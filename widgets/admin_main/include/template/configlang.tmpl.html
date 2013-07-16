@@ -1,0 +1,69 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: configlang.tmpl.html 5122 2012-08-20 03:29:55Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(id){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('itemlist', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="configlang" />
+<input type="hidden" name="act" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<table width="500">
+<tr><td>
+<label><span {_HELP_CONFIGLANG_LIST}>アクセス可能言語</span></label>
+</td>
+<td align="right">
+</td></tr>
+<tr><td colspan="2">
+<table id="itemlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="50"><span>画像</span></th>
+	    <th width="100"><span {_HELP_CONFIGLANG_NAME}>言語</span></th>
+	    <th width="50"><span {_HELP_CONFIGLANG_VALUE}>値</span></th>
+	    <th width="80"><span {_HELP_CONFIGLANG_ACCEPT}>許可</span></th>
+		<th width="80"><span {_HELP_CONFIGLANG_AVAILABLE}>メニュー項目</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="lang_list">
+        <tr>
+	    <td align="center">{IMAGE}</td>
+	    <td align="center">{NAME}</td>
+	    <td align="center">{VALUE}</td>
+	    <td align="center"><input type="checkbox" name="item_accept{INDEX}" {ACCEPT} /></td>
+		<td align="center"><input type="checkbox" name="item_available{INDEX}" {AVAILABLE} /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+<div align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,22 @@
+img {
+	border: none;
+}
+fieldset {
+	border:2px groove #ffffcc;
+	padding:5 5;
+}
+table {
+	text-align: left;
+}
+#main-nav li.begin { margin: 0 0 0 2em; }
+#main-nav li ul { _top: 1.8em; }
+#main-nav li ul li.begin { margin: 0 0 0 2.5em !important; }
+#main-nav { font-size: 74%; }
+/* inner table style canceled */
+.simple-table table
+{
+/*	border: 2px solid #56626d;
+	border-collapse: collapse;
+	font-family: arial, sans-serif;*/
+	font-size: 80%;/* for IE problem*/
+}

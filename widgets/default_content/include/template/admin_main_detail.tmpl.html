@@ -1,0 +1,375 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 4912 2012-05-21 14:51:14Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript" src="{_SCRIPTS_URL}/md5.js"></script>
+<style type="text/css">@import url({_SCRIPTS_URL}/jscalendar-1.0/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/calendar.js"></script>
+<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/lang/calendar-ja.js"></script>
+<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/calendar-setup.js"></script>
+<style type="text/css">@import url({_SCRIPTS_URL}/fileuploader/fileuploader.css);</style>
+<script type="text/javascript" src="{_SCRIPTS_URL}/fileuploader/fileuploader.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	if (document.main.item_password.value != '') document.main.password.value = hex_md5(document.main.item_password.value);
+	
+	document.main.attachfilecount.value = $('#attach_file_list').find('.dragRow').length;
+	document.main.submit();
+	return true;
+}
+function updateItem(serialNo){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	if (document.main.item_password.value != '********'){
+		if (document.main.item_password.value != '') document.main.password.value = hex_md5(document.main.item_password.value);
+	}
+	
+	document.main.attachfilecount.value = $('#attach_file_list').find('.dragRow').length;
+	document.main.submit();
+	return true;
+}
+function delItem(serialNo){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'content';
+	document.main.submit();
+	return true;
+}
+function viewHistory(){
+	document.main.task.value = 'history';
+	document.main.submit();
+	return true;
+}
+function viewCustomValue(){
+	m3ShowStandardWindow("{ADMIN_URL}?cmd=showwidget&widget={ADMIN_WIDGET_ID}&task={CUSTOM_VALUE_TASK}&openby=other");
+	return false;
+}
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow()
+{
+	m3ShowPreviewWindow({DEVICE_TYPE}, "{PREVIEW_URL}");
+	return true;
+}
+// メニューに追加
+function addToMenu(selId)
+{
+	window.open("?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=simple&contentid=" + selId, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=no,resizable=no,width=500,height=300");
+	return true;
+}
+function selectItemLang(){
+	document.main.act.value = 'selectlang';
+	document.main.submit();
+	return true;
+}
+// 添付ファイル追加
+function addAttachFile(fileid, filename)
+{
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
+	lineText += '<td><input type="text" name="item_filetitle[]" size="20" maxlength="60" style="width:100%" /></td>';
+	lineText += '<td><input type="text" name="item_filename[]" size="30" maxlength="100" style="width:100%" value="' + filename + '" /></td>';
+	lineText += '<td align="center"><input type="hidden" name="item_fileid[]" value="' + fileid + '" /><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	$('#attach_file_list').append(lineText);
+	
+	// 項目一覧を再設定
+	setupList();
+}
+function setupList()
+{
+	$("#attach_file_list").tableDnD({
+		onDrop: function(table, row){
+			setupNo();
+		},
+		dragHandle: "dragHandle"
+	});
+	$("#attach_file_list tr").hover(function(){
+		$(this.cells[0]).addClass('currentHandle');
+	}, function() {
+		$(this.cells[0]).removeClass('currentHandle');
+	});
+	// 項目削除処理
+	$("#attach_file_list tr .delLine").click(function(){
+		$(this).parents('.dragRow').remove();
+		setupNo();
+	});
+	// インデックスNo再設定
+	setupNo();
+}
+function setupNo()
+{
+	// インデックスNo再設定
+	$("#attach_file_list tr .lineNo").each(function(index){
+		$(this).text(index + 1);
+	});
+}
+/*function uploadCheck(){
+	if (!document.upload.upfile.value){
+		alert('アップロードするファイルが選択されていません');
+		return false;
+	}
+	if (!window.confirm('ファイルをアップロードします')) return false;
+	document.upload.act.value = 'upload';
+	document.upload.submit();
+	return false;
+}*/
+function createUploader(){
+	var uploader = new qq.FileUploader({
+		element: document.getElementById('file-uploader'),
+		action: '{UPLOAD_URL}',
+		onComplete: function(id, fileName, responseJson){
+			// 一覧に添付ファイルを追加
+			addAttachFile(responseJson.file.fileid, responseJson.file.filename);
+			
+			m3AdjustParentWindow();
+		},
+		debug: true
+	});
+}
+
+$(function(){
+	Calendar.setup({
+		inputField  : "item_start_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton1"       // ID of the button
+	});
+	Calendar.setup({
+		inputField  : "item_end_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton2"       // ID of the button
+	});
+	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_html', 300/* 高さ */);
+	
+	// オプション入力制御
+	if ({OPTION_AREA_OPEN}){
+		$("tr.option_area").slideDown(300);
+		$("#button_open").css({'display':'none'});
+		$("#button_close").css({'display':'block'});
+	} else {
+		$("tr.option_area").slideUp(300);
+		$("#button_open").css({'display':'block'});
+		$("#button_close").css({'display':'none'});
+	}
+	
+	$("#button_open").click(function(){
+		$("tr.option_area").slideDown(300);
+		$("#button_open").css({'display':'none'});
+		$("#button_close").css({'display':'block'});
+		
+		m3AdjustParentWindow();
+		return false;
+	});
+	$("#button_close").click(function(){
+		$("tr.option_area").slideUp(300);
+		$("#button_open").css({'display':'block'});
+		$("#button_close").css({'display':'none'});
+		
+		m3AdjustParentWindow();
+		return false;
+	});
+	// 添付ファイル項目一覧を初期化
+	setupList();
+	
+	// 画像アップローダー作成
+	createUploader();
+	
+	// 行カラー化
+	m3_tableWithScrollbar('input_content', -1, 0);
+	
+	// スクリプト編集エリア
+	m3SetScriptEditor("item_jquery_script", 150);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="content_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="contentid" value="{SEL_ITEM_ID}" />
+<input type="hidden" name="password" />
+<input type="hidden" name="attachfilecount" />
+<table width="90%">
+<tr><td><label>コンテンツ詳細</label></td><td align="right"><span {_HELP_CONTENT_HISTORY_BTN}><input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} /></span><span {_HELP_CONTENT_ADDMENU_BTN}><input type="button" class="button" onclick="addToMenu('{SEL_ITEM_ID}');" value="メニューに追加" {PREVIEW_BTN_DISABLED} /></span><span {_HELP_CONTENT_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} /></span>
+<patTemplate:tmpl name="cancel_button" visibility="visible">
+&nbsp;&nbsp;<span {_HELP_CONTENT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</patTemplate:tmpl>
+</td></tr>
+<tr><td colspan="2">
+<table id="input_content" class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_CONTENT_ID}>ID</span></td>
+	    <td width="100" align="center">{ITEM_ID}</td>
+	    <td class="table-headside" width="150"><span {_HELP_CONTENT_NAME}>名前</span></td>
+	<patTemplate:tmpl name="show_singlelang" visibility="hidden">
+	    <td colspan="3"><input type="text" name="item_name" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
+	</patTemplate:tmpl>
+	<patTemplate:tmpl name="show_multilang" visibility="hidden">
+	    <td width="20%"><input type="text" name="item_name" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
+	    <td class="table-headside" width="150"><span {_HELP_CONTENT_LANG}>言語</span></td>
+	    <td>
+	<patTemplate:tmpl name="default_lang" visibility="hidden">
+	{DEFAULT_LANG}
+	</patTemplate:tmpl>
+	<patTemplate:tmpl name="select_lang" visibility="hidden">
+		    <select name="item_lang" onchange="selectItemLang();">
+		        <patTemplate:tmpl name="lang_list">
+		        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+		        </patTemplate:tmpl>
+		    </select>
+	</patTemplate:tmpl>&nbsp;&nbsp;{LANG}
+	    </td>
+	</patTemplate:tmpl>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_CONTENT_VISIBLE}>公開</span></td>
+	    <td><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} /></td>
+	    <td class="table-headside"><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span></td>
+	    <td><input type="checkbox" name="item_limited" {SEL_ITEM_LIMITED} /></td>
+	    <td class="table-headside" width="150"><span {_HELP_CONTENT_DEFAULT}>デフォルト項目</span></td>
+	    <td><input type="checkbox" name="item_default" {SEL_ITEM_DEFAULT} /></td>
+	</tr>
+	<tr>
+	    <td class="table-headside"><span {_HELP_CONTENT_ACTIVE_TERM}>公開期間</span></td>
+	    <td colspan="5">開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONTENT_HTML}>HTML</span><br />
+	    <span {_HELP_CONTENT_REF_CUSTOM}><input type="button" class="button" onclick="viewCustomValue();" value="置換文字列を参照" /></span></td>
+	    <td colspan="5" width="800">
+	    <textarea name="item_html">{SEL_ITEM_HTML}</textarea>
+	    </td>
+	</tr>
+<patTemplate:tmpl name="show_jquery" visibility="hidden">
+    <tr>
+	    <td class="table-headside" rowspan="4"><span {_HELP_CONTENT_JQUERY}>jQuery</span></td>
+	    <td class="table-headside" colspan="5"><span {_HELP_CONTENT_SCRIPT}>スクリプト</span></td>
+	</tr>
+    <tr>
+	    <td colspan="5"><textarea id="item_jquery_script" name="item_jquery_script" style="width:100%;height:100%;">{JQUERY_SCRIPT}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="table-headside" colspan="5"><span {_HELP_CONTENT_PLUGIN}>プラグイン</span></td>
+	</tr>
+    <tr>
+	    <td colspan="5">
+	    <patTemplate:tmpl name="plugin_list"><label class="item_list_inline"><input type="checkbox" name="item_lib_{ID}" {ID_CHECKED} />{NAME}</label></patTemplate:tmpl>
+	    </td>
+	</tr>
+</patTemplate:tmpl>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONTENT_DESC}>簡易説明</span></td>
+	    <td colspan="5"><input type="text" name="item_desc" value="{DESC}" size="100" maxlength="100" style="width:100%" /></td>
+	</tr>
+	<patTemplate:tmpl name="user_fields" type="condition" conditionvar="type" visibility="hidden">
+	<pattemplate:sub condition="__default">
+    <tr>
+		<td class="table-headside">{FIELD_ID}</td>
+	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" value="{VALUE}" size="40" maxlength="40" style="width:100%" /></td>
+	</tr>
+	</pattemplate:sub>
+	<pattemplate:sub condition="first">
+    <tr>
+	    <td class="table-headside" rowspan="{ROW_COUNT}">ユーザ定義フィールド</td>
+		<td class="table-headside">{FIELD_ID}</td>
+	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" value="{VALUE}" size="40" maxlength="40" style="width:100%" /></td>
+	</tr>
+	</pattemplate:sub>
+	</patTemplate:tmpl>
+        <tr>
+	    <td class="table-headside"><span {_HELP_CONTENT_META_TITLE}>タイトル名</span></td>
+	    <td colspan="5"><input type="text" name="item_meta_title" value="{META_TITLE}" size="30" maxlength="40" /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONTENT_META_DESCRIPTION}>ページ要約</span></td>
+	    <td colspan="5" height="50"><textarea name="item_meta_desc" style="width:100%;height:100%;">{META_DESC}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONTENT_META_KEYWORDS}>検索キーワード</span></td>
+	    <td colspan="5" height="50"><textarea name="item_meta_keyword" style="width:100%;height:100%;">{META_KEYWORD}</textarea></td>
+	</tr>
+	<tr>
+	    <td class="table-headside"><span {_HELP_CONTENT_UPDATE_USER}>更新者</span></td>
+	    <td>{UPDATE_USER}</td>
+	    <td class="table-headside"><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></td>
+	    <td colspan="3">{UPDATE_DT}</td>
+	</tr>
+	<tr class="option_area" style="display:none;">
+	    <td class="table-headside"><span {_HELP_CONTENT_PASSWORD}>パスワード</span></td>
+	    <td><input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" {PASSWORD_DISABLED} /></td>
+	    <td class="table-headside"><span {_HELP_CONTENT_KEY}>外部参照用キー</span></td>
+	    <td><input type="text" name="item_key" value="{SEL_ITEM_KEY}" size="20" maxlength="20" style="width:100%" {KEY_DISABLED} /></td>
+	    <td class="table-headside"><span {_HELP_CONTENT_RELATED_CONTENT}>関連コンテンツ</span></td>
+	    <td><input type="text" name="item_related_content" value="{RELATED_CONTENT}" size="40" maxlength="40" style="width:100%" {RELATED_CONTENT_DISABLED} /></td>
+	</tr>
+<patTemplate:tmpl name="show_template" visibility="hidden">
+    <tr class="option_area" style="display:none;">
+	    <td class="table-headside"><span {_HELP_CONTENT_TEMPLATE}>テンプレート</span></td>
+	    <td colspan="5">
+		    <select name="item_template_id">
+			    <option value="">-- 選択なし --</option>
+		        <patTemplate:tmpl name="template_list">
+		        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+		        </patTemplate:tmpl>
+		    </select>
+		</td>
+	</tr>
+</patTemplate:tmpl>
+ 	<tr class="option_area" style="display:none;">
+	    <td class="table-headside"><span {_HELP_CONTENT_ATTACH_FILE}>添付ファイル</span></td>
+	    <td colspan="5">
+	    <table id="attach_file_list" class="simple-table-inner" width="100%">
+	    <thead>
+	    <tr><th width="35">移動</th><th width="30">No</th><th width="200">タイトル</th><th>ファイル名</th><th width="40">操作</th></tr>
+	    </thead><tbody>
+	    <patTemplate:tmpl name="attach_file_list">
+            <tr class="dragRow">
+	    <td class="dragHandle"></td>
+	    <td align="center"><span class="lineNo"></span></td>
+	    <td><input type="text" name="item_filetitle[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
+	    <td><input type="text" name="item_filename[]" value="{FILENAME}" size="30" maxlength="100" style="width:100%" /></td>
+	    <td align="center"><input type="hidden" name="item_fileid[]" value="{FILE_ID}" /><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    </tr>
+	    </patTemplate:tmpl>
+	    </tbody></table>
+	    <div id="file-uploader"></div>
+	    </td>
+	</tr>
+	<tr>
+	<td style="border-right:0;"><a id="button_open" href="#">{OPEN_BUTTON}</a><a id="button_close" href="#">{CLOSE_BUTTON}</a></td>
+	<td colspan="5" align="right" style="border-left:0;">
+<patTemplate:tmpl name="del_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

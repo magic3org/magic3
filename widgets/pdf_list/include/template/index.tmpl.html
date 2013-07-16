@@ -1,0 +1,39 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function downloadPdf(){
+	document.pdf_list_main.act.value = 'downloadpdf';
+	document.pdf_list_main.download.disabled = true;
+	document.pdf_list_main.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="pdf_list_main" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<input type="hidden" name="fieldcount" value="{FIELD_COUNT}" />
+<div align="right"><input type="button" class="button" name="download" onclick="downloadPdf();" value="PDFをダウンロード" /></div>
+<div>
+<table width="100%">
+    <thead>
+        <tr>
+	    <th width="100">名前</th>
+	    <th>住所</th>
+	    <th width="100">電話番号</th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="field_list">
+        <tr>
+	    <td>{NAME}</td>
+	    <td>{ADDRESS}</td>
+	    <td>{PHONE}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</div>
+</form>
+</patTemplate:tmpl>

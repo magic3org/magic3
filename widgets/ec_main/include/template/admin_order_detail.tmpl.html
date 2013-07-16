@@ -1,0 +1,320 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 4845 2012-04-13 04:47:07Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function addItem(){
+	if (!window.confirm('受注情報を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('受注情報を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (!window.confirm('受注情報を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'order';
+	document.main.submit();
+	return true;
+}
+function selProduct(serial)
+{
+	m3ShowStandardWindow("{ADMIN_URL}?cmd=configwidget&openby=simple&widget={MAIN_WIDGET_ID}&task=imagebrowse_detail&serial=" + serial);
+	return true;
+}
+function downloadDelivSheet(){
+	document.main.act.value = 'downloaddelivsheet';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	m3_tableWithScrollbar('productlist', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="order_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+
+<table width="90%">
+<tr><td>
+<label><span {_HELP_ORDER_DETAIL}>受注詳細</span></label>
+</td>
+<td align="right"><span {_HELP_ORDER_CREATE_DELIV_SHEET_BTN}><input type="button" class="button" onclick="downloadDelivSheet();" value="納品書作成" /></span>&nbsp;&nbsp;<span {_HELP_ORDER_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_ORDER_NO}>受注No</span></td>
+	    <td width="300">{ORDER_NO}</td>
+	    <td class="table-headside" width="100"><span {_HELP_ORDER_STATUS}>受注ステータス</span></td>
+	    <td width="300">
+	    <select name="item_order_status">
+	    	<option value="0">-- 未選択 --</option>
+	        <patTemplate:tmpl name="order_status_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_NAME}>顧客名</span></td>
+	    <td><input type="text" name="item_name" value="{NAME}" maxlength="60" style="width:100%;" {NAME_DISABLED} /></td>
+	    <td class="table-headside"><span {_HELP_ORDER_NAME_KANA}>顧客名(カナ)</span></td>
+	    <td><input type="text" name="item_name_kana" value="{NAME_KANA}" maxlength="60" style="width:100%;" {NAME_KANA_DISABLED} /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_EMAIL}>Eメール</span></td>
+	    <td colspan="3"><input type="text" name="item_custm_email" value="{CUSTM_EMAIL}" maxlength="60" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_ZIP}>郵便番号</span></td>
+	    <td><input type="text" name="item_custm_zipcode" value="{CUSTM_ZIPCODE}" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside"><span {_HELP_ORDER_STATE}>都道府県</span></td>
+	    <td>
+<select name="item_custm_state">
+<option value=""> </option>
+<patTemplate:tmpl name="custm_state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_ADD1}>住所1</span></td>
+	    <td colspan="3"><input type="text" name="item_custm_address" value="{CUSTM_ADDRESS}" maxlength="200" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_ADD2}>住所2</span></td>
+	    <td colspan="3"><input type="text" name="item_custm_address2" value="{CUSTM_ADDRESS2}" maxlength="200" style="width:100%;" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_PHONE}>電話番号</span></td>
+	    <td><input type="text" name="item_custm_phone" value="{CUSTM_PHONE}" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside"><span {_HELP_ORDER_FAX}>FAX</span></td>
+	    <td><input type="text" name="item_custm_fax" value="{CUSTM_FAX}" maxlength="60" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_PAYMETHOD}>支払方法</span></td>
+	    <td colspan="3">
+<select name="item_payment_method" {PAYMENT_DISABLED}>
+<option value=""> </option>
+<patTemplate:tmpl name="payment_method_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>	    
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_DELIVMETHOD}>配送方法</span></td>
+	    <td colspan="3">
+<select name="item_delivery_method" {STATE_DISABLED}>
+<option value=""> </option>
+<patTemplate:tmpl name="deliv_method_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{DELIV_NOTE}
+	    </td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_REGIST_DT}>受付日時</span></td>
+	    <td>{REGIST_DT}</td>
+	    <td class="table-headside"><span {_HELP_ORDER_PAY_DT}>入金日時</span></td>
+	    <td>{PAY_DT}</td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_UPDATE_USER}>更新者</span></td>
+	    <td>{UPDATE_USER}</td>
+	    <td class="table-headside"><span {_HELP_ORDER_UPDATE_DT}>更新日時</span></td>
+	    <td>{UPDATE_DT}</td>
+	</tr>
+	<tr class="even">
+	<td colspan="4" align="right">
+	{MESSAGE}
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+<table class="simple-table">
+    <caption><span {_HELP_ORDER_DELIV}>配送先</span></caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_ORDER_DELIV_NAME}>配送先名</span></td>
+	    <td width="300"><input type="text" name="item_deliv_name" value="{DELIV_NAME}" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside" width="100"><span {_HELP_ORDER_DELIV_NAME_KANA}>配送先名(カナ)</span></td>
+	    <td width="300"><input type="text" name="item_deliv_name_kana" value="{DELIV_NAME_KANA}" maxlength="60" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_DELIV_ZIP}>郵便番号</span></td>
+	    <td><input type="text" name="item_deliv_zipcode" value="{DELIV_ZIPCODE}" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside"><span {_HELP_ORDER_DELIV_STATE}>都道府県</span></td>
+	    <td>
+<select name="item_deliv_state">
+<option value=""> </option>
+<patTemplate:tmpl name="deliv_state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_DELIV_ADD1}>住所1</span></td>
+	    <td colspan="3"><input type="text" name="item_deliv_address" value="{DELIV_ADDRESS}" maxlength="200" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_DELIV_ADD2}>住所2</span></td>
+	    <td colspan="3"><input type="text" name="item_deliv_address2" value="{DELIV_ADDRESS2}" maxlength="200" style="width:100%;" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_DELIV_PHONE}>電話番号</span></td>
+	    <td><input type="text" name="item_deliv_phone" value="{DELIV_PHONE}" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside"><span {_HELP_ORDER_DELIV_FAX}>FAX</span></td>
+	    <td><input type="text" name="item_deliv_fax" value="{DELIV_FAX}" maxlength="60" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_DELIV_EMAIL}>Eメール</span></td>
+	    <td colspan="3"><input type="text" name="item_deliv_email" value="{DELIV_EMAIL}" maxlength="60" style="width:100%;" /></td>
+	</tr>
+	<tr>
+	<td colspan="4" align="right">
+	{MESSAGE}
+<patTemplate:tmpl name="update_button1" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button1" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+<table class="simple-table">
+    <caption><span {_HELP_ORDER_BILL}>請求先</span></caption>
+    <tbody>
+        <tr class="even">
+	    <td class="table-headside" width="100"><span {_HELP_ORDER_BILL_NAME}>請求先名</span></td>
+	    <td width="300"><input type="text" name="item_bill_name" value="{BILL_NAME}" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside" width="100"><span {_HELP_ORDER_BILL_NAME_KANA}>請求先名(カナ)</span></td>
+	    <td width="300"><input type="text" name="item_bill_name_kana" value="{BILL_NAME_KANA}" maxlength="60" style="width:100%;" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_BILL_ZIP}>郵便番号</span></td>
+	    <td><input type="text" name="item_bill_zipcode" value="{BILL_ZIPCODE}" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside"><span {_HELP_ORDER_BILL_STATE}>都道府県</span></td>
+	    <td>
+<select name="item_bill_state">
+<option value=""> </option>
+<patTemplate:tmpl name="bill_state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_BILL_ADD1}>住所1</span></td>
+	    <td colspan="3"><input type="text" name="item_bill_address" value="{BILL_ADDRESS}" maxlength="200" style="width:100%;" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ORDER_BILL_ADD2}>住所2</span></td>
+	    <td colspan="3"><input type="text" name="item_bill_address2" value="{BILL_ADDRESS2}" maxlength="200" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_BILL_PHONE}>電話番号</span></td>
+	    <td><input type="text" name="item_bill_phone" value="{BILL_PHONE}" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside"><span {_HELP_ORDER_BILL_FAX}>FAX</span></td>
+	    <td><input type="text" name="item_bill_fax" value="{BILL_FAX}" maxlength="60" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ORDER_BILL_EMAIL}>Eメール</span></td>
+	    <td colspan="3"><input type="text" name="item_bill_email" value="{BILL_EMAIL}" maxlength="60" style="width:100%;" /></td>
+	</tr>
+	<tr>
+	<td colspan="4" align="right">
+	{MESSAGE}
+<patTemplate:tmpl name="update_button2" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button2" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+</td></tr>
+<tr><td colspan="2">
+
+<table id="productlist" class="simple-table" width="100%">
+    <caption><span {_HELP_ORDER_CONTENT}>受注内容</span></caption>
+    <thead>
+        <tr>
+		    <th width="35">No</th>
+            <th width="35%">商品名</th>
+            <th width="35%">商品コード</th>
+            <th width="100">税込価格(円)</th>
+            <th width="50">数量</th>
+            <th>小計(円)</th>
+	</tr>
+    </thead>
+    <tfoot>
+<tr><td></td><td align="center">値引額</td><td colspan="3">{DISCOUNT_DESC}</td><td align="right">{DISCOUNT}</td></tr>
+<tr><td></td><td align="center">配送料</td><td colspan="3"></td><td align="right">{DELIVERY_FEE}</td></tr>
+<tr><td></td><td align="center">手数料</td><td colspan="3"></td><td align="right">{CHARGE}</td></tr>
+<tr><td colspan="5"></td><td align="center">合計(円)</td></tr>
+<tr><td colspan="5"></td><td align="right">{TOTAL}</td></tr>
+    </tfoot>
+    <tbody>
+        <patTemplate:tmpl name="productlist">
+        <tr>
+		<td align="center">{NO}</td>
+	    <td><a href="#" onclick="selProduct({ID});">{NAME}</a></td>
+	    <td>{CODE}</td>
+	    <td align="right">{UNIT_PRICE}</td>
+	    <td align="right">{QUANTITY}</td>
+	    <td align="right">{PRICE}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

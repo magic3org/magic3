@@ -1,0 +1,132 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: portal.tmpl.html 4762 2012-03-16 12:10:24Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function getNewInfo(){
+	document.main.act.value='newinfo';
+	document.main.submit();
+	return true;
+}
+function sendToPortal(){
+	if (!window.confirm('{_LC_MSG_SEND_TO_PORTAL}')) return false;
+	document.main.act.value='{SITE_ACT}';
+	document.main.submit();
+	return true;
+}
+function selectCategoryMenu(){
+	var desc = {{CATEGORY_DESC_ITEMS}};
+	var value = '';
+	if (desc[document.main.item_site_category.value]) value = desc[document.main.item_site_category.value];
+	$('#category_desc').text(value);
+	return true;
+}
+function valueChanged(){
+	$("#send_portal_button").attr("disabled", "disabled");
+	$("#save_button").removeAttr("disabled");
+}
+$(function(){
+	$("#item_site_desc").change(function(){
+		valueChanged();
+	});
+	$("#item_site_category").change(function(){
+		valueChanged();
+	});
+	$("#item_site_state").change(function(){
+		valueChanged();
+	});
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="portal" />
+<input type="hidden" name="act" />
+<table width="800">
+<tbody><tr><td>
+<table class="simple-table" width="100%">
+    <caption><span {_HELP_PORTAL_PORTAL_INFO}>{_LC_LABEL_PORTAL_INFO}</span></caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_PORTAL_URL}>{_LC_LABEL_URL}</span></td>
+	    <td><a href="{PORTAL_URL}" target="_blank">{PORTAL_URL}</a>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" onclick="getNewInfo();" value="{_LC_LABEL_GET_NEW_INFO}" /></td>
+	</tr>
+    </tbody>
+</table>
+<br />
+<table class="simple-table" width="100%">
+    <caption><span {_HELP_PORTAL_SITEINFO}>{_LC_LABEL_SITE_INFO}</span></caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_PORTAL_SITENAME}>{_LC_LABEL_SITE_NAME}</span></td>
+	    <td><input type="text" name="sitename" value="{SITE_NAME}" size="60" maxlength="100" disabled /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_PORTAL_SITE_URL}>{_LC_LABEL_URL}</span></td>
+	    <td>{SITE_URL}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_PORTAL_SERVER_ID}>{_LC_LABEL_SERVER_ID}</span></td>
+	    <td>{SERVER_ID}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_PORTAL_LOGO}>ロゴ</span></td>
+	    <td>{LOGO_IMAGE}</td>
+	</tr>
+<patTemplate:tmpl name="site_info" visibility="hidden">
+        <tr>
+	    <td class="table-headside"><span {_HELP_PORTAL_SITE_DESC}>{_LC_LABEL_SITE_DESC}</span></td>
+	    <td><textarea id="item_site_desc" name="item_site_desc" rows="2" cols="50" style="width:100%;">{SITE_DESC}</textarea></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_PORTAL_SITE_ATTR}>{_LC_LABEL_SITE_ATTR}</span></td>
+	    <td>{_LC_LABEL_SITE_CATEGORY}
+	    <select id="item_site_category" name="item_site_category" onchange="selectCategoryMenu();">
+	        <option value="" >-- {_LC_LABEL_UNSELECTED} --</option>
+                <patTemplate:tmpl name="category_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>&nbsp;&nbsp;<span id="category_desc"></span>
+	    <br />
+	    {_LC_LABEL_SITE_STATE}
+	    <select id="item_site_state" name="item_site_state" >
+	        <option value="" >-- {_LC_LABEL_UNSELECTED} --</option>
+                <patTemplate:tmpl name="state_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>
+	    </td>
+	</tr>
+        <tr>
+	    <td colspan="2" align="right">
+		<input id="send_portal_button" type="button" class="button" onclick="sendToPortal();" value="{_LC_LABEL_SEND_TO_PORTAL}" {SEND_DISABLED} />
+		<input id="save_button" type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_SAVE}" {SAVE_DISABLED} />
+	    </td>
+	</tr>
+</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+</tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

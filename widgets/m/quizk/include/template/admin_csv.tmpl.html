@@ -1,0 +1,88 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function uploadCheck(){
+	if (!document.upload.setid.value){
+		alert('操作対象のパターンセットが選択されていません');
+		return;
+	}
+	if (!document.upload.upfile.value){
+		alert('アップロードするファイルが選択されていません');
+		return;
+	}
+	document.upload.act.value = 'upload';
+	if (window.confirm('ファイルをアップロードします')){
+		document.upload.submit();
+	}
+}
+// CSVダウンロード
+function downloadCSV(){
+	if (!document.upload.setid.value){
+		alert('操作対象のパターンセットが選択されていません');
+		return;
+	}
+	document.upload.act.value = 'download';
+	document.upload.submit();
+	return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	//m3_tableWithScrollbar('widgetlist', 15, 0);
+});
+// -->
+</script>
+<div align="center">
+{MENU_ITEMS}
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+</form>
+<form enctype="multipart/form-data" method="post" name="upload">
+<input type="hidden" name="act" />
+<input type="hidden" name="datatype" />
+<table><tr><td>
+<label>操作対象のパターンセット：</label>
+    <select name="setid">
+    	<option value="">-- 未選択 --</option>
+        <patTemplate:tmpl name="set_id_list">
+        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+    </select><br /><br />
+</td></tr>
+<tr><td>
+<table class="simple-table" width="400">
+    <tbody>
+        <tr>
+	    <td class="table-head" colspan="2">CSVアップロード</td>
+	</tr>
+        <tr>
+	    <td colspan="2"><input type="file" name="upfile" size="50" /></td>
+	</tr>
+	<tr class="even">
+	<td><input type="checkbox" name="item_replace" />既存データをすべて削除</td>
+	<td align="right"><input type="button" class="button" onclick="uploadCheck();" value="アップロード" /></td>
+	</tr>
+    </tbody>
+</table>
+<br />
+</td></tr>
+<tr><td>
+<table class="simple-table" width="400">
+    <tbody>
+        <tr>
+	    <td class="table-head" colspan="2">CSVダウンロード</td>
+	</tr>
+	<tr>
+	<td>クイズ定義データ</td>
+	<td align="right">
+	    <input type="button" class="button" onclick="downloadCSV();" value="ダウンロード" />
+	</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

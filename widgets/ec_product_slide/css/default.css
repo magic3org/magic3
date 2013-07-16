@@ -1,0 +1,47 @@
+div.product_slide_outer {
+	position: relative;
+	height: 145px;
+	width:95%;/* width:400px;*/	/*表示幅*/
+	overflow: auto;
+	margin:5px 0;		/*上下マージン*/
+}
+ul.product_slide {
+	display: block;
+	height: 110px;
+	/* max width here, for users without javascript */
+	width: 1500px;
+	padding: 15px 0 0 15px;
+	/* removing default styling */
+	margin: 0;
+	background: url('../images/navigati.png');
+	list-style: none;
+}
+.product_slide li {
+	display: block;
+	float: left;
+	padding: 0 4px;
+}
+.product_slide a {
+	display: block;
+	text-decoration: none;
+}
+.product_slide span {
+	display: none;
+	margin-top: 3px;
+	
+	text-align: center;
+	font-size: 12px;
+	color: #fff;
+}
+.product_slide a:hover span {
+	display: block;
+}
+.product_slide img {
+	border: 3px #fff solid;	
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+}
+.product_slide a:hover img {
+	filter:alpha(opacity=50);
+	opacity: 0.5;
+}

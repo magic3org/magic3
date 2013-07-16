@@ -1,0 +1,40 @@
+<patTemplate:tmpl name="_widget">
+<!-- m3:ErrorMessage -->
+<form action="{URL}" method="post" name="contactus_main" class="form">
+<input type="hidden" name="act" value="send" />
+お問い合わせ<br>
+お名前<font color="red">*必須</font><br>
+<input type="text" name="item_name" value="{NAME}" size="25" maxlength="50" {NAME_DISABLED} /><br>
+お名前(フリガナ)<font color="red">*必須</font><br>
+<input type="text" name="item_name_kana" value="{NAME_KANA}" size="25" maxlength="50" {NAME_KANA_DISABLED} /><br>
+Eメール<font color="red">*必須</font><br>
+<input type="text" name="item_email" value="{EMAIL}" size="25" maxlength="50" {EMAIL_DISABLED} /><br>
+Eメール(確認)<font color="red">*必須</font><br>
+<input type="text" name="item_email2" value="{EMAIL2}" size="25" maxlength="50" {EMAIL2_DISABLED} /><br>
+<patTemplate:tmpl name="show_company_name" visibility="hidden">
+会社名<font color="red">*必須</font><br>
+<input type="text" name="item_company_name" value="{COMPANY_NAME}" size="25" maxlength="50" {COMPANY_NAME_DISABLED} /><br>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_address" visibility="hidden">
+郵便番号<font color="red">*必須</font><br>
+<input type="text" name="item_zipcode" value="{ZIPCODE}" size="10" maxlength="10" {ZIPCODE_DISABLED} /><br>
+都道府県<br>
+<select name="item_state" {STATE_DISABLED}>
+<option value=""> </option>
+<patTemplate:tmpl name="state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select><font color="red">*必須</font><br>
+住所<font color="red">*必須</font><br>
+<input type="text" name="item_address" value="{ADDRESS}" size="50" maxlength="50" {ADDRESS_DISABLED} /><br>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_tel" visibility="hidden">
+電話番号<font color="red">*必須</font><br>
+<input type="text" name="item_phone" value="{PHONE}" size="20" maxlength="20" {PHONE_DISABLED} /><br>
+</patTemplate:tmpl>
+内容<font color="red">*必須</font><br>
+<textarea name="item_body" rows="5" {BODY_DISABLED}>{BODY}</textarea><br>
+<input type="submit" value="{SEND_BUTTON_LABEL}" {SEND_BUTTON_DISABLED} /><br>
+{MESSAGE}<br>
+</form>
+</patTemplate:tmpl>

@@ -1,0 +1,18 @@
+<patTemplate:tmpl name="_widget">
+<form action="{URL}" method="post" name="login" class="form">
+<input type="hidden" name="act" value="{ACT}" />
+<patTemplate:tmpl name="login_status" visibility="hidden">
+<div>{MESSAGE}{USER_NAME}</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="login_field" visibility="hidden">
+<div>ｱｶｳﾝﾄ:&nbsp;&nbsp;<input type="text" name="account" size="10" maxlength="40" /></div>
+<div>ﾊﾟｽﾜｰﾄﾞ:<input type="password" name="password" size="10" maxlength="10" /></div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="logout_button" visibility="hidden">
+<div align="center" style="text-align:center;"><input type="submit" value="ﾛｸﾞｱｳﾄ" /></div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="login_button" visibility="hidden">
+<div align="center" style="text-align:center;"><input type="submit" value="ﾛｸﾞｲﾝ" /></div>
+</patTemplate:tmpl>
+</form>
+</patTemplate:tmpl>

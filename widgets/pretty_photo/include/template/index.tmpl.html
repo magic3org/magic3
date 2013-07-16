@@ -1,0 +1,22 @@
+<patTemplate:tmpl name="_widget">
+<ul id="{CSS_ID}" class="gallery clearfix">
+<patTemplate:tmpl name="image_list">
+<li style="list-style:none; background:none;"><a href="{URL}" rel="prettyPhoto[{GROUP_ID}]" title="{DESC}"><img src="{THUMB_URL}" width="{WIDTH}" height="{HEIGHT}" alt="{TITLE}" /></a></li>
+</patTemplate:tmpl>
+</ul>
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$("a[rel^='prettyPhoto[{GROUP_ID}]']").prettyPhoto({
+		animationSpeed: 'normal', /* fast/slow/normal */
+		padding: 40, /* padding for each side of the picture */
+		opacity: 0.35, /* Value betwee 0 and 1 */
+		showTitle: true, /* true/false */
+		allowresize: true, /* true/false */
+		counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
+		theme: 'light_rounded' /* light_rounded / dark_rounded / light_square / dark_square */
+	});
+});
+//-->
+</script>
+</patTemplate:tmpl>

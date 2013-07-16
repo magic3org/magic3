@@ -1,0 +1,184 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+var startTime;
+var maxNo = 0;
+var bufSize = 6;
+var buf = new Array();
+var newItemNo = 0;
+var currentPos = 1;	// データ追加位置(1～6)
+
+function getData()
+{
+	m3_ajax_request('ajax_sample2', 'act=getdata&count=5&no=' + (maxNo + 1), ajax_success_func, ajax_failure_func);
+}
+function ajax_success_func(request, retcode, jsondata)
+{
+	//alert(request.responseText);
+	//if (jsondata.message) alert(jsondata.message);
+	var i;
+	if (jsondata.items){
+		for (i = 0; i < jsondata.items.length; i++){
+			// データをバッファに追加
+			var image = new Image();
+			image.src = jsondata.items[i].thumbnail;	// 画像プリロード
+			
+			var obj = new Object();
+			obj.no = parseInt(jsondata.items[i].no);
+			obj.thumbnail = jsondata.items[i].thumbnail;
+			obj.message = jsondata.items[i].message;
+			obj.image = image;
+			buf.push(obj);
+
+			// 最大メッセージ番号を更新
+			maxNo = obj.no;
+		}
+		// 古いデータ削除
+		if (buf.length - bufSize > 0) buf = buf.slice(buf.length - bufSize);
+	}
+}
+function ajax_failure_func(request)
+{
+	alert('ajax failure!');
+}
+function mycarousel_itemLoadCallback(carousel, state)
+{
+	if (state == 'init') return;
+};
+function makeItem(index, itemObj){
+	var html = '<input class="itemindex" type="hidden" value="' + index + '" /><input class="itemno" type="hidden" value="' + itemObj.no + '" /><div class="thumbnail"><img src="' + itemObj.thumbnail + '" width="64" height="64"></div><div class="info"><a href="#">追加取得</a><span class="cat">説明: データNo=' + itemObj.no + ' 内容=' + itemObj.message + '</span></div>';
+	return html;
+}
+
+function mycarousel_initCallback( carousel, state)
+{
+	// データ取得
+	getData();
+
+	// タイマーセット
+	startTime = new Date();
+		
+	// reset empties it out
+	$('#reset').click( function( evt ) {
+		carousel.reset();
+	});
+}
+function itemVisibleIn(carousel, li, index, state)
+{
+	// 初期データロード時は実行しない
+	if (state == 'init') return;
+}
+function itemVisibleOut(carousel, li, index, state)
+{
+	// 初期データロード時は実行しない
+	if (state == 'init') return;
+	
+	// データ再取得
+	if (document.hasFocus()){	// アクティブ時のみ処理
+	if (startTime){
+		var currentTime = new Date();
+		if ((currentTime - startTime) / 1000 > 15){	// 15秒単位
+			// データ取得
+			getData();
+			//alert('15sec');
+			startTime = new Date();
+		}
+	}
+	}
+	
+	// データ更新処理
+	if (maxNo > newItemNo){		// 最新データ取得のとき
+		var no;
+		no = parseInt($(li).children('.itemindex').attr('value'));		// 項目順
+		if (no == currentPos){			// データ追加位置のとき
+			var i;
+			var nextItemNo = newItemNo;
+			for (i = 0; i < buf.length; i++){
+				if (nextItemNo < buf[i].no){
+					nextItemNo = buf[i].no;
+					break;
+				}
+			}
+			if (nextItemNo > newItemNo){
+				var itemObj = buf[i];
+				$('#item_' + currentPos).html(makeItem(no, itemObj));
+				newItemNo = nextItemNo;
+
+				// データ設定位置を更新
+				currentPos++;
+				if (currentPos > bufSize) currentPos = 1;
+			}
+		}
+	}
+}
+$(function() {
+	$("#mycarousel").jcarousel({
+        	vertical: true,
+		visible: 3,	/* 表示項目数 */
+		auto:5,		/* 停止時間(秒) */
+		scroll:-1,
+		start:4,	/* 先頭項目 */
+		wrap: 'circular',
+		initCallback:   mycarousel_initCallback,
+		itemLoadCallback: {onBeforeAnimation: mycarousel_itemLoadCallback},
+		itemVisibleInCallback: {onBeforeAnimation: itemVisibleIn},
+		itemVisibleOutCallback: {onAfterAnimation: itemVisibleOut}
+	});
+	startTime = new Date(); 
+});
+//]]>
+</script>
+		<ul id="mycarousel" class="jcarousel jcarousel-skin-tango">
+            <li style="list-style-type:none; background:none;" id="item_6">
+	    <input class="itemindex" type="hidden" value="6" /><input class="itemno" type="hidden" value="6" />
+				<div class="thumbnail"><img src="{IMG_URL}/default.png" width="64" height="64"></div>
+				<div class="info">
+					<a href="#">初期取得6</a>
+					<span class="cat">説明: 初期取得データ</span>6
+				</div>
+			</li>
+			
+            <li style="list-style-type:none; background:none;" id="item_5">
+	     <input class="itemindex" type="hidden" value="5" /><input class="itemno" type="hidden" value="5" />
+				<div class="thumbnail"><img src="{IMG_URL}/default.png" width="64" height="64"></div>
+				<div class="info">
+					<a href="#">初期取得5</a>
+					<span class="cat">説明: 初期取得データ</span>5
+				</div>
+			</li>
+            <li style="list-style-type:none; background:none;" id="item_4">
+	     <input class="itemindex" type="hidden" value="4" /><input class="itemno" type="hidden" value="4" />
+				<div class="thumbnail"><img src="{IMG_URL}/default.png" width="64" height="64"></div>
+				<div class="info">
+					<a href="#">初期取得4</a>
+					<span class="cat">説明: 初期取得データ</span>4
+				</div>
+			</li>
+			<li style="list-style-type:none; background:none;" id="item_3">
+	<input class="itemindex" type="hidden" value="3" /><input class="itemno" type="hidden" value="3" />
+				<div class="thumbnail"><img src="{IMG_URL}/default.png" width="64" height="64"></div>
+				<div class="info">
+					<a href="#">初期取得3</a>
+					<span class="cat">説明: 初期取得データ</span>3
+				</div>
+			</li>
+			<li style="list-style-type:none; background:none;" id="item_2">
+	<input class="itemindex" type="hidden" value="2" /><input class="itemno" type="hidden" value="2" />
+				<div class="thumbnail"><img src="{IMG_URL}/default.png" width="64" height="64"></div>
+				<div class="info">
+					<a href="#">初期取得2</a>
+					<span class="cat">説明: 初期取得データ</span>2
+				</div>
+			</li>
+			<li style="list-style-type:none; background:none;" id="item_1">
+	<input class="itemindex" type="hidden" value="1" /><input class="itemno" type="hidden" value="1" />
+			 <input class="itemno" type="hidden" value="0" />
+				<div class="thumbnail"><img src="{IMG_URL}/default.png" width="64" height="64"></div>
+				<div class="info">
+					<a href="#">初期取得1</a>
+					<span class="cat">説明: 初期取得データ</span>1
+				</div>
+			</li>
+			
+        </ul>
+</patTemplate:tmpl>

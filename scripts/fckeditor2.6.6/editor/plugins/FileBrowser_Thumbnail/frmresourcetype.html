@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ * FCKeditor - The text editor for internet
+ * Copyright (C) 2003-2006 Frederico Caldeira Knabben
+ * 
+ * Licensed under the terms of the GNU Lesser General Public License:
+ * 		http://www.opensource.org/licenses/lgpl-license.php
+ * 
+ * For further information visit:
+ * 		http://www.fckeditor.net/
+ * 
+ * "Support Open Source software. What about a donation today?"
+ * 
+ * File Name: frmresourcetype.html
+ * 	This page shows the list of available resource types.
+ * 
+ * File Authors:
+ * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ *
+ * Modified 2008.6.10 by Naoki Hirata (naoki@aplo.co.jp)
+ * Direct Accessing to File Browser
+ *
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="browser.css" type="text/css" rel="stylesheet">
+<script language="javascript">
+<!--
+var FCKLang		= window.parent.FCKLang ;
+var FCKLanguageManager	= window.parent.FCKLanguageManager;
+
+var oConnector	= window.parent.oConnector ;
+
+function SetResourceType( type )
+{
+	window.parent.frames["frmFolders"].SetResourceType( type ) ;
+}
+var aTypes = [
+	['File', FCKLang.BrowserResourceTypeFile],
+	['Image', FCKLang.BrowserResourceTypeImage],
+	['Flash', FCKLang.BrowserResourceTypeFlash],
+	['Media', FCKLang.BrowserResourceTypeMedia]
+] ;
+
+function AddSelectOption( selectElement, optionText, optionValue )
+{
+	var oOption = document.createElement("OPTION") ;
+
+	oOption.text	= optionText ;
+	oOption.value	= optionValue ;	
+
+	selectElement.options.add(oOption) ;
+
+	return oOption ;
+}
+
+window.onload = function()
+{
+	FCKLanguageManager.TranslatePage(document);
+    
+	for ( var i = 0 ; i < aTypes.length ; i++ )
+	{
+		if ( oConnector.ShowAllTypes || aTypes[i][0] == oConnector.ResourceType )
+			AddSelectOption( document.getElementById('cmbType'), aTypes[i][1], aTypes[i][0] ) ;
+	}
+}
+// -->
+</script>
+</head>
+<body bottomMargin="0" topMargin="0">
+	<table height="100%" cellSpacing="0" cellPadding="0" width="100%" border="0">
+		<tr>
+			<td nowrap>
+				<span fckLang="BrowserResourceType">Resource Type</span><BR>
+				<select id="cmbType" style="WIDTH: 100%" onchange="SetResourceType(this.value);">
+				</select>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

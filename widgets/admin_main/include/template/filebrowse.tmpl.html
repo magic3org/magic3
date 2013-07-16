@@ -1,0 +1,208 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: filebrowse.tmpl.html 5830 2013-03-15 13:44:37Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/swfupload.js"></script>
+<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/plugins/swfupload.cookies.js"></script>
+<!--<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/plugins/swfupload.swfobject.js"></script>-->
+<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/plugins/swfupload.queue.js"></script>
+<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/fileprogress.js"></script>
+<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/handlers.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('filelist', -1, 0);
+	
+	// ファイルアップロード機能を作成
+	var uploadObj = new SWFUpload({
+		// Backend Settings
+		flash_url : "{_ROOT_URL}/scripts/swfupload2.5/swfupload.swf",
+		upload_url: "{UPLOAD_URL}",
+		file_post_name : "Filedata",
+		
+		// File Upload Settings
+		file_size_limit : "{MAX_FILE_SIZE}",	// 最大ファイルサイズ
+		file_types : "*.*",
+		file_types_description : "All Files",
+		file_upload_limit : "100",
+		file_queue_limit : "0",
+		
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+
+		// Button Settings
+		button_placeholder_id : "spanButtonPlaceholder",
+		button_width: 100,
+		button_height: 22,
+		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+		button_cursor: SWFUpload.CURSOR.HAND,
+
+		// The event handler functions are defined in handlers.js
+		swfupload_loaded_handler : swfUploadLoaded,
+		swfupload_pre_load_handler : swfUploadPreLoad,
+		swfupload_load_failed_handler : swfUploadLoadFailed,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : function(file){
+			if (this.getStats().files_queued == 0){
+				document.getElementById(this.customSettings.cancelButtonId).disabled = true;
+				updateList();
+			}
+		},
+		queue_complete_handler : queueComplete	// Queue plugin event
+	});
+});
+function selDir(path)
+{
+	document.main.act.value = 'selpath';
+	document.main.path.value = path;
+	document.main.submit();
+}
+function selPage(page)
+{
+	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;
+}
+function updateList()
+{
+	if (!window.confirm('{_LC_MSG_FILE_UPLOAD}')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('{_LC_MSG_SELECT_FILE}');
+		} else {
+			if (!window.confirm('{_LC_MSG_DELETE_FILE}')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function createDir()
+{
+	if (!window.confirm('{_LC_MSG_CREATE_DIRECTORY}')) return false;
+	document.main.act.value = 'createdir';
+	document.main.submit();
+	return true;
+}
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="filebrowse" />
+<input type="hidden" name="act" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="path" value="{PATH}" />
+<table width="90%">
+<tr><td>
+<label><span {_HELP_FILEBROWSE_PATH}>{_LC_LABEL_PATH}</span> {PATH_LINK}</label>
+</td><td align="right"><span {_HELP_FILEBROWSE_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_DISABLED}/></span></td></tr>
+<tr><td colspan="2">
+<table id="filelist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35"><span {_HELP_FILEBROWSE_CHECK}>{_LC_LABEL_CHECK}</span></th>
+	    <th width="30" style="border-right:none;"></th>
+	    <th width="35%" style="border-left:none;"><span {_HELP_FILEBROWSE_FILENAME}>{_LC_LABEL_FILENAME}</span></th>
+	    <th width="10%"><span {_HELP_FILEBROWSE_SIZE}>{_LC_LABEL_SIZE}</span></th>
+	    <th width="10%"><span {_HELP_FILEBROWSE_PERMISSION}>{_LC_LABEL_PERMISSION}</span></th>
+	    <th width="150"><span {_HELP_FILEBROWSE_DATE}>{_LC_LABEL_DATE}</span></th>
+	    <th width="10%"><span {_HELP_FILEBROWSE_OWNER}>{_LC_LABEL_OWNER}</span></th>
+	    <th><span {_HELP_FILEBROWSE_GROUP}>{_LC_LABEL_GROUP}</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="file_list">
+        <tr>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" {CHECK_DISABLED}/><input type="hidden" name="item{INDEX}_name" value="{NAME}" /></td>
+	    <td align="center" style="border-right:none;">{ICON}</td>
+	    <td style="border-left:none;">{FILENAME}</td>
+	    <td align="right">{SIZE}</td>
+	    <td align="center">{PERMISSION}</td>
+	    <td align="center">{DATE}</td>
+	    <td align="center">{OWNER}</td>
+	    <td align="center">{GROUP}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+<tr><td>{PAGE_LINK}</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{START_NO}-{END_NO}{_LC_LABEL_COUNT}</label>&nbsp;&nbsp;</patTemplate:tmpl><!--<label>{TOTAL_COUNT}件中</label> --></td></tr>
+<tr><td colspan="2">
+
+<table><tr><td valign="top">
+<label><span {_HELP_FILEBROWSE_UPLOAD_FILE}>{_LC_LABEL_UPLOAD_FILE}</span></label>
+<table class="simple-table" width="500">
+<tr><td class="table-headside" width="200">{_LC_LABEL_FILESIZE}</td><td align="center">{MAX_FILE_SIZE}
+</td></tr>
+<tr class="even"><td colspan="2">
+<div class="fieldset flash" id="fsUploadProgress"></div>
+<div id="divStatus">0 Files Uploaded</div>
+</td></tr>
+<tr><td colspan="2">
+<!-- ### buttons must place at 'button_placeholder_id' tag position. ### -->
+<span id="spanButtonPlaceholder"></span>
+<input id="btnUpload" type="button" value="{_LC_LABEL_SELECT_FILE}" />
+<input id="btnCancel" type="button" value="{_LC_LABEL_CANCEL}" disabled="disabled" />
+<noscript>
+	We're sorry.  SWFUpload could not load.  You must have JavaScript enabled to enjoy SWFUpload.
+</noscript>
+<div id="divLoadingContent" class="content" style="display: none;">
+	SWFUpload is loading. Please wait a moment...
+</div>
+<div id="divLongLoading" class="content" style="display: none;">
+	SWFUpload is taking a long time to load or the load has failed.  Please make sure that the Flash Plugin is enabled and that a working version of the Adobe Flash Player is installed.
+</div>
+<div id="divAlternateContent" class="content" style="display: none;">
+	We're sorry.  SWFUpload could not load.  You may need to install or upgrade Flash Player.
+	Visit the <a href="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">Adobe website</a> to get the Flash Player.
+</div>
+</td></tr>
+</table>
+</td><td valign="top">
+<label><span {_HELP_FILEBROWSE_CREATE_DIRECTORY}>{_LC_LABEL_CREATE_DIRECTORY}</span></label>
+<table class="simple-table" width="500">
+<tr><td class="table-headside" width="200">{_LC_LABEL_DIRECTORY_NAME}</td><td><input type="text" name="directory_name" value="{DIRECTORY_NAME}" size="60" maxlength="100" /></td></tr>
+<tr class="even"><td colspan="2" align="right"><input type="button" class="button" onclick="createDir();" value="{_LC_LABEL_CREATE}" /></td></tr>
+</table>
+</td></tr>
+</table>
+
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

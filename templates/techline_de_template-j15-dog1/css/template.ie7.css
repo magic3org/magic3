@@ -1,0 +1,161 @@
+/* begin Box, Sheet */
+.Sheet-tl
+{
+	clip: rect(auto 72px 72px auto);
+}
+
+.Sheet-tr
+{
+	clip: rect(auto auto 72px 72px);
+}
+
+.Sheet-bl
+{
+	clip: rect(72px 72px auto auto);
+}
+
+.Sheet-br
+{
+	clip: rect(72px auto auto 72px);
+}
+
+.Sheet-tc
+{
+	clip: rect(auto auto 72px auto);
+}
+
+.Sheet-bc
+{
+	clip: rect(72px auto auto auto);
+}
+
+.Sheet-cr
+{
+	clip: rect(auto auto auto 72px);
+}
+
+.Sheet-cl
+{
+	clip: rect(auto 72px auto auto);
+}
+/* end Box, Sheet */
+
+/* begin Menu */
+.nav .r
+{
+	clip: rect(auto auto auto 845px);
+}
+/* end Menu */
+
+/* begin MenuItem */
+.artmenu a .r
+{
+	clip: rect(auto auto auto 400px);
+}
+/* end MenuItem */
+
+/* begin BlockHeader */
+.BlockHeader .r
+{
+	clip: rect(auto auto auto 868px);
+}
+/* end BlockHeader */
+
+/* begin Box, BlockContent */
+.BlockContent-tl
+{
+	clip: rect(auto 1px 1px auto);
+}
+
+.BlockContent-tr
+{
+	clip: rect(auto auto 1px 1px);
+}
+
+.BlockContent-bl
+{
+	clip: rect(1px 1px auto auto);
+}
+
+.BlockContent-br
+{
+	clip: rect(1px auto auto 1px);
+}
+
+.BlockContent-tc
+{
+	clip: rect(auto auto 1px auto);
+}
+
+.BlockContent-bc
+{
+	clip: rect(1px auto auto auto);
+}
+
+.BlockContent-cr
+{
+	clip: rect(auto auto auto 1px);
+}
+
+.BlockContent-cl
+{
+	clip: rect(auto 1px auto auto);
+}
+/* end Box, BlockContent */
+
+/* begin Box, Post */
+.Post-tl
+{
+	clip: rect(auto 13px 13px auto);
+}
+
+.Post-tr
+{
+	clip: rect(auto auto 13px 13px);
+}
+
+.Post-bl
+{
+	clip: rect(13px 13px auto auto);
+}
+
+.Post-br
+{
+	clip: rect(13px auto auto 13px);
+}
+
+.Post-tc
+{
+	clip: rect(auto auto 13px auto);
+}
+
+.Post-bc
+{
+	clip: rect(13px auto auto auto);
+}
+
+.Post-cr
+{
+	clip: rect(auto auto auto 13px);
+}
+
+.Post-cl
+{
+	clip: rect(auto 13px auto auto);
+}
+/* end Box, Post */
+
+/* begin PostContent */
+.PostContent
+{
+	height:1%;
+}
+/* end PostContent */
+
+/* begin Button */
+.Button .btn .r
+{
+	clip: rect(auto auto auto 398px);
+}
+/* end Button */
+

@@ -1,0 +1,81 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function addItem(){
+    if (!window.confirm('項目を新規追加しますか?')) return false;
+    document.main.act.value = 'add';
+    document.main.submit();
+    return true;
+}
+function updateItem(){
+    if (!window.confirm('項目を更新しますか?')) return false;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return true;
+}
+function delItem(){
+    if (!window.confirm('項目を削除しますか?')) return false;
+    document.main.act.value = 'delete';
+    document.main.submit();
+    return true;
+}
+function cancelItem(){
+    document.main.task.value = 'edittable';
+    document.main.submit();
+    return true;
+}
+// -->
+</script>
+
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="edittable_detail" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="tableid" value="{TABLE_ID}" />
+
+<table>
+<tr><td><label>データ編集</label></td>
+<td align="right"><span {_HELP_EDITTABLE_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table">
+    <thead>
+        <tr>
+	    <th width="100px">項目表示名</th>
+	    <th width="100px">フィールド名</th>
+	    <th width="100px">データ型</th>
+            <th width="100px">値</th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="bodylist">
+        <tr {LINE_COLOR}>
+	    <td>{NAME}</td>
+	    <td>{FIELD_NAME}</td>
+	    <td>{DATA_TYPE}</td>
+	    <td><input type="text" name="item_{FIELD_NAME}" value="{VALUE}" size="30" maxlength="40" /></td>
+	</tr>
+	</patTemplate:tmpl>
+        <tr>
+	    <td colspan="4" align="right">
+<patTemplate:tmpl name="add_button" visibility="hidden">
+	    <input type="button" class="button" onclick="addItem();" value="新規登録" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" {DEL_BUTTON_ENABLED} />
+		<input type="button" class="button" onclick="updateItem();" value="更新" {UPDATE_BUTTON_ENABLED} />
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

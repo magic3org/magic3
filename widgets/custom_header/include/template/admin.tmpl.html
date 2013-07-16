@@ -1,0 +1,253 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_image_detail.tmpl.html 5659 2013-02-14 13:24:13Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<link rel="stylesheet" href="{_ROOT_URL}/scripts/js_color_picker_v2/js_color_picker_v2.css" media="screen" />
+<script src="{_ROOT_URL}/scripts/js_color_picker_v2/color_functions.js"></script>
+<script type="text/javascript" src="{_ROOT_URL}/scripts/js_color_picker_v2/js_color_picker_v2.js"></script>
+<style type="text/css">
+<!--
+#m3header
+{
+	{HEAD_WIDTH}
+	{HEAD_HEIGHT}
+        {HEAD_BGCOLOR}
+	position:relative;
+}
+#m3header-image
+{
+	position:absolute;
+/*	{HEAD_IMAGE_ALIGN}*/
+	{HEAD_IMAGE_MTOP}
+	{HEAD_IMAGE_MLEFT}
+	{HEAD_IMAGE_MRIGHT}
+	{HEAD_IMAGE_MBOTTOM}
+}
+#m3header-inner
+{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+}
+#m3header-title
+{
+	margin: 0;
+	{HEAD_TITLE_COLOR}
+	font-size: {HEAD_TITLE_FONTSIZE}px;
+	{HEAD_TITLE_ALIGN}
+	{HEAD_TITLE_MTOP}
+	{HEAD_TITLE_MLEFT}
+	{HEAD_TITLE_MRIGHT}
+	{HEAD_TITLE_MBOTTOM}
+}
+#m3header-description
+{
+	margin: 0;
+	{HEAD_DESC_COLOR}
+	font-size: {HEAD_DESC_FONTSIZE}px;
+	{HEAD_DESC_ALIGN}
+	{HEAD_DESC_MTOP}
+	{HEAD_DESC_MLEFT}
+	{HEAD_DESC_MRIGHT}
+	{HEAD_DESC_MBOTTOM}
+}
+#m3header-url
+{
+	margin: 0;
+	{HEAD_URL_COLOR}
+	font-size: {HEAD_URL_FONTSIZE}px;
+	{HEAD_URL_ALIGN}
+	{HEAD_URL_MTOP}
+	{HEAD_URL_MLEFT}
+	{HEAD_URL_MRIGHT}
+	{HEAD_URL_MBOTTOM}
+}
+/*#m3header a { color: #fff; text-decoration: none; }
+#m3header a:visited { color: #fff; }
+#m3header a:hover { color: #f93; }*/
+-->
+</style>
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+// 画像表示
+function showImage(filename){
+	var imgPath = '{_WIDGET_URL}/image/' + filename;
+	preImage = $('#preview');
+	preImage.attr('src', imgPath);
+	preImage.css('display', '');
+}
+// ファイルブラウザからの設定用
+function SetUrl(url)
+{
+	$('#item_image_url').val(url);
+	
+	var preImage = $('#preview');
+	preImage.attr('src', url);
+	preImage.css('display', '');
+}
+$(function(){
+	// WYSIWYGエディター作成
+	//m3_setHtmlEditor('item_title');
+	//m3_setHtmlEditor('item_desc');
+	//m3_setHtmlEditor('item_url');
+	m3SetWysiwygEditor('item_title', 100, false);
+	m3SetWysiwygEditor('item_desc', 100, false);
+	m3SetWysiwygEditor('item_url', 100, false);
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="imagepath" />
+<table  width="90%">
+<tbody>
+<tr valign="top"><td height="100%">
+<div><label>ヘッダプレビュー</label></div>
+<div><!-- ヘッダプレビュー開始 -->
+<div id="m3header">
+<div id="m3header-image">{HEAD_IMAGE}</div>
+<div id="m3header-inner">
+<div id="m3header-title">{TITLE}</div>
+<div id="m3header-description">{DESC}</div>
+<div id="m3header-url">{URL}</div>
+</div>
+</div>
+</div><!-- ヘッダプレビュー終了 -->
+<br />
+</td></tr>
+<tr><td>
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150">表示文字列(タイトル)</td>
+	    <td width="800"><textarea name="item_title">{TITLE}</textarea><br />
+	    フォントサイズ：<input type="text" name="item_title_fontsize" value="{TITLE_FONTSIZE}" size="3" maxlength="3" />px&nbsp;&nbsp;
+	    フォントカラー：<input type="text" id="item_title_color" name="item_title_color" value="{TITLE_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_title_color);" />&nbsp;&nbsp;<br />
+	    表示位置：<select name="item_title_align">
+                <patTemplate:tmpl name="item_title_align_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+	    上マージン：<input type="text" name="item_title_mtop" value="{TITLE_MTOP}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    左マージン：<input type="text" name="item_title_mleft" value="{TITLE_MLEFT}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    右マージン：<input type="text" name="item_title_mright" value="{TITLE_MRIGHT}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    下マージン：<input type="text" name="item_title_mbottom" value="{TITLE_MBOTTOM}" size="3" maxlength="4" />px
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside">表示文字列(説明)</td>
+	    <td><textarea name="item_desc">{DESC}</textarea><br />
+	    フォントサイズ：<input type="text" name="item_desc_fontsize" value="{DESC_FONTSIZE}" size="3" maxlength="3" />px&nbsp;&nbsp;
+	    フォントカラー：<input type="text" id="item_desc_color" name="item_desc_color" value="{DESC_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_desc_color);" />&nbsp;&nbsp;<br />
+	    表示位置：<select name="item_desc_align">
+                <patTemplate:tmpl name="item_desc_align_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+	    上マージン：<input type="text" name="item_desc_mtop" value="{DESC_MTOP}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    左マージン：<input type="text" name="item_desc_mleft" value="{DESC_MLEFT}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    右マージン：<input type="text" name="item_desc_mright" value="{DESC_MRIGHT}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    下マージン：<input type="text" name="item_desc_mbottom" value="{DESC_MBOTTOM}" size="3" maxlength="4" />px
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">表示文字列(URL)</td>
+	    <td><textarea name="item_url">{URL}</textarea><br />
+	    フォントサイズ：<input type="text" name="item_url_fontsize" value="{URL_FONTSIZE}" size="3" maxlength="3" />px&nbsp;&nbsp;
+	    フォントカラー：<input type="text" id="item_url_color" name="item_url_color" value="{URL_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_url_color);" />&nbsp;&nbsp;<br />
+	    表示位置：<select name="item_url_align">
+                <patTemplate:tmpl name="item_url_align_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+	    上マージン：<input type="text" name="item_url_mtop" value="{URL_MTOP}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    左マージン：<input type="text" name="item_url_mleft" value="{URL_MLEFT}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    右マージン：<input type="text" name="item_url_mright" value="{URL_MRIGHT}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    下マージン：<input type="text" name="item_url_mbottom" value="{URL_MBOTTOM}" size="3" maxlength="4" />px
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside">画像</td>
+	    <td>
+	    <div><input type="radio" name="item_sel_image" value="0" {NO_IMG_CHECKED} />画像を使用しない&nbsp;&nbsp;</div>
+	    <div><input type="radio" name="item_sel_image" value="1" {MENU_IMG_CHECKED} />メニューから選択&nbsp;&nbsp;
+	    <select name="item_image" onchange="showImage(document.forms[0].item_image.value);">
+		<option value=""></option>
+	        <patTemplate:tmpl name="image_file_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    </div><div><input type="radio" name="item_sel_image" value="2" {ORIGINAL_IMG_CHECKED} />画像を指定&nbsp;&nbsp;<input type="text" id="item_image_url" name="item_image_url" value="{IMAGE_URL}" size="80" maxlength="120" readonly />
+	    <input type="button" class="button" onclick="m3_openImageFileBrowser();" value="参照" />
+	    </div>
+	    <!-- 表示位置：<select name="item_image_align">
+                <patTemplate:tmpl name="item_image_align_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>&nbsp;&nbsp;&nbsp;&nbsp;-->
+	    上マージン：<input type="text" name="item_image_mtop" value="{IMAGE_MTOP}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    左マージン：<input type="text" name="item_image_mleft" value="{IMAGE_MLEFT}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    右マージン：<input type="text" name="item_image_mright" value="{IMAGE_MRIGHT}" size="3" maxlength="4" />px&nbsp;&nbsp;
+	    下マージン：<input type="text" name="item_image_mbottom" value="{IMAGE_MBOTTOM}" size="3" maxlength="4" />px
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">ヘッダサイズ</td>
+	    <td>幅：<input type="text" name="item_width" value="{WIDTH}" size="4" maxlength="4" />
+	    <select name="item_widthtype">
+		<option value="0" {WIDTH0_SELECTED}>%</option>
+	        <option value="1" {WIDTH1_SELECTED}>px</option>
+	    </select>
+	    &nbsp;&nbsp;高さ：<input type="text" name="item_height" value="{HEIGHT}" size="3" maxlength="3" />
+	    <select name="item_heighttype">
+		<option value="0" {HEIGHT0_SELECTED}>%</option>
+	        <option value="1" {HEIGHT1_SELECTED}>px</option>
+	    </select>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside">背景色</td>
+	    <td><input type="text" id="item_bgcolor" name="item_bgcolor" value="{BGCOLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_bgcolor);" />&nbsp;&nbsp;</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リンク先URL</td>
+	    <td><input type="text" name="item_link_url" value="{LINK_URL}" size="80" maxlength="150" style="width:100%;"/></td>
+	</tr>
+	<tr class="even"><td colspan="2" align="right"><input type="reset" class="button" value="リセット" /><input type="button" class="button" onclick="updateItem();" value="更新" />
+	</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+</td></tr>
+<tr><td align="center">
+<div align="left">
+<label>画像プレビュー</label></div>
+<div><img id="preview" style="display:none;" /></div>
+</td></tr>
+
+</tbody>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

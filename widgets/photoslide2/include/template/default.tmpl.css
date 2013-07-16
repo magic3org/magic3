@@ -1,0 +1,29 @@
+/**
+ * CSS作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: default.tmpl.css 4696 2012-02-19 03:31:35Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_tmpl">
+{ID} {
+    height:  160px;
+    width:   180px;
+    padding: 0;
+    margin:  0;
+}
+{ID} img {
+    padding: 10px;
+    border:  1px solid #ccc;
+    background-color: #eee;
+    width:  150px;
+    height: 113px;
+    top:  0;
+    left: 0;
+}
+</patTemplate:tmpl>

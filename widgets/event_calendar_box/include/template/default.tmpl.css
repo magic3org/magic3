@@ -1,0 +1,44 @@
+<patTemplate:tmpl name="_tmpl">
+#event_calendar {
+	font-size: 100%;
+	margin: 5px 10px;
+	border-collapse: collapse;
+}
+#event_calendar caption {
+	font-size: 100%;
+}
+#event_calendar th {
+	font-size: 10px;
+	font-weight: normal;
+	text-align: center;
+    	padding-left:          3px;
+    	padding-top:           0px;
+	line-height: 20px;
+	background: none;
+}
+#event_calendar td {
+	width: 26px;
+	text-align: center;
+	background: url({IMG_URL}/line.gif) repeat-x bottom left;
+}
+#event_calendar td a {
+	display: block;
+	font-weight: bold;
+}
+#event_calendar th.sun {
+	color: #CC3D3D;
+}
+#event_calendar th.sat {
+	color: #2996CC
+}
+#event_calendar td a:link, .calender td a:visited {
+	text-decoration: none;
+	background: #EFEFEF;
+	border-right: 2px solid #FFF;
+	border-left: 2px solid #FFF;
+}
+#event_calendar td a:hover {
+	text-decoration: none;
+	background: #CCC;
+}
+</patTemplate:tmpl>

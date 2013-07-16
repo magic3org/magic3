@@ -1,0 +1,126 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function newItem(){
+    document.main.task.value = 'tenantserver_detail';
+    document.main.act.value = 'new';
+    document.main.submit();
+    return true;
+}
+function editItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('編集する項目を選択してください');
+	} else {
+            document.main.task.value = 'tenantserver_detail';
+            document.main.act.value = 'edit';
+	    document.main.serial.value = items[i];
+            document.main.submit();
+	}
+    }
+    return true;
+}
+function editItemBySerial(serial){
+    document.main.task.value = 'tenantserver_detail';
+    document.main.act.value = 'edit';
+    document.main.serial.value = serial;
+    document.main.submit();
+}
+function delItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('削除する項目を選択してください');
+	} else {
+            if (!window.confirm('選択項目を削除しますか?')) return false;
+            document.main.act.value = 'delete';
+            document.main.submit();
+	}
+    }
+    return true;
+}
+function selpage(page){
+	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;
+}
+function showUrl(url){
+	window.open(url,"","toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900");
+	return false;
+}
+// 運用ログ表示
+function showOpeLog(selId)
+{
+	window.open("?task=opelog&openby=simple&_server=" + selId, "", "{_CONFIG_WINDOW_STYLE}");
+	return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('serverlist', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="tenantserver" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="page" value="{PAGE}" />
+<table width="90%">
+<tr><td><label><span {_HELP_TENANTSERVER}>テナントサーバ一覧</span></label></td>
+<td align="right"><span {_HELP_TENANTSERVER_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_TENANTSERVER_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_TENANTSERVER_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table id="serverlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35"><span {_HELP_TENANTSERVER_CHECK}>選択</span></th>
+	    <th width="20%"><span {_HELP_TENANTSERVER_NAME}>名前</span></th>
+	    <th width="30%"><span {_HELP_TENANTSERVER_URL}>URL</span></th>
+	    <th width="150"><span {_HELP_TENANTSERVER_IP}>IP</span></th>
+	    <th width="100"><span {_HELP_TENANTSERVER_ACCESS}>ポータル接続可</span></th>
+	    <th><span {_HELP_TENANTSERVER_UPDATE_DT}>更新日時</span></th>
+	    <th><span {_HELP_TENANTSERVER_ACT}>操作</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="serverlist">
+        <tr>
+            <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td>{URL}</td>
+	    <td>{IP}</td>
+	    <td align="center"><input type="checkbox" name="item{NO}_canaccess" {CAN_ACCESS} disabled /></td>
+	    <td align="center">{UPDATE_DT}</td>
+	    <td align="right"><input type="button" class="button" onclick="showOpeLog({ID});" value="運用ログ表示" {OPELOG_DISABLED} /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+<tr><td>
+{PAGE_LINK}
+</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{START_NO}-{END_NO}件目</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}件中</label></td></tr>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

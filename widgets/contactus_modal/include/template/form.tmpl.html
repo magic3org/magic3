@@ -1,0 +1,31 @@
+<patTemplate:tmpl name="_widget">
+<div style="display:none">
+<a href="#" title="Close" class="modalCloseX simplemodal-close">x</a>
+<div class="contact-top"></div>
+<div class="contact-content">
+<h1 class="contact-title">お問い合わせ:</h1>
+<div class="contact-loading" style="display:none"></div>
+<div class="contact-message" style="display:none"></div>
+<form action="#" style="display:none">
+<input type="hidden" name="act" value="{ACT}" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<label for="contact-name">*お名前:</label>
+<input type="text" id="contact-name" class="contact-input" name="name" tabindex="1001" />
+<label for="contact-email">*Eメール:</label>
+<input type="text" id="contact-email" class="contact-input" name="email" tabindex="1002" />
+<label for="contact-subject">タイトル:</label>
+<input type="text" id="contact-subject" class="contact-input" name="subject" tabindex="1003" />
+<label for="contact-message">*内容:</label>
+<textarea id="contact-message" class="contact-input" name="message" cols="40" rows="4" tabindex="1004"></textarea>
+<br />
+<label>&nbsp;</label>
+<input type="checkbox" id="contact-cc" name="cc" tabindex="1005" /> <span class="contact-cc">「Eメール」宛てにコピーを送る</span>
+<br />
+<label>&nbsp;</label>
+<button type="submit" class="contact-send contact-button" tabindex="1006">送信</button>
+<button type="submit" class="contact-cancel contact-button simplemodal-close" tabindex="1007">キャンセル</button>
+</form>
+</div>
+<div class="contact-bottom"></div>
+</div>
+</patTemplate:tmpl>

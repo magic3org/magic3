@@ -1,0 +1,105 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-24 13:14+0900\n"
+"PO-Revision-Date: 2011-01-24 13:15+0900\n"
+"Last-Translator: 平田直毅 <naoki@aplo.co.jp>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_g\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: JAPAN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: ../container\n"
+
+#: ../container/baseWidgetContainer.php:416
+#, php-format
+msgid "You must enter %s."
+msgstr "%sが入力されていません"
+
+#: ../container/baseWidgetContainer.php:446
+#, php-format
+msgid "%s can contain alphabets, numbers, hyphen, underscore, period, atmark."
+msgstr "%sは半角英数字／ハイフン／アンダースコア／ピリオド／＠以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:452
+#, php-format
+msgid "%s is not valid E-mail format."
+msgstr "%sは正しいEメール形式ではありません"
+
+#: ../container/baseWidgetContainer.php:478
+#: ../container/baseWidgetContainer.php:558
+#, php-format
+msgid "%s can contain numbers and period."
+msgstr "%sは数値／ピリオド以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:504
+#, php-format
+msgid "%s is not valid URL format."
+msgstr "%sはURL以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:531
+#, php-format
+msgid "%s can contain numbers."
+msgstr "%sは半角数字以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:586
+#, php-format
+msgid "%s is not valid number format."
+msgstr "%sは数値のみ入力可能です"
+
+#: ../container/baseWidgetContainer.php:612
+#, php-format
+msgid "%s can contain alphabets, numbers, hyphen, underscore, slash."
+msgstr "%sは半角英数字／ハイフン／アンダースコア／スラッシュ以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:642
+#, php-format
+msgid "%s can contain alphabets, numbers, hyphen, underscore."
+msgstr "%sは半角英数字／ハイフン／アンダースコア以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:650
+#, php-format
+msgid "%s can contain lower alphabets, numbers, hyphen, underscore."
+msgstr "%sは半角英小文字数字／ハイフン／アンダースコア以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:658
+#, php-format
+msgid "%s can contain upper alphabets, numbers, hyphen, underscore."
+msgstr "%sは半角英大文字数字／ハイフン／アンダースコア以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:686
+#, php-format
+msgid "%s can contain alphabets and space."
+msgstr "%sは半角英字／空白以外の入力はできません"
+
+#: ../container/baseWidgetContainer.php:713
+#, fuzzy, php-format
+msgid "%s can be max byte length %s."
+msgstr "%sは半角%s文字までの入力が可能です"
+
+#: ../container/baseWidgetContainer.php:745
+#, php-format
+msgid "%s can be max length %s."
+msgstr "%sは%s文字までの入力が可能です"
+
+#: ../container/baseWidgetContainer.php:788
+#: ../container/baseWidgetContainer.php:808
+#, php-format
+msgid "%s is not valid Date format."
+msgstr "%sは正しい日付の形式ではありません"
+
+#: ../container/baseWidgetContainer.php:850
+#: ../container/baseWidgetContainer.php:865
+#, php-format
+msgid "%s is not valid Time format."
+msgstr "%sは正しい時刻の形式ではありません"
+
+#: ../container/baseWidgetContainer.php:1263
+msgid "minute;hour;day"
+msgstr "分;時間;日"
+

@@ -1,0 +1,15 @@
+<patTemplate:tmpl name="_widget">
+<form action="{URL}" method="post" name="contactus_main" class="form">
+<input type="hidden" name="act" value="{ACT}" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<input type="hidden" name="fieldcount" value="{FIELD_COUNT}" />
+<patTemplate:tmpl name="show_title" visibility="hidden"><div {CLASS}>{TITLE_NAME}</div></patTemplate:tmpl>
+<!-- m3:ErrorMessage -->
+<patTemplate:tmpl name="show_explanation" visibility="hidden"><div>{EXPLANATION}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="field_list">
+<div>{TITLE}{REQUIRED}{TITLE_BR}{DESC}{DESC_BR}{INPUT}{INPUT_BR}</div>
+</patTemplate:tmpl>
+<div align="center" style="text-align:center;">{MESSAGE}</div>
+<patTemplate:tmpl name="show_send_button" visibility="hidden"><div align="center" style="text-align:center;"><input type="submit" value="{SEND_BUTTON_LABEL}" /></div></patTemplate:tmpl>
+</form>
+</patTemplate:tmpl>

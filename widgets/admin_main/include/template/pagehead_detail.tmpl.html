@@ -1,0 +1,85 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: pagehead_detail.tmpl.html 5120 2012-08-18 13:33:05Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'pagehead';
+	document.main.submit();
+	return true;
+}
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="pagehead_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="pageid" value="{PAGE_ID}" />
+<input type="hidden" name="pagesubid" value="{PAGE_SUBID}" />
+<table width="90%">
+<tr><td>
+<label><span {_HELP_PAGEHEAD_DETAIL}>ページ詳細</span></label>
+</td>
+<td align="right"><span {_HELP_PAGEHEAD_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table" width="800">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_PAGEHEAD_PAGEID}>ページID</span></td>
+	    <td colspan="3">{PAGE_ID}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside" width="150"><span {_HELP_PAGEHEAD_SUBID}>ページサブID</span></td>
+	    <td width="150">{PAGE_SUBID}</td>
+	    <td class="table-headside" width="150"><span {_HELP_PAGEHEAD_NAME}>ページ名</span></td>
+	    <td width="300">{NAME}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_PAGEHEAD_TITLE}>タイトル名</span></td>
+	    <td colspan="3"><input type="text" name="item_title" value="{TITLE}" size="30" maxlength="40" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_PAGEHEAD_DESCRIPTION}>ページ要約</span></td>
+	    <td colspan="3" height="50"><textarea name="item_desc" style="width:100%;height:100%;">{DESC}</textarea></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_PAGEHEAD_KEYWORDS}>検索キーワード</span></td>
+	    <td colspan="3" height="50"><textarea name="item_keyword" style="width:100%;height:100%;">{KEYWORD}</textarea></td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_PAGEHEAD_OTHERS}>その他(タグ形式)</span></td>
+	    <td colspan="3"><textarea name="item_others" rows="2" cols="50" style="width:100%;">{OTHERS}</textarea></td>
+	</tr>
+	<tr>
+	<td align="right" colspan="4">
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,52 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 4820 2012-04-03 04:59:03Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function login_box_login(){
+	document.login_box.act.value = 'loginbox_login';
+	document.login_box.password.value = hex_md5(document.login_box.login_password.value);
+	document.login_box.login_password.disabled = true;
+	document.login_box.submit();
+	return true;
+}
+function login_box_logout(){
+	document.login_box.act.value = 'loginbox_logout';
+	document.login_box.submit();
+	return true;
+}
+//]]>
+</script>
+<div data-role="content">
+<form name="login_box" method="post" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<patTemplate:tmpl name="login_status" visibility="hidden">
+{MESSAGE}{USER_NAME}
+</patTemplate:tmpl>
+<patTemplate:tmpl name="login_field" visibility="hidden">
+<label for="account_field">アカウント</label><input type="text" id="account_field" name="account" value="{ACCOUNT}" size="8" maxlength="40" /><br />
+<label for="password_field">パスワード</label><input type="password" id="password_field" name="login_password" size="8" maxlength="10" /><br />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="logout_button" visibility="hidden">
+<input type="button" class="button" onclick="login_box_logout();" value="ログアウト" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="login_button" visibility="hidden">
+<input type="button" class="button" onclick="login_box_login();" value="ログイン" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="user_items" visibility="hidden">
+<a href="{CHANGEPWD_URL}">パスワード変更</a>
+</patTemplate:tmpl>
+</form>
+</div>
+</patTemplate:tmpl>

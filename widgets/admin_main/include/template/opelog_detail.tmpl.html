@@ -1,0 +1,108 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: opelog_detail.tmpl.html 5802 2013-03-07 06:14:29Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function goTask(task){
+	document.main.task.value = task;
+	document.main.submit();
+	return true;
+}
+function updateItem(serialNo){
+	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(serialNo){
+	if (!window.confirm('{_LC_MSG_DELETE}')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	if (document.main._backurl.value){
+		location.href = document.main._backurl.value;
+		return false;
+	} else {
+		history.back();
+		return false;
+	}
+}
+function showAccessLog(serial){
+	m3ShowStandardWindow("{ACCESS_LOG_URL}&serial=" + serial);
+	return false;
+}
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="opelog_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="viewcount" value="{VIEW_COUNT}" />
+<input type="hidden" name="loglevel" value="{LOG_LEVEL}" />
+<input type="hidden" name="logstatus" value="{LOG_STATUS}" />
+<!-- m3:PostParam -->
+<table width="90%">
+<tr><td>
+<label><span {_HELP_OPELOG_DETAIL}>{_LC_LABEL_LOG_DETAIL}</span></label>
+</td>
+<td align="right"><span {_HELP_OPELOG_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_OPELOG_MESSAGE_TYPE}>{_LC_LABEL_TYPE}</span></td>
+	    <td width="200">{TYPE_IMAGE}&nbsp;&nbsp;{TYPE}</td>
+	    <td class="table-headside" width="100"><span {_HELP_OPELOG_MESSAGE_CHECK}>{_LC_LABEL_CHECK}</span></td>
+	    <td><input type="checkbox" name="item_msgchecked" {MSG_CHECKED} {MSG_DISABLED} /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_OPELOG_MESSAGE}>{_LC_LABEL_MESSAGE}</span></td>
+	    <td colspan="3" width="500" height="100" valign="top">{MESSAGE}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_OPELOG_MESSAGE_DETAIL}>{_LC_LABEL_MESSAGE_DETAIL}</span></td>
+	    <td colspan="3" height="100" valign="top">{DETAIL}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_OPELOG_MESSAGE_CODE}>{_LC_LABEL_MESSAGE_CODE}</span></td>
+	    <td colspan="3">{CODE}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_OPELOG_ACCESS_LOG}>{_LC_LABEL_ACCESS_LOG_NO}</span></td>
+	    <td colspan="3"><a href="#" onclick="showAccessLog({ACCESS_LOG_SERIAL});">{ACCESS_LOG_SERIAL}</a></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_OPELOG_MESSAGE_DT}>{_LC_LABEL_DATE}</span></td>
+	    <td colspan="3">{TIME}</td>
+	</tr>
+	<tr>
+	<td align="right" colspan="4">
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" {UPDATE_DISABLED}/>
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

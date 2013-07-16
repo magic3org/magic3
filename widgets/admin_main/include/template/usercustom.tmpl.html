@@ -1,0 +1,96 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function goTask(task){
+	document.main.task.value = task;
+	document.main.submit();
+	return true;
+}
+function addItem(){
+    if (!window.confirm('新規項目を追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+    if (!window.confirm('この項目を更新しますか?')) return false;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return true;
+}
+function selectLine(id){
+    document.main.act.value = 'select';
+    document.main.id.value = id;
+    document.main.submit();
+    return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('usercustomlist', -1, 0);
+});
+// -->
+</script>
+<div align="center">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="usercustom" />
+<input type="hidden" name="id" value="{ID}" />
+<input type="hidden" name="addid" value="{ADD_ID}" />
+<table id="usercustomlist" class="simple-table">
+<caption><span {_HELP_USERCUSTOM_LIST}>置換文字列一覧</span></caption>
+    <thead>
+        <tr>
+	    <th width="35" align="center"><span {_HELP_USERCUSTOM_CHECK2}>選択</span></th>
+	    <th width="200" align="center"><span {_HELP_USERCUSTOM_KEY}>置換キー</span></th>
+	    <th width="30%" align="center"><span {_HELP_USERCUSTOM_NAME}>名前</span></th>
+	    <th width="30%" align="center"><span {_HELP_USERCUSTOM_VALUE}>置換内容</span></th>
+	</tr>
+    </thead>
+    <tfoot>
+        <tr>
+	    <td align="center"><input type="radio" name="item_selected" value="0" onclick="selectLine('');" {NEW_SELECTED} /></td>
+	    <td>新規追加</td>
+	    <td></td>
+	    <td></td>
+	</tr>
+    </tfoot>
+    <tbody>
+        <patTemplate:tmpl name="key_list">
+        <tr {LINE_COLOR}>
+            <td align="center"><input type="radio" value="{ID}" onclick="selectLine('{ID}');" {CHECKED} /></td>
+	    <td>{KEY}</td>
+	    <td>{NAME}</td>
+	    <td>{VALUE}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+<br />
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside"><span {_HELP_USERCUSTOM_KEY}>置換キー</span></td>
+	    <td width="150px">{KEY}</td>
+	    <td class="table-headside"><span {_HELP_USERCUSTOM_NAME}>名前</span></td>
+	    <td><input type="text" name="item_name" value="{NAME}" size="30" maxlength="40" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_USERCUSTOM_VALUE}>置換内容</span></td>
+	    <td colspan="3" width="500" height="100"><textarea name="item_value" style="width:100%;height:100%;">{VALUE}</textarea></td>
+	</tr>
+	<tr>
+	<td align="right" colspan="4">
+<patTemplate:tmpl name="add_button" visibility="hidden">
+	    <input type="button" class="button" onclick="addItem();" value="新規登録" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

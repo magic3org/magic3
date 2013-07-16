@@ -1,0 +1,269 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_image_detail.tmpl.html 5961 2013-04-22 12:43:56Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function selectMenu(){
+	document.main.act.value = 'select';
+	document.main.submit();
+	return true;
+}
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(serialNo){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(serialNo){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'image';
+	document.main.submit();
+	return true;
+}
+// 画像のデフォルトサイズを取得
+function getDefaultSize()
+{
+	var imageWidth = $('#image_width');
+	var imageHeight = $('#image_height');
+	var preImage = $('#preview_img');
+		
+	var imgObj = new Image();
+	imgObj.src = preImage.attr('src');
+	imageWidth.val(imgObj.width);
+	imageHeight.val(imgObj.height);
+	
+	// デフォルトサイズで表示
+	updateImage();
+}
+function updateImage()
+{
+	// プレビュー画像設定
+	var type = $('#item_type').val();
+	var width = $('#image_width').val();
+	var height = $('#image_height').val();
+	var url = $('#item_image_url').val();
+	var innerText;
+	var preOuter = $('#preview_outer');
+	if (type == 0){
+		innerText = '<img id="preview_img" ';
+		if (width != '') innerText += ' width="' + width + '"';
+		if (height != '') innerText += ' height="' + height + '"';
+		innerText += ' />';
+		preOuter.html(innerText);
+		
+		// 画像を読み込む
+		$('#preview_img').attr('src', url).load(function(){
+			m3AdjustParentWindow();// 親ウィンドウリサイズ
+		});
+	} else {
+		innerText = '<object id="preview_obj" data="' + url + '" type="application/x-shockwave-flash"';
+		if (width != '') innerText += ' width="' + width + '"';
+		if (height != '') innerText += ' height="' + height + '"';
+		innerText += '><param id="preview_param" name="movie" value="' + url + '" /><param name="wmode" value="transparent" /></object>';
+		preOuter.html(innerText);
+	}
+}
+function selectType()
+{
+	// URLクリア
+	$('#image_url').text('');
+	$('#item_image_url').val('');
+	$('#image_width').val('');
+	$('#image_height').val('');
+	$('#preview_outer').html('');
+	
+	// 項目の使用可否を設定
+	setupItems();
+}
+// ファイルブラウザ起動
+function selectImage()
+{
+	var type = $('#item_type').val();
+	if (type == 0){
+		m3_openImageFileBrowser();
+	} else if (type == 1){
+		m3_openFlashFileBrowser();
+	}
+}
+// ファイルブラウザからの設定用
+function SetUrl(url)
+{
+	// URL設定
+	$('#image_url').text(url);
+	$('#item_image_url').val(url);
+	
+	// Flashの場合はデフォルトサイズを設定
+	if ($('#item_type').val() == '1'){
+		$('#image_width').val('130');
+		$('#image_height').val('130');
+	}
+	
+	// 画像表示
+	updateImage();
+}
+function setLinkUrl(url)
+{
+	alert(url);
+}
+// URL作成
+function createUrl(deviceType)
+{
+$('#linkinfo_parent').show();
+CKEDITOR.instances['linkinfo'].execCommand( 'linkinfo' );
+$('#linkinfo_parent').hide();
+}
+function setupItems()
+{
+	var type = $('#item_type').val();
+	if (type == 0){
+		$('#defsize_button').attr('disabled', false);
+	} else if (type == 1){
+		$('#defsize_button').attr('disabled', true);
+	}
+}
+$(function(){
+	// 項目の使用可否を設定
+	setupItems();
+	
+	// WYSIWYGエディター作成
+	//m3_setHtmlEditor('item_html');
+	m3SetWysiwygEditor('item_html', 150, false);
+	
+	var config = {};
+	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_direct.js';
+	CKEDITOR.replace('linkinfo', config);
+	$('#linkinfo_parent').hide();
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="image_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="page" value="{PAGE}" />
+<!-- m3:PostParam -->
+<table width="90%">
+<tr><td><span {_HELP_IMAGE_DETAIL}><label>画像リンク詳細</label></span></td><td align="right">
+<span {_HELP_IMAGE_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_IMAGE_NAME_INPUT}>名前</span></td>
+	    <td width="500">
+	    <select name="item_imageid" onchange="selectMenu();">
+	        <option value="0" {SELECTED}>-- 新規 --</option>
+                <patTemplate:tmpl name="imageid_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" /></td>
+	    <td class="table-headside" width="100"><span {_HELP_IMAGE_ID}>ID</span></td>
+	    <td align="center">{ID}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_IMAGE_VISIBLE}>公開</span></td>
+	    <td colspan="3"><input type="checkbox" name="item_visible" {VISIBLE} /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_IMAGE_TYPE}>画像タイプ</span></td>
+	    <td colspan="3">
+	    <select id="item_type" name="item_type" onchange="selectType();">
+                <patTemplate:tmpl name="item_type_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>&nbsp;&nbsp;埋め込みタグ：<input type="text" value="{TAG}" length="20" readonly />
+	    </td>
+	</tr>
+	<tr class="even">
+	    <td class="table-headside"><span {_HELP_IMAGE_FILE}>画像</span></td>
+	    <td colspan="3"><div id="preview_outer">{IMAGE}</div><div><input type="button" class="button" onclick="selectImage();" value="変更" /></div>
+	    </td>
+	</tr>
+	<tr>
+	    <td class="table-headside"><span {_HELP_IMAGE_URL}>画像パス</span></td>
+	    <td colspan="3"><span id="image_url">{IMAGE_URL}</span><input type="hidden" id="item_image_url" name="item_image_url" value="{IMAGE_URL}" /></td>
+	</tr>
+	<tr class="even">
+	    <td class="table-headside"><span {_HELP_IMAGE_SIZE}>画像サイズ</span></td>
+	    <td colspan="3"><div style="white-space:nowrap">幅：<input type="text" id="image_width" name="item_width" size="4" maxlength="4" value="{WIDTH}" onkeyup="updateImage();" onkeypress="return m3_numericKey(event,true);" />&nbsp;&nbsp;高さ：<input type="text" id="image_height" name="item_height" size="3" maxlength="3" value="{HEIGHT}" onkeyup="updateImage();" onkeypress="return m3_numericKey(event,true);" />
+	    <input type="button" class="button" id="defsize_button" onclick="getDefaultSize();" value="デフォルトサイズ取得" /></div></td>
+	</tr>
+	<tr>
+	    <td class="table-headside"><span {_HELP_IMAGE_LINK_URL}>リンク</span></td>
+	    <td colspan="3"><label>デフォルト：<input type="text" name="item_link_url" value="{LINK_URL}" maxlength="200" style="width:80%;" /></label><!--<input type="button" class="button" onclick="createUrl(0);" value="URL作成" />--><br />
+	    <label>スマートフォン：<input type="text" name="item_link_url_s" value="{LINK_URL_S}" maxlength="200" style="width:80%;" /></label><!--<input type="button" class="button" onclick="createUrl(2);" value="URL作成" />-->
+	    </td>
+	</tr>
+	<tr class="even">
+	    <td class="table-headside"><span {_HELP_IMAGE_TARGET}>リンクターゲット</span></td>
+	    <td colspan="3">
+	    <select name="item_target_type">
+                <patTemplate:tmpl name="item_target_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>
+		</td>
+	</tr>
+	<tr>
+	    <td class="table-headside"><span {_HELP_IMAGE_ALT}>代替テキスト</span></td>
+	    <td colspan="3"><input type="text" name="item_alt" value="{ALT}" maxlength="200" style="width:100%;" /></td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_IMAGE_LAYOUT}>レイアウト</span></td>
+	    <td colspan="3"><textarea name="item_html">{HTML}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_IMAGE_NOTE}>管理者用備考</span></td>
+	    <td colspan="3"><input type="text" name="item_admin_note" value="{ADMIN_NOTE}" maxlength="200" style="width:100%;" /></td>
+	</tr>
+	<tr class="even">
+	    <td class="table-headside"><span {_HELP_IMAGE_UPDATE_USER}>更新者</span></td>
+	    <td>{UPDATE_USER}</td>
+	    <td class="table-headside"><span {_HELP_IMAGE_UPDATE_DT}>更新日時</span></td>
+	    <td>{UPDATE_DT}</td>
+	</tr>
+	<tr>
+	    <td colspan="4" align="right">
+<patTemplate:tmpl name="del_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+<div name="linkinfo_parent" id="linkinfo_parent"><textarea type="text" name="linkinfo" id="linkinfo" ></textarea></div>
+</patTemplate:tmpl>

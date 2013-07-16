@@ -1,0 +1,28 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: top_jquery.tmpl.html 4624 2012-01-28 12:05:57Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<patTemplate:tmpl name="admin_script" visibility="hidden">
+<script type="text/javascript">
+//<![CDATA[
+function editContent(id){
+	m3ShowStandardWindow("{EDIT_URL}&contentid=" + id);
+	return false;
+}
+//]]>
+</script>
+</patTemplate:tmpl>
+{BUTTON_LIST}{CONTENT}
+<patTemplate:tmpl name="show_read_more" visibility="hidden">
+<p class="readmore"><a class="button art-button" href="{CONTENT_URL}">{READ_MORE_TITLE}</a></p>
+</patTemplate:tmpl>
+</patTemplate:tmpl>

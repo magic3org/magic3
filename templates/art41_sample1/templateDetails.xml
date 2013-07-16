@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/1.6/template-install.dtd">
+<extension version="2.5" client="site" type="template" method="upgrade">
+    <name>art41_sample1</name>
+    <creationDate>2012-12-31</creationDate>
+    <version>1.0</version>
+    <author/>
+    <authorUrl/>
+    <description>Artisteer-generated theme</description>
+    <files>
+        <folder>css</folder>
+        <folder>html</folder>
+        <folder>images</folder>
+        <folder>language</folder>
+        <folder>library</folder>
+        <file>ReadMe.txt</file>
+        <file>component.php</file>
+        <file>functions.php</file>
+        <file>index.html</file>
+        <file>index.php</file>
+        <file>jquery.js</file>
+        <file>script.js</file>
+        <file>script.responsive.js</file>
+        <file>templateDetails.xml</file>
+        <file>template_preview.png</file>
+        <file>template_thumbnail.png</file>
+    </files>
+    <positions>
+        <position>banner1</position>
+        <position>banner2</position>
+        <position>banner3</position>
+        <position>banner4</position>
+        <position>banner5</position>
+        <position>banner6</position>
+        <position>bottom1</position>
+        <position>bottom2</position>
+        <position>bottom3</position>
+        <position>breadcrumb</position>
+        <position>copyright</position>
+        <position>debug</position>
+        <position>extra1</position>
+        <position>extra2</position>
+        <position>header</position>
+        <position>left</position>
+        <position>top1</position>
+        <position>top2</position>
+        <position>top3</position>
+        <position>user1</position>
+        <position>user2</position>
+        <position>user3</position>
+        <position>user4</position>
+        <position>user5</position>
+    </positions>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field name="siteSlogan" type="text" size="50" label="TPL_SITE_SLOGAN" description="TPL_SITE_SLOGAN_DESCRIPTION"/>
+            </fieldset>
+        </fields>
+    </config>
+    <languages folder="language">
+        <language tag="en-GB">en-GB/en-GB.tpl_art41_sample1.ini</language>
+    </languages>
+</extension>

@@ -1,0 +1,156 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: configlang.tmpl.html 4917 2012-05-23 09:44:57Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function selectMenu(){
+	document.main.submit();
+	return true;
+}
+function newItem(){
+	document.main.task.value = 'pageid_detail';
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
+function editItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('編集する項目を選択してください');
+		} else {
+			document.main.task.value = 'pageid_detail';
+			document.main.act.value = 'edit';
+			document.main.pageid.value = items[i];
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('削除する項目を選択してください');
+		} else {
+			if (!window.confirm('選択項目を削除しますか?')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItemBySubId(id){
+	document.main.task.value = 'pageid_detail';
+	document.main.act.value = 'edit';
+	document.main.pageid.value = id;
+	document.main.submit();
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('itemlist', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="pageid" />
+<input type="hidden" name="act" />
+<input type="hidden" name="pageid" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<table width="90%">
+<tr><td>
+<label><span {_HELP_PAGEID_LIST}>ページID一覧</span></label>
+    <select name="pageidtype" onchange="selectMenu();">
+        <patTemplate:tmpl name="page_type_list">
+        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+    </select>
+</td>
+<td align="right">
+<patTemplate:tmpl name="new_button" visibility="hidden"><span {_HELP_PAGEID_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span></patTemplate:tmpl><span {_HELP_PAGEID_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><patTemplate:tmpl name="del_button" visibility="hidden"><span {_HELP_PAGEID_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span></patTemplate:tmpl>
+</td></tr>
+<tr><td colspan="2">
+<patTemplate:link src="pageid_list" />
+<patTemplate:link src="pagesubid_list" />
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="pageid_list" visibility="hidden">
+<table id="itemlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35"><span {_HELP_PAGEID_CHECK}>選択</span></th>
+	    <th width="200"><span {_HELP_PAGEID_ID}>ID</span></th>
+	    <th width="50%"><span {_HELP_PAGEID_NAME}>名前</span></th>
+	    <th width="100"><span {_HELP_PAGEID_PATH}>パス</span></th>
+	    <th width="100"><span {_HELP_PAGEID_PRIORITY}>優先順</span></th>
+	    <th><span {_HELP_PAGEID_ACTIVE}>公開</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="id_list">
+        <tr {LINE_COLOR}>
+            <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySubId('{VALUE}');">{VALUE}</a></td>
+	    <td>{NAME}</td>
+	    <td>{PATH}</td>
+	    <td align="center">{PRIORITY}</td>
+	    <td align="center"><input type="checkbox" {AVAILABLE} disabled /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="pagesubid_list" visibility="hidden"> 
+<table id="itemlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35"><span {_HELP_PAGEID_CHECK}>選択</span></th>
+	    <th width="200"><span {_HELP_PAGEID_ID}>ID</span></th>
+	    <th width="50%"><span {_HELP_PAGEID_NAME}>名前</span></th>
+	    <th width="100"><span {_HELP_PAGEID_PRIORITY}>優先順</span></th>
+	    <th><span {_HELP_PAGEID_ACTIVE}>公開</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="sub_id_list">
+        <tr {LINE_COLOR}>
+            <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySubId('{VALUE}');">{VALUE}</a></td>
+	    <td>{NAME}</td>
+	    <td align="center">{PRIORITY}</td>
+	    <td align="center"><input type="checkbox" {AVAILABLE} disabled /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</patTemplate:tmpl>

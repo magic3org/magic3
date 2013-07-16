@@ -1,0 +1,82 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: profile.tmpl.html 5242 2012-09-23 22:24:06Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function regist(){
+	if (!window.confirm('プロフィールを更新します')) return false;
+	document.reguser_main.act.value = 'update';
+	document.reguser_main.submit();
+	return true;
+}
+function createUploader(){
+	var uploader = new qq.FileUploader({
+		element: document.getElementById('file-uploader'),
+		action: '{UPLOAD_URL}',
+		onComplete: function(id, fileName, responseJson){
+			// アバターを変更
+			$("#avatar").attr("src", responseJson.avatar);
+		},
+		debug: true
+	});
+}
+$(function(){
+	// 画像アップローダー作成
+	createUploader();
+});
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="reguser_main" class="form">
+<input type="hidden" name="act" />
+<div id="reguser_input">
+<label><span class="title">アカウント</span>{ACCOUNT}</label>
+<label><span class="title">名前</span><input type="text" name="item_name" value="{NAME}" size="10" maxlength="20" {NAME_DISABLED} /><span class="required">*</span></label>
+<label><span class="title">性別</span>
+<select id="item_gender" name="item_gender" {GENDER_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="gender_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{GENDER_HIDDEN}
+</label>
+<div class="field"><label><span class="title">生年月日</span></label>
+<select id="item_year" name="item_year" {YEAR_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="year_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{YEAR_HIDDEN}年&nbsp;
+<select id="item_month" name="item_month" {MONTH_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="month_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{MONTH_HIDDEN}月&nbsp;
+<select id="item_day" name="item_day" {DAY_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="day_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{DAY_HIDDEN}日
+</div>
+<div class="field"><label><span class="title">アバター</span></label>{IMAGE}</div>
+<div id="file-uploader"></div>
+<div><small><span class="required_msg">*は必須入力項目です。</span></small></div>
+<div>{MESSAGE}</div>
+<div class="bottom">
+<input type="button" class="button" onclick="regist();" value="更新する" />
+</div>
+</div>
+</form>
+</patTemplate:tmpl>

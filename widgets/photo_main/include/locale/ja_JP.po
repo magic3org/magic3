@@ -1,0 +1,350 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-10 10:44+0900\n"
+"PO-Revision-Date: 2012-02-10 10:45+0900\n"
+"Last-Translator: 平田直毅 <naoki@aplo.co.jp>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: JAPAN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: ../container\n"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:88
+msgid "Add new user?"
+msgstr "新規ユーザを追加しますか?"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:89
+msgid "Update user configuration?"
+msgstr "ユーザ情報を更新しますか?"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:90
+msgid "Delete user?"
+msgstr "ユーザを削除しますか?"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:91
+msgid "No name entered."
+msgstr "名前が入力されていません"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:92
+msgid "No login account entered."
+msgstr "ログインアカウントが入力されていません"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:93
+msgid "No password entered."
+msgstr "パスワードが入力されていません"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:94
+msgid "Image Manager Detail"
+msgstr "画像管理者詳細"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:95
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:112
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:221
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:247
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:517
+msgid "Name"
+msgstr "名前"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:96
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:113
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:222
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:248
+msgid "Login Account"
+msgstr "ログインアカウント"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:97
+msgid "Password"
+msgstr "パスワード"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:98
+msgid "Login Enable"
+msgstr "ログイン可"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:99
+msgid "Go back"
+msgstr "戻る"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:100
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:121
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:459
+msgid "Delete"
+msgstr "削除"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:101
+msgid "Update"
+msgstr "更新"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:102
+msgid "Add"
+msgstr "新規追加"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:107
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:452
+msgid "Select item to edit."
+msgstr "編集する項目を選択してください"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:108
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:453
+msgid "Select item to delete."
+msgstr "削除する項目を選択してください"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:109
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:454
+msgid "Delete selected item?"
+msgstr "選択項目を削除しますか?"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:110
+msgid "Image Manager List"
+msgstr "画像管理者一覧"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:111
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:460
+msgid "Select"
+msgstr "選択"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:114
+msgid "Image Count"
+msgstr "画像数"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:115
+msgid "Published Image Count"
+msgstr "公開画像数"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:116
+msgid "Login Count"
+msgstr "ログイン回数"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:118
+msgid "Registered Date"
+msgstr "登録日"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:119
+msgid "New"
+msgstr "新規"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:120
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:458
+msgid "Edit"
+msgstr "編集"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:122
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:475
+msgid "Range:"
+msgstr "範囲："
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:151
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:268
+msgid "Item deleted."
+msgstr "データを削除しました"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:153
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:242
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:270
+msgid "Failed in deleting item."
+msgstr "データ削除に失敗しました"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:186
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:424
+#, php-format
+msgid "%d Total"
+msgstr "全 %d 件"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:228
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:251
+msgid "Login account is duplicated."
+msgstr "アカウントが重複しています"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:230
+msgid "Failed in getting data."
+msgstr "データ取得に失敗しました"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:238
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:525
+msgid "Item updated."
+msgstr "データを更新しました"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:258
+msgid "Item added."
+msgstr "データを追加しました"
+
+#: ../container/admin_photo_mainAuthorWidgetContainer.php:262
+msgid "Failed in adding item."
+msgstr "データ追加に失敗しました"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:135
+msgid "Error parameters."
+msgstr "パラメータにエラーがあります"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:160
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:164
+msgid "Can not access the page."
+msgstr "アクセスできません"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:305
+#, php-format
+msgid "Include files not allowed to delete. (filename: %s)"
+msgstr "削除できないファイルが含まれています。(ファイル名： %s)"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:340
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:569
+msgid "Files deleted."
+msgstr "ファイルを削除しました"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:343
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:572
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:575
+msgid "Failed in deleting files."
+msgstr "ファイル削除に失敗しました"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:348
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:472
+msgid "Directory Name"
+msgstr "ディレクトリ名"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:354
+msgid "Directory created."
+msgstr "ディレクトリを作成しました"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:357
+msgid "Failed in creating directory."
+msgstr "ディレクトリ作成に失敗しました"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:451
+msgid "Files uploaded. Refresh file list?"
+msgstr "アップロード終了しました。ファイル一覧を更新しますか?"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:455
+msgid "Directory not allowed to edit."
+msgstr "ディレクトリは編集できません"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:456
+msgid "Create directory?"
+msgstr "ディレクトリを作成しますか?"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:457
+msgid "Path:"
+msgstr "パス："
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:461
+msgid "Filename"
+msgstr "ファイル名"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:462
+msgid "Status"
+msgstr "状態"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:463
+msgid "Image Code"
+msgstr "画像コード"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:464
+msgid "Size"
+msgstr "サイズ"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:465
+msgid "View Count"
+msgstr "閲覧数"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:466
+msgid "Rating"
+msgstr "評価"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:467
+msgid "Update Date"
+msgstr "更新日"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:468
+msgid "Image Upload"
+msgstr "画像アップロード"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:469
+msgid "Max Filesize"
+msgstr "1ファイル最大サイズ"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:470
+msgid "Select Files"
+msgstr "ファイルを選択"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:471
+msgid "Create Directory"
+msgstr "ディレクトリ作成"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:473
+msgid "Create"
+msgstr "作成"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:474
+msgid "Cancel"
+msgstr "キャンセル"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:529
+msgid "Failed in updating item."
+msgstr "データ更新に失敗しました"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:585
+msgid "Images recreated."
+msgstr "画像を再作成しました"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:638
+msgid "Can not find photo information."
+msgstr "画像情報が見つかりません"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:831
+msgid "Published"
+msgstr "公開中"
+
+#: ../container/admin_photo_mainImagebrowseWidgetContainer.php:834
+msgid "Unpublished"
+msgstr "非公開"
+
+#~ msgid "Code"
+#~ msgstr "コード"
+
+#~ msgid "User Type"
+#~ msgstr "ユーザ種別"
+
+#~ msgid "Administration"
+#~ msgstr "管理権限"
+
+#~ msgid "Count"
+#~ msgstr "回数"
+
+#~ msgid "User Detail"
+#~ msgstr "ユーザ詳細"
+
+#~ msgid "User List"
+#~ msgstr "ユーザ一覧"
+
+#~ msgid "Select files to delete."
+#~ msgstr "削除する項目を選択してください"
+
+#~ msgid "Delete selected files?"
+#~ msgstr "選択項目を削除しますか?"
+
+#~ msgid "Failed in accessing."
+#~ msgstr "アクセスできません"
+
+#~ msgid "Untitled Site"
+#~ msgstr "サイト名未設定"
+
+#~ msgid "Logout from system?"
+#~ msgstr "ログアウトしますか?"
+
+#~ msgid "Top"
+#~ msgstr "トップ"
+
+#~ msgid "Menu"
+#~ msgstr "メニュー"
+
+#~ msgid "Show Menubar"
+#~ msgstr "メニューバーを表示"
+
+#~ msgid "Hide Menubar"
+#~ msgstr "メニューバーを隠す"

@@ -1,0 +1,85 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_history.tmpl.html 5145 2012-08-29 13:21:42Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function cancelItem(){
+	document.main.task.value = 'entry_detail';
+	document.main.submit();
+	return true;
+}
+function selpage(page){
+	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;
+}
+function getHistory(serial){
+	document.main.task.value = 'entry_detail';
+	document.main.act.value = 'get_history';
+	document.main.serial.value = serial;
+	document.main.submit();
+	return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('itemlist', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="history" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="entryid" value="{ENTRY_ID}" />
+<input type="hidden" name="page" value="{PAGE}" />
+<!-- m3:PostParam -->
+<table width="90%">
+<tr><td>
+<label>ブログ記事編集履歴</label>
+</td><td align="right"><input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</td></tr>
+<tr><td colspan="2">
+<table id="itemlist" class="simple-table" width="500px">
+    <thead>
+        <tr>
+	    <!--<th width="35">選択</th>-->
+	    <th width="35">No</th>
+	    <th width="40%">更新日時</th>
+	    <th width="15%">更新者</th>
+	    <th>操作</th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr>
+        <!--<td align="center"><input type="checkbox" name="item{INDEX}_selected" {OPE_DISABLED} /></td>-->
+	    <td align="center">{NO}</td>
+	    <td align="center">{DATE}</td>
+	    <td align="center">{USER}</td>
+	    <td align="center"><a href="javascript:void(0);" onclick="getHistory('{SERIAL}');"><img src="{HISTORY_GET_IMG}" width="16" height="16" border="0" alt="{HISTORY_GET_STR}" title="{HISTORY_GET_STR}" /></a></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+{PAGE_LINK}
+</td></tr>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

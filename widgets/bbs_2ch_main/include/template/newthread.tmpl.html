@@ -1,0 +1,57 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	// 初期データロード
+	$('input[name=bbs_name]').val($.cookie('bbs_name'));
+	$('input[name=bbs_email]').val($.cookie('bbs_email'));
+	
+	// 送信処理
+	$("form.bbs_form").bind("submit", function(){
+		// クッキー再設定
+		$.cookie('bbs_name', $(this).find('input[name=bbs_name]').val(), { expires: 30 });
+		$.cookie('bbs_email', $(this).find('input[name=bbs_email]').val(), { expires: 30 });
+
+		$(this).find('input[name=act]').val('add');
+		return true;
+	});
+});
+//]]>
+</script>
+<form method="post" class="form bbs_form" enctype="{ENCTYPE}">
+<input type="hidden" name="task" value="newthread" />
+<input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<div id="{CSS_ID}" style="width:100%;text-align:left;padding:10px 0 10px 0;{BBS_STYLE}" >
+<div align="center">
+{TOP_IMAGE}
+<!-- m3:ErrorMessage -->
+<table border="1" cellspacing="7" cellpadding="3" style="width:95%;text-align:left;{MAKE_THREAD_STYLE}">
+<tr><td>
+  <table border="0" cellpadding="1" style="width:100%;">
+  <tr><td nowrap colspan="3" style="border:none;"><font size="+1"><b>{BBS_TITLE}</b></font></td></tr>
+  <tr><td colspan="4" style="border:none;">{GUIDE}</td></tr>
+  <tr><td nowrap align="right" style="border:none;">タイトル：</td><td style="border:none;"><input type="text" name="bbs_subject" size="40" value="{SUBJECT}" {SUBJECT_DISABLED}/></td>
+  <td style="border:none;"><input type="submit" class="button" value="新規スレッド作成" {BUTTON_DISABLED}/></td></tr>
+  <tr>
+    <td nowrap align="right" style="border:none;">名前：</td>
+    <td nowrap colspan="2" style="border:none;">
+      <input type="text" name="bbs_name" size="19" {NAME_DISABLED}/>&nbsp;&nbsp;E-mail<font size="1">(省略可)</font>：<input type="text" name="bbs_email" size="19" {EMAIL_DISABLED}/>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap align="right" valign="top" style="border:none;">内容：</td>
+    <td colspan="3" style="border:none;">
+    <textarea rows="5" cols="60" wrap="off" name="bbs_message" style="width:95%;" {MESSAGE_DISABLED}>{MESSAGE}</textarea><br />
+    <patTemplate:tmpl name="file_upload" visibility="hidden"><input type="file" name="bbs_file" size="50" /></patTemplate:tmpl>
+    </td>
+  </tr>
+  </table>
+</td></tr>
+</table>
+</div>
+<br />
+<div style="margin:0 10px;"><a href="{BBS_URL}"><b>BBSホーム</b></a></div>
+</div>
+</form>
+</patTemplate:tmpl>

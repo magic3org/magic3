@@ -1,0 +1,111 @@
+/* begin PostContent */
+body
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 12px;
+font-style: normal;
+font-weight: normal;
+  color: #3A453B;
+  background: transparent;
+  padding: 4px;
+}
+
+a
+{
+font-family: Arial, Helvetica, Sans-Serif;
+text-decoration: underline;
+  color: #5B832F;
+}
+
+a:link
+{
+font-family: Arial, Helvetica, Sans-Serif;
+text-decoration: underline;
+  color: #5B832F;
+}
+
+a:visited, a.visited
+{
+font-family: Arial, Helvetica, Sans-Serif;
+text-decoration: underline;
+  color: #6B806D;
+}
+
+a:hover, a.hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+text-decoration: none;
+  color: #396016;
+}
+
+h1, h2, h3, h4, h5, h6,
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover
+h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited
+{
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none;
+}
+
+h1, h1 a, h1 a:link, h1 a:visited, h1 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 28px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #5B832F;
+}
+
+h2, h2 a, h2 a:link, h2 a:visited, h2 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 22px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #5B832F;
+}
+
+h3, h3 a, h3 a:link, h3 a:visited, h3 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 18px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #5B832F;
+}
+
+h4, h4 a, h4 a:link, h4 a:visited, h4 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 16px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #557C2D;
+}
+
+h5, h5 a, h5 a:link, h5 a:visited, h5 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 14px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #89BF4F;
+}
+
+h6, h6 a, h6 a:link, h6 a:visited, h6 a:hover
+{
+font-family: Arial, Helvetica, Sans-Serif;
+font-size: 14px;
+font-style: normal;
+font-weight: bold;
+text-align: left;
+  color: #415E22;
+}
+/* end PostContent */
+

@@ -1,0 +1,206 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_other.tmpl.html 5677 2013-02-16 09:57:01Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<link rel="stylesheet" href="{_ROOT_URL}/scripts/js_color_picker_v2/js_color_picker_v2.css" media="screen" />
+<script src="{_ROOT_URL}/scripts/js_color_picker_v2/color_functions.js"></script>
+<script type="text/javascript" src="{_ROOT_URL}/scripts/js_color_picker_v2/js_color_picker_v2.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+var imageType = 0;	// 画像タイプ
+
+function updateItem(){
+    if (!window.confirm('設定を更新しますか?')) return false;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return true;
+}
+// ファイルブラウザ起動
+function selectImage(type)
+{
+	imageType = type;
+	m3_openImageFileBrowser();
+}
+// ファイルブラウザからの設定用
+function SetUrl(url)
+{
+	// URL設定
+	if (imageType == 0){
+		$('#top_image').val(url);
+	} else if (imageType == 1){
+		$('#bg_image').val(url);
+	}
+}
+$(function(){
+	// カラー設定
+	m3_tableWithScrollbar('item_list', -1, 0);
+	
+	// WYSIWYGエディター作成
+	//m3_setHtmlEditor('bbs_guide');
+	//m3_setHtmlEditor('bottom_message');
+	m3SetWysiwygEditor('bbs_guide', 150);
+	m3SetWysiwygEditor('bottom_message', 150);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="other" />
+<br />
+<table><tr><td>
+<table id="item_list" class="simple-table" width="900">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150">掲示板タイトル</td>
+	    <td colspan="3"><input type="text" name="bbs_title" value="{BBS_TITLE}" size="60" maxlength="100" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">トップ画像リンク先</td>
+	    <td colspan="3"><input type="text" name="top_link" value="{TOP_LINK}" size="60" maxlength="100" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">トップ画像</td>
+	    <td colspan="3"><input type="text" id="top_image" name="top_image" value="{TOP_IMAGE}" size="60" maxlength="100" /><input type="button" class="button" onclick="selectImage(0);" value="変更" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">背景画像</td>
+	    <td colspan="3"><input type="text" id="bg_image" name="bg_image" value="{BG_IMAGE}" size="60" maxlength="100" /><input type="button" class="button" onclick="selectImage(1);" value="変更" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">掲示板規則</td>
+	    <td colspan="3"><textarea name="bbs_guide">{BBS_GUIDE}</textarea></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">画面下部メッセージ</td>
+	    <td colspan="3"><textarea name="bottom_message">{BOTTOM_MESSAGE}</textarea></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">文字色</td>
+	    <td colspan="3"><input type="text" name="text_color" value="{TEXT_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].text_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">背景色</td>
+	    <td colspan="3"><input type="text" name="bg_color" value="{BG_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].bg_color);" /></td>
+	</tr>
+        <!--<tr>
+	    <td class="table-headside">タイトルカラー</td>
+	    <td colspan="3"><input type="text" name="title_color" value="{TITLE_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].title_color);" /></td>
+	</tr>-->
+        <tr>
+	    <td class="table-headside">メニュー背景色</td>
+	    <td colspan="3"><input type="text" name="menu_color" value="{MENU_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].menu_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">スレッド表示部背景色</td>
+	    <td colspan="3"><input type="text" name="thread_color" value="{THREAD_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].thread_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">スレッド作成部背景色</td>
+	    <td colspan="3"><input type="text" name="makethread_color" value="{MAKETHREAD_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].makethread_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リンク色</td>
+	    <td colspan="3"><input type="text" name="link_color" value="{LINK_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].link_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リンク色(アクティブ)</td>
+	    <td colspan="3"><input type="text" name="alink_color" value="{ALINK_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].alink_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リンク色(アクセス済み)</td>
+	    <td colspan="3"><input type="text" name="vlink_color" value="{VLINK_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].vlink_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">件名文字色</td>
+	    <td colspan="3"><input type="text" name="subject_color" value="{SUBJECT_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].subject_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">投稿者名文字色</td>
+	    <td colspan="3"><input type="text" name="name_color" value="{NAME_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].name_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">エラーメッセージ文字色</td>
+	    <td colspan="3"><input type="text" name="err_message_color" value="{ERR_MESSAGE_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].err_message_color);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">件名最大長</td>
+	    <td colspan="3"><input type="text" name="subject_length" value="{SUBJECT_LENGTH}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">投稿者名最大長</td>
+	    <td colspan="3"><input type="text" name="name_length" value="{NAME_LENGTH}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">emailアドレス最大長</td>
+	    <td colspan="3"><input type="text" name="email_length" value="{EMAIL_LENGTH}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">投稿文最大長</td>
+	    <td colspan="3"><input type="text" name="message_length" value="{MESSAGE_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">投稿文行長</td>
+	    <td colspan="3"><input type="text" name="line_length" value="{LINE_LENGTH}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">投稿文行数</td>
+	    <td colspan="3"><input type="text" name="line_count" value="{LINE_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">レスアンカーリンク数</td>
+	    <td colspan="3"><input type="text" name="res_anchor_link_count" value="{RES_ANCHOR_LINK_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">トップ画面のスレッド最大数</td>
+	    <td colspan="3"><input type="text" name="thread_count" value="{THREAD_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">トップ画面のレス最大数</td>
+	    <td colspan="3"><input type="text" name="res_count" value="{RES_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">投稿可能なレス数の上限</td>
+	    <td colspan="3"><input type="text" name="thread_res" value="{THREAD_RES}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">メニューのスレッド最大数</td>
+	    <td colspan="3"><input type="text" name="menu_thread_count" value="{MENU_THREAD_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">名前未設定時の表示名</td>
+	    <td colspan="3"><input type="text" name="noname_name" value="{NONAME_NAME}" size="30" maxlength="30" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">サイト運営者名</td>
+	    <td colspan="3"><input type="text" name="admin_name" value="{ADMIN_NAME}" size="30" maxlength="30" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">スレッド終了メッセージ</td>
+	    <td colspan="3" height="50"><textarea name="thread_end_message" style="width:100%;height:100%;">{THREAD_END_MESSAGE}</textarea></td>
+	</tr>
+        <!--<tr>
+	    <td class="table-headside">ファイルアップロード</td>
+	    <td colspan="3"><input type="checkbox" name="item_required[]" {REQUIRED} /></td>
+	</tr>-->
+	
+    </tbody>
+</table>
+</td></tr>
+<tr><td align="right">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</td></tr></table>
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,135 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_other.tmpl.html 5108 2012-08-14 03:13:58Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function uploadCheck(){
+	if (!document.main.upfile.value){
+		alert('画像ファイルが選択されていません');
+		return false;
+	}
+	if (!window.confirm('画像ファイルをアップロードしますか?')) return false;
+	document.main.act.value = 'upload';
+	document.main.enctype = 'multipart/form-data';
+	document.main.encoding = 'multipart/form-data';			// for IE
+	document.main.submit();
+	return false;
+}
+$(function(){
+	// カラー設定
+	m3_tableWithScrollbar('item_list', -1, 0);
+	
+	// WYSIWYGエディター作成
+	//m3_setHtmlEditor('top_content');
+	//m3_setHtmlEditor('item_layout_entry_single');
+	//m3_setHtmlEditor('item_layout_entry_list');
+	//m3_setHtmlEditor('item_layout_comment_list');
+	m3SetWysiwygEditor('top_content', 200/* 高さ */);
+	m3SetWysiwygEditor('item_layout_entry_single', 100/* 高さ */, false, 'layout');
+	m3SetWysiwygEditor('item_layout_entry_list', 100/* 高さ */, false, 'layout');
+	m3SetWysiwygEditor('item_layout_comment_list', 100/* 高さ */, false, 'layout');
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="config" />
+<br>
+<table width="90%"><tr><td>
+<table id="item_list" class="simple-table" width="100%">
+<caption><span {_HELP_CONFIG_TITLE}>ブログ設定</span></caption>
+    <tbody>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIG_OPERATION}>機能</span></td>
+	    <td><label class="item_list_inline"><input type="checkbox" name="use_multi_blog" {USE_MULTI_BLOG} />マルチブログを使用</label><label class="item_list_inline"><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></td>
+	</tr>
+    <tr>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIG_VIEW_COUNT}>記事表示数</span></td>
+	    <td><input type="text" name="entry_view_count" value="{VIEW_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_ORDER}>記事表示順</span></td>
+	    <td>
+	    <select name="entry_view_order">
+	        <option value="0" {VIEW_ORDER_INC_SELECTED}>昇順</option>
+		<option value="1" {VIEW_ORDER_DEC_SELECTED}>降順</option>
+	    </select>
+	    </td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIG_ENTRY_DEFAULT_IMAGE}>記事デフォルト画像<br />200x200</span></td>
+	    <td><div id="preview_outer">{ENTRY_DEFAULT_IMAGE}</div><input type="file" name="upfile" size="50" /><input type="button" class="button" onclick="uploadCheck();" value="アップロード" /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリ数</span></td>
+	    <td><input type="text" name="category_count" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIG_RECEIVE_COMMENT}>コメント</span></td>
+	    <td>
+	    <span {_HELP_CONFIG_MAX_COMMENT_LENGTH}>最大文字数：</span><input type="text" name="max_comment_length" value="{MAX_COMMENT_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /><br />
+		<input type="checkbox" name="comment_user_limited" {COMMENT_USER_LIMITED} />ログインしたユーザに投稿を制限
+		</td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIG_MULTI_BLOG_TOP_CONTENT}>マルチブログ<br />トップコンテンツ</span></td>
+	    <td><textarea name="top_content">{TOP_CONTENT}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="table-headside" rowspan="6"><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></td>
+	    <td class="table-headside">記事詳細</td>
+	</tr>
+    <tr>
+	    <td><textarea name="item_layout_entry_single">{LAYOUT_ENTRY_SINGLE}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="table-headside">記事一覧</td>
+	</tr>
+    <tr>
+	    <td><textarea name="item_layout_entry_list">{LAYOUT_ENTRY_LIST}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="table-headside">コメント一覧</td>
+	</tr>
+    <tr>
+	    <td><textarea name="item_layout_comment_list">{LAYOUT_COMMENT_LIST}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="table-headside" rowspan="3"><span {_HELP_CONFIG_OUTPUT_HEAD}>ヘッダ出力</span></td>
+	    <td><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} />ヘッダにタグを出力する(SNS連携等)</td>
+	</tr>
+    <tr>
+	    <td class="table-headside">記事詳細</td>
+	</tr>
+    <tr>
+	    <td height="50"><textarea name="item_head_view_detail" style="width:100%;height:100%;">{HEAD_VIEW_DETAIL}</textarea></td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+<tr><td align="right">
+<input type="button" class="button" onClick="updateItem()" value="更新" />
+</td></tr></table>
+
+</form>
+</div>
+</patTemplate:tmpl>

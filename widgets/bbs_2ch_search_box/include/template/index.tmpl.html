@@ -1,0 +1,18 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function bbs_search(){
+	document.bbs_search_box.act.value = 'bbs_search';
+	document.bbs_search_box.submit();
+	return true;
+}
+//]]>
+</script>
+<form name="bbs_search_box" method="post" class="form" onsubmit="bbs_search();">
+<input type="hidden" name="act" />
+<table width="100%">
+  <tr><td><input type="text" name="keyword" size="10" maxlength="40" style="width:95%;" /></td></tr>
+  <tr><td align="right"><input type="button" class="button" onclick="bbs_search();" value="検索" />&nbsp;&nbsp;</td></tr>
+</table>
+</form>
+</patTemplate:tmpl>

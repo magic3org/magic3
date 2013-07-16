@@ -1,0 +1,155 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: top_jquery.tmpl.html 4624 2012-01-28 12:05:57Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function addItem()
+{
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(serialNo)
+{
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(serialNo)
+{
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function selectItem()
+{
+	document.main.act.value = 'select';
+	document.main.submit();
+	return true;
+}
+function listItem()
+{
+	document.main.task.value = 'list';
+	document.main.submit();
+	return true;
+}
+function m3UpdateByChildWindow(serial)
+{
+	// コンテンツ選択メニュー作成
+	m3_ajax_request('', 'act=getmenu&content_serial=' + serial, ajax_success_func, ajax_failure_func, window.location.href);
+}
+function ajax_success_func(request, retcode, jsondata)
+{
+	if (jsondata.menu_html) $('#content_menu').html(jsondata.menu_html);
+}
+function ajax_failure_func(request)
+{
+	alert('ajax failure!');
+}
+$(function(){
+	// タブ作成
+	$tabs = $("#main_area").tabs({
+		select: function(event, ui){
+			if (ui.panel.id == 'edit_content'){
+				var url = '';
+				var id = document.main.contentid.value;
+				url = "?cmd=configwidget&openby=tabs&widget={CONTENT_WIDGET_ID}&task=content_detail&contentid=" + id;
+				document.getElementById("default_content").src = url;
+			}
+			return true;
+		}
+	});
+	$('#button_edit_content').click(function() {
+		$tabs.tabs('select', 1);
+		return false;
+	});
+});
+//]]>
+</script>
+<div id="main_area" class="m3config_tabs">
+            <ul>
+	    <li><a href="#widget_config"><span>ウィジェット設定</span></a></li>
+	    <li><a href="#edit_content"><span>コンテンツ編集</span></a></li>
+	    </ul>
+	    <div id="widget_config">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="defserial" value="{DEF_SERIAL}" />
+<input type="hidden" name="defconfig" value="{DEF_CONFIG}" />
+<table width="95%" style="margin: 0 auto;">
+<tr><td><span {_HELP_ITEM_DETAIL}><label>固定コンテンツ設定</label></span></td>
+<td align="right"><span {_HELP_ITEM_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_ITEM_NAME}>名前</span></td>
+	    <td width="800">
+	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+	        <option value="0">-- 新規登録 --</option>
+	        <patTemplate:tmpl name="title_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    </patTemplate:tmpl>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ITEM_CONTENT}>コンテンツ</span></td>
+	    <td>
+	    <span id="content_menu"><select name="contentid">
+	        <option value="0">-- 未選択 --</option>
+	        <patTemplate:tmpl name="content_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select></span>
+	    <input id="button_edit_content" type="button" class="button" value="コンテンツを編集" />
+	    </td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_ITEM_OPTION}>表示オプション</span></td>
+	    <td>
+		<input type="checkbox" name="item_show_read_more" {SHOW_READ_MORE} />「もっと読む」ボタンを表示&nbsp;&nbsp;ボタンラベル：<input type="text" name="item_read_more_title" value="{READ_MORE_TITLE}" size="20" maxlength="20" />
+	    </td>
+	</tr>
+	<tr class="even">
+	<td align="right" colspan="2">
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+	    </div>
+	    <div id="edit_content">
+	    <iframe id="default_content" name="default_content" style="width:100%; height:2000px; border:none;" allowTransparency="true" frameborder="0">{_LC_LABEL_NENU_DEF}</iframe>
+	    </div>
+</div>
+</patTemplate:tmpl>

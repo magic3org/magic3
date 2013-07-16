@@ -1,0 +1,96 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function selectMenu(){
+	document.main.submit();
+	return true;
+}
+function editItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('編集する項目を選択してください');
+		} else {
+			document.main.task.value = 'pageinfo_detail';
+			document.main.act.value = 'edit';
+			document.main.pagesubid.value = items[i];
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItemBySubId(id){
+	document.main.task.value = 'pageinfo_detail';
+	document.main.act.value = 'edit';
+	document.main.pagesubid.value = id;
+	document.main.submit();
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('itemlist', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="pageinfo" />
+<input type="hidden" name="act" />
+<input type="hidden" name="pagesubid" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<table width="90%">
+<tr><td>
+<label><span {_HELP_PAGEINFO_LIST}>ページ一覧</span></label>
+    <select name="pageid" onchange="selectMenu();">
+        <patTemplate:tmpl name="main_id_list">
+        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+    </select>
+</td>
+<td align="right"><span {_HELP_PAGEINFO_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table id="itemlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35"><span {_HELP_PAGEINFO_CHECK}>選択</span></th>
+	    <th width="200"><span {_HELP_PAGEINFO_SUBID}>ページサブID</span></th>
+	    <th width="20%"><span {_HELP_PAGEINFO_NAME}>名前</span></th>
+	    <th width="100"><span {_HELP_PAGEINFO_ATTR}>ページ属性</span></th>
+	    <th width="150"><span {_HELP_PAGEINFO_TEMPLATE}>テンプレート</span></th>
+	    <th width="50"><span {_HELP_PAGEINFO_PUBLIC}>公開</span></th>
+	    <th width="50"><span {_HELP_PAGEINFO_SSL}>SSL</span></th>
+	    <th width="100"><span {_HELP_PAGEINFO_USER_LIMITED}>ユーザ制限</span></th>
+	    <th width="100"><span {_HELP_PAGEINFO_DEFAULT}>デフォルト</span></th>
+	    <th><span {_HELP_PAGEINFO_REF}>使用</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="sub_id_list">
+        <tr {LINE_COLOR}>
+            <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySubId('{VALUE}');">{VALUE}</a></td>
+	    <td>{NAME}</td>
+	    <td align="center">{CONTENT_TYPE}</td>
+	    <td align="center">{TEMPLATE}</td>
+	    <td align="center"><input type="checkbox" {PUBLIC} disabled /></td>
+	    <td align="center"><input type="checkbox" {SSL} disabled /></td>
+	    <td align="center"><input type="checkbox" {USER_LIMITED} disabled /></td>
+	    <td align="center"><input type="checkbox" {DEFAULT} disabled /></td>
+	    <td align="center">{REF_COUNT}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,85 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_list.tmpl.html 4970 2012-06-15 10:51:03Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function addItems()
+{
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('リンクを追加するメニューを選択してください');
+		} else {
+			if (!window.confirm('リンクを選択したメニューに追加しますか?')) return false;
+			document.main.act.value = 'addtomenu';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function cancel()
+{
+	window.close();
+	window.opener.focus();
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('itemlist', 10, 0);
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="add_to_menu" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="contentid" value="{CONTENT_ID}" />
+<table width="90%">
+<tr><td>
+<span {_HELP_MENU_LIST}><label>追加対象のメニュー</label></span>
+</td><td align="right"></td></tr>
+<tr><td colspan="2">
+<table id="itemlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35" align="center"><span {_HELP_MENU_CHECK}>選択</span></th>
+	    <th width="100" align="center"><span {_HELP_MENU_ID}>ID</span></th>
+	    <th align="center"><span {_HELP_MENU_NAME}>名前</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr>
+            <td align="center"><input type="checkbox" name="item{INDEX}_selected" {CHECK}/></td>
+	    <td>{ID}</td>
+	    <td>{NAME}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+<tr><td colspan="2" align="right"><input type="button" class="button" onclick="addItems();" value="追加" {ADD_DISABLED}/>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

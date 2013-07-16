@@ -1,0 +1,73 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 4845 2012-04-13 04:47:07Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function sendmessage(){
+	if (!window.confirm('お問い合わせを送信します')) return false;
+	document.contactus_main.act.value = 'send';
+	document.contactus_main.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="contactus_main" class="form" >
+<input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<table width="100%">
+<patTemplate:tmpl name="show_title" visibility="hidden"><tr><td {CLASS} colspan="2" style="border:none;"><h2>{TITLE_NAME}</h2></td></tr></patTemplate:tmpl>
+<patTemplate:tmpl name="show_explanation" visibility="hidden"><tr><td colspan="2" style="border:none;">{EXPLANATION}</td></tr></patTemplate:tmpl>
+<patTemplate:tmpl name="show_name" visibility="hidden">
+<tr><td style="border:none;">お名前</td><td style="border:none;"><input type="text" name="item_name" value="{NAME}" size="25" maxlength="50" {NAME_DISABLED} />&nbsp;{REQUIRED}</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_name_kana" visibility="hidden">
+<tr><td style="border:none;">お名前(フリガナ)</td><td style="border:none;"><input type="text" name="item_name_kana" value="{NAME_KANA}" size="25" maxlength="50" {NAME_KANA_DISABLED} />&nbsp;{REQUIRED}</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_email" visibility="hidden">
+<tr><td style="border:none;">Eメール</td><td style="border:none;"><input type="text" name="item_email" value="{EMAIL}" size="25" maxlength="50" {EMAIL_DISABLED} />&nbsp;{REQUIRED}</td></tr>
+<tr><td style="border:none;">Eメール(確認)</td><td style="border:none;"><input type="text" name="item_email2" value="{EMAIL2}" size="25" maxlength="50" {EMAIL2_DISABLED} />&nbsp;{REQUIRED}</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_company_name" visibility="hidden">
+<tr><td style="border:none;">会社名</td><td style="border:none;"><input type="text" name="item_company_name" value="{COMPANY_NAME}" size="25" maxlength="50" {COMPANY_NAME_DISABLED} />&nbsp;{REQUIRED}</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_zipcode" visibility="hidden">
+<tr><td style="border:none;">郵便番号</td><td style="border:none;"><input type="text" name="item_zipcode" value="{ZIPCODE}" size="10" maxlength="10" {ZIPCODE_DISABLED} />&nbsp;{REQUIRED}</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_state" visibility="hidden">
+<tr><td style="border:none;">都道府県</td><td style="border:none;">
+<select id="item_state" name="item_state" {STATE_DISABLED}>
+<option value=""> </option>
+<patTemplate:tmpl name="state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+&nbsp;{REQUIRED}
+</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_address" visibility="hidden">
+<tr><td style="border:none;">住所</td><td style="border:none;"><input type="text" name="item_address" value="{ADDRESS}" size="30" maxlength="50" style="width:300px" {ADDRESS_DISABLED} />&nbsp;{REQUIRED}</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_tel" visibility="hidden">
+<tr><td style="border:none;">電話番号</td><td style="border:none;"><input type="text" name="item_phone" value="{PHONE}" size="20" maxlength="20" {PHONE_DISABLED} />&nbsp;{REQUIRED}</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_body" visibility="hidden">
+<tr><td style="border:none;">内容</td><td style="border:none;"><textarea name="item_body" rows="10" cols="35" {BODY_DISABLED}>{BODY}</textarea><br />{REQUIRED}</td></tr>
+</patTemplate:tmpl>
+<tr><td colspan="2" style="border:none;">&nbsp;</td></tr>
+<tr><td colspan="2" align="right" style="border:none;">{MESSAGE}&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" class="button" onclick="sendmessage();" value="{SEND_BUTTON_LABEL}" {SEND_BUTTON_DISABLED} />
+</td></tr>
+</table>
+</form>
+</patTemplate:tmpl>

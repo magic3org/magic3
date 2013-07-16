@@ -1,0 +1,30 @@
+<patTemplate:tmpl name="_widget">
+<SCRIPT language="JavaScript">
+<!--
+function sendpwd(){
+	document.reserve_main.task.value = 'sendpwd';
+	document.reserve_main.act.value = 'sendpassword';
+	document.reserve_main.submit();
+	return true;
+}
+// -->
+</SCRIPT>
+<!-- m3:ErrorMessage -->
+<form method="post" name="reserve_main" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" />
+<table width="100%" valign="top">
+<tr><td>
+<table width="100%">
+<tr><td class="contentheading">パスワード再送信&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td>送信先のメールアドレスを入力してください。</td></tr>
+<tr><td>メールアドレス:&nbsp;&nbsp;<input type="text" name="reserve_account" size="30" maxlength="50" value="{ACCOUNT}" {ACCOUNT_DISABLED}/></td></tr>
+<tr><td align="right"><input type="button" class="button" onClick="sendpwd();" value="{BUTTON_LABEL}" {BUTTON_DISABLED}></td></tr>
+</table>
+</td></tr>
+<tr><td><a href="{LOGIN_URL}">ログイン</a></td></tr>
+<tr><td>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+</td></tr></table>
+</form>
+</patTemplate:tmpl>

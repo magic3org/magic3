@@ -1,0 +1,17 @@
+<patTemplate:tmpl name="_widget">
+<patTemplate:tmpl name="show_title" visibility="hidden">{TITLE}</patTemplate:tmpl>
+<!-- m3:ErrorMessage -->
+<patTemplate:tmpl name="entrylist">
+<div class="message_list">
+<div><a href="{PERMALINK}">{TITLE}</a></div>
+<div><span style="font-size:x-small;">{DATE}</span></div>
+<div>{ENTRY}</div>
+<patTemplate:tmpl name="entry_footer" visibility="hidden"><div>{LINK}</div></patTemplate:tmpl>
+</div>
+{SPACER}
+</patTemplate:tmpl>
+<div style="{LINK_STYLE_INNER_BOTTOM}"><patTemplate:tmpl name="page_link" visibility="hidden">{PAGE_LINK}</patTemplate:tmpl></div>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<div style="{LINK_STYLE_BOTTOM}">
+<a href="{TOP_URL}" accesskey="0">ﾌﾞﾛｸﾞﾎｰﾑに戻る[0]</a></div>
+</patTemplate:tmpl>

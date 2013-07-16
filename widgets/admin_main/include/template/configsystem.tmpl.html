@@ -1,0 +1,459 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: configlang.tmpl.html 4917 2012-05-23 09:44:57Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function clearCache(){
+	if (!window.confirm('キャッシュデータをすべてクリアしますか?')) return false;
+	document.main.act.value='clearcache';
+	document.main.submit();
+	return true;
+}
+function toggleSiteOpen(status){
+	if (status == 0){// 停止するとき
+		if (!window.confirm('サイト運用を停止しますか?')) return false;
+		document.main.act.value='siteclose';
+	} else {
+		if (!window.confirm('サイト運用を開始しますか?')) return false;
+		document.main.act.value='siteopen';
+	}
+	document.main.submit();
+	return true;
+}
+function updateIp(){
+	if (!window.confirm('IPアドレスを更新しますか?')) return false;
+	document.main.act.value='updateip';
+	document.main.submit();
+	return true;
+}
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow(type, url)
+{
+	//window.open(url,"","toolbar=no,menubar=no,location=yes,status=no,scrollbars=yes,resizable=yes,width=1000,height=800");
+	m3ShowPreviewWindow(type, url);
+	return true;
+}
+$(function(){
+	// 行カラー設定
+	m3_tableWithScrollbar('site_info', -1, 0);
+	m3_tableWithScrollbar('system_info', -1, 0);
+	m3_tableWithScrollbar('system_version', -1, 0);
+	m3_tableWithScrollbar('server_env', -1, 0);
+	m3_tableWithScrollbar('db_info', -1, 0);
+	m3_tableWithScrollbar('php_info', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<table width="800"><tr><td>
+<patTemplate:tmpl name="system_check" visibility="hidden">
+<table class="simple-table" width="100%">
+    <caption>システムチェック</caption>
+    <tbody>
+        <tr>
+	    <td>{MESSAGE}</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+</patTemplate:tmpl>
+<table class="simple-table" id="site_info" width="100%">
+    <caption>サイトの運用状況</caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150">URL</td>
+	    <td colspan="2"><a href="#" onclick="previewInOtherWindow(0, '{SITE_URL}');">{SITE_URL}</a></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">サイト公開</td>
+	    <td colspan="2">{SITE_OPEN}<input type="button" class="button" onclick="toggleSiteOpen({SITE_OPEN_STATUS});" value="{SITE_OPEN_LABEL}" /><br />
+	    <label>非公開の場合、全アクセスポイントがメンテナンス画面に切り替わります</label></td>
+	</tr>
+        <tr>
+	    <td class="table-headside" rowspan="4">アクセスポイント</td>
+	    <td class="table-headside" width="150">管理用</td><td><a href="#" onclick="previewInOtherWindow(0, '{ADMIN_ACCESS_URL}');">{ADMIN_ACCESS_URL}</a></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">PC用</td><td><patTemplate:tmpl name="show_site_pc_open" visibility="hidden"><input type="checkbox" name="item_site_pc_in_public" {SITE_PC_IN_PUBLIC} />公開<br />
+	    <a href="#" onclick="previewInOtherWindow(0, '{PC_ACCESS_URL}');">{PC_ACCESS_URL}</a></patTemplate:tmpl>
+		<patTemplate:tmpl name="show_site_pc_close" visibility="hidden">閉鎖</patTemplate:tmpl></td>
+	</tr>
+    <tr>
+	    <td class="table-headside">スマートフォン用</td><td><patTemplate:tmpl name="show_site_smartphone_open" visibility="hidden"><input type="checkbox" name="item_site_smartphone_in_public" {SITE_SMARTPHONE_IN_PUBLIC} />公開<br />
+	    <a href="#" onclick="previewInOtherWindow(2, '{SMARTPHONE_ACCESS_URL}');">{SMARTPHONE_ACCESS_URL}</a></patTemplate:tmpl>
+		<patTemplate:tmpl name="show_site_smartphone_close" visibility="hidden">閉鎖</patTemplate:tmpl></td>
+	</tr>
+    <tr>
+	    <td class="table-headside">携帯用</td><td><patTemplate:tmpl name="show_site_mobile_open" visibility="hidden"><input type="checkbox" name="item_site_mobile_in_public" {SITE_MOBILE_IN_PUBLIC} />公開&nbsp;&nbsp;画面エンコーディング：{MOBILE_ENCODE}<br />
+	    <a href="#" onclick="previewInOtherWindow(1, '{MOBILE_ACCESS_URL}');">{MOBILE_ACCESS_URL}</a></patTemplate:tmpl>
+		<patTemplate:tmpl name="show_site_mobile_close" visibility="hidden">閉鎖</patTemplate:tmpl></td>
+	</tr>
+	<!--
+        <tr>
+	    <td class="table-headside">アクセス制限しないIP</td>
+	    <td><input type="text" name="except_ip" value="{EXCEPT_IP}" size="70" maxlength="70" /><input type="button" class="button" onclick="updateIp();" value="更新" /></td>
+	</tr>-->
+    </tbody>
+</table>
+<br />
+</td></tr>
+<tr><td>
+<table class="simple-table" id="system_info" width="100%">
+<caption>詳細設定</caption>
+    <tbody>
+    <tr>
+	    <td class="table-headside" width="150">システムのルートURL</td>
+	    <td colspan="2">{ROOT_URL}</td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIGSYS_SSL_URL}>共有SSLのルートURL</span></td>
+	    <td colspan="2"><input type="text" name="item_ssl_url" value="{SSL_URL}" size="60" maxlength="120" /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside" rowspan="3"><span {_HELP_CONFIGSYS_ACCESS_POINT}>アクセスポイント</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIGSYS_SITE_PC}>PC用</span></td><td><input type="checkbox" name="item_is_active_site_pc" {IS_ACTIVE_SITE_PC} />有効</td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIGSYS_SITE_SMARTPHONE}>スマートフォン用</span></td><td><input type="checkbox" name="item_is_active_site_smartphone" {IS_ACTIVE_SITE_SMARTPHONE} />有効&nbsp;&nbsp;マルチドメインURL：<input type="text" name="item_site_smartphone_url" value="{SITE_SMARTPHONE_URL}" size="60" maxlength="120" /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIGSYS_SITE_MOBILE}>携帯用</span></td><td><input type="checkbox" name="item_is_active_site_mobile" {IS_ACTIVE_SITE_MOBILE} />有効&nbsp;&nbsp;マルチドメインURL：<input type="text" name="item_site_mobile_url" value="{SITE_MOBILE_URL}" size="60" maxlength="120" /></td>
+	</tr>
+<!--    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIGSYS_CONNECT_SERVER_URL}>ポータルサーバのURL</span></td>
+	    <td colspan="2"><input type="text" name="item_connect_server_url" value="{CONNECT_SERVER_URL}" size="60" maxlength="120" /></td>
+	</tr>-->
+    <tr>
+	    <td class="table-headside" rowspan="2">URL</td>
+	    <td colspan="2"><input type="checkbox" name="item_multi_domain" {MULTI_DOMAIN} />マルチドメイン</td>
+	</tr>
+    <tr>
+	    <td colspan="2"><input type="checkbox" name="item_use_hier_page" {USE_HIER_PAGE} />ページの階層化</td>
+	</tr>
+    <tr>
+	    <td class="table-headside" rowspan="2">SSL</td>
+	    <td colspan="2"><input type="checkbox" name="item_use_ssl_admin" {USE_SSL_ADMIN} />管理画面にSSLを使用</td>
+	</tr>
+    <tr>
+	    <!--<td class="table-headside"></td>-->
+	    <td colspan="2"><input type="checkbox" name="item_use_ssl" {USE_SSL} />一般画面にSSLを使用</td>
+	</tr>
+        <!--<tr>
+	    <td class="table-headside">リクエストごとにセッションIDを更新</td>
+	    <td colspan="2"><input type="checkbox" name="item_regenerate_sesison" {REGENERATE_SESSION} /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">ブラウザにJavaScriptファイルのキャッシュを保持</td>
+	    <td colspan="2"><input type="checkbox" name="item_script_cache_in_browser" {SCRIPT_CACHE_IN_BROWSER} /></td>
+	</tr>-->
+    <tr>
+	    <td class="table-headside">スマートフォン</td>
+	    <td colspan="2"><input type="checkbox" name="item_smartphone_auto_redirect" {SMARTPHONE_AUTO_REDIRECT} />スマートフォンでのアクセスを自動的にスマートフォンURLへ遷移</td>
+	</tr>
+    <tr>
+	    <td class="table-headside" rowspan="2">携帯</td>
+	    <td colspan="2"><input type="checkbox" name="item_mobile_auto_redirect" {MOBILE_AUTO_REDIRECT} />携帯でのアクセスを自動的に携帯URLへ遷移</td>
+	</tr>
+    <tr>
+	    <!--<td class="table-headside"></td>-->
+	    <td colspan="2"><input type="checkbox" name="item_mobile_use_session" {MOBILE_USE_SESSION} />携帯でユーザ管理を行う(セッション管理)</td>
+	</tr>
+    <tr>
+	    <td class="table-headside" rowspan="4">管理画面</td>
+	    <td colspan="2">管理画面用jQueryUIテーマ
+	    <select name="item_admin_theme">
+	        <patTemplate:tmpl name="admin_theme_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    </td>
+	</tr>
+    <tr>
+	    <td colspan="2"><input type="checkbox" name="item_can_detail_config" {CAN_DETAIL_CONFIG} />詳細設定モード(開発者向け)</td>
+	</tr>
+    <tr>
+	    <td colspan="2"><input type="checkbox" name="item_config_window_open_by_tab" {CONFIG_WINDOW_OPEN_BY_TAB} />設定画面をタブで開く</td>
+	</tr>
+    <tr>
+		<td colspan="2">WYSIWYGエディター
+	    <select name="item_wysiwyg_editor">
+	        <patTemplate:tmpl name="wysiwyg_editor_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</td>
+	</tr>
+    <tr>
+	    <td class="table-headside" rowspan="2">一般画面</td>
+	    <td colspan="2">jQueryバージョン：
+	    <select name="item_jquery_version">
+	        <patTemplate:tmpl name="jquery_version_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>&nbsp;&nbsp;
+		<input type="checkbox" name="item_use_jquery" {USE_JQUERY} />常にjQueryを使用</td>
+	</tr>
+	<tr>
+		<td colspan="2">jQueryUIテーマ
+	    <select name="item_default_theme">
+	        <patTemplate:tmpl name="theme_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</td>
+	</tr>
+    <tr>
+	    <td class="table-headside" rowspan="2">テンプレート</td>
+	    <td colspan="2">システム画面テンプレート
+	    <select name="item_systemplate">
+	        <patTemplate:tmpl name="systemplate_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    </td>
+	</tr>
+    <tr>
+	    <!--<td class="table-headside"></td>-->
+	    <td colspan="2"><input type="checkbox" name="item_can_change_template" {CAN_CHANGE_TEMPLATE} />一般ユーザによるテンプレートの変更を許可</td>
+	</tr>
+    <!--<tr>
+	    <td class="table-headside">表示キャッシュを使用</td>
+	    <td colspan="2"><input type="checkbox" name="item_use_page_cache" {USE_PAGE_CACHE} /><input type="button" class="button" onclick="clearCache();" value="キャッシュをクリア" /></td>
+	</tr>-->
+    <tr>
+	    <td class="table-headside" rowspan="2">言語</td>
+	    <td colspan="2">
+	    デフォルト言語
+	    <select name="item_lang">
+	        <patTemplate:tmpl name="lang_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    </td>
+	</tr>
+    <tr>
+	    <td colspan="2"><input type="checkbox" name="item_multi_language" {MULTI_LANGUAGE} />多言語対応
+	    </td>
+	</tr>
+    <tr>
+	    <td class="table-headside">一時ディレクトリ</td>
+	    <td colspan="2"><input type="text" name="item_work_dir" value="{WORK_DIR}" size="60" maxlength="120" />&nbsp;&nbsp;{WORK_DIR_ACCESS}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リソースディレクトリ</td>
+	    <td colspan="2"><div style="text-align:left;float:left;">{RESOURCE_DIR}&nbsp;&nbsp;{RESOURCE_DIR_ACCESS}</div><div style="text-align:right;">ディスク使用量：{RESOURCE_DIR_SIZE}</div></td>
+	</tr>
+        <!--<tr>
+	    <td class="table-headside">リソースディレクトリ(イメージ)</td>
+	    <td colspan="2">{RESOURCE_DIR_IMAGE}&nbsp;&nbsp;{RESOURCE_DIR_IMAGE_ACCESS}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リソースディレクトリ(FLASH)</td>
+	    <td colspan="2">{RESOURCE_DIR_FLASH}&nbsp;&nbsp;{RESOURCE_DIR_FLASH_ACCESS}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リソースディレクトリ(メディア)</td>
+	    <td colspan="2">{RESOURCE_DIR_MEDIA}&nbsp;&nbsp;{RESOURCE_DIR_MEDIA_ACCESS}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リソースディレクトリ(ファイル)</td>
+	    <td colspan="2">{RESOURCE_DIR_FILE}&nbsp;&nbsp;{RESOURCE_DIR_FILE_ACCESS}</td>
+	</tr>-->
+        <tr>
+	    <td class="table-headside">テンプレートディレクトリ</td>
+	    <td colspan="2">{TEMPLATES_DIR}&nbsp;&nbsp;{TEMPLATES_DIR_ACCESS}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">ウィジェットディレクトリ</td>
+	    <td colspan="2">{WIDGETS_DIR}&nbsp;&nbsp;{WIDGETS_DIR_ACCESS}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">システムDBバージョン</td>
+	    <td colspan="2">{SYSTEM_DB_VERSION}&nbsp;&nbsp;更新日時:&nbsp;{SYSTEM_DB_UPDATE_DT}</td>
+	</tr>
+        <tr>
+	    <td colspan="3" align="right">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+	    </td>
+	</tr>
+    </tbody>
+</table>
+<br />
+</td></tr>
+<tr><td>
+<table class="simple-table" id="system_version" width="100%">
+<caption>システムバージョン</caption>
+    <tbody>
+        <tr>
+	    <td width="300">ディストリビューション名</td>
+	    <td width="300" align="center">{DISTRIBUTION_NAME}</td>
+	</tr>
+        <tr>
+	    <td>ディストリビューションバージョン</td>
+	    <td align="center">{DISTRIBUTION_VERSION}</td>
+	</tr>
+        <tr>
+	    <td>Magic3フレームワーク</td>
+	    <td align="center">{MAGIC3_VERSION}</td>
+	</tr>
+        <tr>
+	    <td>OS</td>
+	    <td align="center">{OS_VERSION}</td>
+	</tr>
+        <tr>
+	    <td>PHP</td>
+	    <td align="center">{PHP_VERSION}</td>
+	</tr>
+        <tr>
+	    <td>{DB_TYPE}</td>
+	    <td align="center">{DB_VERSION}</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+</td></tr>
+<tr><td>
+<table class="simple-table" id="server_env" width="100%">
+<caption>サーバ環境</caption>
+    <tbody>
+        <tr>
+	    <td width="300">サーバID</td>
+	    <td width="300" align="center">{SERVER_ID}</td>
+	</tr>
+        <tr>
+	    <td width="300">システムインストール日時</td>
+	    <td width="300" align="center">{INSTALL_DT}</td>
+	</tr>
+        <tr>
+	    <td width="300">ホスト名</td>
+	    <td width="300" align="center">{HOST_NAME}</td>
+	</tr>
+        <tr>
+	    <td width="300">ホストIPアドレス</td>
+	    <td width="300" align="center">{DNS_RESOLV}</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+</td></tr>
+<tr><td>
+<table class="simple-table" id="db_info" width="100%">
+<caption>DB接続</caption>
+    <tbody>
+        <tr>
+	    <td width="300">DB種別</td>
+	    <td width="300" align="center">{DB_TYPE}</td>
+	</tr>
+        <tr>
+	    <td width="300">ホスト名</td>
+	    <td width="300" align="center">{DB_HOST_NAME}</td>
+	</tr>
+        <tr>
+	    <td width="300">DB名</td>
+	    <td width="300" align="center">{DB_NAME}</td>
+	</tr>
+        <tr>
+	    <td width="300">接続ユーザ名</td>
+	    <td width="300" align="center">{DB_USER_NAME}</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+</td></tr>
+<tr><td>
+<table class="simple-table" id="php_info" width="100%">
+<caption>PHPの設定</caption>
+    <tbody>
+        <tr>
+	    <td width="300">mbstring</td>
+	    <td width="300" align="center">{CURRENT_MBSTRING}</td>
+	</tr>
+        <tr>
+	    <td>zlib</td>
+	    <td align="center">{CURRENT_ZLIB}</td>
+	</tr>
+        <tr>
+	    <td>gd</td>
+	    <td align="center">{CURRENT_GD}</td>
+	</tr>
+        <!--<tr class="even">
+	    <td>dom</td>
+	    <td align="center">{CURRENT_DOM}</td>
+	</tr>-->
+        <tr>
+	    <td>xml</td>
+	    <td align="center">{CURRENT_XML}</td>
+	</tr>
+        <tr>
+	    <td>gettext</td>
+	    <td align="center">{CURRENT_GETTEXT}</td>
+	</tr>
+        <tr>
+	    <td>curl</td>
+	    <td align="center">{CURRENT_CURL}</td>
+	</tr>
+        <tr>
+	    <td class="table-head" align="left">アップロード可能なファイルのサイズ</td>
+	    <td class="table-head" width="200" align="center">{UPLOAD_FILESIZE_LIMIT}&nbsp;バイト</td>
+	</tr>
+        <tr>
+	    <td colspan="2" bgcolor="#ffffff">php.iniの関係するパラメータ (memory_limit &gt;= post_max_size &gt;= upload_max_filesize に設定)</td>
+	</tr>
+        <tr>
+	    <td>memory_limit</td>
+	    <td align="center">{MEMORY_LIMIT}&nbsp;バイト</td>
+	</tr>
+        <tr>
+	    <td>post_max_size</td>
+	    <td align="center">{POST_MAX_SIZE}&nbsp;バイト</td>
+	</tr>
+        <tr>
+	    <td>upload_max_filesize</td>
+	    <td align="center">{UPLOAD_MAX_FILESIZE}&nbsp;バイト</td>
+	</tr>
+        <tr>
+	    <td>file_uploads</td>
+	    <td align="center">{FILE_UPLOADS}</td>
+	</tr>
+    </tbody>
+</table>
+
+<br />
+</td></tr>
+<tr><td>
+
+<table class="simple-table" width="100%">
+<caption>PHP環境</caption>
+    <tbody>
+        <tr><td>
+<iframe src="{PHPINFO_URL}" width="800" height="500" frameborder="0">実際の画面</iframe>
+</td></tr>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

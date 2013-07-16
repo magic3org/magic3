@@ -1,0 +1,119 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: analyzegraph.tmpl.html 5802 2013-03-07 06:14:29Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<!--[if IE]><script type="text/javascript" src="{_SCRIPTS_URL}/{LIB_DIR}/excanvas.min.js"></script><![endif]-->
+<script type="text/javascript" src="{_SCRIPTS_URL}/{LIB_DIR}/plugins/jqplot.dateAxisRenderer.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+function selectMenu(){
+	document.main.submit();
+	return true;
+}
+function selectPage(page){
+	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;
+}
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow(url)
+{
+	m3ShowPreviewWindow(0, url);
+	return true;
+}
+$(function(){
+	// テーブル行配色
+	m3_tableWithScrollbar('urllist', -1, 0);
+	
+<patTemplate:tmpl name="draw_graph">
+	line1=[{LINE1_DATA}];
+	plot = $.jqplot('chart1', [line1], {
+			axes:{
+				xaxis:{
+					renderer:$.jqplot.DateAxisRenderer},
+				yaxis:{
+					min:0,
+					max:{Y_MAX},
+					numberTicks:5,
+					tickOptions:{
+						formatString: '%d'
+					}
+				}},
+			series:[{lineWidth:4}]
+		});
+</patTemplate:tmpl>
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="analyzegraph" />
+<input type="hidden" name="act" />
+<input type="hidden" name="page" />
+<table>
+<tr><td colspan="2">
+<label><span {_HELP_ANALYZEGRAPH_GRAPHTYPE}>グラフ種別:</span></label>
+    <select name="graphtype" onchange="selectMenu();">
+        <patTemplate:tmpl name="graphtype_list">
+        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+    </select>&nbsp;&nbsp;&nbsp;&nbsp;<label>アクセスポイント:</label>
+    <select name="path" onchange="selectMenu();">
+        <patTemplate:tmpl name="path_list">
+        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+    </select>&nbsp;&nbsp;&nbsp;&nbsp;<label>期間:</label>
+    <select name="term" onchange="selectMenu();">
+        <patTemplate:tmpl name="term_list">
+        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+    </select>
+</td></tr>
+<tr><td align="center" colspan="2">
+<patTemplate:tmpl name="show_graph">
+<div class="jqPlot" id="chart1" style="height:320px; width:800px;" /></div>
+</patTemplate:tmpl>
+<br />
+</td></tr>
+<tr><td colspan="2">
+<label><span {_HELP_ANALYZEGRAPH_TOP_URL}>上位URL</span></label>
+</td></tr>
+<tr><td colspan="2">
+<table id="urllist" class="simple-table" width="800">
+    <thead>
+        <tr>
+	    <th width="7%"><span {_HELP_LOGINHISTORY_NAME}>No</span></th>
+	    <th width="80%"><span {_HELP_LOGINHISTORY_IP}>URL</span></th>
+	    <th width="13%">回数</th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="urllist">
+        <tr>
+	    <td align="center">{NO}</td>
+	    <td><a href="#" onclick="previewInOtherWindow('{PREVIEW_URL}');">{URL}</a></td>
+	    <td align="center">{COUNT}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+<tr><td>
+{PAGE_LINK}
+</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{_LC_LABEL_RANGE}&nbsp;{START_NO}-{END_NO}</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}</label></td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

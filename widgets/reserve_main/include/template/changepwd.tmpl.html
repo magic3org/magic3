@@ -1,0 +1,46 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript" src="{SCRIPT_URL}/md5.js"></script>
+<SCRIPT language="JavaScript">
+<!--
+function changepwd(){
+	var pwd = document.ec_main.ec_password1.value;
+	var pwd2 = document.ec_main.ec_password2.value;
+	if (!pwd){
+		alert('パスワードが入力されていません');
+		return false;
+	}
+	if (pwd != pwd2){
+		alert('パスワードに間違いがあります');
+		return false;
+	}
+	document.ec_main.task.value = 'changepwd';
+	document.ec_main.length.value = pwd.length;
+	document.ec_main.act.value = 'update';
+    	document.ec_main.password.value = hex_md5(pwd);
+	document.ec_main.submit();
+	return true;
+}
+// -->
+</SCRIPT>
+<!-- m3:ErrorMessage -->
+<form method="post" name="ec_main" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" />
+<input type="hidden" name="password" />
+<input type="hidden" name="length" />
+<table width="100%" valign="top">
+<tr><td>
+<table width="100%">
+<tr><td class="contentheading" colspan="2">パスワード変更&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<tr><td colspan="2">新規パスワードを入力してください</td></tr>
+<tr><td width="100">パスワード</td><td><input type="password" name="ec_password1" value="{PWD_VALUE}" size="12" maxlength="12" {PWD1_DISABLED}/></td></tr>
+<tr><td>パスワード(確認)</td><td><input type="password" name="ec_password2" value="{PWD_VALUE}" size="12" maxlength="12" {PWD2_DISABLED}/></td></tr>
+<tr><td align="center" colspan="2">{MESSAGE}&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" onClick="changepwd();" value="{BUTTON_LABEL}" {BUTTON_DISABLED}></td></tr>
+</table>
+<br><br>
+</td></tr>
+<tr><td>
+<br><br><br><br><br><br><br><br><br><br><br><br><br>
+</td></tr></table>
+</form>
+</patTemplate:tmpl>

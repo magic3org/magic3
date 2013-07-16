@@ -1,0 +1,49 @@
+<patTemplate:tmpl name="_widget">
+<div id="{CSS_ID}" style="padding:10px 0 10px 0;{BBS_STYLE}" >
+{TOP_IMAGE}
+<!-- m3:ErrorMessage -->
+<div style="{MENU_STYLE}">
+  <div style="text-align:left;float:left;">{BBS_TITLE}</div>
+  <div style="text-align:right;"><a href="{MENU_ANCHOR}">■</a>{FIRST_ANCHOR}</div>
+  <div style="clear:both;">{GUIDE}</div>
+{AD}
+<hr />
+<a name="{MENU_NAME}"></a>
+  <patTemplate:tmpl name="itemlist"><a href="{URL}" target="_blank">{SUBJECT}</a>&nbsp;</patTemplate:tmpl>
+  <div style="text-align:right;"><a href="{SUBJECT_URL}">ｽﾚｯﾄﾞ一覧はこちら</a></div><br />
+</div>
+<patTemplate:tmpl name="thread_list">
+<div style="{THREAD_STYLE}">
+<a id="{INDEX}" name="{INDEX}"></a><div style="text-align:right;"><a href="{MENU_ANCHOR}">■</a><a href="{FORE_ANCHOR}">▲</a><a href="{NEXT_ANCHOR}">▼</a></div>[{INDEX}:{MESSAGE_COUNT}]<span style="color:{SUBJECT_COLOR}">{SUBJECT}</span><br />
+  <patTemplate:tmpl name="message_list">{NO} 名前:{NAME}<br />{DATE}<br />{MESSAGE}<br /><br /></patTemplate:tmpl>
+<form action="{POST_URL}" method="post" class="form bbs_form" enctype="{ENCTYPE}">
+  <input type="hidden" name="task" value="top" />
+  <input type="hidden" name="act" value="add" />
+  <input type="hidden" name="ticket" value="{TICKET}" />
+  <input type="hidden" name="threadid" value="{THREAD_ID}" />
+  名前:<br /><input type="text" name="bbs_name" value="{BBS_NAME}" size="19" /><br />E-mail(省略可):<br /><input type="text" name="bbs_email" value="{BBS_EMAIL}" size="19" /><br />
+  本文:<br />
+  <textarea rows="5" cols="64" wrap="off" name="bbs_message" style="width:100%;">{BBS_MESSAGE}</textarea><br />
+  <patTemplate:tmpl name="file_upload" visibility="hidden"><input type="file" name="bbs_file" size="50" /></patTemplate:tmpl>
+  <input type="submit" class="button" value="書き込む" /><br />
+  <a href="{THREAD_URL}">全部読む</a>
+  <a href="{THREAD50_URL}">最新50</a>
+  <a href="{THREAD100_URL}">1-100</a>
+  <a href="{MENU_ANCHOR}">板のﾄｯﾌﾟ</a>
+  <a href="{RELOAD_URL}">ﾘﾛｰﾄﾞ</a>
+</form>
+<hr />
+</div>
+</patTemplate:tmpl>
+<div style="{MAKE_THREAD_STYLE}">
+   <form action="{POST_URL}" method="post" class="form">
+   <input type="hidden" name="task" value="newthread" />
+   <input type="hidden" name="new" value="thread" />
+   <input type="submit" class="button" value="新規ｽﾚｯﾄﾞ作成画面へ" />
+   </form>
+</div>
+{BOTTOM_MESSAGE}
+<br />
+<a href="{BBS_URL}" accesskey="0">BBSﾎｰﾑに戻る[0]</a>
+</div>
+</patTemplate:tmpl>

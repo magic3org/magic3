@@ -1,0 +1,55 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function selpage(page){
+    document.main.act.value = 'selpage';
+    document.main.page.value = page;
+    document.main.submit();
+    return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('userlist', -1, 0);
+});
+// -->
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form action="?task=loginstatus" method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="userid" value="{USERID}" />
+<table width="90%">
+<tr><td><label>ユーザログイン状況一覧</label></td>
+<tr><td>
+<table id="userlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+            <th width="40px" align="center">ID</th>
+	    <th width="150px" align="center">アカウント</th>
+	    <th width="150px" align="center">名前</th>
+	    <th width="100px" align="center">ユーザ種別</th>
+	    <th width="70px" align="center">回数</th>
+	    <th width="150px" align="center">最終ログイン</th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="userlist">
+        <tr {LINE_COLOR}>
+	    <td align="center">{ID}</td>
+	    <td>{ACCOUNT}</td>
+	    <td>{NAME}</td>
+	    <td>{USER_TYPE}</td>
+	    <td align="center">{COUNT}</td>
+	    <td align="center">{LOGIN_DT}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+{PAGE_LINK}
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,75 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateProfile(){
+	if (!window.confirm('プロフィールを更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function registProfile(){
+	if (!window.confirm('プロフィールを登録しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function uploadAvatar(){
+	if (!window.confirm('アバターをアップロードしますか?')) return false;
+	document.upload.act.value = 'upload_avatar';
+	document.upload.submit();
+	return true;
+}
+$(function(){
+	// 画像再読み込み
+	var image = new Image();
+	image.src = $("#{AVATAR_ID}").attr("src");
+});
+//]]>
+</script>
+<div id="{CSS_ID}" style="{BLOG_STYLE}" >
+<patTemplate:tmpl name="top_link_area" visibility="hidden"><div style="{LINK_STYLE_TOP}"><a href="{MYPAGE_URL}"><b>投稿</b></a></div></patTemplate:tmpl>
+<div align="center">
+<!-- m3:ErrorMessage -->
+<div style="{MAKE_THREAD_STYLE}">
+<form method="post" class="form" name="main">
+<input type="hidden" name="task" value="profile" />
+<input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+    <fieldset class="chacha_profile">
+    <legend>{PAGE_TITLE}</legend>
+    {AVATAR_IMG}
+    <table border="0" cellpadding="1" width="100%">
+    <tr><td style="border:none;width:25%;white-space:nowrap;">ID：</td><td style="border:none;width:75%;">{ID}</td></tr>
+    <tr><td style="border:none;white-space:nowrap;">ニックネーム：</td><td style="border:none;white-space:nowrap;"><input type="text" name="name" size="40" maxlength="40" value="{NAME}" style="width:60%;" {NAME_DISABLED}/>
+    <patTemplate:tmpl name="name_required_area" visibility="hidden">&nbsp;<font color="red">*必須</font></patTemplate:tmpl></td></tr>
+<patTemplate:tmpl name="email_area" visibility="hidden">
+    <tr><td style="border:none;white-space:nowrap;">Eメール：</td><td style="border:none;white-space:nowrap;"><patTemplate:tmpl name="show_email_area" visibility="hidden"><input type="text" name="email" size="40" maxlength="40" value="{EMAIL}" style="width:60%;" {EMAIL_DISABLED}/>&nbsp;<input type="checkbox" name="show_email" {SHOW_EMAIL} />公開する</patTemplate:tmpl>{EMAIL}</td></tr>
+</patTemplate:tmpl>
+    <tr><td style="border:none;white-space:nowrap;">URL：</td><td style="border:none;"><patTemplate:tmpl name="url_area" visibility="hidden"><input type="text" name="url" size="40" maxlength="100" value="{URL}" style="width:60%;" {URL_DISABLED}/></patTemplate:tmpl>{URL}</td></tr>
+    <tr><td colspan="2" style="border:none;">
+    <patTemplate:tmpl name="add_area" visibility="hidden"><input type="button" class="button" onclick="registProfile();" value="登録" /></patTemplate:tmpl>
+    <patTemplate:tmpl name="update_area" visibility="hidden"><input type="button" class="button" onclick="updateProfile();" value="更新" /></patTemplate:tmpl>
+    </td></tr>
+    </table>
+    </fieldset>
+</form>
+<patTemplate:tmpl name="upload_area" visibility="hidden">
+<form enctype="multipart/form-data" method="post" name="upload">
+<input type="hidden" name="task" value="profile" />
+<input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+    <fieldset>
+    <legend>アバター</legend>
+    64x64のサイズのGIFまたはPNG、JPEGの画像をアップロードしてください<br />サイズの大きい画像は自動調整されます
+    <table border="0" cellpadding="1" width="100%">
+    <tr><td colspan="2" style="border:none;"><input type="file" name="upfile" size="50" /></td></tr>
+    <tr><td colspan="2" style="border:none;"><input type="button" class="button" onclick="uploadAvatar();" value="アップロード" /></td></tr>
+    </table>
+    </fieldset>
+</form>
+</patTemplate:tmpl>
+</div>
+</div>
+<div style="{LINK_STYLE_BOTTOM}"><a href="{HOME_URL}"><b>ブログホーム</b></a></div>
+</div>
+</patTemplate:tmpl>

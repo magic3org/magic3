@@ -1,0 +1,40 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function showprevimage() {
+	var selVal = getSelectedValue( 'tmch_form', '{SEL_TEMPLATE}' );
+	var preImage = $('#tmch_img');
+	preImage.attr('src', '{_ROOT_URL}/templates/' + selVal + '/template_thumbnail.png');
+}
+function getSelectedValue( frmName, srcListName ) {
+	var form = eval( 'document.' + frmName );
+	var srcList = eval( 'form.' + srcListName );
+
+	i = srcList.selectedIndex;
+	if (i != null && i > -1) {
+		return srcList.options[i].value;
+	} else {
+		return null;
+	}
+}
+// for IE6 image bug
+$(document).ready(function(){
+	var preImage = $('#tmch_img');
+	preImage.attr('src', '{TMPL_IMAGE}');
+});
+//]]>
+</script>
+<form name="tmch_form" method="post" class="form">
+<input type="hidden" name="cmd" value="{CHANGE_TEMPLATE}">
+<table width="100%">
+<tr><td align="center">
+<img id="tmch_img" name="preview" border="1" alt="{CUR_TMPL}" style="width:140px; height:90px;" />
+</td></tr>
+<tr><td align="center">
+{SEL_LIST}
+</td></tr>
+<tr><td align="right">
+<input class="button" type="submit" value="{SEL_BUTTON_LABEL}" />&nbsp;&nbsp;&nbsp;&nbsp;
+</td></tr></table>
+</form>
+</patTemplate:tmpl>

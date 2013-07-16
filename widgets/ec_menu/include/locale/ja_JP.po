@@ -1,0 +1,2037 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-01-18 12:28+0900\n"
+"PO-Revision-Date: 2013-01-18 12:29+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja_JP\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: ../container\n"
+"X-Poedit-SearchPath-1: ../help\n"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:70
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:722
+msgid "Folder"
+msgstr "フォルダ"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:71
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:730
+msgid "Separator"
+msgstr "セパレータ"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:147
+msgid "Add menu item?"
+msgstr "項目を新規追加しますか?"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:148
+msgid "Update menu item?"
+msgstr "項目を更新しますか?"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:149
+msgid "Delete menu item?"
+msgstr "項目を削除しますか?"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:150
+#: ../help/help_menudef.php:35
+msgid "Menu Item Detail"
+msgstr "メニュー項目詳細"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:151
+msgid "Go back"
+msgstr "戻る"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:152
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:186
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:384
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:421
+#: ../help/help_menudef.php:43
+msgid "Name"
+msgstr "名前"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:153
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:187
+#: ../help/help_menudef.php:51
+msgid "Language"
+msgstr "言語"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:154
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:182
+msgid "New"
+msgstr "新規"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:155
+msgid "Item Type"
+msgstr "項目タイプ"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:156
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:189
+#: ../help/help_menudef.php:63
+msgid "Link Type"
+msgstr "表示方法"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:157
+msgid "Open page in the same window"
+msgstr "同ウィンドウで表示"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:158
+msgid "Open page in the other window"
+msgstr "別ウィンドウで表示"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:159
+#: ../help/help_menudef.php:79
+msgid "Select Link Type"
+msgstr "リンク先を選択"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:160
+msgid "Unselected"
+msgstr "未選択"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:161
+msgid "Top"
+msgstr "トップ"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:162
+msgid "Input URL"
+msgstr "URL任意設定"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:163
+msgid "Page ID:"
+msgstr "ページID："
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:164
+msgid "General Contents:"
+msgstr "汎用コンテンツ："
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:165
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:188
+#: ../help/help_menudef.php:59
+msgid "URL"
+msgstr "URL"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:166
+msgid "Item Control"
+msgstr "表示制御"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:167
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:190
+#: ../help/help_menudef.php:67
+msgid "Visible"
+msgstr "表示"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:168
+msgid "Cotrol visible status linked to contents."
+msgstr "リンク先のコンテンツに連動"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:169
+#: ../help/help_menudef.php:83
+msgid "Description"
+msgstr "説明"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:170
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:184
+msgid "Delete"
+msgstr "削除"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:171
+msgid "Update"
+msgstr "更新"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:172
+msgid "Add"
+msgstr "新規追加"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:177
+msgid "Select menu item to edit."
+msgstr "編集する項目を選択してください"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:178
+msgid "Select menu item to delete."
+msgstr "削除する項目を選択してください"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:179
+msgid "Delete selected item?"
+msgstr "選択項目を削除しますか?"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:180
+msgid "Menu Item List"
+msgstr "メニュー項目一覧"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:181
+msgid "Path:"
+msgstr "パス："
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:183
+msgid "Edit"
+msgstr "編集"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:185
+msgid "Select"
+msgstr "選択"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:191
+#: ../help/help_menudef.php:75
+msgid "Operation"
+msgstr "操作"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:192
+msgid "Menu Layout"
+msgstr "メニューレイアウト"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:193
+msgid "Menu items can be sorted by mouse drag and drop."
+msgstr "マウスドラッグで項目の表示順を変更できます"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:194
+msgid "Menu Top"
+msgstr "メニュートップ"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:195
+msgid "Open All"
+msgstr "すべて開く"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:196
+msgid "Close All"
+msgstr "すべて閉じる"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:243
+msgid "You are not allowed to delete menu item with child item."
+msgstr "子項目を持つメニュー項目は削除できません。"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:254
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:471
+msgid "Menu item deleted."
+msgstr "データを削除しました"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:256
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:473
+msgid "Failed in deleting menu item."
+msgstr "データ削除に失敗しました"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:385
+msgid "Menu ID"
+msgstr "メニューID"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:410
+msgid "Menu item added."
+msgstr "データを追加しました"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:414
+msgid "Failed in adding menu item."
+msgstr "データ追加に失敗しました"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:458
+msgid "Menu item updated."
+msgstr "データを更新しました"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:462
+msgid "Failed in updating menu item."
+msgstr "データ更新に失敗しました"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:718
+msgid "Link"
+msgstr "リンク"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:726
+msgid "Text"
+msgstr "テキスト"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:746
+msgid "Self"
+msgstr "同"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:749
+msgid "Other"
+msgstr "別"
+
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:775
+msgid "Edit Content"
+msgstr "コンテンツを編集"
+
+#: ../help/help_menudef.php:31
+msgid "Menu Definition List"
+msgstr "メニュー定義一覧"
+
+#: ../help/help_menudef.php:32
+msgid "Menu item list in selected menu definition."
+msgstr "選択したメニュー定義のメニュー項目一覧です。"
+
+#: ../help/help_menudef.php:36
+msgid "Edit menu item."
+msgstr "メニュー項目の設定を編集します。"
+
+#: ../help/help_menudef.php:39
+msgid "Checkbox to Select"
+msgstr "選択用チェックボックス"
+
+#: ../help/help_menudef.php:40
+msgid "Select items to edit or delete by using checkboxes."
+msgstr "編集や削除を行う項目を選択します。"
+
+#: ../help/help_menudef.php:44
+msgid "Definition name for menu item."
+msgstr "メニュー項目の名前です。"
+
+#: ../help/help_menudef.php:47
+msgid "Title"
+msgstr "タイトル"
+
+#: ../help/help_menudef.php:48
+msgid "Configure the different value from 'Name' value. You can use HTML tags."
+msgstr ""
+"メニュー項目に「名前」と異なる表示を行う場合に設定します。HTMLタグが使用可能"
+"です。"
+
+#: ../help/help_menudef.php:52
+msgid "Language for menu item."
+msgstr "メニュー項目の対応言語です。"
+
+#: ../help/help_menudef.php:55
+msgid "Menu Item Type"
+msgstr "メニュー項目タイプ"
+
+#: ../help/help_menudef.php:56
+msgid ""
+"You can select menu item type below.<br /><strong>Link</strong> - Normal "
+"link item to go page if selected.<br /><strong>Folder</strong> - Item has "
+"sub menu items.<br /><strong>Text</strong> - Text item not to link.<br /"
+"><strong>Separator</strong> - Separete between menu items."
+msgstr ""
+"メニュー項目のタイプです。<br />「リンク」-クリックすると画面遷移する通常のリ"
+"ンク項目です。<br />「フォルダ」-サブメニューを持つ項目です。<br />「テキス"
+"ト」-画面遷移せず文字列を表示するだけの項目です。<br />「セパレータ」-区切り"
+"項目です。"
+
+#: ../help/help_menudef.php:60
+msgid "Url to link."
+msgstr "メニュー項目をクリックしたときに表示されるURLです。"
+
+#: ../help/help_menudef.php:64
+msgid ""
+"Select type to open page in the same window or in other window if clicked."
+msgstr ""
+"メニュー項目をクリックしたときにリンク先が同じウィンドウで表示するか、別ウィ"
+"ンドウで表示するかを指定します。"
+
+#: ../help/help_menudef.php:68
+msgid ""
+"Control menu item visible status. If menu item is hidden when visible status "
+"unchecked."
+msgstr ""
+"メニュー項目をユーザに公開するかどうかを制御します。非公開に設定の場合はユー"
+"ザから参照することはできません。"
+
+#: ../help/help_menudef.php:71
+msgid "Product Head Content"
+msgstr "商品ヘッダコンテンツ"
+
+#: ../help/help_menudef.php:72
+msgid "Input contents in 'Product Head' widget when the category is selected."
+msgstr ""
+"商品カテゴリー選択時に「商品ヘッダ」ウィジェットに表示するコンテンツを設定し"
+"ます。"
+
+#: ../help/help_menudef.php:76
+msgid ""
+"You can operate the actions below.<br /><strong>Edit Contents</strong> - If "
+"the link target is contents, edit the contents."
+msgstr ""
+"各種操作を行います。<br />●コンテンツを編集<br />メニュー項目のリンク先がコン"
+"テンツ表示の場合、表示されるコンテンツの編集を行います。"
+
+#: ../help/help_menudef.php:80
+msgid ""
+"Select the link type of menu item. If 'contents' is selected, you can select "
+"the contents to view."
+msgstr ""
+"リンク先を選択します。「コンテンツ」を選択した場合は、表示するコンテンツを指"
+"定します。[任意設定]を選択した場合は、任意のURLにリンク先を設定できます。"
+
+#: ../help/help_menudef.php:84
+msgid "Description about menu item."
+msgstr "メニュー項目についての説明です。"
+
+#: ../help/help_menudef.php:87
+msgid "New Button"
+msgstr "新規ボタン"
+
+#: ../help/help_menudef.php:88
+msgid "Add menu item."
+msgstr "新規メニュー項目を追加します。"
+
+#: ../help/help_menudef.php:91
+msgid "Edit Button"
+msgstr "編集ボタン"
+
+#: ../help/help_menudef.php:92
+msgid "Edit menu item.<br />Select the menu item by using the left checkbox."
+msgstr ""
+"選択されているメニュー項目を編集します。<br />メニュー項目を選択するには、一"
+"覧の左端のチェックボックスにチェックを入れます。"
+
+#: ../help/help_menudef.php:95
+msgid "Delete Button"
+msgstr "削除ボタン"
+
+#: ../help/help_menudef.php:96
+msgid "Delete menu item.<br />Select the menu item by using the left checkbox."
+msgstr ""
+"選択されているメニュー項目を削除します。<br />メニュー項目を選択するには、一"
+"覧の左端のチェックボックスにチェックを入れます。"
+
+#: ../help/help_menudef.php:99
+msgid "Go back Button"
+msgstr "戻るボタン"
+
+#: ../help/help_menudef.php:100
+msgid "Go back to menu item list."
+msgstr "メニュー項目一覧へ戻ります。"
+
+#~ msgid "Category:"
+#~ msgstr "カテゴリー："
+
+#~ msgid ""
+#~ "Control menu item visible status. If menu item is hidden when visible "
+#~ "status unchecked.<br />When 'Cotrol visible status linked to contents.' "
+#~ "is checked, menu item visible status is automatically controled linked to "
+#~ "contents visible status."
+#~ msgstr ""
+#~ "メニュー項目をユーザに公開するかどうかを制御します。非公開に設定の場合は"
+#~ "ユーザから参照することはできません。<br />「リンク先のコンテンツに連動」に"
+#~ "チェックを入れるとリンク先のコンテンツの表示状態に連動してメニュー項目を自"
+#~ "動表示制御します。"
+
+#~ msgid "Url"
+#~ msgstr "リンク先URL"
+
+#~ msgid "Page Attribute:"
+#~ msgstr "ページ属性："
+
+#~ msgid "Not selected"
+#~ msgstr "指定なし"
+
+#~ msgid "Left"
+#~ msgstr "左"
+
+#~ msgid "Center"
+#~ msgstr "中央"
+
+#~ msgid "Right"
+#~ msgstr "右"
+
+#~ msgid "Margin Top"
+#~ msgstr "マージン上"
+
+#~ msgid "Margin Bottom"
+#~ msgstr "マージン下"
+
+#~ msgid "Margin Left"
+#~ msgstr "マージン左"
+
+#~ msgid "Margin Right"
+#~ msgstr "マージン右"
+
+#~ msgid "Widget ID"
+#~ msgstr "ウィジェットID"
+
+#~ msgid "Configration updated."
+#~ msgstr "データを更新しました"
+
+#~ msgid "Failed in updating configration."
+#~ msgstr "データ更新に失敗しました"
+
+#~ msgid "Invalid view term."
+#~ msgstr "表示期間が不正です"
+
+#~ msgid "Update config?"
+#~ msgstr "設定を更新しますか?"
+
+#~ msgid "Widget Common Config"
+#~ msgstr "ウィジェット共通設定"
+
+#~ msgid "Basic"
+#~ msgstr "基本"
+
+#~ msgid "Others"
+#~ msgstr "その他"
+
+#~ msgid "Adjust Widget Title and Contents"
+#~ msgstr "ウィジェットタイトル、位置調整"
+
+#~ msgid "Margin"
+#~ msgstr "マージン"
+
+#~ msgid "Top:"
+#~ msgstr "トップ："
+
+#~ msgid "Bottom:"
+#~ msgstr "下："
+
+#~ msgid "Left:"
+#~ msgstr "左："
+
+#~ msgid "Right:"
+#~ msgstr "右："
+
+#~ msgid "Contents Position"
+#~ msgstr "テキスト表示位置"
+
+#~ msgid "Render"
+#~ msgstr "描画処理"
+
+#~ msgid "Render by Joomla! style"
+#~ msgstr "Joomla!スタイルの描画処理を使用"
+
+#~ msgid "Additional Top Content"
+#~ msgstr "補助コンテンツ(上)"
+
+#~ msgid "Additional Bottom Content"
+#~ msgstr "補助コンテンツ(下)"
+
+#~ msgid "Readmore Button"
+#~ msgstr "もっと読むボタン"
+
+#~ msgid "Title:"
+#~ msgstr "タイトル："
+
+#~ msgid "Url:"
+#~ msgstr "URL："
+
+#~ msgid "View Control"
+#~ msgstr "表示制御"
+
+#~ msgid "Page Shared Attribute"
+#~ msgstr "ページ共通属性"
+
+#~ msgid "On"
+#~ msgstr "オン"
+
+#~ msgid "View Term"
+#~ msgstr "表示期間"
+
+#~ msgid "Except Page"
+#~ msgstr "例外ページ"
+
+#~ msgid "Start Date:"
+#~ msgstr "開始日："
+
+#~ msgid "End Date:"
+#~ msgstr "終了日："
+
+#~ msgid "Hour:"
+#~ msgstr "時間："
+
+#~ msgid "Calendar"
+#~ msgstr "カレンダー"
+
+#~ msgid "View Option"
+#~ msgstr "表示オプション"
+
+#~ msgid "View Type"
+#~ msgstr "表示タイプ"
+
+#~ msgid "Always"
+#~ msgstr "常時表示"
+
+#~ msgid "When user in login"
+#~ msgstr "ログイン時のみ表示"
+
+#~ msgid "When user not in login"
+#~ msgstr "非ログイン時のみ表示"
+
+#~ msgid "Range:"
+#~ msgstr "範囲："
+
+#~ msgid "%d Total"
+#~ msgstr "全 %d 件"
+
+#~ msgid "Failed in updating data."
+#~ msgstr "データ更新に失敗しました"
+
+#~ msgid "Data updated."
+#~ msgstr "データを更新しました"
+
+#~ msgid "Input email address."
+#~ msgstr "メールアドレスが設定されていません"
+
+#~ msgid "URL   :"
+#~ msgstr "URL     :"
+
+#~ msgid "Date  :"
+#~ msgstr "送信日時:"
+
+#~ msgid "Sender:"
+#~ msgstr "送信者  :"
+
+#~ msgid "Email sent. To:"
+#~ msgstr "メールを送信しました。メールアドレス:"
+
+#~ msgid "Failed in sending email. To:"
+#~ msgstr "メール送信に失敗しました。メールアドレス:"
+
+#~ msgid "You are not allowed to write temporary directory. (directory: %s)"
+#~ msgstr "一時ディレクトリに書き込み権限がありません。(ディレクトリ： %s)"
+
+#~ msgid "Image changed."
+#~ msgstr "画像を変更しました"
+
+#~ msgid "Failed in creating image."
+#~ msgstr "画像の作成に失敗しました"
+
+#~ msgid "Failed in uploading file."
+#~ msgstr "ファイルのアップロードに失敗しました"
+
+#~ msgid ""
+#~ "Uploded file not found. (detail: The file may be over maximum size to be "
+#~ "allowed to upload. Size %s bytes."
+#~ msgstr ""
+#~ "アップロードファイルが見つかりません。(要因： アップロード可能なファイルの"
+#~ "Maxサイズを超えている可能性があります。 %sバイト)"
+
+#~ msgid "Send test email to default email address?"
+#~ msgstr "デフォルトメールアドレス宛にテストメールを送信しますか?"
+
+#~ msgid "Site Information"
+#~ msgstr "サイト情報"
+
+#~ msgid "Site Name"
+#~ msgstr "サイト名"
+
+#~ msgid "Required"
+#~ msgstr "必須"
+
+#~ msgid "Site Email"
+#~ msgstr "メールアドレス"
+
+#~ msgid "Send Test Email"
+#~ msgstr "テストメール送信"
+
+#~ msgid "Site Copyright"
+#~ msgstr "サイト著作権"
+
+#~ msgid "Page Header Info (Default)"
+#~ msgstr "ページヘッダ情報(デフォルト値)"
+
+#~ msgid "Header Tilte"
+#~ msgstr "タイトル名"
+
+#~ msgid "Header Description"
+#~ msgstr "ページ要約"
+
+#~ msgid "Header Keywords"
+#~ msgstr "検索キーワード"
+
+#~ msgid "Header Others (by Tag Style)"
+#~ msgstr "その他(タグ形式)"
+
+#~ msgid "System Basic Cofiguration"
+#~ msgstr "システム基本設定"
+
+#~ msgid "Language Cofiguration"
+#~ msgstr "言語設定"
+
+#~ msgid "Message Cofiguration"
+#~ msgstr "メッセージ設定"
+
+#~ msgid "Administration Page"
+#~ msgstr "管理機能の画面"
+
+#~ msgid "Page of administration widget."
+#~ msgstr "管理機能の画面を表示します。"
+
+#~ msgid "Widget Page"
+#~ msgstr "ウィジェットの管理画面"
+
+#~ msgid "Administration page of widgets."
+#~ msgstr "ウィジェットの管理画面を表示します。"
+
+#~ msgid "Title of menu category."
+#~ msgstr "メニューカテゴリのタイトル名を作成します。"
+
+#~ msgid "Newline"
+#~ msgstr "改行"
+
+#~ msgid "Separate menu categories."
+#~ msgstr "メニューの項目ブロックを改行します。"
+
+#~ msgid "PC Page"
+#~ msgstr "PC用画面編集"
+
+#~ msgid "Edit page for PC."
+#~ msgstr "PC用Webサイトの画面を作成します。"
+
+#~ msgid "Mobile Page"
+#~ msgstr "携帯用画面編集"
+
+#~ msgid "Edit page for Mobile."
+#~ msgstr "携帯用Webサイトの画面を作成します。"
+
+#~ msgid "Smartphone Page"
+#~ msgstr "スマートフォン用画面編集"
+
+#~ msgid "Edit page for Smartphone."
+#~ msgstr "スマートフォン用Webサイトの画面を作成します。"
+
+#~ msgid "Widget Administration"
+#~ msgstr "ウィジェット管理"
+
+#~ msgid "Manage widgets to be installed."
+#~ msgstr "ウィジェットの管理を行います。"
+
+#~ msgid "Template Administration"
+#~ msgstr "テンプレート管理"
+
+#~ msgid "Manage templates to be installed."
+#~ msgstr "テンプレートの管理を行います。"
+
+#~ msgid "Menu Administration (Tree)"
+#~ msgstr "メニュー定義(多階層)"
+
+#~ msgid "Manage menus with tree type."
+#~ msgstr "多階層でメニューを定義します。"
+
+#~ msgid "Menu Administration (Single)"
+#~ msgstr "メニュー定義(単一階層)"
+
+#~ msgid "Manage menus with single type."
+#~ msgstr "単一階層でメニューを定義します。"
+
+#~ msgid "System Master"
+#~ msgstr "システムマスター管理"
+
+#~ msgid "Administrate system master data."
+#~ msgstr "システムに関するマスターデータの管理を行います。"
+
+#~ msgid "Tenant Server Administration"
+#~ msgstr "テナントサーバ管理"
+
+#~ msgid "Manage tenant server."
+#~ msgstr "テナントサーバを管理します。"
+
+#~ msgid "User List"
+#~ msgstr "ユーザ一覧"
+
+#~ msgid "Manage user to login."
+#~ msgstr "ログイン可能なユーザを管理します。"
+
+#~ msgid "Login Status"
+#~ msgstr "ログイン状況"
+
+#~ msgid "View user login status."
+#~ msgstr "ユーザのログイン状況を表示します。"
+
+#~ msgid "Configure site information."
+#~ msgstr "サイトの設定を行います。"
+
+#~ msgid "User Custom Parameter"
+#~ msgstr "ユーザ定義変数管理"
+
+#~ msgid "Configure user defined paramater."
+#~ msgstr "ユーザ定義の変数を管理します。"
+
+#~ msgid "System Information"
+#~ msgstr "システム情報"
+
+#~ msgid "Configure sytem information."
+#~ msgstr "システム全体の設定、運用状況を管理します。"
+
+#~ msgid "Access Analytics"
+#~ msgstr "アクセス解析"
+
+#~ msgid "Analyze site access."
+#~ msgstr "サイトへのアクセス状況を参照します。"
+
+#~ msgid "Operation Log"
+#~ msgstr "運用ログ参照"
+
+#~ msgid "View system operation log."
+#~ msgstr "運用ログを参照します。"
+
+#~ msgid "Access Log"
+#~ msgstr "アクセスログ"
+
+#~ msgid "View site access log."
+#~ msgstr "アクセスログを参照します。"
+
+#~ msgid "Search Word Log"
+#~ msgstr "検索語ログ参照"
+
+#~ msgid "View words to search."
+#~ msgstr "検索語ログを参照します。"
+
+#~ msgid "Resource Browse"
+#~ msgstr "リソースブラウズ"
+
+#~ msgid "Administrate resource files."
+#~ msgstr "リソースファイルを管理します。"
+
+#~ msgid "Database Maintenance"
+#~ msgstr "DBメンテナンス"
+
+#~ msgid "Database maintenance such as data initializing."
+#~ msgstr "データの初期化などDBのメンテナンスを行います。"
+
+#~ msgid "Edit Administration Menu"
+#~ msgstr "管理メニュー編集"
+
+#~ msgid "Configure administration menu."
+#~ msgstr "管理メニューの編集を行います。"
+
+#~ msgid "Source Code"
+#~ msgstr "ソース参照"
+
+#~ msgid "View source code."
+#~ msgstr "ソースコードが参照できます。"
+
+#~ msgid "Create User Table"
+#~ msgstr "ユーザ定義テーブル"
+
+#~ msgid "Manage user original table."
+#~ msgstr "ユーザ定義のテーブルの作成、データの編集を行います。"
+
+#~ msgid "Logout"
+#~ msgstr "ログアウト"
+
+#~ msgid "Logout from system."
+#~ msgstr "ログアウト処理を行います。"
+
+#~ msgid "Update configration?"
+#~ msgstr "設定を更新しますか?"
+
+#~ msgid "Administration Menu Others"
+#~ msgstr "管理メニューその他"
+
+#~ msgid "Image"
+#~ msgstr "画像"
+
+#~ msgid "Change"
+#~ msgstr "変更"
+
+#~ msgid "Update menu definition?"
+#~ msgstr "項目を更新しますか?"
+
+#~ msgid "Files to upload not selected."
+#~ msgstr "アップロードするファイルが選択されていません"
+
+#~ msgid "Upload files."
+#~ msgstr "ファイルをアップロードします"
+
+#~ msgid "Administration"
+#~ msgstr "管理機能"
+
+#~ msgid "Widget"
+#~ msgstr "ウィジェット"
+
+#~ msgid "Untitled"
+#~ msgstr "未設定"
+
+#~ msgid "Option"
+#~ msgstr "オプション"
+
+#~ msgid "Menu Item"
+#~ msgstr "メニュー項目"
+
+#~ msgid "Configured Menu Item"
+#~ msgstr "設定されたメニュー項目"
+
+#~ msgid "Menu Definition Script"
+#~ msgstr "管理メニュー定義ファイル"
+
+#~ msgid "Upload"
+#~ msgstr "アップロード"
+
+#~ msgid "Download"
+#~ msgstr "ダウンロード"
+
+#~ msgid "'%s' is duplicated."
+#~ msgstr "項目「%s」は重複しています"
+
+#~ msgid "Administration menu updated."
+#~ msgstr "管理メニューを更新しました"
+
+#~ msgid "Failed in updating administration menu."
+#~ msgstr "管理メニュー更新に失敗しました"
+
+#~ msgid "Script run successfully."
+#~ msgstr "スクリプト実行完了しました"
+
+#~ msgid "Failed in running script."
+#~ msgstr "スクリプト実行に失敗しました"
+
+#~ msgid "Include files not allowed to delete. (filename: %s)"
+#~ msgstr "削除できないファイルが含まれています。(ファイル名： %s)"
+
+#~ msgid "Files deleted."
+#~ msgstr "ファイルを削除しました"
+
+#~ msgid "Failed in deleting files."
+#~ msgstr "ファイル削除に失敗しました"
+
+#~ msgid "Files uploaded. Refresh file list?"
+#~ msgstr "アップロード終了しました。ファイル一覧を更新しますか?"
+
+#~ msgid "Select files to delete."
+#~ msgstr "削除する項目を選択してください"
+
+#~ msgid "Delete selected files?"
+#~ msgstr "選択項目を削除しますか?"
+
+#~ msgid "Filename"
+#~ msgstr "ファイル名"
+
+#~ msgid "Size"
+#~ msgstr "サイズ"
+
+#~ msgid "Permission"
+#~ msgstr "パーミッション"
+
+#~ msgid "Update Date"
+#~ msgstr "更新日"
+
+#~ msgid "Owner"
+#~ msgstr "所有者"
+
+#~ msgid "Group"
+#~ msgstr "グループ"
+
+#~ msgid "Items"
+#~ msgstr "件目"
+
+#~ msgid "Upload Status"
+#~ msgstr "アップロード状況"
+
+#~ msgid "Max Filesize"
+#~ msgstr "1ファイル最大サイズ"
+
+#~ msgid "Select Files"
+#~ msgstr "ファイルを選択"
+
+#~ msgid "Cancel"
+#~ msgstr "キャンセル"
+
+#~ msgid "Login"
+#~ msgstr "ログイン"
+
+#~ msgid "Error"
+#~ msgstr "エラー"
+
+#~ msgid "Login History"
+#~ msgstr "ログイン履歴"
+
+#~ msgid "Date"
+#~ msgstr "日付"
+
+#~ msgid "Name:"
+#~ msgstr "名前："
+
+#~ msgid "Login Acount:"
+#~ msgstr "ログインアカウント："
+
+#~ msgid "Not authenticated"
+#~ msgstr "未承認ユーザ"
+
+#~ msgid "Temporary User"
+#~ msgstr "仮登録ユーザ"
+
+#~ msgid "Normal User"
+#~ msgstr "一般ユーザ"
+
+#~ msgid "Author"
+#~ msgstr "投稿ユーザ"
+
+#~ msgid "Site Manager"
+#~ msgstr "システム運営者"
+
+#~ msgid "Administrator"
+#~ msgstr "システム管理者"
+
+#~ msgid "Out of Range"
+#~ msgstr "該当なし"
+
+#~ msgid "All"
+#~ msgstr "すべて"
+
+#~ msgid "Check Required"
+#~ msgstr "要確認項目"
+
+#~ msgid "Unchecked"
+#~ msgstr "未確認"
+
+#~ msgid "Checked"
+#~ msgstr "確認済"
+
+#~ msgid "Could not connect to server."
+#~ msgstr "サーバに接続できません"
+
+#~ msgid "Update item?"
+#~ msgstr "項目を更新しますか?"
+
+#~ msgid "Delete item?"
+#~ msgstr "項目を削除しますか?"
+
+#~ msgid "Operation Log Detail"
+#~ msgstr "運用ログ詳細"
+
+#~ msgid "Type"
+#~ msgstr "種別"
+
+#~ msgid "Message"
+#~ msgstr "メッセージ"
+
+#~ msgid "Message Detail"
+#~ msgstr "メッセージ詳細"
+
+#~ msgid "Message Code"
+#~ msgstr "メッセージコード"
+
+#~ msgid "Access Log No"
+#~ msgstr "アクセスログ番号"
+
+#~ msgid "Select item to edit."
+#~ msgstr "編集する項目を選択してください"
+
+#~ msgid "Select item to delete."
+#~ msgstr "削除する項目を選択してください"
+
+#~ msgid "Operation Log List"
+#~ msgstr "運用ログ一覧"
+
+#~ msgid "Level:"
+#~ msgstr "レベル："
+
+#~ msgid "Status:"
+#~ msgstr "ステータス："
+
+#~ msgid "Page Id"
+#~ msgstr "ページID"
+
+#~ msgid "Show Detail"
+#~ msgstr "詳細"
+
+#~ msgid "Default Template"
+#~ msgstr "デフォルトテンプレート"
+
+#~ msgid "Change Template"
+#~ msgstr "変更"
+
+#~ msgid "Page Layout"
+#~ msgstr "画面デザイン"
+
+#~ msgid "Layout"
+#~ msgstr "レイアウト"
+
+#~ msgid "Preview"
+#~ msgstr "プレビュー"
+
+#~ msgid "Maximize"
+#~ msgstr "最大化"
+
+#~ msgid "Preview in other window"
+#~ msgstr "別画面でプレビュー"
+
+#~ msgid "Site Preview"
+#~ msgstr "実際の画面"
+
+#~ msgid "Update line data?"
+#~ msgstr "データを更新しますか?"
+
+#~ msgid "Delete line data?"
+#~ msgstr "データを削除しますか?"
+
+#~ msgid "Delete all line data?"
+#~ msgstr "すべての項目を削除しますか?"
+
+#~ msgid "Page Definition Detail"
+#~ msgstr "ページ定義詳細"
+
+#~ msgid "Position"
+#~ msgstr "ポジション名"
+
+#~ msgid "Order"
+#~ msgstr "表示順"
+
+#~ msgid "Widget Name"
+#~ msgstr "ウィジェット名"
+
+#~ msgid "Config ID"
+#~ msgstr "定義ID"
+
+#~ msgid "Shared"
+#~ msgstr "共通"
+
+#~ msgid "Include shared items."
+#~ msgstr "共通項目含む"
+
+#~ msgid "Delete all"
+#~ msgstr "すべて削除"
+
+#~ msgid "Data deleted."
+#~ msgstr "データを削除しました"
+
+#~ msgid "Failed in deleting data."
+#~ msgstr "データ削除に失敗しました"
+
+#~ msgid "Default"
+#~ msgstr "デフォルト"
+
+#~ msgid "Unpublished"
+#~ msgstr "非公開"
+
+#~ msgid "Category"
+#~ msgstr "カテゴリー"
+
+#~ msgid "%s not selected."
+#~ msgstr "%sが選択されていません。"
+
+#~ msgid "State"
+#~ msgstr "都道府県"
+
+#~ msgid "Untitled Site"
+#~ msgstr "サイト名未設定"
+
+#~ msgid "Get new information from portal server."
+#~ msgstr "ポータルサーバから最新情報を取得しました。"
+
+#~ msgid "Failed in getting new information from portal server."
+#~ msgstr "ポータルサーバから最新情報の取得に失敗しました。"
+
+#~ msgid "Local server not to register to portal server."
+#~ msgstr "ローカルのサーバは登録できません。"
+
+#~ msgid "Send site information to potarl server."
+#~ msgstr "ポータルサーバへサイト情報を送信しました。"
+
+#~ msgid "Failed in sending site information to potarl server."
+#~ msgstr "ポータルサーバへサイト情報送信に失敗しました。"
+
+#~ msgid "Save config?"
+#~ msgstr "設定を保存しますか?"
+
+#~ msgid "Send site information to portal?"
+#~ msgstr "サイト情報をポータルへ送信しますか?"
+
+#~ msgid "Portal Information"
+#~ msgstr "ポータル情報"
+
+#~ msgid "Get new information from portal"
+#~ msgstr "ポータルから最新情報を取得"
+
+#~ msgid "Attribute"
+#~ msgstr "属性"
+
+#~ msgid "State:"
+#~ msgstr "都道府県："
+
+#~ msgid "Server Id"
+#~ msgstr "サーバID"
+
+#~ msgid "Register Site Information to Portal"
+#~ msgstr "ポータルにサイト情報を登録"
+
+#~ msgid "Update Site Information in Portal"
+#~ msgstr "ポータルのサイト情報を更新"
+
+#~ msgid "Save"
+#~ msgstr "保存"
+
+#~ msgid "Resource Directory:"
+#~ msgstr "リソースディレクトリ："
+
+#~ msgid "Your browser does not support iframes."
+#~ msgstr "ブラウザがiframeに対応していません"
+
+#~ msgid "For PC"
+#~ msgstr "PC用"
+
+#~ msgid "For Mobile"
+#~ msgstr "携帯用"
+
+#~ msgid "For Smartphone"
+#~ msgstr "スマートフォン用"
+
+#~ msgid "New templates added. (templates count=%d)"
+#~ msgstr "新規テンプレートを追加しました。(追加数=%d)"
+
+#~ msgid "No new templates added."
+#~ msgstr "新規テンプレートはありません"
+
+#~ msgid "Template not selected."
+#~ msgstr "テンプレートが選択されていません"
+
+#~ msgid "Line updated. (template ID: %s)"
+#~ msgstr "データを更新しました。(テンプレートID： %s)"
+
+#~ msgid "Failed in updating line. (template ID: %s)"
+#~ msgstr "データ更新に失敗しました。(テンプレートID： %s)"
+
+#~ msgid "Template deleted. (template ID: %s)"
+#~ msgstr "テンプレートを削除しました。(テンプレートID： %s)"
+
+#~ msgid "Failed in deleting template. (template ID: %s)"
+#~ msgstr "テンプレート削除に失敗しました。(テンプレートID： %s)"
+
+#~ msgid "Failed in deleting template directory. (directory: %s)"
+#~ msgstr ""
+#~ "テンプレートのディレクトリが削除できませんでした。(ディレクトリ： %s)"
+
+#~ msgid "Only zip format file is allowed to upload."
+#~ msgstr "zip圧縮のファイルのみアップロード可能です"
+
+#~ msgid "The template already exists. (template ID: %s)"
+#~ msgstr "テンプレートがすでに存在します。(テンプレートID： %s)"
+
+#~ msgid "The template directory already exists. (directory: %s)"
+#~ msgstr "テンプレートディレクトリがすでに存在します。(ディレクトリ： %s)"
+
+#~ msgid "File uploaded. (template ID: %s)"
+#~ msgstr "ファイルのアップロードが完了しました。(テンプレートID： %s)"
+
+#~ msgid "Failed in moving directory. (directory: %s)"
+#~ msgstr "ディレクトリの移動に失敗しました。(ディレクトリ： %s)"
+
+#~ msgid "Failed in downloading file. (detail: %s)"
+#~ msgstr "ファイルのアップロードに失敗しました。(要因： %s)"
+
+#~ msgid "Update line?"
+#~ msgstr "行を更新しますか?"
+
+#~ msgid "Delete tmplate?"
+#~ msgstr "テンプレートを削除しますか?"
+
+#~ msgid "File not selected."
+#~ msgstr "アップロードするファイルが選択されていません"
+
+#~ msgid "Upload file."
+#~ msgstr "ファイルをアップロードします"
+
+#~ msgid "Template List"
+#~ msgstr "テンプレート一覧"
+
+#~ msgid "Template Type:"
+#~ msgstr "テンプレートタイプ："
+
+#~ msgid "Install Directory:"
+#~ msgstr "インストールディレクトリ:"
+
+#~ msgid "Reload directory"
+#~ msgstr "ディレクトリ再読み込み"
+
+#~ msgid "Show detail"
+#~ msgstr "詳細表示"
+
+#~ msgid "Format"
+#~ msgstr "形式"
+
+#~ msgid "Template Upload (zip compressed file)"
+#~ msgstr "テンプレートアップロード(zip圧縮ファイル)"
+
+#~ msgid "Template not found."
+#~ msgstr "テンプレートが見つかりません"
+
+#~ msgid "Not Detected"
+#~ msgstr "未定"
+
+#~ msgid "SimpleXML module not installed."
+#~ msgstr "SimpleXML拡張モジュールがインストールされていません"
+
+#~ msgid "Logout from system?"
+#~ msgstr "ログアウトしますか?"
+
+#~ msgid "Add new user?"
+#~ msgstr "新規ユーザを追加しますか?"
+
+#~ msgid "Update user configuration?"
+#~ msgstr "ユーザ情報を更新しますか?"
+
+#~ msgid "Delete user?"
+#~ msgstr "ユーザを削除しますか?"
+
+#~ msgid "No name entered."
+#~ msgstr "名前が入力されていません"
+
+#~ msgid "No login account entered."
+#~ msgstr "ログインアカウントが入力されていません"
+
+#~ msgid "No password entered."
+#~ msgstr "パスワードが入力されていません"
+
+#~ msgid "User Detail"
+#~ msgstr "ユーザ詳細"
+
+#~ msgid "Login Account"
+#~ msgstr "ログインアカウント"
+
+#~ msgid "Password"
+#~ msgstr "パスワード"
+
+#~ msgid "User Type"
+#~ msgstr "ユーザ種別"
+
+#~ msgid "Login Enable"
+#~ msgstr "ログイン可"
+
+#~ msgid "Active Term"
+#~ msgstr "有効期間"
+
+#~ msgid "User Group"
+#~ msgstr "ユーザグループ"
+
+#~ msgid "Email"
+#~ msgstr "Eメール"
+
+#~ msgid "Skype Account"
+#~ msgstr "Skypeアカウント"
+
+#~ msgid "Update User"
+#~ msgstr "更新者"
+
+#~ msgid "Update Date Time"
+#~ msgstr "更新日時"
+
+#~ msgid "Count"
+#~ msgstr "回数"
+
+#~ msgid "Item deleted."
+#~ msgstr "データを削除しました"
+
+#~ msgid "Failed in deleting item."
+#~ msgstr "データ削除に失敗しました"
+
+#~ msgid "Invalid active term."
+#~ msgstr "有効期間が不正です"
+
+#~ msgid "Login account is duplicated."
+#~ msgstr "ログインアカウントが重複しています"
+
+#~ msgid "Failed in getting data."
+#~ msgstr "データ取得に失敗しました"
+
+#~ msgid "Item updated."
+#~ msgstr "データを更新しました"
+
+#~ msgid "Failed in updating item."
+#~ msgstr "データ更新に失敗しました"
+
+#~ msgid "User type not selected."
+#~ msgstr "ユーザ種別が選択されていません"
+
+#~ msgid "Item added."
+#~ msgstr "データを追加しました"
+
+#~ msgid "Failed in adding item."
+#~ msgstr "データ追加に失敗しました"
+
+#~ msgid "Limited"
+#~ msgstr "制限あり"
+
+#~ msgid "Can not access the page."
+#~ msgstr "アクセスできません"
+
+#~ msgid "Failed to login."
+#~ msgstr "ログインに失敗しました"
+
+#~ msgid "Password sent."
+#~ msgstr "パスワードを送信しました"
+
+#~ msgid "Send Password"
+#~ msgstr "パスワード送信"
+
+#~ msgid "Account"
+#~ msgstr "アカウント"
+
+#~ msgid "New widgets added. (widgets count=%d)"
+#~ msgstr "新規ウィジェットを追加しました(追加数=%d)"
+
+#~ msgid "No new widgets added."
+#~ msgstr "新規ウィジェットはありません"
+
+#~ msgid "Line updated."
+#~ msgstr "データを更新しました"
+
+#~ msgid "Failed in updating line."
+#~ msgstr "データ更新に失敗しました"
+
+#~ msgid "Widget deleted. (widget ID: %s)"
+#~ msgstr "ウィジェットを削除しました。(ウィジェットID： %s)"
+
+#~ msgid "Failed in deleting widget directory. (directory: %s)"
+#~ msgstr ""
+#~ "ウィジェットのディレクトリが削除できませんでした。(ディレクトリ： %s)"
+
+#~ msgid "Widget not found."
+#~ msgstr "ウィジェットが見つかりません"
+
+#~ msgid "The widget already exists. (widget ID: %s)"
+#~ msgstr "ウィジェットがすでに存在します。(ウィジェットID： %s)"
+
+#~ msgid "Failed in getting file list from zip file. (detail: %s)"
+#~ msgstr "zipファイルの内容のリスト取得に失敗しました。(要因:： %s)"
+
+#~ msgid "Failed in deleting widget directory."
+#~ msgstr "ウィジェットのディレクトリが削除できませんでした"
+
+#~ msgid "Widget installed successfully."
+#~ msgstr "ウィジェットのインストールが完了しました。"
+
+#~ msgid "Widget updated successfully."
+#~ msgstr "ウィジェットの更新が完了しました。"
+
+#~ msgid "Current version is %s."
+#~ msgstr "バージョンは%sです。"
+
+#~ msgid "File uploaded. (widget ID: %s)"
+#~ msgstr "ファイルのアップロードが完了しました。(ウィジェットID： %s)"
+
+#~ msgid "Failed in uploading file. (detail: %s)"
+#~ msgstr "ファイルのアップロードに失敗しました。(要因： %s)"
+
+#~ msgid "The zip filename is different from directory name."
+#~ msgstr ""
+#~ "zipファイルのファイル名とディレクトリ名が異なっているか、全角文字が含まれ"
+#~ "ています"
+
+#~ msgid "Delete widget?"
+#~ msgstr "ウィジェットを削除しますか?"
+
+#~ msgid "Widget List"
+#~ msgstr "ウィジェット一覧"
+
+#~ msgid "Widget Type:"
+#~ msgstr "ウィジェットタイプ："
+
+#~ msgid "Version"
+#~ msgstr "バージョン"
+
+#~ msgid "Available"
+#~ msgstr "配置可"
+
+#~ msgid "Active"
+#~ msgstr "実行可"
+
+#~ msgid "Release Date"
+#~ msgstr "リリース日"
+
+#~ msgid "Widget Upload (zip compressed file)"
+#~ msgstr "ウィジェットアップロード(zip圧縮ファイル)"
+
+#~ msgid "Replace widget if exists."
+#~ msgstr "ウィジェットが存在する場合は置き換え"
+
+#~ msgid "Configure"
+#~ msgstr "設定"
+
+#~ msgid "Common config with all widgets."
+#~ msgstr "すべてのウィジェットで共通する設定です。"
+
+#~ msgid "Adjust widget title and widget contents."
+#~ msgstr ""
+#~ "ウィジェットのタイトルやウィジェットの表示内容の位置調整を行います。"
+
+#~ msgid "Control widget view."
+#~ msgstr "ウィジェットの表示、非表示を制御します。"
+
+#~ msgid "Widget Title"
+#~ msgstr "ウィジェットタイトル名"
+
+#~ msgid ""
+#~ "Configure the title on the top of widget. If you set blank for the title, "
+#~ "default title is displayed. You can control the title visible status by "
+#~ "checking 'Visible' checkbox. This configure takes first priority over "
+#~ "other configures."
+#~ msgstr ""
+#~ "ウィジェットの上部に表示されるタイトル名を設定します。空に設定した場合はデ"
+#~ "フォルトのタイトル名が表示されます。「表示」チェックボックスでタイトルの表"
+#~ "示、非表示の制御を行います。ここでの設定は他のすべての設定に優先します。"
+
+#~ msgid "Adjust widget contents position."
+#~ msgstr "ウィジェットの表示内容のテキストの位置を設定します。"
+
+#~ msgid "Contents Margin"
+#~ msgstr "マージン"
+
+#~ msgid ""
+#~ "Adjust widget contents margin. If you set blank for margin field, the "
+#~ "margin has no value."
+#~ msgstr ""
+#~ "ウィジェットの表示内容のマージンを設定します。空に設定したフィールドは指定"
+#~ "なしになります。"
+
+#~ msgid ""
+#~ "If you check 'Render by Joomla! style' checkbox, the widget is added "
+#~ "border line and title. If you uncheck it, the widget is displayed with "
+#~ "plane text."
+#~ msgstr ""
+#~ "「Joomla!スタイルの描画処理」をオンにするとウィジェットの周囲の枠やタイト"
+#~ "ルが付加されます。チェックをはずした場合はウィジェットのプレーンな出力が表"
+#~ "示されます。"
+
+#~ msgid "Additional content on the top of the widget."
+#~ msgstr "ウィジェットの上部に表示する補助コンテンツです。"
+
+#~ msgid "Additional content on the bottom of the widget."
+#~ msgstr "ウィジェットの下部に表示する補助コンテンツです。"
+
+#~ msgid ""
+#~ "If you check 'Visible' checkbox, 'Read more Button' is displayed. Input "
+#~ "the button 'Title' and the link 'Url'."
+#~ msgstr ""
+#~ "「表示」をオンにするともっと読むボタン表示されます。ボタンのタイトルとリン"
+#~ "ク先URLを入力します。"
+
+#~ msgid ""
+#~ "Control page shared attribute of widget. If its attribute is on, the "
+#~ "widget always shows on any pages.<br />When its attribute is on, the "
+#~ "widget does not show on the exception page."
+#~ msgstr ""
+#~ "ウィジェットのページ共通属性を設定します。共通属性をオンにするとページIDに"
+#~ "関わらずウィジェットが常時表示されます。ページ共通属性がオンの場合、例外"
+#~ "ページで選択されたページ上にはウィジェットは表示されません。"
+
+#~ msgid "Control visible term of widget."
+#~ msgstr "ウィジェットの表示期間を設定します。"
+
+#~ msgid ""
+#~ "Control widget view styles.<br /><strong>View Type</strong> - "
+#~ "<strong>Always</strong>: the widget always shows if user is or is not in "
+#~ "login. <strong>When user in login</strong>: the widget shows if user is "
+#~ "in login. <strong>When user not in login</strong>: the widget shows if "
+#~ "user is not in login. "
+#~ msgstr ""
+#~ "ウィジェットの表示スタイルを制御します。<br />「表示タイプ」-「常時表示」"
+#~ "(ユーザのログイン状態に関わらず常にウィジェットを表示)、「ログイン時のみ表"
+#~ "示」(ユーザがログインしている場合のみウィジェットを表示)、「非ログイン時の"
+#~ "み表示」(ユーザがログインしていない場合のみウィジェットを表示)"
+
+#~ msgid "Operate files with thumbnail."
+#~ msgstr "サムネール画像を見ながら画像ファイルの処理が行えます。"
+
+#~ msgid "File Browse"
+#~ msgstr "ファイルブラウズ"
+
+#~ msgid "Upload files at once."
+#~ msgstr "複数のファイルを一度にアップロードできます。"
+
+#~ msgid "Path"
+#~ msgstr "パス"
+
+#~ msgid "Show current directory."
+#~ msgstr "現在のディレクトリパスを示します。"
+
+#~ msgid "Show file or directory name."
+#~ msgstr "ファイル名、ディレクトリ名を示します。"
+
+#~ msgid "Show byte counts of file."
+#~ msgstr "ファイルのサイズを示します。"
+
+#~ msgid "Show permission of file or directory."
+#~ msgstr "ファイル、ディレクトリのパーミッションを示します。"
+
+#~ msgid "Show owner of file or directory."
+#~ msgstr "ファイル、ディレクトリの所有者を示します。"
+
+#~ msgid "Show group owner of file or directory."
+#~ msgstr "ファイル、ディレクトリのグループ所有者を示します。"
+
+#~ msgid "Show update date of file or directory."
+#~ msgstr "ファイル、ディレクトリの更新日時を示します。"
+
+#~ msgid "Uplod files at this area. Show upload status in uploading files."
+#~ msgstr ""
+#~ "ファイルのアップロードはここから行います。ファイルアップロード時はアップ"
+#~ "ロード状況が表示されます。"
+
+#~ msgid ""
+#~ "Delete files.<br />Select the file by using the left checkbox.<br />You "
+#~ "can delete files and directory in 'resource' directory."
+#~ msgstr ""
+#~ "選択されているファイル項目を削除します。<br />メニュー項目を選択するには、"
+#~ "一覧の左端のチェックボックスにチェックを入れます。<br />「resource」ディレ"
+#~ "クトリ以下のファイルのみ削除可能です。"
+
+#~ msgid "Input basic site information."
+#~ msgstr "システムで必要なサイトの情報です。"
+
+#~ msgid "Input site name."
+#~ msgstr "サイトの名前を設定します。"
+
+#~ msgid ""
+#~ "Input default email address. It is required. It can be format of "
+#~ "name@example.com, name&lt; name@example.com&gt;. This address is used as "
+#~ "email sender from this system to user, and as email receiver sending on "
+#~ "this system by user."
+#~ msgstr ""
+#~ "このサイトのデフォルトのメールアドレスです。このメールアドレスは必須項目で"
+#~ "す。このサーバから発信したメールがメールアドレスを偽装したスパムメールと判"
+#~ "断されることもあるので、サイトと同一ドメインのメールアドレスを設定するのが"
+#~ "最適です。<br />「name@example.com」や「名前&lt; name@example.com&gt;」の"
+#~ "設定が可能です。<br />システムからユーザへ送信する場合の送信元アドレスとし"
+#~ "て、または、このシステム上でユーザがメールを送信した場合に送信先アドレスと"
+#~ "して使用されます。"
+
+#~ msgid "Input site copyright. It is used as rss data copyright."
+#~ msgstr "RSS配信データの著作権表示に使用されます。"
+
+#~ msgid "Page Header Information (Default)"
+#~ msgstr "ページヘッダ情報(デフォルト値)"
+
+#~ msgid ""
+#~ "Input header meta tag string on html. It is default string if each page "
+#~ "does not have meta tag string."
+#~ msgstr ""
+#~ "HTMLのヘッダ部のmetaタグに出力する文字列を設定します。個々のページで設定さ"
+#~ "れていない場合のデフォルト値です。"
+
+#~ msgid "Header Title"
+#~ msgstr "タイトル名"
+
+#~ msgid "Input meta title string. It is used as web browser window title."
+#~ msgstr ""
+#~ "ヘッダ部のtitleタグに設定される文字列です。Webブラウザの画面タイトルとして"
+#~ "表示されます。"
+
+#~ msgid ""
+#~ "Input meta description string with 120 letters. It appears on searched "
+#~ "list by google."
+#~ msgstr ""
+#~ "ヘッダ部のdescriptionタグに設定される文字列です。120文字程度で記述します。"
+#~ "<br />Googleでは検索結果に表示されます。"
+
+#~ msgid "Input meta Keywords string with max 10 counts separeted by comma."
+#~ msgstr ""
+#~ "ヘッダ部のkeywordsタグに設定される文字列です。検索エンジン用のキーワードを"
+#~ "「,」区切りで10個以下で記述します。"
+
+#~ msgid "Input other tag string in meta area."
+#~ msgstr "ヘッダ部に出力するタグを設定します。"
+
+#~ msgid "Others Button"
+#~ msgstr "その他ボタン"
+
+#~ msgid "Configure others."
+#~ msgstr "その他の設定を行います。"
+
+#~ msgid "Go back to edit administration menu."
+#~ msgstr "管理メニュー編集へ戻ります。"
+
+#~ msgid "Image on administration menu page."
+#~ msgstr "管理メニュー上に表示する画像です。"
+
+#~ msgid ""
+#~ "Page is identified by page id. Page id is added to url as parameter. "
+#~ "Unpublish page is not published to users without site administration."
+#~ msgstr ""
+#~ "ページを定義するためのIDです。IDはURLに付加されます。非公開項目は管理権限"
+#~ "のない一般ユーザには公開されないページです。"
+
+#~ msgid "Page Sub Id"
+#~ msgstr "ページサブID"
+
+#~ msgid "Page is identified by page id. Page id is added to url as parameter."
+#~ msgstr "ページを定義するための補助IDです。IDはURLに付加されます。"
+
+#~ msgid "URL in preview tab."
+#~ msgstr "プレビューに表示しているページへのURLです。"
+
+#~ msgid "Detail Button"
+#~ msgstr "詳細ボタン"
+
+#~ msgid "Show page definition detail."
+#~ msgstr "ページ定義の詳細を表示します。"
+
+#~ msgid "Maximize Button"
+#~ msgstr "最大化ボタン"
+
+#~ msgid ""
+#~ "Maximize layout tab. If go back to minimized tab, push down ESC key. If "
+#~ "maximize, push down ESC key."
+#~ msgstr ""
+#~ "レイアウト画面を最大化します。画面を元に戻すにはESCキーを押します。ESCキー"
+#~ "でも最大化できます。"
+
+#~ msgid "Preview page in other window."
+#~ msgstr "実際に表示される画面を別ウィンドウで表示します。"
+
+#~ msgid "Select default template for site."
+#~ msgstr "デフォルトで設定されるデザインテンプレートを指定します。"
+
+#~ msgid "Change template."
+#~ msgstr "デフォルトのテンプレートを変更します。"
+
+#~ msgid "Template Image"
+#~ msgstr "テンプレート表示イメージ"
+
+#~ msgid "The template image if site on window."
+#~ msgstr "テンプレートを設定した場合の画面の表示イメージです。"
+
+#~ msgid ""
+#~ "<strong>Widget Layout</strong> - Create page with layouting widgets. Get "
+#~ "widgets from widget list by mouse drag & drops. Layout widgets by "
+#~ "dropping on any position. If you click on close box on the top right "
+#~ "position, you can delete widget from layout page. The widget on layout "
+#~ "page can move between any positions. If you click on miximize button or "
+#~ "push down ESC key, you can maximize layout page. If pushing down ESC key, "
+#~ "go back to former state.<br /><strong>Widget Context Menu</strong> - If "
+#~ "clicking on the widget by mouse right button, Widget context menu shows. "
+#~ "You can configure widgets and delete widgets by using the context menu. "
+#~ "The widget with shared attribute always shows on every page. The shared "
+#~ "widget shows with red color."
+#~ msgstr ""
+#~ "(ウィジェットの配置)<br />テンプレートにウィジェットを配置し、画面を作成し"
+#~ "ます。ウィジェット一覧からマウスドラッグでウィジェットを取り出します。レイ"
+#~ "アウト画面の任意のポジション位置にドロップするとウィジェットが配置できま"
+#~ "す。レイアウト画面からウィジェットを削除するには、削除するウィジェットの右"
+#~ "上のクローズボックスをクリックします。一度ドロップしたウィジェットは、ド"
+#~ "ラッグドロップでページ上の移動が可能です。最大化ボタンまたはESCキーでレイ"
+#~ "アウト画面が最大化できます。最大化状態から元に戻るにはESCキーを押します。"
+#~ "<br />(ウィジェットコンテキストメニュー)<br />ウィジェットをマウス右クリッ"
+#~ "クするとコンテキストメニューが表示されます。ウィジェットの設定を行ったり、"
+#~ "ウィジェットの削除を行います。「ページ共通」属性を設定したウィジェットは、"
+#~ "ページに関わらず常に表示されます。(赤色表示)"
+
+#~ msgid "Refresh Window"
+#~ msgstr "画面再表示"
+
+#~ msgid "Refresh layout page or preview."
+#~ msgstr "レイアウトまたはプレビュー画面を再表示します。"
+
+#~ msgid "The position is block name for layouting widgets in design template."
+#~ msgstr "デザインテンプレート内でのウィジェットの配置ブロックを指定します。"
+
+#~ msgid "The order is the widget order in position block."
+#~ msgstr "ポジションブロック内でのウィジェットの表示順を指定します。"
+
+#~ msgid "The Config ID is used for widget if needed."
+#~ msgstr ""
+#~ "個別のウィジェットの設定IDです。設定が必要な場合のみ設定可能になります。"
+
+#~ msgid "Control widget visible status."
+#~ msgstr "ウィジェットの表示、非表示を制御します。"
+
+#~ msgid ""
+#~ "The Shared means widget shared status by pages. If widget has shared "
+#~ "attribute, it always shows on evey page."
+#~ msgstr ""
+#~ "同ページIDで、サブページIDに関わらずウィジェットを表示するかどうかを指定し"
+#~ "ます。"
+
+#~ msgid "Server information as portal."
+#~ msgstr "ポータルサーバの情報です。"
+
+#~ msgid "Site information registered at Portal Server."
+#~ msgstr "ポータルサーバに登録するサイト情報です。"
+
+#~ msgid "Input site name on Site Information."
+#~ msgstr "サイトの情報です。"
+
+#~ msgid ""
+#~ "The list is available templates in this system. Use bottom area of "
+#~ "Template Install if you install template."
+#~ msgstr ""
+#~ "システムで利用可能なテンプレートの一覧です。テンプレートのインストールはこ"
+#~ "の画面の最下部の「テンプレートアップロード」から行います。"
+
+#~ msgid "Template Type"
+#~ msgstr "テンプレートタイプ"
+
+#~ msgid "Select template type for pc or mobile, smartphone."
+#~ msgstr "PC用または携帯用、スマートフォン用のテンプレートを選択します。"
+
+#~ msgid "Template Install Directory"
+#~ msgstr "テンプレートインストールディレクトリ"
+
+#~ msgid "Templates installed in the directory by name of template ID."
+#~ msgstr ""
+#~ "テンプレートのインストールディレクトリです。この配下に「テンプレートID」の"
+#~ "ディレクトリ名で個々のテンプレートが格納されます。"
+
+#~ msgid "Template ID"
+#~ msgstr "テンプレートID"
+
+#~ msgid ""
+#~ "Template is identified with Template ID. Template ID is same as directory "
+#~ "name."
+#~ msgstr "テンプレートのIDです。テンプレートのディレクトリ名と同一です。"
+
+#~ msgid "Template Name"
+#~ msgstr "テンプレート名"
+
+#~ msgid "The name of template."
+#~ msgstr "テンプレートの名前です。"
+
+#~ msgid "Template Format"
+#~ msgstr "テンプレート形式"
+
+#~ msgid ""
+#~ "Available formats are below. System default is J15.<br /><strong>J10</"
+#~ "strong> - Joomla! v1.0 format.<br /><strong>J15</strong> - Joomla! v1.5 "
+#~ "format.<br /><strong>J25</strong> - Joomla! v1.7-v2.5 format."
+#~ msgstr ""
+#~ "テンプレートの形式です。<br />利用可能な形式は以下の通りです。Magic3では現"
+#~ "在J15を標準としています。<br />●J10<br />Joomla! v1.0用テンプレート<br /"
+#~ ">●J15<br />Joomla! v1.5用テンプレート<br />●J25<br />Joomla! v1.7-v2.5用テ"
+#~ "ンプレート"
+
+#~ msgid "The current selected template."
+#~ msgstr "現在システムで選択されているデフォルトのテンプレートを示します。"
+
+#~ msgid ""
+#~ "You can operate below.<br /><strong>Preview</strong> - Preview template "
+#~ "with no widgets.<br /><strong>Update</strong> - Update line.<br /"
+#~ "><strong>Delete</strong> - Delete template.<br /><strong>Download</"
+#~ "strong> - Download template with zip format compressed. The compressed "
+#~ "file can be upload by Template Upload area."
+#~ msgstr ""
+#~ "各種操作を行います。<br />●プレビュー<br />テンプレートがプレビューできま"
+#~ "す。<br />●更新<br />この一覧で変更した値を保存します。<br />●削除<br />テ"
+#~ "ンプレートをシステムから削除します。<br />●ダウンロード<br />テンプレート"
+#~ "をZIP圧縮形式でダウンロードします。このファイルはそのまま「テンプレート"
+#~ "アップロード」からシステムへインストールできる形式です。"
+
+#~ msgid "Template Upload"
+#~ msgstr "テンプレートアップロード"
+
+#~ msgid ""
+#~ "Upload template file compressed with zip format, install in the system. "
+#~ "Error is occured if there is the same template ID."
+#~ msgstr ""
+#~ "ZIP形式のテンプレートファイルをアップロードし、システムにテンプレートをイ"
+#~ "ンストールします。同じIDのテンプレートがすでに存在する場合はエラーになりま"
+#~ "す。"
+
+#~ msgid "Show detail list if checked."
+#~ msgstr "チェックを入れると一覧が詳細表示できます。"
+
+#~ msgid "Reload the directory and automatically install unlisted template."
+#~ msgstr ""
+#~ "テンプレートディレクトリを再読み込みして、一覧に表示されていないテンプレー"
+#~ "トを自動的にインストールします。"
+
+#~ msgid "User listed in the system."
+#~ msgstr "システムで一元管理するユーザの一覧です。"
+
+#~ msgid "Account to login.<br />You can enter by email address format."
+#~ msgstr ""
+#~ "ログイン時に使用するアカウントです。<br />メールアドレス形式のアカウントも"
+#~ "使用できます。"
+
+#~ msgid "Password to login."
+#~ msgstr "ログイン時に使用するパスワードです。"
+
+#~ msgid "User name displayed on the web page."
+#~ msgstr "画面上に表示されるユーザの名前です。"
+
+#~ msgid ""
+#~ "User type in the system. <br /><strong>Administrator</strong> - It can "
+#~ "use all administration functions.<br /><strong>Site Manager</strong> - It "
+#~ "can use limited administration functions.<br /><strong>Author</strong> - "
+#~ "It can create entry.<br /><strong>Normal</strong> - It can login the site."
+#~ "<br /><strong>Temporary</strong> - It is registered by itself, but it "
+#~ "does not login yet. If it logins once, it changes to 'Normal' user.<br /"
+#~ "><strong>Not Authenticated</strong> - It requests to become user, but it "
+#~ "does not have permissions."
+#~ msgstr ""
+#~ "ユーザのタイプです。<br />管理者 - すべての管理機能が使用可能です。<br />"
+#~ "運営者 - 制限された管理機能が使用可能です。<br />投稿者 - サイトにログイン"
+#~ "でき、ブログ等の記事の投稿が可能です。<br />一般 - サイトにログインできま"
+#~ "す。<br />仮登録 - 一般機能からユーザ登録を行い、まだログインしていない"
+#~ "ユーザです。一度ログインすると一般ユーザに変更されます。<br />未承認 - 承"
+#~ "認を申請し、まだ承認されていないユーザです。"
+
+#~ msgid "Administration Authority"
+#~ msgstr "管理権限"
+
+#~ msgid ""
+#~ "Permission to use administration functions.<br />The user can use "
+#~ "functions if it checked."
+#~ msgstr ""
+#~ "管理機能(管理画面)が使用可能かどうかの設定です。<br />チェックが入っている"
+#~ "と管理機能が使用可能です。"
+
+#~ msgid ""
+#~ "Permission to login.<br />The user can login if it checked.<br /"
+#~ ">Administrator can not be disable to login."
+#~ msgstr ""
+#~ "ログインを許可するかどうかの設定です。<br />チェックが入っているとログイン"
+#~ "可能です。<br />誤操作防止のため、管理者はログイン不可にできません。"
+
+#~ msgid "Login Count"
+#~ msgstr "ログイン回数"
+
+#~ msgid "Count of user login."
+#~ msgstr "ログインした回数です。"
+
+#~ msgid ""
+#~ "Active term of the account. If you set blank, the account is no limited."
+#~ msgstr "アカウントが有効な期間を設定します。空の場合は制限なしを示します。"
+
+#~ msgid "Group user belong to."
+#~ msgstr "ユーザが所属するグループです。"
+
+#~ msgid "Add new user."
+#~ msgstr "新規ユーザを追加します。"
+
+#~ msgid ""
+#~ "Edit user configuration.<br />Select the user by using the left checkbox."
+#~ msgstr ""
+#~ "選択されているユーザを編集します。<br />ユーザを選択するには、一覧の左端の"
+#~ "チェックボックスにチェックを入れます。"
+
+#~ msgid "Delete user.<br />Select the user by using the left checkbox."
+#~ msgstr ""
+#~ "選択されているユーザを削除します。<br />ユーザを選択するには、一覧の左端の"
+#~ "チェックボックスにチェックを入れます。"
+
+#~ msgid "Go back to user list."
+#~ msgstr "ユーザ一覧へ戻ります。"
+
+#~ msgid ""
+#~ "The list is available widgets in this system. Use bottom area of Widget "
+#~ "Install if you install widget."
+#~ msgstr ""
+#~ "システムで利用可能なウィジェットの一覧です。ウィジェットのインストールはこ"
+#~ "の画面の最下部の「ウィジェットアップロード」から行います。"
+
+#~ msgid "Widget Type"
+#~ msgstr "ウィジェットタイプ"
+
+#~ msgid "Select widget type for pc or mobile, smartphone."
+#~ msgstr "PC用または携帯用、スマートフォン用のウィジェットを選択します。"
+
+#~ msgid "Widget Install Directory"
+#~ msgstr "ウィジェットインストールディレクトリ"
+
+#~ msgid "Widgets installed in the directory by name of widget ID."
+#~ msgstr ""
+#~ "ウィジェットのインストールディレクトリです。この配下に「ウィジェットID」の"
+#~ "ディレクトリ名で個々のウィジェットが格納されます。"
+
+#~ msgid ""
+#~ "Widget is identified with Widget ID. Widget ID is same as directory name."
+#~ msgstr "ウィジェットのIDです。ウィジェットのディレクトリ名と同一です。"
+
+#~ msgid "The name of widget."
+#~ msgstr "ウィジェットの名前です。"
+
+#~ msgid ""
+#~ "The Available attribute allows widget listing on menu. The widget already "
+#~ "on page keeps on."
+#~ msgstr ""
+#~ "ウィジェットを配置用の選択メニューに表示するかどうかを指定します。すでに"
+#~ "ページに配置されているウィジェットはそのまま維持されます。"
+
+#~ msgid ""
+#~ "The Active attribute allows launching widget. You can stop the widget "
+#~ "launched."
+#~ msgstr ""
+#~ "ウィジェットの実行を許可します。特定のウィジェットを緊急停止する場合に使用"
+#~ "します。"
+
+#~ msgid ""
+#~ "You can operate below.<br /><strong>Update</strong> - Update line.<br /"
+#~ "><strong>Delete</strong> - Delete widget.<br /><strong>Config</strong> - "
+#~ "Show config window of widget. The widget config window can be shown in "
+#~ "layout page or top menu.<br /><strong>Download</strong> - Download widget "
+#~ "with zip format compressed. The compressed file can be upload by Widget "
+#~ "Upload area."
+#~ msgstr ""
+#~ "各種操作を行います。<br />●更新<br />この一覧で変更した値を保存します。"
+#~ "<br />●削除<br />ウィジェットをシステムから削除します。<br />●設定<br />"
+#~ "ウィジェットの設定画面を表示します。ウィジェットの設定画面はページ作成画面"
+#~ "やトップメニュー画面からも表示可能です。<br />●ダウンロード<br />ウィ"
+#~ "ジェットをZIP圧縮形式でダウンロードします。このファイルはそのまま「ウィ"
+#~ "ジェットアップロード」からシステムへインストールできる形式です。"
+
+#~ msgid "Widget Upload"
+#~ msgstr "ウィジェットアップロード"
+
+#~ msgid ""
+#~ "Upload widget file compressed with zip format, install in the system. "
+#~ "Error is occured if there is the same widget ID. <br />If 'Replace widget "
+#~ "if exists.' is checked, delete the widget and install new widget."
+#~ msgstr ""
+#~ "ZIP形式のウィジェットファイルをアップロードし、システムにウィジェットをイ"
+#~ "ンストールします。同じIDのウィジェットがすでに存在する場合はエラーになりま"
+#~ "す。<br />「ウィジェットが存在する場合は置き換え」にチェックが入っている場"
+#~ "合、既存のウィジェットを削除した後、ウィジェットをインストールします。"
+
+#~ msgid "Reload the directory and automatically install unlisted widget."
+#~ msgstr ""
+#~ "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェッ"
+#~ "トを自動的にインストールします。"
+
+#~ msgid "Send Email"
+#~ msgstr "Eメール送信"
+
+#~ msgid ""
+#~ "Uploded file not found. (detail: The file may be over maximum size to be "
+#~ "allowed to upload. Size %d bytes."
+#~ msgstr ""
+#~ "アップロードファイルが見つかりません。(要因： アップロード可能なファイルの"
+#~ "Maxサイズを超えている可能性があります。 %dバイト)"
+
+#~ msgid "Google Maps Key"
+#~ msgstr "Googleマップ利用キー"
+
+#~ msgid ""
+#~ "Input google maps key for this site. If it fills, you can FCKEditor with "
+#~ "Google Maps."
+#~ msgstr ""
+#~ "サイトで表示するGoogleマップの利用キーを設定します。設定するとコンテンツ編"
+#~ "集エディタ(FCKEditor)からGoogleマップを使用することが可能になります。"
+
+#~ msgid "Get Maps Key"
+#~ msgstr "利用キーを取得"
+
+#~ msgid "Close Folder"
+#~ msgstr "フォルダを閉じる"
+
+#~ msgid "Send to Portal"
+#~ msgstr "ポータルへ送信"
+
+#~ msgid "Site Description"
+#~ msgstr "サイト説明"
+
+#~ msgid "Site State"
+#~ msgstr "サイト都道府県"
+
+#~ msgid "Failed in getting new infomation from portal server."
+#~ msgstr "ポータルから最新情報を取得"
+
+#~ msgid "Select user item to edit."
+#~ msgstr "編集するユーザ項目を選択してください"
+
+#~ msgid "Select user item to delete."
+#~ msgstr "削除するユーザ項目を選択してください"
+
+#~ msgid "Display Option"
+#~ msgstr "表示オプション"
+
+#~ msgid "Widget Appearance"
+#~ msgstr "ウィジェット表示設定"
+
+#~ msgid "Control widget appearance."
+#~ msgstr "ウィジェットの表示制御を行います。"
+
+#~ msgid "Uncheckd Only"
+#~ msgstr "要確認項目のみ"
+
+#~ msgid "Go Back"
+#~ msgstr "戻る"
+
+#~ msgid "Failed in deleting Menu item."
+#~ msgstr "データ削除に失敗しました"
+
+#~ msgid "Failed in uploding file."
+#~ msgstr "ファイルのアップロードに失敗しました"
+
+#~ msgid "Definition ID"
+#~ msgstr "定義ID"
+
+#~ msgid "Hide Menubar"
+#~ msgstr "メニューバーを隠す"

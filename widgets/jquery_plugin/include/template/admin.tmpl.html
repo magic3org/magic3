@@ -1,0 +1,111 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 5773 2013-03-02 01:14:19Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function selectItem()
+{
+	document.main.act.value = 'select';
+	document.main.submit();
+	return true;
+}
+function listItem(){
+	document.main.task.value = 'list';
+	document.main.submit();
+	return true;
+}
+function clearScript()
+{
+	document.main.item_script.value = '';
+}
+$(function(){
+	// テーブルの行色分け
+	//m3_tableWithScrollbar('itemlist', -1, 0);
+	
+	// スクリプト編集エリア
+	m3SetScriptEditor("item_script", 150);
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<!-- m3:PostParam -->
+<table width="90%">
+<tr><td><span {_HELP_JQUERY_DETAIL}><label>jQueryプラグイン追加</label></span></td>
+<td align="right"><span {_HELP_JQUERY_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="一覧" /></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table id="itemlist" class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_JQUERY_NAME_INPUT}>名前</span></td>
+	    <td width="500">
+	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+	        <option value="0">-- 新規 --</option>
+	        <patTemplate:tmpl name="title_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    </patTemplate:tmpl>
+	    </td>
+	    <td class="table-headside" width="100"><span {_HELP_JQUERY_ID}>ID</span></td>
+	    <td align="center">{ID}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_JQUERY_PLUGIN}>追加プラグイン</span></td>
+	    <td colspan="3">
+	    <patTemplate:tmpl name="itemlist"><input type="checkbox" name="item_lib_{ID}" {ID_CHECKED} />{NAME}<br /></patTemplate:tmpl>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_JQUERY_SCRIPT}>Javascript</span><br /><input type="button" class="button" onclick="clearScript();" value="クリア" /></td>
+	    <td colspan="3"><textarea id="item_script" name="item_script" style="height:100%;width:100%;">{SCRIPT}</textarea>
+	    </td>
+	</tr>
+	<tr class="even">
+	    <td align="right" colspan="4">
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,217 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 4912 2012-05-21 14:51:14Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function newItem(){
+	document.main.task.value = 'content_detail';
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
+function editItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('編集する項目を選択してください');
+		} else {
+			document.main.task.value = 'content_detail';
+			document.main.act.value = 'edit';
+			document.main.serial.value = items[i];
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItemBySerial(serial){
+	document.main.task.value = 'content_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
+}
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('削除する項目を選択してください');
+		} else {
+			if (!window.confirm('選択項目を削除しますか?')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function search(){
+	document.main.act.value = 'search';
+	document.main.submit();
+	return true;
+}
+function selpage(page){
+	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;
+}
+function clearSearchParam(){
+	document.main.search_keyword.value = '';
+	return true;
+}
+// メニューに追加
+function addToMenu(selId)
+{
+	window.open("?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=simple&contentid=" + selId, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=no,resizable=no,width=500,height=300");
+	return true;
+}
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow(url)
+{
+	m3ShowPreviewWindow({DEVICE_TYPE}, url);
+	return true;
+}
+$(function(){
+	// テーブルの行カラー化
+	m3_tableWithScrollbar('contlist', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="content" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="page" value="{PAGE}" />
+<table width="90%">
+<tr><td colspan="2">
+<span {_HELP_CONTENT_SEARCH}><label>コンテンツ検索</label></span>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_CONTENT_SEARCH_KEYWORD}>キーワード</span></td>
+	    <td><input type="text" id="search_keyword" name="search_keyword" value="{SEARCH_KEYWORD}" maxlength="50" style="width:98%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_CONTENT_SEARCH_SORT}>ソート</span></td>
+	    <td>キー：<label><input type="radio" name="search_key" value="0" {SEARCH_CONTENT_ID_CHECKED}>コンテンツID</label><label><input type="radio" name="search_key" value="1" {SEARCH_UPDATE_DT_CHECKED}>更新日時</label>
+	    &nbsp;&nbsp;&nbsp;&nbsp;順序：<label><input type="radio" name="search_order" value="0" {SEARCH_ASC_CHECKED}>昇順</label><label><input type="radio" name="search_order" value="1" {SEARCH_DESC_CHECKED}>降順</label></td>
+	</tr>
+	<tr>
+	    <td colspan="2" align="right"><input type="button" class="button" onclick="clearSearchParam();" value="クリア" /><input type="button" class="button" onclick="search();" value="検索" /></td>
+	</tr>
+    </tbody>
+</table>
+<br>
+</td></tr>
+<tr><td>
+<label><span {_HELP_CONTENT}>コンテンツ一覧</span></label>
+</td>
+<td align="right"><span {_HELP_CONTENT_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_CONTENT_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_CONTENT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+</td></tr>
+<tr><td colspan="2">
+<patTemplate:tmpl name="show_singlelang" visibility="hidden"><!-- 単一言語対応時 start -->
+<table id="contlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+            <th width="4%"><span {_HELP_CONTENT_CHECK}>選択</span></th>
+            <th width="4%"><span {_HELP_CONTENT_ID}>ID</span></th>
+            <th width="30%"><span {_HELP_CONTENT_NAME}>名前</span></th>
+	    <th width="4%"><span {_HELP_CONTENT_STATUS}>状態</span></th>
+	    <th width="4%"><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
+	    <th width="7%"><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span></th>
+	    <th width="7%"><span {_HELP_CONTENT_DEFAULT}>デフォルト</span></th>
+	    <th width="10%"><span {_HELP_CONTENT_UPDATE_USER}>更新者</span></th>
+	    <th width="13%"><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
+	    <th width="5%"><span {_HELP_CONTENT_VIEW_COUNT}>閲覧</span></th>
+	    <th><span {_HELP_CONTENT_ACT}>操作</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td align="center">{ID}</td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
+	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td align="center"><input type="checkbox" disabled {LIMITED} /></td>
+	    <td align="center"><input type="checkbox" disabled {DEFAULT} /></td>
+	    <td align="center">{UPDATE_USER}</td>
+	    <td align="center">{UPDATE_DT}</td>
+	    <td align="center">{VIEW_COUNT}</td>
+	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="16" height="16" border="0" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="16" height="16" border="0" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</patTemplate:tmpl><!-- 単一言語対応時 end -->
+<patTemplate:tmpl name="show_multilang" visibility="hidden"><!-- 多言語対応時 start -->
+<table id="contlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+            <th width="4%"><span {_HELP_CONTENT_CHECK}>選択</span></th>
+            <th width="4%"><span {_HELP_CONTENT_ID}>ID</span></th>
+            <th width="25%"><span {_HELP_CONTENT_NAME}>名前</span></th>
+	    <th width="4%"><span {_HELP_CONTENT_LANG}>言語</span></th>
+	    <th width="4%"><span {_HELP_CONTENT_STATUS}>状態</span></th>
+	    <th width="4%"><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
+	    <th width="7%"><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span></th>
+	    <th width="7%"><span {_HELP_CONTENT_DEFAULT}>デフォルト</span></th>
+	    <th width="10%"><span {_HELP_CONTENT_UPDATE_USER}>更新者</span></th>
+	    <th width="13%"><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
+	    <th width="5%"><span {_HELP_CONTENT_VIEW_COUNT}>閲覧</span></th>
+	    <th><span {_HELP_CONTENT_ACT}>操作</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist2">
+        <tr>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td align="center">{ID}</td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td>{LANG}</td>
+	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
+	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td align="center"><input type="checkbox" disabled {LIMITED} /></td>
+	    <td align="center"><input type="checkbox" disabled {DEFAULT} /></td>
+	    <td align="center">{UPDATE_USER}</td>
+	    <td align="center">{UPDATE_DT}</td>
+	    <td align="center">{VIEW_COUNT}</td>
+	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="16" height="16" border="0" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="16" height="16" border="0" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</patTemplate:tmpl><!-- 多言語対応時 end -->
+{PAGE_LINK}
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

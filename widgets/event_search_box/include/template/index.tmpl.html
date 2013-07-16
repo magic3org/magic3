@@ -1,0 +1,18 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function event_search(){
+	document.event_search_box.act.value = 'event_search';
+	document.event_search_box.submit();
+	return true;
+}
+//]]>
+</script>
+<form name="event_search_box" method="post" class="form" onsubmit="event_search();">
+<input type="hidden" name="act" />
+<table width="100%">
+  <tr><td><input type="text" name="keyword" size="10" maxlength="40" style="width:95%;" /></td></tr>
+  <tr><td align="right"><input type="button" class="button" onclick="event_search();" value="検索" />&nbsp;&nbsp;</td></tr>
+</table>
+</form>
+</patTemplate:tmpl>

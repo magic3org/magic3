@@ -1,0 +1,25 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 5377 2012-11-13 08:35:47Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function tick(){
+	$('#{CSS_ID} li:first').slideUp( function () { $(this).appendTo($('#{CSS_ID}')).slideDown(); });
+}
+setInterval(function(){ tick () }, 5000);
+//]]>
+</script>
+<ul id="{CSS_ID}" class="ticker">
+<patTemplate:tmpl name="field_list"><li style="list-style-type:none;background:none;">{HTML}</li></patTemplate:tmpl>
+</ul>
+</patTemplate:tmpl>

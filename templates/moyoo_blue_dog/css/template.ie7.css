@@ -1,0 +1,177 @@
+/* begin Box, Sheet */
+.art-Sheet-tl
+{
+	clip: rect(auto 37px 37px auto);
+}
+
+.art-Sheet-tr
+{
+	clip: rect(auto auto 37px 37px);
+}
+
+.art-Sheet-bl
+{
+	clip: rect(37px 37px auto auto);
+}
+
+.art-Sheet-br
+{
+	clip: rect(37px auto auto 37px);
+}
+
+.art-Sheet-tc
+{
+	clip: rect(auto auto 37px auto);
+}
+
+.art-Sheet-bc
+{
+	clip: rect(37px auto auto auto);
+}
+
+.art-Sheet-cr
+{
+	clip: rect(auto auto auto 37px);
+}
+
+.art-Sheet-cl
+{
+	clip: rect(auto 37px auto auto);
+}
+
+.art-Sheet-body
+{
+	zoom: 1;
+}
+/* end Box, Sheet */
+
+/* begin Menu */
+.art-nav .r
+{
+	clip: rect(auto auto auto 760px);
+}
+/* end Menu */
+
+/* begin MenuItem */
+.art-menu a .r
+{
+	clip: rect(auto auto auto 400px);
+}
+/* end MenuItem */
+
+/* begin Box, Block */
+
+.art-Block-body
+{
+	zoom: 1;
+}
+/* end Box, Block */
+
+/* begin Box, BlockContent */
+.art-BlockContent-tl
+{
+	clip: rect(auto 7px 7px auto);
+}
+
+.art-BlockContent-tr
+{
+	clip: rect(auto auto 7px 7px);
+}
+
+.art-BlockContent-bl
+{
+	clip: rect(7px 7px auto auto);
+}
+
+.art-BlockContent-br
+{
+	clip: rect(7px auto auto 7px);
+}
+
+.art-BlockContent-tc
+{
+	clip: rect(auto auto 7px auto);
+}
+
+.art-BlockContent-bc
+{
+	clip: rect(7px auto auto auto);
+}
+
+.art-BlockContent-cr
+{
+	clip: rect(auto auto auto 7px);
+}
+
+.art-BlockContent-cl
+{
+	clip: rect(auto 7px auto auto);
+}
+
+.art-BlockContent-body
+{
+	zoom: 1;
+}
+/* end Box, BlockContent */
+
+/* begin Box, Post */
+.art-Post-tl
+{
+	clip: rect(auto 4px 4px auto);
+}
+
+.art-Post-tr
+{
+	clip: rect(auto auto 4px 4px);
+}
+
+.art-Post-bl
+{
+	clip: rect(4px 4px auto auto);
+}
+
+.art-Post-br
+{
+	clip: rect(4px auto auto 4px);
+}
+
+.art-Post-tc
+{
+	clip: rect(auto auto 4px auto);
+}
+
+.art-Post-bc
+{
+	clip: rect(4px auto auto auto);
+}
+
+.art-Post-cr
+{
+	clip: rect(auto auto auto 4px);
+}
+
+.art-Post-cl
+{
+	clip: rect(auto 4px auto auto);
+}
+
+.art-Post-body
+{
+	zoom: 1;
+}
+/* end Box, Post */
+
+/* begin PostContent */
+.art-PostContent
+{
+	height:1%;
+}
+/* end PostContent */
+
+/* begin Button */
+.art-button-wrapper .r
+{
+	clip: rect(auto auto auto 403px);
+}
+/* end Button */
+

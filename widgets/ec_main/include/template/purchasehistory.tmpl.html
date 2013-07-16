@@ -1,0 +1,60 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: purchasehistory.tmpl.html 5438 2012-12-07 14:09:57Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function selectorder(){
+	location.href = '{HISTORY_URL}&act=selorder&item_order=' + document.photo_main.item_order.value;
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="photo_main" class="form">
+<input type="hidden" name="act" />
+<div id="photo_shop">
+<h2>購入履歴</h2>
+<div>
+<patTemplate:tmpl name="order_history" visibility="hidden">
+<label>購入日時：<select id="item_order" name="item_order" onchange="selectorder();">
+<patTemplate:tmpl name="orderlist">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select></label>
+<table id="productlist">
+    <thead>
+        <tr><th class="title">商品</th><th style="text-align:right;">税込価格</th><th style="text-align:right;">数量</th><th style="text-align:right;">小計</th></tr>
+    </thead>
+    <tfoot>
+<patTemplate:tmpl name="show_discount" visibility="hidden"><tr><td align="center">値引額{DISCOUNT_DESC}</td><td colspan="2"></td><td class="number">{DISCOUNT}</td></tr></patTemplate:tmpl>
+<patTemplate:tmpl name="deliv_visible" visibility="visible"><tr><td align="center">配送料</td><td colspan="2"></td><td class="number">{DELIVERY_FEE}</td></tr></patTemplate:tmpl>
+<patTemplate:tmpl name="charge_visible" visibility="visible"><tr><td align="center">手数料</td><td colspan="2"></td><td class="number">{CHARGE}</td></tr></patTemplate:tmpl>
+<tr><td colspan="2"></td><td class="number total">合計</td><td class="number">{TOTAL}</td></tr>
+    </tfoot>
+    <tbody>
+        <patTemplate:tmpl name="cartlist">
+        <tr>
+	    <td><div class="photo_image">{IMAGE}</div><div class="photo_title"><div>{NAME}</div><div>{CODE}</div></div></td>
+	    <td class="number">{UNIT_PRICE}</td>
+	    <td class="number">{QUANTITY}</td>
+	    <td class="number">{PRICE}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</patTemplate:tmpl>
+{MESSAGE}
+</div>
+</div>
+</form>
+</patTemplate:tmpl>

@@ -1,0 +1,115 @@
+/* begin Page */
+/* Created by Artisteer v3.0.0.41778 */
+html 
+{
+    height:100%;
+}
+body
+{
+  padding: 0; 
+  margin:0;
+  color: #343932;
+  height:100%;
+  min-height:100%;
+  background-color: #D4CCAA;
+  min-width: 900px;
+}
+
+.cleared
+{
+  display:block;
+  clear: both;
+  float: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 0;
+  height:0;
+  overflow:hidden;
+}
+
+table.position
+{
+  position: relative;
+  width: 100%;
+  table-layout: fixed;
+}
+/* end Page */
+
+/* begin Box, Sheet */
+.art-sheet
+{
+  position: relative;
+  margin: 0 auto;
+  min-width: 53px;
+  min-height: 53px;
+  margin-top: 10px;
+  margin-bottom: -5px;
+/*  cursor:auto;*/
+  width: 900px;
+}
+
+.art-sheet-body
+{
+  position: relative;
+  padding: 8px;
+    padding-top:8px;
+    padding-bottom:8px;
+}
+
+.art-sheet-cc
+{
+  position: absolute;
+  top: 36px;
+  left: 36px;
+  right: 36px;
+  bottom: 36px;
+  background-color: #F0EDE0;
+}
+
+.art-hmenu-extra1
+{
+width:50%;
+float: left;
+}
+
+.art-hmenu-extra2
+{
+width:50%;
+float: right;
+}
+
+/* begin Layout */
+.art-content-layout
+{
+  display: table;
+  position:relative;
+  margin: 0 auto;
+  table-layout: fixed;
+  border-collapse: collapse;
+  background-color: Transparent;
+  border: none !important;
+  padding:0 !important;
+  width:100%;
+  margin-top:2px;
+  margin-bottom:0;
+}
+
+.art-content-layout .art-content-layout{margin:0;}
+.art-content-layout .art-layout-cell, .art-content-layout .art-layout-cell .art-content-layout .art-layout-cell{display: table-cell;}
+.art-layout-cell .art-layout-cell{display: block;}
+.art-content-layout-row {display: table-row;}
+.art-layout-glare{position:relative;}/* end Layout */
+
+.art-content-layout .art-sidebar1
+{
+  width: 200px;
+}
+.art-content-layout .art-sidebar2
+{
+  width: 200px;
+}
+#footer
+{
+  text-align: center;
+}

@@ -1,0 +1,205 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: smenudef.tmpl.html 5321 2012-10-25 13:46:02Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function selectMenu(){
+	document.main.submit();
+	return true;
+}
+function newItem(){
+	document.main.task.value = 'smenudef_detail';
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
+function editItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('{_LC_MSG_SELECT_ITEM}');
+		} else {
+			document.main.task.value = 'smenudef_detail';
+			document.main.act.value = 'edit';
+			document.main.serial.value = items[i];
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItemBySerial(serial){
+	document.main.task.value = 'smenudef_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
+}
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('{_LC_MSG_SELECT_DEL_ITEM}');
+		} else {
+			if (!window.confirm('{_LC_MSG_DELETE_ITEM}')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editContent(id){
+	m3ShowStandardWindow("{ADMIN_URL}?cmd=configwidget&openby=simple&widget={CONTENT_WIDGET_ID}&task=content_detail&contentid=" + id);
+	return false;
+}
+function showUrl(url){
+	m3ShowPreviewWindow(0, url);
+	return false;
+}
+var sortableUpdate = function(e, ui){
+	var menuitems = m3_parseSortableBoxIndex($('#sortable_box').sortable('toArray'));
+	document.main.menuitems.value = menuitems;
+	document.main.act.value = 'updatemenu';
+	document.main.submit();
+};
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('menuitemlist', -1, 0);
+	
+	// メニューレイアウトボックス作成
+	m3_sortableBox('sortable_box');
+	
+	// マウスドラッグ処理追加
+	var els = ['#sortable_box'];
+	var $els = $(els.toString());
+	
+	$els.sortable({
+		items: '> dl',
+		handle: 'dt',
+		cursor: 'move',
+		opacity: 0.8,
+		connectWith: els,
+		start: function(e,ui){
+			ui.helper.css("width", ui.item.width());
+		},
+		update: sortableUpdate
+	});
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="fixed_mode" value="{FIXED_MODE}" />
+<input type="hidden" name="task" value="smenudef" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="menuitems" />
+<table width="90%">
+<tr><td><span {_HELP_MENUDEF_LIST}><label>{_LC_LABEL_MENU_ITEM_LIST}</label></span>
+    <select name="menuid" onchange="selectMenu();" {SEL_MENU_ID_DISABLED}>
+        <patTemplate:tmpl name="menu_id_list">
+        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+    </select>
+</td>
+<td align="right"><span {_HELP_MENUDEF_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="{_LC_LABEL_NEW}" /></span><span {_HELP_MENUDEF_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /></span><span {_HELP_MENUDEF_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" /></span>
+</td></tr>
+<tr><td colspan="2">
+<patTemplate:tmpl name="show_singlelang" visibility="hidden"><!-- 単一言語対応時 start -->
+<table id="menuitemlist" class="simple-table" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th width="35"><span {_HELP_MENUDEF_CHECK}>{_LC_LABEL_CHECK}</span></th>
+            <th width="20%"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
+	    <th width="40%"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_URL}</span></th>
+	    <th width="80"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
+	    <th width="50"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
+	    <th><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td>{LINK_STR}</td>
+	    <td align="center">{LINK_TYPE}</td>
+	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td align="right"><input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</patTemplate:tmpl><!-- 単一言語対応時 end -->
+<patTemplate:tmpl name="show_multilang" visibility="hidden"><!-- 多言語対応時 start -->
+<table id="menuitemlist" class="simple-table" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th width="40"><span {_HELP_MENUDEF_CHECK}>{_LC_LABEL_CHECK}</span></th>
+            <th width="20%"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
+	    <th width="5%"><span {_HELP_MENUDEF_LANG}>{_LC_LABEL_LANG}</span></th>
+	    <th width="40%"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_URL}</span></th>
+	    <th width="80"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
+	    <th width="50"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
+	    <th><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist2">
+        <tr>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td>{LANG}</td>
+	    <td>{LINK_STR}</td>
+	    <td align="center">{LINK_TYPE}</td>
+	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td align="right"><input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</patTemplate:tmpl><!-- 多言語対応時 end -->
+<br />
+</td></tr>
+</table>
+
+<!-- 下部 start -->
+<table width="90%"><tr valign="top"><td>
+<div id="sortable_box">
+	<h1>{_LC_LABEL_MENU_LAYOUT}</h1>
+	<patTemplate:tmpl name="menuitemlist">
+	<dl>
+		<dt>{NAME}</dt>
+	</dl>
+	</patTemplate:tmpl>
+</div>
+<label>{_LC_MSG_CHANGE_ITEM_ORDER}</label>
+</td></tr>
+</table>
+<!-- 下部 end -->
+</form>
+</div>
+</patTemplate:tmpl>

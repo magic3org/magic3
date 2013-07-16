@@ -1,0 +1,57 @@
+<patTemplate:tmpl name="_tmpl">
+#m3header
+{
+	{WIDTH}
+	{HEIGHT}
+        {BGCOLOR}
+	position:relative;
+}
+#m3header-image
+{
+	position:absolute;
+	{IMAGE_MTOP}
+	{IMAGE_MLEFT}
+	{IMAGE_MRIGHT}
+	{IMAGE_MBOTTOM}
+}
+#m3header-inner
+{
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+}
+#m3header-title
+{
+	margin: 0;
+	{TITLE_COLOR}
+	font-size: {TITLE_FONTSIZE}px;
+	{TITLE_ALIGN}
+	{TITLE_MTOP}
+	{TITLE_MLEFT}
+	{TITLE_MRIGHT}
+	{TITLE_MBOTTOM}
+}
+#m3header-description
+{
+	margin: 0;
+	{DESC_COLOR}
+	font-size: {DESC_FONTSIZE}px;
+	{DESC_ALIGN}
+	{DESC_MTOP}
+	{DESC_MLEFT}
+	{DESC_MRIGHT}
+	{DESC_MBOTTOM}
+}
+#m3header-url
+{
+	margin: 0;
+	{URL_COLOR}
+	font-size: {URL_FONTSIZE}px;
+	{URL_ALIGN}
+	{URL_MTOP}
+	{URL_MLEFT}
+	{URL_MRIGHT}
+	{URL_MBOTTOM}
+}
+</patTemplate:tmpl>

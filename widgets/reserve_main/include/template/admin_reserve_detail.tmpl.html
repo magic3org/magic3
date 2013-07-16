@@ -1,0 +1,145 @@
+<patTemplate:tmpl name="_widget">
+<style type="text/css">@import url({SCRIPT_URL}/jscalendar-1.0/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/calendar.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/lang/calendar-ja.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/calendar-setup.js"></script>
+<SCRIPT language="JavaScript">
+<!--
+function updateItem(serial){
+    if (!window.confirm('項目を更新しますか?')) return false;
+    document.main.serial.value = serial;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return true;
+}
+function cancelItem(){
+    document.main.task.value = 'reserve';
+    document.main.submit();
+    return true;
+}
+function addItem(){
+	if (!window.confirm('予約を新規登録します')) return false;
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
+function clearItem(){
+	document.main.time_hour.value = '-1';
+	document.main.time_minute.value = '-1';
+	document.main.user.value = '0';
+	document.main.note.value = '';
+	return true;
+}
+function selViewMenu(){
+    document.main.act.value = 'selviewmenu';
+    document.main.submit();
+    return true;
+}
+// -->
+</SCRIPT>
+
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="reserve_detail" />
+<input type="hidden" name="serial" />
+<table width="90%">
+<tr><td><label>予約詳細</label>
+<select name="item_date" onchange="selViewMenu();">
+<patTemplate:tmpl name="date_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+&nbsp;&nbsp;<label>表示ステータス</label>
+<select name="view_status" onchange="selViewMenu();">
+<patTemplate:tmpl name="view_status">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+</td>
+<td align="right"><span {_HELP_USER_RET_BTN}><input type="button" class="button" onClick="cancelItem();" value="戻る"></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="100">時間</th>
+            <th width="200">名前</th>
+            <th width="100">ステータス</th>
+	    <th width="300">備考</th>
+	    <th></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr {LINE_COLOR}>
+	    {TIME_COL}
+	    <td>{NAME}</td>
+	    <td>{STATUS_COL}
+	    </td>
+	    <td align="center">
+	    <input type="text" name="item{SERIAL}_note" value="{NOTE}" size="50" maxlength="70" {VISIBLE_STYLE}>
+	    </td>
+	    <td align="center">
+	    <input type="button" class="button" onClick="updateItem({SERIAL});" value="更新" {VISIBLE_STYLE}>
+	    </td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+<br>
+</td></tr>
+<tr><td>
+<table class="simple-table">
+    <tbody>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_RESERVE_DAY}>予約日付</span></td>
+	    <td><input type="text" value="{CURRENT_DATE}" size="12" maxlength="12" disabled></td>
+	    <td class="table-headside"><span {_HELP_RESERVE_TIME}>時間</span></td>
+	    <td>
+<select name="time_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside" width="100px"><span {_HELP_USER_NAME}>名前</span></td>
+	    <td colspan="3">
+<select name="user" {USER_DISABLED}>
+<option value="0">--</option>
+<patTemplate:tmpl name="user_list">
+<option value="{VALUE}" {SELECTED}>{NAME}{NO}</option>
+</patTemplate:tmpl>
+</select>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside" width="100px">備考</td>
+	    <td colspan="3"><input type="text" name="note" size="50" maxlength="70">
+	    </td>
+	</tr>
+	<tr class="even">
+	<td align="right" colspan="4">
+	    <input type="button" class="button" onClick="clearItem();" value="クリア">
+	    <input type="button" class="button" onClick="addItem();" value="新規登録">
+	</td>
+	</tr>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

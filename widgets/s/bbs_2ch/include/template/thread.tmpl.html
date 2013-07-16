@@ -1,0 +1,69 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: thread.tmpl.html 4871 2012-04-20 13:18:06Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	// 初期データロード
+	$('input[name=bbs_name]').val($.cookie('bbs_name'));
+	$('input[name=bbs_email]').val($.cookie('bbs_email'));
+	
+	// 送信処理
+	$("form.bbs_form").bind("submit", function(){
+		// クッキー再設定
+		$.cookie('bbs_name', $(this).find('input[name=bbs_name]').val(), { expires: 30 });
+		$.cookie('bbs_email', $(this).find('input[name=bbs_email]').val(), { expires: 30 });
+
+		$(this).find('input[name=act]').val('add');
+		return true;
+	});
+});
+//]]>
+</script>
+<div id="bbs_2ch" style="{BBS_STYLE}">
+{TOP_IMAGE}
+<!-- m3:ErrorMessage -->
+<patTemplate:tmpl name="thread_area">
+<div class="innerbox" style="{THREAD_STYLE}">
+<div class="list">
+<span class="inlineitem"><a href="{THREAD_URL}">全部読む</a></span>
+<span class="inlineitem"><a href="{THREAD50_URL}">最新50</a></span>
+<span class="inlineitem"><a href="{THREAD100_URL}">1-100</a></span>
+</div>
+  <div class="thread_head" style="{SUBJECT_STYLE}">{SUBJECT}</div>
+  <patTemplate:tmpl name="message_list"><div class="message_head">{NO} 名前：{NAME} {DATE}</div><div class="message_body">{MESSAGE}</div></patTemplate:tmpl>
+<div class="list">
+<span class="inlineitem"><a href="{THREAD_URL}">全部読む</a></span>
+<span class="inlineitem"><a href="{THREAD50_URL}">最新50</a></span>
+<span class="inlineitem"><a href="{THREAD100_URL}">1-100</a></span>
+</div>
+<hr />
+<div class="link"><a href="{THREADNEW_URL}">新着レスの表示</a></div>
+<form method="post" class="form bbs_form" enctype="{ENCTYPE}" data-ajax="false">
+  <input type="hidden" name="task" value="read" />
+  <input type="hidden" name="act" />
+  <input type="hidden" name="ticket" value="{TICKET}" />
+  <input type="hidden" name="threadid" value="{THREAD_ID}" />
+<div data-role="content">
+<div data-role="fieldcontain">
+<label for="bbs_name">名前：</label><input type="text" id="bbs_name" name="bbs_name" value="{BBS_NAME}" size="19" {NAME_DISABLED}/><br />
+<label for="bbs_email">E-mail<small>(省略可)</small>：</label><input type="text" id="bbs_email" name="bbs_email" value="{BBS_EMAIL}" size="19" {EMAIL_DISABLED}/><br />
+<label for="bbs_message">内容：</label><textarea rows="5" cols="64" wrap="off" id="bbs_message" name="bbs_message" {MESSAGE_DISABLED}>{BBS_MESSAGE}</textarea><br />
+<input type="submit" class="button" value="書き込む" {BUTTON_DISABLED}/>
+</div></div>
+</form>
+</div>
+</patTemplate:tmpl>
+<div class="bottom"><a href="{BBS_URL}" data-ajax="false">BBSホーム</a></div>
+</div>
+</patTemplate:tmpl>

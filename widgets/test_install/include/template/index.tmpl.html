@@ -1,0 +1,52 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function sendmessage(){
+	if (!window.confirm('お問い合わせを送信します')) return false;
+	document.contactus_main.act.value = 'send';
+	document.contactus_main.submit();
+	return true;
+}
+// -->
+</script>
+<div align="center">
+<!-- m3:ErrorMessage -->
+<form method="post" name="contactus_main" class="form">
+<input type="hidden" name="act" />
+<table width="100%">
+<tr><td>
+<table width="100%">
+<tr><td class="contentheading" colspan="2">お問い合わせ</td></tr>
+<tr><td>お名前</td><td><input type="text" name="item_name" value="{NAME}" size="25" maxlength="50" {NAME_DISABLED} />&nbsp;<font color="red">*必須</font></td></tr>
+<tr><td>お名前(フリガナ)</td><td><input type="text" name="item_name_kana" value="{NAME_KANA}" size="25" maxlength="50" {NAME_KANA_DISABLED} />&nbsp;<font color="red">*必須</font></td></tr>
+<tr><td>Eメール</td><td><input type="text" name="item_email" value="{EMAIL}" size="25" maxlength="50" {EMAIL_DISABLED} />&nbsp;<font color="red">*必須</font></td></tr>
+<tr><td>Eメール(確認)</td><td><input type="text" name="item_email2" value="{EMAIL2}" size="25" maxlength="50" {EMAIL2_DISABLED} />&nbsp;<font color="red">*必須</font></td></tr>
+<patTemplate:tmpl name="show_company_name" visibility="hidden">
+<tr><td>会社名</td><td><input type="text" name="item_company_name" value="{COMPANY_NAME}" size="25" maxlength="50" {COMPANY_NAME_DISABLED} />&nbsp;<font color="red">*必須</font></td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_address" visibility="hidden">
+<tr><td>郵便番号</td><td><input type="text" name="item_zipcode" value="{ZIPCODE}" size="10" maxlength="10" {ZIPCODE_DISABLED} />&nbsp;<font color="red">*必須</font></td></tr>
+<tr><td>都道府県</td><td>
+<select name="item_state" {STATE_DISABLED}>
+<option value=""> </option>
+<patTemplate:tmpl name="state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+&nbsp;<font color="red">*必須</font>
+</td></tr>
+<tr><td>住所</td><td><input type="text" name="item_address" value="{ADDRESS}" size="50" maxlength="50" {ADDRESS_DISABLED} />&nbsp;<font color="red">*必須</font></td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_tel" visibility="hidden">
+<tr><td>電話番号</td><td><input type="text" name="item_phone" value="{PHONE}" size="20" maxlength="20" {PHONE_DISABLED} />&nbsp;<font color="red">*必須</font></td></tr>
+</patTemplate:tmpl>
+<tr><td>お問い合わせ内容</td><td><textarea name="item_body" rows="10" cols="40" {BODY_DISABLED}>{BODY}</textarea><br /><font color="red">*必須</font></td></tr>
+<tr><td colspan="2">&nbsp;</td></tr>
+<tr><td colspan="2" align="right">{MESSAGE}&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" class="button" onclick="sendmessage();" value="{SEND_BUTTON_LABEL}" {SEND_BUTTON_DISABLED} />
+</td></tr>
+</table>
+</td></tr></table>
+</form>
+</div>
+</patTemplate:tmpl>

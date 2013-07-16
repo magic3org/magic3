@@ -1,0 +1,95 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	// 初期データロード
+	$('input[name=bbs_name]').val($.cookie('bbs_name'));
+	$('input[name=bbs_email]').val($.cookie('bbs_email'));
+	
+	// 送信処理
+	$("form.bbs_form").bind("submit", function(){
+		// クッキー再設定
+		$.cookie('bbs_name', $(this).find('input[name=bbs_name]').val(), { expires: 30 });
+		$.cookie('bbs_email', $(this).find('input[name=bbs_email]').val(), { expires: 30 });
+
+		$(this).find('input[name=act]').val('add');
+		return true;
+	});
+});
+//]]>
+</script>
+<div id="{CSS_ID}" style="width:100%;text-align:left;padding:10px 0 10px 0;{BBS_STYLE}" >
+<div align="center">
+{TOP_IMAGE}
+<!-- m3:ErrorMessage -->
+<table border="1" cellspacing="7" cellpadding="3" style="width:95%;text-align:left;{MENU_STYLE}">
+ <tr>
+  <td>
+   <table border="0" cellpadding="1" style="width:100%;">
+    <tr>
+     <td nowrap colspan="2" style="border:none;"><font size="+1"><b>{BBS_TITLE}</b></font></td>
+     <td nowrap align="right" valign="top" style="width:5%;border:none;"><a href="{MENU_ANCHOR}">■</a> {FIRST_ANCHOR}</td>
+    </tr>
+    <tr>
+     <td colspan="3" style="border:none;">{GUIDE}</td>
+    </tr>
+   </table>
+  </td>
+ </tr>
+</table>
+{AD}
+<a name="{MENU_NAME}"></a>
+<table border="1" cellspacing="7" cellpadding="3" style="width:95%;text-align:left;{MENU_STYLE}">
+ <tr>
+  <td>
+  <patTemplate:tmpl name="itemlist"><a href="{URL}" target="_blank">{SUBJECT}</a>&nbsp;&nbsp;</patTemplate:tmpl>
+  <div align="right"><a href="{SUBJECT_URL}"><b>スレッド一覧はこちら</b></a></div>
+  </td>
+ </tr>
+</table><br />
+<patTemplate:tmpl name="thread_list">
+<table border="1" cellspacing="7" cellpadding="3" style="width:95%;text-align:left;{THREAD_STYLE}">
+<tr><td>
+  <dl><a name="{INDEX}"></a><div align="right"><a href="{MENU_ANCHOR}">■</a><a href="{FORE_ANCHOR}">▲</a><a href="{NEXT_ANCHOR}">▼</a></div><b>【{INDEX}:{MESSAGE_COUNT}】<font size="5" color="{SUBJECT_COLOR}">{SUBJECT}</font></b>
+  <patTemplate:tmpl name="message_list"><dt>{NO} 名前：{NAME} {DATE}</dt><dd>{MESSAGE}<br /><br /></dd></patTemplate:tmpl>
+<div style="margin-left:10px;">
+<form method="post" class="form bbs_form" enctype="{ENCTYPE}">
+  <input type="hidden" name="task" value="top" />
+  <input type="hidden" name="act" />
+  <input type="hidden" name="ticket" value="{TICKET}" />
+  <input type="hidden" name="threadid" value="{THREAD_ID}" />
+  <input type="submit" class="button" value="書き込む" />&nbsp;&nbsp;名前：<input type="text" name="bbs_name" value="{BBS_NAME}" size="19" />&nbsp;&nbsp;E-mail<font size="1">(省略可)</font>：<input type="text" name="bbs_email" value="{BBS_EMAIL}" size="19" />
+  <textarea rows="5" cols="64" wrap="off" name="bbs_message" style="width:95%;">{BBS_MESSAGE}</textarea><br />
+  <patTemplate:tmpl name="file_upload" visibility="hidden"><input type="file" name="bbs_file" size="50" /></patTemplate:tmpl>
+  <b>
+  <a href="{THREAD_URL}">全部読む</a>
+  <a href="{THREAD50_URL}">最新50</a>
+  <a href="{THREAD100_URL}">1-100</a>
+  <a href="{MENU_ANCHOR}">板のトップ</a>
+  <a href="{RELOAD_URL}">リロード</a>
+  </b>
+</form>
+</div>
+</dl>
+</td></tr></table>
+<br />
+</patTemplate:tmpl>
+<table border="1" cellspacing="7" cellpadding="3" style="width:95%;text-align:left;{MAKE_THREAD_STYLE}">
+ <tr>
+  <td>
+   <form method="post" class="form">
+   <input type="hidden" name="task" value="newthread" />
+   <input type="hidden" name="new" value="thread" />
+   <input type="submit" class="button" value="新規スレッド作成画面へ" />
+   </form>
+  </td>
+ </tr>
+</table>
+</div>
+{BOTTOM_MESSAGE}
+<br />
+<div style="margin:0 10px;">
+<a href="{BBS_URL}"><b>BBSホーム</b></a>
+</div>
+</div>
+</patTemplate:tmpl>

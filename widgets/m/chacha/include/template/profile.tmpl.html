@@ -1,0 +1,28 @@
+<patTemplate:tmpl name="_widget">
+<div align="center" style="text-align:center;background-color:#ffcc99;">{TITLE}</div>
+<div style="{LINK_STYLE_TOP}">{MYPAGE_NAME}</div>
+<!-- m3:ErrorMessage -->
+<div>{AVATAR_IMG}&nbsp;ID:&nbsp;{ID}</div>
+<form action="{CURRENT_URL}" method="post" class="form">
+<input type="hidden" name="act" value="{ACT}" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+ﾆｯｸﾈｰﾑ:&nbsp;<patTemplate:tmpl name="name_area" visibility="hidden"><a href="{MYPAGE_URL}">{NAME}</a></patTemplate:tmpl>
+<patTemplate:tmpl name="name_required_area" visibility="hidden"><span style="color:#ff0000"><font color="#ff0000">*必須</font></span><br /></patTemplate:tmpl>
+<patTemplate:tmpl name="name_input_area" visibility="hidden"><input type="text" name="name" size="40" maxlength="40" value="{NAME}" /></patTemplate:tmpl>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<patTemplate:tmpl name="email_area" visibility="hidden">
+Eﾒｰﾙ:<br />
+<patTemplate:tmpl name="show_email_area" visibility="hidden"><input type="text" name="email" size="40" maxlength="40" value="{EMAIL}" /><br />
+<input type="checkbox" name="show_email" {SHOW_EMAIL} />公開する<br /></patTemplate:tmpl>{EMAIL}
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+</patTemplate:tmpl>
+URL:<br />
+<patTemplate:tmpl name="url_area" visibility="hidden"><input type="text" name="url" size="40" maxlength="100" value="{URL}" /></patTemplate:tmpl>{URL}<br />
+<patTemplate:tmpl name="add_area" visibility="hidden"><div align="center" style="text-align:center;"><input type="submit" class="button" value="登録" /></div></patTemplate:tmpl>
+<patTemplate:tmpl name="update_area" visibility="hidden"><div align="center" style="text-align:center;"><input type="submit" class="button" value="更新" /></div></patTemplate:tmpl>
+</form>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<div style="{LINK_STYLE_BOTTOM}">
+{MYPAGE_LINK}
+<a href="{TOP_URL}" accesskey="0">ﾌﾞﾛｸﾞﾎｰﾑに戻る[0]</a></div>
+</patTemplate:tmpl>

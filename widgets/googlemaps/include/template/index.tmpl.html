@@ -1,0 +1,37 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Googleマップ
+ * @author     株式会社 毎日メディアサービス
+ * @copyright  Copyright 2009-2012 株式会社 毎日メディアサービス.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 4766 2012-03-19 02:22:15Z fishbone $
+ * @link       http://www.m-media.co.jp
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	var centerPos = new google.maps.LatLng({LAT}, {LNG});
+	var opts = {	zoom: {ZOOM},
+			center: centerPos,
+<patTemplate:tmpl name="show_pos_control">			navigationControl: false,</patTemplate:tmpl>
+<patTemplate:tmpl name="show_type_control">			mapTypeControl: false,</patTemplate:tmpl>
+			mapTypeId: google.maps.MapTypeId.ROADMAP	};
+	var map = new google.maps.Map(document.getElementById("{TAG_ID}"), opts);
+<patTemplate:tmpl name="show_marker" visibility="hidden">
+	var markerPos = new google.maps.LatLng({MARKER_LAT}, {MARKER_LNG});
+	var marker = new google.maps.Marker({ position: markerPos, map: map });</patTemplate:tmpl>
+<patTemplate:tmpl name="show_info" visibility="hidden">
+	var infoPos = new google.maps.LatLng({INFO_LAT}, {INFO_LNG});
+	var infoWindow = new google.maps.InfoWindow({
+				content: '{INFO_CONTENT}',
+				position: infoPos });
+	infoWindow.open(map);</patTemplate:tmpl>
+});
+//]]>
+</script>
+<div id="{TAG_ID}" style="width:{WIDTH}px;height:{HEIGHT}px;"></div>
+</patTemplate:tmpl>

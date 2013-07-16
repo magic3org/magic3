@@ -1,0 +1,75 @@
+/**
+ * PDF作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: deliv_sheet.tmpl.html 5438 2012-12-07 14:09:57Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_tmpl">
+<style>
+table {
+	text-align: left;
+	width: 100%;
+}
+th {
+	background-color: rgb(153, 153, 153);
+	text-align: center;
+}
+td.number {
+	text-align: center;
+}
+td.price {
+	text-align: right;
+}
+.title {
+	width:100%;
+	text-align: center;
+}
+hr {
+	height: 1px;
+}
+</style>
+<div align="right">No. {SHEET_NO}</div>
+<h1 class="title">納品書</h1>
+<hr />
+<table border="0" cellpadding="2" cellspacing="0">
+<tr><td>
+<div align="left">{DELIV_ADDRESS}</div>
+</td><td>
+<div align="right">{DATE}<br /><br />
+{FROM_ADDRESS}</div>
+</td></tr>
+</table>
+下記の通り、納品いたします。
+<div align="right">単位:円</div>
+<table border="1" cellpadding="2" cellspacing="0">
+<tbody>
+<tr>
+<th width="5%">No</th>
+<th width="56%">項目</th>
+<th width="7%">数量</th>
+<th width="16%">単価</th>
+<th width="16%">金額</th>
+</tr>
+<patTemplate:tmpl name="productlist">
+<tr>
+<td class="number">{NO}</td>
+<td>{NAME_NOLINK}<br />{CODE}</td>
+<td class="number">{QUANTITY}</td>
+<td class="price">{UNIT_PRICE_NOSIGN}</td>
+<td class="price">{PRICE_NOSIGN}</td>
+</tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_discount" visibility="hidden"><tr><td colspan="2"></td><td colspan="2" align="center">値引額{DISCOUNT_DESC}</td><td class="price">{DISCOUNT}</td></tr></patTemplate:tmpl>
+<patTemplate:tmpl name="show_delivery_fee" visibility="hidden"><tr><td colspan="2"></td><td colspan="2" align="center">配送料</td><td class="price">{DELIVERY_FEE}</td></tr></patTemplate:tmpl>
+<patTemplate:tmpl name="show_charge" visibility="hidden"><tr><td colspan="2"></td><td colspan="2" align="center">手数料</td><td class="price">{CHARGE}</td></tr></patTemplate:tmpl>
+<tr><td colspan="2"></td><td colspan="2" align="center">合計</td><td class="price">{TOTAL}</td></tr>
+</tbody></table>
+<br />
+<table border="1" cellpadding="2" cellspacing="0" ><tr><td style="height:50px;">備考</td></tr></table>
+</patTemplate:tmpl>

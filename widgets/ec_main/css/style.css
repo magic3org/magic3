@@ -1,0 +1,68 @@
+#photo_shop table {
+	width:100%;
+}
+#photo_shop table th.title {
+	width:40%;
+}
+#photo_shop table tr td, #photo_shop table tr th {
+	border:none;
+}
+#photo_shop table td.number {
+	text-align:right;
+}
+#photo_shop table td.total {
+	font-weight:bold;
+}
+#photo_shop .photo_bottom {
+	margin-top:30px;
+}
+#photo_shop .photo_image {
+	float:left;
+}
+#photo_shop .photo_image img {
+/*	width: 50px;
+	height: 50px;*/
+	margin: 0 5px 0 0;
+}
+/* 会員登録 */
+#photo_shop label{
+	display:block;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+#photo_shop label span.photo_title {
+	display:block;
+	float:left;
+	padding-right:6px;
+	width:150px;
+	text-align:right;
+	font-weight:bold;
+}
+#photo_shop label span.photo_required {
+	margin-left:3px;
+	color:red;
+}
+#photo_shop span.photo_message_required {
+	color:red;
+	font-size:x-small;
+}
+#photo_shop .photo_field{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+#photo_shop .photo_field span.photo_required {
+	margin-left:3px;
+	color:red;
+}
+/* 配送方法,支払方法 */
+#photo_shop dt {
+	display:block;
+	margin-top:10px;
+	margin-bottom:10px;
+	font-weight:bold;
+}
+#photo_shop dt span.photo_title {
+	display:block;
+	float:left;
+	width:300px;
+}

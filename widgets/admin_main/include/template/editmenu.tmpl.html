@@ -1,0 +1,473 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: editmenu.tmpl.html 5799 2013-03-05 23:08:56Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+var widgetInfo = {WIDGET_INFO};
+var pageInfo = {PAGE_INFO};
+
+function configOthers(){
+	document.main.task.value = 'editmenu_others';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	
+	// メニュー項目タイプを格納
+	var children = $('#menulist_assigned').children('.menulist_aitem');
+	for (i = 0; i < children.length; i++){
+		var child = $(children[i]);
+		var type = child.children('.item_type').val();
+		var sendParam = '<input type="hidden" name="items_type[' + i + ']" value="' + type + '" />';
+		$('#main').append(sendParam);
+		
+		var name = '';
+		var desc = '';
+		if (type == 'type_admin' || type == 'type_widget' || type == 'type_title'){
+			name = child.find('.item_name').val();
+			desc = child.find('.item_desc').val();
+		}
+		sendParam = '<input type="hidden" name="items_name[' + i + ']" value="' + name + '" />';
+		$('#main').append(sendParam);
+		sendParam = '<input type="hidden" name="items_desc[' + i + ']" value="' + desc + '" />';
+		$('#main').append(sendParam);
+		
+		var option = '';
+		var param = '';
+		if (type == 'type_admin' || type == 'type_widget'){
+			option = child.find('.item_option').val();
+			param = child.find('.item_param').val();
+		}
+		sendParam = '<input type="hidden" name="items_option[' + i + ']" value="' + option + '" />';
+		$('#main').append(sendParam);
+		sendParam = '<input type="hidden" name="items_param[' + i + ']" value="' + param + '" />';
+		$('#main').append(sendParam);
+	}
+	
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function selectAdminPage(){
+	var i = document.main.item_adminpage.selectedIndex;
+	$('#adminpage_desc').text(pageInfo[i].desc);
+}
+function selectWidget(){
+	var i = document.main.item_widget.selectedIndex;
+	$('#widget_img').attr('src', widgetInfo[i].image);
+	$('#widget_desc').text(widgetInfo[i].desc);
+}
+function downloadFile(){
+    document.upload.act.value = 'download';
+    document.upload.submit();
+    return true;
+}
+function uploadCheck(){
+	if (!document.upload.upfile.value){
+		alert('{_LC_MSG_UPLOAD_FILE_NOT_SELECTED}');
+		return;
+	}
+	document.upload.act.value = 'upload';
+	if (window.confirm('{_LC_MSG_UPLOAD}')){
+		document.upload.submit();
+	}
+}
+(function($){
+	var mSavedVal;
+	var mInsertIndex = -1;
+	var createMenuItem = function(type, option){
+		var title;
+		var bodyHtml = '';
+		var className = 'menulist_aitem';
+		var name = '';
+		var desc = '';
+		var index = -1;
+
+		if (type == 'type_admin'){
+			$('#item_adminpage option').each(function(i){
+				if ($(this).val() == option){
+					name = $(this).text();
+					index = i;
+					return false;
+				}
+			});
+			title = '{_LC_LABEL_ADMIN}[' + name + ']';
+			className += ' menulist_subitem';
+			if (index != -1) desc = pageInfo[index].desc;
+		} else if (type == 'type_widget'){
+			$('#item_widget option').each(function(i){
+				if ($(this).val() == option){
+					name = $(this).text();
+					index = i;
+					return false;
+				}
+			});
+			title = '{_LC_LABEL_WIDGET}[' + name + ']';
+			className += ' menulist_subitem';
+			if (index != -1) desc = widgetInfo[index].desc;
+		} else {
+			var children = $('#menulist_available').children('.menulist_item');
+			for (i = 0; i < children.length; i++){
+				var child = $(children[i]);
+				if (child.children('.item_type').val() == type){
+					title = child.children('.menulist_item_head').text();
+					break;
+				}
+			}
+			if (type == 'type_title'){
+				name = '{_LC_LABEL_UNTITLED}';
+			}
+		}
+		if (type == 'type_admin' || type == 'type_widget'){
+			bodyHtml += '<table border="0" cellpadding="2" cellspacing="1" width="95%">';
+			bodyHtml += '<tr><td width="30">{_LC_LABEL_NAME}</td><td><input type="text" class="item_name" name="item_name" value="' + name + '" size="25" maxlength="40"></td>';
+			bodyHtml += '<td width="55">{_LC_LABEL_OPTION}</td><td><input type="text" class="item_param" name="item_param" size="15" maxlength="30"></td></tr>';
+			bodyHtml += '<tr><td>{_LC_LABEL_DESC}</td><td colspan="3"><textarea class="item_desc" style="width:100%" rows="1">' + desc + '</textarea></td></tr>';
+			bodyHtml += '</table>';
+		} else if (type == 'type_title'){
+			bodyHtml += '<table border="0" cellpadding="2" cellspacing="1" width="95%">';
+			bodyHtml += '<tr><td width="30">{_LC_LABEL_NAME}</td><td><input type="text" class="item_name" name="item_name" value="' + name + '" size="25" maxlength="40"></td></tr>';
+			bodyHtml += '<tr><td>{_LC_LABEL_DESC}</td><td><textarea class="item_desc" style="width:100%" rows="1">' + desc + '</textarea></td></tr>';
+			bodyHtml += '</table>';
+		}
+		var itemHtml	=  '<div class="' + className + '">';
+		itemHtml	+= '<input type="hidden" class="item_type" value="' + type + '" />';
+		itemHtml	+= '<input type="hidden" class="item_option" value="' + option + '" />';
+		itemHtml	+= '<div class="menulist_aitem_head">' + title + '</div>';
+		itemHtml	+= '<div class="menulist_aitem_body">' + bodyHtml + '</div>';
+		itemHtml	+= '</div>';
+		var menuItem = $(itemHtml);
+		
+		// チェックボックス追加
+		menuItem.children('.menulist_aitem_head').append('<span class="options"><a class="menulist_aitem_close">close</a></span>');
+		menuItem.find('a.menulist_aitem_close').bind('click', menuitemClose);
+		return menuItem;
+	};
+	var menuitemClose = function(){
+		var menuItem = $(this).parents('.menulist_aitem');
+		menuItem.fadeOut('slow', function(){
+			$(this).remove();
+		});
+	};
+	// ウィジェットリストからのドラッグ処理
+	var mouseInDrag = function(obj, e){
+		var width = obj.width();
+		var height = obj.height();
+		var left = obj.offset().left;
+		var top = obj.offset().top;
+
+		if (left <= e.pageX && e.pageX <= left + width &&
+			top <= e.pageY && e.pageY <= top + height){
+
+			// ドロップする位置
+			var children = obj.children('.menulist_aitem');
+			var spacePos = -1;
+			for (var i = 0; i < children.length; i++){
+				var child = $(children[i]);
+				if (child.hasClass('menulist_spacer')){
+					spacePos = i;
+					break;
+				}
+			}
+			
+			var insertPos = -1;
+			var i = 0;
+			var play = 0;
+			for (i = 0; i < children.length; i++){
+				var child = $(children[i]);
+				var childLeft = child.offset().left;
+				var childTop = child.offset().top;
+				var childWidth = child.width();
+				var childHeight = child.height();
+
+				play = 0;
+				if (spacePos != -1){
+					if (i == spacePos - 1){
+						play = -10;
+					} else if (i == spacePos + 1){
+						play = 10;
+					} else if (i == spacePos){
+						if (childLeft <= e.pageX && e.pageX <= childLeft + childWidth &&
+							childTop <= e.pageY && e.pageY <= childTop + childHeight){
+							break;
+						}
+					}
+				}
+				if (e.pageY < child.offset().top + childHeight / 2 + play){
+					break;
+				}
+			}
+			var spacing = true;
+			if (spacePos == -1){
+				insertPos = i;
+			} else {
+				if (insertPos < spacePos){
+					insertPos = i;
+				} else {
+					if (insertPos == spacePos || insertPos == spacePos +1){
+						spacing = false;
+					} else {
+						insertPos = i -1;
+					}
+				}
+			}
+			if (spacing){
+				$('.menulist_spacer').remove();
+				
+				children = obj.children('.menulist_aitem');
+				
+				var spacerHtml = '<div class="menulist_spacer" style="height:50px;border:0;"></div>';
+				if (insertPos < children.length){
+					$(children[insertPos]).before(spacerHtml);
+				} else {
+					obj.append(spacerHtml);
+				}
+				mInsertIndex = insertPos;
+			}
+			return true;
+		} else {
+			return false;
+		}
+	};
+	$(document).ready(function(){
+		var els = ['#menulist_assigned'];
+		var $els = $(els.toString());
+		
+		// チェックボックス追加
+		$('div.menulist_aitem_head', $els).append('<span class="options"><a class="menulist_aitem_close">close</a></span>');
+		$('a.menulist_aitem_close').bind('click', menuitemClose);
+		
+		$els.sortable({
+			items: '> div',
+			handle: 'div.menulist_aitem_head',
+			cursor: 'move',
+			cursorAt: { top: 0, left: 0 },
+			opacity: 0.5,
+			//helper: 'clone',
+			appendTo: 'body',
+			//placeholder: 'clone',
+			//placeholder: 'placeholder',
+			connectWith: els,
+			start: function(e,ui) {
+				ui.helper.css("width", ui.item.width());
+			}
+		});
+		$('div.menulist_item').draggable({
+			cancel: '.menulist_item_body',
+			helper: 'clone',
+			cursor: 'move',
+			cursorAt: { top: 0, left: 0 },
+			opacity: 0.5,
+			appendTo: 'body',
+			start: function(e, ui){
+				mSavedVal = $(this).find('.selectmenu').val();// ドラッグする対象の現在値
+				ui.helper.css("width", $('.ui-draggable').width());
+			},
+			drag: function(e, ui){
+				var object = $('#menulist_assigned');
+				if (object) mouseInDrag(object, e);
+				
+				// ドラッグ中の項目のSELECTメニューの選択項目を固定
+				$('.ui-draggable-dragging').find('.selectmenu option').each(function(i){
+					if ($(this).val() == mSavedVal){
+						$(this).attr('selected', 'selected');
+						return false;
+					}
+				});
+			},
+			stop: function(e, ui){
+				$('.menulist_spacer').remove();
+				if (mInsertIndex == -1) return;
+				
+				// メニュー項目を追加
+				var itemType = $('.ui-draggable-dragging').children('.item_type').val();
+				var obj = $('#menulist_assigned');
+				var children = $('#menulist_assigned').children('.menulist_aitem');
+				var menuItem	= createMenuItem(itemType, mSavedVal);
+				if (mInsertIndex < children.length){
+					$(children[mInsertIndex]).before(menuItem);
+				} else {
+					obj.append(menuItem);
+				}
+			}
+		});
+		$('#menulist_assigned').droppable({
+			accept: 'div.menulist_item',
+			out: function(e, ui){
+				$('.menulist_spacer').remove();
+				mInsertIndex = -1;// ドロップキャンセル
+			}
+		});
+		// 管理画面メニュー、ウィジェットメニュー初期化
+		selectAdminPage();
+		selectWidget();
+		
+		// キー設定
+		$(document).keyup(function(e){
+			if (e.which == 27) location.href = '{TOP_URL}';	// ESCキー
+		});
+	});
+})(jQuery);
+//]]>
+</script>
+<div align="center">
+<!-- m3:ErrorMessage -->
+<table width="90%">
+<tr><td><label>{_LC_LABEL_EDIT_MENU}</label></td>
+<td align="right"><!--<span {_HELP_EDITMENU_CONFIG_OTHERS_BTN}><input type="button" class="button" onclick="configOthers();" value="{_LC_LABEL_OTHERS}" /></span>-->
+</td></tr>
+<tr><td colspan="2" align="center">
+
+<form method="post" name="main" id="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="editmenu" />
+<table border="0" cellpadding="0" cellspacing="0">
+    <tr><td>
+        <div class="menulist_frame" style="width:330px;">
+        <h1>{_LC_LABEL_MENU_ITEM}</h1>
+        <div id="menulist_available" class="menulist_box">
+        <patTemplate:tmpl name="menuavailablelist" type="condition" conditionvar="type">
+        <pattemplate:sub condition="__default">
+        <div class="menulist_item">
+	    <input type="hidden" class="item_type" value="{ITEM_TYPE}" />
+            <div class="menulist_item_head">{NAME}</div>
+	    <div class="menulist_item_body">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr><td>{DESC}</td></tr>
+            </table>
+	    </div>
+        </div>
+        </pattemplate:sub>
+        <pattemplate:sub condition="admin_page">
+        <div id="admin_page_item" class="menulist_item">
+	    <input type="hidden" class="item_type" value="{ITEM_TYPE}" />
+            <div class="menulist_item_head">{NAME}</div>
+	    <div class="menulist_item_body">
+            <table border="0" cellpadding="2" cellspacing="1">
+                <tr><td>{DESC}</td></tr>
+		<tr><td><patTemplate:link src="select_admin_page" /></td></tr>
+		<tr><td><span id="adminpage_desc"></span></td></tr>
+            </table>
+	    </div>
+        </div>
+        </pattemplate:sub>
+        <pattemplate:sub condition="widget">
+        <div id="widget_item" class="menulist_item">
+	    <input type="hidden" class="item_type" value="{ITEM_TYPE}" />
+            <div class="menulist_item_head">{NAME}</div>
+	    <div class="menulist_item_body">
+            <table border="0" cellpadding="2" cellspacing="1">
+                <tr><td colspan="2">{DESC}</td></tr>
+		<tr><td colspan="2"><patTemplate:link src="select_widget" /></td></tr>
+		<tr><td valign="top"><img id="widget_img" /></td><td><span id="widget_desc"></span></td></tr>
+            </table>
+	    </div>
+        </div>
+        </pattemplate:sub>
+        </patTemplate:tmpl>
+        </div>
+        </div>
+    </td><td width="50" align="center">
+    <img src="{_ROOT_URL}/images/system/2rightarrow.png" />
+    </td><td>
+        <div class="menulist_frame" style="width:500px;">
+        <h1>{_LC_LABEL_CONFIGURED_MENU_ITEM}</h1>
+        <div id="menulist_assigned" class="menulist_box_assigned">
+        <patTemplate:tmpl name="menuassignedlist" type="condition" conditionvar="type">
+        <pattemplate:sub condition="__default">
+	<div class="menulist_aitem">
+	    <input type="hidden" class="item_type" value="{ITEM_TYPE}" />
+	    <div class="menulist_aitem_head">{TITLE}</div>
+	    <div class="menulist_aitem_body">{BODY}</div>
+	</div>
+        </pattemplate:sub>
+        <pattemplate:sub condition="subitem">
+	<div class="menulist_aitem menulist_subitem">
+	    <input type="hidden" class="item_type" value="{ITEM_TYPE}" />
+	    <input type="hidden" class="item_option" value="{OPTION}" />
+	    <div class="menulist_aitem_head">{TITLE}</div>
+	    <div class="menulist_aitem_body">
+		<table border="0" cellpadding="2" cellspacing="1" width="95%">
+		<tr><td width="30">{LABEL_NAME}</td><td><input type="text" class="item_name" name="item_name" value="{NAME}" size="25" maxlength="40" /></td>
+		<td width="55">{LABEL_OPTION}</td><td><input type="text" class="item_param" name="item_param" value="{PARAM}" size="15" maxlength="30" /></td></tr>
+		<tr><td>{LABEL_DESC}</td><td colspan="3"><textarea class="item_desc" style="width:100%" rows="1">{DESC}</textarea></td></tr>
+		</table>
+	    </div>
+	</div>
+        </pattemplate:sub>
+        <pattemplate:sub condition="title">
+	<div class="menulist_aitem">
+	    <input type="hidden" class="item_type" value="{ITEM_TYPE}" />
+	    <div class="menulist_aitem_head">{TITLE}</div>
+	    <div class="menulist_aitem_body">
+	        <table border="0" cellpadding="2" cellspacing="1" width="95%">
+		<tr><td width="30">{LABEL_NAME}</td><td><input type="text" class="item_name" name="item_name" value="{NAME}" size="25" maxlength="40" /></td></tr>
+		<tr><td>{LABEL_DESC}</td><td><textarea class="item_desc" style="width:100%" rows="1">{DESC}</textarea></td></tr>
+		</table>
+	    </div>
+	</div>
+        </pattemplate:sub>
+	</patTemplate:tmpl>
+        </div>
+        </div>
+    </td></tr>
+        <tr>
+	    <td colspan="3" align="right">
+	    <input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
+	    </td>
+	</tr>
+</table>
+</form>
+<br />
+<!--</td></tr>
+<tr><td>-->
+<form enctype="multipart/form-data" method="post" name="upload">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="editmenu" />
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-head">{_LC_LABEL_MENU_SCRIPT}</td>
+	</tr>
+        <tr>
+	    <td><input type="file" name="upfile" size="50" /><input type="button" class="button" onclick="uploadCheck();" value="{_LC_LABEL_UPLOAD}" /></td>
+	</tr>
+	<tr class="even">
+	<td align="right">
+	    <input type="button" class="button" onclick="downloadFile();" value="{_LC_LABEL_DOWNLOAD}" />
+	</td>
+	</tr>
+    </tbody>
+</table>
+</form>
+</td></tr>
+</table>
+</div>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="select_admin_page"> 
+<select id="item_adminpage" name="item_adminpage" class="selectmenu" onchange="selectAdminPage();">
+<patTemplate:tmpl name="admin_list">
+    <option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+</patTemplate:tmpl>
+
+<patTemplate:tmpl name="select_widget"> 
+<select id="item_widget" name="item_widget" class="selectmenu" onchange="selectWidget();">
+<patTemplate:tmpl name="widget_list">
+    <option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+</patTemplate:tmpl>

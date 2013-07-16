@@ -1,0 +1,31 @@
+<patTemplate:tmpl name="_widget">
+<div align="center" style="text-align:center;background-color:#ffcc99;">{TITLE}</div>
+<div style="{LINK_STYLE_TOP}">{REGIST_NAME}[9]</div>
+<!-- m3:ErrorMessage -->
+<patTemplate:tmpl name="thread_area">
+<div>{AVATAR_IMAGE}&nbsp;{NAME}</div>
+<patTemplate:tmpl name="add_area" visibility="hidden">
+<form action="{CURRENT_URL}" method="post" class="form">
+    <input type="hidden" name="act" value="{ACT}" />
+    <input type="hidden" name="ticket" value="{TICKET}" />
+    <input type="hidden" name="memberid" value="{MEMBER_ID}" />
+    <textarea rows="5" name="message">{MESSAGE}</textarea><br />
+    <div align="center" style="text-align:center;"><input type="submit" value="投稿" /></div>
+</form>
+</patTemplate:tmpl>
+<hr />
+<patTemplate:tmpl name="no_message_area" visibility="hidden"><div>ﾒｯｾｰｼﾞが投稿されていません</div></patTemplate:tmpl>
+<patTemplate:tmpl name="message_list">
+<div class="chacha_message_list">
+<div>{MESSAGE}</div>
+<div><span style="font-size:x-small;">{DATE}</span><span style="font-size:x-small;">&nbsp;{ID}&nbsp;{MESSAGE_COUNT}</span></div>
+</div>
+{SPACER}
+</patTemplate:tmpl>
+</patTemplate:tmpl>
+<div style="{LINK_STYLE_INNER_BOTTOM}">{PAGE_LINK}</div>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<div style="{LINK_STYLE_BOTTOM}">
+<a href="{REGIST_URL}" accesskey="9">{REGIST_NAME}[9]</a><br />
+<a href="{TOP_URL}" accesskey="0">ﾌﾞﾛｸﾞﾎｰﾑに戻る[0]</a></div>
+</patTemplate:tmpl>

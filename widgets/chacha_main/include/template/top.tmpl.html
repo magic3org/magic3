@@ -1,0 +1,161 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+var startTime;
+var maxNo = {MAX_NO};
+var bufSize = {MESSAGE_COUNT};
+var buf = new Array();
+var newItemNo = 0;
+var currentPos = 1;	// データ追加位置(1～)
+
+function getMessage()
+{
+	m3_ajax_request('{WIDGET_ID}', 'act=getmessage&count={MESSAGE_COUNT}&no=' + (maxNo + 1), chacha_ajax_success_func);
+}
+function chacha_ajax_success_func(request, retcode, jsondata)
+{
+	var i;
+	if (jsondata.messages){
+		for (i = 0; i < jsondata.messages.length; i++){
+			// データをバッファに追加
+			var image = new Image();
+			image.src = jsondata.messages[i].avatar;	// 画像プリロード
+			
+			var obj = new Object();
+			obj.no = parseInt(jsondata.messages[i].no);
+			obj.avatar = jsondata.messages[i].avatar;
+			obj.membername = jsondata.messages[i].membername;
+			obj.message = jsondata.messages[i].message;
+			obj.messageid = jsondata.messages[i].messageid;
+			obj.messagecount = jsondata.messages[i].messagecount;
+			obj.date = jsondata.messages[i].date;
+			obj.image = image;
+			buf.push(obj);
+
+			// 最大メッセージ番号を更新
+			maxNo = obj.no;
+		}
+		// 古いデータ削除
+		if (buf.length - bufSize > 0) buf = buf.slice(buf.length - bufSize);
+	}
+}
+function chacha_itemLoad(carousel, state)
+{
+	if (state == 'init') return;
+};
+function makeItem(index, itemObj){
+	var html = '<input class="bufindex" type="hidden" value="' + index + '" />';
+	html += '<div class="chacha_avatar"><img src="' + itemObj.avatar + '" width="64" height="64" /></div>';
+	html += '<div class="chacha_message_right"><div class="chacha_message_main"><span class="chacha_message_membername">' + itemObj.membername + '</span>';
+	html += '<span class="chacha_message_body">' + itemObj.message + '</span></div>';
+	html += '<div class="chacha_message_info"><span class="chacha_message_date">' + itemObj.date + '</span>';
+	html += '<span class="chacha_message_id">' + itemObj.messageid + '</span>';
+	html += '<span class="chacha_message_count">' + itemObj.messagecount + '</span></div></div>';
+	return html;
+}
+
+function chacha_init( carousel, state)
+{
+	// メッセージ取得
+	getMessage();
+
+	// タイマーセット
+	startTime = new Date();
+		
+	// reset empties it out
+	$('#reset').click( function( evt ) {
+		carousel.reset();
+	});
+}
+function chacha_itemVisibleIn(carousel, li, index, state)
+{
+	// 初期データロード時は実行しない
+	if (state == 'init') return;
+}
+function chacha_itemVisibleOut(carousel, li, index, state)
+{
+	// 初期データロード時は実行しない
+	if (state == 'init') return;
+	
+	// データ再取得
+	if (document.hasFocus()){	// アクティブ時のみ処理
+	if (startTime){
+		var currentTime = new Date();
+		if ((currentTime - startTime) / 1000 > 15){	// 15秒単位
+			// メッセージ取得
+			getMessage();
+			//alert('15sec');
+			startTime = new Date();
+		}
+	}
+	}
+	
+	// データ更新処理
+	if (maxNo > newItemNo){		// 最新データ取得のとき
+		var no;
+		no = parseInt($(li).children('.bufindex').attr('value'));		// 項目順
+		if (no == currentPos){			// データ追加位置のとき
+			var i;
+			var nextItemNo = newItemNo;
+			for (i = 0; i < buf.length; i++){
+				if (nextItemNo < buf[i].no){
+					nextItemNo = buf[i].no;
+					break;
+				}
+			}
+			if (nextItemNo > newItemNo){
+				var itemObj = buf[i];
+				$('#messageitem_' + currentPos).html(makeItem(no, itemObj));
+				newItemNo = nextItemNo;
+
+				// データ設定位置を更新
+				currentPos++;
+				if (currentPos > bufSize) currentPos = 1;
+			}
+		}
+	}
+}
+$(function() {
+	$("#chacha_jcarousel").jcarousel({
+		vertical: true,
+		visible: {VISIBLE_MESSAGE_COUNT},	/* 表示項目数 */
+		auto:5,		/* 停止時間(秒) */
+		scroll:-1,
+		start:{FIRST_MESSAGE_NO},	/* 先頭項目 */
+		wrap: 'circular',
+		initCallback:   chacha_init,
+		itemLoadCallback: {onBeforeAnimation: chacha_itemLoad},
+		itemVisibleInCallback: {onBeforeAnimation: chacha_itemVisibleIn},
+		itemVisibleOutCallback: {onAfterAnimation: chacha_itemVisibleOut}
+	});
+	startTime = new Date(); 
+});
+//]]>
+</script>
+<div id="{CSS_ID}" style="{BLOG_STYLE}" >
+<div align="center"><div style="{TOP_STYLE}">
+{TOP_CONTENTS}
+</div></div>
+<patTemplate:tmpl name="top_link_area" visibility="hidden"><div style="{LINK_STYLE_TOP}"><a href="{REGIST_URL}"><b>{REGIST_NAME}</b></a></div></patTemplate:tmpl>
+<div align="center">
+<!-- m3:ErrorMessage -->
+<div style="{INNER_STYLE}">
+<ul id="chacha_jcarousel" class="jcarousel-skin-chacha">
+<patTemplate:tmpl name="message_list">
+<li style="list-style-type:none; background:none;" id="messageitem_{BUF_INDEX}">
+    <input class="bufindex" type="hidden" value="{BUF_INDEX}" />
+    <div class="chacha_avatar">{AVATAR}</div>
+    <div class="chacha_message_right">
+        <div class="chacha_message_main"><span class="chacha_message_membername">{NAME}</span><span class="chacha_message_body">{MESSAGE}</span></div>
+	<div class="chacha_message_info"><span class="chacha_message_date">{DATE}</span><span class="chacha_message_id">{ID}</span><span class="chacha_message_count">{MESSAGE_COUNT}</span></div>
+    </div>
+    <div style="clear: both;"></div>
+</li>
+</patTemplate:tmpl>
+</ul>
+<div style="{LINK_STYLE_INNER_BOTTOM}"><a href="{READ_MORE_URL}"><b>もっと読む</b></a></div>
+</div>
+</div>
+<div style="{LINK_STYLE_BOTTOM}"><a href="{HOME_URL}"><b>ブログホーム</b></a></div>
+</div>
+</patTemplate:tmpl>

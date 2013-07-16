@@ -1,0 +1,119 @@
+/* begin Box, Sheet */
+.Sheet-tl
+{
+	clip: rect(auto 45px 45px auto);
+}
+
+.Sheet-tr
+{
+	clip: rect(auto auto 45px 45px);
+}
+
+.Sheet-bl
+{
+	clip: rect(45px 45px auto auto);
+}
+
+.Sheet-br
+{
+	clip: rect(45px auto auto 45px);
+}
+
+.Sheet-tc
+{
+	clip: rect(auto auto 45px auto);
+}
+
+.Sheet-bc
+{
+	clip: rect(45px auto auto auto);
+}
+
+.Sheet-cr
+{
+	clip: rect(auto auto auto 45px);
+}
+
+.Sheet-cl
+{
+	clip: rect(auto 45px auto auto);
+}
+/* end Box, Sheet */
+
+/* begin Menu */
+.nav .r
+{
+	clip: rect(auto auto auto 966px);
+}
+/* end Menu */
+
+/* begin MenuItem */
+.artmenu a .r
+{
+	clip: rect(auto auto auto 404px);
+}
+/* end MenuItem */
+
+/* begin Box, Block */
+.Block-tl
+{
+	clip: rect(auto 19px 19px auto);
+}
+
+.Block-tr
+{
+	clip: rect(auto auto 19px 19px);
+}
+
+.Block-bl
+{
+	clip: rect(19px 19px auto auto);
+}
+
+.Block-br
+{
+	clip: rect(19px auto auto 19px);
+}
+
+.Block-tc
+{
+	clip: rect(auto auto 19px auto);
+}
+
+.Block-bc
+{
+	clip: rect(19px auto auto auto);
+}
+
+.Block-cr
+{
+	clip: rect(auto auto auto 19px);
+}
+
+.Block-cl
+{
+	clip: rect(auto 19px auto auto);
+}
+/* end Box, Block */
+
+/* begin BlockHeader */
+.BlockHeader .r
+{
+	clip: rect(auto auto auto 970px);
+}
+/* end BlockHeader */
+
+/* begin PostContent */
+.PostContent
+{
+	height:1%;
+}
+/* end PostContent */
+
+/* begin Button */
+.Button .btn .r
+{
+	clip: rect(auto auto auto 396px);
+}
+/* end Button */
+

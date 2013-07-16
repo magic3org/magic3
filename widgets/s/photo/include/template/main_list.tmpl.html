@@ -1,0 +1,202 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: main_list.tmpl.html 5032 2012-07-12 01:07:50Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+var photoCount = {PHOTO_COUNT};
+var photoInfo = new Array();
+
+$(function(){
+	// 検索詳細設定ダイアログ
+	var dialogHtml = '<div id="photo_config" data-role="dialog">';
+	dialogHtml += '<div data-role="content">';
+        dialogHtml += '<p>コンテンツ</p>';
+        dialogHtml += '<p><a href="#" data-role="button" data-rel="back">閉じる</a></p>';
+    	dialogHtml += '</div>';
+	dialogHtml += '</div>';
+	$('body').append(dialogHtml);
+
+	// 初期データ取得
+	m3_ajax_request('s/photo', '{AJAX_URL}', ajax_success_func, ajax_failure_func);
+<patTemplate:tmpl name="category_script" visibility="hidden">
+	// カテゴリーエリア処理
+	$("#category_add").click(function(){
+		$("#gallery_category").slideToggle(300);
+		return false;
+	});
+	$("#password_submit").click(function(){
+		$("#gallery_category").slideToggle(300);
+		document.main.act.value = 'addcategory';
+		document.main.password.value = hex_md5(document.main.access_password.value);
+		document.main.submit();
+		return false;
+	});
+</patTemplate:tmpl>
+<patTemplate:tmpl name="search_script" visibility="hidden">
+	// 検索エリア処理
+	$('#{SEARCH_TEXT_ID}').val('{KEYWORD}');
+	$('#{SEARCH_SORT_ID}').val('{SORT}');
+	$('#{SEARCH_BUTTON_ID}').click(function(){
+		var value, url;
+		$('#{SEARCH_TEXT_ID}').attr('disabled', 'disabled');
+		$('#{SEARCH_BUTTON_ID}').attr('disabled', 'disabled');
+
+		url = '{SEARCH_URL}';
+		value = $('#{SEARCH_TEXT_ID}').val();
+		if (value && value != '') url += '&keyword=' + encodeURIComponent(value);
+		value = $('#{SEARCH_SORT_ID}').val();
+		if (value && value != '') url += '&sort=' + encodeURIComponent(value);
+		// 単数選択項目
+		var category = '';
+		value = $('select.photo_main_category option:selected').map(function(){ return $(this).val() ? $(this).val() : null; }).get();
+		value = jQuery.unique(value).join('+');
+		if (value && value != '') category += value;
+		// 複数選択項目
+		value = $('input:checked.photo_main_category').map(function(){return $(this).val();}).get();
+		value = jQuery.unique(value).join(',');
+		if (value && value != ''){
+			if (category && category != '') category += '+';
+			category += value;
+		}
+		if (category && category != '') url += '&category=' + encodeURI(category);
+		value = $('.photo_main_author').map(function(){return $(this).val();}).get();
+		value = jQuery.unique(value);
+		if (value && value != '') url += '&author=' + encodeURI(value);
+		window.location.href = url;
+	});
+	$('#{SEARCH_RESET_ID}').click(function(){
+		$('#{SEARCH_FORM_ID} :input').each(function(){
+			var type = this.type;
+			var tag = this.tagName.toLowerCase();
+			if (type == 'text' || type == 'password' || tag == 'textarea'){
+				this.value = '';
+			} else if (type == 'checkbox' || type == 'radio'){
+				this.checked = false;
+			} else if (tag == 'select'){
+				this.selectedIndex = 0;
+			}
+		});
+	});
+</patTemplate:tmpl>
+});
+function ajax_success_func(request, retcode, jsondata)
+{
+	if (jsondata.items){
+		photoCount = jsondata.items.length < photoCount ? jsondata.items.length : photoCount;
+
+		// サムネール表示領域作成
+		var thumbnail_area = '';
+		thumbnail_area += '<ul id="thumbs_ul">';
+		for (var i = 0; i < photoCount; i++){
+			thumbnail_area += '<li>';
+			thumbnail_area += '<div class="thumb_cont">';
+			thumbnail_area += '<div id="image_wrap' + i + '" class="image_wrap"><img class="thumb_img" src="{LOAD_ICON_URL}" /></div>';
+			thumbnail_area += '<div id="title_wrap' + i + '" class="title_wrap">&nbsp;</div>';
+			thumbnail_area += '<div id="score_wrap' + i + '" class="score_wrap"></div>';
+			thumbnail_area += '</div>';
+			thumbnail_area += '</li>';
+		}
+		thumbnail_area += '</ul>';
+		$('#gallery_cont').html(thumbnail_area);
+	
+		for (var i = 0; i < photoCount; i++){
+			var obj = new Object();
+			obj.id = jsondata.items[i].id;
+			obj.no = jsondata.items[i].no;
+			obj.image_url = jsondata.items[i].image_url;
+			obj.title = jsondata.items[i].title;
+			obj.title_short = jsondata.items[i].title_short;
+			obj.score = jsondata.items[i].score;
+			photoInfo.push(obj);
+		}
+		loadPhoto(0);
+	}
+}
+function ajax_failure_func(request)
+{
+//	alert('ajax failure!');
+}
+function loadPhoto(index)
+{
+	if (index >= photoCount) return;
+	
+	var image = new Image();
+	image.title = photoInfo[index].title;
+	image.alt = photoInfo[index].title;
+	
+	// image onload
+	$(image).load(function (){
+		var imageTag = $('<a href="{PHOTO_DETAIL_URL}?photoid=' + photoInfo[index].id + '&no=' + photoInfo[index].no + '{PHOTO_DETAIL_URL_OTHERS}"></a>').html(this);
+		var titleTag = $('<a href="{PHOTO_DETAIL_URL}?photoid=' + photoInfo[index].id + '&no=' + photoInfo[index].no + '{PHOTO_DETAIL_URL_OTHERS}"></a>').text(photoInfo[index].title_short);
+		$('#image_wrap' + index).html(imageTag);
+		$('#title_wrap' + index).html(titleTag);
+		
+		loadPhoto(index +1);
+		
+		$('#score_wrap' + index).raty({
+			path: '{RATY_IMAGE_URL}',
+			start: photoInfo[index].score,
+			half: true,
+			readOnly: true
+		});
+	}).error(function (){
+		$('#image_wrap' + index).html("Error!");
+		loadPhoto(index +1);
+	}).attr('src', photoInfo[index].image_url);
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<div id="photo_gallery">
+<div data-role="content">
+<patTemplate:tmpl name="category_area" visibility="hidden">
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<div class="gallery_category">表示可能なカテゴリー：{AUTH_CATEGORY_LIST}&nbsp;&nbsp;<input id="category_add" type="button" class="button" value="追加" /></div>
+<div id="gallery_category" style="display:none;">
+<div class="gallery_message">
+画像を表示するにはカテゴリーのパスワードを入力する必要があります。<br />
+目的のカテゴリーを選択し、パスワードを送信して下さい。</div>
+<label><span class="gallery_title">カテゴリー</span>
+    <select name="access_category">
+    <option value="0">-- 未選択 --</option>
+        <patTemplate:tmpl name="access_category_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+	</patTemplate:tmpl>
+    </select>
+</label>
+<label><span class="gallery_title">パスワード</span><input type="password" name="access_password" size="10" maxlength="10" /></label>
+<div class="photo_button"><input id="password_submit" type="button" class="button" value="送信" /></div>
+</div>
+</form>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="single_category_area" visibility="hidden">
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<input type="hidden" name="access_category" value="{VALUE}" />
+<label><span class="gallery_title">パスワード</span><input type="password" name="access_password" size="10" maxlength="10" /></label>
+<div class="photo_button"><input id="password_submit" type="button" class="button" value="送信" /></div>
+</form>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="search_area" visibility="hidden">
+<div class="gallery_search"></div>
+</patTemplate:tmpl>
+</div>
+<patTemplate:tmpl name="page_link_top" visibility="hidden"><div class="gallery_nav" data-role="controlgroup" data-type="horizontal">{PAGE_LINK}</div></patTemplate:tmpl>
+<div id="gallery_cont"></div>
+<div style="clear:both;"></div>
+<patTemplate:tmpl name="page_link_bottom" visibility="hidden"><div class="gallery_nav" data-role="controlgroup" data-type="horizontal">{PAGE_LINK}</div></patTemplate:tmpl>
+</div>
+</patTemplate:tmpl>

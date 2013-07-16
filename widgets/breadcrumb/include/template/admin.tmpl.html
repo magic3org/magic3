@@ -1,0 +1,62 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 5883 2013-03-31 12:22:13Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function uploadCheck(){
+	if (!document.main.upfile.value){
+		alert('画像ファイルが選択されていません');
+		return false;
+	}
+	if (!window.confirm('画像ファイルをアップロードしますか?')) return false;
+	document.main.act.value = 'upload';
+	document.main.enctype = 'multipart/form-data';
+	document.main.encoding = 'multipart/form-data';			// for IE
+	document.main.submit();
+	return false;
+}
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<table class="simple-table">
+    <caption>パンくずリスト設定</caption>
+    <tbody>
+	<tr>
+	    <td class="table-headside" width="100"><span {_HELP_VIEW_CONFIG}>表示設定</span></td>
+	    <td width="500"><input type="checkbox" name="item_visible" {VISIBLE} />トップページの場合にリストを表示する<br />
+	    <input type="checkbox" name="item_use_hidden_menu" {USE_HIDDEN_MENU} />非表示のメニューウィジェットの定義を使用する</td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside">区切り画像</td>
+	    <td><div id="preview_outer">{SEPARATOR_IMAGE}</div><input type="hidden" name="item_separator_image_path" value="{SEPARATOR_IMAGE_PATH}" />
+                <input type="file" name="upfile" size="50" /><input type="button" class="button" onclick="uploadCheck();" value="アップロード" />
+	    </td>
+	</tr>
+    <tr>
+	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
+	</tr>
+    </tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

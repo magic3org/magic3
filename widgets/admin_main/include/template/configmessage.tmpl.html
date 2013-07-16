@@ -1,0 +1,59 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: configmessage.tmpl.html 5729 2013-02-25 09:18:27Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form action="?task=configmessage" method="post" name="main">
+<input type="hidden" name="act" />
+<table width="800">
+<tbody><tr><td>
+<table class="simple-table" width="100%">
+    <caption><span {_HELP_CONFIGMESSAGE_MESSAGE}>メッセージ</span></caption>
+    <tbody>
+    <tr>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIGMESSAGE_SITE_IN_MAINTENANCE}>サイトメンテナンス中</span></td>
+	    <td><input type="text" name="item_msg_site_in_maintenance" value="{MSG_SITE_IN_MAINTENANCE}" size="60" maxlength="200" style="width:100%;" /><br />
+	    <input type="checkbox" name="item_use_content_maintenance" {USE_CONTENT_MAINTENANCE} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_MAINTENANCE})</td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside" width="150"><span {_HELP_CONFIGMESSAGE_ACCESS_DENY}>アクセス不可</span></td>
+	    <td><input type="text" name="item_msg_access_deny" value="{MSG_ACCESS_DENY}" size="60" maxlength="200" style="width:100%;" /><br />
+	    <input type="checkbox" name="item_use_content_access_deny" {USE_CONTENT_ACCESS_DENY} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_ACCESS_DENY})</td>
+	</tr>
+    <tr>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIGMESSAGE_PAGE_NOT_FOUND}>存在しないページ</span></td>
+	    <td><input type="text" name="item_msg_page_not_found" value="{MSG_PAGE_NOT_FOUND}" size="60" maxlength="200" style="width:100%;" /><br />
+	    <input type="checkbox" name="item_use_content_page_not_found" {USE_CONTENT_PAGE_NOT_FOUND} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_PAGE_NOT_FOUND})</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+<tr><td align="right">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</td></tr>
+</tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

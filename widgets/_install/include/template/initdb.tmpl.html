@@ -1,0 +1,72 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: initdb.tmpl.html 3791 2010-11-08 07:07:17Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function gonext(){
+	document.main.act.value = 'done';
+	document.main.submit();
+	return false;
+}
+function gofore(){
+	if (document.main.from.value == ''){
+		document.main.task.value = 'checkdb';
+	} else {
+		document.main.task.value = document.main.from.value;
+	}
+	document.main.submit();
+	return false;
+}
+//]]>
+</script>
+<div align="center">
+<br />
+<h2>{_LC_TITLE_EXEC_DB}</h2>
+<!-- m3:ErrorMessage -->
+<form method="post" name="main" class="form">
+<input type="hidden" name="lang" value="{LANG}" />
+<input type="hidden" name="task" value="{TASK}" />
+<input type="hidden" name="from" value="{FROM}" />
+<input type="hidden" name="act" />
+<table>
+<tr><td>
+{MESSAGE}<br />
+{_LC_MSG_EXEC_DB}
+</td></tr>
+<tr><td align="center">
+<br />
+<table class="simple-table" border="0" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr>
+            <th>{_LC_LABEL_TARGET}</th>
+	</tr>
+    </thead>
+    <tbody>
+        <tr>
+	    <td width="250">{_LC_LABEL_TABLE}
+	    </td>
+	</tr>
+    </tbody>
+</table>
+
+</td></tr>
+<tr><td align="right">
+
+<input type="button" class="button" onclick="gofore();" value="{_LC_LABEL_GO_BACK}" />
+<input type="button" class="button" onclick="gonext();" value="{_LC_LABEL_DO}" />
+
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

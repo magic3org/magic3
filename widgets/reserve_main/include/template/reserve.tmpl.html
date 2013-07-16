@@ -1,0 +1,133 @@
+<patTemplate:tmpl name="_widget">
+<style type="text/css">@import url({SCRIPT_URL}/jscalendar-1.0/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/calendar.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/lang/calendar-ja.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/calendar-setup.js"></script>
+<SCRIPT language="JavaScript">
+<!--
+function new_reserve(){
+	if (!window.confirm('予約を新規登録します')) return false;
+	document.reserve_main.act.value = 'new';
+	document.reserve_main.submit();
+	return true;
+}
+function cancel_reserve(){
+	if (!window.confirm('予約をキャンセルしますか?')) return false;
+	document.reserve_main.act.value = 'cancel';
+	document.reserve_main.submit();
+	return true;
+}
+function logout_reserve(){
+	document.reserve_main.act.value = 'logout';
+	document.reserve_main.submit();
+	return true;
+}
+// -->
+</SCRIPT>
+<style type="text/css">
+<!--
+.reserve_calendar {
+	font-size: 100%;
+	margin: 5px 10px;
+	border-collapse: collapse;
+}
+.reserve_calendar caption {
+/*	font-size: 100%;*/
+}
+.reserve_calendar th {
+	/*font-size: 150%;*/
+	text-align: center;
+	font-weight: bold;
+}
+.reserve_calendar td {
+	/*font-size: 120%;*/
+	width: 30px;
+	text-align: center;
+	background: url({IMG_URL}/line.gif) repeat-x bottom left;
+}
+.reserve_calendar td a {
+	display: block;
+	font-weight: bold;
+}
+.reserve_calendar th.sun {
+	color: #CC3D3D;
+}
+.reserve_calendar th.sat {
+	color: #2996CC;
+}
+.reserve_calendar td.sun {
+	color: #CC3D3D;
+}
+.reserve_calendar td.sat {
+	color: #2996CC;
+}
+.reserve_calendar td.select {
+	font-weight: bold;
+	color: green;
+}
+.reserve_calendar td.today {
+	font-weight: bold;
+}
+.reserve_calendar td a:link, .calender td a:visited {
+	text-decoration: none;
+	background: #EFEFEF;
+	border-right: 2px solid #FFF;
+	border-left: 2px solid #FFF;
+}
+.reserve_calendar td a:hover {
+	text-decoration: none;
+	background: #CCC;
+}
+-->
+</style>
+<!-- m3:ErrorMessage -->
+<form method="post" name="reserve_main" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<table width="100%">
+<tr><td class="contentheading" colspan="3">予約状況</td></tr>
+<tr><td width="80px">ログイン</td><td>{LOGIN_STATUS}</td><td align="right">{TODAY_DATE}</td></tr>
+<tr><td colspan="3">&nbsp;</td></tr>
+<tr><td>現在の予約</td><td  colspan="2" align="left">{RESERVED_DATE}</td></tr>
+<patTemplate:tmpl name="cancel_button" visibility="hidden">
+<tr><td colspan="3" align="right"><input type="button" class="button" onClick="cancel_reserve();" value="予約をキャンセル"></td></tr>
+</patTemplate:tmpl>
+<tr><td colspan="3">&nbsp;</td></tr>
+<tr><td colspan="3" align="center">
+{CALENDAR}
+</td></tr>
+<tr><td colspan="3">&nbsp;</td></tr>
+<tr><td>新規予約</td>
+<td colspan="2">日付<input type="text" id="calenderinput" name="reserve_date" value="{RESERVE_DATE}" size="12" maxlength="12" {RESERVE_DATE_DISABLED}><button id="calenderbutton" {CALENDER_DISABLED}>カレンダー</button>
+&nbsp;&nbsp;時間
+<select name="time_hour">
+<option value="-1" style="padding-right:5px;">--</option>
+<patTemplate:tmpl name="time_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time_minute">
+<option value="-1" style="padding-right:5px;">--</option>
+<patTemplate:tmpl name="time_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+</td></tr>
+<tr><td colspan="3" align="right">{MESSAGE}&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" class="button" onClick="new_reserve();" value="新規に予約する" {NEW_BUTTON_DISABLED}>
+</td></tr>
+<tr><td colspan="3">&nbsp;</td></tr>
+<tr><td colspan="3"><a href="#" onClick="logout_reserve();">ログアウト</a></td></tr>
+</table>
+</form>
+<SCRIPT language="JavaScript">
+<!--
+Calendar.setup(
+    {
+      inputField  : "calenderinput",         // ID of the input field
+      ifFormat    : "%Y/%m/%d",    // the date format
+      button      : "calenderbutton"       // ID of the button
+    }
+);
+// -->
+</SCRIPT>
+</patTemplate:tmpl>

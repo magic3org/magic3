@@ -1,0 +1,169 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: menudef.tmpl.html 5389 2012-11-18 22:42:30Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function exec(act){
+	document.main.act.value=act;
+	document.main.submit();
+	return false;
+}
+function updateline(templateId, lineNo){
+	if (!window.confirm('{_LC_MSG_UPDATE_LINE}')) return false;
+	document.main.act.value = 'updateline';
+	document.main.template.value = templateId;
+	document.main.no.value = lineNo;
+	document.main.submit();
+	return false;
+}
+function deleteline(templateId){
+	if (!window.confirm('{_LC_MSG_DELETE_LINE}')) return false;
+	document.main.act.value = 'deleteline';
+	document.main.template.value = templateId;
+	document.main.submit();
+	return false;
+}
+function uploadCheck(){
+	if (!document.upload.upfile.value){
+		alert('{_LC_MSG_NO_UPLOAD_FILE}');
+		return false;
+	}
+	if (!window.confirm('{_LC_MSG_UPLOAD_FILE}')) return false;
+	document.upload.act.value = 'upload';
+	document.upload.item_type.value = document.main.item_type.value;
+	document.upload.submit();
+	return false;
+}
+function download(templateId){
+	document.main.act.value = 'download';
+	document.main.template.value = templateId;
+	document.main.submit();
+	return true;
+}
+function changeDefault(templateId){
+	document.main.act.value = 'changedefault';
+	document.main.template.value = templateId;
+	document.main.submit();
+	return true;
+}
+function changeDetail(){
+	document.main.act.value = 'changedetail';
+	document.main.submit();
+	return true;
+}
+function changeType(){
+	document.main.act.value = 'changetype';
+	document.main.submit();
+	return true;
+}
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow(templateId)
+{
+	m3ShowPreviewWindow(0, '{ADMIN_URL}?cmd=showposition&template=' + templateId);
+	return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('templatelist', 15, 0);
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="templist" />
+<input type="hidden" name="act" />
+<input type="hidden" name="template" />
+<input type="hidden" name="no" />
+<table width="90%">
+<tr><td>
+<span {_HELP_TEMPLIST}><label>{_LC_LABEL_TEMPLATE_LIST}</label></span>&nbsp;&nbsp;&nbsp;&nbsp;<span {_HELP_TEMPLIST_TYPE}><label>{_LC_LABEL_TEMPLATE_TYPE} </label></span>
+<select name="item_type" onchange="changeType();">
+<patTemplate:tmpl name="item_type_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>&nbsp;&nbsp;&nbsp;&nbsp;
+<patTemplate:tmpl name="show_dir" visibility="hidden">
+<span {_HELP_TEMPLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
+<span {_HELP_TEMPLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>
+</patTemplate:tmpl>
+</td><td align="right"><input type="checkbox" name="item_show_detail" onclick="changeDetail();" {SHOW_DETAIL} /><span {_HELP_TEMPLIST_DETAIL_CHECK}><label>{_LC_LABEL_SHOW_DETAIL}</label></span>
+</td></tr>
+<tr><td colspan="2">
+<table id="templatelist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+            <th width="35">No</th>
+	    <th width="45"></th>
+            <th width="15%"><span {_HELP_TEMPLIST_ID}>ID</span></th>
+	    <th width="15%"><span {_HELP_TEMPLIST_NAME}>{_LC_LABEL_TEMPLATE_NAME}</span></th>
+	    <th width="100"><span {_HELP_TEMPLIST_FORMAT}>{_LC_LABEL_TEMPLATE_FORMAT} /<br />{_LC_LABEL_TEMPLATE_CREATOR}</span></th>
+	    <th width="70"><span {_HELP_TEMPLIST_DEFAULT}>{_LC_LABEL_TEMPLATE_DEFAULT}</span></th>
+	    <th width="120">{_LC_LABEL_TEMPLATE_DATE}</th>
+	    <th><span {_HELP_TEMPLIST_ACT}>{_LC_LABEL_TEMPLATE_OPERATION}</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="templist" type="condition" conditionvar="templatetype">
+	<pattemplate:sub condition="__default">
+        <tr>
+	    <td align="center">{NO}</td>
+	    <td align="center">{IMAGE_TAG}</td>
+	    <td>{ID_STR}</td>
+	    <td>{NAME}</td>
+	    <td align="center">{FORMAT_TYPE}</td>
+	    <td align="center"><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
+	    <td>{UPDATE_DT}</td>
+	    <td align="right"><input type="button" class="button" onclick="previewInOtherWindow('{ID}');" value="{LABEL_PREVIEW}" {PREVIEW_BUTTON} />
+	    <input type="button" class="button" onclick="deleteline('{ID}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
+	    </td>
+	</tr>
+        </pattemplate:sub>
+        <pattemplate:sub condition="detail">
+        <tr>
+	    <td align="center">{NO}</td>
+	    <td align="center">{IMAGE_TAG}</td>
+	    <td>{ID_STR}</td>
+	    <td><input type="text" name="item{NO}_name" value="{NAME}" size="35" maxlength="50" /></td>
+	    <td align="center">{FORMAT_TYPE}</td>
+	    <td align="center"><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
+	    <td>{UPDATE_DT}</td>
+	    <td align="right"><input type="button" class="button" onclick="previewInOtherWindow('{ID}');" value="{LABEL_PREVIEW}" {PREVIEW_BUTTON} />
+	    <input type="button" class="button" onclick="updateline('{ID}', '{NO}');" value="{LABEL_UPDATE}" {UPDATE_BUTTON} />
+	    <input type="button" class="button" onclick="deleteline('{ID}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
+	    <input type="button" class="button" onclick="download('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />
+	    </td>
+	</tr>
+        </pattemplate:sub>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+</table>
+<br />
+</form>
+<form enctype="multipart/form-data" method="post" name="upload">
+<input type="hidden" name="act" />
+<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+<input type="hidden" name="item_type" />
+<table class="simple-table" align="center">
+    <tbody>
+        <tr><td class="table-head"><span {_HELP_TEMPLIST_UPLOAD}>{_LC_LABEL_TEMPLATE_UPLOAD}</span></td></tr>
+        <tr><td><input type="file" name="upfile" size="50" /></td></tr>
+	<tr class="even"><td align="right"><input type="button" class="button" onclick="uploadCheck();" value="{_LC_LABEL_UPLOAD}" /></td></tr>
+    </tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

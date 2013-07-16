@@ -1,0 +1,43 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function login_box_login(){
+	document.login_box.act.value = 'bbsloginbox_login';
+	document.login_box.password.value = hex_md5(document.login_box.bbs_password.value);
+	document.login_box.bbs_password.disabled = true;
+	document.login_box.submit();
+	return true;
+}
+function login_box_logout(){
+	document.login_box.act.value = 'bbsloginbox_logout';
+	document.login_box.submit();
+	return true;
+}
+function login_box_reguser(){
+	document.login_box.act.value = 'bbsloginbox_regmember';
+	document.login_box.submit();
+	return true;
+}
+-->
+</script>
+
+<form name="login_box" method="post" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<table width="100%">
+<tr><td><input type="button" class="button" onclick="login_box_reguser();" value="会員登録" /></td></tr>
+<tr><td> {MESSAGE}{USER_NAME}</td></tr>
+<tr><td>
+<table border="0" cellpadding="1" cellspacing="1" width="100%">
+  <tr><td align="right">アカウント:</td><td><span style="white-space: nowrap;"><input type="text" name="bbs_account" size="8" maxlength="40" style="width:72px" /></span></td></tr>
+  <tr><td align="right">パスワード:</td><td><span style="white-space: nowrap;"><input type="password" name="bbs_password" size="8" maxlength="10" style="width:72px" /></span></td></tr>
+</table>
+</td></tr>
+
+<tr><td align="right">
+<input type="button" class="button" onclick="login_box_logout();" value="ログアウト" />&nbsp;&nbsp;<input type="button" class="button" onclick="login_box_login();" value="ログイン" />&nbsp;&nbsp;
+</td></tr>
+</table>
+</form>
+
+</patTemplate:tmpl>

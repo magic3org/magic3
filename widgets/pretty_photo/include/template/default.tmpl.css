@@ -1,0 +1,51 @@
+<patTemplate:tmpl name="_tmpl">
+{CSS_ID}.gallery {
+	list-style: none;
+	/*margin: 0 0 10px 0;*/
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+{CSS_ID}.gallery li {
+	display: block;
+	float: left;
+	margin: 0 5px 5px 0;
+}
+{CSS_ID}.gallery li:before {	/* remove list mark */
+	display:none;
+}
+{CSS_ID}.gallery li a {
+	padding: 2px;
+	display: block;
+	border: 2px #9db2b9 solid;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	line-height: 0;
+	text-decoration: none;
+}
+{CSS_ID}.gallery li a:hover {
+	border: 2px #313739 solid;
+}
+{CSS_ID}.gallery li a:focus {
+	outline: none;
+}
+{CSS_ID}.gallery li a img {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+{CSS_ID}.clearfix:after {
+	content: "."; 
+	display: block; 
+	height: 0; 
+	clear: both; 
+	visibility: hidden;
+}
+{CSS_ID}.clearfix {
+	display: inline-block;
+}
+</patTemplate:tmpl>
+/* Hides from IE-mac \*/
+/** html .clearfix {height: 1%;}
+.clearfix {display: block;}*/
+/* End hide from IE-mac */

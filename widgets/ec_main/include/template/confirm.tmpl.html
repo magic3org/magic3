@@ -1,0 +1,83 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 4845 2012-04-13 04:47:07Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function goback(){
+	location.href = '{GOBACK_URL}';
+	return true;
+}
+function gonext(){
+	document.photo_main.act.value = 'order';
+	document.photo_main.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="photo_main" class="form">
+<input type="hidden" name="act" />
+<div id="photo_shop">
+<div class="photo_top">{MESSAGE_TOP}</div>
+<patTemplate:tmpl name="show_delivery" visibility="hidden">
+<h2>お届け先</h2>
+<label><span class="photo_title">お名前</span><input type="text" name="item_name" value="{NAME}" size="20" maxlength="40" readonly /></label>
+<label><span class="photo_title">お名前(フリガナ)</span><input type="text" name="item_name_kana" value="{NAME_KANA}" size="20" maxlength="40" readonly /></label>
+<patTemplate:tmpl name="show_email" visibility="hidden">
+<label><span class="photo_title">Eメール</span><input type="text" name="item_email" value="{EMAIL}" size="20" maxlength="50" readonly /></label>
+</patTemplate:tmpl>
+<label><span class="photo_title">郵便番号</span><input type="text" name="item_zipcode" value="{ZIPCODE}" size="10" maxlength="10" readonly /></label>
+<label><span class="photo_title">都道府県</span>
+<select id="item_state" name="item_state" readonly disabled>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+</label>
+<label><span class="photo_title">住所1</span><input type="text" name="item_address" value="{ADDRESS}" size="30" maxlength="50" style="width:300px" readonly /></label>
+<label><span class="photo_title">住所2</span><input type="text" name="item_address2" value="{ADDRESS2}" size="30" maxlength="50" style="width:300px" readonly /></label>
+<label><span class="photo_title">電話番号</span><input type="text" name="item_phone" value="{PHONE}" size="20" maxlength="20" readonly /></label>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_delivmethod" visibility="hidden">
+<h2>お届け方法</h2>
+<div>{DELIVMETHOD_NAME}</div>
+<div>{DELIVMETHOD_DESC}</div>
+<div>{DELIVMETHOD_NOTE}</div>
+</patTemplate:tmpl>
+<h2>お支払い方法</h2>
+<div>{PAYMETHOD_NAME}</div>
+<div>{PAYMETHOD_DESC}</div>
+<h2>商品</h2>
+<table width="100%">
+<tr><th class="title">商品</th><th style="text-align:right;">税込価格</th><th style="text-align:right;">数量</th><th style="text-align:right;">小計</th></tr>
+<patTemplate:tmpl name="cartlist">
+<tr>
+    <td><div class="photo_image">{IMAGE}</div><div class="photo_title"><div>{NAME}</div><div>{CODE}</div><input type="hidden" name="checkvalue_{INDEX}" value="{CHECK_VALUE}" /></div></td>
+    <td class="number">{UNIT_PRICE}</td>
+    <td class="number"><input type="text" name="quantity_{INDEX}" value="{QUANTITY}" size="2" maxlength="2" readonly /></td>
+    <td class="number">{PRICE}{PRICE_STATUS}</td>
+</tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_discount" visibility="hidden"><tr><td align="center">値引額{DISCOUNT_DESC}</td><td colspan="2">&nbsp;</td><td class="number">{DISCOUNT}</td></tr></patTemplate:tmpl>
+<patTemplate:tmpl name="show_delivery_fee" visibility="hidden"><tr><td align="center">配送料</td><td colspan="2">&nbsp;</td><td class="number">{DELIVERY_FEE}</td></tr></patTemplate:tmpl>
+<patTemplate:tmpl name="show_charge" visibility="hidden"><tr><td align="center">手数料</td><td colspan="2">&nbsp;</td><td class="number">{CHARGE}</td></tr></patTemplate:tmpl>
+<tr><td align="center"></td><td>&nbsp;</td><td class="number total">合計</td><td class="number">{TOTAL}</td></tr>
+</table>
+<div class="photo_bottom"><div>{MESSAGE_BOTTOM}</div>
+<patTemplate:tmpl name="show_back" visibility="hidden"><input type="button" class="button" onclick="goback();" value="戻る" /></patTemplate:tmpl><patTemplate:tmpl name="show_confirm" visibility="hidden"><input type="button" class="button" onclick="gonext();" value="確定" /></patTemplate:tmpl>
+</div>
+
+</div>
+</form>
+</patTemplate:tmpl>

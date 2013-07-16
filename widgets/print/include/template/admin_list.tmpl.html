@@ -1,0 +1,75 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function delItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('削除する項目を選択してください');
+	} else {
+            if (!window.confirm('選択項目を削除しますか?')) return false;
+            document.main.act.value = 'delete';
+            document.main.submit();
+	}
+    }
+    return true;
+}
+function cancelItem(){
+    document.main.task.value = '';
+    document.main.submit();
+    return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('itemlist', -1, 0);
+});
+// -->
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="list" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<!-- m3:PostParam -->
+<table width="90%">
+<tr><td>
+<span {_HELP_PRINT_LIST}><label>印刷定義一覧</label></span>
+</td><td align="right"><span {_HELP_PRINT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+<span {_HELP_PRINT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table id="itemlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35" align="center"><span {_HELP_PRINT_CHECK}>選択</span></th>
+	    <th width="40%" align="center"><span {_HELP_PRINT_NAME}>名前</span></th>
+	    <th width="40%" align="center"><span {_HELP_PRINT_TAG_ID}>タグID</span></th>
+	    <th align="center"><span {_HELP_PRINT_REF}>使用</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr>
+            <td align="center"><input type="checkbox" name="item{INDEX}_selected" {OPE_DISABLED} /></td>
+	    <td>{NAME}</td>
+	    <td>{TAG_ID}</td>
+	    <td align="center">{DEF_COUNT}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

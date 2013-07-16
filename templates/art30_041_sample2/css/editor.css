@@ -1,0 +1,229 @@
+/* begin Page */
+/* Created by Artisteer v3.0.0.41778 */
+
+body, table
+{
+    color: #343932;
+    font-family: Tahoma, Arial, Helvetica, Sans-Serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, ul, ol, li
+{
+    margin: 0;
+    padding: 0;
+}
+
+li,
+table,
+a,
+a:link,
+a:visited,
+a.visited,
+a:hover,
+a.hovered
+{
+    font-family: Tahoma, Arial, Helvetica, Sans-Serif;
+}
+
+p
+{
+    margin: 12px 0;
+}
+
+h1, h2, h3, h4, h5, h6,
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+h1 a:link, h2 a:link, h3 a:link, h4 a:link, h5 a:link, h6 a:link,
+h1 a:visited, h2 a:visited, h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited,
+h1 a:hover, h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover, h6 a:hover
+{
+  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: left;
+  text-decoration: none;
+}
+
+a
+{
+  text-decoration: underline;
+  color: #8B7D46;
+}
+
+a:link
+{
+  text-decoration: underline;
+  color: #8B7D46;
+}
+
+a:visited, a.visited
+{
+  color: #323630;
+}
+
+a:hover, a.hover
+{
+  text-decoration: none;
+  color: #B7951A;
+}
+
+h1
+{
+   color: #4D544A;
+   margin: 12px 0;
+}
+
+h2
+{
+   color: #666F62;
+   margin: 13px 0;
+   font-size: 18px;
+}
+
+h2 a, h2 a:link, h2 a:hover, h2 a:visited
+{
+   font-size: 18px; 
+}
+
+h3
+{
+   color: #8B7D46;
+   margin: 16px 0;
+   font-size: 18px;
+}
+
+h3 a, h3 a:link, h3 a:hover, h3 a:visited
+{
+   font-size: 18px;
+}
+
+h4
+{
+   color: #575F54;
+   margin: 18px 0;
+   font-size: 15px;
+}
+
+h4 a, h4 a:link, h4 a:hover, h4 a:visited
+{
+   font-size: 15px;
+}
+
+h5
+{
+   color: #575F54;
+   margin: 20px 0;
+   font-size: 13px;
+}
+
+h5 a, h5 a:link, h5 a:hover, h5 a:visited
+{
+   font-size: 13px;
+}
+
+h6
+{
+   color: #818C7D;
+   margin: 25px 0;
+   font-size: 12px;
+}
+
+h6 a, h6 a:link, h6 a:hover, h6 a:visited
+{
+   font-size: 12px;
+}
+
+ul
+{
+  list-style-type: none;
+  margin: 1em 0 1em 2em;
+  padding: 0;
+}
+
+ol
+{
+  list-style-position: inside;
+  margin: 1em 0 1em 2em;
+  padding: 0;
+}
+/* end Page */
+
+/* begin Box, Post */
+a img
+{
+  border: 0;
+}
+
+img
+{
+  border: solid 0 #B7A971;
+  margin: 10px;
+}
+
+table
+{
+  border-collapse: collapse;
+  margin: 1px;
+}
+
+th, td
+{
+  padding: 2px;
+  border: solid 1px #C7BC8F;
+  vertical-align: top;
+  text-align: left;
+}
+
+th
+{
+  text-align: center;
+  vertical-align: middle;
+  padding: 7px;
+}
+
+pre
+{
+  overflow: auto;
+  padding: 0.1em;
+}
+
+/* end Box, Post */
+
+/* begin PostBullets */
+
+li
+{
+  font-size: 12px;
+  color: #343932;
+  padding: 0 0 0 15px;
+}
+
+li ol, li ul
+{
+  margin: 0.5em 0 0.5em 2em;
+  padding: 0;
+}
+
+ol>li
+{
+  background: none;
+  padding-left: 0;
+  /* overrides overflow for "ul li" and sets the default value */
+  overflow: visible;
+}
+
+ul>li
+{
+  background-image: url('../images/postbullets.png');
+  background-repeat: no-repeat;
+  padding-left: 15px;
+  /* makes "ul li" not to align behind the image if they are in the same line */
+  overflow-x: visible;
+  overflow-y: hidden;
+}
+
+/* end PostBullets */
+

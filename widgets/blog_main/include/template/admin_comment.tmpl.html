@@ -1,0 +1,173 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function newItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			document.main.serial.value = 0;
+		} else {
+			document.main.serial.value = items[i];
+		}
+		document.main.task.value = 'comment_detail';
+		document.main.act.value = 'new';
+		document.main.submit();
+	}
+	return true;
+}
+function editItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('編集する項目を選択してください');
+		} else {
+			document.main.task.value = 'comment_detail';
+			document.main.act.value = 'edit';
+			document.main.serial.value = items[i];
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItemBySerial(serial){
+	document.main.task.value = 'comment_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
+}
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('削除する項目を選択してください');
+		} else {
+			if (!window.confirm('選択項目を削除しますか?')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function search(){
+	document.main.act.value = 'search';
+	document.main.submit();
+	return true;
+}
+function selpage(page){
+	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;
+}
+function clearSearchParam(){
+	document.main.search_start.value = '';
+	document.main.search_end.value = '';
+	document.main.search_category0.value = '0';
+	document.main.search_keyword.value = '';
+	return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('commentlist', {LIST_COUNT}, 0);
+
+	Calendar.setup(
+	{
+		inputField  : "search_start",	// ID of the input field
+		ifFormat    : "%Y/%m/%d"		// the date format
+	}
+	);
+	Calendar.setup(
+	{
+		inputField  : "search_end",	// ID of the input field
+		ifFormat    : "%Y/%m/%d"		// the date format
+	}
+	);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="comment"/>
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="entrylist" value="{ENTRY_LIST}" />
+<input type="hidden" name="page" value="{PAGE}" />
+<table width="90%">
+<tr><td colspan="2">
+<span {_HELP_COMMENT_SEARCH}><label>コメント検索</label></span>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside"><span {_HELP_COMMENT_SEARCH_KEYWORD}>キーワード</span></td>
+	    <td><input type="text" id="search_keyword" name="search_keyword" value="{SEARCH_KEYWORD}" maxlength="50" style="width:98%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside" width="100"><span {_HELP_COMMENT_SEARCH_DT}>期間</span></td>
+	    <td><input type="text" id="search_start" name="search_start" value="{SEARCH_START}" size="15" maxlength="10" />～<input type="text" id="search_end" name="search_end" value="{SEARCH_END}" size="15" maxlength="10" /></td>
+	</tr>
+	<tr>
+	    <td colspan="2" align="right"><input type="button" class="button" onclick="clearSearchParam();" value="クリア" /><input type="button" class="button" onclick="search();" value="検索" /></td>
+	</tr>
+    </tbody>
+</table>
+<br>
+</td></tr>
+<tr><td>
+<span {_HELP_COMMENT_LIST}><label>コメント一覧</label></span>
+</td>
+<td align="right"><!--<input type="button" class="button" onclick="newItem();" value="新規" />--><span {_HELP_COMMENT_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_COMMENT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table id="commentlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+            <th width="4%"><span {_HELP_COMMENT_CHECK}>選択</span></th>
+            <th width="20%"><span {_HELP_COMMENT_ENTRY_NAME}>記事タイトル</span></th>
+	    <th width="20%"><span {_HELP_COMMENT_NAME}>コメントタイトル</span></th>
+	    <th width="30%"><span {_HELP_COMMENT_CONTENT}>内容</span></th>
+	    <th width="100"><span {_HELP_COMMENT_USER}>投稿者</span></th>
+	    <th width="100"><span {_HELP_COMMENT_DT}>投稿日時</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td>{ENTRY_NAME}</td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td>{CONTENT}</td>
+	    <td align="center">{REG_USER}</td>
+	    <td align="center">{REG_DATE}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+{PAGE_LINK}
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

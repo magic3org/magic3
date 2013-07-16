@@ -1,0 +1,164 @@
+<patTemplate:tmpl name="_widget">
+<style type="text/css">@import url({SCRIPT_URL}/jscalendar-1.0/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/calendar.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/lang/calendar-ja.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/calendar-setup.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/md5.js"></script>
+<SCRIPT language="JavaScript">
+<!--
+function addItem(){
+    if (document.main.family_name.value == '' || document.main.first_name.value == '' ||
+    	document.main.family_name_kana.value == '' || document.main.first_name_kana.value == ''){
+        window.alert('ユーザ名が入力されていません');
+	return false;
+    }
+    if (document.main.email.value == ''){
+        window.alert('Eメールアドレスが入力されていません');
+	return false;
+    }
+    if (document.main.item_password.value == ''){
+        window.alert('パスワードが入力されていません');
+	return false;
+    }
+    if (!window.confirm('項目を新規追加しますか?')) return false;
+    document.main.act.value = 'add';
+    document.main.password.value = hex_md5(document.main.item_password.value);
+    document.main.submit();
+    return true;
+}
+function updateItem(){
+    if (!window.confirm('項目を更新しますか?')) return false;
+    document.main.act.value = 'update';
+    if (document.main.item_password.value != '********') document.main.password.value = hex_md5(document.main.item_password.value);
+    document.main.submit();
+    return true;
+}
+function delItem(){
+    if (!window.confirm('項目を削除しますか?')) return false;
+    document.main.act.value = 'delete';
+    document.main.submit();
+    return true;
+}
+function cancelItem(){
+    document.main.task.value = 'user';
+    document.main.submit();
+    return true;
+}
+// -->
+</SCRIPT>
+
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="user_detail" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="password" />
+<table width="90%">
+<tr><td><label>ユーザ詳細</label></td>
+<td align="right"><span {_HELP_USER_RET_BTN}><input type="button" class="button" onClick="cancelItem();" value="戻る"></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150px"><span {_HELP_USER_NO}>No(任意)</span></td>
+	    <td><input type="text" name="user_no" value="{USER_NO}" size="30" maxlength="30" {USER_NO_DISABLED}></td>
+	    <td class="table-headside" width="150px"><span {_HELP_MEMBER_EMAIL}>Eメール(ログインアカウント)</span></td>
+	    <td><input type="text" name="email" value="{EMAIL}" size="30" maxlength="50" {EMAIL_DISABLED}></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_MEMBER_NAME}>名前(姓・名)</span></td>
+	    <td><input type="text" name="family_name" value="{FAMILY_NAME}" size="10" maxlength="20" {FAMILY_NAME_DISABLED}>&nbsp;<input type="text" name="first_name" value="{FIRST_NAME}" size="10" maxlength="20" {FIRST_NAME_DISABLED}></td>
+	    <td class="table-headside"><span {_HELP_MEMBER_NAME_KANA}>名前カナ(姓・名)</span></td>
+	    <td><input type="text" name="family_name_kana" value="{FAMILY_NAME_KANA}" size="10" maxlength="20" {FAMILY_NAME_KANA_DISABLED}>&nbsp;<input type="text" name="first_name_kana" value="{FIRST_NAME_KANA}" size="10" maxlength="20" {FIRST_NAME_KANA_DISABLED}></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_MEMBER_ZIP}>郵便番号</span></td>
+	    <td><input type="text" name="zipcode" value="{ZIPCODE}" size="10" maxlength="10" {ZIPCODE_DISABLED}></td>
+	    <td class="table-headside"><span {_HELP_MEMBER_STATE}>都道府県</span></td>
+	    <td>
+<select name="state" {STATE_DISABLED}>
+<option value="0">未設定</option>
+<patTemplate:tmpl name="state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_MEMBER_ADD1}>住所1</span></td>
+	    <td colspan="3"><input type="text" name="address" value="{ADDRESS}" maxlength="100" style="width:100%;" {ADDRESS_DISABLED}></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_MEMBER_ADD2}>住所2</span></td>
+	    <td colspan="3"><input type="text" name="address2" value="{ADDRESS2}" maxlength="100" style="width:100%;" {ADDRESS2_DISABLED}></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_MEMBER_PHONE}>電話番号</span></td>
+	    <td><input type="text" name="phone" value="{PHONE}" size="30" maxlength="30" {PHONE_DISABLED}></td>
+	    <td class="table-headside"><span {_HELP_MEMBER_FAX}>FAX</span></td>
+	    <td><input type="text" name="fax" value="{FAX}" size="30" maxlength="30" {FAX_DISABLED}></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_MEMBER_MOBILE}>携帯電話</span></td>
+	    <td colspan="3"><input type="text" name="mobile" value="{MOBILE}" size="30" maxlength="30" {MOBILE_DISABLED}></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_MEMBER_GENDER}>性別</span></td>
+	    <td>
+<select name="gender" {GENDER_DISABLED}>
+<option value="0" {GENDER_NONE}>未設定</option>
+<option value="1" {GENDER_MALE}>男</option>
+<option value="2" {GENDER_FEMALE}>女</option>
+</select>
+	    </td>
+	    <td class="table-headside"><span {_HELP_MEMBER_BIRTH}>生年月日</span></td>
+	    <td><input type="text" id="calenderinput" name="birthday" value="{BIRTHDAY}" size="15" maxlength="15" {BIRTHDAY_DISABLED}><button id="calenderbutton" {CALENDER_DISABLED}>カレンダー</button>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside">更新者</td>
+	    <td>{UPDATE_USER}</td>
+	    <td class="table-headside">更新日時</td>
+	    <td>{UPDATE_DT}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside" width="100px"><span {_HELP_MEMBER_PWD}>パスワード</span></td>
+	    <td colspan="3"><input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" AUTOCOMPLETE = "off"></td>
+	    <!--<td colspan="3">
+	    <input type="button" class="button" onClick="sendPassword()" value="再作成して、メール送信" {SEND_PWD}>&nbsp;&nbsp;
+	    {SEND_MESSAGE} {PWD_MESSAGE}</td>-->
+	</tr>
+        <tr class="even">
+	    <td colspan="4" align="right">
+<patTemplate:tmpl name="add_button" visibility="hidden">
+	    <input type="button" class="button" onClick="addItem();" value="新規登録">
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onClick="delItem();" value="削除">
+		<input type="button" class="button" onClick="updateItem();" value="更新">
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+</form>
+</div>
+<SCRIPT language="JavaScript">
+<!--
+Calendar.setup(
+    {
+      inputField  : "calenderinput",         // ID of the input field
+      ifFormat    : "%Y/%m/%d",    // the date format
+      button      : "calenderbutton"       // ID of the button
+    }
+);
+// -->
+</SCRIPT>
+</patTemplate:tmpl>

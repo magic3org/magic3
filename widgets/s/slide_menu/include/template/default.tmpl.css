@@ -1,0 +1,34 @@
+<patTemplate:tmpl name="_tmpl">
+{CSS_ID}.{MENU_CLASS}, {CSS_ID}.{MENU_CLASS} ul, {CSS_ID}.{MENU_CLASS} li {
+    list-style-type:none;
+    background-image:none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+{CSS_ID}.{MENU_CLASS} a {
+    display: block;
+    text-decoration: none;
+}
+{CSS_ID}.{MENU_CLASS} li {
+    margin-top: 1px;
+}
+{CSS_ID}.{MENU_CLASS} li a {
+    color: #fff;
+    background: #333;
+    padding: 0.5em;
+}
+{CSS_ID}.{MENU_CLASS} li a:hover {
+    background: #000;
+}
+{CSS_ID}.{MENU_CLASS} li ul li a {
+    color: #000;
+    background: #ccc;
+    padding-left: 20px;
+}
+{CSS_ID}.{MENU_CLASS} li ul li a:hover {
+    background: #aaa;
+    border-left: 5px #000 solid;
+    padding-left: 15px;
+}
+</patTemplate:tmpl>

@@ -1,0 +1,78 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function addItem(){
+    if (!window.confirm('項目を新規追加しますか?')) return false;
+    document.main.act.value = 'add';
+    document.main.submit();
+    return true;
+}
+function updateItem(){
+    if (!window.confirm('項目を更新しますか?')) return false;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return true;
+}
+function delItem(){
+    if (!window.confirm('項目を削除しますか?')) return false;
+    document.main.act.value = 'delete';
+    document.main.submit();
+    return true;
+}
+function cancelItem(){
+    document.main.task.value = 'menuid';
+    document.main.submit();
+    return true;
+}
+// -->
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="menuid_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{MENU_ID}" />
+<table width="90%">
+<tr><td>
+<label><span {_HELP_MENUID_DETAIL}>メニューID詳細</span></label>
+</td>
+<td align="right"><span {_HELP_MENUID_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_MENUID_ID}>メニューID</span></td>
+	    <td width="300"><patTemplate:tmpl name="show_menuid" visibility="hidden"><input type="text" name="item_menuid" size="30" maxlength="50" value="{MENU_ID}" /></patTemplate:tmpl>{MENU_ID}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_MENUID_NAME}>名前</span></td>
+	    <td><input type="text" name="item_name" value="{NAME}" size="30" maxlength="50" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_MENUID_DESC}>説明</span></td>
+	    <td><input type="text" name="item_desc" value="{DESC}" size="60" maxlength="60" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_MENUID_SORT_ORDER}>ソート順</span></td>
+	    <td><input type="text" name="item_sort_order" value="{SORT_ORDER}" size="2" maxlength="3" /></td>
+	</tr>
+	<tr>
+	<td align="right" colspan="2">
+<patTemplate:tmpl name="add_button" visibility="hidden">
+	    <input type="button" class="button" onclick="addItem();" value="新規登録" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+            <input type="button" class="button" onclick="delItem();" value="削除" {DEL_DISABLED} />
+            <input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

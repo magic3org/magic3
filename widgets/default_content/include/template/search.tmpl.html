@@ -1,0 +1,12 @@
+<patTemplate:tmpl name="_widget">
+<!-- m3:ErrorMessage -->
+<table class="dc_search_result" width="100%">
+<patTemplate:tmpl name="show_title" visibility="hidden"><tr><td {CLASS} style="border:none;"><h2>{TITLE}</h2></td></tr></patTemplate:tmpl>
+<tr><td style="border:none;"><span class="dc_search_word">検索キーワード: <span><span class="dc_search_keyword">{KEYWORD}<span></td></tr>
+<patTemplate:tmpl name="contentlist">
+<tr><td style="border:none;"><span class="dc_search_title">{TITLE}<span></td></tr>
+<tr><td align="right" style="border:none;"><span class="dc_search_date">{DATE}<span></td></tr>
+<tr><td style="border:none;"><span class="dc_search_body">{CONTENT}<span></td></tr>
+</patTemplate:tmpl>
+</table>
+</patTemplate:tmpl>

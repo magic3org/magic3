@@ -1,0 +1,83 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function sendmessage_confirm(){
+	document.contactus_main.act.value = 'confirm';
+	document.contactus_main.submit();
+	return true;
+}
+function sendmessage_cancel(){
+	document.contactus_main.act.value = 'cancel';
+	document.contactus_main.submit();
+	return true;
+}
+function sendmessage(){
+//	if (!window.confirm('お問い合わせを送信します')) return false;
+	document.contactus_main.act.value = 'send';
+	document.contactus_main.submit();
+	return true;
+}
+function sendmessage_reset(){
+	if (!window.confirm('入力内容を消去しますか?')) return false;
+	$('#{SEND_FORM_ID} :input').each(function(){
+		var type = this.type;
+		var tag = this.tagName.toLowerCase();
+		if (type == 'text' || type == 'password' || tag == 'textarea'){
+			this.value = '';
+		} else if (type == 'checkbox' || type == 'radio'){
+			this.checked = false;
+		} else if (tag == 'select'){
+			this.selectedIndex = -1;
+		}
+	});
+}
+function sendmessage_init(){
+{ADD_SCRIPT}
+	return;
+}
+function field_recalc(){
+{CALC_SCRIPT}
+	return;
+}
+$(function(){
+	// フィールド初期化
+	sendmessage_init();
+	
+	$('#{CONFIRM_BUTTON_ID}').click(function(){
+		sendmessage_confirm();
+	});
+	$('#{SEND_BUTTON_ID}').click(function(){
+		sendmessage();
+	});
+	$('#{CANCEL_BUTTON_ID}').click(function(){
+		sendmessage_cancel();
+	});
+	$('#{RESET_BUTTON_ID}').click(function(){
+		sendmessage_reset();
+		sendmessage_init();
+	});
+	if (document.contactus_main.sendstatus.value == '0'){
+		$('#{SEND_BUTTON_ID}').hide();
+		$('#{CANCEL_BUTTON_ID}').hide();
+	} else if (document.contactus_main.sendstatus.value == '1'){
+		$('#{CONFIRM_BUTTON_ID}').hide();
+		$('#{RESET_BUTTON_ID}').hide();
+	} else {
+		$('#{CONFIRM_BUTTON_ID}').hide();
+		$('#{SEND_BUTTON_ID}').hide();
+		$('#{CANCEL_BUTTON_ID}').hide();
+		$('#{RESET_BUTTON_ID}').hide();
+	}
+{RECALC_SCRIPT}
+});
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form id="{SEND_FORM_ID}" name="contactus_main" method="post" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<input type="hidden" name="sendstatus" value="{STATUS}" />
+<input type="hidden" name="fieldcount" value="{FIELD_COUNT}" />
+{FIELD_OUTPUT}
+</form>
+</patTemplate:tmpl>

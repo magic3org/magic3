@@ -1,0 +1,167 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 4751 2012-03-14 01:13:47Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function testMail(){
+	if (!window.confirm('{_LC_MSG_SEND_EMAIL}')) return false;
+	document.main.act.value='testmail';
+	document.main.submit();
+	return true;
+}
+function selectItemLang(){
+	document.main.act.value = 'selectlang';
+	document.main.submit();
+	return true;
+}
+function uploadCheck(){
+	if (!document.main.upfile.value){
+		alert('画像ファイルが選択されていません');
+		return false;
+	}
+	if (!window.confirm('画像ファイルをアップロードしますか?')) return false;
+	document.main.act.value = 'upload';
+	document.main.enctype = 'multipart/form-data';
+	document.main.encoding = 'multipart/form-data';			// for IE
+	document.main.submit();
+	return false;
+}
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+<table width="800">
+<tbody><tr><td>
+<!--
+<table class="simple-table" width="800">
+    <caption>ライセンス</caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150">ライセンスキー</td>
+	    <td colspan="3"><input type="text" name="license_key" value="{LICENSE_KEY}" size="30" maxlength="30" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside">郵便番号</td>
+	    <td><input type="text" name="license_zipcode" value="{LICENSE_ZIPCODE}" size="30" maxlength="30" /></td>
+	    <td class="table-headside" width="150">FAX</td>
+	    <td><input type="text" name="license_fax" value="{LICENSE_FAX}" size="30" maxlength="30" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">会社名</td>
+	    <td colspan="3"><input type="text" name="license_name" value="{LICENSE_NAME}" size="30" maxlength="30" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside">住所</td>
+	    <td colspan="3"><input type="text" name="license_address" value="{LICENSE_ADDRESS}" size="80" maxlength="100" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">メールアドレス</td>
+	    <td colspan="3"><input type="text" name="license_email" value="{LICENSE_EMAIL}" size="30" maxlength="30" />&nbsp;&nbsp;</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+<table border="0" cellpadding="0" cellspacing="0" width="800">
+    <tbody>
+        <tr>
+	    <td align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+-->
+<table class="simple-table" width="100%">
+    <caption><span {_HELP_CONFIGSITE_SITEINFO}>{_LC_LABEL_SITE_INFO}</span></caption>
+    <tbody>
+	<patTemplate:tmpl name="show_multilang" visibility="hidden">
+	<tr>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIGSITE_LANG}>言語</span></td>
+	    <td>
+	<patTemplate:tmpl name="default_lang" visibility="hidden">
+	{DEFAULT_LANG}
+	</patTemplate:tmpl>
+	<patTemplate:tmpl name="select_lang" visibility="hidden">
+		    <select name="item_lang" onchange="selectItemLang();">
+		        <patTemplate:tmpl name="lang_list">
+		        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+		        </patTemplate:tmpl>
+		    </select>
+	</patTemplate:tmpl>&nbsp;&nbsp;{LANG}
+	    </td>
+	</tr>
+	</patTemplate:tmpl>
+    <tr>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIGSITE_SITENAME}>{_LC_LABEL_SITE_NAME}</span></td>
+	    <td><input type="text" name="sitename" value="{SITE_NAME}" size="60" maxlength="100" />&nbsp;&nbsp;<font color="red">*{_LC_LABEL_REQUIRED}</font></td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_CONFIGSITE_EMAIL}>{_LC_LABEL_SITE_EMAIL}</span></td>
+	    <td><input type="text" name="siteemail" value="{SITE_EMAIL}" size="60" maxlength="100" />&nbsp;&nbsp;<font color="red">*{_LC_LABEL_REQUIRED}</font>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" onclick="testMail();" value="{_LC_LABEL_SEND_TEST_EMAIL}" {TEST_MAIL_DISABLED} /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIGSITE_SLOGAN}>{_LC_LABEL_SITE_SLOGAN}</span></td>
+	    <td><input type="text" name="siteslogan" value="{SITE_SLOGAN}" size="60" maxlength="100" /></td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_CONFIGSITE_COPYRIGHT}>{_LC_LABEL_SITE_COPYRIGHT}</span></td>
+	    <td><input type="text" name="sitecopyright" value="{SITE_COPYRIGHT}" size="60" maxlength="100" /></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIGSITE_LOGO}>ロゴ</span><br />(72x72, 200x200)</td>
+	    <td><div id="preview_outer">{LOGO_IMAGE}</div>
+                <input type="file" name="upfile" size="50" /><input type="button" class="button" onclick="uploadCheck();" value="アップロード" />
+	    </td>
+	</tr>
+    </tbody>
+</table>
+<br />
+<table class="simple-table" width="100%">
+    <caption><span {_HELP_CONFIGSITE_PAGEHEAD}>{_LC_LABEL_HEADER_INFO}</span></caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIGSITE_TITLE}>{_LC_LABEL_HEADER_TITLE}</span></td>
+	    <td><!--<textarea name="site_title" rows="1" cols="50" style="width:100%;"></textarea>--><input type="text" name="site_title" value="{SITE_TITLE}" size="100" maxlength="100" style="width:100%;" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_CONFIGSITE_DESCRIPTION}>{_LC_LABEL_HEADER_DESC}</span></td>
+	    <td><textarea name="site_description" rows="2" cols="50" style="width:100%;">{SITE_DESC}</textarea></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_CONFIGSITE_KEYWORDS}>{_LC_LABEL_HEADER_KEYWORDS}</span></td>
+	    <td><textarea name="site_keyword" rows="2" cols="50" style="width:100%;">{SITE_KEYWORD}</textarea></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_CONFIGSITE_OTHERS}>{_LC_LABEL_HEADER_OTHERS}</span></td>
+	    <td><textarea name="meta_others" rows="2" cols="50" style="width:100%;">{META_OTHERS}</textarea></td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+<tr><td align="right">
+<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
+</td></tr>
+</tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

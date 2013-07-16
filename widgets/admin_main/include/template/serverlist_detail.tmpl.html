@@ -1,0 +1,109 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'tenantserver';
+	document.main.submit();
+	return true;
+}
+function testDb(){
+	if (document.main.item_db_dsn.value == ''){
+		window.alert('DSNが設定されていません');
+		return false;
+	}
+	if (document.main.item_db_account.value == ''){
+		window.alert('アカウントが設定されていません');
+		return false;
+	}
+	document.main.act.value = 'testdb';
+	document.main.submit();
+	return false;
+}
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="tenantserver_detail" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<table width="90%">
+<tr><td><label><span {_HELP_TENANTSERVER_DETAIL}>テナントサーバ詳細</span></label></td>
+<td align="right"><span {_HELP_TENANTSERVER_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_TENANTSERVER_NAME}>名前</span></td>
+	    <td width="700" colspan="3"><input type="text" name="item_name" value="{NAME}" size="50" maxlength="100" />&nbsp;&nbsp;<font color="red">*必須</font></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_TENANTSERVER_SERVER_ID}>サーバID</span></td>
+	    <td colspan="3"><input type="text" name="item_server_id" value="{SERVER_ID}" size="50" maxlength="100" />&nbsp;&nbsp;<font color="red">*必須</font></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_TENANTSERVER_IP}>IPアドレス</span></td>
+	    <td colspan="3"><input type="text" name="item_ip" value="{IP}" size="50" maxlength="150" />&nbsp;&nbsp;<font color="red">*必須</font></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_TENANTSERVER_URL}>URL</span></td>
+	    <td colspan="3"><input type="text" name="item_url" value="{URL}" size="100" maxlength="150" />&nbsp;&nbsp;<font color="red">*必須</font></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_TENANTSERVER_ACCESS}>ポータル接続可</span></td>
+	    <td colspan="3"><input type="checkbox" name="item_can_access" {CAN_ACCESS} /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_TENANTSERVER_DB_INFO}>DB接続情報</span></td>
+	    <td colspan="3">DB種別：<input name="item_db_type" type="radio" value="mysql" {MYSQL_CHECKED} />MySQL&nbsp;&nbsp;<input name="item_db_type" type="radio" value="pgsql" {PGSQL_CHECKED} />PostgreSQL<br />ホストIP：<input type="text" name="item_db_host" value="{DB_HOST}" size="30" maxlength="40" />&nbsp;&nbsp;ポート番号：<input type="text" name="item_db_port" value="{DB_PORT}" size="4" maxlength="5" onkeypress="return m3_numericKey(event,true);" />&nbsp;&nbsp;DB名：
+	    <input type="text" name="item_db_name" value="{DB_NAME}" size="30" maxlength="40" /><br />
+	    DSN：<input type="text" name="item_db_dsn" value="{DB_DSN}" size="50" maxlength="150" style="width:90%;" readonly /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_TENANTSERVER_DB_USER}>DB接続ユーザ</span></td>
+	    <td colspan="3">アカウント：<input type="text" name="item_db_account" value="{DB_ACCOUNT}" size="30" maxlength="40" />&nbsp;&nbsp;パスワード：<input type="password" name="item_db_password" value="{DB_PASSWORD}" size="30" maxlength="40" autocomplete="off" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_TENANTSERVER_TEST_DB}><input type="button" class="button" onclick="testDb();" value="DB接続テスト" /></span></td>
+	    <td colspan="3">{DB_TEST}</td>
+	</tr>
+        <tr>
+	    <td align="right" colspan="4">
+<patTemplate:tmpl name="del_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+	    <input type="button" class="button" onclick="addItem();" value="新規登録" />
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

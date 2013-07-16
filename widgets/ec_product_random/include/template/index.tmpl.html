@@ -1,0 +1,33 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 4494 2011-12-05 12:05:35Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	$("#product_random").jcarousel({
+		vertical : true,
+		scroll : 3,
+		auto : 3,
+		wrap : "both",
+		easing: "easeOutBounce",
+		animation: 800
+	});
+});
+//]]>
+</script>
+<div align="center">
+<ul id="product_random" class="jcarousel-skin-tango">
+  <patTemplate:tmpl name="product_list"><li style="list-style-type:none; background:none;"><a href="{PRODUCT_URL}"><img src="{IMAGE}" border="0" /></a></li></patTemplate:tmpl>
+</ul>
+</div>
+</patTemplate:tmpl>

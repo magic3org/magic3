@@ -1,0 +1,17 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 4771 2012-03-19 12:20:05Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<div><img src="{URL}" {OPTION}/></div>
+<div><a href="{URL_LARGE}" accesskey="*">詳細</a>[*]&nbsp;<a href="{URL_SMALL}" accesskey="#">広域</a>[#]</div>
+<div>移動<a href="{URL_LEFT}" accesskey="4">←</a>[#M3_EMOJI:128#]&nbsp;<a href="{URL_RIGHT}" accesskey="6">→</a>[#M3_EMOJI:130#]&nbsp;<a href="{URL_UP}" accesskey="2">↑</a>[#M3_EMOJI:126#]&nbsp;<a href="{URL_DOWN}" accesskey="8">↓</a>[#M3_EMOJI:132#]</div>
+</patTemplate:tmpl>

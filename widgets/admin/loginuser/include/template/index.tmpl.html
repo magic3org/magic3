@@ -1,0 +1,18 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 5816 2013-03-11 13:24:26Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<div style="text-align:center;">{AVATAR_IMAGE}</div>
+<div>名前：<a href="{USER_DETAIL_URL}">{NAME}</a></div>
+<div>前回ログイン：{LOGIN_DT}</div>
+<div>ログイン回数：<a href="{LOGIN_STATUS_URL}">{LOGIN_COUNT}</a></div>
+</patTemplate:tmpl>

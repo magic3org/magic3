@@ -1,0 +1,31 @@
+#photo_cart .cart_info {
+	text-align:left;
+	float:left;
+}
+#photo_cart .cart_button {
+	text-align:right;
+}
+#photo_cart ul {
+	clear:both;
+}
+#photo_cart li {
+	list-style-type:none;
+	background:none;
+	behavior: '';	/* IE6 behavior reset */
+	padding:1px 2px;
+}
+#photo_cart li:before {	/* remove list mark */
+	display:none;
+}
+#photo_cart img {
+/*	width: 50px;
+	height: 50px;*/
+	margin: 0px 5px 0px 0px;
+}
+
+#photo_cart .photo_cart_image {
+	float:left;
+}
+#photo_cart .photo_cart_info {
+	padding-top:5px;
+}

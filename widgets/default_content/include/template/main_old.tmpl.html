@@ -1,0 +1,24 @@
+<patTemplate:tmpl name="_widget">
+<patTemplate:tmpl name="admin_script" visibility="hidden">
+<script type="text/javascript">
+//<![CDATA[
+function editContent(id){
+	window.open("{EDIT_URL}&contentid=" + id,"","toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900");
+	return false;
+}
+//]]>
+</script>
+</patTemplate:tmpl>
+<!-- m3:ErrorMessage -->
+<table width="100%">
+<patTemplate:tmpl name="contentlist" type="condition" conditionvar="type">
+<pattemplate:sub condition="__default">
+<tr><td {CLASS} style="border:none;"><h2>{TITLE}</h2></td></tr>
+<tr><td style="border:none;">{BUTTON_LIST}{CONTENT}</td></tr>
+</pattemplate:sub>
+<pattemplate:sub condition="hide_title">
+<tr><td style="border:none;">{BUTTON_LIST}{CONTENT}</td></tr>
+</pattemplate:sub>
+</patTemplate:tmpl>
+</table>
+</patTemplate:tmpl>

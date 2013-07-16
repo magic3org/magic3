@@ -1,0 +1,122 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: main.tmpl.html 6092 2013-06-11 00:34:26Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function sendcomment(status){
+	if (status == 0){
+		document.comment_main.act.value = 'checkcomment';
+		
+<patTemplate:tmpl name="update_cookie" visibility="hidden">
+<patTemplate:tmpl name="update_cookie_author">		$.cookie('comment_author', $('input#author').val(), { expires: 30 });</patTemplate:tmpl>
+<patTemplate:tmpl name="update_cookie_email">		$.cookie('comment_email', $('input#email').val(), { expires: 30 });</patTemplate:tmpl>
+</patTemplate:tmpl>
+	} else {
+		document.comment_main.act.value = 'sendcomment';
+	}
+	document.comment_main.submit();
+	return true;
+}
+/*
+function sendcancel(){
+	document.comment_main.act.value = 'sendcancel';
+	document.comment_main.submit();
+	return true;
+}*/
+$(function(){
+	$('#comment_cancel').click(function(){
+		document.comment_main.act.value = 'sendcancel';
+		document.comment_main.submit();
+	});
+<patTemplate:tmpl name="init_form" visibility="hidden">
+<patTemplate:tmpl name="init_cookie_author">	$('input#author').val($.cookie('comment_author'));</patTemplate:tmpl>
+<patTemplate:tmpl name="init_cookie_email">	$('input#email').val($.cookie('comment_email'));</patTemplate:tmpl>
+<patTemplate:tmpl name="scrollup_comment" visibility="hidden">
+	$('body').scrollTo('#comment_form_head');
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_wysiwyg" visibility="hidden">
+	m3SetSafeWysiwygEditor('comment', 150);
+</patTemplate:tmpl>
+</patTemplate:tmpl>
+});
+//]]>
+</script>
+<patTemplate:tmpl name="message" visibility="hidden"><p class="message">{MESSAGE}</p></patTemplate:tmpl>
+<patTemplate:tmpl name="show_comment_list" visibility="hidden">
+<div class="art-comments">
+<patTemplate:tmpl name="comment_list">
+<div class="art-comment art-postcontent clearfix">
+<patTemplate:tmpl name="show_avatar" varscope="__parent" autoclear="yes">
+    <div class="art-comment-avatar">{AVATAR}</div>
+</patTemplate:tmpl>
+    <div class="art-comment-inner">
+<patTemplate:tmpl name="show_title" varscope="__parent" autoclear="yes"><div class="art-comment-title">{TITLE}</div></patTemplate:tmpl>
+        <div class="art-comment-header">{AUTHOR} {DATE} {TIME} {PERMALINK}{URL}</div>
+        <div class="art-comment-content">{COMMENT}</div>
+        <patTemplate:tmpl name="show_reply" visibility="hidden"><div class="art-comment-footer"><a href="#" class="button">返信</a></div></patTemplate:tmpl>
+    </div>
+</div>
+</patTemplate:tmpl>
+</div>
+</patTemplate:tmpl>
+<!-- m3:ErrorMessage -->
+<patTemplate:tmpl name="add_comment" visibility="hidden">
+<div class="art-commentsform">
+<h2 id="comment_form_head" class="art-postheader">コメントの投稿</h2>
+<form method="post" name="comment_main" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="commentid" value="{COMMENT_ID}" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<input type="hidden" name="sendstatus" value="{STATUS}" />
+
+<patTemplate:tmpl name="input_title" visibility="hidden">
+<div class="comment-form-title">
+    <label for="title">タイトル</label>
+    <input id="title" name="title" type="text" value="{TITLE}" size="30" {TITLE_DISABLED}>
+</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="input_author" visibility="hidden">
+<div class="comment-form-author">
+    <label for="author">投稿者</label>
+    <input id="author" name="author" type="text" value="{AUTHOR}" size="30" {AUTHOR_DISABLED}>
+</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="input_email" visibility="hidden">
+<div class="comment-form-email">
+    <label for="email">メール</label>
+    <input id="email" name="email" type="email" value="{EMAIL}" size="30" {EMAIL_DISABLED}>
+</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="input_url" visibility="hidden">
+<div class="comment-form-url">
+    <label for="url">URL</label>
+    <input id="url" name="url" type="text" value="{URL}" size="30" maxlength="100" {URL_DISABLED}>
+</div>
+</patTemplate:tmpl>
+<div class="comment-form-comment">
+    <label for="comment">コメント</label>
+	<patTemplate:tmpl name="input_comment" visibility="hidden"><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true" {COMMENT_DISABLED}>{COMMENT}</textarea></patTemplate:tmpl>
+	<patTemplate:tmpl name="show_comment" visibility="hidden"><div>{COMMENT_HTML}</div><input type="hidden" name="comment" value="{COMMENT}" />
+	</patTemplate:tmpl>
+</div>
+<p class="form-submit">
+<input type="submit" class="button" value="{SEND_BUTTON_LABEL}" onclick="sendcomment({SEND_STATUS});" />
+<patTemplate:tmpl name="cancel_button" visibility="hidden"><input id="comment_cancel" type="submit" class="button" value="キャンセル" /></patTemplate:tmpl>
+</p>
+		
+</form>
+</div>
+</patTemplate:tmpl>
+
+
+</patTemplate:tmpl>

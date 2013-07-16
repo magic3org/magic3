@@ -1,0 +1,37 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function menuLogout()
+{
+	if (!window.confirm('{_LC_MSG_LOGOUT}')) return false;
+ 
+ 	location.href = '?cmd=logout';
+	return true;
+}
+function editMenu(){
+	window.location.href = '{ADMIN_URL}?task=editmenu';
+}
+$(document).ready(function(){
+	// メニュー編集機能キー登録
+	$(document).keyup(function(e){
+		if (e.which == 27) editMenu();	// ESCキー
+	});
+});
+//]]>
+</script>
+<div align="center">
+<table border="0" cellpadding="0" cellspacing="0" width="80%">
+<tr><td>
+<table border="0" cellpadding="0" cellspacing="0" align="center">
+{ITEMS}
+</table>
+</td>
+<patTemplate:tmpl name="showimage" visibility="hidden">
+<td align="center">
+<img src="{TOPPAGE_IMG}" />
+</td>
+</patTemplate:tmpl>
+</tr>
+</table>
+</div>
+</patTemplate:tmpl>

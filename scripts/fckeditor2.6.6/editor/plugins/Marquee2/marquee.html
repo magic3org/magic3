@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+ * FCKMarqueeCommand
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: marquee.html 3737 2010-10-26 08:16:55Z fishbone $
+ * @link       http://www.magic3.org
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex, nofollow" />
+<style TYPE="text/css">
+	#ColorTable		{ cursor: pointer ; cursor: hand ; }
+	#hicolor		{ height: 74px ; width: 74px ; border-width: 1px ; border-style: solid ; }
+	#hicolortext	{ width: 75px ; text-align: right ; margin-bottom: 7px ; }
+	#selhicolor		{ height: 20px ; width: 74px ; border-width: 1px ; border-style: solid ; }
+	#txtBgcolor		{ width: 75px ; height: 20px ; margin-top: 0px ; margin-bottom: 7px ; }
+	#btnClear		{ width: 75px ; height: 22px ; margin-bottom: 6px ; }
+	.ColorCell		{ height: 15px ; width: 15px ; }
+</style>
+<script src="marquee.js" type="text/javascript"></script>
+<!--<script src="common/fck_dialog_common.js" type="text/javascript"></script>-->
+</head>
+<body onload="OnLoad()" scroll="no" style="OVERFLOW: hidden">
+<table cellspacing="1" cellpadding="1" border="0" width="100%">
+<tr><td valign="top">
+	<table cellpadding="0" cellspacing="5" border="0" width="100%" height="100%">
+	<tr><td nowrap>
+		<span fcklang="DlgMarqueeDirection">Direction</span>
+		<div>
+			<select id="cmbDirection">
+			<option fcklang="DlgMarqueeDirectionNone" value="">Left</option>
+			<option fcklang="DlgMarqueeDirectionLeft" value="left">Left</option>
+			<option fcklang="DlgMarqueeDirectionRight" value="right">Right</option>
+			</select>
+		</div>
+		<br>
+		<span fcklang="DLgMarqueeBehavior">Behavior</span>
+		<div>
+			<select id="cmbBehavior">
+			<option fcklang="DlgMarqueeBehaviorNone" value="">None</option>
+			<option fcklang="DlgMarqueeBehaviorScroll" value="scroll">Scroll</option>
+			<option fcklang="DlgMarqueeBehaviorSlide" value="slide">Slide</option>
+			<option fcklang="DlgMarqueeBehaviorAlternate" value="alternate">Alternate</option>
+			</select>
+		</div>
+		<br>
+		<span fcklang="DlgMarqueeLoop">Loop(1-16)</span>
+		<div>
+			<input type="text" size="2" id="txtLoop" />
+		</div>
+	</td></tr>
+	</table>
+</td>
+<td valign="top" align="center">
+	<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+		<tr>
+			<td align="center">
+				<table border="0" cellspacing="5" cellpadding="0" width="100%">
+					<tr>
+						<td valign="top" align="center" nowrap width="100%">
+							<table id="BasicColorTable" border="0" cellspacing="1" cellpadding="0" width="15" onmouseout="ClearActual();">
+							</table>
+						</td>
+						<td valign="top" align="center" nowrap width="100%">
+							<table id="ColorTable" border="0" cellspacing="1" cellpadding="0" width="270" onmouseout="ClearActual();">
+							</table>
+						</td>
+						<td valign="top" align="left" nowrap>
+							<span fckLang="DlgColorHighlight">Highlight</span>
+							<div id="hicolor"></div>
+							<div id="hicolortext">&nbsp;</div>
+							<span fckLang="DlgColorSelected">Selected</span>
+							<div id="selhicolor"></div>
+							<input id="txtBgcolor" type="text" maxlength="20" onchange="UpdateColor();">
+							<br>
+							<input id="btnClear" type="button" fckLang="DlgColorBtnClear" value="Clear" onclick="Clear();" />
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function blog_search(){
+	document.blog_search_box.act.value = 'blog_search';
+	document.blog_search_box.submit();
+	return true;
+}
+//]]>
+</script>
+<form name="blog_search_box" method="post" class="form" onsubmit="blog_search();">
+<input type="hidden" name="act" />
+<table width="100%">
+  <tr><td><input type="text" name="keyword" size="10" maxlength="40" style="width:95%;" /></td></tr>
+  <tr><td><input type="button" class="button" onclick="blog_search();" value="検索" /></td></tr>
+</table>
+</form>
+</patTemplate:tmpl>

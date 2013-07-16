@@ -1,0 +1,88 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function installSystem(){
+	if (!window.confirm('システムを再インストールしますか?\n既存のデータはすべて削除されます')) return false;
+	document.main.act.value='initsys';
+	document.main.submit();
+	return true;
+}
+function initOtherTable(){
+	if (!window.confirm('追加テーブルを再構築しますか?\n既存のデータは削除されます')) return false;
+	document.main.act.value='initother';
+	document.main.submit();
+	return true;
+}
+function installSampleData(){
+	if (!window.confirm('サンプルデータをインストールしますか?')) return false;
+	document.main.act.value='installsampledata';
+	document.main.submit();
+	return true;
+}
+function selectFile(){
+	document.main.act.value='selectfile';
+	document.main.submit();
+	return true;
+}
+// -->
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form action="?task=initsystem" method="post" name="main">
+<input type="hidden" name="act" />
+<table width="500"><tr><td>
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-head" colspan="2">システム</td>
+	</tr>
+        <tr>
+	    <td style="border-right-width:0;">再インストール</td>
+	    <td align="right" style="border-left-width:0;"><input type="button" class="button" onclick="installSystem();" value="実行" /></td>
+	</tr>
+	<!--
+        <tr class="even">
+	    <td>追加テーブル構築</td>
+	    <td><input type="button" class="button" onclick="initOtherTable();" value="実行" /></td>
+	</tr>
+	-->
+    </tbody>
+</table>
+<br />
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-head" colspan="2">サンプルデータ</td>
+	</tr>
+        <tr class="even">
+	    <td style="border-right-width:0;">
+	    <select name="sample_sql" onChange="selectFile();">
+	        <patTemplate:tmpl name="sample__sql_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    </td>
+	    <td align="right" style="border-left-width:0;"><input type="button" class="button" onclick="installSampleData();" value="インストール" /></td>
+	</tr>
+        <tr>
+	    <td colspan="2">{HEADER}</td>
+	</tr>
+    </tbody>
+</table>
+<br />
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-head" colspan="2">ディスク使用量</td>
+	</tr>
+        <tr>
+	    <td>アクセスログ(_access_log)</td>
+	    <td align="center">{SIZE_ACCESS_LOG}</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr></table>
+</form>
+</div>
+</patTemplate:tmpl>

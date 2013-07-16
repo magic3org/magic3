@@ -1,0 +1,160 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function addItem(){
+    if (!window.confirm('項目を新規追加しますか?')) return false;
+    document.main.act.value = 'add';
+    document.main.submit();
+    return true;
+}
+function updateItem(serialNo){
+    if (!window.confirm('項目を更新しますか?')) return false;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return true;
+}
+function delItem(serialNo){
+    if (!window.confirm('項目を削除しますか?')) return false;
+    document.main.act.value = 'delete';
+    document.main.submit();
+    return true;
+}
+function cancelItem(){
+    document.main.task.value = 'list';
+    document.main.submit();
+    return true;
+}
+function showUrl(){
+    window.open(document.main.save_url.value,"","toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900");
+    return false;
+}
+// ページの選択
+function selectPage(){
+	var page = $('#page');
+	
+	// コンテンツメニューは、コンテンツページ以外は非表示
+	if (page.val() == "content"){
+		$('#contentmenu').css('display', 'block');
+	} else {
+		$('#contentmenu').css('display', 'none');
+	}
+	// 任意入力以外は入力エリアは非表示
+	if (page.val() == "_other"){
+		$('#otherinput').css('display', 'block');
+	} else {
+		$('#otherinput').css('display', 'none');
+	}
+	
+	// リンク先URLを作成
+	var url = '';
+	if (page.val() == "_root"){
+		url = document.main.root_page.value;
+	} else if (page.val() == "_other"){
+		url = document.main.item_url.value;
+	} else if (page.val() == "content"){
+		url = document.main.root_page.value + '?sub=content&contentid=' + $('#contentid').val();
+	} else if (page.val() != ""){
+		url = document.main.root_page.value + '?sub=' + page.val();
+	}
+	$('#linkurl').text(url);
+	document.main.save_url.value = url;
+	return true;
+}
+$(function(){
+    // ページ選択メニュー初期化
+    selectPage();
+});
+// -->
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="id" value="{ID}" />
+<input type="hidden" name="root_page" value="{ROOT_PAGE}" />
+<input type="hidden" name="save_url" value="{SAVE_URL}" />
+<input type="hidden" name="menuitems" />
+
+<table width="90%">
+<tr><td><label>メニュー項目</label></td>
+<td align="right"><input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside">名前</td>
+	    <td><input type="text" name="item_name" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside">リンク先を選択</td>
+	    <td>
+	   
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+	    <tr><td>
+	    <label>ページ：</label>
+	    <select id="page" onchange="selectPage();">
+	        <option value="">-- 未選択 --</option>
+		<option value="_root" {ROOT_SELECTED}>トップ</option>
+	        <patTemplate:tmpl name="sub_id_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+		<option value="_other" {OTHER_SELECTED}>[ URL任意設定 ]</option>
+	    </select>
+	    </td><td>
+	    <span id="contentmenu" style="display:none;">
+	    <label>表示コンテンツ：</label>
+	    <select id="contentid" onchange="selectPage();">
+	        <patTemplate:tmpl name="content_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    </span>
+	    </td></tr>
+	    <tr><td colspan="2">
+	    <span id="otherinput" style="display:none;">
+	    <input type="text" name="item_url" onblur="selectPage();" value="{INPUT_URL}" size="80" maxlength="120" />
+	    </span>
+	    </td></tr>
+	    </table>
+	    
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リンク先URL</td>
+	    <td>
+	    <a id="linkurl" href="#" onclick="showUrl();">{SEL_ITEM_URL}</a>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside">公開</td>
+	    <td><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">リンク有効</td>
+	    <td><input type="checkbox" name="item_enable" {SEL_ITEM_ENABLE} /></td>
+	</tr>
+	<tr class="even">
+	<td align="right" colspan="2">
+<patTemplate:tmpl name="del_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,111 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_author_detail.tmpl.html 4281 2011-09-01 10:28:55Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript" src="{SCRIPT_URL}/md5.js"></script>
+<style type="text/css">@import url({_SCRIPTS_URL}/jscalendar-1.0/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/calendar.js"></script>
+<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/lang/calendar-ja.js"></script>
+<script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/calendar-setup.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+function addItem(){
+	if (document.main.item_name.value == ''){
+		window.alert('{_LC_MSG_NO_NAME}');
+		return false;
+	}
+	if (document.main.item_account.value == ''){
+		window.alert('{_LC_MSG_NO_ACCOUNT}');
+		return false;
+	}
+	if (document.main.item_password.value == ''){
+		window.alert('{_LC_MSG_NO_PASSWORD}');
+		return false;
+	}
+	if (!window.confirm('{_LC_MSG_ADD}')) return false;
+	
+	document.main.act.value = 'add';
+	document.main.password.value = hex_md5(document.main.item_password.value);
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	document.main.act.value = 'update';
+	if (document.main.item_password.value != '********') document.main.password.value = hex_md5(document.main.item_password.value);
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (!window.confirm('{_LC_MSG_DELETE}')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'author';
+	document.main.submit();
+	return true;
+}
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="author_detail" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="password" />
+<table width="90%">
+<tr><td><label>{_LC_LABEL_AUTHOR_DETAIL}</label></td>
+<td align="right"><span {_HELP_AUTHOR_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" /></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table">
+    <tbody>
+        <tr class="even">
+	    <td class="table-headside" width="150"><span {_HELP_AUTHOR_NAME}>{_LC_LABEL_NAME}</span></td>
+	    <td><input type="text" name="item_name" value="{NAME}" size="30" maxlength="40" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_AUTHOR_ACCOUNT}>{_LC_LABEL_ACCOUNT}</span></td>
+	    <td><input type="text" name="item_account" value="{ACCOUNT}" size="30" maxlength="40" /></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_AUTHOR_PWD}>{_LC_LABEL_PASSWORD}</span></td>
+	    <td><input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_AUTHOR_LOGIN}>{_LC_LABEL_LOGIN_ENABLE}</span></td>
+	    <td><input type="checkbox" name="item_canlogin" {CAN_LOGIN} /></td>
+	</tr>
+        <tr class="even">
+	    <td colspan="2" align="right">
+<patTemplate:tmpl name="add_button" visibility="hidden">
+	    <input type="button" class="button" onclick="addItem();" value="{_LC_LABEL_ADD}" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" />
+		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

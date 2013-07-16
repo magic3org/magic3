@@ -1,0 +1,46 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 5677 2013-02-16 09:57:01Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+$(document).ready(function(){
+	// WYSIWYGエディター作成
+	//m3_setHtmlEditor('item_content');
+	m3SetWysiwygEditor('item_content', 200);
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<table class="simple-table" width="90%">
+    <tbody>
+        <tr>
+	    <td class="table-head" width="100">内容</td><td width="800"><textarea name="item_content">{CONTENT}</textarea></td>
+	</tr>
+        <tr class="even">
+	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
+	</tr>
+    </tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

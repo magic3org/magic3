@@ -1,0 +1,111 @@
+<patTemplate:tmpl name="_widget">
+<SCRIPT language="JavaScript">
+<!--
+function goTask(task){
+	document.main.task.value = task;
+	document.main.submit();
+	return true;
+}
+function newItem(){
+    document.main.task.value = 'resource_detail';
+    document.main.act.value = 'new';
+    document.main.submit();
+    return true;
+}
+function editItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('編集する項目を選択してください');
+	} else {
+            document.main.task.value = 'resource_detail';
+            document.main.act.value = 'edit';
+	    document.main.serial.value = items[i];
+            document.main.submit();
+	}
+    }
+    return true;
+}
+function editItemBySerial(serial){
+    document.main.task.value = 'resource_detail';
+    document.main.act.value = 'edit';
+    document.main.serial.value = serial;
+    document.main.submit();
+}
+function delItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('削除する項目を選択してください');
+	} else {
+            if (!window.confirm('選択項目を削除しますか?')) return false;
+            document.main.act.value = 'delete';
+            document.main.submit();
+	}
+    }
+    return true;
+}
+function selpage(page){
+    document.main.act.value = 'search';
+    document.main.page.value = page;
+    document.main.submit();
+    return true;
+}
+// -->
+</SCRIPT>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="resource" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<table width="90%">
+<tr><td>
+<label><span {_HELP_RESOURCE_LIST}>予約対象一覧</span></label>
+</td><td align="right">
+<span {_HELP_RESOURCE_NEW_BTN}><input type="button" class="button" onClick="newItem();" value="新規"></span><span {_HELP_RESOURCE_EDIT_BTN}><input type="button" class="button" onClick="editItem();" value="編集"></span><span {_HELP_RESOURCE_DEL_BTN}><input type="button" class="button" onClick="delItem();" value="削除"></span>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table" width="100%">
+    <thead>
+        <tr>
+            <th width="40px"><span {_HELP_RESOURCE_CHECK}>選択</span></th>
+            <th width="40px"><span {_HELP_RESOURCE_VIEW_NO}>No</span></th>
+            <th width="100px"><span {_HELP_RESOURCE_NAME}>名前</span></th>
+            <th width="150px"><span {_HELP_RESOURCE_SORT}>表示順</span></th>
+	    <th width="70px"><span {_HELP_RESOURCE_VISIBLE}>公開</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr {LINE_COLOR}>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected"></td>
+	    <td align="center">{NO}</td>
+	    <td><a href="#" onClick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td align="center">{VIEW_INDEX}</td>
+	    <td align="center"><input type="checkbox" {VISIBLE} disabled></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+{PAGE_LINK}
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

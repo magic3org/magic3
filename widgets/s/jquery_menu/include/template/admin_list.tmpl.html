@@ -1,0 +1,112 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_list.tmpl.html 4801 2012-03-29 23:37:26Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('削除する項目を選択してください');
+		} else {
+			if (!window.confirm('選択項目を削除しますか?')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = '';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	// タブ作成
+	$tabs = $("#main_area").tabs({
+		select: function(event, ui){
+			if (ui.panel.id == 'menu_define'){
+				document.getElementById("menu_def").src = '{URL}';
+			}
+			return true;
+		}
+	});
+	$('#edit_menu').click(function(){
+		$tabs.tabs('select', 1);
+		return false;
+	});
+	$('#tab_widget').click(function(){
+		window.location.href = window.location.href;
+	});
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('itemlist', -1, 0);
+});
+//]]>
+</script>
+<div id="main_area" class="m3config_tabs">
+            <ul>
+	    <li><a id="tab_widget" href="#widget_config"><span>ウィジェット設定</span></a></li>
+	    <li><a href="#menu_define"><span>メニュー定義</span></a></li>
+	    </ul>
+	    <div id="widget_config">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="list" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<!-- m3:PostParam -->
+<input type="hidden" name="menuid" value="{MENU_ID}" />
+<input type="hidden" name="is_hier" value="{IS_HIER}" />
+<table width="95%" style="margin: 0 auto;">
+<tr><td>
+<span {_HELP_MENU_LIST}><label>メニュー設定一覧</label></span>
+</td><td align="right"><span {_HELP_MENU_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+<span {_HELP_MENU_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table id="itemlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35" align="center"><span {_HELP_MENU_CHECK}>選択</span></th>
+	    <th width="40%" align="center"><span {_HELP_MENU_NAME}>名前</span></th>
+	    <th width="40%" align="center"><span {_HELP_MENU_DEF}>メニュー定義</span></th>
+	    <th align="center"><span {_HELP_MENU_REF}>使用</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr>
+            <td align="center"><input type="checkbox" name="item{INDEX}_selected" {OPE_DISABLED} /></td>
+	    <td>{NAME}</td>
+	    <td>{MENU_NAME}</td>
+	    <td align="center">{DEF_COUNT}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+	    </div>
+	    <div id="menu_define">
+	    <iframe id="menu_def" name="menu_def" style="width:100%; height:2000px; border:none;" allowTransparency="true" frameborder="0">{_LC_LABEL_NENU_DEF}</iframe>
+	    </div>
+</div>
+</patTemplate:tmpl>

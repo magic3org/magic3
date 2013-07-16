@@ -1,0 +1,89 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: memberinfo.tmpl.html 5438 2012-12-07 14:09:57Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function regist(){
+	if (!window.confirm('会員情報を更新します')) return false;
+	document.photo_main.act.value = 'update';
+	document.photo_main.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="photo_main" class="form">
+<input type="hidden" name="act" />
+<div id="photo_shop">
+<h2>会員情報</h2>
+<div class="photo_field"><label><span class="photo_title">お名前</span></label><input type="text" name="item_familyname" value="{FAMILYNAME}" size="10" maxlength="20" {FAMILYNAME_DISABLED} />&nbsp;&nbsp;
+<input type="text" name="item_firstname" value="{FIRSTNAME}" size="10" maxlength="20" {FIRSTNAME_DISABLED} /><span class="photo_required">*</span></div>
+<div class="photo_field"><label><span class="photo_title">お名前(フリガナ)</span></label><input type="text" name="item_familyname_kana" value="{FAMILYNAME_KANA}" size="10" maxlength="20" {FAMILYNAME_KANA_DISABLED} />&nbsp;&nbsp;
+<input type="text" name="item_firstname_kana" value="{FIRSTNAME_KANA}" size="10" maxlength="20" {FIRSTNAME_KANA_DISABLED} /><span class="photo_required">*</span></div>
+<label><span class="photo_title">Eメール</span><input type="hidden" name="oldemail" value="{OLD_EMAIL}" /><input type="text" name="item_email" value="{EMAIL}" size="20" maxlength="50" {EMAIL_DISABLED} /><span class="photo_required">*</span></label>
+<label><span class="photo_title">Eメール(確認)</span><input type="text" name="item_email2" value="{EMAIL2}" size="20" maxlength="50" {EMAIL2_DISABLED} /><span class="photo_required">*</span></label>
+<patTemplate:tmpl name="input_address" visibility="hidden">
+<h2>住所</h2>
+<label><span class="photo_title">郵便番号</span><input type="text" name="item_zipcode" value="{ZIPCODE}" size="10" maxlength="10" {ZIPCODE_DISABLED} /></label>
+<label><span class="photo_title">都道府県</span>
+<select id="item_state" name="item_state" {STATE_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select></label>
+<label><span class="photo_title">住所</span><input type="text" name="item_address" value="{ADDRESS}" size="30" maxlength="50" style="width:300px" {ADDRESS_DISABLED} /></label>
+<label><span class="photo_title">建物名</span><input type="text" name="item_address2" value="{ADDRESS2}" size="30" maxlength="50" style="width:300px" {ADDRESS2_DISABLED} /></label>
+<label><span class="photo_title">電話番号</span><input type="text" name="item_phone" value="{PHONE}" size="20" maxlength="20" {PHONE_DISABLED} /></label>
+<!--<label><span class="photo_title">FAX番号</span><input type="text" name="item_fax" value="{FAX}" size="20" maxlength="20" {FAX_DISABLED} /></label>-->
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_member_info_option" visibility="hidden">
+<h2>プロフィール</h2>
+<label><span class="photo_title">性別</span>
+<select id="item_gender" name="item_gender" {GENDER_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="gender_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{GENDER_HIDDEN}
+<span class="photo_required">*</span></label>
+<div class="photo_field"><label><span class="photo_title">生年月日</span></label>
+<select id="item_year" name="item_year" {YEAR_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="year_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{YEAR_HIDDEN}年&nbsp;
+<select id="item_month" name="item_month" {MONTH_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="month_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{MONTH_HIDDEN}月&nbsp;
+<select id="item_day" name="item_day" {DAY_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="day_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>{DAY_HIDDEN}日
+<span class="photo_required">*</span></div>
+<label><span class="photo_title">現在やっているスポーツ</span><input type="text" name="item_sports" value="{SPORTS}" size="20" maxlength="50" {SPORTS_DISABLED} /><span class="photo_required">*</span></label>
+</patTemplate:tmpl>
+<div><span class="photo_message_required">*は必須入力項目です。</span></div>
+<div>{MESSAGE}</div>
+<div class="photo_bottom">
+<input type="button" class="button" onclick="regist();" value="更新する" /><input type="button" class="button" onclick="location.href = '{CANCEL_URL}'" value="キャンセル" />
+</div>
+</div>
+</form>
+</patTemplate:tmpl>

@@ -1,0 +1,146 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_search.tmpl.html 5677 2013-02-16 09:57:01Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.fieldcount.value = $('#field_list').find('.dragRow').length;
+	
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+// カテゴリ項目を追加
+function addLine()
+{
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
+	lineText += '<td><select name="item_type[]"><patTemplate:tmpl name="item_type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select></td>';
+	lineText += '<td><select name="item_sel_type[]"><patTemplate:tmpl name="sel_type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
+	lineText += '<select name="item_category[]"><patTemplate:tmpl name="category_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select></td>';
+	lineText += '<td><input type="text" class="replaceTag" style="width:100%;" readonly /></td>';
+	lineText += '<td align="center"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	$('#field_list').append(lineText);
+	
+	// 項目一覧を再設定
+	setupList();
+}
+function setupList()
+{
+	$("#field_list").tableDnD({
+		onDrop: function(table, row){
+			setupNo();
+		},
+		dragHandle: "dragHandle"
+	});
+	$("#field_list tr").hover(function(){
+		$(this.cells[0]).addClass('currentHandle');
+	}, function() {
+		$(this.cells[0]).removeClass('currentHandle');
+	});
+	// 項目削除処理
+	$("#field_list tr .delLine").click(function(){
+		$(this).parents('.dragRow').remove();
+		setupNo();
+	});
+	// インデックスNo再設定
+	setupNo();
+}
+function setupNo()
+{
+	// インデックスNo再設定
+	$("#field_list tr .lineNo").each(function(index){
+		$(this).text(index + 1);
+	});
+	$("#field_list tr .replaceTag").each(function(index){
+		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
+		$(this).val(replaceTag);
+	});
+}
+$(function(){
+	// WYSIWYGエディター作成
+	//m3_setHtmlEditor('item_html');
+	m3SetWysiwygEditor('item_html', 300);
+	
+	// カテゴリ項目作成
+	setupList();
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main" class="form">
+<input type="hidden" name="task" value="search" />
+<input type="hidden" name="act" />
+<input type="hidden" name="fieldcount" />
+<table width="90%">
+<tr><td colspan="2"><label>検索条件</label></td></tr>
+<tr><td colspan="2">
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr class="even">
+	    <td class="table-headside" width="150"><span {_HELP_IMAGE_FILE}>追加検索条件</span></td>
+	    <td>
+	    <table id="field_list" class="simple-table-inner" width="100%">
+	    <thead>
+	    <tr><th width="35">移動</th><th width="30">No</th><th width="150">種別</th><th width="300">選択方法/親カテゴリー</th><th width="100">埋め込みタグ</th><th>操作</th></tr>
+	    </thead><tbody>
+	    <patTemplate:tmpl name="field_list">
+            <tr class="dragRow">
+	    <td class="dragHandle"></td>
+	    <td align="center"><span class="lineNo"></span></td>
+	    <td><select name="item_type[]">
+	       <patTemplate:tmpl name="item_type_list2">
+               <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	       </patTemplate:tmpl>
+            </select></td>
+	    <td><select name="item_sel_type[]">
+	       <patTemplate:tmpl name="sel_type_list2">
+               <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	       </patTemplate:tmpl>
+            </select>
+	    <select name="item_category[]">
+	       <patTemplate:tmpl name="category_list2">
+               <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	       </patTemplate:tmpl>
+            </select></td>
+	    <td><input type="text" class="replaceTag" style="width:100%;" readonly /></td>
+	    <td align="center"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    </tr>
+	    </patTemplate:tmpl>
+	    </tbody></table>
+	    <div><input type="button" class="button" onclick="addLine();" value="追加" />&nbsp;&nbsp;{USER_CONTENT_MESSAGE}</div>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">規定タグID</td>
+	    <td>{TAG_ID_STR}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_TAB_TEMPLATE}>テンプレート</span></td>
+	    <td><textarea name="item_html">{HTML}</textarea></td>
+	</tr>
+	<tr>
+	    <td align="right" colspan="2">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+	    </td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

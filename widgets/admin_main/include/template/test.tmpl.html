@@ -1,0 +1,15 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_html', 500/* 高さ */);
+});
+//]]>
+</script>
+<div align="center">
+<!-- m3:ErrorMessage -->
+<textarea name="item_html">{ITEM_HTML}</textarea>
+</div>
+
+</patTemplate:tmpl>

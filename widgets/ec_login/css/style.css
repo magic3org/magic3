@@ -1,0 +1,19 @@
+#ec_login label{
+	display:block;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+#ec_login label span.title {
+	display:block;
+	float:left;
+	padding-right:6px;
+	width:40%;
+	text-align:right;
+/*	font-weight:bold;*/
+}
+#ec_login label input {
+	width:50%;
+}
+#ec_login .top {
+	margin-bottom:5px;
+}

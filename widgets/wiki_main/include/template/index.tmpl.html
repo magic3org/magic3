@@ -1,0 +1,21 @@
+<patTemplate:tmpl name="_widget">
+<!-- m3:ErrorMessage -->
+<patTemplate:tmpl name="show_title" visibility="hidden">
+<h1 class="contentheading">{TITLE}</h1>
+{TITLE_SMALL}
+</patTemplate:tmpl>
+<div class="content">{CONTENT}</div>
+<div class="note">{NOTE}</div>
+<patTemplate:tmpl name="show_toolbar" visibility="hidden">
+<div class="toolbar">{TOOLBAR}</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_page_attach" visibility="hidden">
+<hr class="wiki_hr_full" />
+<div>{CONTENT}</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_page_info" visibility="hidden">
+<hr class="wiki_hr_full" />
+<patTemplate:tmpl name="show_last_modified" visibility="hidden"><div>最終更新: {CONTENT}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="show_page_related" visibility="hidden"><div>リンク: {CONTENT}</div></patTemplate:tmpl>
+</patTemplate:tmpl>
+</patTemplate:tmpl>

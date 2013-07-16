@@ -1,0 +1,133 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function selectItem()
+{
+	document.main.act.value = 'select';
+	document.main.submit();
+	return true;
+}
+function listItem(){
+	document.main.task.value = 'list';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	// タブ作成
+	$tabs = $("#main_area").tabs({
+		select: function(event, ui){
+			if (ui.panel.id == 'menu_define'){
+				var url = '';
+				var id = document.main.menuid.value;
+				if (document.main.is_hier.checked){
+					url = "?task=menudef&openby=tabs&menuid=" + id;
+				} else {
+					url = "?task=smenudef&openby=tabs&menuid=" + id;
+				}
+				document.getElementById("menu_def").src = url;
+			}
+			return true;
+		}
+	});
+	$('#edit_menu').click(function() {
+		$tabs.tabs('select', 1);
+		return false;
+	});
+	<patTemplate:tmpl name="select_menu_def" visibility="hidden">$tabs.tabs('select', 1);</patTemplate:tmpl>
+});
+//]]>
+</script>
+<div id="main_area" class="m3config_tabs">
+            <ul>
+	    <li><a href="#widget_config"><span>ウィジェット設定</span></a></li>
+	    <li><a href="#menu_define"><span>メニュー定義</span></a></li>
+	    </ul>
+	    <div id="widget_config">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="defserial" value="{DEF_SERIAL}" />
+<input type="hidden" name="defconfig" value="{DEF_CONFIG}" />
+<table width="95%" style="margin: 0 auto;">
+<tr><td><span {_HELP_MENU_DETAIL}><label>メニュー設定</label></span></td>
+<td align="right"><span {_HELP_MENU_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_MENU_NAME_INPUT}>名前</span></td>
+	    <td width="500">
+	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+	        <option value="0">-- 新規 --</option>
+	        <patTemplate:tmpl name="title_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    </patTemplate:tmpl>
+	    </td>
+	    <td class="table-headside" width="100"><span {_HELP_MENU_ID}>ID</span></td>
+	    <td align="center">{ID}
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_MENU_DEF}>メニュー定義</span></td>
+	    <td colspan="3">
+	    <input type="checkbox" name="is_hier" {IS_HIER} {IS_HIER_DISABLED} />階層化あり&nbsp;&nbsp;
+	    <select name="menuid" {ID_DISABLED}>
+	        <patTemplate:tmpl name="menu_id_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    <span {_HELP_MENU_EDIT_DEF_BTN}><input id="edit_menu" type="button" class="button" value="メニュー定義を編集" /></span>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_MENU_LIMIT_USER}>ユーザ制限</span></td>
+	    <td colspan="3"><input type="checkbox" name="item_limituser" {LIMIT_USER} />
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_MENU_DESIGN}>デザイン</span></td>
+	    <td colspan="3"><input type="checkbox" name="item_vertical_menu" {VERTICAL_MENU} />縦型メニュー
+	    </td>
+	</tr>
+	<tr>
+	    <td align="right" colspan="4">
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+
+</td></tr>
+</table>
+</form>
+	    </div>
+	    <div id="menu_define">
+	    <iframe id="menu_def" name="menu_def" style="width:100%; height:2000px; border:none;" allowTransparency="true" frameborder="0">{_LC_LABEL_NENU_DEF}</iframe>
+	    </div>
+</div>
+</patTemplate:tmpl>

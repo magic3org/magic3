@@ -1,0 +1,119 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function newItem(){
+    document.main.task.value = 'detail';
+    document.main.act.value = 'new';
+    document.main.submit();
+    return true;
+}
+function editItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('編集する項目を選択してください');
+	} else {
+            document.main.task.value = 'detail';
+            document.main.act.value = 'edit';
+	    document.main.serial.value = items[i];
+            document.main.submit();
+	}
+    }
+    return true;
+}
+function editItemBySerial(serial){
+    document.main.task.value = 'detail';
+    document.main.act.value = 'edit';
+    document.main.serial.value = serial;
+    document.main.submit();
+}
+function delItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('削除する項目を選択してください');
+	} else {
+            if (!window.confirm('選択項目を削除しますか?')) return false;
+            document.main.act.value = 'delete';
+            document.main.submit();
+	}
+    }
+    return true;
+}
+// メニューに追加
+function addToMenu(selId){
+    if (!window.confirm('この項目をメインメニューに追加しますか?')) return false;
+    document.main.act.value = 'addtomenu';
+    document.main.contentid.value = selId;
+    document.main.submit();
+    return true;
+}
+$(function(){
+    // スクロールバー付きのテーブルを作成
+    m3_tableWithScrollbar('contlist', 10, 0);	// データは10行表示
+});
+// -->
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="list" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="contentid" />
+<table width="90%">
+<tr><td>
+<label>コンテンツ一覧</label>
+</td>
+<td align="right"><input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+</td></tr>
+<tr><td colspan="2">
+<table id="contlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+            <th width="40">選択</th>
+            <th width="30">ID</th>
+            <th width="30%">名前</th>
+	    <th width="50">公開</th>
+	    <th width="70">デフォルト</th>
+	    <th width="100">更新者</th>
+	    <th width="120">更新日時</th>
+	    <th width="50">参照数</th>
+	    <th></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr {LINE_COLOR}>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td align="center">{ID}</td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td align="center"><input type="checkbox" disabled {DEFAULT} /></td>
+	    <td align="center">{UPDATE_USER}</td>
+	    <td align="center">{UPDATE_DT}</td>
+	    <td align="center">{VIEW_COUNT}</td>
+	    <td align="right"><input type="button" class="button" onclick="addToMenu('{ID}');" value="メインメニューに追加" /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

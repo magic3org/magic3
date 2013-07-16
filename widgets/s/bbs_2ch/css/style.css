@@ -1,0 +1,73 @@
+/*
+ * ウィジェット用CSS
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: style.css 4863 2012-04-20 05:29:29Z fishbone $
+ * @link       http://www.magic3.org
+ */
+#bbs_2ch {
+	width:100%;
+	text-align:center;
+	padding:10px 0 10px 0;
+}
+#bbs_2ch .innerbox {
+/*	width:100%;*/
+/*	padding:5px;*/
+	margin:5px 0;
+	text-align:left;
+	border: 1px solid gray;
+}
+#bbs_2ch .bbs_title {
+	float:left;
+	font-size: large;
+	font-weight: bold;
+	margin:0 10px 0 10px;
+}
+#bbs_2ch .thread_head {
+	margin:0 5px;
+	font-weight: bold;
+}
+#bbs_2ch .thread_title {
+	font-size: large;
+}
+#bbs_2ch .message_head {
+	margin:3px 5px;
+}
+#bbs_2ch .message_body {
+	margin:0 15px 10px;
+}
+#bbs_2ch .anchor {
+/*	width:40px;*/
+	float:right;
+	margin:0 10px;
+	text-align:right;
+}
+#bbs_2ch .guide {
+	clear:both;
+	margin:0 5px;
+}
+#bbs_2ch .link {
+	text-align:right;
+	font-weight: bold;
+	margin:0 15px 0 15px;
+}
+#bbs_2ch .list {
+/*	width:100%;
+	text-align:left;*/
+	margin:0 15px;
+	line-height:1.8;
+}
+#bbs_2ch .inlineitem {
+	display:inline-block;
+}
+#bbs_2ch .bottom {
+/*	width:100%;*/
+	text-align:left;
+	margin:15px 10px 0;
+}
+

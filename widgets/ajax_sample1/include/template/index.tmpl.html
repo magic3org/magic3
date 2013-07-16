@@ -1,0 +1,20 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function go()
+{
+	m3_ajax_request('ajax_sample1', 'act=getmsg', ajax_success_func, ajax_failure_func);
+}
+function ajax_success_func(request, retcode, jsondata)
+{
+//	alert(request.responseText);
+	alert(jsondata.message);
+}
+function ajax_failure_func(request)
+{
+	alert('ajax failure!');
+}
+-->
+</script>
+<input class="button" type="button" onclick="go();" value="Ajax実行" />
+</patTemplate:tmpl>

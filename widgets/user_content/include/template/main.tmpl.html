@@ -1,0 +1,27 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	var $tabs = $("#user_content>ul").tabs();
+});
+<patTemplate:tmpl name="admin_script" visibility="hidden">
+function editRoom(){
+	window.open("{EDIT_URL}","","toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900");
+	return false;
+}
+</patTemplate:tmpl>
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+{TOP_HTML}
+<patTemplate:tmpl name="tab_area">
+<div id="user_content">
+{BUTTON_LIST}
+<ul>
+<!-- float:left for IE6 -->
+<patTemplate:tmpl name="tablist"><li style="list-style:none; background:none; float:left;"><a href="{HREF}"><span>{NAME}</span></a></li></patTemplate:tmpl>
+</ul>
+<patTemplate:tmpl name="panellist"><div id="{PANEL_ID}" class="tab_panel">{CONTENT}</div></patTemplate:tmpl>
+</div>
+</patTemplate:tmpl>
+</patTemplate:tmpl>

@@ -1,0 +1,155 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: adjustwidget.tmpl.html 5679 2013-02-16 11:50:05Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function updateOther(){
+	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	document.main_other.act.value = 'update_other';
+	document.main_other.submit();
+	return true;
+}
+$(function(){
+	$tabs = $("#main_area").tabs();
+	<patTemplate:tmpl name="select_tabs" visibility="hidden">$tabs.tabs('select', {NO});</patTemplate:tmpl>
+	
+	Calendar.setup({
+		inputField  : "item_start_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton1"       // ID of the button
+	});
+	Calendar.setup({
+		inputField  : "item_end_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton2"       // ID of the button
+	});
+	
+	// WYSIWYGエディター作成
+	//m3_setHtmlEditor('item_top_content');
+	//m3_setHtmlEditor('item_bottom_content');
+	m3SetWysiwygEditor('item_top_content', 100, false);
+	m3SetWysiwygEditor('item_bottom_content', 100, false);
+});
+//]]>
+</script>
+<div class="m3config_head"><label><span {_HELP_ADJUSTWIDGET_CONFIG}>{_LC_LABEL_WIDGET_COMMON_CONFIG}</span></label></div>
+<!-- m3:ErrorMessage -->
+<div id="main_area" class="m3config_tabs">
+            <ul>
+	    <li><a href="#widget_config"><span>{_LC_LABEL_CONFIG_BASIC}</span></a></li>
+	    <li><a href="#widget_other"><span>{_LC_LABEL_CONFIG_OTHER}</span></a></li>
+	    </ul>
+	    <div id="widget_config">
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="widget_id" value="{WIDGET_ID}" />
+<table class="simple-table" width="95%" style="margin: 0 auto;">
+<caption><span {_HELP_ADJUSTWIDGET}>{_LC_LABEL_ADJUST_WIDGET}</span></caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_ADJUSTWIDGET_TITLE}>{_LC_LABEL_TITLE}</span></td>
+	    <td colspan="3"><input type="text" name="item_title" value="{TITLE}" size="30" maxlength="30" />&nbsp;&nbsp;
+	    <input type="checkbox" name="item_title_visible" {TITLE_VISIBLE} />{_LC_LABEL_VISIBLE}
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_MARGIN}>{_LC_LABEL_MARGIN}</span></td>
+	    <td>{_LC_LABEL_TOP}<input type="text" name="item_top" size="3" maxlength="3" value="{TOP}" onkeypress="return m3_numericKey(event,true);" />px&nbsp;&nbsp;{_LC_LABEL_BOTTOM}<input type="text" name="item_bottom" size="3" maxlength="3" value="{BOTTOM}" onkeypress="return m3_numericKey(event,true);" />px&nbsp;&nbsp;{_LC_LABEL_LEFT}<input type="text" name="item_left" size="3" maxlength="3" value="{LEFT}" onkeypress="return m3_numericKey(event,true);" />px&nbsp;&nbsp;{_LC_LABEL_RIGHT}<input type="text" name="item_right" size="3" maxlength="3" value="{RIGHT}" onkeypress="return m3_numericKey(event,true);" />px
+	    </td>
+	    <td class="table-headside" width="150"><span {_HELP_ADJUSTWIDGET_ALIGN}>{_LC_LABEL_POSITION}</span></td>
+	    <td>
+	    <select name="item_align">
+                <patTemplate:tmpl name="item_align_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_RENDER}>{_LC_LABEL_RENDER}</span></td>
+	    <td colspan="3"><input type="checkbox" name="item_use_render" {USE_RENDER} />{_LC_LABEL_USE_JOOMLA_RENDER}
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_TOP_CONTENT}>{_LC_LABEL_TOP_CONTENT}</span></td>
+	    <td colspan="3"><textarea name="item_top_content">{TOP_CONTENT}</textarea></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_BOTTOM_CONTENT}>{_LC_LABEL_BOTTOM_CONTENT}</span></td>
+	    <td colspan="3"><textarea name="item_bottom_content">{BOTTOM_CONTENT}</textarea></td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_READMORE}>{_LC_LABEL_READMORE}</span></td>
+	    <td colspan="3"><input type="checkbox" name="item_show_readmore" {SHOW_READMORE_CHECKED} />{_LC_LABEL_VISIBLE}&nbsp;&nbsp;{_LC_LABEL_READMORE_TITLE}<input type="text" name="item_readmore_title" value="{READMORE_TITLE}" size="30" maxlength="30" /><br />{_LC_LABEL_READMORE_URL}<input type="text" name="item_readmore_url" value="{READMORE_URL}" size="100" maxlength="200" />
+	    
+	    </td>
+	</tr>
+	<tr>
+	<td colspan="4" align="right">
+		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
+	</td>
+	</tr>
+    </tbody>
+</table>
+</form>
+	    </div>
+	    <div id="widget_other">
+<form method="post" name="main_other">
+<input type="hidden" name="act" />
+<input type="hidden" name="widget_id" value="{WIDGET_ID}" />
+<table class="simple-table" width="95%" style="margin: 0 auto;">
+<caption><span {_HELP_ADJUSTWIDGET_VIEW}>{_LC_LABEL_VIEW_CONTROL}</span></caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="150"><span {_HELP_ADJUSTWIDGET_SHARED}>{_LC_LABEL_SHARED_ATTR}</span></td>
+	    <td colspan="3"><input type="checkbox" name="item_shared" {SHARED_CHECKED} />{_LC_LABEL_ON}<br />
+	        <fieldset><legend>{_LC_LABEL_EXCEPT_PAGE}</legend>
+                <patTemplate:tmpl name="sub_id_list">
+		<input type="checkbox" name="item_except_{VALUE}" {CHECKED} />{VALUE} - {NAME}<br />
+		</patTemplate:tmpl>
+		</fieldset>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_TERM}>{_LC_LABEL_VIEW_TERM}</span></td>
+	    <td colspan="3">{_LC_LABEL_START_DATE}<input type="text" class="m3field_calendar" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a>&nbsp;&nbsp;{_LC_LABEL_HOUR}<input type="text" class="m3field_calendar" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" />&nbsp;&nbsp;～&nbsp;&nbsp;{_LC_LABEL_END_DATE}<input type="text" class="m3field_calendar" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a>&nbsp;&nbsp;{_LC_LABEL_HOUR}<input type="text" class="m3field_calendar" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" />
+	    </td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_OPTION}>{_LC_LABEL_VIEW_OPTION}</span></td>
+	    <td colspan="3"><fieldset><legend>{_LC_LABEL_VIEW_TYPE}</legend>
+	    <input type="radio" name="item_view_type" value="0" {CHECKED_ALWAYS} />{_LC_LABEL_ALWAYS}<br /><input type="radio" name="item_view_type" value="1" {CHECKED_LOGIN} />{_LC_LABEL_LOGIN}<br /><input type="radio" name="item_view_type" value="2" {CHECKED_NO_LOGIN} />{_LC_LABEL_NO_LOGIN}</fieldset>
+	    </td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_CSS_CLASS}>{_LC_LABEL_CSS_CLASS}</span></td>
+	    <td colspan="3">{CSS_CLASS}_&nbsp;<input type="text" name="item_css_class_suffix" value="{CSS_CLASS_SUFFIX}" size="10" maxlength="10" />
+	    </td>
+	</tr>
+	<tr>
+	<td colspan="4" align="right">
+		<input type="button" class="button" onclick="updateOther();" value="{_LC_LABEL_UPDATE}" />
+	</td>
+	</tr>
+    </tbody>
+</table>
+</form>
+	    </div>
+</div>
+</patTemplate:tmpl>

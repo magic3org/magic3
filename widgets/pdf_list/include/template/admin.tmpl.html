@@ -1,0 +1,156 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.fieldcount.value = $('#field_list').find('.dragRow').length;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.fieldcount.value = $('#field_list').find('.dragRow').length;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function selectItem()
+{
+	document.main.act.value = 'select';
+	document.main.submit();
+	return true;
+}
+function listItem(){
+	document.main.task.value = 'list';
+	document.main.submit();
+	return true;
+}
+// お問い合わせ項目を追加
+function addLine()
+{
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
+	lineText += '<td><input type="text" name="item_name[]" size="20" maxlength="60" style="width:100%" /></td>';
+	lineText += '<td><input type="text" name="item_address[]" size="30" maxlength="100" style="width:100%" /></td>';
+	lineText += '<td><input type="text" name="item_phone[]" size="30" maxlength="100" style="width:100%" /></td>';
+	lineText += '<td align="center"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	$('#field_list').append(lineText);
+	
+	// 項目一覧を再設定
+	setupList();
+}
+function setupList()
+{
+	$("#field_list").tableDnD({
+		onDrop: function(table, row){
+			setupNo();
+		},
+		dragHandle: "dragHandle"
+	});
+	$("#field_list tr").hover(function(){
+		$(this.cells[0]).addClass('currentHandle');
+	}, function() {
+		$(this.cells[0]).removeClass('currentHandle');
+	});
+	// 項目削除処理
+	$("#field_list tr .delLine").click(function(){
+		$(this).parents('.dragRow').remove();
+		setupNo();
+	});
+	// インデックスNo再設定
+	setupNo();
+}
+function setupNo()
+{
+	// インデックスNo再設定
+	$("#field_list tr .lineNo").each(function(index){
+		$(this).text(index + 1);
+	});
+}
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow()
+{
+	window.open("{PREVIEW_URL}","","toolbar=no,menubar=no,location=yes,status=no,scrollbars=yes,resizable=yes,width=1000,height=800");
+	return true;
+}
+function viewWidget(widgetId){
+	window.open("?cmd=showwidget&widget=" + widgetId,"","toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=800,height=600");
+	return false;
+}
+$(document).ready(function(){
+	setupList();
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="fieldcount" />
+<input type="hidden" name="required" />
+<!-- m3:PostParam -->
+<table width="90%">
+<tr><td><span {_HELP_CONTACTUS_DETAIL}><label>設定詳細</label></span></td>
+<td align="right"><span {_HELP_CONTACTUS_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_DISABLED}/></span>&nbsp;&nbsp;<span {_HELP_CONTACTUS_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="一覧" /></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_CONTACTUS_NAME_INPUT}>名前</span></td>
+	    <td width="500">
+	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+	        <option value="0">-- 新規 --</option>
+	        <patTemplate:tmpl name="title_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    <patTemplate:tmpl name="item_def_name_visible" visibility="hidden">
+	    <input type="text" name="item_def_name" value="{DEF_NAME}" size="40" maxlength="40" />
+	    </patTemplate:tmpl>
+	    </td>
+	    <td class="table-headside" width="100"><span {_HELP_CONTACTUS_ID}>ID</span></td>
+	    <td align="center">{ID}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_CONTACTUS_FIELD}>表示項目</span></td>
+	    <td colspan="3">
+	    <table id="field_list" class="simple-table-inner" width="100%">
+	    <thead>
+	    <tr><th width="35">移動</th><th width="30">No</th><th width="200">名前</th><th>住所</th><th>電話番号</th><th width="40">操作</th></tr>
+	    </thead><tbody>
+	    <patTemplate:tmpl name="field_list">
+            <tr class="dragRow">
+	    <td class="dragHandle"></td>
+	    <td align="center"><span class="lineNo"></span></td>
+	    <td><input type="text" name="item_name[]" value="{NAME}" size="20" maxlength="60" style="width:100%" /></td>
+	    <td><input type="text" name="item_address[]" value="{ADDRESS}" size="30" maxlength="100" style="width:100%" /></td>
+	    <td><input type="text" name="item_phone[]" value="{PHONE}" size="30" maxlength="100" style="width:100%" /></td>
+	    <td align="center"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    </tr>
+	    </patTemplate:tmpl>
+	    </tbody></table>
+	    <div><input type="button" class="button" onclick="addLine();" value="追加" /></div>
+	    </td>
+	</tr>
+	<tr>
+	    <td align="right" colspan="4">
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

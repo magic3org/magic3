@@ -1,0 +1,59 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: menudef.tmpl.html 5389 2012-11-18 22:42:30Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function login_box_login(){
+	document.login_box.act.value = 'eclogin_login';
+	document.login_box.password.value = hex_md5(document.login_box.in_password.value);
+	document.login_box.in_password.disabled = true;
+	document.login_box.submit();
+	return true;
+}
+function login_box_logout(){
+	document.login_box.act.value = 'eclogin_logout';
+	document.login_box.submit();
+	return true;
+}
+//]]>
+</script>
+<form name="login_box" method="post" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<div id="ec_login">
+<patTemplate:tmpl name="login_status" visibility="hidden">
+<div class="top">{MESSAGE}{USER_NAME}</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="login_field" visibility="hidden">
+<label><span class="title">{WORD_ACCOUNT}</span><input type="text" name="account" size="8" maxlength="40" /></label>
+<label><span class="title">パスワード</span><input type="password" name="in_password" size="8" maxlength="10" /></label>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="logout_button" visibility="hidden"><input type="button" class="button" onclick="login_box_logout();" value="ログアウト" /></patTemplate:tmpl>
+<patTemplate:tmpl name="login_button" visibility="hidden"><input type="button" class="button" onclick="login_box_login();" value="ログイン" /></patTemplate:tmpl>
+<patTemplate:tmpl name="regmember_button" visibility="hidden">
+<ul>
+<li><a href="{REGMEMBER_URL}">会員登録</a></li>
+<li><a href="{SENDPWD_URL}">パスワード再送</a></li>
+</ul>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="member_button" visibility="hidden">
+<ul>
+<li><a href="{MEMBER_NOTICE_URL}">お知らせ</a></li>
+<li><a href="{MEMBER_URL}">会員情報変更</a></li>
+<li><a href="{CHANGEPWD_URL}">パスワード変更</a></li>
+<li><a href="{PURCHASEHISTORY_URL}">購入履歴</a></li>
+</ul>
+</patTemplate:tmpl>
+</div>
+</form>
+</patTemplate:tmpl>

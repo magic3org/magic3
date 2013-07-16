@@ -1,0 +1,81 @@
+<patTemplate:tmpl name="_widget">
+<style type="text/css">
+<!--
+/* menu item with sub menu */
+.eccascademenu .hassubmenu {
+	color: {COLOR4};
+	background: url({_WIDGET_URL}/images/{IMAGE_FILENAME}) 0 -96px;
+}
+.eccascademenu {
+        width: 160px;	/* menu width */
+	border-style: none;
+	border-width: 0px;
+	margin: 0px;
+}
+.eccascademenu ul {
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+}
+.eccascademenu  ul li {
+	position: relative;	/* submenu position */
+	background-image:none;
+	padding: 0px;
+	list-style       : none;
+	list-style-image : none;
+	height:32px;
+	width: 160px;
+	
+	margin: 0px;
+}
+.eccascademenu ul li a {
+	color: {COLOR1};
+	height:100%;
+        text-decoration: none;
+	text-align:center;	/* centering text */
+	line-height:30px;	/* centering text */
+	overflow: auto;		/*force hasLayout in IE7 */
+	/*border: 1px solid #ccc;*/ /* menu item outline */
+	background: url({_WIDGET_URL}/images/{IMAGE_FILENAME});
+}
+.eccascademenu ul li a:link, .eccascademenu ul li a:visited {
+        display: block;
+/*        background: url({_WIDGET_URL}/images/{IMAGE_FILENAME});*/
+}
+
+.eccascademenu ul li a:hover, .eccascademenu li #current {
+        color: {COLOR2};
+        background: url({_WIDGET_URL}/images/{IMAGE_FILENAME}) 0 -32px;
+}
+
+.eccascademenu ul li a:active {
+	color: {COLOR3};
+        background: url({_WIDGET_URL}/images/{IMAGE_FILENAME}) 0 -64px;
+}
+/* sub menu */
+.eccascademenu ul li ul{
+	position: absolute;
+	top: 0;
+	visibility: hidden;
+}
+/* for IE6 */
+* html .eccascademenu ul li { float: left;}
+* html .eccascademenu ul li ul { margin-left: 160px;}
+
+-->
+</style>
+<table class="moduletable">
+{TITLE}
+<tr><td><!-- don't remove this line for ie bug -->
+<div class="eccascademenu">
+<ul id="category_menu">
+{CATEGORY_MENU}
+</ul>
+</div>
+<script type="text/javascript">
+<!--
+var menu = new m3_cascadeMenu('category_menu');
+// -->
+</script>
+</tr></td></table><!-- don't remove this line for ie bug -->
+</patTemplate:tmpl>

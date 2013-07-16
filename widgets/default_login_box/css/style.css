@@ -1,0 +1,22 @@
+#default_login label{
+	display:block;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+#default_login label span.default_login_title {
+	display:block;
+	float:left;
+	padding-right:6px;
+	width:43%;
+	text-align:right;
+	font-weight:bold;
+}
+#default_login label input[type=text] {
+	width:48%;
+}
+#default_login label input[type=password] {
+	width:48%;
+}
+#default_login .default_login_top {
+	margin-bottom:5px;
+}

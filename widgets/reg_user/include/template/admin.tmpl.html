@@ -1,0 +1,56 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 5158 2012-09-05 07:47:37Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main" class="form">
+<input type="hidden" name="act" />
+
+<table width="90%">
+<tr><td><!--<span {_HELP_CONTACTUS_DETAIL}><label>設定詳細</label></span>--></td>
+<td align="right"><!-- <span {_HELP_CONTACTUS_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="一覧" /></span>-->
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100">ユーザ承認</td><td width="750">
+		<select name="item_auth_type">
+		<option value="">-- 未選択 --</option>
+		<patTemplate:tmpl name="authtype_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+		</patTemplate:tmpl>
+		</select>
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

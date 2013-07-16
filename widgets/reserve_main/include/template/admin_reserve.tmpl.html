@@ -1,0 +1,137 @@
+<patTemplate:tmpl name="_widget">
+<style type="text/css">@import url({SCRIPT_URL}/jscalendar-1.0/calendar-win2k-1.css);</style>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/calendar.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/lang/calendar-ja.js"></script>
+<script type="text/javascript" src="{SCRIPT_URL}/jscalendar-1.0/calendar-setup.js"></script>
+<SCRIPT language="JavaScript">
+<!--
+function editItemByDate(year, month, day){
+    document.main.task.value = 'reserve_detail';
+    document.main.year.value = year;
+    document.main.month.value = month;
+    document.main.day.value = day;
+    document.main.submit();
+}
+function selViewMenu(){
+    document.main.act.value = 'selviewmenu';
+    document.main.submit();
+    return true;
+}
+function addItem(){
+	if (!window.confirm('予約を新規登録します')) return false;
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
+function clearItem(){
+	document.main.reserve_date.value = '';
+	document.main.time_hour.value = '-1';
+	document.main.time_minute.value = '-1';
+	document.main.user.value = '0';
+	return true;
+}
+// -->
+</SCRIPT>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="reserve" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="year" />
+<input type="hidden" name="month" />
+<input type="hidden" name="day" />
+<table>
+<tr><td>
+<label><span {_HELP_MEMBER_LIST}>予約一覧</span>&nbsp;&nbsp;{VIEW_RANGE}&nbsp;&nbsp;予約対象</label>
+<select name="day_start" onchange="selViewMenu();">
+<patTemplate:tmpl name="resource">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl></select>
+</td><td align="right">
+<label>先頭の日付</label><select name="day_start" onchange="selViewMenu();">
+<patTemplate:tmpl name="day_start">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl></select>&nbsp;&nbsp;
+<label>表示日数</label><select name="day_range" onchange="selViewMenu();">
+<patTemplate:tmpl name="day_range">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl></select>
+<!-- <span {_HELP_RESERVE_EDIT_BTN}><input type="button" class="button" onClick="editItem();" value="編集"></span> -->
+</td></tr>
+<tr><td colspan="2">
+<!--<table class="simple-table" style="border-collapse:separate;" cellpadding="0" cellspacing="0">-->
+<table class="simple-table">
+    <thead>
+        <tr style="border: 1px solid;">
+	    <th style="white-space: nowrap;">時間</th>
+            {HEAD}
+	    <th style="white-space: nowrap;">時間</th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="itemlist">
+        <tr {LINE_COLOR} style="border: 1px solid;" >
+	    {LINE}
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+{PAGE_LINK}
+</td></tr>
+</table>
+<br>
+<table class="simple-table">
+    <tbody>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_RESERVE_DAY}>予約日付</span></td>
+	    <td><input type="text" id="calenderinput" name="reserve_date" value="{RESERVE_DATE}" size="12" maxlength="12" {RESERVE_DAY_DISABLED}><button id="calenderbutton" {CALENDER_DISABLED}>カレンダー</button></td>
+	    <td class="table-headside"><span {_HELP_RESERVE_TIME}>時間</span></td>
+	    <td>
+<select name="time_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside" width="100px"><span {_HELP_USER_NAME}>名前</span></td>
+	    <td colspan="3">
+<select name="user" {USER_DISABLED}>
+<option value="0">--</option>
+<patTemplate:tmpl name="user_list">
+<option value="{VALUE}" {SELECTED}>{NAME}{NO}</option>
+</patTemplate:tmpl>
+</select>
+	    </td>
+	</tr>
+	<tr class="even">
+	<td align="right" colspan="4">
+	    <input type="button" class="button" onClick="clearItem();" value="クリア">
+	    <input type="button" class="button" onClick="addItem();" value="新規登録">
+	</td>
+	</tr>
+    </tbody>
+</table>
+</form>
+</div>
+<SCRIPT language="JavaScript">
+<!--
+Calendar.setup(
+    {
+      inputField  : "calenderinput",         // ID of the input field
+      ifFormat    : "%Y/%m/%d",    // the date format
+      button      : "calenderbutton"       // ID of the button
+    }
+);
+// -->
+</SCRIPT>
+</patTemplate:tmpl>

@@ -1,0 +1,78 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function updateItem(){
+	if (document.main.item_pwd.value == ''){
+		window.alert('パスワードが入力されていません');
+		return false;
+	}
+	if (!window.confirm('設定を更新しますか?')) return false;
+	if (document.main.item_pwd.value != '********') document.main.password.value = hex_md5(document.main.item_pwd.value);
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function selAuth(value){
+	if (value == 'password'){
+		$('#item_pwd').css('display', '');
+		$('#item_pwd_label').css('display', '');
+	} else {
+		$('#item_pwd').css('display', 'none');
+		$('#item_pwd_label').css('display', 'none');
+	}
+}
+// -->
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main" class="form">
+<input type="hidden" name="task" />
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<table width="90%">
+<tr><td><label>Wiki設定</label></td>
+<td align="right">
+</td></tr>
+<tr><td colspan="2">
+
+<table id="config" class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="200"><span {_HELP_AUTH_LABEL}>認証方法</span></td>
+	    <td>
+	    <select name="item_auth" onchange="selAuth(this.value);">
+	        <patTemplate:tmpl name="auth_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+	    &nbsp;&nbsp;<span id="item_pwd_label" {PWD_STYLE}>パスワード:</span>&nbsp;
+	    <input type="password" id="item_pwd" name="item_pwd" value="{PWD}" size="20" maxlength="20" autocomplete="off" {PWD_STYLE} />
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_DEFAULT_PAGE_LABEL}>デフォルト画面</span></td>
+	    <td><input type="text" name="item_default_page" value="{DEFAULT_PAGE}" size="50" maxlength="50" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_VISIBLE_ITEMS_LABEL}>表示項目</span></td>
+	    <td><input type="checkbox" name="item_showtitle" {SHOW_TITLE} />タイトル&nbsp;&nbsp;<input type="checkbox" name="item_showpageattachfiles" {SHOW_PAGE_ATTACH_FILES} />添付ファイル&nbsp;&nbsp;<input type="checkbox" name="item_showpagerelated" {SHOW_PAGE_RELATED} />関連ページリンク&nbsp;&nbsp;<input type="checkbox" name="item_showlastmodified" {SHOW_LAST_MODIFIED} />最終更新
+	    </td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ATTACH_FILES_LABEL}>添付ファイルアップロードディレクトリ</span></td>
+	    <td><input type="text" name="item_upload_dir" value="{UPLOAD_DIR}" size="100" maxlength="120" disabled />&nbsp;&nbsp;{UPLOAD_DIR_ACCESS}</td>
+	</tr>
+	<tr>
+	    <td align="right" colspan="2">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+	    </td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

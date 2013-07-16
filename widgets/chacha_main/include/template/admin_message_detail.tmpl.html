@@ -1,0 +1,76 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(serialNo){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(serialNo){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'message';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	// テーブルの行カラー化
+	m3_tableWithScrollbar('messageinput', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="message_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<table width="90%">
+<tr><td><label>メッセージ詳細</label></td><td align="right"><span {_HELP_MESSAGE_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table id="messageinput" class="simple-table" width="100%">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_MESSAGE_ID}>ID</span></td>
+	    <td width="200" align="center">{ID}</td>
+	    <td class="table-headside" width="100"><span {_HELP_MESSAGE_DATE}>投稿日時</span></td>
+	    <td>{REGIST_DT}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_MESSAGE_TITLE}>タイトル</span></td>
+	    <td>{TITLE}</td>
+	    <td class="table-headside"><span {_HELP_MESSAGE_NAME}>ニックネーム</span></td>
+	    <td>{NAME}</td>
+	</tr>
+	<tr>
+            <td class="table-headside"><span {_HELP_MESSAGE_MSG}>メッセージ</span></td>
+	    <td colspan="3"><textarea name="item_message" rows="2" cols="50" style="width:100%;">{MESSAGE}</textarea></td>
+	</tr>
+	<tr>
+	    <td class="table-headside"><span {_HELP_MESSAGE_UPDATE_USER}>更新者</span></td>
+	    <td>{UPDATE_USER}</td>
+	    <td class="table-headside"><span {_HELP_MESSAGE_UPDATE_DT}>更新日時</span></td>
+	    <td>{UPDATE_DT}</td>
+	</tr>
+	<tr>
+	<td colspan="4" align="right">
+<patTemplate:tmpl name="del_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,648 @@
+/* General */
+body
+{
+/*	background-color: #E8E3B0;*/
+	background-color: #EAD9AE;
+	padding: 0;
+	margin: 0;
+	font-family: arial, sans-serif;
+/*	font-size: 100%;*/
+	font-size: 14px;
+	color: #693A3A;
+}
+label {
+	font-weight: bold;
+/*	font-size: 100%;*/
+/*	font-family: arial, sans-serif;*/
+}
+
+legend, label
+{
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+fieldset legend span {
+	font-weight: bold;
+	font-size: 85%;
+}
+
+input, select {
+	margin: 1px;
+}
+a:link, a:visited {
+/*  font-size        : 10px;*/
+/*	font-family      : Verdana, Arial, Helvetica, sans-serif;*/
+/*  color            : #5D74A3;*/
+	color: #A64D31;
+	font-weight      : bold;
+	text-decoration  : none;
+}
+
+a:hover {
+/*color            : #FFFFFF;*/
+	color: #FF0000;
+	text-decoration  : none;
+}
+/* top page button */
+.toppage-button {
+	display:block;
+	background-color: #FFD50F;
+	border: 2px solid #DA9D42;
+	color: #693A3A;
+	font-weight:bold;
+	width: 180px;
+	font-size: 90%;
+	text-align:center;
+	padding:10px 0px;
+	margin: 10px 0px;
+}
+/* default button */
+.link-button {
+/*	display:block;*/
+	background-color: #FFD50F;
+	border: 2px solid #DA9D42;
+	color: #693A3A;
+	font-weight:bold;
+	width: 90px;
+	height: 20px;
+	font-size: 100%;
+	text-align:center;
+/*	padding:10px 0px;*/
+/*	margin: 5px 0px;*/
+}
+/* Main nav */
+#main-nav
+{
+	background: #6c0006 url("../images/nav_bg.gif") repeat-x;
+	padding: .1em 0;
+	margin: 0 0 25px 0;
+/*	font-family: arial, sans-serif;*/
+	font-size: 78%;
+	line-height: 140%;
+	border-top: 2px solid #6c0006;
+	border-bottom: 2px solid #6c0006;
+	position: relative;
+}
+#main-nav li
+{
+	display: inline;
+	list-style: none;
+	padding: 0 1em;
+	margin: 0;
+	line-height: 130%;
+}
+#main-nav li a
+{
+	color: #fff;
+	text-decoration: none;
+	text-shadow: 2px 2px #6c0006;
+	font-weight: bold;
+	margin: 0;
+	padding: .1em 1em .3em 1em !important;
+}
+
+#main-nav li.begin { margin: 0 0 0 1.4em; }
+
+#main-nav li a:hover, #main-nav li#high li a:hover
+{
+	color: #adb8c4;
+	text-decoration: none;
+	text-shadow: none;
+}
+
+/* Highlights for main nav */
+#main-nav li#high a.top, #main-nav li#high li.select a
+{
+	color: #fff !important;
+	background: #adb8c4 url("../images/sub_bg.gif") repeat-x top !important;
+	margin: 0;
+	border: 1px solid #789;
+	border-top: 1px solid #56626d;
+	border-bottom: 1px solid #adb8c4;
+	text-shadow: 2px 2px #56626d !important;
+}
+
+/* subnav */
+#main-nav li ul
+{
+	display: none;
+	background: url("../images/main_select_bg.gif") top repeat-x #789;
+	padding: .2em 0;
+	margin: 1px 0 0 0;
+	position: absolute;
+	left: 0;
+	top: 1.51em;
+/*	z-index: 2;*/
+	width: 100%;
+	border-bottom: 1px solid #56626d;
+}
+#main-nav li ul li
+{
+	padding: .2em;
+	margin: 0;
+}
+#main-nav li ul li a, #main-nav li#high li.select ul li a
+{
+	color: #fff !important;
+	font-weight: normal;
+	border: none;
+	background: transparent !important;
+	padding: .2em .4em !important;
+	text-shadow: none !important;
+}
+#main-nav li ul li.begin { margin: 0 0 0 1.8em !important; }
+#main-nav li ul li a:hover { color: #56626d !important; }
+
+/* default table define */
+table { empty-cells: show;
+/*	font-family: arial, sans-serif;
+	font-size: 80%;
+	border: none;*/
+}
+/*table caption { display: none; }*/
+
+.simple-table
+{
+	border: 1px solid #6C6C00;
+/*	font-family: arial, sans-serif;*/
+/*	font-size: 95%;*/
+	border-collapse: collapse;
+}
+.simple-table textarea {
+	font-size: 100%;
+}
+.simple-table input {
+	font-size: 95%;
+}
+.simple-table caption {
+	text-align: left;
+	font-weight: bold;
+}
+.simple-table tr th
+{
+	padding: .2em;
+/*	background: #46525d;*/
+	background: #A79F3F;
+	color: #fff;
+	text-align: center;
+}
+.simple-table td,th {
+	padding: 1px 5px 1px 2px;
+	border: 1px solid #6C6C00;
+}
+.simple-table tbody tr {
+/*background: #e6eaed;*/
+	background: #f3f4f6;
+}
+.simple-table tbody tr.even { 
+	background: #EAE3BF;
+}
+
+.simple-table tbody tr.ruled {
+	background: #FFE14F;
+}
+/*
+.simple-table tbody tr.ruled td{
+background-color: #FFE14F;
+}*/
+.simple-table tbody tr td {
+/*
+	border-top: 1px solid #ddd;
+	border-left: 1px solid #56626d;
+	border-right: 1px solid #56626d;*/
+	/*border-top: 1px solid #56626d;*/
+/*	border-top: 1px solid #6C6C00;*/
+}
+.simple-table tfoot
+{
+	background: #6C6C00;
+/*	background: #A79F3F;*/
+	color: #fff;
+	font-weight: bold;
+}
+.simple-table .table-head
+{
+/*	border-top: 0px;*/
+	padding: .2em;
+	background: #A79F3F;
+	color: #fff;
+	text-align: center;
+/*	border-top: 1px solid #d6dbdf;*/
+/*	border-top: 1px solid #6C6C00;*/
+}
+.simple-table .table-headside
+{
+/*	border-top: 0px;*/
+	padding: .2em;
+	background: #A79F3F;
+	color: #fff;
+	text-align: center;
+/*	border-top: 1px solid #d6dbdf;*/
+/*	border-top: 1px solid #6C6C00;
+	border-left: 1px solid #6C6C00;
+	border-right: 1px solid #6C6C00;*/
+}
+/* inner table style canceled */
+.simple-table tbody tr td table tbody tr td{
+	border: none;
+}
+.simple-table table
+{
+/*	border: 2px solid #56626d;
+	border-collapse: collapse;
+	font-family: arial, sans-serif;*/
+	font-size: 100%;
+}
+/* inner table */
+.simple-table-inner
+{
+	border: 1px solid #6C6C00;
+	border-collapse: collapse;
+	margin: 3px 0px;
+}
+.simple-table-inner tbody tr {
+/*	border-top: 1px solid #6C6C00;*/
+}
+.simple-table tbody tr td .simple-table-inner tbody tr td{ /* for IE6 bug */
+/*	border-top: 1px solid #6C6C00;*/
+}
+/* iwidget table */
+.iw_table
+{
+	border: 1px solid #6C6C00;
+	border-collapse: collapse;
+	margin: 3px 0px;
+}
+.iw_table tbody tr {
+/*	border-top: 1px solid #6C6C00;*/
+}
+.simple-table tbody tr td .iw_table tbody tr td{ /* for IE6 bug */
+/*	border-top: 1px solid #6C6C00;*/
+	border: 1px solid #6C6C00;
+}
+/* widget */
+.widget_obj
+{
+	font-size        : 90%;
+}
+/* error message */
+.error-message {
+	color: #EE0000;
+}
+.warning-message {
+	color: #FF8C00;
+}
+.guide-message {
+	color: #00008B;
+}
+/****** widget ******/
+.m3widget_main {
+	margin: 10px 10px 20px 10px;
+}
+.m3widget_box {
+	margin: 10px 10px 20px 10px;
+}
+/****** top page menu ******/
+.m3toppage_menu {
+	width:210px;
+	margin: 10px 15px 20px 15px;
+/*	padding:0;*/
+}
+.m3toppage_menu div {
+/*	margin:0;*/
+/*	padding:5px;*/
+	padding:5px;
+}
+.m3toppage_menu ul {
+	margin:0;
+	padding:0;
+	border-top:0;
+}
+.m3toppage_menu li {
+	background-image:none;
+	list-style:none;
+	list-style-image:none;
+	/*padding-left:10px;*/
+/*	padding-top:3px;*/
+/*	padding:0;
+		margin:0;*/
+}
+.m3toppage_menu li a {
+	padding:3px 0 3px 10px;
+	display:block;
+	text-decoration: none;
+	width:100%;	/* for IE bug */
+}
+/****** menu preview ******/
+#menu_preview {
+	font-weight: bold;
+	font-size: 80%;
+}
+
+/****** widget config menu ******/
+#configmenu-top {
+/*color: #00008B;
+background:#ccff66;*/
+}
+#configmenu-upper {
+	float:left;
+	width:100%;
+/*	background:#000;*/
+/*	font-size: 90%;*/
+	line-height:normal;
+/*background:#99cc66;*/
+/*background:#FFA800;*/
+background:#FFCC00;
+}
+#configmenu-upper ul {
+	margin: 2px 3px;
+	/*margin:0;*/
+	padding:0px 0px 24px 0px;
+	list-style:none;
+}
+#configmenu-upper li {
+	display:inline;
+	margin:0;
+	padding:0;
+}
+#configmenu-upper a {
+	float:left;
+	background:url("../images/configmenu_upper_left.gif") no-repeat left top;
+	margin:0;
+	padding:0 0 0 4px;
+	text-decoration:none;
+}
+#configmenu-upper a span {
+	float:left;
+	display:block;
+	background:url("../images/configmenu_upper_right.gif") no-repeat right top;
+	padding:5px 15px 4px 6px;
+	color:#FFF;
+}
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#configmenu-upper a span {float:none;}
+/* End IE5-Mac hack */
+#configmenu-upper a:hover span {
+	color:#FFF;
+}
+#configmenu-upper a:hover {
+	background-position:0% -42px;
+}
+#configmenu-upper a:hover span {
+	background-position:100% -42px;
+}
+
+#configmenu-upper #current a {
+	background-position:0% -42px;
+}
+#configmenu-upper #current a span {
+	background-position:100% -42px;
+}
+
+/*** lower config menu ***/
+#configmenu-lower {
+	float:left;
+	width:100%;
+/*	background:#000;*/
+/*	font-size: 90%;*/
+	line-height:normal;
+/*background:#339933;*/
+/*background:#FFCC00;*/
+background:#fffacd;
+}
+#configmenu-lower ul {
+	margin: 2px 3px;
+	/*margin:0;*/
+	padding:0px 0px 24px 0px;
+	list-style:none;
+}
+#configmenu-lower li {
+	display:inline;
+	margin:0;
+	padding:0;
+}
+#configmenu-lower a {
+	float:left;
+	background:url("../images/configmenu_upper_left.gif") no-repeat left top;
+	margin:0;
+	padding:0 0 0 4px;
+	text-decoration:none;
+}
+#configmenu-lower a span {
+	float:left;
+	display:block;
+	background:url("../images/configmenu_upper_right.gif") no-repeat right top;
+	padding:5px 15px 4px 6px;
+	color:#FFF;
+}
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#configmenu-lower a span {float:none;}
+/* End IE5-Mac hack */
+#configmenu-lower a:hover span {
+	color:#FFF;
+}
+#configmenu-lower a:hover {
+	background-position:0% -42px;
+}
+#configmenu-lower a:hover span {
+	background-position:100% -42px;
+}
+
+#configmenu-lower #current a {
+	background-position:0% -42px;
+}
+#configmenu-lower #current a span {
+	background-position:100% -42px;
+}
+
+/****** help tooltip ******/
+.help_head {
+	background:#F3F0E7;
+/*	font-family:arial;*/
+	font-size:12px;
+	font-weight:bold;
+	border:1px solid #C8BA92;
+	padding:5px;
+	width:200px;
+}
+.help_body {
+	background:#FFFFFF;
+/*	font-family:arial;*/
+	font-size:12px;
+	border-left:1px solid #C8BA92;
+	border-right:1px solid #C8BA92;
+	border-bottom:1px solid #C8BA92;
+	padding:5px;
+	width:200px;
+}
+
+/****** sortable box ******/
+.sortable-box {
+	background-color:#FFF;
+	border:1px solid #555;
+	color:#222;
+	font-size:12px;
+	margin:0 15px 15px 0;
+	padding:0 10px 10px;
+	width:175px;
+}
+.sortable-box h1 {
+	background-color:#555;
+	border-top:3px solid #666;
+	color:#FFF;
+	font-size:12px;
+	margin:0 -10px 10px;
+	line-height:2;
+	padding:0 10px;
+}
+.sortable-box-item {
+	color:#222;
+	margin:10px 0;
+	border:1px solid #aaa;
+	cursor:move;
+}
+.sortable-box-item dt {
+	background-color:#666;
+	color:#FFF;
+/*	cursor:move;*/
+	height:2em;
+	line-height:2;
+	padding:0 6px;
+	position:relative;
+}
+.sortable-box-item dd {
+	background-color:#FFF;
+	margin:0;
+	padding:3px 6px;
+	cursor:default;
+}
+
+/****** edit menu ******/
+.menulist_frame {
+	background-color:#FFF;
+	border:1px solid #555;
+	color:#222;
+	padding:0;
+	text-align:left;
+	font:11px/1.5 Arial, sans-serif;
+	/*width:300px;*/
+}
+.menulist_frame h1 {
+	background-color:#555;
+	border-top:3px solid #666;
+	color:#FFF;
+	font-size:12px;
+	margin:0;
+	line-height:2;
+	padding:0 10px;
+}
+.menulist_box {
+	border:1px solid #555;
+/*	padding:0 10px 0;*/
+	padding:0;
+	margin: 3px;
+/*	overflow-y: scroll;*/
+	height: 450px;
+}
+.menulist_box_assigned {
+	border:1px solid #555;
+/*	padding:0 10px 0;*/
+	padding:0;
+	margin: 3px;
+	overflow-y: scroll;
+	height: 450px;
+}
+.menulist_item {
+	color:#222;
+	/*margin:10px 10px 0 10px;*/
+	margin:10px;
+	border:1px solid #555;
+/*	width:300px;*/
+	text-align:left;
+	font:11px/1.5 Arial, sans-serif;
+}
+.menulist_item_head {
+	/*background-color:#666;*/
+	background-color:#5BE35B;
+	color:#FFF;
+	cursor:move;
+	height:2em;
+	line-height:2;
+	padding:0 6px;
+	/*position:relative;*/
+}
+.menulist_item_body {
+	background-color:#FFF;
+	margin:0;
+	padding:3px 6px;
+}
+.menulist_aitem {
+	color:#222;
+	/*margin:10px 10px 0 10px;*/
+	margin:10px;
+	border:1px solid #555;
+	/*width:200px;*/
+	text-align:left;
+	font:11px/1.5 Arial, sans-serif;
+}
+.menulist_subitem {
+	margin:10px 10px 10px 20px;
+}
+.menulist_subitem div.menulist_aitem_head {
+	background-color:#5BE35B;
+}
+
+.menulist_aitem_head {
+	background-color:#228B22;
+	color:#FFF;
+	cursor:move;
+	height:2em;
+	line-height:2;
+	padding:0 6px;
+	position:relative;
+}
+.menulist_aitem_body {
+	background-color:#FFF;
+	margin:0;
+	padding:3px 6px;
+}
+.menulist_aitem_head span.options {
+	cursor:default;
+	font-size:1px;
+	line-height:1px;
+	position:absolute;
+	right:5px;
+	top:5px;
+	width:12px;
+}
+.menulist_aitem_body textarea {
+	font:11px/1.5 Arial, sans-serif;
+}
+.menulist_aitem_head span.options a {
+	background-color:#FFF;
+	cursor:pointer;
+	display:block;
+	float:left;
+	text-indent:-9000px;
+	height:12px;
+	width:12px;
+}
+/* widget in dragging */
+/*.ui-sortable-helper {
+	text-align:left;
+	font:11px/1.5 Arial, sans-serif;
+}*/
+/*** config window ***/
+.m3config_tabs {
+	width:95%;
+	margin: 10px auto;
+}
+.m3config_head {
+	width:95%;
+	margin: 10px auto;
+}
+/*** input field ***/
+.m3field_calendar {
+	width: 80px;
+}

@@ -1,0 +1,39 @@
+<patTemplate:tmpl name="_widget">
+<form action="{POST_URL}" method="post" class="form bbs_form" enctype="{ENCTYPE}">
+<input type="hidden" name="task" value="newthread" />
+<input type="hidden" name="act" value="add" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<div id="{CSS_ID}" style="padding:10px 0 10px 0;{BBS_STYLE}" >
+{TOP_IMAGE}
+<!-- m3:ErrorMessage -->
+<div style="{MAKE_THREAD_STYLE}">
+{BBS_TITLE}<br />
+{GUIDE}<br />
+<patTemplate:tmpl name="input_area" visibility="hidden">
+ﾀｲﾄﾙ:<br />
+<input type="text" name="bbs_subject" size="40" value="{SUBJECT}" {SUBJECT_DISABLED}/><br />
+名前:<br />
+<input type="text" name="bbs_name" size="19" {NAME_DISABLED}/><br />
+E-mail(省略可):<br />
+<input type="text" name="bbs_email" size="19" {EMAIL_DISABLED}/><br />
+内容:<br />
+<textarea rows="5" cols="60" wrap="off" name="bbs_message" style="width:100%;" {MESSAGE_DISABLED}>{MESSAGE}</textarea><br />
+<patTemplate:tmpl name="file_upload" visibility="hidden"><input type="file" name="bbs_file" size="50" /></patTemplate:tmpl>
+<input type="submit" class="button" value="新規スレッド作成" {BUTTON_DISABLED}/>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="result_area" visibility="hidden">
+ﾀｲﾄﾙ:<br />
+{SUBJECT}<br />
+名前:<br />
+{NAME}<br />
+E-mail(省略可):<br />
+{EMAIL}<br />
+内容:<br />
+{MESSAGE}<br />
+</patTemplate:tmpl>
+</div>
+<br />
+<a href="{BBS_URL}" accesskey="0">BBSﾎｰﾑに戻る[0]</a>
+</div>
+</form>
+</patTemplate:tmpl>

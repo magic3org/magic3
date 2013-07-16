@@ -1,0 +1,96 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: main.tmpl.html 5398 2012-11-22 02:29:37Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function inputbusket(productid){
+	document.ec_main.act.value = 'inputbasketbylist';
+	document.ec_main.productid.value = productid;
+	document.ec_main.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="ec_main" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="productid" />
+<patTemplate:tmpl name="show_subcategory" visibility="hidden">
+<table id="subcategory" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th>サブカテゴリー</th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="subcategory">
+        <tr>
+	    <td style="border:none;">{CATEGORY_LINK}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+<br />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_productlist" visibility="hidden">
+<table id="productlist" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td colspan="6" class="contentheading" style="border:none;">{TITLE}</td>
+	</tr>
+        <tr>
+            <td colspan="5" style="border:none;">{DETAIL}</td><td align="right" style="border:none;">{PAGE_LINK}</td>
+	</tr>
+        <patTemplate:tmpl name="productlist">
+        <tr><td colspan="6" style="border:none;">
+<table border="0" cellpadding="2" cellspacing="0" height="100">
+<tr>
+    <td valign="top" style="border:none;">{IMAGE_S}{IMAGE_M}</td>
+    <td valign="top" width="100%" style="border:none;">
+    <table border="0" cellpadding="2" cellspacing="0" width="100%">
+	    <tr><td colspan="2" style="border:none;">{NAME}&nbsp;&nbsp;{PRODUCT_LINK}</td></tr>
+	    <tr><td colspan="2" style="border:none;">商品コード: {CODE}</td></tr>
+	    <tr><td colspan="2" style="border:none;">{DESCRIPTION_SHORT}</td></tr>
+	    <tr><td colspan="2" style="border:none;">販売価格(税込)&nbsp;{DISP_TOTAL_PRICE}</td></tr>
+		<patTemplate:tmpl name="show_stock" visibility="hidden"><tr><td colspan="2" style="border:none;">{STOCK}</td></tr></patTemplate:tmpl>
+		
+		<patTemplate:tmpl name="cart_option" type="condition" conditionvar="carttype">
+		<pattemplate:sub condition="__default">
+	    <tr><td colspan="2" style="border:none;"><input type="button" class="button" value="カートに入れる" onclick="inputbusket({ID});" /></td></tr>
+		</pattemplate:sub>
+		<pattemplate:sub condition="content"><tr><td colspan="2" style="border:none;">{CONTENT}</td></tr></pattemplate:sub>
+		</patTemplate:tmpl>
+	</table>
+    </td>
+</tr>
+</table>
+	</td></tr>
+	</patTemplate:tmpl>
+	<tr><td colspan="6" align="right" style="border:none;">{PAGE_LINK}</td></tr>
+    </tbody>
+</table>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="no_item_message" visibility="hidden">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tbody>
+        <tr>
+            <td class="contentheading" style="border:none;">{TITLE}</td>
+	</tr>
+        <tr>
+            <td style="border:none;">{DETAIL}</td>
+	</tr>
+    </tbody>
+</table>
+</patTemplate:tmpl>
+</form>
+</patTemplate:tmpl>

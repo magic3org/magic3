@@ -1,0 +1,112 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript" src="{SCRIPT_URL}/md5.js"></script>
+<SCRIPT language="JavaScript">
+<!--
+function newItem(){
+    document.main.task.value = 'user_detail';
+    document.main.act.value = 'new';
+    document.main.submit();
+    return true;
+}
+function editItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('編集する項目を選択してください');
+	} else {
+            document.main.task.value = 'user_detail';
+            document.main.act.value = 'edit';
+	    document.main.serial.value = items[i];
+            document.main.submit();
+	}
+    }
+    return true;
+}
+function editItemBySerial(serial){
+    document.main.task.value = 'user_detail';
+    document.main.act.value = 'edit';
+    document.main.serial.value = serial;
+    document.main.submit();
+}
+function delItem(){
+    if (document.main.seriallist.value){
+        var items = document.main.seriallist.value.split(",");
+	for (var i = 0; i < items.length; i++){
+	    var name = "document.main.item" + i + "_selected";
+	    var itemObj = eval(name);
+	    // チェックありのときは終了
+	    if (itemObj && itemObj.checked) break;
+	}
+	if (i == items.length){			
+	    window.alert('削除する項目を選択してください');
+	} else {
+            if (!window.confirm('選択項目を削除しますか?')) return false;
+            document.main.act.value = 'delete';
+            document.main.submit();
+	}
+    }
+    return true;
+}
+function selpage(page){
+    document.main.act.value = 'selpage';
+    document.main.page.value = page;
+    document.main.submit();
+    return true;
+}
+// -->
+</SCRIPT>
+
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="user" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="page" value="{PAGE}" />
+<table width="90%">
+<tr><td><label><span {_HELP_USER}>ユーザ一覧</span></label></td>
+<td align="right"><span {_HELP_USER_NEW_BTN}><input type="button" class="button" onClick="newItem();" value="新規"></span><span {_HELP_USER_EDIT_BTN}><input type="button" class="button" onClick="editItem();" value="編集"></span><span {_HELP_USER_DEL_BTN}><input type="button" class="button" onClick="delItem();" value="削除"></span>
+</td></tr>
+<tr><td colspan="2">
+
+<table id="userlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="35px" align="center"><span {_HELP_USER_CHECK}>選択</span></th>
+	    <th width="80px"><span {_HELP_USER_NO}>No</span></th>
+	    <th width="200px" align="center"><span {_HELP_USER_NAME}>名前</span></th>
+	    <th width="100px"><span {_HELP_USER_NAME_KANA}>名前カナ</span></th>
+            <th width="200px"><span {_HELP_USER_EMAIL}>Eメール(ログインアカウント)</span></th>
+	    <th width="70px"><span {_HELP_USER_GENDER}>性別</span></th>
+	</tr>
+    </thead>
+    <tbody>
+        <patTemplate:tmpl name="userlist">
+        <tr {LINE_COLOR}>
+            <td align="center"><input type="checkbox" name="item{INDEX}_selected"></td>
+	    <td>{USER_NO}</td>
+	    <td><a href="#" onClick="editItemBySerial({SERIAL});">{FAMILY_NAME}&nbsp;{FIRST_NAME}</a></td>
+	    <td>{FAMILY_NAME_KANA}&nbsp;{FIRST_NAME_KANA}</td>
+	    <td>{EMAIL}</td>
+	    <td align="center">{GENDER}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+<tr><td>
+{PAGE_LINK}
+</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{START_NO}-{END_NO}件目</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}件中</label></td></tr>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ * FCKeditor - The text editor for internet
+ * Copyright (C) 2003-2006 Frederico Caldeira Knabben
+ * 
+ * Licensed under the terms of the GNU Lesser General Public License:
+ * 		http://www.opensource.org/licenses/lgpl-license.php
+ * 
+ * For further information visit:
+ * 		http://www.fckeditor.net/
+ * 
+ * "Support Open Source software. What about a donation today?"
+ * 
+ * File Name: frmcreatefolder.html
+ * 	Page used to create new folders in the current folder.
+ * 
+ * File Authors:
+ * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
+ *
+ * Modified 2008.6.10 by Naoki Hirata (naoki@aplo.co.jp)
+ * Direct Accessing to File Browser
+ *
+-->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="browser.css" type="text/css" rel="stylesheet">
+<script language="javascript">
+<!--
+var FCKLang		= window.parent.FCKLang;
+var FCKLanguageManager	= window.parent.FCKLanguageManager;
+
+var oConnector	= window.parent.oConnector ;
+
+function SetCurrentFolder( resourceType, folderPath )
+{
+	oConnector.ResourceType = resourceType ;
+	oConnector.CurrentFolder = folderPath;
+}
+
+
+function CreateFolder()
+{
+	var sFolderName = '' ;
+	
+	while ( true ) 
+	{
+		sFolderName = prompt( FCKLang.BrowserNewFolderNameMessage + ':', sFolderName ) ;
+	
+		if ( sFolderName == null )
+			return ;
+		
+		if ( sFolderName.length == 0 )
+		{
+			alert( FCKLang.BrowserNewFolderNameMessage ) ;
+			continue ;
+		}
+		
+		var fckXml = oConnector.SendCommand( 'CreateFolder', 'NewFolderName=' + encodeURIComponent(sFolderName) ) ;
+		
+		var oNodes = fckXml.SelectNodes( 'Connector/Error' );
+		
+		if ((oNodes == null) || (oNodes.length == 0)) {
+			alert('RFo: Invalid XML response from connector.');
+			return ;
+		}
+		
+		var errNo = parseInt(oNodes[0].attributes.getNamedItem('number').value) ;
+		
+		if ( errNo == 0 ) {
+			window.parent.frames['frmResourcesList'].Refresh() ;
+			return ;
+		}
+		
+		switch (errNo) {
+			case 101 :
+				alert( FCKLang.BrowserDisableName );
+				break;
+			case 102 :
+				alert( FCKLang.BrowserDisableChars );
+				break;
+			case 103 :
+				alert( FCKLang.BrowserNoPermission );
+				return ;
+				break;
+			case 104 :
+				alert( FCKLang.BrowserNameExists );
+				break;
+			default :
+				alert( FCKLang.BrowserNewFolderError );
+		}
+	}
+}
+
+window.onload = function()
+{
+	FCKLanguageManager.TranslatePage(document) ;
+	window.top.IsLoadedCreateFolder = true ;
+}
+// -->
+</script>
+</head>
+<body bottomMargin="0" topMargin="0">
+	<table height="100%" cellSpacing="0" cellPadding="0" width="100%" border="0">
+		<tr>
+			<td>
+				<button type="button" style="WIDTH: 100%" onclick="CreateFolder();">
+					<table cellSpacing="0" cellPadding="0" border="0">
+						<tr>
+							<td><img height="16" alt="" src="images/Folder.gif" width="16"></td>
+							<td>&nbsp;</td>
+							<td nowrap><span fckLang="BrowserNewFolderMessage">Create New Folder</span></td>
+						</tr>
+					</table>
+				</button>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

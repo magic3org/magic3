@@ -1,0 +1,16 @@
+RewriteEngine on
+
+# modify RewriteBase directory.
+RewriteBase /magic3
+
+RewriteRule !^([a-zA-Z])/(.*) - [C]
+RewriteRule !^admin/(.*) - [C]
+RewriteRule !^images/(.*) - [C]
+RewriteRule !^include/(.*) - [C]
+RewriteRule !^modules/(.*) - [C]
+RewriteRule !^resource/(.*) - [C]
+RewriteRule !^scripts/(.*) - [C]
+RewriteRule !^templates/(.*) - [C]
+RewriteRule !^ui/(.*) - [C]
+RewriteRule !^widgets/(.*) - [C]
+RewriteRule ^([0-9a-zA-Z\/]+)/$ index.php?sub=$1 [QSA,L]

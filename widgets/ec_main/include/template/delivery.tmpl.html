@@ -1,0 +1,69 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 4845 2012-04-13 04:47:07Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function goback(){
+	location.href = '{GOBACK_URL}';
+	return true;
+}
+function gonext(){
+	document.photo_main.act.value = 'regist';
+	document.photo_main.submit();
+	return true;
+}
+function copydata(){
+	document.photo_main.act.value = 'copydata';
+	document.photo_main.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="photo_main" class="form">
+<input type="hidden" name="act" />
+<div id="photo_shop">
+<h2>お届け先</h2>
+<patTemplate:tmpl name="copy_data">
+<select id="item_addressid" name="item_addressid" onchange="copydata();" {COPYMENU_DISABLED}>
+<patTemplate:tmpl name="copy_data_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+</patTemplate:tmpl>
+<label><span class="photo_title">お名前</span><input type="text" name="item_name" value="{NAME}" size="20" maxlength="40" {NAME_DISABLED} /><span class="photo_required">*</span></label>
+<label><span class="photo_title">お名前(フリガナ)</span><input type="text" name="item_name_kana" value="{NAME_KANA}" size="20" maxlength="40" {NAME_KANA_DISABLED} /><span class="photo_required">*</span></label>
+<patTemplate:tmpl name="input_email" visibility="hidden">
+<label><span class="photo_title">Eメール</span><input type="text" name="item_email" value="{EMAIL}" size="20" maxlength="50" {EMAIL_DISABLED} /><span class="photo_required">*</span></label>
+<label><span class="photo_title">Eメール(確認)</span><input type="text" name="item_email2" value="{EMAIL2}" size="20" maxlength="50" {EMAIL2_DISABLED} /><span class="photo_required">*</span></label>
+</patTemplate:tmpl>
+<label><span class="photo_title">郵便番号</span><input type="text" name="item_zipcode" value="{ZIPCODE}" size="10" maxlength="10" {ZIPCODE_DISABLED} /><span class="photo_required">*</span></label>
+<label><span class="photo_title">都道府県</span>
+<select id="item_state" name="item_state" {STATE_DISABLED}>
+<option value="">&nbsp;</option>
+<patTemplate:tmpl name="state_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+<span class="photo_required">*</span></label>
+<label><span class="photo_title">住所</span><input type="text" name="item_address" value="{ADDRESS}" size="30" maxlength="50" style="width:300px" {ADDRESS_DISABLED} /><span class="photo_required">*</span></label>
+<label><span class="photo_title">建物名</span><input type="text" name="item_address2" value="{ADDRESS2}" size="30" maxlength="50" style="width:300px" {ADDRESS2_DISABLED} /></label>
+<label><span class="photo_title">電話番号</span><input type="text" name="item_phone" value="{PHONE}" size="20" maxlength="20" {PHONE_DISABLED} /><span class="photo_required">*</span></label>
+<div><span class="photo_message_required">*は必須入力項目です。</span></div>
+<div>{MESSAGE}</div>
+<div class="photo_bottom">
+<input type="button" class="button" onclick="goback();" value="戻る" /><input type="button" class="button" onclick="gonext();" value="次へ" />
+</div>
+</div>
+</form>
+</patTemplate:tmpl>

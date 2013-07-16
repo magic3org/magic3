@@ -1,0 +1,6 @@
+td.currentHandle {
+	background-image: url(images/tablednd/drag.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	cursor: move;
+}

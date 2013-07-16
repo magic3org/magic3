@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<install type="template" version="1.5">
+  <name>default_jquery</name>
+  <creationDate>2011-06-14</creationDate>
+  <version>1.0</version>
+  <author>Naoki Hirata</author>
+  <authorUrl></authorUrl>
+  <description>Theme for JQuery Mobile</description>
+</install>

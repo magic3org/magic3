@@ -1,0 +1,363 @@
+<patTemplate:tmpl name="_widget">
+<SCRIPT language="JavaScript">
+<!--
+function updateItem(){
+    if (!window.confirm('設定を更新しますか?')) return false;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return true;
+}
+// -->
+</SCRIPT>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<table width="100%">
+<tr><td align="left"></td></tr>
+</table>
+<table class="simple-table" border="0" cellpadding="0" cellspacing="0" align="center">
+<caption>予約可能時間</caption>
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100px">日</td>
+	    <td>
+<select name="time01_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time01_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time01_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time01_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time01_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time01_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time01_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time01_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<select name="time02_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time02_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time02_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time02_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time02_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time02_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time02_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time02_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">月</td>
+	    <td>
+<select name="time11_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time11_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time11_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time11_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time11_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time11_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time11_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time11_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<select name="time12_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time12_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time12_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time12_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time12_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time12_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time12_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time12_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">火</td>
+	    <td>
+<select name="time21_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time21_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time21_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time21_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time21_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time21_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time21_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time21_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<select name="time22_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time22_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time22_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time22_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time22_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time22_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time22_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time22_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">水</td>
+	    <td>
+<select name="time31_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time31_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time31_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time31_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time31_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time31_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time31_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time31_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<select name="time32_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time32_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time32_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time32_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time32_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time32_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time32_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time32_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">木</td>
+	    <td>
+<select name="time41_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time41_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time41_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time41_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time41_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time41_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time41_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time41_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<select name="time42_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time42_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time42_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time42_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time42_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time42_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time42_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time42_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">金</td>
+	    <td>
+<select name="time51_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time51_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time51_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time51_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time51_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time51_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time51_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time51_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<select name="time52_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time52_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time52_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time52_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time52_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time52_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time52_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time52_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">土</td>
+	    <td>
+<select name="time61_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time61_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time61_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time61_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time61_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time61_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time61_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time61_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<select name="time62_start_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time62_start_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time62_start_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time62_start_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分&nbsp;～&nbsp;<select name="time62_end_hour">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time62_end_hour">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>時&nbsp;<select name="time62_end_minute">
+<option value="-1" >--</option>
+<patTemplate:tmpl name="time62_end_minute">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>分
+	    </td>
+	</tr>
+	<tr>
+	<td></td>
+	<td align="right">
+		<input type="button" class="button" onClick="updateItem()" value="更新">
+	</td>
+	</tr>
+    </tbody>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>

@@ -1,0 +1,45 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 5372 2012-11-11 11:07:46Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	var div = $('div.product_slide_outer');
+	var ul = $('ul.product_slide');
+	var ulPadding = 15;
+	
+	// メニュー幅取得
+	var divWidth = div.width();
+
+	// スクロールバー隠す
+	div.css({overflow: 'hidden'});
+	
+	// 最後のリスト項目取得
+	var lastLi = ul.find('li:last-child');
+	
+	// マウスの移動に合わせてスクロール
+	div.mousemove(function(e){
+		var ulWidth = lastLi[0].offsetLeft + lastLi.outerWidth() + ulPadding;	
+		var left = (e.pageX - div.offset().left) * (ulWidth - divWidth) / divWidth;
+		div.scrollLeft(left);
+	});
+});
+//]]>
+</script>
+<div class="product_slide_outer" style="margin-left:auto;margin-right:auto;">
+<ul class="product_slide" style="margin-left:0;margin-right:0;">
+  <patTemplate:tmpl name="product_list"><li style="list-style-type:none;background:none;margin:0;padding:0;float:left;"><a href="{PRODUCT_URL}"><img src="{IMAGE}" alt="{NAME}" title="{NAME}" width="{IMAGE_WIDTH}" height="{IMAGE_HEIGHT}" style="margin:10px 5px 3px;border:none;" /><span>{NAME}</span></a></li>
+  </patTemplate:tmpl>
+</ul>
+</div>
+</patTemplate:tmpl>

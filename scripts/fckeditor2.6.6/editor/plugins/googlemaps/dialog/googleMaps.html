@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!--
+ * Googlemaps Plugin for FCKeditor
+ * Based on version 1.98 by Alfonso Martinez de Lizarrondo
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: googleMaps.html 4778 2012-03-21 12:33:07Z fishbone $
+ * @link       http://www.magic3.org
+-->
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+	<head>
+		<title>Google Maps</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content="noindex, nofollow" name="robots">
+		<script src="googleMaps.js" type="text/javascript"></script>
+		<style type="text/css">
+			div.box {
+				height: 60px;
+			}
+			p {
+				margin:0;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="MapInfo" class="box">
+			<table>
+				<tr>
+					<td>
+						<label for="txtWidth" fckLang="DlgImgWidth">Width</label>
+						<input id="txtWidth" type="text" size="3">
+					</td>
+					<td>
+						<label for="txtHeight" fckLang="DlgImgHeight">Height</label>
+						<input id="txtHeight" type="text" size="3">
+					</td>
+					<td>
+						<span fckLang="GMapsZoomLevel">Zoom Level</span>
+						<select id="cmbZoom">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="13">13</option>
+							<option value="14">14</option>
+							<option value="15">15</option>
+							<option value="16">16</option>
+							<option value="17">17</option>
+						</select>
+					</td>
+				</tr>
+			</table>
+			<table>
+				<tr>
+					<td>
+						<label for="txtCenterLatitude" fckLang="txtLatitude">Latitude</label>
+						<input id="txtCenterLatitude" type="text" size="7" style="width:70px;">
+					</td>
+					<td>
+						<label for="txtCenterLongitude" fckLang="txtLongitude">Longitude</label>
+						<input id="txtCenterLongitude" type="text" size="7" style="width:70px;">
+					</td>
+				</tr>
+			</table>
+		</div>
+
+	<div id="SearchInfo" style="display:none;" class="box">
+		<label for="searchDirection" fckLang="GMapsSearchLabel">Search a direction</label>
+		<input type="text" id="searchDirection" size="50" > <input type="button" id="searchButton" value="search" fckLang="GMapsSearch">
+	</div>
+
+	<div id="MarkerInfo" style="display:none;" class="box">
+		<img id="btnAddNewMarker" src="../images/AddMarker.png" style="cursor:pointer">
+		<div id="instructions"></div>
+	</div>
+
+	<div id="LineInfo" style="display:none;" class="box">
+		<p><span fckLang="GMapsLineInstructions">Click on the map</span></p>
+
+		<div id="info2" style="display:none">
+			<textarea id="encodedPolyline"></textarea>
+			<textarea id="encodedLevels"></textarea>
+		</div>
+	</div>
+
+
+<!--	<span fckLang="DlgImgPreview">Preview</span>-->
+	<div id="GMapPreview" style="width:300px; height:200px; outline:0;" tabIndex="-1"></div>							
+
+	</body>
+</html>

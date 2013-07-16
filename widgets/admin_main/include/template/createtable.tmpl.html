@@ -1,0 +1,134 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+<!--
+function updateData(){
+    if (!window.confirm('データを更新しますか?')) return false;
+    document.main.act.value = 'update';
+    document.main.submit();
+    return false;
+}
+function deleteLine(serial){
+    if (!window.confirm('この行を削除しますか?')) return false;
+    document.main.act.value = 'delete';
+    document.main.serial.value = serial;
+    document.main.submit();
+    return false;
+}
+function addLine(){
+    if (!window.confirm('この行を追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function addTable(){
+	document.main.act.value = 'addtable';
+	document.main.submit();
+	return true;
+}
+function createTable(){
+	if (!window.confirm('{CREATE_TABLE_MSG}')) return false;
+	document.main.act.value = 'createtable';
+	document.main.submit();
+	return true;
+}
+function selectTable(){
+	document.main.act.value = 'seltable';
+	document.main.submit();
+	return true;
+}
+function selDatatype(){
+	var type = document.main.add_type.value;
+	if (type == "other"){
+		$('add_type_input').style.visibility = "visible";
+	} else {
+		$('add_type_input').style.visibility = "hidden";
+	}
+	return true;
+}
+// -->
+</script>
+
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="createtable" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<table>
+<tr><td colspan="2">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr><td><label>テーブル定義&nbsp;&nbsp;&nbsp;&nbsp;テーブル名</label>
+    <select name="tableid" onchange="selectTable();">
+        <option value="">新規追加</option>
+        <patTemplate:tmpl name="table_id_list">
+        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+        </patTemplate:tmpl>
+    </select>
+<patTemplate:tmpl name="new_table_id" visibility="hidden">
+</td></tr><tr><td>
+<input type="text" name="item_tableid" size="30" maxlength="30" value="{TABLE_NAME}" />
+<input type="button" class="button" onclick="addTable();" value="テーブル名を追加" />
+</patTemplate:tmpl>
+</td></tr>
+</table>
+</td></tr>
+<patTemplate:tmpl name="table_def" visibility="hidden">
+<tr><td colspan="2">
+<table class="simple-table">
+    <thead>
+        <tr>
+            <th width="50px">No</th>
+	    <th width="100px">フィールド名</th>
+	    <th width="100px">項目表示名</th>
+	    <th width="100px">データ型</th>
+	    <th width="100px">デフォルト値</th>
+	    <!--<th width="100px" align="center">ソート順</th>-->
+	    <th><input type="button" class="button" onclick="updateData();" value="更新" /></th>
+	</tr>
+    </thead>
+    <tfoot>
+        <tr>
+	    <td>{NO}</td>
+	    <td><input type="text" name="add_id" size="20" maxlength="40" value="{FIELD_ID}" /></td>
+	    <td><input type="text" name="add_name" size="20" maxlength="40" value="{FIELD_NAME}" /></td>
+	    <td>
+	    <select name="add_type" onchange="selDatatype();">
+	        <option value="">-- 未選択 --</option>
+		<option value="int">int</option>
+		<option value="text">text</option>
+		<option value="boolean">boolean</option>
+		<option value="timestamp">timestamp</option>
+		<option value="other">その他</option>
+	    </select>
+	    <input type="text" id="add_type_input" style="visibility:hidden;"size="20" maxlength="40" />
+	    </td>
+	    <td><input type="text" name="add_default" size="20" maxlength="40" value="{FIELD_DEFAULT}" />
+	    </td>
+	    <td><input type="button" class="button" onclick="addLine();" value="追加" /></td>
+	</tr>
+    </tfoot>
+    <patTemplate:tmpl name="fieldlistbody" visibility="hidden">
+    <tbody>
+        <patTemplate:tmpl name="fieldlist">
+        <tr {LINE_COLOR}>
+	    <td align="center">{NO}</td>
+	    <td><input type="text" name="item{INDEX}_id" value="{ID}" size="20" maxlength="40" /></td>
+	    <td><input type="text" name="item{INDEX}_name" value="{NAME}" size="20" maxlength="40" /></td>
+	    <td><input type="text" name="item{INDEX}_type" value="{TYPE}" size="20" maxlength="40" /></td>
+	    <td><input type="text" name="item{INDEX}_default" value="{DEFAULT}" size="20" maxlength="40" /></td>
+	    <td><input type="button" class="button" onclick="deleteLine('{SERIAL}');" value="削除" /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+    </patTemplate:tmpl>
+</table>
+</td></tr>
+<tr><td><label>{TABLE_STATUS}</label></td><td align="right"><input type="button" class="button" onclick="createTable();" value="{CREATE_TABLE_BTN_LABEL}" />
+</td></tr>
+</patTemplate:tmpl>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

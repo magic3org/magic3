@@ -1,0 +1,79 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 4845 2012-04-13 04:47:07Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function deleteitem(index){
+	document.photo_main.act.value = 'delproduct';
+	document.photo_main.index.value = index;
+	document.photo_main.submit();
+	return true;
+}
+function deleteall(){
+	document.photo_main.act.value = 'delproductall';
+	document.photo_main.submit();
+	return true;
+}
+function updatecart(){
+	document.photo_main.act.value = 'updatecart';
+	document.photo_main.submit();
+	return true;
+}
+function goShopTop(){
+	if (document.photo_main.backurl.value) location.href = document.photo_main.backurl.value;
+	return false;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="photo_main" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="index" />
+<input type="hidden" name="backurl" value="{BACK_URL}" />
+<div id="photo_shop">
+<patTemplate:tmpl name="show_cart" visibility="hidden">
+<h2>カート</h2>
+<table>
+<thead>
+<tr><th class="title">商品</th><th style="text-align:right;">税込価格</th><th style="text-align:right;">数量</th><th style="text-align:right;">小計</th><th>&nbsp;</th></tr>
+</thead>
+<tfoot>
+<patTemplate:tmpl name="show_discount" visibility="hidden"><tr><td align="center">値引額{DISCOUNT_DESC}</td><td colspan="2">&nbsp;</td><td class="number">{DISCOUNT}</td><td>&nbsp;</td></tr></patTemplate:tmpl>
+<tr><td colspan="2" style="text-align:right"><input type="button" class="button" value="カートを空にする" onclick="deleteall();" /><input type="button" class="button" value="カートを更新する" onclick="updatecart();" /></td><td class="number total">合計</td><td class="number">{TOTAL}</td><td>&nbsp;</td></tr>
+</tfoot>
+<tbody>
+<patTemplate:tmpl name="cartlist">
+<tr>
+    <td><div class="photo_image">{IMAGE}</div><div class="photo_title"><div>{NAME}</div><div>{CODE}</div><input type="hidden" name="iteminfo_{INDEX}" value="{PRODUCT_CLASS},{CLASS_INDEX}" /><input type="hidden" name="checkvalue_{INDEX}" value="{CHECK_VALUE}" /></div></td>
+    <td class="number">{UNIT_PRICE}</td>
+    <td class="number"><input type="text" name="quantity_{INDEX}" value="{QUANTITY}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" {QUANTITY_DISABLED}/></td>
+    <td class="number">{PRICE}{PRICE_STATUS}</td>
+    <td class="number"><input type="button" class="button" value="削除" onclick="deleteitem({INDEX});" /></td>
+</tr>
+</patTemplate:tmpl>
+</tbody>
+</table>
+<div class="photo_bottom">
+<input type="button" class="button" value="お買い物を続ける" onclick="goShopTop();" /><input type="button" class="button" value="購入する" onclick="location.href = '{ORDER_URL}'" {ORDER_DISABLED}/>{ORDER_MSG}
+</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="no_item_message" visibility="hidden">
+<h2>カート</h2>
+<div>カートは空です</div>
+<div class="photo_bottom">
+<input type="button" class="button" value="お買い物を続ける" onclick="goShopTop();" />
+</div>
+</patTemplate:tmpl>
+</div>
+</form>
+</patTemplate:tmpl>

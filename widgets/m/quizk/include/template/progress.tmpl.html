@@ -1,0 +1,33 @@
+<patTemplate:tmpl name="_widget">
+<div align="center" style="text-align:center;">{MESSAGE}</div>
+<patTemplate:tmpl name="question_area" visibility="hidden">
+<form action="{URL}" method="post" class="form">
+<input type="hidden" name="act" value="{ACT}" />
+<input type="hidden" name="sid" value="{SID}" />
+<input type="hidden" name="qid" value="{QID}" />
+<input type="hidden" name="no" value="{NO}" />
+<div>{TITLE}</div>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<div>{CONTENT}</div>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<div>{ANSWER}</div>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<div align="center" style="text-align:center;"><input type="submit" value="送信" /></div>
+</form>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="result_area" visibility="hidden">
+<div align="center" style="text-align:center;">{RESULT}</div>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<patTemplate:tmpl name="result_msg" visibility="hidden"><div>正解は</div></patTemplate:tmpl>
+<div>{TITLE}</div>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<div>{CONTENT}</div>
+<div><span style="font-size:x-small;">&nbsp;</span></div>
+<div align="center" style="text-align:center;"><a href="{NEXT_URL}">{NEXT_NAME}</a></div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="view_status_area" visibility="hidden">
+<div>&nbsp;</div>
+</patTemplate:tmpl>
+<div>&nbsp;</div>
+<div align="center" style="text-align:center;"><a href="{TOP_URL}" accesskey="0">ﾄｯﾌﾟﾍﾟｰｼﾞに戻る[0]</a></div>
+</patTemplate:tmpl>

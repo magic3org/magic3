@@ -1,0 +1,62 @@
+<patTemplate:tmpl name="_widget">
+{_DEBUG}<!-- {_DATE} -->
+<script type="text/javascript" src="{SCRIPT_URL}/md5.js"></script>
+<script script type="text/javascript">
+<!--
+function reserve_login(){
+    document.reserve_main.act.value = 'reserve_login';
+    document.reserve_main.password.value = hex_md5(document.reserve_main.reserve_password.value);
+    document.reserve_main.submit();
+    return true;
+}
+function reserve_logout(){
+    document.reserve_main.act.value = 'reserve_logout';
+    document.reserve_main.submit();
+    return true;
+}
+/*function reserve_sendpwd(){
+    document.reserve_main.action = '{SENDPWD_URL}';
+    document.reserve_main.submit();
+    return true;
+}*/
+function reserve_member(){
+    document.reserve_main.action = '{MEMBER_URL}';
+    document.reserve_main.submit();
+    return true;
+}
+-->
+</script>
+
+<form name="reserve_main" method="post" class="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<table width="100%">
+<tr><td class="contentheading">ログイン&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+<patTemplate:tmpl name="login_status" visibility="hidden">
+<tr><td> {MESSAGE}{USER_NAME}</td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="login_field" visibility="hidden">
+<tr><td>
+<table border="0" cellpadding="1" cellspacing="1" width="100%">
+  <tr><td align="right">アカウント</td><td><input type="text" name="reserve_account" size="8" maxlength="40" value="" style="width:150px"/></td></tr>
+  <tr><td align="right">パスワード</td><td><input type="password" name="reserve_password" size="8" maxlength="10" style="width:150px"/></td></tr>
+</table>
+</td></tr>
+</patTemplate:tmpl>
+<tr><td align="right">
+<patTemplate:tmpl name="logout_button" visibility="hidden">
+<input type="button" class="button" onClick="reserve_logout();" value="ログアウト">&nbsp;&nbsp;
+</patTemplate:tmpl>
+<patTemplate:tmpl name="login_button" visibility="hidden">
+<input type="button" class="button" onClick="reserve_login();" value="ログイン">&nbsp;&nbsp;
+</patTemplate:tmpl>
+</td></tr>
+<patTemplate:tmpl name="regmember_button" visibility="hidden">
+<tr><td><a href="{SENDPWD_URL}">パスワード再送</a></td></tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="member_button" visibility="hidden">
+<tr><td><a href="{CHANGEPWD_URL}">パスワード変更</a></td></tr>
+</patTemplate:tmpl>
+</table>
+</form>
+</patTemplate:tmpl>

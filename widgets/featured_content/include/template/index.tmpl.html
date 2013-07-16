@@ -1,0 +1,27 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: index.tmpl.html 5529 2013-01-08 13:40:47Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+{BUTTON_LIST}
+<patTemplate:tmpl name="contentlist" type="condition" conditionvar="type">
+<pattemplate:sub condition="__default">
+<h2>{TITLE}</h2>
+{BUTTON_LIST}{CONTENT}{READ_MORE}
+</pattemplate:sub>
+<pattemplate:sub condition="hide_title">
+{BUTTON_LIST}{CONTENT}{READ_MORE}
+</pattemplate:sub>
+<pattemplate:sub condition="input_password">
+{BUTTON_LIST}{CONTENT}{READ_MORE}
+</pattemplate:sub>
+</patTemplate:tmpl>
+</patTemplate:tmpl>

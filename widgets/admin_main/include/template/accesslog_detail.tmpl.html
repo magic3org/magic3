@@ -1,0 +1,132 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: accesslog_detail.tmpl.html 5802 2013-03-07 06:14:29Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function goTask(task){
+	document.main.task.value = task;
+	document.main.submit();
+	return true;
+}
+function updateItem(serialNo){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(serialNo){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+/*function cancelItem(){
+	document.main.task.value = 'accesslog';
+	document.main.submit();
+	return true;
+}*/
+function cancelItem(){
+	if (document.main._backurl.value){
+		location.href = document.main._backurl.value;
+		return false;
+	} else {
+		history.back();
+		return false;
+	}
+}
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="accesslog_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="viewcount" value="{VIEW_COUNT}" />
+<input type="hidden" name="loglevel" value="{LOG_LEVEL}" />
+<input type="hidden" name="logstatus" value="{LOG_STATUS}" />
+<input type="hidden" name="path" value="{PATH}" />
+<input type="hidden" name="start_date" value="{START_DATE}" />
+<input type="hidden" name="end_date" value="{END_DATE}" />
+<!-- m3:PostParam -->
+<table width="90%">
+<tr><td>
+<label><span {_HELP_ACCESSLOG_DETAIL}>アクセスログ詳細</span></label>
+</td>
+<td align="right">
+<patTemplate:tmpl name="cancel_button" visibility="visible">
+<span {_HELP_ACCESSLOG_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</patTemplate:tmpl>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100"><span {_HELP_ACCESSLOG_NO}>ログ番号</span></td>
+	    <td width="200">{SERIAL}</td>
+	    <td class="table-headside" width="100"><span {_HELP_ACCESSLOG_USER}>ユーザ名(ID)</span></td>
+	    <td>{USER}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_IP}>IP</span></td>
+	    <td colspan="3">{IP}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_URI}>URI</span></td>
+	    <td colspan="3" width="500" height="50" valign="top">{URI}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_REFERER}>REFERER</span></td>
+	    <td colspan="3" width="500" height="50" valign="top">{REFERER}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_REQUEST}>REQUEST</span></td>
+	    <td colspan="3" width="500" height="100" valign="top">{REQUEST}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_AGENT}>AGENT</span></td>
+	    <td colspan="3">{AGENT}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_BROWSER}>種別</span></td>
+	    <td>{BROWSER}</td>
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_OS}>OS</span></td>
+	    <td>{OS}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_LANGUAGE}>LANGUAGE</span></td>
+	    <td>{LANGUAGE}</td>
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_COUNTRY}>国</span></td>
+	    <td>{COUNTRY}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_METHOD}>メソッド</span></td>
+	    <td colspan="3">{METHOD}</td>
+	</tr>
+        <tr class="even">
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_COOKIE}>クッキー値</span></td>
+	    <td colspan="3">{COOKIE}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside"><span {_HELP_ACCESSLOG_DT}>日時</span></td>
+	    <td colspan="3">{TIME}</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

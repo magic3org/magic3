@@ -1,0 +1,55 @@
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function registMessage(){
+	if (!window.confirm('メッセージを投稿しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+//]]>
+</script>
+<div id="{CSS_ID}" style="{BLOG_STYLE}" >
+<patTemplate:tmpl name="top_link_area" visibility="hidden"><div style="{LINK_STYLE_TOP}"><a href="{REGIST_URL}"><b>{REGIST_NAME}</b></a></div></patTemplate:tmpl>
+<div align="center">
+<!-- m3:ErrorMessage -->
+<div style="{THREAD_STYLE}">
+<patTemplate:tmpl name="thread_area">
+<div id="chacha_msg_top" class="chacha_message_list">
+<div class="chacha_avatar">{AVATAR}</div>
+<div class="chacha_message_right">
+<div class="chacha_message_main"><span class="chacha_message_membername">{NAME}</span><span class="chacha_message_body">{THREAD_MESSAGE}</span></div>
+<div class="chacha_message_info"><span class="chacha_message_date">{DATE}</span><span class="chacha_message_id">{ID}</span><span class="chacha_message_count">返信&nbsp;{THREAD_MESSAGE_COUNT}</span></div>
+</div>
+<div style="clear: both;"></div>
+</div>
+<hr />
+<patTemplate:tmpl name="no_message_area" visibility="hidden"><div class="chacha_message">返信メッセージがありません</div></patTemplate:tmpl>
+<patTemplate:tmpl name="message_list">
+<div class="chacha_message_list">
+<div class="chacha_avatar">{AVATAR}</div>
+<div class="chacha_message_right">
+<div class="chacha_message_main"><span class="chacha_message_membername">{NAME}</span><span class="chacha_message_body">{MESSAGE}</span></div>
+<div class="chacha_message_info"><span class="chacha_message_date">{DATE}</span><span class="chacha_message_id">{ID}</span></div>
+</div>
+<div style="clear: both;"></div>
+</div>
+</patTemplate:tmpl>
+</patTemplate:tmpl>
+<div style="{LINK_STYLE_INNER_BOTTOM}">{PAGE_LINK}</div>
+<patTemplate:tmpl name="add_area" visibility="hidden">
+<div style="margin-left:10px;">
+<form method="post" class="form" name="main">
+    <input type="hidden" name="task" value="thread" />
+    <input type="hidden" name="act" />
+    <input type="hidden" name="ticket" value="{TICKET}" />
+    <input type="hidden" name="memberid" value="{MEMBER_ID}" />
+    <textarea rows="3" cols="64" wrap="off" name="message" style="width:95%;">{MESSAGE}</textarea><br />
+    <input type="button" class="button" onclick="registMessage();" value="投稿" />
+</form>
+</div>
+</patTemplate:tmpl>
+</div></div>
+<div style="{LINK_STYLE_BOTTOM}"><a href="{HOME_URL}"><b>ブログホーム</b></a></div>
+</div>
+</patTemplate:tmpl>

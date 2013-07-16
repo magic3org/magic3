@@ -1,0 +1,33 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 4845 2012-04-13 04:47:07Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function agree(){
+	document.photo_main.act.value = 'agree';
+	document.photo_main.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="photo_main" class="form">
+<input type="hidden" name="act" />
+<div id="photo_shop">
+<h2>お買い物会員規約</h2>
+<div>会員登録の前に必ず会員約款をお読みください。</div>
+{CONTENT}
+<div class="photo_bottom"><input type="button" class="button" onclick="agree();" value="同意する" /><input type="button" class="button" onclick="location.href = '{CANCEL_URL}'" value="同意しない" /></div>
+</div>
+</form>
+</patTemplate:tmpl>

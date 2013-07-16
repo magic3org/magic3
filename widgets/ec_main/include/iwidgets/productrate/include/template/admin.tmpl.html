@@ -1,0 +1,22 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 5436 2012-12-07 09:55:12Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<table border="0" cellpadding="0" cellspacing="0" style="border:none;">
+<tr><td>商品ごとの送料(送料単価(商品情報の送料基準) x 数量)の合計で送料を計算します。</td></tr>
+<tr>
+    <td><input type="checkbox" name="iw_use_min" {USE_MIN}>購入額<input type="text" name="iw_min_price" value="{MIN_PRICE}" size="8" maxlength="8" />円以上は無料にする<br />
+    <input type="checkbox" name="iw_input_date" {INPUT_DATE} />お届け希望日時の受付
+    </td>
+</tr>
+</table>
+</patTemplate:tmpl>
