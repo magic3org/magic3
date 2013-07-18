@@ -63,7 +63,7 @@ class commentCommonDef
 	 * @param int $commentNo			コメント番号(0の場合はコンテンツへのリンク)
 	 * @param string					URL(エラーの場合は空文字列)
 	 */
-	function createCommentUrl($contentType, $contentsId, $commentNo = 0)
+	static function createCommentUrl($contentType, $contentsId, $commentNo = 0)
 	{
 		global $gEnvManager;
 		$url = '';
@@ -80,37 +80,50 @@ class commentCommonDef
 				$url = $gEnvManager->getDefaultSmartphoneUrl();
 				break;
 		}
-			
-		switch ($contentType){
-			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				$url .= '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentsId;
-				break;
-			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-				$url .= '?' . M3_REQUEST_PARAM_PRODUCT_ID . '=' . $contentsId;
-				break;
-			case M3_VIEW_TYPE_BBS:					// BBS
-				$url .= '?' . M3_REQUEST_PARAM_BBS_THREAD_ID . '=' . $contentsId;
-				break;
-			case M3_VIEW_TYPE_BLOG:				// ブログ
-				$url .= '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $contentsId;
-				break;
-			case M3_VIEW_TYPE_WIKI:				// wiki
-				$url .= '?' . $contentsId;
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$url .= '?' . M3_REQUEST_PARAM_ROOM_ID . '=' . $contentsId;
-				break;
-			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$url .= '?' . M3_REQUEST_PARAM_EVENT_ID . '=' . $contentsId;
-				break;
-			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-				$url .= '?' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $contentsId;
-				break;
-		}
-		if (empty($url)) return '';
+		$contentParam = self::createContentParam($contentType, $contentsId);
+		if (empty($contentParam)) return '';
+		$url .= '?' . $contentParam;
 
 		if (!empty($commentNo)) $url .= '#' . commentCommonDef::COMMENT_PERMA_HEAD . $commentNo;		// コメントパーマリンク
 		return $url;
+	}
+	/**
+	 * コンテンツパラメータを作成
+	 *
+	 * @param string $contentType		コンテンツタイプ
+	 * @param string $contentsId		共通コンテンツID
+	 * @param string					パラメータ文字列
+	 */
+	static function createContentParam($contentType, $contentsId)
+	{
+		$param = '';
+		switch ($contentType){
+			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
+				$param = M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentsId;
+				break;
+			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
+				$param = M3_REQUEST_PARAM_PRODUCT_ID . '=' . $contentsId;
+				break;
+			case M3_VIEW_TYPE_BBS:					// BBS
+				$param = M3_REQUEST_PARAM_BBS_THREAD_ID . '=' . $contentsId;
+				break;
+			case M3_VIEW_TYPE_BLOG:				// ブログ
+				$param = M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $contentsId;
+				break;
+			case M3_VIEW_TYPE_WIKI:				// wiki
+				$param = $contentsId;
+				break;
+			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
+				$param = M3_REQUEST_PARAM_ROOM_ID . '=' . $contentsId;
+				break;
+			case M3_VIEW_TYPE_EVENT:				// イベント情報
+				$param = M3_REQUEST_PARAM_EVENT_ID . '=' . $contentsId;
+				break;
+			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
+				$param = M3_REQUEST_PARAM_PHOTO_ID . '=' . $contentsId;
+				break;
+		}
+		return $param;
 	}
 	/**
 	 * アップロード画像格納ディレクトリ取得

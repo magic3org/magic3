@@ -27,12 +27,26 @@ function sendcomment(status){
 	document.comment_main.submit();
 	return true;
 }
-/*
-function sendcancel(){
-	document.comment_main.act.value = 'sendcancel';
-	document.comment_main.submit();
-	return true;
-}*/
+<patTemplate:tmpl name="create_uploader" visibility="hidden">
+function createUploader(){
+	var uploader = new qq.FileUploader({
+		element: document.getElementById('comment-image-uploader'),
+		action: '{UPLOAD_URL}',
+		onComplete: function(id, fileName, responseJson){
+			// 一覧に添付ファイルを追加
+			//CKEDITOR.instances['comment'].insertText("[img]http://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Go-home.svg/100px-Go-home.svg.png[/img]");
+		//	CKEDITOR.instances['comment'].insertHTML("[img]http://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Go-home.svg/100px-Go-home.svg.png[/img]");
+			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);
+var oEditor = CKEDITOR.instances['comment'];
+//var html = '<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Go-home.svg/100px-Go-home.svg.png" />';
+var html = responseJson.file.html;
+var newElement = CKEDITOR.dom.element.createFromHtml( html, oEditor.document );
+oEditor.insertElement( newElement );
+		},
+		debug: true
+	});
+}
+</patTemplate:tmpl>
 $(function(){
 	$('#comment_cancel').click(function(){
 		document.comment_main.act.value = 'sendcancel';
@@ -45,7 +59,26 @@ $(function(){
 	$('body').scrollTo('#comment_form_head');
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_wysiwyg" visibility="hidden">
+	// 画像のドロップを禁止
+	CKEDITOR.on('instanceReady', function (ev){
+		var dragstart_outside = true;
+		ev.editor.document.on('dragstart', function (ev){
+			dragstart_outside = false;
+		});
+		ev.editor.document.on('drop', function (ev){
+			if (dragstart_outside) {
+				ev.data.preventDefault(true);
+			}
+			dragstart_outside = true;
+		});
+	});
+	
 	m3SetSafeWysiwygEditor('comment', 150);
+	
+<patTemplate:tmpl name="show_uploader" visibility="hidden">
+	// 画像アップローダー作成
+	createUploader();
+</patTemplate:tmpl>
 </patTemplate:tmpl>
 </patTemplate:tmpl>
 });
@@ -109,14 +142,13 @@ $(function(){
 	<patTemplate:tmpl name="show_comment" visibility="hidden"><div>{COMMENT_HTML}</div><input type="hidden" name="comment" value="{COMMENT}" />
 	</patTemplate:tmpl>
 </div>
+<patTemplate:tmpl name="upload_image" visibility="hidden"><p><div id="comment-image-uploader"></div>
+<small>画像ファイルを「ファイルアップロード」にドラッグ&amp;ドロップします。<br />エリアをクリックした場合は選択ダイアログが表示されます。</small></p></patTemplate:tmpl>
 <p class="form-submit">
 <input type="submit" class="button" value="{SEND_BUTTON_LABEL}" onclick="sendcomment({SEND_STATUS});" />
 <patTemplate:tmpl name="cancel_button" visibility="hidden"><input id="comment_cancel" type="submit" class="button" value="キャンセル" /></patTemplate:tmpl>
 </p>
-		
 </form>
 </div>
 </patTemplate:tmpl>
-
-
 </patTemplate:tmpl>

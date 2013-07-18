@@ -2445,7 +2445,7 @@ class BaseWidgetContainer extends Core
 		return $ret;
 	}
 	/**
-	 * ウィジェット指定でコマンドを実行するためのURLを作成
+	 * ウィジェット指定(FIND)でコマンドを実行するためのURLを作成
 	 *
 	 * @param string $widgetId	コマンドを送信先ウィジェット
 	 * @param string $param		送信先ウィジェットに渡すURLパラメータ

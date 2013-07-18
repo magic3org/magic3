@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('comment') . '/commentBaseWidgetContainer.php');
+require_once($gEnvManager->getLibPath()			. '/qqFileUploader/fileuploader.php');
 
 class commentTopWidgetContainer extends commentBaseWidgetContainer
 {
@@ -23,6 +24,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 	private $commentSerialNo;		// コメントシリアル番号
 	private $isReadImageCheck;		// 画像読み込みチェックかどうか
 	private $isErrorInReadImage;	// 画像読み込み中にエラーがあるかどうか
+	private $readImageCount;		// 読み込み画像総数
+	private $addImageCount;		// 読み込み画像追加数
 	private $currentPageUrl;			// 現在のページURL
 	private $currentPageRootUrl;
 	private $widgetTitle;			// ウィジェットタイトル
@@ -39,6 +42,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 	private $permitImage;		// 画像あり
 	private $autolink;			// 自動リンク
 	private $addLib = array();		// 追加スクリプト
+	private $addScript = array();		// 追加スクリプト
+	private $addCss = array();		// 追加CSS
 	private $avatarSize;		// アバター画像サイズ
 	private $maxImageSize;		// 画像最大サイズ
 	private $imageDir;			// 画像格納ディレクトリ
@@ -57,6 +62,10 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 	const COOKIE_LIB = 'jquery.cookie';		// 名前保存用クッキーライブラリ
 	const PERMALINK_ICON_FILE = '/images/system/permalink.png';		// 「パーマリンク」アイコン
 	const PERMA_BUTTON_ICON_SIZE = 16;				// ボタン用アイコンサイズ
+	
+	// ファイルアップロード用スクリプト
+	const FILE_UPLOAD_SCRIPT_FILE	= '/fileuploader/fileuploader.js';				// スクリプトファイル
+	const FILE_UPLOAD_CSS_FILE		= '/fileuploader.css';		// CSSファイル
 	
 	/**
 	 * コンストラクタ
@@ -96,7 +105,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 	{
 		$contentsId = '';			// 共通コンテンツID
 		$this->cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
-		if ($this->cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
+		$act = $request->trimValueOf('act');
+		if ($this->cmd == M3_REQUEST_CMD_DO_WIDGET && empty($act)){	// ウィジェット単体実行
 			// 画像IDからコメントシリアル番号取得
 			// コメントに添付されている場合はコメントの表示条件をチェック
 			$imageId = $request->trimValueOf(commentCommonDef::REQUEST_PARAM_IMAGE_ID);	// 画像ID
@@ -215,7 +225,6 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 		$this->gInstance->getImageManager()->parseImageFormat($avatarFormat, $imageType, $imageAttr, $this->avatarSize);		// 画像情報取得
 		
 		// 入力値取得
-		$act = $request->trimValueOf('act');
 		$pageNo = $request->trimIntValueOf('page', '1');				// ページ番号
 		if ($this->useTitle){
 			$title = $request->trimValueOf('title');
@@ -261,10 +270,73 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 		$isInit = false;	// 初期表示かどうか
 		if ($this->cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
 			if (!$this->userLimited || ($this->userLimited && $this->gEnv->isCurrentUserLogined())){		// ユーザ制限なし、または、ユーザ制限ありでログイン済みの場合
-				$this->downloadImage($request);			// 画像取得
-			} else {
-				$this->exitWidget();		// ウィジェット終了処理
+				if (empty($act)){	// 画像取得
+					//if (!$this->userLimited || ($this->userLimited && $this->gEnv->isCurrentUserLogined())){		// ユーザ制限なし、または、ユーザ制限ありでログイン済みの場合
+						$this->downloadImage($request);			// 画像取得
+					//}
+				} else if ($act == 'uploadimage'){		// 画像アップロード
+					// ##### 画像ありの場合は画像を取り込む #####
+					if ($this->permitHtml && $this->permitImage){
+						$uploader = new qqFileUploader();
+						$resultObj = $uploader->handleUpload($this->gEnv->getWorkDirPath());		// 一時ディレクトリに保存
+
+						if ($resultObj['success']){
+							$fileInfo = $resultObj['file'];
+							$tmpFile = $fileInfo['path'];
+						
+							// 画像ファイル名作成
+							$imageId = $this->gInstance->getFileManager()->createRandFileId();
+							$imagePath = $this->imageDir . DIRECTORY_SEPARATOR . $imageId;
+				
+							// 画像作成
+							$ret = $this->gInstance->getImageManager()->createImage($tmpFile, $imagePath, $this->maxImageSize, commentCommonDef::OUTPUT_IMAGE_TYPE, $destSize);
+
+							// 画像登録
+							if ($ret){
+								$ret = $this->gInstance->getFileManager()->addAttachFileInfo(commentCommonDef::$_viewContentType, $imageId, $imagePath, $fileInfo['filename']);
+							}
+						
+							$destTag = '';
+							if ($ret){
+								$param = commentCommonDef::REQUEST_PARAM_IMAGE_ID . '=' . $imageId;
+								$newUrl = $this->createCmdUrlToCurrentWidget($param);
+								$destTag = '<img src="' . $this->getUrl($newUrl) . '" width="' . $destSize['width'] . '" height="' . $destSize['height'] . '" />';
+							} else {		// エラーの場合
+								$resultObj = array('error' => 'Could not create file information.');
+							}
+						
+							// 結果オブジェクト更新
+							$resultObj['file']['fileid'] = $imageId;
+							$resultObj['file']['html'] = $destTag;
+							unset($resultObj['file']['path']);
+							unset($resultObj['file']['filename']);
+							unset($resultObj['file']['size']);
+
+							// 一時ファイル削除
+							unlink($tmpFile);
+						}
+
+						// ##### 添付ファイルアップロード結果を返す #####
+						// ページ作成処理中断
+						$this->gPage->abortPage();
+			
+						// 添付ファイルの登録データを返す
+						if (function_exists('json_encode')){
+							$destStr = json_encode($resultObj);
+						} else {
+							$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
+						}
+						//$destStr = htmlspecialchars($destStr, ENT_NOQUOTES);// 「&」が「&amp;」に変換されるので使用しない
+						//header('Content-type: application/json; charset=utf-8');
+						header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
+						echo $destStr;
+			
+						// システム強制終了
+						$this->gPage->exitSystem();
+					}
+				}
 			}
+			$this->exitWidget();		// ウィジェット終了処理
 		} else if ($act == 'checkcomment' && $sendStatus == 0){		// コメント確認のとき
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET) && $isCommentValid){		// 正常なPOST値のとき
 				// 入力チェック
@@ -280,8 +352,14 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 
 				// ##### 画像ありの場合は画像を取り込む #####
 				if ($this->permitHtml && $this->permitImage){
+					// 仮登録画像を取得
+					$this->imageFileInfoArray = $this->getImageFileInfo();
+					
 					// 画像URL変換
+					$this->readImageCount = 0;		// 読み込み画像総数
+					$this->addImageCount = 0;		// 読み込み画像追加数
 					$commentHtml = $this->convertImageUrl($commentHtml);
+					if ($this->readImageCount != count($this->imageFileInfoArray) + $this->addImageCount) $this->isErrorInReadImage = true;		// 画像総数をチェック
 					if ($this->isErrorInReadImage){
 						$this->setUserErrorMsg('画像読み込みに失敗しました');
 						$commentHtml = '';
@@ -321,7 +399,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 				// ##### 画像ありの場合は画像を取り込む #####
 				if ($this->permitHtml && $this->permitImage){
 					// 仮登録画像を取得
-					$this->imageFileInfoArray = array();
+					$this->imageFileInfoArray = $this->getImageFileInfo();
+/*					$this->imageFileInfoArray = array();
 					$clientId = $this->gAccess->getClientId();
 					if (!empty($clientId)){
 						$ret = $this->gInstance->getFileManager()->getAttachFileInfoByClientId(commentCommonDef::$_viewContentType, $clientId, $imageFileRows);
@@ -336,11 +415,14 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 								$this->imageFileInfoArray[] = $newInfoObj;
 							}
 						}
-					}
+					}*/
 					
 					// 画像URL変換
 					$this->isReadImageCheck = true;		// 画像読み込みチェック
+					$this->readImageCount = 0;		// 読み込み画像総数
+					$this->addImageCount = 0;		// 読み込み画像追加数
 					$commentHtml = $this->convertImageUrl($commentHtml);
+					if ($this->readImageCount != count($this->imageFileInfoArray)) $this->isErrorInReadImage = true;		// 画像総数をチェック
 					if ($this->isErrorInReadImage){
 						$this->setUserErrorMsg('画像読み込みに失敗しました');
 						$commentHtml = '';
@@ -533,6 +615,23 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 					
 					$this->tmpl->setAttribute('show_wysiwyg', 'visibility', 'visible');		// wysiwygエディター表示
 					$this->addLib[] = ScriptLibInfo::LIB_CKEDITOR;		// CKEditorライブラリを追加
+					
+					// 画像ありの場合は画像アップロード領域表示
+					if ($this->permitImage){
+						// アップロードライブラリ追加
+						$this->addScript = array($this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_UPLOAD_SCRIPT_FILE));		// スクリプトファイル
+						$this->addCss = array($this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::FILE_UPLOAD_CSS_FILE));			// CSSファイル
+		
+						$this->tmpl->setAttribute('show_uploader', 'visibility', 'visible');
+						$this->tmpl->setAttribute('create_uploader', 'visibility', 'visible');	// 画像アップローダー作成
+						$this->tmpl->setAttribute('upload_image', 'visibility', 'visible');		// 画像アップロード領域
+						
+						// アップロード実行用URL
+						$param = commentCommonDef::createContentParam($this->contentType, $contentsId);
+						$param .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
+						$uploadUrl = $this->createCmdUrlToCurrentWidget($param);
+						$this->tmpl->addVar("create_uploader", "upload_url", $this->getUrl($uploadUrl));
+					}
 				} else {
 					$this->tmpl->setAttribute('show_comment', 'visibility', 'visible');
 					$this->tmpl->addVar('show_comment', 'comment_html', $commentHtml);			// HTMLコメント
@@ -734,6 +833,34 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 		return $this->addLib;
 	}
 	/**
+	 * JavascriptファイルをHTMLヘッダ部に設定
+	 *
+	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptFileToHead($request, &$param)
+	{
+		return $this->addScript;
+	}
+	/**
+	 * CSSファイルをHTMLヘッダ部に設定
+	 *
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssFileToHead($request, &$param)
+	{
+		return $this->addCss;
+	}
+	/**
 	 * 取得したコンテンツ項目をテンプレートに設定する
 	 *
 	 * @param int		$index			行番号
@@ -883,20 +1010,49 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 	 */
     function _convert_image_url_callback($matchData)
 	{
-		static $index = 0;
-		
 		// エラーチェック
 		if ($this->isErrorInReadImage) return '';		// 画像読み込みエラー発生
 		
 		//$destTag = $matchData[0];	// マッチしたタグ全体
 		$destTag = '';
-		$imageUrl = $matchData[1];
+		//$imageUrl = $matchData[1];
+		$imageUrl = html_entity_decode($matchData[1]);			// BBCodeのparse()でIMGタグのsrcの「&」が「&amp;」に変換されてしまう(バグ?)ので戻す
+		if (empty($imageUrl)){
+			$this->isErrorInReadImage = true;		// 画像読み込みエラー発生
+			return '';
+		}
+		
 		if ($this->gEnv->isSystemUrlAccess($imageUrl)){		// システム内のファイルのとき
+			// URLを解析
+			$queryArray = array();
+			$parsedUrl = parse_url($imageUrl);
+			if (!empty($parsedUrl['query'])) parse_str($parsedUrl['query'], $queryArray);		// クエリーの解析
+			
+			for ($i = 0; $i < count($this->imageFileInfoArray); $i++){
+				$fileInfo = $this->imageFileInfoArray[$i];
+				$imageId = $fileInfo->fileId;		// 画像ID
+
+				if ($queryArray[commentCommonDef::REQUEST_PARAM_IMAGE_ID] == $imageId){
+					// 画像サイズ取得
+					$imagePath = $this->imageDir . DIRECTORY_SEPARATOR . $imageId;
+					$this->gInstance->getImageManager()->getImageInfo($imagePath, $width, $height);
+				
+					$param = commentCommonDef::REQUEST_PARAM_IMAGE_ID . '=' . $imageId;
+					if ($this->isReadImageCheck){		// 保存前の画像チェックのとき
+						$newUrl = $this->createCmdUrlToCurrentWidget($param, true/*マクロ形式で取得*/);
+					} else {
+						$newUrl = $this->createCmdUrlToCurrentWidget($param);
+					}
+					$destTag = '<img src="' . $newUrl . '" width="' . $width . '" height="' . $height . '" />';
+					break;
+				}
+			}
+			if ($i == count($this->imageFileInfoArray)) $this->isErrorInReadImage = true;		// 画像読み込みエラー発生
 		} else {
-			if ($this->isReadImageCheck){
-				if ($index < count($this->imageFileInfoArray)){
-					$fileInfo = $this->imageFileInfoArray[$index];
-					if (!empty($imageUrl) && $imageUrl == $fileInfo->originalUrl){	// 取得先URL比較
+			if ($this->isReadImageCheck){		// 保存前の画像チェックのとき
+				for ($i = 0; $i < count($this->imageFileInfoArray); $i++){
+					$fileInfo = $this->imageFileInfoArray[$i];
+					if ($imageUrl == $fileInfo->originalUrl){	// 取得先URL比較
 						$imageId = $fileInfo->fileId;		// 画像ID
 						$imagePath = $this->imageDir . DIRECTORY_SEPARATOR . $imageId;
 						
@@ -906,62 +1062,83 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 						$param = commentCommonDef::REQUEST_PARAM_IMAGE_ID . '=' . $imageId;
 						$newUrl = $this->createCmdUrlToCurrentWidget($param, true/*マクロ形式で取得*/);
 						$destTag = '<img src="' . $newUrl . '" width="' . $width . '" height="' . $height . '" />';
-					} else {
-						$this->isErrorInReadImage = true;		// 画像読み込みエラー発生
+						break;
 					}
-				} else {
-					$this->isErrorInReadImage = true;		// 画像読み込みエラー発生
 				}
+				if ($i == count($this->imageFileInfoArray)) $this->isErrorInReadImage = true;		// 画像読み込みエラー発生
 			} else {
-				if (empty($imageUrl)){
-					$this->isErrorInReadImage = true;		// 画像読み込みエラー発生
-				} else {
-					// 画像ファイル名作成
-					$imageId = $this->gInstance->getFileManager()->createRandFileId();
-					$originalFilename = basename($imageUrl);		// 元のファイル名
-					$imagePath = $this->imageDir . DIRECTORY_SEPARATOR . $imageId;
-						
-					// 画像を取り込む
-					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
-					if ($tmpFile !== false){
-						// 一時ファイルに読み込む
-						$ret = true;
-						if ($input = @fopen($imageUrl, 'r')){
-							$ret = file_put_contents($tmpFile, $input);
-							if ($ret !== false) $ret = true;
-							@fclose($input);
-						} else {
-							$ret = false;
-						}
-
-						// 画像作成
-						if ($ret){
-							$ret = $this->gInstance->getImageManager()->createImage($tmpFile, $imagePath, $this->maxImageSize, commentCommonDef::OUTPUT_IMAGE_TYPE, $destSize);
-						}
-
-						// 画像登録
-						if ($ret){
-							$ret = $this->gInstance->getFileManager()->addAttachFileInfo(commentCommonDef::$_viewContentType, $imageId, $imagePath, $originalFilename, $imageUrl);
-						}
-
-						// 画像が作成できない場合は画像を表示しない
-						if ($ret){
-							$param = commentCommonDef::REQUEST_PARAM_IMAGE_ID . '=' . $imageId;
-							$newUrl = $this->createCmdUrlToCurrentWidget($param);
-							$destTag = '<img src="' . $this->getUrl($newUrl) . '" width="' . $destSize['width'] . '" height="' . $destSize['height'] . '" />';
-						}
-						if (!$ret) $this->isErrorInReadImage = true;		// 画像読み込みエラー発生
-
-						// 一時ファイル削除
-						unlink($tmpFile);
+				// 画像ファイル名作成
+				$imageId = $this->gInstance->getFileManager()->createRandFileId();
+				$originalFilename = basename($imageUrl);		// 元のファイル名
+				$imagePath = $this->imageDir . DIRECTORY_SEPARATOR . $imageId;
+					
+				// 画像を取り込む
+				$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
+				if ($tmpFile !== false){
+					// 一時ファイルに読み込む
+					$ret = true;
+					if ($input = @fopen($imageUrl, 'r')){
+						$ret = file_put_contents($tmpFile, $input);
+						if ($ret !== false) $ret = true;
+						@fclose($input);
 					} else {
-						$this->isErrorInReadImage = true;		// 画像読み込みエラー発生
+						$ret = false;
 					}
+
+					// 画像作成
+					if ($ret){
+						$ret = $this->gInstance->getImageManager()->createImage($tmpFile, $imagePath, $this->maxImageSize, commentCommonDef::OUTPUT_IMAGE_TYPE, $destSize);
+					}
+
+					// 画像登録
+					if ($ret){
+						$ret = $this->gInstance->getFileManager()->addAttachFileInfo(commentCommonDef::$_viewContentType, $imageId, $imagePath, $originalFilename, $imageUrl);
+					}
+
+					// 画像が作成できない場合は画像を表示しない
+					if ($ret){
+						$param = commentCommonDef::REQUEST_PARAM_IMAGE_ID . '=' . $imageId;
+						$newUrl = $this->createCmdUrlToCurrentWidget($param);
+						$destTag = '<img src="' . $this->getUrl($newUrl) . '" width="' . $destSize['width'] . '" height="' . $destSize['height'] . '" />';
+						
+						$this->addImageCount++;		// 読み込み画像追加数
+					}
+					if (!$ret) $this->isErrorInReadImage = true;		// 画像読み込みエラー発生
+
+					// 一時ファイル削除
+					unlink($tmpFile);
+				} else {
+					$this->isErrorInReadImage = true;		// 画像読み込みエラー発生
 				}
 			}
 		}
-		$index++;
+		if (!$this->isErrorInReadImage) $this->readImageCount++;		// 読み込み画像総数更新
 		return $destTag;
     }
+	/**
+	 * 仮登録画像情報を取得
+	 *
+	 * @return array			仮登録画像情報
+	 */
+	function getImageFileInfo()
+	{
+		$imageFileInfoArray = array();
+		$clientId = $this->gAccess->getClientId();
+		if (!empty($clientId)){
+			$ret = $this->gInstance->getFileManager()->getAttachFileInfoByClientId(commentCommonDef::$_viewContentType, $clientId, $imageFileRows);
+			if ($ret){
+				for ($i = 0; $i < count($imageFileRows); $i++){
+					$fileRow = $imageFileRows[$i];
+					$newInfoObj = new stdClass;
+					$newInfoObj->title		= '';
+					$newInfoObj->filename	= '';
+					$newInfoObj->fileId		= $fileRow['af_file_id'];
+					$newInfoObj->originalUrl	= $fileRow['af_original_url'];		// 取得先URL
+					$imageFileInfoArray[] = $newInfoObj;
+				}
+			}
+		}
+		return $imageFileInfoArray;
+	}
 }
 ?>
