@@ -12,7 +12,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: pageManager.php 6162 2013-07-02 12:40:06Z fishbone $
+ * @version    SVN: $Id: pageManager.php 6177 2013-07-18 23:27:25Z fishbone $
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -4120,6 +4120,9 @@ class PageManager extends Core
 	 */
 	function downloadFile($filePath, $downloadFilename, $deleteFile=false)
 	{
+		// エラーチェック
+		if (!file_exists($filePath)) return false;
+		
 		// ファイルサイズ取得
 		$fileSize = filesize($filePath);
 		
