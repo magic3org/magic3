@@ -184,11 +184,12 @@ class FileManager extends Core
 	 *
 	 * @param string $contentType	コンテンツタイプ
 	 * @param string $dir			ファイル格納ディレクトリ
-	 * @return bool					true=成功、false=失敗
+	 * @param array  $fileIdArray	削除対象のファイルID
+	 * @return bool					true=正常終了、false=異常終了
 	 */
-	public function cleanAttachFileInfo($contentType, $dir)
+	public function cleanAttachFileInfo($contentType, $dir, $fileIdArray = null)
 	{
-		$ret = $this->db->cleanAttachFileInfo($contentType, $dir);
+		$ret = $this->db->cleanAttachFileInfo($contentType, $dir, $fileIdArray);
 		return $ret;
 	}
 	/**

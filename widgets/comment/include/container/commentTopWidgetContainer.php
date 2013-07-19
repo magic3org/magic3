@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: commentTopWidgetContainer.php 6155 2013-07-02 00:02:49Z fishbone $
+ * @version    SVN: $Id: commentTopWidgetContainer.php 6175 2013-07-18 12:04:03Z fishbone $
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('comment') . '/commentBaseWidgetContainer.php');
@@ -25,7 +25,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 	private $isReadImageCheck;		// 画像読み込みチェックかどうか
 	private $isErrorInReadImage;	// 画像読み込み中にエラーがあるかどうか
 	private $readImageCount;		// 読み込み画像総数
-	private $addImageCount;		// 読み込み画像追加数
+//	private $addImageCount;		// 読み込み画像追加数
+	private $attachFileIdArray = array();		// コンテンツに実際に添付されている画像
 	private $currentPageUrl;			// 現在のページURL
 	private $currentPageRootUrl;
 	private $widgetTitle;			// ウィジェットタイトル
@@ -352,17 +353,29 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 
 				// ##### 画像ありの場合は画像を取り込む #####
 				if ($this->permitHtml && $this->permitImage){
-					// 仮登録画像を取得
+					// 仮登録画像を取得(アップロード画像分)
 					$this->imageFileInfoArray = $this->getImageFileInfo();
-					
+						
 					// 画像URL変換
 					$this->readImageCount = 0;		// 読み込み画像総数
-					$this->addImageCount = 0;		// 読み込み画像追加数
+					//$this->addImageCount = 0;		// 読み込み画像追加数
 					$commentHtml = $this->convertImageUrl($commentHtml);
-					if ($this->readImageCount != count($this->imageFileInfoArray) + $this->addImageCount) $this->isErrorInReadImage = true;		// 画像総数をチェック
+					//if ($this->readImageCount != count($this->imageFileInfoArray) + $this->addImageCount) $this->isErrorInReadImage = true;		// 画像総数をチェック
 					if ($this->isErrorInReadImage){
 						$this->setUserErrorMsg('画像読み込みに失敗しました');
 						$commentHtml = '';
+					} else {
+						// 仮登録画像を再取得(自動取得画像含む)
+						$this->imageFileInfoArray = $this->getImageFileInfo();
+
+						// ##### 実際に使用されない仮登録画像を削除 #####
+						$delFileIdArray = array();
+						for ($i = 0; $i < count($this->imageFileInfoArray); $i++){
+							$fileInfo = $this->imageFileInfoArray[$i];
+							$imageId = $fileInfo->fileId;		// 画像ID
+							if (!in_array($imageId, $this->attachFileIdArray)) $delFileIdArray[] = $imageId;
+						}
+						$this->gInstance->getFileManager()->cleanAttachFileInfo(commentCommonDef::$_viewContentType, $this->imageDir, $delFileIdArray);
 					}
 				}
 					
@@ -400,27 +413,11 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 				if ($this->permitHtml && $this->permitImage){
 					// 仮登録画像を取得
 					$this->imageFileInfoArray = $this->getImageFileInfo();
-/*					$this->imageFileInfoArray = array();
-					$clientId = $this->gAccess->getClientId();
-					if (!empty($clientId)){
-						$ret = $this->gInstance->getFileManager()->getAttachFileInfoByClientId(commentCommonDef::$_viewContentType, $clientId, $imageFileRows);
-						if ($ret){
-							for ($i = 0; $i < count($imageFileRows); $i++){
-								$fileRow = $imageFileRows[$i];
-								$newInfoObj = new stdClass;
-								$newInfoObj->title		= '';
-								$newInfoObj->filename	= '';
-								$newInfoObj->fileId		= $fileRow['af_file_id'];
-								$newInfoObj->originalUrl	= $fileRow['af_original_url'];		// 取得先URL
-								$this->imageFileInfoArray[] = $newInfoObj;
-							}
-						}
-					}*/
 					
 					// 画像URL変換
 					$this->isReadImageCheck = true;		// 画像読み込みチェック
 					$this->readImageCount = 0;		// 読み込み画像総数
-					$this->addImageCount = 0;		// 読み込み画像追加数
+			//		$this->addImageCount = 0;		// 読み込み画像追加数
 					$commentHtml = $this->convertImageUrl($commentHtml);
 					if ($this->readImageCount != count($this->imageFileInfoArray)) $this->isErrorInReadImage = true;		// 画像総数をチェック
 					if ($this->isErrorInReadImage){
@@ -1044,6 +1041,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 						$newUrl = $this->createCmdUrlToCurrentWidget($param);
 					}
 					$destTag = '<img src="' . $newUrl . '" width="' . $width . '" height="' . $height . '" />';
+					
+					$this->attachFileIdArray[] = $imageId;		// コンテンツに実際に添付されている画像
 					break;
 				}
 			}
@@ -1062,6 +1061,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 						$param = commentCommonDef::REQUEST_PARAM_IMAGE_ID . '=' . $imageId;
 						$newUrl = $this->createCmdUrlToCurrentWidget($param, true/*マクロ形式で取得*/);
 						$destTag = '<img src="' . $newUrl . '" width="' . $width . '" height="' . $height . '" />';
+						
+						$this->attachFileIdArray[] = $imageId;		// コンテンツに実際に添付されている画像
 						break;
 					}
 				}
@@ -1101,7 +1102,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 						$newUrl = $this->createCmdUrlToCurrentWidget($param);
 						$destTag = '<img src="' . $this->getUrl($newUrl) . '" width="' . $destSize['width'] . '" height="' . $destSize['height'] . '" />';
 						
-						$this->addImageCount++;		// 読み込み画像追加数
+						$this->attachFileIdArray[] = $imageId;		// コンテンツに実際に添付されている画像
+			//			$this->addImageCount++;		// 読み込み画像追加数
 					}
 					if (!$ret) $this->isErrorInReadImage = true;		// 画像読み込みエラー発生
 

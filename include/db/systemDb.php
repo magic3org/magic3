@@ -4287,13 +4287,17 @@ class SystemDb extends BaseDb
 	 *
 	 * @param string $contentType	コンテンツタイプ
 	 * @param string $dir			ファイル格納ディレクトリ
-	 * @return bool					1行以上取得 = true, 取得なし= false
+	 * @param array  $fileIdArray	削除対象のファイルID
+	 * @return bool					true=正常終了、false=異常終了
 	 */
-	public function cleanAttachFileInfo($contentType, $dir)
+	public function cleanAttachFileInfo($contentType, $dir, $fileIdArray = null)
 	{
 		global $gAccessManager;
 		global $gEnvManager;
 
+		// パラメータチェック
+		if (!is_null($fileIdArray) && empty($fileIdArray)) return true;		// 削除対象がない場合は終了
+		
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$logSerial = $gEnvManager->getCurrentAccessLogSerial();	// 現在のアクセスログシリアル番号
 		
@@ -4307,6 +4311,7 @@ class SystemDb extends BaseDb
 		$queryStr .=     'AND af_client_id = ? ';
 		$queryStr .=     'AND af_content_id = \'\' ';		// 仮登録ファイル
 		$queryStr .=     'AND af_file_deleted = false ';
+		if (!empty($fileIdArray)) $queryStr .=     'AND af_file_id in (' . implode(',', array_map(create_function('$a','return "\'" . $a . "\'";'), $fileIdArray)) . ') ';
 		$ret = $this->selectRecords($queryStr, array($contentType, $clientId), $rows);
 		
 		// ファイル削除
