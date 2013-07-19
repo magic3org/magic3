@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: commentTopWidgetContainer.php 6175 2013-07-18 12:04:03Z fishbone $
+ * @version    SVN: $Id: commentTopWidgetContainer.php 6178 2013-07-19 01:25:33Z fishbone $
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('comment') . '/commentBaseWidgetContainer.php');
@@ -63,6 +63,9 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 	const COOKIE_LIB = 'jquery.cookie';		// 名前保存用クッキーライブラリ
 	const PERMALINK_ICON_FILE = '/images/system/permalink.png';		// 「パーマリンク」アイコン
 	const PERMA_BUTTON_ICON_SIZE = 16;				// ボタン用アイコンサイズ
+	
+	// デフォルトデザイン
+	const DEFAULT_CSS_FILE		= '/style.css';		// CSSファイル
 	
 	// ファイルアップロード用スクリプト
 	const FILE_UPLOAD_SCRIPT_FILE	= '/fileuploader/fileuploader.js';				// スクリプトファイル
@@ -518,6 +521,8 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 			// ##### 初期表示時は仮登録の添付ファイルを削除 #####
 			$this->gInstance->getFileManager()->cleanAttachFileInfo(commentCommonDef::$_viewContentType, $this->imageDir);
 		}
+		// デフォルトのデザイン
+		$this->addCss[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);			// CSSファイル
 		
 		// タイトル作成
 		$this->widgetTitle = $this->createTitle($this->contentType, $contentsId);
@@ -617,7 +622,7 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 					if ($this->permitImage){
 						// アップロードライブラリ追加
 						$this->addScript = array($this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_UPLOAD_SCRIPT_FILE));		// スクリプトファイル
-						$this->addCss = array($this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::FILE_UPLOAD_CSS_FILE));			// CSSファイル
+						$this->addCss[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::FILE_UPLOAD_CSS_FILE);			// CSSファイル
 		
 						$this->tmpl->setAttribute('show_uploader', 'visibility', 'visible');
 						$this->tmpl->setAttribute('create_uploader', 'visibility', 'visible');	// 画像アップローダー作成
@@ -887,6 +892,10 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 		}
 		if (empty($userName)) $userName = self::NO_COMMENT_AUTHOR;
 	
+		// 投稿者名
+		// リンクまたは太字で表示する
+		$authorTag = '<strong>' . $this->convertToDispString($userName) . '</strong>';
+		
 		// アバター
 		$avatarTag = '';
 		if ($this->useAvatar){
@@ -919,7 +928,7 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 		$row = array(
 			'title'	=> $titleTag,		// タイトル
 			'avatar' => $avatarTag,			// アバター
-			'author' => $this->convertToDispString($userName),	// 投稿者名
+			'author' => $authorTag,	// 投稿者名
 			'date' => $this->timestampToDate($fetchedRow['cm_create_dt']),		// コメント投稿日(日付)
 			'time' => $this->timestampToTime($fetchedRow['cm_create_dt']),		// コメント投稿日(時間)
 			'permalink' => $permaTag,			// パーマリンクアイコン

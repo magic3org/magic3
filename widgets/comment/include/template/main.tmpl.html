@@ -7,7 +7,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: main.tmpl.html 6092 2013-06-11 00:34:26Z fishbone $
+ * @version    SVN: $Id: main.tmpl.html 6175 2013-07-18 12:04:03Z fishbone $
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -89,11 +89,11 @@ $(function(){
 <div class="art-comments">
 <patTemplate:tmpl name="comment_list">
 <div class="art-comment art-postcontent clearfix">
-<patTemplate:tmpl name="show_avatar" varscope="__parent" autoclear="yes">
+<patTemplate:tmpl name="show_avatar" varscope="__parent" autoclear="yes" visibility="hidden">
     <div class="art-comment-avatar">{AVATAR}</div>
 </patTemplate:tmpl>
     <div class="art-comment-inner">
-<patTemplate:tmpl name="show_title" varscope="__parent" autoclear="yes"><div class="art-comment-title">{TITLE}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="show_title" varscope="__parent" autoclear="yes" visibility="hidden"><div class="art-comment-title">{TITLE}</div></patTemplate:tmpl>
         <div class="art-comment-header">{AUTHOR} {DATE} {TIME} {PERMALINK}{URL}</div>
         <div class="art-comment-content">{COMMENT}</div>
         <patTemplate:tmpl name="show_reply" visibility="hidden"><div class="art-comment-footer"><a href="#" class="button">返信</a></div></patTemplate:tmpl>

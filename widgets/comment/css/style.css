@@ -1,36 +1,14 @@
-.blog_category_list {
-	margin-top:5px;
-	margin-bottom:5px;
+.art-comment-avatar
+{
+	float: left;
 }
-.blog_comment_list {
-	border-bottom: 1px solid;
+.clearfix:before, .clearfix:after
+{
+	width: 100%;
+	content: " ";
+	display: table;
 }
-.blog_comment {
-	padding:3px;
-	border-top: 1px solid;
-}
-.blog_comment img {
-	float:left;
-}
-.blog_comment dl {
-	float:left;
-	width:350px;	/* コメント領域の幅固定 */
-}
-.blog_comment dd {
-	margin-left:0;
-	padding-left:0;
-}
-.blog_comment_body {
-	white-space: pre;           /* CSS 2.0 */
-	white-space: pre-wrap;      /* CSS 2.1 */
-	white-space: pre-line;      /* CSS 3.0 */
-	white-space: -pre-wrap;     /* Opera 4-6 */
-	white-space: -o-pre-wrap;   /* Opera 7 */
-	white-space: -moz-pre-wrap; /* Mozilla */
-	white-space: -hp-pre-wrap;  /* HP Printers */
-	word-wrap: break-word;      /* IE 5+ */
-}
-.blog_page_link {
-	margin-top:5px;
-	margin-bottom:5px;
+.clearfix:after
+{
+	clear: both;
 }
