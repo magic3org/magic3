@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: commentTopWidgetContainer.php 6178 2013-07-19 01:25:33Z fishbone $
+ * @version    SVN: $Id: commentTopWidgetContainer.php 6179 2013-07-19 05:48:11Z fishbone $
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('comment') . '/commentBaseWidgetContainer.php');
@@ -47,6 +47,7 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 	private $addCss = array();		// 追加CSS
 	private $avatarSize;		// アバター画像サイズ
 	private $maxImageSize;		// 画像最大サイズ
+	private $uploadMaxBytes;			// アップロード画像最大バイトサイズ
 	private $imageDir;			// 画像格納ディレクトリ
 	private $imageFileInfoArray;	// 画像ファイル情報
 	const COMMENT_ID_SEPARATOR	= ':';			// コメントID作成用セパレータ
@@ -194,11 +195,15 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 			$this->autolink			= $row[commentCommonDef::FD_AUTOLINK];			// 自動リンク
 			$maxLength				= $row[commentCommonDef::FD_MAX_LENGTH];			// 文字数
 			$this->maxImageSize		= $row[commentCommonDef::FD_MAX_IMAGE_SIZE];		// 画像最大サイズ
+			$this->uploadMaxBytes	= $row[commentCommonDef::FD_UPLOAD_MAX_BYTES];			// アップロード画像最大バイトサイズ
 			$this->useTitle			= $row[commentCommonDef::FD_USE_TITLE];		// タイトルあり
 			$this->useAuthor		= $row[commentCommonDef::FD_USE_AUTHOR];		// 投稿者名あり
 			$this->useEmail			= $row[commentCommonDef::FD_USE_EMAIL];		// Eメールあり
 			$this->useUrl			= $row[commentCommonDef::FD_USE_URL];		// URLあり
 			$this->useAvatar		= $row[commentCommonDef::FD_USE_AVATAR];		// アバターあり
+			
+			// 値修正
+			if ($this->uploadMaxBytes <= 0) $this->uploadMaxBytes = commentCommonDef::DF_UPLOAD_MAX_BYTES;		// アップロード画像最大バイトサイズ
 		} else {		// 定義が取得できないとき
 			//$this->cancelParse();		// テンプレート変換処理中断
 			$this->exitWidget();		// ウィジェット終了処理
@@ -281,7 +286,7 @@ class commentTopWidgetContainer extends commentBaseWidgetContainer
 				} else if ($act == 'uploadimage'){		// 画像アップロード
 					// ##### 画像ありの場合は画像を取り込む #####
 					if ($this->permitHtml && $this->permitImage){
-						$uploader = new qqFileUploader();
+						$uploader = new qqFileUploader(array(), $this->uploadMaxBytes);
 						$resultObj = $uploader->handleUpload($this->gEnv->getWorkDirPath());		// 一時ディレクトリに保存
 
 						if ($resultObj['success']){

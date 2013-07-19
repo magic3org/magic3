@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: commentCommonDef.php 6144 2013-06-29 13:47:32Z fishbone $
+ * @version    SVN: $Id: commentCommonDef.php 6175 2013-07-18 12:04:03Z fishbone $
  * @link       http://www.magic3.org
  */
  
@@ -24,6 +24,7 @@ class commentCommonDef
 	const DF_VIEW_DIRECTION	= 0;		// 昇順
 	const DF_MAX_LENGTH		= 300;		// コメント文字数
 	const DF_MAX_IMAGE_SIZE	= 200;		// 画像最大サイズ
+	const DF_UPLOAD_MAX_BYTES	= 512000;		// アップロード画像最大バイトサイズ
 	
 	// DBフィールド名
 	const FD_VIEW_TYPE		= 'cf_view_type';			// コメントタイプ(0=フラット,1=ツリー)
@@ -31,6 +32,7 @@ class commentCommonDef
 	const FD_MAX_COUNT		= 'cf_max_count';			// コメント最大数
 	const FD_MAX_LENGTH		= 'cf_max_length';			// コメント文字数
 	const FD_MAX_IMAGE_SIZE = 'cf_image_max_size';		// 画像の最大サイズ(縦横)
+	const FD_UPLOAD_MAX_BYTES	= 'cf_upload_max_bytes';	// アップロード画像最大バイトサイズ
 	const FD_VISIBLE		= 'cf_visible';			// 表示可否(個別設定可)
 	const FD_VISIBLE_D		= 'cf_visible_d';			// 表示可否デフォルト値
 	const FD_ACCEPT_POST	= 'cf_accept_post';			// コメントの受付(個別設定可)

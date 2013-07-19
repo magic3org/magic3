@@ -86,7 +86,8 @@ $(function(){
 	    <td class="table-headside">入力</td>
 	    <td><label class="item_list_inline"><input type="checkbox" name="item_permit_html" {PERMIT_HTML_CHECKED} />HTMLあり</label><label class="item_list_inline"><input type="checkbox" name="item_permit_image" {PERMIT_IMAGE_CHECKED} />画像あり</label>
 		<label class="item_list_inline">文字数：<input type="text" name="item_max_length" value="{MAX_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></label>
-		<label class="item_list_inline">最大画像サイズ：<input type="text" name="item_max_image_size" value="{MAX_IMAGE_SIZE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></label>
+		<label class="item_list_inline">最大画像サイズ(横または縦)：<input type="text" name="item_max_image_size" value="{MAX_IMAGE_SIZE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />px</label>
+		<label class="item_list_inline">アップロード画像最大サイズ：<input type="text" name="item_upload_max_bytes" value="{UPLOAD_MAX_BYTES}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" />kバイト</label>
 		</td>
 	</tr>
     <tr>

@@ -109,6 +109,7 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 		$autolink = ($request->trimValueOf('item_autolink') == 'on') ? 1 : 0;		// 自動リンク作成
 		$maxLength = $request->trimValueOf('item_max_length');			// 文字数
 		$maxImageSize = $request->trimValueOf('item_max_image_size');			// 画像最大サイズ
+		$uploadMaxBytes = $request->trimValueOf('item_upload_max_bytes');			// アップロード画像最大バイトサイズ
 		$useTitle = ($request->trimValueOf('item_use_title') == 'on') ? 1 : 0;		// タイトルあり
 		$useAuthor = ($request->trimValueOf('item_use_author') == 'on') ? 1 : 0;		// 投稿者名あり
 		$useDate = ($request->trimValueOf('item_use_date') == 'on') ? 1 : 0;		// 投稿日時あり
@@ -130,6 +131,7 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 			    $fieldValues[commentCommonDef::FD_MAX_COUNT]		= $viewCount;		// コメント最大数
 			    $fieldValues[commentCommonDef::FD_MAX_LENGTH]		= $maxLength;		// コメント文字数
 				$fieldValues[commentCommonDef::FD_MAX_IMAGE_SIZE]	= $maxImageSize;			// 画像最大サイズ
+				$fieldValues[commentCommonDef::FD_UPLOAD_MAX_BYTES]	= $uploadMaxBytes * 1024;			// アップロード画像最大バイトサイズ
 			    $fieldValues[commentCommonDef::FD_VISIBLE]			= intval($commentVisible);		// 表示可否(個別設定可)
 			    $fieldValues[commentCommonDef::FD_VISIBLE_D]		= intval($commentVisibleDefault);		// 表示可否デフォルト値
 			    $fieldValues[commentCommonDef::FD_ACCEPT_POST]		= intval($commentAccept);		// コメントの受付(個別設定可)
@@ -179,6 +181,7 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 				$autolink				= $row[commentCommonDef::FD_AUTOLINK];		// 自動リンク作成
 				$maxLength				= $row[commentCommonDef::FD_MAX_LENGTH];			// 文字数
 				$maxImageSize			= $row[commentCommonDef::FD_MAX_IMAGE_SIZE];			// 画像最大サイズ
+				$uploadMaxBytes			= $row[commentCommonDef::FD_UPLOAD_MAX_BYTES];			// アップロード画像最大バイトサイズ
 				$useTitle				= $row[commentCommonDef::FD_USE_TITLE];		// タイトルあり
 				$useAuthor				= $row[commentCommonDef::FD_USE_AUTHOR];		// 投稿者名あり
 				$useDate				= $row[commentCommonDef::FD_USE_DATE];		// 投稿日時あり
@@ -188,6 +191,8 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 				
 				// 値修正
 				if ($maxImageSize <= 0) $maxImageSize = commentCommonDef::DF_MAX_IMAGE_SIZE;			// 画像最大サイズ
+				if ($uploadMaxBytes <= 0) $uploadMaxBytes = commentCommonDef::DF_UPLOAD_MAX_BYTES;		// アップロード画像最大バイトサイズ
+				$uploadMaxBytes /= 1024;
 			} else {
 				$viewType = 0;				// コメントタイプ(フラット)
 				$viewCount = commentCommonDef::DF_VIEW_COUNT;			// 表示項目数
@@ -202,6 +207,8 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 				$autolink = 1;		// 自動リンク作成
 				$maxLength = commentCommonDef::DF_MAX_LENGTH;			// 文字数
 				$maxImageSize = commentCommonDef::DF_MAX_IMAGE_SIZE;			// 画像最大サイズ
+				$uploadMaxBytes	= commentCommonDef::DF_UPLOAD_MAX_BYTES;			// アップロード画像最大バイトサイズ
+				$uploadMaxBytes /= 1024;
 				$useTitle = 0;		// タイトルあり
 				$useAuthor = 1;		// 投稿者名あり
 				$useDate = 1;		// 投稿日時あり
@@ -227,6 +234,7 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 		$this->tmpl->addVar('_widget', 'view_count', $this->convertToDispString($viewCount));							// 表示コメント数
 		$this->tmpl->addVar('_widget', 'max_length', $this->convertToDispString($maxLength));			// 入力文字数
 		$this->tmpl->addVar('_widget', 'max_image_size', $this->convertToDispString($maxImageSize));			// 画像最大サイズ
+		$this->tmpl->addVar('_widget', 'upload_max_bytes', $this->convertToDispString($uploadMaxBytes));			// アップロード画像最大バイトサイズ
 		$this->tmpl->addVar('_widget', 'user_limited_checked', $this->convertToCheckedString($userLimited));	// ユーザ制限あり
 		$this->tmpl->addVar('_widget', 'permit_html_checked', $this->convertToCheckedString($permitHtml));		// HTMLあり
 		$this->tmpl->addVar('_widget', 'permit_image_checked', $this->convertToCheckedString($permitImage));		// 画像あり
