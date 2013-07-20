@@ -145,8 +145,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// ##### 検索条件 #####
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;

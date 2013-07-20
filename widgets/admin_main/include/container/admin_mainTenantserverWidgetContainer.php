@@ -110,8 +110,7 @@ class admin_mainTenantserverWidgetContainer extends admin_mainBaseWidgetContaine
 		}
 		
 		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 総数を取得
 		$totalCount = $this->serverDb->getAllSeverListCount();

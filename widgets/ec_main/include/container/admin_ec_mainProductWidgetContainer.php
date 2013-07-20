@@ -135,8 +135,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$defaultLangId	= $this->gEnv->getDefaultLanguage();
 		
 		// ##### 検索条件 #####
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$this->search_categoryId = $request->trimValueOf('category');		// 検索カテゴリー

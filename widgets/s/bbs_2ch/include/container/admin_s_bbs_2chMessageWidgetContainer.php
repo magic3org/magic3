@@ -96,7 +96,6 @@ class admin_s_bbs_2chMessageWidgetContainer extends admin_s_bbs_2chBaseWidgetCon
 		$langId = $this->gEnv->getDefaultLanguage();
 		
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'delete'){		// 項目削除の場合

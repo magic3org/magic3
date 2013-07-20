@@ -122,8 +122,7 @@ class admin_photo_mainCommentWidgetContainer extends admin_photo_mainBaseWidgetC
 //		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定	
 		
 		// ##### 検索条件 #####
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;

@@ -167,8 +167,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		
 		// ページ番号
 		$viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$pageNo = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_NO);				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'uploadfile'){		// ファイルアップロードのとき

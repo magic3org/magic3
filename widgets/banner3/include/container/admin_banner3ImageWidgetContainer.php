@@ -108,8 +108,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$this->task = $request->trimValueOf('task');
 		
 		// ##### 検索条件 #####
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		$maxListCount = self::IMAGE_LIST_COUNT;		// 表示画像リンク数
 		
 		// 画像選択画面で使用
@@ -198,7 +197,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
 		
 		// 引き継ぎパラメータ
-		$pageNo = $request->trimValueOf('page');				// ページ番号
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 共通値
 		$userId		= $this->gEnv->getCurrentUserId();

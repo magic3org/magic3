@@ -134,8 +134,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$maxListCount = self::DEFAULT_LIST_COUNT;
 		
 		// ##### 検索条件 #####
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		$searchKeyword = $request->trimValueOf('search_keyword');			// 検索キーワード
 		$searchKey = $request->trimValueOf('search_key');			// 検索ソートキー
 		if ($searchKey == '') $searchKey = self::DEFAULT_SEARCH_KEY;

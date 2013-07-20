@@ -273,8 +273,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		// 表示条件
 		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
 		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 入力データのエラーチェック
 		if (!empty($this->startDt) && !empty($this->endDt) && $this->startDt > $this->endDt){

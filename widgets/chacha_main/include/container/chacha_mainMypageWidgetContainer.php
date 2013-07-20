@@ -58,7 +58,6 @@ class chacha_mainMypageWidgetContainer extends chacha_mainBaseWidgetContainer
 	{
 		$act = $request->trimValueOf('act');
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
 		$postTicket = $request->trimValueOf('ticket');		// POST確認用
 		$memberId = $request->trimValueOf(self::URL_PARAM_MEMBER_ID);	// 会員ID
 		$message = $request->trimValueOf('message');		// 投稿メッセージ

@@ -194,8 +194,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		// 表示条件
 		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
 		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 
 		// 表示するログのタイプを設定
 		$pathParam = $this->path;
@@ -294,8 +293,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		// 表示条件
 		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
 		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$pageNo = $request->trimValueOf('page_');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf('page_', '1');				// ページ番号
 		
 		// 総数を取得
 		$pathParam = $this->path;

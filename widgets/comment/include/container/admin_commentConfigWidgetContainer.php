@@ -259,8 +259,7 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 	{
 		// 入力値取得
 		$act = $request->trimValueOf('act');
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 //		$this->contentType = $request->trimValueOf('content_type');		// 選択中のコンテンツタイプ
 		$contentsId = $request->trimValueOf('contentsid');		// コンテンツID
 		
@@ -337,8 +336,7 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 				
 		// 入力値取得
 		$act = $request->trimValueOf('act');
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 //		$this->contentType = $request->trimValueOf('content_type');		// 選択中のコンテンツタイプ
 
 		$contentTypeName = '';

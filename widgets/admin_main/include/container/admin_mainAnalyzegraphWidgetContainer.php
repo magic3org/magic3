@@ -109,8 +109,7 @@ class admin_mainAnalyzegraphWidgetContainer extends admin_mainConditionBaseWidge
 		if (empty($this->path)) $this->path = self::DEFAULT_ACCESS_PATH;
 		$this->termType = $request->trimValueOf('term');				// 期間タイプ
 		if (empty($this->termType)) $this->termType = self::DEFAULT_TERM_TYPE;
-		$pageNo = $request->trimValueOf('page');			// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');			// ページ番号
 		
 		// 出力期間を取得
 		$endDate = $this->db->getStatus(self::CF_LAST_DATE_CALC_PV);

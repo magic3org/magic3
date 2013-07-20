@@ -106,8 +106,7 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 	function createList($request)
 	{
 		// ##### 検索条件 #####
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$this->search_status = $request->trimValueOf('status');		// ステータス

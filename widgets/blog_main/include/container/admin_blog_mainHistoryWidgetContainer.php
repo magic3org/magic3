@@ -58,8 +58,7 @@ class admin_blog_mainHistoryWidgetContainer extends admin_blog_mainBaseWidgetCon
 		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 一覧表示数
 		$maxListCount = self::DEFAULT_LIST_COUNT;

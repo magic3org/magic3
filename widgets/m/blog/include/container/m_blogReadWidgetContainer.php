@@ -72,7 +72,6 @@ class m_blogReadWidgetContainer extends m_blogBaseWidgetContainer
 		// 入力値取得
 		$act = $request->trimValueOf('act');
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
 		$entryId = $request->trimValueOf('entryid');
 		$startDt = $request->trimValueOf('start');
 		$endDt = $request->trimValueOf('end');

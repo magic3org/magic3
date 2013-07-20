@@ -267,10 +267,10 @@ class EnvManager extends Core
 	/**
 	 * インナーウィジェット用ディレクトリへのパスを取得
 	 */
-	public function getIWidgetsPath()
+/*	public function getIWidgetsPath()
 	{
 		return M3_SYSTEM_INCLUDE_PATH . DIRECTORY_SEPARATOR . 'iwidgets';
-	}
+	}*/
 	/**
 	 * addonsディレクトリへのパスを取得
 	 */

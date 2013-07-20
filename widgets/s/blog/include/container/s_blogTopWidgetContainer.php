@@ -136,7 +136,7 @@ class s_blogTopWidgetContainer extends s_blogBaseWidgetContainer
 		$day = $request->trimValueOf('day');		// 日指定
 		$keyword = $request->trimValueOf('keyword');// 検索キーワード
 		$categoryId = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);		// カテゴリID
-		$this->pageNo = $request->trimIntValueOf('page', '1');				// ページ番号
+		$this->pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 表示タイプ取得
 		$this->viewType = 'title';			// 表示タイプ(ブログタイトル)

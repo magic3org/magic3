@@ -182,8 +182,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 			$categoryId = implode(',', $categoryArray);
 		}
 		
-		$pageNo = $request->trimValueOf(M3_REQUEST_PARAM_PAGE_NO);				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		$quantity = $request->trimValueOf('item_quantity');		// 数量
 		if (empty($quantity)) $quantity = 1;
 		

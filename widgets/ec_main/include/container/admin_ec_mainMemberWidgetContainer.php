@@ -94,8 +94,7 @@ class admin_ec_mainMemberWidgetContainer extends admin_ec_mainBaseWidgetContaine
 	 */
 	function createList($request)
 	{
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		$this->memberType	= $request->trimValueOf('member_type');				// 会員タイプ
 		
 		// デフォルト値を取得

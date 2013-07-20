@@ -90,8 +90,7 @@ class admin_reserve_mainResourceWidgetContainer extends admin_reserve_mainBaseWi
 	{
 		global $gEnvManager;
 		
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// デフォルト値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;	// 表示項目数

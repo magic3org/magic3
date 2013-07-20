@@ -95,8 +95,7 @@ class admin_chacha_mainMessageWidgetContainer extends admin_chacha_mainBaseWidge
 		$userId = $this->gEnv->getCurrentUserId();
 		$langId = $this->gEnv->getDefaultLanguage();
 		
-		$pageNo = $request->trimIntValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'delete'){		// 項目削除の場合

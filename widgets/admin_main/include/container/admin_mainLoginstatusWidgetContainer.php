@@ -162,8 +162,7 @@ class admin_mainLoginstatusWidgetContainer extends admin_mainBaseWidgetContainer
 		$act = $request->trimValueOf('act');
 		
 		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 総数を取得
 		$totalCount = $this->db->getUserLoginStatusListCount();
@@ -214,8 +213,7 @@ class admin_mainLoginstatusWidgetContainer extends admin_mainBaseWidgetContainer
 		// 表示条件
 		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
 		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// ユーザ情報取得
 		$ret = $this->db->getUserByAccount($account, $row);

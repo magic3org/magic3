@@ -135,8 +135,7 @@ class admin_commentCommentWidgetContainer extends admin_commentBaseWidgetContain
 //		if (empty($this->contentType)) $this->contentType = $request->trimValueOf('item_content_type');		// 選択中のコンテンツタイプ
 
 		// ##### 検索条件 #####
-		$pageNo = $request->trimValueOf('page');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 
 		$search_startDt = $request->trimValueOf('search_start');		// 検索範囲開始日付
 		if (!empty($search_startDt)) $search_startDt = $this->convertToProperDate($search_startDt);

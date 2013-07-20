@@ -56,7 +56,6 @@ class m_chachaReadWidgetContainer extends m_chachaBaseWidgetContainer
 	{
 		$act = $request->trimValueOf('act');
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
-		if (empty($pageNo)) $pageNo = 1;
 		
 		// クライアントIDを取得
 		$clientId = $this->_mobileId;
