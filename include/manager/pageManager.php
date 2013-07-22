@@ -3270,8 +3270,8 @@ class PageManager extends Core
 										} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
 												strcasecmp($position, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
 											$moduleContent = '';
-											if ($style == '_mainmenu'){		// ナビゲーションバータイプ
-												$moduleContent = $render->getMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+											if ($style == '_mainmenu'){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
+												if ($widgetType == 'menu') $moduleContent = $render->getMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 										
 												// ナビゲーションバータイプで作成できないときはデフォルトの出力を取得
 												if (empty($moduleContent)) $moduleContent = $render->getModuleContents('xhtml', $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
