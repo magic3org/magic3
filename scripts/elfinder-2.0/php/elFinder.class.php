@@ -8,6 +8,8 @@
  * @author Dmitry (dio) Levashov
  * @author Troex Nevelin
  * @author Alexey Sukhotin
+ *
+ * 2013.7.22	PHP 5.1に対応するためにjson処理を変更 modified by naoki hirata
  **/
 class elFinder {
 	
@@ -991,7 +993,14 @@ class elFinder {
 			return array('error' => $this->error(self::ERROR_OPEN, $volume->path($target), $volume->error()));
 		}
 		
-		$json = json_encode($content);
+		// ##### PHP 5.1に対応させるために処理を変更 ####
+//		$json = json_encode($content);
+		if (function_exists('json_encode')){
+			$json = json_encode($content);
+		} else {
+			global $gInstanceManager;
+			$json = $gInstanceManager->getAjaxManager()->createJsonString($content);
+		}
 
 		if ($json == 'null' && strlen($json) < strlen($content)) {
 			return array('error' => $this->error(self::ERROR_NOT_UTF8_CONTENT, $volume->path($target)));

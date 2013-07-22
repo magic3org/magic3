@@ -4,6 +4,8 @@
  * Default elFinder connector
  *
  * @author Dmitry (dio) Levashov
+ *
+ * 2013.7.22	PHP 5.1に対応するためにjson処理を変更 modified by naoki hirata
  **/
 class elFinderConnector {
 	/**
@@ -54,10 +56,11 @@ class elFinderConnector {
 		$cmd    = isset($src['cmd']) ? $src['cmd'] : '';
 		$args   = array();
 		
-		if (!function_exists('json_encode')) {
+		// ##### PHP 5.1に対応させるために処理を変更 ####
+/*		if (!function_exists('json_encode')) {
 			$error = $this->elFinder->error(elFinder::ERROR_CONF, elFinder::ERROR_CONF_NO_JSON);
 			$this->output(array('error' => '{"error":["'.implode('","', $error).'"]}', 'raw' => true));
-		}
+		}*/
 		
 		if (!$this->elFinder->loaded()) {
 			$this->output(array('error' => $this->elFinder->error(elFinder::ERROR_CONF, elFinder::ERROR_CONF_NO_VOL), 'debug' => $this->elFinder->mountErrors));
@@ -124,7 +127,15 @@ class elFinderConnector {
 			if (!empty($data['raw']) && !empty($data['error'])) {
 				exit($data['error']);
 			} else {
-				exit(json_encode($data));
+				// ##### PHP 5.1に対応させるために処理を変更 ####
+				//exit(json_encode($data));
+				if (function_exists('json_encode')){
+					$json = json_encode($data);
+				} else {
+					global $gInstanceManager;
+					$json = $gInstanceManager->getAjaxManager()->createJsonString($data);
+				}
+				exit($json);
 			}
 		}
 		
