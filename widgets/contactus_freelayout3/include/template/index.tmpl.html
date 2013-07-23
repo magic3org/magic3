@@ -56,7 +56,7 @@ $(function(){
 		sendmessage_reset();
 		sendmessage_init();
 	});
-	if (document.contactus_main.sendstatus.value == '0'){
+	if (!document.contactus_main.sendstatus || document.contactus_main.sendstatus.value == '0'){
 		$('#{SEND_BUTTON_ID}').hide();
 		$('#{CANCEL_BUTTON_ID}').hide();
 	} else if (document.contactus_main.sendstatus.value == '1'){
