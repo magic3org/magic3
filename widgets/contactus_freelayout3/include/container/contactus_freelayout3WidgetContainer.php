@@ -343,6 +343,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		// HTMLサブタイトルを設定
 		$this->gPage->setHeadSubTitle(self::DEFAULT_TITLE_NAME);
 
+		// Artisteerデザイン用のスクリプト
+		if ($this->useArtisteer) $this->tmpl->setAttribute('show_art', 'visibility', 'visible');
+		
 		// お問い合わせフィールド作成
 		$this->addScript = '';			// 追加スクリプト
 		$this->calcScript = '';		// 計算処理用スクリプト
@@ -539,7 +542,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					break;
 				case 'checkbox':	// チェックボックス
 				case 'radio':	// ラジオボタン
-					$fieldName .= '[]';
+					if ($type == 'checkbox') $fieldName .= '[]';	// チェックボックス
 					$defArray = explode(';', $def);
 					for ($j = 0; $j < count($defArray); $j++){
 						$param = array();
@@ -552,12 +555,18 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 						//if (!empty($key) && !empty($value)){
 						if ($value == '') $value = $key;
 						if ($key != '' && $value != ''){
-							for ($k = 0; $k < count($inputValue); $k++){
-								//if (!empty($inputValue[$k]) && strcmp($inputValue[$k], $value) == 0){
-								if ($inputValue[$k] != '' && strcmp($inputValue[$k], $value) == 0){
+							if (is_array($inputValue)){
+								for ($k = 0; $k < count($inputValue); $k++){
+									if ($inputValue[$k] != '' && strcmp($inputValue[$k], $value) == 0){
+										$param[] = 'checked';
+										$checked = true;		// チェックされているかどうか
+										break;
+									}
+								}
+							} else {
+								if ($inputValue != '' && strcmp($inputValue, $value) == 0){
 									$param[] = 'checked';
 									$checked = true;		// チェックされているかどうか
-									break;
 								}
 							}
 							if (!$enabled) $param[] = 'disabled';		// 使用不可
@@ -565,14 +574,16 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 							
 							if ($enabled){		// 入力状態のとき
 								if (empty($this->useArtisteer)){				
-									$inputTag .= '<input type="' . $type . '" id="' . $fieldId . '" name="' . $fieldName . '" value="' . $this->convertToDispString($value) . '"' . $paramStr . ' />' . $this->convertToDispString($key) . M3_NL;
+								//	$inputTag .= '<input type="' . $type . '" id="' . $fieldId . '" name="' . $fieldName . '" value="' . $this->convertToDispString($value) . '"' . $paramStr . ' />' . $this->convertToDispString($key) . M3_NL;
+									$inputTag .= '<input type="' . $type . '" name="' . $fieldName . '" value="' . $this->convertToDispString($value) . '"' . $paramStr . ' />' . $this->convertToDispString($key) . M3_NL;
 								} else {			// Artisteer対応デザインのとき
 									if ($type == 'checkbox'){
 										$inputTag .= '<label class="art-checkbox">';
 									} else {
 										$inputTag .= '<label class="art-radiobutton">';
 									}
-									$inputTag .= '<input type="' . $type . '" id="' . $fieldId . '" name="' . $fieldName . '" value="' . $this->convertToDispString($value) . '"' . $paramStr . ' />' . $this->convertToDispString($key) . '</label>' .M3_NL;
+									//$inputTag .= '<input type="' . $type . '" id="' . $fieldId . '" name="' . $fieldName . '" value="' . $this->convertToDispString($value) . '"' . $paramStr . ' />' . $this->convertToDispString($key) . '</label>' .M3_NL;
+									$inputTag .= '<input type="' . $type . '" name="' . $fieldName . '" value="' . $this->convertToDispString($value) . '"' . $paramStr . ' />' . $this->convertToDispString($key) . '</label>' .M3_NL;
 								}
 							} else {
 								if (empty($this->useArtisteer)){

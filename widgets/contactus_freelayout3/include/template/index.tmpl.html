@@ -1,7 +1,30 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    フリーレイアウトお問い合わせ
+ * @author     株式会社 毎日メディアサービス
+ * @copyright  Copyright 2009-2013 株式会社 毎日メディアサービス.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin.tmpl.html 5824 2013-03-14 05:45:38Z fishbone $
+ * @link       http://www.m-media.co.jp
+ */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
 function sendmessage_confirm(){
+<patTemplate:tmpl name="show_art" visibility="hidden">
+	$('label.art-checkbox').each(function(){
+		if ($(this).hasClass('art-checked')){
+			var ch = $(this).children("input[type='checkbox']");
+			for (var i = 0; i < ch.length; i++){
+				var child = $(ch[i]);
+				child.prop('checked', true);
+			}
+		}
+	});
+</patTemplate:tmpl>
 	document.contactus_main.act.value = 'confirm';
 	document.contactus_main.submit();
 	return true;
@@ -12,7 +35,6 @@ function sendmessage_cancel(){
 	return true;
 }
 function sendmessage(){
-//	if (!window.confirm('お問い合わせを送信します')) return false;
 	document.contactus_main.act.value = 'send';
 	document.contactus_main.submit();
 	return true;

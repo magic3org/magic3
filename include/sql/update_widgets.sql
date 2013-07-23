@@ -302,7 +302,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'contactus_freelayout3';
 INSERT INTO _widgets
 (wd_id,              wd_name,                          wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                             wd_read_scripts, wd_read_css,wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('contactus_freelayout3', 'フリーレイアウトお問い合わせ3', '1.2.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'フリーレイアウトでカスタマイズ可能なお問い合わせメール送信機能。「フリーレイアウトお問い合わせ」のバージョンアップ版。', false,           false,     'jquery.formtips,jquery.format,jquery.calculation', 'jquery.tablednd', true,         false,               true,                true, 0,          0, '2013-06-14', now(),         now());
+('contactus_freelayout3', 'フリーレイアウトお問い合わせ3', '1.3.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'フリーレイアウトでカスタマイズ可能なお問い合わせメール送信機能。「フリーレイアウトお問い合わせ」のバージョンアップ版。', false,           false,     'jquery.formtips,jquery.format,jquery.calculation', 'jquery.tablednd', true,         false,               true,                true, 0,          0, '2013-07-24', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'blog_list';
 INSERT INTO _widgets
 (wd_id,         wd_name,                 wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,            wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
