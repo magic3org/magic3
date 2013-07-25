@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: baseDb.php 5454 2012-12-10 00:59:49Z fishbone $
  * @link       http://www.magic3.org
@@ -102,10 +102,17 @@ class BaseDb extends Core
 	function _getConnection()
 	{
 		// ローカルDBが接続されている場合はローカルDBを使用
-		if ($this->_localCon != null) return $this->_localCon;
+		//if ($this->_localCon != null) return $this->_localCon;
+		if (!is_null($this->_localCon)) return $this->_localCon;
 		
-		if (self::$_con == null){
+		//if (self::$_con == null){
+		if (is_null(self::$_con)){
 			try {
+				$isCharset = false;
+				if (strStartsWith($this->_connect_dsn, 'mysql:') && version_compare(PHP_VERSION, '5.3.6') >= 0){
+					$this->_connect_dsn .= ';charset=utf8';		// クライアントの文字セットを設定
+					$isCharset = true;
+				}
 				self::$_con = new PDO($this->_connect_dsn, $this->_connect_user, $this->_connect_password);
 				self::$_con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				
@@ -121,7 +128,7 @@ class BaseDb extends Core
 					
 					// 文字化け防止SQL実行(MySQL4.1以上)
 					//if (self::$_dbVersion >= '4.1') self::$_con->exec('SET NAMES utf8');
-					self::$_con->exec('SET NAMES utf8');
+					if (!$isCharset) self::$_con->exec('SET NAMES utf8');// クライアントの文字セットを設定
 				}
 			} catch (PDOException $e) {
 				// 共通エラー処理
