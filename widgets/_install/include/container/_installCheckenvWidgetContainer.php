@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: _installCheckenvWidgetContainer.php 3791 2010-11-08 07:07:17Z fishbone $
  * @link       http://www.magic3.org
@@ -77,9 +77,20 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 		if (extension_loaded('pdo_mysql')){
 			$status = $this->_('available');
 			$version = exec("mysql_config --version");	// MySQLバージョン取得
-			if (empty($version)) $version = $this->_('version unknown');
-			$status .= '(' . $version . ')';
-			$data = '<b><font color="green">' . $status . '</font></b>';
+			if (empty($version)){
+				$version = $this->_('version unknown');
+			} else {
+				// バージョンチェック
+				$isOK = false;
+				if (version_compare($version, '5.0') >= 0 && version_compare($version, '5.6') < 0) $isOK = true;
+			}
+			if ($isOK){
+				$status .= '(' . $version . ')';
+				$data = '<b><font color="green">' . $status . '</font></b>';
+			} else {
+				$status = $this->_('version not match') . '(' . $version . ')';
+				$data = '<b><font color="red">' . $status . '</font></b>';
+			}
 		} else {
 			$status = $this->_('not available(pdo_mysql not installed)');			// 利用不可(pdo_mysqlがインストールされていません)
 			$data = '<b><font color="red">' . $status . '</font></b>';
