@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: designManager.php 2551 2009-11-14 07:44:55Z fishbone $
  * @link       http://www.magic3.org
@@ -132,6 +132,55 @@ class DesignManager extends Core
 		$value = $this->gSystem->getSystemConfig(self::CF_CONFIG_WINDOW_STYLE);
 		if (empty($value)) $value = self::DEFAULT_CONFIG_WINDOW_STYLE;
 		return $value;
+	}
+	/**
+	 * ページリンク作成(Artisteer4.1対応)
+	 *
+	 * @param int $pageNo			ページ番号(1～)。
+	 * @param int $pageCount		総項目数
+	 * @param int $linkCount		最大リンク数
+	 * @param string $baseUrl		リンク用のベースURL
+	 * @param string $urlParams		オプションのURLパラメータ
+	 * @param int $style			0=Artisteerスタイル、1=括弧スタイル
+	 * @return string				リンクHTML
+	 */
+	function createPageLink($pageNo, $pageCount, $linkCount, $baseUrl, $urlParams = '', $style = 0)
+	{
+		// パラメータ修正
+		if (!empty($urlParams) && !strStartsWith($urlParams, '&')) $urlParams = '&' . $urlParams;
+		
+		// ページング用リンク作成
+		$pageLink = '';
+		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
+			// ページ数1から$linkCountまでのリンクを作成
+			$maxPageCount = $pageCount < $linkCount ? $pageCount : $linkCount;
+			for ($i = 1; $i <= $maxPageCount; $i++){
+				if ($i == $pageNo){
+					$link = '&nbsp;<span class="active">' . $i . '</span>';
+				} else {
+					//$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $i . $urlParams, true/*リンク用*/);
+					$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $i . $urlParams;
+					$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
+				}
+				$pageLink .= $link;
+			}
+			// 残りは「...」表示
+			if ($pageCount > $linkCount) $pageLink .= '&nbsp;...';
+		}
+		if ($pageNo > 1){		// 前ページがあるとき
+			//$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams, true/*リンク用*/);
+			$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams;
+			$link = '<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >&laquo; 前へ</a>';
+			$pageLink = $link . $pageLink;
+		}
+		if ($pageNo < $pageCount){		// 次ページがあるとき
+			//$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams, true/*リンク用*/);
+			$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams;
+			$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >次へ &raquo;</a>';
+			$pageLink .= $link;
+		}
+		$pageLink = '<div class="art-pager">' . $pageLink . '</div>';
+		return $pageLink;
 	}
 }
 ?>

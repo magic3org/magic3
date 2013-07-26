@@ -19,8 +19,8 @@ if (defined("M3_SYSTEM_DEFINE_INCLUDED")) return;
 define("M3_SYSTEM_DEFINE_INCLUDED", true);
 
 // ######### PHPバージョンチェック #########
-if (phpversion() < '5.1.0') die("PHP version error: ver=" . phpversion() . ". Magic3 can move above version 5.1.0.");
-
+//if (phpversion() < '5.1.0') die("PHP version error: ver=" . phpversion() . ". Magic3 can move above version 5.1.0.");
+if (version_compare(PHP_VERSION, '5.1.0') < 0) die("PHP version error: ver=" . PHP_VERSION . ". Magic3 can move above version 5.1.0.");
 // ######### システム起動状況 #########
 define('M3_SYSTEM',			true);
 define('M3_SYSTEM_DEMO',	false);		// システム起動モード、デモモードフラグ
@@ -29,7 +29,8 @@ define('M3_SESSION_DB',		true);		// セッションの保存先にDBを使用す
 
 // ######### 出力の制御 #########
 ini_set('display_errors', '1');		// コメントをはずすと画面にエラー出力する(以下はエラーレベルの設定)
-if (phpversion() < '5.4.0'){
+//if (phpversion() < '5.4.0'){
+if (version_compare(PHP_VERSION, '5.4.0') < 0){
 error_reporting(E_ALL ^ E_NOTICE);			// E_NOTICE 以外の全てのエラーを表示する(PHP5.3以下初期設定値)
 } else {
 error_reporting(E_ALL & ~E_STRICT & ~E_NOTICE);	// E_STRICT,E_NOTICE 以外の全てのエラーを表示する(PHP5.4以上初期設定値)
