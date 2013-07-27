@@ -118,7 +118,8 @@ function plugin_referer_body($page, $sort)
 		list($ltime, $stime, $count, $url, $enable) = $arr;
 
 		// 非ASCIIキャラクタ(だけ)をURLエンコードしておく BugTrack/440
-		$e_url = htmlspecialchars(preg_replace('/([" \x80-\xff]+)/e', 'rawurlencode("$1")', $url));
+		//$e_url = htmlspecialchars(preg_replace('/([" \x80-\xff]+)/e', 'rawurlencode("$1")', $url));
+		$e_url = htmlspecialchars(preg_replace_callback('/([" \x80-\xff]+)/', create_function('$matches','return rawurlencode($matches[1]);'), $url));		// PHP5.5用対応
 		$s_url = htmlspecialchars(mb_convert_encoding(rawurldecode($url), SOURCE_ENCODING, 'auto'));
 
 		$lpass = get_passage($ltime, FALSE); // 最終更新日時からの経過時間
