@@ -41,6 +41,7 @@ class BaseWidgetContainer extends Core
 	protected $urlParamOrder;					// URLパラメータの並び順
 	protected $_useHierPage;						// 階層化ページを使用するかどうか
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
+	protected $_linkPageCount;						// ページリンク作成用ページ総数
 	const PASSWORD_LENGTH = 8;		// パスワード長
 	const HELP_HEAD = '_help_';		// ヘルプ埋め込み用タグのヘッダ部
 	const LOCAL_TEXT_HEAD = '_lc_';		// ローカライズテキストタグのヘッダ部
@@ -2920,6 +2921,35 @@ class BaseWidgetContainer extends Core
 	function cleanMacroValue($str)
 	{
 		return str_replace(array(M3_TAG_START, M3_TAG_END), array('', ''), $str);
+	}
+	/**
+	 * ページリンク計算
+	 *
+	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整
+	 * @param int $totalCount		総項目数
+	 * @param int $viewItemCount	1ページあたりの項目数
+	 * @return bool					true=成功、false=失敗
+	 */
+	function calcPageLink(&$pageNo, $totalCount, $viewItemCount)
+	{
+		// 表示するページ番号の修正
+		$this->_linkPageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
+		if ($pageNo < 1) $pageNo = 1;
+		if ($pageNo > $this->_linkPageCount) $pageNo = $this->_linkPageCount;
+		return true;
+	}
+	/**
+	 * ページリンク作成(Artisteer4.1対応)
+	 *
+	 * @param int $pageNo			ページ番号(1～)。
+	 * @param int $linkCount		最大リンク数
+	 * @param string $baseUrl		リンク用のベースURL
+	 * @return string				リンクHTML
+	 */
+	function createPageLink($pageNo, $linkCount, $baseUrl)
+	{
+		$pageLink = $this->gDesign->createPageLink($pageNo, $this->_linkPageCount, $linkCount, $this->getUrl($baseUrl, true/*リンク用*/));
+		return $pageLink;
 	}
 }
 ?>

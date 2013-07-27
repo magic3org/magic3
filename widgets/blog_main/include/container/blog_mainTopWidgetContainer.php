@@ -474,14 +474,16 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $this->startDt, $this->endDt, ''/*検索キーワード*/, $this->_langId, $targetBlogId, $this->_userId);
 			}
-			$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
-
+			//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+			$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
+			
 			// リンク文字列作成、ページ番号調整
 			// マルチブログのときはブログIDを付加する
 			$multiBlogParam = '';		// マルチブログ時の追加パラメータ
 			if ($this->useMultiBlog) $multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $targetBlogId;
 		//	$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . $multiBlogParam);
-			$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT, $this->getUrl($this->currentPageUrl . $multiBlogParam, true/*リンク用*/));
+		//	$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT, $this->getUrl($this->currentPageUrl . $multiBlogParam, true/*リンク用*/));
+			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . $multiBlogParam);
 
 			// 記事一覧作成
 			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
@@ -544,12 +546,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				//$totalCount = self::$_mainDb->searchEntryItemsCountByKeyword($this->now, $parsedKeywords, $this->_langId, $this->_userId);
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, ''/*期間開始*/, ''/*期間終了*/, $parsedKeywords, $this->_langId, null/*ブログID*/, $this->_userId);
 			}
-			$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+			//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+			$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
 //			$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
-			$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
-							$this->getUrl($this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword), true/*リンク用*/));
+//			$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
+//							$this->getUrl($this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword), true/*リンク用*/));
+			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
 
 			// 記事一覧を表示
 			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
@@ -607,12 +611,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {
 				$totalCount = self::$_mainDb->getEntryItemsCountByCategory($this->now, $category, $this->_langId, $this->_userId);
 			}
-			$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+			//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+			$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
 			//$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
-			$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
-						$this->getUrl($this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category, true/*リンク用*/));
+//			$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
+//						$this->getUrl($this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category, true/*リンク用*/));
+			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 			
 			// 記事一覧を表示
 			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
@@ -647,12 +653,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				} else {
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId);
 				}
-				$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+				//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+				$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
 				//$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
-				$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
-								$this->getUrl($this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month, true/*リンク用*/));
+				//$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
+				//				$this->getUrl($this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month, true/*リンク用*/));
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
 				
 				// 記事一覧作成
 				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
@@ -687,12 +695,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				} else {
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId);
 				}
-				$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+				//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
+				$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
 				//$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
-				$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT, 
-								$this->getUrl($this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day, true/*リンク用*/));
+			//	$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT, 
+			//					$this->getUrl($this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day, true/*リンク用*/));
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
 
 				// 記事一覧作成
 				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
@@ -1107,23 +1117,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		return $pageLink;
 	}*/
-	/**
-	 * ページ番号を補正
-	 *
-	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整
-	 * @param int $pageCount		ページ総数
-	 * @param int $totalCount		総項目数
-	 * @param int $viewItemCount	1ページあたりの項目数
-	 * @return bool					true=成功、false=失敗
-	 */
-	function correctPageNo(&$pageNo, &$pageCount, $totalCount, $viewItemCount)
-	{
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		return true;
-	}
 	/**
 	 * 詳細コンテンツを作成
 	 *

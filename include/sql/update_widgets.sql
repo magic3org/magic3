@@ -234,7 +234,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'ec_disp';
 INSERT INTO _widgets
 (wd_id,     wd_name,                wd_content_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                      wd_has_admin, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('ec_disp', 'Eコマース - 商品表示', 'product',       '1.3.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Eコマースの商品表示機能。商品の説明や一覧を表示。', true,         true, 10, 1,  2, '2013-1-15', now(), now());
+('ec_disp', 'Eコマース - 商品表示', 'product',       '1.4.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Eコマースの商品表示機能。商品の説明や一覧を表示。', true,         true, 10, 1,  2, '2013-7-27', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'ec_main';
 INSERT INTO _widgets
 (wd_id,     wd_name,              wd_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                                        wd_has_admin, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

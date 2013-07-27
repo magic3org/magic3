@@ -861,8 +861,8 @@ class TextConvManager extends Core
 						"'&(iexcl|#161);'i",
 						"'&(cent|#162);'i",
 						"'&(pound|#163);'i",
-						"'&(copy|#169);'i",
-						"'&#(\d+);'e");  // phpとして評価
+						"'&(copy|#169);'i");
+				//		"'&#(\d+);'e");  // phpとして評価      ##### /e modifier deprecated in PHP5.5 #####
 
 		$replace = array("",
 							"",
@@ -875,8 +875,8 @@ class TextConvManager extends Core
 							chr(161),
 							chr(162),
 							chr(163),
-							chr(169),
-							"chr(\\1)");
+							chr(169));
+					//		"chr(\\1)");	// ##### /e modifier deprecated in PHP5.5 #####
 
 		return preg_replace($search, $replace, $src);
 	}

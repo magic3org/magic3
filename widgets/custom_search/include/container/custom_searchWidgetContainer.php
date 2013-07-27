@@ -26,7 +26,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_TITLE = 'カスタム検索';			// デフォルトのウィジェットタイトル
 	const FIELD_HEAD = 'item';			// フィールド名の先頭文字列
 	const DEFAULT_SEARCH_COUNT	= 20;				// デフォルトの検索結果表示数
-	const LINK_PAGE_COUNT		= 10;			// リンクページ数
+	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_NO_KEYWORD	= '検索キーワードが入力されていません';
 	const MESSAGE_FIND_NO_CONTENT	= '該当するコンテンツが見つかりません';
 	const CONTENT_SIZE = 200;			// 検索結果コンテンツの文字列最大長
@@ -166,9 +166,11 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 //								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto);
 				$totalCount = $this->db->searchContentsByKeyword(0/*項目数取得*/, 0/*ダミー*/, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog,
 								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto);
-
+				$this->calcPageLink($pageNo, $totalCount, $this->resultCount);		// ページ番号修正
+				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($pageNo, $totalCount, $this->resultCount, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword));
+				//$pageLink = $this->createPageLink($pageNo, $totalCount, $this->resultCount, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword));
+				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword));
 				
 				// 検出項目を表示
 				$this->db->searchContentsByKeyword($this->resultCount, $pageNo, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
@@ -603,7 +605,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	 * @param string $baseUrl		リンク用のベースURL
 	 * @return string				リンクHTML
 	 */
-	function createPageLink(&$pageNo, $totalCount, $viewItemCount, $baseUrl)
+/*	function createPageLink(&$pageNo, $totalCount, $viewItemCount, $baseUrl)
 	{
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
@@ -620,8 +622,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				if ($i == $pageNo){
 					$link = '&nbsp;' . $i;
 				} else {
-					//$linkUrl = $this->getUrl($baseUrl . '&page=' . $i, true/*リンク用*/);
-					$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . $i), true/*リンク用*/);
+					//$linkUrl = $this->getUrl($baseUrl . '&page=' . $i, true);
+					$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . $i), true);
 					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
 				}
 				$pageLink .= $link;
@@ -630,19 +632,19 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			if ($pageCount > self::LINK_PAGE_COUNT) $pageLink .= '&nbsp;...';
 		}
 		if ($pageNo > 1){		// 前ページがあるとき
-			//$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo -1), true/*リンク用*/);
-			$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . ($pageNo -1)), true/*リンク用*/);
+			//$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo -1), true);
+			$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . ($pageNo -1)), true);
 			$link = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >前へ</a>';
 			$pageLink = $link . $pageLink;
 		}
 		if ($pageNo < $pageCount){		// 次ページがあるとき
-			//$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo +1), true/*リンク用*/);
-			$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . ($pageNo +1)), true/*リンク用*/);
+			//$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo +1), true);
+			$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . ($pageNo +1)), true);
 			$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >次へ</a>';
 			$pageLink .= $link;
 		}
 		return $pageLink;
-	}
+	}*/
 	/**
 	 * URLに検索条件のパラメータを付加
 	 *

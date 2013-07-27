@@ -61,6 +61,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_SEARCH_LIST_TITLE = '検索結果';		// デフォルト検索結果商品一覧タイトル
 	const DEFAULT_CATEGORY_LIST_TITLE = '「$1」の商品一覧';		// カテゴリー表示時タイトル
 	const DEFAULT_CATEGORY_TITLE_SEPARATOR = '-';		// デフォルトのカテゴリータイトル作成用セパレータ
+	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	//const DEFAULT_TITLE_SEPARATOR = '-';		// デフォルトのタイトル作成用セパレータ
 	// Eコマース設定DB値
 	const CF_E_HIERARCHICAL_CATEGORY	= 'hierarchical_category';	// 階層化商品カテゴリー
@@ -287,21 +288,22 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 				for ($i = 0; $i < count($parsedKeywords); $i++){
 					$this->gInstance->getAnalyzeManager()->logSearchWord($this->gEnv->getCurrentWidgetId(), $parsedKeywords[$i]);
 				}
-				
-				//$totalCount = $this->db->getProductCountByKeyword($keyword, $this->langId, 1);
 				$totalCount = $this->db->getProductCountByKeyword($parsedKeywords, $this->langId, 1);
-				$pageCount = (int)(($totalCount -1) / $productCount) + 1;		// 総ページ数
+				$this->calcPageLink($pageNo, $totalCount, $productCount);		// ページ番号修正
+
+/*				$pageCount = (int)(($totalCount -1) / $productCount) + 1;		// 総ページ数
 				
 				// 表示するページ番号の修正
 				if ($pageNo < 1) $pageNo = 1;
-				if ($pageNo > $pageCount) $pageNo = $pageCount;
+				if ($pageNo > $pageCount) $pageNo = $pageCount;*/
 				
 				// 商品リストを表示
 				//$this->db->getProductByKeyword($keyword, $this->langId, $productCount, ($pageNo -1) * $productCount, array($this, 'productListLoop'));
 				$this->db->getProductByKeyword($parsedKeywords, $this->langId, $productCount, ($pageNo -1) * $productCount, array($this, 'productListLoop'));
 
 				// ページング用リンク作成
-				$pageLink = '';
+				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&task=product&act=search&keyword=' . urlencode($keyword));
+/*				$pageLink = '';
 				if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 					for ($i = 1; $i <= $pageCount; $i++){
 						$linkUrl = $this->currentPageUrl . '&task=product&act=search&keyword=' . urlencode($keyword) . '&page=' . $i;
@@ -312,7 +314,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 						}
 						$pageLink .= $link;
 					}
-				}
+				}*/
 				$this->tmpl->addVar("show_productlist", "page_link", $pageLink);
 				
 				// 商品があるかチェック
@@ -348,17 +350,19 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 				if (!empty($categoryId)){
 					// 総数を取得
 					$totalCount = $this->db->getProductCountByCategoryId($categoryId, $this->langId);
-					$pageCount = (int)(($totalCount -1) / $productCount) + 1;		// 総ページ数
+					$this->calcPageLink($pageNo, $totalCount, $productCount);		// ページ番号修正
+					//$pageCount = (int)(($totalCount -1) / $productCount) + 1;		// 総ページ数
 			
-					// 表示するページ番号の修正
+		/*			// 表示するページ番号の修正
 					if ($pageNo < 1) $pageNo = 1;
-					if ($pageNo > $pageCount) $pageNo = $pageCount;
+					if ($pageNo > $pageCount) $pageNo = $pageCount;*/
 
 					// 商品リストを表示
 					$this->db->getProductByCategoryId($categoryId, $this->langId, $productCount, ($pageNo -1) * $productCount, array($this, 'productListLoop'));
 
 					// ページング用リンク作成
-					// ##### カテゴリーはアクセス時のパラメータを使用 #####
+					$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&category=' . $this->categoryId);
+/*					// ##### カテゴリーはアクセス時のパラメータを使用 #####
 					$pageLink = '';
 					if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 						for ($i = 1; $i <= $pageCount; $i++){
@@ -370,7 +374,7 @@ class ec_dispProductWidgetContainer extends BaseWidgetContainer
 							}
 							$pageLink .= $link;
 						}
-					}
+					}*/
 					$this->tmpl->addVar("show_productlist", "page_link", $pageLink);
 				}
 		
