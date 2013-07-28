@@ -1,6 +1,6 @@
 #photo_gallery {
-	width: 620px;
-	/*width:100%;*/
+	/*width: 620px;*/
+	width:100%;
 }
 #photo_gallery .gallery_nav {
 	clear: both;
