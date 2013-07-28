@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: event_mainTopWidgetContainer.php 5230 2012-09-20 00:50:16Z fishbone $
  * @link       http://www.magic3.org
@@ -149,9 +149,11 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				
 				// 総数を取得
 				$totalCount = self::$_localDb->searchEntryItemsCountByKeyword($now, $keyword, $this->langId);
-
+				$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
+				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
+				//$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
+				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
 				
 				// 記事一覧を表示
 				self::$_localDb->searchEntryItemsByKeyword($entryViewCount, $pageNo, $now, $keyword, $this->langId, array($this, 'searchItemsLoop'));
@@ -178,9 +180,11 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			if (!empty($category)){				// カテゴリー指定のとき
 				// 総数を取得
 				$totalCount = self::$_localDb->getEntryItemsCountByCategory($now, $category, $this->langId);
-
+				$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
+				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
+				//$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
+				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 				
 				// 記事一覧を表示
 				self::$_localDb->getEntryItemsByCategory($entryViewCount, $pageNo, $now, $category, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
@@ -207,9 +211,11 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					
 					// 総数を取得
 					$totalCount = self::$_localDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
+					$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 
 					// リンク文字列作成、ページ番号調整
-					$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
+					//$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
+					$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
 				
 					// 記事一覧作成
 					self::$_localDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
@@ -234,9 +240,11 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					
 					// 総数を取得
 					$totalCount = self::$_localDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
-
+					$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
+					
 					// リンク文字列作成、ページ番号調整
-					$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
+					//$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
+					$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
 					
 					// 記事一覧作成
 					self::$_localDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
@@ -375,9 +383,11 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 
 				// 総数を取得
 				$totalCount = self::$_localDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
-
+				$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
+				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl);
+				//$pageLink = $this->createPageLink($pageNo, $totalCount, $entryViewCount, $this->currentPageUrl);
+				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl);
 			
 				// 記事一覧作成
 				self::$_localDb->getEntryItems($entryViewCount, $pageNo, $now, 0/* 期間で指定 */, $startDt/*期間開始*/, $endDt/*期間終了*/,
@@ -664,7 +674,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	 * @param string $baseUrl		リンク用のベースURL
 	 * @return string				リンクHTML
 	 */
-	function createPageLink(&$pageNo, $totalCount, $viewItemCount, $baseUrl)
+/*	function createPageLink(&$pageNo, $totalCount, $viewItemCount, $baseUrl)
 	{
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
@@ -681,7 +691,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				if ($i == $pageNo){
 					$link = '&nbsp;' . $i;
 				} else {
-					$linkUrl = $this->getUrl($baseUrl . '&page=' . $i, true/*リンク用*/);
+					$linkUrl = $this->getUrl($baseUrl . '&page=' . $i, true);
 					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
 				}
 				$pageLink .= $link;
@@ -690,16 +700,16 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			if ($pageCount > self::LINK_PAGE_COUNT) $pageLink .= '&nbsp;...';
 		}
 		if ($pageNo > 1){		// 前ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo -1), true/*リンク用*/);
+			$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo -1), true);
 			$link = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >前へ</a>';
 			$pageLink = $link . $pageLink;
 		}
 		if ($pageNo < $pageCount){		// 次ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo +1), true/*リンク用*/);
+			$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo +1), true);
 			$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >次へ</a>';
 			$pageLink .= $link;
 		}
 		return $pageLink;
-	}
+	}*/
 }
 ?>
