@@ -877,8 +877,12 @@ class TextConvManager extends Core
 							chr(163),
 							chr(169));
 					//		"chr(\\1)");	// ##### /e modifier deprecated in PHP5.5 #####
-
-		return preg_replace($search, $replace, $src);
+					
+		$destStr = preg_replace($search, $replace, $src);
+		
+		// ##### /e modifier deprecated in PHP5.5 #####
+		$destStr = preg_replace_callback('/&#(\d+);/', create_function('$matches','return chr($matches[1]);'), $destStr);
+		return $destStr;
 	}
 	/**
 	 * 改行コードをbrタグに変換

@@ -321,25 +321,26 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		$totalCount = self::$_mainDb->searchPhotoItemCount($this->_langId, null/*開始日時*/, null/*終了日時*/, $parsedKeywords/*キーワード*/,
 															$this->categoryArray/*カテゴリー*/, $this->authorArray/*撮影者*/, $limitedCategory);
 
-		// リンク文字列作成、ページ番号調整
-		$this->calcPage($pageNo, $totalCount, $this->viewCount, $pageCount, $startNo, $endNo);
-		
-		// 検索条件を設定した場合で画像数が0のときはメッセージ表示
-		if ($startNo > $endNo){
-			if (!empty($parsedKeywords) || !empty($this->categoryArray) || !empty($this->authorArray)) $this->setUserErrorMsg('画像が見つかりません');
+		// リンク文字列作成
+		//$this->calcPage($pageNo, $totalCount, $this->viewCount, $pageCount, $startNo, $endNo);
+		$ret = $this->calcPageLink($pageNo, $totalCount, $this->viewCount);
+		if ($ret){		// ページリンク作成可能な場合
+			// ページリンク作成
+			//$pageLink = $this->createPageLink($pageNo, $pageCount, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams);
+			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams);
+			if (!empty($pageLink)){
+				$this->tmpl->setAttribute('page_link_top', 'visibility', 'visible');		// リンク表示
+				$this->tmpl->setAttribute('page_link_bottom', 'visibility', 'visible');		// リンク表示
+				$this->tmpl->addVar("page_link_top", "page_link", $pageLink);
+				$this->tmpl->addVar("page_link_bottom", "page_link", $pageLink);
+			}
+			// AJAX用URL、詳細画面用URL
+			$ajaxUrl = 'act=getlist&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo . $urlParams;
+			$this->tmpl->setAttribute('get_photo', 'visibility', 'visible');		// 画像取得
+			$this->tmpl->addVar("get_photo", "ajax_url", $ajaxUrl);
+		} else {		// 画像なし、あるいは、ページ番号が正しくない場合
+			$this->setUserErrorMsg('画像が見つかりません');
 		}
-		
-		// ページリンク作成
-		$pageLink = $this->createPageLink($pageNo, $pageCount, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams);
-		if (!empty($pageLink)){
-			$this->tmpl->setAttribute('page_link_top', 'visibility', 'visible');		// リンク表示
-			$this->tmpl->setAttribute('page_link_bottom', 'visibility', 'visible');		// リンク表示
-			$this->tmpl->addVar("page_link_top", "page_link", $pageLink);
-			$this->tmpl->addVar("page_link_bottom", "page_link", $pageLink);
-		}
-
-		// AJAX用URL、詳細画面用URL
-		$ajaxUrl = 'act=getlist&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $pageNo . $urlParams;
 		
 		// 検索カテゴリ情報を取得
 		$ret = $this->categoryDb->getAllCategoryForMenu($this->_langId, $menuCategoryArray, $rows);
@@ -360,7 +361,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 			}
 			if (!empty($category)) $this->categoryInfoArray[$parentCategory] = $category;
 		}
-		
+
 		// ##### 検索画面作成 #####
 		if (!empty(self::$_configArray[photo_mainCommonDef::CF_PHOTO_CATEGORY_PASSWORD]) && empty($this->authCategory)){// 画像カテゴリーのパスワード制限ありで参照可能カテゴリーがないとき
 			$fieldOutput = '';		// 検索画面なし
@@ -391,12 +392,11 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 			$this->tmpl->addVar("search_script", "sort",		$this->sortKey . '-' . $this->sortDirection);		// デフォルトのソート順
 		}
 		
-		// 画面埋め込みデータ
+		// その他画面埋め込みデータ
 		$this->tmpl->addVar("_widget", "photo_count", $this->convertToDispString($this->viewCount));
 		$this->tmpl->addVar("_widget", "load_icon_url", $this->getUrl($this->gEnv->getCurrentWidgetImagesUrl() . self::LOAD_ICON_FILE));			// ロード中アイコン
 		$this->tmpl->addVar("_widget", "photo_detail_url", $this->getUrl($this->gEnv->getDefaultUrl(), true/*リンク用*/));		// 詳細画面へのリンク
 		$this->tmpl->addVar("_widget", "photo_detail_url_others", $urlParams);		// 詳細画面へのリンクの付加URLパラメータ
-		$this->tmpl->addVar("_widget", "ajax_url", $ajaxUrl);
 		$this->tmpl->addVar('_widget', 'raty_image_url', $this->getUrl($this->gEnv->getScriptsUrl() . self::RATY_IMAGE_DIR));	// jquery.raty画像パス
 	}
 	/**
@@ -1141,7 +1141,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 	 * @param int $endNo			戻り値、最後項目番号(1～)。
 	 * @return 						なし
 	 */
-	function calcPage(&$pageNo, $totalCount, $viewItemCount, &$pageCount, &$startNo, &$endNo)
+/*	function calcPage(&$pageNo, $totalCount, $viewItemCount, &$pageCount, &$startNo, &$endNo)
 	{
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
@@ -1149,7 +1149,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
 		$startNo = ($pageNo -1) * $viewItemCount +1;		// 先頭の行番号
 		$endNo = $pageNo * $viewItemCount > $totalCount ? $totalCount : $pageNo * $viewItemCount;// 最後の行番号
-	}
+	}*/
 	/**
 	 * ページリンク作成
 	 *
@@ -1160,7 +1160,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 	 * @param string $urlParams		オプションのURLパラメータ
 	 * @return string				リンクHTML
 	 */
-	function createPageLink($pageNo, $pageCount, $linkCount, $baseUrl, $urlParams)
+/*	function createPageLink($pageNo, $pageCount, $linkCount, $baseUrl, $urlParams)
 	{
 		// ページング用リンク作成
 		$pageLink = '';
@@ -1171,7 +1171,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 				if ($i == $pageNo){
 					$link = '&nbsp;[' . $i . ']';
 				} else {
-					$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $i . $urlParams, true/*リンク用*/);
+					$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $i . $urlParams, true);
 					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >[' . $i . ']</a>';
 				}
 				$pageLink .= $link;
@@ -1180,17 +1180,17 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 			if ($pageCount > $linkCount) $pageLink .= '&nbsp;...';
 		}
 		if ($pageNo > 1){		// 前ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams, true/*リンク用*/);
+			$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams, true);
 			$link = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >[前へ]</a>';
 			$pageLink = $link . $pageLink;
 		}
 		if ($pageNo < $pageCount){		// 次ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams, true/*リンク用*/);
+			$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams, true);
 			$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >[次へ]</a>';
 			$pageLink .= $link;
 		}
 		return $pageLink;
-	}
+	}*/
 	/**
 	 * 検索条件フィールド作成
 	 *

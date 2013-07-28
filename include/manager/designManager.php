@@ -179,7 +179,7 @@ class DesignManager extends Core
 			$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >次へ &raquo;</a>';
 			$pageLink .= $link;
 		}
-		$pageLink = '<div class="art-pager">' . $pageLink . '</div>';
+		if (!empty($pageLink)) $pageLink = '<div class="art-pager">' . $pageLink . '</div>';
 		return $pageLink;
 	}
 }

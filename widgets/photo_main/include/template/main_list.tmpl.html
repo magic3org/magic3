@@ -18,7 +18,9 @@ var photoInfo = new Array();
 
 $(function(){
 	// 初期データ取得
+<patTemplate:tmpl name="get_photo" visibility="hidden">
 	m3_ajax_request('photo_main', '{AJAX_URL}', ajax_success_func, ajax_failure_func);
+</patTemplate:tmpl>
 <patTemplate:tmpl name="category_script" visibility="hidden">
 	// カテゴリーエリア処理
 	$("#category_add").click(function(){

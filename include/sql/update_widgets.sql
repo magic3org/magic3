@@ -342,7 +342,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'photo_main';
 INSERT INTO _widgets
 (wd_id,        wd_name,                   wd_type, wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('photo_main', 'フォトギャラリー - メイン', 'photo', 'photo', true,         '1.4.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フォトギャラリーを表示する。', 'jquery.raty', 'search=jquery.tablednd;',  true,     true,        true,               false,true,       1, 2, '2013-02-08', now(),    now());
+('photo_main', 'フォトギャラリー - メイン', 'photo', 'photo', true,         '1.5.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フォトギャラリーを表示する。', 'jquery.raty', 'search=jquery.tablednd;',  true,     true,        true,               false,true,       1, 2, '2013-07-28', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'ie6_nomore';
 INSERT INTO _widgets 
 (wd_id,        wd_name,       wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES

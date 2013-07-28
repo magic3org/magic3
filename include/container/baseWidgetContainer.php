@@ -2928,15 +2928,24 @@ class BaseWidgetContainer extends Core
 	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整
 	 * @param int $totalCount		総項目数
 	 * @param int $viewItemCount	1ページあたりの項目数
-	 * @return bool					true=成功、false=失敗
+	 * @return bool					true=成功、false=失敗(ページ番号修正)
 	 */
 	function calcPageLink(&$pageNo, $totalCount, $viewItemCount)
 	{
+		$isSucceed = true;	// 正常終了かどうか
+		
+		if ($totalCount <= 0) $isSucceed = false;
+		
 		// 表示するページ番号の修正
 		$this->_linkPageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $this->_linkPageCount) $pageNo = $this->_linkPageCount;
-		return true;
+		if ($pageNo < 1){
+			$pageNo = 1;
+			$isSucceed = false;
+		} else if ($pageNo > $this->_linkPageCount){
+			$pageNo = $this->_linkPageCount;
+			$isSucceed = false;
+		}
+		return $isSucceed;
 	}
 	/**
 	 * ページリンク作成(Artisteer4.1対応)
