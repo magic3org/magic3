@@ -168,3 +168,6 @@ CKEDITOR.on('dialogDefinition', function(ev){
 		dialogDefinition.removeContents('Upload');	// 「アップロード」タブ削除
 	}
 });
+CKEDITOR.on('instanceReady',function(){
+	m3AdjustParentWindow();		// フレームサイズ調整
+});
