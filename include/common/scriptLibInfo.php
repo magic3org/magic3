@@ -236,15 +236,14 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.9.2/jquery.effects.min.js';					// Effects
 	
 	// スマートフォン用jQueryファイル
-	const JQUERYS_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery MobileはjQuery v1.6以上が必要
-//	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.2.0.min.js';					// JQuery Mobile
-//	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.2.0.min.css';				// JQuery Mobile
-	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.2.1.min.js';					// JQuery Mobile
-	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.2.1.min.css';				// JQuery Mobile
+	//const JQUERYS_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery MobileはjQuery v1.6以上が必要
+	const JQUERYS_FILENAME			= 'jquery-1.7.2.min.js';					// JQuery Mobile v1.3はjQuery v1.7以上が必要
+//	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.2.1.min.js';					// JQuery Mobile
+//	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.2.1.min.css';				// JQuery Mobile
 //	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.3.0.min.js';					// JQuery Mobile
 //	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.3.0.min.css';				// JQuery Mobile
-//	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.3.1.min.js';					// JQuery Mobile
-//	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.3.1.min.css';				// JQuery Mobile
+	const JQUERYS_MOBILE_FILENAME	= 'jquery_mobile/jquery.mobile-1.3.2.min.js';					// JQuery Mobile
+	const JQUERYS_MOBILE_CSS		= 'jquery_mobile/jquery.mobile.structure-1.3.2.min.css';				// JQuery Mobile
 
 	// ##### 外部ライブラリ #####
 	const LIB_GOOGLEMAPS			= 'googlemaps';
