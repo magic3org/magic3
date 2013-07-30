@@ -27,6 +27,7 @@ class featured_contentWidgetContainer extends BaseWidgetContainer
 	private $fieldInfoArray = array();			// 動画項目情報
 	private $_contentCreated;	// コンテンツが取得できたかどうか
 	private $viewItemsData = array();			// Joomla!ビュー用データ
+	private $createDateRows = array();			// 作成日取得用レコード
 	const DEFAULT_CONFIG_ID = 0;
 	const CONTENT_TYPE = '';	// コンテンツタイプ
 	const VIEW_CONTENT_TYPE = 'ct';		// 参照数カウント用コンテンツタイプ(将来的にはcontentを使用)
@@ -106,12 +107,22 @@ class featured_contentWidgetContainer extends BaseWidgetContainer
 			$contentIdArray[] = $contentId;
 		}
 		
+		// 作成日が必要な場合は取得
+		if ($this->showCreateDate){		// 表示項目(作成日)
+			$ret = $this->db->getFirstContentItems(self::CONTENT_TYPE, $contentIdArray, $this->langId, $all, $this->createDateRows);
+		}
+		
 		//$contentIdArray = explode(',', $contentId);
 		$this->db->getContentItems(self::CONTENT_TYPE, array($this, 'itemsLoop'), $contentIdArray, $this->langId, $all);
 		if (!$this->_contentCreated){		// コンテンツが取得できなかったときはデフォルト言語で取得
+			// 作成日が必要な場合は取得
+			if ($this->showCreateDate){		// 表示項目(作成日)
+				$ret = $this->db->getFirstContentItems(self::CONTENT_TYPE, $contentIdArray, $this->langId, $this->gEnv->getDefaultLanguage(), $this->createDateRows);
+			}
+		
 			$this->db->getContentItems(self::CONTENT_TYPE, array($this, 'itemsLoop'), $contentIdArray, $this->gEnv->getDefaultLanguage(), $all);
 		}
-
+		
 		// 「featured」用のJoomla!パラメータを設定
 		$this->gEnv->setCurrentWidgetJoomlaParam(array('moduleclass_sfx' => 'featured'));
 		
@@ -337,6 +348,13 @@ class featured_contentWidgetContainer extends BaseWidgetContainer
 
 		// 以下は表示する項目のみ値を設定する
 		if (!empty($this->showCreateDate)){		// 表示項目(作成日)
+			for ($i = 0; $i < count($this->createDateRows); $i++){
+				$row = $this->createDateRows[$i];
+				if ($row['cn_id'] ==  $contentId){
+					$viewItem->created = $row['cn_create_dt'];		// コンテンツ作成日時
+					break;
+				}
+			}
 		}
 		if (!empty($this->showModifiedDate)){		// 表示項目(更新日)
 			$viewItem->modified	= $fetchedRow['cn_create_dt'];		// コンテンツ更新日時

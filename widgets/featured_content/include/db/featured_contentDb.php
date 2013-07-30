@@ -86,5 +86,41 @@ class featured_contentDb extends BaseDb
 		$queryStr .=  'ORDER BY no';
 		$this->selectLoop($queryStr, $params, $callback);
 	}
+	/**
+	 * 初回登録コンテンツ項目を取得(一般用)
+	 *
+	 * @param string	$contentType		コンテンツタイプ
+	 * @param array		$contentIdArray		コンテンツID
+	 * @param string	$lang				言語
+	 * @param bool		$all				すべてのデータを取得するか、ユーザ制限のないデータを取得するかを指定
+	 * @param array     $rows				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getFirstContentItems($contentType, $contentIdArray, $lang, $all, &$rows)
+	{
+		$params = array();
+		
+		$contentId = implode(',', $contentIdArray);
+		
+		// CASE文作成
+		$caseStr = 'CASE cn_id ';
+		for ($i = 0; $i < count($contentIdArray); $i++){
+			$caseStr .= 'WHEN ' . $contentIdArray[$i] . ' THEN ' . $i . ' ';
+		}
+		$caseStr .= 'END AS no';
+
+		$queryStr = 'SELECT *, ' . $caseStr . ' FROM content ';
+//		$queryStr .=  'WHERE cn_deleted = false ';		// 削除されていない
+		$queryStr .=  'WHERE cn_history_index = 0 ';		// 初回登録コンテンツ
+		$queryStr .=    'AND cn_type = ? ';
+		$queryStr .=    'AND cn_id in (' . $contentId . ') ';
+		$queryStr .=    'AND cn_language_id = ? ';
+		$params[] = $contentType;
+		$params[] = $lang;
+
+		$queryStr .=  'ORDER BY no';
+		$ret = $this->selectRecords($queryStr, $params, $rows);
+		return $ret;
+	}
 }
 ?>
