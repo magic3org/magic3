@@ -13,10 +13,10 @@
  * @version    SVN: $Id: admin_mainPageinfoWidgetContainer.php 5903 2013-04-05 03:09:02Z fishbone $
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainMasterBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainMainteBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
-class admin_mainPageinfoWidgetContainer extends admin_mainMasterBaseWidgetContainer
+class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $pageId;	// ページID

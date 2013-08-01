@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: index.php 5121 2012-08-20 03:29:46Z fishbone $
  * @link       http://www.magic3.org
@@ -341,4 +341,12 @@ $HELP['tenantserver_del_btn']['title'] = '削除ボタン';
 $HELP['tenantserver_del_btn']['body'] = '選択されているサーバ情報を削除します。<br />サーバ情報を選択するには、一覧の左端のチェックボックスにチェックを入れます。';
 $HELP['tenantserver_ret_btn']['title'] = '戻るボタン';
 $HELP['tenantserver_ret_btn']['body'] = 'テナントサーバ一覧へ戻ります。';
+
+// ########## ファイルブラウザ ##########
+$HELP['resbrowse']['title'] = 'ファイルブラウザ';
+$HELP['resbrowse']['body'] = 'サーバ上の各種ファイル操作を行います。';
+
+// ########## DBデータ初期化 ##########
+$HELP['initsystem']['title'] = 'DBデータ初期化';
+$HELP['initsystem']['body'] = 'DBのデータを初期化します。';
 ?>

@@ -8,15 +8,15 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_mainInitsystemWidgetContainer.php 4316 2011-09-13 01:27:37Z fishbone $
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainMainteBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
-class admin_mainInitsystemWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $showDetail;		// 詳細表示モードかどうか

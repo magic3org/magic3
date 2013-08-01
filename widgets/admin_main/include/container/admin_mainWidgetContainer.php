@@ -122,7 +122,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 			return true;
 		}
 		// 直接実行の場合
-		if($cmd == M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体実行
+/*		if($cmd == M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体実行
 			// 管理者権限がなければ実行できない
 			if ($this->gEnv->isSystemAdmin()){
 				// コンテナを起動
@@ -133,7 +133,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						return false;
 				}
 			}
-		}
+		}*/
 		// 一般画面でログアウトの場合は画面を維持
 		if ($cmd == M3_REQUEST_CMD_LOGOUT && !$this->gEnv->isAdminDirAccess()){
 			$removeParam = array(	array('key' => M3_REQUEST_PARAM_OPERATION_COMMAND, 'value' => M3_REQUEST_CMD_LOGIN),
@@ -163,8 +163,10 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					$taskSrc = $task;
 					if (empty($task) || $task == 'menu'){	// デフォルト値
 						$task = 'top';		// トップメニュー
-					} else if ($task == 'master'){		// マスター管理
-						$task = 'pageinfo';			// ページ情報をデフォルトにする
+//					} else if ($task == 'master'){		// マスター管理
+//						$task = 'pageinfo';			// ページ情報をデフォルトにする
+					} else if ($task == 'mainte'){		// システムメンテナンス
+						$task = 'resbrowse';			// ファイルブラウザをデフォルトにする
 					} else if ($task == 'userlist_detail'){		// ユーザ詳細
 						$task = 'userlist';
 					} else if ($task == 'usergroup_detail'){		// ユーザグループ詳細
@@ -253,8 +255,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'opelog':			// 運用ログ
 						case 'accesslog':			// アクセスログ
 						case 'searchwordlog':		// 検索語ログ一覧
-						case 'resbrowse':			// リソースブラウズ
-						case 'filebrowse':			// ファイルブラウズ
+						case 'resbrowse':			// リソースブラウズ(resbrowseからfilebrowserを起動)
+//						case 'filebrowse':			// ファイルブラウズ
 						case 'filebrowser':			// ファイルブラウズ(elfinder)
 						case 'menudef':			// メニュー定義
 						case 'smenudef':			// 単一階層メニュー定義

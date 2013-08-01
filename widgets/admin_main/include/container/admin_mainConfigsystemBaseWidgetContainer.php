@@ -101,7 +101,7 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 		$menuText .= '</div>' . M3_NL;
 		
 		// 作成データの埋め込み
-		$linkList = '<div id="configmenu-top"><label>' . 'システム情報' . $linkList . '</div>';
+		$linkList = '<div id="configmenu-top"><label>' . 'システム情報' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
 	}

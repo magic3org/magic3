@@ -13,9 +13,9 @@
  * @version    SVN: $Id: admin_mainFilebrowserWidgetContainer.php 6168 2013-07-14 05:43:31Z fishbone $
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBrowseBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWidgetContainer.php');
 
-class admin_mainFilebrowserWidgetContainer extends admin_mainBrowseBaseWidgetContainer
+class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	// ##### 注意 elFinder2.0-rc1はjQuery1.7以下でしか動かない #####
 	// #####      elFinder2.0はjQuery1.8で動作可能             #####

@@ -13,9 +13,9 @@
  * @version    SVN: $Id: admin_mainResbrowseWidgetContainer.php 6132 2013-06-25 05:29:46Z fishbone $
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBrowseBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainMainteBaseWidgetContainer.php');
 
-class admin_mainResbrowseWidgetContainer extends admin_mainBrowseBaseWidgetContainer
+class admin_mainResbrowseWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	//const FILE_BROWSER_PATH = '/editor/plugins/FileBrowser_Thumbnail/browser.html?Lang=%s&Connector=connectors/php/connector.php';		// ファイルブラウザのパス
 	
