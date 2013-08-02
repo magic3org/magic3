@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_mainSmenudefWidgetContainer.php 4979 2012-06-19 05:53:00Z fishbone $
  * @link       http://www.magic3.org
@@ -147,6 +147,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_url'] = $this->_('URL');	// リンク先URL
 			$localeText['label_item_visible'] = $this->_('Item Control');	// 表示制御
 			$localeText['label_visible'] = $this->_('Visible');	// 公開
+			$localeText['label_title'] = $this->_('Title');	// タイトル
 			$localeText['msg_link_to_content'] = $this->_('Cotrol visible status linked to contents.');	// リンク先のコンテンツに連動
 			$localeText['label_desc'] = $this->_('Description');	// 説明
 			$localeText['label_delete'] = $this->_('Delete');	// 削除
@@ -308,6 +309,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->menuId = $request->trimValueOf('menuid');		// 現在選択中のメニューID
 		
 		$name = $request->trimValueOf('item_name');
+		$title = $request->valueOf('item_title');		// タイトル(HTML可)
 		$desc = $request->trimValueOf('item_desc');
 		$this->menuItemType = $request->trimValueOf('item_type');
 		if ($this->menuItemType == '') $this->menuItemType = '0';		// デフォルトの項目タイプは通常リンク
@@ -380,7 +382,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				} else {
 					$nameLangStr = $name;
 				}
-				$ret = $this->db->addMenuItem($this->menuId, 0, $nameLangStr, $desc, 0/*項目順は自動設定*/, $this->menuItemType, $linkType, $url, $visible, $newId, $linkContentType, $linkContentId);
+				$ret = $this->db->addMenuItem($this->menuId, 0, $nameLangStr, $title, $desc, 0/*項目順は自動設定*/, $this->menuItemType, $linkType, $url, $visible, $newId, $linkContentType, $linkContentId);
 				if ($ret){
 					//$this->setGuidanceMsg('データを追加しました');
 					$this->setGuidanceMsg($this->_('Menu item added.'));	// データを追加しました
@@ -421,7 +423,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				} else {
 					$nameLangStr = $name;
 				}
-				$ret = $this->db->updateMenuItem($this->serialNo, $nameLangStr, $desc, $this->menuItemType, $linkType, $url, $visible, $linkContentType, $linkContentId);
+				$ret = $this->db->updateMenuItem($this->serialNo, $nameLangStr, $title, $desc, $this->menuItemType, $linkType, $url, $visible, $linkContentType, $linkContentId);
 				if ($ret){
 					//$this->setGuidanceMsg('データを更新しました');
 					$this->setGuidanceMsg($this->_('Menu item updated.'));		// データを更新しました
@@ -482,6 +484,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					// 取得値を設定
 					$this->serialNo = $row['md_id'];			// ID
 					$name = $this->getDefaultLangString($row['md_name']);		// 名前
+					$title = $row['md_title'];		// タイトル(HTML可)
 					$desc = $row['md_description'];		// 説明
 					$this->menuItemType = $row['md_type'];		// 項目タイプ
 					$linkType = $row['md_link_type'];	// リンクタイプ
@@ -633,6 +636,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar("_widget", "sel_item_name", $name);		// 名前
+		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// タイトル(HTML可)
 		$this->tmpl->addVar("_widget", "desc", $desc);		// 説明
 		$this->tmpl->addVar("_widget", "sel_url", $url);		// 表示するURL
 		$this->tmpl->addVar("input_url", "sel_url", $url);		// 表示するURL

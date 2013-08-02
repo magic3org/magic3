@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: default_menuWidgetContainer.php 5457 2012-12-11 09:36:29Z fishbone $
  * @link       http://www.magic3.org
@@ -208,14 +208,22 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				// メニュー項目を作成
 				//$name = $row['md_name'];
 				$name = $this->getCurrentLangString($row['md_name']);
-				if (empty($name)) continue;
+				//if (empty($name)) continue;
+				$title = $row['md_title'];		// タイトル(HTML可)
+				if (empty($title)) $title = $name;
+				if (empty($title)) continue;
+				
+				// メニュータイトルの処理。タグが含まれていない場合は文字をエスケープする。
+				$stripName = strip_tags($title);
+				if (strlen($stripName) == strlen($title)) $title = $this->convertToDispString($title);		// 文字列長が同じとき
 				
 				$index++;		// インデックス番号更新
 								
 				switch ($row['md_type']){
 					case 0:			// リンク項目のとき
 						// Joomla用メニューデータ作成
-						$menuItem->title = $name;
+						//$menuItem->title = $name;
+						$menuItem->title = $title;
 						$menuItem->flink = $linkUrl;
 						
 						// ##### Joomla用メニュー階層更新 #####
@@ -223,12 +231,14 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 						
 						// ##### タグ作成 #####
 						if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-						$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $this->convertToDispString($name) . '</span></a></li>' . M3_NL;
+						//$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $this->convertToDispString($name) . '</span></a></li>' . M3_NL;
+						$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $title . '</span></a></li>' . M3_NL;
 						break;
 					case 1:			// フォルダのとき
 						if (!empty($this->isHierMenu)){	// 階層化メニューを使用する場合
 							// Joomla用メニューデータ作成
-							$menuItem->title = $name;
+							//$menuItem->title = $name;
+							$menuItem->title = $title;
 							$menuItem->flink = $linkUrl;
 							$menuItem->parent = true;
 							// 階層作成用
@@ -256,7 +266,8 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 							
 							// ##### タグ作成 #####
 							if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-							$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $this->convertToDispString($name) . '</span></a>' . M3_NL;
+							//$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $this->convertToDispString($name) . '</span></a>' . M3_NL;
+							$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $title . '</span></a>' . M3_NL;
 							if (!empty($menuText)){
 								$treeHtml .= '<ul>' . M3_NL;
 								$treeHtml .= $menuText;
@@ -266,26 +277,30 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 						}
 						break;
 					case 2:			// テキストのとき
-						$treeHtml .= '<li><span>' . $this->convertToDispString($name) . '</span></li>' . M3_NL;
+						//$treeHtml .= '<li><span>' . $this->convertToDispString($name) . '</span></li>' . M3_NL;
+						$treeHtml .= '<li><span>' . $title . '</span></li>' . M3_NL;
 						break;
 					case 3:			// セパレータのとき
 						// Joomla用メニューデータ作成
 						$menuItem->type = 'separator';
-						$menuItem->title = $name;
+						//$menuItem->title = $name;
+						$menuItem->title = $title;
 						$menuItem->flink = '';
 						
 						// ##### Joomla用メニュー階層更新 #####
 						$this->menuTree[] = $menuItem;
 						
 						// ##### タグ作成 #####
-						$treeHtml .= '<li><span class="separator">' . $this->convertToDispString($name) . '</span></li>' . M3_NL;
+						//$treeHtml .= '<li><span class="separator">' . $this->convertToDispString($name) . '</span></li>' . M3_NL;
+						$treeHtml .= '<li><span class="separator">' . $title . '</span></li>' . M3_NL;
 						break;
 				}
 				
 				if ($this->templateType == 0){			// Joomla!v1.0のとき
 					$itemRow = array(
 						'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
-						'name' => $this->convertToDispString($name),			// タイトル
+						//'name' => $this->convertToDispString($name),			// タイトル
+						'name' => $title,			// タイトル
 						'attr' => $attr,			// liタグ追加属性
 						'option' => $linkOption			// Aタグ追加属性
 					);

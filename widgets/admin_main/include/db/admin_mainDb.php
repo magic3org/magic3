@@ -2523,6 +2523,7 @@ class admin_mainDb extends BaseDb
 	 * @param string  $menuId		メニューID
 	 * @param string  $parentId		親メニュー項目ID
 	 * @param string  $name			メニュー名
+	 * @param string  $title		タイトル(HTML可)
 	 * @param string  $desc			説明
 	 * @param int     $index		インデックス番号(0のときは最大値を設定)
 	 * @param int     $type			項目タイプ
@@ -2535,7 +2536,7 @@ class admin_mainDb extends BaseDb
 	 * @param string  $contentId	リンク先コンテンツID
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addMenuItem($menuId, $parentId, $name, $desc, $index, $type, $linkType, $url, $visible, $userLimited, &$newId, $contentType = '', $contentId = '')
+	function addMenuItem($menuId, $parentId, $name, $title, $desc, $index, $type, $linkType, $url, $visible, $userLimited, &$newId, $contentType = '', $contentId = '')
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -2558,10 +2559,10 @@ class admin_mainDb extends BaseDb
 			if ($ret) $index = $maxRow['ms'] + 1;
 		}
 		$queryStr = 'INSERT INTO _menu_def ';
-		$queryStr .=  '(md_id, md_parent_id, md_index, md_menu_id, md_name, md_description, md_type, md_link_type, md_link_url, md_visible, md_user_limited, md_content_type, md_content_id, md_update_user_id, md_update_dt) ';
+		$queryStr .=  '(md_id, md_parent_id, md_index, md_menu_id, md_name, md_title, md_description, md_type, md_link_type, md_link_url, md_visible, md_user_limited, md_content_type, md_content_id, md_update_user_id, md_update_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($id, $parentId, $index, $menuId, $name, $desc, $type, $linkType, $url, intval($visible), intval($userLimited), $contentType, $contentId, $userId, $now));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($id, $parentId, $index, $menuId, $name, $title, $desc, $type, $linkType, $url, intval($visible), intval($userLimited), $contentType, $contentId, $userId, $now));
 		
 		// 新規のシリアル番号取得
 		$queryStr = 'select max(md_id) as ns from _menu_def ';
@@ -2577,6 +2578,7 @@ class admin_mainDb extends BaseDb
 	 *
 	 * @param int     $id			メニュー項目ID
 	 * @param string  $name			メニュー名
+	 * @param string  $title		タイトル(HTML可)
 	 * @param string  $desc			説明
 	 * @param int     $type			項目タイプ
 	 * @param int     $linkType		リンクタイプ
@@ -2587,7 +2589,7 @@ class admin_mainDb extends BaseDb
 	 * @param string  $contentId	リンク先コンテンツID
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateMenuItem($id, $name, $desc, $type, $linkType, $url, $visible, $userLimited, $contentType = '', $contentId = '')
+	function updateMenuItem($id, $name, $title, $desc, $type, $linkType, $url, $visible, $userLimited, $contentType = '', $contentId = '')
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -2598,6 +2600,7 @@ class admin_mainDb extends BaseDb
 		$params = array();
 		$queryStr = 'UPDATE _menu_def ';
 		$queryStr .=  'SET md_name = ?, ';			$params[] = $name;
+		$queryStr .=    'md_title = ?, ';			$params[] = $title;
 		$queryStr .=    'md_description = ?, ';		$params[] = $desc;
 		$queryStr .=    'md_type = ?, ';			$params[] = $type;
 		$queryStr .=    'md_link_type = ?, ';		$params[] = $linkType;

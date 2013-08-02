@@ -154,6 +154,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_url'] = $this->_('URL');	// リンク先URL
 			$localeText['label_item_visible'] = $this->_('Item Control');	// 表示制御
 			$localeText['label_visible'] = $this->_('Visible');	// 公開
+			$localeText['label_title'] = $this->_('Title');	// タイトル
 			$localeText['msg_user_limited'] = $this->_('Limit user');	// ユーザ制限
 			$localeText['msg_link_to_content'] = $this->_('Cotrol visible status linked to contents.');	// リンク先のコンテンツに連動
 			$localeText['label_desc'] = $this->_('Description');	// 説明
@@ -373,6 +374,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		if ($parentId == '') $parentId = '0';
 		
 		$name = $request->trimValueOf('item_name');
+		$title = $request->valueOf('item_title');		// タイトル(HTML可)
 		$desc = $request->trimValueOf('item_desc');
 		$this->menuItemType = $request->trimValueOf('item_type');
 		if ($this->menuItemType == '') $this->menuItemType = '0';		// デフォルトの項目タイプは通常リンク
@@ -445,7 +447,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				} else {
 					$nameLangStr = $name;
 				}
-				$ret = $this->db->addMenuItem($this->menuId, $parentId, $nameLangStr, $desc, 0/*項目順は自動設定*/, $this->menuItemType, $linkType, $url,
+				$ret = $this->db->addMenuItem($this->menuId, $parentId, $nameLangStr, $title, $desc, 0/*項目順は自動設定*/, $this->menuItemType, $linkType, $url,
 												$visible, $userLimited, $newId, $linkContentType, $linkContentId);
 				if ($ret){
 					//$this->setGuidanceMsg('データを追加しました');
@@ -485,7 +487,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				} else {
 					$nameLangStr = $name;
 				}
-				$ret = $this->db->updateMenuItem($this->serialNo, $nameLangStr, $desc, $this->menuItemType, $linkType, $url, 
+				$ret = $this->db->updateMenuItem($this->serialNo, $nameLangStr, $title, $desc, $this->menuItemType, $linkType, $url, 
 													$visible, $userLimited, $linkContentType, $linkContentId);
 				if ($ret){
 					//$this->setGuidanceMsg('データを更新しました');
@@ -549,6 +551,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					// 取得値を設定
 					$this->serialNo = $row['md_id'];			// ID
 					$name = $this->getDefaultLangString($row['md_name']);		// 名前
+					$title = $row['md_title'];		// タイトル(HTML可)
 					$desc = $row['md_description'];		// 説明
 					$this->menuItemType = $row['md_type'];		// 項目タイプ
 					$linkType = $row['md_link_type'];	// リンクタイプ
@@ -700,6 +703,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar("_widget", "sel_item_name", $name);		// 名前
+		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// タイトル(HTML可)
 		$this->tmpl->addVar("_widget", "desc", $desc);		// 説明
 		$this->tmpl->addVar("_widget", "sel_url", $url);		// 表示するURL
 		$this->tmpl->addVar("input_url", "sel_url", $url);		// 表示するURL

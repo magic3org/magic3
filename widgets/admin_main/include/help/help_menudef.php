@@ -75,6 +75,10 @@ class help_menudef extends HelpConv
 				'title' =>	$this->_('Description'),			// 説明
 				'body' =>	$this->_('Description about menu item.')		// メニュー項目についての説明です。
 			),
+			'menudef_title' => array(	
+				'title' =>	$this->_('Title'),			// タイトル
+				'body' =>	$this->_('Configure the different value from \'Name\' value. You can use HTML tags.')// メニュー項目に「名前」と異なる表示を行う場合に設定します。HTMLタグが使用可能です。
+			),
 			'menudef_new_btn' => array(	
 				'title' =>	$this->_('New Button'),			// 新規ボタン
 				'body' =>	$this->_('Add menu item.')		// 新規メニュー項目を追加します。
