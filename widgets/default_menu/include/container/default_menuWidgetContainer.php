@@ -209,7 +209,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				//$name = $row['md_name'];
 				$name = $this->getCurrentLangString($row['md_name']);
 				//if (empty($name)) continue;
-				$title = $row['md_title'];		// タイトル(HTML可)
+				$title = $this->getCurrentLangString($row['md_title']);		// タイトル(HTML可)
 				if (empty($title)) $title = $name;
 				if (empty($title)) continue;
 				

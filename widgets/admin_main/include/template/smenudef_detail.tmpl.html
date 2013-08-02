@@ -163,7 +163,12 @@ function ajax_failure_func(request)
 	</tr>-->
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_MENUDEF_TITLE}>{_LC_LABEL_TITLE}</span></td>
-	    <td colspan="3"><input type="text" name="item_title" value="{TITLE}" maxlength="300" style="width:100%" /></td>
+	    <td colspan="3">
+		<input type="text" name="item_title" value="{TITLE}" maxlength="300" style="width:95%" />&nbsp;&nbsp;{LANG}<br />
+	    <patTemplate:tmpl name="input_title" visibility="hidden">
+	    <input type="text" name="item_title_{ID}" value="{VALUE}" maxlength="300" style="width:95%" />&nbsp;&nbsp;{LANG}<br />
+	    </patTemplate:tmpl>
+		</td>
 	</tr>
 	<tr>
 	<td colspan="4" align="right">

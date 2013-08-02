@@ -49,7 +49,8 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	const CONTENT_WIDGET_ID_MOBILE = 'm/content';			// コンテンツ編集ウィジェット(携帯用)
 	const CONTENT_WIDGET_ID_SMARTPHONE = 's/content';			// コンテンツ編集ウィジェット(スマートフォン用)
 	const LANG_ICON_PATH = '/images/system/flag/';		// 言語アイコンパス
-	const ITEM_NAME_HEAD = 'item_name_';				// 多言語対応名前ヘッダ
+	const ITEM_NAME_HEAD = 'item_name_';				// 多言語対応名前ヘッダ部
+	const ITEM_TITLE_HEAD = 'item_title_';				// 多言語対応タイトルヘッダ部
 	const TREE_ITEM_HEAD = 'treeitem_';		// ツリー項目IDヘッダ
 	
 	/**
@@ -389,16 +390,24 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// 多言語入力を取得
 		if ($this->isMultiLang){		// 多言語対応の場合
-			$nameLangArray = array();		// 多言語対応文字列
+			$nameLangArray = array();		// 多言語対応名前文字列
+			$titleLangArray = array();		// 多言語対応タイトル文字列
 			for ($i = 0; $i < count($this->availableLangRows); $i++){
 				$inputLangId = $this->availableLangRows[$i]['ln_id'];
 
+				// 名前
 				$itemName = self::ITEM_NAME_HEAD . $inputLangId;
 				$itemValue = $request->trimValueOf($itemName);
 				if (!empty($itemValue)) $nameLangArray[$inputLangId] = $itemValue;
+				
+				// タイトル
+				$itemName = self::ITEM_TITLE_HEAD . $inputLangId;
+				$itemValue = $request->valueOf($itemName);		// HTML可
+				if (!empty($itemValue)) $titleLangArray[$inputLangId] = $itemValue;
 			}
 			// デフォルト言語を追加
 			if (!empty($name)) $nameLangArray[$this->gEnv->getDefaultLanguage()] = $name;
+			if (!empty($title)) $titleLangArray[$this->gEnv->getDefaultLanguage()] = $title;
 		}
 		
 		$this->menuDeviceType = 0;	// メニューの端末タイプ
@@ -444,10 +453,12 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				// ##### 格納用の名前を作成 #####
 				if ($this->isMultiLang){		// 多言語対応の場合
 					$nameLangStr = $this->serializeLangArray($nameLangArray);
+					$titleLangStr = $this->serializeLangArray($titleLangArray);
 				} else {
 					$nameLangStr = $name;
+					$titleLangStr = $title;
 				}
-				$ret = $this->db->addMenuItem($this->menuId, $parentId, $nameLangStr, $title, $desc, 0/*項目順は自動設定*/, $this->menuItemType, $linkType, $url,
+				$ret = $this->db->addMenuItem($this->menuId, $parentId, $nameLangStr, $titleLangStr, $desc, 0/*項目順は自動設定*/, $this->menuItemType, $linkType, $url,
 												$visible, $userLimited, $newId, $linkContentType, $linkContentId);
 				if ($ret){
 					//$this->setGuidanceMsg('データを追加しました');
@@ -484,10 +495,12 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				// ##### 格納用の名前を作成 #####
 				if ($this->isMultiLang){		// 多言語対応の場合
 					$nameLangStr = $this->serializeLangArray($nameLangArray);
+					$titleLangStr = $this->serializeLangArray($titleLangArray);
 				} else {
 					$nameLangStr = $name;
+					$titleLangStr = $title;
 				}
-				$ret = $this->db->updateMenuItem($this->serialNo, $nameLangStr, $title, $desc, $this->menuItemType, $linkType, $url, 
+				$ret = $this->db->updateMenuItem($this->serialNo, $nameLangStr, $titleLangStr, $desc, $this->menuItemType, $linkType, $url, 
 													$visible, $userLimited, $linkContentType, $linkContentId);
 				if ($ret){
 					//$this->setGuidanceMsg('データを更新しました');
@@ -551,7 +564,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					// 取得値を設定
 					$this->serialNo = $row['md_id'];			// ID
 					$name = $this->getDefaultLangString($row['md_name']);		// 名前
-					$title = $row['md_title'];		// タイトル(HTML可)
+					$title = $this->getDefaultLangString($row['md_title']);		// タイトル(HTML可)
 					$desc = $row['md_description'];		// 説明
 					$this->menuItemType = $row['md_type'];		// 項目タイプ
 					$linkType = $row['md_link_type'];	// リンクタイプ
@@ -575,6 +588,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					// ##### 多言語対応用データ作成 #####
 					if ($this->isMultiLang){		// 多言語対応の場合
 						$nameLangArray = $this->unserializeLangArray($row['md_name']);
+						$titleLangArray = $this->unserializeLangArray($row['md_title']);
 					}
 				}
 			}
@@ -698,7 +712,9 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			
 			// その他の入力欄作成
 			$this->tmpl->setAttribute('input_lang', 'visibility', 'visible');
-			$this->createInputLangText($nameLangArray);
+			$this->tmpl->setAttribute('input_title', 'visibility', 'visible');
+			$this->createInputNameLangText($nameLangArray);
+			$this->createInputTitleLangText($titleLangArray);
 		}
 		
 		// ### 入力値を再設定 ###
@@ -1124,12 +1140,12 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		return $imageTag;
 	}
 	/**
-	 * 多言語文字列入力エリア作成
+	 * 多言語名前文字列入力エリア作成
 	 *
 	 * @param array $nameArray	多言語対応文字列
 	 * @return なし
 	 */
-	function createInputLangText($nameArray)
+	function createInputNameLangText($nameArray)
 	{
 		for ($i = 0; $i < count($this->availableLangRows); $i++){
 			$langId = $this->availableLangRows[$i]['ln_id'];
@@ -1144,6 +1160,29 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			);
 			$this->tmpl->addVars('input_lang', $row);
 			$this->tmpl->parseTemplate('input_lang', 'a');
+		}
+	}
+	/**
+	 * 多言語タイトル文字列入力エリア作成
+	 *
+	 * @param array $titleArray	多言語対応文字列
+	 * @return なし
+	 */
+	function createInputTitleLangText($titleArray)
+	{
+		for ($i = 0; $i < count($this->availableLangRows); $i++){
+			$langId = $this->availableLangRows[$i]['ln_id'];
+			if ($langId == $this->gEnv->getDefaultLanguage()) continue;		// デフォルト言語は除く
+			$langImage = $this->createLangImage($langId);
+			
+			$value = $titleArray[$langId];
+			$row = array(
+				'id'    => $langId,			// 言語ID
+				'value'	=> $this->convertToDispString($value),			// 入力値
+				'lang'	=> $langImage		// 言語画像
+			);
+			$this->tmpl->addVars('input_title', $row);
+			$this->tmpl->parseTemplate('input_title', 'a');
 		}
 	}
 }
