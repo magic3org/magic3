@@ -42,7 +42,7 @@ class admin_menu3WidgetContainer extends BaseAdminWidgetContainer
 	const PREVIEW_ICON_SIZE = 24;			// プレビューアイコンサイズ
 	const HELP_TITLE = 'ヘルプ';
 	const MENU_TITLE_CONTENT = 'コンテンツ管理';		// コンテンツ編集メニューのタイトル
-	const MENU_TITLE_SUB_CONTENT = 'サブコンテンツ管理';		// サブコンテンツ編集メニューのタイトル
+	const MENU_TITLE_SUB_CONTENT = '補助コンテンツ管理';		// サブコンテンツ編集メニューのタイトル
 	
 	/**
 	 * コンストラクタ

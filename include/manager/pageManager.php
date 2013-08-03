@@ -1935,6 +1935,12 @@ class PageManager extends Core
 						$contents .= M3_INDENT_SPACE . 'return true;' . M3_NL;
 						$contents .= '}' . M3_NL;
 						$contents .= 'window.onerror = hideIEErrors;' . M3_NL;
+					} else {		// ダッシュボード画面、メイン管理画面
+						// 画面更新用関数追加
+						$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
+						$contents .= M3_INDENT_SPACE . 'var href = window.location.href.split("#");' . M3_NL;
+						$contents .= M3_INDENT_SPACE . 'window.location.href = href[0];' . M3_NL;
+						$contents .= '}' . M3_NL;
 					}
 					
 					// ウィジェット単体実行以外のときの処理
