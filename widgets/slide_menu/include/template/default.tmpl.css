@@ -1,3 +1,15 @@
+/**
+ * CSS作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: default.tmpl.css 4696 2012-02-19 03:31:35Z fishbone $
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_tmpl">
 {CSS_ID}.{MENU_CLASS}, {CSS_ID}.{MENU_CLASS} ul, {CSS_ID}.{MENU_CLASS} li {
     list-style-type:none;
@@ -13,6 +25,9 @@
 }
 {CSS_ID}.{MENU_CLASS} li {
     margin-top: 1px;
+}
+{CSS_ID}.{MENU_CLASS} li:before {	/* remove list mark */
+    display:none;
 }
 {CSS_ID}.{MENU_CLASS} li a {
     color: #fff;
