@@ -46,20 +46,24 @@
 	-webkit-box-shadow:0px 3px 4px #591E12 inset;
 	-box-shadow:0px 3px 4px #591E12 inset;*/
 }
-#m3menubar a.ldd_subfoot{
-	display:block;
-	clear:both;
-	padding:15px 20px;
-	text-transform:uppercase;
-/*	font-size:12px;*/
-/*	-moz-box-shadow:0px 0px 2px #777 inset;
-	-webkit-box-shadow:0px 0px 2px #777 inset;
-	-box-shadow:0px 0px 2px #777 inset;*/
-}
 #m3menubar .device img {
 	margin: 10px 7px;
 }
 #m3menubar .device .static {
 	display:inline-block;
 	height:45px;
+}
+#m3menubar .ldd_subfoot{
+	display:block;
+	clear:both;
+	padding:5px 10px;
+	white-space: nowrap;
+/*	font-size:12px;*/
+/*	-moz-box-shadow:0px 0px 2px #777 inset;
+	-webkit-box-shadow:0px 0px 2px #777 inset;
+	-box-shadow:0px 0px 2px #777 inset;*/
+}
+#m3menubar .ldd_submenu span {
+	cursor:pointer;
+	margin-right:50px;
 }
