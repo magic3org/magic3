@@ -1,0 +1,6 @@
+/* Begin Additional CSS Styles */
+.art-logo-name {
+text-shadow: 2px 2px 2px #555555;
+}
+.art-blockheader .t, .art-vmenublockheader .t {white-space: nowrap;}
+/* End Additional CSS Styles */

@@ -210,7 +210,8 @@ INSERT INTO _templates
 ('s/default_simple',              's/default_simple',              1,       2,              false,     true,         0,             now()),
 ('s/default_jquery',              's/default_jquery',              1,       2,              false,     true,         0,             now()),
 ('s/default_jquery13',           's/default_jquery13',             1,       2,              false,     true,         0,             now()),
-('s/art_test',                    's/art_test',                    1,       2,              false,     true,         0,             now());
+('s/art_test',                    's/art_test',                    1,       2,              false,     true,         0,             now()),
+('s/art42_sample2',               's/art42_sample2',               1,       2,              false,     true,         0,             now());
 
 -- メニューIDマスター
 INSERT INTO _menu_id
