@@ -125,6 +125,7 @@ class PageManager extends Core
 	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
 	const CF_ADMIN_JQUERY_VERSION = 'admin_jquery_version';			// 管理画面用jQueryバージョン
 	const CF_USE_JQUERY = 'use_jquery';				// jQueryを常に使用するかどうか
+	const CF_SMARTPHONE_USE_JQUERY_MOBILE = 'smartphone_use_jquery_mobile';		// スマートフォン画面でjQuery Mobileを使用
 	const SD_HEAD_OTHERS	= 'head_others';		// ヘッダその他タグ
 	const DEFAULT_THEME_DIR = '/ui/themes/';				// jQueryUIテーマ格納ディレクトリ
 	const THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
@@ -2430,7 +2431,8 @@ class PageManager extends Core
 		global $gEnvManager;
 		global $gRequestManager;
 		global $gInstanceManager;
-		
+		global $gSystemManager;
+
 		$replaceStr = '';		// 変換文字列
 				
 		if (defined('M3_STATE_IN_INSTALL')){		// インストール時のヘッダ出力
@@ -2538,7 +2540,7 @@ class PageManager extends Core
 			// ##### テンプレート情報に応じた処理 #####
 			// テンプレートクリーンが必要な場合はJQueryを追加
 			if ($cleanType != 0) $this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
-
+			
 			// 検索ロボットへの指示
 			$robots = htmlspecialchars(trim($this->gSystem->getSiteDef(M3_TB_FIELD_SITE_ROBOTS)));
 			if (!empty($robots)){
@@ -2571,6 +2573,20 @@ class PageManager extends Core
 					$replaceStr .= '<link rel="shortcut icon" href="' . $faviconFile .'" />' . M3_NL;
 				}
 			}
+			// ##### 追加ライブラリの読み込み #####
+			if ($gEnvManager->getIsSmartphoneSite()){			// スマートフォン用URLのとき
+				$value = $gSystemManager->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面で常にjQuery Mobileを使用
+				if ($value){
+					// ##### jQueryMobileが読み込まれる前に読み込む必要があるスクリプトを設定 #####
+					if (!empty($this->headPreMobileScriptFiles)){		// jQueryMobileファイルの前に出力
+						for ($l = 0; $l < count($this->headPreMobileScriptFiles); $l++){
+							$this->addScriptFile($this->headPreMobileScriptFiles[$l]);		// 通常機能用のスクリプト追加
+						}
+					}
+					$this->addScriptFile($this->selectedJQueryMobileFilename);
+				}
+			}
+			
 			// ##### Ajaxライブラリの読み込み #####
 			if (!$gEnvManager->isAdminDirAccess()){		// 通常画面へのアクセスのとき
 				if ($this->db->isExistsWidgetWithAjax($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId())){// Ajaxライブラリを使用しているウィジェットがあるときは追加

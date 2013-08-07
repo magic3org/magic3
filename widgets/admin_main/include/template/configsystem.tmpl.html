@@ -211,7 +211,8 @@ $(function(){
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>&nbsp;&nbsp;
-		<input type="checkbox" name="item_use_jquery" {USE_JQUERY} />常にjQueryを使用</td>
+		<input type="checkbox" name="item_use_jquery" {USE_JQUERY} />jQueryを常に使用&nbsp;&nbsp;<input type="checkbox" name="item_smartphone_use_jquery_mobile" {SMARTPHONE_USE_JQUERY_MOBILE} />jQuery Mobileを常に使用(スマートフォン)
+		</td>
 	</tr>
 	<tr>
 		<td colspan="2">jQueryUIテーマ
@@ -279,7 +280,7 @@ $(function(){
 	    <td class="table-headside">リソースディレクトリ(ファイル)</td>
 	    <td colspan="2">{RESOURCE_DIR_FILE}&nbsp;&nbsp;{RESOURCE_DIR_FILE_ACCESS}</td>
 	</tr>-->
-        <tr>
+    <tr>
 	    <td class="table-headside">テンプレートディレクトリ</td>
 	    <td colspan="2">{TEMPLATES_DIR}&nbsp;&nbsp;{TEMPLATES_DIR_ACCESS}</td>
 	</tr>
