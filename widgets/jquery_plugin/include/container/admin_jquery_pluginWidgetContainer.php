@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_jquery_pluginWidgetContainer.php 3468 2010-08-10 03:54:48Z fishbone $
  * @link       http://www.magic3.org
@@ -17,7 +17,6 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 
 class admin_jquery_pluginWidgetContainer extends BaseAdminWidgetContainer
 {
-	private $sysDb;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
 	private $langId;
@@ -28,7 +27,8 @@ class admin_jquery_pluginWidgetContainer extends BaseAdminWidgetContainer
 	private $selectedPlugin;			// 選択しているjQueryプラグイン
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const LIB_ITEM_HEAD = 'item_lib_';			// 選択ライブラリの項目名ヘッダ
-	const DEFAULT_SCRIPT = "jQuery(document).ready(function(\$){\n    // any code\n});\n";		// 「$」をエスケープ(2010/8/10)
+//	const DEFAULT_SCRIPT = "jQuery(document).ready(function(\$){\n    // any code\n});\n";		// 「$」をエスケープ(2010/8/10)
+	const DEFAULT_SCRIPT = "\$(function(){\n    // any code\n});\n";
 	
 	/**
 	 * コンストラクタ
@@ -37,9 +37,6 @@ class admin_jquery_pluginWidgetContainer extends BaseAdminWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -323,7 +320,7 @@ class admin_jquery_pluginWidgetContainer extends BaseAdminWidgetContainer
 			// 使用数
 			$defCount = 0;
 			if (!empty($id)){
-				$defCount = $this->sysDb->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
+				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
 			}
 			$operationDisagled = '';
 			if ($defCount > 0) $operationDisagled = 'disabled';
