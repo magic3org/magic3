@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;	// システム情報取得用
 	private $serialNo;	// シリアルNo
 	private $pageId;	// ページID
 	private $pageSubId;	// ページサブID
@@ -42,7 +41,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -223,7 +221,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		}
 
 		// ページサブIDメニュー作成(ページメインIDを先に作成してから)
-		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/);
+		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/, -1/*デバイス関係なし*/, true/*メニューから選択可項目のみ*/);
 
 		// ページ情報取得
 		$contentTypeStr = '';		// コンテンツ種別

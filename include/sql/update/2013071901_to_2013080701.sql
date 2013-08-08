@@ -22,4 +22,7 @@ INSERT INTO _system_config
 (sc_id,               sc_value,                  sc_name) VALUES
 ('smartphone_use_jquery_mobile',    '0',                        'スマートフォン画面でjQuery Mobileを使用');
 
+-- ページIDマスター
+ALTER TABLE _page_id ADD pg_available         BOOLEAN        DEFAULT true                  NOT NULL;      -- メニューから選択可能かどうか
+
 -- *** システム標準テーブル ***

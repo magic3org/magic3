@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;	// システム情報取得用
 	private $pageId;	// ページID
 	private $pageIdType;	// ページタイプ
 	private $serialArray = array();		// 表示されている項目シリアル番号
@@ -35,7 +34,6 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		
 		// DBオブジェクト作成
 		$this->db = new admin_mainDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 		
 		// ページタイプ
 		$this->pageTypeArray = array(	array(	'name' => 'アクセスポイント',	'value' => '0'),
@@ -166,6 +164,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		$desc = $request->trimValueOf('item_desc');		// 説明
 		$priority = $request->trimValueOf('item_priority');		// 優先度
 		$active = ($request->trimValueOf('item_active') == 'on') ? 1 : 0;		// 値が有効かどうか
+		$available = ($request->trimValueOf('item_available') == 'on') ? 1 : 0;		// メニューから選択可能かどうか
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
@@ -183,7 +182,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの追加
-				$ret = $this->db->updatePageId($this->pageIdType, $newPageId, $name, $desc, $priority, $active);
+				$ret = $this->db->updatePageId($this->pageIdType, $newPageId, $name, $desc, $priority, $active, $available);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
@@ -214,7 +213,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの更新
-				$ret = $this->db->updatePageId($this->pageIdType, $this->pageId, $name, $desc, $priority, $active);
+				$ret = $this->db->updatePageId($this->pageIdType, $this->pageId, $name, $desc, $priority, $active, $available);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データを再取得
@@ -252,9 +251,11 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 				$desc = $row['pg_description'];
 				$priority = $row['pg_priority'];
 				$active = $row['pg_active'];
+				$available = $row['pg_available'];		// メニューから選択可能かどうか
 				if (!$row['pg_editable']) $editable = false;
 			} else {
 				$active = '1';		// デフォルトはページ公開
+				$available = '1';		// メニューから選択可能かどうか
 			}
 		}
 		
@@ -276,16 +277,18 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			$this->tmpl->addVar("_widget", "active_disabled", 'disabled');		// 有効な値かどうか
 		}
 
-		$activeStr = '';
-		if ($active) $activeStr = 'checked';
-
 		$this->tmpl->addVar("_widget", "page_id", $this->pageId);			// ページID
 		$this->tmpl->addVar("_widget", "page_id_type", $this->pageIdType);		// ページIDタイプ
 		
 		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
 		$this->tmpl->addVar("_widget", "desc", $desc);		// 説明
 		$this->tmpl->addVar("_widget", "priority", $priority);		// 優先度
-		$this->tmpl->addVar("_widget", "active", $activeStr);		// 有効な値かどうか
+		$checked = '';
+		if ($active) $checked = 'checked';
+		$this->tmpl->addVar("_widget", "active", $checked);		// 有効な値かどうか
+		$checked = '';
+		if ($available) $checked = 'checked';
+		$this->tmpl->addVar("_widget", "available", $checked);		// メニューから選択可能かどうか
 	}
 	/**
 	 * ページID、取得したデータをテンプレートに設定する

@@ -571,11 +571,12 @@ class admin_mainDb extends BaseDb
 	 * ページIDのリストを取得
 	 *
 	 * @param function $callback	コールバック関数
-	 * @param int $type				リストの種別
+	 * @param int $type				リストの種別(0=ページID、1=ページサブID)
 	 * @param int $filter			データのフィルタリング(-1=PC携帯スマートフォンに関係なく取得、0=PC用のみ、1=携帯用のみ、2=スマートフォン用のみ)
+	 * @param bool $availableOnly	true=メニュー表示可能項目のみ取得、false=すべて取得
 	 * @return						なし
 	 */
-	function getPageIdList($callback, $type, $filter = -1)
+	function getPageIdList($callback, $type, $filter = -1, $availableOnly = false)
 	{
 		$params = array($type);
 		$queryStr = 'SELECT * FROM _page_id ';
@@ -591,6 +592,7 @@ class admin_mainDb extends BaseDb
 			if ($filter == 1) $mobile = 1;			// 携帯のとき
 			$params[] = $mobile;
 		}
+		if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
 		$queryStr .=  'ORDER BY pg_priority';
 		$this->selectLoop($queryStr, $params, $callback);
 	}
@@ -863,9 +865,10 @@ class admin_mainDb extends BaseDb
 	 * @param string  $desc			説明
 	 * @param int  $priority		優先度
 	 * @param bool  $active			有効かどうか
+	 * @param bool  $available		メニューから選択可能かどうか
 	 * @return						true=成功、false=失敗
 	 */
-	function updatePageId($type, $id, $name, $desc, $priority, $active)
+	function updatePageId($type, $id, $name, $desc, $priority, $active, $available)
 	{
 		// トランザクション開始
 		$this->startTransaction();
@@ -878,10 +881,11 @@ class admin_mainDb extends BaseDb
 			$queryStr .=     'pg_name = ?, ';
 			$queryStr .=     'pg_description = ?, ';
 			$queryStr .=     'pg_priority = ?, ';
-			$queryStr .=     'pg_active = ? ';
+			$queryStr .=     'pg_active = ?, ';
+			$queryStr .=     'pg_available = ? ';
 			$queryStr .=   'WHERE pg_id = ? ';
 			$queryStr .=     'AND pg_type = ? ';
-			$this->execStatement($queryStr, array($name, $desc, $priority, intval($active), $id, $type));
+			$this->execStatement($queryStr, array($name, $desc, $priority, intval($active), intval($available), $id, $type));
 		} else {
 			// 新規レコードを追加
 			$queryStr  = 'INSERT INTO _page_id (';
@@ -890,15 +894,17 @@ class admin_mainDb extends BaseDb
 			$queryStr .=   'pg_name, ';
 			$queryStr .=   'pg_description, ';
 			$queryStr .=   'pg_priority, ';
-			$queryStr .=   'pg_active ';
+			$queryStr .=   'pg_active, ';
+			$queryStr .=   'pg_available ';
 			$queryStr .= ') VALUES (';
 			$queryStr .=   '?, ';
 			$queryStr .=   '?, ';
 			$queryStr .=   '?, ';
 			$queryStr .=   '?, ';
 			$queryStr .=   '?, ';
+			$queryStr .=   '?, ';
 			$queryStr .=   '?) ';
-			$this->execStatement($queryStr, array($id, $type, $name, $desc, $priority, intval($active)));
+			$this->execStatement($queryStr, array($id, $type, $name, $desc, $priority, intval($active), intval($available)));
 		}
 
 		// トランザクション確定
