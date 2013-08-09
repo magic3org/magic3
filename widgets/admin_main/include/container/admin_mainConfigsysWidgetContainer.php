@@ -962,7 +962,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		
 		$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $pageId, $row);
 		if ($ret){
-			$ret = $this->db->updatePageId(0/*アクセスポイント*/, $pageId, $row['pg_name'], $row['pg_description'], $row['pg_priority'], $status);
+			$ret = $this->db->updatePageId(0/*アクセスポイント*/, $pageId, $row['pg_name'], $row['pg_description'], $row['pg_priority'], $status, $row['pg_available']);
 		}
 		return $ret;
 	}

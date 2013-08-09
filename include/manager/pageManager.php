@@ -1171,6 +1171,7 @@ class PageManager extends Core
 						// システム運用権限がある場合は管理用スクリプトを追加
 						// 一般画面と管理画面の切り替え用のスライドメニューバーには管理用スクリプト,CSSが必要
 						$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
+						$this->addScriptFile(ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME);		// jQuery Contextmenu Lib
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
@@ -2801,6 +2802,7 @@ class PageManager extends Core
 			// 設定値取得
 			$openType = $this->gSystem->getSystemConfig(self::CF_CONFIG_WINDOW_OPEN_TYPE);// ウィジェット設定画面のウィンドウ表示タイプ(0=別ウィンドウ、1=タブ)
 			
+			// ##### ページへJavascriptの埋め込む #####
 			// JavaScriptグローバル変数の設定
 			//$replaceStr .= '<script type="text/javascript">' . M3_NL;
 			//$replaceStr .= '<!--' . M3_NL;
@@ -2952,36 +2954,6 @@ class PageManager extends Core
 				$cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
 				$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない
 				if ($gEnvManager->isSystemManageUser()){		// 一般用画面で管理者権限がある場合のみ有効
-/*					$this->initScript .= M3_INDENT_SPACE . '$(\'body\').append(\'<div id="m3editwidget"></div>\');' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').cluetip({local:true, positionBy:"fixed", topOffset:10, leftOffset:-100, width:50, showTitle:false, sticky:true, mouseOutClose:true, closeText:"",' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'fx:{open:\'fadeIn\', openSpeed:\'fast\'},' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onActivate: function(e){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var attrs = m3_splitAttr($(e).attr(\'m3\'));' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var widgetId = attrs[\'widgetid\'];' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var serialNo = attrs[\'serial\'];' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var configId = attrs[\'configid\'];' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var useconfig = attrs[\'useconfig\'];' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var html = \'\';' . M3_NL;
-					if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
-											'html += \'<a href="javascript:void(0);" onclick="m3ShowAdjustWindow(\' + configId + \', \' + serialNo + \', M3_PAGE_ID, M3_PAGE_SUB_ID);return false;" >' .
-											'<img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" alt="タイトル・位置調整" title="タイトル・位置調整" border="0" style="margin-left:4px;" /></a>\';' . M3_NL;
-					}
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (useconfig == 1){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 
-										'html += \'<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\\\'\' + widgetId + \'\\\', \' + configId + \', \' + serialNo + \');return false;" >' .
-										'<img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" alt="ウィジェット設定" title="ウィジェット設定" border="0" style="margin-left:4px;" /></a>\';' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (html == \'\'){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'return false;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '} else {' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '$(\'#m3editwidget\').html(html);' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'return true;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
-					*/
-					
 					// 管理用ツールバー
 					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').each(function(){' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var attrs = m3_splitAttr($(this).attr(\'m3\'));' . M3_NL;
@@ -3034,7 +3006,6 @@ class PageManager extends Core
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
 					// 閉じるボタン処理
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).find(\'.m3closebox\').click(function(event){' . M3_NL;
-					//$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'event.stopPropagation();' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).children(\'.m3tooltip\').hide();' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
 					// コンテンツ編集ボタンの位置修正
@@ -3042,41 +3013,58 @@ class PageManager extends Core
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var offset = $(this).offset();' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var width = $(this).outerWidth();' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).find(\'.m3edittool\').each(function(){' . M3_NL;
-/*					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipWidth = $(this).outerWidth(true);' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var curPos = $(this).position();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var curOffset = $(this).offset();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var parent = $(this).offsetParent();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var parentOffset = parent.offset();' . M3_NL;*/
-					//$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var x = offset.left;' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).offset({left: offset.left});' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).width(width);' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
 					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
 					
-					// ウィジェットボーダーハイライト、ツールチップ表示
-					/*
-					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').hover(function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).addClass(\'m3_widget_highlight\');' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '}, function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).removeClass(\'m3_widget_highlight\');' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;*/
-					/*
-					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').hover(function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).addClass(\'m3_widget_highlight\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var pos = $(this).position();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var width = $(this).outerWidth();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var tooltipWidth = tooltipObj.outerWidth(true);' . M3_NL;
-			//		$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var x = $(this).offset().left + width - tooltipWidth;' . M3_NL;
-			//		$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var y = $(this).offset().top;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var x = pos.left + width - tooltipWidth;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var y = pos.top;' . M3_NL;
-    				$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'tooltipObj.css({position: "absolute",top: y + "px", left: x + "px"}).show();' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '}, function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).removeClass(\'m3_widget_highlight\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'tooltipObj.hide();' . M3_NL;
-					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;*/
+					// コンテキストメニューを作成
+					$this->initScript .= M3_INDENT_SPACE . 'var widgetWindow = \'<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">\';' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<ul>\';' . M3_NL;
+					if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
+						$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wadjust"><img src="\' + M3_ROOT_URL + \'/images/system/adjust_widget.png" />&nbsp;<span>タイトル・位置調整</span></li>\';' . M3_NL;
+					}
+					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wconfig"><img src="\' + M3_ROOT_URL + \'/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>\';' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</ul>\';' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</div>\';' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . '$("body").append(widgetWindow);' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3_widget\').contextMenu(\'m3_widgetmenu\', {' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'menuStyle: {' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '// border : "2px solid green",' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'backgroundColor: \'#FFFFFF\',' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'width: "150px",' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'textAlign: \'left\',' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'font: \'12px/1.5 Arial, sans-serif\'' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'itemStyle: {' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'padding: \'3px 3px\'' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'bindings: {' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '\'m3_wconfig\': function(t){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var attrs = m3_splitAttr($(\'#\' + t.id).attr(\'m3\'));' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'if (attrs[\'useconfig\'] == \'0\'){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'alert("このウィジェットには設定画面がありません");' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'return;' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '}' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'm3ShowConfigWindow(attrs[\'widgetid\'], attrs[\'configid\'], attrs[\'serial\']);' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '},' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '\'m3_wadjust\': function(t){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var attrs = m3_splitAttr($(\'#\' + t.id).attr(\'m3\'));' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'm3ShowAdjustWindow(attrs[\'configid\'], attrs[\'serial\'], M3_PAGE_ID, M3_PAGE_SUB_ID);' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onContextMenu: function(e){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'return true;' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onShowMenu: function(e, menu){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '// メニュー項目の変更' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var attrs = m3_splitAttr($(e.target).parents(\'dl\').attr(\'m3\'));' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (attrs[\'useconfig\'] == \'0\'){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '$(\'#m3_wconfig\', menu).remove();' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'return menu;' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
 				}
 			}
 			// ポップアップメッセージがある場合は表示
@@ -3711,7 +3699,7 @@ class PageManager extends Core
 			$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 			$contents .= '<dl class="m3_widget m3_widget_sortable" id="' . $widgetTag . '" ' . $m3Option . ' >' . M3_NL;
 			$contents .= '<dt class="m3_widget_with_check_box ' . $sharedClassName . '">' . $rows[$i]['wd_name'] . '</dt>' . M3_NL;
-			$contents .= '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr><table>' . M3_NL;
+			$contents .= '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table>' . M3_NL;
 			$contents .= '<table width="100%"><tr><td>' . $configName . '</td><td align="right">' . $configImg . $widgetIndex . '</td></tr></table></dd>' . M3_NL;
 			$contents .= '</dl>' . M3_NL;
 		}
