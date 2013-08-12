@@ -51,8 +51,13 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	 * @return string 						テンプレートファイル名。テンプレートライブラリを使用しない場合は空文字列「''」を返す。
 	 */
 	function _setTemplate($request, &$param)
-	{	
-		return 'filebrowser.tmpl.html';
+	{
+		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+		if ($openBy == 'ckeditor'){
+			return 'filebrowser_ckeditor.tmpl.html';
+		} else {
+			return 'filebrowser.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む

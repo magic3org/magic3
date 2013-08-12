@@ -18,7 +18,10 @@ $(function(){
 		url : '{URL}',  // connector URL (REQUIRED)
 		width: '80%',
 		height: '500px',
-		lang: '{LANG}'             // language (OPTIONAL)
+		lang: '{LANG}',             // language (OPTIONAL)
+		getFileCallback : function(files, fm){		// ダブルクリックのファイルオープン禁止
+			return false;
+		}
 	}).elfinder('instance');
 });
 //]]>

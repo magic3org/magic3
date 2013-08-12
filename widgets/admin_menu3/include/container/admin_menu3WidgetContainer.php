@@ -183,7 +183,7 @@ class admin_menu3WidgetContainer extends BaseAdminWidgetContainer
 		// メニューを表示
 		if ($menu == 'off'){	// メニュー非表示指定のとき
 		} else if (!empty($openBy)){	// 別ウィンドウで表示のときは閉じるボタン表示
-			if ($openBy != 'tabs' && $openBy != 'iframe'){		// タブ、インナーフレーム表示以外
+			if ($openBy != 'tabs' && $openBy != 'iframe' && $openBy != 'ckeditor'){		// タブ、インナーフレーム、CKEditor表示以外
 				$this->tmpl->setAttribute('closebutton', 'visibility', 'visible');
 			
 				// ウィンドウ閉じるアイコンを設定
