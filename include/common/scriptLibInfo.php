@@ -70,6 +70,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_CLOUDCAROUSEL	= 'jquery.cloudcarousel';
 //	const LIB_JQUERY_JQEASYPANEL	= 'jquery.jqeasypanel';
 	const LIB_JQUERY_SCROLLTO		= 'jquery.scrollto';
+	const LIB_JQUERY_FULLCALENDAR	= 'jquery.fullcalendar';
 	
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
@@ -91,6 +92,7 @@ class ScriptLibInfo
 	const JQUERY_CLOUDCAROUSEL_VER	= '1.0.5';
 //	const JQUERY_JQEASYPANEL_VER	= '1.0';
 	const JQUERY_SCROLLTO_VER		= '1.4.3.1';
+	const JQUERY_FULLCALENDAR_VER	= '1.6.2';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -159,6 +161,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 //	const JQUERY_JQEASYPANEL_FILENAME	= 'jquery/jquery.jqEasyPanel.js';
 //	const JQUERY_JQEASYPANEL_CSS		= 'jquery/jqeasypanel.css';
 	const JQUERY_SCROLLTO_FILENAME		= 'jquery/jquery.scrollTo-1.4.3.1-min.js';
+	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.2/fullcalendar.min.js';
+	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.2/fullcalendar.css';
 	
 	// ライブラリの公式サイトのURL
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
@@ -177,6 +181,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_CLOUDCAROUSEL_URL		= 'http://www.professorcloud.com/mainsite/carousel.htm';
 //	const JQUERY_JQEASYPANEL_URL		= 'http://www.jqeasy.com/';
 	const JQUERY_SCROLLTO_URL			= 'http://flesler.blogspot.jp/2007/10/jqueryscrollto.html';
+	const JQUERY_FULLCALENDAR_URL		= 'http://arshaw.com/fullcalendar/';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
 	
 	// ディレクトリ名
@@ -362,6 +367,11 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 					self::LIB_JQUERY_SCROLLTO		=>	array(	'script' 	=> array(self::JQUERY_SCROLLTO_FILENAME),	// jquery.scrollto用のファイル
 																'url'		=> self::JQUERY_SCROLLTO_URL,
 																'version'	=> self::JQUERY_SCROLLTO_VER),
+					self::LIB_JQUERY_FULLCALENDAR	=>	array(	'script' 	=> array(self::JQUERY_FULLCALENDAR_FILENAME),	// jquery.FullCalendar用のファイル
+																'css'		=> array(self::JQUERY_FULLCALENDAR_CSS),
+																'url'		=> self::JQUERY_FULLCALENDAR_URL,
+																'version'	=> self::JQUERY_FULLCALENDAR_VER),
+																
 /*					self::LIB_JQUERY_JQEASYPANEL	=>	array(	'script' 	=> array(self::JQUERY_JQEASYPANEL_FILENAME),	// jquery.jqEasyPanel用のファイル
 																'css'		=> array(self::JQUERY_JQEASYPANEL_CSS),
 																'url'		=> self::JQUERY_JQEASYPANEL_URL,
