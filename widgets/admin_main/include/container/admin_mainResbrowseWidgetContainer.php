@@ -17,8 +17,6 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainMainteB
 
 class admin_mainResbrowseWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
-	//const FILE_BROWSER_PATH = '/editor/plugins/FileBrowser_Thumbnail/browser.html?Lang=%s&Connector=connectors/php/connector.php';		// ファイルブラウザのパス
-	
 	/**
 	 * コンストラクタ
 	 */
@@ -52,18 +50,6 @@ class admin_mainResbrowseWidgetContainer extends admin_mainMainteBaseWidgetConta
 	 */
 	function _assign($request, &$param)
 	{
-/*		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		
-		$browserPath = $this->gEnv->getScriptsUrl() . '/' . ScriptLibInfo::FCKEDITOR_DIRNAME . sprintf(self::FILE_BROWSER_PATH, $langId);
-		$this->tmpl->addVar('_widget', 'url', $this->getUrl($browserPath));
-		$this->tmpl->addVar('_widget', 'res_dir', $this->gEnv->getResourcePath());// リソースディレクトリ
-		
-		// テキストをローカライズ
-		$localeText = array();
-		$localeText['label_res_dir'] = $this->_('Resource Directory:');		// リソースディレクトリ：
-		$localeText['msg_browser_not_support'] = $this->_('Your browser does not support iframes.');		// ブラウザがiframeに対応していません
-		$this->setLocaleText($localeText);
-		*/
 		$url = '?task=filebrowser&openby=iframe';
 		$this->tmpl->addVar("_widget", "url", $url);
 	}

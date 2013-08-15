@@ -17,6 +17,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWid
 
 class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	private $openByDialog;	// CKEditorからの起動かどうか
+	
 	// ##### 注意 elFinder2.0-rc1はjQuery1.7以下でしか動かない #####
 	// #####      elFinder2.0はjQuery1.8で動作可能             #####
 /*	const FILE_BROWSER_PATH			= '/elfinder-2.0-rc1/php/connector.php';		// ファイルブラウザのパス
@@ -31,6 +33,7 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	const FILEBROWSER_CSS_FILE		= '/elfinder-2.0/css/elfinder.min.css';		// ファイルブラウザelfinder用CSSファイル
 	const FILEBROWSER_PLUS_CSS_FILE	= '/elfinder-2.0/css/theme.css';		// ファイルブラウザelfinder用追加CSSファイル
 	const DEFAULT_THEME_CSS_FILE	= '/smoothness/jquery-ui.custom.css';		// テーマファイル
+	const DIALOG_FIX_CSS 			= 'body { margin: 0; } #elfinder { border: none; } .elfinder-toolbar, .elfinder-statusbar { border-radius: 0 !important; }';
 	
 	/**
 	 * コンストラクタ
@@ -53,7 +56,9 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
-		if ($openBy == 'ckeditor'){
+		if ($openBy == 'dialog') $this->openByDialog = true;			// CKEditorから開いた場合
+		
+		if ($this->openByDialog){	// CKEditorからの起動かどうか
 			return 'filebrowser_ckeditor.tmpl.html';
 		} else {
 			return 'filebrowser.tmpl.html';
@@ -108,6 +113,24 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . self::FILEBROWSER_SCRIPT_FILE),
 							$this->getUrl($this->gEnv->getScriptsUrl() . self::FILEBROWSER_LANG_FILE));
 		return $scriptArray;
+	}
+	/**
+	 * CSSデータをHTMLヘッダ部に設定
+	 *
+	 * CSSデータをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssToHead($request, &$param)
+	{
+		if ($this->openByDialog){	// CKEditorからの起動かどうか
+			return self::DIALOG_FIX_CSS;
+		} else {
+			return '';
+		}
 	}
 }
 ?>

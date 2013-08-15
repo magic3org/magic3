@@ -13,31 +13,37 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-    function getUrlParam(paramName) {
-        var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i');
-        var match = window.location.search.match(reParam);
-        
-        return (match && match.length > 1) ? match[1] : '';
-    }
+function getUrlParam(paramName){
+	var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i');
+	var match = window.location.search.match(reParam);
 
-	$(function(){
-        var funcNum = getUrlParam('CKEditorFuncNum');
-		
-        var elf = $('#elfinder').elfinder({
-			lang: '{LANG}',             // language
-            url : '{URL}',
-			width: '100%',
-			height: '650px',
-            getFileCallback : function(file) {
-                var url = file.url;
-//                if(url.slice(0, options.url.length) == options.url) url = '/' + url;
-						
-                window.opener.CKEDITOR.tools.callFunction(funcNum, url);
-                window.close();
-            }
-            /*resizable: false*/
-        }).elfinder('instance');
-    });
+	return (match && match.length > 1) ? match[1] : '';
+}
+
+$(function(){
+	var funcNum = getUrlParam('CKEditorFuncNum');
+
+	var elf = $('#elfinder').elfinder({
+		lang: '{LANG}',             // language
+		url : '{URL}',
+		getFileCallback : function(file) {
+			var url = file.url;
+			//                if(url.slice(0, options.url.length) == options.url) url = '/' + url;
+	
+			window.opener.CKEDITOR.tools.callFunction(funcNum, url);
+			window.close();
+		},
+		resizable: false
+	}).elfinder('instance');
+
+	// ウィンドウサイズ自動調整
+	$(window).resize(function(){
+		var h = $(window).height();
+		if($('#elfinder').height() != h){
+			$('#elfinder').height(h).resize();
+		}
+	});
+});
 //]]>
 </script>
 <div id="elfinder"></div>
