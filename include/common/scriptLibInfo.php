@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: scriptLibInfo.php 6110 2013-06-13 21:41:24Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 class ScriptLibInfo
@@ -161,8 +161,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 //	const JQUERY_JQEASYPANEL_FILENAME	= 'jquery/jquery.jqEasyPanel.js';
 //	const JQUERY_JQEASYPANEL_CSS		= 'jquery/jqeasypanel.css';
 	const JQUERY_SCROLLTO_FILENAME		= 'jquery/jquery.scrollTo-1.4.3.1-min.js';
-	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.2/fullcalendar.min.js';
-	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.2/fullcalendar.css';
+//	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.2/fullcalendar.min.js';
+	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.3/fullcalendar.js';
+	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.3/fullcalendar.css';
 	
 	// ライブラリの公式サイトのURL
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
@@ -197,8 +198,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const CKEDITOR_FILENAME			= 'ckeditor4.2.0/ckeditor.js';				// CKEditor
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
-	const BOOTSTRAP_FILENAME		= 'bootstrap/bootstrap2.3.min.js';			// bootstrap
-	const BOOTSTRAP_CSS				= 'bootstrap/bootstrap2.3.css';
+//	const BOOTSTRAP_FILENAME		= 'bootstrap/bootstrap2.3.min.js';			// bootstrap
+	const BOOTSTRAP_FILENAME		= 'bootstrap/bootstrap3.0rc2.js';			// bootstrap
+//	const BOOTSTRAP_CSS				= 'bootstrap/bootstrap2.3.css';
+	const BOOTSTRAP_CSS				= 'bootstrap/bootstrap3.0rc2.css';
 	const BOOTSTRAP_OPTION_CSS		= 'bootstrap/bootstrap-box2.3.css';
 	
 	const CODEMIRROR_FILENAME				= 'codemirror-3.1/lib/codemirror.js';				// CodeMirror
