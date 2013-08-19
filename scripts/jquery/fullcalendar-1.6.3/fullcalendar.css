@@ -53,10 +53,11 @@ html .fc,
 	display: inline-block;
 	vertical-align: top;
 	}
-	
-.fc-header-title h2 {
-	margin-top: 0;
-	white-space: nowrap;
+
+/* 年月日タイトル */
+.fc-header .fc-header-title h2 {
+	margin: 0;
+	/*white-space: nowrap;*/
 	}
 	
 .fc .fc-header-space {
