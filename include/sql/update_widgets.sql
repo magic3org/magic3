@@ -379,6 +379,10 @@ DELETE FROM _widgets WHERE wd_id = 'comment';
 INSERT INTO _widgets
 (wd_id,     wd_name,       wd_type, wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('comment', '汎用コメント', '', 'comment', true, '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'メインコンテンツウィジェットに付加する汎用のコメント機能', 'jquery.scrollto',                '',                  true, true,         false,                true,  '2013-07-19', now(),         now());
+DELETE FROM _widgets WHERE wd_id = 'calendar';
+INSERT INTO _widgets
+(wd_id,     wd_name,       wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('calendar', '汎用カレンダー', 'calendar', true, '0.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '様々な情報をカレンダー表示する汎用カレンダー機能', 'jquery.fullcalendar',                '',                  true, true,         true,                true,  0,         1, '2013-08-15', now(),         now());
 
 -- ウィジェット情報(携帯用)
 DELETE FROM _widgets WHERE wd_id = 'm/mainmenu';
