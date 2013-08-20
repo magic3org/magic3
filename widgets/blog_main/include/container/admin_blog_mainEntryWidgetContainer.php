@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_blog_mainEntryWidgetContainer.php 5235 2012-09-21 00:55:05Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_blog_mainBaseWidgetContainer.php');
@@ -36,6 +36,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
+	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
 	
@@ -262,6 +263,12 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		// カテゴリーメニューを作成
 		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		$this->createCategoryMenu(1);		// メニューは１つだけ表示
+		
+		// ボタン作成
+		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+		$searchStr = '検索';
+		$this->tmpl->addVar("_widget", "search_img", $searchImg);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);

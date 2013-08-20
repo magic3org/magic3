@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_default_contentBaseWidgetContainer.php 4970 2012-06-15 10:51:03Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -106,7 +106,7 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 作成データの埋め込み
 		$topName = self::WIDGET_TITLE_NAME . '(' . default_contentCommonDef::$_deviceTypeName . ')';
-		$linkList = '<div id="configmenu-top"><label>' . $topName . $linkList . '</div>';
+		$linkList = '<div id="configmenu-top"><label>' . $topName . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
 	}

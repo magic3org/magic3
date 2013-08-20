@@ -42,6 +42,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	const PREVIEW_ICON_FILE = '/images/system/preview.png';		// プレビュー用アイコン
 	const OPEN_PANEL_ICON_FILE = '/images/system/plus32.png';		// 拡張エリア表示用アイコン
 	const CLOSE_PANEL_ICON_FILE = '/images/system/minus32.png';		// 拡張エリア非表示用アイコン
+	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const LANG_ICON_PATH = '/images/system/flag/';		// 言語アイコンパス
 	const MSG_UPDATE_CONTENT = 'コンテンツを更新しました';			// コンテンツ更新メッセージ
 	const DEFAULT_SEARCH_KEY = '1';			// デフォルトの検索キー(更新日時)
@@ -259,6 +260,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		} else {
 			$this->tmpl->addVar('_widget', 'search_desc_checked', 'checked');
 		}
+		
+		// ボタン作成
+		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+		$searchStr = '検索';
+		$this->tmpl->addVar("_widget", "search_img", $searchImg);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);

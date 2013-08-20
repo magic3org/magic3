@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.tmpl.html 4912 2012-05-21 14:51:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -79,6 +79,10 @@ function clearSearchParam(){
 	document.main.search_keyword.value = '';
 	return true;
 }
+function showSearchArea()
+{
+	$('#search_comment').slideToggle('slow');
+}
 // メニューに追加
 function addToMenu(selId)
 {
@@ -108,9 +112,8 @@ $(function(){
 <input type="hidden" name="page" value="{PAGE}" />
 <table width="90%">
 <tr><td colspan="2">
+<div id="search_comment" class="m3search" style="display:none;">
 <span {_HELP_CONTENT_SEARCH}><label>コンテンツ検索</label></span>
-</td></tr>
-<tr><td colspan="2">
 <table class="simple-table">
     <tbody>
         <tr>
@@ -127,10 +130,11 @@ $(function(){
 	</tr>
     </tbody>
 </table>
-<br>
+</div>
 </td></tr>
 <tr><td>
-<label><span {_HELP_CONTENT}>コンテンツ一覧</span></label>
+<label><span {_HELP_CONTENT}>コンテンツ一覧</span></label>&nbsp;&nbsp;
+<a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>
 </td>
 <td align="right"><span {_HELP_CONTENT_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_CONTENT_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_CONTENT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
 </td></tr>

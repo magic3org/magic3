@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_blog_mainCommentWidgetContainer.php 5145 2012-08-29 13:21:42Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_blog_mainBaseWidgetContainer.php');
@@ -29,6 +29,7 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const CATEGORY_COUNT = 2;				// 記事カテゴリーの選択可能数
 	const COMMENT_SIZE = 40;			// コメント内容の最大文字列長
+	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	
 	/**
 	 * コンストラクタ
@@ -199,6 +200,12 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 		// 記事項目リストを取得
 		$this->db->searchCommentItems($maxListCount, $pageNo, $search_startDt, $endDt, $search_keyword, $this->langId, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		
+		// ボタン作成
+		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+		$searchStr = '検索';
+		$this->tmpl->addVar("_widget", "search_img", $searchImg);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);

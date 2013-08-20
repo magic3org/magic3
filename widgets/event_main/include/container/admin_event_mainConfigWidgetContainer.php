@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_event_mainConfigWidgetContainer.php 3975 2011-02-01 10:47:03Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_event_mainBaseWidgetContainer.php');
@@ -68,19 +68,19 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 				$isErr = false;
 				
 				if (!$isErr){
-					if (!$this->_db->updateConfig(self::CF_ENTRY_VIEW_COUNT, $entryViewCount)) $isErr = true;// 記事表示数
+					if (!self::$_mainDb->updateConfig(self::CF_ENTRY_VIEW_COUNT, $entryViewCount)) $isErr = true;// 記事表示数
 				}
 				if (!$isErr){
-					if (!$this->_db->updateConfig(self::CF_ENTRY_VIEW_ORDER, $entryViewOrder)) $isErr = true;// 記事表示順
+					if (!self::$_mainDb->updateConfig(self::CF_ENTRY_VIEW_ORDER, $entryViewOrder)) $isErr = true;// 記事表示順
 				}
 				if (!$isErr){
-					if (!$this->_db->updateConfig(self::CF_RECEIVE_COMMENT, $receiveComment)) $isErr = true;// コメントを受け付けるかどうか
+					if (!self::$_mainDb->updateConfig(self::CF_RECEIVE_COMMENT, $receiveComment)) $isErr = true;// コメントを受け付けるかどうか
 				}
 				if (!$isErr){
-					if (!$this->_db->updateConfig(self::CF_MAX_COMMENT_LENGTH, $maxCommentLength)) $isErr = true;// コメント最大文字数
+					if (!self::$_mainDb->updateConfig(self::CF_MAX_COMMENT_LENGTH, $maxCommentLength)) $isErr = true;// コメント最大文字数
 				}
 				if (!$isErr){
-					if (!$this->_db->updateConfig(self::CF_TOP_CONTENTS, $topContents)) $isErr = true;// トップコンテンツ
+					if (!self::$_mainDb->updateConfig(self::CF_TOP_CONTENTS, $topContents)) $isErr = true;// トップコンテンツ
 				}
 				if ($isErr){
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
@@ -88,20 +88,20 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				}
 				// 値を再取得
-				$entryViewCount	= $this->_db->getConfig(self::CF_ENTRY_VIEW_COUNT);// 記事表示数
-				$entryViewOrder	= $this->_db->getConfig(self::CF_ENTRY_VIEW_ORDER);// 記事表示順
-				$receiveComment	= $this->_db->getConfig(self::CF_RECEIVE_COMMENT);
-				$maxCommentLength = $this->_db->getConfig(self::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
-				$topContents = $this->_db->getConfig(self::CF_TOP_CONTENTS);// トップコンテンツ
+				$entryViewCount	= self::$_mainDb->getConfig(self::CF_ENTRY_VIEW_COUNT);// 記事表示数
+				$entryViewOrder	= self::$_mainDb->getConfig(self::CF_ENTRY_VIEW_ORDER);// 記事表示順
+				$receiveComment	= self::$_mainDb->getConfig(self::CF_RECEIVE_COMMENT);
+				$maxCommentLength = self::$_mainDb->getConfig(self::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
+				$topContents = self::$_mainDb->getConfig(self::CF_TOP_CONTENTS);// トップコンテンツ
 			}
 		} else {		// 初期表示の場合
-			$entryViewCount	= $this->_db->getConfig(self::CF_ENTRY_VIEW_COUNT);// 記事表示数
+			$entryViewCount	= self::$_mainDb->getConfig(self::CF_ENTRY_VIEW_COUNT);// 記事表示数
 			if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
-			$entryViewOrder	= $this->_db->getConfig(self::CF_ENTRY_VIEW_ORDER);// 記事表示順
-			$receiveComment	= $this->_db->getConfig(self::CF_RECEIVE_COMMENT);
-			$maxCommentLength = $this->_db->getConfig(self::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
+			$entryViewOrder	= self::$_mainDb->getConfig(self::CF_ENTRY_VIEW_ORDER);// 記事表示順
+			$receiveComment	= self::$_mainDb->getConfig(self::CF_RECEIVE_COMMENT);
+			$maxCommentLength = self::$_mainDb->getConfig(self::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
 			if ($maxCommentLength == '') $maxCommentLength = self::DEFAULT_COMMENT_LENGTH;
-			$topContents = $this->_db->getConfig(self::CF_TOP_CONTENTS);// トップコンテンツ
+			$topContents = self::$_mainDb->getConfig(self::CF_TOP_CONTENTS);// トップコンテンツ
 		}
 		// 画面に書き戻す
 		$this->tmpl->addVar("_widget", "view_count", $entryViewCount);// 記事表示数

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_event_mainCommentWidgetContainer.php 3982 2011-02-07 03:00:55Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_event_mainBaseWidgetContainer.php');
@@ -21,7 +21,6 @@ class admin_event_mainCommentWidgetContainer extends admin_event_mainBaseWidgetC
 {
 	private $db;	// DB接続オブジェクト
 	private $mainDb;	// DB接続オブジェクト
-	private $sysDb;		// システムDBオブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $entryId;
 	private $lang;		// 現在の選択言語
@@ -31,6 +30,7 @@ class admin_event_mainCommentWidgetContainer extends admin_event_mainBaseWidgetC
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const CATEGORY_COUNT = 2;				// 記事カテゴリーの選択可能数
 	const COMMENT_SIZE = 40;			// コメント内容の最大文字列長
+	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	
 	/**
 	 * コンストラクタ
@@ -43,7 +43,6 @@ class admin_event_mainCommentWidgetContainer extends admin_event_mainBaseWidgetC
 		// DBオブジェクト作成
 		$this->db = new event_commentDb();
 		$this->mainDb = new event_mainDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -136,7 +135,7 @@ class admin_event_mainCommentWidgetContainer extends admin_event_mainBaseWidgetC
 		
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;
-		$serializedParam = $this->sysDb->getWidgetParam($this->gEnv->getCurrentWidgetId());
+		$serializedParam = $this->_db->getWidgetParam($this->gEnv->getCurrentWidgetId());
 		if (!empty($serializedParam)){
 			$dispInfo = unserialize($serializedParam);
 			$maxListCount = $dispInfo->maxMemberListCountByAdmin;		// 会員リスト最大表示数
@@ -203,6 +202,12 @@ class admin_event_mainCommentWidgetContainer extends admin_event_mainBaseWidgetC
 		// 記事項目リストを取得
 		$this->db->searchCommentItems($maxListCount, $pageNo, $search_startDt, $endDt, $search_keyword, $this->langId, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		
+		// ボタン作成
+		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+		$searchStr = '検索';
+		$this->tmpl->addVar("_widget", "search_img", $searchImg);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);

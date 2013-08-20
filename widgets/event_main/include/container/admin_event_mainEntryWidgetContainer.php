@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_event_mainEntryWidgetContainer.php 5230 2012-09-20 00:50:16Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_event_mainBaseWidgetContainer.php');
@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_mainDb.php');
 class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetContainer
 {
 //	private $db;	// DB接続オブジェクト
-	private $sysDb;		// システムDBオブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $entryId;
 	private $lang;		// 現在の選択言語
@@ -34,6 +33,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
+	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	
 	/**
 	 * コンストラクタ
@@ -44,8 +44,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		parent::__construct();
 		
 		// DBオブジェクト作成
-		//$this->_db = new event_mainDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
+		//self::$_mainDb = new event_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -139,7 +138,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;
-		$serializedParam = $this->sysDb->getWidgetParam($this->gEnv->getCurrentWidgetId());
+		$serializedParam = $this->_db->getWidgetParam($this->gEnv->getCurrentWidgetId());
 		if (!empty($serializedParam)){
 			$dispInfo = unserialize($serializedParam);
 			$maxListCount = $dispInfo->maxMemberListCountByAdmin;		// 会員リスト最大表示数
@@ -171,7 +170,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = $this->_db->delEntryItem($delItems);
+				$ret = self::$_mainDb->delEntryItem($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 					
@@ -197,7 +196,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		if (!empty($search_endDt)) $endDt = $this->getNextDay($search_endDt);
 		
 		// 総数を取得
-		$totalCount = $this->_db->getEntryItemCount($search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId);
+		$totalCount = self::$_mainDb->getEntryItemCount($search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId);
 
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
@@ -219,12 +218,18 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		}
 		
 		// 記事項目リストを取得
-		$this->_db->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'));
+		self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
 		
 		// カテゴリーメニューを作成
-		//$this->_db->getAllCategory($this->langId, $this->categoryListData);
+		//self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		//$this->createCategoryMenu(1);		// メニューは１つだけ表示
+		
+		// ボタン作成
+		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+		$searchStr = '検索';
+		$this->tmpl->addVar("_widget", "search_img", $searchImg);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
@@ -300,7 +305,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			//if ($act == 'select') $this->langId = $defaultLangId;		// 言語は一旦リセット
 			
 			// 登録済みのブログ記事を取得
-			//$this->serialNo = $this->_db->getEntrySerialNoByContentId($this->entryId, $this->langId);
+			//$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);
 			//if (empty($this->serialNo)){
 			//	// 取得できないときは初期化
 			//	$dataInit = true;		// データ初期化
@@ -309,7 +314,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			//}
 		} else if ($act == 'selectlang'){		// 項目選択の場合
 			// 登録済みのコンテンツデータを取得
-			$this->serialNo = $this->_db->getEntrySerialNoByContentId($this->entryId, $this->langId);
+			$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);
 			if (empty($this->serialNo)){
 				// 取得できないときは一部初期化
 				//$name = '';				// タイトル
@@ -346,10 +351,10 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				}
 				
 				if ($act == 'add'){
-					$ret = $this->_db->addEntryItem(0, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
+					$ret = self::$_mainDb->addEntryItem(0, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
 													$startDt, $endDt, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
 				} else {
-					$ret = $this->_db->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
+					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
 													$startDt, $endDt, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
 				}
 				if ($ret){
@@ -392,7 +397,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					$endDt = $end_date . ' ' . $end_time;
 				}
 				
-				$ret = $this->_db->updateEntryItem($this->serialNo, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
+				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
 														$startDt, $endDt, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
@@ -415,7 +420,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			}
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
-				$ret = $this->_db->delEntryItem(array($this->serialNo));
+				$ret = self::$_mainDb->delEntryItem(array($this->serialNo));
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 					
@@ -434,7 +439,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			}
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
-				$ret = $this->_db->delEntryItemById($this->serialNo);
+				$ret = self::$_mainDb->delEntryItemById($this->serialNo);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 					
@@ -459,7 +464,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		
 		// 設定データを再取得
 		if ($dataReload){		// データの再ロード
-			$ret = $this->_db->getEntryBySerial($this->serialNo, $row, $categoryRow);
+			$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 			if ($ret){
 				$this->entryId = $row['ee_id'];		// 記事ID
 				$name = $row['ee_name'];				// タイトル
@@ -487,7 +492,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			}
 		}
 		// カテゴリーメニューを作成
-		//$this->_db->getAllCategory($this->langId, $this->categoryListData);
+		//self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		//$this->createCategoryMenu($this->categoryCount);
 		
 		// ### 入力値を再設定 ###
@@ -545,7 +550,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			}
 			// 言語選択メニュー作成
 			//if (!empty($this->entryId)){	// コンテンツが選択されているとき
-			//	$this->_db->getAllLang(array($this, 'langLoop'));
+			//	self::$_mainDb->getAllLang(array($this, 'langLoop'));
 			//	$this->tmpl->setAttribute('select_lang', 'visibility', 'visible');
 			//}
 		}
@@ -571,7 +576,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 
 		// カテゴリーを取得
 		$categoryArray = array();
-		$ret = $this->_db->getEntryBySerial($serial, $row, $categoryRow);
+		$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);
 		if ($ret){
 			for ($i = 0; $i < count($categoryRow); $i++){
 				if (function_exists('mb_strimwidth')){
@@ -712,7 +717,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	 */
 	function clearCacheBySerial($serial)
 	{
-		$ret = $this->_db->getEntryBySerial($serial, $row, $categoryRow);// 記事ID取得
+		$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);// 記事ID取得
 		if ($ret){
 			$entryId = $row['ee_id'];		// 記事ID
 			$urlParam = array();

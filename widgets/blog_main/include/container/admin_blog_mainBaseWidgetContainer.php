@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_blog_mainBaseWidgetContainer.php 5145 2012-08-29 13:21:42Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -180,7 +180,7 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$menuText .= '</div>' . M3_NL;
 
 		// 作成データの埋め込み
-		$linkList = '<div id="configmenu-top"><label>' . 'ブログ' . $linkList . '</div>';
+		$linkList = '<div id="configmenu-top"><label>' . 'ブログ' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
 	}

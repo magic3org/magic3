@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_event_mainBaseWidgetContainer.php 3975 2011-02-01 10:47:03Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -18,7 +18,8 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainDb.php');
 
 class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 {
-	protected $_db;			// DB接続オブジェクト
+	//protected $_db;			// DB接続オブジェクト
+	protected static $_mainDb;			// DB接続オブジェクト
 	protected $_configArray;		// BBS定義値
 	const CF_RECEIVE_COMMENT		= 'receive_comment';		// コメントを受け付けるかどうか
 	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
@@ -46,7 +47,9 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// サブウィジェット起動のときだけ初期処理実行
 		if ($this->gEnv->getIsSubWidget()){
 			// DBオブジェクト作成
-			$this->_db = new event_mainDb();
+			//$this->_db = new event_mainDb();
+			// DBオブジェクト作成
+			if (!isset(self::$_mainDb)) self::$_mainDb = new event_mainDb();
 		
 			// BBS定義を読み込む
 			$this->_loadConfig();
@@ -168,7 +171,7 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$menuText .= '</div>' . M3_NL;
 
 		// 作成データの埋め込み
-		$linkList = '<div id="configmenu-top"><label>' . 'イベント' . $linkList . '</div>';
+		$linkList = '<div id="configmenu-top"><label>' . 'イベント' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
 	}
@@ -182,7 +185,7 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$this->_configArray = array();
 
 		// イベント定義を読み込み
-		$ret = $this->_db->getAllConfig($rows);
+		$ret = self::$_mainDb->getAllConfig($rows);
 		if ($ret){
 			// 取得データを連想配列にする
 			$configCount = count($rows);

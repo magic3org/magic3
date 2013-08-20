@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_mainProductWidgetContainer.php 5572 2013-01-23 08:43:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_ec_mainBaseWidgetContainer.php');
@@ -50,6 +50,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	const UPLOAD_ICON_FILE = '/images/system/upload_box32.png';		// アップロードボックスアイコン
 	const SORT_UP_ICON_FILE = '/images/system/arrow_up10.png';		// ソート降順アイコン
 	const SORT_DOWN_ICON_FILE = '/images/system/arrow_down10.png';		// ソート昇順アイコン
+	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const SORT_ICON_SIZE = 10;		// ソートアイコンサイズ
 	const CURRENT_TASK = 'product_detail';
 	const PRODUCT_IMAGE_DIR = '/widgets/product/image/';				// 商品画像格納ディレクトリ
@@ -342,6 +343,11 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			}
 			$this->tmpl->addVar('_widget', 'sort', $this->sortKey . '-' . $this->sortDirection);
 //		}
+		// ボタン作成
+		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+		$searchStr = '検索';
+		$this->tmpl->addVar("_widget", "search_img", $searchImg);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// パラメータ再設定
 		$this->tmpl->addVar("_widget", "search_word", $this->convertToDispString($keyword));
