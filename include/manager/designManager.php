@@ -141,7 +141,7 @@ class DesignManager extends Core
 	 * @param int $linkCount		最大リンク数
 	 * @param string $baseUrl		リンク用のベースURL
 	 * @param string $urlParams		オプションのURLパラメータ
-	 * @param int $style			0=Artisteerスタイル、1=括弧スタイル
+	 * @param int $style			0=Artisteerスタイル、1=括弧スタイル、-1=管理画面
 	 * @return string				リンクHTML
 	 */
 	function createPageLink($pageNo, $pageCount, $linkCount, $baseUrl, $urlParams = '', $style = 0)

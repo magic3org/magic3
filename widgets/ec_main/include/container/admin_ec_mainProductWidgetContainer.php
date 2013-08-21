@@ -231,6 +231,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		// 商品リストを表示
 		$this->db->searchProduct($parsedKeywords, $this->search_categoryId, $defaultLangId, $maxListCount, ($pageNo -1) * $maxListCount,
 									$this->sortKey, $this->sortDirection, array($this, 'productListLoop'));
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 
 		// ページング用リンク作成
 		$pageLink = '';

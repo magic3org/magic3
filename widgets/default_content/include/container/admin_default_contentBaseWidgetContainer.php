@@ -21,6 +21,8 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	protected static $_mainDb;			// DB接続オブジェクト
 	protected static $_configArray;		// 汎用コンテンツ定義値
+	protected $_openBy;				// ウィンドウオープンタイプ
+	protected $_baseUrl;			// 管理画面のベースURL
 	
 	const DEFAULT_TOP_PAGE = 'content';		// デフォルトのトップページ
 	const WIDGET_TITLE_NAME = 'デフォルトコンテンツ';				// ウィジェットタイトル名
@@ -49,6 +51,23 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		if (!isset(self::$_configArray)) self::$_configArray = default_contentCommonDef::loadConfig(self::$_mainDb);
 	}
 	/**
+	 * テンプレートに前処理
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _preAssign($request, &$param)
+	{
+		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+		if (!empty($this->_openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);
+		
+		// 管理画面ペースURL取得
+		$this->_baseUrl = $this->getAdminUrlWithOptionParam(true);		// ページ定義パラメータ付加
+	}
+	/**
 	 * テンプレートにデータ埋め込む
 	 *
 	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
@@ -60,10 +79,11 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 	function _postAssign($request, &$param)
 	{
 		// ウィンドウオープンタイプ取得
-		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
-		if (!empty($openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
-		if ($openBy == 'simple' || $openBy == 'tabs') return;			// シンプルウィンドウまたはタブ表示のときはメニューを表示しない
-		
+//		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+//		if (!empty($openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
+//		if ($openBy == 'simple' || $openBy == 'tabs') return;			// シンプルウィンドウまたはタブ表示のときはメニューを表示しない
+		if ($this->_openBy == 'simple' || $this->_openBy == 'tabs') return;			// シンプルウィンドウまたはタブ表示のときはメニューを表示しない
+				
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;

@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_default_contentContentWidgetContainer.php 5893 2013-04-01 13:27:22Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('default_content') . '/admin_default_contentBaseWidgetContainer.php');
@@ -48,6 +48,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	const DEFAULT_SEARCH_KEY = '1';			// デフォルトの検索キー(更新日時)
 	const DEFAULT_SEARCH_ORDER = '1';			// デフォルトの検索ソート順(降順)
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
 	const LOG_MSG_ADD_CONTENT = '汎用コンテンツ(%s)を追加しました。タイトル: %s';
 	const LOG_MSG_UPDATE_CONTENT = '汎用コンテンツ(%s)を更新しました。タイトル: %s';
@@ -217,15 +218,17 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		}
 		// コンテンツ総数を取得
 		$totalCount = self::$_mainDb->getContentCount(default_contentCommonDef::$_contentType, $this->langId, $searchKeyword, $searchKey, $searchOrder);
-
-		// 表示するページ番号の修正
+		
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+/*		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号
+		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号*/
 		
 		// ページング用リンク作成
-		$pageLink = '';
+/*		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			for ($i = 1; $i <= $pageCount; $i++){
 				if ($i == $pageNo){
@@ -235,7 +238,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
+		$currentBaseUrl = $this->_baseUrl . '&task=' . self::TASK_CONTENT;
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl);
 		
 		// 一覧の表示タイプを設定
 		if ($this->isMultiLang){		// 多言語対応の場合
