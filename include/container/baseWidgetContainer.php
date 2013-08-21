@@ -2957,7 +2957,12 @@ class BaseWidgetContainer extends Core
 	 */
 	function createPageLink($pageNo, $linkCount, $baseUrl)
 	{
-		$pageLink = $this->gDesign->createPageLink($pageNo, $this->_linkPageCount, $linkCount, $this->getUrl($baseUrl, true/*リンク用*/));
+		$isAdminDirAccess = $this->gEnv->isAdminDirAccess();
+		if ($isAdminDirAccess){		// 管理画面の場合
+			$pageLink = $this->gDesign->createPageLink($pageNo, $this->_linkPageCount, $linkCount, $this->getUrl($baseUrl, true/*リンク用*/), ''/*追加パラメータなし*/, -1/*管理画面用*/);
+		} else {
+			$pageLink = $this->gDesign->createPageLink($pageNo, $this->_linkPageCount, $linkCount, $this->getUrl($baseUrl, true/*リンク用*/));
+		}
 		return $pageLink;
 	}
 }
