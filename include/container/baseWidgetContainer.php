@@ -2956,7 +2956,7 @@ class BaseWidgetContainer extends Core
 	 * @param string $clickEvent	リンククリックイベント用スクリプト
 	 * @return string				リンクHTML
 	 */
-	function createPageLink($pageNo, $linkCount, $baseUrl, $clickEvent)
+	function createPageLink($pageNo, $linkCount, $baseUrl, $clickEvent = '')
 	{
 		$isAdminDirAccess = $this->gEnv->isAdminDirAccess();
 		if ($isAdminDirAccess){		// 管理画面の場合
