@@ -142,9 +142,10 @@ class DesignManager extends Core
 	 * @param string $baseUrl		リンク用のベースURL
 	 * @param string $urlParams		オプションのURLパラメータ
 	 * @param int $style			0=Artisteerスタイル、1=括弧スタイル、-1=管理画面
+	 * @param string $clickEvent	リンククリックイベント用スクリプト
 	 * @return string				リンクHTML
 	 */
-	function createPageLink($pageNo, $pageCount, $linkCount, $baseUrl, $urlParams = '', $style = 0)
+	function createPageLink($pageNo, $pageCount, $linkCount, $baseUrl, $urlParams = '', $style = 0, $clickEvent = '')
 	{
 		// パラメータ修正
 		if (!empty($urlParams) && !strStartsWith($urlParams, '&')) $urlParams = '&' . $urlParams;
@@ -158,9 +159,15 @@ class DesignManager extends Core
 				if ($i == $pageNo){
 					$link = '&nbsp;<span class="active">' . $i . '</span>';
 				} else {
-					//$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $i . $urlParams, true/*リンク用*/);
-					$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $i . $urlParams;
-					$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
+					$linkUrl = '';
+					$clickScript = '';
+					if (empty($clickEvent)){
+						$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $i . $urlParams;
+					} else {
+						$clickScript = str_replace('$1', $i, $clickEvent);
+					}
+					//$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
+					$link = '&nbsp;' . $this->_createLink($i, convertUrlToHtmlEntity($linkUrl), $clickScript);
 				}
 				$pageLink .= $link;
 			}
@@ -168,19 +175,49 @@ class DesignManager extends Core
 			if ($pageCount > $linkCount) $pageLink .= '&nbsp;...';
 		}
 		if ($pageNo > 1){		// 前ページがあるとき
-			//$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams, true/*リンク用*/);
-			$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams;
-			$link = '<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >&laquo; 前へ</a>';
+			$linkUrl = '';
+			$clickScript = '';
+			if (empty($clickEvent)){
+				$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams;
+			} else {
+				$clickScript = str_replace('$1', $pageNo -1, $clickEvent);
+			}
+			//$link = '<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >&laquo; 前へ</a>';
+			$link = $this->_createLink('&laquo; 前へ', convertUrlToHtmlEntity($linkUrl), $clickScript);
 			$pageLink = $link . $pageLink;
 		}
 		if ($pageNo < $pageCount){		// 次ページがあるとき
-			//$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams, true/*リンク用*/);
-			$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams;
-			$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >次へ &raquo;</a>';
+			$linkUrl = '';
+			$clickScript = '';
+			if (empty($clickEvent)){
+				$linkUrl = $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams;
+			} else {
+				$clickScript = str_replace('$1', $pageNo +1, $clickEvent);
+			}
+			//$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >次へ &raquo;</a>';
+			$link = '&nbsp;' . $this->_createLink('次へ &raquo;', convertUrlToHtmlEntity($linkUrl), $clickScript);
 			$pageLink .= $link;
 		}
 		if (!empty($pageLink)) $pageLink = '<div class="art-pager">' . $pageLink . '</div>';
 		return $pageLink;
+	}
+	/**
+	 * Aタグリンク作成
+	 *
+	 * @param string $name				リンクされる文字列
+	 * @param string $url				URL
+	 * @param string $clickEvent		クリックイベント用JavaScript。イベントが設定されている場合はイベントを優先。
+	 * @return string 					タグ文字列
+	 */
+	function _createLink($name, $url, $clickEvent = '')
+	{
+		$destTag = '';
+		if (empty($clickEvent)){
+			$destTag = '<a href="' . $url . '" >' . $name . '</a>';
+		} else {
+			$destTag = '<a href="javascript:void(0)" onclick="' . $clickEvent . '" >' . $name . '</a>';
+		}
+		return $destTag;
 	}
 }
 ?>

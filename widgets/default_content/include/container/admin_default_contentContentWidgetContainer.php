@@ -239,8 +239,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				$pageLink .= $link;
 			}
 		}*/
-		$currentBaseUrl = $this->_baseUrl . '&task=' . self::TASK_CONTENT;
-		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl);
+//		$currentBaseUrl = $this->_baseUrl . '&task=' . self::TASK_CONTENT;
+		$currentBaseUrl = '';		// POST用のリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
 		
 		// 一覧の表示タイプを設定
 		if ($this->isMultiLang){		// 多言語対応の場合
@@ -272,11 +273,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar("_widget", "search_img", $searchImg);
 		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
-		// 検索結果
+		// 検索条件
+		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		$this->tmpl->addVar("_widget", "search_keyword", $searchKeyword);	// 検索キーワード
-		
+				
 		// その他
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// メニュー選択ウィンドウ表示用

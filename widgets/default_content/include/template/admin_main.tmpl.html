@@ -69,12 +69,12 @@ function search(){
 	document.main.submit();
 	return true;
 }
-/*function selpage(page){
+function selpage(page){
 	document.main.act.value = 'selpage';
 	document.main.page.value = page;
 	document.main.submit();
 	return true;
-}*/
+}
 function clearSearchParam(){
 	document.main.search_keyword.value = '';
 	return true;
@@ -109,7 +109,7 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-<!--<input type="hidden" name="page" value="{PAGE}" />-->
+<input type="hidden" name="page" value="{PAGE}" />
 <table width="90%">
 <tr><td colspan="2">
 <div id="search_comment" class="m3search" style="display:none;">
