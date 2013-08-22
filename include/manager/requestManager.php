@@ -141,6 +141,22 @@ class RequestManager extends Core
 		return $this->_trimValueOf($name, $srcValue, $default, 1/* int型チェック */);
 	}
 	/**
+	 * POST,GETから値をチェックボックスの値を取得(トリミング(前後の空白削除)あり)
+	 *
+	 * POSTまたはGETから値を取得し、トリミング(前後の空白削除)する
+	 * デフォルトでHTMLタグを取り除く
+	 *
+	 * @param string $name		キー値
+	 * @param string $default  	値が存在しないときのデフォルト値
+	 * @return string			取得値(0または1)
+	 */
+	public function trimCheckedValueOf($name, $default = '')
+	{
+		$srcValue = isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : $default);
+		$checked = $this->_trimValueOf($name, $srcValue, $default);
+		return ($checked == 'on') ? '1' : '0';
+	}
+	/**
 	 * トリミング(前後の空白削除)処理
 	 *
 	 * デフォルトでHTMLタグを取り除く

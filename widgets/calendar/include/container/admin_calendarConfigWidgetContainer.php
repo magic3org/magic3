@@ -90,6 +90,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		// 入力値を取得
 		$name	= $request->trimValueOf('item_name');			// 定義名
 		$this->viewOption = $request->valueOf('item_view_option');	// FullCalendar表示オプション
+		$this->showEvent = $request->trimCheckedValueOf('item_show_event');		// イベント記事を表示するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
@@ -111,6 +112,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				$newObj = new stdClass;
 				$newObj->name	= $name;// 表示名
 				$newObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
+				$newObj->showEvent = $this->showEvent;		// イベント記事を表示するかどうか
 				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
@@ -131,6 +133,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				if ($ret){
 					// ウィジェットオブジェクト更新
 					$targetObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
+					$targetObj->showEvent = $this->showEvent;		// イベント記事を表示するかどうか
 				}
 				
 				// 設定値を更新
@@ -155,6 +158,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				$this->viewOption = $this->getParsedTemplateData('option.tmpl.js');	// FullCalendar表示オプション
+				$this->showEvent = '0';		// イベント記事を表示するかどうか
 			}
 			$this->serialNo = 0;
 		} else {
@@ -163,6 +167,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				if ($ret){
 					$name		= $targetObj->name;	// 名前
 					$this->viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
+					if (isset($targetObj->showEvent)) $this->showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -176,7 +181,8 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		$this->tmpl->addVar("item_name_visible", "name",	$name);
-		$this->tmpl->addVar("_widget", "view_option",	$this->convertToDispString($this->viewOption));// FullCalendar表示オプション
+		$this->tmpl->addVar("_widget", "view_option",	$this->convertToDispString($this->viewOption));		// FullCalendar表示オプション
+		$this->tmpl->addVar("_widget", "show_event",	$this->convertToCheckedString($this->showEvent));		// イベント記事を表示するかどうか
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御
