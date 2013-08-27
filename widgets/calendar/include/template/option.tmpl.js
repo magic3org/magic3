@@ -20,7 +20,7 @@ header: {
 	right: ''
 },
 // 最初の曜日
-firstDay: 1, // 1:月曜日
+firstDay: 0, // 0:日曜日、1:月曜日
 // 土曜、日曜を表示
 weekends: true,
 // 週モード (fixed, liquid, variable)

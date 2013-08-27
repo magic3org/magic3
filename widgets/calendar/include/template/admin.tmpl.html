@@ -91,7 +91,11 @@ function listItem(){
 	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_OPTION}>表示オプション</span></td>
 	    <td><textarea name="item_view_option" rows="10" style="width:100%;">{VIEW_OPTION}</textarea></td>
 	</tr>
-	<tr class="even">
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_CONFIG_CSS}>CSS</span></td>
+	    <td><textarea name="item_css" rows="10" style="width:100%;">{CSS}</textarea></td>
+	</tr>
+	<tr>
 	    <td align="right" colspan="2">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />

@@ -22,6 +22,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 	private $configId;		// 定義ID
 	private $paramObj;		// パラメータ保存用オブジェクト
 	private $viewOption;	// FullCalendar表示オプション
+	private $css;		// デザインCSS
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	
 	/**
@@ -91,6 +92,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		$name	= $request->trimValueOf('item_name');			// 定義名
 		$this->viewOption = $request->valueOf('item_view_option');	// FullCalendar表示オプション
 		$this->showEvent = $request->trimCheckedValueOf('item_show_event');		// イベント記事を表示するかどうか
+		$this->css	= $request->valueOf('item_css');		// デザインCSS
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
@@ -113,6 +115,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				$newObj->name	= $name;// 表示名
 				$newObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
 				$newObj->showEvent = $this->showEvent;		// イベント記事を表示するかどうか
+				$newObj->css = $this->css;		// デザインCSS
 				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
@@ -134,6 +137,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 					// ウィジェットオブジェクト更新
 					$targetObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
 					$targetObj->showEvent = $this->showEvent;		// イベント記事を表示するかどうか
+					$targetObj->css			= $this->css;		// デザインCSS
 				}
 				
 				// 設定値を更新
@@ -159,6 +163,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				$this->viewOption = $this->getParsedTemplateData('option.tmpl.js');	// FullCalendar表示オプション
 				$this->showEvent = '0';		// イベント記事を表示するかどうか
+				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));		// デザインCSS
 			}
 			$this->serialNo = 0;
 		} else {
@@ -168,6 +173,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 					$name		= $targetObj->name;	// 名前
 					$this->viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
 					if (isset($targetObj->showEvent)) $this->showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
+					if (isset($targetObj->css)) $this->css = $targetObj->css;					// デザインCSS
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -183,6 +189,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		$this->tmpl->addVar("item_name_visible", "name",	$name);
 		$this->tmpl->addVar("_widget", "view_option",	$this->convertToDispString($this->viewOption));		// FullCalendar表示オプション
 		$this->tmpl->addVar("_widget", "show_event",	$this->convertToCheckedString($this->showEvent));		// イベント記事を表示するかどうか
+		$this->tmpl->addVar("_widget", "css",	$this->convertToDispString($this->css));		// デザインCSS
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御
@@ -318,6 +325,15 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 			// シリアル番号を保存
 			$this->serialArray[] = $id;
 		}
+	}
+	/**
+	 * CSSデータ作成処理コールバック
+	 *
+	 * @param object         $tmpl			テンプレートオブジェクト
+	 * @param								なし
+	 */
+	function makeCss($tmpl)
+	{
 	}
 }
 ?>

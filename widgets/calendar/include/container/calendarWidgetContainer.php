@@ -23,6 +23,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	private $showEvent;		// イベント記事を表示するかどうか
 	private $events;		// 表示イベント
 	private $langId;		// 言語
+	private $css;		// デザインCSS
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カレンダー';		// デフォルトのウィジェットタイトル名
 	const MAX_ITEM_COUNT = 100;				// カレンダーに表示する項目の最大数
@@ -85,6 +86,20 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		return self::DEFAULT_TITLE;
 	}
 	/**
+	 * CSSデータをHTMLヘッダ部に設定
+	 *
+	 * CSSデータをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssToHead($request, &$param)
+	{
+		return $this->css;
+	}
+	/**
 	 * カレンダー表示
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
@@ -104,6 +119,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		}
 		$viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
 		if (isset($targetObj->showEvent)) $this->showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
+		if (isset($targetObj->css)) $this->css = $targetObj->css;			// デザインCSS
 		
 		// 取得コンテンツタイプ
 		$typeArray = array();
