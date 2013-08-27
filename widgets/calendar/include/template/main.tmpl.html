@@ -13,6 +13,18 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function get_calendar_success(request, retcode, jsondata)
+{
+	$('#calendar').fullCalendar('removeEvents');
+
+	if (jsondata.events){
+		$('#calendar').fullCalendar('addEventSource', jsondata.events);
+	}
+}
+function get_calendar_failure(request)
+{
+//	alert('ajax failure!');
+}
 $(function(){
     $('#calendar').fullCalendar({
 		{OPTION}
@@ -38,12 +50,6 @@ $(function(){
         minTime: 6,
         // 最大時間
         maxTime: 20,
-        // 表示する年
-        year: 2012,
-        // 表示する月
-        month: 12,
-        // 表示する日
-        day: 31,
         // 時間の書式
         timeFormat: 'H(:mm)',
         // 列の書式
@@ -85,49 +91,15 @@ $(function(){
         unselectAuto: true,
         // 自動選択解除対象外の要素
         unselectCancel: '',
-        // ビュー表示イベント
-        viewDisplay: function(view) {
-            //alert('ビュー表示イベント ' + view.title);
-        },
-        // ウィンドウリサイズイベント
-        windowResize: function(view) {
-            //alert('ウィンドウリサイズイベント');
-        },
-        // 日付クリックイベント
-        dayClick: function () {
-            //alert('日付クリックイベント');
-        }
-        // イベントソース
-/*        eventSources: [
-            {
-                events: [
-                    {
-                        title: 'event1',
-                        start: '2013-01-01'
-                    },
-                    {
-                        title: 'event2',
-                        start: '2013-01-02',
-                        end: '2013-01-03'
-                    },
-                    {
-                        title: 'event3',
-                        start: '2013-01-05 12:30:00',
-                        allDay: false // will make the time show
-                    }
-                ]
-            }
-        ]*/
+		// 現在の年月日
+		year: {YEAR},
+		month: {MONTH},
+		date: {DAY},
+		// 初期表示イベント
+		viewDisplay: function(view){
+			m3_ajax_request('calendar', 'act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);
+		}
     });
-	$('#calendar').fullCalendar('today');
-    // 動的にオプションを変更する
-    //$('#calendar').fullCalendar('option', 'height', 700);
- 
-    // カレンダーをレンダリング。表示切替時などに使用
-    //$('#calendar').fullCalendar('render');
- 
-    // カレンダーを破棄（イベントハンドラや内部データも破棄する）
-    //$('#calendar').fullCalendar('destroy')
 });
 //]]>
 </script>
