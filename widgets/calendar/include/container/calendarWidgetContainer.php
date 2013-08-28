@@ -20,14 +20,15 @@ require_once($gEnvManager->getWidgetDbPath('calendar') . '/calendarDb.php');
 class calendarWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
-	private $showEvent;		// イベント記事を表示するかどうか
 	private $events;		// 表示イベント
 	private $langId;		// 言語
 	private $css;		// デザインCSS
+	private $addScript = array();		// 追加スクリプト
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カレンダー';		// デフォルトのウィジェットタイトル名
 	const MAX_ITEM_COUNT = 100;				// カレンダーに表示する項目の最大数
-	
+	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-1.6.3/gcal.js';				// Googleカレンダー用スクリプト
+		
 	/**
 	 * コンストラクタ
 	 */
@@ -100,6 +101,20 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		return $this->css;
 	}
 	/**
+	 * JavascriptファイルをHTMLヘッダ部に設定
+	 *
+	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptFileToHead($request, &$param)
+	{
+		return $this->addScript;
+	}
+	/**
 	 * カレンダー表示
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
@@ -118,17 +133,29 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			return;
 		}
 		$viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
-		if (isset($targetObj->showEvent)) $this->showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
+		if (isset($targetObj->showEvent)) $showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
+		if (isset($targetObj->showHoliday)) $showHoliday = $targetObj->showHoliday;		// 祝日を表示するかどうか
+		if (isset($targetObj->holidayColor)) $holidayColor = $targetObj->holidayColor;		// 背景色(祝日)
 		if (isset($targetObj->css)) $this->css = $targetObj->css;			// デザインCSS
+		
+		// 追加スクリプト
+		$this->addScript = array($this->getUrl($this->gEnv->getScriptsUrl() . self::GOOGLE_SCRIPT_FILE));
 		
 		// 取得コンテンツタイプ
 		$typeArray = array();
-		if ($this->showEvent) $typeArray[] = 'event';
+		if ($showEvent) $typeArray[] = 'event';
 		$type = implode(',', $typeArray);
 		
 		list($year, $month, $day) = explode('/', date('Y/m/d'));	// 現在日時
 		$month = intval($month) -1;
 		$day = intval($day) - 1;
+		
+		// 祝日表示
+		if ($showHoliday){
+			$this->tmpl->setAttribute('show_holiday', 'visibility', 'visible');
+			if (empty($holidayColor)) $holidayColor = 'red';
+			$this->tmpl->addVar("show_holiday", "color", $this->convertToDispString($holidayColor));
+		}
 		
 		// データを埋め込む
 		$this->tmpl->addVar("_widget", "type", $type);		// 取得コンテンツタイプ
@@ -146,7 +173,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	function getData($request)
 	{
 		// ##### データアクセス権チェック #####
-		
+
 		// 画面出力キャンセル
 		$this->cancelParse();
 		

@@ -11,6 +11,9 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<link rel="stylesheet" href="{_ROOT_URL}/scripts/js_color_picker_v2/js_color_picker_v2.css" media="screen" />
+<script src="{_ROOT_URL}/scripts/js_color_picker_v2/color_functions.js"></script>
+<script type="text/javascript" src="{_ROOT_URL}/scripts/js_color_picker_v2/js_color_picker_v2.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 function addItem(){
@@ -85,7 +88,9 @@ function listItem(){
 	</tr>-->
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_DATA}>表示データ</span></td>
-	    <td><input type="checkbox" name="item_show_event" {SHOW_EVENT} />イベント記事<br /></td>
+	    <td><input type="checkbox" name="item_show_event" {SHOW_EVENT} />イベント記事<br />
+		<input type="checkbox" name="item_show_holiday" {SHOW_HOLIDAY} />祝日(Googleカレンダーから取得)&nbsp;&nbsp;カラー：<input type="text" id="item_holiday_color" name="item_holiday_color" value="{HOLIDAY_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_holiday_color);" /><br />
+		</td>
 	</tr>
     <tr>
 	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_OPTION}>表示オプション</span></td>

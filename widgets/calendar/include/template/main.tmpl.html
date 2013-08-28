@@ -95,6 +95,17 @@ $(function(){
 		year: {YEAR},
 		month: {MONTH},
 		date: {DAY},
+<patTemplate:tmpl name="show_holiday" visibility="hidden">
+		events: {
+			url: 'http://www.google.com/calendar/feeds/ja.japanese%23holiday%40group.v.calendar.google.com/public/full/',
+			color: '{COLOR}',
+			success:function(events){
+				$(events).each(function(){
+					this.url = null;
+				});    
+			}
+		},
+</patTemplate:tmpl>
 		// 初期表示イベント
 		viewDisplay: function(view){
 			m3_ajax_request('calendar', 'act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);

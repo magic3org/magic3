@@ -46,7 +46,7 @@ class calendarDb extends BaseDb
 		$queryStr .=    'OR (? <= ee_start_dt AND ee_start_dt < ?)) ';
 		$params[] = $startDt;
 		$params[] = $endDt;
-	
+
 		$queryStr .=  'ORDER BY ee_start_dt LIMIT ' . $limit . ' OFFSET ' . $offset;// 日付順
 		$this->selectLoop($queryStr, $params, $callback);
 	}

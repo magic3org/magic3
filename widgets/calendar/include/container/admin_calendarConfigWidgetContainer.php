@@ -91,7 +91,9 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		// 入力値を取得
 		$name	= $request->trimValueOf('item_name');			// 定義名
 		$this->viewOption = $request->valueOf('item_view_option');	// FullCalendar表示オプション
-		$this->showEvent = $request->trimCheckedValueOf('item_show_event');		// イベント記事を表示するかどうか
+		$showEvent = $request->trimCheckedValueOf('item_show_event');		// イベント記事を表示するかどうか
+		$showHoliday = $request->trimCheckedValueOf('item_show_holiday');		// 祝日を表示するかどうか
+		$holidayColor = $request->trimValueOf('item_holiday_color');		// 背景色(祝日)
 		$this->css	= $request->valueOf('item_css');		// デザインCSS
 		
 		$replaceNew = false;		// データを再取得するかどうか
@@ -114,7 +116,9 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				$newObj = new stdClass;
 				$newObj->name	= $name;// 表示名
 				$newObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
-				$newObj->showEvent = $this->showEvent;		// イベント記事を表示するかどうか
+				$newObj->showEvent = $showEvent;		// イベント記事を表示するかどうか
+				$newObj->showHoliday = $showHoliday;		// 祝日を表示するかどうか
+				$newObj->holidayColor = $holidayColor;		// 背景色(祝日)
 				$newObj->css = $this->css;		// デザインCSS
 				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
@@ -136,7 +140,9 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				if ($ret){
 					// ウィジェットオブジェクト更新
 					$targetObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
-					$targetObj->showEvent = $this->showEvent;		// イベント記事を表示するかどうか
+					$targetObj->showEvent = $showEvent;		// イベント記事を表示するかどうか
+					$targetObj->showHoliday = $showHoliday;		// 祝日を表示するかどうか
+					$targetObj->holidayColor = $holidayColor;		// 背景色(祝日)
 					$targetObj->css			= $this->css;		// デザインCSS
 				}
 				
@@ -162,7 +168,9 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				$this->viewOption = $this->getParsedTemplateData('option.tmpl.js');	// FullCalendar表示オプション
-				$this->showEvent = '0';		// イベント記事を表示するかどうか
+				$showEvent = '0';		// イベント記事を表示するかどうか
+				$showHoliday = '0';		// 祝日を表示するかどうか
+				$holidayColor = '';		// 背景色(祝日)
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));		// デザインCSS
 			}
 			$this->serialNo = 0;
@@ -172,7 +180,9 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				if ($ret){
 					$name		= $targetObj->name;	// 名前
 					$this->viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
-					if (isset($targetObj->showEvent)) $this->showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
+					if (isset($targetObj->showEvent)) $showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
+					if (isset($targetObj->showHoliday)) $showHoliday = $targetObj->showHoliday;		// 祝日を表示するかどうか
+					if (isset($targetObj->holidayColor)) $holidayColor = $targetObj->holidayColor;		// 背景色(祝日)
 					if (isset($targetObj->css)) $this->css = $targetObj->css;					// デザインCSS
 				}
 			}
@@ -188,7 +198,9 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		$this->tmpl->addVar("item_name_visible", "name",	$name);
 		$this->tmpl->addVar("_widget", "view_option",	$this->convertToDispString($this->viewOption));		// FullCalendar表示オプション
-		$this->tmpl->addVar("_widget", "show_event",	$this->convertToCheckedString($this->showEvent));		// イベント記事を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_event",	$this->convertToCheckedString($showEvent));		// イベント記事を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_holiday",	$this->convertToCheckedString($showHoliday));		// 祝日を表示するかどうか
+		$this->tmpl->addVar("_widget", "holiday_color",	$this->convertToDispString($holidayColor));		// 背景色(祝日)
 		$this->tmpl->addVar("_widget", "css",	$this->convertToDispString($this->css));		// デザインCSS
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
