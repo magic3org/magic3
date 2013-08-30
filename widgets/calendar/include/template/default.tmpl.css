@@ -11,6 +11,19 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_tmpl">
-.fc-sun { color: red; }  /* 文字色(日曜) */
-.fc-sat { color: blue; } /* 文字色(土曜) */
+.fc-sun {
+    color: red; /* 文字色(日曜) */
+}
+.fc-sat {
+    color: blue; /* 文字色(土曜) */
+}
+/* 定休日サンプル
+.fc-wed {
+    background-color: #FFDFDF;
+    border-color: #FFDFDF;
+}*/
+/* 本日サンプル
+.fc-today{
+    background-color: yellow;
+}*/
 </patTemplate:tmpl>
