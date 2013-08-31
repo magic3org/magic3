@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: main.tmpl.html 5230 2012-09-20 00:50:16Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -60,13 +60,13 @@ $(function(){
 <input type="hidden" name="ticket" value="{TICKET}" />
 <patTemplate:tmpl name="show_top_content" visibility="hidden">{CONTENT}</patTemplate:tmpl>
 <patTemplate:tmpl name="show_title" visibility="hidden"><h1>{TITLE}</h1></patTemplate:tmpl>
-<patTemplate:tmpl name="button_list" visibility="hidden"><div style="text-align:right;">{BUTTON_LIST}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="button_list" visibility="hidden">{BUTTON_LIST}</patTemplate:tmpl>
 <patTemplate:tmpl name="message" visibility="hidden"><div>{MESSAGE}</div></patTemplate:tmpl>
 <patTemplate:tmpl name="entrylist">
 <div class="event_entry">
 <h2><a href="{PERMALINK}">{TITLE}</a></h2>
 <div><small>日時：&nbsp;{DATE}&nbsp;&nbsp;&nbsp;&nbsp;{PLACE}</small></div>
-<div style="text-align:right;">{BUTTON_LIST}</div>
+{BUTTON_LIST}
 <div>{ENTRY}</div>{RESULT}
 <patTemplate:tmpl name="entry_footer" visibility="hidden">{LINK}</patTemplate:tmpl>
 </div>

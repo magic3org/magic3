@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: event_mainTopWidgetContainer.php 5230 2012-09-20 00:50:16Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/event_mainBaseWidgetContainer.php');
@@ -46,9 +46,9 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	const MESSAGE_EXT_ENTRY_PRE	= '…&nbsp;';							// イベント記事に結果がある場合の表示
 	const COMMENT_TITLE		= ' についてのコメント';	// コメント用タイトル
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
-	const ICON_SIZE = 16;		// アイコンのサイズ
-	const EDIT_ICON_FILE = '/images/system/page_edit.png';		// 編集アイコン
-	const NEW_ICON_FILE = '/images/system/page_add.png';		// 新規アイコン
+	const ICON_SIZE = 32;		// アイコンのサイズ
+	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
+	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
 	const DEFAULT_TITLE_SEARCH = '検索';		// 検索時のデフォルトタイトル
 	const COOKIE_LIB = 'jquery.cookie';		// 名前保存用クッキーライブラリ
 	const TASK_ADMIN_ENTRY_DETAIL = 'entry_detail';			// 記事編集画面詳細
@@ -451,8 +451,9 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			// 新規作成ボタン
 			$iconUrl = $this->gEnv->getRootUrl() . self::NEW_ICON_FILE;		// 新規アイコン
 			$iconTitle = '新規';
-			$editImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" style="border:none;" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-			$buttonList .= '<span style="line-height:0;"><a href="javascript:void(0);" onclick="editEntry(0);">' . $editImg . '</a></span>';
+			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$buttonList .= '<a href="javascript:void(0);" onclick="editEntry(0);">' . $editImg . '</a>';
+			$buttonList = '<div class="m3edittool">' . $buttonList . '</div>';
 			
 			$this->tmpl->setAttribute('button_list', 'visibility', 'visible');
 			$this->tmpl->addVar("button_list", "button_list", $buttonList);
@@ -608,8 +609,9 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		if (self::$_canEditEntry){		// 編集権限があるとき
 			$iconUrl = $this->gEnv->getRootUrl() . self::EDIT_ICON_FILE;		// 編集アイコン
 			$iconTitle = '編集';
-			$editImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" style="border:none;" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-			$buttonList = '<span style="line-height:0;"><a href="javascript:void(0);" onclick="editEntry(' . $fetchedRow['ee_serial'] . ');">' . $editImg . '</a></span><br />';
+			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$buttonList .= '<a href="javascript:void(0);" onclick="editEntry(' . $fetchedRow['ee_serial'] . ');">' . $editImg . '</a>';
+			$buttonList = '<div class="m3edittool">' . $buttonList . '</div>';
 		}
 		
 		$row = array(
@@ -665,51 +667,5 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$this->isExistsViewData = true;				// 表示データがあるかどうか
 		return true;
 	}
-	/**
-	 * ページリンク作成
-	 *
-	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整
-	 * @param int $totalCount		総項目数
-	 * @param int $viewItemCount	1ページあたりの項目数
-	 * @param string $baseUrl		リンク用のベースURL
-	 * @return string				リンクHTML
-	 */
-/*	function createPageLink(&$pageNo, $totalCount, $viewItemCount, $baseUrl)
-	{
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-
-		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			//for ($i = 1; $i <= $pageCount; $i++){
-			// ページ数1から「LINK_PAGE_COUNT」までのリンクを作成
-			$maxPageCount = $pageCount < self::LINK_PAGE_COUNT ? $pageCount : self::LINK_PAGE_COUNT;
-			for ($i = 1; $i <= $maxPageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					$linkUrl = $this->getUrl($baseUrl . '&page=' . $i, true);
-					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-			// 残りは「...」表示
-			if ($pageCount > self::LINK_PAGE_COUNT) $pageLink .= '&nbsp;...';
-		}
-		if ($pageNo > 1){		// 前ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo -1), true);
-			$link = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >前へ</a>';
-			$pageLink = $link . $pageLink;
-		}
-		if ($pageNo < $pageCount){		// 次ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo +1), true);
-			$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >次へ</a>';
-			$pageLink .= $link;
-		}
-		return $pageLink;
-	}*/
 }
 ?>

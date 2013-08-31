@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: event_mainDb.php 4010 2011-02-22 09:40:40Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -909,8 +909,31 @@ class event_mainDb extends BaseDb
 		}
 		
 		$queryStr .=  'ORDER BY ee_start_dt,ee_id';
-//		$this->selectLoop($queryStr, $params, $callback, null);
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
+		return $retValue;
+	}
+	/**
+	 * イベント記事のデータのある期間を取得(表示用)
+	 *
+	 * @param string	$lang				言語
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @return bool							true=取得、false=取得せず
+	 */
+	function getTermWithEntryItems($langId, &$startDt, &$endDt)
+	{
+		$params = array();
+		
+		$queryStr  = 'SELECT MIN(ee_start_dt) AS mindt, MAX(ee_end_dt) AS maxdt FROM event_entry ';
+		$queryStr .=   'WHERE ee_deleted = false ';		// 削除されていない
+		$queryStr .=     'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
+		$queryStr .=     'AND ee_language_id = ? ';	$params[] = $langId;
+		$retValue = $this->selectRecord($queryStr, $params, $rows);
+		if ($retValue){
+			$startDt = $rows['mindt'];
+			$endDt = $rows['maxdt'];
+			$endDt = $startDt > $endDt ? $startDt : $endDt;
+		}
 		return $retValue;
 	}
 	/**
@@ -940,106 +963,5 @@ class event_mainDb extends BaseDb
 		$retValue = $this->selectRecords($queryStr, array($langId), $rows);
 		return $retValue;
 	}
-	/**
-	 * 記事が指定ブログ属するかチェック
-	 *
-	 * @param int    $serial		記事のシリアルNo
-	 * @param string $blogId		ブログID
-	 * @return bool					true=存在する、false=存在しない
-	 */
-/*	function isExistsEntryInBlogId($serial, $blogId)
-	{
-		$queryStr  = 'SELECT * FROM blog_entry ';
-		$queryStr .=   'WHERE be_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND be_serial = ? ';
-		$queryStr .=     'AND be_blog_id = ? ';
-		return $this->isRecordExists($queryStr, array($serial, $blogId));
-	}*/
-	/**
-	 * コメントが指定ブログ属するかチェック
-	 *
-	 * @param int    $serial		コメントのシリアルNo
-	 * @param string $blogId		ブログID
-	 * @return bool					true=存在する、false=存在しない
-	 */
-/*	function isExistsCommentInBlogId($serial, $blogId)
-	{
-		$queryStr  = 'SELECT * FROM blog_comment ';
-		$queryStr .=   'LEFT JOIN blog_entry ON bo_entry_id = be_id AND be_deleted = false ';
-		$queryStr .=   'WHERE bo_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND bo_serial = ? ';
-		$queryStr .=     'AND be_blog_id = ? ';
-		return $this->isRecordExists($queryStr, array($serial, $blogId));
-	}*/
-	/**
-	 * すべてのブログIDを取得
-	 *
-	 * @param array   $rows			取得レコード
-	 * @return bool					取得 = true, 取得なし= false
-	 */
-/*	function getAllBlogId(&$rows)
-	{
-		$queryStr  = 'SELECT * FROM blog_id ';
-		$queryStr .=  'WHERE bl_deleted = false ';		// 削除されていない
-		$queryStr .=  'ORDER BY bl_index, bl_id';
-		$retValue = $this->selectRecords($queryStr, array(), $rows);
-		return $retValue;
-	}*/
-	/**
-	 * ブログ一覧を取得(管理用)
-	 *
-	 * @param function	$callback			コールバック関数
-	 * @return 			なし
-	 */
-/*	function getAllBlogInfo($callback)
-	{
-		$queryStr = 'SELECT * FROM blog_id LEFT JOIN _login_user ON bl_owner_id = lu_id AND lu_deleted = false ';
-		$queryStr .=  'WHERE bl_deleted = false ';		// 削除されていない
-		$queryStr .=  'ORDER BY bl_index, bl_id';
-		$this->selectLoop($queryStr, array(), $callback);
-	}*/
-	/**
-	 * ブログ情報を識別IDで取得(管理用)
-	 *
-	 * @param string	$id					識別ID
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-/*	function getBlogInfoById($id, &$row)
-	{
-		$queryStr = 'SELECT * FROM blog_id ';
-		$queryStr .=  'WHERE bl_deleted = false ';
-		$queryStr .=  'AND bl_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id), $row);
-		return $ret;
-	}*/
-	/**
-	 * ブログ情報をシリアル番号で取得
-	 *
-	 * @param string	$serial				シリアル番号
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-/*	function getBlogInfoBySerial($serial, &$row)
-	{
-		$queryStr  = 'SELECT * FROM blog_id LEFT JOIN _login_user ON bl_create_user_id = lu_id AND lu_deleted = false ';
-		$queryStr .=   'WHERE bl_serial = ? ';
-		$ret = $this->selectRecord($queryStr, array($serial), $row);
-		return $ret;
-	}*/
-	/**
-	 * 公開可能なブログ情報かどうか
-	 *
-	 * @param string	$id			識別ID
-	 * @return bool					true=存在する、false=存在しない
-	 */
-/*	function isActiveBlogInfo($id)
-	{
-		$queryStr = 'SELECT * FROM blog_id ';
-		$queryStr .=  'WHERE bl_deleted = false ';
-		$queryStr .=  'AND bl_visible = true ';
-		$queryStr .=  'AND bl_id = ? ';
-		return $this->isRecordExists($queryStr, array($id));
-	}*/
 }
 ?>

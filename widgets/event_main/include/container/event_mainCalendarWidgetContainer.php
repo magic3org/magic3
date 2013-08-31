@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: event_mainCalendarWidgetContainer.php 5230 2012-09-20 00:50:16Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/event_mainBaseWidgetContainer.php');
@@ -23,7 +23,9 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 	private $entryDays = array();		// イベントのある日付
 	private $entryInfoArray;				// イベント情報
 	private $css;	// カレンダー用CSS
+	private $langId;		// 言語
 	const TARGET_WIDGET = 'event_main';		// 呼び出しウィジェットID
+	const EVENT_PAGE_NAME = 'イベント';			// イベント表示画面名
 	
 	/**
 	 * コンストラクタ
@@ -61,6 +63,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		$this->langId = $this->gEnv->getCurrentLanguage();
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$year = $request->trimValueOf('year');		// 年指定
 		if (!(is_numeric($year) && 1 <= $year)){			// エラー値のとき
@@ -92,6 +95,16 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		$endDt = $this->convertToProperDate($nextYear . '/' . $nextMonth . '/1');
 		$ret = $this->db->getEntryItemsForCelendar($now, $startDt, $endDt, $this->gEnv->getCurrentLanguage(), $rows);
 		if ($ret) $this->createEventList($rows);
+		
+		// データの存在範囲を取得
+		$rangeStartYearMonth = $rangeEndYearMonth = 0;
+		$ret = $this->db->getTermWithEntryItems($this->langId, $rangeStartDt, $rangeEndDt);
+		if ($ret){
+			$this->timestampToYearMonthDay($rangeStartDt, $rangeYear, $rangeMonth, $rangeDay);
+			$rangeStartYearMonth = intval(sprintf('%04s%02s', $rangeYear, $rangeMonth));
+			$this->timestampToYearMonthDay($rangeEndDt, $rangeYear, $rangeMonth, $rangeDay);
+			$rangeEndYearMonth = intval(sprintf('%04s%02s', $rangeYear, $rangeMonth));
+		}
 /*		
 		$prevUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $prevYear . '&month=' . $prevMonth);
 		$nextUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $nextYear . '&month=' . $nextMonth);*/
@@ -100,9 +113,19 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		
 		$calendarData  = '<table class="event_main_table" style="width:100%;">' . M3_NL;
 		$calendarData .= '<caption>' . M3_NL;
-		$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($prevUrl, true/*リンク用*/)) . '">' . $prevMonth. '月</a>' . M3_NL;
+		// 前月へのリンク
+		if (!empty($rangeStartYearMonth) && $rangeStartYearMonth <= intval(sprintf('%04s%02s', $prevYear, $prevMonth))){
+			$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($prevUrl, true/*リンク用*/)) . '">' . $prevMonth. '月</a>' . M3_NL;
+		} else {
+			$calendarData .= $prevMonth. '月' . M3_NL;
+		}
 		$calendarData .= '&nbsp;&nbsp;|&nbsp;&nbsp;<span style="font-weight:bold;">' . $year . '年' . $month . '月</span>&nbsp;&nbsp;|&nbsp;&nbsp;' . M3_NL;
-		$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($nextUrl, true/*リンク用*/)) . '">' . $nextMonth . '月</a>' . M3_NL;
+		// 翌月へのリンク
+		if (intval(sprintf('%04s%02s', $nextYear, $nextMonth)) <= $rangeEndYearMonth){
+			$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($nextUrl, true/*リンク用*/)) . '">' . $nextMonth . '月</a>' . M3_NL;
+		} else {
+			$calendarData .= $nextMonth . '月' . M3_NL;
+		}
 		$calendarData .= '</caption>' . M3_NL;
 		$calendarData .= '<tr>' . M3_NL;
 		$calendarData .= '<th style="background:none;width:10%;">日付</th>' . M3_NL;
@@ -189,7 +212,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		// 他画面へのリンク
 		$this->tmpl->setAttribute('top_link_area', 'visibility', 'visible');
 		$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_currentPageUrl, true));
-		$topName = 'トップ';
+		$topName = self::EVENT_PAGE_NAME;
 		$this->tmpl->addVar("top_link_area", "top_url", $topLink);
 		$this->tmpl->addVar("top_link_area", "top_name", $topName);
 	}
@@ -239,6 +262,5 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		if (count($entryInDay) > 0) $this->entryInfoArray[$foreDay] = $entryInDay;
 		return true;
 	}
-	
 }
 ?>

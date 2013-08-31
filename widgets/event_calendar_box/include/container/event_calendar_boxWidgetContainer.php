@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: event_calendar_boxWidgetContainer.php 5054 2012-07-23 02:50:03Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
@@ -22,6 +22,7 @@ class event_calendar_boxWidgetContainer extends BaseWidgetContainer
 	private $db;	// DB接続オブジェクト
 	private $entryDays = array();		// イベントのある日付
 	private $css;	// カレンダー用CSS
+	private $langId;		// 言語
 	const TARGET_WIDGET = 'event_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'イベントカレンダー';			// デフォルトのウィジェットタイトル
 		
@@ -61,6 +62,7 @@ class event_calendar_boxWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		$this->langId = $this->gEnv->getCurrentLanguage();
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$year = $request->trimValueOf('year');		// 年指定
 		if (!(is_numeric($year) && 1 <= $year)){			// エラー値のとき
@@ -92,13 +94,33 @@ class event_calendar_boxWidgetContainer extends BaseWidgetContainer
 		$endDt = $this->convertToProperDate($nextYear . '/' . $nextMonth . '/1');
 		$this->db->getEntryItems($now, $startDt, $endDt, $this->gEnv->getCurrentLanguage(), array($this, 'itemLoop'));
 		
+		// データの存在範囲を取得
+		$rangeStartYearMonth = $rangeEndYearMonth = 0;
+		$ret = $this->db->getTermWithEntryItems($this->langId, $rangeStartDt, $rangeEndDt);
+		if ($ret){
+			$this->timestampToYearMonthDay($rangeStartDt, $rangeYear, $rangeMonth, $rangeDay);
+			$rangeStartYearMonth = intval(sprintf('%04s%02s', $rangeYear, $rangeMonth));
+			$this->timestampToYearMonthDay($rangeEndDt, $rangeYear, $rangeMonth, $rangeDay);
+			$rangeEndYearMonth = intval(sprintf('%04s%02s', $rangeYear, $rangeMonth));
+		}
+
 		$prevUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $prevYear . '&month=' . $prevMonth);
 		$nextUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $nextYear . '&month=' . $nextMonth);
 		$calendarData = '';
 		$calendarData .= '<div align="center">' . M3_NL;
-		$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($prevUrl, true/*リンク用*/)) . '">' . $prevMonth. '</a>' . M3_NL;
+		// 前月へのリンク
+		if (!empty($rangeStartYearMonth) && $rangeStartYearMonth <= intval(sprintf('%04s%02s', $prevYear, $prevMonth))){
+			$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($prevUrl, true/*リンク用*/)) . '">' . $prevMonth . '</a>' . M3_NL;
+		} else {
+			$calendarData .= $prevMonth . M3_NL;
+		}
 		$calendarData .= ' | ' . $year . '/' . $month . ' | ' . M3_NL;
-		$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($nextUrl, true/*リンク用*/)) . '">' . $nextMonth . '</a>' . M3_NL;
+		// 翌月へのリンク
+		if (intval(sprintf('%04s%02s', $nextYear, $nextMonth)) <= $rangeEndYearMonth){
+			$calendarData .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($nextUrl, true/*リンク用*/)) . '">' . $nextMonth . '</a>' . M3_NL;
+		} else {
+			$calendarData .= $nextMonth . M3_NL;
+		}
 		$calendarData .= '</div>' . M3_NL;
 		$calendarData .= '<table id="event_calendar">' . M3_NL;
 		$calendarData .= '<tr>' . M3_NL;
