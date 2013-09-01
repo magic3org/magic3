@@ -20,7 +20,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_commentDb.php');
 
 class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 {
-	private $db;			// DB接続オブジェクト
 	private $categoryDb;	// DB接続オブジェクト
 	private $commentDb;			// DB接続オブジェクト
 	private $currentDay;		// 現在日
@@ -40,12 +39,11 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_NO_ENTRY_TITLE = 'イベント記事未登録';
 	const MESSAGE_NO_ENTRY		= 'イベント記事は登録されていません';				// イベント記事が登録されていないメッセージ
-	const MESSAGE_NO_ENTRY_IN_FUTURE	= '今後のイベント記事は登録されていません';				// 今後のイベント記事が登録されていないメッセージ
+//	const MESSAGE_NO_ENTRY_IN_FUTURE	= '今後のイベント記事は登録されていません';				// 今後のイベント記事が登録されていないメッセージ
 	const MESSAGE_FIND_NO_ENTRY	= 'イベント記事が見つかりません';
 	const MESSAGE_EXT_ENTRY		= '結果を見る';					// イベント記事に結果がある場合の表示
 	const MESSAGE_EXT_ENTRY_PRE	= '…&nbsp;';							// イベント記事に結果がある場合の表示
 	const COMMENT_TITLE		= ' についてのコメント';	// コメント用タイトル
-	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
 	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
@@ -112,10 +110,10 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$this->pageTitle = '';		// 画面タイトル、パンくずリスト用タイトル
 		
 		// イベント定義値取得
-		$entryViewCount	= self::$_configArray[self::CF_ENTRY_VIEW_COUNT];// 記事表示数
-		if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
-		$entryViewOrder	= self::$_configArray[self::CF_ENTRY_VIEW_ORDER];// 記事表示順
-		$receiveComment = self::$_configArray[self::CF_RECEIVE_COMMENT];		// コメントを受け付けるかどうか
+		$entryViewCount	= self::$_configArray[event_mainCommonDef::CF_ENTRY_VIEW_COUNT];// 記事表示数
+		if (empty($entryViewCount)) $entryViewCount = event_mainCommonDef::DEFAULT_VIEW_COUNT;
+		$entryViewOrder	= self::$_configArray[event_mainCommonDef::CF_ENTRY_VIEW_ORDER];// 記事表示順
+		$receiveComment = self::$_configArray[event_mainCommonDef::CF_RECEIVE_COMMENT];		// コメントを受け付けるかどうか
 		
 		$act = $request->trimValueOf('act');
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
@@ -148,7 +146,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$this->gInstance->getAnalyzeManager()->logSearchWord($this->gEnv->getCurrentWidgetId(), $keyword);
 				
 				// 総数を取得
-				$totalCount = self::$_localDb->searchEntryItemsCountByKeyword($now, $keyword, $this->langId);
+				$totalCount = self::$_mainDb->searchEntryItemsCountByKeyword($now, $keyword, $this->langId);
 				$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 				
 				// リンク文字列作成、ページ番号調整
@@ -156,7 +154,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
 				
 				// 記事一覧を表示
-				self::$_localDb->searchEntryItemsByKeyword($entryViewCount, $pageNo, $now, $keyword, $this->langId, array($this, 'searchItemsLoop'));
+				self::$_mainDb->searchEntryItemsByKeyword($entryViewCount, $pageNo, $now, $keyword, $this->langId, array($this, 'searchItemsLoop'));
 				
 				if ($this->isExistsViewData){
 					// ページリンクを埋め込む
@@ -179,7 +177,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			}
 			if (!empty($category)){				// カテゴリー指定のとき
 				// 総数を取得
-				$totalCount = self::$_localDb->getEntryItemsCountByCategory($now, $category, $this->langId);
+				$totalCount = self::$_mainDb->getEntryItemsCountByCategory($now, $category, $this->langId);
 				$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 				
 				// リンク文字列作成、ページ番号調整
@@ -187,7 +185,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 				
 				// 記事一覧を表示
-				self::$_localDb->getEntryItemsByCategory($entryViewCount, $pageNo, $now, $category, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
+				self::$_mainDb->getEntryItemsByCategory($entryViewCount, $pageNo, $now, $category, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
 
 				// タイトルの設定
 				$ret = $this->categoryDb->getCategoryByCategoryId($category, $this->gEnv->getDefaultLanguage(), $row);
@@ -210,7 +208,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$endDt = $this->getNextMonth($year . '/' . $month) . '/1';
 					
 					// 総数を取得
-					$totalCount = self::$_localDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
+					$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
 					$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 
 					// リンク文字列作成、ページ番号調整
@@ -218,7 +216,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
 				
 					// 記事一覧作成
-					self::$_localDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
+					self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
 
 					if ($this->isExistsViewData){
 						// ページリンクを埋め込む
@@ -239,7 +237,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$endDt = $this->getNextDay($year . '/' . $month . '/' . $day);
 					
 					// 総数を取得
-					$totalCount = self::$_localDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
+					$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
 					$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 					
 					// リンク文字列作成、ページ番号調整
@@ -247,7 +245,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
 					
 					// 記事一覧作成
-					self::$_localDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
+					self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
 					
 					if ($this->isExistsViewData){
 						// ページリンクを埋め込む
@@ -269,8 +267,8 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			$this->pageTitle = $title;		// カテゴリー名を画面タイトルにする
 		} else if ($act == 'checkcomment'){		// コメント確認のとき
 			// 入力チェック
-			$maxCommentLength = self::$_configArray[self::CF_MAX_COMMENT_LENGTH];// コメント最大長
-			if ($maxCommentLength == '') $maxCommentLength = self::DEFAULT_COMMENT_LENGTH;
+			$maxCommentLength = self::$_configArray[event_mainCommonDef::CF_MAX_COMMENT_LENGTH];// コメント最大長
+			if ($maxCommentLength == '') $maxCommentLength = event_mainCommonDef::DEFAULT_COMMENT_LENGTH;
 			if (empty($maxCommentLength)){		// 空のときは長さのチェックなし
 				$this->checkInput($body, 'コメント内容');
 			} else {
@@ -281,7 +279,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			// エラーなしの場合は確認画面表示
 			if ($this->getMsgCount() == 0){
 				// タイトル作成
-				$ret = self::$_localDb->getEntryItem($entryId, $this->langId, $row);
+				$ret = self::$_mainDb->getEntryItem($entryId, $this->langId, $row);
 				if ($ret) $title = $row['ee_name'] . self::COMMENT_TITLE;
 				$this->pageTitle = $title;		// 画面タイトル
 				
@@ -343,7 +341,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			// 記事ID指定のときは記事を取得
 			$entryRow = array();
 			if (!empty($entryId)){
-				$ret = self::$_localDb->getEntryItem($entryId, $this->langId, $row);
+				$ret = self::$_mainDb->getEntryItem($entryId, $this->langId, $row);
 				if ($ret) $entryRow = $row;
 			}
 			
@@ -358,7 +356,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$this->tmpl->addVar("_widget", "entry_id", $entryId);		// 記事を指定
 					
 					// ### コメント入力欄の表示 ###
-					//$ret = self::$_localDb->getEntryItem($entryId, $this->langId, $row);
+					//$ret = self::$_mainDb->getEntryItem($entryId, $this->langId, $row);
 					//if ($ret && !empty($row['ee_receive_comment'])){		// コメントを受け付ける場合のみ表示
 					if (!empty($entryRow) && !empty($entryRow['ee_receive_comment'])){		// コメントを受け付ける場合のみ表示
 						$this->tmpl->setAttribute('add_comment', 'visibility', 'visible');
@@ -376,13 +374,13 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$showTopContent = true;		// トップコンテンツを表示
 
 				// トップコンテンツを表示
-				$topContent = self::$_configArray[self::CF_TOP_CONTENTS];// トップコンテンツ
+				$topContent = self::$_configArray[event_mainCommonDef::CF_TOP_CONTENTS];// トップコンテンツ
 
 				$this->tmpl->setAttribute('show_top_content', 'visibility', 'visible');
 				$this->tmpl->addVar("show_top_content", "content", $topContent);
 
 				// 総数を取得
-				$totalCount = self::$_localDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
+				$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
 				$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 				
 				// リンク文字列作成、ページ番号調整
@@ -390,7 +388,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl);
 			
 				// 記事一覧作成
-				self::$_localDb->getEntryItems($entryViewCount, $pageNo, $now, 0/* 期間で指定 */, $startDt/*期間開始*/, $endDt/*期間終了*/,
+				self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, 0/* 期間で指定 */, $startDt/*期間開始*/, $endDt/*期間終了*/,
 								$this->langId, $entryViewOrder, array($this, 'itemsLoop'));
 				
 				if ($this->isExistsViewData){		// 表示するイベント記事があるとき
@@ -400,11 +398,13 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 						$this->tmpl->addVar("page_link", "page_link", $pageLink);
 					}
 				} else {			// 表示するイベント記事がないとき
-					$message = self::MESSAGE_NO_ENTRY_IN_FUTURE;				// 今後のイベント記事が登録されていないメッセージ
+					//$message = self::MESSAGE_NO_ENTRY_IN_FUTURE;				// 今後のイベント記事が登録されていないメッセージ
+					$message = self::$_configArray[event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE];// 予定イベントなし時メッセージ
+					if (empty($message)) $message = event_mainCommonDef::DEFAULT_MSG_NO_FUTURE_EVENT;
 				}
 			} else {		// 記事単体表示のとき
 				$this->viewExtEntry = true;			// 記事ID指定のときは結果(全文)を表示
-				self::$_localDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
+				self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
 				
 				// 記事がないときはコメントを隠す
 				if (!$this->isExistsViewData){

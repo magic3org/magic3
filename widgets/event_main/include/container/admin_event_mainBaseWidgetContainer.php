@@ -14,21 +14,14 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/event_mainCommonDef.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainDb.php');
 
 class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	//protected $_db;			// DB接続オブジェクト
 	protected static $_mainDb;			// DB接続オブジェクト
-	protected $_configArray;		// BBS定義値
-	const CF_RECEIVE_COMMENT		= 'receive_comment';		// コメントを受け付けるかどうか
-	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
-	const CF_ENTRY_VIEW_ORDER		= 'entry_view_order';			// 記事表示方向
-	const CF_MAX_COMMENT_LENGTH		= 'comment_max_length';		// コメント最大文字数
-	const CF_TOP_CONTENTS			= 'top_contents';		// トップコンテンツ
-	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
-	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
-	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
+	protected static $_configArray;		// イベント定義値
 
 	// カレンダー用スクリプト
 	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル
@@ -47,12 +40,10 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// サブウィジェット起動のときだけ初期処理実行
 		if ($this->gEnv->getIsSubWidget()){
 			// DBオブジェクト作成
-			//$this->_db = new event_mainDb();
-			// DBオブジェクト作成
 			if (!isset(self::$_mainDb)) self::$_mainDb = new event_mainDb();
 		
-			// BBS定義を読み込む
-			$this->_loadConfig();
+			// イベント定義を読み込む
+			if (!isset(self::$_configArray)) self::$_configArray = event_mainCommonDef::loadConfig(self::$_mainDb);
 		}
 	}
 	/**
@@ -174,28 +165,6 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . 'イベント' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
-	}
-	/**
-	 * イベント定義値をDBから取得
-	 *
-	 * @return bool			true=取得成功、false=取得失敗
-	 */
-	function _loadConfig()
-	{
-		$this->_configArray = array();
-
-		// イベント定義を読み込み
-		$ret = self::$_mainDb->getAllConfig($rows);
-		if ($ret){
-			// 取得データを連想配列にする
-			$configCount = count($rows);
-			for ($i = 0; $i < $configCount; $i++){
-				$key = $rows[$i]['bg_id'];
-				$value = $rows[$i]['bg_value'];
-				$this->_configArray[$key] = $value;
-			}
-		}
-		return $ret;
 	}
 }
 ?>

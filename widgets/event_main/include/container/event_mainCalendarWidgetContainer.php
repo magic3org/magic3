@@ -14,12 +14,10 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/event_mainBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainDb.php');
 require_once(CALENDAR_ROOT			. 'Month/Weekdays.php');
 
 class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
 	private $entryDays = array();		// イベントのある日付
 	private $entryInfoArray;				// イベント情報
 	private $css;	// カレンダー用CSS
@@ -34,9 +32,6 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DB接続オブジェクト作成
-		$this->db = new event_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -93,12 +88,12 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		// データの存在する日を取得
 		$startDt = $this->convertToProperDate($year . '/' . $month . '/1');
 		$endDt = $this->convertToProperDate($nextYear . '/' . $nextMonth . '/1');
-		$ret = $this->db->getEntryItemsForCelendar($now, $startDt, $endDt, $this->gEnv->getCurrentLanguage(), $rows);
+		$ret = self::$_mainDb->getEntryItemsForCelendar($now, $startDt, $endDt, $this->gEnv->getCurrentLanguage(), $rows);
 		if ($ret) $this->createEventList($rows);
 		
 		// データの存在範囲を取得
 		$rangeStartYearMonth = $rangeEndYearMonth = 0;
-		$ret = $this->db->getTermWithEntryItems($this->langId, $rangeStartDt, $rangeEndDt);
+		$ret = self::$_mainDb->getTermWithEntryItems($this->langId, $rangeStartDt, $rangeEndDt);
 		if ($ret){
 			$this->timestampToYearMonthDay($rangeStartDt, $rangeYear, $rangeMonth, $rangeDay);
 			$rangeStartYearMonth = intval(sprintf('%04s%02s', $rangeYear, $rangeMonth));

@@ -58,6 +58,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$receiveComment = ($request->trimValueOf('receive_comment') == 'on') ? 1 : 0;		// コメントを受け付けるかどうか
 		$topContents = $request->valueOf('top_contents');	// トップコンテンツ
 		$maxCommentLength = $request->valueOf('max_comment_length');	// コメント最大文字数
+		$msgNoEntryInFuture = $request->valueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
 		
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
@@ -65,43 +66,36 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 			$this->checkNumeric($maxCommentLength, 'コメント最大文字数');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
-				$isErr = false;
-				
-				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(self::CF_ENTRY_VIEW_COUNT, $entryViewCount)) $isErr = true;// 記事表示数
-				}
-				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(self::CF_ENTRY_VIEW_ORDER, $entryViewOrder)) $isErr = true;// 記事表示順
-				}
-				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(self::CF_RECEIVE_COMMENT, $receiveComment)) $isErr = true;// コメントを受け付けるかどうか
-				}
-				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(self::CF_MAX_COMMENT_LENGTH, $maxCommentLength)) $isErr = true;// コメント最大文字数
-				}
-				if (!$isErr){
-					if (!self::$_mainDb->updateConfig(self::CF_TOP_CONTENTS, $topContents)) $isErr = true;// トップコンテンツ
-				}
-				if ($isErr){
-					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
-				} else {
+				$ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_ENTRY_VIEW_COUNT, $entryViewCount); // 記事表示数
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_ENTRY_VIEW_ORDER, $entryViewOrder);// 記事表示順
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_RECEIVE_COMMENT, $receiveComment);// コメントを受け付けるかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH, $maxCommentLength);// コメント最大文字数
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_TOP_CONTENTS, $topContents);// トップコンテンツ
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE, $msgNoEntryInFuture);	// 予定イベントなし時メッセージ
+
+				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 				// 値を再取得
-				$entryViewCount	= self::$_mainDb->getConfig(self::CF_ENTRY_VIEW_COUNT);// 記事表示数
-				$entryViewOrder	= self::$_mainDb->getConfig(self::CF_ENTRY_VIEW_ORDER);// 記事表示順
-				$receiveComment	= self::$_mainDb->getConfig(self::CF_RECEIVE_COMMENT);
-				$maxCommentLength = self::$_mainDb->getConfig(self::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
-				$topContents = self::$_mainDb->getConfig(self::CF_TOP_CONTENTS);// トップコンテンツ
+				$entryViewCount	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_COUNT);// 記事表示数
+				$entryViewOrder	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
+				$receiveComment	= self::$_mainDb->getConfig(event_mainCommonDef::CF_RECEIVE_COMMENT);
+				$maxCommentLength = self::$_mainDb->getConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
+				$topContents = self::$_mainDb->getConfig(event_mainCommonDef::CF_TOP_CONTENTS);// トップコンテンツ
+				$msgNoEntryInFuture = self::$_mainDb->getConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE);	// 予定イベントなし時メッセージ
 			}
 		} else {		// 初期表示の場合
-			$entryViewCount	= self::$_mainDb->getConfig(self::CF_ENTRY_VIEW_COUNT);// 記事表示数
-			if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
-			$entryViewOrder	= self::$_mainDb->getConfig(self::CF_ENTRY_VIEW_ORDER);// 記事表示順
-			$receiveComment	= self::$_mainDb->getConfig(self::CF_RECEIVE_COMMENT);
-			$maxCommentLength = self::$_mainDb->getConfig(self::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
-			if ($maxCommentLength == '') $maxCommentLength = self::DEFAULT_COMMENT_LENGTH;
-			$topContents = self::$_mainDb->getConfig(self::CF_TOP_CONTENTS);// トップコンテンツ
+			$entryViewCount	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_COUNT);// 記事表示数
+			if (empty($entryViewCount)) $entryViewCount = event_mainCommonDef::DEFAULT_VIEW_COUNT;
+			$entryViewOrder	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
+			$receiveComment	= self::$_mainDb->getConfig(event_mainCommonDef::CF_RECEIVE_COMMENT);
+			$maxCommentLength = self::$_mainDb->getConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
+			if ($maxCommentLength == '') $maxCommentLength = event_mainCommonDef::DEFAULT_COMMENT_LENGTH;
+			$topContents = self::$_mainDb->getConfig(event_mainCommonDef::CF_TOP_CONTENTS);// トップコンテンツ
+			$msgNoEntryInFuture = self::$_mainDb->getConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE);	// 予定イベントなし時メッセージ
+			if (empty($msgNoEntryInFuture)) $msgNoEntryInFuture = event_mainCommonDef::DEFAULT_MSG_NO_ENTRY_IN_FUTURE;
 		}
 		// 画面に書き戻す
 		$this->tmpl->addVar("_widget", "view_count", $entryViewCount);// 記事表示数
@@ -110,11 +104,10 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		} else {
 			$this->tmpl->addVar("_widget", "view_order_dec_selected", 'selected');// 記事表示順
 		}
-		$checked = '';
-		if ($receiveComment) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "receive_comment", $checked);// コメントを受け付けるかどうか
-		$this->tmpl->addVar("_widget", "max_comment_length", $maxCommentLength);// コメント最大文字数
-		$this->tmpl->addVar("_widget", "top_contents", $topContents);		// トップコンテンツ
+		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
+		$this->tmpl->addVar("_widget", "max_comment_length", $this->convertToDispString($maxCommentLength));// コメント最大文字数
+		$this->tmpl->addVar("_widget", "top_contents", $this->convertToDispString($topContents));		// トップコンテンツ
+		$this->tmpl->addVar("_widget", "msg_no_entry_in_future", $this->convertToDispString($msgNoEntryInFuture));		// 予定イベントなし時メッセージ
 	}
 }
 ?>
