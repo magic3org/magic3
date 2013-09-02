@@ -322,7 +322,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'event_main';
 INSERT INTO _widgets
 (wd_id,        wd_name,                 wd_type, wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,         wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('event_main', 'イベント情報 - メイン', 'event', 'event', true,          '1.0.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベント情報を表示する。', '',                'entry_detail=jquery-ui.tabs;category_detail=jquery.tablednd', true,         true,        true,        true,               false,true,               0, 1, 2, '2012-09-20', now(),    now());
+('event_main', 'イベント情報 - メイン', 'event', 'event', true,          '1.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベント情報を表示する。', '',                'entry_detail=jquery-ui.tabs;category_detail=jquery.tablednd', true,         true,        true,        true,               false,true,               0, 1, 2, '2013-09-01', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'event_search_box';
 INSERT INTO _widgets
 (wd_id,              wd_name,               wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
@@ -383,6 +383,10 @@ DELETE FROM _widgets WHERE wd_id = 'calendar';
 INSERT INTO _widgets
 (wd_id,     wd_name,       wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('calendar', '汎用カレンダー', 'calendar', true, '0.3.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '様々な情報をカレンダー表示する汎用カレンダー機能', 'jquery.fullcalendar',                '',   true,                true, true,         true,                true,  0,         1, '2013-08-27', now(),         now());
+DELETE FROM _widgets WHERE wd_id = 'event_category_menu';
+INSERT INTO _widgets
+(wd_id,                 wd_name,                         wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('event_category_menu', 'イベント - カテゴリーメニュー', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'イベントカテゴリ一覧を表示。',     false,         false,               false,true,           0, 1, -1, '2013-09-02', now(), now());
 
 -- ウィジェット情報(携帯用)
 DELETE FROM _widgets WHERE wd_id = 'm/mainmenu';
