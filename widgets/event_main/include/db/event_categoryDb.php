@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: event_categoryDb.php 5484 2012-12-24 23:17:17Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -18,9 +18,112 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class event_categoryDb extends BaseDb
 {
 	/**
-	 * カテゴリ情報をシリアル番号で取得
+	 * すべての言語を取得
 	 *
-	 * @param string	$serial				シリアル番号
+	 * @param function	$callback			コールバック関数
+	 * @return			true=取得、false=取得せず
+	 */
+	function getAllLang($callback)
+	{
+		$queryStr = 'SELECT * FROM _language ORDER BY ln_priority';
+		$this->selectLoop($queryStr, array(), $callback, null);
+	}
+	/**
+	 * イベントカテゴリー一覧を取得
+	 *
+	 * @param function	$callback			コールバック関数
+	 * @param string	$lang				言語
+	 * @return 			なし
+	 */
+	function getAllCategory($callback, $lang)
+	{
+		$queryStr = 'SELECT * FROM event_category LEFT JOIN _login_user ON ec_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=  'WHERE ec_language_id = ? ';
+		$queryStr .=    'AND ec_deleted = false ';		// 削除されていない
+		$queryStr .=  'ORDER BY ec_id';
+		$this->selectLoop($queryStr, array($lang), $callback);
+	}
+	/**
+	 * イベントカテゴリーの対応言語を取得
+	 *
+	 * @param int		$id			商品カテゴリーID
+	 * @return bool					true=取得、false=取得せず
+	 */
+	function getLangByCategoryId($id, &$rows)
+	{
+		$queryStr = 'SELECT ln_id, ln_name, ln_name_en FROM event_category LEFT JOIN _language ON ec_language_id = ln_id ';
+		$queryStr .=  'WHERE ec_deleted = false ';	// 削除されていない
+		$queryStr .=    'AND ec_id = ? ';
+		$queryStr .=  'ORDER BY ec_id, ln_priority';
+		$retValue = $this->selectRecords($queryStr, array($id), $rows);
+		return $retValue;
+	}
+	/**
+	 * イベントカテゴリーの新規追加
+	 *
+	 * @param int	  $id	カテゴリーID
+	 * @param string  $lang			言語ID
+	 * @param string  $name			名前
+	 * @param int     $pcategory	親カテゴリーID
+	 * @param int     $index		表示順
+	 * @param bool    $visible		表示、非表示
+	 * @param int     $userId		更新者ユーザID
+	 * @param int     $newSerial	新規シリアル番号
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function addCategory($id, $lang, $name, $pcategory, $index, $visible, $userId, &$newSerial)
+	{	
+		// トランザクション開始
+		$this->startTransaction();
+		
+		if ($id == 0){		// IDが0のときは、カテゴリーIDを新規取得
+			// コンテンツIDを決定する
+			$queryStr = 'SELECT MAX(ec_id) AS mid FROM event_category ';
+			$ret = $this->selectRecord($queryStr, array(), $row);
+			if ($ret){
+				$cId = $row['mid'] + 1;
+			} else {
+				$cId = 1;
+			}
+		} else {
+			$cId = $id;
+		}
+		
+		// 前レコードの削除状態チェック
+		$historyIndex = 0;
+		$queryStr = 'SELECT * FROM event_category ';
+		$queryStr .=  'WHERE ec_id = ? ';
+		$queryStr .=    'AND ec_language_id = ? ';
+		$queryStr .=  'ORDER BY ec_history_index DESC ';
+		$ret = $this->selectRecord($queryStr, array($cId, $lang), $row);
+		if ($ret){
+			if (!$row['ec_deleted']){		// レコード存在していれば終了
+				$this->endTransaction();
+				return false;
+			}
+			$historyIndex = $row['ec_history_index'] + 1;
+		}
+		
+		// データを追加
+		$queryStr = 'INSERT INTO event_category ';
+		$queryStr .=  '(ec_id, ec_language_id, ec_history_index, ec_name, ec_parent_id, ec_sort_order, ec_visible, ec_create_user_id, ec_create_dt) ';
+		$queryStr .=  'VALUES ';
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, now())';
+		$this->execStatement($queryStr, array($cId, $lang, $historyIndex, $name, $pcategory, $index, $visible, $userId));
+		
+		// 新規のシリアル番号取得
+		$queryStr = 'SELECT MAX(ec_serial) AS ns FROM event_category ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+			
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * イベントカテゴリーをシリアル番号で取得
+	 *
+	 * @param int		$serial				シリアル番号
 	 * @param array     $row				レコード
 	 * @return bool							取得 = true, 取得なし= false
 	 */
@@ -28,196 +131,97 @@ class event_categoryDb extends BaseDb
 	{
 		$queryStr  = 'SELECT * FROM event_category LEFT JOIN _login_user ON ec_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'WHERE ec_serial = ? ';
-		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		return $ret;
+	}	
+	/**
+	 * イベントカテゴリーをカテゴリーIDで取得
+	 *
+	 * @param int		$id					カテゴリーID
+	 * @param string	$langId				言語ID
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getCategoryByCategoryId($id, $langId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM event_category LEFT JOIN _login_user ON ec_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE ec_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND ec_id = ? ';
+		$queryStr .=   'AND ec_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
 		return $ret;
 	}
 	/**
-	 * カテゴリ一覧を取得(管理用)
+	 * イベントカテゴリーの更新
 	 *
-	 * @param string  $langId		言語ID
-	 * @param function	$callback	コールバック関数
-	 * @return 			なし
+	 * @param int     $serial		シリアル番号
+	 * @param string  $name			名前
+	 * @param int     $pcategory	親カテゴリーID
+	 * @param int     $index		表示順
+	 * @param bool    $visible		表示、非表示
+	 * @param int     $userId		更新者ユーザID
+	 * @param int     $newSerial	新規シリアル番号
+	 * @return bool					true = 成功、false = 失敗
 	 */
-	function getAllCategory($langId, $callback)
-	{
-		$queryStr  = 'SELECT * FROM event_category LEFT JOIN _login_user ON ec_create_user_id = lu_id AND lu_deleted = false ';
-		$queryStr .=   'WHERE ec_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND ec_item_id = ? ';
-		$queryStr .=     'AND ec_language_id = ? ';
-		$queryStr .=   'ORDER BY ec_index';
-		$this->selectLoop($queryStr, array(''/*カテゴリのみ取得*/, $langId), $callback);
-	}
-	/**
-	 * メニュー作成用のカテゴリ一覧を取得(管理用)
-	 *
-	 * @param string  $langId		言語ID
-	 * @param function	$callback	コールバック関数
-	 * @return 			なし
-	 */
-	function getAllCategoryForMenu($langId, $callback)
-	{
-		// カテゴリ情報を取得
-		$queryStr  = 'SELECT ec_id FROM event_category ';
-		$queryStr .=   'WHERE ec_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND ec_item_id = ? ';
-		$queryStr .=     'AND ec_language_id = ? ';
-		$queryStr .=   'ORDER BY ec_index';
-		$retValue = $this->selectRecords($queryStr, array(''/*カテゴリ情報のみ*/, $langId), $rows);
-		if (!$retValue) return;
-		
-		// CASE文作成
-		$categoryId = '';
-		$caseStr = 'CASE ec_id ';
-		for ($i = 0; $i < count($rows); $i++){
-			$id = '\'' . addslashes($rows[$i]['ec_id']) . '\'';
-			$caseStr .= 'WHEN ' . $id . ' THEN ' . $i . ' ';
-			$categoryId .= $id . ',';
-		}
-		$caseStr .= 'END AS no,';
-		$categoryId = rtrim($categoryId, ',');
-		// タイトルを最後にする
-		$caseStr .=   'CASE ec_item_id ';
-		$caseStr .=     'WHEN \'\' THEN 1 ';
-		$caseStr .=     'ELSE 0 ';
-		$caseStr .=   'END AS type ';
-		
-		$queryStr  = 'SELECT *, ' . $caseStr . ' FROM event_category ';
-		$queryStr .=   'WHERE ec_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND ec_language_id = ? ';
-		$queryStr .=     'AND ec_id in (' . $categoryId . ') ';
-		$queryStr .=   'ORDER BY no, type, ec_index';
-		$this->selectLoop($queryStr, array($langId), $callback);
-	}
-	/**
-	 * カテゴリIDでカテゴリ情報を取得
-	 *
-	 * @param string  $categoryId	カテゴリID
-	 * @param string  $langId		言語ID
-	 * @param array   $row			取得レコード
-	 * @return bool					取得 = true, 取得なし= false
-	 */
-	function getCategoryById($categoryId, $langId, &$row)
-	{
-		if (empty($categoryId) || empty($langId)) return false;
-		
-		$queryStr  = 'SELECT * FROM event_category ';
-		$queryStr .=   'WHERE ec_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND ec_id = ? ';
-		$queryStr .=     'AND ec_item_id = ? ';
-		$queryStr .=     'AND ec_language_id = ? ';
-		$retValue = $this->selectRecord($queryStr, array($categoryId, ''/*カテゴリ情報*/, $langId), $row);
-		return $retValue;
-	}
-	/**
-	 * カテゴリIDですべてのカテゴリ項目を取得
-	 *
-	 * @param string  $categoryId	カテゴリID
-	 * @param string  $langId		言語ID
-	 * @param array   $rows			取得レコード
-	 * @return bool					取得 = true, 取得なし= false
-	 */
-	function getAllCategoryItemsById($categoryId, $langId, &$rows)
-	{
-		if (empty($categoryId) || empty($langId)) return false;
-		
-		$queryStr  = 'SELECT * FROM event_category ';
-		$queryStr .=   'WHERE ec_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND ec_id = ? ';
-		$queryStr .=     'AND ec_item_id != ? ';
-		$queryStr .=     'AND ec_language_id = ? ';
-		$queryStr .=   'ORDER BY ec_index';
-		$retValue = $this->selectRecords($queryStr, array($categoryId, ''/*カテゴリ以外*/, $langId), $rows);
-		return $retValue;
-	}
-	/**
-	 * カテゴリ情報を更新
-	 *
-	 * @param string $serial	シリアル番号(0のときは新規登録)
-	 * @param string $id		カテゴリID
-	 * @param string  $langId	言語ID
-	 * @param string $name		名前
-	 * @param int $index		表示順
-	 * @param array $itemArray	カテゴリ項目
-	 * @param int $newSerial	新規シリアル番号
-	 * @return					true = 正常、false=異常
-	 */
-	function updateCategory($serial, $id, $langId, $name, $index, $itemArray, &$newSerial)
-	{
+	function updateCategory($serial, $name, $pcategory, $index, $visible, $userId, &$newSerial)
+	{	
 		$now = date("Y/m/d H:i:s");	// 現在日時
-		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
-		
+				
 		// トランザクション開始
 		$this->startTransaction();
 		
-		// 前レコードの削除状態チェック
-		$historyIndex = 0;
-		$desc = '';
-		if (empty($serial)){		// 新規登録のとき
-			$queryStr  = 'SELECT * FROM event_category ';
-			$queryStr .=   'WHERE ec_id = ? ';
-			$queryStr .=     'AND ec_item_id = ? ';
-			$queryStr .=     'AND ec_language_id = ? ';
-			$queryStr .=   'ORDER BY ec_history_index DESC ';
-			$ret = $this->selectRecord($queryStr, array($id, ''/*カテゴリタイトル*/, $langId), $row);
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$changePCategory = false;		// 親カテゴリを変更かどうか
+		$historyIndex = 0;		// 履歴番号
+		$queryStr  = 'SELECT * FROM event_category ';
+		$queryStr .=   'where ec_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['ec_deleted']){		// レコードが削除されていれば終了
+				$this->endTransaction();
+				return false;
+			}
+			$historyIndex = $row['ec_history_index'] + 1;
+			if ($pcategory != $row['ec_parent_id']) $changePCategory = true;
+		} else {		// 存在しない場合は終了
+			$this->endTransaction();
+			return false;
+		}
+		// 親カテゴリーが変更のときは、同じカテゴリーIDの親カテゴリーも変更
+		if ($changePCategory){
+			$queryStr = 'SELECT ec_serial FROM event_category ';
+			$queryStr .=  'WHERE ec_deleted = false ';	// 削除されていない
+			$queryStr .=    'AND ec_id = ? ';
+			$ret = $this->selectRecords($queryStr, array($row['ec_id']), $rows);
 			if ($ret){
-				if (!$row['ec_deleted']){		// レコード存在していれば終了
-					$this->endTransaction();
-					return false;
+				for ($i = 0; $i < count($rows); $i++){
+					if ($rows[$i]['ec_serial'] != $serial){
+						if (!$this->updatePCategory($rows[$i]['ec_serial'], $pcategory, $userId, $now)){
+							$this->endTransaction();
+							return false;		
+						}
+					}
 				}
-				$historyIndex = $row['ec_history_index'] + 1;
-			}
-		} else {		// 更新のとき
-			// 指定のシリアルNoのレコードが削除状態でないかチェック
-			$queryStr  = 'SELECT * FROM event_category ';
-			$queryStr .=   'WHERE ec_serial = ? ';
-			$ret = $this->selectRecord($queryStr, array($serial), $row);
-			if ($ret){		// 既に登録レコードがあるとき
-				if ($row['ec_deleted']){		// レコードが削除されていれば終了
-					$this->endTransaction();
-					return false;
-				}
-				$historyIndex = $row['ec_history_index'] + 1;
-				
-				// 識別IDと言語の変更は不可
-				$id = $row['ec_id'];
-				$langId = $row['ec_language_id'];
-			} else {		// 存在しない場合は終了
+			} else {
 				$this->endTransaction();
-				return false;
-			}
-			
-			// 古いレコードを削除
-			$queryStr  = 'UPDATE event_category ';
-			$queryStr .=   'SET ec_deleted = true, ';	// 削除
-			$queryStr .=     'ec_update_user_id = ?, ';
-			$queryStr .=     'ec_update_dt = ? ';
-			$queryStr .=   'WHERE ec_deleted = false ';		// 削除されていない
-			$queryStr .=     'AND ec_id = ? ';
-			$queryStr .=     'AND ec_language_id = ? ';
-			$ret = $this->execStatement($queryStr, array($userId, $now, $id, $langId));
-			if (!$ret){
-				$this->endTransaction();
-				return false;
+				return false;			
 			}
 		}
 		
-		// カテゴリ種別を追加
+		// 古いレコードを削除
+		$queryStr  = 'UPDATE event_category ';
+		$queryStr .=   'SET ec_deleted = true, ';	// 削除
+		$queryStr .=     'ec_update_user_id = ?, ';
+		$queryStr .=     'ec_update_dt = ? ';
+		$queryStr .=   'WHERE ec_serial = ?';
+		$this->execStatement($queryStr, array($userId, $now, $serial));
+		
+		// 新規レコード追加
 		$queryStr = 'INSERT INTO event_category ';
-		$queryStr .=  '(ec_id, ec_item_id, ec_language_id, ec_history_index, ec_name, ec_index, ec_create_user_id, ec_create_dt) ';
+		$queryStr .=  '(ec_id, ec_language_id, ec_history_index, ec_name, ec_parent_id, ec_sort_order, ec_visible, ec_create_user_id, ec_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($id, ''/*カテゴリ種別*/, $langId, $historyIndex, $name, intval($index), $userId, $now));
-		
-		// カテゴリ項目を追加
-		for ($i = 0; $i < count($itemArray); $i++){
-			$line = $itemArray[$i];
-			
-			$queryStr = 'INSERT INTO event_category ';
-			$queryStr .=  '(ec_id, ec_item_id, ec_language_id, ec_history_index, ec_name, ec_index, ec_create_user_id, ec_create_dt) ';
-			$queryStr .=  'VALUES ';
-			$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?)';
-			$this->execStatement($queryStr, array($id, $line['ec_item_id'], $langId, $historyIndex, $line['ec_name'], intval($line['ec_index']), $userId, $now));
-		}
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($row['ec_id'], $row['ec_language_id'], $historyIndex, $name, $pcategory, $index, $visible, $userId, $now));
 
 		// 新規のシリアル番号取得
 		$queryStr = 'SELECT MAX(ec_serial) AS ns FROM event_category ';
@@ -229,128 +233,260 @@ class event_categoryDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * カテゴリ情報の削除
+	 * 親イベントカテゴリーの更新
 	 *
-	 * @param array $serial			シリアルNo
+	 * @param int     $serial		シリアル番号
+	 * @param int     $pcategory	親カテゴリーID
+	 * @param int     $userId		更新者ユーザID
+	 * @param string  $now			現在日時
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function updatePCategory($serial, $pcategory, $userId, $now)
+	{
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$historyIndex = 0;		// 履歴番号
+		$queryStr  = 'SELECT * FROM event_category ';
+		$queryStr .=   'where ec_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['ec_deleted']){		// レコードが削除されていれば終了
+				return false;
+			}
+			$historyIndex = $row['ec_history_index'] + 1;
+		} else {		// 存在しない場合は終了
+			return false;
+		}
+		
+		// 古いレコードを削除
+		$queryStr  = 'UPDATE event_category ';
+		$queryStr .=   'SET ec_deleted = true, ';	// 削除
+		$queryStr .=     'ec_update_user_id = ?, ';
+		$queryStr .=     'ec_update_dt = ? ';
+		$queryStr .=   'WHERE ec_serial = ?';
+		$ret = $this->execStatement($queryStr, array($userId, $now, $serial));
+		if (!$ret) return false;
+		
+		// 新規レコード追加
+		$queryStr = 'INSERT INTO event_category ';
+		$queryStr .=  '(ec_id, ec_language_id, ec_history_index, ec_name, ec_parent_id, ec_sort_order, ec_create_user_id, ec_create_dt) ';
+		$queryStr .=  'VALUES ';
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?)';
+		$ret = $this->execStatement($queryStr, array($row['ec_id'], $row['ec_language_id'], $historyIndex, $row['ec_name'], $pcategory, $row['ec_sort_order'], $userId, $now));
+		if ($ret){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * カテゴリーの削除
+	 *
+	 * @param int $serialNo			シリアルNo
+	 * @param int $userId			ユーザID(データ更新者)
 	 * @return						true=成功、false=失敗
 	 */
-	function delCategory($serial)
+	function delCategory($serialNo, $userId)
 	{
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		// トランザクション開始
+		$this->startTransaction();
 		
-		if (!is_array($serial) || count($serial) <= 0) return true;
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$queryStr  = 'SELECT * FROM event_category ';
+		$queryStr .=   'WHERE ec_deleted = false ';		// 未削除
+		$queryStr .=     'AND ec_serial = ? ';
+		$ret = $this->isRecordExists($queryStr, array($serialNo));
+		// 存在しない場合は、既に削除されたとして終了
+		if (!$ret){
+			$this->endTransaction();
+			return false;
+		}
+		
+		// レコードを削除
+		$queryStr  = 'UPDATE event_category ';
+		$queryStr .=   'SET ec_deleted = true, ';	// 削除
+		$queryStr .=     'ec_update_user_id = ?, ';
+		$queryStr .=     'ec_update_dt = now() ';
+		$queryStr .=   'WHERE ec_serial = ?';
+		$this->execStatement($queryStr, array($userId, $serialNo));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * カテゴリーをシリアル番号で削除
+	 *
+	 * @param array   $serial		シリアルNo
+	 * @return						true=成功、false=失敗
+	 */
+	function delCategoryBySerial($serial)
+	{
+		global $gEnvManager;
+		
+		// 引数のエラーチェック
+		if (!is_array($serial)) return false;
+		if (count($serial) <= 0) return true;
+		
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
 		
 		// トランザクション開始
 		$this->startTransaction();
 		
 		// 指定のシリアルNoのレコードが削除状態でないかチェック
-		$delLines = array();		// 削除対象
 		for ($i = 0; $i < count($serial); $i++){
 			$queryStr  = 'SELECT * FROM event_category ';
 			$queryStr .=   'WHERE ec_deleted = false ';		// 未削除
 			$queryStr .=     'AND ec_serial = ? ';
-			$ret = $this->selectRecord($queryStr, array($serial[$i]), $row);
+			$ret = $this->isRecordExists($queryStr, array($serial[$i]));
 			// 存在しない場合は、既に削除されたとして終了
 			if (!$ret){
 				$this->endTransaction();
 				return false;
 			}
-			$line = array();
-			$line['ec_id'] = $row['ec_id'];
-			$line['ec_language_id'] = $row['ec_language_id'];
-			$delLines[] = $line;
 		}
 		
 		// レコードを削除
-		for ($i = 0; $i < count($delLines); $i++){
-			$queryStr  = 'UPDATE event_category ';
-			$queryStr .=   'SET ec_deleted = true, ';	// 削除
-			$queryStr .=     'ec_update_user_id = ?, ';
-			$queryStr .=     'ec_update_dt = ? ';
-			$queryStr .=   'WHERE ec_deleted = false ';		// 削除されていない
-			$queryStr .=     'AND ec_id = ? ';
-			$queryStr .=     'AND ec_language_id = ? ';
-			$this->execStatement($queryStr, array($user, $now, $delLines[$i]['ec_id'], $delLines[$i]['ec_language_id']));
-		}
+		$queryStr  = 'UPDATE event_category ';
+		$queryStr .=   'SET ec_deleted = true, ';	// 削除
+		$queryStr .=     'ec_update_user_id = ?, ';
+		$queryStr .=     'ec_update_dt = ? ';
+		$queryStr .=   'WHERE ec_serial in (' . implode($serial, ',') . ') ';
+		$this->execStatement($queryStr, array($userId, $now));
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
 	}
 	/**
-	 * イベントに対応するカテゴリの更新
+	 * カテゴリーIDで削除
 	 *
-	 * @param string $eventId			イベントID
-	 * @param array $categoryValues		カテゴリ選択値
-	 * @return					true = 正常、false=異常
+	 * @param int $serial			シリアルNo
+	 * @param int $userId			ユーザID(データ更新者)
+	 * @return						true=成功、false=失敗
 	 */
-	function updateEventCategory($eventId, $categoryValues)
+	function delCategoryById($serial, $userId)
 	{
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
-		
 		// トランザクション開始
 		$this->startTransaction();
 		
-		// 古いレコードを削除
-		$queryStr = 'DELETE FROM event_entry_with_category ';
-		$queryStr .=  'WHERE ew_entry_id = ? ';
-		$ret = $this->execStatement($queryStr, array($eventId));
-		if (!$ret){
+		// コンテンツIDを取得
+		$queryStr  = 'SELECT * FROM event_category ';
+		$queryStr .=   'WHERE ec_deleted = false ';		// 未削除
+		$queryStr .=     'AND ec_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['ec_deleted']){		// レコードが削除されていれば終了
+				$this->endTransaction();
+				return false;
+			}
+		} else {		// 存在しない場合は終了
 			$this->endTransaction();
 			return false;
 		}
-
-		// データを追加
-		$keys = array_keys($categoryValues);
-		for ($i = 0; $i < count($keys); $i++){
-			$queryStr = 'INSERT INTO event_entry_with_category ';
-			$queryStr .=  '(ew_entry_id, ew_category_id, ew_category_item_id) ';
-			$queryStr .=  'VALUES ';
-			$queryStr .=  '(?, ?, ?)';
-			$this->execStatement($queryStr, array($eventId, $keys[$i], $categoryValues[$keys[$i]]));
+		$contId = $row['ec_id'];
+		
+		// レコードを削除
+		$queryStr  = 'UPDATE event_category ';
+		$queryStr .=   'SET ec_deleted = true, ';	// 削除
+		$queryStr .=     'ec_update_user_id = ?, ';
+		$queryStr .=     'ec_update_dt = now() ';
+		$queryStr .=   'WHERE ec_id = ?';
+		$this->execStatement($queryStr, array($userId, $contId));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * 指定したカテゴリーが親であるカテゴリーを取得
+	 *
+	 * @param int		$id			親商品カテゴリーID(0はトップレベル)
+	 * @param string	$langId				言語ID
+	 * @return array				カテゴリーIDの配列
+	 */
+	function getChildCategory($id, $lang)
+	{
+		$retArray = array();
+		$queryStr = 'SELECT ec_id FROM event_category ';
+		$queryStr .=  'WHERE ec_deleted = false ';	// 削除されていない
+		$queryStr .=    'AND ec_parent_id = ? ';
+		$queryStr .=    'AND ec_language_id = ? ';
+		$queryStr .=  'ORDER BY ec_sort_order';
+		$ret = $this->selectRecords($queryStr, array($id, $lang), $rows);
+		if ($ret){
+			for ($i = 0; $i < count($rows); $i++){
+				$retArray[] = $rows[$i]['ec_id'];
+			}
 		}
-		
-		// トランザクション確定
-		$ret = $this->endTransaction();
-		return $ret;
+		return $retArray;
 	}
 	/**
-	 * イベントに対応したカテゴリ情報を取得
+	 * 指定したカテゴリーが親であるカテゴリーを取得
 	 *
-	 * @param string  $eventId		イベントID
-	 * @param array   $rows			取得レコード
-	 * @return bool					取得 = true, 取得なし= false
+	 * @param int		$id			親商品カテゴリーID(0はトップレベル)
+	 * @param string	$langId				言語ID
+	 * @param array		$rows		取得した行データ
+	 * @return int					取得した行数
 	 */
-	function getEventCategory($eventId, &$rows)
+	function getChildCategoryWithRows($id, $lang, &$rows)
 	{
-		if (empty($eventId)) return false;
-		
-		$queryStr  = 'SELECT * FROM event_entry_with_category ';
-		$queryStr .=   'WHERE ew_entry_id = ? ';
-		$retValue = $this->selectRecords($queryStr, array($eventId), $rows);
-		return $retValue;
+		$retCount = 0;
+		$queryStr = 'SELECT ec_id,ec_name FROM event_category ';
+		$queryStr .=  'WHERE ec_deleted = false ';	// 削除されていない
+		$queryStr .=    'AND ec_parent_id = ? ';
+		$queryStr .=    'AND ec_language_id = ? ';
+		$queryStr .=  'ORDER BY ec_sort_order';
+		$ret = $this->selectRecords($queryStr, array($id, $lang), $rows);
+		if ($ret){
+			$retCount = count($rows);
+		}
+		return $retCount;
 	}
 	/**
-	 * イベントに対応するカテゴリの削除
+	 * カテゴリーを取得
 	 *
-	 * @param string $eventId	イベントID
-	 * @return					true = 正常、false=異常
+	 * @param function	$callback			コールバック関数
+	 * @param array		$idArray			カテゴリーID
+	 * @param string	$lang				言語
+	 * @return 			なし
 	 */
-	function delEventCategory($eventId)
+	function getCategoryByIdArray($callback, $idArray, $lang)
 	{
-		// トランザクション開始
-		$this->startTransaction();
+		$catId = implode(',', $idArray);
 		
-		// 古いレコードを削除
-		$queryStr = 'DELETE FROM event_entry_with_category ';
-		$queryStr .=  'WHERE ew_entry_id = ? ';
-		$ret = $this->execStatement($queryStr, array($eventId));
-		
-		// トランザクション確定
-		$ret = $this->endTransaction();
-		return $ret;
+		// CASE文作成
+		$caseStr = 'CASE ec_id ';
+		for ($i = 0; $i < count($idArray); $i++){
+			$caseStr .= 'WHEN ' . $idArray[$i] . ' THEN ' . $i . ' ';
+		}
+		$caseStr .= 'END AS no';
+
+		$queryStr = 'SELECT *, ' . $caseStr . ' FROM event_category ';
+		$queryStr .=  'WHERE ec_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND ec_id in (' . $catId . ') ';
+		$queryStr .=    'AND ec_language_id = ? ';
+		$queryStr .=  'ORDER BY no';
+		$this->selectLoop($queryStr, array($lang), $callback, null);
+	}
+	/**
+	 * 最大表示順を取得
+	 *
+	 * @param string	$lang		言語
+	 * @return int					最大表示順
+	 */
+	function getMaxIndex($lang)
+	{
+		$queryStr = 'SELECT MAX(ec_sort_order) AS mi FROM event_category ';
+		$queryStr .=  'WHERE ec_deleted = false ';
+		$queryStr .=  'AND ec_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($lang), $row);
+		if ($ret){
+			$index = $row['mi'];
+		} else {
+			$index = 0;
+		}
+		return $index;
 	}
 }
 ?>

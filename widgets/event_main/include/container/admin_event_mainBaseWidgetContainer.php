@@ -82,9 +82,9 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 			case 'config':		// イベント設定
 				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; イベント設定';// パンくずリスト
 				break;
-			case 'category':		// カテゴリ設定
-			case 'category_detail':		// カテゴリ設定
-				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; カテゴリ';// パンくずリスト
+			case 'category':		// カテゴリー設定
+			case 'category_detail':		// カテゴリー設定
+				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; カテゴリー';// パンくずリスト
 				break;
 		}
 
@@ -109,8 +109,8 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// 基本設定
 		$current = '';
 		$link = $baseUrl . '&task=category';
-		if ($task == 'category' ||		// カテゴリ設定
-			$task == 'category_detail' ||		// カテゴリ設定
+		if ($task == 'category' ||		// カテゴリー設定
+			$task == 'category_detail' ||		// カテゴリー設定
 			$task == 'config'){		// イベント設定
 			$current = 'id="current"';
 		}
@@ -140,15 +140,15 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 			$link = $baseUrl . '&task=comment';
 			if ($task == 'comment' || $task == 'comment_detail') $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>コメント一覧</span></a></li>' . M3_NL;
-		} else if ($task == 'category' ||		// カテゴリ設定
-			$task == 'category_detail' ||		// カテゴリ設定
+		} else if ($task == 'category' ||		// カテゴリー設定
+			$task == 'category_detail' ||		// カテゴリー設定
 			$task == 'config'){		// イベント設定
 			
-			// カテゴリ設定
+			// カテゴリー設定
 			$current = '';
 			$link = $baseUrl . '&task=category';
 			if ($task == 'category' || $task == 'category_detail') $current = 'id="current"';
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>カテゴリ</span></a></li>' . M3_NL;
+			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>カテゴリー</span></a></li>' . M3_NL;
 			
 			// その他設定
 			$current = '';

@@ -25,6 +25,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $categoryListData;		// 全記事カテゴリー
 	private $categoryArray;			// 選択中の記事カテゴリー
+	private $categoryCount;			// カテゴリ数
 	const ICON_SIZE = 16;		// アイコンのサイズ
 	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
@@ -222,8 +223,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
 		
 		// カテゴリーメニューを作成
-		//self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
-		//$this->createCategoryMenu(1);		// メニューは１つだけ表示
+		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
+		$this->createCategoryMenu(1);		// メニューは１つだけ表示
 		
 		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
@@ -256,6 +257,11 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		// デフォルト値
 		$defaultLangId	= $this->gEnv->getDefaultLanguage();
 		
+		// DB定義値取得
+		$this->categoryCount = self::$_configArray[event_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
+		if (empty($this->categoryCount)) $this->categoryCount = event_mainCommonDef::DEFAULT_CATEGORY_COUNT;
+		
+		// 入力値取得
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
@@ -278,6 +284,16 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$category = '';									// カテゴリー
 		$showComment = ($request->trimValueOf('show_comment') == 'on') ? 1 : 0;				// コメントを表示するかどうか
 		$receiveComment = ($request->trimValueOf('receive_comment') == 'on') ? 1 : 0;		// コメントを受け付けるかどうか
+
+		// カテゴリーを取得
+		$this->categoryArray = array();
+		for ($i = 0; $i < $this->categoryCount; $i++){
+			$itemName = 'item_category' . $i;
+			$itemValue = $request->trimValueOf($itemName);
+			if (!empty($itemValue)){		// 0以外の値を取得
+				$this->categoryArray[] = $itemValue;
+			}
+		}
 
 		// 公開期間を取得
 		$start_date = $request->trimValueOf('item_start_date');		// 公開期間開始日付
@@ -488,12 +504,12 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$receiveComment = $row['ee_receive_comment'];		// コメントを受け付けるかどうか
 		
 				// 記事カテゴリー取得
-				//$this->categoryArray = $this->getCategory($categoryRow);
+				$this->categoryArray = $this->getCategory($categoryRow);
 			}
 		}
 		// カテゴリーメニューを作成
-		//self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
-		//$this->createCategoryMenu($this->categoryCount);
+		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
+		$this->createCategoryMenu($this->categoryCount);
 		
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar('_widget', 'entry', $this->entryId);
@@ -580,9 +596,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		if ($ret){
 			for ($i = 0; $i < count($categoryRow); $i++){
 				if (function_exists('mb_strimwidth')){
-					$categoryArray[] = mb_strimwidth($categoryRow[$i]['bc_name'], 0, self::CATEGORY_NAME_SIZE, '…');
+					$categoryArray[] = mb_strimwidth($categoryRow[$i]['ec_name'], 0, self::CATEGORY_NAME_SIZE, '…');
 				} else {
-					$categoryArray[] = substr($categoryRow[$i]['bc_name'], 0, self::CATEGORY_NAME_SIZE) . '...';
+					$categoryArray[] = substr($categoryRow[$i]['ec_name'], 0, self::CATEGORY_NAME_SIZE) . '...';
 				}
 			}
 		}
@@ -664,19 +680,19 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	 * @param array  	$srcRows			取得行
 	 * @return array						取得した行
 	 */
-/*	function getCategory($srcRows)
+	function getCategory($srcRows)
 	{
 		$destArray = array();
 		$itemCount = 0;
 		for ($i = 0; $i < count($srcRows); $i++){
-			if (!empty($srcRows[$i]['bw_category_id'])){
-				$destArray[] = $srcRows[$i]['bw_category_id'];
+			if (!empty($srcRows[$i]['ew_category_id'])){
+				$destArray[] = $srcRows[$i]['ew_category_id'];
 				$itemCount++;
 				if ($itemCount >= $this->categoryCount) break;
 			}
 		}
 		return $destArray;
-	}*/
+	}
 	/**
 	 * 記事カテゴリーメニューを作成
 	 *
@@ -689,14 +705,14 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			// selectメニューの作成
 			$this->tmpl->clearTemplate('category_list');
 			for ($i = 0; $i < count($this->categoryListData); $i++){
-				$categoryId = $this->categoryListData[$i]['bc_id'];
+				$categoryId = $this->categoryListData[$i]['ec_id'];
 				$selected = '';
 				if ($j < count($this->categoryArray) && $this->categoryArray[$j] == $categoryId){
 					$selected = 'selected';
 				}
 				$menurow = array(
 					'value'		=> $categoryId,			// カテゴリーID
-					'name'		=> $this->categoryListData[$i]['bc_name'],			// カテゴリー名
+					'name'		=> $this->categoryListData[$i]['ec_name'],			// カテゴリー名
 					'selected'	=> $selected														// 選択中かどうか
 				);
 				$this->tmpl->addVars('category_list', $menurow);

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_event_mainCategoryWidgetContainer.php 3976 2011-02-03 13:58:42Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_event_mainBaseWidgetContainer.php');
@@ -18,11 +18,11 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_categoryDb.php');
 
 class admin_event_mainCategoryWidgetContainer extends admin_event_mainBaseWidgetContainer
 {
-	private $langId;		// 言語ID
-	private $serialNo;		// 選択中の項目のシリアル番号
+	private $db;	// DB接続オブジェクト
+	private $serialNo;			// シリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
-	private $categoryItemArray = array();			// カテゴリ項目情報
-	
+	private $langId;
+		
 	/**
 	 * コンストラクタ
 	 */
@@ -49,7 +49,7 @@ class admin_event_mainCategoryWidgetContainer extends admin_event_mainBaseWidget
 		$task = $request->trimValueOf('task');
 		if ($task == 'category_detail'){		// 詳細画面
 			return 'admin_category_detail.tmpl.html';
-		} else {			// 一覧画面
+		} else {
 			return 'admin_category.tmpl.html';
 		}
 	}
@@ -79,7 +79,7 @@ class admin_event_mainCategoryWidgetContainer extends admin_event_mainBaseWidget
 	 */
 	function createList($request)
 	{
-		$this->langId = $this->gEnv->getDefaultLanguage();		// デフォルト言語
+		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 		
 		if ($act == 'delete'){		// 項目削除の場合
@@ -95,7 +95,7 @@ class admin_event_mainCategoryWidgetContainer extends admin_event_mainBaseWidget
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = $this->db->delCategory($delItems);
+				$ret = $this->db->delCategoryBySerial($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
@@ -103,15 +103,13 @@ class admin_event_mainCategoryWidgetContainer extends admin_event_mainBaseWidget
 				}
 			}
 		}
-		
-		// 一覧作成
-		$this->db->getAllCategory($this->langId, array($this, 'itemLoop'));
+		// #### カテゴリーリストを作成 ####
+		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->langId);// デフォルト言語で取得
 		
 		if (count($this->serialArray) > 0){
 			$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		} else {
-			// 項目がないときは、一覧を表示しない
-			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');
+			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		}
 	}
 	/**
@@ -122,171 +120,192 @@ class admin_event_mainCategoryWidgetContainer extends admin_event_mainBaseWidget
 	 */
 	function createDetail($request)
 	{
-		$this->langId = $this->gEnv->getDefaultLanguage();		// デフォルト言語
+		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+		$userId = $this->gEnv->getCurrentUserId();
 		
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
-		$name	= $request->trimValueOf('item_name');	// 名前
-		$id		= $request->trimValueOf('item_id');	// 識別ID
-		$index	= $request->trimValueOf('item_index');	// 表示順
-		$itemCount = intval($request->trimValueOf('itemcount'));		// カテゴリ項目数
-		$lineIds = $request->trimValueOf('item_lineid');		// 行カテゴリID
-		$lineNames = $request->trimValueOf('item_linename');		// 行カテゴリ名前
-		
-		// 行データを取得
-		for ($i = 0; $i < $itemCount; $i++){
-			$line = array();
-			$line['ec_item_id'] = $lineIds[$i];
-			$line['ec_name'] = $lineNames[$i];
-			$line['ec_index'] = $i + 1;
-			$this->categoryItemArray[] = $line;
-		}
 
+		$name	= $request->trimValueOf('item_name');		// カテゴリー名称
+		$index	= $request->trimValueOf('item_index');		// 表示順
+		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;			// 表示するかどうか
+		
 		$replaceNew = false;		// データを再取得するかどうか
-		if ($act == 'add'){		// 新規追加のとき
+		if ($act == 'add'){		// 項目追加の場合
 			// 入力チェック
-			$this->checkInput($name, '表示名');
-			$this->checkSingleByte($id, 'カテゴリ識別ID');
-			$this->checkNumeric($index, '表示順');		// 表示順
-			for ($i = 0; $i < $itemCount; $i++){
-				$no = $i + 1;
-				$this->checkInput($this->categoryItemArray[$i]['ec_name'], 'カテゴリ項目名(No.' . $no . ')');
-				$this->checkSingleByte($this->categoryItemArray[$i]['ec_item_id'], 'カテゴリ項目ID(No.' . $no . ')');
-			}
+			$this->checkInput($name, '名前');
+			$this->checkNumeric($index, '表示順');
 			
-			// 同じIDがある場合はエラー
-			if ($this->db->getCategoryById($id, $this->langId, $row)) $this->setMsg(self::MSG_USER_ERR, 'カテゴリ識別IDが重複しています');
-			
-			// エラーなしの場合は、データを更新
+			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->updateCategory(0/*新規*/, $id, $this->langId, $name, $index, $this->categoryItemArray, $newSerial);
-				if ($ret){		// データ追加成功のとき
-					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
+				$ret = $this->db->addCategory(0, $this->langId, $name, 0, $index, $visible, $userId, $newSerial);
+				if ($ret){
+					$this->setGuidanceMsg('データを追加しました');
 					
-					$this->serialNo = $newSerial;		// シリアル番号を更新
+					// シリアル番号更新
+					$this->serialNo = $newSerial;
 					$replaceNew = true;			// データを再取得
 				} else {
-					$this->setMsg(self::MSG_APP_ERR, 'データ追加に失敗しました');
+					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
 			}
-		} else if ($act == 'update'){		// 行更新のとき
+		} else if ($act == 'update'){		// 項目更新の場合
 			// 入力チェック
-			$this->checkInput($name, '表示名');
-			$this->checkSingleByte($id, 'カテゴリ識別ID');
-			$this->checkNumeric($index, '表示順');		// 表示順
-			for ($i = 0; $i < $itemCount; $i++){
-				$no = $i + 1;
-				$this->checkInput($this->categoryItemArray[$i]['ec_name'], 'カテゴリ項目名(No.' . $no . ')');
-				$this->checkSingleByte($this->categoryItemArray[$i]['ec_item_id'], 'カテゴリ項目ID(No.' . $no . ')');
-			}
+			$this->checkInput($name, '名前');
+			$this->checkNumeric($index, '表示順');		
 			
-			// エラーなしの場合は、データを更新
+			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->updateCategory($this->serialNo, $id, $this->langId, $name, $index, $this->categoryItemArray, $newSerial);
-				if ($ret){		// データ追加成功のとき
-					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
-				
-					$this->serialNo = $newSerial;		// シリアル番号を更新
+				$ret = $this->db->updateCategory($this->serialNo, $name, 0, $index, $visible, $userId, $newSerial);
+				if ($ret){
+					$this->setGuidanceMsg('データを更新しました');
+					
+					// 登録済みのカテゴリーを取得
+					$this->serialNo = $newSerial;
 					$replaceNew = true;			// データを再取得
 				} else {
-					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
+					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
 			}
-		} else {		// 初期状態
-			// シリアル番号からデータを取得
-			$ret = $this->db->getCategoryBySerial($this->serialNo, $row);
-			if ($ret) $id = $row['ec_id'];			// カテゴリ識別ID
-			
-			if (empty($id)){		// カテゴリIDが空のときは新規とする
-				$this->serialNo = 0;
-				$id		= '';		// 識別ID
-				$name	= '';	// 名前
-				$index = 0;	// 表示順
+		} else if ($act == 'delete'){		// 項目削除の場合
+			$ret = $this->db->delCategoryBySerial(array($this->serialNo));
+			if ($ret){		// データ削除成功のとき
+				$this->setGuidanceMsg('データを削除しました');
+			} else {
+				$this->setAppErrorMsg('データ削除に失敗しました');
+			}
+		} else {	// 初期表示
+			// 入力値初期化
+			if (empty($this->serialNo)){		// シリアル番号
+				$name = '';		// 名前
+				$index = $this->db->getMaxIndex($this->langId) + 1;	// 表示順
+				$visible = 1;	// 表示状態
 			} else {
 				$replaceNew = true;			// データを再取得
 			}
 		}
-		// 表示データ再取得
+		// データを再取得のとき
 		if ($replaceNew){
-			// タブ識別IDからデータを取得
-			$ret = $this->db->getCategoryById($id, $this->langId, $row);
+			$ret = $this->db->getCategoryBySerial($this->serialNo, $row);
 			if ($ret){
-				$this->serialNo = $row['ec_serial'];
-				$name		= $row['ec_name'];
-				$index	= $row['ec_index'];		// 表示順
-				
-				// カテゴリ項目取得
-				$ret = $this->db->getAllCategoryItemsById($id, $this->langId, $this->categoryItemArray);
+				// 取得値を設定
+				$id = $row['ec_id'];		// ID
+				$this->langId = $row['ec_language_id'];		// 言語ID
+				$name = $row['ec_name'];		// 名前
+				$index = $row['ec_sort_order'];	// 表示順
+				$visible = $row['ec_visible'];	// 表示状態
+				$updateUser = $this->convertToDispString($row['lu_name']);	// 更新者
+				$updateDt = $this->convertToDispDateTime($row['ec_create_dt']);	// 更新日時
 			}
 		}
-		
-		// カテゴリ項目一覧作成
-		$this->createCategoryItemList();
-		if (empty($this->categoryItemArray)) $this->tmpl->setAttribute('item_list', 'visibility', 'hidden');// カテゴリ項目情報一覧
-		
-		if (empty($this->serialNo)){		// シリアル番号が空のときは新規とする
-			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 新規登録ボタン表示
-			$this->tmpl->setAttribute('new_id_field', 'visibility', 'visible');// 新規ID入力フィールド表示
-			
-			$this->tmpl->addVar("new_id_field", "id", $id);		// 識別キー
+		// #### 更新、新規登録部をを作成 ####
+		if (empty($this->serialNo)){		// シリアル番号のときは新規とする
+			$this->tmpl->addVar("_widget", "id", '新規');
+			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
 		} else {
-			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
-			$this->tmpl->setAttribute('id_field', 'visibility', 'visible');// 固定IDフィールド表示
-			
-			$this->tmpl->addVar("id_field", "id", $id);		// 識別キー
+			$this->tmpl->addVar("_widget", "id", $id);
+			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
 		}
-		
-		// 画面にデータを埋め込む
+		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
 		$this->tmpl->addVar("_widget", "name", $name);		// 名前
 		$this->tmpl->addVar("_widget", "index", $index);		// 表示順
 		
-		// 選択中のシリアル番号を設定
-		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
+		$visibleStr = '';
+		if ($visible){	// 項目の表示
+			$visibleStr = 'checked';
+		}
+		$this->tmpl->addVar("_widget", "visible", $visibleStr);		// 表示状態
+		if (!empty($updateUser)) $this->tmpl->addVar("_widget", "update_user", $updateUser);	// 更新者
+		if (!empty($updateDt)) $this->tmpl->addVar("_widget", "update_dt", $updateDt);	// 更新日時
 	}
 	/**
-	 * 取得したタブ定義をテンプレートに設定する
+	 * 取得したデータをテンプレートに設定する
 	 *
 	 * @param int $index			行番号(0～)
 	 * @param array $fetchedRow		フェッチ取得した行
 	 * @param object $param			未使用
 	 * @return bool					true=処理続行の場合、false=処理終了の場合
 	 */
-	function itemLoop($index, $fetchedRow, $param)
+	function categoryListLoop($index, $fetchedRow, $param)
 	{
+		$serial = $fetchedRow['ec_serial'];
+		$id = $this->convertToDispString($fetchedRow['ec_id']);
+
+		
+		// 対応言語を取得
+		$lang = '';
+		$ret = $this->db->getLangByCategoryId($fetchedRow['ec_id'], $rows);
+		if ($ret){
+			$count = count($rows);
+			for ($i = 0; $i < $count; $i++){
+				if ($this->gEnv->getCurrentLanguage() == 'ja'){	// 日本語の場合
+					$lang .= $rows[$i]['ln_name'];
+					if ($i != $count -1) $lang .= ',';
+				} else {
+					$lang .= $rows[$i]['ln_name_en'];
+					if ($i != $count -1) $lang .= ',';
+				}
+			}
+		}
+		// 親カテゴリー名を取得
+		$pcatId = $fetchedRow['ec_parent_id'];
+		$pcategoryName = '';
+		if ($pcatId != 0){
+			$ret = $this->db->getCategoryByCategoryId($pcatId, $this->gEnv->getDefaultLanguage(), $row);
+			if ($ret) $pcategoryName = $this->convertToDispString($row['ec_name']);
+		}
+		$visible = '';
+		if ($fetchedRow['ec_visible']){	// 項目の表示
+			$visible = 'checked';
+		}		
 		$row = array(
-			'index' => $index,
-			'serial' => $fetchedRow['ec_serial'],
-			'id' =>	$this->convertToDispString($fetchedRow['ec_id']),		// 識別ID
-			'name'     => $this->convertToDispString($fetchedRow['ec_name']),			// 表示名
-			'item_index' => $fetchedRow['ec_index']				// 表示順
+			'index' => $index,													// 行番号
+			'serial' => $serial,	// シリアル番号
+			'id' => $id,			// ID
+			'name' => $this->convertToDispString($fetchedRow['ec_name']),		// 名前
+			'pcategory_name' => $pcategoryName,		// 親カテゴリー名前
+			'view_index' => $this->convertToDispString($fetchedRow['ec_sort_order']),		// 表示順
+			'lang' => $lang,													// 対応言語
+			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
+			'update_dt' => $this->convertToDispDateTime($fetchedRow['ec_create_dt']),	// 更新日時
+			'visible' => $visible,											// メニュー項目表示制御
+			'default' => $default											// デフォルト項目
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
-		
+
 		// 表示中項目のシリアル番号を保存
-		$this->serialArray[] = $fetchedRow['ec_serial'];
+		$this->serialArray[] = $serial;
 		return true;
 	}
 	/**
-	 * カテゴリ項目一覧を作成
+	 * 取得した言語をテンプレートに設定する
 	 *
-	 * @return なし						
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
 	 */
-	function createCategoryItemList()
+	function langLoop($index, $fetchedRow, $param)
 	{
-		$itemCount = count($this->categoryItemArray);
-		for ($i = 0; $i < $itemCount; $i++){
-			$id = $this->categoryItemArray[$i]['ec_item_id'];// カテゴリ項目ID
-			$name = $this->categoryItemArray[$i]['ec_name'];		// カテゴリ項目名
-			
-			$row = array(
-				'id' => $this->convertToDispString($id),	// カテゴリ項目ID
-				'name' => $this->convertToDispString($name),	// カテゴリ項目名
-				'root_url' => $this->convertToDispString($this->getUrl($this->gEnv->getRootUrl()))
-			);
-			$this->tmpl->addVars('item_list', $row);
-			$this->tmpl->parseTemplate('item_list', 'a');
+		$selected = '';
+		if ($fetchedRow['ln_id'] == $this->langId){
+			$selected = 'selected';
 		}
+		if ($this->gEnv->getCurrentLanguage() == 'ja'){		// 日本語表示の場合
+			$name = $this->convertToDispString($fetchedRow['ln_name']);
+		} else {
+			$name = $this->convertToDispString($fetchedRow['ln_name_en']);
+		}
+
+		$row = array(
+			'value'    => $this->convertToDispString($fetchedRow['ln_id']),			// 言語ID
+			'name'     => $name,			// 言語名
+			'selected' => $selected														// 選択中かどうか
+		);
+		$this->tmpl->addVars('lang_list', $row);
+		$this->tmpl->parseTemplate('lang_list', 'a');
+		return true;
 	}
 }
 ?>

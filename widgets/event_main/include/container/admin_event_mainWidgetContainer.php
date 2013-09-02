@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_event_mainWidgetContainer.php 3972 2011-01-29 11:04:43Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_event_mainBaseWidgetContainer.php');
@@ -62,8 +62,8 @@ class admin_event_mainWidgetContainer extends admin_event_mainBaseWidgetContaine
 				$task = 'user';
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case 'category':		// カテゴリ管理
-			case 'category_detail':		// カテゴリ管理(詳細)
+			case 'category':		// カテゴリー管理
+			case 'category_detail':		// カテゴリー管理(詳細)
 				$task = 'category';
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;

@@ -55,11 +55,13 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$act = $request->trimValueOf('act');
 		$entryViewCount = $request->trimValueOf('entry_view_count');		// 記事表示数
 		$entryViewOrder = $request->trimValueOf('entry_view_order');		// 記事表示順
+		$categoryCount = $request->trimValueOf('category_count');		// カテゴリ数
 		$receiveComment = ($request->trimValueOf('receive_comment') == 'on') ? 1 : 0;		// コメントを受け付けるかどうか
 		$topContents = $request->valueOf('top_contents');	// トップコンテンツ
 		$maxCommentLength = $request->valueOf('max_comment_length');	// コメント最大文字数
 		$msgNoEntryInFuture = $request->valueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
 		
+		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
 			$this->checkNumeric($entryViewCount, '記事表示順');
@@ -68,6 +70,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				$ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_ENTRY_VIEW_COUNT, $entryViewCount); // 記事表示数
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_ENTRY_VIEW_ORDER, $entryViewOrder);// 記事表示順
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_CATEGORY_COUNT, $categoryCount);		// カテゴリ数
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_RECEIVE_COMMENT, $receiveComment);// コメントを受け付けるかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH, $maxCommentLength);// コメント最大文字数
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_TOP_CONTENTS, $topContents);// トップコンテンツ
@@ -75,21 +78,30 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
+					$reloadData = true;		// データの再ロード
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
-				// 値を再取得
+/*				// 値を再取得
 				$entryViewCount	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_COUNT);// 記事表示数
 				$entryViewOrder	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
+				$categoryCount	= self::$_mainDb->getConfig(event_mainCommonDef::CF_CATEGORY_COUNT);// カテゴリ数
 				$receiveComment	= self::$_mainDb->getConfig(event_mainCommonDef::CF_RECEIVE_COMMENT);
 				$maxCommentLength = self::$_mainDb->getConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
 				$topContents = self::$_mainDb->getConfig(event_mainCommonDef::CF_TOP_CONTENTS);// トップコンテンツ
 				$msgNoEntryInFuture = self::$_mainDb->getConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE);	// 予定イベントなし時メッセージ
+				*/
 			}
 		} else {		// 初期表示の場合
+			$reloadData = true;		// データの再ロード
+		}
+		// データ再取得
+		if ($reloadData){
 			$entryViewCount	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_COUNT);// 記事表示数
 			if (empty($entryViewCount)) $entryViewCount = event_mainCommonDef::DEFAULT_VIEW_COUNT;
 			$entryViewOrder	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
+			$categoryCount	= self::$_mainDb->getConfig(event_mainCommonDef::CF_CATEGORY_COUNT);// カテゴリ数
+			if (empty($categoryCount)) $categoryCount = event_mainCommonDef::DEFAULT_CATEGORY_COUNT;
 			$receiveComment	= self::$_mainDb->getConfig(event_mainCommonDef::CF_RECEIVE_COMMENT);
 			$maxCommentLength = self::$_mainDb->getConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
 			if ($maxCommentLength == '') $maxCommentLength = event_mainCommonDef::DEFAULT_COMMENT_LENGTH;
@@ -97,6 +109,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 			$msgNoEntryInFuture = self::$_mainDb->getConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE);	// 予定イベントなし時メッセージ
 			if (empty($msgNoEntryInFuture)) $msgNoEntryInFuture = event_mainCommonDef::DEFAULT_MSG_NO_ENTRY_IN_FUTURE;
 		}
+		
 		// 画面に書き戻す
 		$this->tmpl->addVar("_widget", "view_count", $entryViewCount);// 記事表示数
 		if (empty($entryViewOrder)){	// 順方向
@@ -104,6 +117,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		} else {
 			$this->tmpl->addVar("_widget", "view_order_dec_selected", 'selected');// 記事表示順
 		}
+		$this->tmpl->addVar("_widget", "category_count", $categoryCount);// カテゴリ数
 		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
 		$this->tmpl->addVar("_widget", "max_comment_length", $this->convertToDispString($maxCommentLength));// コメント最大文字数
 		$this->tmpl->addVar("_widget", "top_contents", $this->convertToDispString($topContents));		// トップコンテンツ

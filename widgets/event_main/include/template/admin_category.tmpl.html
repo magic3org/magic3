@@ -1,3 +1,15 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
@@ -54,7 +66,7 @@ function delItem(){
 }
 $(function(){
 	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('itemlist', -1, 0);
+	m3_tableWithScrollbar('categorylist', 20, 0);	// データは20行表示
 });
 //]]>
 </script>
@@ -68,31 +80,35 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <table width="90%">
 <tr><td>
-<label><span {_HELP_CATEGORY_LIST}>カテゴリ一覧</span></label>
-</td>
-<td align="right"><span {_HELP_CATEGORY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_CATEGORY_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_CATEGORY_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+<label><span {_HELP_CATEGORY_LIST}>カテゴリー一覧</span></label>
+</td><td align="right">
+<span {_HELP_CATEGORY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_CATEGORY_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_CATEGORY_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
 </td></tr>
 <tr><td colspan="2">
-<table id="itemlist" class="simple-table" width="100%">
+
+<table id="categorylist" class="simple-table" width="100%">
     <thead>
         <tr>
-	    <th width="35"><span {_HELP_CATEGORY_CHECK}>選択</span></th>
-	    <th width="200"><span {_HELP_CATEGORY_NAME}>名前</span></th>
-	    <th width="200"><span {_HELP_CATEGORY_ID}>ID</span></th>
-	    <th width="100"><span {_HELP_CATEGORY_INDEX}>表示順</span></th>
+            <th width="40"><span {_HELP_CATEGORY_CHECK}>選択</span></th>
+            <th width="30"><span {_HELP_CATEGORY_ID}>ID</span></th>
+            <th><span {_HELP_CATEGORY_NAME}>カテゴリー名</span></th>
+	    <th width="70"><span {_HELP_CATEGORY_INDEX}>表示順</span></th>
+	    <th width="70"><span {_HELP_CATEGORY_VISIBLE}>公開</span></th>
 	</tr>
     </thead>
     <tbody>
         <patTemplate:tmpl name="itemlist">
-        <tr>
-            <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+        <tr {LINE_COLOR}>
+	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td align="center">{ID}</td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
-	    <td>{ID}</td>
-	    <td align="center">{ITEM_INDEX}</td>
+	    <td align="center">{VIEW_INDEX}</td>
+	    <td align="center"><input type="checkbox" name="item_visible" {VISIBLE} disabled /></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
+
 </td></tr>
 </table>
 </form>

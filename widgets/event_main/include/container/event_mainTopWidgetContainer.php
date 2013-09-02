@@ -124,7 +124,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$month = $request->trimValueOf('month');		// 月指定
 		$day = $request->trimValueOf('day');		// 日指定
 		$keyword = $request->trimValueOf('keyword');// 検索キーワード
-		$category = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);		// カテゴリID
+		$category = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);		// カテゴリーID
 		// コメントの入力
 		$commentTitle = $request->trimValueOf('title');
 		$name = $request->trimValueOf('name');

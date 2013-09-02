@@ -74,11 +74,11 @@ $(function(){
 <table class="simple-table">
     <tbody>
         <tr>
-	    <td class="table-headside" width="70"><span {_HELP_ENTRY_ID}>ID</span></td>
+	    <td class="table-headside" width="100"><span {_HELP_ENTRY_ID}>ID</span></td>
 	    <td width="70" align="center">{ID}</td>
-	    <td class="table-headside" width="70"><span {_HELP_ENTRY_NAME}>タイトル</span></td>
+	    <td class="table-headside" width="100"><span {_HELP_ENTRY_NAME}>タイトル</span></td>
 	    <td  width="300"><input type="text" name="item_name" value="{NAME}" size="60" maxlength="60" style="width:100%;" /></td>
-	    <td class="table-headside" width="70"><span {_HELP_ENTRY_STATUS}>公開</span></td>
+	    <td class="table-headside" width="100"><span {_HELP_ENTRY_STATUS}>公開</span></td>
 	    <td>
 	    <select name="item_status">
 	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
@@ -118,7 +118,7 @@ $(function(){
 	    <td class="table-headside"><span {_HELP_ENTRY_SUMMARY}>概要</span></td>
 	    <td colspan="5"><input type="text" name="item_summary" value="{SUMMARY}" maxlength="50" style="width:100%;" /></td>
 	</tr>
-<!--        <tr class="even">
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_ENTRY_CATEGORY}>カテゴリー</span></td>
 	    <td colspan="5">
     <patTemplate:tmpl name="category">
@@ -130,7 +130,7 @@ $(function(){
     </select>
     </patTemplate:tmpl>
 	    </td>
-	</tr>-->
+	</tr>
         <tr class="even">
 	    <td class="table-headside"><span {_HELP_ENTRY_CONTENT}>内容</span></td>
 	    <td colspan="5" width="800" valign="top">

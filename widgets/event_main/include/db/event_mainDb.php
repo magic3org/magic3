@@ -73,7 +73,7 @@ class event_mainDb extends BaseDb
 	 * @param int		$page				取得するページ(1～)
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$category			カテゴリーID(キー=カテゴリ種別、値=カテゴリ値)
+	 * @param array		$category			カテゴリーID(キー=カテゴリー種別、値=カテゴリー値)
 	 * @param string	$keyword			検索キーワード
 	 * @param string	$langId				言語
 	 * @param function	$callback			コールバック関数
@@ -90,24 +90,12 @@ class event_mainDb extends BaseDb
 			$queryStr .=  'WHERE ee_language_id = ? '; $params[] = $langId;
 			$queryStr .=    'AND ee_deleted = false ';		// 削除されていない
 		} else {
-			$queryStr = 'SELECT distinct(ee_serial) FROM event_entry RIGHT JOIN event_entry_with_category ON ee_id = ew_entry_id ';
+			$queryStr = 'SELECT distinct(ee_serial) FROM event_entry RIGHT JOIN event_entry_with_category ON ee_serial = ew_entry_serial ';
 			$queryStr .=  'WHERE ee_language_id = ? '; $params[] = $langId;
 			$queryStr .=    'AND ee_deleted = false ';		// 削除されていない
 			
 			// 記事カテゴリー
-			//$queryStr .=    'AND bw_category_id in (' . implode(",", $category) . ') ';
-			$queryStr .=    'AND (';
-			$keys = array_keys($category);
-			for ($i = 0; $i < count($keys); $i++){
-				if ($i == 0){
-					$queryStr .=    '(ew_category_id = ? '; $params[] = $keys[$i];
-					$queryStr .=    'AND ew_category_item_id = ?)'; $params[] = $category[$keys[$i]];
-				} else {
-					$queryStr .=    'OR (ew_category_id = ? '; $params[] = $keys[$i];
-					$queryStr .=    'AND ew_category_item_id = ?)'; $params[] = $category[$keys[$i]];
-				}
-			}
-			$queryStr .=    ')';
+			$queryStr .=    'AND ew_category_id in (' . implode(",", $category) . ') ';
 		}
 		// 名前、予定、結果、概要、管理者用備考、場所、連絡先を検索
 		if (!empty($keyword)){
@@ -159,7 +147,7 @@ class event_mainDb extends BaseDb
 	 *
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$category			カテゴリーID(キー=カテゴリ種別、値=カテゴリ値)
+	 * @param array		$category			カテゴリーID(キー=カテゴリー種別、値=カテゴリー値)
 	 * @param string	$keyword			検索キーワード
 	 * @param string	$langId				言語
 	 * @return int							項目数
@@ -172,24 +160,12 @@ class event_mainDb extends BaseDb
 			$queryStr .=  'WHERE ee_language_id = ? '; $params[] = $langId;
 			$queryStr .=    'AND ee_deleted = false ';		// 削除されていない
 		} else {
-			$queryStr = 'SELECT distinct(ee_serial) FROM event_entry RIGHT JOIN event_entry_with_category ON ee_id = ew_entry_id ';
+			$queryStr = 'SELECT distinct(ee_serial) FROM event_entry RIGHT JOIN event_entry_with_category ON ee_serial = ew_entry_serial ';
 			$queryStr .=  'WHERE ee_language_id = ? '; $params[] = $langId;
 			$queryStr .=    'AND ee_deleted = false ';		// 削除されていない
 			
 			// 記事カテゴリー
-			//$queryStr .=    'AND bw_category_id in (' . implode(",", $category) . ') ';
-			$queryStr .=    'AND (';
-			$keys = array_keys($category);
-			for ($i = 0; $i < count($keys); $i++){
-				if ($i == 0){
-					$queryStr .=    '(ew_category_id = ? '; $params[] = $keys[$i];
-					$queryStr .=    'AND ew_category_item_id = ?)'; $params[] = $category[$keys[$i]];
-				} else {
-					$queryStr .=    'OR (ew_category_id = ? '; $params[] = $keys[$i];
-					$queryStr .=    'AND ew_category_item_id = ?)'; $params[] = $category[$keys[$i]];
-				}
-			}
-			$queryStr .=    ')';
+			$queryStr .=    'AND ew_category_id in (' . implode(",", $category) . ') ';
 		}
 		// 名前、予定、結果、概要、管理者用備考、場所、連絡先を検索
 		if (!empty($keyword)){
@@ -464,11 +440,6 @@ class event_mainDb extends BaseDb
 		} else {
 			$rUserId = $regUserId;
 		}
-		if (empty($regDt)){
-			$rDt = $row['ee_regist_dt'];
-		} else {
-			$rDt = $regDt;
-		}
 		$entryId = $row['ee_id'];
 		$langId = $row['ee_language_id'];
 		
@@ -528,11 +499,11 @@ class event_mainDb extends BaseDb
 	function updateEntryCategory($serial, $index, $categoryId)
 	{
 		// 新規レコード追加
-		$queryStr = 'INSERT INTO blog_entry_with_category ';
+		$queryStr = 'INSERT INTO event_entry_with_category ';
 		$queryStr .=  '(';
-		$queryStr .=  'bw_entry_serial, ';
-		$queryStr .=  'bw_index, ';
-		$queryStr .=  'bw_category_id) ';
+		$queryStr .=  'ew_entry_serial, ';
+		$queryStr .=  'ew_index, ';
+		$queryStr .=  'ew_category_id) ';
 		$queryStr .=  'VALUES ';
 		$queryStr .=  '(?, ?, ?)';
 		$ret =$this->execStatement($queryStr, array($serial, $index, $categoryId));
@@ -554,14 +525,10 @@ class event_mainDb extends BaseDb
 		
 		if ($ret){
 			// イベントカテゴリー
-			$queryStr  = 'SELECT * FROM event_entry_with_category ';
-			$queryStr .=   'WHERE ew_entry_id = ? ';
-			$queryStr .=  'ORDER BY ew_serial ';
-			$this->selectRecords($queryStr, array($row['ee_id']), $rows);
-			$categoryRow = array();
-			for ($i = 0; $i < count($rows); $i++){
-				$categoryRow['ew_category_id'] = $rows[$i]['ew_category_item_id'];
-			}
+			$queryStr  = 'SELECT * FROM event_entry_with_category LEFT JOIN event_category ON ew_category_id = ec_id AND ec_deleted = false ';
+			$queryStr .=   'WHERE ew_entry_serial = ? ';
+			$queryStr .=  'ORDER BY ew_index ';
+			$this->selectRecords($queryStr, array(intval($serial)), $categoryRow);
 		}
 		return $ret;
 	}
@@ -798,41 +765,30 @@ class event_mainDb extends BaseDb
 		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
 		$params = array();
 		
-		$queryStr = 'SELECT distinct(be_serial) FROM blog_entry RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
-		$queryStr .=  'WHERE be_language_id = ? '; $params[] = $langId;
-		$queryStr .=    'AND be_deleted = false ';		// 削除されていない
-		$queryStr .=    'AND be_status = ? '; $params[] = 2;	// 「公開」(2)データ
-		$queryStr .=    'AND bw_category_id = ? ';	$params[] = $categoryId;// 記事カテゴリー
-		$queryStr .=    'AND be_regist_dt <= ? ';	$params[] = $now;			// 投稿日時が現在日時よりも過去のものを取得
-		
-		// 公開期間を指定
-		$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
-		$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
+		$queryStr = 'SELECT distinct(ee_serial) FROM event_entry RIGHT JOIN event_entry_with_category ON ee_serial = ew_entry_serial ';
+		$queryStr .=  'WHERE ee_language_id = ? '; $params[] = $langId;
+		$queryStr .=    'AND ee_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND ee_status = ? '; $params[] = 2;	// 「公開」(2)データ
+		$queryStr .=    'AND ew_category_id = ? ';	$params[] = $categoryId;// 記事カテゴリー
 		
 		// シリアル番号を取得
 		$serialArray = array();
 		$ret = $this->selectRecords($queryStr, $params, $serialRows);
 		if ($ret){
 			for ($i = 0; $i < count($serialRows); $i++){
-				$serialArray[] = $serialRows[$i]['be_serial'];
+				$serialArray[] = $serialRows[$i]['ee_serial'];
 			}
 		}
 		$serialStr = implode(',', $serialArray);
 		if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
 	
-		//$queryStr = 'SELECT * FROM blog_entry ';
-		$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
-		$queryStr .=   'WHERE be_serial in (' . $serialStr . ') ';
+		$queryStr = 'SELECT * FROM event_entry ';
+//		$queryStr  = 'SELECT * FROM event_entry LEFT JOIN blog_id ON ee_blog_id = bl_id AND bl_deleted = false ';
+		$queryStr .=   'WHERE ee_serial in (' . $serialStr . ') ';
 		$ord = '';
 		if (!empty($order)) $ord = 'DESC ';
-		$queryStr .=  'ORDER BY be_regist_dt ' . $ord . 'LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
-		$this->selectLoop($queryStr, array(), $callback, null);
+		$queryStr .=  'ORDER BY ee_start_dt ' . $ord . 'LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
+		$this->selectLoop($queryStr, array(), $callback);
 	}
 	/**
 	 * エントリー項目数をカテゴリー指定で取得(表示用)
@@ -847,36 +803,25 @@ class event_mainDb extends BaseDb
 		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
 		$params = array();
 		
-		$queryStr = 'SELECT distinct(be_serial) FROM blog_entry RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
-		$queryStr .=  'WHERE be_language_id = ? '; $params[] = $langId;
-		$queryStr .=    'AND be_deleted = false ';		// 削除されていない
-		$queryStr .=    'AND be_status = ? '; $params[] = 2;	// 「公開」(2)データ
-		$queryStr .=    'AND bw_category_id = ? ';	$params[] = $categoryId;// 記事カテゴリー
-		$queryStr .=    'AND be_regist_dt <= ? ';	$params[] = $now;			// 投稿日時が現在日時よりも過去のものを取得
-		
-		// 公開期間を指定
-		$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
-		$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
+		$queryStr = 'SELECT distinct(ee_serial) FROM event_entry RIGHT JOIN event_entry_with_category ON ee_serial = ew_entry_serial ';
+		$queryStr .=  'WHERE ee_language_id = ? '; $params[] = $langId;
+		$queryStr .=    'AND ee_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND ee_status = ? '; $params[] = 2;	// 「公開」(2)データ
+		$queryStr .=    'AND ew_category_id = ? ';	$params[] = $categoryId;// 記事カテゴリー
 		
 		// シリアル番号を取得
 		$serialArray = array();
 		$ret = $this->selectRecords($queryStr, $params, $serialRows);
 		if ($ret){
 			for ($i = 0; $i < count($serialRows); $i++){
-				$serialArray[] = $serialRows[$i]['be_serial'];
+				$serialArray[] = $serialRows[$i]['ee_serial'];
 			}
 		}
 		$serialStr = implode(',', $serialArray);
 		if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
 	
-		$queryStr = 'SELECT * FROM blog_entry ';
-		$queryStr .=  'WHERE be_serial in (' . $serialStr . ') ';
+		$queryStr = 'SELECT * FROM event_entry ';
+		$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
 		return $this->selectRecordCount($queryStr, array());
 	}
 	/**
@@ -956,10 +901,10 @@ class event_mainDb extends BaseDb
 	 */
 	function getAllCategory($langId, &$rows)
 	{
-		$queryStr = 'SELECT * FROM blog_category LEFT JOIN _login_user ON bc_create_user_id = lu_id AND lu_deleted = false ';
-		$queryStr .=  'WHERE bc_language_id = ? ';
-		$queryStr .=    'AND bc_deleted = false ';		// 削除されていない
-		$queryStr .=  'ORDER BY bc_id';
+		$queryStr = 'SELECT * FROM event_category LEFT JOIN _login_user ON ec_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=  'WHERE ec_language_id = ? ';
+		$queryStr .=    'AND ec_deleted = false ';		// 削除されていない
+		$queryStr .=  'ORDER BY ec_id';
 		$retValue = $this->selectRecords($queryStr, array($langId), $rows);
 		return $retValue;
 	}
