@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_new_boxWidgetContainer.php 5266 2012-10-04 02:16:25Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
@@ -20,7 +20,6 @@ require_once($gEnvManager->getCommonPath()			. '/htmlEdit.php');
 class blog_new_boxWidgetContainer extends BaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;		// システムDBオブジェクト
 	private $isEntry;	// 記事の投稿があるかどうか
 	private $defaultUrl;	// システムのデフォルトURL
 	private $headRssFile;				// RSS情報
@@ -40,7 +39,6 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		
 		// DB接続オブジェクト作成
 		$this->db = new blog_new_boxDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -96,7 +94,7 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 			// RSS用リンク作成
 			$iconTitle = self::DEFAULT_TITLE;
 			$iconUrl = $this->gEnv->getRootUrl() . self::RSS_ICON_FILE;
-			$rssLink = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$rssLink = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" style="border:none;" />';
 			$linkUrl = $this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId());
 			$rssLink = '<a href="' . convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '">' . $rssLink . '</a>';
 			$rssLink = '<div align="right">' . $rssLink . '</div>';		// 右寄せ
