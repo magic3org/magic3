@@ -20,6 +20,7 @@ class event_category_menuWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 言語
+	private $isExistsCategory;		// カテゴリーが存在するかどうか
 	const TARGET_WIDGET = 'event_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'イベントカテゴリー';		// デフォルトのウィジェットタイトル名
 		
@@ -63,6 +64,7 @@ class event_category_menuWidgetContainer extends BaseWidgetContainer
 		
 		// #### カテゴリーリストを作成 ####
 		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->langId);// デフォルト言語で取得
+		if (!$this->isExistsCategory) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');		// 一覧を非表示
 	}
 	/**
 	 * ウィジェットのタイトルを設定
@@ -94,6 +96,8 @@ class event_category_menuWidgetContainer extends BaseWidgetContainer
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
+		
+		$this->isExistsCategory = true;
 		return true;
 	}
 }
