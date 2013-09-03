@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_event_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_mainDb.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_commentDb.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_mainCommentDb.php');
 
 class admin_event_mainCommentWidgetContainer extends admin_event_mainBaseWidgetContainer
 {
@@ -41,7 +41,7 @@ class admin_event_mainCommentWidgetContainer extends admin_event_mainBaseWidgetC
 		parent::__construct();
 		
 		// DBオブジェクト作成
-		$this->db = new event_commentDb();
+		$this->db = new event_mainCommentDb();
 		$this->mainDb = new event_mainDb();
 	}
 	/**

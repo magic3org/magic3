@@ -15,8 +15,8 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/event_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainDb.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_categoryDb.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_commentDb.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_mainCategoryDb.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainCommentDb.php');
 
 class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 {
@@ -60,8 +60,8 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		parent::__construct();
 		
 		// DBオブジェクト作成
-		$this->categoryDb = new event_categoryDb();
-		$this->commentDb = new event_commentDb();
+		$this->categoryDb = new event_mainCategoryDb();
+		$this->commentDb = new event_mainCommentDb();
 	}
 	/**
 	 * テンプレートファイルを設定

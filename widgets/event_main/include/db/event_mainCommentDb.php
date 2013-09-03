@@ -8,14 +8,14 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: event_commentDb.php 3982 2011-02-07 03:00:55Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
-class event_commentDb extends BaseDb
+class event_mainCommentDb extends BaseDb
 {
 	/**
 	 * コメント項目一覧を取得(管理用)

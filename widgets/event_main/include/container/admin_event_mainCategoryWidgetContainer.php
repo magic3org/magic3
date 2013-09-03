@@ -14,7 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_event_mainBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_categoryDb.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_mainCategoryDb.php');
 
 class admin_event_mainCategoryWidgetContainer extends admin_event_mainBaseWidgetContainer
 {
@@ -32,7 +32,7 @@ class admin_event_mainCategoryWidgetContainer extends admin_event_mainBaseWidget
 		parent::__construct();
 		
 		// DBオブジェクト作成
-		$this->db = new event_categoryDb();
+		$this->db = new event_mainCategoryDb();
 	}
 	/**
 	 * テンプレートファイルを設定

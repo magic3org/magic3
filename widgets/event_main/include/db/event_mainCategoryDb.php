@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
-class event_categoryDb extends BaseDb
+class event_mainCategoryDb extends BaseDb
 {
 	/**
 	 * すべての言語を取得
