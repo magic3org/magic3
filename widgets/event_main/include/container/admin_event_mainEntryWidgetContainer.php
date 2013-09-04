@@ -18,7 +18,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_mainDb.php');
 
 class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetContainer
 {
-//	private $db;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $entryId;
 	private $lang;		// 現在の選択言語
@@ -27,9 +26,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	private $categoryArray;			// 選択中の記事カテゴリー
 	private $categoryCount;			// カテゴリ数
 	const ICON_SIZE = 16;		// アイコンのサイズ
-	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
+//	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
-	//const CATEGORY_COUNT = 2;				// 記事カテゴリーの選択可能数
 	const CATEGORY_NAME_SIZE = 20;			// カテゴリー名の最大文字列長
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
@@ -43,9 +41,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		//self::$_mainDb = new event_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -275,16 +270,17 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		if (strlen($html2) <= 10){ // IE6のときFCKEditorのバグの対応(「続き」が空の場合でもpタグが送信される)
 			$html2 = '';
 		}
-		$summary = $request->valueOf('item_summary');		// 要約
-		$place = $request->valueOf('item_place');		// 場所
-		$contact = $request->valueOf('item_contact');		// 連絡先
-		$url = $request->valueOf('item_url');		// URL
-		$note = $request->valueOf('item_note');		// 管理者備考
+		$summary = $request->trimValueOf('item_summary');		// 要約
+		$place = $request->trimValueOf('item_place');		// 場所
+		$contact = $request->trimValueOf('item_contact');		// 連絡先
+		$url = $request->trimValueOf('item_url');		// URL
+		$note = $request->trimValueOf('item_note');		// 管理者備考
 		$status = $request->trimValueOf('item_status');		// エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 		$category = '';									// カテゴリー
-		$showComment = ($request->trimValueOf('show_comment') == 'on') ? 1 : 0;				// コメントを表示するかどうか
-		$receiveComment = ($request->trimValueOf('receive_comment') == 'on') ? 1 : 0;		// コメントを受け付けるかどうか
-
+		$showComment = $request->trimCheckedValueOf('show_comment');				// コメントを表示するかどうか
+		$receiveComment = $request->trimCheckedValueOf('receive_comment');		// コメントを受け付けるかどうか
+		$isAllDay = $request->trimCheckedValueOf('item_is_all_day');			// 終日イベントかどうか
+		
 		// カテゴリーを取得
 		$this->categoryArray = array();
 		for ($i = 0; $i < $this->categoryCount; $i++){
@@ -304,8 +300,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		} else {
 			if (empty($start_time)) $start_time = '00:00';		// 日付が入っているときは時間にデフォルト値を設定
 		}
-		if (!empty($start_time)) $start_time = $this->convertToProperTime($start_time, 1/*時分フォーマット*/);
-		
 		$end_date = $request->trimValueOf('item_end_date');		// 公開期間終了日付
 		if (!empty($end_date)) $end_date = $this->convertToProperDate($end_date);
 		$end_time = $request->trimValueOf('item_end_time');		// 公開期間終了時間
@@ -314,6 +308,17 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		} else {
 			if (empty($end_time)) $end_time = '00:00';		// 日付が入っているときは時間にデフォルト値を設定
 		}
+		// 終日設定の場合は時間を初期化
+		if ($isAllDay){
+			if (!empty($start_time)) $start_time = '00:00';
+			if (!empty($end_time)) $end_time = '00:00';
+			if (!empty($start_date) && $start_date == $end_date){		// 日付が同じ場合は終了日を削除
+				$end_date = '';
+				$end_time = '';
+			}
+		}
+		// 時間を修正
+		if (!empty($start_time)) $start_time = $this->convertToProperTime($start_time, 1/*時分フォーマット*/);
 		if (!empty($end_time)) $end_time = $this->convertToProperTime($end_time, 1/*時分フォーマット*/);
 		
 		$dataReload = false;		// データの再ロード
@@ -368,10 +373,10 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				
 				if ($act == 'add'){
 					$ret = self::$_mainDb->addEntryItem(0, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
-													$startDt, $endDt, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
+													$startDt, $endDt, $isAllDay, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
 				} else {
 					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
-													$startDt, $endDt, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
+													$startDt, $endDt, $isAllDay, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
 				}
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
@@ -414,7 +419,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				}
 				
 				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
-														$startDt, $endDt, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
+														$startDt, $endDt, $isAllDay, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					// シリアル番号更新
@@ -475,6 +480,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			$start_time = date("H:i:s");		// 開催時間
 			$showComment = 1;				// コメントを表示するかどうか
 			$receiveComment = 1;		// コメントを受け付けるかどうか
+			$isAllDay = 0;			// 終日イベントかどうか
 			$dataReload = true;		// データの再ロード
 		}
 		
@@ -502,7 +508,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$end_time = $this->convertToDispTime($row['ee_end_dt'], 1/*時分*/);	// 開催期間終了時間
 				$showComment = $row['ee_show_comment'];				// コメントを表示するかどうか
 				$receiveComment = $row['ee_receive_comment'];		// コメントを受け付けるかどうか
-		
+				$isAllDay = $row['ee_is_all_day'];			// 終日イベントかどうか
+				
 				// 記事カテゴリー取得
 				$this->categoryArray = $this->getCategory($categoryRow);
 			}
@@ -534,12 +541,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 公開期間開始時間
 		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
 		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
-		$checked = '';
-		if ($showComment) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "show_comment", $checked);// コメントを表示するかどうか
-		$checked = '';
-		if ($receiveComment) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "receive_comment", $checked);// コメントを受け付けるかどうか
+		$this->tmpl->addVar("_widget", "show_comment", $this->convertToCheckedString($showComment));// コメントを表示するかどうか
+		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
+		$this->tmpl->addVar("_widget", "is_all_day", $this->convertToCheckedString($isAllDay));// 終日イベントかどうか
 		
 		// 非表示項目を設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
@@ -587,9 +591,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		// シリアル番号
-		$serial = $fetchedRow['ee_serial'];
-
+		$serial = $fetchedRow['ee_serial'];// シリアル番号
+		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
+		
 		// カテゴリーを取得
 		$categoryArray = array();
 		$ret = self::$_mainDb->getEntryBySerial($serial, $row, $categoryRow);
@@ -611,15 +615,25 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			case 3:	$status = '非公開';	break;
 		}
 		// 総参照数
-		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(self::CONTENT_TYPE, $serial);
+		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(event_mainCommonDef::VIEW_CONTENT_TYPE, $serial);
 		
 		// イベント開催期間
-		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){
-			$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
-			$endDtStr = '';
+		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// // 期間終了がないとき
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$startDtStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$endDtStr = '';
+			} else {
+				$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+				$endDtStr = '';
+			}
 		} else {
-			$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
-			$endDtStr = $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$startDtStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$endDtStr = $this->convertToDispDate($fetchedRow['ee_end_dt']);
+			} else {
+				$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+				$endDtStr = $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+			}
 		}
 		
 		$row = array(

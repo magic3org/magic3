@@ -52,7 +52,7 @@ class event_categoryDb extends BaseDb
 	
 		$queryStr = 'SELECT * FROM event_entry ';
 		$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
-		$queryStr .=  'ORDER BY ee_start_dt DESC LIMIT ' . $itemCount;		// 投稿順
+		$queryStr .=  'ORDER BY ee_start_dt DESC, ee_id LIMIT ' . $itemCount;		// 投稿順
 		$this->selectLoop($queryStr, array(), $callback);
 	}
 	/**

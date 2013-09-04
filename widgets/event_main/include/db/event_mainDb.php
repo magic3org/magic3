@@ -122,7 +122,7 @@ class event_mainDb extends BaseDb
 		}
 		
 		if (count($category) == 0){
-			$queryStr .=  'ORDER BY ee_start_dt desc limit ' . $limit . ' offset ' . $offset;
+			$queryStr .=  'ORDER BY ee_start_dt desc, ee_id limit ' . $limit . ' offset ' . $offset;
 			$this->selectLoop($queryStr, $params, $callback, null);
 		} else {
 			// シリアル番号を取得
@@ -138,7 +138,7 @@ class event_mainDb extends BaseDb
 		
 			$queryStr = 'SELECT * FROM event_entry ';
 			$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
-			$queryStr .=  'ORDER BY ee_start_dt desc limit ' . $limit . ' offset ' . $offset;
+			$queryStr .=  'ORDER BY ee_start_dt desc, ee_id limit ' . $limit . ' offset ' . $offset;
 			$this->selectLoop($queryStr, array(), $callback, null);
 		}
 	}
@@ -244,7 +244,7 @@ class event_mainDb extends BaseDb
 			$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\') ';
 		}
 		
-		$queryStr .=  'ORDER BY ee_start_dt desc limit ' . $limit . ' offset ' . $offset;
+		$queryStr .=  'ORDER BY ee_start_dt desc, ee_id limit ' . $limit . ' offset ' . $offset;
 		$this->selectLoop($queryStr, $params, $callback, null);
 	}
 	/**
@@ -294,13 +294,15 @@ class event_mainDb extends BaseDb
 	 * @param array   $category		カテゴリーID
 	 * @param timestamp	$startDt	期間(開始日)
 	 * @param timestamp	$endDt		期間(終了日)
+	 * @param bool    $isAllDay		終日イベントかどうか
 	 * @param bool    $showComment	コメントを表示するかどうか
 	 * @param bool $receiveComment	コメントを受け付けるかどうか
 	 * @param bool $userLimited		参照ユーザを制限するかどうか
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addEntryItem($id, $langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $category, $startDt, $endDt, $showComment, $receiveComment, $userLimited, &$newSerial)
+	function addEntryItem($id, $langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $category, $startDt, $endDt, $isAllDay, 
+									$showComment, $receiveComment, $userLimited, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -350,6 +352,7 @@ class event_mainDb extends BaseDb
 		$queryStr .=   'ee_url, ';
 		$queryStr .=   'ee_admin_note, ';
 		$queryStr .=   'ee_status, ';
+		$queryStr .=   'ee_is_all_day, ';
 		$queryStr .=   'ee_show_comment, ';
 		$queryStr .=   'ee_receive_comment, ';
 		$queryStr .=   'ee_user_limited, ';
@@ -358,9 +361,9 @@ class event_mainDb extends BaseDb
 		$queryStr .=   'ee_create_user_id, ';
 		$queryStr .=   'ee_create_dt) ';
 		$queryStr .= 'VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$this->execStatement($queryStr, array($entryId, $langId, $historyIndex, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, 
-												intval($showComment), intval($receiveComment), intval($userLimited), $startDt, $endDt, $userId, $now));
+												intval($isAllDay), intval($showComment), intval($receiveComment), intval($userLimited), $startDt, $endDt, $userId, $now));
 		
 		// 新規のシリアル番号取得
 		$newSerial = 0;
@@ -397,13 +400,15 @@ class event_mainDb extends BaseDb
 	 * @param array   $category		カテゴリーID
 	 * @param timestamp	$startDt	期間(開始日)
 	 * @param timestamp	$endDt		期間(終了日)
+	 * @param bool    $isAllDay		終日イベントかどうか
 	 * @param bool    $showComment	コメントを表示するかどうか
 	 * @param bool $receiveComment	コメントを受け付けるかどうか
 	 * @param bool $userLimited		参照ユーザを制限するかどうか
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateEntryItem($serial, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $category, $startDt, $endDt, $showComment, $receiveComment, $userLimited, &$newSerial)
+	function updateEntryItem($serial, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $category, $startDt, $endDt, $isAllDay,
+													$showComment, $receiveComment, $userLimited, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -457,6 +462,7 @@ class event_mainDb extends BaseDb
 		$queryStr .=   'ee_url, ';
 		$queryStr .=   'ee_admin_note, ';
 		$queryStr .=   'ee_status, ';
+		$queryStr .=   'ee_is_all_day, ';
 		$queryStr .=   'ee_show_comment, ';
 		$queryStr .=   'ee_receive_comment, ';
 		$queryStr .=   'ee_user_limited, ';
@@ -465,9 +471,9 @@ class event_mainDb extends BaseDb
 		$queryStr .=   'ee_create_user_id, ';
 		$queryStr .=   'ee_create_dt) ';
 		$queryStr .= 'VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$this->execStatement($queryStr, array($entryId, $langId, $historyIndex, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, 
-												intval($showComment), intval($receiveComment), intval($userLimited), $startDt, $endDt, $userId, $now));
+												intval($isAllDay), intval($showComment), intval($receiveComment), intval($userLimited), $startDt, $endDt, $userId, $now));
 
 		// 新規のシリアル番号取得
 		$newSerial = 0;
@@ -698,7 +704,7 @@ class event_mainDb extends BaseDb
 		
 			$ord = '';
 			if (!empty($order)) $ord = 'DESC ';
-			$queryStr .=  'ORDER BY ee_start_dt ' . $ord . 'LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
+			$queryStr .=  'ORDER BY ee_start_dt ' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
 			$this->selectLoop($queryStr, $params, $callback, null);
 		} else {
 			$queryStr  = 'SELECT * FROM event_entry ';
@@ -787,7 +793,7 @@ class event_mainDb extends BaseDb
 		$queryStr .=   'WHERE ee_serial in (' . $serialStr . ') ';
 		$ord = '';
 		if (!empty($order)) $ord = 'DESC ';
-		$queryStr .=  'ORDER BY ee_start_dt ' . $ord . 'LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
+		$queryStr .=  'ORDER BY ee_start_dt ' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
 		$this->selectLoop($queryStr, array(), $callback);
 	}
 	/**
@@ -839,7 +845,7 @@ class event_mainDb extends BaseDb
 		$initDt = $this->gEnv->getInitValueOfTimestamp();
 		$params = array();
 		
-		$queryStr = 'SELECT ee_id,ee_name,ee_summary,ee_place,ee_contact,ee_url,ee_start_dt,ee_end_dt FROM event_entry ';
+		$queryStr = 'SELECT ee_id,ee_name,ee_summary,ee_place,ee_contact,ee_url,ee_start_dt,ee_end_dt,ee_is_all_day FROM event_entry ';
 		$queryStr .=  'WHERE ee_deleted = false ';		// 削除されていない
 		$queryStr .=    'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 		$queryStr .=    'AND ee_language_id = ? ';	$params[] = $lang;
@@ -853,7 +859,7 @@ class event_mainDb extends BaseDb
 			$params[] = $endDt;
 		}
 		
-		$queryStr .=  'ORDER BY ee_start_dt,ee_id';
+		$queryStr .=  'ORDER BY ee_start_dt, ee_id';
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;
 	}

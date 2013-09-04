@@ -204,8 +204,23 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	{
 		$entryId = $fetchedRow['ee_id'];// 記事ID
 		$title = $fetchedRow['ee_name'];// タイトル
-		$startDate = $fetchedRow['ee_start_dt'];// 開催日時(開始)
-		$endDate = $fetchedRow['ee_end_dt'];// 開催日時(終了)
+		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
+		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
+			if ($isAllDay){		// 終日イベントのとき
+				$startDate = $this->convertToDispDate($fetchedRow['ee_start_dt']);// 開催日時(開始)
+			} else {
+				$startDate = $fetchedRow['ee_start_dt'];// 開催日時(開始)
+			}
+			$endDate = '';// 開催日時(終了)
+		} else {
+			if ($isAllDay){		// 終日イベントのとき
+				$startDate = $this->convertToDispDate($fetchedRow['ee_start_dt']);// 開催日時(開始)
+				$endDate = $this->convertToDispDate($fetchedRow['ee_end_dt']);// 開催日時(終了)
+			} else {
+				$startDate = $fetchedRow['ee_start_dt'];// 開催日時(開始)
+				$endDate = $fetchedRow['ee_end_dt'];// 開催日時(終了)
+			}
+		}
 
 		// イベント記事へのリンクを生成
 		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);

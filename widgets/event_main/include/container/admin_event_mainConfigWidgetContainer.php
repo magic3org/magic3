@@ -58,8 +58,8 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$categoryCount = $request->trimValueOf('category_count');		// カテゴリ数
 		$receiveComment = ($request->trimValueOf('receive_comment') == 'on') ? 1 : 0;		// コメントを受け付けるかどうか
 		$topContents = $request->valueOf('top_contents');	// トップコンテンツ
-		$maxCommentLength = $request->valueOf('max_comment_length');	// コメント最大文字数
-		$msgNoEntryInFuture = $request->valueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
+		$maxCommentLength = $request->trimValueOf('max_comment_length');	// コメント最大文字数
+		$msgNoEntryInFuture = $request->trimValueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき

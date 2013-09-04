@@ -165,6 +165,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 					$entryId = $eventArray[$i]['ee_id'];
 					$eventUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
 					$eventLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($eventUrl, true/*リンク用*/)) . '">' . $this->convertToDispString($eventArray[$i]['ee_name']) . '</a>';
+					$isAllDay = $eventArray[$i]['ee_is_all_day'];			// 終日イベントかどうか
 					
 					// 場所
 					$placeStr = '';
@@ -173,15 +174,28 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 					// 期間
 					$dateStr = '';
 					if ($eventArray[$i]['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 期間終了がないとき
-						$dateStr = '時間：' . $this->convertToDispTime($eventArray[$i]['ee_start_dt'], 1);
+						if ($isAllDay){		// 終日イベントのときは時間を表示しない
+							$dateStr = '';
+						} else {
+							$dateStr = '時間：' . $this->convertToDispTime($eventArray[$i]['ee_start_dt'], 1);
+						}
 					} else {
 						// 同日内のとき
 						if ($this->timestampToDate($eventArray[$i]['ee_start_dt']) == $this->timestampToDate($eventArray[$i]['ee_end_dt'])){
-							$dateStr = '時間：' . $this->convertToDispTime($eventArray[$i]['ee_start_dt'], 1) . self::DATE_RANGE_DELIMITER . 
+							if ($isAllDay){		// 終日イベントのときは時間を表示しない
+								$dateStr = '';
+							} else {
+								$dateStr = '時間：' . $this->convertToDispTime($eventArray[$i]['ee_start_dt'], 1) . self::DATE_RANGE_DELIMITER . 
 													$this->convertToDispTime($eventArray[$i]['ee_end_dt'], 1);
+							}
 						} else {
-							$dateStr = '期間：' . $this->convertToDispDateTime($eventArray[$i]['ee_start_dt'], 10/*年なし*/, 10/*時分*/) . self::DATE_RANGE_DELIMITER . 
+							if ($isAllDay){		// 終日イベントのときは時間を表示しない
+								$dateStr = '期間：' . $this->convertToDispDate($eventArray[$i]['ee_start_dt']) . self::DATE_RANGE_DELIMITER . 
+													$this->convertToDispDate($eventArray[$i]['ee_end_dt']);
+							} else {
+								$dateStr = '期間：' . $this->convertToDispDateTime($eventArray[$i]['ee_start_dt'], 10/*年なし*/, 10/*時分*/) . self::DATE_RANGE_DELIMITER . 
 													$this->convertToDispDateTime($eventArray[$i]['ee_end_dt'], 10/*年なし*/, 10/*時分*/);
+							}
 						}
 					}
 					

@@ -35,7 +35,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	private $headDesc;		// METAタグ要約
 	private $headKeyword;	// METAタグキーワード
 	private $addLib = array();		// 追加スクリプト
-	const CONTENT_TYPE = 'ev';
+//	const CONTENT_TYPE = 'ev';
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_NO_ENTRY_TITLE = 'イベント記事未登録';
 	const MESSAGE_NO_ENTRY		= 'イベント記事は登録されていません';				// イベント記事が登録されていないメッセージ
@@ -516,7 +516,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	{
 		// 参照ビューカウントを更新
 		if (!$this->isSystemManageUser){		// システム運用者以上の場合はカウントしない
-			$this->gInstance->getAnalyzeManager()->updateContentViewCount(self::CONTENT_TYPE, $fetchedRow['ee_serial'], $this->currentDay, $this->currentHour);
+			$this->gInstance->getAnalyzeManager()->updateContentViewCount(event_mainCommonDef::VIEW_CONTENT_TYPE, $fetchedRow['ee_serial'], $this->currentDay, $this->currentHour);
 		}
 
 		$entryId = $fetchedRow['ee_id'];// 記事ID
@@ -524,6 +524,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$date = $fetchedRow['ee_start_dt'];// 開催日時
 		$place = $fetchedRow['ee_place'];// 開催場所
 		$showComment = $fetchedRow['ee_show_comment'];				// コメントを表示するかどうか
+		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
 		
 		// コメントを取得
 		$commentCount = $this->commentDb->getCommentCountByEntryId($entryId, $this->langId);	// コメント総数
@@ -584,10 +585,19 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 
 		// イベント開催期間
 		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
-			$dateStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+			if ($isAllDay){		// 終日イベントのとき
+				$dateStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+			} else {
+				$dateStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+			}
 		} else {
-			$dateStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/) . self::DATE_RANGE_DELIMITER;
-			$dateStr .= $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+			if ($isAllDay){		// 終日イベントのとき
+				$dateStr = $this->convertToDispDate($fetchedRow['ee_start_dt']) . self::DATE_RANGE_DELIMITER;
+				$dateStr .= $this->convertToDispDate($fetchedRow['ee_end_dt']);
+			} else {
+				$dateStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/) . self::DATE_RANGE_DELIMITER;
+				$dateStr .= $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+			}
 		}
 		// 場所
 		$placeStr = '';
@@ -616,7 +626,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		
 		$row = array(
 			'permalink' => $this->convertUrlToHtmlEntity($linkUrl),	// パーマリンク
-			'title' => $title,
+			'title' => $this->convertToDispString($title),
 			'date' => $dateStr,			// 開催日時
 			'place' => $placeStr,		// 開催場所
 			'entry' => $entryText,	// イベント記事
