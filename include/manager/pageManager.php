@@ -87,6 +87,7 @@ class PageManager extends Core
 	private $wysiwygEditor;				// 管理画面用WYSIWYGエディター
 	private $optionTemplateId;			// 追加設定するテンプレートID
 	private $isContentGooglemaps;		// コンテンツにGoogleマップが含むかどうか
+	private $useBootstrap;				// Bootstrapを使用するかどうか
 	const CONFIG_KEY_HEAD_TITLE_FORMAT = 'head_title_format';		// ヘッダ作成用フォーマット
 	const ADMIN_WIDGET_ID = 'admin_main';		// 管理用ウィジェットのウィジェットID
 	//const CONTENT_TYPE_WIKI = 'wiki';		// ページのコンテンツタイプ(Wiki)
@@ -163,7 +164,7 @@ class PageManager extends Core
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
 	
 	// 読み込み制御
-	const USE_BOOTSTRAP	= false;			// 管理画面でBootstrapを使用するかどうか
+	const USE_BOOTSTRAP	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
 	
 	/**
 	 * コンストラクタ
@@ -212,24 +213,28 @@ class PageManager extends Core
 		// jQueryファイル名取得
 		$this->selectedJQueryFilename = ScriptLibInfo::getJQueryFilename(0);			// 使用対象のjQueryファイル
 		$this->selectedJQueryUiFilename = ScriptLibInfo::getJQueryFilename(1);		// 使用対象のjQuery UIファイル
-			
+
 		// 管理機能用Javascript取得
-		$this->defaultAdminScriptFiles = array($this->selectedJQueryFilename,			// jQuery
-											$this->selectedJQueryUiFilename,				// jQuery UI Core
-											//ScriptLibInfo::getJQueryFilename(2),		// jQuery UI Plus
-											//ScriptLibInfo::JQUERY_JSHOTKEYS_FILENAME,		// jquery.js-hotkeys
-											ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME,		// jQuery Contextmenu Lib
-											self::M3_STD_SCRIPT_FILENAME,
-											self::M3_ADMIN_SCRIPT_FILENAME,
-											self::M3_OPTION_SCRIPT_FILENAME);
+		if (defined('M3_STATE_IN_INSTALL')){		// インストーラの場合のスクリプト
+			$this->defaultAdminScriptFiles = array($this->selectedJQueryFilename);			// jQuery
+											//	self::M3_STD_SCRIPT_FILENAME,
+											//	self::M3_ADMIN_SCRIPT_FILENAME,
+											//	self::M3_OPTION_SCRIPT_FILENAME);
+
+			$this->defaultAdminCssFiles = array();			// 管理機能用のCSS
+		} else {
+			$this->defaultAdminScriptFiles = array($this->selectedJQueryFilename,			// jQuery
+												$this->selectedJQueryUiFilename,				// jQuery UI Core
+												ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME,		// jQuery Contextmenu Lib
+												self::M3_STD_SCRIPT_FILENAME,
+												self::M3_ADMIN_SCRIPT_FILENAME,
+												self::M3_OPTION_SCRIPT_FILENAME);
+												
+			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);			// 管理機能用のCSS
+		}
 		
 		// 管理権限なしで管理ディレクトリアクセスで読み込むスクリプトファイル
 		$this->defaultAdminDirScriptFiles = array($this->selectedJQueryFilename);			// jQuery
-		
-		$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);			// 管理機能用のCSS
-		
-		// 管理画面追加ライブラリ
-		if (self::USE_BOOTSTRAP) $this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
 		
 		// 遅延ウィジェットリスト									
 		$this->lateLaunchWidgetList = array();
@@ -733,6 +738,15 @@ class PageManager extends Core
 		$this->hasScriptCache = $status;
 	}
 	/**
+	 * Bootstrapを使用に設定
+	 *
+	 * @return 				なし
+	 */
+	function useBootstrap()
+	{
+		$this->useBootstrap = true;				// Bootstrapを使用するかどうか
+	}
+	/**
 	 * ページ作成処理を中断するかどうかを取得
 	 *
 	 * @return bool		true=中断、false=継続
@@ -892,6 +906,13 @@ class PageManager extends Core
 			if ($gAccessManager->isValidAdminKey()) session_id($gRequestManager->trimValueOf(session_name()));
 		}
 		
+		// 管理画面用ライブラリを追加(フレームコンテナでの設定を反映)
+		if ($gEnvManager->isAdminDirAccess()){
+			if ($this->useBootstrap) $this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
+		} else {
+			if ($this->useBootstrap) $this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
+		}
+
 		// セッション変数を取得可能にする
 		session_start();
 
@@ -1134,7 +1155,7 @@ class PageManager extends Core
 					$this->isEditMode = true;			// 一般画面編集モード
 					$this->isPageEditable = true;		// 一般画面ページ編集可能モードに設定(コンテキストメニュー表示)
 					
-					// ライブラリを追加
+					// 管理画面用ライブラリを追加
 					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
 						$this->addAdminScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
 						if ($this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
@@ -2435,14 +2456,50 @@ class PageManager extends Core
 		global $gSystemManager;
 
 		$replaceStr = '';		// 変換文字列
-				
-		if (defined('M3_STATE_IN_INSTALL')){		// インストール時のヘッダ出力
+		
+		// ##### インストール時のヘッダ出力 #####
+		if (defined('M3_STATE_IN_INSTALL')){
 			// タイトルの作成
 			$title = '';
 			if (count($this->headSubTitle) > 0) $title = htmlspecialchars(trim($this->headSubTitle[0]));
 			
 			// ********** メタタグの設定 **********
 			$replaceStr .= '<title>' . $title . '</title>' . M3_NL;
+			
+			// ##### インストーラ用のファイルの読み込み #####
+			$scriptsUrl = '../scripts';
+			// 管理画面用の共通スクリプトを読み込む
+			$count = count($this->defaultAdminScriptFiles);
+			for ($i = 0; $i < $count; $i++){
+				$scriptFilename = $this->defaultAdminScriptFiles[$i];
+
+				// スクリプトのURLを修正
+				if (strncasecmp($scriptFilename, 'http://', 7) == 0 || strncasecmp($scriptFilename, 'https://', 8) == 0){
+					$scriptURL = $scriptFilename;
+					
+					// SSLをページの状態に合わせる
+					if ($isSslPage){
+						$scriptURL = str_replace('http://', 'https://', $scriptURL);
+					} else {
+						$scriptURL = str_replace('https://', 'http://', $scriptURL);
+					}
+				} else {
+					$scriptURL = $scriptsUrl . '/' . $scriptFilename;
+				}
+			
+				// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+				//$scriptURL = $scriptsUrl . '/' . $scriptFilename;
+				if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
+				$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+			}
+			
+			// 管理機能用共通ライブラリのCSSの読み込み
+			$count = count($this->defaultAdminCssFiles);
+			for ($i = 0; $i < $count; $i++){
+				// CSSへのURLを作成
+				$cssURL = $scriptsUrl . '/' . $this->defaultAdminCssFiles[$i];
+				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
+			}
 			return $replaceStr;
 		}
 		
@@ -2534,7 +2591,7 @@ class PageManager extends Core
 				}
 			}
 		}
-		
+
 		// ##### PC用URLと携帯用URLのアクセス別に処理 #####
 		if ($gEnvManager->getIsMobileSite()){		// 携帯用URLのとき
 		} else {			// PC用URLまたはスマートフォン用URLのとき
@@ -2674,7 +2731,7 @@ class PageManager extends Core
 				$rssTitle = $this->headRssFiles[$i]['title'];// タイトル
 				$replaceStr .=  '<link rel="alternate" type="application/rss+xml" title="' . $rssTitle . '" href="' . convertUrlToHtmlEntity($rssUrl) . '" />' . M3_NL;
 			}
-														
+									
 			// ##### 共通Javascriptの読み込み #####
 			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
@@ -2846,7 +2903,7 @@ class PageManager extends Core
 				} else {
 					// ##### 管理用テンプレートを使用している場合の処理 #####
 					// Bootstrap用のスクリプト処理
-					if (self::USE_BOOTSTRAP){
+					if ($this->useBootstrap){
 						$replaceStr .= '$(function(){' . M3_NL;
 						$replaceStr .= '    $(\'.button\').addClass(\'btn\');' . M3_NL;
 						$replaceStr .= '});' . M3_NL;

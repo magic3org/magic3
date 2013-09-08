@@ -24,8 +24,12 @@ class admin_installFrameContainer extends BaseFrameContainer
 	 */
 	function __construct()
 	{
+		global $gPageManager;
+		
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		$gPageManager->useBootstrap();			// Bootstrapを使用
 	}
 	/**
 	 * フレーム単位のアクセス制御

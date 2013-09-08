@@ -15,7 +15,7 @@
  */
 class ScriptLibInfo
 {
-	private static $jQueryVer = 1.8;			// デフォルトで使用するjQueryのバージョン
+	private static $jQueryVer = '1.8';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVersionArray = array(	'1.6'	=> 'jquery-1.6.4.min.js',// jQueryバージョン
 												'1.7'	=> 'jquery-1.7.2.min.js',
 												'1.8'	=> 'jquery-1.8.3.min.js',
@@ -198,11 +198,14 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const CKEDITOR_FILENAME			= 'ckeditor4.2.0/ckeditor.js';				// CKEditor
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
+/*
 //	const BOOTSTRAP_FILENAME		= 'bootstrap/bootstrap2.3.min.js';			// bootstrap
 	const BOOTSTRAP_FILENAME		= 'bootstrap/bootstrap3.0rc2.js';			// bootstrap
 //	const BOOTSTRAP_CSS				= 'bootstrap/bootstrap2.3.css';
 	const BOOTSTRAP_CSS				= 'bootstrap/bootstrap3.0rc2.css';
-	const BOOTSTRAP_OPTION_CSS		= 'bootstrap/bootstrap-box2.3.css';
+	const BOOTSTRAP_OPTION_CSS		= 'bootstrap/bootstrap-box2.3.css';*/
+	const BOOTSTRAP_FILENAME		= 'bootstrap-3.0.0/js/bootstrap.min.js';			// bootstrap
+	const BOOTSTRAP_CSS				= 'bootstrap-3.0.0/css/bootstrap.min.css';
 	
 	const CODEMIRROR_FILENAME				= 'codemirror-3.1/lib/codemirror.js';				// CodeMirror
 	const CODEMIRROR_CSS					= 'codemirror-3.1/lib/codemirror.css';				// CodeMirror
@@ -269,7 +272,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	 */
 	static function setJQueryVer($version)
 	{
-		self::$jQueryVer = $version;
+		if (!empty($version)) self::$jQueryVer = $version;
 	}
 	/**
 	 * jQueryファイル名取得
@@ -281,7 +284,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	{
 		$filename = '';
 		if ($type == 0){	// jQuery
-			$filename = self::$jQueryVersionArray[self::$jQueryVer];
+			$filename = self::$jQueryVersionArray[(string)self::$jQueryVer];
 			//if (empty($filename)) $filename = self::JQUERY_L_FILENAME;	// jQuery本体
 		} else if ($type == 1){	// Core
 			$filename = self::JQUERY_UI_CORE_FILENAME;	// jquery UI
@@ -303,9 +306,12 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 					self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 					self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
 					self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
-					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
+/*					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																'css'		=> array(self::BOOTSTRAP_CSS,
-																					self::BOOTSTRAP_OPTION_CSS)),
+																					self::BOOTSTRAP_OPTION_CSS)),*/
+					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
+																'css'		=> array(self::BOOTSTRAP_CSS)),
+																					
 					// jQueryライブラリ
 					self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル
 					self::LIB_JQUERY_JCAROUSEL		=>	array(	'script' 	=> array(self::JQUERY_JCAROUSEL_FILENAME),

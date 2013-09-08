@@ -31,7 +31,10 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <jdoc:include type="head" />
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
     <!--[if IE]><link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/iestyles.css" media="screen"><![endif]-->
-	<!--[if lt IE 9]><script src="<?php echo $templateUrl; ?>/html5shiv.js"></script><![endif]-->
+	<!--[if lt IE 9]>
+	<script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
+	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
+	<![endif]-->
     <!-- Created by Artisteer v4.1.0.59688 -->
 </head>
 <body>
