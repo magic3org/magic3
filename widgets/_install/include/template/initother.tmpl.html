@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: initother.tmpl.html 3795 2010-11-09 07:12:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -36,57 +36,45 @@ function selectFile(){
 }
 //]]>
 </script>
-<div align="center">
-<br />
-<form method="post" name="main" class="form">
+<div class="jumbotron">
+<h2>{_LC_TITLE_INSTALL}</h2>
+<h3>{_LC_LABEL_VERSION} {VERSION}</h3>
+</div>
+<div class="content">
+<form method="post" name="main" role="form" class="form-horizontal">
 <input type="hidden" name="lang" value="{LANG}" />
 <input type="hidden" name="task" value="initother" />
 <input type="hidden" name="act" />
 <input type="hidden" name="dbstatus" value="{DB_STATUS}" />
 <input type="hidden" name="sample_sql" />
-<table>
-<tr><td align="center">
 <h2>{TITLE}</h2>
 <!-- m3:ErrorMessage -->
-<br />
-</td></tr>
 <patTemplate:tmpl name="install_msg" visibility="hidden">
-<tr><td>
-{MESSAGE}
-<br /><br />
+<p>{MESSAGE}</p>
 </patTemplate:tmpl>
-</td></tr>
 <patTemplate:tmpl name="datainstall_msg" visibility="hidden">
-<tr><td>
-{_LC_MSG_INSTALL_DEMO_DATA}
-</td></tr>
-<tr><td align="center">
-<table class="simple-table" border="0" cellpadding="0" cellspacing="0">
-    <tbody>
-        <tr>
-	    <td class="table-head" width="300" colspan="2">DB</td>
-	</tr>
-        <tr class="even">
-	    <td>
-	    <select name="sample_sql" onChange="selectFile();">
+<p>{_LC_MSG_INSTALL_DEMO_DATA}</p>
+
+<div class="form-group">
+<label class="col-lg-3 control-label">DB</label>
+<div class="col-lg-6">
+	    <select name="sample_sql" class="form-control" onChange="selectFile();">
 	        <patTemplate:tmpl name="sample__sql_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
-	    </td>
-	    <td><input type="button" class="button" onclick="installSampleData();" value="{_LC_LABEL_INSTALL_DATA}" /></td>
-	</tr>
-        <tr>
-	    <td colspan="2">{HEADER}</td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
+</div>
+</div>
+<div class="form-group">
+<label class="col-lg-3 control-label">{_LC_LABEL_DESC}</label>
+<div class="col-lg-6"><p class="form-control-static">{HEADER}</p></div>
+</div>
+<div class="form-group">
+<div class="col-lg-offset-3 col-lg-3"><button class="btn btn-primary" onclick="installSampleData();">{_LC_LABEL_INSTALL_DATA}</button></div>
+</div>
+
 </patTemplate:tmpl>
-<tr><td>
-<div align="right"><input type="button" class="button" onclick="gonext();" value="{_LC_LABEL_GO_NEXT}" /></div>
-</td></tr>
-</table>
 </form>
+<p class="bottom_buttons"><button class="btn btn-success" onclick="gonext();">{_LC_LABEL_GO_NEXT}</button></p>
 </div>
 </patTemplate:tmpl>

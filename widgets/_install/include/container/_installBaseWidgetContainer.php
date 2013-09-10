@@ -8,15 +8,13 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installBaseWidgetContainer.php 3778 2010-11-07 14:13:00Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-//require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
-//class _installBaseWidgetContainer extends BaseWidgetContainer
 class _installBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	const DEFAULT_LANG = 'ja';			// デフォルトの言語(日本語)
@@ -40,15 +38,20 @@ class _installBaseWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _postAssign($request, &$param)
 	{
+		// システムのバージョン
+		$this->tmpl->addVar("_widget", "version", M3_SYSTEM_VERSION);	
+			
 		// 言語を再設定
 		$langId = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);
 		if (empty($langId)) $langId = self::DEFAULT_LANG;
 		$this->tmpl->addVar('_widget', 'lang', $langId);
-		
+				
 		// テキストをローカライズ
 		$localeText = array();
 		$localeText['label_go_next'] = $this->_('Next');
 		$localeText['label_go_back'] = $this->_('Back');
+		$localeText['title_install'] = $this->_('Magic3 Install');
+		$localeText['label_version'] = $this->_('Version:');
 		$this->setLocaleText($localeText);
 	}
 	/**

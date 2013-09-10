@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: checkdb.tmpl.html 3795 2010-11-09 07:12:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -34,50 +34,37 @@ function selectType(){
 }
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="jumbotron">
+<h2>{_LC_TITLE_INSTALL}</h2>
+<h3>{_LC_LABEL_VERSION} {VERSION}</h3>
+</div>
+<div class="content">
 <h2>{_LC_TITLE_SELECT_VERSIONUP_TYPE}</h2>
 <!-- m3:ErrorMessage -->
-<form method="post" name="main" class="form">
+<form method="post" name="main" role="form" class="form-horizontal">
 <input type="hidden" name="lang" value="{LANG}" />
 <input type="hidden" name="task" value="checkdb" />
 <input type="hidden" name="act" />
-<table>
-<tr><td>
-{_LC_MSG_SELECT_VERSIONUP_TYPE}
-</td></tr>
-<tr><td align="center">
-{MESSAGE}
-<br />
-<table class="simple-table" border="0" cellpadding="0" cellspacing="0">
-    <thead>
-        <tr>
-            <th>{_LC_LABEL_VERSIONUP_TYPE}</th>
-	</tr>
-    </thead>
-    <tbody>
-        <tr>
-	    <td width="250">
-	    <select name="update_type" onchange="selectType();" {UPDATE_TYPE_DISABLED} >
+<p>
+{_LC_MSG_SELECT_VERSIONUP_TYPE}<br />
+{MESSAGE}</p>
+<div class="form-group">
+<label for="update_type" class="col-lg-3 control-label">{_LC_LABEL_VERSIONUP_TYPE}</label>
+<div class="col-lg-6">
+	    <select id="update_type" name="update_type" class="form-control" onchange="selectType();" {UPDATE_TYPE_DISABLED} >
 	        <option value="init" {INIT_SELECTED}>{_LC_LABEL_TYPE_CLEAN_INSTALL}</option>
 		<option value="update" {UPDATE_SELECTED}>{_LC_LABEL_TYPE_UPDATE_INSTALL}</option>
 	    </select>
-	    </td>
-	</tr>
-        <tr>
-	    <td>{_LC_LABEL_DESC}<br />{COMMENT}</td>
-	</tr>
-    </tbody>
-</table>
-
-</td></tr>
-<tr><td align="right">
-
-<input type="button" class="button" onclick="gofore();" value="{_LC_LABEL_GO_BACK}" />
-<input type="button" class="button" onclick="gonext();" value="{_LC_LABEL_GO_NEXT}" />
-
-</td></tr>
-</table>
+</div>
+</div>
+<div class="form-group">
+<label class="col-lg-3 control-label">{_LC_LABEL_DESC}</label>
+<div class="col-lg-6"><p class="form-control-static">{COMMENT}</p></div>
+</div>
 </form>
+<p class="bottom_buttons">
+<button class="btn btn-primary" onclick="gofore();">{_LC_LABEL_GO_BACK}</button>
+<button class="btn btn-success" onclick="gonext();">{_LC_LABEL_GO_NEXT}</button>
+</p>
 </div>
 </patTemplate:tmpl>

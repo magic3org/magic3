@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: complete.tmpl.html 3795 2010-11-09 07:12:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -26,41 +26,48 @@ function gofore(){
 }
 //]]>
 </script>
-<div align="center">
-<br />
-<form method="post" name="main" class="form">
+<div class="jumbotron">
+<h2>{_LC_TITLE_INSTALL}</h2>
+<h3>{_LC_LABEL_VERSION} {VERSION}</h3>
+</div>
+<div class="content">
+<form method="post" name="main" role="form" class="form-horizontal">
 <input type="hidden" name="lang" value="{LANG}" />
 <input type="hidden" name="task" value="complete" />
 <input type="hidden" name="act" />
 <input type="hidden" name="dbstatus" value="{DB_STATUS}" />
 <input type="hidden" name="install_type" />
-<table>
-<tr><td align="center">
+
 <h2>{_LC_TITLE_INSTALL_COMPLETE}</h2>
 <!-- m3:ErrorMessage -->
-<br />
+<p>
 {_LC_MSG_INSTALL_COMPLETE}
-<br /><br />
-{_LC_LABEL_MAIN_URL} <a href="{URL}" target="_blank">{URL}</a>
-<br />
-{_LC_LABEL_ADMIN_URL} <a href="{URL_ADMIN}" target="_blank">{URL_ADMIN}</a>
-<br /><br />
+</p>
+<div class="form-group">
+<label class="col-lg-2 control-label">{_LC_LABEL_MAIN_URL}</label>
+<div class="col-lg-6"><p class="form-control-static"><a href="{URL}" target="_blank">{URL}</a></p></div>
+</div>
+<div class="form-group">
+<label class="col-lg-2 control-label">{_LC_LABEL_ADMIN_URL}</label>
+<div class="col-lg-6"><p class="form-control-static"><a href="{URL_ADMIN}" target="_blank">{URL_ADMIN}</a></p></div>
+</div>
 <patTemplate:tmpl name="show_login_user" visibility="hidden">
-{_LC_LABEL_USER} <b>{USER}</b><br />
-{_LC_LABEL_PASSWORD} <b>{PASSWORD}</b>
+<div class="form-group">
+<label class="col-lg-2 control-label">{_LC_LABEL_USER}</label>
+<div class="col-lg-6"><p class="form-control-static"><strong>{USER}</strong></p></div>
+</div>
+<div class="form-group">
+<label class="col-lg-2 control-label">{_LC_LABEL_PASSWORD}</label>
+<div class="col-lg-6"><p class="form-control-static"><strong>{PASSWORD}</strong></p></div>
+</div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_login_info" visibility="hidden">
-{MESSAGE}
+<p>{MESSAGE}</p>
 </patTemplate:tmpl>
-<br />
-</td></tr>
-<tr><td>
-<div align="right">
-<input type="button" class="button" onclick="gofore();" value="{_LC_LABEL_GO_BACK}" />
-<input type="button" class="button" onclick="delInstaller();" value="{_LC_LABEL_CLOSE}" />
-</div>
-</td></tr>
-</table>
 </form>
+<p class="bottom_buttons">
+<button class="btn btn-primary" onclick="gofore();">{_LC_LABEL_GO_BACK}</button>
+<button class="btn btn-success" onclick="delInstaller();">{_LC_LABEL_CLOSE}</button>
+</p>
 </div>
 </patTemplate:tmpl>

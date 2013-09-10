@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installTopWidgetContainer.php 3778 2010-11-07 14:13:00Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
@@ -62,12 +62,8 @@ class _installTopWidgetContainer extends _installBaseWidgetContainer
 		// 言語メニュー作成
 		$this->createLangTypeMenu();
 		
-		$this->tmpl->addVar("_widget", "version", M3_SYSTEM_VERSION);	// システムのバージョン
-		
 		// テキストをローカライズ
 		$localeText = array();
-		$localeText['title_install'] = $this->_('Magic3 Install');
-		$localeText['label_version'] = $this->_('Version:');
 		$localeText['label_language'] = $this->_('Language:');
 		$localeText['msg_install'] = $this->_('Start Installing');		// インストール開始のメッセージ
 		$this->setLocaleText($localeText);

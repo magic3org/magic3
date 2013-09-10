@@ -176,6 +176,7 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 		$localeText['msg_install_data'] = $this->_('Install data?');// データをインストールしますか?
 		$localeText['label_install_data'] = $this->_('Install Data');// デモデータインストール
 		$localeText['msg_install_demo_data'] = $this->_('If you install demo data, use this operation field below.<br />If you don\'t, go next.<br />You can install demo data after installing system at dministration page (System Administration-Maintenance Database).');	// デモ用データをインストールする場合は以下の処理を実行してください<br />何も行わない場合は「次へ」進みます。<br />インストール終了後も管理機能の「システム管理」-「DBメンテナンス」からデモ用データのインストールは可能です。
+		$localeText['label_desc'] = $this->_('Details');// [説明]
 		$this->setLocaleText($localeText);
 	}
 }
