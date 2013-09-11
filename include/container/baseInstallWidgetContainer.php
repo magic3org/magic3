@@ -84,7 +84,7 @@ class BaseInstallWidgetContainer extends BaseWidgetContainer
 	 */
 	function addMsgToGlobal()
 	{
-		$this->gInstance->getMessageManager()->addMessage($this->errorMessage, $this->warningMessage, $this->guidanceMessage);
+		$this->gInstance->getMessageManager()->addMessage($this->errorMessage, $this->warningMessage, $this->guideMessage);
 	}
 }
 ?>

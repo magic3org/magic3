@@ -23,7 +23,7 @@ class BaseTemplateContainer
 	protected $tmpl;		// テンプレートオブジェクト
 	private $errorMessage    = array();		// アプリケーションのエラー
 	private $warningMessage  = array();		// ユーザ操作の誤り
-	private $guidanceMessage = array();		// ガイダンス
+	private $guideMessage = array();		// ガイダンス
 	
 	/**
 	 * コンストラクタ

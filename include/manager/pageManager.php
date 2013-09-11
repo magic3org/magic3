@@ -747,6 +747,15 @@ class PageManager extends Core
 		$this->useBootstrap = true;				// Bootstrapを使用するかどうか
 	}
 	/**
+	 * Bootstrap使用状況を取得
+	 *
+	 * @return bool			true=使用、false=使用しない
+	 */
+	function getUseBootstrap()
+	{
+		return $this->useBootstrap;				// Bootstrapを使用するかどうか
+	}
+	/**
 	 * ページ作成処理を中断するかどうかを取得
 	 *
 	 * @return bool		true=中断、false=継続

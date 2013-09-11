@@ -201,7 +201,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 
 					// エラーメッセージを取得
 					$this->addMsg($this->gInstance->getMessageManager()->getErrorMessage(), 
-									$this->gInstance->getMessageManager()->getWarningMessage(), $this->gInstance->getMessageManager()->getGuidanceMessage());
+									$this->gInstance->getMessageManager()->getWarningMessage(), $this->gInstance->getMessageManager()->getGuideMessage());
 														
 					// ディレクトリ削除
 					if ((is_dir($widgetPath) && rmDirectory($widgetPath)) || !is_dir($widgetPath)){// 削除成功か、ディレクトリが存在しないとき
@@ -359,7 +359,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 										
 										// エラーメッセージを取得
 										$this->addMsg($this->gInstance->getMessageManager()->getErrorMessage(), 
-														$this->gInstance->getMessageManager()->getWarningMessage(), $this->gInstance->getMessageManager()->getGuidanceMessage());
+														$this->gInstance->getMessageManager()->getWarningMessage(), $this->gInstance->getMessageManager()->getGuideMessage());
 							
 										// バージョンを通知
 										if ($this->getMsgCount(self::MSG_APP_ERR) == 0 && $this->getMsgCount(self::MSG_USER_ERR) == 0){		// エラーが発生していないとき

@@ -12,7 +12,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: designManager.php 2551 2009-11-14 07:44:55Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアクラス
@@ -132,6 +132,40 @@ class DesignManager extends Core
 		$value = $this->gSystem->getSystemConfig(self::CF_CONFIG_WINDOW_STYLE);
 		if (empty($value)) $value = self::DEFAULT_CONFIG_WINDOW_STYLE;
 		return $value;
+	}
+	/**
+	 * Bootstrapメッセージ用CSSクラス取得
+	 *
+	 * @param string $type		メッセージタイプ(danger,error,warning,info,success)
+	 * @return array 			クラス名
+	 */
+	function getBootstrapMessageClass($type)
+	{
+		$extClass = array();
+		
+		switch ($type){
+			case 'danger':
+				$extClass[] = 'alert';
+				$extClass[] = 'alert-danger';
+				break;
+			case 'error':
+				$extClass[] = 'alert';
+				$extClass[] = 'alert-error';
+				break;
+			case 'warning':
+				$extClass[] = 'alert';
+				$extClass[] = 'alert-warning';
+				break;
+			case 'info':
+				$extClass[] = 'alert';
+				$extClass[] = 'alert-info';
+				break;
+			case 'success':
+				$extClass[] = 'alert';
+				$extClass[] = 'alert-success';
+				break;
+		}
+		return $extClass;
 	}
 	/**
 	 * ページリンク作成(Artisteer4.1対応)

@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: baseWidgetContainer.php 6151 2013-07-01 11:16:51Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // テンプレートライブラリ読み込み
@@ -29,9 +29,12 @@ class BaseWidgetContainer extends Core
 	protected $parseCancel;			// テンプレート変換処理を中断するかどうか
 	protected $displayMessage = true;		// メッセージを出力するかどうか
 	protected $messageAttr;					// メッセージ用の追加属性
-	protected $errorMessage    = array();		// アプリケーションのエラー
-	protected $warningMessage  = array();		// ユーザ操作の誤り
-	protected $guidanceMessage = array();		// ガイダンス
+	protected $dangerMessage	= array();		// 危険メッセージ
+	protected $errorMessage		= array();		// アプリケーションのエラー
+	protected $warningMessage	= array();		// ユーザ操作の誤り
+	protected $infoMessage		= array();		// 情報メッセージ
+	protected $guideMessage		= array();		// ガイダンス
+	protected $successMessage	= array();		// 成功メッセージ
 	protected $optionUrlParam = array();		// URLに付加する値
 	protected $localeText = array();			// ローカライズ用テキストの定義
 	protected $keepForeTaskForBackUrl = false;	// 遷移前のタスクを戻り先URLとするかどうか
@@ -1660,47 +1663,120 @@ class BaseWidgetContainer extends Core
 	 */
 	function displayMsg()
 	{
+		$messageClassStr = '';
+		$useBootstrap = $this->gPage->getUseBootstrap();
+				
 		// メッセージがある場合はメッセージタグを表示
 		if ($this->getMsgCount() > 0){
 			$this->tmpl->setAttribute('_messages', 'visibility', 'visible');
 		} else {
 			return;
 		}
-		
+		// 危険メッセージ
+		if (count($this->dangerMessage) > 0){
+			$this->tmpl->setAttribute('_danger_message', 'visibility', 'visible');	// メッセージ表示タグを表示
+			
+			// メッセージ追加クラス
+			if ($useBootstrap){
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger');
+				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
+			}
+			
+			foreach ($this->dangerMessage as $value) {
+				$row = array(
+					'message' => $value,
+					'class' 	=> $messageClassStr			// メッセージ追加クラス
+				);
+				$this->tmpl->addVars('_danger_message', $row);
+				$this->tmpl->parseTemplate('_danger_message', 'a');
+			}
+		}
 		// アプリケーションエラー
 		if (count($this->errorMessage) > 0){
 			$this->tmpl->setAttribute('_error_message', 'visibility', 'visible');	// メッセージ表示タグを表示
 			
+			// メッセージ追加クラス
+			if ($useBootstrap){
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger');
+				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
+			}
+			
 			foreach ($this->errorMessage as $value) {
 				$row = array(
-					'message' => $value
+					'message' => $value,
+					'class' 	=> $messageClassStr			// メッセージ追加クラス
 				);
 				$this->tmpl->addVars('_error_message', $row);
 				$this->tmpl->parseTemplate('_error_message', 'a');
 			}
 		}
-		// ユーザエラー
+		// 警告(ユーザエラー)
 		if (count($this->warningMessage) > 0){
 			$this->tmpl->setAttribute('_warning_message', 'visibility', 'visible');		// メッセージ表示タグを表示
 			
+			// メッセージ追加クラス
+			if ($useBootstrap){
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('warning');
+				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
+			}
+			
 			foreach ($this->warningMessage as $value) {
 				$row = array(
-					'message' => $value
+					'message'	=> $value,
+					'class' 	=> $messageClassStr			// メッセージ追加クラス
 				);
 				$this->tmpl->addVars('_warning_message', $row);
 				$this->tmpl->parseTemplate('_warning_message', 'a');
 			}
 		}
-		// ガイダンス
-		if (count($this->guidanceMessage) > 0){
-			$this->tmpl->setAttribute('_guidance_message', 'visibility', 'visible');			// メッセージ表示タグを表示
+		// 情報メッセージ
+		if (count($this->infoMessage) > 0){
+			$this->tmpl->setAttribute('_info_message', 'visibility', 'visible');			// メッセージ表示タグを表示
 			
-			foreach ($this->guidanceMessage as $value) {
+			// メッセージ追加クラス
+			if ($useBootstrap){
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info');
+				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
+			}
+			
+			foreach ($this->infoMessage as $value) {
+				$row = array(
+					'message'	=> $value,
+					'class' 	=> $messageClassStr			// メッセージ追加クラス
+				);
+				$this->tmpl->addVars('_info_message', $row);
+				$this->tmpl->parseTemplate('_info_message', 'a');				
+			}
+		}
+		// ガイダンス
+		if (count($this->guideMessage) > 0){
+			$this->tmpl->setAttribute('_guide_message', 'visibility', 'visible');			// メッセージ表示タグを表示
+			
+			foreach ($this->guideMessage as $value) {
 				$row = array(
 					'message' => $value
 				);
-				$this->tmpl->addVars('_guidance_message', $row);
-				$this->tmpl->parseTemplate('_guidance_message', 'a');				
+				$this->tmpl->addVars('_guide_message', $row);
+				$this->tmpl->parseTemplate('_guide_message', 'a');				
+			}
+		}
+		// 成功メッセージ
+		if (count($this->successMessage) > 0){
+			$this->tmpl->setAttribute('_success_message', 'visibility', 'visible');			// メッセージ表示タグを表示
+			
+			// メッセージ追加クラス
+			if ($useBootstrap){
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('success');
+				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
+			}
+			
+			foreach ($this->successMessage as $value) {
+				$row = array(
+					'message' => $value,
+					'class' 	=> $messageClassStr			// メッセージ追加クラス
+				);
+				$this->tmpl->addVars('_success_message', $row);
+				$this->tmpl->parseTemplate('_success_message', 'a');				
 			}
 		}
 		// 追加属性を設定
@@ -1722,8 +1798,8 @@ class BaseWidgetContainer extends Core
 			array_shift($this->warningMessage);
 		}
 		// ガイダンス
-		while (count($this->guidanceMessage)){
-			array_shift($this->guidanceMessage);
+		while (count($this->guideMessage)){
+			array_shift($this->guideMessage);
 		}
 	}
 	/**
@@ -1740,7 +1816,7 @@ class BaseWidgetContainer extends Core
 		} else if($type == self::MSG_USER_ERR){	// ユーザ操作のエラー
 			array_push($this->warningMessage, $msg);
 		} else if($type == self::MSG_GUIDANCE){	// ガイダンス
-			array_push($this->guidanceMessage, $msg);
+			array_push($this->guideMessage, $msg);
 		}
 	}
 	/**
@@ -1748,14 +1824,14 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @param array $errorMessage		エラーメッセージ
 	 * @param array $warningMessage		ユーザ操作のエラー
-	 * @param array $guidanceMessage	ガイダンス
+	 * @param array $guideMessage	ガイダンス
 	 * @return 				なし
 	 */
-	function addMsg($errorMessage, $warningMessage, $guidanceMessage)
+	function addMsg($errorMessage, $warningMessage, $guideMessage)
 	{
 		$this->errorMessage		= array_merge($this->errorMessage, $errorMessage);		// アプリケーションエラー
 		$this->warningMessage	= array_merge($this->warningMessage, $warningMessage);	// ユーザ操作のエラー
-		$this->guidanceMessage	= array_merge($this->guidanceMessage, $guidanceMessage);	// ガイダンス
+		$this->guideMessage	= array_merge($this->guideMessage, $guideMessage);	// ガイダンス
 	}
 	/**
 	 * グローバルメッセージを追加取得する
@@ -1764,7 +1840,7 @@ class BaseWidgetContainer extends Core
 	 */
 	function getGlobalMsg()
 	{
-		$this->addMsg($this->gInstance->getMessageManager()->getErrorMessage(), $this->gInstance->getMessageManager()->getWarningMessage(), $this->gInstance->getMessageManager()->getGuidanceMessage());
+		$this->addMsg($this->gInstance->getMessageManager()->getErrorMessage(), $this->gInstance->getMessageManager()->getWarningMessage(), $this->gInstance->getMessageManager()->getGuideMessage());
 	}
 	/**
 	 * メッセージテーブルにアプリケーションエラーメッセージを設定する
@@ -1794,7 +1870,7 @@ class BaseWidgetContainer extends Core
 	 */
 	function setGuidanceMsg($msg)
 	{
-		array_push($this->guidanceMessage, $msg);
+		array_push($this->guideMessage, $msg);
 	}
 	/**
 	 * アプリケーションエラーメッセージを取得
@@ -1821,24 +1897,24 @@ class BaseWidgetContainer extends Core
 	 */
 	function getGuidanceMsg()
 	{	
-		return $this->guidanceMessage;
+		return $this->guideMessage;
 	}
 	/**
 	 * メッセージ数を返す
 	 *
-	 * @param int $type		メッセージのタイプ。1=ErrorMessage,2=WarningMessage,3=GuidanceMessage,省略=すべてのメッセージ数
+	 * @param int $type		メッセージのタイプ。1=ErrorMessage,2=WarningMessage,3=GuideMessage,省略=すべてのメッセージ数
 	 * @return 				なし
 	 */
 	function getMsgCount($type = 0)
 	{
 		if ($type == 0){		// すべてのメッセージ数
-			return count($this->errorMessage) + count($this->warningMessage) + count($this->guidanceMessage);
+			return count($this->errorMessage) + count($this->warningMessage) + count($this->guideMessage);
 		} else if ($type == self::MSG_APP_ERR){	// アプリケーションエラー
 			return count($this->errorMessage);
 		} else if($type == self::MSG_USER_ERR){	// ユーザ操作のエラー
 			return count($this->warningMessage);
 		} else if($type == self::MSG_GUIDANCE){// ガイダンス
-			return count($this->guidanceMessage);
+			return count($this->guideMessage);
 		}
 	}
 	/**
@@ -1848,7 +1924,7 @@ class BaseWidgetContainer extends Core
 	 */
 	function isExistsMsg()
 	{
-		if (count($this->errorMessage) + count($this->warningMessage) + count($this->guidanceMessage) > 0){
+		if (count($this->errorMessage) + count($this->warningMessage) + count($this->guideMessage) > 0){
 			return true;
 		} else {
 			return false;

@@ -121,7 +121,7 @@ class BaseIWidgetContainer extends BaseWidgetContainer
 	 */
 	function addMsgToGlobal()
 	{
-		$this->gInstance->getMessageManager()->addMessage($this->errorMessage, $this->warningMessage, $this->guidanceMessage);
+		$this->gInstance->getMessageManager()->addMessage($this->errorMessage, $this->warningMessage, $this->guideMessage);
 	}
 	/**
 	 * 定義情報オブジェクトを更新

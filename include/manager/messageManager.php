@@ -22,7 +22,7 @@ class MessageManager extends Core
 	private $db;						// DBオブジェクト
 	private $errorMessage    = array();		// アプリケーションのエラー
 	private $warningMessage  = array();		// ユーザ操作の誤り
-	private $guidanceMessage = array();		// ガイダンス
+	private $guideMessage = array();		// ガイダンス
 	private $_langStringArray = array();		// 読み込んだ言語テキスト
 	private $langStringLoaded;		// 初期データを読み込んだかどうか
 	private $loadedLang;			// データを読み込んだ言語ID
@@ -54,14 +54,14 @@ class MessageManager extends Core
 	 *
 	 * @param array $errorMessage		エラーメッセージ
 	 * @param array $warningMessage		ユーザ操作のエラー
-	 * @param array $guidanceMessage	ガイダンス
+	 * @param array $guideMessage	ガイダンス
 	 * @return 				なし
 	 */
-	function addMessage($errorMessage, $warningMessage, $guidanceMessage)
+	function addMessage($errorMessage, $warningMessage, $guideMessage)
 	{
 		$this->errorMessage		= array_merge($this->errorMessage, $errorMessage);		// アプリケーションエラー
 		$this->warningMessage	= array_merge($this->warningMessage, $warningMessage);	// ユーザ操作のエラー
-		$this->guidanceMessage	= array_merge($this->guidanceMessage, $guidanceMessage);	// ガイダンス
+		$this->guideMessage	= array_merge($this->guideMessage, $guideMessage);	// ガイダンス
 	}
 	/**
 	 * アプリケーションエラーメッセージを取得
@@ -86,9 +86,9 @@ class MessageManager extends Core
 	 *
 	 * @return array	ガイダンスメッセージ
 	 */
-	function getGuidanceMessage()
+	function getGuideMessage()
 	{	
-		return $this->guidanceMessage;
+		return $this->guideMessage;
 	}
 	/**
 	 * 言語テキスト定義をDBから取得
