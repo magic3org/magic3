@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-26 21:07+0900\n"
-"PO-Revision-Date: 2013-07-26 21:07+0900\n"
+"POT-Creation-Date: 2013-09-12 21:14+0900\n"
+"PO-Revision-Date: 2013-09-12 21:14+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -15,18 +15,22 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: container\n"
 
-#: container/_installBaseWidgetContainer.php:50
+#: container/_installBaseWidgetContainer.php:51
 msgid "Next"
 msgstr "次へ"
 
-#: container/_installBaseWidgetContainer.php:51
+#: container/_installBaseWidgetContainer.php:52
 msgid "Back"
 msgstr "戻る"
 
-#: container/_installBaseWidgetContainer.php:66
-#: container/_installTopWidgetContainer.php:69
+#: container/_installBaseWidgetContainer.php:53
+#: container/_installBaseWidgetContainer.php:69
 msgid "Magic3 Install"
 msgstr "Magic3 インストール"
+
+#: container/_installBaseWidgetContainer.php:54
+msgid "Version:"
+msgstr "バージョン："
 
 #: container/_installCheckdbWidgetContainer.php:85
 msgid "NOTICE&nbsp;&nbsp;All the existing data cleared."
@@ -54,6 +58,7 @@ msgid "Versionup Type"
 msgstr "バージョンアップ方法"
 
 #: container/_installCheckdbWidgetContainer.php:109
+#: container/_installInitotherWidgetContainer.php:190
 msgid "Details"
 msgstr "説明"
 
@@ -272,7 +277,7 @@ msgid "Failed in copying files."
 msgstr "ファイルコピーに失敗しました"
 
 #: container/_installCopyfileWidgetContainer.php:178
-#: container/_installCopyfileWidgetContainer.php:215
+#: container/_installCopyfileWidgetContainer.php:223
 msgid "Check directory"
 msgstr "ディレクトリチェック"
 
@@ -280,21 +285,21 @@ msgstr "ディレクトリチェック"
 msgid "Existing"
 msgstr "正常"
 
-#: container/_installCopyfileWidgetContainer.php:194
-#: container/_installInitotherWidgetContainer.php:162
-msgid "Database Updated"
-msgstr "ＤＢバージョンアップ完了"
-
-#: container/_installCopyfileWidgetContainer.php:195
-#: container/_installInitotherWidgetContainer.php:163
+#: container/_installCopyfileWidgetContainer.php:190
+#: container/_installInitotherWidgetContainer.php:99
 msgid "Updating database completed."
 msgstr "ＤＢバージョンアップが完了しました"
 
-#: container/_installCopyfileWidgetContainer.php:211
+#: container/_installCopyfileWidgetContainer.php:202
+#: container/_installInitotherWidgetContainer.php:172
+msgid "Database Updated"
+msgstr "ＤＢバージョンアップ完了"
+
+#: container/_installCopyfileWidgetContainer.php:219
 msgid "Copy files?"
 msgstr "ファイルをコピーしますか?"
 
-#: container/_installCopyfileWidgetContainer.php:212
+#: container/_installCopyfileWidgetContainer.php:220
 msgid ""
 "If you copy files form old system to this system, use this operation field "
 "below.<br />If you don't, go next."
@@ -302,43 +307,43 @@ msgstr ""
 "旧システムのファイルをこのシステムへコピーする場合は以下の処理を実行してくだ"
 "さい<br />何も行わない場合は「次へ」進みます。"
 
-#: container/_installCopyfileWidgetContainer.php:213
+#: container/_installCopyfileWidgetContainer.php:221
 msgid "Copy files in old system"
 msgstr "旧システムからファイルをコピー"
 
-#: container/_installCopyfileWidgetContainer.php:214
+#: container/_installCopyfileWidgetContainer.php:222
 msgid "Old System Directory"
 msgstr "旧システムルートディレクトリ"
 
-#: container/_installCopyfileWidgetContainer.php:216
+#: container/_installCopyfileWidgetContainer.php:224
 msgid "Copy Target"
 msgstr "コピー対象"
 
-#: container/_installCopyfileWidgetContainer.php:217
+#: container/_installCopyfileWidgetContainer.php:225
 msgid "Replace resource directory"
 msgstr "リソースディレクトリ(/resource) 置き換え"
 
-#: container/_installCopyfileWidgetContainer.php:218
+#: container/_installCopyfileWidgetContainer.php:226
 msgid "Copy template (difference only)"
 msgstr "テンプレート 差分のみ取得"
 
-#: container/_installCopyfileWidgetContainer.php:219
+#: container/_installCopyfileWidgetContainer.php:227
 msgid "Copy widget (difference only)"
 msgstr "ウィジェット 差分のみ取得"
 
-#: container/_installCopyfileWidgetContainer.php:220
+#: container/_installCopyfileWidgetContainer.php:228
 msgid "Copy files"
 msgstr "ファイルをコピー"
 
-#: container/_installCopyfileWidgetContainer.php:232
+#: container/_installCopyfileWidgetContainer.php:240
 msgid "The root directory in old system not selected."
 msgstr "旧システムのルートディレクトリが設定されていません"
 
-#: container/_installCopyfileWidgetContainer.php:235
+#: container/_installCopyfileWidgetContainer.php:243
 msgid "This system selected."
 msgstr "このシステム自体を指定しています"
 
-#: container/_installCopyfileWidgetContainer.php:237
+#: container/_installCopyfileWidgetContainer.php:245
 msgid "Magic3 system not selected."
 msgstr "Magic3システムを指定していません"
 
@@ -428,39 +433,44 @@ msgstr ""
 "DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファ"
 "イル名: %s"
 
-#: container/_installInitotherWidgetContainer.php:79
+#: container/_installInitotherWidgetContainer.php:80
 msgid "Installing data completed."
 msgstr "データインストール完了しました"
 
-#: container/_installInitotherWidgetContainer.php:81
+#: container/_installInitotherWidgetContainer.php:82
 msgid "Failed in installing data."
 msgstr "データインストールに失敗しました"
 
-#: container/_installInitotherWidgetContainer.php:165
-msgid "Database Created"
-msgstr "ＤＢ構築完了"
-
-#: container/_installInitotherWidgetContainer.php:166
+#: container/_installInitotherWidgetContainer.php:101
 msgid "Creating database completed."
 msgstr "ＤＢの構築が完了しました"
 
-#: container/_installInitotherWidgetContainer.php:176
+#: container/_installInitotherWidgetContainer.php:175
+msgid "Database Created"
+msgstr "ＤＢ構築完了"
+
+#: container/_installInitotherWidgetContainer.php:186
 msgid "Install data?"
 msgstr "データをインストールしますか?"
 
-#: container/_installInitotherWidgetContainer.php:177
+#: container/_installInitotherWidgetContainer.php:187
 msgid "Install Data"
+msgstr "インストールデータ"
+
+#: container/_installInitotherWidgetContainer.php:188
+msgid "Install"
 msgstr "インストール"
 
-#: container/_installInitotherWidgetContainer.php:178
+#: container/_installInitotherWidgetContainer.php:189
 msgid ""
-"If you install demo data, use this operation field below.<br />If you don't, "
-"go next.<br />You can install demo data after installing system at "
-"dministration page (System Administration-Maintenance Database)."
+"If you install simple build site data or demo data, use this operation field "
+"below.<br />If you don't, go next.<br />You can install data after "
+"installing system at administration page (Maintenance - Database)."
 msgstr ""
-"デモ用データをインストールする場合は以下の処理を実行してください<br />何も行"
-"わない場合は「次へ」進みます。<br />インストール終了後も管理機能の「システム"
-"管理」-「DBメンテナンス」からデモ用データのインストールは可能です。"
+"サイト簡易構築用データやデモ用データをインストールする場合は、以下の処理を実"
+"行してください。<br />何も行わない場合は「次へ」進みます。<br />インストール"
+"終了後も管理機能の「メンテナンス」-「DB管理」からデータのインストールは可能で"
+"す。"
 
 #: container/_installInputparamWidgetContainer.php:71
 msgid "Can't use database."
@@ -548,14 +558,10 @@ msgstr "ホスト名"
 msgid "Password"
 msgstr "パスワード"
 
-#: container/_installTopWidgetContainer.php:70
-msgid "Version:"
-msgstr "バージョン："
-
-#: container/_installTopWidgetContainer.php:71
+#: container/_installTopWidgetContainer.php:67
 msgid "Language:"
 msgstr "言語："
 
-#: container/_installTopWidgetContainer.php:72
+#: container/_installTopWidgetContainer.php:68
 msgid "Start Installing"
 msgstr "インストールを開始します"

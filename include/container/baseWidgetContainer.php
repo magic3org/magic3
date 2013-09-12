@@ -1875,6 +1875,16 @@ class BaseWidgetContainer extends Core
 		array_push($this->guideMessage, $msg);
 	}
 	/**
+	 * メッセージテーブルに情報メッセージを設定する
+	 *
+	 * @param string $msg	メッセージ
+	 * @return 				なし
+	 */
+	function setInfoMsg($msg)
+	{
+		array_push($this->infoMessage, $msg);
+	}
+	/**
 	 * メッセージテーブルに成功メッセージを設定する
 	 *
 	 * @param string $msg	メッセージ

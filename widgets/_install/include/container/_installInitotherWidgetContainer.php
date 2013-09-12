@@ -77,7 +77,7 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 			// スクリプト実行
 			if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
 				//$this->setMsg(self::MSG_GUIDANCE, $this->_('Installing data completed.'));		// データインストール完了しました
-				$this->setSuccessMsg($this->_('Installing data completed.'));		// データインストール完了しました
+				$this->setInfoMsg($this->_('Installing data completed.'));		// データインストール完了しました
 			} else {
 				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in installing data.'));// データインストールに失敗しました
 			}
@@ -184,8 +184,9 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 		// テキストをローカライズ
 		$localeText = array();
 		$localeText['msg_install_data'] = $this->_('Install data?');// データをインストールしますか?
-		$localeText['label_install_data'] = $this->_('Install Data');// デモデータインストール
-		$localeText['msg_install_demo_data'] = $this->_('If you install demo data, use this operation field below.<br />If you don\'t, go next.<br />You can install demo data after installing system at dministration page (System Administration-Maintenance Database).');	// デモ用データをインストールする場合は以下の処理を実行してください<br />何も行わない場合は「次へ」進みます。<br />インストール終了後も管理機能の「システム管理」-「DBメンテナンス」からデモ用データのインストールは可能です。
+		$localeText['label_install_data'] = $this->_('Install Data');// インストールデータ
+		$localeText['label_install'] = $this->_('Install');// インストールボタンラベル
+		$localeText['msg_install_demo_data'] = $this->_('If you install simple build site data or demo data, use this operation field below.<br />If you don\'t, go next.<br />You can install data after installing system at administration page (Maintenance - Database).');	// サイト簡易構築用データやデモ用データをインストールする場合は、以下の処理を実行してください。<br />何も行わない場合は「次へ」進みます。<br />インストール終了後も管理機能の「メンテナンス」-「DB管理」からデータのインストールは可能です。
 		$localeText['label_desc'] = $this->_('Details');// [説明]
 		$this->setLocaleText($localeText);
 	}
