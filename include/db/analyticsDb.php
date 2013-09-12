@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: analyticsDb.php 4908 2012-05-17 12:44:08Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/db/baseDb.php');
@@ -134,8 +134,28 @@ class analyticsDb extends BaseDb
 
 					// URLの長さのチェック
 					$rowUpdated = false;		// 更新したかどうか
+
 					$url = $this->makeTruncStr($rows[$j]["al_uri"], self::MAX_URL_LENGTH);
-					if ($url != $rows[$j]["al_uri"]){		// URLが長いときは省略形で登録
+					if (empty($url)){			// URLが空の場合は「/」とみなす
+						$queryStr  = 'SELECT * FROM _analyze_page_view ';
+						$queryStr .=   'WHERE ap_type = ? ';
+						$queryStr .=     'AND ap_url = ? ';
+						$queryStr .=     'AND ap_date = ? ';
+						$queryStr .=     'AND ap_hour = ?';
+						$ret = $this->selectRecord($queryStr, array(0/*すべてのデータ*/, '/', $date, $i), $row);
+						if ($ret){
+							$serial = $row['ap_serial'];
+							$count = $row['ap_count'] + $total;
+					
+							$queryStr  = 'UPDATE _analyze_page_view ';
+							$queryStr .=   'SET ap_count = ? ';
+							$queryStr .=   'WHERE ap_serial = ? ';
+							$ret = $this->execStatement($queryStr, array($count, $serial));
+							if (!$ret) return false;		// エラー発生
+					
+							$rowUpdated = true;		// 更新したかどうか
+						}
+					} else if ($url != $rows[$j]["al_uri"]){		// URLが長いときは省略形で登録
 						$queryStr  = 'SELECT * FROM _analyze_page_view ';
 						$queryStr .=   'WHERE ap_type = ? ';
 						$queryStr .=     'AND ap_url = ? ';
@@ -145,16 +165,17 @@ class analyticsDb extends BaseDb
 						if ($ret){
 							$serial = $row['ap_serial'];
 							$count = $row['ap_count'] + $total;
-							
+						
 							$queryStr  = 'UPDATE _analyze_page_view ';
 							$queryStr .=   'SET ap_count = ? ';
 							$queryStr .=   'WHERE ap_serial = ? ';
 							$ret = $this->execStatement($queryStr, array($count, $serial));
 							if (!$ret) return false;		// エラー発生
-							
+						
 							$rowUpdated = true;		// 更新したかどうか
 						}
 					}
+
 					if (!$rowUpdated){			// データ更新していないとき
 						$queryStr  = 'INSERT INTO _analyze_page_view (';
 						$queryStr .=   'ap_type, ';
@@ -198,7 +219,25 @@ class analyticsDb extends BaseDb
 				// URLの長さのチェック
 				$rowUpdated = false;		// 更新したかどうか
 				$url = $this->makeTruncStr($rows[$j]["al_uri"], self::MAX_URL_LENGTH);
-				if ($url != $rows[$j]["al_uri"]){		// URLが長いときは省略形で登録
+				if (empty($url)){			// URLが空の場合は「/」とみなす
+					$queryStr  = 'SELECT * FROM _analyze_daily_count ';
+					$queryStr .=   'WHERE aa_type = ? ';
+					$queryStr .=     'AND aa_url = ? ';
+					$queryStr .=     'AND aa_date = ? ';
+					$ret = $this->selectRecord($queryStr, array(0/*訪問数*/, '/', $date), $row);
+					if ($ret){
+						$serial = $row['aa_serial'];
+						$count = $row['aa_count'] + $total;
+						
+						$queryStr  = 'UPDATE _analyze_daily_count ';
+						$queryStr .=   'SET aa_count = ? ';
+						$queryStr .=   'WHERE aa_serial = ? ';
+						$ret = $this->execStatement($queryStr, array($count, $serial));
+						if (!$ret) return false;		// エラー発生
+						
+						$rowUpdated = true;		// 更新したかどうか
+					}
+				} else if ($url != $rows[$j]["al_uri"]){		// URLが長いときは省略形で登録
 					$queryStr  = 'SELECT * FROM _analyze_daily_count ';
 					$queryStr .=   'WHERE aa_type = ? ';
 					$queryStr .=     'AND aa_url = ? ';
@@ -232,6 +271,7 @@ class analyticsDb extends BaseDb
 				}
 			}
 		}
+
 		// 一日あたりアクセスポイントごとの集計
 		$params = array();
 		//$queryStr  = 'SELECT COUNT(DISTINCT al_session) AS total,al_uri,al_path FROM _access_log ';
@@ -265,6 +305,7 @@ class analyticsDb extends BaseDb
 				}
 			}
 		}
+
 		// 一日あたりすべてのアクセスポイントの集計
 		// MySQL v5.0.22でエラー発生(2010/12/3)
 		// SQLエラーメッセージ(Mixing of GROUP columns (MIN(),MAX(),COUNT(),...) with no GROUP columns is illegal if there is no GROUP BY clause error code: 42000)
@@ -319,7 +360,25 @@ class analyticsDb extends BaseDb
 				// URLの長さのチェック
 				$rowUpdated = false;		// 更新したかどうか
 				$url = $this->makeTruncStr($rows[$j]["al_uri"], self::MAX_URL_LENGTH);
-				if ($url != $rows[$j]["al_uri"]){		// URLが長いときは省略形で登録
+				if (empty($url)){			// URLが空の場合は「/」とみなす
+					$queryStr  = 'SELECT * FROM _analyze_daily_count ';
+					$queryStr .=   'WHERE aa_type = ? ';
+					$queryStr .=     'AND aa_url = ? ';
+					$queryStr .=     'AND aa_date = ? ';
+					$ret = $this->selectRecord($queryStr, array(1/*訪問者数*/, '/', $date), $row);
+					if ($ret){
+						$serial = $row['aa_serial'];
+						$count = $row['aa_count'] + $total;
+						
+						$queryStr  = 'UPDATE _analyze_daily_count ';
+						$queryStr .=   'SET aa_count = ? ';
+						$queryStr .=   'WHERE aa_serial = ? ';
+						$ret = $this->execStatement($queryStr, array($count, $serial));
+						if (!$ret) return false;		// エラー発生
+						
+						$rowUpdated = true;		// 更新したかどうか
+					}
+				} else if ($url != $rows[$j]["al_uri"]){		// URLが長いときは省略形で登録
 					$queryStr  = 'SELECT * FROM _analyze_daily_count ';
 					$queryStr .=   'WHERE aa_type = ? ';
 					$queryStr .=     'AND aa_url = ? ';
