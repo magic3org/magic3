@@ -19,7 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;	// DB接続オブジェクト
+//	private $sysDb;	// DB接続オブジェクト
 	private $createTableScripts;			// テーブル作成スクリプト
 	private $insertTableScripts;			// データインストールスクリプト
 	const SERVER_ID = 'server_id';
@@ -38,7 +38,7 @@ class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new _installDB();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
+//		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -73,9 +73,9 @@ class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 		$canVerUp = false;
 
 		// DB接続可能なときはDBのバージョンを取得
-		$status = $this->sysDb->getDisplayErrMessage();	// 出力状態を取得
-		$currentVer = $this->sysDb->getSystemConfig(M3_TB_FIELD_DB_VERSION);
-		$this->sysDb->displayErrMessage($status);		// 抑止解除
+		$status = $this->_db->getDisplayErrMessage();	// 出力状態を取得
+		$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+		$this->_db->displayErrMessage($status);		// 抑止解除
 		if (empty($currentVer)) $currentVer = 0;
 		if ($currentVer >= self::FIRST_VER) $canVerUp = true;
 

@@ -1865,12 +1865,24 @@ class BaseWidgetContainer extends Core
 	/**
 	 * メッセージテーブルにガイダンスメッセージを設定する
 	 *
+	 * 廃止予定→setGuideMsg()
+	 *
 	 * @param string $msg	メッセージ
 	 * @return 				なし
 	 */
 	function setGuidanceMsg($msg)
 	{
 		array_push($this->guideMessage, $msg);
+	}
+	/**
+	 * メッセージテーブルに成功メッセージを設定する
+	 *
+	 * @param string $msg	メッセージ
+	 * @return 				なし
+	 */
+	function setSuccessMsg($msg)
+	{
+		array_push($this->successMessage, $msg);
 	}
 	/**
 	 * アプリケーションエラーメッセージを取得
@@ -1895,10 +1907,10 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @return array	ガイダンスメッセージ
 	 */
-	function getGuidanceMsg()
+/*	function getGuidanceMsg()
 	{	
 		return $this->guideMessage;
-	}
+	}*/
 	/**
 	 * メッセージ数を返す
 	 *
@@ -1908,7 +1920,8 @@ class BaseWidgetContainer extends Core
 	function getMsgCount($type = 0)
 	{
 		if ($type == 0){		// すべてのメッセージ数
-			return count($this->errorMessage) + count($this->warningMessage) + count($this->guideMessage);
+			//return count($this->errorMessage) + count($this->warningMessage) + count($this->guideMessage);
+			return count($this->dangerMessage) + count($this->errorMessage) + count($this->warningMessage) + count($this->infoMessage) + count($this->guideMessage) + count($this->successMessage);
 		} else if ($type == self::MSG_APP_ERR){	// アプリケーションエラー
 			return count($this->errorMessage);
 		} else if($type == self::MSG_USER_ERR){	// ユーザ操作のエラー

@@ -76,7 +76,8 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 			
 			// スクリプト実行
 			if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
-				$this->setMsg(self::MSG_GUIDANCE, $this->_('Installing data completed.'));		// データインストール完了しました
+				//$this->setMsg(self::MSG_GUIDANCE, $this->_('Installing data completed.'));		// データインストール完了しました
+				$this->setSuccessMsg($this->_('Installing data completed.'));		// データインストール完了しました
 			} else {
 				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in installing data.'));// データインストールに失敗しました
 			}
@@ -89,8 +90,17 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
 		} else if ($act == 'selectfile'){		// スクリプトファイルを選択
 			$filename = $request->trimValueOf('sample_sql');
+		} else if ($act == 'goback'){		// 「戻り」で画面遷移した場合
 		} else {
-			$this->tmpl->setAttribute('install_msg', 'visibility', 'visible');// テーブル構築完了のメッセージ
+			// リダイレクトで初回遷移時のみメッセージを表示
+			$referer	= $request->trimServerValueOf('HTTP_REFERER');
+			if (!empty($referer)){
+				if ($dbStatus == 'update'){
+					$this->setSuccessMsg($this->_('Updating database completed.'));// ＤＢバージョンアップが完了しました
+				} else {
+					$this->setSuccessMsg($this->_('Creating database completed.'));		// ＤＢの構築が完了しました
+				}
+			}
 		}
 		// サンプルSQLスクリプトディレクトリのチェック
 		$scriptFiles = array();
@@ -160,10 +170,10 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 		// 画面のヘッダ、タイトルを設定
 		if ($dbStatus == 'update'){
 			$this->tmpl->addVar("_widget", "title", $this->_('Database Updated'));		// ＤＢバージョンアップ完了
-			$this->tmpl->addVar("install_msg", "message", $this->_('Updating database completed.'));// ＤＢバージョンアップが完了しました
+//			$this->tmpl->addVar("install_msg", "message", $this->_('Updating database completed.'));// ＤＢバージョンアップが完了しました
 		} else {
 			$this->tmpl->addVar("_widget", "title", $this->_('Database Created'));// ＤＢ構築完了
-			$this->tmpl->addVar("install_msg", "message", $this->_('Creating database completed.'));		// ＤＢの構築が完了しました
+//			$this->tmpl->addVar("install_msg", "message", $this->_('Creating database completed.'));		// ＤＢの構築が完了しました
 			
 			if ($type == 'all'){		// カスタムインストールのときは表示しない
 				$this->tmpl->setAttribute('datainstall_msg', 'visibility', 'visible');// サンプルデータインストール用領域表示

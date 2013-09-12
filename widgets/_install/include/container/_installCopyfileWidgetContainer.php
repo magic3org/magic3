@@ -180,8 +180,16 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 				$msg .= '<b><font color="green">' . $this->_('Existing') . '</font></b>';			// 正常
 				$this->tmpl->addVar("_widget", "check_msg", $msg);
 			}
+		} else if ($act == 'goback'){		// 「戻り」で画面遷移した場合
 		} else {
-			$this->tmpl->setAttribute('install_msg', 'visibility', 'visible');// テーブル構築完了のメッセージ
+//			$this->tmpl->setAttribute('install_msg', 'visibility', 'visible');// テーブル構築完了のメッセージ
+			// リダイレクトで初回遷移時のみメッセージを表示
+			$referer	= $request->trimServerValueOf('HTTP_REFERER');
+			if (!empty($referer)){
+				if ($dbStatus == 'update'){
+					$this->setSuccessMsg($this->_('Updating database completed.'));// ＤＢバージョンアップが完了しました
+				}
+			}
 			
 			// パラメータ初期化
 			$isResourceDir = 1;			// リソースディレクトリをコピー対象とする
@@ -192,7 +200,7 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 		// 画面のヘッダ、タイトルを設定
 		if ($dbStatus == 'update'){
 			$this->tmpl->addVar("_widget", "title", $this->_('Database Updated'));		// ＤＢバージョンアップ完了
-			$this->tmpl->addVar("install_msg", "message", $this->_('Updating database completed.'));			// ＤＢバージョンアップが完了しました
+//			$this->tmpl->addVar("install_msg", "message", $this->_('Updating database completed.'));			// ＤＢバージョンアップが完了しました
 		}
 		$this->tmpl->addVar("_widget", "db_status", $dbStatus);
 		$this->tmpl->addVar("_widget", "root_dir", $rootDir);

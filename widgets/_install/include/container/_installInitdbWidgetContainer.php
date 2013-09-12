@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installInitdbWidgetContainer.php 5931 2013-04-15 14:05:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
@@ -19,7 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;	// DB接続オブジェクト
+//	private $sysDb;	// DB接続オブジェクト
 	private $createTableScripts;			// テーブル作成スクリプト
 	private $insertTableScripts;			// データインストールスクリプト
 	private $updateTableScripts;			// テーブル更新スクリプト
@@ -41,7 +41,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new _installDB();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
+//		$this->sysDb = $this->gInstance->getSytemDbObject();
 		
 		// 実行SQLスクリプトファイルの定義
 /*		$this->createTableScripts = array(	array(	'filename' 		=> 'create_base.sql',					// ファイル名
@@ -172,17 +172,17 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				// 初期値設定
 				$langId = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);
 				$serverId = md5($this->gEnv->getRootUrl() . time());		// サーバID
-				if ($ret) $ret = $this->sysDb->updateSystemConfig(self::CF_SERVER_ID, $serverId);
-				if ($ret) $ret = $this->sysDb->updateSystemConfig(self::CF_SERVER_URL, $this->gEnv->getRootUrl());
-				if ($ret) $ret = $this->sysDb->updateSystemConfig(self::INSTALL_DT, $now);
-				if ($ret) $ret = $this->sysDb->updateSystemConfig(M3_TB_FIELD_DB_UPDATE_DT, $now);
-				//if ($ret) $ret = $this->sysDb->updateSystemConfig(self::WORK_DIR, M3_SYSTEM_WORK_DIR_PATH);// 一時ディレクトリ
-				if ($ret) $ret = $this->sysDb->updateSystemConfig(self::WORK_DIR, $this->gEnv->getWorkDirPath());// 一時ディレクトリ
-				if ($ret) $ret = $this->sysDb->updateSystemConfig(self::DEFAULT_LANG, $langId);// デフォルト言語
+				if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_ID, $serverId);
+				if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_URL, $this->gEnv->getRootUrl());
+				if ($ret) $ret = $this->_db->updateSystemConfig(self::INSTALL_DT, $now);
+				if ($ret) $ret = $this->_db->updateSystemConfig(M3_TB_FIELD_DB_UPDATE_DT, $now);
+				//if ($ret) $ret = $this->_db->updateSystemConfig(self::WORK_DIR, M3_SYSTEM_WORK_DIR_PATH);// 一時ディレクトリ
+				if ($ret) $ret = $this->_db->updateSystemConfig(self::WORK_DIR, $this->gEnv->getWorkDirPath());// 一時ディレクトリ
+				if ($ret) $ret = $this->_db->updateSystemConfig(self::DEFAULT_LANG, $langId);// デフォルト言語
 			}
 			// ##### これ以降、DBへのログ出力可能 #####
 			if ($ret){
-				$currentVer = $this->sysDb->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+				$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 				$msg = $this->_('Database created. Database Version: %s');			// DBを作成しました。 DBバージョン: %s
 				//$this->gOpeLog->writeInfo(__METHOD__, 'DBを作成しました。 DBバージョン: ' . $currentVer, 1001);
 				$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $currentVer), 1001);
@@ -240,7 +240,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 			
 			if ($ret){// 正常終了の場合
 				// DBのバージョン取得
-				$currentVer = $this->sysDb->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+				$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 								
 				if ($isCustomInstall){		// カスタムインストールのとき
 					$type = 'custom';		// カスタムインストールのとき
@@ -340,14 +340,14 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				// 更新日時を設定
 				if ($updateDb){
 					$now = date("Y/m/d H:i:s");	// 現在日時
-					$this->sysDb->updateSystemConfig(M3_TB_FIELD_DB_UPDATE_DT, $now);
+					$this->_db->updateSystemConfig(M3_TB_FIELD_DB_UPDATE_DT, $now);
 				}
 			
 				// システム初期化を不可に設定(インストール終了)
 				$this->gSystem->disableInitSystem();
 			
 				// ログ出力
-				$currentVer = $this->sysDb->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+				$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 				if ($updateDb){		// DB更新処理ありの場合
 					$msg = $this->_('Database updated. Database Version: %s');		// DB更新処理が正常に終了しました。現在のDBバージョン: %s
 					//$this->gOpeLog->writeInfo(__METHOD__, 'DB更新処理が正常に終了しました。現在のDBバージョン: ' . $currentVer, 1000);
@@ -414,14 +414,14 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 			// DBのバージョンをチェックして問題なければ実行
 			if ($fileCheck){
 				// 現在のバージョンを取得
-				$currentVer = $this->sysDb->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+				$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 				if ($foreVer != $currentVer) continue;	// バージョンが異なるときは読みとばす
 			
 				//$ret = $this->gInstance->getDbManager()->execInitScriptFile(self::UPDATE_DIR . '/' . $files[$i], $errors);
 				$ret = $this->gInstance->getDbManager()->execInitScriptFile(self::UPDATE_DIR . '/' . $files[$i], $errors);
 				if ($ret){
 					// 成功の場合はDBのバージョンを更新
-					$this->sysDb->updateSystemConfig(M3_TB_FIELD_DB_VERSION, $nextVer);
+					$this->_db->updateSystemConfig(M3_TB_FIELD_DB_VERSION, $nextVer);
 					
 					// 更新情報をログに残す
 					$msg = $this->_('Database updated. Database Version: from %s to %s');// DBをバージョンアップしました。 DBバージョン: %sから%s
@@ -448,7 +448,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 	function getUpdateScriptCount()
 	{
 		$count = 0;// ファイル数初期化
-		$currentVer = $this->sysDb->getSystemConfig(M3_TB_FIELD_DB_VERSION);// 現在のバージョンを取得
+		$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);// 現在のバージョンを取得
 		
 		// SQLスクリプトディレクトリのチェック
 		$dir = $this->gEnv->getSqlPath() . '/' . self::UPDATE_DIR;

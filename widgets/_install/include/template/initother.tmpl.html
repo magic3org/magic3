@@ -49,12 +49,8 @@ function selectFile(){
 <input type="hidden" name="sample_sql" />
 <h2>{TITLE}</h2>
 <!-- m3:ErrorMessage -->
-<patTemplate:tmpl name="install_msg" visibility="hidden">
-<p>{MESSAGE}</p>
-</patTemplate:tmpl>
 <patTemplate:tmpl name="datainstall_msg" visibility="hidden">
 <p>{_LC_MSG_INSTALL_DEMO_DATA}</p>
-
 <div class="form-group">
 <label class="col-lg-3 control-label">DB</label>
 <div class="col-lg-6">
@@ -72,7 +68,6 @@ function selectFile(){
 <div class="form-group">
 <div class="col-lg-offset-3 col-lg-3"><button class="btn btn-primary" onclick="installSampleData();">{_LC_LABEL_INSTALL_DATA}</button></div>
 </div>
-
 </patTemplate:tmpl>
 </form>
 <p class="bottom_buttons"><button class="btn btn-success" onclick="gonext();">{_LC_LABEL_GO_NEXT}</button></p>
