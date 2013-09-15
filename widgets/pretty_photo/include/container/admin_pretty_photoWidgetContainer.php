@@ -107,6 +107,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		$descs = $request->trimValueOf('item_desc');		// 画像説明
 		$this->css	= $request->valueOf('item_css');		// メニュー用CSS
 		$this->cssId	= $request->trimValueOf('item_css_id');		// CSS用ID
+		$showSocialButton = $request->trimCheckedValueOf('item_show_social_button');		// ソーシャルボタンを表示するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
@@ -131,6 +132,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->imageInfo	= array();
 				$newObj->cssId	= $this->cssId;					// CSS用ID
 				$newObj->css	= $this->css;					// メニューCSS
+				$newObj->showSocialButton	= $showSocialButton;		// ソーシャルボタンを表示するかどうか
 				
 				for ($i = 0; $i < $imageCount; $i++){
 					// パスをマクロ形式に変換
@@ -167,6 +169,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 					$targetObj->imageInfo	= array();
 					$targetObj->cssId	= $this->cssId;					// CSS用ID
 					$targetObj->css		= $this->css;					// メニューCSS
+					$targetObj->showSocialButton	= $showSocialButton;		// ソーシャルボタンを表示するかどうか
 					
 					for ($i = 0; $i < $imageCount; $i++){
 						// パスをマクロ形式に変換
@@ -209,6 +212,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 				$this->imageInfoArray = array();			// 画像情報
 				$this->cssId = $this->createDefaultCssId();	// CSS用ID
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));// デフォルト用のCSSを取得
+				$showSocialButton = '0';		// ソーシャルボタンを表示するかどうか
 			}
 			$this->serialNo = 0;
 		} else {
@@ -220,6 +224,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 					if (!empty($targetObj->imageInfo)) $this->imageInfoArray = $targetObj->imageInfo;			// 画像情報
 					$this->cssId	= $targetObj->cssId;					// CSS用ID
 					$this->css		= $targetObj->css;					// メニューCSS
+					$showSocialButton = $targetObj->showSocialButton;		// ソーシャルボタンを表示するかどうか
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -238,6 +243,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "size",	$size);			// 画像サイズ
 		$this->tmpl->addVar("_widget", "css_id",	$this->cssId);	// CSS用ID
 		$this->tmpl->addVar("_widget", "css",	$this->css);
+		$this->tmpl->addVar("_widget", "show_social_button_checked",	$this->convertToCheckedString($showSocialButton));// ソーシャルボタンを表示するかどうか
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御

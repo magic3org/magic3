@@ -11,24 +11,25 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<ul id="{CSS_ID}" class="gallery clearfix">
-<patTemplate:tmpl name="image_list">
-<li style="list-style:none; background:none;"><a href="{URL}" rel="prettyPhoto[{GROUP_ID}]" title="{DESC}"><img src="{THUMB_URL}" width="{WIDTH}" height="{HEIGHT}" alt="{TITLE}" /></a></li>
-</patTemplate:tmpl>
-</ul>
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
 	$("a[rel^='prettyPhoto[{GROUP_ID}]']").prettyPhoto({
+<patTemplate:tmpl name="social_tool_area" visibility="hidden">		social_tools:false,</patTemplate:tmpl>
 		animationSpeed: 'normal', /* fast/slow/normal */
 		padding: 40, /* padding for each side of the picture */
 		opacity: 0.35, /* Value betwee 0 and 1 */
 		showTitle: true, /* true/false */
 		allowresize: true, /* true/false */
 		counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
-		theme: 'light_rounded' /* light_rounded / dark_rounded / light_square / dark_square */
+		theme: 'light_rounded', /* light_rounded / dark_rounded / light_square / dark_square */
 	});
 });
 //]]>
 </script>
+<ul id="{CSS_ID}" class="gallery clearfix">
+<patTemplate:tmpl name="image_list">
+<li style="list-style:none; background:none;"><a href="{URL}" rel="prettyPhoto[{GROUP_ID}]" title="{DESC}"><img src="{THUMB_URL}" width="{WIDTH}" height="{HEIGHT}" alt="{TITLE}" /></a></li>
+</patTemplate:tmpl>
+</ul>
 </patTemplate:tmpl>

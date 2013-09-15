@@ -135,23 +135,29 @@ $(document).ready(function(){
 	    <div><input type="button" class="button" onclick="selectImage();" value="追加" /></div>
 	    </td>
 	</tr>
-        <tr>
+    <tr>
 	    <td class="table-headside"><span {_HELP_IMAGE_SIZE}>画像サイズ</span></td>
 	    <td colspan="3">
 	    <input type="text" name="item_size" value="{SIZE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />px
 	    </td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_OPTION}>オプション</span></td>
+	    <td colspan="3">
+	    <input type="checkbox" name="item_show_social_button" {SHOW_SOCIAL_BUTTON_CHECKED}/>ソーシャルボタンを表示
+	    </td>
+	</tr>
+    <tr>
 	    <td class="table-headside"><span {_HELP_IMAGE_CSS_ID}>CSS用ID</span></td>
 	    <td colspan="3">{CSS_ID}<input type="hidden" name="item_css_id" value="{CSS_ID}" />
 	    </td>
 	</tr>
-        <tr>
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_IMAGE_CSS}>CSS</span></td>
 	    <td colspan="3"><textarea name="item_css" rows="10" style="width:100%;">{CSS}</textarea>
 	    </td>
 	</tr>
-	<tr class="even">
+	<tr>
 	    <td align="right" colspan="4">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />

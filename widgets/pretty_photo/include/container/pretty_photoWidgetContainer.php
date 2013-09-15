@@ -107,6 +107,7 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 				}
 				$this->css		= $targetObj->css;		// CSS
 				$this->cssId	= $targetObj->cssId;	// CSS用のID
+				$showSocialButton = $targetObj->showSocialButton;		// ソーシャルボタンを表示するかどうか
 			}
 		
 			$this->groupId = $this->gEnv->getCurrentWidgetId() . '_' . $configId . '_' . 'group';				// グループ化用ID
@@ -117,6 +118,7 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 			// 画面に値を埋め込む
 			$this->tmpl->addVar('_widget', 'group_id',	$this->groupId);	// グループID
 			$this->tmpl->addVar("_widget", "css_id",	$this->cssId);		// CSS用ID
+			if (empty($showSocialButton)) $this->tmpl->setAttribute('social_tool_area', 'visibility', 'visible');// ソーシャルボタンを非表示
 		}
 	}
 	/**
