@@ -186,11 +186,11 @@ function m3_openImageFileBrowser()
  * @param function	seturl_callback	コールバック関数
  * @return なし
  */
-function m3OpenFlashFileBrowser()
+function m3OpenFlashFileBrowser(seturl_callback)
 {
 	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
 		$('<div />').dialog({
-			title: "画像を選択",
+			title: "Flashを選択",
 			modal: true,
 			width: "80%",
 			zIndex: 99999,

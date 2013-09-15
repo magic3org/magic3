@@ -25,8 +25,13 @@ function listItem(){
 	return true;
 }
 // ######## ファイルブラウザの設定 ########
+// ファイルブラウザ起動
+function selectImage()
+{
+	m3OpenFlashFileBrowser(SetUrl);
+}
 // ファイルブラウザからの設定用
-function SetUrl(url)
+var SetUrl = function(url)
 {
 	$('#item_flash_url').val(url);
 	
@@ -78,7 +83,7 @@ function SetUrl(url)
         <tr class="even">
 	    <td class="table-headside">Flashファイル</td>
 	    <td colspan="3"><input type="text" id="item_flash_url" name="item_flash_url" value="{FLASH_URL}" size="80" maxlength="120" />
-	    <input type="button" class="button" onclick="m3_openFlashFileBrowser();" value="変更" /></td>
+	    <input type="button" class="button" onclick="selectImage();" value="変更" /></td>
 	</tr>
         <tr>
 	    <td class="table-headside">サイズ</td>

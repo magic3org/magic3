@@ -29,7 +29,6 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 	private $cssId;			// CSS用ID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_IMAGE_SIZE = 60;		// デフォルトのサムネールサイズ
-	const FILE_BROWSER_PATH			= '/elfinder-2.0/php/connector.php';		// ファイルブラウザのパス
 	
 	/**
 	 * コンストラクタ
@@ -240,11 +239,6 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "css_id",	$this->cssId);	// CSS用ID
 		$this->tmpl->addVar("_widget", "css",	$this->css);
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
-		
-		
-		$connectorUrl = $this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_BROWSER_PATH . '?dirtype=image');
-		$this->tmpl->addVar('_widget', 'url', $connectorUrl);	// ファイルブラウザ接続先URL
-		$this->tmpl->addVar('_widget', 'lang', $this->langId);		// 表示言語
 		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
