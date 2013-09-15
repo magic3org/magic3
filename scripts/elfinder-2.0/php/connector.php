@@ -35,6 +35,20 @@ function access($attr, $path, $data, $volume) {
 		:  null;                                    // else elFinder decide it itself
 }
 
+// ディレクトリ参照範囲を制限
+debug($gRequestManager->trimServerValueOf('REQUEST_URI'));
+
+$dirType = $gRequestManager->trimValueOf('dirtype');
+if (!empty($dirType) && !in_array($dirType, array('image', 'flash'))){
+	$gOpeLogManager->writeUserAccess(__METHOD__, 'ファイルブラウザへの不正なパラメータを検出しました。dirtype=' . $dirType , 3001, 'アクセスをブロックしました。');
+	exit(0);
+}
+$path = $gEnvManager->getResourcePathForUser();
+$url = $gEnvManager->getRelativeResourcePathToDocumentRootForUser();
+if (!empty($dirType)){
+	$path .= '/' . $dirType;
+	$url .= '/' . $dirType;
+}
 
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
@@ -45,8 +59,8 @@ $opts = array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
 //			'path'          => '../files/',         // path to files (REQUIRED)
 //			'URL'           => dirname($_SERVER['PHP_SELF']) . '/../files/', // URL to files (REQUIRED)
-			'path'          => $gEnvManager->getResourcePathForUser(),         // path to files (REQUIRED)
-			'URL'           => $gEnvManager->getRelativeResourcePathToDocumentRootForUser(), // URL to files (REQUIRED)
+			'path'          => $path,		// path to files (REQUIRED)
+			'URL'           => $url,		// URL to files (REQUIRED)
 			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
 		)
 	)

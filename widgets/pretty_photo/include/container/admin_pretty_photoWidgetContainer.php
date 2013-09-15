@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_pretty_photoWidgetContainer.php 3024 2010-04-12 07:32:38Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -19,10 +19,9 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/pretty_photoDb.php');
 class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
-	private $langId;
+	private $langId;		// 言語ID
 	private $configId;		// 定義ID
 	private $paramObj;		// パラメータ保存用オブジェクト
 	private $imageInfoArray = array();			// 画像情報
@@ -30,6 +29,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 	private $cssId;			// CSS用ID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_IMAGE_SIZE = 60;		// デフォルトのサムネールサイズ
+	const FILE_BROWSER_PATH			= '/elfinder-2.0/php/connector.php';		// ファイルブラウザのパス
 	
 	/**
 	 * コンストラクタ
@@ -41,7 +41,9 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new pretty_photoDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
+		
+		// 初期値を取得
+		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -92,7 +94,6 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
 		
 		$userId		= $this->gEnv->getCurrentUserId();
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		$this->configId = $request->trimValueOf('item_id');		// 定義ID
@@ -240,6 +241,11 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "css",	$this->css);
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
+		
+		$connectorUrl = $this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_BROWSER_PATH . '?dirtype=image');
+		$this->tmpl->addVar('_widget', 'url', $connectorUrl);	// ファイルブラウザ接続先URL
+		$this->tmpl->addVar('_widget', 'lang', $this->langId);		// 表示言語
+		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
@@ -358,7 +364,6 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
 		
 		$userId		= $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 		
 		if ($act == 'delete'){		// メニュー項目の削除
@@ -414,7 +419,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 			// 使用数
 			$defCount = 0;
 			if (!empty($id)){
-				$defCount = $this->sysDb->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
+				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
 			}
 			$operationDisagled = '';
 			if ($defCount > 0) $operationDisagled = 'disabled';

@@ -312,7 +312,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 					self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 					self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
 					self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
-																'css'		=> array(self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS, self::ELFINDER_THEME_CSS)),
+																'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS)),	// テーマは最初に読み込む
 					self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
 /*					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																'css'		=> array(self::BOOTSTRAP_CSS,

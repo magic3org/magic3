@@ -1,6 +1,18 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
-<!--
+//<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	document.main.imagecount.value = $('#image_list').find('.dragRow').length;
@@ -34,10 +46,10 @@ function delImage(lineObj){
 // ファイルブラウザ起動
 function selectImage()
 {
-	m3_openImageFileBrowser();
+	m3OpenImageFileBrowser(SetUrl);
 }
 // ファイルブラウザからの設定用
-function SetUrl(url)
+var SetUrl = function(url)
 {
 	var params = url.split('/');
 	var filename = params[params.length -1];
@@ -68,7 +80,7 @@ function setupImageList()
 $(document).ready(function(){
 	setupImageList();
 });
-// -->
+//]]>
 </script>
 <div align="center">
 <br />
@@ -80,8 +92,8 @@ $(document).ready(function(){
 <input type="hidden" name="imagecount" />
 <!-- m3:PostParam -->
 <table width="90%">
-<tr><td><span {_HELP_IMAGE_DETAIL}><label>設定詳細</label></span></td>
-<td align="right"><span {_HELP_IMAGE_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="一覧" /></span>
+<tr><td><span {_HELP_IMAGE_DETAIL}><label>プリティフォト設定</label></span></td>
+<td align="right"><span {_HELP_IMAGE_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
 </td></tr>
 <tr><td colspan="2">
 
