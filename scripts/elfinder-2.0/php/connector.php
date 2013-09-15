@@ -1,14 +1,28 @@
 <?php
-// ########## Magic3ƒAƒNƒZƒX§Œä(ŠJŽn) ##########
+/**
+ * index.php
+ *
+ * PHP versions 5
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     å¹³ç”°ç›´æ¯…(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(é–‹å§‹) ##########
 require_once('../../../include/global.php');
 
-if (!$gAccessManager->loginedByUser()){		// ƒƒOƒCƒ“’†‚Ìƒ†[ƒU‚ÍƒAƒNƒZƒX‚ð‹–‰Â
+if (!$gAccessManager->loginedByUser()){		// ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã®ãƒ¦ãƒ¼ã‚¶ã¯ã‚¢ã‚¯ã‚»ã‚¹ã‚’è¨±å¯
 	echo 'Access error: access denied.';
 
-	$gOpeLogManager->writeUserAccess(__METHOD__, 'ƒtƒ@ƒCƒ‹ƒuƒ‰ƒEƒU‚Ö‚Ì•s³‚ÈƒAƒNƒZƒX‚ðŒŸo‚µ‚Ü‚µ‚½BƒƒOƒCƒ“‚È‚µ', 3001, 'ƒAƒNƒZƒX‚ðƒuƒƒbƒN‚µ‚Ü‚µ‚½B');
+	$gOpeLogManager->writeUserAccess(__METHOD__, 'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ–ãƒ©ã‚¦ã‚¶ã¸ã®ä¸æ­£ãªã‚¢ã‚¯ã‚»ã‚¹ã‚’æ¤œå‡ºã—ã¾ã—ãŸã€‚ãƒ­ã‚°ã‚¤ãƒ³ãªã—', 3001, 'ã‚¢ã‚¯ã‚»ã‚¹ã‚’ãƒ–ãƒ­ãƒƒã‚¯ã—ã¾ã—ãŸã€‚');
 	exit(0);
 }
-// ########## Magic3ƒAƒNƒZƒX§Œä(I—¹) ##########
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(çµ‚äº†) ##########
 //error_reporting(0); // Set E_ALL for debuging
 
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
@@ -19,7 +33,6 @@ include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSyste
 // include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeMySQL.class.php';
 // Required for FTP connector support
 // include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeFTP.class.php';
-
 
 /**
  * Simple function to demonstrate how to control file access using "accessControl" callback.
@@ -35,12 +48,10 @@ function access($attr, $path, $data, $volume) {
 		:  null;                                    // else elFinder decide it itself
 }
 
-// ƒfƒBƒŒƒNƒgƒŠŽQÆ”ÍˆÍ‚ð§ŒÀ
-debug($gRequestManager->trimServerValueOf('REQUEST_URI'));
-
+// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå‚ç…§ç¯„å›²ã‚’åˆ¶é™
 $dirType = $gRequestManager->trimValueOf('dirtype');
 if (!empty($dirType) && !in_array($dirType, array('image', 'flash'))){
-	$gOpeLogManager->writeUserAccess(__METHOD__, 'ƒtƒ@ƒCƒ‹ƒuƒ‰ƒEƒU‚Ö‚Ì•s³‚Èƒpƒ‰ƒ[ƒ^‚ðŒŸo‚µ‚Ü‚µ‚½Bdirtype=' . $dirType , 3001, 'ƒAƒNƒZƒX‚ðƒuƒƒbƒN‚µ‚Ü‚µ‚½B');
+	$gOpeLogManager->writeUserAccess(__METHOD__, 'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ–ãƒ©ã‚¦ã‚¶ã¸ã®ä¸æ­£ãªãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ¤œå‡ºã—ã¾ã—ãŸã€‚dirtype=' . $dirType , 3001, 'ã‚¢ã‚¯ã‚»ã‚¹ã‚’ãƒ–ãƒ­ãƒƒã‚¯ã—ã¾ã—ãŸã€‚');
 	exit(0);
 }
 $path = $gEnvManager->getResourcePathForUser();
