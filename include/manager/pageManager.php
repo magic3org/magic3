@@ -88,6 +88,7 @@ class PageManager extends Core
 	private $optionTemplateId;			// 追加設定するテンプレートID
 	private $isContentGooglemaps;		// コンテンツにGoogleマップが含むかどうか
 	private $useBootstrap;				// Bootstrapを使用するかどうか
+	private $isHtml5;					// HTML5で出力するかどうか
 	const CONFIG_KEY_HEAD_TITLE_FORMAT = 'head_title_format';		// ヘッダ作成用フォーマット
 	const ADMIN_WIDGET_ID = 'admin_main';		// 管理用ウィジェットのウィジェットID
 	//const CONTENT_TYPE_WIKI = 'wiki';		// ページのコンテンツタイプ(Wiki)
@@ -754,6 +755,15 @@ class PageManager extends Core
 	function getUseBootstrap()
 	{
 		return $this->useBootstrap;				// Bootstrapを使用するかどうか
+	}
+	/**
+	 * HTML5を使用に設定
+	 *
+	 * @return 				なし
+	 */
+	function setHtml5()
+	{
+		$this->isHtml5 = true;					// HTML5で出力するかどうか
 	}
 	/**
 	 * ページ作成処理を中断するかどうかを取得
@@ -2059,12 +2069,12 @@ class PageManager extends Core
 		$openBy = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$task = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 
-		$isHtml5 = false;		// HTML5で出力するかどうか
+//		$isHtml5 = false;		// HTML5で出力するかどうか
 		$tempVer = $gEnvManager->getCurrentTemplateType();		// テンプレートタイプを取得(0=デフォルト(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5)
-		if (intval($tempVer) >= 2) $isHtml5 = true;
-
+		if (intval($tempVer) >= 2) $this->isHtml5 = true;		// HTML5で出力するかどうか				
+		
 		// DOCTYPEの設定
-		if ($isHtml5){
+		if ($this->isHtml5){
 			echo '<!DOCTYPE html>' . M3_NL;
 			echo '<html dir="ltr" lang="' . $gEnvManager->getCurrentLanguage() . '">' . M3_NL;
 			echo '<head>' . M3_NL;
@@ -2095,7 +2105,7 @@ class PageManager extends Core
 		// ##### テンプレートのCSSの読み込み #####
 		// テンプレートは管理用テンプレートに固定されている
 		$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
-		if ($isHtml5){
+		if ($this->isHtml5){
 			echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/style.css" media="screen">' . M3_NL;
     		echo '<!--[if IE]><link rel="stylesheet" href="' . $curTemplateUrl . '/css/iestyles.css" media="screen"><![endif]-->' . M3_NL;
 			echo '<!--[if lt IE 9]><script src="' . $curTemplateUrl . '/html5shiv.js"></script><![endif]-->' . M3_NL;
@@ -2418,19 +2428,19 @@ class PageManager extends Core
 			// サイト構築エンジン
 			echo '<meta name="generator" content="' . M3_SYSTEM_NAME . ' ver.' . M3_SYSTEM_VERSION . ' - ' . M3_SYSTEM_DESCRIPTION . '" />' . M3_NL;
 		} else {		// PC用サイト、管理用サイト、スマートフォン用サイトのとき
-			$isHtml5 = false;		// HTML5で出力するかどうか
+//			$isHtml5 = false;		// HTML5で出力するかどうか
 			if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォン用サイトのときはHTML5で設定
-				$isHtml5 = true;
+				$this->isHtml5 = true;
 			} else {
 				$tempVer = $gEnvManager->getCurrentTemplateType();		// テンプレートタイプを取得(0=デフォルト(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5)
-				if (intval($tempVer) >= 2) $isHtml5 = true;
+				if (intval($tempVer) >= 2) $this->isHtml5 = true;
 			}
 			
 			// ********** メタタグの設定 **********
 	
 			// キャラクターセット
 			//if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォン用サイトのときはHTML5で設定
-			if ($isHtml5){
+			if ($this->isHtml5){
 				//echo '<meta http-equiv="content-type" content="text/html; charset=' . M3_HTML_CHARSET .'" />' . M3_NL;
 				echo '<meta charset="' . M3_HTML_CHARSET . '">' . M3_NL;
 			} else {

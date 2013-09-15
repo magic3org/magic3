@@ -30,6 +30,7 @@ class admin_installFrameContainer extends BaseFrameContainer
 		parent::__construct();
 		
 		$gPageManager->useBootstrap();			// Bootstrapを使用
+		$gPageManager->setHtml5();			// HTML5で出力するかどうか
 	}
 	/**
 	 * フレーム単位のアクセス制御

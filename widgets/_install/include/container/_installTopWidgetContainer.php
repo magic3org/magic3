@@ -64,7 +64,7 @@ class _installTopWidgetContainer extends _installBaseWidgetContainer
 		
 		// テキストをローカライズ
 		$localeText = array();
-		$localeText['label_language'] = $this->_('Language:');
+		$localeText['label_language'] = $this->_('Language');
 		$localeText['msg_install'] = $this->_('Start Installing');		// インストール開始のメッセージ
 		$this->setLocaleText($localeText);
 	}

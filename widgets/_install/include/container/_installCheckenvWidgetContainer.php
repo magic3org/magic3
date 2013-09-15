@@ -122,12 +122,12 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 		$this->tmpl->addVar("_widget","current_memory_limit", $data);
 		
 		// セーフモード
-		$data = '<b><font color="green">' . $this->_('off(encouraged)') . '</font></b>';
-		//$data = '<br />';
+		//$data = '<b><font color="green">' . $this->_('off(encouraged)') . '</font></b>';
+		$data = '<b><font color="green">off</font></b>';
 		$this->tmpl->addVar("_widget","config_safe_mode", $data);
 		if (ini_get('safe_mode')){
-			//$data = '<b><font color="red">on</font></b>';
-			$data = '<b><font color="green">on</font></b>';
+			$data = '<b><font color="red">on</font></b>';
+			//$data = '<b><font color="green">on</font></b>';
 		} else {
 			$data = '<b><font color="green">off</font></b>';
 		}

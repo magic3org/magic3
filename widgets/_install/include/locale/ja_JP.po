@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-12 21:14+0900\n"
-"PO-Revision-Date: 2013-09-12 21:14+0900\n"
+"POT-Creation-Date: 2013-09-13 07:43+0900\n"
+"PO-Revision-Date: 2013-09-13 07:43+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -99,10 +99,6 @@ msgstr "5.1.0 以上"
 #: container/_installCheckenvWidgetContainer.php:113
 msgid "bytes(encouraged)"
 msgstr "バイト以上を奨励"
-
-#: container/_installCheckenvWidgetContainer.php:125
-msgid "off(encouraged)"
-msgstr "offを奨励"
 
 #: container/_installCheckenvWidgetContainer.php:170
 msgid "PDO not installed"
@@ -559,9 +555,12 @@ msgid "Password"
 msgstr "パスワード"
 
 #: container/_installTopWidgetContainer.php:67
-msgid "Language:"
-msgstr "言語："
+msgid "Language"
+msgstr "言語"
 
 #: container/_installTopWidgetContainer.php:68
 msgid "Start Installing"
 msgstr "インストールを開始します"
+
+#~ msgid "off(encouraged)"
+#~ msgstr "offを奨励"

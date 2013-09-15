@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installWidgetContainer.php 3768 2010-11-04 12:28:50Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
@@ -49,6 +49,7 @@ class _installWidgetContainer extends _installBaseWidgetContainer
 			case 'checkdb';		// データベースバージョンチェック
 			case 'initdb';		// データベース初期化画面
 			case 'initother';		// その他初期化画面
+			case 'inputoption';		// 追加データ入力
 			case 'copyfile';		// 旧システムのファイルをコピー
 			case 'complete';		// インストール完了
 				break;
