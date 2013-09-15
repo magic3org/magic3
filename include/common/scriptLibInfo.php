@@ -32,6 +32,7 @@ class ScriptLibInfo
 	const LIB_WYSIWYG_EDITOR		= 'wysiwyg_editor';			// LIB_FCKEDITORまたはLIB_CKEDITOR
 	const LIB_FCKEDITOR				= 'fckeditor';
 	const LIB_CKEDITOR				= 'ckeditor';
+	const LIB_ELFINDER				= 'elfinder';
 	const LIB_MD5					= 'md5';
 	const LIB_SWFOBJECT				= 'swfobject';
 	const LIB_BOOTSTRAP				= 'bootstrap';
@@ -196,6 +197,11 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
 	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
 	const CKEDITOR_FILENAME			= 'ckeditor4.2.0/ckeditor.js';				// CKEditor
+	const ELFINDER_FILENAME			= 'elfinder-2.0/js/elfinder.min.js';		// elFinder
+	const ELFINDER_LANG_FILENAME	= 'elfinder-2.0/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER_CSS				= 'elfinder-2.0/css/elfinder.min.css';		// elFinder CSS
+	const ELFINDER_OPTION_CSS		= 'elfinder-2.0/css/theme.css';				// elFinder CSS
+	const ELFINDER_THEME_CSS		= 'elfinder-2.0/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
 /*
@@ -305,6 +311,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 		$libs = array(self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
 					self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 					self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
+					self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
+																'css'		=> array(self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS, self::ELFINDER_THEME_CSS)),
 					self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
 /*					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																'css'		=> array(self::BOOTSTRAP_CSS,

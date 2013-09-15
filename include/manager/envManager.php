@@ -579,19 +579,22 @@ class EnvManager extends Core
 		return $this->currentDomainRootUrl . '/ui/themes';
 	}
 	/**
-	 * 管理用ディレクトリへのパスを取得
+	 * 管理用ディレクトリへのURLパスを取得
+	 *
+	 * @param bool $removeAdminDir		「admin」ディレクトリ名を削除するかどうか
+	 * @return string					管理用ディレクトリへのURLパス
 	 */
-	public function getAdminUrl()
+	public function getAdminUrl($removeAdminDir = false)
 	{
 		static $url;
 		
 		if (!isset($url)){
-			$url = M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_ADMIN;
-			if ($this->useSslAdmin){
-				$url = $this->getSslRootUrl() . '/' . M3_DIR_NAME_ADMIN;
-			}
+			$url = M3_SYSTEM_ROOT_URL;
+			if ($this->useSslAdmin) $url = $this->getSslRootUrl();
 		}
-		return $url;
+		$destUrl = $url;
+		if (!$removeAdminDir) $destUrl .= '/' . M3_DIR_NAME_ADMIN;
+		return $destUrl;
 	}
 	/**
 	 * システムのデフォルトindexのURLを取得

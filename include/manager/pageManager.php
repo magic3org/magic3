@@ -789,7 +789,7 @@ class PageManager extends Core
 	/**
 	 * CSSファイルの追加
 	 *
-	 * @param string $path	追加するファイルのパス(「ルート/scripts」ディレクトリからの相対パスで指定する)
+	 * @param string $path	追加するファイルのパス(「ルート/scripts」ディレクトリからの相対パスまたは絶対パス(scriptディレクトリ以外の場合)で指定する)
 	 * @return 				なし
 	 */
 	function addAdminCssFile($path)
@@ -1332,7 +1332,8 @@ class PageManager extends Core
 						if (strncmp($lib, 'jquery-ui.', 10) == 0){		// jQuery UIのwidgetsまたはeffectsのとき
 							// jQueryUIテーマを追加
 							if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
-								$this->addHeadCssFile($this->getAdminDefaultThemeUrl());		// CSS追加
+								//$this->addHeadCssFile($this->getAdminDefaultThemeUrl());		// CSS追加
+								$this->addAdminCssFile($this->getAdminDefaultThemeUrl());		// CSS追加(絶対パス)
 								$this->outputTheme = true;
 							}
 						}
@@ -2506,7 +2507,12 @@ class PageManager extends Core
 			$count = count($this->defaultAdminCssFiles);
 			for ($i = 0; $i < $count; $i++){
 				// CSSへのURLを作成
-				$cssURL = $scriptsUrl . '/' . $this->defaultAdminCssFiles[$i];
+				$cssFilename = $this->defaultAdminCssFiles[$i];
+				if (strncasecmp($cssFilename, 'http://', 7) == 0 || strncasecmp($cssFilename, 'https://', 8) == 0){
+					$cssURL = $cssFilename;
+				} else {
+					$cssURL = $scriptsUrl . '/' . $cssFilename;
+				}
 				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 			}
 			return $replaceStr;
@@ -2682,7 +2688,13 @@ class PageManager extends Core
 					$count = count($this->defaultAdminCssFiles);
 					for ($i = 0; $i < $count; $i++){
 						// CSSへのURLを作成
-						$cssURL = $scriptsUrl . '/' . $this->defaultAdminCssFiles[$i];
+						//$cssURL = $scriptsUrl . '/' . $this->defaultAdminCssFiles[$i];
+						$cssFilename = $this->defaultAdminCssFiles[$i];
+						if (strncasecmp($cssFilename, 'http://', 7) == 0 || strncasecmp($cssFilename, 'https://', 8) == 0){
+							$cssURL = $cssFilename;
+						} else {
+							$cssURL = $scriptsUrl . '/' . $cssFilename;
+						}
 						$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 					}
 				}
@@ -4816,7 +4828,8 @@ class PageManager extends Core
 	 */	
 	function getAdminDefaultThemeUrl()
 	{
-		$themeFile = $this->gEnv->getRootUrl() . self::DEFAULT_THEME_DIR . $this->gSystem->adminDefaultTheme() . '/'. self::THEME_CSS_FILE;
+//		$themeFile = $this->gEnv->getRootUrl() . self::DEFAULT_THEME_DIR . $this->gSystem->adminDefaultTheme() . '/'. self::THEME_CSS_FILE;
+		$themeFile = $this->gEnv->getAdminUrl(true/*「admin」削除*/) . self::DEFAULT_THEME_DIR . $this->gSystem->adminDefaultTheme() . '/'. self::THEME_CSS_FILE;
 		return $themeFile;
 	}
 	/**
