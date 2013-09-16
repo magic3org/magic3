@@ -26,7 +26,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'admin_main';
 INSERT INTO _widgets
 (wd_id,        wd_name,      wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin_main', '管理用画面', true,     '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'pagedef=jquery-ui.tabs;pagedef_mobile=jquery-ui.tabs;pagedef_smartphone=jquery-ui.tabs;menudef=jquery.jstree;analyzegraph=jquery.jqplot;adjustwidget=jquery-ui.tabs,wysiwyg_editor;filebrowser=jquery-ui.dialog,jquery-ui.slider;', false,        false,       false,        true,          false, true, '2013-03-04', now(),now());
+('admin_main', '管理用画面', true,     '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'pagedef=jquery-ui.tabs;pagedef_mobile=jquery-ui.tabs;pagedef_smartphone=jquery-ui.tabs;menudef=jquery.jstree;analyzegraph=jquery.jqplot;adjustwidget=jquery-ui.tabs,wysiwyg_editor;filebrowser=elfinder;', false,        false,       false,        true,          false, true, '2013-03-04', now(),now());
 DELETE FROM _widgets WHERE wd_id = 'admin/analytics';
 INSERT INTO _widgets
 (wd_id,             wd_name,            wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -156,7 +156,7 @@ INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author,
 ('youtube2',     'YouTube2',           'YOUT', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'YouTubeの投稿動画を表示。',         false,           false,       true,         true,        true,        false,               true,true,           0, 1, 1, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'flash';
 INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('flash',     'Flash',           '', '1.1.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Flashファイルを表示。',         'jquery-ui.dialog,jquery-ui.slider,elfinder', true,         true,        true,        false,               true,true,           0, 1, 1, now(), now());
+('flash',     'Flash',           '', '1.1.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Flashファイルを表示。',         'elfinder', true,         true,        true,        false,               true,true,           0, 1, 1, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'release_info';
 INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('release_info',               'Magic3リリース情報',                   'RINF', '1.0.0',  '',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Magic3の最新リリース情報を表示。',      false,           false,       true,         true,        false,        false,               false,true,           0, 1, -1, now(), now());
@@ -206,7 +206,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'pretty_photo';
 INSERT INTO _widgets
 (wd_id,          wd_name,          wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,  wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('pretty_photo', 'プリティフォト', '2.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'サムネール表示した画像を拡大します。', 'jquery.prettyphoto', 'jquery.tablednd,jquery.prettyphoto,jquery-ui.dialog,jquery-ui.slider,elfinder',               true,         true,        true,         true,                                true,                true,              0,  3,             1, '2013-09-15', now(),         now());
+('pretty_photo', 'プリティフォト', '2.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'サムネール表示した画像を拡大します。', 'jquery.prettyphoto', 'jquery.tablednd,jquery.prettyphoto,elfinder',               true,         true,        true,         true,                                true,                true,              0,  3,             1, '2013-09-15', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'css_add';
 INSERT INTO _widgets
 (wd_id,   wd_name, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES

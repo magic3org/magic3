@@ -438,6 +438,19 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 		return $libs;
 	}
 	/**
+	 * 依存ライブラリ取得
+	 *
+	 * @param $string $lib	ライブラリID
+	 * @return array		ライブラリ
+	 */
+	static function getDependentLib($lib)
+	{
+		// ##### 依存ライブラリ情報 #####
+		static $dependentLib = array(self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER));
+		
+		return $dependentLib[$lib];
+	}
+	/**
 	 * jQuery UIライブラリ情報取得
 	 *
 	 * @return array		ライブラリ情報

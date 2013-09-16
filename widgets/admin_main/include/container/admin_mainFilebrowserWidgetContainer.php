@@ -27,12 +27,11 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	const FILEBROWSER_CSS_FILE		= '/elfinder-2.0-rc1/css/elfinder.min.css';		// ファイルブラウザelfinder用CSSファイル
 	const FILEBROWSER_PLUS_CSS_FILE	= '/elfinder-2.0-rc1/css/theme.css';		// ファイルブラウザelfinder用追加CSSファイル*/
 	const FILE_BROWSER_PATH			= '/elfinder-2.0/php/connector.php';		// ファイルブラウザのパス
-	const FILEBROWSER_SCRIPT_FILE	= '/elfinder-2.0/js/elfinder.min.js';	// ファイルブラウザelfinderスクリプトファイル
-//	const FILEBROWSER_SCRIPT_FILE	= '/elfinder-2.0/js/elfinder.full.js';	// ファイルブラウザelfinderスクリプトファイル
-	const FILEBROWSER_LANG_FILE		= '/elfinder-2.0/js/i18n/elfinder.ja.js';		// ファイルブラウザelfinder言語ファイル
-	const FILEBROWSER_CSS_FILE		= '/elfinder-2.0/css/elfinder.min.css';		// ファイルブラウザelfinder用CSSファイル
-	const FILEBROWSER_PLUS_CSS_FILE	= '/elfinder-2.0/css/theme.css';		// ファイルブラウザelfinder用追加CSSファイル
-	const DEFAULT_THEME_CSS_FILE	= '/smoothness/jquery-ui.custom.css';		// テーマファイル
+//	const FILEBROWSER_SCRIPT_FILE	= '/elfinder-2.0/js/elfinder.min.js';	// ファイルブラウザelfinderスクリプトファイル
+//	const FILEBROWSER_LANG_FILE		= '/elfinder-2.0/js/i18n/elfinder.ja.js';		// ファイルブラウザelfinder言語ファイル
+//	const FILEBROWSER_CSS_FILE		= '/elfinder-2.0/css/elfinder.min.css';		// ファイルブラウザelfinder用CSSファイル
+//	const FILEBROWSER_PLUS_CSS_FILE	= '/elfinder-2.0/css/theme.css';		// ファイルブラウザelfinder用追加CSSファイル
+//	const DEFAULT_THEME_CSS_FILE	= '/smoothness/jquery-ui.custom.css';		// テーマファイル
 	const DIALOG_FIX_CSS 			= 'body { margin: 0; } #elfinder { border: none; } .elfinder-toolbar, .elfinder-statusbar { border-radius: 0 !important; }';
 	
 	/**
@@ -91,13 +90,13 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	 * @param object         $param			任意使用パラメータ。
 	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
 	 */
-	function _addCssFileToHead($request, &$param)
+/*	function _addCssFileToHead($request, &$param)
 	{
 		return array($this->getUrl($this->gEnv->getScriptsUrl() . self::FILEBROWSER_CSS_FILE),
 					$this->getUrl($this->gEnv->getScriptsUrl() . self::FILEBROWSER_PLUS_CSS_FILE),
 					$this->getUrl($this->gEnv->getAdminDefaultThemeUrl()),			// テンプレートの読み込み順調整のためダミーでデフォルトテンプレートを読み込ませる
 					$this->getUrl($this->gEnv->getThemesUrl() . self::DEFAULT_THEME_CSS_FILE));		// 「smoothness」テンプレート
-	}
+	}*/
 	/**
 	 * JavascriptファイルをHTMLヘッダ部に設定
 	 *
@@ -108,12 +107,12 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	 * @param object         $param			任意使用パラメータ。
 	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
 	 */
-	function _addScriptFileToHead($request, &$param)
+/*	function _addScriptFileToHead($request, &$param)
 	{
 		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . self::FILEBROWSER_SCRIPT_FILE),
 							$this->getUrl($this->gEnv->getScriptsUrl() . self::FILEBROWSER_LANG_FILE));
 		return $scriptArray;
-	}
+	}*/
 	/**
 	 * CSSデータをHTMLヘッダ部に設定
 	 *

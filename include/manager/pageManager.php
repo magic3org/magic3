@@ -1326,7 +1326,35 @@ class PageManager extends Core
 				$libsArray = explode(',', $libs);
 				for ($j = 0; $j < count($libsArray); $j++){
 					$lib = strtolower(trim($libsArray[$j]));// 小文字に変換
+
 					if (isset($this->libFiles[$lib])){		// ライブラリが存在するとき
+						// 依存ライブラリを取得
+						if (strcmp($lib, 'elfinder') == 0){		// elFinderを使用する場合
+							// jQuery UIライブラリを追加
+							$dependentLib = ScriptLibInfo::getDependentLib($lib);
+							for ($l = 0; $l < count($dependentLib); $l++){
+								$addLib = $dependentLib[$l];
+
+								// ライブラリのファイルを追加
+								if (isset($this->libFiles[$addLib]['script'])){
+									$scriptFiles = $this->libFiles[$addLib]['script'];
+									for ($m = 0; $m < count($scriptFiles); $m++){
+										$this->addAdminScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
+									}
+								}
+								if (isset($this->libFiles[$addLib]['css'])){
+									$cssFiles = $this->libFiles[$addLib]['css'];
+									for ($m = 0; $m < count($cssFiles); $m++){
+										$this->addAdminCssFile($cssFiles[$m]);		// 通常機能用のCSS追加
+									}
+								}
+							}
+							// jQueryUIテーマを追加
+							if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
+								$this->addAdminCssFile($this->getAdminDefaultThemeUrl());		// CSS追加(絶対パス)
+								$this->outputTheme = true;
+							}
+						}
 						// Javascript追加
 						if (isset($this->libFiles[$lib]['script'])){
 							$scriptFiles = $this->libFiles[$lib]['script'];
