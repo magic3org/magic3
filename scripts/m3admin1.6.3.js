@@ -129,35 +129,31 @@ function m3ShowPreviewWindow(type, url)
  */
 function m3OpenImageFileBrowser(seturl_callback)
 {
-	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
-		$('<div />').dialog({
-			title: "画像を選択",
-			modal: true,
-			width: "80%",
-			zIndex: 99999,
-			open: function(){
-				$(this).parent().css("padding", "0px");
-				$(this).css("padding", "0px")
-			},
-			create: function(event, ui){
-				$(this).elfinder({
-					url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=image',
-					height: '500px',
-					lang: 'ja',
-					resizable: false,
-					getFileCallback: function(url){
-						seturl_callback(url.url);
-						$('a.ui-dialog-titlebar-close[role="button"]').click();
-					}
-				}).elfinder('instance');
-			}
-		});
-	} else {
-		m3_openImageFileBrowser();
-	}
+	$('<div />').dialog({
+		title: "画像を選択",
+		modal: true,
+		width: "80%",
+		zIndex: 99999,
+		open: function(){
+			$(this).parent().css("padding", "0px");
+			$(this).css("padding", "0px")
+		},
+		create: function(event, ui){
+			$(this).elfinder({
+				url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=image',
+				height: '500px',
+				lang: 'ja',
+				resizable: false,
+				getFileCallback: function(url){
+					seturl_callback(url.url);
+					$('a.ui-dialog-titlebar-close[role="button"]').click();
+				}
+			}).elfinder('instance');
+		}
+	});
 }
 /**
- * 画像ファイルブラウザを表示
+ * 画像ファイルブラウザを表示(廃止予定)
  *
  * @return なし
  */
@@ -188,35 +184,31 @@ function m3_openImageFileBrowser()
  */
 function m3OpenFlashFileBrowser(seturl_callback)
 {
-	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
-		$('<div />').dialog({
-			title: "Flashを選択",
-			modal: true,
-			width: "80%",
-			zIndex: 99999,
-			open: function(){
-				$(this).parent().css("padding", "0px");
-				$(this).css("padding", "0px")
-			},
-			create: function(event, ui){
-				$(this).elfinder({
-					url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=flash',
-					height: '500px',
-					lang: 'ja',
-					resizable: false,
-					getFileCallback: function(url){
-						seturl_callback(url.url);
-						$('a.ui-dialog-titlebar-close[role="button"]').click();
-					}
-				}).elfinder('instance');
-			}
-		});
-	} else {
-		m3_openFlashFileBrowser();
-	}
+	$('<div />').dialog({
+		title: "Flashを選択",
+		modal: true,
+		width: "80%",
+		zIndex: 99999,
+		open: function(){
+			$(this).parent().css("padding", "0px");
+			$(this).css("padding", "0px")
+		},
+		create: function(event, ui){
+			$(this).elfinder({
+				url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=flash',
+				height: '500px',
+				lang: 'ja',
+				resizable: false,
+				getFileCallback: function(url){
+					seturl_callback(url.url);
+					$('a.ui-dialog-titlebar-close[role="button"]').click();
+				}
+			}).elfinder('instance');
+		}
+	});
 }
 /**
- * Flashファイルブラウザを表示
+ * Flashファイルブラウザを表示(廃止予定)
  *
  * @return なし
  */

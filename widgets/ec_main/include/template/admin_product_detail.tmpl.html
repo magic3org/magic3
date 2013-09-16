@@ -55,40 +55,6 @@ function cancelItem(){
 	document.main.submit();
 	return true;
 }
-// ファイルブラウザからの設定用
-function SetUrl(url)
-{
-	var preImage;
-	if (document.main.current_image.value == 'small'){
-		preImage = $('#preview_img_small');
-		document.main.imageurl_s.value = url;
-	} else if (document.main.current_image.value == 'medium'){
-		preImage = $('#preview_img_medium');
-		document.main.imageurl_m.value = url;
-	} else if (document.main.current_image.value == 'large'){
-		preImage = $('#preview_img_large');
-		document.main.imageurl_l.value = url;
-	}
-	if (preImage != null){
-		preImage.attr('src', url);
-		preImage.css('display', '');	// 画像を表示
-	}
-}
-function OpenFileBrowser( url, width, height )
-{
-	var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes";
-	sOptions += ",width=" + width;
-	sOptions += ",height=" + height;
-	window.open(url, 'FCKBrowseWindow', sOptions);
-}
-function BrowseServer(image)
-{
-	// 変更画像
-	document.main.current_image.value = image;
-
-	// 画像選択ブラウザ表示
-	m3_openImageFileBrowser();
-}
 function createUploader(){
 	var uploaderS = new qq.FileUploader({
 		element: document.getElementById('file-uploader_s'),

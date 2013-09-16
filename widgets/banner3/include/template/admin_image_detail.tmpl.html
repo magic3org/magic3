@@ -101,9 +101,9 @@ function selectImage()
 {
 	var type = $('#item_type').val();
 	if (type == 0){
-		m3_openImageFileBrowser();
+		m3OpenImageFileBrowser(SetUrl);
 	} else if (type == 1){
-		m3_openFlashFileBrowser();
+		m3OpenFlashFileBrowser(SetUrl);
 	}
 }
 // ファイルブラウザからの設定用

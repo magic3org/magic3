@@ -1,3 +1,15 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_widget">
 <link rel="stylesheet" href="{_ROOT_URL}/scripts/js_color_picker_v2/js_color_picker_v2.css" media="screen" />
 <script src="{_ROOT_URL}/scripts/js_color_picker_v2/color_functions.js"></script>
@@ -7,16 +19,16 @@
 var imageType = 0;	// 画像タイプ
 
 function updateItem(){
-    if (!window.confirm('設定を更新しますか?')) return false;
-    document.main.act.value = 'update';
-    document.main.submit();
-    return true;
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
 }
 // ファイルブラウザ起動
 function selectImage(type)
 {
 	imageType = type;
-	m3_openImageFileBrowser();
+	m3OpenImageFileBrowser(SetUrl);
 }
 // ファイルブラウザからの設定用
 function SetUrl(url)
