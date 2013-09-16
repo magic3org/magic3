@@ -79,8 +79,7 @@ class ScriptLibInfo
 	// jQueryプラグインバージョン
 	const JQUERY_JCAROUSEL_VER		= '0.2.8';
 	const JQUERY_THICKBOX_VER		= '3.1';
-//	const JQUERY_PRETTYPHOTO_VER	= '2.5.6';
-	const JQUERY_PRETTYPHOTO_VER	= '3.1.4';
+	const JQUERY_PRETTYPHOTO_VER	= '3.1.5';
 	const JQUERY_QTIP_VER			= '1.0';
 	const JQUERY_CALCULATION_VER	= '0.4.07';
 	//const JQUERY_JQPLOT_VER			= '0.9.7';
@@ -140,8 +139,9 @@ class ScriptLibInfo
 	const JQUERY_FACEBOX_CSS			= 'jquery/facebox.css';
 	const JQUERY_CURVYCORNERS_FILENAME	= 'jquery/jquery.curvycorners.packed.js';
 
-	const JQUERY_PRETTYPHOTO_FILENAME	= 'jquery/prettyPhoto3.1.4/js/jquery.prettyPhoto.js';
-	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyPhoto3.1.4/css/prettyPhoto.css';
+	const JQUERY_PRETTYPHOTO_DIR		= 'jquery/prettyPhoto3.1.5';
+	const JQUERY_PRETTYPHOTO_FILENAME	= 'jquery/prettyPhoto3.1.5/js/jquery.prettyPhoto.js';
+	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyPhoto3.1.5/css/prettyPhoto.css';
 	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.min.js';
 	const JQUERY_CALCULATION_FILENAME	= 'jquery/jquery.calculation.js';
 	//const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot/jquery.jqplot.min.js';
@@ -352,6 +352,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 																'url'		=> self::JQUERY_CURVYCORNERS_URL),
 					self::LIB_JQUERY_PRETTYPHOTO	=>	array(	'script' 	=> array(self::JQUERY_PRETTYPHOTO_FILENAME),	// jquery.prettyPhoto用のファイル
 																'css'		=> array(self::JQUERY_PRETTYPHOTO_CSS),
+																'dir'		=> self::JQUERY_PRETTYPHOTO_DIR,				// 格納ディレクトリ
 																'url'		=> self::JQUERY_PRETTYPHOTO_URL,
 																'version'	=> self::JQUERY_PRETTYPHOTO_VER),
 					self::LIB_JQUERY_QTIP			=>	array(	'script' 	=> array(self::JQUERY_QTIP_FILENAME),	// jquery.qtip用のファイル

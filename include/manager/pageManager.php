@@ -1327,19 +1327,22 @@ class PageManager extends Core
 				for ($j = 0; $j < count($libsArray); $j++){
 					$lib = strtolower(trim($libsArray[$j]));// 小文字に変換
 					if (isset($this->libFiles[$lib])){		// ライブラリが存在するとき
+						// Javascript追加
 						if (isset($this->libFiles[$lib]['script'])){
 							$scriptFiles = $this->libFiles[$lib]['script'];
 							for ($l = 0; $l < count($scriptFiles); $l++){
 								$this->addAdminScriptFile($scriptFiles[$l]);		// 管理機能用のスクリプト追加
 							}
 						}
+						// CSS追加
 						if (isset($this->libFiles[$lib]['css'])){
 							$cssFiles = $this->libFiles[$lib]['css'];
 							for ($l = 0; $l < count($cssFiles); $l++){
 								$this->addAdminCssFile($cssFiles[$l]);		// 管理機能用のCSS追加
 							}
 						}
-						if (strncmp($lib, 'jquery-ui.', 10) == 0){		// jQuery UIのwidgetsまたはeffectsのとき
+						// その他
+						if (strncmp($lib, 'jquery-ui.', 10) == 0){		// jQuery UIのwidgetsまたはeffectsのとき。jQuery UI Coreはデフォルトで読み込まれている。
 							// jQueryUIテーマを追加
 							if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
 								//$this->addHeadCssFile($this->getAdminDefaultThemeUrl());		// CSS追加

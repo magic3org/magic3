@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: pretty_photoWidgetContainer.php 3425 2010-07-23 08:28:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -28,6 +28,7 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 	private $css;
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_IMAGE_SIZE = 60;		// デフォルトのサムネールサイズ
+	const DEFAULT_THEME = 'light_rounded';		// デフォルトテーマ
 	
 	/**
 	 * コンストラクタ
@@ -107,6 +108,8 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 				}
 				$this->css		= $targetObj->css;		// CSS
 				$this->cssId	= $targetObj->cssId;	// CSS用のID
+				$theme	= $targetObj->theme;		// テーマ
+				if (empty($theme)) $theme = self::DEFAULT_THEME;
 				$showSocialButton = $targetObj->showSocialButton;		// ソーシャルボタンを表示するかどうか
 			}
 		
@@ -118,6 +121,7 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 			// 画面に値を埋め込む
 			$this->tmpl->addVar('_widget', 'group_id',	$this->groupId);	// グループID
 			$this->tmpl->addVar("_widget", "css_id",	$this->cssId);		// CSS用ID
+			$this->tmpl->addVar("_widget", "theme",	$theme);		// テーマ
 			if (empty($showSocialButton)) $this->tmpl->setAttribute('social_tool_area', 'visibility', 'visible');// ソーシャルボタンを非表示
 		}
 	}

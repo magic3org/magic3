@@ -27,8 +27,11 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 	private $imageInfoArray = array();			// 画像情報
 	private $css;			// メニュー用CSS
 	private $cssId;			// CSS用ID
+	private $theme;			// テーマ
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_IMAGE_SIZE = 60;		// デフォルトのサムネールサイズ
+	const DEFAULT_THEME_DIR = '/images/prettyPhoto';				// テーマ格納ディレクトリ
+	const DEFAULT_THEME = 'light_rounded';		// デフォルトテーマ
 	
 	/**
 	 * コンストラクタ
@@ -107,6 +110,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		$descs = $request->trimValueOf('item_desc');		// 画像説明
 		$this->css	= $request->valueOf('item_css');		// メニュー用CSS
 		$this->cssId	= $request->trimValueOf('item_css_id');		// CSS用ID
+		$this->theme	= $request->trimValueOf('item_theme');		// テーマ
 		$showSocialButton = $request->trimCheckedValueOf('item_show_social_button');		// ソーシャルボタンを表示するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
@@ -132,6 +136,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->imageInfo	= array();
 				$newObj->cssId	= $this->cssId;					// CSS用ID
 				$newObj->css	= $this->css;					// メニューCSS
+				$newObj->theme	= $this->theme;		// テーマ
 				$newObj->showSocialButton	= $showSocialButton;		// ソーシャルボタンを表示するかどうか
 				
 				for ($i = 0; $i < $imageCount; $i++){
@@ -169,6 +174,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 					$targetObj->imageInfo	= array();
 					$targetObj->cssId	= $this->cssId;					// CSS用ID
 					$targetObj->css		= $this->css;					// メニューCSS
+					$targetObj->theme	= $this->theme;		// テーマ
 					$targetObj->showSocialButton	= $showSocialButton;		// ソーシャルボタンを表示するかどうか
 					
 					for ($i = 0; $i < $imageCount; $i++){
@@ -212,6 +218,7 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 				$this->imageInfoArray = array();			// 画像情報
 				$this->cssId = $this->createDefaultCssId();	// CSS用ID
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));// デフォルト用のCSSを取得
+				$this->theme	= self::DEFAULT_THEME;		// テーマ
 				$showSocialButton = '0';		// ソーシャルボタンを表示するかどうか
 			}
 			$this->serialNo = 0;
@@ -224,6 +231,8 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 					if (!empty($targetObj->imageInfo)) $this->imageInfoArray = $targetObj->imageInfo;			// 画像情報
 					$this->cssId	= $targetObj->cssId;					// CSS用ID
 					$this->css		= $targetObj->css;					// メニューCSS
+					$this->theme	= $targetObj->theme;		// テーマ
+					if (empty($this->theme)) $this->theme = self::DEFAULT_THEME;
 					$showSocialButton = $targetObj->showSocialButton;		// ソーシャルボタンを表示するかどうか
 				}
 			}
@@ -236,6 +245,11 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 		// 画像情報一覧作成
 		$this->createImageList();
 		if (empty($this->imageInfoArray)) $this->tmpl->setAttribute('image_list', 'visibility', 'hidden');// 画像情報一覧
+		
+		// テーマ選択メニュー作成
+		$libInfo = $this->gPage->getScriptLibInfo(ScriptLibInfo::LIB_JQUERY_PRETTYPHOTO);
+		$dirPath = $this->gEnv->getScriptsPath() . DIRECTORY_SEPARATOR . $libInfo['dir'] . self::DEFAULT_THEME_DIR;
+		$this->createThemeMenu($dirPath);
 		
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
@@ -328,6 +342,37 @@ class admin_pretty_photoWidgetContainer extends BaseAdminWidgetContainer
 			);
 			$this->tmpl->addVars('image_list', $row);
 			$this->tmpl->parseTemplate('image_list', 'a');
+		}
+	}
+	/**
+	 * prettyPhotoテーマの選択メニューを作成
+	 *
+	 * @param string $dir		テーマのディレクトリ
+	 * @return 					なし
+	 */
+	function createThemeMenu($themeDir)
+	{
+		if (is_dir($themeDir)){
+			$dir = dir($themeDir);
+			while (($file = $dir->read()) !== false){
+				$filePath = $themeDir . '/' . $file;
+				// ディレクトリかどうかチェック
+				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath) &&
+					strncmp($file, '_', 1) != 0){	// 「_」で始まる名前のディレクトリは読み込まない
+
+					$selected = '';
+					if ($file == $this->theme) $selected = 'selected';
+					
+					$row = array(
+						'value'    => $this->convertToDispString($file),			// テーマID
+						'name'     => $this->convertToDispString($file),
+						'selected' => $selected			// 選択中かどうか
+					);
+					$this->tmpl->addVars('theme_list', $row);
+					$this->tmpl->parseTemplate('theme_list', 'a');
+				}
+			}
+			$dir->close();
 		}
 	}
 	/**

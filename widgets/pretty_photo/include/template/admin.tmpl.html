@@ -144,7 +144,13 @@ $(document).ready(function(){
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_OPTION}>オプション</span></td>
 	    <td colspan="3">
-	    <input type="checkbox" name="item_show_social_button" {SHOW_SOCIAL_BUTTON_CHECKED}/>ソーシャルボタンを表示
+		テーマ：
+	    <select name="item_theme">
+	        <patTemplate:tmpl name="theme_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select><br />
+	    <input type="checkbox" name="item_show_social_button" {SHOW_SOCIAL_BUTTON_CHECKED}/>ソーシャルボタンを表示<br />
 	    </td>
 	</tr>
     <tr>
