@@ -15,11 +15,10 @@
 //<![CDATA[
 $(function(){
 	$("a[rel^='prettyPhoto[{GROUP_ID}]']").prettyPhoto({
-<patTemplate:tmpl name="social_tool_area" visibility="hidden">		social_tools:false,</patTemplate:tmpl>
+<patTemplate:tmpl name="social_tool_area" visibility="hidden">		social_tools: false,</patTemplate:tmpl>
+<patTemplate:tmpl name="title_area" visibility="visible">show_title: false,</patTemplate:tmpl>
+		opacity: {OPACITY},
 		animationSpeed: 'normal', /* fast/slow/normal */
-		padding: 40, /* padding for each side of the picture */
-		opacity: 0.35, /* Value betwee 0 and 1 */
-		showTitle: true, /* true/false */
 		allowresize: true, /* true/false */
 		counter_separator_label: '/', /* The separator for the gallery counter 1 "of" 2 */
 		theme: '{THEME}'

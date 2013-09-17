@@ -29,6 +29,7 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_IMAGE_SIZE = 60;		// デフォルトのサムネールサイズ
 	const DEFAULT_THEME = 'light_rounded';		// デフォルトテーマ
+	const DEFAULT_OPACITY = '0.80';		// デフォルトの透明度
 	
 	/**
 	 * コンストラクタ
@@ -103,6 +104,9 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 			if (!empty($targetObj)){		// 定義データが取得できたとき
 				$name	= $targetObj->name;// 名前
 				$this->imageSize	= $targetObj->size;			// 画像サイズ
+				if (empty($this->imageSize)) $this->imageSize = self::DEFAULT_IMAGE_SIZE;
+				$opacity = $targetObj->opacity;		// 透明度
+				if (empty($opacity)) $opacity = self::DEFAULT_OPACITY;
 				if (!empty($targetObj->imageInfo)){
 					$this->imageInfoArray = $targetObj->imageInfo;			// 画像情報
 				}
@@ -111,6 +115,7 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 				$theme	= $targetObj->theme;		// テーマ
 				if (empty($theme)) $theme = self::DEFAULT_THEME;
 				$showSocialButton = $targetObj->showSocialButton;		// ソーシャルボタンを表示するかどうか
+				$showTitle = $targetObj->showTitle;		// タイトルを表示するかどうか
 			}
 		
 			$this->groupId = $this->gEnv->getCurrentWidgetId() . '_' . $configId . '_' . 'group';				// グループ化用ID
@@ -119,32 +124,13 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 			$this->createImageList();
 			
 			// 画面に値を埋め込む
+			$this->tmpl->addVar("_widget", "opacity",	$opacity);		// 透明度
 			$this->tmpl->addVar('_widget', 'group_id',	$this->groupId);	// グループID
 			$this->tmpl->addVar("_widget", "css_id",	$this->cssId);		// CSS用ID
 			$this->tmpl->addVar("_widget", "theme",	$theme);		// テーマ
+			if (!empty($showTitle)) $this->tmpl->setAttribute('title_area', 'visibility', 'hidden');// タイトルを表示するかどうか
 			if (empty($showSocialButton)) $this->tmpl->setAttribute('social_tool_area', 'visibility', 'visible');// ソーシャルボタンを非表示
 		}
-	}
-	/**
-	 * 文字列をHTMLヘッダ部に設定
-	 *
-	 * 文字列をHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						headタグ追加文字列。出力しない場合は空文字列を設定。
-	 */
-	function _addStringToHead($request, &$param)
-	{
-		// IE6用のスクリプトを追加読み込みさせる
-		$str  = '<!--[if IE 6]>' . M3_NL;
-		$str .= '<script src="' . $this->getUrl($this->gEnv->getCurrentWidgetScriptsUrl()) . '/' . '_DD_belatedPNG_0.0.7a-min.js"></script>' . M3_NL;
-		$str .= '<script>' . M3_NL;
-		$str .= 'DD_belatedPNG.fix(".pp_left,.pp_right,a.pp_close,a.pp_arrow_next,a.pp_arrow_previous,.pp_content,.pp_middle,.pp_next,.pp_previous");' . M3_NL;
-		$str .= '</script>' . M3_NL;
-		$str .= '<![endif]-->' . M3_NL;
-		return $str;
 	}
 	/**
 	 * CSSデータをHTMLヘッダ部に設定
