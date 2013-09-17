@@ -92,7 +92,7 @@ class ScriptLibInfo
 	const JQUERY_CLOUDCAROUSEL_VER	= '1.0.5';
 //	const JQUERY_JQEASYPANEL_VER	= '1.0';
 	const JQUERY_SCROLLTO_VER		= '1.4.3.1';
-	const JQUERY_FULLCALENDAR_VER	= '1.6.2';
+	const JQUERY_FULLCALENDAR_VER	= '1.6.4';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -162,9 +162,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 //	const JQUERY_JQEASYPANEL_FILENAME	= 'jquery/jquery.jqEasyPanel.js';
 //	const JQUERY_JQEASYPANEL_CSS		= 'jquery/jqeasypanel.css';
 	const JQUERY_SCROLLTO_FILENAME		= 'jquery/jquery.scrollTo-1.4.3.1-min.js';
-//	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.2/fullcalendar.min.js';
-	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.3/fullcalendar.js';
-	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.3/fullcalendar.css';
+	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.4/fullcalendar.js';
+	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.4/fullcalendar.css';
 	
 	// ライブラリの公式サイトのURL
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';

@@ -2,6 +2,8 @@
  * FullCalendar v1.6.4
  * Docs & License: http://arshaw.com/fullcalendar/
  * (c) 2013 Adam Shaw
+ *
+ * ・calendar header border line removed on 2013/8/17 modified by naoki.
  */
 
 /*
@@ -764,7 +766,7 @@ function Header(calendar, options) {
 	
 	
 	function renderSection(position) {
-		var e = $("<td class='fc-header-" + position + "'/>");
+		var e = $("<td class='fc-header-" + position + "' style='border:none;' />");				// ボーダーライン消去　by naoki
 		var buttonStr = options.header[position];
 		if (buttonStr) {
 			$.each(buttonStr.split(' '), function(i) {
@@ -2273,10 +2275,10 @@ function BasicView(element, calendar, viewName) {
 
 	function buildTableHTML() {
 		var html =
-			"<table class='fc-border-separate' style='width:100%' cellspacing='0'>" +
+			"<div style='padding-right:1px;'><table class='fc-border-separate' style='width:100%' cellspacing='0'>" +		// add DIV with padding 1px for border line by naoki.
 			buildHeadHTML() +
 			buildBodyHTML() +
-			"</table>";
+			"</table></div>";
 
 		return html;
 	}
