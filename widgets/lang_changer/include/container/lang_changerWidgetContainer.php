@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: lang_changerWidgetContainer.php 4915 2012-05-22 05:51:13Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -59,7 +59,9 @@ class lang_changerWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$this->currentPageUrl = $this->gEnv->createCurrentPageUrl();// 現在のページURL
+		//$this->currentPageUrl = $this->gEnv->createCurrentPageUrl();// 現在のページURL
+		$this->currentPageUrl = $this->gEnv->getCurrentRequestUri();		// アクセスされたURL
+
 		$acceptLang = $this->gSystem->getAcceptLanguage();
 
 		// 言語一覧を取得
@@ -93,12 +95,36 @@ class lang_changerWidgetContainer extends BaseWidgetContainer
 		$langId = $fetchedRow['ln_id'];		// 言語ID
 		$name = $fetchedRow['ln_name'];
 		$title = $name . '(' . $fetchedRow['ln_name_en'] . ')';
+		if (strEndsWith($this->currentPageUrl, '.php') || strEndsWith($this->currentPageUrl, '/')){		// クエリー文字列なしの場合
+			$currentUrl = $this->currentPageUrl . '?' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $langId;
+		} else {
+			list($baseUrl, $query) = explode('?', $this->currentPageUrl);
+			if (!empty($query)) parse_str($query, $paramArray);
+			
+			if (isset($paramArray[M3_REQUEST_PARAM_OPERATION_LANG])){
+				$paramArray[M3_REQUEST_PARAM_OPERATION_LANG] = $langId;
+				
+				// クエリー文字列を作成
+				$query = '';
+				$keys = array_keys($paramArray);
+				$keyCount = count($keys);
+				for ($i = 0; $i < $keyCount; $i++){
+					$key = $keys[$i];
+					$value = $paramArray[$key];
+					if ($i > 0) $query .= '&';
+					$query .= $key . '=' . $value;
+				}
+				$currentUrl = $baseUrl . '?' . $query;
+			} else {
+				$currentUrl = $this->currentPageUrl . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $langId;
+			}
+		}
 		
 		// 言語アイコン
 		$iconTitle = $name;
 		$iconUrl = $this->gEnv->getRootUrl() . self::ICON_PATH . $fetchedRow['ln_image_filename'];		// 画像ファイル
 		$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		$linkUrl = $this->convertUrlToHtmlEntity($this->getUrl($this->currentPageUrl . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $langId, true));
+		$linkUrl = $this->convertUrlToHtmlEntity($this->getUrl($currentUrl, true));
 		$imageTag = '<a href="' . $linkUrl . '">' . $iconTag . '</a>&nbsp;&nbsp;';
 			
 		$row = array(
