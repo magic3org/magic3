@@ -112,7 +112,7 @@ class lang_changerWidgetContainer extends BaseWidgetContainer
 					$key = $keys[$i];
 					$value = $paramArray[$key];
 					if ($i > 0) $query .= '&';
-					$query .= $key . '=' . $value;
+					$query .= rawurlencode($key) . '=' . rawurlencode($value);
 				}
 				$currentUrl = $baseUrl . '?' . $query;
 			} else {
