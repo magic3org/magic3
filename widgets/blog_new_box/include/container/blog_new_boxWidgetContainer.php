@@ -84,6 +84,8 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 			
 		if (!$this->isEntry){	// 記事の投稿がないときはメッセージを出力
 			$this->tmpl->addVar("_widget", "message", '投稿記事はありません');
+			
+			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 		}
 		
 		// RSSの設定

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_category_menuWidgetContainer.php 3829 2010-11-16 12:24:10Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -20,6 +20,7 @@ class blog_category_menuWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 言語
+	private $isExistsList;	// 一覧表示項目があるかどうか
 	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'ブログカテゴリー';		// デフォルトのウィジェットタイトル名
 		
@@ -63,6 +64,7 @@ class blog_category_menuWidgetContainer extends BaseWidgetContainer
 		
 		// #### カテゴリーリストを作成 ####
 		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->langId);// デフォルト言語で取得
+		if (!$this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 	}
 	/**
 	 * ウィジェットのタイトルを設定
@@ -94,6 +96,8 @@ class blog_category_menuWidgetContainer extends BaseWidgetContainer
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
+		
+		$this->isExistsList = true;	// 一覧表示項目があるかどうか
 		return true;
 	}
 }

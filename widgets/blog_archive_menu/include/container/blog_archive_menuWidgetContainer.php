@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_archive_menuWidgetContainer.php 5270 2012-10-04 12:19:21Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -20,6 +20,7 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 言語
+	private $isExistsListItem;	// 一覧表示項目があるかどうか
 	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'ブログアーカイブ';		// デフォルトのウィジェットタイトル名
 		
@@ -103,8 +104,11 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 				);
 				$this->tmpl->addVars('itemlist', $row);
 				$this->tmpl->parseTemplate('itemlist', 'a');
+				
+				$this->isExistsListItem = true;	// 一覧表示項目があるかどうか
 			}
 		}
+		if (!$this->isExistsListItem) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 	}
 	/**
 	 * ウィジェットのタイトルを設定
