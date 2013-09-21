@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainConfigbasicBaseWidgetContainer.php 4223 2011-07-08 03:56:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -80,7 +80,8 @@ class admin_mainConfigbasicBaseWidgetContainer extends admin_mainBaseWidgetConta
 		// ### ページヘッダ情報 ###
 		$current = '';
 		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=pagehead';
-		if ($task == 'pagehead'){
+		if ($task == 'pagehead' ||
+			$task == 'pagehead_detail'){		// ページヘッダ情報詳細
 			$current = 'id="current"';
 		}
 		// ヘルプを作成
