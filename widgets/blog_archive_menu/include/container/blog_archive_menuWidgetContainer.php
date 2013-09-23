@@ -23,7 +23,8 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 	private $isExistsListItem;	// 一覧表示項目があるかどうか
 	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'ブログアーカイブ';		// デフォルトのウィジェットタイトル名
-		
+	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -62,8 +63,26 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 	{
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		
-		// #### カテゴリーリストを作成 ####
-		$ret = $this->db->getAllEntry($this->langId, $rows);// デフォルト言語で取得
+		// 定義ID取得
+		$configId = $this->gEnv->getCurrentWidgetConfigId();
+		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
+		
+		// デフォルト値設定
+		$itemCount	= self::DEFAULT_ITEM_COUNT;	// 表示項目数
+		$archiveType	= 0;		// アーカイブタイプ
+		$sortOrder	= 0;		// ソート順
+		
+		// パラメータオブジェクトを取得
+		$targetObj = $this->getWidgetParamObjByConfigId($configId);
+		if (!empty($targetObj)){		// 定義データが取得できたとき
+			$itemCount	= $targetObj->itemCount;
+			$archiveType	= $targetObj->archiveType;		// アーカイブタイプ
+			$sortOrder	= $targetObj->sortOrder;		// ソート順
+		}
+		
+		// #### アーカイブリストを作成 ####
+		$listItemCount = 0;			// 表示項目数
+		$ret = $this->db->getAllEntry($this->langId, $sortOrder, $rows);// デフォルト言語で取得
 		if ($ret){
 			$foreYear = 0;
 			$foreMonth = 0;
@@ -86,6 +105,12 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 						);
 						$this->tmpl->addVars('itemlist', $row);
 						$this->tmpl->parseTemplate('itemlist', 'a');
+						
+						$listItemCount++;			// 表示項目数
+						if ($itemCount > 0 && $listItemCount >= $itemCount){		// 表示項目数の最大を超えたかどうか
+							$entryCount = 0;		// メニュー項目追加を終了
+							break;
+						}
 					}
 					
 					// データを初期化
@@ -105,10 +130,10 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 				$this->tmpl->addVars('itemlist', $row);
 				$this->tmpl->parseTemplate('itemlist', 'a');
 				
-				$this->isExistsListItem = true;	// 一覧表示項目があるかどうか
+				$listItemCount++;			// 表示項目数
 			}
 		}
-		if (!$this->isExistsListItem) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
+		if ($listItemCount <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 	}
 	/**
 	 * ウィジェットのタイトルを設定

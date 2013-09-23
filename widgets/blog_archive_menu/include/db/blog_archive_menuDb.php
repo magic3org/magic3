@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_archive_menuDb.php 5270 2012-10-04 12:19:21Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -23,26 +23,17 @@ class blog_archive_menuDb extends BaseDb
 	 * すべてのブログ記事を取得
 	 *
 	 * @param string	$langId				言語
+	 * @param int		$sortOrder			ソート順(0=降順、1=昇順)
 	 * @param array		$rows				取得データ
 	 * @return 			なし
 	 */
-	function getAllEntry($langId, &$rows)
+	function getAllEntry($langId, $sortOrder, &$rows)
 	{
 		$params = array();
 		$initDt = $this->gEnv->getInitValueOfTimestamp();
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		if (!$this->gEnv->isSystemManageUser()) $userId = $this->gEnv->getCurrentUserId();		// システム管理ユーザの場合
 		
-/*		$queryStr = 'SELECT be_regist_dt FROM blog_entry ';
-		$queryStr .=  'WHERE be_deleted = false ';		// 削除されていない
-		$queryStr .=    'AND be_status = ? ';
-		$queryStr .=    'AND be_language_id = ? ';
-		$queryStr .=    'AND be_regist_dt <= ? ';	// 投稿日時が現在日時よりも過去のものを取得
-		
-		// 公開範囲を指定
-		$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
-		$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';*/
-		//$queryStr = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 		$queryStr = 'SELECT be_regist_dt FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 		$queryStr .=  'WHERE be_deleted = false ';		// 削除されていない
 		$queryStr .=    'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
@@ -69,8 +60,8 @@ class blog_archive_menuDb extends BaseDb
 		$params[] = $initDt;
 		$params[] = $now;
 		
-		$queryStr .=  'ORDER BY be_regist_dt desc';
-		//$retValue = $this->selectRecords($queryStr, array(2, $langId, $now, $initDt, $initDt, $now, $initDt, $initDt, $now), $rows);// 「公開」(2)データを取得
+		$queryStr .=  'ORDER BY be_regist_dt ';
+		if (empty($sortOrder)) $queryStr .=  'desc';
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;		
 	}
