@@ -21,6 +21,7 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 言語
 	private $isExistsListItem;	// 一覧表示項目があるかどうか
+	const DEFAULT_CONFIG_ID = 0;
 	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'ブログアーカイブ';		// デフォルトのウィジェットタイトル名
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
