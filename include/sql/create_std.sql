@@ -69,6 +69,7 @@ CREATE TABLE menu_item (
     mi_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     mi_id                INT            DEFAULT 0                     NOT NULL,      -- 項目ID
     mi_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
+    
     mi_menu_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 項目が所属するメニューID
     mi_index             INT            DEFAULT 0                     NOT NULL,      -- メニュー上での項目番号(0～)
     mi_submenu_id        VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- サブメニューID
@@ -182,6 +183,7 @@ CREATE TABLE wiki_content (
     wc_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- コンテンツタイプ
     wc_id                VARCHAR(191)   DEFAULT ''                    NOT NULL,      -- コンテンツID
     wc_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
+    
     wc_data              TEXT                                         NOT NULL,      -- コンテンツ内容
     wc_content_dt        TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- コンテンツ更新日時
     wc_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可否
@@ -646,6 +648,7 @@ DROP TABLE IF EXISTS bn_def;
 CREATE TABLE bn_def (
     bd_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     bd_id                INT            DEFAULT 0                     NOT NULL,      -- バナーID
+    
     bd_item_id           TEXT                                         NOT NULL,      -- 対応バナー項目(「,」区切りで複数指定可)
     bd_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- バナー名
     bd_disp_type         SMALLINT       DEFAULT 0                     NOT NULL,      -- 表示形式(0=サイクリック,1=ランダム)

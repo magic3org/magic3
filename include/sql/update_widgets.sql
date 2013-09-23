@@ -172,8 +172,9 @@ DELETE FROM _widgets WHERE wd_id = 'blog_category_menu';
 INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('blog_category_menu',   'ブログ - カテゴリーメニュー', 'BGCM', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'ブログカテゴリメニュー',          false,           false,       true,         true,        false,         false,               false,true,           0, 1, -1, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'blog_archive_menu';
-INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('blog_archive_menu',   'ブログ - アーカイブメニュー', 'BGAM', '1.1.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'ブログアーカイブメニュー',          false,           false,       true,         true,        false,         false,               false,true,           0, 1, -1, '2012-10-04', now(), now());
+INSERT INTO _widgets
+(wd_id, wd_name, wd_version, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('blog_archive_menu',   'ブログ - アーカイブメニュー', '2.0.0',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'ブログアーカイブメニュー',        true,         false,               true,true,           0, 1, -1, '2013-09-22', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'phpcode';
 INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib_a, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('phpcode',     'PHPコード実行',           '', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'PHPのプログラムコードを実行。', 'jquery.codepress',        false,           false,       true,         true,        true,        false,               true,true,           0, 0, 0, now(), now());
@@ -363,7 +364,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'lang_changer';
 INSERT INTO _widgets
 (wd_id,          wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('lang_changer', '言語変更', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '表示言語変更', '',          '',         false,        false,               false,true,           1, -1, '2012-05-21', now(), now());
+('lang_changer', '言語変更', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '表示言語変更', '',          '',         false,        false,               false,true,           1, -1, '2013-09-19', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'ec_product_slide';
 INSERT INTO _widgets
 (wd_id,         wd_name,               wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,   wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
