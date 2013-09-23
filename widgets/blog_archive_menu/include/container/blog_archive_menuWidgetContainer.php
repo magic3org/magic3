@@ -88,49 +88,96 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 			$foreMonth = 0;
 			$entryCount = 0;		// 記事数
 			$rowCount = count($rows);
-			for ($i = 0; $i < $rowCount; $i++){
-				// 記事の投稿日を取得
-				$this->timestampToYearMonthDay($rows[$i]['be_regist_dt'], $year, $month, $day);
+			
+			if (empty($archiveType)){		// 月別アーカイブのとき
+				for ($i = 0; $i < $rowCount; $i++){
+					// 記事の投稿日を取得
+					$this->timestampToYearMonthDay($rows[$i]['be_regist_dt'], $year, $month, $day);
 		
-				if ($year == $foreYear && $month == $foreMonth){		// 年月が変わらないとき
-					$entryCount++;		// 記事数
-				} else {		// 年月が変更のとき
-					// メニュー項目を作成
-					if ($entryCount > 0){		// 記事数が0以上のとき
-						$name = $foreYear . '年' . $foreMonth . '月(' . $entryCount . ')';
-						$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear . '&month=' . $foreMonth);
-						$row = array(
-							'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
-							'name' => $this->convertToDispString($name)			// タイトル
-						);
-						$this->tmpl->addVars('itemlist', $row);
-						$this->tmpl->parseTemplate('itemlist', 'a');
+					if ($year == $foreYear && $month == $foreMonth){		// 年月が変わらないとき
+						$entryCount++;		// 記事数
+					} else {		// 年月が変更のとき
+						// メニュー項目を作成
+						if ($entryCount > 0){		// 記事数が0以上のとき
+							$name = $foreYear . '年' . $foreMonth . '月(' . $entryCount . ')';
+							$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear . '&month=' . $foreMonth);
+							$row = array(
+								'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
+								'name' => $this->convertToDispString($name)			// タイトル
+							);
+							$this->tmpl->addVars('itemlist', $row);
+							$this->tmpl->parseTemplate('itemlist', 'a');
 						
-						$listItemCount++;			// 表示項目数
-						if ($itemCount > 0 && $listItemCount >= $itemCount){		// 表示項目数の最大を超えたかどうか
-							$entryCount = 0;		// メニュー項目追加を終了
-							break;
+							$listItemCount++;			// 表示項目数
+							if ($itemCount > 0 && $listItemCount >= $itemCount){		// 表示項目数の最大を超えたかどうか
+								$entryCount = 0;		// メニュー項目追加を終了
+								break;
+							}
 						}
-					}
 					
-					// データを初期化
-					$foreYear = $year;
-					$foreMonth = $month;
-					$entryCount = 1;	// 記事数
+						// データを初期化
+						$foreYear = $year;
+						$foreMonth = $month;
+						$entryCount = 1;	// 記事数
+					}
 				}
-			}
-			// メニュー項目を作成
-			if ($entryCount > 0){		// 記事数が0以上のとき
-				$name = $foreYear . '年' . $foreMonth . '月(' . $entryCount . ')';
-				$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear . '&month=' . $foreMonth);
-				$row = array(
-					'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
-					'name' => $this->convertToDispString($name)			// タイトル
-				);
-				$this->tmpl->addVars('itemlist', $row);
-				$this->tmpl->parseTemplate('itemlist', 'a');
+				// メニュー項目を作成
+				if ($entryCount > 0){		// 記事数が0以上のとき
+					$name = $foreYear . '年' . $foreMonth . '月(' . $entryCount . ')';
+					$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear . '&month=' . $foreMonth);
+					$row = array(
+						'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
+						'name' => $this->convertToDispString($name)			// タイトル
+					);
+					$this->tmpl->addVars('itemlist', $row);
+					$this->tmpl->parseTemplate('itemlist', 'a');
 				
-				$listItemCount++;			// 表示項目数
+					$listItemCount++;			// 表示項目数
+				}
+			} else {			// 年別アーカイブのとき
+				for ($i = 0; $i < $rowCount; $i++){
+					// 記事の投稿日を取得
+					$this->timestampToYearMonthDay($rows[$i]['be_regist_dt'], $year, $month, $day);
+		
+					if ($year == $foreYear){		// 月が変わらないとき
+						$entryCount++;		// 記事数
+					} else {		// 年が変更のとき
+						// メニュー項目を作成
+						if ($entryCount > 0){		// 記事数が0以上のとき
+							$name = $foreYear . '年(' . $entryCount . ')';
+							$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear);
+							$row = array(
+								'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
+								'name' => $this->convertToDispString($name)			// タイトル
+							);
+							$this->tmpl->addVars('itemlist', $row);
+							$this->tmpl->parseTemplate('itemlist', 'a');
+						
+							$listItemCount++;			// 表示項目数
+							if ($itemCount > 0 && $listItemCount >= $itemCount){		// 表示項目数の最大を超えたかどうか
+								$entryCount = 0;		// メニュー項目追加を終了
+								break;
+							}
+						}
+					
+						// データを初期化
+						$foreYear = $year;
+						$entryCount = 1;	// 記事数
+					}
+				}
+				// メニュー項目を作成
+				if ($entryCount > 0){		// 記事数が0以上のとき
+					$name = $foreYear . '年(' . $entryCount . ')';
+					$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear);
+					$row = array(
+						'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
+						'name' => $this->convertToDispString($name)			// タイトル
+					);
+					$this->tmpl->addVars('itemlist', $row);
+					$this->tmpl->parseTemplate('itemlist', 'a');
+				
+					$listItemCount++;			// 表示項目数
+				}
 			}
 		}
 		if ($listItemCount <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示

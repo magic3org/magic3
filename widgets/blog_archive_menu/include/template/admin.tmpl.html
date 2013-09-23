@@ -47,15 +47,15 @@ function listItem(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
 <table width="90%">
-<tr><td><span {_HELP_DETAIL}><label>ブログアーカイブ設定</label></span></td>
-<td align="right"><span {_HELP_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
+<tr><td><span {_HELP_UNTITLED_DETAIL}><label>ブログアーカイブ設定</label></span></td>
+<td align="right"><span {_HELP_UNTITLED_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
 </td></tr>
 <tr><td colspan="2">
 
 <table class="simple-table" width="100%">
     <tbody>
     <tr>
-	    <td class="table-headside" width="100"><span {_HELP_NAME_INPUT}>名前</span></td>
+	    <td class="table-headside" width="100"><span {_HELP_UNTITLED_NAME_INPUT}>名前</span></td>
 	    <td width="500">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
@@ -69,7 +69,7 @@ function listItem(){
 	    </td>
 	</tr>
     <tr class="even">
-	    <td class="table-headside"><span {_HELP_ARCHIVE_TYPE}>アーカイブタイプ</span></td>
+	    <td class="table-headside"><span {_HELP_UNTITLED_ARCHIVE_TYPE}>アーカイブタイプ</span></td>
 	    <td>
 	    <select name="item_archive_type">
 	        <patTemplate:tmpl name="archive_type">
@@ -79,7 +79,7 @@ function listItem(){
 	    </td>
 	</tr>
 	<tr>
-	    <td class="table-headside" width="100"><span {_HELP_VIEW_COUNT}>項目表示</span></td>
+	    <td class="table-headside" width="100"><span {_HELP_UNTITLED_LIST_VIEW}>項目表示</span></td>
 	    <td>項目数：<input type="text" name="item_count" value="{ITEM_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />&nbsp;&nbsp;
 		表示順：<select name="item_sort_order">
 	        <patTemplate:tmpl name="sort_order">
