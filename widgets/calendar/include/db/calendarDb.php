@@ -50,5 +50,43 @@ class calendarDb extends BaseDb
 		$queryStr .=  'ORDER BY ee_start_dt, ee_id LIMIT ' . $limit . ' OFFSET ' . $offset;// 日付順
 		$this->selectLoop($queryStr, $params, $callback);
 	}
+	/**
+	 * 日付タイプ一覧を取得
+	 *
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getDayTypeList($callback)
+	{
+		$queryStr = 'SELECT * FROM date_type LEFT JOIN time_period ON dt_id = to_date_type_id AND to_index = 0 ';
+		$queryStr .=  'WHERE dt_deleted = false ';		// 削除されていない
+		$queryStr .=  'ORDER BY dt_sort_order';
+		$this->selectLoop($queryStr, array(), $callback);
+	}
+	/**
+	 * 日付タイプの削除
+	 *
+	 * @param array  $idArray		ID
+	 * @return bool					true=存在する、false=存在しない
+	 */
+	function deleteDayType($idArray)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		$queryStr  = 'UPDATE date_type ';
+		$queryStr .=   'SET dt_deleted = true, ';	// 削除
+		$queryStr .=     'dt_update_user_id = ?, ';
+		$queryStr .=     'dt_update_dt = ? ';
+		$queryStr .=   'WHERE dt_id in (' . implode($idArray, ',') . ') ';
+		$this->execStatement($queryStr, array($userId, $now, $id));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
 }
 ?>

@@ -22,10 +22,12 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 	protected static $_mainDb;			// DB接続オブジェクト
 	
 	// 画面
+	const TASK_DAYTYPE			= 'daytype';					// 日付タイプ一覧
+	const TASK_DAYTYPE_DETAIL	= 'daytype_detail';				// 日付タイプ詳細
 	const TASK_CONFIG			= 'config';				// 基本設定
 	const TASK_CONFIG_LIST		= 'config_list';		// 設定一覧
 	const DEFAULT_TASK			= 'config';
-	
+
 	/**
 	 * コンストラクタ
 	 */
@@ -59,61 +61,40 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TASK;		// デフォルト画面を設定
-/*		
+return;
 		// パンくずリストを作成
-		$createList = true;		// パンくずリストを作成するかどうか
 		switch ($task){
-			case 'banner':		// バナー管理
-			case 'banner_list':		// バナー一覧管理
-				$linkList = ' &gt;&gt; バナー管理';// パンくずリスト
-				break;
-			case 'image':		// 画像管理
-			case 'image_detail':	// 画像詳細
-				$linkList = ' &gt;&gt; 画像リンク管理';// パンくずリスト
-				break;
-			case 'image_select':	// 画像選択
-				$createList = false;		// パンくずリストを作成するかどうか
+			case self::TASK_DAYTYPE:					// 日付タイプ一覧
+			case self::TASK_DAYTYPE_DETAIL:				// 日付タイプ詳細
+				$linkList = ' &gt;&gt; 日付タイプ';
 				break;
 		}
 
-		if ($createList){				// パンくずリストを作成するとき
-			// ####### 上段メニューの作成 #######
-			$menuText = '<div id="configmenu-upper">' . M3_NL;
-			$menuText .= '<ul>' . M3_NL;
-		
-			$current = '';
-			$baseUrl = $this->getAdminUrlWithOptionParam(true);// 画面定義ID付き
-		
-			// バナー管理
-			$current = '';
-			$link = $this->getUrl($baseUrl . '&task=banner');
-			if ($task == 'banner' ||
-				$task == 'banner_list'){
-				$current = 'id="current"';
-			}
-			$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>バナー管理</span></a></li>' . M3_NL;
-		
-			// 画像管理
-			$current = '';
-			$link = $this->getUrl($baseUrl . '&task=image');
-			if ($task == 'image' ||		// 画像管理
-				$task == 'image_detail'){		// 画像詳細
-				$current = 'id="current"';
-			}
-			$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>画像リンク管理</span></a></li>' . M3_NL;
-		
-			// 上段メニュー終了
-			$menuText .= '</ul>' . M3_NL;
-			$menuText .= '</div>' . M3_NL;
-		
-			// 作成データの埋め込み
-			$linkList = '<div id="configmenu-top"><label>' . 'バナー' . $linkList . '</div>';
-			$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
-			$this->tmpl->addVar("_widget", "menu_items", $outputText);
-		} else {
-			$this->tmpl->addVar("_widget", "menu_items", '');
+		// ####### 上段メニューの作成 #######
+		$menuText = '<div id="configmenu-upper">' . M3_NL;
+		$menuText .= '<ul>' . M3_NL;
+	
+		$current = '';
+		$baseUrl = $this->getAdminUrlWithOptionParam(true);// 画面定義ID付き
+	
+		// 日付タイプ
+		$current = '';
+		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DAYTYPE);
+		if ($task == self::TASK_DAYTYPE ||			// 日付タイプ一覧
+			$task == self::TASK_DAYTYPE_DETAIL){	// 日付タイプ詳細
+			$current = 'id="current"';
 		}
-		*/
+		$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>日付タイプ</span></a></li>' . M3_NL;
+	
+	
+		// 上段メニュー終了
+		$menuText .= '</ul>' . M3_NL;
+		$menuText .= '</div>' . M3_NL;
+	
+		// 作成データの埋め込み
+		$linkList = '<div id="configmenu-top"><label>' . '汎用カレンダー' . $linkList . '</label></div>';
+		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
+		$this->tmpl->addVar("_widget", "menu_items", $outputText);
 	}
 }
 ?>
