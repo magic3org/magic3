@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_mainTopWidgetContainer.php 6061 2013-06-02 14:30:54Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/blog_mainBaseWidgetContainer.php');
@@ -642,50 +642,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->title = self::MESSAGE_NO_ENTRY_TITLE;
 				$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
 			}
-		} else if (!empty($year) && !empty($month)){
-			if (empty($day)){		// 月指定のとき
-				$startDt = $year . '/' . $month . '/1';
-				$endDt = $this->getNextMonth($year . '/' . $month) . '/1';
-				
-				// 総数を取得
-				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
-					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId);
-				} else {
-					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId);
-				}
-				//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
-				$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
-				
-				// リンク文字列作成、ページ番号調整
-				//$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
-				//$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
-				//				$this->getUrl($this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month, true/*リンク用*/));
-				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
-				
-				// 記事一覧作成
-				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
-					self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
-													''/*検索キーワード*/, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'));
-				} else {
-					self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
-													''/*検索キーワード*/, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId);
-				}
-				
-				if ($this->isExistsViewData){
-					// ページリンクを埋め込む
-					if (!empty($pageLink)){
-						$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
-						$this->tmpl->addVar("page_link", "page_link", $pageLink);
-					}
-				}
-				// 年月の表示
-				$this->title = $year . '年 ' . $month . '月';
-				
-				// ブログ記事データがないときはデータなしメッセージ追加
-				if (!$this->isExistsViewData){
-					$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
-				}
-			} else {
+	//	} else if (!empty($year) && !empty($month)){
+		} else if (!empty($year)){			// 年月日指定のとき
+			if (!empty($month) && !empty($day)){		// 日指定のとき
 				$startDt = $year . '/' . $month . '/' . $day;
 				$endDt = $this->getNextDay($year . '/' . $month . '/' . $day);
 				
@@ -723,6 +682,82 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				
 				// 年月日の表示
 				$this->title = $year . '年 ' . $month . '月 ' . $day . '日';
+				
+				// ブログ記事データがないときはデータなしメッセージ追加
+				if (!$this->isExistsViewData){
+					$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+				}
+			} else if (!empty($month)){		// 月指定のとき
+				$startDt = $year . '/' . $month . '/1';
+				$endDt = $this->getNextMonth($year . '/' . $month) . '/1';
+				
+				// 総数を取得
+				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId);
+				} else {
+					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId);
+				}
+				$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
+				
+				// リンク文字列作成、ページ番号調整
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
+				
+				// 記事一覧作成
+				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+					self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
+													''/*検索キーワード*/, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'));
+				} else {
+					self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
+													''/*検索キーワード*/, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId);
+				}
+				
+				if ($this->isExistsViewData){
+					// ページリンクを埋め込む
+					if (!empty($pageLink)){
+						$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
+						$this->tmpl->addVar("page_link", "page_link", $pageLink);
+					}
+				}
+				// 年月の表示
+				$this->title = $year . '年 ' . $month . '月';
+				
+				// ブログ記事データがないときはデータなしメッセージ追加
+				if (!$this->isExistsViewData){
+					$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+				}
+			} else {		// 年指定のとき
+				$startDt = $year . '/1/1';
+				$endDt = ($year + 1) . '/1/1';
+				
+				// 総数を取得
+				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId);
+				} else {
+					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId);
+				}
+				$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
+				
+				// リンク文字列作成、ページ番号調整
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year);
+				
+				// 記事一覧作成
+				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+					self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
+													''/*検索キーワード*/, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'));
+				} else {
+					self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
+													''/*検索キーワード*/, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId);
+				}
+				
+				if ($this->isExistsViewData){
+					// ページリンクを埋め込む
+					if (!empty($pageLink)){
+						$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
+						$this->tmpl->addVar("page_link", "page_link", $pageLink);
+					}
+				}
+				// 年の表示
+				$this->title = $year . '年';
 				
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
