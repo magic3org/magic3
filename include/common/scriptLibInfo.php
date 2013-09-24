@@ -72,6 +72,7 @@ class ScriptLibInfo
 //	const LIB_JQUERY_JQEASYPANEL	= 'jquery.jqeasypanel';
 	const LIB_JQUERY_SCROLLTO		= 'jquery.scrollto';
 	const LIB_JQUERY_FULLCALENDAR	= 'jquery.fullcalendar';
+	const LIB_JQUERY_TIMEPICKER		= 'jquery.timepicker';
 	
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
@@ -93,6 +94,7 @@ class ScriptLibInfo
 //	const JQUERY_JQEASYPANEL_VER	= '1.0';
 	const JQUERY_SCROLLTO_VER		= '1.4.3.1';
 	const JQUERY_FULLCALENDAR_VER	= '1.6.4';
+	const JQUERY_TIMEPICKER_VER		= '0.3.2';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -164,6 +166,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_SCROLLTO_FILENAME		= 'jquery/jquery.scrollTo-1.4.3.1-min.js';
 	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.4/fullcalendar.js';
 	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.4/fullcalendar.css';
+	const JQUERY_TIMEPICKER_FILENAME	= 'jquery/timepicker/jquery.ui.timepicker.js';
+	const JQUERY_TIMEPICKER_LANG_FILENAME	= 'jquery/timepicker/i18n/jquery.ui.timepicker-ja.js';
+	const JQUERY_TIMEPICKER_CSS			= 'jquery/timepicker/jquery.ui.timepicker.css';
 	
 	// ライブラリの公式サイトのURL
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
@@ -183,6 +188,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 //	const JQUERY_JQEASYPANEL_URL		= 'http://www.jqeasy.com/';
 	const JQUERY_SCROLLTO_URL			= 'http://flesler.blogspot.jp/2007/10/jqueryscrollto.html';
 	const JQUERY_FULLCALENDAR_URL		= 'http://arshaw.com/fullcalendar/';
+	const JQUERY_TIMEPICKER_URL			= 'http://fgelinas.com/code/timepicker/';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
 	
 	// ディレクトリ名
@@ -387,8 +393,13 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 					self::LIB_JQUERY_FULLCALENDAR	=>	array(	'script' 	=> array(self::JQUERY_FULLCALENDAR_FILENAME),	// jquery.FullCalendar用のファイル
 																'css'		=> array(self::JQUERY_FULLCALENDAR_CSS),
 																'url'		=> self::JQUERY_FULLCALENDAR_URL,
-																'version'	=> self::JQUERY_FULLCALENDAR_VER),
-																
+																'version'	=> self::JQUERY_FULLCALENDAR_VER),		
+					self::LIB_JQUERY_TIMEPICKER		=>	array(	'script' 	=> array(self::JQUERY_TIMEPICKER_FILENAME,		// jquery.timepicker用のファイル
+																					self::JQUERY_TIMEPICKER_LANG_FILENAME),	// 言語ファイル
+																'css'		=> array(self::JQUERY_TIMEPICKER_CSS),
+																'url'		=> self::JQUERY_TIMEPICKER_URL,
+																'version'	=> self::JQUERY_TIMEPICKER_VER),
+												
 /*					self::LIB_JQUERY_JQEASYPANEL	=>	array(	'script' 	=> array(self::JQUERY_JQEASYPANEL_FILENAME),	// jquery.jqEasyPanel用のファイル
 																'css'		=> array(self::JQUERY_JQEASYPANEL_CSS),
 																'url'		=> self::JQUERY_JQEASYPANEL_URL,
@@ -445,7 +456,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	static function getDependentLib($lib)
 	{
 		// ##### 依存ライブラリ情報 #####
-		static $dependentLib = array(self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER));
+		static $dependentLib = array(	self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
+										self::LIB_JQUERY_TIMEPICKER	=>	array(self::LIB_JQUERY_UI));			// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 		
 		return $dependentLib[$lib];
 	}

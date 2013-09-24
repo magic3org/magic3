@@ -1329,7 +1329,7 @@ class PageManager extends Core
 
 					if (isset($this->libFiles[$lib])){		// ライブラリが存在するとき
 						// 依存ライブラリを取得
-						if (strcmp($lib, 'elfinder') == 0){		// elFinderを使用する場合
+						if (strcmp($lib, ScriptLibInfo::LIB_ELFINDER) == 0 || strcmp($lib, ScriptLibInfo::LIB_JQUERY_TIMEPICKER) == 0){		// elFinderを使用する場合
 							// jQuery UIライブラリを追加
 							$dependentLib = ScriptLibInfo::getDependentLib($lib);
 							for ($l = 0; $l < count($dependentLib); $l++){
