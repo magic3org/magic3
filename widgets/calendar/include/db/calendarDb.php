@@ -58,9 +58,9 @@ class calendarDb extends BaseDb
 	 */
 	function getDayTypeList($callback)
 	{
-		$queryStr = 'SELECT * FROM date_type LEFT JOIN time_period ON dt_id = to_date_type_id AND to_index = 0 ';
-		$queryStr .=  'WHERE dt_deleted = false ';		// 削除されていない
-		$queryStr .=  'ORDER BY dt_sort_order';
+		$queryStr  = 'SELECT * FROM date_type LEFT JOIN time_period ON dt_id = to_date_type_id AND to_index = 0 ';
+		$queryStr .=   'WHERE dt_deleted = false ';		// 削除されていない
+		$queryStr .=   'ORDER BY dt_sort_order';
 		$this->selectLoop($queryStr, array(), $callback);
 	}
 	/**
@@ -87,6 +87,20 @@ class calendarDb extends BaseDb
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
+	}
+	/**
+	 * 時間割一覧を取得
+	 *
+	 * @param int		$dateTypeId		日付タイプ
+	 * @param function	$callback		コールバック関数
+	 * @return 			なし
+	 */
+	function getTimePeriodList($dateTypeId, $callback)
+	{
+		$queryStr  = 'SELECT * FROM time_period ';
+		$queryStr .=   'WHERE to_date_type_id = ? ';
+		$queryStr .=   'ORDER BY to_index';
+		$this->selectLoop($queryStr, array($dateTypeId), $callback);
 	}
 }
 ?>

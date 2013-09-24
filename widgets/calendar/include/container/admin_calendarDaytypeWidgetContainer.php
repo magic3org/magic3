@@ -58,7 +58,7 @@ class admin_calendarDaytypeWidgetContainer extends admin_calendarBaseWidgetConta
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'menuid_detail'){	// 詳細画面
+		if ($task == 'daytype_detail'){	// 詳細画面
 			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);
@@ -99,7 +99,7 @@ class admin_calendarDaytypeWidgetContainer extends admin_calendarBaseWidgetConta
 		}
 		// 一覧作成
 		self::$_mainDb->getDayTypeList(array($this, 'itemLoop'));
-		if (empty($this->serialArray)) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
+		if (empty($this->serialArray)) $this->tmpl->setAttribute('item_list', 'visibility', 'hidden');// 一覧非表示
 		
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
@@ -112,24 +112,17 @@ class admin_calendarDaytypeWidgetContainer extends admin_calendarBaseWidgetConta
 	function createDetail($request)
 	{
 		$act = $request->trimValueOf('act');
-		$this->menuId = $request->trimValueOf('serial');		// メニューID
+		$dateTypeId = $request->trimValueOf('serial');		// 日付タイプID
 
-		$newMenuId = $request->trimValueOf('item_menuid');		// 新規メニューID
-		$name = $request->trimValueOf('item_name');		// 名前
-		$desc = $request->trimValueOf('item_desc');		// 説明
-		$sortOrder = $request->trimValueOf('item_sort_order');		// ソート順
+		$name = $request->trimValueOf('item_name');		// 日付タイプ名
+		$sortOrder = $request->trimIntValueOf('item_sort_order', '1');		// ソート順
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
 			// 入力チェック
-			$this->checkSingleByte($newMenuId, 'メニューID');
 			$this->checkInput($name, '名前');
 			$this->checkNumeric($sortOrder, 'ソート順');
 			
-			// 登録済みのページIDかどうかチェック
-			if ($this->getMsgCount() == 0){
-				if ($this->db->isExistsMenuId($newMenuId)) $this->setMsg(self::MSG_USER_ERR, 'すでに登録済みのメニューIDです');
-			}
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの追加
@@ -137,7 +130,6 @@ class admin_calendarDaytypeWidgetContainer extends admin_calendarBaseWidgetConta
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
-					$this->menuId = $newMenuId;		// メニューID再設定
 					$replaceNew = true;			// データを再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データの追加に失敗しました');
@@ -145,7 +137,6 @@ class admin_calendarDaytypeWidgetContainer extends admin_calendarBaseWidgetConta
 			}
 		} else if ($act == 'update'){		// 更新のとき
 			// 入力チェック
-			$this->checkSingleByte($this->menuId, 'メニューID');
 			$this->checkInput($name, '名前');
 			$this->checkNumeric($sortOrder, 'ソート順');
 			
@@ -160,11 +151,7 @@ class admin_calendarDaytypeWidgetContainer extends admin_calendarBaseWidgetConta
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 			}
-		} else if ($act == 'delete'){		// 削除のとき
-			// 参照ありのときは削除できない
-//			$refCount = $this->sysDb->getMenuIdRefCount($this->menuId);		// メニューID使用数
-//			if ($refCount > 0) $this->setMsg(self::MSG_USER_ERR, '使用中のメニューIDは削除できません');
-			
+		} else if ($act == 'delete'){		// 削除のとき		
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
 				$ret = self::$_mainDb->deleteDayType(array($this->menuId));
@@ -177,35 +164,37 @@ class admin_calendarDaytypeWidgetContainer extends admin_calendarBaseWidgetConta
 		} else {		// 初期状態
 			$replaceNew = true;			// データを再取得
 		}
+		// 時間割一覧を取得
+		self::$_mainDb->getTimePeriodList($dateTypeId, array($this, 'timePeriodLoop'));
+		if (empty($this->serialArray)) $this->tmpl->setAttribute('time_list', 'visibility', 'hidden');
+		
 		// 表示データ再取得
 		if ($replaceNew){
-			$ret = $this->db->getMenuId($this->menuId, $row);
+//			$ret = $this->db->getMenuId($this->menuId, $row);
 			if ($ret){
 				$name = $row['mn_name'];
-				$desc = $row['mn_description'];
 				$sortOrder = $row['mn_sort_order'];
 			}
 		}
-		if (empty($this->menuId)){		// 新規追加のとき
-			$this->tmpl->setAttribute('show_menuid', 'visibility', 'visible');// メニューID入力領域表示
-			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 追加ボタン表示
+		
+		// 入力フィールドの設定、共通項目のデータ設定
+		if (empty($dateTypeId)){		// 新規追加のとき
+			$this->tmpl->addVar('_widget', 'id', '新規');
 			
-			$this->tmpl->addVar("show_menuid", "menu_id", $newMenuId);			// メニューID
+			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');	// 追加ボタン表示
 		} else {
-			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
-			$this->tmpl->addVar("_widget", "menu_id", $this->menuId);			// メニューID
+			$this->tmpl->addVar('_widget', 'id', $dateTypeId);
 			
-			// 使用中のメニューIDは削除できない
-//			$refCount = $this->sysDb->getMenuIdRefCount($this->menuId);		// メニューID使用数
-//			if ($refCount > 0) $this->tmpl->addVar("update_button", "del_disabled", "disabled");		// 削除ボタン使用不可
+			// データ更新、削除ボタン表示
+			$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
+			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');	// 更新ボタン表示
 		}
 		
-		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
-		$this->tmpl->addVar("_widget", "desc", $desc);		// 説明
+		$this->tmpl->addVar("_widget", "name", $name);		// 日付タイプ名
 		$this->tmpl->addVar("_widget", "sort_order", $sortOrder);		// ソート順
 	}
 	/**
-	 * メニューIDをテンプレートに設定する
+	 * 日付一覧をテンプレートに設定する
 	 *
 	 * @param int $index			行番号(0～)
 	 * @param array $fetchedRow		フェッチ取得した行
@@ -220,11 +209,35 @@ class admin_calendarDaytypeWidgetContainer extends admin_calendarBaseWidgetConta
 			'start_time'		=> $this->convertToDispTime($fetchedRow['to_start_time'], 1/*秒なし*/),			// 開始時間
 			'sort_order'	=> $this->convertToDispString($fetchedRow['dt_sort_order'])	// ソート順
 		);
-		$this->tmpl->addVars('itemlist', $row);
-		$this->tmpl->parseTemplate('itemlist', 'a');
+		$this->tmpl->addVars('item_list', $row);
+		$this->tmpl->parseTemplate('item_list', 'a');
 		
 		// 表示中項目のページサブIDを保存
 		$this->serialArray[] = $value;
+		return true;
+	}
+	/**
+	 * 時間割一覧をテンプレートに設定する
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function timePeriodLoop($index, $fetchedRow, $param)
+	{
+		$serial = $fetchedRow['to_serial'];
+		
+		$row = array(
+			'name'			=> $this->convertToDispString($fetchedRow['to_name']),			// 日付タイプ名
+			'start_time'		=> $this->convertToDispTime($fetchedRow['to_start_time'], 1/*秒なし*/),			// 開始時間
+			'minute'	=> $this->convertToDispString($fetchedRow['dt_minute'])	// 時間
+		);
+		$this->tmpl->addVars('time_list', $row);
+		$this->tmpl->parseTemplate('time_list', 'a');
+		
+		// 表示中項目のページサブIDを保存
+		$this->serialArray[] = $serial;
 		return true;
 	}
 }

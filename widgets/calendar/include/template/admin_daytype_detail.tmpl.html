@@ -27,6 +27,12 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+function delItem(){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
 function selectItem()
 {
 	document.main.act.value = 'select';
@@ -43,7 +49,23 @@ function delImage(lineObj){
 	document.main.submit();
 	return true;*/
 }
-function setupImageList()
+// 時間を追加
+function addTime()
+{
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" name="item_title[]" size="20" maxlength="60" style="width:100%" /></td>';
+	lineText += '<td><input type="text" name="item_start_time[]" size="5" maxlength="5" /></td>';
+	lineText += '<td><input type="text" name="item_minute[]" size="3" maxlength="3" /></td>';
+	lineText += '<td><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+/*	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="hidden" name="item_url[]" value="' + url + '" />' + filename + '</td>';
+	lineText += '<td><input type="text" name="item_title[]" size="20" maxlength="60" style="width:100%;" /></td>';
+	lineText += '<td><input type="text" name="item_desc[]" size="30" maxlength="100" style="width:100%;" /></td>';
+	lineText += '<td><a class="delImage" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';*/
+	$('#time_list').append(lineText);
+
+	// 時間枠一覧を再設定
+	setupTimeList();
+}
+function setupTimeList()
 {
 	$("#time_list").tableDnD({
 		dragHandle: "dragHandle"
@@ -64,15 +86,15 @@ function cancelItem(){
 	return true;
 }
 $(function(){
-	setupImageList();
+	setupTimeList();
 });
 //]]>
 </script>
 <div align="center">
-<br />
+{MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="task" />
+<input type="hidden" name="task" value="daytpye_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="imagecount" />
@@ -83,46 +105,41 @@ $(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" width="1000">
     <tbody>
     <tr>
-	    <td class="table-headside" width="100"><span {_HELP_DAYTYPE_NAME_INPUT}>名前</span></td>
-	    <td width="500">
-	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
-	        <option value="0">-- 新規 --</option>
-	        <patTemplate:tmpl name="title_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select>
-	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
-	    </patTemplate:tmpl>
-	    </td>
-	    <td class="table-headside" width="100"><span {_HELP_DAYTYPE_ID}>ID</span></td>
-	    <td align="center">{ID}</td>
+	    <td class="table-headside" width="150"><span {_HELP_DAYTYPE_NAME_INPUT}>名前</span></td>
+	    <td><input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" /></td>
 	</tr>
     <tr class="even">
+	    <td class="table-headside"><span {_HELP_DAYTYPE_SORT_ORDER}>ソート順</span></td>
+	    <td><input type="text" name="item_sort_order" value="{SORT_ORDER}" size="2" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+    <tr>
 	    <td class="table-headside"><span {_HELP_DAYTYPE_TIME}>時間割</span></td>
-	    <td colspan="3">
+	    <td>
 	    <table id="time_list" class="simple-table-inner" width="100%">
 	    <thead>
-	    <tr><th width="35">移動</th><th width="200">ファイル名</th><th width="200">タイトル名</th><th>説明</th><th>操作</th></tr>
+	    <tr><th width="35">移動</th><th width="200">時間枠名</th><th width="200">開始時間</th><th>時間枠(分)</th><th width="200">操作</th></tr>
 	    </thead><tbody>
-	    <patTemplate:tmpl name="item_list">
-            <tr class="dragRow">
+	    <patTemplate:tmpl name="time_list">
+        <tr class="dragRow">
 	    <td class="dragHandle"></td>
-	    <td><input type="hidden" name="item_url[]" value="{URL}" />{FILENAME}</td>
 	    <td><input type="text" name="item_title[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
-	    <td><input type="text" name="item_desc[]" value="{DESC}" size="30" maxlength="100" style="width:100%" /></td>
+	    <td><input type="text" name="item_start_time[]" value="{START_TIME}" size="5" maxlength="5" /></td>
+	    <td><input type="text" name="item_minute[]" value="{MINUTE}" size="3" maxlength="3" /></td>
 	    <td><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
-	    <div><input type="button" class="button" onclick="selectImage();" value="追加" /></div>
+	    <div><input type="button" class="button" onclick="addTime();" value="追加" /></div>
 	    </td>
 	</tr>
-	<tr>
-	    <td align="right" colspan="4">
+	<tr class="even">
+	    <td align="right" colspan="2">
+<patTemplate:tmpl name="delete_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+</patTemplate:tmpl>
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>

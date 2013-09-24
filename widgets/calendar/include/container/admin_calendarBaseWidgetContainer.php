@@ -61,7 +61,7 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TASK;		// デフォルト画面を設定
-return;
+
 		// パンくずリストを作成
 		switch ($task){
 			case self::TASK_DAYTYPE:					// 日付タイプ一覧
