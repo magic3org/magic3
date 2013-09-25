@@ -44,9 +44,9 @@ class admin_calendarWidgetContainer extends admin_calendarBaseWidgetContainer
 		// コンテナを起動
 		$goWidget = false;		// サブウィジェットを実行するかどうか
 		switch ($task){
-			case self::TASK_DAYTYPE:					// 日付タイプ一覧
-			case self::TASK_DAYTYPE_DETAIL:				// 日付タイプ詳細
-				$task = self::TASK_DAYTYPE;
+			case self::TASK_DATETYPE:					// 日付タイプ一覧
+			case self::TASK_DATETYPE_DETAIL:				// 日付タイプ詳細
+				$task = self::TASK_DATETYPE;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 			case self::TASK_CONFIG:		// 基本設定

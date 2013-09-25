@@ -15,14 +15,14 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
-	document.main.imagecount.value = $('#time_list').find('.dragRow').length;
+	document.main.timecount.value = $('#time_list').find('.dragRow').length;
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
 function updateItem(){
 	if (!window.confirm('設定を更新しますか?')) return false;
-	document.main.imagecount.value = $('#time_list').find('.dragRow').length;
+	document.main.timecount.value = $('#time_list').find('.dragRow').length;
 	document.main.act.value='update';
 	document.main.submit();
 	return true;
@@ -44,22 +44,13 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
-function delImage(lineObj){
-/*	document.main.task.value = 'list';
-	document.main.submit();
-	return true;*/
-}
 // 時間を追加
 function addTime()
 {
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" name="item_title[]" size="20" maxlength="60" style="width:100%" /></td>';
-	lineText += '<td><input type="text" name="item_start_time[]" size="5" maxlength="5" /></td>';
-	lineText += '<td><input type="text" name="item_minute[]" size="3" maxlength="3" /></td>';
-	lineText += '<td><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
-/*	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="hidden" name="item_url[]" value="' + url + '" />' + filename + '</td>';
-	lineText += '<td><input type="text" name="item_title[]" size="20" maxlength="60" style="width:100%;" /></td>';
-	lineText += '<td><input type="text" name="item_desc[]" size="30" maxlength="100" style="width:100%;" /></td>';
-	lineText += '<td><a class="delImage" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';*/
+	lineText += '<td><input type="text" class="timeField" name="item_start_time[]" size="5" maxlength="5" /></td>';
+	lineText += '<td><input type="text" name="item_minute[]" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
+	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	$('#time_list').append(lineText);
 
 	// 時間枠一覧を再設定
@@ -75,13 +66,16 @@ function setupTimeList()
 	}, function() {
 		$(this.cells[0]).removeClass('currentHandle');
 	});
-	// 画像項目削除処理
+	// 削除処理
 	$("#time_list tr .delRow").click(function(){
 		$(this).parents('.dragRow').remove();
 	});
+	
+	// タイムピッカー追加
+	$('.timeField').timepicker({ defaultTime: '' });
 }
 function cancelItem(){
-	document.main.task.value = 'daytype';
+	document.main.task.value = 'datetype';
 	document.main.submit();
 	return true;
 }
@@ -94,29 +88,29 @@ $(function(){
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="task" value="daytpye_detail" />
+<input type="hidden" name="task" value="datetype_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<input type="hidden" name="imagecount" />
+<input type="hidden" name="timecount" />
 <!-- m3:PostParam -->
 <table width="90%">
-<tr><td><span {_HELP_DAYTYPE_DETAIL}><label>日付タイプ詳細</label></span></td>
-<td align="right"><span {_HELP_DAYTYPE_LIST_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+<tr><td><span {_HELP_DATETYPE_DETAIL}><label>日付タイプ詳細</label></span></td>
+<td align="right"><span {_HELP_DATETYPE_LIST_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
 </td></tr>
 <tr><td colspan="2">
 
 <table class="simple-table" width="1000">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_DAYTYPE_NAME_INPUT}>名前</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_DATETYPE_NAME_INPUT}>名前</span></td>
 	    <td><input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" /></td>
 	</tr>
     <tr class="even">
-	    <td class="table-headside"><span {_HELP_DAYTYPE_SORT_ORDER}>ソート順</span></td>
+	    <td class="table-headside"><span {_HELP_DATETYPE_SORT_ORDER}>ソート順</span></td>
 	    <td><input type="text" name="item_sort_order" value="{SORT_ORDER}" size="2" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_DAYTYPE_TIME}>時間割</span></td>
+	    <td class="table-headside"><span {_HELP_DATETYPE_TIME}>時間割</span></td>
 	    <td>
 	    <table id="time_list" class="simple-table-inner" width="100%">
 	    <thead>
@@ -126,9 +120,9 @@ $(function(){
         <tr class="dragRow">
 	    <td class="dragHandle"></td>
 	    <td><input type="text" name="item_title[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
-	    <td><input type="text" name="item_start_time[]" value="{START_TIME}" size="5" maxlength="5" /></td>
-	    <td><input type="text" name="item_minute[]" value="{MINUTE}" size="3" maxlength="3" /></td>
-	    <td><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    <td><input type="text" name="item_start_time[]" class="timeField" value="{START_TIME}" size="5" maxlength="5" /></td>
+	    <td><input type="text" name="item_minute[]" value="{MINUTE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td style="text-align: center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>

@@ -22,8 +22,8 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 	protected static $_mainDb;			// DB接続オブジェクト
 	
 	// 画面
-	const TASK_DAYTYPE			= 'daytype';					// 日付タイプ一覧
-	const TASK_DAYTYPE_DETAIL	= 'daytype_detail';				// 日付タイプ詳細
+	const TASK_DATETYPE			= 'datetype';					// 日付タイプ一覧
+	const TASK_DATETYPE_DETAIL	= 'datetype_detail';				// 日付タイプ詳細
 	const TASK_CONFIG			= 'config';				// 基本設定
 	const TASK_CONFIG_LIST		= 'config_list';		// 設定一覧
 	const DEFAULT_TASK			= 'config';
@@ -64,8 +64,8 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 
 		// パンくずリストを作成
 		switch ($task){
-			case self::TASK_DAYTYPE:					// 日付タイプ一覧
-			case self::TASK_DAYTYPE_DETAIL:				// 日付タイプ詳細
+			case self::TASK_DATETYPE:					// 日付タイプ一覧
+			case self::TASK_DATETYPE_DETAIL:				// 日付タイプ詳細
 				$linkList = ' &gt;&gt; 日付タイプ';
 				break;
 		}
@@ -79,9 +79,9 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 	
 		// 日付タイプ
 		$current = '';
-		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DAYTYPE);
-		if ($task == self::TASK_DAYTYPE ||			// 日付タイプ一覧
-			$task == self::TASK_DAYTYPE_DETAIL){	// 日付タイプ詳細
+		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DATETYPE);
+		if ($task == self::TASK_DATETYPE ||			// 日付タイプ一覧
+			$task == self::TASK_DATETYPE_DETAIL){	// 日付タイプ詳細
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>日付タイプ</span></a></li>' . M3_NL;
