@@ -10,7 +10,7 @@
  * @author     株式会社 毎日メディアサービス
  * @copyright  Copyright 2009-2013 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: contactus_freelayout3WidgetContainer.php 6113 2013-06-14 05:41:44Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -102,6 +102,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->resetButtonId = $targetObj->resetButtonId;		// エリアリセットボタンのタグID
 		$sendFormId = $this->gEnv->getCurrentWidgetId() . '_' . $configId . '_form';		// 送信フォームのタグID
 		$name	= $targetObj->name;// 名前
+		$pageTitle = $targetObj->pageTitle;			// 画面タイトル
 		if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// お問い合わせフィールド情報
 		
 		// 入力値を取得
@@ -341,7 +342,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		}
 		
 		// HTMLサブタイトルを設定
-		$this->gPage->setHeadSubTitle(self::DEFAULT_TITLE_NAME);
+		if (empty($pageTitle)) $pageTitle = self::DEFAULT_TITLE_NAME;			// 画面タイトル
+		$this->gPage->setHeadSubTitle($pageTitle);
 
 		// Artisteerデザイン用のスクリプト
 		if ($this->useArtisteer) $this->tmpl->setAttribute('show_art', 'visibility', 'visible');

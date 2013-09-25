@@ -110,6 +110,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		
 		// 入力値を取得
 		$name	= $request->trimValueOf('item_name');			// 定義名
+		$pageTitle = $request->trimValueOf('item_page_title');			// 画面タイトル
 		$baseTemplate = $request->valueOf('item_html');		// 入力エリア作成用ベーステンプレート
 		$this->css	= $request->valueOf('item_css');		// 入力エリア作成用CSS
 		$this->confirmButtonId = $request->trimValueOf('item_confirm_button');		// 確認ボタンのタグID
@@ -217,6 +218,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name		= $name;// 表示名
+				$newObj->pageTitle = $pageTitle;			// 画面タイトル
 				$newObj->baseTemplate = $baseTemplate;		// 入力エリア作成用ベーステンプレート
 				$newObj->css	= $this->css;					// 入力エリア用CSS
 				$newObj->confirmButtonId = $this->confirmButtonId;		// 確認ボタンのタグID
@@ -280,6 +282,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					// ウィジェットオブジェクト更新
+					$targetObj->pageTitle = $pageTitle;			// 画面タイトル
 					$targetObj->baseTemplate = $baseTemplate;		// 入力エリア作成用ベーステンプレート
 					$targetObj->css			= $this->css;					// 入力エリア作成用CSS
 					$targetObj->confirmButtonId = $this->confirmButtonId;		// 確認ボタンのタグID
@@ -321,6 +324,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				
+				$pageTitle = '';			// 画面タイトル
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));// デフォルト用のCSSを取得
 				$emailSubject = '';		// メールタイトル
 				$emailReceiver = '';	// メール受信者(aaaa<xxx@xxx.xxx>形式が可能)
@@ -345,6 +349,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					$name	= $targetObj->name;// 名前
+					$pageTitle = $targetObj->pageTitle;			// 画面タイトル
 					$baseTemplate = $targetObj->baseTemplate;		// 入力エリア作成用ベーステンプレート
 					$this->css		= $targetObj->css;					// 入力エリア作成用CSS
 					$this->confirmButtonId = $targetObj->confirmButtonId;		// 確認ボタンのタグID
@@ -376,7 +381,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
-		$this->tmpl->addVar("item_name_visible", "name",	$name);
+		$this->tmpl->addVar("item_name_visible", "name",	$this->convertToDispString($name));
+		$this->tmpl->addVar("_widget", "page_title",	$this->convertToDispString($pageTitle));			// 画面タイトル
 		$this->tmpl->addVar("_widget", "html",	$baseTemplate);		// 入力エリア作成用ベーステンプレート
 		$this->tmpl->addVar("_widget", "css",	$this->css);		// 入力エリア作成用CSS
 		$this->tmpl->addVar("_widget", "confirm_button",	$this->confirmButtonId);		// 確認ボタンのタグID

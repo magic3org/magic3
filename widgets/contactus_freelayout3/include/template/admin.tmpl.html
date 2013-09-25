@@ -7,7 +7,7 @@
  * @author     株式会社 毎日メディアサービス
  * @copyright  Copyright 2009-2013 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 5824 2013-03-14 05:45:38Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 <patTemplate:tmpl name="_widget">
@@ -183,7 +183,7 @@ $(document).ready(function(){
 
 <table class="simple-table" width="100%">
     <tbody>
-        <tr>
+    <tr>
 	    <td class="table-headside" width="100"><span {_HELP_CONTACTUS_NAME_INPUT}>名前</span></td>
 	    <td width="500">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
@@ -199,7 +199,11 @@ $(document).ready(function(){
 	    <td class="table-headside" width="100"><span {_HELP_CONTACTUS_ID}>ID</span></td>
 	    <td align="center">{ID}</td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_CONTACTUS_PAGE_TITLE}>画面タイトル</span></td>
+	    <td colspan="3"><input type="text" name="item_page_title" value="{PAGE_TITLE}" size="40" maxlength="60" /></td>
+	</tr>
+    <tr>
 	    <td class="table-headside"><span {_HELP_CONTACTUS_FIELD}>お問い合わせ<br />項目</span></td>
 	    <td colspan="3">
 	    <table id="field_list" class="simple-table-inner" width="100%">
@@ -229,35 +233,35 @@ $(document).ready(function(){
 	    <div><input type="button" class="button" onclick="addLine();" value="追加" /></div>
 	    </td>
 	</tr>
-        <tr>
+    <tr class="even">
 	    <td class="table-headside">規定タグID</td>
 	    <td colspan="3">{TAG_ID_STR}<input type="hidden" name="item_confirm_button" value="{CONFIRM_BUTTON}" /><input type="hidden" name="item_send_button" value="{SEND_BUTTON}" /><input type="hidden" name="item_cancel_button" value="{CANCEL_BUTTON}" /><input type="hidden" name="item_reset_button" value="{RESET_BUTTON}" /></td>
 	</tr>
-    <tr class="even">
+    <tr>
 	    <td class="table-headside"><span {_HELP_CONTACTUS_TEMPLATE}>テンプレート</span></td>
 	    <td colspan="3"><textarea name="item_html">{HTML}</textarea></td>
 	</tr>
-    <tr>
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_CONTACTUS_CSS}>CSS</span></td>
 	    <td colspan="3"><textarea name="item_css" rows="3" style="width:100%;">{CSS}</textarea></td>
 	</tr>
-    <tr class="even">
+    <tr>
 	    <td class="table-headside"><span {_HELP_CONTACTUS_DESIGN}>デザイン</span></td>
 	    <td colspan="3"><input type="checkbox" name="item_use_artisteer" {USE_ARTISTEER} />Artisteer対応(チェックボックス,ラジオボタン等)
 	    </td>
 	</tr>
-    <tr>
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_CONTACTUS_EMAIL}>メール送信</span></td>
 	    <td colspan="3">件名：<input type="text" name="item_email_subject" value="{EMAIL_SUBJECT}" size="40" maxlength="60" />&nbsp;&nbsp;&nbsp;&nbsp;
 	    送信先メールアドレス：<input type="text" name="item_email_receiver" value="{EMAIL_RECEIVER}" size="25" maxlength="40" /></td>
 	</tr>
-    <tr class="even">
+    <tr>
 	    <td class="table-headside"><span {_HELP_CONTACTUS_USER_EMAIL}>確認メール</span></td>
 	    <td colspan="3"><input type="checkbox" name="item_send_user_email" {SEND_USER_EMAIL} />お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信<br />件名：<input type="text" name="item_user_email_subject" value="{USER_EMAIL_SUBJECT}" size="40" maxlength="60" />&nbsp;&nbsp;&nbsp;&nbsp;返信先メールアドレス：<input type="text" name="item_user_email_reply" value="{USER_EMAIL_REPLY}" size="25" maxlength="40" /><br />
 	    本文：<br />
 	    <textarea name="item_user_email_format" rows="3" style="width:100%;">{USER_EMAIL_FORMAT}</textarea></td>
 	</tr>
-	<tr>
+	<tr class="even">
 	    <td align="right" colspan="4">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem('update');" value="更新" />
