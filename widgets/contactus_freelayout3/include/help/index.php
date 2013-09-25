@@ -11,7 +11,7 @@
  * @author     株式会社 毎日メディアサービス
  * @copyright  Copyright 2009-2013 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 6113 2013-06-14 05:41:44Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 // 直接アクセスの防止
@@ -34,6 +34,8 @@ $HELP['contactus_name_input']['title'] = '名前';
 $HELP['contactus_name_input']['body'] = '設定名です。新規に登録するか、登録済みの設定を選択します。';
 $HELP['contactus_id']['title'] = '設定ID';
 $HELP['contactus_id']['body'] = '自動的に振られる設定IDです。';
+$HELP['contactus_page_title']['title'] = '画面タイトル';
+$HELP['contactus_page_title']['body'] = '画面タイトルを設定します。';
 $HELP['contactus_template']['title'] = 'テンプレート';
 $HELP['contactus_template']['body'] = 'レイアウト用のテンプレートです。<br />[#ITEM_KEY_n#](nはお問い合わせ項目のNoを指定)形式のタグを埋め込むとその位置に該当するお問い合わせ項目が表示できます。';
 $HELP['contactus_field']['title'] = 'お問い合わせ項目';
