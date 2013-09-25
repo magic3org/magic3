@@ -28,6 +28,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	private $cancelButtonId;		// 送信キャンセルボタンのタグID
 	private $resetButtonId;		// エリアリセットボタンのタグID
 	private $useArtisteer;					// Artisteer対応デザイン
+	private $pageTitle;			// 画面タイトル
 	const DEFAULT_CONFIG_ID = 0;
 	const CONTACTUS_FORM = 'contact_us';		// お問い合わせフォーム
 	const DEFAULT_SEND_MESSAGE = 1;		// メール送信機能を使用するかどうか(デフォルト使用)
@@ -102,7 +103,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->resetButtonId = $targetObj->resetButtonId;		// エリアリセットボタンのタグID
 		$sendFormId = $this->gEnv->getCurrentWidgetId() . '_' . $configId . '_form';		// 送信フォームのタグID
 		$name	= $targetObj->name;// 名前
-		$pageTitle = $targetObj->pageTitle;			// 画面タイトル
+		$this->pageTitle = $targetObj->pageTitle;			// 画面タイトル
+		if (empty($this->pageTitle)) $this->pageTitle = self::DEFAULT_TITLE_NAME;			// 画面タイトル
 		if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// お問い合わせフィールド情報
 		
 		// 入力値を取得
@@ -342,8 +344,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		}
 		
 		// HTMLサブタイトルを設定
-		if (empty($pageTitle)) $pageTitle = self::DEFAULT_TITLE_NAME;			// 画面タイトル
-		$this->gPage->setHeadSubTitle($pageTitle);
+		$this->gPage->setHeadSubTitle($this->pageTitle);
 
 		// Artisteerデザイン用のスクリプト
 		if ($this->useArtisteer) $this->tmpl->setAttribute('show_art', 'visibility', 'visible');
@@ -366,6 +367,17 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "cancel_button_id",	$this->cancelButtonId);		// 送信キャンセルボタンのタグID
 		$this->tmpl->addVar("_widget", "reset_button_id",	$this->resetButtonId);		// エリアリセットボタンのタグID
 		$this->tmpl->addVar("_widget", "send_form_id",	$sendFormId);		// 送信フォームのタグID
+	}
+	/**
+	 * ウィジェットのタイトルを設定
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
+	 * @return string 						ウィジェットのタイトル名
+	 */
+	function _setTitle($request, &$param)
+	{
+		return $this->pageTitle;
 	}
 	/**
 	 * CSSデータをHTMLヘッダ部に設定
