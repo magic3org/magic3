@@ -233,5 +233,34 @@ class calendarDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
+	/**
+	 * カレンダー定義一覧を取得
+	 *
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getCalendarDefList($callback)
+	{
+		$queryStr  = 'SELECT * FROM calendar_def LEFT JOIN _login_user ON cd_update_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE cd_deleted = false ';		// 削除されていない
+		$queryStr .=   'ORDER BY cd_id';
+		$this->selectLoop($queryStr, array(), $callback);
+	}
+	/**
+	 * 日付一覧を取得
+	 *
+	 * @param int       $defId				カレンダー定義ID
+	 * @param int       $type				0=基本データ,1=個別データ
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getDateList($defId, $type, $callback)
+	{
+		$queryStr  = 'SELECT * FROM calendar_date ';
+		$queryStr .=   'WHERE ce_def_id = ? ';
+		$queryStr .=     'AND ce_type = ? ';
+		$queryStr .=   'ORDER BY ce_index';
+		$this->selectLoop($queryStr, array(intval($defId), intval($type)), $callback);
+	}
 }
 ?>

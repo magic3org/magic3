@@ -22,6 +22,8 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 	protected static $_mainDb;			// DB接続オブジェクト
 	
 	// 画面
+	const TASK_DATE				= 'date';				// 日付管理
+	const TASK_DATE_DETAIL		= 'date_detail';		// 日付管理詳細
 	const TASK_DATETYPE			= 'datetype';					// 日付タイプ一覧
 	const TASK_DATETYPE_DETAIL	= 'datetype_detail';				// 日付タイプ詳細
 	const TASK_CONFIG			= 'config';				// 基本設定
@@ -64,9 +66,17 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 
 		// パンくずリストを作成
 		switch ($task){
+			case self::TASK_CONFIG:				// カレンダー設定
+			case self::TASK_CONFIG_LIST:		// 設定一覧
+				$linkList = ' &gt;&gt; カレンダー管理 &gt;&gt; カレンダー設定';
+				break;
+			case self::TASK_DATE:				// 日付管理
+			case self::TASK_DATE_DETAIL:		// 日付管理詳細
+				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 日付定義';
+				break;
 			case self::TASK_DATETYPE:					// 日付タイプ一覧
 			case self::TASK_DATETYPE_DETAIL:				// 日付タイプ詳細
-				$linkList = ' &gt;&gt; 日付タイプ';
+				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 日付タイプ';
 				break;
 		}
 
@@ -77,20 +87,71 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 		$current = '';
 		$baseUrl = $this->getAdminUrlWithOptionParam(true);// 画面定義ID付き
 	
-		// 日付タイプ
+		// カレンダー管理
 		$current = '';
-		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DATETYPE);
-		if ($task == self::TASK_DATETYPE ||			// 日付タイプ一覧
+		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CONFIG);
+		if ($task == self::TASK_CONFIG ||		// 日付定義
+			$task == self::TASK_CONFIG_LIST){	// 日付定義一覧
+			$current = 'id="current"';
+		}
+		$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>カレンダー管理</span></a></li>' . M3_NL;
+		
+		// 基本設定
+		$current = '';
+		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DATE);
+		if ($task == self::TASK_DATE ||				// 日付管理
+			$task == self::TASK_DATE_DETAIL ||		// 日付管理詳細
+			$task == self::TASK_DATETYPE ||			// 日付タイプ一覧
 			$task == self::TASK_DATETYPE_DETAIL){	// 日付タイプ詳細
 			$current = 'id="current"';
 		}
-		$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>日付タイプ</span></a></li>' . M3_NL;
-	
+		$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>基本設定</span></a></li>' . M3_NL;
 	
 		// 上段メニュー終了
 		$menuText .= '</ul>' . M3_NL;
 		$menuText .= '</div>' . M3_NL;
 	
+		// ####### 下段メニューの作成 #######		
+		$menuText .= '<div id="configmenu-lower">' . M3_NL;
+		$menuText .= '<ul>' . M3_NL;
+
+		if ($task == self::TASK_CONFIG ||		// 日付定義
+			$task == self::TASK_CONFIG_LIST){	// 日付定義一覧
+			
+			// 日付定義
+			$current = '';
+			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CONFIG);
+			if ($task == 'entry' || $task == 'entry_detail') $current = 'id="current"';
+			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>カレンダー設定</span></a></li>' . M3_NL;
+			
+		} else if ($task == self::TASK_DATE ||				// 日付管理
+			$task == self::TASK_DATE_DETAIL ||		// 日付管理詳細
+			$task == self::TASK_DATETYPE ||			// 日付タイプ一覧
+			$task == self::TASK_DATETYPE_DETAIL){	// 日付タイプ詳細
+			
+			// 日付管理
+			$current = '';
+			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DATE);
+			if ($task == self::TASK_DATE || $task == self::TASK_DATE_DETAIL) $current = 'id="current"';
+			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>日付定義</span></a></li>' . M3_NL;
+			
+/*			// イベント管理
+			$current = '';
+			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DATE);
+			if ($task == self::TASK_DATE || $task == self::TASK_DATE_DETAIL) $current = 'id="current"';
+			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>イベント管理</span></a></li>' . M3_NL;*/
+			
+			// 日付タイプ
+			$current = '';
+			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DATETYPE);
+			if ($task == self::TASK_DATETYPE || $task == self::TASK_DATETYPE_DETAIL) $current = 'id="current"';
+			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>日付タイプ</span></a></li>' . M3_NL;
+		}
+		
+		// 下段メニュー終了
+		$menuText .= '</ul>' . M3_NL;
+		$menuText .= '</div>' . M3_NL;
+		
 		// 作成データの埋め込み
 		$linkList = '<div id="configmenu-top"><label>' . '汎用カレンダー' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
