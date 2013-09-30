@@ -15,14 +15,14 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
-	document.main.timecount.value = $('#except_date_list').find('.dragRow').length;
+	document.main.exceptdatecount.value = $('#except_date_list').find('.dragRow').length;
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
 function updateItem(){
 	if (!window.confirm('設定を更新しますか?')) return false;
-	document.main.timecount.value = $('#except_date_list').find('.dragRow').length;
+	document.main.exceptdatecount.value = $('#except_date_list').find('.dragRow').length;
 	document.main.act.value='update';
 	document.main.submit();
 	return true;
@@ -33,30 +33,33 @@ function delItem(){
 	document.main.submit();
 	return true;
 }
-function selectItem()
-{
-	document.main.act.value = 'select';
-	document.main.submit();
-	return true;
-}
 function listItem(){
 	document.main.task.value = 'list';
 	document.main.submit();
 	return true;
 }
 // 時間を追加
-function addTime()
+function addDate()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" name="item_title[]" size="20" maxlength="60" style="width:100%" /></td>';
-	lineText += '<td><input type="text" class="timeField" name="item_start_time[]" size="5" maxlength="5" /></td>';
-	lineText += '<td><input type="text" name="item_minute[]" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" name="item_except_date[]" class="date_field" size="15" maxlength="10" /></td>';
+	lineText += '<td><input type="text" name="item_except_title[]" size="20" maxlength="60" style="width:100%" /></td>';
+	lineText += '<td><select name="item_except_date_type[]" class="except_date_type"></select></td>';
 	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
-	$('#except_date_list').append(lineText);
+	
+	var rowObj = $(lineText);
+	var options = $("#date_type_menu option");
+	rowObj.find('.except_date_type').html(options.clone());
+	$('#except_date_list').append(rowObj);
+//	$('#except_date_list').append(lineText);	
 
-	// 時間枠一覧を再設定
-	setupTimeList();
+	// 日付選択メニュー追加
+//	var options = $("#date_type_menu option");
+//	$(".except_date_type").html(options.clone());
+	
+	// 例外日一覧を再設定
+	setupExceptDateList();
 }
-function setupTimeList()
+function setupExceptDateList()
 {
 	$("#except_date_list").tableDnD({
 		dragHandle: "dragHandle"
@@ -71,8 +74,8 @@ function setupTimeList()
 		$(this).parents('.dragRow').remove();
 	});
 	
-	// タイムピッカー追加
-	$('.timeField').timepicker({ defaultTime: '' });
+	// 日付ピッカー追加
+	$('.date_field').datepicker();
 }
 function cancelItem(){
 	document.main.task.value = 'date';
@@ -80,14 +83,22 @@ function cancelItem(){
 	return true;
 }
 function selectMenu(){
+	document.main.act.value = 'select';
 	document.main.submit();
 	return true;
 }
 $(function(){
-//	setupTimeList();
+	setupExceptDateList();
 	
+	// 基本日一覧の日付タイプ選択メニューを作成
 	var options = $("#date_type_menu option");
 	$(".date_type").html(options.clone());
+	for (var i = 0; i < document.main.datecount.value; i++){
+		$("#date_type" + i).val($("#date_value" + i).val());
+	}
+	
+	// 例外日の日付タイプ選択メニューを作成
+	$(".except_date_type").html(options.clone());
 });
 //]]>
 </script>
@@ -98,7 +109,8 @@ $(function(){
 <input type="hidden" name="task" value="date_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<input type="hidden" name="timecount" />
+<input type="hidden" name="datecount" value="{DATE_COUNT}" />
+<input type="hidden" name="exceptdatecount" />
 <!-- m3:PostParam -->
 <table width="90%">
 <tr><td><span {_HELP_DATE_DETAIL}><label>日付定義</label></span></td>
@@ -135,13 +147,13 @@ $(function(){
 	    <td>
 	    <table class="simple-table-inner" width="100%">
 	    <thead>
-	    <tr><th width="35"></th><th width="200">名前</th><th >日付タイプ</th></tr>
+	    <tr><th width="35"></th><th width="300">名前</th><th >日付タイプ</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="date_list">
         <tr>
 	    <td style="text-align:center;">{KEY}</td>
-	    <td><input type="text" name="item_date_name[]" value="{DATE_NAME}" size="20" maxlength="40" style="width:100%" /></td>
-	    <td><select id="date_type{INDEX}" name="item_date_type[]" class="date_type"></select><input type="hidden" id="date_value{INDEX}" /></td>
+	    <td><input type="text" name="item_date_name[]" value="{NAME}" size="20" maxlength="40" style="width:100%" /></td>
+	    <td><select id="date_type{INDEX}" name="item_date_type[]" class="date_type"></select><input type="hidden" id="date_value{INDEX}" value="{TYPE_ID}" /></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
@@ -152,19 +164,19 @@ $(function(){
 	    <td>
 	    <table id="except_date_list" class="simple-table-inner" width="100%">
 	    <thead>
-	    <tr><th width="35">移動</th><th width="200">時間枠名</th><th width="200">開始時間</th><th>時間枠(分)</th><th width="200">操作</th></tr>
+	    <tr><th width="35">移動</th><th width="100">日付</th><th width="200">名前</th><th>日付タイプ</th><th width="200">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="except_date_list">
         <tr class="dragRow">
 	    <td class="dragHandle"></td>
-	    <td><input type="text" name="item_title[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
-	    <td><input type="text" name="item_start_time[]" class="timeField" value="{START_TIME}" size="5" maxlength="5" /></td>
-	    <td><input type="text" name="item_minute[]" value="{MINUTE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td><input type="text" name="item_except_date[]" class="date_field" value="{DATE}" size="15" maxlength="10" /></td>
+	    <td><input type="text" name="item_except_title[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
+	    <td><select id="except_date_type{INDEX}" name="item_except_date_type[]" class="except_date_type"></select><input type="hidden" id="except_date_value{INDEX}" /></td>
 	    <td style="text-align:center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
-	    <div><input type="button" class="button" onclick="addTime();" value="追加" /></div>
+	    <div><input type="button" class="button" onclick="addDate();" value="追加" /></div>
 	    </td>
 	</tr>
 	<tr class="even">

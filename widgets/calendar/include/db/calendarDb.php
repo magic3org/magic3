@@ -247,6 +247,117 @@ class calendarDb extends BaseDb
 		$this->selectLoop($queryStr, array(), $callback);
 	}
 	/**
+	 * カレンダー定義の追加更新
+	 *
+	 * @param string $id			定義ID。0のときは新規追加
+	 * @param string $name			カレンダー定義名
+	 * @param int    $repeatType	繰り返しタイプ
+	 * @param int    $dateCount		所要日数
+	 * @param int    $newId			新規ID
+	 * @return						true = 正常、false=異常
+	 */
+	function updateCalendarDef($id, $name, $repeatType, $dateCount, &$newId)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$historyIndex = 0;
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		if (empty($id)){		// 新規追加の場合
+			// 新規IDを作成
+			$queryStr  = 'SELECT MAX(cd_id) AS mi FROM calendar_def ';
+			$ret = $this->selectRecord($queryStr, array(), $row);
+			if ($ret){
+				$newId = $row['mi'] + 1;
+			} else {
+				$newId = 1;
+			}
+			$id = $newId;
+		} else {
+			// 旧レコード取得
+			$queryStr  = 'SELECT * FROM calendar_def ';
+			$queryStr .=   'WHERE cd_id = ? ';
+			$queryStr .=   'ORDER BY cd_history_index DESC ';
+			$ret = $this->selectRecord($queryStr, array($id), $row);
+			if ($ret){
+				$historyIndex = $row['cd_history_index'] + 1;
+		
+				// レコードが削除されていない場合は削除
+				if (!$row['cd_deleted']){
+					// 古いレコードを削除
+					$queryStr  = 'UPDATE calendar_def ';
+					$queryStr .=   'SET cd_deleted = true, ';	// 削除
+					$queryStr .=     'cd_update_user_id = ?, ';
+					$queryStr .=     'cd_update_dt = ? ';
+					$queryStr .= 'WHERE cd_serial = ?';
+					$this->execStatement($queryStr, array($userId, $now, $row['cd_serial']));
+					if (!$ret){
+						// トランザクション終了
+						$this->endTransaction();
+				
+						return false;
+					}
+				}
+			}
+		}
+
+		// レコードを追加
+		$queryStr  = 'INSERT INTO calendar_def ';
+		$queryStr .=   '(cd_id, cd_history_index, cd_name, cd_repeat_type, cd_date_count, cd_create_user_id, cd_create_dt) ';
+		$queryStr .= 'VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($id, $historyIndex, $name, intval($repeatType), $dateCount, $userId, $now));
+			
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * カレンダー定義の削除
+	 *
+	 * @param array  $idArray		ID
+	 * @return bool					true=成功、false=失敗
+	 */
+	function deleteCalendarDef($idArray)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		
+		if (empty($idArray)) return false;
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		$queryStr  = 'UPDATE calendar_def ';
+		$queryStr .=   'SET cd_deleted = true, ';	// 削除
+		$queryStr .=     'cd_update_user_id = ?, ';
+		$queryStr .=     'cd_update_dt = ? ';
+		$queryStr .=   'WHERE cd_id in (' . implode($idArray, ',') . ') ';
+		$queryStr .=     'AND cd_deleted = false ';	// 削除されていない
+		$this->execStatement($queryStr, array($userId, $now));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * カレンダー定義を取得
+	 *
+	 * @param string	$id				定義ID
+	 * @param array     $row			レコード
+	 * @return bool						取得 = true, 取得なし= false
+	 */
+	function getCalendarDef($id, &$row)
+	{
+		$queryStr  = 'SELECT * FROM calendar_def LEFT JOIN _login_user ON cd_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE cd_deleted = false ';
+		$queryStr .=     'AND cd_id = ? ';
+		$ret = $this->selectRecord($queryStr, array(intval($id)), $row);
+		return $ret;
+	}
+	/**
 	 * 日付一覧を取得
 	 *
 	 * @param int       $defId				カレンダー定義ID
@@ -261,6 +372,49 @@ class calendarDb extends BaseDb
 		$queryStr .=     'AND ce_type = ? ';
 		$queryStr .=   'ORDER BY ce_index';
 		$this->selectLoop($queryStr, array(intval($defId), intval($type)), $callback);
+	}
+	/**
+	 * 日付の追加更新
+	 *
+	 * @param string $id				カレンダー定義ID
+	 * @param int    $dataType			データタイプ(0=インデックス番号,1=日付)
+	 * @param array $dateInfoArray		日付情報の配列
+	 * @return bool						true = 正常、false=異常
+	 */
+	function updateDate($id, $dataType, $dateInfoArray)
+	{
+		// パラメータエラーチェック
+		if (intval($id) <= 0) return false;
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		if ($dataType == 0){		// インデックス番号指定の場合
+			// 旧データ削除
+			$queryStr  = 'DELETE FROM calendar_date ';
+			$queryStr .=   'WHERE ce_def_id = ? ';
+			$queryStr .=     'AND ce_type = ? ';
+			$this->execStatement($queryStr, array($id, $dataType));
+		
+			// レコードを追加
+			$timeCount = count($dateInfoArray);
+			for ($i = 0; $i < $timeCount; $i++){
+				$defObj = $dateInfoArray[$i];
+				$dateName	= $defObj->dateName;			// 名前
+				$dateType	= $defObj->dateType;		// 日付タイプ
+			
+				$queryStr  = 'INSERT INTO calendar_date ';
+				$queryStr .=   '(ce_def_id, ce_type, ce_index, ce_name, ce_date_type_id) ';
+				$queryStr .= 'VALUES ';
+				$queryStr .=   '(?, ?, ?, ?, ?)';
+				$this->execStatement($queryStr, array($id, $dataType, $i, $dateName, $dateType));			
+			}
+		} else if ($dataType == 1){			// 日付指定の場合
+		}
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
 	}
 }
 ?>
