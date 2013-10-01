@@ -250,6 +250,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME	= 'jquery/ui/1.9.2/jquery.ui.autocomplete.min.js';		// Widgets Autocomplete
 	const JQUERY_UI_WIDGETS_BUTTON_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.button.min.js';			// Widgets Button
 	const JQUERY_UI_WIDGETS_DATEPICKER_FILENAME		= 'jquery/ui/1.9.2/jquery.ui.datepicker.min.js';		// Widgets Datepicker
+	const JQUERY_UI_WIDGETS_DATEPICKER_LANG_FILENAME	= 'jquery/ui/1.9.2/jquery.ui.datepicker-ja.js';		// Widgets Datepicker
 	const JQUERY_UI_WIDGETS_DIALOG_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.dialog.min.js';			// Widgets Dialog
 	const JQUERY_UI_WIDGETS_PROGRESSBAR_FILENAME	= 'jquery/ui/1.9.2/jquery.ui.progressbar.min.js';		// Widgets Progressbar
 	const JQUERY_UI_WIDGETS_SLIDER_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.slider.min.js';			// Widgets Slider
@@ -430,7 +431,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 				$libs[self::LIB_JQUERY_UI_WIDGETS_ACCORDION]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_ACCORDION_FILENAME));		// Widgets Accordion
 				$libs[self::LIB_JQUERY_UI_WIDGETS_AUTOCOMPLETE] = array(	'script' => array(self::JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME));	// Widgets Autocomplete
 				$libs[self::LIB_JQUERY_UI_WIDGETS_BUTTON]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_BUTTON_FILENAME));		// Widgets Button
-				$libs[self::LIB_JQUERY_UI_WIDGETS_DATEPICKER]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_DATEPICKER_FILENAME));	// Widgets Datepicker
+				$libs[self::LIB_JQUERY_UI_WIDGETS_DATEPICKER]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_DATEPICKER_FILENAME,
+																								self::JQUERY_UI_WIDGETS_DATEPICKER_LANG_FILENAME));	// Widgets Datepicker
 				$libs[self::LIB_JQUERY_UI_WIDGETS_DIALOG]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_DIALOG_FILENAME));		// Widgets Dialog
 				$libs[self::LIB_JQUERY_UI_WIDGETS_PROGRESSBAR]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_PROGRESSBAR_FILENAME));	// Widgets Progressbar
 				$libs[self::LIB_JQUERY_UI_WIDGETS_SLIDER]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_SLIDER_FILENAME));		// Widgets Slider
