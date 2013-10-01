@@ -370,7 +370,7 @@ class calendarDb extends BaseDb
 		$queryStr  = 'SELECT * FROM calendar_date ';
 		$queryStr .=   'WHERE ce_def_id = ? ';
 		$queryStr .=     'AND ce_type = ? ';
-		$queryStr .=   'ORDER BY ce_index';
+		$queryStr .=   'ORDER BY ce_index, ce_date';
 		$this->selectLoop($queryStr, array(intval($defId), intval($type)), $callback);
 	}
 	/**
@@ -410,6 +410,26 @@ class calendarDb extends BaseDb
 				$this->execStatement($queryStr, array($id, $dataType, $i, $dateName, $dateType));			
 			}
 		} else if ($dataType == 1){			// 日付指定の場合
+			// 旧データ削除
+			$queryStr  = 'DELETE FROM calendar_date ';
+			$queryStr .=   'WHERE ce_def_id = ? ';
+			$queryStr .=     'AND ce_type = ? ';
+			$this->execStatement($queryStr, array($id, $dataType));
+		
+			// レコードを追加
+			$timeCount = count($dateInfoArray);
+			for ($i = 0; $i < $timeCount; $i++){
+				$defObj = $dateInfoArray[$i];
+				$date		= $defObj->date;				// 日付
+				$dateName	= $defObj->dateName;			// 名前
+				$dateType	= $defObj->dateType;		// 日付タイプ
+			
+				$queryStr  = 'INSERT INTO calendar_date ';
+				$queryStr .=   '(ce_def_id, ce_type, ce_date, ce_name, ce_date_type_id) ';
+				$queryStr .= 'VALUES ';
+				$queryStr .=   '(?, ?, ?, ?, ?)';
+				$this->execStatement($queryStr, array($id, $dataType, $date, $dateName, $dateType));			
+			}
 		}
 		
 		// トランザクション確定

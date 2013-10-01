@@ -19,10 +19,12 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 {
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $dateFieldArray;	// 基本日入力値
+	private $exceptDateFieldArray;	// 例外日入力値
 	private $repeatTypeArray;		// 繰り返しタイプ
 	private $repeatType;		// 繰り返しタイプ
 	private $weekArray;			// 曜日データ
 	private $dateCount;			// 基本日数
+	private $exceptDateCount;	// 例外日数
 	
 	/**
 	 * コンストラクタ
@@ -127,9 +129,13 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		$name = $request->trimValueOf('item_name');		// 日付タイプ名
 		$this->repeatType = $request->trimIntValueOf('item_repeat_type', '0');		// 繰り返しタイプ
 		
-		$this->dateCount = intval($request->trimValueOf('datecount'));		// 基本日数		
+		$this->dateCount		= intval($request->trimValueOf('datecount'));		// 基本日数
+		$this->exceptDateCount	= intval($request->trimValueOf('exceptdatecount'));	// 例外日数	
 		$dateNames		= $request->trimValueOf('item_date_name');		// 基本日名
-		$dateTypes = $request->trimValueOf('item_date_type');		// 基本日日付タイプ
+		$dateTypes 		= $request->trimValueOf('item_date_type');		// 基本日日付タイプ
+		$exceptDates			= $request->trimValueOf('item_except_date');		// 例外日
+		$exceptDateNames		= $request->trimValueOf('item_except_date_name');		// 例外日名
+		$exceptDateTypes 		= $request->trimValueOf('item_except_date_type');		// 例外日日付タイプ
 		
 		// 基本日入力取得
 		$this->dateFieldArray = array();
@@ -139,11 +145,25 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			$newObj->dateType	= $dateTypes[$i];		// 基本日日付タイプ
 			$this->dateFieldArray[]	= $newObj;
 		}
+		// 例外日入力取得
+		$this->exceptDateFieldArray = array();
+		for ($i = 0; $i < $this->exceptDateCount; $i++){
+			$newObj				= new stdClass;
+			$newObj->date		= $this->convertToProperDate($exceptDates[$i]);				// 例外日
+			$newObj->dateName	= $exceptDateNames[$i];		// 例外日名
+			$newObj->dateType	= $exceptDateTypes[$i];		// 例外日日付タイプ
+			$this->exceptDateFieldArray[]	= $newObj;
+		}
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
 			// 入力チェック
 			$this->checkInput($name, '名前');
+			
+			for ($i = 0; $i < $this->exceptDateCount; $i++){		// 例外日
+				$ret = $this->checkDate($exceptDates[$i], '例外日(' . ($i + 1) . '行目)');
+				if (!$ret) break;
+			}
 			
 			// エラーなしの場合は、データを追加
 			if ($this->getMsgCount() == 0){	
@@ -154,7 +174,8 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 				if ($ret) $ret = self::$_mainDb->updateDate($newId, 0/*インデックス番号*/, $this->dateFieldArray);
 
 				// 例外日を追加
-				
+				if ($ret) $ret = self::$_mainDb->updateDate($newId, 1/*日付指定*/, $this->exceptDateFieldArray);
+								
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
@@ -168,6 +189,11 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			// 入力チェック
 			$this->checkInput($name, '名前');
 			
+			for ($i = 0; $i < $this->exceptDateCount; $i++){		// 例外日
+				$ret = $this->checkDate($exceptDates[$i], '例外日(' . ($i + 1) . '行目)');
+				if (!$ret) break;
+			}
+			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// カレンダー定義を更新
@@ -175,6 +201,9 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 				
 				// 基本日を追加
 				if ($ret) $ret = self::$_mainDb->updateDate($defId, 0/*インデックス番号*/, $this->dateFieldArray);
+				
+				// 例外日を追加
+				if ($ret) $ret = self::$_mainDb->updateDate($defId, 1/*日付指定*/, $this->exceptDateFieldArray);
 				
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -207,7 +236,11 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 
 				// 基本日を取得
 				$this->dateFieldArray = array();
-				self::$_mainDb->getDateList($defId, 0/*基本データ*/, array($this, 'dateLoop'));			
+				self::$_mainDb->getDateList($defId, 0/*基本日データ*/, array($this, 'dateLoop'));
+				
+				// 例外日を取得
+				$this->exceptDateFieldArray = array();
+				self::$_mainDb->getDateList($defId, 1/*例外日データ*/, array($this, 'exceptDateLoop'));
 			} else {		// 新規の場合
 				$name = '';
 				$this->repeatType = '0';
@@ -224,11 +257,8 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		// 基本日一覧を作成
 		$this->createDateList();
 
-		$this->tmpl->addVar("_widget", "date_count", $this->convertToDispString($this->dateCount));	// 基本日数
-	
-		// 時間割定義を作成
-		$this->createTimeList();
-//		if (empty($this->timeDefArray)) $this->tmpl->setAttribute('except_date_list', 'visibility', 'hidden');
+		// 例外日一覧を作成
+		$this->createExceptDateList();
 		
 		// 入力フィールドの設定、共通項目のデータ設定
 		if (empty($defId)){		// 新規追加のとき
@@ -244,6 +274,8 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		}
 		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($defId));	// カレンダー定義ID
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// 日付タイプ名
+		$this->tmpl->addVar("_widget", "date_count", $this->convertToDispString($this->dateCount));	// 基本日数
+		$this->tmpl->addVar("_widget", "except_date_count", $this->convertToDispString($this->exceptDateCount));	// 例外日数
 	}
 	/**
 	 * 日付定義一覧をテンプレートに設定する
@@ -289,8 +321,13 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			'name'		=> $this->convertToDispString($fetchedRow['dt_name']),			// 日付タイプ名
 			'value'	=> $this->convertToDispString($id)			// 日付タイプID
 		);
+		// 基本日用メニュー
 		$this->tmpl->addVars('date_type_list', $row);
-		$this->tmpl->parseTemplate('date_type_list', 'a');		
+		$this->tmpl->parseTemplate('date_type_list', 'a');
+		
+		// 例外日用メニュー
+		$this->tmpl->addVars('date_type_list2', $row);
+		$this->tmpl->parseTemplate('date_type_list2', 'a');		
 		return true;
 	}
 	/**
@@ -307,42 +344,24 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		$newObj->dateName	= $fetchedRow['ce_name'];			// 基本日名
 		$newObj->dateType	= $fetchedRow['ce_date_type_id'];		// 基本日日付タイプ
 		$this->dateFieldArray[]	= $newObj;		
-/*		$serialNo = $this->convertToDispString($fetchedRow['ce_serial']);
-		$row = array(
-			'name'		=> $this->convertToDispString($fetchedRow['ce_name']),			// 名前
-			'type_id'	=> $this->convertToProperTime($fetchedRow['ce_date_type_id']),			// 日付タイプID
-			'index'			=> $this->convertToDispString($index),			// 行編集用
-			'serial'		=> $this->convertToDispString($serialNo)			// 行編集用
-		);
-		$this->tmpl->addVars('date_list', $row);
-		$this->tmpl->parseTemplate('date_list', 'a');*/
-		
-		// シリアル番号を保存
-//		$this->serialArray[] = $serialNo;
 		return true;
 	}
 	/**
-	 * 時間割定義を作成
+	 * 例外日一覧を取得
 	 *
-	 * @return なし						
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
 	 */
-	function createTimeList()
+	function exceptDateLoop($index, $fetchedRow, $param)
 	{
-		$timeCount = count($this->timeDefArray);
-		for ($i = 0; $i < $timeCount; $i++){
-			$defObj = $this->timeDefArray[$i];
-			$title		= $defObj->title;			// 時間枠タイトル
-			$startTime	= $defObj->startTime;		// 開始時間
-			$minute		= $defObj->minute;			// 時間枠(分)
-			$row = array(
-				'title'			=> $this->convertToDispString($title),	// 時間枠タイトル
-				'start_time'	=> $this->convertToDispString($startTime),	// 開始時間
-				'minute'		=> $this->convertToDispString($minute),		// 時間枠(分)
-				'root_url'		=> $this->convertToDispString($this->getUrl($this->gEnv->getRootUrl()))
-			);
-			$this->tmpl->addVars('except_date_list', $row);
-			$this->tmpl->parseTemplate('except_date_list', 'a');
-		}
+		$newObj				= new stdClass;
+		$newObj->date		= $fetchedRow['ce_date'];			// 基本日
+		$newObj->dateName	= $fetchedRow['ce_name'];			// 基本日名
+		$newObj->dateType	= $fetchedRow['ce_date_type_id'];		// 基本日日付タイプ
+		$this->exceptDateFieldArray[]	= $newObj;		
+		return true;
 	}
 	/**
 	 * 繰り返しタイプ選択メニュー作成
@@ -396,6 +415,34 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 				break;
 		}
 		if ($this->dateCount <= 0) $this->tmpl->setAttribute('date_list', 'visibility', 'hidden');// 一覧非表示
+	}
+	/**
+	 * 例外日リストを作成
+	 *
+	 * @return なし
+	 */
+	function createExceptDateList()
+	{
+		$this->exceptDateCount = count($this->exceptDateFieldArray);
+		
+		for ($i = 0; $i < $this->exceptDateCount; $i++){
+			$defObj = $this->exceptDateFieldArray[$i];
+			$date		= $defObj->date;			// 例外日
+			$dateName	= $defObj->dateName;		// 例外日名
+			$dateType	= $defObj->dateType;		// 例外日日付タイプ
+
+			$row = array(
+				'index'		=> $i,
+				'date'		=> $this->timestampToDate($date),
+				'name'		=> $this->convertToDispString($dateName),			// 名前
+				'type_id'	=> $this->convertToDispString($dateType),			// 日付タイプID
+				'root_url'	=> $this->convertToDispString($this->getUrl($this->gEnv->getRootUrl()))
+			);
+			$this->tmpl->addVars('except_date_list', $row);
+			$this->tmpl->parseTemplate('except_date_list', 'a');
+		}
+
+		if ($this->exceptDateCount <= 0) $this->tmpl->setAttribute('except_date_list', 'visibility', 'hidden');// 一覧非表示
 	}
 }
 ?>

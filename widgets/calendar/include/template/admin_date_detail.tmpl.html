@@ -38,23 +38,18 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
-// 時間を追加
+// 例外日を追加
 function addDate()
 {
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" name="item_except_date[]" class="date_field" size="15" maxlength="10" /></td>';
-	lineText += '<td><input type="text" name="item_except_title[]" size="20" maxlength="60" style="width:100%" /></td>';
+	lineText += '<td><input type="text" name="item_except_date_name[]" size="20" maxlength="60" style="width:100%" /></td>';
 	lineText += '<td><select name="item_except_date_type[]" class="except_date_type"></select></td>';
 	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	
 	var rowObj = $(lineText);
-	var options = $("#date_type_menu option");
-	rowObj.find('.except_date_type').html(options.clone());
+	var options2 = $("#date_type_menu2 option");
+	rowObj.find('.except_date_type').html(options2.clone());
 	$('#except_date_list').append(rowObj);
-//	$('#except_date_list').append(lineText);	
-
-	// 日付選択メニュー追加
-//	var options = $("#date_type_menu option");
-//	$(".except_date_type").html(options.clone());
 	
 	// 例外日一覧を再設定
 	setupExceptDateList();
@@ -98,7 +93,11 @@ $(function(){
 	}
 	
 	// 例外日の日付タイプ選択メニューを作成
-	$(".except_date_type").html(options.clone());
+	var options2 = $("#date_type_menu2 option");
+	$(".except_date_type").html(options2.clone());
+	for (var i = 0; i < document.main.exceptdatecount.value; i++){
+		$("#except_date_type" + i).val($("#except_date_value" + i).val());
+	}
 });
 //]]>
 </script>
@@ -110,7 +109,7 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="datecount" value="{DATE_COUNT}" />
-<input type="hidden" name="exceptdatecount" />
+<input type="hidden" name="exceptdatecount" value="{EXCEPT_DATE_COUNT}" />
 <!-- m3:PostParam -->
 <table width="90%">
 <tr><td><span {_HELP_DATE_DETAIL}><label>日付定義</label></span></td>
@@ -134,8 +133,17 @@ $(function(){
 	    </select>
 		<div style="display:none;">
 		<select id="date_type_menu" name="date_type_menu">
-		    <option value="0">選択なし</option>
+		    <option value="0">[選択なし]</option>
 	        <patTemplate:tmpl name="date_type_list">
+	        <option value="{VALUE}">{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+		<div style="display:none;">
+		<select id="date_type_menu2" name="date_type_menu2">
+		    <option value="0">[選択なし]</option>
+			<option value="-1">[個別定義]</option>
+	        <patTemplate:tmpl name="date_type_list2">
 	        <option value="{VALUE}">{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
@@ -170,8 +178,8 @@ $(function(){
         <tr class="dragRow">
 	    <td class="dragHandle"></td>
 	    <td><input type="text" name="item_except_date[]" class="date_field" value="{DATE}" size="15" maxlength="10" /></td>
-	    <td><input type="text" name="item_except_title[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
-	    <td><select id="except_date_type{INDEX}" name="item_except_date_type[]" class="except_date_type"></select><input type="hidden" id="except_date_value{INDEX}" /></td>
+	    <td><input type="text" name="item_except_date_name[]" value="{NAME}" size="20" maxlength="60" style="width:100%" /></td>
+	    <td><select id="except_date_type{INDEX}" name="item_except_date_type[]" class="except_date_type"></select><input type="hidden" id="except_date_value{INDEX}" value="{TYPE_ID}" /></td>
 	    <td style="text-align:center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
