@@ -43,7 +43,7 @@ function addDate()
 {
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" name="item_except_date[]" class="date_field" size="15" maxlength="10" /></td>';
 	lineText += '<td><input type="text" name="item_except_date_name[]" size="20" maxlength="60" style="width:100%" /></td>';
-	lineText += '<td><select name="item_except_date_type[]" class="except_date_type"></select></td>';
+	lineText += '<td><select name="item_except_date_type[]" class="except_date_type"></select><input type="button" class="button" onclick="editTime();" value="時間定義" /></td>';
 	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	
 	var rowObj = $(lineText);
@@ -82,6 +82,9 @@ function selectMenu(){
 	document.main.submit();
 	return true;
 }
+function editTime(){
+	$("#def_time").dialog("open");
+}
 $(function(){
 	setupExceptDateList();
 	
@@ -98,6 +101,21 @@ $(function(){
 	for (var i = 0; i < document.main.exceptdatecount.value; i++){
 		$("#except_date_type" + i).val($("#except_date_value" + i).val());
 	}
+	
+	// 時間定義用ダイアログ
+	$("#def_time").dialog({
+		autoOpen: false,
+		modal: true,
+		resizable: false,
+		buttons: {
+			"キャンセル": function() {
+				$(this).dialog("close");
+			},
+			"更新": function() {
+				$(this).dialog("close");
+			}
+		}
+	});
 });
 //]]>
 </script>
@@ -179,7 +197,8 @@ $(function(){
 	    <td class="dragHandle"></td>
 	    <td><input type="text" name="item_except_date[]" class="date_field" value="{DATE}" size="15" maxlength="10" /></td>
 	    <td><input type="text" name="item_except_date_name[]" value="{NAME}" size="20" maxlength="60" style="width:100%" /></td>
-	    <td><select id="except_date_type{INDEX}" name="item_except_date_type[]" class="except_date_type"></select><input type="hidden" id="except_date_value{INDEX}" value="{TYPE_ID}" /></td>
+	    <td><select id="except_date_type{INDEX}" name="item_except_date_type[]" class="except_date_type"></select><input type="hidden" id="except_date_value{INDEX}" value="{TYPE_ID}" />
+		<input type="button" class="button" onclick="editTime();" value="時間定義" /></td>
 	    <td style="text-align:center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
@@ -206,4 +225,28 @@ $(function(){
 </table>
 </form>
 </div>
+<table id="def_time" class="simple-table" width="1000">
+    <tbody>
+    <tr>
+	    <td class="table-headside"><span {_HELP_DATETYPE_TIME}>時間割</span></td>
+	    <td>
+	    <table id="time_list" class="simple-table-inner" width="100%">
+	    <thead>
+	    <tr><th width="35">移動</th><th width="200">時間枠名</th><th width="200">開始時間</th><th>時間枠(分)</th><th width="200">操作</th></tr>
+	    </thead><tbody>
+	    <patTemplate:tmpl name="time_list">
+        <tr class="dragRow">
+	    <td class="dragHandle"></td>
+	    <td><input type="text" name="item_title[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
+	    <td><input type="text" name="item_start_time[]" class="timeField" value="{START_TIME}" size="5" maxlength="5" /></td>
+	    <td><input type="text" name="item_minute[]" value="{MINUTE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td style="text-align: center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    </tr>
+	    </patTemplate:tmpl>
+	    </tbody></table>
+	    <div><input type="button" class="button" onclick="addTime();" value="追加" /></div>
+	    </td>
+	</tr>
+    </tbody>
+</table>
 </patTemplate:tmpl>
