@@ -73,6 +73,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_SCROLLTO		= 'jquery.scrollto';
 	const LIB_JQUERY_FULLCALENDAR	= 'jquery.fullcalendar';
 	const LIB_JQUERY_TIMEPICKER		= 'jquery.timepicker';
+	const LIB_JQUERY_JSON			= 'jquery.json';
 	
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
@@ -95,6 +96,7 @@ class ScriptLibInfo
 	const JQUERY_SCROLLTO_VER		= '1.4.3.1';
 	const JQUERY_FULLCALENDAR_VER	= '1.6.4';
 	const JQUERY_TIMEPICKER_VER		= '0.3.2';
+	const JQUERY_JSON_VER			= '2.4.0';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -169,6 +171,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_TIMEPICKER_FILENAME	= 'jquery/timepicker/jquery.ui.timepicker.js';
 	const JQUERY_TIMEPICKER_LANG_FILENAME	= 'jquery/timepicker/i18n/jquery.ui.timepicker-ja.js';
 	const JQUERY_TIMEPICKER_CSS			= 'jquery/timepicker/jquery.ui.timepicker.css';
+	const JQUERY_JSON_FILENAME			= 'jquery/jquery.json-2.4.min.js';
 	
 	// ライブラリの公式サイトのURL
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
@@ -189,6 +192,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_SCROLLTO_URL			= 'http://flesler.blogspot.jp/2007/10/jqueryscrollto.html';
 	const JQUERY_FULLCALENDAR_URL		= 'http://arshaw.com/fullcalendar/';
 	const JQUERY_TIMEPICKER_URL			= 'http://fgelinas.com/code/timepicker/';
+	const JQUERY_JSON_URL				= 'http://code.google.com/p/jquery-json/';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
 	
 	// ディレクトリ名
@@ -400,7 +404,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 																'css'		=> array(self::JQUERY_TIMEPICKER_CSS),
 																'url'		=> self::JQUERY_TIMEPICKER_URL,
 																'version'	=> self::JQUERY_TIMEPICKER_VER),
-												
+					self::LIB_JQUERY_JSON			=>	array(	'script' 	=> array(self::JQUERY_JSON_FILENAME),	// jquery.json用のファイル
+																'url'		=> self::JQUERY_JSON_URL,
+																'version'	=> self::JQUERY_JSON_VER),
 /*					self::LIB_JQUERY_JQEASYPANEL	=>	array(	'script' 	=> array(self::JQUERY_JQEASYPANEL_FILENAME),	// jquery.jqEasyPanel用のファイル
 																'css'		=> array(self::JQUERY_JQEASYPANEL_CSS),
 																'url'		=> self::JQUERY_JQEASYPANEL_URL,
