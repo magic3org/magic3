@@ -19,8 +19,7 @@ if (defined("M3_SYSTEM_DEFINE_INCLUDED")) return;
 define("M3_SYSTEM_DEFINE_INCLUDED", true);
 
 // ######### PHPバージョンチェック #########
-//if (phpversion() < '5.1.0') die("PHP version error: ver=" . phpversion() . ". Magic3 can move above version 5.1.0.");
-if (version_compare(PHP_VERSION, '5.1.0') < 0) die("PHP version error: ver=" . PHP_VERSION . ". Magic3 can move above version 5.1.0.");
+if (version_compare(PHP_VERSION, '5.2.0') < 0) die("PHP version error: ver=" . PHP_VERSION . ". Magic3 can move above version 5.2.0.");
 // ######### システム起動状況 #########
 define('M3_SYSTEM',			true);
 define('M3_SYSTEM_DEMO',	false);		// システム起動モード、デモモードフラグ
@@ -49,8 +48,8 @@ define('M3_ENCODING',	'UTF-8');	// 内部エンコーディング
 // ########## システム関係 ##########
 // システム基本情報
 define('M3_SYSTEM_NAME',			'Magic3');		// システム名称
-define('M3_SYSTEM_VERSION',			'2.7.9');		// システムのバージョン
-define('M3_SYSTEM_RELEASE_DATE',	'2013/9/24');	// システムのリリース日付
+define('M3_SYSTEM_VERSION',			'2.7.10');		// システムのバージョン
+define('M3_SYSTEM_RELEASE_DATE',	'2013/10/2');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
 define('M3_SYSTEM_MIN_MEMORY',		'16M');			// 最小メモリ使用量
