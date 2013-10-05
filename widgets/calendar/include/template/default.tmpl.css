@@ -26,4 +26,12 @@
 .fc-today{
     background-color: yellow;
 }*/
+/* イベント
+.fc-event,
+.fc-agenda .fc-event-time,
+.fc-event a {
+    background-color: black;
+    border-color: black;
+    color: red;
+}*/
 </patTemplate:tmpl>

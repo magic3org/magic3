@@ -16,13 +16,15 @@
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	document.main.exceptdatecount.value = $('#except_date_list').find('.dragRow').length;
+	document.main.timelistdata.value = createTimeListData();
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
-function updateItem(){
-	if (!window.confirm('設定を更新しますか?')) return false;
+function updateItem(){	
+	if (!window.confirm('設定を更新しますか?')) return false;			
 	document.main.exceptdatecount.value = $('#except_date_list').find('.dragRow').length;
+	document.main.timelistdata.value = createTimeListData();
 	document.main.act.value='update';
 	document.main.submit();
 	return true;
@@ -38,24 +40,56 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
+// 時間割データを作成
+function createTimeListData()
+{
+	var lines = [];
+	var i = 0;
+	$("#except_date_list tr.dragRow").each(function (index, obj){
+		var dateType = jQuery.trim($(this).find('.except_date_type').val());
+		if (dateType == -1){
+			var timeList = $(this).data('timeList');
+			if (timeList){
+				lines[i++] = timeList;
+			} else {
+				lines[i++] = [];	// 空データを設定
+			}
+		}
+	});
+	return $.toJSON(lines);
+}
 // 例外日を追加
 function addDate()
 {
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" name="item_except_date[]" class="date_field" size="15" maxlength="10" /></td>';
 	lineText += '<td><input type="text" name="item_except_date_name[]" size="20" maxlength="60" style="width:100%" /></td>';
-	lineText += '<td><select name="item_except_date_type[]" class="except_date_type"></select><input type="button" class="button" onclick="editTime();" value="時間定義" /></td>';
+	lineText += '<td><select name="item_except_date_type[]" class="except_date_type"></select><span class="def_time_button"><input type="button" class="button" onclick="editTime($(this));" value="時間定義" /></span></td>';
 	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	
 	var rowObj = $(lineText);
 	var options2 = $("#date_type_menu2 option");
 	rowObj.find('.except_date_type').html(options2.clone());
+	rowObj.find('.def_time_button').hide();				// 時間定義ボタン非表示
 	$('#except_date_list').append(rowObj);
 	
 	// 例外日一覧を再設定
 	setupExceptDateList();
 }
+// 時間枠を追加
+function addTime()
+{
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField" size="20" maxlength="60" style="width:100%" /></td>';
+	lineText += '<td><input type="text" class="timeField" size="5" maxlength="5" /></td>';
+	lineText += '<td><input type="text" class="minuteField" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
+	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	$('#time_list').append(lineText);
+
+	// 時間枠一覧を再設定
+	setupTimeList();
+}
 function setupExceptDateList()
 {
+	// 例外日一覧の初期設定
 	$("#except_date_list").tableDnD({
 		dragHandle: "dragHandle"
 	});
@@ -64,13 +98,39 @@ function setupExceptDateList()
 	}, function() {
 		$(this.cells[0]).removeClass('currentHandle');
 	});
-	// 削除処理
 	$("#except_date_list tr .delRow").click(function(){
 		$(this).parents('.dragRow').remove();
 	});
-	
+		
 	// 日付ピッカー追加
 	$('.date_field').datepicker();
+	
+	// 時間定義ボタンの表示制御
+	$('.except_date_type').change(function(){
+		if ($(this).val() >= 0){
+			$(this).parent().find('.def_time_button').hide();
+		} else {
+			$(this).parent().find('.def_time_button').show();
+		}
+	});
+}
+function setupTimeList()
+{
+	// 時間一覧の初期設定
+	$("#time_list").tableDnD({
+		dragHandle: "dragHandle"
+	});
+	$("#time_list tr").hover(function(){
+		$(this.cells[0]).addClass('currentHandle');
+	}, function() {
+		$(this.cells[0]).removeClass('currentHandle');
+	});
+	$("#time_list tr .delRow").click(function(){
+		$(this).parents('.dragRow').remove();
+	});
+	
+	// タイムピッカー追加
+	$('.timeField').timepicker({ defaultTime: '' });
 }
 function cancelItem(){
 	document.main.task.value = 'date';
@@ -82,11 +142,37 @@ function selectMenu(){
 	document.main.submit();
 	return true;
 }
-function editTime(){
-	$("#def_time").dialog("open");
+function editTime(obj){
+	// 一旦時間割を削除
+	$("#time_list tr.dragRow").remove();
+	
+	// 時間割を作成
+	var timeList = obj.parents('.dragRow').data('timeList');
+	if (timeList){
+		for (var i = 0; i < timeList.length; i++){
+			var line = timeList[i];
+			
+			var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField" size="20" maxlength="60" style="width:100%" /></td>';
+			lineText += '<td><input type="text" class="timeField" size="5" maxlength="5" /></td>';
+			lineText += '<td><input type="text" class="minuteField" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
+			lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	
+			var rowObj = $(lineText);
+			rowObj.find('.nameField').val(line.name);
+			rowObj.find('.timeField').val(line.time);
+			rowObj.find('.minuteField').val(line.minute);
+			$('#time_list').append(rowObj);
+		}
+		// 時間枠一覧を再設定
+		setupTimeList();
+	}
+	
+	// ダイアログ表示	
+	$("#def_time").data('dateRowObj', obj.parents('.dragRow')).dialog("open");
 }
 $(function(){
-	setupExceptDateList();
+	// 時間割データ
+	var timeListData = {TIME_LIST_DATA};
 	
 	// 基本日一覧の日付タイプ選択メニューを作成
 	var options = $("#date_type_menu option");
@@ -99,20 +185,65 @@ $(function(){
 	var options2 = $("#date_type_menu2 option");
 	$(".except_date_type").html(options2.clone());
 	for (var i = 0; i < document.main.exceptdatecount.value; i++){
-		$("#except_date_type" + i).val($("#except_date_value" + i).val());
+		var dateValue = $("#except_date_value" + i).val();
+		$("#except_date_type" + i).val(dateValue);
+		if (dateValue >= 0) $("#def_time_button" + i).hide();
 	}
+	
+	setupExceptDateList();
+	
+	setupTimeList();
+	
+	// 時間割データの設定
+	var i = 0;
+	$("#except_date_list tr.dragRow").each(function (index, obj){
+		var dateType = jQuery.trim($(this).find('.except_date_type').val());
+		if (dateType == -1){
+			var timeList = timeListData[i++];
+			if (timeList) $(this).data('timeList', timeList);
+		}
+	});
 	
 	// 時間定義用ダイアログ
 	$("#def_time").dialog({
 		autoOpen: false,
 		modal: true,
 		resizable: false,
+		width:800,
 		buttons: {
-			"キャンセル": function() {
+			"キャンセル": function(){
 				$(this).dialog("close");
 			},
-			"更新": function() {
-				$(this).dialog("close");
+			"更新": function(){
+				// エラーチェック
+				var errMessage = '';
+				
+				var lines = [];
+				$("#time_list tr.dragRow").each(function (index, obj){
+					var nameValue = jQuery.trim($(this).find('.nameField').val());
+					var timeValue = jQuery.trim($(this).find('.timeField').val());
+					var minuteValue = jQuery.trim($(this).find('.minuteField').val());
+					
+					if (timeValue == ''){
+						errMessage = '開始時間(' + (index + 1) + '行目)が入力されていません';
+						return false;
+					}
+					if (minuteValue == ''){
+						errMessage = '時間枠(' + (index + 1) + '行目)が入力されていません';
+						return false;
+					}
+					var line = { name:nameValue, time:timeValue, minute:minuteValue };
+					lines[index] = line;
+				});
+				
+				if (errMessage == ''){
+					// 時間割データを保存
+					$(this).data('dateRowObj').data('timeList', lines);
+					
+					$(this).dialog("close");
+				} else {
+					alert(errMessage);
+				}
 			}
 		}
 	});
@@ -128,6 +259,7 @@ $(function(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="datecount" value="{DATE_COUNT}" />
 <input type="hidden" name="exceptdatecount" value="{EXCEPT_DATE_COUNT}" />
+<input type="hidden" name="timelistdata" />
 <!-- m3:PostParam -->
 <table width="90%">
 <tr><td><span {_HELP_DATE_DETAIL}><label>日付定義</label></span></td>
@@ -156,8 +288,6 @@ $(function(){
 	        <option value="{VALUE}">{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
-		</div>
-		<div style="display:none;">
 		<select id="date_type_menu2" name="date_type_menu2">
 		    <option value="0">[選択なし]</option>
 			<option value="-1">[個別定義]</option>
@@ -197,8 +327,7 @@ $(function(){
 	    <td class="dragHandle"></td>
 	    <td><input type="text" name="item_except_date[]" class="date_field" value="{DATE}" size="15" maxlength="10" /></td>
 	    <td><input type="text" name="item_except_date_name[]" value="{NAME}" size="20" maxlength="60" style="width:100%" /></td>
-	    <td><select id="except_date_type{INDEX}" name="item_except_date_type[]" class="except_date_type"></select><input type="hidden" id="except_date_value{INDEX}" value="{TYPE_ID}" />
-		<input type="button" class="button" onclick="editTime();" value="時間定義" /></td>
+	    <td><select id="except_date_type{INDEX}" name="item_except_date_type[]" class="except_date_type"></select><input type="hidden" id="except_date_value{INDEX}" value="{TYPE_ID}" /><span id="def_time_button{INDEX}" class="def_time_button"><input type="button" class="button" onclick="editTime($(this));" value="時間定義" /></span></td>
 	    <td style="text-align:center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
@@ -233,17 +362,8 @@ $(function(){
 	    <table id="time_list" class="simple-table-inner" width="100%">
 	    <thead>
 	    <tr><th width="35">移動</th><th width="200">時間枠名</th><th width="200">開始時間</th><th>時間枠(分)</th><th width="200">操作</th></tr>
-	    </thead><tbody>
-	    <patTemplate:tmpl name="time_list">
-        <tr class="dragRow">
-	    <td class="dragHandle"></td>
-	    <td><input type="text" name="item_title[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
-	    <td><input type="text" name="item_start_time[]" class="timeField" value="{START_TIME}" size="5" maxlength="5" /></td>
-	    <td><input type="text" name="item_minute[]" value="{MINUTE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
-	    <td style="text-align: center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
-	    </tr>
-	    </patTemplate:tmpl>
-	    </tbody></table>
+	    </thead>
+		</table>
 	    <div><input type="button" class="button" onclick="addTime();" value="追加" /></div>
 	    </td>
 	</tr>

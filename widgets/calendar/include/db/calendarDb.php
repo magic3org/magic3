@@ -195,6 +195,21 @@ class calendarDb extends BaseDb
 		$this->selectLoop($queryStr, array($dateTypeId), $callback);
 	}
 	/**
+	 * 時間割一覧を取得
+	 *
+	 * @param int		$dateTypeId		日付タイプ
+	 * @param array  	$rows			取得レコード
+	 * @return							true=取得、false=取得せず
+	 */
+	function getTimePeriodRecords($dateTypeId, &$rows)
+	{
+		$queryStr  = 'SELECT * FROM time_period ';
+		$queryStr .=   'WHERE to_date_type_id = ? ';
+		$queryStr .=   'ORDER BY to_index';
+		$ret = $this->selectRecords($queryStr, array($dateTypeId), $rows);
+		return $ret;
+	}
+	/**
 	 * 時間割の追加更新
 	 *
 	 * @param string $id				日付タイプID
@@ -379,9 +394,10 @@ class calendarDb extends BaseDb
 	 * @param string $id				カレンダー定義ID
 	 * @param int    $dataType			データタイプ(0=インデックス番号,1=日付)
 	 * @param array $dateInfoArray		日付情報の配列
+	 * @param array $timeInfoArray		時間割データ(データタイプ=1のとき)
 	 * @return bool						true = 正常、false=異常
 	 */
-	function updateDate($id, $dataType, $dateInfoArray)
+	function updateDate($id, $dataType, $dateInfoArray, $timeInfoArray = null)
 	{
 		// パラメータエラーチェック
 		if (intval($id) <= 0) return false;
@@ -397,8 +413,8 @@ class calendarDb extends BaseDb
 			$this->execStatement($queryStr, array($id, $dataType));
 		
 			// レコードを追加
-			$timeCount = count($dateInfoArray);
-			for ($i = 0; $i < $timeCount; $i++){
+			$dateCount = count($dateInfoArray);
+			for ($i = 0; $i < $dateCount; $i++){
 				$defObj = $dateInfoArray[$i];
 				$dateName	= $defObj->dateName;			// 名前
 				$dateType	= $defObj->dateType;		// 日付タイプ
@@ -410,15 +426,35 @@ class calendarDb extends BaseDb
 				$this->execStatement($queryStr, array($id, $dataType, $i, $dateName, $dateType));			
 			}
 		} else if ($dataType == 1){			// 日付指定の場合
+			// 旧レコード取得
+			$queryStr  = 'SELECT * FROM calendar_date ';
+			$queryStr .=   'WHERE ce_def_id = ? ';
+			$queryStr .=     'AND ce_type = ? ';
+			$queryStr .=     'AND ce_date_type_id = ? ';
+			$ret = $this->selectRecords($queryStr, array($id, $dataType, -1/*個別定義*/), $rows);
+			if ($ret){
+				$dateTypeArray = array();
+				for ($i = 0; $i < count($rows); $i++){
+					$dateTypeId = intval($rows[$i]['ce_serial']) * (-1);		// カレンダー日付のシリアル番号を負にする
+					$dateTypeArray[] = $dateTypeId;
+				}
+			
+				// 時間枠データ削除
+				$queryStr  = 'DELETE FROM time_period ';
+				$queryStr .=   'WHERE to_date_type_id in (' . implode($dateTypeArray, ',') . ') ';
+				$this->execStatement($queryStr, array());
+			}
+		
 			// 旧データ削除
 			$queryStr  = 'DELETE FROM calendar_date ';
 			$queryStr .=   'WHERE ce_def_id = ? ';
 			$queryStr .=     'AND ce_type = ? ';
 			$this->execStatement($queryStr, array($id, $dataType));
-		
+			
 			// レコードを追加
-			$timeCount = count($dateInfoArray);
-			for ($i = 0; $i < $timeCount; $i++){
+			$timeInfoIndex = 0;
+			$dateCount = count($dateInfoArray);
+			for ($i = 0; $i < $dateCount; $i++){
 				$defObj = $dateInfoArray[$i];
 				$date		= $defObj->date;				// 日付
 				$dateName	= $defObj->dateName;			// 名前
@@ -428,7 +464,30 @@ class calendarDb extends BaseDb
 				$queryStr .=   '(ce_def_id, ce_type, ce_date, ce_name, ce_date_type_id) ';
 				$queryStr .= 'VALUES ';
 				$queryStr .=   '(?, ?, ?, ?, ?)';
-				$this->execStatement($queryStr, array($id, $dataType, $date, $dateName, $dateType));			
+				$this->execStatement($queryStr, array($id, $dataType, $date, $dateName, $dateType));
+				
+				if ($dateType == -1){		// 個別定義の場合
+					// シリアル番号取得
+					$queryStr  = 'SELECT max(ce_serial) AS ms FROM calendar_date ';
+					$ret = $this->selectRecord($queryStr, array(), $row);
+					$dateTypeId = intval($row['ms']) * (-1);
+				
+					// 時間割データを追加
+					$timePeriodArray = $timeInfoArray[$timeInfoIndex++];
+					$timeCount = count($timePeriodArray);
+					for ($j = 0; $j < $timeCount; $j++){
+						$timePeriod = $timePeriodArray[$j];
+						$title		= $timePeriod['name'];		// 時間枠タイトル
+						$startTime	= $timePeriod['time'];		// 開始時間
+						$minute		= $timePeriod['minute'];		// 時間枠(分)
+			
+						$queryStr  = 'INSERT INTO time_period ';
+						$queryStr .=   '(to_date_type_id, to_index, to_name, to_start_time, to_minute) ';
+						$queryStr .= 'VALUES ';
+						$queryStr .=   '(?, ?, ?, ?, ?)';
+						$this->execStatement($queryStr, array($dateTypeId, $j, $title, $startTime, $minute));			
+					}
+				}
 			}
 		}
 		
