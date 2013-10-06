@@ -146,7 +146,8 @@ class ScriptLibInfo
 	const JQUERY_PRETTYPHOTO_DIR		= 'jquery/prettyPhoto3.1.4';
 	const JQUERY_PRETTYPHOTO_FILENAME	= 'jquery/prettyPhoto3.1.4/js/jquery.prettyPhoto.js';
 	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyPhoto3.1.4/css/prettyPhoto.css';
-	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.min.js';
+//	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.min.js';
+	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.0-rc3.min.js';
 	const JQUERY_CALCULATION_FILENAME	= 'jquery/jquery.calculation.js';
 	//const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot/jquery.jqplot.min.js';
 //const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0/jquery.jqplot.min.js';
