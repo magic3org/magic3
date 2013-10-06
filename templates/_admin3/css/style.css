@@ -280,6 +280,10 @@ background-color: #0081c2;
 	margin: 3px 0px;
 }
 /****** item list ******/
+.item_list_block {
+	display:block;
+	clear:both;
+}
 .item_list_inline {
 	display:block;
 	float:left;
