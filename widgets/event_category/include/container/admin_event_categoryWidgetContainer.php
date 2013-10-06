@@ -21,6 +21,8 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 	private $db;	// DB接続オブジェクト
 	private $langId;
 	private $categoryId;			// カテゴリID
+	private $sortOrder;		// ソート順
+	private $sortOrderArray;		// ソート順
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	
@@ -34,6 +36,9 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 		
 		// DB接続オブジェクト作成
 		$this->db = new event_categoryDb();
+		
+		$this->sortOrderArray = array(	array(	'name' => '昇順',	'value' => '0'),
+										array(	'name' => '降順',	'value' => '1'));		// ソート順
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -94,8 +99,10 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 		// 入力値を取得
 		$name	= $request->trimValueOf('item_name');			// 定義名
 		$itemCount	= $request->valueOf('item_count');			// 表示項目数
-		$useRss = ($request->trimValueOf('item_use_rss') == 'on') ? 1 : 0;		// RSS配信を行うかどうか
+		$futureEventOnly = $request->trimCheckedValueOf('item_future_event_only');		// 今後のイベントのみ表示するかどうか
+		$useRss = $request->trimCheckedValueOf('item_use_rss');		// RSS配信を行うかどうか
 		$this->categoryId = $request->valueOf('item_category_id');			// カテゴリID
+		$this->sortOrder	= $request->valueOf('item_sort_order');		// ソート順
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
@@ -120,6 +127,8 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->name	= $name;// 表示名
 				$newObj->categoryId = $this->categoryId;		// カテゴリID
 				$newObj->itemCount	= $itemCount;
+				$newObj->sortOrder	= $this->sortOrder;		// ソート順
+				$newObj->futureEventOnly	= $futureEventOnly;		// 今後のイベントのみ表示するかどうか
 				$newObj->useRss	= $useRss;
 				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
@@ -145,6 +154,8 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 					// ウィジェットオブジェクト更新
 					$targetObj->categoryId = $this->categoryId;		// カテゴリID
 					$targetObj->itemCount	= $itemCount;
+					$targetObj->sortOrder	= $this->sortOrder;		// ソート順
+					$targetObj->futureEventOnly	= $futureEventOnly;		// 今後のイベントのみ表示するかどうか
 					$targetObj->useRss	= $useRss;
 				}
 				
@@ -172,6 +183,8 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				$this->categoryId = 0;		// カテゴリID
 				$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
+				$this->sortOrder	= '0';		// ソート順
+				$futureEventOnly	= '0';		// 今後のイベントのみ表示するかどうか
 				$useRss = 1;							// RSS配信を行うかどうか
 			}
 			$this->serialNo = 0;
@@ -182,6 +195,8 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 					$name		= $targetObj->name;	// 名前
 					$this->categoryId = $targetObj->categoryId;		// カテゴリID
 					$itemCount	= $targetObj->itemCount;
+					$this->sortOrder	= $targetObj->sortOrder;		// ソート順
+					$futureEventOnly	= $targetObj->futureEventOnly;		// 今後のイベントのみ表示するかどうか
 					$useRss		= $targetObj->useRss;// RSS配信を行うかどうか
 					if (!isset($useRss)) $useRss = 1;
 				}
@@ -198,15 +213,16 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 		// カテゴリリスト作成
 		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->langId);// デフォルト言語で取得
 		
+		$this->createSortOrderMenu();	// ソート順メニュー
+		
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		$this->tmpl->addVar("item_name_visible", "name",	$name);
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		$this->tmpl->addVar("_widget", "item_count",	$itemCount);
-		$checked = '';
-		if ($useRss) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "use_rss",	$checked);// RSS配信を行うかどうか
+		$this->tmpl->addVar("_widget", "future_event_only",	$this->convertToCheckedString($futureEventOnly));		// 今後のイベントのみ表示するかどうか
+		$this->tmpl->addVar("_widget", "use_rss",	$this->convertToCheckedString($useRss));// RSS配信を行うかどうか
 		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
@@ -364,6 +380,26 @@ class admin_event_categoryWidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
+	}
+	/**
+	 * ソート順選択メニュー作成
+	 *
+	 * @return なし
+	 */
+	function createSortOrderMenu()
+	{
+		for ($i = 0; $i < count($this->sortOrderArray); $i++){
+			$value = $this->sortOrderArray[$i]['value'];
+			$name = $this->sortOrderArray[$i]['name'];
+			
+			$row = array(
+				'value'    => $value,			// タイプ値
+				'name'     => $this->convertToDispString($name),			// タイプ名
+				'selected' => $this->convertToSelectedString($value, $this->sortOrder)			// 選択中かどうか
+			);
+			$this->tmpl->addVars('sort_order', $row);
+			$this->tmpl->parseTemplate('sort_order', 'a');
+		}
 	}
 }
 ?>

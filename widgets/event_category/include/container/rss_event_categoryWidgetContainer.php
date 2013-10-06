@@ -65,7 +65,6 @@ class rss_event_categoryWidgetContainer extends BaseRssContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$now = date("Y/m/d H:i:s");	// 現在日時
 		$langId = $this->gEnv->getCurrentLanguage();
 		
 		// 定義ID取得
@@ -74,12 +73,16 @@ class rss_event_categoryWidgetContainer extends BaseRssContainer
 		
 		// 初期値設定
 		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
+		$sortOrder	= '0';		// ソート順
+		$futureEventOnly	= '0';		// 今後のイベントのみ表示するかどうか
 		$useRss = 1;							// RSS配信を行うかどうか
-		
+
 		// パラメータオブジェクトを取得
 		$targetObj = $this->getWidgetParamObjByConfigId($configId);
 		if (!empty($targetObj)){		// 定義データが取得できたとき
 			$itemCount	= $targetObj->itemCount;
+			$sortOrder	= $targetObj->sortOrder;		// ソート順
+			$futureEventOnly	= $targetObj->futureEventOnly;		// 今後のイベントのみ表示するかどうか
 			$useRss		= $targetObj->useRss;// RSS配信を行うかどうか
 			if (!isset($useRss)) $useRss = 1;
 		}
@@ -115,7 +118,7 @@ class rss_event_categoryWidgetContainer extends BaseRssContainer
 		
 		// 一覧を作成
 		$this->defaultUrl = $this->gEnv->getDefaultUrl();
-		$this->db->getEntryItems($itemCount, $langId, $categoryId, $now, array($this, 'itemLoop'));
+		$this->db->getEntryItems($itemCount, $langId, $categoryId, $sortOrder, $futureEventOnly, array($this, 'itemLoop'));
 				
 		// 画面にデータを埋め込む
 		if ($this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'visible');

@@ -23,12 +23,14 @@ class event_categoryDb extends BaseDb
 	 * @param int 		$itemCount			取得項目数(0のときは該当すべて)
 	 * @param string	$langId				言語
 	 * @param string	$categoryId			カテゴリID
-	 * @param string	$now				現在日時
+	 * @param int       $sortOrder			ソート順(0=昇順、1=降順)
+	 * @param bool      $futureEventOnly	今後のイベントのみ表示するかどうか
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getEntryItems($itemCount, $langId, $categoryId, $now, $callback)
+	function getEntryItems($itemCount, $langId, $categoryId, $sortOrder, $futureEventOnly, $callback)
 	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
 		$initDt = $this->gEnv->getInitValueOfTimestamp();
 		$params = array();
 		
@@ -38,7 +40,13 @@ class event_categoryDb extends BaseDb
 		$queryStr .=    'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 		$queryStr .=    'AND ee_language_id = ? ';	$params[] = $langId;
 		$queryStr .=    'AND ew_category_id = ? '; $params[] = $categoryId;// 記事カテゴリー
-		
+
+		if (!empty($futureEventOnly)){		// 今後のイベントに限定する場合
+			$nowDate = date("Y/m/d", strtotime($now));
+			$queryStr .=    'AND ? <= ee_start_dt ';
+			$params[] = $nowDate;
+		}
+						
 		// シリアル番号の記事を取得
 		$serialArray = array();
 		$ret = $this->selectRecords($queryStr, $params, $serialRows);
@@ -50,9 +58,12 @@ class event_categoryDb extends BaseDb
 		$serialStr = implode(',', $serialArray);
 		if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
 	
+		
 		$queryStr = 'SELECT * FROM event_entry ';
 		$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
-		$queryStr .=  'ORDER BY ee_start_dt DESC, ee_id LIMIT ' . $itemCount;		// 投稿順
+		$queryStr .=  'ORDER BY ee_start_dt ';
+		if (!empty($sortOrder)) $queryStr .=  'DESC';
+		$queryStr .=  ', ee_id LIMIT ' . $itemCount;		// 投稿順
 		$this->selectLoop($queryStr, array(), $callback);
 	}
 	/**

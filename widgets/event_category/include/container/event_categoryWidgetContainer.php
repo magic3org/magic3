@@ -67,7 +67,6 @@ class event_categoryWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$now = date("Y/m/d H:i:s");	// 現在日時
 		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		
 		// 定義ID取得
@@ -77,6 +76,8 @@ class event_categoryWidgetContainer extends BaseWidgetContainer
 		// 初期値設定
 		$categoryId = 0;// カテゴリID
 		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
+		$sortOrder	= '0';		// ソート順
+		$futureEventOnly	= '0';		// 今後のイベントのみ表示するかどうか
 		$useRss = 1;							// RSS配信を行うかどうか
 		
 		// パラメータオブジェクトを取得
@@ -84,6 +85,8 @@ class event_categoryWidgetContainer extends BaseWidgetContainer
 		if (!empty($targetObj)){		// 定義データが取得できたとき
 			$categoryId = $targetObj->categoryId;		// カテゴリID
 			$itemCount	= $targetObj->itemCount;
+			$sortOrder	= $targetObj->sortOrder;		// ソート順
+			$futureEventOnly	= $targetObj->futureEventOnly;		// 今後のイベントのみ表示するかどうか
 			$useRss		= $targetObj->useRss;// RSS配信を行うかどうか
 			if (!isset($useRss)) $useRss = 1;
 		}
@@ -95,7 +98,7 @@ class event_categoryWidgetContainer extends BaseWidgetContainer
 				
 		// 新規イベントタイトルを取得
 		$this->defaultUrl = $this->gEnv->getDefaultUrl();
-		$this->db->getEntryItems($itemCount, $this->gEnv->getCurrentLanguage(), $categoryId, $now, array($this, 'itemLoop'));
+		$this->db->getEntryItems($itemCount, $this->gEnv->getCurrentLanguage(), $categoryId, $sortOrder, $futureEventOnly, array($this, 'itemLoop'));
 
 		if (!$this->isEntry){	// 記事の投稿がないときはメッセージを出力
 			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');		// 一覧を非表示

@@ -68,7 +68,7 @@ function listItem(){
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_CATEGORY}>カテゴリー</span></td>
 	    <td>
     <select name="item_category_id">
@@ -80,10 +80,16 @@ function listItem(){
 	    </td>
 	</tr>
 	<tr>
-	    <td class="table-headside" width="100"><span {_HELP_VIEW_COUNT}>表示項目数</span></td>
-	    <td><input type="text" name="item_count" value="{ITEM_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td class="table-headside">表示オプション</td>
+	    <td><div class="item_list_block"><label class="item_list_inline"><span {_HELP_VIEW_COUNT}>表示項目数：</span><input type="text" name="item_count" value="{ITEM_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></label>
+				<label class="item_list_inline">表示順：<select name="item_sort_order">
+	        <patTemplate:tmpl name="sort_order">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select></label></div>
+		<div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="item_future_event_only" {FUTURE_EVENT_ONLY} />今後のイベントのみ表示</label></div></td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_USE_RSS}>RSS配信</span></td>
 	    <td><input type="checkbox" name="item_use_rss" {USE_RSS} /></td>
 	</tr>
