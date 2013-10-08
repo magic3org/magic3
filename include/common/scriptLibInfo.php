@@ -61,6 +61,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_CURVYCORNERS	= 'jquery.curvycorners';
 	const LIB_JQUERY_PRETTYPHOTO	= 'jquery.prettyphoto';
 	const LIB_JQUERY_QTIP			= 'jquery.qtip';
+	const LIB_JQUERY_QTIP2			= 'jquery.qtip2';
 	const LIB_JQUERY_CALCULATION	= 'jquery.calculation';
 	const LIB_JQUERY_JQPLOT			= 'jquery.jqplot';
 	const LIB_JQUERY_YOUTUBEPLAYER	= 'jquery.youtubeplayer';
@@ -83,6 +84,7 @@ class ScriptLibInfo
 	const JQUERY_THICKBOX_VER		= '3.1';
 	const JQUERY_PRETTYPHOTO_VER	= '3.1.4';		// v3.1.5はタイトル表示のバグがある(2013/9/17)
 	const JQUERY_QTIP_VER			= '1.0';
+	const JQUERY_QTIP2_VER			= '2.1.1';
 	const JQUERY_CALCULATION_VER	= '0.4.07';
 	//const JQUERY_JQPLOT_VER			= '0.9.7';
 //const JQUERY_JQPLOT_VER			= '1.0.4r1120';
@@ -148,6 +150,8 @@ class ScriptLibInfo
 	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyPhoto3.1.4/css/prettyPhoto.css';
 //	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.min.js';
 	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.0-rc3.min.js';
+	const JQUERY_QTIP2_FILENAME			= 'jquery/qtip2-2.1.1/jquery.qtip.min.js';
+	const JQUERY_QTIP2_CSS				= 'jquery/qtip2-2.1.1/jquery.qtip.min.css';
 	const JQUERY_CALCULATION_FILENAME	= 'jquery/jquery.calculation.js';
 	//const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot/jquery.jqplot.min.js';
 //const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0/jquery.jqplot.min.js';
@@ -182,6 +186,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_CURVYCORNERS_URL		= 'http://code.google.com/p/jquerycurvycorners/';
 	const JQUERY_PRETTYPHOTO_URL		= 'http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/';
 	const JQUERY_QTIP_URL				= 'http://craigsworks.com/projects/qtip/';
+	const JQUERY_QTIP2_URL				= 'http://qtip2.com/';
 	const JQUERY_CALCULATION_URL		= 'http://www.pengoworks.com/workshop/jquery/calculation/calculation.plugin.htm';
 	const JQUERY_JQPLOT_URL				= 'http://www.jqplot.com/';
 	const JQUERY_JSTREE_URL				= 'http://www.jstree.com/';
@@ -368,7 +373,11 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 																'version'	=> self::JQUERY_PRETTYPHOTO_VER),
 					self::LIB_JQUERY_QTIP			=>	array(	'script' 	=> array(self::JQUERY_QTIP_FILENAME),	// jquery.qtip用のファイル
 																'url'		=> self::JQUERY_QTIP_URL,
-																'version'	=> self::JQUERY_QTIP_VER),
+																'version'	=> self::JQUERY_QTIP_VER),											
+					self::LIB_JQUERY_QTIP2			=>	array(	'script' 	=> array(self::JQUERY_QTIP2_FILENAME),	// jquery.qtip2用のファイル
+																'css'		=> array(self::JQUERY_QTIP2_CSS),
+																'url'		=> self::JQUERY_QTIP2_URL,
+																'version'	=> self::JQUERY_QTIP2_VER),
 					self::LIB_JQUERY_CALCULATION	=>	array(	'script' 	=> array(self::JQUERY_CALCULATION_FILENAME),	// jquery.calculation用のファイル
 																'url'		=> self::JQUERY_CALCULATION_URL,
 																'version'	=> self::JQUERY_CALCULATION_VER),
