@@ -11,6 +11,10 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_tmpl">
+/* カレンダーヘッダ部
+.fc-widget-header {
+    background-color:#0066cc;
+}*/
 .fc-sun {
     color: red; /* 文字色(日曜) */
 }

@@ -23,8 +23,11 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 	private $paramObj;		// パラメータ保存用オブジェクト
 	private $viewOption;	// FullCalendar表示オプション
 	private $css;		// デザインCSS
+	private $dateDefId;		// カレンダー定義ID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
-	
+	const DEFAULT_EVENT_TOOLTIP_TITLE_STYLE	= "color: '#fff', background: 'red'";		// ツールチップ(タイトル)のスタイル
+	const DEFAULT_EVENT_TOOLTIP_BORDER_STYLE	= "width: 2, radius: 5, color: '#444'";		// ツールチップ(ボーダー)のスタイル
+				
 	/**
 	 * コンストラクタ
 	 */
@@ -90,12 +93,22 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		
 		// 入力値を取得
 		$name	= $request->trimValueOf('item_name');			// 定義名
+		$this->dateDefId = $request->trimValueOf('item_date_def_id');		// カレンダー定義ID
 		$this->viewOption = $request->valueOf('item_view_option');	// FullCalendar表示オプション
 		$showEvent = $request->trimCheckedValueOf('item_show_event');		// イベント記事を表示するかどうか
-		$showHoliday = $request->trimCheckedValueOf('item_show_holiday');		// 祝日を表示するかどうか
+		$showEventTooltip = $request->trimCheckedValueOf('item_show_event_tooltip');		// イベント記事用のツールチップを表示するかどうか
+		$showHoliday = $request->trimCheckedValueOf('item_show_holiday');		// 祝日を表示するかどうか		
+		$eventTooltipTitleStyle = $request->trimValueOf('item_event_tooltip_title_style');		// ツールチップ(タイトル)のスタイル
+		$eventTooltipBorderStyle = $request->trimValueOf('item_event_tooltip_border_style');		// ツールチップ(ボーダー)のスタイル
 		$holidayColor = $request->trimValueOf('item_holiday_color');		// 背景色(祝日)
+		$layoutTooltip = $request->valueOf('item_layout_tooltip');		// ツールチップのレイアウト
 		$this->css	= $request->valueOf('item_css');		// デザインCSS
 		
+		// 空の場合はデフォルト値に戻す
+		if (empty($eventTooltipTitleStyle)) $eventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
+		if (empty($eventTooltipBorderStyle)) $eventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
+		if (empty($layoutTooltip)) $layoutTooltip = $this->getParsedTemplateData('default_tooltip.tmpl.html');		// ツールチップのレイアウト	
+				
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
 			// 入力チェック
@@ -115,9 +128,14 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name	= $name;// 表示名
+				$newObj->dateDefId = $this->dateDefId;		// カレンダー定義ID
 				$newObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
 				$newObj->showEvent = $showEvent;		// イベント記事を表示するかどうか
+				$newObj->showEventTooltip = $showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 				$newObj->showHoliday = $showHoliday;		// 祝日を表示するかどうか
+				$newObj->eventTooltipTitleStyle = $eventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
+				$newObj->eventTooltipBorderStyle = $eventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
+				$newObj->layoutTooltip = $layoutTooltip;		// ツールチップのレイアウト
 				$newObj->holidayColor = $holidayColor;		// 背景色(祝日)
 				$newObj->css = $this->css;		// デザインCSS
 				
@@ -139,9 +157,14 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					// ウィジェットオブジェクト更新
+					$targetObj->dateDefId = $this->dateDefId;		// カレンダー定義ID
 					$targetObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
 					$targetObj->showEvent = $showEvent;		// イベント記事を表示するかどうか
+					$targetObj->showEventTooltip = $showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 					$targetObj->showHoliday = $showHoliday;		// 祝日を表示するかどうか
+					$targetObj->eventTooltipTitleStyle = $eventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
+					$targetObj->eventTooltipBorderStyle = $eventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
+					$targetObj->layoutTooltip = $layoutTooltip;		// ツールチップのレイアウト
 					$targetObj->holidayColor = $holidayColor;		// 背景色(祝日)
 					$targetObj->css			= $this->css;		// デザインCSS
 				}
@@ -167,10 +190,15 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
+				$this->dateDefId = '0';		// カレンダー定義ID
 				$this->viewOption = $this->getParsedTemplateData('option.tmpl.js');	// FullCalendar表示オプション
 				$showEvent = '0';		// イベント記事を表示するかどうか
+				$showEventTooltip	= '0';		// イベント記事用のツールチップを表示するかどうか
 				$showHoliday = '0';		// 祝日を表示するかどうか
-				$holidayColor = '';		// 背景色(祝日)
+				$eventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
+				$eventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
+				$layoutTooltip = $this->getParsedTemplateData('default_tooltip.tmpl.html');		// ツールチップのレイアウト	
+				$holidayColor = '';		// 背景色(祝日)	
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));		// デザインCSS
 			}
 			$this->serialNo = 0;
@@ -179,9 +207,14 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					$name		= $targetObj->name;	// 名前
+					$this->dateDefId	= $targetObj->dateDefId;		// カレンダー定義ID
 					$this->viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
 					if (isset($targetObj->showEvent)) $showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
+					if (isset($targetObj->showEventTooltip)) $showEventTooltip	= $targetObj->showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 					if (isset($targetObj->showHoliday)) $showHoliday = $targetObj->showHoliday;		// 祝日を表示するかどうか
+					if (isset($targetObj->eventTooltipTitleStyle)) $eventTooltipTitleStyle = $targetObj->eventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
+					if (isset($targetObj->eventTooltipBorderStyle)) $eventTooltipBorderStyle = $targetObj->eventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
+					if (isset($targetObj->layoutTooltip)) $layoutTooltip = $targetObj->layoutTooltip;		// ツールチップのレイアウト
 					if (isset($targetObj->holidayColor)) $holidayColor = $targetObj->holidayColor;		// 背景色(祝日)
 					if (isset($targetObj->css)) $this->css = $targetObj->css;					// デザインCSS
 				}
@@ -194,14 +227,23 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		// 設定項目選択メニュー作成
 		$this->createItemMenu();
 		
+		// 日付定義選択メニュー作成
+		self::$_mainDb->getCalendarDefList(array($this, 'dateDefLoop'));
+		if (self::$_mainDb->getEffectedRowCount() <= 0) $this->tmpl->setAttribute('date_def_list', 'visibility', 'hidden');// 一覧非表示
+		
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		$this->tmpl->addVar("item_name_visible", "name",	$name);
 		$this->tmpl->addVar("_widget", "view_option",	$this->convertToDispString($this->viewOption));		// FullCalendar表示オプション
 		$this->tmpl->addVar("_widget", "show_event",	$this->convertToCheckedString($showEvent));		// イベント記事を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_event_tooltip",	$this->convertToCheckedString($showEventTooltip));	// イベント記事用のツールチップを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_holiday",	$this->convertToCheckedString($showHoliday));		// 祝日を表示するかどうか
 		$this->tmpl->addVar("_widget", "holiday_color",	$this->convertToDispString($holidayColor));		// 背景色(祝日)
 		$this->tmpl->addVar("_widget", "css",	$this->convertToDispString($this->css));		// デザインCSS
+		$this->tmpl->addVar("_widget", "event_tooltip_title_style",	$this->convertToDispString($eventTooltipTitleStyle));		// ツールチップ(タイトル)のスタイル
+		$this->tmpl->addVar("_widget", "event_tooltip_border_style",	$this->convertToDispString($eventTooltipBorderStyle));		// ツールチップ(ボーダー)のスタイル
+		$this->tmpl->addVar("_widget", "layout_tooltip",	$this->convertToDispString($layoutTooltip));		// ツールチップのレイアウト
+		
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御
@@ -346,6 +388,26 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 	 */
 	function makeCss($tmpl)
 	{
+	}
+	/**
+	 * 日付定義をテンプレートに設定する
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function dateDefLoop($index, $fetchedRow, $param)
+	{
+		$value = $fetchedRow['cd_id'];
+		$row = array(
+			'value'    => $this->convertToDispString($value),			// 定義ID
+			'name'     => $this->convertToDispString($fetchedRow['cd_name']),			// 定義名
+			'selected' => $this->convertToSelectedString($value, $this->dateDefId)			// 選択中かどうか
+		);
+		$this->tmpl->addVars('date_def_list', $row);
+		$this->tmpl->parseTemplate('date_def_list', 'a');	
+		return true;
 	}
 }
 ?>

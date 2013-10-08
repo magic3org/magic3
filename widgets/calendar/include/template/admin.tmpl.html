@@ -39,6 +39,9 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
+$(function(){
+	m3SetWysiwygEditor('item_layout_tooltip', 100/* 高さ */, false, 'layout');
+});
 //]]>
 </script>
 <div align="center">
@@ -58,8 +61,8 @@ function listItem(){
 <table class="simple-table" width="100%">
     <tbody>
     <tr>
-	    <td class="table-headside" width="100"><span {_HELP_CONFIG_NAME_INPUT}>名前</span></td>
-	    <td>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIG_NAME_INPUT}>名前</span></td>
+	    <td colspan="2">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
 	        <patTemplate:tmpl name="title_list">
@@ -71,37 +74,42 @@ function listItem(){
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
-<!--    <tr>
-	    <td class="table-headside" width="100"><span {_HELP_CONFIG_DISP_TYPE}>表示方法</span></td>
-	    <td>表示順：
-    <select name="item_disptype">
-        <patTemplate:tmpl name="disp_type_list">
-        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-        </patTemplate:tmpl>
-    </select>
-	    &nbsp;&nbsp;表示方向：
-    <select name="item_dispdirect">
-        <option value="0" {DIRECT_V_SELECTER}>縦</option>
-	<option value="1" {DIRECT_H_SELECTER}>横</option>
-    </select>
-	    &nbsp;&nbsp;表示項目数：<input type="text" name="item_dispcount" value="{DISP_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);"></td>
-	</tr>-->
     <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_DATA}>表示データ</span></td>
-	    <td><input type="checkbox" name="item_show_event" {SHOW_EVENT} />イベント記事<br />
-		<input type="checkbox" name="item_show_holiday" {SHOW_HOLIDAY} />祝日(Googleカレンダーから取得)&nbsp;&nbsp;カラー：<input type="text" id="item_holiday_color" name="item_holiday_color" value="{HOLIDAY_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_holiday_color);" /><br />
+	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_DATE}>日付表示</span></td>
+	    <td colspan="2">日付定義：<select name="item_date_def_id">
+	        <option value="0">[選択なし]</option>
+	        <patTemplate:tmpl name="date_def_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
 		</td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_OPTION}>表示オプション</span></td>
-	    <td><textarea name="item_view_option" rows="10" style="width:100%;">{VIEW_OPTION}</textarea></td>
+	    <td class="table-headside" rowspan="6"><span {_HELP_CONFIG_VIEW_EVENT}>イベント表示</span></td>
+	    <td class="table-headside" width="100" rowspan="5">イベント記事</td>
+		<td><div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="item_show_event" {SHOW_EVENT} />表示</label></div>
+		<div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="item_show_event_tooltip" {SHOW_EVENT_TOOLTIP} />ツールチップを表示</label></div></td>
+	</tr>
+	<tr><td class="table-headside">デフォルトCSS</td></tr>
+	<tr><td><label><span style="width:20%;display:inline-block;">ツールチップ(タイトル)：</span><input type="text" name="item_event_tooltip_title_style" value="{EVENT_TOOLTIP_TITLE_STYLE}" style="width:80%;" /></label>
+		<label><span style="width:20%;display:inline-block;">ツールチップ(ボーダー)：</span><input type="text" name="item_event_tooltip_border_style" value="{EVENT_TOOLTIP_BORDER_STYLE}" style="width:80%;" /></label></td></tr>
+	<tr><td class="table-headside">ツールチップレイアウト</td></tr>
+	<tr><td><textarea name="item_layout_tooltip">{LAYOUT_TOOLTIP}</textarea></td></tr>
+	<tr>
+	    <td class="table-headside">祝日</td>
+		<td><div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="item_show_holiday" {SHOW_HOLIDAY} />表示(Googleカレンダーから取得)</label><label class="item_list_inline" for="item_holiday_color">カラー：<input type="text" id="item_holiday_color" name="item_holiday_color" value="{HOLIDAY_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_holiday_color);" /></label></div></td>
+	<tr>
 	</tr>
     <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONFIG_CSS}>CSS</span></td>
-	    <td><textarea name="item_css" rows="10" style="width:100%;">{CSS}</textarea></td>
+	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_OPTION}>表示オプション</span></td>
+	    <td colspan="2"><textarea name="item_view_option" rows="10" style="width:100%;">{VIEW_OPTION}</textarea></td>
 	</tr>
-	<tr>
-	    <td align="right" colspan="2">
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIG_CSS}>CSS</span></td>
+	    <td colspan="2"><textarea name="item_css" rows="10" style="width:100%;">{CSS}</textarea></td>
+	</tr>
+	<tr class="even">
+	    <td align="right" colspan="3">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>

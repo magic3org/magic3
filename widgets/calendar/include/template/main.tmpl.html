@@ -106,6 +106,36 @@ $(function(){
 			}
 		},
 </patTemplate:tmpl>
+<patTemplate:tmpl name="show_tooltip" visibility="hidden">
+		eventRender: function(event, element){
+			if (event.className == 'event_default'){
+				element.qtip({
+					content: {
+						title: { text: event.title },
+						text: '<span class="title" style="font-weight:bold;">Start: </span>' + ($.fullCalendar.formatDate(event.start, 'hh:mmtt')) +
+						'<br><span class="title" style="font-weight:bold;">End: </span>' + ($.fullCalendar.formatDate(event.end, 'hh:mmtt')) +
+						'<br><span class="title" style="font-weight:bold;">Where: </span>' + event.location +
+						'<br><span class="title" style="font-weight:bold;">Description: </span>' + event.description
+					},
+					position: {
+						adjust: { screen: true },
+						corner: { target: 'bottomMiddle', tooltip: 'topLeft' }
+					},
+					show: {
+						solo: true, effect: { type: 'slide' }, effect: function(){
+							$(this).fadeTo(200, 0.9);
+						}
+					},
+					hide: { when: 'mouseout', fixed: true },
+					style: {
+						tip: true, // Give it a speech bubble tip
+						border: { {BORDER_STYLE} },
+						title: { {TITLE_STYLE} }
+					}
+				});
+			}
+		},
+</patTemplate:tmpl>
 		// 初期表示イベント
 		viewDisplay: function(view){
 			m3_ajax_request('calendar', 'act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);

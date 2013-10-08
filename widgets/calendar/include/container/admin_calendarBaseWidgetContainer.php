@@ -121,7 +121,7 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 			// 日付定義
 			$current = '';
 			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CONFIG);
-			if ($task == 'entry' || $task == 'entry_detail') $current = 'id="current"';
+			if ($task == self::TASK_CONFIG || $task == self::TASK_CONFIG_LIST) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>カレンダー設定</span></a></li>' . M3_NL;
 			
 		} else if ($task == self::TASK_DATE ||				// 日付管理

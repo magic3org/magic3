@@ -24,11 +24,15 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	private $langId;		// 言語
 	private $css;		// デザインCSS
 	private $addScript = array();		// 追加スクリプト
+	private $showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カレンダー';		// デフォルトのウィジェットタイトル名
 	const MAX_ITEM_COUNT = 100;				// カレンダーに表示する項目の最大数
 	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-1.6.3/gcal.js';				// Googleカレンダー用スクリプト
-		
+	const DEFAULT_EVENT_TOOLTIP_TITLE_STYLE		= "color: '#fff', background: 'red'";		// ツールチップ(タイトル)のスタイル
+	const DEFAULT_EVENT_TOOLTIP_BORDER_STYLE	= "width: 2, radius: 5, color: '#444'";		// ツールチップ(ボーダー)のスタイル
+	const DEFAULT_EVENT_CLASS_NAME = 'event_default';			// デフォルトのクラス名
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -132,9 +136,18 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			$this->cancelParse();		// テンプレート変換処理中断
 			return;
 		}
+		// デフォルト値設定
+		$eventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
+		$eventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
+		$layoutTooltip = $this->getParsedTemplateData('default_tooltip.tmpl.html');		// ツールチップのレイアウト	
+		
 		$viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
 		if (isset($targetObj->showEvent)) $showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
+		if (isset($targetObj->showEventTooltip)) $this->showEventTooltip	= $targetObj->showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 		if (isset($targetObj->showHoliday)) $showHoliday = $targetObj->showHoliday;		// 祝日を表示するかどうか
+		if (isset($targetObj->eventTooltipTitleStyle)) $eventTooltipTitleStyle = $targetObj->eventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
+		if (isset($targetObj->eventTooltipBorderStyle)) $eventTooltipBorderStyle = $targetObj->eventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
+		if (isset($targetObj->layoutTooltip)) $layoutTooltip = $targetObj->layoutTooltip;		// ツールチップのレイアウト
 		if (isset($targetObj->holidayColor)) $holidayColor = $targetObj->holidayColor;		// 背景色(祝日)
 		if (isset($targetObj->css)) $this->css = $targetObj->css;			// デザインCSS
 		
@@ -155,6 +168,12 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->setAttribute('show_holiday', 'visibility', 'visible');
 			if (empty($holidayColor)) $holidayColor = 'red';
 			$this->tmpl->addVar("show_holiday", "color", $this->convertToDispString($holidayColor));
+		}
+		// ツールチップ用のデータを追加
+		if ($this->showEventTooltip){
+			$this->tmpl->setAttribute('show_tooltip', 'visibility', 'visible');
+			$this->tmpl->addVar("show_tooltip", "title_style", $eventTooltipTitleStyle);
+			$this->tmpl->addVar("show_tooltip", "border_style", $eventTooltipBorderStyle);
 		}
 		
 		// データを埋め込む
@@ -228,7 +247,15 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		$event = array('title'	=> $title,
 						'start'	=> $startDate,		// 開始
 						'end'	=> $endDate,		// 終了
-						'url'	=> $linkUrl);		// リンク先
+						'url'	=> $linkUrl,		// リンク先
+						'className'	=> self::DEFAULT_EVENT_CLASS_NAME	);	// イベントクラス名
+						
+		// ツールチップ用のデータを追加
+		if ($this->showEventTooltip){
+			$event['location'] = $fetchedRow['ee_place'];			// 場所
+			$event['description'] = $fetchedRow['ee_summary'];		// 概要
+		}
+		
 		$this->events[] = $event;
 		return true;
 	}
