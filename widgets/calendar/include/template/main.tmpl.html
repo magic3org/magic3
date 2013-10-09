@@ -112,10 +112,7 @@ $(function(){
 				element.qtip({
 					content: {
 						title: { text: event.title },
-						text: '<span class="title" style="font-weight:bold;">Start: </span>' + ($.fullCalendar.formatDate(event.start, 'hh:mmtt')) +
-						'<br><span class="title" style="font-weight:bold;">End: </span>' + ($.fullCalendar.formatDate(event.end, 'hh:mmtt')) +
-						'<br><span class="title" style="font-weight:bold;">Where: </span>' + event.location +
-						'<br><span class="title" style="font-weight:bold;">Description: </span>' + event.description
+						text: {CONTENT}
 					},
 					position: {
 						adjust: { screen: true },
@@ -128,7 +125,8 @@ $(function(){
 					},
 					hide: { when: 'mouseout', fixed: true },
 					style: {
-						tip: true, // Give it a speech bubble tip
+						tip: true,
+						width: { min:200, max:300 },
 						border: { {BORDER_STYLE} },
 						title: { {TITLE_STYLE} }
 					}

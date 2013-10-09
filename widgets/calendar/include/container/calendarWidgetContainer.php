@@ -174,6 +174,16 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->setAttribute('show_tooltip', 'visibility', 'visible');
 			$this->tmpl->addVar("show_tooltip", "title_style", $eventTooltipTitleStyle);
 			$this->tmpl->addVar("show_tooltip", "border_style", $eventTooltipBorderStyle);
+			
+			// ツールチップコンテンツ	
+			$contentInfo = array();
+			$contentInfo[M3_TAG_MACRO_CONTENT_START_TIME]	= "' + ($.fullCalendar.formatDate(event.start, 'H:m')) + '";		// コンテンツ置換キー(開始時間)
+			$contentInfo[M3_TAG_MACRO_CONTENT_END_TIME]		= "' + ($.fullCalendar.formatDate(event.end, 'H:m')) + '";		// コンテンツ置換キー(終了時間)
+			$contentInfo[M3_TAG_MACRO_CONTENT_LOCATION]		= "' + event.location + '";			// コンテンツ置換キー(場所)
+			$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION]	= "' + event.description + '";			// コンテンツ置換キー(概要)
+			$contentText = $this->convertM3ToText($layoutTooltip, $contentInfo, true/*改行コード削除*/);
+			$contentText = "'" . $contentText . "'";		// 「'」で括る
+			$this->tmpl->addVar("show_tooltip", "content", $contentText);
 		}
 		
 		// データを埋め込む
@@ -248,13 +258,12 @@ class calendarWidgetContainer extends BaseWidgetContainer
 						'start'	=> $startDate,		// 開始
 						'end'	=> $endDate,		// 終了
 						'url'	=> $linkUrl,		// リンク先
-						'className'	=> self::DEFAULT_EVENT_CLASS_NAME	);	// イベントクラス名
-						
-		// ツールチップ用のデータを追加
-		if ($this->showEventTooltip){
-			$event['location'] = $fetchedRow['ee_place'];			// 場所
-			$event['description'] = $fetchedRow['ee_summary'];		// 概要
-		}
+						'className'	=> self::DEFAULT_EVENT_CLASS_NAME,				// イベントクラス名
+
+						// ツールチップ用データ
+						'location' => $fetchedRow['ee_place'],			// 場所
+						'description' => $fetchedRow['ee_summary']		// 概要
+						);	
 		
 		$this->events[] = $event;
 		return true;
