@@ -1612,9 +1612,10 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @param string $src			変換するデータ
 	 * @param array $contentInfo	変換テキスト情報
+	 * @param bool $removeLineBreak	改行コードを削除するかどうか
 	 * @return string				変換後データ
 	 */
-	function convertM3ToText($src, $contentInfo = array())
+	function convertM3ToText($src, $contentInfo = array(), $removeLineBreak = false)
 	{
 		// URLを求める
 		$rootUrl = $this->gEnv->getRootUrlByCurrentPage();
@@ -1629,6 +1630,9 @@ class BaseWidgetContainer extends Core
 		
 		// 残っているMagic3タグ削除
 		$dest = $this->gInstance->getTextConvManager()->deleteM3Tag($dest);
+		
+		// 改行コードを削除
+		if ($removeLineBreak) $dest = $this->gInstance->getTextConvManager()->deleteLineBreak($dest);
 		return $dest;
 	}
 	/**

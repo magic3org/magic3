@@ -123,6 +123,8 @@ define('M3_TAG_MACRO_CONTENT_UPDATE_DT',	'CT_UPDATE_DT');				// コンテンツ�
 define('M3_TAG_MACRO_CONTENT_REGIST_DT',	'CT_REGIST_DT');				// コンテンツ置換キー(登録日時)
 define('M3_TAG_MACRO_CONTENT_START_DT',		'CT_START_DT');					// コンテンツ置換キー(公開開始日時)
 define('M3_TAG_MACRO_CONTENT_END_DT',		'CT_END_DT');					// コンテンツ置換キー(公開終了日時)
+define('M3_TAG_MACRO_CONTENT_START_TIME',	'CT_START_TIME');				// コンテンツ置換キー(公開開始時間)
+define('M3_TAG_MACRO_CONTENT_END_TIME',		'CT_END_TIME');					// コンテンツ置換キー(公開終了時間)
 define('M3_TAG_MACRO_CONTENT_AUTHOR',		'CT_AUTHOR');					// コンテンツ置換キー(著者)
 define('M3_TAG_MACRO_CONTENT_TITLE',		'CT_TITLE');					// コンテンツ置換キー(タイトル)
 define('M3_TAG_MACRO_CONTENT_BLOG_TITLE',	'CT_BLOG_TITLE');				// コンテンツ置換キー(ブログタイトル)

@@ -892,7 +892,17 @@ class TextConvManager extends Core
 	 */
 	function convLineBreakToBr($src)
 	{
-		return preg_replace("/(\015\012)|(\015)|(\012)/","<br />", $src);
+		return preg_replace("/(\015\012)|(\015)|(\012)/", "<br />", $src);
+	}
+	/**
+	 * 改行コードを削除
+	 *
+	 * @param string $src			変換するデータ
+	 * @return string				変換後データ
+	 */
+	function deleteLineBreak($src)
+	{
+		return preg_replace("/(\015\012)|(\015)|(\012)/", '', $src);
 	}
 	/**
 	 * BBCodeをHTMLタグに変換
