@@ -113,6 +113,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$entryViewCount	= self::$_configArray[event_mainCommonDef::CF_ENTRY_VIEW_COUNT];// 記事表示数
 		if (empty($entryViewCount)) $entryViewCount = event_mainCommonDef::DEFAULT_VIEW_COUNT;
 		$entryViewOrder	= self::$_configArray[event_mainCommonDef::CF_ENTRY_VIEW_ORDER];// 記事表示順
+		$useCalendar	= self::$_configArray[event_mainCommonDef::CF_USE_CALENDAR];		// カレンダーを使用するかどうか
 		$receiveComment = self::$_configArray[event_mainCommonDef::CF_RECEIVE_COMMENT];		// コメントを受け付けるかどうか
 		
 		$act = $request->trimValueOf('act');
@@ -467,11 +468,13 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		}
 		
 		// 他画面へのリンク
-		$this->tmpl->setAttribute('top_link_area', 'visibility', 'visible');
-		$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_currentPageUrl . '&task=' . self::TASK_CALENDAR, true));
-		$topName = 'カレンダー';
-		$this->tmpl->addVar("top_link_area", "calendar_url", $topLink);
-		$this->tmpl->addVar("top_link_area", "calendar_name", $topName);
+		if ($useCalendar){
+			$this->tmpl->setAttribute('top_link_area', 'visibility', 'visible');
+			$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_currentPageUrl . '&task=' . self::TASK_CALENDAR, true));
+			$topName = 'カレンダー';
+			$this->tmpl->addVar("top_link_area", "calendar_url", $topLink);
+			$this->tmpl->addVar("top_link_area", "calendar_name", $topName);
+		}
 	}
 	/**
 	 * ヘッダ部メタタグの設定

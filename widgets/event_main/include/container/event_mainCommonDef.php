@@ -19,6 +19,7 @@ class event_mainCommonDef
 	const VIEW_CONTENT_TYPE = 'ev';		// 記事参照数取得用
 		
 	// DB定義値
+	const CF_USE_CALENDAR			= 'use_calendar';		// カレンダーを使用するかどうか
 	const CF_RECEIVE_COMMENT		= 'receive_comment';		// コメントを受け付けるかどうか
 	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
 	const CF_ENTRY_VIEW_ORDER		= 'entry_view_order';			// 記事表示方向

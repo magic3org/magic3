@@ -56,7 +56,8 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$entryViewCount = $request->trimValueOf('entry_view_count');		// 記事表示数
 		$entryViewOrder = $request->trimValueOf('entry_view_order');		// 記事表示順
 		$categoryCount = $request->trimValueOf('category_count');		// カテゴリ数
-		$receiveComment = ($request->trimValueOf('receive_comment') == 'on') ? 1 : 0;		// コメントを受け付けるかどうか
+		$useCalendar	= $request->trimCheckedValueOf('item_use_calendar');	// カレンダーを使用するかどうか
+		$receiveComment = $request->trimCheckedValueOf('receive_comment');		// コメントを受け付けるかどうか
 		$topContents = $request->valueOf('top_contents');	// トップコンテンツ
 		$maxCommentLength = $request->trimValueOf('max_comment_length');	// コメント最大文字数
 		$msgNoEntryInFuture = $request->trimValueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
@@ -71,6 +72,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 				$ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_ENTRY_VIEW_COUNT, $entryViewCount); // 記事表示数
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_ENTRY_VIEW_ORDER, $entryViewOrder);// 記事表示順
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_CATEGORY_COUNT, $categoryCount);		// カテゴリ数
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_USE_CALENDAR, $useCalendar);		// カレンダーを使用するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_RECEIVE_COMMENT, $receiveComment);// コメントを受け付けるかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH, $maxCommentLength);// コメント最大文字数
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_TOP_CONTENTS, $topContents);// トップコンテンツ
@@ -102,6 +104,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 			$entryViewOrder	= self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
 			$categoryCount	= self::$_mainDb->getConfig(event_mainCommonDef::CF_CATEGORY_COUNT);// カテゴリ数
 			if (empty($categoryCount)) $categoryCount = event_mainCommonDef::DEFAULT_CATEGORY_COUNT;
+			$useCalendar	= self::$_mainDb->getConfig(event_mainCommonDef::CF_USE_CALENDAR);	// カレンダーを使用するかどうか
 			$receiveComment	= self::$_mainDb->getConfig(event_mainCommonDef::CF_RECEIVE_COMMENT);
 			$maxCommentLength = self::$_mainDb->getConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
 			if ($maxCommentLength == '') $maxCommentLength = event_mainCommonDef::DEFAULT_COMMENT_LENGTH;
@@ -118,6 +121,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 			$this->tmpl->addVar("_widget", "view_order_dec_selected", 'selected');// 記事表示順
 		}
 		$this->tmpl->addVar("_widget", "category_count", $categoryCount);// カテゴリ数
+		$this->tmpl->addVar("_widget", "use_calendar", $this->convertToCheckedString($useCalendar));// カレンダーを使用するかどうか
 		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
 		$this->tmpl->addVar("_widget", "max_comment_length", $this->convertToDispString($maxCommentLength));// コメント最大文字数
 		$this->tmpl->addVar("_widget", "top_contents", $this->convertToDispString($topContents));		// トップコンテンツ
