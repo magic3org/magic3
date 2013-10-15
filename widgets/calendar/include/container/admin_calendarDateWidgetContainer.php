@@ -139,6 +139,8 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		$exceptDateNames	= $request->trimValueOf('item_except_date_name');		// 例外日名
 		$exceptDateTypes 	= $request->trimValueOf('item_except_date_type');		// 例外日日付タイプ
 		$timeListData		= $request->trimValueOf('timelistdata');		// 時間割データ
+		$openDateStyle		= $request->trimValueOf('item_open_date_style');		// 開業日スタイル
+		$closedDateStyle	= $request->trimValueOf('item_closed_date_style');		// 休業日スタイル
 
 		// 基本日入力取得
 		$this->dateFieldArray = array();
@@ -189,7 +191,7 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			// エラーなしの場合は、データを追加
 			if ($this->getMsgCount() == 0){	
 				// カレンダー定義を追加
-				$ret = self::$_mainDb->updateCalendarDef(0/*新規*/, $name, $this->repeatType, $this->dateCount, $newId);
+				$ret = self::$_mainDb->updateCalendarDef(0/*新規*/, $name, $this->repeatType, $this->dateCount, $openDateStyle, $closedDateStyle, $newId);
 				
 				// 基本日を追加
 				if ($ret) $ret = self::$_mainDb->updateDate($newId, 0/*インデックス番号*/, $this->dateFieldArray);
@@ -227,7 +229,7 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// カレンダー定義を更新
-				$ret = self::$_mainDb->updateCalendarDef($defId, $name, $this->repeatType, $this->dateCount, $newId);
+				$ret = self::$_mainDb->updateCalendarDef($defId, $name, $this->repeatType, $this->dateCount, $openDateStyle, $closedDateStyle, $newId);
 				
 				// 基本日を追加
 				if ($ret) $ret = self::$_mainDb->updateDate($defId, 0/*インデックス番号*/, $this->dateFieldArray);
@@ -263,7 +265,9 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			if ($ret){
 				$name = $row['cd_name'];
 				$this->repeatType = $row['cd_repeat_type'];
-
+				$openDateStyle		= $row['cd_open_date_style'];		// 開業日スタイル
+				$closedDateStyle	= $row['cd_closed_date_style'];		// 休業日スタイル
+		
 				// 基本日を取得
 				$this->dateFieldArray = array();
 				self::$_mainDb->getDateList($defId, 0/*基本日データ*/, array($this, 'dateLoop'));
@@ -272,11 +276,11 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 				$this->timeArray = array();			// 時間枠データ
 				$this->exceptDateFieldArray = array();
 				self::$_mainDb->getDateList($defId, 1/*例外日データ*/, array($this, 'exceptDateLoop'));
-				
-
 			} else {		// 新規の場合
 				$name = '';
 				$this->repeatType = '0';
+				$openDateStyle		= '';		// 開業日スタイル
+				$closedDateStyle	= default_calendarCommonDef::DEFAULT_CLOSED_DATE_STYLE;		// 休業日スタイル			
 			}
 		}
 		
@@ -317,6 +321,8 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "date_count", $this->convertToDispString($this->dateCount));	// 基本日数
 		$this->tmpl->addVar("_widget", "except_date_count", $this->convertToDispString($this->exceptDateCount));	// 例外日数
 		$this->tmpl->addVar("_widget", "time_list_data", $timeListData);				// 時間割データ(JSON型)
+		$this->tmpl->addVar("_widget", "open_date_style", $this->convertToDispString($openDateStyle));	// 開業日
+		$this->tmpl->addVar("_widget", "closed_date_style", $this->convertToDispString($closedDateStyle));	// 休業日
 	}
 	/**
 	 * 日付定義一覧をテンプレートに設定する

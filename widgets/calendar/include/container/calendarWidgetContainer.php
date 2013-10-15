@@ -21,10 +21,13 @@ class calendarWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $events;		// 表示イベント
+	private $dates;			// 有効日
 	private $langId;		// 言語
 	private $css;		// デザインCSS
 	private $addScript = array();		// 追加スクリプト
 	private $showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
+	private $dateTypeInfo;		// 日付データタイプ
+	private $dateInfo;		// 日付データ
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カレンダー';		// デフォルトのウィジェットタイトル名
 	const MAX_ITEM_COUNT = 100;				// カレンダーに表示する項目の最大数
@@ -136,11 +139,15 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			$this->cancelParse();		// テンプレート変換処理中断
 			return;
 		}
+		// 設定値を取得
+		$dateDefId	= $targetObj->dateDefId;		// カレンダー定義ID
+		
 		// デフォルト値設定
 		$eventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
 		$eventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
 		$layoutTooltip = $this->getParsedTemplateData('default_tooltip.tmpl.html');		// ツールチップのレイアウト	
-		
+		$closedDateStyle	= default_calendarCommonDef::DEFAULT_CLOSED_DATE_STYLE;		// 休業日スタイル	
+				
 		$viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
 		if (isset($targetObj->showEvent)) $showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
 		if (isset($targetObj->showEventTooltip)) $this->showEventTooltip	= $targetObj->showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
@@ -150,6 +157,22 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		if (isset($targetObj->layoutTooltip)) $layoutTooltip = $targetObj->layoutTooltip;		// ツールチップのレイアウト
 		if (isset($targetObj->holidayColor)) $holidayColor = $targetObj->holidayColor;		// 背景色(祝日)
 		if (isset($targetObj->css)) $this->css = $targetObj->css;			// デザインCSS
+		
+		$ret = $this->db->getCalendarDef($dateDefId, $row);
+		if ($ret){
+			$openDateStyle		= $row['cd_open_date_style'];		// 開業日スタイル
+			$closedDateStyle	= $row['cd_closed_date_style'];		// 休業日スタイル
+			
+			// 開業日、休業日スタイルを設定
+			if (!empty($openDateStyle)){
+				$this->tmpl->setAttribute('show_dates', 'visibility', 'visible');
+				$this->tmpl->addVar("show_dates", "css", $openDateStyle);
+			}
+			if (!empty($closedDateStyle)){
+				$this->tmpl->setAttribute('show_closeddates', 'visibility', 'visible');
+				$this->tmpl->addVar("show_closeddates", "css", $closedDateStyle);
+			}
+		}
 		
 		// 追加スクリプト
 		$this->addScript = array($this->getUrl($this->gEnv->getScriptsUrl() . self::GOOGLE_SCRIPT_FILE));
@@ -177,8 +200,8 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			
 			// ツールチップコンテンツ	
 			$contentInfo = array();
-			$contentInfo[M3_TAG_MACRO_CONTENT_START_TIME]	= "' + ($.fullCalendar.formatDate(event.start, 'H:m')) + '";		// コンテンツ置換キー(開始時間)
-			$contentInfo[M3_TAG_MACRO_CONTENT_END_TIME]		= "' + ($.fullCalendar.formatDate(event.end, 'H:m')) + '";		// コンテンツ置換キー(終了時間)
+			$contentInfo[M3_TAG_MACRO_CONTENT_START_TIME]	= "' + ($.fullCalendar.formatDate(event.start, 'H:mm')) + '";		// コンテンツ置換キー(開始時間)
+			$contentInfo[M3_TAG_MACRO_CONTENT_END_TIME]		= "' + ($.fullCalendar.formatDate(event.end, 'H:mm')) + '";		// コンテンツ置換キー(終了時間)
 			$contentInfo[M3_TAG_MACRO_CONTENT_LOCATION]		= "' + event.location + '";			// コンテンツ置換キー(場所)
 			$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION]	= "' + event.description + '";			// コンテンツ置換キー(概要)
 			$contentText = $this->convertM3ToText($layoutTooltip, $contentInfo, true/*改行コード削除*/);
@@ -192,6 +215,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "month", $month);
 		$this->tmpl->addVar("_widget", "day", $day);
 		$this->tmpl->addVar("_widget", "option", $this->convertToDispString($viewOption));
+		$this->tmpl->addVar("_widget", "sub_id", $this->gEnv->getCurrentPageSubId());			// カレンダー定義IDを取得するにはページサブIDが必要
 	}
 	/**
 	 * カレンダー情報データ取得
@@ -201,25 +225,46 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	 */
 	function getData($request)
 	{
-		// ##### データアクセス権チェック #####
-
+		// 定義ID取得
+		$configId = $this->gEnv->getCurrentWidgetConfigId();
+		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
+	
+		// パラメータオブジェクトを取得
+		$targetObj = $this->getWidgetParamObjByConfigId($configId);
+		if (empty($targetObj)){// 定義データが取得できないときは終了
+			$this->cancelParse();		// テンプレート変換処理中断
+			return;
+		}
+		// 設定値を取得
+		$dateDefId	= $targetObj->dateDefId;		// カレンダー定義ID
+		
 		// 画面出力キャンセル
 		$this->cancelParse();
 		
 		$eventType = $request->trimValueOf('type');			// 取得コンテンツタイプ
 		$typeArray = array();
 		if (!empty($eventType)) $typeArray = explode(',', $eventType);
+		// カレンダーの表示期間を取得。終了日は、表示される日の翌日が設定されている
 		$startDt = $request->trimValueOf('start');
+		if (!empty($startDt)) $startDt = $this->convertToProperDate($startDt);
 		$endDt = $request->trimValueOf('end');
+		if (!empty($endDt)) $endDt = $this->convertToProperDate($endDt);
 			
 		// 表示データを取得
 		$this->events = array();
-		if (in_array('event', $typeArray)){			// イベント記事
-			// 項目取得
+		if (in_array('event', $typeArray)){			// イベント記事取得の場合
+			// イベント取得
 			$this->db->getEventItems(self::MAX_ITEM_COUNT, 1, $startDt, $endDt, $this->langId, array($this, 'itemsLoop'));
 		}
 		// Ajax戻りデータ
 		$this->gInstance->getAjaxManager()->addData('events', $this->events);
+		
+		// 日付定義取得
+		list($this->dates, $this->closeddates) = $this->getOpenDate($dateDefId, $startDt, $endDt);
+		
+		// Ajax戻りデータ
+		$this->gInstance->getAjaxManager()->addData('dates', $this->dates);
+		$this->gInstance->getAjaxManager()->addData('closeddates', $this->closeddates);
 	}
 	/**
 	 * 取得したコンテンツ項目をテンプレートに設定する
@@ -266,6 +311,119 @@ class calendarWidgetContainer extends BaseWidgetContainer
 						);	
 		
 		$this->events[] = $event;
+		return true;
+	}
+	/**
+	 * 開業日取得
+	 *
+	 * @param string	$defId				カレンダー定義ID
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array							日付(yyyy-mm-dd)の配列
+	 */
+	function getOpenDate($defId, $startDt, $endDt)
+	{
+		// 日付情報初期化
+		$openDateInfo = array();
+		$closedDateInfo = array();
+		
+		$this->dateInfo = array();
+		$ret = $this->db->getCalendarDef($defId, $row);
+		if ($ret){
+			$name = $row['cd_name'];
+			$repeatType 		= $row['cd_repeat_type'];
+			$openDateStyle		= $row['cd_open_date_style'];		// 開業日スタイル
+			$closedDateStyle	= $row['cd_closed_date_style'];		// 休業日スタイル
+	
+			// 基本日を取得
+			$this->dateTypeInfo = array();		// 日付データタイプ
+			$this->db->getDateList($defId, 0/*基本日データ*/, array($this, 'dateLoop'));
+		} else {
+			return $this->dateInfo;
+		}
+		
+		// カレンダーを作成
+		list($year, $month, $day) = explode('/', $startDt);
+		$year = intval($year);
+		$month = intval($month);
+		$day = intval($day);
+		$week = date('w', mktime(0, 0, 0, $month, $day, $year));		// 曜日(0=日曜日,1=月曜日...)
+		
+		// 基本日データ作成
+		list($endYear, $endMonth, $endDay) = explode('/', $endDt);
+		$endYear = intval($endYear);
+		$endMonth = intval($endMonth);
+		$endDay = intval($endDay);		
+		$endTime = mktime(0, 0, 0, $endMonth, $endDay, $endYear);
+		while (true){
+			$date = sprintf('%04s-%02s-%02s', $year, $month, $day);
+			switch ($repeatType){
+				case '0':		// 繰り返しなし
+				default:
+					$this->dateInfo[$date] = 0;
+					break;
+				case '1':		// 曜日基準
+					$this->dateInfo[$date] = $this->dateTypeInfo[$week];
+					break;
+			}
+			
+			// 翌日を求める
+			$nextTime = mktime(0, 0, 0, $month, $day + 1, $year);
+			if ($nextTime >= $endTime) break;
+			
+			list($year, $month, $day) = explode('/', date("Y/m/d", $nextTime));		
+			$year = intval($year);
+			$month = intval($month);
+			$day = intval($day);
+			
+			// 曜日を更新
+			$week++;
+			if ($week == 7) $week = 0;
+		}
+
+		// 例外日データで更新
+		$this->db->getDateList($defId, 1/*例外日データ*/, array($this, 'exceptDateLoop'));
+		
+		$keys = array_keys($this->dateInfo);
+		for ($i = 0; $i < count($keys); $i++){
+			$key = $keys[$i];
+			$value = $this->dateInfo[$key];
+			if (empty($value)){
+				$closedDateInfo[] = $key;		// 時間定義がある場合は取得
+			} else {
+				$openDateInfo[] = $key;		// 時間定義がある場合は取得
+			}
+		}
+		return array($openDateInfo, $closedDateInfo);
+	}
+	/**
+	 * 基本日一覧を取得
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function dateLoop($index, $fetchedRow, $param)
+	{	
+		$this->dateTypeInfo[]	= intval($fetchedRow['ce_date_type_id']);	// 基本日日付タイプ	
+		return true;
+	}
+	/**
+	 * 例外日一覧を取得
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function exceptDateLoop($index, $fetchedRow, $param)
+	{
+		$this->timestampToYearMonthDay($fetchedRow['ce_date'], $year, $month, $day);
+		$dateStr = sprintf('%04s-%02s-%02s', $year, $month, $day);
+		$dateType	= intval($fetchedRow['ce_date_type_id']);		// 基本日日付タイプ
+		
+		$this->dateInfo[$dateStr] = $dateType;	
 		return true;
 	}
 }

@@ -20,6 +20,7 @@ class default_calendarCommonDef
 	static $_deviceTypeName = 'PC';	// デバイスタイプ名
 
 	const CALENDAR_WIDGET_ID = 'calendar';		// デフォルトのカレンダー管理ウィジェット
+	const DEFAULT_CLOSED_DATE_STYLE = "background: '#f08080', color: '#000'";
 	
 	/**
 	 * 指定デバイス向けのURLを取得

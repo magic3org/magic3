@@ -17,9 +17,25 @@ function get_calendar_success(request, retcode, jsondata)
 {
 	$('#calendar').fullCalendar('removeEvents');
 
-	if (jsondata.events){
-		$('#calendar').fullCalendar('addEventSource', jsondata.events);
+	if (jsondata.events) $('#calendar').fullCalendar('addEventSource', jsondata.events);
+<patTemplate:tmpl name="show_dates" visibility="hidden">	
+	if (jsondata.dates){
+		var dates = jsondata.dates;
+		for (var i = 0; i < dates.length; i++){
+			var date = dates[i];
+			$('.fc-day[data-date="' + date + '"]').css( { {CSS} });
+		}
 	}
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_closeddates" visibility="hidden">
+	if (jsondata.closeddates){
+		var dates = jsondata.closeddates;
+		for (var i = 0; i < dates.length; i++){
+			var date = dates[i];
+			$('.fc-day[data-date="' + date + '"]').css( { {CSS} });
+		}
+	}
+</patTemplate:tmpl>
 }
 function get_calendar_failure(request)
 {
@@ -42,8 +58,6 @@ $(function(){
         slotMinutes: 15,
         // 選択する時間間隔
         snapMinutes: 15,
-        // TODO よくわからない
-        //defaultEventMinutes: 120,
         // スクロール開始時間
         firstHour: 9,
         // 最小時間
@@ -134,9 +148,10 @@ $(function(){
 			}
 		},
 </patTemplate:tmpl>
-		// 初期表示イベント
-		viewDisplay: function(view){
-			m3_ajax_request('calendar', 'act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);
+		// 描画イベント
+		//viewDisplay: function(view){
+		viewRender: function(view, element){
+			m3_ajax_request('calendar', 'sub={SUB_ID}&act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);
 		}
     });
 });

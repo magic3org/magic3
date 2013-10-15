@@ -264,14 +264,16 @@ class calendarDb extends BaseDb
 	/**
 	 * カレンダー定義の追加更新
 	 *
-	 * @param string $id			定義ID。0のときは新規追加
-	 * @param string $name			カレンダー定義名
-	 * @param int    $repeatType	繰り返しタイプ
-	 * @param int    $dateCount		所要日数
-	 * @param int    $newId			新規ID
-	 * @return						true = 正常、false=異常
+	 * @param string $id				定義ID。0のときは新規追加
+	 * @param string $name				カレンダー定義名
+	 * @param int    $repeatType		繰り返しタイプ
+	 * @param int    $dateCount			所要日数
+	 * @param string $openDateStyle		開業日スタイル
+	 * @param string $closedDateStyle	休業日スタイル
+	 * @param int    $newId				新規ID
+	 * @return							true = 正常、false=異常
 	 */
-	function updateCalendarDef($id, $name, $repeatType, $dateCount, &$newId)
+	function updateCalendarDef($id, $name, $repeatType, $dateCount, $openDateStyle, $closedDateStyle, &$newId)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -320,10 +322,10 @@ class calendarDb extends BaseDb
 
 		// レコードを追加
 		$queryStr  = 'INSERT INTO calendar_def ';
-		$queryStr .=   '(cd_id, cd_history_index, cd_name, cd_repeat_type, cd_date_count, cd_create_user_id, cd_create_dt) ';
+		$queryStr .=   '(cd_id, cd_history_index, cd_name, cd_repeat_type, cd_date_count, cd_open_date_style, cd_closed_date_style, cd_create_user_id, cd_create_dt) ';
 		$queryStr .= 'VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($id, $historyIndex, $name, intval($repeatType), $dateCount, $userId, $now));
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($id, $historyIndex, $name, intval($repeatType), $dateCount, $openDateStyle, $closedDateStyle, $userId, $now));
 			
 		// トランザクション確定
 		$ret = $this->endTransaction();
@@ -378,15 +380,31 @@ class calendarDb extends BaseDb
 	 * @param int       $defId				カレンダー定義ID
 	 * @param int       $type				0=基本データ,1=個別データ
 	 * @param function	$callback			コールバック関数
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
 	 * @return 			なし
 	 */
-	function getDateList($defId, $type, $callback)
+	function getDateList($defId, $type, $callback, $startDt = null, $endDt = null)
 	{
+		$params = array();
 		$queryStr  = 'SELECT * FROM calendar_date ';
-		$queryStr .=   'WHERE ce_def_id = ? ';
-		$queryStr .=     'AND ce_type = ? ';
+		$queryStr .=   'WHERE ce_def_id = ? '; $params[] = intval($defId);
+		$queryStr .=     'AND ce_type = ? '; $params[] = intval($type);
+		
+		// 日付範囲
+		if ($type == 1){		// 個別指定の場合
+			if (!empty($startDt)){
+				$queryStr .=    'AND ? <= ce_date ';
+				$params[] = $startDt;
+			}
+			if (!empty($endDt)){
+				$queryStr .=    'AND ce_date < ? ';
+				$params[] = $endDt;
+			}
+		}
+		
 		$queryStr .=   'ORDER BY ce_index, ce_date';
-		$this->selectLoop($queryStr, array(intval($defId), intval($type)), $callback);
+		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**
 	 * 日付の追加更新
