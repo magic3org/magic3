@@ -513,5 +513,299 @@ class calendarDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
+	/**
+	 * 簡易イベント一覧を取得(管理用)
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$category			カテゴリーID
+	 * @param array		$keywords			検索キーワード
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function searchEvent($limit, $page, $startDt, $endDt, $category, $keywords, $callback)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		
+		$params = array();
+		if (count($category) == 0){		// カテゴリー指定なしのとき
+			$queryStr = 'SELECT * FROM calendar_event ';
+			$queryStr .=  'WHERE cv_deleted = false ';		// 削除されていない
+		}
+		
+		// フィールドを検索
+		if (!empty($keywords)){
+			for ($i = 0; $i < count($keywords); $i++){
+				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
+				$queryStr .=    'AND (cv_name LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR cv_html LIKE \'%' . $keyword . '%\') ';
+			}
+		}
+		
+		// 日付範囲
+		if (!empty($startDt)){
+			$queryStr .=    'AND ? <= cv_start_dt ';
+			$params[] = $startDt;
+		}
+		if (!empty($endDt)){
+			$queryStr .=    'AND cv_start_dt < ? ';
+			$params[] = $endDt;
+		}
+		
+		if (count($category) == 0){
+			$queryStr .=  'ORDER BY cv_start_dt desc, cv_id limit ' . $limit . ' offset ' . $offset;
+			$this->selectLoop($queryStr, $params, $callback);
+		}
+	}
+	/**
+	 * 簡易イベント数を取得(管理用)
+	 *
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$category			カテゴリーID
+	 * @param array		$keywords			検索キーワード
+	 * @return int							項目数
+	 */
+	function getEventCount($startDt, $endDt, $category, $keywords)
+	{
+		$params = array();
+		if (count($category) == 0){		// カテゴリー指定なしのとき
+			$queryStr = 'SELECT * FROM calendar_event ';
+			$queryStr .=  'WHERE cv_deleted = false ';		// 削除されていない
+		}
+		
+		// フィールドを検索
+		if (!empty($keywords)){
+			for ($i = 0; $i < count($keywords); $i++){
+				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
+				$queryStr .=    'AND (cv_name LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR cv_html LIKE \'%' . $keyword . '%\') ';
+			}
+		}
+		
+		// 日付範囲
+		if (!empty($startDt)){
+			$queryStr .=    'AND ? <= cv_start_dt ';
+			$params[] = $startDt;
+		}
+		if (!empty($endDt)){
+			$queryStr .=    'AND cv_start_dt < ? ';
+			$params[] = $endDt;
+		}
+		
+		if (count($category) == 0){
+			return $this->selectRecordCount($queryStr, $params);
+		}
+	}
+	/**
+	 * 簡易イベントをシリアル番号で取得
+	 *
+	 * @param string	$serial				シリアル番号
+	 * @param array     $row				レコード
+	 * @param array     $categoryRow		簡易イベントカテゴリー
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getEventBySerial($serial, &$row, &$categoryRow)
+	{
+		$queryStr  = 'SELECT * FROM calendar_event LEFT JOIN _login_user ON cv_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE cv_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		
+		// 簡易イベントカテゴリー
+		return $ret;
+	}
+	/**
+	 * 簡易イベントの削除
+	 *
+	 * @param array   $serial		シリアルNo
+	 * @return						true=成功、false=失敗
+	 */
+	function delEvent($serial)
+	{
+		// 引数のエラーチェック
+		if (!is_array($serial)) return false;
+		if (count($serial) <= 0) return true;
+		
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		for ($i = 0; $i < count($serial); $i++){
+			$queryStr  = 'SELECT * FROM calendar_event ';
+			$queryStr .=   'WHERE cv_deleted = false ';		// 未削除
+			$queryStr .=     'AND cv_serial = ? ';
+			$ret = $this->selectRecord($queryStr, array($serial[$i]), $row);
+			if ($ret){		// 既に登録レコードがあるとき			
+				// レコードを削除
+				$queryStr  = 'UPDATE calendar_event ';
+				$queryStr .=   'SET cv_deleted = true, ';	// 削除
+				$queryStr .=     'cv_update_user_id = ?, ';
+				$queryStr .=     'cv_update_dt = ? ';
+				$queryStr .=   'WHERE cv_serial = ?';
+				$this->execStatement($queryStr, array($userId, $now, $serial[$i]));
+			} else {// 指定のシリアルNoのレコードが削除状態のときはエラー
+				$this->endTransaction();
+				return false;
+			}
+		}
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * 簡易イベントの新規追加
+	 *
+	 * @param string  $id			エントリーID
+	 * @param string  $langId		言語ID
+	 * @param string  $name			イベント名
+	 * @param string  $html			HTML
+	 * @param bool    $visible		表示可否
+	 * @param bool    $isAllDay		終日イベントかどうか
+	 * @param timestamp	$startDt	期間(開始日)
+	 * @param timestamp	$endDt		期間(終了日)
+	 * @param array   $category		カテゴリーID
+	 * @param int     $newSerial	新規シリアル番号
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function addEvent($id, $langId, $name, $html, $visible, $isAllDay, $startDt, $endDt, $category, &$newSerial)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+			
+		// トランザクション開始
+		$this->startTransaction();
+		
+		if (empty($id)){		// エントリーIDが0のときは、エントリーIDを新規取得
+			// エントリーIDを決定する
+			$queryStr = 'SELECT MAX(cv_id) AS mid FROM calendar_event ';
+			$ret = $this->selectRecord($queryStr, array(), $row);
+			if ($ret){
+				$entryId = $row['mid'] + 1;
+			} else {
+				$entryId = 1;
+			}
+		} else {
+			$entryId = $id;
+		}
+		
+		// 前レコードの削除状態チェック
+		$historyIndex = 0;
+		$queryStr  = 'SELECT * FROM calendar_event ';
+		$queryStr .=   'WHERE cv_id = ? ';
+		$queryStr .=   'ORDER BY cv_history_index DESC ';
+		$ret = $this->selectRecord($queryStr, array($entryId), $row);
+		if ($ret){
+			if (!$row['cv_deleted']){		// レコード存在していれば終了
+				$this->endTransaction();
+				return false;
+			}
+			$historyIndex = $row['cv_history_index'] + 1;
+		}
+		
+		// データを追加
+		$queryStr  = 'INSERT INTO calendar_event ';
+		$queryStr .=   '(cv_id, ';
+		$queryStr .=   'cv_history_index, ';
+		$queryStr .=   'cv_name, ';
+		$queryStr .=   'cv_html, ';
+		$queryStr .=   'cv_visible, ';
+		$queryStr .=   'cv_is_all_day, ';
+		$queryStr .=   'cv_start_dt, ';
+		$queryStr .=   'cv_end_dt, ';
+		$queryStr .=   'cv_create_user_id, ';
+		$queryStr .=   'cv_create_dt) ';
+		$queryStr .= 'VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($entryId, $historyIndex, $name, $html, intval($visible), intval($isAllDay), $startDt, $endDt, $userId, $now));
+		
+		// 新規のシリアル番号取得
+		$newSerial = 0;
+		$queryStr = 'SELECT MAX(cv_serial) AS ns FROM calendar_event ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+			
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * エントリー項目の更新
+	 *
+	 * @param int     $serial		シリアル番号
+	 * @param string  $name			イベント名
+	 * @param string  $html			HTML
+	 * @param bool    $visible		表示可否
+	 * @param bool    $isAllDay		終日イベントかどうか
+	 * @param timestamp	$startDt	期間(開始日)
+	 * @param timestamp	$endDt		期間(終了日)
+	 * @param array   $category		カテゴリーID
+	 * @param int     $newSerial	新規シリアル番号
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function updateEvent($serial, $name, $html, $visible, $isAllDay, $startDt, $endDt, $category, &$newSerial)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+						
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$historyIndex = 0;		// 履歴番号
+		$queryStr  = 'SELECT * FROM calendar_event ';
+		$queryStr .=   'WHERE cv_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['cv_deleted']){		// レコードが削除されていれば終了
+				$this->endTransaction();
+				return false;
+			}
+			$historyIndex = $row['cv_history_index'] + 1;
+		} else {		// 存在しない場合は終了
+			$this->endTransaction();
+			return false;
+		}
+		// 古いレコードを削除
+		$queryStr  = 'UPDATE calendar_event ';
+		$queryStr .=   'SET cv_deleted = true, ';	// 削除
+		$queryStr .=     'cv_update_user_id = ?, ';
+		$queryStr .=     'cv_update_dt = ? ';
+		$queryStr .=   'WHERE cv_serial = ?';
+		$this->execStatement($queryStr, array($userId, $now, $serial));
+		
+		// 旧データを取得
+		$entryId = $row['cv_id'];
+		
+		// データを追加
+		$queryStr  = 'INSERT INTO calendar_event ';
+		$queryStr .=   '(cv_id, ';
+		$queryStr .=   'cv_history_index, ';
+		$queryStr .=   'cv_name, ';
+		$queryStr .=   'cv_html, ';
+		$queryStr .=   'cv_visible, ';
+		$queryStr .=   'cv_is_all_day, ';
+		$queryStr .=   'cv_start_dt, ';
+		$queryStr .=   'cv_end_dt, ';
+		$queryStr .=   'cv_create_user_id, ';
+		$queryStr .=   'cv_create_dt) ';
+		$queryStr .= 'VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($entryId, $historyIndex, $name, $html, intval($visible), intval($isAllDay), $startDt, $endDt, $userId, $now));
+
+		// 新規のシリアル番号取得
+		$newSerial = 0;
+		$queryStr = 'SELECT MAX(cv_serial) AS ns FROM calendar_event ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
 }
 ?>

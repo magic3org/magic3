@@ -28,8 +28,16 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_DATETYPE_DETAIL	= 'datetype_detail';				// 日付タイプ詳細
 	const TASK_CONFIG			= 'config';				// 基本設定
 	const TASK_CONFIG_LIST		= 'config_list';		// 設定一覧
+	const TASK_EVENT			= 'event';				// 簡易イベント管理
+	const TASK_EVENT_DETAIL		= 'event_detail';		// 簡易イベント管理詳細
 	const DEFAULT_TASK			= 'config';
 
+	// カレンダー用スクリプト
+	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル
+	const CALENDAR_LANG_FILE = '/jscalendar-1.0/lang/calendar-ja.js';	// カレンダー言語ファイル
+	const CALENDAR_SETUP_FILE = '/jscalendar-1.0/calendar-setup.js';	// カレンダーセットアップファイル
+	const CALENDAR_CSS_FILE = '/jscalendar-1.0/calendar-win2k-1.css';		// カレンダー用CSSファイル
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -70,6 +78,10 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 			case self::TASK_CONFIG_LIST:		// 設定一覧
 				$linkList = ' &gt;&gt; カレンダー管理 &gt;&gt; カレンダー設定';
 				break;
+			case self::TASK_EVENT:				// 簡易イベント管理
+			case self::TASK_EVENT_DETAIL:		// 簡易イベント管理詳細
+				$linkList = ' &gt;&gt; カレンダー管理 &gt;&gt; 簡易イベント';
+				break;
 			case self::TASK_DATE:				// 日付管理
 			case self::TASK_DATE_DETAIL:		// 日付管理詳細
 				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 日付定義';
@@ -90,8 +102,10 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 		// カレンダー管理
 		$current = '';
 		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CONFIG);
-		if ($task == self::TASK_CONFIG ||		// 日付定義
-			$task == self::TASK_CONFIG_LIST){	// 日付定義一覧
+		if ($task == self::TASK_CONFIG ||		// カレンダー定義
+			$task == self::TASK_CONFIG_LIST ||	// カレンダー定義一覧
+			$task == self::TASK_EVENT ||				// 簡易イベント管理
+			$task == self::TASK_EVENT_DETAIL){		// 簡易イベント管理詳細
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>カレンダー管理</span></a></li>' . M3_NL;
@@ -115,15 +129,22 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 		$menuText .= '<div id="configmenu-lower">' . M3_NL;
 		$menuText .= '<ul>' . M3_NL;
 
-		if ($task == self::TASK_CONFIG ||		// 日付定義
-			$task == self::TASK_CONFIG_LIST){	// 日付定義一覧
+		if ($task == self::TASK_CONFIG ||		// カレンダー定義
+			$task == self::TASK_CONFIG_LIST ||	// カレンダー定義一覧
+			$task == self::TASK_EVENT ||				// 簡易イベント管理
+			$task == self::TASK_EVENT_DETAIL){		// 簡易イベント管理詳細
 			
-			// 日付定義
+			// カレンダー定義
 			$current = '';
 			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CONFIG);
 			if ($task == self::TASK_CONFIG || $task == self::TASK_CONFIG_LIST) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>カレンダー設定</span></a></li>' . M3_NL;
 			
+			// 簡易イベント
+			$current = '';
+			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_EVENT);
+			if ($task == self::TASK_EVENT || $task == self::TASK_EVENT_DETAIL) $current = 'id="current"';
+			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>簡易イベント</span></a></li>' . M3_NL;
 		} else if ($task == self::TASK_DATE ||				// 日付管理
 			$task == self::TASK_DATE_DETAIL ||		// 日付管理詳細
 			$task == self::TASK_DATETYPE ||			// 日付タイプ一覧

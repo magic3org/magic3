@@ -59,7 +59,11 @@ class admin_calendarWidgetContainer extends admin_calendarBaseWidgetContainer
 				$task = self::TASK_CONFIG;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
+			case self::TASK_EVENT:				// 簡易イベント管理
+			case self::TASK_EVENT_DETAIL:		// 簡易イベント管理詳細
 			default:
+				$task = self::TASK_EVENT;
+				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 		}
 		if ($goWidget){		// サブウィジェットを実行するかどうか

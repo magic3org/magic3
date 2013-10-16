@@ -1,0 +1,125 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function listItem(){
+	document.main.task.value = 'event';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	Calendar.setup({
+		inputField  : "item_start_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton1"       // ID of the button
+	});
+	Calendar.setup({
+		inputField  : "item_end_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton2"       // ID of the button
+	});
+	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_html', 300/* 高さ */);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="event_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="entry" value="{ENTRY}" />
+<table width="90%">
+<tr><td><span {_HELP_EVENT_DETAIL}><label>簡易イベント詳細</label></span></td><td align="right">
+<patTemplate:tmpl name="cancel_button" visibility="visible"><span {_HELP_EVENT_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
+</td></tr>
+<tr><td colspan="2">
+<table class="simple-table">
+    <tbody>
+    <tr>
+	    <td class="table-headside" width="100"><span {_HELP_EVENT_NAME}>タイトル</span></td>
+	    <td  width="300"><input type="text" name="item_name" value="{NAME}" size="60" maxlength="60" style="width:100%;" /></td>
+	    <td class="table-headside" width="100"><span {_HELP_EVENT_VISIBLE}>公開</span></td>
+	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>	    
+	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_EVENT_DT}>日時</span></td>
+	    <td colspan="3">開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" />&nbsp;&nbsp;
+		<input type="checkbox" name="item_is_all_day" {IS_ALL_DAY} />終日
+		</td>
+	</tr>
+    <!--<tr class="even">
+	    <td class="table-headside"><span {_HELP_EVENT_CATEGORY}>カテゴリー</span></td>
+	    <td colspan="5">
+    <patTemplate:tmpl name="category">
+    <select name="item_category{INDEX}">
+        <option value="0">-- 未選択 --</option>
+        <patTemplate:tmpl name="category_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+	</patTemplate:tmpl>
+    </select>
+    </patTemplate:tmpl>
+	    </td>
+	</tr>-->
+    <tr>
+	    <td class="table-headside"><span {_HELP_EVENT_CONTENT}>内容</span></td>
+	    <td colspan="3" width="800"><textarea name="item_html">{HTML}</textarea></td>
+	</tr>
+	<tr class="even">
+	    <td class="table-headside">更新者</td>
+	    <td>{UPDATE_USER}</td>
+	    <td class="table-headside">更新日時</td>
+	    <td colspan="3">{UPDATE_DT}</td>
+	</tr>
+	<tr>
+	    <td colspan="4" align="right">
+<patTemplate:tmpl name="delete_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>
