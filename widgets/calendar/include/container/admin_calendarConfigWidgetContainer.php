@@ -95,9 +95,12 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		$name	= $request->trimValueOf('item_name');			// 定義名
 		$this->dateDefId = $request->trimValueOf('item_date_def_id');		// カレンダー定義ID
 		$this->viewOption = $request->valueOf('item_view_option');	// FullCalendar表示オプション
+		$showSimpleEvent = $request->trimCheckedValueOf('item_show_simple_event');		// 簡易イベント記事を表示するかどうか
 		$showEvent = $request->trimCheckedValueOf('item_show_event');		// イベント記事を表示するかどうか
 		$showEventTooltip = $request->trimCheckedValueOf('item_show_event_tooltip');		// イベント記事用のツールチップを表示するかどうか
-		$showHoliday = $request->trimCheckedValueOf('item_show_holiday');		// 祝日を表示するかどうか		
+		$showHoliday = $request->trimCheckedValueOf('item_show_holiday');		// 祝日を表示するかどうか
+		$simpleEventTooltipTitleStyle = $request->trimValueOf('item_simple_event_tooltip_title_style');		// ツールチップ(タイトル)のスタイル
+		$simpleEventTooltipBorderStyle = $request->trimValueOf('item_simple_event_tooltip_border_style');		// ツールチップ(ボーダー)のスタイル		
 		$eventTooltipTitleStyle = $request->trimValueOf('item_event_tooltip_title_style');		// ツールチップ(タイトル)のスタイル
 		$eventTooltipBorderStyle = $request->trimValueOf('item_event_tooltip_border_style');		// ツールチップ(ボーダー)のスタイル
 		$holidayColor = $request->trimValueOf('item_holiday_color');		// 背景色(祝日)
@@ -105,6 +108,8 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		$this->css	= $request->valueOf('item_css');		// デザインCSS
 		
 		// 空の場合はデフォルト値に戻す
+		if (empty($simpleEventTooltipTitleStyle)) $simpleEventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
+		if (empty($simpleEventTooltipBorderStyle)) $simpleEventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
 		if (empty($eventTooltipTitleStyle)) $eventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
 		if (empty($eventTooltipBorderStyle)) $eventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
 		if (empty($layoutTooltip)) $layoutTooltip = $this->getParsedTemplateData('default_tooltip.tmpl.html');		// ツールチップのレイアウト	
@@ -130,9 +135,12 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				$newObj->name	= $name;// 表示名
 				$newObj->dateDefId = $this->dateDefId;		// カレンダー定義ID
 				$newObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
+				$newObj->showSimpleEvent = $showSimpleEvent;		// 簡易イベント記事を表示するかどうか
 				$newObj->showEvent = $showEvent;		// イベント記事を表示するかどうか
 				$newObj->showEventTooltip = $showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 				$newObj->showHoliday = $showHoliday;		// 祝日を表示するかどうか
+				$newObj->simpleEventTooltipTitleStyle = $simpleEventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
+				$newObj->simpleEventTooltipBorderStyle = $simpleEventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
 				$newObj->eventTooltipTitleStyle = $eventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
 				$newObj->eventTooltipBorderStyle = $eventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
 				$newObj->layoutTooltip = $layoutTooltip;		// ツールチップのレイアウト
@@ -159,9 +167,12 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 					// ウィジェットオブジェクト更新
 					$targetObj->dateDefId = $this->dateDefId;		// カレンダー定義ID
 					$targetObj->viewOption = $this->viewOption;	// FullCalendar表示オプション
+					$targetObj->showSimpleEvent = $showSimpleEvent;		// 簡易イベント記事を表示するかどうか
 					$targetObj->showEvent = $showEvent;		// イベント記事を表示するかどうか
 					$targetObj->showEventTooltip = $showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 					$targetObj->showHoliday = $showHoliday;		// 祝日を表示するかどうか
+					$targetObj->simpleEventTooltipTitleStyle = $simpleEventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
+					$targetObj->simpleEventTooltipBorderStyle = $simpleEventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
 					$targetObj->eventTooltipTitleStyle = $eventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
 					$targetObj->eventTooltipBorderStyle = $eventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
 					$targetObj->layoutTooltip = $layoutTooltip;		// ツールチップのレイアウト
@@ -192,9 +203,12 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				$this->dateDefId = '0';		// カレンダー定義ID
 				$this->viewOption = $this->getParsedTemplateData('option.tmpl.js');	// FullCalendar表示オプション
+				$showSimpleEvent = '0';		// 簡易イベント記事を表示するかどうか
 				$showEvent = '0';		// イベント記事を表示するかどうか
 				$showEventTooltip	= '0';		// イベント記事用のツールチップを表示するかどうか
 				$showHoliday = '0';		// 祝日を表示するかどうか
+				$simpleEventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
+				$simpleEventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
 				$eventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
 				$eventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
 				$layoutTooltip = $this->getParsedTemplateData('default_tooltip.tmpl.html');		// ツールチップのレイアウト	
@@ -209,9 +223,12 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 					$name		= $targetObj->name;	// 名前
 					$this->dateDefId	= $targetObj->dateDefId;		// カレンダー定義ID
 					$this->viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
+					if (isset($targetObj->showSimpleEvent)) $showSimpleEvent = $targetObj->showSimpleEvent;		// 簡易イベント記事を表示するかどうか
 					if (isset($targetObj->showEvent)) $showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
 					if (isset($targetObj->showEventTooltip)) $showEventTooltip	= $targetObj->showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 					if (isset($targetObj->showHoliday)) $showHoliday = $targetObj->showHoliday;		// 祝日を表示するかどうか
+					if (isset($targetObj->simpleEventTooltipTitleStyle)) $simpleEventTooltipTitleStyle = $targetObj->simpleEventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
+					if (isset($targetObj->simpleEventTooltipBorderStyle)) $simpleEventTooltipBorderStyle = $targetObj->simpleEventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
 					if (isset($targetObj->eventTooltipTitleStyle)) $eventTooltipTitleStyle = $targetObj->eventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
 					if (isset($targetObj->eventTooltipBorderStyle)) $eventTooltipBorderStyle = $targetObj->eventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
 					if (isset($targetObj->layoutTooltip)) $layoutTooltip = $targetObj->layoutTooltip;		// ツールチップのレイアウト
@@ -235,11 +252,14 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		$this->tmpl->addVar("item_name_visible", "name",	$name);
 		$this->tmpl->addVar("_widget", "view_option",	$this->convertToDispString($this->viewOption));		// FullCalendar表示オプション
+		$this->tmpl->addVar("_widget", "show_simple_event",	$this->convertToCheckedString($showSimpleEvent));		// 簡易イベント記事を表示するかどうか
 		$this->tmpl->addVar("_widget", "show_event",	$this->convertToCheckedString($showEvent));		// イベント記事を表示するかどうか
 		$this->tmpl->addVar("_widget", "show_event_tooltip",	$this->convertToCheckedString($showEventTooltip));	// イベント記事用のツールチップを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_holiday",	$this->convertToCheckedString($showHoliday));		// 祝日を表示するかどうか
 		$this->tmpl->addVar("_widget", "holiday_color",	$this->convertToDispString($holidayColor));		// 背景色(祝日)
 		$this->tmpl->addVar("_widget", "css",	$this->convertToDispString($this->css));		// デザインCSS
+		$this->tmpl->addVar("_widget", "simple_event_tooltip_title_style",	$this->convertToDispString($simpleEventTooltipTitleStyle));		// ツールチップ(タイトル)のスタイル
+		$this->tmpl->addVar("_widget", "simple_event_tooltip_border_style",	$this->convertToDispString($simpleEventTooltipBorderStyle));		// ツールチップ(ボーダー)のスタイル
 		$this->tmpl->addVar("_widget", "event_tooltip_title_style",	$this->convertToDispString($eventTooltipTitleStyle));		// ツールチップ(タイトル)のスタイル
 		$this->tmpl->addVar("_widget", "event_tooltip_border_style",	$this->convertToDispString($eventTooltipBorderStyle));		// ツールチップ(ボーダー)のスタイル
 		$this->tmpl->addVar("_widget", "layout_tooltip",	$this->convertToDispString($layoutTooltip));		// ツールチップのレイアウト

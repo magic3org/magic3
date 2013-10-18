@@ -34,7 +34,8 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-1.6.3/gcal.js';				// Googleカレンダー用スクリプト
 	const DEFAULT_EVENT_TOOLTIP_TITLE_STYLE		= "color: '#fff', background: 'red'";		// ツールチップ(タイトル)のスタイル
 	const DEFAULT_EVENT_TOOLTIP_BORDER_STYLE	= "width: 2, radius: 5, color: '#444'";		// ツールチップ(ボーダー)のスタイル
-	const DEFAULT_EVENT_CLASS_NAME = 'event_default';			// デフォルトのクラス名
+	const DEFAULT_SIMPLE_EVENT_CLASS_NAME = 'simple_event_default';			// デフォルトのクラス名(簡易イベント)
+	const DEFAULT_EVENT_CLASS_NAME = 'event_default';			// デフォルトのクラス名(イベント記事)
 	
 	/**
 	 * コンストラクタ
@@ -143,15 +144,20 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		$dateDefId	= $targetObj->dateDefId;		// カレンダー定義ID
 		
 		// デフォルト値設定
+		$simpleEventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
+		$simpleEventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
 		$eventTooltipTitleStyle = self::DEFAULT_EVENT_TOOLTIP_TITLE_STYLE;		// ツールチップ(タイトル)のスタイル
 		$eventTooltipBorderStyle = self::DEFAULT_EVENT_TOOLTIP_BORDER_STYLE;		// ツールチップ(ボーダー)のスタイル
 		$layoutTooltip = $this->getParsedTemplateData('default_tooltip.tmpl.html');		// ツールチップのレイアウト	
 		$closedDateStyle	= default_calendarCommonDef::DEFAULT_CLOSED_DATE_STYLE;		// 休業日スタイル	
 				
 		$viewOption = $targetObj->viewOption;	// FullCalendar表示オプション
+		if (isset($targetObj->showSimpleEvent)) $showSimpleEvent = $targetObj->showSimpleEvent;		// 簡易イベント記事を表示するかどうか
 		if (isset($targetObj->showEvent)) $showEvent = $targetObj->showEvent;		// イベント記事を表示するかどうか
 		if (isset($targetObj->showEventTooltip)) $this->showEventTooltip	= $targetObj->showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 		if (isset($targetObj->showHoliday)) $showHoliday = $targetObj->showHoliday;		// 祝日を表示するかどうか
+		if (isset($targetObj->simpleEventTooltipTitleStyle)) $simpleEventTooltipTitleStyle = $targetObj->simpleEventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
+		if (isset($targetObj->simpleEventTooltipBorderStyle)) $simpleEventTooltipBorderStyle = $targetObj->simpleEventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
 		if (isset($targetObj->eventTooltipTitleStyle)) $eventTooltipTitleStyle = $targetObj->eventTooltipTitleStyle;		// ツールチップ(タイトル)のスタイル
 		if (isset($targetObj->eventTooltipBorderStyle)) $eventTooltipBorderStyle = $targetObj->eventTooltipBorderStyle;		// ツールチップ(ボーダー)のスタイル
 		if (isset($targetObj->layoutTooltip)) $layoutTooltip = $targetObj->layoutTooltip;		// ツールチップのレイアウト
@@ -179,6 +185,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		
 		// 取得コンテンツタイプ
 		$typeArray = array();
+		if ($showSimpleEvent) $typeArray[] = 'simpleevent';
 		if ($showEvent) $typeArray[] = 'event';
 		$type = implode(',', $typeArray);
 		
@@ -193,12 +200,20 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->addVar("show_holiday", "color", $this->convertToDispString($holidayColor));
 		}
 		// ツールチップ用のデータを追加
-		if ($this->showEventTooltip){
+		if ($this->showEventTooltip || $showSimpleEvent){
 			$this->tmpl->setAttribute('show_tooltip', 'visibility', 'visible');
+			
+			// ツールチップスタイル
+			$this->tmpl->addVar("show_tooltip", "simple_title_style", $simpleEventTooltipTitleStyle);
+			$this->tmpl->addVar("show_tooltip", "simple_border_style", $simpleEventTooltipBorderStyle);
 			$this->tmpl->addVar("show_tooltip", "title_style", $eventTooltipTitleStyle);
 			$this->tmpl->addVar("show_tooltip", "border_style", $eventTooltipBorderStyle);
 			
-			// ツールチップコンテンツ	
+			// ツールチップコンテンツ
+			// 簡易イベント
+			$contentText = 'event.content';
+			$this->tmpl->addVar("show_tooltip", "simple_event_content", $contentText);			
+			// イベント記事
 			$contentInfo = array();
 			$contentInfo[M3_TAG_MACRO_CONTENT_START_TIME]	= "' + ($.fullCalendar.formatDate(event.start, 'H:mm')) + '";		// コンテンツ置換キー(開始時間)
 			$contentInfo[M3_TAG_MACRO_CONTENT_END_TIME]		= "' + ($.fullCalendar.formatDate(event.end, 'H:mm')) + '";		// コンテンツ置換キー(終了時間)
@@ -252,9 +267,13 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			
 		// 表示データを取得
 		$this->events = array();
+		if (in_array('simpleevent', $typeArray)){			// 簡易イベント取得の場合
+			// イベント取得
+			$this->db->getEvent(self::MAX_ITEM_COUNT, 1, $startDt, $endDt, $this->langId, array($this, 'simpleEventLoop'));
+		}
 		if (in_array('event', $typeArray)){			// イベント記事取得の場合
 			// イベント取得
-			$this->db->getEventItems(self::MAX_ITEM_COUNT, 1, $startDt, $endDt, $this->langId, array($this, 'itemsLoop'));
+			$this->db->getEventItems(self::MAX_ITEM_COUNT, 1, $startDt, $endDt, $this->langId, array($this, 'eventLoop'));
 		}
 		// Ajax戻りデータ
 		$this->gInstance->getAjaxManager()->addData('events', $this->events);
@@ -274,7 +293,55 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	 * @param object	$param			任意使用パラメータ
 	 * @return bool						trueを返すとループ続行。falseを返すとその時点で終了。
 	 */
-	function itemsLoop($index, $fetchedRow)
+	function simpleEventLoop($index, $fetchedRow)
+	{
+		$entryId = $fetchedRow['cv_id'];// 記事ID
+		$title = $fetchedRow['cv_name'];// タイトル
+		$isAllDay = $fetchedRow['cv_is_all_day'];			// 終日イベントかどうか
+		if ($fetchedRow['cv_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
+			if ($isAllDay){		// 終日イベントのとき
+				$startDate = $this->convertToDispDate($fetchedRow['cv_start_dt']);// 開催日時(開始)
+			} else {
+				$startDate = $fetchedRow['cv_start_dt'];// 開催日時(開始)
+			}
+			$endDate = '';// 開催日時(終了)
+		} else {
+			if ($isAllDay){		// 終日イベントのとき
+				$startDate = $this->convertToDispDate($fetchedRow['cv_start_dt']);// 開催日時(開始)
+				$endDate = $this->convertToDispDate($fetchedRow['cv_end_dt']);// 開催日時(終了)
+			} else {
+				$startDate = $fetchedRow['cv_start_dt'];// 開催日時(開始)
+				$endDate = $fetchedRow['cv_end_dt'];// 開催日時(終了)
+			}
+		}
+
+		// イベント記事へのリンクを生成
+//		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
+		
+		$event = array('title'	=> $title,
+						'start'	=> $startDate,		// 開始
+						'end'	=> $endDate,		// 終了
+//						'url'	=> $linkUrl,		// リンク先
+						'className'	=> self::DEFAULT_SIMPLE_EVENT_CLASS_NAME,				// イベントクラス名
+
+						// ツールチップ用データ
+						'content'	=> $fetchedRow['cv_html']			// ツールチップコンテンツ
+//						'location' => $fetchedRow['cv_place'],			// 場所
+//						'description' => $fetchedRow['cv_summary']		// 概要
+						);	
+		
+		$this->events[] = $event;
+		return true;
+	}
+	/**
+	 * 取得したコンテンツ項目をテンプレートに設定する
+	 *
+	 * @param int		$index			行番号
+	 * @param array		$fetchedRow		取得行
+	 * @param object	$param			任意使用パラメータ
+	 * @return bool						trueを返すとループ続行。falseを返すとその時点で終了。
+	 */
+	function eventLoop($index, $fetchedRow)
 	{
 		$entryId = $fetchedRow['ee_id'];// 記事ID
 		$title = $fetchedRow['ee_name'];// タイトル

@@ -514,6 +514,38 @@ class calendarDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * 簡易イベント一覧を取得(表示用)
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param string	$langId				言語
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getEvent($limit, $page, $startDt, $endDt, $langId, $callback)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		$params = array();
+		
+		$queryStr  = 'SELECT * FROM calendar_event ';
+		$queryStr .=   'WHERE cv_deleted = false ';		// 削除されていない
+		$queryStr .=   'AND cv_visible = true ';		// 表示可
+		
+		// 期間が重なっている場合は取得
+		$queryStr .=    'AND ((cv_start_dt <= ? AND ? < cv_end_dt) ';
+		$params[] = $startDt;
+		$params[] = $startDt;
+		$queryStr .=    'OR (? <= cv_start_dt AND cv_start_dt < ?)) ';
+		$params[] = $startDt;
+		$params[] = $endDt;
+		
+		$queryStr .=  'ORDER BY cv_start_dt, cv_id LIMIT ' . $limit . ' OFFSET ' . $offset;
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
 	 * 簡易イベント一覧を取得(管理用)
 	 *
 	 * @param int		$limit				取得する項目数

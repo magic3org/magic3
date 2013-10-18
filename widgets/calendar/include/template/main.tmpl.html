@@ -122,7 +122,30 @@ $(function(){
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_tooltip" visibility="hidden">
 		eventRender: function(event, element){
-			if (event.className == 'event_default'){
+			if (event.className == 'simple_event_default'){
+				element.qtip({
+					content: {
+						title: { text: event.title },
+						text: {SIMPLE_EVENT_CONTENT}
+					},
+					position: {
+						adjust: { screen: true },
+						corner: { target: 'bottomMiddle', tooltip: 'topLeft' }
+					},
+					show: {
+						solo: true, effect: { type: 'slide' }, effect: function(){
+							$(this).fadeTo(200, 0.9);
+						}
+					},
+					hide: { when: 'mouseout', fixed: true },
+					style: {
+						tip: true,
+						width: { min:200, max:300 },
+						border: { {SIMPLE_BORDER_STYLE} },
+						title: { {SIMPLE_TITLE_STYLE} }
+					}
+				});
+			} else if (event.className == 'event_default'){
 				element.qtip({
 					content: {
 						title: { text: event.title },
@@ -149,7 +172,6 @@ $(function(){
 		},
 </patTemplate:tmpl>
 		// 描画イベント
-		//viewDisplay: function(view){
 		viewRender: function(view, element){
 			m3_ajax_request('calendar', 'sub={SUB_ID}&act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);
 		}
