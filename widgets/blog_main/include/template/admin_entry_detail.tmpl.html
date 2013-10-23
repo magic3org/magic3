@@ -14,21 +14,25 @@
 <script type="text/javascript">
 //<![CDATA[
 function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	
 	// 2番目以降のテキストエリアの内容が取得できないCKEditorの問題を回避
 	if (CKEDITOR.instances['item_html2']){
-		document.main.html2.value = CKEDITOR.instances['item_html2'].getData();
+		//document.main.html2.value = CKEDITOR.instances['item_html2'].getData();
+		document.main.item_html2.value = CKEDITOR.instances['item_html2'].getData();
 	}
-	if (!window.confirm('項目を新規追加しますか?')) return false;
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
 function updateItem(){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	
 	// 2番目以降のテキストエリアの内容が取得できないCKEditorの問題を回避
 	if (CKEDITOR.instances['item_html2']){
-		document.main.html2.value = CKEDITOR.instances['item_html2'].getData();
+		//document.main.html2.value = CKEDITOR.instances['item_html2'].getData();
+		document.main.item_html2.value = CKEDITOR.instances['item_html2'].getData();
 	}
-	if (!window.confirm('項目を更新しますか?')) return false;
 	document.main.act.value = 'update';
 	document.main.submit();
 	return true;
@@ -83,7 +87,6 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="entryid" value="{ENTRYID}" />
-<input type="hidden" name="html2" />
 <table width="90%">
 <tr><td><span {_HELP_ENTRY_DETAIL}><label>ブログ記事詳細</label></span></td><td align="right">
 <span {_HELP_ENTRY_HISTORY_BTN}><input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} /></span><span {_HELP_ENTRY_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} /></span>

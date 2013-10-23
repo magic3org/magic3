@@ -15,12 +15,24 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
+	
+	// 2番目以降のテキストエリアの内容が取得できないCKEditorの問題を回避
+	if (CKEDITOR.instances['item_html2']){
+		//document.main.html2.value = CKEDITOR.instances['item_html2'].getData();
+		document.main.item_html2.value = CKEDITOR.instances['item_html2'].getData();
+	}
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
 function updateItem(){
 	if (!window.confirm('項目を更新しますか?')) return false;
+	
+	// 2番目以降のテキストエリアの内容が取得できないCKEditorの問題を回避
+	if (CKEDITOR.instances['item_html2']){
+		//document.main.html2.value = CKEDITOR.instances['item_html2'].getData();
+		document.main.item_html2.value = CKEDITOR.instances['item_html2'].getData();
+	}
 	document.main.act.value = 'update';
 	document.main.submit();
 	return true;
@@ -51,8 +63,6 @@ $(function(){
 	});
 	
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_html');
-	//m3_setHtmlEditor('item_html2');
 	m3SetWysiwygEditor('item_html', 500/* 高さ */);
 	m3SetWysiwygEditor('item_html2', 500/* 高さ */);
 });
