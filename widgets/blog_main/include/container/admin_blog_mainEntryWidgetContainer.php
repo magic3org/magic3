@@ -319,7 +319,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$entry_date = $request->trimValueOf('item_entry_date');		// 投稿日
 		$entry_time = $request->trimValueOf('item_entry_time');		// 投稿時間
 		$html = $request->valueOf('item_html');
-		$html2 = $request->valueOf('item_html2');
+//		$html2 = $request->valueOf('item_html2');
+		$html2 = $request->valueOf('html2');			// 2番目以降のテキストエリアの内容がPOSTされないCKEditorの問題を回避
 		if (strlen($html2) <= 10){ // IE6のときFCKEditorのバグの対応(「続き」が空の場合でもpタグが送信される)
 			$html2 = '';
 		}
