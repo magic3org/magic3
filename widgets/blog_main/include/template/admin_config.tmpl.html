@@ -17,7 +17,7 @@ function updateItem(){
 	if (!window.confirm('設定を更新しますか?')) return false;
 	
 	// CKEditorの入力内容を確定
-	if (CKEDITOR.instances){
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
 		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
 	
@@ -33,7 +33,7 @@ function uploadCheck(){
 	if (!window.confirm('画像ファイルをアップロードしますか?')) return false;
 	
 	// CKEditorの入力内容を確定
-	if (CKEDITOR.instances){
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
 		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
 	
