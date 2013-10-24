@@ -15,12 +15,24 @@
 //<![CDATA[
 function updateItem(){
 	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	
+	// CKEditorの入力内容を確定
+	if (CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+	
 	document.main.act.value = 'update';
 	document.main.submit();
 	return true;
 }
 function updateOther(){
 	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	
+	// CKEditorの入力内容を確定
+	if (CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+	
 	document.main_other.act.value = 'update_other';
 	document.main_other.submit();
 	return true;

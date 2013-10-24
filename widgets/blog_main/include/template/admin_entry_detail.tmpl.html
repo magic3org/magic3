@@ -16,11 +16,11 @@
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	
-	// 2番目以降のテキストエリアの内容が取得できないCKEditorの問題を回避
-	if (CKEDITOR.instances['item_html2']){
-		//document.main.html2.value = CKEDITOR.instances['item_html2'].getData();
-		document.main.item_html2.value = CKEDITOR.instances['item_html2'].getData();
+	// CKEditorの入力内容を確定
+	if (CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
+
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
@@ -28,11 +28,11 @@ function addItem(){
 function updateItem(){
 	if (!window.confirm('項目を更新しますか?')) return false;
 	
-	// 2番目以降のテキストエリアの内容が取得できないCKEditorの問題を回避
-	if (CKEDITOR.instances['item_html2']){
-		//document.main.html2.value = CKEDITOR.instances['item_html2'].getData();
-		document.main.item_html2.value = CKEDITOR.instances['item_html2'].getData();
+	// CKEditorの入力内容を確定
+	if (CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
+	
 	document.main.act.value = 'update';
 	document.main.submit();
 	return true;
