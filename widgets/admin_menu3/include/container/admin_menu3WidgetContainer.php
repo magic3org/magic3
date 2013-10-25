@@ -418,7 +418,7 @@ class admin_menu3WidgetContainer extends BaseAdminWidgetContainer
 								M3_VIEW_TYPE_PRODUCT,				// 製品
 								M3_VIEW_TYPE_BBS,					// BBS
 								M3_VIEW_TYPE_BLOG,				// ブログ
-								M3_VIEW_TYPE_WIKI,				// wiki
+								M3_VIEW_TYPE_WIKI,				// Wiki
 								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 								M3_VIEW_TYPE_EVENT,				// イベント
 								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
@@ -517,8 +517,8 @@ class admin_menu3WidgetContainer extends BaseAdminWidgetContainer
 						case M3_VIEW_TYPE_BLOG:				// ブログ
 							$title = 'ブログ';
 							break;
-						case M3_VIEW_TYPE_WIKI:				// wiki
-							$title = 'wiki';
+						case M3_VIEW_TYPE_WIKI:				// Wiki
+							$title = 'Wiki';
 							break;
 						case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
 							$title = 'ユーザ作成コンテンツ';
