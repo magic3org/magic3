@@ -19,7 +19,7 @@
 -- *** システムベーステーブル ***
 -- 多言語対応文字列マスター
 ALTER TABLE _language_string DROP PRIMARY KEY;-- ALTER TABLE _language_string DROP CONSTRAINT _language_string_pkey; -- ユニーク制約削除
-ALTER TABLE _language_string ADD ls_type         SMALLINT       DEFAULT 0                     NOT NULL;      -- 文字列(0=メッセージ,1=共通用語,10=Joomla!用)
+ALTER TABLE _language_string ADD ls_type         SMALLINT       DEFAULT 0                     NOT NULL;      -- 文字列(0=メッセージ,1=共通用語,2=コンテンツ種別,10=Joomla!用)
 ALTER TABLE _language_string ADD PRIMARY KEY (ls_type,    ls_id,        ls_language_id); -- ユニーク制約再設定
 
 INSERT INTO _language_string
