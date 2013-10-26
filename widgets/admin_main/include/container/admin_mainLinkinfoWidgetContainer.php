@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainLinkinfoWidgetContainer.php 5948 2013-04-19 10:59:01Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -19,11 +19,13 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_contentDb.php');
 
 class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	private $langId;		// 言語
 	private $db;	// DB接続オブジェクト
 	private $contentDb;		// DB接続オブジェクト
 	private $deviceType;		// デバイスタイプ(0=PC、1=携帯、2=スマートフォン)
 	private $pageList = array();		// ページリスト
 	private $contentList = array();		// コンテンツリスト
+	private $contentType;		// 主要コンテンツタイプ
 	const DEFAULT_CONTENT_COUNT = 300;		// コンテンツリスト取得数
 		
 	/**
@@ -37,6 +39,16 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
 		$this->contentDb = new admin_contentDb();
+		
+		$this->contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
+								M3_VIEW_TYPE_PRODUCT,				// 製品
+								M3_VIEW_TYPE_BBS,					// BBS
+								M3_VIEW_TYPE_BLOG,				// ブログ
+								M3_VIEW_TYPE_WIKI,				// wiki
+								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
+								M3_VIEW_TYPE_EVENT,				// イベント
+								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
+		$this->langId = $this->gEnv->getDefaultLanguage();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -63,10 +75,12 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		// 初期値を取得
-		$langId = $this->gEnv->getDefaultLanguage();
+		// 入力値を取得
+		$accessPoint = $request->trimIntValueOf('accesspoint', '0');		// アクセスポイント(0=PC,1=携帯,2=スマートフォン)
+		$accessPoint = intval($accessPoint);
+		if (!in_array($accessPoint, array(0, 1, 2))) $accessPoint = 0;
 		
-		switch ($this->deviceType){
+		switch ($accessPoint){
 			case 0:			// PC用
 			default:
 				$defaultPageId = $this->gEnv->getDefaultPageId();
@@ -86,9 +100,12 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 
 			// ページ選択メニューデータ
 			$this->pageList = array_merge(array(array('', '-- 未選択 --')), $this->pageList);
-			$this->pageList[] = array('_root', '[サイトトップ]');
+			$this->pageList[] = array('_root', '[トップページ]');
 			$this->gInstance->getAjaxManager()->addData('pagelist', $this->pageList);
-		} else if ($act == 'getcontent'){		// コンテンツ情報取得
+		} else if ($act == 'getcontenttype'){		// コンテンツ種別取得
+			$contentTypeList = $this->getContentTypeList($accessPoint);
+			$this->gInstance->getAjaxManager()->addData('contenttype', $contentTypeList);
+		} else if ($act == 'getcontentlist'){		// コンテンツ一覧取得
 			$pageSubId = $request->trimValueOf('subid');			// ページサブID	####### 注意 処理ページが換わってしまうので、システムの「sub」パラメータとは重ならないようにする #######
 
 			// ページ属性取得
@@ -100,7 +117,7 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			switch ($contentType){
 				case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 					// コンテンツタイプ
-					switch ($this->deviceType){
+					switch ($accessPoint){
 						case 0:			// PC用
 						default:
 							$contentType = '';
@@ -113,14 +130,14 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 							break;
 					}
 		
-					$this->contentDb->getContentList($contentType, $langId, self::DEFAULT_CONTENT_COUNT, $pageNo, 0/*デフォルトソートキー*/, 0/*昇順*/, array($this, 'contentLoop'));
+					$this->contentDb->getContentList($contentType, $this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, 0/*デフォルトソートキー*/, 0/*昇順*/, array($this, 'contentLoop'));
 					break;
 				case M3_VIEW_TYPE_PRODUCT:	// 製品
 					break;
 				case M3_VIEW_TYPE_BBS:	// BBS
 					break;
 				case M3_VIEW_TYPE_BLOG:	// ブログ
-					$this->contentDb->getEntryList($langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
+					$this->contentDb->getEntryList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 					break;
 				case M3_VIEW_TYPE_WIKI:	// Wiki
 					break;
@@ -134,6 +151,11 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			
 			if (!empty($this->contentList)) $this->contentList = array_merge(array(array('', '-- 未選択 --')), $this->contentList);
 			$this->gInstance->getAjaxManager()->addData('contentlist', $this->contentList);
+		} else if ($act == 'getaccesspoint'){		// アクセスポイント取得
+			$accessPointList = array(	array('0', 'PC用「/」'),
+										array('1', '携帯用「/m」'),
+										array('2', 'スマートフォン用「/s」'));
+			$this->gInstance->getAjaxManager()->addData('accesspoint', $accessPointList);
 		}
 	}
 	/**
@@ -169,6 +191,45 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		$this->contentList[] = array($contentId, $name);
 		return true;
+	}
+	/**
+	 * コンテンツ種別情報を取得
+	 *
+	 * @param int $accessPoint	アクセスポイント(0=PC、1=携帯、2=スマートフォン)
+	 * @return array			コンテンツ種別情報
+	 */
+	function getContentTypeList($accessPoint)
+	{
+		$contentTypeArray = array(array(), array(), array());
+		$pageIdArray = array($this->gEnv->getDefaultPageId(), $this->gEnv->getDefaultMobilePageId(), $this->gEnv->getDefaultSmartphonePageId());
+		
+		// 画面に配置しているウィジェットの主要コンテンツタイプを取得
+		$ret = $this->db->getEditWidgetOnPage($this->langId, $pageIdArray, $this->contentType, $rows);
+		if ($ret){
+			$rowCount = count($rows);
+			for ($i = 0; $i < $rowCount; $i++){
+				$row = $rows[$i];
+				switch ($row['pd_id']){		// アクセスポイントごとに分ける
+					case $pageIdArray[0]:
+					default:
+						$index = 0;
+						break;
+					case $pageIdArray[1]:
+						$index = 1;
+						break;
+					case $pageIdArray[2]:
+						$index = 2;
+						break;
+				}
+				$contentTypeArray[$index][] = $row;
+			}
+		}
+		$contentTypeList = array();
+		$contentType = $contentTypeArray[$accessPoint];
+		for ($i = 0; $i < count($contentType); $i++){
+			$contentTypeList[] = array($contentType[$i]['wd_type'], $contentType[$i]['ls_value']);
+		}
+		return $contentTypeList;
 	}
 }
 ?>

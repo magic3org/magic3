@@ -50,8 +50,13 @@ class admin_test_ckeditorWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		global $gEnvManager;
-		
+		$act = $request->trimValueOf('act');
+		$html = $request->valueOf('editor');
+		$html2 = $request->valueOf('editor2');
+		if ($act == 'send'){
+			echo 'editor='.$html.'<br />';
+			echo 'editor2='.$html2.'<br />';
+		}
 		// パスの設定
 //		$this->tmpl->addVar("_widget", "widget_url", $gEnvManager->getCurrentWidgetRootUrl());	// ウィジェットのルートディレクトリ
 //		$this->tmpl->addVar("_widget", "root_url", $gEnvManager->getRootUrl());

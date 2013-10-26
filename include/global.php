@@ -48,8 +48,8 @@ define('M3_ENCODING',	'UTF-8');	// 内部エンコーディング
 // ########## システム関係 ##########
 // システム基本情報
 define('M3_SYSTEM_NAME',			'Magic3');		// システム名称
-define('M3_SYSTEM_VERSION',			'2.7.11');		// システムのバージョン
-define('M3_SYSTEM_RELEASE_DATE',	'2013/10/9');	// システムのリリース日付
+define('M3_SYSTEM_VERSION',			'2.7.12');		// システムのバージョン
+define('M3_SYSTEM_RELEASE_DATE',	'2013/10/17');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
 define('M3_SYSTEM_MIN_MEMORY',		'16M');			// 最小メモリ使用量
@@ -170,7 +170,7 @@ define('M3_VIEW_TYPE_CONTENT',		'content');				// 汎用コンテンツ
 define('M3_VIEW_TYPE_PRODUCT',		'product');				// 商品情報(Eコマース)
 define('M3_VIEW_TYPE_BBS',			'bbs');					// BBS
 define('M3_VIEW_TYPE_BLOG',			'blog');				// ブログ
-define('M3_VIEW_TYPE_WIKI',			'wiki');				// wiki
+define('M3_VIEW_TYPE_WIKI',			'wiki');				// Wiki
 define('M3_VIEW_TYPE_USER',			'user');				// ユーザ作成コンテンツ
 define('M3_VIEW_TYPE_EVENT',		'event');				// イベント情報
 define('M3_VIEW_TYPE_PHOTO',		'photo');				// フォトギャラリー

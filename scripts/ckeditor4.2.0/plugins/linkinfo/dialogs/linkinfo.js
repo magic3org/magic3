@@ -15,6 +15,11 @@
 CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 	var accessPoint = '0';		// アクセスポイント
 	var dialog;					// このダイアログへの参照
+	
+	// コンテンツリスト、コンテンツ内容表示を更新
+	function updateContent()
+	{
+	}
 	return {
 		// Basic properties of the dialog window: title, minimum size.
 		title: editor.lang.linkinfo.title,
@@ -83,6 +88,9 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 						items : [
 							[ '接続中', '' ]
 						],
+						setup: function( element ) {
+							alert("setup");
+						},
 						onLoad : function(){		// 起動時イベント
 							var elementId = '#' + this.getInputElement().$.id;
 
@@ -154,7 +162,7 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 							});
 						},
 						onChange : function(){	// 選択値変更時イベント
-							var dialog = this.getDialog();
+						//	var dialog = this.getDialog();
 							var elementId = '#' + dialog.getContentElement('tab_basic', 'content').getInputElement().$.id;		// コンテンツ選択メニュー
 							var subId = this.getValue();
 
@@ -235,7 +243,7 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 
 		// This method is invoked once a user clicks the OK button, confirming the dialog.
 		onOk: function() {
-			var dialog = this;
+//			var dialog = this;
 			var subId = dialog.getContentElement('tab_basic', 'page').getValue();
 			var contentId = dialog.getContentElement('tab_basic', 'content').getValue();
 			
