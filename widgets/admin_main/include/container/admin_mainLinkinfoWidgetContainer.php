@@ -26,7 +26,9 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	private $pageList = array();		// ページリスト
 	private $contentList = array();		// コンテンツリスト
 	private $contentType;		// 主要コンテンツタイプ
+	private $accessPointType;	// アクセスポイント種別
 	const DEFAULT_CONTENT_COUNT = 300;		// コンテンツリスト取得数
+	const CONTENT_LENGTH = 300;			// プレビュー用コンテンツサイズ
 		
 	/**
 	 * コンストラクタ
@@ -49,6 +51,9 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 								M3_VIEW_TYPE_EVENT,				// イベント
 								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
 		$this->langId = $this->gEnv->getDefaultLanguage();
+		$this->accessPointType = array(	array('', 'PC用「/」'),
+										array('m', '携帯用「/m」'),
+										array('s', 'スマートフォン用「/s」'));	// アクセスポイント種別
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -76,19 +81,21 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		// 入力値を取得
-		$accessPoint = $request->trimIntValueOf('accesspoint', '0');		// アクセスポイント(0=PC,1=携帯,2=スマートフォン)
-		$accessPoint = intval($accessPoint);
-		if (!in_array($accessPoint, array(0, 1, 2))) $accessPoint = 0;
-		
+//		$accessPoint = $request->trimIntValueOf('accesspoint', '0');		// アクセスポイント(0=PC,1=携帯,2=スマートフォン)
+//		$accessPoint = intval($accessPoint);
+//		if (!in_array($accessPoint, array(0, 1, 2))) $accessPoint = 0;
+		$accessPoint = $request->trimValueOf('accesspoint');
+				
 		switch ($accessPoint){
-			case 0:			// PC用
+			case '':			// PC用
 			default:
 				$defaultPageId = $this->gEnv->getDefaultPageId();
+				$accessPoint = '';		// アクセスポイント修正
 				break;
-			case 1:			// 携帯用
+			case 'm':			// 携帯用
 				$defaultPageId = $this->gEnv->getDefaultMobilePageId();
 				break;
-			case 2:			// スマートフォン用
+			case 's':			// スマートフォン用
 				$defaultPageId = $this->gEnv->getDefaultSmartphonePageId();
 				break;
 		}
@@ -106,11 +113,13 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$contentTypeList = $this->getContentTypeList($accessPoint);
 			$this->gInstance->getAjaxManager()->addData('contenttype', $contentTypeList);
 		} else if ($act == 'getcontentlist'){		// コンテンツ一覧取得
-			$pageSubId = $request->trimValueOf('subid');			// ページサブID	####### 注意 処理ページが換わってしまうので、システムの「sub」パラメータとは重ならないようにする #######
+			//$pageSubId = $request->trimValueOf('subid');			// ページサブID	####### 注意 処理ページが換わってしまうので、システムの「sub」パラメータとは重ならないようにする #######
+			$contentType = $request->trimValueOf('contenttype');
+			$pageNo = $request->trimIntValueOf('page', '1');
 
 			// ページ属性取得
-			$ret = $this->db->getPageInfo($defaultPageId, $pageSubId, $row);
-			if ($ret) $contentType = $row['pn_content_type'];
+			//$ret = $this->db->getPageInfo($defaultPageId, $pageSubId, $row);
+			//if ($ret) $contentType = $row['pn_content_type'];
 			
 			// コンテンツタイプで一覧を取得
 			$pageNo = 1;		// ページ番号
@@ -118,14 +127,14 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 				case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 					// コンテンツタイプ
 					switch ($accessPoint){
-						case 0:			// PC用
+						case '':			// PC用
 						default:
 							$contentType = '';
 							break;
-						case 1:			// 携帯用
+						case 'm':			// 携帯用
 							$contentType = 'mobile';
 							break;
-						case 2:			// スマートフォン用
+						case 's':			// スマートフォン用
 							$contentType = 'smartphone';
 							break;
 					}
@@ -148,14 +157,71 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 				case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 					break;
 			}
-			
+
 			if (!empty($this->contentList)) $this->contentList = array_merge(array(array('', '-- 未選択 --')), $this->contentList);
 			$this->gInstance->getAjaxManager()->addData('contentlist', $this->contentList);
+		} else if ($act == 'getcontent'){		// コンテンツ取得
+			$contentType = $request->trimValueOf('contenttype');
+			$contentId = $request->trimValueOf('contentid');
+			$contentText = '';		// プレビュー用コンテンツ
+			
+			switch ($contentType){
+				case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+					// コンテンツタイプ
+					switch ($accessPoint){
+						case '':			// PC用
+						default:
+							$contentType = '';
+							break;
+						case 'm':			// 携帯用
+							$contentType = 'mobile';
+							break;
+						case 's':			// スマートフォン用
+							$contentType = 'smartphone';
+							break;
+					}
+					$ret = $this->contentDb->getContentByContentId($contentType, $contentId, $this->langId, $row);
+					if ($ret){
+						$contentText = $this->gInstance->getTextConvManager()->htmlToText($row['cn_html']);
+		
+						// アプリケーションルートを変換
+						$rootUrl = $this->getUrl($this->gEnv->getRootUrl());
+						$contentText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $rootUrl, $contentText);
+		
+						// 登録したキーワードを変換
+						$this->gInstance->getTextConvManager()->convByKeyValue($contentText, $contentText);
+		
+						// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
+						$contentText = str_replace(array("\r", "\n", "\t", " "), '', $contentText);
+		
+						// 文字列長を修正
+						if (function_exists('mb_strimwidth')){
+							$contentText = mb_strimwidth($contentText, 0, self::CONTENT_LENGTH, '…');
+						} else {
+							$contentText = substr($contentText, 0, self::CONTENT_LENGTH) . '...';
+						}
+					}
+					break;
+				case M3_VIEW_TYPE_PRODUCT:	// 製品
+					break;
+				case M3_VIEW_TYPE_BBS:	// BBS
+					break;
+				case M3_VIEW_TYPE_BLOG:	// ブログ
+					$this->contentDb->getEntryList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
+					break;
+				case M3_VIEW_TYPE_WIKI:	// Wiki
+					break;
+				case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+					break;
+				case M3_VIEW_TYPE_EVENT:	// イベント
+					break;
+				case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+					break;
+			}
+			$this->gInstance->getAjaxManager()->addData('content', $contentText);
+			
 		} else if ($act == 'getaccesspoint'){		// アクセスポイント取得
-			$accessPointList = array(	array('0', 'PC用「/」'),
-										array('1', '携帯用「/m」'),
-										array('2', 'スマートフォン用「/s」'));
-			$this->gInstance->getAjaxManager()->addData('accesspoint', $accessPointList);
+			$this->gInstance->getAjaxManager()->addData('accesspoint', $this->accessPointType);
 		}
 	}
 	/**
@@ -195,8 +261,8 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	/**
 	 * コンテンツ種別情報を取得
 	 *
-	 * @param int $accessPoint	アクセスポイント(0=PC、1=携帯、2=スマートフォン)
-	 * @return array			コンテンツ種別情報
+	 * @param string $accessPoint	アクセスポイント(「」=PC、「m」=携帯、「s」=スマートフォン)
+	 * @return array				コンテンツ種別情報
 	 */
 	function getContentTypeList($accessPoint)
 	{
@@ -225,7 +291,12 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			}
 		}
 		$contentTypeList = array();
-		$contentType = $contentTypeArray[$accessPoint];
+		for ($i = 0; $i < count($this->accessPointType); $i++){
+			if ($this->accessPointType[$i][0] == $accessPoint) break;
+		}
+		if ($i == count($this->accessPointType)) return $contentTypeList;
+		$contentType = $contentTypeArray[$i];
+		
 		for ($i = 0; $i < count($contentType); $i++){
 			$contentTypeList[] = array($contentType[$i]['wd_type'], $contentType[$i]['ls_value']);
 		}

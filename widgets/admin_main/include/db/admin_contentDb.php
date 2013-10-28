@@ -52,6 +52,25 @@ class admin_contentDb extends BaseDb
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**
+	 * コンテンツ項目をコンテンツIDで取得
+	 *
+	 * @param string  $contentType		コンテンツタイプ
+	 * @param string	$contentId		コンテンツID
+	 * @param string	$langId			言語ID
+	 * @param array     $row			レコード
+	 * @return bool						取得 = true, 取得なし= false
+	 */
+	function getContentByContentId($contentType, $contentId, $langId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM content LEFT JOIN _login_user ON cn_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE cn_deleted = false ';	// 削除されていない
+		$queryStr .=    'AND cn_type = ? ';
+		$queryStr .=   'AND cn_id = ? ';
+		$queryStr .=   'AND cn_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($contentType, $contentId, $langId), $row);
+		return $ret;
+	}
+	/**
 	 * ブログ記事一覧を取得
 	 *
 	 * @param string	$langId				言語

@@ -13,12 +13,113 @@
  * @link       http://www.magic3.org
  */
 CKEDITOR.dialog.add('linkinfoDialog', function(editor){
-	var accessPoint = '0';		// アクセスポイント
+	var accessPoint = '';		// アクセスポイント
 	var dialog;					// このダイアログへの参照
 	
 	// コンテンツリスト、コンテンツ内容表示を更新
-	function updateContent()
+	function updateContentList()
 	{
+		// コンテンツリストを取得
+		var elementId = '#' + dialog.getContentElement('tab_basic', 'content_list').getInputElement().$.id;
+		var contentType = dialog.getContentElement('tab_basic', 'content_type').getValue();
+		var pageNo = 1;
+
+		// コンテンツプレビュークリア
+		$('#content_text').text('');
+		
+		// Ajaxでページ情報を取得
+		m3_ajax_request('', 'task=linkinfo&act=getcontentlist&contenttype=' + contentType + '&accesspoint=' + accessPoint + '&page=' + pageNo, function(request, retcode, jsondata){		// 正常終了
+			// コンテンツ種別選択メニューを更新
+			$('option', elementId).remove();
+			if (jsondata.contentlist){
+				$.each(jsondata.contentlist, function(index, item) {
+					$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
+				});
+			}
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	}
+	
+	// ダイアログ上の項目の表示制御
+	function updateItems()
+	{
+		// リンク対象を取得
+		var selValue = dialog.getValueOf('tab_basic', 'link_target');
+		
+		switch (selValue){
+			case 'content':
+				dialog.getContentElement('tab_basic', 'content_type').getElement().show();
+				dialog.getContentElement('tab_basic', 'content_list').getElement().show();
+				dialog.getContentElement('tab_basic', 'page').getElement().hide();
+				dialog.getContentElement('tab_basic', 'content_label').getElement().show();
+				$('#content_text').show();
+				break;
+			case 'page':
+				dialog.getContentElement('tab_basic', 'content_type').getElement().hide();
+				dialog.getContentElement('tab_basic', 'content_list').getElement().hide();
+				dialog.getContentElement('tab_basic', 'page').getElement().show();
+				dialog.getContentElement('tab_basic', 'content_label').getElement().hide();
+				$('#content_text').hide();
+				break;
+			case 'others':
+				dialog.getContentElement('tab_basic', 'content_type').getElement().hide();
+				dialog.getContentElement('tab_basic', 'content_list').getElement().hide();
+				dialog.getContentElement('tab_basic', 'page').getElement().hide();
+				dialog.getContentElement('tab_basic', 'content_label').getElement().hide();
+				$('#content_text').hide();
+				break;
+		}
+	}
+	// URLを更新。必要項目が選択されていない場合はクリア。
+	function updateUrl()
+	{
+		var url = M3_ROOT_URL + '/index.php';
+		
+		// リンク対象を取得
+		var linkTarget = dialog.getValueOf('tab_basic', 'link_target');
+		switch (linkTarget){
+			case 'content':
+				var contentType = dialog.getContentElement('tab_basic', 'content_type').getValue();
+				var contentId = dialog.getContentElement('tab_basic', 'content_list').getValue();
+
+				if (contentId){
+					switch (contentType){
+						case 'content':
+						case 'product':
+						case 'event':
+						case 'photo':
+							url += '?' + contentType + 'id=' + contentId;
+							break;
+						case 'blog':
+							url += '?entryid=' + contentId;
+							break;
+						case 'wiki':
+							url += '?' + contentId;
+							break;
+					}
+				} else {
+					url = '';
+				}
+				break;
+			case 'page':
+				var pageSubId = dialog.getContentElement('tab_basic', 'page').getValue();
+				switch (pageSubId){
+					case '':
+						url = '';
+						break;
+					case '_root':
+						break;
+					default:
+						url += '?sub=' + pageSubId;
+						break;
+				}
+				break;
+			case 'others':
+				url = '';
+				break;
+		}
+		dialog.getContentElement('tab_basic', 'url').setValue(url);
 	}
 	return {
 		// Basic properties of the dialog window: title, minimum size.
@@ -32,6 +133,9 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 			
 			// このダイアログへの参照を取得
 			dialog = this;
+			
+			// ダイアログ項目の表示制御
+			updateItems();
 		},
 		// Dialog window contents definition.
 		contents: [
@@ -52,33 +156,10 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 						'default': 'content',
 						onClick: function(){
 							// ダイアログ項目の表示制御
-							var selValue = this.getValue();
-							switch (selValue){
-								case 'content':
-									dialog.getContentElement('tab_basic', 'content_type').getElement().show();
-									dialog.getContentElement('tab_basic', 'content').getElement().show();
-									dialog.getContentElement('tab_basic', 'page').getElement().hide();
-									dialog.getContentElement('tab_basic', 'url').getElement().hide();
-									dialog.getContentElement('tab_basic', 'content_label').getElement().show();
-									dialog.getContentElement('tab_basic', 'content_text').getElement().show();
-									break;
-								case 'page':
-									dialog.getContentElement('tab_basic', 'content_type').getElement().hide();
-									dialog.getContentElement('tab_basic', 'content').getElement().hide();
-									dialog.getContentElement('tab_basic', 'page').getElement().show();
-									dialog.getContentElement('tab_basic', 'url').getElement().hide();
-									dialog.getContentElement('tab_basic', 'content_label').getElement().hide();
-									dialog.getContentElement('tab_basic', 'content_text').getElement().hide();
-									break;
-								case 'others':
-									dialog.getContentElement('tab_basic', 'content_type').getElement().hide();
-									dialog.getContentElement('tab_basic', 'content').getElement().hide();
-									dialog.getContentElement('tab_basic', 'page').getElement().hide();
-									dialog.getContentElement('tab_basic', 'url').getElement().show();
-									dialog.getContentElement('tab_basic', 'content_label').getElement().hide();
-									dialog.getContentElement('tab_basic', 'content_text').getElement().hide();
-									break;
-							}
+							updateItems();
+							
+							// URLを更新
+							updateUrl();
 						}
 					},
 					{	// コンテンツ種別選択
@@ -88,9 +169,6 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 						items : [
 							[ '接続中', '' ]
 						],
-						setup: function( element ) {
-							alert("setup");
-						},
 						onLoad : function(){		// 起動時イベント
 							var elementId = '#' + this.getInputElement().$.id;
 
@@ -103,37 +181,45 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 										$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
 									});
 								}
+								
+								// デフォルトのコンテンツリストを取得
+								updateContentList();
 							}, function(request){		// 異常終了
 								alert('通信に失敗しました。');
 							});
 						},
 						onChange : function(){	// 選択値変更時イベント
+							// コンテンツリストを更新
+							updateContentList();
 						}
 					},
-					{	// コンテンツ選択
+					{	// コンテンツリスト
 						type : 'select',
-						id : 'content',
+						id : 'content_list',
 						label : editor.lang.linkinfo.content_list_title,
 						items : [
 							[ '接続中', '' ]
 						],
-						onLoad : function(){		// 起動時イベント
-							var elementId = '#' + this.getInputElement().$.id;
+						onChange : function(){	// 選択値変更時イベント
+							// コンテンツプレビュークリア
+							$('#content_text').text('');
+							
+							// コンテンツ内容を取得
+							var contentType = dialog.getContentElement('tab_basic', 'content_type').getValue();
+							var contentId = dialog.getContentElement('tab_basic', 'content_list').getValue();
 
-							// Ajaxでページ情報を取得
-/*							m3_ajax_request('', 'task=linkinfo&act=getcontenttype&accesspoint=' + accessPoint, function(request, retcode, jsondata){		// 正常終了
-								// コンテンツ種別選択メニューを更新
-								$('option', elementId).remove();
-								if (jsondata.contenttype){
-									$.each(jsondata.contenttype, function(index, item) {
-										$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
-									});
+							// Ajaxでコンテンツ内容を取得
+							m3_ajax_request('', 'task=linkinfo&act=getcontent&contenttype=' + contentType + '&contentid=' + contentId + '&accesspoint=' + accessPoint, function(request, retcode, jsondata){		// 正常終了
+
+								if (jsondata.content){
+									$('#content_text').text(jsondata.content);
 								}
+								
+								// URLを更新
+								updateUrl();
 							}, function(request){		// 異常終了
 								alert('通信に失敗しました。');
-							});*/
-						},
-						onChange : function(){	// 選択値変更時イベント
+							});
 						}
 					},
 					{
@@ -144,7 +230,7 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 							[ '接続中', '' ]
 						],
 						onLoad : function(){		// 起動時イベント
-							this.getElement().hide();		// 初期時は項目を隠す
+//							this.getElement().hide();		// 初期時は項目を隠す
 							
 							var elementId = '#' + this.getInputElement().$.id;
 
@@ -162,34 +248,9 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 							});
 						},
 						onChange : function(){	// 選択値変更時イベント
-						//	var dialog = this.getDialog();
-							var elementId = '#' + dialog.getContentElement('tab_basic', 'content').getInputElement().$.id;		// コンテンツ選択メニュー
-							var subId = this.getValue();
-
-							// Ajaxでコンテンツ情報を取得
-							m3_ajax_request('', 'task=linkinfo&act=getcontentlist&subid=' + subId, function(request, retcode, jsondata){		// 正常終了
-								// コンテンツ選択メニューを更新
-								if (jsondata.contentlist){
-									$('option', elementId).remove();
-									if (jsondata.contentlist.length > 0){
-										$.each(jsondata.contentlist, function(index, item) {
-											$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
-										});
-										dialog.getContentElement('tab_basic', 'content').getElement().show();		// 項目を表示
-									} else {
-										dialog.getContentElement('tab_basic', 'content').getElement().hide();		// 項目を非表示
-									}
-								}
-							}, function(request){		// 異常終了
-								alert('通信に失敗しました。');
-							});
+							// URLを更新
+							updateUrl();
 						}
-					},
-					{
-						type: 'text',
-						id: 'url',
-						label: editor.lang.linkinfo.url_title,
-						width: '100%'
 					},
 					{
 						type : 'html',
@@ -198,12 +259,15 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 					},
 					{
 						type: 'html',
-						id: 'content_text',
 						//padding: '5px',
-//						label: editor.lang.linkinfo.content_title,
-//						labelLayout: 'horizontal',
-						html: '<p>' + editor.lang.googlemaps.msgLineInstruction + '</p>'
-					}
+						html: '<p id="content_text" style="white-space: -moz-pre-wrap; white-space: pre-wrap; word-wrap: break-word;"></p>'
+					},
+					{
+						type: 'text',
+						id: 'url',
+						label: editor.lang.linkinfo.url_title,
+						width: '100%'
+					},
 				]
 			},
 			{
