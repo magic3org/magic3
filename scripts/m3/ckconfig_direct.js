@@ -7,15 +7,12 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ckconfig_direct.js 5950 2013-04-19 13:10:35Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
+CKEDITOR.stylesSet.add('default', []);
 
-
-CKEDITOR.editorConfig = function( config ) {
-	// Define changes to default configuration here.
-	// For the complete reference:
-	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
+CKEDITOR.editorConfig = function(config){
 	config.language = 'ja';
 	config.enterMode = CKEDITOR.ENTER_BR; // 改行をbrに変更
 	config.shiftEnterMode = CKEDITOR.ENTER_DIV;
@@ -27,18 +24,10 @@ CKEDITOR.editorConfig = function( config ) {
 	config.toolbar = [
 		{ name: 'others', items: [ 'LinkInfo' ] }
 	];
+	config.stylesCombo_stylesSet = 'default';
 	
 	// 追加プラグインの設定
 	config.extraPlugins = 'linkinfo';
-//	config.autoGrow_maxHeight = 800;		// 指定サイズまで入力に合わせて拡大
-	
 };
-/*CKEDITOR.on('dialogDefinition', function(ev){
-	var dialogName = ev.data.name;
-	var dialogDefinition = ev.data.definition;
-	var dialog = dialogDefinition.dialog;
-	
-	if (dialogName == 'image' || dialogName == 'flash'){
-		dialogDefinition.removeContents('Upload');	// 「アップロード」タブ削除
-	}
-});*/
+
+

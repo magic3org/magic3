@@ -12,6 +12,11 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
+// ライブラリ用変数
+var _m3Url;
+var _m3AccessPoint;		// アクセスポイント(空=PC,m=携帯,s=スマートフォン)
+var _m3LinkUrlCallback;	// リンク作成用コールバック
+
 // 親ウィンドウを更新
 function m3UpdateParentWindow()
 {
@@ -322,6 +327,46 @@ function m3SetScriptEditor(id, height)
 		CKEDITOR.replace(id, config);
 	} else {
 	}*/
+}
+/**
+ * CKEditorツールバー機能の直接実行準備
+ *
+ * @return なし
+ */
+function m3LoadCKTools()
+{
+	var dummyCKParent = $('#_dummy_ck_parent');
+	if (!dummyCKParent[0]){
+		var dummyHtml = '<div id="_dummy_ck_parent"><textarea type="text" id="_dummy_ckeditor" ></textarea></div>';
+		$("body").append(dummyHtml);
+	}
+	dummyCKParent = $('#_dummy_ck_parent');
+
+	var config = {};
+	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_direct.js';
+//	config['toolbar'] = 'Full';
+	CKEDITOR.replace('_dummy_ckeditor', config);
+	dummyCKParent.hide();
+}
+/**
+ * リンク用のURLを作成
+ * あらかじめを実行しておく。
+ *
+ * @param string url					URL初期値
+ * @param function	setlinkurl_callback	コールバック関数
+ * @param string accessPoint			アクセスポイント(空=PC,m=携帯,s=スマートフォン)
+ * @return なし
+ */
+function m3CreateLinkUrl(url, setlinkurl_callback, accessPoint)
+{
+	_m3Url = url;
+	if (setlinkurl_callback) _m3LinkUrlCallback = setlinkurl_callback;
+	if (accessPoint) _m3AccessPoint = accessPoint;
+	
+	var dummyCKParent = $('#_dummy_ck_parent');
+	dummyCKParent.show();			// IE8バグ回避用
+	CKEDITOR.instances['_dummy_ckeditor'].execCommand( 'linkinfo' );
+	dummyCKParent.hide();			// IE8バグ回避用
 }
 /**
  * 画面操作用スライド開閉メニューバー
