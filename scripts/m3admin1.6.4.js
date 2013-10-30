@@ -15,7 +15,7 @@
 // ライブラリ用変数
 var _m3Url;
 var _m3AccessPoint;		// アクセスポイント(空=PC,m=携帯,s=スマートフォン)
-var _m3LinkUrlCallback;	// リンク作成用コールバック
+var _m3SetUrlCallback;	// リンク作成用コールバック
 
 // 親ウィンドウを更新
 function m3UpdateParentWindow()
@@ -352,16 +352,16 @@ function m3LoadCKTools()
  * リンク用のURLを作成
  * あらかじめを実行しておく。
  *
- * @param string url					URL初期値
- * @param function	setlinkurl_callback	コールバック関数
  * @param string accessPoint			アクセスポイント(空=PC,m=携帯,s=スマートフォン)
+ * @param string url					URL初期値
+ * @param function	seturl_callback		コールバック関数
  * @return なし
  */
-function m3CreateLinkUrl(url, setlinkurl_callback, accessPoint)
+function m3CreateLinkUrl(accessPoint, url, seturl_callback)
 {
+	_m3AccessPoint = accessPoint;
 	_m3Url = url;
-	if (setlinkurl_callback) _m3LinkUrlCallback = setlinkurl_callback;
-	if (accessPoint) _m3AccessPoint = accessPoint;
+	_m3SetUrlCallback = seturl_callback;
 	
 	var dummyCKParent = $('#_dummy_ck_parent');
 	dummyCKParent.show();			// IE8バグ回避用

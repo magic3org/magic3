@@ -109,6 +109,7 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 						url = '';
 						break;
 					case '_root':
+						url = M3_ROOT_URL + '/';
 						break;
 					default:
 						url += '?sub=' + pageSubId;
@@ -122,7 +123,6 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 		dialog.getContentElement('tab_basic', 'url').setValue(url);
 	}
 	return {
-		// Basic properties of the dialog window: title, minimum size.
 		title: editor.lang.linkinfo.title,
 		minWidth: 500,
 		minHeight: 300,
@@ -136,15 +136,15 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 			
 			// ダイアログ項目の表示制御
 			updateItems();
+			
+			// 起動時の初期値を設定
+			accessPoint = _m3AccessPoint;		// アクセスポイント
+			dialog.getContentElement('tab_basic', 'url').setValue(_m3Url);
 		},
-		// Dialog window contents definition.
 		contents: [
 			{
-				// Definition of the Basic Settings dialog tab (page).
 				id: 'tab_basic',
 				label: editor.lang.linkinfo.tab_info_title,
-
-				// The tab contents.
 				elements: [
 					{	// リンク対象選択
 						type : 'radio',
@@ -267,11 +267,10 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 						id: 'url',
 						label: editor.lang.linkinfo.url_title,
 						width: '100%'
-					},
+					}
 				]
 			},
 			{
-				// Definition of the Basic Settings dialog tab (page).
 				id: 'tab_advanced',
 				label: editor.lang.linkinfo.tab_advanced_title,
 				elements: [
@@ -290,12 +289,13 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 								// アクセスポイント選択メニューを更新
 								$('option', elementId).remove();
 								if (jsondata.accesspoint){
-									$.each(jsondata.accesspoint, function(index, item) {
+									$.each(jsondata.accesspoint, function(index, item){
 										$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
 									});
 								}
 								// 項目を再選択
-								$(elementId).val(accessPoint);	
+								//$(elementId).val(_m3AccessPoint);
+								$(elementId).val(accessPoint);
 							}, function(request){		// 異常終了
 								alert('通信に失敗しました。');
 							});
@@ -304,36 +304,13 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 				]
 			}
 		],
-
-		// This method is invoked once a user clicks the OK button, confirming the dialog.
-		onOk: function() {
-//			var dialog = this;
-			var subId = dialog.getContentElement('tab_basic', 'page').getValue();
-			var contentId = dialog.getContentElement('tab_basic', 'content').getValue();
+		onOk: function(){
+			var url = dialog.getContentElement('tab_basic', 'url').getValue();
 			
 			// 作成したURLを設定
-			if (typeof setLinkUrl == 'function'){
-				setLinkUrl(subId + contentId);
+			if (typeof _m3SetUrlCallback == 'function'){
+				_m3SetUrlCallback(url);
 			}
-			// The context of this function is the dialog object itself.
-			// http://docs.ckeditor.com/#!/api/CKEDITOR.dialog
-/*			var dialog = this;
-
-			// Creates a new <abbr> element.
-			var abbr = editor.document.createElement( 'abbr' );
-
-			// Set element attribute and text, by getting the defined field values.
-			abbr.setAttribute( 'title', dialog.getValueOf( 'tab_basic', 'title' ) );
-			abbr.setText( dialog.getValueOf( 'tab_basic', 'abbr' ) );
-
-			// Now get yet another field value, from the advanced tab.
-			var id = dialog.getValueOf( 'tab-adv', 'id' );
-			if ( id )
-				abbr.setAttribute( 'id', id );
-
-			// Finally, inserts the element at the editor caret position.
-			editor.insertElement( abbr );
-			*/
 		}
 	};
 });
