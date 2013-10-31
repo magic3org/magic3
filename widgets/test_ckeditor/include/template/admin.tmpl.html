@@ -8,39 +8,40 @@ function SetUrl(url)
 }
 function send()
 {
-/*	// CKEditorの内容を確定
+	// CKEditorの内容を確定
 	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
 		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
    
 	document.main.act.value = 'send';
 	document.main.submit();
-	return true;*/
-	m3CreateLinkUrl( 'm', 'aaa', SetUrl);
-/*$('#parent').show();
-CKEDITOR.instances['editor'].execCommand( 'linkinfo' );
-$('#parent').hide();*/
+	return true;
+}
+function createUrl()
+{	
+	m3CreateLinkUrl( '', 'http://site.com/sample.html', SetUrl);
 }
 $(function(){
-m3LoadCKTools();
+	m3LoadCKTools();
+	
 	// スクリプト編集エディター作成
 	//m3SetWysiwygEditor('item_content', 500/* 高さ */);
 	//m3SetScriptEditor('item_content', 500/* 高さ */);
 //	var scriptFile = M3_ROOT_URL + '/scripts/codemirror-3.1/lib/codemirror.js';
 //$("<script>").attr("src", scriptFile).appendTo("head");
 //CodeMirror.fromTextArea(document.getElementById("item_content"), {mode: "php"});
-/*	var editor = CodeMirror.fromTextArea(document.getElementById("item_content"), {
+	var editor = CodeMirror.fromTextArea(document.getElementById("item_content"), {
 		mode: "javascript",
         lineNumbers: true,
         matchBrackets: true,
         extraKeys: {"Enter": "newlineAndIndentContinueComment"}
-      });*/
+      });
 		
-/*	var config = {};
+	var config = {};
 	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_test.js';
 	config['toolbar'] = 'Full';
-	var editor = CKEDITOR.replace('editor', config);*/
-//	var editor2 = CKEDITOR.replace('editor2', config);
+	var editor = CKEDITOR.replace('editor', config);
+	var editor2 = CKEDITOR.replace('editor2', config);
 //	var editor = CKEDITOR.replace('editor');
 });
 // IEのエラーは非表示
@@ -62,16 +63,16 @@ window.onerror = hideIEErrors;*/
 <table class="simple-table">
     <tbody>
     <tr>
-	    <td class="table-headside">CKEditor</td><td width="800" height="100"><div id="parent"><textarea id="editor" name="editor">{CONTENT}</textarea></div></td>
+	    <td class="table-headside">CKEditor1</td><td width="1000" height="100"><div id="parent"><textarea id="editor" name="editor">{CONTENT}</textarea></div></td>
 	</tr>
     <tr>
-	    <td class="table-headside">CKEditor</td><td width="800" height="100"><div id="parent2"><textarea id="editor2" name="editor2">{CONTENT2}</textarea></div></td>
+	    <td class="table-headside">CKEditor2</td><td width="1000" height="100"><div id="parent2"><textarea id="editor2" name="editor2">{CONTENT2}</textarea></div></td>
 	</tr>
     <tr>
-	    <td class="table-headside">CodeMirror</td><td width="800" height="200"><textarea id="item_content" name="item_content">{CONTENT}</textarea></td>
+	    <td class="table-headside">CodeMirror</td><td width="1000" height="100"><textarea id="item_content" name="item_content">{CONTENT}</textarea></td>
 	</tr>
     <tr>
-	    <td class="table-headside">値</td><td><span id="url"></span></td>
+	    <td class="table-headside">値</td><td><span id="url"></span><input type="button" class="button" onclick="createUrl();" value="URL作成" /></td>
 	</tr>
     <tr>
 	    <td colspan="2"><input type="button" class="button" onclick="send();" value="送信" /></td>

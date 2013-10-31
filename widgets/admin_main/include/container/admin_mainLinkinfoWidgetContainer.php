@@ -25,11 +25,12 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	private $deviceType;		// デバイスタイプ(0=PC、1=携帯、2=スマートフォン)
 	private $pageList = array();		// ページリスト
 	private $contentList = array();		// コンテンツリスト
-	private $contentType;		// 主要コンテンツタイプ
+	private $contentType;			// コンテンツタイプ
+	private $contentTypeArray;		// 主要コンテンツタイプ
 	private $accessPointType;	// アクセスポイント種別
 	const DEFAULT_CONTENT_COUNT = 300;		// コンテンツリスト取得数
 	const CONTENT_LENGTH = 300;			// プレビュー用コンテンツサイズ
-		
+
 	/**
 	 * コンストラクタ
 	 */
@@ -42,7 +43,7 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->db = new admin_mainDb();
 		$this->contentDb = new admin_contentDb();
 		
-		$this->contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
+		$this->contentTypeArray = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
 								M3_VIEW_TYPE_PRODUCT,				// 製品
 								M3_VIEW_TYPE_BBS,					// BBS
 								M3_VIEW_TYPE_BLOG,				// ブログ
@@ -81,9 +82,6 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		// 入力値を取得
-//		$accessPoint = $request->trimIntValueOf('accesspoint', '0');		// アクセスポイント(0=PC,1=携帯,2=スマートフォン)
-//		$accessPoint = intval($accessPoint);
-//		if (!in_array($accessPoint, array(0, 1, 2))) $accessPoint = 0;
 		$accessPoint = $request->trimValueOf('accesspoint');
 				
 		switch ($accessPoint){
@@ -113,17 +111,12 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$contentTypeList = $this->getContentTypeList($accessPoint);
 			$this->gInstance->getAjaxManager()->addData('contenttype', $contentTypeList);
 		} else if ($act == 'getcontentlist'){		// コンテンツ一覧取得
-			//$pageSubId = $request->trimValueOf('subid');			// ページサブID	####### 注意 処理ページが換わってしまうので、システムの「sub」パラメータとは重ならないようにする #######
-			$contentType = $request->trimValueOf('contenttype');
+			$this->contentType = $request->trimValueOf('contenttype');
 			$pageNo = $request->trimIntValueOf('page', '1');
-
-			// ページ属性取得
-			//$ret = $this->db->getPageInfo($defaultPageId, $pageSubId, $row);
-			//if ($ret) $contentType = $row['pn_content_type'];
 			
 			// コンテンツタイプで一覧を取得
 			$pageNo = 1;		// ページ番号
-			switch ($contentType){
+			switch ($this->contentType){
 				case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 					// コンテンツタイプ
 					switch ($accessPoint){
@@ -139,9 +132,10 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 							break;
 					}
 		
-					$this->contentDb->getContentList($contentType, $this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, 0/*デフォルトソートキー*/, 0/*昇順*/, array($this, 'contentLoop'));
+					$this->contentDb->getContentList($contentType, $this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, 0/*降順*/, array($this, 'contentLoop'));
 					break;
 				case M3_VIEW_TYPE_PRODUCT:	// 製品
+					$this->contentDb->getProductList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 					break;
 				case M3_VIEW_TYPE_BBS:	// BBS
 					break;
@@ -149,10 +143,12 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 					$this->contentDb->getEntryList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 					break;
 				case M3_VIEW_TYPE_WIKI:	// Wiki
+					$this->contentDb->getWikiList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 					break;
 				case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
 					break;
 				case M3_VIEW_TYPE_EVENT:	// イベント
+					$this->contentDb->getEventList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 					break;
 				case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 					break;
@@ -161,11 +157,11 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			if (!empty($this->contentList)) $this->contentList = array_merge(array(array('', '-- 未選択 --')), $this->contentList);
 			$this->gInstance->getAjaxManager()->addData('contentlist', $this->contentList);
 		} else if ($act == 'getcontent'){		// コンテンツ取得
-			$contentType = $request->trimValueOf('contenttype');
+			$this->contentType = $request->trimValueOf('contenttype');
 			$contentId = $request->trimValueOf('contentid');
 			$contentText = '';		// プレビュー用コンテンツ
 			
-			switch ($contentType){
+			switch ($this->contentType){
 				case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 					// コンテンツタイプ
 					switch ($accessPoint){
@@ -180,40 +176,26 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 							$contentType = 'smartphone';
 							break;
 					}
-					$ret = $this->contentDb->getContentByContentId($contentType, $contentId, $this->langId, $row);
-					if ($ret){
-						$contentText = $this->gInstance->getTextConvManager()->htmlToText($row['cn_html']);
-		
-						// アプリケーションルートを変換
-						$rootUrl = $this->getUrl($this->gEnv->getRootUrl());
-						$contentText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $rootUrl, $contentText);
-		
-						// 登録したキーワードを変換
-						$this->gInstance->getTextConvManager()->convByKeyValue($contentText, $contentText);
-		
-						// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
-						$contentText = str_replace(array("\r", "\n", "\t", " "), '', $contentText);
-		
-						// 文字列長を修正
-						if (function_exists('mb_strimwidth')){
-							$contentText = mb_strimwidth($contentText, 0, self::CONTENT_LENGTH, '…');
-						} else {
-							$contentText = substr($contentText, 0, self::CONTENT_LENGTH) . '...';
-						}
-					}
+					$ret = $this->contentDb->getContent($contentType, $contentId, $this->langId, $row);
+					if ($ret) $contentText = $this->createContentText($row['cn_html']);
 					break;
 				case M3_VIEW_TYPE_PRODUCT:	// 製品
+					$ret = $this->contentDb->getProduct($contentId, $this->langId, $row);
+					if ($ret) $contentText = $this->createContentText($row['pt_description']);
 					break;
 				case M3_VIEW_TYPE_BBS:	// BBS
 					break;
 				case M3_VIEW_TYPE_BLOG:	// ブログ
-					$this->contentDb->getEntryList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
+					$ret = $this->contentDb->getEntry($contentId, $this->langId, $row);
+					if ($ret) $contentText = $this->createContentText($row['be_html']);
 					break;
 				case M3_VIEW_TYPE_WIKI:	// Wiki
 					break;
 				case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
 					break;
 				case M3_VIEW_TYPE_EVENT:	// イベント
+					$ret = $this->contentDb->getEvent($contentId, $this->langId, $row);
+					if ($ret) $contentText = $this->createContentText($row['ee_html']);
 					break;
 				case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 					break;
@@ -243,7 +225,7 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		return true;
 	}
 	/**
-	 * コンテンツを配列に格納
+	 * コンテンツ名を配列に格納
 	 *
 	 * @param int $index			行番号(0～)
 	 * @param array $fetchedRow		フェッチ取得した行
@@ -253,8 +235,12 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	function contentLoop($index, $fetchedRow, $param)
 	{
 		$contentId = $fetchedRow['id'];
-		$name = $fetchedRow['name'] . ' [' . $contentId . ']';		// コンテンツ名
-		
+		if ($this->contentType = M3_VIEW_TYPE_WIKI){		// コンテンツがWikiの場合の処理
+			$name = $fetchedRow['name'];
+			if (preg_match('/^\:/', $name)) return true;		// 定義データの場合は読み飛ばす
+		} else {
+			$name = $fetchedRow['name'] . ' [' . $contentId . ']';		// コンテンツ名
+		}
 		$this->contentList[] = array($contentId, $name);
 		return true;
 	}
@@ -270,7 +256,7 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$pageIdArray = array($this->gEnv->getDefaultPageId(), $this->gEnv->getDefaultMobilePageId(), $this->gEnv->getDefaultSmartphonePageId());
 		
 		// 画面に配置しているウィジェットの主要コンテンツタイプを取得
-		$ret = $this->db->getEditWidgetOnPage($this->langId, $pageIdArray, $this->contentType, $rows);
+		$ret = $this->db->getEditWidgetOnPage($this->langId, $pageIdArray, $this->contentTypeArray, $rows);
 		if ($ret){
 			$rowCount = count($rows);
 			for ($i = 0; $i < $rowCount; $i++){
@@ -301,6 +287,34 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$contentTypeList[] = array($contentType[$i]['wd_type'], $contentType[$i]['ls_value']);
 		}
 		return $contentTypeList;
+	}
+	/**
+	 * コンテンツプレビュー用のテキストを作成
+	 *
+	 * @param string $src	元のコンテンツ
+	 * @return string		作成したテキスト
+	 */
+	function createContentText($src)
+	{
+		$contentText = $this->gInstance->getTextConvManager()->htmlToText($src);
+
+		// アプリケーションルートを変換
+		$rootUrl = $this->getUrl($this->gEnv->getRootUrl());
+		$contentText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $rootUrl, $contentText);
+
+		// 登録したキーワードを変換
+		$this->gInstance->getTextConvManager()->convByKeyValue($contentText, $contentText);
+
+		// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
+		$contentText = str_replace(array("\r", "\n", "\t", " "), '', $contentText);
+
+		// 文字列長を修正
+		if (function_exists('mb_strimwidth')){
+			$contentText = mb_strimwidth($contentText, 0, self::CONTENT_LENGTH, '…');
+		} else {
+			$contentText = substr($contentText, 0, self::CONTENT_LENGTH) . '...';
+		}
+		return $contentText;
 	}
 }
 ?>

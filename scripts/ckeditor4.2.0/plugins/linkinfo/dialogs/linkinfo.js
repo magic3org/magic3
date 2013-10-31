@@ -95,7 +95,7 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 							url += '?entryid=' + contentId;
 							break;
 						case 'wiki':
-							url += '?' + contentId;
+							url += '?' + encodeURIComponent(contentId);
 							break;
 					}
 				} else {
@@ -213,6 +213,8 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 
 								if (jsondata.content){
 									$('#content_text').text(jsondata.content);
+									$('#content2_image').hide();
+									$('#content2_text').hide();
 								}
 								
 								// URLを更新
@@ -259,8 +261,19 @@ CKEDITOR.dialog.add('linkinfoDialog', function(editor){
 					},
 					{
 						type: 'html',
-						//padding: '5px',
 						html: '<p id="content_text" style="white-space: -moz-pre-wrap; white-space: pre-wrap; word-wrap: break-word;"></p>'
+					},
+					{
+						type: 'hbox',
+						widths: [ '20%', '80%' ],
+						children: [
+						{
+							type: 'html',
+							html: '<p id="content2_image"></p>'
+						},{
+							type: 'html',
+							html: '<p id="content2_text" style="white-space: -moz-pre-wrap; white-space: pre-wrap; word-wrap: break-word;"></p>'
+						} ]
 					},
 					{
 						type: 'text',
