@@ -107,11 +107,21 @@ function SetUrl(url)
 	preImage.attr('src', url);
 	preImage.css('display', '');
 }
+// 作成リンク取得用
+function setLinkUrl(url)
+{
+	$('#item_link_url').val(url);
+}
+// URL作成
+function createUrl(deviceType)
+{
+	m3CreateLinkUrl(''/*PC用リンク*/, '', setLinkUrl);
+}
 $(function(){
+	// CKEditorプラグイン直接実行
+	m3LoadCKTools();
+	
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_title');
-	//m3_setHtmlEditor('item_desc');
-	//m3_setHtmlEditor('item_url');
 	m3SetWysiwygEditor('item_title', 100, false);
 	m3SetWysiwygEditor('item_desc', 100, false);
 	m3SetWysiwygEditor('item_url', 100, false);
@@ -235,8 +245,8 @@ $(function(){
 	    <td><input type="text" id="item_bgcolor" name="item_bgcolor" value="{BGCOLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_bgcolor);" />&nbsp;&nbsp;</td>
 	</tr>
         <tr>
-	    <td class="table-headside">リンク先URL</td>
-	    <td><input type="text" name="item_link_url" value="{LINK_URL}" size="80" maxlength="150" style="width:100%;"/></td>
+	    <td class="table-headside">リンク先</td>
+	    <td><input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" size="80" maxlength="150" style="width:80%;"/><input type="button" class="button" onclick="createUrl('');" value="URL作成" /></td>
 	</tr>
 	<tr class="even"><td colspan="2" align="right"><input type="reset" class="button" value="リセット" /><input type="button" class="button" onclick="updateItem();" value="更新" />
 	</td>

@@ -86,6 +86,20 @@ function SetUrl(url)
 	// 画像表示
 	updateImage();
 }
+// URL作成
+function createUrl(deviceType)
+{
+	m3CreateLinkUrl(''/*PC用リンク*/, '', setLinkUrl);
+}
+// 作成リンク取得用
+function setLinkUrl(url)
+{
+	$('#item_link_url').val(url);
+}
+$(function(){
+	// CKEditorプラグイン直接実行
+	m3LoadCKTools();
+});
 //]]>
 </script>
 <div align="center">
@@ -188,7 +202,7 @@ function SetUrl(url)
         <tr>
 	    <td class="table-headside"><span {_HELP_IMAGE_LINK}>リンク</span></td>
 	    <td colspan="3"><input type="checkbox" name="item_use_link" {USE_LINK} />あり
-	    &nbsp;&nbsp;リンク先：<input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" size="80" maxlength="120" />
+	    &nbsp;&nbsp;<label>リンク先：<input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" size="80" maxlength="120" style="width:70%;" /></label><input type="button" class="button" onclick="createUrl('');" value="URL作成" />
 	    </td>
 	</tr>
 	<tr class="even">
