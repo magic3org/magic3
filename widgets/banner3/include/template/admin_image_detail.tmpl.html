@@ -127,10 +127,22 @@ function setLinkUrl(url)
 {
 	$('#item_link_url').val(url);
 }
+function setLinkUrlS(url)
+{
+	$('#item_link_url_s').val(url);
+}
 // URL作成
 function createUrl(deviceType)
 {
-	m3CreateLinkUrl(0/*PC用リンク*/, '', setLinkUrl);
+	switch (deviceType){
+		case 0:
+		default:
+			m3CreateLinkUrl(0, '', setLinkUrl);
+			break;
+		case 2:
+			m3CreateLinkUrl(2, '', setLinkUrlS);
+			break;
+	}
 }
 function setupItems()
 {
@@ -218,8 +230,8 @@ $(function(){
 	</tr>
 	<tr>
 	    <td class="table-headside"><span {_HELP_IMAGE_LINK_URL}>リンク</span></td>
-	    <td colspan="3"><label><span style="width:10%;display:inline-block;">デフォルト：</span><input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" maxlength="200" style="width:80%;" /></label><input type="button" class="button" onclick="createUrl('');" value="URL作成" /><br />
-	    <label><span style="width:10%;display:inline-block;">スマートフォン：</span><input type="text" id="item_link_url_s" name="item_link_url_s" value="{LINK_URL_S}" maxlength="200" style="width:80%;" /></label><!--<input type="button" class="button" onclick="createUrl(2);" value="URL作成" />-->
+	    <td colspan="3"><label><span style="width:10%;display:inline-block;">デフォルト：</span><input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" maxlength="200" style="width:80%;" /></label><input type="button" class="button" onclick="createUrl(0);" value="URL作成" /><br />
+	    <label><span style="width:10%;display:inline-block;">スマートフォン：</span><input type="text" id="item_link_url_s" name="item_link_url_s" value="{LINK_URL_S}" maxlength="200" style="width:80%;" /></label><input type="button" class="button" onclick="createUrl(2);" value="URL作成" />
 	    </td>
 	</tr>
 	<tr class="even">
