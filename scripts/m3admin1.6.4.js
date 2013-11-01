@@ -352,13 +352,27 @@ function m3LoadCKTools()
  * リンク用のURLを作成
  * あらかじめを実行しておく。
  *
- * @param string accessPoint			アクセスポイント(空=PC,m=携帯,s=スマートフォン)
+ * @param int deviceType				デバイスタイプ(0=PC,1=携帯,2=スマートフォン)
  * @param string url					URL初期値
  * @param function	seturl_callback		コールバック関数
  * @return なし
  */
-function m3CreateLinkUrl(accessPoint, url, seturl_callback)
+function m3CreateLinkUrl(deviceType, url, seturl_callback)
 {
+	// アクセスポイント(空=PC,m=携帯,s=スマートフォン)取得
+	var accessPoint;
+	switch (deviceType){
+		case 0:		// PC用
+		default:
+			accessPoint = '';
+			break;
+		case 1:		// 携帯用
+			accessPoint = 'm';
+			break;
+		case 2:		// スマートフォン用
+			accessPoint = 's';
+			break;
+	}
 	_m3AccessPoint = accessPoint;
 	_m3Url = url;
 	_m3SetUrlCallback = seturl_callback;

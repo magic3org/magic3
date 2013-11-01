@@ -7,18 +7,13 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: smenudef_detail.tmpl.html 4935 2012-06-05 09:40:47Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
 function selectMenu(){
-	document.main.submit();
-	return true;
-}
-function selectPage(){
-	document.main.act.value = 'select';
 	document.main.submit();
 	return true;
 }
@@ -45,30 +40,27 @@ function cancelItem(){
 	document.main.submit();
 	return true;
 }
-function showUrl(url){
-	m3ShowPreviewWindow(0, url);
-	return false;
-}
-function createContent()
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow()
 {
-	m3ShowStandardWindow("{ADMIN_URL}?cmd=configwidget&openby=simple&widget={CONTENT_WIDGET_ID}&task=content_detail");
+	var url = $('#item_url').val();
+	m3ShowPreviewWindow({DEVICE_TYPE}, url);
 }
-function m3UpdateByChildWindow(serial)
+// URL作成
+function createUrl()
 {
-	// コンテンツ選択メニュー作成
-	m3_ajax_request('', 'task=smenudef_detail&act=getmenu&content_serial=' + serial, ajax_success_func, ajax_failure_func);
+	var url = $('#item_url').val();
+	m3CreateLinkUrl({DEVICE_TYPE}, url, setLinkUrl);
 }
-function ajax_success_func(request, retcode, jsondata)
+// 作成リンク取得用
+function setLinkUrl(url)
 {
-	if (jsondata.menu_html){
-		$('#content_menu').html(jsondata.menu_html);
-		selectPage();
-	}
+	$('#item_url').val(url);
 }
-function ajax_failure_func(request)
-{
-	alert('ajax failure!');
-}
+$(function(){
+	// CKEditorプラグイン直接実行
+	m3LoadCKTools();
+});
 //]]>
 </script>
 <div align="center">
@@ -88,7 +80,7 @@ function ajax_failure_func(request)
 
 <table class="simple-table">
     <tbody>
-        <tr>
+    <tr>
 	    <td class="table-headside" width="150"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></td>
 	    <td width="700" colspan="3">
 	    <select name="item_sel_menuid" onchange="selectMenu();">
@@ -103,7 +95,7 @@ function ajax_failure_func(request)
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_MENUDEF_ITEM_TYPE}>{_LC_LABEL_ITEM_TYPE}</span></td>
 	    <td>
 	    <select name="item_type">
@@ -120,57 +112,30 @@ function ajax_failure_func(request)
 	    </select>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_MENUDEF_SEL_LINK}>{_LC_LABEL_SELECT_LINK}</span></td>
-	    <td colspan="3">
-	    {_LC_LABEL_PAGE_ID}
-	    <select name="item_sub_id" onchange="selectPage();">
-	        <option value="">-- {_LC_LABEL_UNSELECTED} --</option>
-	        <patTemplate:tmpl name="sub_id_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-		<option value="_root" {ROOT_SELECTED}>[ {_LC_LABEL_LINK_TOP} ]</option>
-		<option value="_other" {OTHER_SELECTED}>[ {_LC_LABEL_INPUT} ]</option>
-	    </select>&nbsp;&nbsp;{ATTR}<br />
-	    <patTemplate:tmpl name="sel_content" visibility="hidden">
-	    {_LC_LABEL_CONTENT}
-	    <span id="content_menu"><select name="item_content_id" onchange="selectPage();">
-	    	<option value="">-- {_LC_LABEL_UNSELECTED} --</option>
-	        <patTemplate:tmpl name="content_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select></span><input type="button" class="button" onclick="createContent();" value="コンテンツを追加" />
-	    </patTemplate:tmpl>
-	    <patTemplate:tmpl name="input_url" visibility="hidden">
-	    <input type="text" name="item_url" value="{SEL_URL}" size="80" maxlength="120" />
-	    </patTemplate:tmpl>
-	    <patTemplate:tmpl name="input_no_url" visibility="hidden"><input type="hidden" name="item_url" value="{SEL_URL}" /></patTemplate:tmpl>
+    <tr>
+	    <td class="table-headside"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></td>
+	    <td colspan="3"><input type="text" id="item_url" name="item_url" value="{URL}" style="width:80%" readonly /><input type="button" class="button" onclick="createUrl();" value="{_LC_LABEL_CREATE_URL}" /><input type="image" src="{PREVIEW_IMG}" width="16" height="16" border="0" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" onclick="previewInOtherWindow();return false;" />
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_URL}</span></td>
-	    <td colspan="3">
-	    <a id="linkurl" href="#" onclick="showUrl('{SEL_URL}');">{SEL_URL}</a>
-	    </td>
-	</tr>
-        <tr>
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_ITEM_VISIBLE}</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} />{_LC_LABEL_VISIBLE}&nbsp;&nbsp;<input type="checkbox" name="item_link_content" {LINK_CONTENT} />{_LC_MSG_LINK_TO_CONTENT}</td>
+	    <td colspan="3"><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} />{_LC_LABEL_VISIBLE}<br /><input type="checkbox" name="item_user_limited" {USER_LIMITED_CHECKED} />{_LC_MSG_USER_LIMITED}<br />
+		<input type="checkbox" name="item_link_content" {LINK_CONTENT} />{_LC_MSG_LINK_TO_CONTENT}</td>
 	</tr>
         <!--<tr>
 	    <td class="table-headside"><span {_HELP_MENUDEF_DESC}>{_LC_LABEL_DESC}</span></td>
 	    <td colspan="3"><input type="text" name="item_desc" value="{DESC}" size="100" maxlength="100" /></td>
 	</tr>-->
-    <tr class="even">
+    <tr>
 	    <td class="table-headside"><span {_HELP_MENUDEF_TITLE}>{_LC_LABEL_TITLE}</span></td>
 	    <td colspan="3">
-		<input type="text" name="item_title" value="{TITLE}" maxlength="300" style="width:95%" />&nbsp;&nbsp;{LANG}<br />
+		<input type="text" name="item_title" value="{TITLE}" maxlength="300" style="width:80%" />&nbsp;&nbsp;{LANG}<br />
 	    <patTemplate:tmpl name="input_title" visibility="hidden">
-	    <input type="text" name="item_title_{ID}" value="{VALUE}" maxlength="300" style="width:95%" />&nbsp;&nbsp;{LANG}<br />
+	    <input type="text" name="item_title_{ID}" value="{VALUE}" maxlength="300" style="width:80%" />&nbsp;&nbsp;{LANG}<br />
 	    </patTemplate:tmpl>
 		</td>
 	</tr>
-	<tr>
+	<tr class="even">
 	<td colspan="4" align="right">
 <patTemplate:tmpl name="del_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" />

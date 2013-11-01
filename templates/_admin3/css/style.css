@@ -35,6 +35,9 @@ input, select, textarea {
 input[type="checkbox"] {
 	margin-right: 2px;
 }
+input[type="image"]:disabled {
+	cursor: default;
+}
 /*
 a:link, a:visited {
 color: #333;

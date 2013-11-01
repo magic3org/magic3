@@ -13,9 +13,9 @@
  * @link       http://www.magic3.org
  */
 CKEDITOR.plugins.setLang( 'linkinfo', 'ja', {
-	toolbar: 'Magic3リンク作成',
-	title: 'Magic3リンク作成',
-	tab_info_title: 'リンク情報',
+	toolbar: 'Magic3 URL作成',
+	title: 'Magic3 URL作成',
+	tab_info_title: 'URL情報',
 	tab_advanced_title: '高度な設定',
 	link_target_title: 'リンク対象を選択してください。',
 	page_title: 'ページ',

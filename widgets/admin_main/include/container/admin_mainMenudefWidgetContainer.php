@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainMenudefWidgetContainer.php 5812 2013-03-09 13:07:25Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -738,15 +738,9 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				break;
 		}
 		// 項目表示、項目利用可否チェックボックス
-		$visibleStr = '';
-		if ($visible) $visibleStr = 'checked';
-		$this->tmpl->addVar("_widget", "sel_item_visible", $visibleStr);
-		$checked = '';
-		if (!empty($userLimited)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "user_limited_checked", $checked);		// ユーザ制限するかどうか
-		$checked = '';
-		if (!empty($linkContent)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "link_content", $checked);
+		$this->tmpl->addVar("_widget", "sel_item_visible", $this->convertToCheckedString($visible));
+		$this->tmpl->addVar("_widget", "user_limited_checked", $this->convertToCheckedString($userLimited));		// ユーザ制限するかどうか
+		$this->tmpl->addVar("_widget", "link_content", $this->convertToCheckedString($linkContent));
 		
 		// 選択中のシリアル番号、IDを設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);

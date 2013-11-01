@@ -1173,7 +1173,7 @@ class PageManager extends Core
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
 					$this->isEditMode = true;			// 一般画面編集モード
 					$this->isPageEditable = true;		// 一般画面ページ編集可能モードに設定(コンテキストメニュー表示)
-					
+
 					// 管理画面用ライブラリを追加
 					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
 						$this->addAdminScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
