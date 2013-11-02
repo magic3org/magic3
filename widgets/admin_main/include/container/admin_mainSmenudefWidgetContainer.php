@@ -24,9 +24,9 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	private $menuId;		// 現在選択中のメニューID
 	private $menuItemType;	// メニュー項目タイプ
 	private $menuDeviceType;	// メニューの端末タイプ
+	private $itemTypeArray;		// メニュー項目の種類
 	private $isExistsMenuItem;		// メニュー項目が存在するかどうか
 	private $isExistsPreviewMenuItem;		// プレビューメニュー項目が存在するかどうか
-	private $itemTypeArray;		// メニュー項目の種類
 	private $isMultiLang;			// 多言語対応画面かどうか
 	private $availableLangRows;	// 利用可能な言語
 	private $availableLangArray;	// 利用可能な言語
@@ -138,12 +138,6 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_link_type'] = $this->_('Link Type');		// 表示方法
 			$localeText['label_link_self'] = $this->_('Open page in the same window');		// 同ウィンドウで表示
 			$localeText['label_link_other'] = $this->_('Open page in the other window');		// 別ウィンドウで表示
-//			$localeText['label_select_link'] = $this->_('Select Link Type');		// リンク先を選択
-//			$localeText['label_unselected'] = $this->_('Unselected');	// 未選択
-//			$localeText['label_link_top'] = $this->_('Top');	// トップ
-//			$localeText['label_input'] = $this->_('Input URL');	// URL任意設定
-//			$localeText['label_page_id'] = $this->_('Page ID:');	// ページID：
-//			$localeText['label_content'] = $this->_('General Contents:');	// 汎用コンテンツ：
 			$localeText['label_link_url'] = $this->_('Link URL');	// リンク先URL
 			$localeText['label_create_url'] = $this->_('Create URL');	// URLを作成
 			$localeText['label_item_visible'] = $this->_('Item Control');	// 表示制御
@@ -169,7 +163,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_check'] = $this->_('Select');			// 選択
 			$localeText['label_name'] = $this->_('Name');			// 名前
 			$localeText['label_lang'] = $this->_('Language');			// 言語
-			$localeText['label_url'] = $this->_('Url');			// リンク先URL
+			$localeText['label_link_url'] = $this->_('Link URL');			// リンク先URL
 			$localeText['label_link_type'] = $this->_('Link Type');			// 表示方法
 			$localeText['label_visible'] = $this->_('Visible');			// 公開
 			$localeText['label_operation'] = $this->_('Operation');		// 操作
@@ -353,7 +347,6 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			// 入力チェック
 			$this->checkInput($name, $this->_('Name'));		// 名前
 			$this->checkInput($this->menuId, $this->_('Menu ID'));	// メニューID
-			//$this->checkInput($url, 'リンク先');
 
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
@@ -396,7 +389,6 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		} else if ($act == 'update'){		// 項目更新の場合
 			// 入力チェック
 			$this->checkInput($name, $this->_('Name'));		// 名前
-			//$this->checkInput($url, 'リンク先');
 
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){

@@ -21,14 +21,11 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	private $db;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号(メニュー項目IDを使用)
 	private $serialArray = array();			// 表示中のシリアル番号
-	private $currentPageSubId;	// 現在のページサブID
-	private $contentId;			// 現在のコンテンツID
-	private $isExistsMenuItem;		// メニュー項目が存在するかどうか
 	private $menuId;		// 現在選択中のメニューID
 	private $menuItemType;	// メニュー項目タイプ
 	private $menuDeviceType;	// メニューの端末タイプ
 	private $itemTypeArray;		// メニュー項目の種類
-	private $menuHtml;	// コンテンツメニュー
+	private $isExistsMenuItem;		// メニュー項目が存在するかどうか
 	private $isMultiLang;			// 多言語対応画面かどうか
 	private $availableLangRows;	// 利用可能な言語
 	private $availableLangArray;	// 利用可能な言語
@@ -52,6 +49,8 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	const ITEM_NAME_HEAD = 'item_name_';				// 多言語対応名前ヘッダ部
 	const ITEM_TITLE_HEAD = 'item_title_';				// 多言語対応タイトルヘッダ部
 	const TREE_ITEM_HEAD = 'treeitem_';		// ツリー項目IDヘッダ
+	const PREVIEW_ICON_FILE = '/images/system/preview.png';		// プレビュー用アイコン
+	const PREVIEW_TITLE = 'プレビュー';
 	
 	/**
 	 * コンストラクタ
@@ -146,13 +145,8 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_link_type'] = $this->_('Link Type');		// 表示方法
 			$localeText['label_link_self'] = $this->_('Open page in the same window');		// 同ウィンドウで表示
 			$localeText['label_link_other'] = $this->_('Open page in the other window');		// 別ウィンドウで表示
-			$localeText['label_select_link'] = $this->_('Select Link Type');		// リンク先を選択
-			$localeText['label_unselected'] = $this->_('Unselected');	// 未選択
-			$localeText['label_link_top'] = $this->_('Top');	// トップ
-			$localeText['label_input'] = $this->_('Input URL');	// URL任意設定
-			$localeText['label_page_id'] = $this->_('Page ID:');	// ページID：
-			$localeText['label_content'] = $this->_('General Contents:');	// 汎用コンテンツ：
-			$localeText['label_url'] = $this->_('URL');	// リンク先URL
+			$localeText['label_link_url'] = $this->_('Link URL');	// リンク先URL
+			$localeText['label_create_url'] = $this->_('Create URL');	// URLを作成
 			$localeText['label_item_visible'] = $this->_('Item Control');	// 表示制御
 			$localeText['label_visible'] = $this->_('Visible');	// 公開
 			$localeText['label_title'] = $this->_('Title');	// タイトル
@@ -177,7 +171,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_check'] = $this->_('Select');			// 選択
 			$localeText['label_name'] = $this->_('Name');			// 名前
 			$localeText['label_lang'] = $this->_('Language');			// 言語
-			$localeText['label_url'] = $this->_('URL');			// リンク先URL
+			$localeText['label_link_url'] = $this->_('Link URL');			// リンク先URL
 			$localeText['label_link_type'] = $this->_('Link Type');			// 表示方法
 			$localeText['label_visible'] = $this->_('Visible');			// 公開
 			$localeText['label_operation'] = $this->_('Operation');		// 操作
@@ -383,8 +377,6 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;		// チェックボックス
 		$userLimited = ($request->trimValueOf('item_user_limited') == 'on') ? 1 : 0;		// ユーザ制限するかどうか
 		$linkContent = ($request->trimValueOf('item_link_content') == 'on') ? 1 : 0;		// コンテンツにリンクしてメニュー項目を表示制御するかどうか
-		$this->currentPageSubId = $request->trimValueOf('item_sub_id');			// ページサブID
-		$this->contentId = $request->trimValueOf('item_content_id');			// コンテンツID
 		$url = $request->trimValueOf('item_url');		// 決定したURL
 		$url = str_replace($this->gEnv->getRootUrl(), M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $url);// マクロ変換
 		
@@ -413,20 +405,6 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->menuDeviceType = 0;	// メニューの端末タイプ
 		$ret = $this->db->getMenuId($this->menuId, $row);
 		if ($ret) $this->menuDeviceType = $row['mn_device_type'];
-		
-		// コンテンツタイプを取得
-		switch ($this->menuDeviceType){
-			case 0:			// PC用
-			default:
-				$contType = self::CONTENT_TYPE_PC;			// 汎用コンテンツのコンテンツタイプ
-				break;
-			case 1:			// 携帯用
-				$contType = self::CONTENT_TYPE_MOBILE;			// 汎用コンテンツのコンテンツタイプ
-				break;
-			case 2:			// スマートフォン用
-				$contType = self::CONTENT_TYPE_SMARTPHONE;			// 汎用コンテンツのコンテンツタイプ
-				break;
-		}
 		
 		$reloadData = false;		// データの再読み込み
 		if ($act == 'add'){// 新規追加
@@ -525,27 +503,6 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			}
 			$this->gCache->clearCacheByWidgetType(self::WIDGET_TYPE_MENU);		// キャッシュをクリア
 			$this->gPage->updateParentWindow();// 親ウィンドウを更新
-		} else if ($act == 'select'){	// ページサブIDを変更
-			if ($this->currentPageSubId == '_root'){
-				$url = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/';
-			} else if ($this->currentPageSubId == '_other'){		// 任意設定以外のとき
-				$url = '';
-			} else {
-				$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->currentPageSubId;
-				if (!empty($this->contentId)) $url .= '&' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $this->contentId;
-			}
-		} else if ($act == 'getmenu'){		// コンテンツ選択メニュー取得
-			// コンテンツIDを取得
-			$contentSerial = $request->trimValueOf('content_serial');
-			$ret = $this->db->getContentBySerial($contentSerial, $row);
-			if ($ret) $this->contentId = $row['cn_id'];
-			
-			// コンテンツ選択メニューを作成
-			$this->menuHtml  = '<select name="item_content_id" onchange="selectPage();">';
-	        $this->menuHtml .= '<option value="">-- 未選択 --</option>';
-			$this->db->getAllContents($langId, $contType, array($this, 'contentListLoop'));
-			$this->menuHtml .= '</select>';
-			$this->gInstance->getAjaxManager()->addData('menu_html', $this->menuHtml);
 		} else {
 			$reloadData = true;		// データの再読み込み
 		}
@@ -572,15 +529,6 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					$userLimited = $row['md_user_limited'];// ユーザ制限するかどうか
 					$url = $row['md_link_url'];	// リンク先
 					
-					// リンク先を解析
-					if ($url == M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/'){		// トップのとき
-						$this->currentPageSubId = '_root';
-					} else {
-						// システム以下へのリンクかチェック
-						$testUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);		// マクロ展開
-						$ret = $this->gEnv->parseUrl($testUrl, $pageId, $pageSubId, $paramArray);
-						if (!$ret) $this->currentPageSubId = '_other';		// 他サイトへのリンクのとき
-					}
 					// コンテンツにリンクしてメニュー項目を表示制御するかどうか
 					$linkContent = 0;
 					if (!empty($row['md_content_type'])) $linkContent = 1;			// リンクコンテンツが設定されている場合はメニューの表示制御を行う
@@ -596,114 +544,11 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		// リンク先を実URLに変換
 		$url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);		// マクロ展開
 		
-		$contentType = '';		// コンテンツタイプ(ページ属性)
-		if ($this->currentPageSubId == '_root'){
-			$this->tmpl->setAttribute('input_no_url', 'visibility', 'visible');// URL非表示データ
-			$this->tmpl->addVar('_widget', 'root_selected', 'selected');		// ページサブID選択
-		} else if ($this->currentPageSubId == '_other'){
-			$this->tmpl->setAttribute('input_url', 'visibility', 'visible');// URL入力エリア表示
-			$this->tmpl->addVar('_widget', 'other_selected', 'selected');		// ページサブID選択
-		} else {		// ルート、任意設定以外のとき
-			$this->tmpl->setAttribute('input_no_url', 'visibility', 'visible');// URL非表示データ
-
-			// URLを解析
-			$ret = $this->gEnv->parseUrl($url, $pageId, $pageSubId, $paramArray);
-			if ($ret){
-				$this->currentPageSubId = $pageSubId;
-
-				// ページ情報を取得
-				$ret = $this->db->getPageInfo($this->gEnv->getDefaultPageId(), $this->currentPageSubId, $row);
-				if ($ret){
-					$contentType = $row['pn_content_type'];
-				}
-				// メニューの端末タイプごとのアクセスポイントを取得
-				// 汎用コンテンツのコンテンツタイプを取得
-				switch ($this->menuDeviceType){
-					case 0:			// PC用
-					default:
-						$url = $this->gEnv->getDefaultUrl();
-						break;
-					case 1:			// 携帯用
-						$url = $this->gEnv->getDefaultMobileUrl();
-						break;
-					case 2:			// スマートフォン用
-						$url = $this->gEnv->getDefaultSmartphoneUrl();
-						break;
-				}
-				
-				// 表示データタイプごとの処理
-				switch ($contentType){
-					case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-						$this->contentId = $paramArray[M3_REQUEST_PARAM_CONTENT_ID];
-						$url .= '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $this->contentId;
-						break;
-					case M3_VIEW_TYPE_PRODUCT:				// 製品
-					case M3_VIEW_TYPE_BBS:					// BBS
-					case M3_VIEW_TYPE_BLOG:				// ブログ
-					case M3_VIEW_TYPE_WIKI:				// wiki
-					case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-					default:
-						$url .= '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->currentPageSubId;
-						break;
-				}
-			}
-		}
-		
-		// 表示データタイプごとの表示処理
-		switch ($contentType){
-			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				$this->tmpl->setAttribute('sel_content', 'visibility', 'visible');// コンテンツ選択メニュー表示
-				$this->db->getAllContents($langId, $contType, array($this, 'contentListLoop'));
-				break;
-			case M3_VIEW_TYPE_PRODUCT:				// 製品
-				break;
-			case M3_VIEW_TYPE_BBS:					// BBS
-				break;
-			case M3_VIEW_TYPE_BLOG:				// ブログ
-				break;
-			case M3_VIEW_TYPE_WIKI:				// wiki
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				break;
-			default:
-				break;
-		}
-		
-		// リンク先設定用メニュー
-		//$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1);// ウィジェットサブIDメニュー作成
-		switch ($this->menuDeviceType){
-			case 0:			// PC用
-			default:
-				$defaultPageId = $this->gEnv->getDefaultPageId();
-				break;
-			case 1:			// 携帯用
-				$defaultPageId = $this->gEnv->getDefaultMobilePageId();
-				break;
-			case 2:			// スマートフォン用
-				$defaultPageId = $this->gEnv->getDefaultSmartphonePageId();
-				break;
-		}
-		$this->db->getPageSubIdList($defaultPageId, ''/*言語なし*/, array($this, 'pageSubIdLoop'));
-		
 		// メニュー項目タイプメニュー
 		$this->createItemTypeMenu();
 		
 		// メニューID選択メニュー作成
 		$this->db->getAllMenuItems($this->menuId, array($this, 'menuIdLoop'));
-		
-		// コンテンツ編集用ウィジェット
-		switch ($contType){
-			case self::CONTENT_TYPE_PC:			// PC用
-			default:
-				$contentEditWidget = self::CONTENT_WIDGET_ID_PC;
-				break;
-			case self::CONTENT_TYPE_MOBILE:			// 携帯用
-				$contentEditWidget = self::CONTENT_WIDGET_ID_MOBILE;
-				break;
-			case self::CONTENT_TYPE_SMARTPHONE:			// スマートフォン用
-				$contentEditWidget = self::CONTENT_WIDGET_ID_SMARTPHONE;
-				break;
-		}
 		
 		// 多言語用入力エリア作成
 		if ($this->isMultiLang){		// 多言語対応の場合
@@ -721,13 +566,12 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "sel_item_name", $name);		// 名前
 		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// タイトル(HTML可)
 		$this->tmpl->addVar("_widget", "desc", $desc);		// 説明
-		$this->tmpl->addVar("_widget", "sel_url", $url);		// 表示するURL
-		$this->tmpl->addVar("input_url", "sel_url", $url);		// 表示するURL
-		$this->tmpl->addVar("input_no_url", "sel_url", $url);		// 表示するURL
-		$attrStr = '';
-		if (!empty($contentType)) $attrStr = $this->_('Page Attribute:') . ' ' . $contentType;	// ページ属性：
-		$this->tmpl->addVar("_widget", "attr", $attrStr);		// ページ属性
-		$this->tmpl->addVar('_widget', 'content_widget_id', $contentEditWidget);// コンテンツ表示ウィジェット
+		$this->tmpl->addVar("_widget", "url", $url);		// 表示するURL
+		
+		$previewImg = $this->getUrl($this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE);
+		$this->tmpl->addVar("_widget", "preview_img", $previewImg);
+		$this->tmpl->addVar("_widget", "preview_str", self::PREVIEW_TITLE);	
+		
 		// リンクタイプ
 		switch ($linkType){
 			case 0:			// 同ウィンドウで開くリンク
@@ -747,6 +591,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "menu_id", $this->menuId);		// メニューID
 		$this->tmpl->addVar("_widget", "parent_id", $parentId);		// メニュー項目親ID
 		$this->tmpl->addVar("_widget", "fixed_mode", $fixedMode);		// メニュー定義IDが固定かどうか
+		$this->tmpl->addVar("_widget", "device_type", $this->menuDeviceType);		// デバイスタイプ
 		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
@@ -758,78 +603,6 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$ret = $this->db->getChildMenuItems($this->menuId, $this->serialNo, $rows);
 			if ($ret) $this->tmpl->addVar('del_button', 'del_button_disabled', 'disabled');
 		}
-	}
-	/**
-	 * ページID、取得したデータをテンプレートに設定する
-	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
-	 */
-	function pageIdLoop($index, $fetchedRow, $param)
-	{
-		$selected = '';
-		$row = array(
-			'value'    => $this->convertToDispString($fetchedRow['pg_id']),			// ページID
-			'name'     => $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
-			'selected' => $selected														// 選択中かどうか
-		);
-		$this->tmpl->addVars('main_id_list', $row);
-		$this->tmpl->parseTemplate('main_id_list', 'a');
-		return true;
-	}
-	/**
-	 * ページサブID、取得したデータをテンプレートに設定する
-	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
-	 */
-	function pageSubIdLoop($index, $fetchedRow, $param)
-	{
-		$selected = '';
-		if ($fetchedRow['pg_id'] == $this->currentPageSubId) $selected = 'selected';	// 現在のページサブID
-		
-		$contentType = $fetchedRow['pn_content_type'];
-		$name = $fetchedRow['pg_id'];
-		if (!empty($contentType)) $name .= '[' . $contentType . ']';
-		$name .= ' - ' . $fetchedRow['pg_name'];
-		
-		$row = array(
-			'value'    => $this->convertToDispString($fetchedRow['pg_id']),			// ページID
-			'name'     => $this->convertToDispString($name),			// ページ名
-			'selected' => $selected														// 選択中かどうか
-		);
-		$this->tmpl->addVars('sub_id_list', $row);
-		$this->tmpl->parseTemplate('sub_id_list', 'a');
-		return true;
-	}
-	/**
-	 * 取得したデータをテンプレートに設定する
-	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
-	 */
-	function contentListLoop($index, $fetchedRow, $param)
-	{
-		$id = $fetchedRow['cn_id'];
-		$selected = '';
-		if ($id == $this->contentId) $selected = 'selected';	// 現在のコンテンツID
-		$row = array(
-			'value'    => $this->convertToDispString($id),			// ページID
-			'name'     => $this->convertToDispString($fetchedRow['cn_name']),			// ページ名
-			'selected' => $selected														// 選択中かどうか
-		);
-		$this->tmpl->addVars('content_list', $row);
-		$this->tmpl->parseTemplate('content_list', 'a');
-		
-		// コンテンツ選択メニューHTML
-		$this->menuHtml .= '<option value="' . $id . '" ' . $selected . '>' . $this->convertToDispString($fetchedRow['cn_name']) . '</option>';
-		return true;
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する
