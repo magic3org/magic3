@@ -18,7 +18,7 @@ CKEDITOR.plugins.setLang( 'linkinfo', 'en', {
 	tab_info_title: 'URL Info',
 	tab_advanced_title: 'Advanced Settings',
 	link_target_title: 'Select the link target.',
-	page_title: 'Page',
+	page_list_title: 'Page',
 	content_type_title: 'Content Type',
 	content_list_title: 'Content',
 	access_point_title: 'Access Point',

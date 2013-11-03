@@ -18,7 +18,7 @@ CKEDITOR.plugins.setLang( 'linkinfo', 'ja', {
 	tab_info_title: 'URL情報',
 	tab_advanced_title: '高度な設定',
 	link_target_title: 'リンク対象を選択してください。',
-	page_title: 'ページ',
+	page_list_title: 'ページ',
 	content_type_title: 'コンテンツ種別',
 	content_list_title: 'コンテンツ',
 	access_point_title: 'アクセスポイント',

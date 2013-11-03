@@ -414,11 +414,11 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'm/content';
 INSERT INTO _widgets
 (wd_id,      wd_name,       wd_type,   wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
-('m/content', '汎用コンテンツ - コンテンツ', 'content', 'content', true,       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, '汎用コンテンツを表示。', 1,              true,      true,         true,              now(),         now());
+('m/content', '汎用コンテンツ - メイン', 'content', 'content', true,       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, '汎用コンテンツを表示。', 1,              true,      true,         true,              now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'm/pc_content';
 INSERT INTO _widgets
 (wd_id,      wd_name,          wd_type, wd_content_type, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
-('m/pc_content', '汎用コンテンツ - PC共通コンテンツ', 'content', 'content',  '2.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'PCの汎用コンテンツを自動的に携帯用に変換して表示。', 1,              true,      true,         true,              now(),         now());
+('m/pc_content', '汎用コンテンツ(PC共通) - メイン', 'content', 'content',  '2.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'PCの汎用コンテンツを自動的に携帯用に変換して表示。', 1,              true,      true,         true,              now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'm/content_search_box';
 INSERT INTO _widgets
 (wd_id,                  wd_name,              wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type,         wd_mobile, wd_has_admin, wd_initialized, wd_install_dt, wd_create_dt) VALUES
@@ -488,7 +488,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 's/content';
 INSERT INTO _widgets
 (wd_id,       wd_parent_id, wd_name,      wd_type, wd_content_type,   wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/content', 'default_content', '汎用コンテンツ - コンテンツ', 'content',       'content', true, '2.3.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '画像やテキストからできた汎用コンテンツを表示。', 2,         '', 'content_detail=jquery.tablednd', true, true,         true,           0, 2, 2, '2012-08-18', now(), now());
+('s/content', 'default_content', '汎用コンテンツ - メイン', 'content',       'content', true, '2.3.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '画像やテキストからできた汎用コンテンツを表示。', 2,         '', 'content_detail=jquery.tablednd', true, true,         true,           0, 2, 2, '2012-08-18', now(), now());
 DELETE FROM _widgets WHERE wd_id = 's/slide_menu';
 INSERT INTO _widgets
 (wd_id,        wd_name,           wd_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

@@ -29,15 +29,5 @@ CKEDITOR.editorConfig = function(config){
 	// 追加プラグインの設定
 	config.extraPlugins = 'linkinfo';
 };
-CKEDITOR.on('dialogDefinition', function(e){
-	var dialogName = e.data.name;
-	var dialogDefinition = e.data.definition;
-	dialogDefinition.onShow = function(){
-		// 呼び出し元がiframeの場合は、ダイアログの表示位置を修正
-		if (window.parent != window.self){
-			this.move(this.getPosition().x, 0);
-		}
-	}
-})
 
 
