@@ -124,8 +124,10 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 						default:
 							$contentType = '';
 							break;
-						case 'm':			// 携帯用
-							$contentType = 'mobile';
+						case 'm':			// 携帯用。コンテンツタイプが携帯専用とPC共通がある。
+							$contentType = 'mobile';	// デフォルトの汎用コンテンツタイプ
+							$contentTypeList = $this->getContentTypeList($accessPoint);
+							if (count($contentTypeList) > 0) $contentType = $contentTypeList[0][2];
 							break;
 						case 's':			// スマートフォン用
 							$contentType = 'smartphone';
@@ -284,7 +286,9 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$contentType = $contentTypeArray[$i];
 		
 		for ($i = 0; $i < count($contentType); $i++){
-			$contentTypeList[] = array($contentType[$i]['wd_type'], $contentType[$i]['ls_value']);
+			$contentTitle = $this->getCurrentLangString($contentType[$i]['wd_content_name']);
+			if (empty($contentTitle)) $contentTitle = $contentType[$i]['ls_value'];
+			$contentTypeList[] = array($contentType[$i]['wd_type'], $contentTitle, $contentType[$i]['wd_content_info']);
 		}
 		return $contentTypeList;
 	}

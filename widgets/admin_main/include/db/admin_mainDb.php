@@ -3229,7 +3229,7 @@ class admin_mainDb extends BaseDb
 		$caseStr .= 'END AS contentno';
 		$contentStr = rtrim($contentStr, ', ');
 		
-		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_type, wd_content_name, ls_value, ' . $caseStr . ' FROM _page_def ';
+		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_type, wd_content_info, wd_content_name, ls_value, ' . $caseStr . ' FROM _page_def ';
 		$queryStr .=   'LEFT JOIN _widgets ON pd_widget_id = wd_id AND wd_deleted = false ';
 		$queryStr .=   'LEFT JOIN _page_id ON pd_sub_id = pg_id AND pg_type = 1 ';// ページサブID
 		$queryStr .=   'LEFT JOIN _language_string ON wd_type = ls_id AND ls_type = 2 AND ls_language_id = ? ';	// コンテンツ種別名
@@ -3239,9 +3239,9 @@ class admin_mainDb extends BaseDb
 		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
 		$queryStr .=   'AND wd_active = true ';				// 一般ユーザが実行可能かどうか
 		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// ページ共通ウィジェットか公開中のページ上のウィジェット
-		$queryStr .=   'AND wd_edit_content = true ';
-//		$queryStr .=   'AND wd_type in (' . $contentStr . ') ';
-		$queryStr .=   'AND wd_type != \'\' ';
+//		$queryStr .=   'AND wd_edit_content = true ';			// ##### メインウィジェットに限定しない #####
+		$queryStr .=   'AND wd_type in (' . $contentStr . ') ';	// ##### パラメータのコンテンツタイプに限定 #####
+//		$queryStr .=   'AND wd_type != \'\' ';
 //		$queryStr .=   'AND wd_use_instance_def = false ';		// インスタンス定義を使用しないウィジェットをメインコンテンツ編集ウィジェットとする
 		$queryStr .= 'ORDER BY pageno, contentno';
 		$retValue = $this->selectRecords($queryStr, array($langId, $setId), $rows);
