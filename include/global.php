@@ -48,7 +48,7 @@ define('M3_ENCODING',	'UTF-8');	// 内部エンコーディング
 // ########## システム関係 ##########
 // システム基本情報
 define('M3_SYSTEM_NAME',			'Magic3');		// システム名称
-define('M3_SYSTEM_VERSION',			'2.7.14');		// システムのバージョン
+define('M3_SYSTEM_VERSION',			'2.7.15');		// システムのバージョン
 define('M3_SYSTEM_RELEASE_DATE',	'2013/11/3');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
