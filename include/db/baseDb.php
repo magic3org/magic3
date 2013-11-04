@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: baseDb.php 5454 2012-12-10 00:59:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -445,6 +445,7 @@ class BaseDb extends Core
 		$backTraceMsg = ob_get_contents();
 		ob_end_clean();
 		$msg .= ' [BACKTRACE]' . $backTraceMsg;*/
+		$msg .= ' [BACKTRACE]' . $ex->getTraceAsString();
 		
 		$gLogManager->error(__METHOD__, 'DBエラー発生: ' . $ex->getMessage() . $msg);
 	}
