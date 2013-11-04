@@ -23,8 +23,6 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 	private $paramObj;		// 定義取得用
 	private $templateType;		// テンプレートのタイプ
 	private $currentUserLogined;	// 現在のユーザはログイン中かどうか
-	private $menuData = array();			// Joomla用のメニューデータ
-	private $menuTree = array();			// Joomla用のメニュー階層データ
 	const DEFAULT_CONFIG_ID = 0;
 	const MAX_MENU_TREE_LEVEL = 5;			// メニュー階層最大数
 	
@@ -84,16 +82,10 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 			// ユーザ制限があるときはログイン時のみ表示
 			if (!$limitUser || $this->currentUserLogined){
 				// メニュー作成
-				$this->menuData['path'] = array();
-				$this->menuData['active_id'] = 0;
 				$parentTree = array();			// 選択されている項目までの階層パス
 				$menuHtml = $this->createMenu($menuId, 0, 0, $tmp, $parentTree);
 				
 				if (!empty($menuHtml)) $this->tmpl->addVar("_widget", "menu_html", $menuHtml);
-				
-				// Joomla用のメニュー階層データを設定
-				$this->menuData['tree'] = $this->menuTree;
-				$this->gEnv->setJoomlaMenuData($this->menuData);
 			} else {
 				// 出力抑止
 				$this->cancelParse();
@@ -123,27 +115,6 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 			$itemCount = count($rows);
 			for ($i = 0; $i < $itemCount; $i++){
 				$row = $rows[$i];
-				$classArray = array();
-				$linkClassArray = array();
-				$attr = '';
-				// Joomla用メニューデータ(デフォルト値)
-				$menuItem = new stdClass;		// Joomla用メニューデータ
-				$menuItem->type = 'alias';		// 内部リンク。外部リンク(url)
-				$menuItem->id = $index + 1;
-				$menuItem->level = $level + 1;
-				$menuItem->active = false;
-				$menuItem->parent = false;
-				// 階層作成用
-				$menuItem->deeper = false;
-				$menuItem->shallower = false;
-				$menuItem->level_diff = 0;
-				$menuTreeCount = count($this->menuTree);
-				if ($menuTreeCount > 0){		// 前データがあるときは取得
-					$menuLastItem = $this->menuTree[$menuTreeCount -1];
-					$menuLastItem->deeper = ($menuItem->level > $menuLastItem->level);
-					$menuLastItem->shallower = ($menuItem->level < $menuLastItem->level);
-					$menuLastItem->level_diff = $menuLastItem->level - $menuItem->level;
-				}
 									
 				// 非表示のときは処理を飛ばす
 				if (!$row['md_visible']) continue;
@@ -156,9 +127,6 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 					// ログインユーザに表示制限されている場合はメニューを追加しない
 					if (!empty($row['cn_user_limited']) && !$this->currentUserLogined) continue;
 				}
-						
-				// Joomla1.0対応
-				if ($this->templateType == 0) $linkClassArray[] = 'mainlevel';
 				
 				// リンク先の作成
 				$linkUrl = $row['md_link_url'];
@@ -167,36 +135,11 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 				
 				// 選択状態の設定
 				if ($this->checkMenuItemUrl($linkUrl)){
-					$attr = ' id="current"';		// メニュー項目を選択状態にする
-					$classArray[] = 'active';
 					$hasSelectedChild = true;
-					
-					// Joomla用メニュー階層データ
-					$pathTree = $parentTree;			// パスを取得
-					$pathTree[] = $index + 1;
-					$this->menuData['path'] = $pathTree;
-					$this->menuData['active_id'] = $index + 1;
-					$menuItem->active = true;
-				}
-				
-				// リンクタイプに合わせてタグを生成
-				$linkOption = '';
-				if (count($linkClassArray) > 0) $linkOption .= 'class="' . implode(' ', $linkClassArray) . '"';
-				switch ($row['md_link_type']){
-					case 0:			// 同ウィンドウで開くリンク
-					default:
-						$menuItem->browserNav = 0;		// ウィンドウオープン方法(0=同じウィンドウ、1=別タブ、2=別ウィンドウ)
-						break;
-					case 1:			// 別ウィンドウで開くリンク
-						$linkOption .= ' target="_blank"';
-						$menuItem->browserNav = 1;		// ウィンドウオープン方法(0=同じウィンドウ、1=別タブ、2=別ウィンドウ)
-						break;
 				}
 				
 				// メニュー項目を作成
-				//$name = $row['md_name'];
 				$name = $this->getCurrentLangString($row['md_name']);
-				//if (empty($name)) continue;
 				$title = $this->getCurrentLangString($row['md_title']);		// タイトル(HTML可)
 				if (empty($title)) $title = $name;
 				if (empty($title)) continue;
@@ -209,96 +152,16 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 								
 				switch ($row['md_type']){
 					case 0:			// リンク項目のとき
-						// Joomla用メニューデータ作成
-						//$menuItem->title = $name;
-						$menuItem->title = $title;
-						$menuItem->flink = $linkUrl;
-						
-						// ##### Joomla用メニュー階層更新 #####
-						$this->menuTree[] = $menuItem;
-						
-						// ##### タグ作成 #####
-						if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-						//$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $this->convertToDispString($name) . '</span></a></li>' . M3_NL;
-						$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $title . '</span></a></li>' . M3_NL;
-						break;
-					case 1:			// フォルダのとき
-							// Joomla用メニューデータ作成
-							//$menuItem->title = $name;
-							$menuItem->title = $title;
-							$menuItem->flink = $linkUrl;
-							$menuItem->parent = true;
-							// 階層作成用
-							//$menuItem->deeper = true;
-							//$menuItem->level_diff = 1;
-
-							// ##### Joomla用メニュー階層更新 #####
-							$this->menuTree[] = $menuItem;
-						
-							// 階層を更新
-							//array_push($parentTree, $index + 1);
-							array_push($parentTree, $index);
-							
-							// サブメニュー作成
-							$menuText = $this->createMenu($menuId, $row['md_id'], $level + 1, $hasSelectedChild, $parentTree);
-							
-							// 階層を戻す
-							array_pop($parentTree);
-							
-							// 子項目が選択中のときは「active」に設定
-							if ($hasSelectedChild) $classArray[] = 'active';
-
-							// 先頭に「parent」クラスを追加
-							array_unshift($classArray, 'parent');
-							
-							// ##### タグ作成 #####
-							if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-							//$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $this->convertToDispString($name) . '</span></a>' . M3_NL;
-							$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $title . '</span></a>' . M3_NL;
-							if (!empty($menuText)){
-								$treeHtml .= '<ul>' . M3_NL;
-								$treeHtml .= $menuText;
-								$treeHtml .= '</ul>' . M3_NL;
-							}
-							$treeHtml .= '</li>' . M3_NL;
+					default:		// フォルダ等
+						$treeHtml .= '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $title . '</a><br />' . M3_NL;
 						break;
 					case 2:			// テキストのとき
-						//$treeHtml .= '<li><span>' . $this->convertToDispString($name) . '</span></li>' . M3_NL;
-						$treeHtml .= '<li><span>' . $title . '</span></li>' . M3_NL;
+						$treeHtml .= $title . '<br />' . M3_NL;
 						break;
 					case 3:			// セパレータのとき
-						// Joomla用メニューデータ作成
-						$menuItem->type = 'separator';
-						//$menuItem->title = $name;
-						$menuItem->title = $title;
-						$menuItem->flink = '';
-						
-						// ##### Joomla用メニュー階層更新 #####
-						$this->menuTree[] = $menuItem;
-						
 						// ##### タグ作成 #####
-						//$treeHtml .= '<li><span class="separator">' . $this->convertToDispString($name) . '</span></li>' . M3_NL;
-						$treeHtml .= '<li><span class="separator">' . $title . '</span></li>' . M3_NL;
+						$treeHtml .= '<hr />' . M3_NL;
 						break;
-				}
-				
-				if ($this->templateType == 0){			// Joomla!v1.0のとき
-					$itemRow = array(
-						'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
-						//'name' => $this->convertToDispString($name),			// タイトル
-						'name' => $title,			// タイトル
-						'attr' => $attr,			// liタグ追加属性
-						'option' => $linkOption			// Aタグ追加属性
-					);
-					$this->tmpl->addVars('itemlist', $itemRow);
-					$this->tmpl->parseTemplate('itemlist', 'a');
-				}
-				$menuTreeCount = count($this->menuTree);
-				if ($menuTreeCount > 0){		// 前データがあるときは取得
-					$menuLastItem = $this->menuTree[$menuTreeCount -1];
-					$menuLastItem->deeper = (1 > $menuLastItem->level);
-					$menuLastItem->shallower = (1 < $menuLastItem->level);
-					$menuLastItem->level_diff = $menuLastItem->level - 1;
 				}
 			}
 		}
