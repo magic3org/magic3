@@ -100,9 +100,7 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->configId = $request->trimValueOf('item_id');		// 定義ID
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
-		$isHierMenu = ($request->trimValueOf('is_hier') == 'on') ? 1 : 0;		// 階層化メニューを使用するかどうか
 		$limitUser = ($request->trimValueOf('item_limituser') == 'on') ? 1 : 0;		// ユーザを制限するかどうか
-		$useVerticalMenu = ($request->trimValueOf('item_vertical_menu') == 'on') ? 1 : 0;		// 縦型メニューデザインを使用するかどうか
 		$this->menuId = $request->trimValueOf('menuid');
 		if ($this->menuId == '') $this->menuId = self::DEFAULT_MENU_ID;
 
@@ -124,9 +122,7 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj = new stdClass;
 				$newObj->menuId	= $this->menuId;		// メニューID
 				$newObj->name	= $name;// 表示名
-				$newObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
 				$newObj->limitUser = $limitUser;					// ユーザを制限するかどうか
-				$newObj->useVerticalMenu = $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 				
 				$newParam = new stdClass;
 				$newParam->id = -1;		// 新規追加
@@ -169,10 +165,8 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 							$this->menuId = $targetObj->menuId;		// メニューID
 						} else {			// 新規で既存設定の更新
 							$targetObj->menuId	= $this->menuId;		// メニューID
-							$targetObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
 						}
 						$targetObj->limitUser = $limitUser;					// ユーザを制限するかどうか
-						$targetObj->useVerticalMenu = $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 						
 						// ウィジェットパラメータオブジェクトを更新
 						$ret = $this->updateWidgetParamObjectWithId($this->paramObj[$i]);
@@ -204,9 +198,7 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			$name = $this->createDefaultName();			// デフォルト登録項目名
-			$$isHierMenu = 0;		// 階層化メニューを使用するかどうか
 			$limitUser = 0;					// ユーザを制限するかどうか
-			$useVerticalMenu = 0;		// 縦型メニューデザインを使用するかどうか
 			$this->serialNo = 0;
 		} else {
 			// 定義からウィジェットパラメータを検索して、定義データを取得
@@ -220,16 +212,13 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 				if ($replaceNew){		// データ再取得のとき
 					$this->menuId	= $targetObj->menuId;		// メニューID
 					$name			= $targetObj->name;// 名前
-					$isHierMenu		= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
 					$limitUser		= $targetObj->limitUser;					// ユーザを制限するかどうか
-					$useVerticalMenu = $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 				}
 				$this->serialNo = $this->configId;
 				
 				// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
 				if (!empty($defConfigId) && !empty($defSerial)){
 					$this->tmpl->addVar("_widget", "id_disabled", 'disabled');
-					$this->tmpl->addVar("_widget", "is_hier_disabled", 'disabled');	// ユーザを制限するかどうかを使用不可
 				}
 			}
 		}
@@ -237,21 +226,15 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->createItemMenu();
 		
 		// メニューID選択メニュー作成
-		$this->db->getMenuIdList(array($this, 'menuIdListLoop'));
+		$this->db->getMenuIdList(1/*携帯用*/, array($this, 'menuIdListLoop'));
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		
 		$checked = '';
-		if ($isHierMenu) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "is_hier", $checked);	// 階層化メニューを使用するかどうか
-		$checked = '';
 		if ($limitUser) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "limit_user", $checked);	// ユーザを制限するかどうか
-		$checked = '';
-		if ($useVerticalMenu) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "vertical_menu", $checked);		// 縦型メニューデザインを使用するかどうか
 		
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
@@ -361,7 +344,6 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 
 		// 詳細画面からの引継ぎデータ
 		$menuId = $request->trimValueOf('menuid');
-		$isHierMenu = ($request->trimValueOf('is_hier') == 'on') ? 1 : 0;		// 階層化メニューを使用するかどうか
 		
 		// パラメータオブジェクトを取得
 		$this->paramObj = $this->getWidgetParamObjectWithId();
@@ -402,15 +384,13 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		}
 		// 定義一覧作成
 		$this->createItemList();
+		if ($this->db->getEffectedRowCount() <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 		
 		// メニュー定義画面のURLを作成
-		$taskValue = 'menudef';
-		if (empty($isHierMenu)) $taskValue = 'smenudef';
+		$taskValue = 'smenudef';
 		$menuDefUrl = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . $taskValue . '&openby=tabs&menuid=' . $menuId;
 		$this->tmpl->addVar("_widget", "url", $this->getUrl($menuDefUrl));
 		$this->tmpl->addVar("_widget", "menu_id", $menuId);
-		if ($isHierMenu) $checked = 'on';
-		$this->tmpl->addVar("_widget", "is_hier", $checked);	// 階層化メニューを使用するかどうか
 					
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		

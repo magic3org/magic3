@@ -20,15 +20,17 @@ class menuDb extends BaseDb
 	/**
 	 * メニューIDのリストを取得
 	 *
+	 * @param int $deviceType		端末タイプ(0=PC、1=携帯、2=スマートフォン)
 	 * @param function $callback	コールバック関数
 	 * @return						なし
 	 */
-	function getMenuIdList($callback)
+	function getMenuIdList($deviceType, $callback)
 	{
 		$queryStr  = 'SELECT * FROM _menu_id ';
 		$queryStr .=   'WHERE mn_widget_id = \'\' ';		// ウィジェット制限されていないメニュー
+		$queryStr .=     'AND mn_device_type = ? ';
 		$queryStr .=   'ORDER BY mn_sort_order';
-		$this->selectLoop($queryStr, array(), $callback);
+		$this->selectLoop($queryStr, array($deviceType), $callback);
 	}
 	/**
 	 * メニュー項目を取得

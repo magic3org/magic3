@@ -22,7 +22,6 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 	private $langId;		// 現在の言語
 	private $paramObj;		// 定義取得用
 	private $templateType;		// テンプレートのタイプ
-	private $isHierMenu;		// 階層化メニューを使用するかどうか
 	private $currentUserLogined;	// 現在のユーザはログイン中かどうか
 	private $menuData = array();			// Joomla用のメニューデータ
 	private $menuTree = array();			// Joomla用のメニュー階層データ
@@ -80,12 +79,7 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 		} else {
 			$menuId		= $targetObj->menuId;	// メニューID
 			$name		= $targetObj->name;// 定義名
-			$this->isHierMenu	= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
 			$limitUser	= $targetObj->limitUser;// ユーザを制限するかどうか
-			$useVerticalMenu = $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
-			
-			// 縦型メニューデザイン使用の場合はJoomla用パラメータを設定
-			if (!empty($useVerticalMenu)) $this->gEnv->setCurrentWidgetJoomlaParam(array('moduleclass_sfx' => 'art-vmenu'));
 
 			// ユーザ制限があるときはログイン時のみ表示
 			if (!$limitUser || $this->currentUserLogined){
@@ -229,7 +223,6 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 						$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" ' . $linkOption . '><span>' . $title . '</span></a></li>' . M3_NL;
 						break;
 					case 1:			// フォルダのとき
-						if (!empty($this->isHierMenu)){	// 階層化メニューを使用する場合
 							// Joomla用メニューデータ作成
 							//$menuItem->title = $name;
 							$menuItem->title = $title;
@@ -268,7 +261,6 @@ class m_menuWidgetContainer extends BaseWidgetContainer
 								$treeHtml .= '</ul>' . M3_NL;
 							}
 							$treeHtml .= '</li>' . M3_NL;
-						}
 						break;
 					case 2:			// テキストのとき
 						//$treeHtml .= '<li><span>' . $this->convertToDispString($name) . '</span></li>' . M3_NL;

@@ -43,11 +43,7 @@ $(function(){
 			if (ui.panel.id == 'menu_define'){
 				var url = '';
 				var id = document.main.menuid.value;
-				if (document.main.is_hier.checked){
-					url = "?task=menudef&openby=tabs&menuid=" + id;
-				} else {
-					url = "?task=smenudef&openby=tabs&menuid=" + id;
-				}
+				url = "?task=smenudef&openby=tabs&menuid=" + id;
 				document.getElementById("menu_def").src = url;
 			}
 			return true;
@@ -99,10 +95,9 @@ $(function(){
 	    <td align="center">{ID}
 	    </td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_MENU_DEF}>メニュー定義</span></td>
 	    <td colspan="3">
-	    <input type="checkbox" name="is_hier" {IS_HIER} {IS_HIER_DISABLED} />階層化あり&nbsp;&nbsp;
 	    <select name="menuid" {ID_DISABLED}>
 	        <patTemplate:tmpl name="menu_id_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
@@ -116,12 +111,7 @@ $(function(){
 	    <td colspan="3"><input type="checkbox" name="item_limituser" {LIMIT_USER} />
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_MENU_DESIGN}>デザイン</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_vertical_menu" {VERTICAL_MENU} />縦型メニュー
-	    </td>
-	</tr>
-	<tr>
+	<tr class="even">
 	    <td align="right" colspan="4">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />

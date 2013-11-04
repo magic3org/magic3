@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: s_slide_menuDb.php 3129 2010-05-14 05:37:22Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -20,14 +20,15 @@ class s_slide_menuDb extends BaseDb
 	/**
 	 * メニューIDのリストを取得
 	 *
-	 * @param int	$deviceType		端末タイプ
+	 * @param int $deviceType		端末タイプ(0=PC、1=携帯、2=スマートフォン)
 	 * @param function $callback	コールバック関数
 	 * @return						なし
 	 */
 	function getMenuIdList($deviceType, $callback)
 	{
 		$queryStr  = 'SELECT * FROM _menu_id ';
-		$queryStr .=   'WHERE mn_device_type = ? ';
+		$queryStr .=   'WHERE mn_widget_id = \'\' ';		// ウィジェット制限されていないメニュー
+		$queryStr .=     'AND mn_device_type = ? ';
 		$queryStr .=   'ORDER BY mn_sort_order';
 		$this->selectLoop($queryStr, array($deviceType), $callback);
 	}

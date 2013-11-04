@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_default_menuWidgetContainer.php 3906 2010-12-22 12:10:54Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/default_menuDb.php');
 class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
 	private $langId;
@@ -39,7 +38,6 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new default_menuDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -141,7 +139,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				// 画面定義更新
 				if ($ret && !empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
 					$newConfigId = $newParam->id;
-					$ret = $this->sysDb->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $newConfigId, $name, $this->menuId);
+					$ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $newConfigId, $name, $this->menuId);
 				}
 				
 				if ($ret){
@@ -183,7 +181,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				}
 				// 画面定義更新
 				if (!empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
-					if ($ret) $ret = $this->sysDb->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $this->configId, $targetObj->name, $this->menuId);
+					if ($ret) $ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $this->configId, $targetObj->name, $this->menuId);
 				}
 
 				if ($ret){
@@ -239,7 +237,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->createItemMenu();
 		
 		// メニューID選択メニュー作成
-		$this->db->getMenuIdList(array($this, 'menuIdListLoop'));
+		$this->db->getMenuIdList(0/*PC用*/, array($this, 'menuIdListLoop'));
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
@@ -404,6 +402,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		}
 		// 定義一覧作成
 		$this->createItemList();
+		if ($this->db->getEffectedRowCount() <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 		
 		// メニュー定義画面のURLを作成
 		$taskValue = 'menudef';
@@ -440,7 +439,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 			
 			$defCount = 0;
 			if (!empty($id)){
-				$defCount = $this->sysDb->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
+				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
 			}
 			$operationDisagled = '';
 			if ($defCount > 0) $operationDisagled = 'disabled';

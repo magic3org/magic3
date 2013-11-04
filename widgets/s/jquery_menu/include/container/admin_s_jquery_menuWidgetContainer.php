@@ -283,7 +283,7 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->createItemMenu();
 		
 		// メニューID選択メニュー作成
-		$this->db->getMenuIdList(array($this, 'menuIdListLoop'));
+		$this->db->getMenuIdList(2/*スマートフォン用*/, array($this, 'menuIdListLoop'));
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
