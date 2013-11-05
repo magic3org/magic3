@@ -68,8 +68,7 @@ $(function(){
 <input type="hidden" name="task" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<input type="hidden" name="defserial" value="{DEF_SERIAL}" />
-<input type="hidden" name="defconfig" value="{DEF_CONFIG}" />
+<!-- m3:PostParam -->
 <table width="95%" style="margin: 0 auto;">
 <tr><td><span {_HELP_MENU_DETAIL}><label>メニュー設定</label></span></td>
 <td align="right"><span {_HELP_MENU_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
@@ -103,7 +102,7 @@ $(function(){
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
-	    <span {_HELP_MENU_EDIT_DEF_BTN}><input id="edit_menu" type="button" class="button" value="メニュー定義を編集" /></span>
+	    <!--<span {_HELP_MENU_EDIT_DEF_BTN}><input id="edit_menu" type="button" class="button" value="メニュー定義を編集" /></span>-->
 	    </td>
 	</tr>
         <tr>

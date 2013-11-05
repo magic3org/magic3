@@ -26,7 +26,7 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 	private $paramObj;		// パラメータ保存用オブジェクト
 	private $menuId;		// メニューID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
-	const DEFAULT_MENU_ID = 'main_menu';			// デフォルトメニューID
+	const DEFAULT_MENU_ID = 'm_main_menu';			// デフォルトメニューID
 	
 	/**
 	 * コンストラクタ
@@ -84,28 +84,20 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createDetail($request)
 	{
+		// ページ定義IDとページ定義のレコードシリアル番号を取得
+		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
+		
 		$userId		= $this->gEnv->getCurrentUserId();
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
-		
-		// ページ定義IDとページ定義のレコードシリアル番号
-		$defConfigId = $this->getPageDefConfigId($request);				// 定義ID取得
-		$defSerial = $this->getPageDefSerial($request);		// ページ定義のレコードシリアル番号
-		$value = $request->trimValueOf('defconfig');		// ページ定義の定義ID
-		if (!empty($value)) $defConfigId = $value;
-		$value = $request->trimValueOf('defserial');		// ページ定義のレコードシリアル番号
-		if (!empty($value)) $defSerial = $value;
 
 		$this->configId = $request->trimValueOf('item_id');		// 定義ID
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
 		$limitUser = ($request->trimValueOf('item_limituser') == 'on') ? 1 : 0;		// ユーザを制限するかどうか
 		$this->menuId = $request->trimValueOf('menuid');
-		if ($this->menuId == '') $this->menuId = self::DEFAULT_MENU_ID;
-
-		// パラメータオブジェクトを取得
-		$this->paramObj = $this->getWidgetParamObjectWithId();
+		if (empty($this->menuId)) $this->menuId = self::DEFAULT_MENU_ID;
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -124,71 +116,42 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->name	= $name;// 表示名
 				$newObj->limitUser = $limitUser;					// ユーザを制限するかどうか
 				
-				$newParam = new stdClass;
-				$newParam->id = -1;		// 新規追加
-				$newParam->object = $newObj;
-			
-				// ウィジェットパラメータオブジェクト更新
-				$ret = $this->updateWidgetParamObjectWithId($newParam);
-				if ($ret) $this->paramObj[] = $newParam;		// 新規定義を追加
-				
-				// 画面定義更新
-				if ($ret && !empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
-					$newConfigId = $newParam->id;
-					$ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $newConfigId, $name, $this->menuId);
-				}
-				
+				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
-					$defConfigId = $newConfigId;		// 定義定義IDを更新
-					$this->configId = $newConfigId;		// 定義定義IDを更新
+					$this->configId = $defConfigId;		// 定義定義IDを更新
 					$replaceNew = true;			// データ再取得
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
-				$this->gPage->updateParentWindow($defSerial);// 親ウィンドウを更新
 			}
 		} else if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
-				// 該当項目を更新
-				$ret = false;
-				for ($i = 0; $i < count($this->paramObj); $i++){
-					$id			= $this->paramObj[$i]->id;// 定義ID
-					$targetObj	= $this->paramObj[$i]->object;
-					if ($id == $this->configId){
-						// ウィジェットオブジェクト更新。更新値のみ再設定。
-						if (!empty($defConfigId) && !empty($defSerial)){		// 設定再選択不可の場合
-							// 取得値で更新
-							$this->menuId = $targetObj->menuId;		// メニューID
-						} else {			// 新規で既存設定の更新
-							$targetObj->menuId	= $this->menuId;		// メニューID
-						}
-						$targetObj->limitUser = $limitUser;					// ユーザを制限するかどうか
-						
-						// ウィジェットパラメータオブジェクトを更新
-						$ret = $this->updateWidgetParamObjectWithId($this->paramObj[$i]);
-						break;
+				// 現在の設定値を取得
+				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
+				if ($ret){
+					// ウィジェットオブジェクト更新。更新値のみ再設定。
+					if (!empty($defConfigId) && !empty($defSerial)){		// 設定再選択不可の場合
+						// 取得値で更新
+						$this->menuId = $targetObj->menuId;		// メニューID
+					} else {			// 新規で既存設定の更新
+						$targetObj->menuId	= $this->menuId;		// メニューID
 					}
-				}
-				// 画面定義更新
-				if (!empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
-					if ($ret) $ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $this->configId, $targetObj->name, $this->menuId);
+					$targetObj->limitUser = $limitUser;					// ユーザを制限するかどうか
 				}
 
+				// 設定値を更新
+				if ($ret) $ret = $this->updatePageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					
-					if (empty($defConfigId)){		// 画面定義の定義IDが設定されていないときは設定
-						$defConfigId = $this->configId;		// 定義定義IDを更新
-					}
 					$replaceNew = true;			// データ再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
-				$this->gPage->updateParentWindow($defSerial);// 親ウィンドウを更新
 			}
 		} else if ($act == 'select'){	// 定義IDを変更
 			$replaceNew = true;			// データ再取得
@@ -197,30 +160,26 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		// 表示用データを取得
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
-			$name = $this->createDefaultName();			// デフォルト登録項目名
-			$limitUser = 0;					// ユーザを制限するかどうか
+			
+			if ($replaceNew){		// データ再取得時
+				$this->menuId = self::DEFAULT_MENU_ID;
+				$name = $this->createDefaultName();			// デフォルト登録項目名
+				$limitUser = 0;					// ユーザを制限するかどうか
+			}
 			$this->serialNo = 0;
 		} else {
-			// 定義からウィジェットパラメータを検索して、定義データを取得
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$id			= $this->paramObj[$i]->id;// 定義ID
-				$targetObj	= $this->paramObj[$i]->object;
-				if ($id == $this->configId) break;
-			}
-			if ($i < count($this->paramObj)){		// 該当項目があるとき
-				// ウィジェットオブジェクトから値を取得
-				if ($replaceNew){		// データ再取得のとき
+			if ($replaceNew){
+				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
+				if ($ret){
 					$this->menuId	= $targetObj->menuId;		// メニューID
 					$name			= $targetObj->name;// 名前
 					$limitUser		= $targetObj->limitUser;					// ユーザを制限するかどうか
 				}
-				$this->serialNo = $this->configId;
-				
-				// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
-				if (!empty($defConfigId) && !empty($defSerial)){
-					$this->tmpl->addVar("_widget", "id_disabled", 'disabled');
-				}
 			}
+			$this->serialNo = $this->configId;
+				
+			// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
+			if (!empty($defConfigId) && !empty($defSerial)) $this->tmpl->addVar("_widget", "id_disabled", 'disabled');
 		}
 		// 設定項目選択メニュー作成
 		$this->createItemMenu();
@@ -238,10 +197,6 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
-		// 画面定義用の情報を戻す
-		$this->tmpl->addVar("_widget", "def_serial", $defSerial);	// ページ定義のレコードシリアル番号
-		$this->tmpl->addVar("_widget", "def_config", $defConfigId);	// ページ定義の定義ID
-		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
@@ -251,6 +206,9 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		// タブの選択状態を設定
 		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
 		if (empty($act) && !empty($this->configId)) $this->tmpl->setAttribute('select_menu_def', 'visibility', 'visible');
+		
+		// ページ定義IDとページ定義のレコードシリアル番号を更新
+		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
 	}
 	/**
 	 * 選択用メニューを作成
@@ -330,23 +288,15 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createList($request)
 	{
+		// ページ定義IDとページ定義のレコードシリアル番号を取得
+		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
+		
 		$userId		= $this->gEnv->getCurrentUserId();
 		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
-		
-		// ページ定義IDとページ定義のレコードシリアル番号
-		$defConfigId = $this->getPageDefConfigId($request);				// 定義ID取得
-		$defSerial = $this->getPageDefSerial($request);		// ページ定義のレコードシリアル番号
-		$value = $request->trimValueOf('defconfig');		// ページ定義の定義ID
-		if (!empty($value)) $defConfigId = $value;
-		$value = $request->trimValueOf('defserial');		// ページ定義のレコードシリアル番号
-		if (!empty($value)) $defSerial = $value;
 
 		// 詳細画面からの引継ぎデータ
 		$menuId = $request->trimValueOf('menuid');
-		
-		// パラメータオブジェクトを取得
-		$this->paramObj = $this->getWidgetParamObjectWithId();
 		
 		if ($act == 'delete'){		// メニュー項目の削除
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
@@ -361,30 +311,17 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 				}
 			}
 			if (count($delItems) > 0){
-				for ($i = 0; $i < count($this->paramObj); $i++){
-					$id			= $this->paramObj[$i]->id;// 定義ID
-					if (in_array($id, $delItems)){		// 削除対象のとき
-						$newParam = new stdClass;
-						$newParam->id = $id;
-						$newParam->object = null;		// 削除処理
-						$ret = $this->updateWidgetParamObjectWithId($newParam);
-						if (!$ret) break;
-					}
-				}
-				
-				// ウィジェットパラメータオブジェクト更新
+				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->paramObj, $delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
-				// パラメータオブジェクトを取得
-				$this->paramObj = $this->getWidgetParamObjectWithId();
 			}
 		}
 		// 定義一覧作成
 		$this->createItemList();
-		if ($this->db->getEffectedRowCount() <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 		
 		// メニュー定義画面のURLを作成
 		$taskValue = 'smenudef';
@@ -394,9 +331,8 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 					
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		
-		// 画面定義用の情報を戻す
-		$this->tmpl->addVar("_widget", "def_serial", $defSerial);	// ページ定義のレコードシリアル番号
-		$this->tmpl->addVar("_widget", "def_config", $defConfigId);	// ページ定義の定義ID
+		// ページ定義IDとページ定義のレコードシリアル番号を更新
+		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
 	}
 	/**
 	 * 定義一覧作成
