@@ -7,7 +7,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: configlang.tmpl.html 4917 2012-05-23 09:44:57Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -45,7 +45,6 @@ function updateIp(){
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow(type, url)
 {
-	//window.open(url,"","toolbar=no,menubar=no,location=yes,status=no,scrollbars=yes,resizable=yes,width=1000,height=800");
 	m3ShowPreviewWindow(type, url);
 	return true;
 }
@@ -143,6 +142,10 @@ $(function(){
 	    <td class="table-headside"><span {_HELP_CONFIGSYS_CONNECT_SERVER_URL}>ポータルサーバのURL</span></td>
 	    <td colspan="2"><input type="text" name="item_connect_server_url" value="{CONNECT_SERVER_URL}" size="60" maxlength="120" /></td>
 	</tr>-->
+    <tr>
+	    <td class="table-headside">ネットワーク</td>
+	    <td colspan="2"><label class="item_list_inline"><input type="checkbox" name="item_access_in_intranet" {ACCESS_IN_INTRANET} />イントラネット運用</label></td>
+	</tr>
     <tr>
 	    <td class="table-headside" rowspan="2">URL</td>
 	    <td colspan="2"><input type="checkbox" name="item_multi_domain" {MULTI_DOMAIN} />マルチドメイン</td>

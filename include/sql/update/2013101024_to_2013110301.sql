@@ -26,4 +26,8 @@ INSERT INTO _menu_id
 -- ウィジェット情報マスター
 ALTER TABLE _widgets ADD wd_content_info         VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- コンテンツ情報
 
+-- システム設定マスター
+INSERT INTO _system_config 
+(sc_id,                          sc_value,                  sc_name) VALUES
+('access_in_intranet',               '0',                       'イントラネット運用');
 -- *** システム標準テーブル ***

@@ -87,6 +87,7 @@ class PageManager extends Core
 	private $wysiwygEditor;				// 管理画面用WYSIWYGエディター
 	private $optionTemplateId;			// 追加設定するテンプレートID
 	private $isContentGooglemaps;		// コンテンツにGoogleマップが含むかどうか
+	private $useGooglemaps;				// Googleマップを使用するかどうか
 	private $useBootstrap;				// Bootstrapを使用するかどうか
 	private $isHtml5;					// HTML5で出力するかどうか
 	const CONFIG_KEY_HEAD_TITLE_FORMAT = 'head_title_format';		// ヘッダ作成用フォーマット
@@ -120,6 +121,7 @@ class PageManager extends Core
 	const WIDGET_TITLE_START = '[';					// ウィジェットのタイトルの括弧
 	const WIDGET_TITLE_END = ']';					// ウィジェットのタイトルの括弧
 	const DEFAULT_RSS_VERSION = '1.0';				// デフォルトのRSSのバージョン
+	const CF_ACCESS_IN_INTRANET = 'access_in_intranet';		// イントラネット運用かどうか
 	const CF_USE_LATEST_SCRIPT_LIB = 'dev_use_latest_script_lib';		// 最新のJavaScriptライブラリを使用するかどうか
 	const CF_GOOGLE_MAPS_KEY = 'google_maps_key';				// Googleマップ利用キー
 	const CF_CONFIG_WINDOW_OPEN_TYPE = 'config_window_open_type';		// ウィジェット設定画面のウィンドウ表示タイプ(0=別ウィンドウ、1=タブ)
@@ -155,7 +157,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.6.4.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.6.5.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget1.5.3.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.3.js';			// 一般、管理機能共通スクリプト
@@ -186,6 +188,12 @@ class PageManager extends Core
 		// システムDBオブジェクト取得
 		$this->db = $gInstanceManager->getSytemDbObject();
 		
+		// 運用方法
+		$value = $gSystemManager->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用かどうか
+		if (empty($value)){		// インターネット運用
+			$this->useGooglemaps = true;				// Googleマップを使用するかどうか
+		}
+			
 		// 共通スクリプトファイル
 		// 「ルート/scripts」ディレクトリからの相対パスで指定する
 		$this->defaultScriptFiles = array(self::M3_STD_SCRIPT_FILENAME);
@@ -1177,7 +1185,9 @@ class PageManager extends Core
 					// 管理画面用ライブラリを追加
 					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
 						$this->addAdminScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
-						if ($this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
+						
+						// Googleマップライブラリの読み込み
+						if ($this->useGooglemaps && $this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
 							$this->defaultAdminScriptFiles[] = ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS);
 						}
 					} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
@@ -1228,7 +1238,8 @@ class PageManager extends Core
 						$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 						
-						if ($this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
+						// Googleマップライブラリの読み込み
+						if ($this->useGooglemaps && $this->wysiwygEditor == ScriptLibInfo::LIB_CKEDITOR){			// CKEditorの場合はGoogleマップライブラリを読み込む
 							$this->addScriptFile(ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS));
 						}
 					}
@@ -2844,7 +2855,8 @@ class PageManager extends Core
 					}
 				}
 			} else {			// 通常画面
-				if ($this->isContentGooglemaps) $this->addScriptFile(ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS));		// コンテンツにGoogleマップが含むかどうか
+				// Googleマップライブラリの読み込み
+				if ($this->useGooglemaps && $this->isContentGooglemaps) $this->addScriptFile(ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS));	// コンテンツにGoogleマップが含むかどうか
 
 				$count = count($this->defaultScriptFiles);
 				for ($i = 0; $i < $count; $i++){
@@ -2941,10 +2953,13 @@ class PageManager extends Core
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
 				
-				// FCKEditor拡張プラグイン用の定義
-				//$googleMapsKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);		// Googleマップ利用キー
-				//if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLE_MAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
-
+				// Googleマップライブラリの読み込み
+				if ($this->useGooglemaps){
+					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+				} else {
+					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
+				}
+				
 				if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
 					$pageId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);		// ページID
 					$pageSubId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);// ページサブID

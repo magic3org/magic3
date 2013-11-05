@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainConfigsysWidgetContainer.php 5966 2013-04-27 09:11:24Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConfigsystemBaseWidgetContainer.php');
@@ -42,6 +42,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_SMARTPHONE_AUTO_REDIRECT = 'smartphone_auto_redirect';			// スマートフォンの自動遷移
 	const CF_SITE_SMARTPHONE_URL = 'site_smartphone_url';		// スマートフォン用サイトURL
 	const CF_SITE_MOBILE_URL = 'site_mobile_url';		// 携帯用サイトURL
+	const CF_ACCESS_IN_INTRANET = 'access_in_intranet';		// イントラネット運用
 	const CF_MULTI_DOMAIN = 'multi_domain';		// マルチドメイン運用
 //	const CF_USE_SITE_PC			= 'use_site_pc';			// PC用サイト使用
 //	const CF_USE_SITE_SMARTPHONE	= 'use_site_smartphone';	// スマートフォン用サイト使用
@@ -132,6 +133,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$sitePcInPublic = ($request->trimValueOf('item_site_pc_in_public') == 'on') ? 1 : 0;			// PC用サイトの公開状況
 		$siteMobileInPublic = ($request->trimValueOf('item_site_mobile_in_public') == 'on') ? 1 : 0;	// 携帯用サイトの公開状況
 		$siteSmartphoneInPublic = ($request->trimValueOf('item_site_smartphone_in_public') == 'on') ? 1 : 0;	// スマートフォン用サイトの公開状況
+		$accessInIntranet	= $request->trimCheckedValueOf('item_access_in_intranet');		// イントラネット運用
 		$multiDomain = ($request->trimValueOf('item_multi_domain') == 'on') ? 1 : 0;// マルチドメイン運用
 		$isActiveSitePc = ($request->trimValueOf('item_is_active_site_pc') == 'on') ? 1 : 0;	// PC用サイト有効
 		$isActiveSiteSmartphone = ($request->trimValueOf('item_is_active_site_smartphone') == 'on') ? 1 : 0;	// スマートフォン用サイト有効
@@ -188,6 +190,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC, $siteSmartphoneInPublic)) $isErr = true;
+			}
+			if (!$isErr){
+				if (!$this->db->updateSystemConfig(self::CF_ACCESS_IN_INTRANET, $accessInIntranet)) $isErr = true;// イントラネット運用
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_MULTI_DOMAIN, $multiDomain)) $isErr = true;// マルチドメイン運用
@@ -281,8 +286,8 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$sitePcInPublic = $this->gSystem->sitePcInPublic(true/*再取得*/);			// PC用サイトの公開状況
 			$siteMobileInPublic = $this->gSystem->siteMobileInPublic(true/*再取得*/);	// 携帯用サイトの公開状況
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic(true/*再取得*/);	// スマートフォン用サイトの公開状況
-			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);// マルチドメイン運用
-			
+			$accessInIntranet	= $this->db->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用
+			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);			// マルチドメイン運用			
 /*			$isActiveSitePc			= $this->db->getSystemConfig(self::CF_USE_SITE_PC);	// PC用サイト使用
 			$isActiveSiteSmartphone	= $this->db->getSystemConfig(self::CF_USE_SITE_SMARTPHONE);	// スマートフォン用サイト使用
 			$isActiveSiteMobile		= $this->db->getSystemConfig(self::CF_USE_SITE_MOBILE);	// // 携帯用サイト使用
@@ -351,6 +356,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$sitePcInPublic = $this->gSystem->sitePcInPublic(true/*再取得*/);			// PC用サイトの公開状況
 			$siteMobileInPublic = $this->gSystem->siteMobileInPublic(true/*再取得*/);	// 携帯用サイトの公開状況
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic(true/*再取得*/);	// スマートフォン用サイトの公開状況
+			$accessInIntranet	= $this->db->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用
 			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);// マルチドメイン運用
 //			$isActiveSitePc			= $this->db->getSystemConfig(self::CF_USE_SITE_PC);	// PC用サイト使用
 //			$isActiveSiteSmartphone	= $this->db->getSystemConfig(self::CF_USE_SITE_SMARTPHONE);	// スマートフォン用サイト使用
@@ -452,6 +458,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if ($siteSmartphoneInPublic) $checked = 'checked';
 		$this->tmpl->addVar("show_site_smartphone_open", "site_smartphone_in_public", $checked);// スマートフォン用サイトの公開状況
+		$this->tmpl->addVar("_widget", "access_in_intranet", $this->convertToCheckedString($accessInIntranet));// イントラネット運用
 		$checked = '';
 		if ($multiDomain) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "multi_domain", $checked);// マルチドメイン運用
