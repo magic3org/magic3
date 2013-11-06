@@ -237,7 +237,7 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	function contentLoop($index, $fetchedRow, $param)
 	{
 		$contentId = $fetchedRow['id'];
-		if ($this->contentType = M3_VIEW_TYPE_WIKI){		// コンテンツがWikiの場合の処理
+		if ($this->contentType == M3_VIEW_TYPE_WIKI){		// コンテンツがWikiの場合の処理
 			$name = $fetchedRow['name'];
 			if (preg_match('/^\:/', $name)) return true;		// 定義データの場合は読み飛ばす
 		} else {
