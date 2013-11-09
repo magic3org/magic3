@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: mailManager.php 5361 2012-11-05 21:46:56Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -18,6 +18,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 class MailManager extends Core
 {
 	private $db;						// DBオブジェクト
+	const EMAIL_SEPARATOR = ';';		// メールアドレスセパレータ
 	
 	/**
 	 * コンストラクタ
@@ -41,7 +42,7 @@ class MailManager extends Core
 	 *
 	 * @param int $type				メール送信タイプ(0=未設定、1=自動送信、2=手動送信)
 	 * @param string $widgetId		送信を行ったウィジェットID
-	 * @param string $toAddress		送信先メールアドレス
+	 * @param string $toAddress		送信先メールアドレス(「|」区切りで複数送信可。フォーマット「アドレス1|cc:アドレス2|bcc:アドレス3」)
 	 * @param string $fromAddress	送信元メールアドレス
 	 * @param string $replytoAddress	返信先メールアドレス(空の場合は$fromAddressを使用)
 	 * @param string $subject		件名(空のときは、メールフォームテーブルから取得)
@@ -58,11 +59,60 @@ class MailManager extends Core
 		
 		$langId = $gEnvManager->getCurrentLanguage();
 		
+		// 送信先アドレスの解析
+		$toAddressArray = array();
+		$ccAddressArray = array();
+		$bccAddressArray = array();
+		$toAddressParsedArray = explode(self::EMAIL_SEPARATOR, $toAddress);
+		for ($i = 0; $i < count($toAddressParsedArray); $i++){
+			$line = trim($toAddressParsedArray[$i]);
+			if (empty($line)) continue;
+			
+			list($tag, $address) = array_map('trim', explode(':', $line));
+			$compTag = strtolower($tag);
+			switch ($compTag){
+				case 'cc':
+					$ccAddressArray[] = $address;
+					break;
+				case 'bcc':
+					$bccAddressArray[] = $address;
+					break;
+				default:
+					$toAddressArray[] = $tag;
+					break;
+			}
+		}
+		if (count($toAddressArray) > 0) $toAddress = $toAddressArray[0];
+
+		// 送信元アドレスの修正
+		// 送信元アドレスに「cc」「bcc」がある場合は削除
+		$fromAddressArray = array();
+		$fromAddressParsedArray = explode(self::EMAIL_SEPARATOR, $fromAddress);
+		for ($i = 0; $i < count($fromAddressParsedArray); $i++){
+			$line = trim($fromAddressParsedArray[$i]);
+			if (empty($line)) continue;
+			
+			list($tag, $address) = array_map('trim', explode(':', $line));
+			$compTag = strtolower($tag);
+			switch ($compTag){
+				case 'cc':
+					break;
+				case 'bcc':
+					break;
+				default:
+					$fromAddressArray[] = $tag;
+					break;
+			}
+		}
+		if (count($fromAddressArray) > 0) $fromAddress = $fromAddressArray[0];
+		
 		// 送信元、送信先のチェック
 		if (empty($toAddress) || empty($fromAddress)){
 			$this->gOpeLog->writeError(__METHOD__, 'メールアドレスが設定されていません。(送信先=' . $toAddress . ', 送信元=' . $fromAddress . ')', 1100);
 			return false;
 		}
+	
+		// メールフォーマットのチェック
 		if (!$this->checkEmail($toAddress) || !$this->checkEmail($fromAddress) || !$this->checkEmail($ccAddress) || !$this->checkEmail($bccAddress)){
 			$this->gOpeLog->writeError(__METHOD__, '不正なメールアドレスが設定されています。(送信先=' . $toAddress . ', 送信元=' . $fromAddress . 
 										', CC=' . $ccAddress . ', BCC=' . $bccAddress . ')', 1100);
@@ -85,7 +135,7 @@ class MailManager extends Core
 			$destSubject = empty($subject) ? $row['mf_subject'] : $subject;
 			$destContent = $row['mf_content'];
 		}
-		
+	
 		$destHeader = '';
 		if (empty($replytoAddress)) $replytoAddress = $fromAddress;
 		$errAddress = $fromAddress;		// エラーメールの送信先
@@ -109,9 +159,11 @@ class MailManager extends Core
 		}
 		// CCのメールアドレスを設定
 		if (!empty($ccAddress)) $destHeader .= 'Cc: ' . $ccAddress . "\n";
+		$destHeader .= implode('', array_map(create_function('$a', 'return "Cc: " . $a . "\n";'), $ccAddressArray));
 		// BCCのメールアドレスを設定
 		if (!empty($bccAddress)) $destHeader .= 'Bcc: ' . $bccAddress . "\n";
-			
+		$destHeader .= implode('', array_map(create_function('$a', 'return "Bcc: " . $a . "\n";'), $bccAddressArray));
+
 		// 本文を置き換え
 		if (!empty($params)){		// 変換パラメータが設定されているとき
 			while (list($key, $val) = each($params)){
