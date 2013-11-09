@@ -15,6 +15,7 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.optiondatecount.value = $('#option_date_list').find('.dragRow').length;
 	document.main.exceptdatecount.value = $('#except_date_list').find('.dragRow').length;
 	document.main.timelistdata.value = createTimeListData();
 	document.main.act.value = 'add';
@@ -22,7 +23,8 @@ function addItem(){
 	return true;
 }
 function updateItem(){	
-	if (!window.confirm('設定を更新しますか?')) return false;			
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.optiondatecount.value = $('#option_date_list').find('.dragRow').length;		
 	document.main.exceptdatecount.value = $('#except_date_list').find('.dragRow').length;
 	document.main.timelistdata.value = createTimeListData();
 	document.main.act.value='update';
@@ -58,6 +60,27 @@ function createTimeListData()
 	});
 	return $.toJSON(lines);
 }
+// 基本日オプションを追加
+function addOptionDate()
+{
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><select name="item_option_date_no[]" class="option_date_no"></select></td>';
+	lineText += '<td><select name="item_option_date_week[]" class="option_date_week"></select></td>';
+	lineText += '<td><input type="text" name="item_option_date_name[]" size="20" maxlength="60" style="width:100%" /></td>';
+	lineText += '<td><select name="item_option_date_type[]" class="option_date_type"></select></td>';
+	lineText += '<td style="text-align:center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	
+	var rowObj = $(lineText);
+	var options = $("#date_type_menu option");
+	rowObj.find('.option_date_type').html(options.clone());
+	var optionsNo = $("#date_no_menu option");
+	rowObj.find('.option_date_no').html(optionsNo.clone());
+	var optionsWeek = $("#date_week_menu option");
+	rowObj.find('.option_date_week').html(optionsWeek.clone());
+	$('#option_date_list').append(rowObj);
+	
+	// 基本日オプション一覧を再設定
+	setupOptionDateList();
+}
 // 例外日を追加
 function addDate()
 {
@@ -67,8 +90,8 @@ function addDate()
 	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	
 	var rowObj = $(lineText);
-	var options2 = $("#date_type_menu2 option");
-	rowObj.find('.except_date_type').html(options2.clone());
+	var options = $("#date_type_menu2 option");
+	rowObj.find('.except_date_type').html(options.clone());
 	rowObj.find('.def_time_button').hide();				// 時間定義ボタン非表示
 	$('#except_date_list').append(rowObj);
 	
@@ -86,6 +109,21 @@ function addTime()
 
 	// 時間枠一覧を再設定
 	setupTimeList();
+}
+function setupOptionDateList()
+{
+	// 基本日オプション一覧の初期設定
+	$("#option_date_list").tableDnD({
+		dragHandle: "dragHandle"
+	});
+	$("#option_date_list tr").hover(function(){
+		$(this.cells[0]).addClass('currentHandle');
+	}, function() {
+		$(this.cells[0]).removeClass('currentHandle');
+	});
+	$("#option_date_list tr .delRow").click(function(){
+		$(this).parents('.dragRow').remove();
+	});
 }
 function setupExceptDateList()
 {
@@ -173,22 +211,44 @@ function editTime(obj){
 $(function(){
 	// 時間割データ
 	var timeListData = {TIME_LIST_DATA};
-	
+
+	// 基本日オプションの番号選択メニュー,曜日メニューを作成
+	var optionsNo = $("#date_no_menu option");
+	$(".option_date_no").html(optionsNo.clone());
+	for (var i = 0; i < document.main.optiondatecount.value; i++){
+		$("#option_date_no" + i).val($("#option_date_no_value" + i).val());
+	}
+	var optionsWeek = $("#date_week_menu option");
+	$(".option_date_week").html(optionsWeek.clone());
+	for (var i = 0; i < document.main.optiondatecount.value; i++){
+		$("#option_date_week" + i).val($("#option_date_week_value" + i).val());
+	}
+		
 	// 基本日一覧の日付タイプ選択メニューを作成
-	var options = $("#date_type_menu option");
-	$(".date_type").html(options.clone());
+	var options1 = $("#date_type_menu option");
+	$(".date_type").html(options1.clone());
 	for (var i = 0; i < document.main.datecount.value; i++){
 		$("#date_type" + i).val($("#date_value" + i).val());
 	}
 	
+	// 基本日オプションの日付タイプ選択メニューを作成
+	var options2 = $("#date_type_menu option");
+	$(".option_date_type").html(options2.clone());
+	for (var i = 0; i < document.main.optiondatecount.value; i++){
+		var dateValue = $("#option_date_value" + i).val();
+		$("#option_date_type" + i).val(dateValue);
+	}
+	
 	// 例外日の日付タイプ選択メニューを作成
-	var options2 = $("#date_type_menu2 option");
-	$(".except_date_type").html(options2.clone());
+	var options3 = $("#date_type_menu2 option");
+	$(".except_date_type").html(options3.clone());
 	for (var i = 0; i < document.main.exceptdatecount.value; i++){
 		var dateValue = $("#except_date_value" + i).val();
 		$("#except_date_type" + i).val(dateValue);
 		if (dateValue >= 0) $("#def_time_button" + i).hide();
 	}
+	
+	setupOptionDateList();
 	
 	setupExceptDateList();
 	
@@ -258,6 +318,7 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="datecount" value="{DATE_COUNT}" />
+<input type="hidden" name="optiondatecount" value="{OPTION_DATE_COUNT}" />
 <input type="hidden" name="exceptdatecount" value="{EXCEPT_DATE_COUNT}" />
 <input type="hidden" name="timelistdata" />
 <!-- m3:PostParam -->
@@ -274,9 +335,10 @@ $(function(){
 	    <td><input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" /></td>
 	</tr>
     <tr class="even">
-	    <td class="table-headside"><span {_HELP_DATE_REPEAT_TYPE}>繰り返しタイプ</span></td>
+	    <td class="table-headside"><span {_HELP_DATE_REPEAT_DATE}>基本日</span></td>
 	    <td>
-		<select name="item_repeat_type" onchange="selectMenu();">
+		<span {_HELP_DATE_REPEAT_TYPE}>繰り返しタイプ：</span>
+				<select name="item_repeat_type" onchange="selectMenu();">
 	        <patTemplate:tmpl name="repeat_type_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
@@ -295,12 +357,18 @@ $(function(){
 	        <option value="{VALUE}">{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		<select id="date_no_menu" name="date_no_menu">
+	        <patTemplate:tmpl name="date_no_list">
+	        <option value="{VALUE}">{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		<select id="date_week_menu" name="date_week_menu">
+	        <patTemplate:tmpl name="date_week_list">
+	        <option value="{VALUE}">{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
 		</div>
-		</td>
-	</tr>
-    <tr>
-	    <td class="table-headside"><span {_HELP_DATE_REPEAT_DATE}>基本日</span></td>
-	    <td>
+		
 	    <table class="simple-table-inner" width="100%">
 	    <thead>
 	    <tr><th width="35"></th><th width="300">名前</th><th >日付タイプ</th></tr>
@@ -316,6 +384,27 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
+	    <td class="table-headside"><span {_HELP_DATE_REPEAT_DATE_OPTION}>基本日<br />(オプション)</span></td>
+	    <td>
+	    <table id="option_date_list" class="simple-table-inner" width="100%">
+	    <thead>
+	    <tr><th width="35">移動</th><th width="50">第</th><th width="50">曜日</th><th width="200">名前</th><th>日付タイプ</th><th width="200">操作</th></tr>
+	    </thead><tbody>
+	    <patTemplate:tmpl name="option_date_list">
+        <tr class="dragRow">
+	    <td class="dragHandle"></td>
+	    <td><select id="option_date_no{INDEX}" name="item_option_date_no[]" class="option_date_no"></select><input type="hidden" id="option_date_no_value{INDEX}" value="{NO}" /></td>
+	    <td><select id="option_date_week{INDEX}" name="item_option_date_week[]" class="option_date_week"></select><input type="hidden" id="option_date_week_value{INDEX}" value="{WEEK}" /></td>
+		<td><input type="text" name="item_option_date_name[]" value="{NAME}" size="20" maxlength="60" style="width:100%" /></td>
+	    <td><select id="option_date_type{INDEX}" name="item_option_date_type[]" class="option_date_type"></select><input type="hidden" id="option_date_value{INDEX}" value="{TYPE_ID}" /></td>
+	    <td style="text-align:center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    </tr>
+	    </patTemplate:tmpl>
+	    </tbody></table>
+		<div><input type="button" class="button" onclick="addOptionDate();" value="追加" /></div>
+	    </td>
+	</tr>
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_DATE_EXCEPT_DATE}>例外日</span></td>
 	    <td>
 	    <table id="except_date_list" class="simple-table-inner" width="100%">
@@ -335,13 +424,13 @@ $(function(){
 	    <div><input type="button" class="button" onclick="addDate();" value="追加" /></div>
 	    </td>
 	</tr>
-    <tr class="even">
+    <tr>
 	    <td class="table-headside"><span {_HELP_DATE_CSS}>CSS</span></td>
 	    <td><label><span style="width:20%;display:inline-block;">開業日(時間定義あり)：</span><input type="text" name="item_open_date_style" value="{OPEN_DATE_STYLE}" style="width:80%;" /></label>
 		<label><span style="width:20%;display:inline-block;">休業日(時間定義なし)：</span><input type="text" name="item_closed_date_style" value="{CLOSED_DATE_STYLE}" style="width:80%;" /></label>
 		</td>
 	</tr>
-	<tr>
+	<tr class="even">
 	    <td align="right" colspan="2">
 <patTemplate:tmpl name="delete_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />

@@ -443,6 +443,27 @@ class calendarDb extends BaseDb
 				$queryStr .=   '(?, ?, ?, ?, ?)';
 				$this->execStatement($queryStr, array($id, $dataType, $i, $dateName, $dateType));			
 			}
+		} else if ($dataType == 10){		// オプションデータあり、インデックス番号指定の場合
+			// 旧データ削除
+			$queryStr  = 'DELETE FROM calendar_date ';
+			$queryStr .=   'WHERE ce_def_id = ? ';
+			$queryStr .=     'AND ce_type = ? ';
+			$this->execStatement($queryStr, array($id, $dataType));
+		
+			// レコードを追加
+			$dateCount = count($dateInfoArray);
+			for ($i = 0; $i < $dateCount; $i++){
+				$defObj = $dateInfoArray[$i];
+				$dateName	= $defObj->dateName;			// 名前
+				$dateType	= $defObj->dateType;		// 日付タイプ
+				$dateParam 	= serialize(array('no' => $defObj->dateNo, 'week' => $defObj->dateWeek));
+			
+				$queryStr  = 'INSERT INTO calendar_date ';
+				$queryStr .=   '(ce_def_id, ce_type, ce_index, ce_name, ce_date_type_id, ce_param) ';
+				$queryStr .= 'VALUES ';
+				$queryStr .=   '(?, ?, ?, ?, ?, ?)';
+				$this->execStatement($queryStr, array($id, $dataType, $i, $dateName, $dateType, $dateParam));			
+			}
 		} else if ($dataType == 1){			// 日付指定の場合
 			// 旧レコード取得
 			$queryStr  = 'SELECT * FROM calendar_date ';

@@ -19,6 +19,7 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 {
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $dateFieldArray;	// 基本日入力値
+	private $optionDateFieldArray;	// 基本日オプション入力値
 	private $exceptDateFieldArray;	// 例外日入力値
 	private $repeatTypeArray;		// 繰り返しタイプ
 	private $repeatType;		// 繰り返しタイプ
@@ -26,6 +27,7 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 	private $timeArray;			// 時間割
 //	private $timePeriodArray;	// 時間枠データ
 	private $dateCount;			// 基本日数
+	private $optionDateCount;	// 基本オプション日数
 	private $exceptDateCount;	// 例外日数
 	
 	/**
@@ -38,7 +40,7 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		
 		// 初期値設定
 		$this->repeatTypeArray	= array(	array(	'name' => '繰り返しなし',	'value' => '0'),
-										array(	'name' => '曜日基準',		'value' => '1'));
+											array(	'name' => '曜日基準',		'value' => '1'));
 		$this->weekArray		= array('日', '月', '火', '水', '木', '金', '土');			// 曜日データ
 	}
 	/**
@@ -132,9 +134,14 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		$this->repeatType = $request->trimIntValueOf('item_repeat_type', '0');		// 繰り返しタイプ
 		
 		$this->dateCount		= intval($request->trimValueOf('datecount'));		// 基本日数
+		$this->optionDateCount	= intval($request->trimValueOf('optiondatecount'));	// 基本日オプション日数
 		$this->exceptDateCount	= intval($request->trimValueOf('exceptdatecount'));	// 例外日数	
 		$dateNames		= $request->trimValueOf('item_date_name');		// 基本日名
 		$dateTypes 		= $request->trimValueOf('item_date_type');		// 基本日日付タイプ
+		$optionDateNos		= $request->trimValueOf('item_option_date_no');		// 基本日オプション番号
+		$optionDateWeeks	= $request->trimValueOf('item_option_date_week');		// 基本日オプション曜日
+		$optionDateNames	= $request->trimValueOf('item_option_date_name');		// 基本日オプション名前
+		$optionDateTypes	= $request->trimValueOf('item_option_date_type');		// 基本日オプション日付タイプ
 		$exceptDates		= $request->trimValueOf('item_except_date');		// 例外日
 		$exceptDateNames	= $request->trimValueOf('item_except_date_name');		// 例外日名
 		$exceptDateTypes 	= $request->trimValueOf('item_except_date_type');		// 例外日日付タイプ
@@ -150,6 +157,21 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			$newObj->dateType	= $dateTypes[$i];		// 基本日日付タイプ
 			$this->dateFieldArray[]	= $newObj;
 		}
+		
+		// 基本日オプション入力値
+		$this->optionDateFieldArray = array();
+		$optionDateCheckValue = array();		// 値チェック用
+		for ($i = 0; $i < $this->optionDateCount; $i++){
+			$newObj				= new stdClass;
+			$newObj->dateNo		= $optionDateNos[$i];		// 基本日オプション番号
+			$newObj->dateWeek	= $optionDateWeeks[$i];		// 基本日オプション曜日
+			$newObj->dateName	= $optionDateNames[$i];		// 基本日オプション名前
+			$newObj->dateType	= $optionDateTypes[$i];		// 基本日オプション日付タイプ
+			$this->optionDateFieldArray[]	= $newObj;
+			
+			$optionDateCheckValue[] = $optionDateNos[$i] . '-' . $optionDateWeeks[$i];		// 値チェック用(番号、曜日のユニークチェック)
+		}
+		
 		// 例外日入力取得
 		$timeDefCount = 0;			// 個別時間定義を行っている数
 		$this->exceptDateFieldArray = array();
@@ -174,9 +196,15 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			// 入力チェック
 			$this->checkInput($name, '名前');
 			
+			// 日付フォーマットチェック
 			for ($i = 0; $i < $this->exceptDateCount; $i++){		// 例外日
 				$ret = $this->checkDate($exceptDates[$i], '例外日(' . ($i + 1) . '行目)');
 				if (!$ret) break;
+			}
+			
+			// 基本日オプションの重複チェック
+			if ($this->getMsgCount() == 0){
+				if (count($optionDateCheckValue) != count(array_unique($optionDateCheckValue))) $this->setUserErrorMsg('基本日オプションが重複しています');
 			}
 			
 			// 日付の重複チェック
@@ -196,6 +224,9 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 				// 基本日を追加
 				if ($ret) $ret = self::$_mainDb->updateDate($newId, 0/*インデックス番号*/, $this->dateFieldArray);
 
+				// 基本日オプションを追加
+				if ($ret) $ret = self::$_mainDb->updateDate($newId, 10/*インデックス番号、オプションデータあり*/, $this->optionDateFieldArray);
+				
 				// 例外日を追加
 				if ($ret) $ret = self::$_mainDb->updateDate($newId, 1/*日付指定*/, $this->exceptDateFieldArray, $this->timeArray);
 								
@@ -212,9 +243,15 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			// 入力チェック
 			$this->checkInput($name, '名前');
 			
+			// 日付フォーマットチェック
 			for ($i = 0; $i < $this->exceptDateCount; $i++){		// 例外日
 				$ret = $this->checkDate($exceptDates[$i], '例外日(' . ($i + 1) . '行目)');
 				if (!$ret) break;
+			}
+			
+			// 基本日オプションの重複チェック
+			if ($this->getMsgCount() == 0){
+				if (count($optionDateCheckValue) != count(array_unique($optionDateCheckValue))) $this->setUserErrorMsg('基本日オプションが重複しています');
 			}
 			
 			// 日付の重複チェック
@@ -233,6 +270,9 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 				
 				// 基本日を追加
 				if ($ret) $ret = self::$_mainDb->updateDate($defId, 0/*インデックス番号*/, $this->dateFieldArray);
+				
+				// 基本日オプションを追加
+				if ($ret) $ret = self::$_mainDb->updateDate($defId, 10/*インデックス番号、オプションデータあり*/, $this->optionDateFieldArray);
 				
 				// 例外日を追加
 				if ($ret) $ret = self::$_mainDb->updateDate($defId, 1/*日付指定*/, $this->exceptDateFieldArray, $this->timeArray);
@@ -272,6 +312,10 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 				$this->dateFieldArray = array();
 				self::$_mainDb->getDateList($defId, 0/*基本日データ*/, array($this, 'dateLoop'));
 				
+				// 基本日オプションを取得
+				$this->optionDateFieldArray = array();
+				self::$_mainDb->getDateList($defId, 10/*基本日オプションデータ*/, array($this, 'optionDateLoop'));
+
 				// 例外日を取得
 				$this->timeArray = array();			// 時間枠データ
 				$this->exceptDateFieldArray = array();
@@ -291,9 +335,15 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		self::$_mainDb->getDateTypeList(array($this, 'dateTypeLoop'));
 		if (self::$_mainDb->getEffectedRowCount() <= 0) $this->tmpl->setAttribute('date_type_list', 'visibility', 'hidden');// 一覧非表示		
 
+		// 基本日オプション用選択メニュー作成
+		$this->createOptionDateMenu();
+		
 		// 基本日一覧を作成
 		$this->createDateList();
 
+		// 基本日オプションを作成
+		$this->createOptionDateList();
+		
 		// 例外日一覧を作成
 		$this->createExceptDateList();
 		
@@ -319,6 +369,7 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($defId));	// カレンダー定義ID
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// 日付タイプ名
 		$this->tmpl->addVar("_widget", "date_count", $this->convertToDispString($this->dateCount));	// 基本日数
+		$this->tmpl->addVar("_widget", "option_date_count", $this->convertToDispString($this->optionDateCount));	// 基本日オプション日数
 		$this->tmpl->addVar("_widget", "except_date_count", $this->convertToDispString($this->exceptDateCount));	// 例外日数
 		$this->tmpl->addVar("_widget", "time_list_data", $timeListData);				// 時間割データ(JSON型)
 		$this->tmpl->addVar("_widget", "open_date_style", $this->convertToDispString($openDateStyle));	// 開業日
@@ -368,7 +419,7 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 			'name'		=> $this->convertToDispString($fetchedRow['dt_name']),			// 日付タイプ名
 			'value'	=> $this->convertToDispString($id)			// 日付タイプID
 		);
-		// 基本日用メニュー
+		// 基本日,基本日オプション用メニュー
 		$this->tmpl->addVars('date_type_list', $row);
 		$this->tmpl->parseTemplate('date_type_list', 'a');
 		
@@ -391,6 +442,29 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		$newObj->dateName	= $fetchedRow['ce_name'];			// 基本日名
 		$newObj->dateType	= $fetchedRow['ce_date_type_id'];		// 基本日日付タイプ
 		$this->dateFieldArray[]	= $newObj;		
+		return true;
+	}
+	/**
+	 * 例外日オプション一覧を取得
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function optionDateLoop($index, $fetchedRow, $param)
+	{
+		$newObj				= new stdClass;
+		$newObj->dateName	= $fetchedRow['ce_name'];			// 基本日名
+		$newObj->dateType	= $fetchedRow['ce_date_type_id'];		// 基本日日付タイプ
+
+		$param = $fetchedRow['ce_param'];			// オプションパラメータ
+		if (!empty($param)){
+			$optionArray = unserialize($param);
+			$newObj->dateNo		= $optionArray['no'];		// 基本日オプション番号
+			$newObj->dateWeek	= $optionArray['week'];		// 基本日オプション曜日	
+		}
+		$this->optionDateFieldArray[]	= $newObj;
 		return true;
 	}
 	/**
@@ -447,6 +521,34 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		}
 	}
 	/**
+	 * 基本日オプション用選択メニュー作成
+	 *
+	 * @return なし
+	 */
+	function createOptionDateMenu()
+	{
+		// 順番メニュー
+		for ($i = 1; $i < 6; $i++){
+			$row = array(
+				'value'		=> $i,
+				'name'		=> $i			// 名前
+			);
+			$this->tmpl->addVars('date_no_list', $row);
+			$this->tmpl->parseTemplate('date_no_list', 'a');
+		}
+		
+		// 曜日メニュー
+		$dateCount = count($this->weekArray);		// 基本日数
+		for ($i = 0; $i < $dateCount; $i++){
+			$row = array(
+				'value'		=> $i,
+				'name'		=> $this->convertToDispString($this->weekArray[$i])			// 名前
+			);
+			$this->tmpl->addVars('date_week_list', $row);
+			$this->tmpl->parseTemplate('date_week_list', 'a');
+		}
+	}
+	/**
 	 * 基本日リストを作成
 	 *
 	 * @return なし
@@ -480,12 +582,43 @@ class admin_calendarDateWidgetContainer extends admin_calendarBaseWidgetContaine
 		if ($this->dateCount <= 0) $this->tmpl->setAttribute('date_list', 'visibility', 'hidden');// 一覧非表示
 	}
 	/**
+	 * 基本日オプションを作成
+	 *
+	 * @return なし
+	 */
+	function createOptionDateList()
+	{
+		// 項目数再取得
+		$this->optionDateCount = count($this->optionDateFieldArray);
+
+		for ($i = 0; $i < $this->optionDateCount; $i++){
+			$defObj = $this->optionDateFieldArray[$i];
+			$dateName	= $defObj->dateName;		// 基本日オプション名
+			$dateNo		= $defObj->dateNo;			// 基本日オプション番号
+			$dateWeek	= $defObj->dateWeek;		// 基本日オプション曜日
+			$dateType	= $defObj->dateType;		// 基本日オプション日付タイプ
+
+			$row = array(
+				'index'		=> $i,
+				'no'		=> $this->convertToDispString($dateNo),			// 基本日オプション番号
+				'week'		=> $this->convertToDispString($dateWeek),			// 基本日オプション曜日
+				'name'		=> $this->convertToDispString($dateName),			// 名前
+				'type_id'	=> $this->convertToDispString($dateType),			// 日付タイプID
+				'root_url'	=> $this->convertToDispString($this->getUrl($this->gEnv->getRootUrl()))
+			);
+			$this->tmpl->addVars('option_date_list', $row);
+			$this->tmpl->parseTemplate('option_date_list', 'a');
+		}
+		if ($this->optionDateCount <= 0) $this->tmpl->setAttribute('option_date_list', 'visibility', 'hidden');// 一覧非表示
+	}
+	/**
 	 * 例外日リストを作成
 	 *
 	 * @return なし
 	 */
 	function createExceptDateList()
 	{
+		// 項目数再取得
 		$this->exceptDateCount = count($this->exceptDateFieldArray);
 		
 		for ($i = 0; $i < $this->exceptDateCount; $i++){
