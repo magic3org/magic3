@@ -65,7 +65,7 @@ $(function(){
 <patTemplate:tmpl name="entrylist">
 <div class="event_entry">
 <h2><a href="{PERMALINK}">{TITLE}</a></h2>
-<div><small>日時：&nbsp;{DATE}&nbsp;&nbsp;&nbsp;&nbsp;{PLACE}</small></div>
+<div><span class="event_datetime">日時：&nbsp;{DATE}&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="event_place">{PLACE}</span></div>
 {BUTTON_LIST}
 <div>{ENTRY}</div>{RESULT}
 <patTemplate:tmpl name="entry_footer" visibility="hidden">{LINK}</patTemplate:tmpl>
