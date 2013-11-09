@@ -230,6 +230,7 @@ CREATE TABLE blog_id (
     bl_owner_id          INT            DEFAULT 0                     NOT NULL,      -- ブログの所有者ID
     bl_group_id          INT            DEFAULT 0                     NOT NULL,      -- 所属グループID
     bl_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- 参照ユーザを制限
+    bl_limited_user_id   TEXT                                         NOT NULL,      -- 参照可能ユーザ(,区切り)
     bl_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 公開可否
     bl_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 公開期間(開始)
     bl_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 公開期間(終了)

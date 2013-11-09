@@ -222,6 +222,7 @@ CREATE TABLE _login_user (
     lu_enable_login      BOOLEAN        DEFAULT true                  NOT NULL,      -- ログイン許可
     lu_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ログイン可能期間(開始)
     lu_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ログイン可能期間(終了)
+    lu_tmp_password      CHAR(32)       DEFAULT ''                    NOT NULL,      -- 仮パスワード(MD5)
     lu_tmp_pwd_dt        TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 仮パスワード発行日時
     lu_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- レコードを登録したウィジェットID
     lu_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時

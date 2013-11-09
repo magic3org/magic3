@@ -30,4 +30,7 @@ ALTER TABLE _widgets ADD wd_content_info         VARCHAR(20)    DEFAULT ''      
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('access_in_intranet',               '0',                       'イントラネット運用');
+
 -- *** システム標準テーブル ***
+-- カレンダー日付
+ALTER TABLE calendar_date ADD ce_param             TEXT                                         NOT NULL;      -- オプションパラメータ(シリアライズデータ)

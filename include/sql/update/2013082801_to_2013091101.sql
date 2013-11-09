@@ -54,7 +54,7 @@ DROP TABLE IF EXISTS calendar_date;
 CREATE TABLE calendar_date (
     ce_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     ce_def_id            INT            DEFAULT 0                     NOT NULL,      -- カレンダー定義ID
-    ce_type              INT            DEFAULT 0                     NOT NULL,      -- データタイプ(0=インデックス番号,1=日付)
+    ce_type              INT            DEFAULT 0                     NOT NULL,      -- データタイプ(0=インデックス番号,1=日付,10=基本日オプション(インデックス番号))
     ce_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
     ce_date              DATE           DEFAULT '0000-00-00'          NOT NULL,      -- 日付
     

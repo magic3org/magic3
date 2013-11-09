@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2012090701',               'DBバージョン'),
+('db_version',                  '2012100901',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_url',                  '',                         'サーバURL'),
 ('default_lang',                'ja',                       'デフォルト言語'),
@@ -156,6 +156,7 @@ INSERT INTO _page_id
 ('photo',        1,       '',                '',            'フォトギャラリー',                   'フォトギャラリー画面用',               8,           0,              true,      true,      false,     true, false, false),
 ('contact',      1,       '',                '',            'お問い合わせ',                     'お問い合わせ画面用',                 9,           0,              true,      true,      false,     true, false, false),
 ('contact2',     1,       '',                '',            'お問い合わせ2',                    'お問い合わせ画面用',                 10,          0,              true,      true,      false,     true, false, false),
+('reguser',     1,       '',                '',            'ユーザ登録',                    'ユーザ登録画面用',                 12,          0,              true,      true,      false,     true, false, false),
 ('reserve',      1,       '',                '',            '予約',                             '予約画面用',                         20,          0,              true,      true,      false,     true, false, false),
 ('search',       1,       '',                '',            '検索',                             '検索画面用',                         21,          0,              true,      true,      false,     true, false, false),
 ('user',         1,       '',                '',            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          0,              true,      true,      false,     true, false, false),
