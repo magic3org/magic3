@@ -27,6 +27,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	private $addScript = array();		// 追加スクリプト
 	private $showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 	private $dateTypeInfo;		// 日付データタイプ
+	private $optionDateTypeInfo;		// 日付データタイプ(基本日オプション)
 	private $dateInfo;		// 日付データ
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カレンダー';		// デフォルトのウィジェットタイトル名
@@ -405,6 +406,10 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			// 基本日を取得
 			$this->dateTypeInfo = array();		// 日付データタイプ
 			$this->db->getDateList($defId, 0/*基本日データ*/, array($this, 'dateLoop'));
+			
+			// 基本日オプションを取得
+			$this->optionDateTypeInfo = array();		// 日付データタイプ(基本日オプション)
+			$this->db->getDateList($defId, 10/*基本日データ(オプション)*/, array($this, 'optionDateLoop'));
 		} else {
 			return $this->dateInfo;
 		}
@@ -422,7 +427,16 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		$endMonth = intval($endMonth);
 		$endDay = intval($endDay);		
 		$endTime = mktime(0, 0, 0, $endMonth, $endDay, $endYear);
+		// 先頭月の情報を取得
+		$startWeek = date('w', mktime(0, 0, 0, $month, 1, $year));		// 曜日(0=日曜日,1=月曜日...)	
+		$weekCount = intval(($day -1) / 7) + 1;				// 何番目の週か
 		while (true){
+			// 月の先頭かどうか
+			if (intval($day) == 1){
+				$weekCount = 1;				// 何番目の週か
+				$startWeek = $week;			// 先頭の曜日		
+			}
+			
 			$date = sprintf('%04s-%02s-%02s', $year, $month, $day);
 			switch ($repeatType){
 				case '0':		// 繰り返しなし
@@ -433,6 +447,11 @@ class calendarWidgetContainer extends BaseWidgetContainer
 					$this->dateInfo[$date] = $this->dateTypeInfo[$week];
 					break;
 			}
+			// 基本日オプションで上書き
+			if ($weekCount > 0){
+				$dateTypeInfo = $this->optionDateTypeInfo[$weekCount][$week];
+				if (isset($dateTypeInfo)) $this->dateInfo[$date] = $dateTypeInfo;
+			}	
 			
 			// 翌日を求める
 			$nextTime = mktime(0, 0, 0, $month, $day + 1, $year);
@@ -446,7 +465,12 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			// 曜日を更新
 			$week++;
 			if ($week == 7) $week = 0;
+			
+			// 週番号を更新
+			if ($weekCount > 0 && $week == $startWeek) $weekCount++;
 		}
+		// 前月の基本日オプションで上書き
+		
 
 		// 例外日データで更新
 		$this->db->getDateList($defId, 1/*例外日データ*/, array($this, 'exceptDateLoop'));
@@ -474,6 +498,25 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	function dateLoop($index, $fetchedRow, $param)
 	{	
 		$this->dateTypeInfo[]	= intval($fetchedRow['ce_date_type_id']);	// 基本日日付タイプ	
+		return true;
+	}
+	/**
+	 * 基本日オプション一覧を取得
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function optionDateLoop($index, $fetchedRow, $param)
+	{
+		$param = $fetchedRow['ce_param'];			// オプションパラメータ
+		if (!empty($param)){
+			$optionArray = unserialize($param);
+			$no 	= $optionArray['no'];		// 基本日オプション番号
+			$week	= $optionArray['week'];		// 基本日オプション曜日
+			$this->optionDateTypeInfo[$no][$week] = intval($fetchedRow['ce_date_type_id']);	// 基本日日付タイプ
+		}
 		return true;
 	}
 	/**
