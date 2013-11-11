@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_mainDb.php 5265 2012-10-03 09:36:36Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -727,9 +727,10 @@ class blog_mainDb extends BaseDb
 	 * @param function	$callback			コールバック関数
 	 * @param string	$blogId				ブログID(nullのとき指定なし)
 	 * @param int       $userId				参照制限する場合のユーザID
+	 * @param bool		$preview			プレビューモードかどうか
 	 * @return 			なし
 	 */
-	function getEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $keywords, $langId, $order, $callback, $blogId = null, $userId = null)
+	function getEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $keywords, $langId, $order, $callback, $blogId = null, $userId = null, $preview = false)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -741,9 +742,7 @@ class blog_mainDb extends BaseDb
 			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 			$queryStr .=   'LEFT JOIN _login_user ON be_regist_user_id = lu_id AND lu_deleted = false ';
 			$queryStr .=   'WHERE be_deleted = false ';		// 削除されていない
-			$queryStr .=     'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 			$queryStr .=     'AND be_language_id = ? ';	$params[] = $langId;
-			$queryStr .=     'AND be_regist_dt <= ? ';	$params[] = $now;		// 投稿日時が現在日時よりも過去のものを取得
 			if (!empty($entryId)){
 				$queryStr .=     'AND be_id = ? ';		$params[] = $entryId;
 			}
@@ -785,15 +784,20 @@ class blog_mainDb extends BaseDb
 				$params[] = $endDt;
 			}
 			
-			// 公開期間を指定
-			$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
-			$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';
-			$params[] = $initDt;
-			$params[] = $initDt;
-			$params[] = $now;
-			$params[] = $initDt;
-			$params[] = $initDt;
-			$params[] = $now;
+			if (!$preview){		// プレビューモードでないときは取得制限
+				$queryStr .=     'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
+				$queryStr .=     'AND be_regist_dt <= ? ';	$params[] = $now;		// 投稿日時が現在日時よりも過去のものを取得
+			
+				// 公開期間を指定
+				$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
+				$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';
+				$params[] = $initDt;
+				$params[] = $initDt;
+				$params[] = $now;
+				$params[] = $initDt;
+				$params[] = $initDt;
+				$params[] = $now;
+			}
 
 			if (empty($entryId)){
 				$ord = '';
@@ -860,18 +864,17 @@ class blog_mainDb extends BaseDb
 	 * @param string	$langId				言語
 	 * @param string	$blogId				ブログID(nullのとき指定なし)
 	 * @param int       $userId				参照制限する場合のユーザID
+	 * @param bool		$preview			プレビューモードかどうか
 	 * @return int							項目数
 	 */
-	function getEntryItemsCount($now, $startDt, $endDt, $keywords, $langId, $blogId = null, $userId = null)
+	function getEntryItemsCount($now, $startDt, $endDt, $keywords, $langId, $blogId = null, $userId = null, $preview = false)
 	{
 		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
 		$params = array();
 		
 		$queryStr = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 		$queryStr .=  'WHERE be_deleted = false ';		// 削除されていない
-		$queryStr .=    'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 		$queryStr .=    'AND be_language_id = ? ';	$params[] = $langId;
-		$queryStr .=    'AND be_regist_dt <= ? ';	$params[] = $now;		// 投稿日時が現在日時よりも過去のものを取得
 		
 		// タイトルと記事、ユーザ定義フィールドを検索
 		if (!empty($keywords)){
@@ -910,15 +913,20 @@ class blog_mainDb extends BaseDb
 			$params[] = $endDt;
 		}
 		
-		// 公開期間を指定
-		$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
-		$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
+		if (!$preview){		// プレビューモードでないときは取得制限
+			$queryStr .=    'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
+			$queryStr .=    'AND be_regist_dt <= ? ';	$params[] = $now;		// 投稿日時が現在日時よりも過去のものを取得
+		
+			// 公開期間を指定
+			$queryStr .=    'AND (be_active_start_dt = ? OR (be_active_start_dt != ? AND be_active_start_dt <= ?)) ';
+			$queryStr .=    'AND (be_active_end_dt = ? OR (be_active_end_dt != ? AND be_active_end_dt > ?)) ';
+			$params[] = $initDt;
+			$params[] = $initDt;
+			$params[] = $now;
+			$params[] = $initDt;
+			$params[] = $initDt;
+			$params[] = $now;
+		}
 		return $this->selectRecordCount($queryStr, $params);
 	}
 	/**
