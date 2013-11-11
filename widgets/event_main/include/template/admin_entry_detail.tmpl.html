@@ -48,6 +48,12 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow()
+{
+	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
+	return true;
+}
 $(function(){
 	$("#example").tabs();
 	
@@ -63,8 +69,8 @@ $(function(){
 	});
 	
 	// WYSIWYGエディター作成
-	m3SetWysiwygEditor('item_html', 500/* 高さ */);
-	m3SetWysiwygEditor('item_html2', 500/* 高さ */);
+	m3SetWysiwygEditor('item_html', 300/* 高さ */);
+	m3SetWysiwygEditor('item_html2', 300/* 高さ */);
 });
 //]]>
 </script>
@@ -77,8 +83,8 @@ $(function(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="entry" value="{ENTRY}" />
 <table width="90%">
-<tr><td><span {_HELP_ENTRY_DETAIL}><label>イベント記事詳細</label></span></td><td align="right">
-<patTemplate:tmpl name="cancel_button" visibility="visible"><span {_HELP_ENTRY_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
+<tr><td><span {_HELP_ENTRY_DETAIL}><label>イベント記事詳細</label></span></td><td align="right"><span {_HELP_ENTRY_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} /></span>
+<patTemplate:tmpl name="cancel_button" visibility="visible">&nbsp;&nbsp;<span {_HELP_ENTRY_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
 </td></tr>
 <tr><td colspan="2">
 <table class="simple-table">

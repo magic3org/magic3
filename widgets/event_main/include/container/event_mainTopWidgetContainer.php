@@ -22,6 +22,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 {
 	private $categoryDb;	// DB接続オブジェクト
 	private $commentDb;			// DB接続オブジェクト
+	private $preview;			// プレビューモードかどうか
 	private $currentDay;		// 現在日
 	private $currentHour;		// 現在時間
 	private $currentPageUrl;			// 現在のページURL
@@ -134,6 +135,13 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$body = $request->trimValueOf('body');
 		// ページ番号
 		$pageNo = $request->trimIntValueOf('page', '1');				// ページ番号
+
+		// 管理者でプレビューモードのときは表示制限しない
+		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
+		$this->preview = false;
+		if ($this->isSystemManageUser && $cmd == M3_REQUEST_CMD_PREVIEW){		// システム運用者以上
+			$this->preview = true;
+		}
 		
 		$showDefault = false;			// デフォルト状態での表示
 		$this->viewExtEntry = false;			// 結果を表示するかどうか
@@ -209,7 +217,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$endDt = $this->getNextMonth($year . '/' . $month) . '/1';
 					
 					// 総数を取得
-					$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
+					$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId, $this->preview);
 					$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 
 					// リンク文字列作成、ページ番号調整
@@ -217,7 +225,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
 				
 					// 記事一覧作成
-					self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
+					self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 
 					if ($this->isExistsViewData){
 						// ページリンクを埋め込む
@@ -238,7 +246,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$endDt = $this->getNextDay($year . '/' . $month . '/' . $day);
 					
 					// 総数を取得
-					$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
+					$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId, $this->preview);
 					$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 					
 					// リンク文字列作成、ページ番号調整
@@ -246,7 +254,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 					$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
 					
 					// 記事一覧作成
-					self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
+					self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 					
 					if ($this->isExistsViewData){
 						// ページリンクを埋め込む
@@ -381,7 +389,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$this->tmpl->addVar("show_top_content", "content", $topContent);
 
 				// 総数を取得
-				$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId);
+				$totalCount = self::$_mainDb->getEntryItemsCount($now, $startDt, $endDt, $this->langId, $this->preview);
 				$this->calcPageLink($pageNo, $totalCount, $entryViewCount);		// ページ番号修正
 				
 				// リンク文字列作成、ページ番号調整
@@ -390,7 +398,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			
 				// 記事一覧作成
 				self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, 0/* 期間で指定 */, $startDt/*期間開始*/, $endDt/*期間終了*/,
-								$this->langId, $entryViewOrder, array($this, 'itemsLoop'));
+								$this->langId, $entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 				
 				if ($this->isExistsViewData){		// 表示するイベント記事があるとき
 					// ページリンクを埋め込む
@@ -405,7 +413,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				}
 			} else {		// 記事単体表示のとき
 				$this->viewExtEntry = true;			// 記事ID指定のときは結果(全文)を表示
-				self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'));
+				self::$_mainDb->getEntryItems($entryViewCount, $pageNo, $now, $entryId, $startDt/*期間開始*/, $endDt/*期間終了*/, $this->langId, $entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 				
 				// 記事がないときはコメントを隠す
 				if (!$this->isExistsViewData){

@@ -518,6 +518,11 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		$this->createCategoryMenu($this->categoryCount);
 		
+		// プレビュー用URL
+		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_EVENT_ID . '=' . $this->entryId;
+		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar('_widget', 'entry', $this->entryId);
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// 名前

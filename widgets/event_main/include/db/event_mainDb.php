@@ -671,9 +671,10 @@ class event_mainDb extends BaseDb
 	 * @param string	$langId				言語
 	 * @param int		$order				取得順(0=昇順,1=降順)
 	 * @param function	$callback			コールバック関数
+	 * @param bool		$preview			プレビューモードかどうか
 	 * @return 			なし
 	 */
-	function getEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $langId, $order, $callback)
+	function getEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $langId, $order, $callback, $preview = false)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -683,9 +684,66 @@ class event_mainDb extends BaseDb
 		if (empty($entryId)){
 			$queryStr  = 'SELECT * FROM event_entry ';
 			$queryStr .=   'WHERE ee_deleted = false ';		// 削除されていない
-			$queryStr .=     'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 			$queryStr .=     'AND ee_language_id = ? ';	$params[] = $langId;
 		
+			if (!$preview){		// プレビューモードでないときは取得制限
+				$queryStr .=     'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
+				
+				// 検索条件
+				if (empty($startDt) && empty($endDt)){
+					$nowDate = date("Y/m/d", strtotime($now));
+					$queryStr .=    'AND ? <= ee_start_dt ';
+					$params[] = $nowDate;
+				} else {
+					if (!empty($startDt)){
+						$queryStr .=    'AND ? <= ee_start_dt ';
+						$params[] = $startDt;
+					}
+					if (!empty($endDt)){
+						$queryStr .=    'AND ee_start_dt < ? ';
+						$params[] = $endDt;
+					}
+				}
+			}
+			
+			$ord = '';
+			if (!empty($order)) $ord = 'DESC ';
+			$queryStr .=  'ORDER BY ee_start_dt ' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
+			$this->selectLoop($queryStr, $params, $callback, null);
+		} else {
+			$queryStr  = 'SELECT * FROM event_entry ';
+			$queryStr .=   'WHERE ee_deleted = false ';		// 削除されていない
+			$queryStr .=     'AND ee_id = ? ';		$params[] = $entryId;
+			$queryStr .=     'AND ee_language_id = ? ';	$params[] = $langId;
+			
+			if (!$preview){		// プレビューモードでないときは取得制限
+				$queryStr .=     'AND ee_status = ? ';	$params[] = 2;	// 「公開」(2)データを表示
+			}
+			$this->selectLoop($queryStr, $params, $callback, null);		// 「公開」(2)データを表示
+		}
+	}
+	
+	/**
+	 * エントリー項目数を取得(表示用)
+	 *
+	 * @param timestamp $now				現在日時(期間を指定しない場合は現在日より未来のイベントを取得)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param string	$langId				言語
+	 * @param bool		$preview			プレビューモードかどうか
+	 * @return int							項目数
+	 */
+	function getEntryItemsCount($now, $startDt, $endDt, $langId, $preview = false)
+	{
+		$params = array();
+		
+		$queryStr = 'SELECT * FROM event_entry ';
+		$queryStr .=  'WHERE ee_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND ee_language_id = ? ';	$params[] = $langId;
+		
+		if (!$preview){		// プレビューモードでないときは取得制限
+			$queryStr .=    'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
+					
 			// 検索条件
 			if (empty($startDt) && empty($endDt)){
 				$nowDate = date("Y/m/d", strtotime($now));
@@ -700,54 +758,6 @@ class event_mainDb extends BaseDb
 					$queryStr .=    'AND ee_start_dt < ? ';
 					$params[] = $endDt;
 				}
-			}
-		
-			$ord = '';
-			if (!empty($order)) $ord = 'DESC ';
-			$queryStr .=  'ORDER BY ee_start_dt ' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
-			$this->selectLoop($queryStr, $params, $callback, null);
-		} else {
-			$queryStr  = 'SELECT * FROM event_entry ';
-			$queryStr .=   'WHERE ee_deleted = false ';		// 削除されていない
-			$queryStr .=     'AND ee_status = ? ';	$params[] = 2;	// 「公開」(2)データを表示
-			$queryStr .=     'AND ee_id = ? ';		$params[] = $entryId;
-			$queryStr .=     'AND ee_language_id = ? ';	$params[] = $langId;
-			
-			$this->selectLoop($queryStr, $params, $callback, null);		// 「公開」(2)データを表示
-		}
-	}
-	
-	/**
-	 * エントリー項目数を取得(表示用)
-	 *
-	 * @param timestamp $now				現在日時(期間を指定しない場合は現在日より未来のイベントを取得)
-	 * @param timestamp	$startDt			期間(開始日)
-	 * @param timestamp	$endDt				期間(終了日)
-	 * @param string	$langId				言語
-	 * @return int							項目数
-	 */
-	function getEntryItemsCount($now, $startDt, $endDt, $langId)
-	{
-		$params = array();
-		
-		$queryStr = 'SELECT * FROM event_entry ';
-		$queryStr .=  'WHERE ee_deleted = false ';		// 削除されていない
-		$queryStr .=    'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
-		$queryStr .=    'AND ee_language_id = ? ';	$params[] = $langId;
-		
-		// 検索条件
-		if (empty($startDt) && empty($endDt)){
-			$nowDate = date("Y/m/d", strtotime($now));
-			$queryStr .=    'AND ? <= ee_start_dt ';
-			$params[] = $nowDate;
-		} else {
-			if (!empty($startDt)){
-				$queryStr .=    'AND ? <= ee_start_dt ';
-				$params[] = $startDt;
-			}
-			if (!empty($endDt)){
-				$queryStr .=    'AND ee_start_dt < ? ';
-				$params[] = $endDt;
 			}
 		}
 		return $this->selectRecordCount($queryStr, $params);
