@@ -7,7 +7,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.tmpl.html 4912 2012-05-21 14:51:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -20,6 +20,11 @@
 <script type="text/javascript" src="{_SCRIPTS_URL}/fileuploader/fileuploader.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+function newItem(){
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	document.main.act.value = 'add';
@@ -210,7 +215,7 @@ $(function(){
 <table width="90%">
 <tr><td><label>コンテンツ詳細</label></td><td align="right"><span {_HELP_CONTENT_HISTORY_BTN}><input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} /></span><span {_HELP_CONTENT_ADDMENU_BTN}><input type="button" class="button" onclick="addToMenu('{SEL_ITEM_ID}');" value="メニューに追加" {PREVIEW_BTN_DISABLED} /></span><span {_HELP_CONTENT_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} /></span>
 <patTemplate:tmpl name="cancel_button" visibility="visible">
-&nbsp;&nbsp;<span {_HELP_CONTENT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+&nbsp;&nbsp;<span {_HELP_CONTENT_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /></span><span {_HELP_CONTENT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
 </patTemplate:tmpl>
 </td></tr>
 <tr><td colspan="2">

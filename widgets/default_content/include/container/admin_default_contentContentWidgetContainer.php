@@ -388,7 +388,10 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$reloadData = false;		// データの再読み込み
 		$hasPassword = false;		// パスワードが設定されているかどうか
 		$historyIndex = -1;	// 履歴番号
-		if ($act == 'add'){		// 項目追加の場合。多言語対応の場合はデフォルト言語が最初に追加される。
+		if ($act == 'new'){
+			$this->serialNo = 0;
+			$reloadData = true;		// データの再読み込み
+		} else if ($act == 'add'){		// 項目追加の場合。多言語対応の場合はデフォルト言語が最初に追加される。
 			// 入力チェック
 			$this->checkInput($name, '名前');
 
@@ -761,6 +764,45 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				if ($hasPassword || !empty($key) || !empty($relatedContent) || count($this->attachFileInfoArray) > 0) $this->isOpenOptionArea = true;
 			} else {
 				$this->serialNo = 0;
+				
+				$contentId = '0';		// コンテンツID
+				$name = '';		// コンテンツ名前
+				$html = '';				// HTML
+				$desc = '';		// 簡易説明
+				$key = '';					// 外部参照用キー
+				$update_user = '';// 更新者
+				$update_dt = '';
+			
+				// 項目表示、デフォルト値チェックボックス
+				$visible = '1';
+				$default = '0';
+				$limited = '0';		// ユーザ制限
+				$metaTitle = '';		// ページタイトル名(METAタグ)
+				$metaDesc = '';		// ページ要約(METAタグ)
+				$metaKeyword = '';		// ページキーワード(METAタグ)
+				$start_date = '';	// 公開期間開始日
+				$start_time = '';	// 公開期間開始時間
+				$end_date = '';	// 公開期間終了日
+				$end_time = '';	// 公開期間終了時間
+				$relatedContent = '';		// 関連コンテンツ
+				$jQueryScript = '';	// jQueryスクリプト
+				$this->selectedPlugin = array();		// jQueryプラグイン
+				$this->templateId	= '';	// テンプレートID
+				
+				// パスワード
+				$hasPassword = false;		// パスワードが設定されている
+				
+				// 履歴番号
+				$historyIndex = -1;
+				
+				// ユーザ定義フィールド
+				$this->fieldValueArray = array();
+
+				// 添付ファイル情報
+				$this->attachFileInfoArray = array();
+				
+				// 拡張エリアの状態を設定
+				$this->isOpenOptionArea = false;
 			}
 		}
 		// 一覧の表示タイプを設定
@@ -906,6 +948,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				if (empty($contentId)){
 					$this->tmpl->addVar("_widget", "sel_item_id", '');			// コンテンツID
 					$this->tmpl->addVar("_widget", "item_id", '新規');			// コンテンツID
+					
+					$this->tmpl->addVar('cancel_button', 'new_btn_disabled', 'disabled');	// 「新規」ボタン使用不可
 				} else {
 					$this->tmpl->addVar("_widget", "sel_item_id", $contentId);			// コンテンツID
 					$this->tmpl->addVar("_widget", "item_id", $contentId);			// コンテンツID
@@ -913,6 +957,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			} else {
 				$this->tmpl->addVar("_widget", "sel_item_id", '');			// コンテンツID
 				$this->tmpl->addVar("_widget", "item_id", '新規');			// コンテンツID
+				
+				$this->tmpl->addVar('cancel_button', 'new_btn_disabled', 'disabled');	// 「新規」ボタン使用不可
 			}
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
 			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
