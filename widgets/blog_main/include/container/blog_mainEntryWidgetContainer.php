@@ -294,8 +294,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		//$regDt			= date("Y/m/d H:i:s");						// 投稿日時
 		
 		// ブログ定義値
-		$useMultiBlog = $this->_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
-		$this->categoryCount = $this->_configArray[blog_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
+		$useMultiBlog = self::$_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
+		$this->categoryCount = self::$_configArray[blog_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
 		if (empty($this->categoryCount)) $this->categoryCount = self::DEFAULT_CATEGORY_COUNT;
 		
 		// コンテンツレイアウトを取得
