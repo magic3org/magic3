@@ -221,6 +221,11 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		$this->createCategoryMenu(1);		// メニューは１つだけ表示
 		
+		// プレビュー用URL
+		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->gEnv->getPageSubIdByContentType($this->gEnv->getDefaultPageId(), M3_VIEW_TYPE_EVENT);
+		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		
 		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
 		$searchStr = '検索';
@@ -562,6 +567,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			// デフォルト言語を最初に登録
 			$this->tmpl->addVar("default_lang", "default_lang", $defaultLangName);
 			$this->tmpl->setAttribute('default_lang', 'visibility', 'visible');
+			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
 		} else {
 			$this->tmpl->addVar('_widget', 'id', $this->entryId);
 			
