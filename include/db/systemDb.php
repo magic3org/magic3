@@ -919,7 +919,7 @@ class SystemDb extends BaseDb
 	/**
 	 * 指定したコンテンツが表示可能なサブページIDを取得
 	 *
-	 * @param string $contentType	ウィジェットID
+	 * @param string $contentType	コンテンツタイプ
 	 * @param string $pageId		ページID
 	 * @return string				サブページID、該当なしのときは空
 	 */

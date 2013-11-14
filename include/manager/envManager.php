@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: envManager.php 6128 2013-06-25 01:46:36Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/version.php');	// システムバージョンクラス
@@ -1899,6 +1899,17 @@ class EnvManager extends Core
 		if ($this->currentPageSubId == $this->defaultPageSubId) return '';
 		
 		return $this->currentPageSubId;
+	}
+	/**
+	 * コンテンツ種別からデフォルトのページサブID取得
+	 *
+	 * @param string $pageId		ページID
+	 * @param string $contentType	コンテンツ種別	 * @return string 				ページサブID
+	 */
+	public function getPageSubIdByContentType($pageId, $contentType)
+	{
+		$pageSubId = $this->db->getSubPageIdWithContent($contentType, $pageId);// ページサブIDを取得
+		return $pageSubId;
 	}
 	/**
 	 * 現在のページの端末タイプを取得
