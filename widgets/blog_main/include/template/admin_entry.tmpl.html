@@ -86,6 +86,12 @@ function showSearchArea()
 {
 	$('#search_comment').slideToggle('slow');
 }
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow()
+{
+	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
+	return true;
+}
 $(function(){
 	// スクロールバー付きのテーブルを作成
 	m3_tableWithScrollbar('entrylist', {LIST_COUNT}, 0);
@@ -148,7 +154,7 @@ $(function(){
 <span {_HELP_ENTRY_LIST}><label>ブログ記事一覧</label></span>&nbsp;&nbsp;
 <a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>
 </td>
-<td align="right"><span {_HELP_ENTRY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_ENTRY_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_ENTRY_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+<td align="right"><span {_HELP_ENTRY_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" /></span>&nbsp;&nbsp;<span {_HELP_ENTRY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_ENTRY_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_ENTRY_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
 </td></tr>
 <tr><td colspan="2">
 <table id="entrylist" class="simple-table" width="100%">

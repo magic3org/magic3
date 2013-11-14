@@ -264,6 +264,12 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		$this->createCategoryMenu(1);		// メニューは１つだけ表示
 		
+		// プレビュー用URL
+		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->gEnv->getPageSubIdByContentType($this->gEnv->getDefaultPageId(), M3_VIEW_TYPE_BLOG);
+		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+//		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		
 		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
 		$searchStr = '検索';
@@ -375,6 +381,9 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$reloadData = false;		// データの再ロード
 		if ($act == 'select'){		// 一覧から選択のとき
 			$reloadData = true;		// データの再ロード
+		} else if ($act == 'new'){
+			$this->serialNo = 0;
+			$reloadData = true;		// データの再読み込み
 		} else if ($act == 'selectlang'){		// 項目選択の場合
 			// 登録済みのコンテンツデータを取得
 			$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);
@@ -728,6 +737,35 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				
 				// ユーザ定義フィールド
 				$this->fieldValueArray = $this->unserializeArray($row['be_option_fields']);
+			} else {
+				$this->entryId = '0';		// 記事ID
+				$this->blogId = '';		// 所属ブログ
+				$name = '';				// タイトル
+				$html = '';				// HTML
+				$html2 = '';				// HTML
+				$desc = '';		// 簡易説明
+				$status = 0;				// エントリー状況
+				$reg_user = '';				// 投稿者
+				$entry_date = date("Y/m/d");		// 投稿日
+				$entry_time = date("H:i:s");		// 投稿時間
+				$update_user = '';// 更新者
+				$update_dt = '';
+				$start_date = '';	// 公開期間開始日
+				$start_time = '';	// 公開期間開始時間
+				$end_date = '';	// 公開期間終了日
+				$end_time = '';	// 公開期間終了時間
+				$showComment = 1;				// コメントを表示するかどうか
+				$receiveComment = 1;		// コメントを受け付けるかどうか
+				$relatedContent = '';		// 関連コンテンツ
+				
+				// 記事カテゴリー取得
+				$this->categoryArray = array();
+				
+				// 履歴番号
+				$historyIndex = -1;
+				
+				// ユーザ定義フィールド
+				$this->fieldValueArray = array();
 			}
 		}
 		// カテゴリーメニューを作成
@@ -797,6 +835,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
 			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
 			$this->tmpl->addVar('_widget', 'history_btn_disabled', 'disabled');// 履歴ボタン使用不可
+			$this->tmpl->addVar('cancel_button', 'new_btn_disabled', 'disabled');	// 「新規」ボタン使用不可
 			
 			// デフォルト言語を最初に登録
 			$this->tmpl->addVar("default_lang", "default_lang", $defaultLangName);

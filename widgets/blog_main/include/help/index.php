@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 5263 2012-10-03 02:45:01Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 直接アクセスの防止
@@ -62,6 +62,8 @@ $HELP['entry_del_btn']['title'] = '削除ボタン';
 $HELP['entry_del_btn']['body'] = '選択されている記事を削除します。<br />項目を選択するには、一覧の左端のチェックボックスにチェックを入れます。';
 $HELP['entry_ret_btn']['title'] = '戻るボタン';
 $HELP['entry_ret_btn']['body'] = 'ブログ記事一覧へ戻ります。';
+$HELP['entry_preview_btn']['title'] = 'プレビューボタン';
+$HELP['entry_preview_btn']['body'] = 'コンテンツを表示した実際の画面です。';
 
 // ########## コメント ##########
 $HELP['comment_list']['title'] = 'コメント一覧';

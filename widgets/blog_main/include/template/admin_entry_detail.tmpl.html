@@ -13,6 +13,11 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function newItem(){
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	
@@ -90,7 +95,7 @@ $(function(){
 <table width="90%">
 <tr><td><span {_HELP_ENTRY_DETAIL}><label>ブログ記事詳細</label></span></td><td align="right">
 <span {_HELP_ENTRY_HISTORY_BTN}><input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} /></span><span {_HELP_ENTRY_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} /></span>
-<patTemplate:tmpl name="cancel_button" visibility="visible">&nbsp;&nbsp;<span {_HELP_ENTRY_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
+<patTemplate:tmpl name="cancel_button" visibility="visible">&nbsp;&nbsp;<span {_HELP_ENTRY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /></span><span {_HELP_ENTRY_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
 </td></tr>
 <tr><td colspan="2">
 <table class="simple-table">
