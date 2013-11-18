@@ -1,0 +1,71 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+// ファイルブラウザ起動
+function selectImage()
+{
+	m3OpenImageFileBrowser(SetUrl);
+}
+// ファイルブラウザからの設定用
+function SetUrl(url)
+{
+	// URL設定
+	$('#item_image_url').val(url);
+	
+	// 画像表示
+	updateImage();
+}
+function updateImage()
+{
+	// プレビュー画像設定
+	var url = $('#item_image_url').val();
+	var preOuter = $('#preview_outer');
+	var innerText = '<img id="preview_img" src="' + url + '"';
+	innerText += ' />';
+	preOuter.html(innerText);
+}
+$(function(){
+	// 画像表示
+	updateImage();
+});
+//]]>
+</script>
+<div align="center">
+<br />
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" id="item_image_url" name="item_image_url" value="{IMAGE_URL}" />
+<table class="simple-table">
+    <caption>「上へ参ります」設定</caption>
+    <tbody>
+    <tr>
+	    <td class="table-headside" width="150">画像<br />(48x48)</td>
+	    <td width="500"><div id="preview_outer">{IMAGE}</div><div><input type="button" class="button" onclick="selectImage();" value="変更" /></div></td>
+	</tr>
+    <tr class="even">
+	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
+	</tr>
+    </tbody>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

@@ -8,15 +8,17 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: gotopWidgetContainer.php 2506 2009-11-02 10:20:26Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
 
 class gotopWidgetContainer extends BaseWidgetContainer
 {
+	const DEFAULT_IMAGE_FILE = '/up.png';	// デフォルトの矢印アイコン
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -50,6 +52,13 @@ class gotopWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		$imageUrl = $this->gEnv->getCurrentWidgetImagesUrl() . self::DEFAULT_IMAGE_FILE;
+		$paramObj = $this->getWidgetParamObj();
+		if (!empty($paramObj)){
+			$imageUrl	= $paramObj->imageUrl;
+			$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
+		}
+		$this->tmpl->addVar("_widget", "image_url",	$imageUrl);
 	}
 }
 ?>

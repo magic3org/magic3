@@ -15,8 +15,10 @@
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
-class admin_g_analyticsWidgetContainer extends BaseAdminWidgetContainer
+class admin_gotopWidgetContainer extends BaseAdminWidgetContainer
 {
+	const DEFAULT_IMAGE_FILE = '/up.png';		// デフォルトの矢印アイコン
+		
 	/**
 	 * コンストラクタ
 	 */
@@ -50,14 +52,16 @@ class admin_g_analyticsWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		// 入力値を取得
+		$imageUrl = $request->trimValueOf('item_image_url');		// 画像のURL
+		if (empty($imageUrl)) $imageUrl = $this->gEnv->getCurrentWidgetImagesUrl() . self::DEFAULT_IMAGE_FILE;
 		$act = $request->trimValueOf('act');
+		
 		if ($act == 'update'){		// 設定更新のとき
-			// 入力値を取得
-			$account	= $request->valueOf('account_no');			// Google Analyticsアカウント番号
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				$paramObj = new stdClass;
-				$paramObj->account	= $account;
+				$paramObj->imageUrl	= $this->gEnv->getMacroPath($imageUrl);
 				$ret = $this->updateWidgetParamObj($paramObj);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -68,15 +72,16 @@ class admin_g_analyticsWidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else {		// 初期表示の場合
 			// デフォルト値設定
-			$account = '';	// Google Analyticsアカウント番号
+			$imageUrl = $this->gEnv->getCurrentWidgetImagesUrl() . self::DEFAULT_IMAGE_FILE;
 			$paramObj = $this->getWidgetParamObj();
 			if (!empty($paramObj)){
-				$account	= $paramObj->account;
+				$imageUrl	= $paramObj->imageUrl;
+				$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
 			}
 		}
-		
+
 		// 画面にデータを埋め込む
-		$this->tmpl->addVar("_widget", "account_no",	$account);
+		$this->tmpl->addVar("_widget", "image_url",	$imageUrl);// 画像のURL
 	}
 }
 ?>
