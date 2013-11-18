@@ -7,7 +7,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ckconfig.js 6010 2013-05-19 11:38:31Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // スタイルメニューの定義
@@ -143,6 +143,9 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
 	];
 	config.stylesCombo_stylesSet = 'default';
+	
+	// メッセージの変更
+	config.image_previewText = '<strong>「サーバーブラウザー」ボタン</strong>をクリックすると画像ブラウザが立ち上がり、サムネール表示の画像をダブルクリックすると取得できます。画像をアップロードするには、画像ブラウザ上部の「アップロード」ボタンをクリックするか、画像ブラウザ上へ画像ファイルをドロップします。';
 	
 	// 追加プラグインの設定
 	config.extraPlugins = 'youtube,googlemaps,linkinfo';
