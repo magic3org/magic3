@@ -1,0 +1,93 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function newItem(){
+	if (!window.confirm('新規にバックアップを行いますか?')) return false;
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
+function download(filename){
+	document.main.act.value = 'download';
+	document.main.filename.value = filename;
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (document.main.filelist.value){
+		var items = document.main.filelist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('削除する項目を選択してください');
+		} else {
+			if (!window.confirm('選択項目を削除しますか?')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+$(function(){
+	// スクロールバー付きのテーブルを作成
+	m3_tableWithScrollbar('itemlist', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="dbbackup" />
+<input type="hidden" name="act" />
+<input type="hidden" name="filename" />
+<input type="hidden" name="filelist" value="{FILELIST}" />
+<table width="90%">
+<tr><td>
+<label><span {_HELP_DBBACKUP}>バックアップファイル一覧</span></label>
+</td>
+<td align="right">
+<span {_HELP_DBBACKUP_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_DBBACKUP_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table id="itemlist" class="simple-table" width="100%">
+    <thead>
+        <tr>
+	    <th width="4%"><span {_HELP_DBBACKUP_CHECK}>選択</span></th>
+	    <th width="50%"><span {_HELP_DBBACKUP_NAME}>名前</span></th>
+		<th width="20%"><span {_HELP_DBBACKUP_SIZE}>サイズ(バイト)</span></th>
+	    <th><span {_HELP_DBBACKUP_REF}>操作</span></th>
+	</tr>
+    </thead>
+    <tbody>
+    <patTemplate:tmpl name="file_list">
+    <tr>
+        <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td>{FILENAME}</td>
+		<td align="right">{SIZE}</td>
+	    <td align="center"><input type="button" class="button" onclick="download('{FILENAME}');" value="ダウンロード" /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+</td></tr>
+</table>
+</form>
+</div>
+</patTemplate:tmpl>

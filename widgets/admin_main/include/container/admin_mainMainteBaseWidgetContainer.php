@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainMainteBaseWidgetContainer.php 2363 2009-09-26 14:45:44Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -20,6 +20,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_MAIN = 'mainte';				// メンテナンス
 	const TASK_RESBROWSE = 'resbrowse';		// ファイルブラウザ
 	const TASK_INITSYSTEM = 'initsystem';		// DBメンテナンス
+	const TASK_DBBACKUP = 'dbbackup';		// DBバックアップ
 	const TASK_PAGEINFO = 'pageinfo';	// ページ情報
 	const TASK_PAGEINFO_DETAIL = 'pageinfo_detail';	// ページ情報
 	const TASK_PAGEID = 'pageid';		// ページID
@@ -29,11 +30,12 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const DEFAULT_TASK = 'resbrowse';		// ファイルブラウザ
 	
 	const TASK_NAME_MAIN = 'メンテナンス';
-	const HELP_KEY_RESBROWSE = 'resbrowse';		// ファイルブラウザ
-	const HELP_KEY_PAGEINFO = 'pageinfo';
-	const HELP_KEY_PAGEID = 'pageid';
-	const HELP_KEY_MENUID = 'menuid';
-	const HELP_KEY_INITSYSTEM = 'initsystem';		// DBデータ初期化
+	const HELP_KEY_RESBROWSE	= 'resbrowse';		// ファイルブラウザ
+	const HELP_KEY_PAGEINFO		= 'pageinfo';
+	const HELP_KEY_PAGEID		= 'pageid';
+	const HELP_KEY_MENUID		= 'menuid';
+	const HELP_KEY_INITSYSTEM	= 'initsystem';		// DBデータ初期化
+	const HELP_KEY_DBBACKUP		= 'dbbackup';		// DBバックアップ
 	
 	/**
 	 * コンストラクタ
@@ -77,6 +79,9 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			case self::TASK_INITSYSTEM:		// DBデータ初期化
 				$linkList = ' DB管理 &gt;&gt; データ初期化';
 				break;
+			case self::TASK_DBBACKUP:		// DBバックアップ
+				$linkList = ' DB管理 &gt;&gt; バックアップ';
+				break;
 		}
 		// ####### 上段メニューの作成 #######
 		$menuText = '<div id="configmenu-upper">' . M3_NL;
@@ -106,7 +111,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		// DB管理
 		$current = '';
 		$link = $baseUrl . '?task=' . self::TASK_INITSYSTEM;		// DBデータ初期化
-		if ($task == self::TASK_INITSYSTEM){		// DBデータ初期化
+		if ($task == self::TASK_INITSYSTEM ||		// DBデータ初期化
+			$task == self::TASK_DBBACKUP){		// DBバックアップ
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>DB管理</span></a></li>' . M3_NL;
@@ -161,7 +167,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			// ヘルプを作成
 			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_MENUID);
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>メニューID</span></a></li>' . M3_NL;
-		} else if ($task == self::TASK_INITSYSTEM){				// DBデータ初期化
+		} else if ($task == self::TASK_INITSYSTEM || 	// DBデータ初期化
+					$task == self::TASK_DBBACKUP){		// DBバックアップ
 			// ### DBデータ初期化 ###
 			$current = '';
 			$link = $baseUrl . '?task=' . self::TASK_INITSYSTEM;
@@ -170,6 +177,15 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			// ヘルプを作成
 			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_INITSYSTEM);
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>データ初期化</span></a></li>' . M3_NL;
+			
+			// ### DBバックアップ ###
+			$current = '';
+			$link = $baseUrl . '?task=' . self::TASK_DBBACKUP;
+			if ($task == self::TASK_DBBACKUP) $current = 'id="current"';
+
+			// ヘルプを作成
+			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_DBBACKUP);
+			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>バックアップ</span></a></li>' . M3_NL;
 		}
 		
 		// 上段メニュー終了

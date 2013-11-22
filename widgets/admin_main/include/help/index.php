@@ -11,7 +11,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 5121 2012-08-20 03:29:46Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 直接アクセスの防止
@@ -351,4 +351,8 @@ $HELP['resbrowse']['body'] = 'サーバ上の各種ファイル操作を行い�
 // ########## DBデータ初期化 ##########
 $HELP['initsystem']['title'] = 'DBデータ初期化';
 $HELP['initsystem']['body'] = 'DBのデータを初期化します。';
+
+// ########## DBバックアップ ##########
+$HELP['dbbackup']['title'] = 'DBバックアップ';
+$HELP['dbbackup']['body'] = 'DBのデータをバックアップします。';
 ?>
