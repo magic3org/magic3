@@ -78,8 +78,7 @@ class admin_mainDbbackupWidgetContainer extends admin_mainMainteBaseWidgetContai
 		if (!file_exists($backupDir)) @mkdir($backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
 
 		if ($act == 'new'){
-	//		$backupFile = self::BACKUP_FILENAME_HEAD . '-`date +\%Y\%m\%d-\%H\%M\%S`.sql.gz';
-			$backupFile = self::BACKUP_FILENAME_HEAD . date('Ymd-His') . '.sql.gz';
+			$backupFile = $backupDir . DIRECTORY_SEPARATOR . self::BACKUP_FILENAME_HEAD . date('Ymd-His') . '.sql.zip';
 			$this->gInstance->getDbManager()->backupDb($backupFile);
 		} if ($act == 'delete'){		// メニュー項目の削除
 			$listedItem = explode(',', $request->trimValueOf('filelist'));
@@ -153,7 +152,7 @@ class admin_mainDbbackupWidgetContainer extends admin_mainMainteBaseWidgetContai
 		while (($file = $dir->read()) !== false){
 			$filePath = $path . DIRECTORY_SEPARATOR . $file;
 			// カレントディレクトリかどうかチェック
-			if ($file == '.' || $file == '..') continue;
+			if ($file == '.' || $file == '..' || !strStartsWith($file, self::BACKUP_FILENAME_HEAD)) continue;
 			$fileList[] = $file;
 		}
 		$dir->close();

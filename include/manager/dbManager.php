@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: dbManager.php 1909 2009-05-21 03:14:52Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -261,6 +261,17 @@ class DbManager extends Core
 		$ret = $this->specificDb->getDbDataSize($row);
 		if ($ret) $size = $row['size'];
 		return $size;
+	}
+	/**
+	 * データベースをバックアップ
+	 *
+	 * @param string $filename		バックアップファイル名
+	 * @return bool					true=正常、false=異常
+	 */
+	function backupDb($filename)
+	{
+		$ret = $this->specificDb->backupDb($filename);
+		return $ret;
 	}
 }
 ?>
