@@ -78,7 +78,7 @@ class admin_mainDbbackupWidgetContainer extends admin_mainMainteBaseWidgetContai
 		if (!file_exists($backupDir)) @mkdir($backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
 
 		if ($act == 'new'){
-			$backupFile = $backupDir . DIRECTORY_SEPARATOR . self::BACKUP_FILENAME_HEAD . date('Ymd-His') . '.sql.zip';
+			$backupFile = $backupDir . DIRECTORY_SEPARATOR . self::BACKUP_FILENAME_HEAD . date('Ymd-His') . '.sql.gz';
 			$this->gInstance->getDbManager()->backupDb($backupFile);
 		} if ($act == 'delete'){		// メニュー項目の削除
 			$listedItem = explode(',', $request->trimValueOf('filelist'));

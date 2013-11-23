@@ -22,9 +22,9 @@ class BaseDb extends Core
 	private static $_tranStatus;		// トランザクションの状態
 	private static $_inTran;			// トランザクション中かどうか
 	private static $_displayErrMessage = true;			// エラーメッセージの画面出力を行うかどうか
-	private $_connect_dsn;				// DB接続情報
-	private $_connect_user;				// DB接続ユーザ
-	private $_connect_password;			// DB接続パスワード
+	protected $_connect_dsn;				// DB接続情報
+	protected $_connect_user;				// DB接続ユーザ
+	protected $_connect_password;			// DB接続パスワード
 	private $_dsn;						// DB接続情報
 	private $_fetchCallback = null;		// フェッチ時のコールバック関数
 	private $_effectedRowCount;			// 直近のDELETE, INSERT, UPDATE文が作用した行数

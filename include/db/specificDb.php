@@ -91,7 +91,7 @@ class specificDb extends BaseDb
 		$dbType = $this->getDbType();
 		switch ($dbType){
 			case M3_DB_TYPE_MYSQL:		// MySQLの場合
-				$cmd = self::BACKUP_CMD . ' --opt -u' . $this->_connect_user . ' -p' . $this->_connect_password . ' ' . $this->_dbName . ' --single-transaction | zip > ' . $filename;
+				$cmd = self::BACKUP_CMD . ' --opt -u' . $this->_connect_user . ' -p' . $this->_connect_password . ' ' . $this->_dbName . ' --single-transaction | gzip > ' . $filename;
 				$ret = $this->_procExec($cmd);
 				if ($ret == 0){
 					$ret = true;
