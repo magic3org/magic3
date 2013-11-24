@@ -188,6 +188,7 @@ define('M3_WIDGET_TYPE_USER',	'user');				// ユーザ作成コンテンツ
 define('M3_SYSTEM_WORK_DIR_PATH', 				'/tmp');			// 作業用ディレクトリ
 define('M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD',	'm3_upload_');		// アップロードファイル一時退避用ファイル名ヘッダ
 define('M3_SYSTEM_WORK_DOWNLOAD_FILENAME_HEAD',	'm3_download_');	// ダウンロードファイル一時退避用ファイル名ヘッダ
+define('M3_SYSTEM_WORK_BACKUP_FILENAME_HEAD',	'm3_backup_');		// バックアップファイル一時退避用ファイル名ヘッダ
 define('M3_SYSTEM_WORK_DIRNAME_HEAD',			'm3_tmp_');			// 一時ディレクトリ名ヘッダ
 
 // ######### DB定義 ###########

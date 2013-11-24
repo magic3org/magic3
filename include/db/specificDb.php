@@ -106,6 +106,46 @@ class specificDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * データベースをリストア
+	 *
+	 * @param string $filename		バックアップファイル名
+	 * @return bool					true=正常、false=異常
+	 */
+	function restoreDb($filename)
+	{
+		$ret = false;
+		$dbType = $this->getDbType();
+		switch ($dbType){
+			case M3_DB_TYPE_MYSQL:		// MySQLの場合
+				// 一時ファイルに解凍
+				$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_BACKUP_FILENAME_HEAD);
+				$sfp = gzopen($filename, "rb");
+				$fp = fopen($tmpFile, "w");
+				while ($string = gzread($sfp, 4096)) {
+					fwrite($fp, $string, strlen($string));
+				}
+				gzclose($sfp);
+				fclose($fp);
+
+				// リストアコマンド実行
+				$cmd = "mysql -u$this->_connect_user -p$this->_connect_password -e 'source $tmpFile' $this->_dbName";
+				$ret = $this->_procExec($cmd);
+				if ($ret == 0){
+					$ret = true;
+				} else {
+					$ret = false;
+				}
+				
+				// 一時ファイル削除
+				unlink($tmpFile);
+				break;
+			case M3_DB_TYPE_PGSQL:		// PostgreSQLの場合
+
+				break;
+		}
+		return $ret;
+	}
+	/**
 	 * シェルコマンドを実行
 	 *
 	 * @param string $command		コマンド

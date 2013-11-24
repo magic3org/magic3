@@ -19,6 +19,13 @@ function newItem(){
 	document.main.submit();
 	return true;
 }
+function restore(filename){
+	if (!window.confirm('DBのリストアを行いますか?\nこの操作を行うとDBの内容はすべて置き替わります')) return false;
+	document.main.act.value = 'restore';
+	document.main.filename.value = filename;
+	document.main.submit();
+	return true;
+}
 function download(filename){
 	document.main.act.value = 'download';
 	document.main.filename.value = filename;
@@ -81,7 +88,7 @@ $(function(){
         <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{FILENAME}</td>
 		<td align="right">{SIZE}</td>
-	    <td align="center"><input type="button" class="button" onclick="download('{FILENAME}');" value="ダウンロード" /></td>
+	    <td align="center"><input type="button" class="button" onclick="download('{FILENAME}');" value="ダウンロード" /><input type="button" class="button" onclick="restore('{FILENAME}');" value="リストア" /></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>

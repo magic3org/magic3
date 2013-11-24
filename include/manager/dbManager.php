@@ -273,5 +273,16 @@ class DbManager extends Core
 		$ret = $this->specificDb->backupDb($filename);
 		return $ret;
 	}
+	/**
+	 * データベースをリストア
+	 *
+	 * @param string $filename		バックアップファイル名
+	 * @return bool					true=正常、false=異常
+	 */
+	function restoreDb($filename)
+	{
+		$ret = $this->specificDb->restoreDb($filename);
+		return $ret;
+	}
 }
 ?>

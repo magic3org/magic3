@@ -77,9 +77,18 @@ class admin_mainDbbackupWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$backupDir = $this->gEnv->getIncludePath() . self::BACKUP_DIR;				// バックアップファイル格納ディレクトリ
 		if (!file_exists($backupDir)) @mkdir($backupDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的に作成*/);
 
-		if ($act == 'new'){
+		if ($act == 'new'){			// バックアップ処理
+			// タイムアウトを停止
+			$this->gPage->setNoTimeout();
+			
 			$backupFile = $backupDir . DIRECTORY_SEPARATOR . self::BACKUP_FILENAME_HEAD . date('Ymd-His') . '.sql.gz';
 			$this->gInstance->getDbManager()->backupDb($backupFile);
+		} else if ($act == 'restore'){		// リストア処理
+			// タイムアウトを停止
+			$this->gPage->setNoTimeout();
+			
+			$restoreFilename = $backupDir . DIRECTORY_SEPARATOR . $filename;
+			$this->gInstance->getDbManager()->restoreDb($restoreFilename);
 		} if ($act == 'delete'){		// メニュー項目の削除
 			$listedItem = explode(',', $request->trimValueOf('filelist'));
 			$delItems = array();
@@ -127,7 +136,7 @@ class admin_mainDbbackupWidgetContainer extends admin_mainMainteBaseWidgetContai
 			$row = array(
 				'index'			=> $i,
 				'filename'    	=> $this->convertToDispString($fileName),			// ファイル名
-				'size'     		=> $size			// ファイルサイズ
+				'size'     		=> number_format($size)			// ファイルサイズ
 			);
 			$this->tmpl->addVars('file_list', $row);
 			$this->tmpl->parseTemplate('file_list', 'a');
