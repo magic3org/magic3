@@ -18,6 +18,7 @@
 
 -- *** システムベーステーブル ***
 -- システム設定マスター
+DELETE FROM _system_config WHERE sc_id = 'admin_default_theme';
 INSERT INTO _system_config 
 (sc_id,                 sc_value,         sc_name) VALUES
 ('admin_default_theme', 'black-tie',          '管理画面用jQueryUIテーマ');
