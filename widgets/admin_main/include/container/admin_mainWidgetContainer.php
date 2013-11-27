@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainWidgetContainer.php 6132 2013-06-25 05:29:46Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -280,8 +280,13 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 							$this->gPage->redirect($this->getUrl($otherPage));
 							break;
 						default:
-							$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
-							$param = 'message';			// メッセージ画面表示
+							if (strStartsWith($task, 'test_')){
+								$this->gLaunch->goSubWidget($task);
+								return false;
+							} else {
+								$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
+								$param = 'message';			// メッセージ画面表示
+							}
 							break;
 					}
 				} else {		// システム管理者以外の場合

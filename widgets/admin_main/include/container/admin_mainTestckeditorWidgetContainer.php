@@ -14,11 +14,9 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
-require_once($gEnvManager->getLibPath() .	'/tcpdf/config/lang/jpn.php');
-require_once($gEnvManager->getLibPath() .	'/tcpdf/tcpdf.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
-class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainTestckeditorWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 		
@@ -45,7 +43,7 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test.tmpl.html';
+		return 'test_ckeditor.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
