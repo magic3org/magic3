@@ -184,7 +184,7 @@ class banner3WidgetContainer extends BaseWidgetContainer
 					$destImg = '';
 					if (!empty($imageUrl)){
 						if ($itemType == 0){		// 画像ファイルの場合
-							$destImg = '<img src="' . $this->getUrl($imageUrl) . '"';
+							$destImg = '<img class="banner_image" src="' . $this->getUrl($imageUrl) . '"';
 							if (!empty($imageWidth) && $imageWidth > 0) $destImg .= ' width="' . $imageWidth . '"';
 							if (!empty($imageHeight) && $imageHeight > 0) $destImg .= ' height="' . $imageHeight. '"';
 							if (!empty($imageAlt)) $destImg .= ' alt="' . $this->convertToDispString($imageAlt) . '"';		// 代替テキスト

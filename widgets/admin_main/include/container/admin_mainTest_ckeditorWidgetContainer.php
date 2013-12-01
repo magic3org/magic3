@@ -16,7 +16,7 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
-class admin_mainTestckeditorWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainTest_ckeditorWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 		
