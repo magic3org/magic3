@@ -393,6 +393,10 @@ DELETE FROM _widgets WHERE wd_id = 'event_category';
 INSERT INTO _widgets
 (wd_id,            wd_name,                     wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,             wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('event_category', 'イベント情報 - 選択カテゴリー', '1.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベント記事の1カテゴリに属する記事の一覧を表示。', true,        false,               true,true,               1, -1, true, '2013-10-06', now(),    now());
+DELETE FROM _widgets WHERE wd_id = 'slogan';
+INSERT INTO _widgets
+(wd_id,   wd_name, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,   wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('slogan', 'スローガン',  '1.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'ヘッダ等の前面にメッセージテキストを表示。レスポンシブウェブ対応。',                      'jquery.fittext',         '',        true,         false,                                true,                true,              '2012-11-01', now(),         now());
 
 -- ウィジェット情報(携帯用)
 DELETE FROM _widgets WHERE wd_id = 'm/mainmenu';

@@ -75,6 +75,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_FULLCALENDAR	= 'jquery.fullcalendar';
 	const LIB_JQUERY_TIMEPICKER		= 'jquery.timepicker';
 	const LIB_JQUERY_JSON			= 'jquery.json';
+	const LIB_JQUERY_FITTEXT		= 'jquery.fittext';
 	
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
@@ -177,6 +178,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const JQUERY_TIMEPICKER_LANG_FILENAME	= 'jquery/timepicker/i18n/jquery.ui.timepicker-ja.js';
 	const JQUERY_TIMEPICKER_CSS			= 'jquery/timepicker/jquery.ui.timepicker.css';
 	const JQUERY_JSON_FILENAME			= 'jquery/jquery.json-2.4.min.js';
+	const JQUERY_FITTEXT_FILENAME		= 'jquery/jquery.fittext.js';
 	
 	// ライブラリの公式サイトのURL
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
@@ -417,6 +419,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 					self::LIB_JQUERY_JSON			=>	array(	'script' 	=> array(self::JQUERY_JSON_FILENAME),	// jquery.json用のファイル
 																'url'		=> self::JQUERY_JSON_URL,
 																'version'	=> self::JQUERY_JSON_VER),
+					self::LIB_JQUERY_FITTEXT		=>	array(	'script' 	=> array(self::JQUERY_FITTEXT_FILENAME)),	// jquery.fittext用のファイル
 /*					self::LIB_JQUERY_JQEASYPANEL	=>	array(	'script' 	=> array(self::JQUERY_JQEASYPANEL_FILENAME),	// jquery.jqEasyPanel用のファイル
 																'css'		=> array(self::JQUERY_JQEASYPANEL_CSS),
 																'url'		=> self::JQUERY_JQEASYPANEL_URL,
