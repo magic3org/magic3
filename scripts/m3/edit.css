@@ -7,7 +7,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: edit.css 5922 2013-04-10 22:43:51Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 img.m3icon {
@@ -34,6 +34,24 @@ img.m3icon {
 }
 .m3configclose img {
 	border:0;	/* for IE */
+}
+/* 設定画面「前へ」アイコン */
+.m3configprev {
+	position:fixed;
+	bottom:100px;
+	left:50px;
+	margin:5px;
+	padding:0;
+	z-index:2;
+}
+/* 設定画面「次へ」アイコン */
+.m3confignext {
+	position:fixed;
+	bottom:100px;
+	right:50px;
+	margin:5px;
+	padding:0;
+	z-index:2;
 }
 /* ツールチップ */
 .m3tooltip {

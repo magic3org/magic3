@@ -144,6 +144,8 @@ class PageManager extends Core
 	const EDIT_PAGE_ICON_FILE = '/images/system/create_page64.png';		// パネルメニュー編集用アイコン
 	const EDIT_END_ICON_FILE = '/images/system/close64.png';		// パネルメニュー編集終了用アイコン
 	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
+	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
+	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	
 	// アドオンオブジェクト用
@@ -2222,30 +2224,39 @@ class PageManager extends Core
 			$cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||	// ウィジェット詳細設定画面のとき
 			$cmd == M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体実行のとき
 
-			if ($this->isEditMode && !empty($openBy)){// 一般画面編集モードのとき
-				// サーバ指定されている場合はサーバ情報を取得
-				$serverName = '';
-				$server = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_SERVER);
-				if (!empty($server)){
-					// 設定データを取得
-					$ret = $this->db->getServerById($server, $row);
-					if ($ret){
-						$serverName = 'サーバ名：' . $row['ts_name'];// サーバ名
-						echo '<div align="left" style="float:left;padding-left:30px;"><label>' . convertToHtmlEntity($serverName) . '</label></div>';
+			if ($this->isEditMode){// 一般画面編集モードのとき
+				if (!empty($openBy)){
+					// サーバ指定されている場合はサーバ情報を取得
+					$serverName = '';
+					$server = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_SERVER);
+					if (!empty($server)){
+						// 設定データを取得
+						$ret = $this->db->getServerById($server, $row);
+						if ($ret){
+							$serverName = 'サーバ名：' . $row['ts_name'];// サーバ名
+							echo '<div align="left" style="float:left;padding-left:30px;"><label>' . convertToHtmlEntity($serverName) . '</label></div>';
+						}
+					}
+					// タブ形式以外のときは「閉じる」ボタンを表示
+					if ($openBy != 'tabs'){
+						if ($openBy == 'logout'){
+							$titleStr = 'ログアウト';
+							echo '<div class="m3configclose"><a href="#" onclick="location.href=\'?cmd=logout\';"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
+										'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
+						} else {
+							$titleStr = '閉じる';
+							echo '<div class="m3configclose"><a href="#" onclick="window.close();"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
+										'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
+						}
 					}
 				}
-				// タブ形式以外のときは「閉じる」ボタンを表示
-				if ($openBy != 'tabs'){
-					if ($openBy == 'logout'){
-						$titleStr = 'ログアウト';
-						echo '<div class="m3configclose"><a href="#" onclick="location.href=\'?cmd=logout\';"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
-									'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
-					} else {
-						$titleStr = '閉じる';
-						echo '<div class="m3configclose"><a href="#" onclick="window.close();"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
-									'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
-					}
-				}
+				// 「前へ」「次へ」ボタン
+				$titleStr = '前へ';
+				echo '<div class="m3configprev" style="display:none;"><a id="m3configprev" href="#"><img src="' . $rootUrl . self::PREV_ICON_FILE . 
+							'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
+				$titleStr = '次へ';
+				echo '<div class="m3confignext" style="display:none;"><a id="m3confignext" href="#"><img src="' . $rootUrl . self::NEXT_ICON_FILE . 
+							'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
 			}
 		}
 		echo '<!-- Widget Start -->' . M3_NL;

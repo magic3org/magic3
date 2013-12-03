@@ -185,7 +185,7 @@ $(function(){
 <span {_HELP_IMAGE_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
 </td></tr>
 <tr><td colspan="2">
-<table class="simple-table" width="100%">
+<table class="simple-table">
     <tbody>
         <tr>
 	    <td class="table-headside" width="150"><span {_HELP_IMAGE_NAME_INPUT}>名前</span></td>
@@ -230,8 +230,8 @@ $(function(){
 	</tr>
 	<tr>
 	    <td class="table-headside"><span {_HELP_IMAGE_LINK_URL}>リンク</span></td>
-	    <td colspan="3"><label><span style="width:10%;display:inline-block;">デフォルト：</span><input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" maxlength="200" style="width:80%;" /></label><input type="button" class="button" onclick="createUrl(0);" value="URL作成" /><br />
-	    <label><span style="width:10%;display:inline-block;">スマートフォン：</span><input type="text" id="item_link_url_s" name="item_link_url_s" value="{LINK_URL_S}" maxlength="200" style="width:80%;" /></label><input type="button" class="button" onclick="createUrl(2);" value="URL作成" />
+	    <td colspan="3"><label><span style="width:13%;display:inline-block;">デフォルト：</span><input type="text" id="item_link_url" name="item_link_url" value="{LINK_URL}" maxlength="200" style="width:77%;" /></label><input type="button" class="button" onclick="createUrl(0);" value="URL作成" /><br />
+	    <label><span style="width:13%;display:inline-block;">スマートフォン：</span><input type="text" id="item_link_url_s" name="item_link_url_s" value="{LINK_URL_S}" maxlength="200" style="width:77%;" /></label><input type="button" class="button" onclick="createUrl(2);" value="URL作成" />
 	    </td>
 	</tr>
 	<tr class="even">
@@ -250,7 +250,7 @@ $(function(){
 	</tr>
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_IMAGE_LAYOUT}>レイアウト</span></td>
-	    <td colspan="3"><textarea name="item_html">{HTML}</textarea></td>
+	    <td colspan="3" width="800"><textarea name="item_html">{HTML}</textarea></td>
 	</tr>
     <tr>
 	    <td class="table-headside"><span {_HELP_IMAGE_NOTE}>管理者用備考</span></td>
