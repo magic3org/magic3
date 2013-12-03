@@ -141,7 +141,7 @@ function m3OpenImageFileBrowser(seturl_callback)
 		zIndex: 99999,
 		open: function(){
 			$(this).parent().css("padding", "0px");
-			$(this).css("padding", "0px")
+			$(this).css("padding", "0px");
 		},
 		create: function(event, ui){
 			$(this).elfinder({
@@ -196,7 +196,7 @@ function m3OpenFlashFileBrowser(seturl_callback)
 		zIndex: 99999,
 		open: function(){
 			$(this).parent().css("padding", "0px");
-			$(this).css("padding", "0px")
+			$(this).css("padding", "0px");
 		},
 		create: function(event, ui){
 			$(this).elfinder({
@@ -385,6 +385,38 @@ function m3CreateLinkUrl(deviceType, url, seturl_callback)
 	dummyCKParent.show();			// IE8バグ回避用
 	CKEDITOR.instances['_dummy_ckeditor'].execCommand( 'linkinfo' );
 	dummyCKParent.hide();			// IE8バグ回避用
+}
+/**
+ * 「前へ」ボタンのクリックイベントにコールバックを設定
+ *
+ * @param function	callback	コールバック関数
+ * @param int       param		コールバック用パラメータ
+ * @return なし
+ */
+function m3SetPrevButtonEvent(callback, param)
+{
+	if (typeof(callback) == 'function'){
+		$('#m3configprev').click(function(){
+			callback(param);
+		});
+		$('.m3configprev').show();
+	}
+}
+/**
+ * 「次へ」ボタンのクリックイベントにコールバックを設定
+ *
+ * @param function	callback	コールバック関数
+ * @param int       param		コールバック用パラメータ
+ * @return なし
+ */
+function m3SetNextButtonEvent(callback, param)
+{
+	if (typeof(callback) == 'function'){
+		$('#m3confignext').click(function(){
+			callback(param);
+		});
+		$('.m3confignext').show();
+	}
 }
 /**
  * 画面操作用スライド開閉メニューバー

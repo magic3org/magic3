@@ -713,6 +713,44 @@ class blog_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * 前後のエントリー項目を取得
+	 *
+	 * @param timestamp $regDate			登録日時
+	 * @param array     $prevRow			前のレコード
+	 * @param array     $nextRow			次のレコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getPrevNextEntryByDate($regDate, &$prevRow, &$nextRow)
+	{
+		if ($regDate == $this->gEnv->getInitValueOfTimestamp()){
+			return false;
+		} else {
+			$retStatus = false;
+			$params = array();
+			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+			$queryStr .=     'AND be_regist_dt < ? '; $params[] = $regDate;
+			$queryStr .=   'ORDER BY be_regist_dt DESC LIMIT 1';// 投稿順
+			$ret = $this->selectRecord($queryStr, $params, $row);
+			if ($ret){
+				$prevRow = $row;
+				$retStatus = true;
+			}
+			
+			$params = array();
+			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+			$queryStr .=     'AND ? < be_regist_dt '; $params[] = $regDate;
+			$queryStr .=   'ORDER BY be_regist_dt LIMIT 1';// 投稿順
+			$ret = $this->selectRecord($queryStr, $params, $row);
+			if ($ret){
+				$nextRow = $row;
+				$retStatus = true;
+			}
+		}
+		return $retStatus;
+	}
+	/**
 	 * エントリー項目を取得(表示用)
 	 *
 	 * @param int		$limit				取得する項目数

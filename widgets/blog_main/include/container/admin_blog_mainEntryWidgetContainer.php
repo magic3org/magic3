@@ -737,6 +737,15 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				
 				// ユーザ定義フィールド
 				$this->fieldValueArray = $this->unserializeArray($row['be_option_fields']);
+				
+				// 前後のエントリーのシリアル番号を取得
+				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
+					$ret = self::$_mainDb->getPrevNextEntryByDate($row['be_regist_dt'], $prevRow, $nextRow);
+					if ($ret){
+						if (!empty($prevRow)) $prevSerial = $prevRow['be_serial'];
+						if (!empty($nextRow)) $nextSerial = $nextRow['be_serial'];
+					}
+				}
 			} else {
 				$this->entryId = '0';		// 記事ID
 				$this->blogId = '';		// 所属ブログ
@@ -824,6 +833,16 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "receive_comment", $checked);// コメントを受け付けるかどうか
 		$this->tmpl->addVar("_widget", "related_content", $relatedContent);	// 関連コンテンツ
 		
+		// 前後エントリー移動ボタン
+		if (!empty($prevSerial)){
+			$this->tmpl->setAttribute('show_prev_button', 'visibility', 'visible');
+			$this->tmpl->addVar('show_prev_button', 'serial', $prevSerial);
+		}
+		if (!empty($nextSerial)){
+			$this->tmpl->setAttribute('show_next_button', 'visibility', 'visible');
+			$this->tmpl->addVar('show_next_button', 'serial', $nextSerial);
+		}
+						
 		// 非表示項目を設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
 

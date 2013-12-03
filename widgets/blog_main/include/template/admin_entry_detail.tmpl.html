@@ -81,7 +81,22 @@ $(function(){
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_html', 300/* 高さ */);
 	m3SetWysiwygEditor('item_html2', 300/* 高さ */);
+	
+	// 前後エントリー移動ボタン
+	<patTemplate:tmpl name="show_prev_button" visibility="hidden">
+	m3SetPrevButtonEvent(editEntry, {SERIAL});
+	</patTemplate:tmpl>
+	<patTemplate:tmpl name="show_next_button" visibility="hidden">
+	m3SetNextButtonEvent(editEntry, {SERIAL});
+	</patTemplate:tmpl>
 });
+function editEntry(serial){
+	document.main.entryid.value = '';		// 値キャンセル
+	document.main.task.value = 'entry_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
+}
 //]]>
 </script>
 <div align="center">
