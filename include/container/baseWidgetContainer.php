@@ -50,7 +50,7 @@ class BaseWidgetContainer extends Core
 	const LOCAL_TEXT_HEAD = '_lc_';		// ローカライズテキストタグのヘッダ部
 	const LOCAL_TYPE_SYSTEM = 'system';	// ローカライズテキストのタイプ(システム用言語)
 	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
-	const DETACT_GOOGLEMAPS = 'Magic3 googlemaps v';		// Googleマップ検出用文字列
+	const DETECT_GOOGLEMAPS = 'Magic3 googlemaps v';		// Googleマップ検出用文字列
 	
 	// メッセージの種別
 	const MSG_APP_ERR  = 1;		// アプリケーションエラー
@@ -1586,7 +1586,7 @@ class BaseWidgetContainer extends Core
 	{
 		// ### コンテンツ内容のチェック ###
 		// Googleマップが含まれている場合はコンテンツ情報として登録->Googleマップライブラリの読み込み指示
-		$pos = strpos($src, self::DETACT_GOOGLEMAPS);
+		$pos = strpos($src, self::DETECT_GOOGLEMAPS);
 		if ($pos !== false) $this->gPage->setIsContentGooglemaps(true);
 		
 		// URLを求める

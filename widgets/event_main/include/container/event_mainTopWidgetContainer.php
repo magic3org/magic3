@@ -580,20 +580,22 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$entryText = $fetchedRow['ee_html'];
 		$resultText = '';
 		if ($this->viewExtEntry){			// 結果を表示するかどうか
-			$entryText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryText);// アプリケーションルートを変換
+//			$entryText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryText);// アプリケーションルートを変換
 			if (!empty($fetchedRow['ee_html_ext'])){		// 結果がある場合
 				$resultText = $fetchedRow['ee_html_ext'];
-				$resultText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $resultText);// アプリケーションルートを変換
+//				$resultText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $resultText);// アプリケーションルートを変換
 				$resultText = '<div>' . $resultText . '</div>';
 			}
 		} else {
 			// 結果がある場合はリンクを付加
-			$entryText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryText);// アプリケーションルートを変換
+//			$entryText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryText);// アプリケーションルートを変換
 			if (!empty($fetchedRow['ee_html_ext'])){
 				$entryText .= self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a>';
 			}
 		}
-
+		$entryText = $this->convertM3ToHtml($entryText, true/*改行コーをbrタグに変換*/, array());
+		$resultText = $this->convertM3ToHtml($resultText, true/*改行コーをbrタグに変換*/, array());
+		
 		// イベント開催期間
 		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
 			if ($isAllDay){		// 終日イベントのとき
@@ -672,10 +674,11 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		// HTMLを出力(出力内容は特にエラーチェックしない)
 		// 結果がある場合はリンクを付加
 		$entryText = $fetchedRow['ee_html'];
-		$entryText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryText);// アプリケーションルートを変換
+//		$entryText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryText);// アプリケーションルートを変換
 		if (!empty($fetchedRow['ee_html_ext'])){
 			$entryText .= self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a>';
 		}
+		$entryText = $this->convertM3ToHtml($entryText, true/*改行コーをbrタグに変換*/, array());
 		
 		$row = array(
 			'title' => $link,			// リンク付きタイトル
