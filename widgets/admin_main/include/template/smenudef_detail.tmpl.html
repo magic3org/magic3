@@ -56,8 +56,39 @@ function createUrl()
 function setLinkUrl(url)
 {
 	$('#item_url').val(url);
+	
+	// タイトル取得ボタン制御
+	if (url == ''){
+		$("#get_title_button").prop('disabled', true);
+	} else {
+		$("#get_title_button").prop('disabled', false);
+	}
+}
+// リンク先からタイトル取得
+function getTitle()
+{
+	var url = $('#item_url').val();
+	if (url != ''){
+		// Ajaxでタイトルを取得
+		m3_ajax_request('', 'task=linkinfo&act=gettitle&url=' + url, function(request, retcode, jsondata){		// 正常終了
+			// 取得したタイトルを設定
+			if (jsondata.title){
+				if (jsondata.title != '') $('#item_name').val(jsondata.title);
+			}
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	}
 }
 $(function(){
+	// タイトル取得ボタン制御
+	var url = $('#item_url').val();
+	if (url == ''){
+		$("#get_title_button").prop('disabled', true);
+	} else {
+		$("#get_title_button").prop('disabled', false);
+	}
+	
 	// CKEditorプラグイン直接実行
 	m3LoadCKTools();
 });
@@ -89,7 +120,7 @@ $(function(){
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>
-	    <input type="text" name="item_name" value="{SEL_ITEM_NAME}" size="40" maxlength="40" />&nbsp;&nbsp;{LANG}<br />
+	    <input type="text" id="item_name" name="item_name" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /><input type="button" id="get_title_button" class="button" onclick="getTitle();" value="{_LC_LABEL_GET_TITLE}" {GET_TITLE_DISABLED} />&nbsp;&nbsp;{LANG}<br />
 	    <patTemplate:tmpl name="input_lang" visibility="hidden">
 	    <input type="text" name="item_name_{ID}" value="{VALUE}" size="40" maxlength="40" />&nbsp;&nbsp;{LANG}<br />
 	    </patTemplate:tmpl>

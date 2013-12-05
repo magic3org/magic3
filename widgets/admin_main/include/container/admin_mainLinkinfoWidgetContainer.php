@@ -22,7 +22,7 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	private $langId;		// 言語
 	private $db;	// DB接続オブジェクト
 	private $contentDb;		// DB接続オブジェクト
-	private $deviceType;		// デバイスタイプ(0=PC、1=携帯、2=スマートフォン)
+//	private $deviceType;		// デバイスタイプ(0=PC、1=携帯、2=スマートフォン)
 	private $pageList = array();		// ページリスト
 	private $contentList = array();		// コンテンツリスト
 	private $contentType;			// コンテンツタイプ
@@ -161,9 +161,11 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		} else if ($act == 'getcontent'){		// コンテンツ取得
 			$this->contentType = $request->trimValueOf('contenttype');
 			$contentId = $request->trimValueOf('contentid');
-			$contentText = '';		// プレビュー用コンテンツ
+//			$contentText = '';		// プレビュー用コンテンツ
 			
-			switch ($this->contentType){
+			// プレビュー用コンテンツ取得
+			list($contentTitle, $contentText) = $this->getContentInfo($accessPoint, $this->contentType, $contentId, $this->langId);
+/*			switch ($this->contentType){
 				case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
 					// コンテンツタイプ
 					switch ($accessPoint){
@@ -201,11 +203,35 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 					break;
 				case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
 					break;
-			}
+			}*/
 			$this->gInstance->getAjaxManager()->addData('content', $contentText);
 			
 		} else if ($act == 'getaccesspoint'){		// アクセスポイント取得
 			$this->gInstance->getAjaxManager()->addData('accesspoint', $this->accessPointType);
+		} else if ($act == 'gettitle'){		// リンク先のコンテンツタイトル取得(メニュー定義画面(menudef,smenudef)からの呼び出し用)
+			$url = $request->trimValueOf('url');
+			$path = $this->gEnv->getMacroPath($url);
+			$contentTitle = '';
+			if (strStartsWith($path, M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END)){		// Magic3のルートURLマクロのとき
+				$path = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/', '', $path);
+				
+				// アクセスポイントを取得
+				$accessPoint = '';		// PC
+				if (strStartsWith($path, M3_DIR_NAME_MOBILE . '/')){
+					$accessPoint = M3_DIR_NAME_MOBILE;		// 携帯
+				} else if (strStartsWith($path, M3_DIR_NAME_SMARTPHONE . '/')){
+					$accessPoint = M3_DIR_NAME_SMARTPHONE;		// スマートフォン
+				}
+				
+				// コンテンツタイプ、コンテンツID取得
+				list($tmp, $queryStr) = explode('?', $path);
+				list($this->contentType, $contentId) = $this->getContentType($queryStr);
+				
+				// コンテンツを取得
+				list($contentTitle, $contentText) = $this->getContentInfo($accessPoint, $this->contentType, $contentId, $this->langId);
+			} else {		// 外部リンクの場合
+			}
+			$this->gInstance->getAjaxManager()->addData('title', $contentTitle);
 		}
 	}
 	/**
@@ -319,6 +345,133 @@ class admin_mainLinkinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$contentText = substr($contentText, 0, self::CONTENT_LENGTH) . '...';
 		}
 		return $contentText;
+	}
+	
+	/**
+	 * コンテンツプレビュー用のテキストとタイトルを取得
+	 *
+	 * @param strint $accessPoint	アクセスポイント
+	 * @param string $contentType	コンテンツタイプ
+	 * @param string $contentId		コンテンツID
+	 * @param string $langId		言語ID
+	 * @return array				コンテンツタイトル、コンテンツテキストの配列
+	 */
+	function getContentInfo($accessPoint, $contentType, $contentId, $langId)
+	{
+		$contentText = '';
+		$contentTitle = '';
+		switch ($contentType){
+			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+				// コンテンツタイプ
+				switch ($accessPoint){
+					case '':			// PC用
+					default:
+						$contentType = '';
+						break;
+					case 'm':			// 携帯用
+						$contentType = 'mobile';
+						break;
+					case 's':			// スマートフォン用
+						$contentType = 'smartphone';
+						break;
+				}
+				$ret = $this->contentDb->getContent($contentType, $contentId, $langId, $row);
+				if ($ret){
+					$contentTitle = $row['cn_name'];
+					$contentText = $this->createContentText($row['cn_html']);
+				}
+				break;
+			case M3_VIEW_TYPE_PRODUCT:	// 製品
+				$ret = $this->contentDb->getProduct($contentId, $langId, $row);
+				if ($ret){
+					$contentTitle = $row['pt_name'];
+					$contentText = $this->createContentText($row['pt_description']);
+				}
+				break;
+			case M3_VIEW_TYPE_BBS:	// BBS
+				break;
+			case M3_VIEW_TYPE_BLOG:	// ブログ
+				$ret = $this->contentDb->getEntry($contentId, $langId, $row);
+				if ($ret){
+					$contentTitle = $row['be_name'];
+					$contentText = $this->createContentText($row['be_html']);
+				}
+				break;
+			case M3_VIEW_TYPE_WIKI:	// Wiki
+				$contentTitle = $contentId;			// コンテンツIDを返す
+				break;
+			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+				break;
+			case M3_VIEW_TYPE_EVENT:	// イベント
+				$ret = $this->contentDb->getEvent($contentId, $langId, $row);
+				if ($ret){
+					$contentTitle = $row['ee_name'];
+					$contentText = $this->createContentText($row['ee_html']);
+				}
+				break;
+			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+				break;
+		}
+		return array($contentTitle, $contentText);
+	}
+	/**
+	 * URLクエリー文字列からコンテンツタイプを取得
+	 *
+	 * @param string $queryStr	クエリー文字列
+	 * @return array			コンテンツタイプとコンテンツIDの配列
+	 */
+	function getContentType($queryStr)
+	{
+		$contentType = '';
+		$contentId = '';
+		
+		// URLクエリー文字列を解析
+		parse_str($queryStr, $queryArray);
+		if (count($queryArray) > 0){
+			reset($queryArray);
+			$firstKey = key($queryArray);
+			$contentId = $queryArray[$firstKey];
+			
+			switch ($firstKey){
+				case M3_REQUEST_PARAM_CONTENT_ID:		// 汎用コンテンツID
+				case M3_REQUEST_PARAM_CONTENT_ID_SHORT:
+					$contentType = M3_VIEW_TYPE_CONTENT;		// 汎用コンテンツ
+					break;
+				case M3_REQUEST_PARAM_PRODUCT_ID:		// 製品ID
+				case M3_REQUEST_PARAM_PRODUCT_ID_SHORT:
+					$contentType = M3_VIEW_TYPE_PRODUCT;		// 商品情報(Eコマース)
+					break;
+				case M3_REQUEST_PARAM_EVENT_ID:	// イベントID
+				case M3_REQUEST_PARAM_EVENT_ID_SHORT:
+					$contentType = M3_VIEW_TYPE_EVENT;		// イベント情報
+					break;
+				case M3_REQUEST_PARAM_PHOTO_ID:	// 画像ID
+				case M3_REQUEST_PARAM_PHOTO_ID_SHORT:
+					$contentType = M3_VIEW_TYPE_PHOTO;		// フォトギャラリー
+					break;
+				case M3_REQUEST_PARAM_BLOG_ENTRY_ID:	// ブログ記事ID
+				case M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT:
+					$contentType = M3_VIEW_TYPE_BLOG;		// ブログ
+					break;
+				default:
+					$contentId = '';
+			}
+			
+			if (empty($contentType)){		// コンテンツタイプが確定できないとき
+				$queryArray = explode('&', $queryStr);// 「&」で分割
+				for ($i = 0; $i < count($queryArray); $i++){
+					$line = $queryArray[$i];
+					$pos = strpos($line, '=');
+					if ($pos === false){		// 「=」なしのパラメータはwikiパラメータとする
+						$contentType = M3_VIEW_TYPE_WIKI;		// wiki
+						$contentId = $line;			// コンテンツID
+						break;
+					}
+				}
+			}
+		} else {		// URLトップの場合
+		}
+		return array($contentType, $contentId);
 	}
 }
 ?>
