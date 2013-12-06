@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_blog_mainConfigWidgetContainer.php 5701 2013-02-20 02:26:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBaseWidgetContainer.php');
@@ -71,6 +71,10 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		if (strlen($topContent) <= 10){ // FCKEditorのバグの対応(空の場合でもBRタグが送信される)
 			$topContent = '';
 		}
+		$titleSearchList	= $request->trimValueOf('item_title_search_list');		// 検索結果タイトル
+		$titleNoEntry		= $request->trimValueOf('item_title_no_entry');		// 記事なし時タイトル
+		$messageNoEntry		= $request->trimValueOf('item_message_no_entry');		// 記事が登録されていないメッセージ
+		$messageFindNoEntry = $request->trimValueOf('item_message_find_no_entry');		// 記事が見つからないメッセージ
 		
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
@@ -78,6 +82,12 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$this->checkNumeric($maxCommentLength, 'コメント最大文字数');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
+				// 空の場合はデフォルト値を設定
+				if (empty($titleSearchList)) $titleSearchList = blog_mainCommonDef::DEFAULT_TITLE_SEARCH_LIST;// 検索結果タイトル
+				if (empty($titleNoEntry)) $titleNoEntry = blog_mainCommonDef::DEFAULT_TITLE_NO_ENTRY;	// 記事なし時タイトル
+				if (empty($messageNoEntry)) $messageNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_NO_ENTRY;// 記事が登録されていないメッセージ
+				if (empty($messageFindNoEntry)) $messageFindNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;	// 記事が見つからないメッセージ
+			
 				$ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_ENTRY_VIEW_COUNT, $entryViewCount);				// 記事表示数
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_ENTRY_VIEW_ORDER, $entryViewOrder);	// 記事表示順
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_CATEGORY_COUNT, $categoryCount);		// カテゴリ数
@@ -91,7 +101,11 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_LAYOUT_COMMENT_LIST, $layoutCommentList);		// コンテンツレイアウト(コメント一覧)
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_OUTPUT_HEAD, $outputHead);		// ヘッダ出力するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_HEAD_VIEW_DETAIL, $headViewDetail);	// ヘッダ出力(詳細表示)
-																												
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_SEARCH_LIST, $titleSearchList);		// 検索結果タイトル
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_NO_ENTRY, $titleNoEntry);		// 記事なし時タイトル
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_MESSAGE_NO_ENTRY, $messageNoEntry);		// 記事が登録されていないメッセージ
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY, $messageFindNoEntry);		// 記事が見つからないメッセージ
+																										
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				} else {
@@ -161,6 +175,14 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			if (empty($layoutCommentList)) $layoutCommentList = blog_mainCommonDef::DEFAULT_LAYOUT_COMMENT_LIST;
 			$outputHead = self::$_mainDb->getConfig(blog_mainCommonDef::CF_OUTPUT_HEAD);		// ヘッダ出力するかどうか
 			$headViewDetail = self::$_mainDb->getConfig(blog_mainCommonDef::CF_HEAD_VIEW_DETAIL);		// ヘッダ出力(詳細表示)
+			$titleSearchList = self::$_mainDb->getConfig(blog_mainCommonDef::CF_TITLE_SEARCH_LIST);		// 検索結果タイトル
+			if (empty($titleSearchList)) $titleSearchList = blog_mainCommonDef::DEFAULT_TITLE_SEARCH_LIST;
+			$titleNoEntry = self::$_mainDb->getConfig(blog_mainCommonDef::CF_TITLE_NO_ENTRY);		// 記事なし時タイトル
+			if (empty($titleNoEntry)) $titleNoEntry = blog_mainCommonDef::DEFAULT_TITLE_NO_ENTRY;
+			$messageNoEntry = self::$_mainDb->getConfig(blog_mainCommonDef::CF_MESSAGE_NO_ENTRY);		// 記事が登録されていないメッセージ
+			if (empty($messageNoEntry)) $messageNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_NO_ENTRY;
+			$messageFindNoEntry = self::$_mainDb->getConfig(blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY);		// 記事が見つからないメッセージ
+			if (empty($messageFindNoEntry)) $messageFindNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;
 		}
 		// 画面に書き戻す
 		$this->tmpl->addVar("_widget", "view_count", $entryViewCount);// 記事表示数
@@ -199,6 +221,10 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		if (!empty($outputHead)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "output_head_checked", $checked);		// ヘッダ出力するかどうか
 		$this->tmpl->addVar("_widget", "head_view_detail", $headViewDetail);		// ヘッダ出力(詳細表示)
+		$this->tmpl->addVar("_widget", "title_search_list", $titleSearchList);		// 検索結果タイトル
+		$this->tmpl->addVar("_widget", "title_no_entry", $titleNoEntry);		// 記事なし時タイトル
+		$this->tmpl->addVar("_widget", "message_no_entry", $messageNoEntry);		// 記事が登録されていないメッセージ
+		$this->tmpl->addVar("_widget", "message_find_no_entry", $messageFindNoEntry);		// 記事が見つからないメッセージ
 	}
 }
 ?>

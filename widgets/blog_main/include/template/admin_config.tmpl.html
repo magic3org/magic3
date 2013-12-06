@@ -7,7 +7,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_other.tmpl.html 5108 2012-08-14 03:13:58Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -67,12 +67,12 @@ $(function(){
 <input type="hidden" name="task" value="config" />
 <br>
 <table width="90%"><tr><td>
-<table id="item_list" class="simple-table" width="100%">
+<table id="item_list" class="simple-table">
 <caption><span {_HELP_CONFIG_TITLE}>ブログ設定</span></caption>
     <tbody>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_OPERATION}>機能</span></td>
-	    <td><label class="item_list_inline"><input type="checkbox" name="use_multi_blog" {USE_MULTI_BLOG} />マルチブログを使用</label><label class="item_list_inline"><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></td>
+	    <td class="table-headside" width="150"><span {_HELP_CONFIG_OPERATION}>機能</span></td>
+	    <td width="800"><label class="item_list_inline"><input type="checkbox" name="use_multi_blog" {USE_MULTI_BLOG} />マルチブログを使用</label><label class="item_list_inline"><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></td>
 	</tr>
     <tr>
 	    <td class="table-headside" width="150"><span {_HELP_CONFIG_VIEW_COUNT}>記事表示数</span></td>
@@ -134,6 +134,13 @@ $(function(){
 	</tr>
     <tr>
 	    <td height="50"><textarea name="item_head_view_detail" style="width:100%;height:100%;">{HEAD_VIEW_DETAIL}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="table-headside"><span {_HELP_CONFIG_TITLE_MESSAGE}>タイトル・メッセージ</span></td>
+	    <td>検索結果タイトル：<input type="text" name="item_title_search_list" value="{TITLE_SEARCH_LIST}" size="40" maxlength="40" /><br />
+		記事なし時タイトル：<input type="text" name="item_title_no_entry" value="{TITLE_NO_ENTRY}" size="40" maxlength="40" /><br />
+		記事が登録されていないメッセージ：<input type="text" name="item_message_no_entry" value="{MESSAGE_NO_ENTRY}" size="80" maxlength="80" /><br />
+		記事が見つからないメッセージ：<input type="text" name="item_message_find_no_entry" value="{MESSAGE_FIND_NO_ENTRY}" size="80" maxlength="80" /><br /></td>
 	</tr>
     </tbody>
 </table>

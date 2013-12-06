@@ -49,14 +49,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $outputHead;			// ヘッダ出力するかどうか
 	private $viewMode;					// 表示モード
 	private $avatarSize;		// アバター画像サイズ
+	private $titleNoEntry;		// 記事なし時タイトル
+	private $messageNoEntry;		// ブログ記事が登録されていないメッセージ
+	private $messageFindNoEntry;	// ブログ記事が見つからないメッセージ
 	const CONTENT_TYPE = 'bg';
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
-	const MESSAGE_NO_ENTRY_TITLE = 'ブログ記事未登録';
-	const MESSAGE_NO_ENTRY		= 'ブログ記事は登録されていません';				// ブログ記事が登録されていないメッセージ
-	const MESSAGE_FIND_NO_ENTRY	= 'ブログ記事が見つかりません';
 	const MESSAGE_EXT_ENTRY		= '続きを読む';					// 投稿記事に続きがある場合の表示
 	const MESSAGE_EXT_ENTRY_PRE	= '…&nbsp;';							// 投稿記事に続きがある場合の表示
-	const SEARCH_TITLE = 'ブログ検索';				// 検索一覧タイトル
+//	const SEARCH_TITLE = 'ブログ検索';				// 検索一覧タイトル
 	const COMMENT_PERMA_HEAD	= 'comment-';		// コメントパーマリンク
 	const COMMENT_TITLE		= ' についてのコメント';	// コメント用タイトル
 	const NO_COMMENT_TITLE = 'タイトルなし';				// 未設定時のコメントタイトル
@@ -93,6 +93,15 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->outputHead = self::$_configArray[blog_mainCommonDef::CF_OUTPUT_HEAD];			// ヘッダ出力するかどうか
 		$this->useMultiBlog = self::$_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
 		$this->receiveComment = self::$_configArray[blog_mainCommonDef::CF_RECEIVE_COMMENT];		// コメントを受け付けるかどうか
+		
+		$this->titleSearchList = self::$_configArray[blog_mainCommonDef::CF_TITLE_SEARCH_LIST];		// 検索結果タイトル
+		if (empty($this->titleSearchList)) $this->titleSearchList = blog_mainCommonDef::DEFAULT_TITLE_SEARCH_LIST;
+		$this->titleNoEntry = self::$_configArray[blog_mainCommonDef::CF_TITLE_NO_ENTRY];		// 記事なし時タイトル
+		if (empty($this->titleNoEntry)) $this->titleNoEntry = blog_mainCommonDef::DEFAULT_TITLE_NO_ENTRY;
+		$this->messageNoEntry = self::$_configArray[blog_mainCommonDef::CF_MESSAGE_NO_ENTRY];		// ブログ記事が登録されていないメッセージ
+		if (empty($this->messageNoEntry)) $this->messageNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_NO_ENTRY;
+		$this->messageFindNoEntry = self::$_configArray[blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY];		// ブログ記事が見つからないメッセージ
+		if (empty($this->messageFindNoEntry)) $this->messageFindNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -414,8 +423,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		// ブログ記事データがないときはデータなしメッセージ追加
 		if (!$this->isExistsViewData){
-			$this->title = self::MESSAGE_NO_ENTRY_TITLE;
-			$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+//			$this->title = self::MESSAGE_NO_ENTRY_TITLE;
+//			$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+			$this->title = $this->titleNoEntry;
+			$this->message = $this->messageNoEntry;
 		}
 	}
 	/**
@@ -509,8 +520,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->tmpl->addVar("page_link", "page_link", $pageLink);
 				}
 			} else {	// ブログ記事データがないときはデータなしメッセージ追加
-				$this->title = self::MESSAGE_NO_ENTRY_TITLE;
-				$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+				//$this->title = self::MESSAGE_NO_ENTRY_TITLE;
+				//$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+				$this->title = $this->titleNoEntry;
+				$this->message = $this->messageNoEntry;
 			}
 		}
 		// ブログ記事データがないときはデータなしメッセージ追加
@@ -583,10 +596,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->message = '検索キーワード：' . $keyword;
 			} else {	// 検索結果なしの場合
 				$this->tmpl->setAttribute('entrylist', 'visibility', 'hidden');
-				$this->message = self::MESSAGE_FIND_NO_ENTRY;
+				//$this->message = self::MESSAGE_FIND_NO_ENTRY;
+				$this->message = $this->messageFindNoEntry;
 			}
 		}
-		$this->title = self::SEARCH_TITLE;				// 検索一覧タイトル
+		$this->title = $this->titleSearchList;				// 検索一覧タイトル
 		$this->pageTitle = self::DEFAULT_TITLE_SEARCH;		// 画面タイトル、パンくずリスト用タイトル
 	}
 	/**
@@ -647,8 +661,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->tmpl->addVar("page_link", "page_link", $pageLink);
 				}
 			} else {
-				$this->title = self::MESSAGE_NO_ENTRY_TITLE;
-				$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+			//	$this->title = self::MESSAGE_NO_ENTRY_TITLE;
+			//	$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+				$this->title = $this->titleNoEntry;
+				$this->message = $this->messageNoEntry;
 			}
 	//	} else if (!empty($year) && !empty($month)){
 		} else if (!empty($year)){			// 年月日指定のとき
@@ -693,7 +709,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
-					$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+					//$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+					$this->message = $this->messageNoEntry;
 				}
 			} else if (!empty($month)){		// 月指定のとき
 				$startDt = $year . '/' . $month . '/1';
@@ -731,7 +748,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
-					$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+					//$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+					$this->message = $this->messageNoEntry;
 				}
 			} else {		// 年指定のとき
 				$startDt = $year . '/1/1';
@@ -769,7 +787,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
-					$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+					//$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
+					$this->message = $this->messageNoEntry;
 				}
 			}
 		}

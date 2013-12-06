@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_mainCommonDef.php 5263 2012-10-03 02:45:01Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
  
@@ -34,6 +34,10 @@ class blog_mainCommonDef
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	const CF_LAYOUT_ENTRY_LIST		= 'layout_entry_list';			// コンテンツレイアウト(記事一覧)
 	const CF_LAYOUT_COMMENT_LIST	= 'layout_comment_list';			// コンテンツレイアウト(コメント一覧)
+	const CF_TITLE_SEARCH_LIST		= 'title_search_list';		// 検索結果タイトル
+	const CF_TITLE_NO_ENTRY			= 'title_no_entry';		// 記事なし時タイトル
+	const CF_MESSAGE_NO_ENTRY			= 'message_no_entry';		// ブログ記事が登録されていないメッセージ
+	const CF_MESSAGE_FIND_NO_ENTRY		= 'message_find_no_entry';		// ブログ記事が見つからないメッセージ
 	
 	const USER_ID_SEPARATOR = ',';			// ユーザID区切り用セパレータ
 	const ATTACH_FILE_DIR = '/etc/blog';				// 添付ファイル格納ディレクトリ
@@ -42,6 +46,10 @@ class blog_mainCommonDef
 	const DEFAULT_LAYOUT_ENTRY_LIST = '[#TITLE#]<small>[#CT_AUTHOR#] [#CT_DATE#] [#CT_TIME#] [#BLOG_LINK#]</small>[#BODY#][#CATEGORY#][#COMMENT_LINK#]';	// デフォルトのコンテンツレイアウト(記事一覧)
 	const DEFAULT_LAYOUT_COMMENT_LIST = '[#AVATAR#]<dl><db>[#TITLE#] <small>[#CM_AUTHOR#] [#CM_DATE#] [#CM_TIME#] [#URL#]</small></dt><dd>[#BODY#]</dd></dl>';	// デフォルトのコンテンツレイアウト(コメント一覧)
 	const DEFAULT_HEAD_VIEW_DETAIL = '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />';	// デフォルトのヘッダ出力(詳細表示)
+	const DEFAULT_TITLE_SEARCH_LIST 	= 'ブログ検索';		// 検索結果タイトルのデフォルト値
+	const DEFAULT_TITLE_NO_ENTRY		= 'ブログ記事未登録';
+	const DEFAULT_MESSAGE_NO_ENTRY		= 'ブログ記事は登録されていません';				// ブログ記事が登録されていないメッセージ
+	const DEFAULT_MESSAGE_FIND_NO_ENTRY	= 'ブログ記事が見つかりません';					// ブログ記事が見つからないメッセージ
 	
 	/**
 	 * フォトギャラリー定義値をDBから取得
