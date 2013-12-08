@@ -1,4 +1,16 @@
 <patTemplate:tmpl name="_tmpl">
-{ID} {
+{ID} .banner_image {
+    margin:2px;
+}
+{ID}.banner_horizontal .banner_image_outer {
+    float:left;
+    padding:0px;
+    width:240px;
+    display:inline-block;
+}
+{ID}.banner_vertical .banner_image_outer {
+    float:none;
+    padding:0px;
+    width:240px;
 }
 </patTemplate:tmpl>

@@ -99,136 +99,138 @@ class banner3WidgetContainer extends BaseWidgetContainer
 			return;
 		}
 		// バナー定義が取得できたときは、バナーを画面に出力
-		if (empty($this->record)){
-			$this->cancelParse();		// 出力しない
-		} else {
-			$itemArray = explode(',', $this->record['bd_item_id']);
-			if (count($itemArray) > 0){
-				// 表示するバナー項目を決定する
-				$itemCount = $this->record['bd_disp_item_count'];
-				$dispItemArray = array();
-				switch ($this->record['bd_disp_type']){
-					case 0:// サイクリック
-						$firstIndex = $this->record['bd_first_item_index'];
-						if ($firstIndex < 0 || $firstIndex >= count($itemArray)) $firstIndex = 0;
-						if ($itemCount > count($itemArray)) $itemCount = count($itemArray);
-						$count = count($itemArray);
-						for ($i = $firstIndex; $i < $count; $i++)
-						{
-							$dispItemArray[] = $itemArray[$i];
-							if (count($dispItemArray) >= $itemCount){
-								$nextIndex = $i + 1;
-								break;
-							}
-						}
-						$count = $itemCount - count($dispItemArray);
-						for ($i = 0; $i < $count; $i++)
-						{
-							$dispItemArray[] = $itemArray[$i];
-						}
-						if ($count > 0) $nextIndex = $count;
-						if ($nextIndex >= count($itemArray)) $nextIndex = 0;
-						// 読み込みインデックスを保存
-						if (!$this->gEnv->isSystemAdmin()){		// システム管理者の場合はカウントしない
-							$ret = $this->db->updateBannerItemIndex($this->record['bd_id'], $nextIndex);
-						}
-						break;
-					case 1:// ランダム
-						while (true){
-							$index = mt_rand(0, count($itemArray) -1);
-							$dispItemArray[] = $itemArray[$index];
-							array_splice($itemArray, $index, 1);	// 取得した項目を削除
-							if (count($itemArray) == 0 || // 元のデータからすべて取得した
-								count($dispItemArray) >= $itemCount) break;		// 取得最大個数に達した
-						}
-						break;
-				}
-			}
-			// バナー出力
-			for ($i = 0; $i < count($dispItemArray); $i++)
-			{
-				$ret = $this->db->getImageById($dispItemArray[$i], $row);
-				if ($ret && $row['bi_visible']){	// 表示可能なときは表示
-					// DBにバナー表示のログを残す
-					$key = '';
-					if (!$this->gEnv->isSystemAdmin()){		// システム管理者の場合はカウントしない
-						$key = $this->db->viewBannerItemLog($row['bi_serial'], $this->gAccess->getAccessLogSerialNo());
-					}
+		if (empty($this->record)) $this->cancelParse();		// 出力しない
+			
+		$cssId = $this->record['bd_css_id'];
+		$this->headCss = $this->convertM3ToText($this->record['bd_css']);	// 標準マクロ変換してCSSを作成
 		
-					$itemType = $row['bi_type'];		// 画像タイプ
-					$imageUrl = $row['bi_image_url'];
-					if (!empty($imageUrl)) $imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
-					$imageWidth = $row['bi_image_width'];
-					$imageHeight = $row['bi_image_height'];
-					$imageAlt = $row['bi_image_alt'];		// 代替テキスト
-					$srcHtml = $row['bi_html'];		// HTML
-					$attr = $row['bi_attr'];		// その他の属性
-					
-					// その他の属性を設定
-					$targetType = '';			// リンクターゲット
-					if (!empty($attr)){
-						$attrArray = explode(';', $attr);
-						for ($j = 0; $j < count($attrArray); $j++){
-							list($key, $value) = explode('=', $attrArray[$j]);
-							$key = trim($key);
-							$value = trim($value);
-							switch ($key){
-								case 'target':
-									$targetType = $value;			// リンクターゲットの種類
-									break;
-							}
+		$itemArray = explode(',', $this->record['bd_item_id']);
+		if (count($itemArray) > 0){
+			// 表示するバナー項目を決定する
+			$itemCount = $this->record['bd_disp_item_count'];
+			$dispItemArray = array();
+			switch ($this->record['bd_disp_type']){
+				case 0:// サイクリック
+					$firstIndex = $this->record['bd_first_item_index'];
+					if ($firstIndex < 0 || $firstIndex >= count($itemArray)) $firstIndex = 0;
+					if ($itemCount > count($itemArray)) $itemCount = count($itemArray);
+					$count = count($itemArray);
+					for ($i = $firstIndex; $i < $count; $i++)
+					{
+						$dispItemArray[] = $itemArray[$i];
+						if (count($dispItemArray) >= $itemCount){
+							$nextIndex = $i + 1;
+							break;
 						}
 					}
-
-					// バナー表示イメージの作成
-					$destImg = '';
-					if (!empty($imageUrl)){
-						if ($itemType == 0){		// 画像ファイルの場合
-							$destImg = '<img class="banner_image" src="' . $this->getUrl($imageUrl) . '"';
-							if (!empty($imageWidth) && $imageWidth > 0) $destImg .= ' width="' . $imageWidth . '"';
-							if (!empty($imageHeight) && $imageHeight > 0) $destImg .= ' height="' . $imageHeight. '"';
-							if (!empty($imageAlt)) $destImg .= ' alt="' . $this->convertToDispString($imageAlt) . '"';		// 代替テキスト
-							$destImg .= ' />';
-						} else if ($itemType == 1){		// Flashファイルの場合
-							$destImg = '<object data="' . $this->getUrl($imageUrl) . '" type="application/x-shockwave-flash"';
-							if (!empty($imageWidth) && $imageWidth > 0) $destImg .= ' width="' . $imageWidth . '"';
-							if (!empty($imageHeight) && $imageHeight > 0) $destImg .= ' height="' . $imageHeight . '"';
-							$destImg .= '><param name="movie" value="' . $this->getUrl($imageUrl) . '" /><param name="wmode" value="transparent" /></object>';
-						}
+					$count = $itemCount - count($dispItemArray);
+					for ($i = 0; $i < $count; $i++)
+					{
+						$dispItemArray[] = $itemArray[$i];
 					}
-					
-					// リンク作成
-					if (empty($row['bi_link_url'])){
-						$link = $destImg;
-					} else {			// リンク先が設定されているとき
-						// リンク先URLを取得
-						$redirectUrl = default_bannerCommonDef::getLinkUrlByDevice($row['bi_link_url']);
-						
-						$linkUrl  = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;
-						$linkUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
-						if (!empty($key)) $linkUrl .= '&stamp=' . $key;
-						//$linkUrl .= '&url=' . urlencode($row['bi_link_url']);		// URLはエンコードする
-						$linkUrl .= '&url=' . urlencode($redirectUrl);		// URLはエンコードする
-						$link = '<a style="margin:0;padding:0;" href="' . $this->convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '"';
-						if (!empty($targetType)) $link .= ' target="' . $targetType . '"';		// リンクターゲット
-						$link .= '>';
-						$link .= $destImg;
-						$link .= '</a>';
+					if ($count > 0) $nextIndex = $count;
+					if ($nextIndex >= count($itemArray)) $nextIndex = 0;
+					// 読み込みインデックスを保存
+					if (!$this->gEnv->isSystemAdmin()){		// システム管理者の場合はカウントしない
+						$ret = $this->db->updateBannerItemIndex($this->record['bd_id'], $nextIndex);
 					}
-					
-					// テンプレートに埋め込む
-					$keyTag = M3_TAG_START . M3_TAG_MACRO_ITEM . M3_TAG_END;
-					$srcHtml = str_replace($keyTag, $link, $srcHtml, $count);
-				//	if ($count <= 0) $srcHtml .= self::MSG_NOT_FOUND_IMG_TAG;		// 置換用のタグが見つからないときはエラーメッセージを設定
-					
-					$lineOutput = array(
-						'item_data' => $srcHtml
-					);
-					$this->tmpl->addVars('itemlist', $lineOutput);
-					$this->tmpl->parseTemplate('itemlist', 'a');
-				}
+					break;
+				case 1:// ランダム
+					while (true){
+						$index = mt_rand(0, count($itemArray) -1);
+						$dispItemArray[] = $itemArray[$index];
+						array_splice($itemArray, $index, 1);	// 取得した項目を削除
+						if (count($itemArray) == 0 || // 元のデータからすべて取得した
+							count($dispItemArray) >= $itemCount) break;		// 取得最大個数に達した
+					}
+					break;
 			}
 		}
+		// バナー出力
+		for ($i = 0; $i < count($dispItemArray); $i++)
+		{
+			$ret = $this->db->getImageById($dispItemArray[$i], $row);
+			if ($ret && $row['bi_visible']){	// 表示可能なときは表示
+				// DBにバナー表示のログを残す
+				$key = '';
+				if (!$this->gEnv->isSystemAdmin()){		// システム管理者の場合はカウントしない
+					$key = $this->db->viewBannerItemLog($row['bi_serial'], $this->gAccess->getAccessLogSerialNo());
+				}
+	
+				$itemType = $row['bi_type'];		// 画像タイプ
+				$imageUrl = $row['bi_image_url'];
+				if (!empty($imageUrl)) $imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
+				$imageWidth = $row['bi_image_width'];
+				$imageHeight = $row['bi_image_height'];
+				$imageAlt = $row['bi_image_alt'];		// 代替テキスト
+				$srcHtml = $row['bi_html'];		// HTML
+				$attr = $row['bi_attr'];		// その他の属性
+				
+				// その他の属性を設定
+				$targetType = '';			// リンクターゲット
+				if (!empty($attr)){
+					$attrArray = explode(';', $attr);
+					for ($j = 0; $j < count($attrArray); $j++){
+						list($key, $value) = explode('=', $attrArray[$j]);
+						$key = trim($key);
+						$value = trim($value);
+						switch ($key){
+							case 'target':
+								$targetType = $value;			// リンクターゲットの種類
+								break;
+						}
+					}
+				}
+
+				// バナー表示イメージの作成
+				$destImg = '';
+				if (!empty($imageUrl)){
+					if ($itemType == 0){		// 画像ファイルの場合
+						$destImg = '<img class="banner_image" src="' . $this->getUrl($imageUrl) . '"';
+						if (!empty($imageWidth) && $imageWidth > 0) $destImg .= ' width="' . $imageWidth . '"';
+						if (!empty($imageHeight) && $imageHeight > 0) $destImg .= ' height="' . $imageHeight. '"';
+						if (!empty($imageAlt)) $destImg .= ' alt="' . $this->convertToDispString($imageAlt) . '"';		// 代替テキスト
+						$destImg .= ' />';
+					} else if ($itemType == 1){		// Flashファイルの場合
+						$destImg = '<object data="' . $this->getUrl($imageUrl) . '" type="application/x-shockwave-flash"';
+						if (!empty($imageWidth) && $imageWidth > 0) $destImg .= ' width="' . $imageWidth . '"';
+						if (!empty($imageHeight) && $imageHeight > 0) $destImg .= ' height="' . $imageHeight . '"';
+						$destImg .= '><param name="movie" value="' . $this->getUrl($imageUrl) . '" /><param name="wmode" value="transparent" /></object>';
+					}
+				}
+				
+				// リンク作成
+				if (empty($row['bi_link_url'])){
+					$link = $destImg;
+				} else {			// リンク先が設定されているとき
+					// リンク先URLを取得
+					$redirectUrl = default_bannerCommonDef::getLinkUrlByDevice($row['bi_link_url']);
+					
+					$linkUrl  = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;
+					$linkUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
+					if (!empty($key)) $linkUrl .= '&stamp=' . $key;
+					//$linkUrl .= '&url=' . urlencode($row['bi_link_url']);		// URLはエンコードする
+					$linkUrl .= '&url=' . urlencode($redirectUrl);		// URLはエンコードする
+					$link = '<a style="margin:0;padding:0;" href="' . $this->convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '"';
+					if (!empty($targetType)) $link .= ' target="' . $targetType . '"';		// リンクターゲット
+					$link .= '>';
+					$link .= $destImg;
+					$link .= '</a>';
+				}
+				
+				// テンプレートに埋め込む
+				$keyTag = M3_TAG_START . M3_TAG_MACRO_ITEM . M3_TAG_END;
+				$srcHtml = str_replace($keyTag, $link, $srcHtml, $count);
+			//	if ($count <= 0) $srcHtml .= self::MSG_NOT_FOUND_IMG_TAG;		// 置換用のタグが見つからないときはエラーメッセージを設定
+				
+				$lineOutput = array(
+					'item_data' => $srcHtml
+				);
+				$this->tmpl->addVars('itemlist', $lineOutput);
+				$this->tmpl->parseTemplate('itemlist', 'a');
+			}
+		}
+		$this->tmpl->addVar("_widget", "css_id",	$cssId);		// CSS用ID
 	}
 	/**
 	 * ウィジェットのタイトルを設定

@@ -161,13 +161,7 @@ $(function(){
 	setupItems();
 	
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_html');
-	m3SetWysiwygEditor('item_html', 150, false);
-	
-	var config = {};
-	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_direct.js';
-	CKEDITOR.replace('linkinfo', config);
-	$('#linkinfo_parent').hide();
+	m3SetWysiwygEditor('item_html', 150, false, 'layout');
 });
 //]]>
 </script>
@@ -279,5 +273,4 @@ $(function(){
 </table>
 </form>
 </div>
-<div name="linkinfo_parent" id="linkinfo_parent"><textarea type="text" name="linkinfo" id="linkinfo" ></textarea></div>
 </patTemplate:tmpl>

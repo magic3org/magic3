@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: default_bannerCommonDef.php 5868 2013-03-28 04:08:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
  

@@ -284,7 +284,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'banner3';
 INSERT INTO _widgets
 (wd_id,     wd_name,       wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('banner3', 'バナー表示3', 'banner', true, '2.0.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'バナー画像をグループ化して、グループごとに表示できるバナー管理ウィジェットです。', '',                'elfinder',                  true, true,         true,                true,  0,         1, '2013-09-16', now(),         now());
+('banner3', 'バナー表示3', 'banner', true, '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'バナー画像をグループ化して、グループごとに表示できるバナー管理ウィジェットです。', '',                'elfinder',                  true, true,         true,                true,  0,         1, '2013-12-08', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'jquery_plugin';
 INSERT INTO _widgets
 (wd_id,        wd_name,                wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type,    wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -580,7 +580,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 's/banner';
 INSERT INTO _widgets
 (wd_id,     wd_parent_id, wd_name,       wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/banner', 'banner3', 'バナー表示', 'banner', true, '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'バナー画像をグループ化して、グループごとに表示できるバナー管理ウィジェットです。', 2, '',                'jquery-ui.tabs',                  true, true,         true,                true,  0,         1, '2013-03-26', now(),         now());
+('s/banner', 'banner3', 'バナー表示', 'banner', true, '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'バナー画像をグループ化して、グループごとに表示できるバナー管理ウィジェットです。', 2, '',                'jquery-ui.tabs',                  true, true,         true,                true,  0,         1, '2013-12-08', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 's/bbs_2ch';
 INSERT INTO _widgets
 (wd_id,       wd_name,                     wd_type, wd_content_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_read_css, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

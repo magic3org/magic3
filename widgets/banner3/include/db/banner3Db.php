@@ -312,6 +312,22 @@ class banner3Db extends BaseDb
 		$this->selectLoop($queryStr, array(), $callback, null);
 	}
 	/**
+	 * 次のバナー定義IDを取得
+	 *
+	 * @return int							バナーID
+	 */
+	function getNextBannerId()
+	{
+		$queryStr = 'SELECT MAX(bd_id) AS bid FROM bn_def ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret){
+			$newBannerId = $row['bid'] + 1;
+		} else {
+			$newBannerId = 1;
+		}
+		return $newBannerId;
+	}
+	/**
 	 * バナー定義の更新
 	 *
 	 * @param int     $bannerId		バナーID(0=新規追加、0以外=更新)

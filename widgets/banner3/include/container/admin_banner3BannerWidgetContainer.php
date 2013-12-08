@@ -10,17 +10,14 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_banner3BannerWidgetContainer.php 5868 2013-03-28 04:08:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 //require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_banner3BaseWidgetContainer.php');
 require_once($gEnvManager->getWidgetContainerPath('banner3') . '/admin_banner3BaseWidgetContainer.php');
-//require_once($gEnvManager->getCurrentWidgetDbPath() . '/banner3Db.php');
 
 class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContainer
 {
-//	private $db;	// DB接続オブジェクト
-	private $sysDb;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
 	private $configId;		// 定義ID
@@ -29,6 +26,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	private $cssId;			// CSS用ID
 	private $dispType;		// 画像リンク表示方法
 	private $dispTypeDef;		// 画像リンク表示方法定義
+	private $bannerNameArray;	// バナー定義名保存用
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const IMAGE_ICON_FILE = '/images/system/image16.png';			// イメージアイコン
 	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
@@ -93,7 +91,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	{
 		// ページ定義IDとページ定義のレコードシリアル番号を取得
 		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
-		
+
 		$userId		= $this->gEnv->getCurrentUserId();
 		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
@@ -170,7 +168,11 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 			$this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 			$replaceNew = true;			// データ再取得
 		}
-				
+
+		// 設定項目選択メニュー作成
+		$this->bannerNameArray = array();
+		self::$_mainDb->getBannerList(array($this, 'bannerListLoop'));
+		
 		// 表示用データを取得
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
@@ -180,9 +182,9 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 				$this->dispType = 0;	// 表示方法
 				$dispDirect = 0;	// 表示方向
 				$dispCount = 1;	// 表示項目数
+				$this->cssId = $this->createDefaultCssId();	// CSS用ID
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));// デフォルト用のCSSを取得
 			}
-			$this->cssId = $this->createDefaultCssId();	// CSS用ID
 		} else {
 			if ($replaceNew){
 				// 登録済みのバナー定義を取得
@@ -195,8 +197,8 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 					$this->dispType	= $row['bd_disp_type'];				// 表示方法
 					$dispDirect	= $row['bd_disp_direction'];		// 表示方向
 					$html		= $row['bd_item_html'];	// 画像リンクテンプレート
-					$this->css	= $row['bd_css'];		// 表示用CSS
 					$this->cssId	= $row['bd_css_id'];		// CSS用ID
+					$this->css	= $row['bd_css'];		// 表示用CSS
 					$updateUser = $this->convertToDispString($row['lu_name']);// 更新者
 					$updateDt = $this->convertToDispDateTime($row['bd_update_dt']);// 更新日時
 				}
@@ -206,9 +208,6 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 			if (!empty($defConfigId) && !empty($defSerial)) $this->tmpl->addVar("_widget", "id_disabled", 'disabled');
 		}
 		$this->serialNo = $this->configId;
-		
-		// 設定項目選択メニュー作成
-		self::$_mainDb->getBannerList(array($this, 'bannerListLoop'));
 		
 		// 画像リンク表示順選択メニュー作成
 		$this->createDispTypeMenu();
@@ -279,14 +278,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		for ($j = 1; $j < 100; $j++){
 			$name = self::DEFAULT_NAME_HEAD . $j;
 			// 設定名の重複チェック
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$targetObj = $this->paramObj[$i]->object;
-				if ($name == $targetObj->name){		// 定義名
-					break;
-				}
-			}
-			// 重複なしのときは終了
-			if ($i == count($this->paramObj)) break;
+			if (!in_array($name, $this->bannerNameArray)) break;
 		}
 		return $name;
 	}
@@ -297,7 +289,8 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	 */
 	function createDefaultCssId()
 	{
-		return $this->gEnv->getCurrentWidgetId() . '_' . $this->getTempConfigId($this->paramObj);
+		//return $this->gEnv->getCurrentWidgetId() . '_' . $this->getTempConfigId($this->paramObj);
+		return $this->gEnv->getCurrentWidgetId() . '_' . self::$_mainDb->getNextBannerId();
 	}
 	/**
 	 * 一覧画面作成
@@ -355,7 +348,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		$id = $this->convertToDispString($fetchedRow['bd_id']);
+		$id = $fetchedRow['bd_id'];
 
 		// 使用数取得
 		$defCount = 0;
@@ -366,12 +359,12 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		if ($defCount > 0) $operationDisagled = 'disabled';
 			
 		$row = array(
-			'index' => $index,													// インデックス番号
-			'id' => $id,														// ID
-			'name' => $this->convertToDispString($fetchedRow['bd_name']),		// 名前
-			'image_item' => $this->convertToDispString($fetchedRow['bd_item_id']),		// バナー項目ID
-			'ope_disabled' => $operationDisagled,			// 選択可能かどうか
-			'def_count' => $defCount							// 使用数
+			'index'		=> $index,													// インデックス番号
+			'id'		=> $this->convertToDispString($id),														// ID
+			'name'		=> $this->convertToDispString($fetchedRow['bd_name']),		// 名前
+			'image_item'	=> $this->convertToDispString($fetchedRow['bd_item_id']),		// バナー項目ID
+			'ope_disabled'	=> $operationDisagled,			// 選択可能かどうか
+			'def_count'		=> $defCount							// 使用数
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
@@ -390,19 +383,21 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	 */
 	function bannerListLoop($index, $fetchedRow, $param)
 	{
-		$value = $this->convertToDispString($fetchedRow['bd_id']);		// 定義ID
-		$name = $this->convertToDispString($fetchedRow['bd_name']);		// 名前
+		$value = $fetchedRow['bd_id'];		// 定義ID
+		$name = $fetchedRow['bd_name'];		// 名前
 		
 		$selected = '';
 		if ($value == $this->configId) $selected = 'selected';
 		
 		$row = array(
-			'value'    => $value,			// 値
-			'name'     => $name,			// 名前
+			'value'    => $this->convertToDispString($value),			// 値
+			'name'     => $this->convertToDispString($name),			// 名前
 			'selected' => $selected														// 選択中かどうか
 		);
 		$this->tmpl->addVars('title_list', $row);
 		$this->tmpl->parseTemplate('title_list', 'a');
+		
+		$this->bannerNameArray[] = $fetchedRow['bd_name'];
 		return true;
 	}
 	/**
