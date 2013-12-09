@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.tmpl.html 4912 2012-05-21 14:51:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -53,7 +53,7 @@ function {FUNC_NAME}(){
 <input type="hidden" name="act" />
 <input type="hidden" name="contentid" value="{CONTENT_ID}" />
 <input type="hidden" name="password" />
-<input type="password" name="access_password" size="10" maxlength="10" />
+<input type="password" name="access_password" size="10" maxlength="10" style="width:100px;" />
 <input type="button" class="button" onclick="{FUNC_NAME}();" value="送信" />
 </form>
 </pattemplate:sub>
