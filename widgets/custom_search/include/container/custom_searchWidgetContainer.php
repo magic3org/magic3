@@ -32,7 +32,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	const CONTENT_SIZE = 200;			// 検索結果コンテンツの文字列最大長
 	const SEARCH_LIST_CONTENT_ID = 'SEARCH_LIST';	// 検索一覧に表示するコンテンツのID
 	const DEFAULT_SEARCH_ACT = 'custom_search';		// 検索実行処理
-
+	const CF_USE_PASSWORD			= 'use_password';		// 汎用コンテンツに対するパスワードアクセス制御
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -161,11 +162,13 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$message = self::MESSAGE_NO_KEYWORD;
 			} else {
 				// ##### 検索実行の場合 #####
+				// 設定値取得
+				$configArray = $this->loadContentConfig();
+				$contentUsePassword = $configArray[self::CF_USE_PASSWORD];			// パスワードによるコンテンツ閲覧制限
+		
 				// 総数を取得
-//				$totalCount = $this->db->searchContentsCountByKeyword($parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog,
-//								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto);
 				$totalCount = $this->db->searchContentsByKeyword(0/*項目数取得*/, 0/*ダミー*/, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog,
-								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto);
+								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $contentUsePassword);
 				$this->calcPageLink($pageNo, $totalCount, $this->resultCount);		// ページ番号修正
 				
 				// リンク文字列作成、ページ番号調整
@@ -174,7 +177,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				
 				// 検出項目を表示
 				$this->db->searchContentsByKeyword($this->resultCount, $pageNo, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
-								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, array($this, 'searchItemsLoop'));
+								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $contentUsePassword, array($this, 'searchItemsLoop'));
 				
 				if ($this->isExistsViewData){
 					// ページリンクを埋め込む
@@ -668,6 +671,28 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			}
 		}
 		return $destUrl;
+	}
+	/**
+	 * 汎用コンテンツ定義値をDBから取得
+	 *
+	 * @return array		取得データ
+	 */
+	function loadContentConfig()
+	{
+		$retVal = array();
+
+		// 汎用コンテンツ定義を読み込み
+		$ret = $this->db->getAllConfig($rows);
+		if ($ret){
+			// 取得データを連想配列にする
+			$configCount = count($rows);
+			for ($i = 0; $i < $configCount; $i++){
+				$key = $rows[$i]['ng_id'];
+				$value = $rows[$i]['ng_value'];
+				$retVal[$key] = $value;
+			}
+		}
+		return $retVal;
 	}
 }
 ?>

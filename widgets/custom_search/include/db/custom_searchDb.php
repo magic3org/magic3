@@ -10,13 +10,28 @@
  * @author     株式会社 毎日メディアサービス
  * @copyright  Copyright 2010-2013 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: custom_searchDb.php 5969 2013-04-29 13:16:04Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
 class custom_searchDb extends BaseDb
 {
+	/**
+	 * 汎用コンテンツ定義値を取得をすべて取得
+	 *
+	 * @param array  $rows			レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getAllConfig(&$rows)
+	{
+		$contentType = '';
+		$queryStr  = 'SELECT * FROM content_config ';
+		$queryStr .=   'WHERE ng_type = ? ';
+		$queryStr .=   'ORDER BY ng_index';
+		$retValue = $this->selectRecords($queryStr, array($contentType), $rows);
+		return $retValue;
+	}
 	/**
 	 * すべてのカテゴリ種別を取得
 	 *
@@ -87,11 +102,12 @@ class custom_searchDb extends BaseDb
 	 * @param bool		$isTargetEvent		イベント情報を検索対象とするかどうか
 	 * @param bool		$isTargetBbs		BBSを検索対象とするかどうか
 	 * @param bool		$isTargetPhoto		フォトギャラリーを検索対象とするかどうか
+	 * @param bool		$contentUsePassword	汎用コンテンツのパスワード閲覧制限するかどうか
 	 * @param function	$callback			コールバック関数
 	 * @return int,bool						$limitが0のときintで項目数、$limitが0以外のときはbool(true=1行以上レコード取得、false=レコードなし)
 	 */
 	function searchContentsByKeyword($limit, $page, $keywords, $categoryInfo, $langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
-									$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $callback = NULL)
+									$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $contentUsePassword, $callback = NULL)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -110,7 +126,8 @@ class custom_searchDb extends BaseDb
 			$queryStr .=    'AND cn_type = ? ';$params[] = $contentType;
 			$queryStr .=    'AND cn_language_id = ? ';$params[] = $langId;
 			if (!$all) $queryStr .=    'AND cn_user_limited = false ';		// ユーザ制限のないデータ
-
+			if ($contentUsePassword) $queryStr .=    'AND cn_password = \'\' ';	// パスワード閲覧制限する場合はパスワードが設定されているコンテンツを検索しない
+			
 			// タイトルと記事を検索
 			if (!empty($keywords)){
 				for ($i = 0; $i < count($keywords); $i++){
