@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainEditmenuWidgetContainer.php 5568 2013-01-18 08:50:56Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -73,12 +73,16 @@ class admin_mainEditmenuWidgetContainer extends admin_mainBaseWidgetContainer
 																			'desc' => $this->_('Manage menus with tree type.')),		// 多階層でメニューを定義します。
 									array('task' => 'smenudef',				'name' => $this->_('Menu Administration (Single)'),		// メニュー定義(単一階層)
 																			'desc' => $this->_('Manage menus with single type.')),		// 単一階層でメニューを定義します。
-									array('task' => 'master',				'name' => $this->_('System Master'),		// システムマスター管理
+//									array('task' => 'master',				'name' => $this->_('System Master'),		// システムマスター管理
+//																			'desc' => $this->_('Administrate system master data.')),		// システムに関するマスターデータの管理を行います。
+									array('task' => 'mainte',				'name' => $this->_('Maintenance'),		// メンテナンス
 																			'desc' => $this->_('Administrate system master data.')),		// システムに関するマスターデータの管理を行います。
 									array('task' => 'tenantserver',			'name' => $this->_('Tenant Server Administration'),		// テナントサーバ管理
 																			'desc' => $this->_('Manage tenant server.')),		// テナントサーバを管理します。
 									array('task' => 'userlist',				'name' => $this->_('User List'),		// ユーザ一覧
 																			'desc' => $this->_('Manage user to login.')),		// ログイン可能なユーザを管理します。
+									array('task' => 'usergroup',			'name' => $this->_('User Group'),		// ユーザグループ
+																			'desc' => $this->_('Manage user group.')),		// ユーザグループを管理します。
 									array('task' => 'loginstatus',			'name' => $this->_('Login Status'),		// ログイン状況
 																			'desc' => $this->_('View user login status.')),		// ユーザのログイン状況を表示します。
 									array('task' => 'configsite',			'name' => $this->_('Site Information'),		// 基本情報
@@ -86,7 +90,13 @@ class admin_mainEditmenuWidgetContainer extends admin_mainBaseWidgetContainer
 									array('task' => 'usercustom',			'name' => $this->_('User Custom Parameter'),		// ユーザ定義変数管理
 																			'desc' => $this->_('Configure user defined paramater.')),		// ユーザ定義の変数を管理します。
 									array('task' => 'configsys',			'name' => $this->_('System Information'),		// システム情報
-																			'desc' => $this->_('Configure sytem information.')),	// システム全体の設定、運用状況を管理します。
+																			'desc' => $this->_('Configure sytem basic information.')),	// システムの基本的な設定を行います。
+									array('task' => 'configlang',			'name' => $this->_('System Lang'),		// システム言語
+																			'desc' => $this->_('Configure language for system.')),	// システムの言語設定を行います。
+									array('task' => 'configmessage',		'name' => $this->_('System Message'),		// システムメッセージ
+																			'desc' => $this->_('Configure message for system.')),	// システムのメッセージ設定を行います。
+									array('task' => 'pagehead',				'name' => $this->_('Page Header'),		// ページヘッダ情報
+																			'desc' => $this->_('Configure page header information.')),	// ページヘッダ情報を設定します。
 									array('task' => 'analyzecalc',			'name' => $this->_('Access Analytics'),	// アクセス解析
 																			'desc' => $this->_('Analyze site access.')),	// サイトへのアクセス状況を参照します。
 									array('task' => 'opelog',				'name' => $this->_('Operation Log'),	// 運用ログ参照
@@ -97,10 +107,18 @@ class admin_mainEditmenuWidgetContainer extends admin_mainBaseWidgetContainer
 																			'desc' => $this->_('View words to search.')),	// 検索語ログを参照します。
 									array('task' => 'resbrowse',			'name' => $this->_('Resource Browse'),	// リソースブラウズ
 																			'desc' => $this->_('Administrate resource files.')),	// リソースファイルを管理します。
-									array('task' => 'initsystem',			'name' => $this->_('Database Maintenance'),	// DBメンテナンス
-																			'desc' => $this->_('Database maintenance such as data initializing.')),	// データの初期化などDBのメンテナンスを行います。
+									array('task' => 'initsystem',			'name' => $this->_('Datebase Initialize'),	// DB初期化
+																			'desc' => $this->_('Initialize database data.')),	// DBデータの初期化を行います。
+									array('task' => 'dbbackup',				'name' => $this->_('Database Backup'),	// DBバックアップ
+																			'desc' => $this->_('Backup and restore database.')),	// DBのバックアップリストアを行います。
 									array('task' => 'editmenu',				'name' => $this->_('Edit Administration Menu'),	// 管理メニュー編集
-																			'desc' => $this->_('Configure administration menu.')),	// 管理メニューの編集を行います。
+																			'desc' => $this->_('Configure administration menu.')),	// 管理メニューの編集を行います。									
+									array('task' => 'pageinfo',				'name' => $this->_('Page Information'),	// ページ情報
+																			'desc' => $this->_('Configure page information.')),	// ページの情報設定を行います。
+									array('task' => 'pageid',				'name' => $this->_('Page Id'),	// ページID
+																			'desc' => $this->_('Configure page id.')),	// ページIDを管理します。
+									array('task' => 'menuid',				'name' => $this->_('Menu Id'),	// メニューID
+																			'desc' => $this->_('Configure menu id.')),	// メニューIDを管理します。										
 									array('task' => 'createtable',			'name' => $this->_('Create User Table'),	// ユーザ定義テーブル
 																			'desc' => $this->_('Manage user original table.')),	// ユーザ定義のテーブルの作成、データの編集を行います。
 									array('task' => 'logout',				'name' => $this->_('Logout'),	// ログアウト

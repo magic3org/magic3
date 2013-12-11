@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-05 18:28+0900\n"
-"PO-Revision-Date: 2013-12-05 18:29+0900\n"
+"POT-Creation-Date: 2013-12-11 21:21+0900\n"
+"PO-Revision-Date: 2013-12-11 21:22+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -56,13 +56,13 @@ msgstr "ウィジェットID"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:170
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:223
-#: ../container/admin_mainEditmenuWidgetContainer.php:420
+#: ../container/admin_mainEditmenuWidgetContainer.php:438
 msgid "Configration updated."
 msgstr "データを更新しました"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:179
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:232
-#: ../container/admin_mainEditmenuWidgetContainer.php:417
+#: ../container/admin_mainEditmenuWidgetContainer.php:435
 msgid "Failed in updating configration."
 msgstr "データ更新に失敗しました"
 
@@ -85,7 +85,7 @@ msgid "Basic"
 msgstr "基本"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:465
-#: ../container/admin_mainEditmenuWidgetContainer.php:181
+#: ../container/admin_mainEditmenuWidgetContainer.php:199
 #: ../container/admin_mainUserlistWidgetContainer.php:157
 msgid "Others"
 msgstr "その他"
@@ -240,8 +240,8 @@ msgstr "追加CSSクラス"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:498
 #: ../container/admin_mainConfigsiteWidgetContainer.php:311
-#: ../container/admin_mainEditmenuWidgetContainer.php:166
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
+#: ../container/admin_mainEditmenuWidgetContainer.php:202
 #: ../container/admin_mainMenudefWidgetContainer.php:158
 #: ../container/admin_mainOpelogWidgetContainer.php:192
 #: ../container/admin_mainPagedefWidgetContainer.php:435
@@ -329,7 +329,7 @@ msgid "Failed in uploading file."
 msgstr "ファイルのアップロードに失敗しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:251
-#: ../container/admin_mainEditmenuWidgetContainer.php:312
+#: ../container/admin_mainEditmenuWidgetContainer.php:330
 #: ../container/admin_mainTemplistWidgetContainer.php:333
 #: ../container/admin_mainWidgetlistWidgetContainer.php:416
 #, php-format
@@ -345,7 +345,7 @@ msgid "Send test email to default email address?"
 msgstr "デフォルトメールアドレス宛にテストメールを送信しますか?"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:299
-#: ../container/admin_mainEditmenuWidgetContainer.php:84
+#: ../container/admin_mainEditmenuWidgetContainer.php:88
 #: ../container/admin_mainPortalWidgetContainer.php:252
 #: ../help/help_configsite.php:31 ../help/help_portal.php:35
 msgid "Site Information"
@@ -437,7 +437,7 @@ msgid "Title of menu category."
 msgstr "メニューカテゴリのタイトル名を作成します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:58
-#: ../container/admin_mainEditmenuWidgetContainer.php:559
+#: ../container/admin_mainEditmenuWidgetContainer.php:577
 msgid "Newline"
 msgstr "改行"
 
@@ -501,146 +501,215 @@ msgstr "メニュー定義(単一階層)"
 msgid "Manage menus with single type."
 msgstr "単一階層でメニューを定義します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:76
-msgid "System Master"
-msgstr "システムマスター管理"
+#: ../container/admin_mainEditmenuWidgetContainer.php:78
+msgid "Maintenance"
+msgstr "メンテナンス"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:77
+#: ../container/admin_mainEditmenuWidgetContainer.php:79
 msgid "Administrate system master data."
 msgstr "システムに関するマスターデータの管理を行います。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:78
+#: ../container/admin_mainEditmenuWidgetContainer.php:80
 msgid "Tenant Server Administration"
 msgstr "テナントサーバ管理"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:79
+#: ../container/admin_mainEditmenuWidgetContainer.php:81
 msgid "Manage tenant server."
 msgstr "テナントサーバを管理します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:80
+#: ../container/admin_mainEditmenuWidgetContainer.php:82
 #: ../container/admin_mainUserlistWidgetContainer.php:147
 #: ../help/help_userlist.php:31
 msgid "User List"
 msgstr "ユーザ一覧"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:81
+#: ../container/admin_mainEditmenuWidgetContainer.php:83
 msgid "Manage user to login."
 msgstr "ログイン可能なユーザを管理します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:82
+#: ../container/admin_mainEditmenuWidgetContainer.php:84
+#: ../container/admin_mainUserlistWidgetContainer.php:127
+#: ../help/help_userlist.php:75
+msgid "User Group"
+msgstr "ユーザグループ"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:85
+msgid "Manage user group."
+msgstr "ユーザグループを管理します。"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:86
 msgid "Login Status"
 msgstr "ログイン状況"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:83
+#: ../container/admin_mainEditmenuWidgetContainer.php:87
 msgid "View user login status."
 msgstr "ユーザのログイン状況を表示します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:85
+#: ../container/admin_mainEditmenuWidgetContainer.php:89
 msgid "Configure site information."
 msgstr "サイトの設定を行います。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:86
+#: ../container/admin_mainEditmenuWidgetContainer.php:90
 msgid "User Custom Parameter"
 msgstr "ユーザ定義変数管理"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:87
+#: ../container/admin_mainEditmenuWidgetContainer.php:91
 msgid "Configure user defined paramater."
 msgstr "ユーザ定義の変数を管理します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:88
+#: ../container/admin_mainEditmenuWidgetContainer.php:92
 msgid "System Information"
 msgstr "システム情報"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:89
-msgid "Configure sytem information."
-msgstr "システム全体の設定、運用状況を管理します。"
+#: ../container/admin_mainEditmenuWidgetContainer.php:93
+msgid "Configure sytem basic information."
+msgstr "システムの基本的な設定を行います。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:90
+#: ../container/admin_mainEditmenuWidgetContainer.php:94
+msgid "System Lang"
+msgstr "システム言語"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:95
+msgid "Configure language for system."
+msgstr "システムの言語設定を行います。"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:96
+msgid "System Message"
+msgstr "システムメッセージ"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:97
+msgid "Configure message for system."
+msgstr "システムのメッセージ設定を行います。"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:98
+msgid "Page Header"
+msgstr "ページヘッダ情報"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:99
+msgid "Configure page header information."
+msgstr "ページヘッダ情報を設定します。"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:100
 msgid "Access Analytics"
 msgstr "アクセス解析"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:91
+#: ../container/admin_mainEditmenuWidgetContainer.php:101
 msgid "Analyze site access."
 msgstr "サイトへのアクセス状況を参照します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:92
+#: ../container/admin_mainEditmenuWidgetContainer.php:102
 msgid "Operation Log"
 msgstr "運用ログ参照"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:93
+#: ../container/admin_mainEditmenuWidgetContainer.php:103
 msgid "View system operation log."
 msgstr "運用ログを参照します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:94
+#: ../container/admin_mainEditmenuWidgetContainer.php:104
 #: ../container/admin_mainLoginstatusWidgetContainer.php:147
 #: ../container/admin_mainOpelogWidgetContainer.php:207
 msgid "Access Log"
 msgstr "アクセスログ"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:95
+#: ../container/admin_mainEditmenuWidgetContainer.php:105
 msgid "View site access log."
 msgstr "アクセスログを参照します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:96
+#: ../container/admin_mainEditmenuWidgetContainer.php:106
 msgid "Search Word Log"
 msgstr "検索語ログ参照"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:97
+#: ../container/admin_mainEditmenuWidgetContainer.php:107
 msgid "View words to search."
 msgstr "検索語ログを参照します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:98
+#: ../container/admin_mainEditmenuWidgetContainer.php:108
 #: ../help/help_browse.php:31
 msgid "Resource Browse"
 msgstr "リソースブラウズ"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:99
+#: ../container/admin_mainEditmenuWidgetContainer.php:109
 msgid "Administrate resource files."
 msgstr "リソースファイルを管理します。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:100
-msgid "Database Maintenance"
-msgstr "DBメンテナンス"
+#: ../container/admin_mainEditmenuWidgetContainer.php:110
+msgid "Datebase Initialize"
+msgstr "DB初期化"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:101
-msgid "Database maintenance such as data initializing."
-msgstr "データの初期化などDBのメンテナンスを行います。"
+#: ../container/admin_mainEditmenuWidgetContainer.php:111
+msgid "Initialize database data."
+msgstr "DBデータの初期化を行います。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:102
-#: ../container/admin_mainEditmenuWidgetContainer.php:180
+#: ../container/admin_mainEditmenuWidgetContainer.php:112
+msgid "Database Backup"
+msgstr "DBバックアップ"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:113
+msgid "Backup and restore database."
+msgstr "DBのバックアップリストアを行います。"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:114
+#: ../container/admin_mainEditmenuWidgetContainer.php:198
 msgid "Edit Administration Menu"
 msgstr "管理メニュー編集"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:103
+#: ../container/admin_mainEditmenuWidgetContainer.php:115
 msgid "Configure administration menu."
 msgstr "管理メニューの編集を行います。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:104
+#: ../container/admin_mainEditmenuWidgetContainer.php:116
+msgid "Page Information"
+msgstr "ページ情報"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:117
+msgid "Configure page information."
+msgstr "ページの情報設定を行います。"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:118
+#: ../container/admin_mainPagedefWidgetContainer.php:96
+#: ../container/admin_mainPagedefWidgetContainer.php:97
+#: ../help/help_pagedef.php:31
+msgid "Page Id"
+msgstr "ページID"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:119
+msgid "Configure page id."
+msgstr "ページIDを管理します。"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:120
+msgid "Menu Id"
+msgstr "メニューID"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:121
+msgid "Configure menu id."
+msgstr "メニューIDを管理します。"
+
+#: ../container/admin_mainEditmenuWidgetContainer.php:122
 msgid "Create User Table"
 msgstr "ユーザ定義テーブル"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:105
+#: ../container/admin_mainEditmenuWidgetContainer.php:123
 msgid "Manage user original table."
 msgstr "ユーザ定義のテーブルの作成、データの編集を行います。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:106
+#: ../container/admin_mainEditmenuWidgetContainer.php:124
 #: ../container/admin_mainLoginstatusWidgetContainer.php:45
 msgid "Logout"
 msgstr "ログアウト"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:107
+#: ../container/admin_mainEditmenuWidgetContainer.php:125
 msgid "Logout from system."
 msgstr "ログアウト処理を行います。"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:161
+#: ../container/admin_mainEditmenuWidgetContainer.php:179
 msgid "Update configration?"
 msgstr "設定を更新しますか?"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:162
+#: ../container/admin_mainEditmenuWidgetContainer.php:180
 msgid "Administration Menu Others"
 msgstr "管理メニューその他"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:163
+#: ../container/admin_mainEditmenuWidgetContainer.php:181
 #: ../container/admin_mainLoginstatusWidgetContainer.php:149
 #: ../container/admin_mainMenudefWidgetContainer.php:140
 #: ../container/admin_mainOpelogWidgetContainer.php:184
@@ -650,44 +719,44 @@ msgstr "管理メニューその他"
 msgid "Go back"
 msgstr "戻る"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:164
+#: ../container/admin_mainEditmenuWidgetContainer.php:182
 #: ../help/help_editmenu.php:39
 msgid "Image"
 msgstr "画像"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:165
+#: ../container/admin_mainEditmenuWidgetContainer.php:183
 msgid "Change"
 msgstr "変更"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:171
+#: ../container/admin_mainEditmenuWidgetContainer.php:189
 msgid "Update menu definition?"
 msgstr "項目を更新しますか?"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:172
+#: ../container/admin_mainEditmenuWidgetContainer.php:190
 msgid "Files to upload not selected."
 msgstr "アップロードするファイルが選択されていません"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:173
+#: ../container/admin_mainEditmenuWidgetContainer.php:191
 msgid "Upload files."
 msgstr "ファイルをアップロードします"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:174
-#: ../container/admin_mainEditmenuWidgetContainer.php:554
+#: ../container/admin_mainEditmenuWidgetContainer.php:192
+#: ../container/admin_mainEditmenuWidgetContainer.php:572
 #: ../container/admin_mainUserlistWidgetContainer.php:153
 msgid "Administration"
 msgstr "管理機能"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:175
-#: ../container/admin_mainEditmenuWidgetContainer.php:541
+#: ../container/admin_mainEditmenuWidgetContainer.php:193
+#: ../container/admin_mainEditmenuWidgetContainer.php:559
 msgid "Widget"
 msgstr "ウィジェット"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:176
+#: ../container/admin_mainEditmenuWidgetContainer.php:194
 msgid "Untitled"
 msgstr "未設定"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:177
-#: ../container/admin_mainEditmenuWidgetContainer.php:568
+#: ../container/admin_mainEditmenuWidgetContainer.php:195
+#: ../container/admin_mainEditmenuWidgetContainer.php:586
 #: ../container/admin_mainMenudefWidgetContainer.php:141
 #: ../container/admin_mainMenudefWidgetContainer.php:173
 #: ../container/admin_mainMenudefWidgetContainer.php:413
@@ -706,13 +775,13 @@ msgstr "未設定"
 msgid "Name"
 msgstr "名前"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:178
-#: ../container/admin_mainEditmenuWidgetContainer.php:569
+#: ../container/admin_mainEditmenuWidgetContainer.php:196
+#: ../container/admin_mainEditmenuWidgetContainer.php:587
 msgid "Option"
 msgstr "オプション"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:179
-#: ../container/admin_mainEditmenuWidgetContainer.php:570
+#: ../container/admin_mainEditmenuWidgetContainer.php:197
+#: ../container/admin_mainEditmenuWidgetContainer.php:588
 #: ../container/admin_mainMenudefWidgetContainer.php:156
 #: ../container/admin_mainPortalWidgetContainer.php:101
 #: ../container/admin_mainPortalWidgetContainer.php:254
@@ -721,48 +790,48 @@ msgstr "オプション"
 msgid "Description"
 msgstr "説明"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:182
+#: ../container/admin_mainEditmenuWidgetContainer.php:200
 msgid "Menu Item"
 msgstr "メニュー項目"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:183
+#: ../container/admin_mainEditmenuWidgetContainer.php:201
 msgid "Configured Menu Item"
 msgstr "設定されたメニュー項目"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:185
+#: ../container/admin_mainEditmenuWidgetContainer.php:203
 msgid "Menu Definition Script"
 msgstr "管理メニュー定義ファイル"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:186
+#: ../container/admin_mainEditmenuWidgetContainer.php:204
 #: ../container/admin_mainTemplistWidgetContainer.php:467
 #: ../container/admin_mainWidgetlistWidgetContainer.php:520
 msgid "Upload"
 msgstr "アップロード"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:187
+#: ../container/admin_mainEditmenuWidgetContainer.php:205
 #: ../container/admin_mainTemplistWidgetContainer.php:566
 #: ../container/admin_mainWidgetlistWidgetContainer.php:721
 msgid "Download"
 msgstr "ダウンロード"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:260
+#: ../container/admin_mainEditmenuWidgetContainer.php:278
 #, php-format
 msgid "'%s' is duplicated."
 msgstr "項目「%s」は重複しています"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:279
+#: ../container/admin_mainEditmenuWidgetContainer.php:297
 msgid "Administration menu updated."
 msgstr "管理メニューを更新しました"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:282
+#: ../container/admin_mainEditmenuWidgetContainer.php:300
 msgid "Failed in updating administration menu."
 msgstr "管理メニュー更新に失敗しました"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:297
+#: ../container/admin_mainEditmenuWidgetContainer.php:315
 msgid "Script run successfully."
 msgstr "スクリプト実行完了しました"
 
-#: ../container/admin_mainEditmenuWidgetContainer.php:300
+#: ../container/admin_mainEditmenuWidgetContainer.php:318
 msgid "Failed in running script."
 msgstr "スクリプト実行に失敗しました"
 
@@ -1291,12 +1360,6 @@ msgstr "レベル："
 msgid "Status:"
 msgstr "ステータス："
 
-#: ../container/admin_mainPagedefWidgetContainer.php:96
-#: ../container/admin_mainPagedefWidgetContainer.php:97
-#: ../help/help_pagedef.php:31
-msgid "Page Id"
-msgstr "ページID"
-
 #: ../container/admin_mainPagedefWidgetContainer.php:98
 msgid "Show Detail"
 msgstr "詳細"
@@ -1725,11 +1788,6 @@ msgstr "ログイン可"
 #: ../help/help_userlist.php:71
 msgid "Active Term"
 msgstr "有効期間"
-
-#: ../container/admin_mainUserlistWidgetContainer.php:127
-#: ../help/help_userlist.php:75
-msgid "User Group"
-msgstr "ユーザグループ"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:131
 #: ../container/admin_mainUserlistWidgetContainer.php:156
@@ -2747,6 +2805,9 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "Database maintenance such as data initializing."
+#~ msgstr "データの初期化などDBのメンテナンスを行います。"
 
 #~ msgid "Definition name for menu item."
 #~ msgstr "メニュー項目の名前です。"
