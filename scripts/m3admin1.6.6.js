@@ -16,6 +16,8 @@
 var _m3Url;
 var _m3AccessPoint;		// アクセスポイント(空=PC,m=携帯,s=スマートフォン)
 var _m3SetUrlCallback;	// リンク作成用コールバック
+var _m3ContentEdited;		// 入力コンテンツが変更されたかどうか
+var _m3CheckContentEdit;	// 入力コンテンツの変更をチェックするかどうか
 
 // 親ウィンドウを更新
 function m3UpdateParentWindow()
@@ -23,7 +25,6 @@ function m3UpdateParentWindow()
 	var href = 	window.opener.location.href.split('#');
 	window.opener.location.href = href[0];
 	//window.opener.location.href = window.opener.location.href;
-
 }
 // 設定ウィンドウから親ウィンドウを更新
 function m3UpdateParentWindowByConfig(serial)
@@ -417,6 +418,48 @@ function m3SetNextButtonEvent(callback, param)
 		});
 		$('.m3confignext').show();
 	}
+}
+
+/**
+ * 入力データ編集中のページ離脱を防止
+ *
+ * @return なし
+ */
+function m3SetSafeContentEdit()
+{
+	_m3ContentEdited = false;		// 入力コンテンツが変更されたかどうか
+	_m3CheckContentEdit = true;	// 入力コンテンツの変更をチェックするかどうか
+	
+	$(window).bind("beforeunload", function(){
+		// CKEditorの入力内容の変更を確認
+		var ckeChanged = false;
+		if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+			for (instance in CKEDITOR.instances){
+				ckeChanged = CKEDITOR.instances[instance].checkDirty();
+				if (ckeChanged) break;
+			}
+		}
+
+		if (_m3CheckContentEdit && (_m3ContentEdited || ckeChanged)){
+			_m3CheckContentEdit = false;
+			setTimeout(function(){
+				_m3CheckContentEdit = true;
+			}, 10);
+			return "このページを離れようとしています。";
+		}
+	});
+	$("form input, form select, form textarea").change(function(){
+		_m3ContentEdited = true;
+	});
+}
+/**
+ * 入力データ編集中のページ離脱を許可
+ *
+ * @return なし
+ */
+function m3CancelSafeContentEdit()
+{
+	$(window).unbind("beforeunload");
 }
 /**
  * 画面操作用スライド開閉メニューバー
