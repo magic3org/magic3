@@ -26,6 +26,9 @@ function addItem(){
 		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
 
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
@@ -38,12 +41,19 @@ function updateItem(){
 		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
 	
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
 	document.main.act.value = 'update';
 	document.main.submit();
 	return true;
 }
 function delItem(){
 	if (!window.confirm('項目を削除しますか?')) return false;
+	
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
 	document.main.act.value = 'delete';
 	document.main.submit();
 	return true;
@@ -65,6 +75,9 @@ function previewInOtherWindow()
 	return true;
 }
 $(function(){
+	// 編集中の離脱を防止
+	m3SetSafeContentEdit();
+	
 	$("#example").tabs();
 	
 	Calendar.setup({
@@ -113,7 +126,7 @@ function editEntry(serial){
 <patTemplate:tmpl name="cancel_button" visibility="visible">&nbsp;&nbsp;<span {_HELP_ENTRY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /></span><span {_HELP_ENTRY_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
 </td></tr>
 <tr><td colspan="2">
-<table class="simple-table">
+<table class="simple-table" style="margin: 0 auto;">
     <tbody>
         <tr>
 	    <td class="table-headside" width="100"><span {_HELP_ENTRY_ID}>ID</span></td>
