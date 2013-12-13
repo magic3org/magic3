@@ -356,7 +356,8 @@ a.fc-event,
 	
 /* Reusable Separate-border Table
 ------------------------------------------------------------*/
-
+/*テーブルの定義はMagic3のテンプレートのCSSを使用*/
+/*
 table.fc-border-separate {
 	border-collapse: separate;
 	}
@@ -380,8 +381,7 @@ table.fc-border-separate {
 .fc-border-separate tbody tr.fc-first th {
 	border-top-width: 0;
 	}
-	
-	
+*/
 
 /* Month View, Basic Week View, Basic Day View
 ------------------------------------------------------------------------*/
