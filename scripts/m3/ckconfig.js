@@ -107,7 +107,7 @@ CKEDITOR.stylesSet.add( 'default', [
 //	{ name: '四角リスト',	element: 'ul',		styles: { 'list-style-type': 'square' } }
 ]);
 
-CKEDITOR.editorConfig = function( config ) {
+CKEDITOR.editorConfig = function(config){
 	// Define changes to default configuration here.
 	// For the complete reference:
 	// http://docs.ckeditor.com/#!/api/CKEDITOR.config
@@ -117,6 +117,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.autoParagraph = false;
 	config.fillEmptyBlocks = false;		// 「&nbsp;」が自動的に入るのを防ぐ
 	config.toolbarCanCollapse = true;		// ツールバー表示制御
+	config.width = 800;
 	
 	// ツールバーの設定
 	config.toolbar_Full = [
