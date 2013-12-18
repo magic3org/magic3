@@ -26,6 +26,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $preview;			// プレビューモードかどうか
 	private $entryId;	// 記事ID
 	private $title;		// 表示タイトル
+	private $widgetTitle;	// ウィジェットタイトル
 	private $message;			// ユーザ向けメッセージ
 	private $blogId;			// ブログID
 	private $startDt;
@@ -42,6 +43,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $editIconPos;			// 編集アイコンの位置
 	private $useMultiBlog;			// マルチブログを使用するかどうか
 	private $receiveComment;		// コメントを受け付けるかどうか
+	private $useWidgetTitle;		// ウィジェットタイトルを使用するかどうか
 	private $headTitle;		// METAタグタイトル
 	private $headDesc;		// METAタグ要約
 	private $headKeyword;	// METAタグキーワード
@@ -49,9 +51,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $outputHead;			// ヘッダ出力するかどうか
 	private $viewMode;					// 表示モード
 	private $avatarSize;		// アバター画像サイズ
+	private $titleList;		// 一覧タイトル
 	private $titleNoEntry;		// 記事なし時タイトル
 	private $messageNoEntry;		// ブログ記事が登録されていないメッセージ
 	private $messageFindNoEntry;	// ブログ記事が見つからないメッセージ
+	private $startTitleTagLevel;	// 最初のタイトルタグレベル
+	private $itemTagLevel;			// 記事のタイトルタグレベル
 	const CONTENT_TYPE = 'bg';
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_EXT_ENTRY		= '続きを読む';					// 投稿記事に続きがある場合の表示
@@ -72,7 +77,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	const CATEGORY_BLOCK_CLASS = 'blog_category_list';		// カテゴリーブロックのCSSクラス
 	const CATEGORY_BLOCK_LABEL = 'カテゴリー：';		// カテゴリーブロックのラベル
 	const CATEGORY_BLOCK_SEPARATOR = ', ';			// カテゴリーブロック内の区切り
-	const TOP_TITLE_TAG_LEVEL = 2;				// トップタイトルのHタグレベル
+//	const TOP_TITLE_TAG_LEVEL = 2;				// トップタイトルのHタグレベル
 	const AVATAR_TITLE_TAIL = 'のアバター';
 	const EDIT_ICON_MIN_POS = 30;			// 編集アイコンの位置
 	const EDIT_ICON_NEXT_POS = 35;			// 編集アイコンの位置
@@ -89,11 +94,16 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->categoryDb = new blog_categoryDb();
 		$this->commentDb = new blog_commentDb();
 		
+		// 初期値設定
 		$this->editIconPos = self::EDIT_ICON_MIN_POS;			// 編集アイコンの位置
 		$this->outputHead = self::$_configArray[blog_mainCommonDef::CF_OUTPUT_HEAD];			// ヘッダ出力するかどうか
 		$this->useMultiBlog = self::$_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
 		$this->receiveComment = self::$_configArray[blog_mainCommonDef::CF_RECEIVE_COMMENT];		// コメントを受け付けるかどうか
-		
+		$this->useWidgetTitle = self::$_configArray[blog_mainCommonDef::CF_USE_WIDGET_TITLE];		// ウィジェットタイトルを使用するかどうか
+			
+		$this->title = self::$_configArray[blog_mainCommonDef::CF_TITLE_DEFAULT];		// デフォルトタイトル
+		$this->titleList = self::$_configArray[blog_mainCommonDef::CF_TITLE_LIST];		// 一覧タイトル
+		if (empty($this->titleList)) $this->titleList = blog_mainCommonDef::DEFAULT_TITLE_LIST;
 		$this->titleSearchList = self::$_configArray[blog_mainCommonDef::CF_TITLE_SEARCH_LIST];		// 検索結果タイトル
 		if (empty($this->titleSearchList)) $this->titleSearchList = blog_mainCommonDef::DEFAULT_TITLE_SEARCH_LIST;
 		$this->titleNoEntry = self::$_configArray[blog_mainCommonDef::CF_TITLE_NO_ENTRY];		// 記事なし時タイトル
@@ -102,6 +112,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (empty($this->messageNoEntry)) $this->messageNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_NO_ENTRY;
 		$this->messageFindNoEntry = self::$_configArray[blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY];		// ブログ記事が見つからないメッセージ
 		if (empty($this->messageFindNoEntry)) $this->messageFindNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;
+		$this->startTitleTagLevel = self::$_configArray[blog_mainCommonDef::CF_TITLE_TAG_LEVEL];	// 最初のタイトルタグレベル
+		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -181,7 +193,22 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		} else {
 			$buttonList = '';
 		}
-			
+		
+		// タイトルのタグレベル
+		$this->itemTagLevel = $this->startTitleTagLevel;			// 記事のタイトルタグレベル
+		switch ($this->viewMode){					// 表示モード
+			case 0:			// トップ一覧表示
+			default:
+				if (!$this->useWidgetTitle && !empty($this->title)) $this->itemTagLevel++;
+				break;
+			case 1:			// 記事一覧表示
+			case 2:			// 検索一覧表示
+				if (!$this->useWidgetTitle) $this->itemTagLevel++;
+				break;
+			case 10:			// 記事単体表示
+				break;
+		}
+		
 		switch ($this->viewMode){					// 表示モード
 			case 0:			// トップ一覧表示
 			default:
@@ -208,15 +235,19 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->gPage->setHeadSubTitle($this->pageTitle);
 		
 		// タイトルの設定
-		if (!empty($this->title)){
-			$this->tmpl->setAttribute('show_title', 'visibility', 'visible');		// 年月表示
-			$this->tmpl->addVar("show_title", "title", '<h' . self::TOP_TITLE_TAG_LEVEL . '>' . $this->convertToDispString($this->title) . '</h' . self::TOP_TITLE_TAG_LEVEL . '>');
+		if ($this->useWidgetTitle){			// ウィジェットタイトルを使用するとき
+			if (!empty($this->title)) $this->widgetTitle = $this->title;	// ウィジェットタイトル
+		} else {
+			if (!empty($this->title)){
+				$this->tmpl->setAttribute('show_title', 'visibility', 'visible');		// 年月表示
+				$this->tmpl->addVar("show_title", "title", '<h' . $this->startTitleTagLevel . '>' . $this->convertToDispString($this->title) . '</h' . $this->startTitleTagLevel . '>');
+			}
 		}
-		
+
 		// メッセージを表示
 		if (!empty($this->message)){
 			$this->tmpl->setAttribute('message', 'visibility', 'visible');
-			$this->tmpl->addVar("message", "message", $this->convertToDispString($this->message));
+			$this->tmpl->addVar("message", "message", $this->convertToDispString($this->message, true/*タグを残す*/));
 		}
 		
 		// 運用可能ユーザの場合は編集用ボタンを表示
@@ -261,20 +292,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 	}
 	/**
-	 * CSSファイルをHTMLヘッダ部に設定
-	 *
-	 * CSSファイルをHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
-	 */
-	function _addCssFileToHead($request, &$param)
-	{
-		return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
-	}
-	/**
 	 * 記事単体表示
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
@@ -288,8 +305,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		// 記事ID指定のときは記事を取得
 		$entryRow = array();
 		if (!empty($this->entryId)){
-			$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $row);
-			if ($ret) $entryRow = $row;
+			$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $entryRow);
+			if ($ret){
+				// ページのタイトル設定
+				$this->title = $entryRow['be_name'];
+				$this->pageTitle = $this->title;
+			}
 		}
 		
 		// 入力値取得
@@ -315,10 +336,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 
 				// エラーなしの場合は確認画面表示
 				if ($this->getMsgCount() == 0){
-					// タイトル作成
-					$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $row);
+					// コメントタイトル作成
+					if (!empty($entryRow)){		// 記事レコードがあるとき
+						$this->title = $entryRow['be_name'] . self::COMMENT_TITLE;
+						$this->pageTitle = $this->title;
+					}
+/*					$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $row);
 					if ($ret) $this->title = $row['be_name'] . self::COMMENT_TITLE;
-					$this->pageTitle = $this->title;		// 画面タイトル
+					$this->pageTitle = $this->title;		// 画面タイトル*/
 				
 					// ハッシュキー作成
 					$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
@@ -410,9 +435,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
 										''/*検索キーワード*/, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId, $this->preview);
 		}
-
-		// ページのタイトル設定
-		if (!empty($entryRow)) $this->pageTitle = $entryRow['be_name'];		// 記事レコードがあるとき
 		
 		// マルチブログのときはパンくずリストにブログ名を追加
 		if ($this->useMultiBlog){
@@ -423,8 +445,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		// ブログ記事データがないときはデータなしメッセージ追加
 		if (!$this->isExistsViewData){
-//			$this->title = self::MESSAGE_NO_ENTRY_TITLE;
-//			$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
 			$this->title = $this->titleNoEntry;
 			$this->message = $this->messageNoEntry;
 		}
@@ -493,15 +513,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $this->startDt, $this->endDt, ''/*検索キーワード*/, $this->_langId, $targetBlogId, $this->_userId, $this->preview);
 			}
-			//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
 			$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
 			
 			// リンク文字列作成、ページ番号調整
 			// マルチブログのときはブログIDを付加する
 			$multiBlogParam = '';		// マルチブログ時の追加パラメータ
 			if ($this->useMultiBlog) $multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $targetBlogId;
-		//	$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . $multiBlogParam);
-		//	$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT, $this->getUrl($this->currentPageUrl . $multiBlogParam, true/*リンク用*/));
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . $multiBlogParam);
 
 			// 記事一覧作成
@@ -520,17 +537,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->tmpl->addVar("page_link", "page_link", $pageLink);
 				}
 			} else {	// ブログ記事データがないときはデータなしメッセージ追加
-				//$this->title = self::MESSAGE_NO_ENTRY_TITLE;
-				//$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;
 			}
 		}
-		// ブログ記事データがないときはデータなしメッセージ追加
-/*		if (!$showTopContent && !$this->isExistsViewData){
-			$this->title = self::MESSAGE_NO_ENTRY_TITLE;
-			$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
-		}*/
 	}
 	/**
 	 * 検索結果画面表示
@@ -561,28 +571,20 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			
 			// 総数を取得
 			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
-				//$totalCount = self::$_mainDb->searchEntryItemsCountByKeyword($this->now, $parsedKeywords, $this->_langId);
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, ''/*期間開始*/, ''/*期間終了*/, $parsedKeywords, $this->_langId, null/*ブログID*/, null, $this->preview);
 			} else {
-				//$totalCount = self::$_mainDb->searchEntryItemsCountByKeyword($this->now, $parsedKeywords, $this->_langId, $this->_userId);
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, ''/*期間開始*/, ''/*期間終了*/, $parsedKeywords, $this->_langId, null/*ブログID*/, $this->_userId, $this->preview);
 			}
-			//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
 			$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
-//			$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
-//			$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
-//							$this->getUrl($this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword), true/*リンク用*/));
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
 
 			// 記事一覧を表示
 			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
-				//self::$_mainDb->searchEntryItemsByKeyword($entryViewCount, $this->pageNo, $this->now, $parsedKeywords, $this->_langId, array($this, 'itemsLoop'));
 				self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, 0, ''/*期間開始*/, ''/*期間終了*/,
 													$parsedKeywords, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'), null/*ブログID*/, null, $this->preview);
 			} else {
-				//self::$_mainDb->searchEntryItemsByKeyword($entryViewCount, $this->pageNo, $this->now, $parsedKeywords, $this->_langId, array($this, 'itemsLoop'), $this->_userId);
 				self::$_mainDb->getEntryItems($entryViewCount, $this->pageNo, $this->now, 0, ''/*期間開始*/, ''/*期間終了*/,
 													$parsedKeywords, $this->_langId, $entryViewOrder, array($this, 'itemsLoop'), null/*ブログID*/, $this->_userId, $this->preview);
 			}
@@ -596,8 +598,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->message = '検索キーワード：' . $keyword;
 			} else {	// 検索結果なしの場合
 				$this->tmpl->setAttribute('entrylist', 'visibility', 'hidden');
-				//$this->message = self::MESSAGE_FIND_NO_ENTRY;
-				$this->message = $this->messageFindNoEntry;
+				$this->message = $this->messageFindNoEntry . '<br />検索キーワード：' . $keyword;
 			}
 		}
 		$this->title = $this->titleSearchList;				// 検索一覧タイトル
@@ -633,13 +634,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {
 				$totalCount = self::$_mainDb->getEntryItemsCountByCategory($this->now, $category, $this->_langId, $this->_userId);
 			}
-			//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
 			$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
-			//$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
-//			$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT,
-//						$this->getUrl($this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category, true/*リンク用*/));
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 			
 			// 記事一覧を表示
@@ -651,7 +648,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 
 			// タイトルの設定
 			$ret = $this->categoryDb->getCategoryByCategoryId($category, $this->gEnv->getDefaultLanguage(), $row);
-			if ($ret) $this->title = $row['bc_name'];
+			if ($ret) $this->title = str_replace('$1', $row['bc_name'], $this->titleList);
 			
 			// ブログ記事データがないときはデータなしメッセージ追加
 			if ($this->isExistsViewData){
@@ -661,8 +658,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->tmpl->addVar("page_link", "page_link", $pageLink);
 				}
 			} else {
-			//	$this->title = self::MESSAGE_NO_ENTRY_TITLE;
-			//	$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;
 			}
@@ -678,13 +673,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				} else {
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId, $this->preview);
 				}
-				//$this->correctPageNo($this->pageNo, $pageCount, $totalCount, $entryViewCount);
 				$this->calcPageLink($this->pageNo, $totalCount, $entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
-				//$pageLink = $this->createPageLink($this->pageNo, $totalCount, $entryViewCount, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
-			//	$pageLink = $this->gDesign->createPageLink($this->pageNo, $pageCount, self::LINK_PAGE_COUNT, 
-			//					$this->getUrl($this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day, true/*リンク用*/));
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
 
 				// 記事一覧作成
@@ -705,11 +696,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				}
 				
 				// 年月日の表示
-				$this->title = $year . '年 ' . $month . '月 ' . $day . '日';
+				//$this->title = $year . '年 ' . $month . '月 ' . $day . '日';
+				$this->title = str_replace('$1', $year . '年 ' . $month . '月 ' . $day . '日', $this->titleList);
 				
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
-					//$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
 					$this->message = $this->messageNoEntry;
 				}
 			} else if (!empty($month)){		// 月指定のとき
@@ -744,11 +735,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					}
 				}
 				// 年月の表示
-				$this->title = $year . '年 ' . $month . '月';
+				//$this->title = $year . '年 ' . $month . '月';
+				$this->title = str_replace('$1', $year . '年 ' . $month . '月', $this->titleList);
 				
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
-					//$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
 					$this->message = $this->messageNoEntry;
 				}
 			} else {		// 年指定のとき
@@ -783,11 +774,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					}
 				}
 				// 年の表示
-				$this->title = $year . '年';
+				//$this->title = $year . '年';
+				$this->title = str_replace('$1', $year . '年', $this->titleList);
 				
 				// ブログ記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
-					//$this->message = self::MESSAGE_NO_ENTRY;			// ユーザ向けメッセージ
 					$this->message = $this->messageNoEntry;
 				}
 			}
@@ -826,6 +817,31 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		return $this->addLib;
 	}
 	/**
+	 * CSSファイルをHTMLヘッダ部に設定
+	 *
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssFileToHead($request, &$param)
+	{
+		return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+	}
+	/**
+	 * ウィジェットのタイトルを設定
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
+	 * @return string 						ウィジェットのタイトル名
+	 */
+	function _setTitle($request, &$param)
+	{
+		return $this->widgetTitle;	// ウィジェットタイトル
+	}
+	/**
 	 * 取得したコンテンツ項目をテンプレートに設定する
 	 *
 	 * @param int		$index			行番号
@@ -846,21 +862,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$showComment = $fetchedRow['be_show_comment'];				// コメントを表示するかどうか
 		$blogId = $fetchedRow['be_blog_id'];						// ブログID
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
-		
-		// タイトルのタグレベル
-		switch ($this->viewMode){					// 表示モード
-			case 0:			// トップ一覧表示
-			default:
-				$titleTagLevel = 2;
-				break;
-			case 1:			// 記事一覧表示
-			case 2:			// 検索一覧表示
-				$titleTagLevel = 3;
-				break;
-			case 10:			// 記事単体表示
-				$titleTagLevel = 2;
-				break;
-		}
 		
 		// コメントを取得
 		$commentCount = $this->commentDb->getCommentCountByEntryId($entryId, $this->_langId);	// コメント総数
@@ -924,7 +925,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId, true/*リンク用*/);
 		
 		// タイトル作成
-		$titleTag = '<h' . $titleTagLevel . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $this->convertToDispString($title) . '</a></h' . $titleTagLevel . '>';
+		$titleTag = '<h' . $this->itemTagLevel . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $this->convertToDispString($title) . '</a></h' . $this->itemTagLevel . '>';
 		
 		// ユーザ定義フィールド値取得
 		// 埋め込む文字列はHTMLエスケープする
@@ -1003,7 +1004,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$contentIdArray = array_map('trim', explode(',', $relatedContent));
 				$ret = self::$_mainDb->getEntryItem($contentIdArray, $this->_langId, $rows);
 				if ($ret){
-					$relatedContentTag .= '<h' . ($titleTagLevel + 1) . '>' . self::RELATED_CONTENT_BLOCK_LABEL . '</h' . ($titleTagLevel + 1) . '>';
+					$relatedContentTag .= '<h' . ($this->itemTagLevel + 1) . '>' . self::RELATED_CONTENT_BLOCK_LABEL . '</h' . ($this->itemTagLevel + 1) . '>';
 					$relatedContentTag .= '<ul>';
 					for ($i = 0; $i < count($rows); $i++){
 						$relatedUrl = $accessPointUrl . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $rows[$i]['be_id'];	// 関連コンテンツリンク先
@@ -1074,111 +1075,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->isExistsViewData = true;				// 表示データがあるかどうか
 		return true;
 	}
-	/**
-	 * 取得したコンテンツ項目をテンプレートに設定する
-	 *
-	 * @param int		$index			行番号
-	 * @param array		$fetchedRow		取得行
-	 * @param object	$param			任意使用パラメータ
-	 * @return bool						trueを返すとループ続行。falseを返すとその時点で終了。
-	 */
-	function searchItemsLoop($index, $fetchedRow)
-	{
-		$title = $fetchedRow['be_name'];			// タイトル
-		$blogId = $fetchedRow['be_blog_id'];						// ブログID
-		
-		// 記事へのリンクを生成
-		//$linkUrl = $this->currentPageUrl . '&entryid=' . $fetchedRow['be_id'];
-		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id'], true/*リンク用*/);
-		$link = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $this->convertToDispString($title) . '</a>';
-		$commentLink = '<div><a href="' . $this->convertUrlToHtmlEntity($linkUrl . '#comment') . '" >コメント(' . $commentCount . ')</a></div>';	// コメントへのリンク
-		
-		// 日付
-		$date = $fetchedRow['be_regist_dt'];
-
-		// HTMLを出力(出力内容は特にエラーチェックしない)
-		// 続きがある場合はリンクを付加
-		$entryText = $fetchedRow['be_html'];
-//		$entryText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryText);// アプリケーションルートを変換
-		if (!empty($fetchedRow['be_html_ext'])){
-			$entryText .= self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a>';
-		}
-		$contentInfo = array();
-		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['be_name'];			// コンテンツ置換キー(タイトル)
-		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $fetchedRow['be_create_dt'];		// コンテンツ置換キー(更新日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $fetchedRow['be_regist_dt'];		// コンテンツ置換キー(登録日時)
-		$entryText = $this->convertM3ToHtml($entryText, true/*改行コーをbrタグに変換*/, $contentInfo);
-		if (!empty($entryText)) $entryText = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryText . '</div>';// DIVで括る
-		
-		// ブログへのリンクを作成
-		$blogLink = '';
-		if ($this->useMultiBlog && !empty($blogId)){
-			$blogName = $fetchedRow['bl_name'];// ブログ名
-			$blogUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ID . '=' . $blogId);
-			$blogLink = '<span style="font-size:smaller;"><a href="' . $this->convertUrlToHtmlEntity($blogUrl) . '" >' . $this->convertToDispString($blogName) . '</a></span>&nbsp;&nbsp;&nbsp;&nbsp;';
-		}
-		
-		// コンテンツ編集権限がある場合はボタンを表示
-		$buttonList = '';
-		if (self::$_canEditEntry) $buttonList = $this->createButtonTag($fetchedRow['be_serial']);// 編集権限があるとき
-		
-		$row = array(
-			'title' => $link,			// リンク付きタイトル
-			'date' => $date,			// 日付
-			'entry' => $entryText,	// 投稿記事
-			'blog_link' => $blogLink,			// マルチブログへのリンク
-			'button_list' => $buttonList	// 記事編集ボタン
-		);
-		$this->tmpl->addVars('entrylist', $row);
-		$this->tmpl->parseTemplate('entrylist', 'a');
-		$this->isExistsViewData = true;				// 表示データがあるかどうか
-		return true;
-	}
-	/**
-	 * ページリンク作成
-	 *
-	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整
-	 * @param int $totalCount		総項目数
-	 * @param int $viewItemCount	1ページあたりの項目数
-	 * @param string $baseUrl		リンク用のベースURL
-	 * @return string				リンクHTML
-	 */
-/*	function createPageLink(&$pageNo, $totalCount, $viewItemCount, $baseUrl)
-	{
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-
-		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			// ページ数1から「LINK_PAGE_COUNT」までのリンクを作成
-			$maxPageCount = $pageCount < self::LINK_PAGE_COUNT ? $pageCount : self::LINK_PAGE_COUNT;
-			for ($i = 1; $i <= $maxPageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;<span class="active">' . $i . '</span>';
-				} else {
-					$linkUrl = $this->getUrl($baseUrl . '&page=' . $i, true);
-					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-			// 残りは「...」表示
-			if ($pageCount > self::LINK_PAGE_COUNT) $pageLink .= '&nbsp;...';
-		}
-		if ($pageNo > 1){		// 前ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo -1), true);
-			$link = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >前へ</a>';
-			$pageLink = $link . $pageLink;
-		}
-		if ($pageNo < $pageCount){		// 次ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo +1), true);
-			$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >次へ</a>';
-			$pageLink .= $link;
-		}
-		return $pageLink;
-	}*/
 	/**
 	 * 詳細コンテンツを作成
 	 *

@@ -34,22 +34,29 @@ class blog_mainCommonDef
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	const CF_LAYOUT_ENTRY_LIST		= 'layout_entry_list';			// コンテンツレイアウト(記事一覧)
 	const CF_LAYOUT_COMMENT_LIST	= 'layout_comment_list';			// コンテンツレイアウト(コメント一覧)
+	const CF_USE_WIDGET_TITLE		= 'use_widget_title';		// ウィジェットタイトルを使用するかどうか
+	const CF_TITLE_DEFAULT			= 'title_default';		// デフォルトタイトル
+	const CF_TITLE_LIST				= 'title_list';		// 一覧タイトル
 	const CF_TITLE_SEARCH_LIST		= 'title_search_list';		// 検索結果タイトル
 	const CF_TITLE_NO_ENTRY			= 'title_no_entry';		// 記事なし時タイトル
-	const CF_MESSAGE_NO_ENTRY			= 'message_no_entry';		// ブログ記事が登録されていないメッセージ
-	const CF_MESSAGE_FIND_NO_ENTRY		= 'message_find_no_entry';		// ブログ記事が見つからないメッセージ
+	const CF_MESSAGE_NO_ENTRY		= 'message_no_entry';		// ブログ記事が登録されていないメッセージ
+	const CF_MESSAGE_FIND_NO_ENTRY	= 'message_find_no_entry';		// ブログ記事が見つからないメッセージ
+	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
 	
 	const USER_ID_SEPARATOR = ',';			// ユーザID区切り用セパレータ
 	const ATTACH_FILE_DIR = '/etc/blog';				// 添付ファイル格納ディレクトリ
 	const DOWNLOAD_CONTENT_TYPE = '-file';				// ダウンロードするコンテンツのタイプ
-	const DEFAULT_LAYOUT_ENTRY_SINGLE = '[#TITLE#]<small>[#CT_AUTHOR#] [#CT_DATE#] [#CT_TIME#] [#BLOG_LINK#]</small>[#BODY#][#CATEGORY#][#LINKS#]';	// デフォルトのコンテンツレイアウト(記事詳細)
+	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<small>[#CT_AUTHOR#] [#CT_DATE#] [#CT_TIME#] [#BLOG_LINK#]</small>[#BODY#][#CATEGORY#][#LINKS#]';	// デフォルトのコンテンツレイアウト(記事詳細)
 	const DEFAULT_LAYOUT_ENTRY_LIST = '[#TITLE#]<small>[#CT_AUTHOR#] [#CT_DATE#] [#CT_TIME#] [#BLOG_LINK#]</small>[#BODY#][#CATEGORY#][#COMMENT_LINK#]';	// デフォルトのコンテンツレイアウト(記事一覧)
 	const DEFAULT_LAYOUT_COMMENT_LIST = '[#AVATAR#]<dl><db>[#TITLE#] <small>[#CM_AUTHOR#] [#CM_DATE#] [#CM_TIME#] [#URL#]</small></dt><dd>[#BODY#]</dd></dl>';	// デフォルトのコンテンツレイアウト(コメント一覧)
 	const DEFAULT_HEAD_VIEW_DETAIL = '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />';	// デフォルトのヘッダ出力(詳細表示)
+//	const DEFAULT_TITLE_DEFAULT 		= 'ブログ新規';		// ブログタイトルのデフォルト値
+	const DEFAULT_TITLE_LIST 			= '「$1」の記事';		// 一覧タイトルのデフォルト値
 	const DEFAULT_TITLE_SEARCH_LIST 	= 'ブログ検索';		// 検索結果タイトルのデフォルト値
 	const DEFAULT_TITLE_NO_ENTRY		= 'ブログ記事未登録';
 	const DEFAULT_MESSAGE_NO_ENTRY		= 'ブログ記事は登録されていません';				// ブログ記事が登録されていないメッセージ
 	const DEFAULT_MESSAGE_FIND_NO_ENTRY	= 'ブログ記事が見つかりません';					// ブログ記事が見つからないメッセージ
+	const DEFAULT_TITLE_TAG_LEVEL		= 2;		// デフォルトのタイトルタグレベル
 	
 	/**
 	 * フォトギャラリー定義値をDBから取得
