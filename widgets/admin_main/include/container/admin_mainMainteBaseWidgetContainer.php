@@ -102,8 +102,11 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		$current = '';
 		$link = $baseUrl . '?task=' . self::TASK_PAGEINFO;		// ページ情報一覧
 		if ($task == self::TASK_PAGEINFO ||						// ページ情報一覧
+			$task == self::TASK_PAGEINFO_DETAIL ||				// ページ情報詳細
 			$task == self::TASK_PAGEID ||						// ページID一覧
-			$task == self::TASK_MENUID){						// メニューID
+			$task == self::TASK_PAGEID_DETAIL ||				// ページID詳細
+			$task == self::TASK_MENUID ||						// メニューID一覧
+			$task == self::TASK_MENUID_DETAIL){					// メニューID詳細
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>マスター管理</span></a></li>' . M3_NL;
@@ -135,13 +138,16 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_RESBROWSE);
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>ファイルブラウザ</span></a></li>' . M3_NL;
 		} else if ($task == self::TASK_PAGEINFO ||						// ページ情報一覧
+			$task == self::TASK_PAGEINFO_DETAIL ||				// ページ情報詳細
 			$task == self::TASK_PAGEID ||						// ページID一覧
-			$task == self::TASK_MENUID){						// メニューID
+			$task == self::TASK_PAGEID_DETAIL ||				// ページID詳細
+			$task == self::TASK_MENUID ||						// メニューID一覧
+			$task == self::TASK_MENUID_DETAIL){					// メニューID詳細
 			
 			// ### ページ情報 ###
 			$current = '';
 			$link = $baseUrl . '?task=pageinfo';
-			if ($task == 'pageinfo'){
+			if ($task == self::TASK_PAGEINFO || $task == self::TASK_PAGEINFO_DETAIL){
 				$current = 'id="current"';
 			}
 			// ヘルプを作成
@@ -151,7 +157,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			// ### ページID ###
 			$current = '';
 			$link = $baseUrl . '?task=pageid';
-			if ($task == 'pageid'){
+			if ($task == self::TASK_PAGEID || $task == self::TASK_PAGEID_DETAIL){
 				$current = 'id="current"';
 			}
 			// ヘルプを作成
@@ -161,7 +167,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			// ### メニューID ###
 			$current = '';
 			$link = $baseUrl . '?task=menuid';
-			if ($task == 'menuid'){
+			if ($task == self::TASK_MENUID || $task == self::TASK_MENUID_DETAIL){
 				$current = 'id="current"';
 			}
 			// ヘルプを作成
