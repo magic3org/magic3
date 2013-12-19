@@ -27,40 +27,26 @@ CREATE TABLE commerce_config (
     cg_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (cg_id)
 ) TYPE=innodb;
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('default_currency',       'JPY',    'デフォルト通貨',               0);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('default_tax_type',       'sales',  'デフォルト課税タイプ',         1);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('tax_in_price',           '0',      '税処理区分',                   2);      -- 0=外税、1=内税
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('price_calc_type',        '0',      '金額端数処理',                 3);      -- 0=切り捨て、1=切り上げ、2=四捨五入
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('tax_calc_type',          '0',      '税端数処理',                   4);      -- 0=切り捨て、1=切り上げ、2=四捨五入
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('use_email',              '1',      'メール送信機能',               5);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('shop_email',             '',       'ショップ宛てメールアドレス',   6);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('auto_email_sender',      '',       '自動送信メール送信元アドレス', 7);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('shop_name',              '',       'ショップ名',                   8);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('shop_owner',             '',       'ショップオーナー名',           9);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('shop_address',           '',       'ショップ住所',                 10);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('shop_phone',             '',       'ショップ電話番号',             11);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('category_select_count',  '2',      '商品カテゴリー選択可能数',     12);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('order_cancel_hour',      '24',     '注文のキャンセル可能時間',     13);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('disp_product_count',     '10',     '商品一覧表示項目数',           14);
-INSERT INTO commerce_config (cg_id,                    cg_value, cg_name,                        cg_index)
-VALUES                      ('decrement_view_stock_count',              '1',      '注文時の表示在庫数デクリメント',               15);
-INSERT INTO commerce_config (cg_id,                     cg_value, cg_name,                        cg_index)
-VALUES                      ('permit_non_member_order', '0',      '非会員からの注文受付',         16);
+INSERT INTO commerce_config
+(cg_id,                    cg_value, cg_name,                        cg_index) VALUES
+('default_currency',       'JPY',    'デフォルト通貨',               0),
+('default_tax_type',       'sales',  'デフォルト課税タイプ',         1),
+('tax_in_price',           '0',      '税処理区分',                   2),      -- 0=外税、1=内税
+('price_calc_type',        '0',      '金額端数処理',                 3),      -- 0=切り捨て、1=切り上げ、2=四捨五入
+('tax_calc_type',          '0',      '税端数処理',                   4),      -- 0=切り捨て、1=切り上げ、2=四捨五入
+('use_email',              '1',      'メール送信機能',               5),
+('shop_email',             '',       'ショップ宛てメールアドレス',   6),
+('auto_email_sender',      '',       '自動送信メール送信元アドレス', 7),
+('shop_name',              '',       'ショップ名',                   8),
+('shop_owner',             '',       'ショップオーナー名',           9),
+('shop_address',           '',       'ショップ住所',                 10),
+('shop_phone',             '',       'ショップ電話番号',             11),
+('category_select_count',  '2',      '商品カテゴリー選択可能数',     12),
+('order_cancel_hour',      '24',     '注文のキャンセル可能時間',     13),
+('disp_product_count',     '10',     '商品一覧表示項目数',           14),
+('decrement_view_stock_count',              '1',      '注文時の表示在庫数デクリメント',               15),
+('permit_non_member_order', '0',      '非会員からの注文受付',         16),
+('hierarchical_category',  '1',      '階層化商品カテゴリー',         17);
 
 -- 単位マスター
 DROP TABLE IF EXISTS unit_type;
@@ -247,6 +233,10 @@ CREATE TABLE product_class (
     PRIMARY KEY          (pu_serial),
     UNIQUE               (pu_id,        pu_language_id,               pu_history_index)
 ) TYPE=innodb;
+INSERT INTO product_class
+(pu_id,   pu_language_id, pu_name,                pu_index) VALUES 
+('',      'ja',           '一般商品',             1),
+('photo', 'ja',           'フォトギャラリー商品', 2);
 
 -- 商品カテゴリマスター
 DROP TABLE IF EXISTS product_category;
@@ -256,7 +246,7 @@ CREATE TABLE product_category (
     pc_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     pc_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
 
-    pc_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- 商品カテゴリ名称
+    pc_name              VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 商品カテゴリ名称
     pc_parent_id         INT            DEFAULT 0                     NOT NULL,      -- 親カテゴリID
     pc_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
     pc_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
@@ -346,11 +336,9 @@ CREATE TABLE pay_method_def (
     PRIMARY KEY          (po_serial),
     UNIQUE               (po_id,        po_language_id, po_set_id,    po_history_index)
 ) TYPE=innodb;
-INSERT INTO pay_method_def (po_id, po_language_id, po_name, po_index) VALUES ('furikae',  'ja', '郵便振替', 1);
-INSERT INTO pay_method_def (po_id, po_language_id, po_name, po_index) VALUES ('kakidome', 'ja', '現金書留', 2);
-INSERT INTO pay_method_def (po_id, po_language_id, po_name, po_index) VALUES ('furikomi', 'ja', '銀行振込', 3);
-INSERT INTO pay_method_def (po_id, po_language_id, po_name, po_index) VALUES ('daibiki',  'ja', '代金引換', 4);
-INSERT INTO pay_method_def (po_id, po_language_id, po_name, po_index) VALUES ('card',     'ja', 'クレジットカード', 5);
+INSERT INTO pay_method_def 
+(po_id,     po_language_id, po_name, po_index) VALUES
+('payment_service',  'ja', '決済サービス', 1);
 
 -- 配送方法マスター
 DROP TABLE IF EXISTS delivery_method_def;
@@ -703,6 +691,11 @@ CREATE TABLE product_type (
     PRIMARY KEY          (py_serial),
     UNIQUE               (py_product_class,     py_id,        py_language_id,               py_history_index)
 ) TYPE=innodb;
+INSERT INTO product_type
+(py_product_class, py_id,      py_language_id, py_name,            py_code, py_description, py_index, py_single_select) VALUES 
+('',               '',         'ja',           '標準商品',         'ST',    '',             1,             false),
+('photo',          '',         'ja',           '標準商品',         'ST',    '',             1,             false),
+('photo',          'download', 'ja',           'ダウンロード画像', 'DL',    '',             2,             true);
 
 -- 商品ステータス種別マスター
 DROP TABLE IF EXISTS product_status_type;
@@ -1071,6 +1064,13 @@ CREATE TABLE stock_plan (
 ) TYPE=innodb;
 
 -- 更新データ
+-- メニューIDマスター
+DELETE FROM _menu_id WHERE mn_id = 'ec_menu';
+INSERT INTO _menu_id
+(mn_id,         mn_name,          mn_description, mn_device_type, mn_widget_id, mn_sort_order) VALUES
+('ec_menu',   'EC用メニュー(PC用)', '「ec_menu」ウィジェット専用のメニュー',             0,   'ec_menu',           10);
+
+-- 追加クラスマスター
 DELETE FROM _addons WHERE ao_id = 'eclib';
 INSERT INTO _addons (ao_id,     ao_class_name, ao_name,               ao_description, ao_index)
 VALUES              ('eclib',   'ecLib',       'Eコマースライブラリ', '',             1);
@@ -1079,30 +1079,49 @@ INSERT INTO _addons (ao_id,     ao_class_name, ao_name,               ao_descrip
 VALUES              ('ecmail',   'ecMail',       'Eコマースメール連携', '',             2);
 
 -- インナーウィジェット
+-- インナーウィジェット(配送方法)
 DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'flatrate';
 INSERT INTO _iwidgets
-(iw_widget_id, iw_id,      iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'flatrate', '定額', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                now(),         now());
+(iw_widget_id, iw_id,      iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'flatrate', '定額', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
 DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'classrate';
 INSERT INTO _iwidgets
-(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'classrate', '購入額基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                now(),         now());
+(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'classrate', '購入額基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
 DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'staterate';
 INSERT INTO _iwidgets
-(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'staterate', '送付先基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                now(),         now());
+(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'staterate', '送付先基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
 DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'quantityrate';
 INSERT INTO _iwidgets
-(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'quantityrate', '商品数基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                now(),         now());
+(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'quantityrate', '商品数基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
 DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'productrate';
 INSERT INTO _iwidgets
-(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'productrate', '商品別規定', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                now(),         now());
+(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'productrate', '商品別規定', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
 DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'weightrate';
 INSERT INTO _iwidgets
-(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_official_level, iw_install_dt, iw_create_dt) VALUES
-('ec_main', 'weightrate', '送付先+重量基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                now(),         now());
+(iw_widget_id, iw_id,       iw_name,    iw_type,    iw_author,      iw_copyright, iw_license, iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'weightrate', '送付先+重量基準', 'DELIVERY', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,      10,                now(),         now());
+-- インナーウィジェット(支払方法)
+DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'epsilon';
+INSERT INTO _iwidgets
+(iw_widget_id, iw_id,     iw_name,          iw_type,    iw_author,      iw_copyright, iw_license,               iw_license_type, iw_official_level, iw_online, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'epsilon', 'イプシロン決済', 'PAYMENT', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                true,      now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'exchange_classrate';
+INSERT INTO _iwidgets
+(iw_widget_id, iw_id,     iw_name,          iw_type,    iw_author,      iw_copyright, iw_license,               iw_license_type, iw_official_level, iw_online, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'exchange_classrate', '代金引換(購入額基準)', 'PAYMENT', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                false,      now(),         now());
+-- インナーウィジェット(注文計算)
+DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'lotbuying';
+INSERT INTO _iwidgets
+(iw_widget_id, iw_id,       iw_name,          iw_type,     iw_author,      iw_copyright, iw_license,               iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'lotbuying', 'まとめ買い割引', 'CALCORDER', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                now(),         now());
+DELETE FROM _iwidgets WHERE iw_widget_id = 'ec_main' AND iw_id = 'product_lotbuying';
+INSERT INTO _iwidgets
+(iw_widget_id, iw_id,               iw_name,                iw_type,     iw_author,      iw_copyright, iw_license,                iw_license_type, iw_official_level, iw_install_dt, iw_create_dt) VALUES
+('ec_main', 'product_lotbuying', '商品別まとめ買い割引', 'CALCORDER', 'Naoki Hirata', 'Magic3.org', 'GPL', 0,               10,                now(),         now());
 
 -- メール内容
 DELETE FROM _mail_form WHERE mf_id = 'regist_member_to_backoffice';
@@ -1111,4 +1130,25 @@ VALUES                 ('regist_member_to_backoffice', 'ja',           '会員�
 DELETE FROM _mail_form WHERE mf_id = 'order_product_to_backoffice';
 INSERT INTO _mail_form (mf_id,           mf_language_id, mf_subject,         mf_content,                                                                 mf_create_dt) 
 VALUES                 ('order_product_to_backoffice', 'ja',           '商品受注',         '■受注コード：[#ORDER_NO#]■\n■受注日付：[#DATE#]■\n■顧客コード：[#MEMBER_NO#]■\n■顧客名：[#NAME#]■\n■届先名：[#DELIV_NAME#]■\n■届先郵便番号：[#ZIPCODE#]■\n■届先住所１：[#ADDRESS1#]■\n■届先住所２：[#ADDRESS2#]■\n■届先電話番号：[#PHONE#]■\n■配達希望日：[#DEMAND_DATE#]■\n■配達時間帯：[#DEMAND_TIME#]■\n[#BODY#]■配送方法：[#DELIV_METHOD#]■\n■決済方法：[#PAY_METHOD#]■\n■備考：[#NOTE#]■', now());
+DELETE FROM _mail_form WHERE mf_id = 'order_product_to_shop_manager';
+INSERT INTO _mail_form (mf_id,           mf_language_id, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('order_product_to_shop_manager', 'ja',           '商品受注',         '■受注コード：[#ORDER_NO#]■\n■受注日付：[#DATE#]■\n■会員コード：[#MEMBER_NO#]■\n■会員名：[#NAME#]■\n■会員Eメール：[#EMAIL#]■\n■管理画面URL：[#ADMIN_URL#]■\n■届先名：[#DELIV_NAME#]■\n■届先郵便番号：[#ZIPCODE#]■\n■届先都道府県：[#STATE#]■\n■届先住所１：[#ADDRESS1#]■\n■届先住所２：[#ADDRESS2#]■\n■届先電話番号：[#PHONE#]■\n■配達希望日：[#DEMAND_DATE#]■\n■配達時間帯：[#DEMAND_TIME#]■\n[#BODY#]■配送方法：[#DELIV_METHOD#]■\n■決済方法：[#PAY_METHOD#]■\n■備考：[#NOTE#]■\n\n**********\nお届け先\n**********\n[#DELIV_TEXT#]\n**********\n注文内容\n**********\n[#ORDER_TEXT#]\n', now());
+DELETE FROM _mail_form WHERE mf_id = 'order_product_to_customer';
+INSERT INTO _mail_form (mf_id,           mf_language_id, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('order_product_to_customer', 'ja',           'ご注文の確認(自動送信)',         '[#NAME#] 様\n\nこの度は[#SHOP_NAME#]をご利用頂きまして誠にありがとうございます。\n下記の通りご注文を承りましたのでご確認ください。\n\n**********\nお届け先\n**********\n[#DELIV_TEXT#]\n**********\n注文内容\n**********\n[#ORDER_TEXT#]\n\n[#SIGNATURE#]', now());
 
+-- フォトギャラリー設定マスター(Eコマース追加分)
+INSERT INTO photo_config
+(hg_id,               hg_value,           hg_name,                                  hg_index) VALUES
+('online_shop',       '0',                'オンラインショップ機能',                 13),
+('auto_stock',        '1',                '在庫自動処理',                           14),
+('accept_order',      '1',                '注文の受付',                             15),
+('use_email',         '1',                'メール送信機能',                         16),
+('shop_email',        '',                 'ショップ宛てメールアドレス',             17),
+('auto_email_sender', '',                 '自動送信メール送信元アドレス',           18),
+('use_member_address', '1',               '会員登録の住所使用',                     19),
+('auto_regist_member', '1',               '自動会員登録',                           20),
+('sell_product_photo', '0',               'フォト商品販売',                         21),
+('sell_product_download', '0',            'ダウンロード商品販売',                   22),
+('member_notice', '',                     '会員向けお知らせ',                       23),
+('email_to_order_product', '',            '商品受注時メール送信先',                 24);

@@ -219,12 +219,12 @@ INSERT INTO _templates
 
 -- メニューIDマスター
 INSERT INTO _menu_id
-(mn_id,         mn_name,          mn_description, mn_device_type, mn_sort_order) VALUES
-('main_menu',   'メインメニュー(PC用)', '',             0,              0),
-('sub_menu1',   'サブメニュー1(PC用)',  '',             0,              1),
-('sub_menu2',   'サブメニュー2(PC用)',  '',             0,              2),
-('sub_menu3',   'サブメニュー3(PC用)',  '',             0,              3),
-('s_main_menu', 'メインメニュー(スマートフォン用)', '',             2,              0);
+(mn_id,         mn_name,          mn_description, mn_device_type, mn_widget_id, mn_sort_order) VALUES
+('main_menu',   'メインメニュー(PC用)', '',             0,        '',      0),
+('sub_menu1',   'サブメニュー1(PC用)',  '',             0,        '',      1),
+('sub_menu2',   'サブメニュー2(PC用)',  '',             0,        '',      2),
+('sub_menu3',   'サブメニュー3(PC用)',  '',             0,        '',      3),
+('s_main_menu', 'メインメニュー(スマートフォン用)', '',             2,     '',         0);
 
 -- 基本テーブルの不要なデータを削除
 -- 画面定義

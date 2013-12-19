@@ -32,6 +32,7 @@ CREATE TABLE _system_config (
 -- 多言語対応文字列マスター
 DROP TABLE IF EXISTS _language_string;
 CREATE TABLE _language_string (
+    ls_type              SMALLINT       DEFAULT 0                     NOT NULL,      -- 文字列(0=メッセージ,1=共通用語,2=コンテンツ種別,10=Joomla!用)
     ls_id                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ID(Key)
     ls_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     
@@ -39,7 +40,7 @@ CREATE TABLE _language_string (
     ls_name              VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 名称
     ls_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     ls_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
-    PRIMARY KEY          (ls_id,        ls_language_id)
+    PRIMARY KEY          (ls_type,      ls_id,                        ls_language_id)
 ) TYPE=innodb;
 
 -- 言語マスター
@@ -762,7 +763,7 @@ CREATE TABLE _page_def (
     pd_config_id         INT            DEFAULT 0                     NOT NULL,      -- ウィジェット定義ID
     pd_config_name       VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ウィジェット定義名
     pd_menu_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- メニューID
-    pd_suffix            VARCHAR(5)     DEFAULT ''                    NOT NULL,      -- インスタンスを区別するためのサフィックス文字列
+    pd_suffix            VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- インスタンスを区別するためのサフィックス文字列
     pd_title             VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- タイトル
     pd_style             TEXT                                         NOT NULL,      -- HTMLスタイル属性
     pd_except_sub_id     TEXT                                         NOT NULL,      -- 共通時例外ページサブID(「,」区切りで複数指定可)
@@ -862,12 +863,11 @@ DROP TABLE IF EXISTS _mail_form;
 CREATE TABLE _mail_form (
     mf_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     mf_id                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 定義項目ID
+    mf_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     mf_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
     
-    mf_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     mf_subject           VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 件名
     mf_content           TEXT                                         NOT NULL,      -- コンテンツ
-
     mf_check_out_user_id INT            DEFAULT 0                     NOT NULL,      -- チェックアウトユーザID(0のときはチェックイン状態)
     mf_check_out_dt      TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- チェックアウト日時
     mf_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
@@ -876,7 +876,7 @@ CREATE TABLE _mail_form (
     mf_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     mf_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (mf_serial),
-    UNIQUE               (mf_id,        mf_history_index)
+    UNIQUE               (mf_id,        mf_language_id,               mf_history_index)
 ) TYPE=innodb;
 
 -- テーブル作成マスター
@@ -901,6 +901,7 @@ CREATE TABLE _menu_id (
     mn_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
     mn_type              INT            DEFAULT 0                     NOT NULL,      -- メニュータイプ(0=単一階層、1=複数階層)
     mn_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
+    mn_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID(ファイル名)
     mn_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
     PRIMARY KEY  (mn_id)
 ) TYPE=innodb;
@@ -913,14 +914,17 @@ CREATE TABLE _menu_def (
     md_index             INT            DEFAULT 0                     NOT NULL,      -- 表示順(0～)、md_parent_id=0のときは親間の表示順
     md_menu_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- メニューID
     md_name              TEXT                                         NOT NULL,      -- 名前
+    md_title             TEXT                                         NOT NULL,      -- タイトル(HTMLタグ可)
     md_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
     md_type              INT            DEFAULT 0                     NOT NULL,      -- メニュー項目タイプ(0=リンク、1=フォルダ、2=テキスト、3=セパレータ)
     md_link_type         INT            DEFAULT 0                     NOT NULL,      -- リンクタイプ(0=同ウィンドウ、1=別ウィンドウ)
     md_link_url          TEXT                                         NOT NULL,      -- リンク先
     md_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- リンク先のコンテンツの種別
     md_content_id        VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- リンク先のコンテンツのID
+    md_param             TEXT                                         NOT NULL,      -- その他パラメータ
     md_enable            BOOLEAN        DEFAULT true                  NOT NULL,      -- 使用可能かどうか
     md_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
+    md_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- アクセス可能ユーザを制限
 
     md_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
     md_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時

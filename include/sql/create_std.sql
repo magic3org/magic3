@@ -120,6 +120,7 @@ CREATE TABLE content (
     cn_meta_keywords     TEXT                                         NOT NULL,      -- METAタグ、検索用キーワード
     cn_disp_type         SMALLINT       DEFAULT 0                     NOT NULL,      -- 表示タイプ(0=プレーン、1=インナーフレーム)
     cn_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可否
+    cn_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時
     cn_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 表示可能期間(開始)
     cn_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 表示可能期間(終了)
     cn_default           BOOLEAN        DEFAULT false                 NOT NULL,      -- デフォルトフラグ

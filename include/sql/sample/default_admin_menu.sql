@@ -7,9 +7,9 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2011 Magic3 Project.
+-- * @copyright  Copyright 2006-2013 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
--- * @version    SVN: $Id: default_admin_menu.sql 4124 2011-05-09 02:24:07Z fishbone $
+-- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
 -- *
 -- [デフォルト管理画面]
@@ -36,10 +36,10 @@ INSERT INTO _page_info
 UPDATE _page_id SET pg_default_sub_id = 'content' WHERE pg_id = 'admin_index' AND pg_type = 0;
 
 -- テンプレート情報
-DELETE FROM _templates WHERE tm_id = '_admin2';
+DELETE FROM _templates WHERE tm_id = '_admin3';
 INSERT INTO _templates
-(tm_id,           tm_name,                    tm_type, tm_device_type, tm_mobile, tm_clean_type, tm_create_dt) VALUES
-('_admin2',       '_admin2',                  1,       0,              false,     0,             now());
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_available, tm_clean_type, tm_create_dt) VALUES
+('_admin3',                       '_admin3',                       2,       0,              false,     false,        0,             now());
 
 -- システム設定マスター(管理画面用デフォルトテンプレートを変更)
-UPDATE _system_config SET sc_value = '_admin2' WHERE sc_id = 'admin_default_template';
+UPDATE _system_config SET sc_value = '_admin3' WHERE sc_id = 'admin_default_template';
