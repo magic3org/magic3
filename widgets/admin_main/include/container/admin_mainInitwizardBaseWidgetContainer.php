@@ -19,6 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	protected $_mainDb;			// DB接続オブジェクト
+	protected $_taskArray;		// 管理下のタスク
 	const TASK_SITE		= 'initwizard_site';		// サイト情報
 	
 	/**
@@ -29,9 +30,9 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		$this->gPage->useBootstrap();			// Bootstrapを使用
-		
 		$this->_mainDb = new admin_mainDb();
+		
+		$this->_taskArray = array(self::TASK_SITE);		// 管理下のタスク
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -46,6 +47,7 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 	{
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		if (!in_array($task, $this->_taskArray)) $task = $this->_taskArray[0];
 	}
 }
 ?>

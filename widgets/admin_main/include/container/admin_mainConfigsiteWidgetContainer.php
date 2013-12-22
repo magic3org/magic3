@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainConfigsiteWidgetContainer.php 5497 2012-12-30 12:21:54Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConfigbasicBaseWidgetContainer.php');
@@ -305,7 +305,7 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$localeText['label_site_copyright'] = $this->_('Site Copyright');// 著作権
 		$localeText['label_header_info'] = $this->_('Page Header Info (Default)');// ページヘッダ情報(デフォルト値)
 		$localeText['label_header_title'] = $this->_('Header Tilte');// タイトル名
-		$localeText['label_header_desc'] = $this->_('Header Description');// ページ要約
+		$localeText['label_header_desc'] = $this->_('Site Description');// サイト説明
 		$localeText['label_header_keywords'] = $this->_('Header Keywords');// 検索キーワード
 		$localeText['label_header_others'] = $this->_('Header Others (by Tag Style)');// その他タグ
 		$localeText['label_update'] = $this->_('Update');// 更新

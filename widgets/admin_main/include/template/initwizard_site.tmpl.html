@@ -27,24 +27,30 @@ function editEntry(serial){
 }
 //]]>
 </script>
+<div id="main-content">
 <!-- m3:ErrorMessage -->
-<form method="post" name="main">
+<h3>サイト情報</h3>
+<form method="post" name="main" role="form" class="form-horizontal">
 <input type="hidden" name="task" value="entry_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="entryid" value="{ENTRYID}" />
-<table class="simple-table" width="500">
-    <caption>サイト情報</caption>
-    <tbody>
-    <tr>
-	    <td class="table-headside" width="150"><span class="m3help" title="サイト名|サイトの名前を設定します。">サイト名</span></td>
-	    <td><input type="text" name="sitename" value="" size="60" maxlength="100" />&nbsp;&nbsp;<font color="red">*必須</font></td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span class="m3help" title="メールアドレス|このサイトのデフォルトのメールアドレスです。このメールアドレスは必須項目です。「name@example.com」や「名前&lt; name@example.com&gt;」の設定が可能です。<br />このメールアドレスは、システムからユーザへ送信する場合の送信元アドレスとして、またはこのシステム上でユーザがメールを送信した場合に送信先アドレスとして使用されます。ユーザからのメール送信先は、次のフォーマットで「CC」や「BCC」でのメール送信も可能です。フォーマット「アドレス1;cc:アドレス2;bcc:アドレス3」。">メールアドレス</span></td>
-	    <td><input type="text" name="siteemail" value="" size="60" maxlength="100" />&nbsp;&nbsp;<font color="red">*必須</font>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" onclick="testMail();" value="テストメール送信" disabled /></td>
-	</tr>
-    </tbody>
-</table>
+<div class="form-group">
+<label for="site_name" class="col-lg-2 control-label">サイト名</label>
+<div class="col-lg-4"><input id="site_name" name="site_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_NAME}" /></div>
+</div>
+<div class="form-group">
+<label for="site_email" class="col-lg-2 control-label">Eメール</label>
+<div class="col-lg-4"><input id="site_email" name="site_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_EMAIL}" /></div>
+</div>
+<div class="form-group">
+<label for="site_description" class="col-lg-2 control-label">サイト説明</label>
+<div class="col-lg-6"><textarea id="site_description" name="site_description" class="form-control" />{SITE_DESCRIPTION}</textarea></div>
+</div>
+<div class="form-group">
+<label for="site_keyword" class="col-lg-2 control-label">検索キーワード</label>
+<div class="col-lg-6"><textarea id="site_keyword" name="site_keyword" class="form-control" />{SITE_KEYWORD}</textarea></div>
+</div>
 </form>
+</div>
 </patTemplate:tmpl>

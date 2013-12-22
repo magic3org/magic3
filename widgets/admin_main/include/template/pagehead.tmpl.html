@@ -1,41 +1,53 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
-<!--
+//<![CDATA[
 function selectMenu(){
-    document.main.submit();
-    return true;
+	document.main.submit();
+	return true;
 }
 function editItem(){
-    if (document.main.seriallist.value){
-        var items = document.main.seriallist.value.split(",");
-	for (var i = 0; i < items.length; i++){
-	    var name = "document.main.item" + i + "_selected";
-	    var itemObj = eval(name);
-	    // チェックありのときは終了
-	    if (itemObj && itemObj.checked) break;
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('編集する項目を選択してください');
+		} else {
+			document.main.task.value = 'pagehead_detail';
+			document.main.act.value = 'edit';
+			document.main.pagesubid.value = items[i];
+			document.main.submit();
+		}
 	}
-	if (i == items.length){			
-	    window.alert('編集する項目を選択してください');
-	} else {
-            document.main.task.value = 'pagehead_detail';
-            document.main.act.value = 'edit';
-	    document.main.pagesubid.value = items[i];
-            document.main.submit();
-	}
-    }
-    return true;
+	return true;
 }
 function editItemBySubId(id){
-    document.main.task.value = 'pagehead_detail';
-    document.main.act.value = 'edit';
-    document.main.pagesubid.value = id;
-    document.main.submit();
+	document.main.task.value = 'pagehead_detail';
+	document.main.act.value = 'edit';
+	document.main.pagesubid.value = id;
+	document.main.submit();
 }
 $(function(){
 	// スクロールバー付きのテーブルを作成
 	m3_tableWithScrollbar('itemlist', -1, 0);
 });
-// -->
+//]]>
 </script>
 <div align="center">
 {MENU_ITEMS}
@@ -64,7 +76,7 @@ $(function(){
 	    <th width="150"><span {_HELP_PAGEHEAD_SUBID}>サブページID</span></th>
 	    <th width="150"><span {_HELP_PAGEHEAD_NAME}>ページ名</span></th>
 	    <th width="150"><span {_HELP_PAGEHEAD_TITLE}>タイトル名</span></th>
-	    <th width="25%"><span {_HELP_PAGEHEAD_DESCRIPTION}>要約</span></th>
+	    <th width="25%"><span {_HELP_PAGEHEAD_DESCRIPTION}>説明</span></th>
 	    <th><span {_HELP_PAGEHEAD_KEYWORDS}>キーワード</span></th>
 	    <th width="50"><span {_HELP_PAGEHEAD_PUBLIC}>公開</span></th>
 	    <th width="80"><span {_HELP_PAGEHEAD_DEFAULT}>デフォルト</span></th>

@@ -56,8 +56,8 @@ class help_configsite extends HelpConv
 				'body' =>	$this->_('Input meta title string. It is used as web browser window title.')		// ヘッダ部のtitleタグに設定される文字列です。Webブラウザの画面タイトルとして表示されます。
 			),
 			'configsite_description' => array(
-				'title' =>	$this->_('Header Description'),			// ページ要約
-				'body' =>	$this->_('Input meta description string with 120 letters. It appears on searched list by google.')		// ヘッダ部のdescriptionタグに設定される文字列です。120文字程度で記述します。<br />Googleでは検索結果に表示されます。
+				'title' =>	$this->_('Site Description'),			// サイト説明
+				'body' =>	$this->_('Input meta description for site with string with 120 letters. It appears on searched list by google.')		// サイトの説明のためにヘッダ部のdescriptionタグに設定される文字列です。120文字程度で記述します。<br />Googleでは検索結果に表示されます。
 			),
 			'configsite_keywords' => array(
 				'title' =>	$this->_('Header Keywords'),			// 検索キーワード

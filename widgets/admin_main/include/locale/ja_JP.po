@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-11 21:21+0900\n"
-"PO-Revision-Date: 2013-12-11 21:22+0900\n"
+"POT-Creation-Date: 2013-12-22 23:41+0900\n"
+"PO-Revision-Date: 2013-12-22 23:41+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -391,8 +391,8 @@ msgstr "タイトル名"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:308
 #: ../help/help_configsite.php:59
-msgid "Header Description"
-msgstr "ページ要約"
+msgid "Site Description"
+msgstr "サイト説明"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:309
 #: ../help/help_configsite.php:63
@@ -966,7 +966,7 @@ msgid "Create"
 msgstr "作成"
 
 #: ../container/admin_mainLoginstatusWidgetContainer.php:44
-#: ../container/admin_mainWidgetContainer.php:365
+#: ../container/admin_mainWidgetContainer.php:375
 msgid "Login"
 msgstr "ログイン"
 
@@ -1768,7 +1768,7 @@ msgid "Login Account"
 msgstr "ログインアカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:368 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:378 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1793,7 +1793,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:156
 #: ../container/admin_mainUserlistWidgetContainer.php:306
 #: ../container/admin_mainUserlistWidgetContainer.php:374
-#: ../container/admin_mainWidgetContainer.php:369 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:379 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -1861,24 +1861,24 @@ msgstr "データ追加に失敗しました"
 msgid "Limited"
 msgstr "制限あり"
 
-#: ../container/admin_mainWidgetContainer.php:287
+#: ../container/admin_mainWidgetContainer.php:297
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
-#: ../container/admin_mainWidgetContainer.php:293
-#: ../container/admin_mainWidgetContainer.php:299
+#: ../container/admin_mainWidgetContainer.php:303
+#: ../container/admin_mainWidgetContainer.php:309
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:302
+#: ../container/admin_mainWidgetContainer.php:312
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:366
+#: ../container/admin_mainWidgetContainer.php:376
 msgid "Send Password"
 msgstr "パスワード送信"
 
-#: ../container/admin_mainWidgetContainer.php:367
+#: ../container/admin_mainWidgetContainer.php:377
 msgid "Account"
 msgstr "アカウント"
 
@@ -2224,11 +2224,11 @@ msgstr ""
 
 #: ../help/help_configsite.php:60
 msgid ""
-"Input meta description string with 120 letters. It appears on searched list "
-"by google."
+"Input meta description for site with string with 120 letters. It appears on "
+"searched list by google."
 msgstr ""
-"ヘッダ部のdescriptionタグに設定される文字列です。120文字程度で記述します。"
-"<br />Googleでは検索結果に表示されます。"
+"サイトの説明のためにヘッダ部のdescriptionタグに設定される文字列です。120文字"
+"程度で記述します。<br />Googleでは検索結果に表示されます。"
 
 #: ../help/help_configsite.php:64
 msgid "Input meta Keywords string with max 10 counts separeted by comma."
@@ -2806,6 +2806,9 @@ msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
 
+#~ msgid "Header Description"
+#~ msgstr "ページ要約"
+
 #~ msgid "Database maintenance such as data initializing."
 #~ msgstr "データの初期化などDBのメンテナンスを行います。"
 
@@ -2870,9 +2873,6 @@ msgstr ""
 
 #~ msgid "Send to Portal"
 #~ msgstr "ポータルへ送信"
-
-#~ msgid "Site Description"
-#~ msgstr "サイト説明"
 
 #~ msgid "Failed in getting new infomation from portal server."
 #~ msgstr "ポータルから最新情報を取得"

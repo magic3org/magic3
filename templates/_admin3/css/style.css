@@ -86,6 +86,12 @@ a:hover {
 /*	padding:10px 0px;*/
 /*	margin: 5px 0px;*/
 }
+/* main content area */
+#main-content
+{
+	width:60%;
+	margin: 5% auto 0;
+}
 /* Main nav */
 #main-nav
 {
