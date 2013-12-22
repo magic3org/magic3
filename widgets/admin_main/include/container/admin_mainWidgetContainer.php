@@ -20,6 +20,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $redirectUrl;		// リダイレクト先URL
 	private $content;			// メッセージ用コンテンツ
+	private $permitTask;		// 実行許可タスク
 	const CF_USE_CONTENT_MAINTENANCE = 'use_content_maintenance';		// メンテナンス画面に汎用コンテンツを使用するかどうか
 	const CF_USE_CONTENT_ACCESS_DENY = 'use_content_access_deny';		// アクセス不可画面に汎用コンテンツを使用するかどうか
 	const CF_USE_CONTENT_PAGE_NOT_FOUND = 'use_content_page_not_found';		// 存在しないページ画面に汎用コンテンツを使用するかどうか
@@ -31,6 +32,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		$this->permitTask = array('test_', 'initwizard_');		// 実行許可タスク
 	}
 	/**
 	 * ディスパッチ処理(メインコンテナのみ実行)
@@ -161,9 +164,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					// 表示画面を決定
 					$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 					$taskSrc = $task;
-					if (empty($task) || $task == 'menu'){	// デフォルト値
+					if (empty($task) || $task == 'menuhelp'){	// デフォルト値
 						$task = 'top';		// トップメニュー
-//					} else if ($task == 'master'){		// マスター管理
+//					} else if ($task == 'menu'){		// マスター管理
 //						$task = 'pageinfo';			// ページ情報をデフォルトにする
 					} else if ($task == 'mainte'){		// システムメンテナンス
 						$task = 'resbrowse';			// ファイルブラウザをデフォルトにする
@@ -231,8 +234,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					}
 					// コンテナを起動
 					switch ($task){
-						case 'test';			// テスト用画面
-						case 'top';			// トップ画面
+						case 'menu':			// 
+						case 'test':			// テスト用画面
+						case 'top':			// トップ画面
 						case 'userlist':	// ユーザリスト
 						case 'usergroup':	// ユーザグループ
 						case 'loginstatus':	// ログイン状況
@@ -280,13 +284,19 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 							$this->gPage->redirect($this->getUrl($otherPage));
 							break;
 						default:
-							if (strStartsWith($task, 'test_')){
-								$this->gLaunch->goSubWidget($task);
-								return false;
-							} else {
+							foreach ($this->permitTask as $taskStart){
+								if (strStartsWith($task, $taskStart)){
+									$this->gLaunch->goSubWidget($task);
+									return false;
+								}
+							}
+//							if (strStartsWith($task, )){
+//								$this->gLaunch->goSubWidget($task);
+//								return false;
+//							} else {
 								$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
 								$param = 'message';			// メッセージ画面表示
-							}
+//							}
 							break;
 					}
 				} else {		// システム管理者以外の場合

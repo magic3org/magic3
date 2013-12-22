@@ -934,7 +934,7 @@ class PageManager extends Core
 		if ($gEnvManager->isAdminDirAccess()){
 			if ($gAccessManager->isValidAdminKey()) session_id($gRequestManager->trimValueOf(session_name()));
 		}
-		
+
 		// 管理画面用ライブラリを追加(フレームコンテナでの設定を反映)
 		if ($gEnvManager->isAdminDirAccess()){
 			if ($this->useBootstrap) $this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
@@ -1333,13 +1333,17 @@ class PageManager extends Core
 				list($libTask, $libs) = explode('=', trim($itemArray[$i]));
 				$libTask = trim($libTask);
 				$libs = trim($libs);
-				if (empty($libTask) || $libTask != $task) $libs = '';			// タスクが異なるときは追加しない
+				
+				if (strEndsWith($libTask, '_')){		// 「task_subtask」形式のタスクのとき
+					if (!strStartsWith($task, $libTask)) $libs = '';			// タスクIDの先頭部が異なるときは追加しない
+				} else {
+					if (empty($libTask) || $libTask != $task) $libs = '';			// タスクが異なるときは追加しない
+				}
 			}
 			if (!empty($libs)){		// // スクリプト、CSSの追加を行うとき
 				$libsArray = explode(',', $libs);
 				for ($j = 0; $j < count($libsArray); $j++){
 					$lib = strtolower(trim($libsArray[$j]));// 小文字に変換
-
 					if (isset($this->libFiles[$lib])){		// ライブラリが存在するとき
 						// 依存ライブラリを取得
 						if (strcmp($lib, ScriptLibInfo::LIB_ELFINDER) == 0 || strcmp($lib, ScriptLibInfo::LIB_JQUERY_TIMEPICKER) == 0){		// elFinderを使用する場合

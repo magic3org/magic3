@@ -26,7 +26,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'admin_main';
 INSERT INTO _widgets
 (wd_id,        wd_name,      wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin_main', '管理用画面', true,     '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'pagedef=jquery-ui.tabs;pagedef_mobile=jquery-ui.tabs;pagedef_smartphone=jquery-ui.tabs;menudef=jquery.jstree;menudef_detail=wysiwyg_editor;smenudef_detail=wysiwyg_editor;analyzegraph=jquery.jqplot;adjustwidget=jquery-ui.tabs,wysiwyg_editor;filebrowser=elfinder;editmenu_others=elfinder', false,        false,       false,        true,          false, true, '2013-03-04', now(),now());
+('admin_main', '管理用画面', true,     '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'pagedef=jquery-ui.tabs;pagedef_mobile=jquery-ui.tabs;pagedef_smartphone=jquery-ui.tabs;menudef=jquery.jstree;menudef_detail=wysiwyg_editor;smenudef_detail=wysiwyg_editor;analyzegraph=jquery.jqplot;adjustwidget=jquery-ui.tabs,wysiwyg_editor;filebrowser=elfinder;editmenu_others=elfinder;initwizard_=bootstrap', false,        false,       false,        true,          false, true, '2013-03-04', now(),now());
 DELETE FROM _widgets WHERE wd_id = 'admin/analytics';
 INSERT INTO _widgets
 (wd_id,             wd_name,            wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
