@@ -285,7 +285,10 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 							break;
 						default:
 							foreach ($this->permitTask as $taskStart){
-								if (strStartsWith($task, $taskStart)){
+								if (strStartsWith($task, $taskStart)){	// 「taskA_」パターン
+									$this->gLaunch->goSubWidget($task);
+									return false;
+								} else if (strncmp($task, $taskStart, strlen($taskStart) -1)){	// 「taskA」パターン
 									$this->gLaunch->goSubWidget($task);
 									return false;
 								}

@@ -18,7 +18,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
-
 	/**
 	 * コンストラクタ
 	 */
@@ -54,6 +53,44 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 	 */
 	function _assign($request, &$param)
 	{
+		// デフォルト値取得
+		$this->langId		= $this->gEnv->getDefaultLanguage();
+		
+		$act = $request->trimValueOf('act');
+		$siteName			= $request->trimValueOf('site_name');		// サイト名称
+		$siteEmail			= trim($request->valueOf('site_email'));		// サイトEメール
+		$siteDescription 	= $request->trimValueOf('site_description');		// サイト要約
+		$siteKeyword		= $request->trimValueOf('site_keyword');		// サイトキーワード
+	
+		$reloadData = false;		// データの再ロード
+		if ($act == 'update'){		// 設定更新のとき
+			$ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_NAME, $siteName);		// サイト名
+			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL, $siteEmail);	// Eメール
+			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION, $siteDescription);		// サイト説明
+			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS, $siteKeyword);		// 検索キーワード
+			if ($ret){
+				if (!empty($this->_nextTask)){
+					$nextPage = $this->gEnv->getDefaultAdminUrl() . '?task=' . $this->_nextTask;
+					$this->gPage->redirect($nextPage);
+				}
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');			// データ更新に失敗しました
+			}
+		} else {
+			$reloadData = true;
+		}
+		
+		if ($reloadData){		// データ再取得のとき
+			$siteName			= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_NAME);		// サイト名
+			$siteEmail			= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL);
+			$siteDescription	= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION);		// サイト要約
+			$siteKeyword		= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS);		// サイトキーワード
+		}
+
+		$this->tmpl->addVar("_widget", "site_name",			$this->convertToDispString($siteName));		// サイト名
+		$this->tmpl->addVar("_widget", "site_email",		$this->convertToDispString($siteEmail));
+		$this->tmpl->addVar("_widget", "site_description",	$this->convertToDispString($siteDescription));
+		$this->tmpl->addVar("_widget", "site_keyword",		$this->convertToDispString($siteKeyword));
 	}
 }
 ?>

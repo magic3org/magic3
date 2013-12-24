@@ -13,21 +13,23 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-// 前の画面へ遷移
-function goPrev(task){
-	document.main.task.value = task;
-	document.main.submit();
-}
-// 次の画面へ遷移
-function goNext(){
-	document.main.act.value = 'update';
-	document.main.submit();
-}
 $(function(){
 	// 前後エントリー移動ボタン
 	<patTemplate:tmpl name="show_prev_button" visibility="hidden">m3SetPrevButtonEvent(goPrev, '{TASK}');</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_next_button" visibility="hidden">m3SetNextButtonEvent(goNext);</patTemplate:tmpl>
 });
+function goPrev(task){
+	document.main.entryid.value = '';		// 値キャンセル
+	document.main.task.value = task;
+	document.main.act.value = 'edit';
+	document.main.submit();
+}
+function goNext(){
+	document.main.entryid.value = '';		// 値キャンセル
+//	document.main.task.value = 'entry_detail';
+	document.main.act.value = 'update';
+	document.main.submit();
+}
 //]]>
 </script>
 <div id="main-content">
@@ -37,8 +39,9 @@ $(function(){
 <!--<h1>サイト情報</h1>-->
 </div>
 <form method="post" name="main" role="form" class="form-horizontal">
-<input type="hidden" name="task" value="initwizard_site" />
+<input type="hidden" name="task" value="entry_detail" />
 <input type="hidden" name="act" />
+<input type="hidden" name="entryid" value="{ENTRYID}" />
 <div class="form-group">
 <label for="site_name" class="col-lg-2 control-label">サイト名</label>
 <div class="col-lg-4"><input id="site_name" name="site_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_NAME}" /></div>

@@ -391,7 +391,7 @@ function m3CreateLinkUrl(deviceType, url, seturl_callback)
  * 「前へ」ボタンのクリックイベントにコールバックを設定
  *
  * @param function	callback	コールバック関数
- * @param int       param		コールバック用パラメータ
+ * @param string    param		コールバック用パラメータ
  * @return なし
  */
 function m3SetPrevButtonEvent(callback, param)
@@ -407,7 +407,7 @@ function m3SetPrevButtonEvent(callback, param)
  * 「次へ」ボタンのクリックイベントにコールバックを設定
  *
  * @param function	callback	コールバック関数
- * @param int       param		コールバック用パラメータ
+ * @param string    param		コールバック用パラメータ
  * @return なし
  */
 function m3SetNextButtonEvent(callback, param)
