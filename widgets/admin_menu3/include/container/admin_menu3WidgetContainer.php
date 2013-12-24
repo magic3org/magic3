@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_menu3WidgetContainer.php 6126 2013-06-25 01:17:02Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -31,6 +31,8 @@ class admin_menu3WidgetContainer extends BaseAdminWidgetContainer
 //	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
 	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
+	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
+	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const PC_ICON_FILE = '/images/system/device/pc.png';		// PCアイコン
 	const SMARTPHONE_ICON_FILE = '/images/system/device/smartphone.png';		// スマートフォンアイコン
 	const MOBILE_ICON_FILE = '/images/system/device/mobile.png';		// 携帯アイコン
@@ -311,6 +313,12 @@ class admin_menu3WidgetContainer extends BaseAdminWidgetContainer
 			$previewTag = $this->createSitePreviewTag();
 			$this->tmpl->addVar("menu", "site_preview", $previewTag);
 		}
+		// 「前へ」「次へ」アイコンを設定
+		$iconUrl = $this->gEnv->getRootUrl() . self::PREV_ICON_FILE;
+		$this->tmpl->addVar("_widget", "prev_image", $this->getUrl($iconUrl));
+		$iconUrl = $this->gEnv->getRootUrl() . self::NEXT_ICON_FILE;
+		$this->tmpl->addVar("_widget", "next_image", $this->getUrl($iconUrl));
+				
 		// テキストをローカライズ
 		$localeText = array();
 		$localeText['msg_logout'] = $this->_('Logout from system?');// ログアウトしますか?
