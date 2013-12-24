@@ -314,10 +314,11 @@ class admin_menu3WidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "site_preview", $previewTag);
 		}
 		// 「前へ」「次へ」アイコンを設定
+		$this->tmpl->setAttribute('prevnextbutton', 'visibility', 'visible');
 		$iconUrl = $this->gEnv->getRootUrl() . self::PREV_ICON_FILE;
-		$this->tmpl->addVar("_widget", "prev_image", $this->getUrl($iconUrl));
+		$this->tmpl->addVar("prevnextbutton", "prev_image", $this->getUrl($iconUrl));
 		$iconUrl = $this->gEnv->getRootUrl() . self::NEXT_ICON_FILE;
-		$this->tmpl->addVar("_widget", "next_image", $this->getUrl($iconUrl));
+		$this->tmpl->addVar("prevnextbutton", "next_image", $this->getUrl($iconUrl));
 				
 		// テキストをローカライズ
 		$localeText = array();
