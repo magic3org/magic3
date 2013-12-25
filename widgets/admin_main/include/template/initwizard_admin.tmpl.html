@@ -11,52 +11,63 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<script type="text/javascript" src="{SCRIPT_URL}/md5.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+// 前の画面へ遷移
+function goPrev(task){
+	document.main.task.value = task;
+	document.main.submit();
+}
+// 次の画面へ遷移
+function goNext(){
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
+	document.main.act.value = 'update';
+	if (document.main.item_password.value != '********') document.main.password.value = hex_md5(document.main.item_password.value);
+	document.main.submit();
+}
 $(function(){
+	// 編集中の離脱を防止
+	m3SetSafeContentEdit();
+	
 	// 前後エントリー移動ボタン
 	<patTemplate:tmpl name="show_prev_button" visibility="hidden">m3SetPrevButtonEvent(goPrev, '{TASK}');</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_next_button" visibility="hidden">m3SetNextButtonEvent(goNext);</patTemplate:tmpl>
 });
-function goPrev(task){
-	document.main.entryid.value = '';		// 値キャンセル
-	document.main.task.value = task;
-	document.main.act.value = 'edit';
-	document.main.submit();
-}
-function goNext(){
-	document.main.entryid.value = '';		// 値キャンセル
-//	document.main.task.value = 'entry_detail';
-	document.main.act.value = 'update';
-	document.main.submit();
-}
 //]]>
 </script>
 <div id="main-content">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <div class="page-header">
-<!--<h1>サイト情報</h1>-->
+<!--<h1>管理者</h1>-->
 </div>
-<form method="post" name="main" role="form" class="form-horizontal">
-<input type="hidden" name="task" value="entry_detail" />
+<form method="post" name="main" role="form" class="form-horizontal" autocomplete="off">
+<input type="hidden" name="task" value="initwizard_admin" />
 <input type="hidden" name="act" />
-<input type="hidden" name="entryid" value="{ENTRYID}" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="password" />
 <div class="form-group">
-<label for="site_name" class="col-lg-2 control-label">サイト名</label>
-<div class="col-lg-4"><input id="site_name" name="site_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_NAME}" /></div>
+<label for="admin_name" class="col-lg-3 control-label">管理者名</label>
+<div class="col-lg-4"><input id="admin_name" name="admin_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_NAME}" /></div>
 </div>
 <div class="form-group">
-<label for="site_email" class="col-lg-2 control-label">Eメール</label>
-<div class="col-lg-4"><input id="site_email" name="site_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_EMAIL}" /></div>
+<label for="admin_account" class="col-lg-3 control-label">アカウント</label>
+<div class="col-lg-4"><input id="admin_account" name="admin_account" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_ACCOUNT}" /></div>
 </div>
 <div class="form-group">
-<label for="site_description" class="col-lg-2 control-label">サイト説明</label>
-<div class="col-lg-6"><textarea id="site_description" name="site_description" class="form-control" />{SITE_DESCRIPTION}</textarea></div>
+<label for="admin_password" class="col-lg-3 control-label">パスワード</label>
+<div class="col-lg-4"><input id="admin_password" name="admin_password" type="password" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_PASSWORD}" /></div>
 </div>
 <div class="form-group">
-<label for="site_keyword" class="col-lg-2 control-label">検索キーワード</label>
-<div class="col-lg-6"><textarea id="site_keyword" name="site_keyword" class="form-control" />{SITE_KEYWORD}</textarea></div>
+<label for="admin_password2" class="col-lg-3 control-label">パスワード(確認)</label>
+<div class="col-lg-4"><input id="admin_password2" name="admin_password2" type="password" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_PASSWORD2}" /></div>
+</div>
+<div class="form-group">
+<label for="admin_email" class="col-lg-3 control-label">Eメール</label>
+<div class="col-lg-4"><input id="admin_email" name="admin_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_EMAIL}" /></div>
 </div>
 </form>
 </div>

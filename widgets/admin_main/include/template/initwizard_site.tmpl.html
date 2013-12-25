@@ -20,10 +20,16 @@ function goPrev(task){
 }
 // 次の画面へ遷移
 function goNext(){
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
 	document.main.act.value = 'update';
 	document.main.submit();
 }
 $(function(){
+	// 編集中の離脱を防止
+	m3SetSafeContentEdit();
+	
 	// 前後エントリー移動ボタン
 	<patTemplate:tmpl name="show_prev_button" visibility="hidden">m3SetPrevButtonEvent(goPrev, '{TASK}');</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_next_button" visibility="hidden">m3SetNextButtonEvent(goNext);</patTemplate:tmpl>
@@ -40,19 +46,19 @@ $(function(){
 <input type="hidden" name="task" value="initwizard_site" />
 <input type="hidden" name="act" />
 <div class="form-group">
-<label for="site_name" class="col-lg-2 control-label">サイト名</label>
+<label for="site_name" class="col-lg-3 control-label">サイト名</label>
 <div class="col-lg-4"><input id="site_name" name="site_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_NAME}" /></div>
 </div>
 <div class="form-group">
-<label for="site_email" class="col-lg-2 control-label">Eメール</label>
+<label for="site_email" class="col-lg-3 control-label">Eメール</label>
 <div class="col-lg-4"><input id="site_email" name="site_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_EMAIL}" /></div>
 </div>
 <div class="form-group">
-<label for="site_description" class="col-lg-2 control-label">サイト説明</label>
+<label for="site_description" class="col-lg-3 control-label">サイト説明</label>
 <div class="col-lg-6"><textarea id="site_description" name="site_description" class="form-control" />{SITE_DESCRIPTION}</textarea></div>
 </div>
 <div class="form-group">
-<label for="site_keyword" class="col-lg-2 control-label">検索キーワード</label>
+<label for="site_keyword" class="col-lg-3 control-label">検索キーワード</label>
 <div class="col-lg-6"><textarea id="site_keyword" name="site_keyword" class="form-control" />{SITE_KEYWORD}</textarea></div>
 </div>
 </form>

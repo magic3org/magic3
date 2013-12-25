@@ -33,7 +33,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		$this->permitTask = array('test_', 'initwizard_');		// 実行許可タスク
+		$this->permitTask = array('test', 'initwizard');		// 実行許可タスク
 	}
 	/**
 	 * ディスパッチ処理(メインコンテナのみ実行)
@@ -285,11 +285,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 							break;
 						default:
 							foreach ($this->permitTask as $taskStart){
-								if (strStartsWith($task, $taskStart)){	// 「taskA_」パターン
-									$this->gLaunch->goSubWidget($task);
-									return false;
-								} else if (strncmp($task, $taskStart, strlen($taskStart) -1)){	// 「taskA」パターン
-									$this->gLaunch->goSubWidget($task);
+								if (strStartsWith($task, $taskStart)){	// 「taskA」「taskA_」パターン
+									$this->gLaunch->goSubWidget($taskStart);
 									return false;
 								}
 							}
