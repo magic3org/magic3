@@ -113,5 +113,17 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 			$this->tmpl->addVar('show_next_button', 'task', '');
 		}
 	}
+	/**
+	 * 次のタスクがある場合は画面遷移
+	 *
+	 * @return なし
+	 */
+	function _redirectNextTask()
+	{
+		if (!empty($this->_nextTask)){
+			$nextPage = $this->gEnv->getDefaultAdminUrl() . '?task=' . $this->_nextTask;
+			$this->gPage->redirect($nextPage);
+		}
+	}
 }
 ?>

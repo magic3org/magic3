@@ -14,10 +14,10 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwizardBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainInitwizard_adminWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
+	protected $serialNo;		// シリアル番号
 	const DEFAULT_ADMIN_USER_ID = 1;		// デフォルトの管理者ユーザID
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
 	
@@ -28,8 +28,6 @@ class admin_mainInitwizard_adminWidgetContainer extends admin_mainInitwizardBase
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DB接続オブジェクト作成
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -59,10 +57,10 @@ class admin_mainInitwizard_adminWidgetContainer extends admin_mainInitwizardBase
 		// 入力値を取得
 		$act = $request->trimValueOf('act');
 		$this->serialNo = intval($request->trimValueOf('serial'));		// 選択項目のシリアル番号
-		$name		= $request->trimValueOf('item_name');
-		$account	= $request->trimValueOf('item_account');
-		$password	= $request->trimValueOf('password');
-		$email		= $request->trimValueOf('item_email');		// Eメール
+		$name		= $request->trimValueOf('admin_name');
+		$account	= $request->trimValueOf('admin_account');
+		$password	= $request->trimValueOf('password');		// md5変換文字列(空=更新なし)
+		$email		= $request->trimValueOf('admin_email');		// Eメール
 
 		$reloadData = false;		// データの再読み込み
 		if ($act == 'update'){		// 行更新のとき
@@ -73,7 +71,7 @@ class admin_mainInitwizard_adminWidgetContainer extends admin_mainInitwizardBase
 			
 			// アカウント重複チェック
 			// 設定データを取得
-			$ret = $this->db->getUserBySerial($this->serialNo, $row, $groupRows);
+			$ret = $this->_db->getLoginUserRecordBySerial($this->serialNo, $row, $groupRows);
 			if ($ret){
 				if ($row['lu_account'] != $account && $this->_db->isExistsAccount($account)) $this->setMsg(self::MSG_USER_ERR, 'アカウントが重複しています');
 			} else {
@@ -85,18 +83,16 @@ class admin_mainInitwizard_adminWidgetContainer extends admin_mainInitwizardBase
 				// 追加項目
 				$otherParams = array();
 				$otherParams['lu_email'] = $email;		// Eメール
-				$ret = $this->_db->updateLoginUser($this->serialNo, $name, $account, $password, $this->userType, $canLogin, $startDt, $endDt, $newSerial,
-													null, null, $this->userGroupArray, $otherParams);
+				$ret = $this->_db->updateLoginUser($this->serialNo, $name, $account, $password, null, null, null, null, $newSerial,
+													null, null, null, $otherParams);
 				if ($ret){		// データ追加成功のとき
-					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
-					
 					// 運用ログ出力
-					$ret = $this->db->getUserBySerial($newSerial, $row, $groupRows);
-					if ($ret) $loginUserId = $row['lu_id'];
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを更新しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+					$ret = $this->_db->getLoginUserRecordBySerial($newSerial, $row, $groupRows);
+					$loginUserId = $row['lu_id'];
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザ情報を更新しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 					
-					$this->serialNo = $newSerial;
-					$reloadData = true;		// データの再読み込み
+					// 次の画面へ遷移
+					$this->_redirectNextTask();
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
@@ -120,6 +116,7 @@ class admin_mainInitwizard_adminWidgetContainer extends admin_mainInitwizardBase
 		$this->tmpl->addVar("_widget", "admin_email",	$this->convertToDispString($email));		// Eメール
 		$this->tmpl->addVar("_widget", "admin_password", self::DEFAULT_PASSWORD);// 入力済みを示すパスワードの設定
 		$this->tmpl->addVar("_widget", "admin_password2", self::DEFAULT_PASSWORD);// 入力済みを示すパスワードの設定
+		$this->tmpl->addVar("_widget", "default_password", self::DEFAULT_PASSWORD);
 	}
 }
 ?>

@@ -11,7 +11,7 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<script type="text/javascript" src="{SCRIPT_URL}/md5.js"></script>
+<script type="text/javascript" src="{_SCRIPTS_URL}/md5.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 // 前の画面へ遷移
@@ -21,11 +21,15 @@ function goPrev(task){
 }
 // 次の画面へ遷移
 function goNext(){
+	if (document.main.admin_password.value != document.main.admin_password2.value){
+		alert('パスワードに間違いがあります');
+		return false;
+	}
 	// 入力データ編集中のページ離脱を許可
 	m3CancelSafeContentEdit();
 	
+	if (document.main.admin_password.value != '{DEFAULT_PASSWORD}') document.main.password.value = hex_md5(document.main.admin_password.value);
 	document.main.act.value = 'update';
-	if (document.main.item_password.value != '********') document.main.password.value = hex_md5(document.main.item_password.value);
 	document.main.submit();
 }
 $(function(){

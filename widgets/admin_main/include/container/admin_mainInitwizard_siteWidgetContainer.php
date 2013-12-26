@@ -14,7 +14,6 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwizardBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
@@ -25,8 +24,6 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DB接続オブジェクト作成
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -69,10 +66,8 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION, $siteDescription);		// サイト説明
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS, $siteKeyword);		// 検索キーワード
 			if ($ret){
-				if (!empty($this->_nextTask)){
-					$nextPage = $this->gEnv->getDefaultAdminUrl() . '?task=' . $this->_nextTask;
-					$this->gPage->redirect($nextPage);
-				}
+				// 次の画面へ遷移
+				$this->_redirectNextTask();
 			} else {
 				$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');			// データ更新に失敗しました
 			}
