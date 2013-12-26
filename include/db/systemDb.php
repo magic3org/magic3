@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: systemDb.php 6161 2013-07-02 12:38:50Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/db/baseDb.php');
@@ -1816,6 +1816,29 @@ class SystemDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * ログインユーザ情報をシリアル番号で取得
+	 *
+	 * @param string	$serial				シリアル番号
+	 * @param array     $row				レコード
+	 * @param array     $groupRows			ユーザグループ
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getLoginUserRecordBySerial($serial, &$row, &$groupRows)
+	{
+		$queryStr  = 'SELECT * FROM _login_user ';
+		$queryStr .=   'WHERE lu_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		
+		// ユーザグループを取得
+		if ($ret){
+			$queryStr  = 'SELECT * FROM _user_with_group LEFT JOIN _user_group ON uw_group_id = ug_id AND ug_deleted = false ';
+			$queryStr .=   'WHERE uw_user_serial = ? ';
+			$queryStr .=  'ORDER BY uw_index ';
+			$this->selectRecords($queryStr, array($serial), $groupRows);
+		}
+		return $ret;
+	}
+	/**
 	 * ログインユーザ情報をIDで削除
 	 *
 	 * @param int	$id						ユーザID
@@ -2076,10 +2099,10 @@ class SystemDb extends BaseDb
 	 * @param string  $name			ユーザ名
 	 * @param string  $account		アカウント
 	 * @param string  $password		パスワード(空のときは更新しない)
-	 * @param int     $userType		ユーザ種別
-	 * @param string $canLogin		ログイン可能かどうか
-	 * @param timestamp	$startDt	期間(開始日)
-	 * @param timestamp	$endDt		期間(終了日)
+	 * @param int     $userType		ユーザ種別(nullのときは更新しない)
+	 * @param string $canLogin		ログイン可能かどうか(nullのときは更新しない)
+	 * @param timestamp	$startDt	期間(開始日)(nullのときは更新しない)
+	 * @param timestamp	$endDt		期間(終了日)(nullのときは更新しない)
 	 * @param int     $newSerial	新規シリアル番号
 	 * @param string  $adminWidget	管理可能ウィジェット(システム運用者)
 	 * @param string  $userTypeOption	ユーザタイプオプション
@@ -2117,6 +2140,12 @@ class SystemDb extends BaseDb
 		// パスワードが設定されているときは更新
 		$pwd = $row['lu_password'];
 		if (!empty($password)) $pwd = $password;
+		
+		// 元の値を取得
+		if (is_null($userType)) $userType = $row['lu_user_type'];
+		if (is_null($canLogin)) $canLogin = $row['lu_enable_login'];
+		if (is_null($startDt)) $startDt = $row['lu_active_start_dt'];
+		if (is_null($endDt)) $endDt = $row['lu_active_end_dt'];
 		
 		// 古いレコードを削除
 		$queryStr  = 'UPDATE _login_user ';
