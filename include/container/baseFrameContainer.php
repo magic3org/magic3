@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: baseFrameContainer.php 5899 2013-04-02 02:13:17Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/db/systemDb.php');		// システムDBアクセスクラス
@@ -108,12 +108,14 @@ class BaseFrameContainer extends Core
 			$canAccess = true;		// アクセス可能かどうか
 			$isErrorAccess = false;		// 不正アクセスかどうか
 			$toAdminType = 0;		// 管理画面の遷移タイプ(0=アクセス不可、1=ログイン画面、2=サイト非公開画面, 3=存在しないページ)
+			$messageDetail = '';	// 詳細メッセージ
 			
 			// ページID,ページサブIDからアクセス権をチェック
 			$isPublicUrl = $this->gPage->canAccessUrl($isActivePage);
 			if (!$isPublicUrl && !$isSystemManageUser){// システム運用可能ユーザかどうか
 				$canAccess = false;
 				$isErrorAccess = true;		// 不正アクセスかどうか
+				$messageDetail = 'ユーザに公開されていないページへのアクセス。';
 				
 				if (!$isActivePage) $toAdminType = 3;		// 有効なアクセスポイントでない場合は存在しないページとする
 			}
@@ -154,6 +156,7 @@ class BaseFrameContainer extends Core
 							// 標準のアクセスでは、上記コマンド以外は受け付けない
 							$canAccess = false;
 							$isErrorAccess = true;		// 不正アクセス
+							$messageDetail = '不正なコマンドの実行。';
 						}
 					} else {		// サイトアクセスできない場合は、管理画面でメッセージを表示
 						if ($cmd == M3_REQUEST_CMD_LOGIN ||					// ログイン画面を表示のとき
@@ -177,6 +180,7 @@ class BaseFrameContainer extends Core
 							$cmd != M3_REQUEST_CMD_RSS){		// RSS配信
 							
 							$isErrorAccess = true;		// 不正アクセス
+							$messageDetail = '不正なコマンドの実行。';
 						}
 					}
 				}
@@ -199,8 +203,13 @@ class BaseFrameContainer extends Core
 					case 2:			// サイト非公開画面へ
 						$this->gPage->setSystemHandleMode(10/*サイト非公開中*/);
 						break;
-					case 3:			// 存在しないページ画面へ
-						$this->gPage->setSystemHandleMode(12/*存在しないページ*/);
+					case 3:			// 存在しないページ画面へ(システム運用可能ユーザ以外)
+						// サイトが非公開の場合は、メンテナンス中画面のみ表示
+						if ($this->_accessSite($request)){		// サイト公開中の場合
+							$this->gPage->setSystemHandleMode(12/*存在しないページ*/);
+						} else {
+							$this->gPage->setSystemHandleMode(10/*サイト非公開中*/);
+						}
 						break;
 					default:		// アクセス不可画面へ
 						// システム制御モードに変更
@@ -211,7 +220,7 @@ class BaseFrameContainer extends Core
 				$this->_showSystemPage($request, $toAdminType);
 						
 				// 不正アクセスの場合は、アクセスエラーログを残す
-				if ($isErrorAccess) $this->gOpeLog->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。', 2200, 'アクセスをブロックしました。URL: ' . $this->gEnv->getCurrentRequestUri());
+				if ($isErrorAccess) $this->gOpeLog->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $messageDetail, 2200, 'アクセスをブロックしました。URL: ' . $this->gEnv->getCurrentRequestUri());
 				return;
 			}
 			// #################### URLの遷移 #######################
