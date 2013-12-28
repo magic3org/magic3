@@ -338,7 +338,8 @@ class BaseFrameContainer extends Core
 						$this->gCache->setPageCache($request, $pageData);		// キャッシュデータを設定
 						echo $pageData;
 					} else {		// 管理者以外で、非共通のウィジェットが使用されていないページはアクセス不可とする
-						$messageDetail = '要因: 共有ウィジェットのみのページへのアクセスは不正。';
+						$errMessage = 'ユーザに公開されていないページへのアクセス。';
+						$messageDetail = 'アクセスポイント状態=公開, 要因: 共有ウィジェットのみのページへのアクセスは不可。';
 						$this->gOpeLog->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $errMessage, 2200, 'アクセスをブロックしました。URL: ' . $this->gEnv->getCurrentRequestUri() . ', ' . $messageDetail);
 
 						// アクセス不可ページへ遷移
