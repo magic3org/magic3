@@ -108,6 +108,7 @@ class BaseFrameContainer extends Core
 			$canAccess = true;		// アクセス可能かどうか
 			$isErrorAccess = false;		// 不正アクセスかどうか
 			$toAdminType = 0;		// 管理画面の遷移タイプ(0=アクセス不可、1=ログイン画面、2=サイト非公開画面, 3=存在しないページ)
+			$errMessage = '';	// エラーメッセージ
 			$messageDetail = '';	// 詳細メッセージ
 			
 			// ページID,ページサブIDからアクセス権をチェック
@@ -115,7 +116,7 @@ class BaseFrameContainer extends Core
 			if (!$isPublicUrl && !$isSystemManageUser){// システム運用可能ユーザかどうか
 				$canAccess = false;
 				$isErrorAccess = true;		// 不正アクセスかどうか
-				$messageDetail = 'ユーザに公開されていないページへのアクセス。';
+				$errMessage = 'ユーザに公開されていないページへのアクセス。';
 				
 				if (!$isActivePage) $toAdminType = 3;		// 有効なアクセスポイントでない場合は存在しないページとする
 			}
@@ -156,7 +157,8 @@ class BaseFrameContainer extends Core
 							// 標準のアクセスでは、上記コマンド以外は受け付けない
 							$canAccess = false;
 							$isErrorAccess = true;		// 不正アクセス
-							$messageDetail = '不正なコマンドの実行。';
+							$errMessage = '不正なコマンドの実行。';
+							$messageDetail = 'アクセスポイント状態=公開';
 						}
 					} else {		// サイトアクセスできない場合は、管理画面でメッセージを表示
 						if ($cmd == M3_REQUEST_CMD_LOGIN ||					// ログイン画面を表示のとき
@@ -180,7 +182,8 @@ class BaseFrameContainer extends Core
 							$cmd != M3_REQUEST_CMD_RSS){		// RSS配信
 							
 							$isErrorAccess = true;		// 不正アクセス
-							$messageDetail = '不正なコマンドの実行。';
+							$errMessage = '不正なコマンドの実行。';
+							$messageDetail = 'アクセスポイント状態=非公開';
 						}
 					}
 				}
@@ -206,8 +209,10 @@ class BaseFrameContainer extends Core
 					case 3:			// 存在しないページ画面へ(システム運用可能ユーザ以外)
 						// サイトが非公開の場合は、メンテナンス中画面のみ表示
 						if ($this->_accessSite($request)){		// サイト公開中の場合
+							$messageDetail = 'アクセスポイント状態=公開';
 							$this->gPage->setSystemHandleMode(12/*存在しないページ*/);
 						} else {
+							$messageDetail = 'アクセスポイント状態=非公開';
 							$this->gPage->setSystemHandleMode(10/*サイト非公開中*/);
 						}
 						break;
@@ -220,7 +225,7 @@ class BaseFrameContainer extends Core
 				$this->_showSystemPage($request, $toAdminType);
 						
 				// 不正アクセスの場合は、アクセスエラーログを残す
-				if ($isErrorAccess) $this->gOpeLog->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $messageDetail, 2200, 'アクセスをブロックしました。URL: ' . $this->gEnv->getCurrentRequestUri());
+				if ($isErrorAccess) $this->gOpeLog->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $errMessage, 2200, 'アクセスをブロックしました。URL: ' . $this->gEnv->getCurrentRequestUri() . ', ' . $messageDetail);
 				return;
 			}
 			// #################### URLの遷移 #######################
@@ -333,6 +338,9 @@ class BaseFrameContainer extends Core
 						$this->gCache->setPageCache($request, $pageData);		// キャッシュデータを設定
 						echo $pageData;
 					} else {		// 管理者以外で、非共通のウィジェットが使用されていないページはアクセス不可とする
+						$messageDetail = '要因: 共有ウィジェットのみのページへのアクセスは不正。';
+						$this->gOpeLog->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $errMessage, 2200, 'アクセスをブロックしました。URL: ' . $this->gEnv->getCurrentRequestUri() . ', ' . $messageDetail);
+
 						// アクセス不可ページへ遷移
 						$this->gPage->redirect('?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=_accessdeny');
 						// システム制御モードに変更
