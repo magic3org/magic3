@@ -228,9 +228,21 @@ class banner3Db extends BaseDb
 	 */
 	function getTotalViewCount($serial)
 	{
-		$count = 0;
 		$params = array();
 		$queryStr  = 'SELECT * FROM bn_item_view ';
+		$queryStr .=   'WHERE bv_item_serial = ? ';	$params[] = $serial;
+		return $this->selectRecordCount($queryStr, $params);
+	}
+	/**
+	 * バナー項目のクリックカウント総数を取得
+	 *
+	 * @param  int $serial				バナー項目シリアル番号
+	 * @return int						総数
+	 */
+	function getTotalClickCount($serial)
+	{
+		$params = array();
+		$queryStr  = 'SELECT distinct(ba_public_key) FROM bn_item_access LEFT JOIN bn_item_view ON ba_public_key = bv_public_key ';
 		$queryStr .=   'WHERE bv_item_serial = ? ';	$params[] = $serial;
 		return $this->selectRecordCount($queryStr, $params);
 	}

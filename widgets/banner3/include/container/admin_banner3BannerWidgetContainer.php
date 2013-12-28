@@ -13,7 +13,6 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-//require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_banner3BaseWidgetContainer.php');
 require_once($gEnvManager->getWidgetContainerPath('banner3') . '/admin_banner3BaseWidgetContainer.php');
 
 class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContainer

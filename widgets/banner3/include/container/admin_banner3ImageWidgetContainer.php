@@ -403,6 +403,9 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 			$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
 		}
 		
+		// クリック数取得
+		$clickCount = self::$_mainDb->getTotalClickCount($this->serialNo);
+		
 		// #### 更新、新規登録部をを作成 ####
 		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($this->serialNo));
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// 名前
@@ -434,11 +437,12 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 			}
 		}
 		$this->tmpl->addVar("_widget", "image", $destImg);
-		$this->tmpl->addVar("_widget", "width", $imageWidth);
-		$this->tmpl->addVar("_widget", "height", $imageHeight);
-		$this->tmpl->addVar("_widget", "alt", $imageAlt);
+		$this->tmpl->addVar("_widget", "width", $this->convertToDispString($imageWidth));
+		$this->tmpl->addVar("_widget", "height", $this->convertToDispString($imageHeight));
+		$this->tmpl->addVar("_widget", "alt", $this->convertToDispString($imageAlt));
 		$this->tmpl->addVar("_widget", "html", $srcHtml);		// テンプレート
 		$this->tmpl->addVar("_widget", "tag", M3_TAG_START . M3_TAG_MACRO_ITEM . M3_TAG_END);		// 埋め込みタグ
+		$this->tmpl->addVar("_widget", 'click_count', $this->convertToDispString($clickCount));							// クリック数
 		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
