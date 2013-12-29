@@ -15,10 +15,11 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwizardBaseWidgetContainer.php');
 
-class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
+class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
-	// DB定義値
-	const CF_SITE_IN_PUBLIC = 'site_in_public';			// サイト公開状況
+	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
+	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単一階層)
 	
 	/**
 	 * コンストラクタ
@@ -40,7 +41,7 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'initwizard_site.tmpl.html';
+		return 'initwizard_menu.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -57,19 +58,19 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 		$this->langId		= $this->gEnv->getDefaultLanguage();
 		
 		$act = $request->trimValueOf('act');
-		$siteName			= $request->trimValueOf('site_name');		// サイト名称
-		$siteEmail			= trim($request->valueOf('site_email'));		// サイトEメール
-		$siteDescription 	= $request->trimValueOf('site_description');		// サイト要約
-		$siteKeyword		= $request->trimValueOf('site_keyword');		// サイトキーワード
-		$siteOpen 			= $request->trimCheckedValueOf('site_open');		// サイト公開状態
-		
+		$isHier = $request->trimCheckedValueOf('menu_hier');		// 階層化ありかどうか
+	
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
-			$ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_NAME, $siteName);		// サイト名
-			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL, $siteEmail);	// Eメール
-			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION, $siteDescription);		// サイト説明
-			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS, $siteKeyword);		// 検索キーワード
-			if ($ret) $ret = $this->_mainDb->updateSystemConfig(self::CF_SITE_IN_PUBLIC, $siteOpen);	// サイト公開状態
+			// メニュー情報を取得
+			$ret = $this->getMenuInfo($isHier, $itemId, $row);
+			
+			// メニュー管理画面を変更
+			if ($isHier){
+				$ret = $this->_mainDb->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
+			} else {
+				$ret = $this->_mainDb->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
+			}
 			if ($ret){
 				// 次の画面へ遷移
 				$this->_redirectNextTask();
@@ -81,18 +82,31 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 		}
 		
 		if ($reloadData){		// データ再取得のとき
-			$siteName			= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_NAME);		// サイト名
-			$siteEmail			= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL);
-			$siteDescription	= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION);		// サイト要約
-			$siteKeyword		= $this->_mainDb->getSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS);		// サイトキーワード
-			$siteOpen 			= $this->gSystem->siteInPublic();			// サイト公開状態
+			// メニュー情報を取得
+			$ret = $this->getMenuInfo($isHier, $itemId, $row);
 		}
 
-		$this->tmpl->addVar("_widget", "site_name",			$this->convertToDispString($siteName));		// サイト名
-		$this->tmpl->addVar("_widget", "site_email",		$this->convertToDispString($siteEmail));
-		$this->tmpl->addVar("_widget", "site_description",	$this->convertToDispString($siteDescription));
-		$this->tmpl->addVar("_widget", "site_keyword",		$this->convertToDispString($siteKeyword));
-		$this->tmpl->addVar("_widget", "site_open_checked",	$this->convertToCheckedString($siteOpen));		// サイト公開状態
+		$this->tmpl->addVar("_widget", "menu_hier_checked",			$this->convertToCheckedString($isHier));		// 階層化ありかどうか
+	}
+	/**
+	 * メニュー管理画面の情報を取得
+	 *
+	 * @param bool  $isHier		階層化メニューかどうか
+	 * @param int   $itemId		メニュー項目ID
+	 * @param array  $row		取得レコード
+	 * @return bool				取得できたかどうか
+	 */
+	function getMenuInfo(&$isHier, &$itemId, &$row)
+	{
+		$isHier = false;	// 多階層メニューかどうか
+		$ret = $this->_mainDb->getNavItemsByTask(self::SEL_MENU_ID, self::TREE_MENU_TASK, $row);
+		if ($ret){
+			$isHier = true;
+		} else {
+			$ret = $this->_mainDb->getNavItemsByTask(self::SEL_MENU_ID, self::SINGLE_MENU_TASK, $row);
+		}
+		if ($ret) $itemId = $row['ni_id'];
+		return $ret;
 	}
 }
 ?>

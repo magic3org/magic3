@@ -37,7 +37,7 @@ class help_configsite extends HelpConv
 			),
 			'configsite_email' => array(
 				'title' =>	$this->_('Site Email'),			// Eメールアドレス
-				'body' =>	$this->_('Input default email address. It is required. It can be format of name@example.com, name&lt; name@example.com&gt;. This address is used as email sender from this system to user, and used as email receiver from user to this system.<br />If as receiver, it can send email by bcc and cc. The format is "address1;cc:address2;bcc:address3". ')		// このサイトのデフォルトのメールアドレスです。このメールアドレスは必須項目です。「name@example.com」や「名前&lt; name@example.com&gt;」の設定が可能です。<br />このメールアドレスは、システムからユーザへ送信する場合の送信元アドレスとして、またはこのシステム上でユーザがメールを送信した場合に送信先アドレスとして使用されます。ユーザからのメール送信先は、次のフォーマットで「CC」や「BCC」でのメール送信も可能です。フォーマット「アドレス1;cc:アドレス2;bcc:アドレス3」。
+				'body' =>	$this->_('Input default email address. It is required. It can be format of name@example.com, name&lt; name@example.com&gt;. This address is used as email sender from this system to user, and used as email receiver from user to this system.<br />If as receiver, it can send email by bcc and cc. The format is "address1;cc:address2;bcc:address3". ')		// このサイトのデフォルトのEメールアドレスです。このアドレスは必須項目です。「name@example.com」や「名前&lt; name@example.com&gt;」の設定が可能です。<br />このアドレスは、システムからユーザへ送信する場合の送信元アドレスとして、またはこのシステム上でユーザがメールを送信した場合に送信先アドレスとして使用されます。ユーザからのメール送信先は、次のフォーマットで「CC」や「BCC」でのメール送信も可能です。フォーマット「アドレス1;cc:アドレス2;bcc:アドレス3」。
 			),
 			'configsite_slogan' => array(
 				'title' =>	$this->_('Site Slogan'),			// サイトスローガン

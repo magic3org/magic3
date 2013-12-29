@@ -2096,6 +2096,37 @@ class admin_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * ナビゲーションバー項目を取得(タスク指定)
+	 *
+	 * @param string $navId			ナビゲーションバー識別ID
+	 * @param string $taskId		タスクID
+	 * @param array  $row			取得レコード
+	 * @return						true=取得、false=取得せず
+	 */
+	function getNavItemsByTask($navId, $taskId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM _nav_item ';
+		$queryStr .=   'WHERE ni_nav_id = ? ';
+		$queryStr .=     'AND ni_task_id = ? ';
+		$queryStr .=     'AND ni_visible = true ';
+		$retValue = $this->selectRecord($queryStr, array($navId, $taskId), $row);
+		return $retValue;
+	}
+	/**
+	 * メニュー項目のタスクを更新
+	 *
+	 * @param string $itemId	メニュー項目ID
+	 * @param bool $taskId		タスク
+	 * @return					true = 正常、false=異常
+	 */
+	function updateNavItemMenuType($itemId, $taskId)
+	{
+		$sql = 'UPDATE _nav_item SET ni_task_id = ? WHERE ni_id = ?';
+		$params = array($taskId, $itemId);
+		$retValue =$this->execStatement($sql, $params);
+		return $retValue;
+	}
+	/**
 	 * 変換キーテーブルを取得
 	 *
 	 * @param string	$key				キー文字列

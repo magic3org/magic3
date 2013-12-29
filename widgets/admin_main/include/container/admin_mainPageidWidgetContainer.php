@@ -131,7 +131,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			$this->db->getPageIdList(array($this, 'pageIdLoop'), 0);
 			
 			// ヘルプの追加
-			$this->convertHelp('pageid_list');
+//			$this->convertHelp('pageid_list');
 		} else {			// ページサブID表示のとき
 			$this->tmpl->setAttribute('pagesubid_list', 'visibility', 'visible');		// ページサブID一覧表示
 			$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1);
@@ -140,9 +140,9 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			$this->tmpl->setAttribute('del_button', 'visibility', 'visible');// 削除ボタン表示
 			
 			// ヘルプの追加
-			$this->convertHelp('new_button');
-			$this->convertHelp('del_button');
-			$this->convertHelp('pagesubid_list');
+//			$this->convertHelp('new_button');
+//			$this->convertHelp('del_button');
+//			$this->convertHelp('pagesubid_list');
 		}
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}

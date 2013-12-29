@@ -355,4 +355,22 @@ $HELP['initsystem']['body'] = 'DBのデータを初期化します。';
 // ########## DBバックアップ ##########
 $HELP['dbbackup']['title'] = 'DBバックアップ';
 $HELP['dbbackup']['body'] = 'DBのデータをバックアップします。';
+
+// ########## システム初期化ウィザード ##########
+$HELP['initwizard_site_name']['title'] = 'サイト名';
+$HELP['initwizard_site_name']['body'] = 'サイトの名前を設定します。';
+$HELP['initwizard_site_email']['title'] = 'Eメール';
+$HELP['initwizard_site_email']['body'] = 'このサイトのデフォルトのEメールアドレスです。このアドレスは必須項目です。「name@example.com」や「名前&lt; name@example.com&gt;」の設定が可能です。<br />このアドレスは、システムからユーザへ送信する場合の送信元アドレスとして、またはこのシステム上でユーザがメールを送信した場合に送信先アドレスとして使用されます。ユーザからのメール送信先は、次のフォーマットで「CC」や「BCC」でのメール送信も可能です。フォーマット「アドレス1;cc:アドレス2;bcc:アドレス3」。';
+$HELP['initwizard_site_description']['title'] = 'サイト説明';
+$HELP['initwizard_site_description']['body'] = 'サイトの説明のためにヘッダ部のdescriptionタグに設定される文字列です。120文字程度で記述します。<br />Googleでは検索結果に表示されます。';
+$HELP['initwizard_site_keyword']['title'] = '検索キーワード';
+$HELP['initwizard_site_keyword']['body'] = 'ヘッダ部のkeywordsタグに設定される文字列です。検索エンジン用のキーワードを「,」区切りで10個以下で記述します。';
+$HELP['initwizard_admin_name']['title'] = '管理者名';
+$HELP['initwizard_admin_name']['body'] = '画面上に表示される管理者の名前です。';
+$HELP['initwizard_admin_account']['title'] = 'アカウント';
+$HELP['initwizard_admin_account']['body'] = 'ログインに使用するアカウントです。';
+$HELP['initwizard_admin_password']['title'] = 'パスワード';
+$HELP['initwizard_admin_password']['body'] = 'ログインに使用するパスワードです。';
+$HELP['initwizard_admin_email']['title'] = 'Eメール';
+$HELP['initwizard_admin_email']['body'] = '管理者のメールアドレスです。パスワード再送などで使用されます。';
 ?>
