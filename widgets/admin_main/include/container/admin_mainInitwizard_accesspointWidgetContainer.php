@@ -17,6 +17,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwiz
 
 class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
+	const MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
 	const CF_SITE_PC_IN_PUBLIC			= 'site_pc_in_public';				// PC用サイトの公開状況
 	const CF_SITE_MOBILE_IN_PUBLIC		= 'site_mobile_in_public';		// 携帯用サイトの公開状況
 	const CF_SITE_SMARTPHONE_IN_PUBLIC	= 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
@@ -64,12 +65,16 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 	
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
-//			$ret = $this->_db->updateSystemConfig(self::CF_SITE_PC_IN_PUBLIC, $siteOpenPc);
-//			if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SITE_SMARTPHONE_IN_PUBLIC, $siteOpenSmartphone);
-//			if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SITE_MOBILE_IN_PUBLIC, $siteOpenMobile);
 			$ret = $this->updateActiveAccessPoint(0/*PC*/, $siteOpenPc);
-			if ($ret) $ret = $this->updateActiveAccessPoint(2/*スマートフォン*/, $siteOpenSmartphone);
-			if ($ret) $ret = $this->updateActiveAccessPoint(1/*携帯*/, $siteOpenMobile);
+			$this->setMenuItemVisible(0/*PC*/, $siteOpenPc);
+			if ($ret){
+				$ret = $this->updateActiveAccessPoint(2/*スマートフォン*/, $siteOpenSmartphone);
+				$this->setMenuItemVisible(2/*スマートフォン*/, $siteOpenSmartphone);
+			}
+			if ($ret){
+				$ret = $this->updateActiveAccessPoint(1/*携帯*/, $siteOpenMobile);
+				$this->setMenuItemVisible(1/*携帯*/, $siteOpenMobile);
+			}
 			if ($ret){
 				// 次の画面へ遷移
 				$this->_redirectNextTask();
@@ -144,6 +149,33 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 		if ($ret){
 			$ret = $this->_mainDb->updatePageId(0/*アクセスポイント*/, $pageId, $row['pg_name'], $row['pg_description'], $row['pg_priority'], $status, $row['pg_available']);
 		}
+		return $ret;
+	}
+	/**
+	 * 管理メニュー項目の表示制御
+	 *
+	 * @param int   $deviceType デバイスタイプ(0=PC,1=携帯,2=スマートフォン)
+	 * @param bool  $visible	項目の表示非表示
+	 * @return bool				変更できたかどうか
+	 */
+	function setMenuItemVisible($deviceType, $visible)
+	{
+		// 対象タスク
+		switch ($deviceType){
+			case 0:		// PC
+			default:
+				$taskId = 'pagedef';
+				break;
+			case 1:		// 携帯
+				$taskId = 'pagedef_mobile';
+				break;
+			case 2:		// スマートフォン
+				$taskId = 'pagedef_smartphone';
+				break;
+		}
+		
+		$ret = $this->_mainDb->getNavItemsByTask(self::MENU_ID, $taskId, $row);
+		if ($ret) $ret = $this->_mainDb->updateNavItemVisible($row['ni_id'], $visible);
 		return $ret;
 	}
 }

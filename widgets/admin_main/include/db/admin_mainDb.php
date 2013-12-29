@@ -2108,7 +2108,7 @@ class admin_mainDb extends BaseDb
 		$queryStr  = 'SELECT * FROM _nav_item ';
 		$queryStr .=   'WHERE ni_nav_id = ? ';
 		$queryStr .=     'AND ni_task_id = ? ';
-		$queryStr .=     'AND ni_visible = true ';
+//		$queryStr .=     'AND ni_visible = true ';
 		$retValue = $this->selectRecord($queryStr, array($navId, $taskId), $row);
 		return $retValue;
 	}
@@ -2124,6 +2124,22 @@ class admin_mainDb extends BaseDb
 		$sql = 'UPDATE _nav_item SET ni_task_id = ? WHERE ni_id = ?';
 		$params = array($taskId, $itemId);
 		$retValue =$this->execStatement($sql, $params);
+		return $retValue;
+	}
+	/**
+	 * メニュー項目の表示制御
+	 *
+	 * @param string $itemId	メニュー項目ID
+	 * @param bool $visible		表示非表示
+	 * @return					true = 正常、false=異常
+	 */
+	function updateNavItemVisible($itemId, $visible)
+	{
+		$queryStr  = 'UPDATE _nav_item ';
+		$queryStr .=   'SET ni_visible = ? ';
+		$queryStr .= 'WHERE ni_id = ?';
+		$params = array(intval($visible), $itemId);
+		$retValue = $this->execStatement($queryStr, $params);
 		return $retValue;
 	}
 	/**
