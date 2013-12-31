@@ -62,14 +62,14 @@ class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseW
 	
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
-			// メニュー情報を取得
-			$ret = $this->getMenuInfo($isHier, $itemId, $row);
-			
-			// メニュー管理画面を変更
-			if ($isHier){
-				$ret = $this->_mainDb->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
-			} else {
+			// メニュー項目IDを取得
+			$ret = $this->getMenuInfo($isCurrentHier, $itemId, $row);
+
+			// メニュー管理画面を更新
+			if ($isHier){		// 階層化あり
 				$ret = $this->_mainDb->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
+			} else {
+				$ret = $this->_mainDb->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
 			}
 			if ($ret){
 				// 次の画面へ遷移
@@ -85,7 +85,6 @@ class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseW
 			// メニュー情報を取得
 			$ret = $this->getMenuInfo($isHier, $itemId, $row);
 		}
-
 		$this->tmpl->addVar("_widget", "menu_hier_checked",			$this->convertToCheckedString($isHier));		// 階層化ありかどうか
 	}
 	/**
