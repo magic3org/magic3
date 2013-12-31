@@ -63,23 +63,16 @@ class admin_mainInitwizard_pageWidgetContainer extends admin_mainInitwizardBaseW
 	
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
-			$listedItem = explode(',', $request->trimValueOf('seriallist'));
-			$delItems = array();
+			$listedItem = explode(',', $request->trimValueOf('idlist'));
 			for ($i = 0; $i < count($listedItem); $i++){
 				// 項目がチェックされているかを取得
 				$itemName = 'item' . $i . '_selected';
 				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
 				
-				if ($itemValue){		// チェック項目
-					$delItems[] = $listedItem[$i];
-					
-					// 削除可能かチェック
-					$ret = $this->db->getPageIdRecord($this->pageIdType, $listedItem[$i], $row);
-					if ($ret){
-						if (!$row['pg_editable']) $this->setMsg(self::MSG_APP_ERR, 'このデータは削除不可データです。ID=' . $listedItem[$i]);
-					} else {
-						$this->setMsg(self::MSG_APP_ERR, '該当データが見つかりません');
-					}
+				$ret = $this->_mainDb->getPageIdRecord(1, $listedItem[$i], $row);
+				if ($ret){
+					$ret = $this->_mainDb->updatePageId(1, $listedItem[$i], $row['pg_name'], $row['pg_description'], $row['pg_priority'], $row['pg_active'], $itemValue);
+					if (!$ret) break;
 				}
 			}
 			if ($ret){
@@ -93,9 +86,6 @@ class admin_mainInitwizard_pageWidgetContainer extends admin_mainInitwizardBaseW
 		}
 		
 		if ($reloadData){		// データ再取得のとき
-//			$siteOpenPc			= $this->isActiveAccessPoint(0/*PC*/);			// PC用サイトの公開状況
-//			$siteOpenSmartphone = $this->isActiveAccessPoint(2/*スマートフォン*/);	// スマートフォン用サイトの公開状況
-//			$siteOpenMobile		= $this->isActiveAccessPoint(1/*携帯*/);	// 携帯用サイトの公開状況
 		}
 
 		$this->_mainDb->getPageIdList(array($this, 'pageLoop'), 1);
