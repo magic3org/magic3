@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwizardBaseWidgetContainer.php');
 
-class admin_mainInitwizard_pageWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
+class admin_mainInitwizard_page1WidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
 	private $idArray = array();			// 表示するページ
 	const MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
@@ -43,7 +43,7 @@ class admin_mainInitwizard_pageWidgetContainer extends admin_mainInitwizardBaseW
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'initwizard_page.tmpl.html';
+		return 'initwizard_page1.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -64,22 +64,35 @@ class admin_mainInitwizard_pageWidgetContainer extends admin_mainInitwizardBaseW
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
 			$listedItem = explode(',', $request->trimValueOf('idlist'));
+
+			// チェックされている項目数を確認
 			for ($i = 0; $i < count($listedItem); $i++){
 				// 項目がチェックされているかを取得
 				$itemName = 'item' . $i . '_selected';
 				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
-				
-				$ret = $this->_mainDb->getPageIdRecord(1, $listedItem[$i], $row);
-				if ($ret){
-					$ret = $this->_mainDb->updatePageId(1, $listedItem[$i], $row['pg_name'], $row['pg_description'], $row['pg_priority'], $row['pg_active'], $itemValue);
-					if (!$ret) break;
-				}
+				if ($itemValue) break;
 			}
-			if ($ret){
-				// 次の画面へ遷移
-				$this->_redirectNextTask();
-			} else {
-				$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');			// データ更新に失敗しました
+			if ($i == count($listedItem)) $this->setUserErrorMsg('1つ以上の選択が必要です。');
+			
+			// エラーなしの場合は、データを更新
+			if ($this->getMsgCount() == 0){
+				for ($i = 0; $i < count($listedItem); $i++){
+					// 項目がチェックされているかを取得
+					$itemName = 'item' . $i . '_selected';
+					$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
+				
+					$ret = $this->_mainDb->getPageIdRecord(1/*ページサブIDを指定*/, $listedItem[$i], $row);
+					if ($ret){
+						$ret = $this->_mainDb->updatePageId(1/*ページサブIDを指定*/, $listedItem[$i], $row['pg_name'], $row['pg_description'], $row['pg_priority'], $row['pg_active'], $itemValue);
+						if (!$ret) break;
+					}
+				}
+				if ($ret){
+					// 次の画面へ遷移
+					$this->_redirectNextTask();
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');			// データ更新に失敗しました
+				}
 			}
 		} else {
 			$reloadData = true;
@@ -88,7 +101,7 @@ class admin_mainInitwizard_pageWidgetContainer extends admin_mainInitwizardBaseW
 		if ($reloadData){		// データ再取得のとき
 		}
 
-		$this->_mainDb->getPageIdList(array($this, 'pageLoop'), 1);
+		$this->_mainDb->getPageIdList(array($this, 'pageLoop'), 1/*ページサブIDを指定*/);
 					
 		$this->tmpl->addVar("_widget", "id_list", implode($this->idArray, ','));// 表示項目のIDを設定
 	}

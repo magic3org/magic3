@@ -28,13 +28,15 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 	const TASK_ADMIN		= 'initwizard_admin';		// システム管理者
 	const TASK_ACCESS_POINT	= 'initwizard_accesspoint';		// アクセスポイント
 	const TASK_MENU			= 'initwizard_menu';		// メニュー
-	const TASK_PAGE			= 'initwizard_page';		// ページ
+	const TASK_PAGE1		= 'initwizard_page1';		// ページ1
+	const TASK_PAGE2		= 'initwizard_page2';		// ページ2
 	const TASK_END			= 'initwizard_end';		// 処理終了
 	const TASK_TITLE_SITE			= 'サイト';		// サイト情報
 	const TASK_TITLE_ADMIN			= '管理者';		// 管理者
 	const TASK_TITLE_ACCESS_POINT	= 'アクセスポイント';
 	const TASK_TITLE_MENU			= 'メニュー';
-	const TASK_TITLE_PAGE			= 'ページ';
+	const TASK_TITLE_PAGE1			= 'ページ1';
+	const TASK_TITLE_PAGE2			= 'ページ2';
 	const TASK_TITLE_END			= '完了';		// 完了
 	
 	/**
@@ -47,8 +49,10 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 		
 		$this->_mainDb = new admin_mainDb();
 		
-		$this->_taskArray		= array(self::TASK_SITE, self::TASK_ADMIN, self::TASK_ACCESS_POINT, self::TASK_MENU, self::TASK_PAGE, self::TASK_END);		// 管理下のタスク
-		$this->_taskTitleArray	= array(self::TASK_TITLE_SITE, self::TASK_TITLE_ADMIN, self::TASK_TITLE_ACCESS_POINT, self::TASK_TITLE_MENU, self::TASK_TITLE_PAGE, self::TASK_TITLE_END);
+		$this->_taskArray		= array(self::TASK_SITE, self::TASK_ADMIN, self::TASK_ACCESS_POINT, self::TASK_MENU,
+										self::TASK_PAGE1, self::TASK_PAGE2, self::TASK_END);		// 管理下のタスク
+		$this->_taskTitleArray	= array(self::TASK_TITLE_SITE, self::TASK_TITLE_ADMIN, self::TASK_TITLE_ACCESS_POINT, self::TASK_TITLE_MENU,
+										self::TASK_TITLE_PAGE1, self::TASK_TITLE_PAGE2, self::TASK_TITLE_END);
 	}
 	/**
 	 * テンプレート前処理

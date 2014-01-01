@@ -17,7 +17,10 @@ font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 /*label {
 	font-weight: bold;
 }*/
-
+img
+{
+	border:0;
+}
 legend, label
 {
 	border: none;

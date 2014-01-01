@@ -39,7 +39,7 @@ class admin_mainInitwizardWidgetContainer extends admin_mainInitwizardBaseWidget
 	function _dispatch($request, &$param)
 	{
 		// 「initwizard」タスクはディスパッチ処理のみ行う。「initwizard_xxx」タスクではbootstrapライブラリが読み込まれる。
-		
+
 		// 最初の画面へ遷移
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if ($task == self::TASK_END){		// 初期化終了
