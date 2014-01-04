@@ -23,6 +23,7 @@ class EnvManager extends Core
 	private $currentTemplateId;	// 現在のテンプレートID(ディレクトリ名)
 	private $currentTemplateType;	// 現在のテンプレートのタイプ
 	private $currentTemplateCleanType;	// 現在のテンプレートのクリーンタイプ
+	private $currentTemplateUseBootstrap;	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
 	private $currentWidgetId;	// 現在作成中のウィジェットId
 	private $currentWidgetConfigId;	// 現在作成中のウィジェットの定義ID
 	private $currentIWidgetConfigId;	// 現在作成中のインナーウィジェットの定義ID
@@ -1123,10 +1124,12 @@ class EnvManager extends Core
 		// テンプレートの属性を取得
 		$this->currentTemplateType = 0;
 		$this->currentTemplateCleanType = 0;
+		$this->currentTemplateUseBootstrap = false;	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
 		if ($this->canUseDb){		// DB使用可能なとき
 			if ($this->db->getTemplate($name, $row)){
 				$this->currentTemplateType = $row['tm_type'];		// テンプレートタイプ
 				$this->currentTemplateCleanType = $row['tm_clean_type'];	// 現在のテンプレートのクリーンタイプ
+				$this->currentTemplateUseBootstrap = $row['tm_use_bootstrap'];	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
 			}
 		}
 	}
@@ -1154,6 +1157,15 @@ class EnvManager extends Core
 	public function getCurrentTemplateCleanType()
 	{
 		return $this->currentTemplateCleanType;
+	}
+	/**
+	 * 現在のテンプレートでBootstrapライブラリを使用するかどうか
+	 *
+	 * @return bool		true=使用、false=未使用
+	 */
+	public function getCurrentTemplateUseBootstrap()
+	{
+		return $this->currentTemplateUseBootstrap;
 	}
 	/**
 	 * 現在のテンプレートへのパスを取得

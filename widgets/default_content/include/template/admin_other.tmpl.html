@@ -7,7 +7,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_other.tmpl.html 6014 2013-05-19 13:53:53Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -30,8 +30,6 @@ $(function(){
 	m3_tableWithScrollbar('config', -1, 0);
 	
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_password_content');
-	//m3_setHtmlEditor('item_layout_view_detail');
 	m3SetWysiwygEditor('item_password_content', 150/* 高さ */);
 	m3SetWysiwygEditor('item_layout_view_detail', 100/* 高さ */, false, 'layout');
 });
@@ -45,7 +43,7 @@ $(function(){
 <input type="hidden" name="task" value="other" />
 <br />
 <table width="90%"><tr><td>
-<table id="config" class="simple-table" width="100%">
+<table id="config" class="simple-table" width="950">
     <tbody>
     <tr>
 	    <td class="table-headside" width="150">機能</td>

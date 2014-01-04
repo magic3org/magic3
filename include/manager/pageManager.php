@@ -169,7 +169,8 @@ class PageManager extends Core
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
 	
 	// 読み込み制御
-	const USE_BOOTSTRAP	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
+	const USE_BOOTSTRAP_ADMIN	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
+	const BOOTSTRAP_BUTTON_CLASS = 'btn btn-default';
 	
 	/**
 	 * コンストラクタ
@@ -202,7 +203,7 @@ class PageManager extends Core
 		$this->defaultCssFiles = array();
 		
 		$this->wysiwygEditor = $gSystemManager->getSystemConfig(self::CF_WYSIWYG_EDITOR);				// 管理画面用WYSIWYGエディター
-
+		
 		// アクセスする画面に応じてjQueryのバージョンを設定
 		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 			$value = $gSystemManager->getSystemConfig(self::CF_ADMIN_JQUERY_VERSION);// 管理画面用jQueryバージョン
@@ -210,6 +211,9 @@ class PageManager extends Core
 			if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET && strStartsWith($widgetId, 'm/')){// 携帯用アクセスポイント用の管理画面の場合はWYSIWYGエディターはFCKEditorに固定
 				$this->wysiwygEditor = ScriptLibInfo::LIB_FCKEDITOR;				// FCKEditorに固定
 			}
+			
+			// 管理画面にBOOTSTRAPを使用するかどうか
+			$this->useBootstrap = self::USE_BOOTSTRAP_ADMIN;
 		} else {
 			$value = $gSystemManager->getSystemConfig(self::CF_JQUERY_VERSION);// jQueryバージョン
 		}
@@ -935,12 +939,12 @@ class PageManager extends Core
 			if ($gAccessManager->isValidAdminKey()) session_id($gRequestManager->trimValueOf(session_name()));
 		}
 
-		// 管理画面用ライブラリを追加(フレームコンテナでの設定を反映)
+/*		// 管理画面用ライブラリを追加(フレームコンテナでの設定を反映)
 		if ($gEnvManager->isAdminDirAccess()){
 			if ($this->useBootstrap) $this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
 		} else {
 			if ($this->useBootstrap) $this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
-		}
+		}*/
 
 		// セッション変数を取得可能にする
 		session_start();
@@ -2534,6 +2538,23 @@ class PageManager extends Core
 
 		$replaceStr = '';		// 変換文字列
 		
+		// ********************************************************
+		//               ヘッダ文字列作成の前処理
+		// ********************************************************
+		// ##### テンプレートの設定から必要なライブラリを取得 #####
+		// Bootstrapライブラリを追加
+		if (!$this->useBootstrap) $this->useBootstrap = $gEnvManager->getCurrentTemplateUseBootstrap();
+		if ($this->useBootstrap){
+			if ($gEnvManager->isAdminDirAccess()){
+				 $this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
+			} else {
+				$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
+			}
+		}
+		
+		// ********************************************************
+		//               ヘッダ文字列作成処理
+		// ********************************************************
 		// ##### インストール時のヘッダ出力 #####
 		if (defined('M3_STATE_IN_INSTALL')){
 			// タイトルの作成
@@ -2673,7 +2694,7 @@ class PageManager extends Core
 				}
 			}
 		}
-
+		
 		// ##### PC用URLと携帯用URLのアクセス別に処理 #####
 		if ($gEnvManager->getIsMobileSite()){		// 携帯用URLのとき
 		} else {			// PC用URLまたはスマートフォン用URLのとき
@@ -2997,7 +3018,7 @@ class PageManager extends Core
 					// Bootstrap用のスクリプト処理
 					if ($this->useBootstrap){
 						$replaceStr .= '$(function(){' . M3_NL;
-						$replaceStr .= '    $(\'.button\').addClass(\'btn\');' . M3_NL;
+						$replaceStr .= '    $(\'.button\').addClass(\'' . self::BOOTSTRAP_BUTTON_CLASS . '\');' . M3_NL;
 						$replaceStr .= '});' . M3_NL;
 					}
 				}

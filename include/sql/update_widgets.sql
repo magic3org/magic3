@@ -39,6 +39,10 @@ DELETE FROM _widgets WHERE wd_id = 'admin/loginuser';
 INSERT INTO _widgets
 (wd_id,             wd_name,                    wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('admin/loginuser', '管理用ログインユーザ情報', true,     '1.1.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true, '2012-09-19',           now(),         now());
+DELETE FROM _widgets WHERE wd_id = 'admin/message';
+INSERT INTO _widgets
+(wd_id,           wd_name,            wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin/message', '管理用メッセージ出力', true,     '1.0.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true,           '2014-01-02', now(),         now());
 
 -- ウィジェット情報(PC用)
 DELETE FROM _widgets WHERE wd_id = 'default_menu';
