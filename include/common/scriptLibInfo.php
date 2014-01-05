@@ -36,6 +36,7 @@ class ScriptLibInfo
 	const LIB_MD5					= 'md5';
 	const LIB_SWFOBJECT				= 'swfobject';
 	const LIB_BOOTSTRAP				= 'bootstrap';
+	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
 	
 	// スマートフォン用jQueryライブラリ
 	const LIB_JQUERYS				= 'jquerys';
@@ -229,6 +230,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const BOOTSTRAP_OPTION_CSS		= 'bootstrap/bootstrap-box2.3.css';*/
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.0.3/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.0.3/css/bootstrap.min.css';
+	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS	= 'bootstrap/bootswatch_flatly.min.css';	// bootstrap配色
+	const BOOTSTRAP_YAMM_CSS				= 'bootstrap/yamm.css';						// bootstrapメガメニュー
 	
 	const CODEMIRROR_FILENAME				= 'codemirror-3.1/lib/codemirror.js';				// CodeMirror
 	const CODEMIRROR_CSS					= 'codemirror-3.1/lib/codemirror.css';				// CodeMirror
@@ -337,7 +340,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 																					self::BOOTSTRAP_OPTION_CSS)),*/
 					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																'css'		=> array(self::BOOTSTRAP_CSS)),
-																					
+					self::LIB_BOOTSTRAP_ADMIN		=>	array(	'css'		=> array(self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS, self::BOOTSTRAP_YAMM_CSS)),	// Bootstrap管理画面用オプション															
 					// jQueryライブラリ
 					self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル
 					self::LIB_JQUERY_JCAROUSEL		=>	array(	'script' 	=> array(self::JQUERY_JCAROUSEL_FILENAME),

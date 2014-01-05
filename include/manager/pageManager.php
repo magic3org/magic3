@@ -2180,14 +2180,16 @@ class PageManager extends Core
 		
 		// ##### テンプレートのCSSの読み込み #####
 		// テンプレートは管理用テンプレートに固定されている
-		$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
-		if ($this->isHtml5){
-			echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/style.css" media="screen">' . M3_NL;
-    		echo '<!--[if IE]><link rel="stylesheet" href="' . $curTemplateUrl . '/css/iestyles.css" media="screen"><![endif]-->' . M3_NL;
-			echo '<!--[if lt IE 9]><script src="' . $curTemplateUrl . '/html5shiv.js"></script><![endif]-->' . M3_NL;
-		} else {
-			echo '<link href="' . $curTemplateUrl . '/css/style.css" rel="stylesheet" type="text/css" />' . M3_NL;
-			echo '<!--[if IE]><link rel="stylesheet" type="text/css" media="screen" href="' . $curTemplateUrl . '/css/iestyles.css" /><![endif]-->' . M3_NL;
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット設定のとき
+			$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
+			if ($this->isHtml5){
+				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/style.css" media="screen">' . M3_NL;
+	    		echo '<!--[if IE]><link rel="stylesheet" href="' . $curTemplateUrl . '/css/iestyles.css" media="screen"><![endif]-->' . M3_NL;
+				echo '<!--[if lt IE 9]><script src="' . $curTemplateUrl . '/html5shiv.js"></script><![endif]-->' . M3_NL;
+			} else {
+				echo '<link href="' . $curTemplateUrl . '/css/style.css" rel="stylesheet" type="text/css" />' . M3_NL;
+				echo '<!--[if IE]><link rel="stylesheet" type="text/css" media="screen" href="' . $curTemplateUrl . '/css/iestyles.css" /><![endif]-->' . M3_NL;
+			}
 		}
 		// ウィジェット情報取得
 		$ret = $this->db->getWidgetInfo($widgetId, $row);
@@ -2572,8 +2574,10 @@ class PageManager extends Core
 			if ($gEnvManager->isAdminDirAccess()){
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効(ログイン中の場合)
 					$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
+					$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);	// Bootstrap管理画面オプション
 				} else {		// ログインしていない場合(ログイン画面等)
 					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
+					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);// Bootstrap管理画面オプション
 				}
 			} else {
 				$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
