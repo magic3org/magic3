@@ -34,6 +34,7 @@ class PageManager extends Core
 	private $defaultAdminScriptFiles;	// デフォルトで読み込むスクリプトファイル(管理用)
 	private $defaultAdminCssFiles;		// デフォルトで読み込むCSSファイル(管理用)
 	private $defaultAdminDirScriptFiles;	// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
+	private $defaultAdminDirCssFiles;	// デフォルトで読み込むCSSファイル(管理ディレクトリ用)
 	private $headScriptFiles = array();		// ウィジェットからの追加で読み込むスクリプトファイル
 	private $headPreMobileScriptFiles = array();// ウィジェットからの追加で読み込むスクリプトファイル(jQueryMobile用挿入ファイル)
 	private $headCssFiles = array();		// ウィジェットからの追加で読み込むCSSファイル
@@ -1499,6 +1500,29 @@ class PageManager extends Core
 		}
 	}
 	/**
+	 * 非ログイン時の管理機能用のJavascriptファイル、CSSを追加する
+	 *
+	 * @param string $libId		追加ライブラリID
+	 * @return 					なし
+	 */
+	function addDefaultAdminScript($libId)
+	{
+		// Javascript追加
+		if (isset($this->libFiles[$libId]['script'])){
+			$scriptFiles = $this->libFiles[$libId]['script'];
+			for ($i = 0; $i < count($scriptFiles); $i++){
+				$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
+			}
+		}
+		// CSS追加
+		if (isset($this->libFiles[$libId]['css'])){
+			$cssFiles = $this->libFiles[$libId]['css'];
+			for ($i = 0; $i < count($cssFiles); $i++){
+				$this->defaultAdminDirCssFiles[] = $cssFiles[$i];		// デフォルトで読み込むCSSファイル(管理ディレクトリ用)
+			}
+		}
+	}
+	/**
 	 * ページ作成終了
 	 *
 	 * ・最終HTML出力
@@ -1855,7 +1879,7 @@ class PageManager extends Core
 	function replaceHead($srcBuf)
 	{
 		$destBuf = $srcBuf;
-		
+
 		// ##### ヘッダ部分の置換 #####
 		if ($this->outputHead){				// HTMLヘッダ出力を行っているとき
 			// タグ変換用文字列の取得
@@ -2541,12 +2565,16 @@ class PageManager extends Core
 		// ********************************************************
 		//               ヘッダ文字列作成の前処理
 		// ********************************************************
-		// ##### テンプレートの設定から必要なライブラリを取得 #####
-		// Bootstrapライブラリを追加
+		// ##### テンプレートの設定、フレームの設定から必要なライブラリを取得 #####
+		// Bootstrapライブラリ
 		if (!$this->useBootstrap) $this->useBootstrap = $gEnvManager->getCurrentTemplateUseBootstrap();
 		if ($this->useBootstrap){
 			if ($gEnvManager->isAdminDirAccess()){
-				 $this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
+				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効(ログイン中の場合)
+					$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
+				} else {		// ログインしていない場合(ログイン画面等)
+					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
+				}
 			} else {
 				$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
 			}
@@ -2783,6 +2811,14 @@ class PageManager extends Core
 						} else {
 							$cssURL = $scriptsUrl . '/' . $cssFilename;
 						}
+						$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
+					}
+				} else {
+					// 管理権限なしで管理ディレクトリアクセスで必要なCSSファイルを読み込む
+					$count = count($this->defaultAdminDirCssFiles);
+					for ($i = 0; $i < $count; $i++){
+						// CSSへのURLを作成
+						$cssURL = $scriptsUrl . '/' . $this->defaultAdminDirCssFiles[$i];
 						$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 					}
 				}
