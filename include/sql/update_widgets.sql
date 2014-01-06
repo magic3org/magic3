@@ -23,6 +23,10 @@ DELETE FROM _widgets WHERE wd_id = 'admin_menu3';
 INSERT INTO _widgets
 (wd_id,         wd_name,           wd_admin, wd_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('admin_menu3', '管理用メニュー3', true,     'menu',  '1.2.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                false,        false,       true, true,           100,     '2013-03-20',        now(),         now());
+DELETE FROM _widgets WHERE wd_id = 'admin_menu4';
+INSERT INTO _widgets
+(wd_id,         wd_name,           wd_admin, wd_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin_menu4', '管理用メニュー4', true,     'menu',  '1.0.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                false,        false,       true, true,           100,     '2014-01-06',        now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin_main';
 INSERT INTO _widgets
 (wd_id,        wd_name,      wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
