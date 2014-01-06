@@ -230,8 +230,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
 	const BOOTSTRAP_OPTION_CSS		= 'bootstrap/bootstrap-box2.3.css';*/
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.0.3/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.0.3/css/bootstrap.min.css';
-	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS	= 'bootstrap/bootswatch_flatly.min.css';	// bootstrap配色
-	const BOOTSTRAP_YAMM_CSS				= 'bootstrap/yamm.css';						// bootstrapメガメニュー
+	// BootstrapオプションはBootstrapのディレクトリ配下に格納
+	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS	= 'bootstrap-3.0.3/css/bootswatch_flatly.min.css';	// bootstrap配色
+	const BOOTSTRAP_YAMM_CSS				= 'bootstrap-3.0.3/css/yamm.css';					// bootstrapメガメニュー
 	
 	const CODEMIRROR_FILENAME				= 'codemirror-3.1/lib/codemirror.js';				// CodeMirror
 	const CODEMIRROR_CSS					= 'codemirror-3.1/lib/codemirror.css';				// CodeMirror

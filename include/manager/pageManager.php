@@ -940,12 +940,14 @@ class PageManager extends Core
 			if ($gAccessManager->isValidAdminKey()) session_id($gRequestManager->trimValueOf(session_name()));
 		}
 
-/*		// 管理画面用ライブラリを追加(フレームコンテナでの設定を反映)
-		if ($gEnvManager->isAdminDirAccess()){
-			if ($this->useBootstrap) $this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
-		} else {
-			if ($this->useBootstrap) $this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
-		}*/
+		// インストール時の管理画面用ライブラリを追加(フレームコンテナでの設定を反映)
+		if (defined('M3_STATE_IN_INSTALL')){
+			// Bootstrapライブラリ追加
+			if ($this->useBootstrap){
+				$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
+				$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);	// Bootstrap管理画面オプション
+			}
+		}
 
 		// セッション変数を取得可能にする
 		session_start();
