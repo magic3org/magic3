@@ -2600,6 +2600,20 @@ class PageManager extends Core
 			
 			// ##### インストーラ用のファイルの読み込み #####
 			$scriptsUrl = '../scripts';
+			
+			// 管理機能用共通ライブラリのCSSの読み込み
+			$count = count($this->defaultAdminCssFiles);
+			for ($i = 0; $i < $count; $i++){
+				// CSSへのURLを作成
+				$cssFilename = $this->defaultAdminCssFiles[$i];
+				if (strncasecmp($cssFilename, 'http://', 7) == 0 || strncasecmp($cssFilename, 'https://', 8) == 0){
+					$cssURL = $cssFilename;
+				} else {
+					$cssURL = $scriptsUrl . '/' . $cssFilename;
+				}
+				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
+			}
+			
 			// 管理画面用の共通スクリプトを読み込む
 			$count = count($this->defaultAdminScriptFiles);
 			for ($i = 0; $i < $count; $i++){
@@ -2620,22 +2634,8 @@ class PageManager extends Core
 				}
 			
 				// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-				//$scriptURL = $scriptsUrl . '/' . $scriptFilename;
 				if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
 				$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
-			}
-			
-			// 管理機能用共通ライブラリのCSSの読み込み
-			$count = count($this->defaultAdminCssFiles);
-			for ($i = 0; $i < $count; $i++){
-				// CSSへのURLを作成
-				$cssFilename = $this->defaultAdminCssFiles[$i];
-				if (strncasecmp($cssFilename, 'http://', 7) == 0 || strncasecmp($cssFilename, 'https://', 8) == 0){
-					$cssURL = $cssFilename;
-				} else {
-					$cssURL = $scriptsUrl . '/' . $cssFilename;
-				}
-				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 			}
 			return $replaceStr;
 		}
