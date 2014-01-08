@@ -124,7 +124,8 @@ class ScriptLibInfo
 	const JQUERY_EASING_FILENAME		= 'jquery/jquery.easing.1.3.js';
 	//const JQUERY_JCAROUSEL_FILENAME		= 'jquery/jquery.jcarousel.0.2.4.min.js';		// jQuery1.4.2対応版
 	const JQUERY_JCAROUSEL_FILENAME		= 'jquery/jquery.jcarousel.0.2.8.min.js';		// jQuery1.4.2対応版
-	const JQUERY_CONTEXTMENU_FILENAME	= 'jquery/jquery.contextmenu.r2.packed.js';
+//	const JQUERY_CONTEXTMENU_FILENAME	= 'jquery/jquery.contextmenu.r2.packed.js';
+	const JQUERY_CONTEXTMENU_FILENAME	= 'jquery/jquery.contextmenu.r2.js';
 	const JQUERY_THICKBOX_FILENAME		= 'jquery/thickbox3.1.js';
 	const JQUERY_THICKBOX_CSS			= 'jquery/thickbox.css';
 //	const JQUERY_JSHOTKEYS_FILENAME		= 'jquery/jquery.hotkeys.js';

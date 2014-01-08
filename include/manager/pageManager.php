@@ -2075,7 +2075,7 @@ class PageManager extends Core
 					// ヘルプシステムはすべての初期処理完了後に実行する
 					// ヘルプシステムは、「span」タグで埋め込み、「title」属性を使用する
 					if ($this->useHelp){			// ヘルプ表示のとき
-						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').cluetip({splitTitle: \'|\'});' . M3_NL;
+						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').cluetip({splitTitle: \'|\', cluezIndex: 2000});' . M3_NL;
 					} else {			// ヘルプ非表示のときは、title属性をクリアする
 						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').attr(\'title\', \'\');' . M3_NL;
 					}
