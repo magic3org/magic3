@@ -1,69 +1,38 @@
-#m3menubar {
-	margin:0px;
-	padding:0;
-	display:block;
-	height:45px;		/* menubar height */
-	list-style:none;
-	/*margin-right:4px;*/	/* Firefox only */
-	/*margin-bottom:5px;*/	/* menubar bottom margin */
-	/*border-top:1px solid #EF593B;
-	border-bottom:1px solid #EF593B;*/
-/*	border-left:10px solid #D04528;*/
-/*	border-left:0px solid #D04528;*/
-/*	-moz-box-shadow:0px 3px 4px #591E12;
-	-webkit-box-shadow:0px 3px 4px #591E12;
-	-box-shadow:0px 3px 4px #591E12;*/
+
+
+/* BootstrapのMagic3用の修正 */
+.navbar-brand {
+	font-weight: bold;	/* added by Magic3 */
 }
-#m3menubar a{
-	text-decoration:none;
-	font-weight: bold;
+.dropdown-menu-large .dropdown-header {
+	font-weight: bold;	/* added by Magic3 */
 }
-#m3menubar > li{
-	float:left;
-	position:relative;
-	z-index: 50000;		/* IE only */
+/* メニューバー固定用 */
+body { padding-top: 70px; }
+
+/*img.brand {
+	padding: 0;
+}*/
+.dropdown-menu img {
+	margin-right:5px;
 }
-#m3menubar > li > span{
-	float:left;
-	height:45px;		/* menubar height */
-	line-height:45px;	/* menubar height */
-/*	cursor:default;*/
-	cursor:pointer;
-	padding:0px 20px;
+img.avatar {
+	margin-right:5px;
 }
-#m3menubar .ldd_submenu{
-	position:absolute;
-	top:45px;		/* menubar height */
-/*	width:725px;*/	/* submenu width */
-	display:none;
-/*	opacity:0.95;*/
-	left:0px;
-/*	font-size:110%;*/
-	z-index:50000;		/* display top */
-	background-image: none;
-/*	border-top:1px solid #EF593B;
-	-moz-box-shadow:0px 3px 4px #591E12 inset;
-	-webkit-box-shadow:0px 3px 4px #591E12 inset;
-	-box-shadow:0px 3px 4px #591E12 inset;*/
+.dropdown-menu-large > li > ul > li {
+	width:180px;
 }
-#m3menubar .device img {
-	margin: 10px 7px;
+ul.pos-right {
+	float:right;
 }
-#m3menubar .device .static {
-	display:inline-block;
-	height:45px;
+a.dropdown-toggle.device_icon, a.dropdown-toggle.avatar_icon {
+	padding-top:16px;
+	padding-bottom:15px;
+	margin-top:0;
+	margin-bottom:0;
 }
-#m3menubar .ldd_subfoot{
-	display:block;
-	clear:both;
-	padding:5px 10px;
-	white-space: nowrap;
-/*	font-size:12px;*/
-/*	-moz-box-shadow:0px 0px 2px #777 inset;
-	-webkit-box-shadow:0px 0px 2px #777 inset;
-	-box-shadow:0px 0px 2px #777 inset;*/
-}
-#m3menubar .ldd_submenu span {
-	cursor:pointer;
-	margin-right:50px;
+
+/* デバイスアイコンとユーザ項目間のスペーサー */
+li.user_menu {
+	margin-left:20px;
 }

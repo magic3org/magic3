@@ -52,7 +52,7 @@
     if (!menu) {                                      // Create singleton menu
       menu = $('<div id="jqContextMenu"></div>')
                .hide()
-               .css({position:'absolute', zIndex:'500'})
+               .css({position:'absolute', zIndex:'2000'})
                .appendTo('body')
                .bind('click', function(e) {
                  e.stopPropagation();
@@ -60,7 +60,7 @@
     }
     if (!shadow) {
       shadow = $('<div></div>')
-                 .css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:499})
+                 .css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:1999})
                  .appendTo('body')
                  .hide();
     }

@@ -14,14 +14,6 @@
 <patTemplate:tmpl name="menu" visibility="hidden">
 <script type="text/javascript">
 //<![CDATA[
-function goUrl(url)
-{
-	location.href = url;
-}
-function goHelp()
-{
-	location.href = '?task=menuhelp';
-}
 function logout()
 {
 	if (!window.confirm('{_LC_MSG_LOGOUT}')) return false;
@@ -37,42 +29,6 @@ function siteOpen(device, isOpen){
 	return true;
 }
 $(function(){
-	/**
-	 * the menu
-	 */
-	var $menu = $('#m3menubar');
-	
-	/**
-	 * トップメニュー作成
-	 */
-	$menu.children('li.movable').each(function(){
-		var $this = $(this);
-		var $span = $this.children('span.m3toplevel');
-		$span.data('width',$span.width());
-
-		$this.bind('mouseenter',function(){
-			//var menuwidth = $this.children('div.ldd_submenu').width() - 40;
-			var menuwidth = 100;		// メニューバー上のパネル幅固定(2012/6/11)
-			$menu.find('.ldd_submenu').stop(true,true).hide();
-			//$span.stop().animate({'width':'685px'},300,function(){
-			$span.stop().animate({'width':menuwidth+'px'},300,function(){
-				$this.find('.ldd_submenu').slideDown(100);
-			});
-		}).bind('mouseleave',function(){
-			$this.find('.ldd_submenu').stop(true,true).hide();
-			$span.stop().animate({'width':$span.data('width')+'px'},100);
-		});
-	});
-	$('#m3device').children('.static').each(function(){
-		var $this = $(this);
-		$this.bind('mouseenter',function(){
-			//$menu.find('.ldd_submenu').stop(true,true).hide();
-			$this.find('.ldd_submenu').slideDown(100);
-		}).bind('mouseleave',function(){
-			$this.find('.ldd_submenu').stop(true,true).hide();
-		});
-	});
-	
 	// キー設定
 	$(document).keyup(function(e){
 		if (e.which == 36) location.href = '{TOP_URL}';	// HOMEキー
@@ -85,32 +41,42 @@ $(function(){
 <input type="hidden" name="device" />
 <input type="hidden" name="isopen" />
 </form>
-<div>
-<ul id="m3menubar" class="ui-widget ui-widget-header">
-<li><span onclick="goUrl('{PC_URL}');">{SITE_NAME}</span></li>
-<li><span onclick="goUrl('{TOP_URL}');">{_LC_LABEL_TOP}</span></li>
-<li style="float:right;"><span onclick="logout();">{_LC_LABEL_LOGOUT}</span></li>
-<li style="float:right;"><span style="border-left:0px;" onclick="window.open('{OFFICIAL_URL}');return false;">{SYSTEM}</span></li>
-<li style="float:right;"><div id="m3device" class="device" style="display:inline-block;">{SITE_PREVIEW}</div></li>
-<li class="movable">
-<span class="m3toplevel">{_LC_LABEL_MENU}</span><!-- Increases to 685px in width-->
-<div class="ldd_submenu ui-widget-header">
-<table border="0" cellpadding="0" cellspacing="0" align="center">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<!--<nav class="navbar navbar-default" role="navigation">-->
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="{PC_URL}">{SITE_NAME}</a>
+</div>
+<div class="collapse navbar-collapse" id="navbar-collapse">
+    <ul class="nav navbar-nav">
+        <li><a href="{TOP_URL}">{_LC_LABEL_TOP}</a></li>
+        <li class="dropdown dropdown-large">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_LC_LABEL_MENU} <b class="caret"></b></a>
+            <ul class="dropdown-menu dropdown-menu-large row">
 {MENU_INNER}
-</table>
+            </ul>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav pos-right">
+{SITE_MENU}
+        <li class="dropdown user_menu">
+            <a href="#" class="dropdown-toggle avatar_icon" data-toggle="dropdown">{AVATAR_IMG}{USER} <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="#" onclick="logout();">{LOGOUT_IMG}{_LC_LABEL_LOGOUT}</a></li>
+            </ul>
+        </li>
+        <li><a href="{OFFICIAL_URL}" target="_blank">{SYSTEM}</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right"><!-- 右端項目 --></ul>
 </div>
-</li>
-<!-- <li">*****移動するメニュー項目*****</li> -->
-</ul>
-</div>
+</nav>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="closebutton" visibility="hidden">
-<!--<div>
-<ul id="m3menubar">
-<li style="float:right;"><span onclick="window.close();">{_LC_LABEL_CLOSE}</span></li>
-<li style="float:right;"><span style="border-left:0px;">{SERVER_NAME}</span></li>
-</ul>
-</div>-->
 <div class="m3configclose"><a href="#" onclick="window.close();"><img src="{CLOSE_IMAGE}" alt="{_LC_LABEL_CLOSE}" title="{_LC_LABEL_CLOSE}" /></a></div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="prevnextbutton" visibility="hidden">

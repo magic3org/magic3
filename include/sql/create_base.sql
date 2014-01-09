@@ -7,9 +7,9 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2011 Magic3 Project.
+-- * @copyright  Copyright 2006-2014 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
--- * @version    SVN: $Id: create_base.sql 6157 2013-07-02 00:04:47Z fishbone $
+-- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
 -- *
 -- --------------------------------------------------------------------------------------------------
@@ -411,7 +411,7 @@ CREATE TABLE _nav_item (
     ni_task_id           VARCHAR(70)    DEFAULT ''                    NOT NULL,      -- 起動タスクID、「_」で始まるときはリンクなし
     ni_param             VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 追加パラメータ
     ni_group_id          VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 項目グループ識別ID
-    ni_view_control      INT            DEFAULT 0                     NOT NULL,      -- 表示位置制御、1のとき表示位置変更
+    ni_view_control      INT            DEFAULT 0                     NOT NULL,      -- 項目制御(0=リンク,1=改行,2=使用不可,3=セパレータ)
     ni_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名前
     ni_help_title        TEXT                                         NOT NULL,      -- ヘルプタイトル
     ni_help_body         TEXT                                         NOT NULL,      -- ヘルプ本文
