@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_loginuserWidgetContainer.php 5816 2013-03-11 13:24:26Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -20,6 +20,7 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 言語
+	private $useBootstrap;
 	const DEFAULT_TITLE = 'ログインユーザ';		// デフォルトのウィジェットタイトル名
 //	const ICON_SIZE = 128;		// アイコンのサイズ
 		
@@ -33,6 +34,8 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new admin_loginuserDb();
+		
+		$this->useBootstrap = $this->gPage->getUseBootstrap();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -46,7 +49,11 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'index.tmpl.html';
+		if ($this->useBootstrap){
+			return 'index_bs.tmpl.html';
+		} else {
+			return 'index.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -104,6 +111,26 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
+	}
+	/**
+	 * CSSファイルをHTMLヘッダ部に設定
+	 *
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssFileToHead($request, &$param)
+	{
+		// Bootstrapを使用する場合はjQueryUIテーマを使用しない
+		$useBootstrap = $this->gPage->getUseBootstrap();
+		if ($useBootstrap){
+			return '';
+		} else {
+			return array($this->getUrl($this->gEnv->getAdminDefaultThemeUrl()));
+		}
 	}
 }
 ?>

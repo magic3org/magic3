@@ -1119,6 +1119,8 @@ class EnvManager extends Core
 	 */
 	public function setCurrentTemplateId($name)
 	{
+		global $gPageManager;
+		
 		$this->currentTemplateId = $name;
 
 		// テンプレートの属性を取得
@@ -1130,6 +1132,9 @@ class EnvManager extends Core
 				$this->currentTemplateType = $row['tm_type'];		// テンプレートタイプ
 				$this->currentTemplateCleanType = $row['tm_clean_type'];	// 現在のテンプレートのクリーンタイプ
 				$this->currentTemplateUseBootstrap = $row['tm_use_bootstrap'];	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
+				
+				// テンプレートが設定された段階でBootstrapの使用があればページマネージャーに反映する。ウィジェット側で使用状況を参照してビューを作成することがあるため。
+				if ($this->currentTemplateUseBootstrap) $gPageManager->useBootstrap();
 			}
 		}
 	}

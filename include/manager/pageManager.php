@@ -213,7 +213,7 @@ class PageManager extends Core
 				$this->wysiwygEditor = ScriptLibInfo::LIB_FCKEDITOR;				// FCKEditorに固定
 			}
 			
-			// 管理画面にBOOTSTRAPを使用するかどうか
+			// 管理画面にBOOTSTRAPを使用するかどうか(初期値)
 			$this->useBootstrap = self::USE_BOOTSTRAP_ADMIN;
 		} else {
 			$value = $gSystemManager->getSystemConfig(self::CF_JQUERY_VERSION);// jQueryバージョン
@@ -2571,7 +2571,7 @@ class PageManager extends Core
 		// ********************************************************
 		// ##### テンプレートの設定、フレームの設定から必要なライブラリを取得 #####
 		// Bootstrapライブラリ
-		if (!$this->useBootstrap) $this->useBootstrap = $gEnvManager->getCurrentTemplateUseBootstrap();
+//		if (!$this->useBootstrap) $this->useBootstrap = $gEnvManager->getCurrentTemplateUseBootstrap();
 		if ($this->useBootstrap){
 			if ($gEnvManager->isAdminDirAccess()){
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効(ログイン中の場合)
