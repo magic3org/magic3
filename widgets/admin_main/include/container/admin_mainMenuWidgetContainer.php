@@ -17,6 +17,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWid
 
 class admin_mainMenuWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	private $useBootstrap;
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -24,6 +26,8 @@ class admin_mainMenuWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		$this->useBootstrap = $this->gPage->getUseBootstrap();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -37,7 +41,11 @@ class admin_mainMenuWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'menu.tmpl.html';
+		if ($this->useBootstrap){
+			return 'menu_bs.tmpl.html';
+		} else {
+			return 'menu.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む

@@ -173,20 +173,6 @@ class admin_mainTopWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->setLocaleText($localeText);
 	}
 	/**
-	 * CSSファイルをHTMLヘッダ部に設定
-	 *
-	 * CSSファイルをHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
-	 */
-	function _addCssFileToHead($request, &$param)
-	{
-		return array($this->getUrl($this->gEnv->getAdminDefaultThemeUrl()));
-	}
-	/**
 	 * JavascriptファイルをHTMLヘッダ部に設定
 	 *
 	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
