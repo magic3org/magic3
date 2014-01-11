@@ -14,16 +14,6 @@ $document = $this;
 // Shortcut for template base url:
 $templateUrl = $document->baseurl . '/templates/' . $document->template;
 
-//Artx::load("Artx_Page");
-
-// Initialize $view:
-//$view = $this->artx = new ArtxPage($this);
-
-// Decorate component with Artisteer style:
-//$view->componentWrapper();
-
-//JHtml::_('behavior.framework', true);
-
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="<?php echo $document->language; ?>">
@@ -38,20 +28,23 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <!-- Created by Artisteer v4.1.0.59688 -->
 </head>
 <body>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr><td valign="top"><jdoc:include type="modules" name="top" style="artstyle" artstyle="art-nostyle" /></td></tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
+<div class="container">
+<jdoc:include type="modules" name="top" style="none" />
+<div class="row">
 <?php if ($document->countModules('left')): ?>
-    <td style="vertical-align:top;width:20%;"><jdoc:include type="modules" name="left" style="artstyle" artstyle="art-block" /></td>
+    <div class="col-lg-3"><jdoc:include type="modules" name="left" style="none" /></div>
 <?php endif; ?>
-    <td style="vertical-align:top;"><jdoc:include type="component" /></td>
+<?php if ($document->countModules('left') && $document->countModules('right')): ?>
+    <div class="col-lg-6"><jdoc:include type="component" /></div>
+<?php elseif ($document->countModules('left') || $document->countModules('right')): ?>
+    <div class="col-lg-9"><jdoc:include type="component" /></div>
+<?php else: ?>
+    <jdoc:include type="component" />
+<?php endif; ?>
 <?php if ($document->countModules('right')): ?>
-    <td style="vertical-align:top;width:20%;"><jdoc:include type="modules" name="right" style="artstyle" artstyle="art-block" /></td>
+    <div class="col-lg-3"><jdoc:include type="modules" name="right" style="none" /></div>
 <?php endif; ?>
-  </tr>
-</table>
+</div>
+</div>
 </body>
 </html>
