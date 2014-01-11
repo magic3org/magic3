@@ -1674,7 +1674,7 @@ class PageManager extends Core
 		
 		if (preg_match_all('#<jdoc:include\ type="([^"]+)" (.*)\/>#iU', $srcBuf, $matches)){
 			$count = count($matches[1]);
-			for($i = 0; $i < $count; $i++)
+			for ($i = 0; $i < $count; $i++)
 			{
 				$contents = '';
 				$type  = $matches[1][$i];
@@ -1715,7 +1715,19 @@ class PageManager extends Core
 						$contents = $this->getContents($name, $style, $templateVer, $attr);
 					}
 				} else if (strcasecmp($type, 'component') == 0){	// メインポジションタグの場合
-					$contents = $this->getContents('main', 'xhtml', $templateVer, $attr);
+					// スタイルを取得
+					$style = '';		// 表示スタイル
+					$params = explode(' ', $matches[2][$i]);
+					for ($j = 0; $j < count($params); $j++){
+						list($key, $value) = explode('=', $params[$j]);
+						if (strcasecmp($key, 'style') == 0){
+							// スタイルは大文字小文字の区別あり
+							$style = trim($value, "\"'");
+							break;
+						}
+					}
+					if ($style != 'none') $style = 'xhtml';
+					$contents = $this->getContents('main', $style, $templateVer, $attr);
 				} else if (strcasecmp($type, 'message') == 0){	// メッセージタグの場合
 				}
 				$replace[$i] = $contents;

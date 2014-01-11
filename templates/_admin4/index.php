@@ -35,11 +35,11 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <div class="col-lg-3"><jdoc:include type="modules" name="left" style="none" /></div>
 <?php endif; ?>
 <?php if ($document->countModules('left') && $document->countModules('right')): ?>
-    <div class="col-lg-6"><jdoc:include type="component" /></div>
+    <div class="col-lg-6"><jdoc:include type="component" style="none" /></div>
 <?php elseif ($document->countModules('left') || $document->countModules('right')): ?>
-    <div class="col-lg-9"><jdoc:include type="component" /></div>
+    <div class="col-lg-9"><jdoc:include type="component" style="none" /></div>
 <?php else: ?>
-    <jdoc:include type="component" />
+    <jdoc:include type="component" style="none" />
 <?php endif; ?>
 <?php if ($document->countModules('right')): ?>
     <div class="col-lg-3"><jdoc:include type="modules" name="right" style="none" /></div>
