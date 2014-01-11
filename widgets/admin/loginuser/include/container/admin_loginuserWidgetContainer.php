@@ -22,7 +22,7 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 	private $langId;		// 言語
 	private $useBootstrap;
 	const DEFAULT_TITLE = 'ログインユーザ';		// デフォルトのウィジェットタイトル名
-//	const ICON_SIZE = 128;		// アイコンのサイズ
+	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
 		
 	/**
 	 * コンストラクタ
@@ -124,12 +124,14 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
+		$cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
+		
 		// Bootstrapを使用する場合はjQueryUIテーマを使用しない
 		$useBootstrap = $this->gPage->getUseBootstrap();
 		if ($useBootstrap){
-			return '';
+			return $cssFilePath;
 		} else {
-			return array($this->getUrl($this->gEnv->getAdminDefaultThemeUrl()));
+			return array($cssFilePath, $this->getUrl($this->gEnv->getAdminDefaultThemeUrl()));
 		}
 	}
 }
