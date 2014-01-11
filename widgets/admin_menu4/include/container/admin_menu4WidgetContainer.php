@@ -234,7 +234,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$menuInner = str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '<li class="col-sm-' . $columnWidth . '"><ul>' . M3_NL;
 						
 			for ($i = 0; $i < $topMenuCount; $i++){
-				if ($rows[$i]['ni_view_control'] == 0){		// 改行以外のとき
+				if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
+					$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li><li class="col-sm-' . $columnWidth . '"><ul>' . M3_NL;
+				} else {		// 改行以外のとき
 					$topId = $rows[$i]['ni_id'];
 			
 					// サブレベル取得
@@ -254,6 +256,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 					// メニュー小項目
 					if (count($subRows) > 0){
 						for ($l = 0; $l < count($subRows); $l++){
+							// 項目の種別
+							$itemType = $subRows[$l]['ni_view_control'];
+							
 							// ヘルプの作成
 							$helpText = '';
 							$title = $subRows[$l]['ni_help_title'];
@@ -262,17 +267,26 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 							}
 						
 							$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL + 2);
-							$menuInner .= '<li><a href="';
-							$menuInner .= $this->getUrl($this->gEnv->getDefaultAdminUrl() . '?task=' . $subRows[$l]['ni_task_id']);	// 起動タスクパラメータを設定
-							if (!empty($subRows[$l]['ni_param'])){		// パラメータが存在するときはパラメータを追加
-								$menuInner .= '&' . M3_REQUEST_PARAM_OPERATION_TODO . '=' . urlencode($subRows[$l]['ni_param']);
+							
+							switch ($itemType){
+								case 0:		// リンク項目
+								default:
+									$menuInner .= '<li><a href="';
+									$menuInner .= $this->getUrl($this->gEnv->getDefaultAdminUrl() . '?task=' . $subRows[$l]['ni_task_id']);	// 起動タスクパラメータを設定
+									if (!empty($subRows[$l]['ni_param'])){		// パラメータが存在するときはパラメータを追加
+										$menuInner .= '&' . M3_REQUEST_PARAM_OPERATION_TODO . '=' . urlencode($subRows[$l]['ni_param']);
+									}
+									$menuInner .= '" ><span ' . $helpText . '>' . $this->convertToDispString($subRows[$l]['ni_name']) . '</span></a></li>' . M3_NL;
+									break;
+								case 2:		// 使用不可
+									break;
+								case 3:		// セパレータ
+									$menuInner .= '<li class="divider"></li>' . M3_NL;
+									break;
 							}
-							$menuInner .= '" ><span ' . $helpText . '>' . $this->convertToDispString($subRows[$l]['ni_name']) . '</span></a></li>' . M3_NL;
 						}
 					}
 					$menuInner .= str_repeat(' ', 4);
-				} else {		// 改行のとき
-					$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li><li class="col-sm-' . $columnWidth . '"><ul>' . M3_NL;
 				}
 			}
 			
