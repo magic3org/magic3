@@ -20,7 +20,7 @@ class admin_opelogDb extends BaseDb
 	/**
 	 * 運用ログ取得
 	 *
-	 * @param int		$level		取得ログのレベル(0すべて、1=注意以上、10=要確認)
+	 * @param int		$level		取得ログのレベル
 	 * @param int		$status		取得するデータの状況(0=すべて、1=未参照のみ、2=参照済みのみ)
 	 * @param int		$limit		取得する項目数
 	 * @param int		$page		取得するページ(1～)
@@ -41,10 +41,9 @@ class admin_opelogDb extends BaseDb
 		// 必須参照項目のみに限定
 		$params = array();
 		$addWhere = '';
-		if ($level > 0){
-			$addWhere .= 'WHERE ot_level >= ? ';
-			$params[] = $level;
-		}
+		$addWhere .= 'WHERE ot_level >= ? ';
+		$params[] = $level;
+
 		// 参照状況を制限
 		if ($status == 1){		// 未参照
 			if (empty($addWhere)){
@@ -68,7 +67,7 @@ class admin_opelogDb extends BaseDb
 	/**
 	 * 運用ログ総数取得
 	 *
-	 * @param int		$level		取得ログのレベル(0すべて、1=参照必須)
+	 * @param int		$level		取得ログのレベル
 	 * @param int		$status		取得するデータの状況(0=すべて、1=未参照のみ、2=参照済みのみ)
 	 * @return int					総数
 	 */
@@ -79,10 +78,9 @@ class admin_opelogDb extends BaseDb
 		// 必須参照項目のみに限定
 		$params = array();
 		$addWhere = '';
-		if ($level > 0){
-			$addWhere .= 'WHERE ot_level >= ? ';
-			$params[] = $level;
-		}
+		$addWhere .= 'WHERE ot_level >= ? ';
+		$params[] = $level;
+
 		// 参照状況を制限
 		if ($status == 1){		// 未参照
 			if (empty($addWhere)){

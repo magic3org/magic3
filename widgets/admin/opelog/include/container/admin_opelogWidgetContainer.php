@@ -20,7 +20,7 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	const DEFAULT_LOG_LEVEL = '0';		// デフォルトのログレベル
-	const DEFAULT_LOG_STATUS = '1';		// デフォルトのログステータス
+	const DEFAULT_LOG_STATUS = '1';		// デフォルトのログステータス(未参照のみ)
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const DEFAULT_VIEW_COUNT = 10;			// 一度に表示可能なリスト項目数
 //	const MAX_PAGE_COUNT = 20;				// 最大ページ数
@@ -95,7 +95,7 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 		$this->logStatus = self::DEFAULT_LOG_STATUS;		// 現在のログ表示ステータス(0=すべて、1=未確認のみ、2=確認済みのみ)
 
 		// 表示するログを制限
-		$viewLevel = 0;				// 表示メッセージレベル(0すべて、1=注意以上、10=要確認)
+		$viewLevel = 0;				// 表示メッセージレベル(0=以上、1=注意以上、10=要確認)
 		if ($this->logLevel == '1') $viewLevel = 10;
 
 		// 表示条件
