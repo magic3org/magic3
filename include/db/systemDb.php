@@ -3232,16 +3232,17 @@ class SystemDb extends BaseDb
 	/**
 	 * エラーログ書き込み
 	 *
-	 * @param  string $type		メッセージタイプ(info=情報,warn=警告,error=通常エラー,fatal=致命的エラー)
-	 * @param  string $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
-	 * @param  string $message	メッセージ
-	 * @param  int    $code		メッセージコード
+	 * @param string $type		メッセージタイプ(info=情報,warn=警告,error=通常エラー,fatal=致命的エラー)
+	 * @param string $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
+	 * @param string $message	メッセージ
+	 * @param int    $code		メッセージコード
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return bool				true=成功、false=失敗
 	 */
-	function writeErrorLog($type, $method, $message, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	function writeErrorLog($type, $method, $message, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
 		global $gEnvManager;
 		global $gAccessManager;
@@ -3262,7 +3263,11 @@ class SystemDb extends BaseDb
 		} else {
 			$currentVer = $gSystemManager->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 		}
-		if ($currentVer >= 2012090701){
+		if ($currentVer >= 2014010201){
+			// バージョン2014010201以降で「ol_show_top(トップ表示)」を追加(2014/1/12)
+			$sql = "INSERT INTO _operation_log (ol_type, ol_method, ol_message, ol_message_ext, ol_message_code, ol_access_log_serial, ol_search_option, ol_link, ol_show_top, ol_widget_id, ol_dt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
+			$params = array($type, $method, $message, $msgExt, intval($code), intval($logSerial), $searchOption, $link, intval($showTo), $gEnvManager->getCurrentWidgetId());
+		} else if ($currentVer >= 2012090701){
 			// バージョン2012090701以降で「ol_link(リンク先)」を追加(2012/9/12)
 			$sql = "INSERT INTO _operation_log (ol_type, ol_method, ol_message, ol_message_ext, ol_message_code, ol_access_log_serial, ol_search_option, ol_link, ol_widget_id, ol_dt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
 			$params = array($type, $method, $message, $msgExt, intval($code), intval($logSerial), $searchOption, $link, $gEnvManager->getCurrentWidgetId());

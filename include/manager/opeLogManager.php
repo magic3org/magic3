@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: opeLogManager.php 5189 2012-09-12 13:45:30Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 /**
@@ -62,11 +62,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('info', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('info', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * 操作要求出力
@@ -80,11 +81,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('request', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * ワーニング出力
@@ -99,11 +101,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeWarn($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeWarn($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('warn', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('warn', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * 通常エラー出力
@@ -118,11 +121,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('error', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('error', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * 致命的エラー出力
@@ -137,11 +141,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeFatal($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeFatal($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('fatal', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('fatal', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * ユーザ操作出力
@@ -156,11 +161,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeUserInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeUserInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('user_info', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('user_info', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * ユーザ操作要求出力
@@ -175,11 +181,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeUserRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeUserRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('user_request', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('user_request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * ユーザ操作エラー出力
@@ -194,11 +201,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeUserError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeUserError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('user_err', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('user_err', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * ユーザの不正なアクセスを出力
@@ -213,11 +221,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeUserAccess($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeUserAccess($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('user_access', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('user_access', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 	/**
 	 * ユーザからの不正なデータを検出
@@ -232,11 +241,12 @@ class OpeLogManager extends Core
 	 * @param string $msgExt   	詳細メッセージ
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @return なし
 	 */
-	public function writeUserData($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '')
+	public function writeUserData($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
 	{
-		$this->db->writeErrorLog('user_data', $method, $msg, $code, $msgExt, $searchOption, $link);
+		$this->db->writeErrorLog('user_data', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
 }
 ?>
