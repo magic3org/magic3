@@ -52,6 +52,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const UNTITLED_USER_NAME = '名称なしユーザ';		// ユーザ名が設定されていなかった場合の表示名
 	const MAINMENU_INDENT_LEBEL = 4;		// メインメニューのインデントレベル
 	const SITEMENU_INDENT_LEBEL = 2;		// サイトメニューのインデントレベル
+	const MAINMENU_COL_STYLE = 'col-md-';	// Bootstrapのカラムクラス
 
 	// DB定義値
 	const CF_SITE_IN_PUBLIC			= 'site_in_public';			// サイト公開状況
@@ -231,11 +232,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 			if ($topMenuCount > 0 && $rows[$topMenuCount -1]['ni_view_control'] == 0) $columnCount++;
 			$columnWidth = 12 / $columnCount;		// Bootstrapでの幅
-			$menuInner = str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '<li class="col-sm-' . $columnWidth . '"><ul>' . M3_NL;
+			$menuInner = str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '<li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
 						
 			for ($i = 0; $i < $topMenuCount; $i++){
 				if ($rows[$i]['ni_view_control'] == 1){		// 改行のとき
-					$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li><li class="col-sm-' . $columnWidth . '"><ul>' . M3_NL;
+					$menuInner .= str_repeat(M3_INDENT_SPACE, self::MAINMENU_INDENT_LEBEL) . '</ul></li><li class="' . self::MAINMENU_COL_STYLE . $columnWidth . '"><ul>' . M3_NL;
 				} else {		// 改行以外のとき
 					$topId = $rows[$i]['ni_id'];
 			
