@@ -6,7 +6,7 @@ defined('_JEXEC') or die;
  * See readme.txt for more details on how to use the template.
  */
 
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'functions.php';
+//require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'functions.php';
 
 // Create alias for $this object reference:
 $document = $this;
@@ -25,7 +25,6 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 	<script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
 	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
 	<![endif]-->
-    <!-- Created by Artisteer v4.1.0.59688 -->
 </head>
 <body>
 <div class="container">
@@ -45,6 +44,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <div class="col-lg-3"><jdoc:include type="modules" name="right" style="none" /></div>
 <?php endif; ?>
 </div>
+<jdoc:include type="modules" name="bottom" style="none" />
 </div>
 </body>
 </html>

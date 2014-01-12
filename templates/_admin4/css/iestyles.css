@@ -8,10 +8,6 @@ fieldset {
 table {
 	text-align: left;
 }
-#main-nav li.begin { margin: 0 0 0 2em; }
-#main-nav li ul { _top: 1.8em; }
-#main-nav li ul li.begin { margin: 0 0 0 2.5em !important; }
-#main-nav { font-size: 74%; }
 /* inner table style canceled */
 .simple-table table
 {
