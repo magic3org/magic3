@@ -80,5 +80,21 @@ INSERT INTO _nav_item
 (10302,   10300,          1,        'admin_menu.en', 'configsys',       0,               '',       'System Information',         'System Information',         'Configure sytem information.'),
 (10303,   10300,          2,        'admin_menu.en', 'mainte',          0,               '',       'System Maintenance', 'System Maintenance', 'Maintenance about file system and database.');
 
+-- 運用メッセージタイプマスター
+DELETE FROM _operation_type;
+INSERT INTO _operation_type
+(ot_id,          ot_name,                ot_description,                               ot_level, ot_sort_order) VALUES
+('info',         'システム情報',         'システム運用の正常な動作を示します',         0,        1),
+('request',      'システム操作要求',     'システムからの操作要求を示します',           1,        2),
+('warn',         'システム警告',         'システム運用の注意が必要な動作を示します',   2,        3),
+('error',        'システム通常エラー',   'システム運用の異常な動作を示します',         10,       4),
+('fatal',        'システム致命的エラー', 'システム運用の致命的に異常な動作を示します', 10,       5),
+('user_info',    'ユーザ操作',           'ユーザ操作の正常な動作を示します',           0,        6),
+('user_request', 'ユーザ操作要求',       'ユーザ操作からの操作要求を示します',         1,        7),
+('user_err',     'ユーザ操作エラー',     'ユーザ操作の異常な動作を示します',           10,       8),
+('user_access',  'ユーザ不正アクセス',   'ユーザ操作の不正なアクセスを示します',       10,       9),
+('user_data',    'ユーザ不正データ',     'ユーザ操作の不正なデータ送信を示します',     10,       10),
+('guide',        'ガイダンス',           'システム運用に関連しないメッセージを示します',         0,        11);
+
 -- *** システム標準テーブル ***
 

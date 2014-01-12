@@ -248,5 +248,24 @@ class OpeLogManager extends Core
 	{
 		$this->db->writeErrorLog('user_data', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 	}
+	/**
+	 * ガイダンスメッセージ出力
+	 *
+	 * 以下の状況でメッセージ出力するためのインターフェイス
+	 * システム運用には直接関係しないガイダンスやヘルプメッセージ
+	 *
+	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
+	 * @param string $msg   	メッセージ
+	 * @param int    $code		メッセージコード
+	 * @param string $msgExt   	詳細メッセージ
+	 * @param string $searchOption   	検索用補助データ
+	 * @param string $link		リンク先
+	 * @param bool   $showTop	メッセージをトップ表示するかどうか
+	 * @return なし
+	 */
+	public function writeGuide($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
+	{
+		$this->db->writeErrorLog('guide', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+	}
 }
 ?>

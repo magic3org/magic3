@@ -126,7 +126,7 @@ class admin_messageWidgetContainer extends BaseAdminWidgetContainer
 		// 運用ログを取得
 //		$this->db->getOpeLogList($viewLevel, $this->logStatus, $listCount, $pageNo, array($this, 'logListLoop'));
 		//$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
+//		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 		
 		$this->tmpl->addVar('_widget', 'view_count', $viewCount);			// 一度に表示可能なリスト項目数
 	}

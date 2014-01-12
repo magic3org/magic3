@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-13 07:43+0900\n"
-"PO-Revision-Date: 2013-09-13 07:43+0900\n"
+"POT-Creation-Date: 2014-01-12 20:18+0900\n"
+"PO-Revision-Date: 2014-01-12 20:19+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -41,7 +41,7 @@ msgid "Clear all the data, and update system and database."
 msgstr "DBの内容をすべてクリアしてから、システムをバージョンアップします"
 
 #: container/_installCheckdbWidgetContainer.php:89
-#: container/_installInitdbWidgetContainer.php:389
+#: container/_installInitdbWidgetContainer.php:393
 msgid "Keep existing data, and update system and database."
 msgstr "DBの内容を保持したまま、システムをバージョンアップします"
 
@@ -59,6 +59,7 @@ msgstr "バージョンアップ方法"
 
 #: container/_installCheckdbWidgetContainer.php:109
 #: container/_installInitotherWidgetContainer.php:190
+#: container/_installInputoptionWidgetContainer.php:89
 msgid "Details"
 msgstr "説明"
 
@@ -283,6 +284,7 @@ msgstr "正常"
 
 #: container/_installCopyfileWidgetContainer.php:190
 #: container/_installInitotherWidgetContainer.php:99
+#: container/_installInputoptionWidgetContainer.php:75
 msgid "Updating database completed."
 msgstr "ＤＢバージョンアップが完了しました"
 
@@ -386,43 +388,52 @@ msgstr ""
 msgid "Succeeded in creating database. Current Database Version: %s"
 msgstr "DB構築処理が正常に終了しました。現在のDBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:265
+#: container/_installInitdbWidgetContainer.php:261
+msgid ""
+"If you want initializing the system easily, use 'System Initialize Wizard'. "
+"Accessing to 'System Initialize Wizard', push ESC key on the top page."
+msgstr ""
+"システムの初期化を簡単に行うには「システム初期化ウィザード」を使用します。"
+"「システム初期化ウィザード」機能にアクセスするには、トップ画面でESCキーを押し"
+"ます。"
+
+#: container/_installInitdbWidgetContainer.php:269
 msgid "Failed in initializing database."
 msgstr "ＤＢ初期化に失敗しました"
 
-#: container/_installInitdbWidgetContainer.php:266
-#: container/_installInitdbWidgetContainer.php:373
+#: container/_installInitdbWidgetContainer.php:270
+#: container/_installInitdbWidgetContainer.php:377
 msgid "Script filename"
 msgstr "スクリプト名"
 
-#: container/_installInitdbWidgetContainer.php:281
+#: container/_installInitdbWidgetContainer.php:285
 msgid "Create database."
 msgstr "DBを構築します"
 
-#: container/_installInitdbWidgetContainer.php:285
+#: container/_installInitdbWidgetContainer.php:289
 msgid "Create database.<br />Clear all the existing data."
 msgstr "DBを構築します<br />既存のデータはすべて削除されます"
 
-#: container/_installInitdbWidgetContainer.php:352
+#: container/_installInitdbWidgetContainer.php:356
 #, php-format
 msgid "Database updated. Database Version: %s"
 msgstr "DB更新処理が正常に終了しました。現在のDBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:356
+#: container/_installInitdbWidgetContainer.php:360
 #, php-format
 msgid "Widget information updated. Database Version: %s"
 msgstr "ウィジェット情報を更新しました。DBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:372
+#: container/_installInitdbWidgetContainer.php:376
 msgid "Failed in updating database"
 msgstr "DB更新に失敗しました"
 
-#: container/_installInitdbWidgetContainer.php:427
+#: container/_installInitdbWidgetContainer.php:431
 #, php-format
 msgid "Database updated. Database Version: from %s to %s"
 msgstr "DBをバージョンアップしました。 DBバージョン: %sから%s"
 
-#: container/_installInitdbWidgetContainer.php:436
+#: container/_installInitdbWidgetContainer.php:440
 #, php-format
 msgid "Bad script file found in files for update. Filename: %s"
 msgstr ""
@@ -438,6 +449,7 @@ msgid "Failed in installing data."
 msgstr "データインストールに失敗しました"
 
 #: container/_installInitotherWidgetContainer.php:101
+#: container/_installInputoptionWidgetContainer.php:77
 msgid "Creating database completed."
 msgstr "ＤＢの構築が完了しました"
 
@@ -446,18 +458,22 @@ msgid "Database Created"
 msgstr "ＤＢ構築完了"
 
 #: container/_installInitotherWidgetContainer.php:186
+#: container/_installInputoptionWidgetContainer.php:85
 msgid "Install data?"
 msgstr "データをインストールしますか?"
 
 #: container/_installInitotherWidgetContainer.php:187
+#: container/_installInputoptionWidgetContainer.php:86
 msgid "Install Data"
 msgstr "インストールデータ"
 
 #: container/_installInitotherWidgetContainer.php:188
+#: container/_installInputoptionWidgetContainer.php:87
 msgid "Install"
 msgstr "インストール"
 
 #: container/_installInitotherWidgetContainer.php:189
+#: container/_installInputoptionWidgetContainer.php:88
 msgid ""
 "If you install simple build site data or demo data, use this operation field "
 "below.<br />If you don't, go next.<br />You can install data after "
