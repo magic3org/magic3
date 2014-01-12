@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainOpelogWidgetContainer.php 5801 2013-03-06 13:08:29Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConditionBaseWidgetContainer.php');
@@ -38,6 +38,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// 注意アイコン
 	const ERROR_ICON_FILE = '/images/system/error16.png';		// エラーアイコン
 	const ACTION_ICON_FILE = '/images/system/action16.png';		// 操作要求アイコン
+	const GUIDE_ICON_FILE = '/images/system/guide16.png';		// ガイダンスアイコン
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
 	const ICON_SIZE = 16;		// アイコンのサイズ
 	const DEFAULT_LOG_LEVEL = '0';		// デフォルトのログレベル
@@ -349,6 +350,9 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 			if ($ret){
 				$iconUrl = '';
 				switch ($row['ot_level']){
+					case -1:		// ガイダンス
+						$iconUrl = $this->gEnv->getRootUrl() . self::GUIDE_ICON_FILE;
+						break;
 					case 0:		// 情報
 						$iconUrl = $this->gEnv->getRootUrl() . self::INFO_ICON_FILE;
 						break;
@@ -434,6 +438,9 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		// メッセージレベルの設定
 		$iconUrl = '';
 		switch ($fetchedRow['ot_level']){
+			case -1:		// ガイダンス
+				$iconUrl = $this->gEnv->getRootUrl() . self::GUIDE_ICON_FILE;
+				break;
 			case 0:		// 情報
 				$iconUrl = $this->gEnv->getRootUrl() . self::INFO_ICON_FILE;
 				break;

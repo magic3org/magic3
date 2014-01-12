@@ -69,7 +69,7 @@ CREATE TABLE _operation_type (
     ot_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 運用メッセージタイプID
     ot_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 運用メッセージ名称
     ot_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
-    ot_level             INT            DEFAULT 0                     NOT NULL,      -- メッセージレベル(0=通常、1=注意、10=要確認)
+    ot_level             INT            DEFAULT 0                     NOT NULL,      -- メッセージレベル(-1=運用外,0=通常,1=注意,10=要確認)
     ot_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
     PRIMARY KEY  (ot_id)
 ) TYPE=innodb;
