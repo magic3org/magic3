@@ -17,20 +17,6 @@
 -- システムの標準構成で必要な初期データの登録を行う
 -- --------------------------------------------------------------------------------------------------
 
--- 管理画面メニューデータ
-DELETE FROM _nav_item WHERE ni_id >= 500 AND ni_id < 1000;
-DELETE FROM _nav_item WHERE ni_id >= 10500 AND ni_id < 11000;
-INSERT INTO _nav_item
-(ni_id, ni_parent_id, ni_index, ni_nav_id,    ni_task_id,                     ni_group_id, ni_view_control, ni_param, ni_name,    ni_help_title, ni_help_body, ni_visible) VALUES
-(500,   0,            4,        'admin_menu', '_content',                      '',          0,               '',       'コンテンツ管理', 'コンテンツ管理', '各種コンテンツを管理します。', true),
-(501,   500,          0,        'admin_menu', 'configwidget_default_content', '',          0,               '',       '汎用コンテンツ', '汎用コンテンツ', '汎用コンテンツを管理します。(コンテンツメインウィジェット)', true),
-(502,   500,          1,        'admin_menu', 'configwidget_blog_main',       '',          0,               '',       'ブログ', 'ブログ', 'ブログコンテンツを管理します。(バナーメインウィジェット)', true),
-(503,   500,          2,        'admin_menu', 'configwidget_event_main',       '',          0,               '',       'イベント情報', 'イベント情報', 'イベント情報を管理します。(イベント情報メインウィジェット)', true),
-(10500,   0,            4,        'admin_menu.en', '_content',                      '',          0,               '',       'Configure Contents', 'Configure Contents', 'Administrate various contents.', true),
-(10501,   10500,          0,        'admin_menu.en', 'configwidget_default_content', '',          0,               '',       'Standard Contents', 'Standard Contents', 'Administrate standard contents.', true),
-(10502,   10500,          1,        'admin_menu.en', 'configwidget_blog_main',       '',          0,               '',       'Blog Contents', 'Blog Contents', 'Administrate blog contents.', true),
-(10503,   10500,          2,        'admin_menu.en', 'configwidget_event_main',       '',          0,               '',       'Event Information', 'Event Information', 'Administrate event Information.', true);
-
 -- 汎用コンテンツ設定マスター
 INSERT INTO content_config
 (ng_type,   ng_id,                  ng_value,    ng_name,                              ng_index) VALUES
