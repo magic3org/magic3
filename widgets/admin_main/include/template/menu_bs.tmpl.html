@@ -11,6 +11,15 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	$(document).keyup(function(e){
+		if (e.which == 27) location.href = '{ADMIN_URL}';	// ESCキー
+	});
+});
+//]]>
+</script>
 <div class="panel panel-info" style="width:300px;margin:0 auto;" >
     <div class="panel-heading"><span >システム制御</span></div>
     <ul class="list-group">

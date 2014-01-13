@@ -38,11 +38,11 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'admin/opelog';
 INSERT INTO _widgets
 (wd_id,             wd_name,            wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin/opelog', '管理用運用ログ表示', true,     '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       true, true,           '2013-03-04', now(),         now());
+('admin/opelog', '管理用運用ログ表示', true,     '1.2.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       true, true,           '2014-01-13', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin/loginuser';
 INSERT INTO _widgets
 (wd_id,             wd_name,                    wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin/loginuser', '管理用ログインユーザ情報', true,     '1.1.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true, '2012-09-19',           now(),         now());
+('admin/loginuser', '管理用ログインユーザ情報', true,     '2.0.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true, '2014-01-13',           now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin/message';
 INSERT INTO _widgets
 (wd_id,           wd_name,            wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES

@@ -259,7 +259,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				
 				// 初期設定用画面への遷移を通知
 				$guideMsg = $this->_('If you want initializing the system easily, use \'System Initialize Wizard\'. Accessing to \'System Initialize Wizard\', push ESC key on the top page.');	// システムの初期化を簡単に行うには「システム初期化ウィザード」を使用します。「システム初期化ウィザード」機能にアクセスするには、トップ画面でESCキーを押します。
-				$this->gOpeLog->writeGuide(__METHOD__, $guideMsg, 0, '', '', 'task=menu', true/*トップ表示*/);
+				$this->gOpeLog->writeGuide(__METHOD__, $guideMsg, 0, '', '', 'task=iniwizard', true/*トップ表示*/);
 				
 				// 次の画面へ遷移
 				$this->gPage->redirect('?task=initother&install_type=' . $type . '&from=initdb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());

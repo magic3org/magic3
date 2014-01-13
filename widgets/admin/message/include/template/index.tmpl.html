@@ -13,21 +13,28 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-$(function(){
-	// スクロールバー付きのテーブルを作成
-	//m3_tableWithScrollbar('loglist', {VIEW_COUNT}, 0);
-
-});
+function closeOpeLog(serial)
+{
+	document.message_main.act.value = 'update_message';
+	document.message_main.serial.value = serial;
+	document.message_main.checked.value = '1';		// メッセージをチェック済みに
+	document.message_main.submit();
+	return false;
+}
 //]]>
 </script>
-<div align="center">
-<!-- m3:ErrorMessage -->
-</div>
-<!--
+<form method="post" name="message_main">
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" />
+<input type="hidden" name="checked" />
+<patTemplate:tmpl name="loglist">
 <div class="row">
-<div class="alert alert-danger col-lg-6 col-lg-offset-3">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    <strong>Warning!</strong> Best check yo self, you're not looking too good.
+<div class="alert {ALERT_TYPE} col-lg-6 col-lg-offset-3">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" onclick="closeOpeLog({SERIAL});">&times;</button>
+    {TYPE}<strong>{TITLE}</strong><br />
+	{MESSAGE} {LINK}
 </div>
-</div>-->
+</div>
+</patTemplate:tmpl>
+</form>
 </patTemplate:tmpl>

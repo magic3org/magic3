@@ -58,6 +58,8 @@ class admin_mainMenuWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		// 管理用URL設定
+		$this->tmpl->addVar("_widget", "admin_url", $this->gEnv->getDefaultAdminUrl());
 	}
 }
 ?>
