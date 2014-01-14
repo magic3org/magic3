@@ -3266,7 +3266,7 @@ class SystemDb extends BaseDb
 		if ($currentVer >= 2014010201){
 			// バージョン2014010201以降で「ol_show_top(トップ表示)」を追加(2014/1/12)
 			$sql = "INSERT INTO _operation_log (ol_type, ol_method, ol_message, ol_message_ext, ol_message_code, ol_access_log_serial, ol_search_option, ol_link, ol_show_top, ol_widget_id, ol_dt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
-			$params = array($type, $method, $message, $msgExt, intval($code), intval($logSerial), $searchOption, $link, intval($showTo), $gEnvManager->getCurrentWidgetId());
+			$params = array($type, $method, $message, $msgExt, intval($code), intval($logSerial), $searchOption, $link, intval($showTop), $gEnvManager->getCurrentWidgetId());
 		} else if ($currentVer >= 2012090701){
 			// バージョン2012090701以降で「ol_link(リンク先)」を追加(2012/9/12)
 			$sql = "INSERT INTO _operation_log (ol_type, ol_method, ol_message, ol_message_ext, ol_message_code, ol_access_log_serial, ol_search_option, ol_link, ol_widget_id, ol_dt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, now())";

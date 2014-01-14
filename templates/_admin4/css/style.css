@@ -230,7 +230,7 @@ background-color: #0081c2;
 	font-size        : 90%;
 }
 /* error message */
-.error-message {
+/*.error-message {
 	color: #EE0000;
 }
 .warning-message {
@@ -238,7 +238,7 @@ background-color: #0081c2;
 }
 .guide-message {
 	color: #00008B;
-}
+}*/
 /****** widget ******/
 .m3widget_main {
 	margin: 10px 10px 20px 10px;
