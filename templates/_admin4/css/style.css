@@ -1,20 +1,4 @@
 /* General */
-body
-{
-/*	background-color: #E8E3B0;*/
-/*	background-color: #EAD9AE;*/
-background-color: #F8F8F8;
-/*background-color: #f7f6f0;*/
-/***** top位置はメニューバーで定義 *****/
-/*	padding: 0;
-	margin: 0;*/
-/*	font-family: arial, sans-serif;*/
-font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-/*	font-size: 100%;*/
-	font-size: 14px;
-/*	color: #693A3A;*/
-	color: #333;
-}
 /*label {
 	font-weight: bold;
 }*/
@@ -32,10 +16,10 @@ fieldset legend span {
 	font-weight: bold;
 	font-size: 85%;
 }
-
+/* for Bootstrap
 input, select, textarea {
 	margin: 1px 0;
-}
+}*/
 input[type="checkbox"] {
 	margin-right: 2px;
 }
