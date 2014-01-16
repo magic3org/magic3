@@ -535,3 +535,7 @@ background-color: #0081c2;
 .m3field_calendar {
 	width: 80px;
 }
+/****** login box ******/
+.login_box {
+	margin-top:20%;
+}

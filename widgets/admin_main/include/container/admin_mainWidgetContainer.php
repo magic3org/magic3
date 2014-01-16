@@ -309,7 +309,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->SetMsg(self::MSG_APP_ERR, $this->_('Failed to login.'));			// ログインに失敗しました
 			if (!empty($url)) $this->redirectUrl = $url;	// リダイレクト先が設定されている場合は再設定
 		} else if ($retValue == 3){			// パスワード送信のとき
-			$this->setGuidanceMsg($this->_('Password sent.'));		// パスワードを送信しました
+//			$this->setGuidanceMsg($this->_('Password sent.'));		// パスワードを送信しました
+			$this->setSuccessMsg($this->_('Password sent.'));		// パスワードを送信しました
 		}
 		$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// ハッシュ値クリア
 		return true;
@@ -377,6 +378,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['label_account'] = $this->_('Account');		// アカウント
 		$localeText['label_password'] = $this->_('Password');		// パスワード
 		$localeText['label_password2'] = $this->_('Email');		// Eメール
+		$localeText['msg_input_email'] = $this->_('Input email address.');		// Eメールアドレスを入力してください。
 		$this->setLocaleText($localeText);
 	}
 	/**

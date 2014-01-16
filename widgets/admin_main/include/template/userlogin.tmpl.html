@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: userlogin.tmpl.html 5503 2013-01-02 11:22:58Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -15,7 +15,14 @@
 <script type="text/javascript">
 //<![CDATA[
 function loginUser(){
-	if (!document.login.act.value) document.login.password.value = hex_md5(document.login.pwd.value);
+	if (document.login.act.value){
+		if (!document.login.email.value){
+			alert('{_LC_MSG_INPUT_EMAIL}');
+			return false;
+		}
+	} else {
+		document.login.password.value = hex_md5(document.login.pwd.value);
+	}
 	document.login.pwd_button.disabled = true;
 	document.login.pwd.disabled = true;
 	document.login.submit();
@@ -23,8 +30,8 @@ function loginUser(){
 }
 $(document).keyup(function(e){
 	if (e.which == 27){
-		$('#email').toggle();
-		$('#pwd').toggle();
+		$('#pwd_area').toggle();
+		$('#email_area').toggle();
 		if (document.login.act.value){
 			document.login.act.value = '';
 			$('#pwd_label').text('{_LC_LABEL_PASSWORD}');
@@ -45,31 +52,50 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
-<br />
-<h2>{_LC_LABEL_LOGIN}</h2>
+<div class="login_box">
+<div class="row"><div class="col-md-offset-3 col-md-6">
 <!-- m3:ErrorMessage -->
-<form method="post" name="login" onsubmit="loginUser();">
+</div></div>
+<form method="post" name="login" class="form-horizontal" role="form" onsubmit="loginUser();return false;">
 <input type="hidden" name="cmd" value="login" />
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
 <input type="hidden" name="ticket" value="{TICKET}" />
 <patTemplate:tmpl name="redirect_url" visibility="hidden"><input type="hidden" name="url" value="{URL}" /></patTemplate:tmpl>
-<table class="simple-table">
-    <tbody>
-        <tr>
-	<td width="100" class="table-headside">{_LC_LABEL_ACCOUNT}</td>
-	<td width="130"><input type="text" id="account" name="account" style="width:100%;" /></td>
-	</tr>
-    <tr>
-	<td class="table-headside"><span id="pwd_label">{_LC_LABEL_PASSWORD}</span></td>
-	<td><input type="password" id="pwd" name="pwd" style="width:100%;" /><input type="text" id="email" name="email" style="width:100%;display:none;" /></td>
-	</tr>
-        <tr class="even">
-	<td colspan="2" style="text-align:right;"><input type="submit" id="pwd_button" name="pwd_button" class="button" value="{_LC_LABEL_LOGIN}" /></td>
-	</tr>
-    </tbody>
-</table>
+<div class="row"><div class="col-md-offset-4 col-md-4">
+<div class="panel panel-info">
+<div class="panel-heading "><h1 class="panel-title">{_LC_LABEL_LOGIN}</h1></div>
+<div class="panel-body">
+<div class="form-group">
+    <label for="account" class="col-md-4 control-label">{_LC_LABEL_ACCOUNT}</label>
+    <div class="col-md-7">
+        <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input type="text" id="account" name="account" class="form-control">
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label for="pwd" class="col-md-4 control-label"><span id="pwd_label">{_LC_LABEL_PASSWORD}</span></label>
+    <div class="col-md-7">
+        <div id="pwd_area" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+            <input type="password" id="pwd" name="pwd" class="form-control">
+        </div>
+        <div id="email_area" class="input-group" style="display:none;">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+            <input type="text" id="email" name="email" class="form-control" />
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-offset-4 col-md-2">
+        <input type="submit" id="pwd_button" name="pwd_button" class="btn btn-success" value="{_LC_LABEL_LOGIN}" />
+    </div>
+</div>
+</div>
+</div>
+</div></div>
 </form>
 </div>
 </patTemplate:tmpl>

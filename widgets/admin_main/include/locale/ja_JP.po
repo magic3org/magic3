@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-22 23:41+0900\n"
-"PO-Revision-Date: 2013-12-29 10:53+0900\n"
+"POT-Creation-Date: 2014-01-16 11:47+0900\n"
+"PO-Revision-Date: 2014-01-16 11:47+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -243,7 +243,7 @@ msgstr "追加CSSクラス"
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
 #: ../container/admin_mainMenudefWidgetContainer.php:158
-#: ../container/admin_mainOpelogWidgetContainer.php:192
+#: ../container/admin_mainOpelogWidgetContainer.php:193
 #: ../container/admin_mainPagedefWidgetContainer.php:435
 #: ../container/admin_mainSmenudefWidgetContainer.php:151
 #: ../container/admin_mainTemplistWidgetContainer.php:564
@@ -254,21 +254,21 @@ msgstr "更新"
 
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:86
 #: ../container/admin_mainLoginstatusWidgetContainer.php:148
-#: ../container/admin_mainOpelogWidgetContainer.php:210
+#: ../container/admin_mainOpelogWidgetContainer.php:211
 #: ../container/admin_mainUserlistWidgetContainer.php:161
 msgid "Range:"
 msgstr "範囲："
 
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:246
 #: ../container/admin_mainLoginstatusWidgetContainer.php:266
-#: ../container/admin_mainOpelogWidgetContainer.php:289
+#: ../container/admin_mainOpelogWidgetContainer.php:290
 #: ../container/admin_mainUserlistWidgetContainer.php:236
 #, php-format
 msgid "%d Total"
 msgstr "全 %d 件"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:138
-#: ../container/admin_mainOpelogWidgetContainer.php:340
+#: ../container/admin_mainOpelogWidgetContainer.php:341
 #: ../container/admin_mainPagedefWidgetContainer.php:333
 #: ../container/admin_mainPagedefWidgetContainer.php:337
 #: ../container/admin_mainPortalWidgetContainer.php:120
@@ -276,15 +276,16 @@ msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:140
-#: ../container/admin_mainOpelogWidgetContainer.php:336
+#: ../container/admin_mainOpelogWidgetContainer.php:337
 #: ../container/admin_mainPagedefWidgetContainer.php:331
 #: ../container/admin_mainPortalWidgetContainer.php:118
 msgid "Data updated."
 msgstr "データを更新しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:151
+#: ../container/admin_mainWidgetContainer.php:381
 msgid "Input email address."
-msgstr "メールアドレスが設定されていません"
+msgstr "Eメールアドレスが設定されていません"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:154
 msgid "URL   :"
@@ -607,7 +608,7 @@ msgstr "運用ログを参照します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:104
 #: ../container/admin_mainLoginstatusWidgetContainer.php:147
-#: ../container/admin_mainOpelogWidgetContainer.php:207
+#: ../container/admin_mainOpelogWidgetContainer.php:208
 msgid "Access Log"
 msgstr "アクセスログ"
 
@@ -712,7 +713,7 @@ msgstr "管理メニューその他"
 #: ../container/admin_mainEditmenuWidgetContainer.php:181
 #: ../container/admin_mainLoginstatusWidgetContainer.php:149
 #: ../container/admin_mainMenudefWidgetContainer.php:140
-#: ../container/admin_mainOpelogWidgetContainer.php:184
+#: ../container/admin_mainOpelogWidgetContainer.php:185
 #: ../container/admin_mainPagedefWidgetContainer.php:114
 #: ../container/admin_mainSmenudefWidgetContainer.php:133
 #: ../container/admin_mainUserlistWidgetContainer.php:136
@@ -897,7 +898,7 @@ msgstr "削除"
 
 #: ../container/admin_mainFilebrowseWidgetContainer.php:200
 #: ../container/admin_mainMenudefWidgetContainer.php:172
-#: ../container/admin_mainOpelogWidgetContainer.php:204
+#: ../container/admin_mainOpelogWidgetContainer.php:205
 #: ../container/admin_mainSmenudefWidgetContainer.php:164
 #: ../container/admin_mainUserlistWidgetContainer.php:148
 msgid "Select"
@@ -966,7 +967,7 @@ msgid "Create"
 msgstr "作成"
 
 #: ../container/admin_mainLoginstatusWidgetContainer.php:44
-#: ../container/admin_mainWidgetContainer.php:375
+#: ../container/admin_mainWidgetContainer.php:376
 msgid "Login"
 msgstr "ログイン"
 
@@ -979,8 +980,8 @@ msgid "Login History"
 msgstr "ログイン履歴"
 
 #: ../container/admin_mainLoginstatusWidgetContainer.php:144
-#: ../container/admin_mainOpelogWidgetContainer.php:191
-#: ../container/admin_mainOpelogWidgetContainer.php:209
+#: ../container/admin_mainOpelogWidgetContainer.php:192
+#: ../container/admin_mainOpelogWidgetContainer.php:210
 msgid "Date"
 msgstr "日付"
 
@@ -1172,7 +1173,7 @@ msgid "Select menu item to delete."
 msgstr "削除する項目を選択してください"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:166
-#: ../container/admin_mainOpelogWidgetContainer.php:199
+#: ../container/admin_mainOpelogWidgetContainer.php:200
 #: ../container/admin_mainSmenudefWidgetContainer.php:159
 #: ../container/admin_mainUserlistWidgetContainer.php:146
 msgid "Delete selected item?"
@@ -1184,7 +1185,7 @@ msgid "Menu Item List"
 msgstr "メニュー項目一覧"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:170
-#: ../container/admin_mainOpelogWidgetContainer.php:203
+#: ../container/admin_mainOpelogWidgetContainer.php:204
 #: ../container/admin_mainSmenudefWidgetContainer.php:162
 #: ../container/admin_mainUserlistWidgetContainer.php:159
 msgid "Edit"
@@ -1280,83 +1281,83 @@ msgstr "別"
 msgid "Edit Content"
 msgstr "コンテンツを編集"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:59
-#: ../container/admin_mainOpelogWidgetContainer.php:62
+#: ../container/admin_mainOpelogWidgetContainer.php:60
+#: ../container/admin_mainOpelogWidgetContainer.php:63
 #: ../container/admin_mainPagedefWidgetContainer.php:112
 msgid "All"
 msgstr "すべて"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:60
+#: ../container/admin_mainOpelogWidgetContainer.php:61
 msgid "Check Required"
 msgstr "要確認項目"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:63
+#: ../container/admin_mainOpelogWidgetContainer.php:64
 msgid "Unchecked"
 msgstr "未確認"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:64
-#: ../container/admin_mainOpelogWidgetContainer.php:186
-#: ../container/admin_mainOpelogWidgetContainer.php:208
+#: ../container/admin_mainOpelogWidgetContainer.php:65
+#: ../container/admin_mainOpelogWidgetContainer.php:187
+#: ../container/admin_mainOpelogWidgetContainer.php:209
 msgid "Checked"
 msgstr "確認済"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:147
+#: ../container/admin_mainOpelogWidgetContainer.php:148
 msgid "Could not connect to server."
 msgstr "サーバに接続できません"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:181
+#: ../container/admin_mainOpelogWidgetContainer.php:182
 msgid "Update item?"
 msgstr "項目を更新しますか?"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:182
+#: ../container/admin_mainOpelogWidgetContainer.php:183
 msgid "Delete item?"
 msgstr "項目を削除しますか?"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:183
+#: ../container/admin_mainOpelogWidgetContainer.php:184
 msgid "Operation Log Detail"
 msgstr "運用ログ詳細"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:185
-#: ../container/admin_mainOpelogWidgetContainer.php:205
+#: ../container/admin_mainOpelogWidgetContainer.php:186
+#: ../container/admin_mainOpelogWidgetContainer.php:206
 msgid "Type"
 msgstr "種別"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:187
-#: ../container/admin_mainOpelogWidgetContainer.php:206
+#: ../container/admin_mainOpelogWidgetContainer.php:188
+#: ../container/admin_mainOpelogWidgetContainer.php:207
 msgid "Message"
 msgstr "メッセージ"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:188
+#: ../container/admin_mainOpelogWidgetContainer.php:189
 msgid "Message Detail"
 msgstr "メッセージ詳細"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:189
+#: ../container/admin_mainOpelogWidgetContainer.php:190
 msgid "Message Code"
 msgstr "メッセージコード"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:190
+#: ../container/admin_mainOpelogWidgetContainer.php:191
 msgid "Access Log No"
 msgstr "アクセスログ番号"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:197
+#: ../container/admin_mainOpelogWidgetContainer.php:198
 #: ../container/admin_mainUserlistWidgetContainer.php:144
 msgid "Select item to edit."
 msgstr "編集する項目を選択してください"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:198
+#: ../container/admin_mainOpelogWidgetContainer.php:199
 #: ../container/admin_mainUserlistWidgetContainer.php:145
 msgid "Select item to delete."
 msgstr "削除する項目を選択してください"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:200
+#: ../container/admin_mainOpelogWidgetContainer.php:201
 msgid "Operation Log List"
 msgstr "運用ログ一覧"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:201
+#: ../container/admin_mainOpelogWidgetContainer.php:202
 msgid "Level:"
 msgstr "レベル："
 
-#: ../container/admin_mainOpelogWidgetContainer.php:202
+#: ../container/admin_mainOpelogWidgetContainer.php:203
 msgid "Status:"
 msgstr "ステータス："
 
@@ -1768,7 +1769,7 @@ msgid "Login Account"
 msgstr "ログインアカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:378 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:379 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1793,7 +1794,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:156
 #: ../container/admin_mainUserlistWidgetContainer.php:306
 #: ../container/admin_mainUserlistWidgetContainer.php:374
-#: ../container/admin_mainWidgetContainer.php:379 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:380 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -1870,15 +1871,15 @@ msgstr "アクセスできません"
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:312
+#: ../container/admin_mainWidgetContainer.php:313
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:376
+#: ../container/admin_mainWidgetContainer.php:377
 msgid "Send Password"
 msgstr "パスワード送信"
 
-#: ../container/admin_mainWidgetContainer.php:377
+#: ../container/admin_mainWidgetContainer.php:378
 msgid "Account"
 msgstr "アカウント"
 

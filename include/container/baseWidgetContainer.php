@@ -1756,9 +1756,16 @@ class BaseWidgetContainer extends Core
 		if (count($this->guideMessage) > 0){
 			$this->tmpl->setAttribute('_guide_message', 'visibility', 'visible');			// メッセージ表示タグを表示
 			
+			// メッセージ追加クラス
+			if ($useBootstrap){
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info');
+				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
+			}
+			
 			foreach ($this->guideMessage as $value) {
 				$row = array(
-					'message' => $value
+					'message' 	=> $value,
+					'class' 	=> $messageClassStr			// メッセージ追加クラス
 				);
 				$this->tmpl->addVars('_guide_message', $row);
 				$this->tmpl->parseTemplate('_guide_message', 'a');				

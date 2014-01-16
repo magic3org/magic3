@@ -19,6 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_opelogDb.php');
 class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
+	private $currentYear;		// 現在の年号
 	const DEFAULT_LOG_LEVEL = '0';		// デフォルトのログレベル
 	const DEFAULT_LOG_STATUS = '1';		// デフォルトのログステータス(未参照のみ)
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
@@ -41,6 +42,8 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new admin_opelogDb();
+		
+		$this->currentYear = intval(date('Y'));
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -184,12 +187,20 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 			$iconTag = '<a href="'. $this->getUrl($link) .'">' . $iconTag . '</a>';
 		}
 		
+		// 日時
+		$outputDate = $fetchedRow['ol_dt'];
+		if (intval(date('Y', strtotime($outputDate))) == $this->currentYear){
+			$dispDate = $this->convertToDispDateTime($outputDate, 11/*年省略,0なし年月*/, 10/*時分表示*/);
+		} else {
+			$dispDate = $this->convertToDispDateTime($outputDate, 0, 10/*時分表示*/);
+		}
+		
 		$row = array(
 			'index'		=> $index,													// 行番号
 			'serial'	=> $this->convertToDispString($serial),			// シリアル番号
 			'type'		=> $iconTag,			// メッセージタイプを示すアイコン
 			'message'	=> $this->convertToDispString($fetchedRow['ol_message']),		// メッセージ
-			'output_dt' => $this->convertToDispDateTime($fetchedRow['ol_dt']),	// 出力日時
+			'output_dt' => $dispDate,	// 出力日時
 			'url'		=> $this->convertUrlToHtmlEntity($messageUrl)			// メッセージのリンク先
 		);
 		$this->tmpl->addVars('loglist', $row);
