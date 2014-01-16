@@ -2198,6 +2198,7 @@ class PageManager extends Core
 			$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
 			if ($this->isHtml5){
 				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/style.css" media="screen">' . M3_NL;
+				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/widget.css" media="screen">' . M3_NL;		// ウィジェット設定画面用CSS
 	    		echo '<!--[if IE]><link rel="stylesheet" href="' . $curTemplateUrl . '/css/iestyles.css" media="screen"><![endif]-->' . M3_NL;
 				echo '<!--[if lt IE 9]><script src="' . $curTemplateUrl . '/html5shiv.js"></script><![endif]-->' . M3_NL;
 			} else {
@@ -2266,6 +2267,8 @@ class PageManager extends Core
 		} else {
 			echo '<body>' . M3_NL;
 		}
+		// Bootstrap用のタグ出力
+		if ($this->useBootstrap) echo '<div class="container">' . M3_NL;
 		
 		// 別ウィンドウで表示のときは、「閉じる」ボタンを表示
 		if ($cmd == M3_REQUEST_CMD_SHOW_WIDGET ||		// ウィジェットの単体表示のとき
@@ -2335,6 +2338,9 @@ class PageManager extends Core
 			echo '//]]>' . M3_NL;
 			echo '</script>' . M3_NL;
 		}
+		
+		// Bootstrap用のタグ出力
+		if ($this->useBootstrap) echo '</div>' . M3_NL;
 		
 		echo '</body>' . M3_NL;
 		echo '</html>' . M3_NL;
