@@ -29,6 +29,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 //	const THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
 //	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
+	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
 	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
@@ -305,6 +306,13 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "pc_url", $siteUrl);
 			//$this->tmpl->addVar("menu", "site", '<label><a href="#" onclick="previewSite(\'' . $siteUrl . '\');">' . $siteUrl . '</a></label>');
 			
+			// トップアイコンを設定
+			$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
+			$iconTitle = $this->_('Top');
+			$imageSize = self::SITE_ICON_SIZE;
+			$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$this->tmpl->addVar("menu", "top_image", $iconTag);
+				
 			// システムバージョン
 			$this->tmpl->addVar("menu", "system", 'Magic3 v' . M3_SYSTEM_VERSION);
 			$this->tmpl->addVar("menu", "official_url", 'http://www.magic3.org');
@@ -353,7 +361,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		// テキストをローカライズ
 		$localeText = array();
 		$localeText['msg_logout'] = $this->_('Logout from system?');// ログアウトしますか?
-		$localeText['label_top'] = $this->_('Top');// トップ
+//		$localeText['label_top'] = $this->_('Top');// トップ
 		$localeText['label_menu'] = $this->_('Menu');// メニュー
 		$localeText['label_logout'] = $this->_('Logout');// ログアウト
 		$localeText['label_close'] = $this->_('Close');// 閉じる

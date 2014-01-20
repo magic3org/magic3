@@ -16,6 +16,10 @@ body { padding-top: 85px; }
 .dropdown-menu img {
 	margin-right:5px;
 }
+img.home {
+	margin-top:-12px;
+	margin-bottom:-8px;
+}
 img.avatar {
 	margin-right:5px;
 }
@@ -26,8 +30,10 @@ ul.pos-right {
 	float:right;
 }
 a.dropdown-toggle.device_icon, a.dropdown-toggle.avatar_icon {
-	padding-top:16px;
-	padding-bottom:15px;
+/*	padding-top:16px;
+	padding-bottom:15px;*/
+	padding-top:14px;
+	padding-bottom:14px;
 	margin-top:0;
 	margin-bottom:0;
 }
