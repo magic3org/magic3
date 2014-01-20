@@ -126,14 +126,14 @@ function editEntry(serial){
 <patTemplate:tmpl name="cancel_button" visibility="visible">&nbsp;&nbsp;<span {_HELP_ENTRY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /></span><span {_HELP_ENTRY_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
 </td></tr>
 <tr><td colspan="2">
-<table class="simple-table" style="margin: 0 auto;">
+<table class="simple-table" style="margin: 0 auto;width:950px;">
     <tbody>
         <tr>
-	    <td class="table-headside" width="100"><span {_HELP_ENTRY_ID}>ID</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_ENTRY_ID}>ID</span></td>
 	    <td width="100" align="center">{ID}</td>
-	    <td class="table-headside" width="100"><span {_HELP_ENTRY_NAME}>タイトル</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_ENTRY_NAME}>タイトル</span></td>
 	    <td><input type="text" name="item_name" value="{ITEM_NAME}" size="60" maxlength="60" style="width:100%;" /></td>
-	    <td class="table-headside" width="100"><span {_HELP_ENTRY_STATUS}>公開</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_ENTRY_STATUS}>公開</span></td>
 	    <td>
 	    <select name="item_status">
 	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
@@ -159,7 +159,7 @@ function editEntry(serial){
 	    <td class="table-headside"><span {_HELP_ENTRY_USER}>投稿者</span></td>
 	    <td align="center">{ENTRY_USER}</td>
 	    <td class="table-headside"><span {_HELP_ENTRY_DT}>投稿日時</span></td>
-	    <td>日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="15" maxlength="10" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="15" maxlength="10" /></td>
+	    <td>日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" /></td>
 	    <td class="table-headside"><span {_HELP_ENTRY_BLOGID}>所属ブログ</span></td>
 	    <td>
 	    <patTemplate:tmpl name="select_blogid_area" visibility="hidden">
@@ -191,7 +191,7 @@ function editEntry(serial){
 	</tr>
         <tr>
 	    <td class="table-headside"><span {_HELP_ENTRY_CONTENT}>投稿内容</span></td>
-	    <td colspan="5" width="800" valign="top">
+	    <td colspan="5" valign="top">
 	    
 <div id="example" style="width:100%;">
             <ul>

@@ -538,16 +538,19 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		
 		// プレビュー用リンク
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
+		
+//		$title = '<i class="glyphicon glyphicon-eye-open btn-lg"></i> ' . self::MENU_TITLE_PREVIEW;		// アイコン付加
+		$title = self::MENU_TITLE_PREVIEW;		// アイコン付加
 		switch ($deviceType){
 			case 0:			// PC用画面のとき
 			default:
-				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(0, \'' . $this->gEnv->getDefaultUrl() . '\');return false;">' . self::MENU_TITLE_PREVIEW . '</a></li>' . M3_NL;
+				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(0, \'' . $this->gEnv->getDefaultUrl() . '\');return false;">' . $title . '</a></li>' . M3_NL;
 				break;
 			case 1:			// 携帯用画面のとき
-				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(1, \'' . $this->gEnv->getDefaultMobileUrl() . '\');return false;">' . self::MENU_TITLE_PREVIEW . '</a></li>' . M3_NL;
+				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(1, \'' . $this->gEnv->getDefaultMobileUrl() . '\');return false;">' . $title . '</a></li>' . M3_NL;
 				break;
 			case 2:			// スマートフォン用画面のとき
-				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(2, \'' . $this->gEnv->getDefaultSmartphoneUrl() . '\');return false;">' . self::MENU_TITLE_PREVIEW . '</a></li>' . M3_NL;
+				$menuTag .= '<li><a href="#" onclick="m3ShowPreviewWindow(2, \'' . $this->gEnv->getDefaultSmartphoneUrl() . '\');return false;">' . $title . '</a></li>' . M3_NL;
 				break;
 		}
 		
