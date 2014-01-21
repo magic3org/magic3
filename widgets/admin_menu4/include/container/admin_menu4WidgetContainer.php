@@ -308,7 +308,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			
 			// トップアイコンを設定
 			$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
-			$iconTitle = $this->_('Top');
+			$iconTitle = $this->_('Top Page');		// トップ画面
 			$imageSize = self::SITE_ICON_SIZE;
 			$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			$this->tmpl->addVar("menu", "top_image", $iconTag);
