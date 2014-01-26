@@ -763,6 +763,15 @@ class PageManager extends Core
 		$this->useBootstrap = true;				// Bootstrapを使用するかどうか
 	}
 	/**
+	 * Bootstrapを強制的に未使用に設定
+	 *
+	 * @return 				なし
+	 */
+	function cancelBootstrap()
+	{
+		$this->useBootstrap = false;				// Bootstrapを使用するかどうか
+	}
+	/**
 	 * Bootstrap使用状況を取得
 	 *
 	 * @return bool			true=使用、false=使用しない

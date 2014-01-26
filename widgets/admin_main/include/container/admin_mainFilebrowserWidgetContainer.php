@@ -41,6 +41,9 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// Bootstrapの使用を強制キャンセル
+		$this->gPage->cancelBootstrap();
 	}
 	/**
 	 * テンプレートファイルを設定

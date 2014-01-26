@@ -22,6 +22,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	protected $cssFilePath;			// CSSファイル
 	protected $contentMenu;			// コンテンツ編集メニュー
 	protected $subContentMenu;			// サブコンテンツ編集メニュー
+	protected $useMenu;				// メニューを使用するかどうか
 	//const DEFAULT_SITE_NAME = 'サイト名未設定';
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
@@ -212,6 +213,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				}
 			}
 		} else {	// メニュー表示のとき
+			$this->useMenu = true;				// メニューを使用するかどうか
 			$this->tmpl->setAttribute('menu', 'visibility', 'visible');
 			
 			// ##### メニューを作成 #####
@@ -379,7 +381,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
-		return $this->cssFilePath;
+		if ($this->useMenu){					// メニューを使用するかどうか
+			return $this->cssFilePath;
+		} else {
+			return '';
+		}
 	}
 	/**
 	 * サイトメニュータグを作成
