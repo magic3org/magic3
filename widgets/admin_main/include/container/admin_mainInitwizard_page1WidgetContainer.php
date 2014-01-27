@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,10 +18,10 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwiz
 class admin_mainInitwizard_page1WidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
 	private $idArray = array();			// 表示するページ
-	const MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
-	const CF_SITE_PC_IN_PUBLIC			= 'site_pc_in_public';				// PC用サイトの公開状況
-	const CF_SITE_MOBILE_IN_PUBLIC		= 'site_mobile_in_public';		// 携帯用サイトの公開状況
-	const CF_SITE_SMARTPHONE_IN_PUBLIC	= 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
+//	const MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
+//	const CF_SITE_PC_IN_PUBLIC			= 'site_pc_in_public';				// PC用サイトの公開状況
+//	const CF_SITE_MOBILE_IN_PUBLIC		= 'site_mobile_in_public';		// 携帯用サイトの公開状況
+//	const CF_SITE_SMARTPHONE_IN_PUBLIC	= 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
 	
 	/**
 	 * コンストラクタ
@@ -81,10 +81,16 @@ class admin_mainInitwizard_page1WidgetContainer extends admin_mainInitwizardBase
 					$itemName = 'item' . $i . '_selected';
 					$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
 				
+					// 現在の設定を取得
 					$ret = $this->_mainDb->getPageIdRecord(1/*ページサブIDを指定*/, $listedItem[$i], $row);
 					if ($ret){
 						$ret = $this->_mainDb->updatePageId(1/*ページサブIDを指定*/, $listedItem[$i], $row['pg_name'], $row['pg_description'], $row['pg_priority'], $row['pg_active'], $itemValue);
-						if (!$ret) break;
+						if ($ret){
+							// メニュー非表示のページの場合は配置されているウィジェットを削除
+							if (!$itemValue) $this->_mainDb->delPageDefAllNonCommon($listedItem[$i]);
+						} else {
+							break;
+						}
 					}
 				}
 				if ($ret){

@@ -1331,6 +1331,36 @@ class admin_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * 指定したページ上の共通以外のページ定義項目をすべて削除
+	 *
+	 * @param string  $pageSubId		ページサブID
+	 * @return						true=成功、false=失敗
+	 */
+	function delPageDefAllNonCommon($pageSubId)
+	{
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 一般画面のアクセスポイントを取得
+		$queryStr  = 'SELECT * FROM _page_id ';
+		$queryStr .=   'WHERE pg_type = 0 ';
+		$queryStr .=     'AND pg_analytics = true';
+		$ret = $this->selectRecords($queryStr, array(), $rows);
+		if ($ret){
+			for ($i = 0; $i < count($rows); $i++){
+				$pageId = $rows[$i]['pg_id'];
+				$queryStr  = 'DELETE FROM _page_def ';
+				$queryStr .=   'WHERE pd_id = ? ';
+				$queryStr .=     'AND pd_sub_id = ? ';
+				$this->execStatement($queryStr, array($pageId, $pageSubId));
+			}
+		}
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
 	 * ユーザリスト取得
 	 *
 	 * @param int		$limit				取得する項目数
