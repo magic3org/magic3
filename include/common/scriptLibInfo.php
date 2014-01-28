@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -21,7 +21,9 @@ class ScriptLibInfo
 												'1.8'	=> 'jquery-1.8.3.min.js',
 												'1.9'	=> 'jquery-1.9.1.min.js',
 												'1.10'	=> 'jquery-1.10.2.min.js',
-												'2.0'	=> 'jquery-2.0.3.min.js');
+												'1.11'	=> 'jquery-1.11.0.min.js',
+												'2.0'	=> 'jquery-2.0.3.min.js',
+												'2.1'	=> 'jquery-2.1.0.min.js');
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
 	
 	// Javascriptライブラリ(DBでの設定値)
