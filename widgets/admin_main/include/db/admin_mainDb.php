@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -205,35 +205,23 @@ class admin_mainDb extends BaseDb
 		$this->selectLoop($queryStr, array(), $callback);
 	}
 	/**
-	 * ウィジェットリスト(メニューから選択可能なもの)取得
+	 * ウィジェットタイプとデバイスタイプからウィジェットリストを取得
 	 *
-	 * @param function $callback	コールバック関数
-	 * @return						なし
+	 * @param string $widgetType	ウィジェットタイプ
+	 * @param int $deviceType		デバイスタイプ
+	 * @param array  $rows			レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
 	 */
-	/*function getAvailableWidgetList($callback)
+	function getWidgetListByDeviceType($widgetType, $deviceType, &$rows)
 	{
-		$queryStr  = 'select * from _widgets ';
-		$queryStr .=   'where wd_deleted = false ';// 削除されていない
-		$queryStr .=     'and wd_available = true ';		// メニューから選択可能なもの
-		$queryStr .=     'and wd_mobile = false ';		// 携帯用ウィジェット以外
-		$queryStr .=   'order by wd_id';
-		$this->selectLoop($queryStr, array(), $callback);
-	}*/
-	/**
-	 * 携帯用のウィジェットリスト(メニューから選択可能なもの)取得
-	 *
-	 * @param function $callback	コールバック関数
-	 * @return						なし
-	 */
-	/*function getAvailableMobileWidgetList($callback)
-	{
-		$queryStr  = 'select * from _widgets ';
-		$queryStr .=   'where wd_deleted = false ';// 削除されていない
-		$queryStr .=     'and wd_available = true ';		// メニューから選択可能なもの
-		$queryStr .=     'and wd_mobile = true ';		// 携帯用ウィジェット
-		$queryStr .=   'order by wd_id';
-		$this->selectLoop($queryStr, array(), $callback);
-	}*/
+		$queryStr  = 'SELECT * FROM _widgets ';
+		$queryStr .=   'WHERE wd_deleted = false ';	// 削除されていない
+		$queryStr .=     'AND wd_type = ? ';		// ウィジェットタイプ
+		$queryStr .=     'AND wd_device_type = ? ';		// デバイスタイプ
+		$queryStr .=   'ORDER BY wd_priority';
+		$retValue = $this->selectRecords($queryStr, array($widgetType, $deviceType), $rows);
+		return $retValue;
+	}
 	/**
 	 * ウィジェットIDリスト取得
 	 *
@@ -1268,15 +1256,10 @@ class admin_mainDb extends BaseDb
 	 * ページ定義項目の削除
 	 *
 	 * @param int $serialNo			シリアルNo
-	 * @param int $userId			ユーザID(データ更新者)
 	 * @return						true=成功、false=失敗
 	 */
-	function delPageDef($serialNo, $userId)
+	function delPageDef($serialNo)
 	{
-		// 更新ユーザ、日時設定
-		$this->now = date("Y/m/d H:i:s");	// 現在日時
-		$this->userId = $userId;
-		
 		// トランザクション開始
 		$this->startTransaction();
 		
@@ -1287,7 +1270,27 @@ class admin_mainDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
-	
+	/**
+	 * ウィジェットIDでページ定義項目の削除
+	 *
+	 * @param string $widgetId		ウィジェットID
+	 * @param int    $setId				定義セットID
+	 * @return						true=成功、false=失敗
+	 */
+	function delPageDefByWidgetId($widgetId, $setId = 0)
+	{
+		// トランザクション開始
+		$this->startTransaction();
+		
+		$queryStr  = 'DELETE FROM _page_def ';
+		$queryStr .= 'WHERE pd_widget_id = ? ';
+		$queryStr .=   'AND pd_set_id = ? ';
+		$this->execStatement($queryStr, array($widgetId, $setId));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
 	/**
 	 * ページ定義項目をすべて削除
 	 *

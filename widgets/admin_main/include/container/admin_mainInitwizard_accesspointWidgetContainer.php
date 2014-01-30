@@ -18,9 +18,6 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwiz
 class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
 	const MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
-	const CF_SITE_PC_IN_PUBLIC			= 'site_pc_in_public';				// PC用サイトの公開状況
-	const CF_SITE_MOBILE_IN_PUBLIC		= 'site_mobile_in_public';		// 携帯用サイトの公開状況
-	const CF_SITE_SMARTPHONE_IN_PUBLIC	= 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
 	
 	/**
 	 * コンストラクタ

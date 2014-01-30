@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1841,6 +1841,15 @@ class EnvManager extends Core
 	public function getDefaultAdminPageId()
 	{
 		return self::DEFAULT_ADMIN_PAGE_ID;
+	}
+	/**
+	 * 一般画面のデフォルトのページID取得
+	 *
+	 * @return array			ページID(0=PC,1=携帯,2=スマートフォン)
+	 */
+	public function getAllDefaultPageId()
+	{
+		return array(self::DEFAULT_PAGE_ID, self::DEFAULT_MOBILE_PAGE_ID, self::DEFAULT_SMARTPHONE_PAGE_ID);
 	}
 	/**
 	 * 現在のページID

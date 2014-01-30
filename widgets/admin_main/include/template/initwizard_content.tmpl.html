@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -40,17 +40,17 @@ $(function(){
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <div class="page-header">
-<!--<h1>サイト情報</h1>-->
 </div>
 <form method="post" name="main" role="form" class="form-horizontal">
-<input type="hidden" name="task" value="initwizard_accesspoint" />
+<input type="hidden" name="task" value="initwizard_content" />
 <input type="hidden" name="act" />
+<input type="hidden" name="idlist" value="{ID_LIST}" />
 <div class="form-group">
-<label class="col-lg-3 control-label"><span {_HELP_INITWIZARD_ACCESSPOINT_}>運用対象</span></label>
+<label class="col-lg-3 control-label"><span {_HELP_INITWIZARD_CONTENT_}>表示するコンテンツ</span></label>
 <div class="col-lg-5">
-<div class="checkbox"><label><input type="checkbox" name="site_open_pc" {SITE_OPEN_PC_CHECKED}>PC用アクセスポイント</label></div>
-<div class="checkbox"><label><input type="checkbox" name="site_open_smartphone" {SITE_OPEN_SMARTPHONE_CHECKED}>スマートフォン用アクセスポイント</label></div>
-<div class="checkbox"><label><input type="checkbox" name="site_open_mobile" {SITE_OPEN_MOBILE_CHECKED}>携帯用アクセスポイント</label></div>
+<patTemplate:tmpl name="content_type_list">
+<div class="checkbox"><label><input type="checkbox" name="item{INDEX}_selected" {CHECKED}>{NAME}</label></div>
+</patTemplate:tmpl>
 </div>
 </div>
 </form>

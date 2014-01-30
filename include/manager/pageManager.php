@@ -4617,6 +4617,18 @@ class PageManager extends Core
 		return $subId;
 	}
 	/**
+	 * コンテンツタイプとページIDからページサブID取得
+	 *
+	 * @param string $contentType	コンテンツタイプ
+	 * @param string $pageId		ページID
+	 * @return string				ページサブID
+	 */
+	function getPageSubIdByContentType($contentType, $pageId)
+	{
+		$subId = $this->db->getSubPageIdWithContent($contentType, $pageId);// ページサブIDを取得
+		return $subId;
+	}
+	/**
 	 * 指定のウィジェットがページ上にあるかを取得
 	 *
 	 * @param string $pageId		ページID

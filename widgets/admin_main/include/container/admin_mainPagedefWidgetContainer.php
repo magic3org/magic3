@@ -339,7 +339,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			// キャッシュデータをクリア
 			$this->gCache->clearAllCache();
 		} else if ($act == 'deleteline'){		// 削除のとき
-			$ret = $this->db->delPageDef($this->serialNo, $userId);
+			$ret = $this->db->delPageDef($this->serialNo);
 			if ($ret){		// データ削除成功のとき
 				$this->setMsg(self::MSG_GUIDANCE, $this->_('Data deleted.'));			// データを削除しました
 			} else {
