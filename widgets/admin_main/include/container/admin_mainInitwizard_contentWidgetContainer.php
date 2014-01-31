@@ -93,8 +93,8 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 								// コンテンツ属性からページサブIDを取得
 								$pageSubId = $this->gPage->getPageSubIdByContentType($contentType, $pageId);
 							
-								// コンテンツに対するメインウィジェットを取得
-								$ret = $this->_mainDb->getWidgetListByDeviceType($contentType, $j/*デバイスタイプ*/, $rows);
+								// コンテンツに対する表示ウィジェットを取得
+								$ret = $this->_mainDb->getViewWidgetListByDeviceType($contentType, $j/*デバイスタイプ*/, $rows);
 								if ($ret){
 									$widgetId = $rows[0]['wd_id'];
 									
@@ -107,27 +107,29 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 							}
 						}
 					} else {
+						// 変更状況に関わらず処理を行う
 						// 非選択のコンテンツタイプのウィジェットはページから削除
-						if (in_array($contentType, $oldContentType)){
-							for ($j = 0; $j < count($widgetInfoRows); $j++){
-								// 指定のコンテンツタイプに対応するウィジェットを取得
-								$widgetId = $widgetInfoRows[$j]['wd_id'];
-								if ($contentType == $widgetInfoRows[$j]['wd_type']){
-									$ret = $this->_mainDb->delPageDefByWidgetId($widgetId);
-									
-									// アクセスポイントごとの処理
-									for ($k = 0; $k < count($this->pageIdArray); $k++){
-										$pageId = $this->pageIdArray[$k];
-										
-										// コンテンツ属性からページサブIDを取得
-										$pageSubId = $this->gPage->getPageSubIdByContentType($contentType, $pageId);
-								
-										// ページの使用状況を更新
-										$this->updatePageAvailable($pageSubId, false);	// メニューから選択不可
-									}
-								}
+//						if (in_array($contentType, $oldContentType)){
+						for ($j = 0; $j < count($widgetInfoRows); $j++){
+							// 指定のコンテンツタイプに対応するウィジェットを取得
+							$widgetId = $widgetInfoRows[$j]['wd_id'];
+							if ($contentType == $widgetInfoRows[$j]['wd_type']){
+								// ウィジェットをページから削除
+								$ret = $this->_mainDb->delPageDefByWidgetId($widgetId);
 							}
 						}
+							
+						// アクセスポイントごとの処理
+						for ($j = 0; $j < count($this->pageIdArray); $j++){
+							$pageId = $this->pageIdArray[$j];
+							
+							// コンテンツ属性からページサブIDを取得
+							$pageSubId = $this->gPage->getPageSubIdByContentType($contentType, $pageId);
+					
+							// ページの使用状況を更新
+							$this->updatePageAvailable($pageSubId, false);	// メニューから選択不可
+						}
+//						}
 					}
 				}
 				if (true){

@@ -212,11 +212,12 @@ class admin_mainDb extends BaseDb
 	 * @param array  $rows			レコード
 	 * @return bool					1行以上取得 = true, 取得なし= false
 	 */
-	function getWidgetListByDeviceType($widgetType, $deviceType, &$rows)
+	function getViewWidgetListByDeviceType($widgetType, $deviceType, &$rows)
 	{
 		$queryStr  = 'SELECT * FROM _widgets ';
 		$queryStr .=   'WHERE wd_deleted = false ';	// 削除されていない
-		$queryStr .=     'AND wd_type = ? ';		// ウィジェットタイプ
+	//	$queryStr .=     'AND wd_type = ? ';		// ウィジェットタイプ
+		$queryStr .=     'AND wd_content_type = ? ';		// 表示コンテンツタイプ
 		$queryStr .=     'AND wd_device_type = ? ';		// デバイスタイプ
 		$queryStr .=   'ORDER BY wd_priority';
 		$retValue = $this->selectRecords($queryStr, array($widgetType, $deviceType), $rows);
