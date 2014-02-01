@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: systemManager.php 6173 2013-07-16 02:23:00Z fishbone $
  * @link       http://www.magic3.org
@@ -676,9 +676,20 @@ class SystemManager extends Core
 								M3_VIEW_TYPE_WIKI,				// wiki
 								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO,				// フォトギャラリー
-								M3_VIEW_TYPE_SEARCH);			// 検索結果
+								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
 		return $contentType;
+	}
+	/**
+	 * 機能タイプを取得
+	 *
+	 * @return array	機能タイプ
+	 */
+	public function getAllFeatureType()
+	{
+		$featureType = array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード
+								M3_VIEW_TYPE_SEARCH,			// 検索結果
+								M3_VIEW_TYPE_COMMERCE);			// Eコマース
+		return $featureType;
 	}
 }
 ?>

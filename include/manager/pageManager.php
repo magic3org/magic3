@@ -3918,7 +3918,8 @@ class PageManager extends Core
 			// ウィジェットの配置位置に問題があるかどうかを表示
 			// メインコンテンツとページ属性が一致するかどうかチェック
 			$widgetContentType = $rows[$i]['wd_content_type'];
-			if (!empty($widgetContentType) && $widgetContentType != $pageContentType && in_array($widgetContentType, $gSystemManager->getAllContentType())){
+			if (!empty($widgetContentType) && $widgetContentType != $pageContentType && 
+						(in_array($widgetContentType, $gSystemManager->getAllContentType()) || in_array($widgetContentType, $gSystemManager->getAllFeatureType()))){
 				//$title = 'ウィジェット配置注意';
 				$title = 'ページ属性と不一致';
 				$configImg .= '<img src="' . $rootUrl . self::NOTICE_ICON_FILE . '" alt="' . $title . '" title="' . $title . '" />&nbsp;';
