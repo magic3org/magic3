@@ -662,34 +662,5 @@ class SystemManager extends Core
 		}
 		return $this->hierarchicalPage;
 	}
-	/**
-	 * メインコンテンツタイプを取得
-	 *
-	 * @return array	コンテンツタイプ
-	 */
-	public function getAllContentType()
-	{
-		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
-								M3_VIEW_TYPE_PRODUCT,				// 製品
-								M3_VIEW_TYPE_BBS,					// BBS
-								M3_VIEW_TYPE_BLOG,				// ブログ
-								M3_VIEW_TYPE_WIKI,				// wiki
-								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
-								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
-		return $contentType;
-	}
-	/**
-	 * 機能タイプを取得
-	 *
-	 * @return array	機能タイプ
-	 */
-	public function getAllFeatureType()
-	{
-		$featureType = array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード
-								M3_VIEW_TYPE_SEARCH,			// 検索結果
-								M3_VIEW_TYPE_COMMERCE);			// Eコマース
-		return $featureType;
-	}
 }
 ?>

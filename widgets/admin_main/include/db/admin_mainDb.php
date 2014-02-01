@@ -3328,5 +3328,55 @@ class admin_mainDb extends BaseDb
 		$retValue = $this->selectRecords($queryStr, array($langId, $setId), $rows);
 		return $retValue;
 	}
+	/**
+	 * 画面配置している主要コンテンツウィジェット、主要機能ウィジェットを取得
+	 *
+	 * @param string $langId			言語ID
+	 * @param array $pageIdArray		ページID
+	 * @param array $contentTypeArray    コンテンツタイプ
+	 * @param array  $rows				取得レコード
+	 * @param int    $setId				定義セットID
+	 * @return							true=取得、false=取得せず
+	 */
+	function getContentWidgetOnPage($langId, $pageIdArray, $contentTypeArray, &$rows, $setId = 0)
+	{
+		// CASE文作成
+		$caseStr = 'CASE pd_id ';
+		$pageStr = '';
+		for ($i = 0; $i < count($pageIdArray); $i++){
+			$caseStr .= 'WHEN \'' . $pageIdArray[$i] . '\' THEN ' . $i . ' ';
+			$pageStr .= '\'' . $pageIdArray[$i] . '\', ';
+		}
+		$caseStr .= 'END AS pageno, ';
+		$pageStr = rtrim($pageStr, ', ');
+		
+		$caseStr .= 'CASE wd_content_type ';
+		$contentStr = '';
+		for ($i = 0; $i < count($contentTypeArray); $i++){
+			$caseStr .= 'WHEN \'' . $contentTypeArray[$i] . '\' THEN ' . $i . ' ';
+			$contentStr .= '\'' . $contentTypeArray[$i] . '\', ';
+		}
+		$caseStr .= 'ELSE 100 ';		// 指定外
+		$caseStr .= 'END AS contentno ';
+		$contentStr = rtrim($contentStr, ', ');
+		
+		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_content_type, wd_content_info, wd_content_name, ls_value, ' . $caseStr . ' FROM _page_def ';
+		$queryStr .=   'LEFT JOIN _widgets ON pd_widget_id = wd_id AND wd_deleted = false ';
+		$queryStr .=   'LEFT JOIN _page_id ON pd_sub_id = pg_id AND pg_type = 1 ';// ページサブID
+		$queryStr .=   'LEFT JOIN _language_string ON wd_type = ls_id AND ls_type = 2 AND ls_language_id = ? ';	// コンテンツ種別名
+		$queryStr .= 'WHERE pd_set_id = ? ';
+		$queryStr .=   'AND pd_id in (' . $pageStr . ') ';
+		//$queryStr .=   'AND pd_visible = true ';			// ウィジェットは表示中に限定しない
+		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
+		$queryStr .=   'AND wd_active = true ';				// 一般ユーザが実行可能かどうか
+		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// ページ共通ウィジェットか公開中のページ上のウィジェット
+//		$queryStr .=   'AND wd_edit_content = true ';			// ##### メインウィジェットに限定しない #####
+		$queryStr .=   'AND wd_content_type in (' . $contentStr . ') ';	// コンテンツタイプに主要コンテンツ、主要機能がある場合
+//		$queryStr .=   'AND wd_type != \'\' ';
+//		$queryStr .=   'AND wd_use_instance_def = false ';		// インスタンス定義を使用しないウィジェットをメインコンテンツ編集ウィジェットとする
+		$queryStr .= 'ORDER BY pageno, contentno';
+		$retValue = $this->selectRecords($queryStr, array($langId, $setId), $rows);
+		return $retValue;
+	}
 }
 ?>

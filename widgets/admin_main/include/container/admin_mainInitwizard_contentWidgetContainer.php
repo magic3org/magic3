@@ -18,8 +18,10 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainInitwiz
 class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBaseWidgetContainer
 {
 	private $idArray = array();			// 表示するコンテンツ
+	private $itemIndex;					// 項目番号
 	private $pageIdArray;				// アクセスポイント
 	private $mainContentType;			// 主要コンテンツタイプ
+	private $mainFeatureType;			// 主要機能タイプ
 	private $selectedContentType = array();				// 選択中のコンテンツタイプ
 	
 	/**
@@ -30,8 +32,9 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		$this->mainContentType = $this->gPage->getMainContentType();			// 主要コンテンツタイプ
-		$this->pageIdArray = $this->gEnv->getAllDefaultPageId();
+		$this->mainContentType	= $this->gPage->getMainContentType();			// 主要コンテンツタイプ
+		$this->mainFeatureType	= $this->gPage->getMainFeatureType();			// 主要機能タイプ
+		$this->pageIdArray		= $this->gEnv->getAllDefaultPageId();		// アクセスポイント
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -113,7 +116,7 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 						for ($j = 0; $j < count($widgetInfoRows); $j++){
 							// 指定のコンテンツタイプに対応するウィジェットを取得
 							$widgetId = $widgetInfoRows[$j]['wd_id'];
-							if ($contentType == $widgetInfoRows[$j]['wd_type']){
+							if ($contentType == $widgetInfoRows[$j]['wd_content_type']){
 								// ウィジェットをページから削除
 								$ret = $this->_mainDb->delPageDefByWidgetId($widgetId);
 							}
@@ -149,8 +152,10 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 		// 使用しているコンテンツタイプを取得
 		$this->selectedContentType = $this->getSelectedContentType($tmp);
 		
-		// コンテンツタイプ一覧を作成
+		// コンテンツタイプ、機能タイプ一覧を作成
+		$this->itemIndex = 0;					// 項目番号
 		$this->createContentTypeList();
+		$this->createFeatureTypeList();
 		$this->tmpl->addVar("_widget", "id_list", implode($this->idArray, ','));// 表示項目のIDを設定
 	}
 	/**
@@ -167,12 +172,39 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 			$checked = '';
 			if (in_array($value, $this->selectedContentType)) $checked = 'checked';
 			$row = array(
-				'index'		=> $i,
+				'index'		=> $this->itemIndex,
 				'name'		=> $name,			// コンテンツ名
 				'checked'	=> $checked
 			);
 			$this->tmpl->addVars('content_type_list', $row);
 			$this->tmpl->parseTemplate('content_type_list', 'a');
+			$this->itemIndex++;
+			
+			// 表示中項目のページサブIDを保存
+			$this->idArray[] = $value;
+		}
+	}
+	/**
+	 * 機能タイプ一覧作成
+	 *
+	 * @return なし
+	 */
+	function createFeatureTypeList()
+	{
+		for ($i = 0; $i < count($this->mainFeatureType); $i++){
+			$value = $this->mainFeatureType[$i]['value'];
+			$name = $this->mainFeatureType[$i]['name'];
+			
+			$checked = '';
+			if (in_array($value, $this->selectedContentType)) $checked = 'checked';
+			$row = array(
+				'index'		=> $this->itemIndex,
+				'name'		=> $name,			// コンテンツ名
+				'checked'	=> $checked
+			);
+			$this->tmpl->addVars('feature_type_list', $row);
+			$this->tmpl->parseTemplate('feature_type_list', 'a');
+			$this->itemIndex++;
 			
 			// 表示中項目のページサブIDを保存
 			$this->idArray[] = $value;
@@ -189,24 +221,27 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 		$selectedContentType = array();
 		$menuItems = array(array(), array(), array());
 
-		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
+/*		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
 								M3_VIEW_TYPE_PRODUCT,				// 製品
 								M3_VIEW_TYPE_BBS,					// BBS
 								M3_VIEW_TYPE_BLOG,				// ブログ
 								M3_VIEW_TYPE_WIKI,				// Wiki
 								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
-		$ret = $this->_mainDb->getEditWidgetOnPage($this->langId, $this->pageIdArray, $contentType, $rows);
+								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー*/
+		// 主要コンテンツタイプと主要機能タイプを連結
+		$contentType = array_merge(array_map(create_function('$a', 'return $a["value"];'), $this->mainContentType), array_map(create_function('$a', 'return $a["value"];'), $this->mainFeatureType));
+		$ret = $this->_mainDb->getContentWidgetOnPage($this->langId, $this->pageIdArray, $contentType, $rows);
 		if ($ret){
 			$widgetInfoRows = $rows;
 			
+			// コンテンツタイプを取得
 			$usedContentType = array();
 			$rowCount = count($rows);
 			for ($i = 0; $i < $rowCount; $i++){
-				$usedContentType[] = $rows[$i]['wd_type'];
+				if (!empty($rows[$i]['wd_content_type'])) $usedContentType[] = $rows[$i]['wd_content_type'];
 			}
-			
+			// コンテンツタイプをユニークにする
 			for ($i = 0; $i < count($contentType); $i++){
 				$type = $contentType[$i];
 				if (in_array($type, $usedContentType)) $selectedContentType[] = $type;

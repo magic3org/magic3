@@ -963,7 +963,7 @@ class EnvManager extends Core
 	 * @param array $params			ページID,ページサブID以外のパラメータが返る
 	 * @return bool					true=解析成功、false=解析失敗(Magic3以外のURL)
 	 */
-	public function parseUrl($url, &$pageId, &$pageSubId, &$params)
+/*	public function parseUrl($url, &$pageId, &$pageSubId, &$params)
 	{
 		// 引数エラーチェック
 		if (empty($url)) return false;
@@ -1010,7 +1010,7 @@ class EnvManager extends Core
 		} else {// システムディレクトリ以外のときはエラー
 			return false;
 		}
-	}
+	}*/
 	/**
 	 * ページIDとURLのクエリー文字列からサブページIDを取得
 	 *
@@ -1018,7 +1018,7 @@ class EnvManager extends Core
 	 * @param string $query		クエリー文字列
 	 * @return string			サブページID
 	 */
-	public function _getPageSubIdFromUrlQuery($pageId, $query)
+/*	public function _getPageSubIdFromUrlQuery($pageId, $query)
 	{
 		$queryArray = array();
 		if (!empty($query)) parse_str($query, $queryArray);		// クエリーの解析
@@ -1040,7 +1040,7 @@ class EnvManager extends Core
 		}
 		if (empty($pageSubId)) $pageSubId = $this->db->getDefaultPageSubId($pageId);	// 最終的に見つからないときはデフォルト値を取得
 		return $pageSubId;
-	}
+	}*/
 	/**
 	 * Magic3システムへのアクセスかどうか(SSL用のURL含む)
 	 *

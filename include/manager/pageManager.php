@@ -78,7 +78,8 @@ class PageManager extends Core
 	private $pageInfo;					// すべてのページ情報
 	private $currentPageInfo;			// 現在のページのページ情報
 	private $contentType = '';				// ページのコンテンツタイプ
-	private $mainContentType;				// 主要コンテンツタイプ
+	private $mainContentType;				// 一般画面で使用する主要コンテンツタイプ
+	private $mainFeatureType;				// 一般画面で使用する主要機能タイプ
 	private $rssVersion;					// RSSバージョン
 	private $rssChannel;				// RSSチャンネルデータ
 	private $selectedJQueryFilename;		// 使用対象のjQueryファイル
@@ -264,7 +265,7 @@ class PageManager extends Core
 		
 		$this->rssVersion = self::DEFAULT_RSS_VERSION;					// RSSバージョン
 		
-		// 主要コンテンツタイプ
+		// 一般画面で使用する主要コンテンツタイプ
 		$this->mainContentType	 = array(	array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
 											array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
 											array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
@@ -273,6 +274,9 @@ class PageManager extends Core
 											array(	'name' => 'ユーザ作成コンテンツ',		'value' => M3_VIEW_TYPE_USER),
 											array(	'name' => 'イベント',					'value' => M3_VIEW_TYPE_EVENT),
 											array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO));
+		// 一般画面で使用する主要機能タイプ
+		$this->mainFeatureType	 = array(	array(	'name' => '検索',						'value' => M3_VIEW_TYPE_SEARCH),
+											array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE));
 											
 		// URLパラメータ並び順
 		$this->urlParamOrder = array(
@@ -333,6 +337,35 @@ class PageManager extends Core
 			M3_REQUEST_PARAM_BACKUP_URL				=> 33,		// URL退避用(画面編集時)
 			M3_REQUEST_PARAM_SERVER					=> 34,		// サーバ指定
 			M3_REQUEST_PARAM_CATEGORY_ID			=> 35);		// カテゴリID(共通)
+	}
+	/**
+	 * メインコンテンツタイプを取得
+	 *
+	 * @return array	コンテンツタイプ
+	 */
+	public function _getAllContentType()
+	{
+		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
+								M3_VIEW_TYPE_PRODUCT,				// 製品
+								M3_VIEW_TYPE_BBS,					// BBS
+								M3_VIEW_TYPE_BLOG,				// ブログ
+								M3_VIEW_TYPE_WIKI,				// wiki
+								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
+								M3_VIEW_TYPE_EVENT,				// イベント
+								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
+		return $contentType;
+	}
+	/**
+	 * 機能タイプを取得
+	 *
+	 * @return array	機能タイプ
+	 */
+	public function _getAllFeatureType()
+	{
+		$featureType = array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード
+								M3_VIEW_TYPE_SEARCH,			// 検索結果
+								M3_VIEW_TYPE_COMMERCE);			// Eコマース
+		return $featureType;
 	}
 	/**
 	 * タイムアウトを停止
@@ -900,13 +933,22 @@ class PageManager extends Core
 		return $this->contentType;
 	}
 	/**
-	 * 主要コンテンツタイプを取得
+	 * 一般画面で使用する主要コンテンツタイプを取得
 	 *
 	 * @return array			コンテンツタイプの配列
 	 */
 	function getMainContentType()
 	{
 		return $this->mainContentType;				// 主要コンテンツタイプ
+	}
+	/**
+	 * 一般画面で使用する主要機能タイプを取得
+	 *
+	 * @return array			機能タイプの配列
+	 */
+	function getMainFeatureType()
+	{
+		return $this->mainFeatureType;				// 主要機能タイプ
 	}
 	/**
 	 * ページ作成開始
@@ -3919,7 +3961,7 @@ class PageManager extends Core
 			// メインコンテンツとページ属性が一致するかどうかチェック
 			$widgetContentType = $rows[$i]['wd_content_type'];
 			if (!empty($widgetContentType) && $widgetContentType != $pageContentType && 
-						(in_array($widgetContentType, $gSystemManager->getAllContentType()) || in_array($widgetContentType, $gSystemManager->getAllFeatureType()))){
+						(in_array($widgetContentType, $this->_getAllContentType()) || in_array($widgetContentType, $this->_getAllFeatureType()))){
 				//$title = 'ウィジェット配置注意';
 				$title = 'ページ属性と不一致';
 				$configImg .= '<img src="' . $rootUrl . self::NOTICE_ICON_FILE . '" alt="' . $title . '" title="' . $title . '" />&nbsp;';
