@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2013 Magic3 Project.
+-- * @copyright  Copyright 2006-2014 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -19,10 +19,6 @@
 -- --------------------------------------------------------------------------------------------------
 
 -- ウィジェット情報(管理機能)
-DELETE FROM _widgets WHERE wd_id = 'admin_menu3';
-INSERT INTO _widgets
-(wd_id,         wd_name,           wd_admin, wd_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin_menu3', '管理用メニュー3', true,     'menu',  '1.2.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                false,        false,       true, true,           100,     '2013-03-20',        now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin_menu4';
 INSERT INTO _widgets
 (wd_id,         wd_name,           wd_admin, wd_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
