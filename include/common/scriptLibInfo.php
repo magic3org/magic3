@@ -229,18 +229,21 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const ELFINDER_THEME_CSS		= 'elfinder-2.0/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
+
 /*
-//	const BOOTSTRAP_FILENAME		= 'bootstrap/bootstrap2.3.min.js';			// bootstrap
-	const BOOTSTRAP_FILENAME		= 'bootstrap/bootstrap3.0rc2.js';			// bootstrap
-//	const BOOTSTRAP_CSS				= 'bootstrap/bootstrap2.3.css';
-	const BOOTSTRAP_CSS				= 'bootstrap/bootstrap3.0rc2.css';
-	const BOOTSTRAP_OPTION_CSS		= 'bootstrap/bootstrap-box2.3.css';*/
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.0.3/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.0.3/css/bootstrap.min.css';
 	// BootstrapオプションはBootstrapのディレクトリ配下に格納
 	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.0.3/css/bootswatch_flatly.min.css';	// bootstrap配色
 	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap-3.0.3/css/bootsnipp_largedropdownmenu.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap-3.0.3/css/yamm.css';					// bootstrapメガメニュー
+	*/
+	const BOOTSTRAP_FILENAME		= 'bootstrap-3.1.0/js/bootstrap.min.js';			// bootstrap
+	const BOOTSTRAP_CSS				= 'bootstrap-3.1.0/css/bootstrap.min.css';
+	// BootstrapオプションはBootstrapのディレクトリ配下に格納
+	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.0/css/bootswatch_flatly.min.css';	// bootstrap配色
+	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap-3.1.0/css/bootsnipp_largedropdownmenu.css';
+	const BOOTSTRAP_YAMM_CSS						= 'bootstrap-3.1.0/css/yamm.css';					// bootstrapメガメニュー
 	
 	const CODEMIRROR_FILENAME				= 'codemirror-3.1/lib/codemirror.js';				// CodeMirror
 	const CODEMIRROR_CSS					= 'codemirror-3.1/lib/codemirror.css';				// CodeMirror
