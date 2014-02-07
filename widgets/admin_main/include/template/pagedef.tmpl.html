@@ -188,14 +188,24 @@ $(function(){
 						<td>{COL_TEMPLATE_ID}</td>
 						</tr>
 						</patTemplate:tmpl>
+						<tr>
+						<td> </td>
+						<td>[{_LC_LABEL_UNDEFINED_PAGE}]</td>
+						<td></td>
+						<td></td>
+						<td>{DEFAULT_TEMPLATE_ID}</td>
+						</tr>
 					</tbody>
 				</table>
+                <div class="text-right">
+                    <a href="?task=pageinfo" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-cog"></i></a>
+                </div>
 			</div>
 		</div>
 		</div>
 	</div>
 </div>
-<div class="col-lg-4">
+<div class="col-lg-5">
 	<div class="panel-group"  >
 		<label for="templateselectmenu"><span {_HELP_PAGEDEF_TEMPLATE}>{_LC_LABEL_TEMPLATE}</span></label>
 		<div class="panel panel-success" id="templateselectmenu" >
@@ -227,23 +237,23 @@ $(function(){
 		</div>
 	</div>
 </div>
-<div id="layout_switch_image" class="col-lg-1">
-<a id="mode_template_normal" style="{TEMPLATE_NORMAL_STYLE}"><img src="{TEMPLATE_NORMAL32}" alt="通常モード" title="通常モード" width="32" height="32" /></a>
-<a id="mode_template_plain" style="{TEMPLATE_PLAIN_STYLE}"><img src="{TEMPLATE_PLAIN32}" alt="レイアウト専用モード" title="レイアウト専用モード" width="32" height="32" /></a>
-</div>
 </div>
 <!-- head area end -->
 <!-- bottom area start -->
-<div id="layout_preview_title" class="row"><!--<p class="text-right">-->
+<div id="layout_preview_title" class="row">
 <div class="col-lg-6">
 URL：{URL}
 </div>
 <div class="col-lg-6 text-right">
+<button type="button" id="mode_template_normal" class="btn btn-default" style="{TEMPLATE_NORMAL_STYLE}"><img src="{TEMPLATE_NORMAL32}" alt="通常モード" title="通常モード" width="32" height="32" />通常モード</button>
+<button type="button" id="mode_template_plain" class="btn btn-default" style="{TEMPLATE_PLAIN_STYLE}"><img src="{TEMPLATE_PLAIN32}" alt="レイアウトモード" title="レイアウトモード" width="32" height="32" />レイアウトモード</button>
 <!--<span {_HELP_PAGEDEF_MAXIMIZE_BTN}><button type="button" id="layoutmax" class="btn btn-default button" onclick="maximizeLayout();return false;">{_LC_LABEL_MAXIMIZE}</button></span>-->
 <span {_HELP_PAGEDEF_PREVIEW_BTN}><button type="button" id="previewother" class="btn btn-default" onclick="previewInOtherWindow();return false;">{_LC_LABEL_PREVIEW}</button></span>
-<!--</p>-->
 </div>
 </div>
+</div><!-- row end -->
+
+
 <div id="layout_preview_outer">
 <iframe id="layout_preview" src="{ADMIN_URL}&cmd=showpositionwithwidget{PREVIEW_TEMPLATE_PARAM}" frameborder="0"></iframe>
 </div>

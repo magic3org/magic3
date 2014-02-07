@@ -2,6 +2,7 @@
 /*label {
 	font-weight: bold;
 }*/
+/*
 img
 {
 	border:0;
@@ -11,21 +12,23 @@ legend, label
 	border: none;
 	margin: 0;
 	padding: 0;
-}
+}*/
+/*
 fieldset legend span {
 	font-weight: bold;
 	font-size: 85%;
-}
+}*/
 /* for Bootstrap
 input, select, textarea {
 	margin: 1px 0;
 }*/
+/*
 input[type="checkbox"] {
 	margin-right: 2px;
 }
 input[type="image"]:disabled {
 	cursor: default;
-}
+}*/
 /*
 a:link, a:visited {
 color: #333;
@@ -33,6 +36,7 @@ color: #333;
 	text-decoration  : none;
 }
 */
+/*
 a {
 	color: #0088cc;
 	text-decoration: none;
@@ -41,7 +45,7 @@ a {
 a:hover {
 	color: #005580;
 	text-decoration: underline;
-}
+}*/
 /*
 a:hover {
 	color: #FF0000;
@@ -301,7 +305,7 @@ background-color: #0081c2;
 }
 #layout_switch_image
 {
-	padding-top:27px;
+/*	padding-top:27px;*/
 }
 #layout_header .panel-heading {
 	cursor: pointer;
@@ -310,10 +314,18 @@ background-color: #0081c2;
 	margin-left:10px;
 }
 #layout_page_table td:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 #layout_template_table td:hover {
-    cursor: pointer;
+	cursor: pointer;
+}
+#mode_template_normal img {
+	margin-top:-7px;
+	margin-bottom:-7px;
+}
+#mode_template_plain img {
+	margin-top:-7px;
+	margin-bottom:-7px;
 }
 /****** menu preview ******/
 #menu_preview {

@@ -114,6 +114,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// (Bootstrap型設定画面用)
 		$localeText['label_page'] = $this->_('Page');		// ページ
 		$localeText['label_template'] = $this->_('Template');		// テンプレート
+		$localeText['label_undefined_page'] = $this->_('Undefined Page');		// 未設定ページ
 		
 		// 詳細画面
 		$localeText['msg_update_line'] = $this->_('Update line data?');		// データを更新しますか?
@@ -266,6 +267,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// Bootstrap型設定画面用
 //		$detailPageUrl 
 //		$this->tmpl->addVar("_widget", "detail_url", $this->getUrl($adminUrl));
+		$this->tmpl->addVar("_widget", "default_template_id", $this->convertToDispString($this->templateId));	// デフォルトのテンプレートID
 		// ウィジェットIDのリスト
 /*		$widgetList = '';
 		if (!empty($this->widgetArray)) $widgetList = implode($this->widgetArray, ',');
