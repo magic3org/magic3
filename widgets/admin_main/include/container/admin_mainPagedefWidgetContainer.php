@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainPagedefWidgetContainer.php 5775 2013-03-02 14:17:43Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -24,12 +24,19 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $pageSubId;	// ページサブID
 	private $position;	// 表示ポジション
 	private $defaultPageSubId;		// デフォルトのページID
-	private $widgetArray = array();
+//	private $widgetArray = array();
 	private $templateId;		// テンプレートID
+	private $pageTitle;	// 選択ページのタイトル
+	private $templateTitle;	// テンプレートタイトル
+	private $pageInfoRows;			// ページ情報
 	const DEFAULT_IMAGE_SIZE = 32;// ウィジェット画像サイズ
 	const TEMPLATE_NORMAL_ICON_FILE = '/images/system/layout16.png';		// 通常テンプレートアイコン
 	const TEMPLATE_PLAIN_ICON_FILE = '/images/system/layout_plain16.png';		// デザインなしテンプレートアイコン
+	const TEMPLATE_NORMAL32_ICON_FILE = '/images/system/layout32.png';		// 通常テンプレートアイコン
+	const TEMPLATE_PLAIN32_ICON_FILE = '/images/system/layout_plain32.png';		// デザインなしテンプレートアイコン
 	const PLAIN_TEMPLATE_ID = '_layout';		// デザインなしテンプレート
+	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="デフォルト"></i> ';		// タイトル付加用アイコン(ホーム)
+	const TITLE_PRE_ICON_MINUS = '<i class="glyphicon glyphicon-minus-sign" rel="m3help" title="非表示"></i> ';		// タイトル付加用アイコン(マイナス記号)
 	
 	/**
 	 * コンストラクタ
@@ -104,6 +111,9 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$localeText['label_maximize'] = $this->_('Maximize');		// 最大化
 		$localeText['label_preview_in_other_window'] = $this->_('Preview in other window');		// 別画面でプレビュー
 		$localeText['label_site_preview'] = $this->_('Site Preview');// 実際の画面
+		// (Bootstrap型設定画面用)
+		$localeText['label_page'] = $this->_('Page');		// ページ
+		$localeText['label_template'] = $this->_('Template');		// テンプレート
 		
 		// 詳細画面
 		$localeText['msg_update_line'] = $this->_('Update line data?');		// データを更新しますか?
@@ -139,9 +149,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createView($request)
 	{
-		// 環境値取得
-		$userId = $this->gEnv->getCurrentUserId();
-				
 		// パラメータの取得
 		$task = $request->trimValueOf('task');		// 処理区分
 		$act = $request->trimValueOf('act');
@@ -219,16 +226,21 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			// テンプレート選択メニュー作成
 			$this->db->getAllTemplateList(0/* PC用 */, array($this, 'templateIdLoop'));
 		}
-
-		// ページサブIDメニュー作成(ページメインIDを先に作成してから)
-		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/, -1/*デバイス関係なし*/, true/*メニューから選択可項目のみ*/);
-
 		// ページ情報取得
 		$contentTypeStr = '';		// コンテンツ種別
 		$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 		if ($ret){
 			if (!empty($row['pn_content_type'])) $contentTypeStr = $this->_('Page Attribute:') . $row['pn_content_type'];		// 「ページ属性：」
 		}
+		// ページIDでページ情報を取得(Bootstrap型設定画面用)
+		$ret = $this->db->getPageInfoByPageId($this->pageId, ''/*言語*/, $this->pageInfoRows);
+
+		// ページサブIDメニュー作成(ページメインIDを先に作成してから)
+		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/, -1/*デバイス関係なし*/, true/*メニューから選択可項目のみ*/);
+
+		// タイトル(Bootstrap型設定画面用)
+		$this->tmpl->addVar("_widget", "page_title", $this->pageTitle);			// ページタイトル(エスケープ済み)
+		$this->tmpl->addVar("_widget", "template_title", $this->templateTitle);	// テンプレートタイトル(エスケープ済み)
 		
 		// URLを設定
 		$path = '';
@@ -251,16 +263,23 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$adminUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_DEF_PAGE_ID . '=' . $this->pageId . '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $this->pageSubId;
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($adminUrl));
 		
+		// Bootstrap型設定画面用
+//		$detailPageUrl 
+//		$this->tmpl->addVar("_widget", "detail_url", $this->getUrl($adminUrl));
 		// ウィジェットIDのリスト
-		$widgetList = '';
+/*		$widgetList = '';
 		if (!empty($this->widgetArray)) $widgetList = implode($this->widgetArray, ',');
-		$this->tmpl->addVar("_widget", "widget_list", $widgetList);
+		$this->tmpl->addVar("_widget", "widget_list", $widgetList);*/
 		
 		// アイコンを設定
 		$iconUrl = $this->gEnv->getRootUrl() . self::TEMPLATE_NORMAL_ICON_FILE;
 		$this->tmpl->addVar("_widget", "template_normal", $this->getUrl($iconUrl));
 		$iconUrl = $this->gEnv->getRootUrl() . self::TEMPLATE_PLAIN_ICON_FILE;
 		$this->tmpl->addVar("_widget", "template_plain", $this->getUrl($iconUrl));
+		$iconUrl = $this->gEnv->getRootUrl() . self::TEMPLATE_NORMAL32_ICON_FILE;
+		$this->tmpl->addVar("_widget", "template_normal32", $this->getUrl($iconUrl));
+		$iconUrl = $this->gEnv->getRootUrl() . self::TEMPLATE_PLAIN32_ICON_FILE;
+		$this->tmpl->addVar("_widget", "template_plain32", $this->getUrl($iconUrl));
 		
 		// テンプレートモード(空=デザインテンプレート,plain=デザインなしテンプレート)を再設定
 		$this->tmpl->addVar("_widget", "layout_mode", $layoutMode);
@@ -277,7 +296,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "preview_template_param", $previewTemplateParam);		// プレビュー用のテンプレートID
 		
 		if ($this->db->canDetailConfig()){		// 詳細設定可のときは、ページID選択を可にする
-			$this->tmpl->setAttribute('hide_page_id', 'visibility', 'visible');// ページID選択メニュー
+			$this->tmpl->setAttribute('show_access_point', 'visibility', 'visible');// アクセスポイント選択メニュー
 			$this->tmpl->addVar('_widget', 'page_id_col', 'colspan="4"');		// カラム数を調整
 		} else {
 			$this->tmpl->addVar('_widget', 'page_id_col', 'colspan="2"');		// カラム数を調整
@@ -291,9 +310,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createDetail($request)
 	{
-		// 環境値取得
-		$userId = $this->gEnv->getCurrentUserId();
-		
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		$this->pageId = $request->trimValueOf('pageid');		// ページID
@@ -326,7 +342,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				// エラーなしの場合は、データを登録
 				if ($this->getMsgCount() == 0){
 					$ret = $this->db->updatePageDef($this->serialNo, $this->pageId, $updatePageSubId, $updatePos, $updateIndex, $updateWidgetId, $instanceDefId,
-														'', '', $updateVisible, $userId);
+														'', '', $updateVisible);
 					if ($ret){		// データ更新成功のとき
 						$this->setMsg(self::MSG_GUIDANCE, $this->_('Data updated.'));		// データを更新しました
 					} else {
@@ -409,15 +425,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// 定義ID
 		$defId = $fetchedRow['pd_config_id'];
 		
-		// インスタンス定義を使用するかどうか
-		$hasInstanceDef = '';
-		if ($fetchedRow['wd_use_instance_def']){		// 定義ありの場合
-			//if ($defId != '') $hasInstanceDef = 'style="background-color:yellow;"';
-		} else {
-			//$hasInstanceDef = 'readonly';
-			//$defId = '';		// 定義IDは空に設定
-		}
-		
 		$row = array(
 			'no'			=> $index + 1,											// 行番号
 			'serial' 		=> $this->convertToDispString($fetchedRow['pd_serial']),			// シリアルNo
@@ -431,7 +438,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			'suffix'		=> $this->convertToDispString($fetchedRow['pd_suffix']),			// サフィックス
 			'shared'		=> $isSharedItem,												// 共通項目かどうか
 			'visible'		=> $itemVisible,												// 画面に表示するかどうか
-			'has_instance_def' => $hasInstanceDef,								// インスタンス定義が必要かどうか
 			'update_line'	=> $this->convertToDispString($this->_('Update')),							// 「更新」
 			'delete_line'	=> $this->convertToDispString($this->_('Delete')),							// 「削除」
 			'update_button' => $buttonEnabled,												// ボタン使用制御
@@ -464,8 +470,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			'name'     => $name,			// ページ名
 			'selected' => $selected														// 選択中かどうか
 		);
-		$this->tmpl->addVars('main_id_list', $row);
-		$this->tmpl->parseTemplate('main_id_list', 'a');
+		$this->tmpl->addVars('access_point_list', $row);
+		$this->tmpl->parseTemplate('access_point_list', 'a');
 		return true;
 	}
 	/**
@@ -479,22 +485,58 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	function pageSubIdLoop($index, $fetchedRow, $param)
 	{
 		$selected = '';
-		$pid = $fetchedRow['pg_id'];
-		if ($pid == $this->pageSubId){
-			$selected = 'selected';
-		}
-		$value = $this->convertToDispString($pid);
+		$checked = '';
+		$value = $fetchedRow['pg_id'];
 		
 		// 表示ラベルを作成
-		$name = $value;
-		if ($pid == $this->defaultPageSubId) $name .= '[' . $this->_('Default') . ']';			// デフォルトのページサブIDのときは、説明を付加
-		if (!$fetchedRow['pg_active']) $name .= '[' . $this->_('Unpublished') . ']';			// 非公開
-		$name .= ' - ' . $this->convertToDispString($fetchedRow['pg_name']);
+		$name = $this->convertToDispString($fetchedRow['pg_name']);
+		$nameWithAttr = $name . '(' . $this->convertToDispString($value) . ')';
+
+		// ページタイトル(Bootstrap型設定画面)
+		$pageTitle = '';
+		$preTitle = '';
+		if ($value == $this->defaultPageSubId) $preTitle .= self::TITLE_PRE_ICON_HOME;		// デフォルトページ(homeアイコン)
+		if (!$fetchedRow['pg_active']) $preTitle .= self::TITLE_PRE_ICON_MINUS;			// 非表示ページ(非表示アイコン)
+		$pageTitle = $preTitle . $name;	// 選択ページのタイトル
+			
+		// 現在選択中の項目タイトル
+		if ($value == $this->pageSubId){
+			$selected = 'selected';
+			$checked = 'checked';
+			
+			$this->pageTitle = $preTitle . $nameWithAttr;	// 選択ページのタイトル
+//			if ($value == $this->defaultPageSubId) $this->pageTitle .= ' [' . $this->_('Default') . ']';			// デフォルトのページサブIDのときは、説明を付加
+//			if (!$fetchedRow['pg_active']) $this->pageTitle .= ' [' . $this->_('Unpublished') . ']';			// 非公開
+		}
+		
+		// 表示ラベル(Bootstrap型設定画面)
+		if ($value == $this->defaultPageSubId) $nameWithAttr .= ' [' . $this->_('Default') . ']';			// デフォルトのページサブIDのときは、説明を付加
+		if (!$fetchedRow['pg_active']) $nameWithAttr .= ' [' . $this->_('Unpublished') . ']';			// 非公開
+		
+		// ページ情報(Bootstrap型設定画面)
+		$contentType = '';
+		$templateId = '';
+		$pageInfoCount = count($this->pageInfoRows);
+		for ($i = 0; $i < $pageInfoCount; $i++){
+			$pageInfo = $this->pageInfoRows[$i];
+			if ($pageInfo['pg_id'] == $value){
+				$contentType = $pageInfo['pn_content_type'];
+				$templateId = $pageInfo['pn_template_id'];
+				break;
+			}
+		}
 		
 		$row = array(
-			'value'    => $value,			// ページID
-			'name'     => $name,			// ページ名
-			'selected' => $selected														// 選択中かどうか
+			'value'    => $this->convertToDispString($value),			// ページID
+			'name'     => $nameWithAttr,			// ページ名
+			'selected' => $selected,														// 選択中かどうか
+			
+			// Bootstrap型設定画面用
+			'col_title'	=> $pageTitle,		// ページ名
+			'col_id'	=> $this->convertToDispString($value),			// ページID
+			'col_content_type'	=> $contentType,		// コンテンツタイプ
+			'col_template_id'	=> $templateId,			// テンプレートID
+			'col_checked'		=> $checked				// 選択状態
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
 		$this->tmpl->parseTemplate('sub_id_list', 'a');
@@ -510,15 +552,30 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function templateIdLoop($index, $fetchedRow, $param)
 	{
+		$value = $fetchedRow['tm_id'];
+		$name = $fetchedRow['tm_name'];
 		$selected = '';
-		if ($fetchedRow['tm_id'] == $this->templateId){
+		$checked = '';
+		
+		if ($value == $this->templateId){
 			$selected = 'selected';
+			$checked = 'checked';
+			
+			$this->templateTitle = $this->convertToDispString($name);	// 選択テンプレートのタイトル
 		}
-
+		// テンプレート画像
+		$imageUrl = $this->gEnv->getTemplatesUrl() . '/' . $value . '/template_thumbnail.png';
+		$imagetTag = '<img src="' . $imageUrl . '" name="templatepreview" border="1" width="70" height="45" />';
+		
 		$row = array(
-			'value'    => $this->convertToDispString($fetchedRow['tm_id']),			// テンプレートID
-			'name'     => $this->convertToDispString($fetchedRow['tm_name']),			// テンプレート名名
-			'selected' => $selected														// 選択中かどうか
+			'value'    => $this->convertToDispString($value),			// テンプレートID
+			'name'     => $this->convertToDispString($name),			// テンプレート名名
+			'selected' => $selected,													// 選択中かどうか
+			
+			// Bootstrap型設定画面用
+			'col_id'		=> $this->convertToDispString($value),			// テンプレートID
+			'col_image'		=> $imagetTag,									// テンプレート画像
+			'col_checked'	=> $checked				// 選択状態
 		);
 		$this->tmpl->addVars('sel_template_list', $row);
 		$this->tmpl->parseTemplate('sel_template_list', 'a');

@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: help_pagedef.php 3866 2010-11-29 09:02:05Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCommonPath()				. '/helpConv.php' );
@@ -90,6 +90,16 @@ class help_pagedef extends HelpConv
 			'pagedef_widget_common' => array(	
 				'title' =>	$this->_('Shared'),			// ページ共通属性
 				'body'	=>	$this->_('The Shared means widget shared status by pages. If widget has shared attribute, it always shows on evey page.')		// 同ページIDで、サブページIDに関わらずウィジェットを表示するかどうかを指定します。
+			),
+			
+			// (Bootstrap型設定画面用)
+			'pagedef_page' => array(	
+				'title' =>	$this->_('Page'),			// ページ
+				'body'	=>	$this->_('Select the page to edit. Page is identified by Page ID added to url as parameter. Unpublish page is not published to users without site administration.')		// 編集するページを選択します。ページはURLに付加されるページIDで区別されます。非公開項目は管理権限のない一般ユーザには公開されないページです。
+			),
+			'pagedef_template' => array(	
+				'title' =>	$this->_('Template'),			// テンプレート
+				'body'	=>	$this->_('Select the template for page.')		// ページに対してテンプレートを選択します。
 			),
 		);
 		return $helpData;

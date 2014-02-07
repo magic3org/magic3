@@ -659,7 +659,7 @@ class admin_mainDb extends BaseDb
 	 * @param string $pageSubId		ページサブID
 	 * @param array $row			取得データ
 	 * @param string $langId		言語ID
-	 * @return						true=正常、false=異常
+	 * @return bool					true=正常、false=異常
 	 */
 	function getPageInfo($pageId, $pageSubId, &$row, $langId = '')
 	{
@@ -669,6 +669,24 @@ class admin_mainDb extends BaseDb
 		$queryStr .=    'OR (pn_deleted = false ';
 		$queryStr .=    'AND pn_sub_id = ?) ';		// サブページID
 		$ret = $this->selectRecord($queryStr, array($pageId, $langId, $pageSubId, $pageSubId), $row);
+		return $ret;
+	}
+	/**
+	 * ページIDでページ情報を取得
+	 *
+	 * @param string $pageId		ページID
+	 * @param string $langId		言語ID
+	 * @param array $rows			取得データ
+	 * @return bool					true=正常、false=異常
+	 */
+	function getPageInfoByPageId($pageId, $langId, &$rows)
+	{
+		$queryStr = 'SELECT * FROM _page_info RIGHT JOIN _page_id ON pn_sub_id = pg_id AND pg_type = 1 AND pn_deleted = false AND pn_id = ? AND pn_language_id = ? ';// 2010/2/23更新
+		$queryStr .=  'WHERE (pn_deleted IS NULL ';
+		$queryStr .=    'AND pg_type = 1) ';		// サブページID
+		$queryStr .=    'OR pn_deleted = false ';
+		$queryStr .=  'ORDER BY pg_priority';
+		$ret = $this->selectRecords($queryStr, array($pageId, $langId), $rows);
 		return $ret;
 	}
 	/**
@@ -1018,15 +1036,14 @@ class admin_mainDb extends BaseDb
 	 * @param string $suffix		サフィックス
 	 * @param string $style			css
 	 * @param bool $visible			表示状態
-	 * @param int $userId			ユーザID(データ更新者)
 	 * @param int    $setId			定義セットID
 	 * @return						true=成功、false=失敗
 	 */
-	function updatePageDef($serialNo, $pageId, $pageSubId, $position, $index, $widgetId, $configId, $suffix, $style, $visible, $userId, $setId = 0)
+	function updatePageDef($serialNo, $pageId, $pageSubId, $position, $index, $widgetId, $configId, $suffix, $style, $visible, $setId = 0)
 	{
 		// 更新ユーザ、日時設定
 		$this->now = date("Y/m/d H:i:s");	// 現在日時
-		$this->userId = $userId;
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
 		$editable = 1;		// 編集可能
 		
 		// トランザクション開始
@@ -1063,7 +1080,7 @@ class admin_mainDb extends BaseDb
 			$queryStr .=   '?, ';
 			$queryStr .=   '?)';
 			$this->execStatement($queryStr, array($pageId, $pageSubId, $setId, $position, $index, 
-								$widgetId, $configId, $suffix, $style, $visible, $editable, $this->userId, $this->now));
+								$widgetId, $configId, $suffix, $style, $visible, $editable, $userId, $this->now));
 		} else {			// 更新
 			$queryStr  = 'select * from _page_def ';
 			$queryStr .=   'where pd_serial = ? ';
@@ -1101,7 +1118,7 @@ class admin_mainDb extends BaseDb
 					$queryStr .=   '?, ';
 					$queryStr .=   '?)';
 					$this->execStatement($queryStr, array($pageId, $pageSubId, $row['pd_set_id'], $position, $index, 
-										$widgetId, $configId, $suffix, $style, $visible, $editable, $this->userId, $this->now));
+										$widgetId, $configId, $suffix, $style, $visible, $editable, $userId, $this->now));
 										
 					// 旧データ削除
 					$queryStr  = 'DELETE FROM _page_def WHERE pd_serial = ?';
@@ -1122,7 +1139,7 @@ class admin_mainDb extends BaseDb
 					$queryStr .=     'pd_update_dt = ? ';
 					$queryStr .=   'WHERE pd_serial = ? ';
 					$this->execStatement($queryStr, array($position, $index, 
-										$widgetId, $configId, $suffix, $style, $visible, $editable, $this->userId, $this->now, $serialNo));
+										$widgetId, $configId, $suffix, $style, $visible, $editable, $userId, $this->now, $serialNo));
 				}
 			}
 		}

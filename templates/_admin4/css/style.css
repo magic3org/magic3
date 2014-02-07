@@ -284,6 +284,37 @@ background-color: #0081c2;
 .m3search {
 	margin-bottom:15px;
 }
+/****** page layout preview ******/
+#layout_preview
+{
+	border-top:2px solid #2C3E50;
+/*	height: 100%;
+	width: 100%;*/
+}
+#layout_preview_outer{
+	position: fixed;
+/*	top: 20%;*/
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	z-index:1;
+}
+#layout_switch_image
+{
+	padding-top:27px;
+}
+#layout_header .panel-heading {
+	cursor: pointer;
+}
+#layout_header .layout_menu_switch {
+	margin-left:10px;
+}
+#layout_page_table td:hover {
+    cursor: pointer;
+}
+#layout_template_table td:hover {
+    cursor: pointer;
+}
 /****** menu preview ******/
 #menu_preview {
 	font-weight: bold;

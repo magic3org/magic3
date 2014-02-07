@@ -15,10 +15,10 @@
 //<![CDATA[
 $(function(){
     $('#accordion .panel-collapse').on('shown.bs.collapse', function (n){
-	   $(n.target).siblings('.panel-heading').find('.glyphicon').removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+	   $(n.target).siblings('.panel-heading').find('.glyphicon').removeClass("glyphicon-chevron-right").addClass("glyphicon-chevron-down");
     });
     $('#accordion .panel-collapse').on('hidden.bs.collapse', function (n){
-	$(n.target).siblings('.panel-heading').find('.glyphicon').removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+	$(n.target).siblings('.panel-heading').find('.glyphicon').removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-right");
     });
 });
 //]]>
@@ -32,7 +32,7 @@ $(function(){
     <div class="panel-heading" data-toggle="collapse" data-parent="#accordion" data-target="#collapseOne" >
       <h4 class="panel-title">
         <!--<a class="accordion-toggle">-->
-          Collapsible Group Item #1<i class="indicator glyphicon glyphicon-chevron-up"></i>
+          Collapsible Group Item #1<i class="indicator glyphicon glyphicon-chevron-down"></i>
         <!--</a>-->
       </h4>
     </div>
@@ -46,7 +46,7 @@ $(function(){
     <div class="panel-heading">
       <h4 class="panel-title"  data-toggle="collapse" data-parent="#accordion" data-target="#collapseTwo">
         <a class="accordion-toggle">
-          Collapsible Group Item #2<i class="indicator glyphicon glyphicon-chevron-down pull-right"></i>
+          Collapsible Group Item #2<i class="indicator glyphicon glyphicon-chevron-right pull-right"></i>
         </a>
       </h4>
     </div>
