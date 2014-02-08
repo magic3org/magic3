@@ -37,8 +37,10 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const PLAIN_TEMPLATE_ID = '_layout';		// デザインなしテンプレート
 	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="トップページ"></i> ';		// タイトル付加用アイコン(ホーム)
 	const TITLE_PRE_ICON_MINUS = '<i class="glyphicon glyphicon-minus-sign" rel="m3help" title="非表示"></i> ';		// タイトル付加用アイコン(マイナス記号)
-	const BUTTON_ICON_TEMPLATE_CHECK = '<i class="glyphicon glyphicon-check" rel="m3help" title="ページに固定"></i> ';		// テンプレート一覧付加用アイコン(チェックあり)
-	const BUTTON_ICON_TEMPLATE_UNCHECKED = '<i class="glyphicon glyphicon-unchecked" rel="m3help" title="ページに固定"></i> ';	// テンプレート一覧付加用アイコン(チェックなし)
+	const BUTTON_ICON_TEMPLATE_CHECK = '<i class="glyphicon glyphicon-check"></i> ';		// テンプレート一覧付加用アイコン(チェックあり)
+	const BUTTON_ICON_TEMPLATE_UNCHECKED = '<i class="glyphicon glyphicon-unchecked"></i> ';	// テンプレート一覧付加用アイコン(チェックなし)
+	const BUTTON_ICON_TEMPLATE_CHECK_WITH_HELP = '<i class="glyphicon glyphicon-check" rel="m3help" title="ページに固定"></i> ';		// テンプレート一覧付加用アイコン(チェックあり)
+	const HELP_SELECT_BUTTON = 'rel="m3help" title="ページに固定"';			// テンプレート一覧付加用ボタンのヘルプ(ページ専用テンプレート)
 	
 	/**
 	 * コンストラクタ
@@ -609,13 +611,15 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// 個別選択ボタン
 		if ($value == $this->pageTemplateId){			// 個別ページのテンプレートID
 			$selectButtonIcon = self::BUTTON_ICON_TEMPLATE_CHECK;
+			$selectButtonHelp = self::HELP_SELECT_BUTTON;
 			
 			// テンプレートのタイトルを個別ページのテンプレートに変更
-			$this->templateTitle = $selectButtonIcon . $this->convertToDispString($this->pageTemplateId);	// 選択テンプレートのタイトル
+			$this->templateTitle = self::BUTTON_ICON_TEMPLATE_CHECK_WITH_HELP . $this->convertToDispString($this->pageTemplateId);	// 選択テンプレートのタイトル
 		} else {
 			$selectButtonIcon = self::BUTTON_ICON_TEMPLATE_UNCHECKED;
+			$selectButtonHelp = self::HELP_SELECT_BUTTON;
 		}
-		$selectTag = '<button type="button" class="btn btn-sm btn-default" onclick="changePageTemplate(\'' . $value . '\');return false;">' . $selectButtonIcon . '</button>';
+		$selectTag = '<span ' . $selectButtonHelp . '><a class="btn btn-sm btn-default" onclick="changePageTemplate(\'' . $value . '\');return false;">' . $selectButtonIcon . '</a></span>';
 		
 		$row = array(
 			'value'    => $this->convertToDispString($value),			// テンプレートID
