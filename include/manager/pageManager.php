@@ -2139,7 +2139,9 @@ class PageManager extends Core
 					// ヘルプシステムは、「span」タグで埋め込み、「title」属性を使用する
 					if ($this->useHelp){			// ヘルプ表示のとき
 						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').cluetip({splitTitle: \'|\', cluezIndex: 2000});' . M3_NL;
-						$initScript .= M3_INDENT_SPACE . '$(\'[rel=m3help]\').tooltip({ placement: \'top\'});' . M3_NL;		// Bootstrapツールチップ。タイトルのみ表示。
+						if ($cmd != M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示以外のとき
+							$initScript .= M3_INDENT_SPACE . '$(\'[rel=m3help]\').tooltip({ placement: \'top\'});' . M3_NL;		// Bootstrapツールチップ。タイトルのみ表示。
+						}
 					} else {			// ヘルプ非表示のときは、title属性をクリアする
 						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').attr(\'title\', \'\');' . M3_NL;
 					}

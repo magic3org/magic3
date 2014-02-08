@@ -51,6 +51,11 @@ a:hover {
 	color: #FF0000;
 	text-decoration  : none;
 }*/
+/*** Bootstrap plus option ***/
+.align_middle_row.table td {
+	vertical-align: middle;
+}
+
 /* top page button */
 .toppage-button {
 	display:block;
@@ -86,13 +91,14 @@ a:hover {
 }
 
 /* default table define */
+/*
 table {
 	empty-cells: show;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: left;
 }
-
+*/
 .simple-table
 {
 /*	border: 1px solid #6C6C00;*/

@@ -26,17 +26,19 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $defaultPageSubId;		// デフォルトのページID
 //	private $widgetArray = array();
 	private $templateId;		// テンプレートID
+	private $pageTemplateId;	// 個別ページのテンプレートID
 	private $pageTitle;	// 選択ページのタイトル
 	private $templateTitle;	// テンプレートタイトル
 	private $pageInfoRows;			// ページ情報
-	const DEFAULT_IMAGE_SIZE = 32;// ウィジェット画像サイズ
 	const TEMPLATE_NORMAL_ICON_FILE = '/images/system/layout16.png';		// 通常テンプレートアイコン
 	const TEMPLATE_PLAIN_ICON_FILE = '/images/system/layout_plain16.png';		// デザインなしテンプレートアイコン
 	const TEMPLATE_NORMAL32_ICON_FILE = '/images/system/layout32.png';		// 通常テンプレートアイコン
 	const TEMPLATE_PLAIN32_ICON_FILE = '/images/system/layout_plain32.png';		// デザインなしテンプレートアイコン
 	const PLAIN_TEMPLATE_ID = '_layout';		// デザインなしテンプレート
-	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="デフォルト"></i> ';		// タイトル付加用アイコン(ホーム)
+	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="トップページ"></i> ';		// タイトル付加用アイコン(ホーム)
 	const TITLE_PRE_ICON_MINUS = '<i class="glyphicon glyphicon-minus-sign" rel="m3help" title="非表示"></i> ';		// タイトル付加用アイコン(マイナス記号)
+	const BUTTON_ICON_TEMPLATE_CHECK = '<i class="glyphicon glyphicon-check" rel="m3help" title="ページに固定"></i> ';		// テンプレート一覧付加用アイコン(チェックあり)
+	const BUTTON_ICON_TEMPLATE_UNCHECKED = '<i class="glyphicon glyphicon-unchecked" rel="m3help" title="ページに固定"></i> ';	// テンプレート一覧付加用アイコン(チェックなし)
 	
 	/**
 	 * コンストラクタ
@@ -114,7 +116,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// (Bootstrap型設定画面用)
 		$localeText['label_page'] = $this->_('Page');		// ページ
 		$localeText['label_template'] = $this->_('Template');		// テンプレート
-		$localeText['label_undefined_page'] = $this->_('Undefined Page');		// 未設定ページ
+		$localeText['label_default_value'] = $this->_('Default Value');		// デフォルト値
 		
 		// 詳細画面
 		$localeText['msg_update_line'] = $this->_('Update line data?');		// データを更新しますか?
@@ -191,6 +193,35 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				// キャッシュデータをクリア
 				$this->gCache->clearAllCache();
 			}
+		} else if ($act == 'changepagetemplate'){		// 個別ページ用テンプレート選択
+			$templateId = $request->trimValueOf('sel_page_template');		// テンプレートID
+			
+			// ページ用テンプレートの更新
+			switch ($task){
+				case 'pagedef_mobile':	// 携帯用設定画面のとき
+					$defaultTemplateId = $this->gSystem->defaultMobileTemplateId();
+					break;
+				case 'pagedef_smartphone':		// スマートフォン用設定画面
+					$defaultTemplateId = $this->gSystem->defaultSmartphoneTemplateId();
+					break;
+				default:
+					$defaultTemplateId = $this->gSystem->defaultTemplateId();
+					break;
+			}
+			// デフォルトと同じ場合はリセット
+			//if ($templateId == $defaultTemplateId) $templateId = '';
+			
+			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
+			if ($ret){
+				if (is_null($row['pn_content_type'])){		// ページ情報レコードがない場合
+					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $templateId);
+				} else {
+					// 既存の設定値と同じ場合はリセット
+					if ($templateId == $row['pn_template_id']) $templateId = '';
+					
+					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $templateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+				}
+			}
 		}
 		
 		if ($task == 'pagedef_mobile'){		// 携帯用設定画面のとき
@@ -201,9 +232,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			$this->templateId = $this->gSystem->defaultMobileTemplateId();
 			$imagePath = $this->gEnv->getTemplatesUrl() . '/' . $this->templateId . '/template_thumbnail.png';
 			$this->tmpl->addVar("_widget", "TMPL_IMAGE", $this->getUrl($imagePath));							// プレビュー画像
-			
-			// テンプレート選択メニュー作成
-			$this->db->getAllTemplateList(1/* 携帯用 */, array($this, 'templateIdLoop'));
 		} else if ($task == 'pagedef_smartphone'){		// スマートフォン用設定画面
 			// ページメインIDメニュー作成
 			$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/, 2/*スマートフォン*/);
@@ -212,9 +240,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			$this->templateId = $this->gSystem->defaultSmartphoneTemplateId();
 			$imagePath = $this->gEnv->getTemplatesUrl() . '/' . $this->templateId . '/template_thumbnail.png';
 			$this->tmpl->addVar("_widget", "TMPL_IMAGE", $this->getUrl($imagePath));							// プレビュー画像
-			
-			// テンプレート選択メニュー作成
-			$this->db->getAllTemplateList(2/* スマートフォン用 */, array($this, 'templateIdLoop'));
 		} else {			// PC用設定画面のとき
 			// ページメインIDメニュー作成
 			$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/, 0/*携帯以外*/);
@@ -223,9 +248,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			$this->templateId = $this->gSystem->defaultTemplateId();
 			$imagePath = $this->gEnv->getTemplatesUrl() . '/' . $this->templateId . '/template_thumbnail.png';
 			$this->tmpl->addVar("_widget", "TMPL_IMAGE", $this->getUrl($imagePath));							// プレビュー画像
-			
-			// テンプレート選択メニュー作成
-			$this->db->getAllTemplateList(0/* PC用 */, array($this, 'templateIdLoop'));
 		}
 		// ページ情報取得
 		$contentTypeStr = '';		// コンテンツ種別
@@ -239,6 +261,17 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// ページサブIDメニュー作成(ページメインIDを先に作成してから)
 		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/, -1/*デバイス関係なし*/, true/*メニューから選択可項目のみ*/);
 
+		if ($task == 'pagedef_mobile'){		// 携帯用設定画面のとき
+			// テンプレート選択メニュー作成
+			$this->db->getAllTemplateList(1/* 携帯用 */, array($this, 'templateIdLoop'));
+		} else if ($task == 'pagedef_smartphone'){		// スマートフォン用設定画面
+			// テンプレート選択メニュー作成
+			$this->db->getAllTemplateList(2/* スマートフォン用 */, array($this, 'templateIdLoop'));
+		} else {			// PC用設定画面のとき
+			// テンプレート選択メニュー作成
+			$this->db->getAllTemplateList(0/* PC用 */, array($this, 'templateIdLoop'));
+		}
+		
 		// タイトル(Bootstrap型設定画面用)
 		$this->tmpl->addVar("_widget", "page_title", $this->pageTitle);			// ページタイトル(エスケープ済み)
 		$this->tmpl->addVar("_widget", "template_title", $this->templateTitle);	// テンプレートタイトル(エスケープ済み)
@@ -250,13 +283,16 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			$path .= '/' . $pathArray[$i];
 		}
 		$url = $this->gEnv->getRootUrlByPage($this->pageId, $this->pageSubId) . $path . '.php';
+		$dispUrl = $url;
 		if ($this->pageSubId == $this->defaultPageSubId){
 			$urlWithSession = $url . '?' . $this->gAccess->getSessionIdUrlParam();		// セッションIDをURLに追加
 		} else {
 			$url .= '?sub=' . $this->pageSubId;
+			$dispUrl .= '?<strong>sub=' . $this->pageSubId . '</strong>';
 			$urlWithSession = $url . '&' . $this->gAccess->getSessionIdUrlParam();		// セッションIDをURLに追加
 		}
 		$this->tmpl->addVar("_widget", "url", $url);		// getUrl()は掛けない
+		$this->tmpl->addVar("_widget", "disp_url", $dispUrl);		// 表示用URL
 		$this->tmpl->addVar("_widget", "url_with_session", $urlWithSession);		// セッションID付きURL(携帯のみ使用)。getUrl()は掛けない
 		$this->tmpl->addVar("_widget", "content_type", $contentTypeStr);		// コンテンツ種別
 		
@@ -524,6 +560,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			if ($pageInfo['pg_id'] == $value){
 				$contentType = $pageInfo['pn_content_type'];
 				$templateId = $pageInfo['pn_template_id'];
+				if ($value == $this->pageSubId) $this->pageTemplateId = $templateId;	// 個別ページのテンプレートID
 				break;
 			}
 		}
@@ -559,15 +596,26 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$selected = '';
 		$checked = '';
 		
-		if ($value == $this->templateId){
+		if ($value == $this->templateId){			// デフォルトのテンプレート
 			$selected = 'selected';
 			$checked = 'checked';
 			
-			$this->templateTitle = $this->convertToDispString($name);	// 選択テンプレートのタイトル
+			if (empty($this->templateTitle)) $this->templateTitle = $this->convertToDispString($name);	// 選択テンプレートのタイトル
 		}
 		// テンプレート画像
 		$imageUrl = $this->gEnv->getTemplatesUrl() . '/' . $value . '/template_thumbnail.png';
 		$imagetTag = '<img src="' . $imageUrl . '" name="templatepreview" border="1" width="70" height="45" />';
+		
+		// 個別選択ボタン
+		if ($value == $this->pageTemplateId){			// 個別ページのテンプレートID
+			$selectButtonIcon = self::BUTTON_ICON_TEMPLATE_CHECK;
+			
+			// テンプレートのタイトルを個別ページのテンプレートに変更
+			$this->templateTitle = $selectButtonIcon . $this->convertToDispString($this->pageTemplateId);	// 選択テンプレートのタイトル
+		} else {
+			$selectButtonIcon = self::BUTTON_ICON_TEMPLATE_UNCHECKED;
+		}
+		$selectTag = '<button type="button" class="btn btn-sm btn-default" onclick="changePageTemplate(\'' . $value . '\');return false;">' . $selectButtonIcon . '</button>';
 		
 		$row = array(
 			'value'    => $this->convertToDispString($value),			// テンプレートID
@@ -577,7 +625,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			// Bootstrap型設定画面用
 			'col_id'		=> $this->convertToDispString($value),			// テンプレートID
 			'col_image'		=> $imagetTag,									// テンプレート画像
-			'col_checked'	=> $checked				// 選択状態
+			'col_checked'	=> $checked,				// 選択状態
+			'col_select'	=> $selectTag				// 個別選択
 		);
 		$this->tmpl->addVars('sel_template_list', $row);
 		$this->tmpl->parseTemplate('sel_template_list', 'a');

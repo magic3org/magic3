@@ -16,10 +16,6 @@
 var pageSelectMenuVisible = false;			// ページ選択メニューの表示状態
 var templateSelectMenuVisible = false;		// テンプレート選択メニューの表示状態
 
-function selectMenu(){
-	document.main.submit();
-	return true;
-}
 function m3UpdateByChildWindow(serial)
 {
 	//refreshPreviewWindow();
@@ -33,10 +29,21 @@ function previewInOtherWindow()
 function maximizeLayout(){
 	window.location.href = '{ADMIN_URL}&cmd=showpositionwithwidget&task=pagedef';
 }
+function selectMenu(){
+	document.main.submit();
+	return true;
+}
 // テンプレートを選択
 function changeTemplate()
 {
 	document.main.act.value = 'changetemplate';
+	document.main.submit();
+}
+// 個別ページ用テンプレートを選択
+function changePageTemplate(templateId)
+{
+	document.main.sel_page_template.value = templateId;
+	document.main.act.value = 'changepagetemplate';
 	document.main.submit();
 }
 // プレビュー用の画面作成
@@ -87,9 +94,6 @@ $(function(){
 	});
 	
 	// プレビューの位置調節
-	var offset=$('#preview_title').offset();
-	//var offset=$('#layout_preview_outer').offset();
-	//	var previewTop = offset.top + $('#preview_title').height() + 10;
 	var previewTop = 220;
 	$('#layout_preview_outer').css({top: previewTop});
 	//$('#layout_preview_outer')css({top:'500px'});
@@ -122,13 +126,13 @@ $(function(){
 	});
 	
 	// メニュー選択処理
-	$('#layout_page_table tr').click(function(event) {
-		if (event.target.type !== 'radio') {
+	$('#layout_page_table tr').click(function(event){
+		if (event.target.type !== 'radio'){
 			$(':radio', this).trigger('click');
 		}
 	});
-	$('#layout_template_table tr').click(function(event) {
-		if (event.target.type !== 'radio') {
+	$('#layout_template_table tr').click(function(event){
+		if (event.target.type !== 'radio' && event.target.type !== 'button'){
 			$(':radio', this).trigger('click');
 		}
 	});
@@ -147,6 +151,7 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="url" value="{URL}" />
 <input type="hidden" name="layoutmode" value="{LAYOUT_MODE}" />
+<input type="hidden" name="sel_page_template" />
 <!-- head area start -->
 <patTemplate:tmpl name="show_access_point" visibility="hidden">
 <div class="row">
@@ -162,87 +167,89 @@ $(function(){
 <div class="col-lg-7">
     <div class="panel-group" >
         <label for="pageselectmenu"><span {_HELP_PAGEDEF_PAGE}>{_LC_LABEL_PAGE}</span></label>
-		<div class="panel panel-success" id="pageselectmenu" >
-			<div class="panel-heading" data-toggle="collapse" data-parent="#pageselectmenu" data-target="#pageselect" >
-				<h4 class="panel-title">{PAGE_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i><!--<a href="{ADMIN_URL}&task=pagedef_detail">--><a id="link_detail"><i class="glyphicon glyphicon-list-alt pull-right" rel="m3help" title="定義詳細"></i></a></h4>
-			</div>
-			<div id="pageselect" class="panel-collapse collapse">
-			<div class="panel-body">
-				<table id="layout_page_table" class="table table-striped table-hover">
-					<thead>
-						<tr>
-						<th> </th>
-						<th>ページ名</th>
-						<th>ページID</th>
-						<th>属性</th>
-						<th>テンプレート</th>
-						</tr>
-					</thead>
-					<tbody>
-						<patTemplate:tmpl name="sub_id_list">
-						<tr>
-						<td><input type="radio" name="pagesubid" value="{VALUE}" {COL_CHECKED}></td>
-						<td>{COL_TITLE}</td>
-						<td>{COL_ID}</td>
-						<td>{COL_CONTENT_TYPE}</td>
-						<td>{COL_TEMPLATE_ID}</td>
-						</tr>
-						</patTemplate:tmpl>
-						<tr>
-						<td> </td>
-						<td>[{_LC_LABEL_UNDEFINED_PAGE}]</td>
-						<td></td>
-						<td></td>
-						<td>{DEFAULT_TEMPLATE_ID}</td>
-						</tr>
-					</tbody>
-				</table>
+        <div class="panel panel-success" id="pageselectmenu" >
+            <div class="panel-heading" data-toggle="collapse" data-parent="#pageselectmenu" data-target="#pageselect" >
+                <h4 class="panel-title">{PAGE_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i><a id="link_detail"><i class="glyphicon glyphicon-list-alt pull-right" rel="m3help" title="定義詳細"></i></a></h4>
+            </div>
+            <div id="pageselect" class="panel-collapse collapse">
+            <div class="panel-body">
+                <table id="layout_page_table" class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                        <th> </th>
+                        <th>ページ名</th>
+                        <th>ページID</th>
+                        <th>属性</th>
+                        <th>テンプレート</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <patTemplate:tmpl name="sub_id_list">
+                        <tr>
+                        <td><input type="radio" name="pagesubid" value="{VALUE}" {COL_CHECKED}></td>
+                        <td>{COL_TITLE}</td>
+                        <td>{COL_ID}</td>
+                        <td>{COL_CONTENT_TYPE}</td>
+                        <td>{COL_TEMPLATE_ID}</td>
+                        </tr>
+                        </patTemplate:tmpl>
+                        <tr>
+                        <td> </td>
+                        <td>[{_LC_LABEL_DEFAULT_VALUE}]</td>
+                        <td></td>
+                        <td></td>
+                        <td>{DEFAULT_TEMPLATE_ID}</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="text-right">
                     <a href="?task=pageinfo" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-cog"></i></a>
                 </div>
-			</div>
-		</div>
-		</div>
-	</div>
+            </div>
+        </div>
+        </div>
+    </div>
 </div>
 <div class="col-lg-5">
-	<div class="panel-group"  >
-		<label for="templateselectmenu"><span {_HELP_PAGEDEF_TEMPLATE}>{_LC_LABEL_TEMPLATE}</span></label>
-		<div class="panel panel-success" id="templateselectmenu" >
-			<div class="panel-heading" data-toggle="collapse" data-parent="#templateselectmenu" data-target="#templateselect" >
-				<h4 class="panel-title">{TEMPLATE_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i></h4>
-			</div>
-			<div id="templateselect" class="panel-collapse collapse">
-			<div class="panel-body">
-				<table id="layout_template_table" class="table table-striped table-hover">
-					<thead>
-						<tr>
+    <div class="panel-group"  >
+        <label for="templateselectmenu"><span {_HELP_PAGEDEF_TEMPLATE}>{_LC_LABEL_TEMPLATE}</span></label>
+        <div class="panel panel-success" id="templateselectmenu" >
+            <div class="panel-heading" data-toggle="collapse" data-parent="#templateselectmenu" data-target="#templateselect" >
+                <h4 class="panel-title">{TEMPLATE_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i></h4>
+            </div>
+            <div id="templateselect" class="panel-collapse collapse">
+            <div class="panel-body">
+                <table id="layout_template_table" class="table table-striped table-hover align_middle_row">
+                    <thead>
+                        <tr>
+                        <th> </th>
+                        <th>テンプレートID</th>
+                        <th>イメージ</th>
 						<th> </th>
-						<th>テンプレートID</th>
-						<th>イメージ</th>
-						</tr>
-					</thead>
-					<tbody>
-					<patTemplate:tmpl name="sel_template_list">
-						<tr>
-						<td><input type="radio" name="sel_template" value="{VALUE}" {COL_CHECKED}></td>
-						<td>{COL_ID}</td>
-						<td>{COL_IMAGE}</td>
-						</tr>
-					</patTemplate:tmpl>
-					</tbody>
-				</table>
-			</div>
-		</div>
-		</div>
-	</div>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <patTemplate:tmpl name="sel_template_list">
+                        <tr>
+                        <td><input type="radio" name="sel_template" value="{VALUE}" {COL_CHECKED}></td>
+                        <td>{COL_ID}</td>
+                        <td>{COL_IMAGE}</td>
+						<td>{COL_SELECT}</td>
+                        </tr>
+                    </patTemplate:tmpl>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+    </div>
 </div>
 </div>
 <!-- head area end -->
 <!-- bottom area start -->
 <div id="layout_preview_title" class="row">
 <div class="col-lg-6">
-URL：{URL}
+URL：{DISP_URL}
 </div>
 <div class="col-lg-6 text-right">
 <button type="button" id="mode_template_normal" class="btn btn-default" style="{TEMPLATE_NORMAL_STYLE}"><img src="{TEMPLATE_NORMAL32}" alt="通常モード" title="通常モード" width="32" height="32" />通常モード</button>
@@ -250,9 +257,7 @@ URL：{URL}
 <!--<span {_HELP_PAGEDEF_MAXIMIZE_BTN}><button type="button" id="layoutmax" class="btn btn-default button" onclick="maximizeLayout();return false;">{_LC_LABEL_MAXIMIZE}</button></span>-->
 <span {_HELP_PAGEDEF_PREVIEW_BTN}><button type="button" id="previewother" class="btn btn-default" onclick="previewInOtherWindow();return false;">{_LC_LABEL_PREVIEW}</button></span>
 </div>
-</div>
 </div><!-- row end -->
-
 
 <div id="layout_preview_outer">
 <iframe id="layout_preview" src="{ADMIN_URL}&cmd=showpositionwithwidget{PREVIEW_TEMPLATE_PARAM}" frameborder="0"></iframe>

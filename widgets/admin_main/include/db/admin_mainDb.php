@@ -655,6 +655,8 @@ class admin_mainDb extends BaseDb
 	/**
 	 * ページ情報の取得
 	 *
+	 * 注意)ページ情報(_page_info)部が空レコードの場合あり
+	 *
 	 * @param string $pageId		ページID
 	 * @param string $pageSubId		ページサブID
 	 * @param array $row			取得データ
@@ -690,7 +692,7 @@ class admin_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * ページ情報を更新
+	 * ページ情報を更新(ページ情報管理用)
 	 *
 	 * @param string $pageId		ページID
 	 * @param string $pageSubId		ページサブID
