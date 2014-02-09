@@ -23,7 +23,7 @@ function m3UpdateByChildWindow(serial)
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow()
 {
-	m3ShowPreviewWindow(0, "{URL}");
+	m3ShowPreviewWindow({DEVICE_TYPE}, "{URL}");
 	return true;
 }
 function maximizeLayout(){
@@ -92,12 +92,13 @@ $(function(){
 		document.getElementById("layout_preview").src = '{ADMIN_URL}&cmd=showpositionwithwidget';
 		return false;
 	});
+		
 	
 	// プレビューの位置調節
 	var previewTop = 220;
 	$('#layout_preview_outer').css({top: previewTop});
 	//$('#layout_preview_outer')css({top:'500px'});
-	$('#layout_preview').css({width: '100%',  height: '100%'});
+	$('#layout_preview').css({width: '{PREVIEW_WIDTH}', height: '100%'});
 
 	// パネル開閉イベント設定
 	$('#pageselectmenu .panel-collapse').on('show.bs.collapse', function (n){
@@ -147,7 +148,7 @@ $(function(){
 </script>
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="task" value="pagedef" />
+<input type="hidden" name="task" value="{TASK}" />
 <input type="hidden" name="act" />
 <input type="hidden" name="url" value="{URL}" />
 <input type="hidden" name="layoutmode" value="{LAYOUT_MODE}" />
@@ -252,15 +253,15 @@ $(function(){
 URL：{DISP_URL}
 </div>
 <div class="col-lg-6 text-right">
-<button type="button" id="mode_template_normal" class="btn btn-default" style="{TEMPLATE_NORMAL_STYLE}"><img src="{TEMPLATE_NORMAL32}" alt="通常モード" title="通常モード" width="32" height="32" />通常モード</button>
+<button type="button" id="mode_template_normal" class="btn btn-default" style="{TEMPLATE_NORMAL_STYLE}" {TEMPLATE_NORMAL_DISABLED}><img src="{TEMPLATE_NORMAL32}" alt="通常モード" title="通常モード" width="32" height="32" />通常モード</button>
 <button type="button" id="mode_template_plain" class="btn btn-default" style="{TEMPLATE_PLAIN_STYLE}"><img src="{TEMPLATE_PLAIN32}" alt="レイアウトモード" title="レイアウトモード" width="32" height="32" />レイアウトモード</button>
 <!--<span {_HELP_PAGEDEF_MAXIMIZE_BTN}><button type="button" id="layoutmax" class="btn btn-default button" onclick="maximizeLayout();return false;">{_LC_LABEL_MAXIMIZE}</button></span>-->
 <span {_HELP_PAGEDEF_PREVIEW_BTN}><button type="button" id="previewother" class="btn btn-default" onclick="previewInOtherWindow();return false;">{_LC_LABEL_PREVIEW}</button></span>
 </div>
 </div><!-- row end -->
 
-<div id="layout_preview_outer">
-<iframe id="layout_preview" src="{ADMIN_URL}&cmd=showpositionwithwidget{PREVIEW_TEMPLATE_PARAM}" frameborder="0"></iframe>
+<div id="layout_preview_outer" class="text-center">
+<iframe id="layout_preview" src="{ADMIN_URL}&cmd=showpositionwithwidget{PREVIEW_TEMPLATE_PARAM}" frameborder="0" {PREVIEW_OPTION_CLASS}></iframe>
 </div>
 <!-- bottom area end -->
 </form>

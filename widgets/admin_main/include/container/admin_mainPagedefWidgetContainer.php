@@ -24,7 +24,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $pageSubId;	// ページサブID
 	private $position;	// 表示ポジション
 	private $defaultPageSubId;		// デフォルトのページID
-//	private $widgetArray = array();
 	private $templateId;		// テンプレートID
 	private $pageTemplateId;	// 個別ページのテンプレートID
 	private $pageTitle;	// 選択ページのタイトル
@@ -69,11 +68,11 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		
 		if ($task == 'pagedef_detail'){		// 詳細設定画面
 			return 'pagedef_detail.tmpl.html';
-		} else if ($task == 'pagedef_mobile'){		// 携帯用設定画面
+/*		} else if ($task == 'pagedef_mobile'){		// 携帯用設定画面
 			return 'pagedef_mobile.tmpl.html';
 		} else if ($task == 'pagedef_smartphone'){		// スマートフォン用設定画面
-			return 'pagedef_smartphone.tmpl.html';
-		} else {			// 画面定義画面
+			return 'pagedef_smartphone.tmpl.html';*/
+		} else {			// 画面編集画面
 			return 'pagedef.tmpl.html';
 		}
 	}
@@ -175,6 +174,32 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		}
 		if (empty($this->pageSubId)) $this->pageSubId = $this->gEnv->getDefaultPageSubIdByPageId($this->pageId);// デフォルト値取得
 		
+		// デフォルトテンプレート取得
+		switch ($task){
+			case 'pagedef_mobile':	// 携帯用設定画面のとき
+				$this->templateId = $this->gSystem->defaultMobileTemplateId();
+				$deviceType = 1;		// デバイスタイプ(携帯)
+				$taskStr = 'pagedef_mobile';
+				$previewWidth = '600px';
+				$this->tmpl->addVar("_widget", "preview_option_class", 'class="layout_side_border"');		// プレビューエリアにサイドのボーダーラインを付加
+				$this->tmpl->addVar("_widget", "template_normal_disabled", 'disabled');
+				break;
+			case 'pagedef_smartphone':		// スマートフォン用設定画面
+				$this->templateId = $this->gSystem->defaultSmartphoneTemplateId();
+				$deviceType = 2;		// デバイスタイプ(スマートフォン)
+				$taskStr = 'pagedef_smartphone';
+				$previewWidth = '600px';
+				$this->tmpl->addVar("_widget", "preview_option_class", 'class="layout_side_border"');		// プレビューエリアにサイドのボーダーラインを付加
+				$this->tmpl->addVar("_widget", "template_normal_disabled", 'disabled');
+				break;
+			default:
+				$this->templateId = $this->gSystem->defaultTemplateId();
+				$deviceType = 0;		// デバイスタイプ(PC)
+				$taskStr = 'pagedef';
+				$previewWidth = '100%';
+				break;
+		}
+		
 		if ($act == 'changetemplate'){		// テンプレート変更のとき
 			$templateId = $request->trimValueOf('sel_template');		// テンプレートID
 			if (!empty($templateId)){
@@ -199,19 +224,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			$templateId = $request->trimValueOf('sel_page_template');		// テンプレートID
 			
 			// ページ用テンプレートの更新
-			switch ($task){
-				case 'pagedef_mobile':	// 携帯用設定画面のとき
-					$defaultTemplateId = $this->gSystem->defaultMobileTemplateId();
-					break;
-				case 'pagedef_smartphone':		// スマートフォン用設定画面
-					$defaultTemplateId = $this->gSystem->defaultSmartphoneTemplateId();
-					break;
-				default:
-					$defaultTemplateId = $this->gSystem->defaultTemplateId();
-					break;
-			}
 			// デフォルトと同じ場合はリセット
-			//if ($templateId == $defaultTemplateId) $templateId = '';
+			//if ($templateId == $this->templateId) $templateId = '';
 			
 			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 			if ($ret){
@@ -225,54 +239,24 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				}
 			}
 		}
+		// ページIDでページ情報を取得(Bootstrap型設定画面用)
+		$ret = $this->db->getPageInfoByPageId($this->pageId, ''/*言語*/, $this->pageInfoRows);
 		
-		if ($task == 'pagedef_mobile'){		// 携帯用設定画面のとき
-			// ページメインIDメニュー作成
-			$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/, 1/*携帯*/);
+		// ページメインIDメニュー作成
+		$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/, $deviceType);
+
+		// ページサブIDメニュー作成(ページメインIDを先に作成してから)。デバイスで共通。
+		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/, -1/*デバイス関係なし*/, true/*メニューから選択可項目のみ*/);
 		
-			// デフォルトのテンプレートを取得
-			$this->templateId = $this->gSystem->defaultMobileTemplateId();
-			$imagePath = $this->gEnv->getTemplatesUrl() . '/' . $this->templateId . '/template_thumbnail.png';
-			$this->tmpl->addVar("_widget", "TMPL_IMAGE", $this->getUrl($imagePath));							// プレビュー画像
-		} else if ($task == 'pagedef_smartphone'){		// スマートフォン用設定画面
-			// ページメインIDメニュー作成
-			$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/, 2/*スマートフォン*/);
-		
-			// デフォルトのテンプレートを取得
-			$this->templateId = $this->gSystem->defaultSmartphoneTemplateId();
-			$imagePath = $this->gEnv->getTemplatesUrl() . '/' . $this->templateId . '/template_thumbnail.png';
-			$this->tmpl->addVar("_widget", "TMPL_IMAGE", $this->getUrl($imagePath));							// プレビュー画像
-		} else {			// PC用設定画面のとき
-			// ページメインIDメニュー作成
-			$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/, 0/*携帯以外*/);
-			
-			// デフォルトのテンプレートを取得
-			$this->templateId = $this->gSystem->defaultTemplateId();
-			$imagePath = $this->gEnv->getTemplatesUrl() . '/' . $this->templateId . '/template_thumbnail.png';
-			$this->tmpl->addVar("_widget", "TMPL_IMAGE", $this->getUrl($imagePath));							// プレビュー画像
-		}
 		// ページ情報取得
-		$contentTypeStr = '';		// コンテンツ種別
+/*		$contentTypeStr = '';		// コンテンツ種別
 		$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 		if ($ret){
 			if (!empty($row['pn_content_type'])) $contentTypeStr = $this->_('Page Attribute:') . $row['pn_content_type'];		// 「ページ属性：」
-		}
-		// ページIDでページ情報を取得(Bootstrap型設定画面用)
-		$ret = $this->db->getPageInfoByPageId($this->pageId, ''/*言語*/, $this->pageInfoRows);
-
-		// ページサブIDメニュー作成(ページメインIDを先に作成してから)
-		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/, -1/*デバイス関係なし*/, true/*メニューから選択可項目のみ*/);
-
-		if ($task == 'pagedef_mobile'){		// 携帯用設定画面のとき
-			// テンプレート選択メニュー作成
-			$this->db->getAllTemplateList(1/* 携帯用 */, array($this, 'templateIdLoop'));
-		} else if ($task == 'pagedef_smartphone'){		// スマートフォン用設定画面
-			// テンプレート選択メニュー作成
-			$this->db->getAllTemplateList(2/* スマートフォン用 */, array($this, 'templateIdLoop'));
-		} else {			// PC用設定画面のとき
-			// テンプレート選択メニュー作成
-			$this->db->getAllTemplateList(0/* PC用 */, array($this, 'templateIdLoop'));
-		}
+		}*/
+		
+		// テンプレート選択メニュー作成
+		$this->db->getAllTemplateList($deviceType, array($this, 'templateIdLoop'));
 		
 		// タイトル(Bootstrap型設定画面用)
 		$this->tmpl->addVar("_widget", "page_title", $this->pageTitle);			// ページタイトル(エスケープ済み)
@@ -296,7 +280,10 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "url", $url);		// getUrl()は掛けない
 		$this->tmpl->addVar("_widget", "disp_url", $dispUrl);		// 表示用URL
 		$this->tmpl->addVar("_widget", "url_with_session", $urlWithSession);		// セッションID付きURL(携帯のみ使用)。getUrl()は掛けない
-		$this->tmpl->addVar("_widget", "content_type", $contentTypeStr);		// コンテンツ種別
+//		$this->tmpl->addVar("_widget", "content_type", $contentTypeStr);		// コンテンツ種別
+		$this->tmpl->addVar("_widget", "device_type", $deviceType);			// デバイスタイプ
+		$this->tmpl->addVar("_widget", "preview_width", $previewWidth);			// プレビュー幅
+		$this->tmpl->addVar("_widget", "task", $taskStr);			// タスク
 		
 		// 管理用URL設定
 		$adminUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_DEF_PAGE_ID . '=' . $this->pageId . '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $this->pageSubId;
@@ -306,10 +293,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 //		$detailPageUrl 
 //		$this->tmpl->addVar("_widget", "detail_url", $this->getUrl($adminUrl));
 		$this->tmpl->addVar("_widget", "default_template_id", $this->convertToDispString($this->templateId));	// デフォルトのテンプレートID
-		// ウィジェットIDのリスト
-/*		$widgetList = '';
-		if (!empty($this->widgetArray)) $widgetList = implode($this->widgetArray, ',');
-		$this->tmpl->addVar("_widget", "widget_list", $widgetList);*/
 		
 		// アイコンを設定
 		$iconUrl = $this->gEnv->getRootUrl() . self::TEMPLATE_NORMAL_ICON_FILE;
