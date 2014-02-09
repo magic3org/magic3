@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,6 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 class BaseFrameContainer extends Core
 {
 	protected $_db;	// DB接続オブジェクト
-	//const ADMIN_TEMPLATE = '_admin';		// 管理画面用テンプレート
 	const SYSTEM_TEMPLATE = '_system';		// システム画面用テンプレート
 	const M_ADMIN_TEMPLATE = 'm/_admin';	// 携帯用管理画面テンプレート
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ
@@ -744,6 +743,7 @@ class BaseFrameContainer extends Core
 		// 　2.セッションに持っている値
 		// 　3.DBのデフォルト値
 		$curTemplate = '';
+		$isSystemManageUser = $this->gEnv->isSystemManageUser();		// システム運用可能かどうか
 		
 		// テンプレート変更のときは、セッションのテンプレートIDを変更
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// 実行コマンドを取得
@@ -766,74 +766,82 @@ class BaseFrameContainer extends Core
 
 		// セッションにあるときは、セッションの値を使用(携帯でないとき)
 		$pageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
-		if ($curTemplate == ''){
+		if (empty($curTemplate)){
 			if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
 				$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
-				
 				// URLの引数として、ページIDとページサブIDが指定されてくる
-				if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
-					$curTemplate = $this->gSystem->defaultTemplateId();
-
-					// URLの引数でテンプレートIDが指定されている場合は設定
-					$templateId = $request->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);		// テンプレートIDを取得
-					if (!empty($templateId)) $curTemplate = $templateId;
-				} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
-					$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
-				} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
-					$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
-				} else if ($pageId == $this->gEnv->getDefaultAdminPageId() ||		// 管理サイトのとき
-							$pageId == $this->gEnv->getDefaultRegistPageId()){		// 登録サイトのとき
-					//$curTemplate = '_admin';
-					$curTemplate = $this->gSystem->defaultAdminTemplateId();
-				} else if (empty($pageId)){			// ページIDが指定されていないときは、ウィジェットを表示しないテンプレートのみの表示
-					// テンプレートIDが指定されている場合はテンプレートを変更
-					$template = $request->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);		// テンプレートIDを取得
-					if (!empty($template)) $curTemplate = $template;
+				// URLの引数のテンプレートを優先し、引数で指定されていなければ、ページ用個別のテンプレートを取得する
+				
+				// URLの引数でテンプレートIDが指定されている場合は設定
+				$templateId = $request->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);		// テンプレートIDを取得
+				if (!empty($templateId)) $curTemplate = $templateId;
+					
+				// ページ用個別に設定されたテンプレートがある場合は取得
+				if (empty($curTemplate)){
+					$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
+					$line = $this->gPage->getPageInfo($pageId, $pageSubId);
+					if (!empty($line)) $pageTemplateId = $line['pn_template_id'];
+					if (!empty($pageTemplateId)) $curTemplate = $pageTemplateId;
 				}
-			} else {
-				// テンプレートIDをセッションから取得
-				if ($this->gSystem->useTemplateIdInSession()){		// セッションに保存する場合
-					if (!$this->gEnv->getIsMobileSite() && !$this->gEnv->getIsSmartphoneSite()){
-						$curTemplate = $request->getSessionValue(M3_SESSION_CURRENT_TEMPLATE);// 携帯サイト、スマートフォンサイトでないときはセッション値を取得
+				
+				// 取得できなければデフォルトを取得
+				if (empty($curTemplate)){
+					if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
+						$curTemplate = $this->gSystem->defaultTemplateId();
+					} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
+						$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
+					} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
+						$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
+					} else if ($pageId == $this->gEnv->getDefaultAdminPageId() ||		// 管理サイトのとき
+								$pageId == $this->gEnv->getDefaultRegistPageId()){		// 登録サイトのとき
+						$curTemplate = $this->gSystem->defaultAdminTemplateId();
+					} else if (empty($pageId)){			// ページIDが指定されていないときは、ウィジェットを表示しないテンプレートのみの表示
+						// URLの引数でテンプレートIDが指定されている場合は設定
+	//					$templateId = $request->trimValueOf(M3_REQUEST_PARAM_TEMPLATE_ID);		// テンプレートIDを取得
+	//					if (!empty($templateId)) $curTemplate = $templateId;
 					}
 				}
+			} else {
+				// ページ用のテンプレートがあるときは優先
+				$pageTemplateId = $this->gPage->getTemplateIdFromCurrentPageInfo();
+				if (!empty($pageTemplateId)) $curTemplate = $pageTemplateId;
+
+				// テンプレートIDをセッションから取得
+				if (empty($curTemplate) && !$isSystemManageUser){			// システム運用者はセッション値を使用できない
+					if ($this->gSystem->useTemplateIdInSession()){		// セッションに保存する場合
+						if (!$this->gEnv->getIsMobileSite() && !$this->gEnv->getIsSmartphoneSite()){
+							$curTemplate = $request->getSessionValue(M3_SESSION_CURRENT_TEMPLATE);// 携帯サイト、スマートフォンサイトでないときはセッション値を取得
+						}
+					}
+				}
+				
 				// オプションのテンプレートがある場合はオプションを優先
 				$optionTemplate = $this->gPage->getOptionTemplateId();
 				if (!empty($optionTemplate)){
 					$curTemplate = $optionTemplate;
 					$templateDefined = true;		// テンプレート固定かどうか
 				}
+				
+				// セッションにないときはデフォルトを取得
+				if (empty($curTemplate)){
+					if ($this->gEnv->getIsMobileSite()){// 携帯用サイトの場合
+						$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
+					} else if ($this->gEnv->getIsSmartphoneSite()){// スマートフォン用サイトの場合
+						$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
+					} else {
+						$curTemplate = $this->gSystem->defaultTemplateId();
+					}
+				}
 			}
 		}
 
-		// セッションにないときは、DBより取得
-		if ($curTemplate == ''){
-			// ページ用のテンプレートがあるときは優先
-			$pageTemplateId = $this->gPage->getTemplateIdFromCurrentPageInfo();
-			if (empty($pageTemplateId)){
-				if ($this->gEnv->getIsMobileSite()){// 携帯用サイトの場合
-					$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
-				} else if ($this->gEnv->getIsSmartphoneSite()){// スマートフォン用サイトの場合
-					$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
-				} else {
-					$curTemplate = $this->gSystem->defaultTemplateId();
-				}
-			} else {
-				$curTemplate = $pageTemplateId;
-			}
-//			// オプションのテンプレートがある場合はオプションを優先
-//			$optionTemplate = $this->gPage->getOptionTemplateId();
-//			if (!empty($optionTemplate)) $curTemplate = $optionTemplate;
-		}
-		
-		if ($curTemplate == ''){
+		if (empty($curTemplate)){
 			// テンプレートが１つもみつからないときは、管理用テンプレートを使用
-			//$curTemplate = self::ADMIN_TEMPLATE;
 			$curTemplate = $this->gSystem->defaultAdminTemplateId();
 			echo 'template not found. viewing by administration template. [' . $curTemplate . ']';
 		} else {	// セッションにテンプレートIDを保存
 			// テンプレートIDをセッションに残す場合
-			if ($this->gSystem->useTemplateIdInSession()){		// セッションに保存する場合
+/*			if ($this->gSystem->useTemplateIdInSession()){		// セッションに保存する場合
 				if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
 					$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
 				} else {
@@ -841,7 +849,7 @@ class BaseFrameContainer extends Core
 						$request->setSessionValue(M3_SESSION_CURRENT_TEMPLATE, $curTemplate);
 					}
 				}
-			}
+			}*/
 		}
 		return $curTemplate;
 	}
@@ -895,7 +903,6 @@ class BaseFrameContainer extends Core
 			$curTemplateId = self::M_ADMIN_TEMPLATE;	// 携帯管理画面用テンプレート
 		} else {			// 携帯以外のサイトへのアクセスの場合
 			if ($type == 1){			// ログインはデフォルトの管理画面テンプレートに固定
-				//$curTemplateId = self::ADMIN_TEMPLATE;// 管理用テンプレート
 				$curTemplateId = $this->gSystem->defaultAdminTemplateId();
 			} else {
 				$curTemplateId = $this->gSystem->getSystemConfig(self::CONFIG_KEY_MSG_TEMPLATE);

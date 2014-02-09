@@ -132,7 +132,7 @@ $(function(){
 		}
 	});
 	$('#layout_template_table tr').click(function(event){
-		if (event.target.type !== 'radio' && event.target.type !== 'button'){
+		if (event.target.type !== 'radio'){
 			$(':radio', this).trigger('click');
 		}
 	});
