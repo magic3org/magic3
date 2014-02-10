@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: menudef.tmpl.html 5389 2012-11-18 22:42:30Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -15,14 +15,6 @@
 //<![CDATA[
 function exec(act){
 	document.main.act.value=act;
-	document.main.submit();
-	return false;
-}
-function updateline(templateId, lineNo){
-	if (!window.confirm('{_LC_MSG_UPDATE_LINE}')) return false;
-	document.main.act.value = 'updateline';
-	document.main.template.value = templateId;
-	document.main.no.value = lineNo;
 	document.main.submit();
 	return false;
 }
@@ -56,11 +48,6 @@ function changeDefault(templateId){
 	document.main.submit();
 	return true;
 }
-function changeDetail(){
-	document.main.act.value = 'changedetail';
-	document.main.submit();
-	return true;
-}
 function changeType(){
 	document.main.act.value = 'changetype';
 	document.main.submit();
@@ -72,10 +59,10 @@ function previewInOtherWindow(templateId)
 	m3ShowPreviewWindow(0, '{ADMIN_URL}?cmd=showposition&template=' + templateId);
 	return true;
 }
-$(function(){
+/*$(function(){
 	// スクロールバー付きのテーブルを作成
 	m3_tableWithScrollbar('templatelist', 15, 0);
-});
+});*/
 //]]>
 </script>
 <div align="center">
@@ -94,11 +81,8 @@ $(function(){
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
 </select>&nbsp;&nbsp;&nbsp;&nbsp;
-<patTemplate:tmpl name="show_dir" visibility="hidden">
 <span {_HELP_TEMPLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
 <span {_HELP_TEMPLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>
-</patTemplate:tmpl>
-</td><td align="right"><input type="checkbox" name="item_show_detail" onclick="changeDetail();" {SHOW_DETAIL} /><span {_HELP_TEMPLIST_DETAIL_CHECK}><label>{_LC_LABEL_SHOW_DETAIL}</label></span>
 </td></tr>
 <tr><td colspan="2">
 <table id="templatelist" class="simple-table" width="100%">
@@ -107,46 +91,27 @@ $(function(){
             <th width="35">No</th>
 	    <th width="45"></th>
             <th width="15%"><span {_HELP_TEMPLIST_ID}>ID</span></th>
-	    <th width="15%"><span {_HELP_TEMPLIST_NAME}>{_LC_LABEL_TEMPLATE_NAME}</span></th>
-	    <th width="100"><span {_HELP_TEMPLIST_FORMAT}>{_LC_LABEL_TEMPLATE_FORMAT} /<br />{_LC_LABEL_TEMPLATE_CREATOR}</span></th>
+	    <th width="150"><span {_HELP_TEMPLIST_FORMAT}>{_LC_LABEL_TEMPLATE_FORMAT} /<br />{_LC_LABEL_TEMPLATE_CREATOR}</span></th>
 	    <th width="70"><span {_HELP_TEMPLIST_DEFAULT}>{_LC_LABEL_TEMPLATE_DEFAULT}</span></th>
-	    <th width="120">{_LC_LABEL_TEMPLATE_DATE}</th>
+	    <th width="150">{_LC_LABEL_TEMPLATE_DATE}</th>
 	    <th><span {_HELP_TEMPLIST_ACT}>{_LC_LABEL_TEMPLATE_OPERATION}</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="templist" type="condition" conditionvar="templatetype">
-	<pattemplate:sub condition="__default">
+        <patTemplate:tmpl name="templist">
         <tr>
 	    <td align="center">{NO}</td>
 	    <td align="center">{IMAGE_TAG}</td>
 	    <td>{ID_STR}</td>
-	    <td>{NAME}</td>
 	    <td align="center">{FORMAT_TYPE}</td>
 	    <td align="center"><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
 	    <td>{UPDATE_DT}</td>
 	    <td align="right"><input type="button" class="button" onclick="previewInOtherWindow('{ID}');" value="{LABEL_PREVIEW}" {PREVIEW_BUTTON} />
-	    <input type="button" class="button" onclick="deleteline('{ID}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
-	    </td>
-	</tr>
-        </pattemplate:sub>
-        <pattemplate:sub condition="detail">
-        <tr>
-	    <td align="center">{NO}</td>
-	    <td align="center">{IMAGE_TAG}</td>
-	    <td>{ID_STR}</td>
-	    <td><input type="text" name="item{NO}_name" value="{NAME}" size="35" maxlength="50" /></td>
-	    <td align="center">{FORMAT_TYPE}</td>
-	    <td align="center"><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
-	    <td>{UPDATE_DT}</td>
-	    <td align="right"><input type="button" class="button" onclick="previewInOtherWindow('{ID}');" value="{LABEL_PREVIEW}" {PREVIEW_BUTTON} />
-	    <input type="button" class="button" onclick="updateline('{ID}', '{NO}');" value="{LABEL_UPDATE}" {UPDATE_BUTTON} />
 	    <input type="button" class="button" onclick="deleteline('{ID}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
 	    <input type="button" class="button" onclick="download('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />
 	    </td>
-	</tr>
-        </pattemplate:sub>
-	</patTemplate:tmpl>
+	    </tr>
+	    </patTemplate:tmpl>
     </tbody>
 </table>
 </td></tr>

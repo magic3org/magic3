@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainTemplistWidgetContainer.php 5499 2012-12-31 10:37:44Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -25,12 +25,10 @@ require_once($gEnvManager->getJoomlaRootPath() . '/JRender.php');
 class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;		// システムDBオブジェクト
 	private $newTemplate = array();		// 新規追加テンプレート
 	private $defalutTemplate;	// デフォルトのテンプレート
 	private $templateTypeArray;		// テンプレートタイプ
 	private $templateType;			// 現在のテンプレートタイプ
-	private $showDetail;			// 詳細表示するかどうか
 	private $isExistsTemplateList;		// テンプレートが存在するかどうか
 	const TEMPLATE_THUMBNAIL_FILENAME = 'template_thumbnail.png';		// テンプレートサムネール
 	const previewImageSizeHeight = 27;
@@ -50,7 +48,6 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 		
 		// テンプレートタイプメニュー項目
 		$this->templateTypeArray = array(	array(	'name' => $this->_('For PC'),			'value' => '0'),		// PC用
@@ -102,7 +99,6 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		$templateId = $request->trimValueOf('template');		// テンプレートID
 		$this->templateType = $request->trimValueOf('item_type');// 現在のテンプレートタイプ
 		if ($this->templateType == '') $this->templateType = '0';		// デフォルトはPC用テンプレート
-		$this->showDetail = ($request->trimValueOf('item_show_detail') == 'on') ? 1 : 0;		// 詳細表示するかどうか
 		
 		if ($act == 'readnew'){		// テンプレート再読み込みのとき
 			$addTemplateCount = 0;
@@ -173,23 +169,6 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 				$msg = $this->_('No new templates added.');		// 新規テンプレートはありません
 			}
 			$this->setMsg(self::MSG_GUIDANCE, $msg);
-		} else if ($act == 'updateline'){		// 行更新のとき
-			// パラメータエラーチェック
-			if (empty($templateId)) $this->setMsg(self::MSG_APP_ERR, $this->_('Template not selected.'));		// テンプレートが選択されていません
-			
-			if (!$this->isExistsMsg()){		// エラーなしのとき
-				// 変更可能値
-				$updateName = $request->trimValueOf('item' . $selectedItemNo . '_name');				// 名前
-				$updateIsDefault = ($request->trimValueOf('item' . $selectedItemNo . '_isdefault') == 'on') ? 1 : 0;		// デフォルトかどうか
-				$ret = $this->db->updateTemplate($templateId, $updateName);
-				if ($ret){		// データ更新成功のとき
-					//$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました(テンプレートID：' . $templateId . ')');
-					$this->setMsg(self::MSG_GUIDANCE, sprintf($this->_('Line updated. (template ID: %s)'), $templateId));	// データを更新しました(テンプレートID：%s)
-				} else {
-					//$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました(テンプレートID：' . $templateId . ')');
-					$this->setMsg(self::MSG_APP_ERR, sprintf($this->_('Failed in updating line. (template ID: %s)'), $templateId));	// データ更新に失敗しました(テンプレートID：%s)
-				}
-			}
 		} else if ($act == 'deleteline'){		// テンプレート削除のとき
 			// パラメータエラーチェック
 			if (empty($templateId)) $this->setMsg(self::MSG_APP_ERR, $this->_('Template not selected.'));		// テンプレートが選択されていません
@@ -402,14 +381,8 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 				// キャッシュデータをクリア
 				$this->gCache->clearAllCache();
 			}
-		} else if ($act == 'changedetail'){		// 詳細表示の変更のとき
-			// 画面設定値を更新
-			$this->gDisp->setAdminConfig(admin_mainDef::CFG_SHOW_TEMPLATE_DETAIL, strval($this->showDetail));
 		} else if ($act == 'changetype'){		// テンプレートタイプの変更のとき
 		}
-		
-		// 詳細設定状況を再取得
-		$this->showDetail = intval($this->gDisp->getAdminConfig(admin_mainDef::CFG_SHOW_TEMPLATE_DETAIL));
 			
 		// テンプレートのタイプごとの処理
 		switch ($this->templateType){
@@ -427,10 +400,6 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 				$installDir = $this->gEnv->getTemplatesPath() . '/' . M3_DIR_NAME_SMARTPHONE;// テンプレート格納ディレクトリ
 				break;
 		}
-		// 表示制御
-		if (!empty($this->showDetail)){		// 詳細表示のとき
-			$this->tmpl->setAttribute('show_dir', 'visibility', 'visible');// ディレクトリ表示
-		}
 		
 		// テンプレート選択メニュー作成
 		$this->createTemplateTypeMenu();
@@ -440,10 +409,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		if (!$this->isExistsTemplateList) $this->tmpl->setAttribute('templist', 'visibility', 'hidden');// テンプレートがないときは、一覧を表示しない
 		
 		// 画面にデータを埋め込む
-		$checkedStr = '';
-		if (!empty($this->showDetail)) $checkedStr = 'checked';
-		$this->tmpl->addVar("_widget", "show_detail", $checkedStr);		// 詳細表示
-		$this->tmpl->addVar("show_dir", "install_dir", $installDir);// インストールディレクトリ
+		$this->tmpl->addVar("_widget", "install_dir", $installDir);// インストールディレクトリ
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));// 管理用URL
 		
 		// テキストをローカライズ
@@ -482,11 +448,6 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		$templateId = $fetchedRow['tm_id'];// テンプレートID
 		$templateDir = $this->gEnv->getTemplatesPath() . '/' . $templateId;			// テンプレートのディレクトリ
 		if (file_exists($templateDir)) $isExistsTemplate = true;
-								
-		// 詳細表示の設定
-		if ($this->showDetail){
-			$this->tmpl->addVar('templist', 'templatetype', 'detail');		// 詳細表示
-		}
 		
 		// デフォルトテンプレート
 		$defaultCheck = '';
