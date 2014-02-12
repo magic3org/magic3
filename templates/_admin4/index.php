@@ -19,12 +19,21 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 <html dir="ltr" lang="<?php echo $document->language; ?>">
 <head>
     <jdoc:include type="head" />
-	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
+    <link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
     <!--[if IE]><link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/iestyles.css" media="screen"><![endif]-->
-	<!--[if lt IE 9]>
-	<script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
-	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
-	<![endif]-->
+    <!--[if lt IE 9]>
+    <script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
+    <script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
+    <![endif]-->
+    <!--[if lte IE 8]>
+    <style>
+        /* for bootstrap */
+        input[type="password"]{
+            font-family: Arial;
+            font-size: 14px;
+        }
+    </style>
+    <![endif]-->
 </head>
 <body>
 <div class="container">
