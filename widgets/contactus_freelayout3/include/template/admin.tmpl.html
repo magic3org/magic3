@@ -5,7 +5,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2014 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -153,7 +153,6 @@ function viewWidget(widgetId){
 }
 $(document).ready(function(){
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_html');
 	m3SetWysiwygEditor('item_html', 300);
 	
 	// お問い合わせ項目部作成
@@ -181,10 +180,10 @@ $(document).ready(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin: 0 auto;width:950px;">
     <tbody>
     <tr>
-	    <td class="table-headside" width="100"><span {_HELP_CONTACTUS_NAME_INPUT}>名前</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_CONTACTUS_NAME_INPUT}>名前</span></td>
 	    <td width="500">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>

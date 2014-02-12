@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 5666 2013-02-15 13:12:25Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -38,7 +38,6 @@ function listItem(){
 }
 $(function(){
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_html');
 	m3SetWysiwygEditor('item_html', 450);
 });
 //]]>
@@ -57,11 +56,11 @@ $(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin: 0 auto;">
     <tbody>
         <tr>
-	    <td class="table-headside" width="100">名前</td>
-	    <td>
+	    <td class="table-headside" width="150">名前</td>
+	    <td width="800">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規登録 --</option>
 	        <patTemplate:tmpl name="title_list">

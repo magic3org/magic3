@@ -5,9 +5,9 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2014 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 5969 2013-04-29 13:16:04Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 <patTemplate:tmpl name="_widget">
@@ -111,7 +111,6 @@ function setupNo()
 }
 $(function(){
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_html');
 	m3SetWysiwygEditor('item_html', 150/* 高さ */);
 	
 	// カテゴリ項目作成
@@ -135,7 +134,7 @@ $(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin: 0 auto;width:950px;">
     <tbody>
         <tr>
 	    <td class="table-headside" width="150">名前</td>

@@ -6,13 +6,13 @@ fieldset {
 	padding:5 5;
 }
 table {
-	text-align: left;
+	text-align: left;	/*for text align defeult value 'centering' fixed */
 }
 /* inner table style canceled */
 .simple-table table
 {
-/*	border: 2px solid #56626d;
-	border-collapse: collapse;
-	font-family: arial, sans-serif;*/
 	font-size: 80%;/* for IE problem*/
+}
+.simple-table {
+	table-layout:fixed;	/* table width fix */
 }

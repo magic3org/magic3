@@ -5,9 +5,9 @@
  *
  * @package    Googleマップ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2012 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2014 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 5679 2013-02-16 11:50:05Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 <patTemplate:tmpl name="_widget">
@@ -38,7 +38,6 @@ function listItem(){
 }
 $(function(){
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_info_content');
 	m3SetWysiwygEditor('item_info_content', 200);
 <patTemplate:tmpl name="show_script" visibility="hidden">
 	var centerPos = new google.maps.LatLng({LAT}, {LNG});
@@ -75,7 +74,7 @@ $(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin: 0 auto;width:950px;">
     <tbody>
         <tr>
 	    <td class="table-headside" width="150"><span {_HELP_ITEM_NAME_INPUT}>名前</span></td>

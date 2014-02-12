@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_other.tmpl.html 5679 2013-02-16 11:50:05Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -21,7 +21,6 @@ function updateItem(){
 }
 $(function(){
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_top_html');
 	m3SetWysiwygEditor('item_top_html', 200);
 });
 //]]>
@@ -34,11 +33,11 @@ $(function(){
 <input type="hidden" name="task" value="other" />
 <br />
 <table width="90%"><tr><td>
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin: 0 auto;">
     <tbody>
         <tr>
-	    <td class="table-headside" width="100"><span {_HELP_OTHER_TOP_HTML}>トップページ用<br />HTML</span></td>
-	    <td colspan="3"><textarea name="item_top_html">{TOP_HTML}</textarea>
+	    <td class="table-headside" width="150"><span {_HELP_OTHER_TOP_HTML}>トップページ用<br />HTML</span></td>
+	    <td colspan="3" width="800"><textarea name="item_top_html">{TOP_HTML}</textarea>
 	    </td>
 	</tr>
         <tr class="even">
