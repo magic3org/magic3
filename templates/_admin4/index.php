@@ -30,7 +30,6 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
         /* for bootstrap */
         input[type="password"]{
             font-family: Arial;
-            font-size: 14px;
         }
     </style>
     <![endif]-->

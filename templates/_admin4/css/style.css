@@ -51,6 +51,10 @@ a:hover {
 	color: #FF0000;
 	text-decoration  : none;
 }*/
+/*** Bootstrap bug fix ***/
+input[type="password"]{
+	font-size: 14px;
+}
 /*** Bootstrap plus option ***/
 .align_middle_row.table td {
 	vertical-align: middle;
