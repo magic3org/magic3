@@ -25,14 +25,6 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
     <script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
     <![endif]-->
-    <!--[if lte IE 8]>
-    <style>
-        /* for bootstrap */
-        input[type="password"]{
-            font-family: Arial;
-        }
-    </style>
-    <![endif]-->
 </head>
 <body>
 <div class="container">

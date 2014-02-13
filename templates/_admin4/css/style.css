@@ -54,6 +54,7 @@ a:hover {
 /*** Bootstrap bug fix ***/
 input[type="password"]{
 	font-size: 14px;
+	font-family: Arial;/*for IE8 bug*/
 }
 /*** Bootstrap plus option ***/
 .align_middle_row.table td {
