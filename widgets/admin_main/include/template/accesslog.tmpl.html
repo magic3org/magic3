@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: accesslog.tmpl.html 5802 2013-03-07 06:14:29Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -110,9 +110,10 @@ $(function(){
         <option value="{VALUE}" {SELECTED}>{NAME}</option>
         </patTemplate:tmpl>
     </select>
-    &nbsp;&nbsp;&nbsp;&nbsp;<label>期間：</label><input type="text" id="start_date" name="start_date" value="{START_DATE}" size="15" maxlength="10" />～<input type="text" id="end_date" name="end_date" value="{END_DATE}" size="15" maxlength="10" /><input type="button" class="button" onclick="reloadData();" value="再取得" />
+    &nbsp;&nbsp;&nbsp;&nbsp;<label>期間：</label><input type="text" id="start_date" name="start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" />～<input type="text" id="end_date" name="end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" />
 </td>
-<td align="right"><span {_HELP_ACCESSLOG_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="詳細" /></span><!-- <span {_HELP_ACCESSLOG_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span> -->
+<td align="right">
+<input type="button" class="button" onclick="reloadData();" value="再取得" /> <span {_HELP_ACCESSLOG_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="詳細" /></span>
 </td></tr>
 <tr><td colspan="2">
 

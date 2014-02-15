@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainUserBaseWidgetContainer.php 5814 2013-03-11 10:22:45Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -22,6 +22,7 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_USERLIST		= 'userlist';		// ユーザ一覧
 	const TASK_USERLIST_DETAIL = 'userlist_detail';	// ユーザ詳細
 	const TASK_USERGROUP	= 'usergroup';		// ユーザグループ
+	const TASK_USERGROUP_DETAIL	= 'usergroup_detail';		// ユーザグループ詳細
 	const DEFAULT_TOP_PAGE = 'userlist';		// デフォルトのトップ画面
 	
 	/**
@@ -56,6 +57,7 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$linkList = ' &gt;&gt; ユーザ一覧';
 				break;
 			case self::TASK_USERGROUP:	// ユーザグループ
+			case self::TASK_USERGROUP_DETAIL:	// ユーザグループ詳細
 				$linkList = ' &gt;&gt; ユーザグループ';
 				break;
 		}
@@ -82,7 +84,8 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		// ### ユーザグループ ###
 		$current = '';
 		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . self::TASK_USERGROUP;
-		if ($task == self::TASK_USERGROUP){
+		if ($task == self::TASK_USERGROUP ||
+			$task == self::TASK_USERGROUP_DETAIL){	// ユーザグループ詳細
 			$current = 'id="current"';
 		}
 		// ヘルプを作成

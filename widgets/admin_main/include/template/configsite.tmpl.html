@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 4751 2012-03-14 01:13:47Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -112,19 +112,19 @@ function uploadCheck(){
 	</patTemplate:tmpl>
     <tr>
 	    <td class="table-headside" width="150"><span {_HELP_CONFIGSITE_SITENAME}>{_LC_LABEL_SITE_NAME}</span></td>
-	    <td><input type="text" name="sitename" value="{SITE_NAME}" size="60" maxlength="100" />&nbsp;&nbsp;<font color="red">*{_LC_LABEL_REQUIRED}</font></td>
+	    <td><input type="text" name="sitename" value="{SITE_NAME}" size="60" maxlength="100" style="width:70%;" />&nbsp;&nbsp;<font color="red">*{_LC_LABEL_REQUIRED}</font></td>
 	</tr>
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_CONFIGSITE_EMAIL}>{_LC_LABEL_SITE_EMAIL}</span></td>
-	    <td><input type="text" name="siteemail" value="{SITE_EMAIL}" size="60" maxlength="100" />&nbsp;&nbsp;<font color="red">*{_LC_LABEL_REQUIRED}</font>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" onclick="testMail();" value="{_LC_LABEL_SEND_TEST_EMAIL}" {TEST_MAIL_DISABLED} /></td>
+	    <td><input type="text" name="siteemail" value="{SITE_EMAIL}" size="60" maxlength="100" style="width:70%;" />&nbsp;&nbsp;<font color="red">*{_LC_LABEL_REQUIRED}</font>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" onclick="testMail();" value="{_LC_LABEL_SEND_TEST_EMAIL}" {TEST_MAIL_DISABLED} /></td>
 	</tr>
     <tr>
 	    <td class="table-headside"><span {_HELP_CONFIGSITE_SLOGAN}>{_LC_LABEL_SITE_SLOGAN}</span></td>
-	    <td><input type="text" name="siteslogan" value="{SITE_SLOGAN}" size="60" maxlength="100" /></td>
+	    <td><input type="text" name="siteslogan" value="{SITE_SLOGAN}" size="60" maxlength="100" style="width:100%;" /></td>
 	</tr>
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_CONFIGSITE_COPYRIGHT}>{_LC_LABEL_SITE_COPYRIGHT}</span></td>
-	    <td><input type="text" name="sitecopyright" value="{SITE_COPYRIGHT}" size="60" maxlength="100" /></td>
+	    <td><input type="text" name="sitecopyright" value="{SITE_COPYRIGHT}" size="60" maxlength="100" style="width:100%;" /></td>
 	</tr>
     <tr>
 	    <td class="table-headside"><span {_HELP_CONFIGSITE_LOGO}>ロゴ</span><br />(72x72, 200x200)</td>
