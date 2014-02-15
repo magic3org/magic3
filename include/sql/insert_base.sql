@@ -103,9 +103,9 @@ INSERT INTO _addons
 INSERT INTO _nav_item
 (ni_id, ni_parent_id, ni_index, ni_nav_id,    ni_task_id,        ni_view_control, ni_param, ni_name,                ni_help_title,          ni_help_body) VALUES
 (100,   0,            0,        'admin_menu', '_page',           0,               '',       '画面管理',             '画面管理',             'Webサイトのデザインや機能を管理します。'),
-(101,   100,          0,        'admin_menu', 'pagedef',         0,               '',       'PC用画面',         'PC用画面編集',         'PC用Webサイトの画面を作成します。'),
-(102,   100,          1,        'admin_menu', 'pagedef_mobile',  0,               '',       '携帯用画面',       '携帯用画面編集',       '携帯用Webサイトの画面を作成します。'),
-(103,   100,          2,        'admin_menu', 'pagedef_smartphone',  0,           '',       'スマートフォン用画面', 'スマートフォン用画面編集',       'スマートフォン用Webサイトの画面を作成します。'),
+(101,   100,          0,        'admin_menu', 'pagedef',         0,               '',       'PC画面',         'PC画面編集',         'PC用Webサイトの画面を作成します。'),
+(102,   100,          1,        'admin_menu', 'pagedef_mobile',  0,               '',       '携帯画面',       '携帯画面編集',       '携帯用Webサイトの画面を作成します。'),
+(103,   100,          2,        'admin_menu', 'pagedef_smartphone',  0,           '',       'スマートフォン画面', 'スマートフォン画面編集',       'スマートフォン用Webサイトの画面を作成します。'),
 (104,   100,          3,        'admin_menu', '_104',            3,               '',       'セパレータ',                 '',                     ''),
 (105,   100,          4,        'admin_menu', 'widgetlist',      0,               '',       'ウィジェット管理',     'ウィジェット管理',     'ウィジェットの管理を行います。'),
 (106,   100,          5,        'admin_menu', 'templist',        0,               '',       'テンプレート管理',     'テンプレート管理',     'テンプレートの管理を行います。'),

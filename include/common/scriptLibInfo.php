@@ -241,7 +241,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.1.1/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.1.1/css/bootstrap.min.css';
 	// BootstrapオプションはBootstrapのディレクトリ配下に格納
-	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.1/css/bootswatch_flatly.min.css';	// bootstrap配色
+//	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.1/css/bootswatch_flatly.min.css';	// bootstrap配色
+	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.1/css/bootswatch_flatly_ja.min.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap-3.1.1/css/bootsnipp_largedropdownmenu.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap-3.1.1/css/yamm.css';					// bootstrapメガメニュー
 	
