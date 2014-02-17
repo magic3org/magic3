@@ -179,7 +179,7 @@ $(function(){
 <span {_HELP_IMAGE_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
 </td></tr>
 <tr><td colspan="2">
-<table class="simple-table">
+<table class="simple-table" style="margin:0 auto;width:950px;">
     <tbody>
         <tr>
 	    <td class="table-headside" width="150"><span {_HELP_IMAGE_NAME_INPUT}>名前</span></td>
@@ -190,9 +190,9 @@ $(function(){
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" /></td>
-	    <td class="table-headside" width="100"><span {_HELP_IMAGE_ID}>ID</span></td>
-	    <td align="center">{ID}</td>
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" style="width:70%;"/></td>
+	    <td class="table-headside" width="150"><span {_HELP_IMAGE_ID}>ID</span></td>
+	    <td align="center" width="150">{ID}</td>
 	</tr>
         <tr class="even">
 	    <td class="table-headside"><span {_HELP_IMAGE_VISIBLE}>公開</span></td>

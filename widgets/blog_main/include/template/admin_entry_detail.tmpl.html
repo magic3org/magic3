@@ -159,7 +159,7 @@ function editEntry(serial){
 	    <td class="table-headside"><span {_HELP_ENTRY_USER}>投稿者</span></td>
 	    <td align="center">{ENTRY_USER}</td>
 	    <td class="table-headside"><span {_HELP_ENTRY_DT}>投稿日時</span></td>
-	    <td>日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" /></td>
+	    <td>日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" style="width:100px;" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" style="width:100px;" /></td>
 	    <td class="table-headside"><span {_HELP_ENTRY_BLOGID}>所属ブログ</span></td>
 	    <td>
 	    <patTemplate:tmpl name="select_blogid_area" visibility="hidden">
@@ -191,7 +191,7 @@ function editEntry(serial){
 	</tr>
         <tr>
 	    <td class="table-headside"><span {_HELP_ENTRY_CONTENT}>投稿内容</span></td>
-	    <td colspan="5" valign="top">
+	    <td colspan="5" valign="top" style="width:800px;">
 	    
 <div id="example" style="width:100%;">
             <ul>
