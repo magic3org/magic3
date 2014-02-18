@@ -1438,6 +1438,14 @@ embed.elfinder-quicklook-preview-audio {
 	border:0 solid;
 }
 
+/****** Magic3 additional code ******/
+/* button bug when used with Bootstrap */
+.elfinder .elfinder-button {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
 .elfinder .ui-icon-search { cursor:pointer;}
 
 .elfinder-button:first-child {
