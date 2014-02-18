@@ -38,7 +38,6 @@ function cancelItem(){
 }
 $(function(){
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_html');
 	m3SetWysiwygEditor('item_html', 200);
 });
 //]]>
@@ -61,29 +60,29 @@ $(function(){
     <tbody>
         <tr>
 	    <td class="table-headside" width="150"><span {_HELP_TAB_NAME}>名前</span></td>
-	    <td><input type="text" name="item_name" value="{NAME}" size="40" maxlength="60" /></td>
+	    <td width="200"><input type="text" name="item_name" value="{NAME}" size="40" maxlength="60" style="width:100%;" /></td>
 	    <td class="table-headside" width="150"><span {_HELP_TAB_ID}>識別ID</span></td>
 	    <td>
 	    <patTemplate:tmpl name="id_field" visibility="hidden">{ID}<input type="hidden" name="item_id" value="{ID}" /></patTemplate:tmpl>
-	    <patTemplate:tmpl name="new_id_field" visibility="hidden"><input type="text" name="item_id" value="{ID}" size="30" maxlength="40" /></patTemplate:tmpl>
+	    <patTemplate:tmpl name="new_id_field" visibility="hidden"><input type="text" name="item_id" value="{ID}" size="30" maxlength="40" style="width:100%;" /></patTemplate:tmpl>
 	    </td>
 	</tr>
         <tr class="even">
-	    <td class="table-headside" width="150"><span {_HELP_TAB_VISIBLE}>公開</span></td>
+	    <td class="table-headside"><span {_HELP_TAB_VISIBLE}>公開</span></td>
 	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>
-	    <td class="table-headside" width="150"><span {_HELP_TAB_INDEX}>表示順</span></td>
-	    <td><input type="text" name="item_index" value="{INDEX}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td class="table-headside"><span {_HELP_TAB_INDEX}>表示順</span></td>
+	    <td><input type="text" name="item_index" value="{INDEX}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" style="width:100%;" /></td>
 	</tr>
 	<tr>
 	    <td class="table-headside"><span {_HELP_TAB_GROUP_ID}>所属グループID</span></td>
-	    <td colspan="3"><input type="text" name="item_group_id" value="{GROUP_ID}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td colspan="3"><input type="text" name="item_group_id" value="{GROUP_ID}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" style="width:100%;" /></td>
 	</tr>
         <tr class="even">
 	    <td class="table-headside"><span {_HELP_TAB_TEMPLATE}>テンプレート</span></td>
 	    <td colspan="3"><textarea name="item_html">{HTML}</textarea></td>
 	</tr>
         <tr>
-	    <td class="table-headside" width="150"><span {_HELP_TAB_USE_ITEM}>コンテンツ部品</span></td>
+	    <td class="table-headside"><span {_HELP_TAB_USE_ITEM}>コンテンツ部品</span></td>
 	    <td colspan="3">{USE_ITEM}</td>
 	</tr>
 	<tr class="even">

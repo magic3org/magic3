@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 5544 2013-01-14 04:57:24Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -119,7 +119,7 @@ $(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin:0 auto;width:950px;">
     <tbody>
         <tr>
 	    <td class="table-headside" width="150"><span {_HELP_UNTITLEDTASK_NAME_INPUT}>名前</span></td>
@@ -131,10 +131,10 @@ $(function(){
 	        </patTemplate:tmpl>
 	    </select>
 	    <patTemplate:tmpl name="item_def_name_visible" visibility="hidden">
-	    <input type="text" name="item_def_name" value="{DEF_NAME}" size="40" maxlength="40" />
+	    <input type="text" name="item_def_name" value="{DEF_NAME}" size="40" maxlength="40" style="width:60%;" />
 	    </patTemplate:tmpl>
 	    </td>
-	    <td class="table-headside" width="100"><span {_HELP_UNTITLEDTASK_ID}>ID</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_UNTITLEDTASK_ID}>ID</span></td>
 	    <td align="center">{ID}</td>
 	</tr>
     <tr class="even">

@@ -47,7 +47,7 @@ $(function(){
 <td align="right"><span {_HELP_CONTENT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
 </td></tr>
 <tr><td colspan="2">
-<table class="simple-table" style="margin: 0 auto;">
+<table class="simple-table" style="margin:0 auto;width:950px;">
     <tbody>
         <tr>
 	    <td class="table-headside" width="150"><span {_HELP_CONTENT_NAME}>名前</span></td>
@@ -59,13 +59,13 @@ $(function(){
 	    <td class="table-headside" width="150"><span {_HELP_CONTENT_DATA}>設定データ</span></td>
         <patTemplate:tmpl name="input_field" type="condition" conditionvar="datatype">
 	<pattemplate:sub condition="__default">
-	<td colspan="3" colspan="3" width="800"><textarea name="item_html">{HTML}</textarea></td>
+	<td colspan="3" width="800"><textarea name="item_html">{HTML}</textarea></td>
 	</pattemplate:sub>
         <pattemplate:sub condition="text">
-	<td colspan="3"><input type="text" name="item_html" value="{HTML}" size="100" maxlength="150" style="width:100%;"/></td>
+	<td colspan="3"><input type="text" name="item_html" value="{HTML}" size="100" maxlength="150" style="width:100%;" /></td>
         </pattemplate:sub>
         <pattemplate:sub condition="number">
-	<td colspan="3">表示用文字列：<input type="text" name="item_html" value="{HTML}" size="15" maxlength="20" />&nbsp;&nbsp;数値：<input type="text" name="item_number" value="{NUMBER}" size="10" maxlength="10" onkeypress="return m3_numericKey(event,true);" /></td>
+	<td colspan="3">表示用文字列：<input type="text" name="item_html" value="{HTML}" size="15" maxlength="20" style="width:20%;" />&nbsp;&nbsp;数値：<input type="text" name="item_number" value="{NUMBER}" size="10" maxlength="10" onkeypress="return m3_numericKey(event,true);" style="width:20%;" /></td>
         </pattemplate:sub>
 	</patTemplate:tmpl>
 	    </td>

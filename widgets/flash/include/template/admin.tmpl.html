@@ -1,3 +1,15 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
@@ -61,7 +73,7 @@ var SetUrl = function(url)
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin:0 auto;width:800px;">
     <tbody>
         <tr>
 	    <td class="table-headside" width="150">名前</td>
@@ -73,16 +85,15 @@ var SetUrl = function(url)
 	        </patTemplate:tmpl>
 	    </select>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" style="width:60%;" />
 	    </patTemplate:tmpl>
 	    </td>
 	    <td class="table-headside" width="150">ID</td>
-	    <td>{ID}
-	    </td>
+	    <td>{ID}</td>
 	</tr>
         <tr class="even">
 	    <td class="table-headside">Flashファイル</td>
-	    <td colspan="3"><input type="text" id="item_flash_url" name="item_flash_url" value="{FLASH_URL}" size="80" maxlength="120" />
+	    <td colspan="3"><input type="text" id="item_flash_url" name="item_flash_url" value="{FLASH_URL}" size="80" maxlength="120" style="width:80%;" />
 	    <input type="button" class="button" onclick="selectImage();" value="変更" /></td>
 	</tr>
         <tr>
