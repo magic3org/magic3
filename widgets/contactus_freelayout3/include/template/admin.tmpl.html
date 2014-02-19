@@ -192,10 +192,10 @@ $(document).ready(function(){
 	        </patTemplate:tmpl>
 	    </select>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" style="width:60%;" />
 	    </patTemplate:tmpl>
 	    </td>
-	    <td class="table-headside" width="100"><span {_HELP_CONTACTUS_ID}>ID</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_CONTACTUS_ID}>ID</span></td>
 	    <td align="center">{ID}</td>
 	</tr>
     <tr class="even">
@@ -251,12 +251,12 @@ $(document).ready(function(){
 	</tr>
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_CONTACTUS_EMAIL}>メール送信</span></td>
-	    <td colspan="3">件名：<input type="text" name="item_email_subject" value="{EMAIL_SUBJECT}" size="40" maxlength="60" />&nbsp;&nbsp;&nbsp;&nbsp;
-	    送信先メールアドレス：<input type="text" name="item_email_receiver" value="{EMAIL_RECEIVER}" size="25" maxlength="40" /></td>
+	    <td colspan="3">件名：<input type="text" name="item_email_subject" value="{EMAIL_SUBJECT}" size="40" maxlength="60" style="width:300px;" />&nbsp;&nbsp;&nbsp;&nbsp;
+	    送信先メールアドレス：<input type="text" name="item_email_receiver" value="{EMAIL_RECEIVER}" size="25" maxlength="40" style="width:200px;" /></td>
 	</tr>
     <tr>
 	    <td class="table-headside"><span {_HELP_CONTACTUS_USER_EMAIL}>確認メール</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_send_user_email" {SEND_USER_EMAIL} />お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信<br />件名：<input type="text" name="item_user_email_subject" value="{USER_EMAIL_SUBJECT}" size="40" maxlength="60" />&nbsp;&nbsp;&nbsp;&nbsp;返信先メールアドレス：<input type="text" name="item_user_email_reply" value="{USER_EMAIL_REPLY}" size="25" maxlength="40" /><br />
+	    <td colspan="3"><input type="checkbox" name="item_send_user_email" {SEND_USER_EMAIL} />お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信<br />件名：<input type="text" name="item_user_email_subject" value="{USER_EMAIL_SUBJECT}" size="40" maxlength="60" style="width:300px;" />&nbsp;&nbsp;&nbsp;&nbsp;返信先メールアドレス：<input type="text" name="item_user_email_reply" value="{USER_EMAIL_REPLY}" size="25" maxlength="40" style="width:200px;" /><br />
 	    本文：<br />
 	    <textarea name="item_user_email_format" rows="3" style="width:100%;">{USER_EMAIL_FORMAT}</textarea></td>
 	</tr>

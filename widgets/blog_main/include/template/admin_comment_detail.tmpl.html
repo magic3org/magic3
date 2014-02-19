@@ -1,3 +1,15 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
@@ -38,27 +50,27 @@ function cancelItem(){
 <span {_HELP_COMMENT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
 </td></tr>
 <tr><td colspan="2">
-<table class="simple-table">
+<table class="simple-table" style="margin:0 auto;width:950px;">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="100"><span {_HELP_COMMENT_ENTRY_NAME}>記事タイトル</span></td>
+    <tr>
+	    <td class="table-headside" width="150"><span {_HELP_COMMENT_ENTRY_NAME}>記事タイトル</span></td>
 	    <td>{ENTRY_TITLE}</td>
-	    <td class="table-headside" width="100"><span {_HELP_COMMENT_NAME}>コメントタイトル</span></td>
-	    <td><input type="text" name="item_name" value="{NAME}" size="60" maxlength="60" /></td>
+	    <td class="table-headside" width="150"><span {_HELP_COMMENT_NAME}>コメントタイトル</span></td>
+	    <td><input type="text" name="item_name" value="{NAME}" size="60" maxlength="60" style="width:100%;" /></td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_COMMENT_USER}>投稿者</span></td>
-	    <td><input type="text" name="item_reg_user" value="{REG_USER}" size="30" maxlength="50" /></td>
+	    <td><input type="text" name="item_reg_user" value="{REG_USER}" size="30" maxlength="50" style="width:100%;" /></td>
 	    <td class="table-headside"><span {_HELP_COMMENT_DT}>投稿日時</span></td>
-	    <td colspan="3">{ENTRY_DT}</td>
+	    <td>{ENTRY_DT}</td>
 	</tr>
 	<tr>
 	    <td class="table-headside"><span {_HELP_COMMENT_EMAIL}>Eメール</span></td>
-	    <td colspan="3"><input type="text" name="item_email" value="{EMAIL}" size="30" maxlength="50" /></td>
+	    <td colspan="3"><input type="text" name="item_email" value="{EMAIL}" size="30" maxlength="50" style="width:100%;" /></td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_COMMENT_CONTENT}>コメント内容</span></td>
-	    <td colspan="3" width="750" height="200">
+	    <td colspan="3" width="800" height="200">
 	    <textarea name="item_html" style="width:100%;height:100%;">{HTML}</textarea>
 	    </td>
 	</tr>
@@ -73,7 +85,7 @@ function cancelItem(){
 	    <td>{UPDATE_DT}</td>
 	</tr>
 	<tr>
-	    <td colspan="6" align="right">
+	    <td colspan="4" align="right">
 <patTemplate:tmpl name="delete_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 </patTemplate:tmpl>

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -163,10 +163,10 @@ $(function(){
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>&nbsp;&nbsp;&nbsp;&nbsp;
-	    上マージン：<input type="text" name="item_title_mtop" value="{TITLE_MTOP}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    左マージン：<input type="text" name="item_title_mleft" value="{TITLE_MLEFT}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    右マージン：<input type="text" name="item_title_mright" value="{TITLE_MRIGHT}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    下マージン：<input type="text" name="item_title_mbottom" value="{TITLE_MBOTTOM}" size="3" maxlength="4" />px
+	    上マージン：<input type="text" name="item_title_mtop" value="{TITLE_MTOP}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    左マージン：<input type="text" name="item_title_mleft" value="{TITLE_MLEFT}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    右マージン：<input type="text" name="item_title_mright" value="{TITLE_MRIGHT}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    下マージン：<input type="text" name="item_title_mbottom" value="{TITLE_MBOTTOM}" size="3" maxlength="4" style="width:30px;" />px
 	    </td>
 	</tr>
         <tr class="even">
@@ -179,10 +179,10 @@ $(function(){
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>&nbsp;&nbsp;&nbsp;&nbsp;
-	    上マージン：<input type="text" name="item_desc_mtop" value="{DESC_MTOP}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    左マージン：<input type="text" name="item_desc_mleft" value="{DESC_MLEFT}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    右マージン：<input type="text" name="item_desc_mright" value="{DESC_MRIGHT}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    下マージン：<input type="text" name="item_desc_mbottom" value="{DESC_MBOTTOM}" size="3" maxlength="4" />px
+	    上マージン：<input type="text" name="item_desc_mtop" value="{DESC_MTOP}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    左マージン：<input type="text" name="item_desc_mleft" value="{DESC_MLEFT}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    右マージン：<input type="text" name="item_desc_mright" value="{DESC_MRIGHT}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    下マージン：<input type="text" name="item_desc_mbottom" value="{DESC_MBOTTOM}" size="3" maxlength="4" style="width:30px;" />px
 	    </td>
 	</tr>
         <tr>
@@ -195,10 +195,10 @@ $(function(){
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>&nbsp;&nbsp;&nbsp;&nbsp;
-	    上マージン：<input type="text" name="item_url_mtop" value="{URL_MTOP}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    左マージン：<input type="text" name="item_url_mleft" value="{URL_MLEFT}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    右マージン：<input type="text" name="item_url_mright" value="{URL_MRIGHT}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    下マージン：<input type="text" name="item_url_mbottom" value="{URL_MBOTTOM}" size="3" maxlength="4" />px
+	    上マージン：<input type="text" name="item_url_mtop" value="{URL_MTOP}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    左マージン：<input type="text" name="item_url_mleft" value="{URL_MLEFT}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    右マージン：<input type="text" name="item_url_mright" value="{URL_MRIGHT}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    下マージン：<input type="text" name="item_url_mbottom" value="{URL_MBOTTOM}" size="3" maxlength="4" style="width:30px;" />px
 	    </td>
 	</tr>
         <tr class="even">
@@ -212,7 +212,7 @@ $(function(){
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
-	    </div><div><input type="radio" name="item_sel_image" value="2" {ORIGINAL_IMG_CHECKED} />画像を指定&nbsp;&nbsp;<input type="text" id="item_image_url" name="item_image_url" value="{IMAGE_URL}" size="80" maxlength="120" readonly />
+	    </div><div><input type="radio" name="item_sel_image" value="2" {ORIGINAL_IMG_CHECKED} />画像を指定&nbsp;&nbsp;<input type="text" id="item_image_url" name="item_image_url" value="{IMAGE_URL}" size="80" maxlength="120" style="width:80%;" readonly />
 	    <input type="button" class="button" onclick="m3OpenImageFileBrowser(SetUrl);" value="参照" />
 	    </div>
 	    <!-- 表示位置：<select name="item_image_align">
@@ -220,10 +220,10 @@ $(function(){
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>&nbsp;&nbsp;&nbsp;&nbsp;-->
-	    上マージン：<input type="text" name="item_image_mtop" value="{IMAGE_MTOP}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    左マージン：<input type="text" name="item_image_mleft" value="{IMAGE_MLEFT}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    右マージン：<input type="text" name="item_image_mright" value="{IMAGE_MRIGHT}" size="3" maxlength="4" />px&nbsp;&nbsp;
-	    下マージン：<input type="text" name="item_image_mbottom" value="{IMAGE_MBOTTOM}" size="3" maxlength="4" />px
+	    上マージン：<input type="text" name="item_image_mtop" value="{IMAGE_MTOP}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    左マージン：<input type="text" name="item_image_mleft" value="{IMAGE_MLEFT}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    右マージン：<input type="text" name="item_image_mright" value="{IMAGE_MRIGHT}" size="3" maxlength="4" style="width:30px;" />px&nbsp;&nbsp;
+	    下マージン：<input type="text" name="item_image_mbottom" value="{IMAGE_MBOTTOM}" size="3" maxlength="4" style="width:30px;" />px
 	    </td>
 	</tr>
         <tr>
