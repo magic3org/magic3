@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1669,6 +1669,10 @@ class BaseWidgetContainer extends Core
 	{
 		$messageClassStr = '';
 		$useBootstrap = $this->gPage->getUseBootstrap();
+		
+		// 前後タグ
+		$preTag = '';
+		$postTag = '';
 				
 		// メッセージがある場合はメッセージタグを表示
 		if ($this->getMsgCount() > 0){
@@ -1682,14 +1686,16 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger');
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger', $preTag, $postTag);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 			
 			foreach ($this->dangerMessage as $value) {
 				$row = array(
-					'message' => $value,
-					'class' 	=> $messageClassStr			// メッセージ追加クラス
+					'message' 	=> $value,
+					'class' 	=> $messageClassStr,			// メッセージ追加クラス
+					'pre_tag'	=> $preTag,				// 前タグ
+					'post_tag'	=> $postTag				// 後タグ
 				);
 				$this->tmpl->addVars('_danger_message', $row);
 				$this->tmpl->parseTemplate('_danger_message', 'a');
@@ -1701,14 +1707,16 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger');
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('danger', $preTag, $postTag);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
-			
+
 			foreach ($this->errorMessage as $value) {
 				$row = array(
-					'message' => $value,
-					'class' 	=> $messageClassStr			// メッセージ追加クラス
+					'message'	=> $value,
+					'class' 	=> $messageClassStr,			// メッセージ追加クラス
+					'pre_tag'	=> $preTag,				// 前タグ
+					'post_tag'	=> $postTag				// 後タグ
 				);
 				$this->tmpl->addVars('_error_message', $row);
 				$this->tmpl->parseTemplate('_error_message', 'a');
@@ -1720,14 +1728,16 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('warning');
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('warning', $preTag, $postTag);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
-			
+
 			foreach ($this->warningMessage as $value) {
 				$row = array(
 					'message'	=> $value,
-					'class' 	=> $messageClassStr			// メッセージ追加クラス
+					'class' 	=> $messageClassStr,			// メッセージ追加クラス
+					'pre_tag'	=> $preTag,				// 前タグ
+					'post_tag'	=> $postTag				// 後タグ
 				);
 				$this->tmpl->addVars('_warning_message', $row);
 				$this->tmpl->parseTemplate('_warning_message', 'a');
@@ -1739,14 +1749,16 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info');
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info', $preTag, $postTag);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 			
 			foreach ($this->infoMessage as $value) {
 				$row = array(
 					'message'	=> $value,
-					'class' 	=> $messageClassStr			// メッセージ追加クラス
+					'class' 	=> $messageClassStr,			// メッセージ追加クラス
+					'pre_tag'	=> $preTag,				// 前タグ
+					'post_tag'	=> $postTag				// 後タグ
 				);
 				$this->tmpl->addVars('_info_message', $row);
 				$this->tmpl->parseTemplate('_info_message', 'a');				
@@ -1758,14 +1770,16 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info');
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('info', $preTag, $postTag);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 			
 			foreach ($this->guideMessage as $value) {
 				$row = array(
 					'message' 	=> $value,
-					'class' 	=> $messageClassStr			// メッセージ追加クラス
+					'class' 	=> $messageClassStr,			// メッセージ追加クラス
+					'pre_tag'	=> $preTag,				// 前タグ
+					'post_tag'	=> $postTag				// 後タグ
 				);
 				$this->tmpl->addVars('_guide_message', $row);
 				$this->tmpl->parseTemplate('_guide_message', 'a');				
@@ -1777,14 +1791,16 @@ class BaseWidgetContainer extends Core
 			
 			// メッセージ追加クラス
 			if ($useBootstrap){
-				$messageClassArray = $this->gDesign->getBootstrapMessageClass('success');
+				$messageClassArray = $this->gDesign->getBootstrapMessageClass('success', $preTag, $postTag);
 				if (!empty($messageClassArray)) $messageClassStr = ' ' . implode(' ', $messageClassArray);
 			}
 			
 			foreach ($this->successMessage as $value) {
 				$row = array(
-					'message' => $value,
-					'class' 	=> $messageClassStr			// メッセージ追加クラス
+					'message' 	=> $value,
+					'class' 	=> $messageClassStr,			// メッセージ追加クラス
+					'pre_tag'	=> $preTag,				// 前タグ
+					'post_tag'	=> $postTag				// 後タグ
 				);
 				$this->tmpl->addVars('_success_message', $row);
 				$this->tmpl->parseTemplate('_success_message', 'a');				

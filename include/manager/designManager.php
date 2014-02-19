@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -137,9 +137,11 @@ class DesignManager extends Core
 	 * Bootstrapメッセージ用CSSクラス取得
 	 *
 	 * @param string $type		メッセージタイプ(danger,error,warning,info,success)
+	 * @param string $preTag	前タグ
+	 * @param string $preTag	後タグ
 	 * @return array 			クラス名
 	 */
-	function getBootstrapMessageClass($type)
+	function getBootstrapMessageClass($type, &$preTag = null, &$postTag = null)
 	{
 		$extClass = array();
 		
@@ -165,6 +167,13 @@ class DesignManager extends Core
 				$extClass[] = 'alert-success';
 				break;
 		}
+		// メッセージ幅
+		$extClass[] = 'col-lg-6';
+		$extClass[] = 'col-lg-offset-3';
+	
+		// 前後タグ
+		if (isset($preTag)) $preTag = '<div class="row">';
+		if (isset($postTag)) $postTag = '</div>';
 		return $extClass;
 	}
 	/**
