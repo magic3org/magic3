@@ -109,18 +109,18 @@ $(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table">
+<table class="simple-table" style="margin:0 auto;width:950px;">
     <tbody>
     <tr>
 	    <td class="table-headside" width="150"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></td>
-	    <td width="700" colspan="3">
+	    <td width="800" colspan="3">
 	    <select name="item_sel_menuid" onchange="selectMenu();">
 	        <option value="0" {SELECTED}>-- {_LC_LABEL_NEW} --</option>
                 <patTemplate:tmpl name="menuid_list">
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>
-	    <input type="text" id="item_name" name="item_name" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /><input type="button" id="get_title_button" class="button" onclick="getTitle();" value="{_LC_LABEL_GET_TITLE}" {GET_TITLE_DISABLED} />&nbsp;&nbsp;{LANG}<br />
+	    <input type="text" id="item_name" name="item_name" value="{SEL_ITEM_NAME}" size="40" maxlength="40" style="width:50%;" /><input type="button" id="get_title_button" class="button" onclick="getTitle();" value="{_LC_LABEL_GET_TITLE}" {GET_TITLE_DISABLED} />&nbsp;&nbsp;{LANG}<br />
 	    <patTemplate:tmpl name="input_lang" visibility="hidden">
 	    <input type="text" name="item_name_{ID}" value="{VALUE}" size="40" maxlength="40" />&nbsp;&nbsp;{LANG}<br />
 	    </patTemplate:tmpl>
@@ -135,7 +135,7 @@ $(function(){
                 </patTemplate:tmpl>
 	    </select>
 	    </td>
-	    <td class="table-headside"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></td>
 	    <td>
 	    <select name="item_link_type">
 	        <option value="0" {LINK_TYPE_0}>{_LC_LABEL_LINK_SELF}</option>

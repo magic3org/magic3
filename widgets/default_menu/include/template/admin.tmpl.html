@@ -79,10 +79,10 @@ $(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin:0 auto;width:950px;">
     <tbody>
         <tr>
-	    <td class="table-headside" width="100"><span {_HELP_MENU_NAME_INPUT}>名前</span></td>
+	    <td class="table-headside" width="150"><span {_HELP_MENU_NAME_INPUT}>名前</span></td>
 	    <td width="500">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
@@ -91,7 +91,7 @@ $(function(){
 	        </patTemplate:tmpl>
 	    </select>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" style="width:50%;" />
 	    </patTemplate:tmpl>
 	    </td>
 	    <td class="table-headside" width="100"><span {_HELP_MENU_ID}>ID</span></td>

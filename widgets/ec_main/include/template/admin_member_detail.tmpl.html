@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 4845 2012-04-13 04:47:07Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -73,19 +73,19 @@ $(function(){
 <td align="right"><patTemplate:tmpl name="cancel_button" visibility="visible"><input type="button" class="button" onclick="cancelItem();" value="戻る" /></patTemplate:tmpl>
 </td></tr>
 <tr><td colspan="2">
-<table class="simple-table" width="800">
+<table class="simple-table" style="margin:0 auto;width:900px;">
     <tbody>
         <tr>
 	    <td class="table-headside" width="150"><span {_HELP_MEMBER_NO}>会員No</span></td>
-	    <td><input type="text" name="member_no" value="{MEMBER_NO}" size="30" maxlength="30" {MEMBER_NO_DISABLED} /></td>
+	    <td width="300"><input type="text" name="member_no" value="{MEMBER_NO}" size="30" maxlength="30" style="width:100%;" {MEMBER_NO_DISABLED} /></td>
 	    <td class="table-headside" width="150"><span {_HELP_MEMBER_EMAIL}>Eメール</span></td>
-	    <td><input type="text" name="email" value="{EMAIL}" size="30" maxlength="50" {EMAIL_DISABLED} /></td>
+	    <td><input type="text" name="email" value="{EMAIL}" size="30" maxlength="50" style="width:100%;" {EMAIL_DISABLED} /></td>
 	</tr>
         <tr class="even">
 	    <td class="table-headside"><span {_HELP_MEMBER_NAME}>会員名(姓・名)</span></td>
-	    <td><input type="text" name="family_name" value="{FAMILY_NAME}" size="10" maxlength="20" {FAMILY_NAME_DISABLED} />&nbsp;<input type="text" name="first_name" value="{FIRST_NAME}" size="10" maxlength="20" {FIRST_NAME_DISABLED} /></td>
+	    <td><input type="text" name="family_name" value="{FAMILY_NAME}" size="10" maxlength="20" style="width:100px;" {FAMILY_NAME_DISABLED} />&nbsp;<input type="text" name="first_name" value="{FIRST_NAME}" size="10" maxlength="20" style="width:100px;" {FIRST_NAME_DISABLED} /></td>
 	    <td class="table-headside"><span {_HELP_MEMBER_NAME_KANA}>会員名カナ(姓・名)</span></td>
-	    <td><input type="text" name="family_name_kana" value="{FAMILY_NAME_KANA}" size="10" maxlength="20" {FAMILY_NAME_KANA_DISABLED} />&nbsp;<input type="text" name="first_name_kana" value="{FIRST_NAME_KANA}" size="10" maxlength="20" {FIRST_NAME_KANA_DISABLED} /></td>
+	    <td><input type="text" name="family_name_kana" value="{FAMILY_NAME_KANA}" size="10" maxlength="20" style="width:100px;" {FAMILY_NAME_KANA_DISABLED} />&nbsp;<input type="text" name="first_name_kana" value="{FIRST_NAME_KANA}" size="10" maxlength="20" style="width:100px;" {FIRST_NAME_KANA_DISABLED} /></td>
 	</tr>
         <tr>
 	    <td class="table-headside"><span {_HELP_MEMBER_ZIP}>郵便番号</span></td>
@@ -110,13 +110,13 @@ $(function(){
 	</tr>
         <tr>
 	    <td class="table-headside"><span {_HELP_MEMBER_PHONE}>電話番号</span></td>
-	    <td><input type="text" name="phone" value="{PHONE}" size="30" maxlength="30" {PHONE_DISABLED} /></td>
+	    <td><input type="text" name="phone" value="{PHONE}" size="30" maxlength="30" style="width:100%;" {PHONE_DISABLED} /></td>
 	    <td class="table-headside"><span {_HELP_MEMBER_FAX}>FAX</span></td>
-	    <td><input type="text" name="fax" value="{FAX}" size="30" maxlength="30" {FAX_DISABLED} /></td>
+	    <td><input type="text" name="fax" value="{FAX}" size="30" maxlength="30" style="width:100%;" {FAX_DISABLED} /></td>
 	</tr>
         <tr class="even">
 	    <td class="table-headside"><span {_HELP_MEMBER_MOBILE}>携帯電話</span></td>
-	    <td colspan="3"><input type="text" name="mobile" value="{MOBILE}" size="30" maxlength="30" {MOBILE_DISABLED} /></td>
+	    <td colspan="3"><input type="text" name="mobile" value="{MOBILE}" size="30" maxlength="30" style="width:100%;" {MOBILE_DISABLED} /></td>
 	</tr>
 <patTemplate:tmpl name="show_member_info_option" visibility="hidden">
     <tr>
@@ -144,7 +144,7 @@ $(function(){
 	    <td>{UPDATE_DT}</td>
 	</tr>
         <tr class="even">
-	    <td class="table-headside" width="100"><span {_HELP_MEMBER_PWD}>パスワード</span></td>
+	    <td class="table-headside"><span {_HELP_MEMBER_PWD}>パスワード</span></td>
 	    <td colspan="3">
 	    <input type="button" class="button" onclick="sendPassword();" value="再作成して、メール送信" {SEND_PWD} />&nbsp;&nbsp;
 	    {SEND_MESSAGE} {PWD_MESSAGE}</td>
