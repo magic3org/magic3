@@ -1,0 +1,33 @@
+/**
+ * Magic3管理画面用CSS(Bootstrap読み込みなしの場合に使用)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+@font-face {
+  font-family: 'Glyphicons Halflings';
+
+  src: url('../bootstrap-3.1.1/fonts/glyphicons-halflings-regular.eot');
+  src: url('../bootstrap-3.1.1/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../bootstrap-3.1.1/fonts/glyphicons-halflings-regular.woff') format('woff'), url('../bootstrap-3.1.1/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../bootstrap-3.1.1/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.glyphicon-align-justify:before {
+  content: "\e055";
+}

@@ -169,6 +169,7 @@ class PageManager extends Core
 	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt1.1.0.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
 	const M3_ADMIN_CSS_FILE					= 'm3/admin.css';			// 管理機能用のCSS
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
+	const M3_NO_BOOTSTRAP_CSS_FILE			= 'm3/nobootstrap.css';		// 管理画面でBootstrapの読み込みなしの場合のCSS
 	
 	// 読み込み制御
 	const USE_BOOTSTRAP_ADMIN	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
@@ -248,6 +249,7 @@ class PageManager extends Core
 												self::M3_OPTION_SCRIPT_FILENAME);
 												
 			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);			// 管理機能用のCSS
+			if (!$this->useBootstrap) $this->defaultAdminCssFiles[] = self::M3_NO_BOOTSTRAP_CSS_FILE;	// Bootstrapを読み込まない場合は代替CSSを読み込む
 		}
 		
 		// 管理権限なしで管理ディレクトリアクセスで読み込むスクリプトファイル
@@ -1285,8 +1287,9 @@ class PageManager extends Core
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
-						
+					
 						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
+						if (!$this->useBootstrap) $this->addCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
 					}
 				} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
