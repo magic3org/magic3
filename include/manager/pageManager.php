@@ -1286,6 +1286,7 @@ class PageManager extends Core
 						$this->addScriptFile(ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME);		// jQuery Contextmenu Lib
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
+						$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);// パネル用スクリプト追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 					
 						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS

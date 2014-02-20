@@ -80,6 +80,9 @@ class ScriptLibInfo
 	const LIB_JQUERY_JSON			= 'jquery.json';
 	const LIB_JQUERY_FITTEXT		= 'jquery.fittext';
 	
+	// Magic3管理画面専用jQueryプラグイン
+	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
+	
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
 	
@@ -187,6 +190,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_TIMEPICKER_CSS			= 'jquery/timepicker/jquery.ui.timepicker.css';
 	const JQUERY_JSON_FILENAME			= 'jquery/jquery.json-2.4.min.js';
 	const JQUERY_FITTEXT_FILENAME		= 'jquery/jquery.fittext.js';
+	// Magic3管理画面jQueryプラグインのファイル名
+	const JQUERY_M3_SLIDE_PANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
 	
 	// ライブラリの公式サイトのURL
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
@@ -441,6 +446,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																'css'		=> array(self::JQUERY_JQEASYPANEL_CSS),
 																'url'		=> self::JQUERY_JQEASYPANEL_URL,
 																'version'	=> self::JQUERY_JQEASYPANEL_VER)*/
+					// Magic3管理画面専用jQueryプラグイン
+					self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDE_PANEL_FILENAME)),	// スライドパネル
+					
 					// その他ライブラリ
 					self::LIB_CODEMIRROR_JAVASCRIPT		=>	array(	'script' 	=> array(self::CODEMIRROR_FILENAME, self::CODEMIRROR_JAVASCRIPT_FILENAME),	// CodeMirror用のファイル
 																	'css'		=> array(self::CODEMIRROR_CSS),
