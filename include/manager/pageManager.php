@@ -141,9 +141,12 @@ class PageManager extends Core
 	const ADJUST_ICON32_FILE = '/images/system/adjust_widget32.png';	// 位置調整アイコン(ツールチップ用)
 	const CLOSE_BOX_ICON32_FILE = '/images/system/close_box.png';		// ウィンドウ閉じるアイコン(ツールチップ用)
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// ウィジェット配置注意アイコン
-	const ADMIN_ICON_FILE = '/images/system/admin64.png';		// パネルメニュー管理画面遷移用アイコン
-	const LOGOUT_ICON_FILE = '/images/system/logout64.png';		// パネルメニューログアウト用アイコン
-	const EDIT_PAGE_ICON_FILE = '/images/system/create_page64.png';		// パネルメニュー編集用アイコン
+//	const ADMIN_ICON_FILE = '/images/system/admin64.png';		// パネルメニュー管理画面遷移用アイコン
+//	const LOGOUT_ICON_FILE = '/images/system/logout64.png';		// パネルメニューログアウト用アイコン
+//	const EDIT_PAGE_ICON_FILE = '/images/system/create_page64.png';		// パネルメニュー編集用アイコン	
+	const ADMIN_ICON_FILE = '/images/system/home32.png';		// パネルメニュー管理画面遷移用アイコン
+	const LOGOUT_ICON_FILE = '/images/system/logout32.png';		// パネルメニューログアウト用アイコン
+	const EDIT_PAGE_ICON_FILE = '/images/system/create_page32.png';		// パネルメニュー編集用アイコン	
 	const EDIT_END_ICON_FILE = '/images/system/close64.png';		// パネルメニュー編集終了用アイコン
 	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
@@ -250,6 +253,10 @@ class PageManager extends Core
 												
 			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);			// 管理機能用のCSS
 			if (!$this->useBootstrap) $this->defaultAdminCssFiles[] = self::M3_NO_BOOTSTRAP_CSS_FILE;	// Bootstrapを読み込まない場合は代替CSSを読み込む
+			
+			// Javascriptライブラリ
+			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// パネル用スクリプト追加
+			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// パネル用スクリプト追加
 		}
 		
 		// 管理権限なしで管理ディレクトリアクセスで読み込むスクリプトファイル
@@ -1286,7 +1293,8 @@ class PageManager extends Core
 						$this->addScriptFile(ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME);		// jQuery Contextmenu Lib
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);// パネル用スクリプト追加
+						$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// パネル用スクリプト追加
+						$this->addScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// パネル用スクリプト追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 					
 						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
@@ -3213,7 +3221,8 @@ class PageManager extends Core
 						$linkUrl = createUrl($linkUrl, M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_LOGOUT);
 						$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
 						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
-						
+
+/*						
 						$linkStr .= '<div id="m3slidemenubar">';
 						$linkStr .= '<div id="m3slidemenubarpanel">';
 						$linkStr .= '<ul class="menubarbuttons">';
@@ -3229,10 +3238,28 @@ class PageManager extends Core
 						$linkStr .= '<a href="#" class="m3close">閉じる</a>';
 						$linkStr .= '</div>';
 						$linkStr .= '</div>';
+						*/
 					
+						$linkStr .= '<div id="m3slidepanel">';
+						$linkStr .= '<div class="m3panelopener m3topleft"><a href="#"><i class="glyphicon glyphicon-align-justify"></i></a></div>';
+						$linkStr .= '<div style="top:-60px; visibility: visible;" class="m3panel_top m3-navbar-default">';
+						$linkStr .= '<div tabindex="0" class="m3panel_wrap">';
+						$linkStr .= '<ul class="m3-nav m3-navbar-nav">';
+						if ($gEnvManager->isSystemAdmin()){				// 管理画面、編集モードは、管理者権限がある場合のみ有効
+							$linkStr .= $adminTag;
+							$linkStr .= $editTag;
+						}
+						$linkStr .= $logoutTag;
+						$linkStr .= '</ul>';
+						$linkStr .= '</div>';
+						$linkStr .= '</div>';
+						$linkStr .= '</div>';
+
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").append(\'' . $linkStr . '\');' . M3_NL;
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("#m3slidemenubarpanel").m3SlideMenubar();' . M3_NL;
+						//$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("#m3slidemenubarpanel").m3SlideMenubar();' . M3_NL;
+						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(".m3panel_top").m3slidepanel({ "position": "top", "type": "push" });' . M3_NL;
+						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").css("position", "relative");' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
 					}
 				}

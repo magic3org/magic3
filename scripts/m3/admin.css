@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.css 5785 2013-03-04 05:45:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 #m3slidemenubar {
@@ -119,3 +119,125 @@
 
 .m3_widget.m3_widget_sortable { cursor: url(../../images/system/cursor/context.cur), auto; }
 .m3_widget.m3_widget_contextmenu { cursor: url(../../images/system/cursor/context.cur), auto; }
+
+/***** Magic3スライドパネル *****/
+.m3panel_top,
+.m3panel_left,
+.m3panel_right,
+.m3panel_bottom,
+.m3panelopener,
+.m3panelopener a {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+/*	font-weight: inherit;*/
+	font-style: inherit;
+/*	font-size: 100%;*/
+/*	font-family: inherit;*/
+font-family:"Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+font-weight:500;
+line-height:1.1;
+font-size:15px;
+	vertical-align: baseline;
+	text-decoration: none;
+	text-transform: none;
+	background-color: transparent;
+	background-image: none;
+}
+
+.m3panelopener.m3topleft {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+}
+.m3panelopener a {
+	display: block;
+	background: #2C3E50;
+	color: #fff;
+	padding: 5px 10px;
+/*	font-size: 20px;*/
+	height:25px;
+}
+.m3panelopener a:visited {
+ 	color: #fff;
+}
+.m3panelopener a:hover {
+	text-decoration: none;
+}
+.m3panelopener .glyphicon {
+	font-size: 20px;
+}
+.m3panel_left {
+	background: #2C3E50;
+	position: fixed;
+	width: 240px;
+	height: 100%;
+	top: 0;
+	z-index: 1000;
+	visibility: hidden;
+}
+/*
+.m3panel_left .m3panel_wrap {
+	padding: 20px 0px 20px 0px;
+	color: #fff;
+}*/
+
+.m3panel_top {
+	background: #2C3E50;
+	position: fixed;
+	width: 100%;
+	height: 60px;
+	left: 0;
+	z-index: 1000;
+	visibility: hidden;
+}
+/*
+.m3panel_top .m3panell_wrap {
+	padding: 20px 0px 20px 0px;
+	color: #fff;
+}*/
+
+.m3panel_top a, .m3panel_left a, .m3panel_right a, .m3panel_bottom a {
+	color:#18bc9c;
+	text-decoration:none;
+}
+.m3panel_top img, .m3panel_left img, .m3panel_right img, .m3panel_bottom img {
+	border:0;
+	vertical-align:middle;
+}
+
+.m3-nav{padding-left:0;margin-bottom:0;list-style:none;}
+.m3-nav:before,.m3-nav:after{display:table;content:" "}
+.m3-nav:after{clear:both}
+.m3-nav:before,.m3-nav:after{display:table;content:" "}
+.m3-nav:after{clear:both}
+.m3-nav:before,.m3-nav:after{display:table;content:" "}
+.m3-nav:after{clear:both}
+.m3-nav:before,.m3-nav:after{display:table;content:" "}
+.m3-nav:after{clear:both}
+.m3-nav:before,.m3-nav:after{display:table;content:" "}
+.m3-nav:after{clear:both}
+.m3-nav>li{position:relative;display:block;}
+.m3-nav>li>a{position:relative;display:block;padding:10px 15px}
+.m3-nav>li>a:hover,.m3-nav>li>a:focus{text-decoration:none;background-color:#ecf0f1}
+.m3-nav>li.disabled>a{color:#b4bcc2}
+.m3-nav>li.disabled>a:hover,.m3-nav>li.disabled>a:focus{color:#b4bcc2;text-decoration:none;cursor:not-allowed;background-color:transparent}
+
+.m3-navbar-nav{margin:9.75px -15px;padding-left:30px;/*left icon position*/}
+.m3-navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:21px;}
+@media(min-width:768px){
+	.m3-navbar-nav{float:left;margin:0}
+	.m3-navbar-nav>li{float:left}
+	/*.m3-navbar-nav>li>a{padding-top:19.5px;padding-bottom:19.5px}*/
+	.m3-navbar-nav>li>a{padding-top:14px;padding-bottom:14px/*for 32x32 icon top position*/}
+}
+
+.m3-navbar-default{background-color:#2c3e50;border-color:#202d3b}
+.m3-navbar-default .navbar-brand{color:#fff}
+.m3-navbar-default .navbar-brand:hover,.m3-navbar-default .navbar-brand:focus{color:#18bc9c;background-color:transparent}
+.m3-navbar-default .navbar-text{color:#777}
+.m3-navbar-default .m3-navbar-nav>li>a{color:#fff}
+.m3-navbar-default .m3-navbar-nav>li>a:hover,.m3-navbar-default .m3-navbar-nav>li>a:focus{color:#18bc9c;background-color:transparent}
+.m3-navbar-default .m3-navbar-nav>.active>a,.m3-navbar-default .m3-navbar-nav>.active>a:hover,.m3-navbar-default .m3-navbar-nav>.active>a:focus{color:#fff;background-color:#1a242f}
+.m3-navbar-default .m3-navbar-nav>.disabled>a,.m3-navbar-default .m3-navbar-nav>.disabled>a:hover,.m3-navbar-default .m3-navbar-nav>.disabled>a:focus{color:#ccc;background-color:transparent}
