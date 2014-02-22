@@ -605,13 +605,15 @@ class admin_mainDb extends BaseDb
 	 *
 	 * @param int $type				リストの種別(0=ページメインID,1=ページサブID)
 	 * @param array $row			取得データ
+	 * @param bool $availableOnly	true=メニュー表示可能項目のみ取得、false=すべて取得
 	 * @return bool					true=成功、false=失敗
 	 */
-	function getPageIdRecords($type, &$row)
+	function getPageIdRecords($type, &$row, $availableOnly = false)
 	{
-		$queryStr = 'select * from _page_id ';
-		$queryStr .=  'where pg_type = ? ';
-		$queryStr .=  'order by pg_priority';
+		$queryStr 	= 'SELECT * FROM _page_id ';
+		$queryStr .=  	'WHERE pg_type = ? ';
+		if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
+		$queryStr .=  'ORDER BY pg_priority';
 		return $this->selectRecords($queryStr, array($type), $row);
 	}
 	/**

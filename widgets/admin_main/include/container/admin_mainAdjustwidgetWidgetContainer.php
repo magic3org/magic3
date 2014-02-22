@@ -114,7 +114,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$cssClassSuffix = $request->trimValueOf('item_css_class_suffix');			// 追加CSSクラスサフィックス
 		
 		// 例外ページ
-		$this->db->getPageIdRecords(1/*ページサブID*/, $this->subIdRecords);
+		$this->db->getPageIdRecords(1/*ページサブID*/, $this->subIdRecords, true/*メニュー表示可能項目のみ取得*/);
 		$subIdCount = count($this->subIdRecords);
 		$this->exceptPageArray = array();
 		for ($i = 0; $i < $subIdCount; $i++){
