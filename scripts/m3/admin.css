@@ -131,14 +131,10 @@
 	padding: 0;
 	border: 0;
 	outline: 0;
-/*	font-weight: inherit;*/
+	font-weight: inherit;
 	font-style: inherit;
-/*	font-size: 100%;*/
-/*	font-family: inherit;*/
-font-family:"Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
-font-weight:500;
-line-height:1.1;
-font-size:15px;
+	font-size: 100%;
+	font-family: inherit;
 	vertical-align: baseline;
 	text-decoration: none;
 	text-transform: none;
@@ -191,6 +187,9 @@ font-size:15px;
 	left: 0;
 	z-index: 1000;
 	visibility: hidden;
+}
+.m3panel_top ul li {
+	float:left;	/* for IE8 */
 }
 /*
 .m3panel_top .m3panell_wrap {
