@@ -168,9 +168,9 @@ dl.m3_widget_sortable dt span.options a {
 	position:fixed;
 	top:0;
 	right:0;
-	margin:5px;
+	margin:10px;
 	padding:0;
-	width:64px;
-	height:64px;
+	width:32px;
+	height:32px;
 	z-index:2147483647;
 }

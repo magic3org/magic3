@@ -147,7 +147,7 @@ class PageManager extends Core
 	const ADMIN_ICON_FILE = '/images/system/home32.png';		// パネルメニュー管理画面遷移用アイコン
 	const LOGOUT_ICON_FILE = '/images/system/logout32.png';		// パネルメニューログアウト用アイコン
 	const EDIT_PAGE_ICON_FILE = '/images/system/create_page32.png';		// パネルメニュー編集用アイコン	
-	const EDIT_END_ICON_FILE = '/images/system/close64.png';		// パネルメニュー編集終了用アイコン
+	const EDIT_END_ICON_FILE = '/images/system/close32.png';		// パネルメニュー編集終了用アイコン
 	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
