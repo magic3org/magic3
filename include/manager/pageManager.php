@@ -152,6 +152,7 @@ class PageManager extends Core
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
+	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー)
 	
 	// アドオンオブジェクト用
 	const CONTENT_OBJ_ID	= 'contentlib';	// 汎用コンテンツオブジェクトID
@@ -1260,6 +1261,7 @@ class PageManager extends Core
 							$this->defaultAdminScriptFiles[] = ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS);
 						}
 					} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
+						//$this->useBootstrap = true;		// Bootstrapを使用
 						//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
 					}
 					$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
@@ -3689,8 +3691,10 @@ class PageManager extends Core
 						$this->pageDefPosition = '';
 					}
 				}
+				$posHead = '';
+				if (strcasecmp($position, 'user3') == 0 || strcasecmp($position, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
 				$contents .= '<div id="' . $viewPosId . '" class="m3_widgetpos_box" m3="pos:' . $position . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
-				$contents .= '<h2 class="m3_widgetpos_box_title">' . $position . '</h2>' . M3_NL;
+				$contents .= '<h2 class="m3_widgetpos_box_title">' . $posHead . $position . '</h2>' . M3_NL;
 				
 				// ウィジェットイメージを表示
 				$widgetTagHead = self::WIDGET_TAG_HEAD . $posId;
@@ -3914,15 +3918,19 @@ class PageManager extends Core
 				$posName = str_replace(self::POSITION_TAG_HEAD, '', substr($updatepos[$i], 0, strlen($updatepos[$i]) - strlen(strrchr($updatepos[$i], "_"))));
 				if ($task == 'wmove' && $posName == $position2){
 					// ウィジェット一覧外枠
+					$posHead = '';
+					if (strcasecmp($position2, 'user3') == 0 || strcasecmp($position2, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
 					echo '<div id="' . $updatepos[$i] . '" class="m3_widgetpos_box" m3="pos:' . $position2 . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
-					echo '<h2 class="m3_widgetpos_box_title">' . $position2 . '</h2>' . M3_NL;
+					echo '<h2 class="m3_widgetpos_box_title">' . $posHead . $position2 . '</h2>' . M3_NL;
 				
 					// ウィジェット一覧出力
 					echo $this->getWidgetList($pageId, $pageSubId, $widgetTagHead, $rows2);
 				} else {
 					// ウィジェット一覧外枠
+					$posHead = '';
+					if (strcasecmp($position, 'user3') == 0 || strcasecmp($position, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
 					echo '<div id="' . $updatepos[$i] . '" class="m3_widgetpos_box" m3="pos:' . $position . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
-					echo '<h2 class="m3_widgetpos_box_title">' . $position . '</h2>' . M3_NL;
+					echo '<h2 class="m3_widgetpos_box_title">' . $posHead . $position . '</h2>' . M3_NL;
 				
 					// ウィジェット一覧出力
 					echo $this->getWidgetList($pageId, $pageSubId, $widgetTagHead, $rows);

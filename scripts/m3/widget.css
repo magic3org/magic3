@@ -18,27 +18,32 @@ img {
 /* position block div for widget */
 .m3_widgetpos_box {
 	background-color:#FFF;
-	border:1px solid #555;
+/*	border:2px solid #555;*/
+	border:2px solid #1A242F;
 	color:#222;
 /*	margin:0 15px 15px 0;*/
-	margin:0;
+	margin:2px;
 /*	padding:0 10px 0;*/
 	padding:0 0 10px;
 /*	width:90%;*/
 	text-align:left;
-	font:11px/1.5 Arial, sans-serif;
+/*	font:11px/1.5 Arial, sans-serif;*/
+	font-family:"Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size:15px;
+	line-height:1.428571429;	
 }
 .m3_widgetpos_box h2.m3_widgetpos_box_title {
-	background-color:#555;
-	border-top:3px solid #666;
+/*	background-color:#555;*/
+	background-color:#1A242F;
+/*	border-top:3px solid #666;*/
 	color:#FFF;
 /*	margin:0 -10px 10px;*/
 	margin:0 0 10px 0;
 	padding:0 10px;
-	font-size:12px;
+	font-size:15px;
 	font-weight:bold;
 	line-height:2;
-	font-family:Arial, sans-serif;
+/*	font-family:Arial, sans-serif;*/
 }
 
 /* widget list window */
