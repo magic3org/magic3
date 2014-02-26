@@ -79,6 +79,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_TIMEPICKER		= 'jquery.timepicker';
 	const LIB_JQUERY_JSON			= 'jquery.json';
 	const LIB_JQUERY_FITTEXT		= 'jquery.fittext';
+	const LIB_JQUERY_IDTABS			= 'jquery.idtabs';
 	
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
@@ -107,6 +108,7 @@ class ScriptLibInfo
 	const JQUERY_FULLCALENDAR_VER	= '1.6.4';
 	const JQUERY_TIMEPICKER_VER		= '0.3.2';
 	const JQUERY_JSON_VER			= '2.4.0';
+	const JQUERY_IDTABS_VER			= '2.2';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -190,6 +192,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_TIMEPICKER_CSS			= 'jquery/timepicker/jquery.ui.timepicker.css';
 	const JQUERY_JSON_FILENAME			= 'jquery/jquery.json-2.4.min.js';
 	const JQUERY_FITTEXT_FILENAME		= 'jquery/jquery.fittext.js';
+	const JQUERY_IDTABS_FILENAME		= 'jquery/jquery.idTabs.min.js';
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDE_PANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
 	
@@ -214,6 +217,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_FULLCALENDAR_URL		= 'http://arshaw.com/fullcalendar/';
 	const JQUERY_TIMEPICKER_URL			= 'http://fgelinas.com/code/timepicker/';
 	const JQUERY_JSON_URL				= 'http://code.google.com/p/jquery-json/';
+	const JQUERY_IDTABS_URL				= 'http://www.sunsean.com/idTabs/';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
 	
 	// ディレクトリ名
@@ -442,6 +446,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																'url'		=> self::JQUERY_JSON_URL,
 																'version'	=> self::JQUERY_JSON_VER),
 					self::LIB_JQUERY_FITTEXT		=>	array(	'script' 	=> array(self::JQUERY_FITTEXT_FILENAME)),	// jquery.fittext用のファイル
+					self::LIB_JQUERY_IDTABS			=>	array(	'script' 	=> array(self::JQUERY_IDTABS_FILENAME),	// jquery.idtabs用のファイル
+																'url'		=> self::JQUERY_IDTABS_URL,
+																'version'	=> self::JQUERY_IDTABS_VER),															
 /*					self::LIB_JQUERY_JQEASYPANEL	=>	array(	'script' 	=> array(self::JQUERY_JQEASYPANEL_FILENAME),	// jquery.jqEasyPanel用のファイル
 																'css'		=> array(self::JQUERY_JQEASYPANEL_CSS),
 																'url'		=> self::JQUERY_JQEASYPANEL_URL,

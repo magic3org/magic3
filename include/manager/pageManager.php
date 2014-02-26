@@ -256,8 +256,8 @@ class PageManager extends Core
 			if (!$this->useBootstrap) $this->defaultAdminCssFiles[] = self::M3_NO_BOOTSTRAP_CSS_FILE;	// Bootstrapを読み込まない場合は代替CSSを読み込む
 			
 			// Javascriptライブラリ
-			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// パネル用スクリプト追加
-			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// パネル用スクリプト追加
+			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
+			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// 管理パネル用スクリプト追加
 		}
 		
 		// 管理権限なしで管理ディレクトリアクセスで読み込むスクリプトファイル
@@ -1261,6 +1261,7 @@ class PageManager extends Core
 							$this->defaultAdminScriptFiles[] = ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS);
 						}
 					} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
+						$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_IDTABS);			// 管理パネル用スクリプト追加(ポジション表示追加分)
 						//$this->useBootstrap = true;		// Bootstrapを使用
 						//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
 					}
@@ -1295,8 +1296,8 @@ class PageManager extends Core
 						$this->addScriptFile(ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME);		// jQuery Contextmenu Lib
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// パネル用スクリプト追加
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// パネル用スクリプト追加
+						$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
+						$this->addScript('', ScriptLibInfo::LIB_JQUERY_EASING);			// 管理パネル用スクリプト追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 					
 						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
