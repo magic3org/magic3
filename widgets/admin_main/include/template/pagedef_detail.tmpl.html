@@ -68,7 +68,7 @@ $(function(){
 <table id="pagedeflisttable" class="simple-table" width="100%">
     <thead>
         <tr>
-            <th width="17%"><span {_HELP_PAGEDEF_POSITION_BLOCK}>{_LC_LABEL_POSITION}</span>
+            <th width="20%"><span {_HELP_PAGEDEF_POSITION_BLOCK}>{_LC_LABEL_POSITION}</span>
     <select name="position" onchange="selectMenu()">
         <option value="">{_LC_LABEL_ALL}</option>
         <patTemplate:tmpl name="position_list">
@@ -78,7 +78,7 @@ $(function(){
 	    </th>
 	    <th width="80" valign="top"><span {_HELP_PAGEDEF_POSITION_INDEX}>{_LC_LABEL_ORDER}</span></th>
 	    <th width="25%" valign="top">{_LC_LABEL_WIDGET_ID} / {_LC_LABEL_WIDGET_NAME}</th>
-	    <th width="50" valign="top"><span {_HELP_PAGEDEF_WIDGET_CONFIG_ID}>{_LC_LABEL_CONFIG_ID}</span></th>
+	    <th width="80" valign="top"><span {_HELP_PAGEDEF_WIDGET_CONFIG_ID}>{_LC_LABEL_CONFIG_ID}</span></th>
 	    <th width="50" valign="top"><span {_HELP_PAGEDEF_WIDGET_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
 	    <th width="50" valign="top"><span {_HELP_PAGEDEF_WIDGET_COMMON}>{_LC_LABEL_SHARED}</span></th>
 	    <th>{_LC_LABEL_OPERATION}</th>
@@ -93,9 +93,9 @@ $(function(){
         <patTemplate:tmpl name="page_def_list">
         <tr>
 	    <td>{POSITION}</td>
-	    <td align="center"><input type="text" name="item{NO}_index" value="{INDEX}" size="4" maxlength="4" /></td>
+	    <td align="center"><input type="text" name="item{NO}_index" value="{INDEX}" size="4" maxlength="4" style="width:35px;" /></td>
 	    <td>{WIDGET_ID} / {WIDGET_NAME}</td>
-	    <td align="center"><input type="text" name="item{NO}_def_id" value="{DEF_ID}" size="5" maxlength="5" onkeypress="return m3_numericKey(event,true);" />
+	    <td align="center"><input type="text" name="item{NO}_def_id" value="{DEF_ID}" size="5" maxlength="5" onkeypress="return m3_numericKey(event,true);" style="width:35px;" />
 	    </td>
 	    <td align="center"><input type="checkbox" name="item{NO}_visible" {VISIBLE} /></td>
 	    <td align="center"><input type="checkbox" name="item{NO}_shared" {SHARED} /></td>
