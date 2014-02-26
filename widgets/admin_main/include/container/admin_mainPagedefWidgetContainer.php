@@ -35,6 +35,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const TEMPLATE_PLAIN32_ICON_FILE = '/images/system/layout_plain32.png';		// デザインなしテンプレートアイコン
 	const PLAIN_TEMPLATE_ID = '_layout';		// デザインなしテンプレート
 	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="トップページ"></i> ';		// タイトル付加用アイコン(ホーム)
+	const TITLE_PRE_ICON_LOCK = '<i class="glyphicon glyphicon-lock" rel="m3help" title="SSL"></i> ';		// タイトル付加用アイコン(鍵)
 	const TITLE_PRE_ICON_MINUS = '<i class="glyphicon glyphicon-minus-sign" rel="m3help" title="非表示"></i> ';		// タイトル付加用アイコン(マイナス記号)
 	const BUTTON_ICON_TEMPLATE_CHECK = '<i class="glyphicon glyphicon-check"></i> ';		// テンプレート一覧付加用アイコン(チェックあり)
 	const BUTTON_ICON_TEMPLATE_UNCHECKED = '<i class="glyphicon glyphicon-unchecked"></i> ';	// テンプレート一覧付加用アイコン(チェックなし)
@@ -511,6 +512,22 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$checked = '';
 		$value = $fetchedRow['pg_id'];
 		
+		// ページ情報(Bootstrap型設定画面)
+		$contentType = '';
+		$templateId = '';
+		$useSsl = false;		// SSL使用状況
+		$pageInfoCount = count($this->pageInfoRows);
+		for ($i = 0; $i < $pageInfoCount; $i++){
+			$pageInfo = $this->pageInfoRows[$i];
+			if ($pageInfo['pg_id'] == $value){
+				$contentType = $pageInfo['pn_content_type'];
+				$templateId = $pageInfo['pn_template_id'];
+				$useSsl = $pageInfo['pn_use_ssl'];
+				if ($value == $this->pageSubId) $this->pageTemplateId = $templateId;	// 個別ページのテンプレートID
+				break;
+			}
+		}
+		
 		// 表示ラベルを作成
 		$name = $this->convertToDispString($fetchedRow['pg_name']);
 		$nameWithAttr = $name . '(' . $this->convertToDispString($value) . ')';
@@ -519,6 +536,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$pageTitle = '';
 		$preTitle = '';
 		if ($value == $this->defaultPageSubId) $preTitle .= self::TITLE_PRE_ICON_HOME;		// デフォルトページ(homeアイコン)
+		if ($useSsl) $preTitle .= self::TITLE_PRE_ICON_LOCK;		// デフォルトページ(SSLアイコン)
 		if (!$fetchedRow['pg_active']) $preTitle .= self::TITLE_PRE_ICON_MINUS;			// 非表示ページ(非表示アイコン)
 		$pageTitle = $preTitle . $name;	// 選択ページのタイトル
 			
@@ -535,20 +553,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// 表示ラベル(Bootstrap型設定画面)
 		if ($value == $this->defaultPageSubId) $nameWithAttr .= ' [' . $this->_('Default') . ']';			// デフォルトのページサブIDのときは、説明を付加
 		if (!$fetchedRow['pg_active']) $nameWithAttr .= ' [' . $this->_('Unpublished') . ']';			// 非公開
-		
-		// ページ情報(Bootstrap型設定画面)
-		$contentType = '';
-		$templateId = '';
-		$pageInfoCount = count($this->pageInfoRows);
-		for ($i = 0; $i < $pageInfoCount; $i++){
-			$pageInfo = $this->pageInfoRows[$i];
-			if ($pageInfo['pg_id'] == $value){
-				$contentType = $pageInfo['pn_content_type'];
-				$templateId = $pageInfo['pn_template_id'];
-				if ($value == $this->pageSubId) $this->pageTemplateId = $templateId;	// 個別ページのテンプレートID
-				break;
-			}
-		}
 		
 		$row = array(
 			'value'    => $this->convertToDispString($value),			// ページID
