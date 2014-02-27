@@ -536,7 +536,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$pageTitle = '';
 		$preTitle = '';
 		if ($value == $this->defaultPageSubId) $preTitle .= self::TITLE_PRE_ICON_HOME;		// デフォルトページ(homeアイコン)
-		if ($useSsl) $preTitle .= self::TITLE_PRE_ICON_LOCK;		// デフォルトページ(SSLアイコン)
+		if ($useSsl) $preTitle .= self::TITLE_PRE_ICON_LOCK;		// SSL使用ページ(鍵アイコン)
 		if (!$fetchedRow['pg_active']) $preTitle .= self::TITLE_PRE_ICON_MINUS;			// 非表示ページ(非表示アイコン)
 		$pageTitle = $preTitle . $name;	// 選択ページのタイトル
 			
