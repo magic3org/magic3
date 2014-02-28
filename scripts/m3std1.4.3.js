@@ -7,9 +7,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: m3std1.4.3.js 6075 2013-06-04 12:58:29Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 /**
@@ -317,11 +317,11 @@ String.prototype.endsWith = function(suffix) {
  */
 Array.prototype.sortByNumber = function(order){
 	if (order == null || order == 0){	// 昇順
-		this.sort(function(a, b){
+		$(this).sort(function(a, b){
 			return (parseInt(a) > parseInt(b)) ? 1 : -1;
 		});
 	} else {	// 降順
-		this.sort(function(a, b){
+		$(this).sort(function(a, b){
 			return (parseInt(a) < parseInt(b)) ? 1 : -1;
 		});
 	}
