@@ -10,10 +10,22 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-img {
+/*img {
     border: none;
-}
+}*/
 /*.clear { clear:both; font-size:1px; line-height:1px; }*/
+
+.grab {
+	cursor: hand;
+	cursor: grab;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+}
+.grabbing {
+	cursor: grabbing;
+	cursor: -moz-grabbing;
+	cursor: -webkit-grabbing;
+}
 
 /* position block div for widget */
 .m3_widgetpos_box {
@@ -22,6 +34,7 @@ img {
 	border:2px solid #1A242F;
 	color:#222;
 	min-height:80px;
+	min-width:200px;
 /*	margin:0 15px 15px 0;*/
 	margin:2px;
 /*	padding:0 10px 0;*/
@@ -30,7 +43,7 @@ img {
 	text-align:left;
 	font-size:15px;
 	font-family:"Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	line-height:1.428571429;	
+	line-height:1.428571429;
 }
 .m3_widgetpos_box .m3_widgetpos_box_title {
 /*	background-color:#555;*/
@@ -86,7 +99,8 @@ dl.m3_widget_sortable {
 /*dl.m3_widget_sortable dt {*/
 dt.m3_widget_with_check_box {
 	/*background-color:#666;*/
-	background-color:#5BE35B;
+background-color:#18bc9c;
+/*background-color:#3498DB;*/
 	color:#FFF;
 	font-weight: normal;
 /*	cursor:move;*/
@@ -97,7 +111,9 @@ dt.m3_widget_with_check_box {
 	position:relative;
 }
 dt.m3_widget_shared {
-	background-color:#E51919;
+/*	background-color:#E51919;*/
+	background-color:#E74C3C;
+/*	background-color:#F39C12;*/
 }
 dl.m3_widget_sortable dd {
 	background-color:#FFF;
@@ -114,17 +130,23 @@ dl.m3_widget_sortable dd {
 /* widget in list */
 dl.m3_widgetlist_item {
 	color:#222;
-	margin:10px 10px 0 10px;
+/*	margin:10px 10px 0 10px;*/
+	margin:5px 0;
 	border:1px solid #555;
-	width:200px;
+/*	width:200px;*/
 	text-align:left;
 	font:11px/1.5 Arial, sans-serif;
-	z-index:1001;		/* front of m3_widget_window */
+	z-index:1001;	/* front of m3_widget_window */
+	cursor:hand;
+	cursor:grab;
+	cursor:-moz-grab;
+	cursor:-webkit-grab;
 }
+
 dl.m3_widgetlist_item dt {
 /*	cursor:pointer;*/
-	/*background-color:#666;*/
-	background-color:#FF9933;
+/*	background-color:#FF9933;*/
+	background-color:#18bc9c;
 	color:#FFF;
 	font-weight: normal;
 	height:2em;

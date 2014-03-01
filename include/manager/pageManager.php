@@ -148,7 +148,7 @@ class PageManager extends Core
 	const LOGOUT_ICON_FILE = '/images/system/logout32.png';		// パネルメニューログアウト用アイコン
 	const EDIT_PAGE_ICON_FILE = '/images/system/create_page32.png';		// パネルメニュー編集用アイコン	
 //	const EDIT_END_ICON_FILE = '/images/system/close32.png';		// パネルメニュー編集終了用アイコン
-	const EDIT_END_ICON_FILE = '/images/system/undo32.png';		// パネルメニュー編集終了用アイコン
+	const EDIT_END_ICON_FILE = '/images/system/back32.png';		// パネルメニュー編集終了用アイコン
 	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
@@ -169,7 +169,7 @@ class PageManager extends Core
 	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.6.8.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget1.5.3.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
-	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.3.js';			// 一般、管理機能共通スクリプト
+	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.4.js';			// 一般、管理機能共通スクリプト
 	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.1.js';			// 一般画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
 	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt1.1.0.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
 	const M3_ADMIN_CSS_FILE					= 'm3/admin.css';			// 管理機能用のCSS
@@ -3811,6 +3811,10 @@ class PageManager extends Core
 
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if ($task == 'list'){
+			echo '<dl class="m3accordion">' . M3_NL;
+			echo '<dt>' . 'メイン' . '</dt>' . M3_NL;
+			echo '<dd>' . M3_NL;
+			
 			// ウィジェット一覧を取得
 			$ret = $this->db->getAvailableWidgetList($widgetDeviceType, $rows);
 			if ($ret){
@@ -3833,6 +3837,8 @@ class PageManager extends Core
 					echo '</dl>' . M3_NL;
 				}
 			}
+			echo '</dd>' . M3_NL;
+			echo '</dl>' . M3_NL;
 		} else if ($task == 'wget' || $task == 'wdelete' || $task == 'wtoggle' || $task == 'wadd' || $task == 'wmove'){	// ウィジェット再取得、ウィジェット削除,ウィジェット共通属性変更、ウィジェット追加、ウィジェット移動のとき
 			$rev	= $request->trimValueOf('rev');			// リビジョン
 			$serial = $request->trimValueOf('serial');

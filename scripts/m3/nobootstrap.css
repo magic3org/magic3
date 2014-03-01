@@ -31,6 +31,9 @@
 .glyphicon-th:before {
   content: "\e011";
 }
+.glyphicon-th-list:before {
+  content: "\e012";
+}
 .glyphicon-cog:before {
   content: "\e019";
 }
@@ -40,8 +43,26 @@
 .glyphicon-align-justify:before {
   content: "\e055";
 }
+.glyphicon-chevron-left:before {
+  content: "\e079";
+}
+.glyphicon-chevron-right:before {
+  content: "\e080";
+}
+.glyphicon-plus-sign:before {
+  content: "\e081";
+}
+.glyphicon-minus-sign:before {
+  content: "\e082";
+}
 .glyphicon-info-sign:before {
   content: "\e086";
+}
+.glyphicon-chevron-up:before {
+  content: "\e113";
+}
+.glyphicon-chevron-down:before {
+  content: "\e114";
 }
 .glyphicon-thumbs-up:before {
   content: "\e125";

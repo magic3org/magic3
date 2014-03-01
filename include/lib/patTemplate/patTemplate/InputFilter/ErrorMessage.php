@@ -36,7 +36,7 @@ class patTemplate_InputFilter_ErrorMessage extends patTemplate_InputFilter
 	function apply( $data )
 	{
 		// 変換部作成
-		$msgTag  = '<patTemplate:tmpl name="_messages" visibility="hidden">{PRE_TAG}<div class="m3_messages{CLASS}"{ATTR}>' . M3_NL;
+		$msgTag  = '<patTemplate:tmpl name="_messages" visibility="hidden">{PRE_TAG}<div class="m3messages{CLASS}"{ATTR}>' . M3_NL;
 		$msgTag .= '<patTemplate:tmpl name="_danger_message" visibility="hidden">{PRE_TAG}<div class="danger-message{CLASS}"{ATTR}>{MESSAGE}</div>{POST_TAG}</patTemplate:tmpl>' . M3_NL;
 		$msgTag .= '<patTemplate:tmpl name="_error_message" visibility="hidden">{PRE_TAG}<div class="error-message{CLASS}"{ATTR}>{MESSAGE}</div>{POST_TAG}</patTemplate:tmpl>' . M3_NL;
 		$msgTag .= '<patTemplate:tmpl name="_warning_message" visibility="hidden">{PRE_TAG}<div class="warning-message{CLASS}"{ATTR}>{MESSAGE}</div>{POST_TAG}</patTemplate:tmpl>' . M3_NL;

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -140,6 +140,7 @@
 	text-transform: none;
 	background-color: transparent;
 	background-image: none;
+	z-index:1000;
 }
 
 .m3panelopener.m3topleft {
@@ -165,13 +166,13 @@
 	color: #fff;
 	font-size: 24px;
 }
+/*** 左パネル ***/
 .m3panel_left {
 	background: #2C3E50;
 	position: fixed;
 	width: 240px;
 	height: 100%;
 	top: 0;
-	z-index: 1000;
 	visibility: hidden;
 }
 /*
@@ -179,14 +180,13 @@
 	padding: 20px 0px 20px 0px;
 	color: #fff;
 }*/
-
+/*** トップパネル ***/
 .m3panel_top {
 	background: #2C3E50;
 	position: fixed;
 	width: 100%;
 	height: 60px;
 	left: 0;
-	z-index: 1000;
 	visibility: hidden;
 }
 .m3panel_top ul li {
@@ -241,3 +241,109 @@
 .m3-navbar-default .m3-navbar-nav>li>a:hover,.m3-navbar-default .m3-navbar-nav>li>a:focus{color:#18bc9c;background-color:transparent}
 .m3-navbar-default .m3-navbar-nav>.active>a,.m3-navbar-default .m3-navbar-nav>.active>a:hover,.m3-navbar-default .m3-navbar-nav>.active>a:focus{color:#fff;background-color:#1a242f}
 .m3-navbar-default .m3-navbar-nav>.disabled>a,.m3-navbar-default .m3-navbar-nav>.disabled>a:hover,.m3-navbar-default .m3-navbar-nav>.disabled>a:focus{color:#ccc;background-color:transparent}
+
+/******* スライドパネルのタブ *******/
+.m3paneltab ul {
+	margin:5px 5px;
+	padding:0px;
+}
+.m3paneltab ul li {
+	list-style:none;
+	float:left;
+}
+.m3paneltab ul li a {	/*tab*/
+	outline: 0;
+	display:block;
+	padding:6px 10px;
+	text-decoration:none!important;
+/*  margin:1px;
+  margin-left:0;*/
+	font:14px;
+	font-weight:bold;
+	color:#fff;
+/*  background:#444;*/
+	background:#95a5a6;
+}
+.m3paneltab ul li a:hover {
+	color:#FFF;
+	background:#111;
+}
+.m3paneltab ul li a.selected {
+	margin-bottom:0;
+	color:#000;
+	background:#fff;
+/*background:#18BC9C;*/
+/*  border-bottom:1px solid snow;*/
+	cursor:default;
+}
+.m3paneltab div {
+/*  padding:10px 10px 8px 10px;
+  *padding-top:3px;
+  *margin-top:-15px;*/
+	padding:5px 3px;
+	clear:left;
+/*  background:snow;*/
+	font:14pt;
+	outline:0;
+}
+/*.m3paneltab div a { color:#000; font-weight:bold; } */
+
+/*** タブ内アコーディオンメニュー ***/
+.m3accordion {
+	margin-top:0px;
+	color:#FFF;
+}
+
+.m3accordion > dt{
+/*	color:#333;*/
+color:#FFF;	
+font-weight:bold;
+	margin-top:1px;
+	padding:10px 15px;
+/*	background:#ccc;*/
+/*background:#95a5a6;*/
+background:#3498DB;
+	cursor:pointer;
+}
+.m3accordion > dt.active{
+/*	color:#ccc;*/
+/*	background:#333;*/
+color:#FFF;
+background:#F39C12;
+}
+.m3accordion > dt:after{
+	content:"+";
+	border-radius:50%;
+	border:2px solid;
+	font-size:18px;
+	padding:0 7px;
+	margin-top:-3px;
+	float:right;
+	/*
+content: "\e081";
+position: relative;
+top: 1px;
+display: inline-block;
+font-family: 'Glyphicons Halflings';
+font-style: normal;
+font-weight: normal;
+line-height: 1;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;*/
+}
+.m3accordion > dt.active:after{
+	content:"-";
+/*	border:2px solid #ccc;*/
+/*	color:#ccc;*/
+}
+.m3accordion > dd {
+	margin: 3px 0;
+}
+.m3message {
+	color:#e74c3c;
+	text-align:center;
+}
+/*** ウィジェット一覧表示用 ***/
+#m3paneltab_widget {
+	overflow: auto;
+}
