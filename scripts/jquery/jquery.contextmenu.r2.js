@@ -53,7 +53,7 @@
       menu = $('<div id="jqContextMenu"></div>')
                .hide()
                .css({position:'absolute', zIndex:'2000'})
-               .appendTo('body')
+               .appendTo('html')
                .bind('click', function(e) {
                  e.stopPropagation();
                });
@@ -61,7 +61,7 @@
     if (!shadow) {
       shadow = $('<div></div>')
                  .css({backgroundColor:'#000',position:'absolute',opacity:0.2,zIndex:1999})
-                 .appendTo('body')
+                 .appendTo('html')
                  .hide();
     }
     hash = hash || [];

@@ -35,6 +35,7 @@
 	color:#222;
 	min-height:80px;
 	min-width:200px;
+/*	width:100%;*/
 /*	margin:0 15px 15px 0;*/
 	margin:2px;
 /*	padding:0 10px 0;*/
@@ -42,8 +43,10 @@
 /*	width:90%;*/
 	text-align:left;
 	font-size:15px;
-	font-family:"Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+/*	font-family:"Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 	line-height:1.428571429;
+	letter-spacing:normal;
 }
 .m3_widgetpos_box .m3_widgetpos_box_title {
 /*	background-color:#555;*/
@@ -59,6 +62,7 @@
 	font-size: 15px;
 	font-family: inherit;
 	line-height:2;
+	letter-spacing:inherit;
 }
 
 /* widget list window */

@@ -220,6 +220,9 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				}
 				// キャッシュデータをクリア
 				$this->gCache->clearAllCache();
+				
+				// デフォルトテンプレート変更
+				$this->templateId = $templateId;
 			}
 		} else if ($act == 'changepagetemplate'){		// 個別ページ用テンプレート選択
 			$templateId = $request->trimValueOf('sel_page_template');		// テンプレートID

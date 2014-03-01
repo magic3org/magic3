@@ -145,16 +145,16 @@
 			cursorAt: { top: CURSOR_OFFSET, left: CURSOR_OFFSET },		// 左上に初期化
 			opacity: 0.5,
 			helper: 'clone',
-			appendTo: 'body',
+			appendTo: 'html',
 			placeholder: 'm3_spacer',
 			connectWith: els,
 			start: function(e,ui){
 				// カーソルの位置を補正
-				var bodyLeft = parseInt($('body').css('left'));
+/*				var bodyLeft = parseInt($('body').css('left'));
 				if (bodyLeft > 0){
 					bodyLeft = PANEL_WIDTH - parseInt(ui.helper.css("margin-left"));
 					ui.helper.css("margin-left", '-' + String(bodyLeft).toString() + 'px');
-				}
+				}*/
 
 				// ドラッグ中のイメージの幅を固定
 				ui.helper.css("width", DRAG_ITEM_WIDTH);
@@ -269,7 +269,7 @@
 			cursor: 'move',
 			cursorAt: { top: CURSOR_OFFSET, left: CURSOR_OFFSET },	// 左上に初期化
 			opacity: 0.5,
-			appendTo: 'body',
+			appendTo: 'html',
 			drag: function(e, ui){
 				var objects = $('.m3_widgetpos_box');
 				if (objects.length > 0){
@@ -284,11 +284,11 @@
 				$('#m3_widget_window').hide(1000);
 				
 				// カーソルの位置を補正
-				var bodyLeft = parseInt($('body').css('left'));
+/*				var bodyLeft = parseInt($('body').css('left'));
 				if (bodyLeft > 0){
 					bodyLeft = PANEL_WIDTH - parseInt(ui.helper.css("margin-left"));
 					ui.helper.css("margin-left", '-' + String(bodyLeft).toString() + 'px');
-				}
+				}*/
 				
 				// ドラッグ中のイメージの幅を固定
 				ui.helper.css("width", DRAG_ITEM_WIDTH);
