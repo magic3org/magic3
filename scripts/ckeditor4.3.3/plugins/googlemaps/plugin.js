@@ -7,9 +7,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: plugin.js 6003 2013-05-16 07:33:07Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 (function() {
@@ -24,14 +24,9 @@
 	//CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(CKEDITOR.plugins.getPath('googlemaps')) + 'dialogs/googlemaps.js');
 	CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(path) + 'dialogs/googlemaps.js');
 	CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(path) + 'dialogs/polyline.js');
-	
-/*	function createFakeElement(editor, realElement) {
-		var fakeElement = editor.createFakeParserElement(realElement, 'cke_script', 'script', false);
-		return fakeElement;
-	}*/
 
 	CKEDITOR.plugins.add( 'googlemaps', {
-		lang: 'en,ja',
+		lang: 'ja,en',
 		icons: 'googlemaps',
 
 		init: function(editor){

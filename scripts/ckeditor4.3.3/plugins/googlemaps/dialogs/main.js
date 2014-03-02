@@ -7,9 +7,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: main.js 6030 2013-05-22 00:48:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 
@@ -559,6 +559,10 @@ html: '<img id="btnAddNewMarker' + editor.id + '" src="' + pluginUrl + 'images/A
 				}, {
 					type: 'html',
 					html: '<div id="placeholder_marker' + editor.id + '"></div>'
+				}, {		
+					type: 'text',
+					hidden : true,
+					label: 'dummy item for the bug that the tab is auto disabled when all items are html type.'
 				} ]
 			}, {
 				id: 'tab_line',
@@ -570,6 +574,10 @@ html: '<img id="btnAddNewMarker' + editor.id + '" src="' + pluginUrl + 'images/A
 				}, {
 					type: 'html',
 					html: '<div id="placeholder_line' + editor.id + '"></div>'
+				}, {		
+					type: 'text',
+					hidden : true,
+					label: 'dummy item for the bug that the tab is auto disabled when all items are html type.'
 				} ]
 			} ]
 		};
