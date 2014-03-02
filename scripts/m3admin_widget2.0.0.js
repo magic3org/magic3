@@ -16,9 +16,9 @@
 	window.m3 = {};
 	var m3InsertIndex = -1;
 	var m3UpdatePos;
-	const DRAG_ITEM_WIDTH = '200px';		// ドラッグ中のウィジェットの幅
-	const PANEL_WIDTH = '240';				// パネル幅
-	const CURSOR_OFFSET = 10;				// カーソルの位置
+	var DRAG_ITEM_WIDTH = '200px';		// ドラッグ中のウィジェットの幅
+	var PANEL_WIDTH = '240';				// パネル幅
+	var CURSOR_OFFSET = 10;				// カーソルの位置
 	
 	var m3UpdateByConfig = function(serial){
 		var widgets = $('.m3_widget_sortable');
