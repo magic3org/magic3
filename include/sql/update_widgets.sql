@@ -21,46 +21,46 @@
 -- ウィジェット情報(管理機能)
 DELETE FROM _widgets WHERE wd_id = 'admin_menu4';
 INSERT INTO _widgets
-(wd_id,         wd_name,           wd_admin, wd_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin_menu4', '管理用メニュー4', true,     'menu',  '1.0.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                false,        false,       true, true,           100,     '2014-01-06',        now(),         now());
+(wd_id,         wd_name,           wd_admin, wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin_menu4', '管理用メニュー4', true,     'menu',  'admin', '1.0.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                false,        false,       true, true,           100,     '2014-01-06',        now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin_main';
 INSERT INTO _widgets
-(wd_id,        wd_name,      wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin_main', '管理用画面', true,     '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'pagedef=jquery-ui.tabs;pagedef_mobile=jquery-ui.tabs;pagedef_smartphone=jquery-ui.tabs;menudef=jquery.jstree;menudef_detail=wysiwyg_editor;smenudef_detail=wysiwyg_editor;analyzegraph=jquery.jqplot;adjustwidget=jquery-ui.tabs,wysiwyg_editor;filebrowser=elfinder;editmenu_others=elfinder;initwizard_=bootstrap', false,        false,       false,        true,          false, true, '2013-03-04', now(),now());
+(wd_id,        wd_name,      wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin_main', '管理用画面', true,     'admin',            '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'pagedef=jquery-ui.tabs;pagedef_mobile=jquery-ui.tabs;pagedef_smartphone=jquery-ui.tabs;menudef=jquery.jstree;menudef_detail=wysiwyg_editor;smenudef_detail=wysiwyg_editor;analyzegraph=jquery.jqplot;adjustwidget=jquery-ui.tabs,wysiwyg_editor;filebrowser=elfinder;editmenu_others=elfinder;initwizard_=bootstrap', false,        false,       false,        true,          false, true, '2013-03-04', now(),now());
 DELETE FROM _widgets WHERE wd_id = 'admin/analytics';
 INSERT INTO _widgets
-(wd_id,             wd_name,            wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin/analytics', '管理用サイト解析', true,     '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jquery.jqplot', false,        false,       true, true,           '2013-03-04', now(),         now());
+(wd_id,             wd_name,            wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin/analytics', '管理用サイト解析', true,     'admin', '1.1.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jquery.jqplot', false,        false,       true, true,           '2013-03-04', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin/opelog';
 INSERT INTO _widgets
-(wd_id,             wd_name,            wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin/opelog', '管理用運用ログ表示', true,     '1.2.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       true, true,           '2014-01-13', now(),         now());
+(wd_id,             wd_name,            wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin/opelog', '管理用運用ログ表示', true,     'admin', '1.2.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       true, true,           '2014-01-13', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin/loginuser';
 INSERT INTO _widgets
-(wd_id,             wd_name,                    wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin/loginuser', '管理用ログインユーザ情報', true,     '2.0.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true, '2014-01-13',           now(),         now());
+(wd_id,             wd_name,                    wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin/loginuser', '管理用ログインユーザ情報', true,     'admin',            '2.0.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true, '2014-01-13',           now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin/message';
 INSERT INTO _widgets
-(wd_id,           wd_name,            wd_admin, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin/message', '管理用メッセージ出力', true,     '1.0.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true,           '2014-01-02', now(),         now());
+(wd_id,           wd_name,            wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin/message', '管理用メッセージ出力', true, 'admin',            '1.0.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true,           '2014-01-02', now(),         now());
 
 -- ウィジェット情報(PC用)
 DELETE FROM _widgets WHERE wd_id = 'default_menu';
 INSERT INTO _widgets
-(wd_id,                wd_name, wd_type,                      wd_version, wd_joomla_class, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('default_menu', 'デフォルトメニュー', 'menu',         '2.0.0',    '', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる多階層のデフォルトメニューです。「user3」ポジションに配置するとナビゲーションメニューが表示できます。', '', 'jquery-ui.tabs', true,  true,              true, 2,          1, '2012-06-05', now(),         now());
+(wd_id,          wd_name,              wd_type, wd_category_id, wd_version, wd_joomla_class, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('default_menu', 'デフォルトメニュー', 'menu',  'menu',         '2.0.0',    '', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる多階層のデフォルトメニューです。「user3」ポジションに配置するとナビゲーションメニューが表示できます。', '', 'jquery-ui.tabs', true,  true,              true, 2,          1, '2012-06-05', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'accordion_menu';
 INSERT INTO _widgets
-(wd_id,            wd_name, wd_type,                  wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('accordion_menu', 'アコーディオンメニュー','menu','2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる2階層のアコーディオンメニューです。', 'jquery-ui.accordion', 'jquery-ui.accordion', true,  true,              true, 3,          1, '2012-06-07', now(),         now());
+(wd_id,            wd_name,                  wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('accordion_menu', 'アコーディオンメニュー', 'menu',  'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる2階層のアコーディオンメニューです。', 'jquery-ui.accordion', 'jquery-ui.accordion', true,  true,              true, 3,          1, '2012-06-07', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'dropdown_menu';
 INSERT INTO _widgets
-(wd_id,            wd_name, wd_type,                 wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('dropdown_menu', 'ドロップダウンメニュー','menu','2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる多階層のドロップダウンメニューです。', true, true, 'jquery.bgiframe,jquery.hoverintent', 'jquery.bgiframe,jquery.hoverintent', true,  true,              true, 3,          1, '2012-06-07', now(),         now());
+(wd_id,            wd_name,                 wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('dropdown_menu', 'ドロップダウンメニュー', 'menu',  'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる多階層のドロップダウンメニューです。', true, true, 'jquery.bgiframe,jquery.hoverintent', 'jquery.bgiframe,jquery.hoverintent', true,  true,              true, 3,          1, '2012-06-07', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'breadcrumb';
 INSERT INTO _widgets
-(wd_id,        wd_name,          wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                         wd_has_admin, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('breadcrumb', 'パンくずリスト', '2.1.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'メニュー定義からパンくずリストを作成', true,        true,           100, 0, 0, '2013-03-31', now(),    now());
+(wd_id,        wd_name,          wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                         wd_has_admin, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('breadcrumb', 'パンくずリスト', 'menu',         '2.1.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'メニュー定義からパンくずリストを作成', true,        true,           100, 0, 0, '2013-03-31', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'default_footer';
 INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('default_footer',     'デフォルトフッタ',           'DFOT', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'フッタ部分に表示し、著作権の表示を行う。',          false,           false,       true,         true,        false,        false,               false,true,           0, 1, -1, now(), now());
