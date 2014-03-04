@@ -430,7 +430,7 @@
 		widgetWindow += '</ul>';
 		widgetWindow += '<div id="m3paneltab_widget">';
 		widgetWindow += '<div class="m3message"></div>';
-		widgetWindow += '<div id="m3paneltab_widget_list" class="m3widgetlist" style="overflow: auto;">';
+		widgetWindow += '<div id="m3paneltab_widget_list" class="m3widgetlist">';
 		
 /*		widgetWindow += '<dl class="m3accordion">';
 		widgetWindow += '<dt>Heading 1</dt>';

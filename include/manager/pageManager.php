@@ -3811,17 +3811,30 @@ class PageManager extends Core
 
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if ($task == 'list'){
-			echo '<dl class="m3accordion">' . M3_NL;
-			echo '<dt>' . 'メイン' . '</dt>' . M3_NL;
-			echo '<dd>' . M3_NL;
-			
 			// ウィジェット一覧を取得
 			$ret = $this->db->getAvailableWidgetList($widgetDeviceType, $rows);
 			if ($ret){
+				$currentCategoryId = '_none';		// 現在のウィジェットカテゴリー初期化
 				for ($i = 0; $i < count($rows); $i++){
 					$widgetId = $rows[$i]['wd_id'];
 					$desc = $rows[$i]['wd_description'];
 					$widgetTag = self::WIDGET_TYPE_TAG_HEAD . $widgetId;
+					$categoryId = $rows[$i]['wd_category_id'];
+					
+					// カテゴリーの開始タグを追加
+					if ($categoryId != $currentCategoryId){
+						if ($i > 0){
+							echo '</dd>' . M3_NL;
+							echo '</dl>' . M3_NL;
+						}
+						echo '<dl class="m3accordion">' . M3_NL;
+						echo '<dt>' . $rows[$i]['wt_name'] . '</dt>' . M3_NL;
+						echo '<dd>' . M3_NL;
+						
+						// 現在のカテゴリー更新
+						$currentCategoryId = $categoryId;
+					}
+					
 					$image = $gDesignManager->getWidgetIconUrl($widgetId, self::WIDGET_ICON_IMG_SIZE);
 					if ($gEnvManager->getUseSslAdmin()){
 						//$image = str_replace('http://', 'https://', $image);		// SSL通信の場合はSSL用に変換
@@ -3835,10 +3848,14 @@ class PageManager extends Core
 					echo '<dt>' . $rows[$i]['wd_name'] . '</dt>' . M3_NL;			// ウィジェット名
 					echo '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table></dd>' . M3_NL;
 					echo '</dl>' . M3_NL;
+					
+					// カテゴリーの終了タグを追加
+					if ($i == count($rows) - 1){
+						echo '</dd>' . M3_NL;
+						echo '</dl>' . M3_NL;
+					}
 				}
 			}
-			echo '</dd>' . M3_NL;
-			echo '</dl>' . M3_NL;
 		} else if ($task == 'wget' || $task == 'wdelete' || $task == 'wtoggle' || $task == 'wadd' || $task == 'wmove'){	// ウィジェット再取得、ウィジェット削除,ウィジェット共通属性変更、ウィジェット追加、ウィジェット移動のとき
 			$rev	= $request->trimValueOf('rev');			// リビジョン
 			$serial = $request->trimValueOf('serial');

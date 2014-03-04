@@ -287,7 +287,6 @@
   *margin-top:-15px;*/
 	padding:5px 3px;
 	clear:left;
-/*  background:snow;*/
 	font:14pt;
 	outline:0;
 }
@@ -295,7 +294,7 @@
 
 /*** タブ内アコーディオンメニュー ***/
 .m3accordion {
-	margin-top:0px;
+	margin:0 0 2px;
 	color:#FFF;
 }
 
@@ -349,6 +348,6 @@ line-height: 1;
 	text-align:center;
 }
 /*** ウィジェット一覧表示用 ***/
-#m3paneltab_widget {
-	overflow: auto;
+.m3widgetlist {
+	overflow: auto;		/* スクロールバーあり */
 }
