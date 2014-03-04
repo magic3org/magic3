@@ -48,9 +48,12 @@ INSERT INTO _widget_category
 ('commerce',     'Eコマース',        3),
 ('photo',     'フォトギャラリー', 4),
 ('event',     'イベント情報',     5),
-('search',     '検索',             6),
-('menu',     'メニュー',         7),
-('admin',     '管理画面用',      8);
+('subcontent',     '補助コンテンツ',     6),
+('search',     '検索',             7),
+('reguser',     'ユーザ登録',      8),
+('menu',     'メニュー',         9),
+('image',     '画像',         10),
+('admin',     '管理画面用',      20);
 
 -- *** システム標準テーブル ***
 
