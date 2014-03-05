@@ -360,10 +360,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS)),	// テーマは最初に読み込む
 					self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
 /*					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
-																'css'		=> array(self::BOOTSTRAP_CSS,
-																					self::BOOTSTRAP_OPTION_CSS)),*/
-					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
-																'css'		=> array(self::BOOTSTRAP_CSS)),
+																'css'		=> array(self::BOOTSTRAP_CSS)),*/
+					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
+
 					self::LIB_BOOTSTRAP_ADMIN		=>	array(	'css'		=> array(self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS, self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS)),	// Bootstrap管理画面用オプション															
 					// jQueryライブラリ
 					self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル

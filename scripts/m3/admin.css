@@ -153,13 +153,12 @@
 	top: 0px;
 	left: 0px;
 }
-.m3panelopener a {
+.m3panelopener.m3topleft a {
 	display: block;
 	background: #2C3E50;
 	color: #fff;
 	padding: 5px 10px;
-/*	font-size: 20px;*/
-	height:30px;
+	outline:none;
 }
 .m3panelopener a:visited {
  	color: #fff;
@@ -170,6 +169,8 @@
 .m3panelopener .glyphicon {
 	color: #fff;
 	font-size: 24px;
+	margin:0;
+	height:30px;
 }
 /*** 左パネル ***/
 .m3panel_left {
