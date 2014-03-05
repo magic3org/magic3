@@ -604,6 +604,7 @@ class SystemDb extends BaseDb
 		$queryStr  = 'SELECT * FROM _widgets LEFT JOIN _widget_category ON wd_category_id = wt_id AND wt_deleted = false ';
 		$queryStr .=   'WHERE wd_deleted = false ';// 削除されていない
 		$queryStr .=     'AND wd_available = true ';		// メニューから選択可能なもの
+		$queryStr .=     'AND wt_visible = true ';		// カテゴリー表示可能
 		
 		$params = array();
 		switch ($type){
