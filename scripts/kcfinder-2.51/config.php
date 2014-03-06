@@ -27,8 +27,10 @@ $_CONFIG = array(
     'theme' => "oxygen",
 
     //'uploadURL' => "upload",
-	'uploadURL' => $gEnvManager->getRelativeResourcePathToDocumentRootForUser(),	// リソースディレクトリを設定
-    'uploadDir' => "",
+//	'uploadURL' => $gEnvManager->getRelativeResourcePathToDocumentRootForUser(),	// リソースディレクトリを設定
+//	'uploadDir' => "",
+	'uploadURL' => $gEnvManager->getResourceUrlForUser(),		// リソースURL
+	'uploadDir' => $gEnvManager->getResourcePathForUser(),		// リソースディレクトリ
 
     'dirPerms'	=> M3_SYSTEM_DIR_PERMISSION,
     'filePerms'	=> M3_SYSTEM_FILE_PERMISSION,

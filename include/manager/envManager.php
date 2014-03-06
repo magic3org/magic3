@@ -509,6 +509,21 @@ class EnvManager extends Core
 		return $this->currentDomainRootUrl . '/resource';
 	}
 	/**
+	 * ユーザの種別に対応したリソース用ディレクトリへのURLを取得(外部アプリケーション用)
+	 *
+	 * @return string		URL
+	 */
+	public function getResourceUrlForUser()
+	{
+		$url = $this->getResourceUrl();
+		
+		// ユーザのリソース制限が必要な場合は、ユーザごとのディレクトリを設定
+		if ($this->isResourceLimitedUser()){
+			$url .= '/' . M3_DIR_NAME_HOME . '/' . $this->getCurrentUserAccount();
+		}
+		return $url;
+	}
+	/**
 	 * リソース用ディレクトリへのSSL用URLを取得
 	 */
 	public function getSslResourceUrl()
