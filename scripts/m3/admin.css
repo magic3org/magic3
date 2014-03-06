@@ -144,14 +144,20 @@
 	text-transform: none;
 	background-color: transparent;
 	background-image: none;
-	z-index:1000;
 	text-align:left;
 }
-
+.m3panel_top,
+.m3panel_left,
+.m3panel_right,
+.m3panel_bottom,
+.m3panelopener {
+	z-index:1000;
+}
 .m3panelopener.m3topleft {
 	position: fixed;
 	top: 0px;
 	left: 0px;
+	z-index:1001;
 }
 .m3panelopener.m3topleft a {
 	display: block;
@@ -194,6 +200,9 @@
 	height: 60px;
 	left: 0;
 	visibility: hidden;
+}
+.m3panel_top ul {
+	margin-left:30px;
 }
 .m3panel_top ul li {
 	float:left;	/* for IE8 */
@@ -267,7 +276,7 @@
 	font:14px;
 	font-weight:bold;
 	color:#fff;
-/*  background:#444;*/
+/*background:#444;*/
 	background:#95a5a6;
 }
 .m3paneltab ul li a:hover {
@@ -283,9 +292,6 @@
 	cursor:default;
 }
 .m3paneltab div {
-/*  padding:10px 10px 8px 10px;
-  *padding-top:3px;
-  *margin-top:-15px;*/
 	padding:5px 3px;
 	clear:left;
 	font:14pt;

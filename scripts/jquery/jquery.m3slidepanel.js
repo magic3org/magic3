@@ -34,19 +34,20 @@ if (typeof Object.create !== 'function'){
 
 	// デフォルト値
 	$.fn.m3slidepanel.options = {
-		position : "left",		//left, right, top, bottom
-		type : "slide",			//slide or push
+		position : "left",		// left, right, top, bottom
+		type : "slide",			// slide or push
+		collapseOpener:	true,	// オープナーを閉じるかどうか
 		easing : "easeOutQuad",
 		animSpeed : 350,
 		openerClass : 'm3panelopener'
 	};
 	
 	var m3SlidePanel = {
-		init: function( options, elem ) {
+		init: function(options, elem){
 			var self = this;
 
 			self.elem = elem;
-			self.$elem = $( elem );
+			self.$elem = $(elem);
 			self.options = $.extend({}, $.fn.m3slidepanel.options, options);
 
 			// パネル幅または高さ
@@ -70,12 +71,14 @@ if (typeof Object.create !== 'function'){
 		open: function(){
 			var self = this;
 			var inlineCss = {};
+			var panelCss = {};
 			var openerCss = {};
 			var openerSelecter = '.' + self.options.openerClass;
 
 			$(openerSelecter + ' a').on('click',function(e){
 				if(self.$elem.hasClass('opened')){
 					inlineCss[self.options.position] =  -self.containerWidth + 'px';	// パネル幅
+					panelCss[self.options.position] =  '0px';
 					openerCss[self.options.position] =  '0px';		// オープナー初期値
 
 					self.$elem.animate(inlineCss, self.options.animSpeed);
@@ -83,13 +86,24 @@ if (typeof Object.create !== 'function'){
 
 					// BODYを戻す
 					if (self.options.type == "push"){
-						$('body').animate(openerCss, self.options.animSpeed);
+						$('body').animate(panelCss, self.options.animSpeed);
 					}
 
 					self.$elem.removeClass('opened');
-				}else{
+				} else {
 					inlineCss[self.options.position] =  '0px';
+					panelCss[self.options.position] =  self.containerWidth + 'px';
 					openerCss[self.options.position] =  self.containerWidth + 'px';
+					
+					if (self.options.collapseOpener){
+						var collapseWidth;
+						if (self.options.position == 'left' || self.options.position == 'right'){
+							collapseWidth = $(openerSelecter).width();		
+						} else {
+							collapseWidth = $(openerSelecter).height();
+						}
+						openerCss[self.options.position] = (self.containerWidth - collapseWidth) + 'px';
+					}
 
 					self.$elem.animate(
 							inlineCss,
@@ -106,7 +120,8 @@ if (typeof Object.create !== 'function'){
 					// BODYを移動
 					if (self.options.type == "push"){
 						$('body').animate(
-							openerCss,
+							//openerCss,
+							panelCss,
 							self.options.animSpeed,
 							self.options.easing
 						);
