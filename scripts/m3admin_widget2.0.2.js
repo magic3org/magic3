@@ -487,10 +487,16 @@
 				iconObj.addClass('glyphicon-resize-full');
 			}
 			
-			parent.$("#layout_preview_outer").animate(openerCss, 350);
-
+			// 画面をリサイズ
+			parent.$("#layout_preview_outer").animate(openerCss, { 'dulation': 350, 'complete': function(){
+				// スライドメニュー高さ調整
+				var pos = $('#m3paneltab_widget_list').position();
+				var slideMenuHeight = $(window).height() - pos.top - 30;	// スクロールバー部分調整	
+				$('#m3paneltab_widget_list').height(slideMenuHeight);
+			}});
+			
 			// リロード
-			parent.$('#layout_preview').attr('src', function (i, val){ return val; });
+			//parent.$('#layout_preview').attr('src', function (i, val){ return val; });
 
 			return false;		// クリックイベント終了
 		});
