@@ -126,7 +126,9 @@
 .m3panel_right,
 .m3panel_bottom,
 .m3panelopener,
-.m3panelopener a {
+.m3panelopener a,
+.m3resizer,
+.m3resizer a {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -150,7 +152,8 @@
 .m3panel_left,
 .m3panel_right,
 .m3panel_bottom,
-.m3panelopener {
+.m3panelopener,
+.m3resizer {
 	z-index:1000;
 }
 .m3panelopener.m3topleft {
@@ -159,25 +162,37 @@
 	left: 0px;
 	z-index:1001;
 }
-.m3panelopener.m3topleft a {
+.m3resizer.m3topright {
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	z-index:1001;
+}
+.m3panelopener.m3topleft a,
+.m3resizer.m3topright a {
 	display: block;
 	background: #2C3E50;
 	color: #fff;
 	padding: 5px 10px;
 	outline:none;
 }
-.m3panelopener a:visited {
+.m3panelopener.m3topleft a:visited,
+.m3resizer.m3topright a:visited
+{
  	color: #fff;
 }
-.m3panelopener a:hover {
+.m3panelopener.m3topleft a:hover,
+.m3resizer.m3topright a:hover {
 	text-decoration: none;
 }
-.m3panelopener .glyphicon {
+.m3panelopener.m3topleft .glyphicon,
+.m3resizer.m3topright .glyphicon {
 	color: #fff;
 	font-size: 24px;
 	margin:0;
 	height:30px;
 }
+
 /*** 左パネル ***/
 .m3panel_left {
 	background: #2C3E50;

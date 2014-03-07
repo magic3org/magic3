@@ -182,7 +182,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				$deviceType = 1;		// デバイスタイプ(携帯)
 				$taskStr = 'pagedef_mobile';
 				$previewWidth = '600px';
-				$this->tmpl->addVar("_widget", "preview_option_class", 'class="layout_side_border"');		// プレビューエリアにサイドのボーダーラインを付加
+				$this->tmpl->addVar("_widget", "preview_option_class", 'class="layout_top_border layout_side_border"');		// プレビューエリアにトップとサイドのボーダーラインを付加
 				$this->tmpl->addVar("_widget", "template_normal_disabled", 'disabled');
 				break;
 			case 'pagedef_smartphone':		// スマートフォン用設定画面
@@ -190,7 +190,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				$deviceType = 2;		// デバイスタイプ(スマートフォン)
 				$taskStr = 'pagedef_smartphone';
 				$previewWidth = '600px';
-				$this->tmpl->addVar("_widget", "preview_option_class", 'class="layout_side_border"');		// プレビューエリアにサイドのボーダーラインを付加
+				$this->tmpl->addVar("_widget", "preview_option_class", 'class="layout_top_border layout_side_border"');		// プレビューエリアにトップとサイドのボーダーラインを付加
 				$this->tmpl->addVar("_widget", "template_normal_disabled", 'disabled');
 				break;
 			default:
@@ -198,6 +198,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				$deviceType = 0;		// デバイスタイプ(PC)
 				$taskStr = 'pagedef';
 				$previewWidth = '100%';
+				$this->tmpl->addVar("_widget", "preview_option_class", 'class="layout_top_border"');		// プレビューエリアにトップのボーダーラインを付加
 				break;
 		}
 		

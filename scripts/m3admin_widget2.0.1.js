@@ -158,16 +158,9 @@
 
 				// ドラッグ中のイメージの幅を固定
 				ui.helper.css("width", DRAG_ITEM_WIDTH);
-				
-				$('#m3_widgetlist_inner').data('scroll', $('#m3_widgetlist_inner').scrollTop());
-				$('#m3_widget_window').hide(1000);
 			},
-			stop: function(e,ui) {
-				$('#m3_widget_window').show(500, function(){
-					$('#m3_widgetlist_inner').scrollTop($('#m3_widgetlist_inner').data('scroll'));
-				});
-			},
-//			change: changeSortable,
+//			stop: function(e,ui) {
+//			},
 			update: updateSortable
 		});
 		
@@ -226,15 +219,6 @@
 			}
 		});
 	};
-	
-/*	var changeSortable = function(e, ui){
-		if (ui.sender){
-			var w = ui.item.width();
-			ui.placeholder.width(w);
-			ui.helper.css("width", w);
-		}
-	};*/
-	
 	var updateSortable = function(e, ui){
 		var obj = $('#' + ui.item[0].id);
 		var recvPosObj = obj.parents('.m3_widgetpos_box');	// 移動先ポジション
@@ -252,7 +236,8 @@
 	// ウィジェット一覧取得後の更新処理
 	var updateWidgetList = function(){
 		// アコーディオンメニュー作成
-		$('.m3accordion').children('dd').slideUp(); $('.m3accordion').children('dt').click(function(){
+		$('.m3accordion').children('dd').slideUp();
+		$('.m3accordion').children('dt').click(function(){
 			if($(this).hasClass('active')){
 				$(this).removeClass('active');
 				$(this).next('dd').slideUp();
@@ -280,9 +265,6 @@
 				}
 			},
 			start: function(e, ui){
-				$('#m3_widgetlist_inner').data('scroll', $('#m3_widgetlist_inner').scrollTop());
-				$('#m3_widget_window').hide(1000);
-				
 				// カーソルの位置を補正
 /*				var bodyLeft = parseInt($('body').css('left'));
 				if (bodyLeft > 0){
@@ -295,10 +277,6 @@
 			},
 			stop: function(e, ui){
 				m3TaskWidget('add', $('.m3_spacer'), this.id, m3InsertIndex);
-				
-				$('#m3_widget_window').show(500, function(){
-					$('#m3_widgetlist_inner').scrollTop($('#m3_widgetlist_inner').data('scroll'));
-				});
 			}
 		});
 	}
@@ -462,6 +440,12 @@
 		widgetWindow += '<li id="m3_wdelete"><img src="' + M3_ROOT_URL + '/images/system/delete.png" />&nbsp;<span>このウィジェットを削除</span></li>';
 		widgetWindow += '</ul>';
 		widgetWindow += '</div>';
+		
+		// 画面リサイズボタン(右上)
+		if (!(window.parent && window.parent.frames.length == 0)){			// 親ウィンドウありの場合
+			widgetWindow += '<div class="m3resizer m3topright"><a href="#"><i class="glyphicon"></i></a></div>';
+    	}
+		
 		$("body").append(widgetWindow);
 		
 		// パネルスライド可能にする
@@ -478,12 +462,45 @@
 //		var slideMenuHeight = $(window).height() - pos.top * 2;
 		var slideMenuHeight = $(window).height() - pos.top - 30;	// スクロールバー部分調整	
 		$('#m3paneltab_widget_list').height(slideMenuHeight);
-
-/*		$('#m3_widget_window').draggable({
-			cursor: 'move',
-			cancel: '#m3_widget_window_inner'
-		});*/
 	
+		// 画面リサイズボタン
+		$(".m3resizer.m3topright a").click(function(){
+			var openerCss = {};
+			var iframeObj = parent.$('#layout_preview');
+			var iconObj = $('i', this);
+			
+			if (iframeObj.hasClass('layout_top_border')){		// デフォルト(縮小)状態のとき
+				// 画面を拡大
+				parent.$("#layout_preview_outer").css('z-index', '1100');
+				openerCss['top'] = '0px';
+				
+				iframeObj.removeClass('layout_top_border');
+				iconObj.removeClass('glyphicon-resize-full');
+				iconObj.addClass('glyphicon-resize-small');
+			} else {
+				// 画面を縮小
+				parent.$("#layout_preview_outer").css('z-index', '1');
+				openerCss['top'] = '220px';
+				
+				iframeObj.addClass('layout_top_border');
+				iconObj.removeClass('glyphicon-resize-small');
+				iconObj.addClass('glyphicon-resize-full');
+			}
+			
+			parent.$("#layout_preview_outer").animate(openerCss, 350);
+
+			// リロード
+			parent.$('#layout_preview').attr('src', function (i, val){ return val; });
+
+			return false;		// クリックイベント終了
+		});
+		// 画面リサイズボタンアイコン初期化
+		if (parent.$('#layout_preview').hasClass('layout_top_border')){		// デフォルト(縮小)状態のとき
+			$(".m3resizer.m3topright a i").addClass('glyphicon-resize-full');
+		} else {
+			$(".m3resizer.m3topright a i").addClass('glyphicon-resize-small');
+		}
+		
 		setupSortable();
 		
 		$.ajax({	url: createUrl() + '&task=list',

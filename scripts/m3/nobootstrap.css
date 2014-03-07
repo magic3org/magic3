@@ -58,6 +58,12 @@
 .glyphicon-info-sign:before {
   content: "\e086";
 }
+.glyphicon-resize-full:before {
+  content: "\e096";
+}
+.glyphicon-resize-small:before {
+  content: "\e097";
+}
 .glyphicon-chevron-up:before {
   content: "\e113";
 }

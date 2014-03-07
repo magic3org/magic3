@@ -177,7 +177,7 @@ class PageManager extends Core
 	const M3_NO_BOOTSTRAP_CSS_FILE			= 'm3/nobootstrap.css';		// 管理画面でBootstrapの読み込みなしの場合のCSS
 	
 	// 読み込み制御
-	const USE_BOOTSTRAP_ADMIN	= true;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
+	const USE_BOOTSTRAP_ADMIN	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
 	const BOOTSTRAP_BUTTON_CLASS = 'btn btn-default';
 	
 	/**
