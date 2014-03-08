@@ -254,7 +254,7 @@ class PageManager extends Core
 												self::M3_OPTION_SCRIPT_FILENAME);
 												
 			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);			// 管理機能用のCSS
-			if (!$this->useBootstrap) $this->defaultAdminCssFiles[] = self::M3_NO_BOOTSTRAP_CSS_FILE;	// Bootstrapを読み込まない場合は代替CSSを読み込む
+//			if (!$this->useBootstrap) $this->defaultAdminCssFiles[] = self::M3_NO_BOOTSTRAP_CSS_FILE;	// Bootstrapを読み込まない場合は代替CSSを読み込む
 			
 			// Javascriptライブラリ
 			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
@@ -1302,7 +1302,7 @@ class PageManager extends Core
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 					
 						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
-						if (!$this->useBootstrap) $this->addCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
+//						if (!$this->useBootstrap) $this->addCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
 					}
 				} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
@@ -2654,6 +2654,10 @@ class PageManager extends Core
 
 		$replaceStr = '';		// 変換文字列
 		
+		// 実行コマンドを取得
+		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
+		$task = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		
 		// ********************************************************
 		//               ヘッダ文字列作成の前処理
 		// ********************************************************
@@ -2661,7 +2665,7 @@ class PageManager extends Core
 		// Bootstrapライブラリ
 //		if (!$this->useBootstrap) $this->useBootstrap = $gEnvManager->getCurrentTemplateUseBootstrap();
 		if ($this->useBootstrap){
-			if ($gEnvManager->isAdminDirAccess()){
+			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効(ログイン中の場合)
 					$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
 					$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);	// Bootstrap管理画面オプション
@@ -2669,8 +2673,19 @@ class PageManager extends Core
 					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
 					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);// Bootstrap管理画面オプション
 				}
-			} else {
+			} else {		// 一般画面へのアクセスの場合
 				$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
+				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW){				// ログイン、ログアウト場合
+					$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);		// Bootstrap管理画面オプション
+				}
+			}
+		} else {
+			if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効(ログイン中の場合)
+				if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+					$this->addAdminCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
+				} else {
+					$this->addCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
+				}
 			}
 		}
 		
@@ -2727,10 +2742,6 @@ class PageManager extends Core
 			}
 			return $replaceStr;
 		}
-		
-		// 実行コマンドを取得
-		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
-		$task = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		
 		// テンプレートの情報を取得
 		$cleanType = $gEnvManager->getCurrentTemplateCleanType();		// テンプレートクリーンタイプ
