@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 4696 2012-02-19 03:31:35Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -60,11 +60,11 @@ $(function(){
 </td></tr>
 <tr><td colspan="2">
 
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin:0 auto;">
     <tbody>
         <tr>
-	    <td class="table-headside" width="200">名前</td>
-	    <td>
+	    <td class="table-headside" width="150">名前</td>
+	    <td width="800">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規登録 --</option>
 	        <patTemplate:tmpl name="title_list">
@@ -78,17 +78,15 @@ $(function(){
 	</tr>
         <tr class="even">
 	    <td class="table-headside">画像</td>
-	    <td>
-	    <fieldset><legend><input type="radio" name="item_image_type" value="directory" {IMAGE_TYPE_DIRECTORY_CHECKED} />ディレクトリ画像</legend>
-	    画像読み込みディレクトリ：<input type="text" name="item_dir" value="{DIR}" size="80" maxlength="120" /><br />
+	    <td><input type="radio" name="item_image_type" value="directory" {IMAGE_TYPE_DIRECTORY_CHECKED} />ディレクトリ画像<br />
+	    画像読み込みディレクトリ：<input type="text" name="item_dir" value="{DIR}" size="80" maxlength="120" style="width:60%;" /><br />
 	    表示順：
     <select name="item_disptype">
         <patTemplate:tmpl name="disp_type_list">
         <option value="{VALUE}" {SELECTED}>{NAME}</option>
         </patTemplate:tmpl>
-    </select>
-            </fieldset>
-	    <fieldset><legend><input type="radio" name="item_image_type" value="photo" {IMAGE_TYPE_PHOTO_CHECKED} />フォトギャラリー画像</legend>
+    </select><br />
+		<input type="radio" name="item_image_type" value="photo" {IMAGE_TYPE_PHOTO_CHECKED} />フォトギャラリー画像<br />
 取得数：<input type="text" name="item_image_count" value="{IMAGE_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" />&nbsp;&nbsp;
 	    ソートキー：<select name="item_sort_key">
 <patTemplate:tmpl name="item_sort_key_type_list">
@@ -99,7 +97,6 @@ $(function(){
 	        <option value="0" {ORDER_DEC_SELECTED}>降順</option>
 	        <option value="1" {ORDER_INC_SELECTED}>昇順</option>
 	    </select>
-            </fieldset>
 	    </td>
 	</tr>
         <tr>

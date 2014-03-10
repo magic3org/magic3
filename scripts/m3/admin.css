@@ -147,6 +147,15 @@
 	background-color: transparent;
 	background-image: none;
 	text-align:left;
+	
+	user-select:none; /* CSS3 */
+	-webkit-user-select:none; /* Safari、Chromeなど */
+	-moz-user-select:none; /* Firefox */
+	-ms-user-select: none; /* IE10 */
+	-khtml-user-select:none;
+	-webkit-user-drag:none;
+	-khtml-user-drag:none;
+	-webkit-touch-callout:none;
 }
 .m3panel_top,
 .m3panel_left,
