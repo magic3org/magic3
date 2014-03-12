@@ -30,20 +30,14 @@
 /* position block div for widget */
 .m3_widgetpos_box {
 	background-color:#FFF;
-/*	border:2px solid #555;*/
 	border:2px solid #1A242F;
 	color:#222;
 	min-height:80px;
 	min-width:200px;
-/*	width:100%;*/
-/*	margin:0 15px 15px 0;*/
 	margin:2px;
-/*	padding:0 10px 0;*/
 	padding:0 0 10px;
-/*	width:90%;*/
 	text-align:left;
 	font-size:15px;
-/*	font-family:"Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;*/
 	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 	line-height:1.428571429;
 	letter-spacing:normal;
@@ -74,24 +68,6 @@
 	top:105px;
 	left:0;
 	z-index:1000;
-}*/
-
-/* widget listing */
-.m3_widgetlist_box {
-	background-color:#FFF;
-	border:1px solid #555;
-	color:#222;
-/*	margin:0 15px 15px 0;*/
-	margin:0;
-/*	padding:0 10px 0;*/
-	padding:0 0 10px;
-/*	width:90%;*/
-	text-align:left;
-	font:11px/1.5 Arial, sans-serif;
-}
-/*#m3_widgetlist_inner {
-	overflow-y: scroll;
-	height: 500px;
 }*/
 
 /* widget placed in posion block */
@@ -126,10 +102,10 @@ dl.m3_widget_sortable dd {
 }
 
 /* widget in dragging */
-.ui-sortable-helper {
+/*.ui-sortable-helper {
 	text-align:left;
 	font:11px/1.5 Arial, sans-serif;
-}
+}*/
 
 /* widget in list */
 dl.m3_widgetlist_item {
@@ -138,8 +114,8 @@ dl.m3_widgetlist_item {
 	margin:5px 0;
 	border:1px solid #555;
 /*	width:200px;*/
-	text-align:left;
-	font:11px/1.5 Arial, sans-serif;
+/*	text-align:left;*/
+/*	font:11px/1.5 Arial, sans-serif;*/
 	z-index:1001;	/* front of m3_widget_window */
 	cursor:hand;
 	cursor:grab;
@@ -152,12 +128,16 @@ dl.m3_widgetlist_item dt {
 /*	background-color:#FF9933;*/
 	background-color:#18bc9c;
 	color:#FFF;
+	font-size:14px;
 	font-weight: normal;
 	height:2em;
 	line-height:2;
 	margin: 0;
 	padding:0 6px;
 	/*position:relative;*/
+}
+dl.m3_widgetlist_item dt i {
+	font-size:15px;
 }
 dl.m3_widgetlist_item dd {
 	background-color:#FFF;

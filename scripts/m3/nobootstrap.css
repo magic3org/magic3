@@ -28,6 +28,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.glyphicon-th-large:before {
+  content: "\e010";
+}
 .glyphicon-th:before {
   content: "\e011";
 }
@@ -75,4 +78,7 @@
 }
 .glyphicon-wrench:before {
   content: "\e136";
+}
+.glyphicon-tower:before {
+  content: "\e184";
 }

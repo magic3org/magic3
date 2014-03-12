@@ -290,7 +290,7 @@
 	list-style:none;
 	float:left;
 }
-.m3paneltab ul li a {	/*tab*/
+.m3paneltab ul li a {	/*tab top*/
 	outline: 0;
 	display:block;
 	padding:6px 10px;
@@ -328,46 +328,43 @@
 	margin:0 0 2px;
 	color:#FFF;
 }
-
+/* ウィジェットカテゴリー */
 .m3accordion > dt{
-/*	color:#333;*/
-color:#FFF;	
-font-weight:bold;
+	color:#FFF;	
+	font-weight:bold;
+	font-size: 16px;
 	margin-top:1px;
 	padding:10px 15px;
-/*	background:#ccc;*/
-/*background:#95a5a6;*/
-background:#3498DB;
+	background:#3498DB;
 	cursor:pointer;
 }
+/* カテゴリー内ウィジェット一覧 */
 .m3accordion > dt.active{
-/*	color:#ccc;*/
-/*	background:#333;*/
-color:#FFF;
-background:#F39C12;
+	color:#FFF;
+	background:#F39C12;
 }
 .m3accordion > dt:after{
-	content:"+";
+/*	content:"+";
 	border-radius:50%;
 	border:2px solid;
 	font-size:18px;
 	padding:0 7px;
-	margin-top:-3px;
+	margin-top:-3px;*/
+	content: "\e081";	/* 「+」 */
+	position: relative;
+	margin-top:5px;
+	display: inline-block;
+	font-family: 'Glyphicons Halflings';
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1;
 	float:right;
-	/*
-content: "\e081";
-position: relative;
-top: 1px;
-display: inline-block;
-font-family: 'Glyphicons Halflings';
-font-style: normal;
-font-weight: normal;
-line-height: 1;
--webkit-font-smoothing: antialiased;
--moz-osx-font-smoothing: grayscale;*/
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 .m3accordion > dt.active:after{
-	content:"-";
+	content: "\e082";	/* 「-」 */
+/*	content:"-";*/
 /*	border:2px solid #ccc;*/
 /*	color:#ccc;*/
 }

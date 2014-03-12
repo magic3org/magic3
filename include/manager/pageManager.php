@@ -154,6 +154,8 @@ class PageManager extends Core
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー)
+	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メインウィジェット"></i> ';		// ウィジェットの機能マーク(メインウィジェット)
+	const WIDGET_MARK_NAVMENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// ウィジェットの機能マーク(ナビゲーションメニュー)
 	
 	// アドオンオブジェクト用
 	const CONTENT_OBJ_ID	= 'contentlib';	// 汎用コンテンツオブジェクトID
@@ -3855,8 +3857,14 @@ class PageManager extends Core
 					$imageTag .= 'width="' . self::WIDGET_ICON_IMG_SIZE . '"';
 					$imageTag .= ' height="' . self::WIDGET_ICON_IMG_SIZE . '"';
 					$imageTag .= ' />';
+					
+					// ウィジェット機能マーク
+					$widgetSymbol = '';
+					if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetSymbol = self::WIDGET_MARK_MAIN;					// メインウィジェット
+					if ($rows[$i]['wd_type'] == 'menu' && $rows[$i]['wd_type_option'] == 'nav') $widgetSymbol = self::WIDGET_MARK_NAVMENU;		// ナビゲーションメニュー
+						
 					echo '<dl class="m3_widgetlist_item" id="' . $widgetTag . '">' . M3_NL;
-					echo '<dt>' . $rows[$i]['wd_name'] . '</dt>' . M3_NL;			// ウィジェット名
+					echo '<dt>' . $widgetSymbol . $rows[$i]['wd_name'] . '</dt>' . M3_NL;			// ウィジェット名
 					echo '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table></dd>' . M3_NL;
 					echo '</dl>' . M3_NL;
 					
