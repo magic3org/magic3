@@ -49,7 +49,7 @@ class help_templist extends HelpConv
 			),
 			'templist_format' => array(	
 				'title' =>	$this->_('Template Format'),			// テンプレート形式
-				'body' =>	$this->_('Available formats are below. System default is J15.<br /><strong>J10</strong> - Joomla! v1.0 format.<br /><strong>J15</strong> - Joomla! v1.5 format.<br /><strong>J25</strong> - Joomla! v1.7-v2.5 format.')		// テンプレートの形式です。<br />利用可能な形式は以下の通りです。Magic3では現在J15を標準としています。<br />●J10<br />Joomla! v1.0用テンプレート<br />●J15<br />Joomla! v1.5用テンプレート<br />●J25<br />Joomla! v1.7-v2.5用テンプレート
+				'body' =>	$this->_('Available formats are below.<br /><strong>J10</strong> - Joomla! v1.0 format.<br /><strong>J15</strong> - Joomla! v1.5 format.<br /><strong>J25</strong> - Joomla! v1.7-v2.5 format.<br /><strong>B30</strong> - Bootstrap v3.0 format.')		// テンプレートの形式です。<br />利用可能な形式は以下の通りです。<br />●J10<br />Joomla! v1.0用テンプレート<br />●J15<br />Joomla! v1.5用テンプレート<br />●J25<br />Joomla! v1.7-v2.5用テンプレート<br />●B30<br />Bootstrap v3.0テンプレート
 			),
 			'templist_default' => array(	
 				'title' =>	$this->_('Default Template'),			// デフォルト

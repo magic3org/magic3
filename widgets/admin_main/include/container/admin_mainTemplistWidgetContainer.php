@@ -489,6 +489,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 			case 2:					// Joomla!v2.5型
 				$formatType = 'J25';		// テンプレート形式
 				break;
+			case 10:					// Bootstrap v3.0型
+				$formatType = 'B30';		// テンプレート形式
+				break;
 			default:
 				$formatType = $this->_('Not Detected');			// 未定
 				break;
