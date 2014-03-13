@@ -156,7 +156,8 @@ class PageManager extends Core
 	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー)
 	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メインウィジェット"></i> ';		// ウィジェットの機能マーク(メインウィジェット)
 	const WIDGET_MARK_NAVMENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// ウィジェットの機能マーク(ナビゲーションメニュー)
-	
+	const WIDGET_STYLE_NAVMENU = '_navmenu';		// ウィジェットの表示スタイル(ナビゲーションメニュー)
+			
 	// アドオンオブジェクト用
 	const CONTENT_OBJ_ID	= 'contentlib';	// 汎用コンテンツオブジェクトID
 	const BLOG_OBJ_ID		= 'bloglib';		// ブログオブジェクトID
@@ -1775,7 +1776,7 @@ class PageManager extends Core
 						if (empty($style)){
 							if (strStartsWith($name, 'user') ||		// ナビゲーションメニュー位置の場合
 								strcasecmp($name, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
-								$style = '_mainmenu';		// デフォルトはナビゲーション型
+								$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
 							} else {
 								$style = 'none';
 							}
@@ -1888,6 +1889,9 @@ class PageManager extends Core
 		
 					// ウィジェットのタイトルを設定
 					$gEnvManager->setCurrentWidgetTitle('');
+					
+					// ウィジェットのスタイルを設定
+					$gEnvManager->setCurrentWidgetStyle($style);
 				
 					// ウィジェットのページ共通状況を設定
 					$gEnvManager->setIsCurrentWidgetShared($shared);
@@ -1914,6 +1918,9 @@ class PageManager extends Core
 		
 					// パラメータを解除
 					$gEnvManager->setCurrentWidgetPrefix('');				// プレフィックス文字列
+					
+					// ウィジェットのスタイルを解除
+					$gEnvManager->setCurrentWidgetStyle('');
 					
 					// ウィジェットのページ共通状況を解除
 					$gEnvManager->setIsCurrentWidgetShared(false);
@@ -2670,7 +2677,9 @@ class PageManager extends Core
 			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効(ログイン中の場合)
 					$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
-					$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);	// Bootstrap管理画面オプション
+					if ($cmd != M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)以外のとき
+						$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);	// Bootstrap管理画面オプション
+					}
 				} else {		// ログインしていない場合(ログイン画面等)
 					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
 					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);// Bootstrap管理画面オプション
@@ -3612,7 +3621,7 @@ class PageManager extends Core
 										} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
 												strcasecmp($position, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
 											$moduleContent = '';
-											if ($style == '_mainmenu'){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
+											if ($style == self::WIDGET_STYLE_NAVMENU){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
 												if ($widgetType == 'menu') $moduleContent = $render->getMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 										
 												// ナビゲーションバータイプで作成できないときはデフォルトの出力を取得
@@ -3859,12 +3868,12 @@ class PageManager extends Core
 					$imageTag .= ' />';
 					
 					// ウィジェット機能マーク
-					$widgetSymbol = '';
-					if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetSymbol = self::WIDGET_MARK_MAIN;					// メインウィジェット
-					if ($rows[$i]['wd_type'] == 'menu' && $rows[$i]['wd_type_option'] == 'nav') $widgetSymbol = self::WIDGET_MARK_NAVMENU;		// ナビゲーションメニュー
+					$widgetMark = '';
+					if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetMark = self::WIDGET_MARK_MAIN;					// メインウィジェット
+					if ($rows[$i]['wd_type'] == 'menu' && $rows[$i]['wd_type_option'] == 'nav') $widgetMark = self::WIDGET_MARK_NAVMENU;		// ナビゲーションメニュー
 						
 					echo '<dl class="m3_widgetlist_item" id="' . $widgetTag . '">' . M3_NL;
-					echo '<dt>' . $widgetSymbol . $rows[$i]['wd_name'] . '</dt>' . M3_NL;			// ウィジェット名
+					echo '<dt>' . $widgetMark . $rows[$i]['wd_name'] . '</dt>' . M3_NL;			// ウィジェット名
 					echo '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table></dd>' . M3_NL;
 					echo '</dl>' . M3_NL;
 					
@@ -4065,8 +4074,14 @@ class PageManager extends Core
 				$sharedClassName = 'm3_widget_shared';			// 共通ウィジェットのクラス
 			}
 			$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
+			
+			// ウィジェット機能マーク
+			$widgetMark = '';
+			if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetMark = self::WIDGET_MARK_MAIN;					// メインウィジェット
+			if ($rows[$i]['wd_type'] == 'menu' && $rows[$i]['wd_type_option'] == 'nav') $widgetMark = self::WIDGET_MARK_NAVMENU;		// ナビゲーションメニュー
+					
 			$contents .= '<dl class="m3_widget m3_widget_sortable" id="' . $widgetTag . '" ' . $m3Option . ' >' . M3_NL;
-			$contents .= '<dt class="m3_widget_with_check_box ' . $sharedClassName . '">' . $rows[$i]['wd_name'] . '</dt>' . M3_NL;
+			$contents .= '<dt class="m3_widget_with_check_box ' . $sharedClassName . '">' . $widgetMark . $rows[$i]['wd_name'] . '</dt>' . M3_NL;
 			$contents .= '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table>' . M3_NL;
 			$contents .= '<table width="100%"><tr><td>' . $configName . '</td><td align="right">' . $configImg . $widgetIndex . '</td></tr></table></dd>' . M3_NL;
 			$contents .= '</dl>' . M3_NL;
@@ -4219,6 +4234,9 @@ class PageManager extends Core
 				// ウィジェットのタイトルを設定
 				$gEnvManager->setCurrentWidgetTitle($title);
 				
+				// ウィジェットのスタイルを設定
+				$gEnvManager->setCurrentWidgetStyle($style);
+				
 				// ウィジェットのページ共通状況を設定
 				$gEnvManager->setIsCurrentWidgetShared($shared);
 					
@@ -4246,6 +4264,9 @@ class PageManager extends Core
 				// パラメータを解除
 				$gEnvManager->setCurrentWidgetPrefix('');				// プレフィックス文字列
 
+				// ウィジェットのスタイルを解除
+				$gEnvManager->setCurrentWidgetStyle('');
+				
 				// ウィジェットのページ共通状況を解除
 				$gEnvManager->setIsCurrentWidgetShared(false);
 				

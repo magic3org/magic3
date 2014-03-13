@@ -3092,5 +3092,18 @@ class BaseWidgetContainer extends Core
 		}
 		return $pageLink;
 	}
+	/**
+	 * 現在のウィジェットがナビゲーションメニュー対応すべきかを取得
+	 *
+	 * @return bool			true=対応、false=対応なし
+	 */
+	function isNavigationMenuStyle()
+	{
+		$isNavigation = false;
+		
+		$style = $this->gEnv->getCurrentWidgetStyle();
+		if ($style == '_navmenu') $isNavigation = true;		// ナビゲーションメニューの場合
+		return $isNavigation;
+	}
 }
 ?>

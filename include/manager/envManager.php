@@ -35,6 +35,7 @@ class EnvManager extends Core
 	private $currentPageDeviceType;		// 現在のページの端末タイプ
 	private $currentWidgetPrefix;	// 現在作成中のウィジェットのプレフィックス文字列
 	private $currentWidgetTitle;	// 現在作成中のウィジェットのタイトル文字列
+	private $currentWidgetStyle;	// 現在作成中のウィジェットのスタイル文字列
 	private $currentWidgetJoomlaParam;	// 現在作成中のウィジェットのJoomla用パラメータ
 	private $isCurrentWidgetShared;	// 現在作成中のウィジェットが共通ウィジェットかどうか
 	private $currentDomainRootUrl;	// マルチドメイン運用時の現在のルートURL
@@ -1163,7 +1164,7 @@ class EnvManager extends Core
 	/**
 	 * 現在のテンプレートタイプ
 	 *
-	 * @return int		0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5
+	 * @return int		0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0
 	 */
 	public function getCurrentTemplateType()
 	{
@@ -1446,6 +1447,25 @@ class EnvManager extends Core
 	public function getCurrentWidgetTitle()
 	{
 		return $this->currentWidgetTitle;
+	}
+	/**
+	 * 現在処理中のウィジェットのスタイル文字列
+	 *
+	 * @param bool $val	スタイル文字列
+	 * @return 			なし
+	 */
+	public function setCurrentWidgetStyle($val)
+	{
+		$this->currentWidgetStyle = $val;
+	}
+	/**
+	 * 現在処理中のウィジェットのスタイル文字列
+	 *
+	 * @return string	スタイル文字列
+	 */
+	public function getCurrentWidgetStyle()
+	{
+		return $this->currentWidgetStyle;
 	}
 	/**
 	 * 現在作成中のウィジェットのJoomla用パラメータを設定
