@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: default_menuWidgetContainer.php 5457 2012-12-11 09:36:29Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -21,13 +21,16 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 現在の言語
 	private $paramObj;		// 定義取得用
+	private $cssFilePath = array();			// CSSファイル
 	private $templateType;		// テンプレートのタイプ
 	private $isHierMenu;		// 階層化メニューを使用するかどうか
 	private $currentUserLogined;	// 現在のユーザはログイン中かどうか
 	private $menuData = array();			// Joomla用のメニューデータ
 	private $menuTree = array();			// Joomla用のメニュー階層データ
+	private $renderType;		// 描画出力タイプ
 	const DEFAULT_CONFIG_ID = 0;
 	const MAX_MENU_TREE_LEVEL = 5;			// メニュー階層最大数
+	const DEFAULT_BOOTSTRAP_CSS_FILE = '/bootstrap.css';		// CSSファイル
 	
 	/**
 	 * コンストラクタ
@@ -52,13 +55,37 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		// Joomlaテンプレートのバージョンに合わせて出力
+		$this->renderType = 'JOOMLA_NEW';		// 描画出力タイプ
 		$this->templateType = $this->gEnv->getCurrentTemplateType();
-		if ($this->templateType == 0){			// Joomla!v1.0のとき
-			return 'index_old.tmpl.html';
-		} else {
-			return 'index.tmpl.html';
+		$isNav = $this->isNavigationMenuStyle();		// ナビゲーションメニュータイプかどうか
+		
+		switch ($this->templateType){
+			case 0:
+				$this->renderType = 'JOOMLA_OLD';
+				break;
+			case 10:
+				if ($isNav) $this->renderType = 'BOOTSTRAP';
+				break;
+			default:
+				$this->renderType = 'JOOMLA_NEW';		// 描画出力タイプ
+				break;
 		}
+		
+		$templateFile = '';
+		switch ($this->renderType){
+			case 'JOOMLA_NEW':
+			default:
+				$templateFile = 'index.tmpl.html';
+				break;
+			case 'JOOMLA_OLD':
+				$templateFile = 'index_old.tmpl.html';
+				break;
+			case 'BOOTSTRAP':
+				$this->cssFilePath[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
+				$templateFile = 'index_bootstrap.tmpl.html';
+				break;				
+		}
+		return $templateFile;
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -83,34 +110,55 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		if (empty($targetObj)){		// 定義データが取得できないとき
 			// 出力抑止
 			$this->cancelParse();
-		} else {
-			$menuId		= $targetObj->menuId;	// メニューID
-			$name		= $targetObj->name;// 定義名
-			$this->isHierMenu	= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
-			$limitUser	= $targetObj->limitUser;// ユーザを制限するかどうか
-			$useVerticalMenu = $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
-			
-			// 縦型メニューデザイン使用の場合はJoomla用パラメータを設定
-			if (!empty($useVerticalMenu)) $this->gEnv->setCurrentWidgetJoomlaParam(array('moduleclass_sfx' => 'art-vmenu'));
-
-			// ユーザ制限があるときはログイン時のみ表示
-			if (!$limitUser || $this->currentUserLogined){
-				// メニュー作成
-				$this->menuData['path'] = array();
-				$this->menuData['active_id'] = 0;
-				$parentTree = array();			// 選択されている項目までの階層パス
-				$menuHtml = $this->createMenu($menuId, 0, 0, $tmp, $parentTree);
-				
-				if (!empty($menuHtml)) $this->tmpl->addVar("_widget", "menu_html", $menuHtml);
-				
-				// Joomla用のメニュー階層データを設定
-				$this->menuData['tree'] = $this->menuTree;
-				$this->gEnv->setJoomlaMenuData($this->menuData);
-			} else {
-				// 出力抑止
-				$this->cancelParse();
-			}
+			return;
 		}
+		
+		$menuId		= $targetObj->menuId;	// メニューID
+		$name		= $targetObj->name;// 定義名
+		$this->isHierMenu	= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
+		$limitUser			= $targetObj->limitUser;// ユーザを制限するかどうか
+		$useVerticalMenu 	= $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
+		
+		// 縦型メニューデザイン使用の場合はJoomla用パラメータを設定
+		if (!empty($useVerticalMenu)) $this->gEnv->setCurrentWidgetJoomlaParam(array('moduleclass_sfx' => 'art-vmenu'));
+
+		// ユーザ制限があるときはログイン時のみ表示
+		if (!$limitUser || $this->currentUserLogined){
+			// メニュー作成
+			$this->menuData['path'] = array();
+			$this->menuData['active_id'] = 0;
+			$parentTree = array();			// 選択されている項目までの階層パス
+			$menuHtml = $this->createMenu($menuId, 0, 0, $tmp, $parentTree);
+			
+			if (!empty($menuHtml)) $this->tmpl->addVar("_widget", "menu_html", $menuHtml);
+			
+			// Joomla用のメニュー階層データを設定
+			$this->menuData['tree'] = $this->menuTree;
+			$this->gEnv->setJoomlaMenuData($this->menuData);
+			
+			// Bootstrap用のデータを埋め込む
+			if ($this->renderType == 'BOOTSTRAP'){
+				$this->tmpl->addVar("_widget", "site_url", $this->convertUrlToHtmlEntity($this->gEnv->getRootUrl() . '/'));
+				$this->tmpl->addVar("_widget", "sitename", $this->convertToDispString($this->gEnv->getSiteName()));
+			}
+		} else {
+			// 出力抑止
+			$this->cancelParse();
+		}
+	}
+	/**
+	 * CSSファイルをHTMLヘッダ部に設定
+	 *
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssFileToHead($request, &$param)
+	{
+		return $this->cssFilePath;
 	}
 	/**
 	 * メニューツリー作成
@@ -170,7 +218,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				}
 						
 				// Joomla1.0対応
-				if ($this->templateType == 0) $linkClassArray[] = 'mainlevel';
+				if ($this->renderType == 'JOOMLA_OLD') $linkClassArray[] = 'mainlevel';
 				
 				// リンク先の作成
 				$linkUrl = $row['md_link_url'];
@@ -265,25 +313,35 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 							array_unshift($classArray, 'parent');
 							
 							// ##### タグ作成 #####
-							if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-							//$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $this->convertToDispString($name) . '</span></a>' . M3_NL;
-							$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $title . '</span></a>' . M3_NL;
-							if (!empty($menuText)){
-								$treeHtml .= '<ul>' . M3_NL;
-								$treeHtml .= $menuText;
-								$treeHtml .= '</ul>' . M3_NL;
+							if ($this->renderType == 'BOOTSTRAP'){// Bootstrapタイプのとき
+								$classArray[] = 'dropdown';
+								
+								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
+								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="dropdown-toggle" data-toggle="dropdown"><span>' . $title . ' <b class="caret"></b></span></a>' . M3_NL;
+								if (!empty($menuText)){
+									$treeHtml .= '<ul class="dropdown-menu">' . M3_NL;
+									$treeHtml .= $menuText;
+									$treeHtml .= '</ul>' . M3_NL;
+								}
+								$treeHtml .= '</li>' . M3_NL;
+							} else {
+								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
+								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '"><span>' . $title . '</span></a>' . M3_NL;
+								if (!empty($menuText)){
+									$treeHtml .= '<ul>' . M3_NL;
+									$treeHtml .= $menuText;
+									$treeHtml .= '</ul>' . M3_NL;
+								}
+								$treeHtml .= '</li>' . M3_NL;
 							}
-							$treeHtml .= '</li>' . M3_NL;
 						}
 						break;
 					case 2:			// テキストのとき
-						//$treeHtml .= '<li><span>' . $this->convertToDispString($name) . '</span></li>' . M3_NL;
 						$treeHtml .= '<li><span>' . $title . '</span></li>' . M3_NL;
 						break;
 					case 3:			// セパレータのとき
 						// Joomla用メニューデータ作成
 						$menuItem->type = 'separator';
-						//$menuItem->title = $name;
 						$menuItem->title = $title;
 						$menuItem->flink = '';
 						
@@ -291,12 +349,15 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 						$this->menuTree[] = $menuItem;
 						
 						// ##### タグ作成 #####
-						//$treeHtml .= '<li><span class="separator">' . $this->convertToDispString($name) . '</span></li>' . M3_NL;
-						$treeHtml .= '<li><span class="separator">' . $title . '</span></li>' . M3_NL;
+						if ($this->renderType == 'BOOTSTRAP'){// Bootstrapタイプのとき
+							$treeHtml .= '<li class="divider"></li>' . M3_NL;
+						} else {
+							$treeHtml .= '<li><span class="separator">' . $title . '</span></li>' . M3_NL;
+						}
 						break;
 				}
 				
-				if ($this->templateType == 0){			// Joomla!v1.0のとき
+				if ($this->renderType == 'JOOMLA_OLD'){			// Joomla!v1.0のとき
 					$itemRow = array(
 						'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
 						//'name' => $this->convertToDispString($name),			// タイトル
