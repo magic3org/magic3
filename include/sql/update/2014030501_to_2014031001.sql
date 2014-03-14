@@ -40,5 +40,11 @@ INSERT INTO _widget_category
 -- ウィジェット情報マスター
 ALTER TABLE _widgets ADD wd_type_option   VARCHAR(10)    DEFAULT ''                    NOT NULL;      -- ウィジェット種別オプション(nav=ナビゲーションメニュー)
 
+-- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'bootstrap_yeti';
+INSERT INTO _templates
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_create_dt) VALUES
+('bootstrap_yeti',             'bootstrap_sample1',             10,       0,              false,     true,             true,        0,             now());
+
 -- *** システム標準テーブル ***
 
