@@ -603,3 +603,7 @@ background-color: #0081c2;
 .login_box {
 	margin-top:20%;
 }
+/****** 画面編集 ******/
+#layout_preview_title {
+	margin-top:10px;
+}

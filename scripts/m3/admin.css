@@ -163,19 +163,19 @@
 .m3panel_bottom,
 .m3panelopener,
 .m3resizer {
-	z-index:1000;
+	z-index:2000;
 }
 .m3panelopener.m3topleft {
 	position: fixed;
 	top: 0px;
 	left: 0px;
-	z-index:1001;
+	z-index:2001;
 }
 .m3resizer.m3topright {
 	position: fixed;
 	top: 0px;
 	right: 0px;
-	z-index:1001;
+	z-index:2001;
 }
 .m3panelopener.m3topleft a,
 .m3resizer.m3topright a {

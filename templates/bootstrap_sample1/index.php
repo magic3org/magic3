@@ -19,7 +19,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 <html dir="ltr" lang="<?php echo $document->language; ?>">
 <head>
     <jdoc:include type="head" />
-	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootswatch_yeti.min.css" media="screen">
+	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootswatch_yeti_ja.min.css" media="screen">
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
 	<!--[if lt IE 9]>
 	<script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
