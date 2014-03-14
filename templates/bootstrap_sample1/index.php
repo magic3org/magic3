@@ -20,27 +20,38 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 <head>
     <jdoc:include type="head" />
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootswatch_yeti.min.css" media="screen">
+	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
 	<!--[if lt IE 9]>
 	<script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
 	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
 	<![endif]-->
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+    $('.button').addClass('btn btn-default');
+});
+//]]>
+</script>
 </head>
 <body>
 <div class="container">
-<jdoc:include type="modules" name="top" style="none" />
+<jdoc:include type="modules" name="user3" />
+<div class="hidden-xs"><jdoc:include type="modules" name="top-hide" style="none" /></div>
 <div class="row">
 <?php if ($document->countModules('left')): ?>
-    <div class="col-lg-3"><jdoc:include type="modules" name="left" style="none" /></div>
+    <div class="col-sm-3"><div class="row">
+	<div class="col-sm-12"><jdoc:include type="modules" name="left" style="none" /></div>
+	<div class="col-sm-12 hidden-xs"><jdoc:include type="modules" name="left-hide" style="none" /></div>
+	</div></div>
 <?php endif; ?>
-<?php if ($document->countModules('left') && $document->countModules('right')): ?>
-    <div class="col-lg-6"><jdoc:include type="component" style="none" /></div>
-<?php elseif ($document->countModules('left') || $document->countModules('right')): ?>
-    <div class="col-lg-9"><jdoc:include type="component" style="none" /></div>
+<?php if ($document->countModules('left')): ?>
+    <div class="col-sm-9"><div class="row">
+	<div class="col-sm-12"><jdoc:include type="modules" name="banner" style="none" /></div>
+	<div class="col-sm-12"><jdoc:include type="component" style="none" /></div>
+	<div class="col-sm-12 hidden-xs"><jdoc:include type="modules" name="center-hide" style="none" /></div>
+	</div></div>
 <?php else: ?>
     <jdoc:include type="component" style="none" />
-<?php endif; ?>
-<?php if ($document->countModules('right')): ?>
-    <div class="col-lg-3"><jdoc:include type="modules" name="right" style="none" /></div>
 <?php endif; ?>
 </div>
 <jdoc:include type="modules" name="bottom" style="none" />

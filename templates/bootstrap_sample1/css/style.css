@@ -1,0 +1,8 @@
+
+/* メニューバー固定用 */
+body {
+	padding-top: 85px;
+}
+.button {
+	margin:5px;
+}
