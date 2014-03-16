@@ -27,6 +27,7 @@ class PageManager extends Core
 	private $isPageEditable;		// 一般画面ページ編集可能モード
 	private $isTransparentMode;		// 画面透過モード
 	private $isEditMode;			// 一般画面編集モード
+	private $isLayout;				// 画面レイアウト中かどうか
 	private $tmpData;				// データ作成用
 	private $db;					// DBオブジェクト
 	private $defaultScriptFiles;	// デフォルトで読み込むスクリプトファイル
@@ -691,7 +692,6 @@ class PageManager extends Core
 	{
 		if (!empty($rssData)) $this->rssChannel = $rssData;				// RSSチャンネルデータ
 	}
-	
 	/**
 	 * 表示ポジションを表示するかどうか
 	 *
@@ -700,6 +700,15 @@ class PageManager extends Core
 	function showPosition($mode)
 	{
 		$this->showPositionMode = $mode;
+	}
+	/**
+	 * 画面レイアウト中かどうか
+	 *
+	 * @return bool		true=レイアウト中、false=レイアウト中でない
+	 */
+	function isLayout()
+	{
+		return $this->isLayout;				// 画面レイアウト中かどうか
 	}
 	/**
 	 * ウィジェットの単体表示を設定
@@ -1255,7 +1264,7 @@ class PageManager extends Core
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
 					$this->isEditMode = true;			// 一般画面編集モード
 					$this->isPageEditable = true;		// 一般画面ページ編集可能モードに設定(コンテキストメニュー表示)
-
+						
 					// 管理画面用ライブラリを追加
 					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
 						$this->addAdminScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
@@ -1265,6 +1274,7 @@ class PageManager extends Core
 							$this->defaultAdminScriptFiles[] = ScriptLibInfo::getScript(ScriptLibInfo::LIB_GOOGLEMAPS);
 						}
 					} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
+						$this->isLayout = true;		// 画面レイアウト中かどうか
 						$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_IDTABS);			// 管理パネル用スクリプト追加(ポジション表示追加分)
 						//$this->useBootstrap = true;		// Bootstrapを使用
 						//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
