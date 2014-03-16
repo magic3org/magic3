@@ -1,0 +1,4 @@
+/* レイアウト補正用 */
+.pos-static {
+	position:relative;
+}

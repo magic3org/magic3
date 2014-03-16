@@ -6,3 +6,6 @@ body {
 .button {
 	margin:5px;
 }
+.pos-static {
+	position:fixed;
+}
