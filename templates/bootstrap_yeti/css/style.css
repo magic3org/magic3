@@ -6,6 +6,10 @@ body {
 .button {
 	margin:5px;
 }
-.pos-static {
+#pos-fixed {
 	position:fixed;
+}
+#pos-slide.affix {
+	position: fixed;
+	top:80px;
 }

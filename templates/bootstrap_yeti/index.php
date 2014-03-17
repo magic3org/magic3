@@ -32,6 +32,12 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 //<![CDATA[
 $(function(){
     $('.button').addClass('btn btn-default');
+	
+	$('#pos-slide').affix({
+		offset: {
+			top: 100
+		}
+	});
 });
 //]]>
 </script>
@@ -41,11 +47,12 @@ $(function(){
 <jdoc:include type="modules" name="user3" />
 <div class="hidden-xs"><jdoc:include type="modules" name="top-hide" style="none" /></div>
 <div class="row">
-<?php if ($document->countModules('left') || $document->countModules('left-static') || $document->countModules('left-hide')): ?>
+<?php if ($document->countModules('left') || $document->countModules('left-fixed') || $document->countModules('left-hide') || $document->countModules('left-slide')): ?>
     <div class="col-sm-3"><div class="row">
-	<?php if ($document->countModules('left-static')): ?><div class="col-sm-12 hidden-xs"><div class="pos-static"><jdoc:include type="modules" name="left-static" style="none" /></div></div><?php endif; ?>
+	<?php if ($document->countModules('left-fixed')): ?><div class="col-sm-12 hidden-xs"><div id="pos-fixed"><jdoc:include type="modules" name="left-fixed" style="none" /></div></div><?php endif; ?>
 	<?php if ($document->countModules('left')): ?><div class="col-sm-12"><jdoc:include type="modules" name="left" style="none" /></div><?php endif; ?>
 	<?php if ($document->countModules('left-hide')): ?><div class="col-sm-12 hidden-xs"><jdoc:include type="modules" name="left-hide" style="none" /></div><?php endif; ?>
+	<?php if ($document->countModules('left-slide')): ?><div class="col-sm-12"><div id="pos-slide"><jdoc:include type="modules" name="left-slide" style="none" /></div></div><?php endif; ?>
 	</div></div>
     <div class="col-sm-9"><div class="row">
 	<?php if ($document->countModules('banner')): ?><div class="col-sm-12"><jdoc:include type="modules" name="banner" style="none" /></div><?php endif; ?>

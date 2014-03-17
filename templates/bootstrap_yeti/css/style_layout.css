@@ -1,4 +1,4 @@
 /* レイアウト補正用 */
-.pos-static {
+#pos-fixed {
 	position:relative;
 }
