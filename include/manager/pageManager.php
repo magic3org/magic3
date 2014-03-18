@@ -3633,7 +3633,7 @@ class PageManager extends Core
 											$moduleContent = '';
 											if ($style == self::WIDGET_STYLE_NAVMENU){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
 												if ($widgetType == 'menu') $moduleContent = $render->getMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-										
+									
 												// ナビゲーションバータイプで作成できないときはデフォルトの出力を取得
 												if (empty($moduleContent)) $moduleContent = $render->getModuleContents('xhtml', $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 											} else {
