@@ -88,7 +88,8 @@ background-color:#18bc9c;
 	line-height:2;
 	margin: 0;
 	padding:0 6px;
-	position:relative;
+	position:relative; /* title NG */
+	/*position:static;*/	/* OK but checkbox invisible */
 }
 dt.m3_widget_shared {
 /*	background-color:#E51919;*/
