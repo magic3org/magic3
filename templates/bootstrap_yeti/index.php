@@ -28,14 +28,31 @@ $(function(){
 	
 <?php global $gPageManager;if (!$gPageManager->isLayout()): ?>
 	if ($(window).width() >= 768){
-		$('#pos-slide').affix({
-			offset: {
-				top: $('#pos-slide').offset().top -70
-			}
-		});
+		if ($('#pos-slide').offset()){
+			$('#pos-slide').affix({
+				offset: {
+					top: $('#pos-slide').offset().top -70
+				}
+			});
+		}
 	}
 <?php endif; ?>
+
+	// 画像リサイズ
+	resizeImage();
+	$(window).resize(function(){ resizeImage(); });
 });
+
+function resizeImage(){
+	$('img').each(function(){
+		var max = $(window).width();
+		var w = $(this).width();
+		var h = $(this).height();
+		if (w > max) {
+			$(this).width(max).height(Math.round((max / w) * h));
+		}
+	});
+}
 //]]>
 </script>
 </head>
