@@ -39,6 +39,7 @@ class ScriptLibInfo
 	const LIB_SWFOBJECT				= 'swfobject';
 	const LIB_BOOTSTRAP				= 'bootstrap';
 	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
+	const LIB_NOBOOTSTRAP			= 'nobootstrap';			// Bootstrapを使用しない場合の管理画面用ライブラリ
 	
 	// スマートフォン用jQueryライブラリ
 	const LIB_JQUERYS				= 'jquerys';
@@ -241,6 +242,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
 
+	// Bootstrapライブラリ
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.1.1/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.1.1/css/bootstrap.min.css';
 	// BootstrapオプションはBootstrapのディレクトリ配下に格納
@@ -248,7 +250,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.1/css/bootswatch_flatly_ja.min.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap-3.1.1/css/bootsnipp_largedropdownmenu.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap-3.1.1/css/yamm.css';					// bootstrapメガメニュー
-	
+	const NOBOOTSTRAP_CSS							= 'm3/nobootstrap/style.css';
+	const NOBOOTSTRAP_TOOLTIP_FILENAME				= 'm3/nobootstrap/tooltip.js';			// bootstrapツールチップ
+	const NOBOOTSTRAP_DROPDOWN_FILENAME				= 'm3/nobootstrap/dropdown.js';			// bootstrapドロップダウンメニュー
+
 	const CODEMIRROR_FILENAME				= 'codemirror-3.1/lib/codemirror.js';				// CodeMirror
 	const CODEMIRROR_CSS					= 'codemirror-3.1/lib/codemirror.css';				// CodeMirror
 	const CODEMIRROR_JAVASCRIPT_FILENAME	= 'codemirror-3.1/mode/javascript/javascript.js';	// CodeMirror Javascript
@@ -354,8 +359,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 /*					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																'css'		=> array(self::BOOTSTRAP_CSS)),*/
 					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
-
-					self::LIB_BOOTSTRAP_ADMIN		=>	array(	'css'		=> array(self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS, self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS)),	// Bootstrap管理画面用オプション															
+					self::LIB_BOOTSTRAP_ADMIN		=>	array(	'css'		=> array(self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS, self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS)),	// Bootstrap管理画面用オプション			
+					self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
+																'css'		=> array(self::NOBOOTSTRAP_CSS)),
+													
 					// jQueryライブラリ
 					self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル
 					self::LIB_JQUERY_JCAROUSEL		=>	array(	'script' 	=> array(self::JQUERY_JCAROUSEL_FILENAME),

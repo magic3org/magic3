@@ -97,6 +97,7 @@ label.invalid { color: #ff0000; }
 }
 
 /* Tooltips */
+/*
 div.tooltip {
 	float: left;
 	background: #ffc;
@@ -121,7 +122,7 @@ div.tooltip p {
 	font-size: 90%;
 	margin: 0;
 }
-
+*/
 /* Caption fixes */
 /* Caption fixes */
 .img_caption .left {
