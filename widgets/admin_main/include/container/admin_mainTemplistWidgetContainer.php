@@ -563,13 +563,18 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 					if ($xml !== false){
 						if ($xml->attributes()->type == 'template'){
 							$version = $xml->attributes()->version;
-							if (version_compare($version, '1.6') >= 0){
-								$templType = 2;		// Joomla!v2.5テンプレート
-							} else if (version_compare($version, '1.5') >= 0){
-								$templType = 1;		// Joomla!v1.5テンプレート
+							$format = $xml->attributes()->format;
+							if (strcasecmp($format, 'bootstrap') == 0){		// Bootstrapタイプのテンプレートの場合
+								$templType = 10;		// Bootstrap v3.0型
+							} else {					// デフォルトのテンプレート(Joomlaタイプ)
+								if (version_compare($version, '1.6') >= 0){
+									$templType = 2;		// Joomla!v2.5テンプレート
+								} else if (version_compare($version, '1.5') >= 0){
+									$templType = 1;		// Joomla!v1.5テンプレート
 
-								// テンプレートをテスト
-								$cleanType = $this->checkTemplate($id);
+									// テンプレートをテスト
+									$cleanType = $this->checkTemplate($id);
+								}
 							}
 						}
 					}

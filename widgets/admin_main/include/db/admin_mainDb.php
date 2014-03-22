@@ -1772,7 +1772,7 @@ class admin_mainDb extends BaseDb
 	 *
 	 * @param string  $id			テンプレートID
 	 * @param string  $name			テンプレート名
-	 * @param int     $type			テンプレートのタイプ
+	 * @param int     $type			テンプレートのタイプ(1=Joomla!v1.5テンプレート,2=Joomla!v2.5テンプレート,10=Bootstrap v3.0テンプレート)
 	 * @param int     $deviceType	端末タイプ(0=PC用、1=携帯用、2=スマートフォン)
 	 * @param int     $cleanType	クリーン処理タイプ
 	 * @return						なし
@@ -1805,12 +1805,15 @@ class admin_mainDb extends BaseDb
 			}
 			$historyIndex = $row['tm_history_index'] + 1;
 		}
+		// Bootstrapを使用するかどうか
+		$useBootstrap = false;
+		if ($type >= 10) $useBootstrap = true;
 		
 		$queryStr = 'INSERT INTO _templates ';
-		$queryStr .=  '(tm_id, tm_history_index, tm_name, tm_type, tm_device_type, tm_mobile, tm_clean_type, tm_create_dt, tm_create_user_id) ';
+		$queryStr .=  '(tm_id, tm_history_index, tm_name, tm_type, tm_device_type, tm_mobile, tm_clean_type, tm_use_bootstrap, tm_create_dt, tm_create_user_id) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($id, $historyIndex, $name, $type, $deviceType, $mobile, $cleanType, $now, $userId));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($id, $historyIndex, $name, $type, $deviceType, $mobile, $cleanType, intval($useBootstrap), $now, $userId));
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();
