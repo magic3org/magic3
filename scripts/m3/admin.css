@@ -315,7 +315,7 @@
 /*  border-bottom:1px solid snow;*/
 	cursor:default;
 }
-.m3paneltab div {
+.m3paneltab > div, .m3paneltab > div > div {
 	padding:5px 3px;
 	clear:left;
 	font:14pt;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<install type="template" version="0" format="bootstrap">
+<install type="template" version="3.1" format="bootstrap">
   <name>bootstrap_yeti</name>
   <creationDate>2014-03-22</creationDate>
   <version>1.0</version>

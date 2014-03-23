@@ -114,16 +114,12 @@ dl.m3_widgetlist_item {
 /*	margin:10px 10px 0 10px;*/
 	margin:5px 0;
 	border:1px solid #555;
-/*	width:200px;*/
-/*	text-align:left;*/
-/*	font:11px/1.5 Arial, sans-serif;*/
 	z-index:1001;	/* front of m3_widget_window */
 	cursor:hand;
 	cursor:grab;
 	cursor:-moz-grab;
 	cursor:-webkit-grab;
 }
-
 dl.m3_widgetlist_item dt {
 /*	cursor:pointer;*/
 /*	background-color:#FF9933;*/
