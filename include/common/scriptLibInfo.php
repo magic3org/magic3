@@ -84,6 +84,7 @@ class ScriptLibInfo
 	
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
+	const LIB_JQUERY_M3_DROPDOWN		= 'jquery.m3dropdown';		// ドロップダウンメニュー
 	
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
@@ -195,7 +196,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_FITTEXT_FILENAME		= 'jquery/jquery.fittext.js';
 	const JQUERY_IDTABS_FILENAME		= 'jquery/jquery.idTabs.min.js';
 	// Magic3管理画面jQueryプラグインのファイル名
-	const JQUERY_M3_SLIDE_PANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
+	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
+	const JQUERY_M3_DROPDOWN_FILENAME	= 'jquery/jquery.m3dropdown.js';	// ドロップダウンメニュー
+	const JQUERY_M3_DROPDOWN_CSS		= 'jquery/jquery.m3dropdown.css';	// ドロップダウンメニュー
 	
 	// ライブラリの公式サイトのURL
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
@@ -453,8 +456,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																'url'		=> self::JQUERY_JQEASYPANEL_URL,
 																'version'	=> self::JQUERY_JQEASYPANEL_VER)*/
 					// Magic3管理画面専用jQueryプラグイン
-					self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDE_PANEL_FILENAME)),	// スライドパネル
-					
+					self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
+					self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー
+																'css'		=> array(self::JQUERY_M3_DROPDOWN_CSS)),
+																
 					// その他ライブラリ
 					self::LIB_CODEMIRROR_JAVASCRIPT		=>	array(	'script' 	=> array(self::CODEMIRROR_FILENAME, self::CODEMIRROR_JAVASCRIPT_FILENAME),	// CodeMirror用のファイル
 																	'css'		=> array(self::CODEMIRROR_CSS),

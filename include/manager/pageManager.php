@@ -138,6 +138,8 @@ class PageManager extends Core
 	const THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
 	const CONFIG_ICON_FILE = '/images/system/config.png';			// ウィジェット定義画面アイコン
 	const ADJUST_ICON_FILE = '/images/system/adjust_widget.png';	// 位置調整アイコン
+	const SHARED_ICON_FILE = '/images/system/shared.png';	// ページ共通属性
+	const DELETE_ICON_FILE = '/images/system/delete.png';	// ウィジェット削除
 	const CONFIG_ICON32_FILE = '/images/system/config32.png';			// ウィジェット定義画面アイコン(ツールチップ用)
 	const ADJUST_ICON32_FILE = '/images/system/adjust_widget32.png';	// 位置調整アイコン(ツールチップ用)
 	const CLOSE_BOX_ICON32_FILE = '/images/system/close_box.png';		// ウィンドウ閉じるアイコン(ツールチップ用)
@@ -1276,6 +1278,7 @@ class PageManager extends Core
 					} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
 						$this->isLayout = true;		// 画面レイアウト中かどうか
 						$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_IDTABS);			// 管理パネル用スクリプト追加(ポジション表示追加分)
+						$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_DROPDOWN);		// 管理パネル用スクリプト追加(ドロップダウンメニュー)
 						//$this->useBootstrap = true;		// Bootstrapを使用
 						//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
 					}
@@ -4091,9 +4094,31 @@ class PageManager extends Core
 			$widgetMark = '';
 			if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetMark = self::WIDGET_MARK_MAIN;					// メインウィジェット
 			if ($rows[$i]['wd_type'] == 'menu' && $rows[$i]['wd_type_option'] == 'nav') $widgetMark = self::WIDGET_MARK_NAVMENU;		// ナビゲーションメニュー
-					
+			
+			// 操作メニュー
+			$dropdownMenuId = $widgetTag . '_dropdown';
+			$operationMenu = '<div class="m3widgetdropdown">';
+//			$operationMenu .= '<a class="m3widgetdropdownbutton" data-dropdown="#' . $dropdownMenuId . '" href="#"><i class="glyphicon glyphicon-list-alt"></i> <b class="caret"></b></a>';
+			$operationMenu .= '<a class="m3widgetdropdownbutton" data-dropdown="#' . $dropdownMenuId . '" href="#" data-horizontal-offset="4"><b class="caret"></b></a>';
+			$operationMenu .= '<div id="' . $dropdownMenuId . '" class="m3dropdown m3dropdown-tip m3dropdown-relative m3dropdown-anchor-right">';
+			$operationMenu .= '<ul class="m3dropdown-menu">';
+			$operationMenu .= '<li class="m3_wadjust"><a href="#1"><img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" /> <span>タイトル・位置調整</span></a></li>';
+			$operationMenu .= '<li class="m3_wconfig"><a href="#1"><img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" /> <span>ウィジェットの設定</span></a></li>';
+			$operationMenu .= '<li class="m3_wshared"><a href="#1"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>ページ共通属性</span></a></li>';
+			$operationMenu .= '<li class="m3_wdelete"><a href="#1"><img src="' . $rootUrl . self::DELETE_ICON_FILE . '" /> <span>このウィジェットを削除</span></a></li>';
+//			$operationMenu .= '<li><a href="#1">Item 1</a></li>';
+//			$operationMenu .= '<li><a href="#2">Item 2</a></li>';
+//			$operationMenu .= '<li><a href="#3">Item 3</a></li>';
+//			$operationMenu .= '<li class="m3dropdown-divider"></li>';
+//			$operationMenu .= '<li><a href="#4">Item 4</a></li>';
+//			$operationMenu .= '<li><a href="#5">Item 5</a></li>';
+//			$operationMenu .= '<li><a href="#5">Item 6</a></li>';
+			$operationMenu .= '</ul>';
+			$operationMenu .= '</div>';
+			$operationMenu .= '</div>';
+			
 			$contents .= '<dl class="m3_widget m3_widget_sortable" id="' . $widgetTag . '" ' . $m3Option . ' >' . M3_NL;
-			$contents .= '<dt class="m3_widget_with_check_box ' . $sharedClassName . '">' . $widgetMark . $rows[$i]['wd_name'] . '</dt>' . M3_NL;
+			$contents .= '<dt class="m3_widget_with_check_box ' . $sharedClassName . '"><div class="m3widgettitle">' . $widgetMark . $rows[$i]['wd_name'] . '</div>' . $operationMenu . '</dt>' . M3_NL;
 			$contents .= '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table>' . M3_NL;
 			$contents .= '<table width="100%"><tr><td>' . $configName . '</td><td align="right">' . $configImg . $widgetIndex . '</td></tr></table></dd>' . M3_NL;
 			$contents .= '</dl>' . M3_NL;

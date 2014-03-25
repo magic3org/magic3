@@ -59,17 +59,6 @@
 	letter-spacing:inherit;
 }
 
-/* widget list window */
-/*#m3_widget_window {
-	text-align:left;
-	font:11px/1.5 Arial, sans-serif;
-	position:fixed;
-	width:250px;
-	top:105px;
-	left:0;
-	z-index:1000;
-}*/
-
 /* widget placed in posion block */
 dl.m3_widget_sortable {
 	color:#222;
@@ -88,8 +77,29 @@ background-color:#18bc9c;
 	line-height:2;
 	margin: 0;
 	padding:0 6px;
-	position:relative; /* title NG */
-	/*position:static;*/	/* OK but checkbox invisible */
+/*	position:relative;*/ /* title NG */
+/*position:static;*/	/* OK but checkbox invisible */
+}
+dt.m3_widget_with_check_box .m3widgettitle {
+	display:inline;
+	float:left;
+	width:80%;
+	height:2em;
+	overflow:hidden;
+}
+.m3widgetdropdown {
+	display:inline;
+	float:right;
+}
+.m3widgetdropdown a {
+	text-decoration: none;
+}
+.m3widgetdropdown a.m3widgetdropdownbutton {
+	font-size:15px;
+	color: #fff;
+	text-decoration: none;
+	padding:2px 7px;
+	margin:0;
 }
 dt.m3_widget_shared {
 /*	background-color:#E51919;*/
@@ -101,12 +111,6 @@ dl.m3_widget_sortable dd {
 	margin:0;
 	padding:3px 6px;
 }
-
-/* widget in dragging */
-/*.ui-sortable-helper {
-	text-align:left;
-	font:11px/1.5 Arial, sans-serif;
-}*/
 
 /* widget in list */
 dl.m3_widgetlist_item {
@@ -131,7 +135,7 @@ dl.m3_widgetlist_item dt {
 	line-height:2;
 	margin: 0;
 	padding:0 6px;
-	/*position:relative;*/
+/*	position:relative;*/
 }
 dl.m3_widgetlist_item dt i {
 	font-size:15px;
@@ -142,15 +146,13 @@ dl.m3_widgetlist_item dd {
 	padding:3px 6px;
 }
 
-/*.placeholder { border:1px dashed #AAA; }*/
-
 /*
 .ui-sortable h2 span.options { right:10px; top:8px; width:30px; }
 .ui-sortable h2 span.options a { height:12px; width:30px; }*/
 
 /* widget close box */
+/*
 dl.m3_widget_sortable dt span.options {
-/*	cursor:default;*/
 	font-size:1px;
 	line-height:1px;
 	position:absolute;
@@ -160,13 +162,12 @@ dl.m3_widget_sortable dt span.options {
 }
 dl.m3_widget_sortable dt span.options a {
 	background-color:#FFF;
-/*	cursor:pointer;*/
 	display:block;
 	float:left;
 	text-indent:-9000px;
 	height:12px;
 	width:12px;
-}
+}*/
 .m3_spacer {
 	height:100px;
 	border:2px dashed #AAA;
