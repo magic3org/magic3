@@ -64,6 +64,10 @@ dl.m3_widget_sortable {
 	color:#222;
 	margin:10px 10px 0 10px;
 	border:1px solid #555;
+	cursor:hand;
+	cursor:grab;
+	cursor:-moz-grab;
+	cursor:-webkit-grab;
 }
 /*dl.m3_widget_sortable dt {*/
 dt.m3_widget_with_check_box {
@@ -101,6 +105,7 @@ dt.m3_widget_with_check_box .m3widgettitle {
 	padding:2px 7px;
 	margin:0;
 }
+
 dt.m3_widget_shared {
 /*	background-color:#E51919;*/
 	background-color:#E74C3C;

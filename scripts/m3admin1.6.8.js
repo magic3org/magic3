@@ -419,7 +419,6 @@ function m3SetNextButtonEvent(callback, param)
 		$('.m3confignext').show();
 	}
 }
-
 /**
  * 入力データ編集中のページ離脱を防止
  *
@@ -460,6 +459,16 @@ function m3SetSafeContentEdit()
 function m3CancelSafeContentEdit()
 {
 	$(window).unbind("beforeunload");
+}
+/**
+ * ヘルプを設定
+ *
+ * @return なし
+ */
+function m3SetHelp()
+{
+    $('span.m3help').cluetip({splitTitle: '|', cluezIndex: 2000});
+    if (jQuery().tooltip) $('[rel=m3help]').tooltip({ placement: 'top'});
 }
 /**
  * 画面操作用スライド開閉メニューバー

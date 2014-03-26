@@ -117,7 +117,7 @@
 	display:none;
 }
 
-.m3_widget.m3_widget_sortable { cursor: url(../../images/system/cursor/context.cur), auto; }
+/*.m3_widget.m3_widget_sortable { cursor: url(../../images/system/cursor/context.cur), auto; }*/
 .m3_widget.m3_widget_contextmenu { cursor: url(../../images/system/cursor/context.cur), auto; }
 
 /***** Magic3スライドパネル *****/

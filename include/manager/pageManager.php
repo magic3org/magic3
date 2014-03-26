@@ -4102,17 +4102,14 @@ class PageManager extends Core
 			$operationMenu .= '<a class="m3widgetdropdownbutton" data-dropdown="#' . $dropdownMenuId . '" href="#" data-horizontal-offset="4"><b class="caret"></b></a>';
 			$operationMenu .= '<div id="' . $dropdownMenuId . '" class="m3dropdown m3dropdown-tip m3dropdown-relative m3dropdown-anchor-right">';
 			$operationMenu .= '<ul class="m3dropdown-menu">';
-			$operationMenu .= '<li class="m3_wadjust"><a href="#1"><img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" /> <span>タイトル・位置調整</span></a></li>';
-			$operationMenu .= '<li class="m3_wconfig"><a href="#1"><img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" /> <span>ウィジェットの設定</span></a></li>';
-			$operationMenu .= '<li class="m3_wshared"><a href="#1"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>ページ共通属性</span></a></li>';
-			$operationMenu .= '<li class="m3_wdelete"><a href="#1"><img src="' . $rootUrl . self::DELETE_ICON_FILE . '" /> <span>このウィジェットを削除</span></a></li>';
-//			$operationMenu .= '<li><a href="#1">Item 1</a></li>';
-//			$operationMenu .= '<li><a href="#2">Item 2</a></li>';
-//			$operationMenu .= '<li><a href="#3">Item 3</a></li>';
-//			$operationMenu .= '<li class="m3dropdown-divider"></li>';
-//			$operationMenu .= '<li><a href="#4">Item 4</a></li>';
-//			$operationMenu .= '<li><a href="#5">Item 5</a></li>';
-//			$operationMenu .= '<li><a href="#5">Item 6</a></li>';
+			$operationMenu .= '<li class="m3_wadjust"><a href="#"><img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" /> <span>タイトル・位置調整</span></a></li>';
+			if ($hasAdmin) $operationMenu .= '<li class="m3_wconfig"><a href="#"><img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" /> <span>ウィジェットの設定</span></a></li>';
+			if ($shared){
+				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>ページ共通属性を解除</span></a></li>';
+			} else {
+				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>ページ共通属性を設定</span></a></li>';
+			}
+			$operationMenu .= '<li class="m3_wdelete"><a href="#"><img src="' . $rootUrl . self::DELETE_ICON_FILE . '" /> <span>このウィジェットを削除</span></a></li>';
 			$operationMenu .= '</ul>';
 			$operationMenu .= '</div>';
 			$operationMenu .= '</div>';

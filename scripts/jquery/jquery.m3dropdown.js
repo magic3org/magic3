@@ -23,7 +23,7 @@
 //if (jQuery) (function ($) {
 ;(function($){
     $.extend($.fn, {
-        dropdown: function (method, data) {
+        m3dropdown: function (method, data) {
 
             switch (method) {
                 case 'show':
@@ -142,8 +142,8 @@
         }
     }
 
-    $(document).on('click.dropdown', '[data-dropdown]', show);
-    $(document).on('click.dropdown', hide);
+    $(document).on('click.m3dropdown', '[data-dropdown]', show);
+    $(document).on('click.m3dropdown', hide);
     $(window).on('resize', position);
 
 })(jQuery);

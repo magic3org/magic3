@@ -134,8 +134,8 @@
 		var sub = urlParams['_sub'];
 		
 		// チェックボックス追加
-		$('dt.m3_widget_with_check_box', $els).append('<span class="options"><a class="m3_widget_close">close</a></span>');
-		$('a.m3_widget_close').bind('click', widgetClose);
+//		$('dt.m3_widget_with_check_box', $els).append('<span class="options"><a class="m3_widget_close">close</a></span>');
+//		$('a.m3_widget_close').bind('click', widgetClose);
 		
 		//$els.sortable('destroy');		// 一旦削除
 		$els.sortable({
@@ -144,6 +144,7 @@
 			cursor: 'move',
 			cursorAt: { top: CURSOR_OFFSET, left: CURSOR_OFFSET },		// 左上に初期化
 			opacity: 0.5,
+			distance: 10,
 			helper: 'clone',
 			appendTo: 'html',
 			placeholder: 'm3_spacer',
@@ -162,6 +163,35 @@
 //			stop: function(e,ui) {
 //			},
 			update: updateSortable
+		});
+		
+		// ウィジェット操作メニューにイベントを設定
+		$('.m3_wadjust').click(function(e){
+			var attrs = m3_splitAttr($(this).closest('dl.m3_widget_sortable').attr('m3'));
+			m3ShowAdjustWindow(attrs['configid'], attrs['serial'], page, sub);
+			e.preventDefault();
+		});
+		$('.m3_wconfig').click(function(e){
+			var attrs = m3_splitAttr($(this).closest('dl.m3_widget_sortable').attr('m3'));
+		    if (attrs['useconfig'] == '0'){
+		        alert("このウィジェットには設定画面がありません");
+				return;
+		    }
+			m3ShowConfigWindow(attrs['widgetid'], attrs['configid'], attrs['serial']);
+			e.preventDefault();
+		});
+		$('.m3_wshared').click(function(e){
+			var widget = $(this).closest('dl.m3_widget_sortable');
+			m3TaskWidget('toggle', widget);
+			e.preventDefault();
+		});
+		$('.m3_wdelete').click(function(e){
+			var widget = $(this).closest('dl.m3_widget_sortable');
+			widget.fadeOut('slow', function(){
+				m3TaskWidget('delete', $(this));
+				$(this).remove();
+			});
+			e.preventDefault();
 		});
 		
 		// コンテキストメニューを作成
@@ -254,6 +284,8 @@
 			cursor: 'move',
 			cursorAt: { top: CURSOR_OFFSET, left: CURSOR_OFFSET },	// 左上に初期化
 			opacity: 0.5,
+			distance: 10,
+			zIndex:2001,
 			appendTo: 'html',
 			drag: function(e, ui){
 				var objects = $('.m3_widgetpos_box');
@@ -370,33 +402,6 @@
 	};
 	// 初期処理
 	$(function(){
-/*
-		var widgetWindow = '<div id="m3_widget_window">';
-		widgetWindow += '<table border="1px" width="250" bgcolor="#424242" cellspacing="0">';
-		widgetWindow += '<tr>';
-		widgetWindow += '<td width="100%">';
-		widgetWindow += '<table border="0" width="100%" cellspacing="0" cellpadding="0">';
-		widgetWindow += '<tr>';
-		widgetWindow += '<td width="100%">';
-		widgetWindow += '<font color="#FFFFFF">ウィジェット</font>';
-		widgetWindow += '</td>';
-		widgetWindow += '</tr>';
-		widgetWindow += '<tr>';
-		widgetWindow += '<td width="100%" bgcolor="#FFFFFF" style="padding:4px">';
-		widgetWindow += '<div id="m3_widget_window_inner">';
-		widgetWindow += '<div id="m3message"></div>';
-		widgetWindow += '<div id="m3_widgetlist" class="m3_widget_tab">';
-		widgetWindow += '<div id="m3_widgetlist_inner" class="m3_widgetlist_box">';
-		widgetWindow += '</div>';	// widgetlist_box end
-		widgetWindow += '</div>';	// widgetlist end
-		widgetWindow += '</div>';	// m3_widget_window_inner end
-		widgetWindow += '</td>';
-		widgetWindow += '</tr>';
-		widgetWindow += '</table>';
-		widgetWindow += '</td>';
-		widgetWindow += '</tr>';
-		widgetWindow += '</table>';
-		widgetWindow += '</div>';*/
 		var widgetWindow = '';
 		widgetWindow += '<div id="m3slidepanel">';
 		widgetWindow += '<div class="m3panelopener m3topleft"><a href="#"><i class="glyphicon glyphicon-th-list"></i></a></div>';
@@ -514,6 +519,9 @@
 					success:	function(data, textStatus){
 									$("#m3paneltab_widget_list").html(data);
 									updateWidgetList();
+				
+									// ヘルプを設定
+									m3SetHelp();
 								},
 					error:		function(request, textStatus, errorThrown){
 									$(".m3message").text('通信エラー');
