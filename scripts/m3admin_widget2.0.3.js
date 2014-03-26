@@ -165,13 +165,15 @@
 			update: updateSortable
 		});
 		
-		// ウィジェット操作メニューにイベントを設定
-		$('.m3_wadjust').click(function(e){
+		// ウィジェット操作メニューにイベントを再設定
+		$('.m3_wadjust').unbind('click');
+		$('.m3_wadjust').bind('click', function(e){
 			var attrs = m3_splitAttr($(this).closest('dl.m3_widget_sortable').attr('m3'));
 			m3ShowAdjustWindow(attrs['configid'], attrs['serial'], page, sub);
 			e.preventDefault();
 		});
-		$('.m3_wconfig').click(function(e){
+		$('.m3_wconfig').unbind('click');
+		$('.m3_wconfig').bind('click', function(e){
 			var attrs = m3_splitAttr($(this).closest('dl.m3_widget_sortable').attr('m3'));
 		    if (attrs['useconfig'] == '0'){
 		        alert("このウィジェットには設定画面がありません");
@@ -180,12 +182,14 @@
 			m3ShowConfigWindow(attrs['widgetid'], attrs['configid'], attrs['serial']);
 			e.preventDefault();
 		});
-		$('.m3_wshared').click(function(e){
+		$('.m3_wshared').unbind('click');
+		$('.m3_wshared').bind('click', function(e){
 			var widget = $(this).closest('dl.m3_widget_sortable');
 			m3TaskWidget('toggle', widget);
 			e.preventDefault();
 		});
-		$('.m3_wdelete').click(function(e){
+		$('.m3_wdelete').unbind('click');
+		$('.m3_wdelete').bind('click', function(e){
 			var widget = $(this).closest('dl.m3_widget_sortable');
 			widget.fadeOut('slow', function(){
 				m3TaskWidget('delete', $(this));
@@ -199,9 +203,9 @@
 			menuStyle: {
 				// border : "2px solid green",
 				backgroundColor: '#FFFFFF',
-				width: "150px",
+				width: "200px",
 				textAlign: 'left',
-				font: '12px/1.5 Arial, sans-serif'
+				font: '15px/1.5 "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif'
 			},
 			itemStyle: {
 				padding: '3px 3px'
