@@ -1,0 +1,5 @@
+/* レイアウト補正用 */
+#pos-fixed {
+	position:relative;
+}
+

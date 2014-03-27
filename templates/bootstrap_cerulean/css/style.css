@@ -1,0 +1,26 @@
+
+/* メニューバー固定用 */
+body {
+	padding-top: 75px;
+}
+.button {
+	margin: 5px;
+}
+#pos-slide.affix {
+	position: fixed;
+	top: 70px;
+}
+@media(min-width: 768px){
+	#pos-fixed {
+		position: fixed;
+	}
+	
+	#pos-fixed, #pos-slide {
+		width: 160px;
+	}
+}
+@media(min-width: 992px){
+	#pos-fixed, #pos-slide {
+		width: auto;
+	}
+}
