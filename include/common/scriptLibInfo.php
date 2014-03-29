@@ -92,6 +92,7 @@ class ScriptLibInfo
 	// jQueryプラグインバージョン
 	const JQUERY_JCAROUSEL_VER		= '0.2.8';
 	const JQUERY_THICKBOX_VER		= '3.1';
+	const JQUERY_COOKIE_VER			= '1.4.0';
 	const JQUERY_PRETTYPHOTO_VER	= '3.1.4';		// v3.1.5はタイトル表示のバグがある(2013/9/17)
 	const JQUERY_QTIP_VER			= '1.0';
 	const JQUERY_QTIP2_VER			= '2.1.1';
@@ -204,6 +205,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
 	const JQUERY_THICKBOX_URL			= 'http://thickbox.net/';
 	const JQUERY_CLUETIP_URL			= 'http://plugins.learningjquery.com/cluetip/';
+	const JQUERY_COOKIE_URL				= 'https://github.com/carhartl/jquery-cookie';
 	const JQUERY_FACEBOX_URL			= 'http://defunkt.github.com/facebox/';
 	const JQUERY_CURVYCORNERS_URL		= 'http://code.google.com/p/jquerycurvycorners/';
 	const JQUERY_PRETTYPHOTO_URL		= 'http://www.no-margin-for-errors.com/projects/prettyphoto-jquery-lightbox-clone/';
@@ -389,7 +391,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 					self::LIB_JQUERY_TABLEDND		=>	array(	'script' 	=> array(self::JQUERY_TABLEDND_FILENAME),	// jquery.tablednd用のファイル
 																'css'		=> array(self::JQUERY_TABLEDND_CSS)),
 					self::LIB_JQUERY_SIMPLEMODAL	=>	array(	'script'	=> array(self::JQUERY_SIMPLEMODAL_FILENAME)),// jquery.simplemodal用のファイル
-					self::LIB_JQUERY_COOKIE			=>	array(	'script' 	=> array(self::JQUERY_COOKIE_FILENAME)),
+					self::LIB_JQUERY_COOKIE			=>	array(	'script' 	=> array(self::JQUERY_COOKIE_FILENAME),
+																'url'		=> self::JQUERY_COOKIE_URL,
+																'version'	=> self::JQUERY_COOKIE_VER),
 					self::LIB_JQUERY_FORMAT			=>	array(	'script' 	=> array(self::JQUERY_FORMAT_FILENAME)),
 					self::LIB_JQUERY_FORMTIPS		=>	array(	'script' 	=> array(self::JQUERY_FORMTIPS_FILENAME)),
 					self::LIB_JQUERY_FACEBOX		=>	array(	'script' 	=> array(self::JQUERY_FACEBOX_FILENAME),	// jquery.facebox用のファイル
