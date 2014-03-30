@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: fontsizeWidgetContainer.php 2135 2009-07-17 09:38:05Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -20,6 +20,7 @@ class fontsizeWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'フォントサイズ';			// デフォルトのウィジェットタイトル
 	const DEFAULT_FONTRESIZE_CLASS = 'fontresize';			// フォントリサイズ領域を指定するためのクラス名
+	const DEFAULT_SCRIPT_FILE = '/jquery.textresizer.min.js';		// scriptファイル
 	
 	/**
 	 * コンストラクタ
@@ -91,6 +92,21 @@ class fontsizeWidgetContainer extends BaseWidgetContainer
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
+	}
+	/**
+	 * JavascriptファイルをHTMLヘッダ部に設定
+	 *
+	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptFileToHead($request, &$param)
+	{
+		$scriptArray = array($this->getUrl($this->gEnv->getCurrentWidgetScriptsUrl() . self::DEFAULT_SCRIPT_FILE));
+		return $scriptArray;
 	}
 }
 ?>

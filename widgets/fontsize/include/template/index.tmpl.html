@@ -1,10 +1,34 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
-<!--
-$(document).ready(function(){
-	fontSize("#fontsize", ".{CLASS_NAME}", 9, 12, 20, 'フォントを小さくします', 'フォントをデフォルトにします', 'フォントを大きくします');
+//<![CDATA[
+$(function(){
+	$( "#textsize a" ).textresizer({
+		target: ".m3_widget_inner, .m3_widget_inner span, .m3_widget_inner p",
+		type: "css",
+		sizes: [
+			{"font-size":"80%"},
+			{"font-size":"100%"},
+			{"font-size":"130%"}
+		]
+    });
 });
-//-->
+//]]>
 </script>
-<div id="fontsize" style="height:30px;"></div>
+<ul id="textsize">
+    <li><a href="javascript:void(0)" class="f1" >小</a></li>
+    <li><a href="javascript:void(0)" class="f2" >中</a></li>
+    <li><a href="javascript:void(0)" class="f3" >大</a></li>
+</ul>
 </patTemplate:tmpl>
