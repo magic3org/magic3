@@ -17,9 +17,8 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class fontsizeWidgetContainer extends BaseWidgetContainer
 {
-	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'フォントサイズ';			// デフォルトのウィジェットタイトル
-	const DEFAULT_FONTRESIZE_CLASS = 'fontresize';			// フォントリサイズ領域を指定するためのクラス名
+	const DEFAULT_MAX_FONTSIZE = '130';			// デフォルトのフォント拡大サイズ
 	const DEFAULT_SCRIPT_FILE = '/jquery.textresizer.min.js';		// scriptファイル
 	
 	/**
@@ -55,32 +54,15 @@ class fontsizeWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-	/*
-		// 定義ID取得
-		$configId = $this->gEnv->getCurrentWidgetConfigId();
-		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
-		
-		// パラメータオブジェクトを取得
-		$targetObj = $this->getWidgetParamObjByConfigId($configId);
-		if (!empty($targetObj)){		// 定義データが取得できたとき
-			//$name = $targetObj->name;// 定義名
-			//$tagId = $targetObj->tagId;		// 選択範囲のタグID
-			
-			// 表示データ埋め込み
-			//$this->tmpl->setAttribute('show_html', 'visibility', 'visible');// 画像を表示
-			//$this->tmpl->addVar("_widget", "tag_id",	$tagId);
-			// 画面に書き戻す
-			$this->tmpl->addVar("_widget", "class_name", $targetObj->targetClass);		// フォント変更対象クラス
-		}*/
 		// デフォルト値設定
-		$targetClass = self::DEFAULT_FONTRESIZE_CLASS;
+		$maxFontsize = self::DEFAULT_MAX_FONTSIZE;
 		
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
-			$targetClass	= $paramObj->targetClass;			// フォント変更対象クラス
+			$maxFontsize	= $paramObj->maxFontsize;			// フォント拡大サイズ
 		}
 		// 画面に書き戻す
-		$this->tmpl->addVar("_widget", "class_name", $targetClass);		// フォント変更対象クラス
+		$this->tmpl->addVar("_widget", "max_fontsize", $maxFontsize);		// フォント拡大サイズ
 	}
 	/**
 	 * ウィジェットのタイトルを設定

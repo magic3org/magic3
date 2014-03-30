@@ -340,8 +340,8 @@ INSERT INTO _widgets
 ('print', '印刷',  '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'あらかじめ印刷部分を設定した部分印刷を行います。', true,            false,       'jquery',                       '',                  true,         false,               true,                true, 1,          1, now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'fontsize';
 INSERT INTO _widgets
-(wd_id,   wd_name, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                     wd_read_scripts, wd_read_css, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('fontsize', 'フォントサイズ',  '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'フォントサイズを拡大縮小して保持します', true,            true,       'jquery.cookie',                       '',                  true,         false,               false,                true, 1,          1, now(),         now());
+(wd_id,      wd_name,          wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                           wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('fontsize', 'フォントサイズ', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'フォントサイズを拡大縮小して保持します', 'jquery.cookie',   '',                  true,         false,               false,                true, 1,          1, '2014-03-27', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'googlemaps';
 INSERT INTO _widgets
 (wd_id,        wd_name,        wd_version, wd_author,                       wd_copyright,                    wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_read_scripts, wd_read_css, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

@@ -14,21 +14,19 @@
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
-	$( "#textsize a" ).textresizer({
+	$("#fontsize a").textresizer({
 		target: ".m3_widget_inner, .m3_widget_inner span, .m3_widget_inner p",
 		type: "css",
 		sizes: [
-			{"font-size":"80%"},
 			{"font-size":"100%"},
-			{"font-size":"130%"}
+			{"font-size":"{MAX_FONTSIZE}%"}
 		]
     });
 });
 //]]>
 </script>
-<ul id="textsize">
-    <li><a href="javascript:void(0)" class="f1" >小</a></li>
-    <li><a href="javascript:void(0)" class="f2" >中</a></li>
-    <li><a href="javascript:void(0)" class="f3" >大</a></li>
-</ul>
+<div id="fontsize">
+    <a href="javascript:void(0);" class="button" >標準</a>
+    <a href="javascript:void(0);" class="button" >拡大</a>
+</div>
 </patTemplate:tmpl>

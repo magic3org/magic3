@@ -103,10 +103,13 @@ class PageManager extends Core
 	const WIDGET_ID_SEPARATOR = ',';
 	const HEAD_TAGS				= '{{HEAD_TAGS}}';				// HTMLヘッダ出力用タグ
 	const WIDGET_ICON_IMG_SIZE = 32;			// ウィジェットアイコンサイズ
-	const WIDGET_OUTER_CLASS_HEAD_POSITION = 'm3_p_';			// ウィジェットの外枠クラス用ヘッダ(ポジション表示)
+	const WIDGET_OUTER_CLASS = 'm3_widget_outer';			// ウィジェット外枠クラスクラス
+	const WIDGET_OUTER_CLASS_HEAD_POSITION = 'm3_pos_';			// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
+	const WIDGET_OUTER_CLASS_WIDGET_TAG = 'm3_';				// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
+	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
 	const POSITION_TAG_HEAD = 'm3pos_';			// ポジションの識別用タグIDヘッダ
 	const WIDGET_TAG_HEAD = 'm3widget_';			// ウィジェットの識別用タグIDヘッダ
-	const WIDGET_TAG_HEAD_SHORT = 'm3_';			// ウィジェットの識別用タグIDヘッダ
+//	const WIDGET_TAG_HEAD_SHORT = 'm3_';			// ウィジェットの識別用タグIDヘッダ
 	const WIDGET_TYPE_TAG_HEAD = 'm3widgettype_';			// ウィジェット種別の識別用タグIDヘッダ
 	const WIDTET_CLASS_NAME = 'm3widget';			// ウィジェットオブジェクトのタグクラス名
 	const WIDTET_CLASS_TYPE_0 = 'm3widget_type0';			// ウィジェットオブジェクトのタグクラス(ページ共通でない)
@@ -1881,7 +1884,7 @@ class PageManager extends Core
 						}
 					}
 					// ウィジェットの外枠タグを設定
-					//echo '<div class="' . self::WIDGET_TAG_HEAD_SHORT . $widgetId . '">' . M3_NL;
+					//echo '<div class="' . self::WIDGET_OUTER_CLASS_WIDGET_TAG . $widgetId . '">' . M3_NL;
 					// ウィジェット親のCSS定義があるときは、タグを追加
 					if (!empty($cssStyle)) echo '<div style="' . $cssStyle . '">' . M3_NL;
 					
@@ -3541,14 +3544,17 @@ class PageManager extends Core
 							
 							// ウィジェット共通のコンテンツ処理
 							$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);
-									
+
+							// ウィジェットの内枠(コンテンツ外枠)を設定
+							$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+										
 							// キャッシュデータを設定
 							$this->gCache->setWidgetCache($gRequestManager, $this->pageDefRows[$i], $widgetContent,
 															$this->lastHeadTitle, $this->lastHeadDescription, $this->lastHeadKeywords);
 															
 							// ウィジェットの外枠タグを設定
 							$widgetClassSuffix = $this->pageDefRows[$i]['pd_suffix'];		// 追加CSSクラスサフィックス
-							$widgetOuterClass = self::WIDGET_TAG_HEAD_SHORT . str_replace('/', '_', $widgetId);// ウィジェットの外枠のクラス
+							$widgetOuterClass = self::WIDGET_OUTER_CLASS . ' ' . self::WIDGET_OUTER_CLASS_WIDGET_TAG . str_replace('/', '_', $widgetId);// ウィジェットの外枠のクラス
 							if (!empty($widgetClassSuffix)) $widgetOuterClass .= ' ' . $widgetOuterClass . '_' . $widgetClassSuffix;	// 追加CSSクラス
 							$widgetOuterClass .= ' ' . self::WIDGET_OUTER_CLASS_HEAD_POSITION . $position;		// ポジションブロッククラス
 							$widgetContent = '<div class="' . $widgetOuterClass . '">' . $widgetContent . '</div>';
@@ -3632,6 +3638,9 @@ class PageManager extends Core
 										if (isset($joomlaParam['moduleclass_sfx'])) $params['moduleclass_sfx'] = $joomlaParam['moduleclass_sfx'];// ウィジェットでjoomla用パラメータの設定があるとき
 								
 										if (strcmp($position, 'main') == 0){// メイン部のとき
+											// ウィジェットの内枠(コンテンツ外枠)を設定
+											$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+								
 											$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 										} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
 												strcasecmp($position, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
@@ -3645,7 +3654,13 @@ class PageManager extends Core
 												$moduleContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 											}
 											$widgetContent = $moduleContent;
+											
+											// ウィジェットの内枠(コンテンツ外枠)を設定。メニュー処理後に付加。
+											$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 										} else {		// その他の位置のとき
+											// ウィジェットの内枠(コンテンツ外枠)を設定
+											$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+											
 											$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 										}
 										$isRendered = true;		// Joomla!の描画処理を行ったかどうか
@@ -3654,6 +3669,9 @@ class PageManager extends Core
 								if (!$isRendered){		// Joomla!の描画処理を行っていない場合
 									// ウィジェット共通のコンテンツ処理
 									$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);
+									
+									// ウィジェットの内枠(コンテンツ外枠)を設定
+									$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 								}
 							}
 							if (!$ret) return '';		// 処理中断のときは終了
@@ -3664,7 +3682,7 @@ class PageManager extends Core
 															
 							// ウィジェットの外枠タグを設定
 							$widgetClassSuffix = $this->pageDefRows[$i]['pd_suffix'];		// 追加CSSクラスサフィックス
-							$widgetOuterClass = self::WIDGET_TAG_HEAD_SHORT . str_replace('/', '_', $widgetId);// ウィジェットの外枠のクラス
+							$widgetOuterClass = self::WIDGET_OUTER_CLASS . ' ' . self::WIDGET_OUTER_CLASS_WIDGET_TAG . str_replace('/', '_', $widgetId);// ウィジェットの外枠のクラス
 							if (!empty($widgetClassSuffix)) $widgetOuterClass .= ' ' . $widgetOuterClass . '_' . $widgetClassSuffix;	// 追加CSSクラス
 							$widgetOuterClass .= ' ' . self::WIDGET_OUTER_CLASS_HEAD_POSITION . $position;	// ポジションブロッククラス
 							$widgetContent = '<div class="' . $widgetOuterClass . '">' . $widgetContent . '</div>';
@@ -4246,7 +4264,7 @@ class PageManager extends Core
 					}
 				}
 				// ウィジェットの外枠タグを設定
-				//echo '<div class="' . self::WIDGET_TAG_HEAD_SHORT . $widgetId . '">' . M3_NL;
+				//echo '<div class="' . self::WIDGET_OUTER_CLASS_WIDGET_TAG . $widgetId . '">' . M3_NL;
 				// ウィジェット親のCSS定義があるときは、タグを追加
 				if (!empty($cssStyle)) echo '<div style="' . $cssStyle . '">' . M3_NL;
 					

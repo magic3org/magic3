@@ -1,13 +1,25 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
-<!--
+//<![CDATA[
 function updateItem(){
 	if (!window.confirm('設定を更新しますか?')) return false;
 	document.main.act.value='update';
 	document.main.submit();
 	return true;
 }
-// -->
+//]]>
 </script>
 <div align="center">
 <br />
@@ -19,7 +31,7 @@ function updateItem(){
 <table class="simple-table" width="100%">
     <tbody>
         <tr>
-	    <td class="table-headside" width="150"><span {_HELP_TARGET_CLASS_NAME}>対象クラス名</span></td><td><input type="text" name="item_class_name" value="{CLASS_NAME}" size="30" maxlength="30" /></td>
+	    <td class="table-headside" width="150"><span {_HELP_MAX_FONTSIZE}>フォント拡大サイズ</span></td><td><input type="text" name="item_max_fontsize" value="{MAX_FONTSIZE}" size="3" maxlength="3" />%</td>
 	</tr>
         <tr class="even">
 	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>

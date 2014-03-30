@@ -8,16 +8,16 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_fontsizeWidgetContainer.php 2266 2009-08-28 08:25:59Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
 class admin_fontsizeWidgetContainer extends BaseAdminWidgetContainer
 {
-	const DEFAULT_FONTRESIZE_CLASS = 'fontresize';			// フォントリサイズ領域を指定するためのクラス名
+	const DEFAULT_MAX_FONTSIZE = '130';			// デフォルトのフォント拡大サイズ
 
 	/**
 	 * コンストラクタ
@@ -53,16 +53,17 @@ class admin_fontsizeWidgetContainer extends BaseAdminWidgetContainer
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
-		$targetClass = $request->trimValueOf('item_class_name');		// フォント変更対象クラス
+		$maxFontsize = $request->trimValueOf('item_max_fontsize');		// フォント拡大サイズ
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値エラーチェック
-			$this->checkInput($targetClass, '対象クラス名');
+			$this->checkInput($maxFontsize, 'フォント拡大サイズ');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
-				$paramObj->targetClass	= $targetClass;		// フォント変更対象クラス
-				$ret = $this->updateWidgetParamObj($paramObj);
+				$newObj = new stdClass;
+				$newObj->maxFontsize	= $maxFontsize;		// フォント変更対象クラス
+				$ret = $this->updateWidgetParamObj($newObj);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;		// データを再取得するかどうか
@@ -76,15 +77,15 @@ class admin_fontsizeWidgetContainer extends BaseAdminWidgetContainer
 		}
 		if ($replaceNew){
 			// デフォルト値設定
-			$targetClass = self::DEFAULT_FONTRESIZE_CLASS;
+			$maxFontsize = self::DEFAULT_MAX_FONTSIZE;
 			
 			$paramObj = $this->getWidgetParamObj();
 			if (!empty($paramObj)){
-				$targetClass	= $paramObj->targetClass;			// フォント変更対象クラス
+				$maxFontsize	= $paramObj->maxFontsize;			// フォント拡大サイズ
 			}
 		}
 		// 画面に書き戻す
-		$this->tmpl->addVar("_widget", "class_name", $targetClass);		// フォント変更対象クラス
+		$this->tmpl->addVar("_widget", "max_fontsize", $maxFontsize);		// フォント拡大サイズ
 	}
 }
 ?>
