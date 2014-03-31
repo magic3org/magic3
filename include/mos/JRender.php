@@ -246,9 +246,17 @@ $this->item->title = '****';*/
 			$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/featured';			// ビュー作成用スクリプトベースディレクトリ
 			$this->viewRenderType = 'com_content/featured';		// ビュー作成タイプ
 		} else {
-			$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article/default.php';		// ビュー作成処理
-			$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article';			// ビュー作成用スクリプトベースディレクトリ
-			$this->viewRenderType = 'com_content/article';		// ビュー作成タイプ
+			switch ($templateVer){
+				case 1:		// Joomla!v1.5テンプレート
+				case 2:		// Joomla!v2.5テンプレート
+					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article/default.php';		// ビュー作成処理
+					$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article';			// ビュー作成用スクリプトベースディレクトリ
+					$this->viewRenderType = 'com_content/article';		// ビュー作成タイプ
+					break;
+				case 10:		// Bootstrap v3.0
+					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/article/default.php';		// ビュー作成処理
+					break;
+			}
 		}
 		if (!is_readable($path)){// テンプレートの変換処理がない場合はデフォルトを使用
 			$path = $gEnvManager->getJoomlaRootPath() . '/render/default.php';
