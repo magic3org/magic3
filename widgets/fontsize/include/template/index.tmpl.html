@@ -15,11 +15,11 @@
 //<![CDATA[
 $(function(){
 	$("#fontsize a").textresizer({
-		target: ".m3_widget_inner, .m3_widget_inner span, .m3_widget_inner p",
+		target: '.m3_widget_inner, .m3_widget_inner ul li span, .m3_widget_inner p, .m3_widget_inner .button',
 		type: "css",
 		sizes: [
 			{"font-size":"100%"},
-			{"font-size":"{MAX_FONTSIZE}%"}
+			{"font-size":"{MAX_FONTSIZE}px"}
 		]
     });
 });

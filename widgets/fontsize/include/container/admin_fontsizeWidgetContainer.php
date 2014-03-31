@@ -17,7 +17,7 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 
 class admin_fontsizeWidgetContainer extends BaseAdminWidgetContainer
 {
-	const DEFAULT_MAX_FONTSIZE = '130';			// デフォルトのフォント拡大サイズ
+	const DEFAULT_MAX_FONTSIZE = '18';			// デフォルトのフォント拡大サイズ
 
 	/**
 	 * コンストラクタ

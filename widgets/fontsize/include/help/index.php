@@ -20,6 +20,6 @@ defined('M3_SYSTEM') or die('Access error: Direct access denied.');
 global $HELP;
 
 // ########## その他 ##########
-$HELP['max_fontsize']['title'] = 'フォント拡大サイズ';
-$HELP['max_fontsize']['body'] = '拡大時のフォントサイズを%で設定します。';
+$HELP['max_fontsize']['title'] = '拡大フォントサイズ';
+$HELP['max_fontsize']['body'] = '拡大時のフォントサイズをpxで設定します。';
 ?>

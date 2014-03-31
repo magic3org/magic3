@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: JRender.php 5667 2013-02-15 13:19:12Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($this->gEnv->getJoomlaRootPath() . '/JParameter.php');
@@ -35,7 +35,8 @@ class JRender
 	private $viewRenderType;		// ビュー作成タイプ
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	const DEFAULT_RENDER_DIR = '/render/';					// デフォルトのビュー作成スクリプトディレクトリ
-	
+	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
+
 	/**
 	 * コンストラクタ
 	 */
@@ -108,6 +109,9 @@ class JRender
 		// 「もっと読む」ボタンを追加
 		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
 		
+		// ウィジェットの内枠(コンテンツ外枠)を設定
+		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
+		
 		// 指定された表示スタイルでウィジェットを出力
 		$chromeMethod = 'modChrome_' . $style;
 		if (function_exists($chromeMethod))
@@ -151,7 +155,10 @@ class JRender
 		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
 		// 「もっと読む」ボタンを追加
 		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
-				
+		
+		// ウィジェットの内枠(コンテンツ外枠)を設定
+		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
+		
 		// 設定を作成
 		$contents = '';
 		$this->params   = new JParameter();
@@ -251,6 +258,26 @@ $this->item->title = '****';*/
 		$contents = ob_get_contents();
 		ob_clean();
 		return $contents;
+	}
+	/**
+	 * Joomlaナビゲーションメニュー用コンテンツ取得
+	 * 
+	 * @param string $style			表示スタイル
+	 * @param string $content		ウィジェット出力
+	 * @param string $title			タイトル(空のときはタイトル非表示)
+	 * @param array $attribs		その他タグ属性
+	 * @param array $paramsOther	その他パラメータ
+	 * @param array $pageDefParam	画面定義パラメータ
+	 * @param int   $templateVer	テンプレートバージョン(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
+	 * @return string				モジュール出力
+	 */
+	public function getNavMenuContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0)
+	{
+		$content = $this->getMenuContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer);
+
+		// ウィジェットの内枠(コンテンツ外枠)を設定
+		if (!empty($content)) $content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
+		return $content;
 	}
 	/**
 	 * Joomlaメニュー用コンテンツ取得

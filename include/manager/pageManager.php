@@ -3639,14 +3639,15 @@ class PageManager extends Core
 								
 										if (strcmp($position, 'main') == 0){// メイン部のとき
 											// ウィジェットの内枠(コンテンツ外枠)を設定
-											$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+											// ウィジェットの内枠はレンダーで設定
+											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 								
 											$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 										} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
 												strcasecmp($position, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
 											$moduleContent = '';
 											if ($style == self::WIDGET_STYLE_NAVMENU){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
-												if ($widgetType == 'menu') $moduleContent = $render->getMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+												if ($widgetType == 'menu') $moduleContent = $render->getNavMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 									
 												// ナビゲーションバータイプで作成できないときはデフォルトの出力を取得
 												if (empty($moduleContent)) $moduleContent = $render->getModuleContents('xhtml', $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
@@ -3656,10 +3657,12 @@ class PageManager extends Core
 											$widgetContent = $moduleContent;
 											
 											// ウィジェットの内枠(コンテンツ外枠)を設定。メニュー処理後に付加。
-											$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+											// ウィジェットの内枠はレンダーで設定
+											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 										} else {		// その他の位置のとき
 											// ウィジェットの内枠(コンテンツ外枠)を設定
-											$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+											// ウィジェットの内枠はレンダーで設定
+											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 											
 											$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 										}

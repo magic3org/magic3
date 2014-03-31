@@ -31,7 +31,7 @@ function updateItem(){
 <table class="simple-table" width="100%">
     <tbody>
         <tr>
-	    <td class="table-headside" width="150"><span {_HELP_MAX_FONTSIZE}>フォント拡大サイズ</span></td><td><input type="text" name="item_max_fontsize" value="{MAX_FONTSIZE}" size="3" maxlength="3" />%</td>
+	    <td class="table-headside" width="150"><span {_HELP_MAX_FONTSIZE}>フォント拡大サイズ</span></td><td><input type="text" name="item_max_fontsize" value="{MAX_FONTSIZE}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" />px</td>
 	</tr>
         <tr class="even">
 	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>

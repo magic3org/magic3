@@ -18,7 +18,7 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 class fontsizeWidgetContainer extends BaseWidgetContainer
 {
 	const DEFAULT_TITLE = 'フォントサイズ';			// デフォルトのウィジェットタイトル
-	const DEFAULT_MAX_FONTSIZE = '130';			// デフォルトのフォント拡大サイズ
+	const DEFAULT_MAX_FONTSIZE = '18';			// デフォルトのフォント拡大サイズ
 	const DEFAULT_SCRIPT_FILE = '/jquery.textresizer.min.js';		// scriptファイル
 	
 	/**
