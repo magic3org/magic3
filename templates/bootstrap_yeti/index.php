@@ -57,9 +57,11 @@ function resizeImage(){
 </script>
 </head>
 <body>
-<div class="container">
+<header>
 <jdoc:include type="modules" name="user3" />
-<div class="hidden-xs"><jdoc:include type="modules" name="top-hide" style="none" /></div>
+<div class="hidden-xs"><jdoc:include type="modules" name="header-hide" style="none" /></div>
+</header>
+<div class="container">
 <div class="row">
 <?php if ($document->countModules('left') || $document->countModules('left-fixed') || $document->countModules('left-hide') || $document->countModules('left-slide')): ?>
     <div class="col-sm-3"><div class="row">
@@ -70,16 +72,20 @@ function resizeImage(){
 	</div></div>
     <div class="col-sm-9"><div class="row">
 	<?php if ($document->countModules('banner')): ?><div class="col-sm-12"><jdoc:include type="modules" name="banner" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('top')): ?><div class="col-sm-12"><jdoc:include type="modules" name="top" style="bootblock" /></div><?php endif; ?>
 	<div class="col-sm-12"><jdoc:include type="component" style="bootblock" /></div>
-	<?php if ($document->countModules('center-hide')): ?><div class="col-sm-12 hidden-xs"><div id="pos-slide"><jdoc:include type="modules" name="center-hide" style="bootblock" /></div></div><?php endif; ?>
+	<?php if ($document->countModules('bottom')): ?><div class="col-sm-12"><jdoc:include type="modules" name="bottom" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('bottom-hide')): ?><div class="col-sm-12 hidden-xs"><div id="pos-slide"><jdoc:include type="modules" name="bottom-hide" style="bootblock" /></div></div><?php endif; ?>
 	</div></div>
 <?php else: ?>
 	<?php if ($document->countModules('banner')): ?><div class="col-sm-12"><jdoc:include type="modules" name="banner" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('top')): ?><div class="col-sm-12"><jdoc:include type="modules" name="top" style="bootblock" /></div><?php endif; ?>
 	<div class="col-sm-12"><jdoc:include type="component" style="bootblock" /></div>
-	<?php if ($document->countModules('center-hide')): ?><div class="col-sm-12 hidden-xs"><jdoc:include type="modules" name="center-hide" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('bottom')): ?><div class="col-sm-12"><jdoc:include type="modules" name="bottom" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('bottom-hide')): ?><div class="col-sm-12 hidden-xs"><div id="pos-slide"><jdoc:include type="modules" name="bottom-hide" style="bootblock" /></div></div><?php endif; ?>
 <?php endif; ?>
 </div>
-<jdoc:include type="modules" name="bottom" style="none" />
 </div>
+<footer><jdoc:include type="modules" name="footer" style="none" /></footer>
 </body>
 </html>

@@ -121,7 +121,8 @@ class JRender
 			$module->content = $content;
 			if (!empty($title)){
 				$module->showtitle = 1;
-				$module->title = htmlentities($title, ENT_COMPAT, M3_HTML_CHARSET);
+//				$module->title = htmlentities($title, ENT_COMPAT, M3_HTML_CHARSET);
+				$module->title = convertToHtmlEntity($title);
 			}
 			
 			// Joomla!2.5テンプレート用追加設定(2012/4/4 追加)
@@ -384,7 +385,8 @@ $this->item->title = '****';*/
 	 */
 	public function escape($src)
 	{
-		return htmlentities($src, ENT_COMPAT, M3_HTML_CHARSET);
+//		return htmlentities($src, ENT_COMPAT, M3_HTML_CHARSET);
+		return convertToHtmlEntity($src);
 	}
 	/**
 	 * ビュー作成処理(Joomla!v2.5テンプレート用)
