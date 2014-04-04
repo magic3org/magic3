@@ -68,6 +68,26 @@ function changeType(){
 $(function(){
 	// スクロールバー付きのテーブルを作成
 	m3_tableWithScrollbar('widgetlist', -1, 0);
+	
+	// ファイル選択用ボタン作成
+			$('.btn-file :file').on('fileselect', function(event, numFiles, label) {
+				
+				var input = $(this).parents('.input-group').find(':text'),
+					log = numFiles > 1 ? numFiles + ' files selected' : label;
+				
+				if( input.length ) {
+					input.val(log);
+				} else {
+					if( log ) alert(log);
+				}
+				
+			});
+});
+$(document).on('change', '.btn-file :file', function() {
+        var input = $(this),
+            numFiles = input.get(0).files ? input.get(0).files.length : 1,
+            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        input.trigger('fileselect', [numFiles, label]);
 });
 //]]>
 </script>
@@ -81,17 +101,20 @@ $(function(){
 <input type="hidden" name="widget" />
 <table width="90%">
 <tr><td>
-<span {_HELP_WIDGETLIST}><label>{_LC_LABEL_WIDGET_LIST}</label></span>&nbsp;&nbsp;&nbsp;&nbsp;<span {_HELP_WIDGETLIST_TYPE}><label>{_LC_LABEL_WIDGET_TYPE} </label></span>
+<span {_HELP_WIDGETLIST}><label>{_LC_LABEL_WIDGET_LIST}</label></span>&nbsp;&nbsp;
 <select name="item_type" onchange="changeType();">
 <patTemplate:tmpl name="item_type_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>&nbsp;&nbsp;&nbsp;&nbsp;
+</select>
+<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a>
 <patTemplate:tmpl name="show_dir" visibility="hidden">
+<div>
 <span {_HELP_WIDGETLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
 <span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>
+</div>
 </patTemplate:tmpl>
-</td><td align="right"><input type="checkbox" name="item_show_detail" onclick="changeDetail();" {SHOW_DETAIL} /><span {_HELP_WIDGETLIST_DETAIL_CHECK}><label>{_LC_LABEL_SHOW_DETAIL}</label></span>
+</td><td align="right"><span {_HELP_WIDGETLIST_DETAIL_CHECK}><label><input type="checkbox" name="item_show_detail" onclick="changeDetail();" {SHOW_DETAIL} />{_LC_LABEL_SHOW_DETAIL}</label></span>
 </td></tr>
 <tr><td colspan="2">
 <table id="widgetlist" class="simple-table" width="100%">
@@ -99,12 +122,12 @@ $(function(){
         <tr>
 	    <th width="20">No</th>
             <th width="20"></th>
-            <th width="8%"><span {_HELP_WIDGETLIST_ID}>ID</span></th>
-	    <th width="8%"><span {_HELP_WIDGETLIST_NAME}>{_LC_LABEL_WIDGET_NAME}</span></th>
-	    <th width="65">{_LC_LABEL_WIDGET_VERSION}</th>
+            <th width="10%"><span {_HELP_WIDGETLIST_ID}>ID</span></th>
+	    <th width="23%"><span {_HELP_WIDGETLIST_NAME}>{_LC_LABEL_WIDGET_NAME}</span></th>
+	    <th width="8%">{_LC_LABEL_WIDGET_VERSION}</th>
 	    <patTemplate:tmpl name="show_list_detail" visibility="hidden">
-	    <th width="40"><span {_HELP_WIDGETLIST_AVAILABLE}>{_LC_LABEL_WIDGET_AVAILABLE}</span></th>
-	    <th width="40"><span {_HELP_WIDGETLIST_ACTIVE}>{_LC_LABEL_WIDGET_ACTIVE}</span></th>
+	    <th width="5%"><span {_HELP_WIDGETLIST_AVAILABLE}>{_LC_LABEL_WIDGET_AVAILABLE}</span></th>
+	    <th width="5%"><span {_HELP_WIDGETLIST_ACTIVE}>{_LC_LABEL_WIDGET_ACTIVE}</span></th>
 	    </patTemplate:tmpl>
 	    <th width="80">{_LC_LABEL_WIDGET_DATE}</th>
 	    <th><span {_HELP_WIDGETLIST_ACT}>{_LC_LABEL_WIDGET_OPERATION}</span></th>
@@ -117,7 +140,7 @@ $(function(){
 	    <td align="center">{NO}</td>
 	    <td>{IMAGE_TAG}</td>
 	    <td>{ID_TEXT}</td>
-	    <td><input type="text" name="item{NO}_name" value="{NAME}" size="30" maxlength="50" /></td>
+	    <td>{NAME}</td>
 	    <td align="center">{VERSION}</td>
 	    <td align="center">{RELEASE_DT}</td>
 	    <td align="right">
@@ -130,7 +153,7 @@ $(function(){
 	    <td align="center">{NO}</td>
 	    <td>{IMAGE_TAG}</td>
 	    <td>{ID_TEXT}</td>
-	    <td><input type="text" name="item{NO}_name" value="{NAME}" size="30" maxlength="50" /></td>
+	    <td>{NAME}</td>
 	    <td align="center">{VERSION}</td>
 	    <td align="center"><input type="checkbox" name="item{NO}_available" {AVAILABLE} {AVAILABLE_DISABLED} /></td>
 	    <td align="center"><input type="checkbox" name="item{NO}_active" {ACTIVE} {ACTIVE_DISABLED} /></td>
@@ -138,7 +161,10 @@ $(function(){
 	    <td align="right"><input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{LABEL_UPDATE}" {UPDATE_BUTTON} />
 	    <input type="button" class="button" onclick="deleteline('{NO}', '{SERIAL}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
 	    <input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_WIDGET_CONFIG}" {DETAIL_BUTTON} />
-	    <input type="button" class="button" onclick="downloadWidget('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />
+		<div class="btn-group">
+		<!--<input type="button" class="button" onclick="downloadWidget('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />-->
+		<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadWidget('{ID}');" {DOWNLOAD_DISABLED}>{DOWNLOAD_IMAGE}</a>
+		</div>
 	    </td>
 	</tr>
         </pattemplate:sub>
@@ -147,9 +173,8 @@ $(function(){
 </table>
 </td></tr>
 </table>
-<br />
 </form>
-<form enctype="multipart/form-data" method="post" name="upload">
+<!--<form enctype="multipart/form-data" method="post" name="upload">
 <input type="hidden" name="act" />
 <input type="hidden" name="item_type" />
 <table class="simple-table" align="center">
@@ -165,6 +190,35 @@ $(function(){
 	</tr>
     </tbody>
 </table>
-</form>
+</form>-->
+</div>
+<!-- File upload dialog -->
+<div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="uploadModalLabel">{_LC_LABEL_WIDGET_UPLOAD}</h4>
+            </div>
+            <div class="modal-body">
+			    <p>{_LC_MSG_SELECT_FILE}</p>
+                <form enctype="multipart/form-data" method="post" name="upload">
+                    <input type="hidden" name="act" />
+                    <input type="hidden" name="item_type" />
+                    <div class="input-group">
+                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>
+                        <input type="text" class="form-control">
+                    </div>
+                    <div class="checkbox">
+                        <label><input type="checkbox" name="item_replace" />{_LC_MSG_REPLACE_WIDGET}</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{_LC_LABEL_CANCEL}</button>
+                <button type="button" class="btn btn-success" onclick="uploadCheck();">{_LC_LABEL_UPLOAD}</button>
+            </div>
+        </div>
+    </div>
 </div>
 </patTemplate:tmpl>

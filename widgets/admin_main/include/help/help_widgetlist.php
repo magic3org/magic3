@@ -29,12 +29,12 @@ class help_widgetlist extends HelpConv
 		$helpData = array(
 			'widgetlist' => array(	
 				'title' =>	$this->_('Widget List'),			// ウィジェット一覧
-				'body' =>	$this->_('The list is available widgets in this system. Use bottom area of Widget Install if you install widget.')		// システムで利用可能なウィジェットの一覧です。ウィジェットのインストールはこの画面の最下部の「ウィジェットアップロード」から行います。
+				'body' =>	$this->_('The list is available widgets in this system. Select widget type for pc or mobile, smartphone.')		// システムで利用可能なウィジェットの一覧です。PC用またはウィジェットか携帯用、スマートフォン用のウィジェットを選択します。
 			),
-			'widgetlist_type' => array(	
+/*			'widgetlist_type' => array(	
 				'title' =>	$this->_('Widget Type'),			// ウィジェットタイプ
 				'body' =>	$this->_('Select widget type for pc or mobile, smartphone.')		// PC用またはウィジェットか携帯用、スマートフォン用のウィジェットを選択します。
-			),
+			),*/
 			'widgetlist_install_dir' => array(	
 				'title' =>	$this->_('Widget Install Directory'),			// ウィジェットインストールディレクトリ
 				'body' =>	$this->_('Widgets installed in the directory by name of widget ID.')		// ウィジェットのインストールディレクトリです。この配下に「ウィジェットID」のディレクトリ名で個々のウィジェットが格納されます。

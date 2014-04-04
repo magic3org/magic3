@@ -607,3 +607,19 @@ background-color: #0081c2;
 #layout_preview_title {
 	margin-top:10px;
 }
+/* ファイル選択 */
+.btn-file {
+	position: relative;
+	overflow: hidden;
+}
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	outline: none;
+	cursor:pointer;
+	filter: alpha(opacity=0);
+	opacity: 0;
+}

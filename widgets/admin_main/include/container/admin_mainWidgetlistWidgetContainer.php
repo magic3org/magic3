@@ -31,6 +31,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
 	const PHP_FILE_EXT = 'php';		// phpファイル拡張子
 	const NOT_FOUND_WIDGET_ICON_FILE = '/images/system/notfound32.png';		// ウィジェットが見つからないアイコン
+	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
+	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	
 	/**
 	 * コンストラクタ
@@ -169,16 +171,14 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->setMsg(self::MSG_GUIDANCE, $msg);
 		} else if ($act == 'updateline'){		// 行更新のとき
 			// 変更可能値
-			$updateName = $request->trimValueOf('item' . $selectedItemNo . '_name');				// 名前
+//			$updateName = $request->trimValueOf('item' . $selectedItemNo . '_name');				// 名前
 			$updateAvailable = ($request->trimValueOf('item' . $selectedItemNo . '_available') == 'on') ? 1 : 0;		// 利用可能かどうか
 			$updateActive = ($request->trimValueOf('item' . $selectedItemNo . '_active') == 'on') ? 1 : 0;		// ウィジェット実行可能かどうか
 			
-			$ret = $this->db->updateWidget($serial, $updateName, $updateAvailable, $updateActive);
+			$ret = $this->db->updateWidget($serial, $updateAvailable, $updateActive);
 			if ($ret){		// データ更新成功のとき
-				//$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				$this->setMsg(self::MSG_GUIDANCE, $this->_('Line updated.'));		// データを更新しました
 			} else {
-				//$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating line.'));	// データ更新に失敗しました
 			}
 		} else if ($act == 'deleteline'){		// ウィジェット削除のとき
@@ -497,6 +497,11 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		if (!empty($this->showDetail)) $checkedStr = 'checked';
 		$this->tmpl->addVar("_widget", "show_detail", $checkedStr);		// 詳細表示
 		$this->tmpl->addVar("show_dir", "install_dir", $installDir);// インストールディレクトリを設定
+		// ウィジェットアップロード
+		$uploadImg = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
+		$uploadStr = 'ウィジェットアップロード';
+		$uploadImage = '<img src="' . $uploadImg . '" width="32" height="32" border="0" alt="' . $uploadStr . '" title="' . $uploadStr . '" />';
+		$this->tmpl->addVar("_widget", "upload_image", $uploadImage);
 		
 		// テキストをローカライズ
 		$localeText = array();
@@ -505,7 +510,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['msg_no_upload_file'] = $this->_('File not selected.');		// アップロードするファイルが選択されていません
 		$localeText['msg_upload_file'] = $this->_('Upload file.');		// ファイルをアップロードします
 		$localeText['label_widget_list'] = $this->_('Widget List');			// ウィジェット一覧
-		$localeText['label_widget_type'] = $this->_('Widget Type:');			// ウィジェットタイプ：
+//		$localeText['label_widget_type'] = $this->_('Widget Type:');			// ウィジェットタイプ：
 		$localeText['label_install_dir'] = $this->_('Install Directory:');			// インストールディレクトリ:
 		$localeText['label_read_new'] = $this->_('Reload directory');			// ディレクトリ再読み込み
 		$localeText['label_show_detail'] = $this->_('Show detail');			// 詳細表示
@@ -516,8 +521,10 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['label_widget_date'] = $this->_('Release Date');			// リリース日
 		$localeText['label_widget_operation'] = $this->_('Operation');			// 操作
 		$localeText['label_widget_upload'] = $this->_('Widget Upload (zip compressed file)');			// ウィジェットアップロード(zip圧縮ファイル)
+		$localeText['msg_select_file'] = $this->_('Select file to upload.');			// アップロードするファイルを選択してください
 		$localeText['msg_replace_widget'] = $this->_('Replace widget if exists.');			// ウィジェットが存在する場合は置き換え
 		$localeText['label_upload'] = $this->_('Upload');			// アップロード
+		$localeText['label_cancel'] = $this->_('Cancel');			// キャンセル
 		$this->setLocaleText($localeText);
 	}
 	/**
@@ -694,9 +701,17 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$idText = '<span ' . $helpText . '>' . $idText . '</span>';
 				
 		// ボタンの状態
-		$downloadButton = '';
-		if (!$isExistsWidget) $downloadButton = 'disabled';
-		if (!empty($fetchedRow['wd_license_type']))  $downloadButton = 'disabled';// ライセンスのチェック
+		$downloadDisabled = '';
+		if (!$isExistsWidget) $downloadDisabled = 'disabled';
+		if (!empty($fetchedRow['wd_license_type']))  $downloadDisabled = 'disabled';// ライセンスのチェック
+		
+		$downloadImg = $this->getUrl($this->gEnv->getRootUrl() . self::DOWNLOAD_ZIP_ICON_FILE);
+		if (empty($downloadDisabled)){
+			$downloadStr = 'ダウンロード';
+		} else {
+			$downloadStr = 'ダウンロード不可';
+		}
+		$downloadImage = '<img src="' . $downloadImg . '" width="32" height="32" border="0" alt="' . $downloadStr . '" title="' . $downloadStr . '" />';
 		
 		$row = array(
 			'no' => $index + 1,													// 行番号
@@ -713,7 +728,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			'update_button' => $buttonEnabled,									// 更新ボタンの使用制御
 			'delete_button' => $buttonEnabled,									// 削除ボタンの使用制御
 			'detail_button' => $detailButtonEnabled,							// 詳細ボタンの使用制御
-			'download_button' => $downloadButton,								// ダウンロードボタン
+			'download_image' => $downloadImage,								// ダウンロードボタンの画像
+			'download_disabled' => $downloadDisabled,								// ダウンロードボタンの使用可否
 			'image_tag' => $imageTag,		// 画像
 			'label_widget_config' => $this->_('Configure'),			// 設定
 			'label_update' => $this->_('Update'),			// 更新

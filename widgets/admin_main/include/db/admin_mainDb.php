@@ -304,12 +304,11 @@ class admin_mainDb extends BaseDb
 	 * ウィジェットの更新
 	 *
 	 * @param int $serial			シリアル番号
-	 * @param string  $name			ウィジェット名
 	 * @param bool $available		利用可能かどうか
 	 * @param bool $active	ウィジェット実行可能かどうか
 	 * @return bool					true=成功、false=失敗
 	 */
-	function updateWidget($serial, $name, $available, $active)
+	function updateWidget($serial, $available, $active)
 	{
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
 		$now = date("Y/m/d H:i:s");	// 現在日時
@@ -318,16 +317,20 @@ class admin_mainDb extends BaseDb
 		$updateFields[] = 'wd_language';			// 対応言語ID(「,」区切りで複数指定可)
 		$updateFields[] = 'wd_name';				// ウィジェット名称
 		$updateFields[] = 'wd_type';				// ウィジェット種別(content=コンテンツ表示)
+		$updateFields[] = 'wd_content_type';		// 必要とするページのコンテンツ種別
+		$updateFields[] = 'wd_device_type';			// 端末タイプ(0=PC、1=携帯、2=スマートフォン)
 		$updateFields[] = 'wd_version';				// バージョン文字列
 		$updateFields[] = 'wd_fingerprint';			// ソースコードレベルでウィジェットを識別するためのID
 		$updateFields[] = 'wd_group_id';			// ウィジェットグループ(管理用)
 		$updateFields[] = 'wd_compatible_id';		// 互換ウィジェットID
+		$updateFields[] = 'wd_parent_id';			// 親ウィジェットID(ファイル名)
 		$updateFields[] = 'wd_joomla_class';		// Joomla!テンプレート用のクラス名
 		$updateFields[] = 'wd_suffix';				// HTMLタグのクラス名に付けるサフィックス文字列
 		$updateFields[] = 'wd_params';				// 各種パラメータ
 		$updateFields[] = 'wd_author';				// 作者名
 		$updateFields[] = 'wd_copyright';			// 著作権
 		$updateFields[] = 'wd_license';				// ライセンス
+		$updateFields[] = 'wd_license_type';		// ライセンスタイプ(0=オープンソース、1=商用)
 		$updateFields[] = 'wd_official_level';		// 公認レベル(0=非公認、1=準公認、10=正規公認)
 		$updateFields[] = 'wd_status';				// 状態(0=通常,1=テスト中,-1=廃止予定,-10=廃止)
 		$updateFields[] = 'wd_cache_type';			// キャッシュタイプ(0=不可、1=可、2=非ログイン時可, 3=ページキャッシュのみ可)
@@ -341,15 +344,14 @@ class admin_mainDb extends BaseDb
 		$updateFields[] = 'wd_add_script_lib_a';	// (管理機能用)追加する共通スクリプトライブラリ(ライブラリ名で指定、「,」区切りで複数指定可)
 		$updateFields[] = 'wd_add_scripts_a';		// (管理機能用)追加スクリプトファイル(相対パス表記、「,」区切りで複数指定可)
 		$updateFields[] = 'wd_add_css_a';			// (管理機能用)追加CSSファイル(相対パス表記、「,」区切りで複数指定可)
-		$updateFields[] = 'wd_device_type';			// 端末タイプ(0=PC、1=携帯、2=スマートフォン)
+		$updateFields[] = 'wd_admin'; $boolFields[] = 'wd_admin';			// 管理用ウィジェットかどうか
 		$updateFields[] = 'wd_mobile'; $boolFields[] = 'wd_mobile'; 	// 携帯対応かどうか
 		$updateFields[] = 'wd_show_name'; $boolFields[] = 'wd_show_name';			// ウィジェット名称を表示するかどうか
 		$updateFields[] = 'wd_read_scripts'; $boolFields[] = 'wd_read_scripts';		// スクリプトディレクトリを自動読み込みするかどうか
 		$updateFields[] = 'wd_read_css'; $boolFields[] = 'wd_read_css';			// cssディレクトリを自動読み込みするかどうか
 		$updateFields[] = 'wd_use_ajax'; $boolFields[] = 'wd_use_ajax';			// Ajax共通ライブラリを読み込むかどうか
-		$updateFields[] = 'wd_active'; $boolFields[] = 'wd_active';				// 一般ユーザが実行可能かどうか
-		$updateFields[] = 'wd_available'; $boolFields[] = 'wd_available';			// メニューから選択可能かどうか
 		$updateFields[] = 'wd_editable'; $boolFields[] = 'wd_editable';			// データ編集可能かどうか
+		$updateFields[] = 'wd_edit_content'; $boolFields[] = 'wd_edit_content';	// 主要コンテンツ編集可能かどうか
 		$updateFields[] = 'wd_has_admin'; $boolFields[] = 'wd_has_admin';			// 管理画面があるかどうか
 		$updateFields[] = 'wd_has_log'; $boolFields[] = 'wd_has_log';				// ログ参照画面があるかどうか
 		$updateFields[] = 'wd_enable_operation'; $boolFields[] = 'wd_enable_operation';	// 単体起動可能かどうか
@@ -359,6 +361,7 @@ class admin_mainDb extends BaseDb
 		$updateFields[] = 'wd_has_rss'; $boolFields[] = 'wd_has_rss';				// RSS機能があるかどうか
 		$updateFields[] = 'wd_sort_order';			// ソート順
 		$updateFields[] = 'wd_launch_index';		// 遅延実行制御が必要な場合の実行順(0=未設定、0以上=実行順)
+		$updateFields[] = 'wd_release_dt';		// リリース日時
 		$updateFields[] = 'wd_install_dt';			// インストール日時
 		$updateFields[] = 'wd_index_file';			// 起動クラスのファイル名
 		$updateFields[] = 'wd_index_class';			// 起動クラス名
@@ -366,7 +369,12 @@ class admin_mainDb extends BaseDb
 		$updateFields[] = 'wd_admin_class';			// 管理機能起動クラス名
 		$updateFields[] = 'wd_db';					// 対応DB種(mysql,pgsql等を「,」区切りで指定)
 		$updateFields[] = 'wd_table_access_type';	// テーブルのアクセス範囲(0=テーブル未使用、1=共通テーブルのみ、2=独自テーブル)
-
+		$updateFields[] = 'wd_content_name';		// コンテンツ名称(メニュー表示用)
+		$updateFields[] = 'wd_content_info';		// コンテンツ情報
+		$updateFields[] = 'wd_priority';		// 優先度
+		$updateFields[] = 'wd_category_id';		// 所属カテゴリー
+		$updateFields[] = 'wd_type_option';		// ウィジェット種別オプション(nav=ナビゲーションメニュー)
+ 
 		// トランザクション開始
 		$this->startTransaction();
 		
@@ -397,7 +405,6 @@ class admin_mainDb extends BaseDb
 		// ##### データ更新処理 #####
 		// 呼び出しパラメータから取得値
 		$newParams = array();
-		$newParams['wd_name'] = $name;
 		$newParams['wd_available'] = intval($available);
 		$newParams['wd_active'] = intval($active);
 		$keys = array_keys($newParams);// キーを取得
