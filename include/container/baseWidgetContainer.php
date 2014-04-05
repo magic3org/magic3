@@ -1669,6 +1669,7 @@ class BaseWidgetContainer extends Core
 	{
 		$messageClassStr = '';
 		$useBootstrap = $this->gPage->getUseBootstrap();
+		$closeTag = '';		// メッセージ消去用クローズボックス
 		
 		// 前後タグ
 		$preTag = '';
@@ -1680,6 +1681,12 @@ class BaseWidgetContainer extends Core
 		} else {
 			return;
 		}
+		
+		// Bootstrap用のタグ
+		if ($useBootstrap){
+			$closeTag = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
+		}
+		
 		// 危険メッセージ
 		if (count($this->dangerMessage) > 0){
 			$this->tmpl->setAttribute('_danger_message', 'visibility', 'visible');	// メッセージ表示タグを表示
@@ -1692,7 +1699,7 @@ class BaseWidgetContainer extends Core
 			
 			foreach ($this->dangerMessage as $value) {
 				$row = array(
-					'message' 	=> $value,
+					'message' 	=> $closeTag . $value,
 					'class' 	=> $messageClassStr,			// メッセージ追加クラス
 					'pre_tag'	=> $preTag,				// 前タグ
 					'post_tag'	=> $postTag				// 後タグ
@@ -1713,7 +1720,7 @@ class BaseWidgetContainer extends Core
 
 			foreach ($this->errorMessage as $value) {
 				$row = array(
-					'message'	=> $value,
+					'message'	=> $closeTag . $value,
 					'class' 	=> $messageClassStr,			// メッセージ追加クラス
 					'pre_tag'	=> $preTag,				// 前タグ
 					'post_tag'	=> $postTag				// 後タグ
@@ -1734,7 +1741,7 @@ class BaseWidgetContainer extends Core
 
 			foreach ($this->warningMessage as $value) {
 				$row = array(
-					'message'	=> $value,
+					'message'	=> $closeTag . $value,
 					'class' 	=> $messageClassStr,			// メッセージ追加クラス
 					'pre_tag'	=> $preTag,				// 前タグ
 					'post_tag'	=> $postTag				// 後タグ
@@ -1755,7 +1762,7 @@ class BaseWidgetContainer extends Core
 			
 			foreach ($this->infoMessage as $value) {
 				$row = array(
-					'message'	=> $value,
+					'message'	=> $closeTag . $value,
 					'class' 	=> $messageClassStr,			// メッセージ追加クラス
 					'pre_tag'	=> $preTag,				// 前タグ
 					'post_tag'	=> $postTag				// 後タグ
@@ -1776,7 +1783,7 @@ class BaseWidgetContainer extends Core
 			
 			foreach ($this->guideMessage as $value) {
 				$row = array(
-					'message' 	=> $value,
+					'message' 	=> $closeTag . $value,
 					'class' 	=> $messageClassStr,			// メッセージ追加クラス
 					'pre_tag'	=> $preTag,				// 前タグ
 					'post_tag'	=> $postTag				// 後タグ
@@ -1797,7 +1804,7 @@ class BaseWidgetContainer extends Core
 			
 			foreach ($this->successMessage as $value) {
 				$row = array(
-					'message' 	=> $value,
+					'message' 	=> $closeTag . $value,
 					'class' 	=> $messageClassStr,			// メッセージ追加クラス
 					'pre_tag'	=> $preTag,				// 前タグ
 					'post_tag'	=> $postTag				// 後タグ
