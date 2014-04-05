@@ -471,80 +471,30 @@ function m3SetHelp()
     if (jQuery().tooltip) $('[rel=m3help]').tooltip({ placement: 'top'});
 }
 /**
- * 画面操作用スライド開閉メニューバー
+ * ファイル選択ボタンを設定
+ *
+ * @return なし
  */
-$.fn.m3SlideMenubar = function(givenOpts){
-	opts = $.extend({
-		position: 'top',			// panel position 'top' or 'bottom'
-		height: '80px',				// set the height of the panel
-		speed: 'normal',			// 'slow', 'normal', 'fast', or number in milliseconds
-		touchPanel: true,			// mouse click operation than mouse hover
-		openBtn: '.m3open',			// open button id or class inside 'slidetrigger' div
-		closeBtn: '.m3close',			// close button id or class inside 'slidetrigger' div
-		slideTrigger: '#slidetrigger'	// trigger id or class
-	}, givenOpts);
-
-	// refers to the selector 'm3SlideMenubar'
-	var $this = $(this);
-
-	// vars needed to pass args to animate method
-	var containerpadding;
-	var aniOpenArgs = {};
-	var aniCloseArgs = {};
-
-	// add appropriate class names based on position
-	if (opts.position == 'top') {
-		$this.addClass('top');
-		$(opts.slideTrigger).addClass('top');
-		containerpadding = 'top';
-	} else {
-		$this.addClass('bottom');
-		$(opts.slideTrigger).addClass('bottom');
-		containerpadding = 'padding-bottom';
-	};
-
-	// set panel's height
-	$this.css('height', opts.height);
-
-	// remove the 'px' from the height string so we can calculate the container padding
-	var newpadding = opts.height.replace("px","");
-	newpadding = parseInt(opts.height) + 21;
-
-	aniOpenArgs[containerpadding] = newpadding;
-	aniCloseArgs[containerpadding] = 0;
-
-	if (opts.touchPanel){
-		// slide panel in and container down
-		$(opts.openBtn).click(function(){
-			$this.slideDown(opts.speed);
-			$(opts.slideTrigger).animate(aniOpenArgs, opts.speed);
-			$(opts.openBtn).css({'display':'none'});
-			$(opts.closeBtn).css({'display':'inline'});
-			return false;
-		});
-		// slide panel out and container up
-		$(opts.closeBtn).click(function(){
-			$this.slideUp(opts.speed);
-			$(opts.slideTrigger).animate(aniCloseArgs, opts.speed);
-			$(opts.openBtn).css({'display':'inline'});
-			$(opts.closeBtn).css({'display':'none'});
-			return false;
-		});
-	} else {
-		// slide panel in and container down
-		$(opts.openBtn).mouseover(function(){
-			$this.slideDown(opts.speed);
-			$(opts.slideTrigger).slideUp(opts.speed);
-			return false;
-		});
-		// slide panel out and container up
-		$this.hover(function(){},function(){
-			$this.slideUp(opts.speed);
-			$(opts.slideTrigger).slideDown(opts.speed);
-			return false;
-		});
-	}
-};
+function m3SetFileSelectButton()
+{
+	$('.btn-file :file').on('fileselect', function(event, numFiles, label){
+		var input = $(this).parents('.input-group').find(':text'),
+			log = numFiles > 1 ? numFiles + ' files selected' : label;
+		
+		if (input.length){
+			input.val(log);
+		} else {
+			if (log) alert(log);
+		}
+	});
+	
+	$(document).on('change', '.btn-file :file', function(){
+	    var input = $(this),
+	        numFiles = input.get(0).files ? input.get(0).files.length : 1,
+	        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+	    input.trigger('fileselect', [numFiles, label]);
+	});
+}
 /*
  * 初期処理
  */
