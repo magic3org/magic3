@@ -175,7 +175,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.6.9.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.0.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.3.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.4.js';			// 一般、管理機能共通スクリプト
@@ -3265,24 +3265,6 @@ class PageManager extends Core
 						$linkUrl = createUrl($linkUrl, M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_LOGOUT);
 						$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
 						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
-
-/*						
-						$linkStr .= '<div id="m3slidemenubar">';
-						$linkStr .= '<div id="m3slidemenubarpanel">';
-						$linkStr .= '<ul class="menubarbuttons">';
-						if ($gEnvManager->isSystemAdmin()){				// 管理画面、編集モードは、管理者権限がある場合のみ有効
-							$linkStr .= $adminTag;
-							$linkStr .= $editTag;
-						}
-						$linkStr .= $logoutTag;
-						$linkStr .= '</ul>';
-						$linkStr .= '</div>';
-						$linkStr .= '<div id="slidetrigger">';
-						$linkStr .= '<a href="#" class="m3open">開く</a>';
-						$linkStr .= '<a href="#" class="m3close">閉じる</a>';
-						$linkStr .= '</div>';
-						$linkStr .= '</div>';
-						*/
 					
 						$linkStr .= '<div id="m3slidepanel">';
 						$linkStr .= '<div class="m3panelopener m3topleft"><a href="#"><i class="glyphicon glyphicon-align-justify"></i></a></div>';

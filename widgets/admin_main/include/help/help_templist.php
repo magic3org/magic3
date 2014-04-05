@@ -29,12 +29,12 @@ class help_templist extends HelpConv
 		$helpData = array(
 			'templist' => array(	
 				'title' =>	$this->_('Template List'),			// テンプレート一覧
-				'body' =>	$this->_('The list is available templates in this system. Use bottom area of Template Install if you install template.')		// システムで利用可能なテンプレートの一覧です。テンプレートのインストールはこの画面の最下部の「テンプレートアップロード」から行います。
+				'body' =>	$this->_('The list is available templates in this system. Select template type for pc or mobile, smartphone.')		// システムで利用可能なテンプレートの一覧です。PC用テンプレートか携帯用、スマートフォン用のテンプレートを選択します。
 			),
-			'templist_type' => array(	
+/*			'templist_type' => array(	
 				'title' =>	$this->_('Template Type'),			// テンプレートタイプ
 				'body' =>	$this->_('Select template type for pc or mobile, smartphone.')		// PC用テンプレートか携帯用、スマートフォン用のテンプレートを選択します。
-			),
+			),*/
 			'templist_install_dir' => array(	
 				'title' =>	$this->_('Template Install Directory'),			// テンプレートインストールディレクトリ
 				'body' =>	$this->_('Templates installed in the directory by name of template ID.')		// テンプレートのインストールディレクトリです。この配下に「テンプレートID」のディレクトリ名で個々のテンプレートが格納されます。

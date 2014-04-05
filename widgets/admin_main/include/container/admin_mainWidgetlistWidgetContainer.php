@@ -33,6 +33,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	const NOT_FOUND_WIDGET_ICON_FILE = '/images/system/notfound32.png';		// ウィジェットが見つからないアイコン
 	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
 	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
+	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
+	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
 	
 	/**
 	 * コンストラクタ
@@ -95,7 +97,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$widgetId = $request->trimValueOf('widget');		// 処理対象のウィジェット
 		$this->widgetType = $request->trimValueOf('item_type');// 現在のウィジェットタイプ
 		if ($this->widgetType == '') $this->widgetType = '0';		// デフォルトはPC用ウィジェット
-		$this->showDetail = ($request->trimValueOf('item_show_detail') == 'on') ? 1 : 0;		// 詳細表示するかどうか
+//		$this->showDetail = ($request->trimValueOf('item_show_detail') == 'on') ? 1 : 0;		// 詳細表示するかどうか
+		$this->showDetail = $request->trimValueOf('item_show_detail');
 				
 		if ($act == 'readnew'){		// ウィジェット再読み込みのとき
 			$addWidgetCount = 0;
@@ -460,11 +463,17 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 				unlink($tmpFile);
 			}
 		} else if ($act == 'changedetail'){		// 詳細表示の変更のとき
+			// 詳細表示の状態を変更
+			if ($this->showDetail){
+				$this->showDetail = 0;
+			} else {
+				$this->showDetail = 1;
+			}
 			// 画面設定値を更新
-			$this->gDisp->setAdminConfig(admin_mainDef::CFG_SHOW_WIDGET_DETAIL, strval($this->showDetail));
+			//$this->gDisp->setAdminConfig(admin_mainDef::CFG_SHOW_WIDGET_DETAIL, strval($this->showDetail));
 		}
 		// 詳細設定状況を再取得
-		$this->showDetail = intval($this->gDisp->getAdminConfig(admin_mainDef::CFG_SHOW_WIDGET_DETAIL));
+		//$this->showDetail = intval($this->gDisp->getAdminConfig(admin_mainDef::CFG_SHOW_WIDGET_DETAIL));
 		
 		// ウィジェットのタイプごとの処理
 		switch ($this->widgetType){
@@ -493,15 +502,25 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		if (!$this->isExistsWidgetList) $this->tmpl->setAttribute('widgetlist', 'visibility', 'hidden');// ウィジェットがないときは、一覧を表示しない
 		
 		// 画面にデータを埋め込む
-		$checkedStr = '';
-		if (!empty($this->showDetail)) $checkedStr = 'checked';
-		$this->tmpl->addVar("_widget", "show_detail", $checkedStr);		// 詳細表示
+		$showDetailValue = '0';
+		if (!empty($this->showDetail)) $showDetailValue = '1';
+		$this->tmpl->addVar("_widget", "show_detail", $showDetailValue);		// 詳細表示
 		$this->tmpl->addVar("show_dir", "install_dir", $installDir);// インストールディレクトリを設定
+		// 拡張表示アイコン
+		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::AREA_OPEN_ICON_FILE);
+		$imageTitle = '詳細表示';
+		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
+		$this->tmpl->addVar("_widget", "area_open_image", $imageTag);
 		// ウィジェットアップロード
-		$uploadImg = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
-		$uploadStr = 'ウィジェットアップロード';
-		$uploadImage = '<img src="' . $uploadImg . '" width="32" height="32" border="0" alt="' . $uploadStr . '" title="' . $uploadStr . '" />';
-		$this->tmpl->addVar("_widget", "upload_image", $uploadImage);
+		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
+		$imageTitle = 'ウィジェットアップロード';
+		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
+		$this->tmpl->addVar("_widget", "upload_image", $imageTag);
+		// 再読み込みアイコン
+		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::RELOAD_ICON_FILE);
+		$imageTitle = 'ディレクトリ再読み込み';
+		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
+		$this->tmpl->addVar("show_dir", "reload_image", $imageTag);
 		
 		// テキストをローカライズ
 		$localeText = array();

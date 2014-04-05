@@ -13,8 +13,8 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function exec(act){
-	document.main.act.value=act;
+function readnew(){
+	document.main.act.value = 'readnew';
 	document.main.submit();
 	return false;
 }
@@ -36,7 +36,7 @@ function uploadCheck(){
 	document.upload.submit();
 	return false;
 }
-function download(templateId){
+function downloadTemplate(templateId){
 	document.main.act.value = 'download';
 	document.main.template.value = templateId;
 	document.main.submit();
@@ -53,6 +53,10 @@ function changeType(){
 	document.main.submit();
 	return true;
 }
+function showReloadArea()
+{
+	$('#reload_area').slideToggle('slow');
+}
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow(templateId)
 {
@@ -62,6 +66,9 @@ function previewInOtherWindow(templateId)
 $(function(){
 	// スクロールバー付きのテーブルを作成
 	m3_tableWithScrollbar('templatelist', -1, 0);
+	
+	// ファイル選択用ボタン作成
+	m3SetFileSelectButton();
 });
 //]]>
 </script>
@@ -75,14 +82,18 @@ $(function(){
 <input type="hidden" name="no" />
 <table width="90%">
 <tr><td>
-<span {_HELP_TEMPLIST}><label>{_LC_LABEL_TEMPLATE_LIST}</label></span>&nbsp;&nbsp;&nbsp;&nbsp;<span {_HELP_TEMPLIST_TYPE}><label>{_LC_LABEL_TEMPLATE_TYPE} </label></span>
+<span {_HELP_TEMPLIST}><label>{_LC_LABEL_TEMPLATE_LIST}</label></span>&nbsp;&nbsp;
 <select name="item_type" onchange="changeType();">
 <patTemplate:tmpl name="item_type_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>&nbsp;&nbsp;&nbsp;&nbsp;
+</select>
+<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a><a class="btn btn-xs" href="javascript:void(0);" onclick="showReloadArea();">{AREA_OPEN_IMAGE}</a>
+<div id="reload_area" style="display:none;">
 <span {_HELP_TEMPLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
-<span {_HELP_TEMPLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>
+<span {_HELP_TEMPLIST_RELOAD_DIR_BTN}><a class="btn btn-xs" href="javascript:void(0);" onclick="readnew();">{RELOAD_IMAGE}</a></span>
+<!--<span {_HELP_TEMPLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>-->
+</div>
 </td></tr>
 <tr><td colspan="2">
 <table id="templatelist" class="simple-table" width="100%">
@@ -92,8 +103,8 @@ $(function(){
 	    <th width="45"></th>
             <th width="15%"><span {_HELP_TEMPLIST_ID}>ID</span></th>
 	    <th width="150"><span {_HELP_TEMPLIST_FORMAT}>{_LC_LABEL_TEMPLATE_FORMAT} /<br />{_LC_LABEL_TEMPLATE_CREATOR}</span></th>
-	    <th width="70"><span {_HELP_TEMPLIST_DEFAULT}>{_LC_LABEL_TEMPLATE_DEFAULT}</span></th>
-	    <th width="150">{_LC_LABEL_TEMPLATE_DATE}</th>
+	    <th width="100"><span {_HELP_TEMPLIST_DEFAULT}>{_LC_LABEL_TEMPLATE_DEFAULT}</span></th>
+	    <th width="170">{_LC_LABEL_TEMPLATE_DATE}</th>
 	    <th><span {_HELP_TEMPLIST_ACT}>{_LC_LABEL_TEMPLATE_OPERATION}</span></th>
 	</tr>
     </thead>
@@ -105,10 +116,13 @@ $(function(){
 	    <td>{ID_STR}</td>
 	    <td align="center">{FORMAT_TYPE}</td>
 	    <td align="center"><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
-	    <td>{UPDATE_DT}</td>
-	    <td align="right"><input type="button" class="button" onclick="previewInOtherWindow('{ID}');" value="{LABEL_PREVIEW}" {PREVIEW_BUTTON} />
+	    <td align="center">{UPDATE_DT}</td>
+	    <td align="right">
 	    <input type="button" class="button" onclick="deleteline('{ID}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
-	    <input type="button" class="button" onclick="download('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />
+		<input type="button" class="button" onclick="previewInOtherWindow('{ID}');" value="{LABEL_PREVIEW}" {PREVIEW_BUTTON} />
+		<div class="btn-group">
+		<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadTemplate('{ID}');" {DOWNLOAD_DISABLED}>{DOWNLOAD_IMAGE}</a>
+		</div>
 	    </td>
 	    </tr>
 	    </patTemplate:tmpl>
@@ -116,8 +130,8 @@ $(function(){
 </table>
 </td></tr>
 </table>
-<br />
 </form>
+<!--
 <form enctype="multipart/form-data" method="post" name="upload">
 <input type="hidden" name="act" />
 <input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
@@ -129,6 +143,34 @@ $(function(){
 	<tr class="even"><td align="right"><input type="button" class="button" onclick="uploadCheck();" value="{_LC_LABEL_UPLOAD}" /></td></tr>
     </tbody>
 </table>
-</form>
+</form>-->
+</div>
+
+<!-- File upload dialog -->
+<div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="uploadModalLabel">{_LC_LABEL_TEMPLATE_UPLOAD}</h4>
+            </div>
+            <div class="modal-body">
+			    <p>{_LC_MSG_SELECT_FILE}</p>
+                <form enctype="multipart/form-data" method="post" name="upload">
+                    <input type="hidden" name="act" />
+					<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+                    <input type="hidden" name="item_type" />
+                    <div class="input-group">
+                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>
+                        <input type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{_LC_LABEL_CANCEL}</button>
+                <button type="button" class="btn btn-success" onclick="uploadCheck();">{_LC_LABEL_UPLOAD}</button>
+            </div>
+        </div>
+    </div>
 </div>
 </patTemplate:tmpl>

@@ -13,8 +13,8 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function exec(act){
-	document.main.act.value=act;
+function readnew(){
+	document.main.act.value = 'readnew';
 	document.main.submit();
 	return false;
 }
@@ -70,52 +70,37 @@ $(function(){
 	m3_tableWithScrollbar('widgetlist', -1, 0);
 	
 	// ファイル選択用ボタン作成
-			$('.btn-file :file').on('fileselect', function(event, numFiles, label) {
-				
-				var input = $(this).parents('.input-group').find(':text'),
-					log = numFiles > 1 ? numFiles + ' files selected' : label;
-				
-				if( input.length ) {
-					input.val(log);
-				} else {
-					if( log ) alert(log);
-				}
-				
-			});
-});
-$(document).on('change', '.btn-file :file', function() {
-        var input = $(this),
-            numFiles = input.get(0).files ? input.get(0).files.length : 1,
-            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-        input.trigger('fileselect', [numFiles, label]);
+	m3SetFileSelectButton();
 });
 //]]>
 </script>
 <div align="center">
 <br />
 <!-- m3:ErrorMessage -->
-<form action="?task=widgetlist" method="post" name="main">
+<form method="post" name="main">
+<input type="hidden" name="task" value="widgetlist" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="no" />
 <input type="hidden" name="widget" />
 <table width="90%">
-<tr><td>
+<tr><td colspan="2">
 <span {_HELP_WIDGETLIST}><label>{_LC_LABEL_WIDGET_LIST}</label></span>&nbsp;&nbsp;
 <select name="item_type" onchange="changeType();">
 <patTemplate:tmpl name="item_type_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
 </select>
-<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a>
+<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a><a class="btn btn-xs" href="javascript:void(0);" onclick="changeDetail();">{AREA_OPEN_IMAGE}</a><input type="hidden" name="item_show_detail" value="{SHOW_DETAIL}" />
 <patTemplate:tmpl name="show_dir" visibility="hidden">
 <div>
 <span {_HELP_WIDGETLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
-<span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>
+<!--<span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>-->
+<span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><a class="btn btn-xs" href="javascript:void(0);" onclick="readnew();">{RELOAD_IMAGE}</a></span>
 </div>
 </patTemplate:tmpl>
-</td><td align="right"><span {_HELP_WIDGETLIST_DETAIL_CHECK}><label><input type="checkbox" name="item_show_detail" onclick="changeDetail();" {SHOW_DETAIL} />{_LC_LABEL_SHOW_DETAIL}</label></span>
-</td></tr>
+<!--</td><td align="right"><span {_HELP_WIDGETLIST_DETAIL_CHECK}><label><input type="checkbox" name="item_show_detail" onclick="changeDetail();" {SHOW_DETAIL} />{_LC_LABEL_SHOW_DETAIL}</label></span>
+</td></tr>-->
 <tr><td colspan="2">
 <table id="widgetlist" class="simple-table" width="100%">
     <thead>

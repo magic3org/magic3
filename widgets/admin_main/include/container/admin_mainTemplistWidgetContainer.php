@@ -37,7 +37,11 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	const imageSizeWidth = 210;
 	const JOOMLA_CONFIG_FILENAME = 'templateDetails.xml';		// Joomla!のテンプレート設定ファイル名
 	const NOT_FOUND_TEMPLATE_ICON_FILE = '/images/system/notfound32.png';		// テンプレートが見つからないアイコン
-		
+	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
+	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
+	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
+	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -411,6 +415,21 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "install_dir", $installDir);// インストールディレクトリ
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));// 管理用URL
+		// テンプレートアップロード
+		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
+		$imageTitle = 'テンプレートアップロード';
+		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
+		$this->tmpl->addVar("_widget", "upload_image", $imageTag);
+		// 拡張表示アイコン
+		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::AREA_OPEN_ICON_FILE);
+		$imageTitle = '詳細表示';
+		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
+		$this->tmpl->addVar("_widget", "area_open_image", $imageTag);
+		// 再読み込みアイコン
+		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::RELOAD_ICON_FILE);
+		$imageTitle = 'ディレクトリ再読み込み';
+		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
+		$this->tmpl->addVar("_widget", "reload_image", $imageTag);
 		
 		// テキストをローカライズ
 		$localeText = array();
@@ -419,7 +438,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['msg_no_upload_file'] = $this->_('File not selected.');		// アップロードするファイルが選択されていません
 		$localeText['msg_upload_file'] = $this->_('Upload file.');		// ファイルをアップロードします
 		$localeText['label_template_list'] = $this->_('Template List');			// テンプレート一覧
-		$localeText['label_template_type'] = $this->_('Template Type:');			// テンプレートタイプ：
+//		$localeText['label_template_type'] = $this->_('Template Type:');			// テンプレートタイプ：
 		$localeText['label_install_dir'] = $this->_('Install Directory:');			// インストールディレクトリ:
 		$localeText['label_read_new'] = $this->_('Reload directory');			// ディレクトリ再読み込み
 		$localeText['label_show_detail'] = $this->_('Show detail');			// 詳細表示
@@ -430,7 +449,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['label_template_date'] = $this->_('Update Date');			// 更新日時
 		$localeText['label_template_operation'] = $this->_('Operation');			// 操作
 		$localeText['label_template_upload'] = $this->_('Template Upload (zip compressed file)');			// テンプレートアップロード(zip圧縮ファイル)
+		$localeText['msg_select_file'] = $this->_('Select file to upload.');			// アップロードするファイルを選択してください
 		$localeText['label_upload'] = $this->_('Upload');			// アップロード
+		$localeText['label_cancel'] = $this->_('Cancel');			// キャンセル
 		$this->setLocaleText($localeText);
 	}
 	/**
@@ -510,8 +531,16 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		
 		// ボタンの状態
-		$downloadButton = '';
-		if (!$isExistsTemplate) $downloadButton = 'disabled';
+		$downloadDisabled = '';
+		if (!$isExistsTemplate) $downloadDisabled = 'disabled';
+		
+		$downloadImg = $this->getUrl($this->gEnv->getRootUrl() . self::DOWNLOAD_ZIP_ICON_FILE);
+		if (empty($downloadDisabled)){
+			$downloadStr = 'ダウンロード';
+		} else {
+			$downloadStr = 'ダウンロード不可';
+		}
+		$downloadImage = '<img src="' . $downloadImg . '" width="32" height="32" border="0" alt="' . $downloadStr . '" title="' . $downloadStr . '" />';
 		
 		$row = array(
 			'no' => $index + 1,													// 行番号
@@ -523,7 +552,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 			'update_dt' => $this->convertToDispDateTime($fetchedRow['tm_create_dt']),	// 更新日時
 			'is_default' => $defaultCheck,										// デフォルトテンプレートかどうか
 			'image_tag' => $imageTag,		// 画像
-			'download_button' => $downloadButton,		// ダウンロードボタン
+//			'download_button' => $downloadButton,		// ダウンロードボタン
+			'download_image' => $downloadImage,								// ダウンロードボタンの画像
+			'download_disabled' => $downloadDisabled,								// ダウンロードボタンの使用可否
 			'label_preview' => $this->_('Preview'),			// プレビュー
 			'label_update' => $this->_('Update'),			// 更新
 			'label_delete' => $this->_('Delete'),			// 削除
