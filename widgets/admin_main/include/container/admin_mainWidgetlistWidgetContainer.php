@@ -126,6 +126,10 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 						if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath)
 								&& strncmp($file, '_', 1) != 0		// 「_」で始まる名前のディレクトリは読み込まない
 								&& strlen($file) > 1){		// 1文字のディレクトリは読み込まない
+							// index.phpファイルがあるかどうか確認
+							$indexFile = $filePath . DIRECTORY_SEPARATOR . M3_FILENAME_INDEX;
+							if (!file_exists($indexFile)) continue;
+							
 							// ウィジェットIDを作成
 							switch ($this->widgetType){
 								case '0':		// PC用テンプレート
