@@ -12,7 +12,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 <html dir="ltr" lang="<?php echo $document->language; ?>">
 <head>
     <jdoc:include type="head" />
-	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootswatch_yeti_ja.css" media="screen">
+	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootswatch_cerulean_ja.css" media="screen">
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
 	<?php global $gPageManager;if ($gPageManager->isLayout()): ?>
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style_layout.css" media="screen">
