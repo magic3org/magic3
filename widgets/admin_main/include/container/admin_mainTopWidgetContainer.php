@@ -65,6 +65,14 @@ class admin_mainTopWidgetContainer extends admin_mainBaseWidgetContainer
 		if ($this->gPage->getContentType() == M3_VIEW_TYPE_DASHBOARD){
 			// コンテキストメニューを作成(現在はダッシュボード画面のみ対応)
 			$this->addScript = array($this->getUrl($this->gEnv->getCurrentWidgetScriptsUrl() . self::CONTEXTMENU_SCRIPT_FILE));
+			
+			// ##### システム状態をチェック #####
+			// インストーラの存在
+			$installFile = $this->gInstance->getFileManager()->getInstallerPath();
+			if (file_exists($installFile)){
+				$message = 'インストーラファイルが存在しています。削除してください。ファイル=' . $installFile;
+				$this->gOpeLog->writeRequest(__METHOD__, $message, 1301, '', '', '', true/*トップ表示*/, true/*メッセージが表示されない場合のみ追加*/);
+			}
 			return;
 		}
 		

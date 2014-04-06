@@ -3242,14 +3242,17 @@ class SystemDb extends BaseDb
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
+	 * @param bool   $isNoTopMessageExists	トップメッセージがない場合のみログを出力($showTop=trueの場合)
 	 * @return bool				true=成功、false=失敗
 	 */
-	function writeErrorLog($type, $method, $message, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
+	function writeErrorLog($type, $method, $message, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false)
 	{
 		global $gEnvManager;
 		global $gAccessManager;
 		global $gSystemManager;
 		
+		$outputLog = true;				// ログ出力するかどうか
+			
 		// アクセスログ初期化
 		$gAccessManager->initAccessLog();
 		
@@ -3266,6 +3269,16 @@ class SystemDb extends BaseDb
 			$currentVer = $gSystemManager->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 		}
 		if ($currentVer >= 2014010201){
+			// トップ表示の場合は出力条件をチェック
+			if ($showTop && $isNoTopMessageExists){
+				// トップ表示のメッセージがあればログ出力しない
+				$queryStr  = 'SELECT * FROM _operation_log ';
+				$queryStr .=   'WHERE ol_checked = false ';
+				$queryStr .=     'AND ol_message_code = ? ';
+				$recordCount = $this->selectRecordCount($queryStr, array(intval($code)));
+				if ($recordCount > 0) $outputLog = false;				// ログ出力するかどうか
+			}
+			
 			// バージョン2014010201以降で「ol_show_top(トップ表示)」を追加(2014/1/12)
 			$sql = "INSERT INTO _operation_log (ol_type, ol_method, ol_message, ol_message_ext, ol_message_code, ol_access_log_serial, ol_search_option, ol_link, ol_show_top, ol_widget_id, ol_dt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, now())";
 			$params = array($type, $method, $message, $msgExt, intval($code), intval($logSerial), $searchOption, $link, intval($showTop), $gEnvManager->getCurrentWidgetId());
@@ -3293,7 +3306,7 @@ class SystemDb extends BaseDb
 			$sql = "INSERT INTO _operation_log (ol_type, ol_method, ol_message, ol_access_log_serial, ol_dt) VALUES (?, ?, ?, ?, now())";
 			$params = array($type, $method, $message, intval($logSerial));
 		}
-		$this->execStatement($sql, $params);
+		if ($outputLog) $this->execStatement($sql, $params);
 
 		// トランザクション終了
 		$ret = $this->endTransaction();

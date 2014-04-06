@@ -416,7 +416,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->tmpl->addVar("_widget", "except_ip", $this->db->getSystemConfig(self::CF_SITE_ACCESS_EXCEPTION_IP));
 		
 		// ##### システム状態をチェック #####
-		$systemMessage = '';
+/*		$systemMessage = '';
 		// インストーラの存在
 		$installFile = $this->gInstance->getFileManager()->getInstallerPath();
 		if (file_exists($installFile)){
@@ -426,7 +426,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->tmpl->setAttribute('system_check', 'visibility', 'visible');
 			$systemMessage = '<b><font color="red">' . $systemMessage . '</font></b>';
 			$this->tmpl->addVar("system_check", "message", $systemMessage);
-		}
+		}*/
 		
 		// 項目の表示制御
 		$isActiveSite = $this->gSystem->getSiteActiveStatus(0);		// PC用サイト

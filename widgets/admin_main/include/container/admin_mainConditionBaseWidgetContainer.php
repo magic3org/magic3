@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainConditionBaseWidgetContainer.php 5820 2013-03-12 08:58:28Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -29,6 +29,7 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 	const TASK_ACCESSLOG_DETAIL	= 'accesslog_detail';		// アクセスログ詳細
 	const TASK_SEARCHWORDLOG	= 'searchwordlog';				// 検索語ログ一覧
 	const TASK_SEARCHWORDLOG_DETAIL	= 'searchwordlog_detail';		// 検索語ログ詳細
+	const TASK_AWSTATS		= 'awstats';		// Awstats表示
 	const DEFAULT_TOP_PAGE = 'accesslog';		// デフォルトのトップ画面
 	
 	/**
@@ -86,6 +87,9 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 			case self::TASK_SEARCHWORDLOG_DETAIL:		// 検索語ログ詳細
 				$linkList = ' &gt;&gt; ログ &gt;&gt; 検索キーワード';
 				break;
+			case self::TASK_AWSTATS:		// Awstats表示
+				$linkList = ' &gt;&gt; アクセス数 &gt;&gt; Awstats';
+				break;
 			case self::TASK_GRAPH:	// グラフ表示
 				$linkList = ' &gt;&gt; アクセス数 &gt;&gt; グラフ表示';
 				break;
@@ -106,7 +110,8 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 			$task == self::TASK_OPELOG ||			// 運用ログ一覧
 			$task == self::TASK_OPELOG_DETAIL ||		// 運用ログ詳細
 			$task == self::TASK_SEARCHWORDLOG ||				// 検索語ログ一覧
-			$task == self::TASK_SEARCHWORDLOG_DETAIL){		// 検索語ログ詳細
+			$task == self::TASK_SEARCHWORDLOG_DETAIL ||	// 検索語ログ詳細
+			$task == self::TASK_AWSTATS){		// Awstats表示
 			$current = 'id="current"';
 		}
 		// ヘルプを作成
@@ -138,7 +143,8 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 			$task == self::TASK_OPELOG ||			// 運用ログ一覧
 			$task == self::TASK_OPELOG_DETAIL ||		// 運用ログ詳細
 			$task == self::TASK_SEARCHWORDLOG ||				// 検索語ログ一覧
-			$task == self::TASK_SEARCHWORDLOG_DETAIL){		// 検索語ログ詳細
+			$task == self::TASK_SEARCHWORDLOG_DETAIL ||		// 検索語ログ詳細
+			$task == self::TASK_AWSTATS){		// Awstats表示
 			
 			// ### アクセスログ ###
 			$current = '';
@@ -163,6 +169,14 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 			// ヘルプを作成
 			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_SEARCHWORDLOG);
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>検索キーワード</span></a></li>' . M3_NL;
+			
+			// ### Awstats ###
+			$current = '';
+			$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . self::TASK_AWSTATS;			// Awstats
+			if ($task == self::TASK_AWSTATS) $current = 'id="current"';
+			// ヘルプを作成
+			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_AWSTATS);
+			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>Awstats</span></a></li>' . M3_NL;
 		} else if ($task == self::TASK_GRAPH ||	// グラフ表示
 					$task == self::TASK_CALC){		// 集計
 

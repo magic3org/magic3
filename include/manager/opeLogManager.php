@@ -82,11 +82,12 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
+	 * @param bool   $isNoTopMessageExists	トップメッセージがない場合のみログを出力($showTop=trueの場合)
 	 * @return なし
 	 */
-	public function writeRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
+	public function writeRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false)
 	{
-		$this->db->writeErrorLog('request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+		$this->db->writeErrorLog('request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop, $isNoTopMessageExists);
 	}
 	/**
 	 * ワーニング出力
@@ -182,11 +183,12 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
+	 * @param bool   $isNoTopMessageExists	トップメッセージがない場合のみログを出力($showTop=trueの場合)
 	 * @return なし
 	 */
-	public function writeUserRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false)
+	public function writeUserRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false)
 	{
-		$this->db->writeErrorLog('user_request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
+		$this->db->writeErrorLog('user_request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop, $isNoTopMessageExists);
 	}
 	/**
 	 * ユーザ操作エラー出力
