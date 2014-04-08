@@ -31,6 +31,7 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 	const TASK_SEARCHWORDLOG_DETAIL	= 'searchwordlog_detail';		// 検索語ログ詳細
 	const TASK_AWSTATS		= 'awstats';		// Awstats表示
 	const DEFAULT_TOP_PAGE = 'accesslog';		// デフォルトのトップ画面
+	const CF_AWSTATS_DATA_PATH = 'awstats_data_path';		// Awstatsデータパス
 	
 	/**
 	 * コンストラクタ
@@ -176,7 +177,12 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 			if ($task == self::TASK_AWSTATS) $current = 'id="current"';
 			// ヘルプを作成
 			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_AWSTATS);
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>Awstats</span></a></li>' . M3_NL;
+			$isAwstats = $this->isExistsAwstats();
+			if ($isAwstats){		// Awstatsが使用可能な場合
+				$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>Awstats</span></a></li>' . M3_NL;
+			} else {
+				$menuText .= '<li ' . $current . '><a href="javascript:void(0);"><span ' . $helpText . '>Awstats</span></a></li>' . M3_NL;
+			}
 		} else if ($task == self::TASK_GRAPH ||	// グラフ表示
 					$task == self::TASK_CALC){		// 集計
 
@@ -205,6 +211,42 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 		$linkList = '<div id="configmenu-top"><label>' . self::TASK_BASE_NAME . $linkList . '</div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+	}
+	/**
+	 * Awstatsの作成データが参照できるかどうか
+	 *
+	 * @return bool		true=参照可、false=参照不可
+	 */
+	function isExistsAwstats()
+	{
+		$awstatsDataPath = $this->getAwstatsPath();
+		if (is_dir($awstatsDataPath)){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * Awstatsの作成データのパスを取得
+	 *
+	 * @return string		パス
+	 */
+	function getAwstatsPath()
+	{
+		$path = $this->gSystem->getSystemConfig(self::CF_AWSTATS_DATA_PATH);
+		$awstatsDataPath = rel2abs($path, $this->gEnv->getSystemRootPath());
+		return $awstatsDataPath;
+	}
+	/**
+	 * Awstatsの作成データのURLを取得
+	 *
+	 * @return string		URL
+	 */
+	function getAwstatsUrl()
+	{
+		$path = $this->gSystem->getSystemConfig(self::CF_AWSTATS_DATA_PATH);
+		$awstatsDataPath = rel2abs($path, $this->gEnv->getRootUrl());
+		return $awstatsDataPath;
 	}
 }
 ?>

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: userInfo.php 6096 2013-06-12 11:33:36Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 class UserInfo
@@ -25,7 +25,7 @@ class UserInfo
 	public $_recordSerial;			// 更新時に使用
 	
 	// ユーザタイプ
-	//const USER_TYPE_VISITOR				= -100;			// 訪問者(ログインなし)
+	//const USER_TYPE_GUEST				= -100;				// ゲストユーザ(ログインなし)
 	const USER_TYPE_NOT_AUTHENTICATED	= -1;				// 未承認ユーザ
 	const USER_TYPE_TMP					= 0;				// 仮ユーザ
 	const USER_TYPE_NORMAL				= 10;				// 一般ユーザ

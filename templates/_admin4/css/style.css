@@ -51,6 +51,20 @@ a:hover {
 	color: #FF0000;
 	text-decoration  : none;
 }*/
+/****** 管理画面全体 *****/
+.m3admin_container {
+	margin:0 auto;
+	width:90%;
+}
+.m3admin_container .m3title {
+	display:inline-block;
+}
+.m3list_indent1 {
+	margin-left:70px;
+}
+.m3list_indent2 {
+	margin-left:140px;
+}
 /*** Bootstrap bug fix ***/
 input[type="password"]{
 	font-size: 14px;

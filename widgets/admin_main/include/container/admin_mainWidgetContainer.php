@@ -260,6 +260,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'opelog':			// 運用ログ
 						case 'accesslog':			// アクセスログ
 						case 'searchwordlog':		// 検索語ログ一覧
+						case 'awstats':				// Awstats
 						case 'resbrowse':			// リソースブラウズ(resbrowseからfilebrowserを起動)
 //						case 'filebrowse':			// ファイルブラウズ
 						case 'filebrowser':			// ファイルブラウズ(elfinder)

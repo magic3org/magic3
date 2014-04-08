@@ -17,9 +17,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConditi
 
 class admin_mainAwstatsWidgetContainer extends admin_mainConditionBaseWidgetContainer
 {
-	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
-	const DEFAULT_STR_NOT_CALC = '未集計';		// 未集計時の表示文字列
-	const MAX_CALC_DAYS = 30;					// 最大集計日数
+	private $awstatsPath;		// Awstatsデータディレクトリパス
+	private $awstatsUrl;		// AwstatsデータディレクトリURL
 	
 	/**
 	 * コンストラクタ
@@ -41,7 +40,7 @@ class admin_mainAwstatsWidgetContainer extends admin_mainConditionBaseWidgetCont
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'analyzecalc.tmpl.html';
+		return 'awstats.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -54,29 +53,102 @@ class admin_mainAwstatsWidgetContainer extends admin_mainConditionBaseWidgetCont
 	 */
 	function _assign($request, &$param)
 	{
-		$act = $request->trimValueOf('act');
-
-		if ($act == 'calc'){		// 集計実行のとき
-			$messageArray = array();
-			$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray);
-			if ($ret){
-				$this->setMsg(self::MSG_GUIDANCE, $messageArray[0]);
-			} else {
-				$this->setMsg(self::MSG_APP_ERR, $messageArray[0]);
-			}
-		} else if ($act == 'delall'){		// 集計データを削除するとき
-		//	$ret = $this->db->updateStatus(self::CF_LAST_DATE_CALC_PV, '');
-		} else {		// 初期状態
-		}
-
+		$this->awstatsPath = $this->getAwstatsPath();		// Awstatsデータディレクトリパス
+		$this->awstatsUrl = $this->getAwstatsUrl();		// AwstatsデータディレクトリURL
+		
+		// 集計ファイルを取得
+		list($yearFileArray, $monthFileArray) = $this->getYearMonthFile($this->awstatsPath);
+		
+		// 年月データ一覧を作成
+		$this->createYearMonthList($yearFileArray, $monthFileArray);
+		
 		// 値を埋め込む
-//		$lastDateCalcPv = $this->db->getStatus(self::CF_LAST_DATE_CALC_PV);		// ページビュー集計最終更新日
-		if (empty($lastDateCalcPv)){
-			$lastDateCalcPv = self::DEFAULT_STR_NOT_CALC;
-		} else {
-			$lastDateCalcPv = $this->convertToDispDate($lastDateCalcPv);		// 最終集計日
+		$this->tmpl->addVar("_widget", "last_index", $this->getAwstatsUrl());
+	}
+	/**
+	 * 年月ごとの集計ファイルを取得(昇順)
+	 *
+	 * @param string $path		検索ディレクトリ
+	 * @return array			月別ファイル一覧と年別ファイルの一覧の配列
+	 */
+	function getYearMonthFile($path)
+	{
+		$yearArray = array();
+		$monthArray = array();
+		
+		$dir = dir($path);
+		while (($file = $dir->read()) !== false){
+			$filePath = $path . '/' . $file;
+			// ディレクトリかどうかチェック
+			if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath)){
+				$ret = preg_match("/^([0-9]{4})([0-9]{0,2})\.html$/", $file, $match);
+				if ($ret){
+					if (empty($match[2])){
+						$yearArray[] = $match[0];
+					} else {
+						$monthArray[] = $match[0];
+					}
+				}
+
+			}
 		}
-		$this->tmpl->addVar("_widget", "lastdate_pv", $lastDateCalcPv);
+		$dir->close();
+		
+		sort($yearArray);
+		sort($monthArray);
+		return array($yearArray, $monthArray);
+	}
+	/**
+	 * 年月一覧を作成
+	 *
+	 * @param array $yearFileArray			年データファイル名
+	 * @param array $monthFileArray			月データファイル名
+	 * @return なし						
+	 */
+	function createYearMonthList($yearFileArray, $monthFileArray)
+	{
+		if (count($monthFileArray) > 0){
+			preg_match("/^([0-9]{4})([0-9]{0,2})\.html$/", $monthFileArray[0], $match);
+			$startYear = intval($match[1]);
+			$startMonth = intval($match[2]);
+			
+			preg_match("/^([0-9]{4})([0-9]{0,2})\.html$/", $monthFileArray[count($monthFileArray) -1], $match);
+			$endYear = intval($match[1]);
+			$endMonth = intval($match[2]);
+		}
+		
+		for ($i = $endYear; $i >= $startYear; $i--){
+			// 月データの出力
+			$this->tmpl->clearTemplate('month_list');
+			for ($j = 1; $j <= 12; $j++){
+				// ファイルの存在チェック
+				$filename = $i . sprintf('%02d', $j) . '.html';
+				$monthDataFile = $this->awstatsPath . '/' . $filename;
+				$monthTag = $j . '月';
+				if (file_exists($monthDataFile)){
+					$monthDataUrl = $this->awstatsUrl . '/' . $filename;
+					$monthTag = '<a href="' . $monthDataUrl . '" target="_blank">' . $monthTag . '</a>';
+				}
+				$monthRow = array(
+					'month'	=>	$monthTag										// 月
+				);
+				$this->tmpl->addVars('month_list', $monthRow);
+				$this->tmpl->parseTemplate('month_list', 'a');
+			}
+			// ファイルの存在チェック
+			$filename = $i . '.html';
+			$yearDataFile = $this->awstatsPath . '/' . $filename;
+			$yearTag = $i . '年';
+			if (file_exists($yearDataFile)){
+				$yearDataUrl = $this->awstatsUrl . '/' . $filename;		// AwstatsデータディレクトリURL
+				$yearTag = '<a href="' . $yearDataUrl . '" target="_blank">' . $yearTag . '</a>';
+			}
+			$yearRow = array(
+					'year'		=> 	$yearTag		// 年
+			);
+			$this->tmpl->addVars('year_list', $yearRow);
+			$this->tmpl->parseTemplate('year_list', 'a');
+		}
 	}
 }
 ?>
