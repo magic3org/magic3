@@ -234,6 +234,8 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 	function getAwstatsPath()
 	{
 		$path = $this->gSystem->getSystemConfig(self::CF_AWSTATS_DATA_PATH);
+		if (empty($path)) return '';
+		
 		$awstatsDataPath = rel2abs($path, $this->gEnv->getSystemRootPath());
 		return $awstatsDataPath;
 	}
@@ -245,6 +247,8 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 	function getAwstatsUrl()
 	{
 		$path = $this->gSystem->getSystemConfig(self::CF_AWSTATS_DATA_PATH);
+		if (empty($path)) return '';
+		
 		$awstatsDataPath = rel2abs($path, $this->gEnv->getRootUrl());
 		return $awstatsDataPath;
 	}

@@ -55,6 +55,7 @@ class admin_mainAwstatsWidgetContainer extends admin_mainConditionBaseWidgetCont
 	{
 		$this->awstatsPath = $this->getAwstatsPath();		// Awstatsデータディレクトリパス
 		$this->awstatsUrl = $this->getAwstatsUrl();		// AwstatsデータディレクトリURL
+		if (empty($this->awstatsPath)) return;
 		
 		// 集計ファイルを取得
 		list($yearFileArray, $monthFileArray) = $this->getYearMonthFile($this->awstatsPath);
