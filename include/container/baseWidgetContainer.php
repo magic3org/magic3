@@ -45,6 +45,7 @@ class BaseWidgetContainer extends Core
 	protected $_useHierPage;						// 階層化ページを使用するかどうか
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
 	protected $_linkPageCount;						// ページリンク作成用ページ総数
+	protected $_renderType;							// 描画出力タイプ
 	const PASSWORD_LENGTH = 8;		// パスワード長
 	const HELP_HEAD = '_help_';		// ヘルプ埋め込み用タグのヘッダ部
 	const LOCAL_TEXT_HEAD = '_lc_';		// ローカライズテキストタグのヘッダ部
@@ -56,7 +57,7 @@ class BaseWidgetContainer extends Core
 	const MSG_APP_ERR  = 1;		// アプリケーションエラー
 	const MSG_USER_ERR = 2;		// ユーザ操作エラー
 	const MSG_GUIDANCE = 3;		// ガイダンス
-	
+			
 	/**
 	 * コンストラクタ
 	 */
@@ -166,6 +167,23 @@ class BaseWidgetContainer extends Core
 		// 各種設定取得
 		$this->_useHierPage = $this->gSystem->hierarchicalPage();	// 階層化ページ
 		$this->_isMultiDomain = $this->gEnv->isMultiDomain();			// マルチドメイン運用かどうか
+		
+		// 描画出力タイプ
+		$templateType = $this->gEnv->getCurrentTemplateType();
+		switch ($templateType){
+			case 0:
+				$this->_renderType = M3_RENDER_JOOMLA_OLD;		// Joomla! 1.0テンプレート
+				break;
+			case 10:
+				$this->_renderType = M3_RENDER_BOOTSTRAP;		// Bootstrap 3.0テンプレート
+				break;
+			case 20:
+				$this->_renderType = M3_RENDER_JQUERY_MOBILE;		// jQuery Mobileテンプレート
+				break;
+			default:
+				$this->_renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
+				break;
+		}	
 	}
 	/**
 	 * 起動マネージャから呼ばれる唯一のメソッド

@@ -144,6 +144,12 @@ define('M3_TAG_MACRO_COMMENT_AUTHOR',		'CM_AUTHOR');					// コメント置換�
 define('M3_WIDGET_ID_SEPARATOR',	',');									// ウィジェットIDと付加情報を連結
 define('M3_LANG_SEPARATOR',			'|');									// 言語IDと内容を連結
 
+// 描画出力タイプ
+define('M3_RENDER_JOOMLA_OLD',		'joomla_old');		// Joomla! 1.0テンプレート
+define('M3_RENDER_JOOMLA_NEW',		'joomla_new');		// Joomla! 1.5以上のテンプレート
+define('M3_RENDER_BOOTSTRAP',		'bootstrap');		// Bootstrap 3.0テンプレート
+define('M3_RENDER_JQUERY_MOBILE',	'jquery mobile');	// jQuery Mobileテンプレート
+	
 // ファイル拡張子
 define('M3_TEMPLATE_FILE_EXTENSION', '.tmpl.html');		// テンプレートファイルの拡張子(suffix)
 
