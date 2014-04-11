@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: contactusWidgetContainer.php 5455 2012-12-10 13:21:36Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() .			'/baseWidgetContainer.php');
@@ -21,10 +21,12 @@ class contactusWidgetContainer extends BaseWidgetContainer
 	private $db;	// DB接続オブジェクト
 	private $langId;	// 表示言語
 	private $state;		// 都道府県
+	private $tagRequired;		// 「必須」ラベルタグ
 	const CONTACTUS_FORM = 'contact_us';		// お問い合わせフォーム
 	const DEFAULT_SEND_MESSAGE = 1;		// メール送信機能を使用するかどうか(デフォルト使用)
 	const DEFAULT_TITLE_NAME = 'お問い合わせ';	// デフォルトのタイトル名
-	const DEFAULT_STR_REQUIRED = '<font color="red">*必須</font>';		// 「必須」表示用テキスト
+	const DEFAULT_STR_REQUIRED = '<span class="required">*必須</span>';		// 「必須」表示用テキスト
+	const BOOTSTRAP_STR_REQUIRED = '<span class="label label-danger required">必須</span>';		// 「必須」表示用テキスト(Bootstrap出力用)
 	
 	/**
 	 * コンストラクタ
@@ -49,7 +51,13 @@ class contactusWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'index.tmpl.html';
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			$this->tagRequired = self::BOOTSTRAP_STR_REQUIRED;		// 「必須」ラベルタグ
+			return 'index_bootstrap.tmpl.html';
+		} else {
+			$this->tagRequired = self::DEFAULT_STR_REQUIRED;		// 「必須」ラベルタグ
+			return 'index.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -247,40 +255,40 @@ class contactusWidgetContainer extends BaseWidgetContainer
 		}
 		// 入力フィールドの表示制御
 		if ($nameVisible){
-			if ($nameRequired) $this->tmpl->addVar('show_name', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($nameRequired) $this->tmpl->addVar('show_name', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_name', 'visibility', 'visible');// 名前入力フィールドの表示
 		}
 		if ($nameKanaVisible){
-			if ($nameKanaRequired) $this->tmpl->addVar('show_name_kana', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($nameKanaRequired) $this->tmpl->addVar('show_name_kana', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_name_kana', 'visibility', 'visible');// 名前カナ入力フィールドの表示
 		}
 		if ($emailVisible){
-			if ($emailRequired) $this->tmpl->addVar('show_email', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($emailRequired) $this->tmpl->addVar('show_email', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_email', 'visibility', 'visible');// Eメール入力フィールドの表示
 		}
 		if ($companyVisible){
-			if ($companyRequired) $this->tmpl->addVar('show_company_name', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($companyRequired) $this->tmpl->addVar('show_company_name', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_company_name', 'visibility', 'visible');// 会社名入力フィールドの表示
 		}
 		if ($zipcodeVisible){
-			if ($zipcodeRequired) $this->tmpl->addVar('show_zipcode', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($zipcodeRequired) $this->tmpl->addVar('show_zipcode', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_zipcode', 'visibility', 'visible');// 郵便番号入力フィールドの表示
 		}
 		if ($stateVisible){
-			if ($stateRequired) $this->tmpl->addVar('show_state', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($stateRequired) $this->tmpl->addVar('show_state', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_state', 'visibility', 'visible');//都道府県入力フィールドの表示
 			$this->db->getAllState('JPN', $this->langId, array($this, 'stateLoop'));// 都道府県メニュー
 		}
 		if ($addressVisible){	// 住所入力フィールドの表示
-			if ($addressRequired) $this->tmpl->addVar('show_address', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($addressRequired) $this->tmpl->addVar('show_address', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_address', 'visibility', 'visible');// 住所入力フィールドの表示
 		}					
 		if ($telVisible){
-			if ($telRequired) $this->tmpl->addVar('show_tel', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($telRequired) $this->tmpl->addVar('show_tel', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_tel', 'visibility', 'visible');// 電話番号入力フィールドの表示
 		}
 		if ($bodyVisible){
-			if ($bodyRequired) $this->tmpl->addVar('show_body', 'required', self::DEFAULT_STR_REQUIRED);// 「必須」表示
+			if ($bodyRequired) $this->tmpl->addVar('show_body', 'required', $this->tagRequired);// 「必須」表示
 			$this->tmpl->setAttribute('show_body', 'visibility', 'visible');// 内容入力フィールドの表示
 		}
 	}

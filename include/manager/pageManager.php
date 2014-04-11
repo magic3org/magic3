@@ -183,6 +183,7 @@ class PageManager extends Core
 	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt1.1.0.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
 	const M3_ADMIN_CSS_FILE					= 'm3/admin.css';			// 管理機能用のCSS
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
+	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// 一般画面共通のデフォルトCSS
 //	const M3_NO_BOOTSTRAP_CSS_FILE			= 'm3/nobootstrap/style.css';		// 管理画面でBootstrapの読み込みなしの場合のCSS
 	
 	// 読み込み制御
@@ -217,7 +218,7 @@ class PageManager extends Core
 		// 共通スクリプトファイル
 		// 「ルート/scripts」ディレクトリからの相対パスで指定する
 		$this->defaultScriptFiles = array(self::M3_STD_SCRIPT_FILENAME);
-		$this->defaultCssFiles = array();
+		$this->defaultCssFiles = array(self::M3_DEFAULT_CSS_FILE);			// 一般画面共通のデフォルトCSS
 		
 		$this->wysiwygEditor = $gSystemManager->getSystemConfig(self::CF_WYSIWYG_EDITOR);				// 管理画面用WYSIWYGエディター
 		
@@ -252,8 +253,8 @@ class PageManager extends Core
 											//	self::M3_STD_SCRIPT_FILENAME,
 											//	self::M3_ADMIN_SCRIPT_FILENAME,
 											//	self::M3_OPTION_SCRIPT_FILENAME);
-
-			$this->defaultAdminCssFiles = array();			// 管理機能用のCSS
+			
+			$this->defaultAdminCssFiles = array();	// 管理機能用のCSS
 		} else {
 			$this->defaultAdminScriptFiles = array($this->selectedJQueryFilename,			// jQuery
 												$this->selectedJQueryUiFilename,				// jQuery UI Core
@@ -261,8 +262,8 @@ class PageManager extends Core
 												self::M3_STD_SCRIPT_FILENAME,
 												self::M3_ADMIN_SCRIPT_FILENAME,
 												self::M3_OPTION_SCRIPT_FILENAME);
-												
-			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);			// 管理機能用のCSS
+								
+			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);// 管理機能用のCSS	
 //			if (!$this->useBootstrap) $this->defaultAdminCssFiles[] = self::M3_NO_BOOTSTRAP_CSS_FILE;	// Bootstrapを読み込まない場合は代替CSSを読み込む
 			
 			// Javascriptライブラリ
