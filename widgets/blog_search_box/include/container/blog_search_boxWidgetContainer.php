@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_search_boxWidgetContainer.php 2623 2009-12-05 12:40:38Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
@@ -31,15 +31,6 @@ class blog_search_boxWidgetContainer extends BaseWidgetContainer
 		parent::__construct();
 	}
 	/**
-	 * ウィジェット単位のアクセス制御
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 */
-	function _checkAccess($request)
-	{
-		return true;
-	}
-	/**
 	 * テンプレートファイルを設定
 	 *
 	 * _assign()でデータを埋め込むテンプレートファイルのファイル名を返す。
@@ -51,7 +42,11 @@ class blog_search_boxWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'index.tmpl.html';
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return 'index_bootstrap.tmpl.html';
+		} else {
+			return 'index.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
