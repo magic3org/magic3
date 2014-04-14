@@ -127,13 +127,9 @@ $view->componentWrapper();
     <div class="art-footer-body">
         <?php echo $view->position('syndicate'); ?>
                 <div class="art-footer-text">
-                    <?php if ($view->containsModules('copyright')): ?>
                     <?php echo $view->position('copyright', 'art-nostyle'); ?>
-                    <?php else: ?>
-                    <?php ob_start(); ?>
-                    <?php echo str_replace('%YEAR%', date('Y'), ob_get_clean()); ?>
-                    <?php endif; ?>
                 </div>
+		<?php echo $view->position('footer'); ?>
         <div class="cleared"></div>
     </div>
 </div>

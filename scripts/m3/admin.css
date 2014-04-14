@@ -272,3 +272,9 @@
 .m3widgetlist {
 	overflow: auto;		/* スクロールバーあり */
 }
+/*** 編集画面用　***/
+/* テンプレートタイプラベル */
+.panel-heading .label {
+	padding-left:8px;
+	padding-bottom:1px;
+}

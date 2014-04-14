@@ -41,6 +41,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const BUTTON_ICON_TEMPLATE_UNCHECKED = '<i class="glyphicon glyphicon-unchecked"></i> ';	// テンプレート一覧付加用アイコン(チェックなし)
 	const BUTTON_ICON_TEMPLATE_CHECK_WITH_HELP = '<i class="glyphicon glyphicon-check" rel="m3help" title="ページに固定"></i> ';		// テンプレート一覧付加用アイコン(チェックあり)
 	const HELP_SELECT_BUTTON = 'rel="m3help" title="ページに固定"';			// テンプレート一覧付加用ボタンのヘルプ(ページ専用テンプレート)
+	const TEMPLATE_TYPE_LABEL_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型">B</span>';			// Boostrap型テンプレートラベル
 	
 	/**
 	 * コンストラクタ
@@ -586,6 +587,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	{
 		$value = $fetchedRow['tm_id'];
 		$name = $fetchedRow['tm_name'];
+		$type = $fetchedRow['tm_type'];		// テンプレートタイプ
 		$selected = '';
 		$checked = '';
 		
@@ -593,7 +595,14 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			$selected = 'selected';
 			$checked = 'checked';
 			
-			if (empty($this->templateTitle)) $this->templateTitle = $this->convertToDispString($name);	// 選択テンプレートのタイトル
+			if (empty($this->templateTitle)){
+				$this->templateTitle = $this->convertToDispString($name);	// 選択テンプレートのタイトル
+				
+				// テンプレートタイプのアイコンを付加
+				if (10 <= $type && $type < 20){			// Bootstrap型
+					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_BOOTSTRAP;
+				}
+			}
 		}
 		// テンプレート画像
 		$imageUrl = $this->gEnv->getTemplatesUrl() . '/' . $value . '/template_thumbnail.png';
@@ -606,6 +615,11 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			
 			// テンプレートのタイトルを個別ページのテンプレートに変更
 			$this->templateTitle = self::BUTTON_ICON_TEMPLATE_CHECK_WITH_HELP . $this->convertToDispString($this->pageTemplateId);	// 選択テンプレートのタイトル
+			
+			// テンプレートタイプのアイコンを付加
+			if (10 <= $type && $type < 20){			// Bootstrap型
+				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_BOOTSTRAP;
+			}
 		} else {
 			$selectButtonIcon = self::BUTTON_ICON_TEMPLATE_UNCHECKED;
 			$selectButtonHelp = self::HELP_SELECT_BUTTON;

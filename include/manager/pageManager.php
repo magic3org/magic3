@@ -162,6 +162,7 @@ class PageManager extends Core
 	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー)
 	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メインウィジェット"></i> ';		// ウィジェットの機能マーク(メインウィジェット)
 	const WIDGET_MARK_NAVMENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// ウィジェットの機能マーク(ナビゲーションメニュー)
+	const WIDGET_FUNCTION_MARK_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型">B</span>';			// ウィジェット機能マーク(Boostrap型テンプレート
 	const WIDGET_STYLE_NAVMENU = '_navmenu';		// ウィジェットの表示スタイル(ナビゲーションメニュー)
 			
 	// アドオンオブジェクト用
@@ -3890,10 +3891,18 @@ class PageManager extends Core
 					$widgetMark = '';
 					if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetMark = self::WIDGET_MARK_MAIN;					// メインウィジェット
 					if ($rows[$i]['wd_type'] == 'menu' && $rows[$i]['wd_type_option'] == 'nav') $widgetMark = self::WIDGET_MARK_NAVMENU;		// ナビゲーションメニュー
-						
+
+					// ウィジェット機能一覧
+					$functionMark = '';
+					if (!empty($rows[$i]['wd_template_type'])){		// 対応テンプレートタイプ
+						$templateTypeArray = explode(',', $rows[$i]['wd_template_type']);
+						if (in_array('bootstrap', $templateTypeArray)) $functionMark .= self::WIDGET_FUNCTION_MARK_BOOTSTRAP;		// Bootstrap型テンプレート対応
+					}
+			
 					echo '<dl class="m3_widgetlist_item" id="' . $widgetTag . '">' . M3_NL;
 					echo '<dt>' . $widgetMark . $rows[$i]['wd_name'] . '</dt>' . M3_NL;			// ウィジェット名
-					echo '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table></dd>' . M3_NL;
+					echo '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table>';
+					echo $functionMark . '</dd>' . M3_NL;
 					echo '</dl>' . M3_NL;
 					
 					// カテゴリーの終了タグを追加
