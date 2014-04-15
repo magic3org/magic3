@@ -1,5 +1,5 @@
 /**
- * Magic3システムデフォルトCSS
+ * 一般画面で共通のシステムデフォルトCSS
  *
  * LICENSE: This source file is licensed under the terms of the GNU General Public License.
  *
@@ -12,4 +12,7 @@
  */
 .required {
 	color:red;
+}
+.available {
+	color:green;
 }

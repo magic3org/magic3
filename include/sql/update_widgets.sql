@@ -399,8 +399,8 @@ INSERT INTO _widgets
 ('ie6_nomore', 'IE6 No More', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'IE6ブラウザ向けにメッセージを表示', false, true,           1,             -1, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'simple_html';
 INSERT INTO _widgets (
-wd_id,         wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                   wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES (
-'simple_html', '汎用HTML', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'コンテンツとして管理しない部分表示用の汎用HTML', true,         true,                true,          1, -1, now(), now());
+wd_id,         wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                   wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
+('simple_html', '汎用HTML', '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'コンテンツとして管理しない部分表示用の汎用HTML', true,         true,                true,          1, -1, now(), now());
 DELETE FROM _widgets WHERE wd_id = 'lang_changer';
 INSERT INTO _widgets
 (wd_id,          wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

@@ -25,6 +25,7 @@ INSERT INTO _system_config
 
 -- ウィジェット情報マスター
 ALTER TABLE _widgets ADD wd_template_type       TEXT                                         NOT NULL;      -- 対応するテンプレートタイプ(「,」区切りで指定。値=bootstrap,jquerymobile)
+ALTER TABLE _widgets ADD wd_latest_version      VARCHAR(10)    DEFAULT ''                    NOT NULL;      -- 最新バージョンのバージョン文字列
 
 -- *** システム標準テーブル ***
 

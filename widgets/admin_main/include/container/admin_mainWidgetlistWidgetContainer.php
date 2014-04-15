@@ -35,6 +35,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
 	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
+	const NEW_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/sql/update_widgets.sql';		// ウィジェットの最新情報ファイル
 	
 	/**
 	 * コンストラクタ
@@ -473,12 +474,16 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			} else {
 				$this->showDetail = 1;
 			}
-			// 画面設定値を更新
-			//$this->gDisp->setAdminConfig(admin_mainDef::CFG_SHOW_WIDGET_DETAIL, strval($this->showDetail));
+		} else if ($act == 'newinfo'){		// ウィジェットの最新情報を取得
+			// ウィジェットの最新情報ファイルを取得
+			$infoSrc = file_get_contents(self::NEW_INFO_URL);
+
+			// ウィジェットIDとバージョン番号を取得して登録
+			$exp = '/^\(\'([a-zA-Z0-9_\-\/]+?)\'.*\'([0-9\.]+?)\'/m';
+	        $dest = preg_replace_callback($exp, array($this, '_update_widget_info_callback'), $infoSrc);
+			
+			$this->setMsg(self::MSG_GUIDANCE, $this->_('Latest widget information gotten.'));		// 最新のウィジェット情報を取得しました
 		}
-		// 詳細設定状況を再取得
-		//$this->showDetail = intval($this->gDisp->getAdminConfig(admin_mainDef::CFG_SHOW_WIDGET_DETAIL));
-		
 		// ウィジェットのタイプごとの処理
 		switch ($this->widgetType){
 			case '0':		// PC用テンプレート
@@ -528,6 +533,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// テキストをローカライズ
 		$localeText = array();
+		$localeText['msg_get_new_info'] = $this->_('Get new information of widgets?');		// ウィジェットの最新情報を取得しますか?
 		$localeText['msg_update_line'] = $this->_('Update line?');		// 行を更新しますか?
 		$localeText['msg_delete_line'] = $this->_('Delete widget?');		// このウィジェットを削除しますか?
 		$localeText['msg_no_upload_file'] = $this->_('File not selected.');		// アップロードするファイルが選択されていません
@@ -536,9 +542,10 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 //		$localeText['label_widget_type'] = $this->_('Widget Type:');			// ウィジェットタイプ：
 		$localeText['label_install_dir'] = $this->_('Install Directory:');			// インストールディレクトリ:
 		$localeText['label_read_new'] = $this->_('Reload directory');			// ディレクトリ再読み込み
-		$localeText['label_show_detail'] = $this->_('Show detail');			// 詳細表示
+//		$localeText['label_show_detail'] = $this->_('Show detail');			// 詳細表示
 		$localeText['label_widget_name'] = $this->_('Name');			// 名前
 		$localeText['label_widget_version'] = $this->_('Version');			// バージョン
+		$localeText['label_widget_latest_version'] = $this->_('Latest');			// 最新
 		$localeText['label_widget_available'] = $this->_('Available');			// 配置可
 		$localeText['label_widget_active'] = $this->_('Active');			// 実行可
 		$localeText['label_widget_date'] = $this->_('Release Date');			// リリース日
@@ -550,6 +557,17 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['label_cancel'] = $this->_('Cancel');			// キャンセル
 		$this->setLocaleText($localeText);
 	}
+	/**
+	 * ウィジェットバージョン更新コールバック関数
+	 *
+	 * @param array $matchData		検索マッチデータ
+	 * @return string				変換後データ
+	 */
+    function _update_widget_info_callback($matchData)
+	{
+		$this->db->updateWidgetVerInfo($matchData[1], $matchData[2]);
+		return $matchData[0];
+    }
 	/**
 	 * ウィジェットのディレクトリの状態を取得
 	 *
@@ -659,6 +677,9 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function widgetListLoop($index, $fetchedRow, $param)
 	{
+		$version = $fetchedRow['wd_version'];
+		$latestVersion = $fetchedRow['wd_latest_version'];
+		
 		// ウィジェットが存在するかどうかチェック
 		$isExistsWidget = false;
 		$widgetId = $fetchedRow['wd_id'];// ウィジェットID
@@ -736,13 +757,18 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		$downloadImage = '<img src="' . $downloadImg . '" width="32" height="32" border="0" alt="' . $downloadStr . '" title="' . $downloadStr . '" />';
 		
+		// 最新バージョンの表示
+		$latestVer = '';
+		if (version_compare($version, $latestVersion) == -1) $latestVer = '<span class="available">' . $this->convertToDispString($latestVersion) . '</span>';
+		
 		$row = array(
 			'no' => $index + 1,													// 行番号
 			'serial' => $this->convertToDispString($fetchedRow['wd_serial']),			// シリアル番号
 			'id' => $this->convertToDispString($widgetId),			// ID
 			'id_text' => $idText,
 			'name' => $this->convertToDispString($fetchedRow['wd_name']),		// 名前
-			'version' => $this->convertToDispString($fetchedRow['wd_version']),		// バージョン
+			'version' => $this->convertToDispString($version),		// バージョン
+			'latest_version' => $latestVer,		// 最新バージョン
 			'release_dt' => $this->convertToDispDate($fetchedRow['wd_release_dt']),	// リリース日時
 			'available' => $available,												// 利用可能かどうか
 			'active' => $active,													// ウィジェット実行可能かどうか

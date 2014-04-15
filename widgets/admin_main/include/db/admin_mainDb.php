@@ -371,9 +371,11 @@ class admin_mainDb extends BaseDb
 		$updateFields[] = 'wd_table_access_type';	// テーブルのアクセス範囲(0=テーブル未使用、1=共通テーブルのみ、2=独自テーブル)
 		$updateFields[] = 'wd_content_name';		// コンテンツ名称(メニュー表示用)
 		$updateFields[] = 'wd_content_info';		// コンテンツ情報
-		$updateFields[] = 'wd_priority';		// 優先度
-		$updateFields[] = 'wd_category_id';		// 所属カテゴリー
-		$updateFields[] = 'wd_type_option';		// ウィジェット種別オプション(nav=ナビゲーションメニュー)
+		$updateFields[] = 'wd_priority';			// 優先度
+		$updateFields[] = 'wd_category_id';			// 所属カテゴリー
+		$updateFields[] = 'wd_type_option';			// ウィジェット種別オプション(nav=ナビゲーションメニュー)
+		$updateFields[] = 'wd_template_type';		// 対応するテンプレートタイプ(「,」区切りで指定。値=bootstrap,jquerymobile)
+		$updateFields[] = 'wd_latest_version';		// 最新バージョンのバージョン文字列
  
 		// トランザクション開始
 		$this->startTransaction();
@@ -558,6 +560,34 @@ class admin_mainDb extends BaseDb
 		$queryStr .=     'wd_update_dt = ? ';
 		$queryStr .=   'WHERE wd_serial = ?';
 		$this->execStatement($queryStr, array(intval($init), $userId, $now, $row['wd_serial']));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * ウィジェットのバージョン情報を更新
+	 *
+	 * @param string  $id				ウィジェットID
+	 * @param bool $verStr				バージョン文字列
+	 * @return bool						true=成功、false=失敗
+	 */
+	function updateWidgetVerInfo($id, $verStr)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// レコードを更新
+		$queryStr  = 'UPDATE _widgets ';
+		$queryStr .=   'SET wd_latest_version = ?, ';	// 最新バージョン
+		$queryStr .=     'wd_update_user_id = ?, ';
+		$queryStr .=     'wd_update_dt = ? ';
+		$queryStr .=   'WHERE wd_id = ? ';
+		$queryStr .=     'AND wd_deleted = false ';
+		$this->execStatement($queryStr, array($verStr, $userId, $now, $id));
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();

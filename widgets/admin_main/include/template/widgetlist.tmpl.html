@@ -18,6 +18,12 @@ function readnew(){
 	document.main.submit();
 	return false;
 }
+function getInfo(){
+	if (!window.confirm('{_LC_MSG_GET_NEW_INFO}')) return false;
+	document.main.act.value = 'newinfo';
+	document.main.submit();
+	return false;
+}
 function updateline(lineNo, serialNo){
 	if (!window.confirm('{_LC_MSG_UPDATE_LINE}')) return false;
 	document.main.act.value = 'updateline';
@@ -84,23 +90,27 @@ $(function(){
 <input type="hidden" name="no" />
 <input type="hidden" name="widget" />
 <table width="90%">
-<tr><td colspan="2">
+<tr><td>
 <span {_HELP_WIDGETLIST}><label>{_LC_LABEL_WIDGET_LIST}</label></span>&nbsp;&nbsp;
 <select name="item_type" onchange="changeType();">
 <patTemplate:tmpl name="item_type_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
 </select>
-<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a><a class="btn btn-xs" href="javascript:void(0);" onclick="changeDetail();">{AREA_OPEN_IMAGE}</a><input type="hidden" name="item_show_detail" value="{SHOW_DETAIL}" />
+<a class="btn btn-xs" href="javascript:void(0);" onclick="changeDetail();">{AREA_OPEN_IMAGE}</a><input type="hidden" name="item_show_detail" value="{SHOW_DETAIL}" />
+</td><td align="right">
+<input type="button" class="button" onclick="getInfo();" value="最新情報" />
+</td></tr>
 <patTemplate:tmpl name="show_dir" visibility="hidden">
+<tr><td colspan="2">
 <div>
 <span {_HELP_WIDGETLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
 <!--<span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>-->
+<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a>
 <span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><a class="btn btn-xs" href="javascript:void(0);" onclick="readnew();">{RELOAD_IMAGE}</a></span>
 </div>
+</td>
 </patTemplate:tmpl>
-<!--</td><td align="right"><span {_HELP_WIDGETLIST_DETAIL_CHECK}><label><input type="checkbox" name="item_show_detail" onclick="changeDetail();" {SHOW_DETAIL} />{_LC_LABEL_SHOW_DETAIL}</label></span>
-</td></tr>-->
 <tr><td colspan="2">
 <table id="widgetlist" class="simple-table" width="100%">
     <thead>
@@ -108,8 +118,9 @@ $(function(){
 	    <th width="20">No</th>
             <th width="20"></th>
             <th width="10%"><span {_HELP_WIDGETLIST_ID}>ID</span></th>
-	    <th width="23%"><span {_HELP_WIDGETLIST_NAME}>{_LC_LABEL_WIDGET_NAME}</span></th>
+	    <th width="20%"><span {_HELP_WIDGETLIST_NAME}>{_LC_LABEL_WIDGET_NAME}</span></th>
 	    <th width="8%">{_LC_LABEL_WIDGET_VERSION}</th>
+		<th width="5%">{_LC_LABEL_WIDGET_LATEST_VERSION}</th>
 	    <patTemplate:tmpl name="show_list_detail" visibility="hidden">
 	    <th width="5%"><span {_HELP_WIDGETLIST_AVAILABLE}>{_LC_LABEL_WIDGET_AVAILABLE}</span></th>
 	    <th width="5%"><span {_HELP_WIDGETLIST_ACTIVE}>{_LC_LABEL_WIDGET_ACTIVE}</span></th>
@@ -127,6 +138,7 @@ $(function(){
 	    <td>{ID_TEXT}</td>
 	    <td>{NAME}</td>
 	    <td align="center">{VERSION}</td>
+		<td align="center">{LATEST_VERSION}</td>
 	    <td align="center">{RELEASE_DT}</td>
 	    <td align="right">
 	    <input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_WIDGET_CONFIG}" {DETAIL_BUTTON} />
@@ -140,6 +152,7 @@ $(function(){
 	    <td>{ID_TEXT}</td>
 	    <td>{NAME}</td>
 	    <td align="center">{VERSION}</td>
+		<td align="center">{LATEST_VERSION}</td>
 	    <td align="center"><input type="checkbox" name="item{NO}_available" {AVAILABLE} {AVAILABLE_DISABLED} /></td>
 	    <td align="center"><input type="checkbox" name="item{NO}_active" {ACTIVE} {ACTIVE_DISABLED} /></td>
 	    <td align="center">{RELEASE_DT}</td>

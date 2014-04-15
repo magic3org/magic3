@@ -63,10 +63,10 @@ class help_widgetlist extends HelpConv
 				'title' =>	$this->_('Widget Upload'),			// ウィジェットアップロード
 				'body' =>	$this->_('Upload widget file compressed with zip format, install in the system. Error is occured if there is the same widget ID. <br />If \'Replace widget if exists.\' is checked, delete the widget and install new widget.')		// ZIP形式のウィジェットファイルをアップロードし、システムにウィジェットをインストールします。同じIDのウィジェットがすでに存在する場合はエラーになります。<br />「ウィジェットが存在する場合は置き換え」にチェックが入っている場合、既存のウィジェットを削除した後、ウィジェットをインストールします。
 			),
-			'widgetlist_detail_check' => array(	
+/*			'widgetlist_detail_check' => array(	
 				'title' =>	$this->_('Show detail'),			// 詳細表示
 				'body' =>	$this->_('Show detail list if checked.')		// チェックを入れると一覧が詳細表示できます。
-			),
+			),*/
 			'widgetlist_reload_dir_btn' => array(	
 				'title' =>	$this->_('Reload directory'),			// ディレクトリ再読み込み
 				'body' =>	$this->_('Reload the directory and automatically install unlisted widget.')		// ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェットを自動的にインストールします。
