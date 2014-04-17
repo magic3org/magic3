@@ -78,7 +78,9 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-
+file_put_contents("/var/www/html/magic3/master.zip", 
+    file_get_contents("https://github.com/magic3org/magic3/archive/master.zip")
+);
 	}
 }
 ?>

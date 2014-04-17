@@ -479,7 +479,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$infoSrc = file_get_contents(self::NEW_INFO_URL);
 
 			// ウィジェットIDとバージョン番号を取得して登録
-			$exp = '/^\(\'([a-zA-Z0-9_\-\/]+?)\'.*\'([0-9\.]+?)\'/m';
+			$exp = '/^\(\'([a-zA-Z0-9_\-\/]+)\'.*\'([0-9\.]+[a-z]*)\'/m';			// バージョン番号の最後の「b」(ベータ版)等は許可
 	        $dest = preg_replace_callback($exp, array($this, '_update_widget_info_callback'), $infoSrc);
 			
 			$this->setMsg(self::MSG_GUIDANCE, $this->_('Latest widget information gotten.'));		// 最新のウィジェット情報を取得しました
@@ -759,8 +759,24 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// 最新バージョンの表示
 		$latestVer = '';
-		if (version_compare($version, $latestVersion) == -1) $latestVer = '<span class="available">' . $this->convertToDispString($latestVersion) . '</span>';
-		
+		$regex = '/([0-9\.]+)([a-z]*)/';
+		if (preg_match($regex, $latestVersion, $matches)){
+			if (version_compare($version, $latestVersion) == -1){		// 最新バージョンが現在のバージョンよりも上の場合のみ表示
+				$optionVerStr = strtolower($matches[2]);
+				if (empty($optionVerStr)){		// 付加記号なしの場合
+					$latestVer = '<span class="available">' . $this->convertToDispString($latestVersion) . '</span>';
+				} else {
+					switch ($optionVerStr){
+						case 'x':		// 緊急バージョンアップ
+							$latestVer = '<span class="emergency">' . $this->convertToDispString($latestVersion) . '</span>';
+							break;
+						default:		// ベータ版等
+							$latestVer = '<span>' . $this->convertToDispString($latestVersion) . '</span>';
+							break;
+					}
+				}
+			}
+		}
 		$row = array(
 			'no' => $index + 1,													// 行番号
 			'serial' => $this->convertToDispString($fetchedRow['wd_serial']),			// シリアル番号
