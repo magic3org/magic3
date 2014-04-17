@@ -17,6 +17,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 require_once($gEnvManager->getLibPath() .	'/tcpdf/config/lang/jpn.php');
 require_once($gEnvManager->getLibPath() .	'/tcpdf/tcpdf.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
+require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
 
 class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 {
@@ -78,9 +79,10 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-file_put_contents("/var/www/html/magic3/master.zip", 
-    file_get_contents("https://github.com/magic3org/magic3/archive/master.zip")
-);
+		$repo = new GitRepo('magic3org', 'magic3');
+//		$res = $repo->getDirInfo('/include');
+$res = $repo->getFileList('/widgets/blog_search_box', true);
+		print_r($res);
 	}
 }
 ?>
