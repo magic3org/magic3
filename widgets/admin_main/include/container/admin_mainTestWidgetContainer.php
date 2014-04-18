@@ -81,8 +81,16 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		$repo = new GitRepo('magic3org', 'magic3');
 //		$res = $repo->getDirInfo('/include');
-$res = $repo->getFileList('/widgets/blog_search_box', true);
-		print_r($res);
+//$res = $repo->getFileList('/widgets/blog_search_box', true);
+		$ret = $repo->createZipArchive('/widgets/blog_search_box', $this->gEnv->getIncludePath() . DIRECTORY_SEPARATOR . 'widgets_update' . DIRECTORY_SEPARATOR . 'blog_search_box.zip');
+		if (!$ret){
+			$resCode = $repo->getResponseCode();
+			if ($resCode == 403){
+				echo '接続回数の上限を超えました。しばらく待ってから再度接続してください。';
+			} else {
+				echo 'GitHubへの接続に失敗しました。';
+			}
+		}
 	}
 }
 ?>
