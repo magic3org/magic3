@@ -638,9 +638,15 @@ background-color: #0081c2;
 	opacity: 0;
 }
 /****** ステータス表示 ******/
+.required {
+	color:red;
+}
 .available {
 	color:green;
 }
 .emergency {
+	color:red;
+}
+.error {
 	color:red;
 }
