@@ -304,11 +304,10 @@ class admin_mainDb extends BaseDb
 	 * ウィジェットの更新
 	 *
 	 * @param int $serial			シリアル番号
-	 * @param bool $available		利用可能かどうか
-	 * @param bool $active	ウィジェット実行可能かどうか
+	 * @param array $updateParams	更新パラメータ
 	 * @return bool					true=成功、false=失敗
 	 */
-	function updateWidget($serial, $available, $active)
+	function updateWidget($serial, $updateParams)
 	{
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
 		$now = date("Y/m/d H:i:s");	// 現在日時
@@ -350,6 +349,8 @@ class admin_mainDb extends BaseDb
 		$updateFields[] = 'wd_read_scripts'; $boolFields[] = 'wd_read_scripts';		// スクリプトディレクトリを自動読み込みするかどうか
 		$updateFields[] = 'wd_read_css'; $boolFields[] = 'wd_read_css';			// cssディレクトリを自動読み込みするかどうか
 		$updateFields[] = 'wd_use_ajax'; $boolFields[] = 'wd_use_ajax';			// Ajax共通ライブラリを読み込むかどうか
+    	$updateFields[] = 'wd_active'; $boolFields[] = 'wd_use_ajax';			// 一般ユーザが実行可能かどうか
+    	$updateFields[] = 'wd_available'; $boolFields[] = 'wd_use_ajax';		// メニューから選択可能かどうか
 		$updateFields[] = 'wd_editable'; $boolFields[] = 'wd_editable';			// データ編集可能かどうか
 		$updateFields[] = 'wd_edit_content'; $boolFields[] = 'wd_edit_content';	// 主要コンテンツ編集可能かどうか
 		$updateFields[] = 'wd_has_admin'; $boolFields[] = 'wd_has_admin';			// 管理画面があるかどうか
@@ -382,8 +383,8 @@ class admin_mainDb extends BaseDb
 		
 		// 指定のシリアルNoのレコードが削除状態でないかチェック
 		$historyIndex = 0;		// 履歴番号
-		$queryStr  = 'select * from _widgets ';
-		$queryStr .=   'where wd_serial = ? ';
+		$queryStr  = 'SELECT * FROM _widgets ';
+		$queryStr .=   'WHERE wd_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		if ($ret){		// 既に登録レコードがあるとき
 			if ($row['wd_deleted']){		// レコードが削除されていれば終了
@@ -406,10 +407,10 @@ class admin_mainDb extends BaseDb
 		
 		// ##### データ更新処理 #####
 		// 呼び出しパラメータから取得値
-		$newParams = array();
-		$newParams['wd_available'] = intval($available);
-		$newParams['wd_active'] = intval($active);
-		$keys = array_keys($newParams);// キーを取得
+//		$newParams = array();
+//		$newParams['wd_available'] = intval($available);
+//		$newParams['wd_active'] = intval($active);
+		$keys = array_keys($updateParams);// キーを取得
 		
 		// クエリー作成
 		$queryStr  = 'INSERT INTO _widgets (';
@@ -419,12 +420,19 @@ class admin_mainDb extends BaseDb
 		$values = array($row['wd_id'], $historyIndex);
 		// 呼び出しパラメータから取得値を連結
 		for ($i = 0; $i < count($keys); $i++){
-			$queryStr .= $keys[$i] . ', ';
+			$fieldName = $keys[$i];
+			$queryStr .= $fieldName . ', ';
 			$valueStr .= '?, ';
-			$values[] = $newParams[$keys[$i]];
+//			$values[] = $newParams[$keys[$i]];
+			if (in_array($fieldName, $boolFields)){
+				$values[] = intval($updateParams[$fieldName]);
+			} else {
+				$values[] = $updateParams[$fieldName];
+			}
 		}
 		
 		// 更新値を設定
+		/*
 		if ($this->getDbType() == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
 			for ($i = 0; $i < count($updateFields); $i++){
 				$fieldName = $updateFields[$i];
@@ -444,6 +452,18 @@ class admin_mainDb extends BaseDb
 				if (!in_array($fieldName, $keys)){		// フィールドがないとき
 					$queryStr .= $fieldName . ', ';
 					$valueStr .= '?, ';
+					$values[] = $row[$fieldName];
+				}
+			}
+		}*/
+		for ($i = 0; $i < count($updateFields); $i++){
+			$fieldName = $updateFields[$i];
+			if (!in_array($fieldName, $keys)){		// フィールドがないとき
+				$queryStr .= $fieldName . ', ';
+				$valueStr .= '?, ';
+				if (in_array($fieldName, $boolFields)){
+					$values[] = intval($row[$fieldName]);
+				} else {
 					$values[] = $row[$fieldName];
 				}
 			}

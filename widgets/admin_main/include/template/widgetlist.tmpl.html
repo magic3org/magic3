@@ -44,6 +44,13 @@ function detailline(widgetId){
 	m3ShowStandardWindow("?cmd=configwidget&openby=all&widget=" + widgetId);
 	return false;
 }
+function updateWidget(widgetId){
+	if (!window.confirm('{_LC_MSG_UPDATE_WIDGET}')) return false;
+	document.main.act.value = 'updatewidget';
+	document.main.widget.value = widgetId;
+	document.main.submit();
+	return false;
+}
 function uploadCheck(){
 	if (!document.upload.upfile.value){
 		alert('{_LC_MSG_NO_UPLOAD_FILE}');

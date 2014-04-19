@@ -4229,7 +4229,7 @@ class PageManager extends Core
 		} else {
 			// ウィジェットが存在する場合は実行
 			if (!file_exists($widgetIndexFile)) {
-				echo 'widget not found error: ' . $widgetId;
+				if ($gEnvManager->isSystemManageUser()) echo '<span class="error">widget not found error: ' . $widgetId . '</span>';		// システム運用者の場合はエラーメッセージ表示
 			} else {
 				// パラメータ初期化
 				$this->lastHeadCss = '';			// 最後に設定したHTMLヘッダにCSS出力する文字列
@@ -4397,7 +4397,7 @@ class PageManager extends Core
 		if (file_exists($widgetIndexFile)){
 			require($widgetIndexFile);
 		} else {
-			echo 'widget not found error: ' . $widgetId;
+			if ($gEnvManager->isSystemManageUser()) echo '<span class="error">widget not found error: ' . $widgetId . '</span>';		// システム運用者の場合はエラーメッセージ表示
 		}
 		$msg = 'widget-end(' . $widgetId . ')';
 		$gErrorManager->writeDebug(__METHOD__, $msg);		// 時間計測用

@@ -16,6 +16,7 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
+require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
 require_once($gEnvManager->getCurrentWidgetContainerPath()		. '/admin_mainDef.php');			// 定義クラス
 
 class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
@@ -183,7 +184,10 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$updateAvailable = ($request->trimValueOf('item' . $selectedItemNo . '_available') == 'on') ? 1 : 0;		// 利用可能かどうか
 			$updateActive = ($request->trimValueOf('item' . $selectedItemNo . '_active') == 'on') ? 1 : 0;		// ウィジェット実行可能かどうか
 			
-			$ret = $this->db->updateWidget($serial, $updateAvailable, $updateActive);
+			$updateParams = array();
+			$updateParams['wd_available'] = $updateAvailable;
+			$updateParams['wd_active'] = $updateActive;
+			$ret = $this->db->updateWidget($serial, $updateParams);
 			if ($ret){		// データ更新成功のとき
 				$this->setMsg(self::MSG_GUIDANCE, $this->_('Line updated.'));		// データを更新しました
 			} else {
@@ -483,6 +487,75 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	        $dest = preg_replace_callback($exp, array($this, '_update_widget_info_callback'), $infoSrc);
 			
 			$this->setMsg(self::MSG_GUIDANCE, $this->_('Latest widget information gotten.'));		// 最新のウィジェット情報を取得しました
+		} else if ($act == 'updatewidget'){		// ウィジェットの更新
+			// ### 最新のバージョン番号をチェック ###
+			$canUpdate = false;			// 更新可能かどうか
+			
+			// 現在のバージョン取得
+			$ret = $this->_db->getWidgetInfo($widgetId, $row);
+			if ($ret) $version = $row['wd_version'];		// ウィジェットのバージョン
+											
+			// ウィジェットの最新情報ファイルを取得
+			$infoSrc = file_get_contents(self::NEW_INFO_URL);
+
+			// ウィジェットIDとバージョン番号を取得して登録
+			$exp = '/^\(\'' . preg_quote($widgetId) . '\'.*\'([0-9\.]+[a-z]*)\'/m';			// バージョン番号の最後の「b」(ベータ版)等は許可
+			if (preg_match($exp, $infoSrc, $matches)){
+				$latestVersion = $matches[1];
+				
+				if (!empty($version) && !empty($latestVersion) && version_compare($version, $latestVersion) == -1) $canUpdate = true;		// 最新バージョンが現在のバージョンよりも上の場合
+			}
+			if ($canUpdate){
+				// GitHubからソースコードを取得
+				$zipFilePath = $this->gEnv->getIncludePath() . '/widgets_update/' . $widgetId . '#' . date('Ymd') . '.zip';
+				$repo = new GitRepo('magic3org', 'magic3');
+				$ret = $repo->createZipArchive('/widgets/' . $widgetId, $zipFilePath);
+				if ($ret){		// Zipファイル作成完了のとき
+					// 既存ウィジェットのバックアップ
+					$status = false;
+					$widgetDir = $this->gEnv->getWidgetsPath() . '/' . $widgetId;		// ウィジェットのディレクトリ
+					$zipFilePath = $this->gEnv->getIncludePath() . '/widgets_update/' . $widgetId . '.zip';
+					$zipFile = new PclZip($zipFilePath);
+					$ret = $zipFile->create($widgetDir, PCLZIP_OPT_REMOVE_PATH, dirname($widgetDir));
+					if ($ret){
+						// 作業ディレクトリを作成
+						$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+						if (file_exists($tmpDir)) rmDirectory($tmpDir);		// 存在する場合は一旦削除
+							
+						// ダウンロードしたウィジェットと入れ替え
+						$zipFile = new PclZip($zipFilePath);
+						$ret = $zipFile->extract(PCLZIP_OPT_PATH, $tmpDir);
+						if ($ret){
+							$ret = rmDirectory($widgetDir);
+							if ($ret) $ret = mvDirectory($tmpDir . '/' . basename($widgetId), $widgetDir);
+							if ($ret){		// 完了の場合はバージョン情報を更新
+								$updateParams = array();
+								$updateParams['wd_version'] = $latestVersion;
+								$ret = $this->db->updateWidget($row['wd_serial'], $updateParams);
+								if ($ret) $status = true;		// ウィジェット更新完了
+							}
+						}
+					}
+					if ($status){
+						$msg = $this->_('Widget updated successfully.');		// ウィジェットの更新が完了しました。
+						$this->setGuidanceMsg($msg);
+					} else {
+						$msg = $this->_('Failed in updating widget.');		// ウィジェットの更新に失敗しました
+						$this->setAppErrorMsg($msg);
+					}
+				} else {		// Zipファイル作成失敗のとき
+					$resCode = $repo->getResponseCode();
+					if ($resCode == 403){
+						$msg = $this->_('Connection count is over the limit. Wait a minute, connect again.');		// ウィジェットの更新に失敗しました
+					} else {
+						$msg = $this->_('Failed in connecting to GitHub.');		// GitHubへの接続に失敗しました
+					}
+					$this->setAppErrorMsg($msg);
+				}
+			} else {
+				$msg = $this->_('The widget is already the latest version.');		// ウィジェットはすでに最新バージョンです
+				$this->setAppErrorMsg($msg);
+			}
 		}
 		// ウィジェットのタイプごとの処理
 		switch ($this->widgetType){
@@ -538,6 +611,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['msg_delete_line'] = $this->_('Delete widget?');		// このウィジェットを削除しますか?
 		$localeText['msg_no_upload_file'] = $this->_('File not selected.');		// アップロードするファイルが選択されていません
 		$localeText['msg_upload_file'] = $this->_('Upload file.');		// ファイルをアップロードします
+		$localeText['msg_update_widget'] = $this->_('Update widget?');		// ウィジェットを更新しますか?
 		$localeText['label_widget_list'] = $this->_('Widget List');			// ウィジェット一覧
 //		$localeText['label_widget_type'] = $this->_('Widget Type:');			// ウィジェットタイプ：
 		$localeText['label_install_dir'] = $this->_('Install Directory:');			// インストールディレクトリ:
@@ -764,7 +838,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			if (version_compare($version, $latestVersion) == -1){		// 最新バージョンが現在のバージョンよりも上の場合のみ表示
 				$optionVerStr = strtolower($matches[2]);
 				if (empty($optionVerStr)){		// 付加記号なしの場合
-					$latestVer = '<span class="available">' . $this->convertToDispString($latestVersion) . '</span>';
+					$latestVer = '<span class="available"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . $this->convertToDispString($latestVersion) . '</a></span>';
 				} else {
 					switch ($optionVerStr){
 						case 'x':		// 緊急バージョンアップ
