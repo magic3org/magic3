@@ -842,7 +842,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 				} else {
 					switch ($optionVerStr){
 						case 'x':		// 緊急バージョンアップ
-							$latestVer = '<span class="emergency">' . $this->convertToDispString($latestVersion) . '</span>';
+							$latestVer = '<span class="emergency"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . 
+											$this->convertToDispString($latestVersion) . '</a></span>';
 							break;
 						default:		// ベータ版等
 							$latestVer = '<span>' . $this->convertToDispString($latestVersion) . '</span>';
