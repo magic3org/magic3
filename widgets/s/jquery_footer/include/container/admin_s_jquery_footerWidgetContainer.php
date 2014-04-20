@@ -8,16 +8,15 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_s_jquery_footerWidgetContainer.php 5823 2013-03-13 22:07:53Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
 class admin_s_jquery_footerWidgetContainer extends BaseAdminWidgetContainer
 {
-	private $sysDb;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
 	private $langId;
@@ -35,7 +34,6 @@ class admin_s_jquery_footerWidgetContainer extends BaseAdminWidgetContainer
 		parent::__construct();
 		
 		// DBオブジェクト作成
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -312,7 +310,7 @@ class admin_s_jquery_footerWidgetContainer extends BaseAdminWidgetContainer
 			
 			$defCount = 0;
 			if (!empty($id)){
-				$defCount = $this->sysDb->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
+				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
 			}
 			$operationDisagled = '';
 			if ($defCount > 0) $operationDisagled = 'disabled';
