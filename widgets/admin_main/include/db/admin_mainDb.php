@@ -406,10 +406,11 @@ class admin_mainDb extends BaseDb
 		$this->execStatement($queryStr, array($userId, $now, $serial));
 		
 		// ##### データ更新処理 #####
-		// 呼び出しパラメータから取得値
-//		$newParams = array();
-//		$newParams['wd_available'] = intval($available);
-//		$newParams['wd_active'] = intval($active);
+		// 更新対象外を除く
+		$unsetParams = array('wd_id', 'wd_history_index', 'wd_create_user_id', 'wd_create_dt');
+		for ($i = 0; $i < count($unsetParams); $i++){
+			unset($updateParams[$unsetParams[$i]]);
+		}
 		$keys = array_keys($updateParams);// キーを取得
 		
 		// クエリー作成
@@ -423,7 +424,6 @@ class admin_mainDb extends BaseDb
 			$fieldName = $keys[$i];
 			$queryStr .= $fieldName . ', ';
 			$valueStr .= '?, ';
-//			$values[] = $newParams[$keys[$i]];
 			if (in_array($fieldName, $boolFields)){
 				$values[] = intval($updateParams[$fieldName]);
 			} else {
@@ -432,30 +432,6 @@ class admin_mainDb extends BaseDb
 		}
 		
 		// 更新値を設定
-		/*
-		if ($this->getDbType() == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
-			for ($i = 0; $i < count($updateFields); $i++){
-				$fieldName = $updateFields[$i];
-				if (!in_array($fieldName, $keys)){		// フィールドがないとき
-					$queryStr .= $fieldName . ', ';
-					$valueStr .= '?, ';
-					if (in_array($fieldName, $boolFields)){
-						$values[] = intval($row[$fieldName]);
-					} else {
-						$values[] = $row[$fieldName];
-					}
-				}
-			}
-		} else {
-			for ($i = 0; $i < count($updateFields); $i++){
-				$fieldName = $updateFields[$i];
-				if (!in_array($fieldName, $keys)){		// フィールドがないとき
-					$queryStr .= $fieldName . ', ';
-					$valueStr .= '?, ';
-					$values[] = $row[$fieldName];
-				}
-			}
-		}*/
 		for ($i = 0; $i < count($updateFields); $i++){
 			$fieldName = $updateFields[$i];
 			if (!in_array($fieldName, $keys)){		// フィールドがないとき

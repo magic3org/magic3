@@ -80,9 +80,26 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$repo = new GitRepo('magic3org', 'magic3');
-//		$res = $repo->getDirInfo('/include');
-//$res = $repo->getFileList('/widgets/blog_search_box', true);
-		$ret = $repo->createZipArchive('/widgets/blog_search_box', $this->gEnv->getIncludePath() . DIRECTORY_SEPARATOR . 'widgets_update' . DIRECTORY_SEPARATOR . 'blog_search_box.zip');
+		$infoSrc = file_get_contents('https://raw.githubusercontent.com/magic3org/magic3/master/include/sql/update_widgets.sql');
+		
+		$widgetId = 'blog_search_box';
+		//$exp = '/INSERT INTO _widgets.*VALUES.*\(\'' . preg_quote($widgetId) . '\'.*\'([0-9\.]+[a-z]*)\'.*\);/s';			// バージョン番号の最後の「b」(ベータ版)等は許可
+		//$exp = '/INSERT\sINTO\s_widgets.*?\(.*?\).*?VALUES.*?\(.*?\);/s';
+		//$exp = '/INSERT\sINTO\s_widgets.*?\(.*?\)\sVALUES\s\(\'' . preg_quote($widgetId) . '\'/s';
+		//$exp = '/INSERT.*?\(\'' . preg_quote($widgetId) . '\'/s';
+		$exp = '/INSERT\sINTO\s_widgets[\s]*?\(([^\n]*?)\)[\s]*?VALUES[\s]*?\((\'' . preg_quote($widgetId) . '\'[^\n]*?)\);/s';
+		if (preg_match($exp, $infoSrc, $matches)){
+//echo $matches[0].'<br />';
+echo $matches[1].'<br />';
+echo $matches[2].'<br />';
+
+		$keyArray = array_map('trim', explode(',', $matches[1]));
+		$valueArray = explode(',', $matches[2]);
+		$valueArray = array_map(create_function('$a', 'return trim($a, " \'");'), $valueArray);
+var_dump($keyArray);
+var_dump($valueArray);
+		}
+/*		$ret = $repo->createZipArchive('/widgets/blog_search_box', $this->gEnv->getIncludePath() . DIRECTORY_SEPARATOR . 'widgets_update' . DIRECTORY_SEPARATOR . 'blog_search_box.zip');
 		if (!$ret){
 			$resCode = $repo->getResponseCode();
 			if ($resCode == 403){
@@ -90,7 +107,7 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 			} else {
 				echo 'GitHubへの接続に失敗しました。';
 			}
-		}
+		}*/
 	}
 }
 ?>

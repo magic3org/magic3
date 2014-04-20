@@ -529,10 +529,16 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 							$ret = rmDirectory($widgetDir);
 							if ($ret) $ret = mvDirectory($tmpDir . '/' . basename($widgetId), $widgetDir);
 							if ($ret){		// 完了の場合はバージョン情報を更新
-								$updateParams = array();
-								$updateParams['wd_version'] = $latestVersion;
-								$ret = $this->db->updateWidget($row['wd_serial'], $updateParams);
-								if ($ret) $status = true;		// ウィジェット更新完了
+								// DBに登録するウィジェット情報を取得
+								$exp = '/INSERT\sINTO\s_widgets[\s]*?\(([^\n]*?)\)[\s]*?VALUES[\s]*?\((\'' . preg_quote($widgetId) . '\'[^\n]*?)\);/s';
+								if (preg_match($exp, $infoSrc, $matches)){
+									// パラメータ解析
+									$updateParams = $this->_parseSqlQuery($matches[1], $matches[2]);
+									if (count($updateParams) > 0){
+										$ret = $this->db->updateWidget($row['wd_serial'], $updateParams);
+										if ($ret) $status = true;		// ウィジェット更新完了
+									}
+								}
 							}
 						}
 					}
@@ -642,6 +648,28 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->db->updateWidgetVerInfo($matchData[1], $matchData[2]);
 		return $matchData[0];
     }
+	/**
+	 * SQLクエリー文字列を解析して、パラメータを取得
+	 *
+	 * @param string $keys			キー文字列
+	 * @param string $values		値文字列
+	 * @return array				解析したパラメータの連想配列
+	 */
+    function _parseSqlQuery($keys, $values)
+	{
+		$updateParams = array();
+		
+		$keyArray = array_map('trim', explode(',', $keys));
+		$valueArray = explode(',', $values);
+		$valueArray = array_map(create_function('$a', 'return trim($a, " \'");'), $valueArray);
+		if (count($keyArray) == count($valueArray)){
+			$keyCount = count($keyArray);
+			for ($i = 0; $i < $keyCount; $i++){
+				$updateParams[$keyArray[$i]] = $valueArray[$i];
+			}
+		}
+		return $updateParams;
+	}
 	/**
 	 * ウィジェットのディレクトリの状態を取得
 	 *
