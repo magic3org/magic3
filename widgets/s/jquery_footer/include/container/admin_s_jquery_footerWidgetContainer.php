@@ -32,8 +32,6 @@ class admin_s_jquery_footerWidgetContainer extends BaseAdminWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
 	}
 	/**
 	 * テンプレートファイルを設定

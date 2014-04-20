@@ -661,14 +661,36 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		$keyArray = array_map('trim', explode(',', $keys));
 		$valueArray = explode(',', $values);
-		$valueArray = array_map(create_function('$a', 'return trim($a, " \'");'), $valueArray);
+		//$valueArray = array_map(create_function('$a', 'return trim($a, " \'");'), $valueArray);
+		$valueArray = array_map(array($this, '_realValue'), $valueArray);
 		if (count($keyArray) == count($valueArray)){
 			$keyCount = count($keyArray);
 			for ($i = 0; $i < $keyCount; $i++){
 				$updateParams[$keyArray[$i]] = $valueArray[$i];
 			}
 		}
+var_dump($updateParams);
 		return $updateParams;
+	}
+	/**
+	 * SQLクエリー用の値の型を整える
+	 *
+	 * @param string $value			SQLクエリー文字列
+	 * @return						型変換した値
+	 */
+    function _realValue($value)
+	{
+		$value = trim($value);
+		if (strStartsWith($value, '\'') && strEndsWith($value, '\'')){			// 文字列
+			$value = trim($value, '\'');
+		} else {
+			if (strcasecmp($value, 'true') == 0){
+				$value = 1;
+			} else if (strcasecmp($value, 'false') == 0){
+				$value = 0;
+			}
+		}
+		return $value;
 	}
 	/**
 	 * ウィジェットのディレクトリの状態を取得
