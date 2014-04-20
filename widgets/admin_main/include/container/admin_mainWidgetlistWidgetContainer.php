@@ -499,7 +499,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$infoSrc = file_get_contents(self::NEW_INFO_URL);
 
 			// ウィジェットIDとバージョン番号を取得して登録
-			$exp = '/^\(\'' . preg_quote($widgetId) . '\'.*\'([0-9\.]+[a-z]*)\'/m';			// バージョン番号の最後の「b」(ベータ版)等は許可
+			$exp = '/^\(\'' . preg_quote($widgetId, '/') . '\'.*\'([0-9\.]+[a-z]*)\'/m';			// バージョン番号の最後の「b」(ベータ版)等は許可
 			if (preg_match($exp, $infoSrc, $matches)){
 				$latestVersion = $matches[1];
 				
@@ -514,8 +514,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 					// 既存ウィジェットのバックアップ
 					$status = false;
 					$widgetDir = $this->gEnv->getWidgetsPath() . '/' . $widgetId;		// ウィジェットのディレクトリ
-					$zipFilePath = $this->gEnv->getIncludePath() . '/widgets_update/' . $widgetId . '.zip';
-					$zipFile = new PclZip($zipFilePath);
+					$backupZipFilePath = $this->gEnv->getIncludePath() . '/widgets_update/' . $widgetId . '.zip';
+					$zipFile = new PclZip($backupZipFilePath);
 					$ret = $zipFile->create($widgetDir, PCLZIP_OPT_REMOVE_PATH, dirname($widgetDir));
 					if ($ret){
 						// 作業ディレクトリを作成
@@ -530,7 +530,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 							if ($ret) $ret = mvDirectory($tmpDir . '/' . basename($widgetId), $widgetDir);
 							if ($ret){		// 完了の場合はバージョン情報を更新
 								// DBに登録するウィジェット情報を取得
-								$exp = '/INSERT\sINTO\s_widgets[\s]*?\(([^\n]*?)\)[\s]*?VALUES[\s]*?\((\'' . preg_quote($widgetId) . '\'[^\n]*?)\);/s';
+								$exp = '/INSERT\sINTO\s_widgets[\s]*?\(([^\n]*?)\)[\s]*?VALUES[\s]*?\((\'' . preg_quote($widgetId, '/') . '\'[^\n]*?)\);/s';
 								if (preg_match($exp, $infoSrc, $matches)){
 									// パラメータ解析
 									$updateParams = $this->_parseSqlQuery($matches[1], $matches[2]);

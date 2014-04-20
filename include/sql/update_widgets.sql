@@ -565,7 +565,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 's/jquery_footer';
 INSERT INTO _widgets
 (wd_id,             wd_name,                 wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/jquery_footer', 'jQueryページ - フッタ', 'design',       '1.0.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のフッタ', 2,              'jquery.mobile',          '',            true, false,                      true,true, 1, 1, '2014-04-20', now(), now());
+('s/jquery_footer', 'jQueryページ - フッタ', 'design',       '1.0.2',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のフッタ', 2,              'jquery.mobile',          '',            true, false,                      true,true, 1, 1, '2014-04-20', now(), now());
 DELETE FROM _widgets WHERE wd_id = 's/jquery_init';
 INSERT INTO _widgets
 (wd_id,           wd_name,                 wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
