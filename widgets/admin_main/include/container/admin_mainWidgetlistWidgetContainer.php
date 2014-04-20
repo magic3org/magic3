@@ -661,7 +661,6 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		$keyArray = array_map('trim', explode(',', $keys));
 		$valueArray = explode(',', $values);
-		//$valueArray = array_map(create_function('$a', 'return trim($a, " \'");'), $valueArray);
 		$valueArray = array_map(array($this, '_realValue'), $valueArray);
 		if (count($keyArray) == count($valueArray)){
 			$keyCount = count($keyArray);
@@ -669,7 +668,6 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 				$updateParams[$keyArray[$i]] = $valueArray[$i];
 			}
 		}
-var_dump($updateParams);
 		return $updateParams;
 	}
 	/**
