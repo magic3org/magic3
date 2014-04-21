@@ -162,8 +162,8 @@ INSERT INTO _widgets
 ('ec_search_box', 'Eコマース - 検索', 'ECSR',  'commerce',     '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Eコマース商品検索ボックス。',         false,           false,       true,         true,        false,         false,               false,true,               0, 1, -1, now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'ec_product_random';
 INSERT INTO _widgets
-(wd_id,               wd_name,                        wd_category_id, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('ec_product_random', 'Eコマース - 商品ランダム表示', 'commerce',     '2.0.0',  '',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, '商品をランダムに表示する。', 'jquery.easing,jquery.jcarousel',    true,         true,        true,        false,               false,true,           0, 0, 0, '2012-12-13', now(), now());
+(wd_id,               wd_name,                        wd_category_id, wd_version, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('ec_product_random', 'Eコマース - 商品ランダム表示', 'commerce',     '2.0.0',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, '商品をランダムに表示する。', 'jquery.easing,jquery.jcarousel',    true,         true,        true,        false,               false,true,           0, 0, 0, '2012-12-13', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'ec_disp';
 INSERT INTO _widgets
 (wd_id,     wd_name,                wd_content_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                      wd_has_admin, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
