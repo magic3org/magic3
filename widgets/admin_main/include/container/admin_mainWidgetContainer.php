@@ -234,8 +234,6 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					}
 					// コンテナを起動
 					switch ($task){
-						case 'menu':			// 
-						case 'test':			// テスト用画面
 						case 'top':			// トップ画面
 						case 'userlist':	// ユーザリスト
 						case 'usergroup':	// ユーザグループ
@@ -253,7 +251,6 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'usercustom':	// ユーザ定義値管理
 						case 'createtable':		// テーブル作成
 						case 'edittable':		// テーブル編集
-						case 'editmenu':		// メニュー編集
 						case 'pageinfo':		// ページ情報
 						case 'pageid':			// ページID
 						case 'menuid':			// メニューID
@@ -273,6 +270,13 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'tenantserver':			// テナントサーバ管理
 						case 'analyzecalc':		// アクセス解析集計
 						case 'analyzegraph':		// アクセス解析グラフ表示
+						
+						// 管理画面の設定用
+						case 'menu':			// 管理画面設定メニュー
+						case 'menucore':		// 管理画面コア設定メニュー
+						case 'editmenu':		// メニュー編集
+						case 'corefile':		// コアファイル編集
+						case 'test':			// テスト用画面
 							$this->gLaunch->goSubWidget($task);
 							return false;
 						case 'logout':		// ログアウト処理
