@@ -3045,10 +3045,6 @@ class PageManager extends Core
 						$scriptURL = $scriptsUrl . '/' . self::M3_ADMIN_WIDGET_SCRIPT_FILENAME;
 						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 						$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
-						// キー割付用
-						//$scriptURL = $scriptsUrl . '/' . ScriptLibInfo::JQUERY_JSHOTKEYS_FILENAME;
-						//if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-						//$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
 					}
 				} else {		// システム運用権限がない場合
 					// 管理権限なしで管理ディレクトリアクセスで必要なスクリプトを読み込む
@@ -3176,10 +3172,7 @@ class PageManager extends Core
 						$replaceStr .= 'function gobackPagedef(){' . M3_NL;
 						$replaceStr .= '    window.location.href = "' . $gEnvManager->getDefaultAdminUrl() . '?pageid=' . $pageId . '&pagesubid=' . $pageSubId . '&task=' . $task . '";' . M3_NL;
 						$replaceStr .= '}' . M3_NL;
-						//$replaceStr .= '$(document).ready(function(){' . M3_NL;
 						$replaceStr .= '$(function(){' . M3_NL;
-						//$replaceStr .= '    jQuery.hotkeys.add("esc", function(){' . M3_NL;
-						//$replaceStr .= '        gobackPagedef();' . M3_NL;
 						$replaceStr .= '    $(document).keyup(function(e){' . M3_NL;
 						$replaceStr .= '        if (e.which == 36) gobackPagedef();' . M3_NL;
 						$replaceStr .= '    });' . M3_NL;

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -23,10 +23,18 @@ function menuLogout()
 function editMenu(){
 	window.location.href = '{ADMIN_URL}?task=menu';
 }
-$(document).ready(function(){
+function goCoreMenu(){
+	alert("core");
+	//window.location.href = '{ADMIN_URL}?task=menucore';
+}
+$(function(){
 	// メニュー編集機能キー登録
 	$(document).keyup(function(e){
-		if (e.which == 27) editMenu();	// ESCキー
+		if (e.shiftKey === true && e.which === 27){		// Shift+ESCキー
+			goCoreMenu();	// 管理機能コア部設定画面
+		} else if (e.which == 27){		// ESCキー
+			editMenu();		// 管理機能設定画面
+		}
 	});
 });
 //]]>

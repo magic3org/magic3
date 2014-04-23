@@ -49,7 +49,6 @@ class ScriptLibInfo
 	const LIB_JQUERY_EASING			= 'jquery.easing';
 	const LIB_JQUERY_JCAROUSEL		= 'jquery.jcarousel';
 	const LIB_JQUERY_THICKBOX		= 'jquery.thickbox';
-//	const LIB_JQUERY_JSHOTKEYS		= 'jquery.jshotkeys';
 	const LIB_JQUERY_CYCLE			= 'jquery.cycle';
 	const LIB_JQUERY_CODEPRESS		= 'jquery.codepress';
 	const LIB_JQUERY_CLUETIP		= 'jquery.cluetip';
@@ -140,7 +139,6 @@ class ScriptLibInfo
 	const JQUERY_CONTEXTMENU_FILENAME	= 'jquery/jquery.contextmenu.r2.js';
 	const JQUERY_THICKBOX_FILENAME		= 'jquery/thickbox3.1.js';
 	const JQUERY_THICKBOX_CSS			= 'jquery/thickbox.css';
-//	const JQUERY_JSHOTKEYS_FILENAME		= 'jquery/jquery.hotkeys.js';
 	const JQUERY_CYCLE_FILENAME			= 'jquery/jquery.cycle.all.pack.js';
 	const JQUERY_CODEPRESS_FILENAME		= 'jquery/jquery.Codepress.js';
 	const JQUERY_CLUETIP_FILENAME		= 'jquery/jquery.cluetip.js';
@@ -378,7 +376,6 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																'css'		=> array(self::JQUERY_THICKBOX_CSS),
 																'url'		=> self::JQUERY_THICKBOX_URL,
 																'version'	=> self::JQUERY_THICKBOX_VER),
-//					self::LIB_JQUERY_JSHOTKEYS		=>	array(	'script' 	=> array(self::JQUERY_JSHOTKEYS_FILENAME)),	// jquery.js-hotkeys用のファイル
 					self::LIB_JQUERY_CYCLE			=>	array(	'script' 	=> array(self::JQUERY_CYCLE_FILENAME)),		// jquery.cycle用のファイル
 					self::LIB_JQUERY_CODEPRESS		=>	array(	'script' 	=> array(self::JQUERY_CODEPRESS_FILENAME)),	// jquery.codepress用のファイル
 					self::LIB_JQUERY_CLUETIP		=>	array(	'script' 	=> array(self::JQUERY_CLUETIP_FILENAME),// jquery.cluetip用のファイル
