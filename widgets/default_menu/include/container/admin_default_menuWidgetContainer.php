@@ -89,6 +89,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		
 		$userId		= $this->gEnv->getCurrentUserId();
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+		$anchor = $request->trimValueOf('anchor');
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 
@@ -197,6 +198,39 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		// メニューID選択メニュー作成
 		$this->db->getMenuIdList(0/*PC用*/, array($this, 'menuIdListLoop'));
 		
+		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
+		$activeIndex = 0;
+		if (empty($act) && !empty($this->configId)) $activeIndex = 1;
+		// 一覧画面からの戻り画面が指定されてる場合は優先する
+		if ($anchor == 'widget_config') $activeIndex = 0;
+		
+		// ナビゲーションタブ作成
+		$tabItemIndex = 0;
+		$tabDef = array();
+		$tabItem = new stdClass;
+		$tabItem->name	= 'ウィジェット設定';
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_config';
+		$tabItem->parent	= 0;
+//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabItem = new stdClass;
+		$tabItem->name	= 'メニュー定義';
+		$tabItem->task	= '';
+		$tabItem->url	= '#menu_define';
+		$tabItem->parent	= 0;
+//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
+		if (empty($activeIndex)){		// タブの選択
+			$this->tmpl->addVar("_widget", "select_tab", 'widget_config');
+		} else {
+			$this->tmpl->addVar("_widget", "select_tab", 'menu_define');
+		}
+		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
@@ -221,7 +255,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		}
 		// タブの選択状態を設定
 		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
-		if (empty($act) && !empty($this->configId)) $this->tmpl->setAttribute('select_menu_def', 'visibility', 'visible');
+//		if (empty($act) && !empty($this->configId)) $this->tmpl->setAttribute('select_menu_def', 'visibility', 'visible');
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
@@ -339,6 +373,29 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		// 定義一覧作成
 		$this->createItemList();
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
+		
+		// 選択状態はメニュー設定に固定
+		$activeIndex = 0;
+		
+		// ナビゲーションタブ作成
+		$tabItemIndex = 0;
+		$tabDef = array();
+		$tabItem = new stdClass;
+		$tabItem->name	= 'ウィジェット設定';
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_config';
+		$tabItem->parent	= 0;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabItem = new stdClass;
+		$tabItem->name	= 'メニュー定義';
+		$tabItem->task	= '';
+		$tabItem->url	= '#menu_define';
+		$tabItem->parent	= 0;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
 		
 		// メニュー定義画面のURLを作成
 		$taskValue = 'menudef';
