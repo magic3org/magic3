@@ -602,6 +602,11 @@ background-color: #0081c2;
 	width:95%;
 	margin: 10px auto;
 }
+.m3config_fullwidth {
+	position: fixed;
+	left: 0px;
+	right: 0px;
+}
 /****** edit line ******/
 .m3line_image {
 	width:16px;

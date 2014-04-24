@@ -236,7 +236,8 @@ define('M3_REQUEST_PARAM_STAMP',					'stamp');			// 公開発行ID
 define('M3_REQUEST_PARAM_OPTION',					'opt');				// 通信オプション
 define('M3_REQUEST_PARAM_OPERATION_COMMAND',		'cmd');				// 実行処理
 define('M3_REQUEST_PARAM_OPERATION_WIKI_COMMAND',	'wcmd');			// Wikiコマンド実行
-define('M3_REQUEST_PARAM_OPERATION_TASK',			'task');			// ウィジェット間共通処理
+define('M3_REQUEST_PARAM_OPERATION_TASK',			'task');			// 画面指定用タスク
+define('M3_REQUEST_PARAM_OPERATION_ANCHOR',			'anchor');			// 画面指定用アンカー
 define('M3_REQUEST_PARAM_OPERATION_ACT',			'act');				// クライアントからの実行処理
 define('M3_REQUEST_PARAM_OPERATION_LANG',			'lang');			// 言語指定表示
 define('M3_REQUEST_PARAM_SERIAL_NO',      			'serial');			// シリアル番号

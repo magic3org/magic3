@@ -262,5 +262,55 @@ class DesignManager extends Core
 		}
 		return $destTag;
 	}
+	/**
+	 * 管理画面用ナビゲーションタブを作成
+	 *
+	 * @param array $tabDef				タブの定義
+	 * @param string $activeTask		選択状態のタスク
+	 * @param bool $withBreadcrumb		パンくずリストを付加するかどうか
+	 * @param string $breadcrumbTitle	パンくずリストのトップタイトル
+	 * @return string 					タブのHTML
+	 */
+	function createConfigNavTab($tabDef, $activeTask = '', $withBreadcrumb = false, $breadcrumbTitle = '')
+	{
+		$tabDefCount = count($tabDef);
+		if ($tabDefCount <= 0) return '';
+
+		$tabHtml = '<ul id="m3navtab" class="nav nav-tabs">';
+		for ($i = 0; $i < $tabDefCount; $i++){
+			$tabItem = $tabDef[$i];
+			$name = $tabItem->name;
+			$url = $tabItem->url;
+			$active = '';
+			if ($tabItem->active) $active = ' class="active"';
+			$tabHtml .= '<li' . $active . '>';
+			if (empty($url)){
+				$tabHtml .= convertToHtmlEntity($name);
+			} else {
+				$tabHtml .= '<a href="' . convertUrlToHtmlEntity($url) . '" data-toggle="tab">' . convertToHtmlEntity($name) . '</a>';
+			}
+			$tabHtml .= '</li>';
+		}
+		$tabHtml .= '</ul>';
+		return $tabHtml;
+/*
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
+  <li><a href="#profile" data-toggle="tab">Profile</a></li>
+  <li><a href="#messages" data-toggle="tab" class="clickable">Messages(click!)</a></li>
+
+<li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+      Dropdown <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+  <li><a href="#profile" >sample1</a></li>
+  <li><a href="#messages" >sample2</a></li>
+    </ul>
+</li>
+  <li><a href="#settings" data-toggle="tab">Settings</a></li>
+</ul>
+*/
+	}
 }
 ?>

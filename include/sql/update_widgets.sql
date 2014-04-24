@@ -47,8 +47,8 @@ INSERT INTO _widgets
 -- ウィジェット情報(PC用/メニュー)
 DELETE FROM _widgets WHERE wd_id = 'default_menu';
 INSERT INTO _widgets
-(wd_id,          wd_name,              wd_type, wd_type_option, wd_category_id, wd_template_type, wd_version, wd_joomla_class, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('default_menu', 'デフォルトメニュー', 'menu',  'nav',          'menu',         'bootstrap', '3.0.0',    '', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる多階層のメニューです。「user3」ポジションに配置するとナビゲーションメニューが表示できます。', '', 'jquery-ui.tabs', true,  true,              true, 2,          1, '2014-03-14', now(),         now());
+(wd_id,          wd_name,              wd_type, wd_type_option, wd_category_id, wd_template_type, wd_version, wd_required_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('default_menu', 'デフォルトメニュー', 'menu',  'nav',          'menu',         'bootstrap',      '3.1.0b',   '2.8.15',        'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる多階層のメニューです。「user3」ポジションに配置するとナビゲーションメニューが表示できます。', '', 'jquery-ui.tabs', true,  true,              true, 2,          1, '2014-04-24', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'accordion_menu';
 INSERT INTO _widgets
 (wd_id,            wd_name,                  wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

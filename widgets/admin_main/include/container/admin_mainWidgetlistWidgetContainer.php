@@ -28,6 +28,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	private $showDetail;			// 詳細表示するかどうか
 	private $defaultImageSize = 32;		// ウィジェット画像サイズ
 	private $isExistsWidgetList;		// ウィジェットが存在するかどうか
+	private $systemVer;			// システムバージョン
 	const SCRIPT_FILE_EXT = 'js';		// JavaScriptファイル拡張子
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
 	const PHP_FILE_EXT = 'php';		// phpファイル拡張子
@@ -53,6 +54,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->widgetTypeArray = array(	array(	'name' => $this->_('For PC'),			'value' => '0'),	// PC用
 										array(	'name' => $this->_('For Mobile'),		'value' => '1'),	// 携帯用
 										array(	'name' => $this->_('For Smartphone'),	'value' => '2'));	// スマートフォン用
+										
+		$this->systemVer = $this->gSystem->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -801,6 +804,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		$version = $fetchedRow['wd_version'];
 		$latestVersion = $fetchedRow['wd_latest_version'];
+		$requiredVersion = $fetchedRow['wd_required_version'];		// 動作に必要なシステムバージョン
 		
 		// ウィジェットが存在するかどうかチェック
 		$isExistsWidget = false;
@@ -883,10 +887,15 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$latestVer = '';
 		$regex = '/([0-9\.]+)([a-z]*)/';
 		if (preg_match($regex, $latestVersion, $matches)){
-			if (version_compare($version, $latestVersion) == -1){		// 最新バージョンが現在のバージョンよりも上の場合のみ表示
+			if (version_compare($version, $latestVersion) < 0){		// 最新バージョンが現在のバージョンよりも上の場合のみ表示
 				$optionVerStr = strtolower($matches[2]);
 				if (empty($optionVerStr)){		// 付加記号なしの場合
-					$latestVer = '<span class="available"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . $this->convertToDispString($latestVersion) . '</a></span>';
+					// 動作に必要なシステムバージョン以上の場合のみバージョンアップ可能
+					if (version_compare($requiredVersion, $this->systemVer) <= 0){
+						$latestVer = '<span class="available"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . $this->convertToDispString($latestVersion) . '</a></span>';
+					} else {
+						$latestVer = '<span class="available">' . $this->convertToDispString($latestVersion) . '</span>';
+					}
 				} else {
 					switch ($optionVerStr){
 						case 'x':		// 緊急バージョンアップ
