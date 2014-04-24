@@ -28,7 +28,6 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	private $showDetail;			// 詳細表示するかどうか
 	private $defaultImageSize = 32;		// ウィジェット画像サイズ
 	private $isExistsWidgetList;		// ウィジェットが存在するかどうか
-	private $systemVer;			// システムバージョン
 	const SCRIPT_FILE_EXT = 'js';		// JavaScriptファイル拡張子
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
 	const PHP_FILE_EXT = 'php';		// phpファイル拡張子
@@ -54,8 +53,6 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->widgetTypeArray = array(	array(	'name' => $this->_('For PC'),			'value' => '0'),	// PC用
 										array(	'name' => $this->_('For Mobile'),		'value' => '1'),	// 携帯用
 										array(	'name' => $this->_('For Smartphone'),	'value' => '2'));	// スマートフォン用
-										
-		$this->systemVer = $this->gSystem->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -486,7 +483,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$infoSrc = file_get_contents(self::NEW_INFO_URL);
 
 			// ウィジェットIDとバージョン番号を取得して登録
-			$exp = '/^\(\'([a-zA-Z0-9_\-\/]+)\'.*\'([0-9\.]+[a-z]*)\'/m';			// バージョン番号の最後の「b」(ベータ版)等は許可
+			$exp = '/^\(\'([a-zA-Z0-9_\-\/]+)\'.*?\'([0-9\.]+[a-z]*)\'/m';			// バージョン番号の最後の「b」(ベータ版)等は許可
 	        $dest = preg_replace_callback($exp, array($this, '_update_widget_info_callback'), $infoSrc);
 			
 			$this->setMsg(self::MSG_GUIDANCE, $this->_('Latest widget information gotten.'));		// 最新のウィジェット情報を取得しました
@@ -506,7 +503,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			if (preg_match($exp, $infoSrc, $matches)){
 				$latestVersion = $matches[1];
 				
-				if (!empty($version) && !empty($latestVersion) && version_compare($version, $latestVersion) == -1) $canUpdate = true;		// 最新バージョンが現在のバージョンよりも上の場合
+				if (!empty($version) && !empty($latestVersion) && version_compare($version, $latestVersion) < 0) $canUpdate = true;		// 最新バージョンが現在のバージョンよりも上の場合
 			}
 			if ($canUpdate){
 				// GitHubからソースコードを取得
@@ -805,7 +802,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$version = $fetchedRow['wd_version'];
 		$latestVersion = $fetchedRow['wd_latest_version'];
 		$requiredVersion = $fetchedRow['wd_required_version'];		// 動作に必要なシステムバージョン
-		
+
 		// ウィジェットが存在するかどうかチェック
 		$isExistsWidget = false;
 		$widgetId = $fetchedRow['wd_id'];// ウィジェットID
@@ -891,7 +888,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 				$optionVerStr = strtolower($matches[2]);
 				if (empty($optionVerStr)){		// 付加記号なしの場合
 					// 動作に必要なシステムバージョン以上の場合のみバージョンアップ可能
-					if (version_compare($requiredVersion, $this->systemVer) <= 0){
+					if (version_compare($requiredVersion, M3_SYSTEM_VERSION) <= 0){
 						$latestVer = '<span class="available"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . $this->convertToDispString($latestVersion) . '</a></span>';
 					} else {
 						$latestVer = '<span class="available">' . $this->convertToDispString($latestVersion) . '</span>';
