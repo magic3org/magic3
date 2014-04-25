@@ -13,16 +13,10 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
-require_once($gEnvManager->getLibPath() .	'/tcpdf/config/lang/jpn.php');
-require_once($gEnvManager->getLibPath() .	'/tcpdf/tcpdf.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWidgetContainer.php');
 
-class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainInstallWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
-		
 	/**
 	 * コンストラクタ
 	 */
@@ -30,29 +24,6 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DB接続オブジェクト作成
-		$this->db = new admin_mainDb();
-	}
-	/**
-	 * ディスパッチ処理
-	 *
-     * HTTPリクエストの内容を見て処理をコンテナに振り分ける
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
-	 * @return bool 						このクラスの_setTemplate(), _assign()へ処理を継続するかどうかを返す。
-	 *                                      true=処理を継続、false=処理を終了
-	 */
-	function _dispatch($request, &$param)
-	{
-		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if ($task == 'test'){
-			return true;
-		} else {
-			$this->gLaunch->goSubWidget($task);
-			return false;
-		}
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -65,8 +36,8 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	 * @return string 						テンプレートファイル名。テンプレートライブラリを使用しない場合は空文字列「''」を返す。
 	 */
 	function _setTemplate($request, &$param)
-	{	
-		return 'test.tmpl.html';
+	{
+		return 'install.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -79,7 +50,11 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-
+		// 管理用URL設定
+		$this->tmpl->addVar("_widget", "admin_url", $this->gEnv->getDefaultAdminUrl());
+//https://api.github.com/repos/magic3org/magic3/tags
+//https://api.github.com/repos/magic3org/magic3/zipball/v2.8.14
+//https://github.com/magic3org/magic3/archive/v2.8.14.zip
 	}
 }
 ?>

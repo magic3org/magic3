@@ -499,7 +499,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$infoSrc = file_get_contents(self::NEW_INFO_URL);
 
 			// ウィジェットIDとバージョン番号を取得して登録
-			$exp = '/^\(\'' . preg_quote($widgetId, '/') . '\'.*\'([0-9\.]+[a-z]*)\'/m';			// バージョン番号の最後の「b」(ベータ版)等は許可
+			$exp = '/^\(\'' . preg_quote($widgetId, '/') . '\'.*?\'([0-9\.]+[a-z]*)\'/m';			// バージョン番号の最後の「b」(ベータ版)等は許可
 			if (preg_match($exp, $infoSrc, $matches)){
 				$latestVersion = $matches[1];
 				

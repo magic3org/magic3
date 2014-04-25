@@ -276,6 +276,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'menucore':		// 管理画面コア設定メニュー
 						case 'editmenu':		// メニュー編集
 						case 'corefile':		// コアファイル編集
+						case 'install':			// インストール
 						case 'test':			// テスト用画面
 							$this->gLaunch->goSubWidget($task);
 							return false;

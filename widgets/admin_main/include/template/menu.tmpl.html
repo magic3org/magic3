@@ -11,15 +11,21 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<div align="center">
-<table border="0" cellpadding="0" cellspacing="0" align="center"><tr><td>
-<div class="m3toppage_menu">
-    <div class="ui-state-default ui-priority-primary ui-corner-tl ui-corner-tr"><span >システム制御</span></div>
-    <ul class="ui-widget-content ui-corner-bl ui-corner-br">
-        <li ><a href="?task=initwizard" ><span >システム初期化ウィザード</span></a></li>
-        <li ><a href="?task=editmenu" ><span >管理メニュー編集</span></a></li>
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	$(document).keyup(function(e){
+		if (e.which == 27) location.href = '{ADMIN_URL}';	// ESCキー
+	});
+});
+//]]>
+</script>
+<div class="panel panel-info" style="width:300px;margin:0 auto;" >
+    <div class="panel-heading"><span >システム制御</span></div>
+    <ul class="list-group">
+        <li class="list-group-item"><a href="?task=initwizard" ><span >システム初期化ウィザード</span></a></li>
+        <li class="list-group-item"><a href="?task=editmenu" ><span >管理メニュー編集</span></a></li>
+		<li class="list-group-item"><a href="?task=install" ><span >最新版インストール</span></a></li>
     </ul>
-</div>
-</td></tr></table>
 </div>
 </patTemplate:tmpl>
