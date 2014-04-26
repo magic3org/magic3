@@ -26,6 +26,8 @@ class GitRepo
 	const URL_GET_REPO_INFO = 'https://api.github.com/repos/%s/%s';		// レポジトリ情報取得用URL
 	const URL_GET_DIR_INFO	= 'https://api.github.com/repos/%s/%s/contents%s';		// ディレクトリ情報取得用URL
 	const URL_DOWNLOAD_FILE	= 'https://raw.githubusercontent.com/%s/%s/master/%s';		// ファイル取得用URL
+	const URL_DOWNLOAD_ZIP_FILE_BY_TAG = 'https://api.github.com/repos/%s/%s/zipball/%s';		// タグでZip圧縮ファイルを取得
+	const URL_GET_TAG_INFO = 'https://api.github.com/repos/%s/%s/tags';		// タグ情報取得用URL
 	
 	/**
 	 * コンストラクタ
@@ -295,6 +297,67 @@ class GitRepo
 
 		// 作業ディレクトリ削除
 		rmDirectory($tmpDir);
+		return $status;
+	}
+	/**
+	 * タグ情報を取得
+	 *
+	 * @return array		タグ情報(false=失敗の場合)
+	 */
+	function getTagInfo()
+	{
+		$this->_request(sprintf(self::URL_GET_TAG_INFO, $this->user, $this->repo));
+		if ($this->responseCode != 200) return false;
+
+		return json_decode($this->responseText);
+	}
+	/**
+	 * タグからZip圧縮ファイルをダウンロード
+	 *
+	 * @param string $tagId		タグID
+	 * @param string $destDir	解凍先ディレクトリ
+	 * @param string $destPath	解凍したディレクトリパス
+	 * @return bool				true=成功、false=失敗
+	 */
+	function downloadZipFileByTag($tagId, $destDir, &$destPath)
+	{
+		global $gEnvManager;
+		
+		$url = sprintf(self::URL_DOWNLOAD_ZIP_FILE_BY_TAG, $this->user, $this->repo, $tagId);
+		
+		// GitHubからファイル取得
+		$status = false;
+		$readBufLength = 1024 * 8;		// 読み込みバッファサイズ
+		$options  = array('http' => array('user_agent'=> $_SERVER['HTTP_USER_AGENT']));
+		$context  = stream_context_create($options);
+		$srcFile = fopen($url, 'rb', false, $context);
+		if ($srcFile){
+			// Zipファイル保存用一時ファイル作成
+			$tmpFile = tempnam($gEnvManager->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
+			
+			// 保存先ファイルを開く
+			$newFile = fopen($tmpFile, 'wb');
+			if ($newFile){
+				while (!feof($srcFile)){
+					fwrite($newFile, fread($srcFile, $readBufLength), $readBufLength);
+				}
+				fclose($newFile);
+				$status = true;			// 読み込み完了
+			}
+			fclose($srcFile);
+			
+			// Zipファイルを解凍
+			if ($status){
+				$zipFile = new PclZip($tmpFile);
+				if (($zipList = $zipFile->listContent()) != 0){
+					$dirName = basename($zipList[0]['filename']);		// ディレクトリ名取得
+					$status = $zipFile->extract(PCLZIP_OPT_PATH, $destDir);
+					if ($status) $destPath = $destDir . '/' . $dirName;
+				}
+			}
+			// 一時ファイル削除
+			unlink($tmpFile);
+		}
 		return $status;
 	}
 }

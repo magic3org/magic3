@@ -646,12 +646,15 @@ background-color: #0081c2;
 .required {
 	color:red;
 }
-.available {
-	color:green;
-}
 .emergency {
 	color:red;
 }
 .error {
 	color:red;
+}
+.available {
+	color:green;
+}
+.active {
+	color:green;
 }
