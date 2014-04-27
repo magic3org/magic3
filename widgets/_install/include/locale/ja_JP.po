@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-12 20:18+0900\n"
-"PO-Revision-Date: 2014-01-12 20:19+0900\n"
+"POT-Creation-Date: 2014-04-27 16:48+0900\n"
+"PO-Revision-Date: 2014-04-27 16:48+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -41,7 +41,7 @@ msgid "Clear all the data, and update system and database."
 msgstr "DBの内容をすべてクリアしてから、システムをバージョンアップします"
 
 #: container/_installCheckdbWidgetContainer.php:89
-#: container/_installInitdbWidgetContainer.php:393
+#: container/_installInitdbWidgetContainer.php:394
 msgid "Keep existing data, and update system and database."
 msgstr "DBの内容を保持したまま、システムをバージョンアップします"
 
@@ -345,29 +345,33 @@ msgstr "このシステム自体を指定しています"
 msgid "Magic3 system not selected."
 msgstr "Magic3システムを指定していません"
 
-#: container/_installInitdbWidgetContainer.php:102
+#: container/_installInitdbWidgetContainer.php:101
 msgid "Create Database"
 msgstr "ＤＢ構築"
 
-#: container/_installInitdbWidgetContainer.php:106
+#: container/_installInitdbWidgetContainer.php:105
 msgid "Update Database"
 msgstr "ＤＢバージョンアップ"
 
-#: container/_installInitdbWidgetContainer.php:109
+#: container/_installInitdbWidgetContainer.php:108
 msgid "Wait for complete of creating database after the do action."
 msgstr "実行後は処理が完了するまでしばらくお待ちください"
 
-#: container/_installInitdbWidgetContainer.php:110
+#: container/_installInitdbWidgetContainer.php:109
 msgid "Do"
 msgstr "実行"
 
-#: container/_installInitdbWidgetContainer.php:111
+#: container/_installInitdbWidgetContainer.php:110
 msgid "Target"
 msgstr "処理対象"
 
-#: container/_installInitdbWidgetContainer.php:112
+#: container/_installInitdbWidgetContainer.php:111
 msgid "All Tables"
 msgstr "全テーブル"
+
+#: container/_installInitdbWidgetContainer.php:112
+msgid "Processing"
+msgstr "処理中"
 
 #: container/_installInitdbWidgetContainer.php:186
 #, php-format
@@ -402,7 +406,7 @@ msgid "Failed in initializing database."
 msgstr "ＤＢ初期化に失敗しました"
 
 #: container/_installInitdbWidgetContainer.php:270
-#: container/_installInitdbWidgetContainer.php:377
+#: container/_installInitdbWidgetContainer.php:378
 msgid "Script filename"
 msgstr "スクリプト名"
 
@@ -414,26 +418,26 @@ msgstr "DBを構築します"
 msgid "Create database.<br />Clear all the existing data."
 msgstr "DBを構築します<br />既存のデータはすべて削除されます"
 
-#: container/_installInitdbWidgetContainer.php:356
+#: container/_installInitdbWidgetContainer.php:357
 #, php-format
 msgid "Database updated. Database Version: %s"
 msgstr "DB更新処理が正常に終了しました。現在のDBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:360
+#: container/_installInitdbWidgetContainer.php:361
 #, php-format
 msgid "Widget information updated. Database Version: %s"
 msgstr "ウィジェット情報を更新しました。DBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:376
+#: container/_installInitdbWidgetContainer.php:377
 msgid "Failed in updating database"
 msgstr "DB更新に失敗しました"
 
-#: container/_installInitdbWidgetContainer.php:431
+#: container/_installInitdbWidgetContainer.php:433
 #, php-format
 msgid "Database updated. Database Version: from %s to %s"
 msgstr "DBをバージョンアップしました。 DBバージョン: %sから%s"
 
-#: container/_installInitdbWidgetContainer.php:440
+#: container/_installInitdbWidgetContainer.php:442
 #, php-format
 msgid "Bad script file found in files for update. Filename: %s"
 msgstr ""

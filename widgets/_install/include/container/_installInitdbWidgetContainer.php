@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-//	private $sysDb;	// DB接続オブジェクト
 	private $createTableScripts;			// テーブル作成スクリプト
 	private $insertTableScripts;			// データインストールスクリプト
 	private $updateTableScripts;			// テーブル更新スクリプト
@@ -30,6 +29,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 	const UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
 	const INSTALL_INFO_CLASS = 'InstallInfo';			// インストール情報クラス
 	const DEFAULT_LANG		= 'default_lang';					// デフォルト言語
+	const PROCESSING_ICON_FILE = '/images/system/processing.gif';		// 処理中
 	
 	/**
 	 * コンストラクタ
@@ -41,7 +41,6 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new _installDB();
-//		$this->sysDb = $this->gInstance->getSytemDbObject();
 		
 		// 実行SQLスクリプトファイルの定義
 /*		$this->createTableScripts = array(	array(	'filename' 		=> 'create_base.sql',					// ファイル名
@@ -110,6 +109,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		$localeText['label_do'] = $this->_('Do');
 		$localeText['label_target'] = $this->_('Target');
 		$localeText['label_table'] = $this->_('All Tables');
+		$localeText['label_processing'] = $this->_('Processing');
 		$this->setLocaleText($localeText);
 	}
 	/**
@@ -291,6 +291,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		// 画面の設定
 		$this->tmpl->addVar("_widget", "task", $task);		// 実行処理を設定
 		$this->tmpl->addVar("_widget", "message", $msg);		// ＤＢ構築
+		$this->tmpl->addVar('_widget', 'process_image', $this->getUrl($this->gEnv->getRootUrl() . self::PROCESSING_ICON_FILE));	// 処理中アイコン
 	}
 	/**
 	 * DBバージョンアップ画面作成
@@ -391,6 +392,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		// 画面の設定
 		$this->tmpl->addVar("_widget", "task", $task);		// 実行処理を設定
 		$this->tmpl->addVar("_widget", "message", $this->_('Keep existing data, and update system and database.'));		// 既存データを残して、DBをバージョンアップします
+		$this->tmpl->addVar('_widget', 'process_image', $this->getUrl($this->gEnv->getRootUrl() . self::PROCESSING_ICON_FILE));	// 処理中アイコン
 	}
 	/**
 	 * DBをバージョンアップ

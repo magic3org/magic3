@@ -5,3 +5,24 @@
 .bottom_buttons {
 	text-align:right;
 }
+.modal-processing { 
+	position: fixed;
+	top: 50% !important;
+	left: 50% !important;
+	margin-top: -100px;
+	margin-left: -100px;
+	overflow: visible !important;
+}
+.modal-processing,
+.modal-processing .modal-dialog,
+.modal-processing .modal-content {
+	width: 200px;
+	height: 200px;
+}
+.modal-processing .modal-dialog,
+.modal-processing .modal-content {
+	padding: 0 !important;
+	margin: 0 !important;
+}
+.modal-processing .modal-content .icon {
+}
