@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-04-27 16:48+0900\n"
-"PO-Revision-Date: 2014-04-27 16:48+0900\n"
+"PO-Revision-Date: 2014-04-27 17:55+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -311,7 +311,7 @@ msgstr "旧システムからファイルをコピー"
 
 #: container/_installCopyfileWidgetContainer.php:222
 msgid "Old System Directory"
-msgstr "旧システムルートディレクトリ"
+msgstr "旧システムディレクトリ"
 
 #: container/_installCopyfileWidgetContainer.php:224
 msgid "Copy Target"

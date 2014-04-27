@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installCopyfileWidgetContainer.php 3795 2010-11-09 07:12:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
@@ -61,8 +61,6 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 		$act = $request->trimValueOf('act');
 		$type = $request->trimValueOf('install_type');
 		$from = $request->trimValueOf('from');
-		$rootDir = $request->trimValueOf('root_dir');			// 旧システムのルートディレクトリ
-		$rootDir = rtrim($rootDir, '/');
 		$dbStatus = $request->trimValueOf('dbstatus');		// DBの状態
 		$isResourceDir = ($request->trimValueOf('is_resource_dir') == 'on') ? 1 : 0;		// リソースディレクトリをコピーするかどうか
 		$isTemplate = ($request->trimValueOf('is_template') == 'on') ? 1 : 0;				// テンプレートをコピーするかどうか
@@ -74,20 +72,31 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 				$dbStatus = 'init';
 			}
 		}
-
+		// 旧システムのルートディレクトリ
+		$rootDir = $request->trimValueOf('root_dir');
+		$rootDir = rtrim($rootDir, '/');
+		// ファイル名のみの場合は現在のシステムと同じディレクトリに存在しているとする
+		$realRootDir = $rootDir;
+		if (!empty($realRootDir)){
+			if (dirname($realRootDir) == '.'){		// ファイル名のみの場合
+				// フルパス表記に変更
+				$realRootDir = dirname($this->gEnv->getSystemRootPath()) . '/' . $realRootDir;
+			}
+		}
+		
 		if ($act == 'copyfile'){		// 旧システムのリソースファイルをコピーするとき
 			// 入力チェック
-			$ret = $this->checkDir($rootDir);
+			$ret = $this->checkDir($realRootDir);
 			if ($ret){
 				// ディレクトリの存在チェック
 				if ($isResourceDir){
-					if (!is_dir($rootDir . '/' . M3_DIR_NAME_RESOURCE)) $this->setMsg(self::MSG_APP_ERR, $this->_('Resource directory not found.'));		// リソースディレクトリが見つかりません
+					if (!is_dir($realRootDir . '/' . M3_DIR_NAME_RESOURCE)) $this->setMsg(self::MSG_APP_ERR, $this->_('Resource directory not found.'));		// リソースディレクトリが見つかりません
 				}
 				if ($isTemplate){
-					if (!is_dir($rootDir . '/' . M3_DIR_NAME_TEMPLATES)) $this->setMsg(self::MSG_APP_ERR, $this->_('Template directory not found.'));// テンプレートディレクトリが見つかりません
+					if (!is_dir($realRootDir . '/' . M3_DIR_NAME_TEMPLATES)) $this->setMsg(self::MSG_APP_ERR, $this->_('Template directory not found.'));// テンプレートディレクトリが見つかりません
 				}
 				if ($isWidget){
-					if (!is_dir($rootDir . '/' . M3_DIR_NAME_WIDGETS)) $this->setMsg(self::MSG_APP_ERR, $this->_('Widget directory not found.'));		// ウィジェットディレクトリが見つかりません
+					if (!is_dir($realRootDir . '/' . M3_DIR_NAME_WIDGETS)) $this->setMsg(self::MSG_APP_ERR, $this->_('Widget directory not found.'));		// ウィジェットディレクトリが見つかりません
 				}
 			}
 			
@@ -100,7 +109,7 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 					$resourceDir = $this->gEnv->getSystemRootPath() . '/' . M3_DIR_NAME_RESOURCE;
 					//$tmpResourceDir = $this->gEnv->getSystemRootPath() . '/_' . M3_DIR_NAME_RESOURCE;
 					$tmpResourceDir = $this->gEnv->getTempDir() . '/' . M3_DIR_NAME_RESOURCE;
-					$oldResourceDir = $rootDir . '/' . M3_DIR_NAME_RESOURCE;
+					$oldResourceDir = $realRootDir . '/' . M3_DIR_NAME_RESOURCE;
 
 					// 現在のディレクトリを退避
 					$ret = mvDirectory($resourceDir, $tmpResourceDir);
@@ -113,7 +122,6 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 						rmDirectory($tmpResourceDir);
 						
 						// 運用ログを残す
-						//$this->gOpeLog->writeInfo(__METHOD__, '旧システムのリソースディレクトリをコピーしました。ディレクトリ: ' . $oldResourceDir, 1000);
 						$msg = $this->_('Resource directory in old system copied. Directory: %s');		// 旧システムのリソースディレクトリをコピーしました。ディレクトリ: %s
 						$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, $oldResourceDir), 1000);
 					} else {
@@ -131,14 +139,13 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 					for ($i = 0; $i < count($searchDir); $i++){
 						// ディレクトリのコピー
 						$destDir = $this->gEnv->getSystemRootPath() . '/' . M3_DIR_NAME_TEMPLATES . $searchDir[$i];
-						$srcDir = $rootDir . '/' . M3_DIR_NAME_TEMPLATES . $searchDir[$i];
+						$srcDir = $realRootDir . '/' . M3_DIR_NAME_TEMPLATES . $searchDir[$i];
 						$this->copyTemplate($srcDir, $destDir, $excludeDir);
 					}
 					
 					// テンプレートを取り込んだときはメッセージを残す
 					if (count($this->templateIdArray) > 0){
 						// 運用ログを残す
-						//$this->gOpeLog->writeInfo(__METHOD__, '旧システムのテンプレートをコピーしました。テンプレート: ' . implode($this->templateIdArray, ','), 1000);
 						$msg = $this->_('Template in old system copied. Template: %s');		// 旧システムのテンプレートをコピーしました。テンプレート: %s
 						$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, implode($this->templateIdArray, ',')), 1000);
 					}
@@ -151,14 +158,13 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 					for ($i = 0; $i < count($searchDir); $i++){
 						// ディレクトリのコピー
 						$destDir = $this->gEnv->getSystemRootPath() . '/' . M3_DIR_NAME_WIDGETS . $searchDir[$i];
-						$srcDir = $rootDir . '/' . M3_DIR_NAME_WIDGETS . $searchDir[$i];
+						$srcDir = $realRootDir . '/' . M3_DIR_NAME_WIDGETS . $searchDir[$i];
 						$this->copyWidget($srcDir, $destDir, $excludeDir);
 					}
 					
 					// ウィジェットを取り込んだときはメッセージを残す
 					if (count($this->widgetIdArray) > 0){
 						// 運用ログを残す
-						//$this->gOpeLog->writeInfo(__METHOD__, '旧システムのウィジェットをコピーしました。ウィジェット: %s' . implode($this->widgetIdArray, ','), 1000);
 						$msg = $this->_('Widget in old system copied. Widget: %s');		// 旧システムのウィジェットをコピーしました。ウィジェット: %s
 						$this->gOpeLog->writeInfo(__METHOD__, sprintf($msg, implode($this->widgetIdArray, ',')), 1000);
 					}
@@ -171,7 +177,7 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 			}
 		} else if ($act == 'checkdir'){		// 旧システムのルートディレクトリの位置をチェック
 			// 入力チェック
-			$this->checkDir($rootDir);
+			$this->checkDir($realRootDir);
 			
 			// エラーなしの場合は正常メッセージを表示
 			if ($this->getMsgCount() == 0){// 入力チェックOKの場合
@@ -182,7 +188,6 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 			}
 		} else if ($act == 'goback'){		// 「戻り」で画面遷移した場合
 		} else {
-//			$this->tmpl->setAttribute('install_msg', 'visibility', 'visible');// テーブル構築完了のメッセージ
 			// リダイレクトで初回遷移時のみメッセージを表示
 			$referer	= $request->trimServerValueOf('HTTP_REFERER');
 			if (!empty($referer)){
@@ -195,12 +200,17 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 			$isResourceDir = 1;			// リソースディレクトリをコピー対象とする
 			$isTemplate = 1;			// テンプレートをコピー対象とする
 			$isWidget = 1;				// ウィジェットをコピー対象とする
+			
+			// 旧システムディレクトリデフォルト値
+			$rootDir = '';
+			$backupDirName = '_' . basename($this->gEnv->getSystemRootPath());
+			$backupDir = dirname($this->gEnv->getSystemRootPath()) . '/' . $backupDirName;
+			if (file_exists($backupDir)) $rootDir = $backupDirName;		// バックアップディレクトリが存在している場合は値を設定
 		}
 		
 		// 画面のヘッダ、タイトルを設定
 		if ($dbStatus == 'update'){
 			$this->tmpl->addVar("_widget", "title", $this->_('Database Updated'));		// ＤＢバージョンアップ完了
-//			$this->tmpl->addVar("install_msg", "message", $this->_('Updating database completed.'));			// ＤＢバージョンアップが完了しました
 		}
 		$this->tmpl->addVar("_widget", "db_status", $dbStatus);
 		$this->tmpl->addVar("_widget", "root_dir", $rootDir);
@@ -219,7 +229,7 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 		$localeText['msg_copy_files'] = $this->_('Copy files?');// ファイルをコピーしますか?
 		$localeText['msg_copy_from_old_system'] = $this->_('If you copy files form old system to this system, use this operation field below.<br />If you don\'t, go next.');	// 旧システムのファイルをこのシステムへコピーする場合は以下の処理を実行してください<br />何も行わない場合は「次へ」進みます。
 		$localeText['label_copy_from_old_system'] = $this->_('Copy files in old system');		// 旧システムからファイルをコピー
-		$localeText['label_old_system_dir'] = $this->_('Old System Directory');// 旧システムルートディレクトリ
+		$localeText['label_old_system_dir'] = $this->_('Old System Directory');// 旧システムディレクトリ
 		$localeText['label_check_dir'] = $this->_('Check directory');// ディレクトリチェック
 		$localeText['label_target_copy'] = $this->_('Copy Target');// コピー対象
 		$localeText['label_replace_resource'] = $this->_('Replace resource directory');// リソースディレクトリ(/resource) 置き換え
