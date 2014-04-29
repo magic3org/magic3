@@ -21,6 +21,10 @@ function selectMenu(){
 }
 function updateItem(){
 	if (!window.confirm('最新データを集計しますか?')) return false;
+	
+	// 処理中ダイアログ表示
+	m3ShowProcessModal();
+	
 	document.main.act.value='analytics_update';
 	document.main.submit();
 	return true;

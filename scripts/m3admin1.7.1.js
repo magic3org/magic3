@@ -146,7 +146,7 @@ function m3ShowProcessModal()
 			modal += '</div>';
 			modal += '</div>';
 			modal += '</div>';
-		$("body").append(modal);
+		$("body").prepend(modal);
 	}
 	$('#processing-modal').modal('show');
 }

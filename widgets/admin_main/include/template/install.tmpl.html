@@ -18,8 +18,9 @@ function installSystem()
 	if (!window.confirm('最新版システムをインストールしますか?\n実行後はインストーラが自動起動するまでお待ちください。')) return false;
 	
 	// 処理中ダイアログ表示
-	$('#execbutton').blur();
-	$('#processing-modal').modal('show');
+//	$('#execbutton').blur();
+//	$('#processing-modal').modal('show');
+	m3ShowProcessModal();
 	
 	document.main.act.value='install';
 	document.main.submit();
