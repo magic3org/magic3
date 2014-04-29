@@ -127,6 +127,29 @@ function m3ShowPreviewWindow(type, url)
 	}
 	window.open(url, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=" + width + ",height=" + height);
 }
+// 処理中ダイアログ表示
+function m3ShowProcessModal()
+{
+	// 画面上のフォーカスを外す
+	$('input,textarea,select').blur();
+	
+	if ($('#processing-modal').size() == 0){		// ダイアログが存在しない場合
+		var modal  = '<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true">';
+			modal += '<div class="modal-dialog">';
+			modal += '<div class="modal-content">';
+			modal += '<div class="modal-body">';
+			modal += '<div class="text-center">';
+			modal += '<img src="' + M3_ROOT_URL + '/images/system/processing.gif" class="icon" />';
+			modal += '<h4>処理中</h4>';
+			modal += '</div>';
+			modal += '</div>';
+			modal += '</div>';
+			modal += '</div>';
+			modal += '</div>';
+		$("body").append(modal);
+	}
+	$('#processing-modal').modal('show');
+}
 /**
  * 画像ファイルブラウザを表示
  *
