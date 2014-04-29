@@ -123,6 +123,11 @@ class admin_mainInstallWidgetContainer extends admin_mainBaseWidgetContainer
 		$versionStr = $version;
 		if (version_compare($version, M3_SYSTEM_VERSION) > 0) $versionStr = '<span class="available">' . $versionStr . '</span>';
 		
+		// 現在のバージョンよりも古い場合はインストール不可
+		$disabled = '';
+		if (version_compare($version, M3_SYSTEM_VERSION) < 0) $disabled = 'disabled';
+		$this->tmpl->addVar("_widget", "install_button_disabled", $disabled);
+		
 		// 値を埋め込む
 		$this->tmpl->addVar("_widget", "version_tag", $this->convertToDispString($tagName));		// 最新バージョンタグ
 		$this->tmpl->addVar("_widget", "version", $this->convertToDispString($versionStr));		// 最新バージョン
