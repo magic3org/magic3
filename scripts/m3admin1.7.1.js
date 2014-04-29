@@ -133,6 +133,11 @@ function m3ShowProcessModal()
 	// 画面上のフォーカスを外す
 	$('input,textarea,select').blur();
 	
+	$('#processing-modal').modal('show');
+}
+// 処理中ダイアログ順部
+function m3PrepareProcessModal()
+{
 	if ($('#processing-modal').size() == 0){		// ダイアログが存在しない場合
 		var modal  = '<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true">';
 			modal += '<div class="modal-dialog">';
@@ -146,9 +151,8 @@ function m3ShowProcessModal()
 			modal += '</div>';
 			modal += '</div>';
 			modal += '</div>';
-		$("body").prepend(modal);
+		$("body").append(modal);
 	}
-	$('#processing-modal').modal('show');
 }
 /**
  * 画像ファイルブラウザを表示
