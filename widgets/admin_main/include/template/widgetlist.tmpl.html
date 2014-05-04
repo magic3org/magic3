@@ -46,6 +46,10 @@ function detailline(widgetId){
 }
 function updateWidget(widgetId){
 	if (!window.confirm('{_LC_MSG_UPDATE_WIDGET}')) return false;
+	
+	// 処理中ダイアログ表示
+	m3ShowProcessModal();
+	
 	document.main.act.value = 'updatewidget';
 	document.main.widget.value = widgetId;
 	document.main.submit();
@@ -84,6 +88,9 @@ $(function(){
 	
 	// ファイル選択用ボタン作成
 	m3SetFileSelectButton();
+	
+	// 処理中ダイアログ準備
+	m3PrepareProcessModal();
 });
 //]]>
 </script>
