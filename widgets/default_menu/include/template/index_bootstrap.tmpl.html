@@ -11,7 +11,7 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top{NAVBAR_OPTION_CLASS}" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#default_menu-navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
@@ -19,10 +19,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{SITE_URL}">{SITENAME}</a>
+        <a class="navbar-brand{SITENAME_OPTION_CLASS}" href="{SITE_URL}">{SITENAME}</a>
     </div>
     <div class="collapse navbar-collapse" id="default_menu-navbar-collapse">
         <ul class="nav navbar-nav">{MENU_HTML}</ul>
+<patTemplate:tmpl name="show_search" visibility="hidden">
+        <div class="nav navbar-nav navbar-right col-sm-4">
+        <form class="navbar-form" role="search">
+        <div class="input-group">
+            <input type="hidden" name="task" value="search">
+            <input type="hidden" name="option" value="com_search">
+            <input type="text" class="form-control" placeholder="キーワード検索" name="searchword">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+        </div>
+        </form>
+		</div>
+</patTemplate:tmpl>
     </div>
 </nav>
 </patTemplate:tmpl>

@@ -95,12 +95,15 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 
 		$this->configId = $request->trimValueOf('item_id');		// 定義ID
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
-		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
-		$isHierMenu = ($request->trimValueOf('is_hier') == 'on') ? 1 : 0;		// 階層化メニューを使用するかどうか
-		$limitUser = ($request->trimValueOf('item_limituser') == 'on') ? 1 : 0;		// ユーザを制限するかどうか
-		$useVerticalMenu = ($request->trimValueOf('item_vertical_menu') == 'on') ? 1 : 0;		// 縦型メニューデザインを使用するかどうか
 		$this->menuId = $request->trimValueOf('menuid');
 		if (empty($this->menuId)) $this->menuId = self::DEFAULT_MENU_ID;
+		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
+		$isHierMenu			= $request->trimCheckedValueOf('is_hier');		// 階層化メニューを使用するかどうか
+		$limitUser			= $request->trimCheckedValueOf('item_limituser');		// ユーザを制限するかどうか
+		$useVerticalMenu	= $request->trimCheckedValueOf('item_vertical_menu');		// 縦型メニューデザインを使用するかどうか
+		$showSitename		= $request->trimCheckedValueOf('item_show_sitename');		// サイト名を表示するかどうか
+		$showSearch			= $request->trimCheckedValueOf('item_show_search');			// 検索フィールドを表示するかどうか
+		$anotherColor		= $request->trimCheckedValueOf('item_another_color');		// 色を変更するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -119,8 +122,11 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->name	= $name;// 表示名
 				$newObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
 				$newObj->limitUser = $limitUser;					// ユーザを制限するかどうか
-				$newObj->useVerticalMenu = $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
-				
+				$newObj->useVerticalMenu	= $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
+				$newObj->showSitename		= $showSitename;		// サイト名を表示するかどうか
+				$newObj->showSearch			= $showSearch;			// 検索フィールドを表示するかどうか
+				$newObj->anotherColor		= $anotherColor;		// 色を変更するかどうか
+		
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
@@ -147,7 +153,10 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					}
 					$targetObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
 					$targetObj->limitUser = $limitUser;					// ユーザを制限するかどうか
-					$targetObj->useVerticalMenu = $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
+					$targetObj->useVerticalMenu 	= $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
+					$targetObj->showSitename		= $showSitename;		// サイト名を表示するかどうか
+					$targetObj->showSearch			= $showSearch;			// 検索フィールドを表示するかどうか
+					$targetObj->anotherColor		= $anotherColor;		// 色を変更するかどうか
 				}
 
 				// 設定値を更新
@@ -174,6 +183,9 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$$isHierMenu = 0;		// 階層化メニューを使用するかどうか
 				$limitUser = 0;					// ユーザを制限するかどうか
 				$useVerticalMenu = 0;		// 縦型メニューデザインを使用するかどうか
+				$showSitename		= 1;		// サイト名を表示するかどうか
+				$showSearch			= 0;			// 検索フィールドを表示するかどうか
+				$anotherColor		= 0;		// 色を変更するかどうか
 			}
 			$this->serialNo = 0;
 		} else {
@@ -184,7 +196,12 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					$name			= $targetObj->name;// 名前
 					$isHierMenu		= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
 					$limitUser		= $targetObj->limitUser;					// ユーザを制限するかどうか
-					$useVerticalMenu = $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
+					$useVerticalMenu 	= $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
+//					$showSitename		= $targetObj->showSitename;		// サイト名を表示するかどうか
+//					$showSearch			= $targetObj->showSearch;			// 検索フィールドを表示するかどうか					
+					$showSitename	= isset($targetObj->showSitename) ? $targetObj->showSitename : 1;		// サイト名を表示するかどうか
+					$showSearch		= isset($targetObj->showSearch) ? $targetObj->showSearch : 0;			// 検索フィールドを表示するかどうか
+					$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -235,7 +252,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		
-		$checked = '';
+/*		$checked = '';
 		if ($isHierMenu) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "is_hier", $checked);	// 階層化メニューを使用するかどうか
 		$checked = '';
@@ -243,8 +260,14 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "limit_user", $checked);	// ユーザを制限するかどうか
 		$checked = '';
 		if ($useVerticalMenu) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "vertical_menu", $checked);		// 縦型メニューデザインを使用するかどうか
-		
+		$this->tmpl->addVar("_widget", "vertical_menu", $checked);		// 縦型メニューデザインを使用するかどうか*/
+		$this->tmpl->addVar("_widget", "is_hier", $this->convertToCheckedString($isHierMenu));	// 階層化メニューを使用するかどうか
+		$this->tmpl->addVar("_widget", "limit_user", $this->convertToCheckedString($limitUser));	// ユーザを制限するかどうか
+		$this->tmpl->addVar("_widget", "vertical_menu", $this->convertToCheckedString($useVerticalMenu));		// 縦型メニューデザインを使用するかどうか
+		$this->tmpl->addVar("_widget", "show_sitename_checked", $this->convertToCheckedString($showSitename));		// サイト名を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_search_checked", $this->convertToCheckedString($showSearch));			// 検索フィールドを表示するかどうか
+		$this->tmpl->addVar("_widget", "anothor_color_checked", $this->convertToCheckedString($anotherColor));		// 色を変更するかどうか
+					
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御

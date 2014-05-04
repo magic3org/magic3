@@ -118,6 +118,9 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$this->isHierMenu	= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
 		$limitUser			= $targetObj->limitUser;// ユーザを制限するかどうか
 		$useVerticalMenu 	= $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
+		$showSitename	= isset($targetObj->showSitename) ? $targetObj->showSitename : 1;		// サイト名を表示するかどうか
+		$showSearch		= isset($targetObj->showSearch) ? $targetObj->showSearch : 0;			// 検索フィールドを表示するかどうか
+		$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
 		
 		// 縦型メニューデザイン使用の場合はJoomla用パラメータを設定
 		if (!empty($useVerticalMenu)) $this->gEnv->setCurrentWidgetJoomlaParam(array('moduleclass_sfx' => 'art-vmenu'));
@@ -140,6 +143,21 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			if ($this->renderType == 'BOOTSTRAP'){
 				$this->tmpl->addVar("_widget", "site_url", $this->convertUrlToHtmlEntity($this->gEnv->getRootUrl() . '/'));
 				$this->tmpl->addVar("_widget", "sitename", $this->convertToDispString($this->gEnv->getSiteName()));
+
+				// サイト名の表示制御
+				if (!$showSitename){
+					$sitenameOptionClass = ' visible-xs';			// モニタが最小サイズの場合のみ表示
+					$this->tmpl->addVar("_widget", "sitename_option_class", $sitenameOptionClass);
+				}
+				// 検索フィールド表示制御
+				if ($showSearch){
+					$this->tmpl->setAttribute('show_search', 'visibility', 'visible');
+				}
+				// 別の色を指定の場合
+				if ($anotherColor){
+					$navbarOptionClass = ' navbar-inverse';
+					$this->tmpl->addVar("_widget", "navbar_option_class", $navbarOptionClass);
+				}
 			}
 		} else {
 			// 出力抑止
