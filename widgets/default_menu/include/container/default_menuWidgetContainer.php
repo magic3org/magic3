@@ -332,10 +332,16 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 							
 							// ##### タグ作成 #####
 							if ($this->renderType == 'BOOTSTRAP'){// Bootstrapタイプのとき
-								$classArray[] = 'dropdown';
+								//$classArray[] = 'dropdown';
+								$dropDownCaret = '';
+								if ($level == 0){
+									$dropDownCaret = ' <b class="caret"></b>';
+								} else {
+									$classArray[] = 'dropdown-submenu';
+								}
 								
 								if (count($classArray) > 0) $attr .= ' class="' . implode(' ', $classArray) . '"';
-								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="dropdown-toggle" data-toggle="dropdown"><span>' . $title . ' <b class="caret"></b></span></a>' . M3_NL;
+								$treeHtml .= '<li' . $attr . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="dropdown-toggle" data-toggle="dropdown"><span>' . $title . $dropDownCaret . '</span></a>' . M3_NL;
 								if (!empty($menuText)){
 									$treeHtml .= '<ul class="dropdown-menu">' . M3_NL;
 									$treeHtml .= $menuText;

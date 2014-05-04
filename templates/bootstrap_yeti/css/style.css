@@ -23,3 +23,14 @@ body {
 		width: auto;
 	}
 }
+/* 「デフォルトメニュー」ウィジェットの階層メニュー修正用 */
+.dropdown-submenu>.dropdown-menu {
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}

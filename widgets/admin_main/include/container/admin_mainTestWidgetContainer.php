@@ -79,7 +79,6 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-
 	}
 }
 ?>

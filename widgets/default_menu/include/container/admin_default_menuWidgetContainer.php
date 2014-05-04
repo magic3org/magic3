@@ -266,7 +266,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "vertical_menu", $this->convertToCheckedString($useVerticalMenu));		// 縦型メニューデザインを使用するかどうか
 		$this->tmpl->addVar("_widget", "show_sitename_checked", $this->convertToCheckedString($showSitename));		// サイト名を表示するかどうか
 		$this->tmpl->addVar("_widget", "show_search_checked", $this->convertToCheckedString($showSearch));			// 検索フィールドを表示するかどうか
-		$this->tmpl->addVar("_widget", "anothor_color_checked", $this->convertToCheckedString($anotherColor));		// 色を変更するかどうか
+		$this->tmpl->addVar("_widget", "another_color_checked", $this->convertToCheckedString($anotherColor));		// 色を変更するかどうか
 					
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
