@@ -50,27 +50,33 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$si_prefix = array( 'B', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB' );
+		$units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB' );
 		$base = 1024;
 		$path = '/';
 
 		//全体サイズ
-		$total_bytes = disk_total_space($path);
-		$class = min((int)log($total_bytes , $base) , count($si_prefix) - 1);
-		echo "全体サイズ:" . sprintf('%1.2f' , $total_bytes / pow($base,$class)) . $si_prefix[$class] . "<br />";
+		$totalBytes = disk_total_space($path);
+		$class = min((int)log($totalBytes , $base) , count($units) - 1);
+		$totalStr = sprintf('%1.2f' , $totalBytes / pow($base, $class)) . $units[$class];
 
 		//空き容量
-		$free_bytes = disk_free_space($path);
-		$class = min((int)log($free_bytes , $base) , count($si_prefix) - 1);
-		echo "空き容量:" . sprintf('%1.2f' , $free_bytes / pow($base,$class)) . $si_prefix[$class] . "<br />";
+		$freeBytes = disk_free_space($path);
+		$class = min((int)log($freeBytes , $base) , count($units) - 1);
+		$freeStr = sprintf('%1.2f' , $freeBytes / pow($base, $class)) . $units[$class];
 
 		//使用容量
-		$used_bytes = $total_bytes - $free_bytes;
-		$class = min((int)log($used_bytes , $base) , count($si_prefix) - 1);
-		echo "使用容量:" . sprintf('%1.2f' , $used_bytes / pow($base,$class)) . $si_prefix[$class] . "<br />";
+		$usedBytes = $totalBytes - $freeBytes;
+		$class = min((int)log($usedBytes , $base) , count($units) - 1);
+		$usedStr = sprintf('%1.2f' , $usedBytes / pow($base, $class)) . $units[$class];
 
 		//使用率
-		echo "使用率:" . round($used_bytes / $total_bytes * 100, 2) . "%<br />";
+		$usedRateStr = round($usedBytes / $totalBytes * 100, 2) . '%';
+		
+		// 値を埋め込む
+		$this->tmpl->addVar('_widget', 'total_size',	$this->convertToDispString($totalStr));
+		$this->tmpl->addVar('_widget', 'free_size',		$this->convertToDispString($freeStr));
+		$this->tmpl->addVar('_widget', 'used_size',		$this->convertToDispString($usedStr));
+		$this->tmpl->addVar('_widget', 'used_rate',		$this->convertToDispString($usedRateStr));
 	}
 }
 ?>

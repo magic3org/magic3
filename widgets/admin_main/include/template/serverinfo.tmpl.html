@@ -17,6 +17,22 @@ $(function(){
 });
 //]]>
 </script>
+<div class="col-sm-8 col-sm-offset-2">
 <!-- m3:ErrorMessage -->
-<h2>サーバ情報</h2>
+<h3>サーバ情報</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+	    <th width="50%">ディスク</th>
+		<th width="50%"></th>
+	</tr>
+    </thead>
+    <tbody>
+    <tr><td>全体サイズ</td><td>{TOTAL_SIZE}</td></tr>
+	<tr><td>空き容量</td><td>{FREE_SIZE}</td></tr>
+	<tr><td>使用容量</td><td>{USED_SIZE}</td></tr>
+	<tr><td>使用率</td><td>{USED_RATE}</td></tr>
+    </tbody>
+</table>
+</div>
 </patTemplate:tmpl>
