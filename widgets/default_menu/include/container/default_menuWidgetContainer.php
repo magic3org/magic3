@@ -19,6 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/default_menuDb.php');
 class default_menuWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
+	private $targetObj;		// 設定オブジェクト
 	private $langId;		// 現在の言語
 	private $paramObj;		// 定義取得用
 	private $cssFilePath = array();			// CSSファイル
@@ -42,6 +43,13 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new default_menuDb();
+		
+		// 定義ID取得
+		$configId = $this->gEnv->getCurrentWidgetConfigId();
+		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
+		
+		// パラメータオブジェクトを取得
+		$this->targetObj = $this->getWidgetParamObjByConfigId($configId);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -58,13 +66,24 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$this->renderType = 'JOOMLA_NEW';		// 描画出力タイプ
 		$this->templateType = $this->gEnv->getCurrentTemplateType();
 		$isNav = $this->isNavigationMenuStyle();		// ナビゲーションメニュータイプかどうか
+		$useVerticalMenu 	= 0;// 縦型メニューデザインを使用するかどうか
+		if (!empty($this->targetObj) && !empty($this->targetObj->useVerticalMenu)) $useVerticalMenu = 1;
 		
+		// 描画タイプを決める
 		switch ($this->templateType){
 			case 0:
 				$this->renderType = 'JOOMLA_OLD';
 				break;
 			case 10:
-				if ($isNav) $this->renderType = 'BOOTSTRAP';
+				if ($isNav){
+					$this->renderType = 'BOOTSTRAP_NAV';		// Boostrapナビゲーションメニュー
+				} else {
+					if ($useVerticalMenu){		// 縦型メニューの場合
+						$this->renderType = 'BOOTSTRAP';
+					} else {
+						$this->renderType = 'JOOMLA_NEW';		// 描画出力タイプ
+					}
+				}
 				break;
 			default:
 				$this->renderType = 'JOOMLA_NEW';		// 描画出力タイプ
@@ -80,10 +99,13 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			case 'JOOMLA_OLD':
 				$templateFile = 'index_old.tmpl.html';
 				break;
-			case 'BOOTSTRAP':
+			case 'BOOTSTRAP_NAV':		// Bootstrapナビゲーションメニュー
 				$this->cssFilePath[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
+				$templateFile = 'index_bootstrap_nav.tmpl.html';
+				break;
+			case 'BOOTSTRAP':		// Bootstrapメニュー
 				$templateFile = 'index_bootstrap.tmpl.html';
-				break;				
+				break;
 		}
 		return $templateFile;
 	}
@@ -101,12 +123,13 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$this->langId = $this->gEnv->getCurrentLanguage();
 		$this->currentUserLogined = $this->gEnv->isCurrentUserLogined();	// 現在のユーザはログイン中かどうか
 		
-		// 定義ID取得
-		$configId = $this->gEnv->getCurrentWidgetConfigId();
-		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
-		
-		// パラメータオブジェクトを取得
-		$targetObj = $this->getWidgetParamObjByConfigId($configId);
+//		// 定義ID取得
+//		$configId = $this->gEnv->getCurrentWidgetConfigId();
+//		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
+//		
+//		// パラメータオブジェクトを取得
+//		$targetObj = $this->getWidgetParamObjByConfigId($configId);
+		$targetObj = $this->targetObj;
 		if (empty($targetObj)){		// 定義データが取得できないとき
 			// 出力抑止
 			$this->cancelParse();
@@ -140,7 +163,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			$this->gEnv->setJoomlaMenuData($this->menuData);
 			
 			// Bootstrap用のデータを埋め込む
-			if ($this->renderType == 'BOOTSTRAP'){
+			if ($this->renderType == 'BOOTSTRAP_NAV'){
 				$this->tmpl->addVar("_widget", "site_url", $this->convertUrlToHtmlEntity($this->gEnv->getRootUrl() . '/'));
 				$this->tmpl->addVar("_widget", "sitename", $this->convertToDispString($this->gEnv->getSiteName()));
 
@@ -331,7 +354,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 							array_unshift($classArray, 'parent');
 							
 							// ##### タグ作成 #####
-							if ($this->renderType == 'BOOTSTRAP'){// Bootstrapタイプのとき
+							if ($this->renderType == 'BOOTSTRAP_NAV'){// Bootstrapナビゲーションメニューのとき
 								//$classArray[] = 'dropdown';
 								$dropDownCaret = '';
 								if ($level == 0){
@@ -373,7 +396,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 						$this->menuTree[] = $menuItem;
 						
 						// ##### タグ作成 #####
-						if ($this->renderType == 'BOOTSTRAP'){// Bootstrapタイプのとき
+						if ($this->renderType == 'BOOTSTRAP_NAV' || $this->renderType == 'BOOTSTRAP'){// Bootstrapメニューのとき
 							$treeHtml .= '<li class="divider"></li>' . M3_NL;
 						} else {
 							$treeHtml .= '<li><span class="separator">' . $title . '</span></li>' . M3_NL;
