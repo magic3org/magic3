@@ -19,19 +19,19 @@ $(function(){
 </script>
 <div class="col-sm-8 col-sm-offset-2">
 <!-- m3:ErrorMessage -->
-<h3>ドメイン一覧</h3>
+<h3>ホスト一覧</h3>
 <table class="table table-striped">
     <thead>
     <tr>
-		<th width="40%">ドメイン名</th>
+		<th width="40%">ホスト名</th>
 	    <th width="20%">ディレクトリ名</th>
-	    <th width="20%">インストール日時</th>
+	    <th width="20%">インストール日</th>
 		<th width="20%">ディスク使用量</th>
 	</tr>
     </thead>
     <tbody>
-	<patTemplate:tmpl name="domainlist">
-    <tr><td>{DOMAIN}</td><td>{DIR}</td><td>{DATE}</td><td>{DISKSIZE}</td></tr>
+	<patTemplate:tmpl name="hostlist">
+    <tr><td>{HOST}</td><td>{DIR}</td><td>{DATE}</td><td class="text-right">{DISKSIZE}</td></tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>

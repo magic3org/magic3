@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWidgetContainer.php');
 
-class admin_mainDomainWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainHostlistWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const HOME_DIR = '/home';
 	const SITE_DEF_FILE = '/public_html/include/siteDef.php';
@@ -40,7 +40,7 @@ class admin_mainDomainWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'domain.tmpl.html';
+		return 'hostlist.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -54,7 +54,7 @@ class admin_mainDomainWidgetContainer extends admin_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		// ディレクトリ一覧を取得
-		$domainArray = array();
+		$hostArray = array();
 		$searchPath = self::HOME_DIR;
 		if (is_dir($searchPath)){
 			$dir = dir($searchPath);
@@ -70,19 +70,19 @@ class admin_mainDomainWidgetContainer extends admin_mainBaseWidgetContainer
 						$line['dir'] = $file;
 						$line['date'] = date("Y/m/d H:i:s", filemtime($siteInfoFile));
 						
-						// ドメイン名取得
-						$domain = '';
+						// ホスト名取得
+						$host = '';
 						$contents = file_get_contents($siteInfoFile);
 						$key = 'M3_SYSTEM_ROOT_URL';
 						if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)){
 							$params = parse_url($matches[1]);
-							$domain = $params['host'];
+							$host = $params['host'];
 						}
-						$line['domain'] = $domain;
+						$line['host'] = $host;
 						
 						// 使用ディスク量
 						$line['disksize'] = calcDirSize($filePath);
-						$domainArray[] = $line;
+						$hostArray[] = $line;
 					}
 				}
 			}
@@ -90,16 +90,16 @@ class admin_mainDomainWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		
 		// 値を埋め込む
-		for ($i = 0; $i < count($domainArray); $i++){
-			$line = $domainArray[$i];
+		for ($i = 0; $i < count($hostArray); $i++){
+			$line = $hostArray[$i];
 			$row = array(
-				'domain'	=> $this->convertToDispString($line['domain']),	// ドメイン名
+				'host'	=> $this->convertToDispString($line['host']),	// ホスト名
 				'dir'		=> $this->convertToDispString($line['dir']),			// ディレクトリ名
 				'date'		=> $this->convertToDispDate($line['date']),			// インストール日時
 				'disksize'	=> $this->convertToDispString(convFromBytes($line['disksize'])),			// ディスク使用量
 			);
-			$this->tmpl->addVars('domainlist', $row);
-			$this->tmpl->parseTemplate('domainlist', 'a');
+			$this->tmpl->addVars('hostlist', $row);
+			$this->tmpl->parseTemplate('hostlist', 'a');
 		}
 	}
 }
