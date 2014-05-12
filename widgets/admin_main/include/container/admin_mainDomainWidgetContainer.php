@@ -17,6 +17,9 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWid
 
 class admin_mainDomainWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	const HOME_DIR = '/home';
+	const SITE_DEF_FILE = '/public_html/include/siteDef.php';
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -50,14 +53,54 @@ class admin_mainDomainWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		// インストールディレクトリ
-		$dirName = basename($this->gEnv->getSystemRootPath());
+		// ディレクトリ一覧を取得
+		$domainArray = array();
+		$searchPath = self::HOME_DIR;
+		if (is_dir($searchPath)){
+			$dir = dir($searchPath);
+			while (($file = $dir->read()) !== false){
+				$filePath = $searchPath . '/' . $file;
+				$pathParts = pathinfo($file);
+					
+				// ディレクトリのときは、ドメイン名を取得
+				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath)){
+					$siteInfoFile = $filePath . self::SITE_DEF_FILE;
+					if (file_exists($siteInfoFile)){
+						$line = array();
+						$line['dir'] = $file;
+						$line['date'] = date("Y/m/d H:i:s", filemtime($siteInfoFile));
+						
+						// ドメイン名取得
+						$domain = '';
+						$contents = file_get_contents($siteInfoFile);
+						$key = 'M3_SYSTEM_ROOT_URL';
+						if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)){
+							$params = parse_url($matches[1]);
+							$domain = $params['host'];
+						}
+						$line['domain'] = $domain;
+						
+						// 使用ディスク量
+						$line['disksize'] = calcDirSize($filePath);
+						$domainArray[] = $line;
+					}
+				}
+			}
+			$dir->close();
+		}
 		
 		// 値を埋め込む
-		$this->tmpl->addVar("_widget", "version_tag", $this->convertToDispString($tagName));		// 最新バージョンタグ
-		$this->tmpl->addVar("_widget", "version", $this->convertToDispString($versionStr));		// 最新バージョン
-		$this->tmpl->addVar("_widget", "dir_name", $this->convertToDispString($dirName));		// ディレクトリ名
-		$this->tmpl->addVar("_widget", "backup_dir_name", $this->convertToDispString($backupDirName));		// デフォルトディレクトリ名
+		for ($i = 0; $i < count($domainArray); $i++){
+			$line = $domainArray[$i];
+			$row = array(
+				'domain'	=> $this->convertToDispString($line['domain']),	// ドメイン名
+				'dir'		=> $this->convertToDispString($line['dir']),			// ディレクトリ名
+				'date'		=> $this->convertToDispDate($line['date']),			// インストール日時
+				'disksize'	=> $this->convertToDispString(convFromBytes($line['disksize'])),			// ディスク使用量
+			);
+			$this->tmpl->addVars('domainlist', $row);
+			$this->tmpl->parseTemplate('domainlist', 'a');
+		}
 	}
 }
 ?>
