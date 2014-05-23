@@ -59,7 +59,7 @@ class admin_mainAwstatsWidgetContainer extends admin_mainConditionBaseWidgetCont
 		
 		// 集計ファイルを取得
 		list($yearFileArray, $monthFileArray) = $this->getYearMonthFile($this->awstatsPath);
-		
+
 		// 年月データ一覧を作成
 		$this->createYearMonthList($yearFileArray, $monthFileArray);
 		
@@ -116,6 +116,8 @@ class admin_mainAwstatsWidgetContainer extends admin_mainConditionBaseWidgetCont
 			preg_match("/^([0-9]{4})([0-9]{0,2})\.html$/", $monthFileArray[count($monthFileArray) -1], $match);
 			$endYear = intval($match[1]);
 			$endMonth = intval($match[2]);
+		} else {		// データがない場合は終了
+			return;
 		}
 		
 		for ($i = $endYear; $i >= $startYear; $i--){
