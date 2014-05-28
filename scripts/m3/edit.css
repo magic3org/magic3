@@ -84,3 +84,7 @@ img.m3icon {
 	border:0;
 	vertical-align: top;
 }
+/*** CKEditor用 ***/
+.ui-dialog *, .ui-dialog *:after, .ui-dialog *:before{
+	box-sizing: content-box;
+}
