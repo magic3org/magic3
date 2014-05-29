@@ -30,6 +30,9 @@ class admin_mainTest_ckeditorWidgetContainer extends admin_mainBaseWidgetContain
 		
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
+		
+		// Bootstrapの使用を強制キャンセル
+//		$this->gPage->cancelBootstrap();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -56,6 +59,11 @@ class admin_mainTest_ckeditorWidgetContainer extends admin_mainBaseWidgetContain
 	 */
 	function _assign($request, &$param)
 	{
+		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+		
+//		$connectorUrl = $this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_BROWSER_PATH);
+		$this->tmpl->addVar('_widget', 'url', $connectorUrl);	// ファイルブラウザ接続先URL
+		$this->tmpl->addVar('_widget', 'lang', $langId);		// 表示言語
 	}
 }
 ?>

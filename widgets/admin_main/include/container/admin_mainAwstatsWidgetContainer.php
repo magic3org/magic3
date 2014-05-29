@@ -81,7 +81,9 @@ class admin_mainAwstatsWidgetContainer extends admin_mainConditionBaseWidgetCont
 		while (($file = $dir->read()) !== false){
 			$filePath = $path . '/' . $file;
 			// ディレクトリかどうかチェック
-			if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath)){
+			if (strncmp($file, '.', 1) != 0 && $file != '..' &&
+				$file != 'icon' &&				// iconディレクトリ
+				is_file($filePath)){
 				$ret = preg_match("/^([0-9]{4})([0-9]{0,2})\.html$/", $file, $match);
 				if ($ret){
 					if (empty($match[2])){

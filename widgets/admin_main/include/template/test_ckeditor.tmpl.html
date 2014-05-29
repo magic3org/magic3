@@ -11,17 +11,90 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<!--<link rel="stylesheet" type="text/css" href="http://192.168.1.45/magic3/scripts/elfinder-2.0/css/elfinder.min.css" />
+<link rel="stylesheet" type="text/css" href="http://192.168.1.45/magic3/scripts/elfinder-2.0/css/theme.css" />-->
+<link rel="stylesheet" type="text/css" href="http://192.168.1.45/magic3/ui/themes/smoothness/jquery-ui.custom.css" />
+<link rel="stylesheet" type="text/css" href="http://192.168.1.45/magic3/scripts/elfinder-2.0/css/elfinder.min.css" />
+<link rel="stylesheet" type="text/css" href="http://192.168.1.45/magic3/scripts/elfinder-2.0/css/theme.css" />
+
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/jquery-ui-core-1.9.2.min.js"></script>
+
+
+
+
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/elfinder-2.0/js/elfinder.full.js"></script>
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/elfinder-2.0/js/i18n/elfinder.ja.js"></script>
+
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/jquery/ui/1.9.2/jquery.ui.slider.min.js"></script>
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/jquery/ui/1.9.2/jquery.ui.dialog.min.js"></script>
+
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript" src="{_SCRIPTS_URL}/ckeditor4.3.3/ckeditor.js"></script>
+
+<!--<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/elfinder-2.0/js/elfinder.full.js"></script>
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/elfinder-2.0/js/i18n/elfinder.ja.js"></script>
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/jquery/ui/1.9.2/jquery.ui.slider.min.js"></script>
+<script type="text/javascript" src="http://192.168.1.45/magic3/scripts/jquery/ui/1.9.2/jquery.ui.dialog.min.js"></script>
+-->
+
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
+CKEDITOR.on('dialogDefinition', function(event) {
+    var editor = event.editor;
+    var dialogDefinition = event.data.definition;
+    var dialogName = event.data.name;
+
+	// ファイルブラウザ
+	var tabCount = dialogDefinition.contents.length;
+	for (var i = 0; i < tabCount; i++){
+		var browseButton = dialogDefinition.contents[i].get('browse');
+
+		if (browseButton !== null){
+			browseButton.hidden = false;
+			browseButton.onClick = function(dialog, i){
+
+				editor._.filebrowserSe = this;
+				$('<div />').dialog({
+					title: "画像を選択",
+					modal: true,
+					width: "80%",
+					zIndex: 99999,
+					open: function(){
+						$(this).parent().css("padding", "0px");
+						$(this).css("padding", "0px");
+					},
+					create: function(event, ui){
+						$(this).elfinder({
+							url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=image',
+							height: '500px',
+							lang: 'ja',
+							resizable: false,
+							getFileCallback: function(file){
+								var url = file.url;
+								CKEDITOR.tools.callFunction(editor._.filebrowserFn, url);
+								$('a.ui-dialog-titlebar-close[role="button"]').click();
+							}
+						}).elfinder('instance');
+					}
+				});
+			}
+		}
+	}
+
+});
+
 	// WYSIWYGエディター作成
 //	m3SetWysiwygEditor('item_html', 500/* 高さ */);
 	var config = {};
-	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_test.js';
+//	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_test.js';
+	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_elfinder.js';
 	config['toolbar'] = 'Full';
 	var editor = CKEDITOR.replace('editor', config);
+	
+	
+
 });
 //]]>
 </script>

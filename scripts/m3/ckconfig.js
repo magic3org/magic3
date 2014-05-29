@@ -120,21 +120,39 @@ CKEDITOR.editorConfig = function(config){
 	config.width = 800;
 	
 	// ツールバーの設定
-	config.toolbar_Full = [
-		{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
-		{ name: 'document', items: [ 'Source', 'Templates' ] },
-		{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-		{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
-		{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
-		{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
-		'/',
-		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
-		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', /*'-', 'Blockquote', 'CreateDiv',*/ '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
-		{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
-		{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
-//		{ name: 'others', items: [ '-' ] }
-//		{ name: 'about', items: [ 'About' ] }
-	];
+	if (M3_USE_GOOGLEMAPS){			// GoogleMapsを使用する場合
+		config.toolbar_Full = [
+			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
+			{ name: 'document', items: [ 'Source', 'Templates' ] },
+			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+			{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
+			{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
+			{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
+			'/',
+			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
+			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', /*'-', 'Blockquote', 'CreateDiv',*/ '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+			{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+			{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
+	//		{ name: 'others', items: [ '-' ] }
+	//		{ name: 'about', items: [ 'About' ] }
+		];
+	} else {
+		config.toolbar_Full = [
+			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
+			{ name: 'document', items: [ 'Source', 'Templates' ] },
+			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+			{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
+			{ name: 'insert', items: [ 'Image', 'Flash', /*'YouTube', 'Googlemaps',*/ 'Table', 'HorizontalRule' ] },
+			{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
+			'/',
+			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
+			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', /*'-', 'Blockquote', 'CreateDiv',*/ '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
+			{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+			{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
+	//		{ name: 'others', items: [ '-' ] }
+	//		{ name: 'about', items: [ 'About' ] }
+		];
+	}
 	config.toolbar_Layout = [
 		{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
 		{ name: 'document', items: [ 'Source' ] },
@@ -156,13 +174,11 @@ CKEDITOR.editorConfig = function(config){
 //	config.autoGrow_maxHeight = 800;		// 指定サイズまで入力に合わせて拡大
 	
 	// KCFinderの設定
-	config.filebrowserBrowseUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=file';
-	config.filebrowserImageBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=image';
-	//config.filebrowserImageBrowseUrl	= M3_ROOT_URL + '/admin/index.php?task=filebrowser&openby=dialog&mode=image';
-	config.filebrowserFlashBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=flash';
-	config.filebrowserUploadUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/upload.php?type=file';
-	config.filebrowserImageUploadUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/upload.php?type=image';
-	config.filebrowserFlashUploadUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/upload.php?type=flash';
+	if (!jQuery().elfinder){			// elFinderが使用できない場合
+		config.filebrowserBrowseUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=file';
+		config.filebrowserImageBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=image';
+		config.filebrowserFlashBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=flash';
+	}
 };
 CKEDITOR.on('dialogDefinition', function(ev){
 	var dialogName = ev.data.name;
@@ -171,6 +187,45 @@ CKEDITOR.on('dialogDefinition', function(ev){
 	
 	if (dialogName == 'image' || dialogName == 'flash'){
 		dialogDefinition.removeContents('Upload');	// 「アップロード」タブ削除
+	}
+	
+	// ファイルブラウザ
+	if (jQuery().elfinder){			// elFinderが使用できる場合
+		var editor = ev.editor;
+		var tabCount = dialogDefinition.contents.length;
+		for (var i = 0; i < tabCount; i++){
+			var browseButton = dialogDefinition.contents[i].get('browse');
+
+			if (browseButton !== null){
+				browseButton.hidden = false;
+				browseButton.onClick = function(dialog, i){
+					editor._.filebrowserSe = this;
+					$('<div />').dialog({
+						title: "画像を選択",
+						modal: true,
+						width: "80%",
+						zIndex: 99999,
+						open: function(){
+							$(this).parent().css("padding", "0px");
+							$(this).css("padding", "0px");
+						},
+						create: function(event, ui){
+							$(this).elfinder({
+								url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=image',
+								height: '500px',
+								lang: 'ja',
+								resizable: false,
+								getFileCallback: function(file){
+									var url = file.url;
+									CKEDITOR.tools.callFunction(editor._.filebrowserFn, url);
+									$('a.ui-dialog-titlebar-close[role="button"]').click();
+								}
+							}).elfinder('instance');
+						}
+					});
+				}
+			}
+		}
 	}
 });
 CKEDITOR.on('instanceReady',function(){

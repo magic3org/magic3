@@ -176,7 +176,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.1.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.2.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.3.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.4.js';			// 一般、管理機能共通スクリプト
@@ -1439,59 +1439,79 @@ class PageManager extends Core
 				$libsArray = explode(',', $libs);
 				for ($j = 0; $j < count($libsArray); $j++){
 					$lib = strtolower(trim($libsArray[$j]));// 小文字に変換
-					if (isset($this->libFiles[$lib])){		// ライブラリが存在するとき
-						// 依存ライブラリを取得
-						if (strcmp($lib, ScriptLibInfo::LIB_ELFINDER) == 0 || strcmp($lib, ScriptLibInfo::LIB_JQUERY_TIMEPICKER) == 0){		// elFinderを使用する場合
-							// jQuery UIライブラリを追加
-							$dependentLib = ScriptLibInfo::getDependentLib($lib);
-							for ($l = 0; $l < count($dependentLib); $l++){
-								$addLib = $dependentLib[$l];
-
-								// ライブラリのファイルを追加
-								if (isset($this->libFiles[$addLib]['script'])){
-									$scriptFiles = $this->libFiles[$addLib]['script'];
-									for ($m = 0; $m < count($scriptFiles); $m++){
-										$this->addAdminScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
-									}
-								}
-								if (isset($this->libFiles[$addLib]['css'])){
-									$cssFiles = $this->libFiles[$addLib]['css'];
-									for ($m = 0; $m < count($cssFiles); $m++){
-										$this->addAdminCssFile($cssFiles[$m]);		// 通常機能用のCSS追加
-									}
-								}
-							}
-							// jQueryUIテーマを追加
-							if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
-								$this->addAdminCssFile($this->getAdminDefaultThemeUrl());		// CSS追加(絶対パス)
-								$this->outputTheme = true;
-							}
+					
+					// ライブラリセットを展開
+					$setLibArray = ScriptLibInfo::getLibSet($lib);
+					$setLibCount = count($setLibArray);
+					if ($setLibCount > 0){			// ライブラリセットの場合
+						for ($k = 0; $k < $setLibCount; $k++){
+							$this->_addAdminScript($setLibArray[$k]);
 						}
-						// Javascript追加
-						if (isset($this->libFiles[$lib]['script'])){
-							$scriptFiles = $this->libFiles[$lib]['script'];
-							for ($l = 0; $l < count($scriptFiles); $l++){
-								$this->addAdminScriptFile($scriptFiles[$l]);		// 管理機能用のスクリプト追加
-							}
-						}
-						// CSS追加
-						if (isset($this->libFiles[$lib]['css'])){
-							$cssFiles = $this->libFiles[$lib]['css'];
-							for ($l = 0; $l < count($cssFiles); $l++){
-								$this->addAdminCssFile($cssFiles[$l]);		// 管理機能用のCSS追加
-							}
-						}
-						// その他
-						if (strncmp($lib, 'jquery-ui.', 10) == 0){		// jQuery UIのwidgetsまたはeffectsのとき。jQuery UI Coreはデフォルトで読み込まれている。
-							// jQueryUIテーマを追加
-							if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
-								//$this->addHeadCssFile($this->getAdminDefaultThemeUrl());		// CSS追加
-								$this->addAdminCssFile($this->getAdminDefaultThemeUrl());		// CSS追加(絶対パス)
-								$this->outputTheme = true;
-							}
-						}
+					} else {
+						$this->_addAdminScript($lib);
 					}
 				}
+			}
+		}
+	}
+	/**
+	 * ライブラリIDに対応するJavascriptファイル、CSSを追加する
+	 *
+	 * @param string $lib				ライブラリID
+	 * @return 							なし
+	 */
+	function _addAdminScript($lib)
+	{
+		// ライブラリが存在しないときは終了
+		if (!isset($this->libFiles[$lib])) return;
+		
+		// 依存ライブラリを取得
+		if (strcmp($lib, ScriptLibInfo::LIB_ELFINDER) == 0 || strcmp($lib, ScriptLibInfo::LIB_JQUERY_TIMEPICKER) == 0){		// elFinder、timepickerを使用する場合
+			// jQuery UIライブラリを追加
+			$dependentLib = ScriptLibInfo::getDependentLib($lib);
+			for ($i = 0; $i < count($dependentLib); $i++){
+				$addLib = $dependentLib[$i];
+
+				// ライブラリのファイルを追加
+				if (isset($this->libFiles[$addLib]['script'])){
+					$scriptFiles = $this->libFiles[$addLib]['script'];
+					for ($m = 0; $m < count($scriptFiles); $m++){
+						$this->addAdminScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
+					}
+				}
+				if (isset($this->libFiles[$addLib]['css'])){
+					$cssFiles = $this->libFiles[$addLib]['css'];
+					for ($m = 0; $m < count($cssFiles); $m++){
+						$this->addAdminCssFile($cssFiles[$m]);		// 通常機能用のCSS追加
+					}
+				}
+			}
+			// jQueryUIテーマを追加
+			if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
+				$this->addAdminCssFile($this->getAdminDefaultThemeUrl());		// CSS追加(絶対パス)
+				$this->outputTheme = true;
+			}
+		}
+		// Javascript追加
+		if (isset($this->libFiles[$lib]['script'])){
+			$scriptFiles = $this->libFiles[$lib]['script'];
+			for ($i = 0; $i < count($scriptFiles); $i++){
+				$this->addAdminScriptFile($scriptFiles[$i]);		// 管理機能用のスクリプト追加
+			}
+		}
+		// CSS追加
+		if (isset($this->libFiles[$lib]['css'])){
+			$cssFiles = $this->libFiles[$lib]['css'];
+			for ($i = 0; $i < count($cssFiles); $i++){
+				$this->addAdminCssFile($cssFiles[$i]);		// 管理機能用のCSS追加
+			}
+		}
+		// その他
+		if (strncmp($lib, 'jquery-ui.', 10) == 0){		// jQuery UIのwidgetsまたはeffectsのとき。jQuery UI Coreはデフォルトで読み込まれている。
+			// jQueryUIテーマを追加
+			if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
+				$this->addAdminCssFile($this->getAdminDefaultThemeUrl());		// CSS追加(絶対パス)
+				$this->outputTheme = true;
 			}
 		}
 	}

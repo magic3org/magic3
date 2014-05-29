@@ -26,7 +26,10 @@ class ScriptLibInfo
 												'2.1'	=> 'jquery-2.1.0.min.js');
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
 	
-	// Javascriptライブラリ(DBでの設定値)
+	// ##### Javascriptライブラリ(DBでの設定値) #####
+	// ライブラリセット(複数ライブラリの構成)
+	const LIB_SET_CKEDITOR_TOOLBAR	= 'ckeditor_toolbar';		// CKEditorのツールバー用ライブラリ
+	
 	// ベースライブラリ
 	const LIB_JQUERY				= 'jquery';
 	const LIB_JQUERY_UI				= 'jquery-ui';
@@ -519,6 +522,22 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 										self::LIB_JQUERY_TIMEPICKER	=>	array(self::LIB_JQUERY_UI));			// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 		
 		return $dependentLib[$lib];
+	}
+	/**
+	 * ライブラリセットの構成ライブラリ取得
+	 *
+	 * @param $string $libSetId		ライブラリセットID
+	 * @return array				ライブラリ
+	 */
+	static function getLibSet($libSetId)
+	{
+		static $libSet = array(	self::LIB_SET_CKEDITOR_TOOLBAR	=>	array(self::LIB_ELFINDER));		// CKEditorのツールバー用
+		$libs = $libSet[$libSetId];
+		if (isset($libs)){
+			return $libs;
+		} else {
+			return array();
+		}
 	}
 	/**
 	 * jQuery UIライブラリ情報取得
