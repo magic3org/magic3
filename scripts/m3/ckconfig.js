@@ -210,8 +210,10 @@ CKEDITOR.on('dialogDefinition', function(ev){
 							$(this).css("padding", "0px");
 						},
 						create: function(event, ui){
+							var option = '';
+							if (dialogName == 'image' || dialogName == 'flash') option = '?dirtype=' + dialogName;
 							$(this).elfinder({
-								url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=image',
+								url: M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php' + option,
 								height: '500px',
 								lang: 'ja',
 								resizable: false,
