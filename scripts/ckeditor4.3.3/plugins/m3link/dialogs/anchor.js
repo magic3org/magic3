@@ -19,7 +19,7 @@ CKEDITOR.dialog.add( 'm3anchor', function( editor ) {
 	}
 
 	return {
-		title: editor.lang.link.anchor.title,
+		title: editor.lang.m3link.anchor.title,
 		minWidth: 300,
 		minHeight: 60,
 		onOk: function() {
@@ -85,17 +85,17 @@ CKEDITOR.dialog.add( 'm3anchor', function( editor ) {
 		contents: [
 			{
 			id: 'info',
-			label: editor.lang.link.anchor.title,
+			label: editor.lang.m3link.anchor.title,
 			accessKey: 'I',
 			elements: [
 				{
 				type: 'text',
 				id: 'txtName',
-				label: editor.lang.link.anchor.name,
+				label: editor.lang.m3link.anchor.name,
 				required: true,
 				validate: function() {
 					if ( !this.getValue() ) {
-						alert( editor.lang.link.anchor.errorName );
+						alert( editor.lang.m3link.anchor.errorName );
 						return false;
 					}
 					return true;

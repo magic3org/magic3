@@ -8,6 +8,7 @@
 ( function() {
 	CKEDITOR.dialog.add( 'm3link', function( editor ) {
 		var plugin = CKEDITOR.plugins.m3link;
+		var accessPoint = '';		// アクセスポイント
 
 		// Handles the event when the "Target" selection box is changed.
 		var targetChanged = function() {
@@ -44,7 +45,7 @@
 		// Handles the event when the "Type" selection box is changed.
 		var linkTypeChanged = function() {
 				var dialog = this.getDialog(),
-					partIds = [ 'urlOptions', 'anchorOptions', 'emailOptions' ],
+					partIds = [ 'urlOptions', 'anchorOptions' ],
 					typeValue = this.getValue();
 
 				if ( typeValue == 'url' ) {
@@ -98,7 +99,7 @@
 			};
 
 		var commonLang = editor.lang.common,
-			linkLang = editor.lang.link,
+			linkLang = editor.lang.m3link,
 			anchors;
 
 		return {
@@ -118,8 +119,7 @@
 					'default': 'url',
 					items: [
 						[ linkLang.toUrl, 'url' ],
-						[ linkLang.toAnchor, 'anchor' ],
-						[ linkLang.toEmail, 'email' ]
+						[ linkLang.toAnchor, 'anchor' ]
 						],
 					onChange: linkTypeChanged,
 					setup: function( data ) {
@@ -285,8 +285,6 @@
 										this.setValue( data.anchor.name );
 
 									var linkType = this.getDialog().getContentElement( 'info', 'linkType' );
-									if ( linkType && linkType.getValue() == 'email' )
-										this.focus();
 								},
 								commit: function( data ) {
 									if ( !data.anchor )
@@ -341,78 +339,6 @@
 						focus: true,
 						setup: function( data ) {
 							this.getElement()[ anchors && anchors.length ? 'hide' : 'show' ]();
-						}
-					}
-					],
-					setup: function( data ) {
-						if ( !this.getDialog().getContentElement( 'info', 'linkType' ) )
-							this.getElement().hide();
-					}
-				},
-					{
-					type: 'vbox',
-					id: 'emailOptions',
-					padding: 1,
-					children: [
-						{
-						type: 'text',
-						id: 'emailAddress',
-						label: linkLang.emailAddress,
-						required: true,
-						validate: function() {
-							var dialog = this.getDialog();
-
-							if ( !dialog.getContentElement( 'info', 'linkType' ) || dialog.getValueOf( 'info', 'linkType' ) != 'email' )
-								return true;
-
-							var func = CKEDITOR.dialog.validate.notEmpty( linkLang.noEmail );
-							return func.apply( this );
-						},
-						setup: function( data ) {
-							if ( data.email )
-								this.setValue( data.email.address );
-
-							var linkType = this.getDialog().getContentElement( 'info', 'linkType' );
-							if ( linkType && linkType.getValue() == 'email' )
-								this.select();
-						},
-						commit: function( data ) {
-							if ( !data.email )
-								data.email = {};
-
-							data.email.address = this.getValue();
-						}
-					},
-						{
-						type: 'text',
-						id: 'emailSubject',
-						label: linkLang.emailSubject,
-						setup: function( data ) {
-							if ( data.email )
-								this.setValue( data.email.subject );
-						},
-						commit: function( data ) {
-							if ( !data.email )
-								data.email = {};
-
-							data.email.subject = this.getValue();
-						}
-					},
-						{
-						type: 'textarea',
-						id: 'emailBody',
-						label: linkLang.emailBody,
-						rows: 3,
-						'default': '',
-						setup: function( data ) {
-							if ( data.email )
-								this.setValue( data.email.body );
-						},
-						commit: function( data ) {
-							if ( !data.email )
-								data.email = {};
-
-							data.email.body = this.getValue();
 						}
 					}
 					],
@@ -638,6 +564,54 @@
 					type: 'vbox',
 					padding: 1,
 					children: [
+							{
+								type : 'select',
+								id : 'access_point',
+								label : linkLang.access_point_title,
+								items : [
+									[ '接続中', '' ]
+								],
+								onLoad : function(){		// 起動時イベント
+									var elementId = '#' + this.getInputElement().$.id;
+							
+									// Ajaxでページ情報を取得
+									m3_ajax_request('', 'task=linkinfo&act=getaccesspoint', function(request, retcode, jsondata){		// 正常終了
+										// アクセスポイント選択メニューを更新
+										$('option', elementId).remove();
+										if (jsondata.accesspoint){
+											$.each(jsondata.accesspoint, function(index, item){
+												$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
+											});
+										}
+										// 項目を再選択
+										$(elementId).val(accessPoint);
+									}, function(request){		// 異常終了
+										alert('通信に失敗しました。');
+									});
+								},
+								onShow : function(){		// 再表示イベント
+									var elementId = '#' + this.getInputElement().$.id;
+							
+									// 項目を再選択
+									$(elementId).val(accessPoint);
+								},
+								onChange : function(){
+									// アクセスポイント変更
+									accessPoint = dialog.getContentElement('tab_advanced', 'access_point').getValue();
+		
+									// コンテンツタイプ更新
+									updateContentType();
+							
+									// ページリスト更新
+									updatePageList();
+								}
+							}
+						]
+					},
+					{
+					type: 'vbox',
+					padding: 1,
+					children: [
 						{
 						type: 'hbox',
 						widths: [ '45%', '35%', '20%' ],
@@ -839,8 +813,7 @@
 					// Use link URL as text with a collapsed cursor.
 					if ( range.collapsed ) {
 						// Short mailto link text view (#5736).
-						var text = new CKEDITOR.dom.text( data.type == 'email' ?
-							data.email.address : attributes.set[ 'data-cke-saved-href' ], editor.document );
+						var text = new CKEDITOR.dom.text( attributes.set[ 'data-cke-saved-href' ], editor.document );
 						range.insertNode( text );
 						range.selectNodeContents( text );
 					}
@@ -864,10 +837,9 @@
 					element.removeAttributes( attributes.removed );
 
 					// Update text view when user changes protocol (#4612).
-					if ( href == textView || data.type == 'email' && textView.indexOf( '@' ) != -1 ) {
+					if ( href == textView ) {
 						// Short mailto link text view (#5736).
-						element.setHtml( data.type == 'email' ?
-							data.email.address : attributes.set[ 'data-cke-saved-href' ] );
+						element.setHtml( attributes.set[ 'data-cke-saved-href' ] );
 
 						// We changed the content, so need to select it again.
 						selection.selectElement( element );
@@ -896,32 +868,3 @@
 		};
 	} );
 } )();
-
-/**
- * The e-mail address anti-spam protection option. The protection will be
- * applied when creating or modifying e-mail links through the editor interface.
- *
- * Two methods of protection can be chosen:
- *
- * 1. The e-mail parts (name, domain, and any other query string) are
- *     assembled into a function call pattern. Such function must be
- *     provided by the developer in the pages that will use the contents.
- * 2. Only the e-mail address is obfuscated into a special string that
- *     has no meaning for humans or spam bots, but which is properly
- *     rendered and accepted by the browser.
- *
- * Both approaches require JavaScript to be enabled.
- *
- *		// href="mailto:tester@ckeditor.com?subject=subject&body=body"
- *		config.emailProtection = '';
- *
- *		// href="<a href=\"javascript:void(location.href=\'mailto:\'+String.fromCharCode(116,101,115,116,101,114,64,99,107,101,100,105,116,111,114,46,99,111,109)+\'?subject=subject&body=body\')\">e-mail</a>"
- *		config.emailProtection = 'encode';
- *
- *		// href="javascript:mt('tester','ckeditor.com','subject','body')"
- *		config.emailProtection = 'mt(NAME,DOMAIN,SUBJECT,BODY)';
- *
- * @since 3.1
- * @cfg {String} [emailProtection='' (empty string = disabled)]
- * @member CKEDITOR.config
- */

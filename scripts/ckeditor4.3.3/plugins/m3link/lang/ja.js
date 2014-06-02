@@ -2,7 +2,7 @@
 Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
-CKEDITOR.plugins.setLang( 'link', 'ja', {
+CKEDITOR.plugins.setLang( 'm3link', 'ja', {
 	acccessKey: 'アクセスキー',
 	advanced: '高度な設定',
 	advisoryContentType: 'Content Type属性',
@@ -61,5 +61,18 @@ CKEDITOR.plugins.setLang( 'link', 'ja', {
 	toolbar: 'リンク挿入/編集',
 	type: 'リンクタイプ',
 	unlink: 'リンクを削除',
-	upload: 'アップロード'
+	upload: 'アップロード',
+	
+	toolbar: 'Magic3 URL作成',
+	title: 'Magic3 URL作成',
+	tab_info_title: 'URL情報',
+	tab_advanced_title: '高度な設定',
+	link_target_title: 'リンク対象を選択してください。',
+	page_list_title: 'ページ',
+	content_type_title: 'コンテンツ種別',
+	content_list_title: 'コンテンツ',
+	access_point_title: 'アクセスポイント',
+	url_title: 'URL',
+	content_title: 'タイトル',
+	content_label_title: 'コンテンツ内容：'
 } );

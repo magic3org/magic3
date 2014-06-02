@@ -2,7 +2,7 @@
 Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
-CKEDITOR.plugins.setLang( 'link', 'en', {
+CKEDITOR.plugins.setLang( 'm3link', 'en', {
 	acccessKey: 'Access Key',
 	advanced: 'Advanced',
 	advisoryContentType: 'Advisory Content Type',
@@ -61,5 +61,17 @@ CKEDITOR.plugins.setLang( 'link', 'en', {
 	toolbar: 'Link',
 	type: 'Link Type',
 	unlink: 'Unlink',
-	upload: 'Upload'
+	upload: 'Upload',
+	
+	toolbar: 'Create URL for Magic3',
+	title: 'Create URL for Magic3',
+	tab_info_title: 'URL Info',
+	tab_advanced_title: 'Advanced Settings',
+	link_target_title: 'Select the link target.',
+	page_list_title: 'Page',
+	content_type_title: 'Content Type',
+	content_list_title: 'Content',
+	access_point_title: 'Access Point',
+	url_title: 'URL',
+content_label_title: 'Content Summary:'
 } );
