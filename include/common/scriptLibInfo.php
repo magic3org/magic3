@@ -21,9 +21,9 @@ class ScriptLibInfo
 												'1.8'	=> 'jquery-1.8.3.min.js',
 												'1.9'	=> 'jquery-1.9.1.min.js',
 												'1.10'	=> 'jquery-1.10.2.min.js',
-												'1.11'	=> 'jquery-1.11.0.min.js',
+												'1.11'	=> 'jquery-1.11.1.min.js',
 												'2.0'	=> 'jquery-2.0.3.min.js',
-												'2.1'	=> 'jquery-2.1.0.min.js');
+												'2.1'	=> 'jquery-2.1.1.min.js');
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
 	
 	// ##### Javascriptライブラリ(DBでの設定値) #####
