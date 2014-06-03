@@ -1,51 +1,29 @@
 /**
- * @license Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * Magic3 CKEditorプラグイン
+ *
+ * JavaScript 1.5
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
  */
-
 'use strict';
 
 ( function() {
 	CKEDITOR.dialog.add( 'm3link', function( editor ) {
 		var plugin = CKEDITOR.plugins.m3link;
 		var accessPoint = '';		// アクセスポイント
-
-		// Handles the event when the "Target" selection box is changed.
-		var targetChanged = function() {
-				var dialog = this.getDialog(),
-					popupFeatures = dialog.getContentElement( 'target', 'popupFeatures' ),
-					targetName = dialog.getContentElement( 'target', 'linkTargetName' ),
-					value = this.getValue();
-
-				if ( !popupFeatures || !targetName )
-					return;
-
-				popupFeatures = popupFeatures.getElement();
-				popupFeatures.hide();
-				targetName.setValue( '' );
-
-				switch ( value ) {
-					case 'frame':
-						targetName.setLabel( editor.lang.link.targetFrameName );
-						targetName.getElement().show();
-						break;
-					case 'popup':
-						popupFeatures.show();
-						targetName.setLabel( editor.lang.link.targetPopupName );
-						targetName.getElement().show();
-						break;
-					default:
-						targetName.setValue( value );
-						targetName.getElement().hide();
-						break;
-				}
-
-			};
+		var dialog;					// このダイアログへの参照
 
 		// Handles the event when the "Type" selection box is changed.
 		var linkTypeChanged = function() {
 				var dialog = this.getDialog(),
-					partIds = [ 'urlOptions', 'anchorOptions' ],
+					partIds = [ 'urlOptions' ],
 					typeValue = this.getValue();
 
 				if ( typeValue == 'url' ) {
@@ -75,10 +53,6 @@
 					this.setValue( data[ page ][ this.id ] || '' );
 			};
 
-		var setupPopupParams = function( data ) {
-				return setupParams.call( this, 'target', data );
-			};
-
 		var setupAdvParams = function( data ) {
 				return setupParams.call( this, 'advanced', data );
 			};
@@ -90,22 +64,167 @@
 				data[ page ][ this.id ] = this.getValue() || '';
 			};
 
-		var commitPopupParams = function( data ) {
-				return commitParams.call( this, 'target', data );
-			};
-
 		var commitAdvParams = function( data ) {
 				return commitParams.call( this, 'advanced', data );
 			};
 
 		var commonLang = editor.lang.common,
-			linkLang = editor.lang.m3link,
-			anchors;
+		linkLang = editor.lang.m3link;
 
+	// コンテンツリスト、コンテンツ内容表示を更新
+	function updateContentList()
+	{
+		// コンテンツリストを取得
+		var elementId = '#' + dialog.getContentElement('tab_basic', 'content_list').getInputElement().$.id;
+		var contentType = dialog.getContentElement('tab_basic', 'content_type').getValue();
+		var pageNo = 1;
+
+		// コンテンツプレビュークリア
+		dialog.getContentElement('tab_basic', 'url').setValue('');
+		$('#content_text').text('');
+		
+		// Ajaxでページ情報を取得
+		m3_ajax_request('', 'task=linkinfo&act=getcontentlist&contenttype=' + contentType + '&accesspoint=' + accessPoint + '&page=' + pageNo, function(request, retcode, jsondata){		// 正常終了
+			// コンテンツ種別選択メニューを更新
+			$('option', elementId).remove();
+			if (jsondata.contentlist){
+				$.each(jsondata.contentlist, function(index, item) {
+					$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
+				});
+			}
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	}
+		// コンテンツタイプを取得
+	function updateContentType()
+	{
+		var elementId = '#' + dialog.getContentElement('tab_basic', 'content_type').getInputElement().$.id;
+		
+		// Ajaxでコンテンツタイプを取得
+		m3_ajax_request('', 'task=linkinfo&act=getcontenttype&accesspoint=' + accessPoint, function(request, retcode, jsondata){		// 正常終了
+			// コンテンツ種別選択メニューを更新
+			$('option', elementId).remove();
+			if (jsondata.contenttype){
+				$.each(jsondata.contenttype, function(index, item) {
+					$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
+				});
+			}
+			
+			// デフォルトのコンテンツリストを取得
+			updateContentList();
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	}
+	// ページリストを取得
+	function updatePageList()
+	{
+		var elementId = '#' + dialog.getContentElement('tab_basic', 'page_list').getInputElement().$.id;
+
+		// Ajaxでページ情報を取得
+		m3_ajax_request('', 'task=linkinfo&act=getpage&accesspoint=' + accessPoint, function(request, retcode, jsondata){		// 正常終了
+			// ページ選択メニューを更新
+			$('option', elementId).remove();
+			if (jsondata.pagelist){
+				$.each(jsondata.pagelist, function(index, item) {
+					$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
+				});
+			}
+		}, function(request){		// 異常終了
+			alert('通信に失敗しました。');
+		});
+	}
+	// ダイアログ上の項目の表示制御
+	function updateItems()
+	{
+		// リンク対象を取得
+		var selValue = dialog.getValueOf('tab_basic', 'link_target');
+		
+		switch (selValue){
+			case 'content':
+				dialog.getContentElement('tab_basic', 'content_type').getElement().show();
+				dialog.getContentElement('tab_basic', 'content_list').getElement().show();
+				dialog.getContentElement('tab_basic', 'page_list').getElement().hide();
+				dialog.getContentElement('tab_basic', 'content_label').getElement().show();
+				$('#content_text').show();
+				break;
+			case 'page':
+				dialog.getContentElement('tab_basic', 'content_type').getElement().hide();
+				dialog.getContentElement('tab_basic', 'content_list').getElement().hide();
+				dialog.getContentElement('tab_basic', 'page_list').getElement().show();
+				dialog.getContentElement('tab_basic', 'content_label').getElement().hide();
+				$('#content_text').hide();
+				break;
+			case 'others':
+				dialog.getContentElement('tab_basic', 'content_type').getElement().hide();
+				dialog.getContentElement('tab_basic', 'content_list').getElement().hide();
+				dialog.getContentElement('tab_basic', 'page_list').getElement().hide();
+				dialog.getContentElement('tab_basic', 'content_label').getElement().hide();
+				$('#content_text').hide();
+				break;
+		}
+	}
+	// URLを更新。必要項目が選択されていない場合はクリア。
+	function updateUrl()
+	{
+		var url = M3_ROOT_URL;
+		if (accessPoint != '') url += '/' + accessPoint;
+		url += '/index.php';
+		
+		// リンク対象を取得
+		var linkTarget = dialog.getValueOf('tab_basic', 'link_target');
+		switch (linkTarget){
+			case 'content':
+				var contentType = dialog.getContentElement('tab_basic', 'content_type').getValue();
+				var contentId = dialog.getContentElement('tab_basic', 'content_list').getValue();
+
+				if (contentId){
+					switch (contentType){
+						case 'content':
+						case 'product':
+						case 'event':
+						case 'photo':
+							url += '?' + contentType + 'id=' + contentId;
+							break;
+						case 'blog':
+							url += '?entryid=' + contentId;
+							break;
+						case 'wiki':
+							url += '?' + encodeURIComponent(contentId);
+							break;
+					}
+				} else {
+					url = '';
+				}
+				break;
+			case 'page':
+				var pageSubId = dialog.getContentElement('tab_basic', 'page_list').getValue();
+				switch (pageSubId){
+					case '':
+						url = '';
+						break;
+					case '_root':
+						url = M3_ROOT_URL;
+						if (accessPoint != '') url += '/' + accessPoint;
+						url += '/';
+						break;
+					default:
+						url += '?sub=' + pageSubId;
+						break;
+				}
+				break;
+			case 'others':
+				url = '';
+				break;
+		}
+		dialog.getContentElement('tab_basic', 'url').setValue(url);
+	}
+		
 		return {
 			title: linkLang.title,
-			minWidth: 350,
-			minHeight: 230,
+			minWidth: 500,
+			minHeight: 300,
 			contents: [
 				{
 				id: 'info',
@@ -118,8 +237,7 @@
 					label: linkLang.type,
 					'default': 'url',
 					items: [
-						[ linkLang.toUrl, 'url' ],
-						[ linkLang.toAnchor, 'anchor' ]
+						[ linkLang.toUrl, 'url' ]
 						],
 					onChange: linkTypeChanged,
 					setup: function( data ) {
@@ -138,30 +256,6 @@
 						widths: [ '25%', '75%' ],
 						children: [
 							{
-							id: 'protocol',
-							type: 'select',
-							label: commonLang.protocol,
-							'default': 'http://',
-							items: [
-								// Force 'ltr' for protocol names in BIDI. (#5433)
-								[ 'http://\u200E', 'http://' ],
-								[ 'https://\u200E', 'https://' ],
-								[ 'ftp://\u200E', 'ftp://' ],
-								[ 'news://\u200E', 'news://' ],
-								[ linkLang.other, '' ]
-								],
-							setup: function( data ) {
-								if ( data.url )
-									this.setValue( data.url.protocol || '' );
-							},
-							commit: function( data ) {
-								if ( !data.url )
-									data.url = {};
-
-								data.url.protocol = this.getValue();
-							}
-						},
-							{
 							type: 'text',
 							id: 'url',
 							label: commonLang.url,
@@ -170,20 +264,9 @@
 								this.allowOnChange = true;
 							},
 							onKeyUp: function() {
-								this.allowOnChange = false;
-								var protocolCmb = this.getDialog().getContentElement( 'info', 'protocol' ),
-									url = this.getValue(),
-									urlOnChangeProtocol = /^(http|https|ftp|news):\/\/(?=.)/i,
-									urlOnChangeTestOther = /^((javascript:)|[#\/\.\?])/i;
-
-								var protocol = urlOnChangeProtocol.exec( url );
-								if ( protocol ) {
-									this.setValue( url.substr( protocol[ 0 ].length ) );
-									protocolCmb.setValue( protocol[ 0 ].toLowerCase() );
-								} else if ( urlOnChangeTestOther.test( url ) )
-									protocolCmb.setValue( '' );
-
-								this.allowOnChange = true;
+								//this.allowOnChange = false;
+												var url = this.getValue();
+								//this.allowOnChange = true;
 							},
 							onChange: function() {
 								if ( this.allowOnChange ) // Dont't call on dialog load.
@@ -239,113 +322,6 @@
 						label: commonLang.browseServer
 					}
 					]
-				},
-					{
-					type: 'vbox',
-					id: 'anchorOptions',
-					width: 260,
-					align: 'center',
-					padding: 0,
-					children: [
-						{
-						type: 'fieldset',
-						id: 'selectAnchorText',
-						label: linkLang.selectAnchor,
-						setup: function( data ) {
-							anchors = plugin.getEditorAnchors( editor );
-
-							this.getElement()[ anchors && anchors.length ? 'show' : 'hide' ]();
-						},
-						children: [
-							{
-							type: 'hbox',
-							id: 'selectAnchor',
-							children: [
-								{
-								type: 'select',
-								id: 'anchorName',
-								'default': '',
-								label: linkLang.anchorName,
-								style: 'width: 100%;',
-								items: [
-									[ '' ]
-									],
-								setup: function( data ) {
-									this.clear();
-									this.add( '' );
-
-									if ( anchors ) {
-										for ( var i = 0; i < anchors.length; i++ ) {
-											if ( anchors[ i ].name )
-												this.add( anchors[ i ].name );
-										}
-									}
-
-									if ( data.anchor )
-										this.setValue( data.anchor.name );
-
-									var linkType = this.getDialog().getContentElement( 'info', 'linkType' );
-								},
-								commit: function( data ) {
-									if ( !data.anchor )
-										data.anchor = {};
-
-									data.anchor.name = this.getValue();
-								}
-							},
-								{
-								type: 'select',
-								id: 'anchorId',
-								'default': '',
-								label: linkLang.anchorId,
-								style: 'width: 100%;',
-								items: [
-									[ '' ]
-									],
-								setup: function( data ) {
-									this.clear();
-									this.add( '' );
-
-									if ( anchors ) {
-										for ( var i = 0; i < anchors.length; i++ ) {
-											if ( anchors[ i ].id )
-												this.add( anchors[ i ].id );
-										}
-									}
-
-									if ( data.anchor )
-										this.setValue( data.anchor.id );
-								},
-								commit: function( data ) {
-									if ( !data.anchor )
-										data.anchor = {};
-
-									data.anchor.id = this.getValue();
-								}
-							}
-							],
-							setup: function( data ) {
-								this.getElement()[ anchors && anchors.length ? 'show' : 'hide' ]();
-							}
-						}
-						]
-					},
-						{
-						type: 'html',
-						id: 'noAnchors',
-						style: 'text-align: center;',
-						html: '<div role="note" tabIndex="-1">' + CKEDITOR.tools.htmlEncode( linkLang.noAnchors ) + '</div>',
-						// Focus the first element defined in above html.
-						focus: true,
-						setup: function( data ) {
-							this.getElement()[ anchors && anchors.length ? 'hide' : 'show' ]();
-						}
-					}
-					],
-					setup: function( data ) {
-						if ( !this.getDialog().getContentElement( 'info', 'linkType' ) )
-							this.getElement().hide();
-					}
 				}
 				]
 			},
@@ -367,189 +343,20 @@
 						style: 'width : 100%;',
 						'items': [
 							[ commonLang.notSet, 'notSet' ],
-					//		[ linkLang.targetFrame, 'frame' ],
-					//		[ linkLang.targetPopup, 'popup' ],
 							[ commonLang.targetNew, '_blank' ]
-					//		[ commonLang.targetTop, '_top' ],
-					//		[ commonLang.targetSelf, '_self' ],
-					//		[ commonLang.targetParent, '_parent' ]
 							],
-						onChange: targetChanged,
-						setup: function( data ) {
+//						onChange: targetChanged,
+/*						setup: function( data ) {
 							if ( data.target )
 								this.setValue( data.target.type || 'notSet' );
 							targetChanged.call( this );
-						},
+						},*/
 						commit: function( data ) {
 							if ( !data.target )
 								data.target = {};
 
 							data.target.type = this.getValue();
 						}
-					},
-						{
-						type: 'text',
-						id: 'linkTargetName',
-						label: linkLang.targetFrameName,
-						'default': '',
-						setup: function( data ) {
-							if ( data.target )
-								this.setValue( data.target.name );
-						},
-						commit: function( data ) {
-							if ( !data.target )
-								data.target = {};
-
-							data.target.name = this.getValue().replace( /\W/gi, '' );
-						}
-					}
-					]
-				},
-					{
-					type: 'vbox',
-					width: '100%',
-					align: 'center',
-					padding: 2,
-					id: 'popupFeatures',
-					children: [
-						{
-						type: 'fieldset',
-						label: linkLang.popupFeatures,
-						children: [
-							{
-							type: 'hbox',
-							children: [
-								{
-								type: 'checkbox',
-								id: 'resizable',
-								label: linkLang.popupResizable,
-								setup: setupPopupParams,
-								commit: commitPopupParams
-							},
-								{
-								type: 'checkbox',
-								id: 'status',
-								label: linkLang.popupStatusBar,
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							}
-							]
-						},
-							{
-							type: 'hbox',
-							children: [
-								{
-								type: 'checkbox',
-								id: 'location',
-								label: linkLang.popupLocationBar,
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							},
-								{
-								type: 'checkbox',
-								id: 'toolbar',
-								label: linkLang.popupToolbar,
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							}
-							]
-						},
-							{
-							type: 'hbox',
-							children: [
-								{
-								type: 'checkbox',
-								id: 'menubar',
-								label: linkLang.popupMenuBar,
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							},
-								{
-								type: 'checkbox',
-								id: 'fullscreen',
-								label: linkLang.popupFullScreen,
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							}
-							]
-						},
-							{
-							type: 'hbox',
-							children: [
-								{
-								type: 'checkbox',
-								id: 'scrollbars',
-								label: linkLang.popupScrollBars,
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							},
-								{
-								type: 'checkbox',
-								id: 'dependent',
-								label: linkLang.popupDependent,
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							}
-							]
-						},
-							{
-							type: 'hbox',
-							children: [
-								{
-								type: 'text',
-								widths: [ '50%', '50%' ],
-								labelLayout: 'horizontal',
-								label: commonLang.width,
-								id: 'width',
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							},
-								{
-								type: 'text',
-								labelLayout: 'horizontal',
-								widths: [ '50%', '50%' ],
-								label: linkLang.popupLeft,
-								id: 'left',
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							}
-							]
-						},
-							{
-							type: 'hbox',
-							children: [
-								{
-								type: 'text',
-								labelLayout: 'horizontal',
-								widths: [ '50%', '50%' ],
-								label: commonLang.height,
-								id: 'height',
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							},
-								{
-								type: 'text',
-								labelLayout: 'horizontal',
-								label: linkLang.popupTop,
-								widths: [ '50%', '50%' ],
-								id: 'top',
-								setup: setupPopupParams,
-								commit: commitPopupParams
-
-							}
-							]
-						}
-						]
 					}
 					]
 				}
@@ -797,6 +604,19 @@
 				this._.selectedElement = element;
 
 				this.setupContent( data );
+				
+			// ダイアログ項目の表示制御
+			updateItems();
+			
+			// 起動時の初期値を設定
+			$('#content_text').text('');// コンテンツプレビュークリア
+			accessPoint = _m3AccessPoint;		// アクセスポイント
+			dialog.getContentElement('tab_basic', 'url').setValue(_m3Url);
+			
+			// フレーム内にある場合は表示位置を調整
+			if (window.parent != window.self){
+				this.move(this.getPosition().x, 0);
+			}
 			},
 			onOk: function() {
 				var data = {};
@@ -854,6 +674,20 @@
 
 				if ( !editor.config.linkShowTargetTab )
 					this.hidePage( 'target' ); //Hide Target tab.
+				
+				// 設定変更時の確認ダイアログを非表示にする
+				this.on('cancel', function(cancelEvent){ return false; }, this, null, -1);
+			
+				// このダイアログへの参照を取得
+				dialog = this;
+			
+/*				// ダイアログ項目の表示制御
+				updateItems();
+			
+				// 起動時の初期値を設定
+				accessPoint = _m3AccessPoint;		// アクセスポイント
+				dialog.getContentElement('tab_basic', 'url').setValue(_m3Url);
+				*/
 			},
 			// Inital focus on 'url' field if link is of type URL.
 			onFocus: function() {

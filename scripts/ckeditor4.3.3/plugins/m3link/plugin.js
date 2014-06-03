@@ -165,8 +165,6 @@
 					return menu;
 				} );
 			}
-
-			this.compiledProtectionFunction = getCompiledProtectionFunction( editor );
 		},
 
 		afterInit: function( editor ) {
@@ -198,17 +196,9 @@
 	} );
 
 	// Loads the parameters in a selected link to the link dialog fields.
-	var javascriptProtocolRegex = /^javascript:/,
-		emailRegex = /^mailto:([^?]+)(?:\?(.+))?$/,
-		emailSubjectRegex = /subject=([^;?:@&=$,\/]*)/,
-		emailBodyRegex = /body=([^;?:@&=$,\/]*)/,
-		anchorRegex = /^#(.*)$/,
+	var anchorRegex = /^#(.*)$/,
 		urlRegex = /^((?:http|https|ftp|news):\/\/)?(.*)$/,
-		selectableTargets = /^(_(?:self|top|parent|blank))$/,
-		encodedEmailLinkRegex = /^javascript:void\(location\.href='mailto:'\+String\.fromCharCode\(([^)]+)\)(?:\+'(.*)')?\)$/,
-		functionCallProtectedEmailLinkRegex = /^javascript:([^(]+)\(([^)]+)\)$/,
-		popupRegex = /\s*window.open\(\s*this\.href\s*,\s*(?:'([^']*)'|null)\s*,\s*'([^']*)'\s*\)\s*;\s*return\s*false;*\s*/,
-		popupFeaturesRegex = /(?:^|,)([^=]+)=(\d+|yes|no)/gi;
+	selectableTargets = /^(_(?:self|top|parent|blank))$/;
 
 	var advAttrNames = {
 		id: 'advId',
@@ -232,57 +222,6 @@
 
 	function escapeSingleQuote( str ) {
 		return str.replace( /'/g, '\\$&' );
-	}
-
-	function protectEmailAddressAsEncodedString( address ) {
-		var charCode,
-			length = address.length,
-			encodedChars = [];
-
-		for ( var i = 0; i < length; i++ ) {
-			charCode = address.charCodeAt( i );
-			encodedChars.push( charCode );
-		}
-
-		return 'String.fromCharCode(' + encodedChars.join( ',' ) + ')';
-	}
-
-	function protectEmailLinkAsFunction( editor, email ) {
-		var plugin = editor.plugins.link,
-			name = plugin.compiledProtectionFunction.name,
-			params = plugin.compiledProtectionFunction.params,
-			paramName, paramValue, retval;
-
-		retval = [ name, '(' ];
-		for ( var i = 0; i < params.length; i++ ) {
-			paramName = params[ i ].toLowerCase();
-			paramValue = email[ paramName ];
-
-			i > 0 && retval.push( ',' );
-			retval.push( '\'', paramValue ? escapeSingleQuote( encodeURIComponent( email[ paramName ] ) ) : '', '\'' );
-		}
-		retval.push( ')' );
-		return retval.join( '' );
-	}
-
-	function getCompiledProtectionFunction( editor ) {
-		var emailProtection = editor.config.emailProtection || '',
-			compiledProtectionFunction;
-
-		// Compile the protection function pattern.
-		if ( emailProtection && emailProtection != 'encode' ) {
-			compiledProtectionFunction = {};
-
-			emailProtection.replace( /^([^(]+)\(([^)]+)\)$/, function( match, funcName, params ) {
-				compiledProtectionFunction.name = funcName;
-				compiledProtectionFunction.params = [];
-				params.replace( /[^,\s]+/g, function( param ) {
-					compiledProtectionFunction.params.push( param );
-				} );
-			} );
-		}
-
-		return compiledProtectionFunction;
 	}
 
 	/**
@@ -424,42 +363,8 @@
 		 */
 		parseLinkAttributes: function( editor, element ) {
 			var href = ( element && ( element.data( 'cke-saved-href' ) || element.getAttribute( 'href' ) ) ) || '',
-				compiledProtectionFunction = editor.plugins.link.compiledProtectionFunction,
-				emailProtection = editor.config.emailProtection,
-				javascriptMatch, emailMatch, anchorMatch, urlMatch,
+				anchorMatch, urlMatch,
 				retval = {};
-
-			if ( ( javascriptMatch = href.match( javascriptProtocolRegex ) ) ) {
-				if ( emailProtection == 'encode' ) {
-					href = href.replace( encodedEmailLinkRegex, function( match, protectedAddress, rest ) {
-						return 'mailto:' +
-							String.fromCharCode.apply( String, protectedAddress.split( ',' ) ) +
-							( rest && unescapeSingleQuote( rest ) );
-					} );
-				}
-				// Protected email link as function call.
-				else if ( emailProtection ) {
-					href.replace( functionCallProtectedEmailLinkRegex, function( match, funcName, funcArgs ) {
-						if ( funcName == compiledProtectionFunction.name ) {
-							retval.type = 'email';
-							var email = retval.email = {};
-
-							var paramRegex = /[^,\s]+/g,
-								paramQuoteRegex = /(^')|('$)/g,
-								paramsMatch = funcArgs.match( paramRegex ),
-								paramsMatchLength = paramsMatch.length,
-								paramName, paramVal;
-
-							for ( var i = 0; i < paramsMatchLength; i++ ) {
-								paramVal = decodeURIComponent( unescapeSingleQuote( paramsMatch[ i ].replace( paramQuoteRegex, '' ) ) );
-								paramName = compiledProtectionFunction.params[ i ].toLowerCase();
-								email[ paramName ] = paramVal;
-							}
-							email.address = [ email.name, email.domain ].join( '@' );
-						}
-					} );
-				}
-			}
 
 			if ( !retval.type ) {
 				if ( ( anchorMatch = href.match( anchorRegex ) ) ) {
@@ -467,22 +372,11 @@
 					retval.anchor = {};
 					retval.anchor.name = retval.anchor.id = anchorMatch[ 1 ];
 				}
-				// Protected email link as encoded string.
-				else if ( ( emailMatch = href.match( emailRegex ) ) ) {
-					var subjectMatch = href.match( emailSubjectRegex ),
-						bodyMatch = href.match( emailBodyRegex );
-
-					retval.type = 'email';
-					var email = ( retval.email = {} );
-					email.address = emailMatch[ 1 ];
-					subjectMatch && ( email.subject = decodeURIComponent( subjectMatch[ 1 ] ) );
-					bodyMatch && ( email.body = decodeURIComponent( bodyMatch[ 1 ] ) );
-				}
 				// urlRegex matches empty strings, so need to check for href as well.
 				else if ( href && ( urlMatch = href.match( urlRegex ) ) ) {
 					retval.type = 'url';
 					retval.url = {};
-					retval.url.protocol = urlMatch[ 1 ];
+				//	retval.url.protocol = urlMatch[ 1 ];
 					retval.url.url = urlMatch[ 2 ];
 				}
 			}
@@ -490,28 +384,7 @@
 			// Load target and popup settings.
 			if ( element ) {
 				var target = element.getAttribute( 'target' );
-
-				// IE BUG: target attribute is an empty string instead of null in IE if it's not set.
-				if ( !target ) {
-					var onclick = element.data( 'cke-pa-onclick' ) || element.getAttribute( 'onclick' ),
-						onclickMatch = onclick && onclick.match( popupRegex );
-
-					if ( onclickMatch ) {
-						retval.target = {
-							type: 'popup',
-							name: onclickMatch[ 1 ]
-						};
-
-						var featureMatch;
-						while ( ( featureMatch = popupFeaturesRegex.exec( onclickMatch[ 2 ] ) ) ) {
-							// Some values should remain numbers (#7300)
-							if ( ( featureMatch[ 2 ] == 'yes' || featureMatch[ 2 ] == '1' ) && !( featureMatch[ 1 ] in { height: 1, width: 1, top: 1, left: 1 } ) )
-								retval.target[ featureMatch[ 1 ] ] = true;
-							else if ( isFinite( featureMatch[ 2 ] ) )
-								retval.target[ featureMatch[ 1 ] ] = featureMatch[ 2 ];
-						}
-					}
-				} else {
+				if ( target ) {
 					retval.target = {
 						type: target.match( selectableTargets ) ? target : 'frame',
 						name: target
@@ -563,16 +436,14 @@
 		 *
 		 */
 		getLinkAttributes: function( editor, data ) {
-			var emailProtection = editor.config.emailProtection || '',
-				set = {};
+			var set = {};
 
 			// Compose the URL.
 			switch ( data.type ) {
 				case 'url':
-					var protocol = ( data.url && data.url.protocol != undefined ) ? data.url.protocol : 'http://',
-						url = ( data.url && CKEDITOR.tools.trim( data.url.url ) ) || '';
+					var url = ( data.url && CKEDITOR.tools.trim( data.url.url ) ) || '';
 
-					set[ 'data-cke-saved-href' ] = ( url.indexOf( '/' ) === 0 ) ? url : protocol + url;
+					set[ 'data-cke-saved-href' ] = url;
 
 					break;
 				case 'anchor':
@@ -582,77 +453,13 @@
 					set[ 'data-cke-saved-href' ] = '#' + ( name || id || '' );
 
 					break;
-				case 'email':
-					var email = data.email,
-						address = email.address,
-						linkHref;
-
-					switch ( emailProtection ) {
-						case '':
-						case 'encode':
-							var subject = encodeURIComponent( email.subject || '' ),
-								body = encodeURIComponent( email.body || '' ),
-								argList = [];
-
-							// Build the e-mail parameters first.
-							subject && argList.push( 'subject=' + subject );
-							body && argList.push( 'body=' + body );
-							argList = argList.length ? '?' + argList.join( '&' ) : '';
-
-							if ( emailProtection == 'encode' ) {
-								linkHref = [
-									'javascript:void(location.href=\'mailto:\'+',
-									protectEmailAddressAsEncodedString( address )
-								];
-								// parameters are optional.
-								argList && linkHref.push( '+\'', escapeSingleQuote( argList ), '\'' );
-
-								linkHref.push( ')' );
-							} else
-								linkHref = [ 'mailto:', address, argList ];
-
-							break;
-						default:
-							// Separating name and domain.
-							var nameAndDomain = address.split( '@', 2 );
-							email.name = nameAndDomain[ 0 ];
-							email.domain = nameAndDomain[ 1 ];
-
-							linkHref = [ 'javascript:', protectEmailLinkAsFunction( editor, email ) ];
-					}
-
-					set[ 'data-cke-saved-href' ] = linkHref.join( '' );
-					break;
 			}
 
 			// Popups and target.
 			if ( data.target ) {
-				if ( data.target.type == 'popup' ) {
-					var onclickList = [
-							'window.open(this.href, \'', data.target.name || '', '\', \''
-						],
-						featureList = [
-							'resizable', 'status', 'location', 'toolbar', 'menubar', 'fullscreen', 'scrollbars', 'dependent'
-						],
-						featureLength = featureList.length,
-						addFeature = function( featureName ) {
-							if ( data.target[ featureName ] )
-								featureList.push( featureName + '=' + data.target[ featureName ] );
-						};
-
-					for ( var i = 0; i < featureLength; i++ )
-						featureList[ i ] = featureList[ i ] + ( data.target[ featureList[ i ] ] ? '=yes' : '=no' );
-
-					addFeature( 'width' );
-					addFeature( 'left' );
-					addFeature( 'height' );
-					addFeature( 'top' );
-
-					onclickList.push( featureList.join( ',' ), '\'); return false;' );
-					set[ 'data-cke-pa-onclick' ] = onclickList.join( '' );
-				}
-				else if ( data.target.type != 'notSet' && data.target.name )
+				if ( data.target.type != 'popup' && data.target.type != 'notSet' && data.target.name ){
 					set.target = data.target.name;
+				}
 			}
 
 			// Advanced attributes.
@@ -754,19 +561,5 @@
 		 * @member CKEDITOR.config
 		 */
 		linkShowTargetTab: true
-
-		/**
-		 * Whether JavaScript code is allowed as a `href` attribute in an anchor tag.
-		 * With this option enabled it is possible to create links like:
-		 *
-		 *		<a href="javascript:alert('Hello world!')">hello world</a>
-		 *
-		 * By default JavaScript links are not allowed and will not pass
-		 * the Link dialog window validation.
-		 *
-		 * @since 4.4.1
-		 * @cfg {Boolean} [linkJavaScriptLinksAllowed=false]
-		 * @member CKEDITOR.config
-		 */
 	} );
 } )();
