@@ -49,9 +49,9 @@
 			var allowed = 'a[!href]',
 				required = 'a[href]';
 
-			if ( CKEDITOR.dialog.isTabEnabled( editor, 'm3link', 'advanced' ) )
+			if ( CKEDITOR.dialog.isTabEnabled( editor, 'm3link', 'tab_advanced' ) )
 				allowed = allowed.replace( ']', ',accesskey,charset,dir,id,lang,name,rel,tabindex,title,type]{*}(*)' );
-			if ( CKEDITOR.dialog.isTabEnabled( editor, 'm3link', 'target' ) )
+			if ( CKEDITOR.dialog.isTabEnabled( editor, 'm3link', 'tab_target' ) )
 				allowed = allowed.replace( ']', ',target,onclick]' );
 
 			// Add the link and unlink buttons.

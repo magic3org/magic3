@@ -17,36 +17,10 @@
 ( function() {
 	CKEDITOR.dialog.add( 'm3link', function( editor ) {
 		var plugin = CKEDITOR.plugins.m3link;
+		var commonLang = editor.lang.common;
+		var linkLang = editor.lang.m3link;
 		var accessPoint = '';		// アクセスポイント
 		var dialog;					// このダイアログへの参照
-
-		// Handles the event when the "Type" selection box is changed.
-		var linkTypeChanged = function() {
-				var dialog = this.getDialog(),
-					partIds = [ 'urlOptions' ],
-					typeValue = this.getValue();
-
-				if ( typeValue == 'url' ) {
-					if ( editor.config.linkShowTargetTab )
-						dialog.showPage( 'target' );
-				} else {
-					dialog.hidePage( 'target' );
-				}
-
-				for ( var i = 0; i < partIds.length; i++ ) {
-					var element = dialog.getContentElement( 'info', partIds[ i ] );
-					if ( !element )
-						continue;
-
-					element = element.getElement().getParent().getParent();
-					if ( partIds[ i ] == typeValue + 'Options' )
-						element.show();
-					else
-						element.hide();
-				}
-
-				dialog.layout();
-			};
 
 		var setupParams = function( page, data ) {
 				if ( data[ page ] )
@@ -54,7 +28,7 @@
 			};
 
 		var setupAdvParams = function( data ) {
-				return setupParams.call( this, 'advanced', data );
+				return setupParams.call( this, 'tab_advanced', data );
 			};
 
 		var commitParams = function( page, data ) {
@@ -65,22 +39,19 @@
 			};
 
 		var commitAdvParams = function( data ) {
-				return commitParams.call( this, 'advanced', data );
+				return commitParams.call( this, 'tab_advanced', data );
 			};
-
-		var commonLang = editor.lang.common,
-		linkLang = editor.lang.m3link;
 
 	// コンテンツリスト、コンテンツ内容表示を更新
 	function updateContentList()
 	{
 		// コンテンツリストを取得
-		var elementId = '#' + dialog.getContentElement('tab_basic', 'content_list').getInputElement().$.id;
-		var contentType = dialog.getContentElement('tab_basic', 'content_type').getValue();
+		var elementId = '#' + dialog.getContentElement('tab_info', 'content_list').getInputElement().$.id;
+		var contentType = dialog.getContentElement('tab_info', 'content_type').getValue();
 		var pageNo = 1;
 
 		// コンテンツプレビュークリア
-		dialog.getContentElement('tab_basic', 'url').setValue('');
+		dialog.getContentElement('tab_info', 'url').setValue('');
 		$('#content_text').text('');
 		
 		// Ajaxでページ情報を取得
@@ -99,7 +70,7 @@
 		// コンテンツタイプを取得
 	function updateContentType()
 	{
-		var elementId = '#' + dialog.getContentElement('tab_basic', 'content_type').getInputElement().$.id;
+		var elementId = '#' + dialog.getContentElement('tab_info', 'content_type').getInputElement().$.id;
 		
 		// Ajaxでコンテンツタイプを取得
 		m3_ajax_request('', 'task=linkinfo&act=getcontenttype&accesspoint=' + accessPoint, function(request, retcode, jsondata){		// 正常終了
@@ -120,7 +91,7 @@
 	// ページリストを取得
 	function updatePageList()
 	{
-		var elementId = '#' + dialog.getContentElement('tab_basic', 'page_list').getInputElement().$.id;
+		var elementId = '#' + dialog.getContentElement('tab_info', 'page_list').getInputElement().$.id;
 
 		// Ajaxでページ情報を取得
 		m3_ajax_request('', 'task=linkinfo&act=getpage&accesspoint=' + accessPoint, function(request, retcode, jsondata){		// 正常終了
@@ -139,28 +110,28 @@
 	function updateItems()
 	{
 		// リンク対象を取得
-		var selValue = dialog.getValueOf('tab_basic', 'link_target');
+		var selValue = dialog.getValueOf('tab_info', 'link_target');
 		
 		switch (selValue){
 			case 'content':
-				dialog.getContentElement('tab_basic', 'content_type').getElement().show();
-				dialog.getContentElement('tab_basic', 'content_list').getElement().show();
-				dialog.getContentElement('tab_basic', 'page_list').getElement().hide();
-				dialog.getContentElement('tab_basic', 'content_label').getElement().show();
+				dialog.getContentElement('tab_info', 'content_type').getElement().show();
+				dialog.getContentElement('tab_info', 'content_list').getElement().show();
+				dialog.getContentElement('tab_info', 'page_list').getElement().hide();
+				dialog.getContentElement('tab_info', 'content_label').getElement().show();
 				$('#content_text').show();
 				break;
 			case 'page':
-				dialog.getContentElement('tab_basic', 'content_type').getElement().hide();
-				dialog.getContentElement('tab_basic', 'content_list').getElement().hide();
-				dialog.getContentElement('tab_basic', 'page_list').getElement().show();
-				dialog.getContentElement('tab_basic', 'content_label').getElement().hide();
+				dialog.getContentElement('tab_info', 'content_type').getElement().hide();
+				dialog.getContentElement('tab_info', 'content_list').getElement().hide();
+				dialog.getContentElement('tab_info', 'page_list').getElement().show();
+				dialog.getContentElement('tab_info', 'content_label').getElement().hide();
 				$('#content_text').hide();
 				break;
 			case 'others':
-				dialog.getContentElement('tab_basic', 'content_type').getElement().hide();
-				dialog.getContentElement('tab_basic', 'content_list').getElement().hide();
-				dialog.getContentElement('tab_basic', 'page_list').getElement().hide();
-				dialog.getContentElement('tab_basic', 'content_label').getElement().hide();
+				dialog.getContentElement('tab_info', 'content_type').getElement().hide();
+				dialog.getContentElement('tab_info', 'content_list').getElement().hide();
+				dialog.getContentElement('tab_info', 'page_list').getElement().hide();
+				dialog.getContentElement('tab_info', 'content_label').getElement().hide();
 				$('#content_text').hide();
 				break;
 		}
@@ -173,11 +144,11 @@
 		url += '/index.php';
 		
 		// リンク対象を取得
-		var linkTarget = dialog.getValueOf('tab_basic', 'link_target');
+		var linkTarget = dialog.getValueOf('tab_info', 'link_target');
 		switch (linkTarget){
 			case 'content':
-				var contentType = dialog.getContentElement('tab_basic', 'content_type').getValue();
-				var contentId = dialog.getContentElement('tab_basic', 'content_list').getValue();
+				var contentType = dialog.getContentElement('tab_info', 'content_type').getValue();
+				var contentId = dialog.getContentElement('tab_info', 'content_list').getValue();
 
 				if (contentId){
 					switch (contentType){
@@ -199,7 +170,7 @@
 				}
 				break;
 			case 'page':
-				var pageSubId = dialog.getContentElement('tab_basic', 'page_list').getValue();
+				var pageSubId = dialog.getContentElement('tab_info', 'page_list').getValue();
 				switch (pageSubId){
 					case '':
 						url = '';
@@ -218,115 +189,131 @@
 				url = '';
 				break;
 		}
-		dialog.getContentElement('tab_basic', 'url').setValue(url);
+		dialog.getContentElement('tab_info', 'url').setValue(url);
 	}
 		
 		return {
 			title: linkLang.title,
 			minWidth: 500,
 			minHeight: 300,
+
 			contents: [
 				{
-				id: 'info',
+				id: 'tab_info',
 				label: linkLang.info,
 				title: linkLang.info,
 				elements: [
-					{
-					id: 'linkType',
-					type: 'select',
-					label: linkLang.type,
-					'default': 'url',
-					items: [
-						[ linkLang.toUrl, 'url' ]
-						],
-					onChange: linkTypeChanged,
-					setup: function( data ) {
-						this.setValue( data.type || 'url' );
-					},
-					commit: function( data ) {
-						data.type = this.getValue();
-					}
-				},
-					{
-					type: 'vbox',
-					id: 'urlOptions',
-					children: [
+						{	// リンク対象選択
+							type : 'radio',
+							id : 'link_target',
+							label : linkLang.link_target_title,
+							items : [
+								[ 'コンテンツ', 'content' ], [ 'ページ', 'page' ], [ 'その他', 'others' ]
+							],
+							'default': 'content',
+							onClick: function(){
+								// ダイアログ項目の表示制御
+								updateItems();
+							
+								// URLを更新
+								updateUrl();
+							}
+						},
+						{	// コンテンツ種別選択
+							type : 'select',
+							id : 'content_type',
+							label : linkLang.content_type_title,
+							items : [
+								[ linkLang.on_connecting, '' ]
+							],
+							onShow : function(){	// 選択値変更時イベント
+								// コンテンツタイプ更新
+								updateContentType();
+							},
+							onChange : function(){	// 選択値変更時イベント
+								// コンテンツリストを更新
+								updateContentList();
+							}
+						},
+						{	// コンテンツリスト
+							type : 'select',
+							id : 'content_list',
+							label : linkLang.content_list_title,
+							items : [
+								[ linkLang.on_connecting, '' ]
+							],
+							onChange : function(){	// 選択値変更時イベント
+								// コンテンツプレビュークリア
+								$('#content_text').text('');
+							
+								// コンテンツ内容を取得
+								var contentType = dialog.getContentElement('tab_info', 'content_type').getValue();
+								var contentId = dialog.getContentElement('tab_info', 'content_list').getValue();
+
+								// Ajaxでコンテンツ内容を取得
+								m3_ajax_request('', 'task=linkinfo&act=getcontent&contenttype=' + contentType + '&contentid=' + contentId + '&accesspoint=' + accessPoint, function(request, retcode, jsondata){		// 正常終了
+
+									if (jsondata.content){
+										$('#content_text').text(jsondata.content);
+										$('#content2_image').hide();
+										$('#content2_text').hide();
+									}
+								
+									// URLを更新
+									updateUrl();
+								}, function(request){		// 異常終了
+									alert('通信に失敗しました。');
+								});
+							}
+						},
 						{
-						type: 'hbox',
-						widths: [ '25%', '75%' ],
-						children: [
+							type : 'select',
+							id : 'page_list',
+							label : linkLang.page_list_title,
+							items : [
+								[ linkLang.on_connecting, '' ]
+							],
+							//onLoad : function(){		// 起動時イベント
+							onShow : function(){		// 再表示イベント
+								// ページリスト更新
+								updatePageList();
+							},
+							onChange : function(){	// 選択値変更時イベント
+								// URLを更新
+								updateUrl();
+							}
+						},
+						{
+							type : 'html',
+							id: 'content_label',
+							html : '<label>コンテンツ内容：</label>'
+						},
+						{
+							type: 'html',
+							html: '<p id="content_text" style="white-space: -moz-pre-wrap; white-space: pre-wrap; word-wrap: break-word;"></p>'
+						},
+						{
+							type: 'hbox',
+							widths: [ '20%', '80%' ],
+							children: [
 							{
+								type: 'html',
+								html: '<p id="content2_image"></p>'
+							},{
+								type: 'html',
+								html: '<p id="content2_text" style="white-space: -moz-pre-wrap; white-space: pre-wrap; word-wrap: break-word;"></p>'
+							} ]
+						},
+						{
 							type: 'text',
 							id: 'url',
-							label: commonLang.url,
-							required: true,
-							onLoad: function() {
-								this.allowOnChange = true;
-							},
-							onKeyUp: function() {
-								//this.allowOnChange = false;
-												var url = this.getValue();
-								//this.allowOnChange = true;
-							},
-							onChange: function() {
-								if ( this.allowOnChange ) // Dont't call on dialog load.
-								this.onKeyUp();
-							},
-							validate: function() {
-								var dialog = this.getDialog();
-
-								if ( dialog.getContentElement( 'info', 'linkType' ) && dialog.getValueOf( 'info', 'linkType' ) != 'url' )
-									return true;
-
-								if ( !editor.config.linkJavaScriptLinksAllowed && ( /javascript\:/ ).test( this.getValue() ) ) {
-									alert( commonLang.invalidValue );
-									return false;
-								}
-
-								if ( this.getDialog().fakeObj ) // Edit Anchor.
-								return true;
-
-								var func = CKEDITOR.dialog.validate.notEmpty( linkLang.noUrl );
-								return func.apply( this );
-							},
-							setup: function( data ) {
-								this.allowOnChange = false;
-								if ( data.url )
-									this.setValue( data.url.url );
-								this.allowOnChange = true;
-
-							},
-							commit: function( data ) {
-								// IE will not trigger the onChange event if the mouse has been used
-								// to carry all the operations #4724
-								this.onChange();
-
-								if ( !data.url )
-									data.url = {};
-
-								data.url.url = this.getValue();
-								this.allowOnChange = false;
-							}
+							label: linkLang.url_title,
+							width: '100%'
 						}
-						],
-						setup: function( data ) {
-							if ( !this.getDialog().getContentElement( 'info', 'linkType' ) )
-								this.getElement().show();
-						}
-					},
-						{
-						type: 'button',
-						id: 'browse',
-						hidden: 'true',
-						filebrowser: 'info:url',
-						label: commonLang.browseServer
-					}
-					]
-				}
 				]
 			},
 				{
-				id: 'target',
+				id: 'tab_target',
 				requiredContent: 'a[target]', // This is not fully correct, because some target option requires JS.
 				label: linkLang.target,
 				title: linkLang.target,
@@ -363,7 +350,7 @@
 				]
 			},
 				{
-				id: 'advanced',
+				id: 'tab_advanced',
 				label: linkLang.advanced,
 				title: linkLang.advanced,
 				elements: [
@@ -376,7 +363,7 @@
 								id : 'access_point',
 								label : linkLang.access_point_title,
 								items : [
-									[ '接続中', '' ]
+									[ linkLang.on_connecting, '' ]
 								],
 								onLoad : function(){		// 起動時イベント
 									var elementId = '#' + this.getInputElement().$.id;
@@ -584,6 +571,26 @@
 				]
 			}
 			],
+			onLoad: function() {
+				if ( !editor.config.linkShowAdvancedTab )
+					this.hidePage( 'tab_advanced' ); //Hide Advanded tab.
+
+				if ( !editor.config.linkShowTargetTab )
+					this.hidePage( 'tab_target' ); //Hide Target tab.
+				
+				// 設定変更時の確認ダイアログを非表示にする
+				this.on('cancel', function(cancelEvent){ return false; }, this, null, -1);
+			
+				// このダイアログへの参照を取得
+				dialog = this;
+			
+				// ダイアログ項目の表示制御
+				updateItems();
+			
+				// 起動時の初期値を設定
+				accessPoint = _m3AccessPoint;		// アクセスポイント
+				dialog.getContentElement('tab_info', 'url').setValue(_m3Url);
+			},
 			onShow: function() {
 				var editor = this.getParentEditor(),
 					selection = editor.getSelection(),
@@ -611,7 +618,7 @@
 			// 起動時の初期値を設定
 			$('#content_text').text('');// コンテンツプレビュークリア
 			accessPoint = _m3AccessPoint;		// アクセスポイント
-			dialog.getContentElement('tab_basic', 'url').setValue(_m3Url);
+			dialog.getContentElement('tab_info', 'url').setValue(_m3Url);
 			
 			// フレーム内にある場合は表示位置を調整
 			if (window.parent != window.self){
@@ -667,38 +674,17 @@
 
 					delete this._.selectedElement;
 				}
-			},
-			onLoad: function() {
-				if ( !editor.config.linkShowAdvancedTab )
-					this.hidePage( 'advanced' ); //Hide Advanded tab.
-
-				if ( !editor.config.linkShowTargetTab )
-					this.hidePage( 'target' ); //Hide Target tab.
-				
-				// 設定変更時の確認ダイアログを非表示にする
-				this.on('cancel', function(cancelEvent){ return false; }, this, null, -1);
-			
-				// このダイアログへの参照を取得
-				dialog = this;
-			
-/*				// ダイアログ項目の表示制御
-				updateItems();
-			
-				// 起動時の初期値を設定
-				accessPoint = _m3AccessPoint;		// アクセスポイント
-				dialog.getContentElement('tab_basic', 'url').setValue(_m3Url);
-				*/
-			},
+			}
 			// Inital focus on 'url' field if link is of type URL.
-			onFocus: function() {
-				var linkType = this.getContentElement( 'info', 'linkType' ),
+/*			onFocus: function() {
+				var linkType = this.getContentElement( 'tab_info', 'linkType' ),
 					urlField;
 
 				if ( linkType && linkType.getValue() == 'url' ) {
-					urlField = this.getContentElement( 'info', 'url' );
+					urlField = this.getContentElement( 'tab_info', 'url' );
 					urlField.select();
 				}
-			}
+			}*/
 		};
 	} );
 } )();
