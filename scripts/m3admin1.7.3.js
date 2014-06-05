@@ -297,6 +297,9 @@ function m3_setHtmlEditor(id, isMobile)
  */
 function m3SetWysiwygEditor(id, height, toolbarVisible, barType)
 {
+	// アクセスポイントの設定
+	_m3SetAccessPoint(M3_CONFIG_WIDGET_DEVICE_TYPE);
+		
 	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
 		var config = {};
 //		if (M3_USE_GOOGLEMAPS){
@@ -381,8 +384,31 @@ function m3LoadCKTools()
 	dummyCKParent.hide();
 }
 /**
+ * URL作成用のアクセスポイントを設定
+ *
+ * @param int deviceType				デバイスタイプ(0=PC,1=携帯,2=スマートフォン)
+ * @return なし
+ */
+function _m3SetAccessPoint(deviceType)
+{
+	// アクセスポイント(空=PC,m=携帯,s=スマートフォン)取得
+	var accessPoint;
+	switch (deviceType){
+		case 0:		// PC用
+		default:
+			accessPoint = '';
+			break;
+		case 1:		// 携帯用
+			accessPoint = 'm';
+			break;
+		case 2:		// スマートフォン用
+			accessPoint = 's';
+			break;
+	}
+	_m3AccessPoint = accessPoint;
+}
+/**
  * リンク用のURLを作成
- * あらかじめを実行しておく。
  *
  * @param int deviceType				デバイスタイプ(0=PC,1=携帯,2=スマートフォン)
  * @param string url					URL初期値

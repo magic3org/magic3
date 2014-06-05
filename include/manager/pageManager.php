@@ -78,6 +78,7 @@ class PageManager extends Core
 	private $headSubTitleUrl = array();				// ヘッダサブタイトルのリンク先
 	private $pageInfo;					// すべてのページ情報
 	private $currentPageInfo;			// 現在のページのページ情報
+	private $configWidgetInfo;			// ウィジェット設定画面のウィジェットの情報
 	private $contentType = '';				// ページのコンテンツタイプ
 	private $mainContentType;				// 一般画面で使用する主要コンテンツタイプ
 	private $mainFeatureType;				// 一般画面で使用する主要機能タイプ
@@ -176,7 +177,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.2.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.3.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.3.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.4.js';			// 一般、管理機能共通スクリプト
@@ -1297,8 +1298,8 @@ class PageManager extends Core
 					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
 						// ウィジェット情報取得
 						$widgetId = $request->trimValueOf(M3_REQUEST_PARAM_WIDGET_ID);
-						$ret = $this->db->getWidgetInfo($widgetId, $row);
-						if ($ret) $this->addAdminScript($task, trim($row['wd_add_script_lib_a']));		// 管理機能用スクリプト
+						$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
+						if ($ret) $this->addAdminScript($task, trim($this->configWidgetInfo['wd_add_script_lib_a']));		// 管理機能用スクリプト
 					}
 				}
 			} else {		// 一般画面へのアクセスのとき
@@ -3183,7 +3184,12 @@ class PageManager extends Core
 				} else {
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
 				}
-				
+
+				// ウィジェット詳細設定画面専用のJavaScriptグローバル変数
+				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){
+					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+				}
+						
 				if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
 					$pageId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);		// ページID
 					$pageSubId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);// ページサブID
