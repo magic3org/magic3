@@ -366,19 +366,18 @@
 				anchorMatch, urlMatch,
 				retval = {};
 
-			if ( !retval.type ) {
-				if ( ( anchorMatch = href.match( anchorRegex ) ) ) {
-					retval.type = 'anchor';
-					retval.anchor = {};
-					retval.anchor.name = retval.anchor.id = anchorMatch[ 1 ];
-				}
-				// urlRegex matches empty strings, so need to check for href as well.
-				else if ( href && ( urlMatch = href.match( urlRegex ) ) ) {
-					retval.type = 'url';
-					retval.url = {};
-				//	retval.url.protocol = urlMatch[ 1 ];
-					retval.url.url = urlMatch[ 2 ];
-				}
+			if ( ( anchorMatch = href.match( anchorRegex ) ) ) {
+				retval.type = 'anchor';
+				retval.anchor = {};
+				retval.anchor.name = retval.anchor.id = anchorMatch[ 1 ];
+			}
+			// urlRegex matches empty strings, so need to check for href as well.
+			else if ( href && ( urlMatch = href.match( urlRegex ) ) ) {
+				retval.type = 'url';
+				retval.url = {};
+			//	retval.url.protocol = urlMatch[ 1 ];
+			//	retval.url.url = urlMatch[ 2 ];
+				retval.url.url = href;
 			}
 
 			// Load target and popup settings.
@@ -439,13 +438,13 @@
 			var set = {};
 
 			// Compose the URL.
-			switch ( data.type ) {
-				case 'url':
+//			switch ( data.type ) {
+//				case 'url':
 					var url = ( data.url && CKEDITOR.tools.trim( data.url.url ) ) || '';
 
 					set[ 'data-cke-saved-href' ] = url;
 
-					break;
+/*					break;
 				case 'anchor':
 					var name = ( data.anchor && data.anchor.name ),
 						id = ( data.anchor && data.anchor.id );
@@ -453,12 +452,14 @@
 					set[ 'data-cke-saved-href' ] = '#' + ( name || id || '' );
 
 					break;
-			}
+			}*/
 
 			// Popups and target.
 			if ( data.target ) {
-				if ( data.target.type != 'popup' && data.target.type != 'notSet' && data.target.name ){
-					set.target = data.target.name;
+//				if ( data.target.type != 'notSet' && data.target.name ){
+//					set.target = data.target.name;
+				if ( data.target.type != 'notSet' ){
+					set.target = data.target.type;
 				}
 			}
 
@@ -476,8 +477,7 @@
 			}
 
 			// Browser need the "href" fro copy/paste link to work. (#6641)
-			if ( set[ 'data-cke-saved-href' ] )
-				set.href = set[ 'data-cke-saved-href' ];
+			if ( set[ 'data-cke-saved-href' ] ) set.href = set[ 'data-cke-saved-href' ];
 
 			var removed = CKEDITOR.tools.extend( {
 				target: 1,
