@@ -21,6 +21,7 @@
 		var linkLang = editor.lang.m3link;
 		var accessPoint = ''; // アクセスポイント
 		var dialog; // このダイアログへの参照
+		var cancelOnChange;		// changeイベントをキャンセルするかどうか
 
 		var setupParams = function (page, data) {
 			if (data[page])
@@ -67,7 +68,7 @@
 			});
 		}
 		// コンテンツタイプを取得
-		function updateContentType() {
+		function updateContentType(updateList) {
 			var elementId = '#' + dialog.getContentElement('tab_info', 'content_type').getInputElement().$.id;
 
 			// Ajaxでコンテンツタイプを取得
@@ -81,13 +82,13 @@
 				}
 
 				// デフォルトのコンテンツリストを取得
-				updateContentList();
+				if (updateList) updateContentList();
 			}, function (request) { // 異常終了
 				alert('通信に失敗しました。');
 			});
 		}
 		// ページリストを取得
-		function updatePageList() {
+		function updatePageList(pageId) {
 			var elementId = '#' + dialog.getContentElement('tab_info', 'page_list').getInputElement().$.id;
 
 			// Ajaxでページ情報を取得
@@ -98,6 +99,11 @@
 					$.each(jsondata.pagelist, function (index, item) {
 						$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
 					});
+				}
+				
+				if (pageId){
+					elementId = '#' + dialog.getContentElement('tab_info', 'page_list').getInputElement().$.id;
+					$(elementId).val(pageId);
 				}
 			}, function (request) { // 異常終了
 				alert('通信に失敗しました。');
@@ -186,7 +192,121 @@
 			}
 			dialog.getContentElement('tab_info', 'url').setValue(url);
 		}
+		// URLを解析
+		function parseUrl(url) {
+			var urlMatch, queryMatch;
+			var linkTarget;
+			var contentType, contentId;
+			var pageSubId;
+			var urlRegex;
+			var queryRegex = /([^&=#]+)=?([^&#]*)/;
+			var elementId;
+			
+			// 初期化
+			accessPoint = _m3AccessPoint; // アクセスポイント
+			linkTarget = 'content';			// リンク対象
+			
+			if (url){
+				linkTarget = 'others';		// リンク対象「その他」
+				
+				urlRegex = new RegExp("^" + M3_ROOT_URL.replace(/\W/g,'\\$&') + "(.*)\\/index.php\\?(.*)$");
+				urlMatch = url.match( urlRegex );
+				if (urlMatch) {
+					// アクセスポイントを取得
+					switch (urlMatch[1]){
+					case '/m':
+						accessPoint = 'm';
+						break;
+					case '/s':
+						accessPoint = 's';
+						break;
+					default:
+						accessPoint = '';
+						break;
+					}
+				
+					// アクセスポイントの変更をセレクトメニューに反映
+//					var elementId = '#' + dialog.getContentElement('tab_advanced', 'access_point').getInputElement().$.id;
+					//$(elementId).val(accessPoint);
+					//dialog.getContentElement('tab_advanced', 'access_point').setValue(accessPoint);
 
+					// 1番目のパラメータを取得
+					var query = urlMatch[2];
+					queryMatch = query.match(queryRegex);
+					if (queryMatch) {
+						if (queryMatch[2]){
+							switch (queryMatch[1]){
+							case 'contentid':
+								linkTarget = 'content';
+								contentType = 'content';
+								break;
+							case 'productid':
+								linkTarget = 'content';
+								contentType = 'product';
+								break;
+							case 'eventid':
+								linkTarget = 'content';
+								contentType = 'event';
+								break;
+							case 'photoid':
+								linkTarget = 'content';
+								contentType = 'photo';
+								break;
+							case 'entryid':
+								linkTarget = 'content';
+								contentType = 'blog';
+								break;
+							case 'sub':
+								linkTarget = 'page';
+								pageSubId = queryMatch[2];
+								// ページ選択(changeイベント発生させない)
+								//dialog.getContentElement('tab_info', 'page_list').setValue(queryMatch[2]);
+								//elementId = '#' + dialog.getContentElement('tab_info', 'page_list').getInputElement().$.id;
+								//$(elementId).val(queryMatch[2]);
+								break;
+							default:
+								break;
+							}
+							contentId = queryMatch[2];
+						} else {		// キーのみの場合
+							linkTarget = 'content';
+							contentType = 'wiki';
+							contentId = queryMatch[1];
+						}
+					}
+				//	elementId = '#' + dialog.getContentElement('tab_info', 'content_type').getInputElement().$.id;
+				//	$(elementId).val(linkTarget);
+				}
+	//			alert(dialog.getContentElement('tab_advanced', 'access_point').getInputElement().$.id);
+	//			alert(accessPoint);
+	//			dialog.getContentElement('tab_advanced', 'access_point').getInputElement().$.setValue(accessPoint);
+
+			} else {		// URLが空のときはデフォルトの値を表示
+				// アクセスポイントの変更をセレクトメニューに反映
+				//dialog.getContentElement('tab_advanced', 'access_point').setValue(accessPoint);
+			}
+			// アクセスポイントの変更をセレクトメニューに反映
+			cancelOnChange = true;		// changeイベントをキャンセル
+			dialog.getContentElement('tab_advanced', 'access_point').setValue(accessPoint);
+//				elementId = '#' + dialog.getContentElement('tab_advanced', 'access_point').getInputElement().$.id;
+//				$(elementId).val(accessPoint);
+			
+			// リンク対象を設定
+			dialog.getContentElement('tab_info', 'link_target').setValue(linkTarget);
+//			alert(linkTarget);
+//				elementId = '#' + dialog.getContentElement('tab_info', 'link_target').getInputElement().$.id;
+//				$(elementId).val(linkTarget);
+			
+/*			if (linkTarget == 'page'){
+				// ページ選択
+				dialog.getContentElement('tab_info', 'page_list').setValue(pageSubId);
+			}*/
+			cancelOnChange = false;		// changeイベントをキャンセル
+			
+			// ページリスト更新(アクセスポイントに連動)
+			updatePageList(pageSubId);
+		}
+		
 		return {
 			title: linkLang.title,
 			minWidth: 500,
@@ -207,6 +327,8 @@
 					],
 					'default': 'content',
 					onClick: function () {
+						if (cancelOnChange) return;
+								
 						// ダイアログ項目の表示制御
 						updateItems();
 
@@ -265,11 +387,13 @@
 					items: [
 						[linkLang.on_connecting, '']
 					],
-					onShow: function () { // 再表示イベント
+/*					onShow: function () { // 再表示イベント
 						// ページリスト更新
 						updatePageList();
-					},
+					},*/
 					onChange: function () { // 選択値変更時イベント
+						if (cancelOnChange) return;
+								
 						// URLを更新
 						updateUrl();
 					}
@@ -361,23 +485,26 @@
 									});
 								}
 								// 項目を再選択
-								$(elementId).val(accessPoint);
+								//$(elementId).val(accessPoint);
+						//dialog.getContentElement('tab_advanced', 'access_point').setValue(accessPoint);
 							}, function (request) { // 異常終了
 								alert('通信に失敗しました。');
 							});
 						},
-						onShow: function () { // 再表示イベント
+/*						onShow: function () { // 再表示イベント
 							var elementId = '#' + this.getInputElement().$.id;
 
 							// 項目を再選択
 							$(elementId).val(accessPoint);
-						},
+						},*/
 						onChange: function () {
+							if (cancelOnChange) return;
+										
 							// アクセスポイント変更
 							accessPoint = dialog.getContentElement('tab_advanced', 'access_point').getValue();
 
 							// コンテンツタイプ更新
-							updateContentType();
+							updateContentType(true);
 
 							// ページリスト更新
 							updatePageList();
@@ -541,10 +668,11 @@
 				dialog = this;
 
 				// ダイアログ項目の表示制御
-				updateItems();
+			//updateItems();
 
 				// 起動時の初期値を設定
-				accessPoint = _m3AccessPoint; // アクセスポイント
+//				accessPoint = _m3AccessPoint; // アクセスポイント
+//				accessPoint = 'm';
 				//dialog.getContentElement('tab_info', 'url').setValue(_m3Url);
 			},
 			onShow: function () {
@@ -565,15 +693,24 @@
 
 				// Record down the selected element in the dialog.
 				this._.selectedElement = element;
-
+				
 				this.setupContent(data);
-
+				
+				// URL解析
+				parseUrl(data.url.url);
+				
+				// コンテンツタイプ作成
+				updateContentType(false);
+				
 				// ダイアログ項目の表示制御
 				updateItems();
-
+//dialog.getContentElement('tab_advanced', 'access_point').setValue('m');
+//dialog.layout();
+//accessPoint = 'm';
+//alert(dialog.getContentElement('tab_advanced', 'access_point').getValue());
 				// 起動時の初期値を設定
-				$('#content_text').text(''); // コンテンツプレビュークリア
-				accessPoint = _m3AccessPoint; // アクセスポイント
+//				$('#content_text').text(''); // コンテンツプレビュークリア
+//				accessPoint = _m3AccessPoint; // アクセスポイント
 				//dialog.getContentElement('tab_info', 'url').setValue(_m3Url);
 
 				// フレーム内にある場合は表示位置を調整

@@ -366,19 +366,14 @@
 				anchorMatch, urlMatch,
 				retval = {};
 
-			if ( ( anchorMatch = href.match( anchorRegex ) ) ) {
-				retval.type = 'anchor';
-				retval.anchor = {};
-				retval.anchor.name = retval.anchor.id = anchorMatch[ 1 ];
-			}
-			// urlRegex matches empty strings, so need to check for href as well.
-			else if ( href && ( urlMatch = href.match( urlRegex ) ) ) {
-				retval.type = 'url';
-				retval.url = {};
+//			retval.type = 'url';
+			retval.url = {};
+			retval.url.url = href;
+/*			if ( href && ( urlMatch = href.match( urlRegex ) ) ) {
 			//	retval.url.protocol = urlMatch[ 1 ];
 			//	retval.url.url = urlMatch[ 2 ];
 				retval.url.url = href;
-			}
+			}*/
 
 			// Load target and popup settings.
 			if ( element ) {
