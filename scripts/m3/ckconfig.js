@@ -131,7 +131,8 @@ CKEDITOR.editorConfig = function(config){
 			'/',
 			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', /*'-', 'Blockquote', 'CreateDiv',*/ '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
-			{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+//			{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+			{ name: 'links', items: [ 'M3Link', 'M3Unlink', 'M3Anchor' ] },
 			{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
 	//		{ name: 'others', items: [ '-' ] }
 	//		{ name: 'about', items: [ 'About' ] }
@@ -147,7 +148,8 @@ CKEDITOR.editorConfig = function(config){
 			'/',
 			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', /*'-', 'Blockquote', 'CreateDiv',*/ '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
-			{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+	//		{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+			{ name: 'links', items: [ 'M3Link', 'M3Unlink', 'M3Anchor' ] },
 			{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
 	//		{ name: 'others', items: [ '-' ] }
 	//		{ name: 'about', items: [ 'About' ] }
@@ -167,8 +169,10 @@ CKEDITOR.editorConfig = function(config){
 	config.image_previewText = '<strong>「サーバーブラウザー」ボタン</strong>をクリックすると画像ブラウザが立ち上がり、サムネール表示の画像をダブルクリックすると取得できます。画像をアップロードするには、画像ブラウザ上部の「アップロード」ボタンをクリックするか、画像ブラウザ上へ画像ファイルをドロップします。';
 	
 	// 追加プラグインの設定
-	config.extraPlugins = 'youtube,googlemaps';
-	config.removePlugins = 'iframe';
+//	config.extraPlugins = 'youtube,googlemaps';
+//	config.removePlugins = 'iframe';
+	config.extraPlugins = 'youtube,googlemap,m3links';
+	config.removePlugins = 'iframe,link';
 	config.allowedContent = true;		// ACF(Advanced Content Filter)を使用しない。SCRIPT,IFRAMEタグ等許可。
 //	config.extraAllowedContent = 'iframe';
 //	config.autoGrow_maxHeight = 800;		// 指定サイズまで入力に合わせて拡大

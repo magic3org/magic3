@@ -44,15 +44,11 @@
 		};
 
 		// コンテンツリスト、コンテンツ内容表示を更新
-		function updateContentList() {
+		function updateContentList(contentId) {
 			// コンテンツリストを取得
 			var elementId = '#' + dialog.getContentElement('tab_info', 'content_list').getInputElement().$.id;
 			var contentType = dialog.getContentElement('tab_info', 'content_type').getValue();
 			var pageNo = 1;
-
-			// コンテンツプレビュークリア
-			dialog.getContentElement('tab_info', 'url').setValue('');
-			$('#content_text').text('');
 
 			// Ajaxでページ情報を取得
 			m3_ajax_request('', 'task=linkinfo&act=getcontentlist&contenttype=' + contentType + '&accesspoint=' + accessPoint + '&page=' + pageNo, function (request, retcode, jsondata) { // 正常終了
@@ -63,12 +59,20 @@
 						$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
 					});
 				}
+				// 選択値を設定
+				if (contentId){
+					elementId = '#' + dialog.getContentElement('tab_info', 'content_list').getInputElement().$.id;
+					$(elementId).val(contentId);
+					
+					// コンテンツ内容を更新
+					updateContent(false);
+				}
 			}, function (request) { // 異常終了
 				alert('通信に失敗しました。');
 			});
 		}
 		// コンテンツタイプを取得
-		function updateContentType(updateList) {
+		function updateContentType(contentType, contentId) {
 			var elementId = '#' + dialog.getContentElement('tab_info', 'content_type').getInputElement().$.id;
 
 			// Ajaxでコンテンツタイプを取得
@@ -80,9 +84,13 @@
 						$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
 					});
 				}
-
+				// 選択値を設定
+				if (contentType){
+					elementId = '#' + dialog.getContentElement('tab_info', 'content_type').getInputElement().$.id;
+					$(elementId).val(contentType);
+				}
 				// デフォルトのコンテンツリストを取得
-				if (updateList) updateContentList();
+				updateContentList(contentId);
 			}, function (request) { // 異常終了
 				alert('通信に失敗しました。');
 			});
@@ -108,6 +116,31 @@
 			}, function (request) { // 異常終了
 				alert('通信に失敗しました。');
 			});
+		}
+		// コンテンツ内容を取得
+		function updateContent(updateUrlField) {
+			var contentType = dialog.getContentElement('tab_info', 'content_type').getValue();
+			var contentId = dialog.getContentElement('tab_info', 'content_list').getValue();
+
+			// Ajaxでコンテンツ内容を取得
+			m3_ajax_request('', 'task=linkinfo&act=getcontent&contenttype=' + contentType + '&contentid=' + contentId + '&accesspoint=' + accessPoint, function (request, retcode, jsondata) { // 正常終了
+
+				if (jsondata.content) {
+					$('#content_text').text(jsondata.content);
+					$('#content2_image').hide();
+					$('#content2_text').hide();
+				}
+
+				// URLを更新
+				if (updateUrlField) updateUrl();
+			}, function (request) { // 異常終了
+				alert('通信に失敗しました。');
+			});
+		}
+		// コンテンツプレビュークリア
+		function clearPreview() {
+			dialog.getContentElement('tab_info', 'url').setValue('');
+			$('#content_text').text('');
 		}
 		// ダイアログ上の項目の表示制御
 		function updateItems() {
@@ -205,6 +238,7 @@
 			// 初期化
 			accessPoint = _m3AccessPoint; // アクセスポイント
 			linkTarget = 'content';			// リンク対象
+			contentType = 'content';		// 汎用コンテンツ
 			
 			if (url){
 				linkTarget = 'others';		// リンク対象「その他」
@@ -224,11 +258,6 @@
 						accessPoint = '';
 						break;
 					}
-				
-					// アクセスポイントの変更をセレクトメニューに反映
-//					var elementId = '#' + dialog.getContentElement('tab_advanced', 'access_point').getInputElement().$.id;
-					//$(elementId).val(accessPoint);
-					//dialog.getContentElement('tab_advanced', 'access_point').setValue(accessPoint);
 
 					// 1番目のパラメータを取得
 					var query = urlMatch[2];
@@ -305,6 +334,15 @@
 			
 			// ページリスト更新(アクセスポイントに連動)
 			updatePageList(pageSubId);
+			
+			// コンテンツタイプの場合はコンテンツ内容を表示
+			if (linkTarget == 'content'){
+				// コンテンツプレビュークリア
+				$('#content_text').text('');
+				
+				// コンテンツタイプ作成。コンテンツリストを取得。
+				updateContentType(contentType, contentId);
+			}
 		}
 		
 		return {
@@ -349,6 +387,9 @@
 					onChange: function () { // 選択値変更時イベント
 						// コンテンツリストを更新
 						updateContentList();
+								
+						// コンテンツプレビュークリア
+						clearPreview();
 					}
 				}, { // コンテンツリスト
 					type: 'select',
@@ -362,23 +403,7 @@
 						$('#content_text').text('');
 
 						// コンテンツ内容を取得
-						var contentType = dialog.getContentElement('tab_info', 'content_type').getValue();
-						var contentId = dialog.getContentElement('tab_info', 'content_list').getValue();
-
-						// Ajaxでコンテンツ内容を取得
-						m3_ajax_request('', 'task=linkinfo&act=getcontent&contenttype=' + contentType + '&contentid=' + contentId + '&accesspoint=' + accessPoint, function (request, retcode, jsondata) { // 正常終了
-
-							if (jsondata.content) {
-								$('#content_text').text(jsondata.content);
-								$('#content2_image').hide();
-								$('#content2_text').hide();
-							}
-
-							// URLを更新
-							updateUrl();
-						}, function (request) { // 異常終了
-							alert('通信に失敗しました。');
-						});
+						updateContent(true);
 					}
 				}, {
 					type: 'select',
@@ -504,10 +529,13 @@
 							accessPoint = dialog.getContentElement('tab_advanced', 'access_point').getValue();
 
 							// コンテンツタイプ更新
-							updateContentType(true);
-
+							updateContentType();
+										
 							// ページリスト更新
 							updatePageList();
+										
+							// コンテンツプレビュークリア
+							clearPreview();
 						}
 					}]
 				}, {
@@ -698,9 +726,6 @@
 				
 				// URL解析
 				parseUrl(data.url.url);
-				
-				// コンテンツタイプ作成
-				updateContentType(false);
 				
 				// ダイアログ項目の表示制御
 				updateItems();
