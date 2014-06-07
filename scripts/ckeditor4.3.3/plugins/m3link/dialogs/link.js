@@ -288,10 +288,6 @@
 							case 'sub':
 								linkTarget = 'page';
 								pageSubId = queryMatch[2];
-								// ページ選択(changeイベント発生させない)
-								//dialog.getContentElement('tab_info', 'page_list').setValue(queryMatch[2]);
-								//elementId = '#' + dialog.getContentElement('tab_info', 'page_list').getInputElement().$.id;
-								//$(elementId).val(queryMatch[2]);
 								break;
 							default:
 								break;
@@ -303,43 +299,24 @@
 							contentId = queryMatch[1];
 						}
 					}
-				//	elementId = '#' + dialog.getContentElement('tab_info', 'content_type').getInputElement().$.id;
-				//	$(elementId).val(linkTarget);
 				}
-	//			alert(dialog.getContentElement('tab_advanced', 'access_point').getInputElement().$.id);
-	//			alert(accessPoint);
-	//			dialog.getContentElement('tab_advanced', 'access_point').getInputElement().$.setValue(accessPoint);
-
-			} else {		// URLが空のときはデフォルトの値を表示
-				// アクセスポイントの変更をセレクトメニューに反映
-				//dialog.getContentElement('tab_advanced', 'access_point').setValue(accessPoint);
 			}
 			// アクセスポイントの変更をセレクトメニューに反映
 			cancelOnChange = true;		// changeイベントをキャンセル
 			dialog.getContentElement('tab_advanced', 'access_point').setValue(accessPoint);
-//				elementId = '#' + dialog.getContentElement('tab_advanced', 'access_point').getInputElement().$.id;
-//				$(elementId).val(accessPoint);
 			
 			// リンク対象を設定
 			dialog.getContentElement('tab_info', 'link_target').setValue(linkTarget);
-//			alert(linkTarget);
-//				elementId = '#' + dialog.getContentElement('tab_info', 'link_target').getInputElement().$.id;
-//				$(elementId).val(linkTarget);
-			
-/*			if (linkTarget == 'page'){
-				// ページ選択
-				dialog.getContentElement('tab_info', 'page_list').setValue(pageSubId);
-			}*/
 			cancelOnChange = false;		// changeイベントをキャンセル
 			
 			// ページリスト更新(アクセスポイントに連動)
 			updatePageList(pageSubId);
 			
+			// コンテンツプレビュークリア
+			$('#content_text').text('');
+			
 			// コンテンツタイプの場合はコンテンツ内容を表示
 			if (linkTarget == 'content'){
-				// コンテンツプレビュークリア
-				$('#content_text').text('');
-				
 				// コンテンツタイプ作成。コンテンツリストを取得。
 				updateContentType(contentType, contentId);
 			}
@@ -380,10 +357,6 @@
 					items: [
 						[linkLang.on_connecting, '']
 					],
-/*					onShow: function () { // 選択値変更時イベント
-						// コンテンツタイプ更新
-						updateContentType();
-					},*/
 					onChange: function () { // 選択値変更時イベント
 						// コンテンツリストを更新
 						updateContentList();
@@ -412,10 +385,6 @@
 					items: [
 						[linkLang.on_connecting, '']
 					],
-/*					onShow: function () { // 再表示イベント
-						// ページリスト更新
-						updatePageList();
-					},*/
 					onChange: function () { // 選択値変更時イベント
 						if (cancelOnChange) return;
 								
@@ -509,19 +478,10 @@
 										$(elementId).get(0).options[$(elementId).get(0).options.length] = new Option(item[1], item[0]);
 									});
 								}
-								// 項目を再選択
-								//$(elementId).val(accessPoint);
-						//dialog.getContentElement('tab_advanced', 'access_point').setValue(accessPoint);
 							}, function (request) { // 異常終了
 								alert('通信に失敗しました。');
 							});
 						},
-/*						onShow: function () { // 再表示イベント
-							var elementId = '#' + this.getInputElement().$.id;
-
-							// 項目を再選択
-							$(elementId).val(accessPoint);
-						},*/
 						onChange: function () {
 							if (cancelOnChange) return;
 										
@@ -694,14 +654,6 @@
 
 				// このダイアログへの参照を取得
 				dialog = this;
-
-				// ダイアログ項目の表示制御
-			//updateItems();
-
-				// 起動時の初期値を設定
-//				accessPoint = _m3AccessPoint; // アクセスポイント
-//				accessPoint = 'm';
-				//dialog.getContentElement('tab_info', 'url').setValue(_m3Url);
 			},
 			onShow: function () {
 				var editor = this.getParentEditor(),
@@ -729,14 +681,6 @@
 				
 				// ダイアログ項目の表示制御
 				updateItems();
-//dialog.getContentElement('tab_advanced', 'access_point').setValue('m');
-//dialog.layout();
-//accessPoint = 'm';
-//alert(dialog.getContentElement('tab_advanced', 'access_point').getValue());
-				// 起動時の初期値を設定
-//				$('#content_text').text(''); // コンテンツプレビュークリア
-//				accessPoint = _m3AccessPoint; // アクセスポイント
-				//dialog.getContentElement('tab_info', 'url').setValue(_m3Url);
 
 				// フレーム内にある場合は表示位置を調整
 				if (window.parent != window.self) {
@@ -793,16 +737,6 @@
 					delete this._.selectedElement;
 				}
 			}
-			// Inital focus on 'url' field if link is of type URL.
-			/*			onFocus: function() {
-				var linkType = this.getContentElement( 'tab_info', 'linkType' ),
-					urlField;
-
-				if ( linkType && linkType.getValue() == 'url' ) {
-					urlField = this.getContentElement( 'tab_info', 'url' );
-					urlField.select();
-				}
-			}*/
 		};
 	});
 })();
