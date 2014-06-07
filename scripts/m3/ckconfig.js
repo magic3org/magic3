@@ -171,7 +171,7 @@ CKEDITOR.editorConfig = function(config){
 	// 追加プラグインの設定
 //	config.extraPlugins = 'youtube,googlemaps';
 //	config.removePlugins = 'iframe';
-	config.extraPlugins = 'youtube,googlemap,m3links';
+	config.extraPlugins = 'youtube,googlemaps,m3link';
 	config.removePlugins = 'iframe,link';
 	config.allowedContent = true;		// ACF(Advanced Content Filter)を使用しない。SCRIPT,IFRAMEタグ等許可。
 //	config.extraAllowedContent = 'iframe';
