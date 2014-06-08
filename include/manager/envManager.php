@@ -1887,6 +1887,15 @@ class EnvManager extends Core
 		return array(self::DEFAULT_PAGE_ID, self::DEFAULT_MOBILE_PAGE_ID, self::DEFAULT_SMARTPHONE_PAGE_ID);
 	}
 	/**
+	 * 一般画面のデフォルトのアクセスポイント取得
+	 *
+	 * @return array			アクセスポイント(0=PC,1=携帯,2=スマートフォン)
+	 */
+	public function getAllDefaultAccessPoint()
+	{
+		return array('', self::M3_DIR_NAME_MOBILE, self::M3_DIR_NAME_SMARTPHONE);
+	}
+	/**
 	 * 現在のページID
 	 */
 	public function setCurrentPageId($id)

@@ -3168,6 +3168,9 @@ class PageManager extends Core
 			$replaceStr .= 'var M3_ROOT_URL = "' . $rootUrl . '";' . M3_NL;		// システムルートURL
 			
 			if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()){		// 管理画面へのアクセス、システム運用権限があり
+				$pageId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);		// ページID
+				$pageSubId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);// ページサブID
+					
 				// 管理画面のオープン設定
 				$replaceStr .= 'var M3_DEFAULT_ADMIN_URL="' . $gEnvManager->getDefaultAdminUrl() . '";' . M3_NL;		// 管理機能URL
 				if ($openType != '') $replaceStr .= 'var M3_CONFIG_WINDOW_OPEN_TYPE = ' . $openType . ';' . M3_NL;
@@ -3188,12 +3191,17 @@ class PageManager extends Core
 				// ウィジェット詳細設定画面専用のJavaScriptグローバル変数
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){
 					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+				} else if (!empty($pageId)){
+					$accessPoint = $this->gEnv->getAllDefaultPageId();
+					for ($i = 0; $i < count($accessPoint); $i++){
+						if ($pageId == $accessPoint[$i]){
+							$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $i . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+							break;
+						}
+					}
 				}
 						
 				if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
-					$pageId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);		// ページID
-					$pageSubId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);// ページサブID
-			
 					if (!empty($task)){		// 戻りタスクが設定されているときのみ最大化可能
 						$replaceStr .= 'function gobackPagedef(){' . M3_NL;
 						$replaceStr .= '    window.location.href = "' . $gEnvManager->getDefaultAdminUrl() . '?pageid=' . $pageId . '&pagesubid=' . $pageSubId . '&task=' . $task . '";' . M3_NL;
