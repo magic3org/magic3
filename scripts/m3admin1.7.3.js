@@ -378,8 +378,9 @@ function m3LoadCKTools()
 	dummyCKParent = $('#_dummy_ck_parent');
 
 	var config = {};
-	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_direct.js';
-//	config['toolbar'] = 'Full';
+//	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_direct.js';
+	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig.js';
+	config['extraPlugins'] = 'linkinfo';
 	CKEDITOR.replace('_dummy_ckeditor', config);
 	dummyCKParent.hide();
 }

@@ -28,7 +28,7 @@ class ScriptLibInfo
 	
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
-	const LIB_SET_CKEDITOR_TOOLBAR	= 'ckeditor_toolbar';		// CKEditorのツールバー用ライブラリ
+	const LIB_SET_CKEDITOR_M3_TOOLBAR	= 'ckeditor_m3toolbar';		// CKEditorのツールバー用ライブラリ
 	
 	// ベースライブラリ
 	const LIB_JQUERY				= 'jquery';
@@ -530,7 +530,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	 */
 	static function getLibSet($libSetId)
 	{
-		static $libSet = array(	self::LIB_SET_CKEDITOR_TOOLBAR	=>	array(self::LIB_ELFINDER));		// CKEditorのツールバー用
+		static $libSet = array(	self::LIB_SET_CKEDITOR_M3_TOOLBAR	=>	array(self::LIB_ELFINDER));		// CKEditorのMagic3拡張ツールバー用
 		$libs = $libSet[$libSetId];
 		if (isset($libs)){
 			return $libs;
