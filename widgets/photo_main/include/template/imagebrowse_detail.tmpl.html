@@ -73,17 +73,17 @@ $(function(){
 <td align="right"><patTemplate:tmpl name="cancel_button" visibility="visible"><span {_HELP_IMAGEBROWSE_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span></patTemplate:tmpl>
 </td></tr>
 <tr><td colspan="2">
-<table class="simple-table" width="100%">
+<table class="simple-table" style="margin: 0 auto;width:950px;">
     <tbody>
     <tr>
 	    <td class="table-headside" width="150"><span {_HELP_IMAGEBROWSE_PUBLIC_ID}>公開ID</span></td>
-	    <td width="60%">{PHOTO_ID}</td>
+	    <td width="450">{PHOTO_ID}</td>
 	    <td class="table-headside" width="150"><span {_HELP_IMAGEBROWSE_CODE}>画像コード</span></td>
 	    <td>{CODE}</td>
 	</tr>
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_IMAGEBROWSE_TITLE}>タイトル名</span></td>
-	    <td ><input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />&nbsp;&nbsp;元のファイル名：{ORIGINAL_NAME}</td>
+	    <td ><input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" style="width:100%;"/><br />元のファイル名：{ORIGINAL_NAME}</td>
 	    <td class="table-headside"><span {_HELP_IMAGEBROWSE_AUTHOR}>撮影者</span></td>
 	    <td>{AUTHOR}</td>
 	</tr>
