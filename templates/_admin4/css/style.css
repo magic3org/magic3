@@ -65,16 +65,6 @@ a:hover {
 .m3list_indent2 {
 	margin-left:140px;
 }
-/*** Bootstrap bug fix ***/
-input[type="password"]{
-	font-size: 14px;
-	font-family: Arial;/*for IE8 bug*/
-}
-/*** Bootstrap plus option ***/
-.align_middle_row.table td {
-	vertical-align: middle;
-}
-
 /* top page button */
 .toppage-button {
 	display:block;
@@ -679,4 +669,20 @@ background-color: #0081c2;
 }
 .active {
 	color:green;
+}
+/****** Bootstrap修正 ******/
+/*** Bootstrap bug fix ***/
+input[type="password"]{
+	font-size: 14px;
+	font-family: Arial;/*for IE8 bug*/
+}
+/*** Bootstrap plus option ***/
+.align_middle_row.table td {
+	vertical-align: middle;
+}
+/*** タブフォーカス削除 ***/
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+	outline: 0;
 }
