@@ -203,9 +203,24 @@ CKEDITOR.on('dialogDefinition', function(ev){
 			if (browseButton !== null){
 				browseButton.hidden = false;
 				browseButton.onClick = function(dialog, i){
+					var title;
+					
 					editor._.filebrowserSe = this;
+					
+					switch (dialogName){
+					case 'image':
+						title = '画像を選択';
+						break;
+					case 'flash':
+						title = 'Flashを選択';
+						break;
+					default:
+						title = 'ファイルを選択';
+						break;
+					}
+					
 					$('<div />').dialog({
-						title: "画像を選択",
+						title: title,
 						modal: true,
 						width: "80%",
 						zIndex: 99999,
@@ -215,7 +230,11 @@ CKEDITOR.on('dialogDefinition', function(ev){
 						},
 						create: function(event, ui){
 							var option = '';
-							if (dialogName == 'image' || dialogName == 'flash') option = '?dirtype=' + dialogName;
+							if (dialogName == 'image' || dialogName == 'flash'){
+								option = '?dirtype=' + dialogName;
+							} else if (dialogName == 'm3link'){
+								option = '?dirtype=file';
+							}
 							$(this).elfinder({
 								url: M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php' + option,
 								height: '500px',

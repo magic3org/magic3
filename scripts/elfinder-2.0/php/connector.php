@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -50,7 +50,7 @@ function access($attr, $path, $data, $volume) {
 
 // ディレクトリ参照範囲を制限
 $dirType = $gRequestManager->trimValueOf('dirtype');
-if (!empty($dirType) && !in_array($dirType, array('image', 'flash'))){
+if (!empty($dirType) && !in_array($dirType, array('image', 'flash', 'file'))){
 	$gOpeLogManager->writeUserAccess(__METHOD__, 'ファイルブラウザへの不正なパラメータを検出しました。dirtype=' . $dirType , 3001, 'アクセスをブロックしました。');
 	exit(0);
 }

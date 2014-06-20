@@ -153,6 +153,7 @@
 				dialog.getContentElement('tab_info', 'content_list').getElement().show();
 				dialog.getContentElement('tab_info', 'page_list').getElement().hide();
 				dialog.getContentElement('tab_info', 'content_label').getElement().show();
+				dialog.getContentElement('tab_info', 'browse').getElement().hide();
 				$('#content_text').show();
 				break;
 			case 'page':
@@ -160,6 +161,7 @@
 				dialog.getContentElement('tab_info', 'content_list').getElement().hide();
 				dialog.getContentElement('tab_info', 'page_list').getElement().show();
 				dialog.getContentElement('tab_info', 'content_label').getElement().hide();
+				dialog.getContentElement('tab_info', 'browse').getElement().hide();
 				$('#content_text').hide();
 				break;
 			case 'others':
@@ -167,6 +169,7 @@
 				dialog.getContentElement('tab_info', 'content_list').getElement().hide();
 				dialog.getContentElement('tab_info', 'page_list').getElement().hide();
 				dialog.getContentElement('tab_info', 'content_label').getElement().hide();
+				dialog.getContentElement('tab_info', 'browse').getElement().show();
 				$('#content_text').hide();
 				break;
 			}
@@ -421,6 +424,12 @@
 
 						data.url.url = this.getValue();
 					}
+				}, {
+					type: 'button',
+					id: 'browse',
+				//	hidden: 'true',
+					filebrowser: 'tab_info:url',
+					label: commonLang.browseServer
 				}]
 			}, {
 				id: 'tab_target',
