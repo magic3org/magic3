@@ -56,7 +56,7 @@ class help_menudef extends HelpConv
 				'body' =>	$this->_('Url to link.')		// メニュー項目をクリックしたときに表示されるURLです。
 			),
 			'menudef_link_type' => array(	
-				'title' =>	$this->_('Link Type'),			// 表示方法
+				'title' =>	$this->_('Action'),			// 動作(表示方法)
 				'body' =>	$this->_('Select type to open page in the same window or in other window if clicked.')		// メニュー項目をクリックしたときにリンク先が同じウィンドウで表示するか、別ウィンドウで表示するかを指定します。
 			),
 			'menudef_visible' => array(	

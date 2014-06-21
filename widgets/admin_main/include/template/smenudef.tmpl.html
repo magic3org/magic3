@@ -109,7 +109,6 @@ $(function(){
 //]]>
 </script>
 <div class="m3config_body">
-<!--<br />-->
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="fixed_mode" value="{FIXED_MODE}" />
@@ -136,7 +135,7 @@ $(function(){
             <th width="35"><span {_HELP_MENUDEF_CHECK}>{_LC_LABEL_CHECK}</span></th>
             <th width="20%"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
 	    <th width="40%"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></th>
-	    <th width="80"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
+	    <th width="50"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
 	    <th width="50"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
 	    <th><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
 	</tr>
@@ -149,7 +148,9 @@ $(function(){
 	    <td>{LINK_STR}</td>
 	    <td align="center">{LINK_TYPE}</td>
 	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
-	    <td align="right"><input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} /></td>
+	    <td align="right">
+		<!--<input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} />-->
+		<a href="#" onclick="editContent('{CONTENT_ID}');" class="btn btn-sm btn-warning" role="button" rel="m3help" title="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT}><i class="glyphicon glyphicon-edit"></i></a></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
@@ -163,7 +164,7 @@ $(function(){
             <th width="20%"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
 	    <th width="5%"><span {_HELP_MENUDEF_LANG}>{_LC_LABEL_LANG}</span></th>
 	    <th width="40%"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></th>
-	    <th width="80"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
+	    <th width="50"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
 	    <th width="50"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
 	    <th><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
 	</tr>
@@ -177,7 +178,8 @@ $(function(){
 	    <td>{LINK_STR}</td>
 	    <td align="center">{LINK_TYPE}</td>
 	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
-	    <td align="right"><input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} /></td>
+	    <td align="right"><!--<input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} />-->
+		<a href="#" onclick="editContent('{CONTENT_ID}');" class="btn btn-sm btn-warning" role="button" rel="m3help" title="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT}><i class="glyphicon glyphicon-edit"></i></a></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
@@ -186,20 +188,14 @@ $(function(){
 <br />
 </td></tr>
 </table>
-
-
 <!-- 下部 start -->
-
-<!--<div id="sortable_box">-->
-<div class="panel panel-success" style="width:300px;">
+<div class="panel panel-success" style="width:250px;">
 <div class="panel-heading"><span>{_LC_LABEL_MENU_LAYOUT}</span></div>
 <ul id="sortable_box" class="list-group">
     <patTemplate:tmpl name="menuitemlist"><li class="list-group-item">{NAME}</li></patTemplate:tmpl>
 </ul>
 </div>
-<!--</div>-->
 <label>{_LC_MSG_CHANGE_ITEM_ORDER}</label>
-
 <!-- 下部 end -->
 
 </form>

@@ -143,7 +143,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_new'] = $this->_('New');		// 新規
 			$localeText['label_get_title'] = $this->_('Get Title');		// タイトル取得
 			$localeText['label_item_type'] = $this->_('Item Type');		// 項目タイプ
-			$localeText['label_link_type'] = $this->_('Link Type');		// 表示方法
+			$localeText['label_link_type'] = $this->_('Action');		// 動作(表示方法)
 			$localeText['label_link_self'] = $this->_('Open page in the same window');		// 同ウィンドウで表示
 			$localeText['label_link_other'] = $this->_('Open page in the other window');		// 別ウィンドウで表示
 			$localeText['label_link_url'] = $this->_('Link URL');	// リンク先URL
@@ -173,7 +173,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_name'] = $this->_('Name');			// 名前
 			$localeText['label_lang'] = $this->_('Language');			// 言語
 			$localeText['label_link_url'] = $this->_('Link URL');			// リンク先URL
-			$localeText['label_link_type'] = $this->_('Link Type');			// 表示方法
+			$localeText['label_link_type'] = $this->_('Action');			// 動作(表示方法)
 			$localeText['label_visible'] = $this->_('Visible');			// 公開
 			$localeText['label_operation'] = $this->_('Operation');		// 操作
 			$localeText['label_menu_layout'] = $this->_('Menu Layout');		// メニューレイアウト
