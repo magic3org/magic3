@@ -160,8 +160,6 @@ function m3_sortableBox(object, childTag)
 		alert("null object.");
 		return;
 	}
-	// クラスの設定
-	obj.className += " sortable-box";
 	
 	if (childTag){
 		children = obj.getElementsByTagName(childTag);
@@ -172,7 +170,6 @@ function m3_sortableBox(object, childTag)
 		}
 	}
 	for (var i = 0; i < children.length; i++){
-		children[i].className += " sortable-box-item";
 		children[i].id = sortitemhead + i;
 	}
 }

@@ -450,7 +450,7 @@ background-color: #0081c2;
 }
 
 /****** sortable box ******/
-.sortable-box {
+/*.sortable-box {
 	background-color:#FFF;
 	border:1px solid #555;
 	color:#222;
@@ -462,12 +462,12 @@ background-color: #0081c2;
 .sortable-box h1 {
 	background-color:#555;
 	border-top:3px solid #666;
-/*	color:#FFF;*/
 	font-size:12px;
 	margin:0 -10px 10px;
 	line-height:2;
 	padding:0 10px;
-}
+}*/
+/*
 .sortable-box-item {
 	color:#222;
 	margin:10px 0;
@@ -476,8 +476,6 @@ background-color: #0081c2;
 }
 .sortable-box-item dt {
 	background-color:#666;
-/*	color:#FFF;*/
-/*	cursor:move;*/
 	height:2em;
 	line-height:2;
 	padding:0 6px;
@@ -489,7 +487,7 @@ background-color: #0081c2;
 	padding:3px 6px;
 	cursor:default;
 }
-
+*/
 /****** edit menu ******/
 .menulist_frame {
 	background-color:#FFF;
@@ -612,6 +610,10 @@ background-color: #0081c2;
 }
 .m3config_head {
 	width:95%;
+	margin: 10px auto;
+}
+.m3config_body {
+	display: table;
 	margin: 10px auto;
 }
 .m3config_fullwidth {

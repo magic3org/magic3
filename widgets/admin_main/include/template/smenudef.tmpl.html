@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -90,25 +90,26 @@ $(function(){
 	m3_sortableBox('sortable_box');
 	
 	// マウスドラッグ処理追加
-	var els = ['#sortable_box'];
-	var $els = $(els.toString());
+/*	var els = ['#sortable_box'];
+	var $els = $(els.toString());*/
 	
-	$els.sortable({
-		items: '> dl',
-		handle: 'dt',
+	$("#sortable_box").sortable({
+/*		items: '> dl',
+		handle: 'dt',*/
 		cursor: 'move',
 		opacity: 0.8,
-		connectWith: els,
-		start: function(e,ui){
+/*		connectWith: els,*/
+/*		start: function(e,ui){
 			ui.helper.css("width", ui.item.width());
-		},
+		},*/
 		update: sortableUpdate
 	});
+/*	$("#sortable_box").sortable();*/
 });
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_body">
+<!--<br />-->
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="fixed_mode" value="{FIXED_MODE}" />
@@ -186,20 +187,22 @@ $(function(){
 </td></tr>
 </table>
 
+
 <!-- 下部 start -->
-<table width="90%"><tr valign="top"><td>
-<div id="sortable_box">
-	<h1>{_LC_LABEL_MENU_LAYOUT}</h1>
-	<patTemplate:tmpl name="menuitemlist">
-	<dl>
-		<dt>{NAME}</dt>
-	</dl>
-	</patTemplate:tmpl>
+
+<!--<div id="sortable_box">-->
+<div class="panel panel-success" style="width:300px;">
+<div class="panel-heading"><span>{_LC_LABEL_MENU_LAYOUT}</span></div>
+<ul id="sortable_box" class="list-group">
+    <patTemplate:tmpl name="menuitemlist"><li class="list-group-item">{NAME}</li></patTemplate:tmpl>
+</ul>
 </div>
+<!--</div>-->
 <label>{_LC_MSG_CHANGE_ITEM_ORDER}</label>
-</td></tr>
-</table>
+
 <!-- 下部 end -->
+
 </form>
 </div>
+
 </patTemplate:tmpl>
