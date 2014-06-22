@@ -51,6 +51,8 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	const TREE_ITEM_HEAD = 'treeitem_';		// ツリー項目IDヘッダ
 	const PREVIEW_ICON_FILE = '/images/system/preview.png';		// プレビュー用アイコン
 	const PREVIEW_TITLE = 'プレビュー';
+	const WINDOW_ICON_FILE = '/images/system/window32.png';		// 同じウィンドウアイコン
+	const OTHER_WINDOW_ICON_FILE = '/images/system/other_window32.png';		// 別のウィンドウアイコン
 	
 	/**
 	 * コンストラクタ
@@ -762,13 +764,19 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					$visible = 'checked';
 				}
 				// リンクタイプ
-				$linkString = '';
+				$linkIconTag = '';
 				switch ($row['md_link_type']){
 					case 0:			// 同ウィンドウで開くリンク
-						$linkString = $this->_('Self');		// 同
+						$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;
+						$iconTitle = $this->_('Self Window');		// 同じウィンドウ
+						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+						$linkIconTag = '<span rel="m3help" title="' . $iconTitle . '">' . $linkIconTag . '</span>';
 						break;
 					case 1:			// 別ウィンドウで開くリンク
-						$linkString = $this->_('Other');	// 別
+						$iconUrl = $this->gEnv->getRootUrl() . self::OTHER_WINDOW_ICON_FILE;
+						$iconTitle = $this->_('Other Window');		// 同じウィンドウ
+						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+						$linkIconTag = '<span rel="m3help" title="' . $iconTitle . '">' . $linkIconTag . '</span>';
 						break;
 				}
 				// 更新用シリアル番号
@@ -809,7 +817,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					'name' => $this->convertToDispString($name),		// 名前
 					'lang'		=> $lang,			// 言語
 					'item_type' => $iconTag,											// メニュー項目タイプアイコン
-					'link_type' => $linkString,											// リンクタイプ
+					'link_type' => $linkIconTag,											// リンクタイプ
 					'link_str' => $linkUrlStr,											// リンクURL
 					'content_id' => $contentId,											// コンテンツID
 					'enable_content' => $enableContentLink,											// コンテンツの編集ボタンの有効状態
