@@ -129,6 +129,9 @@ table {
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 }
+.simple-table legend {
+	margin-bottom:0;
+}
 .simple-table caption {
 	text-align: left;
 	font-weight: bold;
@@ -657,19 +660,19 @@ background-color: #0081c2;
 	opacity: 0;
 }
 /****** ステータス表示 ******/
-.required {
+span.required {
 	color:red;
 }
-.emergency {
+span.emergency {
 	color:red;
 }
-.error {
+span.error {
 	color:red;
 }
-.available {
+span.available {
 	color:green;
 }
-.active {
+span.active {
 	color:green;
 }
 /****** Bootstrap修正 ******/
