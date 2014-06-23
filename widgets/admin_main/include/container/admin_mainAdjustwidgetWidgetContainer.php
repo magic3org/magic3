@@ -184,7 +184,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			if (!empty($start_date) && !empty($end_date)){
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg($this->_('Invalid view term.'));		// 表示期間が不正です
 			}
-			$this->checkSingleByte($cssClassSuffix, '追加CSSクラス');			// 追加CSSクラスサフィックス
+			$this->checkSingleByte($cssClassSuffix, '追加CSSクラス', true);			// 追加CSSクラスサフィックス
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
@@ -233,8 +233,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				}
 			}
 			// タブを選択
-			$this->tmpl->setAttribute('select_tabs', 'visibility', 'visible');
-			$this->tmpl->addVar("select_tabs", "no", 1);				// 「その他」タブを選択
+			$activeTab = 'widget_other';
 		} else {		// 初期状態
 			// 初期値設定
 			$this->align = '';
@@ -324,6 +323,33 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		
 		// ページID選択チェックボックス作成
 		$this->createPageSubIdList();
+		
+		// ナビゲーションタブ作成
+		$tabItemIndex = 0;
+		$tabDef = array();
+		$tabItem = new stdClass;
+		$tabItem->name	= $this->_('Basic');		// 基本
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_config';
+		$tabItem->parent	= 0;
+//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabItem = new stdClass;
+		$tabItem->name	= $this->_('Others');
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_other';			// その他
+		$tabItem->parent	= 0;
+//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
+		if (empty($activeTab)){		// タブの選択
+			$this->tmpl->addVar('_widget', 'active_tab', 'widget_config');
+		} else {
+			$this->tmpl->addVar('_widget', 'active_tab', $activeTab);
+		}
 		
 		$this->tmpl->addVar("_widget", "top", $marginTop);				// 上マージン
 		$this->tmpl->addVar("_widget", "bottom", $marginBottom);		// 下マージン
@@ -461,8 +487,8 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText = array();
 		$localeText['msg_update'] = $this->_('Update config?');		// 設定を更新しますか?
 		$localeText['label_widget_common_config'] = $this->_('Widget Common Config');			// ウィジェット共通設定
-		$localeText['label_config_basic'] = $this->_('Basic');			// 基本
-		$localeText['label_config_other'] = $this->_('Others');			// その他
+//		$localeText['label_config_basic'] = $this->_('Basic');			// 基本
+//		$localeText['label_config_other'] = $this->_('Others');			// その他
 		$localeText['label_adjust_widget'] = $this->_('Adjust Widget Title and Contents');			// ウィジェットタイトル、位置調整
 		$localeText['label_title'] = $this->_('Title');			// タイトル名
 		$localeText['label_visible'] = $this->_('Visible');			// 表示

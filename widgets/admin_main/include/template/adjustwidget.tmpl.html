@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: adjustwidget.tmpl.html 5679 2013-02-16 11:50:05Z fishbone $
  * @link       http://www.magic3.org
@@ -37,10 +37,19 @@ function updateOther(){
 	document.main_other.submit();
 	return true;
 }
+function activateTab(tab)
+{
+	$('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};
 $(function(){
-	$tabs = $("#main_area").tabs();
-	<patTemplate:tmpl name="select_tabs" visibility="hidden">$tabs.tabs('select', {NO});</patTemplate:tmpl>
+	// タブを選択
+	activateTab('{ACTIVE_TAB}');
 	
+	// タブクリック時処理
+	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
+		$('.m3messages').remove();
+	});
+
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
@@ -59,17 +68,14 @@ $(function(){
 //]]>
 </script>
 <div class="m3config_head"><label><span {_HELP_ADJUSTWIDGET_CONFIG}>{_LC_LABEL_WIDGET_COMMON_CONFIG}</span></label></div>
+{NAV_TAB}
+<div class="m3config_tabs tab-content">
 <!-- m3:ErrorMessage -->
-<div id="main_area" class="m3config_tabs">
-            <ul>
-	    <li><a href="#widget_config"><span>{_LC_LABEL_CONFIG_BASIC}</span></a></li>
-	    <li><a href="#widget_other"><span>{_LC_LABEL_CONFIG_OTHER}</span></a></li>
-	    </ul>
-	    <div id="widget_config">
+<div id="widget_config" class="tab-pane">
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <input type="hidden" name="widget_id" value="{WIDGET_ID}" />
-<table class="simple-table" width="950">
+<table class="simple-table" style="margin: 0 auto;width:950px;">
 <caption><span {_HELP_ADJUSTWIDGET}>{_LC_LABEL_ADJUST_WIDGET}</span></caption>
     <tbody>
         <tr>
@@ -119,21 +125,22 @@ $(function(){
 </table>
 </form>
 	    </div>
-	    <div id="widget_other">
+	    <div id="widget_other" class="tab-pane">
 <form method="post" name="main_other">
 <input type="hidden" name="act" />
 <input type="hidden" name="widget_id" value="{WIDGET_ID}" />
-<table class="simple-table">
+<table class="simple-table" style="margin: 0 auto;width:950px;">
 <caption><span {_HELP_ADJUSTWIDGET_VIEW}>{_LC_LABEL_VIEW_CONTROL}</span></caption>
     <tbody>
         <tr>
 	    <td class="table-headside" width="150"><span {_HELP_ADJUSTWIDGET_SHARED}>{_LC_LABEL_SHARED_ATTR}</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_shared" {SHARED_CHECKED} />{_LC_LABEL_ON}<br />
+	    <td colspan="3">
+		    <div class="checkbox"><label><input type="checkbox" name="item_shared" {SHARED_CHECKED} />{_LC_LABEL_ON}</label></div>
 	        <fieldset><legend>{_LC_LABEL_EXCEPT_PAGE}</legend>
                 <patTemplate:tmpl name="sub_id_list">
-		<input type="checkbox" name="item_except_{VALUE}" {CHECKED} />{VALUE} - {NAME}<br />
-		</patTemplate:tmpl>
-		</fieldset>
+		        <div class="checkbox"><label><input type="checkbox" name="item_except_{VALUE}" {CHECKED} />{VALUE} - {NAME}</label></div>
+		        </patTemplate:tmpl>
+		    </fieldset>
 	    </td>
 	</tr>
         <tr class="even">
@@ -143,8 +150,12 @@ $(function(){
 	</tr>
     <tr>
 	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_OPTION}>{_LC_LABEL_VIEW_OPTION}</span></td>
-	    <td colspan="3"><fieldset><legend>{_LC_LABEL_VIEW_TYPE}</legend>
-	    <input type="radio" name="item_view_type" value="0" {CHECKED_ALWAYS} />{_LC_LABEL_ALWAYS}<br /><input type="radio" name="item_view_type" value="1" {CHECKED_LOGIN} />{_LC_LABEL_LOGIN}<br /><input type="radio" name="item_view_type" value="2" {CHECKED_NO_LOGIN} />{_LC_LABEL_NO_LOGIN}</fieldset>
+	    <td colspan="3">
+		    <fieldset><legend>{_LC_LABEL_VIEW_TYPE}</legend>
+	        <div class="radio"><label><input type="radio" name="item_view_type" value="0" {CHECKED_ALWAYS} />{_LC_LABEL_ALWAYS}</label></div>
+			<div class="radio"><label><input type="radio" name="item_view_type" value="1" {CHECKED_LOGIN} />{_LC_LABEL_LOGIN}</label></div>
+			<div class="radio"><label><input type="radio" name="item_view_type" value="2" {CHECKED_NO_LOGIN} />{_LC_LABEL_NO_LOGIN}</label></div>
+			</fieldset>
 	    </td>
 	</tr>
     <tr class="even">
