@@ -768,13 +768,13 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				switch ($row['md_link_type']){
 					case 0:			// 同ウィンドウで開くリンク
 						$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;
-						$iconTitle = $this->_('Self Window');		// 同じウィンドウ
+						$iconTitle = $this->_('Show in self window');		// 同じウィンドウで表示
 						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 						$linkIconTag = '<span rel="m3help" title="' . $iconTitle . '">' . $linkIconTag . '</span>';
 						break;
 					case 1:			// 別ウィンドウで開くリンク
 						$iconUrl = $this->gEnv->getRootUrl() . self::OTHER_WINDOW_ICON_FILE;
-						$iconTitle = $this->_('Other Window');		// 同じウィンドウ
+						$iconTitle = $this->_('Show in other window');		// 別のウィンドウで表示
 						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 						$linkIconTag = '<span rel="m3help" title="' . $iconTitle . '">' . $linkIconTag . '</span>';
 						break;
