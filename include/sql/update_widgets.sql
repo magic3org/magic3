@@ -424,7 +424,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'm/menu';
 INSERT INTO _widgets
 (wd_id,    wd_name,              wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_add_script_lib, wd_add_script_lib_a,wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('m/menu', 'デフォルトメニュー', 'menu',  'menu',         '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, '複数のメニューが作成できるデフォルトメニュー', 1,              true,     '', 'jquery-ui.tabs',  true,   true,      true,    '2013-11-03',           now(),         now());
+('m/menu', 'デフォルトメニュー', 'menu',  'menu',         '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, '複数のメニューが作成できるデフォルトメニュー', 1,              true,     '', '',  true,   true,      true,    '2013-11-03',           now(),         now());
 -- ウィジェット情報(携帯用/汎用コンテンツ)
 DELETE FROM _widgets WHERE wd_id = 'm/content';
 INSERT INTO _widgets
@@ -554,7 +554,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 's/banner';
 INSERT INTO _widgets
 (wd_id,      wd_parent_id, wd_name,      wd_content_type, wd_category_id, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/banner', 'banner3',    'バナー表示', 'banner',        'subcontent',   true,            '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'バナー画像をグループ化して、グループごとに表示できるバナー管理ウィジェットです。', 2, '',                'jquery-ui.tabs',                  true, true,         true,                true,  0,         1, '2013-12-08', now(),         now());
+('s/banner', 'banner3',    'バナー表示', 'banner',        'subcontent',   true,            '3.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'バナー画像をグループ化して、グループごとに表示できるバナー管理ウィジェットです。', 2, '',                'elfinder',                  true, true,         true,                true,  0,         1, '2013-12-08', now(),         now());
 -- ウィジェット情報(スマートフォン用/デザイン)
 DELETE FROM _widgets WHERE wd_id = 's/jquery_header';
 INSERT INTO _widgets

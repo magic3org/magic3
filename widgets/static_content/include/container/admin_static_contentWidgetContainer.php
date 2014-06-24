@@ -247,9 +247,6 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 「更新」ボタン
 		}
-		// タブの選択状態を設定
-		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
-		//if (empty($act) && !empty($this->configId)) $this->tmpl->setAttribute('select_edit_content', 'visibility', 'visible');
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);

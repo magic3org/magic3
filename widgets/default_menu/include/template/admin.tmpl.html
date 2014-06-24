@@ -50,13 +50,13 @@ function reloadMenuDef()
 function activateTab(tab)
 {
 	$('.nav-tabs a[href="#' + tab + '"]').tab('show');
-};
+}
 $(function(){
 	// メニュー定義画面作成
 	reloadMenuDef();
 
 	// タブを選択
-	activateTab('{SELECT_TAB}');
+	activateTab('{ACTIVE_TAB}');
 	
 	// 階層化の種別選択
 	$('#is_hier').click(function(){
@@ -75,7 +75,7 @@ $(function(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
 <table style="margin: 0 auto;">
-<tr><td><span {_HELP_MENU_DETAIL}><span>メニュー設定</span></span></td>
+<tr><td><span {_HELP_MENU_DETAIL}>メニュー設定</span></td>
 <td align="right"><span {_HELP_MENU_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
 </td></tr>
 <tr><td colspan="2">

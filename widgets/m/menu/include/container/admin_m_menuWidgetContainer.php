@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -89,15 +89,16 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		
 		$userId		= $this->gEnv->getCurrentUserId();
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+		$anchor = $request->trimValueOf('anchor');
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 
 		$this->configId = $request->trimValueOf('item_id');		// 定義ID
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
-		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
-		$limitUser = ($request->trimValueOf('item_limituser') == 'on') ? 1 : 0;		// ユーザを制限するかどうか
 		$this->menuId = $request->trimValueOf('menuid');
 		if (empty($this->menuId)) $this->menuId = self::DEFAULT_MENU_ID;
+		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
+		$limitUser = ($request->trimValueOf('item_limituser') == 'on') ? 1 : 0;		// ユーザを制限するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -187,13 +188,44 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		// メニューID選択メニュー作成
 		$this->db->getMenuIdList(1/*携帯用*/, array($this, 'menuIdListLoop'));
 		
+		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
+		$activeIndex = 0;
+		if (empty($act) && !empty($this->configId)) $activeIndex = 1;
+		// 一覧画面からの戻り画面が指定されてる場合は優先する
+		if ($anchor == 'widget_config') $activeIndex = 0;
+		
+		// ナビゲーションタブ作成
+		$tabItemIndex = 0;
+		$tabDef = array();
+		$tabItem = new stdClass;
+		$tabItem->name	= 'ウィジェット設定';
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_config';
+		$tabItem->parent	= 0;
+//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabItem = new stdClass;
+		$tabItem->name	= 'メニュー定義';
+		$tabItem->task	= '';
+		$tabItem->url	= '#menu_define';
+		$tabItem->parent	= 0;
+//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
+		if (empty($activeIndex)){		// タブの選択
+			$this->tmpl->addVar("_widget", "active_tab", 'widget_config');
+		} else {
+			$this->tmpl->addVar("_widget", "active_tab", 'menu_define');
+		}
+		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		
-		$checked = '';
-		if ($limitUser) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "limit_user", $checked);	// ユーザを制限するかどうか
+		$this->tmpl->addVar("_widget", "limit_user", $this->convertToCheckedString($limitUser));	// ユーザを制限するかどうか
 		
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
@@ -203,9 +235,6 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 「更新」ボタン
 		}
-		// タブの選択状態を設定
-		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
-		if (empty($act) && !empty($this->configId)) $this->tmpl->setAttribute('select_menu_def', 'visibility', 'visible');
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
@@ -322,6 +351,29 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 		// 定義一覧作成
 		$this->createItemList();
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
+		
+		// 選択状態はメニュー設定に固定
+		$activeIndex = 0;
+		
+		// ナビゲーションタブ作成
+		$tabItemIndex = 0;
+		$tabDef = array();
+		$tabItem = new stdClass;
+		$tabItem->name	= 'ウィジェット設定';
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_config';
+		$tabItem->parent	= 0;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabItem = new stdClass;
+		$tabItem->name	= 'メニュー定義';
+		$tabItem->task	= '';
+		$tabItem->url	= '#menu_define';
+		$tabItem->parent	= 0;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
 		
 		// メニュー定義画面のURLを作成
 		$taskValue = 'smenudef';

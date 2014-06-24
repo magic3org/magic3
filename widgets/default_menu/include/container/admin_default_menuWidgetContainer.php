@@ -243,24 +243,15 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
 		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
 		if (empty($activeIndex)){		// タブの選択
-			$this->tmpl->addVar("_widget", "select_tab", 'widget_config');
+			$this->tmpl->addVar("_widget", "active_tab", 'widget_config');
 		} else {
-			$this->tmpl->addVar("_widget", "select_tab", 'menu_define');
+			$this->tmpl->addVar("_widget", "active_tab", 'menu_define');
 		}
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		
-/*		$checked = '';
-		if ($isHierMenu) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "is_hier", $checked);	// 階層化メニューを使用するかどうか
-		$checked = '';
-		if ($limitUser) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "limit_user", $checked);	// ユーザを制限するかどうか
-		$checked = '';
-		if ($useVerticalMenu) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "vertical_menu", $checked);		// 縦型メニューデザインを使用するかどうか*/
 		$this->tmpl->addVar("_widget", "is_hier", $this->convertToCheckedString($isHierMenu));	// 階層化メニューを使用するかどうか
 		$this->tmpl->addVar("_widget", "limit_user", $this->convertToCheckedString($limitUser));	// ユーザを制限するかどうか
 		$this->tmpl->addVar("_widget", "vertical_menu", $this->convertToCheckedString($useVerticalMenu));		// 縦型メニューデザインを使用するかどうか
@@ -276,9 +267,6 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 「更新」ボタン
 		}
-		// タブの選択状態を設定
-		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
-//		if (empty($act) && !empty($this->configId)) $this->tmpl->setAttribute('select_menu_def', 'visibility', 'visible');
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
