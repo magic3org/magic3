@@ -37,11 +37,25 @@ function updateOther(){
 	document.main_other.submit();
 	return true;
 }
+// タブを選択
 function activateTab(tab)
 {
 	$('.nav-tabs a[href="#' + tab + '"]').tab('show');
-};
+}
+// 作成リンク取得用
+function setLinkUrl(url)
+{
+	$('#item_readmore_url').val(url);
+}
+// URL作成
+function createUrl()
+{
+	m3CreateLinkUrl(M3_CONFIG_WIDGET_DEVICE_TYPE, '', setLinkUrl);
+}
 $(function(){
+	// CKEditorプラグイン直接実行
+	m3LoadCKTools();
+	
 	// タブを選択
 	activateTab('{ACTIVE_TAB}');
 	
@@ -49,7 +63,7 @@ $(function(){
 	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
 		$('.m3messages').remove();
 	});
-
+	
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
@@ -112,8 +126,8 @@ $(function(){
 	</tr>
         <tr class="even">
 	    <td class="table-headside"><span {_HELP_ADJUSTWIDGET_READMORE}>{_LC_LABEL_READMORE}</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_show_readmore" {SHOW_READMORE_CHECKED} />{_LC_LABEL_VISIBLE}&nbsp;&nbsp;{_LC_LABEL_READMORE_TITLE}<input type="text" name="item_readmore_title" value="{READMORE_TITLE}" size="30" maxlength="30" /><br />{_LC_LABEL_READMORE_URL}<input type="text" name="item_readmore_url" value="{READMORE_URL}" size="100" maxlength="200" style="width:70%;" />
-	    
+	    <td colspan="3"><input type="checkbox" name="item_show_readmore" {SHOW_READMORE_CHECKED} />{_LC_LABEL_VISIBLE}&nbsp;&nbsp;{_LC_LABEL_READMORE_TITLE}<input type="text" name="item_readmore_title" value="{READMORE_TITLE}" size="30" maxlength="30" /><br />
+		{_LC_LABEL_READMORE_URL}<input type="text" id="item_readmore_url" name="item_readmore_url" value="{READMORE_URL}" size="100" maxlength="200" style="width:70%;" /><input type="button" class="button" onclick="createUrl();" value="URL作成" />
 	    </td>
 	</tr>
 	<tr>
