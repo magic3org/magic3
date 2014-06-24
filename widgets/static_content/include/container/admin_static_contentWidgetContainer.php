@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_static_contentWidgetContainer.php 5489 2012-12-28 13:00:45Z fishbone $
  * @link       http://www.magic3.org
@@ -180,6 +180,30 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 		// 定義選択メニュー作成
 		$this->createDefListMenu();
 
+		// ナビゲーションタブ作成
+		$tabDef = array();
+		$tabItem = new stdClass;
+		$tabItem->name	= 'ウィジェット設定';
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_config';
+		$tabItem->parent	= 0;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem;
+		$tabItem = new stdClass;
+		$tabItem->name	= 'コンテンツ編集';
+		$tabItem->task	= '';
+		$tabItem->url	= '#edit_content';
+		$tabItem->parent	= 0;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem;
+		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
+		if (empty($activeTab)){		// タブの選択
+			$this->tmpl->addVar('_widget', 'active_tab', 'widget_config');
+		} else {
+			$this->tmpl->addVar('_widget', 'active_tab', $activeTab);
+		}
+		
 		// 表示用データを取得
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示

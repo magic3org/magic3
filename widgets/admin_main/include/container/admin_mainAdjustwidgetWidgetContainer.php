@@ -325,24 +325,21 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->createPageSubIdList();
 		
 		// ナビゲーションタブ作成
-		$tabItemIndex = 0;
 		$tabDef = array();
 		$tabItem = new stdClass;
 		$tabItem->name	= $this->_('Basic');		// 基本
 		$tabItem->task	= '';
 		$tabItem->url	= '#widget_config';
 		$tabItem->parent	= 0;
-//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
 		$tabItem->active	= false;
-		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabDef[] = $tabItem;
 		$tabItem = new stdClass;
 		$tabItem->name	= $this->_('Others');
 		$tabItem->task	= '';
 		$tabItem->url	= '#widget_other';			// その他
 		$tabItem->parent	= 0;
-//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
 		$tabItem->active	= false;
-		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabDef[] = $tabItem;
 		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
 		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
 		if (empty($activeTab)){		// タブの選択
