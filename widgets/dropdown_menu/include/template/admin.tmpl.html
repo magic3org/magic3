@@ -49,8 +49,7 @@ function listItem(){
 	return true;
 }
 function editMenuDef(){
-	var id = document.main.item_menuid.value;
-	window.open("?task=menudef&openby=all&menuid=" + id, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1050,height=900");
+	m3ShowStandardWindow("?task=menudef&openby=all&menuid=" + document.main.item_menuid.value);
 	return false;
 }
 //]]>

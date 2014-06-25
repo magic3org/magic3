@@ -117,7 +117,7 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->name	= $name;// 表示名
 				$newObj->limitUser = $limitUser;					// ユーザを制限するかどうか
 				
-				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
+				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj, $this->menuId);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -145,7 +145,7 @@ class admin_m_menuWidgetContainer extends BaseAdminWidgetContainer
 				}
 
 				// 設定値を更新
-				if ($ret) $ret = $this->updatePageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
+				if ($ret) $ret = $this->updatePageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj, $this->menuId);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					

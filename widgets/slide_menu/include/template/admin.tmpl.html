@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 4944 2012-06-07 23:47:16Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -37,8 +37,7 @@ function listItem(){
 	return true;
 }
 function editMenuDef(){
-	var id = document.main.item_menuid.value;
-	window.open("?task=menudef&openby=all&menuid=" + id, "", "{_CONFIG_WINDOW_STYLE}");
+	m3ShowStandardWindow("?task=menudef&openby=all&menuid=" + document.main.item_menuid.value);
 	return false;
 }
 //]]>
