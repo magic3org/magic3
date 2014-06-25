@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 4570 2012-01-06 01:29:45Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 直接アクセスの防止
@@ -32,6 +32,8 @@ $HELP['menu_name_input']['title'] = '名前';
 $HELP['menu_name_input']['body'] = 'メニュー設定名です。新規に登録するか、登録済みの設定を選択します。';
 $HELP['menu_id']['title'] = 'メニュー設定ID';
 $HELP['menu_id']['body'] = '自動的に振られるメニュー設定IDです。';
+$HELP['menu_design']['title'] = 'デザイン';
+$HELP['menu_design']['body'] = '●階層化あり<br />メニュー定義を単階層あるいは多階層で定義するかを設定します。';
 $HELP['menu_style']['title'] = '表示スタイル';
 $HELP['menu_style']['body'] = 'メニューの表示スタイルを設定します。';
 $HELP['menu_def']['title'] = 'メニュー定義';

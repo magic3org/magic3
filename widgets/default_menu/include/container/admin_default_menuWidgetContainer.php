@@ -127,7 +127,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->showSearch			= $showSearch;			// 検索フィールドを表示するかどうか
 				$newObj->anotherColor		= $anotherColor;		// 色を変更するかどうか
 		
-				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
+				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj, $this->menuId);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -160,7 +160,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				}
 
 				// 設定値を更新
-				if ($ret) $ret = $this->updatePageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
+				if ($ret) $ret = $this->updatePageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj, $this->menuId);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					

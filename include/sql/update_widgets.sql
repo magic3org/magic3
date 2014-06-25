@@ -522,7 +522,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 's/jquery_menu';
 INSERT INTO _widgets
 (wd_id,           wd_name,                   wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/jquery_menu', 'jQueryページ - メニュー', 'menu',  'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のメニュー', 2,              'jquery.mobile',       'jquery-ui.tabs',            true,                       true,true,           1, 1, '2012-06-07', now(), now());
+('s/jquery_menu', 'jQueryページ - メニュー', 'menu',  'menu',         '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用のメニュー', 2,              'jquery.mobile',       '',            true,                       true,true,           1, 1, '2012-06-07', now(), now());
 -- ウィジェット情報(スマートフォン用/汎用コンテンツ)
 DELETE FROM _widgets WHERE wd_id = 's/content';
 INSERT INTO _widgets

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_s_jquery_menuWidgetContainer.php 4946 2012-06-08 01:41:44Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -91,29 +91,21 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 		
 		$userId		= $this->gEnv->getCurrentUserId();
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+		$anchor = $request->trimValueOf('anchor');
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
-		
-		// ページ定義IDとページ定義のレコードシリアル番号
-/*		$defConfigId = $this->getPageDefConfigId($request);				// 定義ID取得
-		$defSerial = $this->getPageDefSerial($request);		// ページ定義のレコードシリアル番号
-		$value = $request->trimValueOf('defconfig');		// ページ定義の定義ID
-		if (!empty($value)) $defConfigId = $value;
-		$value = $request->trimValueOf('defserial');		// ページ定義のレコードシリアル番号
-		if (!empty($value)) $defSerial = $value;*/
 
 		$this->configId = $request->trimValueOf('item_id');		// 定義ID
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
+		$this->menuId = $request->trimValueOf('menuid');
+		if (empty($this->menuId)) $this->menuId = self::DEFAULT_MENU_ID;
 		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
 		$isHierMenu = ($request->trimValueOf('is_hier') == 'on') ? 1 : 0;		// 階層化メニューを使用するかどうか
 		$this->menuType = $request->trimValueOf('item_menu_type');		// メニュータイプ
 		$title		= $request->trimValueOf('item_title');			// リストタイトル
 		$theme		= $request->trimValueOf('item_theme');		// メニューのテーマ
 		$insetList	= ($request->trimValueOf('item_inset_list') == 'on') ? 1 : 0;		// インセットリスト形式で表示するかどうか
-//		$useVerticalMenu = ($request->trimValueOf('item_vertical_menu') == 'on') ? 1 : 0;		// 縦型メニューデザインを使用するかどうか
-		$this->menuId = $request->trimValueOf('menuid');
-		if (empty($this->menuId)) $this->menuId = self::DEFAULT_MENU_ID;
-		
+
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
 			// デフォルト値設定
@@ -134,29 +126,10 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->title		= $title;			// リストタイトル
 				$newObj->theme		= $theme;		// メニューのテーマ
 				$newObj->insetList	= $insetList;		// インセットリスト形式で表示するかどうか
-//				$newObj->useVerticalMenu = $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
-				
-//				$newParam = new stdClass;
-//				$newParam->id = -1;		// 新規追加
-//				$newParam->object = $newObj;
-			
-/*
-				// ウィジェットパラメータオブジェクト更新
-				$ret = $this->updateWidgetParamObjectWithId($newParam);
-				if ($ret) $this->paramObj[] = $newParam;		// 新規定義を追加
-				
-				// 画面定義更新
-				if ($ret && !empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
-					$newConfigId = $newParam->id;
-					$ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $newConfigId, $name, $this->menuId);
-				}*/
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj, $this->menuId);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
-					
-//					$defConfigId = $newConfigId;		// 定義定義IDを更新
-//					$this->configId = $newConfigId;		// 定義定義IDを更新
-
+			
 					$this->configId = $defConfigId;		// 定義定義IDを更新
 					$replaceNew = true;			// データ再取得
 				} else {
@@ -167,39 +140,17 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 			// 入力値のエラーチェック
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
-				// 該当項目を更新
-/*				$ret = false;
-				for ($i = 0; $i < count($this->paramObj); $i++){
-					$id			= $this->paramObj[$i]->id;// 定義ID
-					$targetObj	= $this->paramObj[$i]->object;
-					if ($id == $this->configId){
-						// ウィジェットオブジェクト更新。更新値のみ再設定。
-						if (!empty($defConfigId) && !empty($defSerial)){		// 設定再選択不可の場合
-							// 取得値で更新
-							$this->menuId = $targetObj->menuId;		// メニューID
-						} else {			// 新規で既存設定の更新
-							$targetObj->menuId	= $this->menuId;		// メニューID
-							$targetObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
-							$targetObj->title		= $title;			// リストタイトル
-							$targetObj->theme		= $theme;		// メニューのテーマ
-							$targetObj->insetList	= $insetList;		// インセットリスト形式で表示するかどうか
-						}
-//						$targetObj->useVerticalMenu = $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
-						
-						// ウィジェットパラメータオブジェクトを更新
-						$ret = $this->updateWidgetParamObjectWithId($this->paramObj[$i]);
-						break;
-					}
-				}
-				// 画面定義更新
-				if (!empty($defSerial)){		// 画面作成から呼ばれている場合のみ更新
-					if ($ret) $ret = $this->_db->updateWidgetConfigId($this->gEnv->getCurrentWidgetId(), $defSerial, $this->configId, $targetObj->name, $this->menuId);
-				}*/
-
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
-					$targetObj->menuId	= $this->menuId;		// メニューID
+					// ウィジェットオブジェクト更新。更新値のみ再設定。
+					if (!empty($defConfigId) && !empty($defSerial)){		// 設定再選択不可の場合
+						// 取得値で更新
+						$this->menuId = $targetObj->menuId;		// メニューID
+					} else {			// 新規で既存設定の更新
+						$targetObj->menuId	= $this->menuId;		// メニューID
+					}
+					
 					$targetObj->isHierMenu = $isHierMenu;		// 階層化メニューを使用するかどうか
 					$targetObj->menuType	= $this->menuType;		// メニュータイプ
 					$targetObj->title		= $title;			// リストタイトル
@@ -212,9 +163,6 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					
-/*					if (empty($defConfigId)){		// 画面定義の定義IDが設定されていないときは設定
-						$defConfigId = $this->configId;		// 定義定義IDを更新
-					}*/
 					$replaceNew = true;			// データ再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
@@ -227,41 +175,18 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 		// 表示用データを取得
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
-			$name = $this->createDefaultName();			// デフォルト登録項目名
-			$isHierMenu = 0;		// 階層化メニューを使用するかどうか
-			$this->menuType = self::DEFAULT_MENU_TYPE;		// メニュータイプ
-			$title = '';			// リストタイトル
-			$theme = 'c';		// メニューのテーマ
-			$insetList = 1;		// インセットリスト形式で表示するかどうか
-//			$useVerticalMenu = 0;		// 縦型メニューデザインを使用するかどうか
+			
+			if ($replaceNew){		// データ再取得時
+				$this->menuId = self::DEFAULT_MENU_ID;
+				$name = $this->createDefaultName();			// デフォルト登録項目名
+				$isHierMenu = 0;		// 階層化メニューを使用するかどうか
+				$this->menuType = self::DEFAULT_MENU_TYPE;		// メニュータイプ
+				$title = '';			// リストタイトル
+				$theme = 'c';		// メニューのテーマ
+				$insetList = 1;		// インセットリスト形式で表示するかどうか
+			}
 			$this->serialNo = 0;
 		} else {
-		/*
-			// 定義からウィジェットパラメータを検索して、定義データを取得
-			for ($i = 0; $i < count($this->paramObj); $i++){
-				$id			= $this->paramObj[$i]->id;// 定義ID
-				$targetObj	= $this->paramObj[$i]->object;
-				if ($id == $this->configId) break;
-			}
-			if ($i < count($this->paramObj)){		// 該当項目があるとき
-				// ウィジェットオブジェクトから値を取得
-				if ($replaceNew){		// データ再取得のとき
-					$this->menuId	= $targetObj->menuId;		// メニューID
-					$name			= $targetObj->name;// 名前
-					$isHierMenu		= $targetObj->isHierMenu;		// 階層化メニューを使用するかどうか
-					$title			= $targetObj->title;			// リストタイトル
-					$theme			= $targetObj->theme;		// メニューのテーマ
-					$insetList		= $targetObj->insetList;		// インセットリスト形式で表示するかどうか
-//					$useVerticalMenu = $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
-				}
-				$this->serialNo = $this->configId;
-				
-				// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
-				if (!empty($defConfigId) && !empty($defSerial)){
-					$this->tmpl->addVar("_widget", "id_disabled", 'disabled');
-					$this->tmpl->addVar("_widget", "is_hier_disabled", 'disabled');	// ユーザを制限するかどうかを使用不可
-				}
-			}*/
 			if ($replaceNew){
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
@@ -285,11 +210,42 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 		// メニューID選択メニュー作成
 		$this->db->getMenuIdList(2/*スマートフォン用*/, array($this, 'menuIdListLoop'));
 		
+		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
+		$activeIndex = 0;
+		if (empty($act) && !empty($this->configId)) $activeIndex = 1;
+		// 一覧画面からの戻り画面が指定されてる場合は優先する
+		if ($anchor == 'widget_config') $activeIndex = 0;
+		
+		// ナビゲーションタブ作成
+		$tabItemIndex = 0;
+		$tabDef = array();
+		$tabItem = new stdClass;
+		$tabItem->name	= 'ウィジェット設定';
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_config';
+		$tabItem->parent	= 0;
+//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabItem = new stdClass;
+		$tabItem->name	= 'メニュー定義';
+		$tabItem->task	= '';
+		$tabItem->url	= '#menu_define';
+		$tabItem->parent	= 0;
+//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
+		if (empty($activeIndex)){		// タブの選択
+			$this->tmpl->addVar("_widget", "active_tab", 'widget_config');
+		} else {
+			$this->tmpl->addVar("_widget", "active_tab", 'menu_define');
+		}
+		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
-		$checked = '';
-		if ($isHierMenu) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "is_hier", $checked);	// 階層化メニューを使用するかどうか
+		$this->tmpl->addVar("_widget", "is_hier", $this->convertToCheckedString($isHierMenu));	// 階層化メニューを使用するかどうか
 		$this->tmpl->addVar("_widget", "title",	$this->convertToDispString($title));				// リストタイトル
 		$this->tmpl->addVar("_widget", "theme",	$this->convertToDispString($theme));				// メニューのテーマ
 		if (!empty($insetList)) $this->tmpl->addVar("_widget", "inset_list_checked",	'checked'); // インセットリスト形式で表示するかどうか
@@ -302,9 +258,6 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 				$this->tmpl->addVar("_widget", "menu_type_navbar_checked", 'checked');
 				break;
 		}
-//		$checked = '';
-//		if ($useVerticalMenu) $checked = 'checked';
-//		$this->tmpl->addVar("_widget", "vertical_menu", $checked);		// 縦型メニューデザインを使用するかどうか
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御
@@ -313,9 +266,6 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 「更新」ボタン
 		}
-		// タブの選択状態を設定
-		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
-//		if (empty($act) && !empty($this->configId)) $this->tmpl->setAttribute('select_menu_def', 'visibility', 'visible');
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
@@ -404,14 +354,6 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 		$userId		= $this->gEnv->getCurrentUserId();
 		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
-		
-		// ページ定義IDとページ定義のレコードシリアル番号
-//		$defConfigId = $this->getPageDefConfigId($request);				// 定義ID取得
-//		$defSerial = $this->getPageDefSerial($request);		// ページ定義のレコードシリアル番号
-//		$value = $request->trimValueOf('defconfig');		// ページ定義の定義ID
-//		if (!empty($value)) $defConfigId = $value;
-//		$value = $request->trimValueOf('defserial');		// ページ定義のレコードシリアル番号
-//		if (!empty($value)) $defSerial = $value;
 
 		// 詳細画面からの引継ぎデータ
 		$menuId = $request->trimValueOf('menuid');
@@ -430,30 +372,42 @@ class admin_s_jquery_menuWidgetContainer extends BaseAdminWidgetContainer
 				}
 			}
 			if (count($delItems) > 0){
-/*				for ($i = 0; $i < count($this->paramObj); $i++){
-					$id			= $this->paramObj[$i]->id;// 定義ID
-					if (in_array($id, $delItems)){		// 削除対象のとき
-						$newParam = new stdClass;
-						$newParam->id = $id;
-						$newParam->object = null;		// 削除処理
-						$ret = $this->updateWidgetParamObjectWithId($newParam);
-						if (!$ret) break;
-					}
-				}*/
 				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->paramObj, $delItems);
 				
-				// ウィジェットパラメータオブジェクト更新
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
-				// パラメータオブジェクトを取得
-			//	$this->paramObj = $this->getWidgetParamObjectWithId();
 			}
 		}
 		// 定義一覧作成
 		$this->createItemList();
+		
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
+		
+		// 選択状態はメニュー設定に固定
+		$activeIndex = 0;
+		
+		// ナビゲーションタブ作成
+		$tabItemIndex = 0;
+		$tabDef = array();
+		$tabItem = new stdClass;
+		$tabItem->name	= 'ウィジェット設定';
+		$tabItem->task	= '';
+		$tabItem->url	= '#widget_config';
+		$tabItem->parent	= 0;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabItem = new stdClass;
+		$tabItem->name	= 'メニュー定義';
+		$tabItem->task	= '';
+		$tabItem->url	= '#menu_define';
+		$tabItem->parent	= 0;
+		$tabItem->active	= false;
+		$tabDef[] = $tabItem; $tabItemIndex++;
+		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
 		
 		// メニュー定義画面のURLを作成
 		$taskValue = 'menudef';
