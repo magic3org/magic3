@@ -51,13 +51,23 @@ class BaseFrameContainer extends Core
 		// 最小限の設定が行われていない場合,DBに接続できない場合は、インストール画面へ
 		if (!defined('M3_STATE_IN_INSTALL')){
 			if (($this->gEnv->canUseDb() && $this->gSystem->canInitSystem()) ||		// システム初期化モードのとき
-				!$this->gConfig->isConfigured() || 									// 設定ファイルに設定がないとき
-				!$this->gEnv->canUseDb()){											// DBがまだ作成されていないとき
+				!$this->gConfig->isConfigured()){									// 設定ファイルに設定がないとき(初回インストール)
 				
 				// インストーラファイルがない場合は回復
 				$this->gInstance->getFileManager()->recoverInstaller();
 
 				$this->gPage->redirectToInstall();
+				return;
+			} else if ($this->gConfig->isConfigured() && !$this->gEnv->canUseDb()){		// DB接続失敗のとき
+				if ($this->gEnv->isAdminDirAccess()){		// 管理画面の場合のみインストーラ起動
+					// インストーラファイルがない場合は回復
+					$this->gInstance->getFileManager()->recoverInstaller();
+
+					$this->gPage->redirectToInstall();
+				} else {
+					// サーバ内部エラーメッセージ表示
+					$this->gPage->showError();
+				}
 				return;
 			}
 		}

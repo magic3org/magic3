@@ -4571,10 +4571,6 @@ class PageManager extends Core
 	function setResponse($responseCode)
 	{
 		switch ($responseCode){
-			case 503:			// サイト非公開(システムメンテナンス)
-				header('HTTP/1.1 503 Service Temporarily Unavailable');
-				header('Status: 503 Service Temporarily Unavailable');
-				break;
 			case 403:			// アクセス禁止のとき
 				header('HTTP/1.1 403 Forbidden');
 				header('Status: 403 Forbidden');
@@ -4582,6 +4578,14 @@ class PageManager extends Core
 			case 404:			// 存在しないページのとき
 				header("HTTP/1.1 404 Not Found");
 				header("Status: 404 Not Found");
+				break;
+			case 500:			// サーバ内部エラー
+				header('HTTP/1.1 500 Internal Server Error');
+				header('Status: 500 Internal Server Error');
+				break;
+			case 503:			// サイト非公開(システムメンテナンス)
+				header('HTTP/1.1 503 Service Temporarily Unavailable');
+				header('Status: 503 Service Temporarily Unavailable');
 				break;
 		}
 	}
@@ -4699,6 +4703,14 @@ class PageManager extends Core
 				case 303:
 					header('HTTP/1.1 303 See Other');
 					break;
+				case 500:			// サーバ内部エラー
+					header('HTTP/1.1 500 Internal Server Error');
+					header('Status: 500 Internal Server Error');
+					break;
+				case 503:			// サイト非公開(システムメンテナンス)
+					header('HTTP/1.1 503 Service Temporarily Unavailable');
+					header('Status: 503 Service Temporarily Unavailable');
+					break;
 				default:
 					header('HTTP/1.1 ' . (string)$responseCode);
 					break;
@@ -4799,6 +4811,16 @@ class PageManager extends Core
 		} else {
 			return 0;
 		}
+	}
+	/**
+	 * エラー画面を表示
+	 *
+	 * @return 						なし
+	 */
+	function showError()
+	{
+		$this->setResponse(500);
+		echo '<h2>Internal Server Error</h2>';
 	}
 	/**
 	 * ウィジェットがセットされているページサブIDを取得
