@@ -4,13 +4,13 @@
 }
 {ID}.banner_horizontal .banner_image_outer {
     float:left;
-    padding:0px;
     width:240px;
+    text-align:center;
     display:inline-block;
 }
 {ID}.banner_vertical .banner_image_outer {
     float:none;
-    padding:0px;
     width:240px;
+    text-align:center;
 }
 </patTemplate:tmpl>
