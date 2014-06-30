@@ -145,11 +145,11 @@ CREATE TABLE content (
     UNIQUE               (cn_type,      cn_id,        cn_language_id,               cn_history_index)
 ) TYPE=innodb;
 
--- ニュースコンテンツトラン
+-- 新着情報トラン
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
     nw_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    nw_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- コンテンツタイプ
+    nw_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 主要コンテンツタイプ
     nw_server_id         CHAR(32)       DEFAULT ''                    NOT NULL,      -- サーバ識別ID
     nw_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時
 

@@ -215,6 +215,10 @@ DELETE FROM _widgets WHERE wd_id = 'calendar';
 INSERT INTO _widgets
 (wd_id,      wd_name,          wd_content_type, wd_category_id, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('calendar', '汎用カレンダー', 'calendar',      'subcontent',   true, '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '様々な情報をカレンダー表示する汎用カレンダー機能', 'jquery.fullcalendar,jquery.qtip',                'datetype_detail=jquery.tablednd,jquery.timepicker;date_detail=jquery-ui.datepicker,jquery-ui.dialog,jquery.timepicker,jquery.tablednd,jquery.json;event_detail=ckeditor_m3toolbar;',   true,                true, true,         true,                true,  0,         1, '2013-10-17', now(),         now());
+DELETE FROM _widgets WHERE wd_id = 'whatsnew';
+INSERT INTO _widgets
+(wd_id,      wd_name,    wd_status, wd_content_type, wd_category_id, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('whatsnew', '新着情報', 1, 'news',          'subcontent',   true,            '1.0.0b',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'サイトの最新情報をリスト表示する。', '',                'elfinder',                 true,         false,                true,  '2014-06-30', now(),         now());
 -- ウィジェット情報(PC用/検索)
 DELETE FROM _widgets WHERE wd_id = 'custom_search';
 INSERT INTO _widgets
@@ -329,8 +333,8 @@ INSERT INTO _widgets
 ('css_add', 'CSS追加',  '2.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'テンプレートのCSSに加えてCSS定義を追加するためのウィジェットです。',               false,           false,       true,         true,        true,         false,                                true,                true,              0,  3,             1, now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'effect_nicejforms';
 INSERT INTO _widgets
-(wd_id,   wd_name, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('effect_nicejforms', 'effect_nicejforms',  '1.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フォーム部品を装飾するウィジェット。', 'jquery', 'jquery',              true,           false,       true,         true,        true,         false,                                true,                true,              0, 1,              1, now(),         now());
+(wd_id,   wd_name, wd_status, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
+('effect_nicejforms', 'effect_nicejforms(廃止予定)', -1, '1.0.0',    '',        'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フォーム部品を装飾するウィジェット。', 'jquery', 'jquery',              true,           false,       false,         true,        true,         false,                                true,                true,              0, 1,              1, now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'contactus_modal';
 INSERT INTO _widgets
 (wd_id,   wd_name, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
