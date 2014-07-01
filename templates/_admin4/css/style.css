@@ -607,16 +607,17 @@ background-color: #0081c2;
 	font:11px/1.5 Arial, sans-serif;
 }*/
 /*** config window ***/
+/* 外枠 */
+.m3config_container {
+	display: table;
+	margin: 10px auto;
+}
 .m3config_tabs {
 	width:95%;
 	margin: 10px auto;
 }
 .m3config_head {
 	width:95%;
-	margin: 10px auto;
-}
-.m3config_body {
-	display: table;
 	margin: 10px auto;
 }
 .m3config_fullwidth {
