@@ -172,6 +172,7 @@ define('M3_VIEW_FORMAT_TIME',			'H:i:s');			// 時間
 // 表示データタイプ
 define('M3_VIEW_TYPE_DASHBOARD',	'dboard');				// ダッシュボード
 define('M3_VIEW_TYPE_SEARCH',		'search');				// 検索結果
+define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
 define('M3_VIEW_TYPE_COMMERCE',		'commerce');			// Eコマース
 define('M3_VIEW_TYPE_CONTENT',		'content');				// 汎用コンテンツ
 define('M3_VIEW_TYPE_PRODUCT',		'product');				// 商品情報

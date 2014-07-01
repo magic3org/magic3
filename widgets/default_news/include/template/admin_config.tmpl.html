@@ -1,0 +1,112 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id: admin_config.tmpl.html 6137 2013-06-27 13:34:30Z fishbone $
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function selectMenu(){
+	document.main.act.value = 'selcontenttype';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function contentList(){
+	location.href = '{CONFIG_ADMIN_URL}&task=config_list';
+	return false;
+}
+$(function(){
+	// カラー設定
+	m3_tableWithScrollbar('item_list', -1, 0);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="task" value="config" />
+<!-- m3:PostParam -->
+<br>
+<table width="90%">
+<tr><td>汎用コメント設定
+</td><td align="right"><span {_HELP_ITEM_DEL_BTN}><input type="button" class="button" onclick="contentList();" value="コンテンツ個別設定" /></span>
+</td></tr>
+<tr><td colspan="2">
+<table id="item_list" class="simple-table" width="100%">
+    <tbody>
+    <tr>
+	    <td class="table-headside" width="150">コンテンツタイプ</td>
+	    <td><select name="item_content_type" onchange="selectMenu();" {CONTENT_TYPE_DISABLED}>
+	        <patTemplate:tmpl name="content_type_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select><patTemplate:tmpl name="content_type" visibility="hidden"><input type="hidden" name="item_content_type" value="{CONTENT_TYPE}" /></patTemplate:tmpl>
+		</td>
+	</tr>
+    <tr>
+	    <td class="table-headside">表示方法</td>
+	    <td><label class="item_list_inline">表示タイプ：<select name="item_view_type">
+	        <option value="0" {VIEW_TYPE_FLAT_SELECTED}>フラット</option>
+		<option value="1" {VIEW_TYPE_TREE_SELECTED}>ツリー</option>
+	    </select></label><label class="item_list_inline">表示数：<input type="text" name="item_view_count" value="{VIEW_COUNT}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></label>
+		<label class="item_list_inline">表示順：<select name="item_view_direction">
+	        <option value="0" {VIEW_ORDER_INC_SELECTED}>昇順</option>
+		<option value="1" {VIEW_ORDER_DEC_SELECTED}>降順</option>
+	    </select></label>
+		<div style="clear:both;"></div>
+		<label><input type="checkbox" name="item_autolink" {AUTOLINK_CHECKED} />自動リンク作成</label>
+	    </td>
+	</tr>
+    <tr>
+	    <td class="table-headside">状態</td>
+	    <td><label><input type="checkbox" name="item_comment_visible" {COMMENT_VISIBLE_CHECKED} />コメントを表示する</label>(個別デフォルト値：<label><input type="checkbox" name="item_comment_visible_d" {COMMENT_VISIBLE_D_CHECKED} />コメントを表示する</label>)<br /><label><input type="checkbox" name="item_comment_accept" {COMMENT_ACCEPT_CHECKED} />コメントを受け付ける</label>(個別デフォルト値：<label><input type="checkbox" name="item_comment_accept_d" {COMMENT_ACCEPT_D_CHECKED} />コメントを受け付ける</label>)
+		</td>
+	</tr>
+    <tr>
+	    <td class="table-headside">アクセス制御</td>
+	    <td><label><input type="checkbox" name="item_user_limited" {USER_LIMITED_CHECKED} />ユーザ制限あり</label>
+		</td>
+	</tr>
+    <tr>
+	    <td class="table-headside">入力</td>
+	    <td><label class="item_list_inline"><input type="checkbox" name="item_permit_html" {PERMIT_HTML_CHECKED} />HTMLあり</label><label class="item_list_inline"><input type="checkbox" name="item_permit_image" {PERMIT_IMAGE_CHECKED} />画像あり</label>
+		<label class="item_list_inline">文字数：<input type="text" name="item_max_length" value="{MAX_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></label>
+		<label class="item_list_inline">最大画像サイズ(横または縦)：<input type="text" name="item_max_image_size" value="{MAX_IMAGE_SIZE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />px</label>
+		<label class="item_list_inline">アップロード画像最大サイズ：<input type="text" name="item_upload_max_bytes" value="{UPLOAD_MAX_BYTES}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" />kバイト</label>
+		</td>
+	</tr>
+    <tr>
+	    <td class="table-headside">表示フィールド</td>
+	    <td><label class="item_list_inline"><input type="checkbox" name="item_use_title" {USE_TITLE_CHECKED} />タイトル</label>
+		<label class="item_list_inline"><input type="checkbox" name="item_use_author" {USE_AUTHOR_CHECKED} />名前</label>
+		<label class="item_list_inline"><input type="checkbox" name="item_use_date" {USE_DATE_CHECKED} />日時</label>
+		<label class="item_list_inline"><input type="checkbox" name="item_use_email" {USE_EMAIL_CHECKED} />Eメール</label>
+		<label class="item_list_inline"><input type="checkbox" name="item_use_url" {USE_URL_CHECKED} />URL</label>
+		<label class="item_list_inline"><input type="checkbox" name="item_use_avatar" {USE_AVATAR_CHECKED} />アバター</label><input type="checkbox" name="item_show_comment" disabled checked />コメント</label>
+		</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr>
+<tr><td>{MESSAGE}</td><td align="right">
+<input type="button" class="button" onClick="updateItem()" value="更新" />
+</td></tr></table>
+
+</form>
+</div>
+</patTemplate:tmpl>
