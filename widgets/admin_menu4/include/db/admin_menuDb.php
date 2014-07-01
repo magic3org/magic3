@@ -135,7 +135,8 @@ class admin_menuDb extends BaseDb
 		$caseStr .= 'END AS pageno';
 		$pageStr = rtrim($pageStr, ', ');
 		
-		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_content_type, wd_sort_order, ' . $caseStr . ' FROM _page_def ';
+//		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_content_type, wd_sort_order, ' . $caseStr . ' FROM _page_def ';
+		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_content_type, wd_sort_order, wd_content_widget_id, ' . $caseStr . ' FROM _page_def ';
 		$queryStr .=   'LEFT JOIN _widgets ON pd_widget_id = wd_id AND wd_deleted = false ';
 		$queryStr .=   'LEFT JOIN _page_id ON pd_sub_id = pg_id AND pg_type = 1 ';// ページサブID
 		$queryStr .= 'WHERE pd_set_id = ? ';

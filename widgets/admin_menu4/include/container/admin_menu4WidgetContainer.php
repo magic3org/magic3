@@ -350,7 +350,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$this->subContentMenu = $this->getSubContentMenu();			// サブコンテンツ編集メニュー
 			
 			// サイトメニュー
-			$siteMenuTag = $this->createSiteManuTag();
+			$siteMenuTag = $this->createSiteMenuTag();
 			$this->tmpl->addVar("menu", "site_menu", $siteMenuTag);
 		}
 		// 「前へ」「次へ」アイコンを設定
@@ -392,7 +392,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return string			サイトメニュータグ
 	 */
-	function createSiteManuTag()
+	function createSiteMenuTag()
 	{
 		$menuTag = '';
 		$isOpen					= $this->gSystem->siteInPublic();
@@ -624,6 +624,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		}
 		
 		// サブコンテンツ編集メニュー
+		$subMenu = $this->arrangeSubMenu($subMenu);
 		if (!empty($subMenu)){
 			// セパレータ
 			$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
@@ -635,6 +636,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		
 			for ($i = 0; $i < count($subMenu); $i++){
 				$widgetId = $subMenu[$i]['wd_id'];
+				if ($subMenu[$i]['wd_content_widget_id']) $widgetId = $subMenu[$i]['wd_content_widget_id'];
 				$title = $this->getCurrentLangString($subMenu[$i]['wd_content_name']);		// ウィジェットのコンテンツ名を取得
 				
 				if (empty($title)){
@@ -644,6 +646,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 						case 'banner':				// バナー
 							$title = 'バナー';
 							break;
+						case 'news':				// 新着情報
+							$title = '新着情報';
+							break;
 						default:
 							$title = '';
 							break;
@@ -651,7 +656,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				}
 				if (empty($title)) $title = $subMenu[$i]['wd_name'];		// サブコンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;
-			
+
 				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;"><span >' . $this->convertToDispString($title) . '</span></a></li>' . M3_NL;
 			}
@@ -675,6 +680,27 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />' . $openSiteMessage . '</a></li>' . M3_NL;
 
 		return $menuTag;
+	}
+	/**
+	 * サブコンテンツ編集メニュー項目の重複を調整
+	 *
+	 * @param array $menu		サブメニュー
+	 * @return array			修正済みサブメニュー
+	 */
+	function arrangeSubMenu($menu)
+	{
+		$destMenu = array();
+		$widgets = array();
+		for ($i = 0; $i < count($menu); $i++){
+			$menuRow = $menu[$i];
+			$widgetId = $menu[$i]['wd_id'];
+			if (!empty($menu[$i]['wd_content_widget_id'])) $widgetId = $menu[$i]['wd_content_widget_id'];
+			if (!in_array($widgetId, $widgets)){
+				$destMenu[] = $menuRow;
+				$widgets[] = $widgetId;
+			}
+		}
+		return $destMenu;
 	}
 }
 ?>
