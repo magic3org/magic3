@@ -1,5 +1,5 @@
 /**
- * 表示データ作成用テンプレート(patTemplate)
+ * RSS作成用テンプレート(patTemplate)
  *
  * LICENSE: This source file is licensed under the terms of the GNU General Public License.
  *
@@ -11,5 +11,11 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-{CONTENT}
+<patTemplate:tmpl name="itemlist">
+<item rdf:about="{LINK_URL}">
+<title>{NAME}</title>
+<link>{LINK_URL}</link>
+<dc:date>{DATE}</dc:date>
+</item>
+</patTemplate:tmpl>
 </patTemplate:tmpl>
