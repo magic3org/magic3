@@ -14,8 +14,8 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
-require_once($gEnvManager->getWidgetContainerPath('whatsnew') . '/newsCommonDef.php');
-require_once($gEnvManager->getWidgetDbPath('whatsnew') . '/default_newsDb.php');
+require_once($gEnvManager->getWidgetContainerPath('default_news') . '/newsCommonDef.php');
+require_once($gEnvManager->getWidgetDbPath('default_news') . '/default_newsDb.php');
 
 class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 {
@@ -54,7 +54,7 @@ class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 		parent::__construct();
 		
 		// DBオブジェクト作成
-		if (!isset(self::$_mainDb)) self::$_mainDb = new whatsnewDb();
+		if (!isset(self::$_mainDb)) self::$_mainDb = new default_newsDb();
 		
 		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
 		$this->_userId = $this->gEnv->getCurrentUserId();		// 現在のユーザ

@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
-class whatsnewDb extends BaseDb
+class default_newsDb extends BaseDb
 {
 	/**
 	 * 汎用コメント定義値を取得
