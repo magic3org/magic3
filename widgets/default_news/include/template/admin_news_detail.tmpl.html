@@ -47,20 +47,10 @@ function cancelItem(){
 <tr><td colspan="2">
 <table class="simple-table" style="width:950px;">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_NEWS_CONTENT_NAME}>コンテンツタイトル</span></td>
-	    <td width="200">{CONTENT_TITLE}</td>
-	    <td class="table-headside" width="150"><span {_HELP_NEWS_NAME}>コメントタイトル</span></td>
-	    <td>{TITLE}</td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_NEWS_AUTHOR}>投稿者</span></td>
-	    <td>{AUTHOR}</td>
-	    <td class="table-headside"><span {_HELP_NEWS_DATE}>投稿日時</span></td>
-	    <td colspan="3">{DATE}</td>
-	</tr>
 	<tr>
-	    <td class="table-headside"><span {_HELP_NEWS_STATUS}>状態</span></td>
+	    <td class="table-headside" style="width:150px;"><span {_HELP_NEWS_DATE}>投稿日時</span></td>
+	    <td style="width:200px;">{DATE}</td>
+	    <td class="table-headside" style="width:150px;"><span {_HELP_NEWS_STATUS}>状態</span></td>
 	    <td>
 		<select name="item_status">
 	        <patTemplate:tmpl name="status_list">
@@ -68,14 +58,10 @@ function cancelItem(){
 	        </patTemplate:tmpl>
 	    </select>
 		</td>
-	    <td class="table-headside"><span {_HELP_NEWS_EMAIL}>Eメール</span></td>
-	    <td>{EMAIL}</td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_NEWS_CONTENT}>コメント内容</span></td>
-	    <td colspan="3" height="200" valign="top">
-	    {COMMENT}
-	    </td>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_NEWS_URL}>メッセージ</span></td>
+	    <td colspan="3">{MESSAGE}</td>
 	</tr>
 	<tr>
 	    <td class="table-headside"><span {_HELP_NEWS_URL}>URL</span></td>

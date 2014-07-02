@@ -20,12 +20,15 @@
 -- テンプレート情報マスター
 ALTER TABLE _templates ADD tm_version      VARCHAR(10)    DEFAULT ''                    NOT NULL;      -- テンプレートバージョン文字列
 
--- ニュースメッセージトラン
+-- 新着情報トラン
 ALTER TABLE news ADD nw_device_type       INT            DEFAULT 0                     NOT NULL;      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
 ALTER TABLE news ADD nw_summary           VARCHAR(100)   DEFAULT ''                    NOT NULL;      -- 概要
 ALTER TABLE news ADD nw_sort_order        INT            DEFAULT 0                     NOT NULL;      -- ソート順
 ALTER TABLE news ADD nw_mark              INT            DEFAULT 0                     NOT NULL;      -- 付加マーク(0=なし、1=新規)
 ALTER TABLE news ADD nw_status            SMALLINT       DEFAULT 0                     NOT NULL;      -- 状態(0=未設定、1=非公開、2=公開)
+ALTER TABLE news ADD nw_id                INT            DEFAULT 0                     NOT NULL;      -- ID
+ALTER TABLE news ADD nw_history_index     INT            DEFAULT 0                     NOT NULL;      -- 履歴管理用インデックスNo(0～)
+ALTER TABLE news ADD UNIQUE (nw_id,  nw_history_index);            -- ユニーク制約再設定
 
 -- ウィジェット情報マスター
 ALTER TABLE _widgets ADD wd_content_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL;      -- コンテンツ編集用のウィジェット
@@ -46,4 +49,4 @@ INSERT INTO news_config
 (nc_id,                  nc_value,    nc_name,                              nc_index) VALUES
 ('default_message',   '「[#TITLE#]」を更新しました', 'デフォルトメッセージ',               1),
 ('date_format',       'n月j日', '日時フォーマット',               1),
-('layout_list_item',  '[#DATE#] [#MESSAGE#][#MARK#]', '新着情報リスト項目',               1);
+('layout_list_item',  '[#DATE#] [#MESSAGE#][#MARK#]', 'リスト項目レイアウト',               1);
