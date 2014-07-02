@@ -31,4 +31,19 @@ ALTER TABLE news ADD nw_status            SMALLINT       DEFAULT 0              
 ALTER TABLE _widgets ADD wd_content_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL;      -- コンテンツ編集用のウィジェット
 
 -- *** システム標準テーブル ***
+-- 新着情報設定マスター
+DROP TABLE IF EXISTS news_config;
+CREATE TABLE news_config (
+    nc_id                VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- ID(Key)
+    nc_value             TEXT                                         NOT NULL,      -- 値
+    nc_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 名称
+    nc_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
+    nc_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
+    PRIMARY KEY          (nc_id)
+) TYPE=innodb;
 
+INSERT INTO news_config
+(nc_id,                  nc_value,    nc_name,                              nc_index) VALUES
+('default_message',   '「[#TITLE#]」を更新しました', 'デフォルトメッセージ',               1),
+('date_format',       'n月j日', '日時フォーマット',               1),
+('layout_list_item',  '[#DATE#] [#MESSAGE#][#MARK#]', '新着情報リスト項目',               1);

@@ -18,6 +18,12 @@ function selectMenu(){
 	document.main.submit();
 	return true;
 }
+function newItem(){
+	document.main.task.value = 'news_detail';
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
 function editItem(){
 	if (document.main.seriallist.value){
 		var items = document.main.seriallist.value.split(",");
@@ -36,7 +42,10 @@ function editItem(){
 	return true;
 }
 function editItemBySerial(serial){
-	location.href = '{CONFIG_ADMIN_URL}&task=news_detail&act=edit&page=' + main.page.value + '&serial=' + serial;
+	document.main.task.value = 'news_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
 	return false;
 }
 function delItem(){
@@ -114,7 +123,7 @@ $(function(){
 <tr><td colspan="2">
 <div id="search_news" class="m3search" style="display:none;">
 <span {_HELP_NEWS_SEARCH}><label>新着情報検索</label></span>
-<table class="simple-table">
+<table class="simple-table" style="margin:0 0;">
     <tbody>
         <tr>
 	    <td class="table-headside"><span {_HELP_NEWS_SEARCH_KEYWORD}>キーワード</span></td>
@@ -132,16 +141,16 @@ $(function(){
 </div>
 </td></tr>
 <tr><td>
-<span {_HELP_NEWS_LIST}><label>新着一覧</label></span>&nbsp;&nbsp;コンテンツタイプ：
+<span {_HELP_NEWS_LIST}><label>新着一覧</label></span><!--&nbsp;&nbsp;コンテンツタイプ：
 <select name="item_content_type" onchange="selectMenu();" {CONTENT_TYPE_DISABLED}>
 	        <patTemplate:tmpl name="content_type_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
-		<patTemplate:tmpl name="content_type" visibility="hidden"><input type="hidden" name="item_content_type" value="{CONTENT_TYPE}" /></patTemplate:tmpl>&nbsp;&nbsp;
+		<patTemplate:tmpl name="content_type" visibility="hidden"><input type="hidden" name="item_content_type" value="{CONTENT_TYPE}" /></patTemplate:tmpl>&nbsp;&nbsp;-->
 <a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>
 </td>
-<td align="right"><span {_HELP_NEWS_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_NEWS_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+<td align="right"><span {_HELP_NEWS_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_NEWS_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_NEWS_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
 </td></tr>
 <tr><td colspan="2">
 <table id="newslist" class="simple-table" style="margin:0 auto;width:950px;">
