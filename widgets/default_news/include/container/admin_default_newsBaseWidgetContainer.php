@@ -54,6 +54,9 @@ class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 		// DBオブジェクト作成
 		if (!isset(self::$_mainDb)) self::$_mainDb = new default_newsDb();
 		
+		// DB定義を読み込む
+		if (!isset(self::$_configArray)) self::$_configArray = newsCommonDef::loadConfig(self::$_mainDb);
+		
 		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
 		$this->_userId = $this->gEnv->getCurrentUserId();		// 現在のユーザ
 	}

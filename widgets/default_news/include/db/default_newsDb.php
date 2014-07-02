@@ -18,100 +18,62 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class default_newsDb extends BaseDb
 {
 	/**
-	 * 汎用コメント定義値を取得
+	 * 新着情報定義値を取得をすべて取得
 	 *
-	 * @param string $contentType	コンテンツタイプ
 	 * @param array  $rows			レコード
 	 * @return bool					1行以上取得 = true, 取得なし= false
 	 */
-	function getAllConfig($contentType, &$rows)
+	function getAllConfig(&$rows)
 	{
-		$queryStr  = 'SELECT * FROM comment_config ';
-		$queryStr .=   'WHERE cf_content_type  = ?';
-		$retValue = $this->selectRecords($queryStr, array($contentType), $rows);
+		$queryStr  = 'SELECT * FROM news_config ';
+		$queryStr .=   'ORDER BY nc_index';
+		$retValue = $this->selectRecords($queryStr, array(), $rows);
 		return $retValue;
 	}
 	/**
-	 * 汎用コメント定義値を取得
+	 * 新着情報定義値を取得
 	 *
-	 * @param string $contentType	コンテンツタイプ
-	 * @param string $contentsId		コンテンツID
-	 * @param array  $row			レコード
-	 * @return string $value		値
+	 * @param string $key		キーとなる項目値
+	 * @return string $value	値
 	 */
-	function getConfig($contentType, $contentsId, &$row)
+	function getConfig($key)
 	{
-		$params = array();
-		$queryStr  = 'SELECT * FROM comment_config ';
-		$queryStr .=   'WHERE cf_content_type  = ?'; $params[] = $contentType;
-		$queryStr .=     'AND cf_contents_id = ? '; $params[] = $contentsId;
-		$ret = $this->selectRecord($queryStr, $params, $row);
-		return $ret;
+		$retValue = '';
+		$queryStr = 'SELECT nc_value FROM news_config ';
+		$queryStr .=  'WHERE nc_id  = ?';
+		$ret = $this->selectRecord($queryStr, array($key), $row);
+		if ($ret) $retValue = $row['nc_value'];
+		return $retValue;
 	}
 	/**
-	 * 汎用コメント定義値を更新
+	 * 新着情報定義値を更新
 	 *
-	 * @param string $contentType	コンテンツタイプ
-	 * @param string $contentsId		コンテンツID
-	 * @param array  $fieldValues	フィールド値
-	 * @return						true = 正常、false=異常
+	 * @param string $key		キーとなる項目値
+	 * @param string $value		値
+	 * @return					true = 正常、false=異常
 	 */
-	function updateConfig($contentType, $contentsId, $fieldValues)
+	function updateConfig($key, $value)
 	{
-		// 引数チェック
-		if (count($fieldValues) <= 0) return true;
-		
 		// データの確認
-		$params = array();
-		$queryStr  = 'SELECT * FROM comment_config ';
-		$queryStr .=   'WHERE cf_content_type  = ?'; $params[] = $contentType;
-		$queryStr .=     'AND cf_contents_id = ? '; $params[] = $contentsId;
-		$ret = $this->isRecordExists($queryStr, $params);
-
-		$params = array();
-		$fieldQueryStr = '';
-		$fieldValueStr = '';
+		$queryStr = 'SELECT nc_value FROM news_config ';
+		$queryStr .=  'WHERE nc_id  = ?';
+		$ret = $this->isRecordExists($queryStr, array($key));
 		if ($ret){
-			$keys = array_keys($fieldValues);		// キーを取得
-			for ($i = 0; $i < count($keys); $i++){
-				$fieldName = $keys[$i];
-				$fieldValue = $fieldValues[$fieldName];
-				if (!isset($fieldValue)) continue;
-				$params[] = $fieldValue;
-				$fieldQueryStr .= $fieldName . ' = ?, ';
-			}
-			$fieldQueryStr = rtrim($fieldQueryStr, ', ');
-
-			$queryStr  = 'UPDATE comment_config ';
-			$queryStr .= 'SET ' . $fieldQueryStr . ' ';
-			$queryStr .= 'WHERE cf_content_type  = ? '; $params[] = $contentType;
-			$queryStr .=   'AND cf_contents_id = ? '; $params[] = $contentsId;
-			$ret = $this->execStatement($queryStr, $params);
-			return $ret;
+			$queryStr = "UPDATE news_config SET nc_value = ? WHERE nc_id = ?";
+			return $this->execStatement($queryStr, array($value, $key));
 		} else {
-			$keys = array_keys($fieldValues);		// キーを取得
-			for ($i = 0; $i < count($keys); $i++){
-				$fieldName = $keys[$i];
-				$fieldValue = $fieldValues[$fieldName];
-				if (!isset($fieldValue)) continue;
-				$params[] = $fieldValue;
-				$fieldQueryStr .= $fieldName . ', ';
-				$fieldValueStr .= '?, ';
-			}
-			$params[] = $contentType;
-			$fieldQueryStr .= 'cf_content_type, ';
-			$fieldValueStr .= '?, ';
-			$params[] = $contentsId;
-			$fieldQueryStr .= 'cf_contents_id';
-			$fieldValueStr .= '?';
-		
-			$queryStr  = 'INSERT INTO comment_config ';
-			$queryStr .= '(' . $fieldQueryStr . ') VALUES ';
-			$queryStr .= '(' . $fieldValueStr . ')';
-			$ret = $this->execStatement($queryStr, $params);
-			return $ret;
+			$queryStr = "INSERT INTO news_config (nc_id, nc_value) VALUES (?, ?)";
+			return $this->execStatement($queryStr, array($key, $value));
 		}
 	}
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * コメント項目一覧を取得(管理用)
 	 *

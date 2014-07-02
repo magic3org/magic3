@@ -50,33 +50,19 @@ class admin_default_newsConfigWidgetContainer extends admin_default_newsBaseWidg
 	 */
 	function _assign($request, &$param)
 	{
-		$defaultLang	= $this->gEnv->getDefaultLanguage();
-		
 		$act = $request->trimValueOf('act');
-		$entryViewCount = $request->trimValueOf('entry_view_count');		// 記事表示数
-		$entryViewOrder = $request->trimValueOf('entry_view_order');		// 記事表示順
-		$categoryCount = $request->trimValueOf('category_count');		// カテゴリ数
-		$useCalendar	= $request->trimCheckedValueOf('item_use_calendar');	// カレンダーを使用するかどうか
-		$receiveComment = $request->trimCheckedValueOf('receive_comment');		// コメントを受け付けるかどうか
-		$topContents = $request->valueOf('top_contents');	// トップコンテンツ
-		$maxCommentLength = $request->trimValueOf('max_comment_length');	// コメント最大文字数
-		$msgNoEntryInFuture = $request->trimValueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
+		$defaultMessage	= $request->trimValueOf('item_default_message');		// デフォルトメッセージ
+		$dateFormat		= $request->trimValueOf('item_date_format');			// 日時フォーマット
+		$layoutListItem = $request->trimValueOf('item_layout_list_item');		// リスト項目レイアウト
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
-			$this->checkNumeric($entryViewCount, '記事表示順');
-			$this->checkNumeric($maxCommentLength, 'コメント最大文字数');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
-				$ret = self::$_mainDb->updateConfig(newsCommonDef::CF_ENTRY_VIEW_COUNT, $entryViewCount); // 記事表示数
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::CF_ENTRY_VIEW_ORDER, $entryViewOrder);// 記事表示順
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::CF_CATEGORY_COUNT, $categoryCount);		// カテゴリ数
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::CF_USE_CALENDAR, $useCalendar);		// カレンダーを使用するかどうか
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::CF_RECEIVE_COMMENT, $receiveComment);// コメントを受け付けるかどうか
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::CF_MAX_COMMENT_LENGTH, $maxCommentLength);// コメント最大文字数
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::CF_TOP_CONTENTS, $topContents);// トップコンテンツ
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE, $msgNoEntryInFuture);	// 予定イベントなし時メッセージ
+				$ret = self::$_mainDb->updateConfig(newsCommonDef::FD_DEFAULT_MESSAGE, $defaultMessage); // デフォルトメッセージ
+				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::FD_DATE_FORMAT, $dateFormat);// 日時フォーマット
+				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::FD_LAYOUT_LIST_ITEM, $layoutListItem);		// リスト項目レイアウト
 
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -90,33 +76,15 @@ class admin_default_newsConfigWidgetContainer extends admin_default_newsBaseWidg
 		}
 		// データ再取得
 		if ($reloadData){
-			$entryViewCount	= self::$_mainDb->getConfig(newsCommonDef::CF_ENTRY_VIEW_COUNT);// 記事表示数
-			if (empty($entryViewCount)) $entryViewCount = newsCommonDef::DEFAULT_VIEW_COUNT;
-			$entryViewOrder	= self::$_mainDb->getConfig(newsCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
-			$categoryCount	= self::$_mainDb->getConfig(newsCommonDef::CF_CATEGORY_COUNT);// カテゴリ数
-			if (empty($categoryCount)) $categoryCount = newsCommonDef::DEFAULT_CATEGORY_COUNT;
-			$useCalendar	= self::$_mainDb->getConfig(newsCommonDef::CF_USE_CALENDAR);	// カレンダーを使用するかどうか
-			$receiveComment	= self::$_mainDb->getConfig(newsCommonDef::CF_RECEIVE_COMMENT);
-			$maxCommentLength = self::$_mainDb->getConfig(newsCommonDef::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
-			if ($maxCommentLength == '') $maxCommentLength = newsCommonDef::DEFAULT_COMMENT_LENGTH;
-			$topContents = self::$_mainDb->getConfig(newsCommonDef::CF_TOP_CONTENTS);// トップコンテンツ
-			$msgNoEntryInFuture = self::$_mainDb->getConfig(newsCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE);	// 予定イベントなし時メッセージ
-			if (empty($msgNoEntryInFuture)) $msgNoEntryInFuture = newsCommonDef::DEFAULT_MSG_NO_ENTRY_IN_FUTURE;
+			$defaultMessage	= self::$_mainDb->getConfig(newsCommonDef::FD_DEFAULT_MESSAGE);// デフォルトメッセージ
+			$dateFormat		= self::$_mainDb->getConfig(newsCommonDef::FD_DATE_FORMAT);// 日時フォーマット
+			$layoutListItem	= self::$_mainDb->getConfig(newsCommonDef::FD_LAYOUT_LIST_ITEM);// リスト項目レイアウト
 		}
 		
 		// 画面に書き戻す
-		$this->tmpl->addVar("_widget", "view_count", $entryViewCount);// 記事表示数
-		if (empty($entryViewOrder)){	// 順方向
-			$this->tmpl->addVar("_widget", "view_order_inc_selected", 'selected');// 記事表示順
-		} else {
-			$this->tmpl->addVar("_widget", "view_order_dec_selected", 'selected');// 記事表示順
-		}
-		$this->tmpl->addVar("_widget", "category_count", $categoryCount);// カテゴリ数
-		$this->tmpl->addVar("_widget", "use_calendar", $this->convertToCheckedString($useCalendar));// カレンダーを使用するかどうか
-		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
-		$this->tmpl->addVar("_widget", "max_comment_length", $this->convertToDispString($maxCommentLength));// コメント最大文字数
-		$this->tmpl->addVar("_widget", "top_contents", $this->convertToDispString($topContents));		// トップコンテンツ
-		$this->tmpl->addVar("_widget", "msg_no_entry_in_future", $this->convertToDispString($msgNoEntryInFuture));		// 予定イベントなし時メッセージ
+		$this->tmpl->addVar("_widget", "default_message",	$this->convertToDispString($defaultMessage));// デフォルトメッセージ
+		$this->tmpl->addVar("_widget", "date_format",		$this->convertToDispString($dateFormat));// 日時フォーマット
+		$this->tmpl->addVar("_widget", "layout_list_item",	$this->convertToDispString($layoutListItem));// リスト項目レイアウト
 	}
 }
 ?>

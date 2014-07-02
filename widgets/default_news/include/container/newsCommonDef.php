@@ -27,36 +27,38 @@ class newsCommonDef
 	const DF_UPLOAD_MAX_BYTES	= 512000;		// アップロード画像最大バイトサイズ
 	
 	// DBフィールド名
-	const FD_VIEW_TYPE		= 'cf_view_type';			// コメントタイプ(0=フラット,1=ツリー)
-	const FD_VIEW_DIRECTION = 'cf_view_direction';			// 表示方向(0=昇順、1=降順)
-	const FD_MAX_COUNT		= 'cf_max_count';			// コメント最大数
-	const FD_MAX_LENGTH		= 'cf_max_length';			// コメント文字数
-	const FD_MAX_IMAGE_SIZE = 'cf_image_max_size';		// 画像の最大サイズ(縦横)
-	const FD_UPLOAD_MAX_BYTES	= 'cf_upload_max_bytes';	// アップロード画像最大バイトサイズ
-	const FD_VISIBLE		= 'cf_visible';			// 表示可否(個別設定可)
-	const FD_VISIBLE_D		= 'cf_visible_d';			// 表示可否デフォルト値
-	const FD_ACCEPT_POST	= 'cf_accept_post';			// コメントの受付(個別設定可)
-	const FD_ACCEPT_POST_D	= 'cf_accept_post_d';			// コメントの受付デフォルト値
-	const FD_START_DT		= 'cf_start_dt';			// 使用期間(開始)(個別設定可)
-	const FD_END_DT			= 'cf_end_dt';			// 使用期間(終了)(個別設定可)
-	const FD_USER_LIMITED	= 'cf_user_limited';			// 投稿ユーザを制限
-	const FD_NEED_AUTHORIZE	= 'cf_need_authorize';		// 認証が必要かどうか
-	const FD_PERMIT_HTML	= 'cf_permit_html';			// HTMLメッセージ
-	const FD_PERMIT_IMAGE	= 'cf_permit_image';			// 画像あり
-	const FD_AUTOLINK		= 'cf_autolink';			// 自動リンク
-	const FD_USE_TITLE		= 'cf_use_title';			// タイトルあり
-	const FD_USE_AUTHOR		= 'cf_use_author';			// 投稿者名あり
-	const FD_USE_DATE		= 'cf_use_date';			// 投稿日時あり
-	const FD_USE_EMAIL		= 'cf_use_email';			// eメールあり
-	const FD_USE_URL		= 'cf_use_url';				// URLあり
-	const FD_USE_AVATAR		= 'cf_use_avatar';			// アバターあり
+	const FD_DEFAULT_MESSAGE	= 'default_message';		// デフォルトメッセージ
+	const FD_DATE_FORMAT		= 'date_format';			// 日時フォーマット
+	const FD_LAYOUT_LIST_ITEM	= 'layout_list_item';		// リスト項目レイアウト
+
+	/**
+	 * 新着情報定義値をDBから取得
+	 *
+	 * @param object $db	DBオブジェクト
+	 * @return array		取得データ
+	 */
+	static function loadConfig($db)
+	{
+		$retVal = array();
+
+		// 汎用コンテンツ定義を読み込み
+		$ret = $db->getAllConfig($rows);
+		if ($ret){
+			// 取得データを連想配列にする
+			$configCount = count($rows);
+			for ($i = 0; $i < $configCount; $i++){
+				$key = $rows[$i]['nc_id'];
+				$value = $rows[$i]['nc_value'];
+				$retVal[$key] = $value;
+			}
+		}
+		return $retVal;
+	}
 	
-	const DOWNLOAD_TYPE_IMAGE 		= '-image';				// ダウンロードするコンテンツのタイプ
-	const REQUEST_PARAM_IMAGE_ID	= 'imageid';		// 画像識別ID
-	const UPLOAD_IMAGE_DIR 			= '/etc/comment';		// アップロード画像格納ディレクトリ
-	const OUTPUT_IMAGE_TYPE 		= IMAGETYPE_JPEG;		// 出力画像フォーマット
-	const COMMENT_PERMA_HEAD		= 'comment-';		// コメントパーマリンク
 	
+	
+	
+
 	/**
 	 * コメントへのリンク作成
 	 *
