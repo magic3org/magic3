@@ -52,8 +52,6 @@ class admin_default_newsWidgetContainer extends admin_default_newsBaseWidgetCont
 		$goWidget = false;		// サブウィジェットを実行するかどうか
 		switch ($task){
 			case self::TASK_CONFIG:		// 基本設定
-			case self::TASK_CONFIG_LIST:		// コンテンツ個別設定一覧
-			case self::TASK_CONFIG_DETAIL:		// コンテンツ個別設定詳細
 				$task = self::TASK_CONFIG;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;

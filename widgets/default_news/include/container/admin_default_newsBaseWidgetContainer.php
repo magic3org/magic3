@@ -39,8 +39,6 @@ class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 	
 	// 画面
 	const TASK_CONFIG			= 'config';				// 基本設定
-	const TASK_CONFIG_LIST		= 'config_list';		// コンテンツ個別設定一覧
-	const TASK_CONFIG_DETAIL	= 'config_detail';		// コンテンツ個別設定詳細
 	const TASK_NEWS				= 'news';				// 新着情報一覧
 	const TASK_NEWS_DETAIL 		= 'news_detail';		// 新着情報詳細
 	const DEFAULT_TASK			= 'config';
@@ -110,8 +108,6 @@ class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 				$linkList = ' &gt;&gt; 新着一覧';// パンくずリスト
 				break;
 			case self::TASK_CONFIG:		// 基本設定
-			case self::TASK_CONFIG_LIST:		// コンテンツ個別設定一覧
-			case self::TASK_CONFIG_DETAIL:		// コンテンツ個別設定詳細
 				$linkList = ' &gt;&gt; 基本設定';// パンくずリスト
 				break;
 		}
@@ -132,7 +128,7 @@ class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 		// 基本設定
 		$current = '';
 		$link = $this->_baseUrl . '&task=' . self::TASK_CONFIG;
-		if ($task == self::TASK_CONFIG || $task == self::TASK_CONFIG_LIST || $task == self::TASK_CONFIG_DETAIL) $current = 'id="current"';
+		if ($task == self::TASK_CONFIG) $current = 'id="current"';
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>基本設定</span></a></li>' . M3_NL;
 		
 		// 上段メニュー終了

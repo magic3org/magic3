@@ -36,7 +36,7 @@ function editItem(){
 	return true;
 }
 function editItemBySerial(serial){
-	location.href = '{CONFIG_ADMIN_URL}&task=comment_detail&act=edit&page=' + main.page.value + '&serial=' + serial;
+	location.href = '{CONFIG_ADMIN_URL}&task=news_detail&act=edit&page=' + main.page.value + '&serial=' + serial;
 	return false;
 }
 function delItem(){
@@ -77,7 +77,7 @@ function clearSearchParam(){
 }
 function showSearchArea()
 {
-	$('#search_comment').slideToggle('slow');
+	$('#search_news').slideToggle('slow');
 }
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow(url)
@@ -87,7 +87,7 @@ function previewInOtherWindow(url)
 }
 $(function(){
 	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('commentlist', {LIST_COUNT}, 0);
+	m3_tableWithScrollbar('newslist', {LIST_COUNT}, 0);
 
 	Calendar.setup({
 		inputField  : "search_start",	// ID of the input field
@@ -100,28 +100,28 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="task" value="comment"/>
+<input type="hidden" name="task" value="news"/>
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
 <!-- m3:PostParam -->
-<table width="90%">
+<table style="margin:0 auto;">
 <tr><td colspan="2">
-<div id="search_comment" class="m3search" style="display:none;">
-<span {_HELP_COMMENT_SEARCH}><label>新着情報検索</label></span>
+<div id="search_news" class="m3search" style="display:none;">
+<span {_HELP_NEWS_SEARCH}><label>新着情報検索</label></span>
 <table class="simple-table">
     <tbody>
         <tr>
-	    <td class="table-headside"><span {_HELP_COMMENT_SEARCH_KEYWORD}>キーワード</span></td>
+	    <td class="table-headside"><span {_HELP_NEWS_SEARCH_KEYWORD}>キーワード</span></td>
 	    <td><input type="text" id="search_keyword" name="search_keyword" value="{SEARCH_KEYWORD}" maxlength="50" style="width:98%;" /></td>
 	</tr>
         <tr class="even">
-	    <td class="table-headside" width="100"><span {_HELP_COMMENT_SEARCH_DT}>期間</span></td>
+	    <td class="table-headside" width="100"><span {_HELP_NEWS_SEARCH_DT}>期間</span></td>
 	    <td><input type="text" id="search_start" name="search_start" value="{SEARCH_START}" size="15" maxlength="10" />～<input type="text" id="search_end" name="search_end" value="{SEARCH_END}" size="15" maxlength="10" /></td>
 	</tr>
 	<tr>
@@ -132,7 +132,7 @@ $(function(){
 </div>
 </td></tr>
 <tr><td>
-<span {_HELP_COMMENT_LIST}><label>新着一覧</label></span>&nbsp;&nbsp;コンテンツタイプ：
+<span {_HELP_NEWS_LIST}><label>新着一覧</label></span>&nbsp;&nbsp;コンテンツタイプ：
 <select name="item_content_type" onchange="selectMenu();" {CONTENT_TYPE_DISABLED}>
 	        <patTemplate:tmpl name="content_type_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
@@ -141,16 +141,16 @@ $(function(){
 		<patTemplate:tmpl name="content_type" visibility="hidden"><input type="hidden" name="item_content_type" value="{CONTENT_TYPE}" /></patTemplate:tmpl>&nbsp;&nbsp;
 <a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>
 </td>
-<td align="right"><span {_HELP_COMMENT_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_COMMENT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
+<td align="right"><span {_HELP_NEWS_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_NEWS_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
 </td></tr>
 <tr><td colspan="2">
-<table id="commentlist" class="simple-table" width="100%">
+<table id="newslist" class="simple-table" style="margin:0 auto;width:950px;">
     <thead>
     <tr>
-        <th width="4%"><span {_HELP_COMMENT_CHECK}>選択</span></th>
-        <th width="50%"><span {_HELP_COMMENT_CONTENT_NAME}>メッセージ</span></th>
-		<th width="5%"><span {_HELP_COMMENT_STATUS}>状態</span></th>
-	    <th width="100"><span {_HELP_COMMENT_DT}>登録日時</span></th>
+        <th width="4%"><span {_HELP_NEWS_CHECK}>選択</span></th>
+        <th width="50%"><span {_HELP_NEWS_CONTENT_NAME}>メッセージ</span></th>
+		<th width="5%"><span {_HELP_NEWS_STATUS}>状態</span></th>
+	    <th width="100"><span {_HELP_NEWS_DT}>登録日時</span></th>
 	</tr>
     </thead>
     <tbody>

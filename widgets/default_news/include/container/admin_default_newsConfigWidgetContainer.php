@@ -56,13 +56,7 @@ class admin_default_newsConfigWidgetContainer extends admin_default_newsBaseWidg
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == self::TASK_CONFIG_LIST){		// コンテンツ個別設定一覧
-			return 'admin_config_list.tmpl.html';
-		} if ($task == self::TASK_CONFIG_DETAIL){		// コンテンツ個別設定詳細
-			return 'admin_config_detail.tmpl.html';
-		} else {			// 基本設定画面
-			return 'admin_config.tmpl.html';
-		}
+		return 'admin_config.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -76,13 +70,7 @@ class admin_default_newsConfigWidgetContainer extends admin_default_newsBaseWidg
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == self::TASK_CONFIG_LIST){		// コンテンツ個別設定一覧
-			return $this->createList($request);
-		} if ($task == self::TASK_CONFIG_DETAIL){		// コンテンツ個別設定詳細
-			return $this->createDetail($request);
-		} else {			// 基本設定画面
-			return $this->createConfig($request);
-		}
+		return $this->createConfig($request);
 	}
 	/**
 	 * 基本設定画面作成
