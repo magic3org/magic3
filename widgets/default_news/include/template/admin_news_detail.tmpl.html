@@ -47,7 +47,7 @@ function cancelItem(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
 <table style="margin:0 auto;">
-<tr><td><span {_HELP_NEWS_DETAIL}><label>コメント詳細</label></span></td><td align="right">
+<tr><td><span {_HELP_NEWS_DETAIL}><label>新着情報詳細</label></span></td><td align="right">
 <span {_HELP_NEWS_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
 </td></tr>
 <tr><td colspan="2">
@@ -69,15 +69,19 @@ function cancelItem(){
 	    <td class="table-headside"><span {_HELP_NEWS_URL}>メッセージ</span></td>
 	    <td colspan="3"><input type="text" name="item_message" value="{MESSAGE}" size="60" maxlength="200" style="width:100%;" /></td>
 	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_NEWS_CONTENT_TYPE}>コンテンツ種別</span></td>
+	    <td></td>
+	    <td class="table-headside"><span {_HELP_NEWS_CONTENT_TITLE}>コンテンツID</span></td>
+	    <td></td>
+	</tr>
+    <tr class="even">
+	    <td class="table-headside"><span {_HELP_NEWS_CONTENT_TITLE}>コンテンツタイトル</span></td>
+	    <td colspan="3"><input type="text" name="item_content_title" value="{CONTENT_TITLE}" size="60" maxlength="200" style="width:100%;" /></td>
+	</tr>
 	<tr>
 	    <td class="table-headside"><span {_HELP_NEWS_URL}>URL</span></td>
-	    <td colspan="3">{URL}</td>
-	</tr>
-	<tr class="even">
-	    <td class="table-headside">更新者</td>
-	    <td>{UPDATE_USER}</td>
-	    <td class="table-headside">更新日時</td>
-	    <td>{UPDATE_DT}</td>
+	    <td colspan="3"><input type="text" name="item_url" value="{URL}" size="60" maxlength="200" style="width:100%;" /></td>
 	</tr>
 	<tr>
 	    <td colspan="6" align="right">
