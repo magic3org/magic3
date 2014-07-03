@@ -26,7 +26,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	private $statusTypeArray;	// コメント状態メニュー作成用
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
-	const COMMENT_SIZE = 40;			// コメント内容の最大文字列長
+	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const PREVIEW_ICON_FILE = '/images/system/preview.png';		// プレビュー用アイコン
 	const UNTITLED_CONTENT = 'タイトル未設定';
@@ -254,7 +254,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		if ($act == 'add'){		// メッセージを追加
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				$ret = self::$_mainDb->addNewsItem($message, $newSerial);
+				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $message, $url, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -271,7 +271,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		} else if ($act == 'update'){		// 項目更新の場合
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message);
+				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message, $url, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -370,13 +370,13 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	function itemListLoop($index, $fetchedRow, $param)
 	{
 		// シリアル番号
-		$serial = $fetchedRow['cm_serial'];
+		$serial = $fetchedRow['nw_serial'];
 		
-		$contentsId = $fetchedRow['cm_contents_id'];	// 共通コンテンツID
-		$contentType = $fetchedRow['cm_content_type'];	// コンテンツタイプ
+		$contentsId = $fetchedRow['nw_contents_id'];	// 共通コンテンツID
+		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
 		
 		// 公開状態
-		switch ($fetchedRow['cm_status']){
+		switch ($fetchedRow['nw_status']){
 			case 0:	$status = '<font color="red">未承認</font>';
 				break;
 			case 1:	$status = '<font color="orange">非公開</font>';
@@ -384,38 +384,22 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 			case 2:	$status = '<font color="green">公開</font>';
 				break;
 		}
-		// コンテンツタイトル取得
-		$title = $this->getContentTitle($contentType, $contentsId);
 		
-		$userName = $fetchedRow['lu_name'];
-		if (empty($userName)) $userName = $fetchedRow['cm_author'];
-			
-		// コメント内容
-		$comment = strip_tags($fetchedRow['cm_message']);		// タグを削除
+		// メッセージ
+		$message = $fetchedRow['nw_message'];		// タグを削除
 		if (function_exists('mb_strimwidth')){
-			$comment = mb_strimwidth($comment, 0, self::COMMENT_SIZE, '…');
+			$message = mb_strimwidth($message, 0, self::MESSAGE_SIZE, '…');
 		} else {
-			$comment = substr($comment, 0, self::COMMENT_SIZE) . '...';
+			$message = substr($message, 0, self::MESSAGE_SIZE) . '...';
 		}
-		// プレビュー用URL
-//		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
-		$previewUrl = newsCommonDef::createCommentUrl($contentType, $contentsId, $fetchedRow['cm_no']);
-		$previewImg = $this->getUrl($this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE);
-		$previewStr = 'プレビュー';
 		
 		$row = array(
 			'index' => $index,		// 項目番号
 			'serial' => $serial,			// シリアル番号
-			'content_title' => $this->convertToDispString($title),		// コンテンツタイトル
-			'no'	=> $this->convertToDispString($fetchedRow['cm_no']),		// コメント番号
-			'name' => $this->convertToDispString($fetchedRow['cm_title']),		// コメントタイトル
-			'content' => $this->convertToDispString($comment),		// コメント内容
+			'id'	=> $this->convertToDispString($fetchedRow['nw_id']),		// ID
+			'message' => $this->convertToDispString($message),		// メッセージ
 			'status' => $status,													// 公開状況
-			'author' => $this->convertToDispString($userName),	// 投稿者
-			'date' => $this->convertToDispDateTime($fetchedRow['cm_create_dt']),	// 投稿日時
-			'preview_url' => $previewUrl,											// プレビュー用のURL
-			'preview_img' => $previewImg,											// プレビュー用の画像
-			'preview_str' => $previewStr									// プレビュー文字列
+			'date' => $this->convertToDispDateTime($fetchedRow['nw_regist_dt'])	// 投稿日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');

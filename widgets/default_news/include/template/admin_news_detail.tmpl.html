@@ -13,6 +13,12 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
 function updateItem(){
 	if (!window.confirm('項目を更新しますか?')) return false;
 	document.main.act.value = 'update';
@@ -61,7 +67,7 @@ function cancelItem(){
 	</tr>
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_NEWS_URL}>メッセージ</span></td>
-	    <td colspan="3">{MESSAGE}</td>
+	    <td colspan="3"><input type="text" name="item_message" value="{MESSAGE}" size="60" maxlength="200" style="width:100%;" /></td>
 	</tr>
 	<tr>
 	    <td class="table-headside"><span {_HELP_NEWS_URL}>URL</span></td>

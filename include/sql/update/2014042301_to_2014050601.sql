@@ -29,6 +29,8 @@ ALTER TABLE news ADD nw_sort_order        INT            DEFAULT 0              
 ALTER TABLE news ADD nw_mark              INT            DEFAULT 0                     NOT NULL;      -- 付加マーク(0=なし、1=新規)
 ALTER TABLE news ADD nw_status            SMALLINT       DEFAULT 0                     NOT NULL;      -- 状態(0=未設定、1=非公開、2=公開)
 ALTER TABLE news ADD nw_user_limited      BOOLEAN        DEFAULT false                 NOT NULL;      -- アクセス可能ユーザを制限
+ALTER TABLE news ADD nw_create_user_id    INT            DEFAULT 0                     NOT NULL;      -- レコード作成者
+ALTER TABLE news ADD nw_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL;      -- レコード作成日時
 ALTER TABLE news ADD nw_id                INT            DEFAULT 0                     NOT NULL;      -- ID
 ALTER TABLE news ADD nw_history_index     INT            DEFAULT 0                     NOT NULL;      -- 履歴管理用インデックスNo(0～)
 ALTER TABLE news ADD UNIQUE (nw_id,  nw_history_index);            -- ユニーク制約再設定

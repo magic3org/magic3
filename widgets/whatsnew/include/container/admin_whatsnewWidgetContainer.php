@@ -20,6 +20,7 @@ class admin_whatsnewWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $langId;
+	private $serialArray = array();			// 表示中のシリアル番号
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_EDIT_NEWS_WIDGET = 'default_news';		// 新着情報編集用のウィジェット
@@ -246,6 +247,7 @@ class admin_whatsnewWidgetContainer extends BaseAdminWidgetContainer
 		// 定義一覧作成
 		$this->createItemList();
 		
+		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧項目がないときは、一覧を表示しない
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
