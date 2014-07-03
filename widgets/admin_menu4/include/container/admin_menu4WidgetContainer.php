@@ -23,8 +23,10 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	protected $contentMenu;			// コンテンツ編集メニュー
 	protected $subContentMenu;			// サブコンテンツ編集メニュー
 	protected $useMenu;				// メニューを使用するかどうか
+	protected $useCloseButton;				// 「閉じる」を使用するかどうか
 	//const DEFAULT_SITE_NAME = 'サイト名未設定';
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
+	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
 //	const DEFAULT_THEME_DIR = '/ui/themes/';				// jQueryUIテーマ格納ディレクトリ
 //	const THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
@@ -194,6 +196,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		if ($menu == 'off'){	// メニュー非表示指定のとき
 		} else if (!empty($openBy)){	// 別ウィンドウで表示のときは閉じるボタン表示
 			if ($openBy != 'tabs' && $openBy != 'iframe' && $openBy != 'dialog'){		// タブ、インナーフレーム、ダイアログ表示以外
+				$this->useCloseButton = true;				// 「閉じる」を使用するかどうか
 				$this->tmpl->setAttribute('closebutton', 'visibility', 'visible');
 			
 				// ウィンドウ閉じるアイコンを設定
@@ -382,6 +385,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	function _addCssFileToHead($request, &$param)
 	{
 		if ($this->useMenu){					// メニューを使用するかどうか
+			return $this->cssFilePath;
+		} else if ($this->useCloseButton){				// 「閉じる」を使用するかどうか
+			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::WIDGET_CSS_FILE);		// ウィジェット単体表示用CSSファイル
 			return $this->cssFilePath;
 		} else {
 			return '';
