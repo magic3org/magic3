@@ -72,15 +72,14 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="templist" />
 <input type="hidden" name="act" />
 <input type="hidden" name="template" />
 <input type="hidden" name="no" />
-<table width="90%">
+<table style="margin:0 auto;">
 <tr><td>
 <span {_HELP_TEMPLIST}><label>{_LC_LABEL_TEMPLATE_LIST}</label></span>&nbsp;&nbsp;
 <select name="item_type" onchange="changeType();">
@@ -96,7 +95,7 @@ $(function(){
 </div>
 </td></tr>
 <tr><td colspan="2">
-<table id="templatelist" class="simple-table" width="100%">
+<table id="templatelist" class="simple-table" style="width:950px;">
     <thead>
         <tr>
             <th width="35">No</th>

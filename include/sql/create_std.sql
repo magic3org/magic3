@@ -149,7 +149,7 @@ CREATE TABLE content (
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
     nw_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    nw_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 主要コンテンツタイプ
+    nw_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- メッセージタイプ
     nw_server_id         CHAR(32)       DEFAULT ''                    NOT NULL,      -- サーバ識別ID
     nw_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時
 

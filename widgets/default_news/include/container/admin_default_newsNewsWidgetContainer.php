@@ -22,8 +22,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $contentType;		// 選択中のコンテンツタイプ
 	private $contentTypeArray;		// コンテンツ選択メニュー用
-	private $permitHtml;		// HTMLあり
-	private $status;			// コメント状態(0=未設定、1=非公開、2=公開)
+	private $status;			// メッセージ状態(0=未設定、1=非公開、2=公開)
 	private $statusTypeArray;	// コメント状態メニュー作成用
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
@@ -43,7 +42,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		// 初期設定
 		$this->contentTypeArray = array_merge(array(array('name' => '[すべて]', 'value' => '')), $this->gPage->getMainContentType());// コンテンツタイプ取得
 		$this->langId = $this->gEnv->getDefaultLanguage();
-		$this->statusTypeArray = array(	array(	'name' => '未承認',	'value' => '0'),
+		$this->statusTypeArray = array(	//array(	'name' => '未設定',	'value' => '0'),
 										array(	'name' => '非公開',	'value' => '1'),
 										array(	'name' => '公開',	'value' => '2'));
 	}
@@ -156,7 +155,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = self::$_mainDb->delCommentItem($delItems);
+				$ret = self::$_mainDb->delNewsItem($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
@@ -181,7 +180,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 		
 		// 総数を取得
-		$totalCount = self::$_mainDb->getCommentItemCount($this->_contentType, $this->langId, $search_startDt, $endDt, $parsedKeywords);
+		//$totalCount = self::$_mainDb->getCommentItemCount($this->_contentType, $this->langId, $search_startDt, $endDt, $parsedKeywords);
+		$totalCount = self::$_mainDb->getNewsListCount($this->_contentType, $parsedKeywords);
 
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
@@ -203,7 +203,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		}
 		
 		// コメントリストを取得
-		self::$_mainDb->searchCommentItems($this->_contentType, $this->langId, $maxListCount, $pageNo, $search_startDt, $endDt, $parsedKeywords, array($this, 'itemListLoop'));
+//		self::$_mainDb->searchCommentItems($this->_contentType, $this->langId, $maxListCount, $pageNo, $search_startDt, $endDt, $parsedKeywords, array($this, 'itemListLoop'));
+		self::$_mainDb->getNewsList($this->_contentType, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コメントがないときは、一覧を表示しない
 
 		// ボタン作成
@@ -239,6 +240,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		if (empty($this->serialNo)) $this->serialNo = 0;
+		
+		$message = $request->valueOf('item_message');		// メッセージ
 //		$name = $request->trimValueOf('item_name');
 //		$html = $request->valueOf('item_html');
 //		$url = $request->valueOf('item_url');
@@ -246,25 +249,38 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 //		$reg_user = $request->valueOf('item_reg_user');
 		$this->status = $request->trimValueOf('item_status');		// エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 //		$this->contentType = $request->trimValueOf('content_type');		// 選択中のコンテンツタイプ
-
-		// コメント定義取得
-		$ret = self::$_mainDb->getConfig($this->_contentType, ''/*全体の定義*/, $row);
-		if ($ret){
-			$this->permitHtml		= $row[newsCommonDef::FD_PERMIT_HTML];		// HTMLあり
-		} else {
-			$this->permitHtml = 0;		// HTMLあり
-		}
 		
 		$reloadData = false;		// データの再ロード
-		if ($act == 'update'){		// 項目更新の場合
+		if ($act == 'add'){		// メッセージを追加
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				$fieldData = array('cm_status' => $this->status);
-				$ret = self::$_mainDb->updateCommentItem($this->serialNo, $fieldData);
-				
+				$ret = self::$_mainDb->addNewsItem($message, $newSerial);
+				if ($ret){
+					$this->setGuidanceMsg('データを追加しました');
+					
+					// シリアル番号更新
+					$this->serialNo = $newSerial;
+					$reloadData = true;		// データの再読み込み
+					
+					// 親ウィンドウを更新
+					$this->gPage->updateParentWindow($this->serialNo);
+				} else {
+					$this->setAppErrorMsg('データ追加に失敗しました');
+				}
+			}
+		} else if ($act == 'update'){		// 項目更新の場合
+			// エラーなしの場合は、データを更新
+			if ($this->getMsgCount() == 0){
+				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
-					$reloadData = true;		// データの再ロード
+					
+					// シリアル番号更新
+					$this->serialNo = $newSerial;
+					$reloadData = true;		// データの再読み込み
+					
+					// 親ウィンドウを更新
+					$this->gPage->updateParentWindow($this->serialNo);
 				} else {
 					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
@@ -275,31 +291,25 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 			}
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
-				$ret = self::$_mainDb->delCommentItem(array($this->serialNo));
+				$ret = self::$_mainDb->delNewsItem(array($this->serialNo));
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
 			}
-		} else if ($act == 'deleteid'){		// ID項目削除の場合
 		} else {	// 初期画面表示のとき
 			$reloadData = true;		// データの再ロード
 		}
 		
 		// 設定データを再取得
 		if ($reloadData){		// データの再ロード
-			$ret = self::$_mainDb->getCommentItem($this->serialNo, $row);
+			$ret = self::$_mainDb->getNewsItem($this->serialNo, $row);
 			if ($ret){
 				$contentsId = $row['cm_contents_id'];				// 共通コンテンツID
 				$title = $row['cm_title'];				// コメントタイトル
 				$this->status = $row['cm_status'];			// コメント状態(0=未設定、1=非公開、2=公開)
 
-				if ($this->permitHtml){			// HTMLコメントの場合
-					$commentTag = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->currentPageRootUrl, $row['cm_message']);// アプリケーションルートを変換
-				} else {
-					$commentTag = $this->convertToPreviewText($this->convertToDispString($row['cm_message']));// 改行コードをbrタグに変換
-				}
 				$email = $row['cm_email'];				// Eメール
 				if (!empty($row['lu_email'])) $email = $row['lu_email'];
 				$url = $row['cm_url'];				// URL

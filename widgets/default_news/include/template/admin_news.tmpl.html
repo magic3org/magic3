@@ -147,8 +147,8 @@ $(function(){
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
-		<patTemplate:tmpl name="content_type" visibility="hidden"><input type="hidden" name="item_content_type" value="{CONTENT_TYPE}" /></patTemplate:tmpl>&nbsp;&nbsp;-->
-<a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>
+		<patTemplate:tmpl name="content_type" visibility="hidden"><input type="hidden" name="item_content_type" value="{CONTENT_TYPE}" /></patTemplate:tmpl>&nbsp;&nbsp;
+<a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>-->
 </td>
 <td align="right"><span {_HELP_NEWS_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_NEWS_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_NEWS_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
 </td></tr>
@@ -157,6 +157,7 @@ $(function(){
     <thead>
     <tr>
         <th width="4%"><span {_HELP_NEWS_CHECK}>選択</span></th>
+		<th width="6%"><span {_HELP_NEWS_ID}>ID</span></th>
         <th width="50%"><span {_HELP_NEWS_CONTENT_NAME}>メッセージ</span></th>
 		<th width="5%"><span {_HELP_NEWS_STATUS}>状態</span></th>
 	    <th width="100"><span {_HELP_NEWS_DT}>登録日時</span></th>
@@ -166,8 +167,9 @@ $(function(){
     <patTemplate:tmpl name="itemlist">
     <tr>
 	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td>{CONTENT_TITLE}</td>
-		<td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');">{STATUS}</a></td>
+		<td>{ID}</td>
+	    <td>{MESSAGE}</td>
+		<td align="center">{STATUS}</td>
 	    <td align="center">{DATE}</td>
 	</tr>
 	</patTemplate:tmpl>
