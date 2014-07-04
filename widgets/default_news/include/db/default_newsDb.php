@@ -169,6 +169,7 @@ class default_newsDb extends BaseDb
 					$this->endTransaction();
 					return false;
 				}
+				$newsId = $row['nw_id'];
 				$historyIndex = $row['nw_history_index'] + 1;
 			} else {		// 存在しない場合は終了
 				$this->endTransaction();
@@ -194,11 +195,9 @@ class default_newsDb extends BaseDb
 			// 値を引き継ぐフィールドをセット
 			for ($i = 0; $i < count($keepFields); $i++){
 				$fieldName = $keepFields[$i];
-				if (!in_array($fieldName, $otherKeys)){
-					$otherParams[] = $row[$fieldName];
-					$otherQueryStr .= ', ' . $fieldName;
-					$otherValueStr .= ', ?';
-				}
+				$otherParams[] = $row[$fieldName];
+				$otherQueryStr .= ', ' . $fieldName;
+				$otherValueStr .= ', ?';
 			}
 		}
 	
@@ -210,11 +209,14 @@ class default_newsDb extends BaseDb
 		$queryStr .=   'nw_name, ';				$params[] = $name;
 		$queryStr .=   'nw_message, ';			$params[] = $message;
 		$queryStr .=   'nw_url, ';				$params[] = $url;
+		$queryStr .=   'nw_mark, ';				$params[] = $mark;
+		$queryStr .=   'nw_visible, ';			$params[] = intval($visible);
+		$queryStr .=   'nw_regist_dt, ';		$params[] = $regDt;
 		$queryStr .=   'nw_create_user_id, ';	$params[] = $userId;
-		$queryStr .=   'nw_create_dt) ';		$params[] = $now;
+		$queryStr .=   'nw_create_dt';			$params[] = $now;
 		$queryStr .=   $otherQueryStr . ') ';
 		$queryStr .= 'VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?';
 		$queryStr .=   $otherValueStr . ') ';
 		$this->execStatement($queryStr, array_merge($params, $otherParams));
 		

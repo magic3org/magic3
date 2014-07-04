@@ -26,8 +26,11 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
+	const ICON_SIZE = 16;		// アイコンのサイズ
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
+	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
 	const UNTITLED_CONTENT = 'タイトル未設定';
 	
 	/**
@@ -237,13 +240,9 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$date = $request->trimValueOf('item_date');		// 投稿日
 		$time = $request->trimValueOf('item_time');		// 投稿時間
 		$message = $request->valueOf('item_message');		// メッセージ
-//		$name = $request->trimValueOf('item_name');
-//		$html = $request->valueOf('item_html');
-//		$url = $request->valueOf('item_url');
-//		$email = $request->valueOf('item_email');
-//		$reg_user = $request->valueOf('item_reg_user');
+		$url = $request->valueOf('item_url');
 		$this->status = $request->trimValueOf('item_status');		// メッセージ状態(0=非公開、1=公開)
-//		$this->contentType = $request->trimValueOf('content_type');		// 選択中のコンテンツタイプ
+		$mark = 0;
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'add'){		// メッセージを追加
@@ -257,7 +256,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 				// 入力データの修正
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
 				
-				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $message, $url, $newSerial);
+				//$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $message, $url, $newSerial);
+				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $name, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -282,7 +282,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 				// 入力データの修正
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
 				
-				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message, $url, $newSerial);
+				//$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message, $url, $newSerial);
+				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $name, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -321,16 +322,19 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 				$title = $row['nw_name'];							// コンテンツタイトル
 				$this->status = intval($row['nw_visible']);			// 状態(0=非公開、1=公開)
 
+				$message = $row['nw_message'];				// メッセージ
 				$url = $row['nw_url'];				// URL
 				$date = $this->timestampToDate($row['nw_regist_dt']);		// 登録日
 				$time = $this->timestampToTime($row['nw_regist_dt']);		// 登録時間
 				
 				// コンテンツタイトル取得
-				$contentTitle = $this->getContentTitle($this->_contentType, $contentId);
+				$contentTitle = $this->getContentTitle($this->contentType, $contentId);
 			} else {
 				$this->serialNo = 0;
 				$date = date("Y/m/d");		// 登録日
 				$time = date("H:i:s");		// 登録時間
+				$this->status = 0;			// 状態(0=非公開、1=公開)
+				$message = '';				// メッセージ
 			}
 		}
 		// 状態メニュー作成
@@ -351,9 +355,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 
 		// 表示項目を埋め込む
 		$this->tmpl->addVar("_widget", "content_title", $this->convertToDispString($contentTitle));		// コンテンツタイトル
-		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// コメントタイトル
-		$this->tmpl->addVar("_widget", "comment", $commentTag);		// コメント内容
-		$this->tmpl->addVar("_widget", "email", $this->convertToDispString($email));		// Eメール
+		$this->tmpl->addVar("_widget", "message", $this->convertToDispString($message));		// メッセージ
 		$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// URL
 		$this->tmpl->addVar("_widget", "date", $date);	// 投稿日
 		$this->tmpl->addVar("_widget", "time", $time);	// 投稿時間
@@ -376,14 +378,14 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
 		
 		// 公開状態
-		switch ($fetchedRow['nw_status']){
-			case 0:	$status = '<font color="red">未承認</font>';
-				break;
-			case 1:	$status = '<font color="orange">非公開</font>';
-				break;
-			case 2:	$status = '<font color="green">公開</font>';
-				break;
+		if ($fetchedRow['nw_visible']){		// コンテンツが公開状態のとき
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+			$iconTitle = '公開中';
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = '非公開';
 		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// メッセージ
 		$message = $fetchedRow['nw_message'];		// タグを削除
@@ -398,7 +400,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 			'serial' => $serial,			// シリアル番号
 			'id'	=> $this->convertToDispString($fetchedRow['nw_id']),		// ID
 			'message' => $this->convertToDispString($message),		// メッセージ
-			'status' => $status,													// 公開状況
+			'status_img' => $statusImg,													// 公開状況
 			'date' => $this->convertToDispDateTime($fetchedRow['nw_regist_dt'])	// 投稿日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
