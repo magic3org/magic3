@@ -31,7 +31,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
-	const UNTITLED_CONTENT = 'タイトル未設定';
+	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
+	const UNKNOWN_CONTENT = 'タイトル不明';
 	
 	/**
 	 * コンストラクタ
@@ -236,7 +237,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		if (empty($this->serialNo)) $this->serialNo = 0;
 		
-		$name = $request->trimValueOf('item_name');			// コンテンツタイトル
+		$contentTitle = $request->trimValueOf('item_content_title');			// コンテンツタイトル
 		$date = $request->trimValueOf('item_date');		// 投稿日
 		$time = $request->trimValueOf('item_time');		// 投稿時間
 		$message = $request->valueOf('item_message');		// メッセージ
@@ -257,7 +258,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
 				
 				//$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $message, $url, $newSerial);
-				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $name, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -281,9 +282,10 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 			if ($this->getMsgCount() == 0){
 				// 入力データの修正
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
+				$url = $this->gEnv->getMacroPath($url);// パスをマクロ形式に変換
 				
 				//$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message, $url, $newSerial);
-				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $name, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -318,23 +320,33 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		if ($reloadData){		// データの再ロード
 			$ret = self::$_mainDb->getNewsItem($this->serialNo, $row);
 			if ($ret){
-				$contentId = $row['nw_contents_id'];				// コンテンツID
-				$title = $row['nw_name'];							// コンテンツタイトル
+				$date = $this->timestampToDate($row['nw_regist_dt']);		// 登録日
+				$time = $this->timestampToTime($row['nw_regist_dt']);		// 登録時間
 				$this->status = intval($row['nw_visible']);			// 状態(0=非公開、1=公開)
 
 				$message = $row['nw_message'];				// メッセージ
 				$url = $row['nw_url'];				// URL
-				$date = $this->timestampToDate($row['nw_regist_dt']);		// 登録日
-				$time = $this->timestampToTime($row['nw_regist_dt']);		// 登録時間
-				
+				$url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);		// URLを修正
+
 				// コンテンツタイトル取得
-				$contentTitle = $this->getContentTitle($this->contentType, $contentId);
+				$contentType = $row['nw_content_type'];	// コンテンツタイプ
+				$contentId = $row['nw_content_id'];	// コンテンツID
+				if (!empty($contentType) && !empty($contentId)){
+					list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
+				} else {
+					$contentTypeName = '';
+					$contentTitle = $row['nw_name'];	// コンテンツタイトル
+				}
 			} else {
 				$this->serialNo = 0;
 				$date = date("Y/m/d");		// 登録日
 				$time = date("H:i:s");		// 登録時間
 				$this->status = 0;			// 状態(0=非公開、1=公開)
-				$message = '';				// メッセージ
+				$message = self::$_configArray[newsCommonDef::FD_DEFAULT_MESSAGE];				// メッセージ
+				
+				$contentType = '';	// コンテンツタイプ
+				$contentId = '';	// コンテンツID
+				$contentTitle = '';			// コンテンツタイトル
 			}
 		}
 		// 状態メニュー作成
@@ -354,6 +366,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		}
 
 		// 表示項目を埋め込む
+		$this->tmpl->addVar("_widget", "content_type", $this->convertToDispString($contentTypeName));		// コンテンツタイプ
+		$this->tmpl->addVar("_widget", "content_id", $this->convertToDispString($contentId));		// コンテンツID
 		$this->tmpl->addVar("_widget", "content_title", $this->convertToDispString($contentTitle));		// コンテンツタイトル
 		$this->tmpl->addVar("_widget", "message", $this->convertToDispString($message));		// メッセージ
 		$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// URL
@@ -374,8 +388,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		// シリアル番号
 		$serial = $fetchedRow['nw_serial'];
 		
-		$contentsId = $fetchedRow['nw_contents_id'];	// 共通コンテンツID
 		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
+		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
 		
 		// 公開状態
 		if ($fetchedRow['nw_visible']){		// コンテンツが公開状態のとき
@@ -387,8 +401,20 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		}
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
+		// コンテンツタイトル取得
+		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
+		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
+		if (!empty($contentType) && !empty($contentId)){
+			list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
+		} else {
+			$contentTitle = $fetchedRow['nw_name'];	// コンテンツタイトル
+		}
+				
 		// メッセージ
-		$message = $fetchedRow['nw_message'];		// タグを削除
+		$message = $fetchedRow['nw_message'];
+		$keyTag = M3_TAG_START . M3_TAG_MACRO_TITLE . M3_TAG_END;
+		$message = str_replace($keyTag, $contentTitle, $message);// タイトルを変換
+				
 		if (function_exists('mb_strimwidth')){
 			$message = mb_strimwidth($message, 0, self::MESSAGE_SIZE, '…');
 		} else {
@@ -414,46 +440,57 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	 * コンテンツタイトル取得
 	 *
 	 * @param string $contentType		コンテンツタイプ
-	 * @param string $contentsId		共通コンテンツID
-	 * @param string					タイトル
+	 * @param string $contentId			コンテンツID
+	 * @param array						コンテンツタイプ、タイトルの配列
 	 */
-	function getContentTitle($contentType, $contentsId)
+	function getContentTitle($contentType, $contentId)
 	{
-		$contentName = self::UNTITLED_CONTENT;
+		$contentTypeName = self::UNKNOWN_CONTENT_TYPE;
+		$contentName = self::UNKNOWN_CONTENT;
+		
+		// コンテンツタイプ名取得
+		$mainContentType = $this->gPage->getMainContentType();
+		for ($i = 0; $i < count($mainContentType); $i++){
+			$contentTypeRow = $mainContentType[$i];
+			if ($contentTypeRow['value'] == $contentType){
+				$contentTypeName = $contentTypeRow['name'];
+				break;
+			}
+		}
 		
 		switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				$ret = self::$_mainDb->getContentById(''/*PC用コンテンツ*/, $this->_langId, $contentsId, $row);
+				$ret = self::$_mainDb->getContentById(''/*PC用コンテンツ*/, $this->_langId, $contentId, $row);
 				if ($ret) $contentName = $row['cn_name'];
 				break;
 			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-				$ret = self::$_mainDb->getProductById($contentsId, $this->_langId, $row);
+				$ret = self::$_mainDb->getProductById($contentId, $this->_langId, $row);
 				if ($ret) $contentName = $row['pt_name'];
 				break;
 			case M3_VIEW_TYPE_BBS:					// BBS
 				// 未使用
 				break;
 			case M3_VIEW_TYPE_BLOG:				// ブログ
-				$ret = self::$_mainDb->getEntryById($contentsId, $this->_langId, $row);
+				$ret = self::$_mainDb->getEntryById($contentId, $this->_langId, $row);
 				if ($ret) $contentName = $row['be_name'];
 				break;
 			case M3_VIEW_TYPE_WIKI:				// wiki
-				$contentName = $contentsId;
+				$contentName = $contentId;
 				break;
 			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$ret = self::$_mainDb->getRoomById($contentsId, $this->_langId, $row);
+				$ret = self::$_mainDb->getRoomById($contentId, $this->_langId, $row);
 				if ($ret) $contentName = $row['ur_name'];
 				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$ret = self::$_mainDb->getEventById($contentsId, $this->_langId, $row);
+				$ret = self::$_mainDb->getEventById($contentId, $this->_langId, $row);
 				if ($ret) $contentName = $row['ee_name'];
 				break;
 			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-				$ret = self::$_mainDb->getPhotoById($contentsId, $this->_langId, $row);
+				$ret = self::$_mainDb->getPhotoById($contentId, $this->_langId, $row);
 				if ($ret) $contentName = $row['ht_name'];
 				break;
 		}
-		return $contentName;
+		return array($contentTypeName, $contentName);
 	}
 	/**
 	 * コメント状態選択タイプメニュー作成
