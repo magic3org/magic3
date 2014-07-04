@@ -126,14 +126,17 @@ class default_newsDb extends BaseDb
 	 * 新着情報項目の追加、更新
 	 *
 	 * @param int     $serial		シリアル番号(0のときは新規追加)
-	 * @param string  $contentType	コンテンツタイプ
-	 * @param string  $contentId	コンテンツID
+	
+	 * @param string  $name			コンテンツタイトル
 	 * @param string  $message		メッセージ
 	 * @param string  $url			リンク先URL
+	 * @param int     $mark			表示マーク
+	 * @param bool    $visible		表示するかどうか
+	 * @param timestamp $regDt		登録日時
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateNewsItem($serial, $message, $url, &$newSerial)
+	function updateNewsItem($serial, $name, $message, $url, $mark, $visible, $regDt, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -141,6 +144,11 @@ class default_newsDb extends BaseDb
 		// トランザクション開始
 		$this->startTransaction();
 		
+		// 引継ぎパラメータ初期化
+		$otherParams = array();
+		$otherQueryStr = '';
+		$otherValueStr = '';
+			
 		if (empty($serial)){		// シリアル番号が0のときはIDを新規取得
 			// 新着情報IDを決定する
 			$queryStr = 'SELECT MAX(nw_id) AS mid FROM news';
@@ -173,19 +181,42 @@ class default_newsDb extends BaseDb
 			$queryStr .=     'nw_update_dt = ? ';
 			$queryStr .=   'WHERE nw_serial = ?';
 			$this->execStatement($queryStr, array($userId, $now, $serial));
-		}
+			
+			$keepFields = array();	// 値を引き継ぐフィールド名
+			$keepFields[] = 'nw_type';
+			$keepFields[] = 'nw_server_id';
+			$keepFields[] = 'nw_content_type';
+			$keepFields[] = 'nw_content_id';
+			$keepFields[] = 'nw_content_dt';
+			$keepFields[] = 'nw_site_name';
+			$keepFields[] = 'nw_site_url';
 		
+			// 値を引き継ぐフィールドをセット
+			for ($i = 0; $i < count($keepFields); $i++){
+				$fieldName = $keepFields[$i];
+				if (!in_array($fieldName, $otherKeys)){
+					$otherParams[] = $row[$fieldName];
+					$otherQueryStr .= ', ' . $fieldName;
+					$otherValueStr .= ', ?';
+				}
+			}
+		}
+	
 		// データを追加
 		$params = array();
 		$queryStr  = 'INSERT INTO news ';
 		$queryStr .=   '(nw_id, ';				$params[] = $newsId;
 		$queryStr .=   'nw_history_index, ';	$params[] = $historyIndex;
+		$queryStr .=   'nw_name, ';				$params[] = $name;
 		$queryStr .=   'nw_message, ';			$params[] = $message;
+		$queryStr .=   'nw_url, ';				$params[] = $url;
 		$queryStr .=   'nw_create_user_id, ';	$params[] = $userId;
 		$queryStr .=   'nw_create_dt) ';		$params[] = $now;
+		$queryStr .=   $otherQueryStr . ') ';
 		$queryStr .= 'VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, $params);
+		$queryStr .=   '(?, ?, ?, ?, ?';
+		$queryStr .=   $otherValueStr . ') ';
+		$this->execStatement($queryStr, array_merge($params, $otherParams));
 		
 		// 新規のシリアル番号取得
 		$newSerial = 0;

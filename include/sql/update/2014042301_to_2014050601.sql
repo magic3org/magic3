@@ -24,6 +24,8 @@ ALTER TABLE _templates ADD tm_version      VARCHAR(10)    DEFAULT ''            
 ALTER TABLE news ADD nw_device_type       INT            DEFAULT 0                     NOT NULL;      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
 ALTER TABLE news ADD nw_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL;      -- コンテンツの種別
 ALTER TABLE news ADD nw_content_id        TEXT                                         NOT NULL;      -- コンテンツID
+ALTER TABLE news ADD nw_url               TEXT                                         NOT NULL;      -- リンク先
+ALTER TABLE news ADD nw_site_url          TEXT                                         NOT NULL;      -- サイトリンク
 ALTER TABLE news ADD nw_summary           VARCHAR(100)   DEFAULT ''                    NOT NULL;      -- 概要
 ALTER TABLE news ADD nw_mark              INT            DEFAULT 0                     NOT NULL;      -- 付加マーク(0=なし、1=新規)
 ALTER TABLE news ADD nw_visible           BOOLEAN        DEFAULT false                 NOT NULL;      -- 表示するかどうか

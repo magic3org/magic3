@@ -21,14 +21,13 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	private $langId;		// デフォルトの言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $contentType;		// 選択中のコンテンツタイプ
-	private $contentTypeArray;		// コンテンツ選択メニュー用
-	private $status;			// メッセージ状態(0=未設定、1=非公開、2=公開)
+	private $status;			// メッセージ状態(0=非公開、1=公開)
 	private $statusTypeArray;	// コメント状態メニュー作成用
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
-	const PREVIEW_ICON_FILE = '/images/system/preview.png';		// プレビュー用アイコン
+	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const UNTITLED_CONTENT = 'タイトル未設定';
 	
 	/**
@@ -40,11 +39,9 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		parent::__construct();
 		
 		// 初期設定
-		$this->contentTypeArray = array_merge(array(array('name' => '[すべて]', 'value' => '')), $this->gPage->getMainContentType());// コンテンツタイプ取得
 		$this->langId = $this->gEnv->getDefaultLanguage();
-		$this->statusTypeArray = array(	//array(	'name' => '未設定',	'value' => '0'),
-										array(	'name' => '非公開',	'value' => '1'),
-										array(	'name' => '公開',	'value' => '2'));
+		$this->statusTypeArray = array(	array(	'name' => '非公開',	'value' => '0'),
+										array(	'name' => '公開',	'value' => '1'));
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -172,16 +169,13 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 //			$this->contentType = $this->getDefaultContentType();			// コンテンツタイプ
 		}
 		
-		// コンテンツ選択メニュー作成
-		$this->createContentTypeMenu();
-		
 		// ###### 一覧の取得条件を作成 ######
 		if (!empty($search_endDt)) $endDt = $this->getNextDay($search_endDt);
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 		
 		// 総数を取得
-		//$totalCount = self::$_mainDb->getCommentItemCount($this->_contentType, $this->langId, $search_startDt, $endDt, $parsedKeywords);
-		$totalCount = self::$_mainDb->getNewsListCount($this->_contentType, $parsedKeywords);
+		//$totalCount = self::$_mainDb->getCommentItemCount($this->contentType, $this->langId, $search_startDt, $endDt, $parsedKeywords);
+		$totalCount = self::$_mainDb->getNewsListCount($this->contentType, $parsedKeywords);
 
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
@@ -226,8 +220,6 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "list_count", $maxListCount);	// 一覧表示項目数
-//		$this->tmpl->addVar('_widget', 'config_admin_url', $this->getUrl($this->getConfigAdminUrl()));// コメント管理画面URL
-		$this->tmpl->addVar('_widget', 'config_admin_url', $this->getUrl($this->_baseUrl));
 	}
 	/**
 	 * 詳細画面作成
@@ -241,19 +233,30 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		if (empty($this->serialNo)) $this->serialNo = 0;
 		
+		$name = $request->trimValueOf('item_name');			// コンテンツタイトル
+		$date = $request->trimValueOf('item_date');		// 投稿日
+		$time = $request->trimValueOf('item_time');		// 投稿時間
 		$message = $request->valueOf('item_message');		// メッセージ
 //		$name = $request->trimValueOf('item_name');
 //		$html = $request->valueOf('item_html');
 //		$url = $request->valueOf('item_url');
 //		$email = $request->valueOf('item_email');
 //		$reg_user = $request->valueOf('item_reg_user');
-		$this->status = $request->trimValueOf('item_status');		// エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
+		$this->status = $request->trimValueOf('item_status');		// メッセージ状態(0=非公開、1=公開)
 //		$this->contentType = $request->trimValueOf('content_type');		// 選択中のコンテンツタイプ
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'add'){		// メッセージを追加
+			// 入力チェック
+			$this->checkInput($message, 'メッセージ');
+			$this->checkDate($date, '登録日付');
+			$this->checkTime($time, '登録時間');
+			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
+				// 入力データの修正
+				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
+				
 				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $message, $url, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
@@ -269,8 +272,16 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 				}
 			}
 		} else if ($act == 'update'){		// 項目更新の場合
+			// 入力チェック
+			$this->checkInput($message, 'メッセージ');
+			$this->checkDate($date, '登録日付');
+			$this->checkTime($time, '登録時間');
+			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
+				// 入力データの修正
+				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
+				
 				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message, $url, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
@@ -306,58 +317,47 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		if ($reloadData){		// データの再ロード
 			$ret = self::$_mainDb->getNewsItem($this->serialNo, $row);
 			if ($ret){
-				$contentsId = $row['cm_contents_id'];				// 共通コンテンツID
-				$title = $row['cm_title'];				// コメントタイトル
-				$this->status = $row['cm_status'];			// コメント状態(0=未設定、1=非公開、2=公開)
+				$contentId = $row['nw_contents_id'];				// コンテンツID
+				$title = $row['nw_name'];							// コンテンツタイトル
+				$this->status = intval($row['nw_visible']);			// 状態(0=非公開、1=公開)
 
-				$email = $row['cm_email'];				// Eメール
-				if (!empty($row['lu_email'])) $email = $row['lu_email'];
-				$url = $row['cm_url'];				// URL
-				$author = $row['cm_author'];				// 投稿者
-				if (!empty($row['author'])) $author = $row['author'];
-				$reg_dt = $row['cm_create_dt'];				// 投稿日時
-				$update_user = $row['update_user_name'];		// 更新者
-				$update_dt = $row['cm_update_dt'];		// 更新日時
+				$url = $row['nw_url'];				// URL
+				$date = $this->timestampToDate($row['nw_regist_dt']);		// 登録日
+				$time = $this->timestampToTime($row['nw_regist_dt']);		// 登録時間
 				
 				// コンテンツタイトル取得
-				$contentTitle = $this->getContentTitle($this->_contentType, $contentsId);
+				$contentTitle = $this->getContentTitle($this->_contentType, $contentId);
+			} else {
+				$this->serialNo = 0;
+				$date = date("Y/m/d");		// 登録日
+				$time = date("H:i:s");		// 登録時間
 			}
 		}
-		// コメント状態メニュー作成
+		// 状態メニュー作成
 		$this->createStatusMenu();
 		
 		// 非表示項目を設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
 
-		// 入力フィールドの設定、共通項目のデータ設定
-/*		if ($this->entryId == 0){		// 記事IDが0のときは、新規追加モードにする
-			$this->tmpl->addVar('_widget', 'id', '新規');
-			
+		// 入力フィールドの設定
+		if (empty($this->serialNo)){		// 未登録データのとき
+			// データ追加ボタン表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
 		} else {
-			$this->tmpl->addVar('_widget', 'id', $this->entryId);
-			*/
-			if ($this->serialNo == 0){		// 未登録データのとき
-				// データ追加ボタン表示
-				$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
-			} else {
-				// データ更新、削除ボタン表示
-				$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
-				$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
-			}
-//		}
+			// データ更新、削除ボタン表示
+			$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
+			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+		}
+
 		// 表示項目を埋め込む
 		$this->tmpl->addVar("_widget", "content_title", $this->convertToDispString($contentTitle));		// コンテンツタイトル
 		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// コメントタイトル
 		$this->tmpl->addVar("_widget", "comment", $commentTag);		// コメント内容
 		$this->tmpl->addVar("_widget", "email", $this->convertToDispString($email));		// Eメール
 		$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// URL
-		$this->tmpl->addVar("_widget", "author", $this->convertToDispString($author));		// 投稿者
-		$this->tmpl->addVar("_widget", "date", $this->convertToDispDateTime($reg_dt));	// 投稿日時
-		$this->tmpl->addVar("_widget", "update_user", $this->convertToDispString($update_user));	// 更新者
-		$this->tmpl->addVar("_widget", "update_dt", $this->convertToDispDateTime($update_dt));	// 更新日時
-		//$this->tmpl->addVar('_widget', 'config_admin_url', $this->getUrl($this->getConfigAdminUrl()));// コメント管理画面URL
-		$this->tmpl->addVar('_widget', 'config_admin_url', $this->getUrl($this->_baseUrl));
+		$this->tmpl->addVar("_widget", "date", $date);	// 投稿日
+		$this->tmpl->addVar("_widget", "time", $time);	// 投稿時間
+		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する
@@ -407,26 +407,6 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		// 表示中項目のシリアル番号を保存
 		$this->serialArray[] = $serial;
 		return true;
-	}
-	/**
-	 * 選択用メニューを作成
-	 *
-	 * @return なし
-	 */
-	function createContentTypeMenu()
-	{
-		for ($i = 0; $i < count($this->contentTypeArray); $i++){
-			$name = $this->contentTypeArray[$i]['name'];
-			$value = $this->contentTypeArray[$i]['value'];
-
-			$row = array(
-				'name' => $name,		// 名前
-				'value' => $value,		// 値
-				'selected' => $this->convertToSelectedString($value, $this->_contentType)	// 選択中の項目かどうか
-			);
-			$this->tmpl->addVars('content_type_list', $row);
-			$this->tmpl->parseTemplate('content_type_list', 'a');
-		}
 	}
 	/**
 	 * コンテンツタイトル取得

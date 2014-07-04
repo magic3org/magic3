@@ -154,11 +154,11 @@ CREATE TABLE news (
     nw_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時
 
     nw_name              TEXT                                         NOT NULL,      -- コンテンツ名
-    nw_link              TEXT                                         NOT NULL,      -- コンテンツリンク先
+    nw_link              TEXT                                         NOT NULL,      -- コンテンツリンク先(廃止予定)
     nw_content_dt        TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- コンテンツ更新日時
     nw_message           TEXT                                         NOT NULL,      -- メッセージ
     nw_site_name         TEXT                                         NOT NULL,      -- サイト名
-    nw_site_link         TEXT                                         NOT NULL,      -- サイトリンク
+    nw_site_link         TEXT                                         NOT NULL,      -- サイトリンク(廃止予定)
 
     nw_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
     nw_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
