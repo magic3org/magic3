@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: instanceManager.php 4651 2012-02-03 11:36:59Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/db/systemDb.php');		// システムDBアクセスクラス
@@ -22,11 +22,11 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
  */
 class InstanceManager extends Core
 {
-    private $systemDb;		// システムDBオブジェクト
-	private $userInfo;		// ユーザ情報オブジェクト
-	private $addonDir;		// 追加クラスインストールディレクトリ
-	private $addonArray;	// ロード済みの追加クラス
-		
+    private $systemDb;			// システムDBオブジェクト
+	private $userInfo;			// ユーザ情報オブジェクト
+	private $addonDir;			// 追加クラスインストールディレクトリ
+	private $addonArray;		// ロード済みの追加クラス
+	private $addonInfoArray;	// アドオンクラス情報
 	/**
 	 * コンストラクタ
 	 */
@@ -85,8 +85,8 @@ class InstanceManager extends Core
 	/**
 	 * オブジェクト取得
 	 *
-	 * @param string	$id		オブジェクト識別ID
-	 * @return object			取得したオブジェクト
+	 * @param string	$id			オブジェクト識別ID
+	 * @return object				取得したオブジェクト
 	 */
 	public function getObject($id)
 	{
@@ -111,6 +111,46 @@ class InstanceManager extends Core
 		return $addonObj;
 	}
 	/**
+	 * アドオンオブジェクト取得
+	 *
+	 * @param string	$id			オブジェクト識別ID
+	 * @return object				取得したオブジェクト
+	 */
+	public function getAddon($id)
+	{
+		return $this->getObject($id);
+	}
+	/**
+	 * アドオンオブジェクト取得
+	 *
+	 * @param string	$id			オブジェクト識別ID
+	 * @param string    $hookType	イベントフックタイプ
+	 * @return object				取得したイベントフックメソッド
+	 */
+	public function getAddonEventHook($id, $hookType)
+	{
+		global $gEnvManager;
+		
+		$method = null;
+		
+		// 追加クラス情報がないときは、追加クラス情報をロード
+		if (!isset($this->addonArray)) $this->loadAddonClassInfo();
+		
+		// イベントフックの存在を確認
+		$addonInfo = $this->addonInfoArray[$id];
+		if (isset($addonInfo)){
+			switch ($hookType){
+				case M3_EVENT_HOOK_TYPE_OPELOG:
+					if ($addonInfo['ao_opelog_hook']){
+						$addon = $this->getAddon($id);
+						if (isset($addon)) $method = $addon->getEventHook($hookType);
+					}
+					break;
+			}
+		}
+		return $method;
+	}
+	/**
 	 * 追加クラス情報を取得
 	 */
 	public function loadAddonClassInfo()
@@ -128,23 +168,23 @@ class InstanceManager extends Core
 		
 		$ret = $this->systemDb->getAllAddons($rows);
 		if ($ret){
+			$this->addonInfoArray = array();// アドオンクラス情報
 			for ($i = 0; $i < count($rows); $i++){
+				$row = $rows[$i];
+				
 				// 追加クラスID
-				$addonId = $rows[$i]['ao_id'];
+				$addonId = $row['ao_id'];
 				// クラス名
-				$loadClass = $rows[$i]['ao_class_name'];
+				$loadClass = $row['ao_class_name'];
 				// クラスファイルパス
 				$loadClassFile = $this->addonDir . '/' . $addonId . '/' . $loadClass . '.php';
 		
 				// 追加クラスファイルがあるときは追加クラス情報を格納
 				if (file_exists($loadClassFile)){
 					$this->addonArray[$addonId] = $loadClass;
-
-					// ファイル読み込み
-//				require_once($loadClassFile);
-			
-					// クラス作成
-//					$this->addonArray[$addonId] = new $loadClass();
+					
+					// アドオンクラス情報追加
+					$this->addonInfoArray[$addonId] = $row;
 				} else {
 					echo 'addon load error: id=' . $addonId;
 				}

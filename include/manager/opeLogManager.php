@@ -336,6 +336,11 @@ class OpeLogManager extends Core
 	 */
 	private function _opelogEventHook($code, $detailParam, $msg, $msgExt)
 	{
+		global $gInstanceManager;
+		
+		// 運用ログ用イベントフックを実行
+		$eventHook = $gInstanceManager->getAddonEventHook('newslib', M3_EVENT_HOOK_TYPE_OPELOG);		// 新着情報
+		if (is_callable($eventHook)) call_user_func($eventHook, $code, $detailParam, $msg, $msgExt);
 	}
 }
 ?>

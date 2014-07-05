@@ -28,7 +28,7 @@ ALTER TABLE _addons ADD ao_opelog_hook          BOOLEAN        DEFAULT false    
 
 INSERT INTO _addons
 (ao_id,     ao_class_name, ao_name,            ao_description, ao_opelog_hook) VALUES
-('newslib', 'newslib',     '新着情報ライブラリ', '', true);
+('newslib', 'newsLib',     '新着情報ライブラリ', '', true);
 
 -- *** システム標準テーブル ***
 -- 新着情報トラン

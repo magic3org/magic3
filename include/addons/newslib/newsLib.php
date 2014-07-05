@@ -28,46 +28,42 @@ class newsLib
 		$this->db = new newsLibDb();
 	}
 	/**
-	 * 初期化
+	 * イベントフックメソッドを取得
 	 *
-	 * @return なし
+	 * @param string $hookType		イベントフックタイプ
+	 * @return callable				フックメソッド
 	 */
-	function _initData()
+	function getEventHook($hookType)
 	{
-		global $gEnvManager;
-		global $gRequestManager;
-		static $init = false;
-		
-		if ($init) return;
-		
-		$langId = $gEnvManager->getDefaultLanguage();
-	
+		$method = null;
 
-		$init = true;		// 初期化完了
+		switch ($hookType){
+			case M3_EVENT_HOOK_TYPE_OPELOG:
+				$method = array($this, '_opelogEventHook');
+				break;
+		}
+		return $method;
 	}
 	/**
-	 * URLパラメータからオプションのテンプレートを取得
+	 * 運用ログイベントフック
 	 *
-	 * @return string						テンプレートID
+	 * @param int    $code			メッセージコード
+	 * @param array  $detailParam	詳細パラメータ
+	 * @param string $msg   		メッセージ
+	 * @param string $msgExt   		詳細メッセージ
+	 * @return 						なし
 	 */
-	function getOptionTemplate()
+	function _opelogEventHook($code, $detailParam, $msg, $msgExt)
 	{
-		// 初期化
-		$this->_initData();
-		
-		return $this->templateId;
-	}
-	/**
-	 * 現在のブログIDを取得
-	 *
-	 * @return string					ブログID
-	 */
-	function getBlogId()
-	{
-		// 初期化
-		$this->_initData();
-		
-		return $this->blogId;
+		// コンテンツの追加、更新の場合は、新着情報を作成する
+		switch ($code){
+			case 2400:		// コンテンツ追加
+			case 2401:		// コンテンツ更新
+			// case 2402:	// コンテンツ削除
+				$contentType = $detailParam[M3_EVENT_HOOK_PARAM_CONTENT_TYPE];
+				$contentId = $detailParam[M3_EVENT_HOOK_PARAM_CONTENT_ID];
+				break;
+		}
 	}
 }
 ?>
