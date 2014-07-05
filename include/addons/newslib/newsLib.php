@@ -84,20 +84,28 @@ class newsLib
 	 * @param string $msgExt   		詳細メッセージ
 	 * @return 						なし
 	 */
-	function _opelogEventHook($code, $detailParam, $msg, $msgExt)
+//	function _opelogEventHook($code, $detailParam, $msg, $msgExt)
+	function _opelogEventHook()
 	{
+$args =	func_get_args();
+$code = $args[0];
+$detailParam = $args[1];
+$msg  = $args[2];
+$msgExt  = $args[3];
 		// コンテンツの追加、更新の場合は、新着情報を作成する
 		switch ($code){
 			case 2400:		// コンテンツ追加
 			case 2401:		// コンテンツ更新
 			// case 2402:	// コンテンツ削除
-				$contentType = $detailParam[M3_EVENT_HOOK_PARAM_CONTENT_TYPE];
+/*				$contentType = $detailParam[M3_EVENT_HOOK_PARAM_CONTENT_TYPE];
 				$contentId = $detailParam[M3_EVENT_HOOK_PARAM_CONTENT_ID];
 				$regDt = $detailParam[M3_EVENT_HOOK_PARAM_REGIST_DT];
 				$url = '';
 				$this->db->addNewsItem($contentType, $contentId, $this->configArray[FD_DEFAULT_MESSAGE], $url, $regDt, $newSerial);
+				*/
 				break;
 		}
+	echo $code."-----";
 	}
 }
 ?>

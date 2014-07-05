@@ -121,34 +121,37 @@ class InstanceManager extends Core
 		return $this->getObject($id);
 	}
 	/**
-	 * アドオンオブジェクト取得
+	 * アドオンイベントフック処理を実行
 	 *
-	 * @param string	$id			オブジェクト識別ID
-	 * @param string    $hookType	イベントフックタイプ
-	 * @return object				取得したイベントフックメソッド
+	 * @param array			第1引数はイベントフックタイプ。それ以降はそのままイベントフックメソッドへ渡す。
+	 * @return				なし
 	 */
-	public function getAddonEventHook($id, $hookType)
+	public function callAddonEventHook()
 	{
-		global $gEnvManager;
-		
-		$method = null;
+		$args =	func_get_args();
+		$hookType = $args[0];		// イベントフックタイプ
+		array_shift($args);
 		
 		// 追加クラス情報がないときは、追加クラス情報をロード
 		if (!isset($this->addonArray)) $this->loadAddonClassInfo();
 		
-		// イベントフックの存在を確認
-		$addonInfo = $this->addonInfoArray[$id];
-		if (isset($addonInfo)){
-			switch ($hookType){
-				case M3_EVENT_HOOK_TYPE_OPELOG:
+		// イベントフックが使用可能なアドオンをロードし、イベントフックを実行
+		switch ($hookType){
+			case M3_EVENT_HOOK_TYPE_OPELOG:		// 運用ログタイプ
+				for ($i = 0; $i < count($this->addonInfoArray); $i++){
+					$addonInfo = $this->addonInfoArray[$i];
 					if ($addonInfo['ao_opelog_hook']){
-						$addon = $this->getAddon($id);
-						if (isset($addon)) $method = $addon->getEventHook($hookType);
+						$addon = $this->getAddon($addonInfo['ao_id']);
+						if (isset($addon)){
+							if (method_exists($addon, 'getEventHook')){
+								$method = $addon->getEventHook($hookType);
+								if (is_callable($method)) call_user_func_array($method, $args);
+							}
+						}
 					}
-					break;
-			}
+				}
+				break;
 		}
-		return $method;
 	}
 	/**
 	 * 追加クラス情報を取得
@@ -184,7 +187,7 @@ class InstanceManager extends Core
 					$this->addonArray[$addonId] = $loadClass;
 					
 					// アドオンクラス情報追加
-					$this->addonInfoArray[$addonId] = $row;
+					$this->addonInfoArray[] = $row;
 				} else {
 					echo 'addon load error: id=' . $addonId;
 				}

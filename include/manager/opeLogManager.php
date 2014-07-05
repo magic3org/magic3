@@ -339,8 +339,7 @@ class OpeLogManager extends Core
 		global $gInstanceManager;
 		
 		// 運用ログ用イベントフックを実行
-		$eventHook = $gInstanceManager->getAddonEventHook('newslib', M3_EVENT_HOOK_TYPE_OPELOG);		// 新着情報
-		if (is_callable($eventHook)) call_user_func($eventHook, $code, $detailParam, $msg, $msgExt);
+		$gInstanceManager->callAddonEventHook(M3_EVENT_HOOK_TYPE_OPELOG, $code, $detailParam, $msg, $msgExt);
 	}
 }
 ?>
