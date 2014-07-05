@@ -20,6 +20,17 @@
 -- テンプレート情報マスター
 ALTER TABLE _templates ADD tm_version      VARCHAR(10)    DEFAULT ''                    NOT NULL;      -- テンプレートバージョン文字列
 
+-- ウィジェット情報マスター
+ALTER TABLE _widgets ADD wd_content_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL;      -- コンテンツ編集用のウィジェット
+
+-- 追加クラスマスター
+ALTER TABLE _addons ADD ao_opelog_hook          BOOLEAN        DEFAULT false                  NOT NULL;      -- 運用ログイベントフックがあるかどうか
+
+INSERT INTO _addons
+(ao_id,     ao_class_name, ao_name,            ao_description, ao_opelog_hook) VALUES
+('newslib', 'newslib',     '新着情報ライブラリ', '', true);
+
+-- *** システム標準テーブル ***
 -- 新着情報トラン
 ALTER TABLE news ADD nw_device_type       INT            DEFAULT 0                     NOT NULL;      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
 ALTER TABLE news ADD nw_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL;      -- コンテンツの種別
@@ -36,10 +47,6 @@ ALTER TABLE news ADD nw_id                INT            DEFAULT 0              
 ALTER TABLE news ADD nw_history_index     INT            DEFAULT 0                     NOT NULL;      -- 履歴管理用インデックスNo(0～)
 ALTER TABLE news ADD UNIQUE (nw_id,  nw_history_index);            -- ユニーク制約再設定
 
--- ウィジェット情報マスター
-ALTER TABLE _widgets ADD wd_content_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL;      -- コンテンツ編集用のウィジェット
-
--- *** システム標準テーブル ***
 -- 新着情報設定マスター
 DROP TABLE IF EXISTS news_config;
 CREATE TABLE news_config (

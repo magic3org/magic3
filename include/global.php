@@ -140,6 +140,12 @@ define('M3_TAG_MACRO_COMMENT_DATE',			'CM_DATE');						// コメント置換キ�
 define('M3_TAG_MACRO_COMMENT_TIME',			'CM_TIME');						// コメント置換キー(登録時)
 define('M3_TAG_MACRO_COMMENT_AUTHOR',		'CM_AUTHOR');					// コメント置換キー(著者)
 
+// イベントフックタイプ
+define('M3_EVENT_HOOK_TYPE_OPELOG',			'opelog');						// 運用ログ
+// イベントフック用パラメータ
+define('M3_EVENT_HOOK_PARAM_CONTENT_TYPE',	'content_type');				// コンテンツタイプ
+define('M3_EVENT_HOOK_PARAM_CONTENT_ID',	'content_id');					// コンテンツID
+
 // データ作成用
 define('M3_WIDGET_ID_SEPARATOR',	',');									// ウィジェットIDと付加情報を連結
 define('M3_LANG_SEPARATOR',			'|');									// 言語IDと内容を連結
