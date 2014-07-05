@@ -145,6 +145,7 @@ define('M3_EVENT_HOOK_TYPE_OPELOG',			'opelog');						// 運用ログ
 // イベントフック用パラメータ
 define('M3_EVENT_HOOK_PARAM_CONTENT_TYPE',	'content_type');				// コンテンツタイプ
 define('M3_EVENT_HOOK_PARAM_CONTENT_ID',	'content_id');					// コンテンツID
+define('M3_EVENT_HOOK_PARAM_REGIST_DT',		'regist_dt');					// 登録日時
 
 // データ作成用
 define('M3_WIDGET_ID_SEPARATOR',	',');									// ウィジェットIDと付加情報を連結

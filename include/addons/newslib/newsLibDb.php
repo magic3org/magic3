@@ -18,35 +18,69 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class newsLibDb extends BaseDb
 {
 	/**
-	 * エントリー項目を取得
+	 * 新着情報定義値を取得をすべて取得
 	 *
-	 * @param int		$id					エントリーID
-	 * @param string	$langId				言語
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
+	 * @param array  $rows			レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
 	 */
-	function getEntryItem($id, $langId, &$row)
+	function getAllConfig(&$rows)
 	{
-		$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
-		$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
-		$queryStr .=   'AND be_id = ? ';
-		$queryStr .=   'AND be_language_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
-		return $ret;
+		$queryStr  = 'SELECT * FROM news_config ';
+		$queryStr .=   'ORDER BY nc_index';
+		$retValue = $this->selectRecords($queryStr, array(), $rows);
+		return $retValue;
 	}
 	/**
-	 * ブログ情報を識別IDで取得(管理用)
+	 * 新着情報項目の追加
 	 *
-	 * @param string	$id					識別ID
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
+	 * @param string  $contentType	コンテンツタイプ
+	 * @param string  $contentId	コンテンツID
+	 * @param string  $message		メッセージ
+	 * @param string  $url			リンク先URL
+	 * @param timestamp $regDt		登録日時
+	 * @param int     $newSerial	新規シリアル番号
+	 * @return bool					true = 成功、false = 失敗
 	 */
-	function getBlogInfoById($id, &$row)
+	function addNewsItem($contentType, $contentId, $message, $url, $regDt, &$newSerial)
 	{
-		$queryStr = 'SELECT * FROM blog_id ';
-		$queryStr .=  'WHERE bl_deleted = false ';
-		$queryStr .=  'AND bl_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id), $row);
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+			
+		// トランザクション開始
+		$this->startTransaction();
+			
+		// 新着情報IDを決定する
+		$queryStr = 'SELECT MAX(nw_id) AS mid FROM news';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret){
+			$newsId = $row['mid'] + 1;
+		} else {
+			$newsId = 1;
+		}
+
+		// データを追加
+		$params = array();
+		$queryStr  = 'INSERT INTO news ';
+		$queryStr .=   '(nw_id, ';				$params[] = $newsId;
+		$queryStr .=   'nw_content_type, ';		$params[] = $contentType;
+		$queryStr .=   'nw_content_id, ';		$params[] = $contentId;
+		$queryStr .=   'nw_message, ';			$params[] = $message;
+		$queryStr .=   'nw_url, ';				$params[] = $url;
+		$queryStr .=   'nw_regist_dt, ';		$params[] = $regDt;
+		$queryStr .=   'nw_create_user_id, ';	$params[] = $userId;
+		$queryStr .=   'nw_create_dt)';			$params[] = $now;
+		$queryStr .= 'VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, $params);
+		
+		// 新規のシリアル番号取得
+		$newSerial = 0;
+		$queryStr = 'SELECT MAX(nw_serial) AS ns FROM news ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+			
+		// トランザクション確定
+		$ret = $this->endTransaction();
 		return $ret;
 	}
 }

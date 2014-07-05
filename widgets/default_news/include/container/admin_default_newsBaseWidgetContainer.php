@@ -20,7 +20,7 @@ require_once($gEnvManager->getWidgetDbPath('default_news') . '/default_newsDb.ph
 class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	protected static $_mainDb;			// DB接続オブジェクト
-	protected static $_configArray;		// ブログ定義値
+	protected static $_configArray;		// 新着情報定義値
 	protected static $_task;			// 現在の画面
 	protected $_openBy;				// ウィンドウオープンタイプ
 	protected $_baseUrl;			// 管理画面のベースURL
