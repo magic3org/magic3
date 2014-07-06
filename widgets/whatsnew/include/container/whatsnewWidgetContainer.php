@@ -21,16 +21,13 @@ class whatsnewWidgetContainer extends BaseWidgetContainer
 	private $db;	// DB接続オブジェクト
 	private $langId;
 	private $isNews;	// 新着情報があるかどうか
-//	private $defaultUrl;	// システムのデフォルトURL
 	private $headRssFile;				// RSS情報
 	private $configArray;		// 新着情報定義値
 	private $listItemLayout;		// 一覧項目レイアウト
 	const DEFAULT_CONFIG_ID = 0;
-	const DEFAULT_ITEM_COUNT = 20;		// デフォルトの表示項目数
-	const MAX_TITLE_LENGTH = 20;			// タイトルの最大文字列長
-	const DEFAULT_TITLE = 'ブログカテゴリ(%s)の最新記事';		// デフォルトのウィジェットタイトル名
+	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
+	const DEFAULT_TITLE = '新着情報';		// デフォルトのウィジェットタイトル名
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
-	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
 	const UNKNOWN_CONTENT = 'タイトル不明';
 	
 	// DBフィールド名
@@ -121,7 +118,6 @@ class whatsnewWidgetContainer extends BaseWidgetContainer
 		}
 				
 		// 新着情報を取得
-//		$this->defaultUrl = $this->gEnv->getDefaultUrl();
 		$this->listItemLayout = $this->configArray[self::FD_LAYOUT_LIST_ITEM];		// 一覧項目レイアウト
 		$this->db->getNewsList('', $itemCount, 1, array($this, 'itemLoop'));
 
@@ -136,10 +132,10 @@ class whatsnewWidgetContainer extends BaseWidgetContainer
 			$this->headRssFile = array();
 		} else {
 			// RSS用リンク作成
-//			$iconTitle = sprintf(self::DEFAULT_TITLE, $this->categoryName);
+			$iconTitle = self::DEFAULT_TITLE;
 			$iconUrl = $this->gEnv->getRootUrl() . self::RSS_ICON_FILE;
 			$rssLink = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" style="border:none;" />';
-			$linkUrl = $this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId(), M3_REQUEST_PARAM_CATEGORY_ID . '=' . $categoryId);
+			$linkUrl = $this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId());
 			$rssLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)) . '">' . $rssLink . '</a>';
 			$rssLink = '<div align="right">' . $rssLink . '</div>';		// 右寄せ
 			$this->tmpl->addVar("_widget", "rss_link", $rssLink);
@@ -160,7 +156,7 @@ class whatsnewWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTitle($request, &$param)
 	{
-		return $this->categoryName;
+		return self::DEFAULT_TITLE;
 	}
 	/**
 	 * RSS情報をHTMLヘッダ部に設定

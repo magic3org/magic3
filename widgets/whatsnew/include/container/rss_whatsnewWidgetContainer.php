@@ -19,13 +19,14 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/whatsnewDb.php');
 class rss_whatsnewWidgetContainer extends BaseRssContainer
 {
 	private $db;
+	private $langId;
 	private $isExistsList;				// リスト項目が存在するかどうか
 	private $rssChannel;				// RSSチャンネル部出力データ
 	private $rssSeqUrl = array();					// 項目の並び
 	private $defaultUrl;	// システムのデフォルトURL
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
-	const DEFAULT_TITLE = 'ブログカテゴリ(%s)の最新記事';		// デフォルトのウィジェットタイトル名
+	const DEFAULT_TITLE = '新着情報';		// デフォルトのウィジェットタイトル名
 	const DEFAULT_CATEGORY_NAME = 'カテゴリ未選択';		// デフォルトのカテゴリ名
 	const DEFAULT_DESC = 'ブログカテゴリ(%s)の最新の記事が取得できます。';
 	
@@ -37,6 +38,9 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 		// 親クラスを呼び出す
 		parent::__construct();
 		
+		// 初期値
+		$this->langId = $this->gEnv->getCurrentLanguage();
+				
 		// DBオブジェクト作成
 		$this->db = new whatsnewDb();
 	}
@@ -66,7 +70,6 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 	function _assign($request, &$param)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
-		$langId = $this->gEnv->getCurrentLanguage();
 		
 		// 定義ID取得
 		$configId = $this->gEnv->getCurrentWidgetConfigId();
@@ -83,21 +86,6 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 			$useRss		= $targetObj->useRss;// RSS配信を行うかどうか
 			if (!isset($useRss)) $useRss = 1;
 		}
-		// カテゴリIDはURLから取得
-		$categoryId = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);
-		if (empty($categoryId)) $categoryId = 0;
-		
-/*		// 設定値を取得
-		$categoryId = 0;// カテゴリID
-		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
-		$useRss = 1;							// RSS配信を行うかどうか
-		$paramObj = $this->getWidgetParamObj();
-		if (!empty($paramObj)){
-			$categoryId = $paramObj->categoryId;// カテゴリID
-			$itemCount	= $paramObj->itemCount;
-			$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
-			if (!isset($useRss)) $useRss = 1;
-		}*/
 		
 		// RSS配信を行わないときは終了
 		//if (empty($useRss)) $this->cancelParse();		// 出力しない
@@ -108,21 +96,18 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 			// システム強制終了
 			$this->gPage->exitSystem();
 		}
-		// カテゴリ名を取得
-		$categoryName = self::DEFAULT_CATEGORY_NAME;
-		$ret = $this->db->getCategoryByCategoryId($categoryId, $langId, $row);
-		if ($ret) $categoryName = $row['bc_name'];
 		
 		// 一覧を作成
 		$this->defaultUrl = $this->gEnv->getDefaultUrl();
-		$this->db->getEntryItems($itemCount, $langId, $categoryId, $now, array($this, 'itemLoop'));
+		//$this->db->getEntryItems($itemCount, $langId, $categoryId, $now, array($this, 'itemLoop'));
+		$this->db->getNewsList('', $itemCount, 1, array($this, 'itemLoop'));
 				
 		// 画面にデータを埋め込む
 		if ($this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'visible');
 		
 		// RSSチャンネル部出力データ作成
 		$linkUrl = $this->getUrl($this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId()));
-		$this->rssChannel = array(	'title' => sprintf(self::DEFAULT_TITLE, $categoryName),		// タイトル
+		$this->rssChannel = array(	'title' => self::DEFAULT_TITLE,		// タイトル
 									'link' => $linkUrl,					// RSS配信用URL
 									'description' => sprintf(self::DEFAULT_DESC, $categoryName),// 説明
 									'seq' => $this->rssSeqUrl);			// 項目の並び
