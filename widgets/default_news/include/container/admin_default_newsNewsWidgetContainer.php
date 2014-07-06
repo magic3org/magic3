@@ -244,6 +244,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$url = $request->valueOf('item_url');
 		$this->status = $request->trimValueOf('item_status');		// メッセージ状態(0=非公開、1=公開)
 		$mark = 0;
+		$contentTitleDisabled = '';
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'add'){		// メッセージを追加
@@ -315,7 +316,6 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		} else {	// 初期画面表示のとき
 			$reloadData = true;		// データの再ロード
 		}
-		
 		// 設定データを再取得
 		if ($reloadData){		// データの再ロード
 			$ret = self::$_mainDb->getNewsItem($this->serialNo, $row);
@@ -333,6 +333,9 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 				$contentId = $row['nw_content_id'];	// コンテンツID
 				if (!empty($contentType) && !empty($contentId)){
 					list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
+					
+					// コンテンツタイトルを編集不可にする
+					$contentTitleDisabled = 'disabled';
 				} else {
 					$contentTypeName = '';
 					$contentTitle = $row['nw_name'];	// コンテンツタイトル
@@ -369,6 +372,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$this->tmpl->addVar("_widget", "content_type", $this->convertToDispString($contentTypeName));		// コンテンツタイプ
 		$this->tmpl->addVar("_widget", "content_id", $this->convertToDispString($contentId));		// コンテンツID
 		$this->tmpl->addVar("_widget", "content_title", $this->convertToDispString($contentTitle));		// コンテンツタイトル
+		$this->tmpl->addVar("_widget", "content_title_disabled", $contentTitleDisabled);		// コンテンツタイトルフィールド
 		$this->tmpl->addVar("_widget", "message", $this->convertToDispString($message));		// メッセージ
 		$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// URL
 		$this->tmpl->addVar("_widget", "date", $date);	// 投稿日

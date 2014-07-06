@@ -85,14 +85,8 @@ class newsLib
 	 * @return 						なし
 	 */
 	function _opelogEventHook($code, $eventParam, $msg, $msgExt)
-//	function _opelogEventHook()
 	{
-/*$args =	func_get_args();
-$code = $args[0];
-$eventParam = $args[1];
-$msg  = $args[2];
-$msgExt  = $args[3];*/
-//		list($code, $eventParam, $msg, $msgExt) = func_get_args();
+		global $gEnvManager;
 		
 		// コンテンツの追加、更新の場合は、新着情報を作成する
 		switch ($code){
@@ -102,11 +96,64 @@ $msgExt  = $args[3];*/
 				$contentType	= $eventParam[M3_EVENT_HOOK_PARAM_CONTENT_TYPE];		// コンテンツタイプ
 				$contentId		= $eventParam[M3_EVENT_HOOK_PARAM_CONTENT_ID];			// コンテンツID
 				$updateDt		= $eventParam[M3_EVENT_HOOK_PARAM_UPDATE_DT];			// コンテンツ更新日時
-				$url = '';
+				$url = $gEnvManager->getMacroPath($this->_createContentUrl($contentType, $contentId));// パスをマクロ形式に変換;
 				$this->db->addNewsItem($contentType, $contentId, $this->configArray[self::FD_DEFAULT_MESSAGE], $url, $updateDt, $newSerial);
 				break;
 		}
-echo $code.'***';
+	}
+	/**
+	 * コンテンツリンク用のURLを作成
+	 *
+	 * @param string $contentType		コンテンツタイプ
+	 * @param string $contentId			コンテンツID
+	 * @param string					パラメータ文字列
+	 */
+	private function _createContentUrl($contentType, $contentId)
+	{
+		global $gEnvManager;
+		
+		$deviceType = 0;
+		switch ($deviceType){		// デバイスごとの処理
+			case 0:		// PC
+			default:
+				$url = $gEnvManager->getDefaultPcUrl();
+				break;
+			case 1:		// 携帯
+				$url = $gEnvManager->getDefaultMobileUrl();
+				break;
+			case 2:		// スマートフォン
+				$url = $gEnvManager->getDefaultSmartphoneUrl();
+				break;
+		}
+		
+		$param = '';
+		switch ($contentType){
+			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
+				$param = M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
+				break;
+			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
+				$param = M3_REQUEST_PARAM_PRODUCT_ID . '=' . $contentId;
+				break;
+			case M3_VIEW_TYPE_BBS:					// BBS
+				$param = M3_REQUEST_PARAM_BBS_THREAD_ID . '=' . $contentId;
+				break;
+			case M3_VIEW_TYPE_BLOG:				// ブログ
+				$param = M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $contentId;
+				break;
+			case M3_VIEW_TYPE_WIKI:				// wiki
+				$param = $contentId;
+				break;
+			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
+				$param = M3_REQUEST_PARAM_ROOM_ID . '=' . $contentId;
+				break;
+			case M3_VIEW_TYPE_EVENT:				// イベント情報
+				$param = M3_REQUEST_PARAM_EVENT_ID . '=' . $contentId;
+				break;
+			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
+				$param = M3_REQUEST_PARAM_PHOTO_ID . '=' . $contentId;
+				break;
+		}
+		return $url . '?' . $param;
 	}
 }
 ?>
