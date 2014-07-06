@@ -392,9 +392,6 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		// シリアル番号
 		$serial = $fetchedRow['nw_serial'];
 		
-		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
-		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
-		
 		// 公開状態
 		if ($fetchedRow['nw_visible']){		// コンテンツが公開状態のとき
 			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン

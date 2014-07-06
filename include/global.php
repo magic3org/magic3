@@ -97,6 +97,9 @@ define('M3_TAG_MACRO_USER_KEY',		'USER_');								// ユーザ定義置換キー
 define('M3_TAG_MACRO_ITEM',			'ITEM');								// 項目置換キー
 define('M3_TAG_MACRO_TITLE',		'TITLE');								// タイトル置換キー
 define('M3_TAG_MACRO_BODY',			'BODY');								// 本文置換キー
+define('M3_TAG_MACRO_DATE',			'DATE');								// 日付置換キー
+define('M3_TAG_MACRO_MESSAGE',		'MESSAGE');								// メッセージ置換キー
+define('M3_TAG_MACRO_MARK',			'MARK');								// マーク置換キー
 define('M3_TAG_MACRO_AVATAR',		'AVATAR');								// アバター置換キー
 define('M3_TAG_MACRO_URL',			'URL');									// URL置換キー
 define('M3_TAG_MACRO_FILES',		'FILES');								// 添付ファイル置換キー
