@@ -2163,6 +2163,24 @@ class BaseWidgetContainer extends Core
 		$this->gOpeLog->writeUserError($method, $msg, $code, $msgExt);
 	}
 	/**
+	 * ユーザ操作運用ログ出力とイベント処理
+	 *
+	 * 以下の状況で運用ログメッセージを出力するためのインターフェイス
+	 * ユーザの通常の操作で記録すべきもの
+	 * 例) コンテンツの更新等
+	 *
+	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
+	 * @param string $msg   	メッセージ
+	 * @param int    $code		メッセージコード
+	 * @param string $msgExt   	詳細メッセージ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
+	 * @return なし
+	 */
+	public function writeUserInfoEvent($method, $msg, $code = 0, $msgExt = '', $eventParam = array())
+	{
+		$this->gOpeLog->writeUserInfo($method, $msg, $code, $msgExt, '', '', false, $eventParam);
+	}
+	/**
 	 * パスワード生成
 	 *
 	 * システム共通でパスワード生成

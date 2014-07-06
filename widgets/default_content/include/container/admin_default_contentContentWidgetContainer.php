@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -206,7 +206,11 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					for ($i = 0; $i < count($delContentInfo); $i++){
 						$infoObj = $delContentInfo[$i];
 						$contentAttr = default_contentCommonDef::$_deviceTypeName;
-						$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $contentAttr, $infoObj->name), 2100, 'ID=' . $infoObj->contentId);
+						//$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $contentAttr, $infoObj->name), 2100, 'ID=' . $infoObj->contentId);
+						$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_CONTENT,
+												M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->contentId,
+												M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+						$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $contentAttr, $infoObj->name), 2402, 'ID=' . $infoObj->contentId, $eventParam);
 					}
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
@@ -450,6 +454,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					if ($ret){
 						$contentId = $row['cn_id'];		// コンテンツID
 						$name = $row['cn_name'];		// コンテンツ名前
+						$updateDt = $row['cn_create_dt'];		// コンテンツ作成日時
 						$attachFileDir = default_contentCommonDef::getAttachFileDir();
 					
 						$ret = $this->gInstance->getFileManager()->updateAttachFileInfo(default_contentCommonDef::$_viewContentType, $contentId, 0, $newSerial,
@@ -471,14 +476,13 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					if ($ret) $this->setGuidanceMsg('更新情報をサーバへアップしました');
 					
 					// 運用ログを残す
-/*					$ret = self::$_mainDb->getContentBySerial($this->serialNo, $row);
-					if ($ret){
-						$contentId = $row['cn_id'];		// コンテンツID
-						$name = $row['cn_name'];		// コンテンツ名前
-					}*/
 					$contentAttr = default_contentCommonDef::$_deviceTypeName;
 					if ($this->isMultiLang) $contentAttr .= $this->getLangName($this->langId);		// 多言語対応の場合
-					$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_ADD_CONTENT, $contentAttr, $name), 2100, 'ID=' . $contentId);
+					//$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_ADD_CONTENT, $contentAttr, $name), 2100, 'ID=' . $contentId);
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_CONTENT,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $contentId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_ADD_CONTENT, $contentAttr, $name), 2400, 'ID=' . $contentId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
@@ -538,6 +542,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					if ($ret){
 						$contentId = $row['cn_id'];		// コンテンツID
 						$name = $row['cn_name'];		// コンテンツ名前
+						$updateDt = $row['cn_create_dt'];		// コンテンツ作成日時
 						$attachFileDir = default_contentCommonDef::getAttachFileDir();
 					
 						$ret = $this->gInstance->getFileManager()->updateAttachFileInfo(default_contentCommonDef::$_viewContentType, $contentId, $this->serialNo, $newSerial,
@@ -562,14 +567,13 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					if ($ret) $this->setGuidanceMsg('更新情報をサーバへアップしました');
 					
 					// 運用ログを残す
-/*					$ret = self::$_mainDb->getContentBySerial($this->serialNo, $row);
-					if ($ret){
-						$contentId = $row['cn_id'];		// コンテンツID
-						$name = $row['cn_name'];		// コンテンツ名前
-					}*/
 					$contentAttr = default_contentCommonDef::$_deviceTypeName;
 					if ($this->isMultiLang) $contentAttr .= $this->getLangName($this->langId);		// 多言語対応の場合
-					$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_UPDATE_CONTENT, $contentAttr, $name), 2100, 'ID=' . $contentId);
+					//$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_UPDATE_CONTENT, $contentAttr, $name), 2100, 'ID=' . $contentId);
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_CONTENT,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $contentId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_UPDATE_CONTENT, $contentAttr, $name), 2401, 'ID=' . $contentId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
@@ -631,7 +635,11 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 					// 運用ログを残す
 					$contentAttr = default_contentCommonDef::$_deviceTypeName;
 					if ($this->isMultiLang && $this->langId != $this->gEnv->getDefaultLanguage()) $contentAttr .= $this->getLangName($this->langId);		// 多言語対応の場合
-					$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $contentAttr, $name), 2100, 'ID=' . $contentId);
+					//$this->gOpeLog->writeUserInfo(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $contentAttr, $name), 2100, 'ID=' . $contentId);
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_CONTENT,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->contentId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+					$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $contentAttr, $name), 2402, 'ID=' . $contentId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}

@@ -285,5 +285,109 @@ class default_newsDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		return $ret;
 	}
+	/**
+	 * コンテンツ項目をコンテンツIDで取得
+	 *
+	 * @param string  $contentType		コンテンツタイプ
+	 * @param string	$langId			言語ID
+	 * @param string	$contentId		コンテンツID
+	 * @param array     $row			レコード
+	 * @return bool						取得 = true, 取得なし= false
+	 */
+	function getContentById($contentType, $langId, $contentId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM content LEFT JOIN _login_user ON cn_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE cn_deleted = false ';	// 削除されていない
+		$queryStr .=    'AND cn_type = ? ';
+		$queryStr .=   'AND cn_id = ? ';
+		$queryStr .=   'AND cn_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($contentType, $contentId, $langId), $row);
+		return $ret;
+	}
+	/**
+	 * 商品を商品ID、言語IDで取得
+	 *
+	 * @param int		$id					商品ID
+	 * @param string	$langId				言語ID
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getProductById($id, $langId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM product LEFT JOIN product_record ON pt_id = pe_product_id AND pt_language_id = pe_language_id ';
+		$queryStr .=   'WHERE pt_deleted = false ';	// 削除されていない
+		$queryStr .=    'AND pt_visible = true ';		// 表示可能な商品
+		$queryStr .=    'AND pt_id = ? ';
+		$queryStr .=    'AND pt_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		return $ret;
+	}
+	/**
+	 * ブログ記事をエントリーIDで取得
+	 *
+	 * @param string	$id					エントリーID
+	 * @param string	$langId				言語ID
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getEntryById($id, $langId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM blog_entry ';
+		$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND be_id = ? ';
+		$queryStr .=   'AND be_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		return $ret;
+	}
+	/**
+	 * ルーム情報を識別IDで取得
+	 *
+	 * @param string	$id					識別ID
+	 * @param string	$langId				言語
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getRoomById($id, $langId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM user_content_room ';
+		$queryStr .=   'WHERE ur_deleted = false ';
+		$queryStr .=   'AND ur_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id), $row);
+		return $ret;
+	}
+	/**
+	 * イベント情報を取得
+	 *
+	 * @param int		$id					イベントID
+	 * @param string	$langId				言語
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getEventById($id, $langId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM event_entry ';
+		$queryStr .=   'WHERE ee_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND ee_id = ? ';
+		$queryStr .=   'AND ee_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		return $ret;
+	}
+	/**
+	 * フォト情報を取得
+	 *
+	 * @param int		$id					公開画像ID
+	 * @param string	$langId				言語
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getPhotoById($id, $langId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM photo LEFT JOIN _login_user ON ht_owner_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE ht_deleted = false ';
+		$queryStr .=     'AND ht_public_id = ? ';
+		$queryStr .=     'AND ht_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		return $ret;
+	}
 }
 ?>

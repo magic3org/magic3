@@ -64,16 +64,16 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('info', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * 操作要求出力
@@ -89,16 +89,16 @@ class OpeLogManager extends Core
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @param bool   $isNoTopMessageExists	トップメッセージがない場合のみログを出力($showTop=trueの場合)
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false, $detailParam = array())
+	public function writeRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop, $isNoTopMessageExists);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * ワーニング出力
@@ -114,16 +114,16 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeWarn($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeWarn($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('warn', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * 通常エラー出力
@@ -139,16 +139,16 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('error', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * 致命的エラー出力
@@ -164,16 +164,16 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeFatal($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeFatal($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('fatal', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * ユーザ操作出力
@@ -189,16 +189,16 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeUserInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeUserInfo($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('user_info', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * ユーザ操作要求出力
@@ -215,16 +215,16 @@ class OpeLogManager extends Core
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
 	 * @param bool   $isNoTopMessageExists	トップメッセージがない場合のみログを出力($showTop=trueの場合)
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeUserRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false, $detailParam = array())
+	public function writeUserRequest($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $isNoTopMessageExists = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('user_request', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop, $isNoTopMessageExists);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * ユーザ操作エラー出力
@@ -240,16 +240,16 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeUserError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeUserError($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('user_err', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * ユーザの不正なアクセスを出力
@@ -265,16 +265,16 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeUserAccess($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeUserAccess($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('user_access', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * ユーザからの不正なデータを検出
@@ -290,16 +290,16 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeUserData($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeUserData($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('user_data', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * ガイダンスメッセージ出力
@@ -314,32 +314,32 @@ class OpeLogManager extends Core
 	 * @param string $searchOption   	検索用補助データ
 	 * @param string $link		リンク先
 	 * @param bool   $showTop	メッセージをトップ表示するかどうか
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @return なし
 	 */
-	public function writeGuide($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $detailParam = array())
+	public function writeGuide($method, $msg, $code = 0, $msgExt = '', $searchOption = '', $link = '', $showTop = false, $eventParam = array())
 	{
 		// ログ出力
 		$this->db->writeErrorLog('guide', $method, $msg, $code, $msgExt, $searchOption, $link, $showTop);
 		
 		// イベントフック処理
-		$this->_opelogEventHook($code, $detailParam, $msg, $msgExt);
+		$this->_opelogEventHook($code, $eventParam, $msg, $msgExt);
 	}
 	/**
 	 * 運用ログイベントフック処理
 	 *
 	 * @param int    $code			メッセージコード
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
 	 * @param string $msg   		メッセージ
 	 * @param string $msgExt   		詳細メッセージ
 	 * @return						なし
 	 */
-	private function _opelogEventHook($code, $detailParam, $msg, $msgExt)
+	private function _opelogEventHook($code, $eventParam, $msg, $msgExt)
 	{
 		global $gInstanceManager;
 		
 		// 運用ログ用イベントフックを実行
-		$gInstanceManager->callAddonEventHook(M3_EVENT_HOOK_TYPE_OPELOG, $code, $detailParam, $msg, $msgExt);
+		$gInstanceManager->callAddonEventHook(M3_EVENT_HOOK_TYPE_OPELOG, $code, $eventParam, $msg, $msgExt);
 	}
 }
 ?>

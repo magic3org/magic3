@@ -79,33 +79,34 @@ class newsLib
 	 * 運用ログイベントフック
 	 *
 	 * @param int    $code			メッセージコード
-	 * @param array  $detailParam	詳細パラメータ
+	 * @param array  $eventParam	イベント処理用パラメータ
 	 * @param string $msg   		メッセージ
 	 * @param string $msgExt   		詳細メッセージ
 	 * @return 						なし
 	 */
-//	function _opelogEventHook($code, $detailParam, $msg, $msgExt)
-	function _opelogEventHook()
+	function _opelogEventHook($code, $eventParam, $msg, $msgExt)
+//	function _opelogEventHook()
 	{
-$args =	func_get_args();
+/*$args =	func_get_args();
 $code = $args[0];
-$detailParam = $args[1];
+$eventParam = $args[1];
 $msg  = $args[2];
-$msgExt  = $args[3];
+$msgExt  = $args[3];*/
+//		list($code, $eventParam, $msg, $msgExt) = func_get_args();
+		
 		// コンテンツの追加、更新の場合は、新着情報を作成する
 		switch ($code){
 			case 2400:		// コンテンツ追加
 			case 2401:		// コンテンツ更新
 			// case 2402:	// コンテンツ削除
-/*				$contentType = $detailParam[M3_EVENT_HOOK_PARAM_CONTENT_TYPE];
-				$contentId = $detailParam[M3_EVENT_HOOK_PARAM_CONTENT_ID];
-				$regDt = $detailParam[M3_EVENT_HOOK_PARAM_REGIST_DT];
+				$contentType	= $eventParam[M3_EVENT_HOOK_PARAM_CONTENT_TYPE];		// コンテンツタイプ
+				$contentId		= $eventParam[M3_EVENT_HOOK_PARAM_CONTENT_ID];			// コンテンツID
+				$updateDt		= $eventParam[M3_EVENT_HOOK_PARAM_UPDATE_DT];			// コンテンツ更新日時
 				$url = '';
-				$this->db->addNewsItem($contentType, $contentId, $this->configArray[FD_DEFAULT_MESSAGE], $url, $regDt, $newSerial);
-				*/
+				$this->db->addNewsItem($contentType, $contentId, $this->configArray[self::FD_DEFAULT_MESSAGE], $url, $updateDt, $newSerial);
 				break;
 		}
-	echo $code."-----";
+echo $code.'***';
 	}
 }
 ?>
