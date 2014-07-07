@@ -23,6 +23,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	private $contentType;		// 選択中のコンテンツタイプ
 	private $status;			// メッセージ状態(0=非公開、1=公開)
 	private $statusTypeArray;	// コメント状態メニュー作成用
+	private $firstNo;		// 一覧の先頭の番号
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
@@ -389,8 +390,8 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		// シリアル番号
-		$serial = $fetchedRow['nw_serial'];
+		$serial = $fetchedRow['nw_serial'];// シリアル番号
+		$no = $this->firstNo + $index;
 		
 		// 公開状態
 		if ($fetchedRow['nw_visible']){		// コンテンツが公開状態のとき
@@ -425,6 +426,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$row = array(
 			'index' => $index,		// 項目番号
 			'serial' => $serial,			// シリアル番号
+			'no'	=> $no,			// 項目番号(表示用)
 			'id'	=> $this->convertToDispString($fetchedRow['nw_id']),		// ID
 			'message' => $this->convertToDispString($message),		// メッセージ
 			'status_img' => $statusImg,													// 公開状況

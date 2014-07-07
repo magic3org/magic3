@@ -157,7 +157,8 @@ $(function(){
     <thead>
     <tr>
         <th width="4%"><span {_HELP_NEWS_CHECK}>選択</span></th>
-        <th width="70%"><span {_HELP_NEWS_CONTENT_NAME}>メッセージ</span></th>
+		<th width="4%"><span {_HELP_NEWS_NO}>No</span></th>
+        <th width="65%"><span {_HELP_NEWS_CONTENT_NAME}>メッセージ</span></th>
 		<th width="5%"><span {_HELP_NEWS_STATUS}>状態</span></th>
 	    <th><span {_HELP_NEWS_DT}>登録日時</span></th>
 	</tr>
@@ -166,6 +167,7 @@ $(function(){
     <patTemplate:tmpl name="itemlist">
     <tr>
 	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+		<td align="center">{NO}</td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{MESSAGE}</a></td>
 		<td align="center">{STATUS_IMG}</td>
 	    <td align="center">{DATE}</td>
