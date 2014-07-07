@@ -153,6 +153,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.allowedContent = true;		// ACF(Advanced Content Filter)を使用しない。SCRIPT,IFRAMEタグ等許可。
 //	config.extraAllowedContent = 'iframe';
 //	config.autoGrow_maxHeight = 800;		// 指定サイズまで入力に合わせて拡大
+	config.protectedSource.push(/<i[^>]*><\/i>/g);	// iタグ許可
 	
 	// KCFinderの設定
 	config.filebrowserBrowseUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=file';
