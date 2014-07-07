@@ -15,6 +15,7 @@
  */
 require_once($gEnvManager->getContainerPath() . '/baseRssContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/whatsnewDb.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/whatsnewCommonDef.php');
 
 class rss_whatsnewWidgetContainer extends BaseRssContainer
 {
@@ -23,12 +24,11 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 	private $isExistsList;				// リスト項目が存在するかどうか
 	private $rssChannel;				// RSSチャンネル部出力データ
 	private $rssSeqUrl = array();					// 項目の並び
-	private $defaultUrl;	// システムのデフォルトURL
+	private $configArray;		// 新着情報定義値
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
 	const DEFAULT_TITLE = '新着情報';		// デフォルトのウィジェットタイトル名
-	const DEFAULT_CATEGORY_NAME = 'カテゴリ未選択';		// デフォルトのカテゴリ名
-	const DEFAULT_DESC = 'ブログカテゴリ(%s)の最新の記事が取得できます。';
+	const DEFAULT_DESC = 'サイトの最新情報が取得できます。';
 	
 	/**
 	 * コンストラクタ
@@ -43,6 +43,9 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 				
 		// DBオブジェクト作成
 		$this->db = new whatsnewDb();
+		
+		// 共通定義値取得
+		$this->configArray = whatsnewCommonDef::loadConfig($this->db);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -88,7 +91,6 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 		}
 		
 		// RSS配信を行わないときは終了
-		//if (empty($useRss)) $this->cancelParse();		// 出力しない
 		if (empty($useRss)){
 			// ページ作成処理中断
 			$this->gPage->abortPage();
@@ -98,8 +100,6 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 		}
 		
 		// 一覧を作成
-		$this->defaultUrl = $this->gEnv->getDefaultUrl();
-		//$this->db->getEntryItems($itemCount, $langId, $categoryId, $now, array($this, 'itemLoop'));
 		$this->db->getNewsList('', $itemCount, 1, array($this, 'itemLoop'));
 				
 		// 画面にデータを埋め込む
@@ -107,10 +107,10 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 		
 		// RSSチャンネル部出力データ作成
 		$linkUrl = $this->getUrl($this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId()));
-		$this->rssChannel = array(	'title' => self::DEFAULT_TITLE,		// タイトル
-									'link' => $linkUrl,					// RSS配信用URL
-									'description' => sprintf(self::DEFAULT_DESC, $categoryName),// 説明
-									'seq' => $this->rssSeqUrl);			// 項目の並び
+		$this->rssChannel = array(	'title'			=> self::DEFAULT_TITLE,		// タイトル
+									'link'			=> $linkUrl,					// RSS配信用URL
+									'description'	=> self::DEFAULT_DESC,// 説明
+									'seq'			=> $this->rssSeqUrl);			// 項目の並び
 	}
 	/**
 	 * RSSのチャンネル部出力
@@ -135,18 +135,28 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 	 */
 	function itemLoop($index, $fetchedRow)
 	{
-		$totalViewCount = $fetchedRow['total'];
-		$name = $fetchedRow['be_name'];
-
-		// 記事へのリンク
-		$linkUrl = $this->getUrl($this->defaultUrl . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id'], true);
+		// コンテンツタイトル取得
+		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
+		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
+		if (!empty($contentType) && !empty($contentId)){
+			$contentTitle = whatsnewCommonDef::getContentTitle($this->db, $this->langId, $contentType, $contentId);
+		} else {
+			$contentTitle = $fetchedRow['nw_name'];	// コンテンツタイトル
+		}
 		
-		if (!empty($name)){
+		// リンク先URL
+		$linkUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $fetchedRow['nw_url']);		// URLを修正
+		
+		// メッセージ
+		$message = $fetchedRow['nw_message'];
+		$keyTag = M3_TAG_START . M3_TAG_MACRO_TITLE . M3_TAG_END;
+		$message = str_replace($keyTag, $contentTitle, $message);// タイトルを変換
+		
+		if (!empty($message)){
 			$row = array(
-				'total' => $totalViewCount,		// 閲覧数
 				'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
-				'name' => $this->convertToDispString($name),			// タイトル
-				'date' => getW3CDate($fetchedRow['be_regist_dt'])		// 投稿日時
+				'name' => $this->convertToDispString($message),			// メッセージ
+				'date' => getW3CDate($fetchedRow['nw_regist_dt'])		// 登録日時
 			);
 			$this->tmpl->addVars('itemlist', $row);
 			$this->tmpl->parseTemplate('itemlist', 'a');
