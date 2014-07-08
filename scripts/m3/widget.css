@@ -41,6 +41,15 @@
 	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 	line-height:1.428571429;
 	letter-spacing:normal;
+	
+	user-select:none; /* CSS3 */
+	-webkit-user-select:none; /* Safari、Chromeなど */
+	-moz-user-select:none; /* Firefox */
+	-ms-user-select: none; /* IE10 */
+	-khtml-user-select:none;
+	-webkit-user-drag:none;
+	-khtml-user-drag:none;
+	-webkit-touch-callout:none;
 }
 .m3_widgetpos_box .m3_widgetpos_box_title {
 /*	background-color:#555;*/
