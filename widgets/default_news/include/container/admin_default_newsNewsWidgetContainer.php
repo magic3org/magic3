@@ -408,27 +408,32 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
 		if (!empty($contentType) && !empty($contentId)){
 			list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
+			if ($contentTitle == self::UNKNOWN_CONTENT){
+				$contentTitle = '<span class="error">' . $this->convertToDispString($contentTitle) . '</span>';
+			} else {
+				$contentTitle = $this->convertToDispString($contentTitle);
+			}
 		} else {
-			$contentTitle = $fetchedRow['nw_name'];	// コンテンツタイトル
+			$contentTitle = $this->convertToDispString($fetchedRow['nw_name']);	// コンテンツタイトル
 		}
 				
 		// メッセージ
-		$message = $fetchedRow['nw_message'];
+		$message = $this->convertToDispString($fetchedRow['nw_message']);
 		$keyTag = M3_TAG_START . M3_TAG_MACRO_TITLE . M3_TAG_END;
 		$message = str_replace($keyTag, $contentTitle, $message);// タイトルを変換
 				
-		if (function_exists('mb_strimwidth')){
+/*		if (function_exists('mb_strimwidth')){
 			$message = mb_strimwidth($message, 0, self::MESSAGE_SIZE, '…');
 		} else {
 			$message = substr($message, 0, self::MESSAGE_SIZE) . '...';
-		}
+		}*/
 		
 		$row = array(
 			'index' => $index,		// 項目番号
 			'serial' => $serial,			// シリアル番号
 			'no'	=> $no,			// 項目番号(表示用)
 			'id'	=> $this->convertToDispString($fetchedRow['nw_id']),		// ID
-			'message' => $this->convertToDispString($message),		// メッセージ
+			'message' => $message,		// メッセージ
 			'status_img' => $statusImg,													// 公開状況
 			'date' => $this->convertToDispDateTime($fetchedRow['nw_regist_dt'])	// 投稿日時
 		);
