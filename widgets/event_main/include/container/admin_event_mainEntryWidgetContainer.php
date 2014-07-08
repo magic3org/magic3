@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -166,6 +166,18 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				}
 			}
 			if (count($delItems) > 0){
+				// 削除するイベント記事の情報を取得
+				$delEntryInfo = array();
+				for ($i = 0; $i < count($delItems); $i++){
+					$ret = self::$_mainDb->getEntryBySerial($delItems[$i], $row, $categoryRow);
+					if ($ret){
+						$newInfoObj = new stdClass;
+						$newInfoObj->entryId = $row['ee_id'];		// 記事ID
+						$newInfoObj->name = $row['ee_name'];		// 記事タイトル
+						$delEntryInfo[] = $newInfoObj;
+					}
+				}
+				
 				$ret = self::$_mainDb->delEntryItem($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
@@ -177,6 +189,15 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					
 					// 親ウィンドウを更新
 					$this->gPage->updateParentWindow();
+					
+					// 運用ログを残す
+					for ($i = 0; $i < count($delEntryInfo); $i++){
+						$infoObj = $delEntryInfo[$i];
+						$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
+												M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->entryId,
+												M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+						$this->writeUserInfoEvent(__METHOD__, 'イベント記事を削除しました。タイトル: ' . $infoObj->name, 2402, 'ID=' . $infoObj->entryId, $eventParam);
+					}
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
@@ -330,7 +351,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		if ($act == 'select'){		// 一覧から選択のとき
 			//if ($act == 'select') $this->langId = $defaultLangId;		// 言語は一旦リセット
 			
-			// 登録済みのブログ記事を取得
+			// 登録済みのイベント記事を取得
 			//$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);
 			//if (empty($this->serialNo)){
 			//	// 取得できないときは初期化
@@ -394,6 +415,26 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					
 					// 親ウィンドウを更新
 					$this->gPage->updateParentWindow();
+					
+					// 運用ログを残す
+					$statusStr = '';
+					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
+					if ($ret){
+						$entryId = $row['ee_id'];		// 記事ID
+						$name = $row['ee_name'];		// コンテンツ名前
+						$updateDt = $row['ee_create_dt'];		// 作成日時
+						
+						// 公開状態
+						switch ($row['ee_status']){
+							case 1:	$statusStr = '編集中';	break;
+							case 2:	$statusStr = '公開';	break;
+							case 3:	$statusStr = '非公開';	break;
+						}
+					}
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2400, 'ID=' . $entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
@@ -436,6 +477,26 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					
 					// 親ウィンドウを更新
 					$this->gPage->updateParentWindow();
+					
+					// 運用ログを残す
+					$statusStr = '';
+					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
+					if ($ret){
+						$entryId = $row['ee_id'];		// 記事ID
+						$name = $row['ee_name'];		// コンテンツ名前
+						$updateDt = $row['ee_create_dt'];		// 作成日時
+						
+						// 公開状態
+						switch ($row['ee_status']){
+							case 1:	$statusStr = '編集中';	break;
+							case 2:	$statusStr = '公開';	break;
+							case 3:	$statusStr = '非公開';	break;
+						}
+					}
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を更新(' . $statusStr . ')しました。タイトル: ' . $name, 2401, 'ID=' . $entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
@@ -446,6 +507,13 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			}
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
+				// 削除するイベント記事の情報を取得
+				$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
+				if ($ret){
+					$entryId = $row['ee_id'];		// 記事ID
+					$name = $row['ee_name'];		// コンテンツ名前
+				}
+				
 				$ret = self::$_mainDb->delEntryItem(array($this->serialNo));
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
@@ -455,6 +523,12 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					
 					// 親ウィンドウを更新
 					$this->gPage->updateParentWindow();
+					
+					// 運用ログを残す
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を削除しました。タイトル: ' . $name, 2402, 'ID=' . $entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
@@ -465,6 +539,13 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			}
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
+				// 削除するイベント記事の情報を取得
+				$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
+				if ($ret){
+					$entryId = $row['ee_id'];		// 記事ID
+					$name = $row['ee_name'];		// コンテンツ名前
+				}
+				
 				$ret = self::$_mainDb->delEntryItemById($this->serialNo);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
@@ -474,13 +555,19 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					
 					// 親ウィンドウを更新
 					$this->gPage->updateParentWindow();
+					
+					// 運用ログを残す
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を削除しました。タイトル: ' . $name, 2402, 'ID=' . $entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
 			}
 		} else {	// 初期画面表示のとき
 			// 初期値設定
-			// 所属ブログIDは親ウィンドウから引き継ぐ
+			// 所属イベントIDは親ウィンドウから引き継ぐ
 			$start_date = date("Y/m/d");		// 開催日付
 			$start_time = date("H:i:s");		// 開催時間
 			$showComment = 1;				// コメントを表示するかどうか
