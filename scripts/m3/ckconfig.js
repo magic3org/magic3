@@ -122,9 +122,8 @@ CKEDITOR.editorConfig = function(config){
 	// ツールバーの設定
 	if (M3_USE_GOOGLEMAPS){			// GoogleMapsを使用する場合
 		config.toolbar_Full = [
-			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
-			{ name: 'document', items: [ 'Source', 'Templates' ] },
-			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
+			{ name: 'clipboard', items: [ 'Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 			{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
 			{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
 			{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
@@ -139,9 +138,8 @@ CKEDITOR.editorConfig = function(config){
 		];
 	} else {
 		config.toolbar_Full = [
-			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
-			{ name: 'document', items: [ 'Source', 'Templates' ] },
-			{ name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
+			{ name: 'clipboard', items: [ 'Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 			{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
 			{ name: 'insert', items: [ 'Image', 'Flash', /*'YouTube', 'Googlemaps',*/ 'Table', 'HorizontalRule' ] },
 			{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
