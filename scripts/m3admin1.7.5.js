@@ -186,30 +186,6 @@ function m3OpenImageFileBrowser(seturl_callback)
 	});
 }
 /**
- * 画像ファイルブラウザを表示(廃止予定)
- *
- * @return なし
- */
-function m3_openImageFileBrowser()
-{
-	var imageConnector = 'connectors/php/connector.php';
-	var imageBrowser = M3_ROOT_URL + '/scripts/fckeditor2.6.6/editor/plugins/FileBrowser_Thumbnail/browser.html?Type=Image&Lang=ja&Connector=' + imageConnector;
-	var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes";
-	var screenWidth, screenHeight;
-	var width, height;
-	try
-	{
-		screenWidth	= screen.width;
-		screenHeight	= screen.height;
-	} catch (e){
-		screenWidth		= 800;
-		screenHeight	= 600;
-	}
-	width	= screenWidth * 0.7;
-	height	= screenHeight * 0.7;
-	window.open(imageBrowser, 'FCKBrowseWindow', sOptions + ",width=" + width + ",height=" + height);
-}
-/**
  * Flashファイルブラウザを表示
  *
  * @param function	seturl_callback	コールバック関数
@@ -239,30 +215,6 @@ function m3OpenFlashFileBrowser(seturl_callback)
 			}).elfinder('instance');
 		}
 	});
-}
-/**
- * Flashファイルブラウザを表示(廃止予定)
- *
- * @return なし
- */
-function m3_openFlashFileBrowser()
-{
-	var imageConnector = 'connectors/php/connector.php';
-	var imageBrowser = M3_ROOT_URL + '/scripts/fckeditor2.6.6/editor/plugins/FileBrowser_Thumbnail/browser.html?Type=Flash&Lang=ja&Connector=' + imageConnector;
-	var sOptions = "toolbar=no,status=no,resizable=yes,dependent=yes,scrollbars=yes";
-	var screenWidth, screenHeight;
-	var width, height;
-	try
-	{
-		screenWidth	= screen.width;
-		screenHeight	= screen.height;
-	} catch (e){
-		screenWidth		= 800;
-		screenHeight	= 600;
-	}
-	width	= screenWidth * 0.7;
-	height	= screenHeight * 0.7;
-	window.open(imageBrowser, 'FCKBrowseWindow', sOptions + ",width=" + width + ",height=" + height);
 }
 /**
  * TextAreaをHTMLエディターに変更
@@ -579,20 +531,20 @@ $(function(){
 
 		scrollup:function(){
 			if (!this.cssfixedsupport) //if control is positioned using JavaScript
-				this.$control.css({opacity:0}); //hide control immediately after clicking it
+				this.$control.css({ opacity:0 }); //hide control immediately after clicking it
 			var dest = isNaN(this.setting.scrollto) ? this.setting.scrollto : parseInt(this.setting.scrollto);
 			if (typeof dest == "string" && $('#'+dest).length == 1) //check element set by string exists
 				dest=$('#'+dest).offset().top;
 			else
 				dest=0;
-			this.$body.animate({scrollTop: dest}, this.setting.scrollduration);
+			this.$body.animate({ scrollTop: dest }, this.setting.scrollduration);
 		},
 
 		keepfixed:function(){
 			var $window=$(window);
 			var controlx=$window.scrollLeft() + $window.width() - this.$control.width() - this.controlattrs.offsetx;
 			var controly=$window.scrollTop() + $window.height() - this.$control.height() - this.controlattrs.offsety;
-			this.$control.css({left:controlx+'px', top:controly+'px'});
+			this.$control.css({ left:controlx+'px', top:controly+'px' });
 		},
 
 		togglecontrol:function(){
@@ -600,11 +552,11 @@ $(function(){
 			if (!this.cssfixedsupport) this.keepfixed();
 			this.state.shouldvisible = (scrolltop >= this.setting.startline) ? true : false;
 			if (this.state.shouldvisible && !this.state.isvisible){
-				this.$control.stop().animate({opacity:1}, this.setting.fadeduration[0]);
+				this.$control.stop().animate({ opacity:1 }, this.setting.fadeduration[0]);
 				this.state.isvisible = true;
 			}
 			else if (this.state.shouldvisible == false && this.state.isvisible){
-				this.$control.stop().animate({opacity:0}, this.setting.fadeduration[1]);
+				this.$control.stop().animate({ opacity:0 }, this.setting.fadeduration[1]);
 				this.state.isvisible = false;
 			}
 		},
@@ -626,7 +578,7 @@ $(function(){
 				$('a[href="' + mainobj.anchorkeyword + '"]').click(function(){
 					mainobj.scrollup();
 					return false;
-				})
+				});
 				$(window).bind('scroll resize', function(e){
 					mainobj.togglecontrol();
 				});
