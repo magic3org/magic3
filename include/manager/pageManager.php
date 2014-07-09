@@ -177,7 +177,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.4.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.5.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.3.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.5.js';			// 一般、管理機能共通スクリプト
@@ -2201,14 +2201,14 @@ class PageManager extends Core
 					// ##### ヘルプシステムの組み込み #####
 					// ヘルプシステムはすべての初期処理完了後に実行する
 					// ヘルプシステムは、「span」タグで埋め込み、「title」属性を使用する
-					if ($this->useHelp){			// ヘルプ表示のとき
+/*					if ($this->useHelp){			// ヘルプ表示のとき
 						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').cluetip({splitTitle: \'|\', cluezIndex: 2000});' . M3_NL;
 						//if ($cmd != M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示以外のとき
 							$initScript .= M3_INDENT_SPACE . 'if (jQuery().tooltip) $(\'[rel=m3help]\').tooltip({ placement: \'top\'});' . M3_NL;		// Bootstrapツールチップ。タイトルのみ表示。
 						//}
 					} else {			// ヘルプ非表示のときは、title属性をクリアする
 						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').attr(\'title\', \'\');' . M3_NL;
-					}
+					}*/
 				}
 			} else {		// 通常画面のとき
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
