@@ -82,7 +82,7 @@ INSERT INTO _nav_item
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
 (pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,       pd_config_id, pd_config_name,       pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
-('index', '',        'left',         2,        'default_menu',     1,            'メインメニュー設定', 'main_menu', true,             now()),
+('index', '',        'user3',        2,        'default_menu',     1,            'メインメニュー設定', 'main_menu', true,             now()),
 ('index', '',        'left',         8,        'templateChanger',  0,            '',                   '',          true,             now()),
 ('index', 'content', 'left',         10,       'access_count',     0,            '',                   '',          true,        now()),
 ('index', 'content', 'main',         6,       'default_content',   0,            '',                   '',          false,        now()),
