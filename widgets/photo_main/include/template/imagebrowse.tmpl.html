@@ -137,7 +137,7 @@ function createDir()
 }
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
@@ -146,23 +146,23 @@ function createDir()
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="path" value="{PATH}" />
-<table width="90%">
+<table>
 <tr><td>
 <label><span {_HELP_IMAGEBROWSE_PATH}>{_LC_LABEL_PATH}</span> {PATH_LINK}</label>
 </td><td align="right"><span {_HELP_USERLIST_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /></span><span {_HELP_IMAGEBROWSE_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_DISABLED}/></span></td></tr>
 <tr><td colspan="2">
-<table id="filelist" class="simple-table" width="100%">
+<table id="filelist" class="simple-table" style="width:100%;">
     <thead>
         <tr>
 	    <th width="35"><span {_HELP_IMAGEBROWSE_CHECK}>{_LC_LABEL_CHECK}</span></th>
 	    <th width="30" style="border-right:none;"></th>
-	    <th width="40%" style="border-left:none;"><span {_HELP_IMAGEBROWSE_FILENAME}>{_LC_LABEL_FILENAME}</span></th>
-	    <th width="30"><span {_HELP_IMAGEBROWSE_STATUS}>{_LC_LABEL_STATUS}</span></th>
+	    <th style="border-left:none;"><span {_HELP_IMAGEBROWSE_FILENAME}>{_LC_LABEL_FILENAME}</span></th>
+	    <th width="35"><span {_HELP_IMAGEBROWSE_STATUS}>{_LC_LABEL_STATUS}</span></th>
 	    <th width="10%"><span {_HELP_IMAGEBROWSE_IMAGE_CODE}>{_LC_LABEL_IMAGE_CODE}</span></th>
 	    <th width="7%"><span {_HELP_IMAGEBROWSE_SIZE}>{_LC_LABEL_SIZE}</span></th>
 	    <th width="7%"><span {_HELP_IMAGEBROWSE_VIEW_COUNT}>{_LC_LABEL_VIEW_COUNT}</span></th>
 	    <th width="7%"><span {_HELP_IMAGEBROWSE_RATE}>{_LC_LABEL_RATE}</span></th>
-	    <th><span {_HELP_IMAGEBROWSE_DATE}>{_LC_LABEL_DATE}</span></th>
+	    <th width="13%"><span {_HELP_IMAGEBROWSE_DATE}>{_LC_LABEL_DATE}</span></th>
 	</tr>
     </thead>
     <tbody>

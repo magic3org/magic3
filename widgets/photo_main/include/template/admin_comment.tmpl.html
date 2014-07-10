@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_comment.tmpl.html 6036 2013-05-25 13:16:49Z fishbone $
  * @link       http://www.magic3.org
@@ -113,7 +113,7 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
@@ -123,7 +123,7 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="entrylist" value="{ENTRY_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
-<table width="90%">
+<table>
 <!--
 <tr><td colspan="2">
 <span {_HELP_COMMENT_SEARCH}><label>コメント検索</label></span>
@@ -150,7 +150,7 @@ $(function(){
 <td align="right"><span {_HELP_COMMENT_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_COMMENT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
 </td></tr>
 <tr><td colspan="2">
-<table id="commentlist" class="simple-table" width="100%">
+<table id="commentlist" class="simple-table" style="margin:0 auto;width:950px;">
     <thead>
         <tr>
             <th width="35"><span {_HELP_COMMENT_CHECK}>選択</span></th>

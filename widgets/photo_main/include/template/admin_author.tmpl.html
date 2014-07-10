@@ -76,7 +76,7 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
@@ -85,13 +85,13 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
-<table width="90%">
+<table>
 <tr><td><label><span {_HELP_AUTHOR}>{_LC_LABEL_AUTHOR}</span></label></td>
 <td align="right"><span {_HELP_AUTHOR_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="{_LC_LABEL_NEW}" /></span><span {_HELP_AUTHOR_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /></span><span {_HELP_AUTHOR_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" /></span>
 </td></tr>
 <tr><td colspan="2">
 
-<table id="authorlist" class="simple-table" width="100%">
+<table id="authorlist" class="simple-table" style="margin:0 auto;width:950px;">
     <thead>
         <tr>
 	    <th width="35"><span {_HELP_AUTHOR_CHECK}>{_LC_LABEL_CHECK}</span></th>

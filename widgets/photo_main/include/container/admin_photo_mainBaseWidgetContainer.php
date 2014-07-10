@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_photo_mainBaseWidgetContainer.php 5599 2013-02-06 11:47:30Z fishbone $
  * @link       http://www.magic3.org
@@ -232,7 +232,7 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 
 		// 作成データの埋め込み
 		$linkList = '<div id="configmenu-top"><label>' . 'フォトギャラリー' . $linkList . '</div>';
-		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
+		$outputText .= '<table><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
 	}
 	/**

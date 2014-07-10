@@ -2428,7 +2428,7 @@ class PageManager extends Core
 							'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
 			}
 		}
-		echo '<div class="row">' . M3_NL;
+//		echo '<div class="row">' . M3_NL;
 		echo '<!-- Widget Start -->' . M3_NL;
 	}
 	/**
@@ -2441,7 +2441,7 @@ class PageManager extends Core
 		// ウィジェット単体表示のときのみ出力
 		if (!$this->showWidget) return;
 		
-		echo '</div>' . M3_NL;
+//		echo '</div>' . M3_NL;			// row
 		echo '<!-- Widget End -->' . M3_NL;
 		
 		// ##### ウィジェットからの指定による処理 #####
