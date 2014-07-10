@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_photo_mainImagebrowseWidgetContainer.php 5630 2013-02-10 11:08:39Z fishbone $
  * @link       http://www.magic3.org
@@ -42,6 +42,9 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 	const DEFAULT_IMAGE_TYPE = IMAGETYPE_JPEG;
 	const THUMBNAIL_DIR = '/widgets/photo/image';		// 画像格納ディレクトリ
 	const IMAGE_QUALITY = 100;			// 生成画像の品質(0～100)
+	const LOG_MSG_ADD_CONTENT		= 'フォトコンテンツを追加しました。タイトル: %s';
+	const LOG_MSG_UPDATE_CONTENT	= 'フォトコンテンツを更新しました。タイトル: %s';
+	const LOG_MSG_DEL_CONTENT		= 'フォトコンテンツを削除しました。タイトル: %s';
 	
 	/**
 	 * コンストラクタ
@@ -246,7 +249,19 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 								$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, 0/*新規追加*/, $this->langId, $filename, $relativePath, $code, $imageMimeType,
 												$imageSize, $originalFilename, $filesize, $name, $camera, $location, $date, $summary, $description, $license, $this->userId, 
 												$keyword, $visible, 0/*ソート順*/, array()/*画像カテゴリー*/, $thumbFilename, $newSerial);
-								if (!$ret){
+								if ($ret){
+									// 運用ログを追加
+									$ret = self::$_mainDb->getPhotoInfoBySerial($newSerial, $row, $categoryRows);
+									if ($ret){
+										$photoId = $row['ht_public_id'];
+										$name = $row['ht_name'];
+										$updateDt = $row['ht_create_dt'];		// コンテンツ作成日時
+									}
+									$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_PHOTO,
+															M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $photoId,
+															M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+									$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_ADD_CONTENT, $name), 2400, 'ID=' . $photoId, $eventParam);
+								} else {
 									$isErr = true;
 									$this->writeError(__METHOD__, 'アップロード画像のデータ登録に失敗しました。', 1100, '元のファイル名=' . $originalFilename);
 								}
@@ -280,6 +295,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			$delPhotos = array();	// 写真ID
 			$delFiles = array();	// ファイル名
 			$delSystemFiles = array();		// 削除するシステム用画像ファイル
+			$delPhotoInfo = array();		// 削除するフォトコンテンツ情報
 			for ($i = 0; $i < count($listedItem); $i++){
 				// 項目がチェックされているかを取得
 				$itemName = 'item' . $i . '_selected';
@@ -299,6 +315,11 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 									$delItems[] = $serial;
 									$delPhotos[] = $filename;		// 写真ID
 									$delSystemFiles[] = $row['ht_thumb_filename'];
+									
+									$newInfoObj = new stdClass;
+									$newInfoObj->photoId = $row['ht_public_id'];// フォトID
+									$newInfoObj->name = $row['ht_name'];		// フォト名
+									$delPhotoInfo[] = $newInfoObj;
 								}
 							}
 						}
@@ -330,17 +351,19 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 					}
 					// 公開画像、サムネールを削除
 					$ret = $this->deleteImages($delPhotos, $delSystemFiles);
-					/*for ($i = 0; $i < count($delPhotos); $i++){
-						// サムネール削除
-						$thumbnailPath = photo_mainCommonDef::getThumbnailPath($delPhotos[$i]);
-						if (!@unlink($thumbnailPath)) $ret = false;
-						$publicImagePath = photo_mainCommonDef::getPublicImagePath($delPhotos[$i]);
-						if (!@unlink($publicImagePath)) $ret = false;
-					}*/
 				}
 				if ($ret){		// ファイル削除成功のとき
 					//$this->setGuidanceMsg('ファイルを削除しました');
 					$this->setGuidanceMsg($this->_('Files deleted.'));			// ファイルを削除しました
+					
+					// 運用ログを残す
+					for ($i = 0; $i < count($delPhotoInfo); $i++){
+						$infoObj = $delPhotoInfo[$i];
+						$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_PHOTO,
+												M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->photoId,
+												M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+						$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $infoObj->name), 2402, 'ID=' . $infoObj->photoId, $eventParam);
+					}
 				} else {
 					//$this->setAppErrorMsg('ファイル削除に失敗しました');
 					$this->setAppErrorMsg($this->_('Failed in deleting files.'));			// ファイル削除に失敗しました
@@ -533,6 +556,18 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
 					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再読み込み
+					
+					// 運用ログを残す
+					$ret = self::$_mainDb->getPhotoInfoBySerial($newSerial, $row, $categoryRows);
+					if ($ret){
+						$photoId = $row['ht_public_id'];
+						$name = $row['ht_name'];
+						$updateDt = $row['ht_create_dt'];		// コンテンツ作成日時
+					}
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_PHOTO,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $photoId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_UPDATE_CONTENT, $name), 2401, 'ID=' . $photoId, $eventParam);
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating item.'));		// データ更新に失敗しました
 				}
@@ -545,7 +580,9 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 				$imagePath = $this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR . $row['ht_dir'] . DIRECTORY_SEPARATOR . $row['ht_public_id'];
 				$delFiles = array($imagePath);	// ファイル名
 				$delSystemFiles = array($row['ht_thumb_filename']);		// 削除するシステム用画像ファイル
-				
+				$photoId = $row['ht_public_id'];
+				$name = $row['ht_name'];
+						
 				// 写真情報削除
 				$ret = self::$_mainDb->delPhotoInfo($delItems);
 				if ($ret){
@@ -566,16 +603,16 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 					}
 					// 公開画像、サムネールを削除
 					$ret = $this->deleteImages($delPhotos, $delSystemFiles);
-					/*for ($i = 0; $i < count($delPhotos); $i++){
-						$thumbnailPath = photo_mainCommonDef::getThumbnailPath($delPhotos[$i]);
-						if (!@unlink($thumbnailPath)) $ret = false;
-						$publicImagePath = photo_mainCommonDef::getPublicImagePath($delPhotos[$i]);
-						if (!@unlink($publicImagePath)) $ret = false;
-					}*/
 				}
 				if ($ret){		// ファイル削除成功のとき
 					//$this->setGuidanceMsg('ファイルを削除しました');
 					$this->setGuidanceMsg($this->_('Files deleted.'));			// ファイルを削除しました
+					
+					// 運用ログを残す
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_PHOTO,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $photoId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+					$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_DEL_CONTENT, $name), 2402, 'ID=' . $photoId, $eventParam);
 				} else {
 					//$this->setAppErrorMsg('ファイル削除に失敗しました');
 					$this->setAppErrorMsg($this->_('Failed in deleting files.'));			// ファイル削除に失敗しました
