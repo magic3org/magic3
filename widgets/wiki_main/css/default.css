@@ -344,7 +344,9 @@ span.calendar_viewer_right {
 	background-color:inherit;
 	float:right;
 }
-
+div.toolbar img {
+	border:none;
+}
 /***** add for magic3 *****/
 textarea.wiki_edit {
 	width: 100%;
