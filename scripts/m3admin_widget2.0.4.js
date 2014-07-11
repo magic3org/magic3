@@ -408,7 +408,7 @@
 	$(function(){
 		var widgetWindow = '';
 		widgetWindow += '<div id="m3slidepanel">';
-		widgetWindow += '<div class="m3panelopener m3topleft"><a href="#"><i class="glyphicon glyphicon-th-list"></i></a></div>';
+		widgetWindow += '<div class="m3panelopener m3topleft"><a href="#"><i class="glyphicon glyphicon-th-list" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェット一覧"></i></a></div>';
 		widgetWindow += '<div style="left:-240px; visibility:visible;" class="m3panel_left m3-navbar-default">';
 		widgetWindow += '<div class="m3paneltab">';
 		widgetWindow += '<ul>';
@@ -452,7 +452,7 @@
 		
 		// 画面リサイズボタン(右上)
 		if (!(window.parent && window.parent.frames.length == 0)){			// 親ウィンドウありの場合
-			widgetWindow += '<div class="m3resizer m3topright"><a href="#"><i class="glyphicon"></i></a></div>';
+			widgetWindow += '<div class="m3resizer m3topright"><a href="#"><i class="glyphicon" rel="m3help" data-placement="bottom" data-container="body" title="画面の拡大縮小"></i></a></div>';
     	}
 		
 		$("body").append(widgetWindow);

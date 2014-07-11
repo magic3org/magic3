@@ -164,7 +164,7 @@ CKEDITOR.editorConfig = function(config){
 	config.stylesCombo_stylesSet = 'default';
 	
 	// メッセージの変更
-	config.image_previewText = '<strong>「サーバーブラウザー」ボタン</strong>をクリックすると画像ブラウザが立ち上がり、サムネール表示の画像をダブルクリックすると取得できます。画像をアップロードするには、画像ブラウザ上部の「アップロード」ボタンをクリックするか、画像ブラウザ上へ画像ファイルをドロップします。';
+	config.image_previewText = '<strong>「サーバーブラウザー」ボタン</strong>をクリックすると画像ブラウザが立ち上がります。サムネール表示の画像をダブルクリックすると画像が取得できます。画像をアップロードするには、画像ブラウザ上部の「アップロード」ボタンをクリックするか、画像ブラウザ上へ画像ファイルをドロップします。';
 	
 	// 追加プラグインの設定
 //	config.extraPlugins = 'youtube,googlemaps';

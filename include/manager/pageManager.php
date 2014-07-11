@@ -160,10 +160,10 @@ class PageManager extends Core
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
-	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー)
-	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メインウィジェット"></i> ';		// ウィジェットの機能マーク(メインウィジェット)
-	const WIDGET_MARK_NAVMENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー"></i> ';		// ウィジェットの機能マーク(ナビゲーションメニュー)
-	const WIDGET_FUNCTION_MARK_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型">B</span>';			// ウィジェット機能マーク(Boostrap型テンプレート
+	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー" data-placement="auto"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー)
+	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メインウィジェット" data-placement="auto"></i> ';		// ウィジェットの機能マーク(メインウィジェット)
+	const WIDGET_MARK_NAVMENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー" data-placement="auto"></i> ';		// ウィジェットの機能マーク(ナビゲーションメニュー)
+	const WIDGET_FUNCTION_MARK_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型" data-placement="auto">B</span>';			// ウィジェット機能マーク(Boostrap型テンプレート
 	const WIDGET_STYLE_NAVMENU = '_navmenu';		// ウィジェットの表示スタイル(ナビゲーションメニュー)
 			
 	// アドオンオブジェクト用
@@ -178,7 +178,7 @@ class PageManager extends Core
 	
 	// Magic3用スクリプト
 	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.5.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
-	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.3.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
+	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.4.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.5.js';			// 一般、管理機能共通スクリプト
 	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.1.js';			// 一般画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
@@ -3263,7 +3263,7 @@ class PageManager extends Core
 						$linkUrl = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BACKUP_URL);		// 退避していたURLを取得
 						if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
 						$editTag = '<div class="m3editend"><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
-						$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>';
+						$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" data-placement="bottom" /></a></div>';
 						$linkStr .= $editTag;
 						
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
@@ -3271,18 +3271,18 @@ class PageManager extends Core
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
 					} else if ($this->isAccessPointWithAdminMenu){		// 通常画面は、管理メニューを使用するアクセスポイントの場合のみ表示
 						// 管理画面ボタン
-						$titleStr = '管理画面';
+						$titleStr = '管理画面へ遷移';
 						$linkUrl = $gEnvManager->getDefaultAdminUrl();
-						$adminTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
+						$adminTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
 						$adminTag .= '<img src="' . $rootUrl . self::ADMIN_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
 					
 						// 編集ボタン
-						$titleStr = '編集';
+						$titleStr = '画面を編集';
 						$linkUrl  = $gEnvManager->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' .M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET;
 						$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_ID . '=' . $gEnvManager->getCurrentPageId();
 						$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
 						$linkUrl .= '&' . M3_REQUEST_PARAM_BACKUP_URL . '=' . urlencode($gEnvManager->getCurrentRequestUri());			// URL退避用
-						$editTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
+						$editTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
 						$editTag .= '<img src="' . $rootUrl . self::EDIT_PAGE_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
 						
 						// ログアウトボタン
@@ -3294,11 +3294,11 @@ class PageManager extends Core
 							$linkUrl = $gEnvManager->getCurrentRequestUri();
 //						}
 						$linkUrl = createUrl($linkUrl, M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_LOGOUT);
-						$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
+						$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
 						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
 					
 						$linkStr .= '<div id="m3slidepanel">';
-						$linkStr .= '<div class="m3panelopener m3topleft"><a href="#"><i class="glyphicon glyphicon-align-justify"></i></a></div>';
+						$linkStr .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';
 						$linkStr .= '<div style="top:-60px; visibility: visible;" class="m3panel_top m3-navbar-default">';
 						$linkStr .= '<div tabindex="0" class="m3panel_wrap">';
 						$linkStr .= '<ul class="m3-nav m3-navbar-nav">';
@@ -3317,6 +3317,7 @@ class PageManager extends Core
 						//$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("#m3slidemenubarpanel").m3SlideMenubar();' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(".m3panel_top").m3slidepanel({ "position": "top", "type": "push" });' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").css("position", "relative");' . M3_NL;
+						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetHelp();' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
 					}
 				}
