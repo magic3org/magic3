@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_wiki_mainWidgetContainer.php 3478 2010-08-14 08:33:30Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -18,7 +18,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
 
 class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 {
-	private $sysDb;	// DB接続オブジェクト
 	private $langId;
 	private $authType;		// 認証方法
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
@@ -58,11 +57,7 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return 'admin_list.tmpl.html';
-		} else {			// 一覧画面
-			return 'admin.tmpl.html';
-		}
+		return 'admin.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -75,12 +70,8 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return $this->createList($request);
-		} else {			// 詳細設定画面
-			return $this->createDetail($request);
-		}
+		// 詳細設定画面
+		return $this->createDetail($request);
 	}
 	/**
 	 * 詳細画面作成
@@ -236,95 +227,6 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 			);
 			$this->tmpl->addVars('auth_list', $row);
 			$this->tmpl->parseTemplate('auth_list', 'a');
-		}
-	}
-	/**
-	 * 一覧画面作成
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
-	 */
-	function createList($request)
-	{
-		$userId	= $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		$act	= $request->trimValueOf('act');
-		
-		if ($act == 'delete'){		// メニュー項目の削除
-			$listedItem = explode(',', $request->trimValueOf('seriallist'));
-			$delItems = array();
-			for ($i = 0; $i < count($listedItem); $i++){
-				// 項目がチェックされているかを取得
-				$itemName = 'item' . $i . '_selected';
-				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
-				
-				if ($itemValue){		// チェック項目
-					$delItems[] = $listedItem[$i];
-				}
-			}
-			if (count($delItems) > 0){
-				// 更新オブジェクト作成
-				$newParamObj = array();
-
-				for ($i = 0; $i < count($this->paramObj); $i++){
-					$targetObj = $this->paramObj[$i];
-					$id = $targetObj->id;// 定義ID
-					if (!in_array($id, $delItems)){		// 削除対象でないときは追加
-						$newParamObj[] = $targetObj;
-					}
-				}
-				
-				// ウィジェットパラメータオブジェクト更新
-				$ret = $this->updateWidgetParamObj($newParamObj);
-				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg('データを削除しました');
-					$this->paramObj = $newParamObj;
-				} else {
-					$this->setAppErrorMsg('データ削除に失敗しました');
-				}
-			}
-		}
-		// 定義一覧作成
-		$this->createItemList();
-		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		
-		// 画面定義用の情報を戻す
-		$this->tmpl->addVar("_widget", "def_serial", $defSerial);	// ページ定義のレコードシリアル番号
-		$this->tmpl->addVar("_widget", "def_config", $defConfigId);	// ページ定義の定義ID
-	}
-	/**
-	 * 定義一覧作成
-	 *
-	 * @return なし						
-	 */
-	function createItemList()
-	{
-		for ($i = 0; $i < count($this->paramObj); $i++){
-			$targetObj = $this->paramObj[$i];
-			$id = $targetObj->id;// 定義ID
-			$name = $targetObj->name;// 定義名
-			
-			$defCount = 0;
-			if (!empty($id)){
-				$defCount = $this->sysDb->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
-			}
-			$operationDisagled = '';
-			if ($defCount > 0) $operationDisagled = 'disabled';
-			$row = array(
-				'index' => $i,
-				'ope_disabled' => $operationDisagled,			// 選択可能かどうか
-				'name' => $this->convertToDispString($name),		// 名前
-				'movie_id' => $this->convertToDispString($targetObj->movieId),	// 動画ID
-				'width' => $targetObj->width,					// 動画幅
-				'height' => $targetObj->height,					// 動画高さ
-				'def_count' => $defCount							// 使用数
-			);
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
-			
-			// シリアル番号を保存
-			$this->serialArray[] = $id;
 		}
 	}
 }

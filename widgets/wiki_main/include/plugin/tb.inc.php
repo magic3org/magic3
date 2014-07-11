@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: tb.inc.php 1156 2008-10-29 10:13:32Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 /*
@@ -23,7 +23,6 @@
  * plugin_tb_save($url, $tb_id)          Save or update TrackBack Ping data
  * plugin_tb_output_response($rc, $msg)  Show a response code of the ping via HTTP/XML (then exit)
  * plugin_tb_output_rsslist($tb_id)      Show pings for the page via RSS
- * plugin_tb_output_htmllist($tb_id)     Show pings for the page via XHTML
  */
 
 switch(LANG){
@@ -56,17 +55,10 @@ function plugin_tb_action()
 		$mode = WikiParam::getVar('__mode');
 		//if ($trackback && isset($vars['__mode']) && isset($vars['tb_id'])) {
 		if ($trackback && ($mode != '') && ($tb_id != '')) {
-			// Show TrackBacks received (and exit)
-			/*switch ($vars['__mode']) {
-			case 'rss' : plugin_tb_output_rsslist($vars['tb_id']);  break;
-			case 'view': plugin_tb_output_htmllist($vars['tb_id']); break;
-			}*/
 			switch ($mode) {
 				case 'rss' : plugin_tb_output_rsslist($tb_id);  break;
-				case 'view': plugin_tb_output_htmllist($tb_id); break;
 			}
 			exit;
-
 		} else {
 			// Show List of pages that TrackBacks reached
 			//$pages = get_existpages(TRACKBACK_DIR, '.txt');
@@ -203,63 +195,6 @@ EOD;
 	pkwk_common_headers();
 	header('Content-Type: text/xml');
 	echo mb_convert_encoding($rc, 'UTF-8', SOURCE_ENCODING);
-	exit;
-}
-
-// Show pings for the page via XHTML
-function plugin_tb_output_htmllist($tb_id)
-{
-	pkwk_common_headers();
-	echo 'This function had been removed now. It will be created soon.<br />' . "\n";
-	echo 'Sorry for your inconvenience.';
-	exit;
-
-	// ----
-	// Skeleton Logic
-
-	global $script;
-	global $_tb_date;
-
-	$page = tb_id2page($tb_id);
-	if ($page === FALSE) return FALSE;
-
-	$data = tb_get(tb_get_filename($page));
-
-	// Sort: The first is the latest
-	usort($data, create_function('$a,$b', 'return $b[0] - $a[0];'));
-
-	$tb_body = '';
-	foreach ($data as $x) {
-		if (count($x) != 5) continue; // Ignore incorrect record
-
-		list ($time, $url, $title, $excerpt, $blog_name) = $x;
-		if ($title == '') $title = 'no title';
-
-		$time = date($_tb_date, $time + LOCALZONE); // May 2, 2003 11:25 AM
-		$tb_body .= <<<EOD
-EOD;
-	}
-
-	// Output start
-	pkwk_common_headers();
-
-	// BugTrack/466 Care for MSIE trouble
-	// Logically correct, but MSIE will treat the data like 'file downloading'
-	//header('Content-type: application/xhtml+xml; charset=UTF-8');
-	header('Content-type: text/html; charset=UTF-8'); // Works well
-
-	$meta_content_type = pkwk_output_dtd(PKWK_DTD_XHTML_1_0_TRANSITIONAL, 'UTF-8');
-	$msg = <<<EOD
-<head>
- $meta_content_type
-</head>
-<body>
- $script?tb_id=$tb_id<br /><br />
- $tb_body
-</body>
-</html>
-EOD;
-	echo mb_convert_encoding($msg, 'UTF-8', SOURCE_ENCODING);
 	exit;
 }
 ?>
