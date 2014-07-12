@@ -14,11 +14,13 @@
 <!-- m3:ErrorMessage -->
 <article>
 <patTemplate:tmpl name="show_title" visibility="hidden">
+<header>
 <h1 class="contentheading">{TITLE}</h1>
 {TITLE_SMALL}
+</header>
 </patTemplate:tmpl>
-<div class="content">{CONTENT}</div>
-<div class="note">{NOTE}</div>
+<section><div class="content">{CONTENT}</div></section>
+<footer><div class="note">{NOTE}</div></footer>
 </article>
 <patTemplate:tmpl name="show_toolbar" visibility="hidden">
 <div class="toolbar">{TOOLBAR}</div>
