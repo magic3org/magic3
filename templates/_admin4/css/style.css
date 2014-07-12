@@ -663,19 +663,19 @@ background-color: #0081c2;
 	opacity: 0;
 }
 /****** ステータス表示 ******/
-span.required {
+.required {
 	color:red;
 }
-span.emergency {
+.emergency {
 	color:red;
 }
-span.error {
+.error {
 	color:red;
 }
-span.available {
+.available {
 	color:green;
 }
-span.active {
+.active {
 	color:green;
 }
 /****** Bootstrap修正 ******/

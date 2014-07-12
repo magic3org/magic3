@@ -10,18 +10,18 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-span.required {
+.required {
 	color:red;
 }
-span.emergency {
+.emergency {
 	color:red;
 }
-span.error {
+.error {
 	color:red;
 }
-span.available {
+.available {
 	color:green;
 }
-span.active {
+.active {
 	color:green;
 }
