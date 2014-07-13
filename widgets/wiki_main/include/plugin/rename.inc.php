@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: rename.inc.php 1601 2009-03-21 05:51:06Z fishbone $
  * @link       http://www.magic3.org
@@ -100,7 +100,8 @@ function plugin_rename_err($err, $page = '')
 function plugin_rename_phase1($err = '', $page = '')
 {
 	global $script, $_rename_messages;
-
+	global $gEnvManager;
+	
 	$msg    = plugin_rename_err($err, $page);
 	$refer  = plugin_rename_getvar('refer');
 	$method = plugin_rename_getvar('method');
@@ -120,7 +121,26 @@ function plugin_rename_phase1($err = '', $page = '')
 	$ret = array();
 	$ret['msg']  = $_rename_messages['msg_title'];
 
-	$ret['body'] = <<<EOD
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$ret['body'] = <<<EOD
+$msg
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="plugin" value="rename" />
+  <input type="radio"  name="method" id="_p_rename_page" value="page"$radio_page />
+  <label for="_p_rename_page">{$_rename_messages['msg_page']}:</label>$select_refer<br />
+  <input type="radio"  name="method" id="_p_rename_regex" value="regex"$radio_regex />
+  <label for="_p_rename_regex">{$_rename_messages['msg_regex']}:</label><br />
+  <label for="_p_rename_from">From:</label><br />
+  <input type="text" name="src" id="_p_rename_from" size="80" value="$s_src" /><br />
+  <label for="_p_rename_to">To:</label><br />
+  <input type="text" name="dst" id="_p_rename_to"   size="80" value="$s_dst" /><br />
+  <input type="submit" class="button" value="{$_rename_messages['btn_next']}" /><br />
+</form>
+EOD;
+	} else {
+		$ret['body'] = <<<EOD
 $msg
 <form action="$postScript" method="post" class="form">
  <div>
@@ -137,6 +157,7 @@ $msg
  </div>
 </form>
 EOD;
+	}
 	return $ret;
 }
 

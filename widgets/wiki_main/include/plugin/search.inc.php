@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: search.inc.php 1601 2009-03-21 05:51:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 
@@ -82,7 +82,11 @@ function plugin_search_search_form($s_word = '', $type = '', $bases = array())
 {
 	global $script, $_btn_and, $_btn_or, $_btn_search;
 	global $_search_pages, $_search_all;
-
+	global $gEnvManager;
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	
 	$and_check = $or_check = '';
 	if ($type == 'OR') {
 		$or_check  = ' checked="checked"';
@@ -102,22 +106,56 @@ function plugin_search_search_form($s_word = '', $type = '', $bases = array())
 			$s_base   = htmlspecialchars($base);
 			$base_str = '<strong>' . $s_base . '</strong>';
 			$base_label = str_replace('$1', $base_str, $_search_pages);
-			$base_msg  .=<<<EOD
+			
+			// テンプレートタイプに合わせて出力を変更
+			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+				$base_msg  .=<<<EOD
+<div class="radio-inline"><input type="radio" name="base" id="$label_id" value="$s_base" $check />
+  <label for="$label_id">$base_label</label></div>
+EOD;
+			} else {
+				$base_msg  .=<<<EOD
  <div>
   <input type="radio" name="base" id="$label_id" value="$s_base" $check />
   <label for="$label_id">$base_label</label>
  </div>
 EOD;
+			}
 			$check = '';
 		}
-		$base_msg .=<<<EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$base_msg .=<<<EOD
+<div class="radio-inline"><input type="radio" name="base" id="_p_search_base_id_all" value="" />
+<label for="_p_search_base_id_all">$_search_all</label></div>
+EOD;
+			$base_option = '<div>' . $base_msg . '</div>';
+		} else {
+			$base_msg .=<<<EOD
   <input type="radio" name="base" id="_p_search_base_id_all" value="" />
   <label for="_p_search_base_id_all">$_search_all</label>
 EOD;
-		$base_option = '<div class="small">' . $base_msg . '</div>';
+			$base_option = '<div class="small">' . $base_msg . '</div>';
+		}
 	}
 	$postScript = $script . WikiParam::convQuery("?cmd=search");
-	$retValue = <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$retValue = <<<EOD
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <div class="form-group"><input type="text" class="form-control" name="word" value="$s_word" size="20" /></div>
+  <div class="radio-inline"><input type="radio" name="type" id="_p_search_AND" value="AND" $and_check />
+  <label for="_p_search_AND">$_btn_and</label></div>
+  <div class="radio-inline"><input type="radio" name="type" id="_p_search_OR"  value="OR"  $or_check  />
+  <label for="_p_search_OR">$_btn_or</label></div>
+  <input type="submit" class="button btn btn-default" value="$_btn_search" />
+$base_option
+</form>
+EOD;
+	} else {
+		$retValue = <<<EOD
 <form action="$postScript" method="post" class="form">
  <div>
   <input type="text"  name="word" value="$s_word" size="20" />
@@ -130,6 +168,7 @@ EOD;
 $base_option
 </form>
 EOD;
+	}
 	return $retValue;
 }
 ?>

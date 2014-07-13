@@ -531,12 +531,12 @@ $_rename_messages  = array(
 // search.inc.php
 $_title_search  = '単語検索';
 $_title_result  = '$1 の検索結果';
-$_msg_searching = '全てのページから単語を検索します。大文字小文字の区別はありません。';
+$_msg_searching = 'すべてのページから単語を検索します。大文字小文字の区別はありません。';
 $_btn_search    = '検索';
 $_btn_and       = 'AND検索';
 $_btn_or        = 'OR検索';
 $_search_pages  = '$1 から始まるページを検索';
-$_search_all    = '全てのページを検索';
+$_search_all    = 'すべてのページを検索';
 
 ///////////////////////////////////////
 // source.inc.php

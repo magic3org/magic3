@@ -8,15 +8,16 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: newpage.inc.php 1601 2009-03-21 05:51:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 function plugin_newpage_convert()
 {
 	//global $script, $vars, $_btn_edit, $_msg_newpage, $BracketName;
 	global $script, $_btn_edit, $_msg_newpage, $BracketName;
+	global $gEnvManager;
 	static $id = 0;
 
 	if (PKWK_READONLY) return ''; // Show nothing
@@ -32,7 +33,21 @@ function plugin_newpage_convert()
 	++$id;
 
 	$postScript = $script . WikiParam::convQuery("?");
-	$ret = <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$ret = <<<EOD
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="plugin" value="newpage" />
+  <input type="hidden" name="refer"  value="$s_page" />
+  <div class="form-group"><label for="_p_newpage_$id">$_msg_newpage:</label>
+  <input type="text" class="form-control" name="page" id="_p_newpage_$id" value="$s_newpage" size="30" /></div>
+  <input type="submit" class="button btn btn-default" value="$_btn_edit" />
+</form>
+EOD;
+	} else {
+		$ret = <<<EOD
 <form action="$postScript" method="post" class="form">
  <div>
   <input type="hidden" name="plugin" value="newpage" />
@@ -43,6 +58,7 @@ function plugin_newpage_convert()
  </div>
 </form>
 EOD;
+	}
 	return $ret;
 }
 

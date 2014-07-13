@@ -83,7 +83,7 @@ function plugin_unfreeze_action()
   <input type="hidden"   name="wcmd"  value="unfreeze" />
   <input type="hidden"   name="page" value="$s_page" />
   <input type="hidden"   name="pass" />
-  <div class="form-group"><div class="input-group"><input type="password" class="form-control" name="password" size="12" /></div></div>
+  <div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>
   <input type="submit"   name="ok"   class="button btn btn-default" value="$_btn_unfreeze" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
 </form>
 EOD;
