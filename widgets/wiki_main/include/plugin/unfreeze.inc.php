@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: unfreeze.inc.php 1601 2009-03-21 05:51:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 
@@ -24,6 +24,7 @@ function plugin_unfreeze_action()
 	global $script, $function_freeze;
 	global $_title_isunfreezed, $_title_unfreezed, $_title_unfreeze;
 	global $_msg_invalidpass, $_msg_unfreezing, $_btn_unfreeze;
+	global $gEnvManager;
 
 	//$page = isset($vars['page']) ? $vars['page'] : '';
 	$page = WikiParam::getPage();
@@ -72,7 +73,22 @@ function plugin_unfreeze_action()
 		
 		// modified for Magic3 by naoki on 2008/10/10
 		$postScript = $script . WikiParam::convQuery("?");
-		$body  .= <<<EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body  .= <<<EOD
+<p>$_msg_unfreezing</p>
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden"   name="wcmd"  value="unfreeze" />
+  <input type="hidden"   name="page" value="$s_page" />
+  <input type="hidden"   name="pass" />
+  <div class="form-group"><div class="input-group"><input type="password" class="form-control" name="password" size="12" /></div></div>
+  <input type="submit"   name="ok"   class="button btn btn-default" value="$_btn_unfreeze" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+</form>
+EOD;
+		} else {
+			$body  .= <<<EOD
 <p>$_msg_unfreezing</p>
 <form action="$postScript" method="post" class="form">
  <div>
@@ -84,6 +100,7 @@ function plugin_unfreeze_action()
  </div>
 </form>
 EOD;
+		}
 	}
 
 	return array('msg'=>$msg, 'body'=>$body);

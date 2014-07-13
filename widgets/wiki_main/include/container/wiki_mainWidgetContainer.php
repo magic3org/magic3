@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: wiki_mainWidgetContainer.php 3477 2010-08-14 06:57:31Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -462,6 +462,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	function createToolbarButton($key, $width = 20, $height = 20)
 	{
 		global $_LANG;
+		global $gEnvManager;
 		
 		$lang	= $_LANG['skin'];
 		$link	= $this->resLink;
@@ -470,10 +471,19 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		if (! isset($link[$key]) ) { $button = 'LINK NOT FOUND';  return $button; }
 		if (! isset($image[$key])) { $button = 'IMAGE NOT FOUND'; return $button; }
 
-		$button = '<a href="' . $link[$key] . '">' .
-			'<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $width . '" height="' . $height . '" ' .
-				'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
-			'</a>';
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$button = '<a href="' . $link[$key] . '">' .
+				'<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $width . '" height="' . $height . '" ' .
+					'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" rel="tooltip" data-toggle="tooltip" />' .
+				'</a>';
+		} else {
+			$button = '<a href="' . $link[$key] . '">' .
+				'<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $width . '" height="' . $height . '" ' .
+					'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
+				'</a>';
+		}
 		return $button;
 	}
 }

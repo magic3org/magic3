@@ -154,6 +154,13 @@ define('M3_EVENT_HOOK_PARAM_UPDATE_DT',		'update_dt');					// 更新日時
 define('M3_WIDGET_ID_SEPARATOR',	',');									// ウィジェットIDと付加情報を連結
 define('M3_LANG_SEPARATOR',			'|');									// 言語IDと内容を連結
 
+// テンプレートタイプ
+define('M3_TEMPLATE_JOOMLA_10',			0);		// Joomla!v1.0テンプレート
+define('M3_TEMPLATE_JOOMLA_15',			1);		// Joomla!v1.5テンプレート
+define('M3_TEMPLATE_JOOMLA_25',			2);		// Joomla!v2.5テンプレート
+define('M3_TEMPLATE_BOOTSTRAP_30',		10);		// Bootstrap v3.0テンプレート
+define('M3_TEMPLATE_JQUERY_MOBILE_10',	20);		// jQuery Mobile v1.0テンプレート
+
 // 描画出力タイプ
 define('M3_RENDER_JOOMLA_OLD',		'joomla_old');		// Joomla! 1.0テンプレート
 define('M3_RENDER_JOOMLA_NEW',		'joomla_new');		// Joomla! 1.5以上のテンプレート

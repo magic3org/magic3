@@ -41,6 +41,9 @@ $(function(){
 	// 画像リサイズ
 	resizeImage();
 	$(window).resize(function(){ resizeImage(); });
+	
+	// ツールチップ作成
+	$('[rel=tooltip]').tooltip();
 });
 
 function resizeImage(){
