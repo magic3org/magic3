@@ -47,7 +47,10 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	private $attachContents;			// 添付ファイル表示用
 	private $lastModified;				// 最終更新表示用
 	private $widgetTitle;				// ウィジェットタイトル
+	private $cssFilePath;				// CSSファイル
 	const CONTENT_TYPE = 'wk';		// 参照数カウント用
+	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
+	const DEFAULT_BOOTSTRAP_CSS_FILE = '/default_bootstrap.css';		// Bootstrap用CSSファイル
 	
 	/**
 	 * コンストラクタ
@@ -92,6 +95,15 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	{
 		// PukiWiki用グローバル変数		// add for Magic3 by naoki on 2008/9/28
 		global $vars;
+		global $gEnvManager;
+		
+		// CSSファイルの設定
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
+		} else {
+			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
+		}
 		
 		// 初期設定が完了していなときは、初期データ読み込み
 		$init = false;
@@ -269,6 +281,20 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	function _setTitle($request, &$param)
 	{
 		return $this->widgetTitle;
+	}
+	/**
+	 * CSSファイルをHTMLヘッダ部に設定
+	 *
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssFileToHead($request, &$param)
+	{
+		return $this->cssFilePath;
 	}
 	/**
 	 * 表示用データ作成

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: diff.inc.php 1601 2009-03-21 05:51:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -20,13 +20,9 @@
 
 function plugin_diff_action()
 {
-//	global $vars;
-
-	//$page = isset($vars['page']) ? $vars['page'] : '';
 	$page = WikiParam::getPage();
 	check_readable($page, true, true);
 
-	//$action = isset($vars['action']) ? $vars['action'] : '';
 	$action = WikiParam::getVar('action');
 	switch ($action) {
 		case 'delete': $retval = plugin_diff_delete($page);	break;
@@ -37,11 +33,10 @@ function plugin_diff_action()
 
 function plugin_diff_view($page)
 {
-	//global $script, $hr;
 	global $script;
 	global $_msg_notfound, $_msg_goto, $_msg_deleted, $_msg_addline, $_msg_delline, $_title_diff;
 	global $_title_diff_delete;
-
+	
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
 
@@ -52,31 +47,20 @@ function plugin_diff_view($page)
 
 	$is_page = is_page($page);
 	if ($is_page) {
-		// modified for Magic3 by naoki on 2008/10/6
-	/*	$menu[] = ' <li>' . str_replace('$1', '<a href="' . $script . '?' . $r_page . '">' .
-			$s_page . '</a>', $_msg_goto) . '</li>';*/
 		$menu[] = ' <li>' . str_replace('$1', '<a href="' . $script . WikiParam::convQuery("?$r_page") . '">' .
 			$s_page . '</a>', $_msg_goto) . '</li>';
 	} else {
 		$menu[] = ' <li>' . str_replace('$1', $s_page, $_msg_deleted) . '</li>';
 	}
 
-	//$filename = DIFF_DIR . encode($page) . '.txt';
-	//if (file_exists($filename)) {
 	$diffData = WikiPage::getPageDiff($page, true);
 	if (!empty($diffData)){
 		if (! PKWK_READONLY) {
-			// modified for Magic3 by naoki on 2008/10/6
-		/*	$menu[] = '<li><a href="' . $script . '?cmd=diff&amp;action=delete&amp;page=' .
-				$r_page . '">' . str_replace('$1', $s_page, $_title_diff_delete) . '</a></li>';*/
 			$menu[] = '<li><a href="' . $script . WikiParam::convQuery("?cmd=diff&amp;action=delete&amp;page=$r_page") .
 				'">' . str_replace('$1', $s_page, $_title_diff_delete) . '</a></li>';
 		}
-		//$msg = '<pre>' . diff_style_to_css(htmlspecialchars(join('', file($filename)))) . '</pre>' . "\n";
 		$msg = '<pre class="wiki_pre">' . diff_style_to_css(htmlspecialchars($diffData)) . '</pre>' . "\n";
 	} else if ($is_page) {
-		//$diffdata = trim(htmlspecialchars(join('', get_source($page))));
-		//$msg = '<pre><span class="diff_added">' . $diffdata . '</span></pre>' . "\n";
 		$diffData = trim(htmlspecialchars(get_source($page, true)));
 		$msg = '<pre class="wiki_pre"><span class="diff_added">' . $diffData . '</span></pre>' . "\n";
 	} else {
@@ -95,34 +79,21 @@ EOD;
 
 function plugin_diff_delete($page)
 {
-	//global $script, $vars;
 	global $script;
 	global $_title_diff_delete, $_msg_diff_deleted;
 	global $_msg_diff_adminpass, $_btn_delete, $_msg_invalidpass;
-
-	//$filename = DIFF_DIR . encode($page) . '.txt';
+	global $gEnvManager;
+	
 	$body = '';
 	$diffData = WikiPage::getPageDiff($page, true);
 	if (! is_pagename($page))     $body = 'Invalid page name';
-	//if (! file_exists($filename)) $body = make_pagelink($page) . '\'s diff seems not found';
+
 	if (empty($diffData)) $body = make_pagelink($page) . '\'s diff seems not found';
 	if ($body) return array('msg'=>$_title_diff_delete, 'body'=>$body);
 
 	$pass = WikiParam::getVar('pass');
-	/*if (isset($vars['pass'])) {
-		if (pkwk_login($vars['pass'])) {
-			unlink($filename);
-			return array(
-				'msg'  => $_title_diff_delete,
-				'body' => str_replace('$1', make_pagelink($page), $_msg_diff_deleted)
-			);
-		} else {
-			$body .= '<p><strong>' . $_msg_invalidpass . '</strong></p>' . "\n";
-		}
-	}*/
 	if ($pass != ''){
 		if (pkwk_login($pass)){
-			//unlink($filename);
 			WikiPage::clearPageDiff($page);		// diffデータ削除
 			return array(
 				'msg'  => $_title_diff_delete,
@@ -134,9 +105,24 @@ function plugin_diff_delete($page)
 	}
 
 	$s_page = htmlspecialchars($page);
-	// modified for Magic3 by naoki on 2008/10/6
 	$postScript = $script . WikiParam::convQuery("?");
-	$body .= <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$body .= <<<EOD
+<p>$_msg_diff_adminpass</p>
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden"   name="wcmd"    value="diff" />
+  <input type="hidden"   name="page"   value="$s_page" />
+  <input type="hidden"   name="action" value="delete" />
+  <input type="hidden"   name="pass" />
+  <div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>
+  <input type="submit"   name="ok"     class="button btn btn-default" value="$_btn_delete" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+</form>
+EOD;
+	} else {
+		$body .= <<<EOD
 <p>$_msg_diff_adminpass</p>
 <form action="$postScript" method="post" class="form">
  <div>
@@ -149,7 +135,7 @@ function plugin_diff_delete($page)
  </div>
 </form>
 EOD;
-
+	}
 	return array('msg'=>$_title_diff_delete, 'body'=>$body);
 }
 ?>

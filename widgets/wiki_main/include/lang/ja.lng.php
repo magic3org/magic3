@@ -203,7 +203,7 @@ $_msg_symbol         = '記号';
 $_msg_other          = '日本語';
 $_msg_help           = 'テキスト整形のルールを表示する';
 $_msg_week           = array('日','月','火','水','木','金','土');
-$_msg_content_back_to_top = '<div class="jumpmenu"><a href="#navigator">&uarr;</a></div>';
+$_msg_content_back_to_top = '<div class="jumpmenu"><a href="#wiki_top">&uarr;</a></div>';
 $_msg_word           = 'これらのキーワードがハイライトされています：';
 
 ///////////////////////////////////////
