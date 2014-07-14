@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: make_link.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
@@ -349,8 +349,8 @@ EOD;
 			$title = ' title="' . $title . $abbr . '"';
 		}
 		$name = '<a id="notetext_' . $id . '" href="' . $script .
-			'#notefoot_' . $id . '" class="note_super"' . $title .
-			'>*' . $id . '</a>';
+			'#notefoot_' . $id . '" class="note_super jump_anchor"' . $title .
+			'>*' . $id . '</a>';				// ジャンプ先
 		return parent::setParam($page, $name, $body);
 	}
 

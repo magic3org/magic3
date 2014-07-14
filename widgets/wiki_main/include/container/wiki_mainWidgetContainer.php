@@ -96,11 +96,16 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// PukiWiki用グローバル変数		// add for Magic3 by naoki on 2008/9/28
 		global $vars;
 		global $gEnvManager;
+		global $gPageManager;
 		
 		// CSSファイルの設定
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
+			
+			// Javaスクリプトを実行
+			$script = $this->getParsedTemplateData('bootstrap.tmpl.js');
+			$gPageManager->addHeadScript($script);
 		} else {
 			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
 		}

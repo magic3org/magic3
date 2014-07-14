@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: attach.inc.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
@@ -90,7 +90,7 @@ function plugin_attach_action()
 {
 	//global $vars, $_attach_messages;
 	global $_attach_messages;
-
+	
 	// Backward compatible
 	/*if (isset($vars['openfile'])) {
 		$vars['file'] = $vars['openfile'];
@@ -442,7 +442,11 @@ function attach_form($page)
 {
 	//global $script, $vars, $_attach_messages;
 	global $script, $_attach_messages;
+	global $gEnvManager;
 
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
 	$linkList		= $script. WikiParam::convQuery("?plugin=attach&amp;pcmd=list&amp;refer=$r_page");
@@ -472,11 +476,41 @@ EOD;*/
 	//if (PLUGIN_ATTACH_PASSWORD_REQUIRE || PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY) {
 	if (PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY) {
 		$title = $_attach_messages[PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
-		$pass = '<br />' . $title . ': <input type="password" name="password" size="12" />';
+		
+		// テンプレートタイプに合わせて出力を変更
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$pass = '<div class="form-group"><label>' . $title . ': <input type="password" class="form-control" name="password" size="12" /></label></div>';
+		} else {
+			$pass = '<br />' . $title . ': <input type="password" name="password" size="12" />';
+		}
 		$hiddenPath = '<input type="hidden" name="pass" />';
 	}
 	$postScript = $script . WikiParam::convQuery("?");
-	$retValue = <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$retValue = <<<EOD
+<form enctype="multipart/form-data" action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="plugin" value="attach" />
+  <input type="hidden" name="pcmd"   value="post" />
+  <input type="hidden" name="refer"  value="$s_page" />
+  <input type="hidden" name="max_file_size" value="$maxsize" />
+  $hiddenPath
+  $navi
+  <p>
+   $msg_maxsize
+  </p>
+  <!--<label for="_p_attach_file">{$_attach_messages['msg_file']}:</label> <input type="file" name="attach_file" id="_p_attach_file" />-->
+               <div class="input-group">
+                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="attach_file"></span>
+                        <input type="text" class="form-control">
+                    </div>
+  $pass
+  <input type="submit" class="button btn btn-default" value="{$_attach_messages['btn_upload']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+</form>
+EOD;
+	} else {
+		$retValue = <<<EOD
 <form enctype="multipart/form-data" action="$postScript" method="post" class="form">
  <div>
   <input type="hidden" name="plugin" value="attach" />
@@ -494,6 +528,7 @@ EOD;*/
  </div>
 </form>
 EOD;
+	}
 	return $retValue;
 }
 
@@ -646,7 +681,8 @@ class AttachFile
 	function info($err)
 	{
 		global $script, $_attach_messages;
-
+		global $gEnvManager;
+	
 		$r_page = rawurlencode($this->page);
 		$s_page = htmlspecialchars($this->page);
 		$s_file = htmlspecialchars($this->file);
@@ -694,7 +730,45 @@ class AttachFile
 		$linkList		= $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=list&amp;refer=$r_page");
 		$linkListAll	= $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=list");
 		$retval = array('msg'=>sprintf($_attach_messages['msg_info'], htmlspecialchars($this->file)));
-		$retval['body'] = <<< EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$retval['body'] = <<< EOD
+<p class="small">
+ [<a href="$linkList">{$_attach_messages['msg_list']}</a>]
+ [<a href="$linkListAll">{$_attach_messages['msg_listall']}</a>]
+</p>
+<dl class="wiki_list">
+ <dt>$info</dt>
+ <dd>{$_attach_messages['msg_page']}:$s_page</dd>
+ <dd>{$_attach_messages['msg_filename']}:{$this->filename}</dd>
+ <dd>{$_attach_messages['msg_md5hash']}:{$this->md5hash}</dd>
+ <dd>{$_attach_messages['msg_filesize']}:{$this->size_str} ({$this->size} bytes)</dd>
+ <dd>Content-type:{$this->type}</dd>
+ <dd>{$_attach_messages['msg_date']}:{$this->time_str}</dd>
+ <dd>{$_attach_messages['msg_dlcount']}:{$this->status['count'][$this->age]}</dd>
+ $msg_freezed
+</dl>
+<hr />
+$s_err
+<form action="$postScript" method="post" class="form">
+  <input type="hidden" name="plugin" value="attach" />
+  <input type="hidden" name="refer" value="$s_page" />
+  <input type="hidden" name="file" value="$s_file" />
+  <input type="hidden" name="age" value="{$this->age}" />
+  <input type="hidden" name="pass" />
+  $msg_delete
+  $msg_freeze
+  $msg_rename
+  <br />
+  <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
+  <input type="password" name="password" id="_p_attach_password" size="12" />
+  <input type="submit" class="button" value="{$_attach_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+</form>
+EOD;
+		} else {
+			$retval['body'] = <<< EOD
 <p class="small">
  [<a href="$linkList">{$_attach_messages['msg_list']}</a>]
  [<a href="$linkListAll">{$_attach_messages['msg_listall']}</a>]
@@ -729,6 +803,7 @@ $s_err
  </div>
 </form>
 EOD;
+		}
 		return $retval;
 	}
 
