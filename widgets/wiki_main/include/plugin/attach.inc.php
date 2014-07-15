@@ -490,7 +490,7 @@ EOD;*/
 		
 		// テンプレートタイプに合わせて出力を変更
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-			$pass = '<div class="form-group"><label>' . $title . ': <input type="password" class="form-control" name="password" size="12" /></label></div>';
+			$pass = '<div class="form-group"><label for="_p_attach_password">' . $title . ':' . '</label> <input type="password" class="form-control" id="_p_attach_password" name="password" size="12" /></div>';
 		} else {
 			$pass = '<br />' . $title . ': <input type="password" name="password" size="12" />';
 		}
@@ -701,45 +701,88 @@ class AttachFile
 	{
 		global $script, $_attach_messages;
 		global $gEnvManager;
-	
+
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		
 		$r_page = rawurlencode($this->page);
 		$s_page = htmlspecialchars($this->page);
 		$s_file = htmlspecialchars($this->file);
 		$s_err = ($err == '') ? '' : '<p style="font-weight:bold">' . $_attach_messages[$err] . '</p>';
 
 		$msg_rename  = '';
-		if ($this->age) {
-			$msg_freezed = '';
-			$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-				'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
-				$_attach_messages['msg_require'] . '</label><br />';
-			$msg_freeze  = '';
-		} else {
-			if ($this->status['freeze']) {
-				$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
-				$msg_delete  = '';
-				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
-					'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
-					$_attach_messages['msg_require'] . '</label><br />';
-			} else {
-				$msg_freezed = '';
-				$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-					'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
-				if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
-					$msg_delete .= $_attach_messages['msg_require'];
-				$msg_delete .= '</label><br />';
-				$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
-					'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
-					$_attach_messages['msg_require'] . '</label><br />';
 
-				if (PLUGIN_ATTACH_RENAME_ENABLE) {
-					$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
-						'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
-						$_attach_messages['msg_require'] . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
-						'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
-						':</label> ' .
-						'<input type="text" name="newname" id="_p_attach_newname" size="40" value="' .
-						$this->file . '" /><br />';
+		// テンプレートタイプに合わせて出力を変更
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			if ($this->age) {
+				$msg_freezed = '';
+				$msg_delete  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+					'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
+					$_attach_messages['msg_require'] . '</label></div></div>';
+				$msg_freeze  = '';
+			} else {
+				if ($this->status['freeze']) {
+					$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
+					$msg_delete  = '';
+					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
+						'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
+						$_attach_messages['msg_require'] . '</label></div></div>';
+				} else {
+					$msg_freezed = '';
+					$msg_delete = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+						'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
+					if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
+						$msg_delete .= $_attach_messages['msg_require'];
+					$msg_delete .= '</label></div></div>';
+					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
+						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
+						$_attach_messages['msg_require'] . '</label></div></div>';
+
+					if (PLUGIN_ATTACH_RENAME_ENABLE) {
+						$msg_rename  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
+							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
+							$_attach_messages['msg_require'] . '</label></div></div>' .
+							'<div class="form-group"><label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
+							':</label> ' .
+							'<input type="text" name="newname" id="_p_attach_newname" class="form-control" size="40" value="' .
+							$this->file . '" /></div>';
+					}
+				}
+			}
+		} else {
+			if ($this->age) {
+				$msg_freezed = '';
+				$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+					'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
+					$_attach_messages['msg_require'] . '</label><br />';
+				$msg_freeze  = '';
+			} else {
+				if ($this->status['freeze']) {
+					$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
+					$msg_delete  = '';
+					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
+						'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
+						$_attach_messages['msg_require'] . '</label><br />';
+				} else {
+					$msg_freezed = '';
+					$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
+						'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
+					if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
+						$msg_delete .= $_attach_messages['msg_require'];
+					$msg_delete .= '</label><br />';
+					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
+						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
+						$_attach_messages['msg_require'] . '</label><br />';
+
+					if (PLUGIN_ATTACH_RENAME_ENABLE) {
+						$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
+							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
+							$_attach_messages['msg_require'] . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
+							'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
+							':</label> ' .
+							'<input type="text" name="newname" id="_p_attach_newname" size="40" value="' .
+							$this->file . '" /><br />';
+					}
 				}
 			}
 		}
@@ -748,11 +791,10 @@ class AttachFile
 		$postScript 	= $script . WikiParam::convQuery("?");
 		$linkList		= $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=list&amp;refer=$r_page");
 		$linkListAll	= $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=list");
-		$retval = array('msg'=>sprintf($_attach_messages['msg_info'], htmlspecialchars($this->file)));
+		$retval			= array('msg'=>sprintf($_attach_messages['msg_info'], htmlspecialchars($this->file)));
 		$filename		= basename($this->filename);
 		
 		// テンプレートタイプに合わせて出力を変更
-		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$retval['body'] = <<< EOD
 <p>
@@ -772,7 +814,7 @@ class AttachFile
 </dl>
 <hr />
 $s_err
-<form action="$postScript" method="post" class="form">
+<form action="$postScript" method="post" class="form form-inline" role="form">
   <input type="hidden" name="plugin" value="attach" />
   <input type="hidden" name="refer" value="$s_page" />
   <input type="hidden" name="file" value="$s_file" />
@@ -781,10 +823,10 @@ $s_err
   $msg_delete
   $msg_freeze
   $msg_rename
-  <br />
-  <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
-  <input type="password" name="password" id="_p_attach_password" size="12" />
-  <input type="submit" class="button" value="{$_attach_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <br /><br />
+  <div class="form-group"><label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
+  <input type="password" name="password" id="_p_attach_password" class="form-control" size="12" /></div>
+  <input type="submit" class="button btn btn-default" value="{$_attach_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
 </form>
 EOD;
 		} else {

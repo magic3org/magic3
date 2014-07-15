@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: pcomment.inc.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
@@ -89,9 +89,9 @@ function plugin_pcomment_convert()
 {
 	//global $vars;
 	global $_pcmt_messages;
-
+	global $gEnvManager;
+	
 	$ret = '';
-
 	$params = array(
 		'noname'=>FALSE,
 		'nodate'=>FALSE,
@@ -101,6 +101,9 @@ function plugin_pcomment_convert()
 		'_args' =>array()
 	);
 
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+		
 	// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
 	$args = func_get_args(); // with array_walk()
 	array_walk($args, 'plugin_pcomment_check_arg', $params);
@@ -129,28 +132,50 @@ function plugin_pcomment_convert()
 	if (PKWK_READONLY) {
 		$form_start = $form = $form_end = '';
 	} else {
-		// Show a form
-
-		if ($params['noname']) {
-			$title = $_pcmt_messages['msg_comment'];
-			$name = '';
-		} else {
-			$title = $_pcmt_messages['btn_name'];
-			$name = '<input type="text" name="name" size="' . PLUGIN_PCOMMENT_SIZE_NAME . '" />';
-		}
-
-		$radio   = $params['reply'] ?
-			'<input type="radio" name="reply" value="0" tabindex="0" checked="checked" />' : '';
-		$comment = '<input type="text" name="msg" size="' . PLUGIN_PCOMMENT_SIZE_MSG . '" />';
-
 		$s_page   = htmlspecialchars($page);
 		$s_refer  = htmlspecialchars($vars_page);
 		$s_nodate = htmlspecialchars($params['nodate']);
 		$s_count  = htmlspecialchars($count);
 
-		//$form_start = '<form action="' . get_script_uri() . '" method="post">' . "\n";
-		$form_start = '<form action="' . get_script_uri() . WikiParam::convQuery('?') . '" method="post" class="form">' . "\n";
-		$form = <<<EOD
+		// テンプレートタイプに合わせて出力を変更
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			// Show a form
+			if ($params['noname']) {
+				$name = $_pcmt_messages['msg_comment'];
+			} else {
+				$name = '<div class="form-group"><label class="col-sm-4" for="_p_pcomment_name">' . $_pcmt_messages['btn_name'] . 
+						'<input type="text" class="form-control" id="_p_pcomment_name" name="name" maxlength="' . PLUGIN_PCOMMENT_SIZE_NAME . '" /></label></div>';
+			}
+			$radio   = $params['reply'] ? '<input type="radio" name="reply" value="0" tabindex="0" checked="checked" />' : '';
+			$comment = '<div class="form-group"><div class="col-sm-12"><input type="text" class="form-control" name="msg" maxlength="' . PLUGIN_PCOMMENT_SIZE_MSG . '" /></div></div>';
+			
+			$form_start = '<form action="' . get_script_uri() . WikiParam::convQuery('?') . '" method="post" class="form form-horizontal" role="form">' . "\n";
+			$form = <<<EOD
+  <input type="hidden" name="digest" value="$digest" />
+  <input type="hidden" name="plugin" value="pcomment" />
+  <input type="hidden" name="refer"  value="$s_refer" />
+  <input type="hidden" name="page"   value="$s_page" />
+  <input type="hidden" name="nodate" value="$s_nodate" />
+  <input type="hidden" name="dir"    value="$dir" />
+  <input type="hidden" name="count"  value="$count" />
+  $radio $name $comment
+  <input type="submit" class="button btn btn-default" value="{$_pcmt_messages['btn_comment']}" />
+EOD;
+			$form_end = '</form>' . "\n";
+		} else {
+			// Show a form
+			if ($params['noname']) {
+				$title = $_pcmt_messages['msg_comment'];
+				$name = '';
+			} else {
+				$title = $_pcmt_messages['btn_name'];
+				$name = '<input type="text" name="name" size="' . PLUGIN_PCOMMENT_SIZE_NAME . '" />';
+			}
+			$radio   = $params['reply'] ? '<input type="radio" name="reply" value="0" tabindex="0" checked="checked" />' : '';
+			$comment = '<input type="text" name="msg" size="' . PLUGIN_PCOMMENT_SIZE_MSG . '" />';
+			
+			$form_start = '<form action="' . get_script_uri() . WikiParam::convQuery('?') . '" method="post" class="form">' . "\n";
+			$form = <<<EOD
   <div>
   <input type="hidden" name="digest" value="$digest" />
   <input type="hidden" name="plugin" value="pcomment" />
@@ -163,7 +188,8 @@ function plugin_pcomment_convert()
   <input type="submit" class="button" value="{$_pcmt_messages['btn_comment']}" />
   </div>
 EOD;
-		$form_end = '</form>' . "\n";
+			$form_end = '</form>' . "\n";
+		}
 	}
 
 	if (! is_page($_page)) {
@@ -175,22 +201,43 @@ EOD;
 		$recent = ! empty($count) ? sprintf($_pcmt_messages['msg_recent'], $count) : '';
 	}
 
-	if ($dir) {
-		return '<div>' .
-			'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
-			$form_start .
-				$comments . "\n" .
-				$form .
-			$form_end .
-			'</div>' . "\n";
+	// テンプレートタイプに合わせて出力を変更
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		if ($dir) {
+			return '<div class="wiki_comment">' .
+				'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
+				$form_start .
+					$comments . "\n" .
+					'<hr />' . $form .
+				$form_end .
+				'</div>' . "\n";
+		} else {
+			return '<div class="wiki_comment">' .
+				$form_start .
+					$form .
+					'<hr />' . $comments. "\n" .
+				$form_end .
+				'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
+				'</div>' . "\n";
+		}
 	} else {
-		return '<div>' .
-			$form_start .
-				$form .
-				$comments. "\n" .
-			$form_end .
-			'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
-			'</div>' . "\n";
+		if ($dir) {
+			return '<div>' .
+				'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
+				$form_start .
+					$comments . "\n" .
+					$form .
+				$form_end .
+				'</div>' . "\n";
+		} else {
+			return '<div>' .
+				$form_start .
+					$form .
+					$comments. "\n" .
+				$form_end .
+				'<p>' . $recent . ' ' . $link . '</p>' . "\n" .
+				'</div>' . "\n";
+		}
 	}
 }
 
@@ -354,7 +401,8 @@ function plugin_pcomment_check_arg($val, $key, & $params)
 function plugin_pcomment_get_comments($page, $count, $dir, $reply)
 {
 	global $_msg_pcomment_restrict;
-
+	global $gEnvManager;
+	
 	if (! check_readable($page, false, false))
 		return array(str_replace('$1', $page, $_msg_pcomment_restrict));
 
@@ -398,12 +446,23 @@ function plugin_pcomment_get_comments($page, $count, $dir, $reply)
 	$comments = convert_html($data);
 	unset($data);
 
-	// Add radio buttons
-	if ($reply)
-		$comments = preg_replace('/<li>' . "\x01" . '(\d+)' . "\x02" . '(.*)' . "\x03" . '/',
-			'<li class="pcmt"><input class="pcmt" type="radio" name="reply" value="$2" tabindex="$1" />',
-			$comments);
-
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		// Add radio buttons
+		if ($reply){
+			$comments = preg_replace('/<li>' . "\x01" . '(\d+)' . "\x02" . '(.*)' . "\x03" . '/',
+				'<li class="pcmt"><div class="radio"><input class="pcmt" type="radio" name="reply" value="$2" tabindex="$1" /></div>',
+				$comments);
+		}
+	} else {
+		// Add radio buttons
+		if ($reply){
+			$comments = preg_replace('/<li>' . "\x01" . '(\d+)' . "\x02" . '(.*)' . "\x03" . '/',
+				'<li class="pcmt"><input class="pcmt" type="radio" name="reply" value="$2" tabindex="$1" />',
+				$comments);
+		}
+	}
 	return array($comments, $digest);
 }
 ?>
