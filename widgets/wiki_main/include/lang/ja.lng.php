@@ -305,6 +305,7 @@ $_attach_messages = array(
 	'msg_listpage' => '$1 の添付ファイル一覧',
 	'msg_listall'  => '全ページの添付ファイル一覧',
 	'msg_file'     => '添付ファイル',
+	'msg_select_file'     => 'ファイル選択',
 	'msg_maxsize'  => 'アップロード可能最大ファイルサイズは %s です。',
 	'msg_count'    => ' <span class="small">%s件</span>',
 	'msg_password' => 'パスワード',

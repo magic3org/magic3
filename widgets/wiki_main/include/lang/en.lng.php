@@ -303,6 +303,7 @@ $_attach_messages = array(
 	'msg_listpage' => 'File already exists in  $1',
 	'msg_listall'  => 'Attached file list of all pages',
 	'msg_file'     => 'Attach file',
+	'msg_select_file'     => 'Select file',
 	'msg_maxsize'  => 'Maximum file size is %s.',
 	'msg_count'    => ' <span class="small">%s download</span>',
 	'msg_password' => 'password',

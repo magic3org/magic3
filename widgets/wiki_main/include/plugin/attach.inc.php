@@ -451,12 +451,23 @@ function attach_form($page)
 	$s_page = htmlspecialchars($page);
 	$linkList		= $script. WikiParam::convQuery("?plugin=attach&amp;pcmd=list&amp;refer=$r_page");
 	$linkListAll	= $script. WikiParam::convQuery("?plugin=attach&amp;pcmd=list");
-	$navi = <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$navi = <<<EOD
+  <p>
+   [<a href="$linkList">{$_attach_messages['msg_list']}</a>]
+   [<a href="$linkListAll">{$_attach_messages['msg_listall']}</a>]
+  </p>
+EOD;
+	} else {
+		$navi = <<<EOD
   <span class="small">
    [<a href="$linkList">{$_attach_messages['msg_list']}</a>]
    [<a href="$linkListAll">{$_attach_messages['msg_listall']}</a>]
   </span><br />
 EOD;
+	}
 /*
 	$navi = <<<EOD
   <span class="small">
@@ -500,13 +511,17 @@ EOD;*/
   <p>
    $msg_maxsize
   </p>
-  <!--<label for="_p_attach_file">{$_attach_messages['msg_file']}:</label> <input type="file" name="attach_file" id="_p_attach_file" />-->
-               <div class="input-group">
-                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="attach_file"></span>
-                        <input type="text" class="form-control">
-                    </div>
-  $pass
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-btn">
+        <span class="btn btn-primary btn-file">{$_attach_messages['msg_select_file']}<input type="file" name="attach_file"></span>
+      </span>
+      <input type="text" class="form-control" readonly>
+    </div>
+  </div>
+  <div>$pass
   <input type="submit" class="button btn btn-default" value="{$_attach_messages['btn_upload']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  </div>
 </form>
 EOD;
 	} else {
@@ -649,6 +664,7 @@ class AttachFile
 	function toString($showicon, $showinfo)
 	{
 		global $script, $_attach_messages;
+		global $gEnvManager;
 
 		$this->getstatus();
 		$param  = '&amp;file=' . rawurlencode($this->file) . '&amp;refer=' . rawurlencode($this->page) .
@@ -662,19 +678,22 @@ class AttachFile
 		$infoUrl = $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=info$param");
 		$openUrl = $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=open$param");
 		if ($showinfo) {
-			$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
-			$info = "\n<span class=\"small\">[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]</span>\n";
-			$count = ($showicon && ! empty($this->status['count'][$this->age])) ?
-				sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
+			// テンプレートタイプに合わせて出力を変更
+			$templateType = $gEnvManager->getCurrentTemplateType();
+			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+				$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
+				$info = "\n[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]\n";
+				$count = ($showicon && ! empty($this->status['count'][$this->age])) ?
+					sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
+			} else {
+				$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
+				$info = "\n<span class=\"small\">[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]</span>\n";
+				$count = ($showicon && ! empty($this->status['count'][$this->age])) ?
+					sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
+			}
 		}
-		return "<a href=\"$openUrl\" title=\"$title\">$label</a>$count$info";
-		/*if ($showinfo) {
-			$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
-			$info = "\n<span class=\"small\">[<a href=\"$script?plugin=attach&amp;pcmd=info$param\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]</span>\n";
-			$count = ($showicon && ! empty($this->status['count'][$this->age])) ?
-				sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
-		}
-		return "<a href=\"$script?plugin=attach&amp;pcmd=open$param\" title=\"$title\">$label</a>$count$info";*/
+//		return "<a href=\"$openUrl\" title=\"$title\">$label</a>$count$info";
+		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\">$label</a>$count$info";
 	}
 
 	// 情報表示
@@ -730,24 +749,25 @@ class AttachFile
 		$linkList		= $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=list&amp;refer=$r_page");
 		$linkListAll	= $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=list");
 		$retval = array('msg'=>sprintf($_attach_messages['msg_info'], htmlspecialchars($this->file)));
+		$filename		= basename($this->filename);
 		
 		// テンプレートタイプに合わせて出力を変更
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$retval['body'] = <<< EOD
-<p class="small">
+<p>
  [<a href="$linkList">{$_attach_messages['msg_list']}</a>]
  [<a href="$linkListAll">{$_attach_messages['msg_listall']}</a>]
 </p>
 <dl class="wiki_list">
  <dt>$info</dt>
- <dd>{$_attach_messages['msg_page']}:$s_page</dd>
- <dd>{$_attach_messages['msg_filename']}:{$this->filename}</dd>
- <dd>{$_attach_messages['msg_md5hash']}:{$this->md5hash}</dd>
- <dd>{$_attach_messages['msg_filesize']}:{$this->size_str} ({$this->size} bytes)</dd>
- <dd>Content-type:{$this->type}</dd>
- <dd>{$_attach_messages['msg_date']}:{$this->time_str}</dd>
- <dd>{$_attach_messages['msg_dlcount']}:{$this->status['count'][$this->age]}</dd>
+ <dd>{$_attach_messages['msg_page']}: $s_page</dd>
+ <dd>{$_attach_messages['msg_filename']}: {$filename}</dd>
+ <dd>{$_attach_messages['msg_md5hash']}: {$this->md5hash}</dd>
+ <dd>{$_attach_messages['msg_filesize']}: {$this->size_str} ({$this->size} bytes)</dd>
+ <dd>Content-type: {$this->type}</dd>
+ <dd>{$_attach_messages['msg_date']}: {$this->time_str}</dd>
+ <dd>{$_attach_messages['msg_dlcount']}: {$this->status['count'][$this->age]}</dd>
  $msg_freezed
 </dl>
 <hr />
@@ -775,13 +795,13 @@ EOD;
 </p>
 <dl class="wiki_list">
  <dt>$info</dt>
- <dd>{$_attach_messages['msg_page']}:$s_page</dd>
- <dd>{$_attach_messages['msg_filename']}:{$this->filename}</dd>
- <dd>{$_attach_messages['msg_md5hash']}:{$this->md5hash}</dd>
- <dd>{$_attach_messages['msg_filesize']}:{$this->size_str} ({$this->size} bytes)</dd>
- <dd>Content-type:{$this->type}</dd>
- <dd>{$_attach_messages['msg_date']}:{$this->time_str}</dd>
- <dd>{$_attach_messages['msg_dlcount']}:{$this->status['count'][$this->age]}</dd>
+ <dd>{$_attach_messages['msg_page']}: $s_page</dd>
+ <dd>{$_attach_messages['msg_filename']}: {$filename}</dd>
+ <dd>{$_attach_messages['msg_md5hash']}: {$this->md5hash}</dd>
+ <dd>{$_attach_messages['msg_filesize']}: {$this->size_str} ({$this->size} bytes)</dd>
+ <dd>Content-type: {$this->type}</dd>
+ <dd>{$_attach_messages['msg_date']}: {$this->time_str}</dd>
+ <dd>{$_attach_messages['msg_dlcount']}: {$this->status['count'][$this->age]}</dd>
  $msg_freezed
 </dl>
 <hr />

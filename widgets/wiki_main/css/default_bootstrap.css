@@ -28,7 +28,6 @@ ul.wiki_list li {
 	margin-left: .5em;
 	margin-right: 0;
 }
-
 ul.wiki_list1 { list-style-type:disc; }
 ul.wiki_list2 { list-style-type:circle; }
 ul.wiki_list3 { list-style-type:square; }
@@ -305,9 +304,12 @@ textarea.wiki_edit {
 	right: 0;
 	min-width: 100%;
 	min-height: 100%;
-	outline: none;
-	cursor:pointer;
+	font-size: 999px;
+	text-align: right;
 	filter: alpha(opacity=0);
 	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
 }
-
