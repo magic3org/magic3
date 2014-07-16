@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: comment.inc.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
@@ -21,6 +21,8 @@
 define('PLUGIN_COMMENT_DIRECTION_DEFAULT', '1'); // 1: above 0: below
 define('PLUGIN_COMMENT_SIZE_MSG',  70);
 define('PLUGIN_COMMENT_SIZE_NAME', 15);
+// Bootstrap用
+define('PLUGIN_COMMENT_SIZE_MSG_BOOTSTRAP',	40); // テキストエリアのカラム数
 
 define('PLUGIN_COMMENT_FORMAT_MSG',  '$msg');
 define('PLUGIN_COMMENT_FORMAT_NAME', '[[$name]]');
@@ -120,13 +122,14 @@ function plugin_comment_convert()
 {
 	//global $vars, $digest, $_btn_comment, $_btn_name, $_msg_comment;
 	global $digest, $_btn_comment, $_btn_name, $_msg_comment;
+	global $gEnvManager;
 	static $numbers = array();
 	static $comment_cols = PLUGIN_COMMENT_SIZE_MSG;
 
 	if (PKWK_READONLY) return ''; // Show nothing
 
-	/*if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
-	$comment_no = $numbers[$vars['page']]++;*/
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
 	
 	$page = WikiParam::getPage();
 	if (!isset($numbers[$page])) $numbers[$page] = 0;
@@ -137,21 +140,39 @@ function plugin_comment_convert()
 		$nametags = '<label for="_p_comment_comment_' . $comment_no . '">' .
 			$_msg_comment . '</label>';
 	} else {
-		$nametags = '<label for="_p_comment_name_' . $comment_no . '">' .
-			$_btn_name . '</label>' .
-			'<input type="text" name="name" id="_p_comment_name_' .
-			$comment_no .  '" size="' . PLUGIN_COMMENT_SIZE_NAME .
-			'" />' . "\n";
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$nametags = '<div><div class="form-group"><label for="_p_comment_name_' . $comment_no . '">' . $_btn_name .
+						'<input type="text" class="form-control" name="name" id="_p_comment_name_' . $comment_no .  '" size="' . PLUGIN_COMMENT_SIZE_NAME . '" /></label></div></div>' . "\n";
+		} else {
+			$nametags = '<label for="_p_comment_name_' . $comment_no . '">' . $_btn_name . '</label>' .
+						'<input type="text" name="name" id="_p_comment_name_' . $comment_no .  '" size="' . PLUGIN_COMMENT_SIZE_NAME . '" />' . "\n";
+		}
 	}
 	$nodate = in_array('nodate', $options) ? '1' : '0';
-	$above  = in_array('above',  $options) ? '1' :
-		(in_array('below', $options) ? '0' : PLUGIN_COMMENT_DIRECTION_DEFAULT);
+	$above  = in_array('above',  $options) ? '1' : (in_array('below', $options) ? '0' : PLUGIN_COMMENT_DIRECTION_DEFAULT);
 
 	$script = get_script_uri();
 	$postScript = $script . WikiParam::convQuery("?");
-	//$s_page = htmlspecialchars($vars['page']);
 	$s_page = htmlspecialchars($page);
-	$string = <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$size = PLUGIN_COMMENT_SIZE_MSG_BOOTSTRAP;
+		$string = <<<EOD
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="plugin" value="comment" />
+  <input type="hidden" name="refer"  value="$s_page" />
+  <input type="hidden" name="comment_no" value="$comment_no" />
+  <input type="hidden" name="nodate" value="$nodate" />
+  <input type="hidden" name="above"  value="$above" />
+  <input type="hidden" name="digest" value="$digest" />
+  $nametags
+  <div><div class="form-group"><input type="text" class="form-control" name="msg" id="_p_comment_comment_{$comment_no}" size="$size" maxlength="$comment_cols" /></div></div>
+  <input type="submit" name="comment" class="button btn btn-default" value="$_btn_comment" />
+</form>
+EOD;
+	} else {
+		$string = <<<EOD
 <br />
 <form action="$postScript" method="post" class="form">
  <div>
@@ -167,6 +188,7 @@ function plugin_comment_convert()
  </div>
 </form>
 EOD;
+	}
 	return $string;
 }
 ?>

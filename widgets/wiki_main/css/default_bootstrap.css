@@ -23,35 +23,6 @@ div.jumpmenu {
 	padding-top: 80px;
 	margin-top: -80px;
 }
-/*
-ul.wiki_list li {
-	margin-left: .5em;
-	margin-right: 0;
-}
-ul.wiki_list1 { list-style-type:disc; }
-ul.wiki_list2 { list-style-type:circle; }
-ul.wiki_list3 { list-style-type:square; }
-ol.wiki_list1 { list-style-type:decimal; }
-ol.wiki_list2 { list-style-type:lower-roman; }
-ol.wiki_list3 { list-style-type:lower-alpha; }
-*/
-/*
-dl.wiki_list dt {
-	font-weight:bold;
-	margin-top:1em;
-}
-dl.wiki_list1 dt {
-	font-weight:bold;
-	margin-top:1em;
-}
-dl.wiki_list2 dt {
-	font-weight:bold;
-	margin-top:1em;
-}
-dl.wiki_list3 dt {
-	font-weight:bold;
-	margin-top:1em;
-}*/
 span.noexists {
 	color:inherit;
 	background-color:#FFFACC;
@@ -104,7 +75,6 @@ span.diff_added {
 	color:blue;
 	background-color:inherit;
 }
-
 span.diff_removed {
 	color:red;
 	background-color:inherit;
@@ -167,9 +137,6 @@ tfoot th.style_th {
 }
 */
 /* html.php/edit_form() */
-.edit_form {
-	/*clear:both;*/
-}
 /*.small { font-size:80%; }*/
 
 /***** plugin *****/
@@ -286,7 +253,6 @@ span.calendar_viewer_right {
 div.toolbar img {
 	border:none;
 }
-/***** add for magic3 *****/
 textarea.wiki_edit {
 	width: 100%;
 	font-size: 100%;

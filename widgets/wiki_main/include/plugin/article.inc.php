@@ -65,7 +65,8 @@ function plugin_article_action()
 	global $_title_collided, $_msg_collided, $_title_updated;
 	global $_plugin_article_mailto, $_no_subject, $_no_name;
 	global $_msg_article_mail_sender, $_msg_article_mail_page;
-
+	global $gEnvManager;
+	
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	//if ($post['msg'] == '') return array('msg'=>'','body'=>'');
@@ -122,7 +123,15 @@ function plugin_article_action()
 		$s_digest   = htmlspecialchars(WikiParam::getPostVar('digest'));
 		$s_postdata = htmlspecialchars($postdata_input);
 		$postScript = $script . WikiParam::convQuery('?cmd=preview');
-		$body .= <<<EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body .= <<<EOD
+<pre class="wiki_pre">$s_postdata</pre>
+EOD;
+		} else {
+			$body .= <<<EOD
 <form action="$postScript" method="post" class="form">
  <div>
   <input type="hidden" name="refer" value="$s_refer" />
@@ -131,6 +140,7 @@ function plugin_article_action()
  </div>
 </form>
 EOD;
+		}
 	} else {
 		//page_write($post['refer'], trim($postdata));
 		page_write($refer, trim($postdata));
