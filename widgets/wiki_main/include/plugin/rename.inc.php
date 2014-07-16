@@ -20,8 +20,6 @@ define('PLUGIN_RENAME_LOGPAGE', ':RenameLog');
 
 function plugin_rename_action()
 {
-	//global $whatsnew;
-
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 
 	$method = plugin_rename_getvar('method');
@@ -51,7 +49,6 @@ function plugin_rename_action()
 			return plugin_rename_phase1();
 		} else if (!is_page($refer)) {
 			return plugin_rename_phase1('notpage', $refer);
-		//} else if ($refer == $whatsnew) {
 		} else if ($refer == WikiConfig::getWhatsnewPage()) {
 			return plugin_rename_phase1('norename', $refer);
 		} else if ($page == '' || $page == $refer) {	// 新規ページ名未入力、または、新旧ページ名が同じとき
@@ -128,15 +125,15 @@ function plugin_rename_phase1($err = '', $page = '')
 $msg
 <form action="$postScript" method="post" class="form form-inline" role="form">
   <input type="hidden" name="plugin" value="rename" />
-  <input type="radio"  name="method" id="_p_rename_page" value="page"$radio_page />
-  <label for="_p_rename_page">{$_rename_messages['msg_page']}:</label>$select_refer<br />
-  <input type="radio"  name="method" id="_p_rename_regex" value="regex"$radio_regex />
-  <label for="_p_rename_regex">{$_rename_messages['msg_regex']}:</label><br />
-  <label for="_p_rename_from">From:</label><br />
-  <input type="text" name="src" id="_p_rename_from" size="80" value="$s_src" /><br />
-  <label for="_p_rename_to">To:</label><br />
-  <input type="text" name="dst" id="_p_rename_to"   size="80" value="$s_dst" /><br />
-  <input type="submit" class="button" value="{$_rename_messages['btn_next']}" /><br />
+  <div><div class="radio"><input type="radio"  name="method" id="_p_rename_page" value="page"$radio_page />
+  <label for="_p_rename_page">{$_rename_messages['msg_page']}:</label></div> $select_refer</div>
+  <div><div class="radio"><input type="radio"  name="method" id="_p_rename_regex" value="regex"$radio_regex />
+  <label for="_p_rename_regex">{$_rename_messages['msg_regex']}:</label></div></div>
+  <div><div class="form-group"><label for="_p_rename_from">{$_rename_messages['msg_from']}:
+  <input type="text" class="form-control" name="src" id="_p_rename_from" maxlength="80" value="$s_src" /></label></div></div>
+  <div><div class="form-group"><label for="_p_rename_to">{$_rename_messages['msg_to']}:
+  <input type="text" class="form-control" name="dst" id="_p_rename_to"   maxlength="80" value="$s_dst" /></label></div></div>
+  <input type="submit" class="button btn" value="{$_rename_messages['btn_next']}" />
 </form>
 EOD;
 	} else {
@@ -149,9 +146,9 @@ $msg
   <label for="_p_rename_page">{$_rename_messages['msg_page']}:</label>$select_refer<br />
   <input type="radio"  name="method" id="_p_rename_regex" value="regex"$radio_regex />
   <label for="_p_rename_regex">{$_rename_messages['msg_regex']}:</label><br />
-  <label for="_p_rename_from">From:</label><br />
+  <label for="_p_rename_from">{$_rename_messages['msg_from']}:</label><br />
   <input type="text" name="src" id="_p_rename_from" size="80" value="$s_src" /><br />
-  <label for="_p_rename_to">To:</label><br />
+  <label for="_p_rename_to">{$_rename_messages['msg_to']}:</label><br />
   <input type="text" name="dst" id="_p_rename_to"   size="80" value="$s_dst" /><br />
   <input type="submit" class="button" value="{$_rename_messages['btn_next']}" /><br />
  </div>
@@ -166,7 +163,8 @@ EOD;
 function plugin_rename_phase2($err = '', $page = '')
 {
 	global $script, $_rename_messages;
-
+	global $gEnvManager;
+	
 	//$msg   = plugin_rename_err($err);
 	$msg   = plugin_rename_err($err, $page);
 	$page  = plugin_rename_getvar('page');
@@ -187,7 +185,23 @@ function plugin_rename_phase2($err = '', $page = '')
 	$ret = array();
 	$ret['msg']  = $_rename_messages['msg_title'];
 
-	$ret['body'] = <<<EOD
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$ret['body'] = <<<EOD
+$msg
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="plugin" value="rename" />
+  <input type="hidden" name="refer"  value="$s_refer" />
+  $msg_rename<br />
+  <div class="form-group"><label for="_p_rename_newname">{$_rename_messages['msg_newname']}:</label>
+  <input type="text" class="form-control" name="page" id="_p_rename_newname" maxlength="80" value="$s_page" /></div>
+  $msg_related
+  <input type="submit" class="button btn btn-default" value="{$_rename_messages['btn_next']}" />
+</form>
+EOD;
+	} else {
+		$ret['body'] = <<<EOD
 $msg
 <form action="$postScript" method="post" class="form">
  <div>
@@ -201,7 +215,9 @@ $msg
  </div>
 </form>
 EOD;
-	if (! empty($related)) {
+	}
+	
+	if (!empty($related)){
 		$ret['body'] .= '<hr /><p>' . $_rename_messages['msg_related'] . '</p><ul>';
 		sort($related);
 		foreach ($related as $name)
@@ -258,7 +274,8 @@ function plugin_rename_phase3($pages)
 {
 	// $pagesには、「$pages[旧ページ名]=[新規ページ名]」の形式で変更対象のページ名がすべて格納されている
 	global $script, $_rename_messages;
-
+	global $gEnvManager;
+	
 	$msg = $input = '';
 	
 	// 名前を変更するファイルを取得(アップロードディレクトリ内)
@@ -327,7 +344,23 @@ function plugin_rename_phase3($pages)
 	$ret = array();
 	$ret['msg'] = $_rename_messages['msg_title'];
 
-	$ret['body'] = <<<EOD
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$ret['body'] = <<<EOD
+<p>$msg</p>
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="plugin" value="rename" />
+  <input type="hidden" name="pass" />
+  $input
+  <div class="form-group"><label for="_p_rename_adminpass">{$_rename_messages['msg_adminpass']}</label>
+  <input type="password" class="form-control" name="password" id="_p_rename_adminpass" size="12" /></div>
+  <input type="submit" class="button btn btn-default" value="{$_rename_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+</form>
+<p>{$_rename_messages['msg_confirm']}</p>
+EOD;
+	} else {
+		$ret['body'] = <<<EOD
 <p>$msg</p>
 <form action="$postScript" method="post" class="form">
  <div>
@@ -341,7 +374,8 @@ function plugin_rename_phase3($pages)
 </form>
 <p>{$_rename_messages['msg_confirm']}</p>
 EOD;
-
+	}
+	
 	//ksort($pages);
 	$ret['body'] .= '<ul>' . "\n";
 	foreach ($pages as $old=>$new){
@@ -518,11 +552,10 @@ function plugin_rename_getrelated($page)
 
 function plugin_rename_getselecttag($page)
 {
-//	global $whatsnew;
-
+	global $gEnvManager;
+	
 	$pages = array();
 	foreach (get_existpages() as $_page) {
-		//if ($_page == $whatsnew) continue;
 		if ($_page == WikiConfig::getWhatsnewPage()) continue;
 
 		$selected = ($_page == $page) ? ' selected' : '';
@@ -533,12 +566,22 @@ function plugin_rename_getselecttag($page)
 	ksort($pages);
 	$list = join("\n" . ' ', $pages);
 
-	return <<<EOD
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		return <<<EOD
+<select name="refer" class="form-control">
+ <option value=""></option>
+ $list
+</select>
+EOD;
+	} else {
+		return <<<EOD
 <select name="refer">
  <option value=""></option>
  $list
 </select>
 EOD;
-
+	}
 }
 ?>
