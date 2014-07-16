@@ -8,39 +8,37 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: memo.inc.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
  */
 define('MEMO_COLS', 60); // Columns of textarea
 define('MEMO_ROWS',  5); // Rows of textarea
+// Bootstrap用
+define('MEMO_COLS_BOOTSTRAP', 40); // Columns of textarea
 
 function plugin_memo_action()
 {
-	//global $script, $vars, $cols, $rows;
 	global $script, $cols, $rows;
 	global $_title_collided, $_msg_collided, $_title_updated;
-
+	global $gEnvManager;
+	
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-	//if (! isset($vars['msg']) || $vars['msg'] == '') return;
 	$msg = WikiParam::getMsg();
 	if ($msg == '') return;
 
-	//$memo_body = preg_replace('/' . "\r" . '/', '', $vars['msg']);
 	$memo_body = preg_replace('/' . "\r" . '/', '', $msg);
 	$memo_body = str_replace("\n", '\n', $memo_body);
 	$memo_body = str_replace('"', '&#x22;', $memo_body); // Escape double quotes
 	$memo_body = str_replace(',', '&#x2c;', $memo_body); // Escape commas
 
-	//$postdata_old  = get_source($vars['refer']);
 	$refer = WikiParam::getRefer();
 	$postdata_old  = get_source($refer);
 	$postdata = '';
 	$memo_no = 0;
 	foreach($postdata_old as $line) {
 		if (preg_match("/^#memo\(?.*\)?$/i", $line)) {
-			//if ($memo_no == $vars['memo_no']) {
 			if ($memo_no == WikiParam::getVar('memo_no')) {
 				$postdata .= '#memo(' . $memo_body . ')' . "\n";
 				$line = '';
@@ -53,19 +51,24 @@ function plugin_memo_action()
 	$postdata_input = $memo_body . "\n";
 
 	$body = '';
-	//if (md5(@join('', get_source($vars['refer']))) != $vars['digest']) {
 	if (md5(get_source($refer, true)) != WikiParam::getVar('digest')) {
 		$title = $_title_collided;
 		$body  = $_msg_collided . "\n";
 
-		/*$s_refer  = htmlspecialchars($vars['refer']);
-		$s_digest = htmlspecialchars($vars['digest']);*/
 		$s_refer  = htmlspecialchars($refer);
 		$s_digest = htmlspecialchars(WikiParam::getVar('digest'));
 		$s_postdata_input = htmlspecialchars($postdata_input);
 
 		$postScript = $script . WikiParam::convQuery("?cmd=preview");
-		$body .= <<<EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body .= <<<EOD
+<pre class="wiki_pre">$s_postdata_input</pre>
+EOD;
+		} else {
+			$body .= <<<EOD
 <form action="$postScript" method="post" class="form">
  <div>
   <input type="hidden" name="refer"  value="$s_refer" />
@@ -74,18 +77,8 @@ function plugin_memo_action()
  </div>
 </form>
 EOD;
-/*
-		$body .= <<<EOD
-<form action="$script?cmd=preview" method="post">
- <div>
-  <input type="hidden" name="refer"  value="$s_refer" />
-  <input type="hidden" name="digest" value="$s_digest" />
-  <textarea name="msg" rows="$rows" cols="$cols" id="textarea">$s_postdata_input</textarea><br />
- </div>
-</form>
-EOD;*/
+		}
 	} else {
-		//page_write($vars['refer'], $postdata);
 		page_write($refer, $postdata);
 
 		$title = $_title_updated;
@@ -93,21 +86,20 @@ EOD;*/
 	$retvars['msg']  = $title;
 	$retvars['body'] = $body;
 
-	//$vars['page'] = $vars['refer'];
 	WikiParam::setPage($refer);
-
 	return $retvars;
 }
 
 function plugin_memo_convert()
 {
-	//global $script, $vars, $digest;
 	global $script, $digest;
 	global $_btn_memo_update;
+	global $gEnvManager;
 	static $numbers = array();
 
-/*	if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
-	$memo_no = $numbers[$vars['page']]++;*/
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	
 	$page = WikiParam::getPage();
 	if (! isset($numbers[$page])) $numbers[$page] = 0;
 	$memo_no = $numbers[$page]++;
@@ -123,17 +115,36 @@ function plugin_memo_convert()
 		$_submit = '';	
 	} else {
 		$_script = $script . WikiParam::convQuery("?");
-		$_submit = '<input type="submit" name="memo" class="button"   value="' . $_btn_memo_update . '" />';
+		
+		// テンプレートタイプに合わせて出力を変更
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$_submit = '<input type="submit" name="memo" class="button"   value="' . $_btn_memo_update . '" />';
+		} else {
+			$_submit = '<input type="submit" name="memo" class="button btn"   value="' . $_btn_memo_update . '" />';
+		}
 	}
 
-	/*$s_page   = htmlspecialchars($vars['page']);
-	$s_digest = htmlspecialchars($digest);*/
 	$s_page   = htmlspecialchars($page);
 	$s_digest = htmlspecialchars(WikiParam::getDigest());
 	$s_cols   = MEMO_COLS;
 	$s_rows   = MEMO_ROWS;
-	$string   = <<<EOD
-<form action="$_script" method="post" class="memo" class="form">
+	
+	// テンプレートタイプに合わせて出力を変更
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$s_cols = MEMO_COLS_BOOTSTRAP;
+		$string   = <<<EOD
+<form action="$_script" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="memo_no" value="$memo_no" />
+  <input type="hidden" name="refer"   value="$s_page" />
+  <input type="hidden" name="plugin"  value="memo" />
+  <input type="hidden" name="digest"  value="$s_digest" />
+  <div><textarea name="msg" class="wiki_edit form-control" rows="$s_rows" cols="$s_cols">$data</textarea></div>
+  $_submit
+</form>
+EOD;
+	} else {
+		$string   = <<<EOD
+<form action="$_script" method="post" class="form">
  <div>
   <input type="hidden" name="memo_no" value="$memo_no" />
   <input type="hidden" name="refer"   value="$s_page" />
@@ -144,7 +155,7 @@ function plugin_memo_convert()
  </div>
 </form>
 EOD;
-
+	}
 	return $string;
 }
 ?>
