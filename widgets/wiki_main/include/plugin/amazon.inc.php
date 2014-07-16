@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: amazon.inc.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
@@ -127,7 +127,8 @@ function plugin_amazon_convert()
 {
 	//global $script, $vars, $asin, $asin_all;
 	global $asin, $asin_all;
-
+	global $gEnvManager;
+	
 	if (func_num_args() > 3) {
 		if (PKWK_READONLY) return ''; // Show nothing
 
@@ -143,7 +144,20 @@ function plugin_amazon_convert()
 		$s_page = htmlspecialchars(WikiParam::getPage());
 		if ($s_page == '') $s_page = WikiParam::getRefer();
 		$script = get_script_uri() . WikiParam::convQuery('?');
-		$ret = <<<EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$ret = <<<EOD
+<form action="$script" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="plugin" value="amazon" />
+  <input type="hidden" name="refer" value="$s_page" />
+  <div class="form-group"><label for="_p_amazon_asin">ASIN:</label> <input type="text" class="form-control" id="_p_amazon_asin" name="asin" size="30" /></div>
+  <input type="submit" class="button btn btn-default" value="レビュー編集" /> (ISBN 10 桁 or ASIN 12 桁)
+</form>
+EOD;
+		} else {
+			$ret = <<<EOD
 <form action="$script" method="post" class="form">
  <div>
   <input type="hidden" name="plugin" value="amazon" />
@@ -154,6 +168,7 @@ function plugin_amazon_convert()
  </div>
 </form>
 EOD;
+		}
 		return $ret;
 	}
 

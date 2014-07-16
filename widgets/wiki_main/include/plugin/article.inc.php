@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: article.inc.php 1601 2009-03-21 05:51:06Z fishbone $
  * @link       http://www.magic3.org
@@ -41,6 +41,8 @@ define('PLUGIN_ARTICLE_NAME_COLS',	24); // 名前テキストエリアのカラ�
 define('PLUGIN_ARTICLE_SUBJECT_COLS',	60); // 題名テキストエリアのカラム数
 define('PLUGIN_ARTICLE_NAME_FORMAT',	'[[$name]]'); // 名前の挿入フォーマット
 define('PLUGIN_ARTICLE_SUBJECT_FORMAT',	'**$subject'); // 題名の挿入フォーマット
+// Bootstrap用
+define('PLUGIN_ARTICLE_COLS_BOOTSTRAP',	40); // テキストエリアのカラム数
 
 define('PLUGIN_ARTICLE_INS',	0); // 挿入する位置 1:欄の前 0:欄の後
 define('PLUGIN_ARTICLE_COMMENT',	1); // 書き込みの下に一行コメントを入れる 1:入れる 0:入れない
@@ -129,17 +131,6 @@ function plugin_article_action()
  </div>
 </form>
 EOD;
-/*
-		$body .= <<<EOD
-<form action="$script?cmd=preview" method="post">
- <div>
-  <input type="hidden" name="refer" value="$s_refer" />
-  <input type="hidden" name="digest" value="$s_digest" />
-  <textarea name="msg" rows="$rows" cols="$cols" id="textarea">$s_postdata</textarea><br />
- </div>
-</form>
-EOD;
-*/
 	} else {
 		//page_write($post['refer'], trim($postdata));
 		page_write($refer, trim($postdata));
@@ -190,10 +181,11 @@ function plugin_article_convert()
 	//global $script, $vars, $digest;
 	global $script;
 	global $_btn_article, $_btn_name, $_btn_subject;
+	global $gEnvManager;
 	static $numbers = array();
 
 	if (PKWK_READONLY) return ''; // Show nothing
-
+	
 	$page = WikiParam::getPage();
 	if (!isset($numbers[$page])) $numbers[$page] = 0;
 	//if (! isset($numbers[$vars['page']])) $numbers[$vars['page']] = 0;
@@ -210,7 +202,27 @@ function plugin_article_convert()
 	$article_rows = PLUGIN_ARTICLE_ROWS;
 	$article_cols = PLUGIN_ARTICLE_COLS;
 	$postScript = $script . WikiParam::convQuery('?');
-	$string = <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$article_cols = PLUGIN_ARTICLE_COLS_BOOTSTRAP;
+		$string = <<<EOD
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="article_no" value="$article_no" />
+  <input type="hidden" name="plugin" value="article" />
+  <input type="hidden" name="digest" value="$s_digest" />
+  <input type="hidden" name="refer" value="$s_page" />
+  <div><div class="form-group"><label for="_p_article_name_$article_no">$_btn_name
+  <input type="text" class="form-control" name="name" id="_p_article_name_$article_no" maxlength="$name_cols" /></label></div></div>
+  <div><div class="form-group"><label for="_p_article_subject_$article_no">$_btn_subject
+  <input type="text" class="form-control" name="subject" id="_p_article_subject_$article_no" maxlength="$subject_cols" /></label></div></div>
+  <div><textarea class="wiki_edit form-control" name="msg" rows="$article_rows" cols="$article_cols">\n</textarea></div>
+  <input type="submit" class="button btn btn-default" name="article" value="$_btn_article" />
+</form>
+EOD;
+	} else {
+		$string = <<<EOD
 <form action="$postScript" method="post" class="form">
  <div>
   <input type="hidden" name="article_no" value="$article_no" />
@@ -226,6 +238,7 @@ function plugin_article_convert()
  </div>
 </form>
 EOD;
+	}
 	return $string;
 }
 ?>

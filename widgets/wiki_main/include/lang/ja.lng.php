@@ -285,7 +285,7 @@ $_msg_add   = 'ページへの追加は、現在のページ内容に改行が�
 // article.inc.php
 $_btn_name    = 'お名前';
 $_btn_article = '記事の投稿';
-$_btn_subject = '題名: ';
+$_btn_subject = '　題名: ';
 $_msg_article_mail_sender = '投稿者: ';
 $_msg_article_mail_page   = '投稿先: ';
 
