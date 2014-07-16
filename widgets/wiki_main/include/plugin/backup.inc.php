@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: backup.inc.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
@@ -23,7 +23,6 @@ define('PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING', PKWK_SAFE_MODE || PKWK_OPTIMISE
 
 function plugin_backup_action()
 {
-	//global $vars, $do_backup, $hr;
 	global $do_backup, $hr;
 	global $_msg_backuplist, $_msg_diff, $_msg_nowdiff, $_msg_source, $_msg_backup;
 	global $_msg_view, $_msg_goto, $_msg_deleted;
@@ -32,7 +31,6 @@ function plugin_backup_action()
 
 	if (! $do_backup) return;
 
-	//$page = isset($vars['page']) ? $vars['page']  : '';
 	$page = WikiParam::getPage();
 	if ($page == '') return array('msg'=>$_title_backuplist, 'body'=>plugin_backup_get_list_all());
 
@@ -40,7 +38,6 @@ function plugin_backup_action()
 	$s_page = htmlspecialchars($page);
 	$r_page = rawurlencode($page);
 
-	//$action = isset($vars['action']) ? $vars['action'] : '';
 	$action = WikiParam::getVar('action');
 	if ($action == 'delete') return plugin_backup_delete($page);
 
@@ -50,7 +47,6 @@ function plugin_backup_action()
 		$r_action = rawurlencode($action);
 	}
 
-	//$s_age  = (isset($vars['age']) && is_numeric($vars['age'])) ? $vars['age'] : 0;
 	$value = WikiParam::getVar('age');
 	$s_age  = ($value == '') ? 0 : intval($value);
 	if ($s_age <= 0) return array( 'msg'=>$_title_pagebackuplist, 'body'=>plugin_backup_get_list($page));
@@ -146,26 +142,15 @@ function plugin_backup_action()
 // Delete backup
 function plugin_backup_delete($page)
 {
-	//global $vars, $_title_backup_delete, $_title_pagebackuplist, $_msg_backup_deleted;
 	global $_title_backup_delete, $_title_pagebackuplist, $_msg_backup_deleted;
 	global $_msg_backup_adminpass, $_btn_delete, $_msg_invalidpass;
-
+	global $gEnvManager;
+	
 	//if (! _backup_file_exists($page))
 	if (!WikiPage::isPageBackup($page)) return array('msg'=>$_title_pagebackuplist, 'body'=>plugin_backup_get_list($page)); // Say "is not found"
 
 	$body = '';
 	$pass = WikiParam::getVar('pass');
-	/*if (isset($vars['pass'])) {
-		if (pkwk_login($vars['pass'])) {
-			_backup_delete($page);
-			return array(
-				'msg'  => $_title_backup_delete,
-				'body' => str_replace('$1', make_pagelink($page), $_msg_backup_deleted)
-			);
-		} else {
-			$body = '<p><strong>' . $_msg_invalidpass . '</strong></p>' . "\n";
-		}
-	}*/
 	if ($pass != ''){
 		if (pkwk_login($pass)){
 			_backup_delete($page);
@@ -180,7 +165,23 @@ function plugin_backup_delete($page)
 
 	$postScript = get_script_uri() . WikiParam::convQuery("?");
 	$s_page = htmlspecialchars($page);
-	$body .= <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$body .= <<<EOD
+<p>$_msg_backup_adminpass</p>
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden"   name="wcmd"    value="backup" />
+  <input type="hidden"   name="page"   value="$s_page" />
+  <input type="hidden"   name="action" value="delete" />
+  <input type="hidden"   name="pass" />
+  <div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>
+  <input type="submit"   name="ok"     class="button btn" value="$_btn_delete" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+</form>
+EOD;
+	} else {
+		$body .= <<<EOD
 <p>$_msg_backup_adminpass</p>
 <form action="$postScript" method="post" class="form">
  <div>
@@ -193,6 +194,7 @@ function plugin_backup_delete($page)
  </div>
 </form>
 EOD;
+	}
 	return	array('msg'=>$_title_backup_delete, 'body'=>$body);
 }
 
@@ -221,17 +223,6 @@ function plugin_backup_get_list($page)
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
 	$retval = array();
-/*	$retval[0] = <<<EOD
-<ul>
- <li><a href="$script?cmd=backup">$_msg_backuplist</a>
-  <ul>
-EOD;
-	$retval[1] = "\n";
-	$retval[2] = <<<EOD
-  </ul>
- </li>
-</ul>
-EOD;*/
 	$retval[0] = <<<EOD
 <ul class="wiki_list">
  <li><a href="$postScript">$_msg_backuplist</a>
@@ -243,7 +234,7 @@ EOD;
  </li>
 </ul>
 EOD;
-	//$backups = _backup_file_exists($page) ? get_backup($page) : array();
+	
 	$backups = WikiPage::isPageBackup($page) ? WikiPage::getPageBackupInfo($page) : array();
 	if (empty($backups)) {
 		$msg = str_replace('$1', make_pagelink($page), $_msg_nobackup);
@@ -252,31 +243,20 @@ EOD;
 	}
 
 	if (! PKWK_READONLY) {
-		//$retval[1] .= '   <li><a href="' . $script . '?cmd=backup&amp;action=delete&amp;page=' . $r_page . '">';
 		$retval[1] .= '   <li><a href="' . $script . WikiParam::convQuery('?cmd=backup&amp;action=delete&amp;page=' . $r_page) . '">';
 		$retval[1] .= str_replace('$1', $s_page, $_title_backup_delete);
 		$retval[1] .= '</a></li>' . "\n";
 	}
 
-	//$href = $script . '?cmd=backup&amp;page=' . $r_page . '&amp;age=';
 	$query = '?cmd=backup&amp;page=' . $r_page . '&amp;age=';
 	$_anchor_from = $_anchor_to   = '';
 	foreach ($backups as $age=>$data) {
 		if (! PLUGIN_BACKUP_DISABLE_BACKUP_RENDERING) {
-			//$_anchor_from = '<a href="' . $href . $age . '">';
 			$_anchor_from = '<a href="' . $script . WikiParam::convQuery($query . $age) . '">';
 			$_anchor_to   = '</a>';
 		}
 		$date = format_date($data['time'], TRUE);
 
-		/*$retval[1] .= <<<EOD
-   <li>$_anchor_from$age $date$_anchor_to
-     [ <a href="$href$age&amp;action=diff">$_msg_diff</a>
-     | <a href="$href$age&amp;action=nowdiff">$_msg_nowdiff</a>
-     | <a href="$href$age&amp;action=source">$_msg_source</a>
-     ]
-   </li>
-EOD;*/
 		$url = $script . WikiParam::convQuery($query . $age);
 		$retval[1] .= <<<EOD
    <li>$_anchor_from$age $date$_anchor_to
@@ -296,7 +276,6 @@ function plugin_backup_get_list_all($withfilename = FALSE)
 {
 	global $cantedit;
 
-	//$pages = array_diff(get_existpages(BACKUP_DIR, BACKUP_EXT), $cantedit);
 	$pages = array_diff(WikiPage::getAllBackupPages(), $cantedit);
 
 	if (empty($pages)) {
