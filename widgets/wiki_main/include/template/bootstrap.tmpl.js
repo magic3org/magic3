@@ -1,10 +1,10 @@
 /*
- * BOOTSTRAPŒ^ƒeƒ“ƒvƒŒ[ƒg‚Ìê‡‚Ì‹N“®ÀsJavaƒXƒNƒŠƒvƒg
+ * BOOTSTRAPå‹ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®å ´åˆã®èµ·å‹•æ™‚å®Ÿè¡ŒJavaã‚¹ã‚¯ãƒªãƒ—ãƒˆ
  *
  * LICENSE: This source file is licensed under the terms of the GNU General Public License.
  *
  * @package    Magic3 Framework
- * @author     •½“c’¼‹B(Naoki Hirata) <naoki@aplo.co.jp>
+ * @author     å¹³ç”°ç›´æ¯…(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
@@ -12,7 +12,7 @@
  */
 <patTemplate:tmpl name="_tmpl">
 $(function(){
-	// ƒAƒbƒvƒ[ƒhƒtƒ@ƒCƒ‹‘I‘ğ
+	// ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠ
 	$('.btn-file :file').on('fileselect', function(event, numFiles, label){
 		var input = $(this).parents('.input-group').find(':text'),
 			log = numFiles > 1 ? numFiles + ' files selected' : label;

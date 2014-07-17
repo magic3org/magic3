@@ -8,28 +8,26 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: vote.inc.php 1601 2009-03-21 05:51:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 function plugin_vote_action()
 {
-	//global $vars, $script, $cols,$rows;
-	global $script, $cols,$rows;
+	global $script, $cols, $rows;
 	global $_title_collided, $_msg_collided, $_title_updated;
 	global $_vote_plugin_votes;
-
+	global $gEnvManager;
+	
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
-	//$postdata_old  = get_source($vars['refer']);
 	$postdata_old  = get_source(WikiParam::getRefer());
 
 	$vote_no = 0;
 	$title = $body = $postdata = $postdata_input = $vote_str = '';
 	$matches = array();
 	foreach($postdata_old as $line) {
-		//if (! preg_match('/^#vote(?:\((.*)\)(.*))?$/i', $line, $matches) || $vote_no++ != $vars['vote_no']) {
 		if (!preg_match('/^#vote(?:\((.*)\)(.*))?$/i', $line, $matches) || $vote_no++ != WikiParam::getVar('vote_no')){
 			$postdata .= $line;
 			continue;
@@ -44,7 +42,6 @@ function plugin_vote_action()
 				$cnt = $matches[2];
 			}
 			$e_arg = encode($arg);
-			//if (! empty($vars['vote_' . $e_arg]) && $vars['vote_' . $e_arg] == $_vote_plugin_votes)
 			if (WikiParam::getVar('vote_' . $e_arg) == $_vote_plugin_votes)
 				++$cnt;
 
@@ -56,18 +53,24 @@ function plugin_vote_action()
 		$postdata      .= $vote_str;
 	}
 
-	//if (md5(@join('', get_source($vars['refer']))) != $vars['digest']) {
 	if (md5(get_source(WikiParam::getRefer(), true)) != WikiParam::getVar('digest')) {
 		$title = $_title_collided;
 
-	/*	$s_refer          = htmlspecialchars($vars['refer']);
-		$s_digest         = htmlspecialchars($vars['digest']);*/
 		$s_refer          = htmlspecialchars(WikiParam::getRefer());
 		$s_digest         = htmlspecialchars(WikiParam::getVar('digest'));
 		
 		$postScript = $script . WikiParam::convQuery("?cmd=preview");
 		$s_postdata_input = htmlspecialchars($postdata_input);
-		$body = <<<EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body = <<<EOD
+$_msg_collided
+<pre class="wiki_pre">$s_postdata_input</pre>
+EOD;
+		} else {
+			$body = <<<EOD
 $_msg_collided
 <form action="$postScript" method="post" class="form">
  <div>
@@ -77,13 +80,12 @@ $_msg_collided
  </div>
 </form>
 EOD;
+		}
 	} else {
-		//page_write($vars['refer'], $postdata);
 		page_write(WikiParam::getRefer(), $postdata);
 		$title = $_title_updated;
 	}
 
-	//$vars['page'] = $vars['refer'];
 	WikiParam::setPage(WikiParam::getRefer());
 
 	return array('msg'=>$title, 'body'=>$body);
@@ -91,12 +93,11 @@ EOD;
 
 function plugin_vote_convert()
 {
-	//global $script, $vars,  $digest;
 	global $script;
 	global $_vote_plugin_choice, $_vote_plugin_votes;
+	
 	static $number = array();
 
-	//$page = isset($vars['page']) ? $vars['page'] : '';
 	$page = WikiParam::getPage();
 	
 	// Vote-box-id in the page
@@ -109,14 +110,12 @@ function plugin_vote_convert()
 		$_script = '';
 		$_submit = 'hidden';
 	} else {
-		//$_script = $script;
 		$_script = $script . WikiParam::convQuery("?");
 		$_submit = 'submit';
 	}
 
 	$args     = func_get_args();
 	$s_page   = htmlspecialchars($page);
-	//$s_digest = htmlspecialchars($digest);
 	$s_digest = htmlspecialchars(WikiParam::getDigest());
 
 	$body = <<<EOD

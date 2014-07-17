@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: dump.inc.php 1601 2009-03-21 05:51:06Z fishbone $
  * @link       http://www.magic3.org
@@ -54,19 +54,19 @@ $_STORAGE['BACKUP_DIR']['extract_filter'] =  '^' . preg_quote(BACKUP_DIR, '/') .
 // プラグイン本体
 function plugin_dump_action()
 {
-	global $vars;
+//	global $vars;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 
-	$pass = isset($_POST['pass']) ? $_POST['pass'] : NULL;
-	$act  = isset($vars['act'])   ? $vars['act']   : NULL;
-
+	//$pass = isset($_POST['pass']) ? $_POST['pass'] : NULL;
+	//$act  = isset($vars['act'])   ? $vars['act']   : NULL;
+	$pass = WikiParam::getVar('pass');
+	$act = WikiParam::getVar('act');
+	
 	$body = '';
-
-	if ($pass !== NULL) {
-		if (! pkwk_login($pass)) {
-			$body = "<p><strong>パスワードが違います。</strong></p>\n";
-		} else {
+	//if ($pass !== NULL) {
+	if (!empty($pass)){
+		if (pkwk_login($pass)){
 			switch($act){
 			case PLUGIN_DUMP_DUMP:
 				$body = plugin_dump_download();
@@ -82,6 +82,8 @@ function plugin_dump_action()
 				return array('msg' => $msg, 'body' => $body);
 				break;
 			}
+		} else {
+			$body = "<p><strong>パスワードが違います。</strong></p>\n";
 		}
 	}
 
@@ -102,23 +104,28 @@ function plugin_dump_action()
 // ファイルのダウンロード
 function plugin_dump_download()
 {
-	global $vars, $_STORAGE;
+//	global $vars, $_STORAGE;
+	global $_STORAGE;
 
 	// アーカイブの種類
-	$arc_kind = ($vars['pcmd'] == 'tar') ? 'tar' : 'tgz';
+//	$arc_kind = ($vars['pcmd'] == 'tar') ? 'tar' : 'tgz';
+	$arc_kind = (WikiParam::getVar('pcmd') == 'tar') ? 'tar' : 'tgz';
 
 	// ページ名に変換する
-	$namedecode = isset($vars['namedecode']) ? TRUE : FALSE;
+	//$namedecode = isset($vars['namedecode']) ? TRUE : FALSE;
+	$namedecode = empty(WikiParam::getVar('namedecode')) ? FALSE : TRUE;
 
 	// バックアップディレクトリ
-	$bk_wiki   = isset($vars['bk_wiki'])   ? TRUE : FALSE;
+/*	$bk_wiki   = isset($vars['bk_wiki'])   ? TRUE : FALSE;
 	$bk_attach = isset($vars['bk_attach']) ? TRUE : FALSE;
-	$bk_backup = isset($vars['bk_backup']) ? TRUE : FALSE;
+	$bk_backup = isset($vars['bk_backup']) ? TRUE : FALSE;*/
+	$bk_wiki   = empty(WikiParam::getVar('bk_wiki'))   ? FALSE : TRUE;
+	$bk_attach = empty(WikiParam::getVar('bk_attach')) ? FALSE : TRUE;
+	$bk_backup = empty(WikiParam::getVar('bk_backup')) ? FALSE : TRUE;
 
 	$filecount = 0;
 	$tar = new tarlib();
-	$tar->create(CACHE_DIR, $arc_kind) or
-		die_message('テンポラリファイルの生成に失敗しました。');
+	$tar->create(CACHE_DIR, $arc_kind) or die_message('テンポラリファイルの生成に失敗しました。');
 
 	if ($bk_wiki)   $filecount += $tar->add_dir(DATA_DIR,   $_STORAGE['DATA_DIR']['add_filter'],   $namedecode);
 	if ($bk_attach) $filecount += $tar->add_dir(UPLOAD_DIR, $_STORAGE['UPLOAD_DIR']['add_filter'], $namedecode);
@@ -141,7 +148,8 @@ function plugin_dump_download()
 // ファイルのアップロード
 function plugin_dump_upload()
 {
-	global $vars, $_STORAGE;
+//	global $vars, $_STORAGE;
+	global $_STORAGE;
 
 	if (! PLUGIN_DUMP_ALLOW_RESTORE)
 		return array('code' => FALSE , 'msg' => 'Restoring function is not allowed');
@@ -224,16 +232,18 @@ function plugin_dump_disp_form()
 	$act_up   = PLUGIN_DUMP_RESTORE;
 	$maxsize  = PLUGIN_DUMP_MAX_FILESIZE;
 
+	$postScript = $script . WikiParam::convQuery("?");
+	
 	$data = <<<EOD
 <span class="small">
 </span>
 <h3>データのダウンロード</h3>
-<form action="$script" method="post" class="form">
+<form action="$postScript" method="post" class="form">
  <div>
-  <input type="hidden" name="cmd"  value="dump" />
+  <input type="hidden" name="wcmd"  value="dump" />
   <input type="hidden" name="page" value="$defaultpage" />
   <input type="hidden" name="act"  value="$act_down" />
-
+  <input type="hidden"   name="pass" />
 <p><strong>アーカイブの形式</strong>
 <br />
   <input type="radio" name="pcmd" id="_p_dump_tgz" value="tgz" checked="checked" />
@@ -257,8 +267,8 @@ function plugin_dump_disp_form()
   (※リストアに使うことはできなくなります。また、一部の文字は '_' に置換されます)</label><br />
 </p>
 <p><label for="_p_dump_adminpass_dump"><strong>管理者パスワード</strong></label>
-  <input type="password" name="pass" id="_p_dump_adminpass_dump" size="12" />
-  <input type="submit"   name="ok"   class="button" value="OK" />
+  <input type="password" name="password" id="_p_dump_adminpass_dump" size="12" />
+  <input type="submit"   name="ok"   class="button" value="OK" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
 </p>
  </div>
 </form>
@@ -267,11 +277,12 @@ EOD;
 	if(PLUGIN_DUMP_ALLOW_RESTORE) {
 		$data .= <<<EOD
 <h3>データのリストア (*.tar, *.tar.gz)</h3>
-<form enctype="multipart/form-data" action="$script" method="post" class="form">
+<form enctype="multipart/form-data" action="$postScript" method="post" class="form">
  <div>
-  <input type="hidden" name="cmd"  value="dump" />
+  <input type="hidden" name="wcmd"  value="dump" />
   <input type="hidden" name="page" value="$defaultpage" />
   <input type="hidden" name="act"  value="$act_up" />
+  <input type="hidden"   name="pass" />
 <p><strong>[重要] 同じ名前のデータファイルは上書きされますので、十分ご注意ください。</strong></p>
 <p><span class="small">
 アップロード可能な最大ファイルサイズは、$maxsize KByte までです。<br />
@@ -280,8 +291,8 @@ EOD;
   <input type="file" name="upload_file" id="_p_dump_upload_file" size="40" />
 </p>
 <p><label for="_p_dump_adminpass_restore"><strong>管理者パスワード</strong></label>
-  <input type="password" name="pass" id="_p_dump_adminpass_restore" size="12" />
-  <input type="submit"   name="ok"   class="button" value="OK" />
+  <input type="password" name="password" id="_p_dump_adminpass_restore" size="12" />
+  <input type="submit"   name="ok"   class="button" value="OK" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
 </p>
  </div>
 </form>
