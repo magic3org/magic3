@@ -309,7 +309,7 @@ function plugin_bugtrack_template($base, $summary, $name, $priority, $state, $ca
 
 	if ($name    == '') $name    = $_plugin_bugtrack['noname'];
 	if ($summary == '') $summary = $_plugin_bugtrack['nosummary'];
-
+/*
 	 return <<<EOD
 * $summary
 
@@ -319,6 +319,24 @@ function plugin_bugtrack_template($base, $summary, $name, $priority, $state, $ca
 - ${_plugin_bugtrack['state'   ]}: $state
 - ${_plugin_bugtrack['category']}: $category
 - ${_plugin_bugtrack['date'    ]}: now?
+- ${_plugin_bugtrack['version' ]}: $version
+
+** ${_plugin_bugtrack['body']}
+$body
+--------
+
+#comment
+EOD;*/
+	$now = format_date(UTIME);
+	return <<<EOD
+* $summary
+
+- ${_plugin_bugtrack['base'    ]}: $base
+- ${_plugin_bugtrack['name'    ]}: $name
+- ${_plugin_bugtrack['priority']}: $priority
+- ${_plugin_bugtrack['state'   ]}: $state
+- ${_plugin_bugtrack['category']}: $category
+- ${_plugin_bugtrack['date'    ]}: $now
 - ${_plugin_bugtrack['version' ]}: $version
 
 ** ${_plugin_bugtrack['body']}
