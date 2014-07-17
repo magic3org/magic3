@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: bugtrack.inc.php 1601 2009-03-21 05:51:06Z fishbone $
  * @link       http://www.magic3.org
@@ -57,11 +57,8 @@ function plugin_bugtrack_init()
 // #bugtrack: Show bugtrack form
 function plugin_bugtrack_convert()
 {
-	//global $vars;
-
 	if (PKWK_READONLY) return ''; // Show nothing
 
-	//$base = $vars['page'];
 	$base = WikiParam::getPage();
 	$category = array();
 	if (func_num_args()) {
@@ -76,10 +73,10 @@ function plugin_bugtrack_convert()
 function plugin_bugtrack_print_form($base, $category)
 {
 	global $_plugin_bugtrack;
+	global $gEnvManager;
 	static $id = 0;
-
+	
 	++$id;
-
 	$select_priority = "\n";
 	$count = count($_plugin_bugtrack['priority_list']);
 	$selected = '';
@@ -97,20 +94,6 @@ function plugin_bugtrack_print_form($base, $category)
 			$state_list . '</option>' . "\n";
 	}
 
-	if (empty($category)) {
-		$encoded_category = '<input name="category" id="_p_bugtrack_category_' . $id .
-			'" type="text" />';
-	} else {
-		$encoded_category = '<select name="category" id="_p_bugtrack_category_' . $id . '">';
-		foreach ($category as $_category) {
-			$s_category = htmlspecialchars($_category);
-			$encoded_category .= '<option value="' . $s_category . '">' .
-				$s_category . '</option>' . "\n";
-		}
-		$encoded_category .= '</select>';
-	}
-
-	//$script     = get_script_uri();
 	$script     = get_script_uri() . WikiParam::convQuery('?');
 	$s_base     = htmlspecialchars($base);
 	$s_name     = htmlspecialchars($_plugin_bugtrack['name']);
@@ -124,7 +107,81 @@ function plugin_bugtrack_print_form($base, $category)
 	$s_summary  = htmlspecialchars($_plugin_bugtrack['summary']);
 	$s_body     = htmlspecialchars($_plugin_bugtrack['body']);
 	$s_submit   = htmlspecialchars($_plugin_bugtrack['submit']);
-	$body = <<<EOD
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		if (empty($category)) {
+			$encoded_category = '<input type="text" class="form-control" name="category" id="_p_bugtrack_category_' . $id . '" />';
+		} else {
+			$encoded_category = '<select class="form-control" name="category" id="_p_bugtrack_category_' . $id . '">';
+			foreach ($category as $_category) {
+				$s_category = htmlspecialchars($_category);
+				$encoded_category .= '<option value="' . $s_category . '">' .
+					$s_category . '</option>' . "\n";
+			}
+			$encoded_category .= '</select>';
+		}
+	
+		$body = <<<EOD
+<form action="$script" method="post" class="form form-horizontal" role="form">
+<input type="hidden" name="plugin" value="bugtrack" />
+<input type="hidden" name="mode"   value="submit" />
+<input type="hidden" name="base"   value="$s_base" />
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="_p_bugtrack_name_$id">$s_name</label>
+  <div class="col-sm-4"><input type="text" id="_p_bugtrack_name_$id" class="form-control" name="name" size="20" /></div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="_p_bugtrack_category_$id">$s_category</label>
+  <div class="col-sm-4">$encoded_category</div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="_p_bugtrack_priority_$id">$s_priority</label>
+  <div class="col-sm-2"><select class="form-control" id="_p_bugtrack_priority_$id" name="priority">$select_priority   </select></div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="_p_bugtrack_state_$id">$s_state</label>
+  <div class="col-sm-2"><select class="form-control" id="_p_bugtrack_state_$id" name="state">$select_state   </select></div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="_p_bugtrack_pagename_$id">$s_pname</label>
+  <div class="col-sm-4"><input id="_p_bugtrack_pagename_$id" class="form-control" name="pagename" size="20" type="text" /></div>
+  <div class="col-sm-6"><span class="help-block">$s_pnamec</span></div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="_p_bugtrack_version_$id">$s_version</label>
+  <div class="col-sm-2"><input id="_p_bugtrack_version_$id" class="form-control" name="version" size="10" type="text" /></div>
+  <div class="col-sm-offset-2 col-sm-6"><span class="help-block">$s_versionc</span></div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="_p_bugtrack_summary_$id">$s_summary</label>
+  <div class="col-sm-10"><input id="_p_bugtrack_summary_$id" class="form-control" name="summary" size="60" type="text" /></div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label" for="_p_bugtrack_body_$id">$s_body</label>
+  <div class="col-sm-10"><textarea id="_p_bugtrack_body_$id" class="form-control wiki_edit" name="body" rows="6"></textarea></div>
+</div>
+<div class="form-group">
+  <div class="col-sm-offset-2 col-sm-10"><input type="submit" class="button btn" value="$s_submit" /></div>
+</div>
+</form>
+EOD;
+	} else {
+		if (empty($category)) {
+			$encoded_category = '<input name="category" id="_p_bugtrack_category_' . $id .
+				'" type="text" />';
+		} else {
+			$encoded_category = '<select name="category" id="_p_bugtrack_category_' . $id . '">';
+			foreach ($category as $_category) {
+				$s_category = htmlspecialchars($_category);
+				$encoded_category .= '<option value="' . $s_category . '">' .
+					$s_category . '</option>' . "\n";
+			}
+			$encoded_category .= '</select>';
+		}
+		
+		$body = <<<EOD
 <form action="$script" method="post" class="form">
  <table border="0">
   <tr>
@@ -172,6 +229,7 @@ function plugin_bugtrack_print_form($base, $category)
  </table>
 </form>
 EOD;
+	}
 	return $body;
 }
 
@@ -277,10 +335,8 @@ EOD;
 // #bugtrack_list plugin itself
 function plugin_bugtrack_list_convert()
 {
-	//global $script, $vars, $_plugin_bugtrack;
 	global $_plugin_bugtrack;
 
-	//$page = $vars['page'];
 	$page = WikiParam::getPage();
 	if (func_num_args()) {
 		list($_page) = func_get_args();

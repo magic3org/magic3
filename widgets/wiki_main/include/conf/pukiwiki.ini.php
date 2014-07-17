@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: pukiwiki.ini.php 3478 2010-08-14 08:33:30Z fishbone $
  * @link       http://www.magic3.org
@@ -86,6 +86,12 @@ global $preformat_ltrim;
 global $line_break;
 global $usedatetime;
 global $agents;
+
+// Special
+//define('PKWK_READONLY',  1);
+if (!$gEnvManager->isSystemManageUser()) define('PKWK_SAFE_MODE', 1);			// システム運用者でない場合はセーフモードで立ち上げ
+//define('PKWK_OPTIMISE',  1);
+//define('TDIARY_THEME',   'digital_gadgets');
 
 /////////////////////////////////////////////////
 // Functionality settings

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: md5.inc.php 1601 2009-03-21 05:51:06Z fishbone $
  * @link       http://www.magic3.org
@@ -32,14 +32,12 @@ function plugin_md5_action()
 	if (PKWK_SAFE_MODE || PKWK_READONLY) die_message('Prohibited by admin');
 
 	// Wait POST
-	//$phrase = isset($post['phrase']) ? $post['phrase'] : '';
 	$phrase = WikiParam::getPostVar('phrase');
 
 	if ($phrase == '') {
 		// Show the form
 
 		// If plugin=md5&md5=password, only set it (Don't compute)
-		//$value  = isset($get['md5']) ? $get['md5'] : '';
 		$value  = WikiParam::getVar('md5');
 
 		return array(
@@ -74,7 +72,10 @@ function plugin_md5_action()
 // $value    = Default passphrase value
 function plugin_md5_show_form($nophrase = FALSE, $value = '')
 {
+	global $gEnvManager;
+	
 	if (PKWK_SAFE_MODE || PKWK_READONLY) die_message('Prohibited');
+	
 	if (strlen($value) > PKWK_PASSPHRASE_LIMIT_LENGTH)
 		die_message('Limit: malicious message length');
 
@@ -91,14 +92,72 @@ function plugin_md5_show_form($nophrase = FALSE, $value = '')
 	//$self = get_script_uri();
 	$self = get_script_uri() . WikiParam::convQuery("?");
 
-	$form = <<<EOD
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$form = <<<EOD
 <p><strong>NOTICE: Don't use this feature via untrustful or unsure network</strong></p>
-<hr>
+<hr />
 EOD;
 
-	if ($nophrase) $form .= '<strong>NO PHRASE</strong><br />';
+		if ($nophrase) $form .= '<strong>NO PHRASE</strong>';
 
-	$form .= <<<EOD
+		$form .= <<<EOD
+<form action="$self" method="post" class="form" role="form">
+  <input type="hidden" name="plugin" value="md5" />
+  <div class="form-group"><label for="_p_md5_phrase">Phrase:</label>
+  <input type="text" class="form-control" name="phrase"  id="_p_md5_phrase" size="60" $value/></div>
+EOD;
+
+		if ($sha1_enabled) $form .= <<<EOD
+  <div class="radio"><input type="radio" name="scheme" id="_p_md5_sha1" value="x-php-sha1" />
+  <label for="_p_md5_sha1">PHP sha1()</label></div>
+EOD;
+
+		$form .= <<<EOD
+  <div class="radio"><input type="radio" name="scheme" id="_p_md5_md5"  value="x-php-md5" />
+  <label for="_p_md5_md5">PHP md5()</label></div>
+  <div class="radio"><input type="radio" name="scheme" id="_p_md5_crpt" value="x-php-crypt" />
+  <label for="_p_md5_crpt">PHP crypt() *</label></div>
+EOD;
+
+		if ($sha1_enabled) $form .= <<<EOD
+  <div class="radio"><input type="radio" name="scheme" id="_p_md5_lssha" value="SSHA" $sha1_checked/>
+  <label for="_p_md5_lssha">LDAP SSHA (sha-1 with a seed) *</label></div>
+  <div class="radio"><input type="radio" name="scheme" id="_p_md5_lsha" value="SHA" />
+  <label for="_p_md5_lsha">LDAP SHA (sha-1)</label></div>
+EOD;
+
+		$form .= <<<EOD
+  <div class="radio"><input type="radio" name="scheme" id="_p_md5_lsmd5" value="SMD5" $md5_checked/>
+  <label for="_p_md5_lsmd5">LDAP SMD5 (md5 with a seed) *</label></div>
+  <div class="radio"><input type="radio" name="scheme" id="_p_md5_lmd5" value="MD5" />
+  <label for="_p_md5_lmd5">LDAP MD5</label></div>
+
+  <div class="radio"><input type="radio" name="scheme" id="_p_md5_lcrpt" value="CRYPT" />
+  <label for="_p_md5_lcrpt">LDAP CRYPT *</label></div>
+
+  <div class="checkbox"><input type="checkbox" name="prefix" id="_p_md5_prefix" checked="checked" />
+  <label for="_p_md5_prefix">Add scheme prefix (RFC2307, Using LDAP as NIS)</label></div>
+
+  <div class="form-group"><label for="_p_md5_salt">Salt, '{scheme}', '{scheme}salt', or userPassword itself to specify:</label>
+  <input type="text" class="form-control" name="salt" id="_p_md5_salt" size="60" /></div>
+
+  <input type="submit" class="button btn" value="Compute" />
+
+  <hr />
+  <p>* = Salt enabled<p />
+</form>
+EOD;
+	} else {
+		$form = <<<EOD
+<p><strong>NOTICE: Don't use this feature via untrustful or unsure network</strong></p>
+<hr />
+EOD;
+
+		if ($nophrase) $form .= '<strong>NO PHRASE</strong><br />';
+
+		$form .= <<<EOD
 <form action="$self" method="post" class="form">
  <div>
   <input type="hidden" name="plugin" value="md5" />
@@ -106,26 +165,26 @@ EOD;
   <input type="text" name="phrase"  id="_p_md5_phrase" size="60" $value/><br />
 EOD;
 
-	if ($sha1_enabled) $form .= <<<EOD
+		if ($sha1_enabled) $form .= <<<EOD
   <input type="radio" name="scheme" id="_p_md5_sha1" value="x-php-sha1" />
   <label for="_p_md5_sha1">PHP sha1()</label><br />
 EOD;
 
-	$form .= <<<EOD
+		$form .= <<<EOD
   <input type="radio" name="scheme" id="_p_md5_md5"  value="x-php-md5" />
   <label for="_p_md5_md5">PHP md5()</label><br />
   <input type="radio" name="scheme" id="_p_md5_crpt" value="x-php-crypt" />
   <label for="_p_md5_crpt">PHP crypt() *</label><br />
 EOD;
 
-	if ($sha1_enabled) $form .= <<<EOD
+		if ($sha1_enabled) $form .= <<<EOD
   <input type="radio" name="scheme" id="_p_md5_lssha" value="SSHA" $sha1_checked/>
   <label for="_p_md5_lssha">LDAP SSHA (sha-1 with a seed) *</label><br />
   <input type="radio" name="scheme" id="_p_md5_lsha" value="SHA" />
   <label for="_p_md5_lsha">LDAP SHA (sha-1)</label><br />
 EOD;
 
-	$form .= <<<EOD
+		$form .= <<<EOD
   <input type="radio" name="scheme" id="_p_md5_lsmd5" value="SMD5" $md5_checked/>
   <label for="_p_md5_lsmd5">LDAP SMD5 (md5 with a seed) *</label><br />
   <input type="radio" name="scheme" id="_p_md5_lmd5" value="MD5" />
@@ -147,7 +206,7 @@ EOD;
  </div>
 </form>
 EOD;
-
+	}
 	return $form;
 }
 ?>
