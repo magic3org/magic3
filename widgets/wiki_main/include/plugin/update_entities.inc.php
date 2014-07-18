@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: update_entities.inc.php 1601 2009-03-21 05:51:06Z fishbone $
  * @link       http://www.magic3.org
@@ -47,22 +47,36 @@ PHPの持つテーブルおよびW3CのDTDをスキャンして、キャッシ�
 
 function plugin_update_entities_action()
 {
-	//global $script, $vars;
 	global $script;
 	global $_entities_messages;
-
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+	global $gEnvManager;
+	
+	if (PKWK_SAFE_MODE || PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 
 	$msg = $body = '';
 	$action = WikiParam::getVar('action');
 	$pass = WikiParam::getVar('pass');
-	//if (empty($vars['action']) || empty($vars['adminpass']) || ! pkwk_login($vars['adminpass'])) {
 	if (empty($action) || empty($pass) || !pkwk_login($pass)){
 		$msg   = $_entities_messages['title_update'];
 		$items = plugin_update_entities_create();
 		$body  = convert_html(sprintf($_entities_messages['msg_usage'], join("\n" . '-', $items)));
 		$postScript = $script . WikiParam::convQuery("?");
-		$body .= <<<EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body .= <<<EOD
+<form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="plugin" value="update_entities" />
+  <input type="hidden" name="action" value="update" />
+  <input type="hidden" name="pass" />
+  <div class="form-group"><label for="_p_update_entities_adminpass">{$_entities_messages['msg_adminpass']}</label>
+  <input type="password" class="form-control" name="password" id="_p_update_entities_adminpass" size="12" /></div>
+  <input type="submit" class="button btn" value="{$_entities_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+</form>
+EOD;
+		} else {
+			$body .= <<<EOD
 <form action="$postScript" method="post" class="form">
  <div>
   <input type="hidden" name="plugin" value="update_entities" />
@@ -74,8 +88,7 @@ function plugin_update_entities_action()
  </div>
 </form>
 EOD;
-
-	//} else if ($vars['action'] == 'update') {
+		}
 	} else if ($action == 'update') {
 		plugin_update_entities_create(TRUE);
 		$msg  = $_entities_messages['title_update'];
