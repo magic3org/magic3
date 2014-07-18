@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: links.inc.php 1601 2009-03-21 05:51:06Z fishbone $
  * @link       http://www.magic3.org
@@ -42,20 +42,36 @@ function plugin_links_init()
 
 function plugin_links_action()
 {
-	//global $script, $post, $vars, $foot_explain;
-	global $script, $foot_explain;
+	global $script;
 	global $_links_messages;
-
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+	global $gEnvManager;
+	
+	if (PKWK_SAFE_MODE || PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 
 	$msg = $body = '';
 	$action = WikiParam::getVar('action');
-	//if (empty($vars['action']) || empty($post['adminpass']) || ! pkwk_login($post['adminpass'])) {
 	if ($action == '' || !pkwk_login(WikiParam::getPostVar('pass'))) {
 		$msg   = $_links_messages['title_update'];
 		$postScript = $script . WikiParam::convQuery("?");
 		$body  = convert_html($_links_messages['msg_usage']);
-		$body .= <<<EOD
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body .= <<<EOD
+<form action="$postScript" method="post" class="form form-inline" role="form">
+ <div>
+  <input type="hidden" name="plugin" value="links" />
+  <input type="hidden" name="action" value="update" />
+  <input type="hidden" name="pass" />
+  <div class="form-group"><label for="_p_links_adminpass">{$_links_messages['msg_adminpass']}</label>
+  <input type="password" class="form-control" name="password" id="_p_links_adminpass" size="12" /></div>
+  <input type="submit" class="button btn" value="{$_links_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+ </div>
+</form>
+EOD;
+		} else {
+			$body .= <<<EOD
 <form action="$postScript" method="post" class="form">
  <div>
   <input type="hidden" name="plugin" value="links" />
@@ -67,10 +83,10 @@ function plugin_links_action()
  </div>
 </form>
 EOD;
-	//} else if ($vars['action'] == 'update') {
+		}
 	} else if ($action == 'update'){
 		links_init();
-		$foot_explain = array(); // Exhaust footnotes
+//		$foot_explain = array(); // Exhaust footnotes
 		$msg  = $_links_messages['title_update'];
 		$body = $_links_messages['msg_done'    ];
 	} else {

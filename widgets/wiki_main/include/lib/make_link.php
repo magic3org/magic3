@@ -310,7 +310,7 @@ EOD;
 
 	function set($arr, $page)
 	{
-		global $foot_explain, $vars;
+		global $vars;
 		static $note_id = 0;
 
 		list(, $body) = $this->splice($arr);

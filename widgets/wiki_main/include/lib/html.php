@@ -29,7 +29,7 @@ function catbody($body)
 	//global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
 	global $script, $defaultpage, $whatsnew, $help_page, $hr;
 	global $attach_link, $related_link, $cantedit, $function_freeze;
-	global $search_word_color, $_msg_word, $foot_explain, $note_hr, $head_tags;
+	global $search_word_color, $_msg_word, $note_hr, $head_tags;
 	global $trackback, $trackback_javascript, $referer, $javascript;
 	global $nofollow;
 	//global $_LANG, $_LINK, $_IMAGE;

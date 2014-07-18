@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: tracker.inc.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
@@ -24,12 +24,10 @@ define('TRACKER_LIST_SHOW_ERROR_PAGE',TRUE);
 
 function plugin_tracker_convert()
 {
-	//global $script,$vars;
 	global $script;
 
 	if (PKWK_READONLY) return ''; // Show nothing
 
-	//$base = $refer = $vars['page'];
 	$base = $refer = WikiParam::getPage();
 
 	$config_name = 'default';
@@ -91,12 +89,10 @@ EOD;
 }
 function plugin_tracker_action()
 {
-	//global $post, $vars, $now;
 	global $now;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
-	//$config_name = array_key_exists('_config',$post) ? $post['_config'] : '';
 	$config_name = WikiParam::getPostVar('_config');
 
 	$config = new Config('plugin/tracker/'.$config_name);
@@ -596,10 +592,7 @@ class Tracker_field_past extends Tracker_field
 // 一覧表示
 function plugin_tracker_list_convert()
 {
-	//global $vars;
-
 	$config = 'default';
-	//$page = $refer = $vars['page'];
 	$page = $refer = WikiParam::getPage();
 	$field = '_page';
 	$order = '';
@@ -626,18 +619,13 @@ function plugin_tracker_list_convert()
 }
 function plugin_tracker_list_action()
 {
-	//global $script,$vars,$_tracker_messages;
 	global $script,$_tracker_messages;
 
-	//$page = $refer = $vars['refer'];
 	$page = $refer = WikiParam::getRefer();
 	$s_page = make_pagelink($page);
-	//$config = $vars['config'];
 	$config = WikiParam::getVar('config');
-	//$list = array_key_exists('list',$vars) ? $vars['list'] : 'list';
 	$list = WikiParam::getVar('list');
 	if ($list == '') $list = 'list';
-	//$order = array_key_exists('order',$vars) ? $vars['order'] : '_real:SORT_DESC';
 	$order = WikiParam::getVar('order');
 	if ($order == '') $order = '_real:SORT_DESC';
 

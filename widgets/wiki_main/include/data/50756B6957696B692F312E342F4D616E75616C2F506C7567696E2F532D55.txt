@@ -348,7 +348,7 @@ stationaryプラグインは単純な文字列を表示する以外は何もし�
 --PLUGIN_UNFREEZE_EDIT　凍結解除時にページの編集フォームを表示するか
 
 
-**update_entities(Magic3版削除) [#r62603ec]
+**update_entities(Magic3版廃止) [#r62603ec]
 :種別|
 ~コマンド
 :重要度|
