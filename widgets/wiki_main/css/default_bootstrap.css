@@ -1,3 +1,7 @@
+/* default edit content area */
+.edit_form {
+	width:100%;
+}
 /*pre.wiki_pre {
 	border-top:#DDDDEE 1px solid;
 	border-bottom:#888899 1px solid;
@@ -210,12 +214,12 @@ span.calendar_viewer_right {
 div.toolbar img {
 	border:none;
 }
-textarea.wiki_edit {
+/*textarea.wiki_edit {
 	width: 100%;
 	font-size: 100%;
 	margin-top: 0.1em;
 	margin-bottom: 0.1em;
-}
+}*/
 /* ファイル選択 */
 .btn-file {
 	position: relative;

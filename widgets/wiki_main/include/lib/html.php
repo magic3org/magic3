@@ -19,6 +19,8 @@
 // License: GPL v2 or (at your option) any later version
 //
 // HTML-publishing related functions
+// Bootstrap用
+define('EDIT_COLS_BOOTSTRAP', 40); // Columns of textarea
 
 // Show page-content
 // modified for Magic3 by naoki on 2008/9/29
@@ -41,26 +43,30 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 	global $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel, $_msg_help;
 	global $whatsnew, $_btn_template, $_btn_load, $load_template_func;
 	global $notimeupdate;
-
+	global $_btn_addtop;
+	global $gEnvManager;
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+		
 	// Newly generate $digest or not
-	//if ($digest === FALSE) $digest = md5(join('', get_source($page)));
 	if ($digest === FALSE) $digest = md5(get_source($page, true));
 
 	$refer = $template = '';
  
  	// Add plugin
 	$addtag = $add_top = '';
-	//if(isset($vars['add'])) {
 	if ($cmd == 'add'){
-		global $_btn_addtop;
 		$addtag  = '<input type="hidden" name="add"    value="true" />';
-		//$add_top = isset($vars['add_top']) ? ' checked="checked"' : '';
 		$add_top = (WikiParam::getVar('add_top') != '') ? ' checked="checked"' : '';
-		$add_top = '<input type="checkbox" name="add_top" ' .
-			'id="_edit_form_add_top" value="true"' . $add_top . ' />' . "\n" .
-			'  <label for="_edit_form_add_top">' .
-				'<span class="small">' . $_btn_addtop . '</span>' .
-			'</label>';
+		
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$add_top = '<div class="checkbox-inline"><input type="checkbox" name="add_top" id="_edit_form_add_top" value="true"' . $add_top . ' />' . "\n" .
+					'<label for="_edit_form_add_top">' . $_btn_addtop . '</label></div>';
+		} else {
+			$add_top = '<input type="checkbox" name="add_top" id="_edit_form_add_top" value="true"' . $add_top . ' />' . "\n" .
+					'<label for="_edit_form_add_top">' . $_btn_addtop . '</label>';
+		}
 	}
 
 	if($load_template_func && $b_template) {
@@ -74,7 +80,17 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 		}
 		ksort($pages);
 		$s_pages  = join("\n", $pages);
-		$template = <<<EOD
+		
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$template = <<<EOD
+  <select class="form-control" name="template_page">
+   <option value="">-- $_btn_template --</option>
+$s_pages
+  </select>
+  <input type="submit" name="template" class="button btn" value="$_btn_load" accesskey="r" />
+EOD;
+		} else {
+			$template = <<<EOD
   <select name="template_page">
    <option value="">-- $_btn_template --</option>
 $s_pages
@@ -82,6 +98,7 @@ $s_pages
   <input type="submit" name="template" class="button" value="$_btn_load" accesskey="r" />
   <br />
 EOD;
+		}
 
 		/*if (isset($vars['refer']) && $vars['refer'] != '')
 			$refer = '[[' . strip_bracket($vars['refer']) . ']]' . "\n\n";*/
@@ -103,26 +120,59 @@ EOD;
 	$add_notimestamp = '';
 	if ($notimeupdate != 0) {
 		global $_btn_notchangetimestamp;
-		//$checked_time = isset($vars['notimestamp']) ? ' checked="checked"' : '';
+
 		$checked_time = (WikiParam::getVar('notimestamp') != '') ? ' checked="checked"' : '';
-		// Only for administrator
-		if ($notimeupdate == 2) {
-			$add_notimestamp = '   ' .
-				'<input type="password" name="pass" size="12" />' . "\n";
+		
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			// Only for administrator
+			if ($notimeupdate == 2) {
+				$add_notimestamp = '<input type="password" class="form-control" name="pass" size="12" />';
+			}
+			$add_notimestamp = '<div class="checkbox-inline"><input type="checkbox" name="notimestamp" id="_edit_form_notimestamp" value="true"' . $checked_time . ' />' .
+								'<label for="_edit_form_notimestamp">' . $_btn_notchangetimestamp . '</label></div>' . $add_notimestamp . '&nbsp;';
+		} else {
+			// Only for administrator
+			if ($notimeupdate == 2) {
+				$add_notimestamp = '   ' .
+					'<input type="password" name="pass" size="12" />' . "\n";
+			}
+			$add_notimestamp = '<input type="checkbox" name="notimestamp" ' .
+				'id="_edit_form_notimestamp" value="true"' . $checked_time . ' />' . "\n" .
+				'   ' . '<label for="_edit_form_notimestamp"><span class="small">' .
+				$_btn_notchangetimestamp . '</span></label>' . "\n" .
+				$add_notimestamp .
+				'&nbsp;';
 		}
-		$add_notimestamp = '<input type="checkbox" name="notimestamp" ' .
-			'id="_edit_form_notimestamp" value="true"' . $checked_time . ' />' . "\n" .
-			'   ' . '<label for="_edit_form_notimestamp"><span class="small">' .
-			$_btn_notchangetimestamp . '</span></label>' . "\n" .
-			$add_notimestamp .
-			'&nbsp;';
 	}
 
-	// 'margin-bottom', 'float:left', and 'margin-top'
-	// are for layout of 'cancel button'
-	// modified for Magic3 by naoki on 2008/10/6
 	$postScript = $script . WikiParam::convQuery("?");
-	$body = <<<EOD
+	
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$cols = EDIT_COLS_BOOTSTRAP;
+		$body = <<<EOD
+<div class="edit_form">
+ <form action="$postScript" method="post" class="form form-inline" role="form">
+$template
+  $addtag
+  <input type="hidden" name="wcmd"    value="edit" />
+  <input type="hidden" name="page"   value="$s_page" />
+  <input type="hidden" name="digest" value="$s_digest" />
+  <div><textarea class="wiki_edit form-control" name="msg" rows="$rows" cols="$cols">$s_postdata</textarea></div>
+   <input type="submit" name="preview" class="button btn" value="$btn_preview" accesskey="p" />
+   <input type="submit" name="write"   class="button btn" value="$_btn_update" accesskey="s" />
+   $add_top
+   $add_notimestamp
+  <textarea name="original" style="display:none">$s_original</textarea>
+ </form>
+ <form action="$postScript" method="post" class="form form-inline" role="form">
+  <input type="hidden" name="wcmd"    value="edit" />
+  <input type="hidden" name="page"   value="$s_page" />
+  <input type="submit" name="cancel" class="button btn" value="$_btn_cancel" accesskey="c" />
+ </form>
+</div>
+EOD;
+	} else {
+		$body = <<<EOD
 <div class="edit_form">
  <form action="$postScript" method="post" style="margin-bottom:0px;" class="form">
 $template
@@ -147,6 +197,7 @@ $template
  </form>
 </div>
 EOD;
+	}
 
 	//if (isset($vars['help'])) {
 	if (WikiParam::getVar('help') != ''){
@@ -438,6 +489,6 @@ define('PKWK_DTD_TYPE_HTML',   0);*/
 		return '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . $charset . '" />' . "\n";
 	} else {
 		return '<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />' . "\n";
-	}*/
-}
+	}
+}*/
 ?>
