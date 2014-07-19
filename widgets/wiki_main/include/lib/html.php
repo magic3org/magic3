@@ -53,7 +53,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 	if ($digest === FALSE) $digest = md5(get_source($page, true));
 
 	$refer = $template = '';
- 
+
  	// Add plugin
 	$addtag = $add_top = '';
 	if ($cmd == 'add'){

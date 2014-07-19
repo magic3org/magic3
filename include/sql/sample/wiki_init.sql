@@ -72,6 +72,7 @@ INSERT INTO _page_def
 (pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
 ('index', '',        'user3',         2,        'default_menu',       1,            'メインメニュー設定', 'main_menu', false,             now()),
 ('index', '',        'left',         10,       'gotop',              0,            '',                   '',          false,        now()),
+('index', '',        'footer',       2,       'default_footer',      0,            '',                   '',          false,        now()),
 ('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',          false,            now()),
 ('index', 'wiki',    'main',         5,        'wiki_main',          0,            '',                   '',          false,            now()),
 ('index', 'search',  'main',         5,        'custom_search',      1,            '',                   '',          false,            now()),
