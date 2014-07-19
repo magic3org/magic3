@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: html.php 3474 2010-08-13 10:36:48Z fishbone $
  * @link       http://www.magic3.org
@@ -23,33 +23,14 @@
 // Show page-content
 // modified for Magic3 by naoki on 2008/9/29
 //function catbody($title, $page, $body)
-function catbody($body)
+/*function catbody($body)
 {
-	// modified for Magic3 by naoki on 2008/9/26
-	//global $script, $vars, $arg, $defaultpage, $whatsnew, $help_page, $hr;
-	global $script, $defaultpage, $whatsnew, $help_page, $hr;
-	global $attach_link, $related_link, $cantedit, $function_freeze;
-	global $search_word_color, $_msg_word, $note_hr, $head_tags;
 	global $trackback, $trackback_javascript, $referer, $javascript;
-	global $nofollow;
-	//global $_LANG, $_LINK, $_IMAGE;
-
-	global $pkwk_dtd;     // XHTML 1.1, XHTML1.0, HTML 4.01 Transitional...
-	global $page_title;   // Title of this site
-	global $do_backup;    // Do backup or not
-	global $modifier;     // Site administrator's  web page
-	global $modifierlink; // Site administrator's name
-
-// modified for Magic3 by naoki on 2008/9/22
-//	if (! file_exists(SKIN_FILE) || ! is_readable(SKIN_FILE))
-//		die_message('SKIN_FILE is not found');
-//
-//	$_LINK = $_IMAGE = array();
 
 	// Add JavaScript header when ...
 	if ($trackback && $trackback_javascript) $javascript = 1; // Set something If you want
 	if (! PKWK_ALLOW_JAVASCRIPT) unset($javascript);
-}
+}*/
 
 // Show 'edit' form
 //function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
@@ -373,7 +354,7 @@ function pkwk_common_headers()
 }
 
 // DTD definitions
-define('PKWK_DTD_XHTML_1_1',              17); // Strict only
+/*define('PKWK_DTD_XHTML_1_1',              17); // Strict only
 define('PKWK_DTD_XHTML_1_0',              16); // Strict
 define('PKWK_DTD_XHTML_1_0_STRICT',       16);
 define('PKWK_DTD_XHTML_1_0_TRANSITIONAL', 15);
@@ -382,12 +363,11 @@ define('PKWK_DTD_HTML_4_01',               3); // Strict
 define('PKWK_DTD_HTML_4_01_STRICT',        3);
 define('PKWK_DTD_HTML_4_01_TRANSITIONAL',  2);
 define('PKWK_DTD_HTML_4_01_FRAMESET',      1);
-
 define('PKWK_DTD_TYPE_XHTML',  1);
-define('PKWK_DTD_TYPE_HTML',   0);
+define('PKWK_DTD_TYPE_HTML',   0);*/
 
 // Output HTML DTD, <html> start tag. Return content-type.
-function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1, $charset = CONTENT_CHARSET)
+/*function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1, $charset = CONTENT_CHARSET)
 {
 	static $called;
 	if (isset($called)) die('pkwk_output_dtd() already called. Why?');
@@ -444,7 +424,7 @@ function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1, $charset = CONTENT_CHAR
 	// Output <html> start tag
 	echo '<html';
 	if ($type == PKWK_DTD_TYPE_XHTML) {
-		echo ' xmlns="http://www.w3.org/1999/xhtml"'; // dir="ltr" /* LeftToRight */
+		echo ' xmlns="http://www.w3.org/1999/xhtml"'; // dir="ltr"
 		echo ' xml:lang="' . LANG . '"';
 		if ($version == '1.0') echo ' lang="' . LANG . '"'; // Only XHTML 1.0
 	} else {
@@ -458,6 +438,6 @@ function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1, $charset = CONTENT_CHAR
 		return '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . $charset . '" />' . "\n";
 	} else {
 		return '<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />' . "\n";
-	}
+	}*/
 }
 ?>

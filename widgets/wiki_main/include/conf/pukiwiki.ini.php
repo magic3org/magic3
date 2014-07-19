@@ -223,18 +223,6 @@ $interwiki    = 'InterWikiName'; // Set InterWiki definition here
 $menubar      = 'MenuBar';       // Menu
 
 /////////////////////////////////////////////////
-// Change default Document Type Definition
-
-// Some web browser's bug, and / or Java apprets may needs not-Strict DTD.
-// Some plugin (e.g. paint) set this PKWK_DTD_XHTML_1_0_TRANSITIONAL.
-
-//$pkwk_dtd = PKWK_DTD_XHTML_1_1; // Default
-//$pkwk_dtd = PKWK_DTD_XHTML_1_0_STRICT;
-//$pkwk_dtd = PKWK_DTD_XHTML_1_0_TRANSITIONAL;
-//$pkwk_dtd = PKWK_DTD_HTML_4_01_STRICT;
-//$pkwk_dtd = PKWK_DTD_HTML_4_01_TRANSITIONAL;
-
-/////////////////////////////////////////////////
 // Always output "nofollow,noindex" attribute
 
 $nofollow = 0; // 1 = Try hiding from search engines

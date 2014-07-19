@@ -174,7 +174,7 @@ function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 			$page = str_replace('$1', make_search($page), $_title_cannotedit);
 			// modified for Magic3 by naoki on 2008/9/29
 			//catbody($title, $page, $body);
-			catbody($body);
+			//catbody($body);
 			//exit;
 		}
 	}
@@ -253,7 +253,7 @@ function basic_auth($page, $auth_flag, $exit_flag, $auth_pages, $title_cannot)
 			$page = str_replace('$1', make_search($page), $title_cannot);
 			// modified for Magic3 by naoki on 2008/9/29
 			//catbody($title, $page, $body);
-			catbody($body);
+			//catbody($body);
 			exit;
 		}
 		return FALSE;

@@ -13,7 +13,9 @@
 -- * @link       http://www.magic3.org
 -- *
 -- [Wikiサイト初期化]
--- 初期インストールデータは必要最小限のみ
+-- Wiki主軸型サイト。用途はドキュメント管理サイトなど。
+-- 機能はWiki、汎用コンテンツ。
+-- 初期インストールデータは必要最小限のみ。
 
 -- システム設定
 UPDATE _system_config SET sc_value = 'bootstrap_cerulean' WHERE sc_id = 'default_template';

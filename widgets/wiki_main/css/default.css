@@ -123,7 +123,7 @@ span.size7 {
 	display:inline;
 }
 /* html.php/catbody() */
-strong.word0 {
+/*strong.word0 {
 	background-color:#FFFF66;
 	color:black;
 }
@@ -162,7 +162,7 @@ strong.word8 {
 strong.word9 {
 	background-color:#990099;
 	color:white;
-}
+}*/
 /* diff.inc.php */
 span.diff_added {
 	color:blue;

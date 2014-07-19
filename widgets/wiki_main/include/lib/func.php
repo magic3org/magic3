@@ -486,7 +486,7 @@ EOD;
 	//if(defined('SKIN_FILE') && file_exists(SKIN_FILE) && is_readable(SKIN_FILE)) {
 		// modified for Magic3 by naoki on 2008/9/29
 		//catbody($title, $page, $body);
-		catbody($body);
+		//catbody($body);
 	/*} else {
 		header('Content-Type: text/html; charset=euc-jp');
 		print <<<EOD
