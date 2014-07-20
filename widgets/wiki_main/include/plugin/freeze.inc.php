@@ -13,55 +13,38 @@
  * @version    SVN: $Id: freeze.inc.php 1601 2009-03-21 05:51:06Z fishbone $
  * @link       http://www.magic3.org
  */
-
 function plugin_freeze_convert() { return ''; }
 
 function plugin_freeze_action()
 {
-	// modified for Magic3 by naoki on 2008/10/10
-	//global $script, $vars, $function_freeze;
 	global $script, $function_freeze;
 	global $_title_isfreezed, $_title_freezed, $_title_freeze;
 	global $_msg_invalidpass, $_msg_freezing, $_btn_freeze;
 	global $gEnvManager;
 	
-	//$page = isset($vars['page']) ? $vars['page'] : '';
 	$page = WikiParam::getPage();
-	if (! $function_freeze || ! is_page($page))
-		return array('msg' => '', 'body' => '');
+	if (! $function_freeze || ! is_page($page)) return array('msg' => '', 'body' => '');
 
-	//$pass = isset($vars['pass']) ? $vars['pass'] : NULL;
 	$pass = WikiParam::getVar('pass');
 	$msg = $body = '';
 	if (is_freeze($page)) {
 		// Freezed already
 		$msg  = $_title_isfreezed;
-		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)),
-			$_title_isfreezed);
-
-	//} else if ($pass !== NULL && pkwk_login($pass)) {
+		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_isfreezed);
 	} else if ($pass != '' && pkwk_login($pass)) {
-		// Freeze
-		//$postdata = get_source($page);
-		//array_unshift($postdata, "#freeze\n");	// removed for magic3
-		//file_write(DATA_DIR, $page, join('', $postdata), TRUE);
 		// ページをロックする
 		WikiPage::lockPage($page, true);
 
 		// Update
 		is_freeze($page, TRUE);
-		//$vars['cmd'] = 'read';
 		WikiParam::setCmd('read');
 		$msg  = $_title_freezed;
 		$body = '';
-
 	} else {
 		// Show a freeze form
 		$msg    = $_title_freeze;
 		$s_page = htmlspecialchars($page);
-		//$body   = ($pass === NULL) ? '' : "<p><strong>$_msg_invalidpass</strong></p>\n";
 		$body   = ($pass == '') ? '' : "<p><strong>$_msg_invalidpass</strong></p>\n";
-		// modified for Magic3 by naoki on 2008/10/6
 		$postScript = $script . WikiParam::convQuery("?");
 		
 		// テンプレートタイプに合わせて出力を変更
