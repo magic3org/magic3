@@ -19,14 +19,17 @@
 // License: GPL v2 or (at your option) any later version
 //
 // File related functions
-
 // RecentChanges
 define('PKWK_MAXSHOW_ALLOWANCE', 10);
 //define('PKWK_MAXSHOW_CACHE', 'recent.dat');
 
 // AutoLink
 //define('PKWK_AUTOLINK_REGEX_CACHE', 'autolink.dat');
-
+// 運用ログメッセージ
+define('LOG_MSG_ADD_CONTENT',		'Wikiコンテンツを追加しました。タイトル: %s');
+define('LOG_MSG_UPDATE_CONTENT',	'Wikiコンテンツを更新しました。タイトル: %s');
+define('LOG_MSG_DEL_CONTENT',		'Wikiコンテンツを削除しました。タイトル: %s');
+	
 // Get source(wiki text) data of the page
 // modified for Magic3 by naoki on 2008/9/28
 //function get_source($page = NULL, $lock = TRUE, $join = FALSE)
@@ -93,8 +96,6 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	$postdata = make_str_rules($postdata);
 
 	// diffデータを作成
-	// Create and write diff
-	//$oldpostdata = is_page($page) ? join('', get_source($page)) : '';
 	$oldpostdata = is_page($page) ? get_source($page, true) : '';
 	$diffdata    = do_diff($oldpostdata, $postdata);
 
@@ -121,16 +122,19 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	// Create wiki text
 	//file_write(DATA_DIR, $page, $postdata, $notimestamp);
 	if ($postdata === ''){		// データが空のときはページを削除
-		//if (! $file_exists) return; // Ignore null posting for DATA_DIR
-
 		// Update RecentDeleted (Add the $page)
 		add_recent($page, $whatsdeleted, '', $maxshow_deleted);
 
-		// Remove the page
-		//unlink($file);
 		// ページデータとページに関するデータを削除
 		$ret = WikiPage::deletePage($page);
-	
+		if ($ret){
+			// 運用ログを残す
+			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+									M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
+									M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+			_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_DEL_CONTENT, $page), 2402, 'ID=' . $page, $eventParam);
+		}
+		
 		// ##### 添付ファイル削除 #####
 		// アップロード用のディレクトリ内のファイルリストを取得
 		$dir = opendir(UPLOAD_DIR) or die('directory ' . UPLOAD_DIR . ' is not exist or not readable.');
@@ -156,7 +160,14 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 		$postdata = rtrim(preg_replace('/' . "\r" . '/', '', $postdata)) . "\n";
 		
 		$ret = WikiPage::updatePage($page, $postdata, $notimestamp);
-
+		if ($ret){
+			// 運用ログを残す
+			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+									M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
+									M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+			_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_UPDATE_CONTENT, $page), 2401, 'ID=' . $page, $eventParam);
+		}
+		
 		// Update RecentChanges (Add or renew the $page)
 		if ($notimestamp === FALSE) lastmodified_add($page);
 	}
@@ -946,5 +957,25 @@ function pkwk_touch_file($filename, $time = FALSE, $atime = FALSE)
 		die('pkwk_touch_file(): Invalid UID and (not writable for the directory or not a flie): ' .
 			htmlspecialchars(basename($filename)));
 	}
+}
+/**
+ * ユーザ操作運用ログ出力とイベント処理
+ *
+ * 以下の状況で運用ログメッセージを出力するためのインターフェイス
+ * ユーザの通常の操作で記録すべきもの
+ * 例) コンテンツの更新等
+ *
+ * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
+ * @param string $msg   	メッセージ
+ * @param int    $code		メッセージコード
+ * @param string $msgExt   	詳細メッセージ
+ * @param array  $eventParam	イベント処理用パラメータ(ログに格納しない)
+ * @return なし
+ */
+function _writeUserInfoEvent($method, $msg, $code = 0, $msgExt = '', $eventParam = array())
+{
+	global $gOpeLogManager;
+		
+	$gOpeLogManager->writeUserInfo($method, $msg, $code, $msgExt, '', '', false, $eventParam);
 }
 ?>
