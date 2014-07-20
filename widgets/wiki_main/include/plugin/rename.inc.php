@@ -197,7 +197,7 @@ $msg
   <div class="form-group"><label for="_p_rename_newname">{$_rename_messages['msg_newname']}:</label>
   <input type="text" class="form-control" name="page" id="_p_rename_newname" maxlength="80" value="$s_page" /></div>
   $msg_related
-  <input type="submit" class="button btn btn-default" value="{$_rename_messages['btn_next']}" />
+  <input type="submit" class="button btn" value="{$_rename_messages['btn_next']}" />
 </form>
 EOD;
 	} else {
@@ -355,7 +355,7 @@ function plugin_rename_phase3($pages)
   $input
   <div class="form-group"><label for="_p_rename_adminpass">{$_rename_messages['msg_adminpass']}</label>
   <input type="password" class="form-control" name="password" id="_p_rename_adminpass" size="12" /></div>
-  <input type="submit" class="button btn btn-default" value="{$_rename_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit" class="button btn" value="{$_rename_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
 </form>
 <p>{$_rename_messages['msg_confirm']}</p>
 EOD;

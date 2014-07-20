@@ -118,7 +118,7 @@ function plugin_diff_delete($page)
   <input type="hidden"   name="action" value="delete" />
   <input type="hidden"   name="pass" />
   <div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>
-  <input type="submit"   name="ok"     class="button btn btn-default" value="$_btn_delete" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit"   name="ok"     class="button btn" value="$_btn_delete" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
 </form>
 EOD;
 	} else {

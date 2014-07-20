@@ -153,7 +153,7 @@ function plugin_amazon_convert()
   <input type="hidden" name="plugin" value="amazon" />
   <input type="hidden" name="refer" value="$s_page" />
   <div class="form-group"><label for="_p_amazon_asin">ASIN:</label> <input type="text" class="form-control" id="_p_amazon_asin" name="asin" size="30" /></div>
-  <input type="submit" class="button btn btn-default" value="レビュー編集" /> (ISBN 10 桁 or ASIN 12 桁)
+  <input type="submit" class="button btn" value="レビュー編集" /> (ISBN 10 桁 or ASIN 12 桁)
 </form>
 EOD;
 		} else {

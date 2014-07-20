@@ -168,7 +168,7 @@ function plugin_comment_convert()
   <input type="hidden" name="digest" value="$digest" />
   $nametags
   <div><div class="form-group"><input type="text" class="form-control" name="msg" id="_p_comment_comment_{$comment_no}" size="$size" maxlength="$comment_cols" /></div></div>
-  <input type="submit" name="comment" class="button btn btn-default" value="$_btn_comment" />
+  <input type="submit" name="comment" class="button btn" value="$_btn_comment" />
 </form>
 EOD;
 	} else {

@@ -150,7 +150,7 @@ EOD;
   <label for="_p_search_AND">$_btn_and</label></div>
   <div class="radio-inline"><input type="radio" name="type" id="_p_search_OR"  value="OR"  $or_check  />
   <label for="_p_search_OR">$_btn_or</label></div>
-  <input type="submit" class="button btn btn-default" value="$_btn_search" />
+  <input type="submit" class="button btn" value="$_btn_search" />
 $base_option
 </form>
 EOD;

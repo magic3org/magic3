@@ -51,7 +51,7 @@ function plugin_lookup_convert()
   <input type="hidden" name="inter"  value="$interwiki" />
   <div class="form-group"><label for="_p_lookup_$id">$interwiki:</label>
   <input type="text" name="page" id="_p_lookup_$id" class="form-control" size="30" value="$default" /></div>
-  <input type="submit" class="button btn btn-default" value="$button" />
+  <input type="submit" class="button btn" value="$button" />
 </form>
 EOD;
 	} else {

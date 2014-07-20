@@ -228,7 +228,7 @@ function plugin_article_convert()
   <div><div class="form-group"><label for="_p_article_subject_$article_no">$_btn_subject
   <input type="text" class="form-control" name="subject" id="_p_article_subject_$article_no" maxlength="$subject_cols" /></label></div></div>
   <div><textarea class="wiki_edit form-control" name="msg" rows="$article_rows" cols="$article_cols">\n</textarea></div>
-  <input type="submit" class="button btn btn-default" name="article" value="$_btn_article" />
+  <input type="submit" class="button btn" name="article" value="$_btn_article" />
 </form>
 EOD;
 	} else {

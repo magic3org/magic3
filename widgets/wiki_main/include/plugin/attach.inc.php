@@ -520,7 +520,7 @@ EOD;*/
     </div>
   </div>
   <div>$pass
-  <input type="submit" class="button btn btn-default" value="{$_attach_messages['btn_upload']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit" class="button btn" value="{$_attach_messages['btn_upload']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
   </div>
 </form>
 EOD;
@@ -826,7 +826,7 @@ $s_err
   <br /><br />
   <div class="form-group"><label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
   <input type="password" name="password" id="_p_attach_password" class="form-control" size="12" /></div>
-  <input type="submit" class="button btn btn-default" value="{$_attach_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit" class="button btn" value="{$_attach_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
 </form>
 EOD;
 		} else {

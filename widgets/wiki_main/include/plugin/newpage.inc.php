@@ -43,7 +43,7 @@ function plugin_newpage_convert()
   <input type="hidden" name="refer"  value="$s_page" />
   <div class="form-group"><label for="_p_newpage_$id">$_msg_newpage:</label>
   <input type="text" class="form-control" name="page" id="_p_newpage_$id" value="$s_newpage" size="30" /></div>
-  <input type="submit" class="button btn btn-default" value="$_btn_edit" />
+  <input type="submit" class="button btn" value="$_btn_edit" />
 </form>
 EOD;
 	} else {

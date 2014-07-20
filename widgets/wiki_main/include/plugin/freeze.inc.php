@@ -57,7 +57,7 @@ function plugin_freeze_action()
   <input type="hidden"   name="page" value="$s_page" />
   <input type="hidden"   name="pass" />
   <div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>
-  <input type="submit"   name="ok"   class="button btn btn-default" value="$_btn_freeze" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
+  <input type="submit"   name="ok"   class="button btn" value="$_btn_freeze" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
 </form>
 EOD;
 		} else {

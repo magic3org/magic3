@@ -37,6 +37,8 @@ define('PLUGIN_PCOMMENT_NUM_COMMENTS',     10); // Default 'latest N posts'
 define('PLUGIN_PCOMMENT_DIRECTION_DEFAULT', 1); // 1: above 0: below
 define('PLUGIN_PCOMMENT_SIZE_MSG',  70);
 define('PLUGIN_PCOMMENT_SIZE_NAME', 15);
+// Bootstrap用
+define('PLUGIN_PCOMMENT_SIZE_MSG_BOOTSTRAP',	40); // 入力フィールド幅
 
 // Auto log rotation
 define('PLUGIN_PCOMMENT_AUTO_LOG', 0); // 0:off 1-N:number of comments per page
@@ -140,16 +142,16 @@ function plugin_pcomment_convert()
 		// テンプレートタイプに合わせて出力を変更
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			// Show a form
+			$radio   = $params['reply'] ? '<div class="radio-inline"><input type="radio" name="reply" value="0" tabindex="0" checked="checked" /></div>' : '';
 			if ($params['noname']) {
-				$name = $_pcmt_messages['msg_comment'];
+				$name = $radio . $_pcmt_messages['msg_comment'];
 			} else {
-				$name = '<div class="form-group"><label class="col-sm-4" for="_p_pcomment_name">' . $_pcmt_messages['btn_name'] . 
-						'<input type="text" class="form-control" id="_p_pcomment_name" name="name" maxlength="' . PLUGIN_PCOMMENT_SIZE_NAME . '" /></label></div>';
+				$name = '<div><div class="form-group">' . $radio . '<label for="_p_pcomment_name">' . $_pcmt_messages['btn_name'] . 
+						'<input type="text" class="form-control" id="_p_pcomment_name" name="name" size="' . PLUGIN_PCOMMENT_SIZE_NAME . '" /></label></div></div>';
 			}
-			$radio   = $params['reply'] ? '<input type="radio" name="reply" value="0" tabindex="0" checked="checked" />' : '';
-			$comment = '<div class="form-group"><div class="col-sm-12"><input type="text" class="form-control" name="msg" maxlength="' . PLUGIN_PCOMMENT_SIZE_MSG . '" /></div></div>';
+			$comment = '<div class="form-group"><input type="text" class="form-control" name="msg" maxlength="' . PLUGIN_PCOMMENT_SIZE_MSG . '" size="' . PLUGIN_PCOMMENT_SIZE_MSG_BOOTSTRAP . '" /></div>';
 			
-			$form_start = '<form action="' . get_script_uri() . WikiParam::convQuery('?') . '" method="post" class="form form-horizontal" role="form">' . "\n";
+			$form_start = '<form action="' . get_script_uri() . WikiParam::convQuery('?') . '" method="post" class="form form-inline" role="form">' . "\n";
 			$form = <<<EOD
   <input type="hidden" name="digest" value="$digest" />
   <input type="hidden" name="plugin" value="pcomment" />
@@ -158,8 +160,8 @@ function plugin_pcomment_convert()
   <input type="hidden" name="nodate" value="$s_nodate" />
   <input type="hidden" name="dir"    value="$dir" />
   <input type="hidden" name="count"  value="$count" />
-  $radio $name $comment
-  <input type="submit" class="button btn btn-default" value="{$_pcmt_messages['btn_comment']}" />
+  $name $comment
+  <input type="submit" class="button btn" value="{$_pcmt_messages['btn_comment']}" />
 EOD;
 			$form_end = '</form>' . "\n";
 		} else {
