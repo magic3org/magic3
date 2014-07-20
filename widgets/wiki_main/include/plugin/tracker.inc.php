@@ -22,9 +22,14 @@ define('TRACKER_LIST_EXCLUDE_PATTERN','#^SubMenu$|/#');
 // 項目の取り出しに失敗したページを一覧に表示する
 define('TRACKER_LIST_SHOW_ERROR_PAGE',TRUE);
 
+// Bootstrap用
+define('MAX_INPUT_TEXT_WIDTH_BOOTSTRAP', 40);
+define('MAX_TEXTAREA_WIDTH_BOOTSTRAP', 40);
+
 function plugin_tracker_convert()
 {
 	global $script;
+	global $gEnvManager;
 
 	if (PKWK_READONLY) return ''; // Show nothing
 
@@ -78,7 +83,17 @@ function plugin_tracker_convert()
 		}
 		$retval = str_replace("[$name]",$replace,$retval);
 	}
-	return <<<EOD
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
+	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		return <<<EOD
+<form enctype="multipart/form-data" action="$script" method="post" class="form form-inline" role="form">
+$retval
+$hiddens
+</form>
+EOD;
+	} else {
+		return <<<EOD
 <form enctype="multipart/form-data" action="$script" method="post" class="form">
 <div>
 $retval
@@ -86,6 +101,7 @@ $hiddens
 </div>
 </form>
 EOD;
+	}
 }
 function plugin_tracker_action()
 {
@@ -314,10 +330,20 @@ class Tracker_field_text extends Tracker_field
 
 	function get_tag()
 	{
+		global $gEnvManager;
+			
 		$s_name = htmlspecialchars($this->name);
 		$s_size = htmlspecialchars($this->values[0]);
 		$s_value = htmlspecialchars($this->default_value);
-		return "<input type=\"text\" name=\"$s_name\" size=\"$s_size\" value=\"$s_value\" />";
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			if ($s_size > MAX_INPUT_TEXT_WIDTH_BOOTSTRAP) $s_size = MAX_INPUT_TEXT_WIDTH_BOOTSTRAP;
+			return "<input type=\"text\" class=\"form-control\" name=\"$s_name\" size=\"$s_size\" value=\"$s_value\" />";
+		} else {
+			return "<input type=\"text\" name=\"$s_name\" size=\"$s_size\" value=\"$s_value\" />";
+		}
 	}
 }
 class Tracker_field_page extends Tracker_field_text
@@ -356,11 +382,21 @@ class Tracker_field_textarea extends Tracker_field
 
 	function get_tag()
 	{
+		global $gEnvManager;
+		
 		$s_name = htmlspecialchars($this->name);
 		$s_cols = htmlspecialchars($this->values[0]);
 		$s_rows = htmlspecialchars($this->values[1]);
 		$s_value = htmlspecialchars($this->default_value);
-		return "<textarea name=\"$s_name\" cols=\"$s_cols\" rows=\"$s_rows\">$s_value</textarea>";
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$s_cols = MAX_TEXTAREA_WIDTH_BOOTSTRAP;
+			return "<textarea class=\"form-control\" name=\"$s_name\" cols=\"$s_cols\" rows=\"$s_rows\">$s_value</textarea>";
+		} else {
+			return "<textarea name=\"$s_name\" cols=\"$s_cols\" rows=\"$s_rows\">$s_value</textarea>";
+		}
 	}
 	function format_cell($str)
 	{
@@ -452,18 +488,31 @@ class Tracker_field_radio extends Tracker_field_format
 
 	function get_tag()
 	{
+		global $gEnvManager;
+		
 		$s_name = htmlspecialchars($this->name);
 		$retval = '';
 		$id = 0;
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		
 		foreach ($this->config->get($this->name) as $option)
 		{
 			$s_option = htmlspecialchars($option[0]);
 			$checked = trim($option[0]) == trim($this->default_value) ? ' checked="checked"' : '';
 			++$id;
 			$s_id = '_p_tracker_' . $s_name . '_' . $this->id . '_' . $id;
-			$retval .= '<input type="radio" name="' .  $s_name . '" id="' . $s_id .
-				'" value="' . $s_option . '"' . $checked . ' />' .
-				'<label for="' . $s_id . '">' . $s_option . '</label>' . "\n";
+			
+			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+				$retval .= '<div class="radio-inline"><input type="radio" name="' .  $s_name . '" id="' . $s_id .
+					'" value="' . $s_option . '"' . $checked . ' />' .
+					'<label for="' . $s_id . '">' . $s_option . '</label></div>' . "\n";
+			} else {
+				$retval .= '<input type="radio" name="' .  $s_name . '" id="' . $s_id .
+					'" value="' . $s_option . '"' . $checked . ' />' .
+					'<label for="' . $s_id . '">' . $s_option . '</label>' . "\n";
+			}
 		}
 
 		return $retval;
@@ -488,12 +537,21 @@ class Tracker_field_select extends Tracker_field_radio
 
 	function get_tag($empty=FALSE)
 	{
+		global $gEnvManager;
+		
 		$s_name = htmlspecialchars($this->name);
 		$s_size = (array_key_exists(0,$this->values) and is_numeric($this->values[0])) ?
 			' size="'.htmlspecialchars($this->values[0]).'"' : '';
 		$s_multiple = (array_key_exists(1,$this->values) and strtolower($this->values[1]) == 'multiple') ?
 			' multiple="multiple"' : '';
-		$retval = "<select name=\"{$s_name}[]\"$s_size$s_multiple>\n";
+			
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$retval = "<select class=\"form-control\" name=\"{$s_name}[]\"$s_size$s_multiple>\n";
+		} else {
+			$retval = "<select name=\"{$s_name}[]\"$s_size$s_multiple>\n";
+		}
 		if ($empty)
 		{
 			$retval .= " <option value=\"\"></option>\n";
@@ -516,10 +574,16 @@ class Tracker_field_checkbox extends Tracker_field_radio
 
 	function get_tag($empty=FALSE)
 	{
+		global $gEnvManager;
+		
 		$s_name = htmlspecialchars($this->name);
 		$defaults = array_flip(preg_split('/\s*,\s*/',$this->default_value,-1,PREG_SPLIT_NO_EMPTY));
 		$retval = '';
 		$id = 0;
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		
 		foreach ($this->config->get($this->name) as $option)
 		{
 			$s_option = htmlspecialchars($option[0]);
@@ -527,9 +591,16 @@ class Tracker_field_checkbox extends Tracker_field_radio
 				' checked="checked"' : '';
 			++$id;
 			$s_id = '_p_tracker_' . $s_name . '_' . $this->id . '_' . $id;
-			$retval .= '<input type="checkbox" name="' . $s_name .
-				'[]" id="' . $s_id . '" value="' . $s_option . '"' . $checked . ' />' .
-				'<label for="' . $s_id . '">' . $s_option . '</label>' . "\n";
+			
+			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+				$retval .= '<div class="checkbox-inline"><input type="checkbox" name="' . $s_name .
+					'[]" id="' . $s_id . '" value="' . $s_option . '"' . $checked . ' />' .
+					'<label for="' . $s_id . '">' . $s_option . '</label></div>' . "\n";
+			} else {
+				$retval .= '<input type="checkbox" name="' . $s_name .
+					'[]" id="' . $s_id . '" value="' . $s_option . '"' . $checked . ' />' .
+					'<label for="' . $s_id . '">' . $s_option . '</label>' . "\n";
+			}
 		}
 
 		return $retval;

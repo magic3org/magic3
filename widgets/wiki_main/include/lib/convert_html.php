@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: convert_html.php 4951 2012-06-09 09:55:41Z fishbone $
  * @link       http://www.magic3.org
@@ -667,7 +667,8 @@ class Table extends Element
 		}
 		$string = $this->wrap($string, 'table', ' class="style_table" cellspacing="1" border="0"');
 
-		return $this->wrap($string, 'div', ' class="ie5"');
+		//return $this->wrap($string, 'div', ' class="ie5"');
+		return $string;
 	}
 }
 
@@ -730,7 +731,8 @@ class YTable extends Element
 		foreach ($this->elements as $str)
 			$rows .= "\n" . '<tr class="style_tr">' . $str . '</tr>' . "\n";
 		$rows = $this->wrap($rows, 'table', ' class="style_table" cellspacing="1" border="0"');
-		return $this->wrap($rows, 'div', ' class="ie5"');
+		//return $this->wrap($rows, 'div', ' class="ie5"');
+		return $rows;
 	}
 }
 

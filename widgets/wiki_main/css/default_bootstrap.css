@@ -52,8 +52,9 @@ span.new5 {
 	color:green;
 	background-color:transparent;
 	font-size:xx-small;
-}
-thead td.style_td,
+}*/
+
+/*thead td.style_td,
 tfoot td.style_td {
 	color:inherit;
 	background-color:#D0D8E0;
@@ -70,21 +71,21 @@ tfoot th.style_th {
 	text-align:left;
 	color:inherit;
 	background-color:#ccd5dd;
-}
+}*/
 .style_th {
 	padding:5px;
 	margin:1px;
-	text-align:center;
+/*	text-align:center;
 	color:inherit;
-	background-color:#EEEEEE;
+	background-color:#EEEEEE;*/
 }
 .style_td {
 	padding:5px;
 	margin:1px;
-	color:inherit;
-	background-color:#EEF5FF;
+/*	color:inherit;
+	background-color:#EEF5FF;*/
 }
-
+/*
 .super_index {
 	color:#DD3333;
 	background-color:inherit;

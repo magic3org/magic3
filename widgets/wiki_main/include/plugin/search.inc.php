@@ -146,10 +146,10 @@ EOD;
 		$retValue = <<<EOD
 <form action="$postScript" method="post" class="form form-inline" role="form">
   <div class="form-group"><input type="text" class="form-control" name="word" value="$s_word" size="20" /></div>
-  <div class="radio-inline"><input type="radio" name="type" id="_p_search_AND" value="AND" $and_check />
-  <label for="_p_search_AND">$_btn_and</label></div>
-  <div class="radio-inline"><input type="radio" name="type" id="_p_search_OR"  value="OR"  $or_check  />
-  <label for="_p_search_OR">$_btn_or</label></div>
+  <div class="radio-inline"><label for="_p_search_AND"><input type="radio" name="type" id="_p_search_AND" value="AND" $and_check />
+  $_btn_and</label></div>
+  <div class="radio-inline"><label for="_p_search_OR"><input type="radio" name="type" id="_p_search_OR"  value="OR"  $or_check  />
+  $_btn_or</label></div>
   <input type="submit" class="button btn" value="$_btn_search" />
 $base_option
 </form>
