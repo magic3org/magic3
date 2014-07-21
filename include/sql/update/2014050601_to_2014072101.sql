@@ -38,4 +38,10 @@ INSERT INTO _widget_category
 ('design',    'デザイン',         14),
 ('admin',     '管理画面用',      20);
 
+-- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'bootstrap_united';
+INSERT INTO _templates
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_create_dt) VALUES
+('bootstrap_united',             'bootstrap_united',             10,       0,              false,     true,             true,        0,             now());
+
 -- *** システム標準テーブル ***
