@@ -29,6 +29,12 @@ class wiki_updateDb extends BaseDb
 	{
 		$type = '';		// ページタイプ
 		
+		// 回避ページ
+		$escapePages = array(	'RecentChanges',	// Modified page list
+								'RecentDeleted', 	// Removeed page list
+								'InterWikiName',	// Set InterWiki definition here
+								'MenuBar');       	// メニューバー
+
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
 		
@@ -36,6 +42,14 @@ class wiki_updateDb extends BaseDb
 		$queryStr = 'SELECT * FROM wiki_content ';
 		$queryStr .=  'WHERE wc_deleted = false ';		// 削除されていない
 		$queryStr .=    'AND wc_type = ? '; $params[] = $type;
+		
+		// 回避ページ
+		for ($i = 0; $i < count($escapePages); $i++){
+			$queryStr .=    'AND wc_id != ? '; $params[] = $escapePages[$i];
+		}
+		$keyword = addslashes(':config');// 「:config」(設定ファイル)の「'"\」文字をエスケープ
+		$queryStr .=    'AND wc_id NOT LIKE \'' . $keyword . '%\' ';
+					
 		$queryStr .=  'ORDER BY wc_content_dt DESC LIMIT ' . $limit . ' OFFSET ' . $offset;
 		$this->selectLoop($queryStr, $params, $callback);
 	}
