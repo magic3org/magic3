@@ -18,38 +18,25 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class wiki_updateDb extends BaseDb
 {
 	/**
-	 * 最近の更新順にコンテンツリストを取得
+	 * 最近の更新順にWikiコンテンツを取得
 	 *
-	 * @param string   $langId		言語
-	 * @param string   $typeId		コンテンツタイプ
-	 * @param bool	   $all			すべてのデータを取得するか、ユーザ制限のないデータを取得するかを指定
-	 * @param string   $now			現在日時
-	 * @param function $callback	コールバック関数
-	 * @return						なし
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
 	 */
-	function getContentList($langId, $typeId, $all, $now, $callback)
+	function getUpdatePages($limit, $page, $callback)
 	{
-		$initDt = $this->gEnv->getInitValueOfTimestamp();
+		$type = '';		// ページタイプ
+		
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		
 		$params = array();
-		
-		$queryStr  = 'SELECT * FROM content ';
-		$queryStr .=   'WHERE cn_deleted = false ';
-		$queryStr .=     'AND cn_visible = true ';
-		$queryStr .=     'AND cn_type = ? ';$params[] = $typeId;
-		$queryStr .=     'AND cn_language_id = ? ';$params[] = $langId;
-		if (!$all) $queryStr .=    'AND cn_user_limited = false ';		// ユーザ制限のないデータ
-		
-		// 公開期間を指定
-		$queryStr .=    'AND (cn_active_start_dt = ? OR (cn_active_start_dt != ? AND cn_active_start_dt <= ?)) ';
-		$queryStr .=    'AND (cn_active_end_dt = ? OR (cn_active_end_dt != ? AND cn_active_end_dt > ?)) ';
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
-		$params[] = $initDt;
-		$params[] = $initDt;
-		$params[] = $now;
-		
-		$queryStr .=   'ORDER BY cn_create_dt DESC';
+		$queryStr = 'SELECT * FROM wiki_content ';
+		$queryStr .=  'WHERE wc_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND wc_type = ? '; $params[] = $type;
+		$queryStr .=  'ORDER BY wc_content_dt DESC LIMIT ' . $limit . ' OFFSET ' . $offset;
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 }

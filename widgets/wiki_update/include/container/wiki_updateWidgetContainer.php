@@ -23,9 +23,7 @@ class wiki_updateWidgetContainer extends BaseWidgetContainer
 	private $isExistsList;				// リスト項目が存在するかどうか
 	private $headRssFile;				// RSS情報
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
-	const CONTENT_TYPE = '';		// コンテンツタイプ
-	const TARGET_WIDGET = 'default_content';		// 呼び出しウィジェットID
-	const DEFAULT_TITLE = '更新コンテンツ';			// デフォルトのウィジェットタイトル
+	const DEFAULT_TITLE = '更新リスト';			// デフォルトのウィジェットタイトル
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
 	
 	/**
@@ -72,14 +70,10 @@ class wiki_updateWidgetContainer extends BaseWidgetContainer
 		if (!empty($paramObj)){
 			$this->itemCount	= $paramObj->itemCount;
 		}
-			
-		// ログインユーザでないときは、ユーザ制限のない項目だけ表示
-		$all = false;
-		if ($this->gEnv->isCurrentUserLogined()) $all = true;
 		
 		// 一覧を作成
-		$this->db->getContentList($langId, self::CONTENT_TYPE, $all, $now, array($this, 'itemsLoop'));
-				
+		$this->db->getUpdatePages($this->itemCount, 1/*1ページ目*/, array($this, 'itemsLoop'));
+			
 		// 画面にデータを埋め込む
 		if ($this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'visible');
 
@@ -133,29 +127,19 @@ class wiki_updateWidgetContainer extends BaseWidgetContainer
 	 */
 	function itemsLoop($index, $fetchedRow)
 	{
-		// 表示項目数に達したときは終了
-		if ($index >= $this->itemCount) return false;
-		
-		$serial = $fetchedRow['vc_serial'];
-		$totalViewCount = $fetchedRow['total'];
-		$name = $fetchedRow['cn_name'];
+		$name = $fetchedRow['wc_id'];
 
 		// リンク先の作成
-		//$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'contentid=' . $fetchedRow['cn_id']);// コンテンツ表示ウィジェットへのリンク
-		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $fetchedRow['cn_id'], true);
+		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $fetchedRow['wc_id'], true);
 
-		if (!empty($name)){
-			$row = array(
-				'total' => $totalViewCount,		// 閲覧数
-				//'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true)),		// リンク
-				'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
-				'name' => $this->convertToDispString($name)			// タイトル
-			);
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
-		
-			$this->isExistsList = true;		// リスト項目が存在するかどうか
-		}
+		$row = array(
+			'link_url'	=> $this->convertUrlToHtmlEntity($linkUrl),		// リンク
+			'name'		=> $this->convertToDispString($name)			// タイトル
+		);
+		$this->tmpl->addVars('itemlist', $row);
+		$this->tmpl->parseTemplate('itemlist', 'a');
+	
+		$this->isExistsList = true;		// リスト項目が存在するかどうか
 		return true;
 	}
 }
