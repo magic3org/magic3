@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: func.php 4950 2012-06-09 09:07:02Z fishbone $
  * @link       http://www.magic3.org
@@ -57,19 +57,10 @@ function is_url($str, $only_http = FALSE)
 }
 
 // If the page exists
-function is_page($page, $clearcache = FALSE)
+//function is_page($page, $clearcache = FALSE)
+function is_page($page)
 {
-	// modified for Magic3 by naoki on 2008/9/28
-	//if ($clearcache) clearstatcache();
-	//return file_exists(get_filename($page));
 	return WikiPage::isPage($page);
-	/*if ($ret){
-		return true;
-	} else {
-		$ret = WikiPage::getPageFile($page, $data);		// ファイルから初期データを読み込む
-		if ($ret) $ret = WikiPage::initPage($page, $data);
-		return $ret;
-	}*/
 }
 
 function is_editable($page)

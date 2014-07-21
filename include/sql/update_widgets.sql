@@ -254,6 +254,15 @@ DELETE FROM _widgets WHERE wd_id = 'photoslide2';
 INSERT INTO _widgets
 (wd_id,         wd_name,               wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,   wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('photoslide2', '画像スライドショー2', 'image',        '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, '画像をスライドショー表示する。フォトギャラリー連動可。', 'jquery.cycle', 'jquery.cycle',   true,        false,               true,true,           3, 1, '2012-02-19', now(), now());
+-- ウィジェット情報(PC用/Wiki)
+DELETE FROM _widgets WHERE wd_id = 'wiki_main';
+INSERT INTO _widgets
+(wd_id,       wd_name,       wd_category_id,    wd_type, wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('wiki_main', 'Wiki-メイン', 'wiki',            'wiki',  'wiki',          false,           '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Wikiを表示する。', 'md5', 'md5',              true,         true,        true,        false,               false,true,               0, 1, 2, '2014-07-13', now(),    now());
+DELETE FROM _widgets WHERE wd_id = 'wiki_update';
+INSERT INTO _widgets
+(wd_id,                wd_name,                       wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,  wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('wiki_update', 'Wiki-更新リスト', 'wiki',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Wikiコンテンツの最新更新リストを表示。', '', '', true,  false,              true, true, '2014-07-20', now(),         now());
 -- ウィジェット情報(PC用/その他)
 DELETE FROM _widgets WHERE wd_id = 'default_footer';
 INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
@@ -323,14 +332,6 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'g_qrcode';
 INSERT INTO _widgets (wd_id, wd_name, wd_type, wd_version, wd_params, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_read_scripts, wd_read_css, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('g_qrcode',     'Google QRコード',           '', '1.0.0',  '',        'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Google APIを使ったQRコード表示。',         false,           false,       true,         true,        true,        false,               true,true,           0, 1, 1, now(), now());
-DELETE FROM _widgets WHERE wd_id = 'wiki_main';
-INSERT INTO _widgets
-(wd_id,       wd_name,       wd_type, wd_content_type, wd_edit_content, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('wiki_main', 'Wiki-メイン', 'wiki',  'wiki',          false,           '2.0.0b',    'Naoki Hirata', 'Magic3.org', 'GPL', 10, 'Wikiを表示する。', 'md5', 'md5',              true,         true,        true,        false,               false,true,               0, 1, 2, '2014-07-13', now(),    now());
-DELETE FROM _widgets WHERE wd_id = 'wiki_update';
-INSERT INTO _widgets
-(wd_id,                wd_name,                       wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,  wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('wiki_update', 'Wiki-更新リスト', 'wiki',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Wikiコンテンツの最新更新リストを表示。', '', '', true,  false,              true, true, '2014-07-20', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'image2';
 INSERT INTO _widgets
 (wd_id,   wd_name, wd_version, wd_params, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib_a, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES

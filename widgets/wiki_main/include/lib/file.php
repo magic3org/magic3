@@ -96,7 +96,8 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	$postdata = make_str_rules($postdata);
 
 	// diffデータを作成
-	$oldpostdata = is_page($page) ? get_source($page, true) : '';
+	$isExistsPage = is_page($page);			// ページが存在するか
+	$oldpostdata = $isExistsPage ? get_source($page, true) : '';
 	$diffdata    = do_diff($oldpostdata, $postdata);
 
 	// ページdiffデータ更新
@@ -165,14 +166,18 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
 									M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
 									M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
-			_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_UPDATE_CONTENT, $page), 2401, 'ID=' . $page, $eventParam);
+			if ($isExistsPage){			// 更新の場合
+				_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_UPDATE_CONTENT, $page), 2401, 'ID=' . $page, $eventParam);
+			} else {			// 新規の場合
+				_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_ADD_CONTENT, $page), 2400, 'ID=' . $page, $eventParam);
+			}
 		}
 		
 		// Update RecentChanges (Add or renew the $page)
 		if ($notimestamp === FALSE) lastmodified_add($page);
 	}
 	// キャッシュクリア
-	is_page($page, TRUE); // Clear is_page() cache
+	//is_page($page, TRUE); // Clear is_page() cache
 	
 	// リンクを更新
 	links_update($page);
@@ -309,7 +314,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 		lastmodified_add($whatsdeleted, $page);
 
 		// Clear is_page() cache
-		is_page($page, TRUE);
+		//is_page($page, TRUE);
 
 		return;
 
@@ -365,7 +370,7 @@ function file_write($dir, $page, $str, $notimestamp = FALSE)
 			die('pkwk_mail_notify(): Failed');
 	}
 
-	is_page($page, TRUE); // Clear is_page() cache
+	//is_page($page, TRUE); // Clear is_page() cache
 }
 
 // Update RecentDeleted
