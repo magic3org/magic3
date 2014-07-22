@@ -22,9 +22,11 @@ class wiki_updateWidgetContainer extends BaseWidgetContainer
 	private $itemCount;					// リスト項目数
 	private $isExistsList;				// リスト項目が存在するかどうか
 	private $headRssFile;				// RSS情報
+	private $currentDate;				// 現在日付
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
 	const DEFAULT_TITLE = '更新リスト';			// デフォルトのウィジェットタイトル
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
+	const DATE_FORMAT = 'Y年 n月 j日';		// 日付フォーマット
 	
 	/**
 	 * コンストラクタ
@@ -74,8 +76,17 @@ class wiki_updateWidgetContainer extends BaseWidgetContainer
 		// 一覧を作成
 		$this->db->getUpdatePages($this->itemCount, 1/*1ページ目*/, array($this, 'itemsLoop'));
 			
-		// 画面にデータを埋め込む
-		if ($this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'visible');
+		// 一覧データがない場合は非表示
+		if ($this->isExistsList){
+			// 前の日付を表示
+			$dateRow = array(
+				'date'		=> $this->convertToDispString($this->currentDate)			// 日付
+			);
+			$this->tmpl->addVars('date_list', $dateRow);
+			$this->tmpl->parseTemplate('date_list', 'a');
+		} else {
+			$this->tmpl->setAttribute('date_list', 'visibility', 'hidden');
+		}
 
 		// RSS用リンク作成
 		$iconTitle = self::DEFAULT_TITLE;
@@ -128,17 +139,38 @@ class wiki_updateWidgetContainer extends BaseWidgetContainer
 	function itemsLoop($index, $fetchedRow)
 	{
 		$name = $fetchedRow['wc_id'];
-
+		$date = date(self::DATE_FORMAT, strtotime($fetchedRow['wc_content_dt']));
+		
 		// リンク先の作成
-		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $fetchedRow['wc_id'], true);
+		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . $fetchedRow['wc_id'], true);
 
+		if (!isset($this->currentDate)){
+			// 日付を更新
+			$this->currentDate = $date;
+			
+			// バッファ更新
+			$this->tmpl->clearTemplate('item_list');
+		} else if ($date != $this->currentDate){
+			// 前の日付を表示
+			$dateRow = array(
+				'date'		=> $this->convertToDispString($this->currentDate)			// 日付
+			);
+			$this->tmpl->addVars('date_list', $dateRow);
+			$this->tmpl->parseTemplate('date_list', 'a');
+			
+			// 日付を更新
+			$this->currentDate = $date;
+			
+			// バッファ更新
+			$this->tmpl->clearTemplate('item_list');
+		}
 		$row = array(
 			'link_url'	=> $this->convertUrlToHtmlEntity($linkUrl),		// リンク
 			'name'		=> $this->convertToDispString($name)			// タイトル
 		);
-		$this->tmpl->addVars('itemlist', $row);
-		$this->tmpl->parseTemplate('itemlist', 'a');
-	
+		$this->tmpl->addVars('item_list', $row);
+		$this->tmpl->parseTemplate('item_list', 'a');
+		
 		$this->isExistsList = true;		// リスト項目が存在するかどうか
 		return true;
 	}

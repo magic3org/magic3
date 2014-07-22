@@ -24,9 +24,7 @@ class rss_wiki_updateWidgetContainer extends BaseRssContainer
 	private $rssChannel;				// RSSチャンネル部出力データ
 	private $rssSeqUrl = array();					// 項目の並び
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
-	const CONTENT_TYPE = '';		// コンテンツタイプ
-	const TARGET_WIDGET = 'default_content';		// 呼び出しウィジェットID
-	const DEFAULT_TITLE = '更新コンテンツ';			// デフォルトのウィジェットタイトル
+	const DEFAULT_TITLE = '更新リスト';			// デフォルトのウィジェットタイトル
 	const DEFAULT_DESC = '最新の更新コンテンツが取得できます。';
 	
 	/**
@@ -73,14 +71,10 @@ class rss_wiki_updateWidgetContainer extends BaseRssContainer
 		if (!empty($paramObj)){
 			$this->itemCount	= $paramObj->itemCount;
 		}
-			
-		// ログインユーザでないときは、ユーザ制限のない項目だけ表示
-		$all = false;
-		if ($this->gEnv->isCurrentUserLogined()) $all = true;
 		
 		// 一覧を作成
-		$this->db->getContentList($langId, self::CONTENT_TYPE, $all, $now, array($this, 'itemsLoop'));
-				
+		$this->db->getUpdatePages($this->itemCount, 1/*1ページ目*/, array($this, 'itemsLoop'));
+		
 		// 画面にデータを埋め込む
 		if ($this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'visible');
 		
@@ -114,31 +108,23 @@ class rss_wiki_updateWidgetContainer extends BaseRssContainer
 	 */
 	function itemsLoop($index, $fetchedRow)
 	{
-		// 表示項目数に達したときは終了
-		if ($index >= $this->itemCount) return false;
-		
-		$serial = $fetchedRow['vc_serial'];
-		$totalViewCount = $fetchedRow['total'];
-		$name = $fetchedRow['cn_name'];
+		$name = $fetchedRow['wc_id'];
 
 		// リンク先の作成
-		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $fetchedRow['cn_id'], true);
+		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . $fetchedRow['wc_id'], true);
 
-		if (!empty($name)){
-			$row = array(
-				'total' => $totalViewCount,		// 閲覧数
-				'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
-				'name' => $this->convertToDispString($name),			// タイトル
-				'date' => getW3CDate($fetchedRow['cn_create_dt'])		// 更新日時
-			);
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
+		$row = array(
+			'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
+			'name' => $this->convertToDispString($name),			// タイトル
+			'date' => getW3CDate($fetchedRow['wc_content_dt'])		// 更新日時
+		);
+		$this->tmpl->addVars('itemlist', $row);
+		$this->tmpl->parseTemplate('itemlist', 'a');
+	
+		// RSS用
+		$this->rssSeqUrl[] = $linkUrl;					// 項目の並び
 		
-			// RSS用
-			$this->rssSeqUrl[] = $linkUrl;					// 項目の並び
-			
-			$this->isExistsList = true;		// リスト項目が存在するかどうか
-		}
+		$this->isExistsList = true;		// リスト項目が存在するかどうか
 		return true;
 	}
 }
