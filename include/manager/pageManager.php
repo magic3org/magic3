@@ -3144,6 +3144,19 @@ class PageManager extends Core
 					if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
 					$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
 				}
+				
+				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW){				// ログイン、ログアウト場合
+					// 管理権限なしで管理ディレクトリアクセスで必要なスクリプトを読み込む
+					$count = count($this->defaultAdminDirScriptFiles);
+					for ($i = 0; $i < $count; $i++){
+						$scriptFilename = $this->defaultAdminDirScriptFiles[$i];
+
+						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+						$scriptURL = $scriptsUrl . '/' . $scriptFilename;
+						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
+						$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+					}
+				}
 			}
 			// ##### ウィジェットごとのJavaScript読み込み #####
 			// スクリプトがあるウィジェットを取得
