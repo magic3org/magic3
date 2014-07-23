@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-27 16:48+0900\n"
-"PO-Revision-Date: 2014-04-27 17:55+0900\n"
+"POT-Creation-Date: 2014-07-23 20:11+0900\n"
+"PO-Revision-Date: 2014-07-23 20:11+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -71,118 +71,118 @@ msgstr "既存データをすべて消去して、DBを再構築"
 msgid "Keep Existing Data, and Update Database"
 msgstr "既存データを残して、DBをバージョンアップ"
 
-#: container/_installCheckenvWidgetContainer.php:62
-#: container/_installCheckenvWidgetContainer.php:78
+#: container/_installCheckenvWidgetContainer.php:63
+#: container/_installCheckenvWidgetContainer.php:79
 msgid "available"
 msgstr "利用可能"
 
-#: container/_installCheckenvWidgetContainer.php:67
-#: container/_installCheckenvWidgetContainer.php:81
+#: container/_installCheckenvWidgetContainer.php:68
+#: container/_installCheckenvWidgetContainer.php:82
 msgid "version unknown"
 msgstr "バージョン不明"
 
-#: container/_installCheckenvWidgetContainer.php:71
+#: container/_installCheckenvWidgetContainer.php:72
 msgid "not available(pdo_pgsql not installed)"
 msgstr "利用不可(pdo_pgsqlがインストールされていません)"
 
-#: container/_installCheckenvWidgetContainer.php:91
+#: container/_installCheckenvWidgetContainer.php:92
 msgid "version not match"
 msgstr "未対応バージョン"
 
-#: container/_installCheckenvWidgetContainer.php:95
+#: container/_installCheckenvWidgetContainer.php:96
 msgid "not available(pdo_mysql not installed)"
 msgstr "利用不可(pdo_mysqlがインストールされていません)"
 
-#: container/_installCheckenvWidgetContainer.php:101
-msgid "5.1.0 more"
-msgstr "5.1.0 以上"
+#: container/_installCheckenvWidgetContainer.php:102
+msgid "5.2.0 more"
+msgstr "5.2.0 以上"
 
-#: container/_installCheckenvWidgetContainer.php:113
+#: container/_installCheckenvWidgetContainer.php:114
 msgid "bytes(encouraged)"
 msgstr "バイト以上を奨励"
 
-#: container/_installCheckenvWidgetContainer.php:170
+#: container/_installCheckenvWidgetContainer.php:171
 msgid "PDO not installed"
 msgstr "PDOがインストールされていません"
 
-#: container/_installCheckenvWidgetContainer.php:245
-#: container/_installCheckenvWidgetContainer.php:250
-#: container/_installCheckenvWidgetContainer.php:299
-#: container/_installCheckenvWidgetContainer.php:321
-#: container/_installCheckenvWidgetContainer.php:325
-#: container/_installCheckenvWidgetContainer.php:335
-#: container/_installCheckenvWidgetContainer.php:339
+#: container/_installCheckenvWidgetContainer.php:246
+#: container/_installCheckenvWidgetContainer.php:251
+#: container/_installCheckenvWidgetContainer.php:300
+#: container/_installCheckenvWidgetContainer.php:322
+#: container/_installCheckenvWidgetContainer.php:326
+#: container/_installCheckenvWidgetContainer.php:336
+#: container/_installCheckenvWidgetContainer.php:340
 msgid "writable"
 msgstr "書き込み可能"
 
-#: container/_installCheckenvWidgetContainer.php:252
-#: container/_installCheckenvWidgetContainer.php:301
-#: container/_installCheckenvWidgetContainer.php:327
-#: container/_installCheckenvWidgetContainer.php:341
+#: container/_installCheckenvWidgetContainer.php:253
+#: container/_installCheckenvWidgetContainer.php:302
+#: container/_installCheckenvWidgetContainer.php:328
+#: container/_installCheckenvWidgetContainer.php:342
 msgid "not writable"
 msgstr "書き込み不可"
 
-#: container/_installCheckenvWidgetContainer.php:255
+#: container/_installCheckenvWidgetContainer.php:256
 msgid "directory not writable"
 msgstr "ディレクトリ書き込み不可"
 
-#: container/_installCheckenvWidgetContainer.php:306
+#: container/_installCheckenvWidgetContainer.php:307
 msgid "enable"
 msgstr "取得可"
 
-#: container/_installCheckenvWidgetContainer.php:310
+#: container/_installCheckenvWidgetContainer.php:311
 msgid "disable"
 msgstr "取得不可"
 
-#: container/_installCheckenvWidgetContainer.php:347
+#: container/_installCheckenvWidgetContainer.php:348
 msgid "Check Install Environment"
 msgstr "インストール環境チェック"
 
-#: container/_installCheckenvWidgetContainer.php:348
+#: container/_installCheckenvWidgetContainer.php:349
 msgid "Check Item"
 msgstr "チェック項目"
 
-#: container/_installCheckenvWidgetContainer.php:349
+#: container/_installCheckenvWidgetContainer.php:350
 msgid "Required Value"
 msgstr "必要な値"
 
-#: container/_installCheckenvWidgetContainer.php:350
+#: container/_installCheckenvWidgetContainer.php:351
 msgid "Current Value"
 msgstr "現在の値"
 
-#: container/_installCheckenvWidgetContainer.php:351
+#: container/_installCheckenvWidgetContainer.php:352
 msgid "PHP Version"
 msgstr "PHPバージョン"
 
-#: container/_installCheckenvWidgetContainer.php:352
+#: container/_installCheckenvWidgetContainer.php:353
 msgid "Memory Limit(bytes)"
 msgstr "最大メモリ量(バイト)"
 
-#: container/_installCheckenvWidgetContainer.php:353
+#: container/_installCheckenvWidgetContainer.php:354
 msgid "Permit file uploading"
 msgstr "ファイルアップロード許可"
 
-#: container/_installCheckenvWidgetContainer.php:354
+#: container/_installCheckenvWidgetContainer.php:355
 msgid "Session Path"
 msgstr "セッション保存パス"
 
-#: container/_installCheckenvWidgetContainer.php:355
+#: container/_installCheckenvWidgetContainer.php:356
 msgid "Session Path Permission"
 msgstr "セッション保存パスのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:356
+#: container/_installCheckenvWidgetContainer.php:357
 msgid "Session ID"
 msgstr "セッションID"
 
-#: container/_installCheckenvWidgetContainer.php:357
+#: container/_installCheckenvWidgetContainer.php:358
 msgid "Temporary Directory(Install Use)"
 msgstr "一時ディレクトリ(インストール時に使用する一時ディレクトリ)"
 
-#: container/_installCheckenvWidgetContainer.php:358
+#: container/_installCheckenvWidgetContainer.php:359
 msgid "Temporary Directory Permission"
 msgstr "一時ディレクトリのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:359
+#: container/_installCheckenvWidgetContainer.php:360
 msgid ""
 "If directory is not writable, change permission to write or chenge directory "
 "to be writable."
@@ -190,19 +190,19 @@ msgstr ""
 "書き込み不可の場合は書き込み可能なディレクトリあるいはアクセス権に設定する必"
 "要あり"
 
-#: container/_installCheckenvWidgetContainer.php:360
+#: container/_installCheckenvWidgetContainer.php:361
 msgid "Magic3 Config File"
 msgstr "Magic3設定ファイルのパス"
 
-#: container/_installCheckenvWidgetContainer.php:361
+#: container/_installCheckenvWidgetContainer.php:362
 msgid "Magic3 Config File Permission"
 msgstr "Magic3設定ファイルのアクセス権"
 
-#: container/_installCheckenvWidgetContainer.php:362
+#: container/_installCheckenvWidgetContainer.php:363
 msgid "Resource Directory(for Image files etc)"
 msgstr "リソース(画像等)格納ディレクトリ"
 
-#: container/_installCheckenvWidgetContainer.php:363
+#: container/_installCheckenvWidgetContainer.php:364
 msgid "Resource Directory Permission"
 msgstr "リソース(画像等)格納ディレクトリのアクセス権"
 
@@ -238,66 +238,66 @@ msgstr "パスワード："
 msgid "Delete Installer and Close"
 msgstr "インストーラを削除して終了"
 
-#: container/_installCopyfileWidgetContainer.php:84
+#: container/_installCopyfileWidgetContainer.php:93
 msgid "Resource directory not found."
 msgstr "リソースディレクトリが見つかりません"
 
-#: container/_installCopyfileWidgetContainer.php:87
+#: container/_installCopyfileWidgetContainer.php:96
 msgid "Template directory not found."
 msgstr "テンプレートディレクトリが見つかりません"
 
-#: container/_installCopyfileWidgetContainer.php:90
+#: container/_installCopyfileWidgetContainer.php:99
 msgid "Widget directory not found."
 msgstr "ウィジェットディレクトリが見つかりません"
 
-#: container/_installCopyfileWidgetContainer.php:117
+#: container/_installCopyfileWidgetContainer.php:125
 #, php-format
 msgid "Resource directory in old system copied. Directory: %s"
 msgstr "旧システムのリソースディレクトリをコピーしました。ディレクトリ: %s"
 
-#: container/_installCopyfileWidgetContainer.php:142
+#: container/_installCopyfileWidgetContainer.php:149
 #, php-format
 msgid "Template in old system copied. Template: %s"
 msgstr "旧システムのテンプレートをコピーしました。テンプレート: %s"
 
-#: container/_installCopyfileWidgetContainer.php:162
+#: container/_installCopyfileWidgetContainer.php:168
 #, php-format
 msgid "Widget in old system copied. Widget: %s"
 msgstr "旧システムのウィジェットをコピーしました。ウィジェット: %s"
 
-#: container/_installCopyfileWidgetContainer.php:167
+#: container/_installCopyfileWidgetContainer.php:173
 msgid "Files copied."
 msgstr "ファイルをコピーしました"
 
-#: container/_installCopyfileWidgetContainer.php:169
+#: container/_installCopyfileWidgetContainer.php:175
 msgid "Failed in copying files."
 msgstr "ファイルコピーに失敗しました"
 
-#: container/_installCopyfileWidgetContainer.php:178
-#: container/_installCopyfileWidgetContainer.php:223
+#: container/_installCopyfileWidgetContainer.php:184
+#: container/_installCopyfileWidgetContainer.php:233
 msgid "Check directory"
 msgstr "ディレクトリチェック"
 
-#: container/_installCopyfileWidgetContainer.php:180
+#: container/_installCopyfileWidgetContainer.php:186
 msgid "Existing"
 msgstr "正常"
 
-#: container/_installCopyfileWidgetContainer.php:190
+#: container/_installCopyfileWidgetContainer.php:195
 #: container/_installInitotherWidgetContainer.php:99
 #: container/_installInputoptionWidgetContainer.php:75
 msgid "Updating database completed."
 msgstr "ＤＢバージョンアップが完了しました"
 
-#: container/_installCopyfileWidgetContainer.php:202
+#: container/_installCopyfileWidgetContainer.php:213
 #: container/_installInitotherWidgetContainer.php:172
 msgid "Database Updated"
 msgstr "ＤＢバージョンアップ完了"
 
-#: container/_installCopyfileWidgetContainer.php:219
+#: container/_installCopyfileWidgetContainer.php:229
 msgid "Copy files?"
 msgstr "ファイルをコピーしますか?"
 
-#: container/_installCopyfileWidgetContainer.php:220
+#: container/_installCopyfileWidgetContainer.php:230
 msgid ""
 "If you copy files form old system to this system, use this operation field "
 "below.<br />If you don't, go next."
@@ -305,43 +305,43 @@ msgstr ""
 "旧システムのファイルをこのシステムへコピーする場合は以下の処理を実行してくだ"
 "さい<br />何も行わない場合は「次へ」進みます。"
 
-#: container/_installCopyfileWidgetContainer.php:221
+#: container/_installCopyfileWidgetContainer.php:231
 msgid "Copy files in old system"
 msgstr "旧システムからファイルをコピー"
 
-#: container/_installCopyfileWidgetContainer.php:222
+#: container/_installCopyfileWidgetContainer.php:232
 msgid "Old System Directory"
 msgstr "旧システムディレクトリ"
 
-#: container/_installCopyfileWidgetContainer.php:224
+#: container/_installCopyfileWidgetContainer.php:234
 msgid "Copy Target"
 msgstr "コピー対象"
 
-#: container/_installCopyfileWidgetContainer.php:225
+#: container/_installCopyfileWidgetContainer.php:235
 msgid "Replace resource directory"
 msgstr "リソースディレクトリ(/resource) 置き換え"
 
-#: container/_installCopyfileWidgetContainer.php:226
+#: container/_installCopyfileWidgetContainer.php:236
 msgid "Copy template (difference only)"
 msgstr "テンプレート 差分のみ取得"
 
-#: container/_installCopyfileWidgetContainer.php:227
+#: container/_installCopyfileWidgetContainer.php:237
 msgid "Copy widget (difference only)"
 msgstr "ウィジェット 差分のみ取得"
 
-#: container/_installCopyfileWidgetContainer.php:228
+#: container/_installCopyfileWidgetContainer.php:238
 msgid "Copy files"
 msgstr "ファイルをコピー"
 
-#: container/_installCopyfileWidgetContainer.php:240
+#: container/_installCopyfileWidgetContainer.php:250
 msgid "The root directory in old system not selected."
 msgstr "旧システムのルートディレクトリが設定されていません"
 
-#: container/_installCopyfileWidgetContainer.php:243
+#: container/_installCopyfileWidgetContainer.php:253
 msgid "This system selected."
 msgstr "このシステム自体を指定しています"
 
-#: container/_installCopyfileWidgetContainer.php:245
+#: container/_installCopyfileWidgetContainer.php:255
 msgid "Magic3 system not selected."
 msgstr "Magic3システムを指定していません"
 

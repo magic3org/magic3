@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: _installInputparamWidgetContainer.php 3791 2010-11-08 07:07:17Z fishbone $
  * @link       http://www.magic3.org
@@ -53,27 +53,35 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 	{
 		// ########### 画面項目の表示制御 ############
 		// PostgreSQLのPDOが使用可能かどうか
-		$canUseDB = false;
-		// PostgreSQLは非表示にする(暫定)
+		$canUsePgsql = false;
+		$canUseMysql = false;
+		// PostgreSQLのPDOが使用可能かどうか
 		if (extension_loaded('pdo_pgsql')){
 			$this->tmpl->setAttribute("db_pgsql", "visibility", "visible");
-			$canUseDB = true;
+			$canUsePgsql = true;
 		} else {
 			$this->tmpl->setAttribute("db_pgsql", "visibility", "hidden");
 		}
 		// MySQLのPDOが使用可能かどうか
 		if (extension_loaded('pdo_mysql')){
 			$this->tmpl->setAttribute("db_mysql", "visibility", "visible");
-			$canUseDB = true;
+			$canUseMysql = true;
 		} else {
 			$this->tmpl->setAttribute("db_mysql", "visibility", "hidden");
 		}
-		if (!$canUseDB) $this->setMsg(self::MSG_USER_ERR, $this->_('Can\'t use database.'));			// DBが使用できません
+		if (!$canUsePgsql && !$canUseMysql) $this->setMsg(self::MSG_USER_ERR, $this->_('Can\'t use database.'));			// DBが使用できません
 		
 		$dbtype = '';
 		$isConfigured = false;		// 設定ファイルが作成されたかどうか
 		$act = $request->trimValueOf('act');
-		if ($act == ''){
+		if (empty($act)){		// 初期状態
+			// 使用可能なDBが１つのときはデフォルトとする
+			if ($canUsePgsql && !$canUseMysql){
+				$dbtype = M3_DB_TYPE_PGSQL;
+			} else if (!$canUsePgsql && $canUseMysql){
+				$dbtype = M3_DB_TYPE_MYSQL;
+			}
+			
 			// 設定ファイルがある場合は、現在値を取得
 			if ($this->gConfig->isConfigured()){
 				$rooturl = $this->gConfig->getSystemRootUrl();
@@ -180,6 +188,14 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 		
 		// 設定ファイルの内容をみて、ボタンを制御
 		if (!$this->gConfig->isConfigured() && !$isConfigured) $this->tmpl->addVar('_widget', 'button_disabled', 'disabled');
+		
+		// 次の操作のボタンのカラーを設定
+		$buttonTestConnection = $buttonGoBack = $buttonUpdateConfig = $buttonGoNext = 'btn-primary';
+		$this->tmpl->addVar("_widget", "button_test_connection",	$buttonTestConnection);
+		$this->tmpl->addVar("_widget", "button_go_back",	$buttonGoBack);
+		$this->tmpl->addVar("_widget", "button_update_config",	$buttonUpdateConfig);
+		$this->tmpl->addVar("_widget", "button_go_next",	$buttonGoNext);
+		
 		
 		// テキストをローカライズ
 		$localeText = array();
