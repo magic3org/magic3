@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -388,6 +388,31 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['label_password2'] = $this->_('Email');		// Eメール
 		$localeText['msg_input_email'] = $this->_('Input email address.');		// Eメールアドレスを入力してください。
 		$this->setLocaleText($localeText);
+	}
+	/**
+	 * JavascriptライブラリをHTMLヘッダ部に設定
+	 *
+	 * JavascriptライブラリをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string,array 				Javascriptライブラリ。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptLibToHead($request, &$param)
+	{
+		// _addScriptLibToHead()をコールバック関数として利用
+		switch ($param){
+			case 'message':		// メッセージ表示のとき	
+				break;
+			case 'content':		// コンテンツ表示のとき
+				break;
+			default:						// ユーザログイン画面
+				// 必要なスクリプトを設定
+				$this->gPage->addPermittedAdminScript(array(ScriptLibInfo::LIB_JQUERY_COOKIE, ScriptLibInfo::LIB_MD5));
+				break;
+		}
+		return '';
 	}
 	/**
 	 * アクセスポイントから汎用コンテンツのタイプを取得

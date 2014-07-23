@@ -1613,23 +1613,46 @@ class PageManager extends Core
 	/**
 	 * 非ログイン時の管理機能用のJavascriptファイル、CSSを追加する
 	 *
-	 * @param string $libId		追加ライブラリID
+	 * @param array, string 	$lib		追加ライブラリID
 	 * @return 					なし
 	 */
-	function addDefaultAdminScript($libId)
+	function addPermittedAdminScript($lib)
 	{
-		// Javascript追加
-		if (isset($this->libFiles[$libId]['script'])){
-			$scriptFiles = $this->libFiles[$libId]['script'];
-			for ($i = 0; $i < count($scriptFiles); $i++){
-				$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
+		if (is_array($lib)){
+			for ($j = 0; $j < count($lib); $j++){
+				$libId = $lib[$j];
+			
+				// Javascript追加
+				if (isset($this->libFiles[$libId]['script'])){
+					$scriptFiles = $this->libFiles[$libId]['script'];
+					for ($i = 0; $i < count($scriptFiles); $i++){
+						$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
+					}
+				}
+				// CSS追加
+				if (isset($this->libFiles[$libId]['css'])){
+					$cssFiles = $this->libFiles[$libId]['css'];
+					for ($i = 0; $i < count($cssFiles); $i++){
+						$this->defaultAdminDirCssFiles[] = $cssFiles[$i];		// デフォルトで読み込むCSSファイル(管理ディレクトリ用)
+					}
+				}
 			}
-		}
-		// CSS追加
-		if (isset($this->libFiles[$libId]['css'])){
-			$cssFiles = $this->libFiles[$libId]['css'];
-			for ($i = 0; $i < count($cssFiles); $i++){
-				$this->defaultAdminDirCssFiles[] = $cssFiles[$i];		// デフォルトで読み込むCSSファイル(管理ディレクトリ用)
+		} else {
+			$libId = $lib;
+			
+			// Javascript追加
+			if (isset($this->libFiles[$libId]['script'])){
+				$scriptFiles = $this->libFiles[$libId]['script'];
+				for ($i = 0; $i < count($scriptFiles); $i++){
+					$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
+				}
+			}
+			// CSS追加
+			if (isset($this->libFiles[$libId]['css'])){
+				$cssFiles = $this->libFiles[$libId]['css'];
+				for ($i = 0; $i < count($cssFiles); $i++){
+					$this->defaultAdminDirCssFiles[] = $cssFiles[$i];		// デフォルトで読み込むCSSファイル(管理ディレクトリ用)
+				}
 			}
 		}
 	}
@@ -2722,8 +2745,8 @@ class PageManager extends Core
 						$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);	// Bootstrap管理画面オプション
 					}
 				} else {		// ログインしていない場合(ログイン画面等)
-					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
-					$this->addDefaultAdminScript(ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);// Bootstrap管理画面オプション
+					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
+					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);// Bootstrap管理画面オプション
 				}
 			} else {		// 一般画面へのアクセスの場合
 				$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
