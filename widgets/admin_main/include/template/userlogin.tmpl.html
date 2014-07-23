@@ -21,6 +21,9 @@ function loginUser(){
 		}
 	} else {
 		document.login.password.value = hex_md5(document.login.pwd.value);
+		
+		// クッキー再設定
+		$.cookie('login_account', $('#account').val(), { expires: 30 });
 	}
 	document.login.pwd_button.disabled = true;
 	document.login.pwd.disabled = true;
@@ -43,8 +46,11 @@ $(document).keyup(function(e){
 	}
 });
 $(function(){
+	// 初期データロード
+	$('#account').val($.cookie('login_account'));
+	
 	if ($('#account').val()){
-		$('#pwd_button').focus();
+		$('#pwd').focus();
 	} else {
 		$('#account').focus();
 	}
