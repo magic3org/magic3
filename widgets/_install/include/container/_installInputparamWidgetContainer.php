@@ -73,6 +73,7 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 		
 		$dbtype = '';
 		$isConfigured = false;		// 設定ファイルが作成されたかどうか
+		$isTested = false;			// 接続テスト完了かどうか
 		$act = $request->trimValueOf('act');
 		if (empty($act)){		// 初期状態
 			// 使用可能なDBが１つのときはデフォルトとする
@@ -167,6 +168,7 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 						} else {
 							$msg .= '<b><font color="red">' . $this->_('Failed in creating table.') . '</font></b>';			// テーブル作成エラー
 						}
+						$isTested = true;			// 接続テスト完了かどうか
 					} else {
 						$msg .= '<b><font color="red">' . $this->_('Failed in connecting database.') . '</font></b>';		// 接続エラー
 					}
@@ -191,11 +193,19 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 		
 		// 次の操作のボタンのカラーを設定
 		$buttonTestConnection = $buttonGoBack = $buttonUpdateConfig = $buttonGoNext = 'btn-primary';
+		if ($this->gConfig->isConfigured()){		// 設定が保存されているとき
+			$buttonGoNext = 'btn-success';			// 「次へ」ボタンをアクティブ化
+		} else if ($isConfigured){
+			$buttonGoNext = 'btn-success';			// 「次へ」ボタンをアクティブ化
+		} else if ($isTested){
+			$buttonUpdateConfig = 'btn-success';		// 「設定値を更新」ボタンをアクティブ化
+		} else {
+			$buttonTestConnection = 'btn-success';	// 「接続テスト」ボタンをアクティブ化
+		}
 		$this->tmpl->addVar("_widget", "button_test_connection",	$buttonTestConnection);
 		$this->tmpl->addVar("_widget", "button_go_back",	$buttonGoBack);
 		$this->tmpl->addVar("_widget", "button_update_config",	$buttonUpdateConfig);
 		$this->tmpl->addVar("_widget", "button_go_next",	$buttonGoNext);
-		
 		
 		// テキストをローカライズ
 		$localeText = array();
