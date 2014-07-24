@@ -21,12 +21,11 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 	<script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
 	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
 	<![endif]-->
+	<script src="<?php echo $templateUrl; ?>/m3custom.js"></script>
+<?php global $gPageManager;if (!$gPageManager->isLayout()): ?>
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
-    $('.button').addClass('btn btn-default');
-	
-<?php global $gPageManager;if (!$gPageManager->isLayout()): ?>
 	if ($(window).width() >= 768){
 		if ($('#pos-slide').offset()){
 			$('#pos-slide').affix({
@@ -36,28 +35,10 @@ $(function(){
 			});
 		}
 	}
-<?php endif; ?>
-
-	// 画像リサイズ
-	resizeImage();
-	$(window).resize(function(){ resizeImage(); });
-	
-	// ツールチップ作成
-	$('[rel=tooltip]').tooltip();
 });
-
-function resizeImage(){
-	$('img').each(function(){
-		var max = $(window).width();
-		var w = $(this).width();
-		var h = $(this).height();
-		if (w > max) {
-			$(this).width(max).height(Math.round((max / w) * h));
-		}
-	});
-}
 //]]>
 </script>
+<?php endif; ?>
 </head>
 <body>
 <header>
