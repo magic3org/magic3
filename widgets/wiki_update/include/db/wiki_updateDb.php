@@ -47,7 +47,7 @@ class wiki_updateDb extends BaseDb
 		for ($i = 0; $i < count($escapePages); $i++){
 			$queryStr .=    'AND wc_id != ? '; $params[] = $escapePages[$i];
 		}
-		$keyword = addslashes(':config');// 「:config」(設定ファイル)の「'"\」文字をエスケープ
+		$keyword = addslashes(':');// 「:xxxxx」(設定ページ)の「'"\」文字をエスケープ
 		$queryStr .=    'AND wc_id NOT LIKE \'' . $keyword . '%\' ';
 					
 		$queryStr .=  'ORDER BY wc_content_dt DESC LIMIT ' . $limit . ' OFFSET ' . $offset;
