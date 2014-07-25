@@ -62,11 +62,11 @@ $(function(){
 	<?php if ($document->countModules('bottom-hide')): ?><div class="col-sm-12 hidden-xs"><div id="pos-slide"><jdoc:include type="modules" name="bottom-hide" style="bootblock" /></div></div><?php endif; ?>
 	</div></div>
 <?php else: ?>
-	<?php if ($document->countModules('banner')): ?><div class="col-sm-12"><jdoc:include type="modules" name="banner" style="bootblock" /></div><?php endif; ?>
-	<?php if ($document->countModules('top')): ?><div class="col-sm-12"><jdoc:include type="modules" name="top" style="bootblock" /></div><?php endif; ?>
-	<div class="col-sm-12"><jdoc:include type="component" style="bootblock" /></div>
-	<?php if ($document->countModules('bottom')): ?><div class="col-sm-12"><jdoc:include type="modules" name="bottom" style="bootblock" /></div><?php endif; ?>
-	<?php if ($document->countModules('bottom-hide')): ?><div class="col-sm-12 hidden-xs"><div id="pos-slide"><jdoc:include type="modules" name="bottom-hide" style="bootblock" /></div></div><?php endif; ?>
+	<?php if ($document->countModules('banner')): ?><div class="col-sm-offset-2 col-sm-8"><jdoc:include type="modules" name="banner" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('top')): ?><div class="col-sm-offset-2 col-sm-8"><jdoc:include type="modules" name="top" style="bootblock" /></div><?php endif; ?>
+	<div class="col-sm-offset-2 col-sm-8"><jdoc:include type="component" style="bootblock" /></div>
+	<?php if ($document->countModules('bottom')): ?><div class="col-sm-offset-2 col-sm-8"><jdoc:include type="modules" name="bottom" style="bootblock" /></div><?php endif; ?>
+	<?php if ($document->countModules('bottom-hide')): ?><div class="col-sm-offset-2 col-sm-8 hidden-xs"><div id="pos-slide"><jdoc:include type="modules" name="bottom-hide" style="bootblock" /></div></div><?php endif; ?>
 <?php endif; ?>
 </div>
 </div>
