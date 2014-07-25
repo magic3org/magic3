@@ -354,22 +354,17 @@ class custom_searchDb extends BaseDb
 		// ##### Wikiの検索条件 #####
 		if (!empty($isTargetWiki)){
 			if (!empty($queryStr)) $queryStr .= ' UNION ';
-			$queryStr .= 'SELECT DISTINCT \'photo\' AS type, ht_public_id AS id, ht_name AS name, ht_regist_dt AS dt, 0 AS group_id ';
-			$queryStr .= 'FROM photo LEFT JOIN _login_user ON ht_owner_id = lu_id AND lu_deleted = false ';
-			$queryStr .=   'WHERE ht_deleted = false ';		// 未削除
-			$queryStr .=     'AND ht_visible = true ';		// 公開中
+			$queryStr .= 'SELECT DISTINCT \'wiki\' AS type, wc_id AS id, wc_id AS name, wc_content_dt AS dt, 0 AS group_id ';
+			$queryStr .= 'FROM wiki_content LEFT JOIN _login_user ON wc_create_user_id = lu_id AND lu_deleted = false ';
+			$queryStr .=   'WHERE wc_deleted = false ';		// 未削除
+			$queryStr .=     'AND wc_visible = true ';		// 公開中
+			$queryStr .=     'AND wc_type = \'\' ';			// コンテンツ本体
 			
 			if (!empty($keywords)){
 				for ($i = 0; $i < count($keywords); $i++){
 					$keyword = addslashes($keywords[$i]);		// 「'"\」文字をエスケープ
-					$queryStr .=    'AND (ht_public_id LIKE \'%' . $keyword . '%\' ';		// 公開用画像ID
-					$queryStr .=    'OR ht_name LIKE \'%' . $keyword . '%\' ';		// 画像タイトル
-					$queryStr .=    'OR ht_camera LIKE \'%' . $keyword . '%\' ';		// カメラ
-					$queryStr .=    'OR ht_location LIKE \'%' . $keyword . '%\' ';		// 撮影場所
-					$queryStr .=    'OR ht_description LIKE \'%' . $keyword . '%\' ';		// 説明
-					$queryStr .=    'OR ht_summary LIKE \'%' . $keyword . '%\' ';		// 概要
-					$queryStr .=    'OR ht_keyword LIKE \'%' . $keyword . '%\' ';		// キーワード
-					$queryStr .=    'OR lu_name LIKE \'%' . $keyword . '%\') ';	// 撮影者
+					$queryStr .=    'AND (wc_id LIKE \'%' . $keyword . '%\' ';		// WikiコンテンツID
+					$queryStr .=    'OR wc_data LIKE \'%' . $keyword . '%\') ';		// Wikiコンテンツ
 				}
 			}
 		}
@@ -521,6 +516,22 @@ class custom_searchDb extends BaseDb
 		$queryStr .=     'AND ht_public_id = ? ';
 		$queryStr .=     'AND ht_language_id = ? ';
 		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		return $ret;
+	}
+	/**
+	 * Wikiページデータの取得
+	 *
+	 * @param string  $id			WikiコンテンツID
+	 * @param array   $row			レコード
+	 * @return bool					取得 = true, 取得なし= false
+	 */
+	function getWiki($id, &$row)
+	{
+		$queryStr  = 'SELECT * FROM wiki_content ';
+		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
+		$queryStr .=    'AND wc_type = ? ';
+		$queryStr .=   'AND wc_id = ? ';
+		$ret = $this->selectRecord($queryStr, array('', $id), $row);
 		return $ret;
 	}
 }

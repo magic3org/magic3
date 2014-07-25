@@ -22,6 +22,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	private $langId;		// 現在の言語
 	private $categoryInfoArray = array();		// カテゴリ種別メニュー
 	private $resultCount;				// 結果表示件数
+	private $wikiLibObj;		// Wikiコンテンツオブジェクト
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カスタム検索';			// デフォルトのウィジェットタイトル
 	const FIELD_HEAD = 'item';			// フィールド名の先頭文字列
@@ -33,6 +34,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	const SEARCH_LIST_CONTENT_ID = 'SEARCH_LIST';	// 検索一覧に表示するコンテンツのID
 	const DEFAULT_SEARCH_ACT = 'custom_search';		// 検索実行処理
 	const CF_USE_PASSWORD			= 'use_password';		// 汎用コンテンツに対するパスワードアクセス制御
+	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
 	
 	/**
 	 * コンストラクタ
@@ -44,6 +46,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new custom_searchDb();
+		
+		// Wikiコンテンツオブジェクト取得
+		$this->wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -350,16 +355,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 					// *** キーワード部分の検索はどうする？ ***
 					$this->gInstance->getTextConvManager()->convByKeyValue($content, $content);
 		
-					// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
-					$content = str_replace(array("\r", "\n", "\t", " "), '', $content);
-		
-					// 文字列長を修正
-					if (function_exists('mb_strimwidth')){
-						$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
-					} else {
-						$content = substr($content, 0, self::CONTENT_SIZE) . '...';
-					}
-					$summary = $content;
+					// 検索結果用のテキスト作成
+					$summary = $this->_createSummaryText($content);
 				}
 				break;
 			case M3_VIEW_TYPE_USER:		// ユーザ作成コンテンツの場合
@@ -411,16 +408,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 						// タブの内容をテキストに変換
 						$content = $this->gInstance->getTextConvManager()->htmlToText($content);
 		
-						// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
-						$content = str_replace(array("\r", "\n", "\t", " "), '', $content);
-		
-						// 文字列長を修正
-						if (function_exists('mb_strimwidth')){
-							$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
-						} else {
-							$content = substr($content, 0, self::CONTENT_SIZE) . '...';
-						}
-						$summary = $content;
+						// 検索結果用のテキスト作成
+						$summary = $this->_createSummaryText($content);
 					}
 				} else {		// 検索一覧用データがあるとき
 					$contentInfo = $contentArray[$searchListItemId];
@@ -449,16 +438,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 					// テキストに変換。HTMLタグ削除。
 					$content = $this->gInstance->getTextConvManager()->htmlToText($row['be_html']);
 		
-					// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
-					$content = str_replace(array("\r", "\n", "\t", " "), '', $content);
-		
-					// 文字列長を修正
-					if (function_exists('mb_strimwidth')){
-						$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
-					} else {
-						$content = substr($content, 0, self::CONTENT_SIZE) . '...';
-					}
-					$summary = $content;
+					// 検索結果用のテキスト作成
+					$summary = $this->_createSummaryText($content);
 				}
 				break;
 			case M3_VIEW_TYPE_PRODUCT:			// 商品情報の場合
@@ -475,16 +456,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 						// テキストに変換。HTMLタグ削除。
 						$content = $this->gInstance->getTextConvManager()->htmlToText($row['pt_description']);
 	
-						// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
-						$content = str_replace(array("\r", "\n", "\t", " "), '', $content);
-	
-						// 文字列長を修正
-						if (function_exists('mb_strimwidth')){
-							$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
-						} else {
-							$content = substr($content, 0, self::CONTENT_SIZE) . '...';
-						}
-						$summary = $content;
+						// 検索結果用のテキスト作成
+						$summary = $this->_createSummaryText($content);
 					}
 				}
 				break;
@@ -502,16 +475,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 						// テキストに変換。HTMLタグ削除。
 						$content = $this->gInstance->getTextConvManager()->htmlToText($row['ee_html']);
 	
-						// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
-						$content = str_replace(array("\r", "\n", "\t", " "), '', $content);
-	
-						// 文字列長を修正
-						if (function_exists('mb_strimwidth')){
-							$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
-						} else {
-							$content = substr($content, 0, self::CONTENT_SIZE) . '...';
-						}
-						$summary = $content;
+						// 検索結果用のテキスト作成
+						$summary = $this->_createSummaryText($content);
 					}
 				}
 				break;
@@ -527,16 +492,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 					// テキストに変換。HTMLタグ削除。
 					$content = $this->gInstance->getTextConvManager()->htmlToText($row['te_message']);
 
-					// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
-					$content = str_replace(array("\r", "\n", "\t", " "), '', $content);
-
-					// 文字列長を修正
-					if (function_exists('mb_strimwidth')){
-						$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
-					} else {
-						$content = substr($content, 0, self::CONTENT_SIZE) . '...';
-					}
-					$summary = $content;
+					// 検索結果用のテキスト作成
+					$summary = $this->_createSummaryText($content);
 				}
 				break;
 			case M3_VIEW_TYPE_PHOTO:			// フォト情報の場合
@@ -553,17 +510,24 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 						// テキストに変換。HTMLタグ削除。
 						$content = $this->gInstance->getTextConvManager()->htmlToText($row['ht_description']);
 	
-						// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
-						$content = str_replace(array("\r", "\n", "\t", " "), '', $content);
-	
-						// 文字列長を修正
-						if (function_exists('mb_strimwidth')){
-							$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
-						} else {
-							$content = substr($content, 0, self::CONTENT_SIZE) . '...';
-						}
-						$summary = $content;
+						// 検索結果用のテキスト作成
+						$summary = $this->_createSummaryText($content);
 					}
+				}
+				break;
+			case M3_VIEW_TYPE_WIKI:			// Wikiコンテンツの場合
+				$wikiId = $fetchedRow['id'];
+				
+				// Wikiコンテンツへのリンクを作成
+				$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . $wikiId, true/*リンク用*/);
+
+				// Wikiコンテンツを取得
+				$ret = $this->db->getWiki($wikiId, $row);
+				if ($ret){
+					$content = $this->wikiLibObj->convertToText($row['wc_data']);
+				
+					// 検索結果用のテキスト作成
+					$summary = $this->_createSummaryText($content);
 				}
 				break;
 			default:
@@ -580,6 +544,25 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$this->tmpl->parseTemplate('result_list', 'a');
 		$this->isExistsViewData = true;				// 表示データがあるかどうか
 		return true;
+	}
+	/**
+	 * 検索結果表示用の要約テキスト作成
+	 *
+	 * @param string $src			変換するテキスト
+	 * @return string				変換済みテキスト
+	 */
+	function _createSummaryText($src)
+	{
+		// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
+		$content = str_replace(array("\r", "\n", "\t", " "), '', $src);
+
+		// 文字列長を修正
+		if (function_exists('mb_strimwidth')){
+			$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
+		} else {
+			$content = substr($content, 0, self::CONTENT_SIZE) . '...';
+		}
+		return $content;
 	}
 	/**
 	 * すべてのコンテンツ項目を取得
