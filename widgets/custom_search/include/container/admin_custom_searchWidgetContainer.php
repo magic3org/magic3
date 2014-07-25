@@ -8,9 +8,9 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2014 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_custom_searchWidgetContainer.php 5969 2013-04-29 13:16:04Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -120,6 +120,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		$isTargetEvent = ($request->trimValueOf('item_target_event') == 'on') ? 1 : 0;			// イベント情報を検索対象とするかどうか
 		$isTargetBbs = ($request->trimValueOf('item_target_bbs') == 'on') ? 1 : 0;			// BBSを検索対象とするかどうか
 		$isTargetPhoto = ($request->trimValueOf('item_target_photo') == 'on') ? 1 : 0;			// フォトギャラリーを検索対象とするかどうか
+		$isTargetWiki = ($request->trimValueOf('item_target_wiki') == 'on') ? 1 : 0;			// Wikiを検索対象とするかどうか
 		
 		// カテゴリ項目定義
 		$fieldCount = intval($request->trimValueOf('fieldcount'));		// カテゴリ定義項目数
@@ -153,7 +154,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			// 入力チェック
 			$this->checkInput($name, '名前');
 			if (empty($isTargetContent) && empty($isTargetUser) && empty($isTargetBlog) && empty($isTargetProduct) && empty($isTargetEvent) && 
-					empty($isTargetBbs) && empty($isTargetPhoto)) $this->setUserErrorMsg('検索対象が選択されていません');
+					empty($isTargetBbs) && empty($isTargetPhoto) && empty($isTargetWiki)) $this->setUserErrorMsg('検索対象が選択されていません');
 			$this->checkNumeric($resultCount, '表示件数');
 			
 			// 設定名の重複チェック
@@ -182,6 +183,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->isTargetEvent = $isTargetEvent;			// イベント情報を検索対象とするかどうか
 				$newObj->isTargetBbs = $isTargetBbs;			// BBSを検索対象とするかどうか
 				$newObj->isTargetPhoto = $isTargetPhoto;			// フォトギャラリーを検索対象とするかどうか
+				$newObj->isTargetWiki = $isTargetWiki;			// Wikiを検索対象とするかどうか
 				$newObj->fieldInfo = $this->fieldInfoArray;			// カテゴリ定義
 				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
@@ -197,7 +199,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		} else if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
 			if (empty($isTargetContent) && empty($isTargetUser) && empty($isTargetBlog) && empty($isTargetProduct) && empty($isTargetEvent) && 
-					empty($isTargetBbs) && empty($isTargetPhoto)) $this->setUserErrorMsg('検索対象が選択されていません');
+					empty($isTargetBbs) && empty($isTargetPhoto) && empty($isTargetWiki)) $this->setUserErrorMsg('検索対象が選択されていません');
 			$this->checkNumeric($resultCount, '表示件数');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
@@ -217,6 +219,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 					$targetObj->isTargetEvent = $isTargetEvent;			// イベント情報を検索対象とするかどうか
 					$targetObj->isTargetBbs = $isTargetBbs;			// BBSを検索対象とするかどうか
 					$targetObj->isTargetPhoto = $isTargetPhoto;			// フォトギャラリーを検索対象とするかどうか
+					$targetObj->isTargetWiki = $isTargetWiki;			// Wikiを検索対象とするかどうか
 					$targetObj->fieldInfo = $this->fieldInfoArray;			// カテゴリ定義
 				}
 				
@@ -259,6 +262,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				$isTargetEvent = 1;			// イベント情報を検索対象とするかどうか
 				$isTargetBbs = 1;			// BBSを検索対象とするかどうか
 				$isTargetPhoto = 1;			// フォトギャラリーを検索対象とするかどうか
+				$isTargetWiki = 1;			// Wikiを検索対象とするかどうか
 			}
 			$this->serialNo = 0;
 		} else {		// 更新の場合
@@ -277,6 +281,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 					$isTargetEvent = $targetObj->isTargetEvent;			// イベント情報を検索対象とするかどうか
 					$isTargetBbs = $targetObj->isTargetBbs;			// BBSを検索対象とするかどうか
 					$isTargetPhoto = $targetObj->isTargetPhoto;			// フォトギャラリーを検索対象とするかどうか
+					$isTargetWiki = $targetObj->isTargetWiki;			// Wikiを検索対象とするかどうか
 					$searchTemplate = $targetObj->searchTemplate;		// 検索用テンプレート
 					if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// 項目定義
 				}
@@ -330,6 +335,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		if (!empty($isTargetEvent)) $this->tmpl->addVar('_widget', 'target_event_checked', 'checked');			// イベント情報を検索対象とするかどうか
 		if (!empty($isTargetBbs)) $this->tmpl->addVar('_widget', 'target_bbs_checked', 'checked');			// BBSを検索対象とするかどうか
 		if (!empty($isTargetPhoto)) $this->tmpl->addVar('_widget', 'target_photo_checked', 'checked');			// フォトギャラリーを検索対象とするかどうか
+		if (!empty($isTargetWiki)) $this->tmpl->addVar('_widget', 'target_wiki_checked', 'checked');			// Wikiを検索対象とするかどうか
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御

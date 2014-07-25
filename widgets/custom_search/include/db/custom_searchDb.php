@@ -8,7 +8,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2014 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -102,12 +102,13 @@ class custom_searchDb extends BaseDb
 	 * @param bool		$isTargetEvent		イベント情報を検索対象とするかどうか
 	 * @param bool		$isTargetBbs		BBSを検索対象とするかどうか
 	 * @param bool		$isTargetPhoto		フォトギャラリーを検索対象とするかどうか
+	 * @param bool		$isTargetWiki		Wikiを検索対象とするかどうか
 	 * @param bool		$contentUsePassword	汎用コンテンツのパスワード閲覧制限するかどうか
 	 * @param function	$callback			コールバック関数
 	 * @return int,bool						$limitが0のときintで項目数、$limitが0以外のときはbool(true=1行以上レコード取得、false=レコードなし)
 	 */
 	function searchContentsByKeyword($limit, $page, $keywords, $categoryInfo, $langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
-									$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $contentUsePassword, $callback = NULL)
+									$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $isTargetWiki, $contentUsePassword, $callback = NULL)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -330,6 +331,28 @@ class custom_searchDb extends BaseDb
 		}
 		// ##### フォト情報の検索条件 #####
 		if (!empty($isTargetPhoto)){
+			if (!empty($queryStr)) $queryStr .= ' UNION ';
+			$queryStr .= 'SELECT DISTINCT \'photo\' AS type, ht_public_id AS id, ht_name AS name, ht_regist_dt AS dt, 0 AS group_id ';
+			$queryStr .= 'FROM photo LEFT JOIN _login_user ON ht_owner_id = lu_id AND lu_deleted = false ';
+			$queryStr .=   'WHERE ht_deleted = false ';		// 未削除
+			$queryStr .=     'AND ht_visible = true ';		// 公開中
+			
+			if (!empty($keywords)){
+				for ($i = 0; $i < count($keywords); $i++){
+					$keyword = addslashes($keywords[$i]);		// 「'"\」文字をエスケープ
+					$queryStr .=    'AND (ht_public_id LIKE \'%' . $keyword . '%\' ';		// 公開用画像ID
+					$queryStr .=    'OR ht_name LIKE \'%' . $keyword . '%\' ';		// 画像タイトル
+					$queryStr .=    'OR ht_camera LIKE \'%' . $keyword . '%\' ';		// カメラ
+					$queryStr .=    'OR ht_location LIKE \'%' . $keyword . '%\' ';		// 撮影場所
+					$queryStr .=    'OR ht_description LIKE \'%' . $keyword . '%\' ';		// 説明
+					$queryStr .=    'OR ht_summary LIKE \'%' . $keyword . '%\' ';		// 概要
+					$queryStr .=    'OR ht_keyword LIKE \'%' . $keyword . '%\' ';		// キーワード
+					$queryStr .=    'OR lu_name LIKE \'%' . $keyword . '%\') ';	// 撮影者
+				}
+			}
+		}
+		// ##### Wikiの検索条件 #####
+		if (!empty($isTargetWiki)){
 			if (!empty($queryStr)) $queryStr .= ' UNION ';
 			$queryStr .= 'SELECT DISTINCT \'photo\' AS type, ht_public_id AS id, ht_name AS name, ht_regist_dt AS dt, 0 AS group_id ';
 			$queryStr .= 'FROM photo LEFT JOIN _login_user ON ht_owner_id = lu_id AND lu_deleted = false ';

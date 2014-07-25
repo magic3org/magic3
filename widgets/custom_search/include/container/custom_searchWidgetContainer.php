@@ -8,7 +8,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2014 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: custom_searchWidgetContainer.php 5969 2013-04-29 13:16:04Z fishbone $
  * @link       http://www.m-media.co.jp
@@ -57,7 +57,13 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'index.tmpl.html';
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $this->gEnv->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			return 'index_bootstrap.tmpl.html';
+		} else {
+			return 'index.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -101,6 +107,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$isTargetEvent = $targetObj->isTargetEvent;			// イベント情報を検索対象とするかどうか
 		$isTargetBbs = $targetObj->isTargetBbs;			// BBSを検索対象とするかどうか
 		$isTargetPhoto = $targetObj->isTargetPhoto;			// フォトギャラリーを検索対象とするかどうか
+		$isTargetWiki = $targetObj->isTargetWiki;			// Wikiを検索対象とするかどうか
 		$searchTemplate = $targetObj->searchTemplate;		// 検索用テンプレート
 		if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// 項目定義
 		$searchFormId = $this->gEnv->getCurrentWidgetId() . '_' . $configId . '_form';		// フォームのID
@@ -168,7 +175,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		
 				// 総数を取得
 				$totalCount = $this->db->searchContentsByKeyword(0/*項目数取得*/, 0/*ダミー*/, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog,
-								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $contentUsePassword);
+								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $isTargetWiki, $contentUsePassword);
 				$this->calcPageLink($pageNo, $totalCount, $this->resultCount);		// ページ番号修正
 				
 				// リンク文字列作成、ページ番号調整
@@ -177,7 +184,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				
 				// 検出項目を表示
 				$this->db->searchContentsByKeyword($this->resultCount, $pageNo, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
-								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $contentUsePassword, array($this, 'searchItemsLoop'));
+								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $isTargetWiki, $contentUsePassword, array($this, 'searchItemsLoop'));
 				
 				if ($this->isExistsViewData){
 					// ページリンクを埋め込む

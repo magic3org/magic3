@@ -1,0 +1,64 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function content_search(){
+	$('#{SEARCH_TEXT_ID}').attr('disabled', 'disabled');
+	$('#{SEARCH_BUTTON_ID}').attr('disabled', 'disabled');
+	var value = $('#{SEARCH_TEXT_ID}').val();
+	if (value) document.custom_search_box.keyword.value = value;
+	document.custom_search_box.act.value = '{SEARCH_ACT}';
+	document.custom_search_box.submit();
+	return true;
+}
+function content_search_reset(){
+	$('#{SEARCH_FORM_ID} :input').each(function(){
+		var type = this.type;
+		var tag = this.tagName.toLowerCase();
+		if (type == 'text' || type == 'password' || tag == 'textarea'){
+			this.value = '';
+		} else if (type == 'checkbox' || type == 'radio'){
+			this.checked = false;
+		} else if (tag == 'select'){
+			this.selectedIndex = -1;
+		}
+	});
+}
+$(function(){
+	$('#{SEARCH_TEXT_ID}').val('{KEYWORD}');
+	$('#{SEARCH_BUTTON_ID}').click(function(){
+		content_search();
+	});
+	$('#{SEARCH_RESET_ID}').click(function(){
+		content_search_reset();
+	});
+});
+//]]>
+</script>
+<form id="{SEARCH_FORM_ID}" name="custom_search_box" method="get" class="form form-inline" onsubmit="content_search();">
+<input type="hidden" name="sub" value="{PAGE_SUB}" />
+<input type="hidden" name="act" />
+<input type="hidden" name="keyword" />
+{HTML}
+</form>
+<patTemplate:tmpl name="message" visibility="hidden"><div class="search_message">{MESSAGE}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="page_link_top" visibility="hidden"><div class="search_page_link">{PAGE_LINK}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="result_list">
+<div class="search_list">
+<h3>{NO}{TITLE}</h3>
+<div>{BODY}</div>
+</div>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="page_link" visibility="hidden"><div class="search_page_link">{PAGE_LINK}</div></patTemplate:tmpl>
+</patTemplate:tmpl>
