@@ -22,18 +22,6 @@
 // Bootstrap用
 define('EDIT_COLS_BOOTSTRAP', 40); // Columns of textarea
 
-// Show page-content
-// modified for Magic3 by naoki on 2008/9/29
-//function catbody($title, $page, $body)
-/*function catbody($body)
-{
-	global $trackback, $trackback_javascript, $referer, $javascript;
-
-	// Add JavaScript header when ...
-	if ($trackback && $trackback_javascript) $javascript = 1; // Set something If you want
-	if (! PKWK_ALLOW_JAVASCRIPT) unset($javascript);
-}*/
-
 // Show 'edit' form
 //function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='')

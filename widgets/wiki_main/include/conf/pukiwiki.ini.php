@@ -30,7 +30,6 @@ global $menubar;
 
 global $nofollow;
 global $trackback;
-global $trackback_javascript;
 global $referer;
 global $nowikiname;
 global $autolink;
@@ -228,18 +227,10 @@ $menubar      = 'MenuBar';       // Menu
 $nofollow = 0; // 1 = Try hiding from search engines
 
 /////////////////////////////////////////////////
-
-// PKWK_ALLOW_JAVASCRIPT - Allow / Prohibit using JavaScript
-define('PKWK_ALLOW_JAVASCRIPT', 0);
-
-/////////////////////////////////////////////////
 // TrackBack feature
 
 // Enable Trackback
 $trackback = 0;
-
-// Show trackbacks with an another window (using JavaScript)
-$trackback_javascript = 0;
 
 /////////////////////////////////////////////////
 // Referer list feature
