@@ -35,26 +35,20 @@ class wikiLib
 	 */
 	function convertToText($src)
 	{
-		return $src;
-		
 		if (!is_array($src)) $src = explode("\n", $src);
-//$src = preg_split('/(?<=\n)/', $src);
-//$src = str_replace("\r", '', $src);
-//debug($src);
+
 		// クラスが存在しない場合はライブラリを読み込む
 		if (!class_exists('Body')){
 			require_once(dirname(__FILE__) . '/htmlElement.php');
 			require_once(dirname(__FILE__) . '/make_link.php');
 			require_once(dirname(__FILE__) . '/html.php');
+			require_once(dirname(__FILE__) . '/func.php');
 		}
 		
 		$body = new Body(1);
 		$body->parse($src);
-debug($body->toString());
-		return $body->toString();
-
-		//if (preg_match('/^\#([^\(]+)(?:\((.*)\))?/', $text, $matches) &&
-//		return preg_replace('/^\#([^\(]+)(?:\((.*)\))?/', '', $src);
+		$dest = strip_tags($body->toString());
+		return $dest;
 	}
 }
 ?>

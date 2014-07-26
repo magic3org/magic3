@@ -15,7 +15,25 @@
  */
 define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 1); // 1 = Disabled
 define('PKWK_PLUGIN_CALL_TIME_LIMIT', 768);
+
+global $WikiName;
+global $BracketName;
+global $InterWikiName;
+global $NotePattern;
 global $line_rules;
+
+// BugTrack/304暫定対処
+$WikiName = '(?:[A-Z][a-z]+){2,}(?!\w)';
+
+// $BracketName = ':?[^\s\]#&<>":]+:?';
+$BracketName = '(?!\s):?[^\r\n\t\f\[\]<>#&":]+:?(?<!\s)';
+
+// InterWiki
+$InterWikiName = '(\[\[)?((?:(?!\s|:|\]\]).)+):(.+)(?(1)\]\])';
+
+// 注釈
+$NotePattern = '/\(\(((?:(?>(?:(?!\(\()(?!\)\)(?:[^\)]|$)).)+)|(?R))*)\)\)/';		// PHP5.5以降用修正
+
 /////////////////////////////////////////////////
 // ユーザ定義ルール
 //

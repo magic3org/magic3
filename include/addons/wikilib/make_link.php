@@ -320,7 +320,8 @@ EOD;
 		} else {
 			// modified for Magic3 by naoki on 2008/10/1
 			//$script = get_script_uri() . '?' . rawurlencode($page);
-			$script = get_script_uri() . '?' . WikiParam::convQuery(rawurlencode($page));
+			//$script = get_script_uri() . '?' . WikiParam::convQuery(rawurlencode($page));
+			$script = '';
 		}
 
 		$id   = ++$note_id;
@@ -333,10 +334,10 @@ EOD;
 			$script . '#notetext_' . $id . '" class="note_super">*' .
 			$id . '</a>' . "\n" .
 			'<span class="small">' . $note . '</span><br />';*/
-		WikiPage::addFootNote($id, '<a id="notefoot_' . $id . '" href="' .
+/*		WikiPage::addFootNote($id, '<a id="notefoot_' . $id . '" href="' .
 			$script . '#notetext_' . $id . '" class="note_super">*' .
 			$id . '</a>' . "\n" .
-			'<span class="small">' . $note . '</span><br />');
+			'<span class="small">' . $note . '</span><br />');*/
 
 		// A hyperlink, content-body to footnote
 		if (! is_numeric(PKWK_FOOTNOTE_TITLE_MAX) || PKWK_FOOTNOTE_TITLE_MAX <= 0) {
@@ -535,13 +536,14 @@ EOD;
 			list(, $this->param, $this->anchor) = $matches;
 
 		// modified for Magic3 by naoki on 2008/10/1
-		$url = get_interwiki_url($name, $this->param);
+//		$url = get_interwiki_url($name, $this->param);
 		/*$this->url = ($url === FALSE) ?
 			$script . '?' . rawurlencode('[[' . $name . ':' . $this->param . ']]') :
 			htmlspecialchars($url);*/
-		$this->url = ($url === FALSE) ?
+/*		$this->url = ($url === FALSE) ?
 			$script . '?' . WikiParam::convQuery(rawurlencode('[[' . $name . ':' . $this->param . ']]')) :
-			htmlspecialchars($url);
+			htmlspecialchars($url);*/
+		$this->url = '';
 		return parent::setParam(
 			$page,
 			htmlspecialchars($name . ':' . $this->param),
@@ -734,17 +736,19 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 	$s_page = htmlspecialchars(strip_bracket($page));
 	$s_alias = ($alias == '') ? $s_page : $alias;
 	
+return $s_alias;
 	if ($page == '') return '<a href="' . $anchor . '">' . $s_alias . '</a>';
 
 	$r_page  = rawurlencode($page);
 	
 	// add for Magic3 by naoki on 2008/9/29
-	$r_page = WikiParam::convQuery($r_page);
+/*	$r_page = WikiParam::convQuery($r_page);*/
+	$r_page = '';
 
 	$r_refer = ($refer == '') ? '' : '&amp;refer=' . rawurlencode($refer);
 
-	if (! isset($related[$page]) && $page != $vars['page'] && is_page($page))
-		$related[$page] = get_filetime($page);
+//	if (! isset($related[$page]) && $page != $vars['page'] && is_page($page))
+//		$related[$page] = get_filetime($page);
 
 	if ($isautolink || is_page($page)) {
 		// Hyperlink to the page
@@ -829,7 +833,7 @@ function get_interwiki_url($name, $param)
 	static $interwikinames;
 	static $encode_aliases = array('sjis'=>'SJIS', 'euc'=>'EUC-JP', 'utf8'=>'UTF-8');
 
-	$interwiki = WikiConfig::getInterWikiPage();
+//	$interwiki = WikiConfig::getInterWikiPage();
 	if (! isset($interwikinames)) {
 		$interwikinames = $matches = array();
 		foreach (get_source($interwiki) as $line)
