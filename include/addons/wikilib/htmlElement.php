@@ -13,6 +13,69 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
+define('PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK', 1); // 1 = Disabled
+define('PKWK_PLUGIN_CALL_TIME_LIMIT', 768);
+global $line_rules;
+/////////////////////////////////////////////////
+// ユーザ定義ルール
+//
+//  正規表現で記述してください。?(){}-*./+\$^|など
+//  は \? のようにクォートしてください。
+//  前後に必ず / を含めてください。行頭指定は ^ を頭に。
+//  行末指定は $ を後ろに。
+//
+/////////////////////////////////////////////////
+// ユーザ定義ルール(コンバート時に置換)
+$line_rules = array(
+	'COLOR\(([^\(\)]*)\){([^}]*)}'	=> '<span style="color:$1">$2</span>',
+	'SIZE\(([^\(\)]*)\){([^}]*)}'	=> '<span style="font-size:$1px">$2</span>',
+	'COLOR\(([^\(\)]*)\):((?:(?!COLOR\([^\)]+\)\:).)*)'	=> '<span style="color:$1">$2</span>',
+	'SIZE\(([^\(\)]*)\):((?:(?!SIZE\([^\)]+\)\:).)*)'	=> '<span class="size$1">$2</span>',
+	'%%%(?!%)((?:(?!%%%).)*)%%%'	=> '<ins>$1</ins>',
+	'%%(?!%)((?:(?!%%).)*)%%'	=> '<del>$1</del>',
+	"'''(?!')((?:(?!''').)*)'''"	=> '<em>$1</em>',
+	"''(?!')((?:(?!'').)*)''"	=> '<strong>$1</strong>',
+);
+function exist_plugin_convert($name) {
+	return	function_exists('plugin_' . $name . '_convert') ? TRUE : exist_plugin($name) ?
+		function_exists('plugin_' . $name . '_convert') : FALSE;
+}
+function exist_plugin_inline($name) {
+	return	function_exists('plugin_' . $name . '_inline') ? TRUE : exist_plugin($name) ?
+		function_exists('plugin_' . $name . '_inline') : FALSE;
+}
+function exist_plugin($name)
+{
+	static $exist = array(), $count = array();
+
+//	$page = WikiParam::getPage();
+	$name = strtolower($name);
+	if(isset($exist[$name])) {
+		if (++$count[$name] > PKWK_PLUGIN_CALL_TIME_LIMIT){
+			/*die('Alert: plugin "' . htmlspecialchars($name) . '" was called over ' . PKWK_PLUGIN_CALL_TIME_LIMIT .
+			' times. SPAM or someting?<br />' . "\n" .
+			'<a href="' . get_script_uri() . '?cmd=edit&amp;page='. rawurlencode($vars['page']) . '">Try to edit this page</a><br />' . "\n" .
+			'<a href="' . get_script_uri() . '">Return to frontpage</a>');*/
+/*			die('Alert: plugin "' . htmlspecialchars($name) . '" was called over ' . PKWK_PLUGIN_CALL_TIME_LIMIT .
+			' times. SPAM or someting?<br />' . "\n" .
+			'<a href="' . get_script_uri() . WikiParam::convQuery('?cmd=edit&amp;page='. rawurlencode($page)) . '">Try to edit this page</a><br />' . "\n" .
+			'<a href="' . get_script_uri() . '">Return to frontpage</a>');*/
+die('Alert: plugin ' . htmlspecialchars($name));
+		}
+		return $exist[$name];
+	}
+	if (preg_match('/^\w{1,64}$/', $name) &&
+	    file_exists(PLUGIN_DIR . $name . '.inc.php')) {
+	    	$exist[$name] = TRUE;
+	    	$count[$name] = 1;
+		require_once(PLUGIN_DIR . $name . '.inc.php');
+		return TRUE;
+	} else {
+	    	$exist[$name] = FALSE;
+	    	$count[$name] = 1;
+		return FALSE;
+	}
+}
 // Block elements
 class Element
 {
