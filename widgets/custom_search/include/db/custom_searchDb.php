@@ -367,6 +367,19 @@ class custom_searchDb extends BaseDb
 					$queryStr .=    'OR wc_data LIKE \'%' . $keyword . '%\') ';		// Wikiコンテンツ
 				}
 			}
+
+			// 回避ページ
+			$escapePages = array(	'RecentChanges',	// Modified page list
+									'RecentDeleted', 	// Removeed page list
+									'InterWikiName',	// Set InterWiki definition here
+									'MenuBar');       	// メニューバー
+									
+			// 回避ページ
+			for ($i = 0; $i < count($escapePages); $i++){
+				$queryStr .=    'AND wc_id != ? '; $params[] = $escapePages[$i];
+			}
+			$keyword = addslashes(':');// 「:xxxxx」(設定ページ)の「'"\」文字をエスケープ
+			$queryStr .=    'AND wc_id NOT LIKE \'' . $keyword . '%\' ';
 		}
 		if (empty($limit)){			// 項目数取得の場合
 			$ret = $this->selectRecordCount($queryStr, $params);
