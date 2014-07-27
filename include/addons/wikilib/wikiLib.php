@@ -47,7 +47,8 @@ class wikiLib
 		
 		$body = new Body(1);
 		$body->parse($src);
-		$dest = strip_tags($body->toString());
+		$dest = $body->toString();		// HTML形式で出力
+		$dest = strip_tags($dest);			// HTMLタグを削除
 		return $dest;
 	}
 }
