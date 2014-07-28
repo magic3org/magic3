@@ -33,6 +33,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const MESSAGE_NO_USER_CATEGORY = 'カテゴリが登録されていません';			// ユーザ作成コンテンツ用のカテゴリが登録されていないときのメッセージ
 	const DEFAULT_SEARCH_COUNT	= 20;				// デフォルトの検索結果表示数
+	const DEFAULT_RESULT_LENGTH = 200;			// 検索結果コンテンツの文字列最大長
 	
 	/**
 	 * コンストラクタ
@@ -106,6 +107,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
 		$searchTemplate = $request->valueOf('item_html');		// 検索用テンプレート
 		$resultCount	= $request->valueOf('item_result_count');			// 表示項目数
+		$resultLength	= $request->valueOf('item_result_length');			// テキストサイズ
 		$this->searchTextId = $request->trimValueOf('item_search_text');		// 検索用テキストフィールドのタグID
 		$this->searchButtonId = $request->trimValueOf('item_search_button');		// 検索用ボタンのタグID
 		$this->searchResetId = $request->trimValueOf('item_search_reset');		// 検索エリアリセットボタンのタグID
@@ -156,6 +158,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			if (empty($isTargetContent) && empty($isTargetUser) && empty($isTargetBlog) && empty($isTargetProduct) && empty($isTargetEvent) && 
 					empty($isTargetBbs) && empty($isTargetPhoto) && empty($isTargetWiki)) $this->setUserErrorMsg('検索対象が選択されていません');
 			$this->checkNumeric($resultCount, '表示件数');
+			$this->checkNumeric($resultLength, 'テキストサイズ');
 			
 			// 設定名の重複チェック
 			for ($i = 0; $i < count($this->paramObj); $i++){
@@ -172,6 +175,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				$newObj = new stdClass;
 				$newObj->name	= $name;// 表示名
 				$newObj->resultCount	= $resultCount;// 表示件数
+				$newObj->resultLength	= $resultLength;			// テキストサイズ
 				$newObj->searchTemplate = $searchTemplate;		// 検索用テンプレート
 				$newObj->searchTextId = $this->searchTextId;		// 検索用テキストフィールドのタグID
 				$newObj->searchButtonId = $this->searchButtonId;		// 検索用ボタンのタグID
@@ -201,6 +205,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			if (empty($isTargetContent) && empty($isTargetUser) && empty($isTargetBlog) && empty($isTargetProduct) && empty($isTargetEvent) && 
 					empty($isTargetBbs) && empty($isTargetPhoto) && empty($isTargetWiki)) $this->setUserErrorMsg('検索対象が選択されていません');
 			$this->checkNumeric($resultCount, '表示件数');
+			$this->checkNumeric($resultLength, 'テキストサイズ');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 現在の設定値を取得
@@ -208,6 +213,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				if ($ret){
 					// ウィジェットオブジェクト更新
 					$targetObj->resultCount	= $resultCount;// 表示件数
+					$targetObj->resultLength	= $resultLength;			// テキストサイズ
 					$targetObj->searchTemplate	= $searchTemplate;		// 検索用テンプレート
 					$targetObj->searchTextId = $this->searchTextId;		// 検索用テキストフィールドのタグID
 					$targetObj->searchButtonId = $this->searchButtonId;		// 検索用ボタンのタグID
@@ -246,6 +252,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				$resultCount	= self::DEFAULT_SEARCH_COUNT;			// 表示項目数
+				$resultLength	= self::DEFAULT_RESULT_LENGTH;			// テキストサイズ
 				$this->fieldInfoArray = array();			// 項目定義
 				
 				// デフォルトの検索テンプレート作成
@@ -271,6 +278,8 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				if ($ret){
 					$name = $targetObj->name;// 名前
 					$resultCount	= $targetObj->resultCount;			// 表示項目数
+					$resultLength	= intval($targetObj->resultLength);			// テキストサイズ
+					if ($resultLength <= 0) $resultLength = self::DEFAULT_RESULT_LENGTH;			// テキストサイズ
 					$this->searchTextId = $targetObj->searchTextId;		// 検索用テキストフィールドのタグID
 					$this->searchButtonId = $targetObj->searchButtonId;		// 検索用ボタンのタグID
 					$this->searchResetId = $targetObj->searchResetId;		// 検索エリアリセットボタンのタグID
@@ -320,6 +329,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		$this->tmpl->addVar("_widget", "result_count",	$resultCount);			// 表示項目数
+		$this->tmpl->addVar("_widget", "result_length",	$resultLength);			// テキストサイズ
 		$this->tmpl->addVar("_widget", "html",	$searchTemplate);
 		$this->tmpl->addVar("_widget", "search_text",	$this->searchTextId);		// 検索用テキストフィールドのタグID
 		$this->tmpl->addVar("_widget", "search_button",	$this->searchButtonId);		// 検索用ボタンのタグID

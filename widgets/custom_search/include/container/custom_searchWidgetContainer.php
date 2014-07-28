@@ -23,6 +23,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	private $categoryInfoArray = array();		// カテゴリ種別メニュー
 	private $resultCount;				// 結果表示件数
 	private $wikiLibObj;		// Wikiコンテンツオブジェクト
+	private $resultLength;		// 検索結果コンテンツの文字列最大長
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カスタム検索';			// デフォルトのウィジェットタイトル
 	const FIELD_HEAD = 'item';			// フィールド名の先頭文字列
@@ -30,12 +31,12 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_NO_KEYWORD	= '検索キーワードが入力されていません';
 	const MESSAGE_FIND_NO_CONTENT	= '該当するコンテンツが見つかりません';
-	const CONTENT_SIZE = 200;			// 検索結果コンテンツの文字列最大長
 	const SEARCH_LIST_CONTENT_ID = 'SEARCH_LIST';	// 検索一覧に表示するコンテンツのID
 	const DEFAULT_SEARCH_ACT = 'custom_search';		// 検索実行処理
 	const CF_USE_PASSWORD			= 'use_password';		// 汎用コンテンツに対するパスワードアクセス制御
 	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
-	
+	const DEFAULT_RESULT_LENGTH = 200;			// 検索結果コンテンツの文字列最大長
+		
 	/**
 	 * コンストラクタ
 	 */
@@ -102,6 +103,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$name = $targetObj->name;// 定義名
 		$this->resultCount	= intval($targetObj->resultCount);			// 表示項目数
 		if ($this->resultCount <= 0) $this->resultCount = self::DEFAULT_SEARCH_COUNT;
+		$this->resultLength = intval($targetObj->resultLength);
+		if ($this->resultLength <= 0) $this->resultLength = self::DEFAULT_RESULT_LENGTH;	// 検索結果コンテンツの文字列最大長
 		$this->searchTextId = $targetObj->searchTextId;		// 検索用テキストフィールドのタグID
 		$this->searchButtonId = $targetObj->searchButtonId;		// 検索用ボタンのタグID
 		$this->searchResetId = $targetObj->searchResetId;		// 検索エリアリセットボタンのタグID
@@ -558,9 +561,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 
 		// 文字列長を修正
 		if (function_exists('mb_strimwidth')){
-			$content = mb_strimwidth($content, 0, self::CONTENT_SIZE, '…');
+			$content = mb_strimwidth($content, 0, $this->resultLength, '…');
 		} else {
-			$content = substr($content, 0, self::CONTENT_SIZE) . '...';
+			$content = substr($content, 0, $this->resultLength) . '...';
 		}
 		return $content;
 	}
