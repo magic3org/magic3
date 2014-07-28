@@ -26,7 +26,6 @@ function make_line_rules($str)
 		$replace = array_values($line_rules);
 		unset($line_rules);
 	}
-
 	return preg_replace($pattern, $replace, $str);
 }
 

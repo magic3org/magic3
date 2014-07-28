@@ -275,7 +275,7 @@ EOD;
 		// Try to call the plugin
 		if (exist_plugin_inline($this->name))
 			$str = do_plugin_inline($this->name, $this->param, $body);
-
+return '';			// テキスト変換用にプラグインを消去
 		if ($str !== FALSE) {
 			return $str; // Succeed
 		} else {

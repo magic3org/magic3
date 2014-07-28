@@ -125,7 +125,7 @@ $(function(){
 </td>
 </patTemplate:tmpl>
 <tr><td colspan="2">
-<table id="widgetlist" class="simple-table" style="width:950px;">
+<table id="widgetlist" class="simple-table" style="width:1000px;">
     <thead>
         <tr>
 	    <th width="20">No</th>
@@ -154,7 +154,7 @@ $(function(){
 		<td align="center">{LATEST_VERSION}</td>
 	    <td align="center">{RELEASE_DT}</td>
 	    <td align="right">
-	    <input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_WIDGET_CONFIG}" {DETAIL_BUTTON} />
+	    <input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_CONFIG_WINDOW}" {DETAIL_BUTTON} />
 	    </td>
 	</tr>
         </pattemplate:sub>
@@ -171,7 +171,7 @@ $(function(){
 	    <td align="center">{RELEASE_DT}</td>
 	    <td align="right"><input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{LABEL_UPDATE}" {UPDATE_BUTTON} />
 	    <input type="button" class="button" onclick="deleteline('{NO}', '{SERIAL}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
-	    <input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_WIDGET_CONFIG}" {DETAIL_BUTTON} />
+	    <input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_CONFIG_WINDOW}" {DETAIL_BUTTON} />
 		<div class="btn-group">
 		<!--<input type="button" class="button" onclick="downloadWidget('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />-->
 		<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadWidget('{ID}');" {DOWNLOAD_DISABLED}>{DOWNLOAD_IMAGE}</a>

@@ -925,7 +925,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			'download_image' => $downloadImage,								// ダウンロードボタンの画像
 			'download_disabled' => $downloadDisabled,								// ダウンロードボタンの使用可否
 			'image_tag' => $imageTag,		// 画像
-			'label_widget_config' => $this->_('Configure'),			// 設定
+			'label_config_window' => $this->_('Config Window'),			// 設定画面
 			'label_update' => $this->_('Update'),			// 更新
 			'label_delete' => $this->_('Delete'),			// 削除
 			'label_download' => $this->_('Download')			// ダウンロード

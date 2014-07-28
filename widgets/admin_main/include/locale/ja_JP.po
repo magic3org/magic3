@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-23 14:13+0900\n"
-"PO-Revision-Date: 2014-06-23 14:13+0900\n"
+"POT-Creation-Date: 2014-07-28 08:12+0900\n"
+"PO-Revision-Date: 2014-07-28 08:13+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -70,32 +70,32 @@ msgstr "データ更新に失敗しました"
 msgid "Invalid view term."
 msgstr "表示期間が不正です"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:462
-#: ../container/admin_mainConfigsiteWidgetContainer.php:297
-msgid "Update config?"
-msgstr "設定を更新しますか?"
-
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:463
-#: ../help/help_adjustwidget.php:31
-msgid "Widget Common Config"
-msgstr "ウィジェット共通設定"
-
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:464
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:330
 msgid "Basic"
 msgstr "基本"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:465
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:337
 #: ../container/admin_mainEditmenuWidgetContainer.php:199
 #: ../container/admin_mainUserlistWidgetContainer.php:157
 msgid "Others"
 msgstr "その他"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:466
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:485
+#: ../container/admin_mainConfigsiteWidgetContainer.php:297
+msgid "Update config?"
+msgstr "設定を更新しますか?"
+
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:486
+#: ../help/help_adjustwidget.php:31
+msgid "Widget Common Config"
+msgstr "ウィジェット共通設定"
+
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:489
 #: ../help/help_adjustwidget.php:35
 msgid "Adjust Widget Title and Contents"
 msgstr "ウィジェットタイトル、位置調整"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:467
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:490
 #: ../container/admin_mainEditmenuWidgetContainer.php:56
 #: ../container/admin_mainMenudefWidgetContainer.php:155
 #: ../container/admin_mainSmenudefWidgetContainer.php:148
@@ -103,7 +103,7 @@ msgstr "ウィジェットタイトル、位置調整"
 msgid "Title"
 msgstr "タイトル"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:468
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:491
 #: ../container/admin_mainMenudefWidgetContainer.php:154
 #: ../container/admin_mainMenudefWidgetContainer.php:179
 #: ../container/admin_mainPagedefWidgetContainer.php:136
@@ -113,132 +113,132 @@ msgstr "タイトル"
 msgid "Visible"
 msgstr "表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:469
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:492
 msgid "Margin"
 msgstr "マージン"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:470
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:493
 msgid "Top:"
 msgstr "トップ："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:471
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:494
 msgid "Bottom:"
 msgstr "下："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:472
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:495
 msgid "Left:"
 msgstr "左："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:473
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:496
 msgid "Right:"
 msgstr "右："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:474
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:497
 #: ../help/help_adjustwidget.php:47
 msgid "Contents Position"
 msgstr "テキスト表示位置"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:475
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:498
 #: ../help/help_adjustwidget.php:55
 msgid "Render"
 msgstr "描画処理"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:476
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:499
 msgid "Render by Joomla! style"
 msgstr "Joomla!スタイルの描画処理を使用"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:477
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:500
 #: ../help/help_adjustwidget.php:59
 msgid "Additional Top Content"
 msgstr "補助コンテンツ(上)"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:478
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:501
 #: ../help/help_adjustwidget.php:63
 msgid "Additional Bottom Content"
 msgstr "補助コンテンツ(下)"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:479
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:502
 #: ../help/help_adjustwidget.php:67
 msgid "Readmore Button"
 msgstr "もっと読むボタン"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:480
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:503
 msgid "Title:"
 msgstr "タイトル："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:481
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:504
 msgid "Url:"
 msgstr "URL："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:483
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:506
 #: ../help/help_adjustwidget.php:39
 msgid "View Control"
 msgstr "表示制御"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:484
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:507
 #: ../help/help_adjustwidget.php:71
 msgid "Page Shared Attribute"
 msgstr "ページ共通属性"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:485
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:508
 msgid "On"
 msgstr "オン"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:486
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:509
 #: ../help/help_adjustwidget.php:75
 msgid "View Term"
 msgstr "表示期間"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:487
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:510
 msgid "Except Page"
 msgstr "例外ページ"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:488
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:511
 #: ../container/admin_mainUserlistWidgetContainer.php:128
 msgid "Start Date:"
 msgstr "開始日："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:489
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:512
 #: ../container/admin_mainUserlistWidgetContainer.php:129
 msgid "End Date:"
 msgstr "終了日："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:490
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:513
 #: ../container/admin_mainUserlistWidgetContainer.php:130
 msgid "Hour:"
 msgstr "時間："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:491
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:514
 #: ../container/admin_mainUserlistWidgetContainer.php:135
 msgid "Calendar"
 msgstr "カレンダー"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:492
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:515
 #: ../help/help_adjustwidget.php:79
 msgid "View Option"
 msgstr "表示オプション"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:493
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:516
 msgid "View Type"
 msgstr "表示タイプ"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:494
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:517
 msgid "Always"
 msgstr "常時表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:495
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:518
 msgid "When user in login"
 msgstr "ログイン時のみ表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:496
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:519
 msgid "When user not in login"
 msgstr "非ログイン時のみ表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:497
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:520
 msgid "Additional CSS Class"
 msgstr "追加CSSクラス"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:498
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:521
 #: ../container/admin_mainConfigsiteWidgetContainer.php:311
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
@@ -2033,8 +2033,8 @@ msgid "Replace widget if exists."
 msgstr "ウィジェットが存在する場合は置き換え"
 
 #: ../container/admin_mainWidgetlistWidgetContainer.php:928
-msgid "Configure"
-msgstr "設定"
+msgid "Config Window"
+msgstr "設定画面"
 
 #: ../help/help_adjustwidget.php:32
 msgid "Common config with all widgets."
@@ -2834,6 +2834,9 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "Configure"
+#~ msgstr "設定"
 
 #~ msgid "Self"
 #~ msgstr "同"

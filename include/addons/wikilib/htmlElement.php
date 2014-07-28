@@ -209,8 +209,10 @@ function Factory_Div($root, $text)
 	// Seems block plugin?
 	if (PKWKEXP_DISABLE_MULTILINE_PLUGIN_HACK) {
 		// Usual code
-		if (preg_match('/^\#([^\(]+)(?:\((.*)\))?/', $text, $matches) &&
-		    exist_plugin_convert($matches[1])) {
+//		if (preg_match('/^\#([^\(]+)(?:\((.*)\))?/', $text, $matches) &&
+//		    exist_plugin_convert($matches[1])) {
+		// 「#xxxxxxxx」型式のプラグインを空文字列に変換
+		if (preg_match('/^\#([^\(]+)(?:\((.*)\))?/', $text, $matches)) {
 			return new Div($matches);
 		}
 	} else {
@@ -839,7 +841,8 @@ class Div extends Element
 	function toString()
 	{
 		// Call #plugin
-		return do_plugin_convert($this->name, $this->param);
+		//return do_plugin_convert($this->name, $this->param);
+return '';		// テキスト変換用に出力を消去
 	}
 }
 
