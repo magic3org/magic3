@@ -228,7 +228,16 @@ class DesignManager extends Core
 				$pageLink .= $link;
 			}
 			// 残りは「...」表示
-			if ($pageCount > $linkCount) $pageLink .= '&nbsp;...';
+			if ($pageCount > $linkCount){
+				switch ($style){
+					case 2:			// Bootstrap型のとき
+						$pageLink .= '<li class="disabled"><a href="#">…</a></li>';
+						break;
+					default:
+						$pageLink .= '&nbsp;...';
+						break;
+				}
+			}
 		}
 		if ($pageNo > 1){		// 前ページがあるとき
 			$linkUrl = '';
