@@ -184,7 +184,7 @@ class DesignManager extends Core
 	 * @param int $linkCount		最大リンク数
 	 * @param string $baseUrl		リンク用のベースURL
 	 * @param string $urlParams		オプションのURLパラメータ
-	 * @param int $style			0=Artisteerスタイル、1=括弧スタイル、-1=管理画面
+	 * @param int $style			0=Artisteerスタイル、1=括弧スタイル、2=Bootstrap型、-1=管理画面
 	 * @param string $clickEvent	リンククリックイベント用スクリプト
 	 * @return string				リンクHTML
 	 */
@@ -200,7 +200,14 @@ class DesignManager extends Core
 			$maxPageCount = $pageCount < $linkCount ? $pageCount : $linkCount;
 			for ($i = 1; $i <= $maxPageCount; $i++){
 				if ($i == $pageNo){
-					$link = '&nbsp;<span class="active">' . $i . '</span>';
+					switch ($style){
+						case 2:			// Bootstrap型のとき
+							$link = '<li class="active"><a href="#">' . $i . '<span class="sr-only">(current)</span></a></li>';
+							break;
+						default:
+							$link = '&nbsp;<span class="active">' . $i . '</span>';
+							break;
+					}
 				} else {
 					$linkUrl = '';
 					$clickScript = '';
@@ -209,8 +216,14 @@ class DesignManager extends Core
 					} else {
 						$clickScript = str_replace('$1', $i, $clickEvent);
 					}
-					//$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
-					$link = '&nbsp;' . $this->_createLink($i, convertUrlToHtmlEntity($linkUrl), $clickScript);
+					switch ($style){
+						case 2:			// Bootstrap型のとき
+							$link = '<li>' . $this->_createLink($i, convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
+							break;
+						default:
+							$link = '&nbsp;' . $this->_createLink($i, convertUrlToHtmlEntity($linkUrl), $clickScript);
+							break;
+					}
 				}
 				$pageLink .= $link;
 			}
@@ -225,8 +238,14 @@ class DesignManager extends Core
 			} else {
 				$clickScript = str_replace('$1', $pageNo -1, $clickEvent);
 			}
-			//$link = '<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >&laquo; 前へ</a>';
-			$link = $this->_createLink('&laquo; 前へ', convertUrlToHtmlEntity($linkUrl), $clickScript);
+			switch ($style){
+				case 2:			// Bootstrap型のとき
+					$link = '<li>' . $this->_createLink('&laquo;', convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
+					break;
+				default:
+					$link = $this->_createLink('&laquo; 前へ', convertUrlToHtmlEntity($linkUrl), $clickScript);
+					break;
+			}
 			$pageLink = $link . $pageLink;
 		}
 		if ($pageNo < $pageCount){		// 次ページがあるとき
@@ -237,11 +256,26 @@ class DesignManager extends Core
 			} else {
 				$clickScript = str_replace('$1', $pageNo +1, $clickEvent);
 			}
-			//$link = '&nbsp;<a href="' . convertUrlToHtmlEntity($linkUrl) . '" >次へ &raquo;</a>';
-			$link = '&nbsp;' . $this->_createLink('次へ &raquo;', convertUrlToHtmlEntity($linkUrl), $clickScript);
+			switch ($style){
+				case 2:			// Bootstrap型のとき
+					$link = '<li>' . $this->_createLink('&raquo;', convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
+					break;
+				default:
+					$link = '&nbsp;' . $this->_createLink('次へ &raquo;', convertUrlToHtmlEntity($linkUrl), $clickScript);
+					break;
+			}
 			$pageLink .= $link;
 		}
-		if (!empty($pageLink)) $pageLink = '<div class="art-pager">' . $pageLink . '</div>';
+		if (!empty($pageLink)){
+			switch ($style){
+				case 2:			// Bootstrap型のとき
+					$pageLink = '<ul class="pagination">' . $pageLink . '</ul>';
+					break;
+				default:
+					$pageLink = '<div class="art-pager">' . $pageLink . '</div>';
+					break;
+			}
+		}
 		return $pageLink;
 	}
 	/**

@@ -3123,15 +3123,16 @@ class BaseWidgetContainer extends Core
 	 * @param int $linkCount		最大リンク数
 	 * @param string $baseUrl		リンク用のベースURL
 	 * @param string $clickEvent	リンククリックイベント用スクリプト
+	 * @param int $style			0=Artisteerスタイル、1=括弧スタイル、2=Bootstrap型、-1=管理画面
 	 * @return string				リンクHTML
 	 */
-	function createPageLink($pageNo, $linkCount, $baseUrl, $clickEvent = '')
+	function createPageLink($pageNo, $linkCount, $baseUrl, $clickEvent = '', $style = 0)
 	{
 		$isAdminDirAccess = $this->gEnv->isAdminDirAccess();
 		if ($isAdminDirAccess){		// 管理画面の場合
 			$pageLink = $this->gDesign->createPageLink($pageNo, $this->_linkPageCount, $linkCount, $this->getUrl($baseUrl, true/*リンク用*/), ''/*追加パラメータなし*/, -1/*管理画面用*/, $clickEvent);
 		} else {
-			$pageLink = $this->gDesign->createPageLink($pageNo, $this->_linkPageCount, $linkCount, $this->getUrl($baseUrl, true/*リンク用*/));
+			$pageLink = $this->gDesign->createPageLink($pageNo, $this->_linkPageCount, $linkCount, $this->getUrl($baseUrl, true/*リンク用*/), ''/*追加パラメータなし*/, $style);
 		}
 		return $pageLink;
 	}

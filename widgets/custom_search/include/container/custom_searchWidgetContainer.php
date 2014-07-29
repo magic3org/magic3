@@ -24,6 +24,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	private $resultCount;				// 結果表示件数
 	private $wikiLibObj;		// Wikiコンテンツオブジェクト
 	private $resultLength;		// 検索結果コンテンツの文字列最大長
+	private $templateType;		// 現在のテンプレートタイプ
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カスタム検索';			// デフォルトのウィジェットタイトル
 	const FIELD_HEAD = 'item';			// フィールド名の先頭文字列
@@ -64,8 +65,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{
 		// テンプレートタイプに合わせて出力を変更
-		$templateType = $this->gEnv->getCurrentTemplateType();
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+		$this->templateType = $this->gEnv->getCurrentTemplateType();
+		if ($this->templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			return 'index_bootstrap.tmpl.html';
 		} else {
 			return 'index.tmpl.html';
@@ -187,8 +188,10 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$this->calcPageLink($pageNo, $totalCount, $this->resultCount);		// ページ番号修正
 				
 				// リンク文字列作成、ページ番号調整
-				//$pageLink = $this->createPageLink($pageNo, $totalCount, $this->resultCount, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword));
-				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword));
+				$linkStyle = 0;			// HTMLの出力タイプ
+				if ($this->templateType == M3_TEMPLATE_BOOTSTRAP_30) $linkStyle = 2;		// Bootstrap型テンプレートの場合
+				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword),
+													''/*追加パラメータなし*/, $linkStyle);
 				
 				// 検出項目を表示
 				$this->db->searchContentsByKeyword($this->resultCount, $pageNo, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
@@ -592,55 +595,6 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		}
 		return $destArray;
 	}
-	/**
-	 * ページリンク作成
-	 *
-	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整
-	 * @param int $totalCount		総項目数
-	 * @param int $viewItemCount	1ページあたりの項目数
-	 * @param string $baseUrl		リンク用のベースURL
-	 * @return string				リンクHTML
-	 */
-/*	function createPageLink(&$pageNo, $totalCount, $viewItemCount, $baseUrl)
-	{
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-
-		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			//for ($i = 1; $i <= $pageCount; $i++){
-			// ページ数1から「LINK_PAGE_COUNT」までのリンクを作成
-			$maxPageCount = $pageCount < self::LINK_PAGE_COUNT ? $pageCount : self::LINK_PAGE_COUNT;
-			for ($i = 1; $i <= $maxPageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					//$linkUrl = $this->getUrl($baseUrl . '&page=' . $i, true);
-					$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . $i), true);
-					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-			// 残りは「...」表示
-			if ($pageCount > self::LINK_PAGE_COUNT) $pageLink .= '&nbsp;...';
-		}
-		if ($pageNo > 1){		// 前ページがあるとき
-			//$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo -1), true);
-			$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . ($pageNo -1)), true);
-			$link = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >前へ</a>';
-			$pageLink = $link . $pageLink;
-		}
-		if ($pageNo < $pageCount){		// 次ページがあるとき
-			//$linkUrl = $this->getUrl($baseUrl . '&page=' . ($pageNo +1), true);
-			$linkUrl = $this->getUrl($this->addSearchParam($baseUrl . '&page=' . ($pageNo +1)), true);
-			$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >次へ</a>';
-			$pageLink .= $link;
-		}
-		return $pageLink;
-	}*/
 	/**
 	 * URLに検索条件のパラメータを付加
 	 *
