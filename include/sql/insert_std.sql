@@ -29,7 +29,8 @@ INSERT INTO content_config
 ('',           'head_view_detail', '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'HTMLヘッダ(詳細表示)',               3),
 ('smartphone', 'head_view_detail', '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'HTMLヘッダ(詳細表示)',               3),
 ('',           'use_jquery',      '0', 'jQueryスクリプト作成', 0),
-('smartphone', 'use_jquery',      '0', 'jQueryスクリプト作成', 0);
+('smartphone', 'use_jquery',      '0', 'jQueryスクリプト作成', 0),
+('',           'use_content_template',      '0', 'コンテンツ単位のテンプレート設定', 0);
 
 -- Wiki設定マスター
 INSERT INTO wiki_config (wg_id,        wg_value,     wg_name,                 wg_index)

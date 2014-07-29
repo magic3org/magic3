@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2013031701',               'DBバージョン'),
+('db_version',                  '2013061301',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_url',                  '',                         'サーバURL'),
 ('default_lang',                'ja',                       'デフォルト言語'),
@@ -59,6 +59,7 @@ INSERT INTO _system_config
 ('use_content_maintenance',     '0',                        'メンテナンス画面用コンテンツの取得'),
 ('use_content_access_deny',     '0',                        'アクセス不可画面用コンテンツの取得'),
 ('use_jquery',                  '1',                        '一般画面にjQueryを使用'),
+('default_theme',               'black-tie',                '一般画面用jQueryUIテーマ'),
 ('admin_default_theme',         'black-tie',                '管理画面用jQueryUIテーマ'),
 ('jquery_version',               '1.8',                     'jQueryバージョン(PC用)'),
 ('admin_jquery_version',         '1.8',                     '管理画面用jQueryバージョン'),
@@ -86,9 +87,9 @@ INSERT INTO _system_config
 ('fix_ie6_transparent_png',      '0',                       'IE6の透過PNG対応'),
 ('site_logo_filename',           'logo_72c.jpg;logo_200c.jpg',   'サイトロゴファイル名'),
 ('thumb_format',                 '72c.jpg;200c.jpg',   'サムネール仕様'),
-('avatar_format',                '72c.jpg',   'アバター仕様'),
+('avatar_format',                '80c.jpg',   'アバター仕様'),
 ('ogp_thumb_format',             '200c.jpg',   'OGP用サムネール仕様'),
-('wysiwyg_editor',               'fckeditor',   'WYSIWYGエディター'),
+('wysiwyg_editor',               'ckeditor',   'WYSIWYGエディター'),
 ('site_mobile_url',              '',                        '携帯用サイトURL'),
 ('site_smartphone_url',          '',                        'スマートフォン用サイトURL'),
 ('multi_domain',                 '0',                       'マルチドメイン運用'),
@@ -107,7 +108,8 @@ INSERT INTO _login_user
 -- 追加クラスマスター
 INSERT INTO _addons
 (ao_id,     ao_class_name, ao_name,            ao_description) VALUES
-('bloglib', 'blogLib',     'ブログライブラリ', '');
+('bloglib', 'blogLib',     'ブログライブラリ', ''),
+('contentlib', 'contentLib',     '汎用コンテンツライブラリ', '');
 
 -- 管理画面メニューデータ
 INSERT INTO _nav_item
