@@ -458,6 +458,7 @@ CREATE TABLE _attach_file (
     af_desc              TEXT                                         NOT NULL,      -- 説明
     af_file_type         VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- ファイルタイプ
     af_original_filename VARCHAR(256)   DEFAULT ''                    NOT NULL,      -- 元のファイル名
+    af_original_url      TEXT                                         NOT NULL,      -- 取得元URL
     af_file_size         INT            DEFAULT 0                     NOT NULL,      -- ファイルサイズ(バイト)
     af_file_dt           TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ファイル作成日時
     af_file_deleted_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- ファイル削除日時
@@ -540,6 +541,7 @@ CREATE TABLE _templates (
     tm_url               TEXT                                         NOT NULL,      -- 取得先URL
     tm_joomla_params     TEXT                                         NOT NULL,      -- joomla!用パラメータ
     tm_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか
+    tm_use_bootstrap     BOOLEAN        DEFAULT false                 NOT NULL,      -- Bootstrapを使用するかどうか
     tm_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
     tm_clean_type        INT            DEFAULT 0                     NOT NULL,      -- 出力のクリーン処理(0=処理なし,0以外=クリーン処理実行)
     
@@ -746,6 +748,7 @@ CREATE TABLE _page_id (
     pg_active            BOOLEAN        DEFAULT true                  NOT NULL,      -- 有効かどうか
     pg_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可能かどうか
     pg_editable          BOOLEAN        DEFAULT true                  NOT NULL,      -- データ編集可能かどうか
+    pg_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
     pg_admin_menu        BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理メニューを表示するかどうか(ページID種別がアクセスポイント時。初期値。)
     pg_analytics         BOOLEAN        DEFAULT false                 NOT NULL,      -- アクセス解析対象かどうか(ページID種別がアクセスポイント時)
     PRIMARY KEY  (pg_id, pg_type)

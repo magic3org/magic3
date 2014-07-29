@@ -139,6 +139,17 @@ VALUES                       (0,            true,     1,               6,       
 INSERT INTO reserve_calendar (ra_config_id, ra_usual, ra_specify_type, ra_day_attribute, ra_start_time, ra_end_time, ra_available)
 VALUES                       (0,            true,     1,               7,                900,           1200,        true);
 
+-- カレンダー初期データ
+INSERT INTO time_period
+(to_date_type_id, to_index, to_name, to_start_time, to_minute) VALUES
+(1, 0, '午前', '09:00:00', 180),
+(1, 1, '午後', '13:00:00', 240),
+(2, 0, '午前', '09:00:00', 180);
+INSERT INTO date_type
+(dt_id, dt_name, dt_sort_order) VALUES
+(1, '営業日(終日)', 1),
+(2, '営業日(午前のみ)', 2);
+
 -- テーブルのバージョン
 DELETE FROM _version WHERE vs_id = 'standard_table';
 INSERT INTO _version (vs_id,                         vs_value, vs_name)
@@ -321,6 +332,8 @@ INSERT INTO event_config
 ('comment_count',           '100',       '1投稿記事のコメント最大数',          4),
 ('comment_open_time',       '30',        'コメント投稿可能期間(日)',           5),
 ('top_contents',            '',          'トップ画面コンテンツ',               6),
+('msg_no_entry_in_future',  '今後のイベントはありません',         '予定イベントなし時メッセージ',                 0),
+('catagory_count',          '2', 'カテゴリー最大数', 0),
 ('m:entry_view_count',      '3',         '記事表示数(携帯)',                   7),
 ('m:entry_view_order',      '1',         '記事表示順(携帯)',                   8),
 ('m:top_contents',          '',          'トップ画面コンテンツ(携帯)',         9);

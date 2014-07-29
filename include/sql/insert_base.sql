@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2013061301',               'DBバージョン'),
+('db_version',                  '2013101001',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_url',                  '',                         'サーバURL'),
 ('default_lang',                'ja',                       'デフォルト言語'),
@@ -68,6 +68,7 @@ INSERT INTO _system_config
 ('mobile_auto_redirect',        '0',                        '携帯アクセスの自動遷移'),
 ('mobile_use_session',           '1',                       '携帯セッション管理'),
 ('smartphone_auto_redirect',    '0',                        'スマートフォンアクセスの自動遷移'),
+('smartphone_use_jquery_mobile', '0',                       'スマートフォン画面でjQuery Mobileを使用'),
 ('distribution_name',            'magic3.org',              'ディストリビューション名'),
 ('distribution_version',         '',                        'ディストリビューションバージョン'),
 ('use_ssl',                      '0',                       'SSL通信'),

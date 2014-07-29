@@ -128,7 +128,7 @@ CREATE TABLE content (
     cn_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- 参照ユーザを制限
     cn_search_target     BOOLEAN        DEFAULT true                  NOT NULL,      -- 検索対象かどうか
     cn_password          CHAR(32)       DEFAULT ''                    NOT NULL,      -- アクセス制限パスワード(MD5)
-    cn_search_content    TEXT                                         NOT NULL,       -- 検索用コンテンツ
+    cn_search_content    TEXT                                         NOT NULL,      -- 検索用コンテンツ
     cn_thumb_filename    TEXT                                         NOT NULL,      -- サムネールファイル名(「;」区切り)
     cn_template_id       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレートID
     cn_option_fields     TEXT                                         NOT NULL,      -- 追加フィールド
@@ -970,9 +970,11 @@ CREATE TABLE event_entry (
     ee_place             VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 場所
     ee_contact           VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 連絡先(Eメール,電話番号)
     ee_url               TEXT                                         NOT NULL,      -- URL
+    ee_regist_user_id    INT            DEFAULT 0                     NOT NULL,      -- エントリー作者
     ee_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
     ee_show_comment      BOOLEAN        DEFAULT true                  NOT NULL,      -- コメントを表示するかどうか
     ee_receive_comment   BOOLEAN        DEFAULT false                 NOT NULL,      -- コメントの受け付け可否
+    ee_is_all_day        BOOLEAN        DEFAULT false                 NOT NULL,      -- 終日イベントかどうか
     ee_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- 参照ユーザを制限
     ee_start_dt          TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- イベント期間(開始)
     ee_end_dt            TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- イベント期間(終了)
@@ -1011,17 +1013,18 @@ CREATE TABLE event_comment (
     PRIMARY KEY          (eo_serial)
 ) TYPE=innodb;
 
--- イベントカテゴリマスター
+-- イベントカテゴリーマスター
 DROP TABLE IF EXISTS event_category;
 CREATE TABLE event_category (
     ec_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    ec_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリID
-    ec_item_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリ項目ID(空=カテゴリ種別、空以外=カテゴリ項目)
+    ec_id                INT            DEFAULT 0                     NOT NULL,      -- カテゴリーID
     ec_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     ec_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
 
-    ec_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- カテゴリ名称
-    ec_index             INT            DEFAULT 0                     NOT NULL,      -- カテゴリ項目の表示順(カテゴリ項目IDが空のときはカテゴリの表示順)
+    ec_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- カテゴリー名称
+    ec_parent_id         INT            DEFAULT 0                     NOT NULL,      -- 親カテゴリーID
+    ec_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
+    ec_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
 
     ec_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     ec_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
@@ -1029,18 +1032,18 @@ CREATE TABLE event_category (
     ec_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     ec_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ec_serial),
-    UNIQUE               (ec_id,        ec_item_id,  ec_language_id,  ec_history_index)
+    UNIQUE               (ec_id,        ec_language_id,               ec_history_index)
 ) TYPE=innodb;
 
 -- イベント記事とイベント記事カテゴリーの対応付けマスター
 DROP TABLE IF EXISTS event_entry_with_category;
 CREATE TABLE event_entry_with_category (
     ew_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    ew_entry_id          INT            DEFAULT 0                     NOT NULL,      -- エントリーID
-    ew_category_id       VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリID
-    ew_category_item_id  VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリ項目ID
+    ew_entry_serial      INT            DEFAULT 0                     NOT NULL,      -- ブログ記事シリアル番号
+    ew_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号
+    ew_category_id       INT            DEFAULT 0                     NOT NULL,      -- ブログ記事カテゴリーID
     PRIMARY KEY          (ew_serial),
-    UNIQUE               (ew_entry_id,  ew_category_id, ew_category_item_id)
+    UNIQUE               (ew_entry_serial,      ew_index)
 ) TYPE=innodb;
 
 -- --------------------------------------------------------------------------------------------------
@@ -1157,7 +1160,9 @@ CREATE TABLE photo_rate (
     hr_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (hr_serial)
 ) TYPE=innodb;
-
+-- --------------------------------------------------------------------------------------------------
+-- 汎用コメント用
+-- --------------------------------------------------------------------------------------------------
 -- 汎用コメント設定マスター
 DROP TABLE IF EXISTS comment_config;
 CREATE TABLE comment_config (
@@ -1169,6 +1174,8 @@ CREATE TABLE comment_config (
     cf_max_count         INT            DEFAULT 0                     NOT NULL,      -- コメント最大数
     cf_max_length        INT            DEFAULT 0                     NOT NULL,      -- コメント文字数
     cf_image_max_size    INT            DEFAULT 0                     NOT NULL,      -- 画像の最大サイズ(縦横)
+    cf_image_max_upload  INT            DEFAULT 0                     NOT NULL,      -- 画像の最大アップロード数
+    cf_upload_max_bytes  INT            DEFAULT 0                     NOT NULL,      -- アップロード画像の最大バイトサイズ
     cf_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可否(個別設定可)
     cf_visible_d         BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可否デフォルト値
     cf_accept_post       BOOLEAN        DEFAULT true                  NOT NULL,      -- コメントの受付(個別設定可)
@@ -1215,4 +1222,99 @@ CREATE TABLE comment (
     cm_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     cm_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (cm_serial)
+) TYPE=innodb;
+
+-- --------------------------------------------------------------------------------------------------
+-- カレンダー用
+-- --------------------------------------------------------------------------------------------------
+-- カレンダー時間枠
+DROP TABLE IF EXISTS time_period;
+CREATE TABLE time_period (
+    to_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    to_date_type_id      INT            DEFAULT 0                     NOT NULL,      -- 日付タイプID(1～,-1以下=カレンダー日付のシリアル番号)
+    to_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
+    
+    to_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名前
+    to_start_time        TIME           DEFAULT '00:00:00'            NOT NULL,      -- 開始時刻
+    to_minute            INT            DEFAULT 0                     NOT NULL,      -- 時間(分)
+    PRIMARY KEY          (to_serial),
+    UNIQUE               (to_date_type_id,        to_index)
+) TYPE=innodb;
+
+-- 日付タイプ
+DROP TABLE IF EXISTS date_type;
+CREATE TABLE date_type (
+    dt_id                INT            DEFAULT 0                     NOT NULL,      -- 日付タイプID
+    
+    dt_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名称
+    dt_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
+
+    dt_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    dt_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    dt_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
+    PRIMARY KEY          (dt_id)
+) TYPE=innodb;
+
+-- カレンダー日付
+DROP TABLE IF EXISTS calendar_date;
+CREATE TABLE calendar_date (
+    ce_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    ce_def_id            INT            DEFAULT 0                     NOT NULL,      -- カレンダー定義ID
+    ce_type              INT            DEFAULT 0                     NOT NULL,      -- データタイプ(0=インデックス番号,1=日付,10=基本日オプション(インデックス番号))
+    ce_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
+    ce_date              DATE           DEFAULT '0000-00-00'          NOT NULL,      -- 日付
+    
+    ce_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名前
+    ce_date_type_id      INT            DEFAULT 0                     NOT NULL,      -- 日付タイプID(1～,-1=個別時間定義)
+    ce_style             TEXT                                         NOT NULL,      -- HTMLスタイル属性
+    PRIMARY KEY          (ce_serial),
+    UNIQUE               (ce_def_id,    ce_type,     ce_index,        ce_date)
+) TYPE=innodb;
+
+-- カレンダー定義
+DROP TABLE IF EXISTS calendar_def;
+CREATE TABLE calendar_def (
+    cd_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    cd_id                INT            DEFAULT 0                     NOT NULL,      -- カレンダー定義ID
+    cd_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
+    
+    cd_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名前
+    cd_repeat_type       INT            DEFAULT 0                     NOT NULL,      -- 繰り返しタイプ(0=繰り返しなし,1=曜日基準,2=日付基準)
+    cd_date_count        INT            DEFAULT 0                     NOT NULL,      -- 所要日数
+    cd_style             TEXT                                         NOT NULL,      -- HTMLスタイル属性
+    cd_open_date_style   TEXT                                         NOT NULL,      -- 開業日HTMLスタイル属性
+    cd_closed_date_style TEXT                                         NOT NULL,      -- 休業日HTMLスタイル属性
+    cd_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期間(開始)
+    cd_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期間(終了)
+    
+    cd_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
+    cd_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
+    cd_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    cd_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    cd_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
+    PRIMARY KEY          (cd_serial),
+    UNIQUE               (cd_id,        cd_history_index)
+) TYPE=innodb;
+
+-- カレンダーイベントマスター
+DROP TABLE IF EXISTS calendar_event;
+CREATE TABLE calendar_event (
+    cv_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    cv_id                INT            DEFAULT 0                     NOT NULL,      -- エントリーID
+    cv_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
+    
+    cv_name              VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- エントリータイトル
+    cv_html              TEXT                                         NOT NULL,      -- エントリー本文HTML
+    cv_start_dt          TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- イベント期間(開始)
+    cv_end_dt            TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- イベント期間(終了)
+    cv_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可否
+    cv_is_all_day        BOOLEAN        DEFAULT false                 NOT NULL,      -- 終日イベントかどうか
+    
+    cv_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
+    cv_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
+    cv_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    cv_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    cv_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
+    PRIMARY KEY          (cv_serial),
+    UNIQUE               (cv_id,        cv_history_index)
 ) TYPE=innodb;
