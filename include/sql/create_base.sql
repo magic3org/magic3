@@ -216,6 +216,7 @@ CREATE TABLE _login_user (
     lu_user_type_option  TEXT                                         NOT NULL,      -- ユーザタイプオプション(「ウィジェットID=ユーザタイプ」形式の前後「;」区切りで複数指定可)
     lu_assign            TEXT                                         NOT NULL,      -- ログイン可能な機能(2バイト文字カンマ区切り、sy=システム管理機能、ec=EC、bg=ブログ、bs=BBS、rv=予約, wk=Wiki)
     lu_admin_widget      TEXT                                         NOT NULL,      -- システム運営者が管理可能なウィジェット(「,」区切りで複数指定可)
+    lu_default_admin_url TEXT                                         NOT NULL,      -- デフォルトの管理画面のURL(「?」以降)
     lu_user_status       SMALLINT       DEFAULT 0                     NOT NULL,      -- ユーザの状態
     lu_avatar            VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アバターファイル名
     lu_email             VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- Eメールアドレス
@@ -269,6 +270,27 @@ CREATE TABLE _login_user_info (
     li_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (li_serial),
     UNIQUE               (li_id,        li_history_index)
+) TYPE=innodb;
+
+-- 自動ログインマスター
+DROP TABLE IF EXISTS _auto_login;
+CREATE TABLE _auto_login (
+    ag_id                CHAR(32)       DEFAULT ''                    NOT NULL,      -- 自動ログインキー
+    ag_user_id           INT            DEFAULT 0                     NOT NULL,      -- ログインユーザID
+    ag_client_id         VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- PCの場合はアクセス管理用クッキー値。携帯の場合は端末ID「XX-xxxxxx」(XX=キャリアDC,AU,SB、xxxxxx=端末ID)。
+    ag_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
+
+    ag_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス
+    ag_expire_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限
+    ag_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- 登録時アクセスログシリアル番号
+
+    ag_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
+    ag_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
+    ag_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    ag_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    ag_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
+    PRIMARY KEY          (ag_id),
+    UNIQUE               (ag_user_id,   ag_client_id, ag_index)
 ) TYPE=innodb;
 
 -- ユーザグループマスター
@@ -446,6 +468,18 @@ CREATE TABLE _attach_file (
     UNIQUE               (af_content_type,      af_content_id,        af_content_serial, af_index, af_client_id)
 ) TYPE=innodb;
 
+-- オプションコンテンツパラメータマスター
+DROP TABLE IF EXISTS _option_content_param;
+CREATE TABLE _option_content_param (
+    oc_page_id           VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ページID
+    oc_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- URLパラメータ
+
+    oc_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- コンテンツ名称
+    oc_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 実行ウィジェットID(ファイル名)
+    oc_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
+    PRIMARY KEY          (oc_page_id,   oc_id)
+) TYPE=innodb;
+
 -- コンテンツアクセス権マスター
 DROP TABLE IF EXISTS _content_access;
 CREATE TABLE _content_access (
@@ -529,6 +563,7 @@ CREATE TABLE _widgets (
     wd_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェット名称
     wd_type              VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- ウィジェット種別(menu=メニュー,content=コンテンツ編集)
     wd_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 必要とするページのコンテンツ種別
+    wd_content_name      TEXT                                         NOT NULL,      -- コンテンツ名称(管理画面メニュー表示用)
     wd_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     wd_version           VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- バージョン文字列
     wd_fingerprint       CHAR(32)       DEFAULT ''                    NOT NULL,      -- ソースコードレベルでウィジェットを識別するためのID

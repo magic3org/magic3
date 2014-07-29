@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2013010901',               'DBバージョン'),
+('db_version',                  '2013031701',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_url',                  '',                         'サーバURL'),
 ('default_lang',                'ja',                       'デフォルト言語'),
@@ -51,7 +51,7 @@ INSERT INTO _system_config
 ('log_dir',                     '',                         'ログ出力ディレクトリ'),
 ('work_dir',                    '',                         '作業用ディレクトリ'),
 ('default_template',            'moyoo_blue_dog',           'PC一般画面用デフォルトテンプレート'),
-('admin_default_template',      '_admin2',                  '管理画面用デフォルトテンプレート'),
+('admin_default_template',      '_admin3',                  '管理画面用デフォルトテンプレート'),
 ('mobile_default_template',     'm/default',                '携帯画面用デフォルトテンプレート'),
 ('smartphone_default_template', 's/default_jquery',         'スマートフォン画面用デフォルトテンプレート'),
 ('msg_template',                '_system',                  'メッセージ表示用テンプレート'),
@@ -60,6 +60,9 @@ INSERT INTO _system_config
 ('use_content_access_deny',     '0',                        'アクセス不可画面用コンテンツの取得'),
 ('use_jquery',                  '1',                        '一般画面にjQueryを使用'),
 ('admin_default_theme',         'black-tie',                '管理画面用jQueryUIテーマ'),
+('jquery_version',               '1.8',                     'jQueryバージョン(PC用)'),
+('admin_jquery_version',         '1.8',                     '管理画面用jQueryバージョン'),
+('s:jquery_version',             '1.8',                     'jQueryバージョン(スマートフォン用)'),
 ('head_title_format',           '$1;$1 - $2;$1 - $2 - $3;', 'HTMLヘッダタイトルフォーマット'),
 ('mobile_auto_redirect',        '0',                        '携帯アクセスの自動遷移'),
 ('mobile_use_session',           '1',                       '携帯セッション管理'),
@@ -81,9 +84,16 @@ INSERT INTO _system_config
 ('dev_use_latest_script_lib',    '0',                       '最新JavaScriptライブラリの使用(開発用)'),
 ('google_maps_key',              '',                        'Googleマップ利用キー'),
 ('fix_ie6_transparent_png',      '0',                       'IE6の透過PNG対応'),
-('site_logo_filename', 'logo_72c.jpg;logo_200c.jpg',   'サイトロゴファイル名'),
-('thumb_format', '72c.jpg;200c.jpg',   'サムネール仕様'),
-('avatar_format',      '72c.jpg',   'アバター仕様');
+('site_logo_filename',           'logo_72c.jpg;logo_200c.jpg',   'サイトロゴファイル名'),
+('thumb_format',                 '72c.jpg;200c.jpg',   'サムネール仕様'),
+('avatar_format',                '72c.jpg',   'アバター仕様'),
+('ogp_thumb_format',             '200c.jpg',   'OGP用サムネール仕様'),
+('wysiwyg_editor',               'fckeditor',   'WYSIWYGエディター'),
+('site_mobile_url',              '',                        '携帯用サイトURL'),
+('site_smartphone_url',          '',                        'スマートフォン用サイトURL'),
+('multi_domain',                 '0',                       'マルチドメイン運用'),
+('auto_login',        '1',                        '一般画面自動ログイン機能'),
+('auto_login_admin',        '0',                        '管理画面自動ログイン機能');
 
 -- バージョン管理マスター
 INSERT INTO _version (vs_id,         vs_value,     vs_name)
@@ -237,10 +247,11 @@ INSERT INTO _site_def
 
 -- 多言語対応文字列マスター
 INSERT INTO _language_string
-(ls_type, ls_id,                     ls_language_id, ls_value,                             ls_name) VALUES
-(0,       'msg_site_in_maintenance', 'ja',           'ただいまサイトのメンテナンス中です', 'メンテナンス中メッセージ'),
-(0,       'msg_access_deny',         'ja',           'アクセスできません',                 'アクセス不可メッセージ'),
-(1,       'word_account',            'ja',           'ID(Eメール)',                        'アカウント'),
+(ls_type, ls_id,                           ls_language_id, ls_value,                             ls_name) VALUES
+(0,       'msg_site_in_maintenance',       'ja',           'ただいまサイトのメンテナンス中です', 'メンテナンス中メッセージ'),
+(0,       'msg_access_deny',               'ja',           'アクセスできません',                 'アクセス不可メッセージ'),
+(0,       'msg_page_not_found',            'ja',           'ページが見つかりません',                 '存在しないページメッセージ'),
+(1,       'word_account',                  'ja',           'ID(Eメール)',                        'アカウント'),
 (10,      'COM_CONTENT_CREATED_DATE_ON',   'ja',           '作成日：%s',         ''),
 (10,      'COM_CONTENT_LAST_UPDATED',      'ja',           '更新日：%s',         ''),
 (10,      'COM_CONTENT_PUBLISHED_DATE_ON', 'ja',           '公開日：%s',         ''),

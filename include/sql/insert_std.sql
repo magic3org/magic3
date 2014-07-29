@@ -27,7 +27,9 @@ INSERT INTO content_config
 ('',           'output_head',      '0', 'HTMLヘッダ出力', 2),
 ('smartphone', 'output_head',      '0', 'HTMLヘッダ出力', 2),
 ('',           'head_view_detail', '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'HTMLヘッダ(詳細表示)',               3),
-('smartphone', 'head_view_detail', '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'HTMLヘッダ(詳細表示)',               3);
+('smartphone', 'head_view_detail', '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'HTMLヘッダ(詳細表示)',               3),
+('',           'use_jquery',      '0', 'jQueryスクリプト作成', 0),
+('smartphone', 'use_jquery',      '0', 'jQueryスクリプト作成', 0);
 
 -- Wiki設定マスター
 INSERT INTO wiki_config (wg_id,        wg_value,     wg_name,                 wg_index)
@@ -350,7 +352,18 @@ INSERT INTO photo_config
 ('s:photo_title_short_length',  '7',                '画像タイトル(略式)文字数',         202),
 ('s:photo_list_sort_key', 'index',            '画像一覧のソートキー',         203),
 ('s:default_image_size',      '320',              '公開画像デフォルトサイズ',               204),
-('s:default_thumbnail_size',  '128',              'サムネール画像デフォルトサイズ',         205);
+('s:default_thumbnail_size',  '128',              'サムネール画像デフォルトサイズ',         205),
+('html_photo_description',  '0',                'HTML形式の画像情報(説明)',         0),
+('use_photo_date',        '1',                '画像情報(撮影日)を使用',         0),
+('use_photo_location',       '1',                '画像情報(撮影場所)を使用',         0),
+('use_photo_camera',      '1',                '画像情報(カメラ)を使用',         0),
+('use_photo_description', '1',                '画像情報(説明)を使用',         0),
+('use_photo_keyword',     '1',                '画像情報(検索キーワード)を使用',         0),
+('use_photo_category',    '1',                '画像情報(カテゴリー)を使用',         0),
+('use_photo_rate',    '1',                '画像情報(評価)を使用',         0),
+('layout_view_detail',   '<table class="photo_info"><caption>画像情報</caption><tbody><tr><th>ID</th><td>[#CT_ID#]</td></tr><tr><th>タイトル</th><td>[#CT_TITLE#]&nbsp;[#PERMALINK#]</td></tr><tr><th>撮影者</th><td>[#CT_AUTHOR#]</td></tr><tr><th>撮影日</th><td>[#CT_DATE#]</td></tr><tr><th>場所</th><td>[#CT_LOCATION#]</td></tr><tr><th>カメラ</th><td>[#CT_CAMERA#]</td></tr><tr><th>説明</th><td>[#CT_DESCRIPTION#]</td></tr><tr><th>カテゴリー</th><td>[#CT_CATEGORY#]</td></tr><tr><th>キーワード</th><td>[#CT_KEYWORD#]</td></tr><tr><th>評価</th><td>[#RATE#]</td></tr></tbody></table>', 'レイアウト(詳細表示)',               0),
+('output_head',      '0', 'HTMLヘッダ出力', 0),
+('head_view_detail',   '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_SUMMARY#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'ヘッダ出力(詳細表示)',               0);
 
 -- --------------------------------------------------------------------------------------------------
 -- 携帯クイズ王ウィジェット用

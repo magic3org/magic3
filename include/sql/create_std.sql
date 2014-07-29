@@ -132,6 +132,8 @@ CREATE TABLE content (
     cn_option_fields     TEXT                                         NOT NULL,      -- 追加フィールド
     cn_related_content   TEXT                                         NOT NULL,      -- 関連コンテンツID(「,」区切り)
     cn_related_url       TEXT                                         NOT NULL,      -- 関連URL(「;」区切り)
+    cn_script_lib        TEXT                                         NOT NULL,      -- 共通スクリプトライブラリ(ライブラリ名で指定、「,」区切りで複数指定可)
+    cn_script            TEXT                                         NOT NULL,      -- Javascriptスクリプト
     
     cn_check_out_user_id INT            DEFAULT 0                     NOT NULL,      -- チェックアウトユーザID(0のときはチェックイン状態)
     cn_check_out_dt      TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- チェックアウト日時
@@ -1068,12 +1070,15 @@ CREATE TABLE photo (
     ht_mime_type         VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- 画像MIMEタイプ
     ht_image_size        VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 画像縦横サイズ
     ht_original_filename VARCHAR(256)   DEFAULT ''                    NOT NULL,      -- 元の画像ファイル名
+    ht_thumb_filename    TEXT                                         NOT NULL,      -- サムネールファイル名(「;」区切り)
     ht_file_size         INT            DEFAULT 0                     NOT NULL,      -- ファイルサイズ(バイト)
     ht_name              VARCHAR(160)   DEFAULT ''                    NOT NULL,      -- 画像名称
     ht_camera            VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- カメラ
     ht_location          TEXT                                         NOT NULL,      -- 撮影場所
     ht_date              DATE           DEFAULT '0000-00-00'          NOT NULL,      -- 撮影日
     ht_time              INT            DEFAULT 0                     NOT NULL,      -- 撮影時間(hhmm)
+    ht_summary           VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 画像概要
+    ht_description       TEXT                                         NOT NULL,      -- 画像説明
     ht_note              TEXT                                         NOT NULL,      -- 補足情報(廃止予定)
     ht_keyword           TEXT                                         NOT NULL,      -- 検索用キーワード(「,」区切りで複数指定可)
     ht_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
@@ -1135,6 +1140,7 @@ CREATE TABLE photo_rate (
     hr_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     hr_photo_id          INT            DEFAULT 0                     NOT NULL,      -- 画像ID
     hr_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
+    hr_client_id         CHAR(32)       DEFAULT ''                    NOT NULL,      -- クライアントID
     hr_ip                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセス元IP(IPv6対応)
     hr_parent_serial     INT            DEFAULT 0                     NOT NULL,      -- 親コメントのシリアル番号
     hr_user_id           INT            DEFAULT 0                     NOT NULL,      -- ユーザID
