@@ -443,11 +443,14 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$queryArray = array();
 		$parsedUrl = parse_url($url);
 		if (!empty($parsedUrl['query'])) parse_str($parsedUrl['query'], $queryArray);		// クエリーの解析
-		
+
 		// ルートかどうかチェック(クエリー文字列なし)
 		if ($this->isRootUrl($url)){
-			// ページサブIDで比較
-			if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId()) return true;
+			$parsedUrl = parse_url($currentUrl);
+			if (empty($parsedUrl['query'])){		// クエリ文字列がないことが条件。「#」はあっても良い。
+				// ページサブIDで比較
+				if ($this->gEnv->getCurrentPageSubId() == $this->gEnv->getDefaultPageSubId()) return true;
+			}
 		}
 		
 		// パラメータがサブページIDだけの場合はページサブIDで比較
