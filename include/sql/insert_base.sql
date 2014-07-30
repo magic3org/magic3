@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2013121801',               'DBバージョン'),
+('db_version',                  '2014032701',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_url',                  '',                         'サーバURL'),
 ('default_lang',                'ja',                       'デフォルト言語'),
@@ -51,7 +51,7 @@ INSERT INTO _system_config
 ('log_dir',                     '',                         'ログ出力ディレクトリ'),
 ('work_dir',                    '',                         '作業用ディレクトリ'),
 ('default_template',            'moyoo_blue_dog',           'PC一般画面用デフォルトテンプレート'),
-('admin_default_template',      '_admin3',                  '管理画面用デフォルトテンプレート'),
+('admin_default_template',      '_admin4',                  '管理画面用デフォルトテンプレート'),
 ('mobile_default_template',     'm/default',                '携帯画面用デフォルトテンプレート'),
 ('smartphone_default_template', 's/default_jquery',         'スマートフォン画面用デフォルトテンプレート'),
 ('msg_template',                '_system',                  'メッセージ表示用テンプレート'),
@@ -118,8 +118,8 @@ INSERT INTO _nav_item
 (ni_id, ni_parent_id, ni_index, ni_nav_id,    ni_task_id,        ni_view_control, ni_param, ni_name,                ni_help_title,          ni_help_body) VALUES
 (100,   0,            0,        'admin_menu', '_page',           0,               '',       '画面管理',             '画面管理',             'Webサイトのデザインや機能を管理します。'),
 (101,   100,          0,        'admin_menu', 'pagedef',         0,               '',       'PC画面',         'PC画面編集',         'PC用Webサイトの画面を作成します。'),
-(102,   100,          1,        'admin_menu', 'pagedef_mobile',  0,               '',       '携帯画面',       '携帯画面編集',       '携帯用Webサイトの画面を作成します。'),
-(103,   100,          2,        'admin_menu', 'pagedef_smartphone',  0,           '',       'スマートフォン画面', 'スマートフォン画面編集',       'スマートフォン用Webサイトの画面を作成します。'),
+(102,   100,          1,        'admin_menu', 'pagedef_smartphone',  0,           '',       'スマートフォン画面', 'スマートフォン画面編集',       'スマートフォン用Webサイトの画面を作成します。'),
+(103,   100,          2,        'admin_menu', 'pagedef_mobile',  0,               '',       '携帯画面',       '携帯画面編集',       '携帯用Webサイトの画面を作成します。'),
 (104,   100,          3,        'admin_menu', '_104',            3,               '',       'セパレータ',                 '',                     ''),
 (105,   100,          4,        'admin_menu', 'widgetlist',      0,               '',       'ウィジェット管理',     'ウィジェット管理',     'ウィジェットの管理を行います。'),
 (106,   100,          5,        'admin_menu', 'templist',        0,               '',       'テンプレート管理',     'テンプレート管理',     'テンプレートの管理を行います。'),
@@ -135,8 +135,8 @@ INSERT INTO _nav_item
 (303,   300,          2,        'admin_menu', 'mainte',          0,               '',       'メンテナンス', 'メンテナンス', 'ファイルやDBなどのメンテナンスを行います。'),
 (10100,   0,            0,        'admin_menu.en', '_page',           0,               '',       'Edit Page',             'Edit Page',             'Edit page for design and function.'),
 (10101,   10100,          0,        'admin_menu.en', 'pagedef',         0,               '',       'PC Page',         'PC Page',         'Edit page for PC.'),
-(10102,   10100,          1,        'admin_menu.en', 'pagedef_mobile',  0,               '',       'Mobile Page',       'Mobile Page',       'Edit page for Mobile.'),
-(10103,   10100,          2,        'admin_menu.en', 'pagedef_smartphone',  0,           '',       'Smartphone Page', 'Smartphone Page',       'Edit page for Smartphone.'),
+(10102,   10100,          1,        'admin_menu.en', 'pagedef_smartphone',  0,           '',       'Smartphone Page', 'Smartphone Page',       'Edit page for Smartphone.'),
+(10103,   10100,          2,        'admin_menu.en', 'pagedef_mobile',  0,               '',       'Mobile Page',       'Mobile Page',       'Edit page for Mobile.'),
 (10104,   10100,          3,        'admin_menu.en', '_10104',            3,               '',       'Separator',                 '',                     ''),
 (10105,   10100,          4,        'admin_menu.en', 'widgetlist',      0,               '',       'Widget Administration',     'Widget Administration',     'Administrate widgets with widget config window.'),
 (10106,   10100,          5,        'admin_menu.en', 'templist',        0,               '',       'Template Administration',     'Template Administration',     'Administrate templates.'),
@@ -158,31 +158,33 @@ INSERT INTO _page_id
 ('s_index',      0,       'front',         's/index',     'スマートフォン用アクセスポイント', 'スマートフォン用アクセスポイント',   1,           2,              true,      true,      false,     true, false, true),
 ('m_index',      0,       'front',         'm/index',     '携帯用アクセスポイント',           '携帯用アクセスポイント',             2,           1,              true,      true,      true,      true, false, true),
 ('admin_index',  0,       'content',         'admin/index', '管理用アクセスポイント',           '管理用アクセスポイント',             3,           0,              true,      true,      false,     false, false, false),
-('connector',    0,       'content',         'connector',   'サーバ接続用アクセスポイント',     'サーバ接続用アクセスポイント',       4,           0,              true,      true,      false,     true, false, false),
-('front',        1,       '',                '',            'トップ画面',                       'トップ画面用',                   0,           0,              true,      true,      false,     true, false, false),
-('content',      1,       '',                '',            'コンテンツ',                       'コンテンツ画面用',                   1,           0,              true,      true,      false,     false, false, false),
-('shop',         1,       '',                '',            'ECショップ',                       'ECショップ画面用',                   2,           0,              true,      true,      false,     true, false, false),
-('shop_safe',    1,       '',                '',            'ECショップ(セキュリティ保護)',     'ECショップ(セキュリティ保護)画面用', 3,           0,              true,      true,      false,     true, false, false),
-('bbs',          1,       '',                '',            '掲示板',                           '掲示板画面用',                       4,           0,              true,      true,      false,     true, false, false),
-('blog',         1,       '',                '',            'ブログ',                           'ブログ画面用',                       5,           0,              true,      true,      false,     true, false, false),
-('wiki',         1,       '',                '',            'Wiki',                             'Wiki画面用',                         6,           0,              true,      true,      false,     true, false, false),
-('event',        1,       '',                '',            'イベント',                         'イベント画面用',                     7,           0,              true,      true,      false,     true, false, false),
-('photo',        1,       '',                '',            'フォトギャラリー',                   'フォトギャラリー画面用',               8,           0,              true,      true,      false,     true, false, false),
-('contact',      1,       '',                '',            'お問い合わせ',                     'お問い合わせ画面用',                 9,           0,              true,      true,      false,     true, false, false),
-('contact2',     1,       '',                '',            'お問い合わせ2',                    'お問い合わせ画面用',                 10,          0,              true,      true,      false,     true, false, false),
-('reguser',     1,       '',                '',            'ユーザ登録',                    'ユーザ登録画面用',                 12,          0,              true,      true,      false,     true, false, false),
-('reserve',      1,       '',                '',            '予約',                             '予約画面用',                         20,          0,              true,      true,      false,     true, false, false),
-('search',       1,       '',                '',            '検索',                             '検索画面用',                         21,          0,              true,      true,      false,     true, false, false),
-('user',         1,       '',                '',            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          0,              true,      true,      false,     true, false, false),
-('deploy',       1,       '',                '',            'ウィジェット有効化用',             'ウィジェット有効化用',               100,         0,              true,      false,     false,     true, false, false),
-('test',         1,       '',                '',            'ウィジェットテスト用',             'ウィジェットテスト用非公開画面',     101,         0,              false,     true,      false,     true, false, false);
+('connector',    0,       'content',         'connector',   'サーバ接続用アクセスポイント',     'サーバ接続用アクセスポイント',       4,           0,              true,      true,      false,     true, false, false);
+INSERT INTO _page_id 
+(pg_id,          pg_type,      pg_name,                            pg_description,                       pg_priority, pg_active, pg_visible, pg_editable, pg_available) VALUES
+('front',        1,            'トップ画面',                       'トップ画面用',                       0,           true,      true,       true,        true),
+('content',      1,            'コンテンツ',                       'コンテンツ画面用',                   1,           true,      true,       false,       true),
+('shop',         1,            'ECショップ',                       'ECショップ画面用',                   2,           true,      true,       true,        true),
+('shop_safe',    1,            'ECショップ(セキュリティ保護)',     'ECショップ(セキュリティ保護)画面用', 3,           true,      true,       true,        true),
+('bbs',          1,            '掲示板',                           '掲示板画面用',                       4,           true,      true,       true,        true),
+('blog',         1,            'ブログ',                           'ブログ画面用',                       5,           true,      true,       true,        true),
+('wiki',         1,            'Wiki',                             'Wiki画面用',                         6,           true,      true,       true,        true),
+('event',        1,            'イベント',                         'イベント画面用',                     7,           true,      true,       true,        true),
+('photo',        1,            'フォトギャラリー',                   'フォトギャラリー画面用',           8,           true,      true,       true,        true),
+('contact',      1,            'お問い合わせ',                     'お問い合わせ画面用',                 9,           true,      true,       true,        true),
+('contact2',     1,            'お問い合わせ2',                    'お問い合わせ画面用',                 10,          true,      true,       true,        false),
+('reguser',      1,            'ユーザ登録',                       'ユーザ登録画面用',                   12,          true,      true,       true,        false),
+('reserve',      1,            '予約',                             '予約画面用',                         20,          true,      true,       true,        false),
+('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true,        true),
+('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          true,      true,       true,        true),
+('deploy',       1,            'ウィジェット有効化用',             'ウィジェット有効化用',               100,         true,      false,      true,        false),
+('test',         1,            'ウィジェットテスト用',             'ウィジェットテスト用非公開画面',     101,         false,     true,       true,        false);
 
 -- ページ情報マスター
 INSERT INTO _page_info
 (pn_id,       pn_sub_id,   pn_content_type, pn_use_ssl) VALUES
 ('index',     'content',   'content',       false),
 ('index',     'shop',      'product',       false),
-('index',     'shop_safe', '',              true),
+('index',     'shop_safe', 'commerce',      true),
 ('index',     'bbs',       'bbs',           false),
 ('index',     'blog',      'blog',          false),
 ('index',     'wiki',      'wiki',          false),
@@ -204,7 +206,7 @@ INSERT INTO _page_info
 ('m_index',   'search',    'search',        false),
 ('s_index',   'content',   'content',       false),
 ('s_index',   'shop',      'product',       false),
-('s_index',   'shop_safe', '',              true),
+('s_index',   'shop_safe', 'commerce',      true),
 ('s_index',   'bbs',       'bbs',           false),
 ('s_index',   'blog',      'blog',          false),
 ('s_index',   'wiki',      'wiki',          false),
@@ -221,7 +223,8 @@ INSERT INTO _page_info
 -- ページ定義マスター
 INSERT INTO _page_def
 (pd_id,         pd_sub_id,      pd_position_id, pd_index, pd_widget_id,   pd_config_id, pd_visible, pd_editable, pd_title_visible) VALUES
-('admin_index', '',             'top',          1,        'admin_menu3',  0,            true,       false, false),
+('admin_index', '',             'top',          1,        'admin_menu4',  0,            true,       false, false),
+('admin_index', 'front',        'top',          2,        'admin/message',  0,            true,       false, false),
 ('admin_index', 'front',        'main',         1,        'admin_main',   0,            true,       false, false),
 ('admin_index', 'front',        'main',         2,        'admin/analytics',   0,            true,       true, false),
 ('admin_index', 'front',        'main',         3,        'admin/opelog',   0,            true,       true, false),
@@ -440,4 +443,24 @@ INSERT INTO _operation_type
 ('user_request', 'ユーザ操作要求',       'ユーザ操作からの操作要求を示します',         1,        7),
 ('user_err',     'ユーザ操作エラー',     'ユーザ操作の異常な動作を示します',           10,       8),
 ('user_access',  'ユーザ不正アクセス',   'ユーザ操作の不正なアクセスを示します',       10,       9),
-('user_data',    'ユーザ不正データ',     'ユーザ操作の不正なデータ送信を示します',     10,       10);
+('user_data',    'ユーザ不正データ',     'ユーザ操作の不正なデータ送信を示します',     10,       10),
+('guide',        'ガイダンス',           'システム運用に関連しないメッセージを示します',         -1,        11);
+
+-- ウィジェットカテゴリマスター
+INSERT INTO _widget_category
+(wt_id, wt_name,            wt_sort_order) VALUES
+('',     'その他',   100),
+('content',   '汎用コンテンツ',   1),
+('blog',      'ブログ',           2),
+('bbs',       'BBS',           3),
+('commerce',  'Eコマース',        4),
+('photo',     'フォトギャラリー', 5),
+('event',     'イベント情報',     6),
+('user',     'ユーザ作成コンテンツ',     7),
+('subcontent',     '補助コンテンツ',     8),
+('search',     '検索',             9),
+('reguser',     'ユーザ登録',      10),
+('menu',     'メニュー',         11),
+('image',     '画像',         12),
+('design',    'デザイン',         13),
+('admin',     '管理画面用',      20);

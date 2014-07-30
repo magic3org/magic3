@@ -187,19 +187,20 @@ VALUES                 ('send_tmp_password', 'ja',           '仮パスワード
 -- テンプレート情報
 TRUNCATE TABLE _templates;
 INSERT INTO _templates
-(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_available, tm_clean_type, tm_create_dt) VALUES
-('_admin2',                       '_admin2',                       1,       0,              false,     false,        0,             now()),
-('_admin3',                       '_admin3',                       2,       0,              false,     false,        0,             now()),
-('_system',                       '_system',                       1,       0,              false,     false,        0,             now()),
-('_layout',                       '_layout',                       1,       0,              false,     false,        0,             now()),
-('art41_sample1',                 'art41_sample1',                 2,       0,              false,     true,         0,             now()),
-('art41_sample2',                 'art41_sample2',                 2,       0,              false,     true,         0,             now()),
-('m/default',                     'm/default',                     0,       1,              true,      true,         0,             now()),
-('m/smallfont',                   'm/smallfont',                   0,       1,              true,      true,         0,             now()),
-('s/default_simple',              's/default_simple',              1,       2,              false,     true,         0,             now()),
-('s/default_jquery',              's/default_jquery',              1,       2,              false,     true,         0,             now()),
-('s/default_jquery13',           's/default_jquery13',             1,       2,              false,     true,         0,             now()),
-('s/art42_sample2',               's/art42_sample2',               1,       2,              false,     true,         0,             now());
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_create_dt) VALUES
+('_admin4',                       '_admin4',                       2,       0,              false,     true,             false,        0,             now());
+('_system',                       '_system',                       1,       0,              false,     false,            false,        0,             now()),
+('_layout',                       '_layout',                       1,       0,              false,     false,            false,        0,             now()),
+('art41_sample1',                 'art41_sample1',                 2,       0,              false,     false,            true,         0,             now()),
+('art41_sample2',                 'art41_sample2',                 2,       0,              false,     false,            true,         0,             now()),
+('bootstrap_yeti',                'bootstrap_yeti',                10,      0,              false,     true,             true,         0,             now()),
+('bootstrap_cerulean',            'bootstrap_cerulean',            10,      0,              false,     true,             true,         0,             now()),
+('m/default',                     'm/default',                     0,       1,              true,      false,            true,         0,             now()),
+('m/smallfont',                   'm/smallfont',                   0,       1,              true,      false,            true,         0,             now()),
+('s/default_simple',              's/default_simple',              1,       2,              false,     false,            true,         0,             now()),
+('s/default_jquery',              's/default_jquery',              1,       2,              false,     false,            true,         0,             now()),
+('s/default_jquery13',           's/default_jquery13',             1,       2,              false,     false,            true,         0,             now()),
+('s/art42_sample2',               's/art42_sample2',               1,       2,              false,     false,            true,         0,             now());
 
 -- メニューIDマスター
 INSERT INTO _menu_id

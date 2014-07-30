@@ -86,6 +86,7 @@ CREATE TABLE _operation_log (
     ol_link              TEXT                                         NOT NULL,      -- リンク先
     ol_search_option     TEXT                                         NOT NULL,      -- 検索用補助データ
     ol_checked           BOOLEAN        DEFAULT false                 NOT NULL,      -- メッセージ確認状況
+    ol_show_top          BOOLEAN        DEFAULT false                 NOT NULL,      -- メッセージをトップ表示するかどうか
     ol_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 実行ウィジェットID(ファイル名)
     ol_method            TEXT                                         NOT NULL,      -- 実行メソッド
     ol_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
@@ -564,6 +565,8 @@ CREATE TABLE _widgets (
     wd_language          TEXT                                         NOT NULL,      -- 対応言語ID(「,」区切りで複数指定可)
     wd_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェット名称
     wd_type              VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- ウィジェット種別(menu=メニュー,content=コンテンツ編集)
+    wd_type_option       VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- ウィジェット種別オプション(nav=ナビゲーションメニュー)
+    wd_category_id       VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 所属カテゴリー
     wd_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 必要とするページのコンテンツ種別
     wd_content_name      TEXT                                         NOT NULL,      -- コンテンツ名称(管理画面メニュー表示用)
     wd_content_info      VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- コンテンツ情報
@@ -610,6 +613,7 @@ CREATE TABLE _widgets (
     wd_initialized       BOOLEAN        DEFAULT false                 NOT NULL,      -- 初期化完了かどうか
     wd_use_cache         BOOLEAN        DEFAULT false                 NOT NULL,      -- キャッシュ機能を使用するかどうか
     wd_has_rss           BOOLEAN        DEFAULT false                 NOT NULL,      -- RSS機能があるかどうか
+    wd_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
     wd_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
 --    wd_cache_interval    INT            DEFAULT 0                     NOT NULL,      -- キャッシュの更新時間(分)
     wd_launch_index      INT            DEFAULT 0                     NOT NULL,      -- 遅延実行制御が必要な場合の実行順(0=未設定、0以上=実行順)
@@ -632,6 +636,26 @@ CREATE TABLE _widgets (
     wd_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (wd_serial),
     UNIQUE               (wd_id,        wd_history_index)
+) TYPE=innodb;
+
+-- ウィジェットカテゴリマスター
+DROP TABLE IF EXISTS _widget_category;
+CREATE TABLE _widget_category (
+    wt_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    wt_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリID
+    wt_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
+
+    wt_name              VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- カテゴリ名称
+    wt_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
+    wt_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
+
+    wt_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
+    wt_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
+    wt_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    wt_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    wt_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
+    PRIMARY KEY          (wt_serial),
+    UNIQUE               (wt_id,        wt_history_index)
 ) TYPE=innodb;
 
 -- ウィジェットパラメータマスター
