@@ -188,7 +188,7 @@ VALUES                 ('send_tmp_password', 'ja',           '仮パスワード
 TRUNCATE TABLE _templates;
 INSERT INTO _templates
 (tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_create_dt) VALUES
-('_admin4',                       '_admin4',                       2,       0,              false,     true,             false,        0,             now());
+('_admin4',                       '_admin4',                       2,       0,              false,     true,             false,        0,             now()),
 ('_system',                       '_system',                       1,       0,              false,     false,            false,        0,             now()),
 ('_layout',                       '_layout',                       1,       0,              false,     false,            false,        0,             now()),
 ('art41_sample1',                 'art41_sample1',                 2,       0,              false,     false,            true,         0,             now()),
