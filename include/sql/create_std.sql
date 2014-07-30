@@ -1267,6 +1267,7 @@ CREATE TABLE calendar_date (
     ce_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名前
     ce_date_type_id      INT            DEFAULT 0                     NOT NULL,      -- 日付タイプID(1～,-1=個別時間定義)
     ce_style             TEXT                                         NOT NULL,      -- HTMLスタイル属性
+    ce_param             TEXT                                         NOT NULL,      -- オプションパラメータ(シリアライズデータ)
     PRIMARY KEY          (ce_serial),
     UNIQUE               (ce_def_id,    ce_type,     ce_index,        ce_date)
 ) TYPE=innodb;

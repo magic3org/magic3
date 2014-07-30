@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2013101001',               'DBバージョン'),
+('db_version',                  '2013121801',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_url',                  '',                         'サーバURL'),
 ('default_lang',                'ja',                       'デフォルト言語'),
@@ -95,7 +95,8 @@ INSERT INTO _system_config
 ('site_smartphone_url',          '',                        'スマートフォン用サイトURL'),
 ('multi_domain',                 '0',                       'マルチドメイン運用'),
 ('auto_login',        '1',                        '一般画面自動ログイン機能'),
-('auto_login_admin',        '0',                        '管理画面自動ログイン機能');
+('auto_login_admin',        '0',                        '管理画面自動ログイン機能'),
+('access_in_intranet',               '0',                       'イントラネット運用');
 
 -- バージョン管理マスター
 INSERT INTO _version (vs_id,         vs_value,     vs_name)
@@ -255,6 +256,18 @@ INSERT INTO _language_string
 (0,       'msg_access_deny',               'ja',           'アクセスできません',                 'アクセス不可メッセージ'),
 (0,       'msg_page_not_found',            'ja',           'ページが見つかりません',                 '存在しないページメッセージ'),
 (1,       'word_account',                  'ja',           'ID(Eメール)',                        'アカウント'),
+(2,       'dboard',      'ja',           'ダッシュボード',       'ダッシュボード'),
+(2,       'search',      'ja',           '検索結果',             '検索結果'),
+(2,       'news',        'ja',           '新着情報',             '新着情報'),
+(2,       'commerce',    'ja',           'Eコマース',            'Eコマース'),
+(2,       'content',     'ja',           '汎用コンテンツ',       '汎用コンテンツ'),
+(2,       'product',     'ja',           '商品情報',             '商品情報'),
+(2,       'bbs',         'ja',           'BBS',                  'BBS'),
+(2,       'blog',        'ja',           'ブログ',               'ブログ'),
+(2,       'wiki',        'ja',           'Wiki',                 'Wiki'),
+(2,       'user',        'ja',           'ユーザ作成コンテンツ', 'ユーザ作成コンテンツ'),
+(2,       'event',       'ja',           'イベント情報',         'イベント情報'),
+(2,       'photo',       'ja',           'フォトギャラリー',     'フォトギャラリー'),
 (10,      'COM_CONTENT_CREATED_DATE_ON',   'ja',           '作成日：%s',         ''),
 (10,      'COM_CONTENT_LAST_UPDATED',      'ja',           '更新日：%s',         ''),
 (10,      'COM_CONTENT_PUBLISHED_DATE_ON', 'ja',           '公開日：%s',         ''),

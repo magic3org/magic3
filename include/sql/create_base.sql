@@ -566,6 +566,7 @@ CREATE TABLE _widgets (
     wd_type              VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- ウィジェット種別(menu=メニュー,content=コンテンツ編集)
     wd_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 必要とするページのコンテンツ種別
     wd_content_name      TEXT                                         NOT NULL,      -- コンテンツ名称(管理画面メニュー表示用)
+    wd_content_info      VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- コンテンツ情報
     wd_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     wd_version           VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- バージョン文字列
     wd_fingerprint       CHAR(32)       DEFAULT ''                    NOT NULL,      -- ソースコードレベルでウィジェットを識別するためのID
