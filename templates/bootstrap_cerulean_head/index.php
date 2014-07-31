@@ -27,7 +27,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 $(function() {
 $('#nav').affix({
 	offset: {
-		top: $('#page_header').height();
+		top: $('#page_header').height()
 	}
 });	
 });
@@ -50,24 +50,6 @@ $(function(){
 //]]>
 </script>
 <?php endif; ?>
-
-<style type="text/css">
-<!--
-
-#page_header {
-	height:280px;
-    background-color:#eee;
-}
-
-#nav.affix {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index:10;
-}
-
-//-->
-</style>
 </head>
 <body>
 <header id="page_header">
