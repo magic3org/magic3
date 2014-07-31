@@ -164,6 +164,9 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			
 			// Bootstrap用のデータを埋め込む
 			if ($this->renderType == 'BOOTSTRAP_NAV'){
+				// メニュー属性を取得
+				$menuAttr = $this->gEnv->getMenuAttr();
+//	debug("default menu ----style=".$menuAttr['bootstyle']);
 				$this->tmpl->addVar("_widget", "site_url", $this->convertUrlToHtmlEntity($this->gEnv->getRootUrl() . '/'));
 				$this->tmpl->addVar("_widget", "sitename", $this->convertToDispString($this->gEnv->getSiteName()));
 

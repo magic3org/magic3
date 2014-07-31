@@ -70,6 +70,7 @@ class EnvManager extends Core
 	private $mobileEncoding;	// 携帯用の入力、出力エンコーディング
 	private $workDir;			// 作業用ディレクトリ
 	private $userAgent = array();	// アクセス端末の情報
+	private $menuAttr = array();		// メニューの表示属性
 	private $joomlaMenuContent;		// Joomla!v1.5用メニューコンテンツ
 	private $joomlaMenuData;		// Joomla!v2.5用メニュー階層データ
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
@@ -2643,6 +2644,25 @@ class EnvManager extends Core
 			}
 		}
 		return $param;
+	}
+	/**
+	 * メニューの表示属性を設定
+	 *
+	 * @param array $attr		メニュー表示属性
+	 * @return 					なし
+	 */
+	public function setMenuAttr($attr)
+	{
+		$this->menuAttr = $attr;
+	}
+	/**
+	 * メニューの表示属性を取得
+	 *
+	 * @return array		メニュー表示属性
+	 */
+	public function getMenuAttr()
+	{
+		return $this->menuAttr;
 	}
 	/**
 	 * Joomla!v1.5用メニューコンテンツを設定

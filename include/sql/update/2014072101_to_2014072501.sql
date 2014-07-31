@@ -18,10 +18,14 @@
 
 -- *** システムベーステーブル ***
 -- 追加クラスマスター
-
 INSERT INTO _addons
 (ao_id,     ao_class_name, ao_name,            ao_description, ao_opelog_hook) VALUES
 ('wikilib', 'wikiLib',     'Wikiライブラリ', '', false);
 
+-- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'bootstrap_cerulean_head';
+INSERT INTO _templates
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_create_dt) VALUES
+('bootstrap_cerulean_head',             'bootstrap_cerulean_head',             10,       0,              false,     true,             true,        0,             now());
 
 -- *** システム標準テーブル ***

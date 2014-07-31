@@ -1828,8 +1828,10 @@ class PageManager extends Core
 						} else if (strcasecmp($key, 'style') == 0){
 							// スタイルは大文字小文字の区別あり
 							$style = trim($value, "\"'");
-						} else if (strcasecmp($key, 'artstyle') == 0){		// 表示スタイル
+						} else if (strcasecmp($key, 'artstyle') == 0){		// テンプレート側指定の表示スタイル(Artisteer用)
 							$attr['artstyle'] = trim($value, "\"'");
+						} else if (strcasecmp($key, 'bootstyle') == 0){		// テンプレート側指定の表示スタイル(Bootstrap用)
+							$attr['bootstyle'] = trim($value, "\"'");
 						}
 					}
 					if (!empty($name)){		// ポジション名が取得できたとき
@@ -3633,6 +3635,9 @@ class PageManager extends Core
 					
 					if ($i < $count) return '';// 処理中断のときは終了
 				} else {			// Joomla!v1.5テンプレートの場合
+					// テンプレート側で指定されたメニューの表示属性を設定
+					$gEnvManager->setMenuAttr($attr);
+							
 					for ($i = 0; $i < $count; $i++){
 						$pageDefParam = $this->pageDefRows[$i];			// 画面定義パラメータ
 						$widgetId = $this->pageDefRows[$i]['wd_id'];
@@ -3648,6 +3653,7 @@ class PageManager extends Core
 							// Joomla用のパラメータを初期化
 							$gEnvManager->setCurrentWidgetJoomlaParam(array());
 							
+							// ウィジェットの出力を取得
 							ob_clean();
 							$ret = $this->pageDefLoop($i, $this->pageDefRows[$i], $style, $titleTag, false);
 							$widgetContent = ob_get_contents();
