@@ -200,6 +200,7 @@ CREATE TABLE _addons (
     ao_description       VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 説明
     ao_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     ao_autoload          BOOLEAN        DEFAULT true                  NOT NULL,      -- システム起動時の自動読み込み
+    ao_opelog_hook       BOOLEAN        DEFAULT false                 NOT NULL,      -- 運用ログイベントフックがあるかどうか
     PRIMARY KEY          (ao_id)
 ) TYPE=innodb;
 
@@ -537,6 +538,7 @@ CREATE TABLE _templates (
     tm_type              INT            DEFAULT 0                     NOT NULL,      -- テンプレート種別(0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0,20=jQuery Mobile)
     tm_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     tm_language          TEXT                                         NOT NULL,      -- 対応言語ID(「,」区切りで複数指定可)
+    tm_version           VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- テンプレートバージョン文字列
     tm_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレート名
     tm_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
     tm_url               TEXT                                         NOT NULL,      -- 取得先URL
@@ -572,11 +574,15 @@ CREATE TABLE _widgets (
     wd_content_info      VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- コンテンツ情報
     wd_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     wd_version           VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- バージョン文字列
+    wd_latest_version    VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 最新バージョンのバージョン文字列
+    wd_required_version  VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 動作に必要なシステムバージョン
     wd_fingerprint       CHAR(32)       DEFAULT ''                    NOT NULL,      -- ソースコードレベルでウィジェットを識別するためのID
     wd_group_id          VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- ウィジェットグループ(管理用)
     wd_compatible_id     VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 互換ウィジェットID
     wd_parent_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 親ウィジェットID(ファイル名)
+    wd_content_widget_id VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- コンテンツ編集用のウィジェット
     wd_joomla_class      VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- Joomla!テンプレート用のクラス名
+    wd_template_type     TEXT                                         NOT NULL,      -- 対応するテンプレートタイプ(「,」区切りで指定。値=bootstrap,jquerymobile)
     wd_suffix            VARCHAR(4)     DEFAULT ''                    NOT NULL,      -- HTMLタグのクラス名に付けるサフィックス文字列
     wd_params            VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 各種パラメータ
     wd_author            VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- 作者名

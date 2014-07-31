@@ -32,6 +32,13 @@ INSERT INTO content_config
 ('smartphone', 'use_jquery',      '0', 'jQueryスクリプト作成', 0),
 ('',           'use_content_template',      '0', 'コンテンツ単位のテンプレート設定', 0);
 
+-- 新着情報設定マスター
+INSERT INTO news_config
+(nc_id,                  nc_value,    nc_name,                              nc_index) VALUES
+('default_message',   '「[#TITLE#]」を追加しました', 'デフォルトメッセージ',               1),
+('date_format',       'n月j日', '日時フォーマット',               1),
+('layout_list_item',  '[#DATE#] [#MESSAGE#][#MARK#]', 'リスト項目レイアウト',               1);
+
 -- Wiki設定マスター
 INSERT INTO wiki_config (wg_id,        wg_value,     wg_name,                 wg_index)
 VALUES                  ('password',   md5('admin'), '共通パスワード',        1);
@@ -195,6 +202,7 @@ INSERT INTO _templates
 ('art41_sample2',                 'art41_sample2',                 2,       0,              false,     false,            true,         0,             now()),
 ('bootstrap_yeti',                'bootstrap_yeti',                10,      0,              false,     true,             true,         0,             now()),
 ('bootstrap_cerulean',            'bootstrap_cerulean',            10,      0,              false,     true,             true,         0,             now()),
+('bootstrap_united',              'bootstrap_united',              10,      0,              false,     true,             true,         0,             now()),
 ('m/default',                     'm/default',                     0,       1,              true,      false,            true,         0,             now()),
 ('m/smallfont',                   'm/smallfont',                   0,       1,              true,      false,            true,         0,             now()),
 ('s/default_simple',              's/default_simple',              1,       2,              false,     false,            true,         0,             now()),

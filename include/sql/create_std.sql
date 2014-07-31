@@ -149,25 +149,50 @@ CREATE TABLE content (
     UNIQUE               (cn_type,      cn_id,        cn_language_id,               cn_history_index)
 ) TYPE=innodb;
 
+-- 新着情報設定マスター
+DROP TABLE IF EXISTS news_config;
+CREATE TABLE news_config (
+    nc_id                VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- ID(Key)
+    nc_value             TEXT                                         NOT NULL,      -- 値
+    nc_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 名称
+    nc_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
+    nc_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
+    PRIMARY KEY          (nc_id)
+) TYPE=innodb;
+
 -- 新着情報トラン
 DROP TABLE IF EXISTS news;
 CREATE TABLE news (
     nw_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    nw_id                INT            DEFAULT 0                     NOT NULL,      -- ID
+    nw_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
+
     nw_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- メッセージタイプ
     nw_server_id         CHAR(32)       DEFAULT ''                    NOT NULL,      -- サーバ識別ID
+    nw_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     nw_regist_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 登録日時
-
     nw_name              TEXT                                         NOT NULL,      -- コンテンツ名
+    nw_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- コンテンツの種別
+    nw_content_id        TEXT                                         NOT NULL,      -- コンテンツID
+    nw_url               TEXT                                         NOT NULL,      -- リンク先
     nw_link              TEXT                                         NOT NULL,      -- コンテンツリンク先(廃止予定)
     nw_content_dt        TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- コンテンツ更新日時
     nw_message           TEXT                                         NOT NULL,      -- メッセージ
     nw_site_name         TEXT                                         NOT NULL,      -- サイト名
     nw_site_link         TEXT                                         NOT NULL,      -- サイトリンク(廃止予定)
+    nw_site_url          TEXT                                         NOT NULL,      -- サイトリンク
+    nw_summary           VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 概要
+    nw_mark              INT            DEFAULT 0                     NOT NULL,      -- 付加マーク(0=なし、1=新規)
+    nw_visible           BOOLEAN        DEFAULT false                 NOT NULL,      -- 表示するかどうか
+    nw_user_limited      BOOLEAN        DEFAULT false                 NOT NULL,      -- アクセス可能ユーザを制限
 
+    nw_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
+    nw_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
     nw_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
     nw_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     nw_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
-    PRIMARY KEY          (nw_serial)
+    PRIMARY KEY          (nw_serial),
+    UNIQUE               (nw_id,        nw_history_index)
 ) TYPE=innodb;
 
 -- Wiki設定マスター

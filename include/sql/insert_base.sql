@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2014032701',               'DBバージョン'),
+('db_version',                  '2014072101',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_url',                  '',                         'サーバURL'),
 ('default_lang',                'ja',                       'デフォルト言語'),
@@ -96,7 +96,8 @@ INSERT INTO _system_config
 ('multi_domain',                 '0',                       'マルチドメイン運用'),
 ('auto_login',        '1',                        '一般画面自動ログイン機能'),
 ('auto_login_admin',        '0',                        '管理画面自動ログイン機能'),
-('access_in_intranet',               '0',                       'イントラネット運用');
+('access_in_intranet',               '0',                       'イントラネット運用'),
+('awstats_data_path', '../tools/awstats', 'Awstatsデータのデータパス');
 
 -- バージョン管理マスター
 INSERT INTO _version (vs_id,         vs_value,     vs_name)
@@ -109,9 +110,10 @@ INSERT INTO _login_user
 
 -- 追加クラスマスター
 INSERT INTO _addons
-(ao_id,     ao_class_name, ao_name,            ao_description) VALUES
-('bloglib', 'blogLib',     'ブログライブラリ', ''),
-('contentlib', 'contentLib',     '汎用コンテンツライブラリ', '');
+(ao_id,        ao_class_name, ao_name,                    ao_description, ao_opelog_hook) VALUES
+('bloglib',    'blogLib',     'ブログライブラリ',         '',             false),
+('contentlib', 'contentLib',  '汎用コンテンツライブラリ', '',             false),
+('newslib',    'newsLib',     '新着情報ライブラリ',       '',             true);
 
 -- 管理画面メニューデータ
 INSERT INTO _nav_item
@@ -456,11 +458,12 @@ INSERT INTO _widget_category
 ('commerce',  'Eコマース',        4),
 ('photo',     'フォトギャラリー', 5),
 ('event',     'イベント情報',     6),
-('user',     'ユーザ作成コンテンツ',     7),
-('subcontent',     '補助コンテンツ',     8),
-('search',     '検索',             9),
-('reguser',     'ユーザ登録',      10),
-('menu',     'メニュー',         11),
-('image',     '画像',         12),
-('design',    'デザイン',         13),
+('wiki',     'Wiki',     7),
+('user',     'ユーザ作成コンテンツ',     8),
+('subcontent',     '補助コンテンツ',     9),
+('search',     '検索',             10),
+('reguser',     'ユーザ登録',      11),
+('menu',     'メニュー',         12),
+('image',     '画像',         13),
+('design',    'デザイン',         14),
 ('admin',     '管理画面用',      20);
