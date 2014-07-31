@@ -164,9 +164,6 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			
 			// Bootstrap用のデータを埋め込む
 			if ($this->renderType == 'BOOTSTRAP_NAV'){
-				// メニュー属性を取得
-				$menuAttr = $this->gEnv->getMenuAttr();
-//	debug("default menu ----style=".$menuAttr['bootstyle']);
 				$this->tmpl->addVar("_widget", "site_url", $this->convertUrlToHtmlEntity($this->gEnv->getRootUrl() . '/'));
 				$this->tmpl->addVar("_widget", "sitename", $this->convertToDispString($this->gEnv->getSiteName()));
 
@@ -176,14 +173,19 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 					$this->tmpl->addVar("_widget", "sitename_option_class", $sitenameOptionClass);
 				}
 				// 検索フィールド表示制御
-				if ($showSearch){
-					$this->tmpl->setAttribute('show_search', 'visibility', 'visible');
-				}
+				if ($showSearch) $this->tmpl->setAttribute('show_search', 'visibility', 'visible');
+
+				// 追加クラス
+				$navbarOptionClass = array();
+
+				// メニュー属性を取得
+				$menuAttr = $this->gEnv->getMenuAttr();
+				if (!empty($menuAttr['bootstyle'])) $navbarOptionClass[] = $menuAttr['bootstyle'];
+				
 				// 別の色を指定の場合
-				if ($anotherColor){
-					$navbarOptionClass = ' navbar-inverse';
-					$this->tmpl->addVar("_widget", "navbar_option_class", $navbarOptionClass);
-				}
+				if ($anotherColor) $navbarOptionClass[] = 'navbar-inverse';
+
+				if (!empty($navbarOptionClass)) $this->tmpl->addVar("_widget", "navbar_option_class", ' ' . implode(' ', $navbarOptionClass));
 			}
 		} else {
 			// 出力抑止

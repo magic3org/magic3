@@ -12,7 +12,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 <html dir="ltr" lang="<?php echo $document->language; ?>">
 <head>
     <jdoc:include type="head" />
-	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootswatch_yeti_ja.css" media="screen">
+	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootswatch_cerulean_ja.css" media="screen">
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
 	<?php global $gPageManager;if ($gPageManager->isLayout()): ?>
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style_layout.css" media="screen">
@@ -22,6 +22,17 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
 	<![endif]-->
 	<script src="<?php echo $templateUrl; ?>/m3custom.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+$(function() {
+$('#nav').affix({
+	offset: {
+		top: $('#page_header').height();
+	}
+});	
+});
+//]]>
+</script>
 <?php global $gPageManager;if (!$gPageManager->isLayout()): ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -39,12 +50,37 @@ $(function(){
 //]]>
 </script>
 <?php endif; ?>
+
+<style type="text/css">
+<!--
+
+#page_header {
+	height:280px;
+    background-color:#eee;
+}
+
+#nav.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index:10;
+}
+
+//-->
+</style>
 </head>
 <body>
-<header>
-<jdoc:include type="modules" name="user3" bootstyle="navbar-fixed-top" />
-<div class="hidden-xs"><jdoc:include type="modules" name="header-hide" style="none" /></div>
+<header id="page_header">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12"><jdoc:include type="modules" name="header" style="bootblock" /></div>
+    </div>
+</div>
 </header>
+<div id="nav">
+<jdoc:include type="modules" name="user3" bootstyle="navbar-static-top" />
+<div class="hidden-xs"><jdoc:include type="modules" name="header-hide" style="none" /></div>
+</div>
 <div class="container">
 <div class="row">
 <?php if ($document->countModules('left') || $document->countModules('left-fixed') || $document->countModules('left-hide') || $document->countModules('left-slide')): ?>

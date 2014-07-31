@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install type="template" version="3.1" format="bootstrap">
+  <name>bootstrap_cerulean_head</name>
+  <creationDate>2014-07-31</creationDate>
+  <version>1.0</version>
+  <author>Naoki Hirata</author>
+  <authorUrl>http://www.magic3.org/</authorUrl>
+  <description>Bootstrap type template</description>
+</install>
