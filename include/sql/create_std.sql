@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2010 Magic3 Project.
+-- * @copyright  Copyright 2006-2014 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id: create_std.sql 6135 2013-06-26 01:14:43Z fishbone $
 -- * @link       http://www.magic3.org

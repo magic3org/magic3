@@ -1,10 +1,10 @@
 /* メニューバー固定用 */
-body {
+/*body {
 	padding-top: 85px;
 }
 .navbar-form .input-group {
 	margin-left:15px;
-}
+}*/
 /* 階層メニュー用 */
 .dropdown-submenu {
     position: relative;

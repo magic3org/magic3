@@ -1,20 +1,32 @@
 <?php
 defined('_JEXEC') or die;
 
+global $gEnvManager;
+global $gPageManager;
+
 // Create alias for $this object reference:
 $document = $this;
 
 // Shortcut for template base url:
 $templateUrl = $document->baseurl . '/templates/' . $document->template;
 
+// トップ画面かどうか判断
+$isTop = false;
+$url = $gEnvManager->getCurrentRequestUri();
+$parsedUrl = parse_url($url);
+if (empty($parsedUrl['query']) || $gPageManager->isLayout()) $isTop = true;
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="<?php echo $document->language; ?>">
 <head>
     <jdoc:include type="head" />
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/bootswatch_cerulean_ja.css" media="screen">
+	<?php if ($isTop): ?>
+	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style_top.css" media="screen">
+	<?php else: ?>
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style.css" media="screen">
-	<?php global $gPageManager;if ($gPageManager->isLayout()): ?>
+	<?php endif; ?>
+	<?php if ($gPageManager->isLayout()): ?>
 	<link rel="stylesheet" href="<?php echo $templateUrl; ?>/css/style_layout.css" media="screen">
 	<?php endif; ?>
 	<!--[if lt IE 9]>
@@ -22,21 +34,15 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
 	<![endif]-->
 	<script src="<?php echo $templateUrl; ?>/m3custom.js"></script>
-<script type="text/javascript">
-//<![CDATA[
-$(function() {
-$('#nav').affix({
-	offset: {
-		top: $('#page_header').height()
-	}
-});	
-});
-//]]>
-</script>
-<?php global $gPageManager;if (!$gPageManager->isLayout()): ?>
+<?php if (!$gPageManager->isLayout()): ?>
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
+	$('#nav').affix({
+		offset: {
+			top: $('#page_header').height()
+		}
+	});
 	if ($(window).width() >= 768){
 		if ($('#pos-slide').offset()){
 			$('#pos-slide').affix({
@@ -52,7 +58,7 @@ $(function(){
 <?php endif; ?>
 </head>
 <body>
-<?php global $gEnvManager; $url = $gEnvManager->getCurrentRequestUri(); $parsedUrl = parse_url($url); if (empty($parsedUrl['query'])): ?>
+<?php if ($isTop): ?>
 <header id="page_header">
 <div class="container">
     <div class="row">

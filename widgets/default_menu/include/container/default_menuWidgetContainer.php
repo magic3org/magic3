@@ -100,8 +100,10 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				$templateFile = 'index_old.tmpl.html';
 				break;
 			case 'BOOTSTRAP_NAV':		// Bootstrapナビゲーションメニュー
-				$this->cssFilePath[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
 				$templateFile = 'index_bootstrap_nav.tmpl.html';
+				
+				// CSSファイルの追加
+				$this->cssFilePath[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
 				break;
 			case 'BOOTSTRAP':		// Bootstrapメニュー
 				$templateFile = 'index_bootstrap.tmpl.html';
@@ -164,9 +166,9 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			
 			// Bootstrap用のデータを埋め込む
 			if ($this->renderType == 'BOOTSTRAP_NAV'){
-				$this->tmpl->addVar("_widget", "site_url", $this->convertUrlToHtmlEntity($this->gEnv->getRootUrl() . '/'));
-				$this->tmpl->addVar("_widget", "sitename", $this->convertToDispString($this->gEnv->getSiteName()));
-
+				$navbarOptionClass = array();// 追加クラス
+				$menuAttr = $this->gEnv->getMenuAttr();
+								
 				// サイト名の表示制御
 				if (!$showSitename){
 					$sitenameOptionClass = ' visible-xs';			// モニタが最小サイズの場合のみ表示
@@ -176,16 +178,16 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				if ($showSearch) $this->tmpl->setAttribute('show_search', 'visibility', 'visible');
 
 				// 追加クラス
-				$navbarOptionClass = array();
-
 				// メニュー属性を取得
-				$menuAttr = $this->gEnv->getMenuAttr();
 				if (!empty($menuAttr['bootstyle'])) $navbarOptionClass[] = $menuAttr['bootstyle'];
 				
 				// 別の色を指定の場合
 				if ($anotherColor) $navbarOptionClass[] = 'navbar-inverse';
 
+				// データを画面に埋め込む
 				if (!empty($navbarOptionClass)) $this->tmpl->addVar("_widget", "navbar_option_class", ' ' . implode(' ', $navbarOptionClass));
+				$this->tmpl->addVar("_widget", "site_url", $this->convertUrlToHtmlEntity($this->gEnv->getRootUrl() . '/'));
+				$this->tmpl->addVar("_widget", "sitename", $this->convertToDispString($this->gEnv->getSiteName()));
 			}
 		} else {
 			// 出力抑止
