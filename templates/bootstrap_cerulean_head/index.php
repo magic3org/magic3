@@ -52,6 +52,7 @@ $(function(){
 <?php endif; ?>
 </head>
 <body>
+<?php global $gEnvManager; $url = $gEnvManager->getCurrentRequestUri(); $parsedUrl = parse_url($url); if (empty($parsedUrl['query'])): ?>
 <header id="page_header">
 <div class="container">
     <div class="row">
@@ -59,6 +60,7 @@ $(function(){
     </div>
 </div>
 </header>
+<?php endif; ?>
 <div id="nav">
 <jdoc:include type="modules" name="user3" bootstyle="navbar-static-top" />
 <div class="hidden-xs"><jdoc:include type="modules" name="header-hide" style="none" /></div>
