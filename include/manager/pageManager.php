@@ -94,6 +94,7 @@ class PageManager extends Core
 	private $useGooglemaps;				// Googleマップを使用するかどうか
 	private $useBootstrap;				// Bootstrapを使用するかどうか
 	private $isHtml5;					// HTML5で出力するかどうか
+	private $ckeditorCssFiles = array();	// CKEditor用のCSSファイル
 	const CONFIG_KEY_HEAD_TITLE_FORMAT = 'head_title_format';		// ヘッダ作成用フォーマット
 	const ADMIN_WIDGET_ID = 'admin_main';		// 管理用ウィジェットのウィジェットID
 	//const CONTENT_TYPE_WIKI = 'wiki';		// ページのコンテンツタイプ(Wiki)
@@ -177,7 +178,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.5.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.6.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.4.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.5.js';			// 一般、管理機能共通スクリプト
@@ -3231,6 +3232,12 @@ class PageManager extends Core
 				// ウィジェット詳細設定画面専用のJavaScriptグローバル変数
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){
 					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+					
+					// CKEditor用のCSSファイル
+					if (!empty($this->ckeditorCssFiles)){
+						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
+					}
 				} else if (!empty($pageId)){
 					$accessPoint = $this->gEnv->getAllDefaultPageId();
 					for ($i = 0; $i < count($accessPoint); $i++){
@@ -5345,6 +5352,48 @@ class PageManager extends Core
 			$destParam .= rawurlencode($sortParam[$i]['key']) . '=' . rawurlencode($sortParam[$i]['value']);
 		}
 		return $destParam;
+	}
+	/**
+	 * 画面で使用しているCSSファイルを取得
+	 *
+	 * @param string $url	取得画面のURL
+	 * @return array		CSSファイルのURL
+	 */
+	function getCssFilesByHttp($url)
+	{
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_USERAGENT, M3_SYSTEM_NAME . '/' . M3_SYSTEM_VERSION);		// ユーザエージェント
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);		// 画面に出力しない
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+		curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());
+		$content = curl_exec($ch);
+		curl_close($ch);
+
+		// HEADタグを取り出す
+		$urlArray = array();
+		$headContent = '';
+		$pattern = '/<head\b[^>]*?>(.*?)<\/head\b[^>]*?>/si';
+		if (preg_match($pattern, $content, $matches)) $headContent = $matches[0];
+
+		$pattern = '/<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
+		if (preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
+			foreach ($matches as $match) $urlArray[] = $match[1];
+		}
+		
+		// ifで制御されているCSSファイルを除く
+		$pattern = '/<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
+	/*	$pattern = '/<!--\[if\b.*?\]>(.+?)<!\[endif\]-->/si';*/
+/*	$pattern = '/<!--\[if\b.*?\]>[\b]*<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>[\b]*<!\[endif\]-->/si';*/
+/*		if ($ret = preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
+			foreach ($matches as $match) {
+				echo "*{$match[1]}<br />";
+			}
+		}*/
+		
+		// 管理機能用のCSSを除く
+		$this->ckeditorCssFiles = $urlArray;	// CKEditor用のCSSファイル
 	}
 }
 ?>

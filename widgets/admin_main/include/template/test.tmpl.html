@@ -11,22 +11,14 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<script type="text/javascript" src="{_SCRIPTS_URL}/ckeditor4.3.0/ckeditor.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
-	// WYSIWYGエディター作成
-//	m3SetWysiwygEditor('item_html', 500/* 高さ */);
-	var config = {};
-	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_test.js';
-	config['toolbar'] = 'Full';
-	var editor = CKEDITOR.replace('editor', config);
 });
 //]]>
 </script>
 <div align="center">
 <!-- m3:ErrorMessage -->
-<textarea id="editor" name="editor">{ITEM_HTML}</textarea>
 </div>
 
 </patTemplate:tmpl>

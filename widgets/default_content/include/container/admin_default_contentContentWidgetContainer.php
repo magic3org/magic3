@@ -935,6 +935,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar('_widget', 'admin_widget_id', self::ADMIN_WIDGET_ID);// ユーザ定義値参照用(管理ウィジェットのウィジェットID)
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 		
+		// CKEditor用のCSSファイルを読み込む
+		$this->loadCKEditorCssFiles($previewUrl);
+		
 		// 拡張エリア制御
 		if ($this->isOpenOptionArea){
 			$this->tmpl->addVar('_widget', 'option_area_open', 'true');

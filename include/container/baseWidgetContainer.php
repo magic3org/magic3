@@ -3149,5 +3149,15 @@ class BaseWidgetContainer extends Core
 		if ($style == '_navmenu') $isNavigation = true;		// ナビゲーションメニューの場合
 		return $isNavigation;
 	}
+	/**
+	 * CKEditor用のCSSファイルURLを画面に取り込む
+	 *
+	 * @param string $url	取得元画面のURL
+	 * @return 				なし
+	 */
+	function loadCKEditorCssFiles($url)
+	{
+		$this->gPage->getCssFilesByHttp($url);
+	}
 }
 ?>
