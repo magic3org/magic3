@@ -5367,7 +5367,7 @@ class PageManager extends Core
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);		// 画面に出力しない
 		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-		curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());
+		curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());		// セッションを維持
 		$content = curl_exec($ch);
 		curl_close($ch);
 
@@ -5377,23 +5377,21 @@ class PageManager extends Core
 		$pattern = '/<head\b[^>]*?>(.*?)<\/head\b[^>]*?>/si';
 		if (preg_match($pattern, $content, $matches)) $headContent = $matches[0];
 
+		// CSSファイル取り出し
 		$pattern = '/<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
 		if (preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
 			foreach ($matches as $match) $urlArray[] = $match[1];
 		}
 		
 		// ifで制御されているCSSファイルを除く
-		$pattern = '/<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
-	/*	$pattern = '/<!--\[if\b.*?\]>(.+?)<!\[endif\]-->/si';*/
-/*	$pattern = '/<!--\[if\b.*?\]>[\b]*<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>[\b]*<!\[endif\]-->/si';*/
-/*		if ($ret = preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
-			foreach ($matches as $match) {
-				echo "*{$match[1]}<br />";
-			}
-		}*/
-		
+		$delUrlArray = array();
+		$pattern = '/<!--\[if\b.*?\]>[\b]*<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>[\b]*<!\[endif\]-->/si';
+		if (preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
+			foreach ($matches as $match) $delUrlArray[] = $match[1];
+		}
+
 		// 管理機能用のCSSを除く
-		$this->ckeditorCssFiles = $urlArray;	// CKEditor用のCSSファイル
+		$this->ckeditorCssFiles = array_diff($urlArray, $delUrlArray);	// CKEditor用のCSSファイル
 	}
 }
 ?>
