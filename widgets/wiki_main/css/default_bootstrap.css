@@ -22,11 +22,11 @@ div.jumpmenu {
 	padding-top: 80px;
 	margin-top: -80px;
 }*/
-.jump_anchor {
+/*.jump_anchor {*/
 	/* ジャンプ位置を修正 */
-	padding-top: 80px;
+/*	padding-top: 80px;
 	margin-top: -80px;
-}
+}*/
 span.noexists {
 	color:inherit;
 	background-color:#FFFACC;

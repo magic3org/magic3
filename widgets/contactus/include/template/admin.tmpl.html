@@ -40,7 +40,7 @@ $(function(){
 	    <td width="800" colspan="2"><input type="checkbox" name="send_message" {SEND_MESSAGE} /></td>
 	</tr>
     <tr class="even">
-	    <td class="table-headside"><span {_HELP_EMAIL_RECEIVER}>受信用メールアドレス</span></td>
+	    <td class="table-headside"><span {_HELP_EMAIL_RECEIVER}>受信用<br />メールアドレス</span></td>
 	    <td colspan="2"><input type="text" name="email_receiver" value="{EMAIL_RECEIVER}" size="25" maxlength="40" /></td>
 	</tr>
     <tr>
@@ -84,7 +84,7 @@ $(function(){
 	    <td><input type="checkbox" name="body_visible" {BODY_VISIBLE} />表示&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="body_required" {BODY_REQUIRED} />必須</td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_EXPLANATION}>説明</span></td><td colspan="2"><textarea name="explanation">{EXPLANATION}</textarea></td>
+	    <td class="table-headside"><span {_HELP_EXPLANATION}>説明</span></td><td colspan="2"><textarea name="explanation" style="width:100%;">{EXPLANATION}</textarea></td>
 	</tr>
 	<tr class="even">
 	<td colspan="3" align="right">
