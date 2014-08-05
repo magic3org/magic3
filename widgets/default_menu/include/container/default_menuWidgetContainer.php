@@ -145,6 +145,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$useVerticalMenu 	= $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 		$showSitename	= isset($targetObj->showSitename) ? $targetObj->showSitename : 1;		// サイト名を表示するかどうか
 		$showSearch		= isset($targetObj->showSearch) ? $targetObj->showSearch : 0;			// 検索フィールドを表示するかどうか
+		$showLogin		= isset($targetObj->showLogin) ? $targetObj->showLogin : 0;			// ログインを表示するかどうか
 		$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
 		
 		// 縦型メニューデザイン使用の場合はJoomla用パラメータを設定
@@ -177,6 +178,18 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				// 検索フィールド表示制御
 				if ($showSearch) $this->tmpl->setAttribute('show_search', 'visibility', 'visible');
 
+				// ログインフィールド表示制御
+				if ($showLogin){
+					// ログイン状態を取得
+					$userName = $this->gEnv->getCurrentUserName();
+					if (empty($userName)){		// ユーザがログインしていないとき
+						$this->tmpl->setAttribute('show_login', 'visibility', 'visible');
+					} else {
+						$this->tmpl->setAttribute('show_logout', 'visibility', 'visible');
+						$this->tmpl->addVar("show_logout", "account", $this->convertToDispString($userName));
+					}
+				}
+				
 				// 追加クラス
 				// メニュー属性を取得
 				if (!empty($menuAttr['bootstyle'])) $navbarOptionClass[] = $menuAttr['bootstyle'];

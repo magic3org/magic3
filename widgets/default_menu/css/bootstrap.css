@@ -13,6 +13,11 @@
 #nav_account {
 	margin-right:10px;
 }
+#nav_account .dropdown-menu {
+	padding: 15px;
+	min-width: 250px;
+}
+
 /* 階層メニュー用 */
 .dropdown-submenu {
 	position: relative;

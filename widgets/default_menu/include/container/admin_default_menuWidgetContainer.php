@@ -103,6 +103,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$useVerticalMenu	= $request->trimCheckedValueOf('item_vertical_menu');		// 縦型メニューデザインを使用するかどうか
 		$showSitename		= $request->trimCheckedValueOf('item_show_sitename');		// サイト名を表示するかどうか
 		$showSearch			= $request->trimCheckedValueOf('item_show_search');			// 検索フィールドを表示するかどうか
+		$showLogin			= $request->trimCheckedValueOf('item_show_login');			// ログインを表示するかどうか
 		$anotherColor		= $request->trimCheckedValueOf('item_another_color');		// 色を変更するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
@@ -125,6 +126,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->useVerticalMenu	= $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 				$newObj->showSitename		= $showSitename;		// サイト名を表示するかどうか
 				$newObj->showSearch			= $showSearch;			// 検索フィールドを表示するかどうか
+				$newObj->showLogin			= $showLogin;			// ログインを表示するかどうか
 				$newObj->anotherColor		= $anotherColor;		// 色を変更するかどうか
 		
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj, $this->menuId);
@@ -156,6 +158,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 					$targetObj->useVerticalMenu 	= $useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 					$targetObj->showSitename		= $showSitename;		// サイト名を表示するかどうか
 					$targetObj->showSearch			= $showSearch;			// 検索フィールドを表示するかどうか
+					$targetObj->showLogin			= $showLogin;			// ログインを表示するかどうか
 					$targetObj->anotherColor		= $anotherColor;		// 色を変更するかどうか
 				}
 
@@ -185,6 +188,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 				$useVerticalMenu = 0;		// 縦型メニューデザインを使用するかどうか
 				$showSitename		= 1;		// サイト名を表示するかどうか
 				$showSearch			= 0;			// 検索フィールドを表示するかどうか
+				$showLogin			= 0;			// ログインを表示するかどうか
 				$anotherColor		= 0;		// 色を変更するかどうか
 			}
 			$this->serialNo = 0;
@@ -201,6 +205,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 //					$showSearch			= $targetObj->showSearch;			// 検索フィールドを表示するかどうか					
 					$showSitename	= isset($targetObj->showSitename) ? $targetObj->showSitename : 1;		// サイト名を表示するかどうか
 					$showSearch		= isset($targetObj->showSearch) ? $targetObj->showSearch : 0;			// 検索フィールドを表示するかどうか
+					$showLogin		= isset($targetObj->showLogin) ? $targetObj->showLogin : 0;			// ログインを表示するかどうか
 					$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
 				}
 			}
@@ -257,6 +262,7 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "vertical_menu", $this->convertToCheckedString($useVerticalMenu));		// 縦型メニューデザインを使用するかどうか
 		$this->tmpl->addVar("_widget", "show_sitename_checked", $this->convertToCheckedString($showSitename));		// サイト名を表示するかどうか
 		$this->tmpl->addVar("_widget", "show_search_checked", $this->convertToCheckedString($showSearch));			// 検索フィールドを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_login_checked", $this->convertToCheckedString($showLogin));			// ログインを表示するかどうか
 		$this->tmpl->addVar("_widget", "another_color_checked", $this->convertToCheckedString($anotherColor));		// 色を変更するかどうか
 					
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
