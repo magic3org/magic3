@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: index.php 5136 2012-08-23 23:19:35Z fishbone $
  * @link       http://www.magic3.org
@@ -48,8 +48,8 @@ $HELP['content_view_count']['title'] = '閲覧数';
 $HELP['content_view_count']['body'] = 'コンテンツがユーザに閲覧された回数です。管理者の閲覧はカウントされません。';
 $HELP['content_act']['title'] = '操作';
 $HELP['content_act']['body'] = '各種操作を行います。<br />●メニューに追加<br />メニュー定義にコンテンツを表示するメニュー項目を追加します。<br />●プレビュー<br />コンテンツをプレビュー表示します。';
-$HELP['content_html']['title'] = 'HTML';
-$HELP['content_html']['body'] = 'コンテンツの内容となるHTMLです。';
+$HELP['content_body']['title'] = '内容';
+$HELP['content_body']['body'] = 'コンテンツの内容となるHTMLです。';
 $HELP['content_desc']['title'] = '簡易説明';
 $HELP['content_desc']['body'] = 'コンテンツの概要を設定します。';
 $HELP['content_ref_custom']['title'] = '置換文字列を参照';

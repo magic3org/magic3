@@ -24,7 +24,8 @@
     <div class="collapse navbar-collapse" id="default_menu-navbar-collapse">
         <ul class="nav navbar-nav">{MENU_HTML}</ul>
 <patTemplate:tmpl name="show_search" visibility="hidden">
-        <ul class="nav pull-right navbar-nav"><li>
+<!--<div class="col-sm-3 col-md-3">-->
+        <ul id="nav_searchword" class="nav navbar-nav navbar-right"><li>
         <form class="navbar-form" role="search">
         <div class="input-group">
             <input type="hidden" name="task" value="search">
@@ -36,6 +37,7 @@
         </div>
         </form>
 		</li></ul>
+<!--</div>-->
 </patTemplate:tmpl>
     </div>
 </nav>
