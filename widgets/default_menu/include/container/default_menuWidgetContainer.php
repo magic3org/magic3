@@ -29,6 +29,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	private $menuData = array();			// Joomla用のメニューデータ
 	private $menuTree = array();			// Joomla用のメニュー階層データ
 	private $renderType;		// 描画出力タイプ
+	private $showLogin;			// ログインフィールドを表示するかどうか
 	const DEFAULT_CONFIG_ID = 0;
 	const MAX_MENU_TREE_LEVEL = 5;			// メニュー階層最大数
 	const DEFAULT_BOOTSTRAP_CSS_FILE = '/bootstrap.css';		// CSSファイル
@@ -145,8 +146,41 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$useVerticalMenu 	= $targetObj->useVerticalMenu;		// 縦型メニューデザインを使用するかどうか
 		$showSitename	= isset($targetObj->showSitename) ? $targetObj->showSitename : 1;		// サイト名を表示するかどうか
 		$showSearch		= isset($targetObj->showSearch) ? $targetObj->showSearch : 0;			// 検索フィールドを表示するかどうか
-		$showLogin		= isset($targetObj->showLogin) ? $targetObj->showLogin : 0;			// ログインを表示するかどうか
+		$this->showLogin	= isset($targetObj->showLogin) ? $targetObj->showLogin : 0;			// ログインを表示するかどうか
 		$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
+		
+		$act = $request->trimValueOf('act');
+		if ($act == 'nav_login'){			// ログインのとき
+			// アカウント、パスワード取得
+			$account = $request->trimValueOf('account');
+			$password = $request->trimValueOf('password');
+			$autoLogin = ($request->trimValueOf('autologin') == 'on') ? 1 : 0;		// 自動ログインを使用するかどうか
+			
+			// ユーザ認証
+			if ($this->gAccess->userLoginByAccount($account, $password)){
+				$userId = $this->gEnv->getCurrentUserId();
+				
+				// ### 自動ログインの処理 ###
+				// 自動ログインしないに設定した場合は自動ログイン情報を削除
+				$this->gAccess->userAutoLogin($userId, $autoLogin);
+				
+				// 画面を全体を再表示する
+				$this->gPage->redirect($this->gEnv->getCurrentRequestUri());
+				return;
+			} else {		// ログイン失敗の場合
+				// ログイン状態を削除
+				$this->gAccess->userLogout();
+				
+//				$this->tmpl->setAttribute('login_status', 'visibility', 'visible');		// ログイン状況
+//				$this->tmpl->addVar("login_status", "message", 'ログインに失敗しました');
+			}
+		} else if ($act == 'nav_logout'){			// ログアウトのとき
+			$this->gAccess->userLogout();
+			
+			// 画面を全体を再表示する
+			$this->gPage->redirect($this->gEnv->getCurrentRequestUri());
+			return;
+		}
 		
 		// 縦型メニューデザイン使用の場合はJoomla用パラメータを設定
 		if (!empty($useVerticalMenu)) $this->gEnv->setCurrentWidgetJoomlaParam(array('moduleclass_sfx' => 'art-vmenu'));
@@ -179,7 +213,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				if ($showSearch) $this->tmpl->setAttribute('show_search', 'visibility', 'visible');
 
 				// ログインフィールド表示制御
-				if ($showLogin){
+				if ($this->showLogin){
 					// ログイン状態を取得
 					$userName = $this->gEnv->getCurrentUserName();
 					if (empty($userName)){		// ユーザがログインしていないとき
@@ -220,6 +254,24 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	function _addCssFileToHead($request, &$param)
 	{
 		return $this->cssFilePath;
+	}
+	/**
+	 * JavascriptライブラリをHTMLヘッダ部に設定
+	 *
+	 * JavascriptライブラリをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string,array 				Javascriptライブラリ。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptLibToHead($request, &$param)
+	{
+		if ($this->showLogin){			// ログインフィールドを表示する場合
+			return array(ScriptLibInfo::LIB_MD5, ScriptLibInfo::LIB_JQUERY_COOKIE);
+		} else {
+			return '';
+		}
 	}
 	/**
 	 * メニューツリー作成

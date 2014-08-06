@@ -6,6 +6,10 @@
 	margin-left:15px;
 }*/
 /* メニューバー項目調整用 */
+nav .label,nav .glyphicon {
+	margin-right:5px;
+}
+
 #nav_searchword {
 	margin-left:10px;
 	margin-right:10px;
@@ -14,7 +18,7 @@
 	margin-right:10px;
 }
 #nav_account .dropdown-menu {
-	padding: 15px;
+	padding: 15px 15px 0;
 	min-width: 250px;
 }
 

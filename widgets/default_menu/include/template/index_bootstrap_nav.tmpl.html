@@ -11,6 +11,22 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function nav_login(){
+	document.nav_account.act.value = 'nav_login';
+	document.nav_account.password.value = hex_md5(document.nav_account.login_password.value);
+//	document.nav_account.login_password.disabled = true;
+	document.nav_account.submit();
+	return true;
+}
+function nav_logout(){
+	document.nav_account.act.value = 'nav_logout';
+	document.nav_account.submit();
+	return true;
+}
+//]]>
+</script>
 <nav class="navbar navbar-default{NAVBAR_OPTION_CLASS}" role="navigation">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#default_menu-navbar-collapse">
@@ -23,53 +39,6 @@
     </div>
     <div class="collapse navbar-collapse" id="default_menu-navbar-collapse">
         <ul class="nav navbar-nav">{MENU_HTML}</ul>
-<patTemplate:tmpl name="show_login" visibility="hidden">
-        <ul id="nav_account" class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a href="http://www.jquery2dotnet.com" class="dropdown-toggle" data-toggle="dropdown">ログイン <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <div class="row"><div class="col-md-12">
-                            <form class="form" role="form" method="post" action="login" id="login-nav">
-                                <div class="form-group">
-                                    <label class="sr-only" for="exampleInputEmail2">アカウント</label>
-                                    <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email address" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="sr-only" for="exampleInputPassword2">パスワード</label>
-                                    <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
-                                </div>
-                                <!--<div class="checkbox">
-                                    <label><input type="checkbox"> Remember me</label>
-                                </div>-->
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-success btn-block">ログイン</button>
-                                </div>
-                            </form>
-                        </div></div>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-</patTemplate:tmpl>
-<patTemplate:tmpl name="show_logout" visibility="hidden">
-        <ul id="nav_account" class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a href="http://www.jquery2dotnet.com" class="dropdown-toggle" data-toggle="dropdown">{ACCOUNT} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <div class="row"><div class="col-md-12">
-                            <form class="form" role="form" method="post" action="login" id="login-nav">
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-success btn-block">ログアウト</button>
-                                </div>
-                            </form>
-                        </div></div>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-</patTemplate:tmpl>
 <patTemplate:tmpl name="show_search" visibility="hidden">
         <ul id="nav_searchword" class="nav navbar-nav navbar-right"><li>
         <form class="navbar-form" role="search">
@@ -83,6 +52,56 @@
         </div>
         </form>
         </li></ul>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_login" visibility="hidden">
+        <ul id="nav_account" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">ログイン <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div class="row"><div class="col-md-12">
+                            <form class="form" role="form" method="post" name="nav_account">
+							    <input type="hidden" name="act" />
+                                <input type="hidden" name="password" />
+                                <div class="form-group">
+                                    <label class="sr-only" for="account">アカウント</label>
+									<input type="text" class="form-control" id="account" name="account" placeholder="アカウント" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="login_password">パスワード</label>
+									<input type="password" class="form-control" id="login_password" name="login_password" placeholder="パスワード" required>
+                                </div>
+                                <!--<div class="checkbox">
+                                    <label><input type="checkbox"> Remember me</label>
+                                </div>-->
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-block" onclick="nav_login();">ログイン</button>
+                                </div>
+                            </form>
+                        </div></div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="show_logout" visibility="hidden">
+        <ul id="nav_account" class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i>{ACCOUNT} <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <div class="row"><div class="col-md-12">
+                            <form class="form" role="form" method="post" name="nav_account">
+							    <input type="hidden" name="act" />
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-success btn-block" onclick="nav_logout();">ログアウト</button>
+                                </div>
+                            </form>
+                        </div></div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
 </patTemplate:tmpl>
     </div>
 </nav>
