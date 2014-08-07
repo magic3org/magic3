@@ -30,9 +30,12 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	private $menuTree = array();			// Joomla用のメニュー階層データ
 	private $renderType;		// 描画出力タイプ
 	private $showLogin;			// ログインフィールドを表示するかどうか
+	private $loginFailed;		// ログイン失敗かどうか
 	const DEFAULT_CONFIG_ID = 0;
 	const MAX_MENU_TREE_LEVEL = 5;			// メニュー階層最大数
 	const DEFAULT_BOOTSTRAP_CSS_FILE = '/bootstrap.css';		// CSSファイル
+	const LOGIN_FAIL_MARK = '<i class="glyphicon glyphicon-remove-circle error" title="ログイン失敗" rel="tooltip" data-placement="auto"></i> ';		// ログイン失敗表示
+	const LOGIN_FAIL_MESSAGE = '<p class="message error">ログインに失敗しました</p>';
 	
 	/**
 	 * コンストラクタ
@@ -171,6 +174,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				// ログイン状態を削除
 				$this->gAccess->userLogout();
 				
+				$this->loginFailed = true;		// ログイン失敗かどうか
 //				$this->tmpl->setAttribute('login_status', 'visibility', 'visible');		// ログイン状況
 //				$this->tmpl->addVar("login_status", "message", 'ログインに失敗しました');
 			}
@@ -218,10 +222,18 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 					$userName = $this->gEnv->getCurrentUserName();
 					if (empty($userName)){		// ユーザがログインしていないとき
 						$this->tmpl->setAttribute('show_login', 'visibility', 'visible');
+						
+						// ログイン失敗の表示
+						if ($this->loginFailed){
+							$this->tmpl->addVar("show_login", "login_status", self::LOGIN_FAIL_MARK);		// アイコン
+							$this->tmpl->addVar("show_login", "message", self::LOGIN_FAIL_MESSAGE);		// メッセージ
+						}
 					} else {
 						$this->tmpl->setAttribute('show_logout', 'visibility', 'visible');
 						$this->tmpl->addVar("show_logout", "account", $this->convertToDispString($userName));
 					}
+					// ログイン用スクリプト追加
+					$this->tmpl->setAttribute('show_login_script', 'visibility', 'visible');
 				}
 				
 				// 追加クラス
