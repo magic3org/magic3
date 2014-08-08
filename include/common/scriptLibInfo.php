@@ -76,13 +76,14 @@ class ScriptLibInfo
 	const LIB_JQUERY_RATY			= 'jquery.raty';
 	const LIB_JQUERY_MOUSEWHEEL		= 'jquery.mousewheel';
 	const LIB_JQUERY_CLOUDCAROUSEL	= 'jquery.cloudcarousel';
-//	const LIB_JQUERY_JQEASYPANEL	= 'jquery.jqeasypanel';
 	const LIB_JQUERY_SCROLLTO		= 'jquery.scrollto';
 	const LIB_JQUERY_FULLCALENDAR	= 'jquery.fullcalendar';
 	const LIB_JQUERY_TIMEPICKER		= 'jquery.timepicker';
 	const LIB_JQUERY_JSON			= 'jquery.json';
 	const LIB_JQUERY_FITTEXT		= 'jquery.fittext';
 	const LIB_JQUERY_IDTABS			= 'jquery.idtabs';
+	const LIB_JQUERY_BXSLIDER		= 'jquery.bxslider';
+	const LIB_JQUERY_FITVIDS		= 'jquery.fitvids';
 	
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
@@ -108,12 +109,13 @@ class ScriptLibInfo
 	const JQUERY_RATY_VER			= '1.4.3';
 	const JQUERY_MOUSEWHEEL_VER		= '3.0.6';
 	const JQUERY_CLOUDCAROUSEL_VER	= '1.0.5';
-//	const JQUERY_JQEASYPANEL_VER	= '1.0';
 	const JQUERY_SCROLLTO_VER		= '1.4.3.1';
 	const JQUERY_FULLCALENDAR_VER	= '1.6.4';
 	const JQUERY_TIMEPICKER_VER		= '0.3.2';
 	const JQUERY_JSON_VER			= '2.4.0';
 	const JQUERY_IDTABS_VER			= '2.2';
+	const JQUERY_BXSLIDER_VER		= '4.1.2';
+	const JQUERY_FITVIDS_VER		= '1.1';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -160,7 +162,6 @@ class ScriptLibInfo
 	const JQUERY_FACEBOX_FILENAME		= 'jquery/facebox.js';
 	const JQUERY_FACEBOX_CSS			= 'jquery/facebox.css';
 	const JQUERY_CURVYCORNERS_FILENAME	= 'jquery/jquery.curvycorners.packed.js';
-
 	const JQUERY_PRETTYPHOTO_DIR		= 'jquery/prettyPhoto3.1.4';
 	const JQUERY_PRETTYPHOTO_FILENAME	= 'jquery/prettyPhoto3.1.4/js/jquery.prettyPhoto.js';
 	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyPhoto3.1.4/css/prettyPhoto.css';
@@ -186,8 +187,6 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_RATY_FILENAME			= 'jquery/raty/jquery.raty.js';
 	const JQUERY_MOUSEWHEEL_FILENAME	= 'jquery/jquery.mousewheel.js';
 	const JQUERY_CLOUDCAROUSEL_FILENAME	= 'jquery/cloud-carousel.1.0.5.min.js';
-//	const JQUERY_JQEASYPANEL_FILENAME	= 'jquery/jquery.jqEasyPanel.js';
-//	const JQUERY_JQEASYPANEL_CSS		= 'jquery/jqeasypanel.css';
 	const JQUERY_SCROLLTO_FILENAME		= 'jquery/jquery.scrollTo-1.4.3.1-min.js';
 	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.4/fullcalendar.js';
 	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.4/fullcalendar.css';
@@ -197,6 +196,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_JSON_FILENAME			= 'jquery/jquery.json-2.4.min.js';
 	const JQUERY_FITTEXT_FILENAME		= 'jquery/jquery.fittext.js';
 	const JQUERY_IDTABS_FILENAME		= 'jquery/jquery.idTabs.min.js';
+	const JQUERY_BXSLIDER_FILENAME		= 'jquery/bxslider/jquery.bxslider.min.js';
+	const JQUERY_BXSLIDER_CSS			= 'jquery/bxslider/jquery.bxslider.css';
+	const JQUERY_FITVIDS_FILENAME		= 'jquery/jquery.fitvids.js';
+
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
 	const JQUERY_M3_DROPDOWN_FILENAME	= 'jquery/jquery.m3dropdown.js';	// ドロップダウンメニュー
@@ -219,13 +222,14 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_RATY_URL				= 'http://www.wbotelhos.com/raty/';
 	const JQUERY_MOUSEWHEEL_URL			= 'https://github.com/brandonaaron/jquery-mousewheel';
 	const JQUERY_CLOUDCAROUSEL_URL		= 'http://www.professorcloud.com/mainsite/carousel.htm';
-//	const JQUERY_JQEASYPANEL_URL		= 'http://www.jqeasy.com/';
 	const JQUERY_SCROLLTO_URL			= 'http://flesler.blogspot.jp/2007/10/jqueryscrollto.html';
 	const JQUERY_FULLCALENDAR_URL		= 'http://arshaw.com/fullcalendar/';
 	const JQUERY_TIMEPICKER_URL			= 'http://fgelinas.com/code/timepicker/';
 	const JQUERY_JSON_URL				= 'http://code.google.com/p/jquery-json/';
 	const JQUERY_IDTABS_URL				= 'http://www.sunsean.com/idTabs/';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
+	const JQUERY_BXSLIDER_URL			= 'http://bxslider.com/';
+	const JQUERY_FITVIDS_URL			= 'http://fitvidsjs.com/';
 	
 	// ディレクトリ名
 	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
@@ -454,11 +458,15 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 					self::LIB_JQUERY_FITTEXT		=>	array(	'script' 	=> array(self::JQUERY_FITTEXT_FILENAME)),	// jquery.fittext用のファイル
 					self::LIB_JQUERY_IDTABS			=>	array(	'script' 	=> array(self::JQUERY_IDTABS_FILENAME),	// jquery.idtabs用のファイル
 																'url'		=> self::JQUERY_IDTABS_URL,
-																'version'	=> self::JQUERY_IDTABS_VER),															
-/*					self::LIB_JQUERY_JQEASYPANEL	=>	array(	'script' 	=> array(self::JQUERY_JQEASYPANEL_FILENAME),	// jquery.jqEasyPanel用のファイル
-																'css'		=> array(self::JQUERY_JQEASYPANEL_CSS),
-																'url'		=> self::JQUERY_JQEASYPANEL_URL,
-																'version'	=> self::JQUERY_JQEASYPANEL_VER)*/
+																'version'	=> self::JQUERY_IDTABS_VER),
+					self::LIB_JQUERY_BXSLIDER		=>	array(	'script' 	=> array(self::JQUERY_BXSLIDER_FILENAME),		// jquery.bxslider用のファイル
+																'css'		=> array(self::JQUERY_BXSLIDER_CSS),
+																'url'		=> self::JQUERY_BXSLIDER_URL,
+																'version'	=> self::JQUERY_BXSLIDER_VER),
+					self::LIB_JQUERY_FITVIDS		=>	array(	'script' 	=> array(self::JQUERY_FITVIDS_FILENAME),		// jquery.fitvids用のファイル
+																'url'		=> self::JQUERY_FITVIDS_URL,
+																'version'	=> self::JQUERY_FITVIDS_VER),														
+
 					// Magic3管理画面専用jQueryプラグイン
 					self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
 					self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー

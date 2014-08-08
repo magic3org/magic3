@@ -3653,7 +3653,7 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   }
 }
 .navbar-collapse {
-/*  max-height: 340px; *//* Magic3èCê≥ */
+  max-height: 340px;
   overflow-x: visible;
   padding-right: 15px;
   padding-left: 15px;
