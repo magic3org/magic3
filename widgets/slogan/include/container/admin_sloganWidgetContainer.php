@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -27,6 +27,8 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_MESSAGE = 'Default Message';		// デフォルトメッセージ
 	const DEFAULT_SIZE = '3.0';		// デフォルトサイズ
+	const DEFAULT_MIN_SIZE = 20;	// フォント最小サイズ
+	const DEFAULT_MAX_SIZE = 40;	// フォント最大サイズ
 	
 	/**
 	 * コンストラクタ
@@ -97,7 +99,9 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 		// 入力値を取得
 		$name	= $request->trimValueOf('item_name');			// 定義名
 		$message	= $request->trimValueOf('item_message');	// メッセージ
-		$size		= $request->trimValueOf('item_size');	// メッセージサイズ
+		$size		= $request->trimValueOf('item_size');	// フォントサイズパラメータ
+		$minSize		= $request->trimValueOf('item_min_size');	// フォント最小サイズ
+		$maxSize		= $request->trimValueOf('item_max_size');	// フォント最大サイズ
 		$this->cssId	= $request->trimValueOf('item_css_id');		// CSS用ID
 		$this->css	= $request->valueOf('item_css');			// CSS
 
@@ -123,6 +127,8 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->name	= $name;// 表示名
 				$newObj->message = $message;			// メッセージ
 				$newObj->size	= $size;					// メッセージサイズ
+				$newObj->minSize = $minSize;	// フォント最小サイズ
+				$newObj->maxSize = $maxSize;	// フォント最大サイズ
 				$newObj->cssId	= $this->cssId;					// CSS用ID
 				$newObj->css	= $this->css;					// CSS
 				
@@ -147,6 +153,8 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 					// ウィジェットオブジェクト更新
 					$targetObj->message = $message;			// メッセージ
 					$targetObj->size	= $size;					// メッセージサイズ
+					$targetObj->minSize = $minSize;	// フォント最小サイズ
+					$targetObj->maxSize = $maxSize;	// フォント最大サイズ
 					$targetObj->cssId	= $this->cssId;					// CSS用ID
 					$targetObj->css		= $this->css;					// CSS
 				}
@@ -174,6 +182,8 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				$message = self::DEFAULT_MESSAGE;			// メッセージ
 				$size	= self::DEFAULT_SIZE;					// メッセージサイズ
+				$minSize = self::DEFAULT_MIN_SIZE;	// フォント最小サイズ
+				$maxSize = self::DEFAULT_MAX_SIZE;	// フォント最大サイズ
 				$this->cssId = $this->createDefaultCssId();	// CSS用ID
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));
 			}
@@ -185,6 +195,10 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 					$name		= $targetObj->name;	// 名前
 					$message	= $targetObj->message;			// メッセージ
 					$size		= $targetObj->size;					// メッセージサイズ
+					$minSize	= $targetObj->minSize;	// フォント最小サイズ
+					if (!isset($minSize)) $minSize = self::DEFAULT_MIN_SIZE;	// フォント最小サイズ
+					$maxSize	= $targetObj->maxSize;	// フォント最大サイズ
+					if (!isset($maxSize)) $maxSize = self::DEFAULT_MAX_SIZE;	// フォント最大サイズ
 					$this->cssId	= $targetObj->cssId;					// CSS用ID
 					$this->css	= $targetObj->css;	// CSS
 				}
@@ -203,6 +217,8 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("item_name_visible", "name",	$this->convertToDispString($name));
 		$this->tmpl->addVar("_widget", "message", $this->convertToDispString($message));	// メッセージ
 		$this->tmpl->addVar("_widget", "size", $this->convertToDispString($size));	// メッセージサイズ
+		$this->tmpl->addVar("_widget", "min_size", $this->convertToDispString($minSize));	// フォント最小サイズ
+		$this->tmpl->addVar("_widget", "max_size", $this->convertToDispString($maxSize));	// フォント最大サイズ
 		$this->tmpl->addVar("_widget", "css_id",	$this->convertToDispString($this->cssId));	// CSS用ID
 		$this->tmpl->addVar("_widget", "css",	$this->css);
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -76,8 +76,12 @@ function listItem(){
 	    </td>
 	</tr>
 	<tr>
-	    <td class="table-headside"><span {_HELP_ITEM_SIZE}>サイズ</span></td>
-		<td colspan="3"><input type="text" name="item_size" value="{SIZE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td class="table-headside"><span {_HELP_ITEM_SIZE}>フォントサイズ</span></td>
+		<td colspan="3">
+		<label class="item_list_inline">コンプレッサー値：<input type="text" name="item_size" value="{SIZE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></label>
+		<label class="item_list_inline">最小サイズ：<input type="text" name="item_min_size" value="{MIN_SIZE}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" />pt</label>
+		<label class="item_list_inline">最大サイズ：<input type="text" name="item_max_size" value="{MAX_SIZE}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" />pt</label>
+		</td>
 	</tr>
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_ITEM_CSS_ID}>CSS用ID</span></td>

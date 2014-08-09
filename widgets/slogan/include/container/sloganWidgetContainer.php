@@ -22,6 +22,8 @@ class sloganWidgetContainer extends BaseWidgetContainer
 	private $headCss;			// ヘッダ出力用CSS
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_MESSAGE = 'Default Message';		// デフォルトメッセージ
+	const DEFAULT_MIN_SIZE = 20;	// フォント最小サイズ
+	const DEFAULT_MAX_SIZE = 40;	// フォント最大サイズ
 	
 	/**
 	 * コンストラクタ
@@ -70,12 +72,18 @@ class sloganWidgetContainer extends BaseWidgetContainer
 		if (!empty($targetObj)){		// 定義データが取得できたとき
 			$message = $targetObj->message;			// メッセージ
 			$size		= $targetObj->size;					// メッセージサイズ
+			$minSize	= $targetObj->minSize;	// フォント最小サイズ
+			if (!isset($minSize)) $minSize = self::DEFAULT_MIN_SIZE;	// フォント最小サイズ
+			$maxSize	= $targetObj->maxSize;	// フォント最大サイズ
+			if (!isset($maxSize)) $maxSize = self::DEFAULT_MAX_SIZE;	// フォント最大サイズ
 			$cssId		= $targetObj->cssId;					// CSS用ID
 			$this->headCss = $this->convertM3ToText($targetObj->css);	// 標準マクロ変換してCSSを作成
 		}
 		$this->tmpl->addVar('_widget', 'css_id', $this->convertToDispString($cssId));
 		$this->tmpl->addVar("_widget", "message", $this->convertToDispString($message));	// メッセージ
 		$this->tmpl->addVar("_widget", "size", $this->convertToDispString($size));	// メッセージサイズ
+		$this->tmpl->addVar("_widget", "min_size", $this->convertToDispString($minSize));	// フォント最小サイズ
+		$this->tmpl->addVar("_widget", "max_size", $this->convertToDispString($maxSize));	// フォント最大サイズ
 	}
 	/**
 	 * CSSデータをHTMLヘッダ部に設定
