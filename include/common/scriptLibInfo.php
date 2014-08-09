@@ -113,6 +113,7 @@ class ScriptLibInfo
 	const JQUERY_FULLCALENDAR_VER	= '1.6.4';
 	const JQUERY_TIMEPICKER_VER		= '0.3.2';
 	const JQUERY_JSON_VER			= '2.4.0';
+	const JQUERY_FITTEXT_VER		= '1.2';
 	const JQUERY_IDTABS_VER			= '2.2';
 	const JQUERY_BXSLIDER_VER		= '4.1.2';
 	const JQUERY_FITVIDS_VER		= '1.1';
@@ -226,6 +227,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_FULLCALENDAR_URL		= 'http://arshaw.com/fullcalendar/';
 	const JQUERY_TIMEPICKER_URL			= 'http://fgelinas.com/code/timepicker/';
 	const JQUERY_JSON_URL				= 'http://code.google.com/p/jquery-json/';
+	const JQUERY_FITTEXT_URL			= 'http://fittextjs.com/';
 	const JQUERY_IDTABS_URL				= 'http://www.sunsean.com/idTabs/';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
 	const JQUERY_BXSLIDER_URL			= 'http://bxslider.com/';
@@ -455,7 +457,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 					self::LIB_JQUERY_JSON			=>	array(	'script' 	=> array(self::JQUERY_JSON_FILENAME),	// jquery.json用のファイル
 																'url'		=> self::JQUERY_JSON_URL,
 																'version'	=> self::JQUERY_JSON_VER),
-					self::LIB_JQUERY_FITTEXT		=>	array(	'script' 	=> array(self::JQUERY_FITTEXT_FILENAME)),	// jquery.fittext用のファイル
+					self::LIB_JQUERY_FITTEXT		=>	array(	'script' 	=> array(self::JQUERY_FITTEXT_FILENAME),	// jquery.fittext用のファイル
+																'url'		=> self::JQUERY_FITTEXT_URL,
+																'version'	=> self::JQUERY_FITTEXT_VER),
 					self::LIB_JQUERY_IDTABS			=>	array(	'script' 	=> array(self::JQUERY_IDTABS_FILENAME),	// jquery.idtabs用のファイル
 																'url'		=> self::JQUERY_IDTABS_URL,
 																'version'	=> self::JQUERY_IDTABS_VER),
