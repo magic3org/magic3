@@ -14,13 +14,18 @@
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
-	$('.bxslider').bxSlider();
+	$('.bxslider').bxSlider({
+		pager: false
+/*		controls: false*/
+	});
 });
 //]]>
 </script>
-<ul id="{CSS_ID}" class="bxslider">
+<div id="{CSS_ID}">
+<ul class="bxslider">
 <patTemplate:tmpl name="image_list">
-<li style="list-style:none; background:none;"><img src="{URL}" /></li>
+<li style="list-style:none; background:none;"><img src="{URL}" {TITLE}/></li>
 </patTemplate:tmpl>
 </ul>
+</div>
 </patTemplate:tmpl>

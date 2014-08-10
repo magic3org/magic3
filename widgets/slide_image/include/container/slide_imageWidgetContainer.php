@@ -172,12 +172,15 @@ class slide_imageWidgetContainer extends BaseWidgetContainer
 			$urlparam .= 'act=generate&path=' . urlencode($relativeUrl) . '&size=' . $size;
 			$thumbUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
 			
+			// タイトルタグを作成
+			$titleTag = '';
+			if (!empty($name)) $titleTag = 'alt="' . $this->convertToDispString($name) . '" title="' . $this->convertToDispString($name) . '" ';
 			$row = array(
 				'thumb_url' => $this->convertToDispString($this->getUrl($thumbUrl)),				// サムネールURL
 				'url' => $this->convertUrlToHtmlEntity($this->getUrl($url)),			// 実画像URL
 				'width' => $size,		// 画像幅
 				'height' => $size,		// 画像高さ
-				'title' => $this->convertToDispString($name),			// 名前
+				'title' => $titleTag,			// タイトル
 				'desc' => $this->convertToDispString($desc),				// 説明
 				'group_id' => $this->convertToDispString($this->groupId)			// グループ化用ID
 			);

@@ -10,10 +10,20 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
+// [ヘッダ用最大化]
+// ヘッダ部で画像を最大化表示する
 <patTemplate:tmpl name="_tmpl">
-
-
-/*{CSS_ID}*/
-
+{CSS_ID} .bx-wrapper img {
+	margin: 0 auto;
+	width:100%;
+}
+{CSS_ID} .bx-wrapper .bx-viewport {
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border:none;
+	background-color:transparent;
+	left:0;
+}
 </patTemplate:tmpl>
 
