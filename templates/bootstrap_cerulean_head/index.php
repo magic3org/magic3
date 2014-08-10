@@ -60,11 +60,8 @@ $(function(){
 <body>
 <?php if ($isTop): ?>
 <header id="page_header">
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12"><jdoc:include type="modules" name="header" style="bootblock" /></div>
-    </div>
-</div>
+<?php if ($document->countModules('header-pre-hide')): ?><div class="hidden-xs"><jdoc:include type="modules" name="header-pre-hide" style="bootblock" /></div><?php endif; ?>
+<jdoc:include type="modules" name="header" style="bootblock" />
 </header>
 <?php endif; ?>
 <div id="nav">
