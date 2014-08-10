@@ -377,6 +377,15 @@ background-color: #0081c2;
 	margin-top:-7px;
 	margin-bottom:-7px;
 }
+#mode_template_normal {
+	margin-top:-18px;
+}
+#mode_template_plain {
+	margin-top:-18px;
+}
+#previewother {
+	margin-top:-18px;
+}
 /****** menu preview ******/
 #menu_preview {
 	font-weight: bold;
