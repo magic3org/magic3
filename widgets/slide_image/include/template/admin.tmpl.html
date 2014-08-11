@@ -55,7 +55,6 @@ var SetUrl = function(url)
 	var filename = params[params.length -1];
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="hidden" name="item_url[]" value="' + url + '" />' + filename + '</td>';
 	lineText += '<td><input type="text" name="item_title[]" size="20" maxlength="60" style="width:100%;" /></td>';
-	lineText += '<td><input type="text" name="item_desc[]" size="30" maxlength="100" style="width:100%;" /></td>';
 	lineText += '<td><a class="delImage" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	$('#image_list').append(lineText);
 
@@ -99,7 +98,7 @@ $(document).ready(function(){
 
 <table class="simple-table">
     <tbody>
-        <tr>
+    <tr>
 	    <td class="table-headside" width="150"><span {_HELP_IMAGE_NAME_INPUT}>名前</span></td>
 	    <td width="500">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
@@ -115,19 +114,18 @@ $(document).ready(function(){
 	    <td class="table-headside" width="150"><span {_HELP_IMAGE_ID}>ID</span></td>
 	    <td align="center" width="150">{ID}</td>
 	</tr>
-        <tr class="even">
+    <tr class="even">
 	    <td class="table-headside"><span {_HELP_IMAGE_FILE}>画像</span></td>
 	    <td colspan="3">
 	    <table id="image_list" class="simple-table-inner" width="100%">
 	    <thead>
-	    <tr><th width="35">移動</th><th width="200">ファイル名</th><th width="200">タイトル名</th><th>説明</th><th>操作</th></tr>
+	    <tr><th width="35">移動</th><th width="35%">ファイル名</th><th width="35%">タイトル</th><th>操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="image_list">
             <tr class="dragRow">
 	    <td class="dragHandle"></td>
 	    <td><input type="hidden" name="item_url[]" value="{URL}" />{FILENAME}</td>
 	    <td><input type="text" name="item_title[]" value="{TITLE}" size="20" maxlength="60" style="width:100%" /></td>
-	    <td><input type="text" name="item_desc[]" value="{DESC}" size="30" maxlength="100" style="width:100%" /></td>
 	    <td><a class="delImage" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
@@ -135,24 +133,13 @@ $(document).ready(function(){
 	    <div><input type="button" class="button" onclick="selectImage();" value="追加" /></div>
 	    </td>
 	</tr>
-    <tr>
-	    <td class="table-headside"><span {_HELP_IMAGE_SIZE}>画像サイズ</span></td>
-	    <td colspan="3">
-	    <input type="text" name="item_size" value="{SIZE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />px
-	    </td>
-	</tr>
     <tr class="even">
 	    <td class="table-headside"><span {_HELP_OPTION}>オプション</span></td>
 	    <td colspan="3">
-		テーマ：
-	    <select name="item_theme">
-	        <patTemplate:tmpl name="theme_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select><br />
-		<input type="checkbox" name="item_show_title" {SHOW_TITLE_CHECKED}/>タイトルを表示<br />
-	    <input type="checkbox" name="item_show_social_button" {SHOW_SOCIAL_BUTTON_CHECKED}/>ソーシャルボタンを表示<br />
-		透明度(0-1)：<input type="text" name="item_opacity" value="{OPACITY}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" />
+		<label><input type="checkbox" name="item_show_title" {SHOW_TITLE_CHECKED}/>タイトルを表示</label>
+		<label><input type="checkbox" name="item_show_pager" {SHOW_PAGER_CHECKED}/>画像選択ボタンを表示</label>
+		<label><input type="checkbox" name="item_show_control" {SHOW_CONTROL_CHECKED}/>前後移動ボタンを表示</label>
+	    <label><input type="checkbox" name="item_auto" {AUTO_CHECKED}/>自動切り替え</label>
 	    </td>
 	</tr>
     <tr>

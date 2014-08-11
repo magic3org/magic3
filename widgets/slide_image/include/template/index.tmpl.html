@@ -14,9 +14,11 @@
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
-	$('.bxslider').bxSlider({
-		pager: false
-/*		controls: false*/
+	$('#{CSS_ID} .bxslider').bxSlider({
+		pager: {OPTION_PAGER},
+		controls: {OPTION_CONTROLS},
+		auto: {OPTION_AUTO},
+		captions: {OPTION_CAPTIONS}
 	});
 });
 //]]>

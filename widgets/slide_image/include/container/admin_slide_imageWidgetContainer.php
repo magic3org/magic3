@@ -27,12 +27,7 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 	private $imageInfoArray = array();			// 画像情報
 	private $css;			// メニュー用CSS
 	private $cssId;			// CSS用ID
-	private $theme;			// テーマ
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
-	const DEFAULT_IMAGE_SIZE = 60;		// デフォルトのサムネールサイズ
-	const DEFAULT_THEME_DIR = '/images/prettyPhoto';				// テーマ格納ディレクトリ
-	const DEFAULT_THEME = 'light_rounded';		// デフォルトテーマ
-	const DEFAULT_OPACITY = '0.80';		// デフォルトの透明度
 	
 	/**
 	 * コンストラクタ
@@ -105,22 +100,18 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 		// 入力値を取得
 		$name	= $request->trimValueOf('item_name');			// 定義名
 		$imageCount = $request->trimValueOf('imagecount');		// 画像情報数
-		$size	= $request->trimValueOf('item_size');		// 画像サイズ
-		$opacity = $request->trimValueOf('item_opacity');		// 透明度
 		$urls = $request->trimValueOf('item_url');		// 画像URL
 		$titles = $request->trimValueOf('item_title');		// 画像タイトル
-		$descs = $request->trimValueOf('item_desc');		// 画像説明
-		if (empty($opacity)) $opacity = self::DEFAULT_OPACITY;		// 空の場合はデフォルト値をセット
 		$this->css	= $request->valueOf('item_css');		// メニュー用CSS
 		$this->cssId	= $request->trimValueOf('item_css_id');		// CSS用ID
-		$this->theme	= $request->trimValueOf('item_theme');		// テーマ
-		$showTitle = $request->trimCheckedValueOf('item_show_title');		// タイトルを表示するかどうか
-		
+		$showTitle		= $request->trimCheckedValueOf('item_show_title');		// タイトルを表示するかどうか
+		$showPager		= $request->trimCheckedValueOf('item_show_pager');			// ページ移動ボタンを表示するかどうか
+		$showControl	= $request->trimCheckedValueOf('item_show_control');		// 前後移動ボタンを表示するかどうか
+		$auto			= $request->trimCheckedValueOf('item_auto');		// 自動切り替えするかどうか
+		 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
 			// 入力値のエラーチェック
-			$this->checkNumeric($size, '画像サイズ');
-			$this->checkNumericF($opacity, '透明度');
 			
 			// 設定名の重複チェック
 			for ($i = 0; $i < count($this->paramObj); $i++){
@@ -136,13 +127,13 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name		= $name;// 表示名
-				$newObj->size		= $size;		// 画像サイズ
-				$newObj->opacity	= $opacity;		// 透明度
 				$newObj->imageInfo	= array();
 				$newObj->cssId	= $this->cssId;					// CSS用ID
 				$newObj->css	= $this->css;					// メニューCSS
-				$newObj->theme	= $this->theme;		// テーマ
-				$newObj->showTitle = $showTitle;		// タイトルを表示するかどうか
+				$newObj->showTitle		= $showTitle;		// タイトルを表示するかどうか
+				$newObj->showPager		= $showPager;			// ページ移動ボタンを表示するかどうか
+				$newObj->showControl	= $showControl;		// 前後移動ボタンを表示するかどうか
+				$newObj->auto			= $auto;		// 自動切り替えするかどうか
 				
 				for ($i = 0; $i < $imageCount; $i++){
 					// パスをマクロ形式に変換
@@ -151,7 +142,6 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 
 					$newInfoObj = new stdClass;
 					$newInfoObj->name	= $titles[$i];
-					$newInfoObj->desc	= $descs[$i];
 					$newInfoObj->url	= $url;
 					$newObj->imageInfo[] = $newInfoObj;
 				}
@@ -168,21 +158,19 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
-			$this->checkNumeric($size, '画像サイズ');
-			$this->checkNumericF($opacity, '透明度');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					// ウィジェットオブジェクト更新
-					$targetObj->size		= $size;		// 画像サイズ
-					$targetObj->opacity	= $opacity;		// 透明度
 					$targetObj->imageInfo	= array();
 					$targetObj->cssId	= $this->cssId;					// CSS用ID
 					$targetObj->css		= $this->css;					// メニューCSS
-					$targetObj->theme	= $this->theme;		// テーマ
-					$targetObj->showTitle = $showTitle;		// タイトルを表示するかどうか
+					$targetObj->showTitle	= $showTitle;		// タイトルを表示するかどうか
+					$targetObj->showPager	= $showPager;			// ページ移動ボタンを表示するかどうか
+					$targetObj->showControl	= $showControl;		// 前後移動ボタンを表示するかどうか
+					$targetObj->auto		= $auto;		// 自動切り替えするかどうか
 					
 					for ($i = 0; $i < $imageCount; $i++){
 						// パスをマクロ形式に変換
@@ -191,7 +179,6 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 
 						$newInfoObj = new stdClass;
 						$newInfoObj->name	= $titles[$i];
-						$newInfoObj->desc	= $descs[$i];
 						$newInfoObj->url	= $url;
 						$targetObj->imageInfo[] = $newInfoObj;
 					}
@@ -221,13 +208,13 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
-				$size = self::DEFAULT_IMAGE_SIZE;			// 画像サイズ
-				$opacity = self::DEFAULT_OPACITY;		// 透明度
 				$this->imageInfoArray = array();			// 画像情報
 				$this->cssId = $this->createDefaultCssId();	// CSS用ID
 				$this->css = $this->getParsedTemplateData('default.tmpl.css', array($this, 'makeCss'));// デフォルト用のCSSを取得
-				$this->theme	= self::DEFAULT_THEME;		// テーマ
 				$showTitle = '0';		// タイトルを表示するかどうか
+				$showPager		= '0';		// ページ移動ボタンを表示するかどうか
+				$showControl	= '1';		// 前後移動ボタンを表示するかどうか
+				$auto			= '0';		// 自動切り替えするかどうか
 			}
 			$this->serialNo = 0;
 		} else {
@@ -235,16 +222,13 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					$name	= $targetObj->name;// 名前
-					$size	= $targetObj->size;			// 画像サイズ
-					if (empty($size)) $size = self::DEFAULT_IMAGE_SIZE;
-					$opacity = $targetObj->opacity;		// 透明度
-					if (empty($opacity)) $opacity = self::DEFAULT_OPACITY;
 					if (!empty($targetObj->imageInfo)) $this->imageInfoArray = $targetObj->imageInfo;			// 画像情報
 					$this->cssId	= $targetObj->cssId;					// CSS用ID
 					$this->css		= $targetObj->css;					// メニューCSS
-					$this->theme	= $targetObj->theme;		// テーマ
-					if (empty($this->theme)) $this->theme = self::DEFAULT_THEME;
-					$showTitle = $targetObj->showTitle;		// タイトルを表示するかどうか
+					$showTitle 		= $targetObj->showTitle;		// タイトルを表示するかどうか
+					$showPager		= $targetObj->showPager;			// ページ移動ボタンを表示するかどうか
+					$showControl	= $targetObj->showControl;		// 前後移動ボタンを表示するかどうか
+					$auto			= $targetObj->auto;		// 自動切り替えするかどうか
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -257,19 +241,15 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 		$this->createImageList();
 		if (empty($this->imageInfoArray)) $this->tmpl->setAttribute('image_list', 'visibility', 'hidden');// 画像情報一覧
 		
-		// テーマ選択メニュー作成
-		$libInfo = $this->gPage->getScriptLibInfo(ScriptLibInfo::LIB_JQUERY_PRETTYPHOTO);
-		$dirPath = $this->gEnv->getScriptsPath() . DIRECTORY_SEPARATOR . $libInfo['dir'] . self::DEFAULT_THEME_DIR;
-		$this->createThemeMenu($dirPath);
-		
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		$this->tmpl->addVar("item_name_visible", "name",	$this->convertToDispString($name));
-		$this->tmpl->addVar("_widget", "size",		$this->convertToDispString($size));			// 画像サイズ
-		$this->tmpl->addVar("_widget", "opacity",	$this->convertToDispString($opacity));			// 透明度
 		$this->tmpl->addVar("_widget", "css_id",	$this->cssId);	// CSS用ID
 		$this->tmpl->addVar("_widget", "css",	$this->css);
 		$this->tmpl->addVar("_widget", "show_title_checked",	$this->convertToCheckedString($showTitle));		// タイトルを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_pager_checked",	$this->convertToCheckedString($showPager));			// ページ移動ボタンを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_control_checked",	$this->convertToCheckedString($showControl));		// 前後移動ボタンを表示するかどうか
+		$this->tmpl->addVar("_widget", "auto_checked",	$this->convertToCheckedString($auto));		// 自動切り替えするかどうか
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御
@@ -330,7 +310,6 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 		for ($i = 0; $i < $imageCount; $i++){
 			$infoObj = $this->imageInfoArray[$i];
 			$name = $infoObj->name;// タイトル名
-			$desc = $infoObj->desc;		// 説明
 			
 			// ファイル名取得
 			$filename = '';
@@ -346,42 +325,10 @@ class admin_slide_imageWidgetContainer extends BaseAdminWidgetContainer
 				'filename' => $this->convertToDispString($filename),	// ファイル名
 				'url' => $this->convertToDispString($this->getUrl($url)),				// URL
 				'title' => $this->convertToDispString($name),			// 名前
-				'desc' => $this->convertToDispString($desc),				// 説明
 				'root_url' => $this->convertToDispString($rootUrl)
 			);
 			$this->tmpl->addVars('image_list', $row);
 			$this->tmpl->parseTemplate('image_list', 'a');
-		}
-	}
-	/**
-	 * prettyPhotoテーマの選択メニューを作成
-	 *
-	 * @param string $dir		テーマのディレクトリ
-	 * @return 					なし
-	 */
-	function createThemeMenu($themeDir)
-	{
-		if (is_dir($themeDir)){
-			$dir = dir($themeDir);
-			while (($file = $dir->read()) !== false){
-				$filePath = $themeDir . '/' . $file;
-				// ディレクトリかどうかチェック
-				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath) &&
-					strncmp($file, '_', 1) != 0){	// 「_」で始まる名前のディレクトリは読み込まない
-
-					$selected = '';
-					if ($file == $this->theme) $selected = 'selected';
-					
-					$row = array(
-						'value'    => $this->convertToDispString($file),			// テーマID
-						'name'     => $this->convertToDispString($file),
-						'selected' => $selected			// 選択中かどうか
-					);
-					$this->tmpl->addVars('theme_list', $row);
-					$this->tmpl->parseTemplate('theme_list', 'a');
-				}
-			}
-			$dir->close();
 		}
 	}
 	/**

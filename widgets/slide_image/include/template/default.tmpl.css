@@ -11,9 +11,12 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_tmpl">
-
-
-/*{CSS_ID}*/
-
+{CSS_ID} .bx-wrapper img {
+	margin: 0 auto;
+}
+{CSS_ID} {
+	width:500px;
+	margin: 0 auto;
+}
 </patTemplate:tmpl>
 
