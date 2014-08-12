@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_mainInitsystemWidgetContainer.php 4316 2011-09-13 01:27:37Z fishbone $
  * @link       http://www.magic3.org
@@ -108,6 +108,8 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
 		} else if ($act == 'selectfile'){		// スクリプトファイルを選択
 			$filename = $request->trimValueOf('sample_sql');
+		} else if ($act == 'develop'){		// 開発用モード
+			$this->showDetail = true;
 		}
 		
 		// DBのタイプ
