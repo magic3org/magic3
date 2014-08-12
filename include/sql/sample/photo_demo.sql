@@ -1,5 +1,5 @@
 -- *
--- * データ登録スクリプト「Wikiサイト初期化」
+-- * データ登録スクリプト「フォトギャラリーサイトデモ」
 -- *
 -- * PHP versions 5
 -- *
@@ -18,7 +18,7 @@
 -- 初期インストールデータは必要最小限のみ。
 
 -- システム設定
-UPDATE _system_config SET sc_value = 'bootstrap_cerulean' WHERE sc_id = 'default_template';
+UPDATE _system_config SET sc_value = 'bootstrap_cerulean_head' WHERE sc_id = 'default_template';
 
 -- サイト定義マスター
 DELETE FROM _site_def WHERE sd_id = 'site_name';
@@ -27,7 +27,7 @@ INSERT INTO _site_def
 ('site_name',            'ja',           '世界の動物',               'サイト名');
 
 -- 管理画面ページデータ(デフォルトを変更)
-UPDATE _page_id SET pg_default_sub_id = 'top' WHERE pg_id = 'index' AND pg_type = 0;
+UPDATE _page_id SET pg_default_sub_id = 'front' WHERE pg_id = 'index' AND pg_type = 0;
 -- スマートフォン,携帯のアクセスポイントを隠す
 UPDATE _page_id SET pg_active = false WHERE pg_id = 's_index' AND pg_type = 0;
 UPDATE _page_id SET pg_active = false WHERE pg_id = 'm_index' AND pg_type = 0;
@@ -75,16 +75,17 @@ INSERT INTO _nav_item
 -- 画面定義
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
-(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
-('index', '',        'user3',        2,        'default_menu',       1,            'メインメニュー設定', 'main_menu', false,             now()),
-('index', '',        'footer',       2,       'default_footer',      0,            '',                   '',          false,        now()),
-('index', '',        'footer',       10,       'gotop',              0,            '',                   '',          false,        now()),
-('index', 'top',     'header-pre-hide',         2,        'slogan',      1,            '',                   '',          false,            now()),
-('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',          false,            now()),
-('index', 'wiki',    'left',         2,        'wiki_update',        0,            '',                   '',          true,             now()),
-('index', 'wiki',    'main',         5,        'wiki_main',          0,            '',                   '',          false,            now()),
-('index', 'search',  'main',         5,        'custom_search',      1,            '',                   '',          false,            now()),
-('index', 'contact', 'main',         5,        'contactus',          0,            '',                   '',          false,            now());
+(pd_id,   pd_sub_id, pd_position_id,   pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
+('index', '',        'user3',           2,       'default_menu',       1,            'メインメニュー設定', 'main_menu', false,            now()),
+('index', '',        'footer',          2,       'default_footer',     0,            '',                   '',          false,            now()),
+('index', '',        'footer',          10,      'gotop',              0,            '',                   '',          false,            now()),
+('index', 'front',   'header-pre-hide', 2,       'slogan',             1,            '',                   '',          false,            now()),
+('index', 'front',   'header',          2,       'slide_image',        1,            '',                   '',          false,            now()),
+('index', 'content', 'main',            6,       'default_content',    0,            '',                   '',          false,            now()),
+('index', 'wiki',    'left',            2,       'wiki_update',        0,            '',                   '',          true,             now()),
+('index', 'wiki',    'main',            5,       'wiki_main',          0,            '',                   '',          false,            now()),
+('index', 'search',  'main',            5,       'custom_search',      1,            '',                   '',          false,            now()),
+('index', 'contact', 'main',            5,       'contactus',          0,            '',                   '',          false,            now());
 
 -- 新メニュー対応
 TRUNCATE TABLE _menu_def;
