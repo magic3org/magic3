@@ -6213,10 +6213,12 @@ button.close {
 .text-info:hover {
   color: #3498db;
 }
+/* remove underline in table for magic3 */
+/*
 table a:not(.btn),
 .table a:not(.btn) {
   text-decoration: underline;
-}
+}*/
 table .success,
 .table .success,
 table .warning,
