@@ -259,9 +259,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.2.0/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.2.0/css/bootstrap.min.css';
 	// BootstrapオプションはBootstrapのディレクトリ配下に格納
-//	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.1/css/bootswatch_flatly.min.css';	// bootstrap配色
-//	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.1/css/bootswatch_flatly_ja.min.css';	// bootstrap配色(日本語フォント)
-	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.1/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
+//	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.1.1/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
+	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.2.0/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap/css/bootsnipp_largedropdownmenu.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap/css/yamm.css';					// bootstrapメガメニュー
 	const NOBOOTSTRAP_CSS							= 'm3/nobootstrap/style.css';
@@ -370,9 +369,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 					self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
 																'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS)),	// テーマは最初に読み込む
 					self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
-					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
-																'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
-//					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
+//					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
+//																'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
+					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
 					self::LIB_BOOTSTRAP_ADMIN		=>	array(	'css'		=> array(self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS, self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS)),	// Bootstrap管理画面用オプション			
 					self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
 																'css'		=> array(self::NOBOOTSTRAP_CSS)),

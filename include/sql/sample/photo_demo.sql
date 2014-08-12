@@ -100,19 +100,21 @@ DELETE FROM _widget_param WHERE wp_id = 'default_menu';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
 ('default_menu', 1,            'O:8:"stdClass":9:{s:6:"menuId";s:9:"main_menu";s:4:"name";s:27:"メインメニュー設定";s:9:"limitUser";s:1:"0";s:10:"isHierMenu";s:1:"0";s:15:"useVerticalMenu";s:1:"0";s:12:"showSitename";s:1:"0";s:10:"showSearch";s:1:"1";s:12:"anotherColor";s:1:"1";s:9:"showLogin";s:1:"1";}', now());
-
-
 DELETE FROM _widget_param WHERE wp_id = 'custom_search';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
-('custom_search', 1,            'O:8:"stdClass":15:{s:4:"name";s:16:"名称未設定1";s:11:"resultCount";s:2:"20";s:14:"searchTemplate";s:241:"<input id="custom_search_1_text" maxlength="40" size="10" type="text" /> <input class="button" id="custom_search_1_button" type="button" value="検索" /> <input class="button" id="custom_search_1_reset" type="button" value="リセット" />";s:12:"searchTextId";s:20:"custom_search_1_text";s:14:"searchButtonId";s:22:"custom_search_1_button";s:13:"searchResetId";s:21:"custom_search_1_reset";s:15:"isTargetContent";i:1;s:12:"isTargetUser";i:1;s:12:"isTargetBlog";i:1;s:9:"fieldInfo";a:0:{}s:15:"isTargetProduct";i:0;s:13:"isTargetEvent";i:0;s:11:"isTargetBbs";i:0;s:13:"isTargetPhoto";i:0;s:12:"isTargetWiki";i:1;}', now());
-
+('custom_search', 1,            'O:8:"stdClass":16:{s:4:"name";s:16:"名称未設定1";s:11:"resultCount";s:2:"20";s:14:"searchTemplate";s:241:"<input id="custom_search_1_text" maxlength="40" size="10" type="text" /> <input class="button" id="custom_search_1_button" type="button" value="検索" /> <input class="button" id="custom_search_1_reset" type="button" value="リセット" />";s:12:"searchTextId";s:20:"custom_search_1_text";s:14:"searchButtonId";s:22:"custom_search_1_button";s:13:"searchResetId";s:21:"custom_search_1_reset";s:15:"isTargetContent";i:1;s:12:"isTargetUser";i:0;s:12:"isTargetBlog";i:0;s:9:"fieldInfo";a:0:{}s:15:"isTargetProduct";i:0;s:13:"isTargetEvent";i:0;s:11:"isTargetBbs";i:0;s:13:"isTargetPhoto";i:1;s:12:"isTargetWiki";i:0;s:12:"resultLength";s:3:"200";}', now());
 DELETE FROM _widget_param WHERE wp_id = 'slogan';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
 ('slogan', 1,            'O:8:"stdClass":7:{s:4:"name";s:16:"名称未設定1";s:7:"message";s:15:"世界の動物";s:4:"size";s:3:"2.5";s:5:"cssId";s:8:"slogan_1";s:3:"css";s:129:"#slogan_1 {\r\n    position:relative;\r\n    color:#FFF;\r\n    z-index:200;\r\n    top:1.0em;\r\n    padding-left:3em;\r\n    height:0;\r\n}\r\n";s:7:"minSize";s:2:"20";s:7:"maxSize";s:2:"50";}', now());
+DELETE FROM _widget_param WHERE wp_id = 'slide_image';
+INSERT INTO _widget_param
+(wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
+('slide_image', 1,            'O:8:"stdClass":8:{s:4:"name";s:16:"名称未設定1";s:9:"imageInfo";a:4:{i:0;O:8:"stdClass":2:{s:4:"name";s:0:"";s:3:"url";s:59:"[#M3_ROOT_URL#]/resource/image/sample/header/rhinoceros.jpg";}i:1;O:8:"stdClass":2:{s:4:"name";s:0:"";s:3:"url";s:56:"[#M3_ROOT_URL#]/resource/image/sample/header/buffalo.jpg";}i:2;O:8:"stdClass":2:{s:4:"name";s:0:"";s:3:"url";s:57:"[#M3_ROOT_URL#]/resource/image/sample/header/elephant.jpg";}i:3;O:8:"stdClass":2:{s:4:"name";s:0:"";s:3:"url";s:53:"[#M3_ROOT_URL#]/resource/image/sample/header/lion.jpg";}}s:5:"cssId";s:13:"slide_image_1";s:3:"css";s:243:"#slide_image_1 .bx-wrapper img {\r\n	margin: 0 auto;\r\n	width:100%;\r\n}\r\n#slide_image_1 .bx-wrapper .bx-viewport {\r\n	-moz-box-shadow: none;\r\n	-webkit-box-shadow: none;\r\n	box-shadow: none;\r\n	border:none;\r\n	background-color:transparent;\r\n	left:0;\r\n}";s:9:"showTitle";s:1:"0";s:9:"showPager";s:1:"0";s:11:"showControl";s:1:"1";s:4:"auto";s:1:"0";}', now());
 
 -- コンテンツ
 TRUNCATE TABLE content;
 INSERT INTO content (cn_type, cn_id, cn_language_id, cn_name,              cn_description,         cn_html,                        cn_default, cn_key, cn_create_user_id, cn_create_dt) VALUES 
 ('', 1,     'ja',           '会社情報',   '会社情報', '<table class="table">\r\n	<tbody>\r\n		<tr>\r\n			<th>社　名</th>\r\n			<td>\r\n			<p>株式会社ドキュメント</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>所在地</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>設　立</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>代表者</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>事業内容</th>\r\n			<td>\r\n			<p>●ドキュメントの作成</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引銀行</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引先</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th></th>\r\n			<td></td>\r\n		</tr>\r\n	</tbody>\r\n</table>',              false, '',                0, now());
+
