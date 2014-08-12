@@ -18,12 +18,15 @@ $(function(){
 		pager: {OPTION_PAGER},
 		controls: {OPTION_CONTROLS},
 		auto: {OPTION_AUTO},
-		captions: {OPTION_CAPTIONS}
+		captions: {OPTION_CAPTIONS},
+		onSliderLoad: function(){		// 準備が出来てから表示
+			$("#{CSS_ID}").css("visibility", "visible");
+		}
 	});
 });
 //]]>
 </script>
-<div id="{CSS_ID}">
+<div id="{CSS_ID}" style="visibility:hidden;">
 <ul class="bxslider">
 <patTemplate:tmpl name="image_list">
 <li style="list-style:none; background:none;"><img src="{URL}" {TITLE}/></li>
