@@ -105,7 +105,7 @@ class DesignManager extends Core
 			if (file_exists($iconPath)) return $this->gEnv->getWidgetsUrl() . '/' . $widgetId . '/images/' . $iconName;
 		}
 		// 見つからない場合はシステムからデフォルトアイコンを取得
-		return $this->gEnv->getRootUrl() . '/images/wicon'. $size . '.png';
+		return $this->gEnv->getRootUrl() . '/images/system/wicon'. $size . '.png';
 	}
 	/**
 	 * ウィジェット出力の前後に出力するHTMLを取得
