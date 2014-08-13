@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: static_contentWidgetContainer.php 5489 2012-12-28 13:00:45Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -22,6 +22,7 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 	private $langId;		// 現在の言語
 	private $isSystemManageUser;	// システム運用可能ユーザかどうか
 	private $editIconPos;			// 編集アイコンの位置
+	private $title;			// ウィジェットタイトル
 	const DEFAULT_CONFIG_ID = 0;
 	const CONTENT_TYPE = '';			// コンテンツタイプ
 	const VIEW_CONTENT_TYPE = 'ct';		// 参照数カウント用
@@ -96,6 +97,8 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 			// コンテンツを取得
 			$ret = $this->db->getContentByContentId(self::CONTENT_TYPE, $contentId, $this->langId, $now, $row);
 			if ($ret){
+				$this->title = $row['cn_name'];			// ウィジェットタイトル
+				
 				$contentData = $row['cn_html'];
 				if (!empty($showReadMore)){		//「続きを読む」ボタンを表示のとき
 					$contentArray = explode(M3_TAG_START . M3_TAG_MACRO_CONTENT_BREAK . M3_TAG_END, $contentData, 2);
@@ -110,7 +113,7 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 				
 				$contentInfo = array();
 				$contentInfo[M3_TAG_MACRO_CONTENT_BREAK] = '';		// コンテンツ置換キー(コンテンツ区切り)
-				$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $row['cn_name'];			// コンテンツ置換キー(タイトル)
+				$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $this->title;			// コンテンツ置換キー(タイトル)
 				$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $row['cn_create_dt'];		// コンテンツ置換キー(更新日時)
 				$contentText = $this->convertM3ToHtml($contentData, true/*改行コーをbrタグに変換*/, $contentInfo);
 
@@ -167,7 +170,9 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTitle($request, &$param)
 	{
-		return self::DEFAULT_TITLE;
+		$title = self::DEFAULT_TITLE;
+		if (!empty($this->title)) $title = $this->title;
+		return $title;
 	}
 }
 ?>
