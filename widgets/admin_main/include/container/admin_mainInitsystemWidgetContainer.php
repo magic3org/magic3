@@ -61,6 +61,11 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	function _assign($request, &$param)
 	{
 		$filename = '';		// 実行スクリプトファイル
+		
+		// 送信値を取得
+		$develop = $request->trimValueOf('develop');
+		if (!empty($develop)) $this->showDetail = '1';
+		
 		$act = $request->trimValueOf('act');
 		if ($act == 'initsys'){		// システム初期化のとき
 			// テーブルの初期化フラグをリセット
@@ -109,7 +114,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		} else if ($act == 'selectfile'){		// スクリプトファイルを選択
 			$filename = $request->trimValueOf('sample_sql');
 		} else if ($act == 'develop'){		// 開発用モード
-			$this->showDetail = true;
+			$this->showDetail = '1';
 		}
 		
 		// DBのタイプ
@@ -171,6 +176,9 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		// ディスク使用量取得
 		$diskByte = $this->gInstance->getDbManager()->getTableDataSize('_access_log');
 		$this->tmpl->addVar("_widget", "size_access_log", convFromBytes($diskByte));
+		
+		// その他値を埋め込む
+		$this->tmpl->addVar("_widget", "develop", $this->showDetail);
 	}
 	/**
 	 * ディレクトリ内のスクリプトファイルを取得
