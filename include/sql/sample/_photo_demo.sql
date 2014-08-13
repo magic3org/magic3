@@ -75,17 +75,18 @@ INSERT INTO _nav_item
 -- 画面定義
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
-(pd_id,   pd_sub_id, pd_position_id,   pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_menu_id,  pd_title, pd_title_visible, pd_update_dt) VALUES
-('index', '',        'user3',           2,       'default_menu',       1,            'メインメニュー設定', 'main_menu', '',       false,            now()),
-('index', '',        'footer',          2,       'default_footer',     0,            '',                   '',          '',       false,            now()),
-('index', '',        'footer',          10,      'gotop',              0,            '',                   '',          '',       false,            now()),
-('index', 'photo',   'header-pre-hide', 2,       'slogan',             1,            '',                   '',          '',       false,            now()),
-('index', 'photo',   'header',          2,       'slide_image',        1,            '',                   '',          '',       false,            now()),
-('index', 'photo',    'main',            5,       'photo_main',          0,            '',                   '',        '',       false,            now()),
-('index', 'photo',    'left',            5,       'photo_new',          0,            '',                   '',         '最新画像',       true,            now()),
-('index', 'content', 'main',            6,       'default_content',    0,            '',                   '',          '',       false,            now()),
-('index', 'search',  'main',            5,       'custom_search',      1,            '',                   '',          '',       false,            now()),
-('index', 'contact', 'main',            5,       'contactus',          0,            '',                   '',          '',       false,            now());
+(pd_id,   pd_sub_id, pd_position_id,   pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_menu_id,  pd_title,  pd_title_visible, pd_view_control_type, pd_update_dt) VALUES
+('index', '',        'user3',           2,       'default_menu',       1,            'メインメニュー設定', 'main_menu', '',        false,            0,                    now()),
+('index', '',        'footer',          2,       'default_footer',     0,            '',                   '',          '',        false,            0,                    now()),
+('index', '',        'footer',          10,      'gotop',              0,            '',                   '',          '',        false,            0,                    now()),
+('index', 'photo',   'header-pre-hide', 2,       'slogan',             1,            '',                   '',          '',        false,            0,                    now()),
+('index', 'photo',   'header',          2,       'slide_image',        1,            '',                   '',          '',        false,            0,                    now()),
+('index', 'photo',   'main',            2,       'static_content',     1,            '',                   '',          '',        true,             2,                    now()),
+('index', 'photo',    'main',            5,       'photo_main',          0,            '',                   '',        '',        false,            1,                    now()),
+('index', 'photo',    'left',            5,       'photo_new',          0,            '',                   '',         '最新画像', true,            1,                    now()),
+('index', 'content', 'main',            6,       'default_content',    0,            '',                   '',          '',        false,            0,                    now()),
+('index', 'search',  'main',            5,       'custom_search',      1,            '',                   '',          '',        false,            0,                    now()),
+('index', 'contact', 'main',            5,       'contactus',          0,            '',                   '',          '',        false,            0,                    now());
 
 -- 新メニュー対応
 TRUNCATE TABLE _menu_def;
@@ -112,9 +113,14 @@ DELETE FROM _widget_param WHERE wp_id = 'slide_image';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
 ('slide_image', 1,            'O:8:"stdClass":8:{s:4:"name";s:16:"名称未設定1";s:9:"imageInfo";a:4:{i:0;O:8:"stdClass":2:{s:4:"name";s:0:"";s:3:"url";s:59:"[#M3_ROOT_URL#]/resource/image/sample/header/rhinoceros.jpg";}i:1;O:8:"stdClass":2:{s:4:"name";s:0:"";s:3:"url";s:56:"[#M3_ROOT_URL#]/resource/image/sample/header/buffalo.jpg";}i:2;O:8:"stdClass":2:{s:4:"name";s:0:"";s:3:"url";s:57:"[#M3_ROOT_URL#]/resource/image/sample/header/elephant.jpg";}i:3;O:8:"stdClass":2:{s:4:"name";s:0:"";s:3:"url";s:53:"[#M3_ROOT_URL#]/resource/image/sample/header/lion.jpg";}}s:5:"cssId";s:13:"slide_image_1";s:3:"css";s:243:"#slide_image_1 .bx-wrapper img {\r\n	margin: 0 auto;\r\n	width:100%;\r\n}\r\n#slide_image_1 .bx-wrapper .bx-viewport {\r\n	-moz-box-shadow: none;\r\n	-webkit-box-shadow: none;\r\n	box-shadow: none;\r\n	border:none;\r\n	background-color:transparent;\r\n	left:0;\r\n}";s:9:"showTitle";s:1:"0";s:9:"showPager";s:1:"0";s:11:"showControl";s:1:"1";s:4:"auto";s:1:"0";}', now());
+DELETE FROM _widget_param WHERE wp_id = 'static_content';
+INSERT INTO _widget_param
+(wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
+('static_content', 1,            'O:8:"stdClass":4:{s:4:"name";s:16:"名称未設定1";s:9:"contentId";s:1:"2";s:12:"showReadMore";i:0;s:13:"readMoreTitle";s:0:"";}', now());
 
 -- コンテンツ
 TRUNCATE TABLE content;
-INSERT INTO content (cn_type, cn_id, cn_language_id, cn_name,              cn_description,         cn_html,                        cn_default, cn_key, cn_create_user_id, cn_create_dt) VALUES 
-('', 1,     'ja',           '会社情報',   '会社情報', '<table class="table">\r\n	<tbody>\r\n		<tr>\r\n			<th>社　名</th>\r\n			<td>\r\n			<p>株式会社ドキュメント</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>所在地</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>設　立</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>代表者</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>事業内容</th>\r\n			<td>\r\n			<p>●ドキュメントの作成</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引銀行</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引先</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th></th>\r\n			<td></td>\r\n		</tr>\r\n	</tbody>\r\n</table>',              false, '',                0, now());
-
+INSERT INTO content
+(cn_type, cn_id, cn_language_id, cn_name,              cn_description,         cn_html,                        cn_default, cn_key, cn_create_user_id, cn_create_dt) VALUES 
+('', 1,     'ja',           '会社情報',   '会社情報', '<table class="table">\r\n	<tbody>\r\n		<tr>\r\n			<th>社　名</th>\r\n			<td>\r\n			<p>株式会社ドキュメント</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>所在地</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>設　立</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>代表者</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>事業内容</th>\r\n			<td>\r\n			<p>●ドキュメントの作成</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引銀行</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引先</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th></th>\r\n			<td></td>\r\n		</tr>\r\n	</tbody>\r\n</table>',              false, '',                0, now()),
+('', 2,     'ja',           'ようこそ「世界の動物」へ',   'ようこそ「世界の動物」へ', 'このサイトは会員制の画像ライブラリサイトです。<br />\r\n会員登録を行ってから、ログインすると画像が閲覧できます。<br />\r\n',              false, '',                0, now());
