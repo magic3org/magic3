@@ -3867,15 +3867,16 @@ class PageManager extends Core
 		return $transCss;
 	}
 	/**
-	 * 各部品のHTML出力
+	 * 各ポジションのウィジェット数を取得
 	 *
 	 * @param string $position		HTMLテンプレート上の書き出し位置
-	 * @return int   				コンテンツの数
+	 * @return int   				ウィジェットの数
 	 */
 	function getWidgetsCount($position)
 	{
 		global $gRequestManager;
 		global $gEnvManager;
+		static $widgetCountArray = array();
 
 		// 実行コマンドを取得
 		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
@@ -3886,6 +3887,10 @@ class PageManager extends Core
 		// 単一ポジション以外の設定のときは固定で返す(or等)
 		$pos = strpos($position, ' ');
 		if ($pos !== false) return 1;
+		
+		// 既にウィジェット数が取得されている場合は保存値を返す
+		$widgetCount = $widgetCountArray[$position];
+		if (isset($widgetCount)) return $widgetCount;
 		
 		// ファイル名、ページ名を取得
 		$filename	= $gEnvManager->getCurrentPageId();
@@ -3903,7 +3908,10 @@ class PageManager extends Core
 				$this->pageDefPosition = '';
 			}
 		}
-		return count($this->pageDefRows);
+		// ウィジェット数を保存
+		$widgetCount = count($this->pageDefRows);
+		$widgetCountArray[$position] = $widgetCount;
+		return $widgetCount;
 	}
 	/**
 	 * ウィジェット情報取得

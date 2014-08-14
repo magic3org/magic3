@@ -751,9 +751,18 @@ class SystemDb extends BaseDb
 		$queryStr .=     'AND (pd_sub_id = ? OR pd_sub_id = \'\') '; $params[] = $pageSubId;	// 空の場合は共通項目
 		$queryStr .=     'AND pd_position_id = ? '; $params[] = $position;
 		$queryStr .=     'AND pd_set_id = ? '; $params[] = $setId;
-		// 表示ウィジェットに限定する場合は日付範囲も指定
+		// 表示ウィジェットに限定する場合はユーザ制限、日付範囲も指定
 		if ($visibleOnly){
 			$queryStr .=     'AND pd_visible = true ';		// ウィジェットを表示
+			
+			// システム運用者以外の場合は、ユーザのログイン状況をチェック
+			if (!$gEnvManager->isSystemManageUser()){
+				if ($gEnvManager->isCurrentUserLogined()){		// ログイン中のとき
+					$queryStr .=     'AND (pd_view_control_type = 0 OR pd_view_control_type = 1) ';		// ログイン時のみ表示
+				} else {
+					$queryStr .=     'AND (pd_view_control_type = 0 OR pd_view_control_type = 2) ';		// 非ログイン時のみ表示
+				}
+			}
 			
 			// 公開期間を指定
 			$queryStr .=    'AND (pd_active_start_dt = ? OR (pd_active_start_dt != ? AND pd_active_start_dt <= ?)) ';
