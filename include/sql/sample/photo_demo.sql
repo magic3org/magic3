@@ -12,7 +12,7 @@
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
 -- *
--- [フォトギャラリーサイトデモ]
+-- [フォトギャラリーサイトデモ(作成中)]
 -- フォトギャラリー主軸型サイト。用途は会員制の画像閲覧サイトなど。
 -- 機能はフォトギャラリー、汎用コンテンツ、会員登録等。
 -- 初期インストールデータは必要最小限のみ。
@@ -82,6 +82,7 @@ INSERT INTO _page_def
 ('index', 'photo',   'header-pre-hide', 2,       'slogan',             1,            '',                   '',          '',        false,            0,                    now()),
 ('index', 'photo',   'header',          2,       'slide_image',        1,            '',                   '',          '',        false,            0,                    now()),
 ('index', 'photo',   'main',            2,       'static_content',     1,            '',                   '',          '',        true,             2,                    now()),
+('index', 'photo',   'main',            3,       'pretty_photo',       1,            '',                   '',          '',        false,            2,                    now()),
 ('index', 'photo',    'main',            5,       'photo_main',          0,            '',                   '',        '',        false,            1,                    now()),
 ('index', 'photo',    'left',            5,       'photo_new',          0,            '',                   '',         '最新画像', true,            1,                    now()),
 ('index', 'content', 'main',            6,       'default_content',    0,            '',                   '',          '',        false,            0,                    now()),
