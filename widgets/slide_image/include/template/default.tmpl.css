@@ -17,6 +17,7 @@
 {CSS_ID} {
 	width:500px;
 	margin: 0 auto;
+	overflow: hidden;
 }
 </patTemplate:tmpl>
 

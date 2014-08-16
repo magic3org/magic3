@@ -187,6 +187,7 @@ class PageManager extends Core
 	const M3_ADMIN_CSS_FILE					= 'm3/admin.css';			// 管理機能用のCSS
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
 	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// 一般画面共通のデフォルトCSS
+	const M3_CKEDITOR_CSS_FILE				= 'm3/ckeditor.css';			// CKEditorの編集エリア用CSS
 //	const M3_NO_BOOTSTRAP_CSS_FILE			= 'm3/nobootstrap/style.css';		// 管理画面でBootstrapの読み込みなしの場合のCSS
 	
 	// 読み込み制御
@@ -3235,6 +3236,9 @@ class PageManager extends Core
 					
 					// CKEditor用のCSSファイル
 					if (!empty($this->ckeditorCssFiles)){
+						// 編集エリア用のCSSファイルを追加
+						$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+						
 						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 					}
