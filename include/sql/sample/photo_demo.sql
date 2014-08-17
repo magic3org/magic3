@@ -86,6 +86,7 @@ INSERT INTO _page_def
 ('index', 'photo',    'main',            5,       'photo_main',          0,            '',                   '',        '',        false,            1,                    now()),
 ('index', 'photo',    'left',            5,       'photo_new',          0,            '',                   '',         '最新画像', true,            1,                    now()),
 ('index', 'content', 'main',            6,       'default_content',    0,            '',                   '',          '',        false,            0,                    now()),
+('index', 'member',  'main',            6,       'reg_user',           0,            '',                   '',          '',        true,             0,                    now()),
 ('index', 'search',  'main',            5,       'custom_search',      1,            '',                   '',          '',        false,            0,                    now()),
 ('index', 'contact', 'main',            5,       'contactus',          0,            '',                   '',          '',        false,            0,                    now());
 
