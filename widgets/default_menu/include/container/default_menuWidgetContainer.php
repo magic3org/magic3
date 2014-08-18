@@ -36,6 +36,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_BOOTSTRAP_CSS_FILE = '/bootstrap.css';		// CSSファイル
 	const LOGIN_FAIL_MARK = '<i class="glyphicon glyphicon-remove-circle error" title="ログイン失敗" rel="tooltip" data-placement="auto"></i> ';		// ログイン失敗表示
 	const LOGIN_FAIL_MESSAGE = '<p class="message error">ログインに失敗しました</p>';
+	const TASK_REGIST = 'regist';		// 会員登録画面へのリンク用タスク
 	
 	/**
 	 * コンストラクタ
@@ -150,6 +151,7 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 		$showSitename	= isset($targetObj->showSitename) ? $targetObj->showSitename : 1;		// サイト名を表示するかどうか
 		$showSearch		= isset($targetObj->showSearch) ? $targetObj->showSearch : 0;			// 検索フィールドを表示するかどうか
 		$this->showLogin	= isset($targetObj->showLogin) ? $targetObj->showLogin : 0;			// ログインを表示するかどうか
+		$showRegist		= isset($targetObj->showRegist) ? $targetObj->showRegist : 0;			// 会員登録を表示するかどうか
 		$anotherColor	= isset($targetObj->anotherColor) ? $targetObj->anotherColor : 0;		// 色を変更するかどうか
 		
 		$act = $request->trimValueOf('act');
@@ -207,7 +209,10 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 			if ($this->renderType == 'BOOTSTRAP_NAV'){
 				$navbarOptionClass = array();// 追加クラス
 				$menuAttr = $this->gEnv->getMenuAttr();
-								
+
+				// ログイン状態を取得
+				$userName = $this->gEnv->getCurrentUserName();
+					
 				// サイト名の表示制御
 				if (!$showSitename){
 					$sitenameOptionClass = ' visible-xs';			// モニタが最小サイズの場合のみ表示
@@ -216,10 +221,18 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 				// 検索フィールド表示制御
 				if ($showSearch) $this->tmpl->setAttribute('show_search', 'visibility', 'visible');
 
+				// 会員登録表示制御
+				if ($showRegist){			// 会員登録を表示するかどうか
+					if (empty($userName)){		// ログインしていない場合のみ表示
+						$this->tmpl->setAttribute('show_regist', 'visibility', 'visible');
+						
+						// コンテンツタイプが「会員」のページを取得
+						$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_MEMBER, M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_REGIST);
+						$this->tmpl->addVar("show_regist", "url", $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)));
+					}
+				}
 				// ログインフィールド表示制御
 				if ($this->showLogin){
-					// ログイン状態を取得
-					$userName = $this->gEnv->getCurrentUserName();
 					if (empty($userName)){		// ユーザがログインしていないとき
 						$this->tmpl->setAttribute('show_login', 'visibility', 'visible');
 						

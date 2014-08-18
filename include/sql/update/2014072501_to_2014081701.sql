@@ -34,7 +34,7 @@ INSERT INTO _page_id
 ('contact2',     1,            'お問い合わせ2',                    'お問い合わせ画面用',                 10,          true,      true,       true,        false),
 ('reguser',      1,            'ユーザ登録',                       'ユーザ登録画面用',                   12,          true,      true,       true,        false),
 ('reserve',      1,            '予約',                             '予約画面用',                         19,          true,      true,       true,        false),
-('member',       1,            '会員情報',                         '会員情報画面用',                     20,          true,      true,       true,        true),
+('member',       1,            '会員',                             '会員画面用',                         20,          true,      true,       true,        true),
 ('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true,        true),
 ('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          true,      true,       true,        true),
 ('deploy',       1,            'ウィジェット有効化用',             'ウィジェット有効化用',               100,         true,      false,      true,        false),

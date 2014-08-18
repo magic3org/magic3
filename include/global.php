@@ -187,10 +187,12 @@ define('M3_VIEW_FORMAT_DATE',			'Y/m/d');			// 日付
 define('M3_VIEW_FORMAT_TIME',			'H:i:s');			// 時間
 
 // 表示データタイプ
+// 機能タイプ
 define('M3_VIEW_TYPE_DASHBOARD',	'dboard');				// ダッシュボード
 define('M3_VIEW_TYPE_SEARCH',		'search');				// 検索結果
-define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
 define('M3_VIEW_TYPE_COMMERCE',		'commerce');			// Eコマース
+// コンテンツタイプ
+define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
 define('M3_VIEW_TYPE_MEMBER',		'member');				// 会員情報
 define('M3_VIEW_TYPE_CONTENT',		'content');				// 汎用コンテンツ
 define('M3_VIEW_TYPE_PRODUCT',		'product');				// 商品情報
@@ -200,6 +202,21 @@ define('M3_VIEW_TYPE_WIKI',			'wiki');				// Wiki
 define('M3_VIEW_TYPE_USER',			'user');				// ユーザ作成コンテンツ
 define('M3_VIEW_TYPE_EVENT',		'event');				// イベント情報
 define('M3_VIEW_TYPE_PHOTO',		'photo');				// フォトギャラリー
+// すべての機能タイプ
+$M3_ALL_FEATURE_TYPE	= array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード
+									M3_VIEW_TYPE_SEARCH,			// 検索結果
+									M3_VIEW_TYPE_COMMERCE);			// Eコマース
+// すべてのコンテンツタイプ
+$M3_ALL_CONTENT_TYPE	= array(	M3_VIEW_TYPE_NEWS,				// 新着情報
+									M3_VIEW_TYPE_MEMBER,			// 会員情報
+									M3_VIEW_TYPE_CONTENT,			// 汎用コンテンツ
+									M3_VIEW_TYPE_PRODUCT,			// 商品情報
+									M3_VIEW_TYPE_BBS,				// BBS
+									M3_VIEW_TYPE_BLOG,				// ブログ
+									M3_VIEW_TYPE_WIKI,				// Wiki
+									M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
+									M3_VIEW_TYPE_EVENT,				// イベント情報
+									M3_VIEW_TYPE_PHOTO);			// フォトギャラリー
 
 // コンテンツ取得用キー
 define('M3_CONTENT_KEY_MAINTENANCE',	'MAINTENANCE');				// メンテナンス画面用

@@ -370,7 +370,9 @@ class PageManager extends Core
 	 */
 	public function _getAllContentType()
 	{
-		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
+		global $M3_ALL_CONTENT_TYPE;
+		
+/*		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
 								M3_VIEW_TYPE_PRODUCT,				// 製品
 								M3_VIEW_TYPE_BBS,					// BBS
 								M3_VIEW_TYPE_BLOG,				// ブログ
@@ -378,7 +380,8 @@ class PageManager extends Core
 								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 								M3_VIEW_TYPE_EVENT,				// イベント
 								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
-		return $contentType;
+		return $contentType;*/
+		return $M3_ALL_CONTENT_TYPE;
 	}
 	/**
 	 * 機能タイプを取得
@@ -387,10 +390,13 @@ class PageManager extends Core
 	 */
 	public function _getAllFeatureType()
 	{
-		$featureType = array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード
+		global $M3_ALL_FEATURE_TYPE;
+		
+/*		$featureType = array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード
 								M3_VIEW_TYPE_SEARCH,			// 検索結果
 								M3_VIEW_TYPE_COMMERCE);			// Eコマース
-		return $featureType;
+		return $featureType;*/
+		return $M3_ALL_FEATURE_TYPE;
 	}
 	/**
 	 * タイムアウトを停止
@@ -5036,6 +5042,25 @@ class PageManager extends Core
 		return $url;
 	}
 	/**
+	 * 指定のページ属性のページURLを生成
+	 *
+	 * @param string $contentType	コンテンツタイプ
+	 * @param string $param		実行パラメータ
+	 * @return string			生成したURL
+	 */
+	function createContentPageUrl($contentType, $param = '')
+	{
+		global $gEnvManager;
+		
+		$pageSubId = $this->getPageSubIdByContentType($contentType, $gEnvManager->getCurrentPageId());
+		if (empty($pageSubId)) $pageSubId = $gEnvManager->getDefaultPageSubId();
+		
+		$url = $gEnvManager->createPageUrl();
+		$url .= '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId;
+		if (!empty($param)) $url .= '&' . $param;
+		return $url;
+	}
+	/**
 	 * ウィジェット指定呼び出し用のURLを生成
 	 *
 	 * @param string $toWidgetId	送信先ウィジェットID
@@ -5091,7 +5116,6 @@ class PageManager extends Core
 	 * @param string $pageSubId		ページサブID
 	 * @return string				生成したURL
 	 */
-	//function createDirectWidgetCmdUrl($widgetId, $optionParam = '', $pageId = '', $pageSubId = '')
 	function createDirectWidgetCmdUrl($widgetId, $optionParam = '', $byMacro = false, $pageId = '', $pageSubId = '')
 	{
 		global $gEnvManager;
