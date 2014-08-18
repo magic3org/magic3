@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: reg_userRegistWidgetContainer.php 5196 2012-09-13 04:35:43Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/reg_userBaseWidgetContainer.php');
@@ -48,7 +48,11 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'index.tmpl.html';
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートのとき
+			return 'index_bootstrap.tmpl.html';
+		} else {
+			return 'index.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
