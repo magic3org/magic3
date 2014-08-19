@@ -228,7 +228,11 @@ class default_menuWidgetContainer extends BaseWidgetContainer
 						
 						// コンテンツタイプが「会員」のページを取得
 						$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_MEMBER, M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_REGIST);
-						$this->tmpl->addVar("show_regist", "url", $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)));
+						$linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
+						$this->tmpl->addVar("show_regist", "url", $this->convertUrlToHtmlEntity($linkUrl));
+						
+						// 選択状況のチェック
+						if ($this->checkMenuItemUrl($linkUrl)) $this->tmpl->addVar("show_regist", "CLASS", ' class="active"');
 					}
 				}
 				// ログインフィールド表示制御

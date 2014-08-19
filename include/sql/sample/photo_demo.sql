@@ -101,7 +101,7 @@ INSERT INTO _menu_def
 DELETE FROM _widget_param WHERE wp_id = 'default_menu';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
-('default_menu', 1,            'O:8:"stdClass":9:{s:6:"menuId";s:9:"main_menu";s:4:"name";s:27:"メインメニュー設定";s:9:"limitUser";s:1:"0";s:10:"isHierMenu";s:1:"0";s:15:"useVerticalMenu";s:1:"0";s:12:"showSitename";s:1:"0";s:10:"showSearch";s:1:"1";s:12:"anotherColor";s:1:"1";s:9:"showLogin";s:1:"1";}', now());
+('default_menu', 1,            'O:8:"stdClass":10:{s:6:"menuId";s:9:"main_menu";s:4:"name";s:27:"メインメニュー設定";s:9:"limitUser";s:1:"0";s:10:"isHierMenu";s:1:"0";s:15:"useVerticalMenu";s:1:"0";s:12:"showSitename";s:1:"0";s:10:"showSearch";s:1:"1";s:12:"anotherColor";s:1:"1";s:9:"showLogin";s:1:"1";s:10:"showRegist";s:1:"1";}', now());
 DELETE FROM _widget_param WHERE wp_id = 'custom_search';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
