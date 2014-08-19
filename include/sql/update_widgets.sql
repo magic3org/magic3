@@ -240,7 +240,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'reg_user';
 INSERT INTO _widgets
 (wd_id,      wd_name,          wd_content_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,           wd_add_script_lib, wd_has_admin, wd_enable_operation, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('reg_user', '汎用会員登録(廃止予定)',  'member', 'member',      '2.0.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '汎用的な会員登録機能です。「デフォルトログイン」ウィジェットと連携できます。', 'md5', true, true,        true,           0, 0,              0, '2012-09-19', now(), now());
+('reg_user', '汎用会員登録',  'member', 'member',      '2.0.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '汎用的な会員登録機能です。「デフォルトログイン」ウィジェットと連携できます。', 'md5', true, true,        true,           0, 0,              0, '2012-09-19', now(), now());
 -- ウィジェット情報(PC用/画像)
 DELETE FROM _widgets WHERE wd_id = 'pretty_photo';
 INSERT INTO _widgets

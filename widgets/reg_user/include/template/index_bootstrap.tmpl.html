@@ -25,10 +25,18 @@ function sendmessage(){
 <form method="post" name="reguser_main" class="form form-horizontal" role="form">
 <input type="hidden" name="act" />
 <div id="reguser_input">
-<label><span class="title">お名前</span><input type="text" name="item_name" value="{NAME}" size="20" maxlength="20" {NAME_DISABLED} /><span class="label label-danger required">必須</span></label>
-<label><span class="title">Eメール</span><input type="text" name="item_email" value="{EMAIL}" size="20" maxlength="50" {EMAIL_DISABLED} /><span class="label label-danger required">必須</span></label>
-<label><span class="title">Eメール(確認)</span><input type="text" name="item_email2" value="{EMAIL2}" size="20" maxlength="50" {EMAIL2_DISABLED} /><span class="label label-danger required">必須</span></label>
-<div class="bottom"><input type="button" class="button" onclick="sendmessage();" value="{SEND_BUTTON_LABEL}" {SEND_BUTTON_DISABLED} /></div>
+<div class="form-group">
+<label for="item_name" class="col-sm-3 control-label"><span class="title">お名前</span></label><div class="col-sm-4"><input type="text" id="item_name" name="item_name" class="form-control" value="{NAME}" size="20" maxlength="20" {NAME_DISABLED} /></div><p class="col-sm-2 form-control-static"><span class="label label-danger required">必須</span></p>
+</div>
+<div class="form-group">
+<label for="item_email" class="col-sm-3 control-label"><span class="title">Eメール</span></label><div class="col-sm-4"><input type="text" id="item_email" name="item_email" value="{EMAIL}" size="20" maxlength="50" {EMAIL_DISABLED} /></div><p class="col-sm-2 form-control-static"><span class="label label-danger required">必須</span></p>
+</div>
+<div class="form-group">
+<label for="item_email2" class="col-sm-3 control-label"><span class="title">Eメール(確認)</span></label><div class="col-sm-4"><input type="text" id="item_email2" name="item_email2" value="{EMAIL2}" size="20" maxlength="50" {EMAIL2_DISABLED} /></div><p class="col-sm-2 form-control-static"><span class="label label-danger required">必須</span></p>
+</div>
+<div class="form-group">
+<div class="col-sm-offset-3 col-sm-9"><input type="button" class="button" onclick="sendmessage();" value="{SEND_BUTTON_LABEL}" {SEND_BUTTON_DISABLED} /></div>
+</div>
 </div>
 </form>
 </patTemplate:tmpl>

@@ -19,7 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/reg_userDb.php');
 class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	const DEFAULT_TITLE = 'ユーザ登録';		// 画面タイトル
+	const DEFAULT_TITLE = '会員登録';		// 画面タイトル
 	const DEFAULT_CAN_REGIST = 1;			// ユーザ登録を使用するかどうか
 	const REGIST_USER_AUTO_FORM = 'regist_user_auto';		// パスワード送信用フォーム(自動登録)
 	const REGIST_USER_AUTH_FORM = 'regist_user_auth';		// パスワード送信用フォーム(管理者認証)

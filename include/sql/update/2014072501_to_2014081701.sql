@@ -88,22 +88,22 @@ INSERT INTO _page_info
 -- ウィジェットカテゴリマスター
 DELETE FROM _widget_category;
 INSERT INTO _widget_category
-(wt_id, wt_name,            wt_sort_order) VALUES
-('',     'その他',   100),
-('content',   '汎用コンテンツ',   1),
-('blog',      'ブログ',           2),
-('bbs',       'BBS',           3),
-('commerce',  'Eコマース',        4),
-('photo',     'フォトギャラリー', 5),
-('event',     'イベント情報',     6),
-('wiki',     'Wiki',     7),
-('user',     'ユーザ作成コンテンツ',     8),
-('subcontent',     '補助コンテンツ',     9),
-('search',     '検索',             10),
-('member',     '会員',      11),
-('menu',     'メニュー',         12),
-('image',     '画像',         13),
-('design',    'デザイン',         14),
-('admin',     '管理画面用',      20);
+(wt_id,        wt_name,                wt_sort_order) VALUES
+('',           'その他',               100),
+('content',    '汎用コンテンツ',       1),
+('blog',       'ブログ',               2),
+('bbs',        'BBS',                  3),
+('commerce',   'Eコマース',            4),
+('photo',      'フォトギャラリー',     5),
+('event',      'イベント情報',         6),
+('wiki',       'Wiki',                 7),
+('user',       'ユーザ作成コンテンツ', 8),
+('member',     '会員',                 9),
+('subcontent', '補助コンテンツ',       20),
+('search',     '検索',                 21),
+('menu',       'メニュー',             22),
+('image',      '画像',                 23),
+('design',     'デザイン',             24),
+('admin',      '管理画面用',           50);
 
 -- *** システム標準テーブル ***

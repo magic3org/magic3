@@ -17,7 +17,8 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class reg_userBaseWidgetContainer extends BaseWidgetContainer
 {
-	protected $_userId;			// 現在のユーザ
+	private $_userId;			// 現在のユーザ
+	private $cssFilePath = array();			// CSSファイル
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const EMAIL_LOGIN_URL		= '&task=emaillogin&account=%s&pwd=%s';		// Eメールからのログイン用URL
 	// 画面
@@ -32,6 +33,12 @@ class reg_userBaseWidgetContainer extends BaseWidgetContainer
 		parent::__construct();
 		
 		$this->_userId = $this->gEnv->getCurrentUserId();
+		
+		// CSSファイルの追加
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートのとき
+		} else {
+			$this->cssFilePath[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);		// CSSファイル
+		}
 	}
 	/**
 	 * CSSファイルをHTMLヘッダ部に設定
@@ -45,7 +52,8 @@ class reg_userBaseWidgetContainer extends BaseWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
-		return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		//return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		return $this->cssFilePath;
 	}
 	/**
 	 * Eメール送信元を取得
