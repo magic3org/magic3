@@ -232,15 +232,15 @@ DELETE FROM _widgets WHERE wd_id = 'custom_search_box';
 INSERT INTO _widgets
 (wd_id,               wd_name,            wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                     wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('custom_search_box', 'カスタム検索連携', 'search',       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'カスタム検索に検索結果を表示する検索ボックス', 'jquery', 'ckeditor_m3toolbar',     true,         true,true,               1, -1, now(),    now());
--- ウィジェット情報(PC用/ユーザ登録)
+-- ウィジェット情報(PC用/会員)
 DELETE FROM _widgets WHERE wd_id = 'default_login_box';
 INSERT INTO _widgets
 (wd_id,               wd_name,              wd_category_id, wd_version, wd_author, wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('default_login_box', 'デフォルトログイン', 'reguser',      '2.1.0',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, '汎用のユーザログイン用ウィジェットです。「汎用ユーザ登録」ウィジェットと連携できます。', 'md5',        true,         true,        true,        false,               false,true,               0, 2, -1, '2013-04-21', now(),    now());
+('default_login_box', 'デフォルトログイン', 'member',      '2.1.0',  'Naoki Hirata', 'Magic3.org', 'GPL', 10, '汎用の会員ログイン用ウィジェットです。「汎用会員登録」ウィジェットと連携できます。', 'md5',        true,         true,        true,        false,               false,true,               0, 2, -1, '2013-04-21', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'reg_user';
 INSERT INTO _widgets
-(wd_id,      wd_name,          wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,           wd_add_script_lib, wd_has_admin, wd_enable_operation, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('reg_user', '汎用ユーザ登録', 'reguser',      '2.0.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '汎用的なユーザ登録機能です。「デフォルトログイン」ウィジェットと連携できます。', 'md5', true, true,        true,           0, 0,              0, '2012-09-19', now(), now());
+(wd_id,      wd_name,          wd_content_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,           wd_add_script_lib, wd_has_admin, wd_enable_operation, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('reg_user', '汎用会員登録(廃止予定)',  'member', 'member',      '2.0.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '汎用的な会員登録機能です。「デフォルトログイン」ウィジェットと連携できます。', 'md5', true, true,        true,           0, 0,              0, '2012-09-19', now(), now());
 -- ウィジェット情報(PC用/画像)
 DELETE FROM _widgets WHERE wd_id = 'pretty_photo';
 INSERT INTO _widgets
@@ -468,11 +468,11 @@ DELETE FROM _widgets WHERE wd_id = 'm/blog_category';
 INSERT INTO _widgets
 (wd_id,             wd_name,             wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type, wd_mobile, wd_has_admin, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('m/blog_category', 'ブログ-カテゴリ', 'blog',         '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'ブログの全カテゴリを一覧表示する。', 1, true, false,        true,           1, -1, now(), now());
--- ウィジェット情報(携帯用/ユーザ登録)
+-- ウィジェット情報(携帯用/会員)
 DELETE FROM _widgets WHERE wd_id = 'm/default_login';
 INSERT INTO _widgets
 (wd_id,             wd_name,              wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_device_type,              wd_mobile, wd_has_admin, wd_initialized, wd_launch_index, wd_install_dt, wd_create_dt) VALUES
-('m/default_login', 'デフォルトログイン', 'reguser',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'デフォルトのログイン機能', 1, true,      false,        true,           100,             now(),         now());
+('m/default_login', 'デフォルトログイン', 'member',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'デフォルトのログイン機能', 1, true,      false,        true,           100,             now(),         now());
 -- ウィジェット情報(携帯用/その他)
 DELETE FROM _widgets WHERE wd_id = 'm/contactus';
 INSERT INTO _widgets
@@ -589,11 +589,11 @@ DELETE FROM _widgets WHERE wd_id = 's/jquery_init';
 INSERT INTO _widgets
 (wd_id,           wd_name,                 wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                      wd_device_type, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
 ('s/jquery_init', 'jQueryページ-初期化', 'design',       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQuery Mobile型ページ専用の初期化(mobileinit)スクリプト', 2,              'jquery.mobile',          '',            true, true,                      true,true, 3, 1, now(), now());
--- ウィジェット情報(スマートフォン用/ユーザ登録)
+-- ウィジェット情報(スマートフォン用/会員)
 DELETE FROM _widgets WHERE wd_id = 's/login';
 INSERT INTO _widgets
 (wd_id,     wd_name,    wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                     wd_device_type, wd_add_script_lib, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('s/login', 'ログイン', 'reguser',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'デフォルトのログイン用ボックス。', 2,              'md5',             false,        false, false,true,               2, -1, '2012-04-03', now(),    now());
+('s/login', 'ログイン', 'member',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'デフォルトのログイン用ボックス。', 2,              'md5',             false,        false, false,true,               2, -1, '2012-04-03', now(),    now());
 -- ウィジェット情報(スマートフォン用/画像)
 DELETE FROM _widgets WHERE wd_id = 's/photoslide';
 INSERT INTO _widgets

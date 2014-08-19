@@ -291,7 +291,9 @@ class PageManager extends Core
 		$this->rssVersion = self::DEFAULT_RSS_VERSION;					// RSSバージョン
 		
 		// 一般画面で使用する主要コンテンツタイプ
-		$this->mainContentType	 = array(	array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
+		$this->mainContentType	 = array(	array(	'name' => '新着情報',					'value' => M3_VIEW_TYPE_NEWS),
+											array(	'name' => '会員情報',					'value' => M3_VIEW_TYPE_MEMBER),
+											array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
 											array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
 											array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
 											array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
@@ -299,7 +301,7 @@ class PageManager extends Core
 											array(	'name' => 'ユーザ作成コンテンツ',		'value' => M3_VIEW_TYPE_USER),
 											array(	'name' => 'イベント',					'value' => M3_VIEW_TYPE_EVENT),
 											array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO));
-		// 一般画面で使用する主要機能タイプ
+		// 一般画面で使用する主要機能タイプ(「ダッシュボード」は含まない)
 		$this->mainFeatureType	 = array(	array(	'name' => '検索',						'value' => M3_VIEW_TYPE_SEARCH),
 											array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE));
 											
