@@ -13,8 +13,10 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+var {CSS_ID};
+
 $(window).load(function(){		// 画像がすべて読み込まれてから作成
-	$('#{CSS_ID} .bxslider').bxSlider({
+	{CSS_ID} = $('#{CSS_ID} .bxslider').bxSlider({
 		pager: {OPTION_PAGER},
 		controls: {OPTION_CONTROLS},
 		auto: {OPTION_AUTO},
@@ -23,6 +25,9 @@ $(window).load(function(){		// 画像がすべて読み込まれてから作成
 			$("#{CSS_ID}").css("visibility", "visible");
 		}
 	});
+});
+$(window).resize(function(){
+	{CSS_ID}.reloadSlider();
 });
 //]]>
 </script>
