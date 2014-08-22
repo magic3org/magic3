@@ -232,6 +232,17 @@ class GitRepo
 		return $status;
 	}
 	/**
+	 * ファイルダウンロード用のURLを作成
+	 *
+	 * @param string $srcFile	取得ファイル相対パス
+	 * @return string			URL
+	 */
+	function getFileUrl($srcFile)
+	{
+		$url = sprintf(self::URL_DOWNLOAD_FILE, $this->user, $this->repo, $srcFile);
+		return $url;
+	}
+	/**
 	 * ディレクトリのZipアーカイブを取得
 	 *
 	 * @param string $srcDir		アーカイブするディレクトリ

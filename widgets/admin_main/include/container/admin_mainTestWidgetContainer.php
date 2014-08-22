@@ -14,8 +14,6 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
-require_once($gEnvManager->getLibPath() .	'/tcpdf/config/lang/jpn.php');
-require_once($gEnvManager->getLibPath() .	'/tcpdf/tcpdf.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
 
@@ -79,44 +77,13 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=1';
-
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_USERAGENT, M3_SYSTEM_NAME . '/' . M3_SYSTEM_VERSION);		// ユーザエージェント
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);		// 画面に出力しない
-curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-curl_setopt($ch, CURLOPT_COOKIE, session_name() . '=' . session_id());
-//curl_setopt($ch, CURLOPT_USERAGENT, 'User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.10) Gecko/2009042316 Firefox/3.0.10');
-/*curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_HEADER, false);
-curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
-curl_setopt($ch, CURLOPT_TIMEOUT, 10);
-curl_setopt($ch, CURLOPT_COOKIE, 'PHPSESSID=tamae5tresstr4al2va1b4t4b6');*/
-$content = curl_exec($ch);
-curl_close($ch);
-//echo "<pre>".$content."</pre>";
-$homepage = $content;
-//echo $url;
-		//$homepage = file_get_contents($url);
-		//<link[^>]+?text/css[^>]
-	//	$pattern = '/(<link\b.+href=")(?!http)([^"]*)(".*>)/';
-/*		$pattern = '/<link[^>]+?stylesheet[^>]*?>/si';*/
-		/*$pattern = '/<link\b[^>]*?>/si';*/
-		$pattern = '/<head\b[^>]*?>(.*?)<\/head\b[^>]*?>/si';
-		if (preg_match($pattern, $homepage, $matches)) $headContent = $matches[0];
-
-//echo $headContent;
-		$pattern = '/<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
-	/*	$pattern = '/<!--\[if\b.*?\]>(.+?)<!\[endif\]-->/si';*/
-/*	$pattern = '/<!--\[if\b.*?\]>[\b]*<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>[\b]*<!\[endif\]-->/si';*/
-		if ($ret = preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
-			foreach ($matches as $val) {
-				echo "*{$val[1]}<br />";
-			}
-		}
-echo '--------------------';
+		$repo = new GitRepo('magic3org', 'magic3');
+		$options  = array('http' => array('user_agent'=> $_SERVER['HTTP_USER_AGENT']));
+		$context  = stream_context_create($options);
+		$url = $repo->getFileUrl('include/ctemplate/info.json');
+echo file_get_contents($url, 0, $context);
+		$data = json_decode(file_get_contents($url, 0, $context));
+		var_dump($data);
 	}
 
 }
