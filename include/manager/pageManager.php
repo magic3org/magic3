@@ -95,6 +95,7 @@ class PageManager extends Core
 	private $useBootstrap;				// Bootstrapを使用するかどうか
 	private $isHtml5;					// HTML5で出力するかどうか
 	private $ckeditorCssFiles = array();	// CKEditor用のCSSファイル
+	private $ckeditorTemplateType;			// CKEditor用のテンプレートタイプ
 	const CONFIG_KEY_HEAD_TITLE_FORMAT = 'head_title_format';		// ヘッダ作成用フォーマット
 	const ADMIN_WIDGET_ID = 'admin_main';		// 管理用ウィジェットのウィジェットID
 	//const CONTENT_TYPE_WIKI = 'wiki';		// ページのコンテンツタイプ(Wiki)
@@ -3250,6 +3251,10 @@ class PageManager extends Core
 						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 					}
+					// CKEditor用のテンプレートタイプ
+					if (isset($this->ckeditorTemplateType)){
+						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
+					}
 				} else if (!empty($pageId)){
 					$accessPoint = $this->gEnv->getAllDefaultPageId();
 					for ($i = 0; $i < count($accessPoint); $i++){
@@ -3289,6 +3294,10 @@ class PageManager extends Core
 				$replaceStr .= 'var M3_PAGE_SUB_ID = "' . $gEnvManager->getCurrentPageSubId() . '";' . M3_NL;
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
+				
+				// テンプレートタイプ
+				$templateType = $gEnvManager->getCurrentTemplateType();
+				if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
 			} else if ($this->isEditMode){			// 一般画面編集モード
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
@@ -5430,6 +5439,10 @@ class PageManager extends Core
 
 		// 管理機能用のCSSを除く
 		$this->ckeditorCssFiles = array_diff($urlArray, $delUrlArray);	// CKEditor用のCSSファイル
+		
+		// テンプレートタイプを取得
+		$pattern = '/var\s*M3_TEMPLATE_TYPE\s*=\s*(\d+?)\s*;/si';
+		if (preg_match($pattern, $headContent, $matches)) $this->ckeditorTemplateType = $matches[1];			// CKEditor用のテンプレートタイプ
 	}
 }
 ?>

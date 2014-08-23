@@ -81,9 +81,10 @@ class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 		$options  = array('http' => array('user_agent'=> $_SERVER['HTTP_USER_AGENT']));
 		$context  = stream_context_create($options);
 		$url = $repo->getFileUrl('include/ctemplate/info.json');
-echo file_get_contents($url, 0, $context);
 		$data = json_decode(file_get_contents($url, 0, $context));
-		var_dump($data);
+		if ($data === false) echo 'no file';
+//		var_dump($data);
+		echo $data[0]->{'id'};
 	}
 
 }
