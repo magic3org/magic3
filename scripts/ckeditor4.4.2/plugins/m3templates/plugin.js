@@ -1,22 +1,32 @@
 ﻿/**
- * @license Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+ * Magic3 CKEditorプラグイン
+ *
+ * JavaScript 1.5
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    1.0
+ * @link       http://www.magic3.org
  */
-
 ( function() {
-	CKEDITOR.plugins.add( 'templates', {
+	CKEDITOR.plugins.add( 'm3templates', {
 		requires: 'dialog',
-		lang: 'af,ar,bg,bn,bs,ca,cs,cy,da,de,el,en,en-au,en-ca,en-gb,eo,es,et,eu,fa,fi,fo,fr,fr-ca,gl,gu,he,hi,hr,hu,id,is,it,ja,ka,km,ko,ku,lt,lv,mk,mn,ms,nb,nl,no,pl,pt,pt-br,ro,ru,si,sk,sl,sq,sr,sr-latn,sv,th,tr,tt,ug,uk,vi,zh,zh-cn', // %REMOVE_LINE_CORE%
-		icons: 'templates,templates-rtl', // %REMOVE_LINE_CORE%
-		hidpi: true, // %REMOVE_LINE_CORE%
+		lang: 'ja,en',
+		icons: 'm3templates,m3templates-rtl',
+		hidpi: true,
 		init: function( editor ) {
-			CKEDITOR.dialog.add( 'templates', CKEDITOR.getUrl( this.path + 'dialogs/templates.js' ) );
+alert(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE);
+			CKEDITOR.dialog.add( 'm3templates', CKEDITOR.getUrl( this.path + 'dialogs/templates.js' ) );
 
-			editor.addCommand( 'templates', new CKEDITOR.dialogCommand( 'templates' ) );
+			editor.addCommand( 'm3templates', new CKEDITOR.dialogCommand( 'm3templates' ) );
 
-			editor.ui.addButton && editor.ui.addButton( 'Templates', {
+			editor.ui.addButton && editor.ui.addButton( 'M3Templates', {
 				label: editor.lang.templates.button,
-				command: 'templates',
+				command: 'm3templates',
 				toolbar: 'doctools,10'
 			} );
 		}
@@ -76,7 +86,7 @@
  * @member CKEDITOR.config
  */
 CKEDITOR.config.templates_files = [
-	CKEDITOR.getUrl( 'plugins/templates/templates/default.js' )
+	CKEDITOR.getUrl( 'plugins/m3templates/templates/default.js' )
 ];
 
 /**

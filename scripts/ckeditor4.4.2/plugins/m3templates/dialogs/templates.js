@@ -6,7 +6,7 @@
 ( function() {
 	var doc = CKEDITOR.document;
 
-	CKEDITOR.dialog.add( 'templates', function( editor ) {
+	CKEDITOR.dialog.add( 'm3templates', function( editor ) {
 		// Constructs the HTML view of the specified templates data.
 		function renderTemplatesList( container, templatesDefinitions ) {
 			// clear loading wait text.
@@ -121,7 +121,7 @@
 		}
 
 		// Load skin at first.
-		var plugin = CKEDITOR.plugins.get( 'templates' );
+		var plugin = CKEDITOR.plugins.get( 'm3templates' );
 		CKEDITOR.document.appendStyleSheet( CKEDITOR.getUrl( plugin.path + 'dialogs/templates.css' ) );
 
 

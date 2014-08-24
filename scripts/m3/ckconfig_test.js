@@ -125,7 +125,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
 		{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
 		{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
-		{ name: 'others', items: [ 'LinkInfo' ] },
+		{ name: 'others', items: [ 'LinkInfo', 'M3Templates' ] },
 		'/',
 		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
 		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', /*'-', 'Blockquote', 'CreateDiv',*/ '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
