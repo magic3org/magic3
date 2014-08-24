@@ -147,7 +147,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.image_previewText = '<strong>「サーバブラウザ」ボタン</strong>をクリックすると画像ブラウザが立ち上がります。サムネール表示の画像をダブルクリックすると画像が取得できます。画像をアップロードするには、画像ブラウザ上部の「アップロード」ボタンをクリックするか、画像ブラウザ上へ画像ファイルをドロップします。';
 	
 	// 追加プラグインの設定
-	config.extraPlugins = 'youtube,googlemaps,linkinfo';
+	config.extraPlugins = 'youtube,googlemaps,linkinfo,m3templates';
 	config.removePlugins = 'iframe';
 	config.allowedContent = true;		// ACF(Advanced Content Filter)を使用しない。SCRIPT,IFRAMEタグ等許可。
 //	config.extraAllowedContent = 'iframe';

@@ -19,7 +19,7 @@
 		icons: 'm3templates,m3templates-rtl',
 		hidpi: true,
 		init: function( editor ) {
-alert(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE);
+if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined") alert(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE);
 			CKEDITOR.dialog.add( 'm3templates', CKEDITOR.getUrl( this.path + 'dialogs/templates.js' ) );
 
 			editor.addCommand( 'm3templates', new CKEDITOR.dialogCommand( 'm3templates' ) );

@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
+ * @version    1.0
  * @link       http://www.magic3.org
  */
 // スタイルメニューの定義
@@ -123,7 +123,7 @@ CKEDITOR.editorConfig = function(config){
 	if (M3_USE_GOOGLEMAPS){			// GoogleMapsを使用する場合
 		config.toolbar_Full = [
 			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
-			{ name: 'clipboard', items: [ 'Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+			{ name: 'clipboard', items: [ 'M3Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 			{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
 			{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
 			{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
@@ -169,7 +169,7 @@ CKEDITOR.editorConfig = function(config){
 	// 追加プラグインの設定
 //	config.extraPlugins = 'youtube,googlemaps';
 //	config.removePlugins = 'iframe';
-	config.extraPlugins = 'youtube,googlemaps,m3link';
+	config.extraPlugins = 'youtube,googlemaps,m3link,m3templates';
 	config.removePlugins = 'iframe,link';
 	config.allowedContent = true;		// ACF(Advanced Content Filter)を使用しない。SCRIPT,IFRAMEタグ等許可。
 //	config.extraAllowedContent = 'iframe';
