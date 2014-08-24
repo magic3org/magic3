@@ -8,6 +8,8 @@
 　Googleマップ埋め込みプラグイン
 ・m3link - リンク
 　Magic3用のリンク作成プラグイン
+・m3link - テンプレート
+　Magic3用コンテンツテンプレート取得プラグイン
 
 ・bbcode - BBCode処理 v4.4.2
 　CKEditorオプション
