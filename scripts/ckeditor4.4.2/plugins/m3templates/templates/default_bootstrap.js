@@ -3,9 +3,9 @@
  For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 CKEDITOR.addTemplates(
-	"default",
+	"bootstrap",
 	{
-		imagesPath:CKEDITOR.getUrl(CKEDITOR.plugins.getPath("templates")+"templates/images/"),
+		imagesPath:CKEDITOR.getUrl(CKEDITOR.plugins.getPath("m3templates")+"templates/images/bootstrap/"),
 		templates:[
 			{
 				title:"Two Columns (1/3 Left, 2/3 Right)",
@@ -47,7 +47,7 @@ CKEDITOR.addTemplates(
 				title:"Hero Unit w/ Three Columns",
 				image:"template7.gif",
 				description:"Hero unit on top with three columns equally distributed below",
-				html:'<div class="hero-unit"><h1>Donec id elit!</h1><p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p></div><div class="row-fluid"><div class="span4"><h2>Heading</h2><p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p><p><a class="btn" href="">View details »</a></p></div><div class="span4"><h2>Heading</h2><p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p><p><a class="btn" href="">View details »</a></p></div><div class="span4"><h2>Heading</h2><p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p><p><a class="btn" href="">View details »</a></p></div></div>'
+				html:'<div class="hero-unit"><h1>Donec id elit!</h1><p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p></div><div class="row-fluid"><div class="span4"><h2>Heading</h2><p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p><p><a class="btn" href="">View details ≫</a></p></div><div class="span4"><h2>Heading</h2><p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.</p><p><a class="btn" href="">View details ≫</a></p></div><div class="span4"><h2>Heading</h2><p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p><p><a class="btn" href="">View details ≫</a></p></div></div>'
 			},
 			{
 				title:"Jumbotron w/ Two Columns",

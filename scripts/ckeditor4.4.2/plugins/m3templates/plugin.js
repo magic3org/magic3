@@ -19,7 +19,6 @@
 		icons: 'm3templates,m3templates-rtl',
 		hidpi: true,
 		init: function( editor ) {
-if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined") alert(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE);
 			CKEDITOR.dialog.add( 'm3templates', CKEDITOR.getUrl( this.path + 'dialogs/templates.js' ) );
 
 			editor.addCommand( 'm3templates', new CKEDITOR.dialogCommand( 'm3templates' ) );
@@ -62,8 +61,6 @@ if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined") alert(M3_CON
 	};
 } )();
 
-
-
 /**
  * The templates definition set to use. It accepts a list of names separated by
  * comma. It must match definitions loaded with the {@link #templates_files} setting.
@@ -73,6 +70,7 @@ if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined") alert(M3_CON
  * @cfg {String} [templates='default']
  * @member CKEDITOR.config
  */
+CKEDITOR.config.templates = 'default';
 
 /**
  * The list of templates definition files to load.
@@ -88,6 +86,15 @@ if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined") alert(M3_CON
 CKEDITOR.config.templates_files = [
 	CKEDITOR.getUrl( 'plugins/m3templates/templates/default.js' )
 ];
+
+// ##### Bootstrap型テンプレートの場合はコンテンツテンプレートを追加 #####
+if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined" && M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE == 10){
+	CKEDITOR.config.templates_files = [
+		CKEDITOR.getUrl( 'plugins/m3templates/templates/default.js' ),
+		CKEDITOR.getUrl('plugins/m3templates/templates/default_bootstrap.js')
+	];
+	CKEDITOR.config.templates = 'default,bootstrap';
+}
 
 /**
  * Whether the "Replace actual contents" checkbox is checked by default in the
