@@ -18,5 +18,5 @@ CKEDITOR.plugins.setLang( 'm3templates', 'ja', {
 	insertOption: '現在のエディタの内容と置き換えます',
 	options: 'テンプレートオプション',
 	selectPromptMsg: '挿入するテンプレートを選択してください。',
-	title: '内容テンプレート'
+	title: 'コンテンツテンプレート'
 } );
