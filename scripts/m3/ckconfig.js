@@ -139,7 +139,7 @@ CKEDITOR.editorConfig = function(config){
 	} else {
 		config.toolbar_Full = [
 			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
-			{ name: 'clipboard', items: [ 'Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+			{ name: 'clipboard', items: [ 'M3Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 			{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
 			{ name: 'insert', items: [ 'Image', 'Flash', /*'YouTube', 'Googlemaps',*/ 'Table', 'HorizontalRule' ] },
 			{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
@@ -170,7 +170,7 @@ CKEDITOR.editorConfig = function(config){
 //	config.extraPlugins = 'youtube,googlemaps';
 //	config.removePlugins = 'iframe';
 	config.extraPlugins = 'youtube,googlemaps,m3link,m3templates';
-	config.removePlugins = 'iframe,link';
+	config.removePlugins = 'iframe,link,templates';
 	config.allowedContent = true;		// ACF(Advanced Content Filter)を使用しない。SCRIPT,IFRAMEタグ等許可。
 //	config.extraAllowedContent = 'iframe';
 //	config.autoGrow_maxHeight = 800;		// 指定サイズまで入力に合わせて拡大

@@ -1,8 +1,17 @@
-﻿/**
- * @license Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.md or http://ckeditor.com/license
+/**
+ * Magic3 CKEditorプラグイン
+ *
+ * JavaScript 1.5
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    1.0
+ * @link       http://www.magic3.org
  */
-
 ( function() {
 	var doc = CKEDITOR.document;
 
@@ -128,10 +137,10 @@
 		var listContainer;
 
 		var templateListLabelId = 'cke_tpl_list_label_' + CKEDITOR.tools.getNextNumber(),
-			lang = editor.lang.templates,
+			lang = editor.lang.m3templates,
 			config = editor.config;
 		return {
-			title: editor.lang.templates.title,
+			title: editor.lang.m3templates.title,
 
 			minWidth: CKEDITOR.env.ie ? 440 : 400,
 			minHeight: 340,

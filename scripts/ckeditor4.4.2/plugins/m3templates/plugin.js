@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Magic3 CKEditorプラグイン
  *
  * JavaScript 1.5
@@ -98,4 +98,4 @@ CKEDITOR.config.templates_files = [
  * @cfg
  * @member CKEDITOR.config
  */
-CKEDITOR.config.templates_replaceContent = true;
+CKEDITOR.config.templates_replaceContent = false;
