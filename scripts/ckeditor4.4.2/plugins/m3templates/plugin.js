@@ -90,10 +90,9 @@ CKEDITOR.config.templates_files = [
 // ##### Bootstrap型テンプレートの場合はコンテンツテンプレートを追加 #####
 if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined" && M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE == 10){
 	CKEDITOR.config.templates_files = [
-		CKEDITOR.getUrl( 'plugins/m3templates/templates/default.js' ),
 		CKEDITOR.getUrl('plugins/m3templates/templates/default_bootstrap.js')
 	];
-	CKEDITOR.config.templates = 'default,bootstrap';
+	CKEDITOR.config.templates = 'bootstrap';
 }
 
 /**
