@@ -175,6 +175,7 @@ CKEDITOR.editorConfig = function(config){
 //	config.extraAllowedContent = 'iframe';
 //	config.autoGrow_maxHeight = 800;		// 指定サイズまで入力に合わせて拡大
 	config.protectedSource.push(/<i[^>]*><\/i>/g);	// iタグ許可
+	config.dialog_noConfirmCancel = true;		// ダイアログキャンセル時のダイアログを非表示にする
 	
 	// KCFinderの設定
 	if (!jQuery().elfinder){			// elFinderが使用できない場合

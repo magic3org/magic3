@@ -657,9 +657,9 @@
 					this.hidePage('tab_target'); //Hide Target tab.
 
 				// 設定変更時の確認ダイアログを非表示にする
-				this.on('cancel', function (cancelEvent) {
+				/*this.on('cancel', function (cancelEvent) {
 					return false;
-				}, this, null, -1);
+				}, this, null, -1);*/
 
 				// このダイアログへの参照を取得
 				dialog = this;
