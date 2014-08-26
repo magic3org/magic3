@@ -81,7 +81,7 @@
 							// Googleマップの埋め込みタグの場合は固定マップ画像を設定
 							var objectId = element.attributes.id;
 							var className = element.attributes['class'];
-							if (className == 'm3googlemaps'){
+							if (className == 'googlemaps'){
 								// マップ情報取得
 								var mapNumber;
 								var regExp = /gmap(\d+)/;

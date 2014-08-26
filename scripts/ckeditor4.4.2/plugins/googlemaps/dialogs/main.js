@@ -375,7 +375,7 @@
 				newMapElement.setAttributes({
 					'id': 'gmap' + mapInfo.number,
 					'style': style,
-					'class': 'm3googlemaps'
+					'class': 'googlemaps'
 				});
 
 				// ビュー更新前、画像のみ変更
