@@ -3163,11 +3163,12 @@ class PageManager extends Core
 					$count = count($this->defaultAdminDirScriptFiles);
 					for ($i = 0; $i < $count; $i++){
 						$scriptFilename = $this->defaultAdminDirScriptFiles[$i];
-
-						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-						$scriptURL = $scriptsUrl . '/' . $scriptFilename;
-						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-						$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+						if (!in_array($scriptFilename, $this->defaultScriptFiles)){		// 既に追加されていない場合のみ追加
+							// スクリプトをキャッシュ保存しない場合は、パラメータを付加
+							$scriptURL = $scriptsUrl . '/' . $scriptFilename;
+							if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
+							$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+						}
 					}
 				}
 			}
