@@ -9,7 +9,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ja.js 6030 2013-05-22 00:48:33Z fishbone $
+ * @version    1.0
  * @link       http://www.magic3.org
  */
 CKEDITOR.plugins.setLang( 'googlemaps', 'ja', {
@@ -23,6 +23,7 @@ CKEDITOR.plugins.setLang( 'googlemaps', 'ja', {
 	height: '高さ',
 	widthType: '&nbsp;',
 	heightType: '&nbsp;',
+	alignCenter: '中央に配置',
 	zoomLevel: 'ズームレベル',
 	latitude: '緯度',
 	longitude:	'経度',

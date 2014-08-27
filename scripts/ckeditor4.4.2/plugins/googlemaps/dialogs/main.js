@@ -359,6 +359,7 @@
 				mapInfo.height = data.info['txtHeight'];
 				mapInfo.widthType = data.info['cmbWidthType'];
 				mapInfo.heightType = data.info['cmbHeightType'];
+				mapInfo.alignCenter = data.info['chkAlignCenter'];
 				mapInfo.zoom = data.info['cmbZoom'];
 				mapInfo.centerLat = data.info['txtCenterLat'];
 				mapInfo.centerLon = data.info['txtCenterLon'];
@@ -378,6 +379,8 @@
 //				newMapElement.append(scriptElement);
 				var newMapElement = CKEDITOR.dom.element.createFromHtml('<div>' + script + '</div>', editor.document);		// IE8 not work.
 				var style = 'width:' + mapInfo.width + mapInfo.widthType + ';height:' + mapInfo.height + mapInfo.heightType + ';display:none;';
+				if (mapInfo.alignCenter) style += 'margin:0 auto;';
+					
 				newMapElement.setAttributes({
 					'id': 'gmap' + mapInfo.number,
 					'style': style,
@@ -412,7 +415,7 @@
 				{
 					// 項目を横に配置
 					type: 'hbox',
-					widths: [ '10%', '10%', '10%' ],		// 項目間幅を調整
+					widths: [ '10%', '10%', '10%', '20%' ],		// 項目間幅を調整
 	/*				padding: '5px',*/
 					children: [
 					{
@@ -476,6 +479,13 @@
 							[ 'px', 'px' ],
 							[ '%', '%' ]
 						],
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkAlignCenter',
+						label: editor.lang.googlemaps.alignCenter,
+						style: 'margin-top:20px;',
+						'default': false,
 						commit: commitValue
 					} ]
 				}, {
