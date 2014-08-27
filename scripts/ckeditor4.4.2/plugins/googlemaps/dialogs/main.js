@@ -50,6 +50,8 @@
 			// 入力値初期化
 			dialog.setValueOf('tab_map', 'txtWidth', mapInfo.width);
 			dialog.setValueOf('tab_map', 'txtHeight', mapInfo.height);
+			dialog.setValueOf('tab_map', 'cmbWidthType', mapInfo.widthType);
+			dialog.setValueOf('tab_map', 'cmbHeightType', mapInfo.heightType);
 			dialog.setValueOf('tab_map', 'cmbZoom', mapInfo.zoom);
 			dialog.setValueOf('tab_map', 'txtCenterLat', mapInfo.centerLat);
 			dialog.setValueOf('tab_map', 'txtCenterLon', mapInfo.centerLon);
@@ -134,9 +136,11 @@
 		{
 			if (!mapDiv) return;
 			
-			mapDiv.style.width = dialog.getValueOf('tab_map', 'txtWidth') + 'px';
-			mapDiv.style.height = dialog.getValueOf('tab_map', 'txtHeight') + 'px';
-
+//			mapDiv.style.width = dialog.getValueOf('tab_map', 'txtWidth') + 'px';
+//			mapDiv.style.height = dialog.getValueOf('tab_map', 'txtHeight') + 'px';
+			mapDiv.style.width = dialog.getValueOf('tab_map', 'txtWidth') + dialog.getValueOf('tab_map', 'cmbWidthType');
+			mapDiv.style.height = dialog.getValueOf('tab_map', 'txtHeight') + dialog.getValueOf('tab_map', 'cmbHeightType');
+			
 			//ResizeParent();
 		};
 		var updatePreview = function()
@@ -353,6 +357,8 @@
 				// マップ情報更新
 				mapInfo.width = data.info['txtWidth'];
 				mapInfo.height = data.info['txtHeight'];
+				mapInfo.widthType = data.info['cmbWidthType'];
+				mapInfo.heightType = data.info['cmbHeightType'];
 				mapInfo.zoom = data.info['cmbZoom'];
 				mapInfo.centerLat = data.info['txtCenterLat'];
 				mapInfo.centerLon = data.info['txtCenterLon'];
@@ -371,7 +377,7 @@
 //				var newMapElement = CKEDITOR.dom.element.createFromHtml('<div></div>', editor.document);
 //				newMapElement.append(scriptElement);
 				var newMapElement = CKEDITOR.dom.element.createFromHtml('<div>' + script + '</div>', editor.document);		// IE8 not work.
-				var style = 'width:' + mapInfo.width + 'px;height:' + mapInfo.height + 'px;display:none;';
+				var style = 'width:' + mapInfo.width + mapInfo.widthType + ';height:' + mapInfo.height + mapInfo.heightType + ';display:none;';
 				newMapElement.setAttributes({
 					'id': 'gmap' + mapInfo.number,
 					'style': style,
@@ -383,8 +389,8 @@
 							'background-position': 'center center',
 							'background-repeat': 'no-repeat',
 							'border': '0px',
-							'width': mapInfo.width + 'px',
-							'height': mapInfo.height + 'px'
+							'width': mapInfo.width + mapInfo.widthType,
+							'height': mapInfo.height + mapInfo.heightType
 							};
 				var newFakeImage = editor.createFakeElement(newMapElement, 'cke_googlemaps' + mapInfo.number, 'div', false);
 				newFakeImage.setStyles( extraStyles );
@@ -406,7 +412,7 @@
 				{
 					// 項目を横に配置
 					type: 'hbox',
-					widths: [ '10%', '20%' ],		// 項目間幅を調整
+					widths: [ '10%', '10%', '10%' ],		// 項目間幅を調整
 	/*				padding: '5px',*/
 					children: [
 					{
@@ -430,6 +436,17 @@
 						},
 						commit: commitValue
 					}, {
+						type: 'select',
+						id: 'cmbWidthType',
+						label: editor.lang.googlemaps.widthType,
+						style: 'width:50px',
+						'default': 'px',
+						items: [
+							[ 'px', 'px' ],
+							[ '%', '%' ]
+						],
+						commit: commitValue
+					}, {
 						type : 'text',
 						id : 'txtHeight',
 						label: editor.lang.googlemaps.height,
@@ -447,6 +464,48 @@
 						},
 						onChange: function(){
 							resizeMap();
+						},
+						commit: commitValue
+					}, {
+						type: 'select',
+						id: 'cmbHeightType',
+						label: editor.lang.googlemaps.heightType,
+						style: 'width:50px',
+						'default': 'px',
+						items: [
+							[ 'px', 'px' ],
+							[ '%', '%' ]
+						],
+						commit: commitValue
+					} ]
+				}, {
+					type: 'hbox',
+					widths: [ '10%', '10%', '10%' ],
+					children: [
+					{
+						type: 'text',
+						id: 'txtCenterLat',
+					//	requiredContent: 'img(cke-xyz)', // Random text like 'xyz' will check if all are allowed.
+						label: editor.lang.googlemaps.latitude,
+						'default': '',
+						onLoad: function(){
+							fieldCenterLatitude = document.getElementById(this.getInputElement().$.id);			// 参照を取得
+						},
+						onChange: function() {
+							if (mapObj) mapObj.setCenter(new google.maps.LatLng(this.getValue(), fieldCenterLongitude.value));
+						},
+						commit: commitValue
+					}, {
+						type: 'text',
+						id: 'txtCenterLon',
+						//requiredContent: 'img[title]',
+						label: editor.lang.googlemaps.longitude,
+						'default': '',
+						onLoad: function(){
+							fieldCenterLongitude = document.getElementById(this.getInputElement().$.id);		// 参照を取得
+						},
+						onChange: function() {
+							if (mapObj) mapObj.setCenter(new google.maps.LatLng(fieldCenterLatitude.value, this.getValue()));
 						},
 						commit: commitValue
 					}, {
@@ -480,37 +539,6 @@
 						},
 						onChange: function() {
 							if (mapObj) mapObj.setZoom(parseInt(this.getValue()), 10);
-						},
-						commit: commitValue
-					} ]
-				}, {
-					type: 'hbox',
-					widths: [ '50%', '50%' ],
-					children: [
-					{
-						type: 'text',
-						id: 'txtCenterLat',
-					//	requiredContent: 'img(cke-xyz)', // Random text like 'xyz' will check if all are allowed.
-						label: editor.lang.googlemaps.latitude,
-						'default': '',
-						onLoad: function(){
-							fieldCenterLatitude = document.getElementById(this.getInputElement().$.id);			// 参照を取得
-						},
-						onChange: function() {
-							if (mapObj) mapObj.setCenter(new google.maps.LatLng(this.getValue(), fieldCenterLongitude.value));
-						},
-						commit: commitValue
-					}, {
-						type: 'text',
-						id: 'txtCenterLon',
-						//requiredContent: 'img[title]',
-						label: editor.lang.googlemaps.longitude,
-						'default': '',
-						onLoad: function(){
-							fieldCenterLongitude = document.getElementById(this.getInputElement().$.id);		// 参照を取得
-						},
-						onChange: function() {
-							if (mapObj) mapObj.setCenter(new google.maps.LatLng(fieldCenterLatitude.value, this.getValue()));
 						},
 						commit: commitValue
 					} ]

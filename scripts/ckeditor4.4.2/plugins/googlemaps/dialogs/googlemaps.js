@@ -45,7 +45,9 @@ var GoogleMap = function()
 
 	this.width = CKEDITOR.config.googlemaps_width || 400;
 	this.height = CKEDITOR.config.googlemaps_height || 240;
-
+	this.widthType = 'px';
+	this.heightType = 'px';
+	
 	this.centerLat = CKEDITOR.config.googlemaps_centerLat || 35.594757;
 	this.centerLon =  CKEDITOR.config.googlemaps_centerLon || 139.620739;
 	this.zoom = CKEDITOR.config.googlemaps_zoom || 11;
@@ -64,6 +66,9 @@ GoogleMap.prototype.generateStaticMap = function()
 {
 	var w = Math.min(this.width, 640);
 	var h = Math.min(this.height, 640);
+	if (this.widthType == '%') w = 640;
+	if (this.heightType == '%') h = 640;
+	
 	var staticMapTypes = ['roadmap', 'satellite', 'hybrid', 'terrain'];
 
 	var mapUrl = 'http://maps.google.com/maps/api/staticmap?center=' + this.centerLat + ',' + this.centerLon 
@@ -89,6 +94,7 @@ GoogleMap.prototype.updateDimensions = function( oFakeNode )
 {
 	var iWidth, iHeight;
 	var regexSize = /^\s*(\d+)px\s*$/i;
+	var regexSizePer = /^\s*(\d+)%\s*$/i;
 
 	if (oFakeNode.style.width)
 	{
@@ -98,6 +104,16 @@ GoogleMap.prototype.updateDimensions = function( oFakeNode )
 			iWidth = aMatchW[1];
 			oFakeNode.style.width = '';
 			oFakeNode.width = iWidth;
+			this.widthType = 'px';
+		} else {
+			aMatchW  = oFakeNode.style.width.match(regexSizePer);
+			if (aMatchW)
+			{
+				iWidth = aMatchW[1];
+				oFakeNode.style.width = '';
+				oFakeNode.width = iWidth;
+				this.widthType = '%';
+			}
 		}
 	}
 
@@ -109,16 +125,28 @@ GoogleMap.prototype.updateDimensions = function( oFakeNode )
 			iHeight = aMatchH[1];
 			oFakeNode.style.height = '';
 			oFakeNode.height = iHeight;
+			this.heightType = 'px';
+		} else {
+			aMatchH  = oFakeNode.style.height.match(regexSizePer);
+			if (aMatchH)
+			{
+				iHeight = aMatchH[1];
+				oFakeNode.style.height = '';
+				oFakeNode.height = iHeight;
+				this.heightType = '%';
+			}
 		}
 	}
 
 	this.width	= iWidth ? iWidth : oFakeNode.width;
 	this.height	= iHeight ? iHeight : oFakeNode.height;
 }
-GoogleMap.prototype.setDimensions = function(width, height)
+GoogleMap.prototype.setDimensions = function(width, height, widthType, heightType)
 {
 	this.width	= width;
 	this.height	= height;
+	this.widthType = widthType;
+	this.heightType = heightType;
 }
 GoogleMap.prototype.decodeText = function(string)
 {

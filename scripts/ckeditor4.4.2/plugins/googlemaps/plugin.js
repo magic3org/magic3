@@ -89,15 +89,29 @@
 								var mapInfo = GoogleMapsHandler.getMap(mapNumber);
 								if (mapInfo){
 									// 幅、高さを設定
-									var width, height;
+									var width, height, widthType, heightType;
 									var style = element.attributes.style;
-									if ((/width:\s*(\d+)px/i).test(style)) width = RegExp.$1;
-									if ((/height:\s*(\d+)px/i).test(style)) height = RegExp.$1;
+									if ((/width:\s*(\d+)px/i).test(style)){
+										width = RegExp.$1;
+										widthType = 'px';
+									} else if ((/width:\s*(\d+)%/i).test(style)){
+										width = RegExp.$1;
+										widthType = '%';
+									}
+									if ((/height:\s*(\d+)px/i).test(style)){
+										height = RegExp.$1;
+										heightType = 'px';
+									} else if ((/height:\s*(\d+)%/i).test(style)){
+										height = RegExp.$1;
+										heightType = '%';
+									}
 									if (!width || !height){
 										width = CKEDITOR.config.googlemaps_width;
 										height = CKEDITOR.config.googlemaps_height;
+										widthType = 'px';
+										heightType = 'px';
 									}
-									mapInfo.setDimensions(width, height);
+									mapInfo.setDimensions(width, height, widthType, heightType);
 									
 									// 画像を背景に配置しリサイズ不可にする
 									CKEDITOR.addCss(
@@ -107,8 +121,8 @@
 											'background-position: center center;' +
 											'background-repeat: no-repeat;' +
 											'border: 0px;' +
-											'width: ' + width + 'px;' +
-											'height: ' + height + 'px;' +
+											'width: ' + width + widthType + ';' +
+											'height: ' + height + heightType + ';' +
 										'}'
 									);
 									var fakeImage = editor.createFakeParserElement(element, 'cke_googlemaps' + mapNumber, 'div', false/*リサイズ不可*/);
