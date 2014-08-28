@@ -9,7 +9,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
+ * @version    1.1
  * @link       http://www.magic3.org
  */
 (function() {
@@ -21,7 +21,6 @@
 //	CKEDITOR.config.googlemaps_zoom = 11;					// ズームレベル
 
 	var path = CKEDITOR.plugins.getPath('googlemaps');
-	//CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(CKEDITOR.plugins.getPath('googlemaps')) + 'dialogs/googlemaps.js');
 	CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(path) + 'dialogs/googlemaps.js');
 	CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(path) + 'dialogs/polyline.js');
 
@@ -63,14 +62,6 @@
 					mapInfo.parse(content);
 				}
 			}
-/*			var jScripts = $(editor.getData()).filter("script");
-			jScripts.each(function(index){
-				var content = $(this).get(0).outerHTML;
-				if (GoogleMapsHandler.detectMapScript(content)){		// マップ情報の場合は保存
-					var mapInfo = GoogleMapsHandler.createNew();
-					mapInfo.parse(content);
-				}
-			});*/
 		
 			var dataProcessor = editor.dataProcessor;
 			var dataFilter = dataProcessor && dataProcessor.dataFilter;
@@ -89,7 +80,7 @@
 								var mapInfo = GoogleMapsHandler.getMap(mapNumber);
 								if (mapInfo){
 									// 幅、高さを設定
-									var width, height, widthType, heightType;
+									var width, height, widthType, heightType, alignCenter;
 									var style = element.attributes.style;
 									if ((/width:\s*(\d+)px/i).test(style)){
 										width = RegExp.$1;
@@ -111,7 +102,12 @@
 										widthType = 'px';
 										heightType = 'px';
 									}
-									mapInfo.setDimensions(width, height, widthType, heightType);
+									
+									// 位置を取得
+									alignCenter = false;
+									if ((/margin:\s*0 auto;/i).test(style)) alignCenter = true;
+
+									mapInfo.setDimensions(width, height, widthType, heightType, alignCenter);
 									
 									// 画像を背景に配置しリサイズ不可にする
 									CKEDITOR.addCss(

@@ -9,7 +9,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id$
+ * @version    1.1
  * @link       http://www.magic3.org
  */
 
@@ -30,8 +30,6 @@
 		var polyline;
 		
 		// スクリプト読み込み
-//		var path = CKEDITOR.plugins.getPath('googlemaps');
-//		CKEDITOR.scriptLoader.load(CKEDITOR.getUrl(path) + 'dialogs/polyline.js');
 		var pluginUrl = CKEDITOR.getUrl(CKEDITOR.plugins.getPath( 'googlemaps' ));
 			
 		var loadSelectionData = function()
@@ -52,6 +50,7 @@
 			dialog.setValueOf('tab_map', 'txtHeight', mapInfo.height);
 			dialog.setValueOf('tab_map', 'cmbWidthType', mapInfo.widthType);
 			dialog.setValueOf('tab_map', 'cmbHeightType', mapInfo.heightType);
+			dialog.setValueOf('tab_map', 'chkAlignCenter', mapInfo.alignCenter);
 			dialog.setValueOf('tab_map', 'cmbZoom', mapInfo.zoom);
 			dialog.setValueOf('tab_map', 'txtCenterLat', mapInfo.centerLat);
 			dialog.setValueOf('tab_map', 'txtCenterLon', mapInfo.centerLon);

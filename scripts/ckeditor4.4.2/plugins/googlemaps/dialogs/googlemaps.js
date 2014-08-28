@@ -9,7 +9,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: googlemaps.js 6026 2013-05-20 04:55:58Z fishbone $
+ * @version    1.1
  * @link       http://www.magic3.org
  */
 var GoogleMapsHandler = {
@@ -47,6 +47,7 @@ var GoogleMap = function()
 	this.height = CKEDITOR.config.googlemaps_height || 240;
 	this.widthType = 'px';
 	this.heightType = 'px';
+	this.alignCenter = false;
 	
 	this.centerLat = CKEDITOR.config.googlemaps_centerLat || 35.594757;
 	this.centerLon =  CKEDITOR.config.googlemaps_centerLon || 139.620739;
@@ -141,12 +142,13 @@ GoogleMap.prototype.updateDimensions = function( oFakeNode )
 	this.width	= iWidth ? iWidth : oFakeNode.width;
 	this.height	= iHeight ? iHeight : oFakeNode.height;
 }
-GoogleMap.prototype.setDimensions = function(width, height, widthType, heightType)
+GoogleMap.prototype.setDimensions = function(width, height, widthType, heightType, alignCenter)
 {
 	this.width	= width;
 	this.height	= height;
 	this.widthType = widthType;
 	this.heightType = heightType;
+	this.alignCenter = alignCenter;
 }
 GoogleMap.prototype.decodeText = function(string)
 {
@@ -253,10 +255,6 @@ GoogleMap.prototype.buildScript = function()
 	aScript.push('<script type="text/javascript">');
 	aScript.push('//<![CDATA[');
 	aScript.push(versionMarker);
-
-//	if (this.WrapperClass !== '') aScript.push('document.write(\'<div class="' + this.WrapperClass + '">\'); //wrapper');
-//	aScript.push('document.write(\'<div id="gmap' + this.number + '" style="width:' + this.width + 'px; height:' + this.height + 'px;display:none;">.<\\\/div>\');');
-//	if (this.WrapperClass !== '') aScript.push('document.write(\'<\\\/div>\'); ');
 
 	aScript.push('$(function(){');
 	aScript.push('	var allMapTypes = [	google.maps.MapTypeId.ROADMAP,');
