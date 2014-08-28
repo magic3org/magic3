@@ -279,6 +279,14 @@
 			if ( !data.info ) data.info = {};
 			data.info[id] = this.getValue();
 		};
+		var isJson = function(str){
+			try {
+				JSON.parse(str);
+			} catch (e) {
+				return false;
+			}
+			return true;
+		};
 		return {
 			title: editor.lang.googlemaps.title,
 			minWidth: 420,
@@ -615,6 +623,35 @@ html: '<img id="btnAddNewMarker' + editor.id + '" src="' + pluginUrl + 'images/A
 					type: 'text',
 					hidden : true,
 					label: 'dummy item for the bug that the tab is auto disabled when all items are html type.'
+				} ]
+			}, {
+				id: 'tab_style',
+				label: editor.lang.googlemaps.styleTitle,
+				elements: [
+				{
+					type: 'html',
+					html: '<p>' + editor.lang.googlemaps.msgInputStyleJsonData + '</p>'
+				}, {
+					type: 'textarea',
+					id: 'txtStyle',
+					label: '',
+					'default': '',
+					inputStyle: 'cursor:auto;' +
+						'width:' + CKEDITOR.config.googlemaps_width + 'px;' +
+						'height:' + CKEDITOR.config.googlemaps_height + 'px;' +
+						'tab-size:4;' +
+						'text-align:left;',
+					validate : function() {
+						var pass = true,
+						value = this.getValue().trim();
+						pass = pass && (value == '' || isJson(value));
+						if ( !pass ){
+							alert( editor.lang.googlemaps.msgInvalidStyle );
+							this.select();
+						}
+						return pass;
+					},
+					commit: commitValue
 				} ]
 			} ]
 		};

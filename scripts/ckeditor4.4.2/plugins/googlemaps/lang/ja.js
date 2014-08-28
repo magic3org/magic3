@@ -19,6 +19,7 @@ CKEDITOR.plugins.setLang( 'googlemaps', 'ja', {
 	searchTitle: '検索',
 	markerTitle: 'マーカー',
 	lineTitle: 'ライン',
+	styleTitle: 'スタイル',
 	width: '幅',
 	height: '高さ',
 	widthType: '&nbsp;',
@@ -38,5 +39,7 @@ CKEDITOR.plugins.setLang( 'googlemaps', 'ja', {
 	msgMarkerInstruction1:	'アイコンをクリックしてください。',
 	msgMarkerInstruction2:	'地図をクリックして、新しいマーカーを追加してください。',
 	line:	'ライン',
-	msgLineInstruction:	'クリックするとポイントが追加されます。<br />ポイントはドラッグすることもDELキーで削除することもできます。'
+	msgLineInstruction:	'クリックするとポイントが追加されます。<br />ポイントはドラッグすることもDELキーで削除することもできます。',
+	msgInputStyleJsonData: 'JSONフォーマットのスタイルデータを入力してください。',
+	msgInvalidStyle: '無効なJSONデータです。'
 });

@@ -14,7 +14,7 @@
  */
 (function() {
 	// デフォルト値
-	CKEDITOR.config.googlemaps_width = 500;		// マップデ幅
+	CKEDITOR.config.googlemaps_width = 500;		// マップ幅
 	CKEDITOR.config.googlemaps_height = 300;	// マップ高さ
 //	CKEDITOR.config.googlemaps_centerLat = 35.594757;		// マップ緯度
 //	CKEDITOR.config.googlemaps_centerLon = 139.620739;		// マップ経度

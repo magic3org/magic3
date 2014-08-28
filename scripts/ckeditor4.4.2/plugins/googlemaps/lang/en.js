@@ -19,11 +19,14 @@ CKEDITOR.plugins.setLang( 'googlemaps', 'en', {
 	searchTitle: 'Search',
 	markerTitle: 'Marker',
 	lineTitle: 'Line',
+	styleTitle: 'Style',
 	width: 'Width',
 	height: 'Height',
 	widthType: '&nbsp;',
 	heightType: '&nbsp;',
 	alignCenter: 'align at center',
 	zoomLevel: 'Zoom Level',
-	msgDefaultMarkerText:	'Input text.'
+	msgDefaultMarkerText:	'Input text.',
+	msgInputStyleJsonData: 'Input style data by JSON format.',
+	msgInvalidStyle: 'Invalid JSON data.'
 });
