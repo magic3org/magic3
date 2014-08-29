@@ -52,15 +52,12 @@ var GoogleMap = function()
 	this.centerLat = CKEDITOR.config.googlemaps_centerLat || 35.594757;
 	this.centerLon =  CKEDITOR.config.googlemaps_centerLon || 139.620739;
 	this.zoom = CKEDITOR.config.googlemaps_zoom || 11;
+	this.style = '';
 
 	this.markerPoints = [];
-
 	this.linePoints = '';
 	this.lineLevels = '';
-
 	this.mapType = 0;
-
-//	this.WrapperClass = CKEDITOR.config.googlemaps_wrapperClass || '';
 }
 
 GoogleMap.prototype.generateStaticMap = function()
@@ -236,14 +233,13 @@ GoogleMap.prototype.parse = function( script )
 	{
 		this.mapType = RegExp.$1;
 	}
-
-/*	var regexpWrapper = /<div class=("|')(.*)\1.*\/\/wrapper/;
-	if (regexpWrapper.test(script)){
-		this.WrapperClass = RegExp.$2;
-	} else {
-		this.WrapperClass = '';
+	
+	// スタイル
+	var regexpStyle = /var mapStyle\s*=\s*(.*)\s*;/;
+	if (regexpStyle.test(script))
+	{
+		this.style = RegExp.$1;
 	}
-*/
 	return true;
 }
 
@@ -257,20 +253,28 @@ GoogleMap.prototype.buildScript = function()
 	aScript.push(versionMarker);
 
 	aScript.push('$(function(){');
-	aScript.push('	var allMapTypes = [	google.maps.MapTypeId.ROADMAP,');
+	if (this.style == ''){
+		aScript.push('	var allMapTypes = [	google.maps.MapTypeId.ROADMAP,');
+	} else {
+		aScript.push('	var mapStyle = ' + this.style + ';');
+		aScript.push('	var allMapTypes = [	"original",');
+	}
 	aScript.push('						google.maps.MapTypeId.SATELLITE,');
 	aScript.push('						google.maps.MapTypeId.HYBRID,');
 	aScript.push('						google.maps.MapTypeId.TERRAIN	];');
 	aScript.push('	var opts = {	mapTypeControlOptions: {	mapTypeIds: allMapTypes } };');
 	aScript.push('	var mapDiv = document.getElementById("gmap' + this.number + '");');
 	aScript.push('	var map = new google.maps.Map(mapDiv, opts);');
-	//aScript.push('	var mapDiv = $("#gmap' + this.number + '");');
-	//aScript.push('	var map = new google.maps.Map(mapDiv.get(0), opts);');
+	if (this.style != ''){
+		aScript.push('	var originalMapType = new google.maps.StyledMapType(mapStyle, { name: "地図" });');
+		aScript.push('	map.mapTypes.set("original", originalMapType);');
+		aScript.push('	map.setMapTypeId("original");');
+	}
 	aScript.push('	map.setMapTypeId(allMapTypes[' + this.mapType + ']);');
+	
 	aScript.push('	map.setCenter(new google.maps.LatLng(' + this.centerLat + ', ' + this.centerLon + '));');
 	aScript.push('	map.setZoom(' + this.zoom + ');');
 	aScript.push('	mapDiv.style.display = "";');
-	//aScript.push('	mapDiv.show();');
 
 	var aPoints = [];
 	for (var i = 0; i < this.markerPoints.length; i++)

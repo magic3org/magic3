@@ -44,7 +44,7 @@
 			} else {		// マップが選択されていない場合は新規作成
 				mapInfo = GoogleMapsHandler.createNew();
 			}
-			
+
 			// 入力値初期化
 			dialog.setValueOf('tab_map', 'txtWidth', mapInfo.width);
 			dialog.setValueOf('tab_map', 'txtHeight', mapInfo.height);
@@ -54,6 +54,7 @@
 			dialog.setValueOf('tab_map', 'cmbZoom', mapInfo.zoom);
 			dialog.setValueOf('tab_map', 'txtCenterLat', mapInfo.centerLat);
 			dialog.setValueOf('tab_map', 'txtCenterLon', mapInfo.centerLon);
+			dialog.setValueOf('tab_style', 'txtStyle', mapInfo.style);
 //			dialog.setValueOf('tab_line', 'txtEncodedPolyline', mapInfo.linePoints);
 //			dialog.setValueOf('tab_line', 'txtEncodedLevels', mapInfo.lineLevels);
 			
@@ -300,12 +301,6 @@
 //				var height = dialog.getSize().height;
 //				dialog.resize(width, height);
 				
-				// マップの位置を修正
-/*				var off = $('#placeholder_map').position();
-				$('#placeholder_search').css({position:'absolute', top:off.top + 'px',left:off.left + 'px'});
-				$('#placeholder_marker').css({position:'absolute', top:off.top + 'px',left:off.left + 'px'});
-				$('#placeholder_line').css({position:'absolute', top:off.top + 'px',left:off.left + 'px'});
-				*/
 				// タブが変更された場合はマップを移動
 				dialog.on('selectPage', function(e){
 					switch (e.data.page){
@@ -370,6 +365,7 @@
 				mapInfo.zoom = data.info['cmbZoom'];
 				mapInfo.centerLat = data.info['txtCenterLat'];
 				mapInfo.centerLon = data.info['txtCenterLon'];
+				mapInfo.style = data.info['txtStyle'];
 				var markerPoints = [];
 				for (var i=0; i < markers.length; i++){
 					var point = markers[i].getPosition();
@@ -381,11 +377,9 @@
 				mapInfo.linePoints = polyline.encodedPolyline;
 				mapInfo.lineLevels = polyline.encodedLevels;
 				var script = mapInfo.buildScript();
-//				var scriptElement = CKEDITOR.dom.element.createFromHtml(script, editor.document);
-//				var newMapElement = CKEDITOR.dom.element.createFromHtml('<div></div>', editor.document);
-//				newMapElement.append(scriptElement);
 				var newMapElement = CKEDITOR.dom.element.createFromHtml('<div>' + script + '</div>', editor.document);		// IE8 not work.
 				var style = 'width:' + mapInfo.width + mapInfo.widthType + ';height:' + mapInfo.height + mapInfo.heightType + ';display:none;';
+	//			var style = 'width:' + mapInfo.width + mapInfo.widthType + ';height:' + mapInfo.height + mapInfo.heightType + ';';
 				if (mapInfo.alignCenter) style += 'margin:0 auto;';
 					
 				newMapElement.setAttributes({
