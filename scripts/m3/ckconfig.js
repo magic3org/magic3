@@ -13,22 +13,6 @@
 // スタイルメニューの定義
 CKEDITOR.stylesSet.add( 'default', [
 	/* Block Styles */
-
-	// These styles are already available in the "Format" combo ("format" plugin),
-	// so they are not needed here by default. You may enable them to avoid
-	// placing the "Format" combo in the toolbar, maintaining the same features.
-	/*
-	{ name: 'Paragraph',		element: 'p' },
-	{ name: 'Heading 1',		element: 'h1' },
-	{ name: 'Heading 2',		element: 'h2' },
-	{ name: 'Heading 3',		element: 'h3' },
-	{ name: 'Heading 4',		element: 'h4' },
-	{ name: 'Heading 5',		element: 'h5' },
-	{ name: 'Heading 6',		element: 'h6' },
-	{ name: 'Preformatted Text',element: 'pre' },
-	{ name: 'Address',			element: 'address' },
-	*/
-
 	{ name: 'イタリックタイトル',		element: 'h2', styles: { 'font-style': 'italic' } },
 	{ name: 'サブタイトル',			element: 'h3', styles: { 'color': '#aaa', 'font-style': 'italic' } },
 	{
@@ -42,53 +26,24 @@ CKEDITOR.stylesSet.add( 'default', [
 	},
 
 	/* Inline Styles */
-
-	// These are core styles available as toolbar buttons. You may opt enabling
-	// some of them in the Styles combo, removing them from the toolbar.
-	// (This requires the "stylescombo" plugin)
-	/*
-	{ name: 'Strong',			element: 'strong', overrides: 'b' },
-	{ name: 'Emphasis',			element: 'em'	, overrides: 'i' },
-	{ name: 'Underline',		element: 'u' },
-	{ name: 'Strikethrough',	element: 'strike' },
-	{ name: 'Subscript',		element: 'sub' },
-	{ name: 'Superscript',		element: 'sup' },
-	*/
-
-//	{ name: '黄マーカー(span)',	element: 'span', styles: { 'background-color': 'Yellow' } },
-//	{ name: '緑マーカー(span)',	element: 'span', styles: { 'background-color': 'Lime' } },
-
 	{ name: '文字大(big)',		element: 'big' },
 	{ name: '文字小(small)',	element: 'small' },
-
-//	{ name: 'コード(code)',	element: 'code' },
-//	{ name: 'Keyboard Phrase',	element: 'kbd' },
-//	{ name: 'Sample Text',		element: 'samp' },
-//	{ name: 'Variable',			element: 'var' },
-
 	{ name: '削除文(del)',		element: 'del' },
-	{ name: '挿入文(ins)',	element: 'ins' },
-
+	{ name: '挿入文(ins)',		element: 'ins' },
 	{ name: '引用(cite)',		element: 'cite' },
-	{ name: '引用文(q)',	element: 'q' },
-
-//	{ name: 'Language: RTL',	element: 'span', attributes: { 'dir': 'rtl' } },
-//	{ name: 'Language: LTR',	element: 'span', attributes: { 'dir': 'ltr' } },
+	{ name: '引用文(q)',		element: 'q' },
 
 	/* Object Styles */
-
 	{
 		name: '画像左寄せ',
 		element: 'img',
 		attributes: { 'class': 'left' }
 	},
-
 	{
 		name: '画像右寄せ',
 		element: 'img',
 		attributes: { 'class': 'right' }
 	},
-
 	{
 		name: '簡易テーブル',
 		element: 'table',
@@ -102,9 +57,100 @@ CKEDITOR.stylesSet.add( 'default', [
 			'border-collapse': 'collapse'
 		}
 	},
-
 	{ name: '枠なしテーブル',		element: 'table',	styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } }
-//	{ name: '四角リスト',	element: 'ul',		styles: { 'list-style-type': 'square' } }
+]);
+CKEDITOR.stylesSet.add( 'bootstrap', [
+	/* Block Styles */
+	{ name: 'イタリックタイトル',		element: 'h2', styles: { 'font-style': 'italic' } },
+	{ name: 'サブタイトル',			element: 'h3', styles: { 'color': '#aaa', 'font-style': 'italic' } },
+	{
+		name: 'グレーブロック',
+		element: 'div',
+		styles: {
+			padding: '5px 10px',
+			background: '#eee',
+			border: '1px solid #ccc'
+		}
+	},
+
+	/* Inline Styles */
+	{ name: '文字大(big)',		element: 'big' },
+	{ name: '文字小(small)',	element: 'small' },
+	{ name: '削除文(del)',		element: 'del' },
+	{ name: '挿入文(ins)',		element: 'ins' },
+	{ name: '引用(cite)',		element: 'cite' },
+	{ name: '引用文(q)',		element: 'q' },
+
+	/* Object Styles */
+	{
+		name: 'ラベル(default)',
+		element: 'span',
+		attributes: { 'class': 'label label-default' }
+	},
+	{
+		name: 'ラベル(primary)',
+		element: 'span',
+		attributes: { 'class': 'label label-primary' }
+	},
+	{
+		name: 'ラベル(success)',
+		element: 'span',
+		attributes: { 'class': 'label label-success' }
+	},
+	{
+		name: 'ラベル(info)',
+		element: 'span',
+		attributes: { 'class': 'label label-info' }
+	},
+	{
+		name: 'ラベル(warning)',
+		element: 'span',
+		attributes: { 'class': 'label label-warning' }
+	},
+	{
+		name: 'ラベル(danger)',
+		element: 'span',
+		attributes: { 'class': 'label label-danger' }
+	},
+	{
+		name: '画像(角丸)',
+		element: 'img',
+		attributes: { 'class': 'img-rounded' }
+	},
+	{
+		name: '画像(丸)',
+		element: 'img',
+		attributes: { 'class': 'img-circle' }
+	},
+	{
+		name: '画像(サムネール)',
+		element: 'img',
+		attributes: { 'class': 'img-thumbnail' }
+	},
+	{
+		name: '画像左寄せ',
+		element: 'img',
+		attributes: { 'class': 'left' }
+	},
+	{
+		name: '画像右寄せ',
+		element: 'img',
+		attributes: { 'class': 'right' }
+	},
+	{
+		name: '簡易テーブル',
+		element: 'table',
+		attributes: {
+			cellpadding: '5',
+			cellspacing: '0',
+			border: '1',
+			bordercolor: '#ccc'
+		},
+		styles: {
+			'border-collapse': 'collapse'
+		}
+	},
+	{ name: '枠なしテーブル',		element: 'table',	styles: { 'border-style': 'hidden', 'background-color': '#E6E6FA' } }
 ]);
 
 CKEDITOR.editorConfig = function(config){
@@ -161,7 +207,11 @@ CKEDITOR.editorConfig = function(config){
 		{ name: 'paragraph', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
 		{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
 	];
-	config.stylesCombo_stylesSet = 'default';
+	if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined" && M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE == 10){
+		config.stylesCombo_stylesSet = 'bootstrap';
+	} else {
+		config.stylesCombo_stylesSet = 'default';
+	}
 	
 	// メッセージの変更
 	config.image_previewText = '<strong>「サーバブラウザ」ボタン</strong>をクリックすると画像ブラウザが立ち上がります。サムネール表示の画像をダブルクリックすると画像が取得できます。画像をアップロードするには、画像ブラウザ上部の「アップロード」ボタンをクリックするか、画像ブラウザ上へ画像ファイルをドロップします。';
