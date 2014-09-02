@@ -130,12 +130,12 @@ CKEDITOR.stylesSet.add( 'bootstrap', [
 	{
 		name: '画像左寄せ',
 		element: 'img',
-		attributes: { 'class': 'left' }
+		attributes: { 'class': 'pull-left' }
 	},
 	{
 		name: '画像右寄せ',
 		element: 'img',
-		attributes: { 'class': 'right' }
+		attributes: { 'class': 'pull-right' }
 	},
 	{
 		name: '簡易テーブル',
