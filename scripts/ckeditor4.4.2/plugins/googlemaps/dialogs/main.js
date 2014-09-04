@@ -149,26 +149,40 @@
 				}
 			});
 		};
-		var changeMap = function()
+		var changeMap = function(id)
 		{
 			// ダイアログ用のデータ読み込み中のときは終了
 			if (inLoading) return;
-
+			
 			var val;
-			val = dialog.getValueOf('tab_option', 'chkZoomControl');
-			mapObj.setOptions({ zoomControl: val });
-			val = dialog.getValueOf('tab_option', 'chkPanControl');
-			mapObj.setOptions({ panControl: val });
-			val = dialog.getValueOf('tab_option', 'chkScaleControl');
-			mapObj.setOptions({ scaleControl: val });
-			val = dialog.getValueOf('tab_option', 'chkMapTypeControl');
-			mapObj.setOptions({ mapTypeControl: val });
-			val = dialog.getValueOf('tab_option', 'chkStreetViewControl');
-			mapObj.setOptions({ streetViewControl: val });
-			val = dialog.getValueOf('tab_option', 'chkRotateControl');
-			mapObj.setOptions({ rotateControl: val });
-			val = dialog.getValueOf('tab_option', 'chkOverviewMapControl');
-			mapObj.setOptions({ overviewMapControl: val });
+			if (!id || id == 'chkZoomControl'){
+				val = dialog.getValueOf('tab_option', 'chkZoomControl');
+				mapObj.setOptions({ zoomControl: val });
+			}
+			if (!id || id == 'chkPanControl'){
+				val = dialog.getValueOf('tab_option', 'chkPanControl');
+				mapObj.setOptions({ panControl: val });
+			}
+			if (!id || id == 'chkScaleControl'){
+				val = dialog.getValueOf('tab_option', 'chkScaleControl');
+				mapObj.setOptions({ scaleControl: val });
+			}
+			if (!id || id == 'chkMapTypeControl'){
+				val = dialog.getValueOf('tab_option', 'chkMapTypeControl');
+				mapObj.setOptions({ mapTypeControl: val });
+			}
+			if (!id || id == 'chkStreetViewControl'){
+				val = dialog.getValueOf('tab_option', 'chkStreetViewControl');
+				mapObj.setOptions({ streetViewControl: val });
+			}
+			if (!id || id == 'chkRotateControl'){
+				val = dialog.getValueOf('tab_option', 'chkRotateControl');
+				mapObj.setOptions({ rotateControl: val });
+			}
+			if (!id || id == 'chkOverviewMapControl'){
+				val = dialog.getValueOf('tab_option', 'chkOverviewMapControl');
+				mapObj.setOptions({ overviewMapControl: val });
+			}
 		};
 		var resizeMap = function()
 		{
@@ -623,28 +637,36 @@
 						id: 'chkZoomControl',
 						label: editor.lang.googlemaps.zoomControl,
 						'default': false,
-						onChange: changeMap,
+						onChange: function(){
+							changeMap(this.id);
+						},
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkPanControl',
 						label: editor.lang.googlemaps.panControl,
 						'default': false,
-						onChange: changeMap,
+						onChange: function(){
+							changeMap(this.id);
+						},
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkMapTypeControl',
 						label: editor.lang.googlemaps.mapTypeControl,
 						'default': false,
-						onChange: changeMap,
+						onChange: function(){
+							changeMap(this.id);
+						},
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkScaleControl',
 						label: editor.lang.googlemaps.scaleControl,
 						'default': false,
-						onChange: changeMap,
+						onChange: function(){
+							changeMap(this.id);
+						},
 						commit: commitValue
 					} ]
 				}, {
@@ -656,21 +678,27 @@
 						id: 'chkStreetViewControl',
 						label: editor.lang.googlemaps.streetViewControl,
 						'default': false,
-						onChange: changeMap,
+						onChange: function(){
+							changeMap(this.id);
+						},
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkRotateControl',
 						label: editor.lang.googlemaps.rotateControl,
 						'default': false,
-						onChange: changeMap,
+						onChange: function(){
+							changeMap(this.id);
+						},
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkOverviewMapControl',
 						label: editor.lang.googlemaps.overviewMapControl,
 						'default': false,
-						onChange: changeMap,
+						onChange: function(){
+							changeMap(this.id);
+						},
 						commit: commitValue
 					} ]
 				}, {
