@@ -285,13 +285,16 @@ GoogleMap.prototype.buildScript = function()
 	aScript.push('						google.maps.MapTypeId.HYBRID,');
 	aScript.push('						google.maps.MapTypeId.TERRAIN	];');
 	aScript.push('	var opts = {');
-	if (this.zoomControl != 'undefined')		aScript.push('					zoomControl: ' + this.zoomControl + ',');
-	if (this.panControl != 'undefined')			aScript.push('					panControl: ' + this.panControl + ',');
-	if (this.scaleControl != 'undefined')		aScript.push('					scaleControl: ' + this.scaleControl + ',');
-	if (this.mapTypeControl != 'undefined')		aScript.push('					mapTypeControl: ' + this.mapTypeControl + ',');
-	if (this.streetViewControl != 'undefined')	aScript.push('					streetViewControl: ' + this.streetViewControl + ',');
-	if (this.rotateControl != 'undefined')		aScript.push('					rotateControl: ' + this.rotateControl + ',');
-	if (this.overviewMapControl != 'undefined')	aScript.push('					overviewMapControl: ' + this.overviewMapControl + ',');
+	if (typeof this.zoomControl != 'undefined')			aScript.push('					zoomControl: ' + this.zoomControl + ',');
+	if (typeof this.panControl != 'undefined')			aScript.push('					panControl: ' + this.panControl + ',');
+	if (typeof this.scaleControl != 'undefined')		aScript.push('					scaleControl: ' + this.scaleControl + ',');
+	if (typeof this.mapTypeControl != 'undefined')		aScript.push('					mapTypeControl: ' + this.mapTypeControl + ',');
+	if (typeof this.streetViewControl != 'undefined')	aScript.push('					streetViewControl: ' + this.streetViewControl + ',');
+	if (typeof this.rotateControl != 'undefined')		aScript.push('					rotateControl: ' + this.rotateControl + ',');
+	if (typeof this.overviewMapControl != 'undefined'){
+		aScript.push('					overviewMapControl: ' + this.overviewMapControl + ',');
+		aScript.push('					overviewMapControlOptions: { opened: true },');
+	}
 	aScript.push('					mapTypeControlOptions: {	mapTypeIds: allMapTypes } };');
 			 
 	aScript.push('	var mapDiv = document.getElementById("gmap' + this.number + '");');

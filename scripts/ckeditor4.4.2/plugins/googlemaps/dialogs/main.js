@@ -185,7 +185,7 @@
 			}
 			if (!id || id == 'chkOverviewMapControl'){
 				val = dialog.getValueOf('tab_option', 'chkOverviewMapControl');
-				mapObj.setOptions({ overviewMapControl: val });
+				mapObj.setOptions({ overviewMapControl: val, overviewMapControlOptions: { opened: true } });
 			}
 		};
 		var resizeMap = function()
