@@ -9,7 +9,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    1.1
+ * @version    1.2
  * @link       http://www.magic3.org
  */
 
@@ -102,6 +102,7 @@
 				var selectedTab = CKEDITOR.dialog.getCurrent().definition.dialog._.currentTabId;		// 選択中のタブIDを取得
 				switch (selectedTab){
 					case 'tab_map':
+					case 'tab_option':
 					case 'tab_search':
 						break;
 					case 'tab_marker':
@@ -122,6 +123,7 @@
 				if (iCode == 46){
 					switch(selectedTab){
 						case 'tab_map':
+						case 'tab_option':
 						case 'tab_search':
 						case 'tab_marker':
 							break;
@@ -306,6 +308,9 @@
 					switch (e.data.page){
 					case 'tab_map':
 						$('#gmapPreview' + editor.id).appendTo('#placeholder_map' + editor.id);
+						break;
+					case 'tab_option':
+						$('#gmapPreview' + editor.id).appendTo('#placeholder_option' + editor.id);
 						break;
 					case 'tab_search':
 						$('#gmapPreview' + editor.id).appendTo('#placeholder_search' + editor.id);
@@ -557,6 +562,69 @@
 					type: 'html',
 					html: '<div id="placeholder_map' + editor.id + '"><div id="gmapPreview' + editor.id + '" style="outline:0;" tabIndex="-1"></div></div>'
 				} ]		// elements
+			}, {
+				id: 'tab_option',
+				label: editor.lang.googlemaps.optionTitle,
+				elements: [
+				{
+					type: 'html',
+					html: editor.lang.googlemaps.control
+				}, {
+					type: 'hbox',
+					widths: [ '25%', '25%', '25%', '25%' ],
+					children: [
+					{
+						type: 'checkbox',
+						id: 'chkZoomControl',
+						label: editor.lang.googlemaps.zoomControl,
+						'default': false,
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkPanControl',
+						label: editor.lang.googlemaps.panControl,
+						'default': false,
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkScaleControl',
+						label: editor.lang.googlemaps.scaleControl,
+						'default': false,
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkMapTypeControl',
+						label: editor.lang.googlemaps.mapTypeControl,
+						'default': false,
+						commit: commitValue
+					} ]
+				}, {
+					type: 'hbox',
+					widths: [ '25%', '25%', '50%' ],
+					children: [
+					{
+						type: 'checkbox',
+						id: 'chkStreetViewControl',
+						label: editor.lang.googlemaps.streetViewControl,
+						'default': false,
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkRotateControl',
+						label: editor.lang.googlemaps.rotateControl,
+						'default': false,
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkOverviewMapControl',
+						label: editor.lang.googlemaps.overviewMapControl,
+						'default': false,
+						commit: commitValue
+					} ]
+				}, {
+					type: 'html',
+					html: '<div id="placeholder_option' + editor.id + '"></div>'
+				} ]
 			}, {
 				id: 'tab_search',
 				label: editor.lang.googlemaps.searchTitle,
