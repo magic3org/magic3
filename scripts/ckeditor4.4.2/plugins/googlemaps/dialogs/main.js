@@ -28,12 +28,15 @@
 		var fakeImage;
 		var infoWindow;
 		var polyline;
+		var inLoading;
 		
 		// スクリプト読み込み
 		var pluginUrl = CKEDITOR.getUrl(CKEDITOR.plugins.getPath( 'googlemaps' ));
 			
 		var loadSelectionData = function()
 		{
+			inLoading = true;		// データロード中
+			
 			if (fakeImage){		// マップ選択からの起動の場合
 				var className = fakeImage.$.className;
 				var mapNumber;
@@ -54,13 +57,25 @@
 			dialog.setValueOf('tab_map', 'cmbZoom', mapInfo.zoom);
 			dialog.setValueOf('tab_map', 'txtCenterLat', mapInfo.centerLat);
 			dialog.setValueOf('tab_map', 'txtCenterLon', mapInfo.centerLon);
+			dialog.setValueOf('tab_option', 'chkZoomControl', mapInfo.zoomControl);
+			dialog.setValueOf('tab_option', 'chkPanControl', mapInfo.panControl);
+			dialog.setValueOf('tab_option', 'chkScaleControl', mapInfo.scaleControl);
+			dialog.setValueOf('tab_option', 'chkMapTypeControl', mapInfo.mapTypeControl);
+			dialog.setValueOf('tab_option', 'chkStreetViewControl', mapInfo.streetViewControl);
+			dialog.setValueOf('tab_option', 'chkRotateControl', mapInfo.rotateControl);
+			dialog.setValueOf('tab_option', 'chkOverviewMapControl', mapInfo.overviewMapControl);
 			dialog.setValueOf('tab_style', 'txtStyle', mapInfo.style);
 //			dialog.setValueOf('tab_line', 'txtEncodedPolyline', mapInfo.linePoints);
 //			dialog.setValueOf('tab_line', 'txtEncodedLevels', mapInfo.lineLevels);
 			
-			// マップ作成
-			setPreviewElement(mapInfo.mapType);
+			inLoading = false;		// データロード終了
 			
+			// プレビューマップ作成
+			createMap(mapInfo.mapType);
+			
+			// コントローラ設定
+			changeMap();
+				
 			// マーカー設定
 			var markerPoints = mapInfo.markerPoints;
 			for (var i = 0; i < markerPoints.length; i++)
@@ -73,7 +88,7 @@
 			polyline.setMap(mapObj);
 			polyline.decodePolyline(mapInfo.linePoints);
 		};
-		var setPreviewElement = function(mapType)
+		var createMap = function(mapType)
 		{
 			mapDiv = document.getElementById("gmapPreview" + editor.id);
 			resizeMap();
@@ -86,7 +101,7 @@
 							mapTypeControlOptions:{	mapTypeIds:allMapTypes } };
 			mapObj = new google.maps.Map(mapDiv, opts);
 
-			updatePreview();
+			updateMap();
 			
 			// イベント設定
 			google.maps.event.addListener(mapObj, 'zoom_changed', function(){
@@ -134,6 +149,27 @@
 				}
 			});
 		};
+		var changeMap = function()
+		{
+			// ダイアログ用のデータ読み込み中のときは終了
+			if (inLoading) return;
+
+			var val;
+			val = dialog.getValueOf('tab_option', 'chkZoomControl');
+			mapObj.setOptions({ zoomControl: val });
+			val = dialog.getValueOf('tab_option', 'chkPanControl');
+			mapObj.setOptions({ panControl: val });
+			val = dialog.getValueOf('tab_option', 'chkScaleControl');
+			mapObj.setOptions({ scaleControl: val });
+			val = dialog.getValueOf('tab_option', 'chkMapTypeControl');
+			mapObj.setOptions({ mapTypeControl: val });
+			val = dialog.getValueOf('tab_option', 'chkStreetViewControl');
+			mapObj.setOptions({ streetViewControl: val });
+			val = dialog.getValueOf('tab_option', 'chkRotateControl');
+			mapObj.setOptions({ rotateControl: val });
+			val = dialog.getValueOf('tab_option', 'chkOverviewMapControl');
+			mapObj.setOptions({ overviewMapControl: val });
+		};
 		var resizeMap = function()
 		{
 			if (!mapDiv) return;
@@ -145,7 +181,7 @@
 			
 			//ResizeParent();
 		};
-		var updatePreview = function()
+		var updateMap = function()
 		{
 			if (!mapObj) return;
 
@@ -166,7 +202,7 @@
 					// 検索位置にマーカーを設定
 					addMarkerAtPoint(point, address);
 
-					updatePreview();
+					updateMap();
 				} else {
 					alert(editor.lang.googlemaps.msgNotFound.replace("%s", address));
 				}
@@ -336,9 +372,9 @@
 					addMarker();
 				}).attr({ title:editor.lang.googlemaps.addMarker, alt:editor.lang.googlemaps.addMarker });
 			},
-	/*		onFocus: function() {
+			onFocus: function() {		// 特定フィールドからフォーカスをはずす
 				mapDiv.focus();
-			},*/
+			},
 			onShow: function(){
 				// マップ初期化
 				markers = [];
@@ -352,6 +388,8 @@
 				} else {
 					fakeImage = null;
 				}
+				
+				// データロード
 				loadSelectionData();
 			},
 			onOk: function(){
@@ -370,6 +408,13 @@
 				mapInfo.zoom = data.info['cmbZoom'];
 				mapInfo.centerLat = data.info['txtCenterLat'];
 				mapInfo.centerLon = data.info['txtCenterLon'];
+				mapInfo.zoomControl = data.info['chkZoomControl'];
+				mapInfo.panControl = data.info['chkPanControl'];
+				mapInfo.scaleControl = data.info['chkScaleControl'];
+				mapInfo.mapTypeControl = data.info['chkMapTypeControl'];
+				mapInfo.streetViewControl = data.info['chkStreetViewControl'];
+				mapInfo.rotateControl = data.info['chkRotateControl'];
+				mapInfo.overviewMapControl = data.info['chkOverviewMapControl'];
 				mapInfo.style = data.info['txtStyle'];
 				var markerPoints = [];
 				for (var i=0; i < markers.length; i++){
@@ -578,24 +623,28 @@
 						id: 'chkZoomControl',
 						label: editor.lang.googlemaps.zoomControl,
 						'default': false,
+						onChange: changeMap,
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkPanControl',
 						label: editor.lang.googlemaps.panControl,
 						'default': false,
-						commit: commitValue
-					}, {
-						type: 'checkbox',
-						id: 'chkScaleControl',
-						label: editor.lang.googlemaps.scaleControl,
-						'default': false,
+						onChange: changeMap,
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkMapTypeControl',
 						label: editor.lang.googlemaps.mapTypeControl,
 						'default': false,
+						onChange: changeMap,
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkScaleControl',
+						label: editor.lang.googlemaps.scaleControl,
+						'default': false,
+						onChange: changeMap,
 						commit: commitValue
 					} ]
 				}, {
@@ -607,18 +656,21 @@
 						id: 'chkStreetViewControl',
 						label: editor.lang.googlemaps.streetViewControl,
 						'default': false,
+						onChange: changeMap,
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkRotateControl',
 						label: editor.lang.googlemaps.rotateControl,
 						'default': false,
+						onChange: changeMap,
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkOverviewMapControl',
 						label: editor.lang.googlemaps.overviewMapControl,
 						'default': false,
+						onChange: changeMap,
 						commit: commitValue
 					} ]
 				}, {

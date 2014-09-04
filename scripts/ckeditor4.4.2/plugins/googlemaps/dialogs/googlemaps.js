@@ -28,7 +28,7 @@ var GoogleMapsHandler = {
 		return true
 	},
 
-	// This can be called from the dialog
+	// マップ新規作成
 	createNew: function()
 	{
 		var map = new GoogleMap();
@@ -37,7 +37,7 @@ var GoogleMapsHandler = {
 	},
 };
 
-// Our object that will handle parsing of the script and creating the new one.
+// マップのパラメータ初期化
 var GoogleMap = function() 
 {
 	var now = new Date();
@@ -53,7 +53,14 @@ var GoogleMap = function()
 	this.centerLon =  CKEDITOR.config.googlemaps_centerLon || 139.620739;
 	this.zoom = CKEDITOR.config.googlemaps_zoom || 11;
 	this.style = '';
-
+	this.zoomControl = true;
+	this.panControl = true;
+	this.mapTypeControl = true;
+	this.scaleControl = true;
+	this.streetViewControl = false;
+	this.rotateControl = false;
+	this.overviewMapControl = false;
+	
 	this.markerPoints = [];
 	this.linePoints = '';
 	this.lineLevels = '';
@@ -158,8 +165,8 @@ GoogleMap.prototype.encodeText = function(string)
 
 GoogleMap.prototype.parse = function( script )
 {
-	// We only know about version 1:
-	if (!(/Magic3 googlemaps v1\.(\d+) mapid:(\d+)/.test(script))) return false;
+	var regExp = /Magic3 googlemaps v1\.(\d+) mapid:(\d+)/;
+	if (!(regExp.test(script))) return false;
 
 //	var version = parseInt(RegExp.$1, 10);
 	delete GoogleMapsHandler.maps[this.number];
@@ -175,7 +182,6 @@ GoogleMap.prototype.parse = function( script )
 	}
 
 	// マップ位置座標を取得
-//	map.setCenter(new GLatLng(42.4298,-8.07756), 8);
 	var regexpPosition = /map\.setCenter\(new google\.maps\.LatLng\((-?\d{1,3}\.\d{1,6}), (-?\d{1,3}\.\d{1,6})\)\);/;
 	if (regexpPosition.test(script))
 	{
@@ -190,7 +196,23 @@ GoogleMap.prototype.parse = function( script )
 		this.zoom = RegExp.$1;
 	}
 
-	// AddMarkers( [{lat:37.45088, lon:-122.21123, text:'Write your text'}] );
+	// コントロールの状態を取得
+	regExp = /zoomControl:\s*(.*)\s*,/;
+	if (regExp.test(script)) this.zoomControl = (RegExp.$1 == 'true');
+	regExp = /panControl:\s*(.*)\s*,/;
+	if (regExp.test(script)) this.panControl = (RegExp.$1 == 'true');
+	regExp = /scaleControl:\s*(.*)\s*,/;
+	if (regExp.test(script)) this.scaleControl = (RegExp.$1 == 'true');
+	regExp = /mapTypeControl:\s*(.*)\s*,/;
+	if (regExp.test(script)) this.mapTypeControl = (RegExp.$1 == 'true');
+	regExp = /streetViewControl:\s*(.*)\s*,/;
+	if (regExp.test(script)) this.streetViewControl = (RegExp.$1 == 'true');
+	regExp = /rotateControl:\s*(.*)\s*,/;
+	if (regExp.test(script)) this.rotateControl = (RegExp.$1 == 'true');
+	regExp = /overviewMapControl:\s*(.*)\s*,/;
+	if (regExp.test(script)) this.overviewMapControl = (RegExp.$1 == 'true');
+	
+	// マーカーを追加
 	var regexpMarkers = /\{lat\:(-?\d{1,3}\.\d{1,6}),\s*lon\:(-?\d{1,3}\.\d{1,6}),\s*text\:("|')(.*)\3}(?:,|])/;
 	var point;
 	var sampleText = script;
@@ -262,7 +284,16 @@ GoogleMap.prototype.buildScript = function()
 	aScript.push('						google.maps.MapTypeId.SATELLITE,');
 	aScript.push('						google.maps.MapTypeId.HYBRID,');
 	aScript.push('						google.maps.MapTypeId.TERRAIN	];');
-	aScript.push('	var opts = {	mapTypeControlOptions: {	mapTypeIds: allMapTypes } };');
+	aScript.push('	var opts = {');
+	if (this.zoomControl != 'undefined')		aScript.push('					zoomControl: ' + this.zoomControl + ',');
+	if (this.panControl != 'undefined')			aScript.push('					panControl: ' + this.panControl + ',');
+	if (this.scaleControl != 'undefined')		aScript.push('					scaleControl: ' + this.scaleControl + ',');
+	if (this.mapTypeControl != 'undefined')		aScript.push('					mapTypeControl: ' + this.mapTypeControl + ',');
+	if (this.streetViewControl != 'undefined')	aScript.push('					streetViewControl: ' + this.streetViewControl + ',');
+	if (this.rotateControl != 'undefined')		aScript.push('					rotateControl: ' + this.rotateControl + ',');
+	if (this.overviewMapControl != 'undefined')	aScript.push('					overviewMapControl: ' + this.overviewMapControl + ',');
+	aScript.push('					mapTypeControlOptions: {	mapTypeIds: allMapTypes } };');
+			 
 	aScript.push('	var mapDiv = document.getElementById("gmap' + this.number + '");');
 	aScript.push('	var map = new google.maps.Map(mapDiv, opts);');
 	if (this.style != ''){
