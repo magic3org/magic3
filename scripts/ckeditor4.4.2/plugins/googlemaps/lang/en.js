@@ -28,6 +28,10 @@ CKEDITOR.plugins.setLang( 'googlemaps', 'en', {
 	streetViewControl: 'Street View',
 	rotateControl: 'Rotate',
 	overviewMapControl: 'Overview Map',
+	roadmapMapType: 'Map',
+	satelliteMapType: 'Satellite',
+	hybridMapType: 'Hybrid',
+	terrainMapType: 'Terrain',
 	width: 'Width',
 	height: 'Height',
 	widthType: '&nbsp;',
@@ -35,6 +39,7 @@ CKEDITOR.plugins.setLang( 'googlemaps', 'en', {
 	alignCenter: 'align at center',
 	zoomLevel: 'Zoom Level',
 	control: 'Control',
+	mapType: 'Map Type',
 	msgDefaultMarkerText:	'Input text.',
 	msgInputStyleJsonData: 'Input style data by JSON format.',
 	msgInvalidStyle: 'Invalid JSON data.'

@@ -64,6 +64,10 @@
 			dialog.setValueOf('tab_option', 'chkStreetViewControl', mapInfo.streetViewControl);
 			dialog.setValueOf('tab_option', 'chkRotateControl', mapInfo.rotateControl);
 			dialog.setValueOf('tab_option', 'chkOverviewMapControl', mapInfo.overviewMapControl);
+			dialog.setValueOf('tab_option', 'chkRoadmapMapType', mapInfo.roadmapMapType);
+			dialog.setValueOf('tab_option', 'chkSatelliteMapType', mapInfo.satelliteMapType);
+			dialog.setValueOf('tab_option', 'chkHybridMapType', mapInfo.hybridMapType);
+			dialog.setValueOf('tab_option', 'chkTerrainMapType', mapInfo.terrainMapType);
 			dialog.setValueOf('tab_style', 'txtStyle', mapInfo.style);
 //			dialog.setValueOf('tab_line', 'txtEncodedPolyline', mapInfo.linePoints);
 //			dialog.setValueOf('tab_line', 'txtEncodedLevels', mapInfo.lineLevels);
@@ -429,6 +433,10 @@
 				mapInfo.streetViewControl = data.info['chkStreetViewControl'];
 				mapInfo.rotateControl = data.info['chkRotateControl'];
 				mapInfo.overviewMapControl = data.info['chkOverviewMapControl'];
+				mapInfo.roadmapMapType = data.info['chkRoadmapMapType'];
+				mapInfo.satelliteMapType = data.info['chkSatelliteMapType'];
+				mapInfo.hybridMapType = data.info['chkHybridMapType'];
+				mapInfo.terrainMapType = data.info['chkTerrainMapType'];
 				mapInfo.style = data.info['txtStyle'];
 				var markerPoints = [];
 				for (var i=0; i < markers.length; i++){
@@ -695,6 +703,50 @@
 						type: 'checkbox',
 						id: 'chkOverviewMapControl',
 						label: editor.lang.googlemaps.overviewMapControl,
+						'default': false,
+						onChange: function(){
+							changeMap(this.id);
+						},
+						commit: commitValue
+					} ]
+				}, {
+					type: 'html',
+					html: editor.lang.googlemaps.mapType
+				}, {
+					type: 'hbox',
+					widths: [ '25%', '25%', '25%', '25%' ],
+					children: [
+					{
+						type: 'checkbox',
+						id: 'chkRoadmapMapType',
+						label: editor.lang.googlemaps.roadmapMapType,
+						'default': false,
+						onChange: function(){
+							changeMap(this.id);
+						},
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkSatelliteMapType',
+						label: editor.lang.googlemaps.satelliteMapType,
+						'default': false,
+						onChange: function(){
+							changeMap(this.id);
+						},
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkHybridMapType',
+						label: editor.lang.googlemaps.hybridMapType,
+						'default': false,
+						onChange: function(){
+							changeMap(this.id);
+						},
+						commit: commitValue
+					}, {
+						type: 'checkbox',
+						id: 'chkTerrainMapType',
+						label: editor.lang.googlemaps.terrainMapType,
 						'default': false,
 						onChange: function(){
 							changeMap(this.id);
