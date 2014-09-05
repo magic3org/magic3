@@ -9,7 +9,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2013 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    1.1
+ * @version    1.2
  * @link       http://www.magic3.org
  */
 var GoogleMapsHandler = {
@@ -60,6 +60,10 @@ var GoogleMap = function()
 	this.streetViewControl = false;
 	this.rotateControl = false;
 	this.overviewMapControl = false;
+	this.roadmapMapType = true;
+	this.satelliteMapType = false;
+	this.hybridMapType = false;
+	this.terrainMapType = false;
 	
 	this.markerPoints = [];
 	this.linePoints = '';
@@ -173,6 +177,22 @@ GoogleMap.prototype.parse = function( script )
 	this.number = RegExp.$2;
 	GoogleMapsHandler.maps[this.number] = this;
 	
+	// マップの種別を取得
+	this.roadmapMapType = false;
+	this.satelliteMapType = false;
+	this.hybridMapType = false;
+	this.terrainMapType = false;
+	regExp = /google.maps.MapTypeId.ROADMAP/;
+	if (regExp.test(script)) this.roadmapMapType = true;
+	regExp = /"original"/;
+	if (regExp.test(script)) this.roadmapMapType = true;
+	regExp = /google.maps.MapTypeId.SATELLITE/;
+	if (regExp.test(script)) this.satelliteMapType = true;
+	regExp = /google.maps.MapTypeId.HYBRID/;
+	if (regExp.test(script)) this.hybridMapType = true;
+	regExp = /google.maps.MapTypeId.TERRAIN/;
+	if (regExp.test(script)) this.terrainMapType = true;
+	
 	// マップ高さ、幅を取得
 	var regexpDimensions = /<div id="gmap(\d+)" style="width\:\s*(\d+)px; height\:\s*(\d+)px;">/;
 	if (regexpDimensions.test( script ) )
@@ -269,46 +289,54 @@ GoogleMap.prototype.buildScript = function()
 {
 	var versionMarker = '// Magic3 googlemaps v1.00 mapid:' + this.number;
 
-	var aScript = [];
-	aScript.push('<script type="text/javascript">');
-	aScript.push('//<![CDATA[');
-	aScript.push(versionMarker);
-
-	aScript.push('$(function(){');
-	if (this.style == ''){
-		aScript.push('	var allMapTypes = [	google.maps.MapTypeId.ROADMAP,');
-	} else {
-		aScript.push('	var mapStyle = ' + this.style + ';');
-		aScript.push('	var allMapTypes = [	"original",');
-	}
-	aScript.push('						google.maps.MapTypeId.SATELLITE,');
-	aScript.push('						google.maps.MapTypeId.HYBRID,');
-	aScript.push('						google.maps.MapTypeId.TERRAIN	];');
-	aScript.push('	var opts = {');
-	if (typeof this.zoomControl != 'undefined')			aScript.push('					zoomControl: ' + this.zoomControl + ',');
-	if (typeof this.panControl != 'undefined')			aScript.push('					panControl: ' + this.panControl + ',');
-	if (typeof this.scaleControl != 'undefined')		aScript.push('					scaleControl: ' + this.scaleControl + ',');
-	if (typeof this.mapTypeControl != 'undefined')		aScript.push('					mapTypeControl: ' + this.mapTypeControl + ',');
-	if (typeof this.streetViewControl != 'undefined')	aScript.push('					streetViewControl: ' + this.streetViewControl + ',');
-	if (typeof this.rotateControl != 'undefined')		aScript.push('					rotateControl: ' + this.rotateControl + ',');
-	if (typeof this.overviewMapControl != 'undefined'){
-		aScript.push('					overviewMapControl: ' + this.overviewMapControl + ',');
-		aScript.push('					overviewMapControlOptions: { opened: true },');
-	}
-	aScript.push('					mapTypeControlOptions: {	mapTypeIds: allMapTypes } };');
-			 
-	aScript.push('	var mapDiv = document.getElementById("gmap' + this.number + '");');
-	aScript.push('	var map = new google.maps.Map(mapDiv, opts);');
-	if (this.style != ''){
-		aScript.push('	var originalMapType = new google.maps.StyledMapType(mapStyle, { name: "地図" });');
-		aScript.push('	map.mapTypes.set("original", originalMapType);');
-		aScript.push('	map.setMapTypeId("original");');
-	}
-	aScript.push('	map.setMapTypeId(allMapTypes[' + this.mapType + ']);');
+	var scripts = [];
+	scripts.push('<script type="text/javascript">');
+	scripts.push('//<![CDATA[');
+	scripts.push(versionMarker);
+	scripts.push('$(function(){');
 	
-	aScript.push('	map.setCenter(new google.maps.LatLng(' + this.centerLat + ', ' + this.centerLon + '));');
-	aScript.push('	map.setZoom(' + this.zoom + ');');
-	aScript.push('	mapDiv.style.display = "";');
+	// マップタイプ
+	var mapTypes = [];
+	if (this.roadmapMapType){
+		if (this.style == ''){
+			mapTypes.push('google.maps.MapTypeId.ROADMAP');
+		} else {
+			scripts.push('	var mapStyle = ' + this.style + ';');
+			mapTypes.push('"original"');
+		}
+	}
+	if (this.satelliteMapType)	mapTypes.push('google.maps.MapTypeId.SATELLITE');
+	if (this.hybridMapType)		mapTypes.push('google.maps.MapTypeId.HYBRID');
+	if (this.terrainMapType)	mapTypes.push('google.maps.MapTypeId.TERRAIN');
+	scripts.push('	var allMapTypes = [');
+	scripts.push('					' + mapTypes.join(', ') + '];');
+
+	// コントローラー
+	scripts.push('	var opts = {');
+	if (typeof this.zoomControl != 'undefined')			scripts.push('					zoomControl: ' + this.zoomControl + ',');
+	if (typeof this.panControl != 'undefined')			scripts.push('					panControl: ' + this.panControl + ',');
+	if (typeof this.scaleControl != 'undefined')		scripts.push('					scaleControl: ' + this.scaleControl + ',');
+	if (typeof this.mapTypeControl != 'undefined')		scripts.push('					mapTypeControl: ' + this.mapTypeControl + ',');
+	if (typeof this.streetViewControl != 'undefined')	scripts.push('					streetViewControl: ' + this.streetViewControl + ',');
+	if (typeof this.rotateControl != 'undefined')		scripts.push('					rotateControl: ' + this.rotateControl + ',');
+	if (typeof this.overviewMapControl != 'undefined'){
+		scripts.push('					overviewMapControl: ' + this.overviewMapControl + ',');
+		scripts.push('					overviewMapControlOptions: { opened: true },');
+	}
+	scripts.push('					mapTypeControlOptions: {	mapTypeIds: allMapTypes } };');
+			 
+	scripts.push('	var mapDiv = document.getElementById("gmap' + this.number + '");');
+	scripts.push('	var map = new google.maps.Map(mapDiv, opts);');
+	if (this.roadmapMapType && this.style != ''){
+		scripts.push('	var originalMapType = new google.maps.StyledMapType(mapStyle, { name: "地図" });');
+		scripts.push('	map.mapTypes.set("original", originalMapType);');
+		scripts.push('	map.setMapTypeId("original");');
+	}
+	scripts.push('	map.setMapTypeId(allMapTypes[' + this.mapType + ']);');
+	
+	scripts.push('	map.setCenter(new google.maps.LatLng(' + this.centerLat + ', ' + this.centerLon + '));');
+	scripts.push('	map.setZoom(' + this.zoom + ');');
+	scripts.push('	mapDiv.style.display = "";');
 
 	var aPoints = [];
 	for (var i = 0; i < this.markerPoints.length; i++)
@@ -316,23 +344,23 @@ GoogleMap.prototype.buildScript = function()
 		var point = this.markerPoints[i];
 		aPoints.push('{lat:' + point.lat + ', lon:' + point.lon + ', text:\'' + this.encodeText(point.text) + '\'}');	
 	}
-	aScript.push('	m3GooglemapsAddMarkers(map, [' + aPoints.join(',\r\n') + ']);');
+	scripts.push('	m3GooglemapsAddMarkers(map, [' + aPoints.join(',\r\n') + ']);');
 
 	if ((this.linePoints && this.linePoints != '') && (this.lineLevels && this.lineLevels != ''))
 	{
-		aScript.push('	var encodedPoints = "' + this.linePoints + '";');
-		aScript.push('	var encodedLevels = "' + this.lineLevels + '";');
-		aScript.push('	var polylinePoints = m3GooglemapsDecodePolyline(encodedPoints)');
-		aScript.push('	var encodedPolyline = new google.maps.Polyline({	strokeColor:"#3333cc",');
-		aScript.push('														strokeWeight:5,');
-		aScript.push('														path:polylinePoints		});');
-		aScript.push('	encodedPolyline.setMap(map);');
+		scripts.push('	var encodedPoints = "' + this.linePoints + '";');
+		scripts.push('	var encodedLevels = "' + this.lineLevels + '";');
+		scripts.push('	var polylinePoints = m3GooglemapsDecodePolyline(encodedPoints)');
+		scripts.push('	var encodedPolyline = new google.maps.Polyline({	strokeColor:"#3333cc",');
+		scripts.push('														strokeWeight:5,');
+		scripts.push('														path:polylinePoints		});');
+		scripts.push('	encodedPolyline.setMap(map);');
 	}
-	aScript.push('});');
-	aScript.push('//]]>');
-	aScript.push('</script>');
+	scripts.push('});');
+	scripts.push('//]]>');
+	scripts.push('</script>');
 
-	return aScript.join('\r\n');
+	return scripts.join('\r\n');
 }
 Number.prototype.RoundTo = function(precission)
 {

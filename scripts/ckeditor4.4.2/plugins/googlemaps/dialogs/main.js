@@ -28,14 +28,15 @@
 		var fakeImage;
 		var infoWindow;
 		var polyline;
-		var inLoading;
+//		var inLoading;
 		
 		// スクリプト読み込み
 		var pluginUrl = CKEDITOR.getUrl(CKEDITOR.plugins.getPath( 'googlemaps' ));
 			
 		var loadSelectionData = function()
 		{
-			inLoading = true;		// データロード中
+//			inLoading = true;		// データロード中
+			mapObj = null;			// オブジェクト一旦削除
 			
 			if (fakeImage){		// マップ選択からの起動の場合
 				var className = fakeImage.$.className;
@@ -72,7 +73,7 @@
 //			dialog.setValueOf('tab_line', 'txtEncodedPolyline', mapInfo.linePoints);
 //			dialog.setValueOf('tab_line', 'txtEncodedLevels', mapInfo.lineLevels);
 			
-			inLoading = false;		// データロード終了
+//			inLoading = false;		// データロード終了
 			
 			// プレビューマップ作成
 			createMap(mapInfo.mapType);
@@ -156,7 +157,8 @@
 		var changeMap = function(id)
 		{
 			// ダイアログ用のデータ読み込み中のときは終了
-			if (inLoading) return;
+//			if (inLoading) return;
+			if (!mapObj) return;
 			
 			var val;
 			if (!id || id == 'chkZoomControl'){
@@ -453,7 +455,6 @@
 				var style = 'width:' + mapInfo.width + mapInfo.widthType + ';height:' + mapInfo.height + mapInfo.heightType + ';display:none;';
 	//			var style = 'width:' + mapInfo.width + mapInfo.widthType + ';height:' + mapInfo.height + mapInfo.heightType + ';';
 				if (mapInfo.alignCenter) style += 'margin:0 auto;';
-					
 				newMapElement.setAttributes({
 					'id': 'gmap' + mapInfo.number,
 					'style': style,
@@ -722,7 +723,7 @@
 						label: editor.lang.googlemaps.roadmapMapType,
 						'default': false,
 						onChange: function(){
-							changeMap(this.id);
+						//	changeMap(this.id);
 						},
 						commit: commitValue
 					}, {
@@ -731,7 +732,7 @@
 						label: editor.lang.googlemaps.satelliteMapType,
 						'default': false,
 						onChange: function(){
-							changeMap(this.id);
+						//	changeMap(this.id);
 						},
 						commit: commitValue
 					}, {
@@ -740,7 +741,7 @@
 						label: editor.lang.googlemaps.hybridMapType,
 						'default': false,
 						onChange: function(){
-							changeMap(this.id);
+						//	changeMap(this.id);
 						},
 						commit: commitValue
 					}, {
@@ -749,7 +750,7 @@
 						label: editor.lang.googlemaps.terrainMapType,
 						'default': false,
 						onChange: function(){
-							changeMap(this.id);
+						//	changeMap(this.id);
 						},
 						commit: commitValue
 					} ]
