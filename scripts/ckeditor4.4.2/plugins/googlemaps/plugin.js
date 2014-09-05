@@ -9,7 +9,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    1.1
+ * @version    1.2
  * @link       http://www.magic3.org
  */
 (function() {

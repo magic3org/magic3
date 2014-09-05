@@ -182,15 +182,15 @@ GoogleMap.prototype.parse = function( script )
 	this.satelliteMapType = false;
 	this.hybridMapType = false;
 	this.terrainMapType = false;
-	regExp = /google.maps.MapTypeId.ROADMAP/;
+	regExp = /google\.maps\.MapTypeId\.ROADMAP/;
 	if (regExp.test(script)) this.roadmapMapType = true;
 	regExp = /"original"/;
 	if (regExp.test(script)) this.roadmapMapType = true;
-	regExp = /google.maps.MapTypeId.SATELLITE/;
+	regExp = /google\.maps\.MapTypeId\.SATELLITE/;
 	if (regExp.test(script)) this.satelliteMapType = true;
-	regExp = /google.maps.MapTypeId.HYBRID/;
+	regExp = /google\.maps\.MapTypeId\.HYBRID/;
 	if (regExp.test(script)) this.hybridMapType = true;
-	regExp = /google.maps.MapTypeId.TERRAIN/;
+	regExp = /google\.maps\.MapTypeId\.TERRAIN/;
 	if (regExp.test(script)) this.terrainMapType = true;
 	
 	// マップ高さ、幅を取得

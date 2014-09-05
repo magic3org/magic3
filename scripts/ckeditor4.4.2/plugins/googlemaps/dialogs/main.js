@@ -98,10 +98,21 @@
 			mapDiv = document.getElementById("gmapPreview" + editor.id);
 			resizeMap();
 	
-			var allMapTypes = [	google.maps.MapTypeId.ROADMAP,
+			// マップタイプ
+			var allMapTypes = [];
+			var val;
+			val = dialog.getValueOf('tab_option', 'chkRoadmapMapType');
+			if (val) allMapTypes.push(google.maps.MapTypeId.ROADMAP);
+			val = dialog.getValueOf('tab_option', 'chkSatelliteMapType');
+			if (val) allMapTypes.push(google.maps.MapTypeId.SATELLITE);
+			val = dialog.getValueOf('tab_option', 'chkHybridMapType');
+			if (val) allMapTypes.push(google.maps.MapTypeId.HYBRID);
+			val = dialog.getValueOf('tab_option', 'chkTerrainMapType');
+			if (val) allMapTypes.push(google.maps.MapTypeId.TERRAIN);
+/*			var allMapTypes = [	google.maps.MapTypeId.ROADMAP,
 							google.maps.MapTypeId.SATELLITE,
 							google.maps.MapTypeId.HYBRID,
-							google.maps.MapTypeId.TERRAIN	];
+							google.maps.MapTypeId.TERRAIN	];*/
 			var opts = { 	mapTypeId:allMapTypes[mapType],
 							mapTypeControlOptions:{	mapTypeIds:allMapTypes } };
 			mapObj = new google.maps.Map(mapDiv, opts);
@@ -153,6 +164,26 @@
 					}
 				}
 			});
+		};
+		var selectMap = function()
+		{
+			if (!mapObj) return;
+			
+			// マップタイプ
+			var allMapTypes = [];
+			var val;
+			val = dialog.getValueOf('tab_option', 'chkRoadmapMapType');
+			if (val) allMapTypes.push(google.maps.MapTypeId.ROADMAP);
+			val = dialog.getValueOf('tab_option', 'chkSatelliteMapType');
+			if (val) allMapTypes.push(google.maps.MapTypeId.SATELLITE);
+			val = dialog.getValueOf('tab_option', 'chkHybridMapType');
+			if (val) allMapTypes.push(google.maps.MapTypeId.HYBRID);
+			val = dialog.getValueOf('tab_option', 'chkTerrainMapType');
+			if (val) allMapTypes.push(google.maps.MapTypeId.TERRAIN);
+			
+			var opts = { 	mapTypeId: allMapTypes[0],
+							mapTypeControlOptions: {	mapTypeIds:allMapTypes } };
+			mapObj.setOptions(opts);
 		};
 		var changeMap = function(id)
 		{
@@ -722,36 +753,28 @@
 						id: 'chkRoadmapMapType',
 						label: editor.lang.googlemaps.roadmapMapType,
 						'default': false,
-						onChange: function(){
-						//	changeMap(this.id);
-						},
+						onChange: selectMap,
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkSatelliteMapType',
 						label: editor.lang.googlemaps.satelliteMapType,
 						'default': false,
-						onChange: function(){
-						//	changeMap(this.id);
-						},
+						onChange: selectMap,
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkHybridMapType',
 						label: editor.lang.googlemaps.hybridMapType,
 						'default': false,
-						onChange: function(){
-						//	changeMap(this.id);
-						},
+						onChange: selectMap,
 						commit: commitValue
 					}, {
 						type: 'checkbox',
 						id: 'chkTerrainMapType',
 						label: editor.lang.googlemaps.terrainMapType,
 						'default': false,
-						onChange: function(){
-						//	changeMap(this.id);
-						},
+						onChange: selectMap,
 						commit: commitValue
 					} ]
 				}, {
