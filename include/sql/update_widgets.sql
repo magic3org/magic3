@@ -183,8 +183,8 @@ INSERT INTO _widgets
 ('photo_main', 'フォトギャラリー-メイン', 'photo', 'photo',         'photo',        true,         '1.5.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フォトギャラリーを表示する。', 'jquery.raty', 'search=jquery.tablednd;imagebrowse_detail=ckeditor_m3toolbar;',  true,     true,        true,               false,true,       1, 2, '2013-07-28', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'photo_new';
 INSERT INTO _widgets
-(wd_id,       wd_name,                   wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                       wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_install_dt, wd_create_dt) VALUES
-('photo_new', 'フォトギャラリー-新規', 'photo',        '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'フォトギャラリーの新規一覧を表示。', true,         false,true,               1, -1, true, now(),    now());
+(wd_id,       wd_name,                   wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                       wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('photo_new', 'フォトギャラリー-新規', 'photo',        '1.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'フォトギャラリーの新規一覧を表示。', true,         false,true,               1, -1, true, '2014-09-07', now(),    now());
 -- ウィジェット情報(PC用/イベント情報)
 DELETE FROM _widgets WHERE wd_id = 'event_main';
 INSERT INTO _widgets
