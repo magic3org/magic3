@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_update_boxWidgetContainer.php 5267 2012-10-04 11:33:36Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
@@ -84,6 +84,7 @@ class blog_update_boxWidgetContainer extends BaseWidgetContainer
 			
 		if (!$this->isEntry){	// 記事の投稿がないときはメッセージを出力
 			$this->tmpl->addVar("_widget", "message", '投稿記事はありません');
+			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');
 		}
 		
 		// RSSの設定

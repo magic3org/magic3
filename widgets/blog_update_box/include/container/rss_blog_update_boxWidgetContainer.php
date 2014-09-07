@@ -87,9 +87,7 @@ class rss_blog_update_boxWidgetContainer extends BaseRssContainer
 		// 一覧を作成
 		$this->defaultUrl = $this->gEnv->getDefaultUrl();
 		$this->db->getEntryItems($itemCount, $langId, array($this, 'itemLoop'));
-				
-		// 画面にデータを埋め込む
-		if ($this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'visible');
+		if (!$this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 		
 		// RSSチャンネル部出力データ作成
 		$linkUrl = $this->getUrl($this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId()));
