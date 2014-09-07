@@ -8,17 +8,16 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_photo_newWidgetContainer.php 5172 2012-09-06 01:53:47Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
 class admin_photo_newWidgetContainer extends BaseAdminWidgetContainer
 {
-	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
-	const DEFAULT_COL_COUNT = 2;			// カラム数
+	const DEFAULT_ITEM_COUNT = 12;		// デフォルトの表示項目数
 	
 	/**
 	 * コンストラクタ
@@ -57,14 +56,12 @@ class admin_photo_newWidgetContainer extends BaseAdminWidgetContainer
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値を取得
 			$itemCount	= $request->valueOf('item_count');			// 表示項目数
-			$colCount	= $request->trimValueOf('item_col_count');			// カラム数
 			$useRss = ($request->trimValueOf('item_use_rss') == 'on') ? 1 : 0;		// RSS配信を行うかどうか
 			$optionPassage = ($request->trimValueOf('item_option_passage') == 'on') ? 1 : 0;		// 表示オプション(経過日時)
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				$paramObj = new stdClass;
 				$paramObj->itemCount		= $itemCount;
-				$paramObj->colCount			= $colCount;			// カラム数
 				$paramObj->useRss			= $useRss;
 				$paramObj->optionPassage	= $optionPassage;		// 表示オプション(経過日時)
 				$ret = $this->updateWidgetParamObj($paramObj);
@@ -78,13 +75,11 @@ class admin_photo_newWidgetContainer extends BaseAdminWidgetContainer
 		} else {		// 初期表示の場合
 			// デフォルト値設定
 			$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
-			$colCount	= self::DEFAULT_COL_COUNT;			// カラム数
 			$useRss = 1;							// RSS配信を行うかどうか
 			$optionPassage = 0;						// 表示オプション(経過日時)
 			$paramObj = $this->getWidgetParamObj();
 			if (!empty($paramObj)){
 				$itemCount	= $paramObj->itemCount;
-				$colCount	= $paramObj->colCount;			// カラム数
 				$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
 				if (!isset($useRss)) $useRss = 1;
 				$optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
@@ -94,7 +89,6 @@ class admin_photo_newWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "item_count",	$this->convertToDispString($itemCount));
-		$this->tmpl->addVar("_widget", "col_count",		$this->convertToDispString($colCount));			// カラム数
 		$checked = '';
 		if ($useRss) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "use_rss",	$checked);// RSS配信を行うかどうか

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: photo_newWidgetContainer.php 4653 2012-02-03 12:35:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
@@ -23,16 +23,12 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 	private $defaultUrl;	// システムのデフォルトURL
 	private $headRssFile;				// RSS情報
 	private $optionPassage;						// 表示オプション(経過日時)
-	private $colCount;			// カラム数
-	const DEFAULT_ITEM_COUNT = 20;		// デフォルトの表示項目数
-	const DEFAULT_COL_COUNT = 2;			// カラム数
+	const DEFAULT_ITEM_COUNT = 12;		// デフォルトの表示項目数
 	const MAX_TITLE_LENGTH = 20;			// タイトルの最大文字列長
 	const DEFAULT_TITLE = 'フォトギャラリー最新画像';		// デフォルトのウィジェットタイトル名
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
 	const CF_PHOTO_CATEGORY_PASSWORD	= 'photo_category_password';		// 画像カテゴリーのパスワード制限
 	const THUMBNAIL_DIR = '/widgets/photo/image';		// 画像格納ディレクトリ
-	const DEFAULT_IMAGE_EXT = 'jpg';			// 画像ファイルのデフォルト拡張子
-	const DEFAULT_THUMBNAIL_SIZE = 128;		// サムネール画像サイズ
 	const DEFAULT_VIEW_THUMB_SIZE = 72;		// サムネール表示サイズ
 	
 	/**
@@ -73,13 +69,11 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 	{
 		// 設定値を取得
 		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
-		$this->colCount	= self::DEFAULT_COL_COUNT;			// カラム数
 		$useRss = 1;							// RSS配信を行うかどうか
 		$this->optionPassage = 0;						// 表示オプション(経過日時)
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
 			$itemCount	= $paramObj->itemCount;
-			$this->colCount	= $paramObj->colCount;			// カラム数
 			$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
 			if (!isset($useRss)) $useRss = 1;
 			$this->optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
@@ -161,12 +155,11 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 		$urlLink = $this->convertUrlToHtmlEntity($this->getUrl($url, true));
 
 		// 画像URL
-		//$imageUrl = $this->gEnv->getResourceUrl() . self::THUMBNAIL_DIR . '/' . $photoId . '_' . self::DEFAULT_THUMBNAIL_SIZE . '.' . self::DEFAULT_IMAGE_EXT;
 		$imageUrl = $this->gInstance->getImageManager()->getDefaultThumbUrl(M3_VIEW_TYPE_PHOTO, $photoId);
 		
 		$dispTitle = $this->convertToDispString($title);
 		$imageTag = '<a href="' . $this->convertUrlToHtmlEntity($urlLink) . '"><img src="' . $this->convertUrlToHtmlEntity($imageUrl) . '" alt="' . $dispTitle . '" title="' . $dispTitle . '" style="width:' . $imageWidth . 'px;height:' . $imageWidth . 'px;' . $imageStyle . '" /></a>';
-		if (($j + 1) % $this->colCount == 0) $imageTag .= '<br />';
+
 		$row = array(
 			'image' => $imageTag			// アルバムのサムネール画像
 		);

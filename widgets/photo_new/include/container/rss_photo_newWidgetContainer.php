@@ -23,7 +23,7 @@ class rss_photo_newWidgetContainer extends BaseRssContainer
 	private $rssChannel;				// RSSチャンネル部出力データ
 	private $rssSeqUrl = array();					// 項目の並び
 	private $defaultUrl;	// システムのデフォルトURL
-	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
+	const DEFAULT_ITEM_COUNT = 12;		// デフォルトの表示項目数
 	const DEFAULT_TITLE = 'フォトギャラリー最新画像';			// デフォルトのウィジェットタイトル
 	const DEFAULT_DESC = '最新のフォトギャラリー画像が取得できます。';
 	const CF_PHOTO_CATEGORY_PASSWORD	= 'photo_category_password';		// 画像カテゴリーのパスワード制限
