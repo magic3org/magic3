@@ -8,24 +8,24 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: imageManager.php 6148 2013-07-01 01:11:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class ImageManager extends Core
 {
+	private $defaultThumbExt;			// デフォルトのサムネールのファイル拡張子
+	private $defaultThumbSize;			// デフォルトのサムネールの画像サイズ
+	private $defaultThumbType;			// デフォルトのサムネールの画像タイプ
 	const CONTENT_DIR = '/etc/';
 	const THUMBNAIL_DIR = '/thumb';
 	const SITE_LOGO_DIR = '/etc/site/thumb/';		// サイトロゴ格納ディレクトリ
 	const AVATAR_DIR = '/etc/avatar/';		// アバター格納ディレクトリ
 	const DEFAULT_THUMB_DIR = '/etc/default/thumb/';		// デフォルトサムネールディレクトリ
 	const DEFAULT_AVATAR_BASE = 'default_';		// デフォルトのアバターファイル名ヘッド部
-	const DEFAULT_THUMBNAIL_EXT = 'png';
-	const DEFAULT_THUMBNAIL_SIZE = 72;
-	const DEFAULT_THUMBNAIL_TYPE = '72c';
 	const CF_SITE_LOGO_FILENAME = 'site_logo_filename';		// サイトロゴファイル
 	const CF_THUMB_FORMAT = 'thumb_format';		// サムネールフォーマット
 	const CF_AVATAR_FORMAT = 'avatar_format';	// アバターフォーマット
@@ -37,8 +37,24 @@ class ImageManager extends Core
 	 */
 	function __construct()
 	{
+		global $gSystemManager;
+		
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// デフォルト値取得
+		
+		// 画像のフォーマットを取得
+		$formatArray = explode(';', $gSystemManager->getSystemConfig(self::CF_THUMB_FORMAT));
+		if (count($formatArray) > 0){
+			$format = trim($formatArray[0]);
+			$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
+			if ($ret){
+				$this->defaultThumbSize = $matches[1];
+				$this->defaultThumbType = $this->defaultThumbSize . strtolower($matches[2]);
+				$this->defaultThumbExt = strtolower($matches[3]);
+			}
+		}
 	}
 	/**
 	 * システム共通のデフォルトのサムネールを作成
@@ -240,13 +256,13 @@ class ImageManager extends Core
 		global $gEnvManager;
 		
 		// サムネール画像のパス
-		$destPath = $gEnvManager->getResourcePath() . self::CONTENT_DIR . $contentType . self::THUMBNAIL_DIR . DIRECTORY_SEPARATOR . $contentId . '_' . self::DEFAULT_THUMBNAIL_TYPE . '.' . self::DEFAULT_THUMBNAIL_EXT;
+		$destPath = $gEnvManager->getResourcePath() . self::CONTENT_DIR . $contentType . self::THUMBNAIL_DIR . DIRECTORY_SEPARATOR . $contentId . '_' . $this->defaultThumbType . '.' . $this->defaultThumbExt;
 
 		// 画像格納用のディレクトリ作成
 		$destDir = dirname($destPath);
 		if (!file_exists($destDir)) mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
 					
-		$ret = $this->createThumb($path, $destPath, self::DEFAULT_THUMBNAIL_SIZE, IMAGETYPE_PNG);
+		$ret = $this->createThumb($path, $destPath, $this->defaultThumbSize, IMAGETYPE_PNG);
 		return $ret;
 	}
 	/**
@@ -260,7 +276,7 @@ class ImageManager extends Core
 	{
 		global $gEnvManager;
 		
-		return $gEnvManager->getResourceUrl() . self::CONTENT_DIR . $contentType . self::THUMBNAIL_DIR . '/' . $contentId . '_' . self::DEFAULT_THUMBNAIL_TYPE . '.' . self::DEFAULT_THUMBNAIL_EXT;
+		return $gEnvManager->getResourceUrl() . self::CONTENT_DIR . $contentType . self::THUMBNAIL_DIR . '/' . $contentId . '_' . $this->defaultThumbType . '.' . $this->defaultThumbExt;
 	}
 	/**
 	 * サムネール画像のファイルパスを取得
@@ -273,7 +289,7 @@ class ImageManager extends Core
 	{
 		global $gEnvManager;
 		
-		return $gEnvManager->getResourcePath() . self::CONTENT_DIR . $contentType . self::THUMBNAIL_DIR . DIRECTORY_SEPARATOR . $contentId . '_' . self::DEFAULT_THUMBNAIL_TYPE . '.' . self::DEFAULT_THUMBNAIL_EXT;
+		return $gEnvManager->getResourcePath() . self::CONTENT_DIR . $contentType . self::THUMBNAIL_DIR . DIRECTORY_SEPARATOR . $contentId . '_' . $this->defaultThumbType . '.' . $this->defaultThumbExt;
 	}
 	/**
 	 * サムネールを作成
