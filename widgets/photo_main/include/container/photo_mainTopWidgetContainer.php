@@ -99,12 +99,21 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'search'){
-			return 'main_list.tmpl.html';
+			if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+				return 'index.tmpl.html';
+			} else {
+				return 'index_bootstrap.tmpl.html';
+			}
 		} else if ($act == 'inputcart'){			// カートに入れる
 			return '';
 		} else {
 			if (empty($this->photoId)){
-				return 'main_list.tmpl.html';
+//				return 'main_list.tmpl.html';
+				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+					return 'index.tmpl.html';
+				} else {
+					return 'index_bootstrap.tmpl.html';
+				}
 			} else {
 				return 'photo_detail.tmpl.html';
 			}
