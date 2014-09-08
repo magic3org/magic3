@@ -27,7 +27,7 @@ $(window).load(function(){		// 画像がすべて読み込まれてから作成
 	});
 });
 $(window).resize(function(){
-	{CSS_ID}.reloadSlider();
+	if ({CSS_ID}) {CSS_ID}.reloadSlider();
 });
 //]]>
 </script>
