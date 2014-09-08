@@ -401,7 +401,7 @@ CREATE TABLE quiz_config (
     qc_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     qc_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (qc_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- クイズパターンセットIDマスター
 DROP TABLE IF EXISTS quiz_set_id;
@@ -422,7 +422,7 @@ CREATE TABLE quiz_set_id (
     qs_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (qs_serial),
     UNIQUE               (qs_id,  qs_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- クイズ問題定義マスター
 DROP TABLE IF EXISTS quiz_item_def;
@@ -447,7 +447,7 @@ CREATE TABLE quiz_item_def (
     qd_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (qd_serial),
     UNIQUE               (qd_set_id,   qd_id,  qd_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- クイズユーザ回答トラン
 DROP TABLE IF EXISTS quiz_user_post;
@@ -462,7 +462,7 @@ CREATE TABLE quiz_user_post (
     qp_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログ番号
     PRIMARY KEY          (qp_serial),
     UNIQUE               (qp_mobile_id,   qp_set_id,  qp_question_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 INSERT INTO quiz_set_id (qs_id,         qs_name,              qs_index)
 VALUES                  ('default_set', 'デフォルトパターン', 0);

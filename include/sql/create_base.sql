@@ -27,7 +27,7 @@ CREATE TABLE _system_config (
     sc_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     sc_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (sc_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 多言語対応文字列マスター
 DROP TABLE IF EXISTS _language_string;
@@ -41,7 +41,7 @@ CREATE TABLE _language_string (
     ls_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     ls_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (ls_type,      ls_id,                        ls_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 言語マスター
 DROP TABLE IF EXISTS _language;
@@ -53,7 +53,7 @@ CREATE TABLE _language (
     ln_image_filename    VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 画像ファイル名
     ln_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
     PRIMARY KEY  (ln_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 番号管理マスター
 DROP TABLE IF EXISTS _used_no;
@@ -61,7 +61,7 @@ CREATE TABLE _used_no (
     un_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ID(Key)
     un_value             VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 値
     PRIMARY KEY  (un_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 運用メッセージタイプマスター
 DROP TABLE IF EXISTS _operation_type;
@@ -72,7 +72,7 @@ CREATE TABLE _operation_type (
     ot_level             INT            DEFAULT 0                     NOT NULL,      -- メッセージレベル(-1=運用外,0=通常,1=注意,10=要確認)
     ot_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
     PRIMARY KEY  (ot_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 運用ログトラン
 DROP TABLE IF EXISTS _operation_log;
@@ -92,7 +92,7 @@ CREATE TABLE _operation_log (
     ol_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
     ol_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 記録日時
     PRIMARY KEY          (ol_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- デバッグ用メッセージトラン
 DROP TABLE IF EXISTS _debug;
@@ -105,7 +105,7 @@ CREATE TABLE _debug (
     db_time              VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 起動からの経過時間(秒)
     db_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 記録日時
     PRIMARY KEY          (db_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- バージョン管理マスター
 DROP TABLE IF EXISTS _version;
@@ -115,7 +115,7 @@ CREATE TABLE _version (
     vs_name              VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 名称
     vs_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     PRIMARY KEY          (vs_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 汎用キー値型パラメータマスター
 DROP TABLE IF EXISTS _key_value;
@@ -136,7 +136,7 @@ CREATE TABLE _key_value (
     kv_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (kv_serial),
     UNIQUE               (kv_id,        kv_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ウィジェットパラメータ更新マスター
 DROP TABLE IF EXISTS _widget_param_update;
@@ -146,7 +146,7 @@ CREATE TABLE _widget_param_update (
     wu_key_value_id      VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 対応する汎用キー値型パラメータマスターのID
     wu_group_id          VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 項目グループ識別ID
     PRIMARY KEY          (wu_widget_id, wu_member_name)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- デザイン設定マスター
 DROP TABLE IF EXISTS _design;
@@ -157,7 +157,7 @@ CREATE TABLE _design (
     dn_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     dn_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (dn_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- セッション管理トラン
 DROP TABLE IF EXISTS _session;
@@ -166,7 +166,7 @@ CREATE TABLE _session (
     ss_data              TEXT                                         NOT NULL,      -- 値
     ss_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY  (ss_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 管理者一時キートラン
 DROP TABLE IF EXISTS _admin_key;
@@ -175,7 +175,7 @@ CREATE TABLE _admin_key (
     ak_ip                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセス元IP(IPv6対応)
     ak_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
     PRIMARY KEY  (ak_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- クライアント設定値
 DROP TABLE IF EXISTS _client_param;
@@ -189,7 +189,7 @@ CREATE TABLE _client_param (
     cp_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (cp_serial),
     UNIQUE               (cp_id,        cp_widget_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 追加クラスマスター
 DROP TABLE IF EXISTS _addons;
@@ -202,7 +202,7 @@ CREATE TABLE _addons (
     ao_autoload          BOOLEAN        DEFAULT true                  NOT NULL,      -- システム起動時の自動読み込み
     ao_opelog_hook       BOOLEAN        DEFAULT false                 NOT NULL,      -- 運用ログイベントフックがあるかどうか
     PRIMARY KEY          (ao_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ログインユーザマスター
 DROP TABLE IF EXISTS _login_user;
@@ -238,7 +238,7 @@ CREATE TABLE _login_user (
     lu_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (lu_serial),
     UNIQUE               (lu_id,        lu_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ログインユーザ情報マスター(共通的に任意で使用するユーザ情報テーブル)
 DROP TABLE IF EXISTS _login_user_info;
@@ -272,7 +272,7 @@ CREATE TABLE _login_user_info (
     li_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (li_serial),
     UNIQUE               (li_id,        li_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 自動ログインマスター
 DROP TABLE IF EXISTS _auto_login;
@@ -293,7 +293,7 @@ CREATE TABLE _auto_login (
     ag_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ag_id),
     UNIQUE               (ag_user_id,   ag_client_id, ag_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザグループマスター
 DROP TABLE IF EXISTS _user_group;
@@ -313,7 +313,7 @@ CREATE TABLE _user_group (
     ug_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ug_serial),
     UNIQUE               (ug_id,        ug_language_id,               ug_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザとユーザグループの対応付けマスター
 DROP TABLE IF EXISTS _user_with_group;
@@ -324,7 +324,7 @@ CREATE TABLE _user_with_group (
     uw_group_id          VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ユーザグループID
     PRIMARY KEY          (uw_serial),
     UNIQUE               (uw_user_serial,    uw_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザログイントラン
 DROP TABLE IF EXISTS _login_log;
@@ -335,7 +335,7 @@ CREATE TABLE _login_log (
     ll_pre_login_dt      TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 前回ログイン日時
     ll_last_login_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 最終ログイン日時
     PRIMARY KEY  (ll_user_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザログインエラートラン(廃止予定)
 DROP TABLE IF EXISTS _login_err_log;
@@ -345,7 +345,7 @@ CREATE TABLE _login_err_log (
     le_ip                VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセス元IP(IPv6対応)
     le_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
     PRIMARY KEY          (le_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザアクセスログトラン
 DROP TABLE IF EXISTS _access_log;
@@ -369,7 +369,7 @@ CREATE TABLE _access_log (
     al_analyzed          BOOLEAN        DEFAULT false                 NOT NULL,      -- ログ解析完了かどうか
     al_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- アクセス日時
     PRIMARY KEY          (al_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ウィジェット実行ログトラン
 DROP TABLE IF EXISTS _widget_log;
@@ -382,7 +382,7 @@ CREATE TABLE _widget_log (
     wl_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
     wl_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 記録日時
     PRIMARY KEY          (wl_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ダウンロード実行ログトラン
 DROP TABLE IF EXISTS _download_log;
@@ -394,7 +394,7 @@ CREATE TABLE _download_log (
     dl_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
     dl_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 記録日時
     PRIMARY KEY          (dl_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 検索キーワードトラン
 DROP TABLE IF EXISTS _search_word;
@@ -409,7 +409,7 @@ CREATE TABLE _search_word (
     sw_access_log_serial INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
     sw_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 記録日時
     PRIMARY KEY          (sw_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- クライアントIPアクセス制御マスター
 DROP TABLE IF EXISTS _access_ip;
@@ -423,7 +423,7 @@ CREATE TABLE _access_ip (
     ai_param             TEXT                                         NOT NULL,      -- その他パラメータ
     PRIMARY KEY          (ai_serial),
     UNIQUE               (ai_type, ai_ip, ai_ip_mask, ai_server_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ナビゲーション項目マスター
 DROP TABLE IF EXISTS _nav_item;
@@ -442,7 +442,7 @@ CREATE TABLE _nav_item (
     ni_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
     PRIMARY KEY          (ni_id),
     UNIQUE               (ni_nav_id,    ni_task_id,                   ni_param)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 添付ファイルマスター
 DROP TABLE IF EXISTS _attach_file;
@@ -469,7 +469,7 @@ CREATE TABLE _attach_file (
     af_delete_log_serial INT            DEFAULT 0                     NOT NULL,      -- ファイル削除時のアクセスログシリアル番号
     PRIMARY KEY          (af_serial),
     UNIQUE               (af_content_type,      af_content_id,        af_content_serial, af_index, af_client_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- オプションコンテンツパラメータマスター
 DROP TABLE IF EXISTS _option_content_param;
@@ -481,7 +481,7 @@ CREATE TABLE _option_content_param (
     oc_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 実行ウィジェットID(ファイル名)
     oc_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
     PRIMARY KEY          (oc_page_id,   oc_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- コンテンツアクセス権マスター
 DROP TABLE IF EXISTS _content_access;
@@ -501,7 +501,7 @@ CREATE TABLE _content_access (
     cs_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (cs_serial),
     UNIQUE               (cs_user_id,   cs_content_type,    cs_content_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- コンテンツ参照トラン
 DROP TABLE IF EXISTS _view_count;
@@ -515,7 +515,7 @@ CREATE TABLE _view_count (
     vc_count             INT            DEFAULT 0                     NOT NULL,      -- 参照数
     PRIMARY KEY          (vc_serial),
     UNIQUE               (vc_type_id,   vc_content_serial,            vc_content_id,    vc_date,       vc_hour)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- テンプレート表示位置マスター
 DROP TABLE IF EXISTS _template_position;
@@ -526,7 +526,7 @@ CREATE TABLE _template_position (
     tp_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
     tp_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
     PRIMARY KEY  (tp_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- テンプレート情報マスター
 DROP TABLE IF EXISTS _templates;
@@ -555,7 +555,7 @@ CREATE TABLE _templates (
     tm_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (tm_serial),
     UNIQUE               (tm_id,        tm_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ウィジェット情報マスター
 DROP TABLE IF EXISTS _widgets;
@@ -642,7 +642,7 @@ CREATE TABLE _widgets (
     wd_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (wd_serial),
     UNIQUE               (wd_id,        wd_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ウィジェットカテゴリマスター
 DROP TABLE IF EXISTS _widget_category;
@@ -662,7 +662,7 @@ CREATE TABLE _widget_category (
     wt_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (wt_serial),
     UNIQUE               (wt_id,        wt_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ウィジェットパラメータマスター
 DROP TABLE IF EXISTS _widget_param;
@@ -690,7 +690,7 @@ CREATE TABLE _widget_param (
     wp_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (wp_serial),
     UNIQUE               (wp_id,        wp_config_id, wp_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- インナーウィジェット情報マスター
 DROP TABLE IF EXISTS _iwidgets;
@@ -730,7 +730,7 @@ CREATE TABLE _iwidgets (
     iw_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (iw_serial),
     UNIQUE               (iw_widget_id, iw_id,        iw_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- インナーウィジェットメソッド定義マスター
 DROP TABLE IF EXISTS _iwidget_method;
@@ -759,7 +759,7 @@ CREATE TABLE _iwidget_method (
     id_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (id_serial),
     UNIQUE               (id_type,      id_id,        id_language_id, id_set_id,    id_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ページIDマスター
 DROP TABLE IF EXISTS _page_id;
@@ -783,7 +783,7 @@ CREATE TABLE _page_id (
     pg_admin_menu        BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理メニューを表示するかどうか(ページID種別がアクセスポイント時。初期値。)
     pg_analytics         BOOLEAN        DEFAULT false                 NOT NULL,      -- アクセス解析対象かどうか(ページID種別がアクセスポイント時)
     PRIMARY KEY  (pg_id, pg_type)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ページ情報マスター
 -- 言語IDが空以外の場合は個別項目のみを使用
@@ -816,7 +816,7 @@ CREATE TABLE _page_info (
     pn_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (pn_serial),
     UNIQUE               (pn_id,        pn_sub_id,   pn_language_id,  pn_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ページ定義マスター
 DROP TABLE IF EXISTS _page_def;
@@ -856,7 +856,7 @@ CREATE TABLE _page_def (
     pd_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
     pd_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (pd_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ページ定義セットマスター
 DROP TABLE IF EXISTS _page_def_set;
@@ -869,7 +869,7 @@ CREATE TABLE _page_def_set (
     ds_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     ds_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
     PRIMARY KEY          (ds_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- キャッシュトラン
 DROP TABLE IF EXISTS _cache;
@@ -889,7 +889,7 @@ CREATE TABLE _cache (
     ca_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (ca_serial),
     UNIQUE               (ca_widget_id, ca_url)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- サイト定義マスター
 DROP TABLE IF EXISTS _site_def;
@@ -911,7 +911,7 @@ CREATE TABLE _site_def (
     sd_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (sd_serial),
     UNIQUE               (sd_id,        sd_language_id,               sd_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- メール送信ログトラン
 DROP TABLE IF EXISTS _mail_send_log;
@@ -925,7 +925,7 @@ CREATE TABLE _mail_send_log (
     ms_body              TEXT                                         NOT NULL,      -- メール本文
     ms_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 送信日時
     PRIMARY KEY          (ms_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 定型メールフォーム
 DROP TABLE IF EXISTS _mail_form;
@@ -946,7 +946,7 @@ CREATE TABLE _mail_form (
     mf_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (mf_serial),
     UNIQUE               (mf_id,        mf_language_id,               mf_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- テーブル作成マスター
 DROP TABLE IF EXISTS _table_def;
@@ -960,7 +960,7 @@ CREATE TABLE _table_def (
     td_default_value     VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- 初期値
     PRIMARY KEY          (td_serial),
     UNIQUE               (td_table_id,  td_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- メニューIDマスター
 DROP TABLE IF EXISTS _menu_id;
@@ -973,7 +973,7 @@ CREATE TABLE _menu_id (
     mn_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- ウィジェットID(ファイル名)
     mn_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
     PRIMARY KEY  (mn_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- メニュー定義マスター
 DROP TABLE IF EXISTS _menu_def;
@@ -998,7 +998,7 @@ CREATE TABLE _menu_def (
     md_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
     md_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (md_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- テナントサーバ情報マスター
 DROP TABLE IF EXISTS _tenant_server;
@@ -1028,7 +1028,7 @@ CREATE TABLE _tenant_server (
     ts_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ts_serial),
     UNIQUE               (ts_id,        ts_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- サイト解析状況マスター
 DROP TABLE IF EXISTS _analyze_status;
@@ -1037,7 +1037,7 @@ CREATE TABLE _analyze_status (
     as_value             TEXT                                         NOT NULL,      -- 値
     as_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 更新日時
     PRIMARY KEY  (as_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- サイト解析ページビュートラン
 DROP TABLE IF EXISTS _analyze_page_view;
@@ -1051,7 +1051,7 @@ CREATE TABLE _analyze_page_view (
     ap_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス
     PRIMARY KEY          (ap_serial),
     UNIQUE               (ap_type,      ap_url,   ap_path, ap_date,   ap_hour)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- サイト解析日時カウントトラン
 DROP TABLE IF EXISTS _analyze_daily_count;
@@ -1064,5 +1064,5 @@ CREATE TABLE _analyze_daily_count (
     aa_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス
     PRIMARY KEY          (aa_serial),
     UNIQUE               (aa_type,      aa_url,        aa_path,       aa_date)
-) TYPE=innodb;
+) ENGINE=innodb;
 

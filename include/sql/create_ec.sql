@@ -26,7 +26,7 @@ CREATE TABLE commerce_config (
     cg_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     cg_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (cg_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO commerce_config
 (cg_id,                    cg_value, cg_name,                        cg_index) VALUES
 ('default_currency',       'JPY',    'デフォルト通貨',               0),
@@ -59,7 +59,7 @@ CREATE TABLE unit_type (
     ut_decimal_place     INT            DEFAULT 0                     NOT NULL,      -- 小数以下桁数
     ut_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (ut_id,        ut_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO unit_type (ut_id, ut_language_id, ut_name, ut_description, ut_symbol, ut_decimal_place, ut_index) VALUES ('ko',   'ja', '個',             '', '個',       0, 0);
 INSERT INTO unit_type (ut_id, ut_language_id, ut_name, ut_description, ut_symbol, ut_decimal_place, ut_index) VALUES ('hako', 'ja', '箱',             '', '箱',       0, 1);
 INSERT INTO unit_type (ut_id, ut_language_id, ut_name, ut_description, ut_symbol, ut_decimal_place, ut_index) VALUES ('mai',  'ja', '枚',             '', '枚',       0, 2);
@@ -86,7 +86,7 @@ CREATE TABLE tax_rate (
     tr_active_start_dt   TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限開始日時
     tr_active_end_dt     TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限終了日時
     PRIMARY KEY          (tr_id,        tr_priority)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO tax_rate (tr_id, tr_priority, tr_name, tr_rate) VALUES ('rate_sales', 0, '消費税率', '5.00');
 
 -- 税種別マスター
@@ -102,7 +102,7 @@ CREATE TABLE tax_type (
     tt_geo_zone_id       TEXT                                         NOT NULL,      -- 対象区域(,区切り)
     tt_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (tt_id,        tt_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO tax_type (tt_id, tt_language_id, tt_tax_rate_type, tt_tax_rate_id, tt_name, tt_geo_zone_id, tt_index) VALUES ('sales', 'ja', 1, 'rate_sales', '課税(外税)',   '1', 0);
 INSERT INTO tax_type (tt_id, tt_language_id, tt_tax_rate_type, tt_tax_rate_id, tt_name, tt_geo_zone_id, tt_index) VALUES ('notax', 'ja', 0, '',           '非課税', '1', 1);
 
@@ -119,7 +119,7 @@ CREATE TABLE geo_zone (
     gz_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (gz_id),
     UNIQUE               (gz_country_id,    gz_region_id,             gz_type,       gz_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 INSERT INTO geo_zone (gz_id, gz_country_id, gz_region_id, gz_type, gz_language_id, gz_name, gz_description, gz_index) VALUES (1, 'JPN', '00', 0, 'ja', '日本全域', '', 1);
 INSERT INTO geo_zone (gz_id, gz_country_id, gz_region_id, gz_type, gz_language_id, gz_name, gz_description, gz_index) VALUES (2, 'JPN', '01', 1, 'ja', '北海道',   '', 2);
@@ -180,7 +180,7 @@ CREATE TABLE image_size (
     is_height            INT            DEFAULT 0                     NOT NULL,      -- 画像サイズ高さ
     is_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート順
     PRIMARY KEY  (is_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('full-banner',      2, 'フルサイズバナー',     468, 60,  1);
 INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('half-banner',      2, 'ハーフサイズバナー',   234, 60,  2);
 INSERT INTO image_size (is_id, is_type, is_name, is_width, is_height, is_sort_order) VALUES ('small-banner',     2, 'スモールサイズバナー', 200, 40,  3);
@@ -211,7 +211,7 @@ CREATE TABLE product_image (
     im_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (im_serial),
     UNIQUE               (im_product_class,     im_type,      im_id,              im_language_id,          im_size_id,       im_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品クラスマスター
 DROP TABLE IF EXISTS product_class;
@@ -232,7 +232,7 @@ CREATE TABLE product_class (
     pu_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (pu_serial),
     UNIQUE               (pu_id,        pu_language_id,               pu_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO product_class
 (pu_id,   pu_language_id, pu_name,                pu_index) VALUES 
 ('',      'ja',           '一般商品',             1),
@@ -258,7 +258,7 @@ CREATE TABLE product_category (
     pc_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (pc_serial),
     UNIQUE               (pc_id,        pc_language_id,               pc_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品と商品カテゴリーの対応付けマスター
 DROP TABLE IF EXISTS product_with_category;
@@ -269,7 +269,7 @@ CREATE TABLE product_with_category (
     pw_category_id       INT            DEFAULT 0                     NOT NULL,      -- 商品カテゴリーID
     PRIMARY KEY          (pw_serial),
     UNIQUE               (pw_product_serial,    pw_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 価格種別マスター
 DROP TABLE IF EXISTS price_type;
@@ -282,7 +282,7 @@ CREATE TABLE price_type (
     pr_description       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 説明
     pr_sort_order        INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (pr_id,        pr_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 -- INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('suggest', 'ja', 10, '希望小売価格',  1);
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('selling', 'ja', 10, '通常価格',      2);
 INSERT INTO price_type (pr_id, pr_language_id, pr_kind, pr_name, pr_sort_order) VALUES ('bargain', 'ja', 10, '特価',          3);
@@ -299,7 +299,7 @@ CREATE TABLE order_status (
     os_name              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 受注状況名
     os_description       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 説明
     PRIMARY KEY          (os_id,        os_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO order_status (os_id, os_language_id, os_name) VALUES (100, 'ja', '見積依頼');
 INSERT INTO order_status (os_id, os_language_id, os_name) VALUES (101, 'ja', '見積送付済');
 INSERT INTO order_status (os_id, os_language_id, os_name) VALUES (200, 'ja', '注文受付');
@@ -335,7 +335,7 @@ CREATE TABLE pay_method_def (
     po_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (po_serial),
     UNIQUE               (po_id,        po_language_id, po_set_id,    po_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO pay_method_def 
 (po_id,     po_language_id, po_name, po_index) VALUES
 ('payment_service',  'ja', '決済サービス', 1);
@@ -363,7 +363,7 @@ CREATE TABLE delivery_method_def (
     do_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (do_serial),
     UNIQUE               (do_id,        do_language_id, do_set_id,    do_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO delivery_method_def (do_id, do_language_id, do_name, do_index) VALUES ('yubin',    'ja', '一般小包郵便物', 1);
 INSERT INTO delivery_method_def (do_id, do_language_id, do_name, do_index) VALUES ('takuhai',  'ja', '宅配',           2);
 
@@ -393,7 +393,7 @@ CREATE TABLE shop_member (
     sm_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (sm_serial),
     UNIQUE               (sm_id,        sm_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 仮会員情報マスター
 DROP TABLE IF EXISTS shop_tmp_member;
@@ -412,7 +412,7 @@ CREATE TABLE shop_tmp_member (
     sb_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     sb_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (sb_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 個人情報マスター
 DROP TABLE IF EXISTS person_info;
@@ -439,7 +439,7 @@ CREATE TABLE person_info (
     pi_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (pi_serial),
     UNIQUE               (pi_id,        pi_language_id,               pi_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 個人情報追加フィールド
 DROP TABLE IF EXISTS person_info_opt_field;
@@ -450,7 +450,7 @@ CREATE TABLE person_info_opt_field (
     pf_field_type        VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- フィールドタイプ
     pf_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (pf_id,        pf_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 個人情報追加フィールド値
 DROP TABLE IF EXISTS person_info_opt_value;
@@ -461,7 +461,7 @@ CREATE TABLE person_info_opt_value (
     pl_value             TEXT                                         NOT NULL,      -- 値
     PRIMARY KEY          (pl_serial),
     UNIQUE               (pl_person_serial, pl_field_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 法人情報マスター
 DROP TABLE IF EXISTS company_info;
@@ -486,7 +486,7 @@ CREATE TABLE company_info (
     ci_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ci_serial),
     UNIQUE               (ci_id,        ci_language_id,               ci_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 住所マスター
 DROP TABLE IF EXISTS address;
@@ -512,7 +512,7 @@ CREATE TABLE address (
     ad_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ad_serial),
     UNIQUE               (ad_id,        ad_language_id,               ad_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 取引先マスター
 DROP TABLE IF EXISTS customer;
@@ -540,7 +540,7 @@ CREATE TABLE customer (
     cc_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (cc_serial),
     UNIQUE               (cc_id,        cc_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品価格マスター
 DROP TABLE IF EXISTS product_price;
@@ -565,7 +565,7 @@ CREATE TABLE product_price (
     pp_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (pp_serial),
     UNIQUE               (pp_product_class,     pp_product_id,    pp_product_type_id,    pp_language_id,      pp_price_type_id,      pp_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品情報マスター
 DROP TABLE IF EXISTS product;
@@ -616,7 +616,7 @@ CREATE TABLE product (
     pt_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (pt_serial),
     UNIQUE               (pt_id,        pt_language_id,               pt_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- フォト商品情報マスター
 DROP TABLE IF EXISTS photo_product;
@@ -666,7 +666,7 @@ CREATE TABLE photo_product (
     hp_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (hp_serial),
     UNIQUE               (hp_id,        hp_language_id,               hp_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品タイプマスター
 DROP TABLE IF EXISTS product_type;
@@ -690,7 +690,7 @@ CREATE TABLE product_type (
     py_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (py_serial),
     UNIQUE               (py_product_class,     py_id,        py_language_id,               py_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO product_type
 (py_product_class, py_id,      py_language_id, py_name,            py_code, py_description, py_index, py_single_select) VALUES 
 ('',               '',         'ja',           '標準商品',         'ST',    '',             1,             false),
@@ -707,7 +707,7 @@ CREATE TABLE product_status_type (
     pa_data_type         INT            DEFAULT 0                     NOT NULL,      -- データ型(0=bool,1=int,2=string)
     pa_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度(0～)
     PRIMARY KEY          (pa_id,        pa_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('new',     'ja', '新着',       0);
 INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('suggest', 'ja', 'おすすめ',   1);
 INSERT INTO product_status_type (pa_id, pa_language_id, pa_name, pa_priority) VALUES ('few',     'ja', '残りわずか', 2);
@@ -723,7 +723,7 @@ CREATE TABLE shop_cart (
     sh_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- カートの更新日時
     PRIMARY KEY          (sh_serial),
     UNIQUE               (sh_id,        sh_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ショッピングカート商品項目
 DROP TABLE IF EXISTS shop_cart_item;
@@ -740,7 +740,7 @@ CREATE TABLE shop_cart_item (
     si_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- データ有効性
     PRIMARY KEY          (si_serial),
     UNIQUE               (si_head_serial, si_product_class,     si_product_id,    si_product_type_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品ステータスマスター
 DROP TABLE IF EXISTS product_status;
@@ -760,7 +760,7 @@ CREATE TABLE product_status (
     ps_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ps_serial),
     UNIQUE               (ps_id,        ps_language_id,               ps_type,          ps_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品販売ステータスマスター
 DROP TABLE IF EXISTS sale_status;
@@ -776,7 +776,7 @@ CREATE TABLE sale_status (
     sa_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (sa_serial),
     UNIQUE               (sa_id,        sa_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品注文書トラン
 DROP TABLE IF EXISTS order_sheet;
@@ -856,7 +856,7 @@ CREATE TABLE order_sheet (
     oe_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (oe_serial),
     UNIQUE               (oe_user_id,   oe_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品受注トラン
 DROP TABLE IF EXISTS order_header;
@@ -948,7 +948,7 @@ CREATE TABLE order_header (
     or_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (or_serial),
     UNIQUE               (or_id,        or_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品受注トラン追加フィールド
 DROP TABLE IF EXISTS order_opt_field;
@@ -959,7 +959,7 @@ CREATE TABLE order_opt_field (
     of_field_type        VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- フィールドタイプ
     of_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (of_id,        of_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 受注トラン追加フィールド値
 DROP TABLE IF EXISTS order_opt_field_value;
@@ -975,7 +975,7 @@ CREATE TABLE order_opt_field_value (
     ov_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ov_serial),
     UNIQUE               (ov_field_id,  ov_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 受注明細トラン
 DROP TABLE IF EXISTS order_detail;
@@ -1008,7 +1008,7 @@ CREATE TABLE order_detail (
     od_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (od_serial),
     UNIQUE               (od_order_id,  od_index,      od_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品記録トラン
 DROP TABLE IF EXISTS product_record;
@@ -1027,7 +1027,7 @@ CREATE TABLE product_record (
     pe_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (pe_serial),
     UNIQUE               (pe_product_id,        pe_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 商品参照ログ
 DROP TABLE IF EXISTS product_view;
@@ -1038,7 +1038,7 @@ CREATE TABLE product_view (
     pv_log_serial        INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
     pv_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 参照日時
     PRIMARY KEY          (pv_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 入出庫予定トラン
 DROP TABLE IF EXISTS stock_plan;
@@ -1061,7 +1061,7 @@ CREATE TABLE stock_plan (
     sp_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (sp_serial),
     UNIQUE               (sp_product_id,        sp_scheduled_dt,      sp_index,         sp_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 更新データ
 -- メニューIDマスター

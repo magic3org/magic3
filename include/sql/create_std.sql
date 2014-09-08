@@ -27,7 +27,7 @@ CREATE TABLE country (
     ct_iso_code_2        VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- ISO 2文字コード
     ct_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (ct_id,        ct_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 通貨マスター
 DROP TABLE IF EXISTS currency;
@@ -41,7 +41,7 @@ CREATE TABLE currency (
     cu_decimal_place     INT            DEFAULT 0                     NOT NULL,      -- 小数以下桁数
     cu_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (cu_id,        cu_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- メニューマスター(廃止予定)
 DROP TABLE IF EXISTS menu;
@@ -61,7 +61,7 @@ CREATE TABLE menu (
     me_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (me_serial),
     UNIQUE               (me_id,        me_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- メニュー項目マスター(廃止予定)
 DROP TABLE IF EXISTS menu_item;
@@ -89,7 +89,7 @@ CREATE TABLE menu_item (
     mi_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (mi_serial),
     UNIQUE               (mi_id,        mi_language_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 汎用コンテンツ設定マスター
 DROP TABLE IF EXISTS content_config;
@@ -101,7 +101,7 @@ CREATE TABLE content_config (
     ng_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     ng_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (ng_type,      ng_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 汎用コンテンツマスター
 DROP TABLE IF EXISTS content;
@@ -147,7 +147,7 @@ CREATE TABLE content (
     cn_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (cn_serial),
     UNIQUE               (cn_type,      cn_id,        cn_language_id,               cn_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 新着情報設定マスター
 DROP TABLE IF EXISTS news_config;
@@ -158,7 +158,7 @@ CREATE TABLE news_config (
     nc_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     nc_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (nc_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 新着情報トラン
 DROP TABLE IF EXISTS news;
@@ -193,7 +193,7 @@ CREATE TABLE news (
     nw_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (nw_serial),
     UNIQUE               (nw_id,        nw_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- Wiki設定マスター
 DROP TABLE IF EXISTS wiki_config;
@@ -204,7 +204,7 @@ CREATE TABLE wiki_config (
     wg_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     wg_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (wg_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- Wikiコンテンツマスター
 DROP TABLE IF EXISTS wiki_content;
@@ -230,7 +230,7 @@ CREATE TABLE wiki_content (
     wc_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (wc_serial),
     UNIQUE               (wc_type,      wc_id,  wc_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ブログ設定マスター
 DROP TABLE IF EXISTS blog_config;
@@ -242,7 +242,7 @@ CREATE TABLE blog_config (
     bg_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     bg_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (bg_blog_id,   bg_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ブログIDマスター
 DROP TABLE IF EXISTS blog_id;
@@ -273,7 +273,7 @@ CREATE TABLE blog_id (
     bl_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (bl_serial),
     UNIQUE               (bl_id,        bl_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ブログカテゴリマスター
 DROP TABLE IF EXISTS blog_category;
@@ -295,7 +295,7 @@ CREATE TABLE blog_category (
     bc_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (bc_serial),
     UNIQUE               (bc_id,        bc_language_id,               bc_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ブログエントリー(記事)マスター
 DROP TABLE IF EXISTS blog_entry;
@@ -334,7 +334,7 @@ CREATE TABLE blog_entry (
     be_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (be_serial),
     UNIQUE               (be_id,        be_language_id,               be_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ブログ記事とブログ記事カテゴリーの対応付けマスター
 DROP TABLE IF EXISTS blog_entry_with_category;
@@ -345,7 +345,7 @@ CREATE TABLE blog_entry_with_category (
     bw_category_id       INT            DEFAULT 0                     NOT NULL,      -- ブログ記事カテゴリーID
     PRIMARY KEY          (bw_serial),
     UNIQUE               (bw_entry_serial,      bw_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ブログコメントトラン
 DROP TABLE IF EXISTS blog_comment;
@@ -369,7 +369,7 @@ CREATE TABLE blog_comment (
     bo_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     bo_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (bo_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBS設定マスター
 DROP TABLE IF EXISTS bbs_config;
@@ -380,7 +380,7 @@ CREATE TABLE bbs_config (
     sf_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     sf_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (sf_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBSカテゴリマスター
 DROP TABLE IF EXISTS bbs_category;
@@ -401,7 +401,7 @@ CREATE TABLE bbs_category (
     sr_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (sr_serial),
     UNIQUE               (sr_id,        sr_language_id,               sr_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBSグループマスター
 DROP TABLE IF EXISTS bbs_group;
@@ -422,7 +422,7 @@ CREATE TABLE bbs_group (
     sg_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (sg_serial),
     UNIQUE               (sg_id,        sg_language_id,               sg_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBS記事マスター
 DROP TABLE IF EXISTS bbs_thread;
@@ -455,7 +455,7 @@ CREATE TABLE bbs_thread (
     se_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (se_serial),
     UNIQUE               (se_id,        se_language_id,               se_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBSグループアクセス権マスター
 DROP TABLE IF EXISTS bbs_group_access;
@@ -469,7 +469,7 @@ CREATE TABLE bbs_group_access (
     so_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
     so_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (so_group_id,  so_category_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBS会員情報マスター
 DROP TABLE IF EXISTS bbs_member;
@@ -496,7 +496,7 @@ CREATE TABLE bbs_member (
     sv_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (sv_serial),
     UNIQUE               (sv_id,        sv_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBS投稿ログトラン
 DROP TABLE IF EXISTS bbs_post_log;
@@ -505,7 +505,7 @@ CREATE TABLE bbs_post_log (
     sl_count             INT            DEFAULT 0                     NOT NULL,      -- 投稿回数
     sl_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 最終投稿日時
     PRIMARY KEY  (sl_user_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBS投稿参照トラン
 DROP TABLE IF EXISTS bbs_view_count;
@@ -518,7 +518,7 @@ CREATE TABLE bbs_view_count (
     su_count             INT            DEFAULT 0                     NOT NULL,      -- 参照数
     PRIMARY KEY          (su_serial),
     UNIQUE               (su_thread_id,   su_language_id,         su_date,       su_hour)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザ作成コンテンツウィジェット用
 -- ユーザコンテンツ表示タブマスター
@@ -545,7 +545,7 @@ CREATE TABLE user_content_tab (
     ub_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ub_serial),
     UNIQUE               (ub_id,        ub_language_id,               ub_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザ作成コンテンツ項目マスター
 DROP TABLE IF EXISTS user_content_item;
@@ -569,7 +569,7 @@ CREATE TABLE user_content_item (
     ui_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ui_serial),
     UNIQUE               (ui_id,        ui_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザ作成コンテンツマスター
 DROP TABLE IF EXISTS user_content;
@@ -597,7 +597,7 @@ CREATE TABLE user_content (
     uc_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (uc_serial),
     UNIQUE               (uc_id,        uc_room_id,  uc_language_id,  uc_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザ作成コンテンツルームマスター
 DROP TABLE IF EXISTS user_content_room;
@@ -622,7 +622,7 @@ CREATE TABLE user_content_room (
     ur_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ur_serial),
     UNIQUE               (ur_id,        ur_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザ作成コンテンツカテゴリマスター
 DROP TABLE IF EXISTS user_content_category;
@@ -643,7 +643,7 @@ CREATE TABLE user_content_category (
     ua_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ua_serial),
     UNIQUE               (ua_id,        ua_item_id,  ua_language_id,  ua_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- ユーザ作成コンテンツカテゴリとルームの対応付けマスター
 DROP TABLE IF EXISTS user_content_room_category;
@@ -654,7 +654,7 @@ CREATE TABLE user_content_room_category (
     um_category_item_id  VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- カテゴリ項目ID
     PRIMARY KEY          (um_serial),
     UNIQUE               (um_room_id,   um_category_id, um_category_item_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- アクセスカウンターウィジェット用
 -- アクセス時間管理テーブル
@@ -663,7 +663,7 @@ CREATE TABLE ac_access (
     ac_ssid              VARCHAR(32)    DEFAULT ''                    NOT NULL,      -- セッションID
     ac_time              INT            DEFAULT 0                     NOT NULL,      -- 最終アクセス時間
     PRIMARY KEY  (ac_ssid)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- アクセス数管理テーブル
 DROP TABLE IF EXISTS ac_count;
@@ -671,7 +671,7 @@ CREATE TABLE ac_count (
     co_date              DATE           DEFAULT '0000-00-00'          NOT NULL,      -- 日付
     co_count             INT            DEFAULT 0                     NOT NULL,      -- アクセス回数
     PRIMARY KEY  (co_date)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- バナーウィジェット用
 -- バナー表示定義
@@ -695,7 +695,7 @@ CREATE TABLE bn_def (
     bd_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     PRIMARY KEY          (bd_serial),
     UNIQUE               (bd_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- バナー項目
 DROP TABLE IF EXISTS bn_item;
@@ -730,7 +730,7 @@ CREATE TABLE bn_item (
     bi_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (bi_serial),
     UNIQUE               (bi_id,        bi_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- バナー項目参照ログ
 DROP TABLE IF EXISTS bn_item_view;
@@ -741,7 +741,7 @@ CREATE TABLE bn_item_view (
     bv_log_serial        INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
     bv_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 参照日時
     PRIMARY KEY          (bv_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- バナー項目クリックログ
 DROP TABLE IF EXISTS bn_item_access;
@@ -752,7 +752,7 @@ CREATE TABLE bn_item_access (
     ba_log_serial        INT            DEFAULT 0                     NOT NULL,      -- アクセスログシリアル番号
     ba_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 参照日時
     PRIMARY KEY          (ba_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 予約リソースマスター
 DROP TABLE IF EXISTS reserve_resource;
@@ -771,7 +771,7 @@ CREATE TABLE reserve_resource (
     rr_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     rr_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (rr_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 予約設定マスター
 DROP TABLE IF EXISTS reserve_config;
@@ -783,7 +783,7 @@ CREATE TABLE reserve_config (
     rc_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     rc_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (rc_id,        rc_key)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 予約カレンダーマスター
 DROP TABLE IF EXISTS reserve_calendar;
@@ -798,7 +798,7 @@ CREATE TABLE reserve_calendar (
     ra_end_time          INT            DEFAULT 0                     NOT NULL,      -- 日にち時間範囲指定の場合の終了時間(hhmm)
     ra_available         BOOLEAN        DEFAULT false                 NOT NULL,      -- 利用可能かどうか
     PRIMARY KEY          (ra_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 予約状況トラン
 DROP TABLE IF EXISTS reserve_status;
@@ -816,7 +816,7 @@ CREATE TABLE reserve_status (
     rs_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     rs_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (rs_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBS(2ch)設定マスター
 DROP TABLE IF EXISTS bbs_2ch_config;
@@ -828,7 +828,7 @@ CREATE TABLE bbs_2ch_config (
     tg_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     tg_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (tg_board_id,  tg_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBS(2ch)スレッドマスター
 DROP TABLE IF EXISTS bbs_2ch_thread;
@@ -850,7 +850,7 @@ CREATE TABLE bbs_2ch_thread (
     th_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (th_serial),
     UNIQUE               (th_board_id,  th_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- BBS(2ch)スレッドメッセージトラン
 DROP TABLE IF EXISTS bbs_2ch_thread_message;
@@ -872,7 +872,7 @@ CREATE TABLE bbs_2ch_thread_message (
     te_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (te_serial),
     UNIQUE               (te_board_id,  te_thread_id,  te_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- --------------------------------------------------------------------------------------------------
 -- マイクロブログウィジェット用
@@ -887,7 +887,7 @@ CREATE TABLE mblog_config (
     mc_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     mc_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (mc_board_id,  mc_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- マイクロブログスレッドマスター
 DROP TABLE IF EXISTS mblog_thread;
@@ -912,7 +912,7 @@ CREATE TABLE mblog_thread (
     mt_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (mt_serial),
     UNIQUE               (mt_board_id,  mt_id,  mt_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- マイクロブログスレッドメッセージトラン
 DROP TABLE IF EXISTS mblog_thread_message;
@@ -936,7 +936,7 @@ CREATE TABLE mblog_thread_message (
     mm_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (mm_serial),
     UNIQUE               (mm_board_id,  mm_thread_id,  mm_index, mm_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- マイクロブログ会員情報マスター
 DROP TABLE IF EXISTS mblog_member;
@@ -963,7 +963,7 @@ CREATE TABLE mblog_member (
     mb_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (mb_serial),
     UNIQUE               (mb_id,        mb_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- --------------------------------------------------------------------------------------------------
 -- イベント情報用
@@ -977,7 +977,7 @@ CREATE TABLE event_config (
     eg_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
     eg_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (eg_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- イベント記事マスター
 DROP TABLE IF EXISTS event_entry;
@@ -1013,7 +1013,7 @@ CREATE TABLE event_entry (
     ee_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ee_serial),
     UNIQUE               (ee_id,        ee_language_id,               ee_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- イベントコメントトラン
 DROP TABLE IF EXISTS event_comment;
@@ -1036,7 +1036,7 @@ CREATE TABLE event_comment (
     eo_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     eo_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (eo_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- イベントカテゴリーマスター
 DROP TABLE IF EXISTS event_category;
@@ -1058,7 +1058,7 @@ CREATE TABLE event_category (
     ec_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ec_serial),
     UNIQUE               (ec_id,        ec_language_id,               ec_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- イベント記事とイベント記事カテゴリーの対応付けマスター
 DROP TABLE IF EXISTS event_entry_with_category;
@@ -1069,7 +1069,7 @@ CREATE TABLE event_entry_with_category (
     ew_category_id       INT            DEFAULT 0                     NOT NULL,      -- ブログ記事カテゴリーID
     PRIMARY KEY          (ew_serial),
     UNIQUE               (ew_entry_serial,      ew_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- --------------------------------------------------------------------------------------------------
 -- フォトギャラリー用
@@ -1083,7 +1083,7 @@ CREATE TABLE photo_config (
     hg_description       VARCHAR(160)   DEFAULT ''                    NOT NULL,      -- 説明
     hg_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
     PRIMARY KEY          (hg_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 写真情報マスター
 DROP TABLE IF EXISTS photo;
@@ -1128,7 +1128,7 @@ CREATE TABLE photo (
     ht_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (ht_serial),
     UNIQUE               (ht_id,        ht_language_id,               ht_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 写真カテゴリマスター
 DROP TABLE IF EXISTS photo_category;
@@ -1151,7 +1151,7 @@ CREATE TABLE photo_category (
     hc_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (hc_serial),
     UNIQUE               (hc_id,        hc_language_id,  hc_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 写真と写真カテゴリーの対応付けマスター
 DROP TABLE IF EXISTS photo_with_category;
@@ -1162,7 +1162,7 @@ CREATE TABLE photo_with_category (
     hw_category_id       INT            DEFAULT 0                     NOT NULL,      -- カテゴリID
     PRIMARY KEY          (hw_serial),
     UNIQUE               (hw_photo_serial,  hw_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 画像評価トラン
 DROP TABLE IF EXISTS photo_rate;
@@ -1184,7 +1184,7 @@ CREATE TABLE photo_rate (
     hr_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     hr_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (hr_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 -- --------------------------------------------------------------------------------------------------
 -- 汎用コメント用
 -- --------------------------------------------------------------------------------------------------
@@ -1219,7 +1219,7 @@ CREATE TABLE comment_config (
     cf_use_avatar        BOOLEAN        DEFAULT true                  NOT NULL,      -- アバターあり
     cf_use_date          BOOLEAN        DEFAULT true                  NOT NULL,      -- 日付あり
     PRIMARY KEY          (cf_content_type,   cf_contents_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 汎用コメントトラン
 DROP TABLE IF EXISTS comment;
@@ -1247,7 +1247,7 @@ CREATE TABLE comment (
     cm_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     cm_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (cm_serial)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- --------------------------------------------------------------------------------------------------
 -- カレンダー用
@@ -1264,7 +1264,7 @@ CREATE TABLE time_period (
     to_minute            INT            DEFAULT 0                     NOT NULL,      -- 時間(分)
     PRIMARY KEY          (to_serial),
     UNIQUE               (to_date_type_id,        to_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- 日付タイプ
 DROP TABLE IF EXISTS date_type;
@@ -1278,7 +1278,7 @@ CREATE TABLE date_type (
     dt_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     dt_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (dt_id)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- カレンダー日付
 DROP TABLE IF EXISTS calendar_date;
@@ -1295,7 +1295,7 @@ CREATE TABLE calendar_date (
     ce_param             TEXT                                         NOT NULL,      -- オプションパラメータ(シリアライズデータ)
     PRIMARY KEY          (ce_serial),
     UNIQUE               (ce_def_id,    ce_type,     ce_index,        ce_date)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- カレンダー定義
 DROP TABLE IF EXISTS calendar_def;
@@ -1320,7 +1320,7 @@ CREATE TABLE calendar_def (
     cd_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (cd_serial),
     UNIQUE               (cd_id,        cd_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
 
 -- カレンダーイベントマスター
 DROP TABLE IF EXISTS calendar_event;
@@ -1343,4 +1343,4 @@ CREATE TABLE calendar_event (
     cv_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (cv_serial),
     UNIQUE               (cv_id,        cv_history_index)
-) TYPE=innodb;
+) ENGINE=innodb;
