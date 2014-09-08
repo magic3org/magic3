@@ -88,14 +88,6 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 				$this->tmpl->addGlobalVar(self::HELP_HEAD . $key, $helpText);		// グローバルパラメータを文字列変換
 			}
 		}
-		
-		// プレビュー用のURLを設定
-		if (method_exists($this, '_setPreviewUrl')){
-			$previewUrl = $this->_setPreviewUrl($request, $param);
-			
-			// CKEditor用のCSSファイルURLを画面に取り込む
-			$this->gPage->getCssFilesByHttp($previewUrl);
-		}
 			
 		// デバッグ出力があるときは表示
 		if ($this->gEnv->getSystemDebugOut() && method_exists($this,'_debugString')){
