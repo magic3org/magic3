@@ -22,14 +22,16 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 	private $isExistsList;	// リスト項目が存在するかどうか
 	private $defaultUrl;	// システムのデフォルトURL
 	private $headRssFile;				// RSS情報
-	private $optionPassage;						// 表示オプション(経過日時)
+	private $showDate;						// 日付を表示するかどうか
+	private $currentDate;				// 現在日付
 	const DEFAULT_ITEM_COUNT = 12;		// デフォルトの表示項目数
-	const MAX_TITLE_LENGTH = 20;			// タイトルの最大文字列長
 	const DEFAULT_TITLE = 'フォトギャラリー最新画像';		// デフォルトのウィジェットタイトル名
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
 	const CF_PHOTO_CATEGORY_PASSWORD	= 'photo_category_password';		// 画像カテゴリーのパスワード制限
 	const THUMBNAIL_DIR = '/widgets/photo/image';		// 画像格納ディレクトリ
 	const DEFAULT_VIEW_THUMB_SIZE = 72;		// サムネール表示サイズ
+	const DATE_FORMAT = 'Y年 n月 j日';		// 日付フォーマット
+	const TITLE_TAG_LEVEL = 4;
 	
 	/**
 	 * コンストラクタ
@@ -70,14 +72,14 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 		// 設定値を取得
 		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
 		$useRss = 1;							// RSS配信を行うかどうか
-		$this->optionPassage = 0;						// 表示オプション(経過日時)
+		$this->showDate = 0;						// 日付を表示するかどうか
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
 			$itemCount	= $paramObj->itemCount;
 			$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
 			if (!isset($useRss)) $useRss = 1;
-			$this->optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
-			if (!isset($this->optionPassage)) $this->optionPassage = 0;
+			$this->showDate	= $paramObj->showDate;		// 日付を表示するかどうか
+			if (!isset($this->showDate)) $this->showDate = 0;
 		}
 		
 		// 画像タイトルを取得
@@ -86,8 +88,23 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 			$this->db->getPhotoItems($itemCount, $this->gEnv->getCurrentLanguage(), array($this, 'itemLoop'));
 		}
 			
-		if (!$this->isExistsList){	// 画像がないときはメッセージを出力
+/*		if (!$this->isExistsList){	// 画像がないときはメッセージを出力
 			$this->tmpl->addVar("_widget", "message", '最新画像はありません');
+			$this->tmpl->setAttribute('imagelist', 'visibility', 'hidden');// 一覧非表示
+		}*/
+		// 一覧データがない場合は非表示
+		if ($this->isExistsList){
+			// 前の日付を表示
+			$dateTag = '<h' . self::TITLE_TAG_LEVEL . '>' . $this->convertToDispString($this->currentDate) . '</h' . self::TITLE_TAG_LEVEL . '>';
+			$dateRow = array(
+				'date'		=> $dateTag			// 日付
+			);
+			$this->tmpl->addVars('date_list', $dateRow);
+			$this->tmpl->parseTemplate('date_list', 'a');
+		} else {
+			$this->tmpl->addVar("_widget", "message", '最新画像はありません');
+			
+			$this->tmpl->setAttribute('date_list', 'visibility', 'hidden');
 		}
 		
 		// RSSの設定
@@ -148,6 +165,7 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 	{
 		$photoId = $fetchedRow['ht_public_id'];		// フォトID
 		$title = $fetchedRow['ht_name'];		// サムネール画像タイトル
+		$date = date(self::DATE_FORMAT, strtotime($fetchedRow['ht_regist_dt']));
 		$imageWidth = self::DEFAULT_VIEW_THUMB_SIZE;
 		
 		// 画像詳細へのリンク
@@ -160,12 +178,36 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 		$dispTitle = $this->convertToDispString($title);
 		$imageTag = '<a href="' . $this->convertUrlToHtmlEntity($urlLink) . '"><img src="' . $this->convertUrlToHtmlEntity($imageUrl) . '" alt="' . $dispTitle . '" title="' . $dispTitle . '" style="width:' . $imageWidth . 'px;height:' . $imageWidth . 'px;' . $imageStyle . '" /></a>';
 
+		if ($this->showDate){			// 日付表示ありのとき
+			if (!isset($this->currentDate)){
+				// 日付を更新
+				$this->currentDate = $date;
+			
+				// バッファ更新
+				$this->tmpl->clearTemplate('image_list');
+			} else if ($date != $this->currentDate){
+				$dateTag = '<h' . self::TITLE_TAG_LEVEL . '>' . $this->convertToDispString($this->currentDate) . '</h' . self::TITLE_TAG_LEVEL . '>';
+				
+				// 前の日付を表示
+				$dateRow = array(
+					'date'		=> 	$dateTag		// 日付
+				);
+				$this->tmpl->addVars('date_list', $dateRow);
+				$this->tmpl->parseTemplate('date_list', 'a');
+			
+				// 日付を更新
+				$this->currentDate = $date;
+			
+				// バッファ更新
+				$this->tmpl->clearTemplate('image_list');
+			}
+		}
+		
 		$row = array(
 			'image' => $imageTag			// アルバムのサムネール画像
 		);
-						
-		$this->tmpl->addVars('imagelist', $row);
-		$this->tmpl->parseTemplate('imagelist', 'a');
+		$this->tmpl->addVars('image_list', $row);
+		$this->tmpl->parseTemplate('image_list', 'a');
 		
 		$this->isExistsList = true;	// 画像があるかどうか
 		return true;

@@ -57,13 +57,13 @@ class admin_photo_newWidgetContainer extends BaseAdminWidgetContainer
 			// 入力値を取得
 			$itemCount	= $request->valueOf('item_count');			// 表示項目数
 			$useRss = ($request->trimValueOf('item_use_rss') == 'on') ? 1 : 0;		// RSS配信を行うかどうか
-			$optionPassage = ($request->trimValueOf('item_option_passage') == 'on') ? 1 : 0;		// 表示オプション(経過日時)
+			$showDate = ($request->trimValueOf('item_show_date') == 'on') ? 1 : 0;		// 日付を表示するかどうか
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				$paramObj = new stdClass;
 				$paramObj->itemCount		= $itemCount;
 				$paramObj->useRss			= $useRss;
-				$paramObj->optionPassage	= $optionPassage;		// 表示オプション(経過日時)
+				$paramObj->showDate	= $showDate;		// 日付を表示するかどうか
 				$ret = $this->updateWidgetParamObj($paramObj);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -76,25 +76,21 @@ class admin_photo_newWidgetContainer extends BaseAdminWidgetContainer
 			// デフォルト値設定
 			$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
 			$useRss = 1;							// RSS配信を行うかどうか
-			$optionPassage = 0;						// 表示オプション(経過日時)
+			$showDate = 0;						// 日付を表示するかどうか
 			$paramObj = $this->getWidgetParamObj();
 			if (!empty($paramObj)){
 				$itemCount	= $paramObj->itemCount;
 				$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
 				if (!isset($useRss)) $useRss = 1;
-				$optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
-				if (!isset($optionPassage)) $optionPassage = 0;
+				$showDate	= $paramObj->showDate;		// 日付を表示するかどうか
+				if (!isset($showDate)) $showDate = 0;
 			}
 		}
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "item_count",	$this->convertToDispString($itemCount));
-		$checked = '';
-		if ($useRss) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "use_rss",	$checked);// RSS配信を行うかどうか
-		$checked = '';
-		if ($optionPassage) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "option_passage",	$checked);// 表示オプション(経過日時)
+		$this->tmpl->addVar("_widget", "use_rss",	$this->convertToCheckedString($useRss));// RSS配信を行うかどうか
+		$this->tmpl->addVar("_widget", "show_date_checked",	$this->convertToCheckedString($showDate));// 日付を表示するかどうか
 	}
 }
 ?>

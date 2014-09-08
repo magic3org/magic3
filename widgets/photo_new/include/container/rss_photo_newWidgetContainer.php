@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: rss_photo_newWidgetContainer.php 4653 2012-02-03 12:35:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseRssContainer.php');
@@ -92,9 +92,7 @@ class rss_photo_newWidgetContainer extends BaseRssContainer
 		if (!$this->db->getConfig(self::CF_PHOTO_CATEGORY_PASSWORD)){			// カテゴリーパスワード制限がかかっているときは画像の表示不可
 			$this->db->getPhotoItems($itemCount, $langId, array($this, 'itemLoop'));
 		}
-		
-		// 画面にデータを埋め込む
-		if ($this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'visible');
+		if (!$this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 		
 		// RSSチャンネル部出力データ作成
 		$linkUrl = $this->getUrl($this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId()));
