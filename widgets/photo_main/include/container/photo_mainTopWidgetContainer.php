@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: photo_mainTopWidgetContainer.php 5631 2013-02-10 11:34:25Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/photo_mainBaseWidgetContainer.php');
@@ -100,22 +100,25 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		$act = $request->trimValueOf('act');
 		if ($act == 'search'){
 			if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-				return 'index.tmpl.html';
-			} else {
 				return 'index_bootstrap.tmpl.html';
+			} else {
+				return 'index.tmpl.html';
 			}
 		} else if ($act == 'inputcart'){			// カートに入れる
 			return '';
 		} else {
 			if (empty($this->photoId)){
-//				return 'main_list.tmpl.html';
 				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-					return 'index.tmpl.html';
-				} else {
 					return 'index_bootstrap.tmpl.html';
+				} else {
+					return 'index.tmpl.html';
 				}
 			} else {
-				return 'photo_detail.tmpl.html';
+				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+					return 'photo_detail_bootstrap.tmpl.html';
+				} else {
+					return 'photo_detail.tmpl.html';
+				}
 			}
 		}
 	}
@@ -211,7 +214,11 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 			$this->fieldInfoArray = array();			// 項目定義
 		
 			// デフォルトの検索テンプレート作成
-			$searchTemplate = $this->getParsedTemplateData(photo_mainCommonDef::DEFAULT_SEARCH_AREA_TMPL, array($this, '_makeSearcheTemplate'));// デフォルト用の検索テンプレート
+			if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+				$searchTemplate = $this->getParsedTemplateData(photo_mainCommonDef::DEFAULT_SEARCH_AREA_BOOTSTRAP_TMPL, array($this, '_makeSearcheTemplate'));// デフォルト用の検索テンプレート
+			} else {
+				$searchTemplate = $this->getParsedTemplateData(photo_mainCommonDef::DEFAULT_SEARCH_AREA_TMPL, array($this, '_makeSearcheTemplate'));// デフォルト用の検索テンプレート
+			}
 		} else {
 			$searchTemplate = $paramObj->searchTemplate;		// 検索用テンプレート
 			if (!empty($paramObj->fieldInfo)) $this->fieldInfoArray = $paramObj->fieldInfo;			// 項目定義
@@ -335,8 +342,10 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		$ret = $this->calcPageLink($pageNo, $totalCount, $this->viewCount);
 		if ($ret){		// ページリンク作成可能な場合
 			// ページリンク作成
-			//$pageLink = $this->createPageLink($pageNo, $pageCount, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams);
-			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams);
+			$linkStyle = 0;			// HTMLの出力タイプ
+			if ($this->_renderType == M3_RENDER_BOOTSTRAP) $linkStyle = 2;		// Bootstrap型テンプレートの場合
+			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams, $linkStyle);
+			//$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams);
 			if (!empty($pageLink)){
 				$this->tmpl->setAttribute('page_link_top', 'visibility', 'visible');		// リンク表示
 				$this->tmpl->setAttribute('page_link_bottom', 'visibility', 'visible');		// リンク表示
@@ -1139,67 +1148,6 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		$tmpl->addVar("_tmpl", "search_reset_id",	photo_mainCommonDef::SEARCH_RESET_ID);		// 検索エリアリセットボタンのタグID
 		$tmpl->addVar("_tmpl", "search_sort_id",	photo_mainCommonDef::SEARCH_SORT_ID);		// 検索エリアソートメニューのタグID
 	}
-	/**
-	 * ページ番号計算処理
-	 *
-	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整
-	 * @param int $totalCount		総項目数
-	 * @param int $viewItemCount	1ページあたりの項目数
-	 * @param int $pageCount		戻り値、ページ総数(1～)。
-	 * @param int $startNo			戻り値、先頭項目番号(1～)。
-	 * @param int $endNo			戻り値、最後項目番号(1～)。
-	 * @return 						なし
-	 */
-/*	function calcPage(&$pageNo, $totalCount, $viewItemCount, &$pageCount, &$startNo, &$endNo)
-	{
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewItemCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$startNo = ($pageNo -1) * $viewItemCount +1;		// 先頭の行番号
-		$endNo = $pageNo * $viewItemCount > $totalCount ? $totalCount : $pageNo * $viewItemCount;// 最後の行番号
-	}*/
-	/**
-	 * ページリンク作成
-	 *
-	 * @param int $pageNo			ページ番号(1～)。
-	 * @param int $pageCount		総項目数
-	 * @param int $linkCount		最大リンク数
-	 * @param string $baseUrl		リンク用のベースURL
-	 * @param string $urlParams		オプションのURLパラメータ
-	 * @return string				リンクHTML
-	 */
-/*	function createPageLink($pageNo, $pageCount, $linkCount, $baseUrl, $urlParams)
-	{
-		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			// ページ数1から「LINK_PAGE_COUNT」までのリンクを作成
-			$maxPageCount = $pageCount < $linkCount ? $pageCount : $linkCount;
-			for ($i = 1; $i <= $maxPageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;[' . $i . ']';
-				} else {
-					$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $i . $urlParams, true);
-					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >[' . $i . ']</a>';
-				}
-				$pageLink .= $link;
-			}
-			// 残りは「...」表示
-			if ($pageCount > $linkCount) $pageLink .= '&nbsp;...';
-		}
-		if ($pageNo > 1){		// 前ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams, true);
-			$link = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >[前へ]</a>';
-			$pageLink = $link . $pageLink;
-		}
-		if ($pageNo < $pageCount){		// 次ページがあるとき
-			$linkUrl = $this->getUrl($baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams, true);
-			$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >[次へ]</a>';
-			$pageLink .= $link;
-		}
-		return $pageLink;
-	}*/
 	/**
 	 * 検索条件フィールド作成
 	 *

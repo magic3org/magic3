@@ -181,7 +181,7 @@ function loadPhoto(index)
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
-<div class="gallery_category">表示可能なカテゴリー：{AUTH_CATEGORY_LIST}&nbsp;&nbsp;<input id="category_add" type="button" class="button" value="追加" /></div>
+<div class="gallery_category">表示可能なカテゴリー：{AUTH_CATEGORY_LIST}&nbsp;&nbsp;<input id="category_add" type="button" class="button btn btn-default" value="追加" /></div>
 <div id="gallery_category" style="display:none;">
 <div class="gallery_message">
 画像を表示するにはカテゴリーのパスワードを入力する必要があります。<br />
@@ -194,8 +194,8 @@ function loadPhoto(index)
 	</patTemplate:tmpl>
     </select>
 </label>
-<label><span class="gallery_title">パスワード</span><input type="password" name="access_password" size="10" maxlength="10" /></label>
-<div class="photo_button"><input id="password_submit" type="button" class="button" value="送信" /></div>
+<label><span class="gallery_title">パスワード</span><input type="password" name="access_password" class="form-control" size="10" maxlength="10" /></label>
+<div class="photo_button"><input id="password_submit" type="button" class="button btn btn-default" value="送信" /></div>
 </div>
 </form>
 </patTemplate:tmpl>
@@ -204,11 +204,11 @@ function loadPhoto(index)
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
 <input type="hidden" name="access_category" value="{VALUE}" />
-<label><span class="gallery_title">パスワード</span><input type="password" name="access_password" size="10" maxlength="10" /></label>
-<div class="photo_button"><input id="password_submit" type="button" class="button" value="送信" /></div>
+<label><span class="gallery_title">パスワード</span><input type="password" name="access_password" class="form-control" size="10" maxlength="10" /></label>
+<div class="photo_button"><input id="password_submit" type="button" class="button btn btn-default" value="送信" /></div>
 </form>
 </patTemplate:tmpl>
-<patTemplate:tmpl name="search_area" visibility="hidden"><form id="{SEARCH_FORM_ID}" name="custom_search_box" method="get" class="form"><div class="gallery_search">{HTML}</div></form></patTemplate:tmpl>
+<patTemplate:tmpl name="search_area" visibility="hidden"><form id="{SEARCH_FORM_ID}" name="custom_search_box" method="get" class="form form-inline" role="form"><div class="gallery_search">{HTML}</div></form></patTemplate:tmpl>
 <patTemplate:tmpl name="page_link_top" visibility="hidden"><div class="gallery_nav">{PAGE_LINK}</div></patTemplate:tmpl>
 <div id="gallery_cont"></div>
 <patTemplate:tmpl name="page_link_bottom" visibility="hidden"><div class="gallery_nav">{PAGE_LINK}</div></patTemplate:tmpl>

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_photo_mainSearchWidgetContainer.php 4586 2012-01-13 01:32:22Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_photo_mainBaseWidgetContainer.php');
@@ -25,7 +25,6 @@ class admin_photo_mainSearchWidgetContainer extends admin_photo_mainBaseWidgetCo
 	private $categoryArray;		// カテゴリ種別メニュー
 	private $selTypeArray;	// 項目選択タイプメニュー
 	const MESSAGE_NO_USER_CATEGORY = 'カテゴリが登録されていません';			// ユーザ作成コンテンツ用のカテゴリが登録されていないときのメッセージ
-//	const DEFAULT_SEARCH_AREA = 'default_search.tmpl.html';		// デフォルトの検索エリア
 	
 	/**
 	 * コンストラクタ
@@ -44,6 +43,10 @@ class admin_photo_mainSearchWidgetContainer extends admin_photo_mainBaseWidgetCo
 		// 項目選択タイプ
 		$this->selTypeArray = array(	array(	'name' => '単一選択',	'value' => 'single'),
 										array(	'name' => '複数選択',	'value' => 'multi'));
+										
+		// CKEditor用のCSSファイルを読み込む
+		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->gEnv->getPageSubIdByContentType($this->gEnv->getDefaultPageId(), M3_VIEW_TYPE_PHOTO);
+		$this->loadCKEditorCssFiles($previewUrl);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -133,7 +136,12 @@ class admin_photo_mainSearchWidgetContainer extends admin_photo_mainBaseWidgetCo
 				$this->fieldInfoArray = array();			// 項目定義
 			
 				// デフォルトの検索テンプレート作成
-				$searchTemplate = $this->getParsedTemplateData(photo_mainCommonDef::DEFAULT_SEARCH_AREA_TMPL, array($this, '_makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				$templateType = $this->gPage->getCkeditorTemplateType();
+				if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){			// Bootstrap型のテンプレートの場合
+					$searchTemplate = $this->getParsedTemplateData(photo_mainCommonDef::DEFAULT_SEARCH_AREA_BOOTSTRAP_TMPL, array($this, '_makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				} else {
+					$searchTemplate = $this->getParsedTemplateData(photo_mainCommonDef::DEFAULT_SEARCH_AREA_TMPL, array($this, '_makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				}
 			} else {
 				$searchTemplate = $paramObj->searchTemplate;		// 検索用テンプレート
 				if (!empty($paramObj->fieldInfo)) $this->fieldInfoArray = $paramObj->fieldInfo;			// 項目定義

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: photo_mainCommonDef.php 5622 2013-02-08 07:35:45Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
  
@@ -28,6 +28,7 @@ class photo_mainCommonDef
 	const DEFAULT_PHOTO_TITLE_SHORT_LENGTH = 10;	// デフォルトの画像タイトル文字数
 	const DEFAULT_COMMENT_COUNT = 30;		// コメント数
 	const DEFAULT_SEARCH_AREA_TMPL = 'default_search.tmpl.html';		// デフォルトの検索エリアテンプレート
+	const DEFAULT_SEARCH_AREA_BOOTSTRAP_TMPL = 'default_search_bootstrap.tmpl.html';		// デフォルトの検索エリアテンプレート
 	const SEARCH_TEXT_ID = 'photo_main_text';
 	const SEARCH_BUTTON_ID = 'photo_main_button';
 	const SEARCH_RESET_ID = 'photo_main_reset';

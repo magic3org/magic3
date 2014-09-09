@@ -1,0 +1,168 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<patTemplate:tmpl name="photo_info_script" visibility="hidden">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	$('#photo_rating').raty({
+		path: '{RATY_IMAGE_URL}',
+		start: {INIT_RATE},
+		half: true,
+		readOnly: true
+	});
+	$('#photo_rating_input').raty({
+		path: '{RATY_IMAGE_URL}',
+		click: function(score, evt){
+			//document.main.score.value = score;
+			$('form[name=main] input[name=score]').val(score);
+			$("#photo_rating_score").text(score);
+		}
+	});
+	for (var i = 0; i < document.main.comment_count.value; i++){
+		var rateObj = $('#photo_rating' + (i + 1));
+		rateObj.raty({
+			path: '{RATY_IMAGE_URL}',
+			start: rateObj.attr("value"),
+			readOnly: true
+		});
+	}
+	$("#photo_rate_send").click(function(){
+		$("#photo_rate").slideToggle(300);
+		return false;
+	});
+	$("#photo_rate_submit").click(function(){
+		//if (!document.main.score.value){
+		var scoreVal = $('form[name=main] input[name=score]').val();
+		if (!scoreVal){
+			alert("評価を選択してください");
+			return false;
+		}
+		var param = 'act=rate&ticket=' + document.main.ticket.value;
+		param    += '&photoid=' + document.main.photoid.value;
+		//param    += '&value=' + document.main.score.value;
+		param    += '&value=' + scoreVal;
+		//param    += '&comment=' + encodeURI(document.main.comment.value);
+		param    += '&comment=' + encodeURIComponent(document.main.comment.value);
+		m3_ajax_request('photo_main', param, rate_success_func);
+		return false;
+	});
+<patTemplate:tmpl name="product_script" visibility="hidden">
+<patTemplate:tmpl name="product_script_list">
+	$("#input_cart_submit{INDEX}").click(function(){
+		document.main.act.value = 'inputcart';
+		document.main.product.value = $(this).data('product');
+		document.main.submit();
+		return false;
+	});
+</patTemplate:tmpl>
+	$("#input_cart_submit").click(function(){
+		document.main.act.value = 'inputcart';
+		document.main.product.value = $(this).data('product');
+		document.main.submit();
+		return false;
+	});
+	$("#download_image").click(function(){
+		document.main.act.value = 'downloadimage';
+		document.main.submit();
+		return false;
+	});
+</patTemplate:tmpl>
+	// コメント領域表示制御
+	if (document.main.comment_count.value == 0) $("#photo_comment").css('display', 'none');
+});
+function rate_success_func(request, retcode, jsondata)
+{
+	if (jsondata.result){
+		if (jsondata.result == 1){	// 投票成功のとき
+			$('#photo_rate').slideToggle(900, function() {
+    			$("#photo_rate_message").text('投票しました');
+				$("#photo_rate_send").val('投票済み');
+				
+				$.fn.raty.start(jsondata.rate_average, '#photo_rating');
+				$.fn.raty.readOnly(true, '#photo_rating_input');
+				$("#photo_rate_comment").attr("disabled", "disabled");
+				$("#photo_rate_submit").attr("disabled", "disabled");
+				
+				// コメントの追加
+				var commentLine = '<tr><td><span id="photo_rating0" class="photo_rating_comment" value="' 
+							+ jsondata.rate_average + '"></span>&nbsp;&nbsp;' + jsondata.reg_date + '<br />' + jsondata.comment + '</td></tr>';
+				$("#photo_comment").prepend(commentLine);
+				$("#photo_comment").css('display', '');		// コメント表示
+				$('#photo_rating0').raty({
+					path: '{RATY_IMAGE_URL}',
+					start: jsondata.rate_value,
+					readOnly: true
+				});
+  			});
+		} else {
+			$("#photo_rate_message").text("送信に失敗しました");
+		}
+	} else {
+		$("#photo_rate_message").text("送信できません");
+	}
+}
+//]]>
+</script>
+</patTemplate:tmpl>
+<!-- m3:ErrorMessage -->
+<patTemplate:tmpl name="photo_info_area" visibility="hidden">
+<form method="post" name="main" class="form form-inline" role="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<input type="hidden" name="photoid" value="{PHOTO_ID}" />
+<input type="hidden" name="score" />
+<input type="hidden" name="comment_count" value="{COMMENT_COUNT}" />
+<input type="hidden" name="product" />
+<div id="photo_detail">
+<div class="photo_button"><a href="{BACK_URL}"><img src="{BACK_IMG_URL}" width="{ICON_SIZE}" height="{ICON_SIZE}" title="{BACK_TITLE}" alt="{BACK_ALT}" style="border:none;" /></a></div>
+<div class="photo_image"><img src="{IMG_URL}" width="{WIDTH}" height="{HEIGHT}" title="{TITLE}" alt="{ALT}" style="border:none;" /></div>
+<div class="photo_button"><div style="float:left;text-align:left;">
+<patTemplate:tmpl name="prev_link" visibility="hidden"><a href="{PREV_URL}"><img src="{PREV_IMG_URL}" width="{ICON_SIZE}" height="{ICON_SIZE}" title="{PREV_TITLE}" alt="{PREV_ALT}" style="border:none;" /></a></patTemplate:tmpl>&nbsp;</div><div style="float:right; text-align:right;"><patTemplate:tmpl name="next_link" visibility="hidden"><a href="{NEXT_URL}"><img src="{NEXT_IMG_URL}" width="{ICON_SIZE}" height="{ICON_SIZE}" title="{NEXT_TITLE}" alt="{NEXT_ALT}" style="border:none;" /></a></patTemplate:tmpl></div><div style="clear:both;"></div></div>
+{CONTENT}
+<div id="photo_rate" style="display:none;">
+<label><span class="photo_rate_title">評価</span><span id="photo_rating_input"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="photo_rating_score">星をクリックしてください</span></label>
+<label><span class="photo_rate_title">コメント</span><textarea name="comment" id="photo_rate_comment" class="photo_rate_comment"></textarea></label>
+<div class="photo_button"><input id="photo_rate_submit" type="button" class="button btn btn-default" value="送信" /></div>
+</div>
+<patTemplate:tmpl name="product_info" visibility="hidden">
+<table id="photo_product" class="photo_info">
+<caption>商品情報</caption>
+<tbody>
+<patTemplate:tmpl name="product_list">
+<tr>
+    <th>{PRODUCT_NAME}</th><td><div>{PRODUCT_DETAIL}</div>販売価格(税込)&nbsp;{DISP_TOTAL_PRICE}<input id="input_cart_submit{INDEX}" type="button" class="button btn btn-default" value="カートに入れる" data-product="{PRODUCT}" /></td>
+</tr>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="download_area">
+<tr>
+    <th>ダウンロード購入</th>
+    <td><patTemplate:tmpl name="product_cart" visibility="hidden"><input id="input_cart_submit" type="button" class="button btn btn-default" value="カートに入れる" data-product="download" /></patTemplate:tmpl>
+    <patTemplate:tmpl name="product_download" visibility="hidden">購入済み&nbsp;&nbsp;&nbsp;&nbsp;<input id="download_image" type="button" class="button btn btn-default" value="画像ダウンロード" /></patTemplate:tmpl></td>
+</tr>
+</patTemplate:tmpl>
+</tbody>
+</table>
+</patTemplate:tmpl>
+<table id="photo_comment" class="photo_info">
+<caption>コメント</caption>
+<tbody>
+<patTemplate:tmpl name="itemlist">
+<tr><td><span id="photo_rating{NO}" class="photo_rating_comment" value="{RATE_VALUE}"></span>&nbsp;&nbsp;{DATE}<br />{COMMENT}</td></tr>
+</patTemplate:tmpl>
+</tbody>
+</table>
+</div>
+</form>
+</patTemplate:tmpl>
+</patTemplate:tmpl>
