@@ -386,15 +386,6 @@ class BaseWidgetContainer extends Core
 					$this->gPage->setHeadKeywords($headData['keywords']);
 				}
 			}
-			// ##### プレビュー用環境を作成 #####
-			if ($isAdminDirAccess){
-				if (method_exists($this, '_setPreviewUrl')){// プレビュー用のURLを設定
-					$previewUrl = $this->_setPreviewUrl($request, $param);
-			
-					// CKEditor用のCSSファイルURLを画面に取り込む
-					$this->gPage->getCssFilesByHttp($previewUrl);
-				}
-			}
 			if ($useTemplate){
 				// エラーメッセージ出力
 				if ($this->displayMessage) $this->displayMsg();

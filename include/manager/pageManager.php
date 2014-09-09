@@ -5445,5 +5445,14 @@ class PageManager extends Core
 		$pattern = '/var\s*M3_TEMPLATE_TYPE\s*=\s*(\d+?)\s*;/si';
 		if (preg_match($pattern, $headContent, $matches)) $this->ckeditorTemplateType = $matches[1];			// CKEditor用のテンプレートタイプ
 	}
+	/**
+	 * CKEditor用のテンプレートタイプを取得
+	 *
+	 * @return int			テンプレートタイプ
+	 */	
+	function getCkeditorTemplateType()
+	{
+		return $this->ckeditorTemplateType;
+	}
 }
 ?>
