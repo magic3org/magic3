@@ -50,6 +50,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 	private $postPrice;		// 価格表示用
 	private $categoryWithPwdArray;	// パスワードが必要なカテゴリー
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
+	const CSS_FILE_BOOTSTRAP = '/style_bootstrap.css';		// Bootstrap用CSSファイル
 	const NOT_FOUND_ICON_FILE = 		'/images/system/notfound128.gif';		// 写真が見つからないアイコン
 	const BACK_ICON_FILE = '/images/system/back.png';		// 「戻る」アイコン
 	const PREV_ICON_FILE = '/images/system/previous.png';		// 「前へ」アイコン
@@ -195,7 +196,9 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
-		return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		$cssFile = $this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE;
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP) $cssFile = $this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE_BOOTSTRAP;
+		return $this->getUrl($cssFile);
 	}
 	/**
 	 * 一覧画面表示

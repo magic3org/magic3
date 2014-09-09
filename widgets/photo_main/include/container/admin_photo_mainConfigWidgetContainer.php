@@ -33,6 +33,10 @@ class admin_photo_mainConfigWidgetContainer extends admin_photo_mainBaseWidgetCo
 											array(	'name' => '日付',			'value' => 'date'),
 											array(	'name' => '評価',			'value' => 'rate'),
 											array(	'name' => '参照数',			'value' => 'ref'));
+											
+		// CKEditor用のCSSファイルを読み込む
+		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->gEnv->getPageSubIdByContentType($this->gEnv->getDefaultPageId(), M3_VIEW_TYPE_PHOTO);
+		$this->loadCKEditorCssFiles($previewUrl);
 	}
 	/**
 	 * テンプレートファイルを設定

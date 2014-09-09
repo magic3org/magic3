@@ -1,0 +1,130 @@
+/*#photo_gallery {
+	width:100%;
+}*/
+/*#photo_gallery .gallery_nav {
+	clear: both;
+	padding: 0 50px 0 50px;
+}*/
+#photo_gallery li {
+	list-style-type:none;
+	background:none;
+	margin:0;
+	padding:0;
+	float: left;
+	behavior: '';	/* IE6 behavior reset */
+}
+#photo_gallery a {
+	text-decoration : none;
+}
+#photo_gallery .thumb_cont {
+/*	height: 200px;*/
+}
+/*#photo_gallery img {
+	width: 100px;
+	height: 100px;
+}*/
+#photo_gallery .image_wrap {
+}
+#photo_gallery .title_wrap {
+	padding: 0 0 4px 4px;
+	margin:0px;
+}
+#photo_gallery .score_wrap {
+	padding: 0 5px;
+}
+#photo_gallery .score_wrap img {
+	margin:0;
+	border:0;
+	width: 12px;
+	height: 12px;
+}
+#photo_detail .photo_image {
+	text-align:center;
+}
+#photo_detail .photo_image img {
+	margin: 0 auto;		/* for IE */
+}
+#photo_detail .photo_info {
+	width: 100%;
+	margin: 5px 0 5px;
+}
+#photo_detail .photo_info th {
+	width: 30%;
+}
+/*#photo_detail .photo_button {
+	text-align: right;
+}*/
+#photo_rating img {
+	margin:0;
+	border:0;
+}
+#photo_rating_input img {
+	margin:0;
+	border:0;
+}
+span.photo_rating_comment img {
+	margin:0;
+	border:0;
+}
+#photo_rate {
+	border:solid 1px #c6cfe1;
+	background:#dfe4ee;
+	padding:10px;
+	color:#333333;
+	margin-bottom:20px;
+	overflow: hidden;	/* for IE7,8*/
+	_width:100%;		/* for IE6 */
+}
+#photo_rate label{
+	display:block;
+	margin-bottom:10px;
+	color:#555555;
+}
+
+#photo_rate label span.photo_rate_title {
+	display:block;
+	float:left;
+	padding-right:6px;
+	width:70px;
+	text-align:right;
+	font-weight:bold;
+}
+
+#photo_rate .photo_rate_comment {
+	width: 75%;
+	height: 23px
+}
+/*#photo_rate .photo_button {
+	text-align: right;
+}*/
+#photo_rating {
+	margin-right:10px;
+}
+#photo_rate_message {
+	margin-left:10px;
+}
+#gallery_category {
+	border:solid 1px #c6cfe1;
+	background:#dfe4ee;
+	padding:10px;
+	color:#333333;
+	margin-bottom:20px;
+	overflow: hidden;	/* for IE7,8*/
+	_width:100%;		/* for IE6 */
+}
+#gallery_category label{
+	display:block;
+	margin-bottom:10px;
+	color:#555555;
+}
+#gallery_category label span.gallery_title {
+	display:block;
+	float:left;
+	padding-right:6px;
+	width:70px;
+	text-align:right;
+	font-weight:bold;
+}
+#gallery_category .gallery_message {
+	padding: 0px 0 5px;
+}

@@ -133,3 +133,42 @@ INSERT INTO content
 (cn_type, cn_id, cn_language_id, cn_name,              cn_html,                        cn_default, cn_key, cn_create_user_id, cn_create_dt) VALUES 
 ('', 1,     'ja',           '運営会社', '<table class="table">\r\n	<tbody>\r\n		<tr>\r\n			<th>社　名</th>\r\n			<td>\r\n			<p>株式会社サファリ</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>所在地</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>設　立</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>代表者</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>事業内容</th>\r\n			<td>\r\n			<p>●サファリパークの運営</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引銀行</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引先</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th></th>\r\n			<td></td>\r\n		</tr>\r\n	</tbody>\r\n</table>\r\n\r\n<div class="googlemaps" id="gmap201472916954" style="width:100%;height:300px;display:none;margin:0 auto;">\r\n<script type="text/javascript">\r\n//<![CDATA[\r\n// Magic3 googlemaps v1.00 mapid:201472916954\r\n$(function(){\r\n	var mapStyle = [{"featureType":"water","stylers":[{"visibility":"on"},{"color":"#acbcc9"}]},{"featureType":"landscape","stylers":[{"color":"#f2e5d4"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#c5c6c6"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#e4d7c6"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#fbfaf7"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#c5dac6"}]},{"featureType":"administrative","stylers":[{"visibility":"on"},{"lightness":33}]},{"featureType":"road"},{"featureType":"poi.park","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":20}]},{},{"featureType":"road","stylers":[{"lightness":20}]}];\r\n	var allMapTypes = [	"original",\r\n						google.maps.MapTypeId.SATELLITE,\r\n						google.maps.MapTypeId.HYBRID,\r\n						google.maps.MapTypeId.TERRAIN	];\r\n	var opts = {	mapTypeControlOptions: {	mapTypeIds: allMapTypes } };\r\n	var mapDiv = document.getElementById("gmap201472916954");\r\n	var map = new google.maps.Map(mapDiv, opts);\r\n	var originalMapType = new google.maps.StyledMapType(mapStyle, { name: "地図" });\r\n	map.mapTypes.set("original", originalMapType);\r\n	map.setMapTypeId("original");\r\n	map.setMapTypeId(allMapTypes[0]);\r\n	map.setCenter(new google.maps.LatLng(34.69116, 135.52506));\r\n	map.setZoom(11);\r\n	mapDiv.style.display = "";\r\n	m3GooglemapsAddMarkers(map, [{lat:34.68732, lon:135.5262, text:''場所はここ''}]);\r\n});\r\n//]]></script>\r\n</div>\r\n',              false, '',                0, now()),
 ('', 2,     'ja',           'ようこそ「世界の動物」へ',   '<p>このサイトはＰＣ、スマートフォン、タブレットなどマルチデバイスに対応した会員制の画像ライブラリサイトです。<br />\r\n会員登録を行ってからログインすると画像が閲覧できます。</p>\r\n\r\n<p><a class="button" href="[#M3_ROOT_URL#]/index.php?sub=member&task=regist">会員登録へ</a></p>\r\n',              false, '',                0, now());
+
+-- フォトギャラリー設定マスター
+TRUNCATE TABLE photo_config;
+INSERT INTO photo_config
+(hg_id,                     hg_value,           hg_name,                                  hg_index) VALUES
+('image_protect_copyright',       '1',                '画像著作権保護',                             1),
+('upload_image_max_size',   '500K',             'アップロード画像の最大サイズ(バイト数)', 2),
+('watermark_filename',      'default_mark.jpg', 'セキュリティ保護画像ファイル名',         3),
+('default_image_size',      '450',              '公開画像デフォルトサイズ',               4),
+('default_thumbnail_size',  '128',              'サムネール画像デフォルトサイズ',         5),
+('thumbnail_bg_color',      '#FFFFFF',              'サムネール画像背景色',         6),
+('thumbnail_type',          '0',              'サムネールタイプ',         7),
+('image_category_count',  '2',                '画像カテゴリー数',         8),
+('photo_list_item_count',  '24',                '画像一覧表示項目数',         9),
+('photo_list_order',        '0',         '画像一覧表示順',                         10),
+('photo_title_short_length',  '10',                '画像タイトル(略式)文字数',         11),
+('photo_category_password', '0',                '画像カテゴリーのパスワード制限',             12),
+('thumbnail_crop',      '1',                'サムネール画像切り取り',         13),
+('image_size',          '450',              '公開画像サイズ',               14),
+('thumbnail_size',      '128',              'サムネール画像サイズ',         15),
+('image_quality',       '100',              '画像の品質',                   16),
+('photo_list_sort_key', 'index',            '画像一覧のソートキー',         17),
+('s:photo_list_item_count',  '24',                '画像一覧表示項目数',         200),
+('s:photo_list_order',        '1',         '画像一覧表示順',                         201),
+('s:photo_title_short_length',  '7',                '画像タイトル(略式)文字数',         202),
+('s:photo_list_sort_key', 'index',            '画像一覧のソートキー',         203),
+('s:default_image_size',      '320',              '公開画像デフォルトサイズ',               204),
+('s:default_thumbnail_size',  '128',              'サムネール画像デフォルトサイズ',         205),
+('html_photo_description',  '0',                'HTML形式の画像情報(説明)',         0),
+('use_photo_date',        '1',                '画像情報(撮影日)を使用',         0),
+('use_photo_location',       '1',                '画像情報(撮影場所)を使用',         0),
+('use_photo_camera',      '1',                '画像情報(カメラ)を使用',         0),
+('use_photo_description', '1',                '画像情報(説明)を使用',         0),
+('use_photo_keyword',     '1',                '画像情報(検索キーワード)を使用',         0),
+('use_photo_category',    '1',                '画像情報(カテゴリー)を使用',         0),
+('use_photo_rate',    '1',                '画像情報(評価)を使用',         0),
+('layout_view_detail',   '<table class="photo_info table"><caption>画像情報</caption><tbody><tr><th>ID</th><td>[#CT_ID#]</td></tr><tr><th>タイトル</th><td>[#CT_TITLE#]&nbsp;[#PERMALINK#]</td></tr><tr><th>撮影者</th><td>[#CT_AUTHOR#]</td></tr><tr><th>撮影日</th><td>[#CT_DATE#]</td></tr><tr><th>場所</th><td>[#CT_LOCATION#]</td></tr><tr><th>カメラ</th><td>[#CT_CAMERA#]</td></tr><tr><th>説明</th><td>[#CT_DESCRIPTION#]</td></tr><tr><th>カテゴリー</th><td>[#CT_CATEGORY#]</td></tr><tr><th>キーワード</th><td>[#CT_KEYWORD#]</td></tr><tr><th>評価</th><td>[#RATE#]</td></tr></tbody></table>', 'レイアウト(詳細表示)',               0),
+('output_head',      '0', 'HTMLヘッダ出力', 0),
+('head_view_detail',   '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_SUMMARY#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'ヘッダ出力(詳細表示)',               0);

@@ -94,13 +94,15 @@ class photo_newWidgetContainer extends BaseWidgetContainer
 		}*/
 		// 一覧データがない場合は非表示
 		if ($this->isExistsList){
-			// 前の日付を表示
-			$dateTag = '<h' . self::TITLE_TAG_LEVEL . '>' . $this->convertToDispString($this->currentDate) . '</h' . self::TITLE_TAG_LEVEL . '>';
-			$dateRow = array(
-				'date'		=> $dateTag			// 日付
-			);
-			$this->tmpl->addVars('date_list', $dateRow);
-			$this->tmpl->parseTemplate('date_list', 'a');
+			if ($this->showDate){			// 日付表示ありのとき
+				// 前の日付を表示
+				$dateTag = '<h' . self::TITLE_TAG_LEVEL . '>' . $this->convertToDispString($this->currentDate) . '</h' . self::TITLE_TAG_LEVEL . '>';
+				$dateRow = array(
+					'date'		=> $dateTag			// 日付
+				);
+				$this->tmpl->addVars('date_list', $dateRow);
+				$this->tmpl->parseTemplate('date_list', 'a');
+			}
 		} else {
 			$this->tmpl->addVar("_widget", "message", '最新画像はありません');
 			
