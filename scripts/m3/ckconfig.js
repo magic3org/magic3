@@ -200,8 +200,7 @@ CKEDITOR.editorConfig = function(config){
 		];
 	}
 	config.toolbar_Layout = [
-		{ name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
-		{ name: 'document', items: [ 'Source' ] },
+		{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
 		{ name: 'clipboard', items: [ 'Undo', 'Redo' ] },
 		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
 		{ name: 'paragraph', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
