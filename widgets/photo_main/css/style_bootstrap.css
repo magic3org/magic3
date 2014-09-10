@@ -56,15 +56,12 @@
 #photo_detail .photo_info th {
 	width: 30%;
 }
-/*#photo_detail .photo_button {
-	text-align: right;
-}*/
 #photo_rating img {
 	margin:0;
 	border:0;
 }
 #photo_rating_input img {
-	margin:0;
+	margin:10px 0 0;
 	border:0;
 }
 span.photo_rating_comment img {
@@ -74,34 +71,15 @@ span.photo_rating_comment img {
 #photo_rate {
 	border:solid 1px #c6cfe1;
 	background:#dfe4ee;
-	padding:10px;
+	padding:10px 10px 0 10px;
 	color:#333333;
-	margin-bottom:20px;
+/*	margin-bottom:20px;*/
 	overflow: hidden;	/* for IE7,8*/
 	_width:100%;		/* for IE6 */
 }
-#photo_rate label{
-	display:block;
-	margin-bottom:10px;
-	color:#555555;
+#photo_rating_score {
+	margin-left:20px;
 }
-
-#photo_rate label span.photo_rate_title {
-	display:block;
-	float:left;
-	padding-right:6px;
-	width:70px;
-	text-align:right;
-	font-weight:bold;
-}
-
-#photo_rate .photo_rate_comment {
-	width: 75%;
-	height: 23px
-}
-/*#photo_rate .photo_button {
-	text-align: right;
-}*/
 #photo_rating {
 	margin-right:10px;
 }
