@@ -125,10 +125,9 @@ function rate_success_func(request, retcode, jsondata)
 <input type="hidden" name="comment_count" value="{COMMENT_COUNT}" />
 <input type="hidden" name="product" />
 <div id="photo_detail">
-<div class="photo_button"><a href="{BACK_URL}"><img src="{BACK_IMG_URL}" width="{ICON_SIZE}" height="{ICON_SIZE}" title="{BACK_TITLE}" alt="{BACK_ALT}" style="border:none;" /></a></div>
+<a href="{BACK_URL}" class="btn btn-sm btn-warning pull-right" role="button"><i class="glyphicon glyphicon-th" rel="tooltip" title="{BACK_TITLE}"></i></a>
 <div class="photo_image"><img src="{IMG_URL}" width="{WIDTH}" height="{HEIGHT}" title="{TITLE}" alt="{ALT}" style="border:none;" /></div>
-<div class="photo_button"><div style="float:left;text-align:left;">
-<patTemplate:tmpl name="prev_link" visibility="hidden"><a href="{PREV_URL}"><img src="{PREV_IMG_URL}" width="{ICON_SIZE}" height="{ICON_SIZE}" title="{PREV_TITLE}" alt="{PREV_ALT}" style="border:none;" /></a></patTemplate:tmpl>&nbsp;</div><div style="float:right; text-align:right;"><patTemplate:tmpl name="next_link" visibility="hidden"><a href="{NEXT_URL}"><img src="{NEXT_IMG_URL}" width="{ICON_SIZE}" height="{ICON_SIZE}" title="{NEXT_TITLE}" alt="{NEXT_ALT}" style="border:none;" /></a></patTemplate:tmpl></div><div style="clear:both;"></div></div>
+<patTemplate:tmpl name="prev_link" visibility="hidden"><a href="{PREV_URL}" class="btn btn-sm btn-success" role="button"><i class="glyphicon glyphicon-arrow-left" rel="tooltip" title="{PREV_TITLE}"></i></a></patTemplate:tmpl><patTemplate:tmpl name="next_link" visibility="hidden"><a href="{NEXT_URL}" class="btn btn-sm btn-success pull-right" role="button"><i class="glyphicon glyphicon-arrow-right" rel="tooltip" title="{NEXT_TITLE}"></i></a></patTemplate:tmpl>
 {CONTENT}
 <div id="photo_rate" style="display:none;">
 <div class="form-group"><label for="photo_rating_input"><span class="photo_rate_title">評価</span></label><span id="photo_rating_input"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span id="photo_rating_score">星をクリックしてください</span></div>

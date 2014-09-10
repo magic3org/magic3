@@ -59,9 +59,9 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 	const LOAD_ICON_FILE = '/loader.gif';			// ロード中アイコン
 	const RATY_IMAGE_DIR = '/jquery/raty/img';		// jquery.raty画像パス
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
-	const BACK_BUTTON_TITLE = '戻る';		// 「戻る」ボタンタイトル
-	const PREV_BUTTON_TITLE = '前へ';		// 「前へ」ボタンタイトル
-	const NEXT_BUTTON_TITLE = '次へ';		// 「次へ」ボタンタイトル
+	const BACK_BUTTON_TITLE = '一覧へ戻る';		// 「戻る」ボタンタイトル
+	const PREV_BUTTON_TITLE = '前の画像へ';		// 「前へ」ボタンタイトル
+	const NEXT_BUTTON_TITLE = '次の画像へ';		// 「次へ」ボタンタイトル
 	const SEARCH_FIELD_HEAD = 'photo_main_item';			// フィールド名の先頭文字列
 	const SEARCH_FIELD_CLASS_HEAD = 'photo_main_';			// フィールドクラスの先頭文字列
 	const TARGET_WIDGET = 'photo_shop';			// 画像購入ウィジェット
