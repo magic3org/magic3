@@ -62,6 +62,7 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 	const BACK_BUTTON_TITLE = '一覧へ戻る';		// 「戻る」ボタンタイトル
 	const PREV_BUTTON_TITLE = '前の画像へ';		// 「前へ」ボタンタイトル
 	const NEXT_BUTTON_TITLE = '次の画像へ';		// 「次へ」ボタンタイトル
+	const PERMALINK_BUTTON_TITLE = 'パーマリンク';	// 「パーマリンク」ボタンタイトル
 	const SEARCH_FIELD_HEAD = 'photo_main_item';			// フィールド名の先頭文字列
 	const SEARCH_FIELD_CLASS_HEAD = 'photo_main_';			// フィールドクラスの先頭文字列
 	const TARGET_WIDGET = 'photo_shop';			// 画像購入ウィジェット
@@ -568,8 +569,14 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 		
 		// パーマリンク
 		$permaUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_PHOTO_ID . '=' . $this->photoId);
-		$permaLink = '<a href="' . $this->convertUrlToHtmlEntity($permaUrl) . '"><img src="' . $this->getUrl($this->gEnv->getRootUrl() . self::PERMALINK_ICON_FILE) . 
-						'" width="' . photo_mainCommonDef::BUTTON_ICON_SIZE . '" height="' . photo_mainCommonDef::BUTTON_ICON_SIZE . '" title="パーマリンク" alt="パーマリンク" style="border:none;margin:0;padding:0;" /></a>';
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型出力の場合
+			$permaLink = '<a href="' . $this->convertUrlToHtmlEntity($permaUrl) . '" class="btn btn-xs btn-primary" role="button" rel="tooltip" title="' .
+						self::PERMALINK_BUTTON_TITLE . '"><i class="glyphicon glyphicon-link"></i></a>';
+		} else {
+			$permaLink = '<a href="' . $this->convertUrlToHtmlEntity($permaUrl) . '"><img src="' . $this->getUrl($this->gEnv->getRootUrl() . self::PERMALINK_ICON_FILE) . 
+						'" width="' . photo_mainCommonDef::BUTTON_ICON_SIZE . '" height="' . photo_mainCommonDef::BUTTON_ICON_SIZE . '" title="' . 
+						self::PERMALINK_BUTTON_TITLE . '" alt="' . self::PERMALINK_BUTTON_TITLE . '" style="border:none;margin:0;padding:0;" /></a>';
+		}
 		
 		// 前後のリンクを取得
 		$this->startNo = $request->trimIntValueOf(M3_REQUEST_PARAM_ITEM_NO, '1');

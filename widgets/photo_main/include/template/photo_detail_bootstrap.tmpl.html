@@ -125,14 +125,14 @@ function rate_success_func(request, retcode, jsondata)
 <input type="hidden" name="comment_count" value="{COMMENT_COUNT}" />
 <input type="hidden" name="product" />
 <div id="photo_detail">
-<a href="{BACK_URL}" class="btn btn-sm btn-warning pull-right" role="button"><i class="glyphicon glyphicon-th" rel="tooltip" title="{BACK_TITLE}"></i></a>
+<a href="{BACK_URL}" class="btn btn-sm btn-warning pull-right" role="button" rel="tooltip" title="{BACK_TITLE}" data-container="body"><i class="glyphicon glyphicon-th"></i></a>
 <div class="photo_image"><img src="{IMG_URL}" width="{WIDTH}" height="{HEIGHT}" title="{TITLE}" alt="{ALT}" style="border:none;" /></div>
-<patTemplate:tmpl name="prev_link" visibility="hidden"><a href="{PREV_URL}" class="btn btn-sm btn-success" role="button"><i class="glyphicon glyphicon-arrow-left" rel="tooltip" title="{PREV_TITLE}"></i></a></patTemplate:tmpl><patTemplate:tmpl name="next_link" visibility="hidden"><a href="{NEXT_URL}" class="btn btn-sm btn-success pull-right" role="button"><i class="glyphicon glyphicon-arrow-right" rel="tooltip" title="{NEXT_TITLE}"></i></a></patTemplate:tmpl>
+<patTemplate:tmpl name="prev_link" visibility="hidden"><a href="{PREV_URL}" class="btn btn-sm btn-success" role="button" rel="tooltip" title="{PREV_TITLE}" data-container="body"><i class="glyphicon glyphicon-arrow-left"></i></a></patTemplate:tmpl><patTemplate:tmpl name="next_link" visibility="hidden"><a href="{NEXT_URL}" class="btn btn-sm btn-success pull-right" role="button" rel="tooltip" title="{NEXT_TITLE}" data-container="body"><i class="glyphicon glyphicon-arrow-right"></i></a></patTemplate:tmpl>
 {CONTENT}
 <div id="photo_rate" style="display:none;">
 <div class="form-group"><label for="photo_rating_input" class="col-sm-2 control-label"><span class="photo_rate_title">評価</span></label><div class="col-sm-3"><span id="photo_rating_input"></span></div><div class="col-sm-7"><p class="form-control-static"><span id="photo_rating_score">星をクリックしてください</span></p></div></div>
 <div class="form-group"><label for="photo_rate_comment" class="col-sm-2 control-label"><span class="photo_rate_title">コメント</span></label><div class="col-sm-10"><textarea name="comment" id="photo_rate_comment" class="photo_rate_comment form-control"></textarea></div></div>
-<div class="form-group"><div class="col-sm-offset-2 col-sm-10"><input id="photo_rate_submit" type="button" class="button btn btn-default" value="送信" /></div></div>
+<div class="form-group"><div class="col-sm-offset-2 col-sm-10"><input id="photo_rate_submit" type="button" class="button btn btn-primary" value="送信" /></div></div>
 </div>
 <patTemplate:tmpl name="product_info" visibility="hidden">
 <table id="photo_product" class="photo_info">
