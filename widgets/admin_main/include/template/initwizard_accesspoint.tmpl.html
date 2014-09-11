@@ -36,23 +36,24 @@ $(function(){
 });
 //]]>
 </script>
-<div id="main-content">
-{MENU_ITEMS}
+<div class="col-sm-offset-1 col-sm-10">
+<div class="centered-pills">{MENU_ITEMS}</div>
 <!-- m3:ErrorMessage -->
 <div class="page-header">
 <!--<h1>サイト情報</h1>-->
 </div>
+<div class="row">
 <form method="post" name="main" role="form" class="form-horizontal">
 <input type="hidden" name="task" value="initwizard_accesspoint" />
 <input type="hidden" name="act" />
 <div class="form-group">
-<label class="col-lg-3 control-label"><span {_HELP_INITWIZARD_ACCESSPOINT_}>運用対象</span></label>
-<div class="col-lg-5">
+<label class="col-sm-3 control-label"><span {_HELP_INITWIZARD_ACCESSPOINT_}>運用対象</span></label>
+<div class="col-sm-5">
 <div class="checkbox"><label><input type="checkbox" name="site_open_pc" {SITE_OPEN_PC_CHECKED}>PC用アクセスポイント</label></div>
 <div class="checkbox"><label><input type="checkbox" name="site_open_smartphone" {SITE_OPEN_SMARTPHONE_CHECKED}>スマートフォン用アクセスポイント</label></div>
 <div class="checkbox"><label><input type="checkbox" name="site_open_mobile" {SITE_OPEN_MOBILE_CHECKED}>携帯用アクセスポイント</label></div>
 </div>
 </div>
 </form>
-</div>
+</div></div>
 </patTemplate:tmpl>

@@ -36,37 +36,39 @@ $(function(){
 });
 //]]>
 </script>
-<div id="main-content">
-{MENU_ITEMS}
+<div class="col-sm-offset-1 col-sm-10">
+<div class="centered-pills">{MENU_ITEMS}</div>
 <!-- m3:ErrorMessage -->
 <div class="page-header">
 <!--<h1>サイト情報</h1>-->
 </div>
+<div class="row">
 <form method="post" name="main" role="form" class="form-horizontal">
 <input type="hidden" name="task" value="initwizard_site" />
 <input type="hidden" name="act" />
 <div class="form-group">
-<label for="site_name" class="col-lg-3 control-label"><span {_HELP_INITWIZARD_SITE_NAME}>サイト名</span></label>
-<div class="col-lg-4"><input id="site_name" name="site_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_NAME}" /></div>
+<label for="site_name" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_NAME}>サイト名</span></label>
+<div class="col-sm-4"><input id="site_name" name="site_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_NAME}" /></div>
 </div>
 <div class="form-group">
-<label for="site_email" class="col-lg-3 control-label"><span {_HELP_INITWIZARD_SITE_EMAIL}>Eメール</span></label>
-<div class="col-lg-4"><input id="site_email" name="site_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_EMAIL}" /></div>
+<label for="site_email" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_EMAIL}>Eメール</span></label>
+<div class="col-sm-4"><input id="site_email" name="site_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{SITE_EMAIL}" /></div>
 </div>
 <div class="form-group">
-<label for="site_description" class="col-lg-3 control-label"><span {_HELP_INITWIZARD_SITE_DESCRIPTION}>サイト説明</span></label>
-<div class="col-lg-6"><textarea id="site_description" name="site_description" class="form-control" />{SITE_DESCRIPTION}</textarea></div>
+<label for="site_description" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_DESCRIPTION}>サイト説明</span></label>
+<div class="col-sm-8"><textarea id="site_description" name="site_description" class="form-control" />{SITE_DESCRIPTION}</textarea></div>
 </div>
 <div class="form-group">
-<label for="site_keyword" class="col-lg-3 control-label"><span {_HELP_INITWIZARD_SITE_KEYWORD}>検索キーワード</span></label>
-<div class="col-lg-6"><textarea id="site_keyword" name="site_keyword" class="form-control" />{SITE_KEYWORD}</textarea></div>
+<label for="site_keyword" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_KEYWORD}>検索キーワード</span></label>
+<div class="col-sm-8"><textarea id="site_keyword" name="site_keyword" class="form-control" />{SITE_KEYWORD}</textarea></div>
 </div>
 <div class="form-group">
-<label class="col-lg-3 control-label"><span {_HELP_INITWIZARD_SITE_STATUS}>状態</span></label>
-<div class="col-lg-4">
+<label class="col-sm-3 control-label"><span {_HELP_INITWIZARD_SITE_STATUS}>状態</span></label>
+<div class="col-sm-4">
 <div class="checkbox"><label><input type="checkbox" name="site_open" {SITE_OPEN_CHECKED}>公開</label></div>
 </div>
 </div>
 </form>
+</div>
 </div>
 </patTemplate:tmpl>

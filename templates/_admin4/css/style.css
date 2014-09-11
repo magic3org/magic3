@@ -93,12 +93,11 @@ a:hover {
 /*	margin: 5px 0px;*/
 }
 /* main content area */
-#main-content
+/*#main-content
 {
 	width:60%;
 	margin: 5% auto 0;
-}
-
+}*/
 /* default table define */
 /*
 table {
@@ -703,3 +702,7 @@ input[type="password"]{
 .nav-tabs > li.active > a:focus {
 	outline: 0;
 }
+/*** ナビゲーションボタン追加 ***/
+.centered-pills { text-align:center; }
+.centered-pills ul.nav.nav-pills, .centered-pills ul.nav.nav-tabs { display:inline-block; }
+.centered-pills ul.nav.nav-pills li, .centered-pills ul.nav.nav-tabs li { display:inline; }

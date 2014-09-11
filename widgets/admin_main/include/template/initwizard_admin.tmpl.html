@@ -42,37 +42,38 @@ $(function(){
 });
 //]]>
 </script>
-<div id="main-content">
-{MENU_ITEMS}
+<div class="col-sm-offset-1 col-sm-10">
+<div class="centered-pills">{MENU_ITEMS}</div>
 <!-- m3:ErrorMessage -->
 <div class="page-header">
 <!--<h1>管理者</h1>-->
 </div>
+<div class="row">
 <form method="post" name="main" role="form" class="form-horizontal" autocomplete="off">
 <input type="hidden" name="task" value="initwizard_admin" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="password" />
 <div class="form-group">
-<label for="admin_name" class="col-lg-3 control-label"><span {_HELP_INITWIZARD_ADMIN_NAME}>管理者名</span></label>
-<div class="col-lg-4"><input id="admin_name" name="admin_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_NAME}" /></div>
+<label for="admin_name" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_ADMIN_NAME}>管理者名</span></label>
+<div class="col-sm-4"><input id="admin_name" name="admin_name" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_NAME}" /></div>
 </div>
 <div class="form-group">
-<label for="admin_account" class="col-lg-3 control-label"><span {_HELP_INITWIZARD_ADMIN_ACCOUNT}>アカウント</span></label>
-<div class="col-lg-4"><input id="admin_account" name="admin_account" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_ACCOUNT}" /></div>
+<label for="admin_account" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_ADMIN_ACCOUNT}>アカウント</span></label>
+<div class="col-sm-4"><input id="admin_account" name="admin_account" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_ACCOUNT}" /></div>
 </div>
 <div class="form-group">
-<label for="admin_password" class="col-lg-3 control-label"><span {_HELP_INITWIZARD_ADMIN_PASSWORD}>パスワード</span></label>
-<div class="col-lg-4"><input id="admin_password" name="admin_password" type="password" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_PASSWORD}" /></div>
+<label for="admin_password" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_ADMIN_PASSWORD}>パスワード</span></label>
+<div class="col-sm-4"><input id="admin_password" name="admin_password" type="password" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_PASSWORD}" /></div>
 </div>
 <div class="form-group">
-<label for="admin_password2" class="col-lg-3 control-label">パスワード(確認)</label>
-<div class="col-lg-4"><input id="admin_password2" name="admin_password2" type="password" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_PASSWORD2}" /></div>
+<label for="admin_password2" class="col-sm-3 control-label">パスワード(確認)</label>
+<div class="col-sm-4"><input id="admin_password2" name="admin_password2" type="password" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_PASSWORD2}" /></div>
 </div>
 <div class="form-group">
-<label for="admin_email" class="col-lg-3 control-label"><span {_HELP_INITWIZARD_ADMIN_EMAIL}>Eメール</span></label>
-<div class="col-lg-4"><input id="admin_email" name="admin_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_EMAIL}" /></div>
+<label for="admin_email" class="col-sm-3 control-label"><span {_HELP_INITWIZARD_ADMIN_EMAIL}>Eメール</span></label>
+<div class="col-sm-4"><input id="admin_email" name="admin_email" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{ADMIN_EMAIL}" /></div>
 </div>
 </form>
-</div>
+</div></div>
 </patTemplate:tmpl>
