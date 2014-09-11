@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: main_list.tmpl.html 5632 2013-02-10 13:53:17Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -178,34 +178,34 @@ function loadPhoto(index)
 <!-- m3:ErrorMessage -->
 <div id="photo_gallery">
 <patTemplate:tmpl name="category_area" visibility="hidden">
-<form method="post" name="main">
+<form method="post" name="main" class="form form-horizontal">
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
-<div class="gallery_category">表示可能なカテゴリー：{AUTH_CATEGORY_LIST}&nbsp;&nbsp;<input id="category_add" type="button" class="button btn btn-default" value="追加" /></div>
+<div class="gallery_category">表示可能なカテゴリー：{AUTH_CATEGORY_LIST}<input id="category_add" type="button" class="button btn btn-default" value="追加" /></div>
 <div id="gallery_category" style="display:none;">
-<div class="gallery_message">
-画像を表示するにはカテゴリーのパスワードを入力する必要があります。<br />
-目的のカテゴリーを選択し、パスワードを送信して下さい。</div>
-<label><span class="gallery_title">カテゴリー</span>
-    <select name="access_category">
+<p>画像を表示するにはカテゴリーのパスワードが必要です。<br />
+目的のカテゴリーを選択し、パスワードを入力して下さい。</p>
+<div class="form-group"><label class="col-sm-2 control-label" for="access_category"><span class="gallery_title">カテゴリー</span></label>
+<div class="col-sm-3"><select id="access_category" name="access_category" class="form-control">
     <option value="0">-- 未選択 --</option>
         <patTemplate:tmpl name="access_category_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
-    </select>
-</label>
-<label><span class="gallery_title">パスワード</span><input type="password" name="access_password" class="form-control" size="10" maxlength="10" /></label>
-<div class="photo_button"><input id="password_submit" type="button" class="button btn btn-default" value="送信" /></div>
+</select></div>
+</div>
+<div class="form-group"><label class="col-sm-2 control-label" for="access_password"><span class="gallery_title">パスワード</span></label><div class="col-sm-3"><input type="password" id="access_password" name="access_password" class="form-control" size="10" maxlength="10" /></div></div>
+<div class="form-group"><div class="col-sm-offset-2 col-sm-10"><input id="password_submit" type="button" class="button btn btn-default" value="送信" /></div></div>
 </div>
 </form>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="single_category_area" visibility="hidden">
-<form method="post" name="main">
+<form method="post" name="main" class="form form-inline">
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
 <input type="hidden" name="access_category" value="{VALUE}" />
-<label><span class="gallery_title">パスワード</span><input type="password" name="access_password" class="form-control" size="10" maxlength="10" /></label>
-<div class="photo_button"><input id="password_submit" type="button" class="button btn btn-default" value="送信" /></div>
+<p>画像を表示するにはパスワードが必要です。</p>
+<div class="form-group"><label for="access_password" class="control-label"><span class="gallery_title">パスワード</span></label><input type="password" id="access_password" name="access_password" class="form-control" size="15" maxlength="10" /></div>
+<input id="password_submit" type="button" class="button btn btn-default" value="送信" />
 </form>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="search_area" visibility="hidden"><form id="{SEARCH_FORM_ID}" name="custom_search_box" method="get" class="form form-inline" role="form"><div class="gallery_search">{HTML}</div></form></patTemplate:tmpl>

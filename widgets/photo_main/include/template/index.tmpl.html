@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: main_list.tmpl.html 5632 2013-02-10 13:53:17Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -183,9 +183,9 @@ function loadPhoto(index)
 <input type="hidden" name="password" />
 <div class="gallery_category">表示可能なカテゴリー：{AUTH_CATEGORY_LIST}&nbsp;&nbsp;<input id="category_add" type="button" class="button" value="追加" /></div>
 <div id="gallery_category" style="display:none;">
-<div class="gallery_message">
-画像を表示するにはカテゴリーのパスワードを入力する必要があります。<br />
-目的のカテゴリーを選択し、パスワードを送信して下さい。</div>
+<p class="gallery_message">
+画像を表示するにはカテゴリーのパスワードが必要です。<br />
+目的のカテゴリーを選択し、パスワードを入力して下さい。</p>
 <label><span class="gallery_title">カテゴリー</span>
     <select name="access_category">
     <option value="0">-- 未選択 --</option>
@@ -204,6 +204,7 @@ function loadPhoto(index)
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
 <input type="hidden" name="access_category" value="{VALUE}" />
+<p>画像を表示するにはパスワードが必要です。</p>
 <label><span class="gallery_title">パスワード</span><input type="password" name="access_password" size="10" maxlength="10" /></label>
 <div class="photo_button"><input id="password_submit" type="button" class="button" value="送信" /></div>
 </form>

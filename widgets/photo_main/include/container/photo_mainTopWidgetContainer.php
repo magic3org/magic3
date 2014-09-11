@@ -236,9 +236,9 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 			$itemCategory = $this->fieldInfoArray[$i]->category;
 			if ($itemType == 'category'){
 				if (!empty($itemCategory) && !in_array($itemCategory, $menuCategoryArray)) $menuCategoryArray[] = $itemCategory;	// 親カテゴリー
-				//if (!in_array($itemCategory, $menuCategoryArray)) $menuCategoryArray[] = $itemCategory;	// 親カテゴリー
 			}
 		}
+		$enableMessage = true;		// メッセージ表示可能かどうか
 		
 		// POST,GET値取得
 		$keyword = $request->trimValueOf(M3_REQUEST_PARAM_KEYWORD);		// 検索キーワード
@@ -310,11 +310,15 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 					// 参照可能カテゴリー表示
 					$this->authCategoryStr = rtrim($this->authCategoryStr, ', ');
 					$this->tmpl->addVar("category_area", "auth_category_list", $this->convertToDispString($this->authCategoryStr));
+					
+					$enableMessage = false;		// メッセージ表示可能かどうか
 				}
 			} else if ($categoryWithPwdCount == 1){		// 参照可能なカテゴリーが単数のとき
 				if (!in_array($this->categoryWithPwdArray[0], $this->authCategory)){		// 認証されていないとき
 					$this->tmpl->addVar("single_category_area", "value", $this->convertToDispString($this->categoryWithPwdArray[0]));
 					$this->tmpl->setAttribute('single_category_area', 'visibility', 'visible');		// 画像カテゴリーエリア表示
+					
+					$enableMessage = false;		// メッセージ表示可能かどうか
 				}
 			}
 		}
@@ -342,14 +346,12 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 															$this->categoryArray/*カテゴリー*/, $this->authorArray/*撮影者*/, $limitedCategory);
 
 		// リンク文字列作成
-		//$this->calcPage($pageNo, $totalCount, $this->viewCount, $pageCount, $startNo, $endNo);
 		$ret = $this->calcPageLink($pageNo, $totalCount, $this->viewCount);
 		if ($ret){		// ページリンク作成可能な場合
 			// ページリンク作成
 			$linkStyle = 0;			// HTMLの出力タイプ
 			if ($this->_renderType == M3_RENDER_BOOTSTRAP) $linkStyle = 2;		// Bootstrap型テンプレートの場合
 			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams, $linkStyle);
-			//$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->gEnv->createCurrentPageUrl(), $urlParams);
 			if (!empty($pageLink)){
 				$this->tmpl->setAttribute('page_link_top', 'visibility', 'visible');		// リンク表示
 				$this->tmpl->setAttribute('page_link_bottom', 'visibility', 'visible');		// リンク表示
@@ -361,7 +363,8 @@ class photo_mainTopWidgetContainer extends photo_mainBaseWidgetContainer
 			$this->tmpl->setAttribute('get_photo', 'visibility', 'visible');		// 画像取得
 			$this->tmpl->addVar("get_photo", "ajax_url", $ajaxUrl);
 		} else {		// 画像なし、あるいは、ページ番号が正しくない場合
-			$this->setUserErrorMsg('画像が見つかりません');
+			// メッセージ表示可能な場合のみメッセージを表示
+			if ($enableMessage) $this->setUserErrorMsg('画像が見つかりません');
 		}
 		
 		// 検索カテゴリ情報を取得

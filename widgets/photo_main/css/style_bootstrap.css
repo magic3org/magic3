@@ -89,12 +89,14 @@ span.photo_rating_comment img {
 #gallery_category {
 	border:solid 1px #c6cfe1;
 	background:#dfe4ee;
-	padding:10px;
+/*	padding:10px;*/
+	padding:10px 10px 0 10px;
 	color:#333333;
-	margin-bottom:20px;
+/*	margin-bottom:20px;*/
 	overflow: hidden;	/* for IE7,8*/
 	_width:100%;		/* for IE6 */
 }
+/*
 #gallery_category label{
 	display:block;
 	margin-bottom:10px;
@@ -107,7 +109,7 @@ span.photo_rating_comment img {
 	width:70px;
 	text-align:right;
 	font-weight:bold;
-}
-#gallery_category .gallery_message {
+}*/
+/*#gallery_category .gallery_message {
 	padding: 0px 0 5px;
-}
+}*/
