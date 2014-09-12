@@ -67,6 +67,8 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		if (!empty($develop)) $this->showDetail = '1';
 		
 		$act = $request->trimValueOf('act');
+		$connectOfficial = $request->trimCheckedValueOf('item_connect_official');
+		
 		if ($act == 'initsys'){		// システム初期化のとき
 			// テーブルの初期化フラグをリセット
 			$this->gSystem->enableInitSystem();
@@ -174,6 +176,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		}
 		
 		// その他値を埋め込む
+		$this->tmpl->addVar("_widget", "connect_official", $this->convertToCheckedString($connectOfficial));
 		$this->tmpl->addVar("_widget", "develop", $this->showDetail);
 	}
 	/**

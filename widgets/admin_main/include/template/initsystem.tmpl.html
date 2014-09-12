@@ -41,6 +41,10 @@ function showDevelop(){
 	document.main.submit();
 	return true;
 }
+function selectConnectOfficial(){
+	document.main.submit();
+	return true;
+}
 $(function(){
 	// メニュー編集機能キー登録
 	$(document).keyup(function(e){
@@ -54,7 +58,7 @@ $(function(){
 <div style="width:800px;margin:0 auto;">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
-<form method="post" name="main">
+<form method="post" name="main" class="form form-inline">
 <input type="hidden" name="act" />
 <input type="hidden" name="develop" value="{DEVELOP}" />
 
@@ -69,11 +73,14 @@ $(function(){
     <div class="panel-heading">サンプルデータ</div>
     <ul class="list-group">
         <li class="list-group-item">
+		<div class="form-group">
 	    <select name="sample_sql" onChange="selectFile();" class="form-control" style="width:200px;">
 	        <patTemplate:tmpl name="sample__sql_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
+		<div class="form-group"><label class="checkbox-inline"><input type="checkbox" name="item_connect_official" onchange="selectConnectOfficial();" {CONNECT_OFFICIAL} />公式サイトへ接続</label></div>
 		</li>
 		<li class="list-group-item">{HEADER}</li>
     </ul>
