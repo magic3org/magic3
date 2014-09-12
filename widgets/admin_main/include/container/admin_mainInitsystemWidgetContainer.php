@@ -15,12 +15,15 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainMainteBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
+require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
 
 class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $showDetail;		// 詳細表示モードかどうか
+	private $sampleId;		// サンプルデータID
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
+	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 		
 	/**
 	 * コンストラクタ
@@ -60,14 +63,13 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	 */
 	function _assign($request, &$param)
 	{
-		$filename = '';		// 実行スクリプトファイル
-		
 		// 送信値を取得
 		$develop = $request->trimValueOf('develop');
 		if (!empty($develop)) $this->showDetail = '1';
 		
 		$act = $request->trimValueOf('act');
 		$connectOfficial = $request->trimCheckedValueOf('item_connect_official');
+		$this->sampleId = $request->trimValueOf('sample_sql');
 		
 		if ($act == 'initsys'){		// システム初期化のとき
 			// テーブルの初期化フラグをリセット
@@ -97,8 +99,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			// 現在の設定しているテンプレートを解除
 			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
 		} else if ($act == 'installsampledata'){		// サンプルデータインストールのとき
-			$filename = $request->trimValueOf('sample_sql');
-			$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $filename;
+			$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
 			
 			// スクリプト実行
 			if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
@@ -114,7 +115,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			// 現在の設定しているテンプレートを解除
 			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
 		} else if ($act == 'selectfile'){		// スクリプトファイルを選択
-			$filename = $request->trimValueOf('sample_sql');
+			//$this->sampleId = $request->trimValueOf('sample_sql');
 		} else if ($act == 'develop'){		// 開発用モード
 			$this->showDetail = '1';
 		}
@@ -132,10 +133,10 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			$file = $files[$i];
 			
 			// デフォルトのファイル名を決定
-			if (empty($filename)) $filename = $file;
+			if (empty($this->sampleId)) $this->sampleId = $file;
 			
 			$selected = '';
-			if ($file == $filename){
+			if ($file == $this->sampleId){
 				$selected = 'selected';
 			}
 			$row = array(
@@ -147,9 +148,21 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			$this->tmpl->parseTemplate('sample__sql_list', 'a');
 		}
 		
+		// 公式サイト接続の場合は公式サイトからサンプルパッケージリストを取得
+		if ($connectOfficial){
+			$row = array(
+				'value'    => '',			// ファイル名
+				'name'     => '-- 公式サイト --'			// ファイル名
+			);
+			$this->tmpl->addVars('sample__sql_list', $row);
+			$this->tmpl->parseTemplate('sample__sql_list', 'a');
+			
+			$this->getPackageListFromOfficialSite();
+		}
+		
 		// 実行スクリプトファイルのヘッダを取得
-		if (!empty($filename)){
-			$filePath = $searchPath . '/' . $filename;
+		if (!empty($this->sampleId)){
+			$filePath = $searchPath . '/' . $this->sampleId;
 			
 			// ファイルの読み込み
 			$fileHead = '';
@@ -209,6 +222,47 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			closedir($dirHandle);
 		}
 		return $files;
+	}
+	/**
+	 * 公式サイトのサンプルプログラムリストを取得
+	 *
+	 * @return				なし
+	 */
+	function getPackageListFromOfficialSite()
+	{
+		$files = array();
+		$repo = new GitRepo('magic3org', 'magic3_sample_data');
+		$options  = array('http' => array('user_agent'=> $_SERVER['HTTP_USER_AGENT']));
+		$context  = stream_context_create($options);
+		$url = $repo->getFileUrl('release/info.json');
+		$data = json_decode(file_get_contents($url, 0, $context));
+		if ($data === false) return $files;
+
+		$fileCount = count($data);
+		for ($i = 0; $i < $fileCount; $i++){
+			$id = $data[$i]->{'id'};
+			$status = $data[$i]->{'status'};
+			$sampleId = self::DOWNLOAD_FILE_PREFIX . $id;
+			
+			if ($this->showDetail){
+				$name = $id . '[' . $status . ']';
+			} else {
+				// 安定版のみメニューに表示
+				if ($status != 'stable') continue;
+				$name = $id;
+			}
+			
+			$selected = '';
+			if ($sampleId == $this->sampleId) $selected = 'selected';
+
+			$row = array(
+				'value'    => $sampleId,			// サンプルデータID
+				'name'     => $name,			// 表示名
+				'selected' => $selected														// 選択中かどうか
+			);
+			$this->tmpl->addVars('sample__sql_list', $row);
+			$this->tmpl->parseTemplate('sample__sql_list', 'a');
+		}
 	}
 }
 ?>
