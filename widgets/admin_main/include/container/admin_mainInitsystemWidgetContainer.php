@@ -10,7 +10,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainInitsystemWidgetContainer.php 4316 2011-09-13 01:27:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainMainteBaseWidgetContainer.php');
@@ -172,10 +172,6 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			
 			$this->tmpl->addVar("_widget", "header", $fileHead);
 		}
-		
-		// ディスク使用量取得
-		$diskByte = $this->gInstance->getDbManager()->getTableDataSize('_access_log');
-		$this->tmpl->addVar("_widget", "size_access_log", convFromBytes($diskByte));
 		
 		// その他値を埋め込む
 		$this->tmpl->addVar("_widget", "develop", $this->showDetail);

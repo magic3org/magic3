@@ -243,6 +243,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'pagedef':		// 画面定義
 						case 'initsystem':	// システム初期化
 						case 'dbbackup':	// DBバックアップ
+						case 'dbcondition':	// DB状況
 						case 'configsys':	// システム設定
 						case 'configlang':	// 言語設定
 						case 'configmessage':	// メッセージ設定
