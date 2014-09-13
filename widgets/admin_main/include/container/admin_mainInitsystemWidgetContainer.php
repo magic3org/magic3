@@ -172,8 +172,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			$filePath = $searchPath . '/' . $this->sampleId;
 			
 			// ファイルの読み込み
-			$fileTitle = '';
-			$fileDesc = '';
+			$fileDescArray = array();
 			$fp = fopen($filePath, 'r');
 			while (!feof($fp)){
 			    $line = fgets($fp, 1024);
@@ -188,15 +187,20 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 				if (strncmp($line, '-- *', strlen('-- *')) != 0){		// ヘッダ部読み飛ばし
 					// コメント記号を削除
 					$line = trim(substr($line, strlen('--')));
-					$fileDesc .= $line . M3_NL;
+					
+					// タイトルを取得
+					if (preg_match('/^\[(.*)\]$/', $line, $match)){
+						$this->sampleTitle = $match[1];	// サンプルデータタイトル
+					} else {
+						$fileDescArray[] = $line;
+					}
 				}
 			}
 			fclose($fp);
-			$this->sampleTitle = $fileTitle;
-			$this->sampleDesc = $fileDesc;
+			if (count($fileDescArray)) $this->sampleDesc = implode('<br />', $fileDescArray);
 		}
-		$content = '<h5>' . $this->convertToDispString($this->sampleTitle) . '</h5>';
-		$content .= $this->convertToDispString($this->sampleDesc);
+		$content = '<h5>' . $this->convertToDispString($this->sampleTitle, true/*タグ変換なし*/) . '</h5>';
+		$content .= $this->convertToDispString($this->sampleDesc, true/*タグ変換なし*/);
 		$this->tmpl->addVar("_widget", "content", $content);
 				
 		// その他値を埋め込む
@@ -270,7 +274,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 				$selected = 'selected';
 				
 				$this->sampleTitle = $title;	// サンプルデータタイトル
-				$this->sampleDesc = $desc;	// サンプルデータ説明
+				$this->sampleDesc = str_replace("\n", '<br />', $desc);	// サンプルデータ説明
 			}
 
 			$row = array(
