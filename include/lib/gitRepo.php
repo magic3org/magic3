@@ -371,5 +371,66 @@ class GitRepo
 		}
 		return $status;
 	}
+	/**
+	 * 相対パスからZip圧縮ファイルをダウンロード
+	 *
+	 * @param string $path		ダウンロードするファイルの相対パス
+	 * @param string $destDir	解凍先ディレクトリ
+	 * @param string $destPath	解凍したディレクトリパス
+	 * @return bool				true=成功、false=失敗
+	 */
+	function downloadZipFile($path, $destDir, &$destPath)
+	{
+		global $gEnvManager;
+		
+		//$url = sprintf(self::URL_DOWNLOAD_ZIP_FILE_BY_TAG, $this->user, $this->repo, $tagId);
+		$url = sprintf(self::URL_DOWNLOAD_FILE, $this->user, $this->repo, $path);
+		
+		// GitHubからファイル取得
+		$status = false;
+		$readBufLength = 1024 * 8;		// 読み込みバッファサイズ
+		$options  = array('http' => array('user_agent'=> $_SERVER['HTTP_USER_AGENT']));
+		$context  = stream_context_create($options);
+		$srcFile = fopen($url, 'rb', false, $context);
+		if ($srcFile){
+			// Zipファイル保存用一時ファイル作成
+			$tmpFile = tempnam($gEnvManager->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
+			
+			// 保存先ファイルを開く
+			$newFile = fopen($tmpFile, 'wb');
+			if ($newFile){
+				while (!feof($srcFile)){
+					fwrite($newFile, fread($srcFile, $readBufLength), $readBufLength);
+				}
+				fclose($newFile);
+				$status = true;			// 読み込み完了
+			}
+			fclose($srcFile);
+			
+			// Zipファイルを解凍
+			if ($status){
+				$zipFile = new PclZip($tmpFile);
+				if (($zipList = $zipFile->listContent()) != 0){
+					if (count($zipList) == 1){
+						$dirName = basename($zipList[0]['filename']);		// ディレクトリ名取得
+						$status = $zipFile->extract(PCLZIP_OPT_PATH, $destDir);
+						if ($status) $destPath = $destDir . '/' . $dirName;
+					} else {
+						$status = $zipFile->extract(PCLZIP_OPT_PATH, $destDir);
+						if ($status) $destPath = $destDir;
+					}
+/*							if (count($zipList) == 1 && is_dir($extDir . '/' . $fileList[0])){		// 単一ディレクトリのとき
+								$srcTemplateDir = $extDir . '/' . $fileList[0];
+							} else {
+								// 設定ファイルを取得
+								$srcTemplateDir = $extDir;
+							}*/
+				}
+			}
+			// 一時ファイル削除
+			unlink($tmpFile);
+		}
+		return $status;
+	}
 }
 ?>

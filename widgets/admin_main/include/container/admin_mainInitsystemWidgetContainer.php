@@ -307,6 +307,10 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		$repo = new GitRepo('magic3org', 'magic3_sample_data');
 		$repo->downloadZipFile($path, $tmpDir, $destPath);
 		
+		// パッケージ情報ファイルを取得
+		$data = json_decode(file_get_contents($destPath . '/index.json'));
+		if ($data === false) return false;
+		
 		// 作業ディレクトリ削除
 		rmDirectory($tmpDir);
 		return $status;
