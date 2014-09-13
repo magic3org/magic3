@@ -22,6 +22,8 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	private $db;	// DB接続オブジェクト
 	private $showDetail;		// 詳細表示モードかどうか
 	private $sampleId;		// サンプルデータID
+	private $sampleTitle;	// サンプルデータタイトル
+	private $sampleDesc;	// サンプルデータ説明
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 		
@@ -99,17 +101,20 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			// 現在の設定しているテンプレートを解除
 			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
 		} else if ($act == 'installsampledata'){		// サンプルデータインストールのとき
-			$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
-			
-			// スクリプト実行
-			if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
-				$this->setMsg(self::MSG_GUIDANCE, 'スクリプト実行完了しました');
+			if (strStartsWith($this->sampleId, self::DOWNLOAD_FILE_PREFIX)){
 			} else {
-				$this->setMsg(self::MSG_APP_ERR, "スクリプト実行に失敗しました");
-			}
-			if (!empty($errors)){
-				foreach ($errors as $error) {
-					$this->setMsg(self::MSG_APP_ERR, $error);
+				$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
+			
+				// スクリプト実行
+				if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
+					$this->setMsg(self::MSG_GUIDANCE, 'スクリプト実行完了しました');
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, "スクリプト実行に失敗しました");
+				}
+				if (!empty($errors)){
+					foreach ($errors as $error) {
+						$this->setMsg(self::MSG_APP_ERR, $error);
+					}
 				}
 			}
 			// 現在の設定しているテンプレートを解除
@@ -131,17 +136,17 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		// スクリプト選択メニュー作成
 		for ($i = 0; $i < count($files); $i++){
 			$file = $files[$i];
+			$name = preg_replace("/(.+)(\.[^.]+$)/", "$1", $file);		// 拡張子除く
 			
 			// デフォルトのファイル名を決定
 			if (empty($this->sampleId)) $this->sampleId = $file;
 			
 			$selected = '';
-			if ($file == $this->sampleId){
-				$selected = 'selected';
-			}
+			if ($file == $this->sampleId) $selected = 'selected';
+
 			$row = array(
-				'value'    => $file,			// ファイル名
-				'name'     => $file,			// ファイル名
+				'value'    => $this->convertToDispString($file),			// ファイル名
+				'name'     => $this->convertToDispString($name),			// ファイル名
 				'selected' => $selected														// 選択中かどうか
 			);
 			$this->tmpl->addVars('sample__sql_list', $row);
@@ -152,20 +157,23 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		if ($connectOfficial){
 			$row = array(
 				'value'    => '',			// ファイル名
-				'name'     => '-- 公式サイト --'			// ファイル名
+				'name'     => '-- 公式サイト --',			// ファイル名
+				'selected' => ''	
 			);
 			$this->tmpl->addVars('sample__sql_list', $row);
 			$this->tmpl->parseTemplate('sample__sql_list', 'a');
 			
-			$this->getPackageListFromOfficialSite();
+			// 公式サイトのサンプルデータリストを取得
+			$this->getSampleListFromOfficialSite();
 		}
 		
 		// 実行スクリプトファイルのヘッダを取得
-		if (!empty($this->sampleId)){
+		if (!empty($this->sampleId) && !strStartsWith($this->sampleId, self::DOWNLOAD_FILE_PREFIX)){
 			$filePath = $searchPath . '/' . $this->sampleId;
 			
 			// ファイルの読み込み
-			$fileHead = '';
+			$fileTitle = '';
+			$fileDesc = '';
 			$fp = fopen($filePath, 'r');
 			while (!feof($fp)){
 			    $line = fgets($fp, 1024);
@@ -180,14 +188,17 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 				if (strncmp($line, '-- *', strlen('-- *')) != 0){		// ヘッダ部読み飛ばし
 					// コメント記号を削除
 					$line = trim(substr($line, strlen('--')));
-					$fileHead .= $line . '<br />' . M3_NL;
+					$fileDesc .= $line . M3_NL;
 				}
 			}
 			fclose($fp);
-			
-			$this->tmpl->addVar("_widget", "header", $fileHead);
+			$this->sampleTitle = $fileTitle;
+			$this->sampleDesc = $fileDesc;
 		}
-		
+		$content = '<h5>' . $this->convertToDispString($this->sampleTitle) . '</h5>';
+		$content .= $this->convertToDispString($this->sampleDesc);
+		$this->tmpl->addVar("_widget", "content", $content);
+				
 		// その他値を埋め込む
 		$this->tmpl->addVar("_widget", "connect_official", $this->convertToCheckedString($connectOfficial));
 		$this->tmpl->addVar("_widget", "develop", $this->showDetail);
@@ -228,7 +239,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	 *
 	 * @return				なし
 	 */
-	function getPackageListFromOfficialSite()
+	function getSampleListFromOfficialSite()
 	{
 		$files = array();
 		$repo = new GitRepo('magic3org', 'magic3_sample_data');
@@ -243,6 +254,8 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			$id = $data[$i]->{'id'};
 			$status = $data[$i]->{'status'};
 			$sampleId = self::DOWNLOAD_FILE_PREFIX . $id;
+			$title = $data[$i]->{'title'};
+			$desc = $data[$i]->{'description'};
 			
 			if ($this->showDetail){
 				$name = $id . '[' . $status . ']';
@@ -253,11 +266,16 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			}
 			
 			$selected = '';
-			if ($sampleId == $this->sampleId) $selected = 'selected';
+			if ($sampleId == $this->sampleId){
+				$selected = 'selected';
+				
+				$this->sampleTitle = $title;	// サンプルデータタイトル
+				$this->sampleDesc = $desc;	// サンプルデータ説明
+			}
 
 			$row = array(
-				'value'    => $sampleId,			// サンプルデータID
-				'name'     => $name,			// 表示名
+				'value'    => $this->convertToDispString($sampleId),			// サンプルデータID
+				'name'     => $this->convertToDispString($name),			// 表示名
 				'selected' => $selected														// 選択中かどうか
 			);
 			$this->tmpl->addVars('sample__sql_list', $row);
