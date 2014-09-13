@@ -24,6 +24,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	private $sampleId;		// サンプルデータID
 	private $sampleTitle;	// サンプルデータタイトル
 	private $sampleDesc;	// サンプルデータ説明
+	private $archivePath;	// サンプルデータインストール用アーカイブの相対パス
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 		
@@ -72,6 +73,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		$act = $request->trimValueOf('act');
 		$connectOfficial = $request->trimCheckedValueOf('item_connect_official');
 		$this->sampleId = $request->trimValueOf('sample_sql');
+		$archivePath = $request->trimValueOf('archivepath');
 		
 		if ($act == 'initsys'){		// システム初期化のとき
 			// テーブルの初期化フラグをリセット
@@ -101,7 +103,9 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			// 現在の設定しているテンプレートを解除
 			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
 		} else if ($act == 'installsampledata'){		// サンプルデータインストールのとき
-			if (strStartsWith($this->sampleId, self::DOWNLOAD_FILE_PREFIX)){
+			if (strStartsWith($this->sampleId, self::DOWNLOAD_FILE_PREFIX)){		// 公式サイトからサンプルデータを取得の場合
+			 	// サンプルデータインストール用アーカイブを取得しインストール
+				$this->installSampleArchive($archivePath);
 			} else {
 				$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
 			
@@ -206,6 +210,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		// その他値を埋め込む
 		$this->tmpl->addVar("_widget", "connect_official", $this->convertToCheckedString($connectOfficial));
 		$this->tmpl->addVar("_widget", "develop", $this->showDetail);
+		$this->tmpl->addVar("_widget", "archive_path", $this->archivePath);
 	}
 	/**
 	 * ディレクトリ内のスクリプトファイルを取得
@@ -275,6 +280,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 				
 				$this->sampleTitle = $title;	// サンプルデータタイトル
 				$this->sampleDesc = str_replace("\n", '<br />', $desc);	// サンプルデータ説明
+				$this->archivePath = 'release/' . $data[$i]->{'filename'};	// サンプルデータインストール用相対パス
 			}
 
 			$row = array(
@@ -285,6 +291,25 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			$this->tmpl->addVars('sample__sql_list', $row);
 			$this->tmpl->parseTemplate('sample__sql_list', 'a');
 		}
+	}
+	/**
+	 * サンプルアーカイブをインストール
+	 *
+	 * @param string $path	アーカイブ取得用相対パス
+	 * @return bool			true=成功、false=失敗
+	 */
+	function installSampleArchive($path)
+	{
+		// 作業ディレクトリを作成
+		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+		
+		// ファイルダウンロード
+		$repo = new GitRepo('magic3org', 'magic3_sample_data');
+		$repo->downloadZipFile($path, $tmpDir, $destPath);
+		
+		// 作業ディレクトリ削除
+		rmDirectory($tmpDir);
+		return $status;
 	}
 }
 ?>
