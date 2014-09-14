@@ -383,7 +383,6 @@ class GitRepo
 	{
 		global $gEnvManager;
 		
-		//$url = sprintf(self::URL_DOWNLOAD_ZIP_FILE_BY_TAG, $this->user, $this->repo, $tagId);
 		$url = sprintf(self::URL_DOWNLOAD_FILE, $this->user, $this->repo, $path);
 		
 		// GitHubからファイル取得
@@ -411,7 +410,7 @@ class GitRepo
 			if ($status){
 				$zipFile = new PclZip($tmpFile);
 				if (($zipList = $zipFile->listContent()) != 0){
-					if (count($zipList) == 1){
+					if (count($zipList) == 1 && $zipList[0]['folder']){	// 単一ディレクトリのとき
 						$dirName = basename($zipList[0]['filename']);		// ディレクトリ名取得
 						$status = $zipFile->extract(PCLZIP_OPT_PATH, $destDir);
 						if ($status) $destPath = $destDir . '/' . $dirName;
