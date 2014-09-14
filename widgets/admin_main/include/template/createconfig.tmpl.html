@@ -15,7 +15,7 @@
 //<![CDATA[
 function downloadConfig(type){
 	document.main.act.value = 'download';
-	document.main.act.value = type;
+	document.main.type.value = type;
 	document.main.submit();
 	return true;
 }
@@ -30,7 +30,7 @@ function downloadConfig(type){
 <div class="panel panel-info" style="width:500px;margin:20px auto;" >
     <div class="panel-heading">ファイルコピー定義ファイル</div>
     <ul class="list-group">
-        <li class="list-group-item"><div class="form-group"><label for="item_copyfile_path" class="control-label col-sm-3">相対パス</label><div class="col-sm-9"><input type="text" id="item_copyfile_path" name="item_copyfile_path" size="10" maxlength="40" class="form-control" /></div></div></li>
+        <li class="list-group-item"><div class="form-group"><label for="item_path" class="control-label col-sm-3">相対パス</label><div class="col-sm-9"><input type="text" id="item_path" name="item_path" class="form-control" size="10" maxlength="40" value="{PATH}" /></div></div></li>
     </ul>
     <div class="panel-footer"><input type="button" class="button btn" onclick="downloadConfig('copyfile');" value="作成" /></div>
 </div>

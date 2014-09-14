@@ -10,8 +10,7 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-<patTemplate:tmpl name="_tmpl">
-[
+<patTemplate:tmpl name="_tmpl">[
 <patTemplate:tmpl name="itemlist">    {
         "no": "{NO}",
 	"src": "{SRC_FILE}",
