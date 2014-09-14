@@ -50,6 +50,8 @@ $(function(){
 	$(document).keyup(function(e){
 		if (e.shiftKey === true && e.which === 27){		// Shift+ESCキー
 			showDevelop();	// 開発用機能表示
+		} else if (e.shiftKey === true && e.which === 123){		// Shift+「F12」キー
+			showDevelop();	// 開発用機能表示
 		}
 	});
 });

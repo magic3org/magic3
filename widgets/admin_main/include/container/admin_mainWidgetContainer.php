@@ -280,6 +280,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'serverinfo':		// サーバ情報
 						case 'install':			// インストール
 						case 'hostlist':		// ホスト一覧
+						case 'createconfig':	// 設定ファイル作成
 						case 'test':			// テスト用画面
 							$this->gLaunch->goSubWidget($task);
 							return false;
