@@ -410,7 +410,9 @@ class GitRepo
 			if ($status){
 				$zipFile = new PclZip($tmpFile);
 				if (($zipList = $zipFile->listContent()) != 0){
-					if (count($zipList) == 1 && $zipList[0]['folder']){	// 単一ディレクトリのとき
+					$dirName = basename($zipList[0]['filename']);		// ディレクトリ名取得
+					$packageDirName = pathinfo($path, PATHINFO_FILENAME);
+					if ($zipList[0]['folder'] && strcasecmp($dirName, $packageDirName) == 0){	// パッケージ名と同じディレクトリ内にある場合
 						$dirName = basename($zipList[0]['filename']);		// ディレクトリ名取得
 						$status = $zipFile->extract(PCLZIP_OPT_PATH, $destDir);
 						if ($status) $destPath = $destDir . '/' . $dirName;
@@ -418,12 +420,6 @@ class GitRepo
 						$status = $zipFile->extract(PCLZIP_OPT_PATH, $destDir);
 						if ($status) $destPath = $destDir;
 					}
-/*							if (count($zipList) == 1 && is_dir($extDir . '/' . $fileList[0])){		// 単一ディレクトリのとき
-								$srcTemplateDir = $extDir . '/' . $fileList[0];
-							} else {
-								// 設定ファイルを取得
-								$srcTemplateDir = $extDir;
-							}*/
 				}
 			}
 			// 一時ファイル削除
