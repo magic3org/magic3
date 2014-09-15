@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
+require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 
 class admin_mainTestWidgetContainer extends admin_mainBaseWidgetContainer
 {

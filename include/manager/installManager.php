@@ -13,9 +13,10 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
+require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
+require_once(M3_SYSTEM_INCLUDE_PATH . '/common/gitRepo.php');
 
-class InstallManager
+class InstallManager extends Core
 {
 	private $db;						// DBオブジェクト
 	const GITHUB_USER = 'magic3org';				// GitHubユーザ
@@ -50,10 +51,15 @@ class InstallManager
 		$fileCount = count($data);
 		for ($i = 0; $i < $fileCount; $i++){
 			$info = array();
-			$info['id'] = $data[$i]->{'id'};
-			$info['status'] = $data[$i]->{'status'};
-			$info['title'] = $data[$i]->{'title'};
-			$info['description'] = $data[$i]->{'description'};
+			$info['id']				= $data[$i]->{'id'};
+			$info['title']			= $data[$i]->{'title'};
+			$info['description'] 	= $data[$i]->{'description'};
+			$info['category']		= $data[$i]->{'category'};
+			$info['filename']		= $data[$i]->{'filename'};
+			$info['version']		= $data[$i]->{'version'};
+			$info['status']			= $data[$i]->{'status'};
+			$info['thumbnail']		= $data[$i]->{'thumbnail'};
+			$info['format']			= $data[$i]->{'format'};
 			$infoLists[] = $info;
 		}
 		return $infoLists;
@@ -66,6 +72,8 @@ class InstallManager
 	 */
 	function installOffcialSample($id)
 	{
+		global $gEnvManager;
+		
 		// サンプルデータリストを所得
 		$infoLists = $this->getOfficialSampleList();
 		for ($i = 0; $i < count($infoLists); $i++){
@@ -74,7 +82,7 @@ class InstallManager
 		if ($i == count($infoLists)) return false;
 		
 		// 作業ディレクトリを作成
-		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+		$tmpDir = $gEnvManager->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
 		
 		// ファイルダウンロード
 		$repo = new GitRepo(self::GITHUB_USER, self::GITHUB_REPO_OFFICIAL_SAMPLE);

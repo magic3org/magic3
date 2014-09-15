@@ -16,7 +16,7 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
-require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
+require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 require_once($gEnvManager->getCurrentWidgetContainerPath()		. '/admin_mainDef.php');			// 定義クラス
 
 class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer

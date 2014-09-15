@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainMainteBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-require_once($gEnvManager->getLibPath() .	'/gitRepo.php');
+require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 
 class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
@@ -66,6 +66,8 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	 */
 	function _assign($request, &$param)
 	{
+		global $gInstanceManager;
+		
 		// 送信値を取得
 		$develop = $request->trimValueOf('develop');
 		if (!empty($develop)) $this->showDetail = '1';
@@ -105,7 +107,14 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		} else if ($act == 'installsampledata'){		// サンプルデータインストールのとき
 			if (strStartsWith($this->sampleId, self::DOWNLOAD_FILE_PREFIX)){		// 公式サイトからサンプルデータを取得の場合
 			 	// サンプルデータインストール用アーカイブを取得しインストール
-				$this->installSampleArchive($archivePath);
+				//$this->installSampleArchive($archivePath);
+				$sampleId = str_replace(self::DOWNLOAD_FILE_PREFIX, '', $this->sampleId);
+				$ret = $gInstanceManager->getInstallManager()->installOffcialSample($sampleId);
+				if ($ret){
+					$this->setMsg(self::MSG_GUIDANCE, 'サンプルデータインストール完了しました');
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, "サンプルデータインストールに失敗しました");
+				}
 			} else {
 				$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
 			
@@ -298,7 +307,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	 * @param string $path	アーカイブ取得用相対パス
 	 * @return bool			true=成功、false=失敗
 	 */
-	function installSampleArchive($path)
+/*	function installSampleArchive($path)
 	{
 		// 作業ディレクトリを作成
 		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
@@ -314,6 +323,6 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		// 作業ディレクトリ削除
 		rmDirectory($tmpDir);
 		return $status;
-	}
+	}*/
 }
 ?>
