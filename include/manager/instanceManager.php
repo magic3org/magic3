@@ -419,5 +419,20 @@ class InstanceManager extends Core
 		}
 		return $manager;
 	}
+	/**
+	 * インストールマネージャー取得
+	 *
+	 * @return object			取得したオブジェクト
+	 */
+	static public function getInstallManager()
+	{
+		static $manager;// マネージャーオブジェクト
+		
+		if (!isset($manager)){
+			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/installManager.php');
+			$manager 		= new InstallManager();
+		}
+		return $manager;
+	}
 }
 ?>
