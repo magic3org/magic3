@@ -2834,10 +2834,11 @@ class PageManager extends Core
 			// ##### ページへJavascriptの埋め込む #####
 			// JavaScriptグローバル変数の設定
 			$rootUrl = $gEnvManager->getRootUrl();
+			if (empty($rootUrl)) $rootUrl = $gEnvManager->calcSystemRootUrl();
 			$replaceStr .= '<script type="text/javascript">' . M3_NL;
 			$replaceStr .= '//<![CDATA[' . M3_NL;
 			$replaceStr .= '// Magic3 Global values' . M3_NL;
-			$replaceStr .= 'var M3_ROOT_URL = "' . $rootUrl . '";' . M3_NL;		// システムルートURL
+			if (!empty($rootUrl)) $replaceStr .= 'var M3_ROOT_URL = "' . $rootUrl . '";' . M3_NL;		// システムルートURL
 			$replaceStr .= '//]]>' . M3_NL;
 			$replaceStr .= '</script>' . M3_NL;
 			return $replaceStr;
