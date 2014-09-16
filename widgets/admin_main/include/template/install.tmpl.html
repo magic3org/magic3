@@ -18,8 +18,6 @@ function installSystem()
 	if (!window.confirm('最新版システムをインストールしますか?\n実行後はインストーラが自動起動するまでお待ちください。')) return false;
 	
 	// 処理中ダイアログ表示
-//	$('#execbutton').blur();
-//	$('#processing-modal').modal('show');
 	m3ShowProcessModal();
 	
 	document.main.act.value='install';
@@ -51,20 +49,8 @@ $(function(){
 <div class="col-sm-4"><input type="text" name="item_backup_dir_name" class="form-control" value="{BACKUP_DIR_NAME}" size="25" maxlength="50" /></div>
 </div>
 <div class="form-group">
-<div class="col-sm-offset-3 col-sm-9"><input id="execbutton" type="button" class="button btn" onclick="installSystem();" value="実行" {INSTALL_BUTTON_DISABLED}/></div>
+<div class="col-sm-offset-3 col-sm-9"><input type="button" class="button btn" onclick="installSystem();" value="実行" {INSTALL_BUTTON_DISABLED}/></div>
 </div>
 </form>
 </div>
-<!--<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="text-center">
-                    <img src="{PROCESS_IMAGE}" class="icon" />
-                    <h4>処理中</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>-->
 </patTemplate:tmpl>

@@ -18,8 +18,6 @@ require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 
 class admin_mainInstallWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	const PROCESSING_ICON_FILE = '/images/system/processing.gif';		// 処理中
-	
 	/**
 	 * コンストラクタ
 	 */
@@ -133,7 +131,6 @@ class admin_mainInstallWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "version", $this->convertToDispString($versionStr));		// 最新バージョン
 		$this->tmpl->addVar("_widget", "dir_name", $this->convertToDispString($dirName));		// ディレクトリ名
 		$this->tmpl->addVar("_widget", "backup_dir_name", $this->convertToDispString($backupDirName));		// デフォルトディレクトリ名
-		$this->tmpl->addVar('_widget', 'process_image', $this->getUrl($this->gEnv->getRootUrl() . self::PROCESSING_ICON_FILE));	// 処理中アイコン
 	}
 }
 ?>
