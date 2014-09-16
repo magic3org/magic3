@@ -94,7 +94,7 @@ class InstallManager extends Core
 		$archivePath = self::OFFICIAL_SAMPLE_DIR . '/' . $infoLists[$i]['filename'];
 		$repo->downloadZipFile($archivePath, $tmpDir, $destPath);
 		
-		// パッケージ情報ファイルを取得
+		// パッケージコマンドファイルを取得
 		$cmdList = json_decode(file_get_contents($destPath . '/index.json'));
 		if ($cmdList === false) return false;
 		

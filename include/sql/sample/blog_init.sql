@@ -39,6 +39,9 @@ INSERT INTO _key_value
 
 -- 管理画面ページデータ(デフォルトを変更)
 UPDATE _page_id SET pg_default_sub_id = 'blog' WHERE pg_id = 'index' AND pg_type = 0;
+-- スマートフォン,携帯のアクセスポイントを隠す
+UPDATE _page_id SET pg_active = true WHERE pg_id = 's_index' AND pg_type = 0;
+UPDATE _page_id SET pg_active = true WHERE pg_id = 'm_index' AND pg_type = 0;
 
 -- 管理画面メニューデータ
 DELETE FROM _nav_item;

@@ -66,8 +66,6 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	 */
 	function _assign($request, &$param)
 	{
-		global $gInstanceManager;
-		
 		// 送信値を取得
 		$develop = $request->trimValueOf('develop');
 		if (!empty($develop)) $this->showDetail = '1';
@@ -107,9 +105,8 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		} else if ($act == 'installsampledata'){		// サンプルデータインストールのとき
 			if (strStartsWith($this->sampleId, self::DOWNLOAD_FILE_PREFIX)){		// 公式サイトからサンプルデータを取得の場合
 			 	// サンプルデータインストール用アーカイブを取得しインストール
-				//$this->installSampleArchive($archivePath);
 				$sampleId = str_replace(self::DOWNLOAD_FILE_PREFIX, '', $this->sampleId);
-				$ret = $gInstanceManager->getInstallManager()->installOffcialSample($sampleId);
+				$ret = $this->gInstance->getInstallManager()->installOffcialSample($sampleId);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'サンプルデータインストール完了しました');
 				} else {
@@ -259,21 +256,24 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	 */
 	function getSampleListFromOfficialSite()
 	{
-		$files = array();
-		$repo = new GitRepo('magic3org', 'magic3_sample_data');
+/*		$repo = new GitRepo('magic3org', 'magic3_sample_data');
 		$options  = array('http' => array('user_agent'=> $_SERVER['HTTP_USER_AGENT']));
 		$context  = stream_context_create($options);
 		$url = $repo->getFileUrl('release/info.json');
 		$data = json_decode(file_get_contents($url, 0, $context));
-		if ($data === false) return $files;
+		if ($data === false) return $files;*/
+		
+		// 公式サイトからサンプルデータリストを取得
+		$sampleList = $this->gInstance->getInstallManager()->getOfficialSampleList();
 
-		$fileCount = count($data);
-		for ($i = 0; $i < $fileCount; $i++){
-			$id = $data[$i]->{'id'};
-			$status = $data[$i]->{'status'};
+		$files = array();
+		$sampleCount = count($sampleList);
+		for ($i = 0; $i < $sampleCount; $i++){
+			$id = $sampleList[$i]['id'];
+			$status = $sampleList[$i]['status'];
 			$sampleId = self::DOWNLOAD_FILE_PREFIX . $id;
-			$title = $data[$i]->{'title'};
-			$desc = $data[$i]->{'description'};
+			$title = $sampleList[$i]['title'];
+			$desc = $sampleList[$i]['description'];
 			
 			if ($this->showDetail){
 				$name = $id . '[' . $status . ']';
@@ -289,7 +289,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 				
 				$this->sampleTitle = $title;	// サンプルデータタイトル
 				$this->sampleDesc = str_replace("\n", '<br />', $desc);	// サンプルデータ説明
-				$this->archivePath = 'release/' . $data[$i]->{'filename'};	// サンプルデータインストール用相対パス
+				$this->archivePath = 'release/' . $sampleList[$i]['filename'];	// サンプルデータインストール用相対パス
 			}
 
 			$row = array(
@@ -301,28 +301,5 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			$this->tmpl->parseTemplate('sample__sql_list', 'a');
 		}
 	}
-	/**
-	 * サンプルアーカイブをインストール
-	 *
-	 * @param string $path	アーカイブ取得用相対パス
-	 * @return bool			true=成功、false=失敗
-	 */
-/*	function installSampleArchive($path)
-	{
-		// 作業ディレクトリを作成
-		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
-		
-		// ファイルダウンロード
-		$repo = new GitRepo('magic3org', 'magic3_sample_data');
-		$repo->downloadZipFile($path, $tmpDir, $destPath);
-		
-		// パッケージ情報ファイルを取得
-		$data = json_decode(file_get_contents($destPath . '/index.json'));
-		if ($data === false) return false;
-		
-		// 作業ディレクトリ削除
-		rmDirectory($tmpDir);
-		return $status;
-	}*/
 }
 ?>
