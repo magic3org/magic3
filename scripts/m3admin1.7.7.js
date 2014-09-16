@@ -470,16 +470,8 @@ function m3CancelSafeContentEdit()
  */
 function m3SetHelp()
 {
-    $('span.m3help').cluetip({splitTitle: '|', cluezIndex: 2000});
-    if (jQuery().tooltip){
-/*		$('[rel=m3help]').each( function(){
-    		var place = $(this).data('placement');
-			if (!place) place = 'top';
-			$(this).tooltip({ placement: place });
-  		});*/
-		//$('[rel=m3help]').tooltip({ placement: 'top'});
-		$('[rel=m3help]').tooltip();
-	}
+    if (jQuery().cluetip) $('span.m3help').cluetip({splitTitle: '|', cluezIndex: 2000});
+    if (jQuery().tooltip) $('[rel=m3help]').tooltip();
 }
 /**
  * ファイル選択ボタンを設定

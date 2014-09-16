@@ -109,7 +109,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		$localeText['label_do'] = $this->_('Do');
 		$localeText['label_target'] = $this->_('Target');
 		$localeText['label_table'] = $this->_('All Tables');
-		$localeText['label_processing'] = $this->_('Processing');
+//		$localeText['label_processing'] = $this->_('Processing');
 		$this->setLocaleText($localeText);
 	}
 	/**
@@ -291,7 +291,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		// 画面の設定
 		$this->tmpl->addVar("_widget", "task", $task);		// 実行処理を設定
 		$this->tmpl->addVar("_widget", "message", $msg);		// ＤＢ構築
-		$this->tmpl->addVar('_widget', 'process_image', $this->getUrl($this->gEnv->getRootUrl() . self::PROCESSING_ICON_FILE));	// 処理中アイコン
+//		$this->tmpl->addVar('_widget', 'process_image', $this->getUrl($this->gEnv->getRootUrl() . self::PROCESSING_ICON_FILE));	// 処理中アイコン
 	}
 	/**
 	 * DBバージョンアップ画面作成
@@ -392,7 +392,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 		// 画面の設定
 		$this->tmpl->addVar("_widget", "task", $task);		// 実行処理を設定
 		$this->tmpl->addVar("_widget", "message", $this->_('Keep existing data, and update system and database.'));		// 既存データを残して、DBをバージョンアップします
-		$this->tmpl->addVar('_widget', 'process_image', $this->getUrl($this->gEnv->getRootUrl() . self::PROCESSING_ICON_FILE));	// 処理中アイコン
+//		$this->tmpl->addVar('_widget', 'process_image', $this->getUrl($this->gEnv->getRootUrl() . self::PROCESSING_ICON_FILE));	// 処理中アイコン
 	}
 	/**
 	 * DBをバージョンアップ

@@ -14,9 +14,10 @@
 <script type="text/javascript">
 //<![CDATA[
 function gonext(){
-	// 処理中ダイアログ表示
-	$('#execbutton').blur();
-	$('#processing-modal').modal('show');
+//	// 処理中ダイアログ表示
+//	$('#execbutton').blur();
+//	$('#processing-modal').modal('show');
+	m3ShowProcessModal();
 	
 	document.main.act.value = 'done';
 	document.main.submit();
@@ -31,6 +32,10 @@ function gofore(){
 	document.main.submit();
 	return false;
 }
+$(function(){
+	// 処理中ダイアログ準備
+	m3PrepareProcessModal();
+});
 //]]>
 </script>
 <div class="jumbotron">
@@ -58,7 +63,7 @@ function gofore(){
 <button id="execbutton" class="btn btn-success" onclick="gonext();">{_LC_LABEL_DO}</button>
 </p>
 </div>
-<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true">
+<!--<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-body">
@@ -69,5 +74,5 @@ function gofore(){
             </div>
         </div>
     </div>
-</div>
+</div>-->
 </patTemplate:tmpl>

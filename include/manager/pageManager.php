@@ -179,7 +179,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.6.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.7.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.4.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.5.js';			// 一般、管理機能共通スクリプト
@@ -254,9 +254,9 @@ class PageManager extends Core
 
 		// 管理機能用Javascript取得
 		if (defined('M3_STATE_IN_INSTALL')){		// インストーラの場合のスクリプト
-			$this->defaultAdminScriptFiles = array($this->selectedJQueryFilename);			// jQuery
+			$this->defaultAdminScriptFiles = array($this->selectedJQueryFilename,			// jQuery
 											//	self::M3_STD_SCRIPT_FILENAME,
-											//	self::M3_ADMIN_SCRIPT_FILENAME,
+												self::M3_ADMIN_SCRIPT_FILENAME);
 											//	self::M3_OPTION_SCRIPT_FILENAME);
 			
 			$this->defaultAdminCssFiles = array();	// 管理機能用のCSS
@@ -2830,6 +2830,16 @@ class PageManager extends Core
 				if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
 				$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
 			}
+			
+			// ##### ページへJavascriptの埋め込む #####
+			// JavaScriptグローバル変数の設定
+			$rootUrl = $gEnvManager->getRootUrl();
+			$replaceStr .= '<script type="text/javascript">' . M3_NL;
+			$replaceStr .= '//<![CDATA[' . M3_NL;
+			$replaceStr .= '// Magic3 Global values' . M3_NL;
+			$replaceStr .= 'var M3_ROOT_URL = "' . $rootUrl . '";' . M3_NL;		// システムルートURL
+			$replaceStr .= '//]]>' . M3_NL;
+			$replaceStr .= '</script>' . M3_NL;
 			return $replaceStr;
 		}
 		
