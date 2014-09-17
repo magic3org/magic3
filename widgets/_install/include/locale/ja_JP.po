@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-23 20:11+0900\n"
-"PO-Revision-Date: 2014-07-23 20:11+0900\n"
+"POT-Creation-Date: 2014-09-17 16:39+0900\n"
+"PO-Revision-Date: 2014-09-17 16:40+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -58,7 +58,7 @@ msgid "Versionup Type"
 msgstr "バージョンアップ方法"
 
 #: container/_installCheckdbWidgetContainer.php:109
-#: container/_installInitotherWidgetContainer.php:190
+#: container/_installInitotherWidgetContainer.php:226
 #: container/_installInputoptionWidgetContainer.php:89
 msgid "Details"
 msgstr "説明"
@@ -283,13 +283,13 @@ msgid "Existing"
 msgstr "正常"
 
 #: container/_installCopyfileWidgetContainer.php:195
-#: container/_installInitotherWidgetContainer.php:99
+#: container/_installInitotherWidgetContainer.php:113
 #: container/_installInputoptionWidgetContainer.php:75
 msgid "Updating database completed."
 msgstr "ＤＢバージョンアップが完了しました"
 
 #: container/_installCopyfileWidgetContainer.php:213
-#: container/_installInitotherWidgetContainer.php:172
+#: container/_installInitotherWidgetContainer.php:206
 msgid "Database Updated"
 msgstr "ＤＢバージョンアップ完了"
 
@@ -369,10 +369,6 @@ msgstr "処理対象"
 msgid "All Tables"
 msgstr "全テーブル"
 
-#: container/_installInitdbWidgetContainer.php:112
-msgid "Processing"
-msgstr "処理中"
-
 #: container/_installInitdbWidgetContainer.php:186
 #, php-format
 msgid "Database created. Database Version: %s"
@@ -444,39 +440,39 @@ msgstr ""
 "DBバージョンアップ用のスクリプトファイルに不正なファイルを検出しました。 ファ"
 "イル名: %s"
 
-#: container/_installInitotherWidgetContainer.php:80
+#: container/_installInitotherWidgetContainer.php:94
 msgid "Installing data completed."
 msgstr "データインストール完了しました"
 
-#: container/_installInitotherWidgetContainer.php:82
+#: container/_installInitotherWidgetContainer.php:96
 msgid "Failed in installing data."
 msgstr "データインストールに失敗しました"
 
-#: container/_installInitotherWidgetContainer.php:101
+#: container/_installInitotherWidgetContainer.php:115
 #: container/_installInputoptionWidgetContainer.php:77
 msgid "Creating database completed."
 msgstr "ＤＢの構築が完了しました"
 
-#: container/_installInitotherWidgetContainer.php:175
+#: container/_installInitotherWidgetContainer.php:208
 msgid "Database Created"
 msgstr "ＤＢ構築完了"
 
-#: container/_installInitotherWidgetContainer.php:186
+#: container/_installInitotherWidgetContainer.php:222
 #: container/_installInputoptionWidgetContainer.php:85
 msgid "Install data?"
 msgstr "データをインストールしますか?"
 
-#: container/_installInitotherWidgetContainer.php:187
+#: container/_installInitotherWidgetContainer.php:223
 #: container/_installInputoptionWidgetContainer.php:86
 msgid "Install Data"
 msgstr "インストールデータ"
 
-#: container/_installInitotherWidgetContainer.php:188
+#: container/_installInitotherWidgetContainer.php:224
 #: container/_installInputoptionWidgetContainer.php:87
 msgid "Install"
 msgstr "インストール"
 
-#: container/_installInitotherWidgetContainer.php:189
+#: container/_installInitotherWidgetContainer.php:225
 #: container/_installInputoptionWidgetContainer.php:88
 msgid ""
 "If you install simple build site data or demo data, use this operation field "
@@ -488,89 +484,93 @@ msgstr ""
 "終了後も管理機能の「メンテナンス」-「DB管理」からデータのインストールは可能で"
 "す。"
 
-#: container/_installInputparamWidgetContainer.php:71
+#: container/_installInitotherWidgetContainer.php:227
+msgid "Connect to official site"
+msgstr "公式サイトへ接続"
+
+#: container/_installInputparamWidgetContainer.php:72
 msgid "Can't use database."
 msgstr "DBが使用できません"
 
-#: container/_installInputparamWidgetContainer.php:121
-#: container/_installInputparamWidgetContainer.php:198
+#: container/_installInputparamWidgetContainer.php:130
+#: container/_installInputparamWidgetContainer.php:224
 msgid "User"
 msgstr "DBユーザ"
 
-#: container/_installInputparamWidgetContainer.php:124
-#: container/_installInputparamWidgetContainer.php:197
+#: container/_installInputparamWidgetContainer.php:133
+#: container/_installInputparamWidgetContainer.php:223
 msgid "Database Name"
 msgstr "DB名"
 
-#: container/_installInputparamWidgetContainer.php:129
+#: container/_installInputparamWidgetContainer.php:138
 msgid "Database Type not selected."
 msgstr "DB種別が設定されていません"
 
-#: container/_installInputparamWidgetContainer.php:145
+#: container/_installInputparamWidgetContainer.php:154
 msgid "Configration updated."
 msgstr "設定値を更新しました"
 
-#: container/_installInputparamWidgetContainer.php:149
+#: container/_installInputparamWidgetContainer.php:158
 msgid "Failed in updating configration."
 msgstr "設定値の更新に失敗しました"
 
-#: container/_installInputparamWidgetContainer.php:155
+#: container/_installInputparamWidgetContainer.php:164
 msgid "Succeeded in connecting database."
 msgstr "接続正常"
 
-#: container/_installInputparamWidgetContainer.php:158
+#: container/_installInputparamWidgetContainer.php:167
 msgid "Succeeded in creating table."
 msgstr "テーブル作成正常"
 
-#: container/_installInputparamWidgetContainer.php:160
+#: container/_installInputparamWidgetContainer.php:169
 msgid "Failed in creating table."
 msgstr "テーブル作成エラー"
 
-#: container/_installInputparamWidgetContainer.php:163
+#: container/_installInputparamWidgetContainer.php:173
 msgid "Failed in connecting database."
 msgstr "接続エラー"
 
-#: container/_installInputparamWidgetContainer.php:186
+#: container/_installInputparamWidgetContainer.php:212
 msgid "Update Config"
 msgstr "設定値を更新"
 
-#: container/_installInputparamWidgetContainer.php:187
+#: container/_installInputparamWidgetContainer.php:213
 msgid "Test Connection"
 msgstr "接続テスト"
 
-#: container/_installInputparamWidgetContainer.php:188
+#: container/_installInputparamWidgetContainer.php:214
 msgid "Configration changed.\\nUpdate configration?"
 msgstr "設定値が変更されています\\n設定値を保存しますか?"
 
-#: container/_installInputparamWidgetContainer.php:189
+#: container/_installInputparamWidgetContainer.php:215
 msgid "Update configration?"
 msgstr "設定値を更新しますか?"
 
-#: container/_installInputparamWidgetContainer.php:190
+#: container/_installInputparamWidgetContainer.php:216
 msgid "Input Site Information"
 msgstr "サイト情報入力"
 
-#: container/_installInputparamWidgetContainer.php:192
+#: container/_installInputparamWidgetContainer.php:218
 msgid "Site Information"
 msgstr "サイト情報"
 
-#: container/_installInputparamWidgetContainer.php:193
+#: container/_installInputparamWidgetContainer.php:219
 msgid "Root URL"
 msgstr "ルートURL"
 
-#: container/_installInputparamWidgetContainer.php:194
+#: container/_installInputparamWidgetContainer.php:220
 msgid "Database Information"
 msgstr "DB接続情報"
 
-#: container/_installInputparamWidgetContainer.php:195
+#: container/_installInputparamWidgetContainer.php:221
 msgid "Database Type"
 msgstr "DB種別"
 
-#: container/_installInputparamWidgetContainer.php:196
+#: container/_installInputparamWidgetContainer.php:222
 msgid "Hostname"
 msgstr "ホスト名"
 
-#: container/_installInputparamWidgetContainer.php:199
+#: container/_installInputparamWidgetContainer.php:225
 msgid "Password"
 msgstr "パスワード"
 
@@ -581,6 +581,9 @@ msgstr "言語"
 #: container/_installTopWidgetContainer.php:68
 msgid "Start Installing"
 msgstr "インストールを開始します"
+
+#~ msgid "Processing"
+#~ msgstr "処理中"
 
 #~ msgid "off(encouraged)"
 #~ msgstr "offを奨励"

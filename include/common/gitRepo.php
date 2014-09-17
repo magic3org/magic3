@@ -13,7 +13,7 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getLibPath()				. '/pcl/pclzip.lib.php' );
+require_once(M3_SYSTEM_INCLUDE_PATH				. '/lib/pcl/pclzip.lib.php' );
 
 class GitRepo
 {

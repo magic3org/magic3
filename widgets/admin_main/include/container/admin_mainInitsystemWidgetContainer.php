@@ -24,7 +24,6 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	private $sampleId;		// サンプルデータID
 	private $sampleTitle;	// サンプルデータタイトル
 	private $sampleDesc;	// サンプルデータ説明
-	private $archivePath;	// サンプルデータインストール用アーカイブの相対パス
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 		
@@ -73,7 +72,6 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		$act = $request->trimValueOf('act');
 		$connectOfficial = $request->trimCheckedValueOf('item_connect_official');
 		$this->sampleId = $request->trimValueOf('sample_sql');
-		$archivePath = $request->trimValueOf('archivepath');
 		
 		if ($act == 'initsys'){		// システム初期化のとき
 			// テーブルの初期化フラグをリセット
@@ -216,7 +214,6 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		// その他値を埋め込む
 		$this->tmpl->addVar("_widget", "connect_official", $this->convertToCheckedString($connectOfficial));
 		$this->tmpl->addVar("_widget", "develop", $this->showDetail);
-		$this->tmpl->addVar("_widget", "archive_path", $this->archivePath);
 	}
 	/**
 	 * ディレクトリ内のスクリプトファイルを取得
@@ -256,13 +253,6 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 	 */
 	function getSampleListFromOfficialSite()
 	{
-/*		$repo = new GitRepo('magic3org', 'magic3_sample_data');
-		$options  = array('http' => array('user_agent'=> $_SERVER['HTTP_USER_AGENT']));
-		$context  = stream_context_create($options);
-		$url = $repo->getFileUrl('release/info.json');
-		$data = json_decode(file_get_contents($url, 0, $context));
-		if ($data === false) return $files;*/
-		
 		// 公式サイトからサンプルデータリストを取得
 		$sampleList = $this->gInstance->getInstallManager()->getOfficialSampleList();
 
@@ -289,7 +279,6 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 				
 				$this->sampleTitle = $title;	// サンプルデータタイトル
 				$this->sampleDesc = str_replace("\n", '<br />', $desc);	// サンプルデータ説明
-				$this->archivePath = 'release/' . $sampleList[$i]['filename'];	// サンプルデータインストール用相対パス
 			}
 
 			$row = array(
