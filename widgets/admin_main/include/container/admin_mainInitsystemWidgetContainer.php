@@ -207,7 +207,7 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 			fclose($fp);
 			if (count($fileDescArray)) $this->sampleDesc = implode('<br />', $fileDescArray);
 		}
-		$content = '<h5>' . $this->convertToDispString($this->sampleTitle, true/*タグ変換なし*/) . '</h5>';
+		$content = '<h4>' . $this->convertToDispString($this->sampleTitle, true/*タグ変換なし*/) . '</h4>';
 		$content .= $this->convertToDispString($this->sampleDesc, true/*タグ変換なし*/);
 		$this->tmpl->addVar("_widget", "content", $content);
 				
