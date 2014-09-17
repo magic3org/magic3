@@ -29,16 +29,17 @@ function installSampleData(){
 	// 処理中ダイアログ表示
 	m3ShowProcessModal();
 	
-	document.main.act.value='installsampledata';
+	document.main.act.value = 'installsampledata';
 	document.main.submit();
 	return true;
 }
 function selectFile(){
-	document.main.act.value='selectfile';
+	document.main.act.value = 'selectfile';
 	document.main.submit();
 	return true;
 }
 function selectConnectOfficial(){
+	document.main.act.value = 'connectofficial';
 	document.main.submit();
 	return true;
 }

@@ -104,6 +104,7 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 			// 現在の設定しているテンプレートを解除
 			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
 		} else if ($act == 'selectfile'){		// スクリプトファイルを選択
+		} else if ($act == 'connectofficial'){	// 「公式サイトへ接続」チェックボックスをクリック
 		} else if ($act == 'goback'){		// 「戻り」で画面遷移した場合
 		} else {
 			// リダイレクトで初回遷移時のみメッセージを表示
