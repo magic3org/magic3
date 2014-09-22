@@ -1536,9 +1536,6 @@ class PageManager extends Core
 	 */
 	function addScript($task, $scriptInfo)
 	{
-		// ライブラリ情報取得
-		$jQueryUiInfo = ScriptLibInfo::getJQueryUiInfo();
-		
 		$itemArray = explode(self::SCRIPT_LIB_SEPARATOR, strtolower(trim($scriptInfo)));// 小文字に変換したものを解析
 		for ($i = 0; $i < count($itemArray); $i++){
 			$pos = strpos($itemArray[$i], '=');
@@ -1556,68 +1553,93 @@ class PageManager extends Core
 					$lib = strtolower(trim($libsArray[$j]));// 小文字に変換
 					
 					// jQueryライブラリ等、デフォルトでは追加されないライブラリを追加
-					if (strcmp($lib, 'jquery') == 0){// jQuery本体のとき
-						$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
-					} else if (isset($this->libFiles[$lib])){		// ライブラリが存在するとき
-						// ライブラリの依存ライブラリファイルを追加
-						if (strncmp($lib, 'jquery.', 7) == 0){		// jQueryプラグインのとき
-							$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
-							if (strcmp($lib, 'jquery.mobile') == 0){	// jQueryMobileファイルのとき
-								// ##### jQueryMobileが読み込まれる前に読み込む必要があるスクリプトを設定 #####
-								if (!empty($this->headPreMobileScriptFiles)){		// jQueryMobileファイルの前に出力
-									for ($l = 0; $l < count($this->headPreMobileScriptFiles); $l++){
-										$this->addScriptFile($this->headPreMobileScriptFiles[$l]);		// 通常機能用のスクリプト追加
-									}
-								}
-							}
-						} else if (strcmp($lib, ScriptLibInfo::LIB_JQUERY_UI) == 0){	// jQuery UI
-							$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
-						//} else if (strcmp($lib, ScriptLibInfo::LIB_JQUERY_UI_PLUS) == 0){	// jQuery UI plus
-						//	$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
-						//	$this->addScriptFile($this->selectedJQueryUiFilename);		// jQuery Coreスクリプト追加
-						} else if (strncmp($lib, 'jquery-ui.', 10) == 0){		// jQuery UIのwidgetsまたはeffectsのとき
-							// 依存ライブラリ追加
-							$parentLib = $jQueryUiInfo[$lib];		// 依存ライブラリ取得
-							for ($l = 0; $l < count($parentLib); $l++){
-								$addLib = $parentLib[$l];
-								
-								// ライブラリのファイルを追加
-								if (isset($this->libFiles[$addLib]['script'])){
-									$scriptFiles = $this->libFiles[$addLib]['script'];
-									for ($m = 0; $m < count($scriptFiles); $m++){
-										$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
-									}
-								}
-								if (isset($this->libFiles[$addLib]['css'])){
-									$cssFiles = $this->libFiles[$addLib]['css'];
-									for ($m = 0; $m < count($cssFiles); $m++){
-										$this->addCssFile($cssFiles[$m]);		// 通常機能用のCSS追加
-									}
-								}
-							}
-							// jQueryUIテーマを追加
-							if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
-								//$this->addHeadCssFile($this->getAdminDefaultThemeUrl());		// CSS追加
-								$this->addHeadCssFile($this->getDefaultThemeUrl());		// CSS追加
-								$this->outputTheme = true;
-							}
+					$setLibArray = ScriptLibInfo::getLibSet($lib);// ライブラリセットを展開
+					$setLibCount = count($setLibArray);
+					if ($setLibCount > 0){			// ライブラリセットの場合
+						for ($k = 0; $k < $setLibCount; $k++){
+							$this->_addScript($setLibArray[$k]);
 						}
-						
-						// ライブラリ自体のファイルを追加
-						if (isset($this->libFiles[$lib]['script'])){
-							$scriptFiles = $this->libFiles[$lib]['script'];
-							for ($l = 0; $l < count($scriptFiles); $l++){
-								$this->addScriptFile($scriptFiles[$l]);		// 通常機能用のスクリプト追加
-							}
-						}
-						if (isset($this->libFiles[$lib]['css'])){
-							$cssFiles = $this->libFiles[$lib]['css'];
-							for ($l = 0; $l < count($cssFiles); $l++){
-								$this->addCssFile($cssFiles[$l]);		// 通常機能用のCSS追加
-							}
-						}
+					} else {
+						$this->_addScript($lib);
 					}
 				}
+			}
+		}
+	}
+	/**
+	 * ライブラリIDに対応するJavascriptファイル、CSSを追加する
+	 *
+	 * @param string $lib				ライブラリID
+	 * @return 							なし
+	 */
+	function _addScript($lib)
+	{
+		// ライブラリが存在しないときは終了
+		if (!isset($this->libFiles[$lib])) return;
+
+		// ライブラリの依存ライブラリファイルを追加
+		if (strcmp($lib, 'jquery') == 0){// jQuery本体のとき
+			$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
+		} else if (strncmp($lib, 'jquery.', 7) == 0){		// jQueryプラグインのとき
+			$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
+			if (strcmp($lib, 'jquery.mobile') == 0){	// jQueryMobileファイルのとき
+				// ##### jQueryMobileが読み込まれる前に読み込む必要があるスクリプトを設定 #####
+				if (!empty($this->headPreMobileScriptFiles)){		// jQueryMobileファイルの前に出力
+					for ($i = 0; $i < count($this->headPreMobileScriptFiles); $i++){
+						$this->addScriptFile($this->headPreMobileScriptFiles[$i]);		// 通常機能用のスクリプト追加
+					}
+				}
+			}
+		} else if (strcmp($lib, ScriptLibInfo::LIB_JQUERY_UI) == 0){	// jQuery UI
+			$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
+		//} else if (strcmp($lib, ScriptLibInfo::LIB_JQUERY_UI_PLUS) == 0){	// jQuery UI plus
+		//	$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
+		//	$this->addScriptFile($this->selectedJQueryUiFilename);		// jQuery Coreスクリプト追加
+		} else if (strncmp($lib, 'jquery-ui.', 10) == 0 ||		// jQuery UIのwidgetsまたはeffectsのとき
+			strcmp($lib, ScriptLibInfo::LIB_ELFINDER) == 0 || strcmp($lib, ScriptLibInfo::LIB_JQUERY_TIMEPICKER) == 0){		// elFinder、timepickerを使用する場合
+			
+			// 依存ライブラリ追加
+			if (strncmp($lib, 'jquery-ui.', 10) == 0){
+				$jQueryUiInfo = ScriptLibInfo::getJQueryUiInfo();// ライブラリ情報取得
+				$dependentLib = $jQueryUiInfo[$lib];		// 依存ライブラリ取得
+			} else {
+				$dependentLib = ScriptLibInfo::getDependentLib($lib);
+			}
+			for ($i = 0; $i < count($dependentLib); $i++){
+				$addLib = $dependentLib[$i];
+				
+				// ライブラリのファイルを追加
+				if (isset($this->libFiles[$addLib]['script'])){
+					$scriptFiles = $this->libFiles[$addLib]['script'];
+					for ($m = 0; $m < count($scriptFiles); $m++){
+						$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
+					}
+				}
+				if (isset($this->libFiles[$addLib]['css'])){
+					$cssFiles = $this->libFiles[$addLib]['css'];
+					for ($m = 0; $m < count($cssFiles); $m++){
+						$this->addCssFile($cssFiles[$m]);		// 通常機能用のCSS追加
+					}
+				}
+			}
+			// jQueryUIテーマを追加
+			if (!$this->outputTheme){				// jQueryUIテーマ出力を行ったかどうか
+				$this->addCssFile($this->getDefaultThemeUrl());		// 通常機能用のCSS追加
+				$this->outputTheme = true;
+			}
+		}
+		
+		// ライブラリ自体のファイルを追加
+		if (isset($this->libFiles[$lib]['script'])){
+			$scriptFiles = $this->libFiles[$lib]['script'];
+			for ($i = 0; $i < count($scriptFiles); $i++){
+				$this->addScriptFile($scriptFiles[$i]);		// 通常機能用のスクリプト追加
+			}
+		}
+		if (isset($this->libFiles[$lib]['css'])){
+			$cssFiles = $this->libFiles[$lib]['css'];
+			for ($i = 0; $i < count($cssFiles); $i++){
+				$this->addCssFile($cssFiles[$i]);		// 通常機能用のCSS追加
 			}
 		}
 	}
