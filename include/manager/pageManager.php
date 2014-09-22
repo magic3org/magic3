@@ -1012,8 +1012,8 @@ class PageManager extends Core
 		// 実行コマンドを取得
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		$pageId = $gEnvManager->getCurrentPageId();
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+		$pageId = $gEnvManager->getCurrentPageId();
 
 		// クライアントIDの読み込み、再設定
 		$clientId = $request->getCookieValue(M3_COOKIE_CLIENT_ID);
@@ -1343,7 +1343,8 @@ class PageManager extends Core
 					
 						//$this->addScript('', ScriptLibInfo::LIB_FCKEDITOR);// FCKEditorスクリプト追加
 						$this->addScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
-						$this->addScriptFile(self::M3_PLUS_SCRIPT_FILENAME);		// 一般画面追加用スクリプト追加(PLUSライブラリを追加する場合はFCKEditorも使用可能にする)
+					//	$this->addScriptFile(self::M3_PLUS_SCRIPT_FILENAME);		// 一般画面追加用スクリプト追加(PLUSライブラリを追加する場合はFCKEditorも使用可能にする)
+						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 						
@@ -2371,7 +2372,7 @@ class PageManager extends Core
 		// ##### テンプレートのCSSの読み込み #####
 		// テンプレートは管理用テンプレートに固定されている
 		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||		// ウィジェット設定のとき
-			($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy))){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
+			($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy) && $gEnvManager->isContentEditableUser())){	// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 			$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
 			if ($this->isHtml5){
 				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/style.css" media="screen">' . M3_NL;
@@ -2766,6 +2767,8 @@ class PageManager extends Core
 		// 実行コマンドを取得
 		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		$task = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		$widgetId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_WIDGET_ID);
+		$openBy = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		
 		// ********************************************************
 		//               ヘッダ文字列作成の前処理
@@ -2786,7 +2789,8 @@ class PageManager extends Core
 				}
 			} else {		// 一般画面へのアクセスの場合
 				$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 一般画面でBootstrapを使用するかどうか
-				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW){				// ログイン、ログアウト場合
+				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW ||				// ログイン、ログアウト場合
+					($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy) && $gEnvManager->isContentEditableUser())){		// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);		// Bootstrap管理画面オプション
 				}
 			}
@@ -3252,7 +3256,7 @@ class PageManager extends Core
 			$replaceStr .= '//<![CDATA[' . M3_NL;
 			$replaceStr .= '// Magic3 Global values' . M3_NL;
 			$replaceStr .= 'var M3_ROOT_URL = "' . $rootUrl . '";' . M3_NL;		// システムルートURL
-			
+
 			if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()){		// 管理画面へのアクセス、システム運用権限があり
 				$pageId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);		// ページID
 				$pageSubId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);// ページサブID
@@ -3276,6 +3280,7 @@ class PageManager extends Core
 
 				// ウィジェット詳細設定画面専用のJavaScriptグローバル変数
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){
+					// ##### CKEditor用の設定 #####
 					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
 					
 					// CKEditor用のCSSファイル
@@ -3342,6 +3347,37 @@ class PageManager extends Core
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
 				} else {
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
+				}
+				
+				// ##### CKEditor用の設定 #####
+				// ウィジェット情報取得
+				$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
+				$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+				
+				// CKEditor用のCSSファイル
+				if (!empty($this->ckeditorCssFiles)){
+					// 編集エリア用のCSSファイルを追加
+					$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+					
+					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
+				}
+				// CKEditor用のテンプレートタイプ
+				if (isset($this->ckeditorTemplateType)){
+					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
+				}
+					
+				// Bootstrap用のスクリプト処理
+				if ($this->useBootstrap){
+					$replaceStr .= '$(function(){' . M3_NL;
+					$replaceStr .= '    $(\'.button\').addClass(\'' . self::BOOTSTRAP_BUTTON_CLASS . '\');' . M3_NL;
+					$replaceStr .= '});' . M3_NL;
+				}
+			} else {		// 一般画面モードなし
+				if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
+					// プレビュー画面用にテンプレートタイプを出力
+					$templateType = $gEnvManager->getCurrentTemplateType();
+					if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
 				}
 			}
 			

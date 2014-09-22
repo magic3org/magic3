@@ -8,13 +8,12 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_mainEntryWidgetContainer.php 5236 2012-09-21 01:38:04Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-//require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_blog_mainBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/blog_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_blog_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_mainDb.php');
 
 // このファイルはadmin_blog_mainEntryWidgetContainer.phpの内容と同じ。クラス名の定義のみ異なる。
@@ -39,6 +38,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
+	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
 	
@@ -220,7 +220,11 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					// 運用ログを残す
 					for ($i = 0; $i < count($delEntryInfo); $i++){
 						$infoObj = $delEntryInfo[$i];
-						$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $infoObj->name, 2100, 'ID=' . $infoObj->entryId);
+						//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $infoObj->name, 2100, 'ID=' . $infoObj->entryId);
+						$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
+												M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->entryId,
+												M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+						$this->writeUserInfoEvent(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $infoObj->name, 2402, 'ID=' . $infoObj->entryId, $eventParam);
 					}
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
@@ -265,6 +269,18 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		// カテゴリーメニューを作成
 		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		$this->createCategoryMenu(1);		// メニューは１つだけ表示
+		
+		// プレビュー用URL
+		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->gEnv->getPageSubIdByContentType($this->gEnv->getDefaultPageId(), M3_VIEW_TYPE_BLOG);
+		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+//		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		
+		// ボタン作成
+		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+		$searchStr = '検索';
+		$this->tmpl->addVar("_widget", "search_img", $searchImg);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
@@ -371,6 +387,9 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$reloadData = false;		// データの再ロード
 		if ($act == 'select'){		// 一覧から選択のとき
 			$reloadData = true;		// データの再ロード
+		} else if ($act == 'new'){
+			$this->serialNo = 0;
+			$reloadData = true;		// データの再読み込み
 		} else if ($act == 'selectlang'){		// 項目選択の場合
 			// 登録済みのコンテンツデータを取得
 			$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);
@@ -472,6 +491,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					if ($ret){
 						$this->entryId = $row['be_id'];		// 記事ID
 						$name = $row['be_name'];		// コンテンツ名前
+						$updateDt = $row['be_create_dt'];		// 作成日時
 						
 						// 公開状態
 						switch ($row['be_status']){
@@ -480,7 +500,11 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 							case 3:	$statusStr = '非公開';	break;
 						}
 					}
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
+					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, 'ブログ記事を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2400, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
@@ -572,6 +596,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					if ($ret){
 						$this->entryId = $row['be_id'];		// 記事ID
 						$name = $row['be_name'];		// コンテンツ名前
+						$updateDt = $row['be_create_dt'];		// 作成日時
 						
 						// 公開状態
 						switch ($row['be_status']){
@@ -580,7 +605,11 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 							case 3:	$statusStr = '非公開';	break;
 						}
 					}
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を更新(' . $statusStr . ')しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
+					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を更新(' . $statusStr . ')しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, 'ブログ記事を更新(' . $statusStr . ')しました。タイトル: ' . $name, 2401, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
@@ -618,7 +647,11 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->gPage->updateParentWindow();
 					
 					// 運用ログを残す
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
+					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+					$this->writeUserInfoEvent(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2402, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
@@ -650,7 +683,11 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->gPage->updateParentWindow();
 					
 					// 運用ログを残す
-					$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
+					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+					$this->writeUserInfoEvent(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2402, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
@@ -724,6 +761,44 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				
 				// ユーザ定義フィールド
 				$this->fieldValueArray = $this->unserializeArray($row['be_option_fields']);
+				
+				// 前後のエントリーのシリアル番号を取得
+				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
+					$ret = self::$_mainDb->getPrevNextEntryByDate($row['be_regist_dt'], $prevRow, $nextRow);
+					if ($ret){
+						if (!empty($prevRow)) $prevSerial = $prevRow['be_serial'];
+						if (!empty($nextRow)) $nextSerial = $nextRow['be_serial'];
+					}
+				}
+			} else {
+				$this->entryId = '0';		// 記事ID
+				$this->blogId = '';		// 所属ブログ
+				$name = '';				// タイトル
+				$html = '';				// HTML
+				$html2 = '';				// HTML
+				$desc = '';		// 簡易説明
+				$status = 0;				// エントリー状況
+				$reg_user = '';				// 投稿者
+				$entry_date = date("Y/m/d");		// 投稿日
+				$entry_time = date("H:i:s");		// 投稿時間
+				$update_user = '';// 更新者
+				$update_dt = '';
+				$start_date = '';	// 公開期間開始日
+				$start_time = '';	// 公開期間開始時間
+				$end_date = '';	// 公開期間終了日
+				$end_time = '';	// 公開期間終了時間
+				$showComment = 1;				// コメントを表示するかどうか
+				$receiveComment = 1;		// コメントを受け付けるかどうか
+				$relatedContent = '';		// 関連コンテンツ
+				
+				// 記事カテゴリー取得
+				$this->categoryArray = array();
+				
+				// 履歴番号
+				$historyIndex = -1;
+				
+				// ユーザ定義フィールド
+				$this->fieldValueArray = array();
 			}
 		}
 		// カテゴリーメニューを作成
@@ -754,6 +829,9 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
 		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
 		
+		// CKEditor用のCSSファイルを読み込む
+		$this->loadCKEditorCssFiles($previewUrl);
+		
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar('_widget', 'entryid', $this->entryId);
 		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($name));		// 名前
@@ -782,6 +860,16 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "receive_comment", $checked);// コメントを受け付けるかどうか
 		$this->tmpl->addVar("_widget", "related_content", $relatedContent);	// 関連コンテンツ
 		
+		// 前後エントリー移動ボタン
+		if (!empty($prevSerial)){
+			$this->tmpl->setAttribute('show_prev_button', 'visibility', 'visible');
+			$this->tmpl->addVar('show_prev_button', 'serial', $prevSerial);
+		}
+		if (!empty($nextSerial)){
+			$this->tmpl->setAttribute('show_next_button', 'visibility', 'visible');
+			$this->tmpl->addVar('show_next_button', 'serial', $nextSerial);
+		}
+						
 		// 非表示項目を設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
 
@@ -793,6 +881,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
 			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
 			$this->tmpl->addVar('_widget', 'history_btn_disabled', 'disabled');// 履歴ボタン使用不可
+			$this->tmpl->addVar('cancel_button', 'new_btn_disabled', 'disabled');	// 「新規」ボタン使用不可
 			
 			// デフォルト言語を最初に登録
 			$this->tmpl->addVar("default_lang", "default_lang", $defaultLangName);
