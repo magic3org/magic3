@@ -183,7 +183,7 @@ class PageManager extends Core
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.4.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.5.js';			// 一般、管理機能共通スクリプト
-	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.1.js';			// 一般画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
+	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.2.js';			// 一般画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
 	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt1.1.0.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
 	const M3_ADMIN_CSS_FILE					= 'm3/admin.css';			// 管理機能用のCSS
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
@@ -3313,6 +3313,13 @@ class PageManager extends Core
 			} else if ($this->isEditMode){			// 一般画面編集モード
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
+				
+				// Googleマップライブラリの読み込み
+				if ($this->useGooglemaps){
+					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+				} else {
+					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
+				}
 			}
 			
 			// ##### パネルメニュー(一般画面と管理画面の切り替え等)の表示 #####

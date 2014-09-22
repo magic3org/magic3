@@ -1239,6 +1239,7 @@ class s_blogDb extends BaseDb
 		// tm_device_typeは後で追加したため、tm_mobileを残しておく
 		$queryStr = 'SELECT * FROM _templates ';
 		$queryStr .=  'WHERE tm_deleted = false ';// 削除されていない
+		$queryStr .=     'AND tm_available = true ';
 		$params = array();
 		switch ($type){
 			case 0:		// PC用テンプレート

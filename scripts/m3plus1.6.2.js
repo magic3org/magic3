@@ -7,9 +7,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: m3plus1.6.1.js 6010 2013-05-19 11:38:31Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 親ウィンドウを更新
@@ -76,6 +76,7 @@ function m3SetWysiwygEditor(id, height, toolbarVisible, barType)
 	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
 		var config = {};
 		config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig.js';
+		if (typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
 		if (height) config['height'] = height;
 		if (toolbarVisible != null && !toolbarVisible) config['toolbarStartupExpanded'] = false;
 		if (barType){
@@ -101,4 +102,74 @@ function m3SetWysiwygEditor(id, height, toolbarVisible, barType)
 		oFCKeditor.Value	= 'This is some <strong>sample text<\/strong>. You are using <a href="http://www.fckeditor.net/">FCKeditor<\/a>.';
 		oFCKeditor.ReplaceTextarea();
 	}
+	/*
+	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
+		var config = {};
+		config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig.js';
+		if (height) config['height'] = height;
+		if (toolbarVisible != null && !toolbarVisible) config['toolbarStartupExpanded'] = false;
+		if (barType){
+			switch (barType){
+			case 'full':
+			default:
+				config['toolbar'] = 'Full';
+				break;
+			case 'layout':
+				config['toolbar'] = 'Layout';
+				break;
+			}
+		} else {
+			config['toolbar'] = 'Full';
+		}
+		CKEDITOR.replace(id, config);
+	} else {
+		var oFCKeditor		= new FCKeditor(id);
+		oFCKeditor.BasePath	= M3_ROOT_URL + '/scripts/fckeditor2.6.6/';
+		oFCKeditor.Config['CustomConfigurationsPath'] = M3_ROOT_URL + '/scripts/m3/fckconfig.js';
+		oFCKeditor.ToolbarSet	= "M3Default";			// ツールバーリソース名
+		if (height) oFCKeditor.Height = String(height) + 'px';
+		oFCKeditor.Value	= 'This is some <strong>sample text<\/strong>. You are using <a href="http://www.fckeditor.net/">FCKeditor<\/a>.';
+		oFCKeditor.ReplaceTextarea();
+	}*/
+}
+/**
+ * 入力データ編集中のページ離脱を防止
+ *
+ * @return なし
+ */
+function m3SetSafeContentEdit()
+{
+	_m3ContentEdited = false;		// 入力コンテンツが変更されたかどうか
+	_m3CheckContentEdit = true;	// 入力コンテンツの変更をチェックするかどうか
+	
+	$(window).bind("beforeunload", function(){
+		// CKEditorの入力内容の変更を確認
+		var ckeChanged = false;
+		if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+			for (instance in CKEDITOR.instances){
+				ckeChanged = CKEDITOR.instances[instance].checkDirty();
+				if (ckeChanged) break;
+			}
+		}
+
+		if (_m3CheckContentEdit && (_m3ContentEdited || ckeChanged)){
+			_m3CheckContentEdit = false;
+			setTimeout(function(){
+				_m3CheckContentEdit = true;
+			}, 10);
+			return "このページを離れようとしています。";
+		}
+	});
+	$("form input, form select, form textarea").change(function(){
+		_m3ContentEdited = true;
+	});
+}
+/**
+ * 入力データ編集中のページ離脱を許可
+ *
+ * @return なし
+ */
+function m3CancelSafeContentEdit()
+{
+	$(window).unbind("beforeunload");
 }

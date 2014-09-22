@@ -303,5 +303,5 @@ CKEDITOR.on('dialogDefinition', function(ev){
 	}
 });
 CKEDITOR.on('instanceReady',function(){
-	m3AdjustParentWindow();		// フレームサイズ調整
+	if (typeof(m3AdjustParentWindow) == "function") m3AdjustParentWindow();		// フレームサイズ調整
 });
