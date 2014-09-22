@@ -2327,10 +2327,10 @@ class PageManager extends Core
 	{
 		global $gEnvManager;
 		global $gRequestManager;
-				
+
 		// ウィジェット単体表示のときのみ出力
 		if (!$this->showWidget) return;
-		
+
 		// パラメータ取得
 		$openBy = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$task = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
@@ -2367,10 +2367,11 @@ class PageManager extends Core
 			$templatesUrl = $gEnvManager->getTemplatesUrl();	// テンプレート読み込み用パス
 			$widgetsUrl = $gEnvManager->getWidgetsUrl();		// ウィジェット格納パス
 		}
-		
+
 		// ##### テンプレートのCSSの読み込み #####
 		// テンプレートは管理用テンプレートに固定されている
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット設定のとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||		// ウィジェット設定のとき
+			($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy))){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 			$curTemplateUrl = $templatesUrl . '/' . $gEnvManager->getCurrentTemplateId();
 			if ($this->isHtml5){
 				echo '<link rel="stylesheet" href="' . $curTemplateUrl . '/css/style.css" media="screen">' . M3_NL;
