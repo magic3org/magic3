@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1490,6 +1490,7 @@ class blog_mainDb extends BaseDb
 		// tm_device_typeは後で追加したため、tm_mobileを残しておく
 		$queryStr = 'SELECT * FROM _templates ';
 		$queryStr .=  'WHERE tm_deleted = false ';// 削除されていない
+		$queryStr .=     'AND tm_available = true ';
 		$params = array();
 		switch ($type){
 			case 0:		// PC用テンプレート
