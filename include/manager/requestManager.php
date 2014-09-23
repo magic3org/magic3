@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: requestManager.php 6048 2013-05-28 11:09:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -437,7 +437,7 @@ class RequestManager extends Core
 	{
 		// 設定したクッキー値があれば取得
 		$value = isset($this->tmpCookie[$name]) ? $this->tmpCookie[$name] : '';		// クッキー送信前のクッキー格納データ
-		
+
 		if ($value == '') $value = isset($_COOKIE[$name]) ? $_COOKIE[$name] : $default;
 		return $value;
 	}
@@ -452,10 +452,22 @@ class RequestManager extends Core
 	public function setCookieValue($name, $value = '', $expireDay = 30)
 	{
 		$cookExpire = time() + 60 * 60 * 24 * $expireDay;
-		setcookie($name, $value, $cookExpire);
+		//setcookie($name, $value, $cookExpire);
+		setcookie($name, $value, $cookExpire, '/');
 		
 		// 設定したクッキー値を保存
 		$this->tmpCookie[$name] = $value;		// クッキー送信前のクッキー格納データ
+	}
+	/**
+	 * クッキーに値を削除
+	 *
+	 * @param string $name		キー値
+	 * @return 					なし
+	 */
+	public function removeCookieValue($name)
+	{
+		setcookie($name, '', time() - 3600, '/');
+		//setcookie($name, '', time() - 3600, '/');
 	}
 	/**
 	 * URLクエリー配列を取得

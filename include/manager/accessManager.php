@@ -337,7 +337,7 @@ class AccessManager extends Core
 	function _createAutoLogin($loginKey, $userId, $clientId)
 	{
 		global $gRequestManager;
-		
+
 		// クッキーを作成
 		//$gRequestManager->setCookieValue(M3_COOKIE_AUTO_LOGIN, '', -1);		// 一旦削除
 		$gRequestManager->setCookieValue(M3_COOKIE_AUTO_LOGIN, $loginKey, self::AUTO_LOGIN_EXPIRE_DAYS);
@@ -357,9 +357,10 @@ class AccessManager extends Core
 	function _removeAutoLogin($loginKey)
 	{
 		global $gRequestManager;
-		
+
 		// クッキーを削除
 		$gRequestManager->setCookieValue(M3_COOKIE_AUTO_LOGIN, '', -1);
+//		$gRequestManager->removeCookieValue(M3_COOKIE_AUTO_LOGIN);
 		
 		// 自動ログイン情報削除
 		$ret = $this->db->delAutoLogin($loginKey);
