@@ -1142,7 +1142,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$iconTitle = '新規';
 			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			$buttonList .= '<a href="javascript:void(0);" onclick="editEntry(0);">' . $editImg . '</a>';
-			$buttonList = '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;">' . $buttonList . '</div>';
+			$buttonList = '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;position:relative;">' . $buttonList . '</div>';		// *** スタイルは直接設定する必要あり ***
 			
 			$this->editIconPos += self::EDIT_ICON_NEXT_POS;			// 編集アイコンの位置を更新
 		} else {
@@ -1150,7 +1150,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$iconTitle = '編集';
 			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			$buttonList = '<a href="javascript:void(0);" onclick="editEntry(' . $serial . ');">' . $editImg . '</a>';
-			$buttonList = '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;">' . $buttonList . '</div>';
+			$buttonList = '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;position:relative;">' . $buttonList . '</div>';		// *** スタイルは直接設定する必要あり ***
 			
 			$this->editIconPos = self::EDIT_ICON_MIN_POS;			// 編集アイコンの位置を初期位置に戻す
 		}
