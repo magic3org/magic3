@@ -189,7 +189,6 @@ class PageManager extends Core
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
 	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// 一般画面共通のデフォルトCSS
 	const M3_CKEDITOR_CSS_FILE				= 'm3/ckeditor.css';			// CKEditorの編集エリア用CSS
-//	const M3_NO_BOOTSTRAP_CSS_FILE			= 'm3/nobootstrap/style.css';		// 管理画面でBootstrapの読み込みなしの場合のCSS
 	
 	// 読み込み制御
 	const USE_BOOTSTRAP_ADMIN	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
@@ -269,7 +268,6 @@ class PageManager extends Core
 												self::M3_OPTION_SCRIPT_FILENAME);
 								
 			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);// 管理機能用のCSS	
-//			if (!$this->useBootstrap) $this->defaultAdminCssFiles[] = self::M3_NO_BOOTSTRAP_CSS_FILE;	// Bootstrapを読み込まない場合は代替CSSを読み込む
 			
 			// Javascriptライブラリ
 			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
@@ -1335,7 +1333,6 @@ class PageManager extends Core
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
 					
 						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
-//						if (!$this->useBootstrap) $this->addCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
 					} else if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
 						$this->isEditMode = true;			// 一般画面編集モード
 					}
@@ -2799,12 +2796,12 @@ class PageManager extends Core
 		} else {
 			if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効(ログイン中の場合)
 				if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-					//$this->addAdminCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
 					$this->addAdminScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
 				} else {
-					//$this->addCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
 					$this->addScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
 				}
+			} else if ($gEnvManager->isContentEditableUser()){		// 投稿ユーザの場合
+				$this->addScript('', ScriptLibInfo::LIB_NOBOOTSTRAP);		// Bootstrapを使用しない場合の管理機能用スクリプト
 			}
 		}
 		
