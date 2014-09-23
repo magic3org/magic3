@@ -72,6 +72,7 @@ img.m3icon {
 }
 /* コンテンツ編集用ボタンリスト */
 .m3edittool {
+	position:relative;
 	z-index:100000;
 	margin:0;
 	padding:0;
