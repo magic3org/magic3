@@ -61,6 +61,9 @@ if (!empty($dirType)){
 	$url .= '/' . $dirType;
 }
 
+// ディレクトリがない場合は作成
+if (!file_exists($path)) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+	
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
 $opts = array(
