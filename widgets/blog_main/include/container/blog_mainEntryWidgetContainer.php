@@ -1091,17 +1091,19 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	 */
 	function createBlogIdMenu()
 	{
-		$selected = '';
-		if (empty($this->blogId)) $selected ='selected';
-		$row = array(
-			'value'    => $this->convertToDispString(''),			// ブログID
-			'name'     => $this->convertToDispString(self::NO_BLOG_NAME),			// ブログ名
-			'selected' => $selected													// 選択中かどうか
-		);
-		$this->tmpl->addVars('blogid_list', $row);
-		$this->tmpl->parseTemplate('blogid_list', 'a');
+		if ($this->gEnv->isSystemManageUser()){		// システム運用ユーザのみ「ブログ選択なし」が利用可能
+			$selected = '';
+			if (empty($this->blogId)) $selected ='selected';
+			$row = array(
+				'value'    => $this->convertToDispString(''),			// ブログID
+				'name'     => $this->convertToDispString(self::NO_BLOG_NAME),			// ブログ選択なし
+				'selected' => $selected													// 選択中かどうか
+			);
+			$this->tmpl->addVars('blogid_list', $row);
+			$this->tmpl->parseTemplate('blogid_list', 'a');
+		}
 				
-		$ret = self::$_mainDb->getAllBlogId($rows);
+		$ret = self::$_mainDb->getAvailableBlogId($rows);
 		if ($ret){
 			for ($i = 0; $i < count($rows); $i++){
 				$selected = '';

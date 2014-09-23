@@ -1242,17 +1242,21 @@ class blog_mainDb extends BaseDb
 		return $this->isRecordExists($queryStr, array(intval($serial), $blogId));
 	}
 	/**
-	 * すべてのブログIDを取得
+	 * 利用可能なブログのブログIDを取得
 	 *
 	 * @param array   $rows			取得レコード
 	 * @return bool					取得 = true, 取得なし= false
 	 */
-	function getAllBlogId(&$rows)
+	function getAvailableBlogId(&$rows)
 	{
+		$params = array();
 		$queryStr  = 'SELECT * FROM blog_id ';
-		$queryStr .=  'WHERE bl_deleted = false ';		// 削除されていない
+		$queryStr .=   'WHERE bl_deleted = false ';		// 削除されていない
+		if (!$this->gEnv->isSystemManageUser()){		// コンテンツ編集可能ユーザの場合
+			$queryStr .=     'AND bl_owner_id = ? '; $params[] = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		}
 		$queryStr .=  'ORDER BY bl_index, bl_id';
-		$retValue = $this->selectRecords($queryStr, array(), $rows);
+		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;
 	}
 	/**
