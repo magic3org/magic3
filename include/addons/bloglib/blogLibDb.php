@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blogLibDb.php 3621 2010-09-24 03:07:53Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -48,6 +48,19 @@ class blogLibDb extends BaseDb
 		$queryStr .=  'AND bl_id = ? ';
 		$ret = $this->selectRecord($queryStr, array($id), $row);
 		return $ret;
+	}
+	/**
+	 * ブログ定義値を取得をすべて取得
+	 *
+	 * @param array  $rows			レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getAllConfig(&$rows)
+	{
+		$queryStr  = 'SELECT * FROM blog_config ';
+		$queryStr .=   'ORDER BY bg_index';
+		$retValue = $this->selectRecords($queryStr, array(), $rows);
+		return $retValue;
 	}
 }
 ?>

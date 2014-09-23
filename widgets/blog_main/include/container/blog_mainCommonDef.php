@@ -59,7 +59,7 @@ class blog_mainCommonDef
 	const DEFAULT_TITLE_TAG_LEVEL		= 2;		// デフォルトのタイトルタグレベル
 	
 	/**
-	 * フォトギャラリー定義値をDBから取得
+	 * ブログ定義値をDBから取得
 	 *
 	 * @param object $db	DBオブジェクト
 	 * @return array		取得データ
@@ -68,7 +68,7 @@ class blog_mainCommonDef
 	{
 		$retVal = array();
 
-		// 汎用コンテンツ定義を読み込み
+		// ブログ定義値を読み込み
 		$ret = $db->getAllConfig($rows);
 		if ($ret){
 			// 取得データを連想配列にする

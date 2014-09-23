@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blogLib.php 3629 2010-09-25 01:22:57Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(dirname(__FILE__) . '/blogLibDb.php');
@@ -90,6 +90,44 @@ class blogLib
 		$this->_initData();
 		
 		return $this->blogId;
+	}
+	/**
+	 * ブログ定義値を取得
+	 *
+	 * @param string $id				定義ID
+	 * @return string					定義値
+	 */
+	function getConfig($id)
+	{
+		static $configArray;
+		
+		// ブログ定義を読み込む
+		if (!isset($configArray)) $configArray = $this->loadConfig($this->db);
+		
+		return isset($configArray[$id]) ? $configArray[$id] : '';
+	}
+	/**
+	 * ブログ定義値をDBから取得
+	 *
+	 * @param object $db	DBオブジェクト
+	 * @return array		取得データ
+	 */
+	static function loadConfig($db)
+	{
+		$retVal = array();
+
+		// ブログ定義値を読み込み
+		$ret = $db->getAllConfig($rows);
+		if ($ret){
+			// 取得データを連想配列にする
+			$configCount = count($rows);
+			for ($i = 0; $i < $configCount; $i++){
+				$key = $rows[$i]['bg_id'];
+				$value = $rows[$i]['bg_value'];
+				$retVal[$key] = $value;
+			}
+		}
+		return $retVal;
 	}
 }
 ?>

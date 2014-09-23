@@ -23,7 +23,9 @@ class blog_listWidgetContainer extends BaseWidgetContainer
 	private $showWidget;		// ウィジェットを表示するかどうか
 	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'ブログリスト';		// デフォルトのウィジェットタイトル名
-		
+	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
+	const CF_USE_MULTI_BLOG			= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
+
 	/**
 	 * コンストラクタ
 	 */
@@ -67,6 +69,12 @@ class blog_listWidgetContainer extends BaseWidgetContainer
 		
 		// 表示データがない場合はウィジェットを表示しない
 		if (empty($this->showWidget)) $this->cancelParse();// 出力抑止
+		
+		$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
+		if (isset($blogLibObj)){
+			$value = $blogLibObj->getConfig(self::CF_USE_MULTI_BLOG);
+			if (!$value) $this->SetMsg(self::MSG_APP_ERR, "マルチブログモードが選択されていません");
+		}
 	}
 	/**
 	 * ウィジェットのタイトルを設定
