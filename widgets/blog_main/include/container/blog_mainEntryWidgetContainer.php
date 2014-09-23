@@ -13,7 +13,7 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_blog_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/blog_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_mainDb.php');
 
 // このファイルはadmin_blog_mainEntryWidgetContainer.phpの内容と同じ。クラス名の定義のみ異なる。

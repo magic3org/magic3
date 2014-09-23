@@ -1336,6 +1336,8 @@ class PageManager extends Core
 					
 						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
 //						if (!$this->useBootstrap) $this->addCssFile(self::M3_NO_BOOTSTRAP_CSS_FILE);	// Bootstrapを読み込まない場合は代替CSSを読み込む
+					} else if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
+						$this->isEditMode = true;			// 一般画面編集モード
 					}
 				} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
@@ -2896,7 +2898,7 @@ class PageManager extends Core
 			$widgetsUrl = $gEnvManager->getWidgetsUrl();		// ウィジェット格納パス
 			$templatesUrl = $gEnvManager->getTemplatesUrl();	// テンプレート読み込み用パス
 		}
-			
+
 		// タイトルの設定
 		if (!$this->showWidget){// 単体実行以外のとき
 			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスの場合
@@ -3338,43 +3340,43 @@ class PageManager extends Core
 				// テンプレートタイプ
 				$templateType = $gEnvManager->getCurrentTemplateType();
 				if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
-			} else if ($this->isEditMode){			// 一般画面編集モード
-				// WYSIWYGエディター
-				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
+			} else if ($this->isEditMode){			// 一般画面編集モード(コンテンツ編集可能ユーザ)
+				if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
+					// WYSIWYGエディター
+					$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
 				
-				// Googleマップライブラリの読み込み
-				if ($this->useGooglemaps){
-					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+					// Googleマップライブラリの読み込み
+					if ($this->useGooglemaps){
+						$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+					} else {
+						$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
+					}
+				
+					// ##### CKEditor用の設定 #####
+					// ウィジェット情報取得
+					$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
+					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
+				
+					// CKEditor用のCSSファイル
+					if (!empty($this->ckeditorCssFiles)){
+						// 編集エリア用のCSSファイルを追加
+						$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+					
+						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
+						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
+					}
+					// CKEditor用のテンプレートタイプ
+					if (isset($this->ckeditorTemplateType)){
+						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
+					}
+					
+					// Bootstrap用のスクリプト処理
+					if ($this->useBootstrap){
+						$replaceStr .= '$(function(){' . M3_NL;
+						$replaceStr .= '    $(\'.button\').addClass(\'' . self::BOOTSTRAP_BUTTON_CLASS . '\');' . M3_NL;
+						$replaceStr .= '});' . M3_NL;
+					}
 				} else {
-					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
-				}
-				
-				// ##### CKEditor用の設定 #####
-				// ウィジェット情報取得
-				$ret = $this->db->getWidgetInfo($widgetId, $this->configWidgetInfo);
-				$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = ' . $this->configWidgetInfo['wd_device_type'] . ';' . M3_NL;			// ウィジェット設定画面のウィジェットの端末タイプ
-				
-				// CKEditor用のCSSファイル
-				if (!empty($this->ckeditorCssFiles)){
-					// 編集エリア用のCSSファイルを追加
-					$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
-					
-					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
-					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
-				}
-				// CKEditor用のテンプレートタイプ
-				if (isset($this->ckeditorTemplateType)){
-					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
-				}
-					
-				// Bootstrap用のスクリプト処理
-				if ($this->useBootstrap){
-					$replaceStr .= '$(function(){' . M3_NL;
-					$replaceStr .= '    $(\'.button\').addClass(\'' . self::BOOTSTRAP_BUTTON_CLASS . '\');' . M3_NL;
-					$replaceStr .= '});' . M3_NL;
-				}
-			} else {		// 一般画面モードなし
-				if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
 					// プレビュー画面用にテンプレートタイプを出力
 					$templateType = $gEnvManager->getCurrentTemplateType();
 					if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
@@ -5505,7 +5507,9 @@ class PageManager extends Core
 		// CSSファイル取り出し
 		$pattern = '/<link[^<]*?href\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
 		if (preg_match_all($pattern, $headContent, $matches, PREG_SET_ORDER)){
-			foreach ($matches as $match) $urlArray[] = $match[1];
+			foreach ($matches as $match){
+				if (strEndsWith($match[1], '.css')) $urlArray[] = $match[1];
+			}
 		}
 		
 		// ifで制御されているCSSファイルを除く
