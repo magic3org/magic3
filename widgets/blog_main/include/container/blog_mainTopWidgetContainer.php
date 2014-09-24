@@ -878,9 +878,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					
 					// コメント投稿ユーザ名
 					if (self::$_configArray[blog_mainCommonDef::CF_COMMENT_USER_LIMITED]){	// ユーザ制限のときはログインユーザ名を取得
-						$userName = $this->convertToDispString($row[$i]['lu_name']);
+						$userName = $row[$i]['lu_name'];
 					} else {
-						$userName = $this->convertToDispString($row[$i]['bo_user_name']);	// 入力値を使用
+						$userName = $row[$i]['bo_user_name'];	// 入力値を使用
 					}
 					$url = $row[$i]['bo_url'];
 					if (!empty($url)) $url = '<a href="' . $this->convertUrlToHtmlEntity($url) . '" target="_blank">URL</a>';
@@ -1021,9 +1021,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$contentInfo = array();
 		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $fetchedRow['be_id'];			// コンテンツ置換キー(エントリーID)
 		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id']);// コンテンツ置換キー(エントリーURL)
-		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $this->convertToDispString($fetchedRow['lu_name']);			// コンテンツ置換キー(著者)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $this->convertToDispString($fetchedRow['be_name']);			// コンテンツ置換キー(タイトル)
-		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $this->convertToDispString($fetchedRow['be_description']);			// コンテンツ置換キー(簡易説明)
+		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $fetchedRow['lu_name'];			// コンテンツ置換キー(著者)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['be_name'];			// コンテンツ置換キー(タイトル)
+		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['be_description'];			// コンテンツ置換キー(簡易説明)
 		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
 		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $fetchedRow['be_create_dt'];		// コンテンツ置換キー(更新日時)
 		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $fetchedRow['be_regist_dt'];		// コンテンツ置換キー(登録日時)
