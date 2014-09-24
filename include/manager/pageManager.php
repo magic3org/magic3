@@ -218,7 +218,8 @@ class PageManager extends Core
 		if (empty($value)){		// インターネット運用
 			$this->useGooglemaps = true;				// Googleマップを使用するかどうか
 		}
-			
+		$this->useHelp = true;		// ヘルプ機能
+		
 		// 共通スクリプトファイル
 		// 「ルート/scripts」ディレクトリからの相対パスで指定する
 		$this->defaultScriptFiles = array(self::M3_STD_SCRIPT_FILENAME);
@@ -3377,6 +3378,13 @@ class PageManager extends Core
 					// プレビュー画面用にテンプレートタイプを出力
 					$templateType = $gEnvManager->getCurrentTemplateType();
 					if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
+					
+					// ##### ヘルプシステムの組み込み #####
+					if ($this->useHelp){			// ヘルプ表示のとき
+						$replaceStr .= '$(function(){' . M3_NL;
+						$replaceStr .= '    if (jQuery().tooltip) $(\'[rel=m3help]\').tooltip({ placement: \'top\'});' . M3_NL;
+						$replaceStr .= '});' . M3_NL;
+					}
 				}
 			}
 			
