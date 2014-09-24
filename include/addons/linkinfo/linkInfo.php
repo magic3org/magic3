@@ -13,9 +13,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once(dirname(__FILE__) . '/systemInfo.php');
+require_once(dirname(__FILE__) . '/linkInfoDb.php');
 
-class systemInfo
+class linkInfo
 {
 	private $db;	// DB接続オブジェクト
 	private $langId;		// 言語
@@ -33,7 +33,7 @@ class systemInfo
 	function __construct()
 	{
 		// DBオブジェクト作成
-		$this->db = new systemInfoDb();
+		$this->db = new linkInfoDb();
 		
 		$this->contentTypeArray = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
 								M3_VIEW_TYPE_PRODUCT,				// 製品
