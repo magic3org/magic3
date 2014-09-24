@@ -20,6 +20,6 @@
 -- 追加クラスマスター
 INSERT INTO _addons
 (ao_id,     ao_class_name, ao_name,            ao_description, ao_opelog_hook) VALUES
-('systemlib', 'systemLib',     'システム情報ライブラリ', '', false);
+('systeminfo', 'systemInfo',     'システム情報', '', false);
 
 -- *** システム標準テーブル ***
