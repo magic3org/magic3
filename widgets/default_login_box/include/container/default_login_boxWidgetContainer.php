@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: default_login_boxWidgetContainer.php 5956 2013-04-21 10:43:02Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
@@ -115,7 +115,7 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 			$useAutoLogin = $this->gSystem->getSystemConfig(self::CF_AUTO_LOGIN);
 			if ($useAutoLogin) $this->tmpl->setAttribute('auto_login', 'visibility', 'visible');
 		} else {		// ユーザがログイン中のとき
-			$this->tmpl->addVar("login_status", "user_name", 'ログイン: ' . $userName . ' 様');
+			$this->tmpl->addVar("login_status", "user_name", 'ログイン: ' . $this->convertToDispString($userName) . ' 様');
 			
 			// 会員情報、ログアウトボタン表示
 			$this->tmpl->setAttribute('login_status', 'visibility', 'visible');		// ログイン状況
