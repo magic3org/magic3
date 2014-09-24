@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
-class systemLibDb extends BaseDb
+class systemInfoDb extends BaseDb
 {
 	/**
 	 * ウィジェットが配置されているページサブIDのリストを取得
