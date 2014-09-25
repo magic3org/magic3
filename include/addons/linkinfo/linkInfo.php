@@ -225,7 +225,7 @@ class linkInfo
 
 		$contentTypeArray = array(array(), array(), array());
 		$pageIdArray = array($gEnvManager->getDefaultPageId(), $gEnvManager->getDefaultMobilePageId(), $gEnvManager->getDefaultSmartphonePageId());
-		
+
 		// 画面に配置しているウィジェットの主要コンテンツタイプを取得
 		$ret = $this->db->getEditWidgetOnPage($this->langId, $pageIdArray, $this->contentTypeArray, $rows);
 		if ($ret){
@@ -247,13 +247,14 @@ class linkInfo
 				$contentTypeArray[$index][] = $row;
 			}
 		}
+
 		$contentTypeList = array();
 		for ($i = 0; $i < count($this->accessPointType); $i++){
 			if ($this->accessPointType[$i][0] == $accessPoint) break;
 		}
 		if ($i == count($this->accessPointType)) return $contentTypeList;
 		$contentType = $contentTypeArray[$i];
-		
+
 		for ($i = 0; $i < count($contentType); $i++){
 			$contentTitle = $this->getCurrentLangString($contentType[$i]['wd_content_name']);
 			if (empty($contentTitle)) $contentTitle = $contentType[$i]['ls_value'];
@@ -418,6 +419,58 @@ class linkInfo
 		} else {		// URLトップの場合
 		}
 		return array($contentType, $contentId);
+	}
+	/**
+	 * 多言語対応文字列から現在の言語の文字列を取得
+	 *
+	 * @param string $str		多言語対応文字列
+	 * @return string			現在の言語文字列(存在しない場合はデフォルト言語文字列)
+	 */
+	function getCurrentLangString($str)
+	{
+		global $gEnvManager;
+		
+		$langs = $this->unserializeLangArray($str);
+		$langStr = $langs[$gEnvManager->getCurrentLanguage()];
+		if (isset($langStr)){
+			return $langStr;
+		} else {
+			$langStr = $langs[$gEnvManager->getDefaultLanguage()];
+			if (isset($langStr)){
+				return $langStr;
+			} else {
+				return '';
+			}
+		}
+	}
+	/**
+	 * 多言語対応文字列をテキストの連想配列に変換
+	 *
+	 * @param string $str		多言語対応文字列
+	 * @return array			言語ごとの文字列の連想配列
+	 */
+	function unserializeLangArray($str)
+	{
+		global $gEnvManager;
+		
+		$langs = array();
+		if (empty($str)) return $langs;
+		
+		$itemArray = explode(M3_TAG_START . M3_TAG_MACRO_SEPARATOR . M3_TAG_END, $str);		// セパレータ分割
+		for ($i = 0; $i < count($itemArray); $i++){
+			$line = $itemArray[$i];
+			if (empty($line)) continue;
+			$pos = strpos($line, '|');		// 言語ID取得
+			if ($pos === false){		// 言語IDがないときはデフォルトの言語IDを使用
+				$langId = $gEnvManager->getDefaultLanguage();
+				$langStr = $line;
+			} else {
+				list($langId, $langStr) = explode('|', $line, 2);
+				if (empty($langId)) continue;
+			}
+			$langs[$langId] = $langStr;
+		}
+		return $langs;
 	}
 }
 ?>
