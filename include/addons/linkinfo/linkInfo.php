@@ -24,6 +24,11 @@ class linkInfo
 	private $contentType;			// コンテンツタイプ
 	private $contentTypeArray;		// 主要コンテンツタイプ
 	private $accessPointType;	// アクセスポイント種別
+	// URL作成用
+	private $_urlParamOrder;					// URLパラメータの並び順
+	private $_useHierPage;						// 階層化ページを使用するかどうか
+	private $_isMultiDomain;						// マルチドメイン運用かどうか
+	// タイトルリスト、プレビュー用定数
 	const DEFAULT_CONTENT_COUNT = 300;		// コンテンツリスト取得数
 	const CONTENT_LENGTH = 300;			// プレビュー用コンテンツサイズ
 	
@@ -33,6 +38,7 @@ class linkInfo
 	function __construct()
 	{
 		global $gEnvManager;
+		global $gPageManager;
 		
 		// DBオブジェクト作成
 		$this->db = new linkInfoDb();
@@ -49,6 +55,8 @@ class linkInfo
 		$this->accessPointType = array(	array('', 'PC用「/」'),
 										array('m', '携帯用「/m」'),
 										array('s', 'スマートフォン用「/s」'));	// アクセスポイント種別
+		// URLパラメータ並び順
+		$this->_urlParamOrder = $gPageManager->getUrlParamOrder();
 	}
 	/**
 	 * リンク情報を作成し、Ajaxデータとして出力
@@ -471,6 +479,245 @@ class linkInfo
 			$langs[$langId] = $langStr;
 		}
 		return $langs;
+	}
+	/**
+	 * URLを作成
+	 *
+	 * ・ページのSSL設定状況に応じて、SSL用URLに変換
+	 *
+	 * @param string $path				URL作成用のパス
+	 * @param bool $isLink				作成するURLがリンクかどうか。リンクの場合はリンク先のページのSSLの状態に合わせる
+	 * @param string,array $param		URLに付加するパラメータ
+	 * @return string					作成したURL
+	 */
+	function getUrl($path, $isLink = false, $param = '')
+	{
+		global $gEnvManager;
+		global $gPageManager;
+		
+		$destPath = '';
+		$path = trim($path);
+		
+		// URLの示すファイルタイプを取得
+		if ($gEnvManager->getUseSsl()){		// SSLを使用する場合
+			// 現在のページがSSL使用設定になっているかどうかを取得
+			$currentPageId = $gEnvManager->getCurrentPageId();
+			$currentPageSubId = $gEnvManager->getCurrentPageSubId();
+			$isSslPage = $gPageManager->isSslPage($currentPageId, $currentPageSubId);
+			
+			$baseUrl = $gEnvManager->getRootUrl();
+			$sslBaseUrl = $gEnvManager->getSslRootUrl();		// SSL用URLが設定されている場合、設定値を使用
+			
+			// パスを解析
+			if (strStartsWith($path, M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END)){		// Magic3のルートURLマクロのとき
+				$relativePath = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, '', $path);
+				if (empty($relativePath)){			// Magic3のルートURLの場合
+					if ($isLink){		// リンクタイプのとき
+						$destPath = $baseUrl;
+					} else {		// リンクでないとき
+						// 現在のページのSSLの状態に合わせる
+						if ($isSslPage){
+							$destPath = $sslBaseUrl;
+						} else {
+							$destPath = $baseUrl;
+						}
+					}
+					// トップページへのリンクの場合とどう区別するか→トップページへのリンクの場合はフルパスで指定?
+				} else {
+					$destPath = $this->_createUrlByRelativePath($isSslPage, $baseUrl, $sslBaseUrl, $relativePath, $param, $isLink);
+				}
+			} else if (strncasecmp($path, 'http://', strlen('http://')) == 0 || strncasecmp($path, 'https://', strlen('https://')) == 0){				// 絶対パスURLのとき
+				// パスを解析
+				$relativePath = str_replace($baseUrl, '', $path);		// ルートURLからの相対パスを取得
+				if (empty($relativePath)){			// Magic3のルートURLの場合
+					if ($isLink){		// リンクタイプのとき
+						$destPath = $baseUrl;
+					} else {		// リンクでないとき
+						// 現在のページのSSLの状態に合わせる
+						if ($isSslPage){
+							$destPath = $sslBaseUrl;
+						} else {
+							$destPath = $baseUrl;
+						}
+					}
+					// トップページへのリンクの場合とどう区別するか→トップページへのリンクの場合はフルパスで指定?
+				} else if (strStartsWith($relativePath, '/') || strStartsWith($relativePath, '?')){		// ルートURL配下のとき
+					$destPath = $this->_createUrlByRelativePath($isSslPage, $baseUrl, $sslBaseUrl, $relativePath, $param, $isLink);
+				} else {		// ルートURL以外のURLのとき
+					$destPath = $path;
+				}
+			} else {		// 相対パスのとき
+			}
+		} else {		// SSLを使用しない場合
+			if ($this->_useHierPage){		// 階層化ページ使用のとき
+				$createPath = true;		// パスを生成するかどうか
+				$baseUrl = $gEnvManager->getRootUrl();
+				$sslBaseUrl = $gEnvManager->getSslRootUrl();		// SSL用URLが設定されている場合、設定値を使用
+				if (strStartsWith($path, M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END)){		// Magic3のルートURLマクロのとき
+					$relativePath = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, '', $path);
+				} else if (strncasecmp($path, 'http://', strlen('http://')) == 0 || strncasecmp($path, 'https://', strlen('https://')) == 0){				// 絶対パスURLのとき
+					$relativePath = str_replace($baseUrl, '', $path);		// ルートURLからの相対パスを取得
+					if (strStartsWith($relativePath, '/') || strStartsWith($relativePath, '?')){		// ルートURL配下のとき
+					} else {		// ルートURL以外のURLのとき
+						$createPath = false;		// パスを生成するかどうか
+					}
+				}
+				if ($createPath){		// パスを生成するかどうか
+					$destPath = $this->_createUrlByRelativePath(false, $baseUrl, $sslBaseUrl, $relativePath, $param);
+				} else {
+					$destPath = $path;
+				}
+			} else {
+				if (strStartsWith($path, M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END)){		// Magic3のルートURLマクロのとき
+					$destPath = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $gEnvManager->getRootUrl(), $path);
+				} else {
+					$destPath = $path;
+				}
+			}
+		}
+		// マルチドメイン運用の場合はパスを修正
+		if ($this->_isMultiDomain){
+			if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォンサイトの場合
+				$domainUrl = $gEnvManager->getDefaultSmartphoneUrl(false/*ファイル名なし*/);
+				$relativePath = str_replace($domainUrl . '/' . M3_DIR_NAME_SMARTPHONE, '', $destPath);
+				if (strStartsWith($relativePath, '/')){
+					$destPath = $domainUrl . $relativePath;
+				} else {
+					// メインのドメインの場合はアクセスポイント用ドメインに変換
+					$relativePath = str_replace(M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_SMARTPHONE, '', $destPath);
+					if (strStartsWith($relativePath, '/')) $destPath = $domainUrl . $relativePath;
+				}
+			} else if ($gEnvManager->getIsMobileSite()){		// 携帯サイトの場合
+				$domainUrl = $gEnvManager->getDefaultMobileUrl(false, false/*ファイル名なし*/);
+				$relativePath = str_replace($domainUrl . '/' . M3_DIR_NAME_MOBILE, '', $destPath);
+				if (strStartsWith($relativePath, '/')){
+					$destPath = $domainUrl . $relativePath;
+				} else {
+					// メインのドメインの場合はアクセスポイント用ドメインに変換
+					$relativePath = str_replace(M3_SYSTEM_ROOT_URL . '/' . M3_DIR_NAME_MOBILE, '', $destPath);
+					if (strStartsWith($relativePath, '/')) $destPath = $domainUrl . $relativePath;
+				}
+			}
+		}
+		return $destPath;
+	}
+	/**
+	 * 相対パスからURLを作成
+	 *
+	 * @param bool $isSslPage		現在のページがSSL使用になっているかどうか
+	 * @param string $baseUrl		ルートURL
+	 * @param string $sslBaseUrl	SSL使用時のルートURL
+	 * @param string $path			相対パス
+	 * @param string,array $param		URLに付加するパラメータ
+	 * @param bool $isLink				作成するURLがリンクかどうか。リンクの場合はリンク先のページのSSLの状態に合わせる
+	 * @return string				作成したURLパラメータ
+	 */
+	function _createUrlByRelativePath($isSslPage, $baseUrl, $sslBaseUrl, $path, $param = '', $isLink = false)
+	{
+		$destPath = '';
+		
+		// ファイル名を取得
+		$paramArray = array();
+		list($filename, $query) = explode('?', basename($path));
+		$saveFilename = $filename;		// ファイル名を退避
+		if (empty($filename)) $filename = M3_FILENAME_INDEX;
+
+		if (!empty($query)) parse_str($query, $paramArray);
+		if (is_array($param)){
+			$paramArray = array_merge($paramArray, $param);
+		} else if (is_string($param) && !empty($param)){
+			parse_str($param, $addArray);
+			$paramArray = array_merge($paramArray, $addArray);
+		}
+		// ページIDを取得
+		if (strEndsWith($filename, '.php')){			// PHPスクリプトのとき
+			if ($isLink){		// リンクタイプのとき
+				// ページIDを取得
+				$pageId = basename($filename, '.php');
+				$pageSubId = $paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID];
+			
+				// 目的のページのSSL設定状況を取得
+				$isSslSelPage = $gPageManager->isSslPage($pageId, $pageSubId);
+				if ($isSslSelPage){
+					$destPath = $sslBaseUrl;
+				} else {
+					$destPath = $baseUrl;
+				}
+			} else {
+				// 現在のページのSSLの状態に合わせる
+				if ($isSslPage){
+					//$destPath = $sslBaseUrl . $path;
+					$destPath = $sslBaseUrl;
+				} else {
+					//$destPath = $baseUrl . $path;
+					$destPath = $baseUrl;
+				}
+			}
+			// 階層化パスで出力のとき
+			if ($this->_useHierPage && $filename == M3_FILENAME_INDEX){
+				$subId = $paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID];
+				$dirName = dirname($path);
+				if ($dirName == '/'){
+					$destPath .= $dirName;
+				} else {
+					$destPath .= $dirName . '/';
+				}
+				if (!empty($subId)){
+					$destPath .= $subId . '/';
+					unset($paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID]);
+				}
+			} else {
+				$dirName = dirname($path);
+				if ($dirName == '/'){
+					$destPath .= $dirName . $saveFilename;
+				} else {
+					$destPath .= $dirName . '/' . $saveFilename;
+				}
+			}
+			// ページサブIDがデフォルト値のときはページサブIDを省略
+			//if ($paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID] == 
+			$paramStr = $this->_createParamStr($paramArray);
+			if (!empty($paramStr)) $destPath .= '?' . $paramStr;
+		} else {
+			// 現在のページのSSLの状態に合わせる
+			if ($isSslPage){
+				$destPath = $sslBaseUrl . $path;
+			} else {
+				$destPath = $baseUrl . $path;
+			}
+		}
+		return $destPath;
+	}
+	/**
+	 * URLパラメータ文字列作成
+	 *
+	 * @param array $paramArray			URL作成用のパス
+	 * @return string					作成したURLパラメータ
+	 */
+	function _createParamStr($paramArray)
+	{
+		$destParam = '';
+		if (count($paramArray) == 0) return $destParam;
+
+		$sortParam = array();
+		$keys = array_keys($paramArray);
+		$keyCount = count($keys);
+		for ($i = 0; $i < $keyCount; $i++){
+			$key = $keys[$i];
+			$value = $paramArray[$key];
+			$orderNo = $this->_urlParamOrder[$key];
+			if (!isset($orderNo)) $orderNo = 100;
+			$sortParam[] = array('key' => $key, 'value' => $value, 'no' => $orderNo);
+		}
+		usort($sortParam, create_function('$a,$b', 'return $a["no"] - $b["no"];'));
+		
+		// 文字列を作成
+		$sortCount = count($sortParam);
+		for ($i = 0; $i < $sortCount; $i++){
+			if ($i > 0) $destParam .= '&';
+			$destParam .= rawurlencode($sortParam[$i]['key']) . '=' . rawurlencode($sortParam[$i]['value']);
+		}
+		return $destParam;
 	}
 }
 ?>

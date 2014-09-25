@@ -363,7 +363,9 @@ class PageManager extends Core
 			M3_REQUEST_PARAM_BACK_URL				=> 32,		// 戻り先URL
 			M3_REQUEST_PARAM_BACKUP_URL				=> 33,		// URL退避用(画面編集時)
 			M3_REQUEST_PARAM_SERVER					=> 34,		// サーバ指定
-			M3_REQUEST_PARAM_CATEGORY_ID			=> 35);		// カテゴリID(共通)
+			M3_REQUEST_PARAM_CATEGORY_ID			=> 35,		// カテゴリID(共通)
+			M3_REQUEST_PARAM_WIDTH					=> 36,		// 幅
+			M3_REQUEST_PARAM_HEIGHT					=> 37);		// 高さ
 	}
 	/**
 	 * メインコンテンツタイプを取得
@@ -5231,6 +5233,15 @@ class PageManager extends Core
 		$url .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $widgetId;
 		if (!empty($optionParam)) $url .= '&' . $optionParam;
 		return $url;
+	}
+	/**
+	 * URLパラメータの並び順を取得
+	 *
+	 * @return array					パラメータ文字列の配列
+	 */
+	function getUrlParamOrder()
+	{
+		return $this->urlParamOrder;					// URLパラメータの並び順
 	}
 	/**
 	 * キャッシュ制御用の付加パラメータを取得
