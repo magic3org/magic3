@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_mainWidgetContainer.php 5263 2012-10-03 02:45:01Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/blog_mainBaseWidgetContainer.php');
@@ -59,36 +59,42 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 					return true;
 				}
 				break;
+			case self::TASK_LINKINFO:		// CKEditorプラグインのリンク情報取得用
+				break;
 		}
 		self::$_canEditEntry = false;		// 記事編集権限
-		
+
 		// 設定値を取得
 		if ($this->gEnv->isSystemManageUser()){			// システム運用可能ユーザのとき
 			self::$_canEditEntry = true;		// 記事編集権限
 		} else if ($this->gEnv->getCurrentUserType() >= UserInfo::USER_TYPE_AUTHOR){		// ユーザ権限(投稿者以上)のチェック
-			// ブログライブラリオブジェクトからテンプレートを取得
-			$blogId = '';
-			$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
-			if (isset($blogLibObj)) $blogId = $blogLibObj->getBlogId();
+			if ($task == self::TASK_LINKINFO){		// CKEditorプラグインのリンク情報取得用
+				self::$_canEditEntry = true;		// 記事編集権限
+			} else {
+				// ブログライブラリオブジェクトからテンプレートを取得
+				$blogId = '';
+				$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
+				if (isset($blogLibObj)) $blogId = $blogLibObj->getBlogId();
 
-			// ブログの所有者のときは編集権限あり
-			$ret = self::$_mainDb->getBlogInfoById($blogId, $row);
-			if ($ret && $this->gEnv->getCurrentUserId() == $row['bl_owner_id']){
-				// シリアル番号が指定されている場合は編集権限をチェック
-				if (empty($serialNo)){
-					self::$_canEditEntry = true;		// 記事編集権限
-				} else {
-					switch ($task){
-						case self::TASK_ENTRY:					// 記事編集画面(別ウィンドウ)
-						case self::TASK_ENTRY_DETAIL:			// 記事編集画面詳細
-							$ret = self::$_mainDb->isExistsEntryInBlogId($serialNo, $blogId);
-							if ($ret) self::$_canEditEntry = true;		// 記事編集権限
-							break;
-						case self::TASK_COMMENT:		// ブログ記事コメント管理
-						case self::TASK_COMMENT_DETAIL:		// ブログ記事コメント管理(詳細)
-							$ret = self::$_mainDb->isExistsCommentInBlogId($serialNo, $blogId);
-							if ($ret) self::$_canEditEntry = true;		// 記事編集権限
-							break;
+				// ブログの所有者のときは編集権限あり
+				$ret = self::$_mainDb->getBlogInfoById($blogId, $row);
+				if ($ret && $this->gEnv->getCurrentUserId() == $row['bl_owner_id']){
+					// シリアル番号が指定されている場合は編集権限をチェック
+					if (empty($serialNo)){
+						self::$_canEditEntry = true;		// 記事編集権限
+					} else {
+						switch ($task){
+							case self::TASK_ENTRY:					// 記事編集画面(別ウィンドウ)
+							case self::TASK_ENTRY_DETAIL:			// 記事編集画面詳細
+								$ret = self::$_mainDb->isExistsEntryInBlogId($serialNo, $blogId);
+								if ($ret) self::$_canEditEntry = true;		// 記事編集権限
+								break;
+							case self::TASK_COMMENT:		// ブログ記事コメント管理
+							case self::TASK_COMMENT_DETAIL:		// ブログ記事コメント管理(詳細)
+								$ret = self::$_mainDb->isExistsCommentInBlogId($serialNo, $blogId);
+								if ($ret) self::$_canEditEntry = true;		// 記事編集権限
+								break;
+						}
 					}
 				}
 			}
@@ -114,6 +120,14 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 			case self::TASK_COMMENT_DETAIL:		// ブログ記事コメント管理(詳細)
 				if (self::$_canEditEntry){	// 記事が編集可能かどうか
 					$task = self::TASK_COMMENT;
+					$goWidget = true;		// サブウィジェットを実行するかどうか				
+				} else {
+					$this->SetMsg(self::MSG_APP_ERR, "アクセスできません");
+					return true;
+				}
+				break;
+			case self::TASK_LINKINFO:		// CKEditorプラグインのリンク情報取得用
+				if (self::$_canEditEntry){	// 記事が編集可能かどうか
 					$goWidget = true;		// サブウィジェットを実行するかどうか				
 				} else {
 					$this->SetMsg(self::MSG_APP_ERR, "アクセスできません");

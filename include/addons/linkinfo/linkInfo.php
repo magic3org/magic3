@@ -32,6 +32,8 @@ class linkInfo
 	 */
 	function __construct()
 	{
+		global $gEnvManager;
+		
 		// DBオブジェクト作成
 		$this->db = new linkInfoDb();
 		
@@ -43,7 +45,7 @@ class linkInfo
 								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 								M3_VIEW_TYPE_EVENT,				// イベント
 								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
-		$this->langId = $this->gEnv->getDefaultLanguage();
+		$this->langId = $gEnvManager->getDefaultLanguage();
 		$this->accessPointType = array(	array('', 'PC用「/」'),
 										array('m', '携帯用「/m」'),
 										array('s', 'スマートフォン用「/s」'));	// アクセスポイント種別
@@ -56,20 +58,23 @@ class linkInfo
 	 */
 	function outputAjaxData($request)
 	{
+		global $gEnvManager;
+		global $gInstanceManager;
+		
 		// 入力値を取得
 		$accessPoint = $request->trimValueOf('accesspoint');
 				
 		switch ($accessPoint){
 			case '':			// PC用
 			default:
-				$defaultPageId = $this->gEnv->getDefaultPageId();
+				$defaultPageId = $gEnvManager->getDefaultPageId();
 				$accessPoint = '';		// アクセスポイント修正
 				break;
 			case 'm':			// 携帯用
-				$defaultPageId = $this->gEnv->getDefaultMobilePageId();
+				$defaultPageId = $gEnvManager->getDefaultMobilePageId();
 				break;
 			case 's':			// スマートフォン用
-				$defaultPageId = $this->gEnv->getDefaultSmartphonePageId();
+				$defaultPageId = $gEnvManager->getDefaultSmartphonePageId();
 				break;
 		}
 
@@ -81,10 +86,10 @@ class linkInfo
 			// ページ選択メニューデータ
 			$this->pageList = array_merge(array(array('', '-- 未選択 --')), $this->pageList);
 			$this->pageList[] = array('_root', '[トップページ]');
-			$this->gInstance->getAjaxManager()->addData('pagelist', $this->pageList);
+			$gInstanceManager->getAjaxManager()->addData('pagelist', $this->pageList);
 		} else if ($act == 'getcontenttype'){		// コンテンツ種別取得
 			$contentTypeList = $this->getContentTypeList($accessPoint);
-			$this->gInstance->getAjaxManager()->addData('contenttype', $contentTypeList);
+			$gInstanceManager->getAjaxManager()->addData('contenttype', $contentTypeList);
 		} else if ($act == 'getcontentlist'){		// コンテンツ一覧取得
 			$this->contentType = $request->trimValueOf('contenttype');
 			$pageNo = $request->trimIntValueOf('page', '1');
@@ -132,7 +137,7 @@ class linkInfo
 			}
 
 			if (!empty($this->contentList)) $this->contentList = array_merge(array(array('', '-- 未選択 --')), $this->contentList);
-			$this->gInstance->getAjaxManager()->addData('contentlist', $this->contentList);
+			$gInstanceManager->getAjaxManager()->addData('contentlist', $this->contentList);
 		} else if ($act == 'getcontent'){		// コンテンツ取得
 			$this->contentType = $request->trimValueOf('contenttype');
 			$contentId = $request->trimValueOf('contentid');
@@ -140,13 +145,13 @@ class linkInfo
 			
 			// プレビュー用コンテンツ取得
 			list($contentTitle, $contentText) = $this->getContentInfo($accessPoint, $this->contentType, $contentId, $this->langId);
-			$this->gInstance->getAjaxManager()->addData('content', $contentText);
+			$gInstanceManager->getAjaxManager()->addData('content', $contentText);
 			
 		} else if ($act == 'getaccesspoint'){		// アクセスポイント取得
-			$this->gInstance->getAjaxManager()->addData('accesspoint', $this->accessPointType);
+			$gInstanceManager->getAjaxManager()->addData('accesspoint', $this->accessPointType);
 		} else if ($act == 'gettitle'){		// リンク先のコンテンツタイトル取得(メニュー定義画面(menudef,smenudef)からの呼び出し用)
 			$url = $request->trimValueOf('url');
-			$path = $this->gEnv->getMacroPath($url);
+			$path = $gEnvManager->getMacroPath($url);
 			$contentTitle = '';
 			if (strStartsWith($path, M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END)){		// Magic3のルートURLマクロのとき
 				$path = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/', '', $path);
@@ -167,7 +172,7 @@ class linkInfo
 				list($contentTitle, $contentText) = $this->getContentInfo($accessPoint, $this->contentType, $contentId, $this->langId);
 			} else {		// 外部リンクの場合
 			}
-			$this->gInstance->getAjaxManager()->addData('title', $contentTitle);
+			$gInstanceManager->getAjaxManager()->addData('title', $contentTitle);
 		}
 	}
 	/**
@@ -216,8 +221,10 @@ class linkInfo
 	 */
 	function getContentTypeList($accessPoint)
 	{
+		global $gEnvManager;
+
 		$contentTypeArray = array(array(), array(), array());
-		$pageIdArray = array($this->gEnv->getDefaultPageId(), $this->gEnv->getDefaultMobilePageId(), $this->gEnv->getDefaultSmartphonePageId());
+		$pageIdArray = array($gEnvManager->getDefaultPageId(), $gEnvManager->getDefaultMobilePageId(), $gEnvManager->getDefaultSmartphonePageId());
 		
 		// 画面に配置しているウィジェットの主要コンテンツタイプを取得
 		$ret = $this->db->getEditWidgetOnPage($this->langId, $pageIdArray, $this->contentTypeArray, $rows);
@@ -262,14 +269,17 @@ class linkInfo
 	 */
 	function createContentText($src)
 	{
-		$contentText = $this->gInstance->getTextConvManager()->htmlToText($src);
+		global $gEnvManager;
+		global $gInstanceManager;
+		
+		$contentText = $gInstanceManager->getTextConvManager()->htmlToText($src);
 
 		// アプリケーションルートを変換
-		$rootUrl = $this->getUrl($this->gEnv->getRootUrl());
+		$rootUrl = $this->getUrl($gEnvManager->getRootUrl());
 		$contentText = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $rootUrl, $contentText);
 
 		// 登録したキーワードを変換
-		$this->gInstance->getTextConvManager()->convByKeyValue($contentText, $contentText);
+		$gInstanceManager->getTextConvManager()->convByKeyValue($contentText, $contentText);
 
 		// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
 		$contentText = str_replace(array("\r", "\n", "\t", " "), '', $contentText);

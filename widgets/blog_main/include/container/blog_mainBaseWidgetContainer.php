@@ -36,9 +36,11 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	const TASK_COMMENT		= 'comment';		// ブログ記事コメント管理
 	const TASK_COMMENT_DETAIL = 'comment_detail';		// ブログ記事コメント管理(詳細)
 	const DEFAULT_TASK		= 'top';
+	const TASK_LINKINFO		= 'linkinfo';		// CKEditorプラグインのリンク情報取得用
 			
 	// アドオンオブジェクト用
 	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
+//	const LINKINFO_OBJ_ID = 'linkinfo';	// リンク情報オブジェクトID
 	
 	// カレンダー用スクリプト
 	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル
