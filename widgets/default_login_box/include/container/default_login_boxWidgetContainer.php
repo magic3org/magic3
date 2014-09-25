@@ -42,7 +42,11 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'index.tmpl.html';
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return 'index_bootstrap.tmpl.html';
+		} else {
+			return 'index.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -147,7 +151,11 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
-		return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return '';
+		} else {
+			return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		}
 	}
 	/**
 	 * ウィジェットのタイトルを設定
