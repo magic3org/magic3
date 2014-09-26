@@ -69,6 +69,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
 	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
+	const CONFIG_ICON_FILE = '/images/system/page_config32.png';		// 設定アイコン
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const DEFAULT_TITLE_SEARCH = '検索';		// 検索時のデフォルトタイトル
 	const COOKIE_LIB = 'jquery.cookie';		// 名前保存用クッキーライブラリ
