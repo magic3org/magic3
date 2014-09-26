@@ -69,7 +69,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
 	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
-	const CONFIG_ICON_FILE = '/images/system/page_config32.png';		// 設定アイコン
+	const CONFIG_ICON_FILE = '/images/system/page_config32.png';		// 投稿管理画面アイコン
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const DEFAULT_TITLE_SEARCH = '検索';		// 検索時のデフォルトタイトル
 	const COOKIE_LIB = 'jquery.cookie';		// 名前保存用クッキーライブラリ
@@ -279,15 +279,22 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->tmpl->addVar("admin_script", "edit_url", $editUrl);
 				$this->tmpl->addVar("admin_script", "config_url", $configUrl);
 			} else {			// 投稿ユーザのとき
+				// 投稿管理画面へのURL作成
+				$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
+				$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
+				$urlparam .= 'openby=other' . $multiBlogParam;
+				$configUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
+
 				// 編集用画面へのURL作成
 				$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
 				$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
-				//$urlparam .= 'openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
-				$urlparam .= 'openby=other&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
+				$urlparam .= 'openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
+				//$urlparam .= 'openby=other&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
 				$editUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
 
 				// 設定画面表示用のスクリプトを埋め込む
 				$this->tmpl->setAttribute('edit_script', 'visibility', 'visible');
+				$this->tmpl->addVar("edit_script", "config_url", $this->getUrl($configUrl));
 				$this->tmpl->addVar("edit_script", "edit_url", $this->getUrl($editUrl));
 			}
 		}
@@ -1138,24 +1145,36 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	 */
 	function createButtonTag($serial)
 	{
+		$buttonList = '';
+		
 		if (empty($serial)){
-			$iconUrl = $this->gEnv->getRootUrl() . self::NEW_ICON_FILE;		// 新規アイコン
-			$iconTitle = '新規';
-			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
-			$buttonList .= '<a href="javascript:void(0);" onclick="editEntry(0);">' . $editImg . '</a>';
-			$buttonList = '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;position:relative;">' . $buttonList . '</div>';		// *** スタイルは直接設定する必要あり ***
+			// 投稿ユーザの場合は投稿管理画面(ブログ記事、コメントの投稿管理)への遷移用リンクを追加
+			if (!$this->isSystemManageUser){
+				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// 投稿管理アイコン
+				$iconTitle = '投稿管理';
+				$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+				$buttonLink = '<a href="javascript:void(0);" onclick="showConfig();">' . $editImg . '</a>';
+				$buttonList .= '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;position:relative;">' . $buttonLink . '</div>';		// *** スタイルは直接設定する必要あり ***
 			
-			$this->editIconPos += self::EDIT_ICON_NEXT_POS;			// 編集アイコンの位置を更新
+				$this->editIconPos += self::EDIT_ICON_NEXT_POS;			// アイコンの位置を更新
+			}
+			
+			$iconUrl = $this->gEnv->getRootUrl() . self::NEW_ICON_FILE;		// 新規アイコン
+			$iconTitle = '記事作成';
+			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+			$buttonLink = '<a href="javascript:void(0);" onclick="editEntry(0);">' . $editImg . '</a>';
+			$buttonList .= '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;position:relative;">' . $buttonLink . '</div>';		// *** スタイルは直接設定する必要あり ***
+			
+			$this->editIconPos += self::EDIT_ICON_NEXT_POS;			// アイコンの位置を更新
 		} else {
 			$iconUrl = $this->gEnv->getRootUrl() . self::EDIT_ICON_FILE;		// 編集アイコン
-			$iconTitle = '編集';
+			$iconTitle = '記事編集';
 			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
-			$buttonList = '<a href="javascript:void(0);" onclick="editEntry(' . $serial . ');">' . $editImg . '</a>';
-			$buttonList = '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;position:relative;">' . $buttonList . '</div>';		// *** スタイルは直接設定する必要あり ***
+			$buttonLink = '<a href="javascript:void(0);" onclick="editEntry(' . $serial . ');">' . $editImg . '</a>';
+			$buttonList .= '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;position:relative;">' . $buttonLink . '</div>';		// *** スタイルは直接設定する必要あり ***
 			
-			$this->editIconPos = self::EDIT_ICON_MIN_POS;			// 編集アイコンの位置を初期位置に戻す
+			$this->editIconPos = self::EDIT_ICON_MIN_POS;			// アイコンの位置を初期位置に戻す
 		}
-		//return '<div style="text-align:right;">' . $buttonList . '</div>';
 		return $buttonList;
 	}
 }

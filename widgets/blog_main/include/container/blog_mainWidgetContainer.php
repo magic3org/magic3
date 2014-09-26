@@ -41,8 +41,14 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 	function _dispatch($request, &$param)
 	{
 		// 実行処理を決定
+		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// 実行コマンドを取得
+		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){
+			self::$_task = self::DEFAULT_CONFIG_TASK;			// デフォルトのタスク
+		} else {
+			self::$_task = self::DEFAULT_TASK;
+		}
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = self::DEFAULT_TASK;
+		if (empty($task)) $task = self::$_task;
 		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		$serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 

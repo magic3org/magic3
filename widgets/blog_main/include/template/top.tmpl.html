@@ -25,6 +25,10 @@ function editEntry(serial){
 }
 </patTemplate:tmpl>
 <patTemplate:tmpl name="edit_script" visibility="hidden">
+function showConfig(){
+	m3_showConfigWindow("{CONFIG_URL}");
+	return false;
+}
 function editEntry(serial){
 	m3_showConfigWindow("{EDIT_URL}&serial=" + serial);
 	return false;
