@@ -30,7 +30,7 @@ function default_login_logout(){
 <form name="default_login" method="post" class="form form-horizontal" role="form">
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
-<patTemplate:tmpl name="login_status" visibility="hidden"><div class="default_login_top">{MESSAGE}{USER_NAME}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="login_status" visibility="hidden"><p>{MESSAGE}{USER_NAME}</p></patTemplate:tmpl>
 <patTemplate:tmpl name="login_field" visibility="hidden">
 <div class="form-group">
 <label for="account" class="col-sm-5 control-label">アカウント</label><div class="col-sm-7"><input type="text" id="account" name="account" class="form-control" size="8" maxlength="40" /></div>
