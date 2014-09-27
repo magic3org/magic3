@@ -360,7 +360,31 @@ class GitRepo
 			// Zipファイルを解凍
 			if ($status){
 				$zipFile = new PclZip($tmpFile);
-				if (($zipList = $zipFile->listContent()) != 0){
+				if (($zipList = $zipFile->listContent()) == 0){
+					// メッセージを出力する
+					echo $zipFile->errorInfo(true);
+					echo '...retrying...';
+
+					// 失敗の場合はZipArchiveでリトライ
+					$zipFile = new ZipArchive();
+
+					// ZIPファイルをオープン
+					$status = $zipFile->open($tmpFile);
+					if ($status === true) {		// zipファイルのオープンに成功した場合
+						// 圧縮ファイル内の全てのファイルを指定した解凍先に展開する
+						$zipFile->extractTo($destDir);
+
+						if ($zipFile->numFiles == 1 && strEndsWith($zipFile->getNameIndex(0), '/')){
+							$dirName = basename($zipFile->getNameIndex(0));		// ディレクトリ名取得
+							$destPath = $destDir . '/' . $dirName;
+						} else {
+							$destPath = $destDir;
+						}
+
+						// ZIPファイルをクローズ
+						$zipFile->close();
+					}
+				} else {
 					$dirName = basename($zipList[0]['filename']);		// ディレクトリ名取得
 					$status = $zipFile->extract(PCLZIP_OPT_PATH, $destDir);
 					if ($status) $destPath = $destDir . '/' . $dirName;
@@ -394,7 +418,7 @@ class GitRepo
 		if ($srcFile){
 			// Zipファイル保存用一時ファイル作成
 			$tmpFile = tempnam($gEnvManager->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
-			
+
 			// 保存先ファイルを開く
 			$newFile = fopen($tmpFile, 'wb');
 			if ($newFile){
@@ -405,11 +429,35 @@ class GitRepo
 				$status = true;			// 読み込み完了
 			}
 			fclose($srcFile);
-			
+
 			// Zipファイルを解凍
 			if ($status){
 				$zipFile = new PclZip($tmpFile);
-				if (($zipList = $zipFile->listContent()) != 0){
+				if (($zipList = $zipFile->listContent()) == 0){			// 解凍エラーの場合
+					// メッセージを出力する
+					echo $zipFile->errorInfo(true);
+					echo '...retrying...';
+
+					// 失敗の場合はZipArchiveでリトライ
+					$zipFile = new ZipArchive();
+
+					// ZIPファイルをオープン
+					$status = $zipFile->open($tmpFile);
+					if ($status === true) {		// zipファイルのオープンに成功した場合
+						// 圧縮ファイル内の全てのファイルを指定した解凍先に展開する
+						$zipFile->extractTo($destDir);
+
+						if ($zipFile->numFiles == 1 && strEndsWith($zipFile->getNameIndex(0), '/')){
+							$dirName = basename($zipFile->getNameIndex(0));		// ディレクトリ名取得
+							$destPath = $destDir . '/' . $dirName;
+						} else {
+							$destPath = $destDir;
+						}
+
+						// ZIPファイルをクローズ
+						$zipFile->close();
+					}
+				} else {
 					$dirName = basename($zipList[0]['filename']);		// ディレクトリ名取得
 					$packageDirName = pathinfo($path, PATHINFO_FILENAME);
 					if ($zipList[0]['folder'] && strcasecmp($dirName, $packageDirName) == 0){	// パッケージ名と同じディレクトリ内にある場合
