@@ -154,7 +154,7 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 					$value = $blogLibObj->getConfig(self::CF_USE_MULTI_BLOG);
 					if ($value){
 						// ブログリストを作成
-						$this->db->getAllBlog(array($this, 'blogListLoop'));
+						$this->db->getAvailableBlogId(array($this, 'blogListLoop'));
 						if ($this->blogItemExists) $this->tmpl->setAttribute('blog_info', 'visibility', 'visible');
 					}
 				}

@@ -17,33 +17,21 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
 class default_login_boxDb extends BaseDb
 {
-	const USER_ID_SEPARATOR = ',';		// ユーザIDセパレータ
-	
 	/**
-	 * ブログ一覧を取得
+	 * 利用可能なブログのブログIDを取得
 	 *
 	 * @param function	$callback			コールバック関数
-	 * @return 			なし
+	 * @return 								なし
 	 */
-	function getAllBlog($callback)
+	function getAvailableBlogId($callback)
 	{
 		$params = array();
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		if (!$this->gEnv->isSystemManageUser()) $userId = $this->gEnv->getCurrentUserId();		// システム管理ユーザの場合
-		
 		$queryStr  = 'SELECT * FROM blog_id ';
 		$queryStr .=   'WHERE bl_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND bl_visible = true ';
-		
-		// ユーザ参照制限
-		if (isset($userId)){
-			$queryStr .=     'AND ((bl_owner_id = ? AND bl_owner_id != 0) ';	$params[] = $userId;
-			$queryStr .=     'OR bl_user_limited = false ';
-			$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id = \'\' AND 0 != ' . $userId . ') ';
-			$queryStr .=     'OR (bl_user_limited = true AND bl_limited_user_id != \'\' AND bl_limited_user_id LIKE \'%' . self::USER_ID_SEPARATOR . $userId . self::USER_ID_SEPARATOR . '%\')) ';
+		if (!$this->gEnv->isSystemManageUser()){		// コンテンツ編集可能ユーザの場合
+			$queryStr .=     'AND bl_owner_id = ? '; $params[] = $this->gEnv->getCurrentUserId();	// 現在のユーザ
 		}
-		
-		$queryStr .=   'ORDER BY bl_index, bl_id';
+		$queryStr .=  'ORDER BY bl_index, bl_id';
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 }
