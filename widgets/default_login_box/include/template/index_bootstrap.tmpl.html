@@ -42,6 +42,7 @@ function default_login_logout(){
 </patTemplate:tmpl>
 <patTemplate:tmpl name="logout_button" visibility="hidden"><input type="button" class="button btn btn-success" onclick="default_login_logout();" value="ログアウト" /></patTemplate:tmpl>
 <patTemplate:tmpl name="login_button" visibility="hidden"><input type="button" class="button btn btn-success" onclick="default_login_login();" value="ログイン" /></patTemplate:tmpl>
+</form>
 <patTemplate:tmpl name="regmember_button" visibility="hidden">
 <ul>
 <li><a href="{REGUSER_URL}">ユーザ登録</a></li>
@@ -54,5 +55,10 @@ function default_login_logout(){
 <li><a href="{CHANGEPWD_URL}">パスワード変更</a></li>
 </ul>
 </patTemplate:tmpl>
-</form>
+<patTemplate:tmpl name="blog_info" visibility="hidden">
+<p>投稿可能なブログ</p>
+<ul>
+<patTemplate:tmpl name="blog_list"><li><a href="{URL}">{NAME}</a></li></patTemplate:tmpl>
+</ul>
+</patTemplate:tmpl>
 </patTemplate:tmpl>

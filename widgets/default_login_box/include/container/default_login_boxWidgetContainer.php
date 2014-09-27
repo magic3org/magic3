@@ -14,13 +14,19 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() . '/default_login_boxDb.php');
 
 class default_login_boxWidgetContainer extends BaseWidgetContainer
 {
+	private $db;			// DB接続オブジェクト
+	private $blogItemExists;	// マルチブログリストがあるかどうか
 	const TARGET_WIDGET = 'reg_user';		// 呼び出しウィジェットID
+	const TARGET_WIDGET_BLOG = 'blog_main';
 	const DEFAULT_TITLE = 'ログイン';			// デフォルトのウィジェットタイトル
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const CF_AUTO_LOGIN = 'auto_login';		// 自動ログイン機能を使用するかどうか
+	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
+	const CF_USE_MULTI_BLOG			= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
 	
 	/**
 	 * コンストラクタ
@@ -29,6 +35,9 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// DBオブジェクト作成
+		$this->db = new default_login_boxDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -137,6 +146,19 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 				$profileUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'task=profile');
 				$this->tmpl->addVar("member_button", "profile_url", $this->getUrl($profileUrl, true));
 			}
+			
+			// マルチブログを使用している場合はブログリストを表示
+			if ($this->canFindWidget(self::TARGET_WIDGET_BLOG)){			// ウィジェット実行可能なとき
+				$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
+				if (isset($blogLibObj)){
+					$value = $blogLibObj->getConfig(self::CF_USE_MULTI_BLOG);
+					if ($value){
+						// ブログリストを作成
+						$this->db->getAllBlog(array($this, 'blogListLoop'));
+						if ($this->blogItemExists) $this->tmpl->setAttribute('blog_info', 'visibility', 'visible');
+					}
+				}
+			}
 		}
 	}
 	/**
@@ -167,6 +189,29 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
+	}
+	/**
+	 * 取得したデータをテンプレートに設定する
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function blogListLoop($index, $fetchedRow, $param)
+	{
+		// リンク先の作成
+		$name = $fetchedRow['bl_name'];
+		$linkUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ID . '=' . $fetchedRow['bl_id'];
+		$row = array(
+			'url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
+			'name' => $this->convertToDispString($name)			// タイトル
+		);
+		$this->tmpl->addVars('blog_list', $row);
+		$this->tmpl->parseTemplate('blog_list', 'a');
+		
+		$this->blogItemExists = true;
+		return true;
 	}
 }
 ?>

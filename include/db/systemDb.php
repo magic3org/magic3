@@ -1111,6 +1111,8 @@ class SystemDb extends BaseDb
 	/**
 	 * ウィジェットタイプからメインウィジェットのウィジェットIDを取得
 	 *
+	 * アクセスポイントは考慮しなくてもよい?
+	 *
 	 * @param string $widgetType    ウィジェットタイプ
 	 * @param int    $setId			定義セットID
 	 * @return string 				ウィジェットID(見つからないときは空文字列を返す)
