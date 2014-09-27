@@ -8,19 +8,19 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_mainCommentWidgetContainer.php 5145 2012-08-29 13:21:42Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/blog_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_mainDb.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_commentDb.php');
 
+// このファイルはadmin_blog_mainCommentWidgetContainer.phpの内容と同じ。クラス名の定義のみ異なる。
 class blog_mainCommentWidgetContainer extends blog_mainBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $mainDb;	// DB接続オブジェクト
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $entryId;
 	private $lang;		// 現在の選択言語
@@ -30,6 +30,7 @@ class blog_mainCommentWidgetContainer extends blog_mainBaseWidgetContainer
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const CATEGORY_COUNT = 2;				// 記事カテゴリーの選択可能数
 	const COMMENT_SIZE = 40;			// コメント内容の最大文字列長
+	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	
 	/**
 	 * コンストラクタ
@@ -41,7 +42,6 @@ class blog_mainCommentWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new blog_commentDb();
-		$this->mainDb = new blog_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -127,7 +127,7 @@ class blog_mainCommentWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
-		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定	
+		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定
 		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		
 		// ##### 検索条件 #####
@@ -178,7 +178,11 @@ class blog_mainCommentWidgetContainer extends blog_mainBaseWidgetContainer
 		if (!empty($search_endDt)) $endDt = $this->getNextDay($search_endDt);
 		
 		// 総数を取得
-		$totalCount = $this->db->getCommentItemCount($search_startDt, $endDt, $search_keyword, $this->langId, $blogId);
+		if ($this->gEnv->isSystemManageUser()){		// システム運用ユーザのときはすべてのブログにアクセス可能
+			$totalCount = $this->db->getCommentItemCount($search_startDt, $endDt, $search_keyword, $this->langId);
+		} else {
+			$totalCount = $this->db->getCommentItemCount($search_startDt, $endDt, $search_keyword, $this->langId, $blogId);
+		}
 
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
@@ -200,8 +204,18 @@ class blog_mainCommentWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// 記事項目リストを取得
-		$this->db->searchCommentItems($maxListCount, $pageNo, $search_startDt, $endDt, $search_keyword, $this->langId, array($this, 'itemListLoop'), $blogId);
+		if ($this->gEnv->isSystemManageUser()){		// システム運用ユーザのときはすべてのブログにアクセス可能
+			$this->db->searchCommentItems($maxListCount, $pageNo, $search_startDt, $endDt, $search_keyword, $this->langId, array($this, 'itemListLoop'));
+		} else {
+			$this->db->searchCommentItems($maxListCount, $pageNo, $search_startDt, $endDt, $search_keyword, $this->langId, array($this, 'itemListLoop'), $blogId);
+		}
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		
+		// ボタン作成
+		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+		$searchStr = '検索';
+		$this->tmpl->addVar("_widget", "search_img", $searchImg);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
@@ -266,6 +280,17 @@ class blog_mainCommentWidgetContainer extends blog_mainBaseWidgetContainer
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				$ret = $this->db->updateCommentItem($this->serialNo, $name, $html, $url, $reg_user, $email);
+				
+				// 記事更新日を更新
+				if ($ret){
+					$ret = $this->db->getCommentBySerial($this->serialNo, $row);
+					if ($ret){
+						$entryId = $row['be_id'];				// エントリーID
+						$langId = $row['be_language_id'];		// 言語ID
+						$ret = self::$_mainDb->updateEntryDt($entryId, $langId);
+					}
+				}
+				
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					$dataReload = true;		// データの再ロード
@@ -385,6 +410,35 @@ class blog_mainCommentWidgetContainer extends blog_mainBaseWidgetContainer
 		// 表示中項目のシリアル番号を保存
 		$this->serialArray[] = $serial;
 		if (!in_array($entryId, $this->entryArray)) $this->entryArray[] = $entryId;		// 存在しない場合は追加
+		return true;
+	}
+	/**
+	 * 取得した言語をテンプレートに設定する
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function langLoop($index, $fetchedRow, $param)
+	{
+		$selected = '';
+		if ($fetchedRow['ln_id'] == $this->langId){
+			$selected = 'selected';
+		}
+		if ($this->gEnv->getCurrentLanguage() == 'ja'){		// 日本語表示の場合
+			$name = $this->convertToDispString($fetchedRow['ln_name']);
+		} else {
+			$name = $this->convertToDispString($fetchedRow['ln_name_en']);
+		}
+
+		$row = array(
+			'value'    => $this->convertToDispString($fetchedRow['ln_id']),			// 言語ID
+			'name'     => $name,			// 言語名
+			'selected' => $selected														// 選択中かどうか
+		);
+		$this->tmpl->addVars('lang_list', $row);
+		$this->tmpl->parseTemplate('lang_list', 'a');
 		return true;
 	}
 }

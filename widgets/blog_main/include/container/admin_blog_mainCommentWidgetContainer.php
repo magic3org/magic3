@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -126,7 +126,8 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 		
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
-		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定	
+		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定
+		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		
 		// ##### 検索条件 #####
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
@@ -176,7 +177,11 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 		if (!empty($search_endDt)) $endDt = $this->getNextDay($search_endDt);
 		
 		// 総数を取得
-		$totalCount = $this->db->getCommentItemCount($search_startDt, $endDt, $search_keyword, $this->langId);
+		if ($this->gEnv->isSystemManageUser()){		// システム運用ユーザのときはすべてのブログにアクセス可能
+			$totalCount = $this->db->getCommentItemCount($search_startDt, $endDt, $search_keyword, $this->langId);
+		} else {
+			$totalCount = $this->db->getCommentItemCount($search_startDt, $endDt, $search_keyword, $this->langId, $blogId);
+		}
 
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
@@ -198,7 +203,11 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 		}
 		
 		// 記事項目リストを取得
-		$this->db->searchCommentItems($maxListCount, $pageNo, $search_startDt, $endDt, $search_keyword, $this->langId, array($this, 'itemListLoop'));
+		if ($this->gEnv->isSystemManageUser()){		// システム運用ユーザのときはすべてのブログにアクセス可能
+			$this->db->searchCommentItems($maxListCount, $pageNo, $search_startDt, $endDt, $search_keyword, $this->langId, array($this, 'itemListLoop'));
+		} else {
+			$this->db->searchCommentItems($maxListCount, $pageNo, $search_startDt, $endDt, $search_keyword, $this->langId, array($this, 'itemListLoop'), $blogId);
+		}
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
 		
 		// ボタン作成
