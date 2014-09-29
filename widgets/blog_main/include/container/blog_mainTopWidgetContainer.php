@@ -154,7 +154,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				return 'top.tmpl.html';		// トップ画面記事一覧
 			} else {
 				$this->viewMode = 10;					// 表示モード(記事単体表示)
-				return 'single.tmpl.html';		// 記事詳細
+				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+					return 'single_bootstrap.tmpl.html';		// 記事詳細
+				} else {
+					return 'single.tmpl.html';		// 記事詳細
+				}
 			}
 		}
 	}
@@ -836,7 +840,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
-		return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return '';
+		} else {
+			return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		}
 	}
 	/**
 	 * ウィジェットのタイトルを設定

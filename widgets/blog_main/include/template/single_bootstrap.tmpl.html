@@ -1,0 +1,97 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+<patTemplate:tmpl name="comment_script" visibility="hidden">
+function sendcomment(status){
+	if (status == 0){
+		document.blog_main.act.value = 'checkcomment';
+		
+<patTemplate:tmpl name="update_cookie" visibility="hidden">
+		// クッキー再設定
+		$.cookie('comment_name', $('input#comment_name').val(), { expires: 30 });
+		$.cookie('comment_email', $('input#comment_email').val(), { expires: 30 });
+</patTemplate:tmpl>
+	} else {
+		document.blog_main.act.value = 'sendcomment';
+	}
+	document.blog_main.submit();
+	return true;
+}
+function sendcancel(){
+	document.blog_main.act.value = 'sendcancel';
+	document.blog_main.submit();
+	return true;
+}
+</patTemplate:tmpl>
+<patTemplate:tmpl name="admin_script" visibility="hidden">
+function showConfig(){
+	m3ShowStandardWindow("{CONFIG_URL}");
+	return false;
+}
+function editEntry(serial){
+	m3ShowStandardWindow("{EDIT_URL}&serial=" + serial);
+	return false;
+}
+</patTemplate:tmpl>
+<patTemplate:tmpl name="edit_script" visibility="hidden">
+function editEntry(serial){
+	m3_showConfigWindow("{EDIT_URL}&serial=" + serial);
+	return false;
+}
+</patTemplate:tmpl>
+<patTemplate:tmpl name="init_cookie" visibility="hidden">
+$(function(){
+	// 初期データロード
+	$('input#comment_name').val($.cookie('comment_name'));
+	$('input#comment_email').val($.cookie('comment_email'));
+});
+</patTemplate:tmpl>
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="blog_main" class="form form-horizontal" role="form">
+<input type="hidden" name="act" />
+<input type="hidden" name="entryid" value="{ENTRY_ID}" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<patTemplate:tmpl name="show_title" visibility="hidden">{TITLE}</patTemplate:tmpl>
+<patTemplate:tmpl name="message" visibility="hidden"><div>{MESSAGE}</div></patTemplate:tmpl>
+<patTemplate:tmpl name="button_list" visibility="hidden">{BUTTON_LIST}</patTemplate:tmpl>
+<patTemplate:tmpl name="entrylist">{BUTTON_LIST}
+<div class="blog_entry">{ENTRY}</div>
+<patTemplate:tmpl name="show_comment" visibility="hidden">
+<div class="blog_comment_list">
+<h3><a name="comment">この記事についてのコメント</a></h3>
+<patTemplate:tmpl name="commentlist">
+<div class="blog_comment">{COMMENT}</div><hr />
+</patTemplate:tmpl>
+</div>
+</patTemplate:tmpl>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_comment" visibility="hidden">
+<div class="blog_comment_post">
+<h3>コメントの投稿</h3>
+<div class="form-group"><label for="title" class="col-sm-3 control-label">タイトル</label><div class="col-sm-6"><input type="text" id="title" name="title" class="form-control" value="{TITLE}" size="25" maxlength="50" {TITLE_DISABLED} /></div></div>
+<patTemplate:tmpl name="user_info" visibility="hidden">
+<div class="form-group"><label for="comment_name" class="col-sm-3 control-label">名前</label><div class="col-sm-4"><input type="text" id="comment_name" name="name" class="form-control" value="{NAME}" size="25" maxlength="50" {NAME_DISABLED} /></div></div>
+<div class="form-group"><label for="comment_email" class="col-sm-3 control-label">Eメール</label><div class="col-sm-4"><input type="text" id="comment_email" name="email" class="form-control" value="{EMAIL}" size="25" maxlength="50" {EMAIL_DISABLED} /></div></div>
+</patTemplate:tmpl>
+<div class="form-group"><label for="url" class="col-sm-3 control-label">URL</label><div class="col-sm-9"><input type="text" id="url" name="url" class="form-control" value="{URL}" size="50" maxlength="80" {URL_DISABLED} /></div></div>
+<div class="form-group"><label for="body" class="col-sm-3 control-label">内容</label><div class="col-sm-9"><textarea id="body" name="body" class="form-control" rows="10" {BODY_DISABLED}>{BODY}</textarea></div></div>
+<div class="buttonlist"><input type="button" class="button btn" value="{SEND_BUTTON_LABEL}" onclick="sendcomment({SEND_STATUS});" />
+<patTemplate:tmpl name="cancel_button" visibility="hidden"><input type="button" class="button btn" value="キャンセル" onclick="sendcancel();" /></patTemplate:tmpl></div>
+</div>
+</patTemplate:tmpl>
+</form>
+</patTemplate:tmpl>
