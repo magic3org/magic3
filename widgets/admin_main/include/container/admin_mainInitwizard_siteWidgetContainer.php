@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -66,6 +66,7 @@ class admin_mainInitwizard_siteWidgetContainer extends admin_mainInitwizardBaseW
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
 			$ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_NAME, $siteName);		// サイト名
+			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_TITLE, $siteName);	// 画面タイトル
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL, $siteEmail);	// Eメール
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION, $siteDescription);		// サイト説明
 			if ($ret) $ret = $this->_mainDb->updateSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS, $siteKeyword);		// 検索キーワード
