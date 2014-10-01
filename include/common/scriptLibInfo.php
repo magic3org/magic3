@@ -84,6 +84,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_IDTABS			= 'jquery.idtabs';
 	const LIB_JQUERY_BXSLIDER		= 'jquery.bxslider';
 	const LIB_JQUERY_FITVIDS		= 'jquery.fitvids';
+	const LIB_JQUERY_RESPONSIVETABLE	= 'jquery.responsivetable';
 	
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
@@ -117,6 +118,7 @@ class ScriptLibInfo
 	const JQUERY_IDTABS_VER			= '2.2';
 	const JQUERY_BXSLIDER_VER		= '4.1.2';
 	const JQUERY_FITVIDS_VER		= '1.1';
+	const JQUERY_RESPONSIVETABLE_VER	= '5.0.4';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -200,6 +202,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_BXSLIDER_FILENAME		= 'jquery/bxslider/jquery.bxslider.min.js';
 	const JQUERY_BXSLIDER_CSS			= 'jquery/bxslider/jquery.bxslider.css';
 	const JQUERY_FITVIDS_FILENAME		= 'jquery/jquery.fitvids.js';
+	const JQUERY_RESPONSIVETABLE_FILENAME	= 'jquery/responsiveTable/js/rwd-table.js';
+	const JQUERY_RESPONSIVETABLE_CSS		= 'jquery/responsiveTable/css/rwd-table.css';
 
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
@@ -232,6 +236,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const CODEMIRROR_URL				= 'http://codemirror.net/';		// CodeMirror
 	const JQUERY_BXSLIDER_URL			= 'http://bxslider.com/';
 	const JQUERY_FITVIDS_URL			= 'http://fitvidsjs.com/';
+	const JQUERY_RESPONSIVETABLE_URL	= 'http://gergeo.se/RWD-Table-Patterns';
 	
 	// ディレクトリ名
 	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
@@ -471,7 +476,11 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 					self::LIB_JQUERY_FITVIDS		=>	array(	'script' 	=> array(self::JQUERY_FITVIDS_FILENAME),		// jquery.fitvids用のファイル
 																'url'		=> self::JQUERY_FITVIDS_URL,
 																'version'	=> self::JQUERY_FITVIDS_VER),														
-
+					self::LIB_JQUERY_RESPONSIVETABLE	=> array(	'script' 	=> array(self::JQUERY_RESPONSIVETABLE_FILENAME),
+																	'css'		=> array(self::JQUERY_RESPONSIVETABLE_CSS),
+																	'url'		=> self::JQUERY_RESPONSIVETABLE_URL,
+																	'version'	=> self::JQUERY_RESPONSIVETABLE_VER),
+	
 					// Magic3管理画面専用jQueryプラグイン
 					self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
 					self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー

@@ -499,6 +499,27 @@ function m3SetFileSelectButton()
 	});
 }
 /**
+ * 設定入力用テーブルのカラー設定
+ *
+ * @param object  object			テーブルオブジェクトまたはテーブルID文字列
+ * @return なし
+ */
+function m3SetConfigTable(object)
+{
+	var tableObj;		// テーブルオブジェクト
+	
+	if (typeof object == 'string'){
+		tableObj = document.getElementById(object);
+	} else {
+		tableObj = object;
+	}
+	// カラー設定
+	$(tableObj).addClass('table table-bordered table-striped');
+	$(tableObj).find('th').addClass('info');		// ヘッダ部
+	$(tableObj).find('.buttonlist').addClass('pull-right');		// ボタン右寄せ
+	//$(tableObj).find('tbody tr:odd').addClass("table table-bordered table-striped table-hover");
+}
+/**
  * 管理画面初期処理
  *
  * @return なし

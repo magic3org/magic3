@@ -8,19 +8,25 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainConfigsystemBaseWidgetContainer.php 3822 2010-11-15 01:58:17Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 
 class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	const HELP_KEY_CONFIGSYS = 'configsys';		// システム基本設定
-	const HELP_KEY_CONFIGLANG = 'configlang';		// 言語設定
-	const HELP_KEY_CONFIGMESSAGE = 'configmessage';		// メッセージ設定
-	const DEFAULT_TOP_PAGE = 'configsys';		// デフォルトのトップ画面
+//	const HELP_KEY_CONFIGSYS = 'configsys';		// システム基本設定
+//	const HELP_KEY_CONFIGLANG = 'configlang';		// 言語設定
+//	const HELP_KEY_CONFIGMESSAGE = 'configmessage';		// メッセージ設定
+//	const DEFAULT_TOP_PAGE = 'configsys';		// デフォルトのトップ画面
+	// 画面
+	const TASK_CONFIGSYS		= 'configsys';	// システム基本設定
+	const TASK_CONFIGLANG		= 'configlang';	// 言語設定
+	const TASK_CONFIGMESSAGE	= 'configmessage';	// メッセージ設定
+	const TASK_CONFIGIMAGE		= 'configimage';		// 画像設定
+	const DEFAULT_TASK			= 'configsys';		// デフォルト画面
 	
 	/**
 	 * コンストラクタ
@@ -43,18 +49,21 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 	{
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;
+		if (empty($task)) $task = self::DEFAULT_TASK;
 		
 		// パンくずリストを作成
 		switch ($task){
-			case 'configsys':	// システム基本設定
+			case self::TASK_CONFIGSYS:	// システム基本設定
 				$linkList = ' &gt;&gt; ' . $this->_('System Basic Cofiguration');			// システム基本設定
 				break;
-			case 'configlang':	// 言語設定
+			case self::TASK_CONFIGLANG:	// 言語設定
 				$linkList = ' &gt;&gt; ' . $this->_('Language Cofiguration');		// 言語設定
 				break;
-			case 'configmessage':	// メッセージ設定
+			case self::TASK_CONFIGMESSAGE:	// メッセージ設定
 				$linkList = ' &gt;&gt; ' . $this->_('Message Cofiguration');		// メッセージ設定
+				break;
+			case self::TASK_CONFIGIMAGE:		// 画像設定
+				$linkList = ' &gt;&gt; ' . $this->_('Image Cofiguration');		// 画像設定
 				break;
 		}
 				
@@ -68,33 +77,43 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 				
 		// ### システム基本設定 ###
 		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=configsys';
-		if ($task == 'configsys'){
+		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGSYS;
+		if ($task == self::TASK_CONFIGSYS){
 			$current = 'id="current"';
 		}
 		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_CONFIGSYS);
+		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGSYS);
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>システム基本設定</span></a></li>' . M3_NL;
 		
 		// ### 言語設定 ###
 		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=configlang';
-		if ($task == 'configlang'){
+		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGLANG;
+		if ($task == self::TASK_CONFIGLANG){
 			$current = 'id="current"';
 		}
 		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_CONFIGLANG);
+		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGLANG);
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>言語設定</span></a></li>' . M3_NL;
 		
 		// ### メッセージ設定 ###
 		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=configmessage';
-		if ($task == 'configmessage'){
+		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGMESSAGE;
+		if ($task == self::TASK_CONFIGMESSAGE){
 			$current = 'id="current"';
 		}
 		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_CONFIGMESSAGE);
+		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGMESSAGE);
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>メッセージ設定</span></a></li>' . M3_NL;
+		
+		// ### 画像設定 ###
+		$current = '';
+		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGIMAGE;
+		if ($task == self::TASK_CONFIGIMAGE){
+			$current = 'id="current"';
+		}
+		// ヘルプを作成
+		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGIMAGE);
+		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>画像設定</span></a></li>' . M3_NL;
 		
 		// 上段メニュー終了
 		$menuText .= '</ul>' . M3_NL;

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-28 08:12+0900\n"
-"PO-Revision-Date: 2014-07-28 08:13+0900\n"
+"POT-Creation-Date: 2014-10-01 17:16+0900\n"
+"PO-Revision-Date: 2014-10-01 17:17+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -283,7 +283,7 @@ msgid "Data updated."
 msgstr "データを更新しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:151
-#: ../container/admin_mainWidgetContainer.php:389
+#: ../container/admin_mainWidgetContainer.php:392
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
 
@@ -405,17 +405,28 @@ msgstr "検索キーワード"
 msgid "Header Others (by Tag Style)"
 msgstr "その他(タグ形式)"
 
-#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:51
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:57
 msgid "System Basic Cofiguration"
 msgstr "システム基本設定"
 
-#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:54
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:60
 msgid "Language Cofiguration"
 msgstr "言語設定"
 
-#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:57
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:63
 msgid "Message Cofiguration"
 msgstr "メッセージ設定"
+
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:66
+msgid "Image Cofiguration"
+msgstr "画像設定"
+
+#: ../container/admin_mainCreateconfigWidgetContainer.php:86
+#: ../container/admin_mainTemplistWidgetContainer.php:356
+#: ../container/admin_mainWidgetlistWidgetContainer.php:468
+#, php-format
+msgid "Failed in downloading file. (detail: %s)"
+msgstr "ファイルのアップロードに失敗しました。(要因： %s)"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:52
 msgid "Administration Page"
@@ -969,7 +980,7 @@ msgid "Create"
 msgstr "作成"
 
 #: ../container/admin_mainLoginstatusWidgetContainer.php:44
-#: ../container/admin_mainWidgetContainer.php:384
+#: ../container/admin_mainWidgetContainer.php:387
 msgid "Login"
 msgstr "ログイン"
 
@@ -1652,12 +1663,6 @@ msgstr "ファイルのアップロードが完了しました。(テンプレ�
 msgid "Failed in moving directory. (directory: %s)"
 msgstr "ディレクトリの移動に失敗しました。(ディレクトリ： %s)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:356
-#: ../container/admin_mainWidgetlistWidgetContainer.php:468
-#, php-format
-msgid "Failed in downloading file. (detail: %s)"
-msgstr "ファイルのアップロードに失敗しました。(要因： %s)"
-
 #: ../container/admin_mainTemplistWidgetContainer.php:436
 #: ../container/admin_mainWidgetlistWidgetContainer.php:616
 msgid "Update line?"
@@ -1770,7 +1775,7 @@ msgid "Login Account"
 msgstr "ログインアカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:387 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:390 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1795,7 +1800,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:156
 #: ../container/admin_mainUserlistWidgetContainer.php:306
 #: ../container/admin_mainUserlistWidgetContainer.php:374
-#: ../container/admin_mainWidgetContainer.php:388 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:391 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -1863,24 +1868,24 @@ msgstr "データ追加に失敗しました"
 msgid "Limited"
 msgstr "制限あり"
 
-#: ../container/admin_mainWidgetContainer.php:305
+#: ../container/admin_mainWidgetContainer.php:308
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
-#: ../container/admin_mainWidgetContainer.php:311
-#: ../container/admin_mainWidgetContainer.php:317
+#: ../container/admin_mainWidgetContainer.php:314
+#: ../container/admin_mainWidgetContainer.php:320
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:321
+#: ../container/admin_mainWidgetContainer.php:324
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:385
+#: ../container/admin_mainWidgetContainer.php:388
 msgid "Send Password"
 msgstr "パスワード送信"
 
-#: ../container/admin_mainWidgetContainer.php:386
+#: ../container/admin_mainWidgetContainer.php:389
 msgid "Account"
 msgstr "アカウント"
 

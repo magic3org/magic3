@@ -273,6 +273,7 @@ class PageManager extends Core
 			// Javascriptライブラリ
 			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
 			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// 管理パネル用スクリプト追加
+			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
 		}
 		
 		// 管理権限なしで管理ディレクトリアクセスで読み込むスクリプトファイル
@@ -1301,7 +1302,7 @@ class PageManager extends Core
 						//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
 					}
 					$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
-				
+					
 					// スクリプトが必要なウィジェットをすべて取得
 					$this->db->getWidgetsIdWithLib($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $rows);
 					for ($i = 0; $i < count($rows); $i++){
@@ -1343,7 +1344,7 @@ class PageManager extends Core
 					if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
 						$this->isEditMode = true;			// 一般画面編集モード
 					
-						//$this->addScript('', ScriptLibInfo::LIB_FCKEDITOR);// FCKEditorスクリプト追加
+						$this->addScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
 						$this->addScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
 					//	$this->addScriptFile(self::M3_PLUS_SCRIPT_FILENAME);		// 一般画面追加用スクリプト追加(PLUSライブラリを追加する場合はFCKEditorも使用可能にする)
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
