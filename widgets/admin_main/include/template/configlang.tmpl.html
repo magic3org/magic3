@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: configlang.tmpl.html 5122 2012-08-20 03:29:55Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -25,14 +25,14 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="configlang" />
 <input type="hidden" name="act" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-<table width="500">
+<table style="margin: 0 auto;width:500px">
 <tr><td>
 <label><span {_HELP_CONFIGLANG_LIST}>アクセス可能言語</span></label>
 </td>

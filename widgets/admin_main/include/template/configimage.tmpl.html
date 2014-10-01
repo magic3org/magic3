@@ -24,16 +24,17 @@ $(function() {
 });
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
-<form action="?task=configmessage" method="post" name="main">
+<form method="post" name="main">
+<input type="hidden" name="task" value="configimage" />
 <input type="hidden" name="act" />
 <!--<table width="800">
 <tbody><tr><td>-->
-<h5><span {_HELP_CONFIGMESSAGE_MESSAGE}>メッセージ</span></h5>
-<div class="table-responsive">
-<table id="config_area">
+<div>
+<h4><span {_HELP_CONFIGMESSAGE_MESSAGE}>メッセージ</span></h4>
+<table id="config_area" style="margin: 0 auto;width:950px;">
     <tbody>
     <tr>
 	    <th><span {_HELP_CONFIGMESSAGE_SITE_IN_MAINTENANCE}>サイトメンテナンス中</span></th>
@@ -54,8 +55,7 @@ $(function() {
 	<tfoot>
 		<tr><td colspan="2"><div class="buttonlist"><input type="button" class="button" onclick="updateItem();" value="更新" /></div></td></tr>
 	</tfoot>
-</table>
-</div>
+</table></div>
 <!--</td></tr>
 </tbody>
 </table>-->
