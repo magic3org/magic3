@@ -85,6 +85,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_BXSLIDER		= 'jquery.bxslider';
 	const LIB_JQUERY_FITVIDS		= 'jquery.fitvids';
 	const LIB_JQUERY_RESPONSIVETABLE	= 'jquery.responsivetable';
+	const LIB_JQUERY_FORM			= 'jquery.form';
 	
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
@@ -119,6 +120,7 @@ class ScriptLibInfo
 	const JQUERY_BXSLIDER_VER		= '4.1.2';
 	const JQUERY_FITVIDS_VER		= '1.1';
 	const JQUERY_RESPONSIVETABLE_VER	= '5.0.4';
+	const JQUERY_FORM_VER			= '3.51.0';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -204,7 +206,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_FITVIDS_FILENAME		= 'jquery/jquery.fitvids.js';
 	const JQUERY_RESPONSIVETABLE_FILENAME	= 'jquery/responsiveTable/js/rwd-table.js';
 	const JQUERY_RESPONSIVETABLE_CSS		= 'jquery/responsiveTable/css/rwd-table.css';
-
+	const JQUERY_FORM_FILENAME			= 'jquery/jquery.form.js';
+	
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
 	const JQUERY_M3_DROPDOWN_FILENAME	= 'jquery/jquery.m3dropdown.js';	// ドロップダウンメニュー
@@ -237,6 +240,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_BXSLIDER_URL			= 'http://bxslider.com/';
 	const JQUERY_FITVIDS_URL			= 'http://fitvidsjs.com/';
 	const JQUERY_RESPONSIVETABLE_URL	= 'http://gergeo.se/RWD-Table-Patterns';
+	const JQUERY_FORM_URL				= 'http://malsup.com/jquery/form/';
 	
 	// ディレクトリ名
 	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
@@ -480,6 +484,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																	'css'		=> array(self::JQUERY_RESPONSIVETABLE_CSS),
 																	'url'		=> self::JQUERY_RESPONSIVETABLE_URL,
 																	'version'	=> self::JQUERY_RESPONSIVETABLE_VER),
+					self::LIB_JQUERY_FORM			=>	array(	'script' 	=> array(self::JQUERY_FORM_FILENAME),
+																'url'		=> self::JQUERY_FORM_URL,
+																'version'	=> self::JQUERY_FORM_VER),	
 	
 					// Magic3管理画面専用jQueryプラグイン
 					self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
