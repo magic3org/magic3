@@ -69,7 +69,7 @@ class admin_mainInstallWidgetContainer extends admin_mainBaseWidgetContainer
 				$this->gPage->setNoTimeout();
 			
 				// 作業ディレクトリ作成
-				$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+				$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 
 				// タグでZip圧縮ファイルを取得し、指定ディレクトリに解凍
 				$repo = new GitRepo('magic3org', 'magic3');

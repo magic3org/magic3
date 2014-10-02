@@ -155,7 +155,7 @@ class reg_userProfileWidgetContainer extends reg_userBaseWidgetContainer
 			}
 		} else if ($act == 'uploadfile'){		// 添付ファイルアップロード
 			$uploader = new qqFileUploader(array());
-			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 			$resultObj = $uploader->handleUpload($tmpDir);
 			
 			if ($resultObj['success']){

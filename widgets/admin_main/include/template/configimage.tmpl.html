@@ -11,6 +11,8 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<style type="text/css">@import url({_SCRIPTS_URL}/fileuploader/fileuploader.css);</style>
+<script type="text/javascript" src="{_SCRIPTS_URL}/fileuploader/fileuploader.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 function updateItem(){
@@ -19,8 +21,38 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+function createUploader(){
+	var uploader = new qq.FileUploader({
+		element: document.getElementById('file-uploader1'),
+		action: '{UPLOAD_URL}',
+		onComplete: function(id, fileName, responseJson){
+			// 一覧に添付ファイルを追加
+			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);
+			alert(responseJson.file.filename);
+			// 表示領域をリサイズ
+			m3AdjustParentWindow();
+		},
+		debug: true
+	});
+	var uploader2 = new qq.FileUploader({
+		element: document.getElementById('file-uploader2'),
+		action: '{UPLOAD_URL}',
+		onComplete: function(id, fileName, responseJson){
+			// 一覧に添付ファイルを追加
+			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);
+			alert(responseJson.file.filename);
+			
+			// 表示領域をリサイズ
+			m3AdjustParentWindow();
+		},
+		debug: true
+	});
+}
 $(function() {
 	m3SetConfigTable('config_area');
+	
+	// 画像アップローダー作成
+	createUploader();
 });
 //]]>
 </script>
@@ -35,11 +67,11 @@ $(function() {
     <tbody>
     <tr>
 	    <th style="width:150px;"><span {_HELP_CONFIGIMAGE_SITE_LOGO}>サイトロゴ</span></th>
-	    <td></td>
+	    <td><div id="file-uploader1"></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGIMAGE_USER_AVATAR_DEFAULT}>ユーザアバター<br />(デフォルト)</span></th>
-	    <td></td>
+	    <td><div id="file-uploader2"></div></td>
 	</tr>
     </tbody>
 	<tfoot>

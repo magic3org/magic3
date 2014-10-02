@@ -783,7 +783,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			}
 		} else if ($act == 'uploadfile'){		// 画像ファイルアップロード
 			$uploader = new qqFileUploader(array());
-			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 			$resultObj = $uploader->handleUpload($tmpDir);
 
 			if ($resultObj['success']){

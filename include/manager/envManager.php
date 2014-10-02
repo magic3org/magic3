@@ -714,12 +714,13 @@ class EnvManager extends Core
 	/**
 	 * セッション単位の一時ディレクトリを取得
 	 *
+	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
 	 * @return string		一時ディレクトリ
 	 */
-	function getTempDirBySession()
+	function getTempDirBySession($createDir = false)
 	{
 		$dir = $this->workDir . DIRECTORY_SEPARATOR . session_id();
-		if (!file_exists($dir)) mkdir($dir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+		if (!file_exists($dir) && $createDir) mkdir($dir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
 		return $dir;
 	}
 	/**

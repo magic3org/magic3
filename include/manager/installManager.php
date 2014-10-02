@@ -87,7 +87,7 @@ class InstallManager extends Core
 		if ($i == count($infoLists)) return false;
 		
 		// 作業ディレクトリを作成
-		$tmpDir = $gEnvManager->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+		$tmpDir = $gEnvManager->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 		
 		// ファイルダウンロード
 		$repo = new GitRepo(self::GITHUB_USER, self::GITHUB_REPO_OFFICIAL_SAMPLE);

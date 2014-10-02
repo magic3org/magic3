@@ -15,6 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConfigsystemBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
+require_once($gEnvManager->getLibPath()			. '/qqFileUploader/fileuploader.php');
 
 class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWidgetContainer
 {
@@ -23,6 +24,8 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 	const CF_USE_CONTENT_MAINTENANCE = 'use_content_maintenance';		// メンテナンス用コンテンツを汎用コンテンツから取得するかどうか
 	const CF_USE_CONTENT_ACCESS_DENY = 'use_content_access_deny';		// アクセス不可用コンテンツを汎用コンテンツから取得するかどうか
 	const CF_USE_CONTENT_PAGE_NOT_FOUND = 'use_content_page_not_found';		// 存在しないページ画面に汎用コンテンツを使用するかどうか
+	
+	const ATTACH_FILE_DIR = '/etc/content';				// 添付ファイル格納ディレクトリ
 	
 	/**
 	 * コンストラクタ
@@ -98,11 +101,43 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			} else {
 				$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				
-				// 再読み込みフラグをセット
-				$this->gInstance->getMessageManager()->reloadMessage();
-				
 				$replaceNew = true;		// データを再取得
 			}
+		} else if ($act == 'uploadfile'){		// 添付ファイルアップロード
+			$uploader = new qqFileUploader(array());
+			$resultObj = $uploader->handleUpload($this->getAttachFileDir());
+			
+			if ($resultObj['success']){
+				// 作業ディレクトリを作成
+				$tmpDir = $gEnvManager->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+		
+				$fileInfo = $resultObj['file'];
+				$ret = $this->gInstance->getFileManager()->addAttachFileInfo(default_contentCommonDef::$_viewContentType, $fileInfo['fileid'], $fileInfo['path'], $fileInfo['filename']);
+				if (!$ret){			// エラーの場合はファイルを添付ファイルを削除
+					unlink($fileInfo['path']);
+					$resultObj = array('error' => 'Could not create file information.');
+				}
+				
+		// 作業ディレクトリ削除
+		rmDirectory($tmpDir);
+			}
+			// ##### 添付ファイルアップロード結果を返す #####
+			// ページ作成処理中断
+			$this->gPage->abortPage();
+			
+			// 添付ファイルの登録データを返す
+			if (function_exists('json_encode')){
+				$destStr = json_encode($resultObj);
+			} else {
+				$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
+			}
+			//$destStr = htmlspecialchars($destStr, ENT_NOQUOTES);// 「&」が「&amp;」に変換されるので使用しない
+			//header('Content-type: application/json; charset=utf-8');
+			header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
+			echo $destStr;
+			
+			// システム強制終了
+			$this->gPage->exitSystem();
 		} else {
 			$replaceNew = true;		// データを再取得
 		}
@@ -134,6 +169,18 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		$checked = '';
 		if (!empty($useContentPageNotFound)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "use_content_page_not_found", $checked);// 存在しない画面用コンテンツを汎用コンテンツから取得するかどうか
+	}
+	/**
+	 * 添付ファイル格納ディレクトリ取得
+	 *
+	 * @return string		ディレクトリパス
+	 */
+	function getAttachFileDir()
+	{
+		global $gEnvManager;
+		$dir = $gEnvManager->getIncludePath() . self::ATTACH_FILE_DIR;
+		if (!file_exists($dir)) mkdir($dir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+		return $dir;
 	}
 }
 ?>

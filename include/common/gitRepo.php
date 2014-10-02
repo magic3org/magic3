@@ -258,7 +258,7 @@ class GitRepo
 		if ($fileList === false) return false;
 		
 		// 作業ディレクトリを作成
-		$tmpDir = $gEnvManager->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+		$tmpDir = $gEnvManager->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 		
 		// トップディレクトリ作成
 		$topDir = $tmpDir . DIRECTORY_SEPARATOR . basename($srcDir);

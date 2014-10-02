@@ -206,7 +206,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_FITVIDS_FILENAME		= 'jquery/jquery.fitvids.js';
 	const JQUERY_RESPONSIVETABLE_FILENAME	= 'jquery/responsiveTable/js/rwd-table.js';
 	const JQUERY_RESPONSIVETABLE_CSS		= 'jquery/responsiveTable/css/rwd-table.css';
-	const JQUERY_FORM_FILENAME			= 'jquery/jquery.form.js';
+	const JQUERY_FORM_FILENAME			= 'jquery/jquery.form.min.js';
 	
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
