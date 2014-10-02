@@ -4982,12 +4982,40 @@ class PageManager extends Core
 	/**
 	 * エラー画面を表示
 	 *
+	 * @param int $errStatus		HTTPエラーステータスコード
 	 * @return 						なし
 	 */
-	function showError()
+	function showError($errStatus)
 	{
-		$this->setResponse(500);
-		echo '<h2>Internal Server Error</h2>';
+		// レスポンスヘッダ設定
+		$this->setResponse($errStatus);
+		
+		// メッセージ設定
+		$msg = 'NOT DEFINED ERROR';
+		switch ($errStatus){
+			case 403:			// アクセス禁止のとき
+				$msg = 'Forbidden';
+				break;
+			case 404:			// 存在しないページのとき
+				$msg = 'Not Found';
+				break;
+			case 500:			// サーバ内部エラー
+				$msg = 'Internal Server Error';
+				break;
+			case 503:			// サイト非公開(システムメンテナンス)
+				$msg = 'Service Temporarily Unavailable';
+				break;
+		}
+		
+		echo '<!doctype html>';
+		echo '<html>';
+		echo '<head>';
+		echo '<title>' . $msg . '</title>';
+		echo '</head>';
+		echo '<body>';
+		echo '<h2>' . $msg . '</h2>';
+		echo '</body>';
+		echo '</html>';
 	}
 	/**
 	 * ウィジェットがセットされているページサブIDを取得

@@ -66,7 +66,7 @@ class BaseFrameContainer extends Core
 					$this->gPage->redirectToInstall();
 				} else {
 					// サーバ内部エラーメッセージ表示
-					$this->gPage->showError();
+					$this->gPage->showError(500);
 				}
 				return;
 			}
