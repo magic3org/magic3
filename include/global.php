@@ -298,6 +298,7 @@ define('M3_REQUEST_PARAM_PAGE_DEF_CONFIG_ID',		'_defconfig');		// ページ定�
 define('M3_REQUEST_PARAM_BACK_URL',					'_backurl');		// 戻り先URL
 define('M3_REQUEST_PARAM_BACKUP_URL',				'_backupurl');		// URL退避用(画面編集時)
 define('M3_REQUEST_PARAM_SERVER',					'_server');			// サーバ指定
+define('M3_REQUEST_PARAM_FILE_ID',      			'fileid');			// ファイルID
 define('M3_REQUEST_PARAM_CATEGORY_ID',      		'categoryid');		// カテゴリID(共通)
 define('M3_REQUEST_PARAM_WIDTH',      				'width');			// 幅
 define('M3_REQUEST_PARAM_HEIGHT',      				'height');			// 高さ

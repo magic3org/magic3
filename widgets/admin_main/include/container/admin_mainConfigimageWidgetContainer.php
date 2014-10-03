@@ -25,8 +25,6 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 	const CF_USE_CONTENT_ACCESS_DENY = 'use_content_access_deny';		// アクセス不可用コンテンツを汎用コンテンツから取得するかどうか
 	const CF_USE_CONTENT_PAGE_NOT_FOUND = 'use_content_page_not_found';		// 存在しないページ画面に汎用コンテンツを使用するかどうか
 	
-	const ATTACH_FILE_DIR = '/etc/content';				// 添付ファイル格納ディレクトリ
-	
 	/**
 	 * コンストラクタ
 	 */
@@ -102,24 +100,35 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 				$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				
 				$replaceNew = true;		// データを再取得
+				
+				// 作業ディレクトリを削除
+				$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+				rmDirectory($tmpDir);
 			}
-		} else if ($act == 'uploadfile'){		// 添付ファイルアップロード
+		} else if ($act == 'uploadimage'){		// 画像アップロード
+			// 作業ディレクトリを作成
+			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+				
 			$uploader = new qqFileUploader(array());
-			$resultObj = $uploader->handleUpload($this->getAttachFileDir());
+			$resultObj = $uploader->handleUpload($tmpDir);
 			
 			if ($resultObj['success']){
-				// 作業ディレクトリを作成
-				$tmpDir = $gEnvManager->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
-		
 				$fileInfo = $resultObj['file'];
-				$ret = $this->gInstance->getFileManager()->addAttachFileInfo(default_contentCommonDef::$_viewContentType, $fileInfo['fileid'], $fileInfo['path'], $fileInfo['filename']);
-				if (!$ret){			// エラーの場合はファイルを添付ファイルを削除
+				
+				// 各種画像を作成
+				
+				// 画像参照用URL
+				$imageUrl = $this->gEnv->getDefaultAdminUrl();
+				$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
+				$imageUrl .= '&' . M3_REQUEST_PARAM_FILE_ID . '=' . $fileInfo['fileid'];
+				$resultObj['url'] = $imageUrl;
+
+//				$ret = $this->gInstance->getFileManager()->addAttachFileInfo(default_contentCommonDef::$_viewContentType, $fileInfo['fileid'], $fileInfo['path'], $fileInfo['filename']);
+/*				if (!$ret){			// エラーの場合はファイルを添付ファイルを削除
 					unlink($fileInfo['path']);
 					$resultObj = array('error' => 'Could not create file information.');
-				}
-				
-		// 作業ディレクトリ削除
-		rmDirectory($tmpDir);
+				}*/
 			}
 			// ##### 添付ファイルアップロード結果を返す #####
 			// ページ作成処理中断
@@ -138,8 +147,15 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			
 			// システム強制終了
 			$this->gPage->exitSystem();
+		} else if ($act == 'getimage'){			// 画像取得
+			$fileId = $request->trimValueOf('fileid');	// ファイルID
+			$this->getImage($fileId);
 		} else {
 			$replaceNew = true;		// データを再取得
+			
+			// 作業ディレクトリを削除
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			rmDirectory($tmpDir);
 		}
 		
 		if ($replaceNew){
@@ -150,6 +166,11 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			$msg_pageNotFound = $this->gInstance->getMessageManager()->getMessage(MessageManager::MSG_PAGE_NOT_FOUND, $this->langId);// 存在しない画面メッセージ
 			$useContentPageNotFound	= $this->db->getSystemConfig(self::CF_USE_CONTENT_PAGE_NOT_FOUND);			// 存在しない画面用コンテンツを汎用コンテンツから取得するかどうか
 		}
+		// アップロード実行用URL
+		$uploadUrl = $this->gEnv->getDefaultAdminUrl();
+		$uploadUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
+		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "msg_site_in_maintenance", $msg_siteInMaintenance);// メンテナンスメッセージ
@@ -171,16 +192,42 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		$this->tmpl->addVar("_widget", "use_content_page_not_found", $checked);// 存在しない画面用コンテンツを汎用コンテンツから取得するかどうか
 	}
 	/**
-	 * 添付ファイル格納ディレクトリ取得
+	 * 画像を取得
 	 *
-	 * @return string		ディレクトリパス
+	 * @param string $fileId		画像ファイルID
+	 * @return						なし
 	 */
-	function getAttachFileDir()
+	function getImage($fileId)
 	{
-		global $gEnvManager;
-		$dir = $gEnvManager->getIncludePath() . self::ATTACH_FILE_DIR;
-		if (!file_exists($dir)) mkdir($dir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
-		return $dir;
+		// 画像パス
+		$imagePath = $this->gEnv->getTempDirBySession() . '/' . $fileId;		// セッション単位の作業ディレクトリを取得
+			
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+
+		if (is_readable($imagePath)){
+			// 画像情報を取得
+			$imageMimeType = '';
+			$imageSize = @getimagesize($imagePath);
+			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+			
+			// 画像MIMEタイプ設定
+			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
+			
+			// キャッシュの設定
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0');
+			header('Pragma: no-cache');
+		
+			// 画像ファイル読み込み
+			readfile($imagePath);
+		} else {
+			$this->gPage->showError(404);
+		}
+	
+		// システム強制終了
+		$this->gPage->exitSystem();
 	}
 }
 ?>

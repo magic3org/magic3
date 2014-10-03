@@ -28,7 +28,8 @@ function createUploader(){
 		onComplete: function(id, fileName, responseJson){
 			// 一覧に添付ファイルを追加
 			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);
-			alert(responseJson.file.filename);
+			alert(responseJson.url);
+			alert(responseJson.file.path);
 			// 表示領域をリサイズ
 			m3AdjustParentWindow();
 		},
@@ -40,7 +41,7 @@ function createUploader(){
 		onComplete: function(id, fileName, responseJson){
 			// 一覧に添付ファイルを追加
 			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);
-			alert(responseJson.file.filename);
+			alert(responseJson.file.path);
 			
 			// 表示領域をリサイズ
 			m3AdjustParentWindow();
