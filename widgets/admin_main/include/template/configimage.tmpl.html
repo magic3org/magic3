@@ -28,8 +28,14 @@ function createUploader(){
 		onComplete: function(id, fileName, responseJson){
 			// 一覧に添付ファイルを追加
 			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);
-			alert(responseJson.url);
-			alert(responseJson.file.path);
+//			alert(responseJson.url);
+//			alert(responseJson.file.path);
+			
+		// 画像を読み込む
+		$('#sitelogo_preview').attr('src', responseJson.url).load(function(){
+			m3AdjustParentWindow();// 親ウィンドウリサイズ
+		});
+		
 			// 表示領域をリサイズ
 			m3AdjustParentWindow();
 		},
@@ -41,8 +47,13 @@ function createUploader(){
 		onComplete: function(id, fileName, responseJson){
 			// 一覧に添付ファイルを追加
 			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);
-			alert(responseJson.file.path);
+		//	alert(responseJson.file.path);
 			
+		// 画像を読み込む
+		$('#useravatar_preview').attr('src', responseJson.url).load(function(){
+			m3AdjustParentWindow();// 親ウィンドウリサイズ
+		});
+		
 			// 表示領域をリサイズ
 			m3AdjustParentWindow();
 		},
@@ -63,16 +74,16 @@ $(function() {
 <form method="post" name="main">
 <input type="hidden" name="task" value="configimage" />
 <input type="hidden" name="act" />
-<h4><span {_HELP_CONFIGMESSAGE_MESSAGE}>メッセージ</span></h4>
+<h4><span {_HELP_CONFIGIMAGE_IMAGE}>画像</span></h4>
 <table id="config_area" style="margin: 0 auto;width:950px;">
     <tbody>
     <tr>
-	    <th style="width:150px;"><span {_HELP_CONFIGIMAGE_SITE_LOGO}>サイトロゴ</span></th>
-	    <td><div id="file-uploader1"></div></td>
+	    <th style="width:150px;"><span {_HELP_CONFIGIMAGE_SITE_LOGO}>サイトロゴ<br />128x128</span></th>
+	    <td><img id="sitelogo_preview" class="pull-left" /><div id="file-uploader1" class="pull-right"></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIGIMAGE_USER_AVATAR_DEFAULT}>ユーザアバター<br />(デフォルト)</span></th>
-	    <td><div id="file-uploader2"></div></td>
+	    <th><span {_HELP_CONFIGIMAGE_USER_AVATAR_DEFAULT}>ユーザアバター<br />(デフォルト)<br />200x200</span></th>
+	    <td><img id="useravatar_preview" class="pull-left" /><div id="file-uploader2" class="pull-right"></div></td>
 	</tr>
     </tbody>
 	<tfoot>
