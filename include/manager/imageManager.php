@@ -542,17 +542,39 @@ class ImageManager extends Core
 	/**
 	 * サイトロゴ画像のURLを取得
 	 *
+	 * @param string $type				画像タイプ「sm」「md」「lg」
 	 * @return string				画像URL
 	 */
-	function getSiteLogoUrl()
+	function getSiteLogoUrl($type = 'lg')
 	{
 		global $gEnvManager;
 		global $gSystemManager;
+		static $logoArray;
 		
-		$siteLogoFiles = explode(';', $gSystemManager->getSystemConfig(self::CF_SITE_LOGO_FILENAME));		// サイトロゴファイル名
-		$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR . $siteLogoFiles[count($siteLogoFiles) -1];
+		$logoFilename = '';
+		if (!isset($logoArray)){
+			// フォーマットを読み込む
+			$logoArray = array();
+			$lines = explode(';', $gSystemManager->getSystemConfig(self::CF_SITE_LOGO_FILENAME));		// サイトロゴファイル名
+			for ($i = 0; $i < count($lines); $i++){
+				$line = trim($lines[$i]);
+				if (!empty($line)){
+					$ret = preg_match('/(.*?)\s*=\s*(.*?)_(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $line, $matches);
+					if ($ret){
+						$imageType = $matches[1];
+						$imageName = $matches[2];
+						$imageFilename = $imageName . '_' . $matches[3] . strtolower($matches[4]) . '.' . strtolower($matches[5]);
+						if (!empty($imageType)) $logoArray[$imageType] = $imageFilename;
+					}
+				}
+			}
+		}
+		$value = $logoArray[$type];
+		if (isset($value)) $logoFilename = $value;
+		
+		$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR . $logoFilename;
 		$url = '';
-		if (is_readable($path)) $url = $gEnvManager->getResourceUrl() . self::SITE_LOGO_DIR . $siteLogoFiles[count($siteLogoFiles) -1];
+		if (is_readable($path)) $url = $gEnvManager->getResourceUrl() . self::SITE_LOGO_DIR . $logoFilename;
 		return $url;
 	}
 	/**

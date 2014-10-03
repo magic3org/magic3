@@ -18,9 +18,12 @@
 
 -- *** システムベーステーブル ***
 -- システム設定マスター
+DELETE FROM _system_config WHERE sc_id = 'site_logo_filename';
 DELETE FROM _system_config WHERE sc_id = 'avatar_format';
 INSERT INTO _system_config 
-(sc_id,               sc_value,           sc_name) VALUES
-('avatar_format', 'sm=32c.png;md=80c.png;lg=128c.png', 'アバター仕様');
+(sc_id,                sc_value,                            sc_name) VALUES
+('site_logo_filename', 'sm=logo_80c.png;lg=logo_200c.png',        'サイトロゴファイル名'),
+('avatar_format',      'sm=32c.png;md=80c.png;lg=128c.png', 'アバター仕様');
+
 
 -- *** システム標準テーブル ***

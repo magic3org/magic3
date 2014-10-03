@@ -51,15 +51,16 @@ class admin_mainTest_regexWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$format = 'md =  80c.png';
-		$ret = preg_match('/(.*?)\s*=\s*(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
+		$format = 'sm=logo_80c.png';
+		$ret = preg_match('/(.*?)\s*=\s*(.*?)_(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
 		if ($ret){
 			$imageType = $matches[1];
-			$size = $matches[2];
-			$type = $size . strtolower($matches[3]);
-			$ext = strtolower($matches[4]);
+			$name = $matches[2];
+			$size = $matches[3];
+			$type = $size . strtolower($matches[4]);
+			$ext = strtolower($matches[5]);
 		}
-		echo 'imagetype=[' . $imageType . '] size=[' . $size . '] type=[' . $type . '] ext=[' . $ext . ']';
+		echo 'imagetype=[' . $imageType . '] name=[' . $name . '] size=[' . $size . '] type=[' . $type . '] ext=[' . $ext . ']';
 	}
 }
 ?>

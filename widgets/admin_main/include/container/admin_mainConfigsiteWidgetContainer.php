@@ -285,7 +285,8 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$this->tmpl->addVar("_widget", "meta_others", $this->convertToDispString($metaOthers));		// ヘッダその他タグ
 		
 		// サイトロゴ
-		$siteLogoUrl = $this->gEnv->getResourceUrl() . '/etc/site/thumb/' . $siteLogoFiles[0] . '?' . date('YmdHis');		// サイトロゴファイル名
+//		$siteLogoUrl = $this->gEnv->getResourceUrl() . '/etc/site/thumb/' . $siteLogoFiles[0] . '?' . date('YmdHis');		// サイトロゴファイル名
+		$siteLogoUrl = $this->gInstance->getImageManager()->getSiteLogoUrl() . '?' . date('YmdHis');		// サイトロゴファイル名
 		$siteLogoImage = '<img src="' . $this->convertUrlToHtmlEntity($this->getUrl($siteLogoUrl)) . '" />';
 		$this->tmpl->addVar("_widget", "logo_image", $siteLogoImage);
 		
