@@ -595,10 +595,43 @@ class ImageManager extends Core
 	 */
 	function getDefaultAvatarFormat()
 	{
+//		global $gSystemManager;
+//		
+//		$formats = explode(';', $gSystemManager->getSystemConfig(self::CF_AVATAR_FORMAT));		// アバターフォーマット
+//		$format = $formats[count($formats) -1];		// 最後(最大)の画像
+		$format = $this->getAvatarFormat('md');
+		return $format;
+	}
+	/**
+	 * アバター画像フォーマットを取得
+	 *
+	 * @param string $type				画像タイプ「sm」「md」「lg」
+	 * @param string					画像フォーマット。取得できないときは空文字列。
+	 */
+	function getAvatarFormat($type)
+	{
 		global $gSystemManager;
+		static $formatArray;
 		
-		$formats = explode(';', $gSystemManager->getSystemConfig(self::CF_AVATAR_FORMAT));		// アバターフォーマット
-		$format = $formats[count($formats) -1];		// 最後(最大)の画像
+		$format = '';
+		if (!isset($formatArray)){
+			// フォーマットを読み込む
+			$formatArray = array();
+			$lines = explode(';', $gSystemManager->getSystemConfig(self::CF_AVATAR_FORMAT));		// アバターフォーマット
+			for ($i = 0; $i < count($lines); $i++){
+				$line = trim($lines[$i]);
+				if (!empty($line)){
+					$ret = preg_match('/(.*?)\s*=\s*(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $line, $matches);
+					if ($ret){
+						$imageType = $matches[1];
+						$imageFormat = $matches[2] . strtolower($matches[3]) . '.' . strtolower($matches[4]);
+						if (!empty($imageType)) $formatArray[$imageType] = $imageFormat;
+					}
+				}
+			}
+		}
+		$value = $formatArray[$type];
+		if (isset($value)) $format = $value;
 		return $format;
 	}
 	/**
