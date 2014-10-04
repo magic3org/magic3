@@ -20,10 +20,8 @@ require_once($gEnvManager->getLibPath()			. '/qqFileUploader/fileuploader.php');
 class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $langId;		// 変更対象の言語ID
-	const CF_USE_CONTENT_MAINTENANCE = 'use_content_maintenance';		// メンテナンス用コンテンツを汎用コンテンツから取得するかどうか
-	const CF_USE_CONTENT_ACCESS_DENY = 'use_content_access_deny';		// アクセス不可用コンテンツを汎用コンテンツから取得するかどうか
-	const CF_USE_CONTENT_PAGE_NOT_FOUND = 'use_content_page_not_found';		// 存在しないページ画面に汎用コンテンツを使用するかどうか
+	const IMAGE_TYPE_SITE_LOGO = 'sitelogo';			// 画像タイプ(サイトロゴ)
+	const IMAGE_TYPE_USER_AVATAR = 'useravatar';		// 画像タイプ(ユーザアバター)
 	
 	/**
 	 * コンストラクタ
@@ -61,39 +59,13 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 	 */
 	function _assign($request, &$param)
 	{
-		// ユーザ情報、表示言語
-		$userInfo		= $this->gEnv->getCurrentUserInfo();
-		$this->langId		= $this->gEnv->getCurrentLanguage();
-
 		$act = $request->trimValueOf('act');
-		$msg_siteInMaintenance = $request->trimValueOf('item_msg_site_in_maintenance');		// メンテナンス中メッセージ
-		$useContentMaintenance = ($request->trimValueOf('item_use_content_maintenance') == 'on') ? 1 : 0;		// メンテナンス画面用コンテンツを汎用コンテンツから取得するかどうか
-		$msg_accessDeny = $request->trimValueOf('item_msg_access_deny');		// アクセス不可メッセージ
-		$useContentAccessDeny = ($request->trimValueOf('item_use_content_access_deny') == 'on') ? 1 : 0;		// アクセス不可用コンテンツを汎用コンテンツから取得するかどうか
-		$msg_pageNotFound = $request->trimValueOf('item_msg_page_not_found');		// 存在しない画面メッセージ
-		$useContentPageNotFound = ($request->trimValueOf('item_use_content_page_not_found') == 'on') ? 1 : 0;		// 存在しない画面用コンテンツを汎用コンテンツから取得するかどうか
-		
+		$type = $request->trimValueOf('type');		// 画像タイプ
+
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 設定更新のとき
 			$isErr = false;
-			if (!$isErr){
-				if (!$this->gInstance->getMessageManager()->updateMessage(MessageManager::MSG_SITE_IN_MAINTENANCE, $msg_siteInMaintenance, $this->langId)) $isErr = true;
-			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_USE_CONTENT_MAINTENANCE, $useContentMaintenance)) $isErr = true;		// メンテナンス画面用コンテンツを汎用コンテンツから取得するかどうか
-			}
-			if (!$isErr){
-				if (!$this->gInstance->getMessageManager()->updateMessage(MessageManager::MSG_ACCESS_DENY, $msg_accessDeny, $this->langId)) $isErr = true;
-			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_USE_CONTENT_ACCESS_DENY, $useContentAccessDeny)) $isErr = true;		// アクセス不可画面用コンテンツを汎用コンテンツから取得するかどうか
-			}
-			if (!$isErr){
-				if (!$this->gInstance->getMessageManager()->updateMessage(MessageManager::MSG_PAGE_NOT_FOUND, $msg_pageNotFound, $this->langId)) $isErr = true;
-			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_USE_CONTENT_PAGE_NOT_FOUND, $useContentPageNotFound)) $isErr = true;		// 存在しない画面用コンテンツを汎用コンテンツから取得するかどうか
-			}
+
 			if ($isErr){		// エラー発生のとき
 				$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 			} else {
@@ -116,19 +88,31 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 				$fileInfo = $resultObj['file'];
 				
 				// 各種画像を作成
+				switch ($type){
+				case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
+					$formats = $this->gInstance->getImageManager()->getAllSiteLogoFormat();
+					$filenameBase = $this->gInstance->getImageManager()->getSiteLogoFilenameBase();
+					break;
+				case self::IMAGE_TYPE_USER_AVATAR:		// アバター
+					$formats = $this->gInstance->getImageManager()->getAllAvatarFormat();
+					$filenameBase = $this->gInstance->getImageManager()->getDefaultAvatarFilenameBase();
+					break;
+				}
 				
-				// 画像参照用URL
-				$imageUrl = $this->gEnv->getDefaultAdminUrl();
-				$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
-				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
-				$imageUrl .= '&' . M3_REQUEST_PARAM_FILE_ID . '=' . $fileInfo['fileid'];
-				$resultObj['url'] = $imageUrl;
-
-//				$ret = $this->gInstance->getFileManager()->addAttachFileInfo(default_contentCommonDef::$_viewContentType, $fileInfo['fileid'], $fileInfo['path'], $fileInfo['filename']);
-/*				if (!$ret){			// エラーの場合はファイルを添付ファイルを削除
-					unlink($fileInfo['path']);
-					$resultObj = array('error' => 'Could not create file information.');
-				}*/
+				$ret = $this->gInstance->getImageManager()->createImageByFormat($fileInfo['path'], $formats, $tmpDir, $filenameBase, $destFilename);
+				if ($ret){			// 画像作成成功の場合
+					// 画像参照用URL
+					$imageUrl = $this->gEnv->getDefaultAdminUrl();
+					$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
+					$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
+					//$imageUrl .= '&' . M3_REQUEST_PARAM_FILE_ID . '=' . $fileInfo['fileid'];
+					$imageUrl .= '&type=' . $type;
+					$resultObj['url'] = $imageUrl;
+				} else {// エラーの場合
+					$resultObj = array('error' => 'Could not create resized images.');
+				}
+				// アップロードファイル削除
+				unlink($fileInfo['path']);
 			}
 			// ##### 添付ファイルアップロード結果を返す #####
 			// ページ作成処理中断
@@ -148,8 +132,9 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			// システム強制終了
 			$this->gPage->exitSystem();
 		} else if ($act == 'getimage'){			// 画像取得
-			$fileId = $request->trimValueOf('fileid');	// ファイルID
-			$this->getImage($fileId);
+			//$fileId = $request->trimValueOf('fileid');	// ファイルID
+		//	$this->getImage($fileId);
+			$this->getImageByType($type);
 		} else {
 			$replaceNew = true;		// データを再取得
 			
@@ -159,18 +144,13 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		}
 		
 		if ($replaceNew){
-			$msg_siteInMaintenance = $this->gInstance->getMessageManager()->getMessage(MessageManager::MSG_SITE_IN_MAINTENANCE, $this->langId);// メンテナンス中メッセージ
-			$useContentMaintenance	= $this->db->getSystemConfig(self::CF_USE_CONTENT_MAINTENANCE);			// メンテナンス画面用コンテンツを汎用コンテンツから取得するかどうか
-			$msg_accessDeny = $this->gInstance->getMessageManager()->getMessage(MessageManager::MSG_ACCESS_DENY, $this->langId);// アクセス不可メッセージ
-			$useContentAccessDeny	= $this->db->getSystemConfig(self::CF_USE_CONTENT_ACCESS_DENY);			// アクセス不可用コンテンツを汎用コンテンツから取得するかどうか
-			$msg_pageNotFound = $this->gInstance->getMessageManager()->getMessage(MessageManager::MSG_PAGE_NOT_FOUND, $this->langId);// 存在しない画面メッセージ
-			$useContentPageNotFound	= $this->db->getSystemConfig(self::CF_USE_CONTENT_PAGE_NOT_FOUND);			// 存在しない画面用コンテンツを汎用コンテンツから取得するかどうか
 		}
 		// アップロード実行用URL
 		$uploadUrl = $this->gEnv->getDefaultAdminUrl();
 		$uploadUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
-		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
+		$this->tmpl->addVar("_widget", "upload_url_sitelogo", $this->getUrl($uploadUrl . '&type=' . self::IMAGE_TYPE_SITE_LOGO));		// サイトロゴ用
+		$this->tmpl->addVar("_widget", "upload_url_useravatar", $this->getUrl($uploadUrl . '&type=' . self::IMAGE_TYPE_USER_AVATAR));		// アバター用
 		
 		// サイトロゴ
 		$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
@@ -188,25 +168,65 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl(''/*デフォルトアバター*/, $size) . '?' . date('YmdHis');		// サイトロゴファイル名
 		}
 		$this->tmpl->addVar("_widget", "useravatar_url", $this->convertUrlToHtmlEntity($this->getUrl($avatarUrl)));
+	}
+	/**
+	 * 画像を取得
+	 *
+	 * @param string $type		画像タイプ
+	 * @return					なし
+	 */
+	function getImageByType($type)
+	{
+		// 画像パス
+//		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+		//$imagePath = $this->gEnv->getTempDirBySession() . '/' . $fileId;		// セッション単位の作業ディレクトリを取得
 		
-		// 画面にデータを埋め込む
-		$this->tmpl->addVar("_widget", "msg_site_in_maintenance", $msg_siteInMaintenance);// メンテナンスメッセージ
-		$this->tmpl->addVar("_widget", "content_key_maintenance", M3_CONTENT_KEY_MAINTENANCE);		// メンテナンス用コンテンツ取得キー
-		$checked = '';
-		if (!empty($useContentMaintenance)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "use_content_maintenance", $checked);// メンテナンス画面用コンテンツを汎用コンテンツから取得するかどうか
+		switch ($type){
+		case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
+			$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
+			if (!empty($siteLogoSizeArray)){
+				$size = $siteLogoSizeArray[count($siteLogoSizeArray) -1];		// 最大画像
+				$filename = $this->gInstance->getImageManager()->getSiteLogoFilename($size);
+			}
+			break;
+		case self::IMAGE_TYPE_USER_AVATAR:		// アバター
+			$avatarSizeArray = $this->gInstance->getImageManager()->getAllAvatarSizeId();
+			if (!empty($avatarSizeArray)){
+				$size = $avatarSizeArray[count($avatarSizeArray) -1];		// 最大画像
+				$filename = $this->gInstance->getImageManager()->getDefaultAvatarFilename($size);
+			}
+			break;
+		}
 		
-		$this->tmpl->addVar("_widget", "msg_access_deny", $msg_accessDeny);				// アクセス不可メッセージ
-		$this->tmpl->addVar("_widget", "content_key_access_deny", M3_CONTENT_KEY_ACCESS_DENY);		// アクセス不可用コンテンツ取得キー
-		$checked = '';
-		if (!empty($useContentAccessDeny)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "use_content_access_deny", $checked);// アクセス不可用コンテンツを汎用コンテンツから取得するかどうか
+		$imagePath = '';
+		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
+			
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+
+		if (is_readable($imagePath)){
+			// 画像情報を取得
+			$imageMimeType = '';
+			$imageSize = @getimagesize($imagePath);
+			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+			
+			// 画像MIMEタイプ設定
+			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
+			
+			// キャッシュの設定
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0');
+			header('Pragma: no-cache');
 		
-		$this->tmpl->addVar("_widget", "msg_page_not_found", $msg_pageNotFound);				// 存在しない画面メッセージ
-		$this->tmpl->addVar("_widget", "content_key_page_not_found", M3_CONTENT_KEY_PAGE_NOT_FOUND);		// 存在しない画面用コンテンツ取得キー
-		$checked = '';
-		if (!empty($useContentPageNotFound)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "use_content_page_not_found", $checked);// 存在しない画面用コンテンツを汎用コンテンツから取得するかどうか
+			// 画像ファイル読み込み
+			readfile($imagePath);
+		} else {
+			$this->gPage->showError(404);
+		}
+	
+		// システム強制終了
+		$this->gPage->exitSystem();
 	}
 	/**
 	 * 画像を取得

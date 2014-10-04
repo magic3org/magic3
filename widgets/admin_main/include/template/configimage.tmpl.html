@@ -24,7 +24,7 @@ function updateItem(){
 function createUploader(){
 	var uploader = new qq.FileUploader({
 		element: document.getElementById('file-uploader1'),
-		action: '{UPLOAD_URL}',
+		action: '{UPLOAD_URL_SITELOGO}',
 		onComplete: function(id, fileName, responseJson){
 			// 一覧に添付ファイルを追加
 			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);
@@ -43,7 +43,7 @@ function createUploader(){
 	});
 	var uploader2 = new qq.FileUploader({
 		element: document.getElementById('file-uploader2'),
-		action: '{UPLOAD_URL}',
+		action: '{UPLOAD_URL_USERAVATAR}',
 		onComplete: function(id, fileName, responseJson){
 			// 一覧に添付ファイルを追加
 			//addAttachFile(responseJson.file.fileid, responseJson.file.filename);

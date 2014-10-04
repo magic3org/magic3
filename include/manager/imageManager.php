@@ -27,8 +27,8 @@ class ImageManager extends Core
 	const SITE_LOGO_DIR = '/etc/site/thumb';		// サイトロゴ格納ディレクトリ
 	const AVATAR_DIR = '/etc/avatar/';		// アバター格納ディレクトリ
 	const DEFAULT_THUMB_DIR = '/etc/default/thumb/';		// デフォルトサムネールディレクトリ
-	const DEFAULT_SITE_LOGO_BASE = 'logo_';		// デフォルトのサイトロゴファイル名ヘッド部
-	const DEFAULT_AVATAR_BASE = 'default_';		// デフォルトのアバターファイル名ヘッド部
+	const DEFAULT_SITE_LOGO_BASE = 'logo';		// デフォルトのサイトロゴファイル名ベース
+	const DEFAULT_AVATAR_BASE = 'default';		// デフォルトのアバターファイル名ベース
 	const NOT_AVAILABLE_HEAD = 'notavailable_';		// 設定画像がない場合の表示画像のファイル名ヘッダ部
 	// DB定義値
 	const CF_SITE_LOGO_FILENAME	= 'site_logo_filename';		// サイトロゴファイル
@@ -560,7 +560,7 @@ class ImageManager extends Core
 		
 		$logoFilename = '';
 		$value = $this->siteLogoFomatArray[$type];
-		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . $value;
+		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
 		
 		if (empty($logoFilename)){
 			$url = $gEnvManager->getResourceUrl() . self::SITE_LOGO_DIR;
@@ -588,7 +588,7 @@ class ImageManager extends Core
 		
 		$logoFilename = '';
 		$value = $this->siteLogoFomatArray[$type];
-		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . $value;
+		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
 		
 		if (empty($logoFilename)){
 			$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR;
@@ -610,6 +610,18 @@ class ImageManager extends Core
 		return array_keys($this->siteLogoFomatArray);
 	}
 	/**
+	 * サイトロゴの画像フォーマットを取得
+	 *
+	 * @return array				画像フォーマット
+	 */
+	function getAllSiteLogoFormat()
+	{
+		// サイトロゴ画像情報を読み込む
+		$this->_loadSiteLogoInfo();
+		
+		return array_values($this->siteLogoFomatArray);
+	}
+	/**
 	 * サイトロゴ画像ファイル名を取得
 	 *
 	 * @param string $type			画像タイプ「sm」「md」「lg」
@@ -622,7 +634,7 @@ class ImageManager extends Core
 		
 		$logoFilename = '';
 		$value = $this->siteLogoFomatArray[$type];
-		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . $value;
+		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
 		
 		return $logoFilename;
 	}
@@ -653,6 +665,15 @@ class ImageManager extends Core
 		}
 	}
 	/**
+	 * サイトロゴのファイル名ベースを取得
+	 *
+	 * @return string				ファイル名ベース
+	 */
+	function getSiteLogoFilenameBase()
+	{
+		return self::DEFAULT_SITE_LOGO_BASE;
+	}
+	/**
 	 * アバター画像のURLを取得
 	 *
 	 * @param string $filename		画像ファイル名。空の場合はデフォルトアバター画像。
@@ -664,12 +685,10 @@ class ImageManager extends Core
 		global $gEnvManager;
 		
 		if (empty($filename)){
-			//$filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
-			$filename = self::DEFAULT_AVATAR_BASE . $this->getAvatarFormat($type);
+			$filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
 		} else {
 			$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . $filename;
-			//if (!is_readable($path)) $filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
-			if (!is_readable($path)) $filename = self::DEFAULT_AVATAR_BASE . $this->getAvatarFormat($type);
+			if (!is_readable($path)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
 		}
 		$url = $gEnvManager->getResourceUrl() . self::AVATAR_DIR . $filename;
 		return $url;
@@ -685,8 +704,7 @@ class ImageManager extends Core
 	{
 		global $gEnvManager;
 		
-		//if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
-		if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . $this->getAvatarFormat($type);
+		if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
 		$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . $filename;
 		return $path;
 	}
@@ -697,10 +715,6 @@ class ImageManager extends Core
 	 */
 	function getDefaultAvatarFormat()
 	{
-//		global $gSystemManager;
-//		
-//		$formats = explode(';', $gSystemManager->getSystemConfig(self::CF_AVATAR_FORMAT));		// アバターフォーマット
-//		$format = $formats[count($formats) -1];		// 最後(最大)の画像
 		$format = $this->getAvatarFormat('md');
 		return $format;
 	}
@@ -712,25 +726,6 @@ class ImageManager extends Core
 	 */
 	function getAvatarFormat($type)
 	{
-/*		global $gSystemManager;
-		
-		$format = '';
-		if (!isset($this->avatarFormatArray)){
-			// フォーマットを読み込む
-			$this->avatarFormatArray = array();
-			$lines = explode(';', $gSystemManager->getSystemConfig(self::CF_AVATAR_FORMAT));		// アバターフォーマット
-			for ($i = 0; $i < count($lines); $i++){
-				$line = trim($lines[$i]);
-				if (!empty($line)){
-					$ret = preg_match('/(.*?)\s*=\s*(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $line, $matches);
-					if ($ret){
-						$imageType = $matches[1];
-						$imageFormat = $matches[2] . strtolower($matches[3]) . '.' . strtolower($matches[4]);
-						if (!empty($imageType)) $this->avatarFormatArray[$imageType] = $imageFormat;
-					}
-				}
-			}
-		}*/
 		// アバター画像情報を読み込む
 		$this->_loadAvatarInfo();
 		
@@ -777,6 +772,49 @@ class ImageManager extends Core
 		return array_keys($this->avatarFormatArray);
 	}
 	/**
+	 * アバターのフォーマットを取得
+	 *
+	 * @return array				画像サイズID
+	 */
+	function getAllAvatarFormat()
+	{
+		// アバター画像情報を読み込む
+		$this->_loadAvatarInfo();
+		
+		return array_values($this->avatarFormatArray);
+	}
+	/**
+	 * デフォルトアバターのファイル名ベースを取得
+	 *
+	 * @return string				ファイル名ベース
+	 */
+	function getDefaultAvatarFilenameBase()
+	{
+		return self::DEFAULT_AVATAR_BASE;
+	}
+	/**
+	 * デフォルトアバターのファイル名を取得
+	 *
+	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @return string				画像ファイル名
+	 */
+	function getDefaultAvatarFilename($type)
+	{
+		// アバター画像情報を読み込む
+		$this->_loadAvatarInfo();
+		
+		$filename = '';
+		$value = $this->avatarFormatArray[$type];
+		if (isset($value)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $value;
+		return $filename;
+		
+//		$logoFilename = '';
+//		$value = $this->siteLogoFomatArray[$type];
+//		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
+//		return $logoFilename;
+	}
+	
+	/**
 	 * OGP用サムネールデフォルトフォーマットを取得
 	 *
 	 * @return string				フォーマット
@@ -791,22 +829,26 @@ class ImageManager extends Core
 	/**
 	 * 指定フォーマットの画像を作成
 	 *
-	 * @param string $path				元の画像ファイル
-	 * @param string $formats			作成する画像フォーマット(複数の場合は「;」区切り)
-	 * @param string $destDir			作成する画像のディレクトリ
-	 * @param string $destFilenameBase	作成する画像ファイル名基本部。ファイル名は「基本部_フォーマット」で作成。
-	 * @param array  $destFilename		作成した画像のファイル名
-	 * @return bool						true=作成,false=作成失敗
+	 * @param string $path					元の画像ファイル
+	 * @param string,array $formats			作成する画像フォーマット(複数の場合は「;」区切り)またはフォーマットの配列
+	 * @param string $destDir				作成する画像のディレクトリ
+	 * @param string $destFilenameBase		作成する画像ファイル名基本部。ファイル名は「基本部_フォーマット」で作成。
+	 * @param array  $destFilename			作成した画像のファイル名
+	 * @return bool							true=作成,false=作成失敗
 	 */
 	function createImageByFormat($path, $formats, $destDir, $destFilenameBase, &$destFilename)
 	{
 		// 引数エラーチェック
-		if (empty($formats)) return false;
+		if (empty($path) || empty($formats) || empty($destDir) || empty($destFilenameBase)) return false;
 		
 		$destFilename = array();		// 画像ファイル名
 		
 		// 画像のフォーマットを取得
-		$formatArray = explode(';', $formats);
+		if (is_array($formats)){
+			$formatArray = $formats;
+		} else {
+			$formatArray = explode(';', $formats);
+		}
 		
 		for ($i = 0; $i < count($formatArray); $i++){
 			$format = $formatArray[$i];
@@ -817,10 +859,8 @@ class ImageManager extends Core
 
 				// サムネールの作成
 				if ($imageAttr == 'c'){		// 切り取りサムネールの場合
-					//$ret = $this->gInstance->getImageManager()->createThumb($path, $newPath, $imageSize, $imageType, true);
 					$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, true);
 				} else {
-					//$ret = $this->gInstance->getImageManager()->createThumb($path, $newPath, $imageSize, $imageType, false);
 					$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, false);
 				}
 				if ($ret){
