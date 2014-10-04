@@ -20,6 +20,7 @@ class ImageManager extends Core
 	private $defaultThumbExt;			// デフォルトのサムネールのファイル拡張子
 	private $defaultThumbSize;			// デフォルトのサムネールの画像サイズ
 	private $defaultThumbType;			// デフォルトのサムネールの画像タイプ
+	private $siteLogoInfoArray;		// サイトロゴ画像情報
 	const CONTENT_DIR = '/etc/';
 	const THUMBNAIL_DIR = '/thumb';
 	const SITE_LOGO_DIR = '/etc/site/thumb/';		// サイトロゴ格納ディレクトリ
@@ -542,19 +543,83 @@ class ImageManager extends Core
 	/**
 	 * サイトロゴ画像のURLを取得
 	 *
-	 * @param string $type				画像タイプ「sm」「md」「lg」
-	 * @return string				画像URL
+	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @return string				画像URL。画像が存在しないときは空。
 	 */
 	function getSiteLogoUrl($type = 'lg')
 	{
 		global $gEnvManager;
 		global $gSystemManager;
-		static $logoArray;
+		
+		// サイトロゴ画像情報を読み込む
+		$this->_loadSiteLogoInfo();
 		
 		$logoFilename = '';
-		if (!isset($logoArray)){
-			// フォーマットを読み込む
-			$logoArray = array();
+		$value = $this->siteLogoInfoArray[$type];
+		if (isset($value)) $logoFilename = $value;
+		
+		$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR . $logoFilename;
+		$url = '';
+		if (is_readable($path)) $url = $gEnvManager->getResourceUrl() . self::SITE_LOGO_DIR . $logoFilename;
+		return $url;
+	}
+	/**
+	 * サイトロゴ画像のパスを取得
+	 *
+	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @return string				画像パス
+	 */
+	function getSiteLogoPath($type = 'lg')
+	{
+		global $gEnvManager;
+		
+		// サイトロゴ画像情報を読み込む
+		$this->_loadSiteLogoInfo();
+		
+		$logoFilename = '';
+		$value = $this->siteLogoInfoArray[$type];
+		if (isset($value)) $logoFilename = $value;
+		
+		$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR . $logoFilename;
+		return $path;
+	}
+	/**
+	 * サイトロゴの画像サイズIDを取得
+	 *
+	 * @return array				画像サイズID
+	 */
+	function getAllSiteLogoSizeId()
+	{
+		// サイトロゴ画像情報を読み込む
+		$this->_loadSiteLogoInfo();
+		
+		return array_keys($this->siteLogoInfoArray);
+	}
+	/**
+	 * サイトロゴ画像ファイル名を取得
+	 *
+	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @return string				画像ファイル名
+	 */
+	function getSiteLogoFilename($type)
+	{
+		// サイトロゴ画像情報を読み込む
+		$this->_loadSiteLogoInfo();
+		
+		return $this->siteLogoInfoArray[$type];
+	}
+	/**
+	 * サイトロゴ画像情報を読み込む
+	 *
+	 * @return 					なし
+	 */
+	function _loadSiteLogoInfo()
+	{
+		global $gSystemManager;
+		
+		if (!isset($this->siteLogoInfoArray)){
+			// ファイル名を読み込む
+			$this->siteLogoInfoArray = array();
 			$lines = explode(';', $gSystemManager->getSystemConfig(self::CF_SITE_LOGO_FILENAME));		// サイトロゴファイル名
 			for ($i = 0; $i < count($lines); $i++){
 				$line = trim($lines[$i]);
@@ -564,18 +629,11 @@ class ImageManager extends Core
 						$imageType = $matches[1];
 						$imageName = $matches[2];
 						$imageFilename = $imageName . '_' . $matches[3] . strtolower($matches[4]) . '.' . strtolower($matches[5]);
-						if (!empty($imageType)) $logoArray[$imageType] = $imageFilename;
+						if (!empty($imageType)) $this->siteLogoInfoArray[$imageType] = $imageFilename;
 					}
 				}
 			}
 		}
-		$value = $logoArray[$type];
-		if (isset($value)) $logoFilename = $value;
-		
-		$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR . $logoFilename;
-		$url = '';
-		if (is_readable($path)) $url = $gEnvManager->getResourceUrl() . self::SITE_LOGO_DIR . $logoFilename;
-		return $url;
 	}
 	/**
 	 * アバター画像のURLを取得

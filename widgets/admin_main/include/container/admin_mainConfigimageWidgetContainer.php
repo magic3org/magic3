@@ -25,8 +25,6 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 	const CF_USE_CONTENT_ACCESS_DENY = 'use_content_access_deny';		// アクセス不可用コンテンツを汎用コンテンツから取得するかどうか
 	const CF_USE_CONTENT_PAGE_NOT_FOUND = 'use_content_page_not_found';		// 存在しないページ画面に汎用コンテンツを使用するかどうか
 	
-	const CF_SITE_LOGO_FILENAME = 'site_logo_filename';		// サイトロゴファイル
-	
 	/**
 	 * コンストラクタ
 	 */
@@ -175,10 +173,13 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
 		
 		// サイトロゴ
-		$siteLogoFiles = explode(';', $this->db->getSystemConfig(self::CF_SITE_LOGO_FILENAME));		// サイトロゴファイル名
-		$siteLogoUrl = $this->gEnv->getResourceUrl() . '/etc/site/thumb/' . $siteLogoFiles[0] . '?' . date('YmdHis');		// サイトロゴファイル名
-		$siteLogoImage = '<img src="' . $this->convertUrlToHtmlEntity($this->getUrl($siteLogoUrl)) . '" />';
-		$this->tmpl->addVar("_widget", "logo_image", $siteLogoImage);
+		$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
+		if (!empty($siteLogoSizeArray)){
+			$size = $siteLogoSizeArray[count($siteLogoSizeArray) -1];
+			$siteLogoFilename = $this->gInstance->getImageManager()->getSiteLogoFilename($size);
+			$siteLogoUrl = $this->gInstance->getImageManager()->getSiteLogoUrl($size) . '?' . date('YmdHis');		// サイトロゴファイル名
+		}
+		$this->tmpl->addVar("_widget", "sitelogo_url", $this->convertUrlToHtmlEntity($this->getUrl($siteLogoUrl)));
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "msg_site_in_maintenance", $msg_siteInMaintenance);// メンテナンスメッセージ
