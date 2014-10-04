@@ -175,11 +175,19 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		// サイトロゴ
 		$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
 		if (!empty($siteLogoSizeArray)){
-			$size = $siteLogoSizeArray[count($siteLogoSizeArray) -1];
+			$size = $siteLogoSizeArray[count($siteLogoSizeArray) -1];		// 最大画像
 			$siteLogoFilename = $this->gInstance->getImageManager()->getSiteLogoFilename($size);
 			$siteLogoUrl = $this->gInstance->getImageManager()->getSiteLogoUrl($size) . '?' . date('YmdHis');		// サイトロゴファイル名
 		}
 		$this->tmpl->addVar("_widget", "sitelogo_url", $this->convertUrlToHtmlEntity($this->getUrl($siteLogoUrl)));
+		
+		// アバター
+		$avatarSizeArray = $this->gInstance->getImageManager()->getAllAvatarSizeId();
+		if (!empty($avatarSizeArray)){
+			$size = $avatarSizeArray[count($avatarSizeArray) -1];		// 最大画像
+			$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl(''/*デフォルトアバター*/, $size) . '?' . date('YmdHis');		// サイトロゴファイル名
+		}
+		$this->tmpl->addVar("_widget", "useravatar_url", $this->convertUrlToHtmlEntity($this->getUrl($avatarUrl)));
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "msg_site_in_maintenance", $msg_siteInMaintenance);// メンテナンスメッセージ

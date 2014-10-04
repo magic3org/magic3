@@ -21,6 +21,7 @@ class ImageManager extends Core
 	private $defaultThumbSize;			// デフォルトのサムネールの画像サイズ
 	private $defaultThumbType;			// デフォルトのサムネールの画像タイプ
 	private $siteLogoFomatArray;		// サイトロゴ画像フォーマット情報
+	private $avatarFormatArray;			// アバターの画像フォーマット情報
 	const CONTENT_DIR = '/etc/';
 	const THUMBNAIL_DIR = '/thumb';
 	const SITE_LOGO_DIR = '/etc/site/thumb';		// サイトロゴ格納ディレクトリ
@@ -649,39 +650,26 @@ class ImageManager extends Core
 					}
 				}
 			}
-/*			
-			// ファイル名を読み込む
-			$this->siteLogoFomatArray = array();
-			$lines = explode(';', $gSystemManager->getSystemConfig(self::CF_SITE_LOGO_FILENAME));		// サイトロゴファイル名
-			for ($i = 0; $i < count($lines); $i++){
-				$line = trim($lines[$i]);
-				if (!empty($line)){
-					$ret = preg_match('/(.*?)\s*=\s*(.*?)_(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $line, $matches);
-					if ($ret){
-						$imageType = $matches[1];
-						$imageName = $matches[2];
-						$imageFilename = $imageName . '_' . $matches[3] . strtolower($matches[4]) . '.' . strtolower($matches[5]);
-						if (!empty($imageType)) $this->siteLogoFomatArray[$imageType] = $imageFilename;
-					}
-				}
-			}*/
 		}
 	}
 	/**
 	 * アバター画像のURLを取得
 	 *
 	 * @param string $filename		画像ファイル名。空の場合はデフォルトアバター画像。
+	 * @param string $type			画像タイプ「sm」「md」「lg」
 	 * @return string				画像URL。存在しない場合はデフォルト画像URLを取得
 	 */
-	function getAvatarUrl($filename = '')
+	function getAvatarUrl($filename = '', $type = 'lg')
 	{
 		global $gEnvManager;
 		
 		if (empty($filename)){
-			$filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
+			//$filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
+			$filename = self::DEFAULT_AVATAR_BASE . $this->getAvatarFormat($type);
 		} else {
 			$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . $filename;
-			if (!is_readable($path)) $filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
+			//if (!is_readable($path)) $filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
+			if (!is_readable($path)) $filename = self::DEFAULT_AVATAR_BASE . $this->getAvatarFormat($type);
 		}
 		$url = $gEnvManager->getResourceUrl() . self::AVATAR_DIR . $filename;
 		return $url;
@@ -690,13 +678,15 @@ class ImageManager extends Core
 	 * アバター画像のパスを取得
 	 *
 	 * @param string $filename		画像ファイル名。空の場合はデフォルトアバター画像。
+	 * @param string $type			画像タイプ「sm」「md」「lg」
 	 * @return string				画像パス
 	 */
-	function getAvatarPath($filename = '')
+	function getAvatarPath($filename = '', $type = 'lg')
 	{
 		global $gEnvManager;
 		
-		if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
+		//if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . $this->getDefaultAvatarFormat();
+		if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . $this->getAvatarFormat($type);
 		$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . $filename;
 		return $path;
 	}
@@ -722,13 +712,12 @@ class ImageManager extends Core
 	 */
 	function getAvatarFormat($type)
 	{
-		global $gSystemManager;
-		static $formatArray;
+/*		global $gSystemManager;
 		
 		$format = '';
-		if (!isset($formatArray)){
+		if (!isset($this->avatarFormatArray)){
 			// フォーマットを読み込む
-			$formatArray = array();
+			$this->avatarFormatArray = array();
 			$lines = explode(';', $gSystemManager->getSystemConfig(self::CF_AVATAR_FORMAT));		// アバターフォーマット
 			for ($i = 0; $i < count($lines); $i++){
 				$line = trim($lines[$i]);
@@ -737,14 +726,55 @@ class ImageManager extends Core
 					if ($ret){
 						$imageType = $matches[1];
 						$imageFormat = $matches[2] . strtolower($matches[3]) . '.' . strtolower($matches[4]);
-						if (!empty($imageType)) $formatArray[$imageType] = $imageFormat;
+						if (!empty($imageType)) $this->avatarFormatArray[$imageType] = $imageFormat;
+					}
+				}
+			}
+		}*/
+		// アバター画像情報を読み込む
+		$this->_loadAvatarInfo();
+		
+		$value = $this->avatarFormatArray[$type];
+		if (isset($value)) $format = $value;
+		return $format;
+	}
+	/**
+	 * アバターの画像情報を読み込む
+	 *
+	 * @return 					なし
+	 */
+	function _loadAvatarInfo()
+	{
+		global $gSystemManager;
+		
+		if (!isset($this->avatarFormatArray)){
+			// フォーマットを読み込む
+			$this->avatarFormatArray = array();
+			$lines = explode(';', $gSystemManager->getSystemConfig(self::CF_AVATAR_FORMAT));		// アバターフォーマット
+			for ($i = 0; $i < count($lines); $i++){
+				$line = trim($lines[$i]);
+				if (!empty($line)){
+					$ret = preg_match('/(.*?)\s*=\s*(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $line, $matches);
+					if ($ret){
+						$imageType = $matches[1];
+						$imageFormat = $matches[2] . strtolower($matches[3]) . '.' . strtolower($matches[4]);
+						if (!empty($imageType)) $this->avatarFormatArray[$imageType] = $imageFormat;
 					}
 				}
 			}
 		}
-		$value = $formatArray[$type];
-		if (isset($value)) $format = $value;
-		return $format;
+	}
+	/**
+	 * アバターの画像サイズIDを取得
+	 *
+	 * @return array				画像サイズID
+	 */
+	function getAllAvatarSizeId()
+	{
+		// アバター画像情報を読み込む
+		$this->_loadAvatarInfo();
+		
+		return array_keys($this->avatarFormatArray);
 	}
 	/**
 	 * OGP用サムネールデフォルトフォーマットを取得
