@@ -639,15 +639,15 @@ class ImageManager extends Core
 	/**
 	 * サイトロゴ画像の画像サイズ、画像タイプを取得
 	 *
-	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @param string $sizeId		画像タイプ「sm」「md」「lg」
 	 * @param string $imageType		画像タイプ
 	 * @param string $imageAttr		画像属性(c=切り取りあり)
 	 * @param string,array $imageSize		画像サイズ(縦横異なる場合は連想配列(width,height))
 	 * @return bool					true=取得成功、false=取得失敗
 	 */
-	function getSiteLogoFormatInfo($type, &$imageType, &$imageAttr, &$imageSize)
+	function getSiteLogoFormatInfo($sizeId, &$imageType, &$imageAttr, &$imageSize)
 	{
-		$format = $this->getSiteLogoFormat($type);
+		$format = $this->getSiteLogoFormat($sizeId);
 		$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
 		return $ret;
 	}
@@ -787,15 +787,15 @@ class ImageManager extends Core
 	/**
 	 * アバター画像の画像サイズ、画像タイプを取得
 	 *
-	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @param string $sizeId		画像タイプ「sm」「md」「lg」
 	 * @param string $imageType		画像タイプ
 	 * @param string $imageAttr		画像属性(c=切り取りあり)
 	 * @param string,array $imageSize		画像サイズ(縦横異なる場合は連想配列(width,height))
 	 * @return bool					true=取得成功、false=取得失敗
 	 */
-	function getAvatarFormatInfo($type, &$imageType, &$imageAttr, &$imageSize)
+	function getAvatarFormatInfo($sizeId, &$imageType, &$imageAttr, &$imageSize)
 	{
-		$format = $this->getAvatarFormat($type);
+		$format = $this->getAvatarFormat($sizeId);
 		$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
 		return $ret;
 	}

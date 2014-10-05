@@ -20,7 +20,7 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $langId;		// 言語
-	private $useBootstrap;
+//	private $useBootstrap;
 	const DEFAULT_TITLE = 'ログインユーザ';		// デフォルトのウィジェットタイトル名
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
 		
@@ -35,7 +35,7 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 		// DBオブジェクト作成
 		$this->db = new admin_loginuserDb();
 		
-		$this->useBootstrap = $this->gPage->getUseBootstrap();
+//		$this->useBootstrap = $this->gPage->getUseBootstrap();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -49,11 +49,11 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		if ($this->useBootstrap){
-			return 'index_bs.tmpl.html';
-		} else {
+//		if ($this->useBootstrap){
+//			return 'index_bs.tmpl.html';
+//		} else {
 			return 'index.tmpl.html';
-		}
+//		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -67,7 +67,7 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$userId = $this->gEnv->getCurrentUserId();
-		$avatarFormat = $this->gInstance->getImageManager()->getDefaultAvatarFormat();		// 画像フォーマット取得
+//		$avatarFormat = $this->gInstance->getImageManager()->getDefaultAvatarFormat();		// 画像フォーマット取得
 		
 		// ユーザ情報取得
 		$ret = $this->db->getLoginUserInfo($userId, $row);
@@ -81,9 +81,16 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 			$loginStatusUrl = '?task=loginstatus_history&account=' . $row['lu_account'];// ログイン状況画面URL
 		}
 		
-		// アバター画像取得
-		$this->gInstance->getImageManager()->parseImageFormat($avatarFormat, $imageType, $imageAttr, $imageSize);		// 画像情報取得
-		$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl($avatar);
+		// ##### アバター画像取得 #####
+		// 画像サイズ取得
+		$sizeIdArray = $this->gInstance->getImageManager()->getAllAvatarSizeId();
+		if (!empty($sizeIdArray)){
+			$sizeId = $sizeIdArray[count($sizeIdArray) -1];
+			$this->gInstance->getImageManager()->getAvatarFormatInfo($sizeId, $imageType, $imageAttr, $imageSize);
+			$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl($avatar, $sizeId);
+		}
+//		$this->gInstance->getImageManager()->parseImageFormat($avatarFormat, $imageType, $imageAttr, $imageSize);		// 画像情報取得
+		
 		$iconTitle = 'アバター画像';
 		$iconTag = '<img src="' . $this->getUrl($avatarUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
@@ -127,12 +134,12 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 		$cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
 		
 		// Bootstrapを使用する場合はjQueryUIテーマを使用しない
-		$useBootstrap = $this->gPage->getUseBootstrap();
-		if ($useBootstrap){
+//		$useBootstrap = $this->gPage->getUseBootstrap();
+//		if ($useBootstrap){
 			return $cssFilePath;
-		} else {
-			return array($cssFilePath, $this->getUrl($this->gEnv->getAdminDefaultThemeUrl()));
-		}
+//		} else {
+//			return array($cssFilePath, $this->getUrl($this->gEnv->getAdminDefaultThemeUrl()));
+//		}
 	}
 }
 ?>
