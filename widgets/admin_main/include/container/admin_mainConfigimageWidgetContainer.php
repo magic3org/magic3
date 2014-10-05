@@ -190,6 +190,7 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		// サイトロゴ
 		$imageUrl = '';
 		$updateStatus = '0';
+		$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
 		$filenameArray = $this->gInstance->getImageManager()->getSiteLogoFilename();
 		for ($i = 0; $i < count($filenameArray); $i++){
 			$path = $tmpDir . DIRECTORY_SEPARATOR . $filenameArray[$i];
@@ -204,19 +205,24 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			$updateStatus = '1';
 		} else {
 			// 既存の画像を表示
-			$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
 			if (!empty($siteLogoSizeArray)){
-				$size = $siteLogoSizeArray[count($siteLogoSizeArray) -1];		// 最大画像
-				$siteLogoFilename = $this->gInstance->getImageManager()->getSiteLogoFilename($size);
-				$imageUrl = $this->gInstance->getImageManager()->getSiteLogoUrl($size) . '?' . date('YmdHis');		// サイトロゴファイル名
+				$sizeId = $siteLogoSizeArray[count($siteLogoSizeArray) -1];		// 最大画像
+				$imageUrl = $this->gInstance->getImageManager()->getSiteLogoUrl($sizeId) . '?' . date('YmdHis');		// サイトロゴファイル名
 			}
+		}
+		// サイトロゴサイズ取得
+		if (!empty($siteLogoSizeArray)){
+			$sizeId = $siteLogoSizeArray[count($siteLogoSizeArray) -1];		// 最大画像
+			$this->gInstance->getImageManager()->getSiteLogoFormatInfo($sizeId, $imageType, $imageAttr, $imageSize);
 		}
 		$this->tmpl->addVar("_widget", "sitelogo_url", $this->convertUrlToHtmlEntity($this->getUrl($imageUrl)));
 		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
+		$this->tmpl->addVar("_widget", "sitelogo_size", $imageSize . 'x' . $imageSize);
 		
 		// アバター
 		$imageUrl = '';
 		$updateStatus = '0';
+		$avatarSizeArray = $this->gInstance->getImageManager()->getAllAvatarSizeId();
 		$filenameArray = $this->gInstance->getImageManager()->getDefaultAvatarFilename();
 		for ($i = 0; $i < count($filenameArray); $i++){
 			$path = $tmpDir . DIRECTORY_SEPARATOR . $filenameArray[$i];
@@ -230,14 +236,20 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			$imageUrl .= '&type=' . self::IMAGE_TYPE_USER_AVATAR;		// アバター
 			$updateStatus = '1';
 		} else {
-			$avatarSizeArray = $this->gInstance->getImageManager()->getAllAvatarSizeId();
 			if (!empty($avatarSizeArray)){
-				$size = $avatarSizeArray[count($avatarSizeArray) -1];		// 最大画像
-				$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl(''/*デフォルトアバター*/, $size) . '?' . date('YmdHis');		// サイトロゴファイル名
+				$sizeId = $avatarSizeArray[count($avatarSizeArray) -1];		// 最大画像
+				$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl(''/*デフォルトアバター*/, $sizeId) . '?' . date('YmdHis');		// サイトロゴファイル名
 			}
 		}
+		// アバターサイズ取得
+		if (!empty($avatarSizeArray)){
+			$sizeId = $avatarSizeArray[count($avatarSizeArray) -1];		// 最大画像
+			$this->gInstance->getImageManager()->getAvatarFormatInfo($sizeId, $imageType, $imageAttr, $imageSize);
+		}
+		
 		$this->tmpl->addVar("_widget", "useravatar_url", $this->convertUrlToHtmlEntity($this->getUrl($avatarUrl)));
 		$this->tmpl->addVar("_widget", "useravatar_updated", $updateStatus);
+		$this->tmpl->addVar("_widget", "useravatar_size", $imageSize . 'x' . $imageSize);
 	}
 	/**
 	 * 最大画像を取得

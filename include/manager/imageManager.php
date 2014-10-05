@@ -621,6 +621,37 @@ class ImageManager extends Core
 		return array_values($this->siteLogoFomatArray);
 	}
 	/**
+	 * サイトロゴの画像フォーマットを取得
+	 *
+	 * @param string $type				画像タイプ「sm」「md」「lg」
+	 * @param string					画像フォーマット。取得できないときは空文字列。
+	 */
+	function getSiteLogoFormat($type)
+	{
+		// サイトロゴ画像情報を読み込む
+		$this->_loadSiteLogoInfo();
+		
+		$format = '';
+		$value = $this->siteLogoFomatArray[$type];
+		if (isset($value)) $format = $value;
+		return $format;
+	}
+	/**
+	 * サイトロゴ画像の画像サイズ、画像タイプを取得
+	 *
+	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @param string $imageType		画像タイプ
+	 * @param string $imageAttr		画像属性(c=切り取りあり)
+	 * @param string,array $imageSize		画像サイズ(縦横異なる場合は連想配列(width,height))
+	 * @return bool					true=取得成功、false=取得失敗
+	 */
+	function getSiteLogoFormatInfo($type, &$imageType, &$imageAttr, &$imageSize)
+	{
+		$format = $this->getSiteLogoFormat($type);
+		$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+		return $ret;
+	}
+	/**
 	 * サイトロゴ画像ファイル名を取得
 	 *
 	 * @param string $type			画像タイプ「sm」「md」「lg」。空の場合はすべてのファイル名を取得。
@@ -752,6 +783,21 @@ class ImageManager extends Core
 		$value = $this->avatarFormatArray[$type];
 		if (isset($value)) $format = $value;
 		return $format;
+	}
+	/**
+	 * アバター画像の画像サイズ、画像タイプを取得
+	 *
+	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @param string $imageType		画像タイプ
+	 * @param string $imageAttr		画像属性(c=切り取りあり)
+	 * @param string,array $imageSize		画像サイズ(縦横異なる場合は連想配列(width,height))
+	 * @return bool					true=取得成功、false=取得失敗
+	 */
+	function getAvatarFormatInfo($type, &$imageType, &$imageAttr, &$imageSize)
+	{
+		$format = $this->getAvatarFormat($type);
+		$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+		return $ret;
 	}
 	/**
 	 * アバターの画像情報を読み込む
@@ -904,10 +950,11 @@ class ImageManager extends Core
 	 * @param string $format		画像フォーマット
 	 * @param string $imageType		画像タイプ
 	 * @param string $imageAttr		画像属性(c=切り取りあり)
-	 * @param string,array $imageSize		画像サイズ(縦横異なる場合は連想配列(width,height))
+	 * @param string $imageSize		画像サイズ
+	 * @param array  $imageWidthHeight	画像サイズ縦横(連想配列(width,height))
 	 * @return bool					true=取得成功、false=取得失敗
 	 */
-	function parseImageFormat($format, &$imageType, &$imageAttr, &$imageSize)
+	function parseImageFormat($format, &$imageType, &$imageAttr, &$imageSize, &$imageWidthHeight = null)
 	{
 		$format = trim($format);
 		//$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
@@ -916,7 +963,9 @@ class ImageManager extends Core
 			$imageSize = $matches[1];
 			$height = intval($matches[3]);
 			if ($height > 0){
-				$imageSize = array('width' => $imageSize, 'height' => $height);
+				$imageWidthHeight = array('width' => $imageSize, 'height' => $height);
+			} else {
+				$imageWidthHeight = array('width' => $imageSize, 'height' => $imageSize);
 			}
 			//$imageAttr = strtolower($matches[2]);
 			//$ext = strtolower($matches[3]);
