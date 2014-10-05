@@ -558,9 +558,10 @@ class ImageManager extends Core
 		// サイトロゴ画像情報を読み込む
 		$this->_loadSiteLogoInfo();
 		
-		$logoFilename = '';
-		$value = $this->siteLogoFomatArray[$type];
-		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
+		//$logoFilename = '';
+		//$value = $this->siteLogoFomatArray[$type];
+		//if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
+		$logoFilename = $this->getSiteLogoFilename($type);
 		
 		if (empty($logoFilename)){
 			$url = $gEnvManager->getResourceUrl() . self::SITE_LOGO_DIR;
@@ -576,7 +577,7 @@ class ImageManager extends Core
 	/**
 	 * サイトロゴ画像のパスを取得
 	 *
-	 * @param string $type			画像タイプ「sm」「md」「lg」。空の場合はロゴ格納ディレクトリを返す。
+	 * @param string $type			画像タイプ「sm」「md」「lg」。空文字列の場合はロゴ格納ディレクトリを返す。
 	 * @return string				画像パス
 	 */
 	function getSiteLogoPath($type = 'lg')
@@ -586,9 +587,10 @@ class ImageManager extends Core
 		// サイトロゴ画像情報を読み込む
 		$this->_loadSiteLogoInfo();
 		
-		$logoFilename = '';
-		$value = $this->siteLogoFomatArray[$type];
-		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
+//		$logoFilename = '';
+//		$value = $this->siteLogoFomatArray[$type];
+//		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
+		$logoFilename = $this->getSiteLogoFilename($type);
 		
 		if (empty($logoFilename)){
 			$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR;
@@ -624,19 +626,28 @@ class ImageManager extends Core
 	/**
 	 * サイトロゴ画像ファイル名を取得
 	 *
-	 * @param string $type			画像タイプ「sm」「md」「lg」
-	 * @return string				画像ファイル名
+	 * @param string $type			画像タイプ「sm」「md」「lg」。空の場合はすべてのファイル名を取得。
+	 * @return string,array			画像ファイル名
 	 */
-	function getSiteLogoFilename($type)
+	function getSiteLogoFilename($type = '')
 	{
 		// サイトロゴ画像情報を読み込む
 		$this->_loadSiteLogoInfo();
 		
-		$logoFilename = '';
-		$value = $this->siteLogoFomatArray[$type];
-		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
+		if (empty($type)){
+			$filenameArray = array();
+			$formats = array_values($this->siteLogoFomatArray);
+			for ($i = 0; $i < count($formats); $i++){
+				$filenameArray[] = self::DEFAULT_SITE_LOGO_BASE . '_' . $formats[$i];
+			}
+			return $filenameArray;
+		} else {
+			$logoFilename = '';
+			$value = $this->siteLogoFomatArray[$type];
+			if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
 		
-		return $logoFilename;
+			return $logoFilename;
+		}
 	}
 	/**
 	 * サイトロゴ画像情報を読み込む
@@ -676,7 +687,7 @@ class ImageManager extends Core
 	/**
 	 * アバター画像のURLを取得
 	 *
-	 * @param string $filename		画像ファイル名。空の場合はデフォルトアバター画像。
+	 * @param string $filename		画像ファイル名。空文字列の場合はデフォルトアバター画像。
 	 * @param string $type			画像タイプ「sm」「md」「lg」
 	 * @return string				画像URL。存在しない場合はデフォルト画像URLを取得
 	 */
@@ -685,10 +696,12 @@ class ImageManager extends Core
 		global $gEnvManager;
 		
 		if (empty($filename)){
-			$filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
+//			$filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
+			$filename = $this->getDefaultAvatarFilename($type);
 		} else {
 			$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . $filename;
-			if (!is_readable($path)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
+			//if (!is_readable($path)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
+			if (!is_readable($path)) $filename = $this->getDefaultAvatarFilename($type);
 		}
 		$url = $gEnvManager->getResourceUrl() . self::AVATAR_DIR . $filename;
 		return $url;
@@ -696,16 +709,29 @@ class ImageManager extends Core
 	/**
 	 * アバター画像のパスを取得
 	 *
-	 * @param string $filename		画像ファイル名。空の場合はデフォルトアバター画像。
-	 * @param string $type			画像タイプ「sm」「md」「lg」
+	 * @param string $filename		画像ファイル名。空文字列の場合はデフォルトアバター画像。
+	 * @param string $type			画像タイプ「sm」「md」「lg」。画像ファイル名が空文字列で、画像タイプが空文字列の場合はロゴ格納ディレクトリを返す。
 	 * @return string				画像パス
 	 */
 	function getAvatarPath($filename = '', $type = 'lg')
 	{
 		global $gEnvManager;
 		
-		if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
+/*		if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
 		$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . $filename;
+		return $path;*/
+		
+		if (empty($filename)){
+			//$value = $this->avatarFormatArray[$type];
+			//if (isset($value)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $value;
+			$filename = $this->getDefaultAvatarFilename($type);
+		}
+		
+		if (empty($filename)){
+			$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR;
+		} else {
+			$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . '/' . $filename;
+		}
 		return $path;
 	}
 	/**
@@ -729,6 +755,7 @@ class ImageManager extends Core
 		// アバター画像情報を読み込む
 		$this->_loadAvatarInfo();
 		
+		$format = '';
 		$value = $this->avatarFormatArray[$type];
 		if (isset($value)) $format = $value;
 		return $format;
@@ -795,23 +822,27 @@ class ImageManager extends Core
 	/**
 	 * デフォルトアバターのファイル名を取得
 	 *
-	 * @param string $type			画像タイプ「sm」「md」「lg」
-	 * @return string				画像ファイル名
+	 * @param string $type			画像タイプ「sm」「md」「lg」。空の場合はすべてのファイル名を取得。
+	 * @return string,array			画像ファイル名
 	 */
-	function getDefaultAvatarFilename($type)
+	function getDefaultAvatarFilename($type = '')
 	{
 		// アバター画像情報を読み込む
 		$this->_loadAvatarInfo();
 		
-		$filename = '';
-		$value = $this->avatarFormatArray[$type];
-		if (isset($value)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $value;
-		return $filename;
-		
-//		$logoFilename = '';
-//		$value = $this->siteLogoFomatArray[$type];
-//		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
-//		return $logoFilename;
+		if (empty($type)){
+			$filenameArray = array();
+			$formats = array_values($this->avatarFormatArray);
+			for ($i = 0; $i < count($formats); $i++){
+				$filenameArray[] = self::DEFAULT_AVATAR_BASE . '_' . $formats[$i];
+			}
+			return $filenameArray;
+		} else {
+			$filename = '';
+			$value = $this->avatarFormatArray[$type];
+			if (isset($value)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $value;
+			return $filename;
+		}
 	}
 	
 	/**

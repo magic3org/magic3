@@ -64,17 +64,38 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 設定更新のとき
-			$isErr = false;
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			
+			// サイトロゴのエラーチェック
+			$filenameArray = $this->gInstance->getImageManager()->getSiteLogoFilename();
+			for ($i = 0; $i < count($filenameArray); $i++){
+				$path = $tmpDir . DIRECTORY_SEPARATOR . $filenameArray[$i];
+				if (!file_exists($path)){
+					$this->setAppErrorMsg('サイトロゴが正常にアップロードされていません');
+					break;
+				}
+			}
+			// アバターのエラーチェック
+			$filenameArray = $this->gInstance->getImageManager()->getDefaultAvatarFilename();
+			for ($i = 0; $i < count($filenameArray); $i++){
+				$path = $tmpDir . DIRECTORY_SEPARATOR . $filenameArray[$i];
+				if (!file_exists($path)){
+					$this->setAppErrorMsg('ユーザアバターが正常にアップロードされていません');
+					break;
+				}
+			}
 
-			if ($isErr){		// エラー発生のとき
-				$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
-			} else {
+			// 必要なファイルが存在するかチェック
+	//		getDefaultAvatarFilename();
+			
+			// 画像がアップロードされている場合は更新
+		//	mvFileToDir($srcDir, $filenames, $destDir)
+			if ($this->getMsgCount() == 0){		// エラーなしの場合
 				$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				
 				$replaceNew = true;		// データを再取得
 				
 				// 作業ディレクトリを削除
-				$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
 				rmDirectory($tmpDir);
 			}
 		} else if ($act == 'uploadimage'){		// 画像アップロード
@@ -132,8 +153,6 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			// システム強制終了
 			$this->gPage->exitSystem();
 		} else if ($act == 'getimage'){			// 画像取得
-			//$fileId = $request->trimValueOf('fileid');	// ファイルID
-		//	$this->getImage($fileId);
 			$this->getImageByType($type);
 		} else {
 			$replaceNew = true;		// データを再取得
@@ -170,17 +189,14 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		$this->tmpl->addVar("_widget", "useravatar_url", $this->convertUrlToHtmlEntity($this->getUrl($avatarUrl)));
 	}
 	/**
-	 * 画像を取得
+	 * 最大画像を取得
 	 *
 	 * @param string $type		画像タイプ
 	 * @return					なし
 	 */
 	function getImageByType($type)
 	{
-		// 画像パス
-//		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
-		//$imagePath = $this->gEnv->getTempDirBySession() . '/' . $fileId;		// セッション単位の作業ディレクトリを取得
-		
+		// 画像パス作成
 		switch ($type){
 		case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
 			$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
@@ -197,7 +213,6 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			}
 			break;
 		}
-		
 		$imagePath = '';
 		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
 			
@@ -234,7 +249,7 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 	 * @param string $fileId		画像ファイルID
 	 * @return						なし
 	 */
-	function getImage($fileId)
+/*	function getImage($fileId)
 	{
 		// 画像パス
 		$imagePath = $this->gEnv->getTempDirBySession() . '/' . $fileId;		// セッション単位の作業ディレクトリを取得
@@ -265,6 +280,6 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 	
 		// システム強制終了
 		$this->gPage->exitSystem();
-	}
+	}*/
 }
 ?>

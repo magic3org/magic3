@@ -368,6 +368,24 @@ function mvFile($srcFile, $destFile)
 	return $ret;
 }
 /**
+ * 複数ファイルの移動
+ *
+ * @param string $srcDir			移動するファイルの存在するディレクトリ
+ * @param array $filenames			移動するファイル
+ * @param string $destDir			移動先ディレクトリ
+ * @return bool						true=移動完了、false=移動失敗
+ */
+function mvFileToDir($srcDir, $filenames, $destDir)
+{
+	for ($i = 0; $i < count(); $i++){
+		$srcPath = $srcDir . '/' . $filenames[$i];
+		if (file_exists($srcPath)){
+			$destPath = $destDir . '/' . $filenames[$i];
+			mvFile($srcPath, $destPath);
+		}
+	}
+}
+/**
  * ディレクトリの削除
  *
  * @param string $dirname			ディレクトリのパス
