@@ -580,22 +580,19 @@ class ImageManager extends Core
 	 * @param string $type			画像タイプ「sm」「md」「lg」。空文字列の場合はロゴ格納ディレクトリを返す。
 	 * @return string				画像パス
 	 */
-	function getSiteLogoPath($type = 'lg')
+	function getSiteLogoPath($type = '')
 	{
 		global $gEnvManager;
 		
 		// サイトロゴ画像情報を読み込む
 		$this->_loadSiteLogoInfo();
 		
-//		$logoFilename = '';
-//		$value = $this->siteLogoFomatArray[$type];
-//		if (isset($value)) $logoFilename = self::DEFAULT_SITE_LOGO_BASE . '_' . $value;
-		$logoFilename = $this->getSiteLogoFilename($type);
-		
-		if (empty($logoFilename)){
+		$path = '';
+		if (empty($type)){
 			$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR;
 		} else {
-			$path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR . '/' . $logoFilename;
+			$filename = $this->getSiteLogoFilename($type);
+			if (!empty($filename)) $path = $gEnvManager->getResourcePath() . self::SITE_LOGO_DIR . '/' . $filename;
 		}
 		return $path;
 	}
@@ -713,22 +710,18 @@ class ImageManager extends Core
 	 * @param string $type			画像タイプ「sm」「md」「lg」。画像ファイル名が空文字列で、画像タイプが空文字列の場合はロゴ格納ディレクトリを返す。
 	 * @return string				画像パス
 	 */
-	function getAvatarPath($filename = '', $type = 'lg')
+	function getAvatarPath($filename = '', $type = '')
 	{
 		global $gEnvManager;
 		
-/*		if (empty($filename)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $this->getAvatarFormat($type);
-		$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . $filename;
-		return $path;*/
-		
+		$path = '';
 		if (empty($filename)){
-			//$value = $this->avatarFormatArray[$type];
-			//if (isset($value)) $filename = self::DEFAULT_AVATAR_BASE . '_' . $value;
-			$filename = $this->getDefaultAvatarFilename($type);
-		}
-		
-		if (empty($filename)){
-			$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR;
+			if (empty($type)){
+				$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR;
+			} else {
+				$filename = $this->getDefaultAvatarFilename($type);
+				if (!empty($filename)) $path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . '/' . $filename;
+			}
 		} else {
 			$path = $gEnvManager->getResourcePath() . self::AVATAR_DIR . '/' . $filename;
 		}

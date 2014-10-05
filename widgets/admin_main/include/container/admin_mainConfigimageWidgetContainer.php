@@ -61,35 +61,47 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 	{
 		$act = $request->trimValueOf('act');
 		$type = $request->trimValueOf('type');		// 画像タイプ
+		$updatedSiteLogo = $request->trimValueOf('sitelogo_updated');		// サイトロゴ更新フラグ
+		$updatedUserAvatar = $request->trimValueOf('useravatar_updated');	// アバター更新フラグ
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 設定更新のとき
 			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
 			
 			// サイトロゴのエラーチェック
-			$filenameArray = $this->gInstance->getImageManager()->getSiteLogoFilename();
-			for ($i = 0; $i < count($filenameArray); $i++){
-				$path = $tmpDir . DIRECTORY_SEPARATOR . $filenameArray[$i];
-				if (!file_exists($path)){
-					$this->setAppErrorMsg('サイトロゴが正常にアップロードされていません');
-					break;
+			if (!empty($updatedSiteLogo)){
+				$siteLogoFilenameArray = $this->gInstance->getImageManager()->getSiteLogoFilename();
+				for ($i = 0; $i < count($siteLogoFilenameArray); $i++){
+					$path = $tmpDir . DIRECTORY_SEPARATOR . $siteLogoFilenameArray[$i];
+					if (!file_exists($path)){
+						$this->setAppErrorMsg('サイトロゴが正常にアップロードされていません');
+						break;
+					}
 				}
 			}
 			// アバターのエラーチェック
-			$filenameArray = $this->gInstance->getImageManager()->getDefaultAvatarFilename();
-			for ($i = 0; $i < count($filenameArray); $i++){
-				$path = $tmpDir . DIRECTORY_SEPARATOR . $filenameArray[$i];
-				if (!file_exists($path)){
-					$this->setAppErrorMsg('ユーザアバターが正常にアップロードされていません');
-					break;
+			if (!empty($updatedUserAvatar)){
+				$userAvatarFilenameArray = $this->gInstance->getImageManager()->getDefaultAvatarFilename();
+				for ($i = 0; $i < count($userAvatarFilenameArray); $i++){
+					$path = $tmpDir . DIRECTORY_SEPARATOR . $userAvatarFilenameArray[$i];
+					if (!file_exists($path)){
+						$this->setAppErrorMsg('ユーザアバターが正常にアップロードされていません');
+						break;
+					}
 				}
 			}
-
-			// 必要なファイルが存在するかチェック
-	//		getDefaultAvatarFilename();
 			
-			// 画像がアップロードされている場合は更新
-		//	mvFileToDir($srcDir, $filenames, $destDir)
+			// 画像の更新
+			if ($this->getMsgCount() == 0){		// エラーなしの場合は画像をコピー
+				// サイトロゴ
+				$ret = mvFileToDir($tmpDir, $siteLogoFilenameArray, $this->gInstance->getImageManager()->getSiteLogoPath());
+				
+				// アバター
+				if ($ret) $ret = mvFileToDir($tmpDir, $userAvatarFilenameArray, $this->gInstance->getImageManager()->getAvatarPath());
+				
+				if (!$ret) $this->setAppErrorMsg('画像の更新に失敗しました');
+			}
+			
 			if ($this->getMsgCount() == 0){		// エラーなしの場合
 				$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 				
@@ -171,22 +183,61 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		$this->tmpl->addVar("_widget", "upload_url_sitelogo", $this->getUrl($uploadUrl . '&type=' . self::IMAGE_TYPE_SITE_LOGO));		// サイトロゴ用
 		$this->tmpl->addVar("_widget", "upload_url_useravatar", $this->getUrl($uploadUrl . '&type=' . self::IMAGE_TYPE_USER_AVATAR));		// アバター用
 		
+		// ##### 画像の表示 #####
+		// アップロードされているファイルがある場合は、アップロード画像を表示
+		$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+		
 		// サイトロゴ
-		$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
-		if (!empty($siteLogoSizeArray)){
-			$size = $siteLogoSizeArray[count($siteLogoSizeArray) -1];		// 最大画像
-			$siteLogoFilename = $this->gInstance->getImageManager()->getSiteLogoFilename($size);
-			$siteLogoUrl = $this->gInstance->getImageManager()->getSiteLogoUrl($size) . '?' . date('YmdHis');		// サイトロゴファイル名
+		$imageUrl = '';
+		$updateStatus = '0';
+		$filenameArray = $this->gInstance->getImageManager()->getSiteLogoFilename();
+		for ($i = 0; $i < count($filenameArray); $i++){
+			$path = $tmpDir . DIRECTORY_SEPARATOR . $filenameArray[$i];
+			if (!file_exists($path)) break;
 		}
-		$this->tmpl->addVar("_widget", "sitelogo_url", $this->convertUrlToHtmlEntity($this->getUrl($siteLogoUrl)));
+		if ($i == count($filenameArray)){		// 画像が存在する場合
+			// 画像参照用URL
+			$imageUrl = $this->gEnv->getDefaultAdminUrl();
+			$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
+			$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
+			$imageUrl .= '&type=' . self::IMAGE_TYPE_SITE_LOGO;		// サイトロゴ
+			$updateStatus = '1';
+		} else {
+			// 既存の画像を表示
+			$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
+			if (!empty($siteLogoSizeArray)){
+				$size = $siteLogoSizeArray[count($siteLogoSizeArray) -1];		// 最大画像
+				$siteLogoFilename = $this->gInstance->getImageManager()->getSiteLogoFilename($size);
+				$imageUrl = $this->gInstance->getImageManager()->getSiteLogoUrl($size) . '?' . date('YmdHis');		// サイトロゴファイル名
+			}
+		}
+		$this->tmpl->addVar("_widget", "sitelogo_url", $this->convertUrlToHtmlEntity($this->getUrl($imageUrl)));
+		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
 		
 		// アバター
-		$avatarSizeArray = $this->gInstance->getImageManager()->getAllAvatarSizeId();
-		if (!empty($avatarSizeArray)){
-			$size = $avatarSizeArray[count($avatarSizeArray) -1];		// 最大画像
-			$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl(''/*デフォルトアバター*/, $size) . '?' . date('YmdHis');		// サイトロゴファイル名
+		$imageUrl = '';
+		$updateStatus = '0';
+		$filenameArray = $this->gInstance->getImageManager()->getDefaultAvatarFilename();
+		for ($i = 0; $i < count($filenameArray); $i++){
+			$path = $tmpDir . DIRECTORY_SEPARATOR . $filenameArray[$i];
+			if (!file_exists($path)) break;
+		}
+		if ($i == count($filenameArray)){		// 画像が存在する場合
+			// 画像参照用URL
+			$imageUrl = $this->gEnv->getDefaultAdminUrl();
+			$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
+			$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
+			$imageUrl .= '&type=' . self::IMAGE_TYPE_USER_AVATAR;		// アバター
+			$updateStatus = '1';
+		} else {
+			$avatarSizeArray = $this->gInstance->getImageManager()->getAllAvatarSizeId();
+			if (!empty($avatarSizeArray)){
+				$size = $avatarSizeArray[count($avatarSizeArray) -1];		// 最大画像
+				$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl(''/*デフォルトアバター*/, $size) . '?' . date('YmdHis');		// サイトロゴファイル名
+			}
 		}
 		$this->tmpl->addVar("_widget", "useravatar_url", $this->convertUrlToHtmlEntity($this->getUrl($avatarUrl)));
+		$this->tmpl->addVar("_widget", "useravatar_updated", $updateStatus);
 	}
 	/**
 	 * 最大画像を取得

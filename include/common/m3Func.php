@@ -377,13 +377,17 @@ function mvFile($srcFile, $destFile)
  */
 function mvFileToDir($srcDir, $filenames, $destDir)
 {
-	for ($i = 0; $i < count(); $i++){
+	$noErr = true;
+	
+	for ($i = 0; $i < count($filenames); $i++){
 		$srcPath = $srcDir . '/' . $filenames[$i];
 		if (file_exists($srcPath)){
 			$destPath = $destDir . '/' . $filenames[$i];
-			mvFile($srcPath, $destPath);
+			$ret = mvFile($srcPath, $destPath);
+			if (!$ret) $noErr = false;
 		}
 	}
+	return $noErr;
 }
 /**
  * ディレクトリの削除
