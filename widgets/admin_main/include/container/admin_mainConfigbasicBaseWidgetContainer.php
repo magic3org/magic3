@@ -89,7 +89,7 @@ class admin_mainConfigbasicBaseWidgetContainer extends admin_mainBaseWidgetConta
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>ページヘッダ情報</span></a></li>' . M3_NL;
 		
 		// ### Magic3ポータル ###
-		$current = '';
+/*		$current = '';
 		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=portal';
 		if ($task == 'portal'){
 			$current = 'id="current"';
@@ -97,6 +97,7 @@ class admin_mainConfigbasicBaseWidgetContainer extends admin_mainBaseWidgetConta
 		// ヘルプを作成
 		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_PORTAL);
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>Magic3ポータル</span></a></li>' . M3_NL;
+		*/
 		
 		// 上段メニュー終了
 		$menuText .= '</ul>' . M3_NL;

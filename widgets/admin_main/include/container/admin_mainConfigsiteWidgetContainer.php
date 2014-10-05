@@ -24,7 +24,6 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 	private $isMultiLang;			// 多言語対応画面かどうか
 	
 	const TEST_MAIL_FORM = 'test';		// テストメールフォーム
-	const CF_SITE_LOGO_FILENAME = 'site_logo_filename';		// サイトロゴファイル
 	const SD_HEAD_OTHERS	= 'head_others';		// ヘッダその他タグ
 	
 	/**
@@ -88,7 +87,6 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$userInfo		= $this->gEnv->getCurrentUserInfo();
 		$this->langId		= $this->gEnv->getDefaultLanguage();
 //		$langId		= $this->gEnv->getCurrentLanguage();		// 現在の言語ID
-		$siteLogoFiles = explode(';', $this->db->getSystemConfig(self::CF_SITE_LOGO_FILENAME));		// サイトロゴファイル名
 		
 		// 言語を取得
 		if ($this->isMultiLang){		// 多言語対応の場合
@@ -161,96 +159,6 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in sending email. To:') . ' ' . $email);			// メール送信に失敗しました。メールアドレス:
 				}
 			}
-		} else if ($act == 'upload'){		// 画像アップロードのとき
-			// アップロードされたファイルか？セキュリティチェックする
-			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
-				// テンポラリディレクトリの書き込み権限をチェック
-				if (!is_writable($this->gEnv->getWorkDirPath())){
-					//$msg = '一時ディレクトリに書き込み権限がありません。ディレクトリ：' . $this->gEnv->getWorkDirPath();
-					$msg = sprintf($this->_('You are not allowed to write temporary directory. (directory: %s)'), $this->gEnv->getWorkDirPath());	// 一時ディレクトリに書き込み権限がありません。(ディレクトリ：%s)
-					$this->setAppErrorMsg($msg);
-				}
-				
-				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
-					// ファイルを保存するサーバディレクトリを指定
-					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
-		
-					// アップされたテンポラリファイルを保存ディレクトリにコピー
-					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
-					if ($ret){
-						// ファイルの内容のチェック
-						$imageSize = @getimagesize($tmpFile);// 画像情報を取得
-						if ($imageSize){
-							$imageWidth = $imageSize[0];
-							$imageHeight = $imageSize[1];
-							$imageType = $imageSize[2];
-							$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
-
-							// 受付可能なファイルタイプかどうか
-							if (!in_array($imageMimeType, $this->permitMimeType)){
-								$msg = 'アップロード画像のタイプが不正です。';
-								$this->setAppErrorMsg($msg);
-							}
-						} else {
-							$msg = 'アップロード画像が不正です。';
-							$this->setAppErrorMsg($msg);
-						}
-				
-						if ($this->getMsgCount() == 0){		// エラーが発生していないとき
-							// サムネールを作成
-							for ($i = 0; $i < count($siteLogoFiles); $i++){
-								$siteLogoFilename = $siteLogoFiles[$i];
-								$ret = preg_match('/.+_(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $siteLogoFilename, $matches);
-								if ($ret){
-									$thumbSize = $matches[1];
-									$thumbAttr = strtolower($matches[2]);
-									$ext = strtolower($matches[3]);
-								
-									$imageType = IMAGETYPE_JPEG;
-									switch ($ext){
-										case 'jpg':
-										case 'jpeg':
-											$imageType = IMAGETYPE_JPEG;
-											break;
-										case 'gif':
-											$imageType = IMAGETYPE_GIF;
-											break;
-										case 'png':
-											$imageType = IMAGETYPE_PNG;
-											break;
-										case 'bmp':
-											$imageType = IMAGETYPE_BMP;
-											break;
-									}
-									$thumbPath = $this->gEnv->getResourcePath() . '/etc/site/thumb/' . $siteLogoFilename;
-
-									// サムネールの作成
-									if ($thumbAttr == 'c'){		// 切り取りサムネールの場合
-										$ret = $this->gInstance->getImageManager()->createThumb($tmpFile, $thumbPath, $thumbSize, $imageType, true);
-									} else {
-										$ret = $this->gInstance->getImageManager()->createThumb($tmpFile, $thumbPath, $thumbSize, $imageType, false);
-									}
-								}
-							}
-							if ($ret){
-								$msg = $this->_('Image changed.');			// 画像を変更しました
-								$this->setGuidanceMsg($msg);
-							} else {
-								$msg = $this->_('Failed in creating image.');			// 画像の作成に失敗しました
-								$this->setAppErrorMsg($msg);
-							}
-						}
-					} else {
-						$msg = $this->_('Failed in uploading file.');		// ファイルのアップロードに失敗しました
-						$this->setAppErrorMsg($msg);
-					}
-					// テンポラリファイル削除
-					unlink($tmpFile);
-				}
-			} else {
-				$msg = sprintf($this->_('Uploded file not found. (detail: The file may be over maximum size to be allowed to upload. Size %s bytes.'), $this->gSystem->getMaxFileSizeForUpload());	// アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります。%dバイト)
-				$this->setAppErrorMsg($msg);
-			}
 		} else {		// 初期表示の場合
 
 		}
@@ -283,12 +191,6 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$this->tmpl->addVar("_widget", "site_desc", $this->convertToDispString($siteDesc));
 		$this->tmpl->addVar("_widget", "site_keyword", $this->convertToDispString($siteKeyword));
 		$this->tmpl->addVar("_widget", "meta_others", $this->convertToDispString($metaOthers));		// ヘッダその他タグ
-		
-		// サイトロゴ
-//		$siteLogoUrl = $this->gEnv->getResourceUrl() . '/etc/site/thumb/' . $siteLogoFiles[0] . '?' . date('YmdHis');		// サイトロゴファイル名
-		$siteLogoUrl = $this->gInstance->getImageManager()->getSiteLogoUrl() . '?' . date('YmdHis');		// サイトロゴファイル名
-		$siteLogoImage = '<img src="' . $this->convertUrlToHtmlEntity($this->getUrl($siteLogoUrl)) . '" />';
-		$this->tmpl->addVar("_widget", "logo_image", $siteLogoImage);
 		
 		// メール送信ボタン
 		if (empty($siteEmail)) $this->tmpl->addVar("_widget", "test_mail_disabled", 'disabled');
