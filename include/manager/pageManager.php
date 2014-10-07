@@ -2473,12 +2473,12 @@ class PageManager extends Core
 					if ($openBy != 'tabs'){
 						if ($openBy == 'logout'){
 							$titleStr = 'ログアウト';
-							echo '<div class="m3configclose"><a href="#" onclick="location.href=\'?cmd=logout\';"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
-										'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
+							echo '<div class="m3configclose"><a href="#" onclick="location.href=\'?cmd=logout\';" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
+										'" alt="' . $titleStr . '" /></a></div>' . M3_NL;
 						} else {
 							$titleStr = '閉じる';
-							echo '<div class="m3configclose"><a href="#" onclick="window.close();"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
-										'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
+							echo '<div class="m3configclose"><a href="#" onclick="window.close();" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
+										'" alt="' . $titleStr . '" /></a></div>' . M3_NL;
 						}
 					}
 				}

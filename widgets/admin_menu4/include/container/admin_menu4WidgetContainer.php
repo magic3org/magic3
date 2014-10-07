@@ -421,7 +421,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 			$iconTag  = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '<li class="dropdown" >' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) .
-						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="bottom" data-container="body" title="PC用アクセスポイント" rel="m3help">';
+						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="right" data-container="body" title="' . $iconTitle . '" rel="m3help">';
 			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(0, $isVisibleSite);				// コンテンツ編集メニュー付加
@@ -443,7 +443,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 			$iconTag  = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '<li class="dropdown" >' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) .
-						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="bottom" data-container="body" title="スマートフォン用アクセスポイント" rel="m3help">';
+						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="right" data-container="body" title="' . $iconTitle . '" rel="m3help">';
 			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(2, $isVisibleSite);// コンテンツ編集メニュー付加
@@ -465,7 +465,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 			$iconTag  = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '<li class="dropdown" >' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) .
-						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="bottom" data-container="body" title="携帯用アクセスポイント" rel="m3help">';
+						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="right" data-container="body" title="' . $iconTitle . '" rel="m3help">';
 			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(1, $isVisibleSite);			// コンテンツ編集メニュー付加
