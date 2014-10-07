@@ -2485,10 +2485,10 @@ class PageManager extends Core
 				// 「前へ」「次へ」ボタン
 				$titleStr = '前へ';
 				echo '<div class="m3configprev" style="display:none;"><a id="m3configprev" href="#"><img src="' . $rootUrl . self::PREV_ICON_FILE . 
-							'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
+							'" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" /></a></div>' . M3_NL;
 				$titleStr = '次へ';
 				echo '<div class="m3confignext" style="display:none;"><a id="m3confignext" href="#"><img src="' . $rootUrl . self::NEXT_ICON_FILE . 
-							'" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></div>' . M3_NL;
+							'" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" /></a></div>' . M3_NL;
 			}
 		}
 //		echo '<div class="row">' . M3_NL;

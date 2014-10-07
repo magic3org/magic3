@@ -315,7 +315,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
 			$iconTitle = $this->_('Top Page');		// トップ画面
 			$imageSize = self::SITE_ICON_SIZE;
-			$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
 			$this->tmpl->addVar("menu", "top_image", $iconTag);
 				
 			// システムバージョン
@@ -339,13 +339,13 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl($avatar);
 			$iconTitle = 'アバター画像';
 			$imageSize = self::AVATAR_ICON_SIZE;
-			$iconTag = '<img class="avatar" src="' . $this->getUrl($avatarUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$iconTag = '<img class="avatar" src="' . $this->getUrl($avatarUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
 			$this->tmpl->addVar("menu", "avatar_img", $iconTag);
 		
 			// ユーザメニュー
 			$iconTitle = 'ログアウト';
 			$iconUrl = $this->gEnv->getRootUrl() . self::LOGOUT_ICON_FILE;		// ログアウト
-			$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
 			$this->tmpl->addVar("menu", "logout_img", $iconTag);
 			
 			// 運用中のコンテンツを取得
@@ -420,8 +420,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$iconUrl = $this->gEnv->getRootUrl() . self::PC_CLOSED_ICON_FILE;		// サイト非公開
 			}
 			$iconTag  = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '<li class="dropdown" >' . M3_NL;
-        	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown">';
-			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
+        	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) .
+						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="bottom" data-container="body" title="PC用アクセスポイント" rel="m3help">';
+			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(0, $isVisibleSite);				// コンテンツ編集メニュー付加
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '</ul>'. M3_NL;
@@ -441,8 +442,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$iconUrl = $this->gEnv->getRootUrl() . self::SMARTPHONE_CLOSED_ICON_FILE;// サイト非公開
 			}
 			$iconTag  = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '<li class="dropdown" >' . M3_NL;
-        	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown">';
-			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
+        	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) .
+						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="bottom" data-container="body" title="スマートフォン用アクセスポイント" rel="m3help">';
+			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(2, $isVisibleSite);// コンテンツ編集メニュー付加
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '</ul>'. M3_NL;
@@ -462,8 +464,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$iconUrl = $this->gEnv->getRootUrl() . self::MOBILE_CLOSED_ICON_FILE;// サイト非公開
 			}
 			$iconTag  = str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL) . '<li class="dropdown" >' . M3_NL;
-        	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown">';
-			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
+        	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) .
+						'<a href="#" class="dropdown-toggle device_icon" data-toggle="dropdown" data-placement="bottom" data-container="body" title="携帯用アクセスポイント" rel="m3help">';
+			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SITE_ICON_SIZE . '" height="' . self::SITE_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" /><b class="caret"></b></a>' . M3_NL;
         	$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '<ul class="dropdown-menu">' . M3_NL;
 			$iconTag .= $this->createContentMenu(1, $isVisibleSite);			// コンテンツ編集メニュー付加
 			$iconTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 1) . '</ul>'. M3_NL;
@@ -683,7 +686,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		}
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 		$menuTag .= '<li><a href="#" onclick="siteOpen(' . $deviceType . ',' . intval(!$isVisibleSite) . ');return false;">';
-		$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />' . $openSiteMessage . '</a></li>' . M3_NL;
+		$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $openSiteMessage . '</a></li>' . M3_NL;
 
 		return $menuTag;
 	}

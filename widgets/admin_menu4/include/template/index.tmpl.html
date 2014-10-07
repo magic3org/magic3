@@ -50,11 +50,11 @@ $(function(){
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="{PC_URL}">{SITE_NAME}</a>
+    <a class="navbar-brand" href="{PC_URL}" data-placement="bottom" data-container="body" title="サイトを表示" rel="m3help">{SITE_NAME}</a>
 </div>
 <div class="collapse navbar-collapse" id="navbar-collapse">
     <ul class="nav navbar-nav">
-        <li><a href="{TOP_URL}">{TOP_IMAGE}</a></li>
+        <li><a href="{TOP_URL}" data-placement="bottom" data-container="body" title="トップ画面へ" rel="m3help">{TOP_IMAGE}</a></li>
         <li class="dropdown dropdown-large">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{_LC_LABEL_MENU} <b class="caret"></b></a>
             <ul class="dropdown-menu dropdown-menu-large row">
@@ -70,17 +70,17 @@ $(function(){
                 <li><a href="#" onclick="logout();">{LOGOUT_IMG}{_LC_LABEL_LOGOUT}</a></li>
             </ul>
         </li>
-        <li><a href="{OFFICIAL_URL}" target="_blank">{SYSTEM}</a></li>
+        <li><a href="{OFFICIAL_URL}" target="_blank" data-placement="bottom" data-container="body" title="Magic3公式サイトを表示" rel="m3help">{SYSTEM}</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right"><!-- 右端項目 --></ul>
 </div>
 </nav>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="closebutton" visibility="hidden">
-<div class="m3configclose"><a href="#" onclick="window.close();"><img src="{CLOSE_IMAGE}" alt="{_LC_LABEL_CLOSE}" title="{_LC_LABEL_CLOSE}" /></a></div>
+<div class="m3configclose"><a href="#" onclick="window.close();" title="{_LC_LABEL_CLOSE}" data-container="body" rel="m3help"><img src="{CLOSE_IMAGE}" alt="{_LC_LABEL_CLOSE}" /></a></div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="prevnextbutton" visibility="hidden">
-<div class="m3configprev" style="display:none;"><a id="m3configprev" href="#"><img src="{PREV_IMAGE}" alt="前へ" title="前へ" /></a></div>
-<div class="m3confignext" style="display:none;"><a id="m3confignext" href="#"><img src="{NEXT_IMAGE}" alt="次へ" title="次へ" /></a></div>
+<div class="m3configprev" style="display:none;"><a id="m3configprev" href="#" title="前へ" data-container="body" rel="m3help"><img src="{PREV_IMAGE}" alt="前へ" /></a></div>
+<div class="m3confignext" style="display:none;"><a id="m3confignext" href="#" title="次へ" data-container="body" rel="m3help"><img src="{NEXT_IMAGE}" alt="次へ" /></a></div>
 </patTemplate:tmpl>
 </patTemplate:tmpl>
