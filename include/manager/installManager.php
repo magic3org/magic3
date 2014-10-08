@@ -96,7 +96,12 @@ class InstallManager extends Core
 		
 		// パッケージコマンドファイルを取得
 		$cmdList = json_decode(file_get_contents($destPath . '/index.json'));
-		if ($cmdList === false) return false;
+		if ($cmdList === false){
+			// 作業ディレクトリ削除
+			rmDirectory($tmpDir);
+		
+			return false;
+		}
 		
 		// インストールコマンドを実行
 		$status = $this->_execInstallCmd($destPath, $cmdList);
