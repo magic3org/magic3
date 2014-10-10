@@ -1,9 +1,17 @@
 /*!
  * jQuery Upload File Plugin
- * version: 3.1.10
+ * version: 3.1.10.1
  * @requires jQuery v1.5 or later & form plugin
  * Copyright (c) 2013 Ravishanker Kusuma
+ * Licensed under MIT
  * http://hayageek.com/
+ *
+ * Revision History
+ * v3.1.10.1
+ * - Cutomized for Bootstrap modified by naoki on 2014/10/10.
+ *
+ * v3.1.10
+ * - Original version by Ravishanker Kusuma.
  */
 (function ($) {
     if($.fn.ajaxForm == undefined) {
@@ -46,6 +54,7 @@
             showFileCounter: true,
             fileCounterStyle: "). ",
             showProgress: false,
+			stripedBar: false,
             nestedForms: true,
             showDownload: false,
             onLoad: function (obj) {},
@@ -535,14 +544,29 @@
             this.preview = $("<img class='ajax-file-upload-preview' />").width(s.previewWidth).height(s.previewHeight).appendTo(this.statusbar).hide();
             this.filename = $("<div class='ajax-file-upload-filename'></div>").appendTo(this.statusbar);
             this.progressDiv = $("<div class='ajax-file-upload-progress'>").appendTo(this.statusbar).hide();
-            this.progressbar = $("<div class='ajax-file-upload-bar " + obj.formGroup + "'></div>").appendTo(this.progressDiv);
-            this.abort = $("<div class='ajax-file-upload-red " + s.abortButtonClass + " " + obj.formGroup + "'>" + s.abortStr + "</div>").appendTo(this.statusbar)
+            //this.progressbar = $("<div class='ajax-file-upload-bar " + obj.formGroup + "'></div>").appendTo(this.progressDiv);
+			this.progressbarOuter = $("<div class='progress " + obj.formGroup + "'></div>").appendTo(this.progressDiv);
+			if (s.stripedBar){
+				this.progressbar = $("<div class='progress-bar progress-bar-striped active' role='progressbar'></div>").appendTo(this.progressbarOuter);
+			} else {
+				this.progressbar = $("<div class='progress-bar' role='progressbar'></div>").appendTo(this.progressbarOuter);
+			}
+//            this.abort = $("<div class='ajax-file-upload-red " + s.abortButtonClass + " " + obj.formGroup + "'>" + s.abortStr + "</div>").appendTo(this.statusbar)
+//                .hide();
+//            this.cancel = $("<div class='ajax-file-upload-red " + s.cancelButtonClass + " " + obj.formGroup + "'>" + s.cancelStr + "</div>").appendTo(this.statusbar)
+//                .hide();
+            this.abort = $("<button class='btn btn-danger btn-sm " + s.abortButtonClass + " " + obj.formGroup + "'>" + s.abortStr + "</button>").appendTo(this.statusbar)
                 .hide();
-            this.cancel = $("<div class='ajax-file-upload-red " + s.cancelButtonClass + " " + obj.formGroup + "'>" + s.cancelStr + "</div>").appendTo(this.statusbar)
+            this.cancel = $("<button class='btn btn-danger btn-sm " + s.cancelButtonClass + " " + obj.formGroup + "'>" + s.cancelStr + "</button>").appendTo(this.statusbar)
                 .hide();
-            this.done = $("<div class='ajax-file-upload-green'>" + s.doneStr + "</div>").appendTo(this.statusbar).hide();
-            this.download = $("<div class='ajax-file-upload-green'>" + s.downloadStr + "</div>").appendTo(this.statusbar).hide();
-            this.del = $("<div class='ajax-file-upload-red'>" + s.deletelStr + "</div>").appendTo(this.statusbar).hide();
+			$("<span>&nbsp;</span>").appendTo(this.statusbar);
+            //this.done = $("<div class='ajax-file-upload-green'>" + s.doneStr + "</div>").appendTo(this.statusbar).hide();
+			//this.download = $("<div class='ajax-file-upload-green'>" + s.downloadStr + "</div>").appendTo(this.statusbar).hide();
+			this.done = $("<button class='btn btn-success btn-sm'>" + s.doneStr + "</button>").appendTo(this.statusbar).hide();
+            this.download = $("<button class='btn btn-success btn-sm'>" + s.downloadStr + "</button>").appendTo(this.statusbar).hide();
+			$("<span>&nbsp;</span>").appendTo(this.statusbar);
+            //this.del = $("<div class='ajax-file-upload-red'>" + s.deletelStr + "</div>").appendTo(this.statusbar).hide();
+			this.del = $("<button class='btn btn-danger btn-sm'>" + s.deletelStr + "</button>").appendTo(this.statusbar).hide();
             if(s.showQueueDiv)
                 $("#" + s.showQueueDiv).append(this.statusbar);
             else
@@ -648,7 +672,8 @@
                         pd.progressbar.html('100%');
                         pd.progressbar.css('text-align', 'center');
                     }
-
+					if (s.stripedBar) pd.progressbar.removeClass('active');
+					
                     pd.abort.hide();
                     s.onSuccess.call(this, fileArray, data, xhr, pd);
                     if(s.showStatusAfterSuccess) {
