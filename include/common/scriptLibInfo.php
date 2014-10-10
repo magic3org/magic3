@@ -86,6 +86,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_FITVIDS		= 'jquery.fitvids';
 	const LIB_JQUERY_RESPONSIVETABLE	= 'jquery.responsivetable';
 	const LIB_JQUERY_FORM			= 'jquery.form';
+	const LIB_JQUERY_UPLOADFILE		= 'jquery.uploadfile';
 	
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
@@ -121,6 +122,7 @@ class ScriptLibInfo
 	const JQUERY_FITVIDS_VER		= '1.1';
 	const JQUERY_RESPONSIVETABLE_VER	= '5.0.4';
 	const JQUERY_FORM_VER			= '3.51.0';
+	const JQUERY_UPLOADFILE_VER		= '3.1.10';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -207,6 +209,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_RESPONSIVETABLE_FILENAME	= 'jquery/responsiveTable/js/rwd-table.js';
 	const JQUERY_RESPONSIVETABLE_CSS		= 'jquery/responsiveTable/css/rwd-table.css';
 	const JQUERY_FORM_FILENAME			= 'jquery/jquery.form.min.js';
+	const JQUERY_UPLOADFILE_FILENAME	= 'jquery/uploadfile/jquery.uploadfile.js';
+	const JQUERY_UPLOADFILE_CSS			= 'jquery/uploadfile/uploadfile.css';
 	
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
@@ -241,6 +245,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_FITVIDS_URL			= 'http://fitvidsjs.com/';
 	const JQUERY_RESPONSIVETABLE_URL	= 'http://gergeo.se/RWD-Table-Patterns';
 	const JQUERY_FORM_URL				= 'http://malsup.com/jquery/form/';
+	const JQUERY_UPLOADFILE_URL			= 'https://github.com/hayageek/jquery-upload-file/';
 	
 	// ディレクトリ名
 	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
@@ -486,7 +491,11 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																	'version'	=> self::JQUERY_RESPONSIVETABLE_VER),
 					self::LIB_JQUERY_FORM			=>	array(	'script' 	=> array(self::JQUERY_FORM_FILENAME),
 																'url'		=> self::JQUERY_FORM_URL,
-																'version'	=> self::JQUERY_FORM_VER),	
+																'version'	=> self::JQUERY_FORM_VER),
+					self::LIB_JQUERY_UPLOADFILE		=> array(	'script' 	=> array(self::JQUERY_UPLOADFILE_FILENAME),
+																'css'		=> array(self::JQUERY_UPLOADFILE_CSS),
+																'url'		=> self::JQUERY_UPLOADFILE_URL,
+																'version'	=> self::JQUERY_UPLOADFILE_VER),
 	
 					// Magic3管理画面専用jQueryプラグイン
 					self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
@@ -547,7 +556,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	{
 		// ##### 依存ライブラリ情報 #####
 		static $dependentLib = array(	self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
-										self::LIB_JQUERY_TIMEPICKER	=>	array(self::LIB_JQUERY_UI));			// JQUERY_TIMEPICKERはJQUERY_UIを使用する
+										self::LIB_JQUERY_TIMEPICKER	=>	array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
+										self::LIB_JQUERY_UPLOADFILE =>	array(self::LIB_JQUERY_FORM));
 		
 		return $dependentLib[$lib];
 	}
