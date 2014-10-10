@@ -1482,9 +1482,10 @@ class PageManager extends Core
 		if (!isset($this->libFiles[$lib])) return;
 		
 		// 依存ライブラリを取得
-		if (strcmp($lib, ScriptLibInfo::LIB_ELFINDER) == 0 || strcmp($lib, ScriptLibInfo::LIB_JQUERY_TIMEPICKER) == 0){		// elFinder、timepickerを使用する場合
-			// jQuery UIライブラリを追加
-			$dependentLib = ScriptLibInfo::getDependentLib($lib);
+//		if (strcmp($lib, ScriptLibInfo::LIB_ELFINDER) == 0 || strcmp($lib, ScriptLibInfo::LIB_JQUERY_TIMEPICKER) == 0){		// elFinder、timepickerを使用する場合
+		// jQuery UIライブラリを追加
+		$dependentLib = ScriptLibInfo::getDependentLib($lib);
+		if (isset($dependentLib)){
 			for ($i = 0; $i < count($dependentLib); $i++){
 				$addLib = $dependentLib[$i];
 
@@ -1591,6 +1592,28 @@ class PageManager extends Core
 				if (!empty($this->headPreMobileScriptFiles)){		// jQueryMobileファイルの前に出力
 					for ($i = 0; $i < count($this->headPreMobileScriptFiles); $i++){
 						$this->addScriptFile($this->headPreMobileScriptFiles[$i]);		// 通常機能用のスクリプト追加
+					}
+				}
+			} else {
+				// 依存ライブラリ追加
+				$dependentLib = ScriptLibInfo::getDependentLib($lib);
+				if (isset($dependentLib)){
+					for ($i = 0; $i < count($dependentLib); $i++){
+						$addLib = $dependentLib[$i];
+				
+						// ライブラリのファイルを追加
+						if (isset($this->libFiles[$addLib]['script'])){
+							$scriptFiles = $this->libFiles[$addLib]['script'];
+							for ($m = 0; $m < count($scriptFiles); $m++){
+								$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
+							}
+						}
+						if (isset($this->libFiles[$addLib]['css'])){
+							$cssFiles = $this->libFiles[$addLib]['css'];
+							for ($m = 0; $m < count($cssFiles); $m++){
+								$this->addCssFile($cssFiles[$m]);		// 通常機能用のCSS追加
+							}
+						}
 					}
 				}
 			}
