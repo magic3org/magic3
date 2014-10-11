@@ -547,9 +547,9 @@
             this.progressDiv = $("<div class='ajax-file-upload-progress'>").appendTo(this.statusbar).hide();
 			this.progressbarOuter = $("<div class='progress " + obj.formGroup + "'></div>").appendTo(this.progressDiv);
 			if (s.stripedBar){
-				this.progressbar = $("<div class='progress-bar progress-bar-striped active " + s.progressBarClass + "' role='progressbar'></div>").appendTo(this.progressbarOuter);
+				this.progressbar = $("<div class='ajax-file-upload-bar progress-bar progress-bar-striped active " + s.progressBarClass + "' role='progressbar'></div>").appendTo(this.progressbarOuter);
 			} else {
-				this.progressbar = $("<div class='progress-bar " + s.progressBarClass + "' role='progressbar'></div>").appendTo(this.progressbarOuter);
+				this.progressbar = $("<div class='ajax-file-upload-bar progress-bar " + s.progressBarClass + "' role='progressbar'></div>").appendTo(this.progressbarOuter);
 			}
             this.abort = $("<button class='btn btn-danger btn-sm " + s.abortButtonClass + " " + obj.formGroup + "'>" + s.abortStr + "</button>").appendTo(this.statusbar)
                 .hide();
@@ -635,7 +635,7 @@
                     var percentVal = percentComplete + '%';
                     if(percentComplete > 1) pd.progressbar.width(percentVal)
                     if(s.showProgress) {
-                        pd.progressbar.html(percentVal);
+						pd.progressbar.html('<span class="ajax-file-upload-percent">' + percentVal + '</span>');
                         pd.progressbar.css('text-align', 'center');
                     }
 
@@ -662,7 +662,7 @@
                     obj.responses.push(data);
                     pd.progressbar.width('100%')
                     if(s.showProgress) {
-                        pd.progressbar.html('100%');
+                        pd.progressbar.html('<span class="ajax-file-upload-percent">100%</span>');
                         pd.progressbar.css('text-align', 'center');
                     }
 					if (s.stripedBar) pd.progressbar.removeClass('active');

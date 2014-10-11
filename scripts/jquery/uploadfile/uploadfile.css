@@ -42,30 +42,18 @@ background-color: #dfe4ee;
 }
 
 .ajax-file-upload-progress {
-margin: 0 5px 0 10px;
-width: 200px;
-height: 0;
-/*position: relative;
-border: 1px solid #ddd;
-padding: 1px;
-border-radius: 3px;*/
-display: inline-block;
-background-color:black;
+	margin: 0 5px 0 10px;
+	width: 200px;
+	height: 0;
+	display: inline-block;
 }
 .ajax-file-upload-bar {
-/*background-color: #0ba1b5;
-width: 0;
-height: 20px;
-border-radius: 3px;
-color:#FFFFFF;*/
 }
-/*.ajax-file-upload-percent {
-position: absolute;
-display: inline-block;
-left: 48%
-}*/
+.ajax-file-upload-percent {
+	color:#FFFFFF;
+}
 .ajax-file-upload-error {
-    color: red;
+	color: red;
 }
 /* for Bootstrap Element */
 .ajax-file-upload-statusbar button {
