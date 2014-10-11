@@ -141,7 +141,7 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 					$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
 					$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
 					//$imageUrl .= '&' . M3_REQUEST_PARAM_FILE_ID . '=' . $fileInfo['fileid'];
-					$imageUrl .= '&type=' . $type;
+					$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
 					$resultObj['url'] = $imageUrl;
 				} else {// エラーの場合
 					$resultObj = array('error' => 'Could not create resized images.');

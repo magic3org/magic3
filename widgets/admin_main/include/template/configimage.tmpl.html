@@ -36,30 +36,6 @@ function createUploader(){
 		},
 		debug: true
 	});*/
-	$('#uploader_sitelogo').uploadFile({
-		url: '{UPLOAD_URL_SITELOGO}',
-//		fileName: 'qqfile',
-		allowedTypes: 'jpg,png,gif',
-		showFileCounter: false,		// ファイルNoなし
-		showProgress: true,
-		stripedBar: true,
-		dragDropStr: '',
-		progressBarClass: 'progress-bar-info',
-		abortStr: '中断',
-		cancelStr: 'キャンセル',
-		deletelStr: '削除',
-		doneStr: '完了',
-		dragdropWidth: 300,		// ドラッグ領域幅
-		statusBarWidth: 300,		// ファイルリスト領域幅
-		onSuccess:function(files, data, xhr, pd)
-		{
-			alert((data));
-		},
-		onError: function(files, status, errMsg, pd)
-		{
-			alert('アップロードに失敗しました');
-		}
-	});
 /*	var uploader2 = new qq.FileUploader({
 		element: document.getElementById('uploader_useravatar'),
 		action: '{UPLOAD_URL_USERAVATAR}',
@@ -74,6 +50,60 @@ function createUploader(){
 		},
 		debug: true
 	});*/
+	$('#uploader_sitelogo').uploadFile({
+		url: '{UPLOAD_URL_SITELOGO}',
+		allowedTypes: 'jpg,png,gif',
+		showFileCounter: false,		// ファイルNoなし
+		showProgress: true,
+		stripedBar: true,
+		dragDropStr: '',
+		progressBarClass: 'progress-bar-info',
+		returnType: 'json',
+		customErrorKeyStr: 'error',
+		abortStr: '中断',
+		cancelStr: 'キャンセル',
+		deletelStr: '削除',
+		doneStr: '完了',
+		dragdropWidth: 300,		// ドラッグ領域幅
+		statusBarWidth: 300,		// ファイルリスト領域幅
+		onSuccess:function(files, data)
+		{
+			// 画像を読み込む
+			$('#sitelogo_preview').attr('src', data.url).load(function(){
+				m3AdjustParentWindow();// 親ウィンドウリサイズ
+			});
+		
+			// 編集フラグを更新
+			document.main.sitelogo_updated.value = '1';
+		}
+	});
+	$('#uploader_useravatar').uploadFile({
+		url: '{UPLOAD_URL_USERAVATAR}',
+		allowedTypes: 'jpg,png,gif',
+		showFileCounter: false,		// ファイルNoなし
+		showProgress: true,
+		stripedBar: true,
+		dragDropStr: '',
+		progressBarClass: 'progress-bar-info',
+		returnType: 'json',
+		customErrorKeyStr: 'error',
+		abortStr: '中断',
+		cancelStr: 'キャンセル',
+		deletelStr: '削除',
+		doneStr: '完了',
+		dragdropWidth: 300,		// ドラッグ領域幅
+		statusBarWidth: 300,		// ファイルリスト領域幅
+		onSuccess:function(files, data)
+		{
+			// 画像を読み込む
+			$('#useravatar_preview').attr('src', data.url).load(function(){
+				m3AdjustParentWindow();// 親ウィンドウリサイズ
+			});
+			
+			// 編集フラグを更新
+			document.main.useravatar_updated.value = '1';
+		}
+	});
 }
 $(function() {
 	m3SetConfigTable('config_area');
@@ -100,7 +130,7 @@ $(function() {
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGIMAGE_USER_AVATAR_DEFAULT}>ユーザアバター<br />(デフォルト)<br />{USERAVATAR_SIZE}</span></th>
-	    <td><img id="useravatar_preview" class="pull-left" src="{USERAVATAR_URL}" /><div id="uploader_useravatar" class="pull-right"></div></td>
+	    <td><img id="useravatar_preview" class="pull-left" src="{USERAVATAR_URL}" /><div class="pull-right"><div id="uploader_useravatar">{UPLOAD_AREA}</div></div></td>
 	</tr>
     </tbody>
 	<tfoot>
