@@ -19,6 +19,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアク�
 
 class DesignManager extends Core
 {
+	private $_getUrlCallback;		// URL変換(getUrl())用コールバック関数
 	private $db;						// DBオブジェクト
 	private $defaultMenuParam;			// デフォルトメニュー用パラメータ
 	private $iconExts = array('png', 'gif');
@@ -29,6 +30,7 @@ class DesignManager extends Core
 	const J10_DEFAULT_CONTENT_HEAD_CLASS = 'class="contentheading"';		// Joomla!1.0テンプレート用のコンテンツヘッダCSSクラス
 	const CF_CONFIG_WINDOW_STYLE		= 'config_window_style';	// 設定画面のウィンドウスタイル取得用キー
 	const DEFAULT_CONFIG_WINDOW_STYLE	= 'toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900';// 設定画面のウィンドウスタイルデフォルト値
+	const UPLOAD_ICON_FILE = '/images/system/upload_box32.png';		// アップロードボックスアイコン
 	
 	/**
 	 * コンストラクタ
@@ -40,6 +42,16 @@ class DesignManager extends Core
 		
 		// システムDBオブジェクト取得
 		$this->db = $this->gInstance->getSytemDbObject();
+	}
+	/**
+	 * URL変換(getUrl())用コールバック関数を設定
+	 *
+	 * @param  function  $func		コールバック関数
+	 * @return 						なし
+	 */
+	function _setGetUrlCallback($func)
+	{
+		$this->_getUrlCallback = $func;
 	}
 	/**
 	 * デフォルトウィジェットテーブルのパラメータを取得
@@ -336,24 +348,18 @@ class DesignManager extends Core
 		}
 		$tabHtml .= '</ul>';
 		return $tabHtml;
-/*
-<ul class="nav nav-tabs" id="myTab">
-  <li class="active"><a href="#home" data-toggle="tab">Home</a></li>
-  <li><a href="#profile" data-toggle="tab">Profile</a></li>
-  <li><a href="#messages" data-toggle="tab" class="clickable">Messages(click!)</a></li>
-
-<li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-      Dropdown <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu">
-  <li><a href="#profile" >sample1</a></li>
-  <li><a href="#messages" >sample2</a></li>
-    </ul>
-</li>
-  <li><a href="#settings" data-toggle="tab">Settings</a></li>
-</ul>
-*/
+	}
+	/**
+	 * ドラッグ&ドロップファイルアップロード用タグを作成
+	 *
+	 * @param string $id			親のタグID
+	 * @return string 				アップロード用HTML
+	 */
+	function createDragDropFileUploadHtml()
+	{
+		$iconUrl = call_user_func($this->_getUrlCallback, $this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
+		$html = '<h3 align="center"><img src="' . $iconUrl . '" />ファイルアップロード</h3><p align="center">ここにドラッグ＆ドロップまたはクリック</p>';
+		return $html;
 	}
 }
 ?>

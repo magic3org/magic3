@@ -95,7 +95,10 @@ class BaseWidgetContainer extends Core
 			default:
 				$this->_renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
 				break;
-		}	
+		}
+		
+		// URL変換用コールバック関数を設定
+		$this->gDesign->_setGetUrlCallback(array($this, 'getUrl'));
 	}
 	/**
 	 * 起動マネージャから呼ばれる唯一のメソッド
