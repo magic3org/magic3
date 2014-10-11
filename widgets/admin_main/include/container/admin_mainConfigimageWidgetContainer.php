@@ -15,7 +15,8 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConfigsystemBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-require_once($gEnvManager->getLibPath()			. '/qqFileUploader/fileuploader.php');
+//require_once($gEnvManager->getLibPath()			. '/qqFileUploader/fileuploader.php');
+require_once($gEnvManager->getCommonPath()				. '/uploadFile.php' );			// ファイルアップロード受信ライブラリ
 
 class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWidgetContainer
 {
@@ -114,12 +115,13 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			// 作業ディレクトリを作成
 			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 				
-			$uploader = new qqFileUploader(array());
+			//$uploader = new qqFileUploader(array());
+			$uploader = new uploadFile();
 			$resultObj = $uploader->handleUpload($tmpDir);
 			
 			if ($resultObj['success']){
 				$fileInfo = $resultObj['file'];
-				
+
 				// 各種画像を作成
 				switch ($type){
 				case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
@@ -247,6 +249,7 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 			$this->gInstance->getImageManager()->getAvatarFormatInfo($sizeId, $imageType, $imageAttr, $imageSize);
 		}
 		
+		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());
 		$this->tmpl->addVar("_widget", "useravatar_url", $this->convertUrlToHtmlEntity($this->getUrl($avatarUrl)));
 		$this->tmpl->addVar("_widget", "useravatar_updated", $updateStatus);
 		$this->tmpl->addVar("_widget", "useravatar_size", $imageSize . 'x' . $imageSize);

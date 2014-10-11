@@ -11,8 +11,8 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<style type="text/css">@import url({_SCRIPTS_URL}/fileuploader/fileuploader.css);</style>
-<script type="text/javascript" src="{_SCRIPTS_URL}/fileuploader/fileuploader.js"></script>
+<!--<style type="text/css">@import url({_SCRIPTS_URL}/fileuploader/fileuploader.css);</style>
+<script type="text/javascript" src="{_SCRIPTS_URL}/fileuploader/fileuploader.js"></script>-->
 <script type="text/javascript">
 //<![CDATA[
 function updateItem(){
@@ -22,7 +22,7 @@ function updateItem(){
 	return true;
 }
 function createUploader(){
-	var uploader = new qq.FileUploader({
+/*	var uploader = new qq.FileUploader({
 		element: document.getElementById('uploader_sitelogo'),
 		action: '{UPLOAD_URL_SITELOGO}',
 		onComplete: function(id, fileName, responseJson){
@@ -35,8 +35,32 @@ function createUploader(){
 			document.main.sitelogo_updated.value = '1';
 		},
 		debug: true
+	});*/
+	$('#uploader_sitelogo').uploadFile({
+		url: '{UPLOAD_URL_SITELOGO}',
+//		fileName: 'qqfile',
+		allowedTypes: 'jpg,png,gif',
+		showFileCounter: false,		// ファイルNoなし
+		showProgress: true,
+		stripedBar: true,
+		dragDropStr: '',
+		progressBarClass: 'progress-bar-info',
+		abortStr: '中断',
+		cancelStr: 'キャンセル',
+		deletelStr: '削除',
+		doneStr: '完了',
+		dragdropWidth: 300,		// ドラッグ領域幅
+		statusBarWidth: 300,		// ファイルリスト領域幅
+		onSuccess:function(files, data, xhr, pd)
+		{
+			alert((data));
+		},
+		onError: function(files, status, errMsg, pd)
+		{
+			alert('アップロードに失敗しました');
+		}
 	});
-	var uploader2 = new qq.FileUploader({
+/*	var uploader2 = new qq.FileUploader({
 		element: document.getElementById('uploader_useravatar'),
 		action: '{UPLOAD_URL_USERAVATAR}',
 		onComplete: function(id, fileName, responseJson){
@@ -49,7 +73,7 @@ function createUploader(){
 			document.main.useravatar_updated.value = '1';
 		},
 		debug: true
-	});
+	});*/
 }
 $(function() {
 	m3SetConfigTable('config_area');
@@ -72,7 +96,7 @@ $(function() {
     <tbody>
     <tr>
 	    <th style="width:150px;"><span {_HELP_CONFIGIMAGE_SITE_LOGO}>サイトロゴ<br />{SITELOGO_SIZE}</span></th>
-	    <td><img id="sitelogo_preview" class="pull-left" src="{SITELOGO_URL}" /><div id="uploader_sitelogo" class="pull-right"></div></td>
+	    <td><img id="sitelogo_preview" class="pull-left" src="{SITELOGO_URL}" /><div class="pull-right"><div id="uploader_sitelogo">{UPLOAD_AREA}</div></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGIMAGE_USER_AVATAR_DEFAULT}>ユーザアバター<br />(デフォルト)<br />{USERAVATAR_SIZE}</span></th>
