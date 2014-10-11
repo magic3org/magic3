@@ -43,7 +43,7 @@ background-color: #dfe4ee;
 
 .ajax-file-upload-progress {
 margin: 0 5px 0 10px;
-width: 250px;
+width: 200px;
 height: 0;
 /*position: relative;
 border: 1px solid #ddd;
@@ -59,16 +59,15 @@ height: 20px;
 border-radius: 3px;
 color:#FFFFFF;*/
 }
-.ajax-file-upload-percent {
+/*.ajax-file-upload-percent {
 position: absolute;
 display: inline-block;
-top: 3px;
 left: 48%
-}
+}*/
 .ajax-file-upload-error {
     color: red;
 }
 /* for Bootstrap Element */
 .ajax-file-upload-statusbar button {
-	margin-top: -10px;
+	margin-top: -8px;
 }
