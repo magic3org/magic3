@@ -464,17 +464,16 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param function $callback			コールバック関数
+	 * @param string   $destDir				アップロード先ディレクトリ
 	 * @return 								なし
 	 */
-	function ajaxUploadFile($request, $callback)
+	function ajaxUploadFile($request, $callback, $destDir)
 	{
 		require_once($this->gEnv->getCommonPath() . '/uploadFile.php' );			// ファイルアップロード受信ライブラリ
 		
-		// 作業ディレクトリを作成
-		$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
-			
+		// ファイルアップロード処理
 		$uploader = new uploadFile();
-		$resultObj = $uploader->handleUpload($tmpDir);
+		$resultObj = $uploader->handleUpload($destDir);
 		$isSuccess = $resultObj['success'];
 		
 		$filePath = '';
@@ -483,8 +482,8 @@ class BaseWidgetContainer extends Core
 			$filePath = $fileInfo['path'];
 		}
 		// コールバック関数を呼び出す
-//		if (is_callable($callback)) call_user_func($callback, $isSuccess, $resultObj, $request, $filePath, $tmpDir);		// 参照渡しできない
-		if (is_callable($callback)) call_user_func_array($callback, array($isSuccess, &$resultObj, $request, $filePath, $tmpDir));
+//		if (is_callable($callback)) call_user_func($callback, $isSuccess, $resultObj, $request, $filePath, $destDir);		// 参照渡しできない
+		if (is_callable($callback)) call_user_func_array($callback, array($isSuccess, &$resultObj, $request, $filePath, $destDir));
 		
 		// アップロードファイル削除
 		if ($isSuccess && file_exists($filePath)) unlink($filePath);

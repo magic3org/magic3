@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConfigsystemBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-require_once($gEnvManager->getCommonPath()				. '/uploadFile.php' );			// ファイルアップロード受信ライブラリ
+//require_once($gEnvManager->getCommonPath()				. '/uploadFile.php' );			// ファイルアップロード受信ライブラリ
 
 class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWidgetContainer
 {
@@ -111,63 +111,11 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 				rmDirectory($tmpDir);
 			}
 		} else if ($act == 'uploadimage'){		// 画像アップロード
-			// Ajaxでのファイルアップロード処理
-			$this->ajaxUploadFile($request, array($this, 'uploadFile'));
-			
-return;
 			// 作業ディレクトリを作成
 			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
-				
-			$uploader = new uploadFile();
-			$resultObj = $uploader->handleUpload($tmpDir);
 			
-			if ($resultObj['success']){
-				$fileInfo = $resultObj['file'];
-
-				// 各種画像を作成
-				switch ($type){
-				case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
-					$formats = $this->gInstance->getImageManager()->getAllSiteLogoFormat();
-					$filenameBase = $this->gInstance->getImageManager()->getSiteLogoFilenameBase();
-					break;
-				case self::IMAGE_TYPE_USER_AVATAR:		// アバター
-					$formats = $this->gInstance->getImageManager()->getAllAvatarFormat();
-					$filenameBase = $this->gInstance->getImageManager()->getDefaultAvatarFilenameBase();
-					break;
-				}
-				
-				$ret = $this->gInstance->getImageManager()->createImageByFormat($fileInfo['path'], $formats, $tmpDir, $filenameBase, $destFilename);
-				if ($ret){			// 画像作成成功の場合
-					// 画像参照用URL
-					$imageUrl = $this->gEnv->getDefaultAdminUrl();
-					$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
-					$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
-					//$imageUrl .= '&' . M3_REQUEST_PARAM_FILE_ID . '=' . $fileInfo['fileid'];
-					$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
-					$resultObj['url'] = $imageUrl;
-				} else {// エラーの場合
-					$resultObj = array('error' => 'Could not create resized images.');
-				}
-				// アップロードファイル削除
-				unlink($fileInfo['path']);
-			}
-			// ##### 添付ファイルアップロード結果を返す #####
-			// ページ作成処理中断
-			$this->gPage->abortPage();
-			
-			// 添付ファイルの登録データを返す
-			if (function_exists('json_encode')){
-				$destStr = json_encode($resultObj);
-			} else {
-				$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
-			}
-			//$destStr = htmlspecialchars($destStr, ENT_NOQUOTES);// 「&」が「&amp;」に変換されるので使用しない
-			//header('Content-type: application/json; charset=utf-8');
-			header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
-			echo $destStr;
-			
-			// システム強制終了
-			$this->gPage->exitSystem();
+			// Ajaxでのファイルアップロード処理
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $tmpDir);
 		} else if ($act == 'getimage'){			// 画像取得
 			$this->getImageByType($type);
 		} else {
@@ -318,16 +266,14 @@ return;
 	 * @param object         $resultObj		アップロード処理結果オブジェクト
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param string         $filePath		アップロードされたファイル
-	 * @param string         $tmpDir		アップロード先ディレクトリ
+	 * @param string         $destDir		アップロード先ディレクトリ
 	 * @return								なし
 	 */
-	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $tmpDir)
+	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
 	{
 		$type = $request->trimValueOf('type');		// 画像タイプ
 		
-		if ($isSuccess){
-//			$fileInfo = $resultObj['file'];
-
+		if ($isSuccess){		// ファイルアップロード成功のとき
 			// 各種画像を作成
 			switch ($type){
 			case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
@@ -340,7 +286,7 @@ return;
 				break;
 			}
 			
-			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $tmpDir, $filenameBase, $destFilename);
+			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
 			if ($ret){			// 画像作成成功の場合
 				// 画像参照用URL
 				$imageUrl = $this->gEnv->getDefaultAdminUrl();
@@ -351,8 +297,6 @@ return;
 			} else {// エラーの場合
 				$resultObj = array('error' => 'Could not create resized images.');
 			}
-			// アップロードファイル削除
-			//unlink($fileInfo['path']);
 		}
 	}
 }
