@@ -528,7 +528,7 @@ function m3SetConfigTable(object)
  * @param function	callback	成功時コールバック関数
  * @return bool					true=作成成功、false=作成失敗
  */
-function m3CreateDragDropFileUpload(id, url, width, callback)
+function m3CreateDragDropUploadFile(id, url, width, callback)
 {
 	if (!jQuery().uploadFile) return false;
 	

@@ -15,7 +15,6 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConfigsystemBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-//require_once($gEnvManager->getLibPath()			. '/qqFileUploader/fileuploader.php');
 require_once($gEnvManager->getCommonPath()				. '/uploadFile.php' );			// ファイルアップロード受信ライブラリ
 
 class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWidgetContainer
@@ -112,10 +111,13 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 				rmDirectory($tmpDir);
 			}
 		} else if ($act == 'uploadimage'){		// 画像アップロード
+			// Ajaxでのファイルアップロード処理
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'));
+			
+return;
 			// 作業ディレクトリを作成
 			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 				
-			//$uploader = new qqFileUploader(array());
 			$uploader = new uploadFile();
 			$resultObj = $uploader->handleUpload($tmpDir);
 			
@@ -310,42 +312,48 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		$this->gPage->exitSystem();
 	}
 	/**
-	 * 画像を取得
+	 * アップロードファイルから各種画像を作成
 	 *
-	 * @param string $fileId		画像ファイルID
-	 * @return						なし
+	 * @param bool           $isSuccess		アップロード成功かどうか
+	 * @param object         $resultObj		アップロード処理結果オブジェクト
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string         $filePath		アップロードされたファイル
+	 * @param string         $tmpDir		アップロード先ディレクトリ
+	 * @return								なし
 	 */
-/*	function getImage($fileId)
+	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $tmpDir)
 	{
-		// 画像パス
-		$imagePath = $this->gEnv->getTempDirBySession() . '/' . $fileId;		// セッション単位の作業ディレクトリを取得
-			
-		// ページ作成処理中断
-		$this->gPage->abortPage();
-
-		if (is_readable($imagePath)){
-			// 画像情報を取得
-			$imageMimeType = '';
-			$imageSize = @getimagesize($imagePath);
-			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
-			
-			// 画像MIMEタイプ設定
-			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
-			
-			// キャッシュの設定
-			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
-			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
-			header('Cache-Control: post-check=0, pre-check=0');
-			header('Pragma: no-cache');
+		$type = $request->trimValueOf('type');		// 画像タイプ
 		
-			// 画像ファイル読み込み
-			readfile($imagePath);
-		} else {
-			$this->gPage->showError(404);
+		if ($isSuccess){
+//			$fileInfo = $resultObj['file'];
+
+			// 各種画像を作成
+			switch ($type){
+			case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
+				$formats = $this->gInstance->getImageManager()->getAllSiteLogoFormat();
+				$filenameBase = $this->gInstance->getImageManager()->getSiteLogoFilenameBase();
+				break;
+			case self::IMAGE_TYPE_USER_AVATAR:		// アバター
+				$formats = $this->gInstance->getImageManager()->getAllAvatarFormat();
+				$filenameBase = $this->gInstance->getImageManager()->getDefaultAvatarFilenameBase();
+				break;
+			}
+			
+			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $tmpDir, $filenameBase, $destFilename);
+			if ($ret){			// 画像作成成功の場合
+				// 画像参照用URL
+				$imageUrl = $this->gEnv->getDefaultAdminUrl();
+				$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
+				$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
+				$resultObj['url'] = $imageUrl;
+			} else {// エラーの場合
+				$resultObj = array('error' => 'Could not create resized images.');
+			}
+			// アップロードファイル削除
+			//unlink($fileInfo['path']);
 		}
-	
-		// システム強制終了
-		$this->gPage->exitSystem();
-	}*/
+	}
 }
 ?>

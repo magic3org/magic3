@@ -43,8 +43,8 @@ $(function() {
 	m3SetConfigTable('config_area');
 	
 	// 画像アップローダー作成
-	m3CreateDragDropFileUpload('uploader_sitelogo', '{UPLOAD_URL_SITELOGO}', 300, uploader_sitelogo_onSuccess);
-	m3CreateDragDropFileUpload('uploader_useravatar', '{UPLOAD_URL_USERAVATAR}', 300, uploader_useravatar_onSuccess);
+	m3CreateDragDropUploadFile('uploader_sitelogo', '{UPLOAD_URL_SITELOGO}', 300, uploader_sitelogo_onSuccess);
+	m3CreateDragDropUploadFile('uploader_useravatar', '{UPLOAD_URL_USERAVATAR}', 300, uploader_useravatar_onSuccess);
 });
 //]]>
 </script>

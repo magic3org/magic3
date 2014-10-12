@@ -460,6 +460,54 @@ class BaseWidgetContainer extends Core
 		return $launchFromPagedef;
 	}
 	/**
+	 * Ajaxでのファイルアップロード処理
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param function $callback			コールバック関数
+	 * @return 								なし
+	 */
+	function ajaxUploadFile($request, $callback)
+	{
+		require_once($this->gEnv->getCommonPath() . '/uploadFile.php' );			// ファイルアップロード受信ライブラリ
+		
+		// 作業ディレクトリを作成
+		$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+			
+		$uploader = new uploadFile();
+		$resultObj = $uploader->handleUpload($tmpDir);
+		$isSuccess = $resultObj['success'];
+		
+		$filePath = '';
+		if ($isSuccess){
+			$fileInfo = $resultObj['file'];
+			$filePath = $fileInfo['path'];
+		}
+		// コールバック関数を呼び出す
+//		if (is_callable($callback)) call_user_func($callback, $isSuccess, $resultObj, $request, $filePath, $tmpDir);		// 参照渡しできない
+		if (is_callable($callback)) call_user_func_array($callback, array($isSuccess, &$resultObj, $request, $filePath, $tmpDir));
+		
+		// アップロードファイル削除
+		if ($isSuccess && file_exists($filePath)) unlink($filePath);
+
+		// ##### 添付ファイルアップロード結果を返す #####
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+		
+		// 添付ファイルの登録データを返す
+		if (function_exists('json_encode')){
+			$destStr = json_encode($resultObj);
+		} else {
+			$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
+		}
+		//$destStr = htmlspecialchars($destStr, ENT_NOQUOTES);// 「&」が「&amp;」に変換されるので使用しない
+		//header('Content-type: application/json; charset=utf-8');
+		header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
+		echo $destStr;
+		
+		// システム強制終了
+		$this->gPage->exitSystem();
+	}
+	/**
 	 * ヘルプ文字列を変換
 	 *
 	 * @param string $templateName		テンプレート名
