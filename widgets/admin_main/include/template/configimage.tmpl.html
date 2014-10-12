@@ -19,67 +19,32 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
-function createUploader(){
-	$('#uploader_sitelogo').uploadFile({
-		url: '{UPLOAD_URL_SITELOGO}',
-		allowedTypes: 'jpg,png,gif',
-		showFileCounter: false,		// ファイルNoなし
-		showProgress: true,
-		stripedBar: true,
-		dragDropStr: '',
-		progressBarClass: 'progress-bar-info',
-		returnType: 'json',
-		customErrorKeyStr: 'error',
-		abortStr: '中断',
-		cancelStr: 'キャンセル',
-		deletelStr: '削除',
-		doneStr: '完了',
-		dragdropWidth: 300,		// ドラッグ領域幅
-		statusBarWidth: 300,		// ファイルリスト領域幅
-		onSuccess:function(files, data)
-		{
-			// 画像を読み込む
-			$('#sitelogo_preview').attr('src', data.url).load(function(){
-				m3AdjustParentWindow();// 親ウィンドウリサイズ
-			});
-		
-			// 編集フラグを更新
-			document.main.sitelogo_updated.value = '1';
-		}
+function uploader_sitelogo_onSuccess(files, data)
+{
+	// 画像を読み込む
+	$('#sitelogo_preview').attr('src', data.url).load(function(){
+		m3AdjustParentWindow();// 親ウィンドウリサイズ
 	});
-	$('#uploader_useravatar').uploadFile({
-		url: '{UPLOAD_URL_USERAVATAR}',
-		allowedTypes: 'jpg,png,gif',
-		showFileCounter: false,		// ファイルNoなし
-		showProgress: true,
-		stripedBar: true,
-		dragDropStr: '',
-		progressBarClass: 'progress-bar-info',
-		returnType: 'json',
-		customErrorKeyStr: 'error',
-		abortStr: '中断',
-		cancelStr: 'キャンセル',
-		deletelStr: '削除',
-		doneStr: '完了',
-		dragdropWidth: 300,		// ドラッグ領域幅
-		statusBarWidth: 300,		// ファイルリスト領域幅
-		onSuccess:function(files, data)
-		{
-			// 画像を読み込む
-			$('#useravatar_preview').attr('src', data.url).load(function(){
-				m3AdjustParentWindow();// 親ウィンドウリサイズ
-			});
-			
-			// 編集フラグを更新
-			document.main.useravatar_updated.value = '1';
-		}
+
+	// 編集フラグを更新
+	document.main.sitelogo_updated.value = '1';
+}
+function uploader_useravatar_onSuccess(files, data)
+{
+	// 画像を読み込む
+	$('#useravatar_preview').attr('src', data.url).load(function(){
+		m3AdjustParentWindow();// 親ウィンドウリサイズ
 	});
+	
+	// 編集フラグを更新
+	document.main.useravatar_updated.value = '1';
 }
 $(function() {
 	m3SetConfigTable('config_area');
 	
 	// 画像アップローダー作成
-	createUploader();
+	m3CreateDragDropFileUpload('uploader_sitelogo', '{UPLOAD_URL_SITELOGO}', 300, uploader_sitelogo_onSuccess);
+	m3CreateDragDropFileUpload('uploader_useravatar', '{UPLOAD_URL_USERAVATAR}', 300, uploader_useravatar_onSuccess);
 });
 //]]>
 </script>

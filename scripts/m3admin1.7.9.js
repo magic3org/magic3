@@ -520,6 +520,42 @@ function m3SetConfigTable(object)
 	//$(tableObj).find('tbody tr:odd').addClass("table table-bordered table-striped table-hover");
 }
 /**
+ * ドラッグ&ドロップファイルアップロード機能を作成
+ *
+ * @param string    id			表示領域タグID
+ * @param string    url			アップロード先URL
+ * @param int       width		表示幅
+ * @param function	callback	成功時コールバック関数
+ * @return bool					true=作成成功、false=作成失敗
+ */
+function m3CreateDragDropFileUpload(id, url, width, callback)
+{
+	if (!jQuery().uploadFile) return false;
+	
+	$('#' + id).uploadFile({
+		url: url,
+		allowedTypes: 'jpg,png,gif',
+		showFileCounter: false,		// ファイルNoなし
+		showProgress: true,
+		stripedBar: true,
+		dragDropStr: '',
+		progressBarClass: 'progress-bar-info',
+		returnType: 'json',
+		customErrorKeyStr: 'error',
+		abortStr: '中断',
+		cancelStr: 'キャンセル',
+		deletelStr: '削除',
+		doneStr: '完了',
+		dragdropWidth: width,		// ドラッグ領域幅
+		statusBarWidth: width,		// ファイルリスト領域幅
+		onSuccess:function(files, data)
+		{
+			if (typeof(callback) == 'function') callback(files, data);
+		}
+	});
+	return true;
+}
+/**
  * 管理画面初期処理
  *
  * @return なし
