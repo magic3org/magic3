@@ -524,17 +524,28 @@ function m3SetConfigTable(object)
  *
  * @param string    id			表示領域タグID
  * @param string    url			アップロード先URL
- * @param int       width		表示幅
  * @param function	callback	成功時コールバック関数
+ * @param int       type		アップロード可能ファイル(0=画像)
+ * @param int       width		表示幅
  * @return bool					true=作成成功、false=作成失敗
  */
-function m3CreateDragDropUploadFile(id, url, width, callback)
+function m3CreateDragDropUploadFile(id, url, callback, type, width)
 {
 	if (!jQuery().uploadFile) return false;
 	
+	var fileType = type || 0;
+	var areaWidth = width || 300;
+	var allowTypes = '';
+	
+	switch (fileType){
+	case 0:
+	default:
+		allowTypes = 'png,gif,jpg,jpeg';
+		break;
+	}
 	$('#' + id).uploadFile({
 		url: url,
-		allowedTypes: 'jpg,png,gif',
+		allowedTypes: allowTypes,
 		showFileCounter: false,		// ファイルNoなし
 		showProgress: true,
 		stripedBar: true,
@@ -546,8 +557,8 @@ function m3CreateDragDropUploadFile(id, url, width, callback)
 		cancelStr: 'キャンセル',
 		deletelStr: '削除',
 		doneStr: '完了',
-		dragdropWidth: width,		// ドラッグ領域幅
-		statusBarWidth: width,		// ファイルリスト領域幅
+		dragdropWidth: areaWidth,		// ドラッグ領域幅
+		statusBarWidth: areaWidth,		// ファイルリスト領域幅
 		onSuccess:function(files, data)
 		{
 			if (typeof(callback) == 'function') callback(files, data);
