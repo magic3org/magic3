@@ -11,8 +11,6 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<!--<style type="text/css">@import url({_SCRIPTS_URL}/fileuploader/fileuploader.css);</style>
-<script type="text/javascript" src="{_SCRIPTS_URL}/fileuploader/fileuploader.js"></script>-->
 <script type="text/javascript">
 //<![CDATA[
 function updateItem(){
@@ -22,34 +20,6 @@ function updateItem(){
 	return true;
 }
 function createUploader(){
-/*	var uploader = new qq.FileUploader({
-		element: document.getElementById('uploader_sitelogo'),
-		action: '{UPLOAD_URL_SITELOGO}',
-		onComplete: function(id, fileName, responseJson){
-			// 画像を読み込む
-			$('#sitelogo_preview').attr('src', responseJson.url).load(function(){
-				m3AdjustParentWindow();// 親ウィンドウリサイズ
-			});
-			
-			// 編集フラグを更新
-			document.main.sitelogo_updated.value = '1';
-		},
-		debug: true
-	});*/
-/*	var uploader2 = new qq.FileUploader({
-		element: document.getElementById('uploader_useravatar'),
-		action: '{UPLOAD_URL_USERAVATAR}',
-		onComplete: function(id, fileName, responseJson){
-			// 画像を読み込む
-			$('#useravatar_preview').attr('src', responseJson.url).load(function(){
-				m3AdjustParentWindow();// 親ウィンドウリサイズ
-			});
-		
-			// 編集フラグを更新
-			document.main.useravatar_updated.value = '1';
-		},
-		debug: true
-	});*/
 	$('#uploader_sitelogo').uploadFile({
 		url: '{UPLOAD_URL_SITELOGO}',
 		allowedTypes: 'jpg,png,gif',
