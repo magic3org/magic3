@@ -21,7 +21,8 @@ function updateItem(id){
 }
 $(function(){
 	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('itemlist', -1, 0);
+//	m3_tableWithScrollbar('itemlist', -1, 0);
+	m3SetConfigTable('config_table');
 });
 //]]>
 </script>
@@ -32,37 +33,31 @@ $(function(){
 <input type="hidden" name="task" value="configlang" />
 <input type="hidden" name="act" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-<table style="margin: 0 auto;width:500px">
-<tr><td>
-<label><span {_HELP_CONFIGLANG_LIST}>アクセス可能言語</span></label>
-</td>
-<td align="right">
-</td></tr>
-<tr><td colspan="2">
-<table id="itemlist" class="simple-table" width="100%">
+<h4><span {_HELP_CONFIGLANG_LIST}>アクセス可能言語</span></h4>
+<table id="config_table" style="margin: 0 auto;width:950px;">
     <thead>
-        <tr>
-	    <th width="50"><span>画像</span></th>
-	    <th width="100"><span {_HELP_CONFIGLANG_NAME}>言語</span></th>
-	    <th width="50"><span {_HELP_CONFIGLANG_VALUE}>値</span></th>
-	    <th width="80"><span {_HELP_CONFIGLANG_ACCEPT}>許可</span></th>
-		<th width="80"><span {_HELP_CONFIGLANG_AVAILABLE}>メニュー項目</span></th>
+    <tr>
+	    <th><span>画像</span></th>
+	    <th><span {_HELP_CONFIGLANG_NAME}>言語</span></th>
+	    <th><span {_HELP_CONFIGLANG_VALUE}>値</span></th>
+	    <th><span {_HELP_CONFIGLANG_ACCEPT}>許可</span></th>
+		<th><span {_HELP_CONFIGLANG_AVAILABLE}>メニュー項目</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="lang_list">
-        <tr>
-	    <td align="center">{IMAGE}</td>
-	    <td align="center">{NAME}</td>
-	    <td align="center">{VALUE}</td>
-	    <td align="center"><input type="checkbox" name="item_accept{INDEX}" {ACCEPT} /></td>
-		<td align="center"><input type="checkbox" name="item_available{INDEX}" {AVAILABLE} /></td>
+    <patTemplate:tmpl name="lang_list">
+    <tr>
+	    <td>{IMAGE}</td>
+	    <td>{NAME}</td>
+	    <td>{VALUE}</td>
+	    <td><input type="checkbox" name="item_accept{INDEX}" {ACCEPT} /></td>
+		<td><input type="checkbox" name="item_available{INDEX}" {AVAILABLE} /></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
-</table>
-<div align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
-</td></tr>
+	<tfoot>
+		<tr><td colspan="5"><div class="buttonlist"><input type="button" class="button" onclick="updateItem();" value="更新" /></div></td></tr>
+	</tfoot>
 </table>
 </form>
 </div>

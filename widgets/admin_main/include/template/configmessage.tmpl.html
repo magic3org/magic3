@@ -19,6 +19,9 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+$(function() {
+	m3SetConfigTable('config_table');
+});
 //]]>
 </script>
 <div class="m3config_container">
@@ -27,33 +30,28 @@ function updateItem(){
 <form method="post" name="main">
 <input type="hidden" name="task" value="configmessage" />
 <input type="hidden" name="act" />
-<table style="margin: 0 auto;width:800px;">
-<tbody><tr><td>
-<table class="simple-table" width="100%">
-    <caption><span {_HELP_CONFIGMESSAGE_MESSAGE}>メッセージ</span></caption>
+<h4><span {_HELP_CONFIGMESSAGE_MESSAGE}>メッセージ</span></h4>
+<table id="config_table" style="margin: 0 auto;width:950px;">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_CONFIGMESSAGE_SITE_IN_MAINTENANCE}>サイトメンテナンス中</span></td>
-	    <td><input type="text" name="item_msg_site_in_maintenance" value="{MSG_SITE_IN_MAINTENANCE}" size="60" maxlength="200" style="width:100%;" /><br />
-	    <input type="checkbox" name="item_use_content_maintenance" {USE_CONTENT_MAINTENANCE} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_MAINTENANCE})</td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside" width="150"><span {_HELP_CONFIGMESSAGE_ACCESS_DENY}>アクセス不可</span></td>
-	    <td><input type="text" name="item_msg_access_deny" value="{MSG_ACCESS_DENY}" size="60" maxlength="200" style="width:100%;" /><br />
-	    <input type="checkbox" name="item_use_content_access_deny" {USE_CONTENT_ACCESS_DENY} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_ACCESS_DENY})</td>
+	    <th class="table-headside" width="150"><span {_HELP_CONFIGMESSAGE_SITE_IN_MAINTENANCE}>サイト<br />メンテナンス中</span></th>
+	    <td><input type="text" name="item_msg_site_in_maintenance" class="form-control" value="{MSG_SITE_IN_MAINTENANCE}" size="60" maxlength="200" />
+	    <div class="checkbox"><label><input type="checkbox" name="item_use_content_maintenance" {USE_CONTENT_MAINTENANCE} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_MAINTENANCE})</label></div></td>
 	</tr>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_CONFIGMESSAGE_PAGE_NOT_FOUND}>存在しないページ</span></td>
-	    <td><input type="text" name="item_msg_page_not_found" value="{MSG_PAGE_NOT_FOUND}" size="60" maxlength="200" style="width:100%;" /><br />
-	    <input type="checkbox" name="item_use_content_page_not_found" {USE_CONTENT_PAGE_NOT_FOUND} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_PAGE_NOT_FOUND})</td>
+	    <th class="table-headside"><span {_HELP_CONFIGMESSAGE_ACCESS_DENY}>アクセス不可</span></th>
+	    <td><input type="text" name="item_msg_access_deny" class="form-control" value="{MSG_ACCESS_DENY}" size="60" maxlength="200" />
+	    <div class="checkbox"><label><input type="checkbox" name="item_use_content_access_deny" {USE_CONTENT_ACCESS_DENY} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_ACCESS_DENY})</label></div></td>
+	</tr>
+    <tr>
+	    <th class="table-headside"><span {_HELP_CONFIGMESSAGE_PAGE_NOT_FOUND}>存在しないページ</span></th>
+	    <td><input type="text" name="item_msg_page_not_found" class="form-control" value="{MSG_PAGE_NOT_FOUND}" size="60" maxlength="200" />
+	    <div class="checkbox"><label><input type="checkbox" name="item_use_content_page_not_found" {USE_CONTENT_PAGE_NOT_FOUND} />汎用コンテンツから外部キーで取得(外部キー：{CONTENT_KEY_PAGE_NOT_FOUND})</label></div></td>
 	</tr>
     </tbody>
-</table>
-</td></tr>
-<tr><td align="right">
-<input type="button" class="button" onclick="updateItem();" value="更新" />
-</td></tr>
-</tbody>
+	<tfoot>
+		<tr><td colspan="2"><div class="buttonlist"><input type="button" class="button" onclick="updateItem();" value="更新" /></div></td></tr>
+	</tfoot>
 </table>
 </form>
 </div>
