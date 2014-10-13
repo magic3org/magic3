@@ -470,8 +470,8 @@ function m3CancelSafeContentEdit()
  */
 function m3SetHelp()
 {
-    if (jQuery().cluetip) $('span.m3help').cluetip({splitTitle: '|', cluezIndex: 2000});
-    if (jQuery().tooltip) $('[rel=m3help]').tooltip();
+    if (jQuery().cluetip) $('span.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:1000, timeout:0 }});
+    if (jQuery().tooltip) $('[rel=m3help]').tooltip({ 'delay': { show: 2000, hide: 100 }});
 }
 /**
  * ファイル選択ボタンを設定
