@@ -46,7 +46,7 @@ $(function(){
     <tbody>
 	<patTemplate:tmpl name="show_multilang" visibility="hidden">
 	<tr>
-	    <th class="table-headside" width="150"><span {_HELP_CONFIGSITE_LANG}>言語</span></th>
+	    <th><span {_HELP_CONFIGSITE_LANG}>言語</span></th>
 	    <td>
 	<patTemplate:tmpl name="default_lang" visibility="hidden">
 	{DEFAULT_LANG}
@@ -62,19 +62,19 @@ $(function(){
 	</tr>
 	</patTemplate:tmpl>
     <tr>
-	    <th class="table-headside" width="150"><span {_HELP_CONFIGSITE_SITENAME}>{_LC_LABEL_SITE_NAME}</span></th>
+	    <th><span {_HELP_CONFIGSITE_SITENAME}>{_LC_LABEL_SITE_NAME}</span></th>
 	    <td ><input type="text" name="sitename" class="form-control col-sm-6" value="{SITE_NAME}" size="60" maxlength="100" style="width:50%;" /><p class="form-control-static col-sm-6 required">*{_LC_LABEL_REQUIRED}</p></td>
 	</tr>
     <tr>
-	    <th class="table-headside"><span {_HELP_CONFIGSITE_EMAIL}>{_LC_LABEL_SITE_EMAIL}</span></th>
+	    <th><span {_HELP_CONFIGSITE_EMAIL}>{_LC_LABEL_SITE_EMAIL}</span></th>
 	    <td><input type="text" name="siteemail" class="form-control col-sm-6" value="{SITE_EMAIL}" size="60" maxlength="100" style="width:50%;" /><p class="form-control-static col-sm-2 required">*{_LC_LABEL_REQUIRED}</p><div class="col-sm-4"><input type="button" class="button pull-right" onclick="testMail();" value="{_LC_LABEL_SEND_TEST_EMAIL}" {TEST_MAIL_DISABLED} /></div></td>
 	</tr>
     <tr>
-	    <th class="table-headside"><span {_HELP_CONFIGSITE_SLOGAN}>{_LC_LABEL_SITE_SLOGAN}</span></th>
+	    <th><span {_HELP_CONFIGSITE_SLOGAN}>{_LC_LABEL_SITE_SLOGAN}</span></th>
 	    <td><input type="text" name="siteslogan" class="form-control" value="{SITE_SLOGAN}" size="60" maxlength="100" style="width:100%;" /></td>
 	</tr>
     <tr>
-	    <th class="table-headside"><span {_HELP_CONFIGSITE_COPYRIGHT}>{_LC_LABEL_SITE_COPYRIGHT}</span></th>
+	    <th><span {_HELP_CONFIGSITE_COPYRIGHT}>{_LC_LABEL_SITE_COPYRIGHT}</span></th>
 	    <td><input type="text" name="sitecopyright" class="form-control" value="{SITE_COPYRIGHT}" size="60" maxlength="100" style="width:100%;" /></td>
 	</tr>
     </tbody>
@@ -83,19 +83,19 @@ $(function(){
 <table id="config_table2">
     <tbody>
         <tr>
-	    <th class="table-headside" width="150"><span {_HELP_CONFIGSITE_TITLE}>{_LC_LABEL_HEADER_TITLE}</span></th>
+	    <th><span {_HELP_CONFIGSITE_TITLE}>{_LC_LABEL_HEADER_TITLE}</span></th>
 	    <td><!--<textarea name="site_title" rows="1" cols="50" style="width:100%;"></textarea>--><input type="text" name="site_title" class="form-control" value="{SITE_TITLE}" size="100" maxlength="100" style="width:100%;" /></td>
 	</tr>
         <tr>
-	    <th class="table-headside"><span {_HELP_CONFIGSITE_DESCRIPTION}>{_LC_LABEL_HEADER_DESC}</span></th>
+	    <th><span {_HELP_CONFIGSITE_DESCRIPTION}>{_LC_LABEL_HEADER_DESC}</span></th>
 	    <td><textarea name="site_description" class="form-control" rows="2" cols="50" style="width:100%;">{SITE_DESC}</textarea></td>
 	</tr>
         <tr>
-	    <th class="table-headside"><span {_HELP_CONFIGSITE_KEYWORDS}>{_LC_LABEL_HEADER_KEYWORDS}</span></th>
+	    <th><span {_HELP_CONFIGSITE_KEYWORDS}>{_LC_LABEL_HEADER_KEYWORDS}</span></th>
 	    <td><textarea name="site_keyword" class="form-control" rows="2" cols="50" style="width:100%;">{SITE_KEYWORD}</textarea></td>
 	</tr>
         <tr>
-	    <th class="table-headside"><span {_HELP_CONFIGSITE_OTHERS}>{_LC_LABEL_HEADER_OTHERS}</span></th>
+	    <th><span {_HELP_CONFIGSITE_OTHERS}>{_LC_LABEL_HEADER_OTHERS}</span></th>
 	    <td><textarea name="meta_others" class="form-control" rows="2" cols="50" style="width:100%;">{META_OTHERS}</textarea></td>
 	</tr>
     </tbody>
