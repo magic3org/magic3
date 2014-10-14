@@ -1,0 +1,152 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	m3SetConfigTable('system_version');
+	m3SetConfigTable('server_env');
+	m3SetConfigTable('db_info');
+	m3SetConfigTable('php_info');
+});
+//]]>
+</script>
+<div class="m3config_container">
+{MENU_ITEMS}
+<h4>システムバージョン</h4>
+<table id="system_version">
+    <tbody>
+        <tr>
+	    <th style="width:300px;">ディストリビューション名</th>
+	    <td>{DISTRIBUTION_NAME}</td>
+	</tr>
+        <tr>
+	    <th>ディストリビューションバージョン</th>
+	    <td>{DISTRIBUTION_VERSION}</td>
+	</tr>
+        <tr>
+	    <th>Magic3フレームワーク</th>
+	    <td>{MAGIC3_VERSION}</td>
+	</tr>
+        <tr>
+	    <th>OS</th>
+	    <td>{OS_VERSION}</td>
+	</tr>
+        <tr>
+	    <th>PHP</th>
+	    <td>{PHP_VERSION}</td>
+	</tr>
+        <tr>
+	    <th>{DB_TYPE}</th>
+	    <td>{DB_VERSION}</td>
+	</tr>
+    </tbody>
+</table>
+<h4>サーバ環境</h4>
+<table id="server_env">
+    <tbody>
+        <tr>
+	    <th style="width:300px;">サーバID</th>
+	    <td>{SERVER_ID}</td>
+	</tr>
+        <tr>
+	    <th>システムインストール日時</th>
+	    <td>{INSTALL_DT}</td>
+	</tr>
+        <tr>
+	    <th>ホスト名</th>
+	    <td>{HOST_NAME}</td>
+	</tr>
+        <tr>
+	    <th>ホストIPアドレス</th>
+	    <td>{DNS_RESOLV}</td>
+	</tr>
+    </tbody>
+</table>
+<h4>DB接続</h4>
+<table id="db_info">
+    <tbody>
+        <tr>
+	    <th style="width:300px;">DB種別</th>
+	    <td>{DB_TYPE}</td>
+	</tr>
+        <tr>
+	    <th>ホスト名</th>
+	    <td>{DB_HOST_NAME}</td>
+	</tr>
+        <tr>
+	    <th>DB名</th>
+	    <td>{DB_NAME}</td>
+	</tr>
+        <tr>
+	    <th>接続ユーザ名</th>
+	    <td>{DB_USER_NAME}</td>
+	</tr>
+    </tbody>
+</table>
+<h4>PHPの設定</h4>
+<table id="php_info">
+    <tbody>
+        <tr>
+	    <th width="300">mbstring</th>
+	    <td>{CURRENT_MBSTRING}</td>
+	</tr>
+        <tr>
+	    <th>zlib</th>
+	    <td>{CURRENT_ZLIB}</td>
+	</tr>
+        <tr>
+	    <th>gd</th>
+	    <td>{CURRENT_GD}</td>
+	</tr>
+        <tr>
+	    <th>xml</th>
+	    <td>{CURRENT_XML}</td>
+	</tr>
+        <tr>
+	    <th>gettext</th>
+	    <td>{CURRENT_GETTEXT}</td>
+	</tr>
+        <tr>
+	    <th>curl</th>
+	    <td>{CURRENT_CURL}</td>
+	</tr>
+        <tr>
+	    <th>アップロード可能なファイルのサイズ</th>
+	    <th>{UPLOAD_FILESIZE_LIMIT}&nbsp;バイト</th>
+	</tr>
+        <tr>
+	    <td colspan="2" bgcolor="#ffffff">php.iniの関係するパラメータ (memory_limit &gt;= post_max_size &gt;= upload_max_filesize に設定)</td>
+	</tr>
+        <tr>
+	    <th>memory_limit</th>
+	    <td>{MEMORY_LIMIT}&nbsp;バイト</td>
+	</tr>
+        <tr>
+	    <th>post_max_size</th>
+	    <td>{POST_MAX_SIZE}&nbsp;バイト</td>
+	</tr>
+        <tr>
+	    <th>upload_max_filesize</th>
+	    <td>{UPLOAD_MAX_FILESIZE}&nbsp;バイト</td>
+	</tr>
+        <tr>
+	    <th>file_uploads</th>
+	    <td>{FILE_UPLOADS}</td>
+	</tr>
+    </tbody>
+</table>
+<h4>PHP環境</h4>
+<iframe src="{PHPINFO_URL}" width="100%" height="500" frameborder="0">実際の画面</iframe>
+</div>
+</patTemplate:tmpl>

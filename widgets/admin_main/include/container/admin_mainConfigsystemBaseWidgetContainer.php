@@ -17,15 +17,12 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
-//	const HELP_KEY_CONFIGSYS = 'configsys';		// システム基本設定
-//	const HELP_KEY_CONFIGLANG = 'configlang';		// 言語設定
-//	const HELP_KEY_CONFIGMESSAGE = 'configmessage';		// メッセージ設定
-//	const DEFAULT_TOP_PAGE = 'configsys';		// デフォルトのトップ画面
 	// 画面
 	const TASK_CONFIGSYS		= 'configsys';	// システム基本設定
 	const TASK_CONFIGLANG		= 'configlang';	// 言語設定
 	const TASK_CONFIGMESSAGE	= 'configmessage';	// メッセージ設定
 	const TASK_CONFIGIMAGE		= 'configimage';		// 画像設定
+	const TASK_SERVER_ENV		= 'serverenv';	// サーバ環境
 	const DEFAULT_TASK			= 'configsys';		// デフォルト画面
 	
 	/**
@@ -56,6 +53,9 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 			case self::TASK_CONFIGSYS:	// システム基本設定
 				$linkList = ' &gt;&gt; ' . $this->_('System Basic Cofiguration');			// システム基本設定
 				break;
+			case self::TASK_SERVER_ENV:	// サーバ環境
+				$linkList = ' &gt;&gt; ' . $this->_('Server Environment');			// サーバ環境
+				break;
 			case self::TASK_CONFIGLANG:	// 言語設定
 				$linkList = ' &gt;&gt; ' . $this->_('Language Cofiguration');		// 言語設定
 				break;
@@ -85,6 +85,16 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGSYS);
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>システム基本設定</span></a></li>' . M3_NL;
 		
+		// ### サーバ環境 ###
+		$current = '';
+		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_SERVER_ENV;
+		if ($task == self::TASK_SERVER_ENV){
+			$current = 'id="current"';
+		}
+		// ヘルプを作成
+		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_SERVER_ENV);
+		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>サーバ環境</span></a></li>' . M3_NL;
+				
 		// ### 言語設定 ###
 		$current = '';
 		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGLANG;

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -26,7 +26,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	private $jqueryVersion;			// jQueryバージョン
 	private $wysiwygMenuData;		// WYSIWYGエディター選択メニューデータ
 	private $wysiwygEditor;			// 管理画面用WYSIWYGエディター
-	const MENU_ITEM_DEVELOP = 'develop';				// 「開発」メニューの識別ID
 	const DEFAULT_THEME_DIR = '/ui/themes';				// jQueryUIテーマ格納ディレクトリ
 	const DEFAULT_SYSTEM_TEMPLATE_ID = '_system';				// デフォルトのシステム画面用テンプレート
 	const DEFAULT_JQUERY_VERSION = '1.8';				// デフォルトのjQueryバージョン
@@ -44,12 +43,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_SITE_MOBILE_URL = 'site_mobile_url';		// 携帯用サイトURL
 	const CF_ACCESS_IN_INTRANET = 'access_in_intranet';		// イントラネット運用
 	const CF_MULTI_DOMAIN = 'multi_domain';		// マルチドメイン運用
-//	const CF_USE_SITE_PC			= 'use_site_pc';			// PC用サイト使用
-//	const CF_USE_SITE_SMARTPHONE	= 'use_site_smartphone';	// スマートフォン用サイト使用
-//	const CF_USE_SITE_MOBILE		= 'use_site_mobile';		// 携帯用サイト使用
 	const CF_SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
-	const CF_DISTRIBUTION_NAME = 'distribution_name';		// ディストリビューション名
-	const CF_DISTRIBUTION_VERSION = 'distribution_version';		// ディストリビューションバージョン
 	const CF_MOBILE_USE_SESSION = 'mobile_use_session';		// 携帯でセッション管理を行うかどうか
 	const CF_USE_PAGE_CACHE = 'use_page_cache';		// 画面キャッシュ機能を使用するかどうか
 	const CF_USE_TEMPLATE_ID_IN_SESSION = 'use_template_id_in_session';			// セッションにテンプレートIDを保存
@@ -66,13 +60,8 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_SMARTPHONE_USE_JQUERY_MOBILE = 'smartphone_use_jquery_mobile';		// スマートフォン画面でjQuery Mobileを使用
 	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
 	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
-	const CF_SERVER_ID = 'server_id';		// サーバID
 	const CF_DEFAULT_LANG		= 'default_lang';					// デフォルト言語
-	const CF_INSTALL_DT = 'install_dt';		// システムインストール日時
 	const CF_WORK_DIR = 'work_dir';			// 作業ディレクトリ
-	// 未使用
-	const CF_REGENERATE_SESSION_ID = 'regenerate_session_id';				// セッションIDを毎回更新するかどうか
-	const CF_SCRIPT_CACHE_IN_BROWSER = 'script_cache_in_browser';				// ブラウザにスクリプトのキャッシュを保持するかどうか
 	
 	/**
 	 * コンストラクタ
@@ -125,8 +114,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$usePageCache = ($request->trimValueOf('item_use_page_cache') == 'on') ? 1 : 0;		// 表示キャッシュ機能を使用するかどうか
 		$canChangeTemplate = ($request->trimValueOf('item_can_change_template') == 'on') ? 1 : 0;		// ユーザによるテンプレート変更を許可するかどうか
 		$canDetailConfig = ($request->trimValueOf('item_can_detail_config') == 'on') ? 1 : 0;		// 詳細システム設定が可能かどうか
-//		$regenerateSession = ($request->trimValueOf('item_regenerate_sesison') == 'on') ? 1 : 0;		// セッションIDを更新するかどうか
-//		$scriptCacheInBrowser = ($request->trimValueOf('item_script_cache_in_browser') == 'on') ? 1 : 0;		// ブラウザにスクリプトのキャッシュを保持するかどうか
 		$mobileAutoRedirect = ($request->trimValueOf('item_mobile_auto_redirect') == 'on') ? 1 : 0;		// 携帯の自動遷移
 		$smartphoneAutoRedirect = ($request->trimValueOf('item_smartphone_auto_redirect') == 'on') ? 1 : 0;		// スマートフォンの自動遷移
 		$mobileUseSession = ($request->trimValueOf('item_mobile_use_session') == 'on') ? 1 : 0;		// 携帯でセッション管理するかどうか
@@ -165,14 +152,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_PERMIT_DETAIL_CONFIG, $canDetailConfig)) $isErr = true;
 			}
-			/*	
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_REGENERATE_SESSION_ID, $regenerateSession)) $isErr = true;
-			}
-			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_SCRIPT_CACHE_IN_BROWSER, $scriptCacheInBrowser)) $isErr = true;
-			}
-			*/
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_MOBILE_AUTO_REDIRECT, $mobileAutoRedirect)) $isErr = true;
 			}
@@ -198,15 +177,12 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 				if (!$this->db->updateSystemConfig(self::CF_MULTI_DOMAIN, $multiDomain)) $isErr = true;// マルチドメイン運用
 			}
 			if (!$isErr){
-				//if (!$this->db->updateSystemConfig(self::CF_USE_SITE_PC, $isActiveSitePc)) $isErr = true;// PC用サイト使用
 				if (!$this->updateActiveAccessPoint(0/*PC*/, $isActiveSitePc)) $isErr = true;// PC用サイト有効
 			}
 			if (!$isErr){
-				//if (!$this->db->updateSystemConfig(self::CF_USE_SITE_SMARTPHONE, $isActiveSiteSmartphone)) $isErr = true;// スマートフォン用サイト使用
 				if (!$this->updateActiveAccessPoint(2/*スマートフォン*/, $isActiveSiteSmartphone)) $isErr = true;// スマートフォン用サイト有効
 			}
 			if (!$isErr){
-				//if (!$this->db->updateSystemConfig(self::CF_USE_SITE_MOBILE, $isActiveSiteMobile)) $isErr = true;// 携帯用サイト使用
 				if (!$this->updateActiveAccessPoint(1/*携帯*/, $isActiveSiteMobile)) $isErr = true;// 携帯用サイト有効
 			}
 			if (!$isErr){
@@ -276,8 +252,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$usePageCache 		= $this->db->getSystemConfig(self::CF_USE_PAGE_CACHE);			// 表示キャッシュ機能を使用するかどうか
 			$canChangeTemplate	= $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);// ユーザによるテンプレート変更を許可するかどうか
 			$canDetailConfig	= $this->db->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);
-//			$regenerateSession	= $this->db->getSystemConfig(self::CF_REGENERATE_SESSION_ID);
-//			$scriptCacheInBrowser = $this->db->getSystemConfig(self::CF_SCRIPT_CACHE_IN_BROWSER);
 //			$mobileAutoRedirect	= $this->db->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT);
 			$mobileAutoRedirect	= $this->gSystem->mobileAutoRedirect(true/*再取得*/);				// 携帯の自動遷移
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
@@ -287,11 +261,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$siteMobileInPublic = $this->gSystem->siteMobileInPublic(true/*再取得*/);	// 携帯用サイトの公開状況
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic(true/*再取得*/);	// スマートフォン用サイトの公開状況
 			$accessInIntranet	= $this->db->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用
-			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);			// マルチドメイン運用			
-/*			$isActiveSitePc			= $this->db->getSystemConfig(self::CF_USE_SITE_PC);	// PC用サイト使用
-			$isActiveSiteSmartphone	= $this->db->getSystemConfig(self::CF_USE_SITE_SMARTPHONE);	// スマートフォン用サイト使用
-			$isActiveSiteMobile		= $this->db->getSystemConfig(self::CF_USE_SITE_MOBILE);	// // 携帯用サイト使用
-			*/
+			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);			// マルチドメイン運用
 			$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
 			$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
 			$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
@@ -307,9 +277,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
 			$this->wysiwygEditor = $this->db->getSystemConfig(self::CF_WYSIWYG_EDITOR);			// 管理画面用WYSIWYGエディター
-			
-			// メニュー項目の制御
-			//$this->db->updateMenuVisible(self::MENU_ITEM_DEVELOP, $canDetailConfig);			// 「開発」メニュー
 		} else if ($act == 'updateip'){		// IPアドレスを更新のとき
 			$exceptIp = $request->trimValueOf('except_ip');
 
@@ -346,8 +313,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$usePageCache 		= $this->db->getSystemConfig(self::CF_USE_PAGE_CACHE);			// 表示キャッシュ機能を使用するかどうか
 			$canChangeTemplate	= $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);// ユーザによるテンプレート変更を許可するかどうか
 			$canDetailConfig	= $this->db->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);
-//			$regenerateSession	= $this->db->getSystemConfig(self::CF_REGENERATE_SESSION_ID);
-//			$scriptCacheInBrowser = $this->db->getSystemConfig(self::CF_SCRIPT_CACHE_IN_BROWSER);
 //			$mobileAutoRedirect	= $this->db->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT);
 			$mobileAutoRedirect	= $this->gSystem->mobileAutoRedirect(true/*再取得*/);				// 携帯の自動遷移
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
@@ -358,9 +323,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$siteSmartphoneInPublic = $this->gSystem->siteSmartphoneInPublic(true/*再取得*/);	// スマートフォン用サイトの公開状況
 			$accessInIntranet	= $this->db->getSystemConfig(self::CF_ACCESS_IN_INTRANET);		// イントラネット運用
 			$multiDomain		= $this->db->getSystemConfig(self::CF_MULTI_DOMAIN);// マルチドメイン運用
-//			$isActiveSitePc			= $this->db->getSystemConfig(self::CF_USE_SITE_PC);	// PC用サイト使用
-//			$isActiveSiteSmartphone	= $this->db->getSystemConfig(self::CF_USE_SITE_SMARTPHONE);	// スマートフォン用サイト使用
-//			$isActiveSiteMobile		= $this->db->getSystemConfig(self::CF_USE_SITE_MOBILE);	// // 携帯用サイト使用
 			$isActiveSitePc			= $this->isActiveAccessPoint(0/*PC*/);					// PC用サイト有効かどうか
 			$isActiveSiteSmartphone	= $this->isActiveAccessPoint(2/*スマートフォン*/);		// スマートフォン用サイト有効かどうか
 			$isActiveSiteMobile		= $this->isActiveAccessPoint(1/*スマートフォン*/);		// 携帯用サイト有効かどうか
@@ -403,7 +365,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$this->tmpl->addVar("show_site_mobile_open", "mobile_encode", $this->gEnv->getMobileEncoding());
 		
 		// サイト運用状況を設定
-		//if ($this->db->getSystemConfig(self::CF_SITE_IN_PUBLIC)){		// 運用中のとき
 		if ($this->gSystem->siteInPublic(true/*再取得*/)){		// 運用中のとき
 			$this->tmpl->addVar("_widget", "site_open", '<b><font color="green">公開中</font></b>');
 			$this->tmpl->addVar("_widget", "site_open_status", '0');
@@ -414,19 +375,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$this->tmpl->addVar("_widget", "site_open_label", '公開開始');
 		}
 		$this->tmpl->addVar("_widget", "except_ip", $this->db->getSystemConfig(self::CF_SITE_ACCESS_EXCEPTION_IP));
-		
-		// ##### システム状態をチェック #####
-/*		$systemMessage = '';
-		// インストーラの存在
-		$installFile = $this->gInstance->getFileManager()->getInstallerPath();
-		if (file_exists($installFile)){
-			$systemMessage .= 'インストーラファイルが存在しています。削除してください。ファイル=' . $installFile . '<br />';
-		}
-		if (!empty($systemMessage)){
-			$this->tmpl->setAttribute('system_check', 'visibility', 'visible');
-			$systemMessage = '<b><font color="red">' . $systemMessage . '</font></b>';
-			$this->tmpl->addVar("system_check", "message", $systemMessage);
-		}*/
 		
 		// 項目の表示制御
 		$isActiveSite = $this->gSystem->getSiteActiveStatus(0);		// PC用サイト
@@ -496,6 +444,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		if ($smartphoneUseJqueryMobile) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "smartphone_use_jquery_mobile", $checked);		// スマートフォン画面でjQuery Mobileを使用
 
+		// URL
 		$this->tmpl->addVar("_widget", "root_url", $this->gEnv->getRootUrl());
 		$this->tmpl->addVar("_widget", "ssl_url", $sslUrl);// SSLのURL
 		$this->tmpl->addVar("_widget", "connect_server_url", $connectServerUrl);// ポータル接続先URL
@@ -505,15 +454,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if ($canDetailConfig) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "can_detail_config", $checked);
-		/*
-		$checked = '';
-		if ($regenerateSession) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "regenerate_session", $checked);
-		
-		$checked = '';
-		if ($scriptCacheInBrowser) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "script_cache_in_browser", $checked);
-*/
 		$checked = '';
 		if (!empty($mobileAutoRedirect)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "mobile_auto_redirect", $checked);// 携帯の自動遷移
@@ -526,109 +466,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if (!empty($configWindowOpenByTab)) $checked = 'checked'; 			// ウィジェット設定画面をタブで開くかどうか
 		$this->tmpl->addVar("_widget", "config_window_open_by_tab", $checked);
-		
-		$this->tmpl->addVar("_widget", "upload_filesize_limit", $this->gSystem->getMaxFileSizeForUpload());
-		$this->tmpl->addVar("_widget", "memory_limit", ini_get('memory_limit'));
-		$this->tmpl->addVar("_widget", "post_max_size", ini_get('post_max_size'));
-		$this->tmpl->addVar("_widget", "upload_max_filesize", ini_get('upload_max_filesize'));
-		// ファイルのアップロード許可
-		if (ini_get('file_uploads')){
-			$data = '<b><font color="green">On</font></b>';
-		} else {
-			$data = '<b><font color="red">Off</font></b>';
-		}
-		$this->tmpl->addVar("_widget", "file_uploads", $data);
-		
-		// バージョン
-		$this->tmpl->addVar("_widget", "distribution_name", $this->db->getSystemConfig(self::CF_DISTRIBUTION_NAME));		// ディストリビューション名
-		$value = $this->db->getSystemConfig(self::CF_DISTRIBUTION_VERSION);
-		if (empty($value)) $value = M3_SYSTEM_VERSION;
-		$this->tmpl->addVar("_widget", "distribution_version", $value);		// ディストリビューションバージョン
-		$this->tmpl->addVar("_widget", "magic3_version", M3_SYSTEM_VERSION);
-		$this->tmpl->addVar("_widget", "php_version", phpversion());
-		if ($this->db->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
-			$dbType = 'MySQL';
-		} else if ($this->db->getDbType() == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
-			$dbType = 'PostgreSQL';
-		} else {
-			$dbType = 'DB未設定';
-		}
-		$this->tmpl->addVar("_widget", "db_type", $dbType);			// 使用しているDB種
-		$this->tmpl->addVar("_widget", "db_version", $this->db->getDbVersion());
-		$this->tmpl->addVar("_widget", "os_version", php_uname('s') . ' ' . php_uname('r') . ' ' . php_uname('m'));		// OSバージョン
-		
-		// DB接続
-		$this->gConfig->getDbConnectDsnByList($dbType, $hostname, $dbname);
-		$this->tmpl->addVar("_widget", "db_type", $dbType);			// DB種
-		$this->tmpl->addVar("_widget", "db_host_name", $hostname);			// DBホスト名
-		$this->tmpl->addVar("_widget", "db_name", $dbname);			// DB名
-		$dbuser = $this->gConfig->getDbConnectUser();		// 接続ユーザ
-		$this->tmpl->addVar("_widget", "db_user_name", $dbuser);			// 接続ユーザ名
-				
-		// mbstring
-		if (extension_loaded('mbstring')){
-			$data = '<b><font color="green">On</font></b>';
-		} else {
-			$data = '<b><font color="red">Off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_mbstring", $data);
-		// zlib
-		if (extension_loaded('zlib')){
-			$data = '<b><font color="green">On</font></b>';
-		} else {
-			$data = '<b><font color="red">Off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_zlib", $data);
-		// gd
-		if (extension_loaded('gd')){
-			$data = '<b><font color="green">On</font></b>';
-		} else {
-			$data = '<b><font color="red">Off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_gd", $data);
-		// dom
-		if (extension_loaded('dom')){
-			$data = '<b><font color="green">On</font></b>';
-		} else {
-			$data = '<b><font color="red">Off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_dom", $data);
-		// xml
-		if (extension_loaded('xml')){
-			$data = '<b><font color="green">On</font></b>';
-		} else {
-			$data = '<b><font color="red">Off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_xml", $data);
-		// gettext
-		if (extension_loaded('gettext')){
-			$data = '<b><font color="green">On</font></b>';
-		} else {
-			$data = '<b><font color="red">Off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_gettext", $data);
-		// curl
-		if (extension_loaded('curl')){
-			$data = '<b><font color="green">On</font></b>';
-		} else {
-			$data = '<b><font color="red">Off</font></b>';
-		}
-		$this->tmpl->addVar("_widget","current_curl", $data);
-		
-		// サーバ環境
-		$hostname = exec('hostname');
-		$this->tmpl->addVar("_widget", "host_name", $hostname);
-		$dnsResolv = '解決できません';
-		if ($hostname != 'localhost.localdomain'){
-			$hosts = gethostbynamel($hostname);
-			if ($hosts !== false){
-				if (count($hosts) > 0) $dnsResolv = $hosts[0];
-			}
-		}
-		$this->tmpl->addVar("_widget", "dns_resolv", $dnsResolv);
-		$this->tmpl->addVar("_widget", "server_id", $this->db->getSystemConfig(self::CF_SERVER_ID));
-		$this->tmpl->addVar("_widget", "install_dt", $this->db->getSystemConfig(self::CF_INSTALL_DT));		// インストール日時
-		$this->tmpl->addVar("_widget", "work_dir", $workDir);		// 一時ディレクトリ
+
+		// 一時ディレクトリ
+		$this->tmpl->addVar("_widget", "work_dir", $workDir);
 		if (is_writable($workDir)){
 			if (checkWritableDir($workDir)){
 				$data = '<b><font color="green">書き込み可能</font></b>';
@@ -655,58 +495,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$data = '<b><font color="red">書き込み不可</font></b>';
 		}
 		$this->tmpl->addVar("_widget", "resource_dir_access", $data);
-/*		// 画像ディレクトリ
-		$path = $this->gEnv->getResourcePath() . '/image';
-		$this->tmpl->addVar("_widget", "resource_dir_image", $path);
-		if (is_writable($path)){
-			if (checkWritableDir($path)){
-				$data = '<b><font color="green">書き込み可能</font></b>';
-			} else {
-				$data = '<b><font color="red">Safe Modeにより書き込み不可</font></b>';
-			}
-		} else {
-			$data = '<b><font color="red">書き込み不可</font></b>';
-		}
-		$this->tmpl->addVar("_widget", "resource_dir_image_access", $data);
-		// FLASHディレクトリ
-		$path = $this->gEnv->getResourcePath() . '/flash';
-		$this->tmpl->addVar("_widget", "resource_dir_flash", $path);
-		if (is_writable($path)){
-			if (checkWritableDir($path)){
-				$data = '<b><font color="green">書き込み可能</font></b>';
-			} else {
-				$data = '<b><font color="red">Safe Modeにより書き込み不可</font></b>';
-			}
-		} else {
-			$data = '<b><font color="red">書き込み不可</font></b>';
-		}
-		$this->tmpl->addVar("_widget", "resource_dir_flash_access", $data);
-		// メディアディレクトリ
-		$path = $this->gEnv->getResourcePath() . '/media';
-		$this->tmpl->addVar("_widget", "resource_dir_media", $path);
-		if (is_writable($path)){
-			if (checkWritableDir($path)){
-				$data = '<b><font color="green">書き込み可能</font></b>';
-			} else {
-				$data = '<b><font color="red">Safe Modeにより書き込み不可</font></b>';
-			}
-		} else {
-			$data = '<b><font color="red">書き込み不可</font></b>';
-		}
-		$this->tmpl->addVar("_widget", "resource_dir_media_access", $data);
-		// ファイルディレクトリ
-		$path = $this->gEnv->getResourcePath() . '/file';
-		$this->tmpl->addVar("_widget", "resource_dir_file", $path);
-		if (is_writable($path)){
-			if (checkWritableDir($path)){
-				$data = '<b><font color="green">書き込み可能</font></b>';
-			} else {
-				$data = '<b><font color="red">Safe Modeにより書き込み不可</font></b>';
-			}
-		} else {
-			$data = '<b><font color="red">書き込み不可</font></b>';
-		}
-		$this->tmpl->addVar("_widget", "resource_dir_file_access", $data);*/
+
 		// テンプレートディレクトリ
 		$path = $this->gEnv->getTemplatesPath();
 		$this->tmpl->addVar("_widget", "templates_dir", $path);
@@ -720,6 +509,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$data = '<b><font color="red">書き込み不可</font></b>';
 		}
 		$this->tmpl->addVar("_widget", "templates_dir_access", $data);
+		
 		// ウィジェットディレクトリ
 		$path = $this->gEnv->getWidgetsPath();
 		$this->tmpl->addVar("_widget", "widgets_dir", $path);
@@ -737,11 +527,6 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		// ディレクトリサイズ
 		$size = convFromBytes(calcDirSize($this->gEnv->getResourcePath()));
 		$this->tmpl->addVar("_widget", "resource_dir_size", $size);
-		
-		// phpinfo出力へのURL
-		//$phpinfoUrl = '?task=phpinfo&menu=off';			// メニューは非表示にする
-		$phpinfoUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_SHOW_PHPINFO;			// phpinfo画面
-		$this->tmpl->addVar("_widget", "phpinfo_url", $phpinfoUrl);
 	}
 	/**
 	 * 取得した言語をテンプレートに設定する

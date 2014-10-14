@@ -52,12 +52,12 @@ $(function(){
 	{DEFAULT_LANG}
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="select_lang" visibility="hidden">
-		    <select name="item_lang" class="form-control" onchange="selectItemLang();">
+		    <select name="item_lang" class="form-control" onchange="selectItemLang();" style="width:30%;">
 		        <patTemplate:tmpl name="lang_list">
 		        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 		        </patTemplate:tmpl>
 		    </select>
-	</patTemplate:tmpl>&nbsp;&nbsp;{LANG}
+	</patTemplate:tmpl>{LANG}
 	    </td>
 	</tr>
 	</patTemplate:tmpl>
