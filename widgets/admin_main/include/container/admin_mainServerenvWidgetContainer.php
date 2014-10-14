@@ -50,6 +50,20 @@ class admin_mainServerenvWidgetContainer extends admin_mainConfigsystemBaseWidge
 		return 'serverenv.tmpl.html';
 	}
 	/**
+	 * ヘルプデータを設定
+	 *
+	 * ヘルプの設定を行う場合はヘルプIDを返す。
+	 * ヘルプデータの読み込むディレクトリは「自ウィジェットディレクトリ/include/help」に固定。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
+	 * @return string 						ヘルプID。ヘルプデータはファイル名「help_[ヘルプID].php」で作成。ヘルプを使用しない場合は空文字列「''」を返す。
+	 */
+	function _setHelp($request, &$param)
+	{	
+		return 'serverenv';
+	}
+	/**
 	 * テンプレートにデータ埋め込む
 	 *
 	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。

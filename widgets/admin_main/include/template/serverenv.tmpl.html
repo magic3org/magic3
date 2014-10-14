@@ -97,50 +97,50 @@ $(function(){
 <h4>PHPの設定</h4>
 <table id="php_info">
     <tbody>
-        <tr>
-	    <th width="300">mbstring</th>
+    <tr>
+	    <th style="width:300px;">mbstring</th>
 	    <td>{CURRENT_MBSTRING}</td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>zlib</th>
 	    <td>{CURRENT_ZLIB}</td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>gd</th>
 	    <td>{CURRENT_GD}</td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>xml</th>
 	    <td>{CURRENT_XML}</td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>gettext</th>
 	    <td>{CURRENT_GETTEXT}</td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>curl</th>
 	    <td>{CURRENT_CURL}</td>
 	</tr>
-        <tr>
-	    <th>アップロード可能なファイルのサイズ</th>
-	    <th>{UPLOAD_FILESIZE_LIMIT}&nbsp;バイト</th>
+    <tr>
+	    <th><span {_HELP_SERVERENV_UPLOAD_FILESIZE}>アップロード可能なファイルのサイズ</span></th>
+	    <td>{UPLOAD_FILESIZE_LIMIT}&nbsp;バイト</td>
 	</tr>
-        <tr>
+<!--        <tr>
 	    <td colspan="2" bgcolor="#ffffff">php.iniの関係するパラメータ (memory_limit &gt;= post_max_size &gt;= upload_max_filesize に設定)</td>
-	</tr>
-        <tr>
+	</tr>-->
+    <tr>
 	    <th>memory_limit</th>
 	    <td>{MEMORY_LIMIT}&nbsp;バイト</td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>post_max_size</th>
 	    <td>{POST_MAX_SIZE}&nbsp;バイト</td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>upload_max_filesize</th>
 	    <td>{UPLOAD_MAX_FILESIZE}&nbsp;バイト</td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>file_uploads</th>
 	    <td>{FILE_UPLOADS}</td>
 	</tr>

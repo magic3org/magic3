@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-01 17:16+0900\n"
-"PO-Revision-Date: 2014-10-01 17:17+0900\n"
+"POT-Creation-Date: 2014-10-15 08:04+0900\n"
+"PO-Revision-Date: 2014-10-15 08:05+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -81,7 +81,7 @@ msgid "Others"
 msgstr "その他"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:485
-#: ../container/admin_mainConfigsiteWidgetContainer.php:297
+#: ../container/admin_mainConfigsiteWidgetContainer.php:200
 msgid "Update config?"
 msgstr "設定を更新しますか?"
 
@@ -239,7 +239,7 @@ msgid "Additional CSS Class"
 msgstr "追加CSSクラス"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:521
-#: ../container/admin_mainConfigsiteWidgetContainer.php:311
+#: ../container/admin_mainConfigsiteWidgetContainer.php:214
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
 #: ../container/admin_mainMenudefWidgetContainer.php:160
@@ -267,7 +267,7 @@ msgstr "範囲："
 msgid "%d Total"
 msgstr "全 %d 件"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:138
+#: ../container/admin_mainConfigsiteWidgetContainer.php:136
 #: ../container/admin_mainOpelogWidgetContainer.php:341
 #: ../container/admin_mainPagedefWidgetContainer.php:378
 #: ../container/admin_mainPagedefWidgetContainer.php:382
@@ -275,139 +275,109 @@ msgstr "全 %d 件"
 msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:140
+#: ../container/admin_mainConfigsiteWidgetContainer.php:138
 #: ../container/admin_mainOpelogWidgetContainer.php:337
 #: ../container/admin_mainPagedefWidgetContainer.php:376
 #: ../container/admin_mainPortalWidgetContainer.php:118
 msgid "Data updated."
 msgstr "データを更新しました"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:151
-#: ../container/admin_mainWidgetContainer.php:392
+#: ../container/admin_mainConfigsiteWidgetContainer.php:149
+#: ../container/admin_mainWidgetContainer.php:393
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:154
+#: ../container/admin_mainConfigsiteWidgetContainer.php:152
 msgid "URL   :"
 msgstr "URL     :"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:155
+#: ../container/admin_mainConfigsiteWidgetContainer.php:153
 msgid "Date  :"
 msgstr "送信日時:"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:156
+#: ../container/admin_mainConfigsiteWidgetContainer.php:154
 msgid "Sender:"
 msgstr "送信者  :"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:159
+#: ../container/admin_mainConfigsiteWidgetContainer.php:157
 msgid "Email sent. To:"
 msgstr "メールを送信しました。メールアドレス:"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:161
+#: ../container/admin_mainConfigsiteWidgetContainer.php:159
 msgid "Failed in sending email. To:"
 msgstr "メール送信に失敗しました。メールアドレス:"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:170
-#: ../container/admin_mainTemplistWidgetContainer.php:220
-#: ../container/admin_mainWidgetlistWidgetContainer.php:271
-#, php-format
-msgid "You are not allowed to write temporary directory. (directory: %s)"
-msgstr "一時ディレクトリに書き込み権限がありません。(ディレクトリ： %s)"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:236
-msgid "Image changed."
-msgstr "画像を変更しました"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:239
-msgid "Failed in creating image."
-msgstr "画像の作成に失敗しました"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:244
-#: ../container/admin_mainTemplistWidgetContainer.php:308
-#: ../container/admin_mainWidgetlistWidgetContainer.php:401
-#: ../container/admin_mainWidgetlistWidgetContainer.php:420
-msgid "Failed in uploading file."
-msgstr "ファイルのアップロードに失敗しました"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:251
-#: ../container/admin_mainEditmenuWidgetContainer.php:330
-#: ../container/admin_mainTemplistWidgetContainer.php:316
-#: ../container/admin_mainWidgetlistWidgetContainer.php:428
-#, php-format
-msgid ""
-"Uploded file not found. (detail: The file may be over maximum size to be "
-"allowed to upload. Size %s bytes."
-msgstr ""
-"アップロードファイルが見つかりません。(要因： アップロード可能なファイルのMax"
-"サイズを超えている可能性があります。 %sバイト)"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:298
+#: ../container/admin_mainConfigsiteWidgetContainer.php:201
 msgid "Send test email to default email address?"
 msgstr "デフォルトメールアドレス宛にテストメールを送信しますか?"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:299
+#: ../container/admin_mainConfigsiteWidgetContainer.php:202
 #: ../container/admin_mainEditmenuWidgetContainer.php:88
 #: ../container/admin_mainPortalWidgetContainer.php:252
 #: ../help/help_configsite.php:31 ../help/help_portal.php:35
 msgid "Site Information"
 msgstr "サイト情報"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:300
+#: ../container/admin_mainConfigsiteWidgetContainer.php:203
 #: ../container/admin_mainPortalWidgetContainer.php:168
 #: ../container/admin_mainPortalWidgetContainer.php:253
 #: ../help/help_configsite.php:35 ../help/help_portal.php:39
 msgid "Site Name"
 msgstr "サイト名"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:301
+#: ../container/admin_mainConfigsiteWidgetContainer.php:204
 msgid "Required"
 msgstr "必須"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:302
+#: ../container/admin_mainConfigsiteWidgetContainer.php:205
 #: ../help/help_configsite.php:39
 msgid "Site Email"
 msgstr "メールアドレス"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:303
+#: ../container/admin_mainConfigsiteWidgetContainer.php:206
 msgid "Send Test Email"
 msgstr "テストメール送信"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:304
+#: ../container/admin_mainConfigsiteWidgetContainer.php:207
 #: ../help/help_configsite.php:43
 msgid "Site Slogan"
 msgstr "サイトスローガン"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:305
+#: ../container/admin_mainConfigsiteWidgetContainer.php:208
 #: ../help/help_configsite.php:47
 msgid "Site Copyright"
 msgstr "サイト著作権"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:306
+#: ../container/admin_mainConfigsiteWidgetContainer.php:209
 msgid "Page Header Info (Default)"
 msgstr "ページヘッダ情報(デフォルト値)"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:307
+#: ../container/admin_mainConfigsiteWidgetContainer.php:210
 msgid "Header Tilte"
 msgstr "タイトル名"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:308
+#: ../container/admin_mainConfigsiteWidgetContainer.php:211
 #: ../help/help_configsite.php:59
 msgid "Site Description"
 msgstr "サイト説明"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:309
+#: ../container/admin_mainConfigsiteWidgetContainer.php:212
 #: ../help/help_configsite.php:63
 msgid "Header Keywords"
 msgstr "検索キーワード"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:310
+#: ../container/admin_mainConfigsiteWidgetContainer.php:213
 #: ../help/help_configsite.php:67
 msgid "Header Others (by Tag Style)"
 msgstr "その他(タグ形式)"
 
-#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:57
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:54
 msgid "System Basic Cofiguration"
 msgstr "システム基本設定"
+
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:57
+msgid "Server Environment"
+msgstr "サーバ環境"
 
 #: ../container/admin_mainConfigsystemBaseWidgetContainer.php:60
 msgid "Language Cofiguration"
@@ -847,6 +817,17 @@ msgstr "スクリプト実行完了しました"
 msgid "Failed in running script."
 msgstr "スクリプト実行に失敗しました"
 
+#: ../container/admin_mainEditmenuWidgetContainer.php:330
+#: ../container/admin_mainTemplistWidgetContainer.php:316
+#: ../container/admin_mainWidgetlistWidgetContainer.php:428
+#, php-format
+msgid ""
+"Uploded file not found. (detail: The file may be over maximum size to be "
+"allowed to upload. Size %s bytes."
+msgstr ""
+"アップロードファイルが見つかりません。(要因： アップロード可能なファイルのMax"
+"サイズを超えている可能性があります。 %sバイト)"
+
 #: ../container/admin_mainFilebrowseWidgetContainer.php:104
 #, php-format
 msgid "Include files not allowed to delete. (filename: %s)"
@@ -980,7 +961,7 @@ msgid "Create"
 msgstr "作成"
 
 #: ../container/admin_mainLoginstatusWidgetContainer.php:44
-#: ../container/admin_mainWidgetContainer.php:387
+#: ../container/admin_mainWidgetContainer.php:388
 msgid "Login"
 msgstr "ログイン"
 
@@ -1643,6 +1624,12 @@ msgstr "テンプレートのディレクトリが削除できませんでした
 msgid "Only zip format file is allowed to upload."
 msgstr "zip圧縮のファイルのみアップロード可能です"
 
+#: ../container/admin_mainTemplistWidgetContainer.php:220
+#: ../container/admin_mainWidgetlistWidgetContainer.php:271
+#, php-format
+msgid "You are not allowed to write temporary directory. (directory: %s)"
+msgstr "一時ディレクトリに書き込み権限がありません。(ディレクトリ： %s)"
+
 #: ../container/admin_mainTemplistWidgetContainer.php:272
 #, php-format
 msgid "The template already exists. (template ID: %s)"
@@ -1662,6 +1649,12 @@ msgstr "ファイルのアップロードが完了しました。(テンプレ�
 #, php-format
 msgid "Failed in moving directory. (directory: %s)"
 msgstr "ディレクトリの移動に失敗しました。(ディレクトリ： %s)"
+
+#: ../container/admin_mainTemplistWidgetContainer.php:308
+#: ../container/admin_mainWidgetlistWidgetContainer.php:401
+#: ../container/admin_mainWidgetlistWidgetContainer.php:420
+msgid "Failed in uploading file."
+msgstr "ファイルのアップロードに失敗しました"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:436
 #: ../container/admin_mainWidgetlistWidgetContainer.php:616
@@ -1775,7 +1768,7 @@ msgid "Login Account"
 msgstr "ログインアカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:390 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:391 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1800,7 +1793,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:156
 #: ../container/admin_mainUserlistWidgetContainer.php:306
 #: ../container/admin_mainUserlistWidgetContainer.php:374
-#: ../container/admin_mainWidgetContainer.php:391 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:392 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -1868,24 +1861,24 @@ msgstr "データ追加に失敗しました"
 msgid "Limited"
 msgstr "制限あり"
 
-#: ../container/admin_mainWidgetContainer.php:308
+#: ../container/admin_mainWidgetContainer.php:309
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
-#: ../container/admin_mainWidgetContainer.php:314
-#: ../container/admin_mainWidgetContainer.php:320
+#: ../container/admin_mainWidgetContainer.php:315
+#: ../container/admin_mainWidgetContainer.php:321
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:324
+#: ../container/admin_mainWidgetContainer.php:325
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:388
+#: ../container/admin_mainWidgetContainer.php:389
 msgid "Send Password"
 msgstr "パスワード送信"
 
-#: ../container/admin_mainWidgetContainer.php:389
+#: ../container/admin_mainWidgetContainer.php:390
 msgid "Account"
 msgstr "アカウント"
 
@@ -2569,6 +2562,18 @@ msgstr "ポータルサーバに登録するサイト情報です。"
 msgid "Input site name on Site Information."
 msgstr "サイトの情報です。"
 
+#: ../help/help_serverenv.php:31
+msgid "Allowed Upload File Size"
+msgstr "アップロード可能なファイルのサイズ"
+
+#: ../help/help_serverenv.php:32
+msgid ""
+"The parameters which related to upload file size in php.ini are configured "
+"memory_limit &gt;= post_max_size &gt;= upload_max_filesize."
+msgstr ""
+"php.iniの関係するパラメータをmemory_limit &gt;= post_max_size &gt;= "
+"upload_max_filesize に設定します。"
+
 #: ../help/help_templist.php:32
 msgid ""
 "The list is available templates in this system. Select template type for pc "
@@ -2839,6 +2844,12 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "Image changed."
+#~ msgstr "画像を変更しました"
+
+#~ msgid "Failed in creating image."
+#~ msgstr "画像の作成に失敗しました"
 
 #~ msgid "Configure"
 #~ msgstr "設定"
