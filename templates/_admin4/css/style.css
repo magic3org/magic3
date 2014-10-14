@@ -633,8 +633,13 @@ background-color: #0081c2;
 	left: 0px;
 	right: 0px;
 }
+.m3config_table {
+	margin: 0 auto;
+	margin: 0 auto 15px auto;
+	width: 950px;
+}
 .m3config_update_buttons {
-	margin-top: 10px;
+/*	margin-top: 10px;*/
 	text-align: right;
 }
 /****** edit line ******/

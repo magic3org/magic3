@@ -30,65 +30,29 @@ function selectItemLang(){
 	document.main.submit();
 	return true;
 }
+$(function(){
+	m3SetConfigTable('config_table');
+	m3SetConfigTable('config_table2');
+});
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
-<table width="800">
-<tbody><tr><td>
-<!--
-<table class="simple-table" width="800">
-    <caption>ライセンス</caption>
-    <tbody>
-        <tr>
-	    <td class="table-headside" width="150">ライセンスキー</td>
-	    <td colspan="3"><input type="text" name="license_key" value="{LICENSE_KEY}" size="30" maxlength="30" /></td>
-	</tr>
-        <tr class="even">
-	    <td class="table-headside">郵便番号</td>
-	    <td><input type="text" name="license_zipcode" value="{LICENSE_ZIPCODE}" size="30" maxlength="30" /></td>
-	    <td class="table-headside" width="150">FAX</td>
-	    <td><input type="text" name="license_fax" value="{LICENSE_FAX}" size="30" maxlength="30" /></td>
-	</tr>
-        <tr>
-	    <td class="table-headside">会社名</td>
-	    <td colspan="3"><input type="text" name="license_name" value="{LICENSE_NAME}" size="30" maxlength="30" /></td>
-	</tr>
-        <tr class="even">
-	    <td class="table-headside">住所</td>
-	    <td colspan="3"><input type="text" name="license_address" value="{LICENSE_ADDRESS}" size="80" maxlength="100" /></td>
-	</tr>
-        <tr>
-	    <td class="table-headside">メールアドレス</td>
-	    <td colspan="3"><input type="text" name="license_email" value="{LICENSE_EMAIL}" size="30" maxlength="30" />&nbsp;&nbsp;</td>
-	</tr>
-    </tbody>
-</table>
-<br />
-<table border="0" cellpadding="0" cellspacing="0" width="800">
-    <tbody>
-        <tr>
-	    <td align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
--->
-<table class="simple-table" width="100%">
-    <caption><span {_HELP_CONFIGSITE_SITEINFO}>{_LC_LABEL_SITE_INFO}</span></caption>
+<h4><span {_HELP_CONFIGSITE_SITEINFO}>{_LC_LABEL_SITE_INFO}</span></h4>
+<table id="config_table">
     <tbody>
 	<patTemplate:tmpl name="show_multilang" visibility="hidden">
 	<tr>
-	    <td class="table-headside" width="150"><span {_HELP_CONFIGSITE_LANG}>言語</span></td>
+	    <th class="table-headside" width="150"><span {_HELP_CONFIGSITE_LANG}>言語</span></th>
 	    <td>
 	<patTemplate:tmpl name="default_lang" visibility="hidden">
 	{DEFAULT_LANG}
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="select_lang" visibility="hidden">
-		    <select name="item_lang" onchange="selectItemLang();">
+		    <select name="item_lang" class="form-control" onchange="selectItemLang();">
 		        <patTemplate:tmpl name="lang_list">
 		        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 		        </patTemplate:tmpl>
@@ -98,51 +62,45 @@ function selectItemLang(){
 	</tr>
 	</patTemplate:tmpl>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_CONFIGSITE_SITENAME}>{_LC_LABEL_SITE_NAME}</span></td>
-	    <td><input type="text" name="sitename" value="{SITE_NAME}" size="60" maxlength="100" style="width:70%;" />&nbsp;&nbsp;<font color="red">*{_LC_LABEL_REQUIRED}</font></td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONFIGSITE_EMAIL}>{_LC_LABEL_SITE_EMAIL}</span></td>
-	    <td><input type="text" name="siteemail" value="{SITE_EMAIL}" size="60" maxlength="100" style="width:70%;" />&nbsp;&nbsp;<font color="red">*{_LC_LABEL_REQUIRED}</font>&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" onclick="testMail();" value="{_LC_LABEL_SEND_TEST_EMAIL}" {TEST_MAIL_DISABLED} /></td>
+	    <th class="table-headside" width="150"><span {_HELP_CONFIGSITE_SITENAME}>{_LC_LABEL_SITE_NAME}</span></th>
+	    <td ><input type="text" name="sitename" class="form-control col-sm-6" value="{SITE_NAME}" size="60" maxlength="100" style="width:50%;" /><p class="form-control-static col-sm-6 required">*{_LC_LABEL_REQUIRED}</p></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIGSITE_SLOGAN}>{_LC_LABEL_SITE_SLOGAN}</span></td>
-	    <td><input type="text" name="siteslogan" value="{SITE_SLOGAN}" size="60" maxlength="100" style="width:100%;" /></td>
+	    <th class="table-headside"><span {_HELP_CONFIGSITE_EMAIL}>{_LC_LABEL_SITE_EMAIL}</span></th>
+	    <td><input type="text" name="siteemail" class="form-control col-sm-6" value="{SITE_EMAIL}" size="60" maxlength="100" style="width:50%;" /><p class="form-control-static col-sm-2 required">*{_LC_LABEL_REQUIRED}</p><div class="col-sm-4"><input type="button" class="button pull-right" onclick="testMail();" value="{_LC_LABEL_SEND_TEST_EMAIL}" {TEST_MAIL_DISABLED} /></div></td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONFIGSITE_COPYRIGHT}>{_LC_LABEL_SITE_COPYRIGHT}</span></td>
-	    <td><input type="text" name="sitecopyright" value="{SITE_COPYRIGHT}" size="60" maxlength="100" style="width:100%;" /></td>
+    <tr>
+	    <th class="table-headside"><span {_HELP_CONFIGSITE_SLOGAN}>{_LC_LABEL_SITE_SLOGAN}</span></th>
+	    <td><input type="text" name="siteslogan" class="form-control" value="{SITE_SLOGAN}" size="60" maxlength="100" style="width:100%;" /></td>
+	</tr>
+    <tr>
+	    <th class="table-headside"><span {_HELP_CONFIGSITE_COPYRIGHT}>{_LC_LABEL_SITE_COPYRIGHT}</span></th>
+	    <td><input type="text" name="sitecopyright" class="form-control" value="{SITE_COPYRIGHT}" size="60" maxlength="100" style="width:100%;" /></td>
 	</tr>
     </tbody>
 </table>
-<br />
-<table class="simple-table" width="100%">
-    <caption><span {_HELP_CONFIGSITE_PAGEHEAD}>{_LC_LABEL_HEADER_INFO}</span></caption>
+<h4><span {_HELP_CONFIGSITE_PAGEHEAD}>{_LC_LABEL_HEADER_INFO}</span></h4>
+<table id="config_table2">
     <tbody>
         <tr>
-	    <td class="table-headside" width="150"><span {_HELP_CONFIGSITE_TITLE}>{_LC_LABEL_HEADER_TITLE}</span></td>
-	    <td><!--<textarea name="site_title" rows="1" cols="50" style="width:100%;"></textarea>--><input type="text" name="site_title" value="{SITE_TITLE}" size="100" maxlength="100" style="width:100%;" /></td>
-	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONFIGSITE_DESCRIPTION}>{_LC_LABEL_HEADER_DESC}</span></td>
-	    <td><textarea name="site_description" rows="2" cols="50" style="width:100%;">{SITE_DESC}</textarea></td>
+	    <th class="table-headside" width="150"><span {_HELP_CONFIGSITE_TITLE}>{_LC_LABEL_HEADER_TITLE}</span></th>
+	    <td><!--<textarea name="site_title" rows="1" cols="50" style="width:100%;"></textarea>--><input type="text" name="site_title" class="form-control" value="{SITE_TITLE}" size="100" maxlength="100" style="width:100%;" /></td>
 	</tr>
         <tr>
-	    <td class="table-headside"><span {_HELP_CONFIGSITE_KEYWORDS}>{_LC_LABEL_HEADER_KEYWORDS}</span></td>
-	    <td><textarea name="site_keyword" rows="2" cols="50" style="width:100%;">{SITE_KEYWORD}</textarea></td>
+	    <th class="table-headside"><span {_HELP_CONFIGSITE_DESCRIPTION}>{_LC_LABEL_HEADER_DESC}</span></th>
+	    <td><textarea name="site_description" class="form-control" rows="2" cols="50" style="width:100%;">{SITE_DESC}</textarea></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONFIGSITE_OTHERS}>{_LC_LABEL_HEADER_OTHERS}</span></td>
-	    <td><textarea name="meta_others" rows="2" cols="50" style="width:100%;">{META_OTHERS}</textarea></td>
+        <tr>
+	    <th class="table-headside"><span {_HELP_CONFIGSITE_KEYWORDS}>{_LC_LABEL_HEADER_KEYWORDS}</span></th>
+	    <td><textarea name="site_keyword" class="form-control" rows="2" cols="50" style="width:100%;">{SITE_KEYWORD}</textarea></td>
+	</tr>
+        <tr>
+	    <th class="table-headside"><span {_HELP_CONFIGSITE_OTHERS}>{_LC_LABEL_HEADER_OTHERS}</span></th>
+	    <td><textarea name="meta_others" class="form-control" rows="2" cols="50" style="width:100%;">{META_OTHERS}</textarea></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-<tr><td align="right">
-<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
-</td></tr>
-</tbody>
-</table>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" /></div>
 </form>
 </div>
 </patTemplate:tmpl>
