@@ -30,18 +30,6 @@ function selectItemLang(){
 	document.main.submit();
 	return true;
 }
-/*function uploadCheck(){
-	if (!document.main.upfile.value){
-		alert('画像ファイルが選択されていません');
-		return false;
-	}
-	if (!window.confirm('画像ファイルをアップロードしますか?')) return false;
-	document.main.act.value = 'upload';
-	document.main.enctype = 'multipart/form-data';
-	document.main.encoding = 'multipart/form-data';			// for IE
-	document.main.submit();
-	return false;
-}*/
 //]]>
 </script>
 <div align="center">
@@ -125,12 +113,6 @@ function selectItemLang(){
 	    <td class="table-headside"><span {_HELP_CONFIGSITE_COPYRIGHT}>{_LC_LABEL_SITE_COPYRIGHT}</span></td>
 	    <td><input type="text" name="sitecopyright" value="{SITE_COPYRIGHT}" size="60" maxlength="100" style="width:100%;" /></td>
 	</tr>
-<!--    <tr>
-	    <td class="table-headside"><span {_HELP_CONFIGSITE_LOGO}>ロゴ</span><br />(72x72, 200x200)</td>
-	    <td><div id="preview_outer">{LOGO_IMAGE}</div>
-                <input type="file" name="upfile" size="50" /><input type="button" class="button" onclick="uploadCheck();" value="アップロード" />
-	    </td>
-	</tr>-->
     </tbody>
 </table>
 <br />

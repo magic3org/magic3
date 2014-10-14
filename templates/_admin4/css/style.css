@@ -236,15 +236,13 @@ background-color: #0081c2;
 	font-size        : 90%;
 }
 /* error message */
-/*.error-message {
-	color: #EE0000;
+.m3messages {
+/*	margin-top: 10px;*/
 }
-.warning-message {
-	color: #FF8C00;
+.m3messages .alert {
+	margin-top: 10px;
+	margin-bottom: 0;
 }
-.guide-message {
-	color: #00008B;
-}*/
 /****** widget ******/
 .m3widget_main {
 	margin: 10px 10px 20px 10px;
@@ -634,6 +632,10 @@ background-color: #0081c2;
 	position: fixed;
 	left: 0px;
 	right: 0px;
+}
+.m3config_update_buttons {
+	margin-top: 10px;
+	text-align: right;
 }
 /****** edit line ******/
 .m3line_image {

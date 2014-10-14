@@ -20,8 +20,6 @@ function updateItem(id){
 	return true;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-//	m3_tableWithScrollbar('itemlist', -1, 0);
 	m3SetConfigTable('config_table');
 });
 //]]>
@@ -55,10 +53,8 @@ $(function(){
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
-	<tfoot>
-		<tr><td colspan="5"><div class="buttonlist"><input type="button" class="button" onclick="updateItem();" value="更新" /></div></td></tr>
-	</tfoot>
 </table>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
 </form>
 </div>
 </patTemplate:tmpl>
