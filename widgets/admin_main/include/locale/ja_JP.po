@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-15 08:04+0900\n"
-"PO-Revision-Date: 2014-10-15 08:05+0900\n"
+"POT-Creation-Date: 2014-10-16 08:30+0900\n"
+"PO-Revision-Date: 2014-10-16 08:31+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -2268,6 +2268,27 @@ msgstr ""
 #: ../help/help_configsite.php:68
 msgid "Input other tag string in meta area."
 msgstr "ヘッダ部に出力するタグを設定します。"
+
+#: ../help/help_configsys.php:31
+msgid "Site Status"
+msgstr "サイトの状態"
+
+#: ../help/help_configsys.php:32
+msgid "When it is closed, all access points show the maintenance page."
+msgstr "非公開の場合、全アクセスポイントがメンテナンス画面に切り替わります"
+
+#: ../help/help_configsys.php:35
+msgid "Root URL of Shared SSL"
+msgstr "共有SSLのルートURL"
+
+#: ../help/help_configsys.php:36
+msgid ""
+"If you use SSL on admin access point or general access point, you can set "
+"another url for SSL. If you set blank for the url, the system url which is "
+"changed http to https is used."
+msgstr ""
+"管理画面または一般画面でSSLを使用する場合にSSL専用の別のURLが設定可能です。空"
+"に設定した場合はシステムのルートURLをhttpsに変更したURLが使用されます。"
 
 #: ../help/help_editmenu.php:31
 msgid "Others Button"

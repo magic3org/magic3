@@ -19,14 +19,6 @@ defined('M3_SYSTEM') or die('Access error: Direct access denied.');
 
 global $HELP;
 
-// ########## システム情報 ##########
-$HELP['configsys']['title'] = 'システム基本設定';
-$HELP['configsys']['body'] = 'システムの動作に関する基本設定を行います。';
-$HELP['configsys_ssl_url']['title'] = '共有SSLのルートURL';
-$HELP['configsys_ssl_url']['body'] = '管理画面または一般画面でSSLを使用する場合にSSL専用の別のURLが設定可能です。空に設定した場合はシステムのルートURLをhttpsに変更したURLが使用されます。';
-$HELP['configsys_connect_server_url']['title'] = 'ポータルサーバのURL';
-$HELP['configsys_connect_server_url']['body'] = 'ポータルサーバに接続する場合の接続先URLです。Magic3がインストールされているURLを指定します。';
-
 // ########## 言語設定 ##########
 $HELP['configlang']['title'] = '言語設定';
 $HELP['configlang']['body'] = '言語に関する設定を行います。';
