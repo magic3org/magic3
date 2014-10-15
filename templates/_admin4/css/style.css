@@ -628,6 +628,7 @@ background-color: #0081c2;
 	width:95%;
 	margin: 10px auto;
 }
+/* for IFRAME */
 .m3config_fullwidth {
 	position: fixed;
 	left: 0px;
@@ -644,6 +645,11 @@ background-color: #0081c2;
 .m3config_update_buttons {
 /*	margin-top: 10px;*/
 	text-align: right;
+}
+/* fix item size */
+.m3config_item {
+	padding-left: 0;
+	padding-right: 0;
 }
 /****** edit line ******/
 .m3line_image {

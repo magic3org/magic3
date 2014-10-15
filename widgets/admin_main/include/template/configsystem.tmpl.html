@@ -53,31 +53,31 @@ $(function(){
     <tbody>
     <tr>
 	    <th>URL</th>
-	    <td colspan="2"><a href="#" onclick="previewInOtherWindow(0, '{SITE_URL}');">{SITE_URL}</a></td>
+	    <td colspan="2"><div class="form-control-static"><a href="#" onclick="previewInOtherWindow(0, '{SITE_URL}');">{SITE_URL}</a></div></td>
 	</tr>
     <tr>
-	    <th>サイト公開</th>
-	    <td colspan="2">{SITE_OPEN}<input type="button" class="button" onclick="toggleSiteOpen({SITE_OPEN_STATUS});" value="{SITE_OPEN_LABEL}" />
-	    <label>非公開の場合、全アクセスポイントがメンテナンス画面に切り替わります</label></td>
+	    <th><span {_HELP_CONFIGSYS_SITE_STATUS}>サイトの状態</span></th>
+	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">{SITE_OPEN}</div><div class="col-sm-2 m3config_item"><input type="button" class="button" onclick="toggleSiteOpen({SITE_OPEN_STATUS});" value="{SITE_OPEN_LABEL}" /></div>
+	    <!--<label>非公開の場合、全アクセスポイントがメンテナンス画面に切り替わります</label>--></td>
 	</tr>
     <tr>
 	    <th rowspan="4">アクセスポイント</th>
-	    <th>管理用</th><td><a href="#" onclick="previewInOtherWindow(0, '{ADMIN_ACCESS_URL}');">{ADMIN_ACCESS_URL}</a></td>
+	    <th>管理用</th><td><div class="form-control-static"><a href="#" onclick="previewInOtherWindow(0, '{ADMIN_ACCESS_URL}');">{ADMIN_ACCESS_URL}</a></div></td>
 	</tr>
     <tr>
-	    <th>PC用</th><td><patTemplate:tmpl name="show_site_pc_open" visibility="hidden"><input type="checkbox" name="item_site_pc_in_public" {SITE_PC_IN_PUBLIC} />公開<br />
-	    <a href="#" onclick="previewInOtherWindow(0, '{PC_ACCESS_URL}');">{PC_ACCESS_URL}</a></patTemplate:tmpl>
-		<patTemplate:tmpl name="show_site_pc_close" visibility="hidden">閉鎖</patTemplate:tmpl></td>
+	    <th>PC用</th><td><patTemplate:tmpl name="show_site_pc_open" visibility="hidden"><div class="checkbox"><label><input type="checkbox" name="item_site_pc_in_public" {SITE_PC_IN_PUBLIC} />公開</label></div>
+	    <div class="form-control-static"><a href="#" onclick="previewInOtherWindow(0, '{PC_ACCESS_URL}');">{PC_ACCESS_URL}</a></div></patTemplate:tmpl>
+		<patTemplate:tmpl name="show_site_pc_close" visibility="hidden"><div class="form-control-static">閉鎖</div></patTemplate:tmpl></td>
 	</tr>
     <tr>
-	    <th>スマートフォン用</th><td><patTemplate:tmpl name="show_site_smartphone_open" visibility="hidden"><input type="checkbox" name="item_site_smartphone_in_public" {SITE_SMARTPHONE_IN_PUBLIC} />公開<br />
-	    <a href="#" onclick="previewInOtherWindow(2, '{SMARTPHONE_ACCESS_URL}');">{SMARTPHONE_ACCESS_URL}</a></patTemplate:tmpl>
-		<patTemplate:tmpl name="show_site_smartphone_close" visibility="hidden">閉鎖</patTemplate:tmpl></td>
+	    <th>スマートフォン用</th><td><patTemplate:tmpl name="show_site_smartphone_open" visibility="hidden"><div class="checkbox"><label><input type="checkbox" name="item_site_smartphone_in_public" {SITE_SMARTPHONE_IN_PUBLIC} />公開</label></div>
+	    <div class="form-control-static"><a href="#" onclick="previewInOtherWindow(2, '{SMARTPHONE_ACCESS_URL}');">{SMARTPHONE_ACCESS_URL}</a></div></patTemplate:tmpl>
+		<patTemplate:tmpl name="show_site_smartphone_close" visibility="hidden"><div class="form-control-static">閉鎖</div></patTemplate:tmpl></td>
 	</tr>
     <tr>
-	    <th>携帯用</th><td><patTemplate:tmpl name="show_site_mobile_open" visibility="hidden"><input type="checkbox" name="item_site_mobile_in_public" {SITE_MOBILE_IN_PUBLIC} />公開&nbsp;&nbsp;画面エンコーディング：{MOBILE_ENCODE}<br />
-	    <a href="#" onclick="previewInOtherWindow(1, '{MOBILE_ACCESS_URL}');">{MOBILE_ACCESS_URL}</a></patTemplate:tmpl>
-		<patTemplate:tmpl name="show_site_mobile_close" visibility="hidden">閉鎖</patTemplate:tmpl></td>
+	    <th>携帯用</th><td><patTemplate:tmpl name="show_site_mobile_open" visibility="hidden"><div class="checkbox col-sm-6 m3config_item"><label><input type="checkbox" name="item_site_mobile_in_public" {SITE_MOBILE_IN_PUBLIC} />公開</label></div><div class="form-control-static col-sm-6 text-right m3config_item">画面エンコーディング：{MOBILE_ENCODE}</div>
+	    <div class="form-control-static"><a href="#" onclick="previewInOtherWindow(1, '{MOBILE_ACCESS_URL}');">{MOBILE_ACCESS_URL}</a></div></patTemplate:tmpl>
+		<patTemplate:tmpl name="show_site_mobile_close" visibility="hidden"><div class="form-control-static">閉鎖</div></patTemplate:tmpl></td>
 	</tr>
     </tbody>
 </table>
@@ -86,143 +86,144 @@ $(function(){
     <tbody>
     <tr>
 	    <th>システムの<br />ルートURL</th>
-	    <td colspan="2">{ROOT_URL}</td>
+	    <td colspan="2"><div class="form-control-static">{ROOT_URL}</div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGSYS_SSL_URL}>共有SSLの<br />ルートURL</span></th>
-	    <td colspan="2"><input type="text" name="item_ssl_url" value="{SSL_URL}" size="60" maxlength="120" style="width:100%;" /></td>
+	    <td colspan="2"><input type="text" name="item_ssl_url" class="form-control" value="{SSL_URL}" size="60" maxlength="120" style="width:100%;" /></td>
 	</tr>
     <tr>
 	    <th rowspan="3"><span {_HELP_CONFIGSYS_ACCESS_POINT}>アクセスポイント</span></th>
-	    <th><span {_HELP_CONFIGSYS_SITE_PC}>PC用</span></th><td><input type="checkbox" name="item_is_active_site_pc" {IS_ACTIVE_SITE_PC} />有効</td>
+	    <th><span {_HELP_CONFIGSYS_SITE_PC}>PC用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_pc" {IS_ACTIVE_SITE_PC} />有効</label></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIGSYS_SITE_SMARTPHONE}>スマートフォン用</span></th><td><input type="checkbox" name="item_is_active_site_smartphone" {IS_ACTIVE_SITE_SMARTPHONE} />有効&nbsp;&nbsp;マルチドメインURL：<input type="text" name="item_site_smartphone_url" value="{SITE_SMARTPHONE_URL}" size="60" maxlength="120" style="width:100%;" /></td>
+	    <th><span {_HELP_CONFIGSYS_SITE_SMARTPHONE}>スマートフォン用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_smartphone" {IS_ACTIVE_SITE_SMARTPHONE} />有効</label></div>マルチドメインURL：<input type="text" name="item_site_smartphone_url" class="form-control" value="{SITE_SMARTPHONE_URL}" size="60" maxlength="120" style="width:100%;" /></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIGSYS_SITE_MOBILE}>携帯用</span></th><td><input type="checkbox" name="item_is_active_site_mobile" {IS_ACTIVE_SITE_MOBILE} />有効&nbsp;&nbsp;マルチドメインURL：<input type="text" name="item_site_mobile_url" value="{SITE_MOBILE_URL}" size="60" maxlength="120" style="width:100%;" /></td>
+	    <th><span {_HELP_CONFIGSYS_SITE_MOBILE}>携帯用</span></th><td><div class="checkbox"><label><input type="checkbox" name="item_is_active_site_mobile" {IS_ACTIVE_SITE_MOBILE} />有効</label></div>マルチドメインURL：<input type="text" id="item_site_mobile_url" name="item_site_mobile_url" class="form-control" value="{SITE_MOBILE_URL}" size="60" maxlength="120" style="width:100%;" /></td>
 	</tr>
     <tr>
 	    <th>ネットワーク</th>
-	    <td colspan="2"><label class="item_list_inline"><input type="checkbox" name="item_access_in_intranet" {ACCESS_IN_INTRANET} />イントラネット運用</label></td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_access_in_intranet" {ACCESS_IN_INTRANET} />イントラネット運用</label></div></td>
 	</tr>
     <tr>
 	    <th rowspan="2">URL</th>
-	    <td colspan="2"><input type="checkbox" name="item_multi_domain" {MULTI_DOMAIN} />マルチドメイン</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_multi_domain" {MULTI_DOMAIN} />マルチドメイン</label></div></td>
 	</tr>
     <tr>
-	    <td colspan="2"><input type="checkbox" name="item_use_hier_page" {USE_HIER_PAGE} />ページの階層化</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_use_hier_page" {USE_HIER_PAGE} />ページの階層化</label></div></td>
 	</tr>
     <tr>
 	    <th rowspan="2">SSL</th>
-	    <td colspan="2"><input type="checkbox" name="item_use_ssl_admin" {USE_SSL_ADMIN} />管理画面にSSLを使用</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_use_ssl_admin" {USE_SSL_ADMIN} />管理画面にSSLを使用</label></div></td>
 	</tr>
     <tr>
-	    <td colspan="2"><input type="checkbox" name="item_use_ssl" {USE_SSL} />一般画面にSSLを使用</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_use_ssl" {USE_SSL} />一般画面にSSLを使用</label></div></td>
 	</tr>
     <tr>
 	    <th>スマートフォン</th>
-	    <td colspan="2"><input type="checkbox" name="item_smartphone_auto_redirect" {SMARTPHONE_AUTO_REDIRECT} />スマートフォンでのアクセスを自動的にスマートフォンURLへ遷移</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_smartphone_auto_redirect" {SMARTPHONE_AUTO_REDIRECT} />スマートフォンでのアクセスを自動的にスマートフォンURLへ遷移</label></div></td>
 	</tr>
     <tr>
 	    <th rowspan="2">携帯</th>
-	    <td colspan="2"><input type="checkbox" name="item_mobile_auto_redirect" {MOBILE_AUTO_REDIRECT} />携帯でのアクセスを自動的に携帯URLへ遷移</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_mobile_auto_redirect" {MOBILE_AUTO_REDIRECT} />携帯でのアクセスを自動的に携帯URLへ遷移</label></div></td>
 	</tr>
     <tr>
-	    <td colspan="2"><input type="checkbox" name="item_mobile_use_session" {MOBILE_USE_SESSION} />携帯でユーザ管理を行う(セッション管理)</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_mobile_use_session" {MOBILE_USE_SESSION} />携帯でユーザ管理を行う(セッション管理)</label></div></td>
 	</tr>
     <tr>
 	    <th rowspan="4">管理画面</th>
-	    <td colspan="2">管理画面用jQueryUIテーマ
-	    <select name="item_admin_theme">
+	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">管理画面用jQueryUIテーマ</div>
+	    <div class="col-sm-4 m3config_item"><select name="item_admin_theme" class="form-control">
 	        <patTemplate:tmpl name="admin_theme_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select>
+	    </select></div>
 	    </td>
 	</tr>
     <tr>
-	    <td colspan="2"><input type="checkbox" name="item_can_detail_config" {CAN_DETAIL_CONFIG} />詳細設定モード(開発者向け)</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_can_detail_config" {CAN_DETAIL_CONFIG} />詳細設定モード(開発者向け)</label></div></td>
 	</tr>
     <tr>
-	    <td colspan="2"><input type="checkbox" name="item_config_window_open_by_tab" {CONFIG_WINDOW_OPEN_BY_TAB} />設定画面をタブで開く</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_config_window_open_by_tab" {CONFIG_WINDOW_OPEN_BY_TAB} />設定画面をタブで開く</label></div></td>
 	</tr>
     <tr>
-		<td colspan="2">WYSIWYGエディター
-	    <select name="item_wysiwyg_editor">
+		<td colspan="2"><div class="form-control-static col-sm-3 m3config_item">WYSIWYGエディター</div>
+	    <div class="col-sm-4 m3config_item"><select name="item_wysiwyg_editor" class="form-control">
 	        <patTemplate:tmpl name="wysiwyg_editor_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select>
+	    </select></div>
 		</td>
 	</tr>
     <tr>
 	    <th rowspan="2">一般画面</th>
-	    <td colspan="2">jQueryバージョン：
-	    <select name="item_jquery_version">
+	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">jQueryバージョン：</div>
+	    <div class="col-sm-4 m3config_item"><select name="item_jquery_version" class="form-control">
 	        <patTemplate:tmpl name="jquery_version_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select>&nbsp;&nbsp;
-		<input type="checkbox" name="item_use_jquery" {USE_JQUERY} />jQueryを常に使用&nbsp;&nbsp;<input type="checkbox" name="item_smartphone_use_jquery_mobile" {SMARTPHONE_USE_JQUERY_MOBILE} />jQuery Mobileを常に使用(スマートフォン)
+	    </select></div>
+		<div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_use_jquery" {USE_JQUERY} />jQueryを常に使用</label></div></div>
+		<div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_smartphone_use_jquery_mobile" {SMARTPHONE_USE_JQUERY_MOBILE} />jQuery Mobileを常に使用(スマートフォン)</label></div></div>
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2">jQueryUIテーマ
-	    <select name="item_default_theme">
+		<td colspan="2"><div class="form-control-static col-sm-3 m3config_item">jQueryUIテーマ</div>
+	    <div class="col-sm-4 m3config_item"><select name="item_default_theme" class="form-control">
 	        <patTemplate:tmpl name="theme_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select>
+	    </select></div>
 		</td>
 	</tr>
     <tr>
 	    <th rowspan="2">テンプレート</th>
-	    <td colspan="2">システム画面テンプレート
-	    <select name="item_systemplate">
+	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">システム画面テンプレート</div>
+	    <div class="col-sm-4 m3config_item"><select name="item_systemplate" class="form-control">
 	        <patTemplate:tmpl name="systemplate_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select>
+	    </select></div>
 	    </td>
 	</tr>
     <tr>
-	    <td colspan="2"><input type="checkbox" name="item_can_change_template" {CAN_CHANGE_TEMPLATE} />一般ユーザによるテンプレートの変更を許可</td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_can_change_template" {CAN_CHANGE_TEMPLATE} />一般ユーザによるテンプレートの変更を許可</label></div></td>
 	</tr>
     <tr>
 	    <th rowspan="2">言語</th>
 	    <td colspan="2">
-	    デフォルト言語
-	    <select name="item_lang">
+	    <div class="form-control-static col-sm-3 m3config_item">デフォルト言語</div>
+	    <div class="col-sm-4 m3config_item"><select name="item_lang" class="form-control">
 	        <patTemplate:tmpl name="lang_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select>
+	    </select></div>
 	    </td>
 	</tr>
     <tr>
-	    <td colspan="2"><input type="checkbox" name="item_multi_language" {MULTI_LANGUAGE} />多言語対応
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_multi_language" {MULTI_LANGUAGE} />多言語対応</label></div>
 	    </td>
 	</tr>
     <tr>
 	    <th>一時ディレクトリ</th>
-	    <td colspan="2"><input type="text" name="item_work_dir" value="{WORK_DIR}" size="60" maxlength="120" style="width:70%;" />&nbsp;&nbsp;{WORK_DIR_ACCESS}</td>
+	    <td colspan="2"><div class="col-sm-10 m3config_item"><input type="text" name="item_work_dir" class="form-control" value="{WORK_DIR}" size="60" maxlength="120" /></div><div class="form-control-static col-sm-2 text-right m3config_item">{WORK_DIR_ACCESS}</div></td>
 	</tr>
         <tr>
 	    <th>リソース<br />ディレクトリ</th>
-	    <td colspan="2"><div style="text-align:left;float:left;">{RESOURCE_DIR}&nbsp;&nbsp;{RESOURCE_DIR_ACCESS}</div><div style="text-align:right;">ディスク使用量：{RESOURCE_DIR_SIZE}</div></td>
+	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{RESOURCE_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{RESOURCE_DIR_ACCESS}</div><div class="form-control-static col-sm-12 m3config_item">ディスク使用量：{RESOURCE_DIR_SIZE}バイト</div></td>
 	</tr>
     <tr>
 	    <th>テンプレート<br />ディレクトリ</th>
-	    <td colspan="2">{TEMPLATES_DIR}&nbsp;&nbsp;{TEMPLATES_DIR_ACCESS}</td>
+	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{TEMPLATES_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{TEMPLATES_DIR_ACCESS}</div></td>
 	</tr>
         <tr>
 	    <th>ウィジェット<br />ディレクトリ</th>
-	    <td colspan="2">{WIDGETS_DIR}&nbsp;&nbsp;{WIDGETS_DIR_ACCESS}</td>
+	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{WIDGETS_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{WIDGETS_DIR_ACCESS}</div></td>
 	</tr>
         <tr>
 	    <th>システムDB<br />バージョン</th>
-	    <td colspan="2">{SYSTEM_DB_VERSION}&nbsp;&nbsp;更新日時:&nbsp;{SYSTEM_DB_UPDATE_DT}</td>
+	    <td colspan="2"><div class="form-control-static col-sm-12 m3config_item">{SYSTEM_DB_VERSION}&nbsp;&nbsp;更新日時:&nbsp;{SYSTEM_DB_UPDATE_DT}</div></td>
 	</tr>
     </tbody>
 </table>
