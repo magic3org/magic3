@@ -22,9 +22,10 @@
 .available {
 	color:green;
 }
-.active {
+/* タブでトラブルが生じるので使用しない */
+/*.active {
 	color:green;
-}
+}*/
 .message {
 	text-align: center;
 }

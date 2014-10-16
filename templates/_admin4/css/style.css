@@ -699,9 +699,10 @@ background-color: #0081c2;
 .available {
 	color:green;
 }
-.active {
+/* タブでトラブルが生じるので使用しない */
+/*.active {
 	color:green;
-}
+}*/
 /****** Bootstrap修正 ******/
 /*** Bootstrap bug fix ***/
 input[type="password"]{
