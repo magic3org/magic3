@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-10-16 08:30+0900\n"
-"PO-Revision-Date: 2014-10-16 08:31+0900\n"
+"PO-Revision-Date: 2014-10-17 14:11+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -119,7 +119,7 @@ msgstr "マージン"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:493
 msgid "Top:"
-msgstr "トップ："
+msgstr "上："
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:494
 msgid "Bottom:"
