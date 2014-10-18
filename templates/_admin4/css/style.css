@@ -642,11 +642,17 @@ background-color: #0081c2;
 .m3config_table th {
 	width: 150px;
 }
+.m3config_table td.ckeditor {
+	padding: 0;
+}
+.m3config_table .spacer_bottom {
+	margin-bottom:5px;
+}
 .m3config_update_buttons {
 /*	margin-top: 10px;*/
 	text-align: right;
 }
-/* fix item size */
+/* fix item width */
 .m3config_item {
 	padding-left: 0;
 	padding-right: 0;
