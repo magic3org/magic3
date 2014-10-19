@@ -282,6 +282,59 @@ class linkInfoDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * フォト情報一覧を取得
+	 *
+	 * @param string	$langId				言語
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getPhotoList($langId, $limit, $page, $callback)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		
+		$params = array();
+		$queryStr  = 'SELECT ht_public_id AS id, ht_name AS name FROM photo LEFT JOIN _login_user ON ht_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE ht_deleted = false ';// 削除されていない
+		$queryStr .=     'AND ht_language_id = ? '; $params[] = $langId;
+		$queryStr .=   'ORDER BY ht_create_dt DESC ';
+		$queryStr .=   'LIMIT ' . $limit . ' OFFSET ' . $offset;
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
+	 * フォト情報数を取得
+	 *
+	 * @param string	$langId				言語
+	 * @return int							項目数
+	 */
+	function getPhotoCount($langId)
+	{
+		$params = array();
+		$queryStr  = 'SELECT ht_public_id AS id, ht_name AS name FROM photo LEFT JOIN _login_user ON ht_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=   'WHERE ht_deleted = false ';// 削除されていない
+		$queryStr .=     'AND ht_language_id = ? '; $params[] = $langId;
+		return $this->selectRecordCount($queryStr, $params);
+	}
+	/**
+	 * フォト情報を取得
+	 *
+	 * @param int		$id					イベントID
+	 * @param string	$langId				言語
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getPhoto($id, $langId, &$row)
+	{
+		$queryStr  = 'SELECT * FROM photo ';
+		$queryStr .=   'WHERE ht_deleted = false ';
+		$queryStr .=     'AND ht_public_id = ? ';
+		$queryStr .=     'AND ht_language_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		return $ret;
+	}
+	/**
 	 * Wiki情報一覧を取得
 	 *
 	 * @param string	$langId				言語

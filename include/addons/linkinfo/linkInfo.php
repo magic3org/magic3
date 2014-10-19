@@ -141,6 +141,7 @@ class linkInfo
 					$this->db->getEventList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 					break;
 				case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+					$this->db->getPhotoList($this->langId, self::DEFAULT_CONTENT_COUNT, $pageNo, array($this, 'contentLoop'));
 					break;
 			}
 
@@ -365,6 +366,11 @@ class linkInfo
 				}
 				break;
 			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+				$ret = $this->db->getPhoto($contentId, $langId, $row);
+				if ($ret){
+					$contentTitle = $row['ht_name'];
+					$contentText = $this->createContentText($row['ht_description']);
+				}
 				break;
 		}
 		return array($contentTitle, $contentText);
