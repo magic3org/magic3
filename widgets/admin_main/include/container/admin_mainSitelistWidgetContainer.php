@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWidgetContainer.php');
 
-class admin_mainHostlistWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const HOME_DIR = '/home';
 	const SITE_DEF_FILE = '/public_html/include/siteDef.php';
@@ -40,7 +40,7 @@ class admin_mainHostlistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'hostlist.tmpl.html';
+		return 'sitelist.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -98,8 +98,8 @@ class admin_mainHostlistWidgetContainer extends admin_mainBaseWidgetContainer
 				'date'		=> $this->convertToDispDate($line['date']),			// インストール日時
 				'disksize'	=> $this->convertToDispString(convFromBytes($line['disksize'])),			// ディスク使用量
 			);
-			$this->tmpl->addVars('hostlist', $row);
-			$this->tmpl->parseTemplate('hostlist', 'a');
+			$this->tmpl->addVars('sitelist', $row);
+			$this->tmpl->parseTemplate('sitelist', 'a');
 		}
 	}
 }
