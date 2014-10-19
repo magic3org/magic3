@@ -11,21 +11,30 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<div class="col-sm-8 col-sm-offset-2">
+<script type="text/javascript">
+//<![CDATA[
+$(function() {
+	m3SetConfigTable('config_area');
+});
+//]]>
+</script>
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
-<h3>サイト一覧</h3>
-<table class="table table-striped">
+<h4>サイト一覧</h4>
+<table id="config_area">
     <thead>
     <tr>
-		<th width="40%">ホスト名</th>
-	    <th width="20%">ディレクトリ名</th>
-	    <th width="20%">インストール日</th>
-		<th width="20%">ディスク使用量</th>
+		<th style="width:35px;">No</th>
+		<th>サイト名&nbsp;/<br />ホスト名</th>
+		<th style="width:35px;">状態</th>
+	    <th>ディレクトリ名</th>
+	    <th>インストール日</th>
+		<th>ディスク使用量</th>
 	</tr>
     </thead>
     <tbody>
 	<patTemplate:tmpl name="sitelist">
-    <tr><td>{HOST}</td><td>{DIR}</td><td>{DATE}</td><td class="text-right">{DISKSIZE}</td></tr>
+    <tr><td>{NO}</td><td>{HOST}</td><td>{STATUS}</td><td>{DIR}</td><td>{DATE}</td><td class="text-right">{DISKSIZE}</td></tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>

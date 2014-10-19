@@ -15,6 +15,15 @@
 -- [サーバ管理]
 -- サーバ管理を行う。
 
+-- システム設定マスター(PCサイト非公開)
+UPDATE _system_config SET sc_value = '0' WHERE sc_id = 'site_pc_in_public';
+
+-- ページIDマスター
+-- スマートフォン,携帯のアクセスポイントを隠す
+UPDATE _page_id SET pg_active = true  WHERE pg_id = 'index' AND pg_type = 0;
+UPDATE _page_id SET pg_active = false WHERE pg_id = 's_index' AND pg_type = 0;
+UPDATE _page_id SET pg_active = false WHERE pg_id = 'm_index' AND pg_type = 0;
+
 -- 管理画面メニューデータ
 DELETE FROM _nav_item;
 INSERT INTO _nav_item
