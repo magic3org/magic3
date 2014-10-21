@@ -18,6 +18,12 @@
 -- システム設定マスター(PCサイト非公開)
 UPDATE _system_config SET sc_value = '0' WHERE sc_id = 'site_pc_in_public';
 
+-- サイト定義マスター
+DELETE FROM _site_def WHERE sd_id = 'site_name';
+INSERT INTO _site_def
+(sd_id,                  sd_language_id, sd_value,         sd_name) VALUES
+('site_name',            'ja',           'サーバ管理',               'サイト名');
+
 -- ページIDマスター
 -- スマートフォン,携帯のアクセスポイントを隠す
 UPDATE _page_id SET pg_active = true  WHERE pg_id = 'index' AND pg_type = 0;
@@ -28,7 +34,7 @@ UPDATE _page_id SET pg_active = false WHERE pg_id = 'm_index' AND pg_type = 0;
 DELETE FROM _nav_item;
 INSERT INTO _nav_item
 (ni_id, ni_parent_id, ni_index, ni_nav_id,    ni_task_id,        ni_view_control, ni_param, ni_name,                ni_help_title,          ni_help_body) VALUES
-(200,   0,            2,        'admin_menu', '_adminserver',    0,               '',       'システム運用',         '',                     ''),
+(200,   0,            2,        'admin_menu', '_adminserver',    0,               '',       'サーバ運用',         '',                     ''),
 (201,   200,          0,        'admin_menu', 'serverinfo',      0,               '',       'サーバ情報',           'サーバ情報',           'このサーバについての情報を表示します。'),
 (202,   200,          1,        'admin_menu', 'sitelist',        0,               '',       'サイト一覧',           'サイト一覧',           '運営中のサイトの情報を表示します。'),
 (299,   0,            3,        'admin_menu', '_299',            1,               '',       '改行',                 '',                     ''),

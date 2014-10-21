@@ -56,7 +56,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		// ディレクトリ一覧を取得
 		$hostArray = array();
 		$searchPath = self::HOME_DIR;
-		if (is_dir($searchPath)){
+		if ($ret = @is_dir($searchPath)){
 			$dir = dir($searchPath);
 			while (($file = $dir->read()) !== false){
 				$filePath = $searchPath . '/' . $file;
@@ -88,7 +88,10 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 			}
 			$dir->close();
 		}
-		
+		if ($ret === false){
+			$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
+			return;
+		}
 		// 値を埋め込む
 		for ($i = 0; $i < count($hostArray); $i++){
 			$line = $hostArray[$i];

@@ -17,6 +17,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWid
 
 class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	const MAGIC3_SRC_VER_FILE = '/var/magic3/src_version';
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -55,7 +57,11 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$path = '/';
 
 		//全体サイズ
-		$totalBytes = disk_total_space($path);
+		$totalBytes = @disk_total_space($path);
+		if ($totalBytes === false){
+			$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
+			return;
+		}
 		$class = min((int)log($totalBytes , $base) , count($units) - 1);
 		$totalStr = sprintf('%1.2f' , $totalBytes / pow($base, $class)) . $units[$class];
 
@@ -72,11 +78,19 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		//使用率
 		$usedRateStr = round($usedBytes / $totalBytes * 100, 2) . '%';
 		
+		// Magic3のソースバージョン
+		if (file_exists(self::MAGIC3_SRC_VER_FILE)){
+			$srcVer = file_get_contents(self::MAGIC3_SRC_VER_FILE);
+		} else {
+			$srcVer = '未取得';
+		}
+		
 		// 値を埋め込む
 		$this->tmpl->addVar('_widget', 'total_size',	$this->convertToDispString($totalStr));
 		$this->tmpl->addVar('_widget', 'free_size',		$this->convertToDispString($freeStr));
 		$this->tmpl->addVar('_widget', 'used_size',		$this->convertToDispString($usedStr));
 		$this->tmpl->addVar('_widget', 'used_rate',		$this->convertToDispString($usedRateStr));
+		$this->tmpl->addVar('_widget', 'src_version',		$this->convertToDispString($srcVer));
 	}
 }
 ?>
