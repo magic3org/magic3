@@ -19,6 +19,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const HOME_DIR = '/home';
 	const SITE_DEF_FILE = '/public_html/include/siteDef.php';
+	const MSG_SITE_NOT_INSTALLED = 'インストール未実行';
 	
 	/**
 	 * コンストラクタ
@@ -53,6 +54,13 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		// Apacheで運営されているバーチャルホストの情報を取得
+		$siteCondition = shell_exec('httpd -S');
+		echo $siteCondition;
+		
+		// マスターホストのディレクトリ名
+		$masterHostId = basename(dirname($this->gEnv->getSystemRootPath()));
+		
 		// ディレクトリ一覧を取得
 		$hostArray = array();
 		$searchPath = self::HOME_DIR;
@@ -63,7 +71,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 				$pathParts = pathinfo($file);
 					
 				// ディレクトリのときは、ドメイン名を取得
-				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath)){
+				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath) && $file != $masterHostId){
 					$siteInfoFile = $filePath . self::SITE_DEF_FILE;
 					if (file_exists($siteInfoFile)){
 						$line = array();
@@ -95,8 +103,11 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		// 値を埋め込む
 		for ($i = 0; $i < count($hostArray); $i++){
 			$line = $hostArray[$i];
+			$hostStr = $this->convertToDispString($line['host']);
+			if (empty($hostStr)) $hostStr = '<span class="error">' . self::MSG_SITE_NOT_INSTALLED . '</span>';
 			$row = array(
-				'host'	=> $this->convertToDispString($line['host']),	// ホスト名
+				'no'		=> $i + 1,
+				'host'		=> $hostStr,	// ホスト名
 				'dir'		=> $this->convertToDispString($line['dir']),			// ディレクトリ名
 				'date'		=> $this->convertToDispDate($line['date']),			// インストール日時
 				'disksize'	=> $this->convertToDispString(convFromBytes($line['disksize'])),			// ディスク使用量

@@ -696,6 +696,9 @@ background-color: #0081c2;
 .required {
 	color:red;
 }
+.notice {
+	color:red;
+}
 .emergency {
 	color:red;
 }

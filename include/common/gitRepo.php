@@ -323,6 +323,34 @@ class GitRepo
 		return json_decode($this->responseText);
 	}
 	/**
+	 * タグ情報から最新版のバージョン番号を取得
+	 *
+	 * @return string		バージョン番号
+	 */
+	function getLatestVersionStrByTag()
+	{
+		$version = '';
+		$tagInfoArray = $this->getTagInfo();
+		if ($tagInfoArray !== false){
+			$tagInfoCount = count($tagInfoArray);
+			if ($tagInfoCount > 0){
+				for ($i = 0; $i < $tagInfoCount; $i++){
+					$tagInfo = $tagInfoArray[$i];
+					$tagName = $tagInfo->name;
+					$zipUrl = $tagInfo->zipball_url;
+				
+					// バージョン番号を取得
+					$exp = '/[\c\.]*([0-9\.]+)/s';			// バージョン番号の最後の「b」(ベータ版)等は許可
+					if (preg_match($exp, $tagName, $matches)){
+						$version = $matches[1];
+						if (!empty($version)) break;
+					}
+				}
+			}
+		}
+		return $version;
+	}
+	/**
 	 * タグからZip圧縮ファイルをダウンロード
 	 *
 	 * @param string $tagId		タグID

@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 
 class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 {
@@ -79,8 +80,19 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$usedRateStr = round($usedBytes / $totalBytes * 100, 2) . '%';
 		
 		// Magic3のソースバージョン
+		$repo = new GitRepo('magic3org', 'magic3');
+		$latestVersion = $repo->getLatestVersionStrByTag();
 		if (file_exists(self::MAGIC3_SRC_VER_FILE)){
 			$srcVer = file_get_contents(self::MAGIC3_SRC_VER_FILE);
+			$srcVer = trim($srcVer);
+			
+			// 最新バージョンの場合はインストール不可
+			$disabled = '';
+			if (!empty($srcVer) && version_compare($srcVer, $latestVersion) == 0) $disabled = 'disabled';
+			$this->tmpl->addVar("_widget", "update_src_button_disabled", $disabled);
+			
+			// 最新バージョン表示用
+			$versionInfoStr = '<span class="available">(最新版 ' . $latestVersion . ')</span>';
 		} else {
 			$srcVer = '未取得';
 		}
@@ -90,7 +102,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar('_widget', 'free_size',		$this->convertToDispString($freeStr));
 		$this->tmpl->addVar('_widget', 'used_size',		$this->convertToDispString($usedStr));
 		$this->tmpl->addVar('_widget', 'used_rate',		$this->convertToDispString($usedRateStr));
-		$this->tmpl->addVar('_widget', 'src_version',		$this->convertToDispString($srcVer));
+		$this->tmpl->addVar('_widget', 'src_version',	$this->convertToDispString($srcVer) . $versionInfoStr);
 	}
 }
 ?>
