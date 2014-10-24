@@ -41,7 +41,12 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'sitelist.tmpl.html';
+		$ret = is_dir(self::HOME_DIR);
+		if ($ret === false){		// ディレクトリの参照ができない場合はアクセス不可
+			return 'message.tmpl.html';
+		} else {
+			return 'sitelist.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -55,8 +60,20 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		// Apacheで運営されているバーチャルホストの情報を取得
+		$vhostList = array();
 		$siteCondition = shell_exec('httpd -S');
-		echo $siteCondition;
+		preg_match_all('/^\s*port 80 namevhost\s*(.*?)\s*\((.*?):(\d+?)\).*$/m', $siteCondition, $matches, PREG_SET_ORDER);
+		for ($i = 0; $i < count($matches); $i++){
+			$hostName = $matches[$i][1];
+			$configPath = $matches[$i][2];
+
+			// ホストIDを取得
+			$hostID = '';
+			$fileContent = file_get_contents($configPath);
+			$ret = preg_match('/^\s*DocumentRoot\s*\/home\/(.*?)\/.*$/m', $fileContent, $hostMatches);
+			if ($ret) $hostID = $hostMatches[1];
+			if (!empty($hostID)) $vhostList[$hostID] = array('hostname' => $hostName, 'config_path' => $configPath);
+		}
 		
 		// マスターホストのディレクトリ名
 		$masterHostId = basename(dirname($this->gEnv->getSystemRootPath()));
@@ -72,13 +89,16 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 					
 				// ディレクトリのときは、ドメイン名を取得
 				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath) && $file != $masterHostId){
+					$line = array();
+					$hostInfo = $vhostList[$file];
+					if (!empty($hostInfo['hostname'])) $line['host'] = $hostInfo['hostname'];
+						
 					$siteInfoFile = $filePath . self::SITE_DEF_FILE;
 					if (file_exists($siteInfoFile)){
-						$line = array();
 						$line['dir'] = $file;
 						$line['date'] = date("Y/m/d H:i:s", filemtime($siteInfoFile));
 						
-						// ホスト名取得
+/*						// ホスト名取得
 						$host = '';
 						$contents = file_get_contents($siteInfoFile);
 						$key = 'M3_SYSTEM_ROOT_URL';
@@ -86,12 +106,12 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 							$params = parse_url($matches[1]);
 							$host = $params['host'];
 						}
-						$line['host'] = $host;
+						$line['host'] = $host;*/
 						
 						// 使用ディスク量
 						$line['disksize'] = calcDirSize($filePath);
-						$hostArray[] = $line;
 					}
+					$hostArray[] = $line;
 				}
 			}
 			$dir->close();
