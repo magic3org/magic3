@@ -19,7 +19,12 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const HOME_DIR = '/home';
 	const SITE_DEF_FILE = '/public_html/include/siteDef.php';
-	const MSG_SITE_NOT_INSTALLED = 'インストール未実行';
+	const STSTUS_NOT_INSTALLED = 'インストール未実行';
+	const STSTUS_ACTIVE = '運用中';
+	const LINK_ADMIN_PAGE = '管理画面';
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 運用中アイコン
+	const NOT_INSTALLED_ICON_FILE = '/images/system/notice32.png';			// インストール未実行アイコン
+	const WINDOW_ICON_FILE = '/images/system/window32.png';			// 管理画面アイコン
 	
 	/**
 	 * コンストラクタ
@@ -91,25 +96,29 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_dir($filePath) && $file != $masterHostId){
 					$line = array();
 					$hostInfo = $vhostList[$file];
-					if (!empty($hostInfo['hostname'])) $line['host'] = $hostInfo['hostname'];
+					if (!isset($hostInfo)) continue;		// バーチャルホストでないディレクトリは読み飛ばす
+					
+					if (!empty($hostInfo['hostname'])) $line['hostname'] = $hostInfo['hostname'];
+					
+					// ディレクトリ作成日をホスト作成日とする
+					$line['date'] = filemtime($filePath);
+					
+					// 使用ディスク量
+					$line['disksize'] = calcDirSize($filePath);
 						
 					$siteInfoFile = $filePath . self::SITE_DEF_FILE;
 					if (file_exists($siteInfoFile)){
 						$line['dir'] = $file;
-						$line['date'] = date("Y/m/d H:i:s", filemtime($siteInfoFile));
+//						$line['date'] = date("Y/m/d H:i:s", filemtime($siteInfoFile));
 						
-/*						// ホスト名取得
-						$host = '';
+						// URL取得
+						$url = '';
 						$contents = file_get_contents($siteInfoFile);
 						$key = 'M3_SYSTEM_ROOT_URL';
 						if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)){
-							$params = parse_url($matches[1]);
-							$host = $params['host'];
+							$url = $matches[1];
 						}
-						$line['host'] = $host;*/
-						
-						// 使用ディスク量
-						$line['disksize'] = calcDirSize($filePath);
+						$line['url'] = $url;
 					}
 					$hostArray[] = $line;
 				}
@@ -121,16 +130,37 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 			return;
 		}
 		// 値を埋め込む
+		usort($hostArray, create_function('$a,$b', 'return $a["date"] - $b["date"];'));
 		for ($i = 0; $i < count($hostArray); $i++){
 			$line = $hostArray[$i];
-			$hostStr = $this->convertToDispString($line['host']);
-			if (empty($hostStr)) $hostStr = '<span class="error">' . self::MSG_SITE_NOT_INSTALLED . '</span>';
+			$hostStr = $this->convertToDispString($line['hostname']);
+//			if (empty($hostStr)) $hostStr = '<span class="error">' . self::MSG_SITE_NOT_INSTALLED . '</span>';
+			
+			// 運用状態アイコン
+			if (empty($line['url'])){		// インストールが実行されていないとき
+				$titleStr = self::STSTUS_NOT_INSTALLED;
+				$iconUrl = $this->gEnv->getRootUrl() . self::NOT_INSTALLED_ICON_FILE;		// インストール未実行アイコン
+			} else {
+				$titleStr = self::STSTUS_ACTIVE;
+				$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;		// 運用中アイコン
+			}
+			$statusTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" />';
+		
+			// 管理画面アイコン
+			$titleStr = self::LINK_ADMIN_PAGE;
+			$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;		// 管理画面アイコン
+			$linkUrl = 'http://' . $line['hostname'] . '/' . M3_DIR_NAME_ADMIN . '/';
+			$linkTag = '<a href="' . convertUrlToHtmlEntity($linkUrl) . '" target="_blank" rel="m3help" title="' . $titleStr . '">';
+			$linkTag .= '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $titleStr . '" /></a>';
+			
 			$row = array(
 				'no'		=> $i + 1,
 				'host'		=> $hostStr,	// ホスト名
+				'status'	=> $statusTag,	// 状態
 				'dir'		=> $this->convertToDispString($line['dir']),			// ディレクトリ名
-				'date'		=> $this->convertToDispDate($line['date']),			// インストール日時
+				'date'		=> $this->convertToDispDate(date("Y/m/d H:i:s", $line['date'])),			// 作成日時
 				'disksize'	=> $this->convertToDispString(convFromBytes($line['disksize'])),			// ディスク使用量
+				'link'		=> $linkTag
 			);
 			$this->tmpl->addVars('sitelist', $row);
 			$this->tmpl->parseTemplate('sitelist', 'a');

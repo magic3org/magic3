@@ -27,14 +27,15 @@ $(function() {
 		<th style="width:35px;">No</th>
 		<th>ホスト名</th>
 		<th style="width:35px;">状態</th>
-	    <th>ホストID</th>
-	    <th>インストール日</th>
-		<th>ディスク使用量</th>
+	    <th style="width:100px;">ホストID</th>
+	    <th style="width:100px;">作成日</th>
+		<th style="width:100px;">ディスク使用量</th>
+		<th style="width:100px;">管理画面</th>
 	</tr>
     </thead>
     <tbody>
 	<patTemplate:tmpl name="sitelist">
-    <tr><td>{NO}</td><td>{HOST}</td><td>{STATUS}</td><td>{DIR}</td><td>{DATE}</td><td class="text-right">{DISKSIZE}</td></tr>
+    <tr><td>{NO}</td><td>{HOST}</td><td>{STATUS}</td><td>{DIR}</td><td>{DATE}</td><td class="text-right">{DISKSIZE}</td><td>{LINK}</td></tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
