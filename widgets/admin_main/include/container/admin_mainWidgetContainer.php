@@ -224,6 +224,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						$task = 'analyzecalc';
 					} else if ($task == 'analyzegraph'){		// アクセス解析グラフ表示
 						$task = 'analyzegraph';
+					} else if ($task == 'sitelist' ||				// サイト一覧
+								$task == 'sitelist_detail'){		// サイト詳細
+						$task = 'sitelist';
 					}
 					
 					// オプション表示

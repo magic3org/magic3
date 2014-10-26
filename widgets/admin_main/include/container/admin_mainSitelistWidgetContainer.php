@@ -46,11 +46,17 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
+		$task = $request->trimValueOf('task');
+		
 		$ret = is_dir(self::HOME_DIR);
 		if ($ret === false){		// ディレクトリの参照ができない場合はアクセス不可
 			return 'message.tmpl.html';
 		} else {
-			return 'sitelist.tmpl.html';
+			if ($task == 'sitelist_detail'){		// 詳細画面
+				return 'sitelist_detail.tmpl.html';
+			} else {
+				return 'sitelist.tmpl.html';
+			}
 		}
 	}
 	/**
@@ -63,6 +69,22 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	 * @param								なし
 	 */
 	function _assign($request, &$param)
+	{
+		$task = $request->trimValueOf('task');
+		
+		if ($task == 'sitelist_detail'){		// 詳細画面
+			$this->createDetail($request);
+		} else {
+			$this->createList($request);
+		}
+	}
+	/**
+	 * 一覧画面作成
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function createList($request)
 	{
 		// Apacheで運営されているバーチャルホストの情報を取得
 		$vhostList = array();
@@ -173,6 +195,16 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->tmpl->addVars('sitelist', $row);
 			$this->tmpl->parseTemplate('sitelist', 'a');
 		}
+	}
+	/**
+	 * 詳細画面作成
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function createDetail($request)
+	{
+		$act = $request->trimValueOf('act');
 	}
 }
 ?>
