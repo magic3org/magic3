@@ -129,6 +129,10 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->SetMsg(self::MSG_APP_ERR, $this->_('Can not access the page.'));		// アクセスできません
 			return;
 		}
+		$adminUrl = $this->gEnv->getAdminUrl();
+		$isSslAdminUrl = false;			// 管理画面がSSLアクセスかどうか
+		if (strStartsWith($adminUrl, 'https://')) $isSslAdminUrl = true;
+		
 		// 値を埋め込む
 		usort($hostArray, create_function('$a,$b', 'return $a["date"] - $b["date"];'));
 		for ($i = 0; $i < count($hostArray); $i++){
@@ -149,7 +153,11 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 			// 管理画面アイコン
 			$titleStr = self::LINK_ADMIN_PAGE;
 			$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;		// 管理画面アイコン
-			$linkUrl = 'http://' . $line['hostname'] . '/' . M3_DIR_NAME_ADMIN . '/';
+			if ($isSslAdminUrl){		// マスターホストの管理画面がSSLでのアクセスの場合は、管理対象のホストの管理画面もSSLアクセスとする
+				$linkUrl = 'https://' . $line['hostname'] . '/' . M3_DIR_NAME_ADMIN . '/';
+			} else {
+				$linkUrl = 'http://' . $line['hostname'] . '/' . M3_DIR_NAME_ADMIN . '/';
+			}
 			$linkTag = '<a href="' . convertUrlToHtmlEntity($linkUrl) . '" target="_blank" rel="m3help" title="' . $titleStr . '">';
 			$linkTag .= '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $titleStr . '" /></a>';
 			
