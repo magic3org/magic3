@@ -248,6 +248,8 @@ class EnvManager extends Core
 	// ##################### システム全体のパス環境 #####################
 	/**
 	 * システムルートディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getSystemRootPath()
 	{
@@ -255,6 +257,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * 管理用ディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getAdminPath()
 	{
@@ -262,6 +266,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * includeディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getIncludePath()
 	{
@@ -276,13 +282,26 @@ class EnvManager extends Core
 	}*/
 	/**
 	 * addonsディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getAddonsPath()
 	{
 		return M3_SYSTEM_INCLUDE_PATH . DIRECTORY_SEPARATOR . 'addons';
 	}
 	/**
+	 * cronjobsディレクトリへのパスを取得
+	 *
+	 * @return string			パス
+	 */
+	public function getCronjobsPath()
+	{
+		return M3_SYSTEM_INCLUDE_PATH . DIRECTORY_SEPARATOR . 'cronjobs';
+	}
+	/**
 	 * コンテナクラス用ディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getContainerPath()
 	{
@@ -290,6 +309,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * DBクラス用ディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getDbPath()
 	{
@@ -297,6 +318,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * ライブラリ用ディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getLibPath()
 	{
@@ -304,6 +327,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * SQL格納用ディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getSqlPath()
 	{
@@ -311,6 +336,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * テーブル作成用SQL格納用ディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getTablesPath()
 	{
@@ -318,6 +345,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * Coreディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getCorePath()
 	{
@@ -325,6 +354,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * Commonディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getCommonPath()
 	{
@@ -332,6 +363,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * dataディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getDataPath()
 	{
@@ -339,6 +372,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * Joomla用ルートディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getJoomlaRootPath()
 	{
@@ -346,6 +381,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * スクリプトファイルディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getScriptsPath()
 	{
@@ -353,6 +390,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * テンプレート用ディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getTemplatesPath()
 	{
@@ -360,6 +399,8 @@ class EnvManager extends Core
 	}
 	/**
 	 * リソース用ディレクトリへのパスを取得
+	 *
+	 * @return string			パス
 	 */
 	public function getResourcePath()
 	{
@@ -384,6 +425,8 @@ class EnvManager extends Core
 	 * widgetsディレクトリへのパスを取得
 	 *
 	 * 例) /var/www/html/magic3/widgets
+	 *
+	 * @return string			パス
 	 */
 	public function getWidgetsPath()
 	{

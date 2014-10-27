@@ -19,6 +19,7 @@ require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const MAGIC3_SRC_VER_FILE = '/var/magic3/src_version';
+	const CMD_FILENAME_UPDATE_INSTALL_PACKAGE = 'CMD_00_UPDATEINSTALLPACKAGE';			// インストールパッケージ取得ジョブファイル名
 	
 	/**
 	 * コンストラクタ
@@ -56,6 +57,25 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB' );
 		$base = 1024;
 		$path = '/';
+		$cmdPath = $this->gEnv->getCronjobsPath();
+		$cmdFile_update_install_package = $cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;		// インストールパッケージの更新、コマンド実行ファイル
+		
+		// ジョブの実行状況を表示
+		if (file_exists($cmdFile_update_install_package)) $this->setUserErrorMsg('インストーラの更新中です');
+
+		$act = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_ACT);
+		if ($act == 'getnewsrc'){		// 最新インストールパッケージ取得のとき
+			if (!file_exists($cmdPath)) mkdir($cmdPath, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+			
+			// コマンドファイルにパラメータを書き込む
+			$cmdContent = '';
+			$email = $this->gEnv->getSiteEmail();
+			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
+			$ret = file_put_contents($cmdFile_update_install_package, $cmdContent, LOCK_EX/*排他的アクセス*/);
+			if ($ret !== false){
+//echo '成功';
+			}
+		}
 
 		//全体サイズ
 		$totalBytes = @disk_total_space($path);
@@ -87,8 +107,8 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$srcVer = trim($srcVer);
 			
 			// 最新バージョンの場合はインストール不可
-			$disabled = '';
-			if (!empty($srcVer) && version_compare($srcVer, $latestVersion) == 0) $disabled = 'disabled';
+//			$disabled = '';
+//			if (!empty($srcVer) && version_compare($srcVer, $latestVersion) == 0) $disabled = 'disabled';
 			$this->tmpl->addVar("_widget", "update_src_button_disabled", $disabled);
 			
 			// 最新バージョン表示用

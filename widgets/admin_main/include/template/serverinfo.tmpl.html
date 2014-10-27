@@ -26,6 +26,8 @@ $(function(){
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
 <h3>サーバ情報</h3>
 <h4>ディスク</h4>
 <table id="server_info">
@@ -42,5 +44,6 @@ $(function(){
     <tr><th>インストーラ<br />バージョン</th><td>{SRC_VERSION}<div class="pull-right"><input type="button" class="button" onclick="updateSrc();" value="最新版を取得" {UPDATE_SRC_BUTTON_DISABLED} /></div></td></tr>
     </tbody>
 </table>
+</form>
 </div>
 </patTemplate:tmpl>

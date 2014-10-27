@@ -29,28 +29,28 @@ $(function(){
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
-<h4><span {_HELP_CONFIGSITE_PAGEHEAD}>{_LC_LABEL_HEADER_INFO}</span></h4>
+<h4><span {_HELP_SITELIST_PAGEHEAD}>{_LC_LABEL_HEADER_INFO}</span></h4>
 <table id="config_table">
     <tbody>
         <tr>
-	    <th><span {_HELP_CONFIGSITE_TITLE}>{_LC_LABEL_HEADER_TITLE}</span></th>
+	    <th><span {_HELP_SITELIST_TITLE}>{_LC_LABEL_HEADER_TITLE}</span></th>
 	    <td><input type="text" name="site_title" class="form-control" value="{SITE_TITLE}" size="100" maxlength="100" style="width:100%;" /></td>
 	</tr>
         <tr>
-	    <th><span {_HELP_CONFIGSITE_DESCRIPTION}>{_LC_LABEL_HEADER_DESC}</span></th>
+	    <th><span {_HELP_SITELIST_DESCRIPTION}>{_LC_LABEL_HEADER_DESC}</span></th>
 	    <td><textarea name="site_description" class="form-control" rows="2" cols="50" style="width:100%;">{SITE_DESC}</textarea></td>
 	</tr>
         <tr>
-	    <th><span {_HELP_CONFIGSITE_KEYWORDS}>{_LC_LABEL_HEADER_KEYWORDS}</span></th>
+	    <th><span {_HELP_SITELIST_KEYWORDS}>{_LC_LABEL_HEADER_KEYWORDS}</span></th>
 	    <td><textarea name="site_keyword" class="form-control" rows="2" cols="50" style="width:100%;">{SITE_KEYWORD}</textarea></td>
 	</tr>
         <tr>
-	    <th><span {_HELP_CONFIGSITE_OTHERS}>{_LC_LABEL_HEADER_OTHERS}</span></th>
+	    <th><span {_HELP_SITELIST_OTHERS}>{_LC_LABEL_HEADER_OTHERS}</span></th>
 	    <td><textarea name="meta_others" class="form-control" rows="2" cols="50" style="width:100%;">{META_OTHERS}</textarea></td>
 	</tr>
     </tbody>
 </table>
-<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" /></div>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
 </form>
 </div>
 </patTemplate:tmpl>
