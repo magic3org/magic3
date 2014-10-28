@@ -13,9 +13,15 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function updateItem(){
-	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
-	document.main.act.value='update';
+function addItem(){
+	if (!window.confirm('サイトを新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (!window.confirm('サイトを削除しますか?')) return false;
+	document.main.act.value = 'delete';
 	document.main.submit();
 	return true;
 }
@@ -35,29 +41,32 @@ $(function(){
 <form method="post" name="main">
 <input type="hidden" name="task" value="sitelist_detail" />
 <input type="hidden" name="act" />
-<input type="hidden" name="id" />
+<input type="hidden" name="id" value="{ID}" />
 <h3>サイト詳細<div class="pull-right"><div class="btn-group btn-group-sm"><input type="button" class="button" onclick="cancelItem();" value="戻る" /></div></div></h3>
 <table id="config_table">
     <tbody>
-        <tr>
-	    <th><span {_HELP_SITELIST_TITLE}>{_LC_LABEL_HEADER_TITLE}</span></th>
-	    <td><input type="text" name="site_title" class="form-control" value="{SITE_TITLE}" size="100" maxlength="100" style="width:100%;" /></td>
+    <tr>
+	    <th>ホスト名</th>
+	    <td colspan="3"><patTemplate:tmpl name="input_hostname" visibility="hidden"><input type="text" name="item_hostname" class="form-control" value="{HOSTNAME}" maxlength="100" /></patTemplate:tmpl>{HOSTNAME}</td>
 	</tr>
-        <tr>
-	    <th><span {_HELP_SITELIST_DESCRIPTION}>{_LC_LABEL_HEADER_DESC}</span></th>
-	    <td><textarea name="site_description" class="form-control" rows="2" cols="50" style="width:100%;">{SITE_DESC}</textarea></td>
+    <tr>
+	    <th>サイト名</th>
+	    <td>{SITE_NAME}</td>
+	    <th>ホストID</th>
+	    <td>{HOST_ID}</td>
 	</tr>
-        <tr>
-	    <th><span {_HELP_SITELIST_KEYWORDS}>{_LC_LABEL_HEADER_KEYWORDS}</span></th>
-	    <td><textarea name="site_keyword" class="form-control" rows="2" cols="50" style="width:100%;">{SITE_KEYWORD}</textarea></td>
-	</tr>
-        <tr>
-	    <th><span {_HELP_SITELIST_OTHERS}>{_LC_LABEL_HEADER_OTHERS}</span></th>
-	    <td><textarea name="meta_others" class="form-control" rows="2" cols="50" style="width:100%;">{META_OTHERS}</textarea></td>
+    <tr>
+	    <th>作成日</th>
+	    <td>{DATE}</td>
+	    <th>Magic3バージョン</th>
+	    <td>{VERSION}</td>
 	</tr>
     </tbody>
 </table>
-<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
+<div class="well m3config_update_buttons">
+<patTemplate:tmpl name="add_button" visibility="hidden"><input type="button" class="button" onclick="addItem();" value="新規登録" /></patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden"><input type="button" class="button" onclick="delItem();" value="削除" /></patTemplate:tmpl>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

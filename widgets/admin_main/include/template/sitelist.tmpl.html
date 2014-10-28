@@ -13,6 +13,12 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function newItem(){
+	document.main.task.value = 'sitelist_detail';
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
 function editItemById(id){
 	document.main.task.value = 'sitelist_detail';
 	document.main.act.value = 'edit';
@@ -45,7 +51,7 @@ $(function() {
     </thead>
     <tbody>
 	<patTemplate:tmpl name="sitelist">
-    <tr><td>{NO}</td><td><a href="#" onclick="editItemById('{HOST_ID}');">{HOST}</a></td><td>{STATUS}</td><td>{DIR}</td><td>{DATE}</td><td class="text-right">{DISKSIZE}</td><td>{LINK}</td></tr>
+    <tr><td>{NO}</td><td><a href="#" onclick="editItemById('{ID}');">{HOST}</a></td><td>{STATUS}</td><td>{DIR}</td><td>{DATE}</td><td class="text-right">{DISKSIZE}</td><td>{LINK}</td></tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>

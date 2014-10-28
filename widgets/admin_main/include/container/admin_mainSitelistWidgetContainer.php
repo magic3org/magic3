@@ -86,21 +86,8 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function createList($request)
 	{
-		// Apacheで運営されているバーチャルホストの情報を取得
-		$vhostList = array();
-		$siteCondition = shell_exec('httpd -S');
-		preg_match_all('/^\s*port 80 namevhost\s*(.*?)\s*\((.*?):(\d+?)\).*$/m', $siteCondition, $matches, PREG_SET_ORDER);
-		for ($i = 0; $i < count($matches); $i++){
-			$hostName = $matches[$i][1];
-			$configPath = $matches[$i][2];
-
-			// ホストIDを取得
-			$hostID = '';
-			$fileContent = file_get_contents($configPath);
-			$ret = preg_match('/^\s*DocumentRoot\s*\/home\/(.*?)\/.*$/m', $fileContent, $hostMatches);
-			if ($ret) $hostID = $hostMatches[1];
-			if (!empty($hostID)) $vhostList[$hostID] = array('hostname' => $hostName, 'config_path' => $configPath);
-		}
+		// Apacheからバーチャルホスト情報を取得
+		$vhostList = $this->_getVirtualHostInfo();
 		
 		// マスターホストのディレクトリ名
 		$masterHostId = basename(dirname($this->gEnv->getSystemRootPath()));
@@ -185,6 +172,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 			
 			$row = array(
 				'no'		=> $i + 1,
+				'id'		=> $this->convertToDispString($line['hostname']),	// ID(ホスト名)
 				'host'		=> $hostStr,	// ホスト名
 				'status'	=> $statusTag,	// 状態
 				'dir'		=> $this->convertToDispString($line['dir']),			// ディレクトリ名
@@ -204,7 +192,72 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function createDetail($request)
 	{
+		// Apacheからバーチャルホスト情報を取得
+		$vhostList = $this->_getVirtualHostInfo();
+		
 		$act = $request->trimValueOf('act');
+		$hostname = $request->trimValueOf('id');				// ホスト名
+		
+		$replaceNew = false;		// データを再取得するかどうか
+		if ($act == 'add'){		// 新規追加のとき
+		} else if ($act == 'delete'){		// 削除のとき
+		} else {		// 初期状態
+			$replaceNew = true;			// データを再取得
+		}
+		// 表示データ再取得
+		if ($replaceNew){
+			// ホストID取得
+			$hostId = '';
+			foreach ($vhostList as $key => $vhost){
+				if ($vhost['hostname'] == $hostname){
+					$hostId = $key;
+					break;
+				}
+			}
+			
+			// ディレクトリ日付取得
+			$siteDir = self::HOME_DIR . '/' . $hostId;
+			$createDt = filemtime($siteDir);
+		}
+		
+		if (empty($hostname)){		// 新規追加のとき
+			$this->tmpl->setAttribute('input_hostname', 'visibility', 'visible');	// ホスト名入力領域表示
+			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');		// 新規追加ボタン表示
+			
+			$this->tmpl->addVar("input_hostname", "hostname", $hostname);			// メニューID
+		} else {
+			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 削除ボタン表示
+			$this->tmpl->addVar("_widget", "hostname", $hostname);			// ホスト名
+		}
+		$this->tmpl->addVar("_widget", "host_id", $hostId);		// ホストID
+		$this->tmpl->addVar("_widget", "date", $this->convertToDispDate(date("Y/m/d H:i:s", $createDt)));		// 作成日付
+		$this->tmpl->addVar("_widget", "version", $version);		// Magic3バージョン
+		
+	}
+	/**
+	 * Apacheから運用中のバーチャルホスト情報を取得
+	 *
+	 * @return array		バーチャルホスト情報
+	 */
+	function _getVirtualHostInfo()
+	{
+		// Apacheで運営されているバーチャルホストの情報を取得
+		$vhostList = array();
+		$siteCondition = shell_exec('httpd -S');
+		preg_match_all('/^\s*port 80 namevhost\s*(.*?)\s*\((.*?):(\d+?)\).*$/m', $siteCondition, $matches, PREG_SET_ORDER);
+		for ($i = 0; $i < count($matches); $i++){
+			$hostName = $matches[$i][1];
+			$configPath = $matches[$i][2];
+
+			// ホストIDを取得
+			$hostID = '';
+			$fileContent = file_get_contents($configPath);
+			$ret = preg_match('/^\s*DocumentRoot\s*\/home\/(.*?)\/.*$/m', $fileContent, $hostMatches);
+			if ($ret) $hostID = $hostMatches[1];
+			if (!empty($hostID)) $vhostList[$hostID] = array('hostname' => $hostName, 'config_path' => $configPath);
+		}
+		
+		return $vhostList;
 	}
 }
 ?>
