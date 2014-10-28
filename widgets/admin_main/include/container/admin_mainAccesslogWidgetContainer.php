@@ -117,7 +117,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 			'NI' => 'nict.gif',		// 独立行政法人情報通信研究機構
 			'DB' => 'dotbot.gif',		// Dotbot
 			'EW' => 'entireweb.png',		// Entireweb
-			'TB' => 'turnitinbot.gif',		// TurnitinBot
+			'TB' => 'turnitinbot.png',		// TurnitinBot
 			'BI' => 'bing.png',		// Bing
 			'YC' => 'yacy.png',		// YaCy
 			
