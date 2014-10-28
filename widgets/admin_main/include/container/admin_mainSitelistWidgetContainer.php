@@ -17,14 +17,18 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWid
 
 class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	private $cmdPath;		// ジョブ格納ディレクトリ
 	const HOME_DIR = '/home';
 	const SITE_DEF_FILE = '/public_html/include/siteDef.php';
+	const GLOBAL_FILE = '/public_html/include/global.php';
 	const STSTUS_NOT_INSTALLED = 'インストール未実行';
 	const STSTUS_ACTIVE = '運用中';
 	const LINK_ADMIN_PAGE = '管理画面';
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 運用中アイコン
 	const NOT_INSTALLED_ICON_FILE = '/images/system/notice32.png';			// インストール未実行アイコン
 	const WINDOW_ICON_FILE = '/images/system/window32.png';			// 管理画面アイコン
+	const CMD_FILENAME_CREATE_SITE = 'CMD_00_CREATESITE';			// サイト作成ジョブファイル名
+	const CMD_FILENAME_REMOVE_SITE = 'CMD_00_REMOVESITE';			// サイト削除ジョブファイル名
 	
 	/**
 	 * コンストラクタ
@@ -33,6 +37,10 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// ジョブ格納ディレクトリ
+		$this->cmdPath = $this->gEnv->getCronjobsPath();
+		if (!file_exists($this->cmdPath)) mkdir($this->cmdPath, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -98,7 +106,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		if ($ret = @is_dir($searchPath)){
 			$dir = dir($searchPath);
 			while (($file = $dir->read()) !== false){
-				$filePath = $searchPath . '/' . $file;
+				$filePath = $searchPath . DIRECTORY_SEPARATOR . $file;
 				$pathParts = pathinfo($file);
 					
 				// ディレクトリのときは、ドメイン名を取得
@@ -124,9 +132,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 						$url = '';
 						$contents = file_get_contents($siteInfoFile);
 						$key = 'M3_SYSTEM_ROOT_URL';
-						if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)){
-							$url = $matches[1];
-						}
+						if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)) $url = $matches[1];
 						$line['url'] = $url;
 					}
 					$hostArray[] = $line;
@@ -192,46 +198,85 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function createDetail($request)
 	{
-		// Apacheからバーチャルホスト情報を取得
-		$vhostList = $this->_getVirtualHostInfo();
-		
 		$act = $request->trimValueOf('act');
 		$hostname = $request->trimValueOf('id');				// ホスト名
+		$value = $request->trimValueOf('item_hostname');				// ホスト名
+		if (!empty($value)) $hostname = $value;
+		
+		// Apacheからバーチャルホスト情報を取得
+		$vhostList = $this->_getVirtualHostInfo();
+
+		// ホストID取得
+		$hostId = '';
+		foreach ($vhostList as $key => $vhost){
+			if ($vhost['hostname'] == $hostname){
+				$hostId = $key;
+				break;
+			}
+		}
+			
+		// ジョブの実行状況を表示
+		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
+		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
+		if (file_exists($cmdFile_create_site)) $this->setUserErrorMsg('サイトの作成中です');
+		if (file_exists($cmdFile_remove_site)) $this->setUserErrorMsg('サイトの削除中です');
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
+			// 入力チェック
+			$this->checkInput($hostname, 'ホスト名');		// ホスト名
+			
+			// コマンドファイルにパラメータを書き込む
+			$cmdContent = '';
+			$email = $this->gEnv->getSiteEmail();
+			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
+			$cmdContent .= 'hostname=' . $hostname . "\n";
+			$ret = file_put_contents($cmdFile_create_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
+			if ($ret !== false){
+//echo '成功';
+			}
 		} else if ($act == 'delete'){		// 削除のとき
+			// コマンドファイルにパラメータを書き込む
+			$cmdContent = '';
+			$email = $this->gEnv->getSiteEmail();
+			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
+			$cmdContent .= 'hostname=' . $hostname . "\n";
+			$ret = file_put_contents($cmdFile_remove_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
+			if ($ret !== false){
+//echo '成功';
+			}
 		} else {		// 初期状態
 			$replaceNew = true;			// データを再取得
 		}
 		// 表示データ再取得
 		if ($replaceNew){
-			// ホストID取得
-			$hostId = '';
-			foreach ($vhostList as $key => $vhost){
-				if ($vhost['hostname'] == $hostname){
-					$hostId = $key;
-					break;
+			// ディレクトリ日付取得
+			$siteDir = self::HOME_DIR . DIRECTORY_SEPARATOR . $hostId;
+			if (file_exists($siteDir)){
+				$createDt = date("Y/m/d H:i:s", filemtime($siteDir));
+				
+				// バージョン取得
+				if (file_exists($siteDir . self::GLOBAL_FILE)){
+					$key = 'M3_SYSTEM_VERSION';
+					$contents = file_get_contents($siteDir . self::GLOBAL_FILE);
+					if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)) $version = $matches[1];
 				}
 			}
-			
-			// ディレクトリ日付取得
-			$siteDir = self::HOME_DIR . '/' . $hostId;
-			$createDt = filemtime($siteDir);
 		}
 		
 		if (empty($hostname)){		// 新規追加のとき
 			$this->tmpl->setAttribute('input_hostname', 'visibility', 'visible');	// ホスト名入力領域表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');		// 新規追加ボタン表示
 			
-			$this->tmpl->addVar("input_hostname", "hostname", $hostname);			// メニューID
+			$this->tmpl->addVar("input_hostname", "hostname", $this->convertToDispString($hostname));			// メニューID
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 削除ボタン表示
-			$this->tmpl->addVar("_widget", "hostname", $hostname);			// ホスト名
+			$this->tmpl->addVar("_widget", "hostname", $this->convertToDispString($hostname));			// ホスト名
 		}
-		$this->tmpl->addVar("_widget", "host_id", $hostId);		// ホストID
-		$this->tmpl->addVar("_widget", "date", $this->convertToDispDate(date("Y/m/d H:i:s", $createDt)));		// 作成日付
-		$this->tmpl->addVar("_widget", "version", $version);		// Magic3バージョン
+		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($hostname));		// ホスト名
+		$this->tmpl->addVar("_widget", "host_id", $this->convertToDispString($hostId));		// ホストID
+		$this->tmpl->addVar("_widget", "date", $this->convertToDispDate($createDt));		// 作成日付
+		$this->tmpl->addVar("_widget", "version", $this->convertToDispString($version));		// Magic3バージョン
 		
 	}
 	/**
