@@ -19,6 +19,11 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+function cancelItem(){
+	document.main.task.value = 'sitelist';
+	document.main.submit();
+	return true;
+}
 $(function(){
 	m3SetConfigTable('config_table');
 });
@@ -28,8 +33,10 @@ $(function(){
 {MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
+<input type="hidden" name="task" value="sitelist_detail" />
 <input type="hidden" name="act" />
-<h4><span {_HELP_SITELIST_PAGEHEAD}>{_LC_LABEL_HEADER_INFO}</span></h4>
+<input type="hidden" name="id" />
+<h3>サイト詳細<div class="pull-right"><div class="btn-group btn-group-sm"><input type="button" class="button" onclick="cancelItem();" value="戻る" /></div></div></h3>
 <table id="config_table">
     <tbody>
         <tr>
