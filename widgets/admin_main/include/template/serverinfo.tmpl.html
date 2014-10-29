@@ -20,6 +20,7 @@ function updateSrc(){
 }
 $(function(){
 	m3SetConfigTable('server_info');
+	m3SetConfigTable('site_admin_info');
 	m3SetConfigTable('install_info');
 });
 //]]>
@@ -36,6 +37,12 @@ $(function(){
 	<tr><th>空き容量</th><td>{FREE_SIZE}</td></tr>
 	<tr><th>使用容量</th><td>{USED_SIZE}</td></tr>
 	<tr><th>使用率</th><td>{USED_RATE}</td></tr>
+    </tbody>
+</table>
+<h3>サイト管理</h3>
+<table id="site_admin_info">
+    <tbody>
+    <tr><th>ジョブ監視</th><td>{WATCH_JOB_STATUS}</td></tr>
     </tbody>
 </table>
 <h3>サイト構築</h3>

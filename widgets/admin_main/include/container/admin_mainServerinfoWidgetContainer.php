@@ -20,6 +20,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const MAGIC3_SRC_VER_FILE = '/var/magic3/src_version';
 	const CMD_FILENAME_UPDATE_INSTALL_PACKAGE = 'CMD_00_UPDATEINSTALLPACKAGE';			// インストールパッケージ取得ジョブファイル名
+	const WATCH_JOB_STATUS_FILE = 'STATUS';		// ジョブ状態確認用ファイル
 	
 	/**
 	 * コンストラクタ
@@ -117,11 +118,20 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$srcVer = '未取得';
 		}
 		
+		// ジョブ監視状況
+		$watchJobStatus = '<span class="stopped">停止</span>';
+		if (file_exists($cmdPath . DIRECTORY_SEPARATOR . self::WATCH_JOB_STATUS_FILE)){
+			// 10分以内にジョブが実行されている場合は稼動にする
+			$time = filemtime($cmdPath . DIRECTORY_SEPARATOR . self::WATCH_JOB_STATUS_FILE);
+			if (time() - $time < 60 * 10) $watchJobStatus = '<span class="running">稼動中</span>';
+		}
+		
 		// 値を埋め込む
 		$this->tmpl->addVar('_widget', 'total_size',	$this->convertToDispString($totalStr));
 		$this->tmpl->addVar('_widget', 'free_size',		$this->convertToDispString($freeStr));
 		$this->tmpl->addVar('_widget', 'used_size',		$this->convertToDispString($usedStr));
 		$this->tmpl->addVar('_widget', 'used_rate',		$this->convertToDispString($usedRateStr));
+		$this->tmpl->addVar('_widget', 'watch_job_status',		$watchJobStatus);
 		$this->tmpl->addVar('_widget', 'src_version',	$this->convertToDispString($srcVer) . $versionInfoStr);
 	}
 }

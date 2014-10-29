@@ -25,6 +25,12 @@
 .available {
 	color:green;
 }
+.running {
+	color:green;
+}
+.stopped {
+	color:red;
+}
 /* タブでトラブルが生じるので使用しない */
 /*.active {
 	color:green;
