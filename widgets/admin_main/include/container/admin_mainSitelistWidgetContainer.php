@@ -100,6 +100,9 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		// マスターホストのディレクトリ名
 		$masterHostId = basename(dirname($this->gEnv->getSystemRootPath()));
 		
+		// ジョブの実行状況を表示
+		$isShownJobStatus = $this->_showJobStatus();
+		
 		// ディレクトリ一覧を取得
 		$hostArray = array();
 		$searchPath = self::HOME_DIR;
@@ -199,81 +202,112 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	function createDetail($request)
 	{
 		$act = $request->trimValueOf('act');
-		$hostname = $request->trimValueOf('id');				// ホスト名
-		$value = $request->trimValueOf('item_hostname');				// ホスト名
-		if (!empty($value)) $hostname = $value;
+		$id = $request->trimValueOf('id');				// ID(ホスト名)
+		$hostname = $request->trimValueOf('item_hostname');				// ホスト名
 		
 		// Apacheからバーチャルホスト情報を取得
 		$vhostList = $this->_getVirtualHostInfo();
 
-		// ホストID取得
-		$hostId = '';
-		foreach ($vhostList as $key => $vhost){
-			if ($vhost['hostname'] == $hostname){
-				$hostId = $key;
-				break;
-			}
-		}
-			
-		// ジョブの実行状況を表示
-		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
-		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
-		if (file_exists($cmdFile_create_site)) $this->setUserErrorMsg('サイトの作成中です');
-		if (file_exists($cmdFile_remove_site)) $this->setUserErrorMsg('サイトの削除中です');
+		// ジョブ実行ファイル
+		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンドファイル
+		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンドファイル
 		
-		$replaceNew = false;		// データを再取得するかどうか
+		// ジョブの実行状況を表示
+		$isShownJobStatus = $this->_showJobStatus();
+		
+		$reloadData = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
 			// 入力チェック
-			$this->checkInput($hostname, 'ホスト名');		// ホスト名
+			$ret = $this->checkInput($hostname, 'ホスト名');		// ホスト名
+			if ($ret && !preg_match('/^(?:[-A-Za-z0-9]+\.)+[A-Za-z]{2,6}$/', $hostname)) $this->setUserErrorMsg('不正なホスト名です');
 			
-			// コマンドファイルにパラメータを書き込む
-			$cmdContent = '';
-			$email = $this->gEnv->getSiteEmail();
-			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
-			$cmdContent .= 'hostname=' . $hostname . "\n";
-			$ret = file_put_contents($cmdFile_create_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
-			if ($ret !== false){
-//echo '成功';
+			// 登録済みかどうかチェック
+			if ($this->getMsgCount() == 0){
+				foreach ($vhostList as $key => $vhost){
+					if ($vhost['hostname'] == $hostname){
+						$this->setUserErrorMsg('ホスト名はすでに登録されています');
+						break;
+					}
+				}
+			}
+			
+			// エラーなしの場合は、データを更新
+			if ($this->getMsgCount() == 0){
+				// コマンドファイルにパラメータを書き込む
+				$cmdContent = '';
+				$email = $this->gEnv->getSiteEmail();
+				if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
+				$cmdContent .= 'hostname=' . $hostname . "\n";
+				$ret = file_put_contents($cmdFile_create_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
+				if ($ret !== false){
+					$id = $hostname;
+					$reloadData = true;			// データを再取得
+	//echo '成功';
+				}
 			}
 		} else if ($act == 'delete'){		// 削除のとき
-			// コマンドファイルにパラメータを書き込む
-			$cmdContent = '';
-			$email = $this->gEnv->getSiteEmail();
-			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
-			$cmdContent .= 'hostname=' . $hostname . "\n";
-			$ret = file_put_contents($cmdFile_remove_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
-			if ($ret !== false){
-//echo '成功';
+			// 入力チェック
+			$ret = $this->checkInput($id, 'ID');		// ID(ホスト名)
+			
+			// エラーなしの場合は、データを更新
+			if ($this->getMsgCount() == 0){
+				// コマンドファイルにパラメータを書き込む
+				$cmdContent = '';
+				$email = $this->gEnv->getSiteEmail();
+				if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
+				$cmdContent .= 'hostname=' . $id . "\n";
+				$ret = file_put_contents($cmdFile_remove_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
+				if ($ret !== false){
+					$reloadData = true;			// データを再取得
+	//echo '成功';
+				}
 			}
 		} else {		// 初期状態
-			$replaceNew = true;			// データを再取得
+			$reloadData = true;			// データを再取得
 		}
 		// 表示データ再取得
-		if ($replaceNew){
-			// ディレクトリ日付取得
-			$siteDir = self::HOME_DIR . DIRECTORY_SEPARATOR . $hostId;
-			if (file_exists($siteDir)){
-				$createDt = date("Y/m/d H:i:s", filemtime($siteDir));
+		if ($reloadData){
+			// ホストID取得
+			$hostId = '';
+			foreach ($vhostList as $key => $vhost){
+				if ($vhost['hostname'] == $id){
+					$hostId = $key;
+					$hostname = $id;
+					break;
+				}
+			}
+			if (!empty($hostId)){
+				// ディレクトリ日付取得
+				$siteDir = self::HOME_DIR . DIRECTORY_SEPARATOR . $hostId;
+				if (file_exists($siteDir)){
+					$createDt = date("Y/m/d H:i:s", filemtime($siteDir));
 				
-				// バージョン取得
-				if (file_exists($siteDir . self::GLOBAL_FILE)){
-					$key = 'M3_SYSTEM_VERSION';
-					$contents = file_get_contents($siteDir . self::GLOBAL_FILE);
-					if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)) $version = $matches[1];
+					// バージョン取得
+					if (file_exists($siteDir . self::GLOBAL_FILE)){
+						$key = 'M3_SYSTEM_VERSION';
+						$contents = file_get_contents($siteDir . self::GLOBAL_FILE);
+						if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)) $version = $matches[1];
+					}
 				}
 			}
 		}
 		
-		if (empty($hostname)){		// 新規追加のとき
+		if (empty($id)){		// 新規追加のとき
 			$this->tmpl->setAttribute('input_hostname', 'visibility', 'visible');	// ホスト名入力領域表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');		// 新規追加ボタン表示
 			
-			$this->tmpl->addVar("input_hostname", "hostname", $this->convertToDispString($hostname));			// メニューID
+			$this->tmpl->addVar("input_hostname", "hostname", $this->convertToDispString($hostname));			// ホスト名
+			
+			// ジョブメッセージが表示されているときはボタン使用不可
+			$this->tmpl->addVar("add_button", "add_button_disabled", $this->convertToDisabledString($isShownJobStatus));
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 削除ボタン表示
 			$this->tmpl->addVar("_widget", "hostname", $this->convertToDispString($hostname));			// ホスト名
+			
+			// ジョブメッセージが表示されているときはボタン使用不可
+			$this->tmpl->addVar("update_button", "del_button_disabled", $this->convertToDisabledString($isShownJobStatus));
 		}
-		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($hostname));		// ホスト名
+		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($id));		// ID(ホスト名)
 		$this->tmpl->addVar("_widget", "host_id", $this->convertToDispString($hostId));		// ホストID
 		$this->tmpl->addVar("_widget", "date", $this->convertToDispDate($createDt));		// 作成日付
 		$this->tmpl->addVar("_widget", "version", $this->convertToDispString($version));		// Magic3バージョン
@@ -303,6 +337,28 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		
 		return $vhostList;
+	}
+	/**
+	 * ジョブの実行状況を表示
+	 *
+	 * @return bool			メッセージ表示ありかどうか
+	 */
+	function _showJobStatus()
+	{
+		$isShown = false;
+		
+		// ジョブの実行状況を表示
+		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
+		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
+		if (file_exists($cmdFile_create_site)){
+			$this->setUserErrorMsg('サイトの作成中です');
+			$isShown = true;			// メッセージ表示あり
+		}
+		if (file_exists($cmdFile_remove_site)){
+			$this->setUserErrorMsg('サイトの削除中です');
+			$isShown = true;			// メッセージ表示あり
+		}
+		return $isShown;
 	}
 }
 ?>

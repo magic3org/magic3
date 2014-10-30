@@ -578,6 +578,18 @@ class BaseWidgetContainer extends Core
 		return convertToHtmlEntity($src, $keepTags);
 	}
 	/**
+	 * ボタン用無効(disabled)文字列に変換
+	 *
+	 * @param string $src 		変換値(bool型またはint,string型(0または1))
+	 * @return string			「disabled」または空文字列
+	 */
+	function convertToDisabledString($src)
+	{
+		$disabled = '';
+		if (!empty($src)) $disabled = 'disabled';
+		return $disabled;
+	}
+	/**
 	 * チェックボックス、ラジオボタン選択用文字列に変換
 	 *
 	 * @param string $src 		変換値(bool型またはint,string型(0または1))

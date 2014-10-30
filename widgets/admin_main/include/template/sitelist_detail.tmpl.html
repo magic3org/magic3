@@ -64,8 +64,8 @@ $(function(){
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
-<patTemplate:tmpl name="add_button" visibility="hidden"><input type="button" class="button" onclick="addItem();" value="新規登録" /></patTemplate:tmpl>
-<patTemplate:tmpl name="update_button" visibility="hidden"><input type="button" class="button" onclick="delItem();" value="削除" /></patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden"><input type="button" class="button" onclick="addItem();" value="新規登録" {ADD_BUTTON_DISABLED} /></patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden"><input type="button" class="button" onclick="delItem();" value="削除" {DEL_BUTTON_DISABLED} /></patTemplate:tmpl>
 </div>
 </form>
 </div>
