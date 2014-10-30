@@ -29,6 +29,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	const WINDOW_ICON_FILE = '/images/system/window32.png';			// 管理画面アイコン
 	const CMD_FILENAME_CREATE_SITE = 'CMD_00_CREATESITE';			// サイト作成ジョブファイル名
 	const CMD_FILENAME_REMOVE_SITE = 'CMD_00_REMOVESITE';			// サイト削除ジョブファイル名
+	const CMD_FILENAME_UPDATE_INSTALL_PACKAGE = 'CMD_00_UPDATEINSTALLPACKAGE';			// インストールパッケージ取得ジョブファイル名
 	
 	/**
 	 * コンストラクタ
@@ -350,12 +351,17 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		// ジョブの実行状況を表示
 		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
 		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
+		$cmdFile_update_insatll_package = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;			// インストールパッケージ取得ジョブファイル名
 		if (file_exists($cmdFile_create_site)){
 			$this->setUserErrorMsg('サイトの作成中です');
 			$isShown = true;			// メッセージ表示あり
 		}
 		if (file_exists($cmdFile_remove_site)){
 			$this->setUserErrorMsg('サイトの削除中です');
+			$isShown = true;			// メッセージ表示あり
+		}
+		if (file_exists($cmdFile_update_insatll_package)){
+			$this->setUserErrorMsg('インストーラの更新中です');
 			$isShown = true;			// メッセージ表示あり
 		}
 		return $isShown;
