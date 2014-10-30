@@ -277,6 +277,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.2.0/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap/css/bootsnipp_largedropdownmenu.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap/css/yamm.css';					// bootstrapメガメニュー
+	const BOOTSTRAP_DIALOG_FILENAME					= 'bootstrap/bootstrap3-dialog/bootstrap-dialog.min.js';		// Bootstrap Dialog拡張
+	const BOOTSTRAP_DIALOG_CSS						= 'bootstrap/bootstrap3-dialog/bootstrap-dialog.css';
 	const NOBOOTSTRAP_CSS							= 'm3/nobootstrap/style.css';
 	const NOBOOTSTRAP_TOOLTIP_FILENAME				= 'm3/nobootstrap/tooltip.js';			// bootstrapツールチップ
 	const NOBOOTSTRAP_DROPDOWN_FILENAME				= 'm3/nobootstrap/dropdown.js';			// bootstrapドロップダウンメニュー
@@ -386,7 +388,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
 //					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
-					self::LIB_BOOTSTRAP_ADMIN		=>	array(	'css'		=> array(self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS, self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS)),	// Bootstrap管理画面用オプション			
+					self::LIB_BOOTSTRAP_ADMIN		=>	array(	'script' 	=> array(self::BOOTSTRAP_DIALOG_FILENAME),
+																'css'		=> array(	self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS,
+																						self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS,
+																						self::BOOTSTRAP_DIALOG_CSS)),	// Bootstrap管理画面用オプション			
 					self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
 																'css'		=> array(self::NOBOOTSTRAP_CSS)),
 													

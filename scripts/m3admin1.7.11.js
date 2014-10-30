@@ -130,14 +130,6 @@ function m3ShowPreviewWindow(type, url)
 // 処理中ダイアログ表示
 function m3ShowProcessModal()
 {
-	// 画面上のフォーカスを外す
-	$('input,textarea,select').blur();
-	
-	$('#processing-modal').modal('show');
-}
-// 処理中ダイアログ順部
-function m3PrepareProcessModal()
-{
 	if ($('#processing-modal').size() == 0){		// ダイアログが存在しない場合
 		var modal  = '<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true">';
 			modal += '<div class="modal-dialog">';
@@ -153,6 +145,21 @@ function m3PrepareProcessModal()
 			modal += '</div>';
 		$("body").append(modal);
 	}
+	
+	// 画面上のフォーカスを外す
+	$('input,textarea,select').blur();
+	
+	$('#processing-modal').modal('show');
+}
+// 処理中ダイアログ非表示
+function m3HideProcessModal()
+{
+	$('#processing-modal').modal('hide');
+}
+// 処理中ダイアログ順部
+function m3PrepareProcessModal()
+{
+
 }
 /**
  * 画像ファイルブラウザを表示
