@@ -243,7 +243,11 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 				if ($ret !== false){
 					$id = $hostname;
 					$reloadData = true;			// データを再取得
-	//echo '成功';
+
+					$this->tmpl->setAttribute('show_process_dialog', 'visibility', 'visible');		// 処理結果監視
+					$this->tmpl->addVar("_widget", "cmd_type", '&type=create_site');		// 実行コマンドタイプ
+					$msgCompleted = 'サイト作成が完了しました';	// 処理完了メッセージ
+					$msgError = 'サイト作成に失敗しました';		// 処理エラーメッセージ
 				}
 			}
 		} else if ($act == 'delete'){		// 削除のとき
@@ -260,9 +264,26 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 				$ret = file_put_contents($cmdFile_remove_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
 				if ($ret !== false){
 					$reloadData = true;			// データを再取得
-	//echo '成功';
+
+					$this->tmpl->setAttribute('show_process_dialog', 'visibility', 'visible');		// 処理結果監視
+					$this->tmpl->addVar("_widget", "cmd_type", '&type=remove_site');		// 実行コマンドタイプ
+					$msgCompleted = 'サイト削除が完了しました';		// 処理完了メッセージ
+					$msgError = 'サイト削除に失敗しました';			// 処理エラーメッセージ
 				}
 			}
+		} else if ($act == 'getinfo'){		// 最新情報取得
+			$type = $request->trimValueOf('type');			// 実行コマンドタイプ
+			if ($type == 'create_site'){
+				$cmdFile = $cmdFile_create_site;		// サイト作成、コマンドファイル
+			} else if ($type == 'remove_site'){
+				$cmdFile = $cmdFile_remove_site;		// サイト削除、コマンドファイル
+			}
+			if (file_exists($cmdFile)){
+				$this->gInstance->getAjaxManager()->addData('code', '0');
+			} else {			// インストールパッケージ更新完了のとき
+				$this->gInstance->getAjaxManager()->addData('code', '1');
+			}
+			return;
 		} else {		// 初期状態
 			$reloadData = true;			// データを再取得
 		}
@@ -312,7 +333,8 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "host_id", $this->convertToDispString($hostId));		// ホストID
 		$this->tmpl->addVar("_widget", "date", $this->convertToDispDate($createDt));		// 作成日付
 		$this->tmpl->addVar("_widget", "version", $this->convertToDispString($version));		// Magic3バージョン
-		
+		$this->tmpl->addVar("_widget", "msg_completed", $msgCompleted);		// 処理完了メッセージ
+		$this->tmpl->addVar("_widget", "msg_error", $msgError);		// 処理エラーメッセージ
 	}
 	/**
 	 * Apacheから運用中のバーチャルホスト情報を取得

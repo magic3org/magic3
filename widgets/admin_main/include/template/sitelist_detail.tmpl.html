@@ -13,25 +13,73 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function addItem(){
-	if (!window.confirm('サイトを新規追加しますか?')) return false;
+function addItem()
+{
+	// 確認ダイアログ表示
+	m3Confirm('', 'サイトを新規追加しますか?\n所要時間: 約5分', function(result){
+		if (result){
+			document.main.act.value='add';
+			document.main.submit();
+			return true;
+		}
+	});
+/*	if (!window.confirm('サイトを新規追加しますか?')) return false;
 	document.main.act.value = 'add';
 	document.main.submit();
-	return true;
+	return true;*/
 }
-function delItem(){
-	if (!window.confirm('サイトを削除しますか?')) return false;
+function delItem()
+{
+	// 確認ダイアログ表示
+	m3Confirm('', 'サイトを削除しますか?\n所要時間: 約5分', function(result){
+		if (result){
+			document.main.act.value='delete';
+			document.main.submit();
+			return true;
+		}
+	});
+/*	if (!window.confirm('サイトを削除しますか?')) return false;
 	document.main.act.value = 'delete';
 	document.main.submit();
-	return true;
+	return true;*/
 }
-function cancelItem(){
+function cancelItem()
+{
 	document.main.task.value = 'sitelist';
 	document.main.submit();
 	return true;
 }
+function watchProcess(){
+	m3_ajax_request('', 'task=sitelist_detail&act=getinfo{CMD_TYPE}', function(request, retcode, jsondata){		// 正常終了
+		if (jsondata.code == '0'){			// 処理中の場合
+			watchProcess();
+		} else {		// 処理完了の場合
+			// 処理中ダイアログを非表示
+			m3HideProcessModal();
+			
+			m3Alert('success', '{MSG_COMPLETED}', function(){
+				// 画面再表示
+				window.location.href = window.location.href;
+			});
+		}
+	}, function(request){		// 異常終了
+		m3Alert('error', '{MSG_ERROR}');
+	});
+}
+function startWatchProcess()
+{
+	// 処理中ダイアログ表示
+	m3ShowProcessModal();
+	
+	// サーバ処理監視
+	watchProcess();
+}
 $(function(){
 	m3SetConfigTable('config_table');
+<patTemplate:tmpl name="show_process_dialog" visibility="hidden">
+	// 処理結果監視を開始
+	startWatchProcess();
+</patTemplate:tmpl>
 });
 //]]>
 </script>
@@ -64,7 +112,7 @@ $(function(){
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
-<patTemplate:tmpl name="add_button" visibility="hidden"><input type="button" class="button" onclick="addItem();" value="新規登録" {ADD_BUTTON_DISABLED} /></patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden"><input type="button" class="button" onclick="addItem();" value="新規作成" {ADD_BUTTON_DISABLED} /></patTemplate:tmpl>
 <patTemplate:tmpl name="update_button" visibility="hidden"><input type="button" class="button" onclick="delItem();" value="削除" {DEL_BUTTON_DISABLED} /></patTemplate:tmpl>
 </div>
 </form>

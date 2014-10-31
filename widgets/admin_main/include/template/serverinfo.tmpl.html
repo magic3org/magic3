@@ -24,11 +24,6 @@ function updateSrc()
 		}
 	});
 }
-function refreshPage()
-{
-	// 画面再表示
-	window.location.href = window.location.href;
-}
 function watchProcess(){
 	m3_ajax_request('', 'task=serverinfo&act=getinfo', function(request, retcode, jsondata){		// 正常終了
 		if (jsondata.code == '0'){			// 処理中の場合
@@ -37,7 +32,10 @@ function watchProcess(){
 			// 処理中ダイアログを非表示
 			m3HideProcessModal();
 			
-			m3Alert('success', 'インストーラの更新完了しました', refreshPage);
+			m3Alert('success', 'インストーラの更新完了しました', function(){
+				// 画面再表示
+				window.location.href = window.location.href;
+			});
 		}
 	}, function(request){		// 異常終了
 		m3Alert("error", "インストーラの更新に失敗しました");
