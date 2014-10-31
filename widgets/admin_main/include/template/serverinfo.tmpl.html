@@ -16,7 +16,7 @@
 function updateSrc()
 {
 	// 確認ダイアログ表示
-	m3Confirm('', 'インストーラを更新しますか?\n所要時間: 約5分', '', function(result){
+	m3Confirm('', 'インストーラを更新しますか?\n所要時間: 約5分', function(result){
 		if (result){
 			document.main.act.value='getnewsrc';
 			document.main.submit();
@@ -37,7 +37,7 @@ function watchProcess(){
 			// 処理中ダイアログを非表示
 			m3HideProcessModal();
 			
-			m3Alert('success', 'インストーラの更新完了しました', '成功', refreshPage);
+			m3Alert('success', 'インストーラの更新完了しました', refreshPage);
 		}
 	}, function(request){		// 異常終了
 		m3Alert("error", "インストーラの更新に失敗しました");

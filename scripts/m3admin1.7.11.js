@@ -174,11 +174,11 @@ function m3HideProcessModal()
  *
  * @param string type			アラートタイプ(空文字列,info,notice,success,failure,warinig,error)
  * @param string message		メッセージ
- * @param string title			タイトル
  * @param function	after_callback	コールバック関数
+ * @param string title			タイトル
  * @return なし
  */
-function m3Alert(type, message, title, after_callback)
+function m3Alert(type, message, after_callback, title)
 {
 	var dialogType;
 	var config = {};
@@ -242,11 +242,11 @@ function m3Alert(type, message, title, after_callback)
  *
  * @param string type			アラートタイプ(空文字列,info,notice,success,failure,warinig,error)
  * @param string message		メッセージ
- * @param string title			タイトル
  * @param function	callback	ボタンが押されときのコールバック関数(第1引数1にOK(true),キャンセル(false)が渡る。)
+ * @param string title			タイトル
  * @return なし
  */
-function m3Confirm(type, message, title, callback)
+function m3Confirm(type, message, callback, title)
 {
 	var dialogType;
 	var config = {};
