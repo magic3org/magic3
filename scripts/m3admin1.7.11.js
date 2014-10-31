@@ -127,7 +127,11 @@ function m3ShowPreviewWindow(type, url)
 	}
 	window.open(url, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=" + width + ",height=" + height);
 }
-// 処理中ダイアログ表示
+/**
+ * 処理中ダイアログ表示
+ *
+ * @return なし
+ */
 function m3ShowProcessModal()
 {
 	if ($('#processing-modal').size() == 0){		// ダイアログが存在しない場合
@@ -151,15 +155,85 @@ function m3ShowProcessModal()
 	
 	$('#processing-modal').modal('show');
 }
-// 処理中ダイアログ非表示
+/**
+ * 処理中ダイアログ非表示
+ *
+ * @return なし
+ */
 function m3HideProcessModal()
 {
 	$('#processing-modal').modal('hide');
 }
 // 処理中ダイアログ順部
-function m3PrepareProcessModal()
+/*function m3PrepareProcessModal()
 {
 
+}*/
+/**
+ * アラートを表示
+ *
+ * @param string type			アラートタイプ(空文字列,info,notice,success,failure,warinig,error)
+ * @param string message		メッセージ
+ * @param string title			タイトル
+ * @return なし
+ */
+function m3Alert(type, message, title)
+{
+	var dialogType;
+	var config = {};
+	
+	switch (type){
+	case '':
+		dialogType = BootstrapDialog.TYPE_DEFAULT;
+		break;
+	case 'info':
+		dialogType = BootstrapDialog.TYPE_INFO;
+		break;
+	case 'notice':
+		dialogType = BootstrapDialog.TYPE_PRIMARY;
+		break;
+	case 'success':
+		dialogType = BootstrapDialog.TYPE_SUCCESS;
+		break;
+	case 'failure':
+		dialogType = BootstrapDialog.TYPE_WARNING;
+		break;
+	case 'waring':
+		dialogType = BootstrapDialog.TYPE_WARNING;
+		break;
+	case 'error':
+		dialogType = BootstrapDialog.TYPE_DANGER;
+		break;
+	}
+	config['type'] = dialogType;
+	config['message'] = message;
+	if (!title){
+		switch (type){
+		case '':
+			break;
+		case 'info':
+			title = '情報';
+			break;
+		case 'notice':
+			title = '注意';
+			break;
+		case 'success':
+			title = '成功';
+			break;
+		case 'failure':
+			title = '失敗';
+			break;
+		case 'warning':
+			title="警告";
+			break;
+		case 'danger':
+			title = 'エラー';
+			break;
+		}
+	}
+	if (title) config['title'] = title;
+	
+	BootstrapDialog.alert(config);
 }
 /**
  * 画像ファイルブラウザを表示

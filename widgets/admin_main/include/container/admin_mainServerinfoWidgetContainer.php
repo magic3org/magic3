@@ -80,8 +80,19 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
 			$ret = file_put_contents($cmdFile_update_install_package, $cmdContent, LOCK_EX/*排他的アクセス*/);
 			if ($ret !== false){
+				$this->tmpl->setAttribute('show_process_dialog', 'visibility', 'visible');		// 処理結果監視
 //echo '成功';
 			}
+		} else if ($act == 'getinfo'){		// 最新情報取得
+			//$this->gInstance->getAjaxManager()->addData('message', "サーバからの応答\n現在の日時は" . date(" Y年m月d日 H：i：s"));
+			// システム強制終了
+			//$this->gPage->exitSystem();
+			if (file_exists($cmdFile_update_install_package)){
+				$this->gInstance->getAjaxManager()->addData('code', '0');
+			} else {			// インストールパッケージ更新完了のとき
+				$this->gInstance->getAjaxManager()->addData('code', '1');
+			}
+			return;
 		}
 
 		//全体サイズ

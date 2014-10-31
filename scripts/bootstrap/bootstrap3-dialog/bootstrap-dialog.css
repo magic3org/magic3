@@ -45,22 +45,28 @@
     font-size: 18px;
 }
 .bootstrap-dialog.type-default .modal-header {
-    background-color: #fff;
+/*    background-color: #fff;*/
+	background-color: #ecf0f1;
 }
 .bootstrap-dialog.type-info .modal-header {
-    background-color: #5bc0de;
+/*    background-color: #5bc0de;*/
+	background-color: #3498db;
 }
 .bootstrap-dialog.type-primary .modal-header {
-    background-color: #428bca;
+/*    background-color: #428bca;*/
+	background-color: #2c3e50;
 }
 .bootstrap-dialog.type-success .modal-header {
-    background-color: #5cb85c;
+/*    background-color: #5cb85c;*/
+	background-color: #18bc9c;
 }
 .bootstrap-dialog.type-warning .modal-header {
-    background-color: #f0ad4e;
+/*    background-color: #f0ad4e;*/
+	background-color: #f39c12;
 }
 .bootstrap-dialog.type-danger .modal-header {
-    background-color: #d9534f;
+/*    background-color: #d9534f;*/
+	background-color: #e74c3c;
 }
 .bootstrap-dialog .bootstrap-dialog-button-icon {
     margin-right: 3px;

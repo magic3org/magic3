@@ -18,10 +18,51 @@ function updateSrc(){
 	document.main.submit();
 	return true;
 }
+function watchProcess(){
+	m3_ajax_request('', 'task=serverinfo&act=getinfo', function(request, retcode, jsondata){		// 正常終了
+		if (jsondata.code == '0'){			// 処理中の場合
+	//		watchProcess();
+		} else {		// 処理完了の場合
+			$('#processing-modal').modal('hide');
+	//		alert('更新しました');
+		}
+	}, function(request){		// 異常終了
+		alert('通信に失敗しました。');
+	});
+}
+function test()
+{
+m3Alert("", "helllo");
+BootstrapDialog.show({
+			type: BootstrapDialog.TYPE_INFO,
+            message: 'Hi Apple!',
+   closable: true,
+            closeByBackdrop: false,
+            closeByKeyboard: false,
+            buttons: [{
+                label: 'Close the dialog',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+        });
+}
+function startWatchProcess()
+{
+	// 処理中ダイアログ表示
+	m3ShowProcessModal();
+	
+	// サーバ処理監視
+	watchProcess();
+}
 $(function(){
 	m3SetConfigTable('server_info');
 	m3SetConfigTable('site_admin_info');
 	m3SetConfigTable('install_info');
+<patTemplate:tmpl name="show_process_dialog" visibility="hidden">
+	// 処理結果監視を開始
+	startWatchProcess();
+</patTemplate:tmpl>
 });
 //]]>
 </script>
@@ -51,6 +92,7 @@ $(function(){
     <tr><th>インストーラ<br />バージョン</th><td>{SRC_VERSION}<div class="pull-right"><input type="button" class="button" onclick="updateSrc();" value="最新版を取得" {UPDATE_SRC_BUTTON_DISABLED} /></div></td></tr>
     </tbody>
 </table>
+<input type="button" class="button" onclick="test();" value="テスト" />
 </form>
 </div>
 </patTemplate:tmpl>
