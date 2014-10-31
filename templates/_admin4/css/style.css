@@ -457,7 +457,7 @@ background-color: #0081c2;
 	padding:5px;
 	width:200px;
 }
-
+.m3help { cursor: help; }
 /****** sortable box ******/
 /*.sortable-box {
 	background-color:#FFF;
