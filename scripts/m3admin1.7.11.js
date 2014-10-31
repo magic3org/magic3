@@ -175,9 +175,10 @@ function m3HideProcessModal()
  * @param string type			アラートタイプ(空文字列,info,notice,success,failure,warinig,error)
  * @param string message		メッセージ
  * @param string title			タイトル
+ * @param function	after_callback	コールバック関数
  * @return なし
  */
-function m3Alert(type, message, title)
+function m3Alert(type, message, title, after_callback)
 {
 	var dialogType;
 	var config = {};
@@ -232,8 +233,100 @@ function m3Alert(type, message, title)
 		}
 	}
 	if (title) config['title'] = title;
+	if (after_callback) config['callback'] = function(result){ after_callback(); };
 	
 	BootstrapDialog.alert(config);
+}
+/**
+ * 確認画面を表示
+ *
+ * @param string type			アラートタイプ(空文字列,info,notice,success,failure,warinig,error)
+ * @param string message		メッセージ
+ * @param string title			タイトル
+ * @param function	callback	ボタンが押されときのコールバック関数(第1引数1にOK(true),キャンセル(false)が渡る。)
+ * @return なし
+ */
+function m3Confirm(type, message, title, callback)
+{
+	var dialogType;
+	var config = {};
+	
+	switch (type){
+	case '':
+	default:
+		//dialogType = BootstrapDialog.TYPE_DEFAULT;
+		dialogType = BootstrapDialog.TYPE_INFO;
+		break;
+	case 'info':
+		dialogType = BootstrapDialog.TYPE_INFO;
+		break;
+	case 'notice':
+		dialogType = BootstrapDialog.TYPE_PRIMARY;
+		break;
+	case 'success':
+		dialogType = BootstrapDialog.TYPE_SUCCESS;
+		break;
+	case 'failure':
+		dialogType = BootstrapDialog.TYPE_WARNING;
+		break;
+	case 'waring':
+		dialogType = BootstrapDialog.TYPE_WARNING;
+		break;
+	case 'error':
+		dialogType = BootstrapDialog.TYPE_DANGER;
+		break;
+	}
+
+	if (!title){
+		switch (type){
+		case '':
+		default:
+			title = '確認';
+			break;
+		case 'info':
+			title = '情報';
+			break;
+		case 'notice':
+			title = '注意';
+			break;
+		case 'success':
+			title = '成功';
+			break;
+		case 'failure':
+			title = '失敗';
+			break;
+		case 'warning':
+			title="警告";
+			break;
+		case 'danger':
+			title = 'エラー';
+			break;
+		}
+	}
+	
+	new BootstrapDialog({
+		type: dialogType,
+		title: title,
+		message: message,
+		closable: false,
+		data: {
+			'callback': callback
+		},
+		buttons: [{
+			label: BootstrapDialog.DEFAULT_TEXTS.CANCEL,
+			action: function(dialog) {
+				typeof dialog.getData('callback') === 'function' && dialog.getData('callback')(false);
+				dialog.close();
+			}
+		}, {
+			label: BootstrapDialog.DEFAULT_TEXTS.OK,
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				typeof dialog.getData('callback') === 'function' && dialog.getData('callback')(true);
+				dialog.close();
+			}
+		}]
+	}).open();
 }
 /**
  * 画像ファイルブラウザを表示
@@ -653,6 +746,9 @@ function m3CreateDragDropUploadFile(id, url, callback, type, width)
  * @return なし
  */
 $(function(){
+	// 定義値を設定
+	BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'キャンセル';
+	
 	//** jQuery Scroll to Top Control script- (c) Dynamic Drive DHTML code library: http://www.dynamicdrive.com.
 	//** Available/ usage terms at http://www.dynamicdrive.com (March 30th, 09')
 	//** v1.1 (April 7th, 09'):

@@ -13,39 +13,35 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function updateSrc(){
-	document.main.act.value='getnewsrc';
-	document.main.submit();
-	return true;
+function updateSrc()
+{
+	// 確認ダイアログ表示
+	m3Confirm('', 'インストーラを更新しますか?\n所要時間: 約5分', '', function(result){
+		if (result){
+			document.main.act.value='getnewsrc';
+			document.main.submit();
+			return true;
+		}
+	});
+}
+function refreshPage()
+{
+	// 画面再表示
+	window.location.href = window.location.href;
 }
 function watchProcess(){
 	m3_ajax_request('', 'task=serverinfo&act=getinfo', function(request, retcode, jsondata){		// 正常終了
 		if (jsondata.code == '0'){			// 処理中の場合
-	//		watchProcess();
+			watchProcess();
 		} else {		// 処理完了の場合
-			$('#processing-modal').modal('hide');
-	//		alert('更新しました');
+			// 処理中ダイアログを非表示
+			m3HideProcessModal();
+			
+			m3Alert('success', 'インストーラの更新完了しました', '成功', refreshPage);
 		}
 	}, function(request){		// 異常終了
-		alert('通信に失敗しました。');
+		m3Alert("error", "インストーラの更新に失敗しました");
 	});
-}
-function test()
-{
-m3Alert("", "helllo");
-BootstrapDialog.show({
-			type: BootstrapDialog.TYPE_INFO,
-            message: 'Hi Apple!',
-   closable: true,
-            closeByBackdrop: false,
-            closeByKeyboard: false,
-            buttons: [{
-                label: 'Close the dialog',
-                action: function(dialogRef){
-                    dialogRef.close();
-                }
-            }]
-        });
 }
 function startWatchProcess()
 {
@@ -92,7 +88,6 @@ $(function(){
     <tr><th>インストーラ<br />バージョン</th><td>{SRC_VERSION}<div class="pull-right"><input type="button" class="button" onclick="updateSrc();" value="最新版を取得" {UPDATE_SRC_BUTTON_DISABLED} /></div></td></tr>
     </tbody>
 </table>
-<input type="button" class="button" onclick="test();" value="テスト" />
 </form>
 </div>
 </patTemplate:tmpl>
