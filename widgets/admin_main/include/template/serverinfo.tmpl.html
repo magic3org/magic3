@@ -65,10 +65,10 @@ $(function(){
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <h3>サーバ情報</h3>
-<h4>ディスク</h4>
 <table id="server_info">
     <tbody>
-    <tr><th>全体サイズ</th><td>{TOTAL_SIZE}</td></tr>
+	<tr><th>ホストID</th><td colspan="2">{HOST_ID}</td></tr>
+    <tr><th rowspan="4">ディスク</th><th>全体サイズ</th><td>{TOTAL_SIZE}</td></tr>
 	<tr><th>空き容量</th><td>{FREE_SIZE}</td></tr>
 	<tr><th>使用容量</th><td>{USED_SIZE}</td></tr>
 	<tr><th>使用率</th><td>{USED_RATE}</td></tr>

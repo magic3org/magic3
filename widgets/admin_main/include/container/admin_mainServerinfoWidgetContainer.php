@@ -70,6 +70,9 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		// ジョブの実行状況を表示
 		$isShownJobStatus = $this->_showJobStatus();
 
+		// マスターホストのディレクトリ名
+		$masterHostId = basename(dirname($this->gEnv->getSystemRootPath()));
+		
 		$act = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_ACT);
 		if ($act == 'getnewsrc'){		// 最新インストールパッケージ取得のとき
 			// コマンドファイルにパラメータを書き込む
@@ -136,6 +139,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		
 		// 値を埋め込む
+		$this->tmpl->addVar('_widget', 'host_id',	$this->convertToDispString($masterHostId));			// ホストID
 		$this->tmpl->addVar('_widget', 'total_size',	$this->convertToDispString($totalStr));
 		$this->tmpl->addVar('_widget', 'free_size',		$this->convertToDispString($freeStr));
 		$this->tmpl->addVar('_widget', 'used_size',		$this->convertToDispString($usedStr));
