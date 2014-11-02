@@ -170,8 +170,9 @@ function m3HideProcessModal()
  */
 function m3PrepareProcessModal()
 {
+	// ダイアログ作成
 	if ($('#processing-modal').size() == 0){		// ダイアログが存在しない場合
-		var modal  = '<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true">';
+		var modal  = '<div class="modal modal-processing fade" id="processing-modal" role="dialog" aria-hidden="true" style="display:none;">';
 			modal += '<div class="modal-dialog">';
 			modal += '<div class="modal-content">';
 			modal += '<div class="modal-body">';
