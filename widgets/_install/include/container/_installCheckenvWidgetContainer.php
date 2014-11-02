@@ -79,6 +79,10 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 			$status = $this->_('available');
 			$version = exec("mysql_config --version");	// MySQLバージョン取得
 			if (empty($version)){
+				$cmdOutput = exec("mysql --version");	// mysqlコマンドからバージョン取得
+				if (preg_match('/^.*\s([.\d]+)-MariaDB/i', $cmdOutput, $matches)) $version = $matches[1];
+			}
+			if (empty($version)){
 				$version = $this->_('version unknown');
 			} else {
 				// バージョンチェック

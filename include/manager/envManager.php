@@ -177,9 +177,11 @@ class EnvManager extends Core
 		}
 		// 日本語処理関係
 		if (extension_loaded('mbstring')){	// mbstring使用可能
+			if (version_compare(PHP_VERSION, '5.6.0') < 0){
+				ini_set('mbstring.http_input',                  'pass');
+				ini_set('mbstring.http_output',                 'pass');
+			}
 			ini_set('mbstring.encoding_translation',        'Off');		// ここでは設定を変更できない？
-			ini_set('mbstring.http_input',                  'pass');
-			ini_set('mbstring.http_output',                 'pass');
 			ini_set('mbstring.substitute_character',		'none');	// 無効な文字の代替出力
 			ini_set('mbstring.func_overload',               '0');
 			
