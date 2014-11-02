@@ -128,6 +128,21 @@ function m3ShowPreviewWindow(type, url)
 	window.open(url, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=" + width + ",height=" + height);
 }
 /**
+ * 管理画面用部品
+ *
+ * @return なし
+ */
+function m3LoadOptionUI()
+{
+	// ダイアログ用定義値
+	if (typeof(BootstrapDialog) != "undefined"){
+		BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'キャンセル';
+	}
+
+	// 処理中ダイアログ準備
+	m3PrepareProcessModal();
+}
+/**
  * 処理中ダイアログ表示
  *
  * @return なし
@@ -748,9 +763,6 @@ function m3CreateDragDropUploadFile(id, url, callback, type, width)
  * @return なし
  */
 $(function(){
-	// 定義値を設定
-	BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'キャンセル';
-	
 	//** jQuery Scroll to Top Control script- (c) Dynamic Drive DHTML code library: http://www.dynamicdrive.com.
 	//** Available/ usage terms at http://www.dynamicdrive.com (March 30th, 09')
 	//** v1.1 (April 7th, 09'):
@@ -824,9 +836,9 @@ $(function(){
 	}
 	scrolltotop.init();
 	
-	// ヘルプ作成
-	m3SetHelp();
+	// 管理画面用部品
+	m3LoadOptionUI();
 	
-	// 処理中ダイアログ準備
-	m3PrepareProcessModal();
+	// 最後にヘルプ作成
+	m3SetHelp();
 });
