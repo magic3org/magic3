@@ -76,18 +76,26 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 
 		// MySQLのPDOが使用可能かどうか
 		if (extension_loaded('pdo_mysql')){
+			$isMariaDb = false;			// MariaDBかどうか
 			$status = $this->_('available');
 			$version = exec("mysql_config --version");	// MySQLバージョン取得
 			if (empty($version)){
 				$cmdOutput = exec("mysql --version");	// mysqlコマンドからバージョン取得
-				if (preg_match('/^.*\s([.\d]+)-MariaDB/i', $cmdOutput, $matches)) $version = $matches[1];
+				if (preg_match('/^.*\s([.\d]+)-MariaDB/i', $cmdOutput, $matches)){
+					$version = $matches[1];
+					$isMariaDb = true;
+				}
 			}
 			if (empty($version)){
 				$version = $this->_('version unknown');
 			} else {
 				// バージョンチェック
 				$isOK = false;
-				if (version_compare($version, '5.0') >= 0 && version_compare($version, '5.6') < 0) $isOK = true;
+				if ($isMariaDb){	// MariaDbの場合
+					$isOK = true;
+				} else {
+					if (version_compare($version, '5.0') >= 0 && version_compare($version, '5.6') < 0) $isOK = true;
+				}
 			}
 			if ($isOK){
 				$status .= '(' . $version . ')';
