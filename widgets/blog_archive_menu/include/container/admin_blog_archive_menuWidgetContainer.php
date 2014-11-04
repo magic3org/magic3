@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -260,7 +260,7 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 		// 定義一覧作成
 		$this->createItemList();
 		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		if (!empty($this->serialArray)) $this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
