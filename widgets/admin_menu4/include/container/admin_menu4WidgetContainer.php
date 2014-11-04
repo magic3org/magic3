@@ -356,6 +356,19 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$siteMenuTag = $this->createSiteMenuTag();
 			$this->tmpl->addVar("menu", "site_menu", $siteMenuTag);
 		}
+		// サブメニューバーを表示
+		$breadcrumbDef = $this->gPage->getAdminBreadcrumbDef();
+		if (!empty($breadcrumbDef)){
+			$this->tmpl->setAttribute('breadcrumb', 'visibility', 'visible');
+			for ($i = 0; $i < count($breadcrumbDef); $i++){
+				$row = array(
+					'name' => $this->convertToDispString($breadcrumbDef[$i])
+				);
+				$this->tmpl->addVars('breadcrumb_list', $row);
+				$this->tmpl->parseTemplate('breadcrumb_list', 'a');
+			}
+		}
+	
 		// 「前へ」「次へ」アイコンを設定
 		$this->tmpl->setAttribute('prevnextbutton', 'visibility', 'visible');
 		$iconUrl = $this->gEnv->getRootUrl() . self::PREV_ICON_FILE;

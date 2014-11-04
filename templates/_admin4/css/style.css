@@ -738,3 +738,11 @@ input[type="password"]{
 .centered-pills { text-align:center; }
 .centered-pills ul.nav.nav-pills, .centered-pills ul.nav.nav-tabs { display:inline-block; }
 .centered-pills ul.nav.nav-pills li, .centered-pills ul.nav.nav-tabs li { display:inline; }
+
+/*** パンくずリスト修正 ***/
+ol.breadcrumb {
+	margin-top:0;
+	margin-bottom:0;
+	padding-left:100px;
+	border-radius:0;
+}

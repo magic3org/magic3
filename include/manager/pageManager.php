@@ -96,6 +96,8 @@ class PageManager extends Core
 	private $isHtml5;					// HTML5で出力するかどうか
 	private $ckeditorCssFiles = array();	// CKEditor用のCSSファイル
 	private $ckeditorTemplateType;			// CKEditor用のテンプレートタイプ
+	private $adminSubNavbarDef = array();		// 管理画面用のサブメニューバーの定義
+	private $adminBreadcrumbDef = array();			// 管理画面用パンくずリスト定義
 	const CONFIG_KEY_HEAD_TITLE_FORMAT = 'head_title_format';		// ヘッダ作成用フォーマット
 	const ADMIN_WIDGET_ID = 'admin_main';		// 管理用ウィジェットのウィジェットID
 	//const CONTENT_TYPE_WIKI = 'wiki';		// ページのコンテンツタイプ(Wiki)
@@ -993,6 +995,44 @@ class PageManager extends Core
 	function getMainFeatureType()
 	{
 		return $this->mainFeatureType;				// 主要機能タイプ
+	}
+	/**
+	 * 管理画面用のサブメニューバーの定義を設定
+	 *
+	 * @param array $def	メニューバー定義
+	 * @return 				なし
+	 */
+	function setAdminSubNavbarDef($def)
+	{
+		$this->adminSubNavbarDef = $def;
+	}
+	/**
+	 * 管理画面用のサブメニューバーの定義を取得
+	 *
+	 * @return array メニューバーの定義
+	 */
+	function getAdminSubNavbarDef()
+	{
+		return $this->adminSubNavbarDef;
+	}
+	/**
+	 * 管理画面用パンくずリスト定義を設定
+	 *
+	 * @param array $def	パンくずリスト定義
+	 * @return 				なし
+	 */
+	function setAdminBreadcrumbDef($def)
+	{
+		$this->adminBreadcrumbDef = $def;
+	}
+	/**
+	 * 管理画面用パンくずリスト定義を取得
+	 *
+	 * @return array パンくずリスト定義
+	 */
+	function getAdminBreadcrumbDef()
+	{
+		return $this->adminBreadcrumbDef;
 	}
 	/**
 	 * ページ作成開始

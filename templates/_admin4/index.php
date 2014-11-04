@@ -27,8 +27,8 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <![endif]-->
 </head>
 <body>
-<div class="container">
 <jdoc:include type="modules" name="top" style="none" />
+<div class="container">
 <?php if ($document->countModules('left') || $document->countModules('right')): ?><div class="row"><?php endif; ?>
 <?php if ($document->countModules('left')): ?>
     <div class="col-lg-3"><jdoc:include type="modules" name="left" style="none" /></div>

@@ -56,6 +56,7 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		$this->gPage->setAdminBreadcrumbDef(array('テスト画面'));
 	}
 }
 ?>
