@@ -11,6 +11,16 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<patTemplate:tmpl name="fixtoppos" visibility="hidden">
+<script type="text/javascript">
+//<![CDATA[
+$(function(){
+	// トップ位置修正
+	$('body').css('padding-top', '{TOP}px');
+});
+//]]>
+</script>
+</patTemplate:tmpl>
 <patTemplate:tmpl name="menu" visibility="hidden">
 <script type="text/javascript">
 //<![CDATA[

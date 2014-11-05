@@ -240,8 +240,10 @@ background-color: #0081c2;
 /*	margin-top: 10px;*/
 }
 .m3messages .alert {
-	margin-top: 10px;
-	margin-bottom: 0;
+/*	margin-top: 10px;
+	margin-bottom: 0;*/
+	margin-top: 0;
+	margin-bottom: 10px;
 }
 /****** widget ******/
 .m3widget_main {
@@ -739,10 +741,3 @@ input[type="password"]{
 .centered-pills ul.nav.nav-pills, .centered-pills ul.nav.nav-tabs { display:inline-block; }
 .centered-pills ul.nav.nav-pills li, .centered-pills ul.nav.nav-tabs li { display:inline; }
 
-/*** パンくずリスト修正 ***/
-ol.breadcrumb {
-	margin-top:0;
-	margin-bottom:0;
-	padding-left:100px;
-	border-radius:0;
-}

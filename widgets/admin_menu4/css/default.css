@@ -1,5 +1,3 @@
-
-
 /* BootstrapのMagic3用の修正 */
 .navbar-brand {
 	font-weight: bold;	/* added by Magic3 */
@@ -9,6 +7,14 @@
 }
 /* メニューバー固定用 */
 body { padding-top: 85px; }
+
+/*** パンくずリスト修正 ***/
+ol.breadcrumb {
+	margin-top:0;
+/*	margin-bottom:0;*/
+	padding-left:100px;
+	border-radius:0;
+}
 
 /*img.brand {
 	padding: 0;

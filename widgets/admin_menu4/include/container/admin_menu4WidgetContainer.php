@@ -367,6 +367,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$this->tmpl->addVars('breadcrumb_list', $row);
 				$this->tmpl->parseTemplate('breadcrumb_list', 'a');
 			}
+			
+			// メニューバーの高さを修正
+			$topPos = 300;
+			$this->tmpl->setAttribute('fixtoppos', 'visibility', 'visible');
+			$this->tmpl->addVar('fixtoppos', 'top', $this->convertToDispString($topPos));
 		}
 	
 		// 「前へ」「次へ」アイコンを設定
