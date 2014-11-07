@@ -738,7 +738,7 @@ input[type="password"]{
 }
 /*** サブメニューバー ***/
 nav.secondlevel {
-	z-index:300;
+	z-index:900;
 }
 nav.secondlevel.minimized {
 	height:34px;
@@ -747,6 +747,9 @@ nav.secondlevel.minimized {
 nav.secondlevel.minimized .navbar-brand {
 	padding: 4px 5px;
 /*  margin: 8px 15px 8px 0;*/
+}
+nav.secondlevel .navbar-collapse {
+	margin-left:50px;
 }
 nav.secondlevel .navbar-text.title {
 	font-size: 18px;

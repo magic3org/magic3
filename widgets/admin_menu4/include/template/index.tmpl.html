@@ -19,6 +19,7 @@ $(function(){
 	$('nav.secondlevel').css('margin-top', '{SECOND_TOP}px');
 	$('body').css('padding-top', '{CONTENT_TOP}px');
 	
+<patTemplate:tmpl name="usesubmenubar" visibility="hidden">
 	// サブメニューバーの制御
 	$(window).scroll(function() {
 		if ($(document).scrollTop() > 50){
@@ -29,6 +30,7 @@ $(function(){
 			$('nav .btn').removeClass('btn-sm');
 		}
 	});
+</patTemplate:tmpl>
 });
 //]]>
 </script>
@@ -100,9 +102,9 @@ $(function(){
 </patTemplate:tmpl>
 <patTemplate:tmpl name="subnavbar" visibility="hidden">
 <nav class="navbar-inverse navbar-fixed-top secondlevel">
-    <div class="collapse navbar-collapse main-nav" style="margin-left:50px;">
-        <div class="navbar-text title">●●タイトル</div>
-        <ul class="nav navbar-nav"></ul>
+    <div class="collapse navbar-collapse">
+        {TITLE}
+        {MENU}
 	</div>
 </nav>
 </patTemplate:tmpl>

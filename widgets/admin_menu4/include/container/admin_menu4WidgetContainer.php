@@ -193,7 +193,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
 
 		// メニューを表示
-		$topPos = 0;		// コンテンツの開始位置
 		if ($menu == 'off'){	// メニュー非表示指定のとき
 		} else if (!empty($openBy)){	// 別ウィンドウで表示のときは閉じるボタン表示
 			if ($openBy != 'tabs' && $openBy != 'iframe' && $openBy != 'dialog'){		// タブ、インナーフレーム、ダイアログ表示以外
@@ -218,7 +217,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else {	// メニュー表示のとき
 			$this->useMenu = true;				// メニューを使用するかどうか
-			$topPos = self::MENUBAR_HEIGHT;		// コンテンツの開始位置
 			$this->tmpl->setAttribute('menu', 'visibility', 'visible');
 			
 			// ##### メニューを作成 #####
@@ -358,13 +356,24 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$siteMenuTag = $this->createSiteMenuTag();
 			$this->tmpl->addVar("menu", "site_menu", $siteMenuTag);
 		}
+		// ##### サブメニューバーとパンくずリストを作成 #####
+		$topPos = 0;		// コンテンツの開始位置
+		if ($this->useMenu) $topPos = self::MENUBAR_HEIGHT;		// コンテンツの開始位置
+		
 		// サブメニューバーを表示
 		$subNavbarDef = $this->gPage->getAdminSubNavbarDef();
 		if (!empty($subNavbarDef)){
+			$topPos += self::MENUBAR_HEIGHT;		// コンテンツの開始位置更新
+					
 			$this->tmpl->setAttribute('subnavbar', 'visibility', 'visible');
+			if ($this->useMenu) $this->tmpl->setAttribute('usesubmenubar', 'visibility', 'visible');
 			
-			$topPos += self::MENUBAR_HEIGHT;		// コンテンツの開始位置
+			// サブメニューバー作成
+			list($title, $menu) = $this->createSubMenubar($subNavbarDef);
+			$this->tmpl->addVar('subnavbar', 'title', $title);
+			$this->tmpl->addVar('subnavbar', 'menu', $menu);
 		}
+		// パンくずリストを表示
 		$breadcrumbDef = $this->gPage->getAdminBreadcrumbDef();
 		if (!empty($breadcrumbDef)){
 			$this->tmpl->setAttribute('breadcrumb', 'visibility', 'visible');
@@ -737,6 +746,20 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 		}
 		return $destMenu;
+	}
+	/**
+	 * サブメニューバー作成
+	 *
+	 * @param object $navbarDef	メニューバー定義
+	 * @return 					なし
+	 */
+	function createSubMenubar($navbarDef)
+	{
+		$title = '<div class="navbar-text title">' . 'xxxxx' . '</div>';
+		$menu = '';
+//		●●タイトル
+//		<ul class="nav navbar-nav"></ul>
+		return array($title, $menu);
 	}
 }
 ?>

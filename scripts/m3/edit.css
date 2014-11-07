@@ -30,7 +30,7 @@ img.m3icon {
 	padding:0;
 	width:32px;
 	height:32px;
-	z-index:2;
+	z-index:1002;
 }
 .m3configclose img {
 	border:0;	/* for IE */
