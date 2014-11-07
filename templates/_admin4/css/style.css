@@ -739,6 +739,7 @@ input[type="password"]{
 /*** サブメニューバー ***/
 nav.secondlevel {
 	z-index:900;
+	height:60px;
 }
 nav.secondlevel.minimized {
 	height:34px;
@@ -780,8 +781,9 @@ nav.secondlevel.minimized .btn.navbar-btn {
 	padding: 6px 9px;
 	font-size: 13px;
 	line-height: 1.5;
-	border-radius: 3px;
-
+/*	border-radius: 3px;*/
+	border-radius: 0;
+	
 	margin-top: 0px;
 	margin-bottom: 0px;
 /*
