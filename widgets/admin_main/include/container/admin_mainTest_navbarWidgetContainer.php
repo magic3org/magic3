@@ -57,6 +57,58 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$this->gPage->setAdminBreadcrumbDef(array('テスト画面', '詳細画面'));
+		
+		$navbarDef = new stdClass;
+		$navbarDef->title = 'ウィジェット名';
+
+		$index = 0;
+		$navbarMenu = array();
+		$menuItem = new stdClass;
+		$menuItem->name	= 'トップ項目';
+		$menuItem->task	= 'item_detail';
+		$menuItem->url	= '';
+		$menuItem->parent	= -1;		// 親なし
+		$menuItem->active	= false;
+		$navbarMenu[] = $menuItem; $index++;
+		$menuItem = new stdClass;
+		$menuItem->name	= 'トップ項目2';
+		$menuItem->task	= '';
+		$menuItem->url	= '#widget_other';
+		$menuItem->parent	= -1;		// 親なし
+		$menuItem->active	= false;
+		$navbarMenu[] = $menuItem; $index++;
+		$menuItem = new stdClass;
+		$menuItem->name	= 'トップ項目3';
+		$menuItem->task	= '';
+		$menuItem->url	= '';
+		$menuItem->parent	= -1;		// 親なし
+		$menuItem->active	= false;
+		$navbarMenu[] = $menuItem; $index++;
+		$parentIndex = $index;
+		$menuItem = new stdClass;
+		$menuItem->name	= 'トップ項目3サブ項目1';
+		$menuItem->task	= 'a';
+		$menuItem->url	= '';
+		$menuItem->parent	= $parentIndex;
+		$menuItem->active	= false;
+		$navbarMenu[] = $menuItem; $index++;
+		$menuItem = new stdClass;
+		$menuItem->name	= 'トップ項目3サブ項目2';
+		$menuItem->task	= b'';
+		$menuItem->url	= '';
+		$menuItem->parent	= $parentIndex;
+		$menuItem->active	= true;
+		$navbarMenu[] = $menuItem; $index++;
+		$menuItem = new stdClass;
+		$menuItem->name	= 'トップ項目3サブ項目3';
+		$menuItem->task	= 'c';
+		$menuItem->url	= '';
+		$menuItem->parent	= $parentIndex;
+		$menuItem->active	= false;
+		$navbarMenu[] = $menuItem; $index++;
+		$navbarDef->menu = $navbarMenu;
+		
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 }
 ?>

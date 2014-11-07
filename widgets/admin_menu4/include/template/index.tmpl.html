@@ -16,7 +16,19 @@
 //<![CDATA[
 $(function(){
 	// トップ位置修正
-	$('body').css('padding-top', '{TOP}px');
+	$('nav.secondlevel').css('margin-top', '{SECOND_TOP}px');
+	$('body').css('padding-top', '{CONTENT_TOP}px');
+	
+	// サブメニューバーの制御
+	$(window).scroll(function() {
+		if ($(document).scrollTop() > 50){
+			$('nav').addClass('minimized');
+			$('nav .btn').addClass('btn-sm');
+		} else {
+			$('nav').removeClass('minimized');
+			$('nav .btn').removeClass('btn-sm');
+		}
+	});
 });
 //]]>
 </script>
@@ -84,6 +96,14 @@ $(function(){
     </ul>
     <ul class="nav navbar-nav navbar-right"><!-- 右端項目 --></ul>
 </div>
+</nav>
+</patTemplate:tmpl>
+<patTemplate:tmpl name="subnavbar" visibility="hidden">
+<nav class="navbar-inverse navbar-fixed-top secondlevel">
+    <div class="collapse navbar-collapse main-nav" style="margin-left:50px;">
+        <div class="navbar-text title">●●タイトル</div>
+        <ul class="nav navbar-nav"></ul>
+	</div>
 </nav>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="breadcrumb" visibility="hidden">

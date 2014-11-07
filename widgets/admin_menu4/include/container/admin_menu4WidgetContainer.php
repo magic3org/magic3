@@ -24,7 +24,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	protected $subContentMenu;			// サブコンテンツ編集メニュー
 	protected $useMenu;				// メニューを使用するかどうか
 	protected $useCloseButton;				// 「閉じる」を使用するかどうか
-	//const DEFAULT_SITE_NAME = 'サイト名未設定';
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
 	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
@@ -57,6 +56,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const MAINMENU_INDENT_LEBEL = 4;		// メインメニューのインデントレベル
 	const SITEMENU_INDENT_LEBEL = 2;		// サイトメニューのインデントレベル
 	const MAINMENU_COL_STYLE = 'col-md-';	// Bootstrapのカラムクラス
+	const MENUBAR_HEIGHT = 60;			// メニューバーの高さ
 
 	// DB定義値
 	const CF_SITE_IN_PUBLIC			= 'site_in_public';			// サイト公開状況
@@ -193,6 +193,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
 
 		// メニューを表示
+		$topPos = 0;		// コンテンツの開始位置
 		if ($menu == 'off'){	// メニュー非表示指定のとき
 		} else if (!empty($openBy)){	// 別ウィンドウで表示のときは閉じるボタン表示
 			if ($openBy != 'tabs' && $openBy != 'iframe' && $openBy != 'dialog'){		// タブ、インナーフレーム、ダイアログ表示以外
@@ -217,6 +218,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 		} else {	// メニュー表示のとき
 			$this->useMenu = true;				// メニューを使用するかどうか
+			$topPos = self::MENUBAR_HEIGHT;		// コンテンツの開始位置
 			$this->tmpl->setAttribute('menu', 'visibility', 'visible');
 			
 			// ##### メニューを作成 #####
@@ -357,6 +359,12 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "site_menu", $siteMenuTag);
 		}
 		// サブメニューバーを表示
+		$subNavbarDef = $this->gPage->getAdminSubNavbarDef();
+		if (!empty($subNavbarDef)){
+			$this->tmpl->setAttribute('subnavbar', 'visibility', 'visible');
+			
+			$topPos += self::MENUBAR_HEIGHT;		// コンテンツの開始位置
+		}
 		$breadcrumbDef = $this->gPage->getAdminBreadcrumbDef();
 		if (!empty($breadcrumbDef)){
 			$this->tmpl->setAttribute('breadcrumb', 'visibility', 'visible');
@@ -367,13 +375,14 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$this->tmpl->addVars('breadcrumb_list', $row);
 				$this->tmpl->parseTemplate('breadcrumb_list', 'a');
 			}
-			
-			// メニューバーの高さを修正
-			$topPos = 300;
-			$this->tmpl->setAttribute('fixtoppos', 'visibility', 'visible');
-			$this->tmpl->addVar('fixtoppos', 'top', $this->convertToDispString($topPos));
 		}
-	
+		// メニューバーの高さ位置を修正
+		if (!empty($subNavbarDef) || !empty($breadcrumbDef)){
+			$this->tmpl->setAttribute('fixtoppos', 'visibility', 'visible');
+			$this->tmpl->addVar('fixtoppos', 'second_top', $this->convertToDispString($topPos - self::MENUBAR_HEIGHT));
+			$this->tmpl->addVar('fixtoppos', 'content_top', $this->convertToDispString($topPos));		// コンテンツのトップ位置
+		}
+			
 		// 「前へ」「次へ」アイコンを設定
 		$this->tmpl->setAttribute('prevnextbutton', 'visibility', 'visible');
 		$iconUrl = $this->gEnv->getRootUrl() . self::PREV_ICON_FILE;
