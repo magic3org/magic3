@@ -60,54 +60,129 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		$navbarDef = new stdClass;
 		$navbarDef->title = 'ウィジェット名';
-
-		$index = 0;
-		$navbarMenu = array();
+		
+/*		$navbarMenu = array();
 		$menuItem = new stdClass;
 		$menuItem->name	= 'トップ項目';
 		$menuItem->task	= 'item_detail';
 		$menuItem->url	= '';
-		$menuItem->parent	= -1;		// 親なし
 		$menuItem->active	= false;
-		$navbarMenu[] = $menuItem; $index++;
+		$navbarMenu[] = $menuItem;
 		$menuItem = new stdClass;
 		$menuItem->name	= 'トップ項目2';
 		$menuItem->task	= '';
 		$menuItem->url	= '#widget_other';
-		$menuItem->parent	= -1;		// 親なし
-		$menuItem->active	= false;
-		$navbarMenu[] = $menuItem; $index++;
+		$menuItem->active	= true;
+		$navbarMenu[] = $menuItem;
 		$menuItem = new stdClass;
 		$menuItem->name	= 'トップ項目3';
 		$menuItem->task	= '';
 		$menuItem->url	= '';
-		$menuItem->parent	= -1;		// 親なし
 		$menuItem->active	= false;
-		$navbarMenu[] = $menuItem; $index++;
-		$parentIndex = $index;
-		$menuItem = new stdClass;
+		$menuItem->submenu = array(
+								(Object)array(	'name'		=> 'トップ項目3サブ項目1',
+												'task'		=> 'a',
+												'url'		=> '',
+												'active'	=> false	),
+								(Object)array(	'name'		=> 'トップ項目3サブ項目1',
+												'task'		=> 'a',
+												'url'		=> '',
+												'active'	=> false	),
+								(Object)array(	'name'		=> 'トップ項目3サブ項目1',
+												'task'		=> 'a',
+												'url'		=> '',
+												'active'	=> false	)
+								);*/
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'トップ項目',
+									'task'		=> 'item_detail',
+									'url'		=> '',
+									'active'	=> false,
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> 'トップ項目2',
+									'task'		=> '',
+									'url'		=> '#widget_other',
+									'active'	=> true,
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> 'トップ項目3',
+									'task'		=> '',
+									'url'		=> '',
+									'active'	=> false,
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'トップ項目3サブ項目1',
+											'task'		=> 'a',
+											'url'		=> '',
+											'active'	=> false
+										),
+										(Object)array(
+											'name'		=> 'トップ項目3サブ項目1',
+											'task'		=> 'a',
+											'url'		=> '',
+											'active'	=> false
+										),
+										(Object)array(
+											'name'		=> 'トップ項目3サブ項目1',
+											'task'		=> 'a',
+											'url'		=> '',
+											'active'	=> false
+										)
+									)
+								),
+								(Object)array(
+									'name'		=> 'トップ項目4',
+									'task'		=> '',
+									'url'		=> '',
+									'active'	=> false,
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'トップ項目4サブ項目1',
+											'task'		=> 'a',
+											'url'		=> '',
+											'active'	=> false
+										),
+										(Object)array(
+											'name'		=> 'トップ項目4サブ項目1',
+											'task'		=> 'a',
+											'url'		=> '',
+											'active'	=> true
+										),
+										(Object)array(
+											'name'		=> 'トップ項目4サブ項目1',
+											'task'		=> 'a',
+											'url'		=> '',
+											'active'	=> false
+										)
+									)
+								)
+							);
+//		$navbarMenu[] = $menuItem;
+//		$navbarDef->menu = $navbarMenu;
+/*		$menuItem = new stdClass;
 		$menuItem->name	= 'トップ項目3サブ項目1';
 		$menuItem->task	= 'a';
 		$menuItem->url	= '';
-		$menuItem->parent	= $parentIndex;
 		$menuItem->active	= false;
-		$navbarMenu[] = $menuItem; $index++;
+		$menuItems[] = $menuItem;
 		$menuItem = new stdClass;
 		$menuItem->name	= 'トップ項目3サブ項目2';
 		$menuItem->task	= b'';
 		$menuItem->url	= '';
-		$menuItem->parent	= $parentIndex;
 		$menuItem->active	= true;
-		$navbarMenu[] = $menuItem; $index++;
+		$menuItems[] = $menuItem;
 		$menuItem = new stdClass;
 		$menuItem->name	= 'トップ項目3サブ項目3';
 		$menuItem->task	= 'c';
 		$menuItem->url	= '';
-		$menuItem->parent	= $parentIndex;
 		$menuItem->active	= false;
-		$navbarMenu[] = $menuItem; $index++;
-		$navbarDef->menu = $navbarMenu;
+		$menuItems[] = $menuItem;*/
 		
+//var_dump($navbarDef->menu);
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 }

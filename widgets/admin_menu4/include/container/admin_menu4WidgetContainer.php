@@ -755,11 +755,53 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createSubMenubar($navbarDef)
 	{
-		$title = '<div class="navbar-text title">' . 'xxxxx' . '</div>';
-		$menu = '';
-//		●●タイトル
-//		<ul class="nav navbar-nav"></ul>
-		return array($title, $menu);
+		// タイトル作成
+		$titleTag = '';
+		if (!empty($navbarDef->title)) $titleTag = '<div class="navbar-text title">' . $this->convertToDispString($navbarDef->title) . '</div>';
+		
+		// メニュー作成
+		$menuTag = '';
+		$menu = $navbarDef->menu;
+		$menuItemCount = count($menu);
+		for ($i = 0; $i < $menuItemCount; $i++){
+			$menuItem = $menu[$i];
+			$name	= $menuItem->name;
+			$active = $menuItem->active;
+			$subMenu = $menuItem->submenu;
+			
+			if (empty($subMenu)){		// サブメニューをない場合
+				if ($active){
+					$buttonType = 'btn-primary';
+				} else {
+					$buttonType = 'btn-success';
+				}
+				$menuTag .= '<li><button type="button" class="btn navbar-btn ' . $buttonType . '">' . $this->convertToDispString($name) . '</button></li>';
+			} else {		// サブメニューがある場合
+				// アクティブな項目があるかチェック
+				$subMenuTag = '';
+				for ($j = 0; $j < count($subMenu); $j++){
+					$subMenuItem = $subMenu[$j];
+					$subName	= $subMenuItem->name;
+					$subActive = $subMenuItem->active;
+					$classActive = '';
+					if ($subActive){
+						$classActive = ' class="active"';
+						$active = true;			// 親の階層もアクティブにする
+					}
+					$subMenuTag .= '<li' . $classActive . '><a href="#contact">' . $this->convertToDispString($name) . '</a></li>';
+				}
+				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
+
+ 				if ($active){
+					$buttonType = 'btn-primary';
+				} else {
+					$buttonType = 'btn-success';
+				}
+				$menuTag .= '<li><a class="btn navbar-btn ' . $buttonType . '" data-toggle="dropdown" href="#" >' . $this->convertToDispString($name) . ' <span class="caret"></span></a>' . $subMenuTag . '</li>';
+			}
+		}
+		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
+		return array($titleTag, $menuTag);
 	}
 }
 ?>
