@@ -106,8 +106,9 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 	 */
 	function addOptionUrlParam($key, $value)
 	{
-		$param = array($key, $value);
-		array_push($this->optionUrlParam, $param);
+//		$param = array($key, $value);
+//		array_push($this->optionUrlParam, $param);
+		$this->optionUrlParam[$key] = $value;
 	}
 	/**
 	 * パラメータ付きの管理画面用のURLを取得
@@ -117,17 +118,27 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 	 */
 	function getAdminUrlWithOptionParam($withPageDef = false)
 	{
-		$url = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . 
-					'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
-		if ($withPageDef){
-			$configId = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_PAGE_DEF_CONFIG_ID);
-			if (!empty($configId)) $url .= '&' . M3_REQUEST_PARAM_PAGE_DEF_CONFIG_ID . '=' . $configId;		// 定義ID
-			$defSerial = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_PAGE_DEF_SERIAL);
-			if (!empty($defSerial)) $url .= '&' . M3_REQUEST_PARAM_PAGE_DEF_SERIAL . '=' . $defSerial;				// 画面定義シリアル番号
+		global $gRequestManager;
+		
+		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
+		
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){			// ウィジェットの設定画面の場合
+			$url = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . 
+						'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
+			if ($withPageDef){
+				$configId = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_PAGE_DEF_CONFIG_ID);
+				if (!empty($configId)) $url .= '&' . M3_REQUEST_PARAM_PAGE_DEF_CONFIG_ID . '=' . $configId;		// 定義ID
+				$defSerial = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_PAGE_DEF_SERIAL);
+				if (!empty($defSerial)) $url .= '&' . M3_REQUEST_PARAM_PAGE_DEF_SERIAL . '=' . $defSerial;				// 画面定義シリアル番号
+			}
+		} else {
+			$url = $this->gEnv->getDefaultAdminUrl();
 		}
-		foreach ($this->optionUrlParam as $value){
+		// その他のパラメータ
+		$url = createUrl($url, $this->optionUrlParam);
+/*		foreach ($this->optionUrlParam as $value){
 			$url .= '&' . $value[0] . '=' . $value[1];
-		}
+		}*/
 		return $url;
 	}
 	/**

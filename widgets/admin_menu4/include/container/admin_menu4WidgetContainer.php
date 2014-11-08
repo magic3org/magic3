@@ -761,6 +761,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		
 		// メニュー作成
 		$menuTag = '';
+		$baseUrl = $navbarDef->baseurl;
 		$menu = $navbarDef->menu;
 		$menuItemCount = count($menu);
 		for ($i = 0; $i < $menuItemCount; $i++){
@@ -782,13 +783,20 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				for ($j = 0; $j < count($subMenu); $j++){
 					$subMenuItem = $subMenu[$j];
 					$subName	= $subMenuItem->name;
-					$subActive = $subMenuItem->active;
+					$subActive	= $subMenuItem->active;
+					$task		= $subMenuItem->task;
+					$url		= $subMenuItem->url;
+					
+					$linkUrl = '';			// リンク先 
+					if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);
+					if (empty($linkUrl)) $linkUrl = $url;
+					if (empty($linkUrl)) $linkUrl = '#';
 					$classActive = '';
 					if ($subActive){
 						$classActive = ' class="active"';
 						$active = true;			// 親の階層もアクティブにする
 					}
-					$subMenuTag .= '<li' . $classActive . '><a href="#contact">' . $this->convertToDispString($name) . '</a></li>';
+					$subMenuTag .= '<li' . $classActive . '><a href="' . $this->getUrl($linkUrl) . '">' . $this->convertToDispString($name) . '</a></li>';
 				}
 				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
 

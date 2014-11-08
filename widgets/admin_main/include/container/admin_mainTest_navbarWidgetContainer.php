@@ -60,6 +60,7 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		$navbarDef = new stdClass;
 		$navbarDef->title = 'ウィジェット名';
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
 		
 /*		$navbarMenu = array();
 		$menuItem = new stdClass;
