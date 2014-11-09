@@ -794,6 +794,12 @@ nav.secondlevel.minimized .btn.navbar-btn {
 nav.secondlevel a.btn.navbar-btn {
 	padding: 10px 15px;
 }
+/*** フォーカス削除 ***/
+nav.secondlevel .btn.navbar-btn,
+nav.secondlevel .btn.navbar-btn:hover,
+nav.secondlevel .btn.navbar-btn:focus {
+	outline: 0;
+}
 /*** ナビゲーションボタン追加 ***/
 .centered-pills { text-align:center; }
 .centered-pills ul.nav.nav-pills, .centered-pills ul.nav.nav-tabs { display:inline-block; }
