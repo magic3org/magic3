@@ -8,42 +8,34 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: logManager.php 1979 2009-06-14 15:08:38Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-define('LOG4PHP_CONFIGURATION', M3_SYSTEM_CONF_PATH . '/log4php.properties');		// 設定ファイルの位置
-//require_once(M3_SYSTEM_LIB_PATH . '/log4php/LoggerManager.php');					// log4Php取り込み
-
 /**
  * ログ出力管理クラス
  *
  * Magic3 Frameworkで出力するすべてのログを管理する
- * 設定ファイルのパスは上記「LOG4PHP_CONFIGURATION」で定義する
- * 設定ファイルのデフォルトの位置：プロジェクトルート/include/conf/log4php.properties
+ * 設定ファイルのデフォルトの位置：プロジェクトルート/include/conf/log4php.xml
  * ログファイルはデフォルトで、「/tmp/magic3_YYYYMMDD.log」に出力される
  * 
  * エラーレベルの順位
- * DEBUG ＜ INFO ＜ WARN ＜ ERROR ＜ FATAL
+ * TRACE ＜ DEBUG ＜ INFO ＜ WARN ＜ ERROR ＜ FATAL
  * エラーレベル指定で、ログの出力を制御する
  */
 class LogManager
 {
-//	public $logger;
-	
 	/**
 	 * コンストラクタ
 	 */
 	function __construct()
 	{
-		// ログオブジェクト作成
-		//$this->logger = LoggerManager::getLogger('Main');
 	}
 	/**
 	 * ログ出力オブジェクト取得
 	 *
-	 * @return PDO 			接続コネクションオブジェクト
+	 * @return object 			ログ出力オブジェクト
 	 */
 	function _getLogger()
 	{
@@ -51,10 +43,25 @@ class LogManager
 		
 		if (!is_object($logger)){
 			// ログオブジェクト作成
-			require_once(M3_SYSTEM_LIB_PATH . '/log4php/LoggerManager.php');					// log4Php取り込み
-			$logger = LoggerManager::getLogger('Main');
+			require_once(M3_SYSTEM_LIB_PATH . '/apache-log4php-2.3.0/Logger.php');		// log4Php取り込み
+			Logger::configure(M3_SYSTEM_CONF_PATH . '/log4php.xml');					// 設定ファイル読み込み
+			$logger = Logger::getLogger('main');
 		}
 		return $logger;
+	}
+	/**
+	 * トレース出力
+	 *
+	 * トレース時に任意のメッセージを出力するためのインターフェイス
+	 * 実運用時は出力しない
+	 *
+	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
+	 * @param string $msg   	メッセージ
+	 * @return					なし
+	 */
+	public function trace($method, $msg)
+	{
+		$this->_getLogger()->trace($msg);
 	}
 	/**
 	 * デバッグ文出力
@@ -64,11 +71,11 @@ class LogManager
 	 *
 	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
 	 * @param string $msg   	メッセージ
+	 * @return					なし
 	 */
 	public function debug($method, $msg)
 	{
-		//$this->logger->debug($msg . ' (' . $method . ')');
-		$this->_getLogger()->debug($msg . ' (' . $method . ')');
+		$this->_getLogger()->debug($msg);
 	}
 	/**
 	 * 運用状況確認用出力
@@ -79,11 +86,11 @@ class LogManager
 	 *
 	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
 	 * @param string $msg   	メッセージ
+	 * @return					なし
 	 */
 	public function info($method, $msg)
 	{
-		//$this->logger->info($msg . ' (' . $method . ')');
-		$this->_getLogger()->info($msg . ' (' . $method . ')');
+		$this->_getLogger()->info($msg);
 	}
 	/**
 	 * ワーニング出力
@@ -94,11 +101,11 @@ class LogManager
 	 *
 	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
 	 * @param string $msg   	メッセージ
+	 * @return					なし
 	 */
 	public function warn($method, $msg)
 	{
-		//$this->logger->warn($msg . ' (' . $method . ')');
-		$this->_getLogger()->warn($msg . ' (' . $method . ')');
+		$this->_getLogger()->warn($msg);
 	}
 	/**
 	 * 通常エラー出力
@@ -109,11 +116,11 @@ class LogManager
 	 *
 	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
 	 * @param string $msg   	メッセージ
+	 * @return					なし
 	 */
 	public function error($method, $msg)
 	{
-		//$this->logger->error($msg . ' (' . $method . ')');
-		$this->_getLogger()->error($msg . ' (' . $method . ')');
+		$this->_getLogger()->error($msg);
 	}
 	/**
 	 * 致命的エラー出力
@@ -124,11 +131,11 @@ class LogManager
 	 *
 	 * @param object $method	呼び出し元クラスメソッド(通常は「__METHOD__」)
 	 * @param string $msg   	メッセージ
+	 * @return					なし
 	 */
 	public function fatal($method, $msg)
 	{
-		//$this->logger->fatal($msg . ' (' . $method . ')');
-		$this->_getLogger()->fatal($msg . ' (' . $method . ')');
+		$this->_getLogger()->fatal($msg);
 	}
 }
 ?>
