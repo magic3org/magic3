@@ -27,6 +27,8 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ITEM_HEAD_EXCEPT_PAGE = 'item_except_';			// 例外ページサブIDの項目名ヘッダ
 	const WIDGET_CSS_CLASS_HEAD = 'm3_';			// ウィジェットCSSクラスのヘッダ部
+	const MENUBAR_TITLE = '共通設定';
+	const HELP_ADJUSTWIDGET_CONFIG = 'adjustwidget_config';			// 機能説明ヘルプ
 	
 	/**
 	 * コンストラクタ
@@ -72,6 +74,45 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	function _setTemplate($request, &$param)
 	{
 		return 'adjustwidget.tmpl.html';
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// パンくずリストの作成
+		$this->gPage->setAdminBreadcrumbDef(array('基本'));
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = self::MENUBAR_TITLE;
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= $this->gInstance->getHelpManager()->getHelpText(self::HELP_ADJUSTWIDGET_CONFIG);// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> $this->_('Basic'),		// 基本
+									'task'		=> 'item_detail',
+									'url'		=> '',
+									'tagid'		=> 'menubar_basic',
+									'active'	=> false,
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> $this->_('Others'),		// その他
+									'task'		=> '',
+									'url'		=> '#widget_other',
+									'tagid'		=> 'menubar_other',
+									'active'	=> false,
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -325,7 +366,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->createPageSubIdList();
 		
 		// ナビゲーションタブ作成
-		$tabDef = array();
+/*		$tabDef = array();
 		$tabItem = new stdClass;
 		$tabItem->name	= $this->_('Basic');		// 基本
 		$tabItem->task	= '';
@@ -341,7 +382,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$tabItem->active	= false;
 		$tabDef[] = $tabItem;
 		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
-		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
+		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);*/
 		if (empty($activeTab)){		// タブの選択
 			$this->tmpl->addVar('_widget', 'active_tab', 'widget_config');
 		} else {
@@ -483,9 +524,9 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	{
 		$localeText = array();
 		$localeText['msg_update'] = $this->_('Update config?');		// 設定を更新しますか?
-		$localeText['label_widget_common_config'] = $this->_('Widget Common Config');			// ウィジェット共通設定
-//		$localeText['label_config_basic'] = $this->_('Basic');			// 基本
-//		$localeText['label_config_other'] = $this->_('Others');			// その他
+//		$localeText['label_widget_common_config'] = $this->_('Common Config');			// 共通設定
+		$localeText['label_config_basic'] = $this->_('Basic');			// 基本
+		$localeText['label_config_other'] = $this->_('Others');			// その他
 		$localeText['label_adjust_widget'] = $this->_('Adjust Widget Title and Contents');			// ウィジェットタイトル、位置調整
 		$localeText['label_title'] = $this->_('Title');			// タイトル名
 		$localeText['label_visible'] = $this->_('Visible');			// 表示

@@ -622,6 +622,7 @@ background-color: #0081c2;
 	min-width: 950px;
 	max-width: 90%;
 }
+/* 削除予定 */
 .m3config_tabs {
 	width:95%;
 	margin: 10px auto;
@@ -800,6 +801,13 @@ nav.secondlevel .btn.navbar-btn:hover,
 nav.secondlevel .btn.navbar-btn:focus {
 	outline: 0;
 }
+/*** パンくずリスト ***/
+.breadcrumb {
+	margin-top:0;
+	margin-bottom:10px;
+	padding-left:100px;
+}
+
 /*** ナビゲーションボタン追加 ***/
 .centered-pills { text-align:center; }
 .centered-pills ul.nav.nav-pills, .centered-pills ul.nav.nav-tabs { display:inline-block; }

@@ -40,7 +40,29 @@ function updateOther(){
 // タブを選択
 function activateTab(tab)
 {
-	$('.nav-tabs a[href="#' + tab + '"]').tab('show');
+	if (tab == 'widget_config'){
+		// メニューバーの更新
+		$('.navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');
+		$('#menubar_basic').removeClass('btn-success').addClass('btn-primary');
+		
+		// パンくずリストの更新
+		$('.breadcrumb').html('<li>{_LC_LABEL_CONFIG_BASIC}</li>');
+		
+		// 画面の更新
+		$('.tab-pane').removeClass('active');
+		$('#widget_config').addClass('active');
+	} else {
+		// メニューバーの更新
+		$('.navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');
+		$('#menubar_other').removeClass('btn-success').addClass('btn-primary');
+		
+		// パンくずリストの更新
+		$('.breadcrumb').html('<li>{_LC_LABEL_CONFIG_OTHER}</li>');
+		
+		// 画面の更新
+		$('.tab-pane').removeClass('active');
+		$('#widget_other').addClass('active');
+	}
 }
 // 作成リンク取得用
 function setLinkUrl(url)
@@ -59,8 +81,17 @@ $(function(){
 	// タブを選択
 	activateTab('{ACTIVE_TAB}');
 	
-	// タブクリック時処理
-	$('a[data-toggle="tab"]').on('shown.bs.tab', function (e){
+	// 画面選択処理
+	$('#menubar_basic').on('click', function(){
+		// 画面の更新
+		activateTab('widget_config');
+		
+		$('.m3messages').remove();
+	});
+	$('#menubar_other').on('click', function(){
+		// 画面の更新
+		activateTab('widget_other');
+		
 		$('.m3messages').remove();
 	});
 	
@@ -85,15 +116,13 @@ $(function(){
 });
 //]]>
 </script>
-<div class="m3config_head"><h3><span {_HELP_ADJUSTWIDGET_CONFIG}>{_LC_LABEL_WIDGET_COMMON_CONFIG}</span></h3></div>
-{NAV_TAB}
-<div class="m3config_tabs tab-content">
+<div class="tab-content">
 <!-- m3:ErrorMessage -->
 <div id="widget_config" class="tab-pane"><div class="m3config_container">
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <input type="hidden" name="widget_id" value="{WIDGET_ID}" />
-<h4><span {_HELP_ADJUSTWIDGET}>{_LC_LABEL_ADJUST_WIDGET}</span></h4>
+<h3><span {_HELP_ADJUSTWIDGET}>{_LC_LABEL_ADJUST_WIDGET}</span></h3>
 <table id="widget_config_table">
     <tbody>
         <tr>
@@ -146,7 +175,7 @@ $(function(){
 <form method="post" name="main_other">
 <input type="hidden" name="act" />
 <input type="hidden" name="widget_id" value="{WIDGET_ID}" />
-<h4><span {_HELP_ADJUSTWIDGET_VIEW}>{_LC_LABEL_VIEW_CONTROL}</span></h4>
+<h3><span {_HELP_ADJUSTWIDGET_VIEW}>{_LC_LABEL_VIEW_CONTROL}</span></h3>
 <table id="widget_other_table">
     <tbody>
         <tr>
