@@ -2,7 +2,7 @@
 <configuration xmlns="http://logging.apache.org/log4php/">
   <appender name="default" class="LoggerAppenderDailyFile">
     <layout class="LoggerLayoutPattern">
-      <param name="conversionPattern" value="%d{Y-m-d H:i:s.u} %-5p %m%n" />
+      <param name="conversionPattern" value="%d{Y-m-d H:i:s.u} [%p] %m%n" />
     </layout>
     <param name="file" value="/tmp/magic3_%s.log" />
     <param name="datePattern" value="Ymd" />
