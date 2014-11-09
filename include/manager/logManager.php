@@ -16,9 +16,10 @@
 /**
  * ログ出力管理クラス
  *
- * Magic3 Frameworkで出力するすべてのログを管理する
+ * Magic3 Frameworkで出力するすべてのログを管理する。
  * 設定ファイルのデフォルトの位置：プロジェクトルート/include/conf/log4php.xml
- * ログファイルはデフォルトで、「/tmp/magic3_YYYYMMDD.log」に出力される
+ * ログ出力ディレクトリは「プロジェクトルート/include/log 」で、書き込み不可の場合はlog4php.xmlの定義値(「/tmp」)を使用。
+ * ログファイル名「magic3_YYYYMMDD.log」で出力される。
  * 
  * エラーレベルの順位
  * TRACE ＜ DEBUG ＜ INFO ＜ WARN ＜ ERROR ＜ FATAL
@@ -46,6 +47,13 @@ class LogManager
 			require_once(M3_SYSTEM_LIB_PATH . '/apache-log4php-2.3.0/Logger.php');		// log4Php取り込み
 			Logger::configure(M3_SYSTEM_CONF_PATH . '/log4php.xml');					// 設定ファイル読み込み
 			$logger = Logger::getLogger('main');
+			
+			// 出力ディレクトリを修正
+			$logDir = M3_SYSTEM_INCLUDE_PATH . '/log';
+			if (is_writable($logDir)){
+				$appender = Logger::getRootLogger()->getAppender('default');
+				$appender->setFile($logDir . '/magic3_%s.log');
+			}
 		}
 		return $logger;
 	}
