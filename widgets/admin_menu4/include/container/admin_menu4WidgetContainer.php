@@ -757,7 +757,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	{
 		// タイトル作成
 		$titleTag = '';
-		if (!empty($navbarDef->title)) $titleTag = '<div class="navbar-text title">' . $this->convertToDispString($navbarDef->title) . '</div>';
+		if (!empty($navbarDef->title)){
+			$title = $this->convertToDispString($navbarDef->title);
+			if (!empty($navbarDef->help)) $title = '<span ' . $navbarDef->help . '>' . $title . '</span>';
+			$titleTag = '<div class="navbar-text title">' . $title . '</div>';
+		}
 		
 		// メニュー作成
 		$menuTag = '';
@@ -767,6 +771,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		for ($i = 0; $i < $menuItemCount; $i++){
 			$menuItem = $menu[$i];
 			$name	= $menuItem->name;
+			$tagId	= $menuItem->tagid;
 			$active = $menuItem->active;
 			$subMenu = $menuItem->submenu;
 			
@@ -776,13 +781,16 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				} else {
 					$buttonType = 'btn-success';
 				}
-				$menuTag .= '<li><button type="button" class="btn navbar-btn ' . $buttonType . '">' . $this->convertToDispString($name) . '</button></li>';
+				$tagIdAttr = '';		// タグID
+				if (!empty($tagId)) $tagIdAttr = ' id="' . $tagId . '"';
+				$menuTag .= '<li><button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '">' . $this->convertToDispString($name) . '</button></li>';
 			} else {		// サブメニューがある場合
 				// アクティブな項目があるかチェック
 				$subMenuTag = '';
 				for ($j = 0; $j < count($subMenu); $j++){
 					$subMenuItem = $subMenu[$j];
 					$subName	= $subMenuItem->name;
+					$subTagId	= $subMenuItem->tagid;
 					$subActive	= $subMenuItem->active;
 					$task		= $subMenuItem->task;
 					$url		= $subMenuItem->url;
@@ -796,7 +804,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 						$classActive = ' class="active"';
 						$active = true;			// 親の階層もアクティブにする
 					}
-					$subMenuTag .= '<li' . $classActive . '><a href="' . $this->getUrl($linkUrl) . '">' . $this->convertToDispString($name) . '</a></li>';
+					$tagIdAttr = '';		// タグID
+					if (!empty($subTagId)) $tagIdAttr = ' id="' . $subTagId . '"';
+					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . $this->getUrl($linkUrl) . '">' . $this->convertToDispString($name) . '</a></li>';
 				}
 				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
 
