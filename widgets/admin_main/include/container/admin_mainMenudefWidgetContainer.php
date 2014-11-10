@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -32,6 +32,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	private $parentId;				// メニュー親項目
 	private $parentIdArray = array();			// メニュー項目パス
 	private $parentNameArray = array();			// メニュー項目名
+	const BREADCRUMB_TITLE = 'メニュー管理(多階層)';		// 画面タイトル名(パンくずリスト)
 	const MAIN_MENU_ID = 'main_menu';			// メインメニューID
 //	const CONTENT_WIDGET_ID = 'default_content';			// コンテンツ編集ウィジェット
 	const MAX_MENU_TREE_LEVEL = 5;			// メニュー階層最大数
@@ -124,7 +125,21 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @param								なし
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// パンくずリストの作成
+		$this->gPage->setAdminBreadcrumbDef(array(self::BREADCRUMB_TITLE));
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
 	 */
 	function _assign($request, &$param)
 	{

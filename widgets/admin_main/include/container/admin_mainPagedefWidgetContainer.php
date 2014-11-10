@@ -29,6 +29,9 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $pageTitle;	// 選択ページのタイトル
 	private $templateTitle;	// テンプレートタイトル
 	private $pageInfoRows;			// ページ情報
+	const BREADCRUMB_TITLE_PC			= 'PC画面';		// 画面タイトル名(パンくずリスト)
+	const BREADCRUMB_TITLE_MOBILE		= '携帯画面';		// 画面タイトル名(パンくずリスト)
+	const BREADCRUMB_TITLE_SMARTPHONE	= 'スマートフォン画面';		// 画面タイトル名(パンくずリスト)
 	const TEMPLATE_NORMAL_ICON_FILE = '/images/system/layout16.png';		// 通常テンプレートアイコン
 	const TEMPLATE_PLAIN_ICON_FILE = '/images/system/layout_plain16.png';		// デザインなしテンプレートアイコン
 	const TEMPLATE_NORMAL32_ICON_FILE = '/images/system/layout32.png';		// 通常テンプレートアイコン
@@ -70,10 +73,6 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		
 		if ($task == 'pagedef_detail'){		// 詳細設定画面
 			return 'pagedef_detail.tmpl.html';
-/*		} else if ($task == 'pagedef_mobile'){		// 携帯用設定画面
-			return 'pagedef_mobile.tmpl.html';
-		} else if ($task == 'pagedef_smartphone'){		// スマートフォン用設定画面
-			return 'pagedef_smartphone.tmpl.html';*/
 		} else {			// 画面編集画面
 			return 'pagedef.tmpl.html';
 		}
@@ -99,7 +98,34 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @param								なし
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		$task = $request->trimValueOf('task');		// 処理区分
+		
+		// パンくずリストの作成
+		switch ($task){
+			case 'pagedef_mobile':		// 携帯用設定画面のとき
+				$title = self::BREADCRUMB_TITLE_MOBILE;
+				break;
+			case 'pagedef_smartphone':		// スマートフォン用設定画面のとき
+				$title = self::BREADCRUMB_TITLE_SMARTPHONE;
+				break;
+			default:						// PC用画面のとき
+				$title = self::BREADCRUMB_TITLE_PC;
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef(array($title));
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
 	 */
 	function _assign($request, &$param)
 	{

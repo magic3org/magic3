@@ -468,8 +468,8 @@
 		
 		// スライドメニュー高さ調整
 		var pos = $('#m3paneltab_widget_list').position();
-//		var slideMenuHeight = $(window).height() - pos.top * 2;
-		var slideMenuHeight = $(window).height() - pos.top - 30;	// スクロールバー部分調整	
+		//var slideMenuHeight = $(window).height() - pos.top - 30;	// スクロールバー部分調整
+		var slideMenuHeight = $(window).height() - pos.top - 20;	// スクロールバー部分調整
 		$('#m3paneltab_widget_list').height(slideMenuHeight);
 	
 		// 画面リサイズボタン
@@ -489,7 +489,7 @@
 			} else {
 				// 画面を縮小
 				parent.$("#layout_preview_outer").css('z-index', '1');
-				openerCss['top'] = '220px';
+				openerCss['top'] = '240px';		// 高さ調整
 				
 				iframeObj.addClass('layout_top_border');
 				iconObj.removeClass('glyphicon-resize-small');
@@ -500,7 +500,8 @@
 			parent.$("#layout_preview_outer").animate(openerCss, { 'dulation': 350, 'complete': function(){
 				// スライドメニュー高さ調整
 				var pos = $('#m3paneltab_widget_list').position();
-				var slideMenuHeight = $(window).height() - pos.top - 30;	// スクロールバー部分調整	
+				//var slideMenuHeight = $(window).height() - pos.top - 30;	// スクロールバー部分調整
+				var slideMenuHeight = $(window).height() - pos.top - 20;	// スクロールバー部分調整
 				$('#m3paneltab_widget_list').height(slideMenuHeight);
 			}});
 			

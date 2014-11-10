@@ -328,7 +328,10 @@ background-color: #0081c2;
 }
 .modal-processing .modal-content .icon {
 }
-/****** page layout preview ******/
+/****** 画面編集 ******/
+#layout_preview_title {
+	margin-top:10px;
+}
 #layout_preview
 {
 /*	border-top:2px solid #2C3E50;*/
@@ -622,8 +625,7 @@ background-color: #0081c2;
 	min-width: 950px;
 	max-width: 90%;
 }
-/* 削除予定 */
-.m3config_tabs {
+.m3config_tabs {/* 削除予定 */
 	width:95%;
 	margin: 10px auto;
 }
@@ -674,10 +676,6 @@ background-color: #0081c2;
 /****** login box ******/
 .login_box {
 	margin-top:20%;
-}
-/****** 画面編集 ******/
-#layout_preview_title {
-	margin-top:10px;
 }
 /* ファイル選択 */
 .btn-file {
