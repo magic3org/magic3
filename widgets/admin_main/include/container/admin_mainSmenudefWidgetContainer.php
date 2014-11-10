@@ -30,7 +30,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	private $isMultiLang;			// 多言語対応画面かどうか
 	private $availableLangRows;	// 利用可能な言語
 	private $availableLangArray;	// 利用可能な言語
-	const BREADCRUMB_TITLE = 'メニュー管理(単一階層)';		// 画面タイトル名(パンくずリスト)
+	const BREADCRUMB_TITLE = 'メニュー管理(単階層)';		// 画面タイトル名(パンくずリスト)
 	const MAIN_MENU_ID = 'main_menu';			// メインメニューID
 	const WIDGET_TYPE_MENU = 'menu';		// メニュー型のウィジェット(キャッシュクリア用)
 	const CONTENT_TYPE_PC = '';			// 汎用コンテンツのコンテンツタイプ(PC用)

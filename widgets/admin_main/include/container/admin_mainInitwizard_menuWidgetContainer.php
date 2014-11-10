@@ -19,7 +19,7 @@ class admin_mainInitwizard_menuWidgetContainer extends admin_mainInitwizardBaseW
 {
 	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
 	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
-	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単一階層)
+	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 	
 	/**
 	 * コンストラクタ

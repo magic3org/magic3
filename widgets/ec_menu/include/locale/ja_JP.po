@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-18 12:28+0900\n"
-"PO-Revision-Date: 2013-01-18 12:29+0900\n"
+"POT-Creation-Date: 2014-11-10 13:58+0900\n"
+"PO-Revision-Date: 2014-11-10 13:58+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -17,12 +17,12 @@ msgstr ""
 "X-Poedit-SearchPath-1: ../help\n"
 
 #: ../container/admin_ec_menuMenudefWidgetContainer.php:70
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:722
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:718
 msgid "Folder"
 msgstr "フォルダ"
 
 #: ../container/admin_ec_menuMenudefWidgetContainer.php:71
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:730
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:726
 msgid "Separator"
 msgstr "セパレータ"
 
@@ -49,8 +49,8 @@ msgstr "戻る"
 
 #: ../container/admin_ec_menuMenudefWidgetContainer.php:152
 #: ../container/admin_ec_menuMenudefWidgetContainer.php:186
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:384
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:421
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:380
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:417
 #: ../help/help_menudef.php:43
 msgid "Name"
 msgstr "名前"
@@ -205,52 +205,52 @@ msgid "You are not allowed to delete menu item with child item."
 msgstr "子項目を持つメニュー項目は削除できません。"
 
 #: ../container/admin_ec_menuMenudefWidgetContainer.php:254
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:471
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:467
 msgid "Menu item deleted."
 msgstr "データを削除しました"
 
 #: ../container/admin_ec_menuMenudefWidgetContainer.php:256
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:473
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:469
 msgid "Failed in deleting menu item."
 msgstr "データ削除に失敗しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:385
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:381
 msgid "Menu ID"
 msgstr "メニューID"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:410
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:406
 msgid "Menu item added."
 msgstr "データを追加しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:414
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:410
 msgid "Failed in adding menu item."
 msgstr "データ追加に失敗しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:458
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:454
 msgid "Menu item updated."
 msgstr "データを更新しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:462
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:458
 msgid "Failed in updating menu item."
 msgstr "データ更新に失敗しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:718
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:714
 msgid "Link"
 msgstr "リンク"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:726
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:722
 msgid "Text"
 msgstr "テキスト"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:746
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:742
 msgid "Self"
 msgstr "同"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:749
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:745
 msgid "Other"
 msgstr "別"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:775
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:771
 msgid "Edit Content"
 msgstr "コンテンツを編集"
 
@@ -695,12 +695,6 @@ msgstr "メニュー項目一覧へ戻ります。"
 
 #~ msgid "Manage menus with tree type."
 #~ msgstr "多階層でメニューを定義します。"
-
-#~ msgid "Menu Administration (Single)"
-#~ msgstr "メニュー定義(単一階層)"
-
-#~ msgid "Manage menus with single type."
-#~ msgstr "単一階層でメニューを定義します。"
 
 #~ msgid "System Master"
 #~ msgstr "システムマスター管理"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-10-16 08:30+0900\n"
-"PO-Revision-Date: 2014-10-17 14:11+0900\n"
+"PO-Revision-Date: 2014-11-10 13:49+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -477,11 +477,11 @@ msgstr "多階層でメニューを定義します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:74
 msgid "Menu Administration (Single)"
-msgstr "メニュー定義(単一階層)"
+msgstr "メニュー定義(単階層)"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:75
 msgid "Manage menus with single type."
-msgstr "単一階層でメニューを定義します。"
+msgstr "単階層でメニューを定義します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:78
 msgid "Maintenance"

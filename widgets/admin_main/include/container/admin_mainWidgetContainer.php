@@ -208,8 +208,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					} else if ($task == 'menudef' ||				// メニュー定義
 								$task == 'menudef_detail'){		// メニュー定義詳細
 						$task = 'menudef';
-					} else if ($task == 'smenudef' ||				// 単一階層メニュー定義
-								$task == 'smenudef_detail'){		// 単一階層メニュー定義詳細
+					} else if ($task == 'smenudef' ||				// 単階層メニュー定義
+								$task == 'smenudef_detail'){		// 単階層メニュー定義詳細
 						$task = 'smenudef';
 					} else if ($task == 'linkinfo'){		// 内部リンク情報取得
 						$task = 'linkinfo';
@@ -267,8 +267,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'resbrowse':			// リソースブラウズ(resbrowseからfilebrowserを起動)
 //						case 'filebrowse':			// ファイルブラウズ
 						case 'filebrowser':			// ファイルブラウズ(elfinder)
-						case 'menudef':			// メニュー定義
-						case 'smenudef':			// 単一階層メニュー定義
+						case 'menudef':				// 多階層メニュー定義
+						case 'smenudef':			// 単階層メニュー定義
 						case 'linkinfo':			// 内部リンク情報取得
 						case 'configsite':			// サイト情報
 						case 'pagehead':			// ページヘッダ情報

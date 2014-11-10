@@ -71,8 +71,8 @@ class admin_mainEditmenuWidgetContainer extends admin_mainBaseWidgetContainer
 																			'desc' => $this->_('Manage templates to be installed.')),		// テンプレートの管理を行います。
 									array('task' => 'menudef',				'name' => $this->_('Menu Administration (Tree)'),		// メニュー定義(多階層)
 																			'desc' => $this->_('Manage menus with tree type.')),		// 多階層でメニューを定義します。
-									array('task' => 'smenudef',				'name' => $this->_('Menu Administration (Single)'),		// メニュー定義(単一階層)
-																			'desc' => $this->_('Manage menus with single type.')),		// 単一階層でメニューを定義します。
+									array('task' => 'smenudef',				'name' => $this->_('Menu Administration (Single)'),		// メニュー定義(単階層)
+																			'desc' => $this->_('Manage menus with single type.')),		// 単階層でメニューを定義します。
 //									array('task' => 'master',				'name' => $this->_('System Master'),		// システムマスター管理
 //																			'desc' => $this->_('Administrate system master data.')),		// システムに関するマスターデータの管理を行います。
 									array('task' => 'mainte',				'name' => $this->_('Maintenance'),		// メンテナンス

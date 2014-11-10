@@ -21,7 +21,7 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	protected $db;	// DB接続オブジェクト
 	const SEL_MENU_ID = 'admin_menu';		// メニュー変換対象メニューバーID
 	const TREE_MENU_TASK	= 'menudef';	// メニュー管理画面(多階層)
-	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単一階層)
+	const SINGLE_MENU_TASK	= 'smenudef';	// メニュー管理画面(単階層)
 
 	/**
 	 * コンストラクタ
@@ -89,7 +89,7 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			if ($isHier){		// 階層化メニューのとき
 				$this->tmpl->addVar("_widget", "menu_type_tree", 'checked');		// 多階層メニュー
 			} else {
-				$this->tmpl->addVar("_widget", "menu_type_single", 'checked');		// 単一階層メニュー
+				$this->tmpl->addVar("_widget", "menu_type_single", 'checked');		// 単階層メニュー
 			}
 		}
 	}

@@ -24,7 +24,7 @@ INSERT INTO _system_config
 ('site_mobile_in_public',        '1',                       '携帯用サイト公開');
 
 -- メニューIDマスター
-ALTER TABLE _menu_id ADD mn_type           INT            DEFAULT 0                     NOT NULL;      -- メニュータイプ(0=単一階層、1=複数階層)
+ALTER TABLE _menu_id ADD mn_type           INT            DEFAULT 0                     NOT NULL;      -- メニュータイプ(0=単階層、1=多階層)
 
 -- ウィジェット情報マスター
 DELETE FROM _widgets WHERE wd_id = 'm/quizk';
