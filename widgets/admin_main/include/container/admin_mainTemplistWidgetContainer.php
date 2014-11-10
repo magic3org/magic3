@@ -30,6 +30,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	private $templateTypeArray;		// テンプレートタイプ
 	private $templateType;			// 現在のテンプレートタイプ
 	private $isExistsTemplateList;		// テンプレートが存在するかどうか
+	const BREADCRUMB_TITLE			= 'テンプレート管理';		// 画面タイトル名(パンくずリスト)
 	const TEMPLATE_THUMBNAIL_FILENAME = 'template_thumbnail.png';		// テンプレートサムネール
 	const previewImageSizeHeight = 27;
 	const previewImageSizeWidth = 42;
@@ -93,7 +94,20 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @param								なし
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		$this->gPage->setAdminBreadcrumbDef(array(self::BREADCRUMB_TITLE));
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
 	 */
 	function _assign($request, &$param)
 	{

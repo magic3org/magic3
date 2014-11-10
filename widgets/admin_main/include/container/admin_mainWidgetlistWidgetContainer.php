@@ -28,6 +28,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	private $showDetail;			// 詳細表示するかどうか
 	private $defaultImageSize = 32;		// ウィジェット画像サイズ
 	private $isExistsWidgetList;		// ウィジェットが存在するかどうか
+	const BREADCRUMB_TITLE			= 'ウィジェット管理';		// 画面タイトル名(パンくずリスト)
 	const SCRIPT_FILE_EXT = 'js';		// JavaScriptファイル拡張子
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
 	const PHP_FILE_EXT = 'php';		// phpファイル拡張子
@@ -89,7 +90,20 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @param								なし
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		$this->gPage->setAdminBreadcrumbDef(array(self::BREADCRUMB_TITLE));
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
 	 */
 	function _assign($request, &$param)
 	{
