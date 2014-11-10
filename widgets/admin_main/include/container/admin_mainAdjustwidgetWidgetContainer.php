@@ -97,7 +97,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$navbarDef->menu =	array(
 								(Object)array(
 									'name'		=> $this->_('Basic'),		// 基本
-									'task'		=> 'item_detail',
+									'task'		=> '',
 									'url'		=> '',
 									'tagid'		=> 'menubar_basic',
 									'active'	=> false,
@@ -106,7 +106,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 								(Object)array(
 									'name'		=> $this->_('Others'),		// その他
 									'task'		=> '',
-									'url'		=> '#widget_other',
+									'url'		=> '',
 									'tagid'		=> 'menubar_other',
 									'active'	=> false,
 									'submenu'	=> array()

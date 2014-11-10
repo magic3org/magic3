@@ -773,9 +773,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$name	= $menuItem->name;
 			$tagId	= $menuItem->tagid;
 			$active = $menuItem->active;
+			$task	= $menuItem->task;
+			$url	= $menuItem->url;
 			$subMenu = $menuItem->submenu;
 			
-			if (empty($subMenu)){		// サブメニューをない場合
+			if (empty($subMenu)){		// サブメニューを持たない場合
 				if ($active){
 					$buttonType = 'btn-primary';
 				} else {
@@ -783,7 +785,14 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				}
 				$tagIdAttr = '';		// タグID
 				if (!empty($tagId)) $tagIdAttr = ' id="' . $tagId . '"';
-				$menuTag .= '<li><button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '">' . $this->convertToDispString($name) . '</button></li>';
+				
+				// タスクまたはURLが設定されている場合はリンクを設定
+				$event = '';
+				$linkUrl = '';			// リンク先 
+				if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);
+				if (empty($linkUrl)) $linkUrl = $url;
+				if (!empty($linkUrl)) $event = ' onclick="window.location=\'' . $linkUrl . '\';"';
+				$menuTag .= '<li><button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '"' . $event . '>' . $this->convertToDispString($name) . '</button></li>';
 			} else {		// サブメニューがある場合
 				// アクティブな項目があるかチェック
 				$subMenuTag = '';

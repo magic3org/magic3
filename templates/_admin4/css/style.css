@@ -657,6 +657,14 @@ background-color: #0081c2;
 /*	margin-top: 10px;*/
 	text-align: right;
 }
+.m3config_h {
+	display:inline-block;
+}
+/* Hタグ右ボタン */
+.m3config_h_side_buttons {
+	display:inline-block;
+	padding-top:10px;
+}
 /* fix item width */
 .m3config_item {
 	padding-left: 0;
@@ -793,7 +801,7 @@ nav.secondlevel.minimized .btn.navbar-btn {
 nav.secondlevel a.btn.navbar-btn {
 	padding: 10px 15px;
 }
-/*** フォーカス削除 ***/
+/* フォーカス削除 */
 nav.secondlevel .btn.navbar-btn,
 nav.secondlevel .btn.navbar-btn:hover,
 nav.secondlevel .btn.navbar-btn:focus {

@@ -99,6 +99,7 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 									'name'		=> 'トップ項目',
 									'task'		=> 'item_detail',
 									'url'		=> '',
+									'tagid'		=> '',
 									'active'	=> false,
 									'submenu'	=> array()
 								),
@@ -106,6 +107,7 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 									'name'		=> 'トップ項目2',
 									'task'		=> '',
 									'url'		=> '#widget_other',
+									'tagid'		=> '',
 									'active'	=> true,
 									'submenu'	=> array()
 								),
@@ -113,24 +115,28 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 									'name'		=> 'トップ項目3',
 									'task'		=> '',
 									'url'		=> '',
+									'tagid'		=> '',
 									'active'	=> false,
 									'submenu'	=> array(
 										(Object)array(
 											'name'		=> 'トップ項目3サブ項目1',
 											'task'		=> 'a',
 											'url'		=> '',
+											'tagid'		=> '',
 											'active'	=> false
 										),
 										(Object)array(
 											'name'		=> 'トップ項目3サブ項目1',
 											'task'		=> 'a',
 											'url'		=> '',
+											'tagid'		=> '',
 											'active'	=> false
 										),
 										(Object)array(
 											'name'		=> 'トップ項目3サブ項目1',
 											'task'		=> 'a',
 											'url'		=> '',
+											'tagid'		=> '',
 											'active'	=> false
 										)
 									)
@@ -139,24 +145,28 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 									'name'		=> 'トップ項目4',
 									'task'		=> '',
 									'url'		=> '',
+									'tagid'		=> '',
 									'active'	=> false,
 									'submenu'	=> array(
 										(Object)array(
 											'name'		=> 'トップ項目4サブ項目1',
 											'task'		=> 'a',
 											'url'		=> '',
+											'tagid'		=> '',
 											'active'	=> false
 										),
 										(Object)array(
 											'name'		=> 'トップ項目4サブ項目1',
 											'task'		=> 'a',
 											'url'		=> '',
+											'tagid'		=> '',
 											'active'	=> true
 										),
 										(Object)array(
 											'name'		=> 'トップ項目4サブ項目1',
 											'task'		=> 'a',
 											'url'		=> '',
+											'tagid'		=> '',
 											'active'	=> false
 										)
 									)
