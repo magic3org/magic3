@@ -75,6 +75,10 @@ class help_userlist extends HelpConv
 				'title' =>	$this->_('User Group'),	// ユーザグループ
 				'body' =>	$this->_('Group user belong to.')		// ユーザが所属するグループです。
 			),
+			'userlist_buttons' => array(	
+				'title' =>	$this->_('Action Buttons'),	// 操作ボタン
+				'body' =>	$this->_('<strong>New Button</strong> - Add new user.<br /><strong>Edit Button</strong> - Edit user configuration.<br />Select the user by using the left checkbox.<br /><strong>Delete Button</strong> - Delete user.<br />Select the user by using the left checkbox.')		// 新規ボタン - 新規ユーザを追加します。<br />編集ボタン - 選択されているユーザを編集します。<br />ユーザを選択するには、一覧の左端のチェックボックスにチェックを入れます。<br />削除ボタン - 選択されているユーザを削除します。<br />ユーザを選択するには、一覧の左端のチェックボックスにチェックを入れます。
+			),
 			'userlist_new_btn' => array(	
 				'title' =>	$this->_('New Button'),	// 新規ボタン
 				'body' =>	$this->_('Add new user.')		// 新規ユーザを追加します。

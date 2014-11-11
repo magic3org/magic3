@@ -19,9 +19,10 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	protected $_mainDb;			// DB接続オブジェクト
-	const TASK_USERLIST		= 'userlist';		// ユーザ一覧
-	const TASK_USERLIST_DETAIL = 'userlist_detail';	// ユーザ詳細
-	const TASK_USERGROUP	= 'usergroup';		// ユーザグループ
+	const BREADCRUMB_TITLE	= 'ユーザ管理';		// パンくずリストトップタイトル
+	const TASK_USERLIST			= 'userlist';		// ユーザ一覧
+	const TASK_USERLIST_DETAIL	= 'userlist_detail';	// ユーザ詳細
+	const TASK_USERGROUP		= 'usergroup';		// ユーザグループ
 	const TASK_USERGROUP_DETAIL	= 'usergroup_detail';		// ユーザグループ詳細
 	const DEFAULT_TOP_PAGE = 'userlist';		// デフォルトのトップ画面
 	
@@ -50,56 +51,44 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;
 		
-		// パンくずリストを作成
+		// パンくずリストの作成
+		$titles = array(self::BREADCRUMB_TITLE);
 		switch ($task){
 			case self::TASK_USERLIST:	// ユーザ一覧
 			case self::TASK_USERLIST_DETAIL:	// ユーザ詳細
-				$linkList = ' &gt;&gt; ユーザ一覧';
+				$titles[] = 'ユーザ一覧';
 				break;
 			case self::TASK_USERGROUP:	// ユーザグループ
 			case self::TASK_USERGROUP_DETAIL:	// ユーザグループ詳細
-				$linkList = ' &gt;&gt; ユーザグループ';
+				$titles[] = 'ユーザグループ';
 				break;
 		}
-				
-		// ####### 上段メニューの作成 #######
-		$menuText = '<div id="configmenu-upper">' . M3_NL;
-		$menuText .= '<ul>' . M3_NL;
+		$this->gPage->setAdminBreadcrumbDef($titles);
 		
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . 
-				'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
-				
-		// ### ユーザ一覧 ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . self::TASK_USERLIST;
-		if ($task == self::TASK_USERLIST ||
-			$task == self::TASK_USERLIST_DETAIL){	// ユーザ詳細
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_USERLIST);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>ユーザ一覧</span></a></li>' . M3_NL;
-		
-		// ### ユーザグループ ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=' . self::TASK_USERGROUP;
-		if ($task == self::TASK_USERGROUP ||
-			$task == self::TASK_USERGROUP_DETAIL){	// ユーザグループ詳細
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_USERGROUP);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>ユーザグループ</span></a></li>' . M3_NL;
-		
-		// 上段メニュー終了
-		$menuText .= '</ul>' . M3_NL;
-		$menuText .= '</div>' . M3_NL;
-		
-		// 作成データの埋め込み
-		$linkList = '<div id="configmenu-top"><label>' . 'ユーザ管理' . $linkList . '</label></div>';
-		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
-		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = '';
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'ユーザ一覧',
+									'task'		=> self::TASK_USERLIST,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_USERLIST || $task == self::TASK_USERLIST_DETAIL),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> 'ユーザグループ',
+									'task'		=> self::TASK_USERGROUP,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_USERGROUP || $task == self::TASK_USERGROUP_DETAIL),
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 }
 ?>

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainUserlistWidgetContainer.php 5848 2013-03-21 23:47:43Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainUserBaseWidgetContainer.php');
@@ -32,8 +32,8 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	const USER_GROUP_COUNT = 2;				// ユーザグループの選択可能数
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
-	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
-	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
+	const LOGIN_ENABLED_ICON_FILE = '/images/system/active.png';			// ログイン可アイコン
+	const CLOSED_ICON_FILE = '/images/system/closed32.png';	// ログイン不可アイコン
 	const SKYPE_STATUS_ICON_HEIGHT = 22;	// Skype状態アイコン
 	const SKYPE_STATUS_ICON_WIDTH = 91; 	// Skype状態アイコン
 	
@@ -535,10 +535,6 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	 */
 	function userListLoop($index, $fetchedRow, $param)
 	{
-		$isAdmin = '';
-		if ($fetchedRow['lu_user_type'] >= UserInfo::USER_TYPE_MANAGER){	// 管理画面が使用できるかどうか
-			$isAdmin = 'checked';
-		}
 		$canLogin = '';
 		if ($fetchedRow['lu_enable_login']){
 			$canLogin = 'checked';
@@ -580,12 +576,12 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$loginStatusUrl = '?task=loginstatus_history&account=' . $fetchedRow['lu_account'];
 		
 		// Skype状態表示用タグ作成
-		$skypeStatusTag = '';
+/*		$skypeStatusTag = '';
 		$skypeAccount = $fetchedRow['lu_skype_account'];
 		if (!empty($skypeAccount)){
 			$skypeStatusTag = '<a href="skype:' . $skypeAccount . '?call"><img src="http://mystatus.skype.com/bigclassic/' 
 								. $skypeAccount . '" style="border: none;" width="' . self::SKYPE_STATUS_ICON_WIDTH . '" height="' . self::SKYPE_STATUS_ICON_HEIGHT . '" alt="ログイン状態" /></a>';
-		}
+		}*/
 		
 		$row = array(
 			'index' => $index,													// 行番号
@@ -596,12 +592,11 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			'email' => $this->convertToDispString($fetchedRow['lu_email']),		// Eメール
 			'user_type' => $userType,		// ユーザ種別
 			'update_dt' => $this->convertToDispDateTime($fetchedRow['lu_create_dt'], 0, 10/*時分表示*/),	// 更新日時
-			'is_admin' => $isAdmin,													// 管理者権限があるかどうか
 			'can_login' => $canLogin,												// ログイン可能かどうか
 			'login_count' => $loginCount,			// ログイン回数
 			'login_status_url' => $this->convertUrlToHtmlEntity($loginStatusUrl),	// ログイン状況画面URL
-			'selected' => $selected,												// 項目選択用ラジオボタン
-			'others' => $skypeStatusTag												// その他
+			'selected' => $selected												// 項目選択用ラジオボタン
+//			'others' => $skypeStatusTag												// その他
 		);
 		$this->tmpl->addVars('userlist', $row);
 		$this->tmpl->parseTemplate('userlist', 'a');
