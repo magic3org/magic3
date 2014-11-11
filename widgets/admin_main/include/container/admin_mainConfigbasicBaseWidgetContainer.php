@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,11 +17,14 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainConfigbasicBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	const HELP_KEY_CONFIGSITE = 'configsite';		// サイト情報
-	const HELP_KEY_PAGEHEAD = 'pagehead';		// ページヘッダ情報
-	const HELP_KEY_PORTAL = 'portal';			// Magic3ポータル
-	const DEFAULT_TOP_PAGE = 'configsite';		// デフォルトのトップ画面
-	
+	const BREADCRUMB_TITLE	= '基本情報';		// パンくずリストトップタイトル
+	// 画面
+	const TASK_CONFIGSITE		= 'configsite';			// サイト情報
+	const TASK_PAGEHEAD			= 'pagehead';			// ページヘッダ情報
+	const TASK_PAGEHEAD_DETAIL	= 'pagehead_detail';	// ページヘッダ情報詳細
+	const TASK_PORTAL			= 'portal';				// Magic3ポータル
+	const DEFAULT_TASK			= 'configsite';			// デフォルトの画面
+				
 	/**
 	 * コンストラクタ
 	 */
@@ -43,70 +46,48 @@ class admin_mainConfigbasicBaseWidgetContainer extends admin_mainBaseWidgetConta
 	{
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;
+		if (empty($task)) $task = self::DEFAULT_TASK;
 		
-		// パンくずリストを作成
+		// パンくずリストの作成
+		$titles = array(self::BREADCRUMB_TITLE);
 		switch ($task){
-			case 'configsite':	// サイト情報
-				$linkList = ' &gt;&gt; サイト情報';
+			case self::TASK_CONFIGSITE:			// サイト情報
+				$titles[] = 'サイト情報';
 				break;
-			case 'pagehead':	// ページヘッダ情報
-			case 'pagehead_detail':	// ページヘッダ情報詳細
-				$linkList = ' &gt;&gt; ページヘッダ情報';
+			case self::TASK_PAGEHEAD:			// ページヘッダ情報
+			case self::TASK_PAGEHEAD_DETAIL:	// ページヘッダ情報詳細
+				$titles[] = 'ページヘッダ情報';
 				break;
-			case 'portal':	// Magic3ポータル
-				$linkList = ' &gt;&gt; Magic3ポータル';
+			case self::TASK_PORTAL:				// Magic3ポータル
+				$titles[] = 'Magic3ポータル';
 				break;
 		}
-				
-		// ####### 上段メニューの作成 #######
-		$menuText = '<div id="configmenu-upper">' . M3_NL;
-		$menuText .= '<ul>' . M3_NL;
+		$this->gPage->setAdminBreadcrumbDef($titles);
 		
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . 
-				'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
-				
-		// ### サイト情報 ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=configsite';
-		if ($task == 'configsite'){
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_CONFIGSITE);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>サイト情報</span></a></li>' . M3_NL;
-		
-		// ### ページヘッダ情報 ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=pagehead';
-		if ($task == 'pagehead' ||
-			$task == 'pagehead_detail'){		// ページヘッダ情報詳細
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_PAGEHEAD);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>ページヘッダ情報</span></a></li>' . M3_NL;
-		
-		// ### Magic3ポータル ###
-/*		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . 'task=portal';
-		if ($task == 'portal'){
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_PORTAL);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>Magic3ポータル</span></a></li>' . M3_NL;
-		*/
-		
-		// 上段メニュー終了
-		$menuText .= '</ul>' . M3_NL;
-		$menuText .= '</div>' . M3_NL;
-		
-		// 作成データの埋め込み
-		$linkList = '<div id="configmenu-top"><label>' . '基本情報' . $linkList . '</label></div>';
-		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
-		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = '';
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'サイト情報',
+									'task'		=> self::TASK_CONFIGSITE,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_CONFIGSITE),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> 'ページヘッダ情報',
+									'task'		=> self::TASK_PAGEHEAD,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_PAGEHEAD || $task == self::TASK_PAGEHEAD_DETAIL),
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 }
 ?>
