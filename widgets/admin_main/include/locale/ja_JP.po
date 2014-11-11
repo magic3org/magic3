@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-11 20:05+0900\n"
-"PO-Revision-Date: 2014-11-11 20:06+0900\n"
+"POT-Creation-Date: 2014-11-11 21:54+0900\n"
+"PO-Revision-Date: 2014-11-11 21:55+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -2187,7 +2187,7 @@ msgid "Create directory in this area."
 msgstr "ディレクトリの作成はここから行います。"
 
 #: ../help/help_browse.php:78 ../help/help_menudef.php:91
-#: ../help/help_userlist.php:95
+#: ../help/help_userlist.php:99
 msgid "Delete Button"
 msgstr "削除ボタン"
 
@@ -2302,7 +2302,7 @@ msgid "Configure others."
 msgstr "その他の設定を行います。"
 
 #: ../help/help_editmenu.php:35 ../help/help_menudef.php:95
-#: ../help/help_userlist.php:99
+#: ../help/help_userlist.php:103
 msgid "Go back Button"
 msgstr "戻るボタン"
 
@@ -2415,7 +2415,7 @@ msgstr ""
 "メニュー項目に「名前」と異なる表示を行う場合に設定します。HTMLタグが使用可能"
 "です。"
 
-#: ../help/help_menudef.php:83 ../help/help_userlist.php:87
+#: ../help/help_menudef.php:83 ../help/help_userlist.php:91
 msgid "New Button"
 msgstr "新規ボタン"
 
@@ -2423,7 +2423,7 @@ msgstr "新規ボタン"
 msgid "Add menu item."
 msgstr "新規メニュー項目を追加します。"
 
-#: ../help/help_menudef.php:87 ../help/help_userlist.php:91
+#: ../help/help_menudef.php:87 ../help/help_userlist.php:95
 msgid "Edit Button"
 msgstr "編集ボタン"
 
@@ -2772,7 +2772,7 @@ msgstr "アカウントが有効な期間を設定します。空の場合は制
 msgid "Group user belong to."
 msgstr "ユーザが所属するグループです。"
 
-#: ../help/help_userlist.php:83
+#: ../help/help_userlist.php:83 ../help/help_userlist.php:87
 msgid "Action Buttons"
 msgstr "操作ボタン"
 
@@ -2790,23 +2790,27 @@ msgstr ""
 "す。"
 
 #: ../help/help_userlist.php:88
+msgid "<strong>Go back Button</strong> - Go back to user list."
+msgstr "戻るボタン - ユーザ一覧へ戻ります。"
+
+#: ../help/help_userlist.php:92
 msgid "Add new user."
 msgstr "新規ユーザを追加します。"
 
-#: ../help/help_userlist.php:92
+#: ../help/help_userlist.php:96
 msgid ""
 "Edit user configuration.<br />Select the user by using the left checkbox."
 msgstr ""
 "選択されているユーザを編集します。<br />ユーザを選択するには、一覧の左端の"
 "チェックボックスにチェックを入れます。"
 
-#: ../help/help_userlist.php:96
+#: ../help/help_userlist.php:100
 msgid "Delete user.<br />Select the user by using the left checkbox."
 msgstr ""
 "選択されているユーザを削除します。<br />ユーザを選択するには、一覧の左端の"
 "チェックボックスにチェックを入れます。"
 
-#: ../help/help_userlist.php:100
+#: ../help/help_userlist.php:104
 msgid "Go back to user list."
 msgstr "ユーザ一覧へ戻ります。"
 

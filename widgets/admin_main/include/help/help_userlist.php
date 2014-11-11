@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: help_userlist.php 5892 2013-04-01 05:50:24Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCommonPath()	. '/helpConv.php' );
@@ -82,6 +82,10 @@ class help_userlist extends HelpConv
 			'userlist_buttons' => array(	
 				'title' =>	$this->_('Action Buttons'),	// 操作ボタン
 				'body' =>	$this->_('<strong>New Button</strong> - Add new user.<br /><strong>Edit Button</strong> - Edit user configuration.<br />Select the user by using the left checkbox.<br /><strong>Delete Button</strong> - Delete user.<br />Select the user by using the left checkbox.')		// 新規ボタン - 新規ユーザを追加します。<br />編集ボタン - 選択されているユーザを編集します。<br />ユーザを選択するには、一覧の左端のチェックボックスにチェックを入れます。<br />削除ボタン - 選択されているユーザを削除します。<br />ユーザを選択するには、一覧の左端のチェックボックスにチェックを入れます。
+			),
+			'userlist_buttons2' => array(	
+				'title' =>	$this->_('Action Buttons'),	// 操作ボタン
+				'body' =>	$this->_('<strong>Go back Button</strong> - Go back to user list.')		// 戻るボタン - ユーザ一覧へ戻ります。
 			),
 			'userlist_new_btn' => array(	
 				'title' =>	$this->_('New Button'),	// 新規ボタン

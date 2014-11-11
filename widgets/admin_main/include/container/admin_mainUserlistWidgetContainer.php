@@ -120,7 +120,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			$localeText['msg_no_password'] = $this->_('No password entered.');		// パスワードが入力されていません
 			$localeText['label_userlist_detail'] = $this->_('User Detail');		// ユーザ詳細
 			$localeText['label_name'] = $this->_('Name');		// 名前
-			$localeText['label_account'] = $this->_('Login Account');		// ログインアカウント
+			$localeText['label_account'] = $this->_('Login') . '<br />' . $this->_('Account');		// ログインアカウント
 			$localeText['label_password'] = $this->_('Password');		// パスワード
 			$localeText['label_user_type'] = $this->_('User Type');		// ユーザ種別
 			$localeText['label_login_permission'] = $this->_('Login Permission');		// ログイン許可
