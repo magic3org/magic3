@@ -59,9 +59,13 @@ class help_userlist extends HelpConv
 				'title' =>	$this->_('Administration Authority'),	// 管理権限
 				'body' =>	$this->_('Permission to use administration functions.<br />The user can use functions if it checked.')		// 管理機能(管理画面)が使用可能かどうかの設定です。<br />チェックが入っていると管理機能が使用可能です。
 			),
-			'userlist_login' => array(	
-				'title' =>	$this->_('Login Enable'),	// ログイン可
+			'userlist_login_permission' => array(	
+				'title' =>	$this->_('Login Permission'),	// ログイン許可
 				'body' =>	$this->_('Permission to login.<br />The user can login if it checked.<br />Administrator can not be disable to login.')		// ログインを許可するかどうかの設定です。<br />チェックが入っているとログイン可能です。<br />誤操作防止のため、管理者はログイン不可にできません。
+			),
+			'userlist_login_permission_status' => array(	
+				'title' =>	$this->_('Login Permission'),	// ログイン許可
+				'body' =>	$this->_('The icon shows the status which user can login or not.')		// アイコンでログイン可またはログイン不可を示します。
 			),
 			'userlist_login_count' => array(	
 				'title' =>	$this->_('Login Count'),	// ログイン回数

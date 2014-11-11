@@ -31,8 +31,9 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const USER_GROUP_COUNT = 2;				// ユーザグループの選択可能数
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
+	const STATUS_ICON_SIZE = 32;			// 状態表示アイコンサイズ
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
-	const LOGIN_ENABLED_ICON_FILE = '/images/system/active.png';			// ログイン可アイコン
+	const LOGIN_ENABLED_ICON_FILE = '/images/system/active32.png';			// ログイン可アイコン
 	const CLOSED_ICON_FILE = '/images/system/closed32.png';	// ログイン不可アイコン
 	const SKYPE_STATUS_ICON_HEIGHT = 22;	// Skype状態アイコン
 	const SKYPE_STATUS_ICON_WIDTH = 91; 	// Skype状態アイコン
@@ -122,7 +123,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			$localeText['label_account'] = $this->_('Login Account');		// ログインアカウント
 			$localeText['label_password'] = $this->_('Password');		// パスワード
 			$localeText['label_user_type'] = $this->_('User Type');		// ユーザ種別
-			$localeText['label_login_enable'] = $this->_('Login Enable');		// ログイン可
+			$localeText['label_login_permission'] = $this->_('Login Permission');		// ログイン許可
 			$localeText['label_active_term'] = $this->_('Active Term');		// 有効期間
 			$localeText['label_user_group'] = $this->_('User Group');		// ユーザグループ
 			$localeText['label_start_date'] = $this->_('Start Date:');		// 開始日
@@ -149,7 +150,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			$localeText['label_name'] = $this->_('Name');			// 名前
 			$localeText['label_account'] = $this->_('Login Account');		// ログインアカウント
 			$localeText['label_user_type'] = $this->_('User Type');		// ユーザ種別
-			$localeText['label_login_enable'] = $this->_('Login Enable');		// ログイン可
+			$localeText['label_login'] = $this->_('Login');		// ログイン
 			$localeText['label_admin'] = $this->_('Administration');		// 管理権限
 			$localeText['label_login_count'] = $this->_('Count');		// 回数
 			$localeText['label_update_dt'] = $this->_('Update Date');		// 更新日
@@ -535,10 +536,10 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	 */
 	function userListLoop($index, $fetchedRow, $param)
 	{
-		$canLogin = '';
+/*		$canLogin = '';
 		if ($fetchedRow['lu_enable_login']){
 			$canLogin = 'checked';
-		}
+		}*/
 		// アクセス制限
 		$adminWidget = '';
 		if (!empty($fetchedRow['lu_admin_widget'])) $adminWidget = '(' . $this->_('Limited') . ')';
@@ -575,6 +576,16 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		// ログイン状況画面URL
 		$loginStatusUrl = '?task=loginstatus_history&account=' . $fetchedRow['lu_account'];
 		
+		// ユーザ状態
+		if ($fetchedRow['lu_enable_login']){		// ログイン可能のとき
+			$iconUrl = $this->gEnv->getRootUrl() . self::LOGIN_ENABLED_ICON_FILE;			// ログイン可アイコン
+			$iconTitle = 'ログイン可';
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::CLOSED_ICON_FILE;		// ログイン不可アイコン
+			$iconTitle = 'ログイン不可';
+		}
+		$loginPermissionTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::STATUS_ICON_SIZE . '" height="' . self::STATUS_ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+					
 		// Skype状態表示用タグ作成
 /*		$skypeStatusTag = '';
 		$skypeAccount = $fetchedRow['lu_skype_account'];
@@ -592,7 +603,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			'email' => $this->convertToDispString($fetchedRow['lu_email']),		// Eメール
 			'user_type' => $userType,		// ユーザ種別
 			'update_dt' => $this->convertToDispDateTime($fetchedRow['lu_create_dt'], 0, 10/*時分表示*/),	// 更新日時
-			'can_login' => $canLogin,												// ログイン可能かどうか
+			'login_permission'	=> $loginPermissionTag,				// ログイン可能かどうか
 			'login_count' => $loginCount,			// ログイン回数
 			'login_status_url' => $this->convertUrlToHtmlEntity($loginStatusUrl),	// ログイン状況画面URL
 			'selected' => $selected												// 項目選択用ラジオボタン
