@@ -746,7 +746,7 @@ input[type="password"]{
 /*** サブメニューバー ***/
 nav.secondlevel {
 	z-index:900;
-	height:60px;
+	height:50px;
 }
 nav.secondlevel.minimized {
 	height:34px;
@@ -798,8 +798,30 @@ nav.secondlevel.minimized .btn.navbar-btn {
   margin-bottom: 13.5px;*/
 	height:34px;/*for chrome*/
 }
+nav.secondlevel .btn.navbar-btn {
+	height:41px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
 nav.secondlevel a.btn.navbar-btn {
 	padding: 10px 15px;
+}
+
+nav.secondlevel a.btn.navbar-btn.btn-success:hover {
+	color: #ffffff;
+	background-color: #128f76;
+	border-color: #11866f;
+}
+nav.secondlevel a.btn.navbar-btn.btn-primary:hover {
+	color: #ffffff;
+	background-color: #1a242f;
+	border-color: #161f29;
+}
+nav.secondlevel .dropdown-menu {
+	margin-top: -8px;
+}
+nav.secondlevel.minimized .dropdown-menu {
+	margin-top: 0px;
 }
 /* フォーカス削除 */
 nav.secondlevel .btn.navbar-btn,

@@ -56,7 +56,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const MAINMENU_INDENT_LEBEL = 4;		// メインメニューのインデントレベル
 	const SITEMENU_INDENT_LEBEL = 2;		// サイトメニューのインデントレベル
 	const MAINMENU_COL_STYLE = 'col-md-';	// Bootstrapのカラムクラス
-	const MENUBAR_HEIGHT = 60;			// メニューバーの高さ
+	const MENUBAR_HEIGHT = 60;			// メインメニューバーの高さ
+	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
 
 	// DB定義値
 	const CF_SITE_IN_PUBLIC			= 'site_in_public';			// サイト公開状況
@@ -363,7 +364,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		// サブメニューバーを表示
 		$subNavbarDef = $this->gPage->getAdminSubNavbarDef();
 		if (!empty($subNavbarDef)){
-			$topPos += self::MENUBAR_HEIGHT;		// コンテンツの開始位置更新
+			$topPos += self::SUB_MENUBAR_HEIGHT;		// サブメニューバーの高さ追加
 					
 			$this->tmpl->setAttribute('subnavbar', 'visibility', 'visible');
 			if ($this->useMenu) $this->tmpl->setAttribute('usesubmenubar', 'visibility', 'visible');
@@ -388,7 +389,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		// メニューバーの高さ位置を修正
 		if (!empty($subNavbarDef) || !empty($breadcrumbDef)){
 			$this->tmpl->setAttribute('fixtoppos', 'visibility', 'visible');
-			$this->tmpl->addVar('fixtoppos', 'second_top', $this->convertToDispString($topPos - self::MENUBAR_HEIGHT));
+			$this->tmpl->addVar('fixtoppos', 'second_top', $this->convertToDispString($topPos - self::SUB_MENUBAR_HEIGHT));
 			$this->tmpl->addVar('fixtoppos', 'content_top', $this->convertToDispString($topPos));		// コンテンツのトップ位置
 		}
 			
