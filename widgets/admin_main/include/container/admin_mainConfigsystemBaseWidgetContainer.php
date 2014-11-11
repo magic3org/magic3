@@ -17,6 +17,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	const BREADCRUMB_TITLE	= 'システム情報';		// パンくずリストトップタイトル
+	
 	// 画面
 	const TASK_CONFIGSYS		= 'configsys';	// システム基本設定
 	const TASK_CONFIGLANG		= 'configlang';	// 言語設定
@@ -47,6 +49,48 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TASK;
+		
+		// パンくずリストの作成
+		$titles = array(self::BREADCRUMB_TITLE);
+		switch ($task){
+			case self::TASK_USERLIST:	// ユーザ一覧
+			case self::TASK_USERLIST_DETAIL:	// ユーザ詳細
+				$titles[] = 'ユーザ一覧';
+				break;
+			case self::TASK_USERGROUP:	// ユーザグループ
+			case self::TASK_USERGROUP_DETAIL:	// ユーザグループ詳細
+				$titles[] = 'ユーザグループ';
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef($titles);
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = '';
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'ユーザ一覧',
+									'task'		=> self::TASK_USERLIST,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_USERLIST || $task == self::TASK_USERLIST_DETAIL),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> 'ユーザグループ',
+									'task'		=> self::TASK_USERGROUP,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_USERGROUP || $task == self::TASK_USERGROUP_DETAIL),
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
+		
+		
+		
 		
 		// パンくずリストを作成
 		switch ($task){
