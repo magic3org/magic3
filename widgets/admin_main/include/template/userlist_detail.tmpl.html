@@ -50,11 +50,6 @@ function delItem(){
 	document.main.submit();
 	return true;
 }
-/*function cancelItem(){
-	document.main.task.value = 'userlist';
-	document.main.submit();
-	return true;
-}*/
 function cancelItem(){
 	if (document.main._backurl.value){
 		location.href = document.main._backurl.value;
@@ -99,24 +94,25 @@ $(function(){
     <tbody>
     <tr>
 	    <th><span {_HELP_USERLIST_NAME}>{_LC_LABEL_NAME}</span></th>
-	    <td colspan="3"><input type="text" name="item_name" class="form-control" value="{NAME}" size="30" maxlength="40" /></td>
+	    <td colspan="3"><div class="col-sm-4 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" size="30" maxlength="40" /></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_ACCOUNT}>{_LC_LABEL_ACCOUNT}</span></th>
-	    <td colspan="3"><input type="text" name="item_account" class="form-control" value="{ACCOUNT}" size="30" maxlength="40" /></td>
+	    <td colspan="3"><div class="col-sm-4 m3config_item"><input type="text" name="item_account" class="form-control" value="{ACCOUNT}" size="30" maxlength="40" /></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_PWD}>{_LC_LABEL_PASSWORD}</span></th>
-	    <td colspan="3"><input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></td>
+	    <td colspan="3"><div class="col-sm-4 m3config_item"><input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_USERTYPE}>{_LC_LABEL_USER_TYPE}</span></th>
-	    <td colspan="3">
+	    <td colspan="3"><div class="col-sm-4 m3config_item">
 	    <select name="item_usertype" class="form-control" {USERTYPE_DISABLED}>
 	        <patTemplate:tmpl name="usertype_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    </td>
 	</tr>
     <tr>
@@ -125,18 +121,24 @@ $(function(){
 	</tr>
 	<tr>
 	    <th><span {_HELP_USERLIST_ACTIVE_TERM}>{_LC_LABEL_ACTIVE_TERM}</span></th>
-	    <td colspan="3">{_LC_LABEL_START_DATE}<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a>&nbsp;&nbsp;{_LC_LABEL_HOUR}<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;{_LC_LABEL_END_DATE}<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a>&nbsp;&nbsp;{_LC_LABEL_HOUR}<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" /></td>
+	    <td colspan="3">
+		<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_START_DATE}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_HOUR}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-5">～</div></div><div style="clear:both;"></div>
+<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_END_DATE}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_HOUR}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div></div>
+<!-- {_LC_LABEL_START_DATE}<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a>&nbsp;&nbsp;{_LC_LABEL_HOUR}<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;{_LC_LABEL_END_DATE}<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a>&nbsp;&nbsp;{_LC_LABEL_HOUR}<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" /> -->
+		</td>
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_USER_GROUP}>{_LC_LABEL_USER_GROUP}</span></th>
 	    <td colspan="3">
     <patTemplate:tmpl name="group">
-    <select name="item_group{INDEX}" {MENU_DISABLED}>
+    <div class="col-sm-4 m3config_item">
+	<select name="item_group{INDEX}" class="form-control" {MENU_DISABLED}>
         <option value="">-- {UNSELECTED} --</option>
         <patTemplate:tmpl name="group_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
+	</div>
     </patTemplate:tmpl>
 	    </td>
 	</tr>
