@@ -18,7 +18,6 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const BREADCRUMB_TITLE	= 'システム情報';		// パンくずリストトップタイトル
-	
 	// 画面
 	const TASK_CONFIGSYS		= 'configsys';	// システム基本設定
 	const TASK_CONFIGLANG		= 'configlang';	// 言語設定
@@ -53,17 +52,24 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 		// パンくずリストの作成
 		$titles = array(self::BREADCRUMB_TITLE);
 		switch ($task){
-			case self::TASK_USERLIST:	// ユーザ一覧
-			case self::TASK_USERLIST_DETAIL:	// ユーザ詳細
-				$titles[] = 'ユーザ一覧';
+			case self::TASK_CONFIGSYS:	// システム基本設定
+				$titles[] = $this->_('System Basic Cofiguration');
 				break;
-			case self::TASK_USERGROUP:	// ユーザグループ
-			case self::TASK_USERGROUP_DETAIL:	// ユーザグループ詳細
-				$titles[] = 'ユーザグループ';
+			case self::TASK_SERVER_ENV:	// サーバ環境
+				$titles[] = $this->_('Server Environment');
+				break;
+			case self::TASK_CONFIGLANG:	// 言語設定
+				$titles[] = $this->_('Language Cofiguration');
+				break;
+			case self::TASK_CONFIGMESSAGE:	// メッセージ設定
+				$titles[] = $this->_('Message Cofiguration');
+				break;
+			case self::TASK_CONFIGIMAGE:		// 画像設定
+				$titles[] = $this->_('Image Cofiguration');
 				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
-		
+				
 		// メニューバーの作成
 		$navbarDef = new stdClass;
 		$navbarDef->title = '';
@@ -71,45 +77,50 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 		$navbarDef->help	= '';// ヘルプ文字列
 		$navbarDef->menu =	array(
 								(Object)array(
-									'name'		=> 'ユーザ一覧',
-									'task'		=> self::TASK_USERLIST,
+									'name'		=> $this->_('System Basic Cofiguration'),			// システム基本設定
+									'task'		=> self::TASK_CONFIGSYS,
 									'url'		=> '',
 									'tagid'		=> '',
-									'active'	=> ($task == self::TASK_USERLIST || $task == self::TASK_USERLIST_DETAIL),
+									'active'	=> ($task == self::TASK_CONFIGSYS),
 									'submenu'	=> array()
 								),
 								(Object)array(
-									'name'		=> 'ユーザグループ',
-									'task'		=> self::TASK_USERGROUP,
+									'name'		=> $this->_('Server Environment'),			// サーバ環境
+									'task'		=> self::TASK_SERVER_ENV,
 									'url'		=> '',
 									'tagid'		=> '',
-									'active'	=> ($task == self::TASK_USERGROUP || $task == self::TASK_USERGROUP_DETAIL),
+									'active'	=> ($task == self::TASK_SERVER_ENV),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> $this->_('Language Cofiguration'),		// 言語設定
+									'task'		=> self::TASK_CONFIGLANG,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_CONFIGLANG),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> $this->_('Message Cofiguration'),		// メッセージ設定
+									'task'		=> self::TASK_CONFIGMESSAGE,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_CONFIGMESSAGE),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> $this->_('Image Cofiguration'),		// 画像設定
+									'task'		=> self::TASK_CONFIGIMAGE,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_CONFIGIMAGE),
 									'submenu'	=> array()
 								)
 							);
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
 		
-		
-		
-		
-		// パンくずリストを作成
-		switch ($task){
-			case self::TASK_CONFIGSYS:	// システム基本設定
-				$linkList = ' &gt;&gt; ' . $this->_('System Basic Cofiguration');			// システム基本設定
-				break;
-			case self::TASK_SERVER_ENV:	// サーバ環境
-				$linkList = ' &gt;&gt; ' . $this->_('Server Environment');			// サーバ環境
-				break;
-			case self::TASK_CONFIGLANG:	// 言語設定
-				$linkList = ' &gt;&gt; ' . $this->_('Language Cofiguration');		// 言語設定
-				break;
-			case self::TASK_CONFIGMESSAGE:	// メッセージ設定
-				$linkList = ' &gt;&gt; ' . $this->_('Message Cofiguration');		// メッセージ設定
-				break;
-			case self::TASK_CONFIGIMAGE:		// 画像設定
-				$linkList = ' &gt;&gt; ' . $this->_('Image Cofiguration');		// 画像設定
-				break;
-		}
+/*
+
 				
 		// ####### 上段メニューの作成 #######
 		$menuText = '<div id="configmenu-upper">' . M3_NL;
@@ -177,6 +188,7 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 		$linkList = '<div id="configmenu-top"><label>' . 'システム情報' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+		*/
 	}
 }
 ?>
