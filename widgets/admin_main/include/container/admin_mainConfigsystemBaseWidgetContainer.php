@@ -82,6 +82,7 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_CONFIGSYS),
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGSYS),// ヘルプ文字列
 									'submenu'	=> array()
 								),
 								(Object)array(
@@ -90,6 +91,7 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_SERVER_ENV),
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_SERVER_ENV),// ヘルプ文字列
 									'submenu'	=> array()
 								),
 								(Object)array(
@@ -98,6 +100,7 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_CONFIGLANG),
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGLANG),// ヘルプ文字列
 									'submenu'	=> array()
 								),
 								(Object)array(
@@ -106,6 +109,7 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_CONFIGMESSAGE),
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGMESSAGE),// ヘルプ文字列
 									'submenu'	=> array()
 								),
 								(Object)array(
@@ -114,81 +118,11 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_CONFIGIMAGE),
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGIMAGE),// ヘルプ文字列
 									'submenu'	=> array()
 								)
 							);
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
-		
-/*
-
-				
-		// ####### 上段メニューの作成 #######
-		$menuText = '<div id="configmenu-upper">' . M3_NL;
-		$menuText .= '<ul>' . M3_NL;
-		
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . 
-				'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
-				
-		// ### システム基本設定 ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGSYS;
-		if ($task == self::TASK_CONFIGSYS){
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGSYS);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>システム基本設定</span></a></li>' . M3_NL;
-		
-		// ### サーバ環境 ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_SERVER_ENV;
-		if ($task == self::TASK_SERVER_ENV){
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_SERVER_ENV);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>サーバ環境</span></a></li>' . M3_NL;
-				
-		// ### 言語設定 ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGLANG;
-		if ($task == self::TASK_CONFIGLANG){
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGLANG);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>言語設定</span></a></li>' . M3_NL;
-		
-		// ### メッセージ設定 ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGMESSAGE;
-		if ($task == self::TASK_CONFIGMESSAGE){
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGMESSAGE);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>メッセージ設定</span></a></li>' . M3_NL;
-		
-		// ### 画像設定 ###
-		$current = '';
-		$link = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::TASK_CONFIGIMAGE;
-		if ($task == self::TASK_CONFIGIMAGE){
-			$current = 'id="current"';
-		}
-		// ヘルプを作成
-		$helpText = $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGIMAGE);
-		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span ' . $helpText . '>画像設定</span></a></li>' . M3_NL;
-		
-		// 上段メニュー終了
-		$menuText .= '</ul>' . M3_NL;
-		$menuText .= '</div>' . M3_NL;
-		
-		// 作成データの埋め込み
-		$linkList = '<div id="configmenu-top"><label>' . 'システム情報' . $linkList . '</label></div>';
-		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
-		$this->tmpl->addVar("_widget", "menu_items", $outputText);
-		*/
 	}
 }
 ?>

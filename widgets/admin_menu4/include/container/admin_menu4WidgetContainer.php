@@ -776,6 +776,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$active = $menuItem->active;
 			$task	= $menuItem->task;
 			$url	= $menuItem->url;
+			$help	= $menuItem->help;
 			$subMenu = $menuItem->submenu;
 			
 			if (empty($subMenu)){		// サブメニューを持たない場合
@@ -793,7 +794,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);
 				if (empty($linkUrl)) $linkUrl = $url;
 				if (!empty($linkUrl)) $event = ' onclick="window.location=\'' . $linkUrl . '\';"';
-				$menuTag .= '<li><button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '"' . $event . '>' . $this->convertToDispString($name) . '</button></li>';
+				$button = '<button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '"' . $event . '>' . $this->convertToDispString($name) . '</button>';
+				if (!empty($help)) $button = '<span ' . $help . '>' . $button . '</span>';
+				$menuTag .= '<li>' . $button . '</li>';
 			} else {		// サブメニューがある場合
 				// アクティブな項目があるかチェック
 				$subMenuTag = '';

@@ -64,22 +64,33 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 		if ($this->gPage->getUseHelp()){		// ヘルプ表示を行う場合
 			// ヘルプメソッドが指定されている場合は、ヘルプクラスを使用
 			$outputHelp = false;		// ヘルプ出力を行ったかどうか
-			$helpKeys = array();
+			
+			// ### ヘルプの読み込みは、代替ウィジェットにカレントウィジェットのデータを上書きする ###
+			// 代替ウィジェットが設定されている場合は代替ウィジェットのヘルプを読み込む
+			if (!empty($this->_defaultWidgetId)){
+				// ウィジェットのデフォルトのヘルプファイルを読み込む
+				$helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->_defaultWidgetId);
+			}
+			
+			// ウィジェットのデフォルトのヘルプファイルを読み込む
+			$helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->gEnv->getCurrentWidgetId());
+			
+			// タスク単位のヘルプを読み込む
 			if (method_exists($this, '_setHelp')){
 				$helpId = $this->_setHelp($request, $param);
-				$helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->gEnv->getCurrentWidgetId(), false/*新規モード*/, $helpId, $this);
+				$helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->gEnv->getCurrentWidgetId(), $helpId, $this);
 			}
-
-			// ヘルプIDが設定されていない場合は共通ファイルを読み込む
+				
+/*			// ヘルプIDが設定されていない場合は共通ファイルを読み込む
 			if (empty($helpKeys)){
 				// 代替ウィジェットが設定されている場合は代替ウィジェットのヘルプを読み込む
 				if (!empty($this->_defaultWidgetId)) $helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->_defaultWidgetId);
 
 				// カレントウィジェットのヘルプを読み込む
-				$isAdd = false;		// 追加モード
-				if (!empty($this->_defaultWidgetId)) $isAdd = true;		// 追加モード
-				$helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->gEnv->getCurrentWidgetId(), $isAdd);
-			}
+//				$isAdd = false;		// 追加モード
+//				if (!empty($this->_defaultWidgetId)) $isAdd = true;		// 追加モード
+				$helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->gEnv->getCurrentWidgetId());
+			}*/
 
 			// テンプレート上のヘルプタグを変換
 			for ($i = 0; $i < count($helpKeys); $i++){

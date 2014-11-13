@@ -39,9 +39,6 @@ class help_configsys extends HelpConv
 		return $helpData;
 	}
 /*
-// ########## システム情報 ##########
-$HELP['configsys']['title'] = 'システム基本設定';
-$HELP['configsys']['body'] = 'システムの動作に関する基本設定を行います。';
 $HELP['configsys_connect_server_url']['title'] = 'ポータルサーバのURL';
 $HELP['configsys_connect_server_url']['body'] = 'ポータルサーバに接続する場合の接続先URLです。Magic3がインストールされているURLを指定します。';
 */

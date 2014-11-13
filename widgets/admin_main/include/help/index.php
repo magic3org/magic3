@@ -19,6 +19,10 @@ defined('M3_SYSTEM') or die('Access error: Direct access denied.');
 
 global $HELP;
 
+// ########## システム情報(ベース用) ##########
+$HELP['configsys']['title'] = 'システム基本設定';
+$HELP['configsys']['body'] = 'システムの動作に関する基本設定を行います。';
+
 // ########## 言語設定 ##########
 $HELP['configlang']['title'] = '言語設定';
 $HELP['configlang']['body'] = '言語に関する設定を行います。';

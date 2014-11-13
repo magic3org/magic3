@@ -375,17 +375,6 @@ class BaseWidgetContainer extends Core
 		$this->tmpl->addVar("_widget", "_ROOT_URL", $rootUrl);
 		$this->tmpl->addVar("_widget", "_WIDGET_URL", $currentWidgetUrl);	// ウィジェットのルートディレクトリ
 		
-		// ヘルプを設定
-		/*if ($this->gPage->getUseHelp()){		// ヘルプ表示を行う場合
-			// 「_widget」の変換を行う
-			$helpKeys = $this->gInstance->getHelpManager()->loadHelp($this->gEnv->getCurrentWidgetId());
-			for ($i = 0; $i < count($helpKeys); $i++){
-				$key = $helpKeys[$i];
-				$helpText = $this->gInstance->getHelpManager()->getHelpText($key);
-				$this->tmpl->addVar("_widget", self::HELP_HEAD . $key, $helpText);
-			}
-		}*/
-		
 		// デバッグ出力があるときは表示
 		if ($this->gEnv->getSystemDebugOut() && method_exists($this,'_debugString')){
 			$debugStr = $this->_debugString();

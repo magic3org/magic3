@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: helpConv.php 3843 2010-11-19 08:27:05Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 class HelpConv
@@ -49,15 +49,27 @@ class HelpConv
 		}
 	}
 	/**
-	 * ヘルプデータキーを取得
+	 * ヘルプデータを設定
 	 *
 	 * @param array $helpData	ヘルプデータ
-	 * @return array			ヘルプデータキー
+	 * @return					なし
 	 */
-	function getHelpKeys($helpData)
+	function setHelpData($helpData)
 	{
 		$this->helpData = $helpData;
-		return array_keys($this->helpData);
+	}
+	/**
+	 * ヘルプデータキーを取得
+	 *
+	 * @return array			ヘルプデータキー
+	 */
+	function getHelpKeys()
+	{
+		if (empty($this->helpData)){
+			return array();
+		} else {
+			return array_keys($this->helpData);
+		}
 	}
 	/**
 	 * ヘルプデータを取得
