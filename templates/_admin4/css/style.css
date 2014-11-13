@@ -787,7 +787,8 @@ nav.secondlevel.minimized .navbar-toggle {
 
 nav.secondlevel.minimized .btn.navbar-btn {
 	padding: 6px 9px;
-	font-size: 13px;
+/*	font-size: 13px;*/
+	font-size: 15px;
 	line-height: 1.5;
 /*	border-radius: 3px;*/
 	border-radius: 0;
