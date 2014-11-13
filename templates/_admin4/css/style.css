@@ -735,7 +735,10 @@ input[type="password"]{
 	font-family: Arial;/*for IE8 bug*/
 }
 /*** Bootstrap plus option ***/
-.align_middle_row.table td {
+/*.align_middle_row.table td {
+	vertical-align: middle;
+}*/
+.table.m3config_table td {
 	vertical-align: middle;
 }
 /*** タブフォーカス削除 ***/
