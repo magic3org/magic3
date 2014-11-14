@@ -2505,6 +2505,7 @@ class PageManager extends Core
 		// ウィジェットのタイトルを設定
 		$title = $row['wd_name'];
 		if (empty($title)) $title = $row['wd_id'];
+		$gEnvManager->setCurrentWidgetTitle($title);
 		echo '<title>' . self::WIDGET_TITLE_START . htmlspecialchars($title) . self::WIDGET_TITLE_END . '</title>' . M3_NL;
 		echo '</head>' . M3_NL;
 		// タブでウィンドウを開く場合は背景を透過モードにする

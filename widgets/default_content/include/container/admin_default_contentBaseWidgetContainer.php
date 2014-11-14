@@ -25,7 +25,7 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 	protected $_baseUrl;			// 管理画面のベースURL
 	
 	const DEFAULT_TOP_PAGE = 'content';		// デフォルトのトップページ
-	const WIDGET_TITLE_NAME = 'デフォルトコンテンツ';				// ウィジェットタイトル名
+	const BREADCRUMB_TITLE = '汎用コンテンツ';				// パンくずリストトップタイトル
 	// 画面
 	const TASK_CONTENT = 'content';							// コンテンツ管理
 	const TASK_CONTENT_DETAIL = 'content_detail';			// コンテンツ管理詳細
@@ -86,7 +86,9 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;
 		
 		// パンくずリストの作成
-		$titles = array(self::WIDGET_TITLE_NAME . '(' . default_contentCommonDef::$_deviceTypeName . ')');
+//		$titles = array(self::BREADCRUMB_TITLE . '(' . default_contentCommonDef::$_deviceTypeName . ')');
+//		$titles = array(self::BREADCRUMB_TITLE);
+		$titles = array();
 		switch ($task){
 			case self::TASK_CONTENT:		// コンテンツ管理
 			case self::TASK_CONTENT_DETAIL:		// コンテンツ管理(詳細)
@@ -100,7 +102,7 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// メニューバーの作成
 		$navbarDef = new stdClass;
-		$navbarDef->title = '';
+		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
 		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
 		$navbarDef->help	= '';// ヘルプ文字列
 		$navbarDef->menu =	array(
@@ -124,7 +126,7 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
 		
 
-
+/*
 		// パンくずリストを作成
 		switch ($task){
 			case self::TASK_CONTENT:		// コンテンツ管理
@@ -166,6 +168,7 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . $topName . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+	*/
 	}
 }
 ?>
