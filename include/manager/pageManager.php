@@ -107,6 +107,8 @@ class PageManager extends Core
 	const WIDGET_ID_TITLE_TAG_END = '}}';						// 遅延実行用タグ(タイトル埋め込み用)
 	const WIDGET_ID_SEPARATOR = ',';
 	const HEAD_TAGS				= '{{HEAD_TAGS}}';				// HTMLヘッダ出力用タグ
+	const MENUBAR_TAGS			= '{{MENUBAR_TAGS}}';				// メニューバー出力用タグ
+	const MENUBAR_SCRIPT_TAGS	= '{{MENUBAR_SCRIPT_TAGS}}';				// メニューバー出力用スクリプトタグ
 	const WIDGET_ICON_IMG_SIZE = 32;			// ウィジェットアイコンサイズ
 	const WIDGET_OUTER_CLASS = 'm3_widget_outer';			// ウィジェット外枠クラスクラス
 	const WIDGET_OUTER_CLASS_HEAD_POSITION = 'm3_pos_';			// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
@@ -2299,18 +2301,6 @@ class PageManager extends Core
 							$contents .= 'if (window.parent.m3UpdateByChildWindow) window.parent.m3UpdateByChildWindow();' . M3_NL;
 						}*/
 					} else if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){			// ウィジェット設定画面
-						// 画面更新用関数追加
-						$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
-						$contents .= M3_INDENT_SPACE . 'var href = window.location.href.split("#");' . M3_NL;
-						$contents .= M3_INDENT_SPACE . 'window.location.href = href[0];' . M3_NL;
-						$contents .= M3_INDENT_SPACE . 'm3UpdateParentWindow();' . M3_NL;		// 親ウィンドウ更新
-						$contents .= '}' . M3_NL;
-						
-						// IEエラーメッセージ出力抑止
-						$contents .= 'function hideIEErrors(){' . M3_NL;
-						$contents .= M3_INDENT_SPACE . 'return true;' . M3_NL;
-						$contents .= '}' . M3_NL;
-						$contents .= 'window.onerror = hideIEErrors;' . M3_NL;
 					} else {		// ダッシュボード画面、メイン管理画面
 						// 画面更新用関数追加
 						$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
@@ -2387,6 +2377,10 @@ class PageManager extends Core
 	/**
 	 * Widget単体起動用のHTMLのヘッダ部(headタグ)出力
 	 *
+	 * startWidget(),endWidget()は、以下のコマンドを処理する
+	 *  ・M3_REQUEST_CMD_SHOW_WIDGET(ウィジェットの単体表示)
+	 *  ・M3_REQUEST_CMD_CONFIG_WIDGET(ウィジェット設定画面)
+	 *  ・M3_REQUEST_CMD_DO_WIDGET(ウィジェット単体実行)
 	 * Widgetの出力方法は、以下のパターンがある
 	 *  ・HTMLヘッダ付加 - Widget単体で画面出力するためにHTMLヘッダを付加するパターン
 	 *  ・HTMLヘッダなし - Wiget単体のタグ出力のみのパターン
@@ -2502,6 +2496,11 @@ class PageManager extends Core
 				$dir->close();
 			}
 		}
+		// ##### スクリプト用出力用タグを埋め込む #####
+		// ウィジェット設定画面用メニューバーの作成
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
+			echo self::MENUBAR_SCRIPT_TAGS;			// メニューバー出力用タグ
+		}
 		
 		// ウィジェットのタイトルを設定
 		$title = $row['wd_name'];
@@ -2513,6 +2512,10 @@ class PageManager extends Core
 			echo '<body style="background-color:transparent;">' . M3_NL;
 		} else {
 			echo '<body>' . M3_NL;
+		}
+		// ウィジェット設定画面用メニューバーの作成
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
+			echo self::MENUBAR_TAGS;			// メニューバー出力用タグ
 		}
 		// Bootstrap用のタグ出力
 		if ($this->useBootstrap) echo '<div class="container">' . M3_NL;
@@ -2561,20 +2564,80 @@ class PageManager extends Core
 		echo '<!-- Widget Start -->' . M3_NL;
 	}
 	/**
-	 * Widget単体起動用のタグを閉じる
+	 * Widget単体起動の終了処理
 	 *
-	 * @param string $cmd		起動コマンド
+	 * startWidget(),endWidget()は、以下のコマンドを処理する
+	 *  ・M3_REQUEST_CMD_SHOW_WIDGET(ウィジェットの単体表示)
+	 *  ・M3_REQUEST_CMD_CONFIG_WIDGET(ウィジェット設定画面)
+	 *  ・M3_REQUEST_CMD_DO_WIDGET(ウィジェット単体実行)
+	 *
+	 * @param string $cmd			起動コマンド
+	 * @param string $srcContent	HTML出力ソース
 	 */
-	function endWidget($cmd)
+	function endWidget($cmd, $srcContent)
 	{
+		global $gDesignManager;
+		
 		// ウィジェット単体表示のときのみ出力
 		if (!$this->showWidget) return;
+		
+		// メニューバー出力
+		// パンくずリストを表示
+		$breadcrumbHtml = '';
+		if (!empty($this->adminSubNavbarDef)) $breadcrumbHtml .= $gDesignManager->createSubMenubar($this->adminSubNavbarDef);
+		if (!empty($this->adminBreadcrumbDef)) $breadcrumbHtml .= $gDesignManager->createAdminBreadcrumb($this->adminBreadcrumbDef);
+		$destContent = str_replace(self::MENUBAR_TAGS, $breadcrumbHtml, $srcContent);
+		
+		// ヘッドタグ出力
+		$replaceStr .= '<script type="text/javascript">' . M3_NL;
+		$replaceStr .= '//<![CDATA[' . M3_NL;
+		
+		// ##### 追加関数 #####
+		// ウィジェット設定画面用
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェットの設定管理
+			// 画面更新用関数追加
+			$replaceStr .= 'function m3UpdateByConfig(serial){' . M3_NL;
+			$replaceStr .= M3_INDENT_SPACE . 'var href = window.location.href.split("#");' . M3_NL;
+			$replaceStr .= M3_INDENT_SPACE . 'window.location.href = href[0];' . M3_NL;
+			$replaceStr .= M3_INDENT_SPACE . 'm3UpdateParentWindow();' . M3_NL;		// 親ウィンドウ更新
+			$replaceStr .= '}' . M3_NL;
+		
+			// IEエラーメッセージ出力抑止
+			$replaceStr .= 'function hideIEErrors(){' . M3_NL;
+			$replaceStr .= M3_INDENT_SPACE . 'return true;' . M3_NL;
+			$replaceStr .= '}' . M3_NL;
+			$replaceStr .= 'window.onerror = hideIEErrors;' . M3_NL;
+		}
+		
+		// ##### 初期処理 #####
+		$replaceStr .= '$(function(){' . M3_NL;
+		// トップ位置修正
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット詳細設定画面のとき
+			if (!empty($this->adminSubNavbarDef) || !empty($this->adminBreadcrumbDef)){
+				$menubarHeight = $gDesignManager->getSubMenubarHeight();
+				$replaceStr .= str_repeat(M3_INDENT_SPACE, 1) . '$("nav.secondlevel").css("margin-top", "0");' . M3_NL;
+				$replaceStr .= str_repeat(M3_INDENT_SPACE, 1) . '$("body").css("padding-top", "' . $menubarHeight . 'px");' . M3_NL;
+			}
+		}
+		// ##### ウィジェットからの指定による処理 #####
+		if ($this->updateParentWindow){			// 親ウィンドウ再描画のとき
+			if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット詳細設定画面のとき
+				$replaceStr .= str_repeat(M3_INDENT_SPACE, 1) . 'm3UpdateParentWindowByConfig(' . $this->updateDefSerial . ');' . M3_NL;// 更新する項目のページ定義シリアル番号
+			} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET){			// ウィジェット単体実行のとき
+				$replaceStr .= str_repeat(M3_INDENT_SPACE, 1) . 'm3UpdateParentWindow();' . M3_NL;
+			}
+		}
+		$replaceStr .= '});' . M3_NL;
+		$replaceStr .= '//]]>' . M3_NL;
+		$replaceStr .= '</script>' . M3_NL;
+		$destContent = str_replace(self::MENUBAR_SCRIPT_TAGS, $replaceStr, $destContent);
+		echo $destContent;// 変換したコンテンツを出力
 		
 //		echo '</div>' . M3_NL;			// row
 		echo '<!-- Widget End -->' . M3_NL;
 		
 		// ##### ウィジェットからの指定による処理 #####
-		if ($this->updateParentWindow){			// 親ウィンドウ再描画のとき
+/*		if ($this->updateParentWindow){			// 親ウィンドウ再描画のとき
 			echo '<script type="text/javascript">' . M3_NL;
 			echo '//<![CDATA[' . M3_NL;
 			echo '$(function(){' . M3_NL;
@@ -2586,7 +2649,7 @@ class PageManager extends Core
 			echo '});' . M3_NL;
 			echo '//]]>' . M3_NL;
 			echo '</script>' . M3_NL;
-		}
+		}*/
 		
 		// Bootstrap用のタグ出力
 		if ($this->useBootstrap) echo '</div>' . M3_NL;

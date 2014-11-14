@@ -31,6 +31,7 @@ class DesignManager extends Core
 	const CF_CONFIG_WINDOW_STYLE		= 'config_window_style';	// 設定画面のウィンドウスタイル取得用キー
 	const DEFAULT_CONFIG_WINDOW_STYLE	= 'toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900';// 設定画面のウィンドウスタイルデフォルト値
 	const UPLOAD_ICON_FILE = '/images/system/upload_box32.png';		// アップロードボックスアイコン
+	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
 	
 	/**
 	 * コンストラクタ
@@ -360,6 +361,119 @@ class DesignManager extends Core
 		$iconUrl = call_user_func($this->_getUrlCallback, $this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
 		$html = '<h4 align="center"><img src="' . $iconUrl . '" />ファイルアップロード</h4><p align="center">ここにドラッグ＆ドロップまたはクリック</p>';
 		return $html;
+	}
+	/**
+	 * 管理画面用パンくずリストを作成
+	 *
+	 * @param array $def				パンくずリストの定義
+	 * @return string 					パンくずリストのHTML
+	 */
+	function createAdminBreadcrumb($def)
+	{
+		$destHtml = '<ol class="breadcrumb">';
+		for ($i = 0; $i < count($def); $i++){
+			$name = $def[$i];
+			$destHtml .= '<li>' . convertToHtmlEntity($name) . '</li>';
+		}
+		$destHtml .= '</ol>';
+		return $destHtml;
+	}
+	/**
+	 * サブメニューバー作成
+	 *
+	 * @param object $navbarDef			メニューバー定義
+	 * @return string 					サブメニューバーのHTML
+	 */
+	function createSubMenubar($navbarDef)
+	{
+		// タイトル作成
+		$titleTag = '';
+		if (!empty($navbarDef->title)){
+			$title = convertToHtmlEntity($navbarDef->title);
+			if (!empty($navbarDef->help)) $title = '<span ' . $navbarDef->help . '>' . $title . '</span>';
+			$titleTag = '<div class="navbar-text title">' . $title . '</div>';
+		}
+		
+		// メニュー作成
+		$menuTag = '';
+		$baseUrl = $navbarDef->baseurl;
+		$menu = $navbarDef->menu;
+		$menuItemCount = count($menu);
+		for ($i = 0; $i < $menuItemCount; $i++){
+			$menuItem = $menu[$i];
+			$name	= $menuItem->name;
+			$tagId	= $menuItem->tagid;
+			$active = $menuItem->active;
+			$task	= $menuItem->task;
+			$url	= $menuItem->url;
+			$help	= $menuItem->help;
+			$subMenu = $menuItem->submenu;
+			
+			if (empty($subMenu)){		// サブメニューを持たない場合
+				if ($active){
+					$buttonType = 'btn-primary';
+				} else {
+					$buttonType = 'btn-success';
+				}
+				$tagIdAttr = '';		// タグID
+				if (!empty($tagId)) $tagIdAttr = ' id="' . $tagId . '"';
+				
+				// タスクまたはURLが設定されている場合はリンクを設定
+				$event = '';
+				$linkUrl = '';			// リンク先 
+				if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);
+				if (empty($linkUrl)) $linkUrl = $url;
+				if (!empty($linkUrl)) $event = ' onclick="window.location=\'' . $linkUrl . '\';"';
+				$button = '<button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '"' . $event . '>' . convertToHtmlEntity($name) . '</button>';
+				if (!empty($help)) $button = '<span ' . $help . '>' . $button . '</span>';
+				$menuTag .= '<li>' . $button . '</li>';
+			} else {		// サブメニューがある場合
+				// アクティブな項目があるかチェック
+				$subMenuTag = '';
+				for ($j = 0; $j < count($subMenu); $j++){
+					$subMenuItem = $subMenu[$j];
+					$subName	= $subMenuItem->name;
+					$subTagId	= $subMenuItem->tagid;
+					$subActive	= $subMenuItem->active;
+					$task		= $subMenuItem->task;
+					$url		= $subMenuItem->url;
+					
+					$linkUrl = '';			// リンク先 
+					if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);
+					if (empty($linkUrl)) $linkUrl = $url;
+					if (empty($linkUrl)) $linkUrl = '#';
+					$classActive = '';
+					if ($subActive){
+						$classActive = ' class="active"';
+						$active = true;			// 親の階層もアクティブにする
+					}
+					$tagIdAttr = '';		// タグID
+					if (!empty($subTagId)) $tagIdAttr = ' id="' . $subTagId . '"';
+					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . $this->getUrl($linkUrl) . '">' . convertToHtmlEntity($name) . '</a></li>';
+				}
+				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
+
+ 				if ($active){
+					$buttonType = 'btn-primary';
+				} else {
+					$buttonType = 'btn-success';
+				}
+				$menuTag .= '<li><a class="btn navbar-btn ' . $buttonType . '" data-toggle="dropdown" href="#" >' . convertToHtmlEntity($name) . ' <span class="caret"></span></a>' . $subMenuTag . '</li>';
+			}
+		}
+		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
+		
+		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel"><div class="collapse navbar-collapse">' . $titleTag . $menuTag . '</div></nav>';
+		return $destHtml;
+	}
+	/**
+	 * サブメニューバーの高さを取得
+	 *
+	 * @return int				高さ
+	 */
+	function getSubMenubarHeight()
+	{
+		return self::SUB_MENUBAR_HEIGHT;
 	}
 }
 ?>

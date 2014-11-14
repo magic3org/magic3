@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -79,15 +79,52 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 	function _postAssign($request, &$param)
 	{
 		// ウィンドウオープンタイプ取得
-//		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
-//		if (!empty($openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
-//		if ($openBy == 'simple' || $openBy == 'tabs') return;			// シンプルウィンドウまたはタブ表示のときはメニューを表示しない
 		if ($this->_openBy == 'simple' || $this->_openBy == 'tabs') return;			// シンプルウィンドウまたはタブ表示のときはメニューを表示しない
 				
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;
 		
+		// パンくずリストの作成
+		$titles = array(self::WIDGET_TITLE_NAME . '(' . default_contentCommonDef::$_deviceTypeName . ')');
+		switch ($task){
+			case self::TASK_CONTENT:		// コンテンツ管理
+			case self::TASK_CONTENT_DETAIL:		// コンテンツ管理(詳細)
+				$titles[] = 'コンテンツ管理';
+				break;
+			case self::TASK_OTHER:		// その他設定
+				$titles[] = '基本設定';
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef($titles);
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = '';
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'コンテンツ管理',
+									'task'		=> self::TASK_CONTENT,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_CONTENT || $task == self::TASK_CONTENT_DETAIL),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> '基本設定',
+									'task'		=> self::TASK_OTHER,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_OTHER),
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
+		
+
+
 		// パンくずリストを作成
 		switch ($task){
 			case self::TASK_CONTENT:		// コンテンツ管理

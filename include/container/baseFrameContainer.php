@@ -467,10 +467,10 @@ class BaseFrameContainer extends Core
 				// ウィジェット用のタグを閉じる
 				$this->gPage->endWidgetXml($cmd);
 			} else if ($cmd == M3_REQUEST_CMD_RSS){		// RSS配信のとき
+				ob_start();// バッファ作成
+				
 				// ウィジェット用のHTMLヘッダを出力
 				$this->gPage->startWidgetRss($cmd);
-
-				ob_start();// バッファ作成
 				
 				// 指定のウィジェットを実行
 				$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/index.php';
@@ -511,9 +511,11 @@ class BaseFrameContainer extends Core
 				// ウィジェット用のタグを閉じる
 				$this->gPage->endWidgetRss($cmd, $content);
 			} else {		// RSS配信以外のとき
+				ob_start();// バッファ作成
+							
 				// ウィジェット用のHTMLヘッダを出力
 				$this->gPage->startWidget($cmd);
-
+				
 				// 指定のウィジェットを実行
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット設定のとき
 					$widgetIndexFile = $this->gEnv->getWidgetsPath() . '/' . $widgetId . '/admin/index.php';		// 管理用画面
@@ -549,8 +551,12 @@ class BaseFrameContainer extends Core
 					echo 'file not found: ' . $widgetIndexFile;
 				}
 			
+				// 現在のバッファ内容を取得し、バッファを破棄
+				$content = ob_get_contents();
+				ob_end_clean();
+				
 				// ウィジェット用のタグを閉じる
-				$this->gPage->endWidget($cmd);
+				$this->gPage->endWidget($cmd, $content);
 			}
 		
 			// 作業中のウィジェットIDを解除
