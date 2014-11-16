@@ -88,14 +88,10 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
-
 <h3 class="m3config_h"><span {_HELP_USERLIST}>{_LC_LABEL_USERLIST}</span></h3>
-<div class="m3config_h_side_buttons pull-right">
-<div {_HELP_USERLIST_BUTTONS}>
-<div class="btn-group">
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_USERLIST_BUTTONS}><div class="btn-group">
     <button type="button" class="button" onclick="newItem();">{_LC_LABEL_NEW}</button><button type="button" class="button" onclick="return editItem();">{_LC_LABEL_EDIT}</button><button type="button" class="button" onclick="delItem();">{_LC_LABEL_DELETE}</button>
-</div>
-</div></div>
+</div></div></div>
 
 <table id="userlist">
     <thead>

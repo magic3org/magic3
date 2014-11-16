@@ -21,6 +21,7 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 class BaseAdminWidgetContainer extends BaseWidgetContainer
 {
 	const DEFAULT_WIDGET_TYPE = 'admin';		// ウィジェットタイプ
+	const TASK_CONFIG_LIST = 'list';			// 設定一覧
 	
 	/**
 	 * コンストラクタ
@@ -248,6 +249,47 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 			$destPath = $sslBaseUrl . $path;
 		}
 		return $destPath;
+	}
+	/**
+	 * 設定画面用のメニューバーを作成
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return								なし
+	 */
+	function createBasicConfigMenubar($request)
+	{
+		// 表示画面を決定
+		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		
+		// パンくずリストの作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_CONFIG_LIST:			// 設定一覧
+				$titles[] = '基本';
+				$titles[] = '設定一覧';
+				break;
+			default:
+				$titles[] = '基本';
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef($titles);
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> '基本',		// 基本
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> true,
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 }
 ?>

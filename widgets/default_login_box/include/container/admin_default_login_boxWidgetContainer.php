@@ -48,6 +48,20 @@ class admin_default_login_boxWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
 	 * @param								なし
 	 */
 	function _assign($request, &$param)
