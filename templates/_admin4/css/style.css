@@ -668,9 +668,9 @@ background-color: #0081c2;
 /* fix item width */
 .m3config_item {
 	padding-left: 0;
-	padding-right: 0;
+/*	padding-right: 0;*/
+	padding-right: 5px;
 }
-
 /****** edit line ******/
 .m3line_image {
 	width:16px;

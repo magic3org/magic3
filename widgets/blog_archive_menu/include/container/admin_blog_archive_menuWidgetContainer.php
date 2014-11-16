@@ -26,6 +26,8 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 	private $sortOrderArray;		// ソート順
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
+	// 画面
+	const TASK_LIST = 'list';			// 設定一覧
 	
 	/**
 	 * コンストラクタ
@@ -56,11 +58,55 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 	function _setTemplate($request, &$param)
 	{	
 		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
+		if ($task == self::TASK_LIST){		// 一覧画面
 			return 'admin_list.tmpl.html';
 		} else {			// 一覧画面
 			return 'admin.tmpl.html';
 		}
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// 表示画面を決定
+		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		
+		// パンくずリストの作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_LIST:			// 設定一覧
+				$titles[] = '基本';
+				$titles[] = '設定一覧';
+				break;
+			default:
+				$titles[] = '基本';
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef($titles);
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> '基本',		// 基本
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> true,
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -74,7 +120,7 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
+		if ($task == self::TASK_LIST){		// 一覧画面
 			return $this->createList($request);
 		} else {			// 詳細設定画面
 			return $this->createDetail($request);
