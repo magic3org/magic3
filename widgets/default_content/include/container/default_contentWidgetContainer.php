@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: default_contentWidgetContainer.php 5924 2013-04-11 00:52:55Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('default_content') . '/default_contentBaseWidgetContainer.php');
@@ -94,9 +94,9 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			// Joomlaテンプレートのバージョンに合わせて出力
 			$this->templateType = $this->gEnv->getCurrentTemplateType();
 			if ($this->templateType == 0){			// Joomla!v1.0のとき
-				return 'main_old.tmpl.html';
+				return 'index_old.tmpl.html';
 			} else {
-				return 'main.tmpl.html';
+				return 'index.tmpl.html';
 			}
 		}
 	}

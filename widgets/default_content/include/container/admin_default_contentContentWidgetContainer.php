@@ -84,13 +84,13 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		switch ($task){
 			case self::TASK_CONTENT:		// コンテンツ管理
 			default:
-				$filename = 'admin_main.tmpl.html';
+				$filename = 'admin.tmpl.html';
 				break;
 			case self::TASK_CONTENT_DETAIL:		// 詳細画面
-				$filename = 'admin_main_detail.tmpl.html';
+				$filename = 'admin_detail.tmpl.html';
 				break;
 			case self::TASK_ADD_TO_MENU:		// コンテンツへのリンクをメニュー項目に追加
-				$filename = 'admin_list.tmpl.html';
+				$filename = 'admin_menu.tmpl.html';
 				break;
 		}
 		return $filename;
