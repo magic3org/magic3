@@ -91,11 +91,19 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		$titles = array();
 		switch ($task){
 			case self::TASK_CONTENT:		// コンテンツ管理
-			case self::TASK_CONTENT_DETAIL:		// コンテンツ管理(詳細)
 				$titles[] = 'コンテンツ管理';
 				break;
+			case self::TASK_CONTENT_DETAIL:		// コンテンツ管理(詳細)
+				$titles[] = 'コンテンツ管理';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_HISTORY:				// コンテンツ履歴
+				$titles[] = 'コンテンツ管理';
+				$titles[] = '詳細';
+				$titles[] = '履歴';
+				break;
 			case self::TASK_OTHER:		// その他設定
-				$titles[] = '基本設定';
+				$titles[] = '基本';
 				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
@@ -111,11 +119,11 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 									'task'		=> self::TASK_CONTENT,
 									'url'		=> '',
 									'tagid'		=> '',
-									'active'	=> ($task == self::TASK_CONTENT || $task == self::TASK_CONTENT_DETAIL),
+									'active'	=> ($task == self::TASK_CONTENT || $task == self::TASK_CONTENT_DETAIL || $task == self::TASK_HISTORY),
 									'submenu'	=> array()
 								),
 								(Object)array(
-									'name'		=> '基本設定',
+									'name'		=> '基本',
 									'task'		=> self::TASK_OTHER,
 									'url'		=> '',
 									'tagid'		=> '',

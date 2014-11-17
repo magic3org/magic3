@@ -26,8 +26,7 @@ function updateItem(){
 	return true;
 }
 $(function(){
-	// 行カラー化
-//	m3_tableWithScrollbar('config', -1, 0);
+	m3SetConfigTable('mainconfig');
 	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_password_content', 150/* 高さ */);
@@ -35,69 +34,66 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <input type="hidden" name="task" value="other" />
-<br />
-<table width="90%"><tr><td>
-<table id="config" class="simple-table" width="950">
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150">機能</td>
+	    <th>機能</th>
 	    <td><label><input type="checkbox" name="item_use_jquery" {USE_JQUERY} /><span {_HELP_OTHER_USE_JQUERY}>jQueryスクリプト作成</span></label>
 		<label><input type="checkbox" name="item_use_content_template" {USE_CONTENT_TEMPLATE} /><span {_HELP_OTHER_USE_CONTENT_TEMPLATE}>コンテンツ単位のテンプレート設定</span></label>
 	        </td>
 	</tr>
     <tr>
-	    <td class="table-headside">コンテンツ表示</td>
+	    <th>コンテンツ表示</th>
 	    <td><input type="checkbox" name="item_show_title" {SHOW_TITLE} /><span {_HELP_OTHER_SHOW_TITLE}>コンテンツタイトルの表示</span><br />
 	        <input type="checkbox" name="item_show_edit" {SHOW_EDIT} /><span {_HELP_OTHER_SHOW_EDIT}>編集ボタンの表示</span></td>
 	</tr>
     <tr>
-	    <td class="table-headside">メッセージ</td>
+	    <th>メッセージ</th>
 	    <td><input type="checkbox" name="item_show_message_deny" {SHOW_MESSAGE_DENY} /><span {_HELP_OTHER_SHOW_MESSAGE_DENY}>コンテンツ参照不可の場合はメッセージを表示</span><br />
-	    <input type="text" name="item_message_deny" value="{MESSAGE_DENY}" size="100" maxlength="200" style="width:100%;" />
+	    <input type="text" name="item_message_deny" class="form-control" value="{MESSAGE_DENY}" size="100" maxlength="200" />
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside">アクセス制御</td>
+	    <th>アクセス制御</th>
 	    <td><input type="checkbox" name="item_use_password" {USE_PASSWORD} /><span {_HELP_OTHER_USE_PASSWORD}>パスワードによるアクセス制限</span><br />
 	    パスワード画面コンテンツ
 	    <textarea name="item_password_content">{PASSWORD_CONTENT}</textarea>
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside" rowspan="2"><span {_HELP_OTHER_LAYOUT}>レイアウト</span></td>
-	    <td class="table-headside">詳細表示</td>
+	    <th rowspan="2"><span {_HELP_OTHER_LAYOUT}>レイアウト</span></th>
+	    <th>詳細表示</th>
 	</tr>
     <tr>
 	    <td><textarea name="item_layout_view_detail">{LAYOUT_VIEW_DETAIL}</textarea></td>
 	</tr>
     <tr>
-	    <td class="table-headside" rowspan="3"><span {_HELP_OTHER_OUTPUT_HEAD}>ヘッダ出力</span></td>
+	    <th rowspan="3"><span {_HELP_OTHER_OUTPUT_HEAD}>ヘッダ出力</span></th>
 	    <td><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} /><span {_HELP_OTHER_OUTPUT_HEAD}>ヘッダにタグを出力する(SNS連携等)</span></td>
 	</tr>
     <tr>
-	    <td class="table-headside">詳細表示</td>
+	    <th>詳細表示</th>
 	</tr>
     <tr>
-	    <td height="50"><textarea name="item_head_view_detail" style="width:100%;height:100%;">{HEAD_VIEW_DETAIL}</textarea></td>
+	    <td><textarea name="item_head_view_detail" class="form-control" rows="5">{HEAD_VIEW_DETAIL}</textarea></td>
 	</tr>
     <patTemplate:tmpl name="option_smartphone" visibility="hidden">
     <tr>
-	    <td class="table-headside">その他</td>
+	    <th>その他</th>
 	    <td><input type="checkbox" name="item_jquery_mobile_format" {JQUERY_MOBILE_FORMAT_CHECKED} />jQuery Mobile対応</td>
 	</tr>
     </patTemplate:tmpl>
     </tbody>
 </table>
-</td></tr>
-<tr><td align="right">
+<div class="well m3config_update_buttons">
 <input type="button" class="button" onclick="updateItem();" value="更新" />
-</td></tr></table>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

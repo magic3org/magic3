@@ -96,13 +96,12 @@ function previewInOtherWindow(url)
 	return true;
 }
 $(function(){
-	// テーブルの行カラー化
-	m3_tableWithScrollbar('contlist', -1, 0);
+	m3SetConfigTable('searchfield');
+	m3SetConfigTable('contlist');
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="content" />
@@ -110,37 +109,66 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
-<table width="90%">
-<tr><td colspan="2">
-<div id="search_comment" class="m3search" style="display:none;">
-<span {_HELP_CONTENT_SEARCH}><label>コンテンツ検索</label></span>
-<table class="simple-table">
+<h3 class="m3config_h"><span {_HELP_CONTENT}>コンテンツ一覧</span><a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" rel="m3help" /></a></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+</div></div></div>
+
+<div id="search_comment" class="m3search panel panel-info" style="display:none;width:600px;">
+<div class="panel-heading">
+    <h3 class="panel-title"><span {_HELP_CONTENT_SEARCH}>コンテンツ検索</span></h3>
+</div>
+<div class="panel-body form-horizontal">
+<div class="form-group">
+    <label for="search_keyword" class="col-sm-3 control-label"><span {_HELP_CONTENT_SEARCH_KEYWORD}>キーワード</span></label>
+    <div class="col-sm-9">
+		<input type="text" id="search_keyword" name="search_keyword" class="form-control" value="{SEARCH_KEYWORD}" maxlength="50" />
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label"><span {_HELP_CONTENT_SEARCH_SORT}>ソート</span></label>
+    <div class="form-control-static col-sm-2">キー：</div>
+    <div class="col-sm-7">
+		<div class="radio-inline"><label><input type="radio" name="search_key" value="0" {SEARCH_CONTENT_ID_CHECKED}>コンテンツID</label></div><div class="radio-inline"><label><input type="radio" name="search_key" value="1" {SEARCH_UPDATE_DT_CHECKED}>更新日時</label></div>
+    </div>
+</div>
+<div class="form-group">
+    <div class="form-control-static col-sm-2 col-sm-offset-3">順序：</div>
+    <div class="col-sm-7">
+		<div class="radio-inline"><label><input type="radio" name="search_order" value="0" {SEARCH_ASC_CHECKED}>昇順</label></div><div class="radio-inline"><label><input type="radio" name="search_order" value="1" {SEARCH_DESC_CHECKED}>降順</label></div>
+    </div>
+</div>
+<div class="form-group">
+	<div class="col-sm-12 text-right">
+	<input type="button" class="button" onclick="clearSearchParam();" value="クリア" /> <input type="button" class="button" onclick="search();" value="検索" />
+	</div>
+</div>
+</div>
+</div>
+
+<!--
+<div id="search_comment" class="m3search" style="display:none;border:2px;">
+<h4><span {_HELP_CONTENT_SEARCH}>コンテンツ検索</span></h4>
+<table id="searchfield">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="100"><span {_HELP_CONTENT_SEARCH_KEYWORD}>キーワード</span></td>
+    <tr>
+	    <th width="100"><span {_HELP_CONTENT_SEARCH_KEYWORD}>キーワード</span></th>
 	    <td><input type="text" id="search_keyword" name="search_keyword" value="{SEARCH_KEYWORD}" maxlength="50" style="width:98%;" /></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONTENT_SEARCH_SORT}>ソート</span></td>
+    <tr>
+	    <th><span {_HELP_CONTENT_SEARCH_SORT}>ソート</span></th>
 	    <td>キー：<label><input type="radio" name="search_key" value="0" {SEARCH_CONTENT_ID_CHECKED}>コンテンツID</label><label><input type="radio" name="search_key" value="1" {SEARCH_UPDATE_DT_CHECKED}>更新日時</label>
 	    &nbsp;&nbsp;&nbsp;&nbsp;順序：<label><input type="radio" name="search_order" value="0" {SEARCH_ASC_CHECKED}>昇順</label><label><input type="radio" name="search_order" value="1" {SEARCH_DESC_CHECKED}>降順</label></td>
 	</tr>
-	<tr>
-	    <td colspan="2" align="right"><input type="button" class="button" onclick="clearSearchParam();" value="クリア" /><input type="button" class="button" onclick="search();" value="検索" /></td>
-	</tr>
     </tbody>
 </table>
+<div class="m3config_update_buttons">
+<input type="button" class="button" onclick="clearSearchParam();" value="クリア" /> <input type="button" class="button" onclick="search();" value="検索" />
 </div>
-</td></tr>
-<tr><td>
-<label><span {_HELP_CONTENT}>コンテンツ一覧</span></label>&nbsp;&nbsp;
-<a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>
-</td>
-<td align="right"><span {_HELP_CONTENT_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_CONTENT_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_CONTENT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
-</td></tr>
-<tr><td colspan="2">
+</div>-->
+
 <patTemplate:tmpl name="show_singlelang" visibility="hidden"><!-- 単一言語対応時 start -->
-<table id="contlist" class="simple-table" width="100%">
+<table id="contlist">
     <thead>
         <tr>
             <th width="4%"><span {_HELP_CONTENT_CHECK}>選択</span></th>
@@ -159,8 +187,8 @@ $(function(){
         <patTemplate:tmpl name="itemlist">
         <tr>
 	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td align="center">{ID}</td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td align="center"><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
+	    <td>{NAME}</td>
 	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
 	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
 	    <td align="center"><input type="checkbox" disabled {LIMITED} /></td>
@@ -174,7 +202,7 @@ $(function(){
 </table>
 </patTemplate:tmpl><!-- 単一言語対応時 end -->
 <patTemplate:tmpl name="show_multilang" visibility="hidden"><!-- 多言語対応時 start -->
-<table id="contlist" class="simple-table" width="100%">
+<table id="contlist">
     <thead>
         <tr>
             <th width="4%"><span {_HELP_CONTENT_CHECK}>選択</span></th>
@@ -210,8 +238,7 @@ $(function(){
 </table>
 </patTemplate:tmpl><!-- 多言語対応時 end -->
 {PAGE_LINK}
-</td></tr>
-</table>
+
 </form>
 </div>
 </patTemplate:tmpl>

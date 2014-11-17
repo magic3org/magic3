@@ -273,7 +273,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		
 		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
-		$searchStr = '検索';
+		$searchStr = '検索フィールドを表示';
 		$this->tmpl->addVar("_widget", "search_img", $searchImg);
 		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
