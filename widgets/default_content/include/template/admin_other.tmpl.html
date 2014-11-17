@@ -44,49 +44,59 @@ $(function(){
     <tbody>
     <tr>
 	    <th>機能</th>
-	    <td><label><input type="checkbox" name="item_use_jquery" {USE_JQUERY} /><span {_HELP_OTHER_USE_JQUERY}>jQueryスクリプト作成</span></label>
-		<label><input type="checkbox" name="item_use_content_template" {USE_CONTENT_TEMPLATE} /><span {_HELP_OTHER_USE_CONTENT_TEMPLATE}>コンテンツ単位のテンプレート設定</span></label>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_jquery" {USE_JQUERY} /><span {_HELP_OTHER_USE_JQUERY}>jQueryスクリプト作成</span></label></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_use_content_template" {USE_CONTENT_TEMPLATE} /><span {_HELP_OTHER_USE_CONTENT_TEMPLATE}>コンテンツ単位のテンプレート設定</span></label></div>
 	        </td>
 	</tr>
     <tr>
 	    <th>コンテンツ表示</th>
-	    <td><input type="checkbox" name="item_show_title" {SHOW_TITLE} /><span {_HELP_OTHER_SHOW_TITLE}>コンテンツタイトルの表示</span><br />
-	        <input type="checkbox" name="item_show_edit" {SHOW_EDIT} /><span {_HELP_OTHER_SHOW_EDIT}>編集ボタンの表示</span></td>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_show_title" {SHOW_TITLE} /><span {_HELP_OTHER_SHOW_TITLE}>コンテンツタイトルの表示</span></label></div>
+	        <div class="checkbox"><label><input type="checkbox" name="item_show_edit" {SHOW_EDIT} /><span {_HELP_OTHER_SHOW_EDIT}>編集ボタンの表示</span></label></div>
+	    </td>
 	</tr>
     <tr>
 	    <th>メッセージ</th>
-	    <td><input type="checkbox" name="item_show_message_deny" {SHOW_MESSAGE_DENY} /><span {_HELP_OTHER_SHOW_MESSAGE_DENY}>コンテンツ参照不可の場合はメッセージを表示</span><br />
+	    <td>
+		<div class="checkbox"><label><input type="checkbox" name="item_show_message_deny" {SHOW_MESSAGE_DENY} /><span {_HELP_OTHER_SHOW_MESSAGE_DENY}>コンテンツ参照不可の場合はメッセージを表示</span></label></div>
 	    <input type="text" name="item_message_deny" class="form-control" value="{MESSAGE_DENY}" size="100" maxlength="200" />
 	    </td>
 	</tr>
     <tr>
-	    <th>アクセス制御</th>
-	    <td><input type="checkbox" name="item_use_password" {USE_PASSWORD} /><span {_HELP_OTHER_USE_PASSWORD}>パスワードによるアクセス制限</span><br />
-	    パスワード画面コンテンツ
-	    <textarea name="item_password_content">{PASSWORD_CONTENT}</textarea>
+	    <th rowspan="3">アクセス制御</th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_password" {USE_PASSWORD} /><span {_HELP_OTHER_USE_PASSWORD}>パスワードによるアクセス制限</span></label></div>
 	    </td>
+	</tr>
+    <tr>
+	    <th>パスワード画面コンテンツ</th>
+	</tr>
+    <tr>
+	    <td class="ckeditor"><textarea name="item_password_content">{PASSWORD_CONTENT}</textarea></td>
 	</tr>
     <tr>
 	    <th rowspan="2"><span {_HELP_OTHER_LAYOUT}>レイアウト</span></th>
 	    <th>詳細表示</th>
 	</tr>
     <tr>
-	    <td><textarea name="item_layout_view_detail">{LAYOUT_VIEW_DETAIL}</textarea></td>
+	    <td class="ckeditor"><textarea name="item_layout_view_detail">{LAYOUT_VIEW_DETAIL}</textarea></td>
 	</tr>
     <tr>
 	    <th rowspan="3"><span {_HELP_OTHER_OUTPUT_HEAD}>ヘッダ出力</span></th>
-	    <td><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} /><span {_HELP_OTHER_OUTPUT_HEAD}>ヘッダにタグを出力する(SNS連携等)</span></td>
+	    <td>
+		<div class="checkbox"><label><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} /><span {_HELP_OTHER_OUTPUT_HEAD}>ヘッダにタグを出力する(SNS連携等)</span></label></div>
+		</td>
 	</tr>
     <tr>
 	    <th>詳細表示</th>
 	</tr>
     <tr>
-	    <td><textarea name="item_head_view_detail" class="form-control" rows="5">{HEAD_VIEW_DETAIL}</textarea></td>
+	    <td class="ckeditor"><textarea name="item_head_view_detail" class="form-control" rows="5">{HEAD_VIEW_DETAIL}</textarea></td>
 	</tr>
     <patTemplate:tmpl name="option_smartphone" visibility="hidden">
     <tr>
 	    <th>その他</th>
-	    <td><input type="checkbox" name="item_jquery_mobile_format" {JQUERY_MOBILE_FORMAT_CHECKED} />jQuery Mobile対応</td>
+	    <td>
+		<div class="checkbox"><label><input type="checkbox" name="item_jquery_mobile_format" {JQUERY_MOBILE_FORMAT_CHECKED} />jQuery Mobile対応</label></div>
+		</td>
 	</tr>
     </patTemplate:tmpl>
     </tbody>
