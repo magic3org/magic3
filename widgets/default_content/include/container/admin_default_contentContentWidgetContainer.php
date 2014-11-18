@@ -31,13 +31,13 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	private $selectedPlugin = array();			// 選択しているjQueryプラグイン
 	private $addLib = array();		// 追加スクリプトライブラリ
 	private $templateId;	// テンプレートID
-	const ICON_SIZE = 16;		// アイコンのサイズ
+	const ICON_SIZE = 32;		// アイコンのサイズ
 	const PANEL_BUTTON_SIZE = 32;	// 拡張エリア制御ボタンサイズ
 	const INC_INDEX = 1;		// メニュー項目表示順の増加分
 	const ADMIN_WIDGET_ID = 'admin_main';		// 管理ウィジェットのウィジェットID
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
-	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
-	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const ADD_TO_MENU_ICON_FILE = '/images/system/addtomenu.png';		// メニューに追加用アイコン
 	const PREVIEW_ICON_FILE = '/images/system/preview.png';		// プレビュー用アイコン
 	const OPEN_PANEL_ICON_FILE = '/images/system/plus32.png';		// 拡張エリア表示用アイコン
@@ -1096,8 +1096,10 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		if ($fetchedRow['cn_user_limited']) $limited = 'checked';
 
 		// デフォルト時の項目かどうか
-		$default = '';
-		if ($fetchedRow['cn_default']) $default = 'checked';
+//		$default = '';
+//		if ($fetchedRow['cn_default']) $default = 'checked';
+		$defaultIcon = '';
+		if ($fetchedRow['cn_default']) $defaultIcon = '<i class="glyphicon glyphicon-asterisk" data-container="body" rel="m3help" title="デフォルト項目"></i>';
 		
 		// 対応言語を取得
 		$lang = '';
@@ -1122,7 +1124,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
 			$iconTitle = '非公開';
 		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// 操作用ボタン
 		$addToMenuImg = $this->getUrl($this->gEnv->getRootUrl() . self::ADD_TO_MENU_ICON_FILE);		// メニューに追加用アイコン
@@ -1159,7 +1161,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			'update_dt' => $this->convertToDispDateTime($fetchedRow['cn_create_dt']),	// 更新日時
 			'visible' => $visible,											// メニュー項目表示制御
 			'limited' => $limited,											// ユーザ制限
-			'default' => $default,											// デフォルト項目
+			'default_icon' => $defaultIcon,											// デフォルト項目
+		//	'default' => $default,											// デフォルト項目
 			'add_to_menu_img' => $addToMenuImg,											// メニューに追加用の画像
 			'add_to_menu_str' => $addToMenuStr,											// メニューに追加用の文字列
 			'status_url' => $statusUrl,											// 現在の表示画面用URL

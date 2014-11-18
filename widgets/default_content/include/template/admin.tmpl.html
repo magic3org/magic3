@@ -96,7 +96,6 @@ function previewInOtherWindow(url)
 	return true;
 }
 $(function(){
-	m3SetConfigTable('searchfield');
 	m3SetConfigTable('contlist');
 });
 //]]>
@@ -109,7 +108,9 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
-<h3 class="m3config_h"><span {_HELP_CONTENT}>コンテンツ一覧</span><a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" rel="m3help" /></a></h3>
+<h3 class="m3config_h"><span {_HELP_CONTENT}>コンテンツ一覧</span><!--<a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" rel="m3help" /></a>-->
+<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="コンテンツを検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>
+</h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
@@ -146,56 +147,35 @@ $(function(){
 </div>
 </div>
 
-<!--
-<div id="search_comment" class="m3search" style="display:none;border:2px;">
-<h4><span {_HELP_CONTENT_SEARCH}>コンテンツ検索</span></h4>
-<table id="searchfield">
-    <tbody>
-    <tr>
-	    <th width="100"><span {_HELP_CONTENT_SEARCH_KEYWORD}>キーワード</span></th>
-	    <td><input type="text" id="search_keyword" name="search_keyword" value="{SEARCH_KEYWORD}" maxlength="50" style="width:98%;" /></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_CONTENT_SEARCH_SORT}>ソート</span></th>
-	    <td>キー：<label><input type="radio" name="search_key" value="0" {SEARCH_CONTENT_ID_CHECKED}>コンテンツID</label><label><input type="radio" name="search_key" value="1" {SEARCH_UPDATE_DT_CHECKED}>更新日時</label>
-	    &nbsp;&nbsp;&nbsp;&nbsp;順序：<label><input type="radio" name="search_order" value="0" {SEARCH_ASC_CHECKED}>昇順</label><label><input type="radio" name="search_order" value="1" {SEARCH_DESC_CHECKED}>降順</label></td>
-	</tr>
-    </tbody>
-</table>
-<div class="m3config_update_buttons">
-<input type="button" class="button" onclick="clearSearchParam();" value="クリア" /> <input type="button" class="button" onclick="search();" value="検索" />
-</div>
-</div>-->
-
 <patTemplate:tmpl name="show_singlelang" visibility="hidden"><!-- 単一言語対応時 start -->
 <table id="contlist">
     <thead>
         <tr>
-            <th width="4%"><span {_HELP_CONTENT_CHECK}>選択</span></th>
-            <th width="4%"><span {_HELP_CONTENT_ID}>ID</span></th>
-            <th width="30%"><span {_HELP_CONTENT_NAME}>名前</span></th>
-	    <th width="4%"><span {_HELP_CONTENT_STATUS}>状態</span></th>
-	    <th width="4%"><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
-	    <th width="7%"><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span></th>
-	    <th width="7%"><span {_HELP_CONTENT_DEFAULT}>デフォルト</span></th>
-	    <th width="13%"><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
-	    <th width="5%"><span {_HELP_CONTENT_VIEW_COUNT}>閲覧</span></th>
-	    <th><span {_HELP_CONTENT_ACT}>操作</span></th>
+            <th class="select"><span {_HELP_CONTENT_CHECK}>選択</span></th>
+            <th style="width:50px;"><span {_HELP_CONTENT_ID}>ID</span></th>
+            <th><span {_HELP_CONTENT_NAME}>名前</span></th>
+	    <th style="width:50px;"><span {_HELP_CONTENT_STATUS}>状態</span></th>
+	    <th style="width:50px;"><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
+	    <th style="width:50px;"><span {_HELP_CONTENT_LIMITED}>制限</span></th>
+		<th style="width:50px;"><span {_HELP_CONTENT_VIEW_COUNT}>閲覧</span></th>
+	    <!--<th width="7%"><span {_HELP_CONTENT_DEFAULT}>デフォルト</span></th>-->
+	    <th style="width:120px;"><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
+	    <th style="width:60px;"><span {_HELP_CONTENT_ACT}>操作</span></th>
 	</tr>
     </thead>
     <tbody>
         <patTemplate:tmpl name="itemlist">
         <tr>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td align="center"><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
-	    <td>{NAME}</td>
-	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
-	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
-	    <td align="center"><input type="checkbox" disabled {LIMITED} /></td>
-	    <td align="center"><input type="checkbox" disabled {DEFAULT} /></td>
-	    <td align="center">{UPDATE_DT}</td>
-	    <td align="center">{VIEW_COUNT}</td>
-	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="16" height="16" border="0" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="16" height="16" border="0" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a></td>
+	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
+	    <td><div class="form-control-static col-sm-11 m3config_item">{NAME}</div><div class="form-control-static col-sm-1 text-right m3config_item">{DEFAULT_ICON}</div></td>
+	    <td class="status"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
+	    <td class="status"><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td class="status"><input type="checkbox" disabled {LIMITED} /></td>
+		<td class="number">{VIEW_COUNT}</td>
+	    <!--<td><input type="checkbox" disabled {DEFAULT} /></td>-->
+	    <td>{UPDATE_DT}</td>
+	    <td><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="32" height="32" rel="m3help" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="32" height="32" rel="m3help" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
@@ -205,33 +185,33 @@ $(function(){
 <table id="contlist">
     <thead>
         <tr>
-            <th width="4%"><span {_HELP_CONTENT_CHECK}>選択</span></th>
-            <th width="4%"><span {_HELP_CONTENT_ID}>ID</span></th>
-            <th width="25%"><span {_HELP_CONTENT_NAME}>名前</span></th>
-	    <th width="4%"><span {_HELP_CONTENT_LANG}>言語</span></th>
-	    <th width="4%"><span {_HELP_CONTENT_STATUS}>状態</span></th>
-	    <th width="4%"><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
-	    <th width="7%"><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span></th>
-	    <th width="7%"><span {_HELP_CONTENT_DEFAULT}>デフォルト</span></th>
-	    <th width="13%"><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
-	    <th width="5%"><span {_HELP_CONTENT_VIEW_COUNT}>閲覧</span></th>
-	    <th><span {_HELP_CONTENT_ACT}>操作</span></th>
+            <th class="select"><span {_HELP_CONTENT_CHECK}>選択</span></th>
+            <th style="width:50px;"><span {_HELP_CONTENT_ID}>ID</span></th>
+            <th><span {_HELP_CONTENT_NAME}>名前</span></th>
+	    <th style="width:60px;"><span {_HELP_CONTENT_LANG}>言語</span></th>
+	    <th style="width:50px;"><span {_HELP_CONTENT_STATUS}>状態</span></th>
+	    <th style="width:50px;"><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
+	    <th style="width:50px;"><span {_HELP_CONTENT_LIMITED}>制限</span></th>
+		<th style="width:50px;"><span {_HELP_CONTENT_VIEW_COUNT}>閲覧</span></th>
+	    <!--<th width="7%"><span {_HELP_CONTENT_DEFAULT}>デフォルト</span></th>-->
+	    <th style="width:120px;"><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
+	    <th style="width:60px;"><span {_HELP_CONTENT_ACT}>操作</span></th>
 	</tr>
     </thead>
     <tbody>
         <patTemplate:tmpl name="itemlist2">
         <tr>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td align="center">{ID}</td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
+	    <td><div class="form-control-static col-sm-11 m3config_item">{NAME}</div><div class="form-control-static col-sm-1 text-right m3config_item">{DEFAULT_ICON}</div></td>
 	    <td>{LANG}</td>
-	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
-	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
-	    <td align="center"><input type="checkbox" disabled {LIMITED} /></td>
-	    <td align="center"><input type="checkbox" disabled {DEFAULT} /></td>
-	    <td align="center">{UPDATE_DT}</td>
-	    <td align="center">{VIEW_COUNT}</td>
-	    <td align="center"><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="16" height="16" border="0" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="16" height="16" border="0" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a></td>
+	    <td class="status"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
+	    <td class="status"><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td class="status"><input type="checkbox" disabled {LIMITED} /></td>
+		<td class="number">{VIEW_COUNT}</td>
+	    <!--<td><input type="checkbox" disabled {DEFAULT} /></td>-->
+	    <td>{UPDATE_DT}</td>
+	    <td><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="16" height="16" border="0" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="16" height="16" border="0" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
