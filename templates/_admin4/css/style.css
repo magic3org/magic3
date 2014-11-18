@@ -647,6 +647,18 @@ background-color: #0081c2;
 .m3config_table th {
 	width: 150px;
 }
+.m3config_table th.select {
+	width: 50px;
+}
+.m3config_table td.select {
+	text-align: center;
+}
+.m3config_table td.status {
+	text-align: center;
+}
+.m3config_table td.number {
+	text-align: right;
+}
 .m3config_table td.ckeditor {
 	padding: 0;
 }
