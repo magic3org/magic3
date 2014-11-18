@@ -42,7 +42,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	const PREVIEW_ICON_FILE = '/images/system/window32.png';		// プレビュー用アイコン
 	const OPEN_PANEL_ICON_FILE = '/images/system/plus32.png';		// 拡張エリア表示用アイコン
 	const CLOSE_PANEL_ICON_FILE = '/images/system/minus32.png';		// 拡張エリア非表示用アイコン
-	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
+	const DELETE_ICON_FILE = '/images/system/delete32.png';		// 行削除用アイコン
 	const LANG_ICON_PATH = '/images/system/flag/';		// 言語アイコンパス
 	const MSG_UPDATE_CONTENT = 'コンテンツを更新しました';			// コンテンツ更新メッセージ
 	const DEFAULT_SEARCH_KEY = '1';			// デフォルトの検索キー(更新日時)
@@ -270,12 +270,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		} else {
 			$this->tmpl->addVar('_widget', 'search_desc_checked', 'checked');
 		}
-		
-		// ボタン作成
-		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
-		$searchStr = '検索フィールドを表示';
-		$this->tmpl->addVar("_widget", "search_img", $searchImg);
-		$this->tmpl->addVar("_widget", "search_str", $searchStr);
 		
 		// 検索条件
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
@@ -935,6 +929,11 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVar('_widget', 'admin_widget_id', self::ADMIN_WIDGET_ID);// ユーザ定義値参照用(管理ウィジェットのウィジェットID)
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 		
+		$iconUrl = $this->gEnv->getRootUrl() . self::DELETE_ICON_FILE;			// 行削除アイコン
+		$iconTitle = '削除';
+		$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$this->tmpl->addVar('_widget', 'delete_icon', $iconTag);
+		
 		// CKEditor用のCSSファイルを読み込む
 		$this->loadCKEditorCssFiles($previewUrl);
 		
@@ -1355,6 +1354,11 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	 */
 	function createAttachFileList()
 	{
+		// アイコンタグ作成
+		$iconUrl = $this->gEnv->getRootUrl() . self::DELETE_ICON_FILE;			// 行削除アイコン
+		$iconTitle = '削除';
+		$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
 		$fileCount = count($this->attachFileInfoArray);
 		for ($i = 0; $i < $fileCount; $i++){
 			$infoObj = $this->attachFileInfoArray[$i];
@@ -1366,7 +1370,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				'title' => $this->convertToDispString($title),
 				'filename' => $this->convertToDispString($filename),
 				'file_id' => $this->convertToDispString($fileId),
-				'root_url' => $this->convertToDispString($this->getUrl($this->gEnv->getRootUrl()))
+				'delete_icon' => $iconTag
 			);
 			$this->tmpl->addVars('attach_file_list', $row);
 			$this->tmpl->parseTemplate('attach_file_list', 'a');

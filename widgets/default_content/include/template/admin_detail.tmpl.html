@@ -88,7 +88,7 @@ function addAttachFile(fileid, filename)
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
 	lineText += '<td><input type="text" name="item_filetitle[]" class="form-control" size="20" maxlength="60" /></td>';
 	lineText += '<td><input type="text" name="item_filename[]" class="form-control" size="30" maxlength="100" value="' + filename + '" /></td>';
-	lineText += '<td align="center"><input type="hidden" name="item_fileid[]" value="' + fileid + '" /><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	lineText += '<td align="center"><input type="hidden" name="item_fileid[]" value="' + fileid + '" /><a class="delLine" href="#">{DELETE_ICON}</a></td></tr>';
 	$('#attach_file_list').append(lineText);
 	
 	// 項目一覧を再設定
@@ -353,17 +353,18 @@ $(function(){
  	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_ATTACH_FILE}>添付ファイル</span></th>
 	    <td colspan="5">
-	    <table id="attach_file_list" class="simple-table simple-table-inner">
+	    <!--<table id="attach_file_list" class="simple-table simple-table-inner">-->
+		<table id="attach_file_list" class="table table-condensed table-bordered table-striped">
 	    <thead>
 	    <tr><th style="width:35px;">移動</th><th style="width:30px;">No</th><th style="width:200px;">タイトル</th><th>ファイル名</th><th style="width:35px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="attach_file_list">
-            <tr class="dragRow">
+        <tr class="dragRow">
 	    <td class="dragHandle"></td>
 	    <td align="center"><span class="lineNo"></span></td>
 	    <td><input type="text" name="item_filetitle[]" class="form-control" value="{TITLE}" size="20" maxlength="60" /></td>
 	    <td><input type="text" name="item_filename[]" class="form-control" value="{FILENAME}" size="30" maxlength="100" /></td>
-	    <td align="center"><input type="hidden" name="item_fileid[]" value="{FILE_ID}" /><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    <td align="center"><input type="hidden" name="item_fileid[]" value="{FILE_ID}" /><a class="delLine" href="#">{DELETE_ICON}</a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>

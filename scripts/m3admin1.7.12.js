@@ -709,7 +709,7 @@ function m3SetConfigTable(object)
 		tableObj = object;
 	}
 	// カラー設定
-	$(tableObj).addClass('table table-bordered table-striped m3config_table');
+	$(tableObj).addClass('table table-condensed table-bordered table-striped m3config_table');
 	$(tableObj).find('th').addClass('info');		// ヘッダ部
 //	$(tableObj).find('.buttonlist').addClass('pull-right');		// ボタン右寄せ
 	//$(tableObj).find('tbody tr:odd').addClass("table table-bordered table-striped table-hover");
