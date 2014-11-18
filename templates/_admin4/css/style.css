@@ -206,9 +206,9 @@ background-color: #0081c2;
 /* inner table */
 .simple-table-inner
 {
-/*	border: 1px solid #6C6C00;*/
 	border-collapse: collapse;
-	margin: 3px 0px;
+	width: 100%;
+	margin-bottom: 10px;
 }
 /* iwidget table */
 .iw_table
