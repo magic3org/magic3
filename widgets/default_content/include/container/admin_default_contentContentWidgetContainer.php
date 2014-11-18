@@ -38,8 +38,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
-	const ADD_TO_MENU_ICON_FILE = '/images/system/addtomenu.png';		// メニューに追加用アイコン
-	const PREVIEW_ICON_FILE = '/images/system/preview.png';		// プレビュー用アイコン
+	const ADD_TO_MENU_ICON_FILE = '/images/system/addtomenu32.png';		// メニューに追加用アイコン
+	const PREVIEW_ICON_FILE = '/images/system/preview32.png';		// プレビュー用アイコン
 	const OPEN_PANEL_ICON_FILE = '/images/system/plus32.png';		// 拡張エリア表示用アイコン
 	const CLOSE_PANEL_ICON_FILE = '/images/system/minus32.png';		// 拡張エリア非表示用アイコン
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
