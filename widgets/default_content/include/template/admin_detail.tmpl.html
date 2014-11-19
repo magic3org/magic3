@@ -122,16 +122,6 @@ function setupNo()
 		$(this).text(index + 1);
 	});
 }
-/*function uploadCheck(){
-	if (!document.upload.upfile.value){
-		alert('アップロードするファイルが選択されていません');
-		return false;
-	}
-	if (!window.confirm('ファイルをアップロードします')) return false;
-	document.upload.act.value = 'upload';
-	document.upload.submit();
-	return false;
-}*/
 function createUploader(){
 	var uploader = new qq.FileUploader({
 		element: document.getElementById('file-uploader'),
@@ -214,13 +204,13 @@ $(function(){
 
 <div class="m3config_h_side_buttons pull-right">
 <patTemplate:tmpl name="cancel_button" visibility="visible">
-<div {_HELP_CONTENT_BUTTONS2}><div class="btn-group">
+<div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /><input type="button" class="button" onclick="cancelItem();" value="戻る" />
 </div></div>
 </patTemplate:tmpl>
 </div>
 <div class="m3config_h_side_buttons pull-right" style="margin-right:10px;">
-<div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
+<div {_HELP_CONTENT_BUTTONS2}><div class="btn-group">
 <input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} /><input type="button" class="button" onclick="addToMenu('{SEL_ITEM_ID}');" value="メニューに追加" {PREVIEW_BTN_DISABLED} /><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} />
 </div></div>
 </div>
@@ -232,25 +222,27 @@ $(function(){
     <tbody>
     <tr>
 	    <th><span {_HELP_CONTENT_ID}>ID</span></th>
-	    <td style="width:150px;">{ITEM_ID}</td>
+	    <td colspan="5"><div class="form-control-static m3config_item" >{ITEM_ID}</div></td>
+	</tr>
+	<tr>
 	    <th><span {_HELP_CONTENT_NAME}>名前</span></th>
 	<patTemplate:tmpl name="show_singlelang" visibility="hidden">
-	    <td colspan="3"><input type="text" name="item_name" class="form-control" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
+	    <td colspan="5"><input type="text" name="item_name" class="form-control" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_multilang" visibility="hidden">
-	    <td><input type="text" name="item_name" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
-	    <th><span {_HELP_CONTENT_LANG}>言語</span></th>
-	    <td>
-	<patTemplate:tmpl name="default_lang" visibility="hidden">
-	{DEFAULT_LANG}
-	</patTemplate:tmpl>
-	<patTemplate:tmpl name="select_lang" visibility="hidden">
-		    <select name="item_lang" class="form-control" onchange="selectItemLang();">
+	    <td colspan="2"><input type="text" name="item_name" class="form-control" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
+	    <th style="width:150px;"><span {_HELP_CONTENT_LANG}>言語</span></th>
+	    <td colspan="2">
+	    <patTemplate:tmpl name="default_lang" visibility="hidden">{DEFAULT_LANG}</patTemplate:tmpl>
+	    <patTemplate:tmpl name="select_lang" visibility="hidden">
+		    <div class="col-sm-6 m3config_item">
+			<select name="item_lang" class="form-control" onchange="selectItemLang();">
 		        <patTemplate:tmpl name="lang_list">
 		        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 		        </patTemplate:tmpl>
 		    </select>
-	</patTemplate:tmpl>&nbsp;&nbsp;{LANG}
+			</div>
+	    </patTemplate:tmpl>&nbsp;&nbsp;{LANG}
 	    </td>
 	</patTemplate:tmpl>
 	</tr>
@@ -264,7 +256,11 @@ $(function(){
 	</tr>
 	<tr>
 	    <th><span {_HELP_CONTENT_ACTIVE_TERM}>公開期間</span></th>
-	    <td colspan="5">開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" /></td>
+	    <td colspan="5">
+		<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item">時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-5">～</div></div><div style="clear:both;"></div>
+        <div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item" >時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div></div>
+		<!--開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" />-->
+		</td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONTENT_BODY}>内容</span>
@@ -323,9 +319,9 @@ $(function(){
 	</tr>
 	<tr>
 	    <th><span {_HELP_CONTENT_UPDATE_USER}>更新者</span></th>
-	    <td>{UPDATE_USER}</td>
+	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
 	    <th><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
-	    <td colspan="3">{UPDATE_DT}</td>
+	    <td colspan="3"><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_PASSWORD}>パスワード</span></th>
@@ -372,7 +368,7 @@ $(function(){
 	    </td>
 	</tr>
 	<tr>
-	    <td colspan="6"><div class="pull-left"><!--<a id="button_open" href="#">-->{OPEN_BUTTON}<!--</a><a id="button_close" href="#">-->{CLOSE_BUTTON}<!--</a>--></div></td>
+	    <td colspan="6"><div class="pull-left">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>
 	</tr>
     </tbody>
 </table>

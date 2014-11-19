@@ -73,6 +73,11 @@ $HELP['content_password']['body'] = 'コンテンツにパスワードを掛け�
 $HELP['content_attach_file']['title'] = '添付ファイル';
 $HELP['content_attach_file']['body'] = 'コンテンツに添付するファイルを指定します。ファイルを追加するには、「ファイルアップロード」領域にファイルをドロップするか、クリックで表示したダイアログでファイルを選択します。';
 
+$HELP['content_buttons']['title'] = '操作ボタン';
+$HELP['content_buttons']['body'] = '新規 - 新規コンテンツを追加します。<br />編集 - 選択されているコンテンツを編集します。<br />コンテンツを選択するには、一覧の左端のチェックボックスにチェックを入れます。<br />削除ボタン - 選択されているコンテンツを削除します。<br />コンテンツを選択するには、一覧の左端のチェックボックスにチェックを入れます。';
+$HELP['content_buttons2']['title'] = '操作ボタン';
+$HELP['content_buttons2']['body'] = '履歴 - コンテンツの編集履歴を表示します。<br />メニューに追加 - コンテンツへのリンクをメニューに追加します。<br />プレビュー - コンテンツをプレビュー表示します。';
+
 $HELP['content_new_btn']['title'] = '新規ボタン';
 $HELP['content_new_btn']['body'] = '新規コンテンツを追加します。';
 $HELP['content_edit_btn']['title'] = '編集ボタン';
@@ -87,7 +92,7 @@ $HELP['content_addmenu_btn']['title'] = 'メニューに追加';
 $HELP['content_addmenu_btn']['body'] = 'コンテンツへのリンクをメニューに追加します。';
 $HELP['content_history_btn']['title'] = '履歴ボタン';
 $HELP['content_history_btn']['body'] = 'コンテンツの編集履歴を表示します。';
-
+			
 // ########## 基本設定 ##########
 $HELP['other_layout']['title'] = 'レイアウト';
 $HELP['other_layout']['body'] = 'コンテンツのレイアウトを設定します。<br />「[#～#]」は自動変換されるMagic3マクロです。「[#USER_SSS#]」(Sは任意の半角英大文字)の形式で、「ユーザ定義フィールド」として任意にフィールドを追加することができます。';
