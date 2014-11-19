@@ -74,7 +74,11 @@ function previewInOtherWindow()
 // メニューに追加
 function addToMenu(selId)
 {
-	window.open("?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=simple&contentid=" + selId, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=no,resizable=no,width=500,height=300");
+//	window.open("?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=simple&contentid=" + selId, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=no,resizable=no,width=500,height=300");
+
+	BootstrapDialog.show({
+		message: $('<div></div>').load('?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=dialog&contentid=' + selId)
+	});
 	return true;
 }
 function selectItemLang(){

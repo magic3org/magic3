@@ -79,7 +79,7 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 	function _postAssign($request, &$param)
 	{
 		// ウィンドウオープンタイプ取得
-		if ($this->_openBy == 'simple' || $this->_openBy == 'tabs') return;			// シンプルウィンドウまたはタブ表示のときはメニューを表示しない
+		if ($this->_openBy == 'simple' || $this->_openBy == 'tabs' || $this->_openBy == 'dialog') return;	// シンプルウィンドウまたはタブ、ダイアログ表示のときはメニューを表示しない
 				
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);

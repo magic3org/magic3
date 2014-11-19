@@ -277,7 +277,7 @@ class PageManager extends Core
 			// Javascriptライブラリ
 			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
 			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// 管理パネル用スクリプト追加
-			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
+//			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
 		}
 		
 		// 管理権限なしで管理ディレクトリアクセスで読み込むスクリプトファイル
@@ -1388,7 +1388,7 @@ class PageManager extends Core
 					if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
 						$this->isEditMode = true;			// 一般画面編集モード
 					
-						$this->addScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
+//						$this->addScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
 						$this->addScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
 					//	$this->addScriptFile(self::M3_PLUS_SCRIPT_FILENAME);		// 一般画面追加用スクリプト追加(PLUSライブラリを追加する場合はFCKEditorも使用可能にする)
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
@@ -2539,8 +2539,8 @@ class PageManager extends Core
 							echo '<div align="left" style="float:left;padding-left:30px;"><label>' . convertToHtmlEntity($serverName) . '</label></div>';
 						}
 					}
-					// タブ形式以外のときは「閉じる」ボタンを表示
-					if ($openBy != 'tabs'){
+					// タブ、インナーフレーム、ダイアログ表示以外のときは「閉じる」ボタンを表示
+					if ($openBy != 'tabs' && $openBy != 'iframe' && $openBy != 'dialog'){		// 以外
 						if ($openBy == 'logout'){
 							$titleStr = 'ログアウト';
 							echo '<div class="m3configclose"><a href="#" onclick="location.href=\'?cmd=logout\';" data-placement="left" data-container="body" title="' . $titleStr . '" rel="m3help"><img src="' . $rootUrl . self::CLOSE_ICON_FILE . 
