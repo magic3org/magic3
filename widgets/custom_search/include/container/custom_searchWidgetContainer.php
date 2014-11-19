@@ -441,9 +441,12 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				// ブログ記事を取得
 				$ret = $this->db->getEntryByEntryId($entryId, $this->langId, $row);
 				if ($ret){
+					$content = trim($row['be_html']);
+					if (empty($content)) $content = trim($row['be_html_ext']);		// 本文1がない場合は本文2を表示
+					
 					// テキストに変換。HTMLタグ削除。
-					$content = $this->gInstance->getTextConvManager()->htmlToText($row['be_html']);
-		
+					$content = $this->gInstance->getTextConvManager()->htmlToText($content);
+
 					// 検索結果用のテキスト作成
 					$summary = $this->_createSummaryText($content);
 				}
