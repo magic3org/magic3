@@ -694,6 +694,15 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			
 			// システム強制終了
 			$this->gPage->exitSystem();
+		} else if ($act == 'getmenu'){		// メニュー定義取得
+			// コンテンツ選択メニューを作成
+			$this->menuHtml  = '<select name="contentid">';
+	        $this->menuHtml .= '<option value="0">-- 未選択 --</option>';
+//			$this->db->getAllContentItems(array($this, 'itemListLoop'), $this->langId);
+			$this->menuHtml .= '</select>';
+
+			$this->gInstance->getAjaxManager()->addData('html', $this->menuHtml);
+			return;
 		} else {
 			// ##### コンテンツIDが設定されているとき(他ウィジェットからの表示)は、データを取得 #####
 			if (empty($contentId)){

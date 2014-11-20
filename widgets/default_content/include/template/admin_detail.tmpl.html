@@ -77,7 +77,38 @@ function addToMenu(selId)
 //	window.open("?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=simple&contentid=" + selId, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=no,resizable=no,width=500,height=300");
 
 	BootstrapDialog.show({
-		message: $('<div></div>').load('?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=dialog&contentid=' + selId)
+		type: BootstrapDialog.TYPE_PRIMARY,
+		title: 'メニューの選択',
+		message: '<strong>hello</strong>',
+		closable: false,
+		onshow: function(dialog) {
+			// Ajaxでメニュー定義一覧を取得
+			m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=content_detail&act=getmenu&contentid=' + selId, function(request, retcode, jsondata){		// 正常終了
+				// メニュー選択テーブルを作成
+				if (jsondata.html) dialog.setMessage(jsondata.html);
+			}, function(request){		// 異常終了
+				alert('通信に失敗しました。');
+			});
+		},
+		data: {
+			'callback': function (){
+				alert("ok...");
+			}
+		},
+		buttons: [{
+			label: 'キャンセル',
+			action: function(dialog) {
+				//typeof dialog.getData('callback') === 'function' && dialog.getData('callback')(false);
+				dialog.close();
+			}
+		}, {
+			label: 'OK',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				typeof dialog.getData('callback') === 'function' && dialog.getData('callback')(true);
+				dialog.close();
+			}
+		}]
 	});
 	return true;
 }
