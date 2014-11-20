@@ -243,7 +243,7 @@ function m3Alert(type, message, after_callback, title)
 			title = '失敗';
 			break;
 		case 'warning':
-			title="警告";
+			title = "警告";
 			break;
 		case 'danger':
 			title = 'エラー';

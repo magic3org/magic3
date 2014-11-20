@@ -695,13 +695,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			// システム強制終了
 			$this->gPage->exitSystem();
 		} else if ($act == 'getmenu'){		// メニュー定義取得
-			// コンテンツ選択メニューを作成
-			$this->menuHtml  = '<select name="contentid">';
-	        $this->menuHtml .= '<option value="0">-- 未選択 --</option>';
-//			$this->db->getAllContentItems(array($this, 'itemListLoop'), $this->langId);
-			$this->menuHtml .= '</select>';
-
-			$this->gInstance->getAjaxManager()->addData('html', $this->menuHtml);
+			$menuList = $this->getParsedTemplateData('default_menulist.tmpl.html', array($this, 'makeMenuList'));// メニュー定義一覧
+debug($menuList);
+			$this->gInstance->getAjaxManager()->addData('html', $menuList);
 			return;
 		} else {
 			// ##### コンテンツIDが設定されているとき(他ウィジェットからの表示)は、データを取得 #####
@@ -1483,6 +1479,20 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		$this->tmpl->addVars('template_list', $row);
 		$this->tmpl->parseTemplate('template_list', 'a');
 		return true;
+	}
+	/**
+	 * メニュー定義一覧データ作成処理コールバック
+	 *
+	 * @param object         $tmpl			テンプレートオブジェクト
+	 * @param								なし
+	 */
+	function makeMenuList($tmpl)
+	{
+/*		$tmpl->addVar("_tmpl", "widget_url",	$this->gEnv->getCurrentWidgetRootUrl());		// ウィジェットのURL
+		$tmpl->addVar("_tmpl", "search_text_id",	$this->searchTextId);		// 検索用テキストフィールドのタグID
+		$tmpl->addVar("_tmpl", "search_button_id",	$this->searchButtonId);		// 検索用ボタンのタグID
+		$tmpl->addVar("_tmpl", "search_reset_id",	$this->searchResetId);		// 検索エリアリセットボタンのタグID
+		*/
 	}
 }
 ?>
