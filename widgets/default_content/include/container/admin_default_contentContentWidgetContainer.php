@@ -1100,7 +1100,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 //		$default = '';
 //		if ($fetchedRow['cn_default']) $default = 'checked';
 		$defaultIcon = '';
-		if ($fetchedRow['cn_default']) $defaultIcon = '<i class="glyphicon glyphicon-asterisk" data-container="body" rel="m3help" title="デフォルト項目"></i>';
+		if ($fetchedRow['cn_default']) $defaultIcon = '<i class="glyphicon glyphicon-flag" data-container="body" rel="m3help" title="デフォルト項目"></i>';
 		
 		// 対応言語を取得
 		$lang = '';

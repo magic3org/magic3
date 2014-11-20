@@ -15,6 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_blog_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_mainDb.php');
+require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 
 class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
@@ -413,6 +414,12 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('公開期間が不正です');
 			}
 			
+			// 関連コンテンツのチェック
+			if (!empty($relatedContent)){
+				$contentIdArray = explode(',', $relatedContent);
+				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
+			}
+					
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// 保存データ作成
@@ -516,6 +523,12 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			// 期間範囲のチェック
 			if (!empty($start_date) && !empty($end_date)){
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('公開期間が不正です');
+			}
+			
+			// 関連コンテンツのチェック
+			if (!empty($relatedContent)){
+				$contentIdArray = explode(',', $relatedContent);
+				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
 			}
 			
 			// エラーなしの場合は、データを更新
