@@ -15,6 +15,7 @@
  */
 require_once($gEnvManager->getWidgetContainerPath('default_content') . '/admin_default_contentBaseWidgetContainer.php');
 require_once($gEnvManager->getLibPath()			. '/qqFileUploader/fileuploader.php');
+require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 
 class admin_default_contentContentWidgetContainer extends admin_default_contentBaseWidgetContainer
 {
@@ -398,6 +399,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('公開期間が不正です');
 			}
 			
+			// 関連コンテンツのチェック
+			if (!empty($relatedContent)){
+				$contentIdArray = explode(',', $relatedContent);
+				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
+			}
+			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// 保存データ作成
@@ -488,6 +495,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			// 期間範囲のチェック
 			if (!empty($start_date) && !empty($end_date)){
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('公開期間が不正です');
+			}
+			
+			// 関連コンテンツのチェック
+			if (!empty($relatedContent)){
+				$contentIdArray = explode(',', $relatedContent);
+				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
 			}
 			
 			// エラーなしの場合は、データを更新
