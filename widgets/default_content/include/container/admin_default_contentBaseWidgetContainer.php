@@ -29,7 +29,6 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 	// 画面
 	const TASK_CONTENT = 'content';							// コンテンツ管理
 	const TASK_CONTENT_DETAIL = 'content_detail';			// コンテンツ管理詳細
-	const TASK_ADD_TO_MENU = 'add_to_menu';	// コンテンツへのリンクをメニューに追加
 	const TASK_OTHER = 'other';								// その他設定
 	const TASK_HISTORY = 'history';							// コンテンツ履歴
 	

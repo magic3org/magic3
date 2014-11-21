@@ -46,7 +46,6 @@ class admin_default_contentWidgetContainer extends admin_default_contentBaseWidg
 		switch ($task){
 			case self::TASK_CONTENT:		// コンテンツ管理
 			case self::TASK_CONTENT_DETAIL:		// コンテンツ管理(詳細)
-			case self::TASK_ADD_TO_MENU:	// コンテンツへのリンクをメニューに追加
 				$task = self::TASK_CONTENT;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;

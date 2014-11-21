@@ -90,9 +90,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			case self::TASK_CONTENT_DETAIL:		// 詳細画面
 				$filename = 'admin_detail.tmpl.html';
 				break;
-//			case self::TASK_ADD_TO_MENU:		// コンテンツへのリンクをメニュー項目に追加
-//				$filename = 'admin_menu.tmpl.html';
-//				break;
 		}
 		return $filename;
 	}
@@ -116,9 +113,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			case self::TASK_CONTENT_DETAIL:		// 詳細画面
 				$this->createDetail($request);
 				break;
-//			case self::TASK_ADD_TO_MENU:		// コンテンツへのリンクをメニュー項目に追加
-//				$this->createAddToMenu($request);
-//				break;
 		}
 	}
 	/**
@@ -1059,83 +1053,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	 * @return string,array 				Javascriptライブラリ。出力しない場合は空文字列を設定。
 	 */
 	function _addScriptLibToHead($request, &$param)
-	//function _addAdminScriptLibToHead($request, &$param)
 	{
 		return $this->addLib;
 	}
-	/**
-	 * コンテンツへのリンクをメニューに追加するための画面作成
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
-	 */
-/*	function createAddToMenu($request)
-	{
-		// ユーザ情報、表示言語
-		$userId = $this->gEnv->getCurrentUserId();
-		$this->langId = $this->gEnv->getDefaultLanguage();
-
-		$act = $request->trimValueOf('act');
-		$contentId = $request->trimValueOf('contentid');		// コンテンツID
-		$serialList = $request->trimValueOf('seriallist');
-		if (!empty($serialList)){
-			$listedItem = explode(',', $serialList);
-			for ($i = 0; $i < count($listedItem); $i++){
-				// 項目がチェックされているかを取得
-				$itemName = 'item' . $i . '_selected';
-				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
-				if ($itemValue) $this->selectedItem[] = $listedItem[$i];// チェック項目
-			}
-		}
-		if ($act == 'addtomenu'){			// メニューに項目を追加
-			// URLの作成
-			switch (default_contentCommonDef::$_deviceType){		// デバイスごとの処理
-				case 0:		// PC
-				default:
-					$url = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . $this->gEnv->getDefaultPageId() . '.php?contentid=' . $contentId;
-					break;
-				case 1:		// 携帯
-					$url = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . M3_DIR_NAME_MOBILE . '/' . $this->gEnv->getDefaultPageId() . '.php?contentid=' . $contentId;
-					break;
-				case 2:		// スマートフォン
-					$url = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . M3_DIR_NAME_SMARTPHONE . '/' . $this->gEnv->getDefaultPageId() . '.php?contentid=' . $contentId;
-					break;
-			}
-
-			// コンテンツ名を取得
-			$menutItemName = '';
-			$ret = self::$_mainDb->getContentByContentId(default_contentCommonDef::$_contentType, $contentId, $this->langId, $row);
-			if ($ret) $menutItemName = $row['cn_name'];		// 名前は取得値を設定
-
-			// メニュー項目追加
-			for ($i = 0; $i < count($this->selectedItem); $i++){
-				$ret = self::$_mainDb->addMenuItem($this->selectedItem[$i], $menutItemName, $url);
-				if (!$ret) break;
-			}
-			if ($ret){
-				// 親ウィンドウを更新
-				//$this->gPage->updateParentWindow();		// 設定画面からの小ウィンドウ表示なので親ウィンドウ(設定画面)は更新しない
-					
-				$this->setGuidanceMsg('メニューにリンクを追加しました');
-				$this->completed = true;			// データ登録完了かどうか
-			} else {
-				$this->setAppErrorMsg('メニューのリンク追加に失敗しました');
-			}
-		}
-
-		// メニューID選択メニュー作成
-		self::$_mainDb->getMenuIdList(default_contentCommonDef::$_deviceType, array($this, 'menuIdListLoop'));
-		
-		$this->tmpl->addVar("_widget", "content_id", $contentId);// コンテンツID
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		
-		// 一覧項目がないときは、一覧を表示しない
-		if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');
-		
-		if ($this->completed){// 	データ追加完了のとき
-			$this->tmpl->addVar('_widget', 'add_disabled', 'disabled');// 「追加」ボタン
-		}
-	}*/
 	/**
 	 * 取得したデータをテンプレートに設定する
 	 *
