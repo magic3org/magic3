@@ -807,14 +807,15 @@ class default_contentDb extends BaseDb
 	 *
 	 * @param int	$deviceType		デバイスタイプ
 	 * @param function $callback	コールバック関数
+	 * @param object $tmpl			出力テンプレート
 	 * @return						なし
 	 */
-	function getMenuIdList($deviceType, $callback)
+	function getMenuIdList($deviceType, $callback, $tmpl)
 	{
 		$queryStr = 'SELECT * FROM _menu_id ';
 		$queryStr .=  'WHERE mn_device_type = ? ';
 		$queryStr .=  'ORDER BY mn_sort_order';
-		$this->selectLoop($queryStr, array($deviceType), $callback);
+		$this->selectLoop($queryStr, array($deviceType), $callback, $tmpl);
 	}
 	/**
 	 * コンテンツ履歴を取得

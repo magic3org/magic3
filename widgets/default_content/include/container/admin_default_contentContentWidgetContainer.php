@@ -90,9 +90,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			case self::TASK_CONTENT_DETAIL:		// 詳細画面
 				$filename = 'admin_detail.tmpl.html';
 				break;
-			case self::TASK_ADD_TO_MENU:		// コンテンツへのリンクをメニュー項目に追加
-				$filename = 'admin_menu.tmpl.html';
-				break;
+//			case self::TASK_ADD_TO_MENU:		// コンテンツへのリンクをメニュー項目に追加
+//				$filename = 'admin_menu.tmpl.html';
+//				break;
 		}
 		return $filename;
 	}
@@ -116,9 +116,9 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			case self::TASK_CONTENT_DETAIL:		// 詳細画面
 				$this->createDetail($request);
 				break;
-			case self::TASK_ADD_TO_MENU:		// コンテンツへのリンクをメニュー項目に追加
-				$this->createAddToMenu($request);
-				break;
+//			case self::TASK_ADD_TO_MENU:		// コンテンツへのリンクをメニュー項目に追加
+//				$this->createAddToMenu($request);
+//				break;
 		}
 	}
 	/**
@@ -695,9 +695,52 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			// システム強制終了
 			$this->gPage->exitSystem();
 		} else if ($act == 'getmenu'){		// メニュー定義取得
-			$menuList = $this->getParsedTemplateData('default_menulist.tmpl.html', array($this, 'makeMenuList'));// メニュー定義一覧
-debug($menuList);
+			$menuList = $this->getParsedTemplateData('default_menulist.tmpl.html', array($this, 'makeMenuList'), $contentId);// メニュー定義一覧
 			$this->gInstance->getAjaxManager()->addData('html', $menuList);
+			return;
+		} else if ($act == 'addtomenu'){			// メニューに項目を追加
+			$serialList = $request->trimValueOf('seriallist');
+			if (!empty($serialList)){
+				$listedItem = explode(',', $serialList);
+				for ($i = 0; $i < count($listedItem); $i++){
+					// 項目がチェックされているかを取得
+					$itemName = 'item' . $i . '_selected';
+					$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
+					if ($itemValue) $this->selectedItem[] = $listedItem[$i];// チェック項目
+				}
+			}
+		
+			// URLの作成
+			switch (default_contentCommonDef::$_deviceType){		// デバイスごとの処理
+				case 0:		// PC
+				default:
+					$url = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . $this->gEnv->getDefaultPageId() . '.php?contentid=' . $contentId;
+					break;
+				case 1:		// 携帯
+					$url = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . M3_DIR_NAME_MOBILE . '/' . $this->gEnv->getDefaultPageId() . '.php?contentid=' . $contentId;
+					break;
+				case 2:		// スマートフォン
+					$url = M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END . '/' . M3_DIR_NAME_SMARTPHONE . '/' . $this->gEnv->getDefaultPageId() . '.php?contentid=' . $contentId;
+					break;
+			}
+
+			// コンテンツ名を取得
+			$menutItemName = '';
+			$ret = self::$_mainDb->getContentByContentId(default_contentCommonDef::$_contentType, $contentId, $this->langId, $row);
+			if ($ret) $menutItemName = $row['cn_name'];		// 名前は取得値を設定
+
+			// メニュー項目追加
+			for ($i = 0; $i < count($this->selectedItem); $i++){
+				$ret = self::$_mainDb->addMenuItem($this->selectedItem[$i], $menutItemName, $url);
+				if (!$ret) break;
+			}
+			if ($ret){
+				$this->gInstance->getAjaxManager()->addData('status', 'OK');
+				$this->gInstance->getAjaxManager()->addData('message', '<div class="alert alert-success">メニューにリンクを追加しました</div>');
+			} else {
+				$this->gInstance->getAjaxManager()->addData('status', 'NG');
+				$this->gInstance->getAjaxManager()->addData('message', '<div class="alert alert-error">メニューのリンク追加に失敗しました</div>');
+			}
 			return;
 		} else {
 			// ##### コンテンツIDが設定されているとき(他ウィジェットからの表示)は、データを取得 #####
@@ -1026,7 +1069,7 @@ debug($menuList);
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param								なし
 	 */
-	function createAddToMenu($request)
+/*	function createAddToMenu($request)
 	{
 		// ユーザ情報、表示言語
 		$userId = $this->gEnv->getCurrentUserId();
@@ -1092,7 +1135,7 @@ debug($menuList);
 		if ($this->completed){// 	データ追加完了のとき
 			$this->tmpl->addVar('_widget', 'add_disabled', 'disabled');// 「追加」ボタン
 		}
-	}
+	}*/
 	/**
 	 * 取得したデータをテンプレートに設定する
 	 *
@@ -1240,7 +1283,7 @@ debug($menuList);
 	 * @param object $param			未使用
 	 * @return bool					true=処理続行の場合、false=処理終了の場合
 	 */
-	function menuIdListLoop($index, $fetchedRow, $param)
+	function menuIdListLoop($index, $fetchedRow, $tmpl)
 	{
 		$id = $fetchedRow['mn_id'];
 		
@@ -1255,8 +1298,8 @@ debug($menuList);
 			'name' => $this->convertToDispString($fetchedRow['mn_name']),		// 名前
 			'check' => $checkStr		// チェック状態
 		);
-		$this->tmpl->addVars('itemlist', $row);
-		$this->tmpl->parseTemplate('itemlist', 'a');
+		$tmpl->addVars('itemlist', $row);
+		$tmpl->parseTemplate('itemlist', 'a');
 		
 		// 表示中項目IDを保存
 		$this->serialArray[] = $id;
@@ -1483,11 +1526,20 @@ debug($menuList);
 	/**
 	 * メニュー定義一覧データ作成処理コールバック
 	 *
-	 * @param object         $tmpl			テンプレートオブジェクト
-	 * @param								なし
+	 * @param object	$tmpl			テンプレートオブジェクト
+	 * @param object	$param			任意パラメータ(コンテンツID)
+	 * @param							なし
 	 */
-	function makeMenuList($tmpl)
+	function makeMenuList($tmpl, $param)
 	{
+		// メニューID選択メニュー作成
+		self::$_mainDb->getMenuIdList(default_contentCommonDef::$_deviceType, array($this, 'menuIdListLoop'), $tmpl);
+		if (!$this->isExistsContent) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧項目がないときは、一覧を表示しない
+
+		$tmpl->addVar("_tmpl", "content_id", $param);// コンテンツID
+		$tmpl->addVar("_tmpl", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+		
+		
 /*		$tmpl->addVar("_tmpl", "widget_url",	$this->gEnv->getCurrentWidgetRootUrl());		// ウィジェットのURL
 		$tmpl->addVar("_tmpl", "search_text_id",	$this->searchTextId);		// 検索用テキストフィールドのタグID
 		$tmpl->addVar("_tmpl", "search_button_id",	$this->searchButtonId);		// 検索用ボタンのタグID

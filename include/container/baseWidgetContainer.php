@@ -519,10 +519,11 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @param string $filename		テンプレートファイル名
 	 * @param function $callback	コールバック関数。「callback($tmpl) $tmpl=テンプレートオブジェクト」の形式で呼ばれる。
+	 * @param object $param			任意パラメータ
 	 * @param string $templateName	テンプレート名(デフォルトは「_tmpl」)
 	 * @return string				変換後データ
 	 */
-	function getParsedTemplateData($filename, $callback = NULL, $templateName = '_tmpl')
+	function getParsedTemplateData($filename, $callback = NULL, $param = NULL, $templateName = '_tmpl')
 	{
 		// テンプレートオブジェクト作成
 		$tmpl = new PatTemplate();
@@ -549,7 +550,7 @@ class BaseWidgetContainer extends Core
 		$tmpl->readTemplatesFromFile($filename);
 		
 		// コールバック関数を呼び出す
-		if (is_callable($callback)) call_user_func($callback, $tmpl);
+		if (is_callable($callback)) call_user_func($callback, $tmpl, $param);
 		
 		return $tmpl->getParsedTemplate($templateName);
 	}

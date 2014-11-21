@@ -11,7 +11,6 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<!--<script type="text/javascript" src="{_SCRIPTS_URL}/md5.js"></script>-->
 <style type="text/css">@import url({_SCRIPTS_URL}/jscalendar-1.0/calendar-win2k-1.css);</style>
 <script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/calendar.js"></script>
 <script type="text/javascript" src="{_SCRIPTS_URL}/jscalendar-1.0/lang/calendar-ja.js"></script>
@@ -74,13 +73,12 @@ function previewInOtherWindow()
 // メニューに追加
 function addToMenu(selId)
 {
-//	window.open("?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=simple&contentid=" + selId, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=no,resizable=no,width=500,height=300");
-
 	BootstrapDialog.show({
 		type: BootstrapDialog.TYPE_PRIMARY,
 		title: 'メニューの選択',
-		message: '<strong>hello</strong>',
+		message: 'データ読み込み中...',
 		closable: false,
+		nl2br: false,
 		onshow: function(dialog) {
 			// Ajaxでメニュー定義一覧を取得
 			m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=content_detail&act=getmenu&contentid=' + selId, function(request, retcode, jsondata){		// 正常終了
@@ -90,23 +88,43 @@ function addToMenu(selId)
 				alert('通信に失敗しました。');
 			});
 		},
-		data: {
-			'callback': function (){
-				alert("ok...");
-			}
-		},
 		buttons: [{
+			id: 'cancel',
 			label: 'キャンセル',
 			action: function(dialog) {
-				//typeof dialog.getData('callback') === 'function' && dialog.getData('callback')(false);
 				dialog.close();
 			}
 		}, {
+			id: 'ok',
 			label: 'OK',
 			cssClass: 'btn-primary',
 			action: function(dialog) {
-				typeof dialog.getData('callback') === 'function' && dialog.getData('callback')(true);
-				dialog.close();
+				if (document.menuform && document.menuform.seriallist.value){
+					var items = document.menuform.seriallist.value.split(",");
+					for (var i = 0; i < items.length; i++){
+						var name = "document.menuform.item" + i + "_selected";
+						var itemObj = eval(name);
+						// チェックありのときは終了
+						if (itemObj && itemObj.checked) break;
+					}
+					if (i == items.length){
+						alert('リンクを追加するメニューを選択してください');
+					} else {
+						// メニュー項目を追加
+						var postValues = $('#menuform').serialize();
+						m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&' + postValues, function(request, retcode, jsondata){		// 正常終了
+							// 処理終了の場合はボタンを変更
+							if (jsondata.status && jsondata.status == 'OK'){
+								dialog.getButton('ok').hide();
+								dialog.getButton('cancel').text('閉じる');
+							}
+							// メッセージ表示
+							if (jsondata.message) $('#menulist_msg').html(jsondata.message);
+						}, function(request){		// 異常終了
+							alert('通信に失敗しました。');
+						});
+					}
+				}
 			}
 		}]
 	});

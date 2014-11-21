@@ -11,12 +11,18 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_tmpl">
+<div id="menulist_msg">追加先のメニューを選択してください</div>
+<form method="post" id="menuform" name="menuform">
+<input type="hidden" name="task" value="content_detail" />
+<input type="hidden" name="act" value="addtomenu" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="contentid" value="{CONTENT_ID}" />
 <table id="menudef_list" class="table table-condensed table-bordered table-striped">
 <thead>
 	<tr>
-		<th width="35"><span {_HELP_MENU_CHECK}>選択</span></th>
-		<th width="100"><span {_HELP_MENU_ID}>ID</span></th>
-		<th><span {_HELP_MENU_NAME}>名前</span></th>
+		<th class="info" style="width:50px;"><span {_HELP_MENU_CHECK}>選択</span></th>
+		<th class="info"><span {_HELP_MENU_ID}>ID</span></th>
+		<th class="info"><span {_HELP_MENU_NAME}>名前</span></th>
 	</tr>
 </thead>
 <tbody>
@@ -29,4 +35,5 @@
 	</patTemplate:tmpl>
 </tbody>
 </table>
+</form>
 </patTemplate:tmpl>
