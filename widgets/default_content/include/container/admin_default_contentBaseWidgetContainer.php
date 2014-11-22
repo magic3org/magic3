@@ -78,8 +78,16 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 	function _postAssign($request, &$param)
 	{
 		// ウィンドウオープンタイプ取得
-		if ($this->_openBy == 'simple' || $this->_openBy == 'tabs' || $this->_openBy == 'dialog') return;	// シンプルウィンドウまたはタブ、ダイアログ表示のときはメニューを表示しない
-				
+		//if ($this->_openBy == 'simple' || $this->_openBy == 'tabs' || $this->_openBy == 'dialog') return;	// シンプルウィンドウまたはタブ、ダイアログ表示のときはメニューを表示しない
+		if ($this->_openBy == 'tabs' || $this->_openBy == 'dialog'){
+			return;	// タブ、ダイアログ表示のときはメニューを表示しない
+		} else if ($this->_openBy == 'simple'){		// シンプルウィンドウの場合はウィジェット名のみ表示
+			$navbarDef = new stdClass;
+			$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+			$this->gPage->setAdminSubNavbarDef($navbarDef);
+			return;
+		}
+		
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;
