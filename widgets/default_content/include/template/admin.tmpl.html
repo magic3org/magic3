@@ -84,11 +84,11 @@ function showSearchArea()
 	$('#search_comment').slideToggle('slow');
 }
 // メニューに追加
-function addToMenu(selId)
+/*function addToMenu(selId)
 {
 	window.open("?cmd=configwidget&widget={TARGET_WIDGET}&task=add_to_menu&openby=simple&contentid=" + selId, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=no,resizable=no,width=500,height=300");
 	return true;
-}
+}*/
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow(url)
 {
@@ -175,7 +175,7 @@ $(function(){
 		<td class="number">{VIEW_COUNT}</td>
 	    <!--<td><input type="checkbox" disabled {DEFAULT} /></td>-->
 	    <td>{UPDATE_DT}</td>
-	    <td><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="32" height="32" rel="m3help" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="32" height="32" rel="m3help" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a></td>
+	    <td><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="32" height="32" rel="m3help" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a><!--&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="32" height="32" rel="m3help" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a>--></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
@@ -211,7 +211,7 @@ $(function(){
 		<td class="number">{VIEW_COUNT}</td>
 	    <!--<td><input type="checkbox" disabled {DEFAULT} /></td>-->
 	    <td>{UPDATE_DT}</td>
-	    <td><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="32" height="32" rel="m3help" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="32" height="32" rel="m3help" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a></td>
+	    <td><a href="javascript:void(0);" onclick="previewInOtherWindow('{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="32" height="32" rel="m3help" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a><!--&nbsp;<a href="javascript:void(0);" onclick="addToMenu('{ID}');"><img src="{ADD_TO_MENU_IMG}" width="32" height="32" rel="m3help" alt="{ADD_TO_MENU_STR}" title="{ADD_TO_MENU_STR}" /></a>--></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
