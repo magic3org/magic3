@@ -275,17 +275,19 @@ $(function(){
     <tbody>
     <tr>
 	    <th><span {_HELP_CONTENT_ID}>ID</span></th>
-	    <td colspan="5"><div class="form-control-static m3config_item" >{ITEM_ID}</div></td>
+	    <td style="width:300px;"><div class="form-control-static m3config_item" >{ITEM_ID}</div></td>
+	    <th><span {_HELP_CONTENT_DEFAULT}>デフォルト項目</span></th>
+	    <td><div class="checkbox"><label style="display:inline;"><input type="checkbox" name="item_default" {SEL_ITEM_DEFAULT} /></label></div></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_CONTENT_NAME}>名前</span></th>
 	<patTemplate:tmpl name="show_singlelang" visibility="hidden">
-	    <td colspan="5"><input type="text" name="item_name" class="form-control" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
+	    <td colspan="3"><input type="text" name="item_name" class="form-control" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_multilang" visibility="hidden">
-	    <td colspan="2"><input type="text" name="item_name" class="form-control" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
+	    <td><input type="text" name="item_name" class="form-control" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></td>
 	    <th style="width:150px;"><span {_HELP_CONTENT_LANG}>言語</span></th>
-	    <td colspan="2">
+	    <td>
 	    <patTemplate:tmpl name="default_lang" visibility="hidden">{DEFAULT_LANG}</patTemplate:tmpl>
 	    <patTemplate:tmpl name="select_lang" visibility="hidden">
 		    <div class="col-sm-6 m3config_item">
@@ -303,13 +305,11 @@ $(function(){
 	    <th><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
 	    <td><div class="checkbox"><label style="display:inline;"><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} /></label></div></td>
 	    <th><span {_HELP_CONTENT_LIMITED}>ユーザ制限</span></th>
-	    <td style="width:150px;"><div class="checkbox"><label style="display:inline;"><input type="checkbox" name="item_limited" {SEL_ITEM_LIMITED} /></label></div></td>
-	    <th><span {_HELP_CONTENT_DEFAULT}>デフォルト項目</span></th>
-	    <td><div class="checkbox"><label style="display:inline;"><input type="checkbox" name="item_default" {SEL_ITEM_DEFAULT} /></label></div></td>
+	    <td><div class="checkbox"><label style="display:inline;"><input type="checkbox" name="item_limited" {SEL_ITEM_LIMITED} /></label></div></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_CONTENT_ACTIVE_TERM}>公開期間</span></th>
-	    <td colspan="5">
+	    <td colspan="3">
 		<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item">時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-5">～</div></div><div style="clear:both;"></div>
         <div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item" >時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div></div>
 		<!--開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" />-->
@@ -318,76 +318,78 @@ $(function(){
     <tr>
 	    <th><span {_HELP_CONTENT_BODY}>内容</span>
 	    <!--<span {_HELP_CONTENT_REF_CUSTOM}><input type="button" class="button" onclick="viewCustomValue();" value="置換文字列を参照" /></span>--></th>
-	    <td class="ckeditor" colspan="5">
+	    <td class="ckeditor" colspan="3">
 	        <textarea name="item_html">{SEL_ITEM_HTML}</textarea>
 	    </td>
 	</tr>
 <patTemplate:tmpl name="show_jquery" visibility="hidden">
     <tr>
 	    <th rowspan="4"><span {_HELP_CONTENT_JQUERY}>jQuery</span></th>
-	    <th colspan="5"><span {_HELP_CONTENT_SCRIPT}>スクリプト</span></th>
+	    <th colspan="3"><span {_HELP_CONTENT_SCRIPT}>スクリプト</span></th>
 	</tr>
     <tr>
-	    <td colspan="5" style="height:50px;"><textarea id="item_jquery_script" name="item_jquery_script" class="form-control">{JQUERY_SCRIPT}</textarea></td>
+	    <td colspan="3" style="height:50px;"><textarea id="item_jquery_script" name="item_jquery_script" class="form-control">{JQUERY_SCRIPT}</textarea></td>
 	</tr>
     <tr>
-	    <th colspan="5"><span {_HELP_CONTENT_PLUGIN}>プラグイン</span></th>
+	    <th colspan="3"><span {_HELP_CONTENT_PLUGIN}>プラグイン</span></th>
 	</tr>
     <tr>
-	    <td colspan="5">
+	    <td colspan="3">
 	    <patTemplate:tmpl name="plugin_list"><label class="item_list_inline"><input type="checkbox" name="item_lib_{ID}" {ID_CHECKED} />{NAME}</label></patTemplate:tmpl>
 	    </td>
 	</tr>
 </patTemplate:tmpl>
     <tr>
 	    <th><span {_HELP_CONTENT_DESC}>簡易説明</span></th>
-	    <td colspan="5"><input type="text" name="item_desc" class="form-control" value="{DESC}" size="100" maxlength="100" /></td>
+	    <td colspan="3"><input type="text" name="item_desc" class="form-control" value="{DESC}" size="100" maxlength="100" /></td>
 	</tr>
 	<patTemplate:tmpl name="user_fields" type="condition" conditionvar="type" visibility="hidden">
 	<pattemplate:sub condition="__default">
     <tr>
 		<th>{FIELD_ID}</th>
-	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" class="form-control" value="{VALUE}" size="40" maxlength="40" /></td>
+	    <td colspan="2"><input type="text" name="item_{FIELD_ID}" class="form-control" value="{VALUE}" size="40" maxlength="40" /></td>
 	</tr>
 	</pattemplate:sub>
 	<pattemplate:sub condition="first">
     <tr>
 	    <th rowspan="{ROW_COUNT}">ユーザ定義フィールド</th>
 		<th>{FIELD_ID}</th>
-	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" class="form-control" value="{VALUE}" size="40" maxlength="40" /></td>
+	    <td colspan="2"><input type="text" name="item_{FIELD_ID}" class="form-control" value="{VALUE}" size="40" maxlength="40" /></td>
 	</tr>
 	</pattemplate:sub>
 	</patTemplate:tmpl>
     <tr>
 	    <th><span {_HELP_CONTENT_META_TITLE}>タイトル名</span></th>
-	    <td colspan="5"><input type="text" name="item_meta_title" class="form-control" value="{META_TITLE}" size="30" maxlength="40" /></td>
+	    <td colspan="3"><input type="text" name="item_meta_title" class="form-control" value="{META_TITLE}" size="30" maxlength="40" /></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONTENT_META_DESCRIPTION}>ページ要約</span></th>
-	    <td colspan="5" height="50"><textarea name="item_meta_desc" class="form-control">{META_DESC}</textarea></td>
+	    <td colspan="3" height="50"><textarea name="item_meta_desc" class="form-control">{META_DESC}</textarea></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONTENT_META_KEYWORDS}>検索キーワード</span></th>
-	    <td colspan="5" height="50"><textarea name="item_meta_keyword" class="form-control">{META_KEYWORD}</textarea></td>
+	    <td colspan="3" height="50"><textarea name="item_meta_keyword" class="form-control">{META_KEYWORD}</textarea></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_CONTENT_UPDATE_USER}>更新者</span></th>
 	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
 	    <th><span {_HELP_CONTENT_UPDATE_DT}>更新日時</span></th>
-	    <td colspan="3"><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
+	    <td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_PASSWORD}>パスワード</span></th>
 	    <td><input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="10" maxlength="15" autocomplete="off" {PASSWORD_DISABLED} /></td>
 	    <th><span {_HELP_CONTENT_KEY}>外部参照用キー</span></th>
 	    <td><input type="text" name="item_key" class="form-control" value="{SEL_ITEM_KEY}" size="20" maxlength="20" {KEY_DISABLED} /></td>
+	</tr>
+	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_RELATED_CONTENT}>関連コンテンツ</span></th>
-	    <td><input type="text" name="item_related_content" class="form-control" value="{RELATED_CONTENT}" size="40" maxlength="40" {RELATED_CONTENT_DISABLED} /></td>
+	    <td colspan="3"><input type="text" name="item_related_content" class="form-control" value="{RELATED_CONTENT}" size="40" maxlength="40" {RELATED_CONTENT_DISABLED} /></td>
 	</tr>
 <patTemplate:tmpl name="show_template" visibility="hidden">
     <tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_TEMPLATE}>テンプレート</span></th>
-	    <td colspan="5">
+	    <td colspan="3">
 		    <div class="col-sm-4 m3config_item">
 		    <select name="item_template_id" class="form-control">
 			    <option value="">-- 選択なし --</option>
@@ -401,7 +403,7 @@ $(function(){
 </patTemplate:tmpl>
  	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_ATTACH_FILE}>添付ファイル</span></th>
-	    <td colspan="5">
+	    <td colspan="3">
 	    <!--<table id="attach_file_list" class="simple-table simple-table-inner">-->
 		<table id="attach_file_list" class="table table-condensed table-bordered table-striped">
 	    <thead>
@@ -421,7 +423,7 @@ $(function(){
 	    </td>
 	</tr>
 	<tr>
-	    <td colspan="6"><div class="pull-left">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>
+	    <td colspan="4"><div class="pull-left">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>
 	</tr>
     </tbody>
 </table>
