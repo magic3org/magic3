@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -30,8 +30,17 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const CALENDAR_SETUP_FILE = '/jscalendar-1.0/calendar-setup.js';	// カレンダーセットアップファイル
 	const CALENDAR_CSS_FILE = '/jscalendar-1.0/calendar-win2k-1.css';		// カレンダー用CSSファイル
 	// 画面
-	const TASK_CONFIG = 'config';								// その他設定
-	const TASK_HISTORY = 'history';							// ブログ記事履歴
+	const TASK_ENTRY			= 'entry';				// ブログ記事(一覧)
+	const TASK_ENTRY_DETAIL		= 'entry_detail';		// ブログ記事(詳細)
+	const TASK_HISTORY			= 'history';			// ブログ記事履歴
+	const TASK_COMMENT			= 'comment';			// ブログ記事コメント(一覧)
+	const TASK_COMMENT_DETAIL	= 'comment_detail';		// ブログ記事コメント(詳細)
+	const TASK_CATEGORY			= 'category';			// 記事カテゴリー(一覧)
+	const TASK_CATEGORY_DETAIL	= 'category_detail';	// 記事カテゴリー(詳細)
+	const TASK_BLOGID			= 'blogid';				// マルチブログ設定(一覧)
+	const TASK_BLOGID_DETAIL	= 'blogid_detail';		// マルチブログ設定(詳細)
+	const TASK_CONFIG			= 'config';				// 基本設定
+	const DEFAULT_TASK			= 'entry';				// デフォルトのタスク(ブログ記事(一覧))
 	
 	/**
 	 * コンストラクタ
@@ -64,8 +73,149 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = 'entry';
+		if (empty($task)) $task = self::DEFAULT_TASK;
 		
+		$titles = array();
+		switch ($task){
+			case self::TASK_ENTRY:				// ブログ記事(一覧)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				break;
+			case self::TASK_ENTRY_DETAIL:		// ブログ記事(詳細)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_HISTORY:			// ブログ記事履歴
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '詳細';
+				$titles[] = '履歴';
+				break;
+			case self::TASK_COMMENT:			// ブログ記事コメント(一覧)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = 'コメント一覧';
+				break;
+			case self::TASK_COMMENT_DETAIL:		// ブログ記事コメント(詳細)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = 'コメント一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_CATEGORY:			// 記事カテゴリー(一覧)
+				$titles[] = '基本';
+				$titles[] = '記事カテゴリー';
+				break;
+			case self::TASK_CATEGORY_DETAIL:	// 記事カテゴリー(詳細)
+				$titles[] = '基本';
+				$titles[] = '記事カテゴリー';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_BLOGID:			// マルチブログ設定(一覧)
+				$titles[] = '基本';
+				$titles[] = 'マルチブログ';
+				break;
+			case self::TASK_BLOGID_DETAIL:		// マルチブログ設定(詳細)
+				$titles[] = '基本';
+				$titles[] = 'マルチブログ';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_CONFIG:				// 基本設定
+				$titles[] = '基本';
+				$titles[] = '基本設定';
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef($titles);
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'ブログ記事管理',
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_ENTRY ||				// ブログ記事(一覧)
+														$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
+														$task == self::TASK_HISTORY ||			// ブログ記事履歴
+														$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
+														$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> '記事一覧',
+											'task'		=> self::TASK_ENTRY,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_ENTRY ||			// ブログ記事(一覧)
+																$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
+																$task == self::TASK_HISTORY				// ブログ記事履歴
+															)
+										),
+										(Object)array(
+											'name'		=> 'コメント一覧',
+											'task'		=> self::TASK_COMMENT,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
+																$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
+															)
+										)
+									)
+								),
+								(Object)array(
+									'name'		=> '基本',
+									'task'		=> self::TASK_CONFIG,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_CATEGORY ||			// 記事カテゴリー(一覧)
+														$task == self::TASK_CATEGORY_DETAIL ||	// 記事カテゴリー(詳細)
+														$task == self::TASK_BLOGID ||			// マルチブログ設定(一覧)
+														$task == self::TASK_BLOGID_DETAIL ||		// マルチブログ設定(詳細)
+														$task == self::TASK_CONFIG					// 基本設定
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> '記事カテゴリー',
+											'task'		=> self::TASK_CATEGORY,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_CATEGORY ||			// 記事カテゴリー(一覧)
+																$task == self::TASK_CATEGORY_DETAIL		// 記事カテゴリー(詳細)
+															)
+										),
+										(Object)array(
+											'name'		=> 'マルチブログ',
+											'task'		=> self::TASK_BLOGID,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_BLOGID ||			// マルチブログ設定(一覧)
+																$task == self::TASK_BLOGID_DETAIL		// マルチブログ設定(詳細)
+															)
+										),
+										(Object)array(
+											'name'		=> '基本設定',
+											'task'		=> self::TASK_CONFIG,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_CONFIG					// 基本設定
+															)
+										)
+									)
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
+		
+/*
 		// パンくずリストを作成
 		switch ($task){
 			case 'entry':		// ブログ記事
@@ -183,6 +333,7 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . 'ブログ' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+		*/
 	}
 }
 ?>
