@@ -449,7 +449,7 @@ class DesignManager extends Core
 					}
 					$tagIdAttr = '';		// タグID
 					if (!empty($subTagId)) $tagIdAttr = ' id="' . $subTagId . '"';
-					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . $this->getUrl($linkUrl) . '">' . convertToHtmlEntity($name) . '</a></li>';
+					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . convertUrlToHtmlEntity($linkUrl) . '">' . convertToHtmlEntity($subName) . '</a></li>';
 				}
 				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
 
