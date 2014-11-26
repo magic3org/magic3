@@ -126,6 +126,8 @@ $HELP['category_index']['title'] = '表示順';
 $HELP['category_index']['body'] = 'カテゴリーを一覧表示する際の表示順です。';
 $HELP['category_visible']['title'] = '公開';
 $HELP['category_visible']['body'] = 'カテゴリーをユーザに公開するかどうかを制御します。';
+$HELP['category_buttons']['title'] = '操作ボタン';
+$HELP['category_buttons']['body'] = '新規 - 新規にカテゴリーを追加します。<br />編集 - 選択されているカテゴリーを編集します。カテゴリーを選択するには、一覧の左端のチェックボックスにチェックを入れます。<br />削除ボタン - 選択されているカテゴリーを削除します。カテゴリーを選択するには、一覧の左端のチェックボックスにチェックを入れます。';
 
 // ########## マルチブログ管理 ##########
 $HELP['blogid_list']['title'] = 'ブログ一覧';
