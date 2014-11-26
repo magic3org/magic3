@@ -137,7 +137,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_TAG_LEVEL, $titleTagLevel);		// タイトルタグレベル
 					
 				// 画像の移動
-				if ($ret){
+				if ($ret && !empty($updatedEntryImage)){		// 画像更新の場合
 					$ret = mvFileToDir($this->tmpDir, $entryImageFilenameArray, $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType,
 								''/*ディレクトリ取得*/));
 					if ($ret){
