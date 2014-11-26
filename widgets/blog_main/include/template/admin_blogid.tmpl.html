@@ -65,50 +65,46 @@ function delItem(){
 	return true;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('itemlist', -1, 0);
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="blogid" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-<table width="90%">
-<tr><td>
-<label><span {_HELP_BLOGID_LIST}>ブログ一覧</span></label>
-</td>
-<td align="right"><span {_HELP_BLOGID_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_BLOGID_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_BLOGID_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table id="itemlist" class="simple-table" width="100%">
+<h3 class="m3config_h"><span {_HELP_BLOGID_LIST}>ブログ一覧</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_BLOGID_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+</div></div></div>
+
+<table id="mainconfig">
     <thead>
-        <tr>
-	    <th width="35"><span {_HELP_BLOGID_CHECK}>選択</span></th>
-	    <th width="200"><span {_HELP_BLOGID_ID}>ID</span></th>
-	    <th width="20%"><span {_HELP_BLOGID_NAME}>ブログ名</span></th>
-	    <th width="20%"><span {_HELP_BLOGID_OWNER}>所有者 / アカウント</span></th>
+    <tr>
+	    <th class="select"><span {_HELP_BLOGID_CHECK}>選択</span></th>
+	    <th><span {_HELP_BLOGID_ID}>ID</span></th>
+	    <th><span {_HELP_BLOGID_NAME}>ブログ名</span></th>
+	    <th><span {_HELP_BLOGID_OWNER}>所有者 / アカウント</span></th>
 	    <th><span {_HELP_BLOGID_VISIBLE}>公開</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="itemlist">
-        <tr>
-            <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+    <patTemplate:tmpl name="itemlist">
+    <tr>
+        <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
 	    <td>{NAME}</td>
-	    <td align="center">{OWNER}</td>
-	    <td align="center"><input type="checkbox" {VISIBLE} disabled /></td>
+	    <td>{OWNER}</td>
+	    <td><input type="checkbox" {VISIBLE} disabled /></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
-</td></tr>
-</table>
+
 </form>
 </div>
 </patTemplate:tmpl>

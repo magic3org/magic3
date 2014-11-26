@@ -293,12 +293,17 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$visible = '';
 		if ($fetchedRow['bl_visible']) $visible = 'checked';	// 項目の表示
 		
+		// 所有者
+		$owner = '';
+		$account = $fetchedRow['lu_account'];
+		if (!empty($account)) $owner = $this->convertToDispString($fetchedRow['lu_name'] . ' / ' . $account);
+		
 		$row = array(
 			'index' => $index,
 			'serial' => $fetchedRow['bl_serial'],
 			'id' =>	$this->convertToDispString($id),		// 識別ID
 			'name'     => $this->convertToDispString($fetchedRow['bl_name']),			// 表示名
-			'owner'     => $this->convertToDispString($fetchedRow['lu_name'] . ' / ' . $fetchedRow['lu_account']),			// 所有者
+			'owner'     => $owner,			// 所有者
 			'visible'	=> $visible					// 公開状況
 		);
 		$this->tmpl->addVars('itemlist', $row);
