@@ -160,6 +160,34 @@ class ImageManager extends Core
 		return $ret;
 	}
 	/**
+	 * システム共通サムネールフォーマットを取得
+	 *
+	 * @return array				フォーマット
+	 */
+	function getAllSystemDefaultThumbFormat()
+	{
+		global $gSystemManager;
+		
+		$format = $gSystemManager->getSystemConfig(self::CF_THUMB_FORMAT);		// サムネールフォーマット
+		$formatArray = explode(';', $format);
+		return $formatArray;
+	}
+	/**
+	 * システム共通サムネールのファイル名を取得
+	 *
+	 * @param string $contentId		コンテンツID
+	 * @return array				画像ファイル名
+	 */
+	function getSystemDefaultThumbFilename($contentId)
+	{
+		$filenameArray = array();
+		$formatArray = $this->getAllSystemDefaultThumbFormat();
+		for ($i = 0; $i < count($formatArray); $i++){
+			$filenameArray[] = $contentId . '_' . $formatArray[$i];
+		}
+		return $filenameArray;
+	}
+	/**
 	 * システム共通のサムネール画像のURLを取得
 	 *
 	 * @param string     $contentType	コンテンツタイプ
@@ -761,7 +789,7 @@ class ImageManager extends Core
 	/**
 	 * アバターデフォルトフォーマットを取得
 	 *
-	 * @return string				フォーマット
+	 * @return string				画像フォーマット
 	 */
 	function getDefaultAvatarFormat()
 	{
@@ -840,7 +868,7 @@ class ImageManager extends Core
 	/**
 	 * アバターのフォーマットを取得
 	 *
-	 * @return array				画像サイズID
+	 * @return array				画像フォーマット
 	 */
 	function getAllAvatarFormat()
 	{
@@ -883,7 +911,6 @@ class ImageManager extends Core
 			return $filename;
 		}
 	}
-	
 	/**
 	 * OGP用サムネールデフォルトフォーマットを取得
 	 *
@@ -909,7 +936,7 @@ class ImageManager extends Core
 	function createImageByFormat($path, $formats, $destDir, $destFilenameBase, &$destFilename)
 	{
 		// 引数エラーチェック
-		if (empty($path) || empty($formats) || empty($destDir) || empty($destFilenameBase)) return false;
+		if (empty($path) || empty($formats) || empty($destDir) || strlen($destFilenameBase) == 0) return false;
 		
 		$destFilename = array();		// 画像ファイル名
 		
@@ -919,7 +946,7 @@ class ImageManager extends Core
 		} else {
 			$formatArray = explode(';', $formats);
 		}
-		
+
 		for ($i = 0; $i < count($formatArray); $i++){
 			$format = $formatArray[$i];
 			$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);

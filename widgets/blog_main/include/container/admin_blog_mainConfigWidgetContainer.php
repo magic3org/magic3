@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,8 +17,11 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
+	private $tmpDir;		// 作業ディレクトリを作成
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
-		
+	const IMAGE_TYPE_ENTRY_IMAGE = 'entryimage';			// 画像タイプ(記事デフォルト画像)
+	const ACT_UPLOAD_IMAGE	= 'uploadimage';			// 画像アップロード
+	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
 	/**
 	 * コンストラクタ
 	 */
@@ -26,6 +29,9 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// 作業ディレクトリを取得
+		$this->tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリパスを取得
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -79,11 +85,26 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$messageNoEntry		= $request->trimValueOf('item_message_no_entry');		// 記事が登録されていないメッセージ
 		$messageFindNoEntry = $request->trimValueOf('item_message_find_no_entry');		// 記事が見つからないメッセージ
 		$titleTagLevel		= $request->trimIntValueOf('item_title_tag_level', blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL);		// タイトルタグレベル
+		$imageType			= $request->trimValueOf('type');		// 画像タイプ
+		$updatedEntryImage	= $request->trimValueOf('updated_entryimage');		// 記事デフォルト画像更新フラグ
 		
+		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
 			$this->checkNumeric($entryViewCount, '記事表示順');
 			$this->checkNumeric($maxCommentLength, 'コメント最大文字数');
+			
+			// 記事デフォルト画像のエラーチェック
+			if (!empty($updatedEntryImage)){
+				$entryImageFilenameArray = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename('0'/*デフォルト画像*/);
+				for ($i = 0; $i < count($entryImageFilenameArray); $i++){
+					$path = $this->tmpDir . DIRECTORY_SEPARATOR . $entryImageFilenameArray[$i];
+					if (!file_exists($path)){
+						$this->setAppErrorMsg('記事デフォルト画像が正常にアップロードされていません');
+						break;
+					}
+				}
+			}
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 空の場合はデフォルト値を設定
@@ -114,55 +135,43 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_MESSAGE_NO_ENTRY, $messageNoEntry);		// 記事が登録されていないメッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY, $messageFindNoEntry);		// 記事が見つからないメッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_TAG_LEVEL, $titleTagLevel);		// タイトルタグレベル
-																										
+					
+				// 画像の移動
+				if ($ret){
+					$ret = mvFileToDir($this->tmpDir, $entryImageFilenameArray, $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType,
+								''/*ディレクトリ取得*/));
+					if ($ret){
+						$ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE, implode(';', $entryImageFilenameArray));
+					}
+				}
+																									
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
+					
+					$replaceNew = true;		// データを再取得
+				
+					// 作業ディレクトリを削除
+					rmDirectory($this->tmpDir);
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 				$this->gPage->updateParentWindow();// 親ウィンドウを更新
 			}
-		} else if ($act == 'upload'){		// 画像アップロードのとき
-			// アップロードされたファイルか？セキュリティチェックする
-			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
-				// テンポラリディレクトリの書き込み権限をチェック
-				if (!is_writable($this->gEnv->getWorkDirPath())){
-					$msg = sprintf('一時ディレクトリに書き込み権限がありません。(ディレクトリ：%s)', $this->gEnv->getWorkDirPath());
-					$this->setAppErrorMsg($msg);
-				}
-				
-				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
-					// ファイルを保存するサーバディレクトリを指定
-					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
-		
-					// アップされたテンポラリファイルを保存ディレクトリにコピー
-					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
-					if ($ret){
-						// サムネール作成
-						$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, 0/*記事ID*/, $tmpFile, $destFilename);
-						if ($ret){
-							$entryDefaultImages = implode(';', $destFilename);
-							$ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE, $entryDefaultImages);
-						}
-						if ($ret){
-							$msg = '画像を変更しました';
-							$this->setGuidanceMsg($msg);
-						} else {
-							$msg = '画像の作成に失敗しました';
-							$this->setAppErrorMsg($msg);
-						}
-					} else {
-						$msg = 'ファイルのアップロードに失敗しました';
-						$this->setAppErrorMsg($msg);
-					}
-					// テンポラリファイル削除
-					unlink($tmpFile);
-				}
-			} else {
-				$msg = sprintf('アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります。%sバイト)', $this->gSystem->getMaxFileSizeForUpload());
-				$this->setAppErrorMsg($msg);
-			}
+		} else if ($act == self::ACT_UPLOAD_IMAGE){		// 画像アップロード
+			// 作業ディレクトリを作成
+			$this->tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+			
+			// Ajaxでのファイルアップロード処理
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $this->tmpDir);
+		} else if ($act == self::ACT_GET_IMAGE){			// 画像取得
+			// Ajaxでの画像取得
+			$this->getImageByType($imageType);
 		} else {		// 初期表示の場合
+			$replaceNew = true;		// データを再取得
+			
+			// 作業ディレクトリを削除
+			rmDirectory($this->tmpDir);
+			
 			$entryViewCount	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_VIEW_COUNT);// 記事表示数
 			if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
 			$entryViewOrder	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
@@ -207,15 +216,24 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$this->tmpl->addVar("_widget", "view_order_dec_selected", 'selected');// 記事表示順
 		}
 		
+		// アップロード実行用URL
+		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIG;
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_UPLOAD_IMAGE;
+		$this->tmpl->addVar("_widget", "upload_url_entryimage", $this->getUrl($uploadUrl . '&type=' . self::IMAGE_TYPE_ENTRY_IMAGE));		// 記事デフォルト画像
+		
+		// ##### 画像の表示 #####
+		// アップロードされているファイルがある場合は、アップロード画像を表示
 		// 記事デフォルト画像
-		$entryDefaultImageUrl = '';
-		$value = self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE);
-		if (!empty($value)){
-			$entryDefaultImages = explode(';', $value);
-			$entryDefaultImageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $entryDefaultImages[count($entryDefaultImages) -1]);
-			$entryDefaultImage = '<img src="' . $this->convertUrlToHtmlEntity($this->getUrl($entryDefaultImageUrl . '?' . date('YmdHis'))) . '" />';
-			$this->tmpl->addVar("_widget", "entry_default_image", $entryDefaultImage);
+		$imageUrl = '';
+		$updateStatus = '0';			// 画像更新状態
+		$entryImageFilename = $this->getDefaultEntryImageFilename();		// 記事デフォルト画像名取得
+		if (!empty($entryImageFilename)){
+			$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $entryImageFilename) . '?' . date('YmdHis');
 		}
+		$this->tmpl->addVar("_widget", "entryimage_url", $this->convertUrlToHtmlEntity($this->getUrl($imageUrl)));			// 記事デフォルト画像
+		$this->tmpl->addVar("_widget", "updated_entryimage", $updateStatus);
 		
 		$this->tmpl->addVar("_widget", "category_count", $categoryCount);// カテゴリ数
 		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
@@ -236,8 +254,104 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "message_no_entry", $messageNoEntry);		// 記事が登録されていないメッセージ
 		$this->tmpl->addVar("_widget", "message_find_no_entry", $messageFindNoEntry);		// 記事が見つからないメッセージ
 		$this->tmpl->addVar("_widget", "title_tag_level", $titleTagLevel);		// タイトルタグレベル
-		
 		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア
+	}
+	/**
+	 * 最大画像を取得
+	 *
+	 * @param string $type		画像タイプ
+	 * @return					なし
+	 */
+	function getImageByType($type)
+	{
+		// 画像パス作成
+		switch ($type){
+		case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
+			$filename = $this->getDefaultEntryImageFilename();		// 記事デフォルト画像名取得
+			break;
+		}
+		$imagePath = '';
+		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
+			
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+
+		if (is_readable($imagePath)){
+			// 画像情報を取得
+			$imageMimeType = '';
+			$imageSize = @getimagesize($imagePath);
+			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+			
+			// 画像MIMEタイプ設定
+			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
+			
+			// キャッシュの設定
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0');
+			header('Pragma: no-cache');
+		
+			// 画像ファイル読み込み
+			readfile($imagePath);
+		} else {
+			$this->gPage->showError(404);
+		}
+	
+		// システム強制終了
+		$this->gPage->exitSystem();
+	}
+	/**
+	 * アップロードファイルから各種画像を作成
+	 *
+	 * @param bool           $isSuccess		アップロード成功かどうか
+	 * @param object         $resultObj		アップロード処理結果オブジェクト
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string         $filePath		アップロードされたファイル
+	 * @param string         $destDir		アップロード先ディレクトリ
+	 * @return								なし
+	 */
+	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
+	{
+		$type = $request->trimValueOf('type');		// 画像タイプ
+		
+		if ($isSuccess){		// ファイルアップロード成功のとき
+			// 各種画像を作成
+			switch ($type){
+			case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
+				//$formats = $this->gInstance->getImageManager()->getDefaultContentThumbFormat();
+				$formats = $this->gInstance->getImageManager()->getAllSystemDefaultThumbFormat();
+				$filenameBase = '0';
+				break;
+			}
+
+			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
+			if ($ret){			// 画像作成成功の場合
+				// 画像参照用URL
+				$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+				$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIG;
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
+				$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
+				$resultObj['url'] = $imageUrl;
+			} else {// エラーの場合
+				$resultObj = array('error' => 'Could not create resized images.');
+			}
+		}
+	}
+	/**
+	 * 記事デフォルト画像名を取得
+	 *
+	 * @return string		ファイル名
+	 */
+	function getDefaultEntryImageFilename()
+	{
+		$filename = '';
+		$value = self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE);
+		if (!empty($value)){
+			$filenameArray = explode(';', $value);
+			$filename = $filenameArray[count($filenameArray) -1];
+		}
+		return $filename;
 	}
 }
 ?>
