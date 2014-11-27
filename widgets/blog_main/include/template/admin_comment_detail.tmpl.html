@@ -36,56 +36,60 @@ function cancelItem(){
 	document.main.submit();
 	return true;
 }
+$(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="comment_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<table width="90%">
-<tr><td><span {_HELP_COMMENT_DETAIL}><label>コメント詳細</label></span></td><td align="right">
-<span {_HELP_COMMENT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table" style="margin:0 auto;width:950px;">
+<h3 class="m3config_h"><span {_HELP_COMMENT_DETAIL}>コメント詳細</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_COMMENT_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div></div>
+
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_COMMENT_ENTRY_NAME}>記事タイトル</span></td>
-	    <td>{ENTRY_TITLE}</td>
-	    <td class="table-headside" width="150"><span {_HELP_COMMENT_NAME}>コメントタイトル</span></td>
-	    <td><input type="text" name="item_name" value="{NAME}" size="60" maxlength="60" style="width:100%;" /></td>
+	    <th><span {_HELP_COMMENT_ENTRY_NAME}>記事タイトル</span></th>
+	    <td style="width:200px;">{ENTRY_TITLE}</td>
+	    <th><span {_HELP_COMMENT_NAME}>コメントタイトル</span></th>
+	    <td><input type="text" name="item_name" class="form-control" value="{NAME}" size="60" maxlength="60" /></td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_COMMENT_USER}>投稿者</span></td>
-	    <td><input type="text" name="item_reg_user" value="{REG_USER}" size="30" maxlength="50" style="width:100%;" /></td>
-	    <td class="table-headside"><span {_HELP_COMMENT_DT}>投稿日時</span></td>
+    <tr>
+	    <th><span {_HELP_COMMENT_USER}>投稿者</span></th>
+	    <td><input type="text" name="item_reg_user" class="form-control" value="{REG_USER}" size="30" maxlength="50" /></td>
+	    <th><span {_HELP_COMMENT_DT}>投稿日時</span></th>
 	    <td>{ENTRY_DT}</td>
 	</tr>
 	<tr>
-	    <td class="table-headside"><span {_HELP_COMMENT_EMAIL}>Eメール</span></td>
-	    <td colspan="3"><input type="text" name="item_email" value="{EMAIL}" size="30" maxlength="50" style="width:100%;" /></td>
+	    <th><span {_HELP_COMMENT_EMAIL}>Eメール</span></th>
+	    <td colspan="3"><input type="text" name="item_email" class="form-control" value="{EMAIL}" size="30" maxlength="50" /></td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_COMMENT_CONTENT}>コメント内容</span></td>
-	    <td colspan="3" width="800" height="200">
-	    <textarea name="item_html" style="width:100%;height:100%;">{HTML}</textarea>
+    <tr>
+	    <th><span {_HELP_COMMENT_CONTENT}>コメント内容</span></th>
+	    <td colspan="3">
+	    <textarea name="item_html" class="form-control" style="height:200px;">{HTML}</textarea>
 	    </td>
 	</tr>
 	<tr>
-	    <td class="table-headside"><span {_HELP_COMMENT_URL}>URL</span></td>
-	    <td colspan="3"><input type="text" name="item_url" value="{URL}" maxlength="100" style="width:100%;" /></td>
-	</tr>
-	<tr class="even">
-	    <td class="table-headside">更新者</td>
-	    <td>{UPDATE_USER}</td>
-	    <td class="table-headside">更新日時</td>
-	    <td>{UPDATE_DT}</td>
+	    <th><span {_HELP_COMMENT_URL}>URL</span></th>
+	    <td colspan="3"><input type="text" name="item_url" class="form-control" value="{URL}" maxlength="100" /></td>
 	</tr>
 	<tr>
-	    <td colspan="4" align="right">
+	    <th>更新者</th>
+	    <td><div class="form-control-static m3config_item" >{UPDATE_USER}</div></td>
+	    <th>更新日時</th>
+	    <td><div class="form-control-static m3config_item" >{UPDATE_DT}</div></td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="delete_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 </patTemplate:tmpl>
@@ -95,12 +99,7 @@ function cancelItem(){
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
