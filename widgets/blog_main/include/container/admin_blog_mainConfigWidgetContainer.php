@@ -88,7 +88,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$imageType			= $request->trimValueOf('type');		// 画像タイプ
 		$updatedEntryImage	= $request->trimValueOf('updated_entryimage');		// 記事デフォルト画像更新フラグ
 		
-		$replaceNew = false;		// データを再取得するかどうか
+		$reloadData = false;		// データの再読み込み
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
 			$this->checkNumeric($entryViewCount, '記事表示順');
@@ -148,7 +148,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					
-					$replaceNew = true;		// データを再取得
+					$reloadData = true;		// データを再取得
 				
 					// 作業ディレクトリを削除
 					rmDirectory($this->tmpDir);
@@ -167,11 +167,12 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			// Ajaxでの画像取得
 			$this->getImageByType($imageType);
 		} else {		// 初期表示の場合
-			$replaceNew = true;		// データを再取得
+			$reloadData = true;		// データを再取得
 			
 			// 作業ディレクトリを削除
 			rmDirectory($this->tmpDir);
-			
+		}
+		if ($reloadData){		// データを再取得
 			$entryViewCount	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_VIEW_COUNT);// 記事表示数
 			if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
 			$entryViewOrder	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
@@ -208,6 +209,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$titleTagLevel = self::$_mainDb->getConfig(blog_mainCommonDef::CF_TITLE_TAG_LEVEL);		// タイトルタグレベル
 			if (empty($titleTagLevel)) $titleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;	
 		}
+		
 		// 画面に書き戻す
 		$this->tmpl->addVar("_widget", "view_count", $entryViewCount);// 記事表示数
 		if (empty($entryViewOrder)){	// 順方向

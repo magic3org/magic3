@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -92,7 +92,6 @@ function selpage(page){
 function clearSearchParam(){
 	document.main.search_start.value = '';
 	document.main.search_end.value = '';
-	document.main.search_category0.value = '0';
 	document.main.search_keyword.value = '';
 	return true;
 }
@@ -101,26 +100,25 @@ function showSearchArea()
 	$('#search_comment').slideToggle('slow');
 }
 $(function(){
+	// テーブルを作成
+	m3SetConfigTable('commentlist');
 	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('commentlist', {LIST_COUNT}, 0);
+	//m3_tableWithScrollbar('commentlist', {LIST_COUNT}, 0);
 
 	Calendar.setup(
 	{
 		inputField  : "search_start",	// ID of the input field
 		ifFormat    : "%Y/%m/%d"		// the date format
-	}
-	);
+	});
 	Calendar.setup(
 	{
 		inputField  : "search_end",	// ID of the input field
 		ifFormat    : "%Y/%m/%d"		// the date format
-	}
-	);
+	});
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="comment"/>
@@ -129,61 +127,64 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="entrylist" value="{ENTRY_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
-<table width="90%">
-<tr><td colspan="2">
-<div id="search_comment" class="m3search" style="display:none;">
-<span {_HELP_COMMENT_SEARCH}><label>コメント検索</label></span>
-<table class="simple-table">
-    <tbody>
-        <tr>
-	    <td class="table-headside"><span {_HELP_COMMENT_SEARCH_KEYWORD}>キーワード</span></td>
-	    <td><input type="text" id="search_keyword" name="search_keyword" value="{SEARCH_KEYWORD}" maxlength="50" style="width:98%;" /></td>
-	</tr>
-        <tr class="even">
-	    <td class="table-headside" width="100"><span {_HELP_COMMENT_SEARCH_DT}>期間</span></td>
-	    <td><input type="text" id="search_start" name="search_start" value="{SEARCH_START}" size="15" maxlength="10" />～<input type="text" id="search_end" name="search_end" value="{SEARCH_END}" size="15" maxlength="10" /></td>
-	</tr>
-	<tr>
-	    <td colspan="2" align="right"><input type="button" class="button" onclick="clearSearchParam();" value="クリア" /><input type="button" class="button" onclick="search();" value="検索" /></td>
-	</tr>
-    </tbody>
-</table>
+<h3 class="m3config_h"><span {_HELP_COMMENT_LIST}>コメント一覧</span>
+<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="コメントを検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>
+</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_COMMENT_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+</div></div></div>
+
+<div id="search_comment" class="m3search panel panel-info" style="display:none;width:600px;">
+<div class="panel-heading">
+    <h3 class="panel-title"><span {_HELP_COMMENT_SEARCH}>コメント検索</span></h3>
 </div>
-</td></tr>
-<tr><td>
-<span {_HELP_COMMENT_LIST}><label>コメント一覧</label></span>&nbsp;&nbsp;
-<a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>
-</td>
-<td align="right"><!--<input type="button" class="button" onclick="newItem();" value="新規" />--><span {_HELP_COMMENT_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_COMMENT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table id="commentlist" class="simple-table" width="100%">
+<div class="panel-body form-horizontal">
+<div class="form-group">
+    <label for="search_keyword" class="col-sm-3 control-label"><span {_HELP_COMMENT_SEARCH_KEYWORD}>キーワード</span></label>
+    <div class="col-sm-9">
+	<input type="text" id="search_keyword" name="search_keyword" class="form-control" value="{SEARCH_KEYWORD}" maxlength="50" />
+    </div>
+</div>
+<div class="form-group">
+    <label for="search_start" class="col-sm-3 control-label"><span {_HELP_COMMENT_SEARCH_DT}>期間</span></label>
+    <div class="col-sm-9">
+	<input type="text" id="search_start" name="search_start" class="form-control" value="{SEARCH_START}" size="15" maxlength="10" style="width:150px;display:inline-block;margin-right:10px;" />～<input type="text" id="search_end" name="search_end" class="form-control" value="{SEARCH_END}" size="15" maxlength="10" style="width:150px;display:inline-block;margin-left:10px;" />
+    </div>
+</div>
+<div class="form-group">
+	<div class="col-sm-12 text-right">
+	<input type="button" class="button" onclick="clearSearchParam();" value="クリア" /> <input type="button" class="button" onclick="search();" value="検索" />
+	</div>
+</div>
+</div>
+</div>
+
+<table id="commentlist">
     <thead>
-        <tr>
-            <th width="4%"><span {_HELP_COMMENT_CHECK}>選択</span></th>
-            <th width="20%"><span {_HELP_COMMENT_ENTRY_NAME}>記事タイトル</span></th>
-	    <th width="20%"><span {_HELP_COMMENT_NAME}>コメントタイトル</span></th>
-	    <th width="30%"><span {_HELP_COMMENT_CONTENT}>内容</span></th>
-	    <th width="100"><span {_HELP_COMMENT_USER}>投稿者</span></th>
-	    <th width="100"><span {_HELP_COMMENT_DT}>投稿日時</span></th>
+    <tr>
+        <th class="select"><span {_HELP_COMMENT_CHECK}>選択</span></th>
+	    <th><span {_HELP_COMMENT_NAME}>コメントタイトル</span></th>
+        <th><span {_HELP_COMMENT_ENTRY_NAME}>記事タイトル</span></th>
+	    <th><span {_HELP_COMMENT_CONTENT}>内容</span></th>
+	    <th><span {_HELP_COMMENT_USER}>投稿者</span></th>
+	    <th><span {_HELP_COMMENT_DT}>投稿日時</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="itemlist">
-        <tr>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td>{ENTRY_NAME}</td>
+    <patTemplate:tmpl name="itemlist">
+    <tr>
+	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td>{ENTRY_NAME}</td>
 	    <td>{CONTENT}</td>
-	    <td align="center">{REG_USER}</td>
-	    <td align="center">{REG_DATE}</td>
+	    <td>{REG_USER}</td>
+	    <td>{REG_DATE}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
 {PAGE_LINK}
-</td></tr>
-</table>
+
 </form>
 </div>
 </patTemplate:tmpl>

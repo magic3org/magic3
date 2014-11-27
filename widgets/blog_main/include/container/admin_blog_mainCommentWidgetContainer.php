@@ -211,10 +211,10 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
 		
 		// ボタン作成
-		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
+/*		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
 		$searchStr = '検索';
 		$this->tmpl->addVar("_widget", "search_img", $searchImg);
-		$this->tmpl->addVar("_widget", "search_str", $searchStr);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);*/
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
