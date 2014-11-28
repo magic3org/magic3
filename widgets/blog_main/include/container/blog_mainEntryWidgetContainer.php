@@ -13,8 +13,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/blog_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_blog_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_mainDb.php');
+require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 
 // このファイルはadmin_blog_mainEntryWidgetContainer.phpの内容と同じ。クラス名の定義のみ異なる。
 //class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetContainer
@@ -30,14 +31,14 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	private $categoryCount;			// カテゴリ数
 	private $isMultiLang;			// 多言語対応画面かどうか
 	private $fieldValueArray;		// ユーザ定義フィールド入力値
-	const ICON_SIZE = 16;		// アイコンのサイズ
+	const ICON_SIZE = 32;		// アイコンのサイズ
 	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	//const CATEGORY_COUNT = 2;				// 記事カテゴリーの選択可能数
 	const CATEGORY_NAME_SIZE = 20;			// カテゴリー名の最大文字列長
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
-	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
-	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
@@ -276,12 +277,6 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 //		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
 		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
 		
-		// ボタン作成
-		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
-		$searchStr = '検索';
-		$this->tmpl->addVar("_widget", "search_img", $searchImg);
-		$this->tmpl->addVar("_widget", "search_str", $searchStr);
-		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "total_count", $totalCount);
@@ -415,6 +410,12 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('公開期間が不正です');
 			}
 			
+			// 関連コンテンツのチェック
+			if (!empty($relatedContent)){
+				$contentIdArray = explode(',', $relatedContent);
+				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
+			}
+					
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// 保存データ作成
@@ -518,6 +519,12 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			// 期間範囲のチェック
 			if (!empty($start_date) && !empty($end_date)){
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('公開期間が不正です');
+			}
+			
+			// 関連コンテンツのチェック
+			if (!empty($relatedContent)){
+				$contentIdArray = explode(',', $relatedContent);
+				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
 			}
 			
 			// エラーなしの場合は、データを更新
@@ -964,7 +971,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
 			$iconTitle = '非公開';
 		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		$row = array(
 			'index' => $index,		// 項目番号

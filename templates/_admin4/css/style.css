@@ -653,6 +653,9 @@ i[rel="m3help"] { cursor: default; }
 .m3config_table td.select {
 	text-align: center;
 }
+.m3config_table th.status {
+	width: 50px;
+}
 .m3config_table td.status {
 	text-align: center;
 }
