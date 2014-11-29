@@ -78,7 +78,7 @@ $(function(){
 	// 編集中の離脱を防止
 	m3SetSafeContentEdit();
 	
-	$("#example").tabs();
+	$("#entryhtml").tabs();
 	
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
@@ -110,90 +110,93 @@ function editEntry(serial){
 	document.main.serial.value = serial;
 	document.main.submit();
 }
+$(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="entry_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="entryid" value="{ENTRYID}" />
-<table width="90%">
-<tr><td><span {_HELP_ENTRY_DETAIL}><label>ブログ記事詳細</label></span></td><td align="right">
-<span {_HELP_ENTRY_HISTORY_BTN}><input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} /></span><span {_HELP_ENTRY_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} /></span>
-<patTemplate:tmpl name="cancel_button" visibility="visible">&nbsp;&nbsp;<span {_HELP_ENTRY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /></span><span {_HELP_ENTRY_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table" style="margin: 0 auto;width:950px;">
+<h3 class="m3config_h"><span {_HELP_ENTRY_DETAIL}>ブログ記事詳細</span></h3>
+
+<patTemplate:tmpl name="cancel_button" visibility="visible">
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_ENTRY_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /><input type="button" class="button" onclick="listItem();" value="戻る" />
+</div></div></div>
+</patTemplate:tmpl>
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_ENTRY_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} /><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} />
+</div></div></div>
+
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_ENTRY_ID}>ID</span></td>
-	    <td width="100" align="center">{ID}</td>
-	    <td class="table-headside" width="150"><span {_HELP_ENTRY_NAME}>タイトル</span></td>
-	    <td width="250"><input type="text" name="item_name" value="{ITEM_NAME}" size="60" maxlength="60" style="width:100%;" /></td>
-	    <td class="table-headside" width="150"><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span></td>
-	    <td>
-	    <select name="item_status">
+    <tr>
+	    <th><span {_HELP_ENTRY_ID}>ID</span></th>
+	    <td style="width:300px;"><div class="form-control-static m3config_item">{ID}</div></td>
+	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span></th>
+	    <td colspan="3" class="warning">
+		<div class="col-sm-6 m3config_item">
+	    <select name="item_status" class="form-control">
 	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
 		<option value="2" {SELECTED_PUBLIC}>公開</option>
 		<option value="3" {SELECTED_CLOSED}>非公開</option>
 	    </select>
-	    </td>	    
-	    <!--<td class="table-headside" width="70px">対応言語</td>
-	    <td width="70px">
-<patTemplate:tmpl name="default_lang" visibility="hidden">
-{DEFAULT_LANG}
-</patTemplate:tmpl>
-<patTemplate:tmpl name="select_lang" visibility="hidden">
-	    <select name="item_lang" onchange="selectItemLang();">
-	        <patTemplate:tmpl name="lang_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select>
-</patTemplate:tmpl>
-	    </td>-->
+		</div>
+	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_ENTRY_USER}>投稿者</span></td>
-	    <td align="center">{ENTRY_USER}</td>
-	    <td class="table-headside"><span {_HELP_ENTRY_DT}>投稿日時</span></td>
-	    <td>日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" style="width:100px;" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" style="width:70px;" /></td>
-	    <td class="table-headside"><span {_HELP_ENTRY_BLOGID}>所属ブログ</span></td>
-	    <td>
-	    <patTemplate:tmpl name="select_blogid_area" visibility="hidden">
-	    <select name="blogid">
+	<tr>
+	    <th><span {_HELP_ENTRY_NAME}>タイトル</span></th>
+	    <td colspan="5"><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" size="60" maxlength="60" /></td>
+	</tr>
+	<patTemplate:tmpl name="select_blogid_area" visibility="hidden">
+	<tr>
+	    <th><span {_HELP_ENTRY_BLOGID}>所属ブログ</span></th>
+	    <td colspan="5">
+		<div class="col-sm-4 m3config_item">
+	    <select name="blogid" class="form-control">
 	        <patTemplate:tmpl name="blogid_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
-	    </patTemplate:tmpl>
-	    <patTemplate:tmpl name="show_blogid_area" visibility="hidden">{BLOG_NAME}<input type="hidden" name="blogid" value="{BLOG_ID}" /></patTemplate:tmpl>
+		</div>
 	    </td>
 	</tr>
+	</patTemplate:tmpl>
+    <tr>
+	    <th><span {_HELP_ENTRY_USER}>投稿者</span></th>
+	    <td><div class="form-control-static m3config_item">{ENTRY_USER}</div></td>
+	    <th><span {_HELP_ENTRY_DT}>投稿日時</span></th>
+	    <td colspan="3">日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" style="width:100px;" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" style="width:70px;" /></td>
+	</tr>
 	<tr>
-	    <td class="table-headside"><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span></td>
+	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span></th>
 	    <td colspan="5">開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" /></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_ENTRY_CATEGORY}>カテゴリー</span></td>
+        <tr>
+	    <th><span {_HELP_ENTRY_CATEGORY}>カテゴリー</span></th>
 	    <td colspan="5">
     <patTemplate:tmpl name="category">
-    <select name="item_category{INDEX}">
+	<div class="col-sm-4 m3config_item">
+    <select name="item_category{INDEX}" class="form-control">
         <option value="0">-- 未選択 --</option>
         <patTemplate:tmpl name="category_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
+	</div>
     </patTemplate:tmpl>
 	    </td>
 	</tr>
         <tr>
-	    <td class="table-headside"><span {_HELP_ENTRY_CONTENT}>投稿内容</span></td>
-	    <td colspan="5" valign="top" style="width:800px;">
-	    
-<div id="example" style="width:100%;">
+	    <th><span {_HELP_ENTRY_CONTENT}>投稿内容</span></th>
+	    <td colspan="5" class="ckeditor">
+<div id="entryhtml">
             <ul>
 	    <li><a href="#entry1"><span>本文1</span></a></li>
 	    <li><a href="#entry2"><span>本文2</span></a></li>
@@ -208,40 +211,45 @@ function editEntry(serial){
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_ENTRY_DESC}>簡易説明</span></td>
-	    <td colspan="5"><input type="text" name="item_desc" value="{DESC}" size="100" maxlength="100" style="width:100%" /></td>
+	    <th><span {_HELP_ENTRY_DESC}>簡易説明</span></th>
+	    <td colspan="5"><input type="text" name="item_desc" class="form-control" value="{DESC}" size="100" maxlength="100" /></td>
 	</tr>
 	<patTemplate:tmpl name="user_fields" type="condition" conditionvar="type" visibility="hidden">
 	<pattemplate:sub condition="__default">
     <tr>
-		<td class="table-headside">{FIELD_ID}</td>
-	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" value="{VALUE}" size="40" maxlength="40" style="width:100%" /></td>
+		<th>{FIELD_ID}</th>
+	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" class="form-control" value="{VALUE}" size="40" maxlength="40" /></td>
 	</tr>
 	</pattemplate:sub>
 	<pattemplate:sub condition="first">
     <tr>
-	    <td class="table-headside" rowspan="{ROW_COUNT}">ユーザ定義フィールド</td>
-		<td class="table-headside">{FIELD_ID}</td>
-	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" value="{VALUE}" size="40" maxlength="40" style="width:100%" /></td>
+	    <th rowspan="{ROW_COUNT}">ユーザ定義フィールド</th>
+		<th>{FIELD_ID}</th>
+	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" class="form-control" value="{VALUE}" size="40" maxlength="40" /></td>
 	</tr>
 	</pattemplate:sub>
 	</patTemplate:tmpl>
-	<tr class="even">
-	    <td class="table-headside">コメント</td>
-	    <td colspan="5"><input type="checkbox" name="show_comment" {SHOW_COMMENT} />コメントを表示する&nbsp;&nbsp;<input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメントを受け付ける</td>
+	<patTemplate:tmpl name="show_comment_area" visibility="hidden">
+	<tr>
+	    <th>コメント</th>
+	    <td colspan="5"><div class="col-sm-4 m3config_item"><div class="checkbox"><label><input type="checkbox" name="show_comment" {SHOW_COMMENT} />コメントを表示する</label></div></div>
+		<div class="col-sm-4 m3config_item"><div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメントを受け付ける</label></div></div>
+		</td>
 	</tr>
+	</patTemplate:tmpl>
     <tr>
-	    <td class="table-headside"><span {_HELP_ENTRY_RELATED_CONTENT}>関連コンテンツ</span></td>
-	    <td colspan="5"><input type="text" name="item_related_content" value="{RELATED_CONTENT}" size="40" maxlength="40" style="width:100%" {RELATED_CONTENT_DISABLED} /></td>
+	    <th><span {_HELP_ENTRY_RELATED_CONTENT}>関連コンテンツ</span></th>
+	    <td colspan="5"><input type="text" name="item_related_content" class="form-control" value="{RELATED_CONTENT}" size="40" maxlength="40" {RELATED_CONTENT_DISABLED} /></td>
 	</tr>
 	<tr>
-	    <td class="table-headside">更新者</td>
-	    <td>{UPDATE_USER}</td>
-	    <td class="table-headside">更新日時</td>
-	    <td colspan="3">{UPDATE_DT}</td>
+	    <th>更新者</th>
+	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
+	    <th>更新日時</th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
-	<tr class="even">
-	    <td colspan="6" align="right">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="delete_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 </patTemplate:tmpl>
@@ -251,12 +259,7 @@ function editEntry(serial){
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

@@ -180,4 +180,6 @@ $HELP['config_max_comment_length']['title'] = '最大文字数';
 $HELP['config_max_comment_length']['body'] = 'コメントに入力可能な文字数を設定します。0を指定した場合は無制限です。';
 $HELP['config_multi_blog_top_content']['title'] = 'マルチブログトップコンテンツ';
 $HELP['config_multi_blog_top_content']['body'] = 'マルチブログを使用した場合のトップ画面のコンテンツです。各ブログへのリンク等を設定します。空文字列を設定した場合は全ブログのブログ記事が一覧表示されます。';
+$HELP['config_layout']['title'] = 'レイアウト';
+$HELP['config_layout']['body'] = 'コンテンツのレイアウトを設定します。<br />「[#～#]」は自動変換されるMagic3マクロです。「記事詳細」レイアウトでは、「[#USER_SSS#]」(Sは任意の半角英大文字)の形式で、「ユーザ定義フィールド」として任意にフィールドを追加することができます。';
 ?>
