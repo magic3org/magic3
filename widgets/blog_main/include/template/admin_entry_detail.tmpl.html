@@ -110,9 +110,23 @@ function editEntry(serial){
 	document.main.serial.value = serial;
 	document.main.submit();
 }
+function setStatusColor(){
+	var status = $('#item_status').val();
+	if (status == 2){		// 公開状態のとき
+		$('#status_field').removeClass('warning').addClass('success');
+	} else {
+		$('#status_field').removeClass('success').addClass('warning');
+	}
+}
 $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
+	
+	// 編集状態メニューのイベント設定
+	$('#item_status').change(function() {
+		setStatusColor();
+	});
+	setStatusColor();
 });
 //]]>
 </script>
@@ -140,9 +154,9 @@ $(function(){
 	    <th><span {_HELP_ENTRY_ID}>ID</span></th>
 	    <td style="width:200px;"><div class="form-control-static m3config_item">{ID}</div></td>
 	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span></th>
-	    <td colspan="3" class="warning">
+	    <td id="status_field" colspan="3" class="warning">
 		<div class="col-sm-6 m3config_item">
-	    <select name="item_status" class="form-control">
+	    <select id="item_status" name="item_status" class="form-control">
 	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
 		<option value="2" {SELECTED_PUBLIC}>公開</option>
 		<option value="3" {SELECTED_CLOSED}>非公開</option>
