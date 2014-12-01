@@ -306,6 +306,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// ブログ定義値
 		$useMultiBlog = self::$_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
+		$useComment = self::$_configArray[blog_mainCommonDef::CF_RECEIVE_COMMENT];// コメント機能を使用するかどうか
 		$this->categoryCount = self::$_configArray[blog_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
 		if (empty($this->categoryCount)) $this->categoryCount = self::DEFAULT_CATEGORY_COUNT;
 		
@@ -336,6 +337,10 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$showComment = ($request->trimValueOf('show_comment') == 'on') ? 1 : 0;				// コメントを表示するかどうか
 		$receiveComment = ($request->trimValueOf('receive_comment') == 'on') ? 1 : 0;		// コメントを受け付けるかどうか
 		$relatedContent = $request->trimValueOf('item_related_content');	// 関連コンテンツ
+		if (!$useComment){		// コメント機能を使用しない場合のデフォルト値
+			$showComment = 1;				// コメントを表示するかどうか
+			$receiveComment = 1;		// コメントを受け付けるかどうか
+		}
 		
 		// カテゴリーを取得
 		$this->categoryArray = array();
@@ -817,16 +822,25 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// 所属ブログ
 		if (empty($useMultiBlog)){
-			$this->tmpl->setAttribute('show_blogid_area', 'visibility', 'visible');
+/*			$this->tmpl->setAttribute('show_blogid_area', 'visibility', 'visible');
 			
 			$blogName = $this->getBlogName($this->blogId);
 			$this->tmpl->addVar("show_blogid_area", "blog_id", $this->blogId);	// 所属ブログID
 			$this->tmpl->addVar("show_blogid_area", "blog_name", $blogName);	// 所属ブログ名
+			*/
 		} else {		// マルチブログを使用するとき
 			$this->tmpl->setAttribute('select_blogid_area', 'visibility', 'visible');
 			
 			// ブログ選択メニュー作成
 			$this->createBlogIdMenu();
+		}
+		
+		// コメント機能の設定
+		if ($useComment){
+			$this->tmpl->setAttribute('show_comment_area', 'visibility', 'visible');
+			
+			$this->tmpl->addVar("show_comment_area", "show_comment", $this->convertToCheckedString($showComment));// コメントを表示するかどうか
+			$this->tmpl->addVar("show_comment_area", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
 		}
 		
 		// プレビュー用URL
@@ -859,12 +873,6 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 公開期間開始時間
 		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
 		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
-		$checked = '';
-		if ($showComment) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "show_comment", $checked);// コメントを表示するかどうか
-		$checked = '';
-		if ($receiveComment) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "receive_comment", $checked);// コメントを受け付けるかどうか
 		$this->tmpl->addVar("_widget", "related_content", $relatedContent);	// 関連コンテンツ
 		
 		// 前後エントリー移動ボタン
@@ -891,8 +899,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->tmpl->addVar('cancel_button', 'new_btn_disabled', 'disabled');	// 「新規」ボタン使用不可
 			
 			// デフォルト言語を最初に登録
-			$this->tmpl->addVar("default_lang", "default_lang", $defaultLangName);
-			$this->tmpl->setAttribute('default_lang', 'visibility', 'visible');
+			//$this->tmpl->addVar("default_lang", "default_lang", $defaultLangName);
+			//$this->tmpl->setAttribute('default_lang', 'visibility', 'visible');
 		} else {
 			// 記事ID
 			$itemId = $this->entryId;
