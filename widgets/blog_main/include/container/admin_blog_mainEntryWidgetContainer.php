@@ -774,7 +774,12 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				
 				// 前後のエントリーのシリアル番号を取得
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
-					$ret = self::$_mainDb->getPrevNextEntryByDate($row['be_regist_dt'], $prevRow, $nextRow);
+					if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスの場合
+						$blogId = null;	// デフォルトブログ(ブログID空)を含むすべてのブログ記事にアクセス可能
+					} else {
+						$blogId = $this->blogId;		// 所属ブログ
+					}
+					$ret = self::$_mainDb->getPrevNextEntryByDate($row['be_regist_dt'], $prevRow, $nextRow, $blogId);
 					if ($ret){
 						if (!empty($prevRow)) $prevSerial = $prevRow['be_serial'];
 						if (!empty($nextRow)) $nextSerial = $nextRow['be_serial'];

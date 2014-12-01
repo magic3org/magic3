@@ -718,9 +718,10 @@ class blog_mainDb extends BaseDb
 	 * @param timestamp $regDate			登録日時
 	 * @param array     $prevRow			前のレコード
 	 * @param array     $nextRow			次のレコード
+	 * @param string	$blogId				ブログID(未指定の場合はnull)
 	 * @return bool							取得 = true, 取得なし= false
 	 */
-	function getPrevNextEntryByDate($regDate, &$prevRow, &$nextRow)
+	function getPrevNextEntryByDate($regDate, &$prevRow, &$nextRow, $blogId = null)
 	{
 		if ($regDate == $this->gEnv->getInitValueOfTimestamp()){
 			return false;
@@ -730,6 +731,12 @@ class blog_mainDb extends BaseDb
 			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 			$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
 			$queryStr .=     'AND be_regist_dt < ? '; $params[] = $regDate;
+			
+			// ブログID
+			if (isset($blogId)){
+				$queryStr .=    'AND be_blog_id = ? ';
+				$params[] = $blogId;
+			}
 			$queryStr .=   'ORDER BY be_regist_dt DESC LIMIT 1';// 投稿順
 			$ret = $this->selectRecord($queryStr, $params, $row);
 			if ($ret){
@@ -741,6 +748,12 @@ class blog_mainDb extends BaseDb
 			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 			$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
 			$queryStr .=     'AND ? < be_regist_dt '; $params[] = $regDate;
+			
+			// ブログID
+			if (isset($blogId)){
+				$queryStr .=    'AND be_blog_id = ? ';
+				$params[] = $blogId;
+			}
 			$queryStr .=   'ORDER BY be_regist_dt LIMIT 1';// 投稿順
 			$ret = $this->selectRecord($queryStr, $params, $row);
 			if ($ret){
