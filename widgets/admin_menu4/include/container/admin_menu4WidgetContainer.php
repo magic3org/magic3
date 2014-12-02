@@ -824,7 +824,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 					}
 					$tagIdAttr = '';		// タグID
 					if (!empty($subTagId)) $tagIdAttr = ' id="' . $subTagId . '"';
-					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . $this->getUrl($linkUrl) . '">' . $this->convertToDispString($name) . '</a></li>';
+					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . $this->getUrl($linkUrl) . '">' . $this->convertToDispString($subName) . '</a></li>';
 				}
 				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
 

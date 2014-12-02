@@ -404,6 +404,7 @@ class DesignManager extends Core
 			$name	= $menuItem->name;
 			$tagId	= $menuItem->tagid;
 			$active = $menuItem->active;
+			$disabled	= $menuItem->disabled;
 			$task	= $menuItem->task;
 			$url	= $menuItem->url;
 			$help	= $menuItem->help;
@@ -415,6 +416,7 @@ class DesignManager extends Core
 				} else {
 					$buttonType = 'btn-success';
 				}
+				if ($disabled) $buttonType .= ' disabled';		// 使用可否
 				$tagIdAttr = '';		// タグID
 				if (!empty($tagId)) $tagIdAttr = ' id="' . $tagId . '"';
 				
@@ -435,6 +437,7 @@ class DesignManager extends Core
 					$subName	= $subMenuItem->name;
 					$subTagId	= $subMenuItem->tagid;
 					$subActive	= $subMenuItem->active;
+					$subDisabled	= $subMenuItem->disabled;
 					$task		= $subMenuItem->task;
 					$url		= $subMenuItem->url;
 					
@@ -443,7 +446,9 @@ class DesignManager extends Core
 					if (empty($linkUrl)) $linkUrl = $url;
 					if (empty($linkUrl)) $linkUrl = '#';
 					$classActive = '';
-					if ($subActive){
+					if ($subDisabled){		// 使用可否
+						$classActive = ' class="disabled"';
+					} else if ($subActive){
 						$classActive = ' class="active"';
 						$active = true;			// 親の階層もアクティブにする
 					}
@@ -463,7 +468,9 @@ class DesignManager extends Core
 		}
 		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
 		
+		// メニューバー作成
 		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel"><div class="collapse navbar-collapse">' . $titleTag . $menuTag . '</div></nav>';
+
 		return $destHtml;
 	}
 	/**

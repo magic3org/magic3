@@ -125,7 +125,7 @@ const TASK_BASE_NAME = '運用状況';			// 機能のベース名
 		
 		// メニューバーの作成
 		$navbarDef = new stdClass;
-		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+//		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
 		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
 		$navbarDef->help	= '';// ヘルプ文字列
 		$navbarDef->menu =	array(
@@ -136,11 +136,11 @@ const TASK_BASE_NAME = '運用状況';			// 機能のベース名
 									'tagid'		=> '',
 									'active'	=> (
 														$task == self::TASK_ACCESSLOG ||				// アクセスログ一覧
-														$task == self::TASK_ACCESSLOG_DETAIL ||		// アクセスログ詳細
-														$task == self::TASK_OPELOG ||			// 運用ログ一覧
-														$task == self::TASK_OPELOG_DETAIL ||		// 運用ログ詳細
-														$task == self::TASK_SEARCHWORDLOG ||				// 検索語ログ一覧
-														$task == self::TASK_SEARCHWORDLOG_DETAIL ||	// 検索語ログ詳細
+														$task == self::TASK_ACCESSLOG_DETAIL ||			// アクセスログ詳細
+														$task == self::TASK_OPELOG ||					// 運用ログ一覧
+														$task == self::TASK_OPELOG_DETAIL ||			// 運用ログ詳細
+														$task == self::TASK_SEARCHWORDLOG ||			// 検索語ログ一覧
+														$task == self::TASK_SEARCHWORDLOG_DETAIL		// 検索語ログ詳細
 													),
 									'submenu'	=> array(
 										(Object)array(
