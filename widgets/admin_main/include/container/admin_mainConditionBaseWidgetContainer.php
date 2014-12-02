@@ -20,17 +20,20 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 {
 	protected $_mainDb;
 	protected $_openBy;				// ウィンドウオープンタイプ
-	const TASK_BASE_NAME = '運用状況';			// 機能のベース名
-	const TASK_CALC		= 'analyzecalc';		// 集計
-	const TASK_GRAPH	= 'analyzegraph';		// グラフ表示
+const TASK_BASE_NAME = '運用状況';			// 機能のベース名
+	const BREADCRUMB_TITLE	= '運用状況';		// パンくずリストトップタイトル
+	// 画面
 	const TASK_OPELOG	= 'opelog';			// 運用ログ一覧
 	const TASK_OPELOG_DETAIL 	= 'opelog_detail';		// 運用ログ詳細
 	const TASK_ACCESSLOG		= 'accesslog';				// アクセスログ一覧
 	const TASK_ACCESSLOG_DETAIL	= 'accesslog_detail';		// アクセスログ詳細
 	const TASK_SEARCHWORDLOG	= 'searchwordlog';				// 検索語ログ一覧
 	const TASK_SEARCHWORDLOG_DETAIL	= 'searchwordlog_detail';		// 検索語ログ詳細
+	const TASK_CALC		= 'analyzecalc';		// 集計
+	const TASK_GRAPH	= 'analyzegraph';		// グラフ表示
 	const TASK_AWSTATS		= 'awstats';		// Awstats表示
 	const DEFAULT_TOP_PAGE = 'accesslog';		// デフォルトのトップ画面
+	// DB定義値
 	const CF_AWSTATS_DATA_PATH = 'awstats_data_path';		// Awstatsデータパス
 	
 	/**
@@ -73,6 +76,144 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;
+		
+		// パンくずリストの作成
+		$titles = array();
+		$titles[] = self::BREADCRUMB_TITLE;
+		switch ($task){
+			case self::TASK_OPELOG:			// 運用ログ一覧
+				$titles[] = 'ログ';
+				$titles[] = '運用ログ';
+				break;
+			case self::TASK_OPELOG_DETAIL:		// 運用ログ詳細
+				$titles[] = 'ログ';
+				$titles[] = '運用ログ';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_ACCESSLOG:				// アクセスログ一覧
+				$titles[] = 'ログ';
+				$titles[] = 'アクセスログ';
+				break;
+			case self::TASK_ACCESSLOG_DETAIL:		// アクセスログ詳細
+				$titles[] = 'ログ';
+				$titles[] = 'アクセスログ';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_SEARCHWORDLOG:				// 検索語ログ一覧
+				$titles[] = 'ログ';
+				$titles[] = '検索キーワード';
+				break;
+			case self::TASK_SEARCHWORDLOG_DETAIL:		// 検索語ログ詳細
+				$titles[] = 'ログ';
+				$titles[] = '検索キーワード';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_GRAPH:	// グラフ表示
+				$titles[] = 'アクセス数';
+				$titles[] = 'グラフ表示';
+				break;
+			case self::TASK_CALC:	// 集計
+				$titles[] = 'アクセス数';
+				$titles[] = '集計';
+				break;
+			case self::TASK_AWSTATS:		// Awstats表示
+				$titles[] = 'アクセス解析';
+				$titles[] = 'Awstats';
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef($titles);
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'ログ',
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_ACCESSLOG ||				// アクセスログ一覧
+														$task == self::TASK_ACCESSLOG_DETAIL ||		// アクセスログ詳細
+														$task == self::TASK_OPELOG ||			// 運用ログ一覧
+														$task == self::TASK_OPELOG_DETAIL ||		// 運用ログ詳細
+														$task == self::TASK_SEARCHWORDLOG ||				// 検索語ログ一覧
+														$task == self::TASK_SEARCHWORDLOG_DETAIL ||	// 検索語ログ詳細
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'アクセスログ',
+											'task'		=> self::TASK_ACCESSLOG,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_ACCESSLOG ||				// アクセスログ一覧
+																$task == self::TASK_ACCESSLOG_DETAIL			// アクセスログ詳細
+															)
+										),
+										(Object)array(
+											'name'		=> '運用ログ',
+											'task'		=> self::TASK_OPELOG,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_OPELOG ||			// 運用ログ一覧
+																$task == self::TASK_OPELOG_DETAIL		// 運用ログ詳細
+															)
+										),
+										(Object)array(
+											'name'		=> '検索キーワード',
+											'task'		=> self::TASK_SEARCHWORDLOG,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_SEARCHWORDLOG ||				// 検索語ログ一覧
+																$task == self::TASK_SEARCHWORDLOG_DETAIL			// 検索語ログ詳細
+															)
+										)
+									)
+								),
+								(Object)array(
+									'name'		=> 'アクセス数',
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_GRAPH ||	// グラフ表示
+														$task == self::TASK_CALC			// 集計
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'グラフ表示',
+											'task'		=> self::TASK_GRAPH,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_GRAPH	// グラフ表示
+															)
+										),
+										(Object)array(
+											'name'		=> '集計',
+											'task'		=> self::TASK_CALC,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_CALC			// 集計
+															)
+										)
+									)
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
+		
+		
+		
+		
+		
+		
+		
 		
 		// パンくずリストを作成
 		switch ($task){

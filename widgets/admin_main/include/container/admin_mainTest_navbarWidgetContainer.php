@@ -104,6 +104,15 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 									'submenu'	=> array()
 								),
 								(Object)array(
+									'name'		=> 'トップ項目',
+									'task'		=> 'item_detail2',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> false,
+									'disabled'	=> true,
+									'submenu'	=> array()
+								),
+								(Object)array(
 									'name'		=> 'トップ項目2',
 									'task'		=> '',
 									'url'		=> '#widget_other',
@@ -130,7 +139,8 @@ class admin_mainTest_navbarWidgetContainer extends admin_mainBaseWidgetContainer
 											'task'		=> 'a',
 											'url'		=> '',
 											'tagid'		=> '',
-											'active'	=> false
+											'active'	=> false,
+											'disabled'	=> true
 										),
 										(Object)array(
 											'name'		=> 'トップ項目3サブ項目1',

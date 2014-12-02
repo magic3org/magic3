@@ -774,6 +774,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$name	= $menuItem->name;
 			$tagId	= $menuItem->tagid;
 			$active = $menuItem->active;
+			$disabled	= $menuItem->disabled;
 			$task	= $menuItem->task;
 			$url	= $menuItem->url;
 			$help	= $menuItem->help;
@@ -785,6 +786,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				} else {
 					$buttonType = 'btn-success';
 				}
+				if ($disabled) $buttonType .= ' disabled';		// 使用可否
 				$tagIdAttr = '';		// タグID
 				if (!empty($tagId)) $tagIdAttr = ' id="' . $tagId . '"';
 				
@@ -805,6 +807,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 					$subName	= $subMenuItem->name;
 					$subTagId	= $subMenuItem->tagid;
 					$subActive	= $subMenuItem->active;
+					$subDisabled	= $subMenuItem->disabled;
 					$task		= $subMenuItem->task;
 					$url		= $subMenuItem->url;
 					
@@ -813,7 +816,9 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 					if (empty($linkUrl)) $linkUrl = $url;
 					if (empty($linkUrl)) $linkUrl = '#';
 					$classActive = '';
-					if ($subActive){
+					if ($subDisabled){		// 使用可否
+						$classActive = ' class="disabled"';
+					} else if ($subActive){
 						$classActive = ' class="active"';
 						$active = true;			// 親の階層もアクティブにする
 					}
