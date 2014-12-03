@@ -756,7 +756,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createSubMenubar($navbarDef)
 	{
-		// タイトル作成
+/*		// タイトル作成
 		$titleTag = '';
 		if (!empty($navbarDef->title)){
 			$title = $this->convertToDispString($navbarDef->title);
@@ -838,6 +838,13 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 		}
 		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
+		*/
+		// タイトル作成
+		$titleTag = $this->gDesign->createSubMenubarTitleTag($navbarDef);
+		
+		// メニュー作成
+		$menuTag = $this->gDesign->createSubMenubarMenuTag($navbarDef);
+		
 		return array($titleTag, $menuTag);
 	}
 }

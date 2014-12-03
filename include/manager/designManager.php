@@ -55,6 +55,19 @@ class DesignManager extends Core
 		$this->_getUrlCallback = $func;
 	}
 	/**
+	 * ウィジェットコンテナクラスのgetUrl()を使用してURLを作成
+	 *
+	 * @param string $path				URL作成用のパス
+	 * @param bool $isLink				作成するURLがリンクかどうか。リンクの場合はリンク先のページのSSLの状態に合わせる(未使用)
+	 * @param string,array $param		URLに付加するパラメータ
+	 * @return string					変換後URL
+	 */
+	function getUrl($path, $isLink = false, $param = '')
+	{
+		$destUrl = call_user_func($this->_getUrlCallback, $path, $isLink, $param);
+		return $destUrl;
+	}
+	/**
 	 * デフォルトウィジェットテーブルのパラメータを取得
 	 *
 	 * @param int $menuType			タイプ(0=テーブルタグ形式、1=リンクタグ形式)
@@ -387,13 +400,41 @@ class DesignManager extends Core
 	function createSubMenubar($navbarDef)
 	{
 		// タイトル作成
+		$titleTag = $this->createSubMenubarTitleTag($navbarDef);
+		
+		// メニュー作成
+		$menuTag = $this->createSubMenubarMenuTag($navbarDef);
+		
+		// メニューバー作成
+		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel"><div class="collapse navbar-collapse">' . $titleTag . $menuTag . '</div></nav>';
+
+		return $destHtml;
+	}
+	/**
+	 * サブメニューバーのタイトルタグ作成
+	 *
+	 * @param object $navbarDef			メニューバー定義
+	 * @return string 					サブメニューバーのHTML
+	 */
+	function createSubMenubarTitleTag($navbarDef)
+	{
+		// タイトル作成
 		$titleTag = '';
 		if (!empty($navbarDef->title)){
 			$title = convertToHtmlEntity($navbarDef->title);
 			if (!empty($navbarDef->help)) $title = '<span ' . $navbarDef->help . '>' . $title . '</span>';
 			$titleTag = '<div class="navbar-text title">' . $title . '</div>';
 		}
-		
+		return $titleTag;
+	}
+	/**
+	 * サブメニューバーのメニュータグ作成
+	 *
+	 * @param object $navbarDef			メニューバー定義
+	 * @return string 					サブメニューバーのHTML
+	 */
+	function createSubMenubarMenuTag($navbarDef)
+	{
 		// メニュー作成
 		$menuTag = '';
 		$baseUrl = $navbarDef->baseurl;
@@ -455,7 +496,9 @@ class DesignManager extends Core
 					}
 					$tagIdAttr = '';		// タグID
 					if (!empty($subTagId)) $tagIdAttr = ' id="' . $subTagId . '"';
-					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . convertUrlToHtmlEntity($linkUrl) . '">' . convertToHtmlEntity($subName) . '</a></li>';
+				
+				//	$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . convertUrlToHtmlEntity($linkUrl) . '">' . convertToHtmlEntity($subName) . '</a></li>';
+					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '">' . convertToHtmlEntity($subName) . '</a></li>';
 				}
 				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
 
@@ -469,10 +512,7 @@ class DesignManager extends Core
 		}
 		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
 		
-		// メニューバー作成
-		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel"><div class="collapse navbar-collapse">' . $titleTag . $menuTag . '</div></nav>';
-
-		return $destHtml;
+		return $menuTag;
 	}
 	/**
 	 * サブメニューバーの高さを取得
