@@ -29,7 +29,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_INITSYSTEM		= 'initsystem';		// DBメンテナンス
 	const TASK_DBBACKUP			= 'dbbackup';		// DBバックアップ
 	const TASK_DBCONDITION		= 'dbcondition';	// DB状況
-	const DEFAULT_TASK			= 'resbrowse';		// ファイルブラウザ
+	const TASK_MAIN				= 'mainte';			// 全体(メンテナンス)
+	const DEFAULT_TASK			= 'resbrowse';		// デフォルト(ファイルブラウザ)
 	
 	const TASK_NAME_MAIN = 'メンテナンス';
 	const HELP_KEY_RESBROWSE	= 'resbrowse';		// ファイルブラウザ
@@ -60,7 +61,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	function _postAssign($request, &$param)
 	{
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = self::DEFAULT_TASK;
+		if ($task == self::TASK_MAIN) $task = self::DEFAULT_TASK;
 		
 		// パンくずリストの作成
 		$titles = array();
@@ -112,7 +113,124 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
 
-
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+//		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'ファイル管理',
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_RESBROWSE		// ファイルブラウザ
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'ファイルブラウザ',
+											'task'		=> self::TASK_RESBROWSE,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_RESBROWSE		// ファイルブラウザ
+															)
+										)
+									)
+								),
+								(Object)array(
+									'name'		=> 'マスター管理',
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_PAGEINFO ||			// ページ情報
+														$task == self::TASK_PAGEINFO_DETAIL ||	// ページ情報詳細
+														$task == self::TASK_PAGEID ||			// ページID
+														$task == self::TASK_PAGEID_DETAIL ||	// ページID詳細
+														$task == self::TASK_MENUID ||			// メニューID
+														$task == self::TASK_MENUID_DETAIL		// メニューID詳細
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'ページ情報',
+											'task'		=> self::TASK_PAGEINFO,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_PAGEINFO ||			// ページ情報
+																$task == self::TASK_PAGEINFO_DETAIL	// ページ情報詳細
+															)
+										),
+										(Object)array(
+											'name'		=> 'ページID',
+											'task'		=> self::TASK_PAGEID,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_PAGEID ||			// ページID
+																$task == self::TASK_PAGEID_DETAIL	// ページID詳細
+															)
+										),
+										(Object)array(
+											'name'		=> 'メニューID',
+											'task'		=> self::TASK_MENUID,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_MENUID ||			// メニューID
+																$task == self::TASK_MENUID_DETAIL		// メニューID詳細
+															)
+										)
+									)
+								),
+								(Object)array(
+									'name'		=> 'DB管理',
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_INITSYSTEM ||		// DBメンテナンス
+														$task == self::TASK_DBBACKUP ||			// DBバックアップ
+														$task == self::TASK_DBCONDITION			// DB状況
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'データ初期化',
+											'task'		=> self::TASK_INITSYSTEM,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_INITSYSTEM		// DBメンテナンス
+															)
+										),
+										(Object)array(
+											'name'		=> 'バックアップ',
+											'task'		=> self::TASK_DBBACKUP,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_DBBACKUP		// DBバックアップ
+															)
+										),
+										(Object)array(
+											'name'		=> '状況',
+											'task'		=> self::TASK_DBCONDITION,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_DBCONDITION		// DB状況
+															)
+										)
+									)
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
+		
+		
+		
+		
 		// パンくずリストを作成
 		switch ($task){
 			case self::TASK_RESBROWSE:		// ファイルブラウザ
