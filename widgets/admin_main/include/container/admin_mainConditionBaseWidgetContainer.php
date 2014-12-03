@@ -204,17 +204,32 @@ const TASK_BASE_NAME = '運用状況';			// 機能のベース名
 															)
 										)
 									)
+								),
+								(Object)array(
+									'name'		=> 'アクセス解析',
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_AWSTATS		// Awstats表示
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'Awstats',
+											'task'		=> self::TASK_AWSTATS,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_AWSTATS
+															),
+											'disabled'	=> (	!$this->isExistsAwstats()	)
+										)
+									)
 								)
 							);
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
 		
-		
-		
-		
-		
-		
-		
-		
+/*
 		// パンくずリストを作成
 		switch ($task){
 			case self::TASK_OPELOG:			// 運用ログ一覧
@@ -352,6 +367,7 @@ const TASK_BASE_NAME = '運用状況';			// 機能のベース名
 		$linkList = '<div id="configmenu-top"><label>' . self::TASK_BASE_NAME . $linkList . '</div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+*/
 	}
 	/**
 	 * Awstatsの作成データが参照できるかどうか

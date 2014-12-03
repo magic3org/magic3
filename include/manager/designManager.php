@@ -448,6 +448,7 @@ class DesignManager extends Core
 					$classActive = '';
 					if ($subDisabled){		// 使用可否
 						$classActive = ' class="disabled"';
+						$linkUrl = '#';
 					} else if ($subActive){
 						$classActive = ' class="active"';
 						$active = true;			// 親の階層もアクティブにする
