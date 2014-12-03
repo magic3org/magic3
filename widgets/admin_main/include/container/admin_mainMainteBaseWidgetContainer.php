@@ -17,18 +17,19 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	const TASK_MAIN = 'mainte';				// メンテナンス
-	const TASK_RESBROWSE = 'resbrowse';		// ファイルブラウザ
-	const TASK_INITSYSTEM	= 'initsystem';		// DBメンテナンス
-	const TASK_DBBACKUP		= 'dbbackup';		// DBバックアップ
-	const TASK_DBCONDITION	= 'dbcondition';	// DB状況
-	const TASK_PAGEINFO = 'pageinfo';	// ページ情報
-	const TASK_PAGEINFO_DETAIL = 'pageinfo_detail';	// ページ情報
-	const TASK_PAGEID = 'pageid';		// ページID
-	const TASK_PAGEID_DETAIL = 'pageid_detail';		// ページID
-	const TASK_MENUID = 'menuid';		// メニューID
-	const TASK_MENUID_DETAIL = 'menuid_detail';		// メニューID
-	const DEFAULT_TASK = 'resbrowse';		// ファイルブラウザ
+	const BREADCRUMB_TITLE	= 'メンテナンス';		// パンくずリストトップタイトル
+	// 画面
+	const TASK_RESBROWSE 		= 'resbrowse';		// ファイルブラウザ
+	const TASK_PAGEINFO			= 'pageinfo';	// ページ情報
+	const TASK_PAGEINFO_DETAIL	= 'pageinfo_detail';	// ページ情報
+	const TASK_PAGEID			= 'pageid';		// ページID
+	const TASK_PAGEID_DETAIL	= 'pageid_detail';		// ページID
+	const TASK_MENUID			= 'menuid';		// メニューID
+	const TASK_MENUID_DETAIL	= 'menuid_detail';		// メニューID
+	const TASK_INITSYSTEM		= 'initsystem';		// DBメンテナンス
+	const TASK_DBBACKUP			= 'dbbackup';		// DBバックアップ
+	const TASK_DBCONDITION		= 'dbcondition';	// DB状況
+	const DEFAULT_TASK			= 'resbrowse';		// ファイルブラウザ
 	
 	const TASK_NAME_MAIN = 'メンテナンス';
 	const HELP_KEY_RESBROWSE	= 'resbrowse';		// ファイルブラウザ
@@ -59,8 +60,59 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	function _postAssign($request, &$param)
 	{
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if ($task == self::TASK_MAIN) $task = self::DEFAULT_TASK;
+		if (empty($task)) $task = self::DEFAULT_TASK;
 		
+		// パンくずリストの作成
+		$titles = array();
+		$titles[] = self::BREADCRUMB_TITLE;
+		switch ($task){
+			case self::TASK_RESBROWSE:		// ファイルブラウザ
+				$titles[] = 'ファイル管理';
+				$titles[] = 'ファイルブラウザ';
+				break;
+			case self::TASK_PAGEINFO:	// ページ情報
+				$titles[] = 'マスター管理';
+				$titles[] = 'ページ情報';
+				break;
+			case self::TASK_PAGEINFO_DETAIL:	// ページ情報
+				$titles[] = 'マスター管理';
+				$titles[] = 'ページ情報';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_PAGEID:	// ページID
+				$titles[] = 'マスター管理';
+				$titles[] = 'ページID';
+				break;
+			case self::TASK_PAGEID_DETAIL:		// ページID
+				$titles[] = 'マスター管理';
+				$titles[] = 'ページID';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_MENUID:		// メニューID
+				$titles[] = 'マスター管理';
+				$titles[] = 'メニューID';
+				break;
+			case self::TASK_MENUID_DETAIL:		// メニューID
+				$titles[] = 'マスター管理';
+				$titles[] = 'メニューID';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_INITSYSTEM:		// DBメンテナンス
+				$titles[] = 'DB管理';
+				$titles[] = 'データ初期化';
+				break;
+			case self::TASK_DBBACKUP:		// DBバックアップ
+				$titles[] = 'DB管理';
+				$titles[] = 'バックアップ';
+				break;
+			case self::TASK_DBCONDITION:	// DB状況
+				$titles[] = 'DB管理';
+				$titles[] = '状況';
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef($titles);
+
+
 		// パンくずリストを作成
 		switch ($task){
 			case self::TASK_RESBROWSE:		// ファイルブラウザ
