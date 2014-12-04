@@ -119,7 +119,7 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		$navbarDef = new stdClass;
 		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
 		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
-		$navbarDef->help	= '';// ヘルプ文字列
+		$navbarDef->help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面', M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能<br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
 		$navbarDef->menu =	array(
 								(Object)array(
 									'name'		=> 'コンテンツ管理',

@@ -127,6 +127,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'active'	=> (
 														$task == self::TASK_RESBROWSE		// ファイルブラウザ
 													),
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_RESBROWSE),// ヘルプ文字列
 									'submenu'	=> array(
 										(Object)array(
 											'name'		=> 'ファイルブラウザ',
@@ -135,7 +136,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 											'tagid'		=> '',
 											'active'	=> (
 																$task == self::TASK_RESBROWSE		// ファイルブラウザ
-															)
+															),
+											'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_RESBROWSE),// ヘルプ文字列
 										)
 									)
 								),

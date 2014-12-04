@@ -37,6 +37,7 @@ class EnvManager extends Core
 	private $currentWidgetTitle;	// 現在作成中のウィジェットのタイトル文字列
 	private $currentWidgetStyle;	// 現在作成中のウィジェットのスタイル文字列
 	private $currentWidgetJoomlaParam;	// 現在作成中のウィジェットのJoomla用パラメータ
+	private $currentWidgetParams = array();		// 現在作成中のウィジェットのその他パラメータ
 	private $isCurrentWidgetShared;	// 現在作成中のウィジェットが共通ウィジェットかどうか
 	private $currentDomainRootUrl;	// マルチドメイン運用時の現在のルートURL
 	private $defaultLanguage;	// デフォルト言語(システムで固定)
@@ -1483,6 +1484,9 @@ class EnvManager extends Core
 	}
 	/**
 	 * 現在処理中のウィジェットのタイトル文字列
+	 *
+	 * @param string $val	タイトル文字列
+	 * @return 				なし
 	 */
 	public function setCurrentWidgetTitle($val)
 	{
@@ -1490,10 +1494,33 @@ class EnvManager extends Core
 	}
 	/**
 	 * 現在処理中のウィジェットのタイトル文字列
+	 *
+	 * @return string	タイトル文字列
 	 */
 	public function getCurrentWidgetTitle()
 	{
 		return $this->currentWidgetTitle;
+	}
+	/**
+	 * 現在処理中のウィジェットのパラメータ設定
+	 *
+	 * @param string $key	キー
+	 * @param string $val	値
+	 * @return 				なし
+	 */
+	public function setCurrentWidgetParams($key, $val)
+	{
+		$this->currentWidgetParams[$key] = $val;
+	}
+	/**
+	 * 現在処理中のウィジェットのパラメータから値取得
+	 *
+	 * @param string $key	キー
+	 * @return string		値
+	 */
+	public function getCurrentWidgetParams($key)
+	{
+		return $this->currentWidgetParams[$key];
 	}
 	/**
 	 * 現在処理中のウィジェットのスタイル文字列

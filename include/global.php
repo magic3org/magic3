@@ -44,6 +44,8 @@ define('M3_NL',	"\n");				// 改行
 define('M3_TB',	"\t");				// タブ
 define('M3_INDENT_SPACE', '    ');	// 字下げスペース
 define('M3_ENCODING',	'UTF-8');	// 内部エンコーディング
+define('M3_TITLE_BRACKET_START',	'「');					// タイトルを括弧表記する場合の開始
+define('M3_TITLE_BRACKET_END',		'」');					// タイトルを括弧表記する場合の終了
 
 // ########## システム関係 ##########
 // システム基本情報

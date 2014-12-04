@@ -2516,6 +2516,10 @@ class PageManager extends Core
 		}
 		// ウィジェット設定画面用メニューバーの作成
 		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
+			// ウィジェット情報を設定
+			$desc = $row['wd_description'];		// 説明
+			$gEnvManager->setCurrentWidgetParams('desc', $desc);
+			
 			echo self::MENUBAR_TAGS;			// メニューバー出力用タグ
 		}
 		// Bootstrap用のタグ出力
