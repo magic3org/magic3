@@ -220,25 +220,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
-/*		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号*/
-		
-		// ページング用リンク作成
-/*		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					$link = '&nbsp;<a href="#" onclick="selpage(\'' . $i . '\');return false;">' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-		}*/
-//		$currentBaseUrl = $this->_baseUrl . '&task=' . self::TASK_CONTENT;
+
+		// ページングリンク作成
 		$currentBaseUrl = '';		// POST用のリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
 		

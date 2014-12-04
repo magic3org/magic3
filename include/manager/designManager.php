@@ -228,6 +228,7 @@ class DesignManager extends Core
 				if ($i == $pageNo){
 					switch ($style){
 						case 2:			// Bootstrap型のとき
+						case -1:		// 管理画面
 							$link = '<li class="active"><a href="#">' . $i . '<span class="sr-only">(current)</span></a></li>';
 							break;
 						default:
@@ -244,6 +245,7 @@ class DesignManager extends Core
 					}
 					switch ($style){
 						case 2:			// Bootstrap型のとき
+						case -1:		// 管理画面
 							$link = '<li>' . $this->_createLink($i, convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
 							break;
 						default:
@@ -257,6 +259,7 @@ class DesignManager extends Core
 			if ($pageCount > $linkCount){
 				switch ($style){
 					case 2:			// Bootstrap型のとき
+					case -1:		// 管理画面
 						$pageLink .= '<li class="disabled"><a href="#">…</a></li>';
 						break;
 					default:
@@ -275,6 +278,7 @@ class DesignManager extends Core
 			}
 			switch ($style){
 				case 2:			// Bootstrap型のとき
+				case -1:		// 管理画面
 					$link = '<li>' . $this->_createLink('&laquo;', convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
 					break;
 				default:
@@ -293,6 +297,7 @@ class DesignManager extends Core
 			}
 			switch ($style){
 				case 2:			// Bootstrap型のとき
+				case -1:		// 管理画面
 					$link = '<li>' . $this->_createLink('&raquo;', convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
 					break;
 				default:
@@ -304,6 +309,7 @@ class DesignManager extends Core
 		if (!empty($pageLink)){
 			switch ($style){
 				case 2:			// Bootstrap型のとき
+				case -1:		// 管理画面
 					$pageLink = '<ul class="pagination">' . $pageLink . '</ul>';
 					break;
 				default:
