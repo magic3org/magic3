@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: filebrowser.tmpl.html 6132 2013-06-25 05:29:46Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -16,7 +16,7 @@
 $(function(){
 	var elf = $('#elfinder').elfinder({
 		url : '{URL}',  // connector URL (REQUIRED)
-		width: '90%',
+		width: '100%',
 		height: '500px',
 		lang: '{LANG}',             // language (OPTIONAL)
 		getFileCallback : function(files, fm){		// ダブルクリックのファイルオープン禁止
@@ -26,8 +26,5 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
-<div style="text-align:left;width:90%;"><label>ファイルブラウザ</label></div>
 <div id="elfinder"></div>
-</div>
 </patTemplate:tmpl>

@@ -230,9 +230,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 							);
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
 		
-		
-		
-		
+/*
 		// パンくずリストを作成
 		switch ($task){
 			case self::TASK_RESBROWSE:		// ファイルブラウザ
@@ -390,6 +388,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . self::TASK_NAME_MAIN . ' &gt;&gt;' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+*/
 	}
 }
 ?>
