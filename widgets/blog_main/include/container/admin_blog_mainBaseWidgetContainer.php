@@ -75,6 +75,7 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TASK;
 		
+		// パンくずリストの定義データ作成
 		$titles = array();
 		switch ($task){
 			case self::TASK_ENTRY:				// ブログ記事(一覧)
@@ -124,97 +125,93 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = '基本設定';
 				break;
 		}
-		$this->gPage->setAdminBreadcrumbDef($titles);
 		
-		// メニューバーの作成
-		$navbarDef = new stdClass;
-		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
-		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
-		$navbarDef->help	= '';// ヘルプ文字列
-		$navbarDef->menu =	array(
-								(Object)array(
-									'name'		=> 'ブログ記事管理',
-									'task'		=> '',
-									'url'		=> '',
-									'tagid'		=> '',
-									'active'	=> (
-														$task == self::TASK_ENTRY ||				// ブログ記事(一覧)
-														$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
-														$task == self::TASK_HISTORY ||			// ブログ記事履歴
-														$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
-														$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
-													),
-									'submenu'	=> array(
-										(Object)array(
-											'name'		=> '記事一覧',
-											'task'		=> self::TASK_ENTRY,
-											'url'		=> '',
-											'tagid'		=> '',
-											'active'	=> (
-																$task == self::TASK_ENTRY ||			// ブログ記事(一覧)
-																$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
-																$task == self::TASK_HISTORY				// ブログ記事履歴
-															)
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> 'ブログ記事管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_ENTRY ||				// ブログ記事(一覧)
+											$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
+											$task == self::TASK_HISTORY ||			// ブログ記事履歴
+											$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
+											$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
 										),
-										(Object)array(
-											'name'		=> 'コメント一覧',
-											'task'		=> self::TASK_COMMENT,
-											'url'		=> '',
-											'tagid'		=> '',
-											'active'	=> (
-																$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
-																$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
-															)
-										)
-									)
-								),
-								(Object)array(
-									'name'		=> '基本',
-									'task'		=> self::TASK_CONFIG,
-									'url'		=> '',
-									'tagid'		=> '',
-									'active'	=> (
-														$task == self::TASK_CATEGORY ||			// 記事カテゴリー(一覧)
-														$task == self::TASK_CATEGORY_DETAIL ||	// 記事カテゴリー(詳細)
-														$task == self::TASK_BLOGID ||			// マルチブログ設定(一覧)
-														$task == self::TASK_BLOGID_DETAIL ||		// マルチブログ設定(詳細)
-														$task == self::TASK_CONFIG					// 基本設定
-													),
-									'submenu'	=> array(
-										(Object)array(
-											'name'		=> '記事カテゴリー',
-											'task'		=> self::TASK_CATEGORY,
-											'url'		=> '',
-											'tagid'		=> '',
-											'active'	=> (
-																$task == self::TASK_CATEGORY ||			// 記事カテゴリー(一覧)
-																$task == self::TASK_CATEGORY_DETAIL		// 記事カテゴリー(詳細)
-															)
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '記事一覧',
+								'task'		=> self::TASK_ENTRY,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_ENTRY ||			// ブログ記事(一覧)
+													$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
+													$task == self::TASK_HISTORY				// ブログ記事履歴
+												)
+							),
+							(Object)array(
+								'name'		=> 'コメント一覧',
+								'task'		=> self::TASK_COMMENT,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
+													$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
+												)
+							)
+						)
+					),
+					(Object)array(
+						'name'		=> '基本',
+						'task'		=> self::TASK_CONFIG,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_CATEGORY ||			// 記事カテゴリー(一覧)
+											$task == self::TASK_CATEGORY_DETAIL ||	// 記事カテゴリー(詳細)
+											$task == self::TASK_BLOGID ||			// マルチブログ設定(一覧)
+											$task == self::TASK_BLOGID_DETAIL ||		// マルチブログ設定(詳細)
+											$task == self::TASK_CONFIG					// 基本設定
 										),
-										(Object)array(
-											'name'		=> 'マルチブログ',
-											'task'		=> self::TASK_BLOGID,
-											'url'		=> '',
-											'tagid'		=> '',
-											'active'	=> (
-																$task == self::TASK_BLOGID ||			// マルチブログ設定(一覧)
-																$task == self::TASK_BLOGID_DETAIL		// マルチブログ設定(詳細)
-															)
-										),
-										(Object)array(
-											'name'		=> '基本設定',
-											'task'		=> self::TASK_CONFIG,
-											'url'		=> '',
-											'tagid'		=> '',
-											'active'	=> (
-																$task == self::TASK_CONFIG					// 基本設定
-															)
-										)
-									)
-								)
-							);
-		$this->gPage->setAdminSubNavbarDef($navbarDef);
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '記事カテゴリー',
+								'task'		=> self::TASK_CATEGORY,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CATEGORY ||			// 記事カテゴリー(一覧)
+													$task == self::TASK_CATEGORY_DETAIL		// 記事カテゴリー(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> 'マルチブログ',
+								'task'		=> self::TASK_BLOGID,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_BLOGID ||			// マルチブログ設定(一覧)
+													$task == self::TASK_BLOGID_DETAIL		// マルチブログ設定(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> '基本設定',
+								'task'		=> self::TASK_CONFIG,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CONFIG					// 基本設定
+												)
+							)
+						)
+					)
+				);
 		
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
 /*
 		// パンくずリストを作成
 		switch ($task){

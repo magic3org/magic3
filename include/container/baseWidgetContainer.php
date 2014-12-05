@@ -37,6 +37,8 @@ class BaseWidgetContainer extends Core
 	protected $successMessage	= array();		// 成功メッセージ
 	protected $optionUrlParam = array();		// URLに付加する値
 	protected $localeText = array();			// ローカライズ用テキストの定義
+	protected $configMenubarBreadcrumbTitleDef;			// 設定画面用パンくずリストのタイトル定義
+	protected $configMenubarMenuDef;					// 設定画面用メニューバーのメニュー定義
 	protected $keepForeTaskForBackUrl = false;	// 遷移前のタスクを戻り先URLとするかどうか
 	protected $_defConfigId;					// ページ定義のウィジェット定義ID
 	protected $_defSerial;						// ページ定義のレコードシリアル番号
@@ -201,6 +203,23 @@ class BaseWidgetContainer extends Core
 				
 			// 各ウィジェットごとのテンプレート処理、テンプレートを使用しないときは出力処理(Ajax等)
 			if (method_exists($this, '_postAssign')) $this->_postAssign($request, $param);
+			
+			// サブメニューバーの作成
+			if ($isAdminDirAccess){			// 管理画面のみ
+				// 設定画面用パンくずリストの作成
+				if (!empty($this->configMenubarBreadcrumbTitleDef)) $this->gPage->setAdminBreadcrumbDef($this->configMenubarBreadcrumbTitleDef);
+				
+				// 設定画面用メニューバーの作成
+				if (!empty($this->configMenubarMenuDef)){
+					$navbarDef = new stdClass;
+					$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+					$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+					$navbarDef->help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面',
+								'<strong>●' . M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
+					$navbarDef->menu = $this->configMenubarMenuDef;
+					$this->gPage->setAdminSubNavbarDef($navbarDef);
+				}
+			}
 			
 			// テキストのローカライズ
 			if ($useTemplate){

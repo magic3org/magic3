@@ -92,9 +92,7 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TOP_PAGE;
 		
-		// パンくずリストの作成
-//		$titles = array(self::BREADCRUMB_TITLE . '(' . default_contentCommonDef::$_deviceTypeName . ')');
-//		$titles = array(self::BREADCRUMB_TITLE);
+		// パンくずリストの定義データ作成
 		$titles = array();
 		switch ($task){
 			case self::TASK_CONTENT:		// コンテンツ管理
@@ -113,33 +111,29 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = '基本';
 				break;
 		}
-		$this->gPage->setAdminBreadcrumbDef($titles);
 		
-		// メニューバーの作成
-		$navbarDef = new stdClass;
-		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
-		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
-		$navbarDef->help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面', M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能<br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
-		$navbarDef->menu =	array(
-								(Object)array(
-									'name'		=> 'コンテンツ管理',
-									'task'		=> self::TASK_CONTENT,
-									'url'		=> '',
-									'tagid'		=> '',
-									'active'	=> ($task == self::TASK_CONTENT || $task == self::TASK_CONTENT_DETAIL || $task == self::TASK_HISTORY),
-									'submenu'	=> array()
-								),
-								(Object)array(
-									'name'		=> '基本',
-									'task'		=> self::TASK_OTHER,
-									'url'		=> '',
-									'tagid'		=> '',
-									'active'	=> ($task == self::TASK_OTHER),
-									'submenu'	=> array()
-								)
-							);
-		$this->gPage->setAdminSubNavbarDef($navbarDef);
-		
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> 'コンテンツ管理',
+						'task'		=> self::TASK_CONTENT,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> ($task == self::TASK_CONTENT || $task == self::TASK_CONTENT_DETAIL || $task == self::TASK_HISTORY),
+						'submenu'	=> array()
+					),
+					(Object)array(
+						'name'		=> '基本',
+						'task'		=> self::TASK_OTHER,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> ($task == self::TASK_OTHER),
+						'submenu'	=> array()
+					)
+				);
+
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
 
 /*
 		// パンくずリストを作成

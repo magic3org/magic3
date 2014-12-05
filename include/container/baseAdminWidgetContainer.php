@@ -251,7 +251,7 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 		return $destPath;
 	}
 	/**
-	 * 設定画面用のメニューバーを作成
+	 * 設定画面用の基本メニューバーを作成
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @return								なし
@@ -290,6 +290,18 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 								)
 							);
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
+	}
+	/**
+	 * 設定画面用のメニューバー(ナビゲーションバー+パンくずリスト)の定義を設定
+	 *
+	 * @param array $titleDef		パンくずリストのタイトル定義
+	 * @param array $menuDef		メニューバーのメニュー定義
+	 * @return								なし
+	 */
+	function setConfigMenubarDef($titleDef, $menuDef)
+	{
+		$this->configMenubarBreadcrumbTitleDef = $titleDef;			// 設定画面用パンくずリストのタイトル定義
+		$this->configMenubarMenuDef = $menuDef;					// 設定画面用メニューバーのメニュー定義
 	}
 }
 ?>
