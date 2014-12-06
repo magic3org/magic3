@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-11 21:54+0900\n"
-"PO-Revision-Date: 2014-11-11 21:55+0900\n"
+"POT-Creation-Date: 2014-12-06 13:06+0900\n"
+"PO-Revision-Date: 2014-12-06 13:06+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -83,7 +83,7 @@ msgid "Invalid view term."
 msgstr "表示期間が不正です"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:526
-#: ../container/admin_mainConfigsiteWidgetContainer.php:200
+#: ../container/admin_mainConfigsiteWidgetContainer.php:213
 msgid "Update config?"
 msgstr "設定を更新しますか?"
 
@@ -236,7 +236,7 @@ msgid "Additional CSS Class"
 msgstr "追加CSSクラス"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:562
-#: ../container/admin_mainConfigsiteWidgetContainer.php:214
+#: ../container/admin_mainConfigsiteWidgetContainer.php:228
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
 #: ../container/admin_mainMenudefWidgetContainer.php:175
@@ -304,87 +304,101 @@ msgstr "メールを送信しました。メールアドレス:"
 msgid "Failed in sending email. To:"
 msgstr "メール送信に失敗しました。メールアドレス:"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:201
+#: ../container/admin_mainConfigsiteWidgetContainer.php:184
+#: ../container/admin_mainConfigsiteWidgetContainer.php:185
+msgid "Change logo"
+msgstr "ロゴを変更"
+
+#: ../container/admin_mainConfigsiteWidgetContainer.php:214
 msgid "Send test email to default email address?"
 msgstr "デフォルトメールアドレス宛にテストメールを送信しますか?"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:202
+#: ../container/admin_mainConfigsiteWidgetContainer.php:215
 #: ../container/admin_mainEditmenuWidgetContainer.php:88
 #: ../container/admin_mainPortalWidgetContainer.php:252
 #: ../help/help_configsite.php:31 ../help/help_portal.php:35
 msgid "Site Information"
 msgstr "サイト情報"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:203
+#: ../container/admin_mainConfigsiteWidgetContainer.php:216
 #: ../container/admin_mainPortalWidgetContainer.php:168
 #: ../container/admin_mainPortalWidgetContainer.php:253
 #: ../help/help_configsite.php:35 ../help/help_portal.php:39
 msgid "Site Name"
 msgstr "サイト名"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:204
+#: ../container/admin_mainConfigsiteWidgetContainer.php:217
 msgid "Required"
 msgstr "必須"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:205
+#: ../container/admin_mainConfigsiteWidgetContainer.php:218
 #: ../help/help_configsite.php:39
 msgid "Site Email"
 msgstr "メールアドレス"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:206
+#: ../container/admin_mainConfigsiteWidgetContainer.php:219
 msgid "Send Test Email"
 msgstr "テストメール送信"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:207
+#: ../container/admin_mainConfigsiteWidgetContainer.php:220
 #: ../help/help_configsite.php:43
 msgid "Site Slogan"
 msgstr "サイトスローガン"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:208
+#: ../container/admin_mainConfigsiteWidgetContainer.php:221
 #: ../help/help_configsite.php:47
 msgid "Site Copyright"
 msgstr "サイト著作権"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:209
+#: ../container/admin_mainConfigsiteWidgetContainer.php:222
+msgid "Logo"
+msgstr "ロゴ"
+
+#: ../container/admin_mainConfigsiteWidgetContainer.php:223
 msgid "Page Header Info (Default)"
 msgstr "ページヘッダ情報(デフォルト値)"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:210
+#: ../container/admin_mainConfigsiteWidgetContainer.php:224
 msgid "Header Tilte"
 msgstr "タイトル名"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:211
-#: ../help/help_configsite.php:59
+#: ../container/admin_mainConfigsiteWidgetContainer.php:225
+#: ../help/help_configsite.php:63
 msgid "Site Description"
 msgstr "サイト説明"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:212
-#: ../help/help_configsite.php:63
+#: ../container/admin_mainConfigsiteWidgetContainer.php:226
+#: ../help/help_configsite.php:67
 msgid "Header Keywords"
 msgstr "検索キーワード"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:213
-#: ../help/help_configsite.php:67
+#: ../container/admin_mainConfigsiteWidgetContainer.php:227
+#: ../help/help_configsite.php:71
 msgid "Header Others (by Tag Style)"
 msgstr "その他(タグ形式)"
 
-#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:98
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:56
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:80
 msgid "System Basic Cofiguration"
 msgstr "システム基本設定"
 
-#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:101
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:59
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:89
 msgid "Server Environment"
 msgstr "サーバ環境"
 
-#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:104
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:62
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:98
 msgid "Language Cofiguration"
 msgstr "言語設定"
 
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:65
 #: ../container/admin_mainConfigsystemBaseWidgetContainer.php:107
 msgid "Message Cofiguration"
 msgstr "メッセージ設定"
 
-#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:110
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:68
+#: ../container/admin_mainConfigsystemBaseWidgetContainer.php:116
 msgid "Image Cofiguration"
 msgstr "画像設定"
 
@@ -958,6 +972,7 @@ msgid "Create"
 msgstr "作成"
 
 #: ../container/admin_mainLoginstatusWidgetContainer.php:44
+#: ../container/admin_mainUserlistWidgetContainer.php:123
 #: ../container/admin_mainUserlistWidgetContainer.php:153
 #: ../container/admin_mainWidgetContainer.php:391
 msgid "Login"
@@ -1764,12 +1779,9 @@ msgid "User Detail"
 msgstr "ユーザ詳細"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainUserlistWidgetContainer.php:151
-#: ../container/admin_mainUserlistWidgetContainer.php:306
-#: ../container/admin_mainUserlistWidgetContainer.php:374
-#: ../help/help_userlist.php:39
-msgid "Login Account"
-msgstr "ログインアカウント"
+#: ../container/admin_mainWidgetContainer.php:393
+msgid "Account"
+msgstr "アカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:124
 #: ../container/admin_mainWidgetContainer.php:394 ../help/help_userlist.php:43
@@ -1811,6 +1823,13 @@ msgstr "更新者"
 #: ../container/admin_mainUserlistWidgetContainer.php:135
 msgid "Update Date Time"
 msgstr "更新日時"
+
+#: ../container/admin_mainUserlistWidgetContainer.php:151
+#: ../container/admin_mainUserlistWidgetContainer.php:306
+#: ../container/admin_mainUserlistWidgetContainer.php:374
+#: ../help/help_userlist.php:39
+msgid "Login Account"
+msgstr "ログインアカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:155
 msgid "Count"
@@ -1876,10 +1895,6 @@ msgstr "パスワードを送信しました"
 #: ../container/admin_mainWidgetContainer.php:392
 msgid "Send Password"
 msgstr "パスワード送信"
-
-#: ../container/admin_mainWidgetContainer.php:393
-msgid "Account"
-msgstr "アカウント"
 
 #: ../container/admin_mainWidgetlistWidgetContainer.php:189
 #, php-format
@@ -2233,10 +2248,18 @@ msgid "Input site copyright. It is used as rss data copyright."
 msgstr "RSS配信データの著作権表示に使用されます。"
 
 #: ../help/help_configsite.php:51
+msgid "Site Logo"
+msgstr "サイトロゴ"
+
+#: ../help/help_configsite.php:52
+msgid "Select image for site logo."
+msgstr "サイトのロゴ用の画像を選択します。"
+
+#: ../help/help_configsite.php:55
 msgid "Page Header Information (Default)"
 msgstr "ページヘッダ情報(デフォルト値)"
 
-#: ../help/help_configsite.php:52
+#: ../help/help_configsite.php:56
 msgid ""
 "Input header meta tag string on html. It is default string if each page does "
 "not have meta tag string."
@@ -2244,17 +2267,17 @@ msgstr ""
 "HTMLのヘッダ部のmetaタグに出力する文字列を設定します。個々のページで設定され"
 "ていない場合のデフォルト値です。"
 
-#: ../help/help_configsite.php:55
+#: ../help/help_configsite.php:59
 msgid "Header Title"
 msgstr "タイトル名"
 
-#: ../help/help_configsite.php:56
+#: ../help/help_configsite.php:60
 msgid "Input meta title string. It is used as web browser window title."
 msgstr ""
 "ヘッダ部のtitleタグに設定される文字列です。Webブラウザの画面タイトルとして表"
 "示されます。"
 
-#: ../help/help_configsite.php:60
+#: ../help/help_configsite.php:64
 msgid ""
 "Input meta description for site with string with 120 letters. It appears on "
 "searched list by google."
@@ -2262,13 +2285,13 @@ msgstr ""
 "サイトの説明のためにヘッダ部のdescriptionタグに設定される文字列です。120文字"
 "程度で記述します。<br />Googleでは検索結果に表示されます。"
 
-#: ../help/help_configsite.php:64
+#: ../help/help_configsite.php:68
 msgid "Input meta Keywords string with max 10 counts separeted by comma."
 msgstr ""
 "ヘッダ部のkeywordsタグに設定される文字列です。検索エンジン用のキーワードを"
 "「,」区切りで10個以下で記述します。"
 
-#: ../help/help_configsite.php:68
+#: ../help/help_configsite.php:72
 msgid "Input other tag string in meta area."
 msgstr "ヘッダ部に出力するタグを設定します。"
 

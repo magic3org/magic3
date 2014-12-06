@@ -40,14 +40,16 @@ class BaseWidgetContainer extends Core
 	protected $configMenubarBreadcrumbTitleDef;			// 設定画面用パンくずリストのタイトル定義
 	protected $configMenubarMenuDef;					// 設定画面用メニューバーのメニュー定義
 	protected $keepForeTaskForBackUrl = false;	// 遷移前のタスクを戻り先URLとするかどうか
-	protected $_defConfigId;					// ページ定義のウィジェット定義ID
-	protected $_defSerial;						// ページ定義のレコードシリアル番号
-	protected $_backUrl;						// 戻り先URL
 	protected $urlParamOrder;					// URLパラメータの並び順
 	protected $_useHierPage;						// 階層化ページを使用するかどうか
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
 	protected $_linkPageCount;						// ページリンク作成用ページ総数
 	protected $_renderType;							// 描画出力タイプ
+	// POST,GETパラメータ
+	protected $_defConfigId;					// ページ定義のウィジェット定義ID
+	protected $_defSerial;						// ページ定義のレコードシリアル番号
+	protected $_backUrl;						// 戻り先URL
+	protected $_openBy;							// ウィンドウオープンタイプ
 	const PASSWORD_LENGTH = 8;		// パスワード長
 	const HELP_HEAD = '_help_';		// ヘルプ埋め込み用タグのヘッダ部
 	const LOCAL_TEXT_HEAD = '_lc_';		// ローカライズテキストタグのヘッダ部
@@ -126,6 +128,10 @@ class BaseWidgetContainer extends Core
 			// 処理を継続しない場合は終了
 			if (!$this->_dispatch($request, $param)) return;
 		}
+		
+		// POST,GETパラメータ取得
+		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+				
 		if (method_exists($this, '_setTemplate')){
 			// テンプレートファイル名を取得
 			// $paramは、任意使用パラメータ

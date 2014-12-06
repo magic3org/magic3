@@ -162,7 +162,7 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		} else {		// 初期表示の場合
 
 		}
-		
+				
 		// 一覧の表示タイプを設定
 		if ($this->isMultiLang){		// 多言語対応の場合
 			$this->tmpl->setAttribute('show_multilang', 'visibility', 'visible');
@@ -171,6 +171,18 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 			$this->createLangMenu();
 			$this->tmpl->setAttribute('select_lang', 'visibility', 'visible');
 		}
+		
+		// サイトロゴ
+		$siteLogoSizeArray = $this->gInstance->getImageManager()->getAllSiteLogoSizeId();
+		if (!empty($siteLogoSizeArray)){
+			$sizeId = $siteLogoSizeArray[count($siteLogoSizeArray) -1];		// 最大画像
+			$imageUrl = $this->gInstance->getImageManager()->getSiteLogoUrl($sizeId) . '?' . date('YmdHis');		// サイトロゴファイル名
+		}
+		$this->tmpl->addVar("_widget", "sitelogo_url", $this->convertUrlToHtmlEntity($this->getUrl($imageUrl)));
+		// ロゴ変更用ボタン
+		$editLogoUrl = $loginStatusUrl = '?task=configimage&' . M3_REQUEST_PARAM_OPEN_BY . '=all';	// システム画像設定画面
+		$editLogoButton = $this->gDesign->createEditButton($editLogoUrl, $this->_('Change logo'));
+		$this->tmpl->addVar("_widget", "edit_logo_button", $editLogoButton);
 		
 		// 画面にデータを埋め込む
 		$siteName = $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_NAME);		// サイト名
@@ -206,6 +218,7 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$localeText['label_send_test_email'] = $this->_('Send Test Email');// テストメール送信
 		$localeText['label_site_slogan'] = $this->_('Site Slogan');// サイトスローガン
 		$localeText['label_site_copyright'] = $this->_('Site Copyright');// 著作権
+		$localeText['label_site_logo'] = $this->_('Logo');// ロゴ
 		$localeText['label_header_info'] = $this->_('Page Header Info (Default)');// ページヘッダ情報(デフォルト値)
 		$localeText['label_header_title'] = $this->_('Header Tilte');// タイトル名
 		$localeText['label_header_desc'] = $this->_('Site Description');// サイト説明

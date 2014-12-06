@@ -529,5 +529,27 @@ class DesignManager extends Core
 	{
 		return self::SUB_MENUBAR_HEIGHT;
 	}
+	/**
+	 * 編集ボタンを作成を作成
+	 *
+	 * @param string $url		リンク先
+	 * @param string $title		ツールチップ用文字列
+	 * @param string $tagId		タグのID
+	 * @return string 			ボタンのタグ
+	 */
+	function createEditButton($url, $title = '', $tagId = '')
+	{
+		if (empty($url)){
+			$urlAttr = ' href="javascript:void(0);"';
+		} else {
+			$urlAttr = ' href="' . convertUrlToHtmlEntity($this->getUrl($url)) . '"';
+		}
+		$idAttr = '';
+		if (!empty($tagId)) $idAttr = ' id="' . $tagId . '"';
+		$helpAttr = '';
+		if (!empty($title)) $helpAttr = ' rel="m3help" title="' . $title . '"';
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="btn btn-sm btn-warning" role="button" data-container="body"' . $helpAttr . '><i class="glyphicon glyphicon-edit"></i></a>';
+		return $buttonTag;
+	}
 }
 ?>

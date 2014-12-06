@@ -203,6 +203,9 @@ class admin_mainConfigimageWidgetContainer extends admin_mainConfigsystemBaseWid
 		$this->tmpl->addVar("_widget", "useravatar_url", $this->convertUrlToHtmlEntity($this->getUrl($avatarUrl)));
 		$this->tmpl->addVar("_widget", "useravatar_updated", $updateStatus);
 		$this->tmpl->addVar("_widget", "useravatar_size", $imageSize . 'x' . $imageSize);
+		
+		// 「戻る」ボタンの表示制御
+		if ($this->_openBy == 'all') $this->tmpl->setAttribute('cancel_button', 'visibility', 'visible');		// タスク画面からのリンクの場合のみ表示
 	}
 	/**
 	 * 最大画像を取得

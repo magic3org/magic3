@@ -39,6 +39,15 @@ function uploader_useravatar_onSuccess(files, data)
 	// 編集フラグを更新
 	document.main.useravatar_updated.value = '1';
 }
+function cancelItem(){
+	if (document.main._backurl.value){
+		location.href = document.main._backurl.value;
+		return false;
+	} else {
+		history.back();
+		return false;
+	}
+}
 $(function() {
 	m3SetConfigTable('config_area');
 	
@@ -55,7 +64,13 @@ $(function() {
 <input type="hidden" name="act" />
 <input type="hidden" name="sitelogo_updated" value="{SITELOGO_UPDATED}" />
 <input type="hidden" name="useravatar_updated" value="{USERAVATAR_UPDATED}" />
-<h3><span {_HELP_CONFIGIMAGE_IMAGE}>画像</span></h3>
+<!-- m3:PostParam -->
+<h3 class="m3config_h"><span {_HELP_CONFIGIMAGE_IMAGE}>画像</span></h3>
+<patTemplate:tmpl name="cancel_button" visibility="hidden">
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_CONFIGIMAGE_BUTTONS}><div class="btn-group">
+    <input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div></div>
+</patTemplate:tmpl>
 <table id="config_area">
     <tbody>
     <tr>
