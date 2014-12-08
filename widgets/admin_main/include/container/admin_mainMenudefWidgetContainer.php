@@ -129,6 +129,8 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _postAssign($request, &$param)
 	{
+		if ($this->_openBy == 'tabs' || $this->_openBy == 'dialog') return;	// タブ、ダイアログ表示のときはメニューを表示しない
+		
 		// パンくずリストの作成
 		$this->gPage->setAdminBreadcrumbDef(array(self::BREADCRUMB_TITLE));
 	}
@@ -784,14 +786,12 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					case 0:			// 同ウィンドウで開くリンク
 						$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;
 						$iconTitle = $this->_('Show in self window');		// 同じウィンドウで表示
-						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-						$linkIconTag = '<span rel="m3help" title="' . $iconTitle . '">' . $linkIconTag . '</span>';
+						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
 						break;
 					case 1:			// 別ウィンドウで開くリンク
 						$iconUrl = $this->gEnv->getRootUrl() . self::OTHER_WINDOW_ICON_FILE;
 						$iconTitle = $this->_('Show in other window');		// 別のウィンドウで表示
-						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-						$linkIconTag = '<span rel="m3help" title="' . $iconTitle . '">' . $linkIconTag . '</span>';
+						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
 						break;
 				}
 				// 更新用シリアル番号

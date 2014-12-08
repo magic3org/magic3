@@ -83,28 +83,18 @@ var sortableUpdate = function(e, ui){
 	document.main.submit();
 };
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('menuitemlist', -1, 0);
+	// テーブル作成
+	m3SetConfigTable('menuitemlist');
 	
 	// メニューレイアウトボックス作成
 	m3_sortableBox('sortable_box');
 	
 	// マウスドラッグ処理追加
-/*	var els = ['#sortable_box'];
-	var $els = $(els.toString());*/
-	
 	$("#sortable_box").sortable({
-/*		items: '> dl',
-		handle: 'dt',*/
 		cursor: 'move',
 		opacity: 0.8,
-/*		connectWith: els,*/
-/*		start: function(e,ui){
-			ui.helper.css("width", ui.item.width());
-		},*/
 		update: sortableUpdate
 	});
-/*	$("#sortable_box").sortable();*/
 });
 //]]>
 </script>
@@ -117,38 +107,38 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="menuitems" />
-<table>
-<tr><td><span {_HELP_MENUDEF_LIST}><label>{_LC_LABEL_MENU_ITEM_LIST}</label></span>
-    <select name="menuid" onchange="selectMenu();" {SEL_MENU_ID_DISABLED}>
+<h3 class="m3config_h" style="margin-bottom:2px;"><span {_HELP_MENUDEF_LIST}>{_LC_LABEL_MENU_ITEM_LIST}</span>
+    <select name="menuid" class="form-control" onchange="selectMenu();" {SEL_MENU_ID_DISABLED} style="display:inline-block;width:450px;">
         <patTemplate:tmpl name="menu_id_list">
         <option value="{VALUE}" {SELECTED}>{NAME}</option>
         </patTemplate:tmpl>
     </select>
-</td>
-<td align="right"><span {_HELP_MENUDEF_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="{_LC_LABEL_NEW}" /></span><span {_HELP_MENUDEF_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /></span><span {_HELP_MENUDEF_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" /></span>
-</td></tr>
-<tr><td colspan="2">
+</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_MENUDEF_BUTTONS}><div class="btn-group">
+    <input type="button" class="button" onclick="newItem();" value="{_LC_LABEL_NEW}" /><input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" />
+</div></div></div>
+
 <patTemplate:tmpl name="show_singlelang" visibility="hidden"><!-- 単一言語対応時 start -->
-<table id="menuitemlist" class="simple-table" style="margin:0 auto;width:950px;">
+<table id="menuitemlist">
     <thead>
-        <tr>
-            <th width="35"><span {_HELP_MENUDEF_CHECK}>{_LC_LABEL_CHECK}</span></th>
-            <th width="20%"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
-	    <th width="40%"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></th>
-	    <th width="50"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
-	    <th width="50"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
-	    <th><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
+    <tr>
+        <th style="width:50px;"><span {_HELP_MENUDEF_CHECK}>{_LC_LABEL_CHECK}</span></th>
+        <th><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
+	    <th><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></th>
+	    <th style="width:50px;"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
+	    <th style="width:50px;"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
+	    <th style="width:50px;"><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="itemlist">
-        <tr>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+    <patTemplate:tmpl name="itemlist">
+    <tr>
+	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
 	    <td>{LINK_STR}</td>
-	    <td align="center">{LINK_TYPE}</td>
-	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
-	    <td align="right">
+	    <td>{LINK_TYPE}</td>
+	    <td><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td>
 		<!--<input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} />-->
 		<a href="#" onclick="editContent('{CONTENT_ID}');" class="btn btn-sm btn-warning" role="button" rel="m3help" title="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT}><i class="glyphicon glyphicon-edit"></i></a></td>
 	</tr>
@@ -157,37 +147,35 @@ $(function(){
 </table>
 </patTemplate:tmpl><!-- 単一言語対応時 end -->
 <patTemplate:tmpl name="show_multilang" visibility="hidden"><!-- 多言語対応時 start -->
-<table id="menuitemlist" class="simple-table" style="margin:0 auto;width:950px;">
+<table id="menuitemlist">
     <thead>
-        <tr>
-            <th width="40"><span {_HELP_MENUDEF_CHECK}>{_LC_LABEL_CHECK}</span></th>
-            <th width="20%"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
-	    <th width="5%"><span {_HELP_MENUDEF_LANG}>{_LC_LABEL_LANG}</span></th>
-	    <th width="40%"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></th>
-	    <th width="50"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
-	    <th width="50"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
-	    <th><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
+    <tr>
+        <th style="width:50px;"><span {_HELP_MENUDEF_CHECK}>{_LC_LABEL_CHECK}</span></th>
+        <th><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
+	    <th><span {_HELP_MENUDEF_LANG}>{_LC_LABEL_LANG}</span></th>
+	    <th><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></th>
+	    <th style="width:50px;"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
+	    <th style="width:50px;"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
+	    <th style="width:50px;"><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="itemlist2">
-        <tr>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
+    <patTemplate:tmpl name="itemlist2">
+    <tr>
+	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
 	    <td>{LANG}</td>
 	    <td>{LINK_STR}</td>
-	    <td align="center">{LINK_TYPE}</td>
-	    <td align="center"><input type="checkbox" disabled {VISIBLE} /></td>
-	    <td align="right"><!--<input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} />-->
+	    <td>{LINK_TYPE}</td>
+	    <td><input type="checkbox" disabled {VISIBLE} /></td>
+	    <td><!--<input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} />-->
 		<a href="#" onclick="editContent('{CONTENT_ID}');" class="btn btn-sm btn-warning" role="button" rel="m3help" title="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT}><i class="glyphicon glyphicon-edit"></i></a></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
 </patTemplate:tmpl><!-- 多言語対応時 end -->
-<br />
-</td></tr>
-</table>
+
 <!-- 下部 start -->
 <div class="panel panel-success" style="width:250px;">
 <div class="panel-heading"><span>{_LC_LABEL_MENU_LAYOUT}</span></div>
