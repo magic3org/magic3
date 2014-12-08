@@ -168,8 +168,8 @@ $(function(){
     <div class="panel-group" >
         <label for="pageselectmenu"><span {_HELP_PAGEDEF_PAGE}>{_LC_LABEL_PAGE}</span></label>
         <div class="panel panel-success" id="pageselectmenu" >
-            <div class="panel-heading" data-toggle="collapse" data-parent="#pageselectmenu" data-target="#pageselect" >
-                <h4 class="panel-title">{PAGE_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i><a id="link_detail"><i class="glyphicon glyphicon-list-alt pull-right" rel="m3help" title="定義詳細"></i></a></h4>
+            <div class="panel-heading" data-toggle="collapse" data-parent="#pageselectmenu" data-target="#pageselect" rel="m3help" data-container="body" title="ページを選択">
+                <h4 class="panel-title">{PAGE_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i><a id="link_detail" href="javascript:void(0);" class="btn btn-sm btn-warning pull-right" role="button" rel="m3help" data-container="body" title="定義詳細を表示" style="margin:-4px 0 0;"><i class="glyphicon glyphicon-list-alt pull-right"></i></a></h4>
             </div>
             <div id="pageselect" class="panel-collapse collapse">
             <div class="panel-body">
@@ -214,7 +214,7 @@ $(function(){
     <div class="panel-group"  >
         <label for="templateselectmenu"><span {_HELP_PAGEDEF_TEMPLATE}>{_LC_LABEL_TEMPLATE}</span></label>
         <div class="panel panel-success" id="templateselectmenu" >
-            <div class="panel-heading" data-toggle="collapse" data-parent="#templateselectmenu" data-target="#templateselect" >
+            <div class="panel-heading" data-toggle="collapse" data-parent="#templateselectmenu" data-target="#templateselect" rel="m3help" data-container="body" title="テンプレートを選択">
                 <h4 class="panel-title">{TEMPLATE_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i></h4>
             </div>
             <div id="templateselect" class="panel-collapse collapse">
