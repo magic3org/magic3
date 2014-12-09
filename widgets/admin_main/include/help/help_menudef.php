@@ -41,7 +41,7 @@ class help_menudef extends HelpConv
 			),
 			'menudef_name' => array(	
 				'title' =>	$this->_('Name'),			// 名前
-				'body' =>	$this->_('Definition name for menu item.<br />If \'Get Title\' button is clicked, it is replaced with the content title on the URL to link.')		// メニュー項目の名前です。「タイトル取得」ボタンを押すと、リンク先URLのコンテンツのタイトルを取得できます。
+				'body' =>	$this->_('Definition name for menu item.<br />If \'Get Title\' button is clicked, it is replaced with the content title on \'URL to link\'.')		// メニュー項目の名前です。「タイトル取得」ボタンを押すと、リンク先URLのコンテンツのタイトルを取得できます。
 			),
 			'menudef_lang' => array(	
 				'title' =>	$this->_('Language'),			// 言語

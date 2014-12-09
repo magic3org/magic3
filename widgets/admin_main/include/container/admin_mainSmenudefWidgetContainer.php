@@ -32,6 +32,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	private $availableLangArray;	// 利用可能な言語
 	const BREADCRUMB_TITLE = 'メニュー管理(単階層)';		// 画面タイトル名(パンくずリスト)
 	const MAIN_MENU_ID = 'main_menu';			// メインメニューID
+	const CREATE_URL_TAG_ID = 'createurl';			// URL作成ボタンタグID
 	const WIDGET_TYPE_MENU = 'menu';		// メニュー型のウィジェット(キャッシュクリア用)
 	const CONTENT_TYPE_PC = '';			// 汎用コンテンツのコンテンツタイプ(PC用)
 	const CONTENT_TYPE_MOBILE = 'mobile';			// 汎用コンテンツのコンテンツタイプ(携帯用)
@@ -536,6 +537,12 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				$this->tmpl->addVar("_widget", "link_type_1", 'selected');
 				break;
 		}
+		
+		// リンク先URL作成ボタン
+		$createUrlButton = $this->gDesign->createEditButton(''/*同画面*/, $this->_('Create URL'), self::CREATE_URL_TAG_ID);
+		$this->tmpl->addVar("_widget", "create_url_button", $createUrlButton);
+		$this->tmpl->addVar("_widget", "tagid_create_url", self::CREATE_URL_TAG_ID);		// URL作成タグ
+		
 		// 項目表示、項目利用可否チェックボックス
 		$this->tmpl->addVar("_widget", "sel_item_visible", $this->convertToCheckedString($visible));
 		$this->tmpl->addVar("_widget", "user_limited_checked", $this->convertToCheckedString($userLimited));		// ユーザ制限するかどうか

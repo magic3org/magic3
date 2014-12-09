@@ -678,7 +678,9 @@ i[rel="m3help"] { cursor: default; }
 /* Hタグ右ボタン */
 .m3config_h_side_buttons {
 	display:inline-block;
-	padding-top:10px;
+/*	padding-top:10px;*/
+	margin-top:10px;
+	margin-bottom:10px;
 }
 /* fix item width */
 .m3config_item {
