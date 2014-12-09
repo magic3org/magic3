@@ -283,7 +283,7 @@ define('M3_REQUEST_PARAM_PAGE_NO',      			'page');			// ページ番号
 define('M3_REQUEST_PARAM_LIST_NO',      			'list');			// 一覧番号
 define('M3_REQUEST_PARAM_ITEM_NO',      			'no');				// 項目番号
 define('M3_REQUEST_PARAM_OPERATION_TODO',      		'todo');			// 指定ウィジェットに実行させる処理
-define('M3_REQUEST_PARAM_FROM',						'from');			// メッセージの送信元ウィジェットID
+define('M3_REQUEST_PARAM_FROM',						'from');			// メッセージの送信元ウィジェットID。遷移元画面。
 define('M3_REQUEST_PARAM_VIEW_STYLE',				'style');			// 表示スタイル
 define('M3_REQUEST_PARAM_FORWARD',					'forward');			// 画面遷移用パラメータ
 define('M3_REQUEST_PARAM_ADMIN_KEY',				'adminkey');		// 管理者一時キー
