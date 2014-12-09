@@ -180,7 +180,8 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		}
 		$this->tmpl->addVar("_widget", "sitelogo_url", $this->convertUrlToHtmlEntity($this->getUrl($imageUrl)));
 		// ロゴ変更用ボタン
-		$editLogoUrl = $loginStatusUrl = '?task=configimage&' . M3_REQUEST_PARAM_OPEN_BY . '=all';	// システム画像設定画面
+	//	$editLogoUrl = $loginStatusUrl = '?task=configimage&' . M3_REQUEST_PARAM_OPEN_BY . '=all';	// システム画像設定画面
+		$editLogoUrl = $loginStatusUrl = '?task=configimage&' . M3_REQUEST_PARAM_FROM . '=configsite';	// システム画像設定画面
 		$editLogoButton = $this->gDesign->createEditButton($editLogoUrl, $this->_('Change logo'));
 		$this->tmpl->addVar("_widget", "edit_logo_button", $editLogoButton);
 		
