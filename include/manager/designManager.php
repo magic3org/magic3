@@ -432,10 +432,10 @@ class DesignManager extends Core
 			$iconTag = '';
 			switch ($iconType){
 				case 1:		// ウィジェット設定画面
-					$iconTag = '<i class="glyphicon glyphicon-cog"></i>';
+					$iconTag = '<i class="glyphicon glyphicon-cog"></i> ';
 					break;
 				case 2:		// 共通設定画面
-					$iconTag = '<i class="glyphicon glyphicon-stop"></i>';
+					$iconTag = '<i class="glyphicon glyphicon-wrench"></i> ';
 					break;
 			}
 			if (empty($navbarDef->help)){

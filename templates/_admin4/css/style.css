@@ -778,18 +778,20 @@ nav.secondlevel.minimized .navbar-brand {
 /*  margin: 8px 15px 8px 0;*/
 }
 nav.secondlevel .navbar-collapse {
-	margin-left:50px;
+	margin-left:50px;	/*メニューバー最左項目の左端*/
 }
 nav.secondlevel .navbar-text.title {
 	font-size: 18px;
 	margin-top: 17px;
 	margin-bottom: 17px;
+	margin-right: 50px;
 }
 
 nav.secondlevel.minimized .navbar-text.title {
 	font-size: 17px;
 	margin-top:5px;
 	margin-bottom:5px;
+	margin-right: 20px;
 /* default
   margin-top: 19.5px;
   margin-bottom: 19.5px;
