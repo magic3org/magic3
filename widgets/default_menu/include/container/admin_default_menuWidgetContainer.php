@@ -27,6 +27,8 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 	private $menuId;		// メニューID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_MENU_ID = 'main_menu';			// デフォルトメニューID
+	// 画面
+	const TASK_LIST = 'list';			// 設定一覧
 	
 	/**
 	 * コンストラクタ
@@ -65,7 +67,62 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @param								なし
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// 表示画面を決定
+		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		
+		// パンくずリストの作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_LIST:			// 設定一覧
+				$titles[] = '基本';
+				$titles[] = '設定一覧';
+				break;
+			default:
+				$titles[] = '基本';
+				break;
+		}
+		$this->gPage->setAdminBreadcrumbDef($titles);
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= $this->_createWidgetInfoHelp();		// ウィジェットの説明用ヘルプ// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'メニュー定義',	// メニュー定義
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> 'menubar_other',
+									'active'	=> false,
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> '基本',		// 基本
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> 'menubar_basic',
+									'active'	=> (
+//														$task == '' ||						// 基本設定
+														$task == self::TASK_LIST			// 設定一覧
+													),
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
 	 */
 	function _assign($request, &$param)
 	{
@@ -231,27 +288,6 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		// 一覧画面からの戻り画面が指定されてる場合は優先する
 		if ($anchor == 'widget_config') $activeIndex = 0;
 		
-		// ナビゲーションタブ作成
-		$tabItemIndex = 0;
-		$tabDef = array();
-		$tabItem = new stdClass;
-		$tabItem->name	= 'ウィジェット設定';
-		$tabItem->task	= '';
-		$tabItem->url	= '#widget_config';
-		$tabItem->parent	= 0;
-//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
-		$tabItem->active	= false;
-		$tabDef[] = $tabItem; $tabItemIndex++;
-		$tabItem = new stdClass;
-		$tabItem->name	= 'メニュー定義';
-		$tabItem->task	= '';
-		$tabItem->url	= '#menu_define';
-		$tabItem->parent	= 0;
-//		$tabItem->active	= ($tabItemIndex == $activeIndex) ? true : false;
-		$tabItem->active	= false;
-		$tabDef[] = $tabItem; $tabItemIndex++;
-		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
-		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
 		if (empty($activeIndex)){		// タブの選択
 			$this->tmpl->addVar("_widget", "active_tab", 'widget_config');
 		} else {
@@ -396,29 +432,6 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 		// 定義一覧作成
 		$this->createItemList();
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
-		
-		// 選択状態はメニュー設定に固定
-		$activeIndex = 0;
-		
-		// ナビゲーションタブ作成
-		$tabItemIndex = 0;
-		$tabDef = array();
-		$tabItem = new stdClass;
-		$tabItem->name	= 'ウィジェット設定';
-		$tabItem->task	= '';
-		$tabItem->url	= '#widget_config';
-		$tabItem->parent	= 0;
-		$tabItem->active	= false;
-		$tabDef[] = $tabItem; $tabItemIndex++;
-		$tabItem = new stdClass;
-		$tabItem->name	= 'メニュー定義';
-		$tabItem->task	= '';
-		$tabItem->url	= '#menu_define';
-		$tabItem->parent	= 0;
-		$tabItem->active	= false;
-		$tabDef[] = $tabItem; $tabItemIndex++;
-		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
-		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
 		
 		// メニュー定義画面のURLを作成
 		$taskValue = 'menudef';
