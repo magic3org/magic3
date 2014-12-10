@@ -86,6 +86,9 @@ function selectTree(id)
 	return true;
 }
 $(function(){
+	// 親ウィンドウの表示エリア調整
+	m3AdjustParentWindow();
+	
 	// 項目ツリー作成
 	$("#treeitem_0").jstree({
 		"themes" : {

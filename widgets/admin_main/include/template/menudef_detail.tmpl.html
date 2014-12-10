@@ -81,6 +81,9 @@ function getTitle()
 	}
 }
 $(function(){
+	// 親ウィンドウの表示エリア調整
+	m3AdjustParentWindow();
+	
 	// タイトル取得ボタン制御
 	var url = $('#item_url').val();
 	if (url == ''){
