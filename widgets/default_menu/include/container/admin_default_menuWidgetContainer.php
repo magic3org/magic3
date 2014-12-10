@@ -73,18 +73,11 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 	{
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		
+
 		// パンくずリストの作成
+		// ダミーで作成。タイトルはJavascript側で設定。
 		$titles = array();
-		switch ($task){
-			case self::TASK_LIST:			// 設定一覧
-				$titles[] = '基本';
-				$titles[] = '設定一覧';
-				break;
-			default:
-				$titles[] = '基本';
-				break;
-		}
+		$titles[] = '設定なし';
 		$this->gPage->setAdminBreadcrumbDef($titles);
 		
 		// メニューバーの作成

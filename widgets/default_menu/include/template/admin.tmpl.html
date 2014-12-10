@@ -88,11 +88,6 @@ $(function(){
 	// タブを選択
 	activateTab('{ACTIVE_TAB}');
 	
-	// 階層化の種別選択
-	$('#is_hier').click(function(){
-		reloadMenuDef();
-	});
-	
 	// 画面選択処理
 	$('#menubar_basic').on('click', function(){
 		// 画面の更新
@@ -105,6 +100,11 @@ $(function(){
 		activateTab('menu_define');
 		
 		$('.m3messages').remove();
+	});
+	
+	// 階層化の種別選択
+	$('#is_hier').click(function(){
+		reloadMenuDef();
 	});
 });
 //]]>
@@ -192,7 +192,7 @@ $(function(){
 </form>
 </div></div>
 <div id="menu_define" class="tab-pane">
-<iframe id="menu_def" name="menu_def" style="width:100%; height:100%; border:none;" frameborder="0" scrolling="no" allowTransparency="true">{_LC_LABEL_NENU_DEF}</iframe>
+<iframe id="menu_def" name="menu_def" style="width:100%; height:100%; border:none;" frameborder="0" scrolling="no" allowTransparency="true">実際の画面</iframe>
 </div>
 </div>
 </patTemplate:tmpl>

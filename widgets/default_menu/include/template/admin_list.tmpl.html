@@ -43,7 +43,37 @@ function reloadMenuDef()
 }
 function activateTab(tab)
 {
-	$('.nav-tabs a[href="#' + tab + '"]').tab('show');
+	if (tab == 'widget_config'){
+		// メニューバーの更新
+		$('.navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');
+		$('#menubar_basic').removeClass('btn-success').addClass('btn-primary');
+		
+		// パンくずリストの更新
+		$('.breadcrumb').html('<li>基本</li><li>設定一覧</li>');
+		
+		// 画面の更新
+		$('.tab-pane').removeClass('active');
+		$('#widget_config').addClass('active');
+	} else {		// メニュー定義画面の表示
+		// メニューバーの更新
+		$('.navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');
+		$('#menubar_other').removeClass('btn-success').addClass('btn-primary');
+		
+		// パンくずリストの更新
+		$('.breadcrumb').html('<li>メニュー定義</li>');
+		
+		// 画面の更新
+		$('.tab-pane').removeClass('active');
+		$('#menu_define').addClass('active');
+		
+		// IFRAMEの高さを調整
+		$("#menu_def").height($("#menu_def").contents().find("html").height());
+	}
+}
+// IFRAMEの高さを調整
+function m3AdjustWindow()
+{
+	$("#menu_def").height($("#menu_def").contents().find("html").height());
 }
 $(function(){
 	// メニュー定義画面作成
@@ -52,11 +82,16 @@ $(function(){
 	// タブを選択
 	activateTab('widget_config');
 	
-	$('#m3navtab a[href="#widget_config"]').click(function(e){
-		e.preventDefault();
-		
+	// 画面選択処理
+	$('#menubar_basic').on('click', function(){
+		// 画面の更新
 		cancelItem();
-		return false;
+	});
+	$('#menubar_other').on('click', function(){
+		// 画面の更新
+		activateTab('menu_define');
+		
+		$('.m3messages').remove();
 	});
 
 	// スクロールバー付きのテーブルを作成
@@ -64,10 +99,9 @@ $(function(){
 });
 //]]>
 </script>
-{NAV_TAB}
-<div class="m3config_tabs tab-content">
-<div id="widget_config" class="tab-pane">
+<div class="tab-content">
 <!-- m3:ErrorMessage -->
+<div id="widget_config" class="tab-pane"><div class="m3config_container">
 <form method="post" name="main">
 <input type="hidden" name="task" value="list" />
 <input type="hidden" name="anchor" value="widget_config" />
@@ -109,9 +143,9 @@ $(function(){
 </td></tr>
 </table>
 </form>
-	    </div>
-<div id="menu_define" class="tab-pane m3config_fullwidth">
-    <iframe id="menu_def" name="menu_def" style="width:100%; height:2000px; border:none;" allowTransparency="true" frameborder="0">{_LC_LABEL_NENU_DEF}</iframe>
+</div></div>
+<div id="menu_define" class="tab-pane">
+<iframe id="menu_def" name="menu_def" style="width:100%; height:100%; border:none;" frameborder="0" scrolling="no" allowTransparency="true">実際の画面</iframe>
 </div>
 </div>
 </patTemplate:tmpl>
