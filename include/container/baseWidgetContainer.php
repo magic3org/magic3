@@ -220,8 +220,9 @@ class BaseWidgetContainer extends Core
 					$navbarDef = new stdClass;
 					$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
 					$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
-					$navbarDef->help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面',
-								'<strong>●' . M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
+//					$navbarDef->help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面',
+//								'<strong>●' . M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
+					$navbarDef->help	= $this->_createWidgetInfoHelp();		// ウィジェットの説明用ヘルプ
 					$navbarDef->menu = $this->configMenubarMenuDef;
 					$this->gPage->setAdminSubNavbarDef($navbarDef);
 				}
@@ -519,6 +520,18 @@ class BaseWidgetContainer extends Core
 		
 		// システム強制終了
 		$this->gPage->exitSystem();
+	}
+	/**
+	 * ウィジェットの説明のヘルプ文字列を作成
+	 *
+	 * @param string $templateName		テンプレート名
+	 * @return string					ヘルプ文字列
+	 */
+	function _createWidgetInfoHelp()
+	{
+		$help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面',
+					'<strong>●' . M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
+		return $help;
 	}
 	/**
 	 * ヘルプ文字列を変換

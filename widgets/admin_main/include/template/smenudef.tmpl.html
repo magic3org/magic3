@@ -83,9 +83,6 @@ var sortableUpdate = function(e, ui){
 	document.main.submit();
 };
 $(function(){
-	// 親ウィンドウの表示エリア調整
-	m3AdjustParentWindow();
-	
 	// テーブル作成
 	m3SetConfigTable('menuitemlist');
 	
@@ -98,6 +95,9 @@ $(function(){
 		opacity: 0.8,
 		update: sortableUpdate
 	});
+	
+	// 親ウィンドウの表示エリア調整
+	m3AdjustParentWindow();
 });
 //]]>
 </script>
