@@ -398,7 +398,7 @@ class DesignManager extends Core
 		return $destHtml;
 	}
 	/**
-	 * サブメニューバー作成
+	 * サブメニューバー作成(ウィジェット設定画面専用)
 	 *
 	 * @param object $navbarDef			メニューバー定義
 	 * @return string 					サブメニューバーのHTML
@@ -406,7 +406,7 @@ class DesignManager extends Core
 	function createSubMenubar($navbarDef)
 	{
 		// タイトル作成
-		$titleTag = $this->createSubMenubarTitleTag($navbarDef);
+		$titleTag = $this->createSubMenubarTitleTag($navbarDef, 1/*ウィジェット設定画面用アイコン*/);
 		
 		// メニュー作成
 		$menuTag = $this->createSubMenubarMenuTag($navbarDef);
@@ -420,15 +420,33 @@ class DesignManager extends Core
 	 * サブメニューバーのタイトルタグ作成
 	 *
 	 * @param object $navbarDef			メニューバー定義
+	 * @param int $iconType				アイコンタイプ(0=なし、1=ウィジェット設定画面、2=システム画面(共通設定画面等))
 	 * @return string 					サブメニューバーのHTML
 	 */
-	function createSubMenubarTitleTag($navbarDef)
+	function createSubMenubarTitleTag($navbarDef, $iconType = 0)
 	{
 		// タイトル作成
 		$titleTag = '';
 		if (!empty($navbarDef->title)){
 			$title = convertToHtmlEntity($navbarDef->title);
-			if (!empty($navbarDef->help)) $title = '<span ' . $navbarDef->help . '>' . $title . '</span>';
+			$iconTag = '';
+			switch ($iconType){
+				case 1:		// ウィジェット設定画面
+					$iconTag = '<i class="glyphicon glyphicon-cog"></i>';
+					break;
+				case 2:		// 共通設定画面
+					$iconTag = '<i class="glyphicon glyphicon-stop"></i>';
+					break;
+			}
+			if (empty($navbarDef->help)){
+				$title = $iconTag . $title;
+			} else {
+				if (empty($iconTag)){
+					$title = '<span ' . $navbarDef->help . '>' . $title . '</span>';
+				} else {
+					$title = '<span ' . $navbarDef->help . '>' . $iconTag . '</span>' . $title;
+				}
+			}
 			$titleTag = '<div class="navbar-text title">' . $title . '</div>';
 		}
 		return $titleTag;

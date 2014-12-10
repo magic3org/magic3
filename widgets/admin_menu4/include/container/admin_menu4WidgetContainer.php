@@ -840,7 +840,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
 		*/
 		// タイトル作成
-		$titleTag = $this->gDesign->createSubMenubarTitleTag($navbarDef);
+		$titleTag = $this->gDesign->createSubMenubarTitleTag($navbarDef, 2/*システム画面(共通設定画面等)*/);
 		
 		// メニュー作成
 		$menuTag = $this->gDesign->createSubMenubarMenuTag($navbarDef);
