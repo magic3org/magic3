@@ -46,13 +46,6 @@ function previewInOtherWindow()
 	var url = $('#item_url').val();
 	m3ShowPreviewWindow({DEVICE_TYPE}, url);
 }
-// URL作成
-/*
-function createUrl()
-{
-	var url = $('#item_url').val();
-	m3CreateLinkUrl({DEVICE_TYPE}, url, setLinkUrl);
-}*/
 // 作成リンク取得用
 function setLinkUrl(url)
 {
@@ -134,7 +127,6 @@ $(function(){
 	    </select>
 		</div>
 		<div class="col-sm-6 m3config_item"><input type="button" id="get_title_button" class="button" onclick="getTitle();" value="{_LC_LABEL_GET_TITLE}" {GET_TITLE_DISABLED} /></div>
-
 		<div class="form-group">
 	    <div class="col-sm-11 m3config_item"><input type="text" id="item_name" name="item_name" class="form-control" value="{SEL_ITEM_NAME}" size="40" maxlength="40" /></div><div class="col-sm-1 m3config_item form-control-static">{LANG}</div>
 		</div>
@@ -205,7 +197,6 @@ $(function(){
 		<input type="button" class="button" onclick="addItem();" value="{_LC_LABEL_ADD}" />
 </patTemplate:tmpl>
 </div>
-
 </form>
 </div>
 </patTemplate:tmpl>
