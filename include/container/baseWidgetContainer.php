@@ -529,8 +529,10 @@ class BaseWidgetContainer extends Core
 	 */
 	function _createWidgetInfoHelp()
 	{
+		$widgetTitle = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
 		$help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面',
-					'<strong>●' . M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
+					'<strong>' . M3_TITLE_BRACKET_START . $widgetTitle . M3_TITLE_BRACKET_END . 'ウィジェット</strong><br />' .
+					'<strong>●機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
 		return $help;
 	}
 	/**
