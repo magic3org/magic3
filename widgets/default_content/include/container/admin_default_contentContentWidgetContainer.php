@@ -1291,7 +1291,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				// 言語アイコン
 				$iconTitle = $langName;
 				$iconUrl = $this->gEnv->getRootUrl() . self::LANG_ICON_PATH . $rows[$i]['ln_image_filename'];		// 画像ファイル
-				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 				$imageTag .= $iconTag;
 			}
 		}
