@@ -94,8 +94,8 @@ $(function(){
 		$('.m3messages').remove();
 	});
 
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('itemlist', -1, 0);
+	// テーブル作成
+	m3SetConfigTable('widget_config_table');
 });
 //]]>
 </script>
@@ -111,36 +111,31 @@ $(function(){
 <input type="hidden" name="menuid" value="{MENU_ID}" />
 <input type="hidden" name="is_hier" value="{IS_HIER}" />
 <!-- m3:PostParam -->
-<table style="margin: 0 auto;">
-<tr><td>
-<span {_HELP_MENU_LIST}><label>メニュー設定一覧</label></span>
-</td><td align="right"><span {_HELP_MENU_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
-<span {_HELP_MENU_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table id="itemlist" class="simple-table" width="950">
+<h3 class="m3config_h"><span {_HELP_MENU_LIST}>設定一覧</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_MENU_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="delItem();" value="削除" /><input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div></div>
+<table id="widget_config_table">
     <thead>
-        <tr>
-	    <th width="35" align="center"><span {_HELP_MENU_CHECK}>選択</span></th>
-	    <th width="35" align="center"><span {_HELP_MENU_ID}>ID</span></th>
-	    <th width="40%" align="center"><span {_HELP_MENU_NAME}>名前</span></th>
-	    <th width="40%" align="center"><span {_HELP_MENU_DEF}>メニュー定義</span></th>
-	    <th align="center"><span {_HELP_MENU_REF}>使用</span></th>
+    <tr>
+	    <th class="select"><span {_HELP_MENU_CHECK}>選択</span></th>
+	    <th style="width:50px;"><span {_HELP_MENU_ID}>ID</span></th>
+	    <th><span {_HELP_MENU_NAME}>名前</span></th>
+	    <th><span {_HELP_MENU_DEF}>メニュー定義</span></th>
+	    <th style="width:50px;"><span {_HELP_MENU_REF}>使用</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="itemlist">
-        <tr>
-            <td align="center"><input type="checkbox" name="item{INDEX}_selected" {OPE_DISABLED} /></td>
-	    <td align="center">{ID}</td>
+    <patTemplate:tmpl name="itemlist">
+    <tr>
+        <td class="select"><input type="checkbox" name="item{INDEX}_selected" {OPE_DISABLED} /></td>
+	    <td>{ID}</td>
 	    <td>{NAME}</td>
 	    <td>{MENU_NAME}</td>
-	    <td align="center">{DEF_COUNT}</td>
+	    <td class="number">{DEF_COUNT}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
-</table>
-</td></tr>
 </table>
 </form>
 </div></div>

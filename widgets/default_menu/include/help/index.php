@@ -19,7 +19,7 @@ defined('M3_SYSTEM') or die('Access error: Direct access denied.');
 
 global $HELP;
 
-// ########## メインメニュー項目一覧 ##########
+// ########## メニュー項目一覧 ##########
 $HELP['menu_list']['title'] = 'メニュー設定一覧';
 $HELP['menu_list']['body'] = '登録されているメニュー設定の一覧です。';
 $HELP['menu_detail']['title'] = 'メニュー設定';
@@ -32,6 +32,8 @@ $HELP['menu_name_input']['title'] = '名前';
 $HELP['menu_name_input']['body'] = 'メニュー設定名です。新規に登録するか、登録済みの設定を選択します。';
 $HELP['menu_id']['title'] = 'メニュー設定ID';
 $HELP['menu_id']['body'] = '自動的に振られるメニュー設定IDです。';
+$HELP['menu_access_control']['title'] = 'アクセス制御';
+$HELP['menu_access_control']['body'] = 'メニュー項目の表示制御を行います。';
 $HELP['menu_limit_user']['title'] = 'ユーザ制限';
 $HELP['menu_limit_user']['body'] = 'メニューの表示をログインしたユーザに限定するかどうかを設定します。';
 $HELP['menu_design']['title'] = 'デザイン';

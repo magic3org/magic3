@@ -106,6 +106,9 @@ $(function(){
 	$('#is_hier').click(function(){
 		reloadMenuDef();
 	});
+	
+	// テーブル作成
+	m3SetConfigTable('widget_config_table');
 });
 //]]>
 </script>
@@ -117,78 +120,71 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
-<table style="margin: 0 auto;">
-<tr><td><span {_HELP_MENU_DETAIL}>メニュー設定</span></td>
-<td align="right"><span {_HELP_MENU_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table" style="margin:0 auto;width:950px;">
+<h3 class="m3config_h"><span {_HELP_MENU_DETAIL}>基本設定</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_MENU_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
+<table id="widget_config_table">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_MENU_NAME_INPUT}>名前</span></td>
-	    <td width="500">
-	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+    <tr>
+	    <th><span {_HELP_MENU_NAME_INPUT}>名前</span></th>
+	    <td style="width:500px;">
+	    <div class="col-sm-6 m3config_item">
+		<select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
 	        <patTemplate:tmpl name="title_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" style="width:50%;" />
+	    <div class="col-sm-6 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" size="40" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
-	    <td class="table-headside" width="150"><span {_HELP_MENU_ID}>ID</span></td>
-	    <td align="center">{ID}
-	    </td>
+	    <th><span {_HELP_MENU_ID}>ID</span></th>
+	    <td>{ID}</td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_MENU_DEF}>メニュー定義</span></td>
+    <tr>
+	    <th><span {_HELP_MENU_DEF}>メニュー定義</span></th>
 	    <td colspan="3">
-	    <select name="menuid" {ID_DISABLED}>
+		<div class="col-sm-6 m3config_item">
+	    <select name="menuid" class="form-control" {ID_DISABLED}>
 	        <patTemplate:tmpl name="menu_id_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_MENU_LIMIT_USER}>ユーザ制限</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_limituser" {LIMIT_USER} />
+    <tr>
+	    <th><span {_HELP_MENU_ACCESS_CONTROL}>アクセス制御</span></th>
+	    <td colspan="3"><div class="checkbox"><label><input type="checkbox" name="item_limituser" {LIMIT_USER} /><span {_HELP_MENU_LIMIT_USER}>ユーザ制限</span></label></div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_MENU_DESIGN}>デザイン</span></td>
+    <tr>
+	    <th><span {_HELP_MENU_DESIGN}>デザイン</span></th>
 	    <td colspan="3">
-		<fieldset>
-		<legend>共通</legend>
+		<h4>共通</h4>
 		<div class="checkbox"><label><input type="checkbox" id="is_hier" name="is_hier" {IS_HIER} {IS_HIER_DISABLED} />階層化あり</label></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_vertical_menu" {VERTICAL_MENU} />縦型メニュー</label></div>
-		</fieldset>
-		<fieldset>
-		<legend>Bootstrap型テンプレート用</legend>
+		<h4>Bootstrap型テンプレート用</h4>
 		<div class="checkbox"><label><input type="checkbox" name="item_show_sitename" {SHOW_SITENAME_CHECKED} />サイト名を常に表示</label></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_show_search" {SHOW_SEARCH_CHECKED} />検索フィールド表示</label></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_show_login" {SHOW_LOGIN_CHECKED} />ログイン表示</label></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_show_regist" {SHOW_REGIST_CHECKED} />会員登録表示</label></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_another_color" {ANOTHER_COLOR_CHECKED} />色を変える</label></div>
-		</fieldset>
 	    </td>
 	</tr>
-	<tr>
-	    <td align="right" colspan="4">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-
-</td></tr>
-</table>
+</div>
 </form>
 </div></div>
 <div id="menu_define" class="tab-pane">

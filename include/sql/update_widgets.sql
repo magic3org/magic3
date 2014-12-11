@@ -48,7 +48,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'default_menu';
 INSERT INTO _widgets
 (wd_id,          wd_name,              wd_type, wd_type_option, wd_category_id, wd_template_type, wd_version, wd_required_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('default_menu', 'デフォルトメニュー', 'menu',  'nav',          'menu',         'bootstrap',      '3.3.0',   '2.9.4',        'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '複数のメニューが作成できる多階層のメニューです。「user3」ポジションに配置するとナビゲーションメニューが表示できます。', '', '', true,  true,              true, 2,          1, '2014-08-18', now(),         now());
+('default_menu', 'デフォルトメニュー', 'menu',  'nav',          'menu',         'bootstrap',      '4.0.0',   '2.9.4',        'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '画面に複数配置が可能な標準のメニューです。単階層または多階層でメニューを定義します。テンプレートに合わせて多様な表示ができます。「user3」ポジションに配置するとナビゲーションタイプのメニューが表示できます。', '', '', true,  true,              true, 2,          1, '2014-12-10', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'accordion_menu';
 INSERT INTO _widgets
 (wd_id,            wd_name,                  wd_type, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
