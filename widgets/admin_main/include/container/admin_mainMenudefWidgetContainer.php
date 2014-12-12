@@ -317,7 +317,13 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		$treeMenu = $this->createTreeMenu($this->menuId, 0);
 		
 		// メニュー項目が存在しないときはメニューのプレビューを表示しない
-		if (!$this->isExistsMenuItem) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');		// メニュー項目一覧
+		if (!$this->isExistsMenuItem){
+			if ($this->isMultiLang){		// 多言語対応のとき
+				$this->tmpl->setAttribute('itemlist2', 'visibility', 'hidden');		// メニュー項目一覧
+			} else {
+				$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');		// メニュー項目一覧
+			}
+		}
 		if ($fixedMode == '1') $this->tmpl->addVar("_widget", "sel_menu_id_disabled", 'disabled');			// メニューIDの選択可否
 		
 		// メニュー階層パスを作成
