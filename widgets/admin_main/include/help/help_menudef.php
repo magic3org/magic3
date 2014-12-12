@@ -71,6 +71,10 @@ class help_menudef extends HelpConv
 				'title' =>	$this->_('Select Link Type'),			// リンク先を選択
 				'body' =>	$this->_('Select the link type of menu item. If \'contents\' is selected, you can select the contents to view.')		// リンク先を選択します。「コンテンツ」を選択した場合は、表示するコンテンツを指定します。[任意設定]を選択した場合は、任意のURLにリンク先を設定できます。
 			),
+			'menudef_menu_layout' => array(	
+				'title' =>	$this->_('Menu Layout'),			// メニューレイアウト
+				'body' =>	$this->_('Change the order of items by dragging.')		// 項目をドラッグして並び順を変えることができます。
+			),
 			'menudef_desc' => array(	
 				'title' =>	$this->_('Description'),			// 説明
 				'body' =>	$this->_('Description about menu item.')		// メニュー項目についての説明です。
