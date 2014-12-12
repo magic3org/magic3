@@ -111,7 +111,7 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="menuitems" />
 <h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_MENUDEF_LIST}>{_LC_LABEL_MENU_ITEM_LIST}</span>
-    <select name="menuid" class="form-control" onchange="selectMenu();" {SEL_MENU_ID_DISABLED} style="display:inline-block;width:450px;margin-top:-7px;">
+    <select name="menuid" class="form-control" onchange="selectMenu();" style="display:inline-block;width:450px;margin-top:-7px;" {SEL_MENU_ID_DISABLED}>
         <patTemplate:tmpl name="menu_id_list">
         <option value="{VALUE}" {SELECTED}>{NAME}</option>
         </patTemplate:tmpl>

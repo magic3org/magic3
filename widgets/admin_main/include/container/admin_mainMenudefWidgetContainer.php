@@ -34,7 +34,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	private $parentNameArray = array();			// メニュー項目名
 	const BREADCRUMB_TITLE = 'メニュー管理(多階層)';		// 画面タイトル名(パンくずリスト)
 	const MAIN_MENU_ID = 'main_menu';			// メインメニューID
-//	const CONTENT_WIDGET_ID = 'default_content';			// コンテンツ編集ウィジェット
+	const CREATE_URL_TAG_ID = 'createurl';			// URL作成ボタンタグID
 	const MAX_MENU_TREE_LEVEL = 5;			// メニュー階層最大数
 	const FILE_ICON_FILE = '/images/system/file.png';			// ファイルアイコン
 	const FOLDER_ICON_FILE = '/images/system/folder.png';		// フォルダアイコン
@@ -601,6 +601,12 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				$this->tmpl->addVar("_widget", "link_type_1", 'selected');
 				break;
 		}
+		
+		// リンク先URL作成ボタン
+		$createUrlButton = $this->gDesign->createEditButton(''/*同画面*/, $this->_('Create URL'), self::CREATE_URL_TAG_ID);
+		$this->tmpl->addVar("_widget", "create_url_button", $createUrlButton);
+		$this->tmpl->addVar("_widget", "tagid_create_url", self::CREATE_URL_TAG_ID);		// URL作成タグ
+		
 		// 項目表示、項目利用可否チェックボックス
 		$this->tmpl->addVar("_widget", "sel_item_visible", $this->convertToCheckedString($visible));
 		$this->tmpl->addVar("_widget", "user_limited_checked", $this->convertToCheckedString($userLimited));		// ユーザ制限するかどうか
