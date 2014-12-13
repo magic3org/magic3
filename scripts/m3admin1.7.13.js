@@ -844,5 +844,5 @@ $(function(){
 	m3LoadOptionUI();
 	
 	// 最後にヘルプ作成
-	m3SetHelp();
+	$(window).load( function(){ m3SetHelp(); });
 });
