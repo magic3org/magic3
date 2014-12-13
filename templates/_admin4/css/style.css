@@ -682,6 +682,9 @@ i[rel="m3help"] { cursor: default; }
 	margin-top:10px;
 	margin-bottom:10px;
 }
+.m3config_h_side_small_button {
+	margin-top:-17px;
+}
 /* fix item width */
 .m3config_item {
 	padding-left: 0;
