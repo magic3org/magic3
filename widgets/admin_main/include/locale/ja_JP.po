@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-12 20:30+0900\n"
-"PO-Revision-Date: 2014-12-12 20:31+0900\n"
+"POT-Creation-Date: 2014-12-13 10:38+0900\n"
+"PO-Revision-Date: 2014-12-13 10:39+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -94,18 +94,18 @@ msgstr "ウィジェットタイトル、位置調整"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:531
 #: ../container/admin_mainEditmenuWidgetContainer.php:56
-#: ../container/admin_mainMenudefWidgetContainer.php:172
-#: ../container/admin_mainSmenudefWidgetContainer.php:166
+#: ../container/admin_mainMenudefWidgetContainer.php:173
+#: ../container/admin_mainSmenudefWidgetContainer.php:167
 #: ../help/help_menudef.php:83
 msgid "Title"
 msgstr "タイトル"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:532
-#: ../container/admin_mainMenudefWidgetContainer.php:171
-#: ../container/admin_mainMenudefWidgetContainer.php:196
+#: ../container/admin_mainMenudefWidgetContainer.php:172
+#: ../container/admin_mainMenudefWidgetContainer.php:197
 #: ../container/admin_mainPagedefWidgetContainer.php:162
-#: ../container/admin_mainSmenudefWidgetContainer.php:165
-#: ../container/admin_mainSmenudefWidgetContainer.php:189
+#: ../container/admin_mainSmenudefWidgetContainer.php:166
+#: ../container/admin_mainSmenudefWidgetContainer.php:190
 #: ../help/help_menudef.php:63 ../help/help_pagedef.php:87
 msgid "Visible"
 msgstr "表示"
@@ -239,10 +239,10 @@ msgstr "追加CSSクラス"
 #: ../container/admin_mainConfigsiteWidgetContainer.php:228
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
-#: ../container/admin_mainMenudefWidgetContainer.php:177
+#: ../container/admin_mainMenudefWidgetContainer.php:178
 #: ../container/admin_mainOpelogWidgetContainer.php:193
 #: ../container/admin_mainPagedefWidgetContainer.php:496
-#: ../container/admin_mainSmenudefWidgetContainer.php:171
+#: ../container/admin_mainSmenudefWidgetContainer.php:172
 #: ../container/admin_mainTemplistWidgetContainer.php:573
 #: ../container/admin_mainUserlistWidgetContainer.php:139
 #: ../container/admin_mainWidgetlistWidgetContainer.php:943
@@ -703,10 +703,10 @@ msgstr "管理メニューその他"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:181
 #: ../container/admin_mainLoginstatusWidgetContainer.php:149
-#: ../container/admin_mainMenudefWidgetContainer.php:159
+#: ../container/admin_mainMenudefWidgetContainer.php:160
 #: ../container/admin_mainOpelogWidgetContainer.php:185
 #: ../container/admin_mainPagedefWidgetContainer.php:156
-#: ../container/admin_mainSmenudefWidgetContainer.php:153
+#: ../container/admin_mainSmenudefWidgetContainer.php:154
 #: ../container/admin_mainUserlistWidgetContainer.php:137
 msgid "Go back"
 msgstr "戻る"
@@ -749,14 +749,14 @@ msgstr "未設定"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:195
 #: ../container/admin_mainEditmenuWidgetContainer.php:586
-#: ../container/admin_mainMenudefWidgetContainer.php:160
-#: ../container/admin_mainMenudefWidgetContainer.php:192
-#: ../container/admin_mainMenudefWidgetContainer.php:432
-#: ../container/admin_mainMenudefWidgetContainer.php:475
-#: ../container/admin_mainSmenudefWidgetContainer.php:154
-#: ../container/admin_mainSmenudefWidgetContainer.php:185
-#: ../container/admin_mainSmenudefWidgetContainer.php:369
-#: ../container/admin_mainSmenudefWidgetContainer.php:412
+#: ../container/admin_mainMenudefWidgetContainer.php:161
+#: ../container/admin_mainMenudefWidgetContainer.php:193
+#: ../container/admin_mainMenudefWidgetContainer.php:439
+#: ../container/admin_mainMenudefWidgetContainer.php:482
+#: ../container/admin_mainSmenudefWidgetContainer.php:155
+#: ../container/admin_mainSmenudefWidgetContainer.php:186
+#: ../container/admin_mainSmenudefWidgetContainer.php:371
+#: ../container/admin_mainSmenudefWidgetContainer.php:414
 #: ../container/admin_mainTemplistWidgetContainer.php:459
 #: ../container/admin_mainUserlistWidgetContainer.php:122
 #: ../container/admin_mainUserlistWidgetContainer.php:150
@@ -774,10 +774,10 @@ msgstr "オプション"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:197
 #: ../container/admin_mainEditmenuWidgetContainer.php:588
-#: ../container/admin_mainMenudefWidgetContainer.php:175
+#: ../container/admin_mainMenudefWidgetContainer.php:176
 #: ../container/admin_mainPortalWidgetContainer.php:101
 #: ../container/admin_mainPortalWidgetContainer.php:254
-#: ../container/admin_mainSmenudefWidgetContainer.php:169
+#: ../container/admin_mainSmenudefWidgetContainer.php:170
 #: ../help/help_menudef.php:79
 msgid "Description"
 msgstr "説明"
@@ -881,16 +881,16 @@ msgid "Create directory?"
 msgstr "ディレクトリを作成しますか?"
 
 #: ../container/admin_mainFilebrowseWidgetContainer.php:198
-#: ../container/admin_mainMenudefWidgetContainer.php:187
+#: ../container/admin_mainMenudefWidgetContainer.php:188
 msgid "Path:"
 msgstr "パス："
 
 #: ../container/admin_mainFilebrowseWidgetContainer.php:199
-#: ../container/admin_mainMenudefWidgetContainer.php:176
-#: ../container/admin_mainMenudefWidgetContainer.php:190
+#: ../container/admin_mainMenudefWidgetContainer.php:177
+#: ../container/admin_mainMenudefWidgetContainer.php:191
 #: ../container/admin_mainPagedefWidgetContainer.php:497
-#: ../container/admin_mainSmenudefWidgetContainer.php:170
-#: ../container/admin_mainSmenudefWidgetContainer.php:183
+#: ../container/admin_mainSmenudefWidgetContainer.php:171
+#: ../container/admin_mainSmenudefWidgetContainer.php:184
 #: ../container/admin_mainTemplistWidgetContainer.php:574
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
@@ -899,9 +899,9 @@ msgid "Delete"
 msgstr "削除"
 
 #: ../container/admin_mainFilebrowseWidgetContainer.php:200
-#: ../container/admin_mainMenudefWidgetContainer.php:191
+#: ../container/admin_mainMenudefWidgetContainer.php:192
 #: ../container/admin_mainOpelogWidgetContainer.php:205
-#: ../container/admin_mainSmenudefWidgetContainer.php:184
+#: ../container/admin_mainSmenudefWidgetContainer.php:185
 #: ../container/admin_mainUserlistWidgetContainer.php:149
 msgid "Select"
 msgstr "選択"
@@ -1046,162 +1046,162 @@ msgstr "システム管理者"
 msgid "Out of Range"
 msgstr "該当なし"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:70
-#: ../container/admin_mainMenudefWidgetContainer.php:765
-#: ../container/admin_mainSmenudefWidgetContainer.php:63
+#: ../container/admin_mainMenudefWidgetContainer.php:71
+#: ../container/admin_mainMenudefWidgetContainer.php:772
+#: ../container/admin_mainSmenudefWidgetContainer.php:64
 msgid "Link"
 msgstr "リンク"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:71
-#: ../container/admin_mainMenudefWidgetContainer.php:769
-#: ../container/admin_mainSmenudefWidgetContainer.php:64
+#: ../container/admin_mainMenudefWidgetContainer.php:72
+#: ../container/admin_mainMenudefWidgetContainer.php:776
+#: ../container/admin_mainSmenudefWidgetContainer.php:65
 msgid "Folder"
 msgstr "フォルダ"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:72
-#: ../container/admin_mainMenudefWidgetContainer.php:773
-#: ../container/admin_mainSmenudefWidgetContainer.php:65
+#: ../container/admin_mainMenudefWidgetContainer.php:73
+#: ../container/admin_mainMenudefWidgetContainer.php:780
+#: ../container/admin_mainSmenudefWidgetContainer.php:66
 msgid "Text"
 msgstr "テキスト"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:73
-#: ../container/admin_mainMenudefWidgetContainer.php:777
-#: ../container/admin_mainSmenudefWidgetContainer.php:66
+#: ../container/admin_mainMenudefWidgetContainer.php:74
+#: ../container/admin_mainMenudefWidgetContainer.php:784
+#: ../container/admin_mainSmenudefWidgetContainer.php:67
 msgid "Separator"
 msgstr "セパレータ"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:155
-#: ../container/admin_mainSmenudefWidgetContainer.php:149
+#: ../container/admin_mainMenudefWidgetContainer.php:156
+#: ../container/admin_mainSmenudefWidgetContainer.php:150
 msgid "Add menu item?"
 msgstr "項目を新規追加しますか?"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:156
-#: ../container/admin_mainSmenudefWidgetContainer.php:150
+#: ../container/admin_mainMenudefWidgetContainer.php:157
+#: ../container/admin_mainSmenudefWidgetContainer.php:151
 msgid "Update menu item?"
 msgstr "項目を更新しますか?"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:157
-#: ../container/admin_mainSmenudefWidgetContainer.php:151
+#: ../container/admin_mainMenudefWidgetContainer.php:158
+#: ../container/admin_mainSmenudefWidgetContainer.php:152
 msgid "Delete menu item?"
 msgstr "項目を削除しますか?"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:158
-#: ../container/admin_mainSmenudefWidgetContainer.php:152
+#: ../container/admin_mainMenudefWidgetContainer.php:159
+#: ../container/admin_mainSmenudefWidgetContainer.php:153
 #: ../help/help_menudef.php:35
 msgid "Menu Item Detail"
 msgstr "メニュー項目詳細"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:161
-#: ../container/admin_mainMenudefWidgetContainer.php:193
-#: ../container/admin_mainSmenudefWidgetContainer.php:155
-#: ../container/admin_mainSmenudefWidgetContainer.php:186
+#: ../container/admin_mainMenudefWidgetContainer.php:162
+#: ../container/admin_mainMenudefWidgetContainer.php:194
+#: ../container/admin_mainSmenudefWidgetContainer.php:156
+#: ../container/admin_mainSmenudefWidgetContainer.php:187
 #: ../help/help_menudef.php:47
 msgid "Language"
 msgstr "言語"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:162
-#: ../container/admin_mainMenudefWidgetContainer.php:188
-#: ../container/admin_mainSmenudefWidgetContainer.php:156
-#: ../container/admin_mainSmenudefWidgetContainer.php:181
+#: ../container/admin_mainMenudefWidgetContainer.php:163
+#: ../container/admin_mainMenudefWidgetContainer.php:189
+#: ../container/admin_mainSmenudefWidgetContainer.php:157
+#: ../container/admin_mainSmenudefWidgetContainer.php:182
 #: ../container/admin_mainUserlistWidgetContainer.php:159
 msgid "New"
 msgstr "新規"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:163
-#: ../container/admin_mainSmenudefWidgetContainer.php:157
+#: ../container/admin_mainMenudefWidgetContainer.php:164
+#: ../container/admin_mainSmenudefWidgetContainer.php:158
 msgid "Get Title"
 msgstr "タイトル取得"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:164
-#: ../container/admin_mainSmenudefWidgetContainer.php:158
+#: ../container/admin_mainMenudefWidgetContainer.php:165
+#: ../container/admin_mainSmenudefWidgetContainer.php:159
 msgid "Item Type"
 msgstr "項目タイプ"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:165
-#: ../container/admin_mainMenudefWidgetContainer.php:195
-#: ../container/admin_mainSmenudefWidgetContainer.php:159
-#: ../container/admin_mainSmenudefWidgetContainer.php:188
+#: ../container/admin_mainMenudefWidgetContainer.php:166
+#: ../container/admin_mainMenudefWidgetContainer.php:196
+#: ../container/admin_mainSmenudefWidgetContainer.php:160
+#: ../container/admin_mainSmenudefWidgetContainer.php:189
 #: ../help/help_menudef.php:59
 msgid "Action"
 msgstr "動作"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:166
-#: ../container/admin_mainSmenudefWidgetContainer.php:160
+#: ../container/admin_mainMenudefWidgetContainer.php:167
+#: ../container/admin_mainSmenudefWidgetContainer.php:161
 msgid "Open page in the same window"
 msgstr "同ウィンドウで表示"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:167
-#: ../container/admin_mainSmenudefWidgetContainer.php:161
+#: ../container/admin_mainMenudefWidgetContainer.php:168
+#: ../container/admin_mainSmenudefWidgetContainer.php:162
 msgid "Open page in the other window"
 msgstr "別ウィンドウで表示"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:168
-#: ../container/admin_mainMenudefWidgetContainer.php:194
-#: ../container/admin_mainSmenudefWidgetContainer.php:162
-#: ../container/admin_mainSmenudefWidgetContainer.php:187
+#: ../container/admin_mainMenudefWidgetContainer.php:169
+#: ../container/admin_mainMenudefWidgetContainer.php:195
+#: ../container/admin_mainSmenudefWidgetContainer.php:163
+#: ../container/admin_mainSmenudefWidgetContainer.php:188
 msgid "Link URL"
 msgstr "リンク先URL"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:169
-#: ../container/admin_mainMenudefWidgetContainer.php:606
-#: ../container/admin_mainSmenudefWidgetContainer.php:163
-#: ../container/admin_mainSmenudefWidgetContainer.php:542
+#: ../container/admin_mainMenudefWidgetContainer.php:170
+#: ../container/admin_mainMenudefWidgetContainer.php:613
+#: ../container/admin_mainSmenudefWidgetContainer.php:164
+#: ../container/admin_mainSmenudefWidgetContainer.php:544
 msgid "Create URL"
 msgstr "URL作成"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:170
-#: ../container/admin_mainSmenudefWidgetContainer.php:164
+#: ../container/admin_mainMenudefWidgetContainer.php:171
+#: ../container/admin_mainSmenudefWidgetContainer.php:165
 msgid "Item Control"
 msgstr "表示制御"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:173
-#: ../container/admin_mainSmenudefWidgetContainer.php:167
+#: ../container/admin_mainMenudefWidgetContainer.php:174
+#: ../container/admin_mainSmenudefWidgetContainer.php:168
 msgid "Limit user"
 msgstr "ユーザ制限"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:174
-#: ../container/admin_mainSmenudefWidgetContainer.php:168
+#: ../container/admin_mainMenudefWidgetContainer.php:175
+#: ../container/admin_mainSmenudefWidgetContainer.php:169
 msgid "Cotrol visible status linked to contents."
 msgstr "リンク先のコンテンツに連動"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:178
-#: ../container/admin_mainSmenudefWidgetContainer.php:172
+#: ../container/admin_mainMenudefWidgetContainer.php:179
+#: ../container/admin_mainSmenudefWidgetContainer.php:173
 #: ../container/admin_mainUserlistWidgetContainer.php:140
 msgid "Add"
 msgstr "新規追加"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:183
-#: ../container/admin_mainSmenudefWidgetContainer.php:177
+#: ../container/admin_mainMenudefWidgetContainer.php:184
+#: ../container/admin_mainSmenudefWidgetContainer.php:178
 msgid "Select menu item to edit."
 msgstr "編集する項目を選択してください"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:184
-#: ../container/admin_mainSmenudefWidgetContainer.php:178
+#: ../container/admin_mainMenudefWidgetContainer.php:185
+#: ../container/admin_mainSmenudefWidgetContainer.php:179
 msgid "Select menu item to delete."
 msgstr "削除する項目を選択してください"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:185
+#: ../container/admin_mainMenudefWidgetContainer.php:186
 #: ../container/admin_mainOpelogWidgetContainer.php:200
-#: ../container/admin_mainSmenudefWidgetContainer.php:179
+#: ../container/admin_mainSmenudefWidgetContainer.php:180
 #: ../container/admin_mainUserlistWidgetContainer.php:147
 msgid "Delete selected item?"
 msgstr "選択項目を削除しますか?"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:186
-#: ../container/admin_mainSmenudefWidgetContainer.php:180
+#: ../container/admin_mainMenudefWidgetContainer.php:187
+#: ../container/admin_mainSmenudefWidgetContainer.php:181
 msgid "Menu Item List"
 msgstr "メニュー項目一覧"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:189
+#: ../container/admin_mainMenudefWidgetContainer.php:190
 #: ../container/admin_mainOpelogWidgetContainer.php:204
-#: ../container/admin_mainSmenudefWidgetContainer.php:182
+#: ../container/admin_mainSmenudefWidgetContainer.php:183
 #: ../container/admin_mainUserlistWidgetContainer.php:160
 msgid "Edit"
 msgstr "編集"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:197
+#: ../container/admin_mainMenudefWidgetContainer.php:198
 #: ../container/admin_mainPagedefWidgetContainer.php:164
-#: ../container/admin_mainSmenudefWidgetContainer.php:190
+#: ../container/admin_mainSmenudefWidgetContainer.php:191
 #: ../container/admin_mainTemplistWidgetContainer.php:464
 #: ../container/admin_mainWidgetlistWidgetContainer.php:646
 #: ../help/help_menudef.php:67 ../help/help_templist.php:59
@@ -1209,84 +1209,89 @@ msgstr "編集"
 msgid "Operation"
 msgstr "操作"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:198
-#: ../container/admin_mainSmenudefWidgetContainer.php:191
+#: ../container/admin_mainMenudefWidgetContainer.php:199
+#: ../container/admin_mainSmenudefWidgetContainer.php:192
 #: ../help/help_menudef.php:75
 msgid "Menu Layout"
 msgstr "メニューレイアウト"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:199
-#: ../container/admin_mainSmenudefWidgetContainer.php:192
+#: ../container/admin_mainMenudefWidgetContainer.php:200
+#: ../container/admin_mainSmenudefWidgetContainer.php:193
 msgid "Menu items can be sorted by mouse drag and drop."
 msgstr "マウスドラッグで項目の表示順を変更できます"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:200
+#: ../container/admin_mainMenudefWidgetContainer.php:201
 msgid "Menu Top"
 msgstr "メニュートップ"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:201
+#: ../container/admin_mainMenudefWidgetContainer.php:202
 msgid "Open All"
 msgstr "すべて開く"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:202
+#: ../container/admin_mainMenudefWidgetContainer.php:203
 msgid "Close All"
 msgstr "すべて閉じる"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:265
+#: ../container/admin_mainMenudefWidgetContainer.php:266
 msgid "You are not allowed to delete menu item with child item."
 msgstr "子項目を持つメニュー項目は削除できません。"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:276
-#: ../container/admin_mainMenudefWidgetContainer.php:519
-#: ../container/admin_mainSmenudefWidgetContainer.php:264
-#: ../container/admin_mainSmenudefWidgetContainer.php:455
+#: ../container/admin_mainMenudefWidgetContainer.php:277
+#: ../container/admin_mainMenudefWidgetContainer.php:526
+#: ../container/admin_mainSmenudefWidgetContainer.php:266
+#: ../container/admin_mainSmenudefWidgetContainer.php:457
 msgid "Menu item deleted."
 msgstr "データを削除しました"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:279
-#: ../container/admin_mainMenudefWidgetContainer.php:522
-#: ../container/admin_mainSmenudefWidgetContainer.php:267
-#: ../container/admin_mainSmenudefWidgetContainer.php:458
+#: ../container/admin_mainMenudefWidgetContainer.php:280
+#: ../container/admin_mainMenudefWidgetContainer.php:529
+#: ../container/admin_mainSmenudefWidgetContainer.php:269
+#: ../container/admin_mainSmenudefWidgetContainer.php:460
 msgid "Failed in deleting menu item."
 msgstr "データ削除に失敗しました"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:433
-#: ../container/admin_mainSmenudefWidgetContainer.php:370
+#: ../container/admin_mainMenudefWidgetContainer.php:440
+#: ../container/admin_mainSmenudefWidgetContainer.php:372
 msgid "Menu ID"
 msgstr "メニューID"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:463
-#: ../container/admin_mainSmenudefWidgetContainer.php:399
+#: ../container/admin_mainMenudefWidgetContainer.php:470
+#: ../container/admin_mainSmenudefWidgetContainer.php:401
 msgid "Menu item added."
 msgstr "データを追加しました"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:468
-#: ../container/admin_mainSmenudefWidgetContainer.php:405
+#: ../container/admin_mainMenudefWidgetContainer.php:475
+#: ../container/admin_mainSmenudefWidgetContainer.php:407
 msgid "Failed in adding menu item."
 msgstr "データ追加に失敗しました"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:505
-#: ../container/admin_mainSmenudefWidgetContainer.php:441
+#: ../container/admin_mainMenudefWidgetContainer.php:512
+#: ../container/admin_mainSmenudefWidgetContainer.php:443
 msgid "Menu item updated."
 msgstr "データを更新しました"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:510
-#: ../container/admin_mainSmenudefWidgetContainer.php:446
+#: ../container/admin_mainMenudefWidgetContainer.php:517
+#: ../container/admin_mainSmenudefWidgetContainer.php:448
 msgid "Failed in updating menu item."
 msgstr "データ更新に失敗しました"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:794
-#: ../container/admin_mainSmenudefWidgetContainer.php:596
+#: ../container/admin_mainMenudefWidgetContainer.php:798
+#: ../container/admin_mainSmenudefWidgetContainer.php:595
 msgid "Show in self window"
 msgstr "同じウィンドウで表示"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:799
-#: ../container/admin_mainSmenudefWidgetContainer.php:601
+#: ../container/admin_mainMenudefWidgetContainer.php:803
+#: ../container/admin_mainSmenudefWidgetContainer.php:600
 msgid "Show in other window"
 msgstr "別ウィンドウで表示"
 
-#: ../container/admin_mainMenudefWidgetContainer.php:846
-#: ../container/admin_mainSmenudefWidgetContainer.php:653
+#: ../container/admin_mainMenudefWidgetContainer.php:809
+#: ../container/admin_mainSmenudefWidgetContainer.php:606
+msgid "Hidden item"
+msgstr "非表示項目"
+
+#: ../container/admin_mainMenudefWidgetContainer.php:854
+#: ../container/admin_mainSmenudefWidgetContainer.php:657
 msgid "Edit Content"
 msgstr "コンテンツを編集"
 

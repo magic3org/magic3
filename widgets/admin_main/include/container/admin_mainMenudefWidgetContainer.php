@@ -54,6 +54,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	const PREVIEW_TITLE = 'プレビュー';
 	const WINDOW_ICON_FILE = '/images/system/window32.png';		// 同じウィンドウアイコン
 	const OTHER_WINDOW_ICON_FILE = '/images/system/other_window32.png';		// 別のウィンドウアイコン
+	const STOP_ICON_FILE = '/images/system/closed32.png';		// 停止中(項目非表示)アイコン
 	
 	/**
 	 * コンストラクタ
@@ -788,23 +789,25 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				}
 				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
-				$visible = '';
-				if ($row['md_visible']){
-					$visible = 'checked';
-				}
 				// リンクタイプ
 				$linkIconTag = '';
-				switch ($row['md_link_type']){
-					case 0:			// 同ウィンドウで開くリンク
-						$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;
-						$iconTitle = $this->_('Show in self window');		// 同じウィンドウで表示
-						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
-						break;
-					case 1:			// 別ウィンドウで開くリンク
-						$iconUrl = $this->gEnv->getRootUrl() . self::OTHER_WINDOW_ICON_FILE;
-						$iconTitle = $this->_('Show in other window');		// 別のウィンドウで表示
-						$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
-						break;
+				if ($row['md_visible']){			// メニュー項目表示の場合
+					switch ($row['md_link_type']){
+						case 0:			// 同ウィンドウで開くリンク
+							$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;
+							$iconTitle = $this->_('Show in self window');		// 同じウィンドウで表示
+							$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+							break;
+						case 1:			// 別ウィンドウで開くリンク
+							$iconUrl = $this->gEnv->getRootUrl() . self::OTHER_WINDOW_ICON_FILE;
+							$iconTitle = $this->_('Show in other window');		// 別のウィンドウで表示
+							$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+							break;
+					}
+				} else {
+					$iconUrl = $this->gEnv->getRootUrl() . self::STOP_ICON_FILE;// 停止中(項目非表示)アイコン
+					$iconTitle = $this->_('Hidden item');		// 非表示項目
+					$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
 				}
 				// 更新用シリアル番号
 				$serial = $id;
@@ -848,7 +851,6 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 					'link_str' => $linkUrlStr,											// リンクURL
 					'content_id' => $contentId,											// コンテンツID
 					'enable_content' => $enableContentLink,											// コンテンツの編集ボタンの有効状態
-					'visible' => $visible,											// メニュー項目表示制御
 					'label_edit_content' => $this->_('Edit Content')				// コンテンツを編集
 				);
 

@@ -129,7 +129,6 @@ $(function(){
         <th><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
 	    <th><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></th>
 	    <th style="width:50px;"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
-	    <th style="width:50px;"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
 	    <th style="width:50px;"><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
 	</tr>
     </thead>
@@ -140,9 +139,7 @@ $(function(){
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
 	    <td>{LINK_STR}</td>
 	    <td>{LINK_TYPE}</td>
-	    <td><input type="checkbox" disabled {VISIBLE} /></td>
 	    <td>
-		<!--<input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} />-->
 		<a href="#" onclick="editContent('{CONTENT_ID}');" class="btn btn-sm btn-warning" role="button" rel="m3help" title="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT}><i class="glyphicon glyphicon-edit"></i></a></td>
 	</tr>
 	</patTemplate:tmpl>
@@ -155,10 +152,9 @@ $(function(){
     <tr>
         <th style="width:50px;"><span {_HELP_MENUDEF_CHECK}>{_LC_LABEL_CHECK}</span></th>
         <th><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
-	    <th><span {_HELP_MENUDEF_LANG}>{_LC_LABEL_LANG}</span></th>
+	    <th style="width:50px;"><span {_HELP_MENUDEF_LANG}>{_LC_LABEL_LANG}</span></th>
 	    <th><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_LINK_URL}</span></th>
 	    <th style="width:50px;"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
-	    <th style="width:50px;"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
 	    <th style="width:50px;"><span {_HELP_MENUDEF_ACT}>{_LC_LABEL_OPERATION}</span></th>
 	</tr>
     </thead>
@@ -170,8 +166,7 @@ $(function(){
 	    <td>{LANG}</td>
 	    <td>{LINK_STR}</td>
 	    <td>{LINK_TYPE}</td>
-	    <td><input type="checkbox" disabled {VISIBLE} /></td>
-	    <td><!--<input type="button" class="button" onclick="editContent('{CONTENT_ID}');" value="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT} />-->
+	    <td>
 		<a href="#" onclick="editContent('{CONTENT_ID}');" class="btn btn-sm btn-warning" role="button" rel="m3help" title="{LABEL_EDIT_CONTENT}" {ENABLE_CONTENT}><i class="glyphicon glyphicon-edit"></i></a></td>
 	</tr>
 	</patTemplate:tmpl>

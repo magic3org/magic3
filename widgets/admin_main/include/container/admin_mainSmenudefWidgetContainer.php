@@ -47,6 +47,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	const PREVIEW_TITLE = 'プレビュー';
 	const WINDOW_ICON_FILE = '/images/system/window32.png';		// 同じウィンドウアイコン
 	const OTHER_WINDOW_ICON_FILE = '/images/system/other_window32.png';		// 別のウィンドウアイコン
+	const STOP_ICON_FILE = '/images/system/closed32.png';		// 停止中(項目非表示)アイコン
 	
 	/**
 	 * コンストラクタ
@@ -241,7 +242,8 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				$menuItemNoArray = explode(',', $menuitems);
 			
 				// メニューの並び順を変更
-				$this->db->orderMenuItems($this->menuId, 0/*1階層目*/, true/*表示項目のみ*/, $menuItemNoArray);
+			//	$this->db->orderMenuItems($this->menuId, 0/*1階層目*/, true/*表示項目のみ*/, $menuItemNoArray);
+				$this->db->orderMenuItems($this->menuId, 0/*1階層目*/, false/*すべての項目*/, $menuItemNoArray);
 			}
 			$this->gCache->clearCacheByWidgetType(self::WIDGET_TYPE_MENU);		// キャッシュをクリア
 			$this->gPage->updateParentWindow();// 親ウィンドウを更新
@@ -583,25 +585,28 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			if ($this->isMultiLang){		// 多言語対応の場合
 				$lang = $this->createLangImageList($row['md_name']);
 			}
-			// メニュー項目表示状態
-			$visible = '';
-			if ($row['md_visible']){
-				$visible = 'checked';
-			}
+
 			// リンクタイプ
 			$iconTag = '';
-			switch ($row['md_link_type']){
-				case 0:			// 同ウィンドウで開くリンク
-					$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;
-					$iconTitle = $this->_('Show in self window');		// 同じウィンドウで表示
-					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
-					break;
-				case 1:			// 別ウィンドウで開くリンク
-					$iconUrl = $this->gEnv->getRootUrl() . self::OTHER_WINDOW_ICON_FILE;
-					$iconTitle = $this->_('Show in other window');		// 別のウィンドウで表示
-					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
-					break;
+			if ($row['md_visible']){			// メニュー項目表示の場合
+				switch ($row['md_link_type']){
+					case 0:			// 同ウィンドウで開くリンク
+						$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;
+						$iconTitle = $this->_('Show in self window');		// 同じウィンドウで表示
+						$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+						break;
+					case 1:			// 別ウィンドウで開くリンク
+						$iconUrl = $this->gEnv->getRootUrl() . self::OTHER_WINDOW_ICON_FILE;
+						$iconTitle = $this->_('Show in other window');		// 別のウィンドウで表示
+						$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+						break;
+				}
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::STOP_ICON_FILE;// 停止中(項目非表示)アイコン
+				$iconTitle = $this->_('Hidden item');		// 非表示項目
+				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
 			}
+				
 			// 項目選択のラジオボタンの状態
 			$serial = $this->convertToDispString($row['md_id']);
 			$selected = '';
@@ -648,12 +653,10 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 				'link_str' => $linkUrlStr,											// リンクURL
 				'content_id' => $contentId,											// コンテンツID
 				'enable_content' => $enableContentLink,											// コンテンツの編集ボタンの有効状態
-				'visible' => $visible,											// メニュー項目表示制御
 				'selected' => $selected,												// 項目選択用ラジオボタン
 				'label_edit_content' => $this->_('Edit Content')				// コンテンツを編集
 			);
-//			$this->tmpl->addVars('itemlist', $itemRow);
-//			$this->tmpl->parseTemplate('itemlist', 'a');
+
 			if ($this->isMultiLang){		// 多言語対応のとき
 				$this->tmpl->addVars('itemlist2', $itemRow);
 				$this->tmpl->parseTemplate('itemlist2', 'a');
@@ -663,11 +666,11 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			}
 		
 			// メニューのプレビュー
-			if ($row['md_visible']){		// 表示項目のみ追加
+//			if ($row['md_visible']){		// 表示項目のみ追加
 				$this->tmpl->addVars('menuitemlist', $itemRow);
 				$this->tmpl->parseTemplate('menuitemlist', 'a');
 				$this->isExistsPreviewMenuItem = true;		// メニュー項目が存在するかどうか
-			}
+//			}
 			$this->isExistsMenuItem = true;		// メニュー項目が存在するかどうか
 	
 			// シリアル番号を保存
