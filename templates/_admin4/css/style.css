@@ -683,7 +683,10 @@ i[rel="m3help"] { cursor: default; }
 	margin-bottom:10px;
 }
 .m3config_h_side_small_button {
-	margin-top:-17px;
+/*	margin-top:-17px;*/
+	margin-top:-13px;
+	font-size: 17px;
+	padding: 0px 5px;
 }
 /* fix item width */
 .m3config_item {
