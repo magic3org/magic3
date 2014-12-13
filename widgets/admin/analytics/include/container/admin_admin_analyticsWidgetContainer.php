@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_admin_analyticsWidgetContainer.php 5807 2013-03-08 05:18:13Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -30,7 +30,7 @@ class admin_admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 	const TERM_TYPE_ALL = '_all';				// 全データ表示選択
 	const DEFAULT_GRAPH_TYPE = 'pageview';		// デフォルトのグラフ種別
 	const DEFAULT_GRAPH_WIDTH = 800;		// グラフ幅
-	const DEFAULT_GRAPH_HEIGHT = 320;		// グラフ高さ
+	const DEFAULT_GRAPH_HEIGHT = 280;		// グラフ高さ
 	
 	/**
 	 * コンストラクタ
