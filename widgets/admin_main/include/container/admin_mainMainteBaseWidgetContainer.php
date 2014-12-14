@@ -29,6 +29,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_INITSYSTEM		= 'initsystem';		// DBメンテナンス
 	const TASK_DBBACKUP			= 'dbbackup';		// DBバックアップ
 	const TASK_DBCONDITION		= 'dbcondition';	// DB状況
+	const TASK_INITWIZARD		= 'initwizard';		// システム初期化ウィザード
+	const TASK_EDITMENU			= 'editmenu';		// 管理メニュー編集
 	const TASK_MAIN				= 'mainte';			// 全体(メンテナンス)
 	const DEFAULT_TASK			= 'resbrowse';		// デフォルト(ファイルブラウザ)
 	
@@ -109,6 +111,14 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			case self::TASK_DBCONDITION:	// DB状況
 				$titles[] = 'DB管理';
 				$titles[] = '状況';
+				break;
+			case self::TASK_INITWIZARD:		// システム初期化ウィザード
+				$titles[] = 'コア制御';
+				$titles[] = 'システム初期化ウィザード';
+				break;
+			case self::TASK_EDITMENU:		// 管理メニュー編集
+				$titles[] = 'コア制御';
+				$titles[] = '管理メニュー編集';
 				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
@@ -223,6 +233,37 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 											'tagid'		=> '',
 											'active'	=> (
 																$task == self::TASK_DBCONDITION		// DB状況
+															)
+										)
+									)
+								),
+								
+								(Object)array(
+									'name'		=> 'コア制御',
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> (
+														$task == self::TASK_INITWIZARD ||		// システム初期化ウィザード
+														$task == self::TASK_EDITMENU			// 管理メニュー編集
+													),
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> 'システム初期化ウィザード',
+											'task'		=> self::TASK_INITWIZARD,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_INITWIZARD		// システム初期化ウィザード
+															)
+										),
+										(Object)array(
+											'name'		=> '管理メニュー編集',
+											'task'		=> self::TASK_EDITMENU,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_EDITMENU		// 管理メニュー編集
 															)
 										)
 									)
