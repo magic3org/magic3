@@ -772,7 +772,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 						if (!empty($nextRow)) $nextSerial = $nextRow['be_serial'];
 					}
 				}
-			} else {
+			} else {		// データがないとき
+				$this->serialNo = 0;
 				$this->entryId = '0';		// 記事ID
 				$this->blogId = '';		// 所属ブログ
 				$name = '';				// タイトル
