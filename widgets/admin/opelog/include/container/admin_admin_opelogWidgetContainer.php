@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_admin_opelogWidgetContainer.php 5788 2013-03-04 13:52:44Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -18,7 +18,7 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 class admin_admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 {
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
-	const DEFAULT_VIEW_COUNT = 10;			// 一度に表示可能なリスト項目数
+	const DEFAULT_VIEW_COUNT = 8;			// 一度に表示可能なリスト項目数
 	
 	/**
 	 * コンストラクタ

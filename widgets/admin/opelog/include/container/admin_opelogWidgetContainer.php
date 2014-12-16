@@ -23,7 +23,7 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 	const DEFAULT_LOG_LEVEL = '0';		// デフォルトのログレベル
 	const DEFAULT_LOG_STATUS = '1';		// デフォルトのログステータス(未参照のみ)
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
-	const DEFAULT_VIEW_COUNT = 10;			// 一度に表示可能なリスト項目数
+	const DEFAULT_VIEW_COUNT = 8;			// 一度に表示可能なリスト項目数
 //	const MAX_PAGE_COUNT = 20;				// 最大ページ数
 	const INFO_ICON_FILE = '/images/system/info16.png';			// 情報アイコン
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// 注意アイコン
