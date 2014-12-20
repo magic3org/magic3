@@ -110,7 +110,8 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 			if ($task == $this->_taskArray[$i]) $attr = ' class="active"';
 			$menuHtml .= '<li' . $attr . '><a href="' . $url . '">' . $this->convertToDispString($this->_taskTitleArray[$i]) . '</a></li>';
 		}
-		$menuHtml = '<ul class="nav nav-pills">' . $menuHtml . '</ul>';
+//		$menuHtml = '<ul class="nav nav-pills">' . $menuHtml . '</ul>';
+		$menuHtml = '<ul class="nav nav-tabs">' . $menuHtml . '</ul>';
 		$this->tmpl->addVar("_widget", "menu_items", $menuHtml);
 		
 		// 前後エントリー移動ボタン
