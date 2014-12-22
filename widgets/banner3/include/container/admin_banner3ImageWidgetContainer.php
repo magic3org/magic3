@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_banner3ImageWidgetContainer.php 5868 2013-03-28 04:08:49Z fishbone $
  * @link       http://www.magic3.org
@@ -404,7 +404,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		}
 		
 		// クリック数取得
-		$clickCount = self::$_mainDb->getTotalClickCount($this->serialNo);
+//		$clickCount = self::$_mainDb->getTotalClickCount($this->serialNo);		// 処理に時間が掛かるのでコメントにする
 		
 		// #### 更新、新規登録部をを作成 ####
 		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($this->serialNo));
