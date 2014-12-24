@@ -482,12 +482,16 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		// 定義ID
 		$defId = $fetchedRow['pd_config_id'];
 		
+		$sharedColorClass = '';			// ウィジェットの共有状態
+		if (empty($fetchedRow['pd_sub_id'])) $sharedColorClass = 'class="danger"';
+		
 		$row = array(
 			'no'			=> $index + 1,											// 行番号
 			'serial' 		=> $this->convertToDispString($fetchedRow['pd_serial']),			// シリアルNo
 //			'id' 			=> $this->convertToDispString($fetchedRow['wd_id']),			// ウィジェットID
 			'name'			=> $this->convertToDispString($fetchedRow['wd_name']),		// 名前
 			'position'		=> $this->convertToDispString($fetchedRow['pd_position_id']),	// 表示ポジション
+			'shared_color'	=> $sharedColorClass,			// ウィジェットの共有状態
 			'index'			=> $this->convertToDispString($fetchedRow['pd_index']),				// 表示順
 			'widget_id'		=> $this->convertToDispString($fetchedRow['pd_widget_id']),				// ウィジェットID
 			'widget_name'		=> $this->convertToDispString($fetchedRow['wd_name']),				// ウィジェット名
