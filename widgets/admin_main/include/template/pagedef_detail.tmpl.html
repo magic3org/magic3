@@ -45,12 +45,12 @@ function cancelItem(){
 	return true;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('pagedeflisttable', 25, 0);
+	// テーブル作成
+	m3SetConfigTable('pagedeflist');
 });
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="pagedef_detail" />
@@ -59,53 +59,51 @@ $(function(){
 <input type="hidden" name="pagesubid" value="{PAGESUBID}" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="no" />
-<table width="90%">
-<tr><td><label><span {_HELP_LIST}>{_LC_LABEL_PAGE_DEF_DETAIL}</span></label>&nbsp;&nbsp;<label>( {URL} )</label></td>
-<td align="right"><span {_HELP_USERLIST_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" />
-</td></tr>
-<tr><td colspan="2">
-
-<table id="pagedeflisttable" class="simple-table" width="100%">
-    <thead>
-        <tr>
-            <th width="20%"><span {_HELP_PAGEDEF_POSITION_BLOCK}>{_LC_LABEL_POSITION}</span>
-    <select name="position" onchange="selectMenu()">
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_LIST}>{_LC_LABEL_PAGE_DEF_DETAIL}</span></h3>
+<div class="form-control-static m3config_h" style="margin-left:50px;"><span {_HELP_PAGEDEF_POSITION_BLOCK}>{_LC_LABEL_POSITION}</span>： </div>
+<div class="m3config_h">
+    <select id="position" name="position" class="form-control" onchange="selectMenu()" style="display:inline-block;width:150px;margin-top:-7px;">
         <option value="">{_LC_LABEL_ALL}</option>
         <patTemplate:tmpl name="position_list">
         <option value="{VALUE}" {SELECTED}>{NAME}</option>
         </patTemplate:tmpl>
-    </select>	    
-	    </th>
-	    <th width="80" valign="top"><span {_HELP_PAGEDEF_POSITION_INDEX}>{_LC_LABEL_ORDER}</span></th>
-	    <th width="25%" valign="top">{_LC_LABEL_WIDGET_ID} / {_LC_LABEL_WIDGET_NAME}</th>
-	    <th width="80" valign="top"><span {_HELP_PAGEDEF_WIDGET_CONFIG_ID}>{_LC_LABEL_CONFIG_ID}</span></th>
-	    <th width="50" valign="top"><span {_HELP_PAGEDEF_WIDGET_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
-	    <th width="50" valign="top"><span {_HELP_PAGEDEF_WIDGET_COMMON}>{_LC_LABEL_SHARED}</span></th>
+    </select>
+</div>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_PAGEDEF_BUTTONS}><div class="btn-group">
+    <input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" />
+</div></div></div>
+
+<table id="pagedeflist">
+    <thead>
+    <tr>
+        <th style="width:100px;"><span {_HELP_PAGEDEF_POSITION_BLOCK}>{_LC_LABEL_POSITION}</span></th>
+	    <th style="width:50px;"><span {_HELP_PAGEDEF_POSITION_INDEX}>{_LC_LABEL_ORDER}</span></th>
+	    <th>{_LC_LABEL_WIDGET_NAME}<br />{_LC_LABEL_WIDGET_ID}</th>
+	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_CONFIG_ID}>{_LC_LABEL_CONFIG_ID}</span></th>
+	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
+	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_COMMON}>{_LC_LABEL_SHARED}</span></th>
 	    <th>{_LC_LABEL_OPERATION}</th>
 	</tr>
     </thead>
     <tfoot>
-        <tr>
-	    <td colspan="8" align="right"><input type="checkbox" name="with_common" checked />{_LC_LABEL_SHARED_ITEM}<input type="button" class="button" onclick="deleteAll();" value="{_LC_LABEL_DELETE_ALL}" {DEL_ALL_BUTTON} /></td>
+    <tr>
+	    <th colspan="7"><div class="pull-right"><input type="button" class="button" onclick="deleteAll();" value="{_LC_LABEL_DELETE_ALL}" {DEL_ALL_BUTTON} /></div><div class="checkbox pull-right col-sm-2"><label><input type="checkbox" name="with_common" checked />{_LC_LABEL_SHARED_ITEM}</label></div></th>
 	</tr>
     </tfoot>
     <tbody>
-        <patTemplate:tmpl name="page_def_list">
-        <tr>
+    <patTemplate:tmpl name="page_def_list">
+    <tr>
 	    <td>{POSITION}</td>
-	    <td align="center"><input type="text" name="item{NO}_index" value="{INDEX}" size="4" maxlength="4" style="width:35px;" /></td>
-	    <td>{WIDGET_ID} / {WIDGET_NAME}</td>
-	    <td align="center"><input type="text" name="item{NO}_def_id" value="{DEF_ID}" size="5" maxlength="5" onkeypress="return m3_numericKey(event,true);" style="width:35px;" />
-	    </td>
-	    <td align="center"><input type="checkbox" name="item{NO}_visible" {VISIBLE} /></td>
-	    <td align="center"><input type="checkbox" name="item{NO}_shared" {SHARED} /></td>
-	    <td align="right"><input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{UPDATE_LINE}" {UPDATE_BUTTON} />
+	    <td><input type="text" name="item{NO}_index" class="form-control" value="{INDEX}" size="4" maxlength="4" /></td>
+	    <td>{WIDGET_NAME}<br />{WIDGET_ID}</td>
+	    <td><input type="text" name="item{NO}_def_id" class="form-control" value="{DEF_ID}" size="5" maxlength="5" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td><input type="checkbox" name="item{NO}_visible" {VISIBLE} /></td>
+	    <td><input type="checkbox" name="item{NO}_shared" {SHARED} /></td>
+	    <td><input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{UPDATE_LINE}" {UPDATE_BUTTON} />
 	    <input type="button" class="button" onclick="deleteline('{NO}', '{SERIAL}');" value="{DELETE_LINE}" {DELETE_BUTTON} /></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
-</table>
-</td></tr>
 </table>
 
 </form>

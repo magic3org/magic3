@@ -29,6 +29,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $pageTitle;	// 選択ページのタイトル
 	private $templateTitle;	// テンプレートタイトル
 	private $pageInfoRows;			// ページ情報
+	private $isExistsDefItems;		// ページ定義項目が存在するかどうか
 	const BREADCRUMB_TITLE_PC			= 'PC画面';		// 画面タイトル名(パンくずリスト)
 	const BREADCRUMB_TITLE_MOBILE		= '携帯画面';		// 画面タイトル名(パンくずリスト)
 	const BREADCRUMB_TITLE_SMARTPHONE	= 'スマートフォン画面';		// 画面タイトル名(パンくずリスト)
@@ -432,6 +433,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 
 		// 定義詳細一覧表示
 		$this->db->getPageDefList(array($this, 'pageListLoop'), $this->pageId, $this->pageSubId, $this->position);
+		if (!$this->isExistsDefItems) $this->tmpl->setAttribute('page_def_list', 'visibility', 'hidden');
 			
 		// ポジションメニュー作成
 		$this->db->getPagePositionList(array($this, 'pagePositionLoop'));
@@ -500,6 +502,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		);
 		$this->tmpl->addVars('page_def_list', $row);
 		$this->tmpl->parseTemplate('page_def_list', 'a');
+		
+		$this->isExistsDefItems = true;		// ページ定義項目が存在するかどうか
 		return true;
 	}
 	/**
