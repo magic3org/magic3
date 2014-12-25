@@ -167,8 +167,8 @@ $(function(){
         <patTemplate:tmpl name="itemlist">
         <tr>
 	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
-	    <td><div class="form-control-static col-sm-11 m3config_item">{NAME}</div><div class="form-control-static col-sm-1 text-right m3config_item">{DEFAULT_ICON}</div></td>
+	    <td>{ID}</td>
+	    <td><div class="form-control-static col-sm-11 m3config_item"><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></div><div class="form-control-static col-sm-1 text-right m3config_item">{DEFAULT_ICON}</div></td>
 	    <td class="status"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
 	    <td class="status"><input type="checkbox" disabled {VISIBLE} /></td>
 	    <td class="status"><input type="checkbox" disabled {LIMITED} /></td>
@@ -202,8 +202,8 @@ $(function(){
         <patTemplate:tmpl name="itemlist2">
         <tr>
 	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
-	    <td><div class="form-control-static col-sm-11 m3config_item">{NAME}</div><div class="form-control-static col-sm-1 text-right m3config_item">{DEFAULT_ICON}</div></td>
+	    <td>{ID}</td>
+	    <td><div class="form-control-static col-sm-11 m3config_item"><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></div><div class="form-control-static col-sm-1 text-right m3config_item">{DEFAULT_ICON}</div></td>
 	    <td>{LANG}</td>
 	    <td class="status"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
 	    <td class="status"><input type="checkbox" disabled {VISIBLE} /></td>

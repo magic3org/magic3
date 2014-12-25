@@ -117,7 +117,7 @@ $(function(){
 <input type="hidden" name="page" value="{PAGE}" />
 
 <h3 class="m3config_h"><span {_HELP_ENTRY_LIST}>ブログ記事一覧</span>
-<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="コメントを検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>
+<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>
 </h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_ENTRY_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
@@ -184,7 +184,7 @@ $(function(){
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{ID}</td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});" rel="m3help" title="記事を編集">{NAME}</a></td>
 	    <td class="status">{STATUS_IMG}</td>
 	    <td class="status">{STATUS}</td>
 	    <td>{CATEGORY}</td>
