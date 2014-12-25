@@ -363,7 +363,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 
 		$reloadData = false;		// データの再読み込み
 		$hasPassword = false;		// パスワードが設定されているかどうか
-		$historyIndex = -1;	// 履歴番号
+		$historyIndex = -1;	// 履歴番号(旧データの場合のみ有効)
 		if ($act == 'new'){
 			$this->serialNo = 0;
 			$reloadData = true;		// データの再読み込み
@@ -512,6 +512,16 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 										'cn_script_lib'			=> implode(',', $this->selectedPlugin),			// jQueryプラグイン
 										'cn_template_id'		=> $this->templateId);		// テンプレートID
 										
+				// 履歴からのデータ取得の場合はシリアル番号を最新に変更
+				$mode = $request->trimValueOf('mode');			// データ更新モード
+				if ($mode == 'history'){		// 履歴データ表示モード
+					// 最新のシリアル番号を取得
+					$ret = self::$_mainDb->getContentByContentId(default_contentCommonDef::$_contentType, $contentId, $this->langId, $row);
+					if ($ret) $this->serialNo = $row['cn_serial'];		// コンテンツシリアル番号
+					
+					// ### 履歴データを再取得すべき? ###
+				}
+				
 				$ret = self::$_mainDb->updateContentItem($this->serialNo, $name, $desc, $html, $visible, $default, $limited, $key, $password, 
 															$metaTitle, $metaDesc, $metaKeyword, $startDt, $endDt, $newSerial, $oldRecord, $otherParams);
 				if ($ret){
@@ -778,7 +788,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 				if (!empty($row['cn_password'])) $hasPassword = true;		// パスワードが設定されている
 				
 				// 履歴番号
-				if ($row['cn_deleted']) $historyIndex = $row['cn_history_index'];
+				if ($row['cn_deleted']) $historyIndex = $row['cn_history_index'];// 旧データの場合のみ有効
 				
 				// ユーザ定義フィールド
 				$this->fieldValueArray = $this->unserializeArray($row['cn_option_fields']);
@@ -1020,7 +1030,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 
 			$this->tmpl->addVar("_widget", "sel_item_id", $contentId);			// コンテンツID
 			$this->tmpl->addVar("_widget", "item_id", $itemId);			// コンテンツID
-			$this->tmpl->setAttribute('del_button', 'visibility', 'visible');// 「削除」ボタン
+			
+			if ($historyIndex >= 0){		// 履歴データの場合
+				$this->tmpl->setAttribute('update_history_button', 'visibility', 'visible');		// 「履歴データで更新」ボタン
+			} else {
+				$this->tmpl->setAttribute('del_button', 'visibility', 'visible');// 「更新」「削除」ボタン
+			}
 		}
 		// 「戻る」ボタンの表示
 		if ($openby == 'simple' || $openby == 'tabs') $this->tmpl->setAttribute('cancel_button', 'visibility', 'hidden');		// 詳細画面のみの表示またはタブ表示のときは戻るボタンを隠す

@@ -553,6 +553,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$mode = $request->trimValueOf('mode');			// データ更新モード
 				if ($mode == 'history'){		// 履歴データ表示モード
 					$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);		// 最新のシリアル番号を取得
+					
+					// ### 履歴データを再取得すべき? ###
 				}
 			
 				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
