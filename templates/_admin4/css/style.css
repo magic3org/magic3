@@ -694,6 +694,11 @@ i[rel="m3help"] { cursor: default; }
 /*	padding-right: 0;*/
 	padding-right: 5px;
 }
+
+.m3config_sortable_box li {
+	cursor: move;
+}
+
 /****** edit line ******/
 .m3line_image {
 	width:16px;
