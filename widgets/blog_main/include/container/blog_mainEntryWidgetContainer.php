@@ -370,7 +370,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			if (!empty($itemValue)) $this->fieldValueArray[$fieldKey] = $itemValue;
 		}
 		
-		$historyIndex = -1;	// 履歴番号
+		$historyIndex = -1;	// 履歴番号初期化(旧データの場合のみ有効)
 		$reloadData = false;		// データの再ロード
 		if ($act == 'select'){		// 一覧から選択のとき
 			$reloadData = true;		// データの再ロード
@@ -550,7 +550,13 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 										'be_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
 										'be_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'be_option_fields'		=> $this->serializeArray($this->fieldValueArray));				// ユーザ定義フィールド値
-										
+
+				// 履歴からのデータ取得の場合はシリアル番号を最新に変更
+				$mode = $request->trimValueOf('mode');			// データ更新モード
+				if ($mode == 'history'){		// 履歴データ表示モード
+					$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);		// 最新のシリアル番号を取得
+				}
+			
 				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
 													''/*投稿者そのまま*/, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $oldRecord, $otherParams);
 				if ($ret){
@@ -756,7 +762,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->categoryArray = $this->getCategory($categoryRow);
 				
 				// 履歴番号
-				if ($row['be_deleted']) $historyIndex = $row['be_history_index'];
+				if ($row['be_deleted']) $historyIndex = $row['be_history_index'];		// 旧データの場合のみ有効
 				
 				// ユーザ定義フィールド
 				$this->fieldValueArray = $this->unserializeArray($row['be_option_fields']);
@@ -838,7 +844,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// プレビュー用URL
 		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $this->entryId;
-		if ($historyIndex >= 0) $previewUrl .= '&' . M3_REQUEST_PARAM_HISTORY . '=' . $historyIndex;
+		if ($historyIndex >= 0) $previewUrl .= '&' . M3_REQUEST_PARAM_HISTORY . '=' . $historyIndex;		// 履歴番号(旧データの場合のみ有効)
 		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
 		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
 		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
@@ -897,16 +903,21 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		} else {
 			// 記事ID
 			$itemId = $this->entryId;
-			if ($historyIndex >= 0) $itemId .= '(' . ($historyIndex +1) . ')';// 履歴番号
+			if ($historyIndex >= 0) $itemId .= '(' . ($historyIndex +1) . ')';// 履歴番号(旧データの場合のみ有効)
 			$this->tmpl->addVar('_widget', 'id', $itemId);
 			
+			// ボタンの表示制御
 			if ($this->serialNo == 0){		// 未登録データのとき
 				// データ追加ボタン表示
 				$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
 			} else {
-				// データ更新、削除ボタン表示
-				$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');// デフォルト言語以外はデータ削除
-				$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+				if ($historyIndex >= 0){		// 履歴データの場合
+					$this->tmpl->setAttribute('update_history_button', 'visibility', 'visible');		// 「履歴データで更新」ボタン
+				} else {
+					// データ更新、削除ボタン表示
+					$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');// デフォルト言語以外はデータ削除
+					$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+				}
 			}
 			// 言語選択メニュー作成
 			//if (!empty($this->entryId)){	// コンテンツが選択されているとき
