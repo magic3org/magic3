@@ -48,6 +48,23 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+// 履歴データで更新
+function updateHistoryItem(){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	
+	// CKEditorの入力内容を確定
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+	
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
+	document.main.act.value = 'update';
+	document.main.mode.value = 'history';
+	document.main.submit();
+	return true;
+}
 function delItem(){
 	if (!window.confirm('項目を削除しますか?')) return false;
 	
@@ -137,6 +154,7 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="entryid" value="{ENTRYID}" />
+<input type="hidden" name="mode" value="{MODE}" />
 <h3 class="m3config_h"><span {_HELP_ENTRY_DETAIL}>ブログ記事詳細</span></h3>
 
 <patTemplate:tmpl name="cancel_button" visibility="visible">
@@ -279,6 +297,9 @@ $(function(){
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_history_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateHistoryItem();" value="履歴データで更新" />
 </patTemplate:tmpl>
 </div>
 </form>
