@@ -344,6 +344,8 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 			// シリアル番号を保存
 			$this->serialArray[] = $id;
 		}
+		// 一覧部の表示制御
+		$this->setListTemplateVisibility('itemlist');
 	}
 	/**
 	 * 選択用メニューを作成

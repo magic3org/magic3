@@ -426,6 +426,22 @@ class BaseWidgetContainer extends Core
 		$this->parseCancel = true;			// テンプレート変換処理を中断するかどうか
 	}
 	/**
+	 * リスト出力型のテンプレートの表示状態を修正
+	 *
+	 * @param string $templateName			テンプレート名
+	 * @return 								なし
+	 */
+	function setListTemplateVisibility($templateName)
+	{
+		// 出力がある場合はテンプレート出力を表示
+		$isExistsOutput = $this->tmpl->_templates[$templateName]['parsed'];
+		if ($isExistsOutput){
+			$this->tmpl->setAttribute($templateName, 'visibility', 'visible');	// 表示
+		} else {
+			$this->tmpl->setAttribute($templateName, 'visibility', 'hidden');	// 非表示
+		}
+	}
+	/**
 	 * テンプレートファイルを強制入れ替え
 	 *
 	 * @param string $templateFilename		テンプレートファイル名
