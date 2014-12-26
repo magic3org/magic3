@@ -147,7 +147,8 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		
 		// #### 画像リンクリストを作成 ####
 		self::$_mainDb->getImageList($maxListCount, $pageNo, array($this, 'imageListLoop'));
-		if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
+		$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
+		//if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
 		// ページング用リンク作成
 		$pageLink = '';

@@ -30,7 +30,8 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	const IMAGE_ICON_FILE = '/images/system/image16.png';			// イメージアイコン
 	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
 	const ICON_SIZE = 16;		// アイコンのサイズ
-	
+	const CHANGE_IMAGE_TAG_ID = 'changeimage';			// 画像変更ボタンタグID
+
 	/**
 	 * コンストラクタ
 	 */
@@ -213,7 +214,8 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		
 		// 画像リンクプレビューを作成
 		if (!empty($bannerItem)) self::$_mainDb->getImageListById(explode(',', $bannerItem), array($this, 'imageListLoop'));
-		if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
+		$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
+		//if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
 		// プレビュー用のCSSを作成
 		$this->headCss = str_replace(M3_TAG_START . M3_TAG_MACRO_WIDGET_URL . M3_TAG_END, $this->gEnv->getCurrentWidgetRootUrl(), $this->css);
@@ -231,6 +233,11 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		$this->tmpl->addVar("_widget", "disp_count", $dispCount);	// 表示項目数
 		//if (!empty($updateUser)) $this->tmpl->addVar("_widget", "update_user", $updateUser);	// 更新者
 		//if (!empty($updateDt)) $this->tmpl->addVar("_widget", "update_dt", $updateDt);	// 更新日時
+		
+		// 画像変更ボタン
+		$changeImageButton = $this->gDesign->createEditButton(''/*同画面*/, ''/*ツールチップなし*/, self::CHANGE_IMAGE_TAG_ID);
+		$this->tmpl->addVar("_widget", "change_image_button", $changeImageButton);
+		$this->tmpl->addVar("_widget", "tagid_change_image", self::CHANGE_IMAGE_TAG_ID);		// 画像変更タグ
 		
 		$this->tmpl->addVar("_widget", "css_id",	$this->cssId);	// CSS用ID
 		$this->tmpl->addVar("_widget", "css",	$this->css);
@@ -330,6 +337,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 
 		// バナーリストを取得
 		self::$_mainDb->getBannerList(array($this, 'itemListLoop'));
+		$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
 		
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar('_widget', 'admin_url', $this->gEnv->getDefaultAdminUrl());// 管理者URL
