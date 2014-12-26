@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_banner3BaseWidgetContainer.php 5859 2013-03-26 06:14:45Z fishbone $
  * @link       http://www.magic3.org
@@ -20,7 +20,14 @@ require_once($gEnvManager->getWidgetDbPath('banner3') . '/banner3Db.php');
 class admin_banner3BaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	protected static $_mainDb;			// DB接続オブジェクト
-	
+	// 画面
+	const TASK_BANNER 		= 'banner';					// バナー設定
+	const TASK_BANNER_LIST	= 'banner_list';			// バナー設定一覧
+	const TASK_IMAGE 		= 'image';					// 画像一覧
+	const TASK_IMAGE_DETAIL	= 'image_detail';			// 画像詳細
+	const TASK_IMAGE_SELECT	= 'image_select';			// 画像選択
+	const DEFAULT_TASK = 'banner';						// デフォルト画面
+			
 	/**
 	 * コンストラクタ
 	 */
@@ -49,12 +56,79 @@ class admin_banner3BaseWidgetContainer extends BaseAdminWidgetContainer
 		// ウィンドウオープンタイプ取得
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		if (!empty($openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
-		if ($openBy == 'simple' || $openBy == 'tabs') return;			// シンプルウィンドウまたはタブ表示のときはメニューを表示しない
+		if ($openBy == 'simple' || $openBy == 'tabs' || $openBy == 'dialog') return;			// シンプルウィンドウまたはタブ表示、ダイアログのときはメニューを表示しない
 				
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = 'banner';		// デフォルト画面を設定
+		if (empty($task)) $task = self::DEFAULT_TASK;		// デフォルト画面を設定
 		
+		// パンくずリストの定義データ作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_BANNER:					// バナー設定
+				$titles[] = 'バナー管理';
+				$titles[] = 'バナー設定';
+				break;
+			case self::TASK_BANNER_LIST:			// バナー設定一覧
+				$titles[] = 'バナー管理';
+				$titles[] = 'バナー設定';
+				$titles[] = '設定一覧';
+				break;
+			case self::TASK_IMAGE:					// 画像一覧
+				$titles[] = 'バナー管理';
+				$titles[] = '画像一覧';
+				break;
+			case self::TASK_IMAGE_DETAIL:				// 画像詳細
+				$titles[] = 'バナー管理';
+				$titles[] = '画像一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_IMAGE_SELECT:			// 画像選択
+				break;
+		}
+		
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> 'バナー管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_BANNER ||				// バナー設定
+											$task == self::TASK_BANNER_LIST ||			// バナー設定一覧
+											$task == self::TASK_IMAGE ||				// 画像一覧
+											$task == self::TASK_IMAGE_DETAIL			// 画像詳細
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> 'バナー設定',
+								'task'		=> self::TASK_BANNER,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_BANNER ||				// バナー設定
+													$task == self::TASK_BANNER_LIST			// バナー設定一覧
+												)
+							),
+							(Object)array(
+								'name'		=> '画像一覧',
+								'task'		=> self::TASK_IMAGE,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_IMAGE ||				// 画像一覧
+													$task == self::TASK_IMAGE_DETAIL			// 画像詳細
+												)
+							)
+						)
+					)
+				);
+
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
+		
+/*
 		// パンくずリストを作成
 		$createList = true;		// パンくずリストを作成するかどうか
 		switch ($task){
@@ -108,6 +182,7 @@ class admin_banner3BaseWidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$this->tmpl->addVar("_widget", "menu_items", '');
 		}
+		*/
 	}
 }
 ?>

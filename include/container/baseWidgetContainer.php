@@ -219,7 +219,7 @@ class BaseWidgetContainer extends Core
 				if (!empty($this->configMenubarMenuDef)){
 					$navbarDef = new stdClass;
 					$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
-					$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+					$navbarDef->baseurl = $this->getAdminUrlWithOptionParam(true);	// 定義ID,画面定義シリアル番号を付加
 //					$navbarDef->help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面',
 //								'<strong>●' . M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
 					$navbarDef->help	= $this->_createWidgetInfoHelp();		// ウィジェットの説明用ヘルプ
