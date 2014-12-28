@@ -13,9 +13,7 @@
  * @version    SVN: $Id: admin_banner3ImageWidgetContainer.php 5868 2013-03-28 04:08:49Z fishbone $
  * @link       http://www.magic3.org
  */
-//require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_banner3BaseWidgetContainer.php');
 require_once($gEnvManager->getWidgetContainerPath('banner3') . '/admin_banner3BaseWidgetContainer.php');
-//require_once($gEnvManager->getCurrentWidgetDbPath() . '/banner3Db.php');
 require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 
 class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
@@ -37,6 +35,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 	const ICON_SIZE = 16;		// アイコンのサイズ
 	const MAX_URL_LENGTH = 30;		// 一覧のURLの最大長
 	const MAX_NOTE_LENGTH = 30;		// 一覧のコメントの最大長
+	const CHANGE_IMAGE_TAG_ID = 'changeimage';			// 画像変更ボタンタグID
 	
 	/**
 	 * コンストラクタ
@@ -444,6 +443,11 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "html", $srcHtml);		// テンプレート
 		$this->tmpl->addVar("_widget", "tag", M3_TAG_START . M3_TAG_MACRO_ITEM . M3_TAG_END);		// 埋め込みタグ
 		$this->tmpl->addVar("_widget", 'click_count', $this->convertToDispString($clickCount));							// クリック数
+		
+		// 画像変更ボタン
+		$changeImageButton = $this->gDesign->createEditButton(''/*同画面*/, '変更', self::CHANGE_IMAGE_TAG_ID);
+		$this->tmpl->addVar("_widget", "change_image_button", $changeImageButton);
+		$this->tmpl->addVar("_widget", "tagid_change_image", self::CHANGE_IMAGE_TAG_ID);		// 画像変更タグ
 		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
