@@ -178,7 +178,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['msg_select_item'] = $this->_('Select menu item to edit.');		// 編集する項目を選択してください
 			$localeText['msg_select_del_item'] = $this->_('Select menu item to delete.');		// 削除する項目を選択してください
 			$localeText['msg_delete_item'] = $this->_('Delete selected item?');// 選択項目を削除しますか?
-			$localeText['label_menu_item_list'] = $this->_('Menu Item List');					// メニュー項目一覧
+			$localeText['label_menu_item_list'] = $this->_('Menu Definition');					// メニュー定義
 			$localeText['label_new'] = $this->_('New');					// 新規
 			$localeText['label_edit'] = $this->_('Edit');				// 編集
 			$localeText['label_delete'] = $this->_('Delete');			// 削除

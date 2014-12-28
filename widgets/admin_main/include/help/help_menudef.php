@@ -28,7 +28,7 @@ class help_menudef extends HelpConv
 		// ########## メニュー定義 ##########
 		$helpData = array(
 			'menudef_list' => array(	
-				'title' =>	$this->_('Menu Definition List'),			// メニュー定義一覧
+				'title' =>	$this->_('Menu Definition'),			// メニュー定義
 				'body' =>	$this->_('Menu item list in selected menu definition.')		// 選択したメニュー定義のメニュー項目一覧です。
 			),
 			'menudef_detail' => array(	
