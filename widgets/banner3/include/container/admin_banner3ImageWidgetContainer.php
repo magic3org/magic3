@@ -36,6 +36,8 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 	const MAX_URL_LENGTH = 30;		// 一覧のURLの最大長
 	const MAX_NOTE_LENGTH = 30;		// 一覧のコメントの最大長
 	const CHANGE_IMAGE_TAG_ID = 'changeimage';			// 画像変更ボタンタグID
+	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
+	const CHANGE_URL_S_TAG_ID = 'changeurl_s';			// URL変更ボタンタグID(スマートフォン用)
 	
 	/**
 	 * コンストラクタ
@@ -445,10 +447,16 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$this->tmpl->addVar("_widget", 'click_count', $this->convertToDispString($clickCount));							// クリック数
 		
 		// 画像変更ボタン
-		$changeImageButton = $this->gDesign->createEditButton(''/*同画面*/, '変更', self::CHANGE_IMAGE_TAG_ID);
-		$this->tmpl->addVar("_widget", "change_image_button", $changeImageButton);
+		$buttonTag = $this->gDesign->createEditButton(''/*同画面*/, '変更', self::CHANGE_IMAGE_TAG_ID);
+		$this->tmpl->addVar("_widget", "change_image_button", $buttonTag);
 		$this->tmpl->addVar("_widget", "tagid_change_image", self::CHANGE_IMAGE_TAG_ID);		// 画像変更タグ
-		
+		$buttonTag = $this->gDesign->createEditButton(''/*同画面*/, 'URL作成', self::CHANGE_URL_TAG_ID);
+		$this->tmpl->addVar("_widget", "change_url_button", $buttonTag);
+		$this->tmpl->addVar("_widget", "tagid_change_url", self::CHANGE_URL_TAG_ID);		// URL変更タグ
+		$buttonTag = $this->gDesign->createEditButton(''/*同画面*/, 'URL作成', self::CHANGE_URL_S_TAG_ID);
+		$this->tmpl->addVar("_widget", "change_url_s_button", $buttonTag);
+		$this->tmpl->addVar("_widget", "tagid_change_url_s", self::CHANGE_URL_S_TAG_ID);		// URL変更タグ(スマートフォン用)
+	
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン

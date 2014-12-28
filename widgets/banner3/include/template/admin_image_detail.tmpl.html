@@ -153,6 +153,17 @@ function setupItems()
 		$('#defsize_button').attr('disabled', true);
 	}
 }
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow(type)
+{
+	var url;
+	if (type == 2){		// スマートフォン用URLのとき
+		url = $('#item_link_url_s').val();
+	} else {
+		url = $('#item_link_url').val();
+	}
+	m3ShowPreviewWindow(type, url);
+}
 $(function(){
 	// CKEditorプラグイン直接実行
 	m3LoadCKTools();
@@ -168,8 +179,13 @@ $(function(){
 	
 	// 画像選択
 	$("#{TAGID_CHANGE_IMAGE}").click(function (){
-		//getBannerItem();
 		selectImage();
+	});
+	$("#{TAGID_CHANGE_URL}").click(function (){		// デフォルトURL
+		createUrl(0);
+	});
+	$("#{TAGID_CHANGE_URL_S}").click(function (){		// スマートフォン用URL
+		createUrl(2);
 	});
 });
 
@@ -224,7 +240,7 @@ $(function(){
 	</tr>
 	<tr>
 	    <th><span {_HELP_IMAGE_FILE}>画像</span><div class="pull-right"><span {_HELP_IMAGE_CHANGE_BTN}>{CHANGE_IMAGE_BUTTON}</span></div></th>
-	    <td colspan="5"><div id="preview_outer">{IMAGE}</div><!--<div><input type="button" class="button" onclick="selectImage();" value="変更" /></div>-->
+	    <td colspan="5"><div id="preview_outer">{IMAGE}</div>
 	    </td>
 	</tr>
 	<tr>
@@ -238,12 +254,26 @@ $(function(){
 	</tr>
 	<tr>
 	    <th rowspan="2"><span {_HELP_IMAGE_LINK_URL}>リンク</span></th>
-	    <th>デフォルト</th>
-		<td colspan="4"><input type="text" id="item_link_url" name="item_link_url" class="form-control" value="{LINK_URL}" maxlength="200" /><input type="button" class="button" onclick="createUrl(0);" value="URL作成" /></td>
+	    <th>デフォルト<div class="pull-right">{CHANGE_URL_BUTTON}</div></th>
+		<td colspan="4"><!--<input type="text" id="item_link_url" name="item_link_url" class="form-control" value="{LINK_URL}" maxlength="200" />-->
+		<div class="input-group">
+		    <input type="text" id="item_link_url" name="item_link_url" class="form-control" value="{LINK_URL}" maxlength="200" />
+		    <span class="input-group-btn">
+		    <a class="btn btn-default" onclick="previewInOtherWindow(0);return false;" rel="m3help" title="プレビュー"><i class="glyphicon glyphicon-new-window"></i></a>
+		    </span>
+		</div>
+		<!--<input type="button" class="button" onclick="createUrl(0);" value="URL作成" />--></td>
 	</tr>
 	<tr>
-		<th>スマートフォン</th>
-		<td colspan="4"><input type="text" id="item_link_url_s" name="item_link_url_s" class="form-control" value="{LINK_URL_S}" maxlength="200" /><input type="button" class="button" onclick="createUrl(2);" value="URL作成" /></td>
+		<th>スマートフォン<div class="pull-right">{CHANGE_URL_S_BUTTON}</div></th>
+		<td colspan="4"><!--<input type="text" id="item_link_url_s" name="item_link_url_s" class="form-control" value="{LINK_URL_S}" maxlength="200" />-->
+		<div class="input-group">
+		    <input type="text" id="item_link_url_s" name="item_link_url_s" class="form-control" value="{LINK_URL_S}" maxlength="200" />
+		    <span class="input-group-btn">
+		    <a class="btn btn-default" onclick="previewInOtherWindow(2);return false;" rel="m3help" title="プレビュー"><i class="glyphicon glyphicon-new-window"></i></a>
+		    </span>
+		</div>
+		<!--<input type="button" class="button" onclick="createUrl(2);" value="URL作成" />--></td>
 	<tr>
 	</tr>
 	<tr>
