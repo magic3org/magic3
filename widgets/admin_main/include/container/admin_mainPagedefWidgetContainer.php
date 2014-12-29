@@ -483,7 +483,11 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$defId = $fetchedRow['pd_config_id'];
 		
 		$sharedColorClass = '';			// ウィジェットの共有状態
-		if (empty($fetchedRow['pd_sub_id'])) $sharedColorClass = 'class="danger"';
+		if (empty($fetchedRow['pd_sub_id'])){
+			$sharedColorClass = 'class="danger"';
+		} else {
+			$sharedColorClass = 'class="success"';
+		}
 		
 		$row = array(
 			'no'			=> $index + 1,											// 行番号
