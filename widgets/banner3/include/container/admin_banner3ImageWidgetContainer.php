@@ -19,17 +19,18 @@ require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
-	private $serialArray = array();		// 表示されている画像リンクシリアル番号
-	private $idArray = array();			// 表示されている画像リンクID
+	private $serialArray = array();		// 表示されている画像シリアル番号
+	private $idArray = array();			// 表示されている画像ID
 	private $isExistsContent;		// コンテンツ項目が存在するかどうか
 	private $itemTypeArray;		// バナー項目のすべての種類
 	private $targetTypeArray;		// リンクターゲットのすべての種類
-	private $itemId;			// 選択中の画像リンク項目
+	private $itemId;			// 選択中の画像項目
 	private $itemType;			// バナー項目の種類
 	private $targetType;			// リンクターゲットの種類
-	private $selectedItems;		// 画像リンク選択用
+	private $selectedItems;		// 画像選択用
 	private $task;				// 処理タスク
-	const IMAGE_LIST_COUNT = 10;		// 表示画像リンク数
+	const IMAGE_LIST_COUNT = 10;		// 表示画像数
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const IMAGE_ICON_FILE = '/images/system/image16.png';			// イメージアイコン
 	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
 	const ICON_SIZE = 16;		// アイコンのサイズ
@@ -92,7 +93,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		}
 	}
 	/**
-	 * 画像リンク一覧画面作成
+	 * 画像一覧画面作成
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param								なし
@@ -110,7 +111,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		
 		// ##### 検索条件 #####
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
-		$maxListCount = self::IMAGE_LIST_COUNT;		// 表示画像リンク数
+		$maxListCount = self::IMAGE_LIST_COUNT;		// 表示画像数
 		
 		// 画像選択画面で使用
 		$this->selectedItems = explode(',', $request->trimValueOf('items'));
@@ -140,19 +141,25 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		// 総数を取得
 		$totalCount = self::$_mainDb->getImageCount();
 
-		// 表示するページ番号の修正
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+/*		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号
+		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号*/
 		
-		// #### 画像リンクリストを作成 ####
+		// #### 画像リストを作成 ####
 		self::$_mainDb->getImageList($maxListCount, $pageNo, array($this, 'imageListLoop'));
 		$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
 		//if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
+		// ページングリンク作成
+		$currentBaseUrl = '';		// POST用のリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
+		
 		// ページング用リンク作成
-		$pageLink = '';
+/*		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			for ($i = 1; $i <= $pageCount; $i++){
 				if ($i == $pageNo){
@@ -162,7 +169,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
 		// 非表示項目を設定
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "id_list", implode($this->idArray, ','));// 表示項目のIDを設定
@@ -171,13 +178,13 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "task", $this->task);	// 処理タスク
 		
 		// ボタンの表示制御
-		if ($this->task == 'image_select'){		// 画像リンク選択タスクのとき
+		if ($this->task == 'image_select'){		// 画像選択タスクのとき
 			$this->tmpl->setAttribute('select_button', 'visibility', 'visible');// 「確定」ボタン
 			
-			// 選択中の画像リンク
+			// 選択中の画像
 			$itemsStr = $this->convertToDispString(implode($this->selectedItems, ','));
-			$this->tmpl->addVar("_widget", "items", $itemsStr);	// 画像リンク選択項目
-			$this->tmpl->addVar("select_button", "items_label", $itemsStr);	// 画像リンク選択項目
+			$this->tmpl->addVar("_widget", "items", $itemsStr);	// 画像選択項目
+			$this->tmpl->addVar("select_button", "items_label", $itemsStr);	// 画像選択項目
 		} else {
 			$this->tmpl->setAttribute('edit_button', 'visibility', 'visible');// 「新規」「削除」「編集」ボタン
 			
@@ -207,7 +214,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$act = $request->trimValueOf('act');
 		
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
-		$this->itemId = $request->trimValueOf('item_imageid');		// 選択中の画像リンク項目ID
+		$this->itemId = $request->trimValueOf('item_imageid');		// 選択中の画像項目ID
 		$name = $request->trimValueOf('item_name');
 		$this->itemType = $request->trimValueOf('item_type');
 		$this->targetType = $request->trimValueOf('item_target_type');			// リンクターゲットの種類
@@ -308,7 +315,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
 			}
-		} else if ($act == 'select'){		// 画像リンクIDの選択の場合
+		} else if ($act == 'select'){		// 画像IDの選択の場合
 			if (empty($this->itemId)){
 				$this->serialNo = 0;
 				
@@ -461,7 +468,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
 		} else {
-			$this->tmpl->addVar("_widget", "id", $this->itemId);			// 画像リンク項目ID
+			$this->tmpl->addVar("_widget", "id", $this->itemId);			// 画像項目ID
 			$this->tmpl->setAttribute('del_button', 'visibility', 'visible');// 「削除」ボタン
 		}
 		
@@ -528,9 +535,9 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$eventAttr = 'onclick="showPreview(\''. $id . '\', \'' . $name . '\', \'' . $type . '\', \'' . $this->getUrl($url) . '\', \'' . $width .'\', \'' . $height . '\', \'' . $redirectUrl . '\');"';
 		$previewButtonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
 
-		// 画像リンク選択タスクのときは、選択中の項目にチェックをつける
+		// 画像選択タスクのときは、選択中の項目にチェックをつける
 		$checked = '';
-		if ($this->task == 'image_select'){		// 画像リンク選択タスクのとき
+		if ($this->task == 'image_select'){		// 画像選択タスクのとき
 			if (in_array($id, $this->selectedItems)) $checked = 'checked';
 		}
 		$row = array(
