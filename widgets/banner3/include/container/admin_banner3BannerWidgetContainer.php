@@ -365,13 +365,18 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		$operationDisagled = '';
 		if ($defCount > 0) $operationDisagled = 'disabled';
 			
+		// 画像プレビュー用ボタンを作成
+//		$buttonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', '');
+		//createPreviewImageButton($url, $title = '', $tagId = '', $btnClass = '');
+		
 		$row = array(
-			'index'		=> $index,													// インデックス番号
-			'id'		=> $this->convertToDispString($id),														// ID
-			'name'		=> $this->convertToDispString($fetchedRow['bd_name']),		// 名前
-			'image_item'	=> $this->convertToDispString($fetchedRow['bd_item_id']),		// バナー項目ID
-			'ope_disabled'	=> $operationDisagled,			// 選択可能かどうか
-			'def_count'		=> $defCount							// 使用数
+			'index'					=> $index,													// インデックス番号
+			'id'					=> $this->convertToDispString($id),														// ID
+			'name'					=> $this->convertToDispString($fetchedRow['bd_name']),		// 名前
+			'image_item'			=> $this->convertToDispString($fetchedRow['bd_item_id']),		// バナー項目ID
+			'ope_disabled'			=> $operationDisagled,			// 選択可能かどうか
+			'def_count'				=> $defCount							// 使用数
+//			'preview_image_button'	=> $buttonTag					// 画像プレビューボタン
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');

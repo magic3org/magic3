@@ -548,14 +548,16 @@ class DesignManager extends Core
 		return self::SUB_MENUBAR_HEIGHT;
 	}
 	/**
-	 * 編集ボタンを作成を作成
+	 * 編集ボタンを作成
 	 *
-	 * @param string $url		リンク先
+	 * @param string $url		リンク先(リンク先がない場合は空文字列)
 	 * @param string $title		ツールチップ用文字列
 	 * @param string $tagId		タグのID
+	 * @param string $attr		その他の追加属性
+	 * @param string $btnClass	ボタンのカラークラス
 	 * @return string 			ボタンのタグ
 	 */
-	function createEditButton($url, $title = '', $tagId = '')
+	function createEditButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-warning')
 	{
 		if (empty($url)){
 			$urlAttr = ' href="javascript:void(0);"';
@@ -564,9 +566,37 @@ class DesignManager extends Core
 		}
 		$idAttr = '';
 		if (!empty($tagId)) $idAttr = ' id="' . $tagId . '"';
-		$helpAttr = '';
-		if (!empty($title)) $helpAttr = ' rel="m3help" title="' . $title . '"';
-		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="btn btn-sm btn-warning" role="button" data-container="body"' . $helpAttr . '><i class="glyphicon glyphicon-edit"></i></a>';
+		$otherAttr = '';
+		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
+		if (!empty($attr)) $otherAttr .= ' ' . $attr;
+		$tagClass = 'btn btn-sm ' . $btnClass;
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-edit"></i></a>';
+		return $buttonTag;
+	}
+	/**
+	 * 画像プレビューボタンを作成
+	 *
+	 * @param string $url		リンク先(リンク先がない場合は空文字列)
+	 * @param string $title		ツールチップ用文字列
+	 * @param string $tagId		タグのID
+	 * @param string $attr		その他の追加属性
+	 * @param string $btnClass	ボタンのカラークラス
+	 * @return string 			ボタンのタグ
+	 */
+	function createPreviewImageButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-default')
+	{
+		if (empty($url)){
+			$urlAttr = ' href="javascript:void(0);"';
+		} else {
+			$urlAttr = ' href="' . convertUrlToHtmlEntity($this->getUrl($url)) . '"';
+		}
+		$idAttr = '';
+		if (!empty($tagId)) $idAttr = ' id="' . $tagId . '"';
+		$otherAttr = '';
+		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
+		if (!empty($attr)) $otherAttr .= ' ' . $attr;
+		$tagClass = 'btn btn-sm ' . $btnClass;
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-picture"></i></a>';
 		return $buttonTag;
 	}
 }

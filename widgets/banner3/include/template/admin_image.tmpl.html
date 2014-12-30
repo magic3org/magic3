@@ -182,7 +182,7 @@ $(function(){
         <th class="select"><span {_HELP_IMAGE_CHECK}>選択</span></th>
         <th style="width:50px;"><span {_HELP_IMAGE_ID}>ID</span></th>
         <th><span {_HELP_IMAGE_NAME}>名前</span></th>
-	    <th style="width:50px;"><span {_HELP_IMAGE_TYPE}>種別</span></th>
+	    <!--<th style="width:50px;"><span {_HELP_IMAGE_TYPE}>種別</span></th>-->
 	    <th><span {_HELP_IMAGE_FILENAME}>ファイル名</span></th>
 	    <th><span {_HELP_IMAGE_LINK_URL}>リンク先</span></th>
 	    <th style="width:50px;"><span {_HELP_IMAGE_VISIBLE}>公開</span></th>
@@ -191,12 +191,12 @@ $(function(){
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
-    <tr onclick="showPreview('{ID}', '{NAME}', '{TYPE}', '{URL}', '{WIDTH}', '{HEIGHT}', '{LINK_URL}');">
+    <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" onchange="clickItem();" {CHECKED} /></td>
 	    <td>{ID}</td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
-	    <td>{TYPE_ICON}</td>
-	    <td>{FILENAME}</td>
+	    <!--<td>{TYPE_ICON}</td>-->
+	    <td>{FILENAME}<div class="pull-right">{PREVIEW_IMAGE_BUTTON}</div></td>
 	    <td>{LINK_URL}</td>
 	    <td><input type="checkbox" disabled {VISIBLE} /></td>
 	    <td>{VIEW_COUNT}</td>

@@ -482,6 +482,12 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 	function imageListLoop($index, $fetchedRow, $param)
 	{
 		$serial = $this->convertToDispString($fetchedRow['bi_serial']);
+		$id = $fetchedRow['bi_id'];
+		$name = $fetchedRow['bi_name'];
+		$type = $fetchedRow['bi_type'];
+		$width = $fetchedRow['bi_image_width'];
+		$height = $fetchedRow['bi_image_height'];
+		
 		$visible = '';
 		if ($fetchedRow['bi_visible']){	// 項目の表示
 			$visible = 'checked';
@@ -493,7 +499,7 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		// 閲覧数取得
 		$viewCount = self::$_mainDb->getTotalViewCount($serial);
 		
-		// 項目タイプの設定
+/*		// 項目タイプの設定
 		$iconUrl = '';
 		switch ($fetchedRow['bi_type']){
 			case 0:		// 画像ファイル
@@ -507,8 +513,8 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 			default:
 				break;
 		}
-		$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-	
+		$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';*/
+		
 		// 画像URL
 		$url = $fetchedRow['bi_image_url'];
 		if (!empty($url)) $url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);
@@ -518,36 +524,39 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$linkUrl = makeTruncStr($redirectUrl, self::MAX_URL_LENGTH);
 		$note = makeTruncStr($fetchedRow['bi_admin_note'], self::MAX_NOTE_LENGTH);
 	
+		// 画像プレビュー用ボタンを作成
+		$eventAttr = 'onclick="showPreview(\''. $id . '\', \'' . $name . '\', \'' . $type . '\', \'' . $this->getUrl($url) . '\', \'' . $width .'\', \'' . $height . '\', \'' . $redirectUrl . '\');"';
+		$previewButtonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+
 		// 画像リンク選択タスクのときは、選択中の項目にチェックをつける
 		$checked = '';
 		if ($this->task == 'image_select'){		// 画像リンク選択タスクのとき
-			if (in_array($fetchedRow['bi_id'], $this->selectedItems)) $checked = 'checked';
+			if (in_array($id, $this->selectedItems)) $checked = 'checked';
 		}
 		$row = array(
 			'index' => $index,													// 項目番号
 			'serial' => $serial,								// シリアル番号
-			'id' => $this->convertToDispString($fetchedRow['bi_id']),			// ID
+			'id' => $this->convertToDispString($id),			// ID
 			'checked' => $checked,				// 項目のチェック状況
-			'type_icon' => $iconTag,					// バナー項目タイプ
-			'type' => $this->convertToDispString($fetchedRow['bi_type']),					// バナー項目タイプ
-			'name' => $this->convertToDispString($fetchedRow['bi_name']),		// 名前
+//			'type_icon' => $iconTag,					// バナー項目タイプ
+//			'type' => $this->convertToDispString($type),					// バナー項目タイプ
+			'name' => $this->convertToDispString($name),		// 名前
 			'filename' => $filename,
-			'url' => $this->getUrl($url),					// URL
+//			'url' => $this->getUrl($url),					// URL
 			'link_url' => $this->convertToDispString($linkUrl),					// リンク先URL
-			'width' => $this->convertToDispString($fetchedRow['bi_image_width']),					// 画像幅
-			'height' => $this->convertToDispString($fetchedRow['bi_image_height']),					// 画像高さ
+			'width' => $this->convertToDispString($width),					// 画像幅
+			'height' => $this->convertToDispString($height),					// 画像高さ
 			'view_count' => $viewCount,								// 閲覧数
 			'visible' => $visible,											// 項目の表示
-			'note' => $this->convertToDispString($note),					// 備考
-			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
-			'update_dt' => $this->convertToDispDateTime($fetchedRow['bi_create_dt'])	// 更新日時
+//			'note' => $this->convertToDispString($note),					// 備考
+			'preview_image_button'	=> $previewButtonTag					// 画像プレビューボタン
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
 		
 		// 表示中項目のシリアル番号を保存
 		$this->serialArray[] = $fetchedRow['bi_serial'];
-		$this->idArray[] = $fetchedRow['bi_id'];
+		$this->idArray[] = $id;
 		$this->isExistsContent = true;		// コンテンツ項目が存在するかどうか
 		return true;
 	}
