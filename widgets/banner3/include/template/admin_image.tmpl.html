@@ -93,65 +93,6 @@ function showPreview(id, name, type, url, width, height, link_url){
 	$('#preview_name').text(name);
 	$('#preview_link_url').text(link_url);
 }
-function clickItem()
-{
-	// 選択画面表示時のみ処理を行う
-	if (document.main.task.value != 'image_select') return true;
-
-	// 選択項目を更新
-	var i, j;
-	var value;
-	var items = new Array();
-	var itemsOnPage = new Array();
-	var itemsArray = new Array();
-	value = document.main.items.value;
-	if (value) items = value.split(',');
-	value = document.main.idlist.value;
-	if (value) itemsOnPage = value.split(",");
-	
-	for (i = 0; i < items.length; i++){
-		var id = items[i];
-		for (j = 0; j < itemsOnPage.length; j++){
-			if (id == itemsOnPage[j]){
-				var name = "document.main.item" + j + "_selected";
-				var itemObj = eval(name);
-				// チェックありのときは追加
-				if (itemObj && itemObj.checked) itemsArray[itemsArray.length] = id;
-				break;
-			}
-		}
-		if (j == itemsOnPage.length) itemsArray[itemsArray.length] = id;
-	}
-	for (i = 0; i < itemsOnPage.length; i++){
-		var id = itemsOnPage[i];
-		for (j = 0; j < items.length; j++){
-			if (id == items[j]) break;
-		}
-		if (j == items.length){
-			var name = "document.main.item" + i + "_selected";
-			var itemObj = eval(name);
-			// チェックありのときは追加
-			if (itemObj && itemObj.checked) itemsArray[itemsArray.length] = id;
-		}
-	}
-	// IDでソート
-	itemsArray.sortByNumber();
-	var itemsValue = '';
-	for (i = 0; i < itemsArray.length; i++)
-	{
-		itemsValue += itemsArray[i];
-		if (i != itemsArray.length -1) itemsValue += ',';
-	}
-	document.main.items.value = itemsValue;
-	$('#items_label').text(itemsValue);
-}
-// バナー項目IDをカンマ区切り文字列で返す
-function selItem()
-{
-	window.close();
-	window.opener.setBannerItem(document.main.items.value);
-	window.opener.focus();
-}
 $(function(){
 	// テーブルを作成
 	m3SetConfigTable('itemlist');
@@ -192,25 +133,19 @@ $(function(){
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
-	    <td><input type="checkbox" name="item{INDEX}_selected" onchange="clickItem();" {CHECKED} /></td>
+	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{ID}</td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
 	    <!--<td>{TYPE_ICON}</td>-->
 	    <td>{FILENAME}<div class="pull-right">{PREVIEW_IMAGE_BUTTON}</div></td>
-	    <td>{LINK_URL}</td>
+	    <td>{LINK_URL_SHORT}</td>
 	    <td><input type="checkbox" disabled {VISIBLE} /></td>
 	    <td>{VIEW_COUNT}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
-{PAGE_LINK}
-<patTemplate:tmpl name="select_button" visibility="hidden">
-<div class="well">
-<div class="pull-left"><div class="form-control-static m3config_item">選択項目：<span id="items_label">{ITEMS_LABEL}</span></div></div>
-<div class="pull-right"><input type="button" class="button" onclick="selItem();" value="確定" /></div>
-</div>
-</patTemplate:tmpl>
+<div>{PAGE_LINK}</div>
 
 <h3 class="m3config_h"><span {_HELP_IMAGE_PREVIEW}>プレビュー</span></h3>
 <table class="previewtable">
@@ -222,7 +157,7 @@ $(function(){
 	    <td><div id="preview_name"></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_IMAGE_IMAGE}>表示画像</span></th>
+	    <th><span {_HELP_IMAGE_IMAGE}>画像</span></th>
 	    <td colspan="3"><div id="preview_image"></div></td>
 	</tr>
     <tr>

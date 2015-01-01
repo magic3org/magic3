@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: banner3Db.php 3116 2010-05-11 12:19:18Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -174,9 +174,10 @@ class banner3Db extends BaseDb
 	 * @param int		$limit				取得する項目数(-1=すべて取得)
 	 * @param int		$page				取得するページ(1～)
 	 * @param function	$callback			コールバック関数
+	 * @param object    $tmpl				出力テンプレート
 	 * @return 			なし
 	 */
-	function getImageList($limit, $page, $callback)
+	function getImageList($limit, $page, $callback, $tmpl = null)
 	{
 		if ($limit == -1){
 			$queryStr  = 'SELECT * FROM bn_item ';
@@ -190,7 +191,7 @@ class banner3Db extends BaseDb
 			$queryStr .=   'WHERE bi_deleted = false ';
 			$queryStr .=   'ORDER BY bi_id limit ' . $limit . ' offset ' . $offset;
 		}
-		$this->selectLoop($queryStr, array(), $callback, null);
+		$this->selectLoop($queryStr, array(), $callback, $tmpl);
 	}
 	/**
 	 * 画像リンク数を取得

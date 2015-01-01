@@ -640,7 +640,6 @@ i[rel="m3help"] { cursor: default; }
 	right: 0px;
 }
 .m3config_table {
-	margin: 0 auto;
 	margin: 0 auto 15px auto;
 	width: 950px;
 }
@@ -668,6 +667,11 @@ i[rel="m3help"] { cursor: default; }
 .m3config_table .spacer_bottom {
 	margin-bottom:5px;
 }
+/* for madal table */
+.m3config_modal_table {
+	width: 100%;
+}
+
 .m3config_update_buttons {
 /*	margin-top: 10px;*/
 	text-align: right;

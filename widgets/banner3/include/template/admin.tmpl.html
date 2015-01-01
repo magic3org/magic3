@@ -13,6 +13,8 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+var imageModal;		// 画像選択用ダイアログ
+
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	document.main.act.value = 'add';
@@ -36,11 +38,11 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
-function getBannerItem(){
+/*function getBannerItem(){
 	var selectedItems = $('#item_banner').val();
 	window.open("?cmd=configwidget&widget=banner3&task=image_select&openby=simple&items=" + selectedItems, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1050,height=900");
 	return true;
-}
+}*/
 function setBannerItem(value)
 {
 	$('#item_banner').val(value);
@@ -48,6 +50,85 @@ function setBannerItem(value)
 	// プレビュー更新
 	document.main.act.value = 'update_preview';
 	document.main.submit();
+}
+function selpage(page)
+{
+	var selectedItems = $('#item_banner').val();
+	
+	// Ajaxで画像一覧を取得
+	m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=banner&act=getimagelist&page=' + page + '&items=' + selectedItems, function(request, retcode, jsondata){		// 正常終了
+		// 画像選択テーブルを作成
+		if (jsondata.html) imageModal.setMessage(jsondata.html);
+	}, function(request){		// 異常終了
+		alert('通信に失敗しました。');
+	});
+	return true;
+/*	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;*/
+}
+// 画像を変更
+function getBannerItem()
+{
+	imageModal = BootstrapDialog.show({
+/*		type: BootstrapDialog.TYPE_PRIMARY,*/
+		size: BootstrapDialog.SIZE_WIDE,
+		title: '画像の選択',
+		message: 'データ読み込み中...',
+		closable: false,
+		nl2br: false,
+		onshow: function(dialog) {
+			selpage(1);
+/*			// Ajaxで画像一覧を取得
+			m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=banner&act=getimagelist', function(request, retcode, jsondata){		// 正常終了
+				// 画像選択テーブルを作成
+				if (jsondata.html) dialog.setMessage(jsondata.html);
+			}, function(request){		// 異常終了
+				alert('通信に失敗しました。');
+			});*/
+		},
+		buttons: [{
+			id: 'cancel',
+			label: 'キャンセル',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}, {
+			id: 'ok',
+			label: 'OK',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				if (document.menuform && document.menuform.seriallist.value){
+					var items = document.menuform.seriallist.value.split(",");
+					for (var i = 0; i < items.length; i++){
+						var name = "document.menuform.item" + i + "_selected";
+						var itemObj = eval(name);
+						// チェックありのときは終了
+						if (itemObj && itemObj.checked) break;
+					}
+					if (i == items.length){
+						alert('画像を選択してください');
+					} else {
+						// 画像を追加
+						var postValues = $('#menuform').serialize();
+						m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&' + postValues, function(request, retcode, jsondata){		// 正常終了
+							// 処理終了の場合はボタンを変更
+							if (jsondata.status && jsondata.status == 'OK'){
+								dialog.getButton('ok').hide();
+								dialog.getButton('cancel').text('閉じる');
+							}
+							// メッセージ表示
+							if (jsondata.message) $('#imagelist_msg').html(jsondata.message);
+						}, function(request){		// 異常終了
+							alert('通信に失敗しました。');
+						});
+					}
+				}
+			}
+		}]
+	});
+	return true;
 }
 $(function(){
 	// テーブルを作成
@@ -94,7 +175,6 @@ $(function(){
     <tr>
 	    <th><span {_HELP_BANNER_IMAGE}>画像</span><div class="pull-right"><span {_HELP_BANNER_IMAGE_BTN}>{CHANGE_IMAGE_BUTTON}</span></div></th>
 	    <td><input type="text" id="item_banner" name="item_banner" class="form-control" value="{BANNER_ITEM}" />
-	    <!--<span {_HELP_BANNER_IMAGE_BTN}><input type="button" class="button" onclick="getBannerItem();" value="画像変更" /></span>-->
 	    </td>
 	</tr>
     <tr>
@@ -147,7 +227,7 @@ $(function(){
 	    <td ><div class="form-control-static m3config_item col-sm-12">{NAME}</div></td>
 	</tr>
     <tr>
-	    <th>表示画像</th>
+	    <th>画像</th>
 	    <td colspan="3">{IMAGE}</td>
 	</tr>
     <tr>

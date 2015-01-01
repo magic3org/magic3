@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -26,12 +26,17 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	private $dispType;		// 画像リンク表示方法
 	private $dispTypeDef;		// 画像リンク表示方法定義
 	private $bannerNameArray;	// バナー定義名保存用
+	private $act;				// 実行act
+	private $selectedItems;		// 画像選択用
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const IMAGE_ICON_FILE = '/images/system/image16.png';			// イメージアイコン
 	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
 	const ICON_SIZE = 16;		// アイコンのサイズ
 	const CHANGE_IMAGE_TAG_ID = 'changeimage';			// 画像変更ボタンタグID
-
+	const MAX_URL_LENGTH = 30;		// 一覧のURLの最大長
+	const IMAGE_LIST_COUNT = 10;		// 表示画像数
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -163,6 +168,12 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		} else if ($act == 'select'){	// 定義IDを変更
 			$replaceNew = true;			// データ再取得
 		} else if ($act == 'update_preview'){	// プレビュー再表示
+		} else if ($act == 'getimagelist'){		// 画像一覧取得
+			$this->act = $act;				// 実行act
+
+			$imageList = $this->getParsedTemplateData('default_imagelist.tmpl.html', array($this, 'makeImageList'), $request);// 画像一覧作成
+			$this->gInstance->getAjaxManager()->addData('html', $imageList);
+			return;
 		} else {			// 初期起動時
 			// デフォルト値設定
 			$this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
@@ -231,6 +242,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		$this->tmpl->addVar("_widget", "direct_h_selecter", $selected);	// 横表示
 		$this->tmpl->addVar("_widget", "banner_item", $bannerItem);	// バナー項目ID
 		$this->tmpl->addVar("_widget", "disp_count", $dispCount);	// 表示項目数
+		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// 画像選択ダイアログ用
 		//if (!empty($updateUser)) $this->tmpl->addVar("_widget", "update_user", $updateUser);	// 更新者
 		//if (!empty($updateDt)) $this->tmpl->addVar("_widget", "update_dt", $updateDt);	// 更新日時
 		
@@ -458,7 +470,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	 * @param object $param			未使用
 	 * @return bool					true=処理続行の場合、false=処理終了の場合
 	 */
-	function imageListLoop($index, $fetchedRow, $param)
+/*	function imageListLoop($index, $fetchedRow, $param)
 	{
 		$serial = $this->convertToDispString($fetchedRow['bi_serial']);
 		$visible = '';
@@ -540,6 +552,136 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		// 表示中項目のシリアル番号を保存
 		//$this->serialArray[] = $fetchedRow['bi_serial'];
 		//$this->idArray[] = $fetchedRow['bi_id'];
+		$this->isExistsContent = true;		// コンテンツ項目が存在するかどうか
+		return true;
+	}*/
+	/**
+	 * 画像一覧データ作成処理コールバック
+	 *
+	 * @param object	$tmpl			テンプレートオブジェクト
+	 * @param object	$request		任意パラメータ(HTTPリクエストオブジェクト)
+	 * @param							なし
+	 */
+	function makeImageList($tmpl, $request)
+	{
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
+		
+		// 画像選択画面で使用
+		$this->selectedItems = explode(',', $request->trimValueOf('items'));
+		sort($this->selectedItems, SORT_NUMERIC);		// ID順にソート
+			
+		// 総数を取得
+		$totalCount = self::$_mainDb->getImageCount();
+
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, self::IMAGE_LIST_COUNT);
+		
+		// #### 画像リストを作成 ####
+		self::$_mainDb->getImageList(self::IMAGE_LIST_COUNT, $pageNo, array($this, 'imageListLoop'), $tmpl);
+		$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
+		//if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
+		
+		// ページングリンク作成
+		$currentBaseUrl = '';		// POST用のリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
+		$tmpl->addVar("_tmpl", "page_link", $pageLink);
+		
+		// 画像選択項目
+		$itemsStr = $this->convertToDispString(implode($this->selectedItems, ','));
+		$tmpl->addVar("_tmpl", "items", $itemsStr);	// 画像選択項目
+	}
+	/**
+	 * 取得したデータをテンプレートに設定する
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $tmpl			テンプレートオブジェクト(画像選択データ用)
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function imageListLoop($index, $fetchedRow, $tmpl)
+	{
+		$serial = $this->convertToDispString($fetchedRow['bi_serial']);
+		$id = $fetchedRow['bi_id'];
+		$name = $fetchedRow['bi_name'];
+		$type = $fetchedRow['bi_type'];
+		$width = $fetchedRow['bi_image_width'];
+		$height = $fetchedRow['bi_image_height'];
+		
+		$visible = '';
+		if ($fetchedRow['bi_visible']){	// 項目の表示
+			$visible = 'checked';
+		}
+		// ファイル名取得
+		$partArray = explode('/', $fetchedRow['bi_image_url']);
+		if (count($partArray) > 0) $filename = $partArray[count($partArray)-1];
+		
+		// 画像URL
+		$url = $fetchedRow['bi_image_url'];
+		if (!empty($url)) $url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);
+		
+		// リンク先
+		$linkUrl = default_bannerCommonDef::getLinkUrlByDevice($fetchedRow['bi_link_url']);
+		$linkUrlShort = makeTruncStr($linkUrl, self::MAX_URL_LENGTH);
+	
+		// 画像プレビュー用ボタンを作成
+		$eventAttr = 'onclick="showPreview(\''. $id . '\', \'' . $name . '\', \'' . $type . '\', \'' . $this->getUrl($url) . '\', \'' . $width .'\', \'' . $height . '\', \'' . $linkUrl . '\');"';
+		$previewButtonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+
+		// バナー表示イメージの作成
+//		$imageUrl = $fetchedRow['bi_image_url'];
+//		if (!empty($imageUrl)) $imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
+//		$imageWidth = $fetchedRow['bi_image_width'];
+//		$imageHeight = $fetchedRow['bi_image_height'];
+		$destImg = '';
+		if (!empty($url)){
+			if ($itemType == 0){		// 画像ファイルの場合
+				$destImg = '<img id="preview_img" src="' . $this->getUrl($url) . '" ';
+				if (!empty($width) && $width > 0) $destImg .= 'width="' . $width . '"';
+				if (!empty($height) && $height > 0) $destImg .= ' height="' . $height. '"';
+				$destImg .= ' />';
+			} else if ($itemType == 1){		// Flashファイルの場合
+				$destImg = '<object id="preview_obj" data="' . $this->getUrl($url) . '" type="application/x-shockwave-flash"';
+				if (!empty($width) && $width > 0) $destImg .= ' width="' . $width . '"';
+				if (!empty($height) && $height > 0) $destImg .= ' height="' . $height . '"';
+				$destImg .= '><param id="preview_param" name="movie" value="' . $this->getUrl($url) . '" /><param name="wmode" value="transparent" /></object>';
+			}
+		}
+		
+		// 画像選択タスクのときは、選択中の項目にチェックをつける
+		$checked = '';
+		if ($this->act == 'getimagelist'){		// 画像選択用データの場合
+			if (in_array($id, $this->selectedItems)) $checked = 'checked';
+		}
+		$row = array(
+			'index' => $index,													// 項目番号
+			'serial' => $serial,								// シリアル番号
+			'id' => $this->convertToDispString($id),			// ID
+			'checked' => $checked,				// 項目のチェック状況
+//			'type_icon' => $iconTag,					// バナー項目タイプ
+//			'type' => $this->convertToDispString($type),					// バナー項目タイプ
+			'name' => $this->convertToDispString($name),		// 名前
+			'filename' => $filename,
+//			'url' => $this->getUrl($url),					// URL
+			'link_url' => $this->convertToDispString($linkUrl),					// リンク先URL
+			'link_url_short' => $this->convertToDispString($linkUrlShort),					// リンク先URL
+			'width' => $this->convertToDispString($width),					// 画像幅
+			'height' => $this->convertToDispString($height),					// 画像高さ
+			'visible' => $visible,											// 項目の表示
+			'preview_image_button'	=> $previewButtonTag,					// 画像プレビューボタン
+			'image' => $destImg							// プレビュー画像
+		);
+		
+		if ($this->act == 'getimagelist'){		// 画像選択用データの場合
+			$tmpl->addVars('itemlist', $row);
+			$tmpl->parseTemplate('itemlist', 'a');
+		} else {
+			$this->tmpl->addVars('itemlist', $row);
+			$this->tmpl->parseTemplate('itemlist', 'a');
+		}
+		
+		// 表示中項目のシリアル番号を保存
+		$this->serialArray[] = $fetchedRow['bi_serial'];
+		$this->idArray[] = $id;
 		$this->isExistsContent = true;		// コンテンツ項目が存在するかどうか
 		return true;
 	}

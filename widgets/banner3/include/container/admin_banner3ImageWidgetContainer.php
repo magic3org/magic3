@@ -35,7 +35,6 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
 	const ICON_SIZE = 16;		// アイコンのサイズ
 	const MAX_URL_LENGTH = 30;		// 一覧のURLの最大長
-	const MAX_NOTE_LENGTH = 30;		// 一覧のコメントの最大長
 	const CHANGE_IMAGE_TAG_ID = 'changeimage';			// 画像変更ボタンタグID
 	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
 	const CHANGE_URL_S_TAG_ID = 'changeurl_s';			// URL変更ボタンタグID(スマートフォン用)
@@ -143,11 +142,6 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
-/*		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号*/
 		
 		// #### 画像リストを作成 ####
 		self::$_mainDb->getImageList($maxListCount, $pageNo, array($this, 'imageListLoop'));
@@ -158,18 +152,6 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$currentBaseUrl = '';		// POST用のリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
 		
-		// ページング用リンク作成
-/*		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					$link = '&nbsp;<a href="#" onclick="selpage(\'' . $i . '\');return false;">' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-		}*/
 		// 非表示項目を設定
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "id_list", implode($this->idArray, ','));// 表示項目のIDを設定
@@ -187,9 +169,6 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 			$this->tmpl->addVar("select_button", "items_label", $itemsStr);	// 画像選択項目
 		} else {
 			$this->tmpl->setAttribute('edit_button', 'visibility', 'visible');// 「新規」「削除」「編集」ボタン
-			
-			// ヘルプの追加
-			$this->convertHelp('edit_button');
 		}
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
@@ -526,13 +505,12 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$url = $fetchedRow['bi_image_url'];
 		if (!empty($url)) $url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);
 		
-		// リンク先、備考
-		$redirectUrl = default_bannerCommonDef::getLinkUrlByDevice($fetchedRow['bi_link_url']);
-		$linkUrl = makeTruncStr($redirectUrl, self::MAX_URL_LENGTH);
-		$note = makeTruncStr($fetchedRow['bi_admin_note'], self::MAX_NOTE_LENGTH);
+		// リンク先
+		$linkUrl = default_bannerCommonDef::getLinkUrlByDevice($fetchedRow['bi_link_url']);
+		$linkUrlShort = makeTruncStr($linkUrl, self::MAX_URL_LENGTH);
 	
 		// 画像プレビュー用ボタンを作成
-		$eventAttr = 'onclick="showPreview(\''. $id . '\', \'' . $name . '\', \'' . $type . '\', \'' . $this->getUrl($url) . '\', \'' . $width .'\', \'' . $height . '\', \'' . $redirectUrl . '\');"';
+		$eventAttr = 'onclick="showPreview(\''. $id . '\', \'' . $name . '\', \'' . $type . '\', \'' . $this->getUrl($url) . '\', \'' . $width .'\', \'' . $height . '\', \'' . $linkUrl . '\');"';
 		$previewButtonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
 
 		// 画像選択タスクのときは、選択中の項目にチェックをつける
@@ -551,11 +529,11 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 			'filename' => $filename,
 //			'url' => $this->getUrl($url),					// URL
 			'link_url' => $this->convertToDispString($linkUrl),					// リンク先URL
+			'link_url_short' => $this->convertToDispString($linkUrlShort),					// リンク先URL
 			'width' => $this->convertToDispString($width),					// 画像幅
 			'height' => $this->convertToDispString($height),					// 画像高さ
 			'view_count' => $viewCount,								// 閲覧数
 			'visible' => $visible,											// 項目の表示
-//			'note' => $this->convertToDispString($note),					// 備考
 			'preview_image_button'	=> $previewButtonTag					// 画像プレビューボタン
 		);
 		$this->tmpl->addVars('itemlist', $row);
