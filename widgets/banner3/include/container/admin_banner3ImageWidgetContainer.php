@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_banner3ImageWidgetContainer.php 5868 2013-03-28 04:08:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('banner3') . '/admin_banner3BaseWidgetContainer.php');
@@ -160,16 +160,8 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "task", $this->task);	// 処理タスク
 		
 		// ボタンの表示制御
-		if ($this->task == 'image_select'){		// 画像選択タスクのとき
-			$this->tmpl->setAttribute('select_button', 'visibility', 'visible');// 「確定」ボタン
-			
-			// 選択中の画像
-			$itemsStr = $this->convertToDispString(implode($this->selectedItems, ','));
-			$this->tmpl->addVar("_widget", "items", $itemsStr);	// 画像選択項目
-			$this->tmpl->addVar("select_button", "items_label", $itemsStr);	// 画像選択項目
-		} else {
-			$this->tmpl->setAttribute('edit_button', 'visibility', 'visible');// 「新規」「削除」「編集」ボタン
-		}
+		$this->tmpl->setAttribute('edit_button', 'visibility', 'visible');// 「新規」「削除」「編集」ボタン
+
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
 	}
@@ -513,16 +505,10 @@ class admin_banner3ImageWidgetContainer extends admin_banner3BaseWidgetContainer
 		$eventAttr = 'onclick="showPreview(\''. $id . '\', \'' . $name . '\', \'' . $type . '\', \'' . $this->getUrl($url) . '\', \'' . $width .'\', \'' . $height . '\', \'' . $linkUrl . '\');"';
 		$previewButtonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
 
-		// 画像選択タスクのときは、選択中の項目にチェックをつける
-		$checked = '';
-		if ($this->task == 'image_select'){		// 画像選択タスクのとき
-			if (in_array($id, $this->selectedItems)) $checked = 'checked';
-		}
 		$row = array(
 			'index' => $index,													// 項目番号
 			'serial' => $serial,								// シリアル番号
 			'id' => $this->convertToDispString($id),			// ID
-			'checked' => $checked,				// 項目のチェック状況
 //			'type_icon' => $iconTag,					// バナー項目タイプ
 //			'type' => $this->convertToDispString($type),					// バナー項目タイプ
 			'name' => $this->convertToDispString($name),		// 名前

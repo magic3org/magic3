@@ -85,12 +85,12 @@ function clickItem()
 	$('#items_label').text(itemsValue);
 }
 // バナー項目IDをカンマ区切り文字列で返す
-function selItem()
+/*function selItem()
 {
 	window.close();
 	window.opener.setBannerItem(document.modalform.items.value);
 	window.opener.focus();
-}
+}*/
 $(function(){
 	// テーブルを作成
 	m3SetModalTable($('.modaltable'));
@@ -102,15 +102,15 @@ $(function(){
 //]]>
 </script>
 <div id="imagelist_msg">バナー用の画像を選択してください(複数可)</div>
+<div>選択項目：<span id="items_label">{ITEMS_LABEL}</span></div>
 <form method="post" id="modalform" name="modalform">
-<input type="hidden" name="task" value="{TASK}" />
+<!--<input type="hidden" name="task" value="{TASK}" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
-<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />-->
 <input type="hidden" name="page" value="{PAGE}" />
 <input type="hidden" name="idlist" value="{ID_LIST}" />
 <input type="hidden" name="items" value="{ITEMS}" />
-<!-- m3:PostParam -->
 <h3 class="m3config_h"><span {_HELP_IMAGE_LIST}>画像一覧</span></h3>
 <table class="modaltable">
     <thead>
@@ -137,12 +137,6 @@ $(function(){
     </tbody>
 </table>
 <div>{PAGE_LINK}</div>
-<!--
-<div class="well">
-<div class="pull-left"><div class="form-control-static m3config_item">選択項目：<span id="items_label">{ITEMS_LABEL}</span></div></div>
-<div class="pull-right"><input type="button" class="button" onclick="selItem();" value="確定" /></div>
-</div>
--->
 
 <h3 class="m3config_h"><span {_HELP_IMAGE_PREVIEW}>プレビュー</span></h3>
 <table id="previewtable" class="previewtable" style="display:none;">

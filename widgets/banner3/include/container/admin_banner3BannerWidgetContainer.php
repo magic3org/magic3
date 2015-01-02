@@ -28,6 +28,7 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 	private $bannerNameArray;	// バナー定義名保存用
 	private $act;				// 実行act
 	private $selectedItems;		// 画像選択用
+	private $idArray = array();			// 表示されている画像ID
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const IMAGE_ICON_FILE = '/images/system/image16.png';			// イメージアイコン
 	const FLASH_ICON_FILE = '/images/system/flash16.png';		// Flashアイコン
@@ -584,11 +585,16 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		// ページングリンク作成
 		$currentBaseUrl = '';		// POST用のリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
-		$tmpl->addVar("_tmpl", "page_link", $pageLink);
 		
-		// 画像選択項目
+		// 表示項目
 		$itemsStr = $this->convertToDispString(implode($this->selectedItems, ','));
-		$tmpl->addVar("_tmpl", "items", $itemsStr);	// 画像選択項目
+		$tmpl->addVar("_tmpl", "items_label", $itemsStr);	// 画像選択項目
+		
+		// 非表示項目
+		$tmpl->addVar("_tmpl", "page_link", $pageLink);
+		$tmpl->addVar("_tmpl", "page", $this->convertToDispString($pageNo));	// ページ番号
+		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->idArray, ',')));		// 表示画像のID
+		$tmpl->addVar("_tmpl", "items", $itemsStr);								// 選択中の画像
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する
