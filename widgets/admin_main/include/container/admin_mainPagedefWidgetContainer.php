@@ -472,9 +472,12 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		}
 		// 編集不可項目のときは、ボタンを使用不可にする
 		$buttonEnabled = '';
-		if (!$fetchedRow['pd_editable']){
-			$buttonEnabled = 'disabled';
-		}
+		if (!$fetchedRow['pd_editable']) $buttonEnabled = 'disabled';
+		
+		// 設定画面がない場合はボタンを使用不可にする
+		$configButtonEnabled = '';
+		if (!$fetchedRow['wd_has_admin']) $configButtonEnabled = 'disabled';
+
 		// 項目を画面に表示するかどうか
 		$itemVisible = '';
 		if ($fetchedRow['pd_visible']) $itemVisible = 'checked';
@@ -505,8 +508,10 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			'visible'		=> $itemVisible,												// 画面に表示するかどうか
 			'update_line'	=> $this->convertToDispString($this->_('Update')),							// 「更新」
 			'delete_line'	=> $this->convertToDispString($this->_('Delete')),							// 「削除」
-			'update_button' => $buttonEnabled,												// ボタン使用制御
-			'delete_button'	=> $buttonEnabled,												// ボタン使用制御
+			'update_button' => $buttonEnabled,												// 行更新ボタン
+			'delete_button'	=> $buttonEnabled,												// 行削除ボタン
+			'config_button_disabled'	=> $configButtonEnabled,												// 設定画面表示ボタン
+			'label_config_window' => $this->_('Show config window'),			// 設定画面を表示
 		);
 		$this->tmpl->addVars('page_def_list', $row);
 		$this->tmpl->parseTemplate('page_def_list', 'a');
