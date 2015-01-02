@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -36,7 +36,6 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
 	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
-	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
 	const NEW_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/sql/update_widgets.sql';		// ウィジェットの最新情報ファイル
 	
 	/**
@@ -608,11 +607,15 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		if (!empty($this->showDetail)) $showDetailValue = '1';
 		$this->tmpl->addVar("_widget", "show_detail", $showDetailValue);		// 詳細表示
 		$this->tmpl->addVar("show_dir", "install_dir", $installDir);// インストールディレクトリを設定
-		// 拡張表示アイコン
-		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::AREA_OPEN_ICON_FILE);
-		$imageTitle = '詳細表示';
-		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
-		$this->tmpl->addVar("_widget", "area_open_image", $imageTag);
+		// 拡張表示ボタン
+		if ($this->showDetail){			// 詳細表示の場合
+			$title = $this->_('Close Detail');		// 詳細を非表示
+			$openButton = '<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $this->convertToDispString($title) . '" onclick="changeDetail();"><i class="glyphicon glyphicon-minus"></i></a>';
+		} else {
+			$title = $this->_('Open Detail');		// 詳細を表示
+			$openButton = '<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $this->convertToDispString($title) . '" onclick="changeDetail();"><i class="glyphicon glyphicon-plus"></i></a>';
+		}
+		$this->tmpl->addVar("_widget", "area_open_button", $openButton);
 		// ウィジェットアップロード
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
 		$imageTitle = 'ウィジェットアップロード';
@@ -939,7 +942,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			'download_image' => $downloadImage,								// ダウンロードボタンの画像
 			'download_disabled' => $downloadDisabled,								// ダウンロードボタンの使用可否
 			'image_tag' => $imageTag,		// 画像
-			'label_config_window' => $this->_('Config Window'),			// 設定画面
+			'label_config_window' => $this->_('Show config window'),			// 設定画面を表示
 			'label_update' => $this->_('Update'),			// 更新
 			'label_delete' => $this->_('Delete'),			// 削除
 			'label_download' => $this->_('Download')			// ダウンロード

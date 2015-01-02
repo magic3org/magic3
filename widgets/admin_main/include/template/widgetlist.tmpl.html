@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -83,8 +83,8 @@ function changeType(){
 	return true;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('widgetlist', -1, 0);
+	// テーブル作成
+	m3SetConfigTable('widgetlist');
 	
 	// ファイル選択用ボタン作成
 	m3SetFileSelectButton();
@@ -102,76 +102,74 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="no" />
 <input type="hidden" name="widget" />
-<table style="margin:0 auto;">
-<tr><td>
-<span {_HELP_WIDGETLIST}><label>{_LC_LABEL_WIDGET_LIST}</label></span>&nbsp;&nbsp;
-<select name="item_type" onchange="changeType();">
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_WIDGETLIST}>{_LC_LABEL_WIDGET_LIST}</span>
+<select name="item_type" class="form-control" onchange="changeType();" style="display:inline-block;width:200px;margin-top:-7px;">
 <patTemplate:tmpl name="item_type_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
 </select>
-<a class="btn btn-xs" href="javascript:void(0);" onclick="changeDetail();">{AREA_OPEN_IMAGE}</a><input type="hidden" name="item_show_detail" value="{SHOW_DETAIL}" />
-</td><td align="right">
+{AREA_OPEN_BUTTON}<input type="hidden" name="item_show_detail" value="{SHOW_DETAIL}" />
+</h3>
+
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_WIDGETLIST_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="getInfo();" value="最新情報" />
-</td></tr>
+</div></div></div>
+
 <patTemplate:tmpl name="show_dir" visibility="hidden">
-<tr><td colspan="2">
 <div>
 <span {_HELP_WIDGETLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
 <!--<span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>-->
 <a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a>
 <span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><a class="btn btn-xs" href="javascript:void(0);" onclick="readnew();">{RELOAD_IMAGE}</a></span>
 </div>
-</td>
 </patTemplate:tmpl>
-<tr><td colspan="2">
-<table id="widgetlist" class="simple-table" style="width:1000px;">
+
+<table id="widgetlist">
     <thead>
-        <tr>
-	    <th width="20">No</th>
-            <th width="20"></th>
-            <th width="10%"><span {_HELP_WIDGETLIST_ID}>ID</span></th>
-	    <th width="20%"><span {_HELP_WIDGETLIST_NAME}>{_LC_LABEL_WIDGET_NAME}</span></th>
-	    <th width="8%">{_LC_LABEL_WIDGET_VERSION}</th>
-		<th width="5%">{_LC_LABEL_WIDGET_LATEST_VERSION}</th>
+    <tr>
+	    <th style="width:50px;">No</th>
+        <th style="width:32px;"></th>
+        <th><span {_HELP_WIDGETLIST_ID}>ID</span><br /><span {_HELP_WIDGETLIST_NAME}>{_LC_LABEL_WIDGET_NAME}</span></th>
+	    <th style="width:50px;">{_LC_LABEL_WIDGET_VERSION}</th>
+		<th style="width:50px;">{_LC_LABEL_WIDGET_LATEST_VERSION}</th>
 	    <patTemplate:tmpl name="show_list_detail" visibility="hidden">
-	    <th width="5%"><span {_HELP_WIDGETLIST_AVAILABLE}>{_LC_LABEL_WIDGET_AVAILABLE}</span></th>
-	    <th width="5%"><span {_HELP_WIDGETLIST_ACTIVE}>{_LC_LABEL_WIDGET_ACTIVE}</span></th>
+	    <th style="width:50px;"><span {_HELP_WIDGETLIST_AVAILABLE}>{_LC_LABEL_WIDGET_AVAILABLE}</span></th>
+	    <th style="width:50px;"><span {_HELP_WIDGETLIST_ACTIVE}>{_LC_LABEL_WIDGET_ACTIVE}</span></th>
 	    </patTemplate:tmpl>
-	    <th width="80">{_LC_LABEL_WIDGET_DATE}</th>
+	    <th style="width:80px;">{_LC_LABEL_WIDGET_DATE}</th>
 	    <th><span {_HELP_WIDGETLIST_ACT}>{_LC_LABEL_WIDGET_OPERATION}</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="widgetlist" type="condition" conditionvar="widgettype">
+    <patTemplate:tmpl name="widgetlist" type="condition" conditionvar="widgettype">
 	<pattemplate:sub condition="__default">
-        <tr>
-	    <td align="center">{NO}</td>
+    <tr>
+	    <td>{NO}</td>
 	    <td>{IMAGE_TAG}</td>
-	    <td>{ID_TEXT}</td>
-	    <td>{NAME}</td>
-	    <td align="center">{VERSION}</td>
-		<td align="center">{LATEST_VERSION}</td>
-	    <td align="center">{RELEASE_DT}</td>
-	    <td align="right">
-	    <input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_CONFIG_WINDOW}" {DETAIL_BUTTON} />
+	    <td>{ID_TEXT}<br />{NAME}</td>
+	    <td>{VERSION}</td>
+		<td>{LATEST_VERSION}</td>
+	    <td>{RELEASE_DT}</td>
+	    <td>
+	    <!--<input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_CONFIG_WINDOW}" {DETAIL_BUTTON} />-->
+		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="detailline('{ID}');" {DETAIL_BUTTON}><i class="glyphicon glyphicon-cog"></i></a>
 	    </td>
 	</tr>
-        </pattemplate:sub>
-        <pattemplate:sub condition="detail">
-        <tr>
-	    <td align="center">{NO}</td>
+    </pattemplate:sub>
+    <pattemplate:sub condition="detail">
+    <tr>
+	    <td>{NO}</td>
 	    <td>{IMAGE_TAG}</td>
-	    <td>{ID_TEXT}</td>
-	    <td>{NAME}</td>
-	    <td align="center">{VERSION}</td>
-		<td align="center">{LATEST_VERSION}</td>
-	    <td align="center"><input type="checkbox" name="item{NO}_available" {AVAILABLE} {AVAILABLE_DISABLED} /></td>
-	    <td align="center"><input type="checkbox" name="item{NO}_active" {ACTIVE} {ACTIVE_DISABLED} /></td>
-	    <td align="center">{RELEASE_DT}</td>
-	    <td align="right"><input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{LABEL_UPDATE}" {UPDATE_BUTTON} />
+	    <td>{ID_TEXT}<br />{NAME}</td>
+	    <td>{VERSION}</td>
+		<td>{LATEST_VERSION}</td>
+	    <td><input type="checkbox" name="item{NO}_available" {AVAILABLE} {AVAILABLE_DISABLED} /></td>
+	    <td><input type="checkbox" name="item{NO}_active" {ACTIVE} {ACTIVE_DISABLED} /></td>
+	    <td>{RELEASE_DT}</td>
+	    <td><input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{LABEL_UPDATE}" {UPDATE_BUTTON} />
 	    <input type="button" class="button" onclick="deleteline('{NO}', '{SERIAL}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
-	    <input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_CONFIG_WINDOW}" {DETAIL_BUTTON} />
+	    <!--<input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_CONFIG_WINDOW}" {DETAIL_BUTTON} />-->
+		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="detailline('{ID}');" {DETAIL_BUTTON}><i class="glyphicon glyphicon-cog"></i></a>
 		<div class="btn-group">
 		<!--<input type="button" class="button" onclick="downloadWidget('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />-->
 		<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadWidget('{ID}');" {DOWNLOAD_DISABLED}>{DOWNLOAD_IMAGE}</a>
@@ -181,8 +179,6 @@ $(function(){
         </pattemplate:sub>
 	</patTemplate:tmpl>
     </tbody>
-</table>
-</td></tr>
 </table>
 </form>
 <!--<form enctype="multipart/form-data" method="post" name="upload">
