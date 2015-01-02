@@ -943,8 +943,8 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			'download_disabled' => $downloadDisabled,								// ダウンロードボタンの使用可否
 			'image_tag' => $imageTag,		// 画像
 			'label_config_window' => $this->_('Show config window'),			// 設定画面を表示
-			'label_update' => $this->_('Update'),			// 更新
-			'label_delete' => $this->_('Delete'),			// 削除
+			'label_update' => $this->_('Update line'),			// 行を更新
+			'label_delete' => $this->_('Delete line'),			// 行を削除
 			'label_download' => $this->_('Download')			// ダウンロード
 		);
 		$this->tmpl->addVars('widgetlist', $row);

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-02 14:49+0900\n"
-"PO-Revision-Date: 2015-01-02 14:49+0900\n"
+"POT-Creation-Date: 2015-01-02 20:40+0900\n"
+"PO-Revision-Date: 2015-01-02 20:40+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -241,11 +241,10 @@ msgstr "追加CSSクラス"
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
 #: ../container/admin_mainMenudefWidgetContainer.php:178
 #: ../container/admin_mainOpelogWidgetContainer.php:193
-#: ../container/admin_mainPagedefWidgetContainer.php:506
+#: ../container/admin_mainPagedefWidgetContainer.php:509
 #: ../container/admin_mainSmenudefWidgetContainer.php:172
 #: ../container/admin_mainTemplistWidgetContainer.php:573
 #: ../container/admin_mainUserlistWidgetContainer.php:139
-#: ../container/admin_mainWidgetlistWidgetContainer.php:946
 msgid "Update"
 msgstr "更新"
 
@@ -888,13 +887,12 @@ msgstr "パス："
 #: ../container/admin_mainFilebrowseWidgetContainer.php:199
 #: ../container/admin_mainMenudefWidgetContainer.php:177
 #: ../container/admin_mainMenudefWidgetContainer.php:191
-#: ../container/admin_mainPagedefWidgetContainer.php:507
+#: ../container/admin_mainPagedefWidgetContainer.php:510
 #: ../container/admin_mainSmenudefWidgetContainer.php:171
 #: ../container/admin_mainSmenudefWidgetContainer.php:184
 #: ../container/admin_mainTemplistWidgetContainer.php:574
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
-#: ../container/admin_mainWidgetlistWidgetContainer.php:947
 msgid "Delete"
 msgstr "削除"
 
@@ -1491,12 +1489,17 @@ msgstr "データを削除しました"
 msgid "Failed in deleting data."
 msgstr "データ削除に失敗しました"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:597
+#: ../container/admin_mainPagedefWidgetContainer.php:514
+#: ../container/admin_mainWidgetlistWidgetContainer.php:945
+msgid "Show config window"
+msgstr "設定画面を表示"
+
+#: ../container/admin_mainPagedefWidgetContainer.php:602
 #: ../container/admin_mainTemplistWidgetContainer.php:462
 msgid "Default"
 msgstr "デフォルト"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:598
+#: ../container/admin_mainPagedefWidgetContainer.php:603
 msgid "Unpublished"
 msgstr "非公開"
 
@@ -2060,9 +2063,13 @@ msgstr "ウィジェットアップロード(zip圧縮ファイル)"
 msgid "Replace widget if exists."
 msgstr "ウィジェットが存在する場合は置き換え"
 
-#: ../container/admin_mainWidgetlistWidgetContainer.php:945
-msgid "Show config window"
-msgstr "設定画面を表示"
+#: ../container/admin_mainWidgetlistWidgetContainer.php:946
+msgid "Update line"
+msgstr "行を更新"
+
+#: ../container/admin_mainWidgetlistWidgetContainer.php:947
+msgid "Delete line"
+msgstr "行を削除"
 
 #: ../help/help_adjustwidget.php:31
 msgid "Widget Common Config"

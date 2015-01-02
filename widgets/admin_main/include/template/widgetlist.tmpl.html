@@ -151,8 +151,7 @@ $(function(){
 		<td>{LATEST_VERSION}</td>
 	    <td>{RELEASE_DT}</td>
 	    <td>
-	    <!--<input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_CONFIG_WINDOW}" {DETAIL_BUTTON} />-->
-		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="detailline('{ID}');" {DETAIL_BUTTON}><i class="glyphicon glyphicon-cog"></i></a>
+		<a href="javascript:void(0);" class="btn btn-sm btn-success" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="detailline('{ID}');" {DETAIL_BUTTON}><i class="glyphicon glyphicon-cog"></i></a>
 	    </td>
 	</tr>
     </pattemplate:sub>
@@ -166,14 +165,14 @@ $(function(){
 	    <td><input type="checkbox" name="item{NO}_available" {AVAILABLE} {AVAILABLE_DISABLED} /></td>
 	    <td><input type="checkbox" name="item{NO}_active" {ACTIVE} {ACTIVE_DISABLED} /></td>
 	    <td>{RELEASE_DT}</td>
-	    <td><input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{LABEL_UPDATE}" {UPDATE_BUTTON} />
-	    <input type="button" class="button" onclick="deleteline('{NO}', '{SERIAL}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
-	    <!--<input type="button" class="button" onclick="detailline('{ID}');" value="{LABEL_CONFIG_WINDOW}" {DETAIL_BUTTON} />-->
-		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="detailline('{ID}');" {DETAIL_BUTTON}><i class="glyphicon glyphicon-cog"></i></a>
-		<div class="btn-group">
+	    <td>
+		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_UPDATE}" onclick="updateline('{NO}', '{SERIAL}');" {UPDATE_BUTTON}><i class="glyphicon glyphicon-save"></i></a>
+		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_DELETE}" onclick="deleteline('{NO}', '{SERIAL}');" {DELETE_BUTTON}><i class="glyphicon glyphicon-trash"></i></a>
+		<a href="javascript:void(0);" class="btn btn-sm btn-success" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="detailline('{ID}');" {DETAIL_BUTTON}><i class="glyphicon glyphicon-cog"></i></a>
+		<!--<div class="btn-group">-->
 		<!--<input type="button" class="button" onclick="downloadWidget('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />-->
 		<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadWidget('{ID}');" {DOWNLOAD_DISABLED}>{DOWNLOAD_IMAGE}</a>
-		</div>
+		<!--</div>-->
 	    </td>
 	</tr>
         </pattemplate:sub>
