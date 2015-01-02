@@ -84,13 +84,6 @@ function clickItem()
 	document.modalform.items.value = itemsValue;
 	$('#items_label').text(itemsValue);
 }
-// バナー項目IDをカンマ区切り文字列で返す
-/*function selItem()
-{
-	window.close();
-	window.opener.setBannerItem(document.modalform.items.value);
-	window.opener.focus();
-}*/
 $(function(){
 	// テーブルを作成
 	m3SetModalTable($('.modaltable'));
@@ -101,25 +94,21 @@ $(function(){
 });
 //]]>
 </script>
-<div id="imagelist_msg">バナー用の画像を選択してください(複数可)</div>
+<div id="imagelist_msg">{MSG}</div>
 <div>選択項目：<span id="items_label">{ITEMS_LABEL}</span></div>
 <form method="post" id="modalform" name="modalform">
-<!--<input type="hidden" name="task" value="{TASK}" />
-<input type="hidden" name="act" />
-<input type="hidden" name="serial" />
-<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />-->
 <input type="hidden" name="page" value="{PAGE}" />
 <input type="hidden" name="idlist" value="{ID_LIST}" />
-<input type="hidden" name="items" value="{ITEMS}" />
+<input type="hidden" id="items" name="items" value="{ITEMS}" />
 <h3 class="m3config_h"><span {_HELP_IMAGE_LIST}>画像一覧</span></h3>
 <table class="modaltable">
     <thead>
     <tr>
         <th style="width:50px;"><span {_HELP_IMAGE_CHECK}>選択</span></th>
         <th style="width:50px;"><span {_HELP_IMAGE_ID}>ID</span></th>
-        <th><span {_HELP_IMAGE_NAME}>名前</span></th>
-	    <th><span {_HELP_IMAGE_FILENAME}>ファイル名</span></th>
-	    <th><span {_HELP_IMAGE_LINK_URL}>リンク先</span></th>
+        <th style="width:25%;"><span {_HELP_IMAGE_NAME}>名前</span></th>
+	    <th style="width:25%;"><span {_HELP_IMAGE_FILENAME}>ファイル名</span></th>
+	    <th style="width:25%;"><span {_HELP_IMAGE_LINK_URL}>リンク先</span></th>
 	    <th style="width:50px;"><span {_HELP_IMAGE_VISIBLE}>公開</span></th>
 	</tr>
     </thead>

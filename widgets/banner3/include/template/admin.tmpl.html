@@ -38,22 +38,12 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
-/*function getBannerItem(){
-	var selectedItems = $('#item_banner').val();
-	window.open("?cmd=configwidget&widget=banner3&task=image_select&openby=simple&items=" + selectedItems, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1050,height=900");
-	return true;
-}*/
-/*function setBannerItem(value)
-{
-	$('#item_banner').val(value);
-	
-	// プレビュー更新
-	document.main.act.value = 'update_preview';
-	document.main.submit();
-}*/
 function selpage(page)
 {
-	var selectedItems = $('#item_banner').val();
+	// 選択中の画像を取得
+	var selectedItems;
+	selectedItems = $('#items').val();
+	if (!selectedItems) selectedItems = $('#item_banner').val();
 	
 	// Ajaxで画像一覧を取得
 	m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=banner&act=getimagelist&page=' + page + '&items=' + selectedItems, function(request, retcode, jsondata){		// 正常終了

@@ -227,7 +227,6 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		// 画像リンクプレビューを作成
 		if (!empty($bannerItem)) self::$_mainDb->getImageListById(explode(',', $bannerItem), array($this, 'imageListLoop'));
 		$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
-		//if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
 		// プレビュー用のCSSを作成
 		$this->headCss = str_replace(M3_TAG_START . M3_TAG_MACRO_WIDGET_URL . M3_TAG_END, $this->gEnv->getCurrentWidgetRootUrl(), $this->css);
@@ -579,16 +578,24 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		
 		// #### 画像リストを作成 ####
 		self::$_mainDb->getImageList(self::IMAGE_LIST_COUNT, $pageNo, array($this, 'imageListLoop'), $tmpl);
-		$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
-		//if (!$this->isExistsContent) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
+		//$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
+		if (empty($this->idArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
 		// ページングリンク作成
 		$currentBaseUrl = '';		// POST用のリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
 		
+		// メッセージ設定
+		if (empty($this->idArray)){
+			$msg = 'バナー用の画像が登録されていません。先に画像を登録してください。';
+		} else {
+			$msg = 'バナー用の画像を選択してください(複数可)';
+		}
+		
 		// 表示項目
 		$itemsStr = $this->convertToDispString(implode($this->selectedItems, ','));
 		$tmpl->addVar("_tmpl", "items_label", $itemsStr);	// 画像選択項目
+		$tmpl->addVar("_tmpl", "msg", $this->convertToDispString($msg));	// 画像選択項目
 		
 		// 非表示項目
 		$tmpl->addVar("_tmpl", "page_link", $pageLink);
@@ -688,7 +695,6 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 		// 表示中項目のシリアル番号を保存
 		$this->serialArray[] = $fetchedRow['bi_serial'];
 		$this->idArray[] = $id;
-		$this->isExistsContent = true;		// コンテンツ項目が存在するかどうか
 		return true;
 	}
 }
