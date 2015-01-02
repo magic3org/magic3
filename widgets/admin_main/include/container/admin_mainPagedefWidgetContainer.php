@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -506,8 +506,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			'suffix'		=> $this->convertToDispString($fetchedRow['pd_suffix']),			// サフィックス
 			'shared'		=> $isSharedItem,												// 共通項目かどうか
 			'visible'		=> $itemVisible,												// 画面に表示するかどうか
-			'update_line'	=> $this->convertToDispString($this->_('Update')),							// 「更新」
-			'delete_line'	=> $this->convertToDispString($this->_('Delete')),							// 「削除」
+			'update_line'	=> $this->convertToDispString($this->_('Update line')),							// 行を更新
+			'delete_line'	=> $this->convertToDispString($this->_('Delete line')),							// 行を削除
 			'update_button' => $buttonEnabled,												// 行更新ボタン
 			'delete_button'	=> $buttonEnabled,												// 行削除ボタン
 			'config_button_disabled'	=> $configButtonEnabled,												// 設定画面表示ボタン

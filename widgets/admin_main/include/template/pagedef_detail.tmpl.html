@@ -82,7 +82,7 @@ $(function(){
 	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_CONFIG_ID}>{_LC_LABEL_CONFIG_ID}</span></th>
 	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
 	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_COMMON}>{_LC_LABEL_SHARED}</span></th>
-	    <th>{_LC_LABEL_OPERATION}</th>
+	    <th style="width:100px;">{_LC_LABEL_OPERATION}</th>
 	</tr>
     </thead>
     <tfoot>
@@ -99,9 +99,12 @@ $(function(){
 	    <td><input type="text" name="item{NO}_def_id" class="form-control" value="{DEF_ID}" size="5" maxlength="5" onkeypress="return m3_numericKey(event,true);" /></td>
 	    <td><input type="checkbox" name="item{NO}_visible" {VISIBLE} /></td>
 	    <td {SHARED_COLOR}><input type="checkbox" name="item{NO}_shared" {SHARED} /></td>
-	    <td><input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{UPDATE_LINE}" {UPDATE_BUTTON} />
-	    <input type="button" class="button" onclick="deleteline('{NO}', '{SERIAL}');" value="{DELETE_LINE}" {DELETE_BUTTON} />
-		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="m3ShowConfigWindow('{WIDGET_ID}', '{DEF_ID}', '{SERIAL}');return false;" {CONFIG_BUTTON_DISABLED}><i class="glyphicon glyphicon-cog"></i></a>
+	    <td>
+		<!--<input type="button" class="button" onclick="updateline('{NO}', '{SERIAL}');" value="{UPDATE_LINE}" {UPDATE_BUTTON} />-->
+		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{UPDATE_LINE}" onclick="updateline('{NO}', '{SERIAL}');" {UPDATE_BUTTON}><i class="glyphicon glyphicon-save"></i></a>
+	    <!--<input type="button" class="button" onclick="deleteline('{NO}', '{SERIAL}');" value="{DELETE_LINE}" {DELETE_BUTTON} />-->
+		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{DELETE_LINE}" onclick="deleteline('{NO}', '{SERIAL}');" {DELETE_BUTTON}><i class="glyphicon glyphicon-trash"></i></a>
+		<a href="javascript:void(0);" class="btn btn-sm btn-success" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="m3ShowConfigWindow('{WIDGET_ID}', '{DEF_ID}', '{SERIAL}');return false;" {CONFIG_BUTTON_DISABLED}><i class="glyphicon glyphicon-cog"></i></a>
 		</td>
 	</tr>
 	</patTemplate:tmpl>
