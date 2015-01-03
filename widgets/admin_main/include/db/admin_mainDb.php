@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -172,8 +172,10 @@ class admin_mainDb extends BaseDb
 	function getAllWidgetList($type, $callback)
 	{
 		// wd_device_typeは後で追加したため、wd_mobileを残しておく
-		$queryStr  = 'SELECT * FROM _widgets ';
-		$queryStr .=  'WHERE wd_deleted = false ';// 削除されていない
+//		$queryStr  = 'SELECT * FROM _widgets ';
+		$queryStr  = 'SELECT DISTINCT wd_serial,wd_id,wd_name,wd_description,wd_license_type,wd_release_dt,wd_available,wd_active,wd_editable,wd_has_admin,wd_version,wd_latest_version,wd_required_version,pd_widget_id ';
+		$queryStr .=   'FROM _widgets LEFT JOIN _page_def ON wd_id = pd_widget_id ';
+		$queryStr .=   'WHERE wd_deleted = false ';// 削除されていない
 		$params = array();
 		switch ($type){
 			case 0:		// PC用テンプレート

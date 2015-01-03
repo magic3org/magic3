@@ -118,9 +118,8 @@ $(function(){
 <patTemplate:tmpl name="show_dir" visibility="hidden">
 <div>
 <span {_HELP_WIDGETLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
-<!--<span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>-->
-<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a>
 <span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><a class="btn btn-xs" href="javascript:void(0);" onclick="readnew();">{RELOAD_IMAGE}</a></span>
+<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a>
 </div>
 </patTemplate:tmpl>
 
@@ -130,14 +129,15 @@ $(function(){
 	    <th style="width:50px;">No</th>
         <th style="width:32px;"></th>
         <th><span {_HELP_WIDGETLIST_ID}>ID</span><br /><span {_HELP_WIDGETLIST_NAME}>{_LC_LABEL_WIDGET_NAME}</span></th>
+		<th style="width:50px;">{_LC_LABEL_STATUS}</th>
 	    <th style="width:50px;">{_LC_LABEL_WIDGET_VERSION}</th>
 		<th style="width:50px;">{_LC_LABEL_WIDGET_LATEST_VERSION}</th>
 	    <patTemplate:tmpl name="show_list_detail" visibility="hidden">
 	    <th style="width:50px;"><span {_HELP_WIDGETLIST_AVAILABLE}>{_LC_LABEL_WIDGET_AVAILABLE}</span></th>
 	    <th style="width:50px;"><span {_HELP_WIDGETLIST_ACTIVE}>{_LC_LABEL_WIDGET_ACTIVE}</span></th>
 	    </patTemplate:tmpl>
-	    <th style="width:80px;">{_LC_LABEL_WIDGET_DATE}</th>
-	    <th><span {_HELP_WIDGETLIST_ACT}>{_LC_LABEL_WIDGET_OPERATION}</span></th>
+	    <th style="width:50px;">{_LC_LABEL_WIDGET_DATE}</th>
+	    <th style="width:150px;"><span {_HELP_WIDGETLIST_ACT}>{_LC_LABEL_WIDGET_OPERATION}</span></th>
 	</tr>
     </thead>
     <tbody>
@@ -147,6 +147,7 @@ $(function(){
 	    <td>{NO}</td>
 	    <td>{IMAGE_TAG}</td>
 	    <td>{ID_TEXT}<br />{NAME}</td>
+		<td>{STATUS}</td>
 	    <td>{VERSION}</td>
 		<td>{LATEST_VERSION}</td>
 	    <td>{RELEASE_DT}</td>
@@ -160,6 +161,7 @@ $(function(){
 	    <td>{NO}</td>
 	    <td>{IMAGE_TAG}</td>
 	    <td>{ID_TEXT}<br />{NAME}</td>
+		<td>{STATUS}</td>
 	    <td>{VERSION}</td>
 		<td>{LATEST_VERSION}</td>
 	    <td><input type="checkbox" name="item{NO}_available" {AVAILABLE} {AVAILABLE_DISABLED} /></td>
@@ -180,6 +182,7 @@ $(function(){
     </tbody>
 </table>
 </form>
+</div>
 <!--<form enctype="multipart/form-data" method="post" name="upload">
 <input type="hidden" name="act" />
 <input type="hidden" name="item_type" />
@@ -197,7 +200,7 @@ $(function(){
     </tbody>
 </table>
 </form>-->
-</div>
+
 <!-- File upload dialog -->
 <div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
     <div class="modal-dialog">

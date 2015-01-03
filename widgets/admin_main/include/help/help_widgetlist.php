@@ -52,7 +52,7 @@ class help_widgetlist extends HelpConv
 				'body' =>	$this->_('The Available attribute allows widget listing on menu. The widget already on page keeps on.')		// ウィジェットを配置用の選択メニューに表示するかどうかを指定します。すでにページに配置されているウィジェットはそのまま維持されます。
 			),
 			'widgetlist_active' => array(	
-				'title' =>	$this->_('Active'),			// 実行可能
+				'title' =>	$this->_('Enable'),			// 実行可能
 				'body' =>	$this->_('The Active attribute allows launching widget. You can stop the widget launched.')		// ウィジェットの実行を許可します。特定のウィジェットを緊急停止する場合に使用します。
 			),
 			'widgetlist_act' => array(	

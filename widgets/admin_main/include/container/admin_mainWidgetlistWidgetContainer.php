@@ -32,10 +32,13 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	const SCRIPT_FILE_EXT = 'js';		// JavaScriptファイル拡張子
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
 	const PHP_FILE_EXT = 'php';		// phpファイル拡張子
+	const ICON_SIZE = 32;		// アイコンのサイズ
 	const NOT_FOUND_WIDGET_ICON_FILE = '/images/system/notfound32.png';		// ウィジェットが見つからないアイコン
 	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
 	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const NEW_INFO_URL = 'https://raw.githubusercontent.com/magic3org/magic3/master/include/sql/update_widgets.sql';		// ウィジェットの最新情報ファイル
 	
 	/**
@@ -620,7 +623,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
 		$imageTitle = 'ウィジェットアップロード';
 		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
-		$this->tmpl->addVar("_widget", "upload_image", $imageTag);
+		$this->tmpl->addVar("show_dir", "upload_image", $imageTag);
 		// 再読み込みアイコン
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::RELOAD_ICON_FILE);
 		$imageTitle = 'ディレクトリ再読み込み';
@@ -641,10 +644,11 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['label_read_new'] = $this->_('Reload directory');			// ディレクトリ再読み込み
 //		$localeText['label_show_detail'] = $this->_('Show detail');			// 詳細表示
 		$localeText['label_widget_name'] = $this->_('Name');			// 名前
+		$localeText['label_status'] = $this->_('Status');			// 状態
 		$localeText['label_widget_version'] = $this->_('Version');			// バージョン
 		$localeText['label_widget_latest_version'] = $this->_('Latest');			// 最新
 		$localeText['label_widget_available'] = $this->_('Available');			// 配置可
-		$localeText['label_widget_active'] = $this->_('Active');			// 実行可
+		$localeText['label_widget_active'] = $this->_('Enable');			// 実行可
 		$localeText['label_widget_date'] = $this->_('Release Date');			// リリース日
 		$localeText['label_widget_operation'] = $this->_('Operation');			// 操作
 		$localeText['label_widget_upload'] = $this->_('Widget Upload (zip compressed file)');			// ウィジェットアップロード(zip圧縮ファイル)
@@ -840,6 +844,16 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$active = 'checked';
 		}
 		
+		// ウィジェットの稼動状態
+		if (empty($fetchedRow['pd_widget_id']) || !$fetchedRow['wd_active']){		// ウィジェットが停止中の場合
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = $this->_('Stop');		// 停止
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+			$iconTitle = $this->_('Active');	// 稼働中
+		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
 		// 編集不可項目のときは、ボタンを使用不可にする
 		$buttonEnabled = '';
 		$availableDisabled = '';
@@ -895,7 +909,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		} else {
 			$downloadStr = 'ダウンロード不可';
 		}
-		$downloadImage = '<img src="' . $downloadImg . '" width="32" height="32" border="0" alt="' . $downloadStr . '" title="' . $downloadStr . '" />';
+		$downloadImage = '<img src="' . $downloadImg . '" width="32" height="32" alt="' . $downloadStr . '" title="' . $downloadStr . '" />';
 		
 		// 最新バージョンの表示
 		$latestVer = '';
@@ -932,6 +946,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			'version' => $this->convertToDispString($version),		// バージョン
 			'latest_version' => $latestVer,		// 最新バージョン
 			'release_dt' => $this->convertToDispDate($fetchedRow['wd_release_dt']),	// リリース日時
+			'status'	=> $statusImg,					// ウィジェット稼動状態
 			'available' => $available,												// 利用可能かどうか
 			'active' => $active,													// ウィジェット実行可能かどうか
 			'available_disabled' => $availableDisabled,							// 利用可能かどうか、使用制御
