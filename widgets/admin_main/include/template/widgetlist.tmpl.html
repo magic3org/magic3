@@ -129,9 +129,8 @@ $(function(){
 	    <th style="width:50px;">No</th>
         <th style="width:32px;"></th>
         <th><span {_HELP_WIDGETLIST_ID}>ID</span><br /><span {_HELP_WIDGETLIST_NAME}>{_LC_LABEL_WIDGET_NAME}</span></th>
-		<th style="width:50px;">{_LC_LABEL_STATUS}</th>
-	    <th style="width:50px;">{_LC_LABEL_WIDGET_VERSION}</th>
-		<th style="width:50px;">{_LC_LABEL_WIDGET_LATEST_VERSION}</th>
+		<th style="width:50px;"><span {_HELP_WIDGETLIST_STATUS}>{_LC_LABEL_STATUS}</span></th>
+	    <th style="width:100px;">{_LC_LABEL_WIDGET_VERSION}<br />({_LC_LABEL_WIDGET_LATEST_VERSION})</th>
 	    <patTemplate:tmpl name="show_list_detail" visibility="hidden">
 	    <th style="width:50px;"><span {_HELP_WIDGETLIST_AVAILABLE}>{_LC_LABEL_WIDGET_AVAILABLE}</span></th>
 	    <th style="width:50px;"><span {_HELP_WIDGETLIST_ACTIVE}>{_LC_LABEL_WIDGET_ACTIVE}</span></th>
@@ -148,8 +147,7 @@ $(function(){
 	    <td>{IMAGE_TAG}</td>
 	    <td>{ID_TEXT}<br />{NAME}</td>
 		<td>{STATUS}</td>
-	    <td>{VERSION}</td>
-		<td>{LATEST_VERSION}</td>
+	    <td>{VERSION}<br />{LATEST_VERSION}</td>
 	    <td>{RELEASE_DT}</td>
 	    <td>
 		<a href="javascript:void(0);" class="btn btn-sm btn-success" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="detailline('{ID}');" {DETAIL_BUTTON}><i class="glyphicon glyphicon-cog"></i></a>
@@ -162,8 +160,7 @@ $(function(){
 	    <td>{IMAGE_TAG}</td>
 	    <td>{ID_TEXT}<br />{NAME}</td>
 		<td>{STATUS}</td>
-	    <td>{VERSION}</td>
-		<td>{LATEST_VERSION}</td>
+	    <td>{VERSION}<br />{LATEST_VERSION}</td>
 	    <td><input type="checkbox" name="item{NO}_available" {AVAILABLE} {AVAILABLE_DISABLED} /></td>
 	    <td><input type="checkbox" name="item{NO}_active" {ACTIVE} {ACTIVE_DISABLED} /></td>
 	    <td>{RELEASE_DT}</td>
@@ -171,10 +168,7 @@ $(function(){
 		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_UPDATE}" onclick="updateline('{NO}', '{SERIAL}');" {UPDATE_BUTTON}><i class="glyphicon glyphicon-save"></i></a>
 		<a href="javascript:void(0);" class="btn btn-sm btn-default" role="button" rel="m3help" data-container="body" title="{LABEL_DELETE}" onclick="deleteline('{NO}', '{SERIAL}');" {DELETE_BUTTON}><i class="glyphicon glyphicon-trash"></i></a>
 		<a href="javascript:void(0);" class="btn btn-sm btn-success" role="button" rel="m3help" data-container="body" title="{LABEL_CONFIG_WINDOW}" onclick="detailline('{ID}');" {DETAIL_BUTTON}><i class="glyphicon glyphicon-cog"></i></a>
-		<!--<div class="btn-group">-->
-		<!--<input type="button" class="button" onclick="downloadWidget('{ID}');" value="{LABEL_DOWNLOAD}" {DOWNLOAD_BUTTON} />-->
-		<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadWidget('{ID}');" {DOWNLOAD_DISABLED}>{DOWNLOAD_IMAGE}</a>
-		<!--</div>-->
+		{DOWNLOAD_BUTTON_TAG}
 	    </td>
 	</tr>
         </pattemplate:sub>

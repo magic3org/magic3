@@ -28,6 +28,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	private $showDetail;			// 詳細表示するかどうか
 	private $defaultImageSize = 32;		// ウィジェット画像サイズ
 	private $isExistsWidgetList;		// ウィジェットが存在するかどうか
+	private $labelTextArray;		// ラベルテキスト退避用
 	const BREADCRUMB_TITLE			= 'ウィジェット管理';		// 画面タイトル名(パンくずリスト)
 	const SCRIPT_FILE_EXT = 'js';		// JavaScriptファイル拡張子
 	const CSS_FILE_EXT = 'css';		// cssファイル拡張子
@@ -56,6 +57,17 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->widgetTypeArray = array(	array(	'name' => $this->_('For PC'),			'value' => '0'),	// PC用
 										array(	'name' => $this->_('For Mobile'),		'value' => '1'),	// 携帯用
 										array(	'name' => $this->_('For Smartphone'),	'value' => '2'));	// スマートフォン用
+										
+		// ラベル文字列
+		$this->labelTextArray = array(
+										'label_active'			=> $this->_('Active'),			// 稼働中
+										'label_stop'			=> $this->_('Stop'),			// 停止
+										'label_update'			=> $this->_('Update line'),			// 行を更新
+										'label_delete'			=> $this->_('Delete line'),			// 行を削除
+										'label_config_window' 	=> $this->_('Show config window'),			// 設定画面を表示
+										'label_download'		=> $this->_('Download'),			// ダウンロード
+										'label_download_disabled'	=> $this->_('Download disabled')			// ダウンロード不可
+									);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -847,10 +859,12 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		// ウィジェットの稼動状態
 		if (empty($fetchedRow['pd_widget_id']) || !$fetchedRow['wd_active']){		// ウィジェットが停止中の場合
 			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-			$iconTitle = $this->_('Stop');		// 停止
+			//$iconTitle = $this->_('Stop');		// 停止
+			$iconTitle = $this->labelTextArray['label_stop'];
 		} else {
 			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-			$iconTitle = $this->_('Active');	// 稼働中
+			//$iconTitle = $this->_('Active');	// 稼働中
+			$iconTitle = $this->labelTextArray['label_active'];
 		}
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
@@ -888,15 +902,13 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$imageTag = '<img class="widget_obj" src="' . $this->getUrl($iconUrl) . '" ';
 		$imageTag .= 'width="' . $this->defaultImageSize . '"';
 		$imageTag .= ' height="' . $this->defaultImageSize . '"';
-		$imageTag .= ' border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$imageTag .= ' alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// ヘルプの作成
 		$helpText = '';
 		$title = $fetchedRow['wd_name'];
-		if (!empty($title)){
-			$helpText = $this->gInstance->getHelpManager()->createHelpText($title, $fetchedRow['wd_description']);
-		}
-		$idText = '<span ' . $helpText . '>' . $idText . '</span>';
+		if (!empty($title))$helpText = $this->gInstance->getHelpManager()->createHelpText($title, $fetchedRow['wd_description']);
+		$imageTag = '<span ' . $helpText . '>' . $imageTag . '</span>';
 				
 		// ボタンの状態
 		$downloadDisabled = '';
@@ -905,11 +917,12 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		$downloadImg = $this->getUrl($this->gEnv->getRootUrl() . self::DOWNLOAD_ZIP_ICON_FILE);
 		if (empty($downloadDisabled)){
-			$downloadStr = 'ダウンロード';
+			$downloadStr = $this->labelTextArray['label_download'];					// ダウンロード
 		} else {
-			$downloadStr = 'ダウンロード不可';
+			$downloadStr = $this->labelTextArray['label_download_disabled'];		// ダウンロード不可
 		}
-		$downloadImage = '<img src="' . $downloadImg . '" width="32" height="32" alt="' . $downloadStr . '" title="' . $downloadStr . '" />';
+		$downloadButtonTag = '<img src="' . $downloadImg . '" width="32" height="32" alt="' . $downloadStr . '" />';
+		$downloadButtonTag = '<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadWidget(\'' . $widgetId . '\');" rel="m3help" data-container="body" title="' . $downloadStr . '" ' . $downloadDisabled . '>' . $downloadButtonTag . '</a>';
 		
 		// 最新バージョンの表示
 		$latestVer = '';
@@ -920,18 +933,18 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 				if (empty($optionVerStr)){		// 付加記号なしの場合
 					// 動作に必要なシステムバージョン以上の場合のみバージョンアップ可能
 					if (version_compare($requiredVersion, M3_SYSTEM_VERSION) <= 0){
-						$latestVer = '<span class="available"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . $this->convertToDispString($latestVersion) . '</a></span>';
+						$latestVer = '(<span class="available"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . $this->convertToDispString($latestVersion) . '</a></span>)';
 					} else {
-						$latestVer = '<span class="available">' . $this->convertToDispString($latestVersion) . '</span>';
+						$latestVer = '(<span class="available">' . $this->convertToDispString($latestVersion) . '</span>)';
 					}
 				} else {
 					switch ($optionVerStr){
 						case 'x':		// 緊急バージョンアップ
-							$latestVer = '<span class="emergency"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . 
-											$this->convertToDispString($latestVersion) . '</a></span>';
+							$latestVer = '(<span class="emergency"><a href="javascript:void(0);" onclick="updateWidget(\'' . $widgetId . '\');">' . 
+											$this->convertToDispString($latestVersion) . '</a></span>)';
 							break;
 						default:		// ベータ版等
-							$latestVer = '<span>' . $this->convertToDispString($latestVersion) . '</span>';
+							$latestVer = '(<span>' . $this->convertToDispString($latestVersion) . '</span>)';
 							break;
 					}
 				}
@@ -954,13 +967,16 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			'update_button' => $buttonEnabled,									// 更新ボタンの使用制御
 			'delete_button' => $buttonEnabled,									// 削除ボタンの使用制御
 			'detail_button' => $detailButtonEnabled,							// 詳細ボタンの使用制御
-			'download_image' => $downloadImage,								// ダウンロードボタンの画像
-			'download_disabled' => $downloadDisabled,								// ダウンロードボタンの使用可否
+			'download_button_tag' => $downloadButtonTag,								// ダウンロードボタン
+//			'download_disabled' => $downloadDisabled,								// ダウンロードボタンの使用可否
 			'image_tag' => $imageTag,		// 画像
-			'label_config_window' => $this->_('Show config window'),			// 設定画面を表示
-			'label_update' => $this->_('Update line'),			// 行を更新
-			'label_delete' => $this->_('Delete line'),			// 行を削除
-			'label_download' => $this->_('Download')			// ダウンロード
+//			'label_config_window' => $this->_('Show config window'),			// 設定画面を表示
+//			'label_update' => $this->_('Update line'),			// 行を更新
+//			'label_delete' => $this->_('Delete line'),			// 行を削除
+//			'label_download' => $this->_('Download')			// ダウンロード
+			'label_update' => $this->labelTextArray['label_update'],		// 行を更新
+			'label_delete' => $this->labelTextArray['label_delete'],		// 行を削除
+			'label_config_window' => $this->labelTextArray['label_config_window'],		// 設定画面を表示
 		);
 		$this->tmpl->addVars('widgetlist', $row);
 		$this->tmpl->parseTemplate('widgetlist', 'a');

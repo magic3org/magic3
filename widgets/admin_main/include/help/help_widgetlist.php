@@ -47,6 +47,10 @@ class help_widgetlist extends HelpConv
 				'title' =>	$this->_('Widget Name'),			// ウィジェット名前
 				'body' =>	$this->_('The name of widget.')		// ウィジェットの名前です。
 			),
+			'widgetlist_status' => array(	
+				'title' =>	$this->_('Active Status'),			// 稼動状態
+				'body' =>	$this->_('This indicates the active status of widget.')		// ウィジェットの稼動状態を示します。
+			),
 			'widgetlist_available' => array(	
 				'title' =>	$this->_('Available'),			// 配置可能
 				'body' =>	$this->_('The Available attribute allows widget listing on menu. The widget already on page keeps on.')		// ウィジェットを配置用の選択メニューに表示するかどうかを指定します。すでにページに配置されているウィジェットはそのまま維持されます。
