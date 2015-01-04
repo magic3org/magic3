@@ -54,9 +54,12 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->db = new admin_mainDb();
 		
 		// ウィジェットタイプメニュー項目
-		$this->widgetTypeArray = array(	array(	'name' => $this->_('For PC'),			'value' => '0'),	// PC用
+		$this->widgetTypeArray = array(
+										array(	'name' => $this->_('For PC'),			'value' => '0'),	// PC用
 										array(	'name' => $this->_('For Mobile'),		'value' => '1'),	// 携帯用
-										array(	'name' => $this->_('For Smartphone'),	'value' => '2'));	// スマートフォン用
+										array(	'name' => $this->_('For Smartphone'),	'value' => '2'),		// スマートフォン用
+										array(	'name' => $this->_('For Administration'),	'value' => '-1')		// 管理用
+									);	
 										
 		// ラベル文字列
 		$this->labelTextArray = array(

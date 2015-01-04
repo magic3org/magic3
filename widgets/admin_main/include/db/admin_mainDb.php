@@ -165,7 +165,7 @@ class admin_mainDb extends BaseDb
 	/**
 	 * ウィジェットリスト取得
 	 *
-	 * @param int      $type		テンプレートのタイプ(0=PC用、1=携帯用、2=スマートフォン)
+	 * @param int      $type		ウィジェットのタイプ(-1=管理用、0=PC用、1=携帯用、2=スマートフォン)
 	 * @param function $callback	コールバック関数
 	 * @return						なし
 	 */
@@ -178,13 +178,19 @@ class admin_mainDb extends BaseDb
 		$queryStr .=   'WHERE wd_deleted = false ';// 削除されていない
 		$params = array();
 		switch ($type){
-			case 0:		// PC用テンプレート
-			case 2:		// スマートフォン用テンプレート
+			case -1:		// 管理用
+				$queryStr .=    'AND wd_admin = true ';		// 管理用
+				$queryStr .=    'AND wd_device_type = 0 ';	// PC画面
+				break;
+			case 0:		// PC用
+			case 2:		// スマートフォン用
 			default:
+				$queryStr .=    'AND wd_admin = false ';		// 管理用以外
 				$queryStr .=    'AND wd_mobile = false ';		// 携帯用以外
 				$queryStr .=    'AND wd_device_type = ? '; $params[] = $type;
 				break;
 			case 1:		// 携帯用のとき
+				$queryStr .=    'AND wd_admin = false ';		// 管理用以外
 				$queryStr .=    'AND wd_mobile = true ';		// 携帯用
 				break;
 		}
