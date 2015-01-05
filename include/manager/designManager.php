@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -574,6 +574,32 @@ class DesignManager extends Core
 		return $buttonTag;
 	}
 	/**
+	 * プレビューボタンを作成
+	 *
+	 * @param string $url		リンク先(リンク先がない場合は空文字列)
+	 * @param string $title		ツールチップ用文字列
+	 * @param string $tagId		タグのID
+	 * @param string $attr		その他の追加属性
+	 * @param string $btnClass	ボタンのカラークラス
+	 * @return string 			ボタンのタグ
+	 */
+	function createPreviewButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-default')
+	{
+		if (empty($url)){
+			$urlAttr = ' href="javascript:void(0);"';
+		} else {
+			$urlAttr = ' href="' . convertUrlToHtmlEntity($this->getUrl($url)) . '"';
+		}
+		$idAttr = '';
+		if (!empty($tagId)) $idAttr = ' id="' . $tagId . '"';
+		$otherAttr = '';
+		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
+		if (!empty($attr)) $otherAttr .= ' ' . $attr;
+		$tagClass = 'btn btn-sm ' . $btnClass;
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-new-window"></i></a>';
+		return $buttonTag;
+	}
+	/**
 	 * 画像プレビューボタンを作成
 	 *
 	 * @param string $url		リンク先(リンク先がない場合は空文字列)
@@ -597,6 +623,32 @@ class DesignManager extends Core
 		if (!empty($attr)) $otherAttr .= ' ' . $attr;
 		$tagClass = 'btn btn-sm ' . $btnClass;
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-picture"></i></a>';
+		return $buttonTag;
+	}
+	/**
+	 * ゴミ箱ボタンを作成
+	 *
+	 * @param string $url		リンク先(リンク先がない場合は空文字列)
+	 * @param string $title		ツールチップ用文字列
+	 * @param string $tagId		タグのID
+	 * @param string $attr		その他の追加属性
+	 * @param string $btnClass	ボタンのカラークラス
+	 * @return string 			ボタンのタグ
+	 */
+	function createTrashButton($url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-default')
+	{
+		if (empty($url)){
+			$urlAttr = ' href="javascript:void(0);"';
+		} else {
+			$urlAttr = ' href="' . convertUrlToHtmlEntity($this->getUrl($url)) . '"';
+		}
+		$idAttr = '';
+		if (!empty($tagId)) $idAttr = ' id="' . $tagId . '"';
+		$otherAttr = '';
+		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
+		if (!empty($attr)) $otherAttr .= ' ' . $attr;
+		$tagClass = 'btn btn-sm ' . $btnClass;
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-trash"></i></a>';
 		return $buttonTag;
 	}
 }
