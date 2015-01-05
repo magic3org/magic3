@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -64,11 +64,18 @@ function previewInOtherWindow(templateId)
 	return true;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('templatelist', -1, 0);
-	
+	// テーブル作成
+	m3SetConfigTable('templatelist');
+
 	// ファイル選択用ボタン作成
 	m3SetFileSelectButton();
+	
+	// キー設定
+	$(document).keyup(function(e){
+		if (e.which == 27){		// ESCキー
+			showReloadArea();		// 開発者用機能表示
+		}
+	});
 });
 //]]>
 </script>
@@ -79,57 +86,55 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="template" />
 <input type="hidden" name="no" />
-<table style="margin:0 auto;">
-<tr><td>
-<span {_HELP_TEMPLIST}><label>{_LC_LABEL_TEMPLATE_LIST}</label></span>&nbsp;&nbsp;
-<select name="item_type" onchange="changeType();">
+
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_TEMPLIST}>{_LC_LABEL_TEMPLATE_LIST}</span>
+<select name="item_type" class="form-control" onchange="changeType();" style="display:inline-block;width:200px;margin-top:-7px;">
 <patTemplate:tmpl name="item_type_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
 </select>
-<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a><a class="btn btn-xs" href="javascript:void(0);" onclick="showReloadArea();">{AREA_OPEN_IMAGE}</a>
+</h3>
+
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_TEMPLIST_BUTTONS}><div class="btn-group">
+<input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="{_LC_LABEL_UPLOAD}" />
+</div></div></div>
 <div id="reload_area" style="display:none;">
 <span {_HELP_TEMPLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
 <span {_HELP_TEMPLIST_RELOAD_DIR_BTN}><a class="btn btn-xs" href="javascript:void(0);" onclick="readnew();">{RELOAD_IMAGE}</a></span>
-<!--<span {_HELP_TEMPLIST_RELOAD_DIR_BTN}><input type="button" class="button" onclick="exec('readnew');" value="{_LC_LABEL_READ_NEW}" /></span>-->
 </div>
-</td></tr>
-<tr><td colspan="2">
-<table id="templatelist" class="simple-table" style="width:950px;">
+
+<table id="templatelist">
     <thead>
-        <tr>
-            <th width="35">No</th>
-	    <th width="45"></th>
-            <th width="15%"><span {_HELP_TEMPLIST_ID}>ID</span></th>
-	    <th width="150"><span {_HELP_TEMPLIST_FORMAT}>{_LC_LABEL_TEMPLATE_FORMAT} /<br />{_LC_LABEL_TEMPLATE_CREATOR}</span></th>
-	    <th width="100"><span {_HELP_TEMPLIST_DEFAULT}>{_LC_LABEL_TEMPLATE_DEFAULT}</span></th>
-	    <th width="170">{_LC_LABEL_TEMPLATE_DATE}</th>
+    <tr>
+        <th style="width:50px;">No</th>
+	    <th style="width:32px;"></th>
+        <th><span {_HELP_TEMPLIST_ID}>ID</span></th>
+	    <th><span {_HELP_TEMPLIST_FORMAT}>{_LC_LABEL_TEMPLATE_FORMAT} /<br />{_LC_LABEL_TEMPLATE_CREATOR}</span></th>
+	    <th style="width:50px;"><span {_HELP_TEMPLIST_DEFAULT}>{_LC_LABEL_TEMPLATE_DEFAULT}</span></th>
+	    <th style="width:100px;">{_LC_LABEL_TEMPLATE_DATE}</th>
 	    <th><span {_HELP_TEMPLIST_ACT}>{_LC_LABEL_TEMPLATE_OPERATION}</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="templist">
-        <tr>
-	    <td align="center">{NO}</td>
-	    <td align="center">{IMAGE_TAG}</td>
+    <patTemplate:tmpl name="templist">
+    <tr>
+	    <td>{NO}</td>
+	    <td>{IMAGE_TAG}</td>
 	    <td>{ID_STR}</td>
-	    <td align="center">{FORMAT_TYPE}</td>
-	    <td align="center"><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
-	    <td align="center">{UPDATE_DT}</td>
-	    <td align="right">
+	    <td>{FORMAT_TYPE}</td>
+	    <td><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
+	    <td>{UPDATE_DT}</td>
+	    <td>
 	    <input type="button" class="button" onclick="deleteline('{ID}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
 		<input type="button" class="button" onclick="previewInOtherWindow('{ID}');" value="{LABEL_PREVIEW}" {PREVIEW_BUTTON} />
-		<div class="btn-group">
 		<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadTemplate('{ID}');" {DOWNLOAD_DISABLED}>{DOWNLOAD_IMAGE}</a>
-		</div>
 	    </td>
-	    </tr>
-	    </patTemplate:tmpl>
+	</tr>
+	</patTemplate:tmpl>
     </tbody>
 </table>
-</td></tr>
-</table>
 </form>
+</div>
 <!--
 <form enctype="multipart/form-data" method="post" name="upload">
 <input type="hidden" name="act" />
@@ -143,7 +148,6 @@ $(function(){
     </tbody>
 </table>
 </form>-->
-</div>
 
 <!-- File upload dialog -->
 <div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">

@@ -39,9 +39,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	const JOOMLA_CONFIG_FILENAME = 'templateDetails.xml';		// Joomla!のテンプレート設定ファイル名
 	const NOT_FOUND_TEMPLATE_ICON_FILE = '/images/system/notfound32.png';		// テンプレートが見つからないアイコン
 	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
-	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
+//	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
-	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
+//	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
 	
 	/**
 	 * コンストラクタ
@@ -429,7 +429,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "install_dir", $installDir);// インストールディレクトリ
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));// 管理用URL
-		// テンプレートアップロード
+/*		// テンプレートアップロード
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
 		$imageTitle = 'テンプレートアップロード';
 		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
@@ -438,7 +438,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::AREA_OPEN_ICON_FILE);
 		$imageTitle = '詳細表示';
 		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
-		$this->tmpl->addVar("_widget", "area_open_image", $imageTag);
+		$this->tmpl->addVar("_widget", "area_open_image", $imageTag);*/
 		// 再読み込みアイコン
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::RELOAD_ICON_FILE);
 		$imageTitle = 'ディレクトリ再読み込み';

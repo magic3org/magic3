@@ -141,12 +141,6 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_can_detail_config" {CAN_DETAIL_CONFIG} />詳細設定モード(開発者向け)</label></div></td>
-	</tr>
-    <tr>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_config_window_open_by_tab" {CONFIG_WINDOW_OPEN_BY_TAB} />設定画面をタブで開く</label></div></td>
-	</tr>
-    <tr>
 		<td colspan="2"><div class="form-control-static col-sm-3 m3config_item">WYSIWYGエディター</div>
 	    <div class="col-sm-4 m3config_item"><select name="item_wysiwyg_editor" class="form-control">
 	        <patTemplate:tmpl name="wysiwyg_editor_list">
@@ -154,6 +148,12 @@ $(function(){
 	        </patTemplate:tmpl>
 	    </select></div>
 		</td>
+	</tr>
+    <tr>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_config_window_open_by_tab" {CONFIG_WINDOW_OPEN_BY_TAB} />設定画面をタブで開く</label></div></td>
+	</tr>
+    <tr>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_can_detail_config" {CAN_DETAIL_CONFIG} />詳細設定モード(開発者向け)</label></div></td>
 	</tr>
     <tr>
 	    <th rowspan="2">一般画面</th>
