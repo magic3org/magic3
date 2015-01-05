@@ -36,7 +36,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const NOT_FOUND_WIDGET_ICON_FILE = '/images/system/notfound32.png';		// ウィジェットが見つからないアイコン
 	const DOWNLOAD_ZIP_ICON_FILE = '/images/system/download_zip32.png';		// Zipダウンロード用アイコン
-	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
+//	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
@@ -610,7 +610,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 
 		// 表示制御
 		if (!empty($this->showDetail)){		// 詳細表示のとき
-			$this->tmpl->setAttribute('show_dir', 'visibility', 'visible');// ディレクトリ表示
+//			$this->tmpl->setAttribute('show_dir', 'visibility', 'visible');// ディレクトリ表示
 			$this->tmpl->setAttribute('show_list_detail', 'visibility', 'visible');// 一覧を詳細表示
 		}
 		// ウィジェットタイプ選択メニュー作成
@@ -624,7 +624,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$showDetailValue = '0';
 		if (!empty($this->showDetail)) $showDetailValue = '1';
 		$this->tmpl->addVar("_widget", "show_detail", $showDetailValue);		// 詳細表示
-		$this->tmpl->addVar("show_dir", "install_dir", $installDir);// インストールディレクトリを設定
+		$this->tmpl->addVar("_widget", "install_dir", $installDir);// インストールディレクトリを設定
 		// 拡張表示ボタン
 		if ($this->showDetail){			// 詳細表示の場合
 			$title = $this->_('Close Detail');		// 詳細を非表示
@@ -634,16 +634,16 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$openButton = '<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $this->convertToDispString($title) . '" onclick="changeDetail();"><i class="glyphicon glyphicon-plus"></i></a>';
 		}
 		$this->tmpl->addVar("_widget", "area_open_button", $openButton);
-		// ウィジェットアップロード
+/*		// ウィジェットアップロード
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
 		$imageTitle = 'ウィジェットアップロード';
 		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
-		$this->tmpl->addVar("show_dir", "upload_image", $imageTag);
+		$this->tmpl->addVar("show_dir", "upload_image", $imageTag);*/
 		// 再読み込みアイコン
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::RELOAD_ICON_FILE);
 		$imageTitle = 'ディレクトリ再読み込み';
 		$imageTag = '<img src="' . $imageUrl . '" width="32" height="32" border="0" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
-		$this->tmpl->addVar("show_dir", "reload_image", $imageTag);
+		$this->tmpl->addVar("_widget", "reload_image", $imageTag);
 		
 		// テキストをローカライズ
 		$localeText = array();

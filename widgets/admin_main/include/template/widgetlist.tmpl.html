@@ -82,6 +82,10 @@ function changeType(){
 	document.main.submit();
 	return true;
 }
+function showReloadArea()
+{
+	$('#reload_area').slideToggle('slow');
+}
 $(function(){
 	// テーブル作成
 	m3SetConfigTable('widgetlist');
@@ -91,6 +95,13 @@ $(function(){
 	
 	// 処理中ダイアログ準備
 //	m3PrepareProcessModal();
+
+	// キー設定
+	$(document).keyup(function(e){
+		if (e.which == 27){		// ESCキー
+			showReloadArea();		// 開発者用機能表示
+		}
+	});
 });
 //]]>
 </script>
@@ -110,18 +121,14 @@ $(function(){
 </select>
 {AREA_OPEN_BUTTON}<input type="hidden" name="item_show_detail" value="{SHOW_DETAIL}" />
 </h3>
-
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_WIDGETLIST_BUTTONS}><div class="btn-group">
+<input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="{_LC_LABEL_UPLOAD}" />
 <input type="button" class="button" onclick="getInfo();" value="最新情報" />
 </div></div></div>
-
-<patTemplate:tmpl name="show_dir" visibility="hidden">
-<div>
+<div id="reload_area" style="display:none;">
 <span {_HELP_WIDGETLIST_INSTALL_DIR}><label>{_LC_LABEL_INSTALL_DIR} </label></span>{INSTALL_DIR}&nbsp;&nbsp;
 <span {_HELP_WIDGETLIST_RELOAD_DIR_BTN}><a class="btn btn-xs" href="javascript:void(0);" onclick="readnew();">{RELOAD_IMAGE}</a></span>
-<a class="btn btn-xs" href="javascript:void(0);" data-toggle="modal" data-target="#uploadModal">{UPLOAD_IMAGE}</a>
 </div>
-</patTemplate:tmpl>
 
 <table id="widgetlist">
     <thead>

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-04 12:18+0900\n"
-"PO-Revision-Date: 2015-01-04 12:19+0900\n"
+"POT-Creation-Date: 2015-01-05 13:02+0900\n"
+"PO-Revision-Date: 2015-01-05 13:02+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -242,7 +242,6 @@ msgstr "追加CSSクラス"
 #: ../container/admin_mainMenudefWidgetContainer.php:178
 #: ../container/admin_mainOpelogWidgetContainer.php:193
 #: ../container/admin_mainSmenudefWidgetContainer.php:172
-#: ../container/admin_mainTemplistWidgetContainer.php:573
 #: ../container/admin_mainUserlistWidgetContainer.php:139
 msgid "Update"
 msgstr "更新"
@@ -799,7 +798,6 @@ msgid "Upload"
 msgstr "アップロード"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:205
-#: ../container/admin_mainTemplistWidgetContainer.php:575
 #: ../container/admin_mainWidgetlistWidgetContainer.php:71
 msgid "Download"
 msgstr "ダウンロード"
@@ -888,7 +886,7 @@ msgstr "パス："
 #: ../container/admin_mainMenudefWidgetContainer.php:191
 #: ../container/admin_mainSmenudefWidgetContainer.php:171
 #: ../container/admin_mainSmenudefWidgetContainer.php:184
-#: ../container/admin_mainTemplistWidgetContainer.php:574
+#: ../container/admin_mainTemplistWidgetContainer.php:549
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
 msgid "Delete"
@@ -1396,7 +1394,7 @@ msgid "Layout"
 msgstr "レイアウト"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:142
-#: ../container/admin_mainTemplistWidgetContainer.php:572
+#: ../container/admin_mainTemplistWidgetContainer.php:552
 msgid "Preview"
 msgstr "プレビュー"
 
@@ -1760,8 +1758,8 @@ msgstr "テンプレートが見つかりません"
 msgid "Not Detected"
 msgstr "未検出"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:603
-#: ../container/admin_mainTemplistWidgetContainer.php:649
+#: ../container/admin_mainTemplistWidgetContainer.php:605
+#: ../container/admin_mainTemplistWidgetContainer.php:651
 msgid "SimpleXML module not installed."
 msgstr "SimpleXML拡張モジュールがインストールされていません"
 
@@ -2722,17 +2720,15 @@ msgstr "現在システムで選択されているデフォルトのテンプレ
 
 #: ../help/help_templist.php:60
 msgid ""
-"You can operate below.<br /><strong>Preview</strong> - Preview template with "
-"no widgets.<br /><strong>Update</strong> - Update line.<br /><strong>Delete</"
-"strong> - Delete template.<br /><strong>Download</strong> - Download "
-"template with zip format compressed. The compressed file can be upload by "
-"Template Upload area."
+"You can operate below.<br /><strong>Delete</strong> - Delete template.<br /"
+"><strong>Preview</strong> - Preview template with no widgets.<br /"
+"><strong>Download</strong> - Download template with zip format compressed. "
+"The compressed file can be upload by Template Upload area."
 msgstr ""
-"各種操作を行います。<br />●プレビュー<br />テンプレートがプレビューできます。"
-"<br />●更新<br />この一覧で変更した値を保存します。<br />●削除<br />テンプ"
-"レートをシステムから削除します。<br />●ダウンロード<br />テンプレートをZIP圧"
-"縮形式でダウンロードします。このファイルはそのまま「テンプレートアップロー"
-"ド」からシステムへインストールできる形式です。"
+"各種操作を行います。<br />●削除<br />テンプレートをシステムから削除します。"
+"<br />●プレビュー<br />テンプレートがプレビューできます。<br />●ダウンロード"
+"<br />テンプレートをZIP圧縮形式でダウンロードします。このファイルはそのまま"
+"「テンプレートアップロード」からシステムへインストールできる形式です。"
 
 #: ../help/help_templist.php:63
 msgid "Template Upload"
