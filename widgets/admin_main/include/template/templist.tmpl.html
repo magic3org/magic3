@@ -125,9 +125,7 @@ $(function(){
 	    <td><input type="checkbox" name="item{NO}_isdefault" onchange="changeDefault('{ID}');" {IS_DEFAULT} /></td>
 	    <td>{UPDATE_DT}</td>
 	    <td>
-	    <input type="button" class="button" onclick="deleteline('{ID}');" value="{LABEL_DELETE}" {DELETE_BUTTON} />
-		<input type="button" class="button" onclick="previewInOtherWindow('{ID}');" value="{LABEL_PREVIEW}" {PREVIEW_BUTTON} />
-		<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadTemplate('{ID}');" {DOWNLOAD_DISABLED}>{DOWNLOAD_IMAGE}</a>
+		{DELETE_BUTTON} {PREVIEW_BUTTON} {DOWNLOAD_BUTTON}
 	    </td>
 	</tr>
 	</patTemplate:tmpl>

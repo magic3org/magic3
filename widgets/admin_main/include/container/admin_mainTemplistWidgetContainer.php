@@ -486,7 +486,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// デフォルトテンプレート
 		$defaultCheck = '';
-		if ($fetchedRow['tm_id'] == $this->defalutTemplate){
+		if ($templateId == $this->defalutTemplate){
 			$defaultCheck = 'checked ';
 		}
 		if (!$isExistsTemplate) $defaultCheck .= 'disabled';		// テンプレートが存在しないときは使用不可
@@ -543,18 +543,24 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 				$formatType .= $version;
 			}
 		}
-		
-		// ボタンの状態
-		$downloadDisabled = '';
+
+		// 削除ボタン
+		$eventAttr = 'onclick="deleteline(\'' . $templateId . '\');"';
+		$deleteButtonTag = $this->gDesign->createTrashButton(''/*同画面*/, $this->_('Delete'), ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+		// プレビューボタン
+		$eventAttr = 'onclick="previewInOtherWindow(\'' . $templateId . '\');"';
+		$previewButtonTag = $this->gDesign->createPreviewButton(''/*同画面*/, $this->_('Preview'), ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+		// ダウンロードボタン
+		$downloadDisabled = '';// ボタンの状態
 		if (!$isExistsTemplate) $downloadDisabled = 'disabled';
-		
 		$downloadImg = $this->getUrl($this->gEnv->getRootUrl() . self::DOWNLOAD_ZIP_ICON_FILE);
 		if (empty($downloadDisabled)){
 			$downloadStr = 'ダウンロード';
 		} else {
 			$downloadStr = 'ダウンロード不可';
 		}
-		$downloadImage = '<img src="' . $downloadImg . '" width="32" height="32" border="0" alt="' . $downloadStr . '" title="' . $downloadStr . '" />';
+		$downloadButtonTag = '<img src="' . $downloadImg . '" width="32" height="32" alt="' . $downloadStr . '" />';
+		$downloadButtonTag = '<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadTemplate(\'' . $templateId . '\');" rel="m3help" data-container="body" title="' . $downloadStr . '" ' . $downloadDisabled . '>' . $downloadButtonTag . '</a>';
 		
 		$row = array(
 			'no' => $index + 1,													// 行番号
@@ -566,13 +572,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 			'update_dt' => $this->convertToDispDateTime($fetchedRow['tm_create_dt']),	// 更新日時
 			'is_default' => $defaultCheck,										// デフォルトテンプレートかどうか
 			'image_tag' => $imageTag,		// 画像
-//			'download_button' => $downloadButton,		// ダウンロードボタン
-			'download_image' => $downloadImage,								// ダウンロードボタンの画像
-			'download_disabled' => $downloadDisabled,								// ダウンロードボタンの使用可否
-			'label_preview' => $this->_('Preview'),			// プレビュー
-			'label_update' => $this->_('Update'),			// 更新
-			'label_delete' => $this->_('Delete'),			// 削除
-			'label_download' => $this->_('Download')			// ダウンロード
+			'delete_button'		=> $deleteButtonTag,		// 削除ボタン
+			'preview_button'	=> $previewButtonTag,		// プレビューボタン
+			'download_button' 	=> $downloadButtonTag								// ダウンロードボタン
 		);
 		$this->tmpl->addVars('templist', $row);
 		$this->tmpl->parseTemplate('templist', 'a');
