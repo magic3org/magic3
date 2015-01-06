@@ -3550,8 +3550,8 @@ class PageManager extends Core
 						$titleStr = '編集終了';
 						$linkUrl = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BACKUP_URL);		// 退避していたURLを取得
 						if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
-						$editTag = '<div class="m3editend"><a href="' . convertUrlToHtmlEntity($linkUrl) . '">';
-						$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" data-placement="bottom" /></a></div>';
+						$editTag = '<div class="m3editend"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
+						$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" /></a></div>';
 						$linkStr .= $editTag;
 						
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
@@ -3562,7 +3562,7 @@ class PageManager extends Core
 						$titleStr = '管理画面へ遷移';
 						$linkUrl = $gEnvManager->getDefaultAdminUrl();
 						$adminTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						$adminTag .= '<img src="' . $rootUrl . self::ADMIN_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
+						$adminTag .= '<img src="' . $rootUrl . self::ADMIN_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 					
 						// 編集ボタン
 						$titleStr = '画面を編集';
@@ -3571,7 +3571,7 @@ class PageManager extends Core
 						$linkUrl .= '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
 						$linkUrl .= '&' . M3_REQUEST_PARAM_BACKUP_URL . '=' . urlencode($gEnvManager->getCurrentRequestUri());			// URL退避用
 						$editTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						$editTag .= '<img src="' . $rootUrl . self::EDIT_PAGE_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
+						$editTag .= '<img src="' . $rootUrl . self::EDIT_PAGE_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 						
 						// ログアウトボタン
 						$titleStr = 'ログアウト';
@@ -3583,7 +3583,7 @@ class PageManager extends Core
 //						}
 						$linkUrl = createUrl($linkUrl, M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_LOGOUT);
 						$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" title="' . $titleStr . '" /></a></li>';
+						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 					
 						$linkStr .= '<div id="m3slidepanel">';
 						$linkStr .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';
@@ -3626,18 +3626,18 @@ class PageManager extends Core
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var html = \'\';' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'if (useconfig == 1){' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
-										'html += \'<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\\\'\' + widgetId + \'\\\', \' + configId + \', \' + serialNo + \');return false;" >' .
-										'<img src="' . $rootUrl . self::CONFIG_ICON32_FILE . '" alt="ウィジェット設定" title="ウィジェット設定" width="32" height="32" /></a>\';' . M3_NL;
+										'html += \'<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\\\'\' + widgetId + \'\\\', \' + configId + \', \' + serialNo + \');return false;" rel="m3help" data-container="body" title="ウィジェット設定">' .
+										'<img src="' . $rootUrl . self::CONFIG_ICON32_FILE . '" alt="ウィジェット設定" width="32" height="32" /></a>\';' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
 					if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 
-											'html += \'<a href="javascript:void(0);" onclick="m3ShowAdjustWindow(\' + configId + \', \' + serialNo + \', M3_PAGE_ID, M3_PAGE_SUB_ID);return false;" >' .
-											'<img src="' . $rootUrl . self::ADJUST_ICON32_FILE . '" alt="タイトル・位置調整" title="タイトル・位置調整" width="32" height="32" /></a>\';' . M3_NL;
+											'html += \'<a href="javascript:void(0);" onclick="m3ShowAdjustWindow(\' + configId + \', \' + serialNo + \', M3_PAGE_ID, M3_PAGE_SUB_ID);return false;" rel="m3help" data-container="body" title="タイトル・位置調整">' .
+											'<img src="' . $rootUrl . self::ADJUST_ICON32_FILE . '" alt="タイトル・位置調整" width="32" height="32" /></a>\';' . M3_NL;
 					}
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'if (html != \'\'){' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 
-											'html = \'<div class="m3tooltip" style="display:none;">\' + html + \'<a class="m3closebox" href="javascript:void(0);">' . 
-											'<img src="' . $rootUrl . self::CLOSE_BOX_ICON32_FILE . '" alt="閉じる" title="閉じる" width="11" height="11" /></a></div>\';' . M3_NL;
+											'html = \'<div class="m3tooltip" style="display:none;">\' + html + \'<a class="m3closebox" href="javascript:void(0);" rel="m3help" data-container="body" title="閉じる">' . 
+											'<img src="' . $rootUrl . self::CLOSE_BOX_ICON32_FILE . '" alt="閉じる" width="11" height="11" /></a></div>\';' . M3_NL;
 											
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).append(html);' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
@@ -4417,14 +4417,17 @@ class PageManager extends Core
 						(in_array($widgetContentType, $this->_getAllContentType()) || in_array($widgetContentType, $this->_getAllFeatureType()))){
 				//$title = 'ウィジェット配置注意';
 				$title = 'ページ属性と不一致';
-				$configImg .= '<img src="' . $rootUrl . self::NOTICE_ICON_FILE . '" alt="' . $title . '" title="' . $title . '" />&nbsp;';
+				$configImg .= '<span rel="m3help" data-container="body" title="' . $title . '"><img src="' . $rootUrl . self::NOTICE_ICON_FILE . '" alt="' . $title . '" /></span>&nbsp;';
 			}
 			if ($rows[$i]['wd_has_admin']){
 				$hasAdmin = '1';
 				$title = 'ウィジェット設定';
-				$configImg .= '<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', \'' . $configId . '\', \'' . $serial . '\');return false;" >' .
-								'<img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" alt="' . $title . '" title="' . $title . '" /></a>&nbsp;';
+				$configImg .= '<a href="javascript:void(0);" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', \'' . $configId . '\', \'' . $serial . '\');return false;" rel="m3help" data-container="body" title="' . $title . '">' .
+								'<img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" alt="' . $title . '"/></a>&nbsp;';
 			}
+			// 表示順
+			$configImg .= '<span rel="m3help" data-container="body" title="表示順">' . $widgetIndex . '</span>';
+			
 			$shared = '0';		// 共通属性があるかどうか
 			$sharedClassName = '';
 			if (empty($rows[$i]['pd_sub_id'])){
@@ -4460,7 +4463,7 @@ class PageManager extends Core
 			$contents .= '<dl class="m3_widget m3_widget_sortable" id="' . $widgetTag . '" ' . $m3Option . ' >' . M3_NL;
 			$contents .= '<dt class="m3_widget_with_check_box ' . $sharedClassName . '"><div class="m3widgettitle">' . $widgetMark . $rows[$i]['wd_name'] . '</div>' . $operationMenu . '</dt>' . M3_NL;
 			$contents .= '<dd><table width="100%"><tr valign="top"><td width="35">' . $imageTag . '</td><td>' . $desc . '</td></tr></table>' . M3_NL;
-			$contents .= '<table width="100%"><tr><td>' . $configName . '</td><td align="right">' . $configImg . $widgetIndex . '</td></tr></table></dd>' . M3_NL;
+			$contents .= '<table width="100%"><tr><td>' . $configName . '</td><td align="right">' . $configImg . '</td></tr></table></dd>' . M3_NL;
 			$contents .= '</dl>' . M3_NL;
 		}
 		return $contents;
