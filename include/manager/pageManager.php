@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -184,7 +184,7 @@ class PageManager extends Core
 	
 	// Magic3用スクリプト
 	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.7.14.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
-	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.5.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
+	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.6.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.5.js';			// 一般、管理機能共通スクリプト
 //	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.2.js';			// 一般画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
@@ -3682,10 +3682,10 @@ class PageManager extends Core
 					// コンテキストメニューを作成
 					$this->initScript .= M3_INDENT_SPACE . 'var widgetWindow = \'<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">\';' . M3_NL;
 					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<ul>\';' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wconfig"><img src="\' + M3_ROOT_URL + \'/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>\';' . M3_NL;
 					if ($gEnvManager->isSystemAdmin()){		// 位置調整は管理者権限がある場合のみ有効(管理ウィジェットの機能のため)
 						$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wadjust"><img src="\' + M3_ROOT_URL + \'/images/system/adjust_widget.png" />&nbsp;<span>タイトル・位置調整</span></li>\';' . M3_NL;
 					}
-					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'<li id="m3_wconfig"><img src="\' + M3_ROOT_URL + \'/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>\';' . M3_NL;
 					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</ul>\';' . M3_NL;
 					$this->initScript .= M3_INDENT_SPACE . 'widgetWindow += \'</div>\';' . M3_NL;
 					$this->initScript .= M3_INDENT_SPACE . '$("body").append(widgetWindow);' . M3_NL;
@@ -4445,8 +4445,8 @@ class PageManager extends Core
 			$operationMenu .= '<a class="m3widgetdropdownbutton" data-dropdown="#' . $dropdownMenuId . '" href="#" data-horizontal-offset="4"><b class="caret"></b></a>';
 			$operationMenu .= '<div id="' . $dropdownMenuId . '" class="m3dropdown m3dropdown-tip m3dropdown-relative m3dropdown-anchor-right">';
 			$operationMenu .= '<ul class="m3dropdown-menu">';
-			$operationMenu .= '<li class="m3_wadjust"><a href="#"><img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" /> <span>タイトル・位置調整</span></a></li>';
 			if ($hasAdmin) $operationMenu .= '<li class="m3_wconfig"><a href="#"><img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" /> <span>ウィジェットの設定</span></a></li>';
+			$operationMenu .= '<li class="m3_wadjust"><a href="#"><img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" /> <span>タイトル・位置調整</span></a></li>';
 			if ($shared){
 				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>ページ共通属性を解除</span></a></li>';
 			} else {

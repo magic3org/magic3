@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -443,8 +443,8 @@
 		// コンテキストメニュー
 		widgetWindow += '<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">';
 		widgetWindow += '<ul>';
-		widgetWindow += '<li id="m3_wadjust"><img src="' + M3_ROOT_URL + '/images/system/adjust_widget.png" />&nbsp;<span>タイトル・位置調整</span></li>';
 		widgetWindow += '<li id="m3_wconfig"><img src="' + M3_ROOT_URL + '/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>';
+		widgetWindow += '<li id="m3_wadjust"><img src="' + M3_ROOT_URL + '/images/system/adjust_widget.png" />&nbsp;<span>タイトル・位置調整</span></li>';
 		widgetWindow += '<li id="m3_wshared"><img src="' + M3_ROOT_URL + '/images/system/shared.png" />&nbsp;<span>ページ共通属性</span></li>';
 		widgetWindow += '<li id="m3_wdelete"><img src="' + M3_ROOT_URL + '/images/system/delete.png" />&nbsp;<span>このウィジェットを削除</span></li>';
 		widgetWindow += '</ul>';
