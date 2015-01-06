@@ -658,15 +658,24 @@ function m3CancelSafeContentEdit()
 /**
  * ヘルプを設定
  *
+ * @param object parentObj		親オブジェクト
  * @return なし
  */
-function m3SetHelp()
+function m3SetHelp(parentObj)
 {
-    if (jQuery().cluetip){
-		$('span.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:500, timeout:0 }});
-		$('div.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:500, timeout:0 }});
+	if (parentObj){
+	    if (jQuery().cluetip){
+			parentObj.find('span.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:500, timeout:0 }});
+			parentObj.find('div.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:500, timeout:0 }});
+		}
+	    if (jQuery().tooltip) parentObj.find('[rel=m3help]').tooltip({ 'delay': { show: 1000, hide: 0 }});
+	} else {
+	    if (jQuery().cluetip){
+			$('span.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:500, timeout:0 }});
+			$('div.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:500, timeout:0 }});
+		}
+	    if (jQuery().tooltip) $('[rel=m3help]').tooltip({ 'delay': { show: 1000, hide: 0 }});
 	}
-    if (jQuery().tooltip) $('[rel=m3help]').tooltip({ 'delay': { show: 1000, hide: 0 }});
 }
 /**
  * ファイル選択ボタンを設定
