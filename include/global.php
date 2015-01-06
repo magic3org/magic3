@@ -10,9 +10,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    Release 2.9.x SVN: $Id$
+ * @version    Release 2.10.x SVN: $Id$
  * @link       http://www.magic3.org
  */
 if (defined("M3_SYSTEM_DEFINE_INCLUDED")) return;
@@ -50,8 +50,8 @@ define('M3_TITLE_BRACKET_END',		'」');					// タイトルを括弧表記する
 // ########## システム関係 ##########
 // システム基本情報
 define('M3_SYSTEM_NAME',			'Magic3');		// システム名称
-define('M3_SYSTEM_VERSION',			'2.10.6');		// システムのバージョン
-define('M3_SYSTEM_RELEASE_DATE',	'2014/12/29');	// システムのリリース日付
+define('M3_SYSTEM_VERSION',			'2.10.7');		// システムのバージョン
+define('M3_SYSTEM_RELEASE_DATE',	'2014/1/6');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
 define('M3_SYSTEM_MIN_MEMORY',		'16M');			// 最小メモリ使用量
