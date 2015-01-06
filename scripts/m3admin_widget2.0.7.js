@@ -118,6 +118,9 @@
 									}
 									setupSortable();
 				
+									// ヘルプを設定
+									m3SetHelp();
+				
 									// 関連画面を更新
 									if (window.parent.m3UpdateByChildWindow) window.parent.m3UpdateByChildWindow();
 								},
