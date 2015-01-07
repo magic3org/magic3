@@ -70,6 +70,20 @@ class admin_admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		return 'admin.tmpl.html';
 	}
 	/**
+	 * テンプレートの後処理
+	 *
+	 * テンプレートのデータ埋め込み(_assign())の後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
+	}
+	/**
 	 * テンプレートにデータ埋め込む
 	 *
 	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。

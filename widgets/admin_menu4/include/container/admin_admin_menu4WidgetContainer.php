@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -47,6 +47,20 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	function _setTemplate($request, &$param)
 	{	
 		return 'admin.tmpl.html';
+	}
+	/**
+	 * テンプレートの後処理
+	 *
+	 * テンプレートのデータ埋め込み(_assign())の後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 	/**
 	 * テンプレートにデータ埋め込む
