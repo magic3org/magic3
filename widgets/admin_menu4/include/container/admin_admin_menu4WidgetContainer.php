@@ -74,16 +74,17 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
+		$isHier = $request->trimValueOf('menu_type');
 		
-		if ($act == 'togglemenu'){		// メニュー管理画面を変更
+		if ($act == 'update'){		// 設定更新のとき
 			// メニュー情報を取得
-			$ret = $this->getMenuInfo($isHier, $itemId, $row);
+			$ret = $this->getMenuInfo($dummy, $itemId, $row);
 			if ($ret){
 				// メニュー管理画面を変更
-				if ($isHier){
-					$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
-				} else {
+				if ($isHier){		// 多階層の場合
 					$ret = $this->db->updateNavItemMenuType($itemId, self::TREE_MENU_TASK);
+				} else {
+					$ret = $this->db->updateNavItemMenuType($itemId, self::SINGLE_MENU_TASK);
 				}
 			}
 			if ($ret){
@@ -94,17 +95,18 @@ class admin_admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			}
 			$this->gPage->updateParentWindow();// 親ウィンドウを更新
 		} else {		// 初期表示の場合
-
+			$replaceNew = true;			// データ再取得
 		}
-		// メニュー情報を取得
-		$ret = $this->getMenuInfo($isHier, $itemId, $row);
-		if ($ret){
-			// 値を埋め込む
-			if ($isHier){		// 階層化メニューのとき
-				$this->tmpl->addVar("_widget", "menu_type_tree", 'checked');		// 多階層メニュー
-			} else {
-				$this->tmpl->addVar("_widget", "menu_type_single", 'checked');		// 単階層メニュー
-			}
+		
+		if ($replaceNew){		// データ再取得のとき
+			// メニュー情報を取得
+			$ret = $this->getMenuInfo($isHier, $itemId, $row);
+		}
+		// 値を埋め込む
+		if ($isHier){		// 階層化メニューのとき
+			$this->tmpl->addVar("_widget", "menu_type_tree", 'checked');		// 多階層メニュー
+		} else {
+			$this->tmpl->addVar("_widget", "menu_type_single", 'checked');		// 単階層メニュー
 		}
 	}
 	/**

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -13,31 +13,41 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function toggleMenu(){
-	if (!window.confirm('メニュー管理画面を変更しますか?')) return false;
-	document.main.act.value='togglemenu';
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
 	document.main.submit();
 	return true;
 }
+$(function(){
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main" class="form">
 <input type="hidden" name="act" />
-<table width="500"><tr><td>
-<table class="simple-table" width="100%">
+<h3 class="m3config_h">基本設定</h3>
+<div class="m3config_h_side_buttons pull-right">
+<div {_HELP_BUTTONS}>
+<div class="btn-group">
+    <a class="button" href="?task=editmenu" target="_blank">管理メニュー編集</a>
+</div>
+</div></div>
+<table id="mainconfig">
     <tbody>
-	<tr><td class="table-headside" colspan="3">メニューバー</td></tr>
     <tr>
-	    <td style="border-right-width:0;">メニュー管理タイプ変更</td><td style="border-left-width:0;border-right-width:0;"><input type="radio" name="menu_type" {MENU_TYPE_SINGLE} disabled />単階層メニュー<input type="radio" name="menu_type" {MENU_TYPE_TREE} disabled />多階層メニュー</td>
-	    <td align="right" style="border-left-width:0;"><input type="button" class="button" onclick="toggleMenu();" value="実行" /></td>
+	    <th>メニュー管理タイプ</th>
+		<td><div class="radio"><label><input type="radio" name="menu_type" value="0" {MENU_TYPE_SINGLE} />単階層</label></div>
+		<div class="radio"><label><input type="radio" name="menu_type" value="1" {MENU_TYPE_TREE} />多階層</label></div>
+		</td>
 	</tr>
-	<tr class="even"><td colspan="3"><a href="?task=editmenu&openby=other">管理メニュー編集</a></td></tr>
     </tbody>
 </table>
-</td></tr></table>
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

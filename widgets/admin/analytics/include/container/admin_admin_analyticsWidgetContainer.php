@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -49,7 +49,8 @@ class admin_admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 										array(	'name' => '訪問者数',		'value' => 'visitor'));
 										
 		// 期間タイプ
-		$this->termTypeArray = array(	array(	'name' => '30日',	'value' => '30day'),
+		$this->termTypeArray = array(	array(	'name' => '10日',	'value' => '10day'),
+										array(	'name' => '30日',	'value' => '30day'),
 										array(	'name' => '3ヶ月',	'value' => '3month'),
 										array(	'name' => '6ヶ月',	'value' => '6month'),
 										array(	'name' => '1年',	'value' => '1year'),
