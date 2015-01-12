@@ -40,7 +40,7 @@ class admin_commentConfigWidgetContainer extends admin_commentBaseWidgetContaine
 		parent::__construct();
 		
 		// 初期設定
-		$this->contentTypeArray = $this->gPage->getMainContentType();// コンテンツタイプ取得
+		$this->contentTypeArray = $this->gPage->getMainContentTypeInfo();// コンテンツタイプ取得
 		$this->langId = $this->gEnv->getDefaultLanguage();
 	}
 	/**

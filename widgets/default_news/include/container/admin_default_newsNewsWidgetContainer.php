@@ -457,7 +457,7 @@ class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidget
 		$contentName = self::UNKNOWN_CONTENT;
 		
 		// コンテンツタイプ名取得
-		$mainContentType = $this->gPage->getMainContentType();
+		$mainContentType = $this->gPage->getMainContentTypeInfo();
 		for ($i = 0; $i < count($mainContentType); $i++){
 			$contentTypeRow = $mainContentType[$i];
 			if ($contentTypeRow['value'] == $contentType){

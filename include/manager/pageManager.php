@@ -80,8 +80,8 @@ class PageManager extends Core
 	private $currentPageInfo;			// 現在のページのページ情報
 	private $configWidgetInfo;			// ウィジェット設定画面のウィジェットの情報
 	private $contentType = '';				// ページのコンテンツタイプ
-	private $mainContentType;				// 一般画面で使用する主要コンテンツタイプ
-	private $mainFeatureType;				// 一般画面で使用する主要機能タイプ
+	private $mainContentTypeInfo;				// 一般画面で使用する主要コンテンツタイプ
+	private $mainFeatureTypeInfo;				// 一般画面で使用する主要機能タイプ
 	private $rssVersion;					// RSSバージョン
 	private $rssChannel;				// RSSチャンネルデータ
 	private $selectedJQueryFilename;		// 使用対象のjQueryファイル
@@ -296,19 +296,19 @@ class PageManager extends Core
 		$this->rssVersion = self::DEFAULT_RSS_VERSION;					// RSSバージョン
 		
 		// 一般画面で使用する主要コンテンツタイプ
-		$this->mainContentType	 = array(	array(	'name' => '新着情報',					'value' => M3_VIEW_TYPE_NEWS),
-											array(	'name' => '会員情報',					'value' => M3_VIEW_TYPE_MEMBER),
-											array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
-											array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
-											array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
-											array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
-											array(	'name' => 'Wiki',						'value' => M3_VIEW_TYPE_WIKI),
-											array(	'name' => 'ユーザ作成コンテンツ',		'value' => M3_VIEW_TYPE_USER),
-											array(	'name' => 'イベント',					'value' => M3_VIEW_TYPE_EVENT),
-											array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO));
+		$this->mainContentTypeInfo	 = array(	array(	'name' => '新着情報',					'value' => M3_VIEW_TYPE_NEWS),
+												array(	'name' => '会員情報',					'value' => M3_VIEW_TYPE_MEMBER),
+												array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
+												array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
+												array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
+												array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
+												array(	'name' => 'Wiki',						'value' => M3_VIEW_TYPE_WIKI),
+												array(	'name' => 'ユーザ作成コンテンツ',		'value' => M3_VIEW_TYPE_USER),
+												array(	'name' => 'イベント情報',					'value' => M3_VIEW_TYPE_EVENT),
+												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO));
 		// 一般画面で使用する主要機能タイプ(「ダッシュボード」は含まない)
-		$this->mainFeatureType	 = array(	array(	'name' => '検索',						'value' => M3_VIEW_TYPE_SEARCH),
-											array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE));
+		$this->mainFeatureTypeInfo	 = array(	array(	'name' => '検索',						'value' => M3_VIEW_TYPE_SEARCH),
+												array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE));
 											
 		// URLパラメータ並び順
 		$this->urlParamOrder = array(
@@ -981,22 +981,42 @@ class PageManager extends Core
 		return $this->contentType;
 	}
 	/**
+	 * 一般画面で使用する主要コンテンツタイプの情報取得
+	 *
+	 * @return array			コンテンツタイプの情報の連想配列
+	 */
+	function getMainContentTypeInfo()
+	{
+		return $this->mainContentTypeInfo;				// 主要コンテンツタイプ
+	}
+	/**
 	 * 一般画面で使用する主要コンテンツタイプを取得
 	 *
 	 * @return array			コンテンツタイプの配列
 	 */
-	function getMainContentType()
+	function getMainContentTypes()
 	{
-		return $this->mainContentType;				// 主要コンテンツタイプ
+		// 「value」値のみ取得
+		return array_map(create_function('$a', 'return $a["value"];'), $this->mainContentTypeInfo);
+	}
+	/**
+	 * 一般画面で使用する主要機能タイプ情報を取得
+	 *
+	 * @return array			機能タイプの情報の連想配列
+	 */
+	function getMainFeatureTypeInfo()
+	{
+		return $this->mainFeatureTypeInfo;				// 主要機能タイプ
 	}
 	/**
 	 * 一般画面で使用する主要機能タイプを取得
 	 *
 	 * @return array			機能タイプの配列
 	 */
-	function getMainFeatureType()
+	function getMainFeatureTypes()
 	{
-		return $this->mainFeatureType;				// 主要機能タイプ
+		// 「value」値のみ取得
+		return array_map(create_function('$a', 'return $a["value"];'), $this->mainFeatureTypeInfo);
 	}
 	/**
 	 * 管理画面用のサブメニューバーの定義を設定

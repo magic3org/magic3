@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -32,8 +32,8 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		$this->mainContentType	= $this->gPage->getMainContentType();			// 主要コンテンツタイプ
-		$this->mainFeatureType	= $this->gPage->getMainFeatureType();			// 主要機能タイプ
+		$this->mainContentType	= $this->gPage->getMainContentTypeInfo();			// 主要コンテンツタイプ
+		$this->mainFeatureType	= $this->gPage->getMainFeatureTypeInfo();			// 主要機能タイプ
 		$this->pageIdArray		= $this->gEnv->getAllDefaultPageId();		// アクセスポイント
 	}
 	/**
@@ -221,16 +221,9 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 		$selectedContentType = array();
 		$menuItems = array(array(), array(), array());
 
-/*		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
-								M3_VIEW_TYPE_PRODUCT,				// 製品
-								M3_VIEW_TYPE_BBS,					// BBS
-								M3_VIEW_TYPE_BLOG,				// ブログ
-								M3_VIEW_TYPE_WIKI,				// Wiki
-								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
-								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー*/
 		// 主要コンテンツタイプと主要機能タイプを連結
-		$contentType = array_merge(array_map(create_function('$a', 'return $a["value"];'), $this->mainContentType), array_map(create_function('$a', 'return $a["value"];'), $this->mainFeatureType));
+//		$contentType = array_merge(array_map(create_function('$a', 'return $a["value"];'), $this->mainContentType), array_map(create_function('$a', 'return $a["value"];'), $this->mainFeatureType));
+		$contentType = array_merge($this->gPage->getMainContentTypes(), $this->gPage->getMainFeatureTypes());
 		$ret = $this->_mainDb->getContentWidgetOnPage($this->langId, $this->pageIdArray, $contentType, $rows);
 		if ($ret){
 			$widgetInfoRows = $rows;

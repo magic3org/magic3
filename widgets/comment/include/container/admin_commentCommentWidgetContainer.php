@@ -41,7 +41,7 @@ class admin_commentCommentWidgetContainer extends admin_commentBaseWidgetContain
 		parent::__construct();
 		
 		// 初期設定
-		$this->contentTypeArray = array_merge(array(array('name' => '[すべて]', 'value' => '')), $this->gPage->getMainContentType());// コンテンツタイプ取得
+		$this->contentTypeArray = array_merge(array(array('name' => '[すべて]', 'value' => '')), $this->gPage->getMainContentTypeInfo());// コンテンツタイプ取得
 		$this->langId = $this->gEnv->getDefaultLanguage();
 		$this->statusTypeArray = array(	array(	'name' => '未承認',	'value' => '0'),
 										array(	'name' => '非公開',	'value' => '1'),

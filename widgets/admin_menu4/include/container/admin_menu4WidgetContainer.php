@@ -521,14 +521,15 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	{
 		$menuItems = array(array(), array(), array());
 		$pageIdArray = array($this->gEnv->getDefaultPageId(), $this->gEnv->getDefaultMobilePageId(), $this->gEnv->getDefaultSmartphonePageId());
-		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
+/*		$contentType = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
 								M3_VIEW_TYPE_PRODUCT,				// 製品
 								M3_VIEW_TYPE_BBS,					// BBS
 								M3_VIEW_TYPE_BLOG,				// ブログ
 								M3_VIEW_TYPE_WIKI,				// Wiki
 								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
+								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー*/
+		$contentType = $this->gPage->getMainContentTypes();
 		$ret = $this->db->getEditWidgetOnPage($pageIdArray, $contentType, $rows);
 		if ($ret){
 			$rowCount = count($rows);
@@ -591,6 +592,18 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createContentMenu($deviceType, $isVisibleSite)
 	{
+		static $mainContentTypeArray;
+		
+		if (!isset($mainContentTypeArray)){
+			$mainContentTypeArray = array();
+			$mainContentTypeInfo = $this->gPage->getMainContentTypeInfo();		// 主要コンテンツタイプ情報
+			for ($i = 0; $i < count($mainContentTypeInfo); $i++){
+				$value = $mainContentTypeInfo[$i]['value'];
+				$name = $mainContentTypeInfo[$i]['name'];
+				$mainContentTypeArray[$value] = $name;
+			}
+		}
+
 		$menuTag = '';
 		$menu = $this->contentMenu[$deviceType];		// コンテンツ編集メニュー
 		$subMenu = $this->subContentMenu[$deviceType];	// サブコンテンツ編集メニュー
@@ -631,7 +644,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				if (empty($title)){
 					// コンテンツ単位でタイトルを取得
 					$contentType = $menu[$i]['wd_type'];
-					switch ($contentType){
+					$title = $mainContentTypeArray[$contentType];
+/*					switch ($contentType){
 						case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
 							$title = '汎用コンテンツ';
 							break;
@@ -659,7 +673,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 						default:
 							$title = '';
 							break;
-					}
+					}*/
 				}
 				if (empty($title)) $title = $menu[$i]['wd_name'];		// コンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;

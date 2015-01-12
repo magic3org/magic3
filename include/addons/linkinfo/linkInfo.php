@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -43,14 +43,15 @@ class linkInfo
 		// DBオブジェクト作成
 		$this->db = new linkInfoDb();
 		
-		$this->contentTypeArray = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
+/*		$this->contentTypeArray = array(	M3_VIEW_TYPE_CONTENT,				// 汎用コンテンツ
 								M3_VIEW_TYPE_PRODUCT,				// 製品
 								M3_VIEW_TYPE_BBS,					// BBS
 								M3_VIEW_TYPE_BLOG,				// ブログ
 								M3_VIEW_TYPE_WIKI,				// wiki
 								M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 								M3_VIEW_TYPE_EVENT,				// イベント
-								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー
+								M3_VIEW_TYPE_PHOTO);				// フォトギャラリー*/
+		$this->contentTypeArray = $gPageManager->getMainContentTypes();
 		$this->langId = $gEnvManager->getDefaultLanguage();
 		$this->accessPointType = array(	array('', 'PC用「/」'),
 										array('m', '携帯用「/m」'),
