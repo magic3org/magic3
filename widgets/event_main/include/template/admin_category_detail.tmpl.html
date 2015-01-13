@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -36,44 +36,45 @@ function cancelItem(){
     document.main.submit();
     return true;
 }
+$(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="category_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<table width="90%">
-<tr><td>
-<label><span {_HELP_CATEGORY_DETAIL}>カテゴリー詳細</span></label>
-</td>
-<td align="right"><span {_HELP_CATEGORY_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table">
+<h3 class="m3config_h"><span {_HELP_CATEGORY_DETAIL}>カテゴリー詳細</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_CATEGORY_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div></div>
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_CATEGORY_ID}>ID</span></td>
-	    <td width="150">{ID}</td>
-	    <td class="table-headside" width="150"><span {_HELP_CATEGORY_NAME}>名前</span></td>
-	    <td width="300"><input type="text" name="item_name" value="{NAME}" size="30" maxlength="20" style="width:100%;" /></td>
+    <tr>
+	    <th><span {_HELP_CATEGORY_ID}>ID</span></th>
+	    <td style="width:150px;">{ID}</td>
+	    <th><span {_HELP_CATEGORY_NAME}>名前</span></th>
+	    <td><input type="text" name="item_name" class="form-control" value="{NAME}" size="30" maxlength="20" /></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_CATEGORY_VISIBLE}>公開</span></td>
+    <tr>
+	    <th><span {_HELP_CATEGORY_VISIBLE}>公開</span></th>
 	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>
-	    <td class="table-headside"><span {_HELP_CATEGORY_VISIBLE}>表示順</span></td>
-	    <td><input type="text" name="item_index" value="{INDEX}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <th><span {_HELP_CATEGORY_VISIBLE}>表示順</span></th>
+	    <td><div class="col-sm-2 m3config_item"><input type="text" name="item_index" class="form-control" value="{INDEX}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside">更新者</td>
+    <tr>
+	    <th>更新者</th>
 	    <td>{UPDATE_USER}</td>
-	    <td class="table-headside">更新日時</td>
+	    <th>更新日時</th>
 	    <td>{UPDATE_DT}</td>
 	</tr>
-	<tr class="even">
-	<td colspan="4" align="right">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
@@ -81,12 +82,7 @@ function cancelItem(){
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	</td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

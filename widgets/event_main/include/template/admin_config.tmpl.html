@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,63 +20,62 @@ function updateItem(){
 	return true;
 }
 $(function(){
-	// カラー設定
-	m3_tableWithScrollbar('item_list', -1, 0);
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
 	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('top_contents', 200/* 高さ */);
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <input type="hidden" name="task" value="config" />
-<br>
-<table width="90%"><tr><td>
-<table id="item_list" class="simple-table" style="margin:0 auto;">
-<caption><span {_HELP_CONFIG_TITLE}>イベント設定</span></caption>
+<h3 class="m3config_h"><span {_HELP_CONFIG_TITLE}>基本設定</span></h3>
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_CONFIG_FUNCTION}>機能</span></td>
-	    <td><label class="item_list_inline"><input type="checkbox" name="item_use_calendar" {USE_CALENDAR} />カレンダー</label>
+	    <th><span {_HELP_CONFIG_FUNCTION}>機能</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_calendar" {USE_CALENDAR} />カレンダー</label></div>
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_EVENT}>イベント記事</span></td>
-	    <td><label class="item_list_inline">表示数：<input type="text" name="entry_view_count" value="{VIEW_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></label>
-		<label class="item_list_inline">表示順：<select name="entry_view_order">
+	    <th><span {_HELP_CONFIG_EVENT}>イベント記事</span></th>
+	    <td>
+		<div class="form-control-static col-sm-2 m3config_item">表示数：</div><div class="col-sm-1 m3config_item"><input type="text" id="entry_view_count" name="entry_view_count" class="form-control" value="{VIEW_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div>
+		<div class="form-control-static col-sm-2 m3config_item">表示順：</div>
+		<div class="col-sm-2 m3config_item">
+		<select name="entry_view_order" class="form-control">
 	        <option value="0" {VIEW_ORDER_INC_SELECTED}>昇順</option>
 		<option value="1" {VIEW_ORDER_DEC_SELECTED}>降順</option>
-	    </select></label></td>
+	    </select></div></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリ数</span></td>
-	    <td><input type="text" name="category_count" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <th><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリ数</span></th>
+	    <td><div class="col-sm-1 m3config_item"><input type="text" name="category_count" class="form-control" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_RECEIVE_COMMENT}>コメント</span></td>
-	    <td><div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></div>
-	    <div class="item_list_block"><label class="item_list_inline"><span {_HELP_CONFIG_MAX_COMMENT_LENGTH}>最大文字数：</span><input type="text" name="max_comment_length" value="{MAX_COMMENT_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></label></div></td>
+	    <th><span {_HELP_CONFIG_RECEIVE_COMMENT}>コメント</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></div>
+	    <div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_MAX_COMMENT_LENGTH}>最大文字数：</span></div><div class="col-sm-2 m3config_item"><input type="text" name="max_comment_length" class="form-control" value="{MAX_COMMENT_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_MESSAGE}>メッセージ</span></td>
-	    <td>予定イベントなし時：<input type="text" name="item_msg_no_entry_in_future" value="{MSG_NO_ENTRY_IN_FUTURE}" size="60" maxlength="200" style="width:80%;" />
+	    <th><span {_HELP_CONFIG_MESSAGE}>メッセージ</span></th>
+	    <td>
+		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">予定イベントなし時：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_msg_no_entry_in_future" class="form-control" value="{MSG_NO_ENTRY_IN_FUTURE}" size="60" maxlength="200" /></div><div class="clearfix"></div></div>
         </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_TOP_CONTENTS}>トップコンテンツ</span></td>
-	    <td width="800"><textarea name="top_contents">{TOP_CONTENTS}</textarea></td>
+	    <th><span {_HELP_CONFIG_TOP_CONTENTS}>トップコンテンツ</span></th>
+	    <td class="ckeditor"><textarea name="top_contents">{TOP_CONTENTS}</textarea></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-<tr><td align="right">
+<div class="well m3config_update_buttons">
 <input type="button" class="button" onClick="updateItem()" value="更新" />
-</td></tr></table>
-
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

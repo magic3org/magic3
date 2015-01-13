@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainDb.php');
 
 class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 {
-	//protected $_db;			// DB接続オブジェクト
 	protected static $_mainDb;			// DB接続オブジェクト
 	protected static $_configArray;		// イベント定義値
 
@@ -28,6 +27,17 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const CALENDAR_LANG_FILE = '/jscalendar-1.0/lang/calendar-ja.js';	// カレンダー言語ファイル
 	const CALENDAR_SETUP_FILE = '/jscalendar-1.0/calendar-setup.js';	// カレンダーセットアップファイル
 	const CALENDAR_CSS_FILE = '/jscalendar-1.0/calendar-win2k-1.css';		// カレンダー用CSSファイル
+	
+	// 画面
+	const TASK_ENTRY			= 'entry';				// イベント記事(一覧)
+	const TASK_ENTRY_DETAIL		= 'entry_detail';		// イベント記事(詳細)
+	const TASK_HISTORY			= 'history';			// (未使用)イベント記事履歴
+	const TASK_COMMENT			= 'comment';			// イベント記事コメント(一覧)
+	const TASK_COMMENT_DETAIL	= 'comment_detail';		// イベント記事コメント(詳細)
+	const TASK_CATEGORY			= 'category';			// 記事カテゴリー(一覧)
+	const TASK_CATEGORY_DETAIL	= 'category_detail';	// 記事カテゴリー(詳細)
+	const TASK_CONFIG			= 'config';				// 基本設定
+	const DEFAULT_TASK			= 'entry';				// デフォルトのタスク(イベント記事(一覧))
 	
 	/**
 	 * コンストラクタ
@@ -63,8 +73,125 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = 'entry';
+		if (empty($task)) $task = self::DEFAULT_TASK;
 		
+		// パンくずリストの定義データ作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_ENTRY:				// イベント記事(一覧)
+				$titles[] = 'イベント記事管理';
+				$titles[] = '記事一覧';
+				break;
+			case self::TASK_ENTRY_DETAIL:		// イベント記事(詳細)
+				$titles[] = 'イベント記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_HISTORY:			// イベント記事履歴
+				$titles[] = 'イベント記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '詳細';
+				$titles[] = '履歴';
+				break;
+			case self::TASK_COMMENT:			// イベント記事コメント(一覧)
+				$titles[] = 'イベント記事管理';
+				$titles[] = 'コメント一覧';
+				break;
+			case self::TASK_COMMENT_DETAIL:		// イベント記事コメント(詳細)
+				$titles[] = 'イベント記事管理';
+				$titles[] = 'コメント一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_CATEGORY:			// 記事カテゴリー(一覧)
+				$titles[] = '基本';
+				$titles[] = '記事カテゴリー';
+				break;
+			case self::TASK_CATEGORY_DETAIL:	// 記事カテゴリー(詳細)
+				$titles[] = '基本';
+				$titles[] = '記事カテゴリー';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_CONFIG:				// 基本設定
+				$titles[] = '基本';
+				$titles[] = '基本設定';
+				break;
+		}
+		
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> 'イベント記事管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_ENTRY ||				// イベント記事(一覧)
+											$task == self::TASK_ENTRY_DETAIL ||		// イベント記事(詳細)
+											$task == self::TASK_HISTORY ||			// イベント記事履歴
+											$task == self::TASK_COMMENT ||			// イベント記事コメント(一覧)
+											$task == self::TASK_COMMENT_DETAIL		// イベント記事コメント(詳細)
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '記事一覧',
+								'task'		=> self::TASK_ENTRY,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_ENTRY ||			// イベント記事(一覧)
+													$task == self::TASK_ENTRY_DETAIL ||		// イベント記事(詳細)
+													$task == self::TASK_HISTORY				// イベント記事履歴
+												)
+							),
+							(Object)array(
+								'name'		=> 'コメント一覧',
+								'task'		=> self::TASK_COMMENT,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_COMMENT ||			// イベント記事コメント(一覧)
+													$task == self::TASK_COMMENT_DETAIL		// イベント記事コメント(詳細)
+												)
+							)
+						)
+					),
+					(Object)array(
+						'name'		=> '基本',
+						'task'		=> self::TASK_CONFIG,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_CATEGORY ||			// 記事カテゴリー(一覧)
+											$task == self::TASK_CATEGORY_DETAIL ||	// 記事カテゴリー(詳細)
+											$task == self::TASK_CONFIG					// 基本設定
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '記事カテゴリー',
+								'task'		=> self::TASK_CATEGORY,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CATEGORY ||			// 記事カテゴリー(一覧)
+													$task == self::TASK_CATEGORY_DETAIL		// 記事カテゴリー(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> '基本設定',
+								'task'		=> self::TASK_CONFIG,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CONFIG					// 基本設定
+												)
+							)
+						)
+					)
+				);
+		
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
+/*
 		// パンくずリストを作成
 		switch ($task){
 			case 'entry':		// イベント記事
@@ -165,6 +292,7 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . 'イベント' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+		*/
 	}
 }
 ?>
