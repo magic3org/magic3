@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -652,8 +652,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
 			
 			// デフォルト言語を最初に登録
-			$this->tmpl->addVar("default_lang", "default_lang", $defaultLangName);
-			$this->tmpl->setAttribute('default_lang', 'visibility', 'visible');
+//			$this->tmpl->addVar("default_lang", "default_lang", $defaultLangName);
+//			$this->tmpl->setAttribute('default_lang', 'visibility', 'visible');
 			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
 		} else {
 			$this->tmpl->addVar('_widget', 'id', $this->entryId);

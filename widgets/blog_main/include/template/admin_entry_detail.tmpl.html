@@ -103,12 +103,38 @@ function previewInOtherWindow()
 	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
 	return true;
 }
+function editEntry(serial){
+	document.main.entryid.value = '';		// 値キャンセル
+	document.main.task.value = 'entry_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
+}
+function setStatusColor(){
+	var status = $('#item_status').val();
+	if (status == 2){		// 公開状態のとき
+		$('#status_field').removeClass('warning').addClass('success');
+	} else {
+		$('#status_field').removeClass('success').addClass('warning');
+	}
+}
 $(function(){
 	// 編集中の離脱を防止
 	m3SetSafeContentEdit();
 	
-	$("#entryhtml").tabs();
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
 	
+	// タブを作成
+	$("#entryhtml").tabs();
+		
+	// 編集状態メニューのイベント設定
+	$('#item_status').change(function() {
+		setStatusColor();
+	});
+	setStatusColor();
+	
+	// カレンダー作成
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
@@ -131,31 +157,6 @@ $(function(){
 	<patTemplate:tmpl name="show_next_button" visibility="hidden">
 	m3SetNextButtonEvent(editEntry, {SERIAL});
 	</patTemplate:tmpl>
-});
-function editEntry(serial){
-	document.main.entryid.value = '';		// 値キャンセル
-	document.main.task.value = 'entry_detail';
-	document.main.act.value = 'edit';
-	document.main.serial.value = serial;
-	document.main.submit();
-}
-function setStatusColor(){
-	var status = $('#item_status').val();
-	if (status == 2){		// 公開状態のとき
-		$('#status_field').removeClass('warning').addClass('success');
-	} else {
-		$('#status_field').removeClass('success').addClass('warning');
-	}
-}
-$(function(){
-	// テーブルを作成
-	m3SetConfigTable('mainconfig');
-	
-	// 編集状態メニューのイベント設定
-	$('#item_status').change(function() {
-		setStatusColor();
-	});
-	setStatusColor();
 });
 //]]>
 </script>
