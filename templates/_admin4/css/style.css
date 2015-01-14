@@ -1,56 +1,3 @@
-/* General */
-/*label {
-	font-weight: bold;
-}*/
-/*
-img
-{
-	border:0;
-}
-legend, label
-{
-	border: none;
-	margin: 0;
-	padding: 0;
-}*/
-/*
-fieldset legend span {
-	font-weight: bold;
-	font-size: 85%;
-}*/
-/* for Bootstrap
-input, select, textarea {
-	margin: 1px 0;
-}*/
-/*
-input[type="checkbox"] {
-	margin-right: 2px;
-}
-input[type="image"]:disabled {
-	cursor: default;
-}*/
-/*
-a:link, a:visited {
-color: #333;
-	font-weight      : bold;
-	text-decoration  : none;
-}
-*/
-/*
-a {
-	color: #0088cc;
-	text-decoration: none;
-}
-
-a:hover {
-	color: #005580;
-	text-decoration: underline;
-}*/
-/*
-a:hover {
-	color: #FF0000;
-	text-decoration  : none;
-}*/
 /****** 管理画面全体 *****/
 .m3admin_container {
 	margin:0 auto;
@@ -464,45 +411,7 @@ background-color: #0081c2;
 .m3help { cursor: help; }
 i[rel="m3help"] { cursor: default; }
 span[rel="m3help"] { cursor: default; }
-/****** sortable box ******/
-/*.sortable-box {
-	background-color:#FFF;
-	border:1px solid #555;
-	color:#222;
-	font-size:12px;
-	margin:0 15px 15px 0;
-	padding:0 10px 10px;
-	width:175px;
-}
-.sortable-box h1 {
-	background-color:#555;
-	border-top:3px solid #666;
-	font-size:12px;
-	margin:0 -10px 10px;
-	line-height:2;
-	padding:0 10px;
-}*/
-/*
-.sortable-box-item {
-	color:#222;
-	margin:10px 0;
-	border:1px solid #aaa;
-	cursor:move;
-}
-.sortable-box-item dt {
-	background-color:#666;
-	height:2em;
-	line-height:2;
-	padding:0 6px;
-	position:relative;
-}
-.sortable-box-item dd {
-	background-color:#FFF;
-	margin:0;
-	padding:3px 6px;
-	cursor:default;
-}
-*/
+
 /****** edit menu ******/
 .menulist_frame {
 	background-color:#FFF;
@@ -640,6 +549,7 @@ span[rel="m3help"] { cursor: default; }
 	left: 0px;
 	right: 0px;
 }
+/* テーブル */
 .m3config_table {
 	margin: 0 auto 15px auto;
 	width: 950px;
@@ -650,9 +560,9 @@ span[rel="m3help"] { cursor: default; }
 .m3config_table th.select {
 	width: 50px;
 }
-.m3config_table td.select {
+/*.m3config_table td.select {
 	text-align: center;
-}
+}*/
 .m3config_table th.status {
 	width: 50px;
 }
