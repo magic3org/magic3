@@ -28,6 +28,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	const ICON_SIZE = 16;		// アイコンのサイズ
 //	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const CATEGORY_NAME_SIZE = 20;			// カテゴリー名の最大文字列長
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
@@ -215,6 +216,12 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		// 総数を取得
 		$totalCount = self::$_mainDb->getEntryItemCount($search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId);
 
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+/*
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
@@ -232,7 +239,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
 		
 		// 記事項目リストを取得
 		self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'));

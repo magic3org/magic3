@@ -26,7 +26,8 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $entryArray = array();		// 表示されている項目の記事ID
 	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
-	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT	= 20;			// 最大リスト表示数
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const CATEGORY_COUNT = 2;				// 記事カテゴリーの選択可能数
 	const COMMENT_SIZE = 40;			// コメント内容の最大文字列長
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
@@ -183,7 +184,13 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 			$totalCount = $this->db->getCommentItemCount($search_startDt, $endDt, $search_keyword, $this->langId, $blogId);
 		}
 
-		// 表示するページ番号の修正
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		
+/*		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
@@ -200,7 +207,7 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
 		
 		// 記事項目リストを取得
 		if ($this->gEnv->isSystemManageUser()){		// システム運用ユーザのときはすべてのブログにアクセス可能

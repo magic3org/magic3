@@ -38,7 +38,9 @@ $(function(){
     <tbody>
     <tr>
 	    <th><span {_HELP_CONFIG_FUNCTION}>機能</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_calendar" {USE_CALENDAR} />カレンダー</label></div>
+	    <td>
+		<div class="checkbox"><label><input type="checkbox" name="item_use_calendar" {USE_CALENDAR} />カレンダーを使用</label></div>
+		<div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></div>
 	    </td>
 	</tr>
     <tr>
@@ -58,7 +60,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_RECEIVE_COMMENT}>コメント</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></div>
+	    <td>
 	    <div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_MAX_COMMENT_LENGTH}>最大文字数：</span></div><div class="col-sm-2 m3config_item"><input type="text" name="max_comment_length" class="form-control" value="{MAX_COMMENT_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
     <tr>

@@ -55,15 +55,17 @@ $(function(){
 
 <table id="mainconfig">
     <tbody>
+	<tr>
+	    <th><span {_HELP_COMMENT_NAME}>コメントタイトル</span></th>
+	    <td colspan="3"><input type="text" name="item_name" class="form-control" value="{NAME}" size="60" maxlength="60" /></td>
+	</tr>
     <tr>
 	    <th><span {_HELP_COMMENT_ENTRY_NAME}>記事タイトル</span></th>
-	    <td style="width:200px;">{ENTRY_TITLE}</td>
-	    <th><span {_HELP_COMMENT_NAME}>コメントタイトル</span></th>
-	    <td><input type="text" name="item_name" class="form-control" value="{NAME}" size="60" maxlength="60" /></td>
+	    <td colspan="3"><div class="form-control-static m3config_item">{ENTRY_TITLE}</div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_COMMENT_USER}>投稿者</span></th>
-	    <td><input type="text" name="item_reg_user" class="form-control" value="{REG_USER}" size="30" maxlength="50" /></td>
+	    <td style="width:250px;"><input type="text" name="item_reg_user" class="form-control" value="{REG_USER}" size="30" maxlength="50" /></td>
 	    <th><span {_HELP_COMMENT_DT}>投稿日時</span></th>
 	    <td>{ENTRY_DT}</td>
 	</tr>
@@ -74,7 +76,7 @@ $(function(){
     <tr>
 	    <th><span {_HELP_COMMENT_CONTENT}>コメント内容</span></th>
 	    <td colspan="3">
-	    <textarea name="item_html" class="form-control" style="height:200px;">{HTML}</textarea>
+	    <textarea name="item_html" class="form-control" rows="4">{HTML}</textarea>
 	    </td>
 	</tr>
 	<tr>
@@ -83,9 +85,9 @@ $(function(){
 	</tr>
 	<tr>
 	    <th>更新者</th>
-	    <td><div class="form-control-static m3config_item" >{UPDATE_USER}</div></td>
+	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
 	    <th>更新日時</th>
-	    <td><div class="form-control-static m3config_item" >{UPDATE_DT}</div></td>
+	    <td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
     </tbody>
 </table>
