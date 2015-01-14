@@ -39,6 +39,7 @@ class ScriptLibInfo
 	const LIB_CKEDITOR				= 'ckeditor';
 	const LIB_ELFINDER				= 'elfinder';
 	const LIB_MD5					= 'md5';
+	const LIB_MOMENT				= 'moment';
 	const LIB_SWFOBJECT				= 'swfobject';
 	const LIB_BOOTSTRAP				= 'bootstrap';
 	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
@@ -265,6 +266,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const ELFINDER_OPTION_CSS		= 'elfinder-2.0/css/theme.css';				// elFinder CSS
 	const ELFINDER_THEME_CSS		= 'elfinder-2.0/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
 	const MD5_FILENAME				= 'md5.js';									// MD5
+	const MOMENT_FILENAME			= 'moment-with-locales-2.9.0.js';			// Moment.js
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
 
 	// Bootstrapライブラリ
@@ -381,7 +383,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	 */
 	static function getLib()
 	{
-		$libs = array(self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
+		$libs = array(
+					self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
+					self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
 					self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 					self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
 					self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
