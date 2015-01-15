@@ -114,7 +114,8 @@ class ScriptLibInfo
 	const JQUERY_MOUSEWHEEL_VER		= '3.0.6';
 	const JQUERY_CLOUDCAROUSEL_VER	= '1.0.5';
 	const JQUERY_SCROLLTO_VER		= '1.4.3.1';
-	const JQUERY_FULLCALENDAR_VER	= '1.6.4';
+//	const JQUERY_FULLCALENDAR_VER	= '1.6.4';
+	const JQUERY_FULLCALENDAR_VER	= '2.2.6';
 	const JQUERY_TIMEPICKER_VER		= '0.3.2';
 	const JQUERY_JSON_VER			= '2.4.0';
 	const JQUERY_FITTEXT_VER		= '1.2';
@@ -196,8 +197,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_MOUSEWHEEL_FILENAME	= 'jquery/jquery.mousewheel.js';
 	const JQUERY_CLOUDCAROUSEL_FILENAME	= 'jquery/cloud-carousel.1.0.5.min.js';
 	const JQUERY_SCROLLTO_FILENAME		= 'jquery/jquery.scrollTo-1.4.3.1-min.js';
-	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.4/fullcalendar.js';
-	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.4/fullcalendar.css';
+//	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.4/fullcalendar.js';
+//	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.4/fullcalendar.css';
+	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-2.2.6/fullcalendar.js';
+	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-2.2.6/fullcalendar.css';
 	const JQUERY_TIMEPICKER_FILENAME	= 'jquery/timepicker/jquery.ui.timepicker.js';
 	const JQUERY_TIMEPICKER_LANG_FILENAME	= 'jquery/timepicker/i18n/jquery.ui.timepicker-ja.js';
 	const JQUERY_TIMEPICKER_CSS			= 'jquery/timepicker/jquery.ui.timepicker.css';
@@ -474,7 +477,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 					self::LIB_JQUERY_FULLCALENDAR	=>	array(	'script' 	=> array(self::JQUERY_FULLCALENDAR_FILENAME),	// jquery.FullCalendar用のファイル
 																'css'		=> array(self::JQUERY_FULLCALENDAR_CSS),
 																'url'		=> self::JQUERY_FULLCALENDAR_URL,
-																'version'	=> self::JQUERY_FULLCALENDAR_VER),		
+																'version'	=> self::JQUERY_FULLCALENDAR_VER,
+																'option_lang'	=> true),		// 多言語対応
 					self::LIB_JQUERY_TIMEPICKER		=>	array(	'script' 	=> array(self::JQUERY_TIMEPICKER_FILENAME,		// jquery.timepicker用のファイル
 																					self::JQUERY_TIMEPICKER_LANG_FILENAME),	// 言語ファイル
 																'css'		=> array(self::JQUERY_TIMEPICKER_CSS),
