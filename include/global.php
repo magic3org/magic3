@@ -31,8 +31,10 @@ ini_set('display_errors', '1');		// コメントをはずすと画面にエラ�
 //if (phpversion() < '5.4.0'){
 if (version_compare(PHP_VERSION, '5.4.0') < 0){
 error_reporting(E_ALL ^ E_NOTICE);			// E_NOTICE 以外の全てのエラーを表示する(PHP5.3以下初期設定値)
-} else {
+} else if (version_compare(PHP_VERSION, '5.6.0') < 0){
 error_reporting(E_ALL & ~E_STRICT & ~E_NOTICE);	// E_STRICT,E_NOTICE 以外の全てのエラーを表示する(PHP5.4以上初期設定値)
+} else {
+error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
 }
 //error_reporting(E_ALL);
 //error_reporting(E_ALL | E_STRICT);// 構文ミスエラーを表示

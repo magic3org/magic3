@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -44,7 +44,7 @@ function get_calendar_failure(request)
 $(function(){
     $('#calendar').fullCalendar({
 		{OPTION}
-		// jQuery UI theme
+/*		// jQuery UI theme
 		theme: false,
         // 初期表示ビュー
         defaultView: 'month',
@@ -71,15 +71,15 @@ $(function(){
             month: 'ddd',    // 月
             week: "d'('ddd')'", // 7(月)
             day: "d'('ddd')'" // 7(月)
-        },
+        },*/
         // タイトルの書式
-        titleFormat: {
+ /*       titleFormat: {
             month: 'yyyy年M月',                             // 2013年9月
             week: "yyyy年M月d日{ ～ }{[yyyy年]}{[M月]d日}", // 2013年9月7日 ～ 13日
             day: "yyyy年M月d日'('ddd')'"                  // 2013年9月7日(火)
-        },
+        },*/
         // ボタン文字列
-        buttonText: {
+/*        buttonText: {
             prev:     '&lsaquo;', // <
             next:     '&rsaquo;', // >
             prevYear: '&laquo;',  // <<
@@ -88,8 +88,8 @@ $(function(){
             month:    '月',
             week:     '週',
             day:      '日'
-        },
-        // 月名称
+        },*/
+ /*       // 月名称
         monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
         // 月略称
         monthNamesShort: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
@@ -97,7 +97,8 @@ $(function(){
         dayNames: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
         // 曜日略称
         dayNamesShort: ['日', '月', '火', '水', '木', '金', '土'],
-        // 選択可
+		*/
+/*        // 選択可
         selectable: true,
         // 選択時にプレースホルダーを描画
         selectHelper: true,
@@ -108,7 +109,7 @@ $(function(){
 		// 現在の年月日
 		year: {YEAR},
 		month: {MONTH},
-		date: {DAY},
+		date: {DAY},*/
 <patTemplate:tmpl name="show_holiday" visibility="hidden">
 		events: {
 			url: 'http://www.google.com/calendar/feeds/ja.japanese%23holiday%40group.v.calendar.google.com/public/full/',
@@ -173,7 +174,9 @@ $(function(){
 </patTemplate:tmpl>
 		// 描画イベント
 		viewRender: function(view, element){
-			m3_ajax_request('calendar', 'sub={SUB_ID}&act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);
+//			m3_ajax_request('calendar', 'sub={SUB_ID}&act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);
+			
+			m3_ajax_request('calendar', 'sub={SUB_ID}&act=getdata&type={TYPE}&start=' + (moment(view.visStart).format('YYYY-MM-DD')) + '&end=' + (moment(view.visEnd).format('YYYY-MM-DD')), get_calendar_success, get_calendar_failure);
 		}
     });
 });

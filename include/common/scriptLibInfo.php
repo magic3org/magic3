@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -478,7 +478,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																'css'		=> array(self::JQUERY_FULLCALENDAR_CSS),
 																'url'		=> self::JQUERY_FULLCALENDAR_URL,
 																'version'	=> self::JQUERY_FULLCALENDAR_VER,
-																'option_lang'	=> true),		// 多言語対応
+																'option_lang'	=> ''),		// 多言語対応オプション(ファイルパスのLANG値を現在の言語IDに変換するためのオプション。デフォルトの言語IDを指定。デフォルトが空の場合、ファイルパスを返さないの意。)
 					self::LIB_JQUERY_TIMEPICKER		=>	array(	'script' 	=> array(self::JQUERY_TIMEPICKER_FILENAME,		// jquery.timepicker用のファイル
 																					self::JQUERY_TIMEPICKER_LANG_FILENAME),	// 言語ファイル
 																'css'		=> array(self::JQUERY_TIMEPICKER_CSS),
@@ -570,9 +570,12 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	static function getDependentLib($lib)
 	{
 		// ##### 依存ライブラリ情報 #####
-		static $dependentLib = array(	self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
+		static $dependentLib = array(
+										self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
 										self::LIB_JQUERY_TIMEPICKER	=>	array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
-										self::LIB_JQUERY_UPLOADFILE =>	array(self::LIB_JQUERY_FORM));
+										self::LIB_JQUERY_UPLOADFILE =>	array(self::LIB_JQUERY_FORM),
+										self::LIB_JQUERY_FULLCALENDAR	=> array(self::LIB_MOMENT)
+									);
 		
 		return $dependentLib[$lib];
 	}
