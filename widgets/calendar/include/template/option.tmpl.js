@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -31,4 +31,6 @@ weekNumbers: false,
 //contentHeight: 600,
 // カレンダーの縦横比(比率が大きくなると高さが縮む)
 //aspectRatio: 1.35,
+// イベントの表示項目数の制限
+eventLimit: true,	// カラムの高さで制限
 </patTemplate:tmpl>

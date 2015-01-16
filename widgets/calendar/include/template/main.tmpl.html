@@ -11,6 +11,7 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<!--<link rel="stylesheet" type="text/css" href="{_ROOT_URL}/scripts/jquery/fullcalendar-2.2.6/fullcalendar2.css" />-->
 <script type="text/javascript">
 //<![CDATA[
 function get_calendar_success(request, retcode, jsondata)
@@ -42,7 +43,24 @@ function get_calendar_failure(request)
 //	alert('ajax failure!');
 }
 $(function(){
+	// CSSを上書き
+	$("head").append("<link>");
+	css = $("head").children(":last");
+	css.attr({
+		rel: "stylesheet",
+		type: "text/css",
+		href: "{OVERWRITE_CSS}"
+	});
+
     $('#calendar').fullCalendar({
+			header: {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,basicWeek,basicDay'
+			},
+//			defaultDate: '2014-11-12',
+//			editable: true,
+			
 		{OPTION}
 /*		// jQuery UI theme
 		theme: false,

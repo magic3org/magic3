@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -37,6 +37,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_EVENT_TOOLTIP_BORDER_STYLE	= "width: 2, radius: 5, color: '#444'";		// ツールチップ(ボーダー)のスタイル
 	const DEFAULT_SIMPLE_EVENT_CLASS_NAME = 'simple_event_default';			// デフォルトのクラス名(簡易イベント)
 	const DEFAULT_EVENT_CLASS_NAME = 'event_default';			// デフォルトのクラス名(イベント記事)
+	const OVERWRITE_CSS_FILE = '/overwrite.css';		// fullcalendarCSS上書き用ファイル
 	
 	/**
 	 * コンストラクタ
@@ -232,6 +233,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "day", $day);
 		$this->tmpl->addVar("_widget", "option", $this->convertToDispString($viewOption));
 		$this->tmpl->addVar("_widget", "sub_id", $this->gEnv->getCurrentPageSubId());			// カレンダー定義IDを取得するにはページサブIDが必要
+		$this->tmpl->addVar("_widget", "overwrite_css", $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::OVERWRITE_CSS_FILE));
 	}
 	/**
 	 * カレンダー情報データ取得
