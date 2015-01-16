@@ -201,7 +201,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 //	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.4/fullcalendar.js';
 //	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.4/fullcalendar.css';
 	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-2.2.6/fullcalendar.js';
-	const JQUERY_FULLCALENDAR_LANG_FILENAME	= 'jquery/fullcalendar-2.2.6/lang/{$LANG}.js';			// 言語ファイル
+	const JQUERY_FULLCALENDAR_LANG_FILENAME	= 'jquery/fullcalendar-2.2.6/lang/{LANG}.js';			// 言語ファイル
 	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-2.2.6/fullcalendar.css';
 	const JQUERY_TIMEPICKER_FILENAME	= 'jquery/timepicker/jquery.ui.timepicker.js';
 	const JQUERY_TIMEPICKER_LANG_FILENAME	= 'jquery/timepicker/i18n/jquery.ui.timepicker-ja.js';
@@ -576,14 +576,14 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 		if (isset($scripts)){
 			for ($i = 0; $i < count($scripts); $i++){
 				$scriptInfo = $scripts[$i];
-				$script = str_replace('{$LANG}', $langId, $scriptInfo['script'], $count);		// 言語IDを変換
+				$script = str_replace('{LANG}', $langId, $scriptInfo['script'], $count);		// 言語IDを変換
 				$filePath = $scriptsPath . '/' . $script;
 				$defaultLang = $scriptInfo['default_lang'];
 				if (file_exists($filePath)){		// ファイルが存在する場合はスクリプトファイルを追加
 					$scriptFiles[] = $script;
 				} else {		// ファイルが存在しないとき
 					if (!empty($defaultLang)){
-						$script = str_replace('{$LANG}', $defaultLang, $scriptInfo['script'], $count);		// 言語IDを変換
+						$script = str_replace('{LANG}', $defaultLang, $scriptInfo['script'], $count);		// 言語IDを変換
 						$filePath = $scriptsPath . '/' . $script;
 						if (file_exists($filePath)) $scriptFiles[] = $script;		// ファイルが存在する場合はスクリプトファイルを追加
 					}
