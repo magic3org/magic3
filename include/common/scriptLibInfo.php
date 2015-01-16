@@ -15,6 +15,7 @@
  */
 class ScriptLibInfo
 {
+	private static $libs;						// ライブラリ情報
 	private static $jQueryVer = '1.8';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVersionArray = array(	'1.6'	=> 'jquery-1.6.4.min.js',// jQueryバージョン
 												'1.7'	=> 'jquery-1.7.2.min.js',
@@ -200,6 +201,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 //	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-1.6.4/fullcalendar.js';
 //	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-1.6.4/fullcalendar.css';
 	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-2.2.6/fullcalendar.js';
+	const JQUERY_FULLCALENDAR_LANG_FILENAME	= 'jquery/fullcalendar-2.2.6/lang/{$LANG}.js';			// 言語ファイル
 	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-2.2.6/fullcalendar.css';
 	const JQUERY_TIMEPICKER_FILENAME	= 'jquery/timepicker/jquery.ui.timepicker.js';
 	const JQUERY_TIMEPICKER_LANG_FILENAME	= 'jquery/timepicker/i18n/jquery.ui.timepicker-ja.js';
@@ -386,180 +388,209 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	 */
 	static function getLib()
 	{
-		$libs = array(
-					self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
-					self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
-					self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
-					self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
-					self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
-																'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS)),	// テーマは最初に読み込む
-					self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
-					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
-																'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
-//					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
-					self::LIB_BOOTSTRAP_ADMIN		=>	array(	'script' 	=> array(self::BOOTSTRAP_DIALOG_FILENAME),
-																'css'		=> array(	self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS,
-																						self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS,
-																						self::BOOTSTRAP_DIALOG_CSS)),	// Bootstrap管理画面用オプション			
-					self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
-																'css'		=> array(self::NOBOOTSTRAP_CSS)),
+		if (!isset(self::$libs)){
+			self::$libs = array(
+						self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
+						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
+						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
+						self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
+						self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
+																	'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS)),	// テーマは最初に読み込む
+						self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
+						self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
+																	'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
+	//					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
+						self::LIB_BOOTSTRAP_ADMIN		=>	array(	'script' 	=> array(self::BOOTSTRAP_DIALOG_FILENAME),
+																	'css'		=> array(	self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS,
+																							self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS,
+																							self::BOOTSTRAP_DIALOG_CSS)),	// Bootstrap管理画面用オプション			
+						self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
+																	'css'		=> array(self::NOBOOTSTRAP_CSS)),
 													
-					// jQueryライブラリ
-					self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル
-					self::LIB_JQUERY_JCAROUSEL		=>	array(	'script' 	=> array(self::JQUERY_JCAROUSEL_FILENAME),
-																'url'		=> self::JQUERY_JCAROUSEL_URL,
-																'version'	=> self::JQUERY_JCAROUSEL_VER),			// jquery.jcarousel用のファイル
-					self::LIB_JQUERY_THICKBOX		=>	array(	'script' 	=> array(self::JQUERY_THICKBOX_FILENAME),// jquery.thickbox用のファイル
-																'css'		=> array(self::JQUERY_THICKBOX_CSS),
-																'url'		=> self::JQUERY_THICKBOX_URL,
-																'version'	=> self::JQUERY_THICKBOX_VER),
-					self::LIB_JQUERY_CYCLE			=>	array(	'script' 	=> array(self::JQUERY_CYCLE_FILENAME)),		// jquery.cycle用のファイル
-					self::LIB_JQUERY_CODEPRESS		=>	array(	'script' 	=> array(self::JQUERY_CODEPRESS_FILENAME)),	// jquery.codepress用のファイル
-					self::LIB_JQUERY_CLUETIP		=>	array(	'script' 	=> array(self::JQUERY_CLUETIP_FILENAME),// jquery.cluetip用のファイル
-																'css'		=> array(self::JQUERY_CLUETIP_CSS),
-																'url'		=> self::JQUERY_CLUETIP_URL),
-					self::LIB_JQUERY_SIMPLETREE		=>	array(	'script' 	=> array(self::JQUERY_SIMPLETREE_FILENAME),// jquery.simpletree用のファイル
-																'css'		=> array(self::JQUERY_SIMPLETREE_CSS)),
-					self::LIB_JQUERY_BGIFRAME		=>	array(	'script' 	=> array(self::JQUERY_BGIFRAME_FILENAME)),	// jquery.bgiframe用のファイル
-					self::LIB_JQUERY_HOVERINTENT	=>	array(	'script' 	=> array(self::JQUERY_HOVERINTENT_FILENAME)),
-					self::LIB_JQUERY_TABLEDND		=>	array(	'script' 	=> array(self::JQUERY_TABLEDND_FILENAME),	// jquery.tablednd用のファイル
-																'css'		=> array(self::JQUERY_TABLEDND_CSS)),
-					self::LIB_JQUERY_SIMPLEMODAL	=>	array(	'script'	=> array(self::JQUERY_SIMPLEMODAL_FILENAME)),// jquery.simplemodal用のファイル
-					self::LIB_JQUERY_COOKIE			=>	array(	'script' 	=> array(self::JQUERY_COOKIE_FILENAME),
-																'url'		=> self::JQUERY_COOKIE_URL,
-																'version'	=> self::JQUERY_COOKIE_VER),
-					self::LIB_JQUERY_FORMAT			=>	array(	'script' 	=> array(self::JQUERY_FORMAT_FILENAME)),
-					self::LIB_JQUERY_FORMTIPS		=>	array(	'script' 	=> array(self::JQUERY_FORMTIPS_FILENAME)),
-					self::LIB_JQUERY_FACEBOX		=>	array(	'script' 	=> array(self::JQUERY_FACEBOX_FILENAME),	// jquery.facebox用のファイル
-																'css'		=> array(self::JQUERY_FACEBOX_CSS),
-																'url'		=> self::JQUERY_FACEBOX_URL),
-					self::LIB_JQUERY_CURVYCORNERS	=> array(	'script'	=> array(self::JQUERY_CURVYCORNERS_FILENAME),
-																'url'		=> self::JQUERY_CURVYCORNERS_URL),
-					self::LIB_JQUERY_PRETTYPHOTO	=>	array(	'script' 	=> array(self::JQUERY_PRETTYPHOTO_FILENAME),	// jquery.prettyPhoto用のファイル
-																'css'		=> array(self::JQUERY_PRETTYPHOTO_CSS),
-																'dir'		=> self::JQUERY_PRETTYPHOTO_DIR,				// 格納ディレクトリ
-																'url'		=> self::JQUERY_PRETTYPHOTO_URL,
-																'version'	=> self::JQUERY_PRETTYPHOTO_VER),
-					self::LIB_JQUERY_QTIP			=>	array(	'script' 	=> array(self::JQUERY_QTIP_FILENAME),	// jquery.qtip用のファイル
-																'url'		=> self::JQUERY_QTIP_URL,
-																'version'	=> self::JQUERY_QTIP_VER),											
-					self::LIB_JQUERY_QTIP2			=>	array(	'script' 	=> array(self::JQUERY_QTIP2_FILENAME),	// jquery.qtip2用のファイル
-																'css'		=> array(self::JQUERY_QTIP2_CSS),
-																'url'		=> self::JQUERY_QTIP2_URL,
-																'version'	=> self::JQUERY_QTIP2_VER),
-					self::LIB_JQUERY_CALCULATION	=>	array(	'script' 	=> array(self::JQUERY_CALCULATION_FILENAME),	// jquery.calculation用のファイル
-																'url'		=> self::JQUERY_CALCULATION_URL,
-																'version'	=> self::JQUERY_CALCULATION_VER),
-					self::LIB_JQUERY_JQPLOT			=>	array(	'script' 	=> array(self::JQUERY_JQPLOT_FILENAME),	// jquery.jqplot用のファイル
-																'css'		=> array(self::JQUERY_JQPLOT_CSS),
-																'dir'		=> self::JQUERY_JQPLOT_DIR,
-																'url'		=> self::JQUERY_JQPLOT_URL,
-																'version'	=> self::JQUERY_JQPLOT_VER),
-					self::LIB_JQUERY_YOUTUBEPLAYER	=>	array(	'script'	=> array(self::JQUERY_YOUTUBEPLAYER_FILENAME)),// jquery.youtubeplayer用のファイル
-					self::LIB_JQUERY_JSTREE			=>	array(	'script' 	=> array(self::JQUERY_JSTREE_FILENAME),	// jquery.jstree用のファイル
-																'url'		=> self::JQUERY_JSTREE_URL,
-																'version'	=> self::JQUERY_JSTREE_VER),
-					self::LIB_JQUERY_IFRAME			=>	array(	'script'	=> array(self::JQUERY_IFRAME_FILENAME),		// jquery.iframe-auto-height用のファイル
-																'url'		=> self::JQUERY_IFRAME_URL,
-																'version'	=> self::JQUERY_IFRAME_VER),
-					self::LIB_JQUERY_RATY			=>	array(	'script'	=> array(self::JQUERY_RATY_FILENAME),		// jquery.raty用のファイル
-																'url'		=> self::JQUERY_RATY_URL,
-																'version'	=> self::JQUERY_RATY_VER),
-					self::LIB_JQUERY_MOUSEWHEEL		=>	array(	'script'	=> array(self::JQUERY_MOUSEWHEEL_FILENAME),		// jquery.mousewheel用のファイル
-																'url'		=> self::JQUERY_MOUSEWHEEL_URL,
-																'version'	=> self::JQUERY_MOUSEWHEEL_VER),
-					self::LIB_JQUERY_CLOUDCAROUSEL	=>	array(	'script'	=> array(self::JQUERY_CLOUDCAROUSEL_FILENAME),		// jquery.cloudcarousel用のファイル
-																'url'		=> self::JQUERY_CLOUDCAROUSEL_URL,
-																'version'	=> self::JQUERY_CLOUDCAROUSEL_VER),
-					self::LIB_JQUERY_SCROLLTO		=>	array(	'script' 	=> array(self::JQUERY_SCROLLTO_FILENAME),	// jquery.scrollto用のファイル
-																'url'		=> self::JQUERY_SCROLLTO_URL,
-																'version'	=> self::JQUERY_SCROLLTO_VER),
-					self::LIB_JQUERY_FULLCALENDAR	=>	array(	'script' 	=> array(self::JQUERY_FULLCALENDAR_FILENAME),	// jquery.FullCalendar用のファイル
-																'css'		=> array(self::JQUERY_FULLCALENDAR_CSS),
-																'url'		=> self::JQUERY_FULLCALENDAR_URL,
-																'version'	=> self::JQUERY_FULLCALENDAR_VER,
-																'option_lang'	=> ''),		// 多言語対応オプション(ファイルパスのLANG値を現在の言語IDに変換するためのオプション。デフォルトの言語IDを指定。デフォルトが空の場合、ファイルパスを返さないの意。)
-					self::LIB_JQUERY_TIMEPICKER		=>	array(	'script' 	=> array(self::JQUERY_TIMEPICKER_FILENAME,		// jquery.timepicker用のファイル
-																					self::JQUERY_TIMEPICKER_LANG_FILENAME),	// 言語ファイル
-																'css'		=> array(self::JQUERY_TIMEPICKER_CSS),
-																'url'		=> self::JQUERY_TIMEPICKER_URL,
-																'version'	=> self::JQUERY_TIMEPICKER_VER),
-					self::LIB_JQUERY_JSON			=>	array(	'script' 	=> array(self::JQUERY_JSON_FILENAME),	// jquery.json用のファイル
-																'url'		=> self::JQUERY_JSON_URL,
-																'version'	=> self::JQUERY_JSON_VER),
-					self::LIB_JQUERY_FITTEXT		=>	array(	'script' 	=> array(self::JQUERY_FITTEXT_FILENAME),	// jquery.fittext用のファイル
-																'url'		=> self::JQUERY_FITTEXT_URL,
-																'version'	=> self::JQUERY_FITTEXT_VER),
-					self::LIB_JQUERY_IDTABS			=>	array(	'script' 	=> array(self::JQUERY_IDTABS_FILENAME),	// jquery.idtabs用のファイル
-																'url'		=> self::JQUERY_IDTABS_URL,
-																'version'	=> self::JQUERY_IDTABS_VER),
-					self::LIB_JQUERY_BXSLIDER		=>	array(	'script' 	=> array(self::JQUERY_BXSLIDER_FILENAME),		// jquery.bxslider用のファイル
-																'css'		=> array(self::JQUERY_BXSLIDER_CSS),
-																'url'		=> self::JQUERY_BXSLIDER_URL,
-																'version'	=> self::JQUERY_BXSLIDER_VER),
-					self::LIB_JQUERY_FITVIDS		=>	array(	'script' 	=> array(self::JQUERY_FITVIDS_FILENAME),		// jquery.fitvids用のファイル
-																'url'		=> self::JQUERY_FITVIDS_URL,
-																'version'	=> self::JQUERY_FITVIDS_VER),														
-					self::LIB_JQUERY_RESPONSIVETABLE	=> array(	'script' 	=> array(self::JQUERY_RESPONSIVETABLE_FILENAME),
-																	'css'		=> array(self::JQUERY_RESPONSIVETABLE_CSS),
-																	'url'		=> self::JQUERY_RESPONSIVETABLE_URL,
-																	'version'	=> self::JQUERY_RESPONSIVETABLE_VER),
-					self::LIB_JQUERY_FORM			=>	array(	'script' 	=> array(self::JQUERY_FORM_FILENAME),
-																'url'		=> self::JQUERY_FORM_URL,
-																'version'	=> self::JQUERY_FORM_VER),
-					self::LIB_JQUERY_UPLOADFILE		=> array(	'script' 	=> array(self::JQUERY_UPLOADFILE_FILENAME),
-																'css'		=> array(self::JQUERY_UPLOADFILE_CSS),
-																'url'		=> self::JQUERY_UPLOADFILE_URL,
-																'version'	=> self::JQUERY_UPLOADFILE_VER),
+						// jQueryライブラリ
+						self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル
+						self::LIB_JQUERY_JCAROUSEL		=>	array(	'script' 	=> array(self::JQUERY_JCAROUSEL_FILENAME),
+																	'url'		=> self::JQUERY_JCAROUSEL_URL,
+																	'version'	=> self::JQUERY_JCAROUSEL_VER),			// jquery.jcarousel用のファイル
+						self::LIB_JQUERY_THICKBOX		=>	array(	'script' 	=> array(self::JQUERY_THICKBOX_FILENAME),// jquery.thickbox用のファイル
+																	'css'		=> array(self::JQUERY_THICKBOX_CSS),
+																	'url'		=> self::JQUERY_THICKBOX_URL,
+																	'version'	=> self::JQUERY_THICKBOX_VER),
+						self::LIB_JQUERY_CYCLE			=>	array(	'script' 	=> array(self::JQUERY_CYCLE_FILENAME)),		// jquery.cycle用のファイル
+						self::LIB_JQUERY_CODEPRESS		=>	array(	'script' 	=> array(self::JQUERY_CODEPRESS_FILENAME)),	// jquery.codepress用のファイル
+						self::LIB_JQUERY_CLUETIP		=>	array(	'script' 	=> array(self::JQUERY_CLUETIP_FILENAME),// jquery.cluetip用のファイル
+																	'css'		=> array(self::JQUERY_CLUETIP_CSS),
+																	'url'		=> self::JQUERY_CLUETIP_URL),
+						self::LIB_JQUERY_SIMPLETREE		=>	array(	'script' 	=> array(self::JQUERY_SIMPLETREE_FILENAME),// jquery.simpletree用のファイル
+																	'css'		=> array(self::JQUERY_SIMPLETREE_CSS)),
+						self::LIB_JQUERY_BGIFRAME		=>	array(	'script' 	=> array(self::JQUERY_BGIFRAME_FILENAME)),	// jquery.bgiframe用のファイル
+						self::LIB_JQUERY_HOVERINTENT	=>	array(	'script' 	=> array(self::JQUERY_HOVERINTENT_FILENAME)),
+						self::LIB_JQUERY_TABLEDND		=>	array(	'script' 	=> array(self::JQUERY_TABLEDND_FILENAME),	// jquery.tablednd用のファイル
+																	'css'		=> array(self::JQUERY_TABLEDND_CSS)),
+						self::LIB_JQUERY_SIMPLEMODAL	=>	array(	'script'	=> array(self::JQUERY_SIMPLEMODAL_FILENAME)),// jquery.simplemodal用のファイル
+						self::LIB_JQUERY_COOKIE			=>	array(	'script' 	=> array(self::JQUERY_COOKIE_FILENAME),
+																	'url'		=> self::JQUERY_COOKIE_URL,
+																	'version'	=> self::JQUERY_COOKIE_VER),
+						self::LIB_JQUERY_FORMAT			=>	array(	'script' 	=> array(self::JQUERY_FORMAT_FILENAME)),
+						self::LIB_JQUERY_FORMTIPS		=>	array(	'script' 	=> array(self::JQUERY_FORMTIPS_FILENAME)),
+						self::LIB_JQUERY_FACEBOX		=>	array(	'script' 	=> array(self::JQUERY_FACEBOX_FILENAME),	// jquery.facebox用のファイル
+																	'css'		=> array(self::JQUERY_FACEBOX_CSS),
+																	'url'		=> self::JQUERY_FACEBOX_URL),
+						self::LIB_JQUERY_CURVYCORNERS	=> array(	'script'	=> array(self::JQUERY_CURVYCORNERS_FILENAME),
+																	'url'		=> self::JQUERY_CURVYCORNERS_URL),
+						self::LIB_JQUERY_PRETTYPHOTO	=>	array(	'script' 	=> array(self::JQUERY_PRETTYPHOTO_FILENAME),	// jquery.prettyPhoto用のファイル
+																	'css'		=> array(self::JQUERY_PRETTYPHOTO_CSS),
+																	'dir'		=> self::JQUERY_PRETTYPHOTO_DIR,				// 格納ディレクトリ
+																	'url'		=> self::JQUERY_PRETTYPHOTO_URL,
+																	'version'	=> self::JQUERY_PRETTYPHOTO_VER),
+						self::LIB_JQUERY_QTIP			=>	array(	'script' 	=> array(self::JQUERY_QTIP_FILENAME),	// jquery.qtip用のファイル
+																	'url'		=> self::JQUERY_QTIP_URL,
+																	'version'	=> self::JQUERY_QTIP_VER),											
+						self::LIB_JQUERY_QTIP2			=>	array(	'script' 	=> array(self::JQUERY_QTIP2_FILENAME),	// jquery.qtip2用のファイル
+																	'css'		=> array(self::JQUERY_QTIP2_CSS),
+																	'url'		=> self::JQUERY_QTIP2_URL,
+																	'version'	=> self::JQUERY_QTIP2_VER),
+						self::LIB_JQUERY_CALCULATION	=>	array(	'script' 	=> array(self::JQUERY_CALCULATION_FILENAME),	// jquery.calculation用のファイル
+																	'url'		=> self::JQUERY_CALCULATION_URL,
+																	'version'	=> self::JQUERY_CALCULATION_VER),
+						self::LIB_JQUERY_JQPLOT			=>	array(	'script' 	=> array(self::JQUERY_JQPLOT_FILENAME),	// jquery.jqplot用のファイル
+																	'css'		=> array(self::JQUERY_JQPLOT_CSS),
+																	'dir'		=> self::JQUERY_JQPLOT_DIR,
+																	'url'		=> self::JQUERY_JQPLOT_URL,
+																	'version'	=> self::JQUERY_JQPLOT_VER),
+						self::LIB_JQUERY_YOUTUBEPLAYER	=>	array(	'script'	=> array(self::JQUERY_YOUTUBEPLAYER_FILENAME)),// jquery.youtubeplayer用のファイル
+						self::LIB_JQUERY_JSTREE			=>	array(	'script' 	=> array(self::JQUERY_JSTREE_FILENAME),	// jquery.jstree用のファイル
+																	'url'		=> self::JQUERY_JSTREE_URL,
+																	'version'	=> self::JQUERY_JSTREE_VER),
+						self::LIB_JQUERY_IFRAME			=>	array(	'script'	=> array(self::JQUERY_IFRAME_FILENAME),		// jquery.iframe-auto-height用のファイル
+																	'url'		=> self::JQUERY_IFRAME_URL,
+																	'version'	=> self::JQUERY_IFRAME_VER),
+						self::LIB_JQUERY_RATY			=>	array(	'script'	=> array(self::JQUERY_RATY_FILENAME),		// jquery.raty用のファイル
+																	'url'		=> self::JQUERY_RATY_URL,
+																	'version'	=> self::JQUERY_RATY_VER),
+						self::LIB_JQUERY_MOUSEWHEEL		=>	array(	'script'	=> array(self::JQUERY_MOUSEWHEEL_FILENAME),		// jquery.mousewheel用のファイル
+																	'url'		=> self::JQUERY_MOUSEWHEEL_URL,
+																	'version'	=> self::JQUERY_MOUSEWHEEL_VER),
+						self::LIB_JQUERY_CLOUDCAROUSEL	=>	array(	'script'	=> array(self::JQUERY_CLOUDCAROUSEL_FILENAME),		// jquery.cloudcarousel用のファイル
+																	'url'		=> self::JQUERY_CLOUDCAROUSEL_URL,
+																	'version'	=> self::JQUERY_CLOUDCAROUSEL_VER),
+						self::LIB_JQUERY_SCROLLTO		=>	array(	'script' 	=> array(self::JQUERY_SCROLLTO_FILENAME),	// jquery.scrollto用のファイル
+																	'url'		=> self::JQUERY_SCROLLTO_URL,
+																	'version'	=> self::JQUERY_SCROLLTO_VER),
+						self::LIB_JQUERY_FULLCALENDAR	=>	array(	'script' 	=> array(self::JQUERY_FULLCALENDAR_FILENAME),	// jquery.FullCalendar用のファイル
+																	'css'		=> array(self::JQUERY_FULLCALENDAR_CSS),
+																	'url'		=> self::JQUERY_FULLCALENDAR_URL,
+																	'version'	=> self::JQUERY_FULLCALENDAR_VER,
+																	'script_lang'	=> array(	array( 'script' 	=> self::JQUERY_FULLCALENDAR_LANG_FILENAME,	'default_lang'	=> ''))),	// 言語ファイル(ファイルパスのLANG値を現在の言語IDに変換するためのオプション。デフォルトの言語IDを指定。デフォルトが空の場合、ファイルパスを返さないの意。)
+						self::LIB_JQUERY_TIMEPICKER		=>	array(	'script' 	=> array(self::JQUERY_TIMEPICKER_FILENAME,		// jquery.timepicker用のファイル
+																						self::JQUERY_TIMEPICKER_LANG_FILENAME),	// 言語ファイル
+																	'css'		=> array(self::JQUERY_TIMEPICKER_CSS),
+																	'url'		=> self::JQUERY_TIMEPICKER_URL,
+																	'version'	=> self::JQUERY_TIMEPICKER_VER),
+						self::LIB_JQUERY_JSON			=>	array(	'script' 	=> array(self::JQUERY_JSON_FILENAME),	// jquery.json用のファイル
+																	'url'		=> self::JQUERY_JSON_URL,
+																	'version'	=> self::JQUERY_JSON_VER),
+						self::LIB_JQUERY_FITTEXT		=>	array(	'script' 	=> array(self::JQUERY_FITTEXT_FILENAME),	// jquery.fittext用のファイル
+																	'url'		=> self::JQUERY_FITTEXT_URL,
+																	'version'	=> self::JQUERY_FITTEXT_VER),
+						self::LIB_JQUERY_IDTABS			=>	array(	'script' 	=> array(self::JQUERY_IDTABS_FILENAME),	// jquery.idtabs用のファイル
+																	'url'		=> self::JQUERY_IDTABS_URL,
+																	'version'	=> self::JQUERY_IDTABS_VER),
+						self::LIB_JQUERY_BXSLIDER		=>	array(	'script' 	=> array(self::JQUERY_BXSLIDER_FILENAME),		// jquery.bxslider用のファイル
+																	'css'		=> array(self::JQUERY_BXSLIDER_CSS),
+																	'url'		=> self::JQUERY_BXSLIDER_URL,
+																	'version'	=> self::JQUERY_BXSLIDER_VER),
+						self::LIB_JQUERY_FITVIDS		=>	array(	'script' 	=> array(self::JQUERY_FITVIDS_FILENAME),		// jquery.fitvids用のファイル
+																	'url'		=> self::JQUERY_FITVIDS_URL,
+																	'version'	=> self::JQUERY_FITVIDS_VER),														
+						self::LIB_JQUERY_RESPONSIVETABLE	=> array(	'script' 	=> array(self::JQUERY_RESPONSIVETABLE_FILENAME),
+																		'css'		=> array(self::JQUERY_RESPONSIVETABLE_CSS),
+																		'url'		=> self::JQUERY_RESPONSIVETABLE_URL,
+																		'version'	=> self::JQUERY_RESPONSIVETABLE_VER),
+						self::LIB_JQUERY_FORM			=>	array(	'script' 	=> array(self::JQUERY_FORM_FILENAME),
+																	'url'		=> self::JQUERY_FORM_URL,
+																	'version'	=> self::JQUERY_FORM_VER),
+						self::LIB_JQUERY_UPLOADFILE		=> array(	'script' 	=> array(self::JQUERY_UPLOADFILE_FILENAME),
+																	'css'		=> array(self::JQUERY_UPLOADFILE_CSS),
+																	'url'		=> self::JQUERY_UPLOADFILE_URL,
+																	'version'	=> self::JQUERY_UPLOADFILE_VER),
 	
-					// Magic3管理画面専用jQueryプラグイン
-					self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
-					self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー
-																'css'		=> array(self::JQUERY_M3_DROPDOWN_CSS)),
+						// Magic3管理画面専用jQueryプラグイン
+						self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
+						self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー
+																	'css'		=> array(self::JQUERY_M3_DROPDOWN_CSS)),
 																
-					// その他ライブラリ
-					self::LIB_CODEMIRROR_JAVASCRIPT		=>	array(	'script' 	=> array(self::CODEMIRROR_FILENAME, self::CODEMIRROR_JAVASCRIPT_FILENAME),	// CodeMirror用のファイル
-																	'css'		=> array(self::CODEMIRROR_CSS),
-																	'url'		=> self::CODEMIRROR_URL,
-																	'version'	=> self::CODEMIRROR_VER)
-																);
+						// その他ライブラリ
+						self::LIB_CODEMIRROR_JAVASCRIPT		=>	array(	'script' 	=> array(self::CODEMIRROR_FILENAME, self::CODEMIRROR_JAVASCRIPT_FILENAME),	// CodeMirror用のファイル
+																		'css'		=> array(self::CODEMIRROR_CSS),
+																		'url'		=> self::CODEMIRROR_URL,
+																		'version'	=> self::CODEMIRROR_VER)
+																	);
 																
-		// WYSIWYGエディターに合わせてライブラリを設定
-		$libs[self::LIB_WYSIWYG_EDITOR] = $libs[self::getWysiwygEditorLibId()];		// LIB_FCKEDITORまたはLIB_CKEDITOR
+			// WYSIWYGエディターに合わせてライブラリを設定
+			self::$libs[self::LIB_WYSIWYG_EDITOR] = self::$libs[self::getWysiwygEditorLibId()];		// LIB_FCKEDITORまたはLIB_CKEDITOR
 					
-		// 使用するjQueryバージョンに合わせてファイルを追加
-/*		switch (self::$jQueryVer){
-			case 0:		// デフォルトのとき
-				$libs[self::LIB_JQUERY] = array(	'script' => array(self::getJQueryFilename(0)));	// jquery
-				$libs[self::LIB_JQUERY_UI] = array(	'script' => array(self::JQUERY_UI_CORE_FILENAME));	// jquery ui
-				$libs[self::LIB_JQUERY_UI_PLUS] = array(	'script' => array(self::JQUERY_UI_PLUS_FILENAME));	// jquery ui plus(追加分)
-				break;
-			case 1:		// 最新のとき*/
-				$libs[self::LIB_JQUERY] = array(	'script' => array(self::getJQueryFilename(0)));	// jquery
-				$libs[self::LIB_JQUERY_UI] = array(	'script' => array(self::JQUERY_UI_CORE_FILENAME));	// jquery ui
-//				$libs[self::LIB_JQUERY_UI_PLUS] = array(	'script' => array(self::JQUERY_L_UI_PLUS_FILENAME));	// jquery ui plus(追加分)
-				
-				// jQuery UI
-				$libs[self::LIB_JQUERY_UI_WIDGETS_ACCORDION]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_ACCORDION_FILENAME));		// Widgets Accordion
-				$libs[self::LIB_JQUERY_UI_WIDGETS_AUTOCOMPLETE] = array(	'script' => array(self::JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME));	// Widgets Autocomplete
-				$libs[self::LIB_JQUERY_UI_WIDGETS_BUTTON]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_BUTTON_FILENAME));		// Widgets Button
-				$libs[self::LIB_JQUERY_UI_WIDGETS_DATEPICKER]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_DATEPICKER_FILENAME,
-																								self::JQUERY_UI_WIDGETS_DATEPICKER_LANG_FILENAME));	// Widgets Datepicker
-				$libs[self::LIB_JQUERY_UI_WIDGETS_DIALOG]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_DIALOG_FILENAME));		// Widgets Dialog
-				$libs[self::LIB_JQUERY_UI_WIDGETS_PROGRESSBAR]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_PROGRESSBAR_FILENAME));	// Widgets Progressbar
-				$libs[self::LIB_JQUERY_UI_WIDGETS_SLIDER]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_SLIDER_FILENAME));		// Widgets Slider
-				$libs[self::LIB_JQUERY_UI_WIDGETS_TABS]			= array(	'script' => array(self::JQUERY_UI_WIDGETS_TABS_FILENAME));			// Widgets Tabs
-				$libs[self::LIB_JQUERY_UI_EFFECTS]				= array(	'script' => array(self::JQUERY_UI_EFFECTS_FILENAME));				// Effects
-//				break;
-//		}
+			// 使用するjQueryバージョンに合わせてファイルを追加
+			self::$libs[self::LIB_JQUERY] = array(	'script' => array(self::getJQueryFilename(0)));	// jquery
+			self::$libs[self::LIB_JQUERY_UI] = array(	'script' => array(self::JQUERY_UI_CORE_FILENAME));	// jquery ui
+//				self::$libs[self::LIB_JQUERY_UI_PLUS] = array(	'script' => array(self::JQUERY_L_UI_PLUS_FILENAME));	// jquery ui plus(追加分)
+			
+			// jQuery UI
+			self::$libs[self::LIB_JQUERY_UI_WIDGETS_ACCORDION]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_ACCORDION_FILENAME));		// Widgets Accordion
+			self::$libs[self::LIB_JQUERY_UI_WIDGETS_AUTOCOMPLETE] = array(	'script' => array(self::JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME));	// Widgets Autocomplete
+			self::$libs[self::LIB_JQUERY_UI_WIDGETS_BUTTON]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_BUTTON_FILENAME));		// Widgets Button
+			self::$libs[self::LIB_JQUERY_UI_WIDGETS_DATEPICKER]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_DATEPICKER_FILENAME,
+																							self::JQUERY_UI_WIDGETS_DATEPICKER_LANG_FILENAME));	// Widgets Datepicker
+			self::$libs[self::LIB_JQUERY_UI_WIDGETS_DIALOG]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_DIALOG_FILENAME));		// Widgets Dialog
+			self::$libs[self::LIB_JQUERY_UI_WIDGETS_PROGRESSBAR]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_PROGRESSBAR_FILENAME));	// Widgets Progressbar
+			self::$libs[self::LIB_JQUERY_UI_WIDGETS_SLIDER]		= array(	'script' => array(self::JQUERY_UI_WIDGETS_SLIDER_FILENAME));		// Widgets Slider
+			self::$libs[self::LIB_JQUERY_UI_WIDGETS_TABS]			= array(	'script' => array(self::JQUERY_UI_WIDGETS_TABS_FILENAME));			// Widgets Tabs
+			self::$libs[self::LIB_JQUERY_UI_EFFECTS]				= array(	'script' => array(self::JQUERY_UI_EFFECTS_FILENAME));				// Effects
+
 		
-		// スマートフォン用jQueryライブラリ
-		$libs[self::LIB_JQUERYS] 			= array(	'script' => array(self::getJQueryFilename(10)));		// スマートフォン用jQuery
-		$libs[self::LIB_JQUERYS_MOBILE]		= array(	'script' 	=> array(self::JQUERYS_MOBILE_FILENAME),	// JQuery Mobile
-														'css'		=> array(self::JQUERYS_MOBILE_CSS));
-		// 外部ライブラリ
-		$libs[self::LIB_GOOGLEMAPS]			= array(	'script'	=> array(self::GOOGLEMAPS_FILENAME));
-		return $libs;
+			// スマートフォン用jQueryライブラリ
+			self::$libs[self::LIB_JQUERYS] 			= array(	'script' => array(self::getJQueryFilename(10)));		// スマートフォン用jQuery
+			self::$libs[self::LIB_JQUERYS_MOBILE]		= array(	'script' 	=> array(self::JQUERYS_MOBILE_FILENAME),	// JQuery Mobile
+															'css'		=> array(self::JQUERYS_MOBILE_CSS));
+			// 外部ライブラリ
+			self::$libs[self::LIB_GOOGLEMAPS]			= array(	'script'	=> array(self::GOOGLEMAPS_FILENAME));
+		}
+		return self::$libs;
+	}
+	
+	/**
+	 * 言語ファイル取得
+	 *
+	 * @param $string $lib	ライブラリID
+	 * @return array		スクリプトファイル
+	 */
+	static function getLangScript($lib)
+	{
+		global $gEnvManager;
+		
+		$langId = $gEnvManager->getCurrentLanguage();
+		$scriptsPath = $gEnvManager->getScriptsPath();
+		$scriptFiles = array();
+		$scripts = self::$libs[$lib]['script_lang'];
+		
+		if (isset($scripts)){
+			for ($i = 0; $i < count($scripts); $i++){
+				$scriptInfo = $scripts[$i];
+				$script = str_replace('{$LANG}', $langId, $scriptInfo['script'], $count);		// 言語IDを変換
+				$filePath = $scriptsPath . '/' . $script;
+				$defaultLang = $scriptInfo['default_lang'];
+				if (file_exists($filePath)){		// ファイルが存在する場合はスクリプトファイルを追加
+					$scriptFiles[] = $script;
+				} else {		// ファイルが存在しないとき
+					if (!empty($defaultLang)){
+						$script = str_replace('{$LANG}', $defaultLang, $scriptInfo['script'], $count);		// 言語IDを変換
+						$filePath = $scriptsPath . '/' . $script;
+						if (file_exists($filePath)) $scriptFiles[] = $script;		// ファイルが存在する場合はスクリプトファイルを追加
+					}
+				}
+			}
+		}
+		return $scriptFiles;
 	}
 	/**
 	 * 依存ライブラリ取得

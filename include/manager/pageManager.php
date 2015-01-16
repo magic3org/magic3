@@ -1561,6 +1561,14 @@ class PageManager extends Core
 						$this->addAdminScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
 					}
 				}
+				// ライブラリの言語ファイルを追加
+				if (isset($this->libFiles[$addLib]['script_lang'])){
+					$scriptFiles = ScriptLibInfo::getLangScript($addLib);
+					for ($m = 0; $m < count($scriptFiles); $m++){
+						$this->addAdminScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
+					}
+				}
+				// ライブラリのCSSファイルを追加
 				if (isset($this->libFiles[$addLib]['css'])){
 					$cssFiles = $this->libFiles[$addLib]['css'];
 					for ($m = 0; $m < count($cssFiles); $m++){
@@ -1577,6 +1585,13 @@ class PageManager extends Core
 		// Javascript追加
 		if (isset($this->libFiles[$lib]['script'])){
 			$scriptFiles = $this->libFiles[$lib]['script'];
+			for ($i = 0; $i < count($scriptFiles); $i++){
+				$this->addAdminScriptFile($scriptFiles[$i]);		// 管理機能用のスクリプト追加
+			}
+		}
+		// ライブラリの言語ファイルを追加
+		if (isset($this->libFiles[$lib]['script_lang'])){
+			$scriptFiles = ScriptLibInfo::getLangScript($lib);
 			for ($i = 0; $i < count($scriptFiles); $i++){
 				$this->addAdminScriptFile($scriptFiles[$i]);		// 管理機能用のスクリプト追加
 			}
@@ -1673,6 +1688,14 @@ class PageManager extends Core
 								$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
 							}
 						}
+						// ライブラリの言語ファイルを追加
+						if (isset($this->libFiles[$addLib]['script_lang'])){
+							$scriptFiles = ScriptLibInfo::getLangScript($addLib);
+							for ($m = 0; $m < count($scriptFiles); $m++){
+								$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
+							}
+						}
+						// ライブラリのCSSファイルを追加
 						if (isset($this->libFiles[$addLib]['css'])){
 							$cssFiles = $this->libFiles[$addLib]['css'];
 							for ($m = 0; $m < count($cssFiles); $m++){
@@ -1707,6 +1730,14 @@ class PageManager extends Core
 						$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
 					}
 				}
+				// ライブラリの言語ファイルを追加
+				if (isset($this->libFiles[$addLib]['script_lang'])){
+					$scriptFiles = ScriptLibInfo::getLangScript($addLib);;
+					for ($m = 0; $m < count($scriptFiles); $m++){
+						$this->addScriptFile($scriptFiles[$m]);		// 通常機能用のスクリプト追加
+					}
+				}
+				// ライブラリのCSSファイルを追加
 				if (isset($this->libFiles[$addLib]['css'])){
 					$cssFiles = $this->libFiles[$addLib]['css'];
 					for ($m = 0; $m < count($cssFiles); $m++){
@@ -1728,6 +1759,14 @@ class PageManager extends Core
 				$this->addScriptFile($scriptFiles[$i]);		// 通常機能用のスクリプト追加
 			}
 		}
+		// ライブラリの言語ファイルを追加
+		if (isset($this->libFiles[$lib]['script_lang'])){
+			$scriptFiles = ScriptLibInfo::getLangScript($lib);
+			for ($i = 0; $i < count($scriptFiles); $i++){
+				$this->addScriptFile($scriptFiles[$i]);		// 通常機能用のスクリプト追加
+			}
+		}
+		// ライブラリのCSSファイルを追加
 		if (isset($this->libFiles[$lib]['css'])){
 			$cssFiles = $this->libFiles[$lib]['css'];
 			for ($i = 0; $i < count($cssFiles); $i++){
@@ -1754,6 +1793,13 @@ class PageManager extends Core
 						$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
 					}
 				}
+				// ライブラリの言語ファイルを追加
+				if (isset($this->libFiles[$libId]['script_lang'])){
+					$scriptFiles = ScriptLibInfo::getLangScript($libId);
+					for ($i = 0; $i < count($scriptFiles); $i++){
+						$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
+					}
+				}
 				// CSS追加
 				if (isset($this->libFiles[$libId]['css'])){
 					$cssFiles = $this->libFiles[$libId]['css'];
@@ -1768,6 +1814,13 @@ class PageManager extends Core
 			// Javascript追加
 			if (isset($this->libFiles[$libId]['script'])){
 				$scriptFiles = $this->libFiles[$libId]['script'];
+				for ($i = 0; $i < count($scriptFiles); $i++){
+					$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
+				}
+			}
+			// ライブラリの言語ファイルを追加
+			if (isset($this->libFiles[$libId]['script_lang'])){
+				$scriptFiles = ScriptLibInfo::getLangScript($libId);
 				for ($i = 0; $i < count($scriptFiles); $i++){
 					$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
 				}
