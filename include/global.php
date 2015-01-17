@@ -195,6 +195,7 @@ define('M3_VIEW_FORMAT_TIME',			'H:i:s');			// 時間
 define('M3_VIEW_TYPE_DASHBOARD',	'dboard');				// ダッシュボード
 define('M3_VIEW_TYPE_SEARCH',		'search');				// 検索結果
 define('M3_VIEW_TYPE_COMMERCE',		'commerce');			// Eコマース
+define('M3_VIEW_TYPE_CALENDAR',		'calendar');			// カレンダー
 // コンテンツタイプ
 define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
 define('M3_VIEW_TYPE_MEMBER',		'member');				// 会員情報
@@ -209,7 +210,8 @@ define('M3_VIEW_TYPE_PHOTO',		'photo');				// フォトギャラリー
 // すべての機能タイプ
 $M3_ALL_FEATURE_TYPE	= array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード
 									M3_VIEW_TYPE_SEARCH,			// 検索結果
-									M3_VIEW_TYPE_COMMERCE);			// Eコマース
+									M3_VIEW_TYPE_COMMERCE,			// Eコマース
+									M3_VIEW_TYPE_CALENDAR);			// カレンダー
 // すべてのコンテンツタイプ
 $M3_ALL_CONTENT_TYPE	= array(	M3_VIEW_TYPE_NEWS,				// 新着情報
 									M3_VIEW_TYPE_MEMBER,			// 会員情報

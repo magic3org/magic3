@@ -308,7 +308,9 @@ class PageManager extends Core
 												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO));
 		// 一般画面で使用する主要機能タイプ(「ダッシュボード」は含まない)
 		$this->mainFeatureTypeInfo	 = array(	array(	'name' => '検索',						'value' => M3_VIEW_TYPE_SEARCH),
-												array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE));
+												array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE),
+												array(	'name' => 'カレンダー',					'value' => M3_VIEW_TYPE_CALENDAR)
+											);
 											
 		// URLパラメータ並び順
 		$this->urlParamOrder = array(
