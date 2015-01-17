@@ -18,8 +18,10 @@ function get_calendar_success(request, retcode, jsondata)
 {
 	$('#calendar').fullCalendar('removeEvents');
 
-	if (jsondata.events) $('#calendar').fullCalendar('addEventSource', jsondata.events);
-<patTemplate:tmpl name="show_dates" visibility="hidden">	
+	if (jsondata.events){
+		$('#calendar').fullCalendar('addEventSource', jsondata.events);
+	}
+<patTemplate:tmpl name="show_dates" visibility="hidden">
 	if (jsondata.dates){
 		var dates = jsondata.dates;
 		for (var i = 0; i < dates.length; i++){
@@ -67,7 +69,7 @@ $(function(){
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_tooltip" visibility="hidden">
 		eventRender: function(event, element){
-			if (event.className == 'simple_event_default'){
+			if (event.className == 'simple_event_default' && {SIMPLE_EVENT_TOOLTIP_ON}){
 				element.qtip({
 					content: {
 						title: { text: event.title },
@@ -90,7 +92,7 @@ $(function(){
 						title: { {SIMPLE_TITLE_STYLE} }
 					}
 				});
-			} else if (event.className == 'event_default'){
+			} else if (event.className == 'event_default' && {EVENT_TOOLTIP_ON}){
 				element.qtip({
 					content: {
 						title: { text: event.title },
@@ -118,9 +120,7 @@ $(function(){
 </patTemplate:tmpl>
 		// 描画イベント
 		viewRender: function(view, element){
-//			m3_ajax_request('calendar', 'sub={SUB_ID}&act=getdata&type={TYPE}&start=' + $.fullCalendar.formatDate(view.visStart, 'yyyy-MM-dd') + '&end=' + $.fullCalendar.formatDate(view.visEnd, 'yyyy-MM-dd'), get_calendar_success, get_calendar_failure);
-			
-			m3_ajax_request('calendar', 'sub={SUB_ID}&act=getdata&type={TYPE}&start=' + (moment(view.visStart).format('YYYY-MM-DD')) + '&end=' + (moment(view.visEnd).format('YYYY-MM-DD')), get_calendar_success, get_calendar_failure);
+			m3_ajax_request('calendar', 'sub={SUB_ID}&act=getdata&type={TYPE}&start=' + (moment(view.start).format('YYYY-MM-DD')) + '&end=' + (moment(view.end).format('YYYY-MM-DD')), get_calendar_success, get_calendar_failure);
 		}
     });
 });

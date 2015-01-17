@@ -77,7 +77,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	{
 		// 初期値設定
 		$this->langId = $this->gEnv->getCurrentLanguage();
-		
+
 		$act = $request->trimValueOf('act');
 		if ($act == 'getdata'){
 			$this->getData($request);
@@ -210,20 +210,35 @@ class calendarWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->addVar("show_tooltip", "simple_border_style", $simpleEventTooltipBorderStyle);
 			$this->tmpl->addVar("show_tooltip", "title_style", $eventTooltipTitleStyle);
 			$this->tmpl->addVar("show_tooltip", "border_style", $eventTooltipBorderStyle);
-			
-			// ツールチップコンテンツ
+
+			// ### ツールチップコンテンツ ###
 			// 簡易イベント
-			$contentText = 'event.content';
-			$this->tmpl->addVar("show_tooltip", "simple_event_content", $contentText);			
+			$tooltipOn = 'false';
+			if ($showSimpleEvent){
+				$contentText = 'event.content';
+				$tooltipOn = 'true';			// ツールチップ表示
+			} else {
+				$contentText = '\'\'';
+			}
+			$this->tmpl->addVar("show_tooltip", "simple_event_content", $contentText);
+			$this->tmpl->addVar("show_tooltip", "simple_event_tooltip_on", $tooltipOn);
+			
 			// イベント記事
-			$contentInfo = array();
-			$contentInfo[M3_TAG_MACRO_CONTENT_START_TIME]	= "' + ($.fullCalendar.formatDate(event.start, 'H:mm')) + '";		// コンテンツ置換キー(開始時間)
-			$contentInfo[M3_TAG_MACRO_CONTENT_END_TIME]		= "' + ($.fullCalendar.formatDate(event.end, 'H:mm')) + '";		// コンテンツ置換キー(終了時間)
-			$contentInfo[M3_TAG_MACRO_CONTENT_LOCATION]		= "' + event.location + '";			// コンテンツ置換キー(場所)
-			$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION]	= "' + event.description + '";			// コンテンツ置換キー(概要)
-			$contentText = $this->convertM3ToText($layoutTooltip, $contentInfo, true/*改行コード削除*/);
-			$contentText = "'" . $contentText . "'";		// 「'」で括る
+			$tooltipOn = 'false';
+			if ($this->showEventTooltip){
+				$contentInfo = array();
+				$contentInfo[M3_TAG_MACRO_CONTENT_START_TIME]	= "' + (event.start ? (moment(event.start).format('H:mm')) : '') + '";		// コンテンツ置換キー(開始時間)
+				$contentInfo[M3_TAG_MACRO_CONTENT_END_TIME]		= "' + (event.end ? (moment(event.end).format('H:mm')) : '') + '";		// コンテンツ置換キー(終了時間)
+				$contentInfo[M3_TAG_MACRO_CONTENT_LOCATION]		= "' + event.location + '";			// コンテンツ置換キー(場所)
+				$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION]	= "' + event.description + '";			// コンテンツ置換キー(概要)
+				$contentText = $this->convertM3ToText($layoutTooltip, $contentInfo, true/*改行コード削除*/);
+				$contentText = "'" . $contentText . "'";		// 「'」で括る
+				$tooltipOn = 'true';			// ツールチップ表示
+			} else {
+				$contentText = '\'\'';
+			}
 			$this->tmpl->addVar("show_tooltip", "content", $contentText);
+			$this->tmpl->addVar("show_tooltip", "event_tooltip_on", $tooltipOn);
 		}
 		
 		// データを埋め込む
@@ -321,11 +336,14 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		// イベント記事へのリンクを生成
 //		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
 		
-		$event = array('title'	=> $title,
+		$event = array(
+//						'id'	=> '123',
+						'title'	=> $title,
 						'start'	=> $startDate,		// 開始
 						'end'	=> $endDate,		// 終了
-//						'url'	=> $linkUrl,		// リンク先
+						'url'	=> $linkUrl,		// リンク先
 						'className'	=> self::DEFAULT_SIMPLE_EVENT_CLASS_NAME,				// イベントクラス名
+//						'allDay'	=> 'true',		// 
 
 						// ツールチップ用データ
 						'content'	=> $fetchedRow['cv_html']			// ツールチップコンテンツ
@@ -369,7 +387,8 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		// イベント記事へのリンクを生成
 		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
 		
-		$event = array('title'	=> $title,
+		$event = array(
+						'title'	=> $title,
 						'start'	=> $startDate,		// 開始
 						'end'	=> $endDate,		// 終了
 						'url'	=> $linkUrl,		// リンク先
