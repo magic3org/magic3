@@ -16,17 +16,10 @@ header: {
 	// title, prev, next, prevYear, nextYear, today
 	left: 'prev,next today',
 	center: 'title',
-	//right: 'month agendaWeek agendaDay'
+	//right: 'month,agendaWeek,agendaDay'
+	//right: 'month,basicWeek,basicDay'
 	right: ''
 },
-// 最初の曜日
-firstDay: 0, // 0:日曜日、1:月曜日
-// 土曜、日曜を表示
-weekends: true,
-// 週モード (fixed, liquid, variable)
-weekMode: 'fixed',
-// 週数を表示
-weekNumbers: false,
 // コンテンツの高さ(px)
 //contentHeight: 600,
 // カレンダーの縦横比(比率が大きくなると高さが縮む)
