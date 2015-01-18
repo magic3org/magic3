@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -22,15 +22,15 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 	protected static $_mainDb;			// DB接続オブジェクト
 	
 	// 画面
+	const TASK_CALENDAR			= 'calendar';			// カレンダー設定
+	const TASK_CALENDAR_LIST	= 'calendar_list';		// カレンダー設定一覧
+	const TASK_EVENT			= 'event';				// 簡易イベント一覧
+	const TASK_EVENT_DETAIL		= 'event_detail';		// 簡易イベント詳細
 	const TASK_DATE				= 'date';				// 日付管理
 	const TASK_DATE_DETAIL		= 'date_detail';		// 日付管理詳細
-	const TASK_DATETYPE			= 'datetype';					// 日付タイプ一覧
-	const TASK_DATETYPE_DETAIL	= 'datetype_detail';				// 日付タイプ詳細
-	const TASK_CONFIG			= 'config';				// 基本設定
-	const TASK_CONFIG_LIST		= 'config_list';		// 設定一覧
-	const TASK_EVENT			= 'event';				// 簡易イベント管理
-	const TASK_EVENT_DETAIL		= 'event_detail';		// 簡易イベント管理詳細
-	const DEFAULT_TASK			= 'config';
+	const TASK_DATETYPE			= 'datetype';			// 日付タイプ一覧
+	const TASK_DATETYPE_DETAIL	= 'datetype_detail';	// 日付タイプ詳細
+	const DEFAULT_TASK			= 'calendar';
 
 	// カレンダー用スクリプト
 	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル
@@ -71,11 +71,127 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TASK;		// デフォルト画面を設定
+		
+		// パンくずリストの定義データ作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_CALENDAR:					// カレンダー設定
+				$titles[] = 'カレンダー管理';
+				$titles[] = 'カレンダー設定';
+				break;
+			case self::TASK_CALENDAR_LIST:			// カレンダー設定一覧
+				$titles[] = 'カレンダー管理';
+				$titles[] = 'カレンダー設定';
+				$titles[] = '設定一覧';
+				break;
+			case self::TASK_EVENT:				// 簡易イベント一覧
+				$titles[] = 'カレンダー管理';
+				$titles[] = '簡易イベント一覧';
+				break;
+			case self::TASK_EVENT_DETAIL:		// 簡易イベント詳細
+				$titles[] = 'カレンダー管理';
+				$titles[] = '簡易イベント一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_DATE:				// 日付定義
+				$titles[] = '基本';
+				$titles[] = '日付定義';
+				break;
+			case self::TASK_DATE_DETAIL:		// 日付定義詳細
+				$titles[] = '基本';
+				$titles[] = '日付定義';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_DATETYPE:					// 日付タイプ
+				$titles[] = '基本';
+				$titles[] = '日付タイプ定義';
+				break;
+			case self::TASK_DATETYPE_DETAIL:				// 日付タイプ詳細
+				$titles[] = '基本';
+				$titles[] = '日付タイプ定義';
+				$titles[] = '詳細';
+				break;
+		}
+		
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> 'カレンダー管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_CALENDAR ||				// カレンダー設定
+											$task == self::TASK_CALENDAR_LIST ||		// カレンダー設定一覧
+											$task == self::TASK_EVENT ||				// 簡易イベント一覧
+											$task == self::TASK_EVENT_DETAIL			// 簡易イベント詳細
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> 'カレンダー設定',
+								'task'		=> self::TASK_CALENDAR,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CALENDAR ||				// カレンダー設定
+													$task == self::TASK_CALENDAR_LIST			// カレンダー設定一覧
+												)
+							),
+							(Object)array(
+								'name'		=> '簡易イベント',
+								'task'		=> self::TASK_EVENT,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_EVENT ||				// 簡易イベント一覧
+													$task == self::TASK_EVENT_DETAIL			// 簡易イベント詳細
+												)
+							)
+						)
+					),
+					(Object)array(
+						'name'		=> '基本',
+						'task'		=> self::TASK_DATE,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_DATE ||			// 日付定義
+											$task == self::TASK_DATE_DETAIL ||	// 日付定義詳細
+											$task == self::TASK_DATETYPE || 	// 日付タイプ
+											$task == self::TASK_DATETYPE_DETAIL 	// 日付タイプ詳細
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '日付定義',
+								'task'		=> self::TASK_DATE,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_DATE ||			// 日付定義
+													$task == self::TASK_DATE_DETAIL		// 日付定義詳細
+												)
+							),
+							(Object)array(
+								'name'		=> '日付タイプ',
+								'task'		=> self::TASK_DATETYPE,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_DATETYPE || 	// 日付タイプ
+													$task == self::TASK_DATETYPE_DETAIL 	// 日付タイプ詳細
+												)
+							)
+						)
+					)
+				);
 
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
+/*
 		// パンくずリストを作成
 		switch ($task){
-			case self::TASK_CONFIG:				// カレンダー設定
-			case self::TASK_CONFIG_LIST:		// 設定一覧
+			case self::TASK_CALENDAR:				// カレンダー設定
+			case self::TASK_CALENDAR_LIST:		// 設定一覧
 				$linkList = ' &gt;&gt; カレンダー管理 &gt;&gt; カレンダー設定';
 				break;
 			case self::TASK_EVENT:				// 簡易イベント管理
@@ -101,9 +217,9 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 	
 		// カレンダー管理
 		$current = '';
-		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CONFIG);
-		if ($task == self::TASK_CONFIG ||		// カレンダー定義
-			$task == self::TASK_CONFIG_LIST ||	// カレンダー定義一覧
+		$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CALENDAR);
+		if ($task == self::TASK_CALENDAR ||		// カレンダー定義
+			$task == self::TASK_CALENDAR_LIST ||	// カレンダー定義一覧
 			$task == self::TASK_EVENT ||				// 簡易イベント管理
 			$task == self::TASK_EVENT_DETAIL){		// 簡易イベント管理詳細
 			$current = 'id="current"';
@@ -129,15 +245,15 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 		$menuText .= '<div id="configmenu-lower">' . M3_NL;
 		$menuText .= '<ul>' . M3_NL;
 
-		if ($task == self::TASK_CONFIG ||		// カレンダー定義
-			$task == self::TASK_CONFIG_LIST ||	// カレンダー定義一覧
+		if ($task == self::TASK_CALENDAR ||		// カレンダー定義
+			$task == self::TASK_CALENDAR_LIST ||	// カレンダー定義一覧
 			$task == self::TASK_EVENT ||				// 簡易イベント管理
 			$task == self::TASK_EVENT_DETAIL){		// 簡易イベント管理詳細
 			
 			// カレンダー定義
 			$current = '';
-			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CONFIG);
-			if ($task == self::TASK_CONFIG || $task == self::TASK_CONFIG_LIST) $current = 'id="current"';
+			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_CALENDAR);
+			if ($task == self::TASK_CALENDAR || $task == self::TASK_CALENDAR_LIST) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>カレンダー設定</span></a></li>' . M3_NL;
 			
 			// 簡易イベント
@@ -156,12 +272,6 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 			if ($task == self::TASK_DATE || $task == self::TASK_DATE_DETAIL) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>日付定義</span></a></li>' . M3_NL;
 			
-/*			// イベント管理
-			$current = '';
-			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DATE);
-			if ($task == self::TASK_DATE || $task == self::TASK_DATE_DETAIL) $current = 'id="current"';
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>イベント管理</span></a></li>' . M3_NL;*/
-			
 			// 日付タイプ
 			$current = '';
 			$link = $this->getUrl($baseUrl . '&task=' . self::TASK_DATETYPE);
@@ -177,6 +287,7 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . '汎用カレンダー' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+*/
 	}
 }
 ?>

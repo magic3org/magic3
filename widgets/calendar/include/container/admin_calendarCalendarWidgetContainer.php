@@ -8,14 +8,14 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getWidgetContainerPath('calendar') . '/admin_calendarBaseWidgetContainer.php');
 
-class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContainer
+class admin_calendarCalendarWidgetContainer extends admin_calendarBaseWidgetContainer
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
@@ -49,7 +49,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == self::TASK_CONFIG_LIST){		// 一覧画面
+		if ($task == self::TASK_CALENDAR_LIST){		// 設定一覧
 			return 'admin_list.tmpl.html';
 		} else {			// 一覧画面
 			return 'admin.tmpl.html';
@@ -67,7 +67,7 @@ class admin_calendarConfigWidgetContainer extends admin_calendarBaseWidgetContai
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == self::TASK_CONFIG_LIST){		// 一覧画面
+		if ($task == self::TASK_CALENDAR_LIST){		// 設定一覧
 			return $this->createList($request);
 		} else {			// 詳細設定画面
 			return $this->createDetail($request);

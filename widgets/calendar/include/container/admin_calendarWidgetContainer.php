@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -44,6 +44,11 @@ class admin_calendarWidgetContainer extends admin_calendarBaseWidgetContainer
 		// コンテナを起動
 		$goWidget = false;		// サブウィジェットを実行するかどうか
 		switch ($task){
+			case self::TASK_CALENDAR:					// カレンダー設定設定
+			case self::TASK_CALENDAR_LIST:			// カレンダー設定設定一覧
+				$task = self::TASK_CALENDAR;
+				$goWidget = true;		// サブウィジェットを実行するかどうか
+				break;
 			case self::TASK_DATE:					// 日付管理一覧
 			case self::TASK_DATE_DETAIL:			// 日付管理詳細
 				$task = self::TASK_DATE;
@@ -52,11 +57,6 @@ class admin_calendarWidgetContainer extends admin_calendarBaseWidgetContainer
 			case self::TASK_DATETYPE:					// 日付タイプ一覧
 			case self::TASK_DATETYPE_DETAIL:				// 日付タイプ詳細
 				$task = self::TASK_DATETYPE;
-				$goWidget = true;		// サブウィジェットを実行するかどうか
-				break;
-			case self::TASK_CONFIG:		// 基本設定
-			case self::TASK_CONFIG_LIST:		// 設定一覧
-				$task = self::TASK_CONFIG;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 			case self::TASK_EVENT:				// 簡易イベント管理
