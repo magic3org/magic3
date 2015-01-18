@@ -559,7 +559,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$selected = '';
 		$checked = '';
 		$value = $fetchedRow['pg_id'];
-		
+
 		// ページ情報(Bootstrap型設定画面)
 		$contentType = '';
 		$templateId = '';
@@ -568,14 +568,14 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		for ($i = 0; $i < $pageInfoCount; $i++){
 			$pageInfo = $this->pageInfoRows[$i];
 			if ($pageInfo['pg_id'] == $value){
-				$contentType = $pageInfo['pn_content_type'];
+				$contentType = strval($pageInfo['pn_content_type']);			// NULL値あり
 				$templateId = $pageInfo['pn_template_id'];
 				$useSsl = $pageInfo['pn_use_ssl'];
 				if ($value == $this->pageSubId) $this->pageTemplateId = $templateId;	// 個別ページのテンプレートID
 				break;
 			}
 		}
-		
+
 		// 表示ラベルを作成
 		$name = $this->convertToDispString($fetchedRow['pg_name']);
 		$nameWithAttr = $name . '(' . $this->convertToDispString($value) . ')';
@@ -610,8 +610,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			// Bootstrap型設定画面用
 			'col_title'	=> $pageTitle,		// ページ名
 			'col_id'	=> $this->convertToDispString($value),			// ページID
-			'col_content_type'	=> $contentType,		// コンテンツタイプ
-			'col_template_id'	=> $templateId,			// テンプレートID
+			'col_content_type'	=> $this->convertToDispString($contentType),		// コンテンツタイプ
+			'col_template_id'	=> $this->convertToDispString($templateId),			// テンプレートID
 			'col_checked'		=> $checked				// 選択状態
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
