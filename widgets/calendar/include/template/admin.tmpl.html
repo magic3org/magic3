@@ -40,96 +40,100 @@ function listItem(){
 	return true;
 }
 $(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+	
 	m3SetWysiwygEditor('item_layout_tooltip', 100/* 高さ */, false, 'layout');
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="config" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
-<table width="90%">
-<tr><td><span {_HELP_CONFIG_DETAIL}><label>カレンダー設定</label></span></td>
-<td align="right"><span {_HELP_CALENDAR_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
-</td></tr>
-<tr><td colspan="2">
+<h3 class="m3config_h"><span {_HELP_CALENDAR_DETAIL}>カレンダー設定</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_CALENDAR_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
 
-<table class="simple-table" width="100%">
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_CONFIG_NAME_INPUT}>名前</span></td>
+	    <th><span {_HELP_CALENDAR_NAME_INPUT}>名前</span></th>
 	    <td colspan="2">
-	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+	    <div class="col-sm-4 m3config_item"><select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
 	        <patTemplate:tmpl name="title_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select>
+	    </select></div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    <div class="col-sm-6 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" size="40" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_DATE}>日付表示</span></td>
-	    <td colspan="2">日付定義：<select name="item_date_def_id">
+    <tr>
+	    <th><span {_HELP_CALENDAR_VIEW_DATE}>日付表示</span></th>
+	    <td colspan="2">
+		<div class="form-control-static m3config_item col-sm-2">日付定義：</div>
+		<div class="col-sm-3 m3config_item"><select name="item_date_def_id" class="form-control">
 	        <option value="0">[選択なし]</option>
 	        <patTemplate:tmpl name="date_def_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select>
+	    </select></div>
 		</td>
 	</tr>
-    <tr>
-	    <td class="table-headside" rowspan="9"><span {_HELP_CONFIG_VIEW_EVENT}>イベント表示</span></td>
-	    <td class="table-headside" width="150" rowspan="3">簡易イベント</td>
-		<td><div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="item_show_simple_event" {SHOW_SIMPLE_EVENT} />表示</label></div></td>
-	</tr>
-	<tr><td class="table-headside">デフォルトCSS</td></tr>
-	<tr><td><label>ツールチップ(タイトル)：<input type="text" name="item_simple_event_tooltip_title_style" value="{SIMPLE_EVENT_TOOLTIP_TITLE_STYLE}" style="width:500px;" /></label>
-		<label>ツールチップ(ボーダー)：<input type="text" name="item_simple_event_tooltip_border_style" value="{SIMPLE_EVENT_TOOLTIP_BORDER_STYLE}" style="width:500px;" /></label></td></tr>
 	<tr>
-	    <td class="table-headside" rowspan="5">イベント記事</td>
-		<td><div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="item_show_event" {SHOW_EVENT} />表示</label></div>
-		<div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="item_show_event_tooltip" {SHOW_EVENT_TOOLTIP} />ツールチップを表示</label></div></td>
-	</tr>
-	<tr><td class="table-headside">デフォルトCSS</td></tr>
-	<tr><td><label>ツールチップ(タイトル)：<input type="text" name="item_event_tooltip_title_style" value="{EVENT_TOOLTIP_TITLE_STYLE}" style="width:500px;" /></label>
-		<label>ツールチップ(ボーダー)：<input type="text" name="item_event_tooltip_border_style" value="{EVENT_TOOLTIP_BORDER_STYLE}" style="width:500px;" /></label></td></tr>
-	<tr><td class="table-headside">ツールチップレイアウト</td></tr>
-	<tr><td><textarea name="item_layout_tooltip">{LAYOUT_TOOLTIP}</textarea></td></tr>
-	<tr>
-	    <td class="table-headside">祝日</td>
-		<td><div class="item_list_block"><label class="item_list_inline"><input type="checkbox" name="item_show_holiday" {SHOW_HOLIDAY} />表示(Googleカレンダーから取得)</label><label class="item_list_inline" for="item_holiday_color">カラー：<input type="text" id="item_holiday_color" name="item_holiday_color" value="{HOLIDAY_COLOR}" size="10" maxlength="10" /><input type="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_holiday_color);" /></label></div></td>
-	<tr>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONFIG_VIEW_OPTION}>表示オプション</span></td>
-	    <td colspan="2"><textarea name="item_view_option" rows="10" style="width:100%;">{VIEW_OPTION}</textarea></td>
+	    <th>祝日表示</th>
+		<td colspan="2">
+		<div class="checkbox"><label><input type="checkbox" name="item_show_holiday" {SHOW_HOLIDAY} />表示(Googleカレンダーから取得)</label></div>
+		<div class="form-control-static m3config_item col-sm-2">カラー：</div><div class="col-sm-3 m3config_item"><input type="text" id="item_holiday_color" name="item_holiday_color" class="form-control" value="{HOLIDAY_COLOR}" size="10" maxlength="10" /></div><input type="button" class="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_holiday_color);" /></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_CSS}>CSS</span></td>
-	    <td colspan="2"><textarea name="item_css" rows="10" style="width:100%;">{CSS}</textarea></td>
+	    <th rowspan="6"><span {_HELP_CALENDAR_VIEW_EVENT}>イベント表示</span></th>
+	    <th rowspan="3">簡易イベント</th>
+		<td><div class="checkbox"><label><input type="checkbox" name="item_show_simple_event" {SHOW_SIMPLE_EVENT} />表示</label></div></td>
 	</tr>
-	<tr class="even">
-	    <td align="right" colspan="3">
+	<tr><td class="info">デフォルトCSS</td></tr>
+	<tr><td><div class="form-group">ツールチップ(タイトル)：<input type="text" name="item_simple_event_tooltip_title_style" class="form-control" value="{SIMPLE_EVENT_TOOLTIP_TITLE_STYLE}" /></div>
+		<div class="form-group">ツールチップ(ボーダー)：<input type="text" name="item_simple_event_tooltip_border_style" class="form-control" value="{SIMPLE_EVENT_TOOLTIP_BORDER_STYLE}" /></div></td>
+	</tr>
+	<tr>
+	    <th rowspan="3">イベント記事</th>
+		<td><div class="checkbox"><label><input type="checkbox" name="item_show_event" {SHOW_EVENT} />表示</label></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_show_event_tooltip" {SHOW_EVENT_TOOLTIP} />ツールチップを表示</label></div></td>
+	</tr>
+	<tr><td class="info">デフォルトCSS</td></tr>
+	<tr><td><div class="form-group">ツールチップ(タイトル)：<input type="text" name="item_event_tooltip_title_style" class="form-control" value="{EVENT_TOOLTIP_TITLE_STYLE}" /></div>
+		<div class="form-group">ツールチップ(ボーダー)：<input type="text" name="item_event_tooltip_border_style" class="form-control" value="{EVENT_TOOLTIP_BORDER_STYLE}" /></div></td>
+	</tr>
+	<tr>
+	    <th><span {_HELP_CALENDAR_VIEW_OPTION}>表示オプション</span></th>
+	    <td colspan="2"><textarea name="item_view_option" class="form-control" rows="10">{VIEW_OPTION}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CALENDAR_CSS}>CSS</span></th>
+	    <td colspan="2"><textarea name="item_css" class="form-control" rows="10">{CSS}</textarea></td>
+	</tr>
+    <tr>
+	    <th rowspan="2"><span {_HELP_CALENDAR_LAYOUT}>レイアウト</span></th>
+	    <td class="info" colspan="2">イベント記事ツールチップ</td>
+	</tr>
+	<tr><td class="ckeditor" colspan="2"><textarea name="item_layout_tooltip" >{LAYOUT_TOOLTIP}</textarea></td></tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-
-</table>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
