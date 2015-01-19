@@ -104,11 +104,11 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 				break;
 			case self::TASK_DATETYPE:					// 日付タイプ
 				$titles[] = '基本';
-				$titles[] = '日付タイプ定義';
+				$titles[] = '日付タイプ';
 				break;
 			case self::TASK_DATETYPE_DETAIL:				// 日付タイプ詳細
 				$titles[] = '基本';
-				$titles[] = '日付タイプ定義';
+				$titles[] = '日付タイプ';
 				$titles[] = '詳細';
 				break;
 		}
