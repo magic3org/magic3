@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -37,6 +37,9 @@ function listItem(){
 	return true;
 }
 $(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+	
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
@@ -53,58 +56,54 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="event_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="entry" value="{ENTRY}" />
-<table width="90%">
-<tr><td><span {_HELP_EVENT_DETAIL}><label>簡易イベント詳細</label></span></td><td align="right">
+<h3 class="m3config_h"><span {_HELP_EVENT_DETAIL}>簡易イベント詳細</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_DATE_BUTTONS}><div class="btn-group">
 <patTemplate:tmpl name="cancel_button" visibility="visible"><span {_HELP_EVENT_RET_BTN}><input type="button" class="button" onclick="listItem();" value="戻る" /></span></patTemplate:tmpl>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table">
+</div></div></div>
+
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" width="100"><span {_HELP_EVENT_NAME}>タイトル</span></td>
-	    <td  width="300"><input type="text" name="item_name" value="{NAME}" size="60" maxlength="60" style="width:100%;" /></td>
-	    <td class="table-headside" width="100"><span {_HELP_EVENT_VISIBLE}>公開</span></td>
-	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>	    
-	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_EVENT_DT}>日時</span></td>
-	    <td colspan="3">開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;
-		<input type="checkbox" name="item_is_all_day" {IS_ALL_DAY} />終日
-		</td>
-	</tr>
-    <!--<tr class="even">
-	    <td class="table-headside"><span {_HELP_EVENT_CATEGORY}>カテゴリー</span></td>
-	    <td colspan="5">
-    <patTemplate:tmpl name="category">
-    <select name="item_category{INDEX}">
-        <option value="0">-- 未選択 --</option>
-        <patTemplate:tmpl name="category_list">
-		<option value="{VALUE}" {SELECTED}>{NAME}</option>
-	</patTemplate:tmpl>
-    </select>
-    </patTemplate:tmpl>
-	    </td>
-	</tr>-->
-    <tr>
-	    <td class="table-headside"><span {_HELP_EVENT_CONTENT}>内容</span></td>
-	    <td colspan="3" width="800"><textarea name="item_html">{HTML}</textarea></td>
-	</tr>
-	<tr class="even">
-	    <td class="table-headside">更新者</td>
-	    <td>{UPDATE_USER}</td>
-	    <td class="table-headside">更新日時</td>
-	    <td colspan="3">{UPDATE_DT}</td>
+	    <th><span {_HELP_EVENT_NAME}>タイトル</span></th>
+	    <td colspan="3"><input type="text" name="item_name" class="form-control" value="{NAME}" size="60" maxlength="60" /></td>
 	</tr>
 	<tr>
-	    <td colspan="4" align="right">
+	    <th><span {_HELP_EVENT_VISIBLE}>公開</span></th>
+	    <td colspan="3"><div class="checkbox"><label style="display:inline;"><input type="checkbox" name="item_visible" {VISIBLE} /></label></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_EVENT_DT}>日時</span></th>
+	    <td colspan="3">
+<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item">時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-5">～</div></div><div style="clear:both;"></div>
+        <div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" >時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div>
+		<div class="col-sm-4 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_is_all_day" {IS_ALL_DAY} />終日</label></div></div>
+		</div>
+		<!--
+		開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;
+		<input type="checkbox" name="item_is_all_day" {IS_ALL_DAY} />終日
+		-->
+		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_EVENT_CONTENT}>内容</span></th>
+	    <td class="ckeditor" colspan="3"><textarea name="item_html">{HTML}</textarea></td>
+	</tr>
+	<tr>
+	    <th>更新者</td>
+	    <td style="width:200px;"><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
+	    <th>更新日時</td>
+	    <td colspan="3"><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="delete_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 </patTemplate:tmpl>
@@ -114,12 +113,7 @@ $(function(){
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

@@ -86,11 +86,11 @@ class admin_calendarBaseWidgetContainer extends BaseAdminWidgetContainer
 				break;
 			case self::TASK_EVENT:				// 簡易イベント一覧
 				$titles[] = 'カレンダー管理';
-				$titles[] = '簡易イベント一覧';
+				$titles[] = '簡易イベント';
 				break;
 			case self::TASK_EVENT_DETAIL:		// 簡易イベント詳細
 				$titles[] = 'カレンダー管理';
-				$titles[] = '簡易イベント一覧';
+				$titles[] = '簡易イベント';
 				$titles[] = '詳細';
 				break;
 			case self::TASK_DATE:				// 日付定義
