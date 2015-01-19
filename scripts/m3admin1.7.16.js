@@ -724,6 +724,25 @@ function m3SetConfigTable(object)
 	//$(tableObj).find('tbody tr:odd').addClass("table table-bordered table-striped table-hover");
 }
 /**
+ * 設定入力用サブテーブルのカラー設定
+ *
+ * @param object  object			テーブルオブジェクトまたはテーブルID文字列
+ * @return なし
+ */
+function m3SetConfigSubTable(object)
+{
+	var tableObj;		// テーブルオブジェクト
+	
+	if (typeof object == 'string'){
+		tableObj = document.getElementById(object);
+	} else {
+		tableObj = object;
+	}
+	// カラー設定
+	$(tableObj).addClass('table table-condensed table-bordered table-striped');
+	$(tableObj).find('th').addClass('info');		// ヘッダ部
+}
+/**
  * モーダル入力用テーブルのカラー設定
  *
  * @param object  object			テーブルオブジェクトまたはテーブルID文字列
