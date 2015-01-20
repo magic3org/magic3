@@ -214,11 +214,18 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$editLogoButton = $this->gDesign->createEditButton($editLogoUrl, $this->_('Change logo'));
 		$this->tmpl->addVar("_widget", "edit_logo_button", $editLogoButton);
 		
-		// 画面にデータを埋め込む
+		// データ読み込み
 		$siteName = $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_NAME);		// サイト名
 		$siteEmail = $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL);
 		$siteSlogan = $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_SLOGAN);// サイトスローガン
 		$siteCopyRight = $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_COPYRIGHT);		// 著作権
+		$siteTitle	= $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_TITLE);		// 画面タイトル
+		$siteDesc	= $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION);		// サイト要約
+		$siteKeyword = $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS);		// サイトキーワード
+		$metaOthers	= $this->db->getSiteDef($this->langId, self::SD_HEAD_OTHERS);		// ヘッダその他タグ
+		$googleApiKey = $this->_db->getSystemConfig(self::CF_GOOGLE_API_KEY);	// GoogleAPIキー
+		
+		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "site_name", $this->convertToDispString($siteName));		// サイト名
 		$this->tmpl->addVar("_widget", "site_email", $this->convertToDispString($siteEmail));
 		$this->tmpl->addVar("_widget", "site_slogan", $this->convertToDispString($siteSlogan));		// サイトスローガン
@@ -226,10 +233,6 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$this->tmpl->addVar("_widget", "google_api_key", $this->convertToDispString($googleApiKey));	// GoogleAPIキー
 		
 		// SEO
-		$siteTitle	= $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_TITLE);		// 画面タイトル
-		$siteDesc	= $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION);		// サイト要約
-		$siteKeyword = $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS);		// サイトキーワード
-		$metaOthers	= $this->db->getSiteDef($this->langId, self::SD_HEAD_OTHERS);		// ヘッダその他タグ
 		$this->tmpl->addVar("_widget", "site_title", $this->convertToDispString($siteTitle));
 		$this->tmpl->addVar("_widget", "site_desc", $this->convertToDispString($siteDesc));
 		$this->tmpl->addVar("_widget", "site_keyword", $this->convertToDispString($siteKeyword));
