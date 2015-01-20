@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-05 13:02+0900\n"
-"PO-Revision-Date: 2015-01-05 13:02+0900\n"
+"POT-Creation-Date: 2015-01-21 08:02+0900\n"
+"PO-Revision-Date: 2015-01-21 08:02+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -236,7 +236,7 @@ msgid "Additional CSS Class"
 msgstr "追加CSSクラス"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:562
-#: ../container/admin_mainConfigsiteWidgetContainer.php:228
+#: ../container/admin_mainConfigsiteWidgetContainer.php:229
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
 #: ../container/admin_mainMenudefWidgetContainer.php:178
@@ -351,24 +351,28 @@ msgid "Logo"
 msgstr "ロゴ"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:223
+msgid "Google API Key"
+msgstr "GoogleAPIキー"
+
+#: ../container/admin_mainConfigsiteWidgetContainer.php:224
 msgid "Page Header Info (Default)"
 msgstr "ページヘッダ情報(デフォルト値)"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:224
+#: ../container/admin_mainConfigsiteWidgetContainer.php:225
 msgid "Header Tilte"
 msgstr "タイトル名"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:225
+#: ../container/admin_mainConfigsiteWidgetContainer.php:226
 #: ../help/help_configsite.php:63
 msgid "Site Description"
 msgstr "サイト説明"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:226
+#: ../container/admin_mainConfigsiteWidgetContainer.php:227
 #: ../help/help_configsite.php:67
 msgid "Header Keywords"
 msgstr "検索キーワード"
 
-#: ../container/admin_mainConfigsiteWidgetContainer.php:227
+#: ../container/admin_mainConfigsiteWidgetContainer.php:228
 #: ../help/help_configsite.php:71
 msgid "Header Others (by Tag Style)"
 msgstr "その他(タグ形式)"
@@ -3083,9 +3087,6 @@ msgstr ""
 #~ msgstr ""
 #~ "アップロードファイルが見つかりません。(要因： アップロード可能なファイルの"
 #~ "Maxサイズを超えている可能性があります。 %dバイト)"
-
-#~ msgid "Google Maps Key"
-#~ msgstr "Googleマップ利用キー"
 
 #~ msgid ""
 #~ "Input google maps key for this site. If it fills, you can FCKEditor with "

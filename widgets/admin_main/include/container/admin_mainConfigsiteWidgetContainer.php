@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -23,7 +23,8 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 	private $permitMimeType;			// アップロードを許可する画像タイプ
 	private $isMultiLang;			// 多言語対応画面かどうか
 	
-	const TEST_MAIL_FORM = 'test';		// テストメールフォーム
+	const CF_GOOGLE_API_KEY	= 'google_api_key';		// GoogleAPIキー
+	const TEST_MAIL_FORM = 'test';					// テストメールフォーム
 	const SD_HEAD_OTHERS	= 'head_others';		// ヘッダその他タグ
 	
 	/**
@@ -106,7 +107,8 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 			$siteDesc = $request->trimValueOf('site_description');		// サイト要約
 			$siteKeyword = $request->trimValueOf('site_keyword');		// サイトキーワード
 			$metaOthers		= $request->valueOf('meta_others');		// ヘッダその他タグ
-			
+			$googleApiKey = $request->trimValueOf('google_api_key');		// GoogleAPIキー
+/*			
 			$isErr = false;
 			if (!$isErr){		// サイト名
 				if (!$this->db->updateSiteDef($this->langId, M3_TB_FIELD_SITE_NAME, $siteName)) $isErr = true;
@@ -137,6 +139,33 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 			} else {
 				$this->setMsg(self::MSG_GUIDANCE, $this->_('Data updated.'));		// データを更新しました
 			}
+			*/
+			
+			$ret = true;
+			if ($ret) $ret = $this->db->updateSiteDef($this->langId, M3_TB_FIELD_SITE_NAME, $siteName);		 // サイト名
+			
+			if ($ret) $ret = $this->db->updateSiteDef($this->langId, M3_TB_FIELD_SITE_EMAIL, $siteEmail);
+			
+			if ($ret) $ret = $this->db->updateSiteDef($this->langId, M3_TB_FIELD_SITE_SLOGAN, $siteSlogan);		// サイトスローガン
+
+			if ($ret) $ret = $this->db->updateSiteDef($this->langId, M3_TB_FIELD_SITE_COPYRIGHT, $siteCopyRight);	// 著作権
+
+			if ($ret) $ret = $this->db->updateSiteDef($this->langId, M3_TB_FIELD_SITE_TITLE, $siteTitle);
+			
+			if ($ret) $ret = $this->db->updateSiteDef($this->langId, M3_TB_FIELD_SITE_DESCRIPTION, $siteDesc);
+			
+			if ($ret) $ret = $this->db->updateSiteDef($this->langId, M3_TB_FIELD_SITE_KEYWORDS, $siteKeyword);
+
+			if ($ret) $ret = $this->db->updateSiteDef($this->langId, self::SD_HEAD_OTHERS, $metaOthers);
+			
+			if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_GOOGLE_API_KEY, $googleApiKey);		// GoogleAPIキー
+				
+			if ($ret){
+				$this->setMsg(self::MSG_GUIDANCE, $this->_('Data updated.'));		// データを更新しました
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating data.'));			// データ更新に失敗しました
+			}
+				
 			// システムパラメータを更新
 			//$this->gEnv->loadSystemParams();
 			
@@ -194,6 +223,7 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$this->tmpl->addVar("_widget", "site_email", $this->convertToDispString($siteEmail));
 		$this->tmpl->addVar("_widget", "site_slogan", $this->convertToDispString($siteSlogan));		// サイトスローガン
 		$this->tmpl->addVar("_widget", "site_copyright", $this->convertToDispString($siteCopyRight));	// 著作権
+		$this->tmpl->addVar("_widget", "google_api_key", $this->convertToDispString($googleApiKey));	// GoogleAPIキー
 		
 		// SEO
 		$siteTitle	= $this->db->getSiteDef($this->langId, M3_TB_FIELD_SITE_TITLE);		// 画面タイトル
@@ -220,6 +250,7 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 		$localeText['label_site_slogan'] = $this->_('Site Slogan');// サイトスローガン
 		$localeText['label_site_copyright'] = $this->_('Site Copyright');// 著作権
 		$localeText['label_site_logo'] = $this->_('Logo');// ロゴ
+		$localeText['label_google_api_key'] = $this->_('Google API Key');// GoogleAPIキー
 		$localeText['label_header_info'] = $this->_('Page Header Info (Default)');// ページヘッダ情報(デフォルト値)
 		$localeText['label_header_title'] = $this->_('Header Tilte');// タイトル名
 		$localeText['label_header_desc'] = $this->_('Site Description');// サイト説明
