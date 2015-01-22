@@ -32,12 +32,17 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カレンダー';		// デフォルトのウィジェットタイトル名
 	const MAX_ITEM_COUNT = 100;				// カレンダーに表示する項目の最大数
-	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-1.6.3/gcal.js';				// Googleカレンダー用スクリプト
+	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-2.2.6/gcal.js';				// Googleカレンダー用スクリプト
 	const DEFAULT_EVENT_TOOLTIP_TITLE_STYLE		= "color: '#fff', background: 'red'";		// ツールチップ(タイトル)のスタイル
 	const DEFAULT_EVENT_TOOLTIP_BORDER_STYLE	= "width: 2, radius: 5, color: '#444'";		// ツールチップ(ボーダー)のスタイル
 	const DEFAULT_SIMPLE_EVENT_CLASS_NAME = 'simple_event_default';			// デフォルトのクラス名(簡易イベント)
 	const DEFAULT_EVENT_CLASS_NAME = 'event_default';			// デフォルトのクラス名(イベント記事)
 	const OVERWRITE_CSS_FILE = '/overwrite.css';		// fullcalendarCSS上書き用ファイル
+	const EVENT_ID_HEAD = 'e-';							// イベント記事の識別用IDヘッダ
+	const SIMPLE_EVENT_ID_HEAD = 's-';					// 簡易イベント記事の識別用IDヘッダ
+	
+	// DB定義
+	const CF_GOOGLE_API_KEY	= 'google_api_key';		// GoogleAPIキー
 	
 	/**
 	 * コンストラクタ
@@ -197,9 +202,12 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		
 		// 祝日表示
 		if ($showHoliday){
+			$googleApiKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_API_KEY);			// GoogleAPIキー取得
+			
 			$this->tmpl->setAttribute('show_holiday', 'visibility', 'visible');
 			if (empty($holidayColor)) $holidayColor = 'red';
 			$this->tmpl->addVar("show_holiday", "color", $this->convertToDispString($holidayColor));
+			$this->tmpl->addVar("show_holiday", "google_api_key", $googleApiKey);
 		}
 		// ツールチップ用のデータを追加
 		if ($this->showEventTooltip || $showSimpleEvent){
@@ -337,7 +345,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 //		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
 		
 		$event = array(
-//						'id'	=> '123',
+						'id'	=> self::SIMPLE_EVENT_ID_HEAD . $entryId,
 						'title'	=> $title,
 						'start'	=> $startDate,		// 開始
 						'end'	=> $endDate,		// 終了
@@ -388,6 +396,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
 		
 		$event = array(
+						'id'	=> self::EVENT_ID_HEAD . $entryId,
 						'title'	=> $title,
 						'start'	=> $startDate,		// 開始
 						'end'	=> $endDate,		// 終了

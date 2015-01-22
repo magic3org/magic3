@@ -27,7 +27,9 @@ class admin_calendarCalendarWidgetContainer extends admin_calendarBaseWidgetCont
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_EVENT_TOOLTIP_TITLE_STYLE	= "color: '#fff', background: 'red'";		// ツールチップ(タイトル)のスタイル
 	const DEFAULT_EVENT_TOOLTIP_BORDER_STYLE	= "width: 2, radius: 5, color: '#444'";		// ツールチップ(ボーダー)のスタイル
-				
+	// DB定義
+	const CF_GOOGLE_API_KEY	= 'google_api_key';		// GoogleAPIキー
+		
 	/**
 	 * コンストラクタ
 	 */
@@ -127,6 +129,11 @@ class admin_calendarCalendarWidgetContainer extends admin_calendarBaseWidgetCont
 					break;
 				}
 			}
+			// GoogleAPIを利用の場合はキーの設定をチェック
+			if ($showHoliday){
+				$retValue = $this->gSystem->getSystemConfig(self::CF_GOOGLE_API_KEY);
+				if (empty($retValue)) $this->setUserErrorMsg('GoogleAPIキーの設定が必要です');
+			}
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
@@ -159,6 +166,11 @@ class admin_calendarCalendarWidgetContainer extends admin_calendarBaseWidgetCont
 			}
 		} else if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
+			// GoogleAPIを利用の場合はキーの設定をチェック
+			if ($showHoliday){
+				$retValue = $this->gSystem->getSystemConfig(self::CF_GOOGLE_API_KEY);
+				if (empty($retValue)) $this->setUserErrorMsg('GoogleAPIキーの設定が必要です');
+			}
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 現在の設定値を取得

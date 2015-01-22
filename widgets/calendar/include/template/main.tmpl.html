@@ -16,9 +16,12 @@
 //<![CDATA[
 function get_calendar_success(request, retcode, jsondata)
 {
-	$('#calendar').fullCalendar('removeEvents');
-
 	if (jsondata.events){
+		var events = jsondata.events;
+		for (var i = 0; i < events.length; i++){
+			var event = events[i];
+			$('#calendar').fullCalendar('removeEvents', event.id);
+		}
 		$('#calendar').fullCalendar('addEventSource', jsondata.events);
 	}
 <patTemplate:tmpl name="show_dates" visibility="hidden">
@@ -57,15 +60,16 @@ $(function(){
     $('#calendar').fullCalendar({
 		{OPTION}
 <patTemplate:tmpl name="show_holiday" visibility="hidden">
-		events: {
-			url: 'http://www.google.com/calendar/feeds/ja.japanese%23holiday%40group.v.calendar.google.com/public/full/',
+        googleCalendarApiKey: '{GOOGLE_API_KEY}',
+        events: {
+            googleCalendarId: 'ja.japanese#holiday@group.v.calendar.google.com',
 			color: '{COLOR}',
 			success:function(events){
 				$(events).each(function(){
-					this.url = null;
-				});    
+					this.url = null;		// リンク削除
+				});
 			}
-		},
+        },
 </patTemplate:tmpl>
 <patTemplate:tmpl name="show_tooltip" visibility="hidden">
 		eventRender: function(event, element){
