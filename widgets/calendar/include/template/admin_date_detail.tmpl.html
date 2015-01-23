@@ -101,9 +101,9 @@ function addDate()
 // 時間枠を追加
 function addTime()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField" size="20" maxlength="60" /></td>';
-	lineText += '<td><input type="text" class="timeField" size="5" maxlength="5" /></td>';
-	lineText += '<td><input type="text" class="minuteField" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField form-control" size="20" maxlength="60" /></td>';
+	lineText += '<td><input type="text" class="timeField form-control" size="5" maxlength="5" /></td>';
+	lineText += '<td><input type="text" class="minuteField form-control" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
 	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	$('#time_list').append(lineText);
 
@@ -181,32 +181,138 @@ function selectMenu(){
 	return true;
 }
 function editTime(obj){
-	// 一旦時間割を削除
-	$("#time_list tr.dragRow").remove();
-	
-	// 時間割を作成
-	var timeList = obj.parents('.dragRow').data('timeList');
-	if (timeList){
-		for (var i = 0; i < timeList.length; i++){
-			var line = timeList[i];
-			
-			var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField" size="20" maxlength="60" /></td>';
-			lineText += '<td><input type="text" class="timeField" size="5" maxlength="5" /></td>';
-			lineText += '<td><input type="text" class="minuteField" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
-			lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
-	
-			var rowObj = $(lineText);
-			rowObj.find('.nameField').val(line.name);
-			rowObj.find('.timeField').val(line.time);
-			rowObj.find('.minuteField').val(line.minute);
-			$('#time_list').append(rowObj);
-		}
-		// 時間枠一覧を再設定
-		setupTimeList();
-	}
-	
 	// ダイアログ表示	
-	$("#def_time").data('dateRowObj', obj.parents('.dragRow')).dialog("open");
+//	$("#def_time").data('dateRowObj', obj.parents('.dragRow')).dialog("open");
+/*
+	$("#def_time").dialog({
+		autoOpen: false,
+		modal: true,
+		resizable: false,
+		width:800,
+		buttons: {
+			"キャンセル": function(){
+				$(this).dialog("close");
+			},
+			"更新": function(){
+				// エラーチェック
+				var errMessage = '';
+				
+				var lines = [];
+				$("#time_list tr.dragRow").each(function (index, obj){
+					var nameValue = jQuery.trim($(this).find('.nameField').val());
+					var timeValue = jQuery.trim($(this).find('.timeField').val());
+					var minuteValue = jQuery.trim($(this).find('.minuteField').val());
+					
+					if (timeValue == ''){
+						errMessage = '開始時間(' + (index + 1) + '行目)が入力されていません';
+						return false;
+					}
+					if (minuteValue == ''){
+						errMessage = '時間枠(' + (index + 1) + '行目)が入力されていません';
+						return false;
+					}
+					var line = { name:nameValue, time:timeValue, minute:minuteValue };
+					lines[index] = line;
+				});
+				
+				if (errMessage == ''){
+					// 時間割データを保存
+					$(this).data('dateRowObj').data('timeList', lines);
+					
+					$(this).dialog("close");
+				} else {
+					alert(errMessage);
+				}
+			}
+		}
+	});
+*/
+	var dialogText = '<div id="def_time">';
+	dialogText += '<table id="time_list" class="table table-condensed table-bordered table-striped">';
+	dialogText += '<thead>';
+	dialogText += '<tr><th class="info" style="width:50px;">移動</th><th class="info">時間枠名</th><th class="info" style="width:100px;">開始時間</th><th class="info" style="width:100px;">時間枠(分)</th><th class="info" style="width:50px;">操作</th></tr>';
+	dialogText += '</thead>';
+	dialogText += '</table>';
+	dialogText += '<div><input type="button" class="button btn btn-default" onclick="addTime();" value="追加" /></div>';
+	dialogText += '</div>';
+	
+	// 時間定義用ダイアログ作成
+	BootstrapDialog.show({
+		type: BootstrapDialog.TYPE_PRIMARY,
+		title: '時間割の作成',
+		message: dialogText,
+		closable: false,
+		nl2br: false,
+		onshown: function(dialog) {
+			dialog.setData('dateRowObj', obj.parents('.dragRow'));
+			
+			// 一旦時間割を削除
+			$("#time_list tr.dragRow").remove();
+	
+			// 時間割を作成
+			var timeList = obj.parents('.dragRow').data('timeList');
+			if (timeList){
+				for (var i = 0; i < timeList.length; i++){
+					var line = timeList[i];
+			
+					var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField form-control" size="20" maxlength="60" /></td>';
+					lineText += '<td><input type="text" class="timeField form-control" size="5" maxlength="5" /></td>';
+					lineText += '<td><input type="text" class="minuteField form-control" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
+					lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	
+					var rowObj = $(lineText);
+					rowObj.find('.nameField').val(line.name);
+					rowObj.find('.timeField').val(line.time);
+					rowObj.find('.minuteField').val(line.minute);
+					$('#time_list').append(rowObj);
+				}
+				// 時間枠一覧を再設定
+				setupTimeList();
+			}
+		},
+		buttons: [{
+			id: 'cancel',
+			label: 'キャンセル',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}, {
+			id: 'ok',
+			label: 'OK',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				// エラーチェック
+				var errMessage = '';
+				
+				var lines = [];
+				$("#time_list tr.dragRow").each(function (index, obj){
+					var nameValue = jQuery.trim($(this).find('.nameField').val());
+					var timeValue = jQuery.trim($(this).find('.timeField').val());
+					var minuteValue = jQuery.trim($(this).find('.minuteField').val());
+					
+					if (timeValue == ''){
+						errMessage = '開始時間(' + (index + 1) + '行目)が入力されていません';
+						return false;
+					}
+					if (minuteValue == ''){
+						errMessage = '時間枠(' + (index + 1) + '行目)が入力されていません';
+						return false;
+					}
+					var line = { name:nameValue, time:timeValue, minute:minuteValue };
+					lines[index] = line;
+				});
+				
+				if (errMessage == ''){
+					// 時間割データを保存
+					dialog.getData('dateRowObj').data('timeList', lines);
+
+					dialog.close();
+				} else {
+					alert(errMessage);
+				}
+			}
+		}]
+	});
 }
 $(function(){
 	// テーブルを作成
@@ -267,50 +373,6 @@ $(function(){
 		if (dateType == -1){
 			var timeList = timeListData[i++];
 			if (timeList) $(this).data('timeList', timeList);
-		}
-	});
-	
-	// 時間定義用ダイアログ
-	$("#def_time").dialog({
-		autoOpen: false,
-		modal: true,
-		resizable: false,
-		width:800,
-		buttons: {
-			"キャンセル": function(){
-				$(this).dialog("close");
-			},
-			"更新": function(){
-				// エラーチェック
-				var errMessage = '';
-				
-				var lines = [];
-				$("#time_list tr.dragRow").each(function (index, obj){
-					var nameValue = jQuery.trim($(this).find('.nameField').val());
-					var timeValue = jQuery.trim($(this).find('.timeField').val());
-					var minuteValue = jQuery.trim($(this).find('.minuteField').val());
-					
-					if (timeValue == ''){
-						errMessage = '開始時間(' + (index + 1) + '行目)が入力されていません';
-						return false;
-					}
-					if (minuteValue == ''){
-						errMessage = '時間枠(' + (index + 1) + '行目)が入力されていません';
-						return false;
-					}
-					var line = { name:nameValue, time:timeValue, minute:minuteValue };
-					lines[index] = line;
-				});
-				
-				if (errMessage == ''){
-					// 時間割データを保存
-					$(this).data('dateRowObj').data('timeList', lines);
-					
-					$(this).dialog("close");
-				} else {
-					alert(errMessage);
-				}
-			}
 		}
 	});
 });
@@ -452,19 +514,4 @@ $(function(){
 </div>
 </form>
 </div>
-<table id="def_time">
-    <tbody>
-    <tr>
-	    <th><span {_HELP_DATETYPE_TIME}>時間割</span></th>
-	    <td>
-	    <table id="time_list" class="simple-table-inner" width="100%">
-	    <thead>
-	    <tr><th width="35">移動</th><th width="200">時間枠名</th><th width="200">開始時間</th><th>時間枠(分)</th><th width="200">操作</th></tr>
-	    </thead>
-		</table>
-	    <div><input type="button" class="button" onclick="addTime();" value="追加" /></div>
-	    </td>
-	</tr>
-    </tbody>
-</table>
 </patTemplate:tmpl>
