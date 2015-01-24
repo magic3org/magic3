@@ -104,7 +104,7 @@ function addTime()
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField form-control" size="20" maxlength="60" /></td>';
 	lineText += '<td><input type="text" class="timeField form-control" size="5" maxlength="5" /></td>';
 	lineText += '<td><input type="text" class="minuteField form-control" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
-	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	lineText += '<td style="text-align: center;"><div class="form-control-static"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></div></td></tr>';
 	$('#time_list').append(lineText);
 
 	// 時間枠一覧を再設定
@@ -244,6 +244,7 @@ function editTime(obj){
 		closable: false,
 		nl2br: false,
 		onshown: function(dialog) {
+			// データ更新対象のオブジェクトを設定
 			dialog.setData('dateRowObj', obj.parents('.dragRow'));
 			
 			// 一旦時間割を削除
@@ -258,7 +259,7 @@ function editTime(obj){
 					var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField form-control" size="20" maxlength="60" /></td>';
 					lineText += '<td><input type="text" class="timeField form-control" size="5" maxlength="5" /></td>';
 					lineText += '<td><input type="text" class="minuteField form-control" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
-					lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+					lineText += '<td style="text-align: center;"><div class="form-control-static"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></div></td></tr>';
 	
 					var rowObj = $(lineText);
 					rowObj.find('.nameField').val(line.name);
