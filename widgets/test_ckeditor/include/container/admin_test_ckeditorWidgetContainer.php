@@ -15,7 +15,8 @@
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
-class admin_test_ckeditorWidgetContainer extends BaseAdminWidgetContainer
+//class admin_test_ckeditorWidgetContainer extends BaseAdminWidgetContainer
+class admin_test_ckeditorWidgetContainer extends BaseInstallWidgetContainer
 {
 	const CURRENT_VERSION = '1.1.0';		// 現在のバージョン
 	
