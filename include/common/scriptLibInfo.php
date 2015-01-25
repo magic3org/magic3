@@ -604,7 +604,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	{
 		// ##### 依存ライブラリ情報 #####
 		static $dependentLib = array(
-										self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
+										//self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
+										self::LIB_ELFINDER	=>	array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 										self::LIB_JQUERY_TIMEPICKER	=>	array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 										self::LIB_JQUERY_UPLOADFILE =>	array(self::LIB_JQUERY_FORM),
 										self::LIB_JQUERY_FULLCALENDAR	=> array(self::LIB_MOMENT)
