@@ -287,7 +287,7 @@ CKEDITOR.on('dialogDefinition', function(ev){
 							$(this).elfinder({
 								url: M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php' + option,
 								//url: M3_ROOT_URL + '/scripts/elfinder-2.1/php/connector.php' + option,
-								height: '500px',
+								height: '600px',
 								lang: 'ja',
 								resizable: false,
 								getFileCallback: function(file){
