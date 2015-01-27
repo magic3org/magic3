@@ -15,11 +15,8 @@
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
-//class admin_test_ckeditorWidgetContainer extends BaseAdminWidgetContainer
-class admin_test_ckeditorWidgetContainer extends BaseInstallWidgetContainer
+class admin_test_ckeditorWidgetContainer extends BaseAdminWidgetContainer
 {
-	const CURRENT_VERSION = '1.1.0';		// 現在のバージョン
-	
 	/**
 	 * コンストラクタ
 	 */
@@ -64,36 +61,6 @@ class admin_test_ckeditorWidgetContainer extends BaseInstallWidgetContainer
 //		$this->tmpl->addVar("_widget", "widget_url", $gEnvManager->getCurrentWidgetRootUrl());	// ウィジェットのルートディレクトリ
 //		$this->tmpl->addVar("_widget", "root_url", $gEnvManager->getRootUrl());
 //		$this->tmpl->addVar("_widget", "widget_sc_url", $gEnvManager->getCurrentWidgetScriptsUrl());
-	}
-	/**
-	 * SQLスクリプト実行
-	 *
-	 * 実行するSQLスクリプトファイル名を実行順に配列で返す。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param int $install					インストール種別(0=インストール、1=アンインストール、2=アップデート)
-	 * @param string $version				現在のバージョン
-	 * @return array						実行するスクリプトの配列
-	 */
-	function _doScript($request, $install, $version)
-	{
-		$scripts = array();
-		
-		switch ($install){
-			case 0:		// インストール
-				$scripts[] = 'install.sql';
-				break;
-			case 1:		// アンインストール
-				$scripts[] = 'uninstall.sql';
-				break;
-			case 2:		// アップデート
-				// ウィジェットのバージョンを確認
-				if (version_compare($version, self::CURRENT_VERSION) < 0) $scripts[] = 'update.sql';
-				break;
-			default:
-				break;
-		}
-		return $scripts;
 	}
 }
 ?>
