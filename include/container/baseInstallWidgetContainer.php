@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: baseInstallWidgetContainer.php 3187 2010-06-06 06:35:07Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -29,10 +29,10 @@ class BaseInstallWidgetContainer extends BaseWidgetContainer
 	 * 起動マネージャから呼ばれる唯一のメソッド
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param int $install					インストール種別(0=インストール、1=アンインストール、2=アップグレード)
+	 * @param int $install					インストール種別(-1=未設定、0=インストール、1=アンインストール、2=アップグレード)
 	 * @return								なし
 	 */
-	function process($request, $install)
+	function process($request, $install = -1)
 	{
 		// 管理者権限がなければ実行できない
 		if (!$this->gEnv->isSystemAdmin()) return;
