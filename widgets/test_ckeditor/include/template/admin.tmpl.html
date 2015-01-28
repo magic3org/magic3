@@ -36,29 +36,27 @@ function createUrl()
 $(function(){
 	m3SetConfigTable('mainconfig');
 	
+	// URL作成用にCKEditorを直接起動可能にする
 	m3LoadCKTools();
 	
+	// elFinder用の設定でCKEditorを作成
+	var config = {};
+	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_elfinder.js';
+	config['toolbar'] = 'Full';
+	var editor = CKEDITOR.replace('editor', config);
+	var editor2 = CKEDITOR.replace('editor2', config);
+
+	// 標準のCKEditor作成方法
+//m3SetWysiwygEditor('editor', 100/* 高さ */);
+//m3SetWysiwygEditor('editor2', 100/* 高さ */);
+
 	// スクリプト編集エディター作成
-	//m3SetWysiwygEditor('item_content', 500/* 高さ */);
-	//m3SetScriptEditor('item_content', 500/* 高さ */);
-//	var scriptFile = M3_ROOT_URL + '/scripts/codemirror-3.1/lib/codemirror.js';
-//$("<script>").attr("src", scriptFile).appendTo("head");
-//CodeMirror.fromTextArea(document.getElementById("item_content"), {mode: "php"});
 	var editor = CodeMirror.fromTextArea(document.getElementById("item_content"), {
 		mode: "javascript",
         lineNumbers: true,
         matchBrackets: true,
         extraKeys: {"Enter": "newlineAndIndentContinueComment"}
       });
-		
-	var config = {};
-	config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig_test.js';
-	config['toolbar'] = 'Full';
-	var editor = CKEDITOR.replace('editor', config);
-	var editor2 = CKEDITOR.replace('editor2', config);
-
-//m3SetWysiwygEditor('editor', 100/* 高さ */);
-//m3SetWysiwygEditor('editor2', 100/* 高さ */);
 });
 // IEのエラーは非表示
 /*function hideIEErrors(){
