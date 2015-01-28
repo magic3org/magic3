@@ -39,6 +39,7 @@ class ScriptLibInfo
 	const LIB_FCKEDITOR				= 'fckeditor';
 	const LIB_CKEDITOR				= 'ckeditor';
 	const LIB_ELFINDER				= 'elfinder';
+	const LIB_ELFINDER21			= 'elfinder21';			// v2.1
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
 	const LIB_SWFOBJECT				= 'swfobject';
@@ -271,14 +272,13 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	//const ELFINDER_CSS				= 'elfinder-2.0/css/elfinder.min.css';		// elFinder CSS
 	const ELFINDER_OPTION_CSS		= 'elfinder-2.0/css/theme.css';				// elFinder CSS
 	const ELFINDER_THEME_CSS		= 'elfinder-2.0/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-/*
-	const ELFINDER_FILENAME			= 'elfinder-2.1/js/elfinder.min.js';		// elFinder
-	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER_CSS				= 'elfinder-2.1/css/elfinder.full.css';		// elFinder CSS
-	//const ELFINDER_CSS				= 'elFinder-2.0/css/elfinder.min.css';		// elFinder CSS
-	const ELFINDER_OPTION_CSS		= 'elfinder-2.1/css/theme.css';				// elFinder CSS
-	const ELFINDER_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-*/
+	// elFinder v2.1版
+	const ELFINDER21_FILENAME		= 'elfinder-2.1/js/elfinder.min.js';		// elFinder
+	const ELFINDER21_LANG_FILENAME	= 'elfinder-2.1/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER21_CSS			= 'elfinder-2.1/css/elfinder.full.css';		// elFinder CSS
+	const ELFINDER21_OPTION_CSS		= 'elfinder-2.1/css/theme.css';				// elFinder CSS
+	const ELFINDER21_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
+
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const MOMENT_FILENAME			= 'moment-with-locales-2.9.0.js';			// Moment.js
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
@@ -404,6 +404,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
 						self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
 																	'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS)),	// テーマは最初に読み込む
+						self::LIB_ELFINDER21			=>	array(	'script' 	=> array(self::ELFINDER21_FILENAME, self::ELFINDER21_LANG_FILENAME),		// elFinder v2.1
+																	'css'		=> array(self::ELFINDER21_THEME_CSS, self::ELFINDER21_CSS, self::ELFINDER21_OPTION_CSS)),	// テーマは最初に読み込む
 						self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
 						self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																	'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
@@ -612,6 +614,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 		static $dependentLib = array(
 										//self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
 										self::LIB_ELFINDER	=>	array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
+										self::LIB_ELFINDER21	=>	array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 										self::LIB_JQUERY_TIMEPICKER	=>	array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 										self::LIB_JQUERY_UPLOADFILE =>	array(self::LIB_JQUERY_FORM),
 										self::LIB_JQUERY_FULLCALENDAR	=> array(self::LIB_MOMENT)
