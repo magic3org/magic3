@@ -90,7 +90,8 @@ class elFinder {
 		'resize'    => array('target' => true, 'width' => true, 'height' => true, 'mode' => false, 'x' => false, 'y' => false, 'degree' => false),
 		'netmount'  => array('protocol' => true, 'host' => true, 'path' => false, 'port' => false, 'user' => true, 'pass' => true, 'alias' => false, 'options' => false),
 		'url'       => array('target' => true, 'options' => false),
-		'callback'  => array('node' => true, 'json' => false, 'bind' => false, 'done' => false)
+		'callback'  => array('node' => true, 'json' => false, 'bind' => false, 'done' => false),
+		'pixlr'     => array('target' => false, 'node' => false, 'image' => false, 'type' => false, 'title' => false)
 	);
 	
 	/**
@@ -1916,7 +1917,32 @@ class elFinder {
 		}
 		exit();
 	}
-	
+
+	/**
+	 * Edit on Pixlr.com
+	 *
+	 * @param  array  command arguments
+	 * @author Naoki Sawada
+	 **/
+	 protected function pixlr($args) {
+		
+		$out = array();
+		if (! empty($args['target'])) {
+			$args['upload'] = array( $args['image'] );
+			$args['name']   = array( preg_replace('/\.[a-z]{1,4}$/i', '', $args['title']).'.'.$args['type'] );
+			
+			$res = $this->upload($args);
+			
+			$out = array(
+				'node' => $args['node'],
+				'json' => json_encode($res),
+				'bind' => 'upload'
+			);
+		}
+		
+		return $this->callback($out);
+	}
+
 	/***************************************************************************/
 	/*                                   utils                                 */
 	/***************************************************************************/

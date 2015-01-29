@@ -127,6 +127,8 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdnetunmount': 'アンマウント', // added 30.04.2012
 			'cmdplaces'    : 'お気に入りへ', // added 28.12.2014
 			
+			'cmdpixlr'     : 'Pixlr で編集',
+			
 			/*********************************** buttons ***********************************/ 
 			'btnClose'  : '閉じる',
 			'btnSave'   : '保存',

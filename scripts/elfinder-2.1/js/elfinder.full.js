@@ -1,6 +1,6 @@
 /*!
  * elFinder - file manager for web
- * Version 2.1 (Nightly: f4a6623) (2015-01-25)
+ * Version 2.1.0 (2015-01-28)
  * http://elfinder.org
  * 
  * Copyright 2009-2015, Studio 42
@@ -3579,7 +3579,7 @@ elFinder.prototype = {
  *
  * @type String
  **/
-elFinder.prototype.version = '2.1 (Nightly: f4a6623)';
+elFinder.prototype.version = '2.1.0';
 
 
 
@@ -3764,6 +3764,7 @@ elFinder.prototype._options = {
 	 * @type Array
 	 */
 	commands : [
+		'pixlr',
 		'open', 'reload', 'home', 'up', 'back', 'forward', 'getfile', 'quicklook', 
 		'download', 'rm', 'duplicate', 'rename', 'mkdir', 'mkfile', 'upload', 'copy', 
 		'cut', 'paste', 'edit', 'extract', 'archive', 'search', 'info', 'view', 'help',
@@ -3938,7 +3939,7 @@ elFinder.prototype._options = {
 			['quicklook'],
 			['copy', 'cut', 'paste'],
 			['rm'],
-			['duplicate', 'rename', 'edit', 'resize'],
+			['duplicate', 'rename', 'edit', 'resize', 'pixlr'],
 			['extract', 'archive'],
 			['search'],
 			['view', 'sort'],
@@ -4180,7 +4181,7 @@ elFinder.prototype._options = {
 		// current directory menu
 		cwd    : ['reload', 'back', '|', 'upload', 'mkdir', 'mkfile', 'paste', '|', 'sort', '|', 'info'],
 		// current directory file menu
-		files  : ['getfile', '|','open', 'quicklook', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', '|', 'edit', 'rename', 'resize', '|', 'archive', 'extract', '|', 'places', 'info']
+		files  : ['getfile', '|','open', 'quicklook', '|', 'download', '|', 'copy', 'cut', 'paste', 'duplicate', '|', 'rm', '|', 'edit', 'rename', 'resize', 'pixlr', '|', 'archive', 'extract', '|', 'places', 'info']
 	},
 
 	/**
@@ -4970,6 +4971,8 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdnetmount'  : 'Mount network volume', // added 18.04.2012
 			'cmdnetunmount': 'Unmount', // added 30.04.2012
 			'cmdplaces'    : 'To Places', // added 28.12.2014
+			
+			'cmdpixlr'     : 'Edit on Pixlr',
 			
 			/*********************************** buttons ***********************************/ 
 			'btnClose'  : 'Close',
@@ -10260,6 +10263,98 @@ elFinder.prototype.commands.paste = function() {
 	}
 
 }
+
+/*
+ * File: /js/commands/pixlr.js
+ */
+
+elFinder.prototype.commands.pixlr = function() {
+	this.updateOnSelect = false;
+
+	this.getstate = function(sel) {
+		var fm = this.fm;
+		var sel = fm.selectedFiles();
+		return !this._disabled && sel.length == 1 && sel[0].read && sel[0].mime.indexOf('image/') !== -1 && fm.file(sel[0].phash) && fm.file(sel[0].phash).write ? 0 : -1;
+	};
+
+	this.exec = function(hashes) {
+		var fm    = this.fm,
+		dfrd  = $.Deferred().fail(function(error) { error && fm.error(error); }),
+		files = this.files(hashes),
+		cnt   = files.length,
+		fire = function(mode) {
+			var file, url, uploadURL, img, target, exit, loc,
+			cdata = $.param(fm.options.customData);
+			
+			// set custom data
+			if (cdata) {
+				cdata = '&' + cdata;
+			}
+			
+			file = files[0];
+			
+			loc = location.href.replace(/^(https?:\/\/[^\/]+).+/i, '$1');
+			img = fm.url(file.hash);
+			if (! img.match(/^http/)) {
+				img = loc + img;
+			}
+			
+			loc = location.href.replace(/\/[^\/]*$/, '/');
+			uploadURL = fm.uploadURL;
+			if (! uploadURL.match(/^http/)) {
+				uploadURL = loc + uploadURL;
+			}
+			
+			target = uploadURL + (uploadURL.indexOf('?') === -1 ? '?' : '&')
+				+ 'cmd=pixlr'
+				+ '&target=' + file.phash
+				+ '&node=' + encodeURIComponent(fm.id)
+				+ cdata;
+			
+			exit = uploadURL + (uploadURL.indexOf('?') === -1 ? '?' : '&')
+				+ 'cmd=pixlr'
+				+ cdata;
+			
+			url = 'http://pixlr.com/'+mode+'/?image=' + encodeURIComponent(img)
+				+ '&target=' + encodeURIComponent(target)
+				+ '&title=' + encodeURIComponent('pixlr_'+file.name)
+				+ '&exit=' + encodeURIComponent(exit);
+			
+			if (!window.open(url)) {
+				return dfrd.reject('errPopup');
+			}
+		},
+		selector = $('<div/>'),
+		opts    = {
+			title : 'Pixlr Editor or Pixlr Express ?',
+			width : 'auto',
+			close : function() { $(this).elfinderdialog('destroy'); }
+		}
+		;
+		
+		if (!cnt) {
+			return dfrd.reject();
+		}
+		
+		selector.css('text-align', 'center')
+		        .append($('<button/>').css('margin', '30px').append('Pixlr Editor').button().click(
+					function(){
+						fire('editor');
+						$(this).elfinderdialog('destroy');
+						return false;
+					}))
+		        .append($('<button/>').css('margin', '30px').append('Pixlr Express').button().click(
+		        	function(){
+		        		fire('express');
+		        		$(this).elfinderdialog('destroy');
+		        		return false;
+		        	}));
+		
+		dialog = fm.dialog(selector, opts);
+
+		return dfrd.resolve();
+	};
+};
 
 /*
  * File: /js/commands/places.js
