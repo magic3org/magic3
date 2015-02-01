@@ -45,7 +45,8 @@ class admin_blog_mainWidgetContainer extends admin_blog_mainBaseWidgetContainer
 		$goWidget = false;		// サブウィジェットを実行するかどうか
 		switch ($task){
 			case self::TASK_CONFIG:		// その他設定
-			case self::TASK_HISTORY:	// コンテンツ履歴
+			case self::TASK_IMAGE:		// ブログ記事画像
+			case self::TASK_HISTORY:	// ブログ記事履歴
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 			case 'entry':		// ブログ記事管理
