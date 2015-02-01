@@ -48,8 +48,8 @@ $(function() {
 	m3SetConfigTable('config_area');
 	
 	// 画像アップローダー作成
-	m3CreateDragDropUploadFile('uploader_sitelogo', '{UPLOAD_URL_SITELOGO}', uploader_sitelogo_onSuccess);
-	m3CreateDragDropUploadFile('uploader_useravatar', '{UPLOAD_URL_USERAVATAR}', uploader_useravatar_onSuccess);
+//	m3CreateDragDropUploadFile('uploader_sitelogo', '{UPLOAD_URL_SITELOGO}', uploader_sitelogo_onSuccess);
+//	m3CreateDragDropUploadFile('uploader_useravatar', '{UPLOAD_URL_USERAVATAR}', uploader_useravatar_onSuccess);
 });
 //]]>
 </script>
@@ -69,8 +69,8 @@ $(function() {
 <table id="config_area">
     <tbody>
     <tr>
-	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{SITELOGO_SIZE}</span></th>
-	    <td><img id="sitelogo_preview" class="pull-left" src="{SITELOGO_URL}" /><div class="pull-right"><div id="uploader_sitelogo">{UPLOAD_AREA}</div></div></td>
+	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{EYECATCH_SIZE}</span></th>
+	    <td><img id="sitelogo_preview" class="pull-left" src="{EYECATCH_URL}" /><div class="pull-right"><div id="uploader_sitelogo">{UPLOAD_AREA}</div></div></td>
 	</tr>
     </tbody>
 </table>

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -196,6 +196,25 @@ class blog_mainCommonDef
 		$thumbPath	= $gInstanceManager->getImageManager()->getDefaultThumbPath(M3_VIEW_TYPE_BLOG, $entryId);
 		if (file_exists($thumbPath)) @unlink($thumbPath);
 		return true;
+	}
+	/**
+	 * アイキャッチ用画像のURLを取得
+	 *
+	 * @param string    $filenames				ファイル名(「;」区切り)
+	 * @param string    $defaultFilenames		デフォルトファイル名(「;」区切り)
+	 * @return string							画像URL
+	 */
+	static function getEyecatchImageUrl($filenames, $defaultFilenames)
+	{
+		global $gInstanceManager;
+		
+		$thumbUrl = '';
+		if (empty($filenames)) $filenames = $defaultFilenames;		// 記事デフォルト画像
+		if (!empty($filenames)){
+			$thumbFilenameArray = explode(';', $filenames);
+			$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilenameArray[count($thumbFilenameArray) -1]);		// 最大サイズ画像
+		}
+		return $thumbUrl;
 	}
 }
 ?>

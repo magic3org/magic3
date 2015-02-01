@@ -56,6 +56,14 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$act = $request->trimValueOf('act');
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		
+		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
+		if ($ret){
+			$thumbUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]) . '?' . date('YmdHis');
+		}
+		
+		$this->tmpl->addVar("_widget", "eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($thumbUrl)));
+//		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
+		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);
 	}
 }
