@@ -963,14 +963,17 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 			
 		// コンテンツのサムネールを取得
-		$thumbUrl = '';
+/*		$thumbUrl = '';
 		$thumbFilename = $fetchedRow['be_thumb_filename'];
 		if ($isDefaltContent) $thumbFilename = $defaltContentRow['be_thumb_filename'];
 		if (empty($thumbFilename)) $thumbFilename = self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE];		// 記事デフォルト画像
 		if (!empty($thumbFilename)){
 			$thumbFilenameArray = explode(';', $thumbFilename);
 			$thumbUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $thumbFilenameArray[count($thumbFilenameArray) -1]);
-		}
+		}*/
+		$thumbFilename = $fetchedRow['be_thumb_filename'];
+		if ($isDefaltContent) $thumbFilename = $defaltContentRow['be_thumb_filename'];
+		$thumbUrl = blog_mainCommonDef::getEyecatchImageUrl($thumbFilename, self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
 
 		// ブログへのリンクを作成
 		$blogLink = '';
