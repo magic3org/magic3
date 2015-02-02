@@ -27,7 +27,7 @@ INSERT INTO _system_config
 -- *** システム標準テーブル ***
 
 -- ブログ設定マスター
-DELETE FROM blog_config WHERE sc_id = 'entry_default_image';
+DELETE FROM blog_config WHERE bg_id = 'entry_default_image';
 INSERT INTO blog_config
 (bg_id,                     bg_value,                         bg_name,              bg_index) VALUES
 ('entry_default_image',     '0_72c.jpg;0_80c.jpg;0_200c.jpg', '記事デフォルト画像', 0);
