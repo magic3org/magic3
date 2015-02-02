@@ -90,6 +90,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_RESPONSIVETABLE	= 'jquery.responsivetable';
 	const LIB_JQUERY_FORM			= 'jquery.form';
 	const LIB_JQUERY_UPLOADFILE		= 'jquery.uploadfile';
+	const LIB_JQUERY_JCROP			= 'jquery.jcrop';
 	
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
@@ -127,6 +128,7 @@ class ScriptLibInfo
 	const JQUERY_RESPONSIVETABLE_VER	= '5.0.4';
 	const JQUERY_FORM_VER			= '3.51.0';
 	const JQUERY_UPLOADFILE_VER		= '3.1.10';
+	const JQUERY_JCROP_VER			= '0.9.12';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 	
@@ -218,6 +220,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_FORM_FILENAME			= 'jquery/jquery.form.min.js';
 	const JQUERY_UPLOADFILE_FILENAME	= 'jquery/uploadfile/jquery.uploadfile.js';
 	const JQUERY_UPLOADFILE_CSS			= 'jquery/uploadfile/uploadfile.css';
+	const JQUERY_JCROP_FILENAME			= 'jquery/jcrop0.9.12/jquery.Jcrop.js';
+	const JQUERY_JCROP_CSS				= 'jquery/jcrop0.9.12/jquery.Jcrop.css';
 	
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
@@ -253,6 +257,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_RESPONSIVETABLE_URL	= 'http://gergeo.se/RWD-Table-Patterns';
 	const JQUERY_FORM_URL				= 'http://malsup.com/jquery/form/';
 	const JQUERY_UPLOADFILE_URL			= 'https://github.com/hayageek/jquery-upload-file/';
+	const JQUERY_JCROP_URL				= 'http://deepliquid.com/content/Jcrop.html';
 	
 	// ディレクトリ名
 	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
@@ -526,7 +531,11 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																	'css'		=> array(self::JQUERY_UPLOADFILE_CSS),
 																	'url'		=> self::JQUERY_UPLOADFILE_URL,
 																	'version'	=> self::JQUERY_UPLOADFILE_VER),
-	
+						self::LIB_JQUERY_JCROP			=> array(	'script' 	=> array(self::JQUERY_JCROP_FILENAME),
+																	'css'		=> array(self::JQUERY_JCROP_CSS),
+																	'url'		=> self::JQUERY_JCROP_URL,
+																	'version'	=> self::JQUERY_JCROP_VER),
+																	
 						// Magic3管理画面専用jQueryプラグイン
 						self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
 						self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー
