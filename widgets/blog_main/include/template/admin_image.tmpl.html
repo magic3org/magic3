@@ -28,11 +28,12 @@ function cancelItem(){
 function createEyecatch()
 {
 	var dialogText = '<img src="{DEFAULT_EYECATCH_URL}" id="target" alt="selected image" />';
-	dialogText += '<div id="preview-pane">';
+	dialogText += '<div id="preview-pane" style="display:none;">';
 	dialogText += '<div class="preview-container">';
 	dialogText += '<img src="{DEFAULT_EYECATCH_URL}" class="jcrop-preview" alt="Preview" />';
 	dialogText += '</div>';
 	dialogText += '</div>';
+	dialogText += '<div class="pull-right"><input type="button" class="button btn btn-default" onclick="selectImage();" value="画像を選択" style="margin-top:-65px;" /></div>';
 		
 	// ダイアログ作成
 	BootstrapDialog.show({
@@ -41,9 +42,56 @@ function createEyecatch()
 		message: dialogText,
 		closable: false,
 		nl2br: false,
-/*		onshown: function(dialog) {
+		onshown: function(dialog) {
 			// 起動時の処理
-		},*/
+	    // Create variables (in this scope) to hold the API and image size
+			var jcrop_api,
+				boundx,
+				boundy,
+
+				// Grab some information about the preview pane
+				$preview = $('#preview-pane'),
+				$pcnt = $('#preview-pane .preview-container'),
+				$pimg = $('#preview-pane .preview-container img'),
+
+				xsize = $pcnt.width(),
+				ysize = $pcnt.height();
+
+			$('#target').Jcrop({
+				/*			keySupport: false,*/
+				onChange: updatePreview,
+				onSelect: updatePreview,
+				aspectRatio: xsize / ysize
+			},function(){
+				// Use the API to get the real image size
+				var bounds = this.getBounds();
+				boundx = bounds[0];
+				boundy = bounds[1];
+				// Store the API in the jcrop_api variable
+				jcrop_api = this;
+
+				// Move the preview into the jcrop container for css positioning
+				$preview.appendTo(jcrop_api.ui.holder);
+
+				$('#preview-pane').show();
+			});
+
+			function updatePreview(c)
+			{
+				if (parseInt(c.w) > 0)
+				{
+					var rx = xsize / c.w;
+					var ry = ysize / c.h;
+
+					$pimg.css({
+						width: Math.round(rx * boundx) + 'px',
+						height: Math.round(ry * boundy) + 'px',
+						marginLeft: '-' + Math.round(rx * c.x) + 'px',
+						marginTop: '-' + Math.round(ry * c.y) + 'px'
+					});
+				}
+			};
+		},
 		buttons: [{
 			id: 'cancel',
 			label: 'キャンセル',
@@ -60,20 +108,69 @@ function createEyecatch()
 		}]
 	});
 }
-$(function() {
+// ファイルブラウザ起動
+function selectImage()
+{
+	m3OpenImageFileBrowser(SetUrl);
+}
+// ファイルブラウザからの設定用
+function SetUrl(url)
+{
+	alert(url);
+}
+$(function()
+{
+	// CKEditorプラグイン直接実行
+	m3LoadCKTools();
+	
 	m3SetConfigTable('config_area');
 	
 	// URL作成
 	$("#{TAGID_CREATE_EYECATCH}").click(function (){
 		createEyecatch();
 	});
-	
-	// 画像アップローダー作成
-//	m3CreateDragDropUploadFile('uploader_sitelogo', '{UPLOAD_URL_SITELOGO}', uploader_sitelogo_onSuccess);
-//	m3CreateDragDropUploadFile('uploader_useravatar', '{UPLOAD_URL_USERAVATAR}', uploader_useravatar_onSuccess);
 });
 //]]>
 </script>
+<style type="text/css">
+#target {
+        max-height:430px;
+        max-width:430px;
+        height: auto!important;
+        width: auto!important;
+}
+/* Apply these styles only when #preview-pane has
+   been placed within the Jcrop widget */
+.jcrop-holder #preview-pane {
+  display: block;
+  position: absolute;
+  z-index: 2000;
+  top: 5px;
+  right: -140px;
+  padding: 6px;
+  border: 1px rgba(0,0,0,.4) solid;
+  background-color: white;
+
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+
+  -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* The Javascript code will set the aspect ratio of the crop
+   area based on the size of the thumbnail preview,
+   specified here */
+#preview-pane .preview-container {
+/*  width: 250px;
+  height: 170px;*/
+  width:100px;
+  height:100px;
+  overflow: hidden;
+}
+</style>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">

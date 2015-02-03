@@ -1222,7 +1222,8 @@
     var KeyManager = (function () {
       var $keymgr = $('<input type="radio" />').css({
         position: 'fixed',
-        left: '-120px',
+        /*left: '-120px',*/
+		left: '-32768px',		// Invisible position for dialog. modified by naoki 2015/2/3
         width: '12px'
       }).addClass('jcrop-keymgr'),
 
