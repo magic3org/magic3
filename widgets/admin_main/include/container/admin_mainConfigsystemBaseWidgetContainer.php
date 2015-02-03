@@ -86,15 +86,6 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 									'submenu'	=> array()
 								),
 								(Object)array(
-									'name'		=> $this->_('Server Environment'),			// サーバ環境
-									'task'		=> self::TASK_SERVER_ENV,
-									'url'		=> '',
-									'tagid'		=> '',
-									'active'	=> ($task == self::TASK_SERVER_ENV),
-									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_SERVER_ENV),// ヘルプ文字列
-									'submenu'	=> array()
-								),
-								(Object)array(
 									'name'		=> $this->_('Language Cofiguration'),		// 言語設定
 									'task'		=> self::TASK_CONFIGLANG,
 									'url'		=> '',
@@ -119,6 +110,15 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_CONFIGIMAGE),
 									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGIMAGE),// ヘルプ文字列
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> $this->_('Server Environment'),			// サーバ環境
+									'task'		=> self::TASK_SERVER_ENV,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_SERVER_ENV),
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_SERVER_ENV),// ヘルプ文字列
 									'submenu'	=> array()
 								)
 							);

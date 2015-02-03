@@ -19,33 +19,54 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
-function uploader_sitelogo_onSuccess(files, data)
-{
-	// 画像を読み込む
-	$('#sitelogo_preview').attr('src', data.url).load(function(){
-		m3AdjustParentWindow();// 親ウィンドウリサイズ
-	});
-
-	// 編集フラグを更新
-	document.main.sitelogo_updated.value = '1';
-}
-function uploader_useravatar_onSuccess(files, data)
-{
-	// 画像を読み込む
-	$('#useravatar_preview').attr('src', data.url).load(function(){
-		m3AdjustParentWindow();// 親ウィンドウリサイズ
-	});
-	
-	// 編集フラグを更新
-	document.main.useravatar_updated.value = '1';
-}
 function cancelItem(){
 	document.main.task.value = 'entry_detail';
 	document.main.submit();
 	return true;
 }
+// 画像作成用ダイアログ表示
+function createEyecatch()
+{
+	var dialogText = '<img src="image/aaa.jpg" id="target" alt="selected image" />';
+	dialogText += '<div id="preview-pane">';
+	dialogText += '<div class="preview-container">';
+	dialogText += '<img src="image/aaa.jpg" class="jcrop-preview" alt="Preview" />';
+	dialogText += '</div>';
+	dialogText += '</div>';
+		
+	// ダイアログ作成
+	BootstrapDialog.show({
+		/*type: BootstrapDialog.TYPE_PRIMARY,*/
+		title: '画像作成',
+		message: dialogText,
+		closable: false,
+		nl2br: false,
+/*		onshown: function(dialog) {
+			// 起動時の処理
+		},*/
+		buttons: [{
+			id: 'cancel',
+			label: 'キャンセル',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}, {
+			id: 'ok',
+			label: 'OK',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}]
+	});
+}
 $(function() {
 	m3SetConfigTable('config_area');
+	
+	// URL作成
+	$("#{TAGID_CREATE_EYECATCH}").click(function (){
+		createEyecatch();
+	});
 	
 	// 画像アップローダー作成
 //	m3CreateDragDropUploadFile('uploader_sitelogo', '{UPLOAD_URL_SITELOGO}', uploader_sitelogo_onSuccess);
@@ -59,8 +80,6 @@ $(function() {
 <input type="hidden" name="task" value="image" />
 <input type="hidden" name="act" />
 <input type="hidden" name="entryid" value="{ENTRY_ID}" />
-<input type="hidden" name="sitelogo_updated" value="{SITELOGO_UPDATED}" />
-<input type="hidden" name="useravatar_updated" value="{USERAVATAR_UPDATED}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h"><span {_HELP_IMAGE_IMAGE}>ブログ記事画像</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_IMAGE_BUTTONS}><div class="btn-group">
@@ -69,7 +88,7 @@ $(function() {
 <table id="config_area">
     <tbody>
     <tr>
-	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{EYECATCH_SIZE}</span></th>
+	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{EYECATCH_SIZE}</span><div class="pull-right">{CREATE_EYECATCH_BUTTON}</div></th>
 	    <td><img id="sitelogo_preview" class="pull-left" src="{EYECATCH_URL}" /><div class="pull-right"><div id="uploader_sitelogo">{UPLOAD_AREA}</div></div></td>
 	</tr>
     </tbody>

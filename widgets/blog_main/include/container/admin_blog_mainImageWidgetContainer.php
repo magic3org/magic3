@@ -17,6 +17,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
+	const CREATE_EYECATCH_TAG_ID = 'createeyecatch';			// アイキャッチ画像作成ボタンタグID
 	
 	/**
 	 * コンストラクタ
@@ -60,6 +61,11 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		if ($ret){
 			$thumbUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]) . '?' . date('YmdHis');
 		}
+		
+		// アイキャッチ画像変更ボタン
+		$createEyecatchButton = $this->gDesign->createEditButton(''/*同画面*/, '画像を作成', self::CREATE_EYECATCH_TAG_ID);
+		$this->tmpl->addVar("_widget", "create_eyecatch_button", $createEyecatchButton);
+		$this->tmpl->addVar("_widget", "tagid_create_eyecatch", self::CREATE_EYECATCH_TAG_ID);		// 画像作成タグ
 		
 		$this->tmpl->addVar("_widget", "eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($thumbUrl)));
 //		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
