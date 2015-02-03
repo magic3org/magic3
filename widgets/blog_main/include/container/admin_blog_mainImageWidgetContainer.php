@@ -59,7 +59,27 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		
 		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
 		if ($ret){
-			$thumbUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]) . '?' . date('YmdHis');
+			$html		= $row['be_html'];				// HTML
+			$html2		= $row['be_html_ext'];			// HTML続き
+			
+			// 最大サイズのアイキャッチ画像を取得
+			$eyecatchUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
+			
+			// アイキャッチ変更用ダイアログのデフォルト画像を取得
+			if (empty($row['be_thumb_filename'])){
+				$defaultEyecatchUrl = $eyecatchUrl;
+			} else {		// 画像が作成されているとき
+				// アイキャッチを作成したソース画像を取得
+				$defaultEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
+				if (empty($defaultEyecatchPath) && !empty($html2)) $defaultEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
+				if (empty($defaultEyecatchPath)){		// 画像が見つからないとき
+					$defaultEyecatchUrl = blog_mainCommonDef::getEyecatchImageUrl(''/*画像なし*/, self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
+				} else {
+					$defaultEyecatchUrl = $this->gEnv->getUrlToPath($defaultEyecatchPath);		// URLに変換
+				}
+			}
+			$eyecatchUrl .= '?' . date('YmdHis');
+			$defaultEyecatchUrl .= '?' . date('YmdHis');
 		}
 		
 		// アイキャッチ画像変更ボタン
@@ -67,7 +87,8 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "create_eyecatch_button", $createEyecatchButton);
 		$this->tmpl->addVar("_widget", "tagid_create_eyecatch", self::CREATE_EYECATCH_TAG_ID);		// 画像作成タグ
 		
-		$this->tmpl->addVar("_widget", "eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($thumbUrl)));
+		$this->tmpl->addVar("_widget", "eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($eyecatchUrl)));
+		$this->tmpl->addVar("_widget", "default_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($defaultEyecatchUrl)));		// デフォルトのアイキャッチ画像
 //		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);

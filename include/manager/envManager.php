@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -984,6 +984,16 @@ class EnvManager extends Core
 	public function getRelativePathToSystemRootPath($path)
 	{
 		return $this->calcRelativePath($this->getSystemRootPath(), $path);
+	}
+	/**
+	 * フルパスからURLを取得
+	 *
+	 * @param string $path	指定パス
+	 * @return string		URL
+	 */
+	public function getUrlToPath($path)
+	{
+		return $this->getRootUrl() . $this->calcRelativePath($this->getSystemRootPath(), $path);
 	}
 	/**
 	 * マクロ変換したパスを取得
