@@ -24,73 +24,77 @@ function cancelItem(){
 	document.main.submit();
 	return true;
 }
-// 画像作成用ダイアログ表示
-function createEyecatch()
+function initJcrop()
 {
-	var dialogText = '<img src="{DEFAULT_EYECATCH_URL}" id="target" alt="selected image" />';
+	var jcrop_api,
+		boundx,
+		boundy,
+
+		// Grab some information about the preview pane
+		$preview = $('#preview-pane'),
+		$pcnt = $('#preview-pane .preview-container'),
+		$pimg = $('#preview-pane .preview-container img'),
+
+		xsize = $pcnt.width(),
+		ysize = $pcnt.height();
+
+	$('#target').Jcrop({
+		/*			keySupport: false,*/
+		onChange: updatePreview,
+		onSelect: updatePreview,
+		aspectRatio: xsize / ysize
+	},function(){
+		// Use the API to get the real image size
+		var bounds = this.getBounds();
+		boundx = bounds[0];
+		boundy = bounds[1];
+		// Store the API in the jcrop_api variable
+		jcrop_api = this;
+
+		// Move the preview into the jcrop container for css positioning
+		$preview.appendTo(jcrop_api.ui.holder);
+
+		$preview.show();
+	});
+
+	function updatePreview(c)
+	{
+		if (parseInt(c.w) > 0)
+		{
+			var rx = xsize / c.w;
+			var ry = ysize / c.h;
+
+			$pimg.css({
+				width: Math.round(rx * boundx) + 'px',
+				height: Math.round(ry * boundy) + 'px',
+				marginLeft: '-' + Math.round(rx * c.x) + 'px',
+				marginTop: '-' + Math.round(ry * c.y) + 'px'
+			});
+		}
+	};
+}
+// 画像作成用ダイアログ表示
+function createEyecatch(url)
+{
+//	var dialogText = '<img src="{DEFAULT_EYECATCH_URL}" id="target" alt="selected image" />';
+	var dialogText = '<p>画像から切り取る領域を選択してください</p>';
+	dialogText += '<img src="' + url + '" id="target" alt="selected image" />';
 	dialogText += '<div id="preview-pane" style="display:none;">';
 	dialogText += '<div class="preview-container">';
-	dialogText += '<img src="{DEFAULT_EYECATCH_URL}" class="jcrop-preview" alt="Preview" />';
+//	dialogText += '<img id="preview" src="{DEFAULT_EYECATCH_URL}" class="jcrop-preview" alt="Preview" />';
+	dialogText += '<img id="preview" src="' + url + '" class="jcrop-preview" alt="Preview" />';
 	dialogText += '</div>';
 	dialogText += '</div>';
-	dialogText += '<div class="pull-right"><input type="button" class="button btn btn-default" onclick="selectImage();" value="画像を選択" style="margin-top:-65px;" /></div>';
 		
 	// ダイアログ作成
 	BootstrapDialog.show({
-		/*type: BootstrapDialog.TYPE_PRIMARY,*/
-		title: '画像作成',
+		title: '画像の部分選択',
 		message: dialogText,
 		closable: false,
 		nl2br: false,
-		onshown: function(dialog) {
-			// 起動時の処理
-	    // Create variables (in this scope) to hold the API and image size
-			var jcrop_api,
-				boundx,
-				boundy,
-
-				// Grab some information about the preview pane
-				$preview = $('#preview-pane'),
-				$pcnt = $('#preview-pane .preview-container'),
-				$pimg = $('#preview-pane .preview-container img'),
-
-				xsize = $pcnt.width(),
-				ysize = $pcnt.height();
-
-			$('#target').Jcrop({
-				/*			keySupport: false,*/
-				onChange: updatePreview,
-				onSelect: updatePreview,
-				aspectRatio: xsize / ysize
-			},function(){
-				// Use the API to get the real image size
-				var bounds = this.getBounds();
-				boundx = bounds[0];
-				boundy = bounds[1];
-				// Store the API in the jcrop_api variable
-				jcrop_api = this;
-
-				// Move the preview into the jcrop container for css positioning
-				$preview.appendTo(jcrop_api.ui.holder);
-
-				$('#preview-pane').show();
-			});
-
-			function updatePreview(c)
-			{
-				if (parseInt(c.w) > 0)
-				{
-					var rx = xsize / c.w;
-					var ry = ysize / c.h;
-
-					$pimg.css({
-						width: Math.round(rx * boundx) + 'px',
-						height: Math.round(ry * boundy) + 'px',
-						marginLeft: '-' + Math.round(rx * c.x) + 'px',
-						marginTop: '-' + Math.round(ry * c.y) + 'px'
-					});
-				}
-			};
+		onshown: function(dialog) {		// 起動時の処理
+			// 画像の部分選択機能作成
+			initJcrop();
 		},
 		buttons: [{
 			id: 'cancel',
@@ -108,15 +112,11 @@ function createEyecatch()
 		}]
 	});
 }
-// ファイルブラウザ起動
-function selectImage()
-{
-	m3OpenImageFileBrowser(SetUrl);
-}
 // ファイルブラウザからの設定用
 function SetUrl(url)
 {
-	alert(url);
+	// 画像部分選択用ダイアログ表示
+	createEyecatch(url);
 }
 $(function()
 {
@@ -125,17 +125,17 @@ $(function()
 	
 	m3SetConfigTable('config_area');
 	
-	// URL作成
+	// 画像作成ボタンの処理
 	$("#{TAGID_CREATE_EYECATCH}").click(function (){
-		createEyecatch();
+		m3OpenImageFileBrowser(SetUrl);		// 画像選択
 	});
 });
 //]]>
 </script>
 <style type="text/css">
 #target {
-        max-height:430px;
-        max-width:430px;
+        max-height:400px;
+        max-width:400px;
         height: auto!important;
         width: auto!important;
 }
