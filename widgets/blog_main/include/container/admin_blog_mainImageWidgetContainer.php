@@ -57,6 +57,28 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$act = $request->trimValueOf('act');
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		
+		$act = $request->trimValueOf('act');
+		if ($act == 'createimage'){		// 画像作成
+			$this->gInstance->getAjaxManager()->addData('html', 'hello');
+
+			$src = $request->trimValueOf('src');
+			$path = $this->gEnv->getAbsolutePath($this->gEnv->getDocumentRootUrl() . $src);
+	$targ_w = $targ_h = 200;
+	$jpeg_quality = 100;
+	$destPath = '/var/www/html/magic3/include/log/tmp.jpg';
+
+//	$src = 'demo_files/pool.jpg';
+//	$img_r = imagecreatefromjpeg($src);
+$img_r = imagecreatefromjpeg($path);
+	$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+
+	imagecopyresampled($dst_r, $img_r, 0, 0, $request->trimValueOf('x'), $request->trimValueOf('y'),
+						$targ_w, $targ_h, $request->trimValueOf('w'), $request->trimValueOf('h'));
+
+	imagejpeg($dst_r, $destPath, $jpeg_quality);
+			return;
+		}
+		
 		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
 		if ($ret){
 			$html		= $row['be_html'];				// HTML
@@ -91,6 +113,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 //		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);
+		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// 変更画像送信用
 	}
 }
 ?>

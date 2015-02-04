@@ -29,6 +29,8 @@ function initJcrop()
 	var jcrop_api,
 		boundx,
 		boundy,
+		originalw,
+		originalh,
 
 		// Grab some information about the preview pane
 		$preview = $('#preview-pane'),
@@ -37,6 +39,14 @@ function initJcrop()
 
 		xsize = $pcnt.width(),
 		ysize = $pcnt.height();
+
+		// オリジナルの画像サイズを取得
+		var img = new Image();
+		img.onload = function() {
+			originalw = this.width;
+			originalh = this.height;
+		};
+		img.src = $("#target").attr("src");
 
 	$('#target').Jcrop({
 		/*			keySupport: false,*/
@@ -48,6 +58,7 @@ function initJcrop()
 		var bounds = this.getBounds();
 		boundx = bounds[0];
 		boundy = bounds[1];
+
 		// Store the API in the jcrop_api variable
 		jcrop_api = this;
 
@@ -70,21 +81,39 @@ function initJcrop()
 				marginLeft: '-' + Math.round(rx * c.x) + 'px',
 				marginTop: '-' + Math.round(ry * c.y) + 'px'
 			});
+			
+/*		$('#x').val(c.x);
+		$('#y').val(c.y);
+		$('#w').val(c.w);
+		$('#h').val(c.h);*/
+			$('#x').val(c.x * originalw / boundx);
+			$('#y').val(c.y * originalh / boundy);
+			$('#w').val(c.w * originalw / boundx);
+			$('#h').val(c.h * originalh / boundy);
 		}
 	};
 }
 // 画像作成用ダイアログ表示
 function createEyecatch(url)
 {
-//	var dialogText = '<img src="{DEFAULT_EYECATCH_URL}" id="target" alt="selected image" />';
-	var dialogText = '<p>画像から切り取る領域を選択してください</p>';
+	var dialogText = '';
+	
+	dialogText += '<form method="post" id="modalform" name="modalform">';
+	dialogText += '<input type="hidden" name="task" value="image" />';
+	dialogText += '<input type="hidden" name="act" value="createimage" />';
+	dialogText += '<input type="hidden" id="src" name="src" value="' + url + '" />';
+	dialogText += '<input type="hidden" id="x" name="x" />';
+	dialogText += '<input type="hidden" id="y" name="y" />';
+	dialogText += '<input type="hidden" id="w" name="w" />';
+	dialogText += '<input type="hidden" id="h" name="h" />';
+	dialogText += '<p>画像から切り取る領域をマウスで選択してください</p>';
 	dialogText += '<img src="' + url + '" id="target" alt="selected image" />';
 	dialogText += '<div id="preview-pane" style="display:none;">';
 	dialogText += '<div class="preview-container">';
-//	dialogText += '<img id="preview" src="{DEFAULT_EYECATCH_URL}" class="jcrop-preview" alt="Preview" />';
 	dialogText += '<img id="preview" src="' + url + '" class="jcrop-preview" alt="Preview" />';
 	dialogText += '</div>';
 	dialogText += '</div>';
+	dialogText += '</form>';
 		
 	// ダイアログ作成
 	BootstrapDialog.show({
@@ -107,7 +136,24 @@ function createEyecatch(url)
 			label: 'OK',
 			cssClass: 'btn-primary',
 			action: function(dialog) {
-				dialog.close();
+				// 選択状態のチェック
+				if (parseInt($('#w').val())){
+					// 元の画像サイズ取得
+
+					// 変更画像を送信
+					var postValues = $('#modalform').serialize();
+					m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&' + postValues, function(request, retcode, jsondata){		// 正常終了
+				
+						// メッセージ表示
+						//if (jsondata.message) $('#menulist_msg').html(jsondata.message);
+					}, function(request){		// 異常終了
+						alert('通信に失敗しました。');
+					});
+				
+					dialog.close();
+				} else {
+					alert("切り取る領域を選択してください");
+				}
 			}
 		}]
 	});
