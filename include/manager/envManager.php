@@ -986,6 +986,16 @@ class EnvManager extends Core
 		return $this->calcRelativePath($this->getSystemRootPath(), $path);
 	}
 	/**
+	 * URLから絶対パスを取得
+	 *
+	 * @param string $url	指定URL
+	 * @return string		絶対パス
+	 */
+	public function getAbsolutePath($url)
+	{
+		return $this->getSystemRootPath() . $this->getRelativePathToSystemRootUrl($url);
+	}
+	/**
 	 * フルパスからURLを取得
 	 *
 	 * @param string $path	指定パス

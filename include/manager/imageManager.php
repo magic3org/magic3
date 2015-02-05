@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -325,7 +325,7 @@ class ImageManager extends Core
 		return $gEnvManager->getResourcePath() . self::CONTENT_DIR . $contentType . self::THUMBNAIL_DIR . DIRECTORY_SEPARATOR . $contentId . '_' . $this->defaultThumbType . '.' . $this->defaultThumbExt;
 	}
 	/**
-	 * サムネールを作成
+	 * サムネールを作成(自動クロップ機能付き)
 	 *
 	 * @param string $path		元の画像ファイル
 	 * @param string $destPath	サムネールファイルパス
@@ -462,7 +462,6 @@ class ImageManager extends Core
 		$ret = imagedestroy($thumbObj);
 		return $ret;
 	}
-	
 	/**
 	 * リサイズ画像を作成
 	 *
@@ -551,6 +550,76 @@ class ImageManager extends Core
 		
 		// 画像サイズの再設定
 		$destSize = array('width' => $destWidth, 'height' => $destHeight);
+		return $ret;
+	}
+	/**
+	 * クロップ画像を作成
+	 *
+	 * @param string $path		元の画像ファイル
+	 * @param int $x			クロップ位置(x座標)
+	 * @param int $y			クロップ位置(y座標)
+	 * @param int $w			クロップ位置(幅)
+	 * @param int $h			クロップ位置(高さ)
+	 * @param string $destPath	出力画像ファイルパス
+	 * @param int $destWidth	出力画像幅
+	 * @param int $destHeight	出力画像高さ
+	 * @param int $type			出力画像タイプ
+	 * @param int $imageQuality	画像品質
+	 * @return bool				true=作成,false=作成失敗
+	 */
+	function createCropImage($path, $x, $y, $w, $h, $destPath, $destWidth, $destHeight, $type = IMAGETYPE_JPEG, $imageQuality = 100)
+	{
+		$imageSize = @getimagesize($path);
+		if ($imageSize){
+			$imageType = $imageSize[2];
+			$srcWidth = $imageSize[0];
+			$srcHeight = $imageSize[1];
+		} else {
+			return false;
+		}
+
+		// 画像オブジェクト作成
+		switch ($imageType){
+			case IMAGETYPE_GIF:
+				$imageObj = @imagecreatefromgif($path);
+				break;
+			case IMAGETYPE_JPEG:
+				$imageObj = @imagecreatefromjpeg($path);
+				break;
+			case IMAGETYPE_PNG:
+				$imageObj = @imagecreatefrompng($path);
+				break;
+			default:		// 処理不可の画像タイプの場合は終了
+				return false;
+		}
+		
+		// 出力用の画像オブジェクト作成
+		$destImageObj = imagecreatetruecolor($destWidth, $destHeight);
+		
+		// 画像作成
+		if (!imagecopyresampled($destImageObj, $imageObj, 0, 0, $x, $y, $destWidth, $destHeight, $w, $h)){
+			imagedestroy($imageObj);
+			imagedestroy($destImageObj);
+			return false;
+		}
+		
+		// 画像ファイル出力
+		switch ($type){
+			case IMAGETYPE_GIF:
+				$ret = @imagegif($destImageObj, $destPath, $imageQuality);
+				break;
+			case IMAGETYPE_JPEG:
+				$ret = @imagejpeg($destImageObj, $destPath, $imageQuality);
+				break;
+			case IMAGETYPE_PNG:
+				//$ret = @imagepng($destImageObj, $destPath, $imageQuality);		// PNGでは$imageQualityを使用すると画像が0サイズで作成される
+				$ret = @imagepng($destImageObj, $destPath);
+				break;
+		}
+		// イメージを破棄
+		$ret = imagedestroy($imageObj);
+		$ret = imagedestroy($destImageObj);
+		
 		return $ret;
 	}
 	/**
