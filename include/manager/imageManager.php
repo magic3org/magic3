@@ -300,6 +300,50 @@ class ImageManager extends Core
 		}
 	}
 	/**
+	 * システム共通の非公開サムネール画像のパスを取得
+	 *
+	 * @param string     $contentType	コンテンツタイプ
+	 * @param int        $deviceType	デバイスタイプ(0=PC、1=携帯、2=スマートフォン)
+	 * @param string     $filename		ファイル名(空のときは格納ディレクトリを返す)
+	 * @param string     $notAvailableFileType	ファイルが見つからない場合の代替ファイルのタイプ(ogp=OGP用サムネール)
+	 * @return string					画像パス
+	 */
+	function getSystemPrivateThumbPath($contentType, $deviceType, $filename = '', $notAvailableFileType = '')
+	{
+		global $gEnvManager;
+				
+		switch ($deviceType){
+			case 0:		// PC
+			default:
+				$deviceDir = '';
+				break;
+			case 1:		// 携帯
+				$deviceDir = '/m';
+				break;
+			case 2:		// スマートフォン
+				$deviceDir = '/s';
+				break;
+		}
+		
+		$destDir = $gEnvManager->getIncludePath() . self::CONTENT_DIR . $contentType . $deviceDir . self::THUMBNAIL_DIR;		// 画像格納用のディレクトリ
+		
+		if (empty($notAvailableFileType)){
+			if (empty($filename)){
+				return $destDir;
+			} else {
+				return $destDir . DIRECTORY_SEPARATOR . $filename;
+			}
+		} else {		// 画像が見つからない場合の画像タイプが指定されているとき
+			// ファイルとして扱う
+			$path = $destDir . DIRECTORY_SEPARATOR . $filename;
+			if (!is_dir($path) && is_readable($path)){
+				return $destDir . DIRECTORY_SEPARATOR . $filename;
+			} else {
+				return $this->getNotAvailableImagePath($notAvailableFileType);
+			}
+		}
+	}
+	/**
 	 * デフォルトのサムネールを作成
 	 *
 	 * @param string $contentType	コンテンツタイプ

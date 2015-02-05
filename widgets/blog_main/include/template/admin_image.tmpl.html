@@ -147,8 +147,8 @@ function createEyecatch(url)
 				
 						// 画像URL取得
 						if (jsondata.url){
-							var innerText = '<img id="preview_img" src="' + jsondata.url + '" />';
-							$('#eyecatch_new').html(innerText);
+							var innerText = '<img src="' + jsondata.url + '" />';
+							$('#eyecatch_new_area').html(innerText);
 						}
 					}, function(request){		// 異常終了
 						alert('通信に失敗しました。');
@@ -236,7 +236,7 @@ $(function()
     <tbody>
     <tr>
 	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{EYECATCH_SIZE}</span><div class="pull-right">{CREATE_EYECATCH_BUTTON}</div></th>
-	    <td><img id="eyecatch_preview" class="pull-left" src="{EYECATCH_URL}" /><div id="eyecatch_new" class="pull-left"></div</td>
+	    <td><img id="eyecatch_preview" class="pull-left" src="{EYECATCH_URL}" /><div id="eyecatch_new_area" class="pull-left">{EYECATCH_NEW_IMAGE}</div</td>
 	</tr>
     </tbody>
 </table>

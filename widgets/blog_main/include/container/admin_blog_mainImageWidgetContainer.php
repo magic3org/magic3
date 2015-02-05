@@ -17,7 +17,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
-	private $tmpDir;		// 作業ディレクトリ
+//	private $tmpDir;		// 作業ディレクトリ
 	const CREATE_EYECATCH_TAG_ID = 'createeyecatch';			// アイキャッチ画像作成ボタンタグID
 	const ACT_CREATE_IMAGE	= 'createimage';	// 画像作成
 	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
@@ -61,8 +61,30 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		$act = $request->trimValueOf('act');
 		
-		$replaceNew = false;		// データを再取得するかどうか
-		if ($act == self::ACT_CREATE_IMAGE){		// 画像作成
+		$reloadData = false;		// データを再取得するかどうか
+		if ($act == 'update'){		// 項目更新の場合
+			if ($this->getMsgCount() == 0){			// エラーのないとき
+				// 作業ディレクトリを取得
+				$tmpDir = $this->gEnv->getTempDirBySession();
+		
+				// 画像ファイル名、フォーマット取得
+				list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		
+				// アイキャッチ画像を退避ディレクトリに保存
+				$ret = mvFileToDir($tmpDir, $filenames, $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType));
+				if ($ret){
+					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
+					
+					$reloadData = true;		// データを再取得
+				
+					// 作業ディレクトリを削除
+					rmDirectory($tmpDir);
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
+				}
+				$this->gPage->updateParentWindow();// 親ウィンドウを更新
+			}
+		} else if ($act == self::ACT_CREATE_IMAGE){		// 画像作成
 			$this->createCropImage($request);
 			return;
 		} else if ($act == self::ACT_GET_IMAGE){			// 画像取得
@@ -70,21 +92,21 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$this->getImageByType($request);
 			return;
 		} else {
-			$replaceNew = true;		// データを再取得
+			$reloadData = true;		// データを再取得
 			
 			// 作業ディレクトリを削除
 			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
 			rmDirectory($tmpDir);
 		}
-		
+
 		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
 		if ($ret){
 			$html		= $row['be_html'];				// HTML
 			$html2		= $row['be_html_ext'];			// HTML続き
-			
+		
 			// 最大サイズのアイキャッチ画像を取得
 			$eyecatchUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
-			
+		
 			// アイキャッチ変更用ダイアログのデフォルト画像を取得
 			if (empty($row['be_thumb_filename'])){
 				$defaultEyecatchUrl = $eyecatchUrl;
@@ -99,6 +121,22 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 				}
 			}
 			$defaultEyecatchUrl .= '?' . date('YmdHis');
+		
+			// ### 置き換え用アイキャッチ画像 ###
+			// 作業ディレクトリを取得
+			$tmpDir = $this->gEnv->getTempDirBySession();
+	
+			// 画像ファイル名、フォーマット取得
+			list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+	
+			$imagePath = '';
+			$filename = $filenames[count($filenames) -1];
+			if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
+			if (is_readable($imagePath)){	// 置き換え用アイキャッチ画像がある場合
+				// 置き換え用アイキャッチ画像URL
+				$imageUrl = $this->getEyecatchUrl($entryId);
+				$eyecatchImagTag = '<img src="' . $this->getUrl($imageUrl) . '" />';
+			}
 		}
 		
 		// アイキャッチ画像変更ボタン
@@ -107,6 +145,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "tagid_create_eyecatch", self::CREATE_EYECATCH_TAG_ID);		// 画像作成タグ
 		
 		$this->tmpl->addVar("_widget", "eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($eyecatchUrl . '?' . date('YmdHis'))));
+		$this->tmpl->addVar("_widget", "eyecatch_new_image", $eyecatchImagTag);			// 置き換え用アイキャッチ画像
 //		$this->tmpl->addVar("_widget", "default_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($defaultEyecatchUrl)));		// デフォルトのアイキャッチ画像
 //		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
@@ -157,15 +196,9 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 				break;
 			}
 		}
-				// 画像参照用URL
-		$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
-		$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
-		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGE;
-		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
-		$imageUrl .= '&' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId;
-//		$imageUrl .= '&type=' . $type;
-		$imageUrl .= '&' . date('YmdHis');
-		$this->gInstance->getAjaxManager()->addData('url', $imageUrl);
+		// 画像参照用URL
+		$imageUrl = $this->getEyecatchUrl($entryId);
+		$this->gInstance->getAjaxManager()->addData('url', $this->getUrl($imageUrl));
 	}
 	/**
 	 * 最大画像を取得
@@ -214,6 +247,23 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 	
 		// システム強制終了
 		$this->gPage->exitSystem();
+	}
+	/**
+	 * 置き換え用アイキャッチ画像のURLを取得
+	 *
+	 * @param string $entryId	記事ID
+	 * @return string			画像のURL
+	 */
+	function getEyecatchUrl($entryId)
+	{
+		$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+		$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGE;
+		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
+		$imageUrl .= '&' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId;
+//		$imageUrl .= '&type=' . $type;
+		$imageUrl .= '&' . date('YmdHis');
+		return $imageUrl;
 	}
 }
 ?>
