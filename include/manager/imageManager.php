@@ -162,30 +162,53 @@ class ImageManager extends Core
 	/**
 	 * システム共通サムネールフォーマットを取得
 	 *
+	 * @param int $filterType		画像フィルタータイプ(0=すべて、1=クロップ画像(c)のみ)
 	 * @return array				フォーマット
 	 */
-	function getAllSystemDefaultThumbFormat()
+	function getAllSystemDefaultThumbFormat($filterType = 0)
 	{
 		global $gSystemManager;
 		
-		$format = $gSystemManager->getSystemConfig(self::CF_THUMB_FORMAT);		// サムネールフォーマット
-		$formatArray = explode(';', $format);
-		return $formatArray;
+//		$format = $gSystemManager->getSystemConfig(self::CF_THUMB_FORMAT);		// サムネールフォーマット
+//		$formatArray = explode(';', $format);
+//		return $formatArray;
+		
+		// 画像のフォーマットを取得
+		$formatArray = explode(';', $gSystemManager->getSystemConfig(self::CF_THUMB_FORMAT));
+		
+		$formats = array();
+		if ($filterType != 0){
+			for ($i = 0; $i < count($formatArray); $i++){
+				$format = trim($formatArray[$i]);
+				$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
+				if ($ret){
+					$thumbSize = $matches[1];
+					$thumbAttr = strtolower($matches[2]);
+					$ext = strtolower($matches[3]);
+					
+					if ($thumbAttr == 'c') $formats[] = $format;
+				}
+			}
+		} else {
+			$formats = $formatArray;
+		}
+		return $formats;
 	}
 	/**
 	 * システム共通サムネールのファイル名を取得
 	 *
 	 * @param string $contentId		コンテンツID
-	 * @return array				画像ファイル名
+	 * @param int $filterType		画像フィルタータイプ(0=すべて、1=クロップ画像(c)のみ)
+	 * @return array				画像ファイル名の配列と画像フォーマットの配列
 	 */
-	function getSystemDefaultThumbFilename($contentId)
+	function getSystemDefaultThumbFilename($contentId, $filterType = 0)
 	{
 		$filenameArray = array();
-		$formatArray = $this->getAllSystemDefaultThumbFormat();
+		$formatArray = $this->getAllSystemDefaultThumbFormat($filterType);
 		for ($i = 0; $i < count($formatArray); $i++){
 			$filenameArray[] = $contentId . '_' . $formatArray[$i];
 		}
-		return $filenameArray;
+		return array($filenameArray, $formatArray);
 	}
 	/**
 	 * システム共通のサムネール画像のURLを取得

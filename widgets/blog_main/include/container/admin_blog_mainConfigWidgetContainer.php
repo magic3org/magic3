@@ -17,7 +17,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
-	private $tmpDir;		// 作業ディレクトリを作成
+	private $tmpDir;		// 作業ディレクトリ
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
 	const IMAGE_TYPE_ENTRY_IMAGE = 'entryimage';			// 画像タイプ(記事デフォルト画像)
 	const ACT_UPLOAD_IMAGE	= 'uploadimage';			// 画像アップロード
@@ -96,7 +96,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			
 			// 記事デフォルト画像のエラーチェック
 			if (!empty($updatedEntryImage)){
-				$entryImageFilenameArray = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename('0'/*デフォルト画像*/);
+				list($entryImageFilenameArray, $tmpArray) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename('0'/*デフォルト画像*/);
 				for ($i = 0; $i < count($entryImageFilenameArray); $i++){
 					$path = $this->tmpDir . DIRECTORY_SEPARATOR . $entryImageFilenameArray[$i];
 					if (!file_exists($path)){

@@ -17,7 +17,10 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
+	private $tmpDir;		// 作業ディレクトリ
 	const CREATE_EYECATCH_TAG_ID = 'createeyecatch';			// アイキャッチ画像作成ボタンタグID
+	const ACT_CREATE_IMAGE	= 'createimage';	// 画像作成
+	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
 	
 	/**
 	 * コンストラクタ
@@ -56,27 +59,22 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
-		
 		$act = $request->trimValueOf('act');
-		if ($act == 'createimage'){		// 画像作成
-			$this->gInstance->getAjaxManager()->addData('html', 'hello');
-
-			$src = $request->trimValueOf('src');
-			$path = $this->gEnv->getAbsolutePath($this->gEnv->getDocumentRootUrl() . $src);
-	$targ_w = $targ_h = 200;
-	$jpeg_quality = 100;
-	$destPath = '/var/www/html/magic3/include/log/tmp.jpg';
-
-//	$src = 'demo_files/pool.jpg';
-//	$img_r = imagecreatefromjpeg($src);
-$img_r = imagecreatefromjpeg($path);
-	$dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
-
-	imagecopyresampled($dst_r, $img_r, 0, 0, $request->trimValueOf('x'), $request->trimValueOf('y'),
-						$targ_w, $targ_h, $request->trimValueOf('w'), $request->trimValueOf('h'));
-
-	imagejpeg($dst_r, $destPath, $jpeg_quality);
+		
+		$replaceNew = false;		// データを再取得するかどうか
+		if ($act == self::ACT_CREATE_IMAGE){		// 画像作成
+			$this->createCropImage($request);
 			return;
+		} else if ($act == self::ACT_GET_IMAGE){			// 画像取得
+			// Ajaxでの画像取得
+			$this->getImageByType($request);
+			return;
+		} else {
+			$replaceNew = true;		// データを再取得
+			
+			// 作業ディレクトリを削除
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			rmDirectory($tmpDir);
 		}
 		
 		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
@@ -114,6 +112,108 @@ $img_r = imagecreatefromjpeg($path);
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// 変更画像送信用
+	}
+	/**
+	 * クロップ画像を作成
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return								なし
+	 */
+	function createCropImage($request)
+	{
+		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
+		$type = $request->trimValueOf('type');		// 画像タイプ
+		$src = $request->trimValueOf('src');	// 画像URL
+		$x = $request->trimValueOf('x');
+		$y = $request->trimValueOf('y');
+		$w = $request->trimValueOf('w');
+		$h = $request->trimValueOf('h');
+		
+		// 引数エラーチェック
+		$entryId = intval($entryId);
+		if (empty($entryId)) return false;
+		
+		// 作業ディレクトリを作成
+		$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+		
+		// ソース画像パスを取得
+		$srcPath = $this->gEnv->getAbsolutePath($this->gEnv->getDocumentRootUrl() . $src);
+		
+		// 画像ファイル名、フォーマット取得
+		list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		
+		// クロップ画像を作成
+		for ($i = 0; $i < count($formats); $i++){
+			$format = $formats[$i];
+			
+			// フォーマット情報を取得
+			$ret = $this->gInstance->getImageManager()->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+			if ($ret){
+				// 画像作成
+				$destPath = $tmpDir . DIRECTORY_SEPARATOR . $filenames[$i];
+				$ret = $this->gInstance->getImageManager()->createCropImage($srcPath, $x, $y, $w, $h, $destPath, $imageSize, $imageSize);
+				if (!$ret) return false;
+			} else {
+				break;
+			}
+		}
+				// 画像参照用URL
+		$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+		$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGE;
+		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
+		$imageUrl .= '&' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId;
+//		$imageUrl .= '&type=' . $type;
+		$imageUrl .= '&' . date('YmdHis');
+		$this->gInstance->getAjaxManager()->addData('url', $imageUrl);
+	}
+	/**
+	 * 最大画像を取得
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return					なし
+	 */
+	function getImageByType($request)
+	{
+		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
+		$type = $request->trimValueOf('type');		// 画像タイプ
+		
+		// 作業ディレクトリを取得
+		$tmpDir = $this->gEnv->getTempDirBySession();
+		
+		// 画像ファイル名、フォーマット取得
+		list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		
+		$imagePath = '';
+		$filename = $filenames[count($filenames) -1];
+		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
+			
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+
+		if (is_readable($imagePath)){
+			// 画像情報を取得
+			$imageMimeType = '';
+			$imageSize = @getimagesize($imagePath);
+			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+			
+			// 画像MIMEタイプ設定
+			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
+			
+			// キャッシュの設定
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0');
+			header('Pragma: no-cache');
+		
+			// 画像ファイル読み込み
+			readfile($imagePath);
+		} else {
+			$this->gPage->showError(404);
+		}
+	
+		// システム強制終了
+		$this->gPage->exitSystem();
 	}
 }
 ?>

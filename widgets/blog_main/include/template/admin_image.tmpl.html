@@ -101,6 +101,7 @@ function createEyecatch(url)
 	dialogText += '<form method="post" id="modalform" name="modalform">';
 	dialogText += '<input type="hidden" name="task" value="image" />';
 	dialogText += '<input type="hidden" name="act" value="createimage" />';
+	dialogText += '<input type="hidden" name="entryid" value="{ENTRY_ID}" />';
 	dialogText += '<input type="hidden" id="src" name="src" value="' + url + '" />';
 	dialogText += '<input type="hidden" id="x" name="x" />';
 	dialogText += '<input type="hidden" id="y" name="y" />';
@@ -144,8 +145,11 @@ function createEyecatch(url)
 					var postValues = $('#modalform').serialize();
 					m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&' + postValues, function(request, retcode, jsondata){		// 正常終了
 				
-						// メッセージ表示
-						//if (jsondata.message) $('#menulist_msg').html(jsondata.message);
+						// 画像URL取得
+						if (jsondata.url){
+							var innerText = '<img id="preview_img" src="' + jsondata.url + '" />';
+							$('#eyecatch_new').html(innerText);
+						}
 					}, function(request){		// 異常終了
 						alert('通信に失敗しました。');
 					});
@@ -232,7 +236,7 @@ $(function()
     <tbody>
     <tr>
 	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{EYECATCH_SIZE}</span><div class="pull-right">{CREATE_EYECATCH_BUTTON}</div></th>
-	    <td><img id="sitelogo_preview" class="pull-left" src="{EYECATCH_URL}" /><div class="pull-right"><div id="uploader_sitelogo">{UPLOAD_AREA}</div></div></td>
+	    <td><img id="eyecatch_preview" class="pull-left" src="{EYECATCH_URL}" /><div id="eyecatch_new" class="pull-left"></div</td>
 	</tr>
     </tbody>
 </table>
