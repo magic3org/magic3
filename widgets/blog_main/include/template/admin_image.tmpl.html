@@ -40,13 +40,13 @@ function initJcrop()
 		xsize = $pcnt.width(),
 		ysize = $pcnt.height();
 
-		// オリジナルの画像サイズを取得
-		var img = new Image();
-		img.onload = function() {
-			originalw = this.width;
-			originalh = this.height;
-		};
-		img.src = $("#target").attr("src");
+	// オリジナルの画像サイズを取得
+	var img = new Image();
+	img.onload = function() {
+		originalw = this.width;
+		originalh = this.height;
+	};
+	img.src = $("#target").attr("src");
 
 	$('#target').Jcrop({
 		/*			keySupport: false,*/
@@ -82,10 +82,6 @@ function initJcrop()
 				marginTop: '-' + Math.round(ry * c.y) + 'px'
 			});
 			
-/*		$('#x').val(c.x);
-		$('#y').val(c.y);
-		$('#w').val(c.w);
-		$('#h').val(c.h);*/
 			$('#x').val(c.x * originalw / boundx);
 			$('#y').val(c.y * originalh / boundy);
 			$('#w').val(c.w * originalw / boundx);
@@ -147,8 +143,11 @@ function createEyecatch(url)
 				
 						// 画像URL取得
 						if (jsondata.url){
-							var innerText = '<img src="' + jsondata.url + '" />';
+							var innerText = '{MOVE_ICON_TAG}<img src="' + jsondata.url + '" />';
 							$('#eyecatch_new_area').html(innerText);
+							
+							// ヘルプ設定
+							m3SetHelp($('#eyecatch_new_area'));
 						}
 					}, function(request){		// 異常終了
 						alert('通信に失敗しました。');
@@ -236,7 +235,7 @@ $(function()
     <tbody>
     <tr>
 	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{EYECATCH_SIZE}</span><div class="pull-right">{CREATE_EYECATCH_BUTTON}</div></th>
-	    <td><img id="eyecatch_preview" class="pull-left" src="{EYECATCH_URL}" /><div id="eyecatch_new_area" class="pull-left">{EYECATCH_NEW_IMAGE}</div</td>
+	    <td><img id="eyecatch_preview" class="pull-left" src="{EYECATCH_URL}" /><div id="eyecatch_new_area" class="pull-left">{EYECATCH_NEW_IMAGE}</div></td>
 	</tr>
     </tbody>
 </table>

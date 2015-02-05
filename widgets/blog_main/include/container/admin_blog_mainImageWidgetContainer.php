@@ -17,7 +17,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
-//	private $tmpDir;		// 作業ディレクトリ
+	const TITLE_MOVE_RIGHT = '右の画像に変更';
+	const MOVE_RIGHT_ICON_FILE = '/images/system/move_right64.png';			// 画像変更表示用アイコン
 	const CREATE_EYECATCH_TAG_ID = 'createeyecatch';			// アイキャッチ画像作成ボタンタグID
 	const ACT_CREATE_IMAGE	= 'createimage';	// 画像作成
 	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
@@ -135,7 +136,12 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 			if (is_readable($imagePath)){	// 置き換え用アイキャッチ画像がある場合
 				// 置き換え用アイキャッチ画像URL
 				$imageUrl = $this->getEyecatchUrl($entryId);
-				$eyecatchImagTag = '<img src="' . $this->getUrl($imageUrl) . '" />';
+				
+				$titleStr = self::TITLE_MOVE_RIGHT;
+				$iconUrl = $this->gEnv->getRootUrl() . self::MOVE_RIGHT_ICON_FILE;		// 右の画像に変更アイコン
+
+				$eyecatchImagTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" />';
+				$eyecatchImagTag .= '<img src="' . $this->getUrl($imageUrl) . '" />';
 			}
 		}
 		
@@ -144,8 +150,14 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "create_eyecatch_button", $createEyecatchButton);
 		$this->tmpl->addVar("_widget", "tagid_create_eyecatch", self::CREATE_EYECATCH_TAG_ID);		// 画像作成タグ
 		
+		// 画像変更表示用アイコン
+		$titleStr = self::TITLE_MOVE_RIGHT;
+		$iconUrl = $this->gEnv->getRootUrl() . self::MOVE_RIGHT_ICON_FILE;		// 右の画像に変更アイコン
+		$moveIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" />';
+				
 		$this->tmpl->addVar("_widget", "eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($eyecatchUrl . '?' . date('YmdHis'))));
 		$this->tmpl->addVar("_widget", "eyecatch_new_image", $eyecatchImagTag);			// 置き換え用アイキャッチ画像
+		$this->tmpl->addVar("_widget", "move_icon_tag", $moveIconTag);			// 画像変更表示用アイコン
 //		$this->tmpl->addVar("_widget", "default_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($defaultEyecatchUrl)));		// デフォルトのアイキャッチ画像
 //		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
