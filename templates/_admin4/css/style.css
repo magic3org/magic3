@@ -274,6 +274,36 @@ background-color: #0081c2;
 }
 .modal-processing .modal-content .icon {
 }
+/*** 画像クロップ用ダイアログ ***/
+#crop_target {
+	max-height:400px;
+	max-width:400px;
+	height: auto!important;
+	width: auto!important;
+}
+.jcrop-holder #crop_preview {
+	display: block;
+	position: absolute;
+	z-index: 2000;
+	top: 5px;
+	right: -140px;
+	padding: 6px;
+	border: 1px rgba(0,0,0,.4) solid;
+	background-color: white;
+
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+
+	-webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+}
+#crop_preview .preview-container {
+	width:100px;
+	height:100px;
+	overflow: hidden;
+}
 /****** 画面編集 ******/
 #layout_preview_title {
 	margin-top:10px;
