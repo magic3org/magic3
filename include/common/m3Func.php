@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -384,6 +384,28 @@ function mvFileToDir($srcDir, $filenames, $destDir)
 		if (file_exists($srcPath)){
 			$destPath = $destDir . '/' . $filenames[$i];
 			$ret = mvFile($srcPath, $destPath);
+			if (!$ret) $noErr = false;
+		}
+	}
+	return $noErr;
+}
+/**
+ * 複数ファイルのコピー
+ *
+ * @param string $srcDir			移動するファイルの存在するディレクトリ
+ * @param array $filenames			移動するファイル
+ * @param string $destDir			移動先ディレクトリ
+ * @return bool						true=移動完了、false=移動失敗
+ */
+function cpFileToDir($srcDir, $filenames, $destDir)
+{
+	$noErr = true;
+	
+	for ($i = 0; $i < count($filenames); $i++){
+		$srcPath = $srcDir . '/' . $filenames[$i];
+		if (file_exists($srcPath)){
+			$destPath = $destDir . '/' . $filenames[$i];
+			$ret = copy($srcPath, $destPath);
 			if (!$ret) $noErr = false;
 		}
 	}
