@@ -24,6 +24,13 @@ function cancelItem(){
 	document.main.submit();
 	return true;
 }
+function delEyecatch(){
+	if (!window.confirm('アイキャッチ画像を削除しますか?')) return false;
+	
+	document.main.act.value = 'deleteeyecatch';
+	document.main.submit();
+	return true;
+}
 function initJcrop()
 {
 	var jcrop_api,
@@ -145,6 +152,7 @@ function createEyecatch(url)
 						if (jsondata.url){
 							var innerText = '{MOVE_ICON_TAG}<img src="' + jsondata.url + '" />';
 							$('#eyecatch_new_area').html(innerText);
+							$('#delete_eyecatch_button').hide();			// 画像削除ボタンを非表示にする
 							
 							// ヘルプ設定
 							m3SetHelp($('#eyecatch_new_area'));
@@ -177,6 +185,10 @@ $(function()
 	// 画像作成ボタンの処理
 	$("#{TAGID_CREATE_EYECATCH}").click(function (){
 		m3OpenImageFileBrowser(SetUrl);		// 画像選択
+	});
+	
+	$('#delete_eyecatch_button').click(function (){
+		delEyecatch();
 	});
 });
 //]]>
@@ -235,7 +247,11 @@ $(function()
     <tbody>
     <tr>
 	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{EYECATCH_SIZE}</span><div class="pull-right">{CREATE_EYECATCH_BUTTON}</div></th>
-	    <td><img id="eyecatch_preview" class="pull-left" src="{EYECATCH_URL}" /><div id="eyecatch_new_area" class="pull-left">{EYECATCH_NEW_IMAGE}</div></td>
+	    <td><img id="eyecatch_preview" class="pull-left" src="{EYECATCH_URL}" /><div id="eyecatch_new_area" class="pull-left">{EYECATCH_NEW_IMAGE}</div>
+		<patTemplate:tmpl name="delete_eyecatch_button" visibility="hidden">
+		<div class="pull-right"><button id="delete_eyecatch_button" class="btn btn-sm btn-default" type="button" rel="m3help" data-container="body" title="画像を削除"><i class="glyphicon glyphicon-trash"></i></button></div>
+		</patTemplate:tmpl>
+		</td>
 	</tr>
     </tbody>
 </table>

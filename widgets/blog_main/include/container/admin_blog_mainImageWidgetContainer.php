@@ -20,6 +20,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 	const TITLE_MOVE_RIGHT = '右の画像に変更';
 	const MOVE_RIGHT_ICON_FILE = '/images/system/move_right64.png';			// 画像変更表示用アイコン
 	const CREATE_EYECATCH_TAG_ID = 'createeyecatch';			// アイキャッチ画像作成ボタンタグID
+	const ACT_DELETE_EYECATCH = 'deleteeyecatch';				// アイキャッチ画像を削除
 	const ACT_CREATE_IMAGE	= 'createimage';	// 画像作成
 	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
 	
@@ -57,7 +58,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 	function _assign($request, &$param)
 	{
 		$userId		= $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+		$langId	= $this->gEnv->getDefaultLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		$act = $request->trimValueOf('act');
@@ -84,9 +85,13 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
 				$ret = mvFileToDir($tmpDir, $filenames, $privateThumbDir);
 				
-				// 画像を公開ディレクトリにコピーし、ブログ記事の情報を更新
+				// 画像を公開ディレクトリにコピー
 				$publicThumbDir = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
-				$ret = cpFileToDir($privateThumbDir, $filenames, $publicThumbDir);
+				if ($ret) $ret = cpFileToDir($privateThumbDir, $filenames, $publicThumbDir);
+
+				// ブログ記事のサムネールファイル名を更新
+				$thumbFilename = implode(';', $filenames);
+				if ($ret) $ret = self::$_mainDb->updateThumbFilename($entryId, $langId, $thumbFilename);
 				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -97,6 +102,37 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 					rmDirectory($tmpDir);
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
+				}
+				$this->gPage->updateParentWindow();// 親ウィンドウを更新
+			}
+		} else if ($act == self::ACT_DELETE_EYECATCH){		// アイキャッチ画像を削除
+			// 作業ディレクトリを取得
+			$tmpDir = $this->gEnv->getTempDirBySession();
+			
+			// 画像ファイル名、フォーマット取得
+			list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+			
+			if ($this->getMsgCount() == 0){			// エラーのないとき
+				// 公開ディレクトリ、非公開ディレクトリの画像を削除
+				$publicThumbDir = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
+				$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
+				for ($i = 0; $i < count($filenames); $i++){
+					$publicThumbPath = $publicThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
+					$privateThumbPath = $privateThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
+					if (file_exists($publicThumbPath)) @unlink($publicThumbPath);
+					if (file_exists($privateThumbPath)) @unlink($privateThumbPath);
+				}
+			
+				// 作業ディレクトリを削除
+				rmDirectory($tmpDir);
+					
+				// ブログ記事のサムネールファイル名を更新
+				$ret = self::$_mainDb->updateThumbFilename($entryId, $langId, '');
+				
+				if ($ret){
+					$this->setMsg(self::MSG_GUIDANCE, 'アイキャッチ画像を削除しました');
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'アイキャッチ画像削除に失敗しました');
 				}
 				$this->gPage->updateParentWindow();// 親ウィンドウを更新
 			}
@@ -135,6 +171,9 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 				} else {
 					$defaultEyecatchUrl = $this->gEnv->getUrlToPath($defaultEyecatchPath);		// URLに変換
 				}
+				
+				// アイキャッチ画像削除用ボタンを表示
+				$this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
 			}
 			$defaultEyecatchUrl .= '?' . date('YmdHis');
 		
