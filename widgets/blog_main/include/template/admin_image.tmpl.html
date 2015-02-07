@@ -142,8 +142,6 @@ function createEyecatch(url)
 			action: function(dialog) {
 				// 選択状態のチェック
 				if (parseInt($('#w').val())){
-					// 元の画像サイズ取得
-
 					// 変更画像を送信
 					var postValues = $('#modalform').serialize();
 					m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&' + postValues, function(request, retcode, jsondata){		// 正常終了
@@ -199,6 +197,7 @@ $(function()
 <input type="hidden" name="task" value="image" />
 <input type="hidden" name="act" />
 <input type="hidden" name="entryid" value="{ENTRY_ID}" />
+<input type="hidden" name="originaleyecatchurl" value="{ORIGINAL_EYECATCH_URL}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h"><span {_HELP_IMAGE_IMAGE}>ブログ記事画像</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_IMAGE_BUTTONS}><div class="btn-group">

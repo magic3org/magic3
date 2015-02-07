@@ -76,6 +76,9 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$path = $tmpDir . DIRECTORY_SEPARATOR . $filenames[$i];
 				if (!file_exists($path)){
 					$this->setAppErrorMsg('画像が作成されていません');
+					
+					// 作業ディレクトリを削除
+					rmDirectory($tmpDir);
 					break;
 				}
 			}
@@ -156,34 +159,17 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$html		= $row['be_html'];				// HTML
 			$html2		= $row['be_html_ext'];			// HTML続き
 		
-			// 最大サイズのアイキャッチ画像を取得
+			// ### 現在設定されているアイキャッチ画像 ###
+			// 最大サイズのアイキャッチ画像を取得。公開ディレクトリになければデフォルト画像を表示。
 			$eyecatchUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
 			
-			// アイキャッチ変更用ダイアログのデフォルト画像を取得
-			if (empty($row['be_thumb_filename'])){
-				$defaultEyecatchUrl = $eyecatchUrl;
-			} else {		// 画像が作成されているとき
-				// アイキャッチを作成したソース画像を取得
-				$defaultEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
-				if (empty($defaultEyecatchPath) && !empty($html2)) $defaultEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
-				if (empty($defaultEyecatchPath)){		// 画像が見つからないとき
-					$defaultEyecatchUrl = blog_mainCommonDef::getEyecatchImageUrl(''/*画像なし*/, self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
-				} else {
-					$defaultEyecatchUrl = $this->gEnv->getUrlToPath($defaultEyecatchPath);		// URLに変換
-				}
-				
-				// アイキャッチ画像削除用ボタンを表示
-				$this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
-			}
-			$defaultEyecatchUrl .= '?' . date('YmdHis');
-		
 			// ### 置き換え用アイキャッチ画像 ###
 			// 画像ファイル名、フォーマット取得
 			list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
 	
 			$imagePath = '';
 			$filename = $filenames[count($filenames) -1];
-			if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
+			if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;	// 一時ディレクトリ
 			if (is_readable($imagePath)){	// 置き換え用アイキャッチ画像がある場合
 				// 置き換え用アイキャッチ画像URL
 				$imageUrl = $this->getEyecatchUrl($entryId);
@@ -194,6 +180,20 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$eyecatchImagTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" />';
 				$eyecatchImagTag .= '<img src="' . $this->getUrl($imageUrl) . '" />';
 			}
+			
+			// 記事内でアイキャッチ画像に使用した画像を取得
+			$originalEyecatchUrl = '';
+			$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
+			$imagePath = $privateThumbDir . '/' . $filename;
+			if (!empty($row['be_thumb_filename']) && !file_exists($imagePath)){// 画像が作成されていて、非公開ディレクトリに画像がない場合
+				// アイキャッチを作成したソース画像を取得
+				$originalEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
+				if (empty($originalEyecatchPath) && !empty($html2)) $originalEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
+				if (!empty($originalEyecatchPath)) $originalEyecatchUrl = $this->gEnv->getUrlToPath($originalEyecatchPath);		// URLに変換
+			}
+			
+			// アイキャッチ画像削除用ボタンを表示
+			if (!empty($row['be_thumb_filename'])) $this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
 		}
 		// アイキャッチ画像の情報を取得
 		$formats = $this->gInstance->getImageManager()->getAllSystemDefaultThumbFormat(1/*クロップ画像のみ*/);
@@ -212,8 +212,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($eyecatchUrl . '?' . date('YmdHis'))));
 		$this->tmpl->addVar("_widget", "eyecatch_new_image", $eyecatchImagTag);			// 置き換え用アイキャッチ画像
 		$this->tmpl->addVar("_widget", "move_icon_tag", $moveIconTag);			// 画像変更表示用アイコン
-//		$this->tmpl->addVar("_widget", "default_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($defaultEyecatchUrl)));		// デフォルトのアイキャッチ画像
-//		$this->tmpl->addVar("_widget", "sitelogo_updated", $updateStatus);
+		$this->tmpl->addVar("_widget", "original_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($originalEyecatchUrl)));		// アイキャッチ画像の元の画像
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// 変更画像送信用
