@@ -131,7 +131,7 @@ class blog_mainCommonDef
 	 * @param timestamp $updateDt	記事の更新日付
 	 * @return string				画像URL
 	 */
-	static function createThumbnail($srcHtml, $entryId, $updateDt)
+/*	static function createThumbnail($srcHtml, $entryId, $updateDt)
 	{
 		global $gEnvManager;
 		global $gInstanceManager;
@@ -167,7 +167,7 @@ class blog_mainCommonDef
 					
 					// 画像格納用のディレクトリ作成
 					$destDir = dirname($thumbPath);
-					if (!file_exists($destDir)) mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+					if (!file_exists($destDir)) mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true);
 
 					// サムネール作成
 					$ret = $gInstanceManager->getImageManager()->createDefaultThumb(M3_VIEW_TYPE_BLOG, $entryId, $imagePath);
@@ -182,21 +182,21 @@ class blog_mainCommonDef
 			}
 		}
 		return $thumbUrl;
-	}
+	}*/
 	/**
 	 * サムネール画像を削除
 	 *
 	 * @param int    $entryId		ブログ記事ID
 	 * @return bool					true=成功、false=失敗
 	 */
-	static function removeThumbnail($entryId)
+/*	static function removeThumbnail($entryId)
 	{
 		global $gInstanceManager;
 		
 		$thumbPath	= $gInstanceManager->getImageManager()->getDefaultThumbPath(M3_VIEW_TYPE_BLOG, $entryId);
 		if (file_exists($thumbPath)) @unlink($thumbPath);
 		return true;
-	}
+	}*/
 	/**
 	 * アイキャッチ用画像のURLを取得
 	 *
@@ -215,6 +215,71 @@ class blog_mainCommonDef
 			$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilenameArray[count($thumbFilenameArray) -1]);		// 最大サイズ画像
 		}
 		return $thumbUrl;
+	}
+	
+	/**
+	 * アイキャッチ用画像を公開ディレクトリにコピー
+	 *
+	 * @param string    $entryId		記事ID
+	 * @return bool						true=成功、false=失敗
+	 */
+	static function copyEyecatchImageToPublicDir($entryId)
+	{
+		global $gInstanceManager;
+		
+		// 画像ファイル名、フォーマット取得
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		
+		// 画像を公開ディレクトリにコピー
+		$privateThumbDir = $gInstanceManager->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, self::$_deviceType);
+		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, self::$_deviceType);
+		$ret = cpFileToDir($privateThumbDir, $filenames, $publicThumbDir);
+		return $ret;
+	}
+	/**
+	 * 公開ディレクトリのアイキャッチ用画像を削除
+	 *
+	 * @param string    $entryId		記事ID
+	 * @return bool						true=成功、false=失敗
+	 */
+	static function removerEyecatchImageInPublicDir($entryId)
+	{
+		global $gInstanceManager;
+		
+		// 画像ファイル名、フォーマット取得
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		
+		// 公開ディレクトリ内の画像を削除
+		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, self::$_deviceType);
+		for ($i = 0; $i < count($filenames); $i++){
+			$publicThumbPath = $publicThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
+			if (file_exists($publicThumbPath)) @unlink($publicThumbPath);
+		}
+		return true;
+	}
+	/**
+	 * 公開,非公開ディレクトリのアイキャッチ用画像を削除
+	 *
+	 * @param string    $entryId		記事ID
+	 * @return bool						true=成功、false=失敗
+	 */
+	static function removerEyecatchImage($entryId)
+	{
+		global $gInstanceManager;
+		
+		// 画像ファイル名、フォーマット取得
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+
+		// 公開ディレクトリ、非公開ディレクトリの画像を削除
+		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
+		$privateThumbDir = $gInstanceManager->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
+		for ($i = 0; $i < count($filenames); $i++){
+			$publicThumbPath = $publicThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
+			$privateThumbPath = $privateThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
+			if (file_exists($publicThumbPath)) @unlink($publicThumbPath);
+			if (file_exists($privateThumbPath)) @unlink($privateThumbPath);
+		}
+		return true;
 	}
 }
 ?>

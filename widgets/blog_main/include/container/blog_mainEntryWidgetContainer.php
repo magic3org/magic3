@@ -202,14 +202,17 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					// ##### サムネールの削除 #####
 					for ($i = 0; $i < count($delEntryInfo); $i++){
 						$infoObj = $delEntryInfo[$i];
-						$ret = blog_mainCommonDef::removeThumbnail($infoObj->entryId);
+//						$ret = blog_mainCommonDef::removeThumbnail($infoObj->entryId);
 						
 						if (!empty($infoObj->thumb)){
-							$oldFiles = explode(';', $infoObj->thumb);
-							$this->gInstance->getImageManager()->delSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $oldFiles);
+							//$oldFiles = explode(';', $infoObj->thumb);
+							//$this->gInstance->getImageManager()->delSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $oldFiles);
+							
+							// アイキャッチ画像削除
+							blog_mainCommonDef::removerEyecatchImage($infoObj->entryId);
 						}
 					}
-					
+
 					// キャッシュデータのクリア
 					for ($i = 0; $i < count($delItems); $i++){
 						$this->clearCacheBySerial($delItems[$i]);
@@ -429,11 +432,13 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					// 次の記事IDを取得
 					$nextEntryId = self::$_mainDb->getNextEntryId();
 				
-					$thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
-					if (empty($thumbPath) && !empty($html2)) $thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
-					if (!empty($thumbPath)){
-						$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $nextEntryId, $thumbPath, $destFilename);
-						if ($ret) $thumbFilename = implode(';', $destFilename);
+					if ($status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
+						$thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
+						if (empty($thumbPath) && !empty($html2)) $thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
+						if (!empty($thumbPath)){
+							$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $nextEntryId, $thumbPath, $destFilename);
+							if ($ret) $thumbFilename = implode(';', $destFilename);
+						}
 					}
 				}
 				
@@ -458,7 +463,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					$reloadData = true;		// データの再ロード
 					
 					// ##### サムネールの作成 #####
-					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
+/*					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 					if ($ret){
 						$entryId	= $row['be_id'];		// 記事ID
 						$html		= $row['be_html'];				// HTML
@@ -470,7 +475,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 						} else {
 							$ret = blog_mainCommonDef::removeThumbnail($entryId);
 						}
-					}
+					}*/
 					
 					// キャッシュデータのクリア
 					$this->clearCacheBySerial($this->serialNo);
@@ -537,11 +542,25 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 				// サムネール画像を取得
 				$thumbFilename = '';
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
-					$thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
-					if (empty($thumbPath) && !empty($html2)) $thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
-					if (!empty($thumbPath)){
-						$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $this->entryId, $thumbPath, $destFilename);
-						if ($ret) $thumbFilename = implode(';', $destFilename);
+					if ($status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
+						// コンテンツからアイキャッチ画像を作成
+						$thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
+						if (empty($thumbPath) && !empty($html2)) $thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
+						if (!empty($thumbPath)){
+							$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $this->entryId, $thumbPath, $destFilename);
+							if ($ret) $thumbFilename = implode(';', $destFilename);
+						}
+					
+						// 非公開ディレクトリのアイキャッチ画像をコピー
+						$ret = blog_mainCommonDef::copyEyecatchImageToPublicDir($this->entryId);
+						if ($ret){			// アイキャッチ画像をコピーした場合は、ファイル名を取得
+							// 画像ファイル名、フォーマット取得
+							list($destFilename, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($this->entryId, 1/*クロップ画像のみ*/);
+							$thumbFilename = implode(';', $destFilename);
+						}
+					} else {		// 記事非公開の場合
+						// 公開ディレクトリのアイキャッチ画像を削除
+						blog_mainCommonDef::removerEyecatchImageInPublicDir($this->entryId);
 					}
 				}
 
@@ -561,13 +580,13 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			
 				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
 													''/*投稿者そのまま*/, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $oldRecord, $otherParams);
-				if ($ret){
+/*				if ($ret){
 					// コンテンツに画像がなくなった場合は、サムネールを削除
 					if (empty($thumbFilename) && !empty($oldRecord['be_thumb_filename'])){
 						$oldFiles = explode(';', $oldRecord['be_thumb_filename']);
 						$this->gInstance->getImageManager()->delSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $oldFiles);
 					}
-				}
+				}*/
 				
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
@@ -576,7 +595,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->serialNo = $newSerial;
 					$reloadData = true;		// データの再ロード
 					
-					// ##### サムネールの作成 #####
+/*					// ##### サムネールの作成 #####
 					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 					if ($ret){
 						$entryId	= $row['be_id'];		// 記事ID
@@ -589,7 +608,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 						} else {
 							$ret = blog_mainCommonDef::removeThumbnail($entryId);
 						}
-					}
+					}*/
 					
 					// キャッシュデータのクリア
 					$this->clearCacheBySerial($this->serialNo);
@@ -639,12 +658,15 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->setGuidanceMsg('データを削除しました');
 					
 					// ##### サムネールの削除 #####
-					$ret = blog_mainCommonDef::removeThumbnail($this->entryId);
+//					$ret = blog_mainCommonDef::removeThumbnail($this->entryId);
 					
 					// サムネールを削除
 					if (!empty($row['be_thumb_filename'])){
-						$oldFiles = explode(';', $row['be_thumb_filename']);
-						$this->gInstance->getImageManager()->delSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $oldFiles);
+//						$oldFiles = explode(';', $row['be_thumb_filename']);
+//						$this->gInstance->getImageManager()->delSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $oldFiles);
+						
+						// アイキャッチ画像削除
+						blog_mainCommonDef::removerEyecatchImage($this->entryId);
 					}
 						
 					// キャッシュデータのクリア
@@ -681,8 +703,11 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->setGuidanceMsg('データを削除しました');
 					
 					// ##### サムネールの削除 #####
-					$ret = blog_mainCommonDef::removeThumbnail($this->entryId);
+//					$ret = blog_mainCommonDef::removeThumbnail($this->entryId);
 					
+					// アイキャッチ画像削除
+					blog_mainCommonDef::removerEyecatchImage($this->entryId);
+						
 					// キャッシュデータのクリア
 					$this->clearCacheBySerial($this->serialNo);
 					
