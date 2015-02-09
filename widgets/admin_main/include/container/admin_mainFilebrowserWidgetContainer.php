@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainFilebrowserWidgetContainer.php 6168 2013-07-14 05:43:31Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWidgetContainer.php');
@@ -21,17 +21,7 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	
 	// ##### 注意 elFinder2.0-rc1はjQuery1.7以下でしか動かない #####
 	// #####      elFinder2.0はjQuery1.8で動作可能             #####
-/*	const FILE_BROWSER_PATH			= '/elfinder-2.0-rc1/php/connector.php';		// ファイルブラウザのパス
-	const FILEBROWSER_SCRIPT_FILE	= '/elfinder-2.0-rc1/js/elfinder.min.js';	// ファイルブラウザelfinderスクリプトファイル
-	const FILEBROWSER_LANG_FILE		= '/elfinder-2.0-rc1/js/i18n/elfinder.ja.js';		// ファイルブラウザelfinder言語ファイル
-	const FILEBROWSER_CSS_FILE		= '/elfinder-2.0-rc1/css/elfinder.min.css';		// ファイルブラウザelfinder用CSSファイル
-	const FILEBROWSER_PLUS_CSS_FILE	= '/elfinder-2.0-rc1/css/theme.css';		// ファイルブラウザelfinder用追加CSSファイル*/
-	const FILE_BROWSER_PATH			= '/elfinder-2.0/php/connector.php';		// ファイルブラウザのパス
-//	const FILEBROWSER_SCRIPT_FILE	= '/elfinder-2.0/js/elfinder.min.js';	// ファイルブラウザelfinderスクリプトファイル
-//	const FILEBROWSER_LANG_FILE		= '/elfinder-2.0/js/i18n/elfinder.ja.js';		// ファイルブラウザelfinder言語ファイル
-//	const FILEBROWSER_CSS_FILE		= '/elfinder-2.0/css/elfinder.min.css';		// ファイルブラウザelfinder用CSSファイル
-//	const FILEBROWSER_PLUS_CSS_FILE	= '/elfinder-2.0/css/theme.css';		// ファイルブラウザelfinder用追加CSSファイル
-//	const DEFAULT_THEME_CSS_FILE	= '/smoothness/jquery-ui.custom.css';		// テーマファイル
+	const FILE_BROWSER_PATH			= '/elfinder-2.1/php/connector.php';		// ファイルブラウザのパス
 	const DIALOG_FIX_CSS 			= 'body { margin: 0; } #elfinder { border: none; } .elfinder-toolbar, .elfinder-statusbar { border-radius: 0 !important; }';
 	
 	/**

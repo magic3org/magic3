@@ -94,6 +94,20 @@ $opts = array(
 			'URL'           => $url,		// URL to files (REQUIRED)
 			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
 		)
+	),
+	'bind' =>	array(
+		'upload.presave' => array(
+			'Plugin.AutoResize.onUpLoadPreSave'
+		)
+	),
+	'plugin' => array(
+		'PluginAutoResize' => array(
+			'enable'         => true,       // For control by volume driver
+			'maxWidth'       => 100,       // Path to Water mark image
+			'maxHeight'      => 100,       // Margin right pixel
+			'quality'        => 100         // JPEG image save quality
+//			'targetType'     => IMG_GIF|IMG_JPG|IMG_PNG|IMG_WBMP // Target image formats ( bit-field )
+		)
 	)
 );
 

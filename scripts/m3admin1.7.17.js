@@ -365,7 +365,7 @@ function m3OpenImageFileBrowser(seturl_callback)
 		},
 		create: function(event, ui){
 			$(this).elfinder({
-				url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=image',
+				url : M3_ROOT_URL + '/scripts/elfinder-2.1/php/connector.php?dirtype=image',
 				height: '500px',
 				lang: 'ja',
 				resizable: false,
@@ -396,7 +396,7 @@ function m3OpenFlashFileBrowser(seturl_callback)
 		},
 		create: function(event, ui){
 			$(this).elfinder({
-				url : M3_ROOT_URL + '/scripts/elfinder-2.0/php/connector.php?dirtype=flash',
+				url : M3_ROOT_URL + '/scripts/elfinder-2.1/php/connector.php?dirtype=flash',
 				height: '500px',
 				lang: 'ja',
 				resizable: false,
