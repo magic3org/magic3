@@ -7,22 +7,22 @@
  * LICENSE: This source file is licensed under the terms of the GNU General Public License.
  *
  * @package    Magic3 Framework
- * @author     •½“c’¼‹B(Naoki Hirata) <naoki@aplo.co.jp>
+ * @author     å¹³ç”°ç›´æ¯…(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2014 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-// ########## Magic3ƒAƒNƒZƒX§Œä(ŠJŽn) ##########
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(é–‹å§‹) ##########
 require_once('../../../include/global.php');
 
-if (!$gAccessManager->loginedByUser()){		// ƒƒOƒCƒ“’†‚Ìƒ†[ƒU‚ÍƒAƒNƒZƒX‚ð‹–‰Â
+if (!$gAccessManager->loginedByUser()){		// ãƒ­ã‚°ã‚¤ãƒ³ä¸­ã®ãƒ¦ãƒ¼ã‚¶ã¯ã‚¢ã‚¯ã‚»ã‚¹ã‚’è¨±å¯
 	echo 'Access error: access denied.';
 
-	$gOpeLogManager->writeUserAccess(__METHOD__, 'ƒtƒ@ƒCƒ‹ƒuƒ‰ƒEƒU‚Ö‚Ì•s³‚ÈƒAƒNƒZƒX‚ðŒŸo‚µ‚Ü‚µ‚½BƒƒOƒCƒ“‚È‚µ', 3001, 'ƒAƒNƒZƒX‚ðƒuƒƒbƒN‚µ‚Ü‚µ‚½B');
+	$gOpeLogManager->writeUserAccess(__METHOD__, 'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ–ãƒ©ã‚¦ã‚¶ã¸ã®ä¸æ­£ãªã‚¢ã‚¯ã‚»ã‚¹ã‚’æ¤œå‡ºã—ã¾ã—ãŸã€‚ãƒ­ã‚°ã‚¤ãƒ³ãªã—', 3001, 'ã‚¢ã‚¯ã‚»ã‚¹ã‚’ãƒ–ãƒ­ãƒƒã‚¯ã—ã¾ã—ãŸã€‚');
 	exit(0);
 }
-// ########## Magic3ƒAƒNƒZƒX§Œä(I—¹) ##########
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(çµ‚äº†) ##########
 //error_reporting(0); // Set E_ALL for debuging
 
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
@@ -63,11 +63,11 @@ function access($attr, $path, $data, $volume) {
 		:  null;                                    // else elFinder decide it itself
 }
 
-// ########## Magic3ƒAƒNƒZƒX§Œä(ŠJŽn) ##########
-// ƒfƒBƒŒƒNƒgƒŠŽQÆ”ÍˆÍ‚ð§ŒÀ
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(é–‹å§‹) ##########
+// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå‚ç…§ç¯„å›²ã‚’åˆ¶é™
 $dirType = $gRequestManager->trimValueOf('dirtype');
 if (!empty($dirType) && !in_array($dirType, array('image', 'flash', 'file'))){
-	$gOpeLogManager->writeUserAccess(__METHOD__, 'ƒtƒ@ƒCƒ‹ƒuƒ‰ƒEƒU‚Ö‚Ì•s³‚Èƒpƒ‰ƒ[ƒ^‚ðŒŸo‚µ‚Ü‚µ‚½Bdirtype=' . $dirType , 3001, 'ƒAƒNƒZƒX‚ðƒuƒƒbƒN‚µ‚Ü‚µ‚½B');
+	$gOpeLogManager->writeUserAccess(__METHOD__, 'ãƒ•ã‚¡ã‚¤ãƒ«ãƒ–ãƒ©ã‚¦ã‚¶ã¸ã®ä¸æ­£ãªãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’æ¤œå‡ºã—ã¾ã—ãŸã€‚dirtype=' . $dirType , 3001, 'ã‚¢ã‚¯ã‚»ã‚¹ã‚’ãƒ–ãƒ­ãƒƒã‚¯ã—ã¾ã—ãŸã€‚');
 	exit(0);
 }
 $path = $gEnvManager->getResourcePathForUser();
@@ -77,9 +77,9 @@ if (!empty($dirType)){
 	$url .= '/' . $dirType;
 }
 
-// ƒfƒBƒŒƒNƒgƒŠ‚ª‚È‚¢ê‡‚Íì¬
-if (!file_exists($path)) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*Ä‹A“I*/);
-// ########## Magic3ƒAƒNƒZƒX§Œä(I—¹) ##########
+// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒãªã„å ´åˆã¯ä½œæˆ
+if (!file_exists($path)) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*å†å¸°çš„*/);
+// ########## Magic3ã‚¢ã‚¯ã‚»ã‚¹åˆ¶å¾¡(çµ‚äº†) ##########
 
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
@@ -88,8 +88,6 @@ $opts = array(
 	'roots' => array(
 		array(
 			'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-//			'path'          => '../files/',         // path to files (REQUIRED)
-//			'URL'           => dirname($_SERVER['PHP_SELF']) . '/../files/', // URL to files (REQUIRED)
 			'path'          => $path,		// path to files (REQUIRED)
 			'URL'           => $url,		// URL to files (REQUIRED)
 			'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
@@ -101,12 +99,11 @@ $opts = array(
 		)
 	),
 	'plugin' => array(
-		'PluginAutoResize' => array(
-			'enable'         => true,       // For control by volume driver
-			'maxWidth'       => 100,       // Path to Water mark image
-			'maxHeight'      => 100,       // Margin right pixel
-			'quality'        => 100         // JPEG image save quality
-//			'targetType'     => IMG_GIF|IMG_JPG|IMG_PNG|IMG_WBMP // Target image formats ( bit-field )
+		'AutoResize' => array(
+			'enable'		=> true,		// ç”»åƒã‚µã‚¤ã‚ºã‚’åˆ¶é™
+			'maxWidth'		=> 1024,		// æœ€å¤§ç”»åƒå¹…
+			'maxHeight'		=> 1024,		// æœ€å¤§ç”»åƒé«˜ã•
+			'quality'		=> 100			// JPEG image save quality
 		)
 	)
 );
