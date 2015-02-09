@@ -271,14 +271,21 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
 	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor
 	
-	const ELFINDER_FILENAME			= 'elfinder-2.0/js/elfinder.min.js';		// elFinder
+	// elFinder v2.0版
+/*	const ELFINDER_FILENAME			= 'elfinder-2.0/js/elfinder.full.js';		// elFinder
 	const ELFINDER_LANG_FILENAME	= 'elfinder-2.0/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER_CSS				= 'elfinder-2.0/css/elfinder.full.css';		// elFinder CSS
-	//const ELFINDER_CSS				= 'elfinder-2.0/css/elfinder.min.css';		// elFinder CSS
 	const ELFINDER_OPTION_CSS		= 'elfinder-2.0/css/theme.css';				// elFinder CSS
 	const ELFINDER_THEME_CSS		= 'elfinder-2.0/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
+	*/
+	const ELFINDER_FILENAME			= 'elfinder-2.1/js/elfinder.full.js';		// elFinder
+	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER_CSS				= 'elfinder-2.1/css/elfinder.full.css';		// elFinder CSS
+	const ELFINDER_OPTION_CSS		= 'elfinder-2.1/css/theme.css';				// elFinder CSS
+	const ELFINDER_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
+
 	// elFinder v2.1版
-	const ELFINDER21_FILENAME		= 'elfinder-2.1/js/elfinder.min.js';		// elFinder
+	const ELFINDER21_FILENAME		= 'elfinder-2.1/js/elfinder.full.js';		// elFinder
 	const ELFINDER21_LANG_FILENAME	= 'elfinder-2.1/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER21_CSS			= 'elfinder-2.1/css/elfinder.full.css';		// elFinder CSS
 	const ELFINDER21_OPTION_CSS		= 'elfinder-2.1/css/theme.css';				// elFinder CSS

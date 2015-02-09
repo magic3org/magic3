@@ -3930,10 +3930,11 @@ elFinder.prototype._options = {
 		// toolbar configuration
 		toolbar : [
 			['back', 'forward'],
-			['netmount'],
+			//['netmount'],				// modified for magic3 by naoki 2015/2/9
 			// ['reload'],
 			// ['home', 'up'],
-			['mkdir', 'mkfile', 'upload'],
+			//['mkdir', 'mkfile', 'upload'],
+			['mkdir', 'upload'],		// modified for magic3 by naoki 2015/2/9
 			['open', 'download', 'getfile'],
 			['info'],
 			['quicklook'],
@@ -9280,8 +9281,8 @@ elFinder.prototype.commands.help = function() {
 			
 			html.push(sep);
 			html.push('<div class="'+lic+'">Licence: BSD Licence</div>');
-			html.push('<div class="'+lic+'">Copyright © 2009-2015, Studio 42</div>');
-			html.push('<div class="'+lic+'">„ …'+fm.i18n('dontforget')+' ”</div>');
+			html.push('<div class="'+lic+'">Copyright c 2009-2015, Studio 42</div>');
+			html.push('<div class="'+lic+'">? …'+fm.i18n('dontforget')+' ”</div>');
 			html.push('</div>');
 		},
 		shortcuts = function() {
