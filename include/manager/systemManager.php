@@ -10,9 +10,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: systemManager.php 6173 2013-07-16 02:23:00Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');		// Magic3コアクラス
@@ -61,7 +61,10 @@ class SystemManager extends Core
 	const CF_SMARTPHONE_AUTO_REDIRECT = 'smartphone_auto_redirect';		// スマートフォンの自動遷移
 	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
 	const DEFAULT_PAGE_CACHE_LIFETIME = 1440;		// デフォルトの画面キャッシュの更新時間(分)。1日ごと。
-	
+	const CF_UPLOAD_IMAGE_AUTORESIZE = 'upload_image_autoresize';		// 画像リサイズ機能を使用するかどうか
+	const CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH = 'upload_image_autoresize_max_width';		// 画像リサイズ機能最大画像幅
+	const CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT = 'upload_image_autoresize_max_height';		// 画像リサイズ機能最大画像高さ
+
 	/**
 	 * コンストラクタ
 	 */

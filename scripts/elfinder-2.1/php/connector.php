@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -81,6 +81,11 @@ if (!empty($dirType)){
 if (!file_exists($path)) mkdir($path, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
 // ########## Magic3アクセス制御(終了) ##########
 
+// 画像の自動生成の設定
+$autoResizeEnable	= (bool)$gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// 画像リサイズ機能を使用するかどうか
+$maxWidth			= $gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);		// 画像リサイズ機能最大画像幅
+$maxHeight			= $gSystemManager->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);		// 画像リサイズ機能最大画像高さ
+
 // Documentation for connector options:
 // https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
 $opts = array(
@@ -100,9 +105,9 @@ $opts = array(
 	),
 	'plugin' => array(
 		'AutoResize' => array(
-			'enable'		=> true,		// 画像サイズを制限
-			'maxWidth'		=> 1024,		// 最大画像幅
-			'maxHeight'		=> 1024,		// 最大画像高さ
+			'enable'		=> $autoResizeEnable,		// 画像サイズを制限
+			'maxWidth'		=> $maxWidth,		// 最大画像幅
+			'maxHeight'		=> $maxHeight,		// 最大画像高さ
 			'quality'		=> 100			// JPEG image save quality
 		)
 	)
