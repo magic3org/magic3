@@ -22,7 +22,7 @@ DELETE FROM _system_config WHERE sc_id = 'site_logo_filename';
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('site_logo_filename', 'logo_72c.jpg;logo_200c.jpg',   'サイトロゴファイル名'),
-('thumb_format', '72c.jpg;200c.jpg',   'サムネール仕様');
+('thumb_format', '72c.jpg;200c.jpg',   'コンテンツ用サムネール仕様');
 
 -- サイト定義マスター
 DELETE FROM _site_def WHERE sd_id = 'head_others';

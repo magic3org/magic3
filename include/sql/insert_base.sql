@@ -87,7 +87,7 @@ INSERT INTO _system_config
 ('google_maps_key',              '',                        'Googleマップ利用キー'),
 ('fix_ie6_transparent_png',      '0',                       'IE6の透過PNG対応'),
 ('site_logo_filename',           'logo_72c.jpg;logo_200c.jpg',   'サイトロゴファイル名'),
-('thumb_format',                 '72c.jpg;200c.jpg',   'サムネール仕様'),
+('thumb_format',                 '72c.jpg;200c.jpg',   'コンテンツ用サムネール仕様'),
 ('avatar_format',                '80c.jpg',   'アバター仕様'),
 ('ogp_thumb_format',             '200c.jpg',   'OGP用サムネール仕様'),
 ('wysiwyg_editor',               'ckeditor',   'WYSIWYGエディター'),
