@@ -24,6 +24,14 @@ INSERT INTO _system_config
 ('upload_image_autoresize_max_width', '1024',         'アップロード画像自動リサイズの最大幅'),
 ('upload_image_autoresize_max_height', '1024',         'アップロード画像自動リサイズの最大高さ');
 
+DELETE FROM _system_config WHERE sc_id = 'thumb_format';
+INSERT INTO _system_config 
+(sc_id,                          sc_value,                  sc_name) VALUES
+('thumb_format', '72c.jpg;80c.jpg;160x120c.jpg;200c.jpg',   'コンテンツ用サムネール仕様');
 
 -- *** システム標準テーブル ***
+-- ブログ設定マスター
+INSERT INTO blog_config
+(bg_id,                     bg_value,                         bg_name,              bg_index) VALUES
+('thumb_type',     's=80c.jpg;mw=160x120c.jpg;l=200c.jpg', '記事サムネールタイプ', 0);
 

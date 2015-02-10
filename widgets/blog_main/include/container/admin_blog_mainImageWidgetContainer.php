@@ -245,17 +245,17 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		
 		// 画像ファイル名、フォーマット取得
 		list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
-		
+
 		// クロップ画像を作成
 		for ($i = 0; $i < count($formats); $i++){
 			$format = $formats[$i];
-			
+
 			// フォーマット情報を取得
-			$ret = $this->gInstance->getImageManager()->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+			$ret = $this->gInstance->getImageManager()->parseImageFormat($format, $imageType, $imageAttr, $imageSize, $imageWidthHeight);
 			if ($ret){
 				// 画像作成
 				$destPath = $tmpDir . DIRECTORY_SEPARATOR . $filenames[$i];
-				$ret = $this->gInstance->getImageManager()->createCropImage($srcPath, $x, $y, $w, $h, $destPath, $imageSize, $imageSize);
+				$ret = $this->gInstance->getImageManager()->createCropImage($srcPath, $x, $y, $w, $h, $destPath, $imageWidthHeight['width'], $imageWidthHeight['height']);
 				if (!$ret) return false;
 			} else {
 				break;
@@ -285,7 +285,7 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$imagePath = '';
 		$filename = $filenames[count($filenames) -1];
 		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
-			
+
 		// ページ作成処理中断
 		$this->gPage->abortPage();
 

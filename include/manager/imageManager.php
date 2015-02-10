@@ -30,6 +30,7 @@ class ImageManager extends Core
 	const DEFAULT_SITE_LOGO_BASE = 'logo';		// デフォルトのサイトロゴファイル名ベース
 	const DEFAULT_AVATAR_BASE = 'default';		// デフォルトのアバターファイル名ベース
 	const NOT_AVAILABLE_HEAD = 'notavailable_';		// 設定画像がない場合の表示画像のファイル名ヘッダ部
+	const PARSE_IMAGE_FORMAT = '/(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマット解析用
 	// DB定義値
 	const CF_SITE_LOGO_FILENAME	= 'site_logo_filename';		// サイトロゴファイル
 	const CF_SITE_LOGO_FORMAT	= 'site_logo_format';		// サイトロゴフォーマット
@@ -180,14 +181,19 @@ class ImageManager extends Core
 		if ($filterType != 0){
 			for ($i = 0; $i < count($formatArray); $i++){
 				$format = trim($formatArray[$i]);
-				$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
+				$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+				if ($ret){
+					if ($imageAttr == 'c') $formats[] = $format;
+				}
+/*				$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
 				if ($ret){
 					$thumbSize = $matches[1];
 					$thumbAttr = strtolower($matches[2]);
 					$ext = strtolower($matches[3]);
 					
 					if ($thumbAttr == 'c') $formats[] = $format;
-				}
+				}*/
+				
 			}
 		} else {
 			$formats = $formatArray;
@@ -1120,8 +1126,8 @@ class ImageManager extends Core
 	function parseImageFormat($format, &$imageType, &$imageAttr, &$imageSize, &$imageWidthHeight = null)
 	{
 		$format = trim($format);
-		//$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
-		$ret = preg_match('/(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);	// 「MMxNNc.jpg」タイプのフォーマットを解析
+		//$ret = preg_match('/(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);	// 「MMxNNc.jpg」タイプのフォーマットを解析
+		$ret = preg_match(self::PARSE_IMAGE_FORMAT, $format, $matches);		// 「MMxNNc.jpg」タイプのフォーマットを解析
 		if ($ret){
 			$imageSize = $matches[1];
 			$height = intval($matches[3]);
