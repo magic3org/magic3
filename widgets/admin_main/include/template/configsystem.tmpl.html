@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -177,6 +177,14 @@ $(function(){
 		</td>
 	</tr>
     <tr>
+	    <th>アップロード</th>
+	    <td colspan="2"><div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_upload_image_autoresize" {UPLOAD_IMAGE_AUTORESIZE} />画像のリサイズ</label></div></div>
+		<div class="form-control-static col-sm-2 m3config_item">最大サイズ</div>
+		<div class="form-control-static col-sm-1 m3config_item">幅：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_upload_image_autoresize_max_width" class="form-control" size="4" maxlength="4" value="{UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
+		<div class="form-control-static col-sm-1 m3config_item">高さ：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_upload_image_autoresize_max_height" class="form-control" size="4" maxlength="4" value="{UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
+		</td>
+	</tr>
+    <tr>
 	    <th rowspan="2">テンプレート</th>
 	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">システム画面テンプレート</div>
 	    <div class="col-sm-4 m3config_item"><select name="item_systemplate" class="form-control">
@@ -208,7 +216,7 @@ $(function(){
 	    <th>一時ディレクトリ</th>
 	    <td colspan="2"><div class="col-sm-10 m3config_item"><input type="text" name="item_work_dir" class="form-control" value="{WORK_DIR}" size="60" maxlength="120" /></div><div class="form-control-static col-sm-2 text-right m3config_item">{WORK_DIR_ACCESS}</div></td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>リソース<br />ディレクトリ</th>
 	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{RESOURCE_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{RESOURCE_DIR_ACCESS}</div><div class="form-control-static col-sm-12 m3config_item">ディスク使用量：{RESOURCE_DIR_SIZE}バイト</div></td>
 	</tr>

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -150,6 +150,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$useJquery = ($request->trimValueOf('item_use_jquery') == 'on') ? 1 : 0;			// 常にjQueryを使用するかどうか
 		$smartphoneUseJqueryMobile = ($request->trimValueOf('item_smartphone_use_jquery_mobile') == 'on') ? 1 : 0;// スマートフォン画面でjQuery Mobileを使用
 		$this->wysiwygEditor = $request->trimValueOf('item_wysiwyg_editor');			// 管理画面用WYSIWYGエディター
+		$uploadImageAutoresize = $request->trimCheckedValueOf('item_upload_image_autoresize');		// アップロード画像の自動リサイズを行うかどうか
+		$uploadImageAutoresizeMaxWidth = $request->trimIntValueOf('item_upload_image_autoresize_max_width');		// アップロード画像の自動リサイズ、画像最大幅
+		$uploadImageAutoresizeMaxHeight = $request->trimIntValueOf('item_upload_image_autoresize_max_height');		// アップロード画像の自動リサイズ、画像最大高さ
 		
 		if ($act == 'update'){		// 設定更新のとき
 			$isErr = false;
@@ -247,7 +250,16 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_WYSIWYG_EDITOR, $this->wysiwygEditor)) $isErr = true;// 管理画面用WYSIWYGエディター
 			}		
-			
+			if (!$isErr){
+				if (!$this->db->updateSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE, $uploadImageAutoresize)) $isErr = true;		// アップロード画像の自動リサイズを行うかどうか
+			}
+			if (!$isErr){
+				if (!$this->db->updateSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH, $uploadImageAutoresizeMaxWidth)) $isErr = true;		// アップロード画像の自動リサイズ、画像最大幅
+			}
+			if (!$isErr){
+				if (!$this->db->updateSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT, $uploadImageAutoresizeMaxHeight)) $isErr = true;		// アップロード画像の自動リサイズ、画像最大高さ
+			}
+		
 			if ($isErr){
 				$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 			} else {
@@ -291,6 +303,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
 			$this->wysiwygEditor = $this->db->getSystemConfig(self::CF_WYSIWYG_EDITOR);			// 管理画面用WYSIWYGエディター
+			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
+			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
+			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
 		} else if ($act == 'updateip'){		// IPアドレスを更新のとき
 			$exceptIp = $request->trimValueOf('except_ip');
 
@@ -352,6 +367,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 			$smartphoneUseJqueryMobile = $this->db->getSystemConfig(self::CF_SMARTPHONE_USE_JQUERY_MOBILE);// スマートフォン画面でjQuery Mobileを使用
 			$this->wysiwygEditor = $this->db->getSystemConfig(self::CF_WYSIWYG_EDITOR);			// 管理画面用WYSIWYGエディター
+			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
+			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
+			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
 		}
 		// 言語選択メニューを作成
 		$this->db->getLangs($this->gSystem->getSystemLanguages(), array($this, 'langLoop'));
@@ -481,6 +499,10 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		if (!empty($configWindowOpenByTab)) $checked = 'checked'; 			// ウィジェット設定画面をタブで開くかどうか
 		$this->tmpl->addVar("_widget", "config_window_open_by_tab", $checked);
 
+		$this->tmpl->addVar("_widget", "upload_image_autoresize", $this->convertToCheckedString($uploadImageAutoresize));			// アップロード画像の自動リサイズを行うかどうか
+		$this->tmpl->addVar("_widget", "upload_image_autoresize_max_width", $uploadImageAutoresizeMaxWidth);		// アップロード画像の自動リサイズ、画像最大幅
+		$this->tmpl->addVar("_widget", "upload_image_autoresize_max_height", $uploadImageAutoresizeMaxHeight);		// アップロード画像の自動リサイズ、画像最大高さ
+			
 		// 一時ディレクトリ
 		$this->tmpl->addVar("_widget", "work_dir", $workDir);
 		if (is_writable($workDir)){
