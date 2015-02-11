@@ -30,6 +30,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	private $isMultiLang;			// 多言語対応画面かどうか
 	private $fieldValueArray;		// ユーザ定義フィールド入力値
 	const ICON_SIZE = 32;		// アイコンのサイズ
+	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
@@ -1011,6 +1012,15 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		}
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
+		// アイキャッチ画像
+		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], -1/*最小画像*/);
+		if (empty($fetchedRow['be_thumb_filename'])){
+			$iconTitle = 'アイキャッチ画像未設定';
+		} else {
+			$iconTitle = 'アイキャッチ画像';
+		}
+		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
 		$row = array(
 			'index' => $index,		// 項目番号
 			'no' => $index + 1,													// 行番号
@@ -1018,7 +1028,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			'id' => $this->convertToDispString($fetchedRow['be_id']),			// ID
 			'name' => $this->convertToDispString($fetchedRow['be_name']),		// 名前
 			'lang' => $lang,													// 対応言語
-			'status_img' => $statusImg,												// ユーザからの参照状況
+			'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
+			'status_img' => $statusImg,												// 公開状態
 			'status' => $status,													// 公開状況
 			'category' => $category,											// 記事カテゴリー
 			'view_count' => $totalViewCount,									// 総参照数

@@ -200,11 +200,12 @@ class blog_mainCommonDef
 	/**
 	 * アイキャッチ用画像のURLを取得
 	 *
-	 * @param string    $filenames				ファイル名(「;」区切り)
-	 * @param string    $defaultFilenames		デフォルトファイル名(「;」区切り)
+	 * @param string $filenames				ファイル名(「;」区切り)
+	 * @param string $defaultFilenames		デフォルトファイル名(「;」区切り)
+	 * @param string $size					アイキャッチ画像サイズ(0=最大、-1=最小)
 	 * @return string							画像URL
 	 */
-	static function getEyecatchImageUrl($filenames, $defaultFilenames)
+	static function getEyecatchImageUrl($filenames, $defaultFilenames, $size = 0)
 	{
 		global $gInstanceManager;
 		
@@ -212,7 +213,16 @@ class blog_mainCommonDef
 		if (empty($filenames)) $filenames = $defaultFilenames;		// 記事デフォルト画像
 		if (!empty($filenames)){
 			$thumbFilenameArray = explode(';', $filenames);
-			$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilenameArray[count($thumbFilenameArray) -1]);		// 最大サイズ画像
+			
+			switch ($size){
+			case 0:			// 最大
+			default:
+				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilenameArray[count($thumbFilenameArray) -1]);		// 最大サイズ画像
+				break;
+			case -1:		// 最小
+				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilenameArray[0]);		// 最小サイズ画像
+				break;
+			}
 		}
 		return $thumbUrl;
 	}
