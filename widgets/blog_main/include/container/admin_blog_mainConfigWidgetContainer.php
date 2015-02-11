@@ -321,7 +321,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			switch ($type){
 			case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
 				//$formats = $this->gInstance->getImageManager()->getDefaultContentThumbFormat();
-				$formats = $this->gInstance->getImageManager()->getAllSystemThumbFormat();
+				$formats = $this->gInstance->getImageManager()->getSystemThumbFormat();
 				$filenameBase = '0';
 				break;
 			}

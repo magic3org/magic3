@@ -165,10 +165,10 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 			
 			// ### 置き換え用アイキャッチ画像 ###
 			// 画像ファイル名、フォーマット取得
-			list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
+			list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($entryId, 10/*アイキャッチ画像*/);
 	
 			$imagePath = '';
-			$filename = $filenames[count($filenames) -1];
+			$filename = $filenames[0];
 			if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;	// 一時ディレクトリ
 			if (is_readable($imagePath)){	// 置き換え用アイキャッチ画像がある場合
 				// 置き換え用アイキャッチ画像URL
@@ -196,8 +196,8 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 			if (!empty($row['be_thumb_filename'])) $this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
 		}
 		// アイキャッチ画像の情報を取得
-		$formats = $this->gInstance->getImageManager()->getAllSystemThumbFormat(1/*クロップ画像のみ*/);
-		$ret = $this->gInstance->getImageManager()->parseImageFormat($formats[count($formats) -1], $imageType, $imageAttr, $imageSize);
+		$formats = $this->gInstance->getImageManager()->getSystemThumbFormat(10/*アイキャッチ画像*/);
+		$ret = $this->gInstance->getImageManager()->parseImageFormat($formats[0], $imageType, $imageAttr, $imageSize);
 
 		// アイキャッチ画像変更ボタン
 		$createEyecatchButton = $this->gDesign->createEditButton(''/*同画面*/, '画像を作成', self::CREATE_EYECATCH_TAG_ID);
@@ -280,10 +280,10 @@ class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$tmpDir = $this->gEnv->getTempDirBySession();
 		
 		// 画像ファイル名、フォーマット取得
-		list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		list($filenames, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($entryId, 10/*アイキャッチ画像画像*/);
 		
 		$imagePath = '';
-		$filename = $filenames[count($filenames) -1];
+		$filename = $filenames[0];
 		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
 
 		// ページ作成処理中断

@@ -163,40 +163,35 @@ class ImageManager extends Core
 	/**
 	 * システム共通サムネールフォーマットを取得
 	 *
-	 * @param int $filterType		画像フィルタータイプ(0=すべて、1=クロップ画像(c)のみ)
+	 * @param int $filterType		画像フィルタータイプ(0=すべて、1=クロップ画像(c)のみ、10=最大アイキャッチ画像)
 	 * @return array				フォーマット
 	 */
-	function getAllSystemThumbFormat($filterType = 0)
+	function getSystemThumbFormat($filterType = 0)
 	{
 		global $gSystemManager;
-		
-//		$format = $gSystemManager->getSystemConfig(self::CF_THUMB_FORMAT);		// サムネールフォーマット
-//		$formatArray = explode(';', $format);
-//		return $formatArray;
 		
 		// 画像のフォーマットを取得
 		$formatArray = explode(';', $gSystemManager->getSystemConfig(self::CF_THUMB_FORMAT));
 		
 		$formats = array();
-		if ($filterType != 0){
+		switch ($filterType){
+		case 0:
+		default:
+			$formats = $formatArray;
+			break;
+		case 1:		// クロップ画像(c)のみ
 			for ($i = 0; $i < count($formatArray); $i++){
 				$format = trim($formatArray[$i]);
 				$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
 				if ($ret){
 					if ($imageAttr == 'c') $formats[] = $format;
 				}
-/*				$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
-				if ($ret){
-					$thumbSize = $matches[1];
-					$thumbAttr = strtolower($matches[2]);
-					$ext = strtolower($matches[3]);
-					
-					if ($thumbAttr == 'c') $formats[] = $format;
-				}*/
-				
 			}
-		} else {
-			$formats = $formatArray;
+			break;
+		case 10:	// 最大アイキャッチ画像
+			$format = trim($formatArray[count($formatArray) -1]);		// 最後のフォーマットを取得
+			$formats[] = $format;
+			break;
 		}
 		return $formats;
 	}
@@ -204,13 +199,13 @@ class ImageManager extends Core
 	 * システム共通サムネールのファイル名を取得
 	 *
 	 * @param string $contentId		コンテンツID
-	 * @param int $filterType		画像フィルタータイプ(0=すべて、1=クロップ画像(c)のみ)
+	 * @param int $filterType		画像フィルタータイプ(0=すべて、1=クロップ画像(c)のみ、10=最大アイキャッチ画像)
 	 * @return array				画像ファイル名の配列と画像フォーマットの配列
 	 */
 	function getSystemThumbFilename($contentId, $filterType = 0)
 	{
 		$filenameArray = array();
-		$formatArray = $this->getAllSystemThumbFormat($filterType);
+		$formatArray = $this->getSystemThumbFormat($filterType);
 		for ($i = 0; $i < count($formatArray); $i++){
 			$filenameArray[] = $contentId . '_' . $formatArray[$i];
 		}
