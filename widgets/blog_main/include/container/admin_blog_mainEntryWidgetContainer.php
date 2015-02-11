@@ -553,7 +553,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 						$ret = blog_mainCommonDef::copyEyecatchImageToPublicDir($this->entryId);
 						if ($ret){			// アイキャッチ画像をコピーした場合は、ファイル名を取得
 							// 画像ファイル名、フォーマット取得
-							list($destFilename, $formats) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename($this->entryId, 1/*クロップ画像のみ*/);
+							list($destFilename, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($this->entryId, 1/*クロップ画像のみ*/);
 							$thumbFilename = implode(';', $destFilename);
 						}
 					} else {		// 記事非公開の場合

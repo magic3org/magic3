@@ -96,7 +96,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			
 			// 記事デフォルト画像のエラーチェック
 			if (!empty($updatedEntryImage)){
-				list($entryImageFilenameArray, $tmpArray) = $this->gInstance->getImageManager()->getSystemDefaultThumbFilename('0'/*デフォルト画像*/);
+				list($entryImageFilenameArray, $tmpArray) = $this->gInstance->getImageManager()->getSystemThumbFilename('0'/*デフォルト画像*/);
 				for ($i = 0; $i < count($entryImageFilenameArray); $i++){
 					$path = $this->tmpDir . DIRECTORY_SEPARATOR . $entryImageFilenameArray[$i];
 					if (!file_exists($path)){
@@ -321,7 +321,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			switch ($type){
 			case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
 				//$formats = $this->gInstance->getImageManager()->getDefaultContentThumbFormat();
-				$formats = $this->gInstance->getImageManager()->getAllSystemDefaultThumbFormat();
+				$formats = $this->gInstance->getImageManager()->getAllSystemThumbFormat();
 				$filenameBase = '0';
 				break;
 			}

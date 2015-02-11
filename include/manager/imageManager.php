@@ -166,7 +166,7 @@ class ImageManager extends Core
 	 * @param int $filterType		画像フィルタータイプ(0=すべて、1=クロップ画像(c)のみ)
 	 * @return array				フォーマット
 	 */
-	function getAllSystemDefaultThumbFormat($filterType = 0)
+	function getAllSystemThumbFormat($filterType = 0)
 	{
 		global $gSystemManager;
 		
@@ -207,10 +207,10 @@ class ImageManager extends Core
 	 * @param int $filterType		画像フィルタータイプ(0=すべて、1=クロップ画像(c)のみ)
 	 * @return array				画像ファイル名の配列と画像フォーマットの配列
 	 */
-	function getSystemDefaultThumbFilename($contentId, $filterType = 0)
+	function getSystemThumbFilename($contentId, $filterType = 0)
 	{
 		$filenameArray = array();
-		$formatArray = $this->getAllSystemDefaultThumbFormat($filterType);
+		$formatArray = $this->getAllSystemThumbFormat($filterType);
 		for ($i = 0; $i < count($formatArray); $i++){
 			$filenameArray[] = $contentId . '_' . $formatArray[$i];
 		}

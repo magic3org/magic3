@@ -228,7 +228,7 @@ class blog_mainCommonDef
 		global $gInstanceManager;
 		
 		// 画像ファイル名、フォーマット取得
-		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
 		
 		// 画像を公開ディレクトリにコピー
 		$privateThumbDir = $gInstanceManager->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, self::$_deviceType);
@@ -247,7 +247,7 @@ class blog_mainCommonDef
 		global $gInstanceManager;
 		
 		// 画像ファイル名、フォーマット取得
-		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
 		
 		// 公開ディレクトリ内の画像を削除
 		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, self::$_deviceType);
@@ -268,7 +268,7 @@ class blog_mainCommonDef
 		global $gInstanceManager;
 		
 		// 画像ファイル名、フォーマット取得
-		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemDefaultThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
 
 		// 公開ディレクトリ、非公開ディレクトリの画像を削除
 		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
