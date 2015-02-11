@@ -642,6 +642,7 @@ class ImageManager extends Core
 	 */
 	function createCropImage($path, $x, $y, $w, $h, $destPath, $destWidth, $destHeight, $type = IMAGETYPE_JPEG, $imageQuality = 100)
 	{
+		// 元の画像サイズを取得
 		$imageSize = @getimagesize($path);
 		if ($imageSize){
 			$imageType = $imageSize[2];
@@ -669,8 +670,35 @@ class ImageManager extends Core
 		// 出力用の画像オブジェクト作成
 		$destImageObj = imagecreatetruecolor($destWidth, $destHeight);
 		
+		// 画像サイズ取得
+		$newX = $x;
+		$newY = $y;
+		$newW = $w;
+		$newH = $h;
+		if ($destWidth > $destHeight){		// 横長タイプの画像に変換の場合
+			// 横方向に拡張
+			$newW = round($h * $destWidth / $destHeight);
+			$newX = round($x + $w / 2 - $newW / 2);
+			if ($newX < 0 || $newX + $newW > $srcWidth){	// 横方向に拡張できない場合は縦を縮小
+				$newH = round($w * $destHeight / $destWidth);
+				$newY = round($y + $h / 2 - $newH / 2);
+				$newX = $x;
+				$newW = $w;
+			}
+		} else if ($destWidth < $destHeight){		// 縦長タイプの画像に変換の場合
+			// 縦方向に拡張
+			$newH = round($w * $destHeight / $destWidth);
+			$newY = round($y + $h / 2 - $newH / 2);
+			if ($newY < 0 || $newY + $newH > $srcHeight){	// 縦方向に拡張できない場合は横を縮小
+				$newW = round($h * $destWidth / $destHeight);
+				$newX = round($x + $w / 2 - $newW / 2);
+				$newY = $y;
+				$newH = $h;
+			}
+		}
+		
 		// 画像作成
-		if (!imagecopyresampled($destImageObj, $imageObj, 0, 0, $x, $y, $destWidth, $destHeight, $w, $h)){
+		if (!imagecopyresampled($destImageObj, $imageObj, 0, 0, $newX, $newY, $destWidth, $destHeight, $newW, $newH)){
 			imagedestroy($imageObj);
 			imagedestroy($destImageObj);
 			return false;
