@@ -1013,7 +1013,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// アイキャッチ画像
-		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], -1/*最小画像*/);
+		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], -1/*最小画像*/) . '?' . date('YmdHis');
 		if (empty($fetchedRow['be_thumb_filename'])){
 			$iconTitle = 'アイキャッチ画像未設定';
 		} else {
