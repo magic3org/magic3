@@ -203,13 +203,14 @@ class blog_mainCommonDef
 	 *
 	 * @param string $filenames				作成済みファイル名(「;」区切り)
 	 * @param string $defaultFilenames		作成済みデフォルトファイル名(「;」区切り)
-	 * @param string $thumbTypeDef			サムネール画像タイプ定義
-	 * @param string $thumbType				サムネール画像タイプ(s,m,l)
+	 * @param string $thumbTypeDef			サムネール画像タイプ定義(タイプ指定の場合)
+	 * @param string $thumbType				サムネール画像タイプ(s,m,l)(タイプ指定の場合)
 	 * @return string						画像URL
 	 */
 	static function getEyecatchImageUrl($filenames, $defaultFilenames, $thumbTypeDef = '', $thumbType = '')
 	{
 		global $gInstanceManager;
+		static $thumbTypeArray;
 		
 		$thumbUrl = '';
 		if (empty($filenames)) $filenames = $defaultFilenames;		// 記事デフォルト画像
@@ -223,7 +224,8 @@ class blog_mainCommonDef
 				// コンテンツIDを取得
 				list($contentId, $tmp) = explode('_', $defaultThumbFilename);
 				$thumbFilename = '';
-				$thumbTypeArray = $gInstanceManager->getImageManager()->parseFormatType($thumbTypeDef);// サムネールタイプ
+				if (!isset($thumbTypeArray)) $thumbTypeArray = $gInstanceManager->getImageManager()->parseFormatType($thumbTypeDef);// サムネールタイプ
+
 				if (empty($thumbType)){
 					// サムネールタイプが設定されていない場合は最大サイズを取得
 					$thumbFilename = $contentId . '_' . end($thumbTypeArray);

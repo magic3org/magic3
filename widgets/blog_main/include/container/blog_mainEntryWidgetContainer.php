@@ -134,7 +134,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	 */
 	function createList($request)
 	{
-		// ユーザ情報、表示言語
+		// 初期値取得
 		$defaultLangId = $this->gEnv->getDefaultLanguage();
 		
 		$act = $request->trimValueOf('act');
@@ -1015,7 +1015,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// アイキャッチ画像
-		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], -1/*最小画像*/) . '?' . date('YmdHis');
+		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
 		if (empty($fetchedRow['be_thumb_filename'])){
 			$iconTitle = 'アイキャッチ画像未設定';
 		} else {
