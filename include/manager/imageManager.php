@@ -31,6 +31,8 @@ class ImageManager extends Core
 	const DEFAULT_AVATAR_BASE = 'default';		// デフォルトのアバターファイル名ベース
 	const NOT_AVAILABLE_HEAD = 'notavailable_';		// 設定画像がない場合の表示画像のファイル名ヘッダ部
 	const PARSE_IMAGE_FORMAT = '/(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマット解析用
+//	const PARSE_IMAGE_FORMAT_TYPE = '/(.*?)\s*=\s*(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマットタイプ解析用
+	const PARSE_IMAGE_FORMAT_TYPE = '/(.*?)\s*=\s*(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマットタイプ解析用
 	// DB定義値
 	const CF_SITE_LOGO_FILENAME	= 'site_logo_filename';		// サイトロゴファイル
 	const CF_SITE_LOGO_FORMAT	= 'site_logo_format';		// サイトロゴフォーマット
@@ -1137,7 +1139,7 @@ class ImageManager extends Core
 		return $ret;
 	}
 	/**
-	 * フォーマットから画像サイズ、画像タイプを取得
+	 * 画像フォーマットから画像サイズ、画像タイプを取得
 	 *
 	 * @param string $format		画像フォーマット
 	 * @param string $imageType		画像タイプ
@@ -1182,6 +1184,32 @@ class ImageManager extends Core
 			}
 		}
 		return $ret;
+	}
+	/**
+	 * 画像フォーマットタイプを解析
+	 *
+	 * @param string $formatStr 画像フォーマット
+	 * @return array			フォーマットタイプの連想配列
+	 */
+	function parseFormatType($formatStr)
+	{
+		// フォーマットを読み込む
+		$typeArray = array();
+		$lines = explode(';', $formatStr);		// アバターフォーマット
+		for ($i = 0; $i < count($lines); $i++){
+			$line = trim($lines[$i]);
+			if (!empty($line)){
+				//$ret = preg_match(, $line, $matches);
+				//'/(.*?)\s*=\s*(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマットタイプ解析用
+				$ret = preg_match(self::PARSE_IMAGE_FORMAT_TYPE, $line, $matches);
+				if ($ret){
+					$imageType = $matches[1];
+					$imageFormat = $matches[2] . strtolower($matches[3]) . '.' . strtolower($matches[4]);
+					if (!empty($imageType)) $typeArray[$imageType] = $imageFormat;
+				}
+			}
+		}
+		return $typeArray;
 	}
 	/**
 	 * 画像未設定時に表示する画像のURLを取得

@@ -42,6 +42,7 @@ class blog_mainCommonDef
 	const CF_MESSAGE_NO_ENTRY		= 'message_no_entry';		// ブログ記事が登録されていないメッセージ
 	const CF_MESSAGE_FIND_NO_ENTRY	= 'message_find_no_entry';		// ブログ記事が見つからないメッセージ
 	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
+	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
 	
 	const USER_ID_SEPARATOR = ',';			// ユーザID区切り用セパレータ
 	const ATTACH_FILE_DIR = '/etc/blog';				// 添付ファイル格納ディレクトリ
@@ -200,12 +201,13 @@ class blog_mainCommonDef
 	/**
 	 * アイキャッチ用画像のURLを取得
 	 *
-	 * @param string $filenames				ファイル名(「;」区切り)
-	 * @param string $defaultFilenames		デフォルトファイル名(「;」区切り)
-	 * @param string $size					アイキャッチ画像サイズ(0=最大、-1=最小)
-	 * @return string							画像URL
+	 * @param string $filenames				作成済みファイル名(「;」区切り)
+	 * @param string $defaultFilenames		作成済みデフォルトファイル名(「;」区切り)
+	 * @param string $thumbTypeDef			サムネール画像タイプ定義
+	 * @param string $thumbType				サムネール画像タイプ(s,m,l)
+	 * @return string						画像URL
 	 */
-	static function getEyecatchImageUrl($filenames, $defaultFilenames, $size = 0)
+	static function getEyecatchImageUrl($filenames, $defaultFilenames, $thumbTypeDef = '', $thumbType = '')
 	{
 		global $gInstanceManager;
 		
@@ -213,15 +215,24 @@ class blog_mainCommonDef
 		if (empty($filenames)) $filenames = $defaultFilenames;		// 記事デフォルト画像
 		if (!empty($filenames)){
 			$thumbFilenameArray = explode(';', $filenames);
+			$defaultThumbFilename = $thumbFilenameArray[count($thumbFilenameArray) -1];	// 最大サイズをデフォルト画像とする
 			
-			switch ($size){
-			case 0:			// 最大
-			default:
-				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilenameArray[count($thumbFilenameArray) -1]);		// 最大サイズ画像
-				break;
-			case -1:		// 最小
-				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilenameArray[0]);		// 最小サイズ画像
-				break;
+			if (empty($thumbTypeDef)){			// サイズ指定でないとき
+				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $defaultThumbFilename);		// 最大サイズ画像
+			} else {						// サイズ指定の場合
+				// コンテンツIDを取得
+				list($contentId, $tmp) = explode('_', $defaultThumbFilename);
+				$thumbFilename = '';
+				$thumbTypeArray = $gInstanceManager->getImageManager()->parseFormatType($thumbTypeDef);// サムネールタイプ
+				if (empty($thumbType)){
+					// サムネールタイプが設定されていない場合は最大サイズを取得
+					$thumbFilename = $contentId . '_' . end($thumbTypeArray);
+				} else {					
+					$thumbFilename = $contentId . '_' . $thumbTypeArray[$thumbType];
+					if (!in_array($thumbFilename, $thumbFilenameArray)) $thumbFilename = '';			// 作成されていない画像の場合はデフォルト画像を設定
+				}
+				if (empty($thumbFilename)) $thumbFilename = $defaultThumbFilename;	// デフォルト画像
+				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilename);
 			}
 		}
 		return $thumbUrl;
