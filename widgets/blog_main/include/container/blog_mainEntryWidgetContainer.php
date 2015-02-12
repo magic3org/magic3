@@ -808,6 +808,15 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 						if (!empty($nextRow)) $nextSerial = $nextRow['be_serial'];
 					}
 				}
+				
+				// アイキャッチ画像
+				$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+				if (empty($row['be_thumb_filename'])){
+					$iconTitle = 'アイキャッチ画像未設定';
+				} else {
+					$iconTitle = 'アイキャッチ画像';
+				}
+				$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			} else {		// データがないとき
 				$this->serialNo = 0;
 				$this->entryId = '0';		// 記事ID
@@ -901,6 +910,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
 		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
 		$this->tmpl->addVar("_widget", "related_content", $relatedContent);	// 関連コンテンツ
+		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
 		
 		// 前後エントリー移動ボタン
 		if (!empty($prevSerial)){
