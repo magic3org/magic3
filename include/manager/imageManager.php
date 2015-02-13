@@ -223,6 +223,7 @@ class ImageManager extends Core
 	 */
 	function getSystemThumbFilenameByType($filenames, $thumbTypeDef = '', $thumbType = '')
 	{
+		static $savedThumbTypeDef = '';
 		static $thumbTypeArray;
 		
 		// 引数エラーチェック
@@ -237,7 +238,10 @@ class ImageManager extends Core
 			list($contentId, $tmp) = explode('_', $defaultThumbFilename);
 
 			// サムネールタイプを解析
-			if (!isset($thumbTypeArray)) $thumbTypeArray = $this->parseFormatType($thumbTypeDef);// サムネールタイプ
+			if ($thumbTypeDef != $savedThumbTypeDef){
+				$thumbTypeArray = $this->parseFormatType($thumbTypeDef);// サムネールタイプ
+				$savedThumbTypeDef = $thumbTypeDef;
+			}
 
 			if (empty($thumbType)){
 				// サムネールタイプが設定されていない場合は最大サイズを取得
