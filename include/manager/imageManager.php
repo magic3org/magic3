@@ -214,6 +214,45 @@ class ImageManager extends Core
 		return array($filenameArray, $formatArray);
 	}
 	/**
+	 * サムネールタイプからシステム共通サムネールのファイル名を取得
+	 *
+	 * @param string $filenames		取得対象のファイル名(「;」区切り)
+	 * @param string $thumbTypeDef	サムネール画像タイプ定義
+	 * @param string $thumbType		サムネール画像タイプ(s,m,l等)
+	 * @return string				ファイル名
+	 */
+	function getSystemThumbFilenameByType($filenames, $thumbTypeDef = '', $thumbType = '')
+	{
+		static $thumbTypeArray;
+		
+		// 引数エラーチェック
+		if (empty($filenames)) return '';
+		
+		$thumbFilename = '';
+		$thumbFilenameArray = explode(';', $filenames);
+		$defaultThumbFilename = $thumbFilenameArray[count($thumbFilenameArray) -1];	// 最大サイズをデフォルト画像とする
+		
+		if (!empty($thumbTypeDef)){			// サイズ指定の場合
+			// コンテンツIDを取得
+			list($contentId, $tmp) = explode('_', $defaultThumbFilename);
+
+			// サムネールタイプを解析
+			if (!isset($thumbTypeArray)) $thumbTypeArray = $this->parseFormatType($thumbTypeDef);// サムネールタイプ
+
+			if (empty($thumbType)){
+				// サムネールタイプが設定されていない場合は最大サイズを取得
+				$thumbFilename = $contentId . '_' . end($thumbTypeArray);
+			} else {					
+				$thumbFilename = $contentId . '_' . $thumbTypeArray[$thumbType];
+			}
+			
+			// 作成されていない画像の場合はデフォルト画像を設定
+			if (!in_array($thumbFilename, $thumbFilenameArray)) $thumbFilename = '';
+		}
+		if (empty($thumbFilename)) $thumbFilename = $defaultThumbFilename;	// デフォルト画像
+		return $thumbFilename;
+	}
+	/**
 	 * システム共通のサムネール画像のURLを取得
 	 *
 	 * @param string     $contentType	コンテンツタイプ

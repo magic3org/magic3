@@ -215,7 +215,9 @@ class blog_mainCommonDef
 		$thumbUrl = '';
 		if (empty($filenames)) $filenames = $defaultFilenames;		// 記事デフォルト画像
 		if (!empty($filenames)){
-			$thumbFilenameArray = explode(';', $filenames);
+			$thumbFilename = $gInstanceManager->getImageManager()->getSystemThumbFilenameByType($filenames, $thumbTypeDef, $thumbType);
+			if (!empty($thumbFilename)) $thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilename);
+/*			$thumbFilenameArray = explode(';', $filenames);
 			$defaultThumbFilename = $thumbFilenameArray[count($thumbFilenameArray) -1];	// 最大サイズをデフォルト画像とする
 			
 			if (empty($thumbTypeDef)){			// サイズ指定でないとき
@@ -235,7 +237,7 @@ class blog_mainCommonDef
 				}
 				if (empty($thumbFilename)) $thumbFilename = $defaultThumbFilename;	// デフォルト画像
 				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilename);
-			}
+			}*/
 		}
 		return $thumbUrl;
 	}
