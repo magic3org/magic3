@@ -560,6 +560,20 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		}
 		$this->tmpl->addVar("_widget", "widgets_dir_access", $data);
 		
+		// 非公開リソースディレクトリ
+		$path = $this->gEnv->getPrivateResourcePath();
+		$this->tmpl->addVar("_widget", "private_resource_dir", $path);
+		if (is_writable($path)){
+			if (checkWritableDir($path)){
+				$data = '<b><font color="green">書き込み可能</font></b>';
+			} else {
+				$data = '<b><font color="red">Safe Modeにより書き込み不可</font></b>';
+			}
+		} else {
+			$data = '<b><font color="red">書き込み不可</font></b>';
+		}
+		$this->tmpl->addVar("_widget", "private_resource_dir_access", $data);
+		
 		// ディレクトリサイズ
 		$size = convFromBytes(calcDirSize($this->gEnv->getResourcePath()));
 		$this->tmpl->addVar("_widget", "resource_dir_size", $size);

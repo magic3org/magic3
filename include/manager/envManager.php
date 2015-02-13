@@ -425,6 +425,15 @@ class EnvManager extends Core
 		return $path;
 	}
 	/**
+	 * 非公開リソースディレクトリへのパスを取得
+	 *
+	 * @return string			パス
+	 */
+	public function getPrivateResourcePath()
+	{
+		return M3_SYSTEM_INCLUDE_PATH . DIRECTORY_SEPARATOR . 'etc';
+	}
+	/**
 	 * widgetsディレクトリへのパスを取得
 	 *
 	 * 例) /var/www/html/magic3/widgets

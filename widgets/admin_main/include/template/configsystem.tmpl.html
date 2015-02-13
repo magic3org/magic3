@@ -217,18 +217,22 @@ $(function(){
 	    <td colspan="2"><div class="col-sm-10 m3config_item"><input type="text" name="item_work_dir" class="form-control" value="{WORK_DIR}" size="60" maxlength="120" /></div><div class="form-control-static col-sm-2 text-right m3config_item">{WORK_DIR_ACCESS}</div></td>
 	</tr>
     <tr>
-	    <th>リソース<br />ディレクトリ</th>
+	    <th>公開リソース<br />ディレクトリ</th>
 	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{RESOURCE_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{RESOURCE_DIR_ACCESS}</div><div class="form-control-static col-sm-12 m3config_item">ディスク使用量：{RESOURCE_DIR_SIZE}バイト</div></td>
+	</tr>
+    <tr>
+	    <th>非公開リソース<br />ディレクトリ</th>
+	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{PRIVATE_RESOURCE_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{PRIVATE_RESOURCE_DIR_ACCESS}</div></td>
 	</tr>
     <tr>
 	    <th>テンプレート<br />ディレクトリ</th>
 	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{TEMPLATES_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{TEMPLATES_DIR_ACCESS}</div></td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>ウィジェット<br />ディレクトリ</th>
 	    <td colspan="2"><div class="form-control-static col-sm-10 m3config_item">{WIDGETS_DIR}</div><div class="form-control-static col-sm-2 text-right m3config_item">{WIDGETS_DIR_ACCESS}</div></td>
 	</tr>
-        <tr>
+    <tr>
 	    <th>システムDB<br />バージョン</th>
 	    <td colspan="2"><div class="form-control-static col-sm-12 m3config_item">{SYSTEM_DB_VERSION}&nbsp;&nbsp;更新日時:&nbsp;{SYSTEM_DB_UPDATE_DT}</div></td>
 	</tr>
