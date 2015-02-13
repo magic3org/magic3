@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -135,7 +135,8 @@ class RequestManager extends Core
 	 * @param string $default  	値が存在しないときのデフォルト値
 	 * @return string			取得値
 	 */
-	public function trimIntValueOf($name, $default = '')
+	//public function trimIntValueOf($name, $default = '')
+	public function trimIntValueOf($name, $default)			// デフォルト値必須(2015/2/13)
 	{
 		$srcValue = isset($_POST[$name]) ? $_POST[$name] : (isset($_GET[$name]) ? $_GET[$name] : $default);
 		return $this->_trimValueOf($name, $srcValue, $default, 1/* int型チェック */);

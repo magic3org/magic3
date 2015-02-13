@@ -114,8 +114,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$act = $request->trimValueOf('act');
 		
 		if ($act == 'opensite'){		// サイト公開制御
-			$deviceType = $request->trimIntValueOf('device');
-			$isOpen = $request->trimIntValueOf('isopen');		// サイトの公開状況
+			$deviceType = $request->trimIntValueOf('device', '0');
+			$isOpen = $request->trimIntValueOf('isopen', '0');		// サイトの公開状況
 
 			$siteInPublic			= $this->gSystem->siteInPublic();			// サイト全体の公開状況
 			$sitePcInPublic			= $this->gSystem->sitePcInPublic();			// PC用サイトの公開状況

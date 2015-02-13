@@ -151,8 +151,8 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$smartphoneUseJqueryMobile = ($request->trimValueOf('item_smartphone_use_jquery_mobile') == 'on') ? 1 : 0;// スマートフォン画面でjQuery Mobileを使用
 		$this->wysiwygEditor = $request->trimValueOf('item_wysiwyg_editor');			// 管理画面用WYSIWYGエディター
 		$uploadImageAutoresize = $request->trimCheckedValueOf('item_upload_image_autoresize');		// アップロード画像の自動リサイズを行うかどうか
-		$uploadImageAutoresizeMaxWidth = $request->trimIntValueOf('item_upload_image_autoresize_max_width');		// アップロード画像の自動リサイズ、画像最大幅
-		$uploadImageAutoresizeMaxHeight = $request->trimIntValueOf('item_upload_image_autoresize_max_height');		// アップロード画像の自動リサイズ、画像最大高さ
+		$uploadImageAutoresizeMaxWidth = $request->trimValueOf('item_upload_image_autoresize_max_width');		// アップロード画像の自動リサイズ、画像最大幅
+		$uploadImageAutoresizeMaxHeight = $request->trimValueOf('item_upload_image_autoresize_max_height');		// アップロード画像の自動リサイズ、画像最大高さ
 		
 		if ($act == 'update'){		// 設定更新のとき
 			$isErr = false;
