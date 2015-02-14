@@ -61,6 +61,9 @@ class admin_test_ckeditorWidgetContainer extends BaseAdminWidgetContainer
 //		$this->tmpl->addVar("_widget", "widget_url", $gEnvManager->getCurrentWidgetRootUrl());	// ウィジェットのルートディレクトリ
 //		$this->tmpl->addVar("_widget", "root_url", $gEnvManager->getRootUrl());
 //		$this->tmpl->addVar("_widget", "widget_sc_url", $gEnvManager->getCurrentWidgetScriptsUrl());
+
+$this->gPage->addCkeditorCssFile($this->gEnv->getScriptsUrl() . '/' . 'bootstrap-3.2.0/css/bootstrap.min.css');
+echo 'CKEditor2 added: ' . $this->gEnv->getScriptsUrl() . '/' . 'bootstrap-3.2.0/css/bootstrap.min.css';
 	}
 }
 ?>

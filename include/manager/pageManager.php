@@ -915,6 +915,17 @@ class PageManager extends Core
 		if (!in_array($destPath, $this->defaultAdminCssFiles)) $this->defaultAdminCssFiles[] = $destPath;
 	}
 	/**
+	 * 編集エリア用のCSSファイルの追加
+	 *
+	 * @param string $path	追加するファイルのパス(「ルート/scripts」ディレクトリからの相対パスまたは絶対パス(scriptディレクトリ以外の場合)で指定する)
+	 * @return 				なし
+	 */
+	function addCkeditorCssFile($path)
+	{
+		$destPath = trim($path, '/');
+		if (!in_array($destPath, $this->ckeditorCssFiles)) $this->ckeditorCssFiles[] = $destPath;
+	}
+	/**
 	 * JavaScriptファイルの追加
 	 *
 	 * @param string $path	追加するファイルのパス(「ルート/scripts」ディレクトリからの相対パスで指定する)
