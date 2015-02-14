@@ -447,7 +447,7 @@ function m3SetWysiwygEditor(id, height, toolbarVisible, barType)
 	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
 		var config = {};
 		config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig.js';
-		if (typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
+		if (barType != 'layout' && typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
 		if (height) config['height'] = height;
 		if (toolbarVisible != null && !toolbarVisible) config['toolbarStartupExpanded'] = false;
 		if (barType){
