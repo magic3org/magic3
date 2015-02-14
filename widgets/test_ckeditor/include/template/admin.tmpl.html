@@ -49,6 +49,7 @@ $(function(){
 	// 標準のCKEditor作成方法
 //m3SetWysiwygEditor('editor', 100/* 高さ */);
 m3SetWysiwygEditor('editor2', 100/* 高さ */);
+m3SetWysiwygEditor('editor3', 100/* 高さ */, false, 'layout');
 
 	// スクリプト編集エディター作成
 	var editor = CodeMirror.fromTextArea(document.getElementById("item_content"), {
@@ -80,6 +81,9 @@ window.onerror = hideIEErrors;*/
 	</tr>
     <tr>
 	    <th>CKEditor2<br />m3SetWysiwygEditor</th><td class="ckeditor"><div id="parent2"><textarea id="editor2" name="editor2">{CONTENT2}</textarea></div></td>
+	</tr>
+    <tr>
+	    <th>CKEditor3<br />layout</th><td class="ckeditor"><div id="parent3"><textarea id="editor3" name="editor3">{CONTENT3}</textarea></div></td>
 	</tr>
     <tr>
 	    <th>CodeMirror</th><td class="ckeditor"><textarea id="item_content" name="item_content">{CONTENT}</textarea></td>
