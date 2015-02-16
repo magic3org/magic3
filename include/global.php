@@ -350,6 +350,7 @@ define('M3_REQUEST_CMD_LOGIN',      				'login');				// ログイン
 define('M3_REQUEST_CMD_LOGOUT',      				'logout');				// ログアウト
 define('M3_REQUEST_CMD_CHANGE_TEMPLATE',			'changetemplate');		// テンプレートの変更
 define('M3_REQUEST_CMD_RSS',						'rss');					// RSS配信
+define('M3_REQUEST_CMD_CSS',						'css');					// CSS生成
 // 共通
 define('M3_REQUEST_VALUE_ON',						'on');					// on値
 define('M3_REQUEST_VALUE_OFF',						'off');					// off値

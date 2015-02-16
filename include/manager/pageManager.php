@@ -63,6 +63,7 @@ class PageManager extends Core
 	private $headScript = array();		// HTMLヘッダにJavascript出力する文字列
 	private $headPreMobileScript = array();		// HTMLヘッダにJavascript出力する文字列(jQueryMobile用挿入スクリプト)
 	private $headString = array();		// HTMLヘッダに出力する任意文字列
+	private $exportCss = array();		// 外部出力でCSS出力する文字列
 	private $lastHeadCss;				// 最後に設定したHTMLヘッダにCSS出力する文字列
 	private $lastHeadScript;			// 最後に設定したHTMLヘッダにJavascript出力する文字列
 	private $lastHeadString;			// 最後に設定したHTMLヘッダに出力する任意文字列
@@ -532,6 +533,19 @@ class PageManager extends Core
 			if (!in_array($css, $this->headCss)) $this->headCss[] = $css;
 			
 			$this->lastHeadCss = $css;			// 最後に設定したHTMLヘッダにCSS出力する文字列
+		}
+	}
+	/**
+	 * 外部出力で出力するCSSの文字列を設定
+	 *
+	 * @param string $css	追加するCSS内容
+	 * @return 				なし
+	 */
+	function addExportCss($css)
+	{
+		$destCss = trim($css);
+		if (!empty($destCss)){
+			if (!in_array($css, $this->exportCss)) $this->exportCss[] = $css;
 		}
 	}
 	/**
@@ -1875,7 +1889,14 @@ class PageManager extends Core
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		
 		// 最終HTML(ページ全体で使用するHTML)の出力
-		if ($cmd != M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体オペレーションのときは出力しない
+		if ($cmd == M3_REQUEST_CMD_CSS){		// CSS生成のとき
+			// 外部出力形式でCSS出力
+			if (count($this->exportCss) > 0){
+				for ($i = 0; $i < count($this->exportCss); $i++){
+					$contents .= $this->exportCss[$i] . M3_NL;
+				}
+			}
+		} else if ($cmd != M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体オペレーションのときは出力しない
 			if ($getOutput){
 				$contents = $this->getLastContents($request);
 			} else {
@@ -3970,6 +3991,9 @@ class PageManager extends Core
 								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
 								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+							} else {
+								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
+								$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
 							}
 						} else {		// キャッシュデータがあるとき
 							$widgetContent = $cacheData;
@@ -4106,6 +4130,9 @@ class PageManager extends Core
 								$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
 								$widgetContent = '<div id="' . $widgetTag . '" class="m3_widget" rel="#m3editwidget" ' . $m3Option . '>' . $widgetContent . '</div>';
+							} else {
+								$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
+								$widgetContent = '<div id="' . $widgetTag . '">' . $widgetContent . '</div>';
 							}
 						} else {		// キャッシュデータがあるとき
 							$widgetContent = $cacheData;
@@ -5467,6 +5494,29 @@ class PageManager extends Core
 		
 		$url .= M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_RSS;
 		$url .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $widgetId;
+		if (!empty($optionParam)) $url .= '&' . $optionParam;
+		return $url;
+	}
+	/**
+	 * CSS生成用のURLを生成
+	 *
+	 * @param string $pageId		ページID(空のときは現在のURL)
+	 * @param string $pageSubId		ページサブID
+	 * @param string $optionParam	追加パラメータ
+	 * @return string				生成したURL
+	 */
+	function createCssCmdUrl($pageId = '', $pageSubId = '', $optionParam = '')
+	{
+		global $gEnvManager;
+		
+		// 現在のページURLを取得
+		$url = $gEnvManager->createPageUrl() . '?';
+		
+		// ページサブIDを取得
+		if (empty($pageSubId)) $pageSubId = $this->gEnv->getCurrentWidgetPageSubId();	// ページ共通属性ありのときは空
+		if (!empty($pageSubId)) $url .= M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId . '&';
+		
+		$url .= M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CSS;
 		if (!empty($optionParam)) $url .= '&' . $optionParam;
 		return $url;
 	}

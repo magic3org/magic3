@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -161,7 +161,8 @@ class BaseFrameContainer extends Core
 							$cmd != M3_REQUEST_CMD_FIND_WIDGET &&				// ウィジェットを検索
 							$cmd != M3_REQUEST_CMD_DO_WIDGET &&					// ウィジェット単体実行
 							$cmd != M3_REQUEST_CMD_PREVIEW &&					// サイトのプレビューを表示
-							$cmd != M3_REQUEST_CMD_RSS){		// RSS配信
+							$cmd != M3_REQUEST_CMD_RSS &&						// RSS配信
+							$cmd != M3_REQUEST_CMD_CSS){						// CSS生成
 							
 							// 標準のアクセスでは、上記コマンド以外は受け付けない
 							$canAccess = false;
@@ -188,7 +189,8 @@ class BaseFrameContainer extends Core
 							$cmd != M3_REQUEST_CMD_FIND_WIDGET &&				// ウィジェットを検索
 							$cmd != M3_REQUEST_CMD_DO_WIDGET &&					// ウィジェット単体実行
 							$cmd != M3_REQUEST_CMD_PREVIEW &&					// サイトのプレビューを表示
-							$cmd != M3_REQUEST_CMD_RSS){		// RSS配信
+							$cmd != M3_REQUEST_CMD_RSS &&						// RSS配信
+							$cmd != M3_REQUEST_CMD_CSS){						// CSS生成
 							
 							$isErrorAccess = true;		// 不正アクセス
 							$errMessage = '不正なコマンドの実行。';
@@ -318,6 +320,8 @@ class BaseFrameContainer extends Core
 			if (!empty($openBy)) $this->gPage->showWidget();	// ウィジェット表示
 		} else if ($cmd == M3_REQUEST_CMD_RSS){		// RSS配信
 			$createPage = false;		// ウィジェット単体処理モードに設定
+		} else if ($cmd == M3_REQUEST_CMD_CSS){		// CSS生成
+		
 		} else if ($this->gEnv->isServerConnector()){		// サーバ接続の場合
 			$createPage = false;		// ウィジェット単体処理モードに設定
 		}
@@ -364,9 +368,10 @@ class BaseFrameContainer extends Core
 				echo $cacheData;
 			}
 			
-			// オプション出力(時間計測等)追加
-			echo $this->gPage->getOptionContents($request);
-			
+			if ($cmd != M3_REQUEST_CMD_CSS){		// 画面出力(CSS生成以外)のとき
+				// オプション出力(時間計測等)追加
+				echo $this->gPage->getOptionContents($request);
+			}
 		} else {		// ウィジェット単体実行モードのとき
 			// ###################ウィジェット指定で出力の場合####################
 			// ウィジェット単体を直接実行するインターフェイスで、HTTPヘッダは送信しない。
@@ -608,6 +613,8 @@ class BaseFrameContainer extends Core
 	 */
 	function _createPage($request, $curTemplate)
 	{
+		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// 実行コマンドを取得
+		
 		// カレントのテンプレートIDを設定
 		$this->gEnv->setCurrentTemplateId($curTemplate);
 
@@ -729,6 +736,9 @@ class BaseFrameContainer extends Core
 			}
 		}
 		
+		// ##### CSS生成の場合は、すべてのウィジェット実行後出力を削除する #####
+		if ($cmd == M3_REQUEST_CMD_CSS) $destContents = '';		// CSS生成のとき
+
 		// ページ作成終了処理(HTTPヘッダ出力)
 		$destContents .= $this->gPage->endPage($request, true/*出力を取得*/);		// 最終HTMLを追加
 		if ($this->gPage->isRedirect()) return '';// リダイレクトの場合ob_end_clean()を実行すると、ログインできないことがあるのでここで終了(2011/11/11)

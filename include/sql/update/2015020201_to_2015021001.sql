@@ -29,6 +29,9 @@ INSERT INTO _system_config
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('thumb_format', '72c.jpg;80c.jpg;80x60c.jpg;160x120c.jpg;200x150c.jpg;200c.jpg',   'コンテンツ用サムネール仕様');
 
+-- ページ定義マスター
+ALTER TABLE _page_def ADD pd_css             TEXT                                         NOT NULL;      -- CSS
+
 -- *** システム標準テーブル ***
 -- ブログ設定マスター
 INSERT INTO blog_config
