@@ -1206,9 +1206,10 @@ class admin_mainDb extends BaseDb
 	 * @param bool $showReadmore	もっと読むボタンを表示するかどうか
 	 * @param string $readmoreTitle	もっと読むボタンタイトル
 	 * @param string $readmoreUrl	もっと読むリンク先URL
+	 * @param string $serializedParam	その他のパラメータ
 	 * @return						true=成功、false=失敗
 	 */
-	function updatePageDefInfo($serialNo, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl)
+	function updatePageDefInfo($serialNo, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, $serializedParam)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -1228,10 +1229,11 @@ class admin_mainDb extends BaseDb
 		$queryStr .=     'pd_show_readmore = ?, ';
 		$queryStr .=     'pd_readmore_title = ?, ';
 		$queryStr .=     'pd_readmore_url = ?, ';
+		$queryStr .=     'pd_param = ?, ';
 		$queryStr .=     'pd_update_user_id = ?, ';
 		$queryStr .=     'pd_update_dt = ? ';
 		$queryStr .=   'WHERE pd_serial = ? ';
-		$ret = $this->execStatement($queryStr, array($style, $title, intval($titleVisible), intval($useRender), $topContent, $bottomContent, intval($showReadmore), $readmoreTitle, $readmoreUrl, $user, $now, $serialNo));
+		$ret = $this->execStatement($queryStr, array($style, $title, intval($titleVisible), intval($useRender), $topContent, $bottomContent, intval($showReadmore), $readmoreTitle, $readmoreUrl, $serializedParam, $user, $now, $serialNo));
 
 		// トランザクション確定
 		$ret = $this->endTransaction();

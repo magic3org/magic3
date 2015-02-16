@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -159,11 +159,18 @@ $(function(){
 	    <th><span {_HELP_ADJUSTWIDGET_BOTTOM_CONTENT}>{_LC_LABEL_BOTTOM_CONTENT}</span></th>
 	    <td class="ckeditor"><textarea name="item_bottom_content" class="form-control">{BOTTOM_CONTENT}</textarea></td>
 	</tr>
-        <tr>
+    <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_READMORE}>{_LC_LABEL_READMORE}</span></th>
 	    <td>
 		<div class="form-group"><div class="col-sm-2 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_show_readmore" {SHOW_READMORE_CHECKED} />{_LC_LABEL_VISIBLE}</label></div></div><div class="form-control-static col-sm-2 text-right m3config_item">{_LC_LABEL_READMORE_TITLE}</div><div class="col-sm-8"><input type="text" name="item_readmore_title" class="form-control spacer_bottom" value="{READMORE_TITLE}" maxlength="30" /></div></div><div style="clear:both;"></div>
 		<div class="form-group"><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_READMORE_URL}</div><div class="col-sm-8 m3config_item"><input type="text" id="item_readmore_url" name="item_readmore_url" class="form-control" value="{READMORE_URL}" maxlength="200" /></div><div class="col-sm-2"><input type="button" class="button" onclick="createUrl();" value="URL作成" /></div></div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_ADJUSTWIDGET_CSS}>{_LC_LABEL_CSS}</span></th>
+	    <td>
+	        <h4>{_LC_LABEL_FOR_JOOMLA_TEMPLATE}</h4>
+            <div class="checkbox"><label><input type="checkbox" name="item_remove_list_marker" {REMOVE_LIST_MARKER} />{_LC_LABEL_REMOVE_LIST_MARKER}</label></div>
 	    </td>
 	</tr>
     </tbody>
@@ -178,7 +185,7 @@ $(function(){
 <h3><span {_HELP_ADJUSTWIDGET_VIEW}>{_LC_LABEL_VIEW_CONTROL}</span></h3>
 <table id="widget_other_table">
     <tbody>
-        <tr>
+    <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_SHARED}>{_LC_LABEL_SHARED_ATTR}</span></th>
 	    <td>
 		    <div class="col-sm-12 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_shared" {SHARED_CHECKED} />{_LC_LABEL_ON}</label></div></div>

@@ -31,6 +31,7 @@ INSERT INTO _system_config
 
 -- ページ定義マスター
 ALTER TABLE _page_def ADD pd_css             TEXT                                         NOT NULL;      -- CSS
+ALTER TABLE _page_def ADD pd_param           TEXT                                         NOT NULL;      -- パラメータオブジェクトをシリアライズしたもの
 
 -- *** システム標準テーブル ***
 -- ブログ設定マスター

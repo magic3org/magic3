@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -148,6 +148,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$showReadmore = ($request->trimValueOf('item_show_readmore') == 'on') ? 1 : 0;		// もっと読むボタンを表示するかどうか
 		$readmoreTitle = $request->trimValueOf('item_readmore_title');			// もっと読むボタンタイトル
 		$readmoreUrl = $request->trimValueOf('item_readmore_url');			// もっと読むリンク先URL
+		$removeListMarker = $request->trimCheckedValueOf('item_remove_list_marker');		// リストのマーカーを削除するかどうか
 		
 		// 「その他」設定
 		$shared = ($request->trimValueOf('item_shared') == 'on') ? 1 : 0;		// 共通属性があるかどうか
@@ -206,7 +207,11 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				if (!empty($marginLeft)) $style .= 'padding-left:' . $marginLeft . 'px;';
 				if (!empty($marginRight)) $style .= 'padding-right:' . $marginRight . 'px;';
 				
-				$ret = $this->db->updatePageDefInfo($defSerial, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl);
+				// その他のパラメータ
+				$paramObj = new stdClass;
+				$paramObj->removeListMarker = $removeListMarker;		// リストのマーカーを削除するかどうか
+				
+				$ret = $this->db->updatePageDefInfo($defSerial, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, serialize($paramObj));
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Configration updated.'));		// データを更新しました
 					$replaceNew = true;			// データを再取得
@@ -291,6 +296,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			$showReadmore = 0;		// もっと読むボタンを表示するかどうか
 			$readmoreTitle = '';			// もっと読むボタンタイトル
 			$readmoreUrl = '';			// もっと読むリンク先URL
+			$removeListMarker = '';		// リストのマーカーを削除するかどうか
 		
 			// 「その他」設定
 			$shared = 0;		// 共通属性があるかどうか
@@ -344,6 +350,14 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$readmoreTitle = $row['pd_readmore_title'];			// もっと読むボタンタイトル
 				$readmoreUrl = $row['pd_readmore_url'];			// もっと読むリンク先URL
 			
+				// その他のパラメータ
+				// その他のパラメータ
+				$paramStr = $row['pd_param'];
+				if (!empty($paramObj)){
+					$paramObj = unserialize($paramStr);
+					$removeListMarker = $paramObj->removeListMarker;		// リストのマーカーを削除するかどうか
+				}
+				
 				$shared = 0;		// 共通属性があるかどうか
 				if (empty($row['pd_sub_id'])) $shared = 1;	// 共通ウィジェットのとき
 				$viewControlType = $row['pd_view_control_type'];		// 表示制御タイプ
@@ -389,19 +403,20 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			$this->tmpl->addVar('_widget', 'active_tab', $activeTab);
 		}
 		
-		$this->tmpl->addVar("_widget", "top", $marginTop);				// 上マージン
-		$this->tmpl->addVar("_widget", "bottom", $marginBottom);		// 下マージン
-		$this->tmpl->addVar("_widget", "left", $marginLeft);			// 左マージン
-		$this->tmpl->addVar("_widget", "right", $marginRight);			// 右マージン
-		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));				// タイトル名
+		$this->tmpl->addVar("_widget", "top", 		$this->convertToDispString($marginTop));				// 上マージン
+		$this->tmpl->addVar("_widget", "bottom", 	$this->convertToDispString($marginBottom));		// 下マージン
+		$this->tmpl->addVar("_widget", "left", 		$this->convertToDispString($marginLeft));			// 左マージン
+		$this->tmpl->addVar("_widget", "right", 	$this->convertToDispString($marginRight));			// 右マージン
+		$this->tmpl->addVar("_widget", "title", 	$this->convertToDispString($title));				// タイトル名
 		if (!empty($titleVisible)) $this->tmpl->addVar("_widget", "title_visible", 'checked');		// タイトルを表示するかどうか
 		if (!empty($useRender)) $this->tmpl->addVar("_widget", "use_render", 'checked');		// Joomla!の描画処理を使用するかどうか
-		$this->tmpl->addVar("_widget", "widget_id", $widgetId);				// ウィジェットID
+		$this->tmpl->addVar("_widget", "widget_id", $this->convertToDispString($widgetId));				// ウィジェットID
 		$this->tmpl->addVar("_widget", "top_content", $topContent);			// 補助コンテンツ(上)
 		$this->tmpl->addVar("_widget", "bottom_content", $bottomContent);			// 補助コンテンツ(下)
 		if (!empty($showReadmore)) $this->tmpl->addVar("_widget", "show_readmore_checked", 'checked');		// もっと読むボタンを表示するかどうか
-		$this->tmpl->addVar("_widget", "readmore_title", $readmoreTitle);			// もっと読むボタンタイトル
-		$this->tmpl->addVar("_widget", "readmore_url", $readmoreUrl);			// もっと読むリンク先URL
+		$this->tmpl->addVar("_widget", "readmore_title", $this->convertToDispString($readmoreTitle));			// もっと読むボタンタイトル
+		$this->tmpl->addVar("_widget", "readmore_url", $this->convertToDispString($readmoreUrl));			// もっと読むリンク先URL
+		$this->tmpl->addVar("_widget", "remove_list_marker", $this->convertToCheckedString($removeListMarker));		// リストのマーカーを削除するかどうか
 			
 		// 「その他」設定
 		$checked = '';
@@ -543,6 +558,9 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_readmore'] = $this->_('Readmore Button');// 「もっと読む」ボタン
 		$localeText['label_readmore_title'] = $this->_('Title:');// タイトル：
 		$localeText['label_readmore_url'] = $this->_('Url:');// URL：
+		$localeText['label_css'] = $this->_('CSS');		// CSS
+		$localeText['label_for_joomla_template'] = $this->_('Configure for Joomla! style template');		// Joomla!スタイルテンプレート用の設定
+		$localeText['label_remove_list_marker'] = $this->_('Remove list marker');		// リストのマーカーを削除
 		
 		$localeText['label_view_control'] = $this->_('View Control');// 表示制御
 		$localeText['label_shared_attr'] = $this->_('Page Shared Attribute');// ページ共通属性
