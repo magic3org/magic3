@@ -1207,9 +1207,10 @@ class admin_mainDb extends BaseDb
 	 * @param string $readmoreTitle	もっと読むボタンタイトル
 	 * @param string $readmoreUrl	もっと読むリンク先URL
 	 * @param string $serializedParam	その他のパラメータ
+	 * @param string $exportCss		外部出力用CSS
 	 * @return						true=成功、false=失敗
 	 */
-	function updatePageDefInfo($serialNo, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, $serializedParam)
+	function updatePageDefInfo($serialNo, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, $serializedParam, $exportCss)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -1230,10 +1231,11 @@ class admin_mainDb extends BaseDb
 		$queryStr .=     'pd_readmore_title = ?, ';
 		$queryStr .=     'pd_readmore_url = ?, ';
 		$queryStr .=     'pd_param = ?, ';
+		$queryStr .=     'pd_css = ?, ';
 		$queryStr .=     'pd_update_user_id = ?, ';
 		$queryStr .=     'pd_update_dt = ? ';
 		$queryStr .=   'WHERE pd_serial = ? ';
-		$ret = $this->execStatement($queryStr, array($style, $title, intval($titleVisible), intval($useRender), $topContent, $bottomContent, intval($showReadmore), $readmoreTitle, $readmoreUrl, $serializedParam, $user, $now, $serialNo));
+		$ret = $this->execStatement($queryStr, array($style, $title, intval($titleVisible), intval($useRender), $topContent, $bottomContent, intval($showReadmore), $readmoreTitle, $readmoreUrl, $serializedParam, $exportCss, $user, $now, $serialNo));
 
 		// トランザクション確定
 		$ret = $this->endTransaction();

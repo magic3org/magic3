@@ -2110,7 +2110,7 @@ class PageManager extends Core
 			// 実行パラメータ取得
 			$count = count($this->latelaunchWidgetParam);
 			for ($i = 0; $i < $count; $i++){
-				list($wId, $index, $confId, $preId, $serial, $style, $cssStyle, $title, $shared) = $this->latelaunchWidgetParam[$i];
+				list($wId, $index, $confId, $preId, $serial, $style, $cssStyle, $title, $shared, $exportCss) = $this->latelaunchWidgetParam[$i];
 				if ($wId == $widgetId){
 					// パラメータ初期化
 					$this->lastHeadCss = '';			// 最後に設定したHTMLヘッダにCSS出力する文字列
@@ -2230,6 +2230,9 @@ class PageManager extends Core
 					if (!empty($newTitle)) $title = $newTitle;
 					$tag = self::WIDGET_ID_TITLE_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $index . self::WIDGET_ID_TITLE_TAG_END;
 					$destBuf = str_replace($tag, $title, $destBuf);
+					
+					// ##### 外部出力用のCSSがある場合は追加 #####
+					$this->addExportCss($exportCss);
 				}
 			}
 		}
@@ -3338,12 +3341,20 @@ class PageManager extends Core
 					$dir->close();
 				}
 			}
+			// ##### 外部出力用CSS読み込み #####
+			// 外部出力用CSSデータがある場合はURLを追加
+			if (!empty($this->exportCss)){
+				$cssUrl = $this->createCssCmdUrl() . '&' . date('YmdHis');
+				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
+				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
+			}
+			
 			// ウィジェットからの追加のCSS読み込み
 			$count = count($this->headCssFiles);
 			for ($i = 0; $i < $count; $i++){
 				$cssUrl = $this->headCssFiles[$i];
 				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
-				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssUrl . '" />' . M3_NL;
+				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
 			}
 
 			// ##### RSS配信情報の読み込み #####
@@ -4004,6 +4015,9 @@ class PageManager extends Core
 							if (!empty($metaKeyword)) $this->setHeadKeywords($metaKeyword);
 						}
 						$contents .= $widgetContent;
+						
+						// ##### 外部出力用のCSSがある場合は追加 #####
+						$this->addExportCss($this->pageDefRows[$i]['pd_css']);
 					}
 					ob_end_clean();		// バッファ破棄
 					
@@ -4143,6 +4157,9 @@ class PageManager extends Core
 							if (!empty($metaKeyword)) $this->setHeadKeywords($metaKeyword);
 						}
 						$contents .= $widgetContent;
+						
+						// ##### 外部出力用のCSSがある場合は追加 #####
+						$this->addExportCss($this->pageDefRows[$i]['pd_css']);
 					}
 				}
 			
@@ -4672,14 +4689,14 @@ class PageManager extends Core
 			$maxNo = 0;		// 最大シリアル番号
 			$count = count($this->latelaunchWidgetParam);
 			for ($i = 0; $i < $count; $i++){
-				list($wId, $index, $tmp1, $tmp2, $tmp3, $tmp4, $tmp5, $tmp6, $tmp7) = $this->latelaunchWidgetParam[$i];
+				list($wId, $index, $tmp1, $tmp2, $tmp3, $tmp4, $tmp5, $tmp6, $tmp7, $tmp8) = $this->latelaunchWidgetParam[$i];
 				if ($wId == $widgetId) $maxNo = $index + 1;
 			}
 			// Joomla!1.0テンプレートの場合はタイトルを修正
 			if ($widgetHeaderType > 0 && empty($style)){			// Joomla!1.0テンプレートのとき
 				if (!empty($fetchedRow['pd_title'])) $title = $fetchedRow['pd_title'];
 			}
-			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared);
+			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, $exportCss);
 			
 			// 遅延実行用タグを埋め込む
 			echo self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TAG_END;
@@ -5500,12 +5517,10 @@ class PageManager extends Core
 	/**
 	 * CSS生成用のURLを生成
 	 *
-	 * @param string $pageId		ページID(空のときは現在のURL)
-	 * @param string $pageSubId		ページサブID
 	 * @param string $optionParam	追加パラメータ
 	 * @return string				生成したURL
 	 */
-	function createCssCmdUrl($pageId = '', $pageSubId = '', $optionParam = '')
+	function createCssCmdUrl($optionParam = '')
 	{
 		global $gEnvManager;
 		
@@ -5513,8 +5528,8 @@ class PageManager extends Core
 		$url = $gEnvManager->createPageUrl() . '?';
 		
 		// ページサブIDを取得
-		if (empty($pageSubId)) $pageSubId = $this->gEnv->getCurrentWidgetPageSubId();	// ページ共通属性ありのときは空
-		if (!empty($pageSubId)) $url .= M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId . '&';
+		$pageSubId = $this->gEnv->getCurrentPageSubId();
+		$url .= M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId . '&';
 		
 		$url .= M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CSS;
 		if (!empty($optionParam)) $url .= '&' . $optionParam;

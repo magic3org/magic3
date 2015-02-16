@@ -90,6 +90,7 @@ define('M3_TAG_MACRO_ROOT_URL',		'M3_ROOT_URL');							// アプリケーショ�
 define('M3_TAG_MACRO_IMG_URL',		'M3_IMG_URL');							// 画像URLを示すマクロ
 define('M3_TAG_MACRO_LINK_URL',		'M3_LINK_URL');							// リンク先URLを示すマクロ
 define('M3_TAG_MACRO_WIDGET_URL',	'M3_WIDGET_URL');						// 個別のウィジェットのルートURLを示すマクロ
+define('M3_TAG_MACRO_WIDGET_CSS_ID',	'M3_WIDGET_CSS_ID');				// 個別のウィジェットのCSS用IDを示すマクロ
 define('M3_TAG_MACRO_EMOJI_CODE',	'M3_EMOJI');							// 絵文字コード
 define('M3_TAG_MACRO_SEPARATOR',	'M3_$');								// テキストデータセパレータ
 define('M3_TAG_MACRO_SITE_KEY',		'SITE_');								// サイト定義置換キー

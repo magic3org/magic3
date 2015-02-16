@@ -29,6 +29,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	const WIDGET_CSS_CLASS_HEAD = 'm3_';			// ウィジェットCSSクラスのヘッダ部
 	const MENUBAR_TITLE = '共通設定';
 	const HELP_ADJUSTWIDGET_CONFIG = 'adjustwidget_config';			// 機能説明ヘルプ
+	const REMOVE_LIST_MARKER_CSS = "#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n}\n";			// CSS(リストマーカー削除)
 	
 	/**
 	 * コンストラクタ
@@ -199,7 +200,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				// CSSを作成
+				// インナーdiv用CSSを作成
 				$style = '';
 				if (!empty($this->align)) $style .= 'text-align:' . $this->align . ';';
 				if (!empty($marginTop)) $style .= 'padding-top:' . $marginTop . 'px;';
@@ -211,7 +212,11 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$paramObj = new stdClass;
 				$paramObj->removeListMarker = $removeListMarker;		// リストのマーカーを削除するかどうか
 				
-				$ret = $this->db->updatePageDefInfo($defSerial, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, serialize($paramObj));
+				// 外部出力用CSS作成
+				$exportCss = '';
+				if ($removeListMarker) $exportCss = self::REMOVE_LIST_MARKER_CSS;
+				
+				$ret = $this->db->updatePageDefInfo($defSerial, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, serialize($paramObj), $exportCss);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Configration updated.'));		// データを更新しました
 					$replaceNew = true;			// データを再取得
@@ -353,7 +358,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				// その他のパラメータ
 				// その他のパラメータ
 				$paramStr = $row['pd_param'];
-				if (!empty($paramObj)){
+				if (!empty($paramStr)){
 					$paramObj = unserialize($paramStr);
 					$removeListMarker = $paramObj->removeListMarker;		// リストのマーカーを削除するかどうか
 				}
