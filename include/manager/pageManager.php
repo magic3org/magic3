@@ -530,7 +530,8 @@ class PageManager extends Core
 	{
 		$destCss = trim($css);
 		if (!empty($destCss)){
-			if (!in_array($css, $this->headCss)) $this->headCss[] = $css;
+			//if (!in_array($css, $this->headCss)) $this->headCss[] = $css;
+			if (!in_array($css, $this->exportCss)) $this->exportCss[] = $css;		// CSS動的外部出力
 			
 			$this->lastHeadCss = $css;			// 最後に設定したHTMLヘッダにCSS出力する文字列
 		}
