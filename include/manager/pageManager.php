@@ -1896,6 +1896,12 @@ class PageManager extends Core
 					$contents .= $this->exportCss[$i] . M3_NL;
 				}
 			}
+			
+			// ヘッダ出力
+			header('Content-type: text/css');
+			
+			// 画面情報、ユーザ情報の保存は行わない
+			return $contents;
 		} else if ($cmd != M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体オペレーションのときは出力しない
 			if ($getOutput){
 				$contents = $this->getLastContents($request);
@@ -2110,7 +2116,7 @@ class PageManager extends Core
 			// 実行パラメータ取得
 			$count = count($this->latelaunchWidgetParam);
 			for ($i = 0; $i < $count; $i++){
-				list($wId, $index, $confId, $preId, $serial, $style, $cssStyle, $title, $shared, $exportCss) = $this->latelaunchWidgetParam[$i];
+				list($wId, $maxNo, $confId, $preId, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index) = $this->latelaunchWidgetParam[$i];
 				if ($wId == $widgetId){
 					// パラメータ初期化
 					$this->lastHeadCss = '';			// 最後に設定したHTMLヘッダにCSS出力する文字列
@@ -2223,16 +2229,21 @@ class PageManager extends Core
 					ob_end_clean();
 					
 					// ウィジェットの出力を取得
-					$tag = self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $index . self::WIDGET_ID_TAG_END;
+					$tag = self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TAG_END;
 					$destBuf = str_replace($tag, $srcContents, $destBuf);
 					
 					// タイトルの出力
 					if (!empty($newTitle)) $title = $newTitle;
-					$tag = self::WIDGET_ID_TITLE_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $index . self::WIDGET_ID_TITLE_TAG_END;
+					$tag = self::WIDGET_ID_TITLE_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TITLE_TAG_END;
 					$destBuf = str_replace($tag, $title, $destBuf);
 					
 					// ##### 外部出力用のCSSがある場合は追加 #####
-					$this->addExportCss($exportCss);
+					if (!empty($exportCss)){
+						// ウィジェットのタグIDを変換
+						$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $index;				// ウィジェット識別用ユニークタグ
+						$exportCss = str_replace(M3_TAG_START . M3_TAG_MACRO_WIDGET_CSS_ID . M3_TAG_END, $widgetTag, $exportCss);
+						$this->addExportCss($exportCss);
+					}
 				}
 			}
 		}
@@ -3344,7 +3355,7 @@ class PageManager extends Core
 			// ##### 外部出力用CSS読み込み #####
 			// 外部出力用CSSデータがある場合はURLを追加
 			if (!empty($this->exportCss)){
-				$cssUrl = $this->createCssCmdUrl() . '&' . date('YmdHis');
+				$cssUrl = $this->createCssCmdUrl(date('YmdHis'));
 				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
 				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
 			}
@@ -3972,7 +3983,7 @@ class PageManager extends Core
 
 						if (empty($cacheData)){		// キャッシュデータがないとき
 							ob_clean();
-							$ret = $this->pageDefLoop($i, $this->pageDefRows[$i], $style, $titleTag, $widgetHeaderType);
+							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, $widgetHeaderType);
 							if (!$ret) break;
 							$widgetContent = ob_get_contents();
 							
@@ -4017,7 +4028,13 @@ class PageManager extends Core
 						$contents .= $widgetContent;
 						
 						// ##### 外部出力用のCSSがある場合は追加 #####
-						$this->addExportCss($this->pageDefRows[$i]['pd_css']);
+						$exportCss = $this->pageDefRows[$i]['pd_css'];
+						if (!empty($exportCss)){
+							// ウィジェットのタグIDを変換
+							$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
+							$exportCss = str_replace(M3_TAG_START . M3_TAG_MACRO_WIDGET_CSS_ID . M3_TAG_END, $widgetTag, $exportCss);
+							$this->addExportCss($exportCss);
+						}
 					}
 					ob_end_clean();		// バッファ破棄
 					
@@ -4043,7 +4060,7 @@ class PageManager extends Core
 							
 							// ウィジェットの出力を取得
 							ob_clean();
-							$ret = $this->pageDefLoop($i, $this->pageDefRows[$i], $style, $titleTag, false);
+							$ret = $this->pageDefLoop($position, $i, $this->pageDefRows[$i], $style, $titleTag, 0/*タイトル出力なし*/);
 							$widgetContent = ob_get_contents();
 
 							$trimContent = trim($widgetContent);
@@ -4159,7 +4176,13 @@ class PageManager extends Core
 						$contents .= $widgetContent;
 						
 						// ##### 外部出力用のCSSがある場合は追加 #####
-						$this->addExportCss($this->pageDefRows[$i]['pd_css']);
+						$exportCss = $this->pageDefRows[$i]['pd_css'];
+						if (!empty($exportCss)){
+							// ウィジェットのタグIDを変換
+							$widgetTag = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
+							$exportCss = str_replace(M3_TAG_START . M3_TAG_MACRO_WIDGET_CSS_ID . M3_TAG_END, $widgetTag, $exportCss);
+							$this->addExportCss($exportCss);
+						}
 					}
 				}
 			
@@ -4615,6 +4638,7 @@ class PageManager extends Core
 	/**
 	 * ウィジェット出力を処理
 	 *
+	 * @param string $position			HTMLテンプレート上の書き出し位置
 	 * @param int $index			行番号
 	 * @param array $fetchedRow		fetch取得した行
 	 * @param string $style			ウィジェットの表示スタイル(空の場合=Joomla!v1.0テンプレート用、空以外=Joomla!v1.5テンプレート用)
@@ -4622,7 +4646,7 @@ class PageManager extends Core
 	 * @param int $widgetHeaderType	ウィジェットタイトルを出力方法(0=出力なし、1=Joomla!v1.0PC用出力、2=Joomla!v1.0携帯用出力)
 	 * @return bool					処理を継続するかどうか(true=続行、false=中断)
 	 */
-	function pageDefLoop($index, $fetchedRow, $style, &$titleTag, $widgetHeaderType = 0)
+	function pageDefLoop($position, $index, $fetchedRow, $style, &$titleTag, $widgetHeaderType = 0)
 	{
 		global $gEnvManager;
 		global $gErrorManager;
@@ -4689,14 +4713,14 @@ class PageManager extends Core
 			$maxNo = 0;		// 最大シリアル番号
 			$count = count($this->latelaunchWidgetParam);
 			for ($i = 0; $i < $count; $i++){
-				list($wId, $index, $tmp1, $tmp2, $tmp3, $tmp4, $tmp5, $tmp6, $tmp7, $tmp8) = $this->latelaunchWidgetParam[$i];
-				if ($wId == $widgetId) $maxNo = $index + 1;
+				list($wId, $maxNo, $tmp1, $tmp2, $tmp3, $tmp4, $tmp5, $tmp6, $tmp7, $tmp8, $tmp9, $tmp10) = $this->latelaunchWidgetParam[$i];
+				if ($wId == $widgetId) $maxNo = $maxNo + 1;
 			}
 			// Joomla!1.0テンプレートの場合はタイトルを修正
 			if ($widgetHeaderType > 0 && empty($style)){			// Joomla!1.0テンプレートのとき
 				if (!empty($fetchedRow['pd_title'])) $title = $fetchedRow['pd_title'];
 			}
-			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, $exportCss);
+			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index);
 			
 			// 遅延実行用タグを埋め込む
 			echo self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TAG_END;
