@@ -272,10 +272,11 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 				$titles[] = '基本';
 				break;
 		}
-		$this->gPage->setAdminBreadcrumbDef($titles);
+		//$this->gPage->setAdminBreadcrumbDef($titles);
+		$this->configMenubarBreadcrumbTitleDef = $titles;			// 設定画面用パンくずリストのタイトル定義
 		
 		// メニューバーの作成
-		$navbarDef = new stdClass;
+/*		$navbarDef = new stdClass;
 		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
 		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
 		$navbarDef->help	= '';// ヘルプ文字列
@@ -288,8 +289,19 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 									'active'	=> true,
 									'submenu'	=> array()
 								)
-							);
-		$this->gPage->setAdminSubNavbarDef($navbarDef);
+							);*/
+		$menu =	array(
+					(Object)array(
+						'name'		=> '基本',		// 基本
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> true,
+						'submenu'	=> array()
+					)
+				);
+//		$this->gPage->setAdminSubNavbarDef($navbarDef);
+		$this->configMenubarMenuDef = $menu;					// 設定画面用メニューバーのメニュー定義
 	}
 	/**
 	 * 設定画面用のメニューバー(ナビゲーションバー+パンくずリスト)の定義を設定
