@@ -17,7 +17,9 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 
 class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 {
+	private $imageType;		// 選択中の画像タイプ
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
+	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	
 	/**
 	 * コンストラクタ
@@ -66,18 +68,32 @@ class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$act = $request->trimValueOf('act');
+		// 入力値を取得
+		$act			= $request->trimValueOf('act');
+		$itemCount		= $request->trimValueOf('item_count');			// 表示項目数
+		$useRss			= $request->trimCheckedValueOf('item_use_rss');		// RSS配信を行うかどうか
+		$optionPassage	= $request->trimCheckedValueOf('item_option_passage');		// 表示オプション(経過日時)
+		$showImage		= $request->trimCheckedValueOf('item_show_image');		// 画像を表示するかどうか
+		$this->imageType	= $request->trimValueOf('item_image_type');				// 画像タイプ
+		$imageWidth		= $request->trimIntValueOf('item_image_width', '0');			// 画像幅(空文字列をOKとする)
+		$imageHeight	= $request->trimIntValueOf('item_image_height', '0');			// 画像高さ(空文字列をOKとする)
+
 		if ($act == 'update'){		// 設定更新のとき
-			// 入力値を取得
-			$itemCount	= $request->valueOf('item_count');			// 表示項目数
-			$useRss = ($request->trimValueOf('item_use_rss') == 'on') ? 1 : 0;		// RSS配信を行うかどうか
-			$optionPassage = ($request->trimValueOf('item_option_passage') == 'on') ? 1 : 0;		// 表示オプション(経過日時)
+			// 入力値のエラーチェック
+			$this->checkNumeric($itemCount, '項目数');
+			$this->checkNumeric($imageWidth, '画像幅');
+			$this->checkNumeric($imageHeight, '画像高さ');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				$paramObj = new stdClass;
 				$paramObj->itemCount		= $itemCount;
 				$paramObj->useRss			= $useRss;
 				$paramObj->optionPassage	= $optionPassage;		// 表示オプション(経過日時)
+				$paramObj->showImage		= $showImage;		// 画像を表示するかどうか
+				$paramObj->imageType		= $this->imageType;				// 画像タイプ
+				$paramObj->imageWidth		= intval($imageWidth);			// 画像幅
+				$paramObj->imageHeight		= intval($imageHeight);			// 画像高さ
+		
 				$ret = $this->updateWidgetParamObj($paramObj);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -91,6 +107,11 @@ class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 			$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
 			$useRss = 1;							// RSS配信を行うかどうか
 			$optionPassage = 0;						// 表示オプション(経過日時)
+			$showImage		= 0;		// 画像を表示するかどうか
+			$this->imageType	= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
+			$imageWidth		= 0;			// 画像幅
+			$imageHeight	= 0;			// 画像高さ
+			
 			$paramObj = $this->getWidgetParamObj();
 			if (!empty($paramObj)){
 				$itemCount	= $paramObj->itemCount;
@@ -98,17 +119,49 @@ class admin_blog_new_boxWidgetContainer extends BaseAdminWidgetContainer
 				if (!isset($useRss)) $useRss = 1;
 				$optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
 				if (!isset($optionPassage)) $optionPassage = 0;
+				$showImage			= $paramObj->showImage;		// 画像を表示するかどうか
+				$this->imageType	= $paramObj->imageType;				// 画像タイプ
+				$imageWidth			= intval($paramObj->imageWidth);			// 画像幅
+				$imageHeight		= intval($paramObj->imageHeight);			// 画像高さ
 			}
 		}
+		// 画像タイプ選択メニュー作成
+		$this->createpImageTypeList();
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "item_count",	$itemCount);
-		$checked = '';
-		if ($useRss) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "use_rss",	$checked);// RSS配信を行うかどうか
-		$checked = '';
-		if ($optionPassage) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "option_passage",	$checked);// 表示オプション(経過日時)
+		$this->tmpl->addVar("_widget", "use_rss",	$this->convertToCheckedString($useRss));// RSS配信を行うかどうか
+		$this->tmpl->addVar("_widget", "option_passage",	$this->convertToCheckedString($optionPassage));// 表示オプション(経過日時)
+		$this->tmpl->addVar("_widget", "show_image_checked",	$this->convertToCheckedString($showImage));// 画像を表示するかどうか
+		$imageWidth = empty($imageWidth) ? '' : $imageWidth;
+		$imageHeight = empty($imageHeight) ? '' : $imageHeight;
+		$this->tmpl->addVar("_widget", "image_width",	$this->convertToDispString($imageWidth));// 画像幅
+		$this->tmpl->addVar("_widget", "image_height",	$this->convertToDispString($imageHeight));// 画像高さ
+	}
+	/**
+	 * 画像タイプ選択メニュー作成
+	 *
+	 * @return なし
+	 */
+	function createpImageTypeList()
+	{
+		$formats = $this->gInstance->getImageManager()->getSystemThumbFormat(1/*クロップ画像のみ*/);
+		
+		for ($i = 0; $i < count($formats); $i++){
+			$id = $formats[$i];
+			$name = $id;
+			
+			$selected = '';
+			if ($id == $this->imageType) $selected = 'selected';
+
+			$row = array(
+				'value'			=> $this->convertToDispString($id),				// 値
+				'name'			=> $this->convertToDispString($name),			// 名前
+				'selected'		=> $selected			// 選択中かどうか
+			);
+			$this->tmpl->addVars('image_type_list', $row);
+			$this->tmpl->parseTemplate('image_type_list', 'a');
+		}
 	}
 }
 ?>
