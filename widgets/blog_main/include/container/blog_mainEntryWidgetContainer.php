@@ -43,6 +43,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
+	const TAG_ID_ACTIVE_TERM = 'activeterm_button';		// 公開期間エリア表示用ボタンタグ
+	const TOOLTIP_ACTIVE_TERM = '公開期間を設定';		// 公開期間エリア表示用ボタンツールチップ
 	
 	/**
 	 * コンストラクタ
@@ -911,6 +913,16 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
 		$this->tmpl->addVar("_widget", "related_content", $relatedContent);	// 関連コンテンツ
 		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
+		
+		// 公開期間エリア表示ボタン
+		$activeTermButton = $this->gDesign->createTermButton(''/*同画面*/, self::TOOLTIP_ACTIVE_TERM, self::TAG_ID_ACTIVE_TERM);
+		$this->tmpl->addVar("_widget", "active_term_button", $activeTermButton);
+		$this->tmpl->addVar("_widget", "tagid_active_term", self::TAG_ID_ACTIVE_TERM);
+		if (!empty($start_date) || !empty($start_time) || !empty($end_date) || !empty($end_time)){
+			$this->tmpl->addVar('_widget', 'show_active_term_area', 'true');		// 公開期間エリアの初期の表示状態
+		} else {
+			$this->tmpl->addVar('_widget', 'show_active_term_area', 'false');		// 公開期間エリアの初期の表示状態
+		}
 		
 		// 前後エントリー移動ボタン
 		if (!empty($prevSerial)){
