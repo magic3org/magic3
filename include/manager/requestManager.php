@@ -132,7 +132,7 @@ class RequestManager extends Core
 	 * デフォルトでHTMLタグを取り除く
 	 *
 	 * @param string $name		キー値
-	 * @param string $default  	値が存在しないときのデフォルト値
+	 * @param string $default  	値が存在しないとき、値が空文字列のときのデフォルト値
 	 * @return string			取得値
 	 */
 	//public function trimIntValueOf($name, $default = '')
@@ -160,7 +160,7 @@ class RequestManager extends Core
 	/**
 	 * トリミング(前後の空白削除)処理
 	 *
-	 * デフォルトでHTMLタグを取り除く
+	 * デフォルトで不正な文字(HTMLタグ等)を取り除く
 	 *
 	 * @param string $name		キー値
 	 * @param string $value  	値
@@ -186,7 +186,9 @@ class RequestManager extends Core
 				$isValid = false;
 				if (strlen($stripValue) == strlen($trimValue[$key])){		// 文字列長が同じとき
 					if ($ckeckType == 1){		// int型チェック
-						if (is_numeric($stripValue) && !strstr($stripValue, '.')){
+						if ($stripValue == ''){				// 空文字列の場合はエラーと見なさない(2015/2/19 追加)
+							$isValid = true;
+						} else if (is_numeric($stripValue) && !strstr($stripValue, '.')){
 							$isValid = true;
 						} else {	// エラーの場合は値を修正
 							$stripValue = '';
@@ -221,11 +223,13 @@ class RequestManager extends Core
 			$saveValue = $destValue;
 			$destValue = $this->_convSafeText($destValue);
 			if ($destValue != $saveValue) $destValue = '';
-			
+
 			$isValid = false;
 			if (strlen($destValue) == strlen($trimValue)){		// 文字列長が同じとき
 				if ($ckeckType == 1){		// int型チェック
-					if (is_numeric($destValue) && !strstr($destValue, '.')){
+					if ($destValue == ''){				// 空文字列の場合はエラーと見なさない(2015/2/19 追加)
+						$isValid = true;
+					} else if (is_numeric($destValue) && !strstr($destValue, '.')){
 						$isValid = true;
 					} else {	// エラーの場合は値を修正
 						$destValue = '';
