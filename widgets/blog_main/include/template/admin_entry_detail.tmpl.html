@@ -140,6 +140,14 @@ $(function(){
 	});
 	setStatusColor();
 	
+	// 公開期間エリア表示制御
+	$("#{TAGID_ACTIVE_TERM}").click(function(){
+		$('tr.active_term_area').slideToggle('slow');
+		m3AdjustParentWindow();
+		return false;
+	});
+	if ({SHOW_ACTIVE_TERM_AREA}) $('tr.active_term_area').show();
+		
 	// カレンダー作成
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
@@ -191,7 +199,7 @@ $(function(){
     <tr>
 	    <th><span {_HELP_ENTRY_ID}>ID</span></th>
 	    <td style="width:200px;"><div class="form-control-static m3config_item col-sm-6">{ID}</div><div class="pull-right">{EYECATCH_IMAGE}</div></td>
-	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span></th>
+	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
 	    <td id="status_field" colspan="3" class="warning">
 		<div class="col-sm-6 m3config_item">
 	    <select id="item_status" name="item_status" class="form-control">
@@ -229,7 +237,7 @@ $(function(){
 		<!--日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" style="width:100px;" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" style="width:70px;" />-->
 		</td>
 	</tr>
-	<tr>
+	<tr class="active_term_area" style="display:none;">
 	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span></th>
 	    <td colspan="5">
 <div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item">時間：</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-5">～</div></div><div style="clear:both;"></div>
