@@ -142,11 +142,25 @@ $(function(){
 	
 	// 公開期間エリア表示制御
 	$("#{TAGID_ACTIVE_TERM}").click(function(){
-		$('tr.active_term_area').slideToggle('slow');
+		var $tableRow = $('tr.active_term_area');
+		if ($tableRow.is(':hidden')){
+			$('#tmprow').remove();
+			$tableRow.slideToggle('slow');
+	    } else {
+			$tableRow.slideToggle('slow', function(){
+				$tableRow.after('<tr id="tmprow"></tr>');
+			});
+	    }
+	
+		// 表示エリアリサイズ
 		m3AdjustParentWindow();
 		return false;
 	});
-	if ({SHOW_ACTIVE_TERM_AREA}) $('tr.active_term_area').show();
+	if ({SHOW_ACTIVE_TERM_AREA}){
+		$('tr.active_term_area').show();
+	} else {
+		$('tr.active_term_area').after('<tr id="tmprow"></tr>').hide();
+	}
 		
 	// カレンダー作成
 	Calendar.setup({
