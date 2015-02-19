@@ -182,13 +182,22 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		}
 		
 		// 画像
-		$imageUrl = $this->gatImageUrl($entryId, $this->imageType);
-//		echo '--'.$imageUrl;
+		$imageTag = '';
+		if ($this->showImage){
+			$titleStr = $fetchedRow['be_name'];
+			$imageUrl = $this->gatImageUrl($entryId, $this->imageType);
+			$style = '';
+			if ($this->imageWidth > 0) $style .= 'width:' . $this->imageWidth . 'px;';
+			if ($this->imageHeight > 0) $style .= 'height:' . $this->imageHeight . 'px;';
+			if (!empty($style)) $style = 'style="' . $style . '" ';
+			$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $titleStr . '" title="' . $titleStr . '" ' . $style . '/>';
+		}
 		
 		$row = array(
 			'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($url, true/*リンク用*/)),		// リンク
 			'name' => $this->convertToDispString($title),			// タイトル
-			'option'	=> $optionStr								// オプション項目
+			'option'	=> $optionStr,								// オプション項目
+			'image'		=> $imageTag								// 画像
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
