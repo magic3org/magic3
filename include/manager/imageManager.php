@@ -412,6 +412,17 @@ class ImageManager extends Core
 		return $ret;
 	}
 	/**
+	 * フォーマットからサムネール画像のファイル名を取得
+	 *
+	 * @param string $contentId		コンテンツID
+	 * @param string $format		画像フォーマット
+	 * @return string				画像URL
+	 */
+	function getThumbFilename($contentId, $format)
+	{
+		return $contentId . '_' . $format;
+	}
+	/**
 	 * サムネール画像のURLを取得
 	 *
 	 * @param string $contentType	コンテンツタイプ

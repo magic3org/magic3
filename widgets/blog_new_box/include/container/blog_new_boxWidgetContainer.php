@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -24,7 +24,12 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 	private $defaultUrl;	// システムのデフォルトURL
 	private $headRssFile;				// RSS情報
 	private $optionPassage;						// 表示オプション(経過日時)
+	private $showImage;		// 画像を表示するかどうか
+	private $imageType;				// 画像タイプ
+	private $imageWidth;			// 画像幅
+	private $imageHeight;			// 画像高さ
 	const DEFAULT_ITEM_COUNT = 20;		// デフォルトの表示項目数
+	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	const MAX_TITLE_LENGTH = 20;			// タイトルの最大文字列長
 	const DEFAULT_TITLE = 'ブログ最新記事';		// デフォルトのウィジェットタイトル名
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
@@ -65,17 +70,25 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		// 設定値を取得
+		// 初期値設定
 		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
 		$useRss = 1;							// RSS配信を行うかどうか
-		$this->optionPassage = 0;						// 表示オプション(経過日時)
+		$this->optionPassage	= 0;						// 表示オプション(経過日時)
+		$this->showImage		= 0;				// 画像を表示するかどうか
+		$this->imageType		= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
+		$this->imageWidth		= 0;				// 画像幅
+		$this->imageHeight		= 0;				// 画像高さ
+			
+		// 設定値を取得
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
-			$itemCount	= $paramObj->itemCount;
-			$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
-			if (!isset($useRss)) $useRss = 1;
-			$this->optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
-			if (!isset($this->optionPassage)) $this->optionPassage = 0;
+			if (isset($paramObj->itemCount))	$itemCount	= $paramObj->itemCount;
+			if (isset($paramObj->useRss))		$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
+			if (isset($paramObj->optionPassage)) $this->optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
+			if (isset($paramObj->showImage))	$this->showImage		= $paramObj->showImage;				// 画像を表示するかどうか
+			if (isset($paramObj->imageType))	$this->imageType		= $paramObj->imageType;				// 画像タイプ
+			if (isset($paramObj->imageWidth))	$this->imageWidth		= $paramObj->imageWidth;				// 画像幅
+			if (isset($paramObj->imageHeight))	$this->imageHeight		= $paramObj->imageHeight;				// 画像高さ
 		}
 		
 		// 新規ブログタイトルを取得
@@ -144,6 +157,8 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 	 */
 	function itemLoop($index, $fetchedRow, $param)
 	{
+		$entryId = $fetchedRow['be_id'];
+		
 		// タイトルを設定
 		$title = $fetchedRow['be_name'];
 		// タイトルの長さは制限
@@ -166,6 +181,10 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 			}
 		}
 		
+		// 画像
+		$imageUrl = $this->gatImageUrl($entryId, $this->imageType);
+//		echo '--'.$imageUrl;
+		
 		$row = array(
 			'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($url, true/*リンク用*/)),		// リンク
 			'name' => $this->convertToDispString($title),			// タイトル
@@ -176,6 +195,24 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		
 		$this->isEntry = true;	// 記事の投稿があるかどうか
 		return true;
+	}
+	/**
+	 * 画像のURLを取得
+	 *
+	 * @param string $entryId		記事ID
+	 * @param string $format		画像フォーマット
+	 * @return string				URL
+	 */
+	function gatImageUrl($entryId, $format)
+	{
+		$filename = $this->gInstance->getImageManager()->getThumbFilename($entryId, $format);
+		$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+		if (!file_exists($path)){
+			$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $format);		// デフォルト画像ファイル名
+			$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+		}
+		$url = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+		return $url;
 	}
 }
 ?>
