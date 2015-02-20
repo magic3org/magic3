@@ -251,8 +251,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			if (!empty($start_date) && !empty($end_date)){
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg($this->_('Invalid view term.'));		// 表示期間が不正です
 			}
-			$this->checkSingleByte($cssClassSuffix, '追加CSSクラス', true);			// 追加CSSクラスサフィックス
-			
+
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// 保存データ作成
@@ -278,9 +277,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				if (!empty($this->exceptPageArray)) $exceptPageStr = implode(',', $this->exceptPageArray);
 				$updateData['pd_except_sub_id'] = $exceptPageStr;
 				
-				// 追加CSSクラス
-				$updateData['pd_suffix'] = $cssClassSuffix;			// 追加CSSクラスサフィックス
-				
+				// ページ定義を更新
 				$ret = $this->db->updatePageDefRecord($defSerial, $updateData);
 				
 				// ページ共通属性を更新
@@ -301,6 +298,34 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			}
 			// タブを選択
 			$activeTab = 'widget_view_control';
+		} else if ($act == 'update_style'){		// 「スタイル」更新のとき
+			// 入力値エラーチェック
+			$this->checkSingleByte($cssClassSuffix, '追加CSSクラス', true);			// 追加CSSクラスサフィックス
+			
+			// エラーなしの場合は、データを更新
+			if ($this->getMsgCount() == 0){
+				// 追加CSSクラス
+				$updateData = array();
+				$updateData['pd_suffix'] = $cssClassSuffix;			// 追加CSSクラスサフィックス
+				
+				// ページ定義を更新
+				$ret = $this->db->updatePageDefRecord($defSerial, $updateData);
+				
+				if ($ret){		// データ追加成功のとき
+					$this->setMsg(self::MSG_GUIDANCE, $this->_('Configration updated.'));		// データを更新しました
+					$replaceNew = true;			// データを再取得
+					
+					// キャッシュをクリア
+					$this->gCache->clearCacheByWidgetConfigId($widgetId, $defConfigId);
+		
+					// 親ウィンドウを更新
+					$this->gPage->updateParentWindow($defSerial);
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating configration.'));		// データ更新に失敗しました
+				}
+			}
+			// タブを選択
+			$activeTab = 'widget_style';
 		} else {		// 初期状態
 			// 初期値設定
 			$this->align = '';
