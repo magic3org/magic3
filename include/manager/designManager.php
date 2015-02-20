@@ -521,17 +521,19 @@ class DesignManager extends Core
 					$tagIdAttr = '';		// タグID
 					if (!empty($subTagId)) $tagIdAttr = ' id="' . $subTagId . '"';
 				
-				//	$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . convertUrlToHtmlEntity($linkUrl) . '">' . convertToHtmlEntity($subName) . '</a></li>';
-					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '">' . convertToHtmlEntity($subName) . '</a></li>';
+				//	$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '">' . convertToHtmlEntity($subName) . '</a></li>';
+					$subMenuTag .= '<li' . $classActive . '><a' . $tagIdAttr . ' href="' . convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '">' . convertToHtmlEntity($subName) . '</a></li>';
 				}
 				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
 
+				$tagIdAttr = '';		// タグID
+				if (!empty($tagId)) $tagIdAttr = ' id="' . $tagId . '"';
  				if ($active){
 					$buttonType = 'btn-primary';
 				} else {
 					$buttonType = 'btn-success';
 				}
-				$menuTag .= '<li><a class="btn navbar-btn ' . $buttonType . '" data-toggle="dropdown" href="#" >' . convertToHtmlEntity($name) . ' <span class="caret"></span></a>' . $subMenuTag . '</li>';
+				$menuTag .= '<li><a' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '" data-toggle="dropdown" href="#" >' . convertToHtmlEntity($name) . ' <span class="caret"></span></a>' . $subMenuTag . '</li>';
 			}
 		}
 		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
