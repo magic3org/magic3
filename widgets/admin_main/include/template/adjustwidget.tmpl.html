@@ -25,7 +25,7 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
-function updateOther(){
+function updateViewControl(){
 	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
 	
 	// CKEditorの入力内容を確定
@@ -33,8 +33,20 @@ function updateOther(){
 		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
 	}
 	
-	document.main_other.act.value = 'update_other';
-	document.main_other.submit();
+	document.main_view_control.act.value = 'update_view_control';
+	document.main_view_control.submit();
+	return true;
+}
+function updateStyle(){
+	if (!window.confirm('{_LC_MSG_UPDATE}')) return false;
+	
+	// CKEditorの入力内容を確定
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+	
+	document.main_style.act.value = 'update_style';
+	document.main_style.submit();
 	return true;
 }
 // タブを選択
@@ -42,7 +54,8 @@ function activateTab(tab)
 {
 	if (tab == 'widget_config'){
 		// メニューバーの更新
-		$('.navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');
+		$('.nav .navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');	// トップレベル非アクティブ
+		$('.nav .btn-primary').removeClass('btn-primary');		// サブレベル非アクティブ
 		$('#menubar_basic').removeClass('btn-success').addClass('btn-primary');
 		
 		// パンくずリストの更新
@@ -51,17 +64,32 @@ function activateTab(tab)
 		// 画面の更新
 		$('.tab-pane').removeClass('active');
 		$('#widget_config').addClass('active');
-	} else {
+	} else if (tab == 'widget_view_control'){
 		// メニューバーの更新
-		$('.navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');
+		$('.nav .navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');// トップレベル非アクティブ
+		$('.nav .btn-primary').removeClass('btn-primary');		// サブレベル非アクティブ
 		$('#menubar_other').removeClass('btn-success').addClass('btn-primary');
+		$('#menubar_view_control').addClass('btn-primary');
 		
 		// パンくずリストの更新
-		$('.breadcrumb').html('<li>{_LC_LABEL_CONFIG_OTHER}</li>');
+		$('.breadcrumb').html('<li>{_LC_LABEL_CONFIG_OTHER}</li><li>{_LC_LABEL_CONFIG_VIEW_CONTROL}</li>');
 		
 		// 画面の更新
 		$('.tab-pane').removeClass('active');
-		$('#widget_other').addClass('active');
+		$('#widget_view_control').addClass('active');
+	} else {
+		// メニューバーの更新
+		$('.nav .navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');// トップレベル非アクティブ
+		$('.nav .btn-primary').removeClass('btn-primary');		// サブレベル非アクティブ
+		$('#menubar_other').removeClass('btn-success').addClass('btn-primary');
+		$('#menubar_style').addClass('btn-primary');
+		
+		// パンくずリストの更新
+		$('.breadcrumb').html('<li>{_LC_LABEL_CONFIG_OTHER}</li><li>{_LC_LABEL_CONFIG_STYLE}</li>');
+		
+		// 画面の更新
+		$('.tab-pane').removeClass('active');
+		$('#widget_style').addClass('active');
 	}
 }
 // 作成リンク取得用
@@ -88,16 +116,23 @@ $(function(){
 		
 		$('.m3messages').remove();
 	});
-	$('#menubar_other').on('click', function(){
+	$('#menubar_view_control').on('click', function(){
 		// 画面の更新
-		activateTab('widget_other');
+		activateTab('widget_view_control');
+		
+		$('.m3messages').remove();
+	});
+	$('#menubar_style').on('click', function(){
+		// 画面の更新
+		activateTab('widget_style');
 		
 		$('.m3messages').remove();
 	});
 	
 	// テーブル作成
 	m3SetConfigTable('widget_config_table');
-	m3SetConfigTable('widget_other_table');
+	m3SetConfigTable('widget_view_control_table');
+	m3SetConfigTable('widget_style_table');
 	
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
@@ -178,12 +213,13 @@ $(function(){
 <div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" /></div>
 </form>
 </div></div>
-<div id="widget_other" class="tab-pane"><div class="m3config_container">
-<form method="post" name="main_other">
+
+<div id="widget_view_control" class="tab-pane"><div class="m3config_container">
+<form method="post" name="main_view_control">
 <input type="hidden" name="act" />
 <input type="hidden" name="widget_id" value="{WIDGET_ID}" />
 <h3><span {_HELP_ADJUSTWIDGET_VIEW}>{_LC_LABEL_VIEW_CONTROL}</span></h3>
-<table id="widget_other_table">
+<table id="widget_view_control_table">
     <tbody>
     <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_SHARED}>{_LC_LABEL_SHARED_ATTR}</span></th>
@@ -217,8 +253,31 @@ $(function(){
 	</tr>
     </tbody>
 </table>
-<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateOther();" value="{_LC_LABEL_UPDATE}" /></div>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateViewControl();" value="{_LC_LABEL_UPDATE}" /></div>
 </form>
-	    </div></div>
+</div></div>
+		
+<div id="widget_style" class="tab-pane"><div class="m3config_container">
+<form method="post" name="main_style">
+<input type="hidden" name="act" />
+<input type="hidden" name="widget_id" value="{WIDGET_ID}" />
+<h3><span {_HELP_ADJUSTWIDGET_STYLE}>{_LC_LABEL_STYLE}</span></h3>
+<table id="widget_style_table">
+    <tbody>
+    <tr>
+	    <th><span {_HELP_ADJUSTWIDGET_WIDGET_CSS_ID}>{_LC_LABEL_WIDGET}<br />{_LC_LABEL_ELEMENT_ID}({_LC_LABEL_DYNAMIC})</span></th>
+	    <td><div class="form-control-static m3config_item">{WIDGET_CSS_ID}</div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_ADJUSTWIDGET_CSS_CLASS}>{_LC_LABEL_CSS_CLASS}</span></th>
+	    <td><div class="form-control-static col-sm-3 m3config_item">{CSS_CLASS}_</div><div class="col-sm-3 m3config_item"><input type="text" name="item_css_class_suffix" class="form-control" value="{CSS_CLASS_SUFFIX}" size="10" maxlength="10" /></div>
+	    </td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateStyle();" value="{_LC_LABEL_UPDATE}" /></div>
+</form>
+</div></div>
 </div>
 </patTemplate:tmpl>

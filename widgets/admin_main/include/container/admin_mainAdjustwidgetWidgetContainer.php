@@ -29,6 +29,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	const WIDGET_CSS_CLASS_HEAD = 'm3_';			// ウィジェットCSSクラスのヘッダ部
 	const MENUBAR_TITLE = '共通設定';
 	const HELP_ADJUSTWIDGET_CONFIG = 'adjustwidget_config';			// 機能説明ヘルプ
+	const WIDGET_TAG_HEAD = 'm3widget_';			// ウィジェットの識別用タグIDヘッダ
 	const REMOVE_LIST_MARKER_CSS = "#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n}\n";			// CSS(リストマーカー削除)
 	
 	/**
@@ -110,7 +111,22 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 									'url'		=> '',
 									'tagid'		=> 'menubar_other',
 									'active'	=> false,
-									'submenu'	=> array()
+									'submenu'	=> array(
+										(Object)array(
+											'name'		=> $this->_('View Control'),		// 表示制御
+											'task'		=> '',
+											'url'		=> '',
+											'tagid'		=> 'menubar_view_control',
+											'active'	=> false
+										),
+										(Object)array(
+											'name'		=> $this->_('Style'),		// スタイル
+											'task'		=> '',
+											'url'		=> '',
+											'tagid'		=> 'menubar_style',
+											'active'	=> false
+										)
+									)
 								)
 							);
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
@@ -230,7 +246,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 					$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in updating configration.'));			// データ更新に失敗しました
 				}
 			}
-		} else if ($act == 'update_other'){		// 「その他」更新のとき
+		} else if ($act == 'update_view_control'){		// 「表示制御」更新のとき
 			// 期間範囲のチェック
 			if (!empty($start_date) && !empty($end_date)){
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg($this->_('Invalid view term.'));		// 表示期間が不正です
@@ -284,7 +300,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				}
 			}
 			// タブを選択
-			$activeTab = 'widget_other';
+			$activeTab = 'widget_view_control';
 		} else {		// 初期状態
 			// 初期値設定
 			$this->align = '';
@@ -356,7 +372,6 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$readmoreUrl = $row['pd_readmore_url'];			// もっと読むリンク先URL
 			
 				// その他のパラメータ
-				// その他のパラメータ
 				$paramStr = $row['pd_param'];
 				if (!empty($paramStr)){
 					$paramObj = unserialize($paramStr);
@@ -375,6 +390,9 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				//例外ページ
 				$this->exceptPageArray = array();
 				if (!empty($row['pd_except_sub_id'])) $this->exceptPageArray = explode(',', $row['pd_except_sub_id']);
+				
+				// ウィジェット用CSS ID
+				$widgetCssId = $this->gPage->getWidgetCssId($row['pd_serial'], $row['pd_id'], $row['pd_sub_id'], $row['pd_position_id']);
 			}
 		}
 		
@@ -385,23 +403,6 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->createPageSubIdList();
 		
 		// ナビゲーションタブ作成
-/*		$tabDef = array();
-		$tabItem = new stdClass;
-		$tabItem->name	= $this->_('Basic');		// 基本
-		$tabItem->task	= '';
-		$tabItem->url	= '#widget_config';
-		$tabItem->parent	= 0;
-		$tabItem->active	= false;
-		$tabDef[] = $tabItem;
-		$tabItem = new stdClass;
-		$tabItem->name	= $this->_('Others');
-		$tabItem->task	= '';
-		$tabItem->url	= '#widget_other';			// その他
-		$tabItem->parent	= 0;
-		$tabItem->active	= false;
-		$tabDef[] = $tabItem;
-		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
-		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);*/
 		if (empty($activeTab)){		// タブの選択
 			$this->tmpl->addVar('_widget', 'active_tab', 'widget_config');
 		} else {
@@ -423,7 +424,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "readmore_url", $this->convertToDispString($readmoreUrl));			// もっと読むリンク先URL
 		$this->tmpl->addVar("_widget", "remove_list_marker", $this->convertToCheckedString($removeListMarker));		// リストのマーカーを削除するかどうか
 			
-		// 「その他」設定
+		// 「表示制御」設定
 		$checked = '';
 		if ($shared) $checked = 'checked';		// 共通属性があるかどうか
 		switch ($viewControlType){		// 表示制御タイプ
@@ -444,9 +445,11 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
 		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
 		
+		// 「スタイル」設定
 		$widgetOuterClass = self::WIDGET_CSS_CLASS_HEAD . str_replace('/', '_', $widgetId);
 		$this->tmpl->addVar("_widget", "css_class", $this->convertToDispString($widgetOuterClass));	// ウィジェットCSSクラス
 		$this->tmpl->addVar("_widget", "css_class_suffix", $this->convertToDispString($cssClassSuffix));			// 追加CSSクラスサフィックス
+		$this->tmpl->addVar("_widget", "widget_css_id", $this->convertToDispString($widgetCssId));	// ウィジェット用CSS ID
 		
 		// パス等を設定
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
@@ -547,6 +550,8 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 //		$localeText['label_widget_common_config'] = $this->_('Common Config');			// 共通設定
 		$localeText['label_config_basic'] = $this->_('Basic');			// 基本
 		$localeText['label_config_other'] = $this->_('Others');			// その他
+		$localeText['label_config_view_control'] = $this->_('View Control');			// 表示制御
+		$localeText['label_config_style'] = $this->_('Style');			// スタイル
 		$localeText['label_adjust_widget'] = $this->_('Adjust Widget Title and Contents');			// ウィジェットタイトル、位置調整
 		$localeText['label_title'] = $this->_('Title');			// タイトル名
 		$localeText['label_visible'] = $this->_('Visible');			// 表示
@@ -581,8 +586,14 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_always'] = $this->_('Always');		// 常時表示
 		$localeText['label_login'] = $this->_('When user in login');		// ログイン時のみ表示
 		$localeText['label_no_login'] = $this->_('When user not in login');		// 非ログイン時のみ表示
-		$localeText['label_css_class'] = $this->_('Additional CSS Class');		// 追加CSSクラス
 		$localeText['label_update'] = $this->_('Update');// 更新
+		
+		$localeText['label_style'] = $this->_('Style');// スタイル
+		$localeText['label_widget'] = $this->_('Widget');		// ウィジェット
+		$localeText['label_element_id'] = $this->_('Element ID');		// エレメントID
+		$localeText['label_dynamic'] = $this->_('Dynamic');		// 動的
+		$localeText['label_css_class'] = $this->_('Additional CSS Class');		// 追加CSSクラス
+		
 		$this->setLocaleText($localeText);
 	}
 }

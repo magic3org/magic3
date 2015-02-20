@@ -4325,6 +4325,31 @@ class PageManager extends Core
 		return $widgetCount;
 	}
 	/**
+	 * ウィジェットのページ定義シリアル番号からウィジェットCSS IDを取得
+	 *
+	 * @param int $defSerial		ページ定義シリアル番号
+	 * @param string $pageId		ページID
+	 * @param string $subpage    	ページサブID
+	 * @param string $position		表示位置ID
+	 * @return string				CSSエレメントID
+	 */
+	function getWidgetCssId($defSerial, $pageId, $pageSubId, $position)
+	{
+		$elementId = '';
+		$ret = $this->db->getPageDef($pageId, $pageSubId, $position, $rows, 0/*定義セットIdデフォルト*/, true/*表示ウィジェットのみ*/);
+		if ($ret){
+			$rowCount = count($rows);
+			for ($i = 0; $i < $rowCount; $i++){
+				$row = $rows[$i];
+				if ($row['pd_serial'] == $defSerial){
+					$elementId = self::WIDGET_TAG_HEAD . $position . '_' . $i;				// ウィジェット識別用ユニークタグ
+					break;
+				}
+			}
+		}
+		return $elementId;
+	}
+	/**
 	 * ウィジェット情報取得
 	 *
 	 * 画面作成機能でウィジェット情報を取得するためのAjaxインターフェイス
