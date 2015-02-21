@@ -167,7 +167,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$readmoreUrl = $request->trimValueOf('item_readmore_url');			// もっと読むリンク先URL
 		$removeListMarker = $request->trimCheckedValueOf('item_remove_list_marker');		// リストのマーカーを削除するかどうか
 		
-		// 「その他」設定
+		// 「表示制御」設定
 		$shared = ($request->trimValueOf('item_shared') == 'on') ? 1 : 0;		// 共通属性があるかどうか
 		$viewControlType = $request->trimValueOf('item_view_type');			// 表示制御タイプ
 		$cssClassSuffix = $request->trimValueOf('item_css_class_suffix');			// 追加CSSクラスサフィックス
@@ -203,6 +203,9 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			if (empty($end_time)) $end_time = '00:00';		// 日付が入っているときは時間にデフォルト値を設定
 		}
 		if (!empty($end_time)) $end_time = $this->convertToProperTime($end_time, 1/*時分フォーマット*/);
+		
+		// 「スタイル」設定
+		$css = $request->trimValueOf('item_css');		// 任意CSS
 		
 		$act = $request->trimValueOf('act');
 		$replaceNew = false;		// データを再取得するかどうか
@@ -304,12 +307,37 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
+				// ##### CSS作成 #####
+				// CSS作成用のパラメータ取得
+				$rmListMarker = 0;
+				$generateCss = '';
+				$ret = $this->db->getPageDef($defSerial, $row);
+				if ($ret){
+					// その他のパラメータ
+					$paramStr = $row['pd_param'];
+					if (!empty($paramStr)){
+						$paramObj = unserialize($paramStr);
+						$rmListMarker = $paramObj->removeListMarker;
+						if ($rmListMarker) $generateCss .= self::REMOVE_LIST_MARKER_CSS;		// リストのマーカーを削除するCSS
+					}
+				}
+				$generateCss = rtrim($generateCss, "\r\n");
+				if (!empty($generateCss)) $generateCss .= M3_NL;
+				$generateCss .= $css;
+				
+				// その他のパラメータ
+				$paramObj = new stdClass;
+				$paramObj->removeListMarker = $rmListMarker;		// リストのマーカーを削除するかどうか
+				$paramObj->css		= $css;					// 入力されたCSSをそのまま残す
+				
 				// 追加CSSクラス
 				$updateData = array();
-				$updateData['pd_suffix'] = $cssClassSuffix;			// 追加CSSクラスサフィックス
+				$updateData['pd_suffix']	= $cssClassSuffix;			// 追加CSSクラスサフィックス
+				$updateData['pd_css']		= $generateCss;					// CSS
+				$updateData['pd_param']		= serialize($paramObj);
 				
 				// ページ定義を更新
-				$ret = $this->db->updatePageDefRecord($defSerial, $updateData);
+				if ($ret) $ret = $this->db->updatePageDefRecord($defSerial, $updateData);
 				
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Configration updated.'));		// データを更新しました
@@ -342,9 +370,9 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			$showReadmore = 0;		// もっと読むボタンを表示するかどうか
 			$readmoreTitle = '';			// もっと読むボタンタイトル
 			$readmoreUrl = '';			// もっと読むリンク先URL
-			$removeListMarker = '';		// リストのマーカーを削除するかどうか
+			$removeListMarker = 0;		// リストのマーカーを削除するかどうか
 		
-			// 「その他」設定
+			// 「表示制御」設定
 			$shared = 0;		// 共通属性があるかどうか
 			$viewControlType = 0;		// 表示制御タイプ
 			$this->exceptPageArray = array();		// 例外ページ
@@ -352,7 +380,10 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			$start_time = '';	// 公開期間開始時間
 			$end_date = '';	// 公開期間終了日
 			$end_time = '';	// 公開期間終了時間
+			
+			// 「スタイル」設定
 			$cssClassSuffix = '';			// 追加CSSクラスサフィックス
+			$css = '';
 				
 			$replaceNew = true;
 		}
@@ -401,6 +432,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				if (!empty($paramStr)){
 					$paramObj = unserialize($paramStr);
 					$removeListMarker = $paramObj->removeListMarker;		// リストのマーカーを削除するかどうか
+					$css = $paramObj->css;
 				}
 				
 				$shared = 0;		// 共通属性があるかどうか
@@ -410,8 +442,10 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$start_time = $this->convertToDispTime($row['pd_active_start_dt'], 1/*時分*/);	// 公開期間開始時間
 				$end_date = $this->convertToDispDate($row['pd_active_end_dt']);	// 公開期間終了日
 				$end_time = $this->convertToDispTime($row['pd_active_end_dt'], 1/*時分*/);	// 公開期間終了時間
-				$cssClassSuffix = $row['pd_suffix'];			// 追加CSSクラスサフィックス
 				
+				// 「スタイル」設定
+				$cssClassSuffix = $row['pd_suffix'];			// 追加CSSクラスサフィックス
+
 				//例外ページ
 				$this->exceptPageArray = array();
 				if (!empty($row['pd_except_sub_id'])) $this->exceptPageArray = explode(',', $row['pd_except_sub_id']);
@@ -475,6 +509,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "css_class", $this->convertToDispString($widgetOuterClass));	// ウィジェットCSSクラス
 		$this->tmpl->addVar("_widget", "css_class_suffix", $this->convertToDispString($cssClassSuffix));			// 追加CSSクラスサフィックス
 		$this->tmpl->addVar("_widget", "widget_css_id", $this->convertToDispString($widgetCssId));	// ウィジェット用CSS ID
+		$this->tmpl->addVar("_widget", "css", $this->convertToDispString($css));
 		
 		// パス等を設定
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
