@@ -524,6 +524,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "css_class", $this->convertToDispString($widgetOuterClass));	// ウィジェットCSSクラス
 		$this->tmpl->addVar("_widget", "css_class_suffix", $this->convertToDispString($cssClassSuffix));			// 追加CSSクラスサフィックス
 		$this->tmpl->addVar("_widget", "widget_css_id", $this->convertToDispString($widgetCssId));	// ウィジェット用CSS ID
+		$this->tmpl->addVar("_widget", "replace_tag", $this->convertToDispString(M3_TAG_START . M3_TAG_MACRO_WIDGET_CSS_ID . M3_TAG_END));
 		$this->tmpl->addVar("_widget", "css", $this->convertToDispString($css));
 		
 		// パス等を設定
@@ -667,6 +668,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_widget'] = $this->_('Widget');		// ウィジェット
 		$localeText['label_element_id'] = $this->_('Element ID');		// エレメントID
 		$localeText['label_dynamic'] = $this->_('Dynamic');		// 動的
+		$localeText['label_replace_tag'] = $this->_('Replace Tag');		// 置換タグ
 		$localeText['label_css_class'] = $this->_('Additional CSS Class');		// 追加CSSクラス
 		
 		$this->setLocaleText($localeText);

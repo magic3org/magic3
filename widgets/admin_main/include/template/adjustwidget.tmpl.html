@@ -261,17 +261,18 @@ $(function(){
     <tbody>
     <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_WIDGET_CSS_ID}>{_LC_LABEL_WIDGET}<br />{_LC_LABEL_ELEMENT_ID}({_LC_LABEL_DYNAMIC})</span></th>
-	    <td><div class="form-control-static m3config_item">{WIDGET_CSS_ID}</div>
-	    </td>
+	    <td style="width:200px;"><div class="form-control-static m3config_item">{WIDGET_CSS_ID}</div></td>
+	    <th>{_LC_LABEL_REPLACE_TAG}</th>
+	    <td><div class="form-control-static m3config_item">{REPLACE_TAG}</div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_CSS_CLASS}>{_LC_LABEL_CSS_CLASS}</span></th>
-	    <td><div class="form-control-static col-sm-3 m3config_item">{CSS_CLASS}_</div><div class="col-sm-3 m3config_item"><input type="text" name="item_css_class_suffix" class="form-control" value="{CSS_CLASS_SUFFIX}" size="10" maxlength="10" /></div>
+	    <td colspan="3"><div class="form-control-static col-sm-3 m3config_item">{CSS_CLASS}_</div><div class="col-sm-3 m3config_item"><input type="text" name="item_css_class_suffix" class="form-control" value="{CSS_CLASS_SUFFIX}" size="10" maxlength="10" /></div>
 	    </td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_CSS}>{_LC_LABEL_CSS}</span></th>
-	    <td class="ckeditor"><textarea name="item_css" class="form-control" rows="3">{CSS}</textarea></td>
+	    <td class="ckeditor" colspan="3"><textarea name="item_css" class="form-control" rows="10">{CSS}</textarea></td>
 	</tr>
     </tbody>
 </table>
