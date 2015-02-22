@@ -170,6 +170,7 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		
 		// 記事へのリンク
 		$url = $this->defaultUrl . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id'];
+		$escapedLinkUrl = $this->convertUrlToHtmlEntity($this->getUrl($url, true/*リンク用*/));
 
 		// オプション項目
 		$optionStr = '';
@@ -191,10 +192,11 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 			if ($this->imageHeight > 0) $style .= 'height:' . $this->imageHeight . 'px;';
 			if (!empty($style)) $style = 'style="' . $style . '" ';
 			$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $titleStr . '" title="' . $titleStr . '" ' . $style . '/>';
+			$imageTag = '<div style="float:left;"><a href="' . $escapedLinkUrl . '">' . $imageTag . '</a></div>';
 		}
 		
 		$row = array(
-			'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($url, true/*リンク用*/)),		// リンク
+			'link_url' => $escapedLinkUrl,		// リンク
 			'name' => $this->convertToDispString($title),			// タイトル
 			'option'	=> $optionStr,								// オプション項目
 			'image'		=> $imageTag								// 画像

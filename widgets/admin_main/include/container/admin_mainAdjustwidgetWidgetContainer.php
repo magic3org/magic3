@@ -236,7 +236,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 
 				// ##### CSS作成 #####
 				$generateCss = '';
-				if ($paramRemoveListMarker) $generateCss .= self::REMOVE_LIST_MARKER_CSS;		// リストのマーカーを削除するCSS
+				if ($removeListMarker) $generateCss .= self::REMOVE_LIST_MARKER_CSS;		// リストのマーカーを削除するCSS
 				$generateCss = rtrim($generateCss, "\r\n");
 				if (!empty($generateCss)) $generateCss .= M3_NL;
 				$generateCss .= $paramCss;			// 保存値を使用
