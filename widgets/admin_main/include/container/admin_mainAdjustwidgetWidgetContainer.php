@@ -219,6 +219,9 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
+				// その他のパラメータオブジェクトの設定値を取得
+				list($paramRemoveListMarker, $paramCss) = $this->getParamObjValue($defSerial);
+				
 				// インナーdiv用CSSを作成
 				$style = '';
 				if (!empty($this->align)) $style .= 'text-align:' . $this->align . ';';
@@ -227,15 +230,23 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				if (!empty($marginLeft)) $style .= 'padding-left:' . $marginLeft . 'px;';
 				if (!empty($marginRight)) $style .= 'padding-right:' . $marginRight . 'px;';
 				
+				// 外部出力用CSS作成
+//				$exportCss = '';
+//				if ($removeListMarker) $exportCss = self::REMOVE_LIST_MARKER_CSS;
+
+				// ##### CSS作成 #####
+				$generateCss = '';
+				if ($paramRemoveListMarker) $generateCss .= self::REMOVE_LIST_MARKER_CSS;		// リストのマーカーを削除するCSS
+				$generateCss = rtrim($generateCss, "\r\n");
+				if (!empty($generateCss)) $generateCss .= M3_NL;
+				$generateCss .= $paramCss;			// 保存値を使用
+				
 				// その他のパラメータ
 				$paramObj = new stdClass;
 				$paramObj->removeListMarker = $removeListMarker;		// リストのマーカーを削除するかどうか
+				$paramObj->css				= $paramCss;				// 保存値を使用
 				
-				// 外部出力用CSS作成
-				$exportCss = '';
-				if ($removeListMarker) $exportCss = self::REMOVE_LIST_MARKER_CSS;
-				
-				$ret = $this->db->updatePageDefInfo($defSerial, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, serialize($paramObj), $exportCss);
+				$ret = $this->db->updatePageDefInfo($defSerial, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, serialize($paramObj), $generateCss);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Configration updated.'));		// データを更新しました
 					$replaceNew = true;			// データを再取得
@@ -307,10 +318,11 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				// ##### CSS作成 #####
+				// その他のパラメータオブジェクトの設定値を取得
+				list($paramRemoveListMarker, $paramCss) = $this->getParamObjValue($defSerial);
+				
 				// CSS作成用のパラメータ取得
-				$rmListMarker = 0;
-				$generateCss = '';
+/*				$rmListMarker = 0;
 				$ret = $this->db->getPageDef($defSerial, $row);
 				if ($ret){
 					// その他のパラメータ
@@ -318,17 +330,20 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 					if (!empty($paramStr)){
 						$paramObj = unserialize($paramStr);
 						$rmListMarker = $paramObj->removeListMarker;
-						if ($rmListMarker) $generateCss .= self::REMOVE_LIST_MARKER_CSS;		// リストのマーカーを削除するCSS
 					}
-				}
+				}*/
+				
+				// ##### CSS作成 #####
+				$generateCss = '';
+				if ($paramRemoveListMarker) $generateCss .= self::REMOVE_LIST_MARKER_CSS;		// リストのマーカーを削除するCSS
 				$generateCss = rtrim($generateCss, "\r\n");
 				if (!empty($generateCss)) $generateCss .= M3_NL;
 				$generateCss .= $css;
 				
 				// その他のパラメータ
 				$paramObj = new stdClass;
-				$paramObj->removeListMarker = $rmListMarker;		// リストのマーカーを削除するかどうか
-				$paramObj->css		= $css;					// 入力されたCSSをそのまま残す
+				$paramObj->removeListMarker = $paramRemoveListMarker;		// リストのマーカーを削除するかどうか
+				$paramObj->css				= $css;					// 入力されたCSSをそのまま残す
 				
 				// 追加CSSクラス
 				$updateData = array();
@@ -337,7 +352,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$updateData['pd_param']		= serialize($paramObj);
 				
 				// ページ定義を更新
-				if ($ret) $ret = $this->db->updatePageDefRecord($defSerial, $updateData);
+				$ret = $this->db->updatePageDefRecord($defSerial, $updateData);
 				
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Configration updated.'));		// データを更新しました
@@ -655,6 +670,28 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_css_class'] = $this->_('Additional CSS Class');		// 追加CSSクラス
 		
 		$this->setLocaleText($localeText);
+	}
+	/**
+	 * ページ定義からパラメータオブジェクトに格納している値を取得
+	 *
+	 * @param int $defSerial		ページ定義のシリアル番号
+	 * @return array				連想配列で値(リストのマーカーを削除するかどうか、CSS)を返す
+	 */
+	function getParamObjValue($defSerial)
+	{
+		$removeListMarker = 0;
+		$css = '';
+		$ret = $this->db->getPageDef($defSerial, $row);
+		if ($ret){
+			// その他のパラメータ
+			$paramStr = $row['pd_param'];
+			if (!empty($paramStr)){
+				$paramObj = unserialize($paramStr);
+				$removeListMarker = $paramObj->removeListMarker;
+				$css = $paramObj->css;
+			}
+		}
+		return array($removeListMarker, $css);
 	}
 }
 ?>
