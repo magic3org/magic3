@@ -75,7 +75,7 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _postAssign($request, &$param)
 	{
-		// 表示画面を決定
+/*		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		
 		// パンくずリストの作成
@@ -106,7 +106,10 @@ class admin_blog_archive_menuWidgetContainer extends BaseAdminWidgetContainer
 									'submenu'	=> array()
 								)
 							);
-		$this->gPage->setAdminSubNavbarDef($navbarDef);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);*/
+		
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 	/**
 	 * テンプレートにデータ埋め込む
