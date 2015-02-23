@@ -194,11 +194,13 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 			$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $titleStr . '" title="' . $titleStr . '" ' . $style . '/>';
 			$imageTag = '<div style="float:left;"><a href="' . $escapedLinkUrl . '">' . $imageTag . '</a></div>';
 		}
+		// 記事名
+		$nameTag = '<a href="' . $escapedLinkUrl . '"><span>' . $this->convertToDispString($title) . '</span></a>';
+		$nameTag .= $optionStr;
+		if ($this->showImage) $nameTag = '<div>' . $nameTag . '</div>';
 		
 		$row = array(
-			'link_url' => $escapedLinkUrl,		// リンク
-			'name' => $this->convertToDispString($title),			// タイトル
-			'option'	=> $optionStr,								// オプション項目
+			'name' 		=> $nameTag,			// タイトル
 			'image'		=> $imageTag								// 画像
 		);
 		$this->tmpl->addVars('itemlist', $row);
