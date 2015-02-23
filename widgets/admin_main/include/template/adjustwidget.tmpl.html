@@ -148,6 +148,9 @@ $(function(){
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_top_content', 100, false);
 	m3SetWysiwygEditor('item_bottom_content', 100, false);
+	
+	// 入力制限
+	$(".pixelsize").numeric({ decimal: false });
 });
 //]]>
 </script>
@@ -168,7 +171,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_MARGIN}>{_LC_LABEL_MARGIN}</span></th>
-	    <td><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_TOP}</div><div class="col-sm-1 m3config_item"><input type="text" name="item_top" class="form-control" size="3" maxlength="3" value="{TOP}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_BOTTOM}</div><div class="col-sm-1 m3config_item"><input type="text" name="item_bottom" class="form-control" size="3" maxlength="3" value="{BOTTOM}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_LEFT}</div><div class="col-sm-1 m3config_item"><input type="text" name="item_left" class="form-control" size="3" maxlength="3" value="{LEFT}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_RIGHT}</div><div class="col-sm-1 m3config_item"><input type="text" name="item_right" class="form-control" size="3" maxlength="3" value="{RIGHT}" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
+	    <td><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_TOP}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_top" class="form-control pixelsize" maxlength="4" value="{TOP}" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_BOTTOM}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_bottom" class="form-control pixelsize" maxlength="4" value="{BOTTOM}" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_LEFT}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_left" class="form-control pixelsize" maxlength="4" value="{LEFT}" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_RIGHT}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_right" class="form-control pixelsize" maxlength="4" value="{RIGHT}" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
 	    </td>
 	</tr>
 	<tr>

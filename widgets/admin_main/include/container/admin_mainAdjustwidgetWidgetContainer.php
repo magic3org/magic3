@@ -211,10 +211,10 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 行更新のとき
 			// 入力チェック
-			$this->checkNumeric($marginTop, $this->_('Margin Top'), true);		// マージン(上)
-			$this->checkNumeric($marginBottom, $this->_('Margin Bottom'), true);		// マージン(下)
-			$this->checkNumeric($marginLeft, $this->_('Margin Left'), true);		// マージン(左)
-			$this->checkNumeric($marginRight, $this->_('Margin Right'), true);		// マージン(右)
+			$this->checkSingleByte($marginTop, $this->_('Margin Top'), true);		// マージン(上)
+			$this->checkSingleByte($marginBottom, $this->_('Margin Bottom'), true);		// マージン(下)
+			$this->checkSingleByte($marginLeft, $this->_('Margin Left'), true);		// マージン(左)
+			$this->checkSingleByte($marginRight, $this->_('Margin Right'), true);		// マージン(右)
 			$this->checkInput($widgetId, $this->_('Widget ID'));		// ウィジェットID
 			
 			// エラーなしの場合は、データを更新

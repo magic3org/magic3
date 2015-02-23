@@ -276,8 +276,9 @@ class PageManager extends Core
 			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);// 管理機能用のCSS	
 			
 			// Javascriptライブラリ
-			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
-			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// 管理パネル用スクリプト追加
+			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用
+			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_EASING);		// 管理パネル用
+			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_NUMERIC);		// 入力制限プラグイン
 //			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
 		}
 		
