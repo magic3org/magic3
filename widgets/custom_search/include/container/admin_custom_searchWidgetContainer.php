@@ -8,7 +8,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2014 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -51,6 +51,23 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 										array(	'name' => '複数選択',	'value' => 'multi'));
 	}
 	/**
+	 * ウィジェット初期化
+	 *
+	 * 以下のパターンで通常のウィジェット出力と異なる処理を行う場合の初期設定
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		$task = $request->trimValueOf('task');
+		if ($task == 'list'){		// 一覧画面
+			// テンプレート処理を変更
+			$this->replaceAssignTemplate(self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST);		// 設定一覧(基本)
+		}
+	}
+	/**
 	 * テンプレートファイルを設定
 	 *
 	 * _assign()でデータを埋め込むテンプレートファイルのファイル名を返す。
@@ -86,6 +103,20 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		} else {			// 詳細設定画面
 			return $this->createDetail($request);
 		}
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 	/**
 	 * 詳細画面作成

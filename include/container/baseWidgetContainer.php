@@ -45,11 +45,17 @@ class BaseWidgetContainer extends Core
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
 	protected $_linkPageCount;						// ページリンク作成用ページ総数
 	protected $_renderType;							// 描画出力タイプ
+	protected $_assignTemplate;						// テンプレート処理置き換えを使用するかどうか
+	protected $_assignTemplate_method;				// テンプレート処理置き換え用(_assign()メソッド名)
+	protected $_assignTemplate_filename;			// テンプレート処理置き換え用(テンプレートファイル)
+	
 	// POST,GETパラメータ
 	protected $_defConfigId;					// ページ定義のウィジェット定義ID
 	protected $_defSerial;						// ページ定義のレコードシリアル番号
 	protected $_backUrl;						// 戻り先URL
 	protected $_openBy;							// ウィンドウオープンタイプ
+	protected $_paramObj;						// パラメータオブジェクト
+	protected $_serialArray;					// シリアル番号
 	const PASSWORD_LENGTH = 8;		// パスワード長
 	const HELP_HEAD = '_help_';		// ヘルプ埋め込み用タグのヘッダ部
 	const LOCAL_TEXT_HEAD = '_lc_';		// ローカライズテキストタグのヘッダ部
@@ -61,7 +67,15 @@ class BaseWidgetContainer extends Core
 	const MSG_APP_ERR  = 1;		// アプリケーションエラー
 	const MSG_USER_ERR = 2;		// ユーザ操作エラー
 	const MSG_GUIDANCE = 3;		// ガイダンス
-			
+	
+	// テンプレート処理置き換え用
+	// 出力パターン
+	const ASSIGN_TEMPLATE_BASIC_CONFIG_LIST = 'BASIC_CONFIG_LIST';			// 設定一覧(基本)
+	// メソッド名
+	const ASSIGN_TEMPLATE_METHOD_BASIC_CONFIG_LIST		= 'assignTemplate_createList';					// テンプレート処理置き換え用(_assign())
+	// テンプレートファイル名
+	const ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST	= 'admin_list.tmpl.html';			// 設定一覧(基本)
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -132,7 +146,12 @@ class BaseWidgetContainer extends Core
 		// POST,GETパラメータ取得
 		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 				
-		if (method_exists($this, '_setTemplate')){
+		// ##### 初期処理 #####
+		// 組み込みのウィジェットメイン処理を行う場合は、_init()で設定を行う
+		if (method_exists($this, '_init')) $this->_init($request);
+		
+		// ##### ウィジェットメイン処理 #####
+		if (method_exists($this, '_setTemplate') || $this->_assignTemplate){			// テンプレートがあるか、テンプレート処理置き換えを使用するとき
 			// テンプレートファイル名を取得
 			// $paramは、任意使用パラメータ
 			$templateFile = $this->_setTemplate($request, $param);
@@ -167,8 +186,12 @@ class BaseWidgetContainer extends Core
 			if (method_exists($this, '_preAssign')) $this->_preAssign($request, $param);
 			
 			// 各ウィジェットごとのテンプレート処理、テンプレートを使用しないときは出力処理(Ajax等)
-			if (method_exists($this, '_assign')){
-				$this->_assign($request, $param);
+			if (method_exists($this, '_assign') || $this->_assignTemplate){
+				if ($this->_assignTemplate){		// テンプレート処理置き換えを使用
+					if (is_callable($this->_assignTemplate_method)) call_user_func($this->_assignTemplate_method, $request, $param);
+				} else {
+					$this->_assign($request, $param);
+				}
 				
 				// 管理画面へのアクセスの場合は管理用POST値を設定
 				if ($isAdminDirAccess){
@@ -454,6 +477,22 @@ class BaseWidgetContainer extends Core
 		
 		// テンプレートファイルを再設定
 		$this->tmpl->readTemplatesFromFile($templateFilename);
+	}
+	/**
+	 * テンプレート処理置き換え
+	 *
+	 * @param string $outputType			テンプレート処理タイプ
+	 * @return 								なし
+	 */
+	function replaceAssignTemplate($outputType)
+	{
+		switch ($outputType){
+		case self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST:		// 設定一覧(基本)
+			$this->_assignTemplate			= true;		// テンプレート処理置き換えを使用
+			$this->_assignTemplate_method	= array($this, self::ASSIGN_TEMPLATE_METHOD_BASIC_CONFIG_LIST);					// テンプレート処理置き換え用(_assign())
+			$this->_assignTemplate_filename = self::ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST;				// テンプレート処理置き換え用(ファイル名)
+			break;
+		}
 	}
 	/**
 	 * 遷移前のタスクを戻り先URLとするに設定
@@ -3179,6 +3218,87 @@ class BaseWidgetContainer extends Core
 	function loadCKEditorCssFiles($url)
 	{
 		$this->gPage->getCssFilesByHttp($url);
+	}
+	
+	/**
+	 * テンプレート処理置き換え用画面作成メソッド(一覧画面作成)
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function assignTemplate_createList($request)
+	{
+		// ページ定義IDとページ定義のレコードシリアル番号を取得
+		$this->startPageDefParam($defSerial, $defConfigId, $this->_paramObj);
+		
+		$userId		= $this->gEnv->getCurrentUserId();
+		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+		$act = $request->trimValueOf('act');
+		
+		if ($act == 'delete'){		// メニュー項目の削除
+			$listedItem = explode(',', $request->trimValueOf('seriallist'));
+			$delItems = array();
+			for ($i = 0; $i < count($listedItem); $i++){
+				// 項目がチェックされているかを取得
+				$itemName = 'item' . $i . '_selected';
+				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
+				
+				if ($itemValue){		// チェック項目
+					$delItems[] = $listedItem[$i];
+				}
+			}
+			if (count($delItems) > 0){
+				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->_paramObj, $delItems);
+				if ($ret){		// データ削除成功のとき
+					$this->setGuidanceMsg('データを削除しました');
+				} else {
+					$this->setAppErrorMsg('データ削除に失敗しました');
+				}
+			}
+		}
+		// 定義一覧作成
+		$this->assignTemplate_createItemList();
+		
+		if (!empty($this->_serialArray)) $this->tmpl->addVar("_widget", "serial_list", implode($this->_serialArray, ','));// 表示項目のシリアル番号を設定
+		
+		// ページ定義IDとページ定義のレコードシリアル番号を更新
+		$this->endPageDefParam($defSerial, $defConfigId, $this->_paramObj);
+	}
+	/**
+	 * テンプレート処理置き換え用画面作成メソッド(定義一覧作成)
+	 *
+	 * @return なし						
+	 */
+	function assignTemplate_createItemList()
+	{
+		for ($i = 0; $i < count($this->_paramObj); $i++){
+			$id			= $this->_paramObj[$i]->id;// 定義ID
+			$targetObj	= $this->_paramObj[$i]->object;
+			$name = $targetObj->name;// 定義名
+		
+			// 使用数
+			$defCount = 0;
+			if (!empty($id)){
+				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
+			}
+			$operationDisagled = '';
+			if ($defCount > 0) $operationDisagled = 'disabled';
+			
+			$row = array(
+				'index' => $i,
+				'id' => $id,
+				'ope_disabled' => $operationDisagled,			// 選択可能かどうか
+				'name' => $this->convertToDispString($name),		// 名前
+				'def_count' => $defCount							// 使用数
+			);
+			$this->tmpl->addVars('itemlist', $row);
+			$this->tmpl->parseTemplate('itemlist', 'a');
+			
+			// シリアル番号を保存
+			$this->_serialArray[] = $id;
+		}
+		// 一覧部の表示制御
+		$this->setListTemplateVisibility('itemlist');
 	}
 }
 ?>
