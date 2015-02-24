@@ -69,6 +69,7 @@ class BaseWidgetContainer extends Core
 	const MSG_GUIDANCE = 3;		// ガイダンス
 	
 	// テンプレート処理置き換え用
+	const ASSIGN_TEMPLATE_DIR = '/widgets/template';		// // テンプレート読み込みディレクトリ
 	// 出力パターン
 	const ASSIGN_TEMPLATE_BASIC_CONFIG_LIST = 'BASIC_CONFIG_LIST';			// 設定一覧(基本)
 	// メソッド名
@@ -154,12 +155,16 @@ class BaseWidgetContainer extends Core
 		if (method_exists($this, '_setTemplate') || $this->_assignTemplate){			// テンプレートがあるか、テンプレート処理置き換えを使用するとき
 			// テンプレートファイル名を取得
 			// $paramは、任意使用パラメータ
-			$templateFile = $this->_setTemplate($request, $param);
+			if ($this->_assignTemplate){
+				$templateFile = $this->_assignTemplate_filename;
+			} else {
+				$templateFile = $this->_setTemplate($request, $param);
+			}
 			
 			// テンプレートファイル名が空文字列のときは、テンプレートライブラリを使用しない
 			if (!empty($templateFile)){
 				// テンプレートオブジェクト作成
-				$this->__setTemplate();
+				$this->__setTemplate($this->_assignTemplate);
 				
 				// テンプレートファイルを設定
 				$this->tmpl->readTemplatesFromFile($templateFile);
@@ -363,8 +368,11 @@ class BaseWidgetContainer extends Core
 	}
 	/**
 	 * テンプレートファイルの設定
+	 * 
+	 * @param bool $useSystemTemplate		システムの標準テンプレートを使用するかどうか
+	 * @return 								なし
 	 */
-	function __setTemplate()
+	function __setTemplate($useSystemTemplate = false)
 	{
 		// テンプレートオブジェクト作成
 		$this->tmpl = new PatTemplate();
@@ -372,14 +380,19 @@ class BaseWidgetContainer extends Core
 		// ##### テンプレート読み込みディレクトリ #####
 		$dirArray = array();
 		
-		// カレントウィジェットのディレクトリを追加
-		$dir = $this->gEnv->getCurrentWidgetTemplatePath();
-		if (file_exists($dir)) $dirArray[] = $dir;
-		
-		// 代替処理ウィジェットが設定されている場合はディレクトリを追加
-		if (!empty($this->_defaultWidgetId)){
-			$dir = $this->gEnv->getWidgetsPath() . '/' . $this->_defaultWidgetId . '/include/template';				// 代替処理用ウィジェットID
+		if ($useSystemTemplate){	// システムの標準テンプレートを使用する場合
+			$dir = $this->gEnv->getPrivateResourcePath() . self::ASSIGN_TEMPLATE_DIR;
 			if (file_exists($dir)) $dirArray[] = $dir;
+		} else {
+			// カレントウィジェットのディレクトリを追加
+			$dir = $this->gEnv->getCurrentWidgetTemplatePath();
+			if (file_exists($dir)) $dirArray[] = $dir;
+		
+			// 代替処理ウィジェットが設定されている場合はディレクトリを追加
+			if (!empty($this->_defaultWidgetId)){
+				$dir = $this->gEnv->getWidgetsPath() . '/' . $this->_defaultWidgetId . '/include/template';				// 代替処理用ウィジェットID
+				if (file_exists($dir)) $dirArray[] = $dir;
+			}
 		}
 
 		$this->tmpl->setRoot($dirArray);

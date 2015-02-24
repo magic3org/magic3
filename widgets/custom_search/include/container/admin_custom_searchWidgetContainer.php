@@ -63,7 +63,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	{
 		$task = $request->trimValueOf('task');
 		if ($task == 'list'){		// 一覧画面
-			// テンプレート処理を変更
+			// テンプレート処理を変更。_setTemplate()、_assign()はキャンセル。
 			$this->replaceAssignTemplate(self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST);		// 設定一覧(基本)
 		}
 	}
@@ -80,11 +80,11 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return 'admin_list.tmpl.html';
-		} else {			// 一覧画面
+//		if ($task == 'list'){		// 一覧画面
+//			return 'admin_list.tmpl.html';
+//		} else {			// 一覧画面
 			return 'admin.tmpl.html';
-		}
+//		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -97,12 +97,12 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return $this->createList($request);
-		} else {			// 詳細設定画面
+//		$task = $request->trimValueOf('task');
+//		if ($task == 'list'){		// 一覧画面
+//			return $this->createList($request);
+//		} else {			// 詳細設定画面
 			return $this->createDetail($request);
-		}
+//		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -439,7 +439,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param								なし
 	 */
-	function createList($request)
+/*	function createList($request)
 	{
 		// ページ定義IDとページ定義のレコードシリアル番号を取得
 		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
@@ -476,13 +476,13 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
-	}
+	}*/
 	/**
 	 * 定義一覧作成
 	 *
 	 * @return なし						
 	 */
-	function createItemList()
+/*	function createItemList()
 	{
 		for ($i = 0; $i < count($this->paramObj); $i++){
 			$id = $this->paramObj[$i]->id;// 定義ID
@@ -507,7 +507,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			// シリアル番号を保存
 			$this->serialArray[] = $id;
 		}
-	}
+	}*/
 	/**
 	 * 検索テンプレートデータ作成処理コールバック
 	 *
