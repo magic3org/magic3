@@ -48,14 +48,15 @@ class BaseWidgetContainer extends Core
 	protected $_assignTemplate;						// テンプレート処理置き換えを使用するかどうか
 	protected $_assignTemplate_method;				// テンプレート処理置き換え用(_assign()メソッド名)
 	protected $_assignTemplate_filename;			// テンプレート処理置き換え用(テンプレートファイル)
-	
 	// POST,GETパラメータ
 	protected $_defConfigId;					// ページ定義のウィジェット定義ID
 	protected $_defSerial;						// ページ定義のレコードシリアル番号
 	protected $_backUrl;						// 戻り先URL
 	protected $_openBy;							// ウィンドウオープンタイプ
-	protected $_paramObj;						// パラメータオブジェクト
-	protected $_serialArray;					// シリアル番号
+	// テンプレート置き換え処理用
+	protected $_localParamObj;					// パラメータオブジェクト
+	protected $_localSerialArray;					// シリアル番号
+	
 	const PASSWORD_LENGTH = 8;		// パスワード長
 	const HELP_HEAD = '_help_';		// ヘルプ埋め込み用タグのヘッダ部
 	const LOCAL_TEXT_HEAD = '_lc_';		// ローカライズテキストタグのヘッダ部
@@ -3242,7 +3243,7 @@ class BaseWidgetContainer extends Core
 	function assignTemplate_createList($request)
 	{
 		// ページ定義IDとページ定義のレコードシリアル番号を取得
-		$this->startPageDefParam($defSerial, $defConfigId, $this->_paramObj);
+		$this->startPageDefParam($defSerial, $defConfigId, $this->_localParamObj);
 		
 		$userId		= $this->gEnv->getCurrentUserId();
 		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
@@ -3261,7 +3262,7 @@ class BaseWidgetContainer extends Core
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->_paramObj, $delItems);
+				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->_localParamObj, $delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
@@ -3272,10 +3273,10 @@ class BaseWidgetContainer extends Core
 		// 定義一覧作成
 		$this->assignTemplate_createItemList();
 		
-		if (!empty($this->_serialArray)) $this->tmpl->addVar("_widget", "serial_list", implode($this->_serialArray, ','));// 表示項目のシリアル番号を設定
+		if (!empty($this->_localSerialArray)) $this->tmpl->addVar("_widget", "serial_list", implode($this->_localSerialArray, ','));// 表示項目のシリアル番号を設定
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
-		$this->endPageDefParam($defSerial, $defConfigId, $this->_paramObj);
+		$this->endPageDefParam($defSerial, $defConfigId, $this->_localParamObj);
 	}
 	/**
 	 * テンプレート処理置き換え用画面作成メソッド(定義一覧作成)
@@ -3284,9 +3285,9 @@ class BaseWidgetContainer extends Core
 	 */
 	function assignTemplate_createItemList()
 	{
-		for ($i = 0; $i < count($this->_paramObj); $i++){
-			$id			= $this->_paramObj[$i]->id;// 定義ID
-			$targetObj	= $this->_paramObj[$i]->object;
+		for ($i = 0; $i < count($this->_localParamObj); $i++){
+			$id			= $this->_localParamObj[$i]->id;// 定義ID
+			$targetObj	= $this->_localParamObj[$i]->object;
 			$name = $targetObj->name;// 定義名
 		
 			// 使用数
@@ -3308,7 +3309,7 @@ class BaseWidgetContainer extends Core
 			$this->tmpl->parseTemplate('itemlist', 'a');
 			
 			// シリアル番号を保存
-			$this->_serialArray[] = $id;
+			$this->_localSerialArray[] = $id;
 		}
 		// 一覧部の表示制御
 		$this->setListTemplateVisibility('itemlist');
