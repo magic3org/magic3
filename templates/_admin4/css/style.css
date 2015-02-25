@@ -639,7 +639,12 @@ span[rel="m3help"] { cursor: default; }
 /*	padding-right: 0;*/
 	padding-right: 5px;
 }
-
+/* インライン項目 */
+.m3config_inline_item {
+	padding-left: 0;
+	padding-right: 20px;
+	display:inline-block;
+}
 .m3config_sortable_box li {
 	cursor: move;
 }
