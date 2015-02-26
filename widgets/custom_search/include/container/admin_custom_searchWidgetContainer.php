@@ -30,10 +30,12 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	private $fieldInfoArray = array();			// 項目定義
 	private $categoryArray;		// カテゴリ種別メニュー
 	private $selTypeArray;	// 項目選択タイプメニュー
+	private $imageType;		// 選択中の画像タイプ
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const MESSAGE_NO_USER_CATEGORY = 'カテゴリが登録されていません';			// ユーザ作成コンテンツ用のカテゴリが登録されていないときのメッセージ
 	const DEFAULT_SEARCH_COUNT	= 20;				// デフォルトの検索結果表示数
 	const DEFAULT_RESULT_LENGTH = 200;			// 検索結果コンテンツの文字列最大長
+	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	
 	/**
 	 * コンストラクタ
@@ -129,12 +131,17 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		// ページ定義IDとページ定義のレコードシリアル番号を取得
 		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
 		
+		// パラメータ初期化
 		$userId		= $this->gEnv->getCurrentUserId();
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+		
+		// 入力値を取得(共通)
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
-
-		// 入力値を取得
+		$this->configId = $request->trimValueOf('item_id');		// 定義ID
+		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
+		
+		// 入力値を取得(その他)
 		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
 		$searchTemplate = $request->valueOf('item_html');		// 検索用テンプレート
 		$resultCount	= $request->valueOf('item_result_count');			// 表示項目数
@@ -142,8 +149,10 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		$this->searchTextId = $request->trimValueOf('item_search_text');		// 検索用テキストフィールドのタグID
 		$this->searchButtonId = $request->trimValueOf('item_search_button');		// 検索用ボタンのタグID
 		$this->searchResetId = $request->trimValueOf('item_search_reset');		// 検索エリアリセットボタンのタグID
-		$this->configId = $request->trimValueOf('item_id');		// 定義ID
-		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
+		$showImage		= $request->trimCheckedValueOf('item_show_image');		// 画像を表示するかどうか
+		$this->imageType	= $request->trimValueOf('item_image_type');				// 画像タイプ
+		$imageWidth		= $request->trimIntValueOf('item_image_width', '0');			// 画像幅(空文字列をOKとする)
+		$imageHeight	= $request->trimIntValueOf('item_image_height', '0');			// 画像高さ(空文字列をOKとする)
 
 		// 検索対象
 		$isTargetContent = ($request->trimValueOf('item_target_content') == 'on') ? 1 : 0;		// 汎用コンテンツを検索対象とするかどうか
@@ -207,6 +216,10 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->name	= $name;// 表示名
 				$newObj->resultCount	= $resultCount;// 表示件数
 				$newObj->resultLength	= $resultLength;			// テキストサイズ
+				$newObj->showImage		= $showImage;		// 画像を表示するかどうか
+				$newObj->imageType		= $this->imageType;				// 画像タイプ
+				$newObj->imageWidth		= intval($imageWidth);			// 画像幅
+				$newObj->imageHeight		= intval($imageHeight);			// 画像高さ
 				$newObj->searchTemplate = $searchTemplate;		// 検索用テンプレート
 				$newObj->searchTextId = $this->searchTextId;		// 検索用テキストフィールドのタグID
 				$newObj->searchButtonId = $this->searchButtonId;		// 検索用ボタンのタグID
@@ -245,6 +258,10 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 					// ウィジェットオブジェクト更新
 					$targetObj->resultCount	= $resultCount;// 表示件数
 					$targetObj->resultLength	= $resultLength;			// テキストサイズ
+					$targetObj->showImage		= $showImage;		// 画像を表示するかどうか
+					$targetObj->imageType		= $this->imageType;				// 画像タイプ
+					$targetObj->imageWidth		= intval($imageWidth);			// 画像幅
+					$targetObj->imageHeight		= intval($imageHeight);			// 画像高さ
 					$targetObj->searchTemplate	= $searchTemplate;		// 検索用テンプレート
 					$targetObj->searchTextId = $this->searchTextId;		// 検索用テキストフィールドのタグID
 					$targetObj->searchButtonId = $this->searchButtonId;		// 検索用ボタンのタグID
@@ -274,9 +291,6 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			$replaceNew = true;			// データ再取得
 		}
 		
-		// 設定項目選択メニュー作成
-		$this->createItemMenu();
-		
 		// 表示用データを取得
 		if (empty($this->configId)){		// 新規登録の場合
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
@@ -284,6 +298,10 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				$name = $this->createDefaultName();			// デフォルト登録項目名
 				$resultCount	= self::DEFAULT_SEARCH_COUNT;			// 表示項目数
 				$resultLength	= self::DEFAULT_RESULT_LENGTH;			// テキストサイズ
+				$showImage		= 0;		// 画像を表示するかどうか
+				$this->imageType	= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
+				$imageWidth		= 0;			// 画像幅
+				$imageHeight	= 0;			// 画像高さ
 				$this->fieldInfoArray = array();			// 項目定義
 				
 				// デフォルトの検索テンプレート作成
@@ -311,6 +329,10 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 					$resultCount	= $targetObj->resultCount;			// 表示項目数
 					$resultLength	= intval($targetObj->resultLength);			// テキストサイズ
 					if ($resultLength <= 0) $resultLength = self::DEFAULT_RESULT_LENGTH;			// テキストサイズ
+					$showImage			= $targetObj->showImage;		// 画像を表示するかどうか
+					$this->imageType	= $targetObj->imageType;				// 画像タイプ
+					$imageWidth			= intval($targetObj->imageWidth);			// 画像幅
+					$imageHeight		= intval($targetObj->imageHeight);			// 画像高さ
 					$this->searchTextId = $targetObj->searchTextId;		// 検索用テキストフィールドのタグID
 					$this->searchButtonId = $targetObj->searchButtonId;		// 検索用ボタンのタグID
 					$this->searchResetId = $targetObj->searchResetId;		// 検索エリアリセットボタンのタグID
@@ -331,6 +353,13 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
 			if (!empty($defConfigId) && !empty($defSerial)) $this->tmpl->addVar("_widget", "id_disabled", 'disabled');
 		}
+		
+		// 設定項目選択メニュー作成
+		$this->createItemMenu();
+		
+		// 画像タイプ選択メニュー作成
+		$this->createpImageTypeList();
+		
 		// カテゴリ情報取得
 		$this->categoryArray = array();		// カテゴリ種別メニュー
 		$ret = $this->db->getAllCategory($this->langId, $rows);
@@ -361,6 +390,11 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		$this->tmpl->addVar("_widget", "result_count",	$resultCount);			// 表示項目数
 		$this->tmpl->addVar("_widget", "result_length",	$resultLength);			// テキストサイズ
+		$this->tmpl->addVar("_widget", "show_image_checked",	$this->convertToCheckedString($showImage));// 画像を表示するかどうか
+		$imageWidth = empty($imageWidth) ? '' : $imageWidth;
+		$imageHeight = empty($imageHeight) ? '' : $imageHeight;
+		$this->tmpl->addVar("_widget", "image_width",	$this->convertToDispString($imageWidth));// 画像幅
+		$this->tmpl->addVar("_widget", "image_height",	$this->convertToDispString($imageHeight));// 画像高さ
 		$this->tmpl->addVar("_widget", "html",	$searchTemplate);
 		$this->tmpl->addVar("_widget", "search_text",	$this->searchTextId);		// 検索用テキストフィールドのタグID
 		$this->tmpl->addVar("_widget", "search_button",	$this->searchButtonId);		// 検索用ボタンのタグID
@@ -433,81 +467,6 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		}
 		return $name;
 	}
-	/**
-	 * 一覧画面作成
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
-	 */
-/*	function createList($request)
-	{
-		// ページ定義IDとページ定義のレコードシリアル番号を取得
-		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
-		
-		$userId		= $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		$act = $request->trimValueOf('act');
-		
-		if ($act == 'delete'){		// メニュー項目の削除
-			$listedItem = explode(',', $request->trimValueOf('seriallist'));
-			$delItems = array();
-			for ($i = 0; $i < count($listedItem); $i++){
-				// 項目がチェックされているかを取得
-				$itemName = 'item' . $i . '_selected';
-				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
-				
-				if ($itemValue){		// チェック項目
-					$delItems[] = $listedItem[$i];
-				}
-			}
-			if (count($delItems) > 0){
-				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->paramObj, $delItems);
-				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg('データを削除しました');
-				} else {
-					$this->setAppErrorMsg('データ削除に失敗しました');
-				}
-			}
-		}
-		// 定義一覧作成
-		$this->createItemList();
-		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		
-		// ページ定義IDとページ定義のレコードシリアル番号を更新
-		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
-	}*/
-	/**
-	 * 定義一覧作成
-	 *
-	 * @return なし						
-	 */
-/*	function createItemList()
-	{
-		for ($i = 0; $i < count($this->paramObj); $i++){
-			$id = $this->paramObj[$i]->id;// 定義ID
-			$targetObj = $this->paramObj[$i]->object;
-			$name = $targetObj->name;// 定義名
-			
-			$defCount = 0;
-			if (!empty($id)){
-				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
-			}
-			$operationDisagled = '';
-			if ($defCount > 0) $operationDisagled = 'disabled';
-			$row = array(
-				'index' => $i,
-				'ope_disabled' => $operationDisagled,			// 選択可能かどうか
-				'name' => $this->convertToDispString($name),		// 名前
-				'def_count' => $defCount							// 使用数
-			);
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
-			
-			// シリアル番号を保存
-			$this->serialArray[] = $id;
-		}
-	}*/
 	/**
 	 * 検索テンプレートデータ作成処理コールバック
 	 *
@@ -634,6 +593,31 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			);
 			$this->tmpl->addVars('sel_type_list', $row);
 			$this->tmpl->parseTemplate('sel_type_list', 'a');
+		}
+	}
+	/**
+	 * 画像タイプ選択メニュー作成
+	 *
+	 * @return なし
+	 */
+	function createpImageTypeList()
+	{
+		$formats = $this->gInstance->getImageManager()->getSystemThumbFormat(1/*クロップ画像のみ*/);
+		
+		for ($i = 0; $i < count($formats); $i++){
+			$id = $formats[$i];
+			$name = $id;
+			
+			$selected = '';
+			if ($id == $this->imageType) $selected = 'selected';
+
+			$row = array(
+				'value'			=> $this->convertToDispString($id),				// 値
+				'name'			=> $this->convertToDispString($name),			// 名前
+				'selected'		=> $selected			// 選択中かどうか
+			);
+			$this->tmpl->addVars('image_type_list', $row);
+			$this->tmpl->parseTemplate('image_type_list', 'a');
 		}
 	}
 }
