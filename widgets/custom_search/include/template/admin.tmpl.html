@@ -65,14 +65,14 @@ function listItem(){
 // カテゴリ項目を追加
 function addLine()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
-	lineText += '<td><select name="item_type[]"><patTemplate:tmpl name="type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
-	lineText += '&nbsp;&nbsp;<input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />タイトル表示</td>';
-	lineText += '<td><select name="item_sel_type[]"><patTemplate:tmpl name="sel_type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><input type="text" name="item_init_value[]" style="width:50%;" /></td>';
-	lineText += '<td><input type="text" class="replaceTag" style="width:100%;" readonly /></td>';
-	lineText += '<td align="center"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td style="text-align:center;"><span class="lineNo"></span></td>';
+	lineText += '<td><select name="item_type[]" class="form-control"><patTemplate:tmpl name="type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
+	lineText += '<div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />タイトル表示</label></div></td>';
+	lineText += '<td><select name="item_sel_type[]" class="form-control"><patTemplate:tmpl name="sel_type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><input type="text" name="item_init_value[]" class="form-control" style="margin-top:5px;" /></td>';
+	lineText += '<td style="vertical-align:top;"><input type="text" class="replaceTag form-control" readonly /></td>';
+	lineText += '<td style="text-align:center;"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	$('#field_list').append(lineText);
-	
+		
 	// 項目一覧を再設定
 	setupList();
 }
@@ -140,24 +140,39 @@ $(function(){
     <tr>
 	    <th>名前</th>
 	    <td>
+		<div class="col-sm-4 m3config_item">
 	    <select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規登録 --</option>
 	        <patTemplate:tmpl name="title_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" class="form-control" value="{NAME}" size="40" maxlength="40" />
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" size="40" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
     <tr>
 	    <th>検索対象</th>
-	    <td><label class="item_list_inline"><input type="checkbox" name="item_target_content" {TARGET_CONTENT_CHECKED} />汎用コンテンツ</label><label class="item_list_inline"><input type="checkbox" name="item_target_user" {TARGET_USER_CHECKED} />ユーザ作成コンテンツ</label><label class="item_list_inline"><input type="checkbox" name="item_target_blog" {TARGET_BLOG_CHECKED} />ブログ</label><label class="item_list_inline"><input type="checkbox" name="item_target_product" {TARGET_PRODUCT_CHECKED} />商品情報</label><label class="item_list_inline"><input type="checkbox" name="item_target_event" {TARGET_EVENT_CHECKED} />イベント情報</label><label class="item_list_inline"><input type="checkbox" name="item_target_bbs" {TARGET_BBS_CHECKED} />BBS</label><label class="item_list_inline"><input type="checkbox" name="item_target_photo" {TARGET_PHOTO_CHECKED} />フォトギャラリー</label><label class="item_list_inline"><input type="checkbox" name="item_target_wiki" {TARGET_WIKI_CHECKED} />Wiki</label></td>
+	    <td>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_content" {TARGET_CONTENT_CHECKED} />汎用コンテンツ</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_user" {TARGET_USER_CHECKED} />ユーザ作成コンテンツ</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_blog" {TARGET_BLOG_CHECKED} />ブログ</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_product" {TARGET_PRODUCT_CHECKED} />商品情報</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_event" {TARGET_EVENT_CHECKED} />イベント情報</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_bbs" {TARGET_BBS_CHECKED} />BBS</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_photo" {TARGET_PHOTO_CHECKED} />フォトギャラリー</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_target_wiki" {TARGET_WIKI_CHECKED} />Wiki</label></div>
+		</td>
 	</tr>
     <tr>
 	    <th><span {_HELP_SEARCH_RESULT}>検索結果</span></th>
-	    <td><span {_HELP_RESULT_COUNT}>表示件数</span><input type="text" name="item_result_count" class="form-control" value="{RESULT_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /><span {_HELP_RESULT_LENGTH}>テキストサイズ</span><input type="text" name="item_result_length" class="form-control" value="{RESULT_LENGTH}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />
+	    <td>
+		<div class="form-group clearfix" style="margin-bottom:5px;"><div class="form-control-static col-sm-2 m3config_item"><span {_HELP_RESULT_COUNT}>表示件数：</span></div>
+		<div class="col-sm-1 m3config_item"><input type="text" name="item_result_count" class="form-control" value="{RESULT_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></div>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item"><span {_HELP_RESULT_LENGTH}>テキストサイズ：</span></div>
+		<div class="col-sm-1 m3config_item"><input type="text" name="item_result_length" class="form-control" value="{RESULT_LENGTH}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_show_image" {SHOW_IMAGE_CHECKED} />画像を表示</label></div>
 		<div class="form-control-static m3config_item col-sm-1" style="width:120px;">画像タイプ：</div>
 	    <div class="col-sm-3 m3config_item" style="margin-right:50px;">
@@ -174,26 +189,28 @@ $(function(){
     <tr>
 	    <th><span {_HELP_IMAGE_FILE}>ユーザ作成コンテンツ<br />絞り込みカテゴリ項目</span></th>
 	    <td>
-	    <table id="field_list" class="simple-table-inner" width="100%">
+	    <table id="field_list" class="table table-condensed table-bordered table-striped">
 	    <thead>
-	    <tr><th width="35">移動</th><th width="30">No</th><th width="200">種別</th><th width="200">選択方法/初期値</th><th width="100">埋め込みタグ</th><th>操作</th></tr>
+	    <tr><th style="width:35px;">移動</th><th style="width:30px;">No</th><th style="width:200px;">種別</th><th style="width:200px;">選択方法/初期値</th><th>埋め込みタグ</th><th style="width:35px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="field_list">
-            <tr class="dragRow">
+        <tr class="dragRow">
 	    <td class="dragHandle"></td>
-	    <td align="center"><span class="lineNo"></span></td>
-	    <td><select name="item_type[]">
+	    <td style="text-align:center;"><span class="lineNo"></span></td>
+	    <td><select name="item_type[]" class="form-control">
 	       <patTemplate:tmpl name="type_list2">
                <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	       </patTemplate:tmpl>
-            </select>&nbsp;&nbsp;<input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE_CHECKED} />タイトル表示</td>
-	    <td><select name="item_sel_type[]">
+            </select>
+			<div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE_CHECKED} />タイトル表示</label></div></td>
+	    <td><select name="item_sel_type[]" class="form-control">
 	       <patTemplate:tmpl name="sel_type_list2">
                <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	       </patTemplate:tmpl><input type="text" name="item_init_value[]" style="width:50%;" value="{INIT_VALUE}" />
-            </select></td>
-	    <td><input type="text" class="replaceTag" style="width:100%;" readonly /></td>
-	    <td align="center"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	       </patTemplate:tmpl>
+            </select><input type="text" name="item_init_value[]" class="form-control" value="{INIT_VALUE}" style="margin-top:5px;" />
+			</td>
+	    <td style="vertical-align:top;"><input type="text" class="replaceTag form-control" readonly /></td>
+	    <td style="text-align:center;"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
@@ -202,10 +219,10 @@ $(function(){
 	</tr>
     <tr>
 	    <th>規定タグID</th>
-	    <td>{TAG_ID_STR}<input type="hidden" name="item_search_text" value="{SEARCH_TEXT}" /><input type="hidden" name="item_search_button" value="{SEARCH_BUTTON}" /><input type="hidden" name="item_search_reset" value="{SEARCH_RESET}" /></td>
+	    <td><div class="form-control-static m3config_item">{TAG_ID_STR}</div><input type="hidden" name="item_search_text" value="{SEARCH_TEXT}" /><input type="hidden" name="item_search_button" value="{SEARCH_BUTTON}" /><input type="hidden" name="item_search_reset" value="{SEARCH_RESET}" /></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_TAB_TEMPLATE}>テンプレート</span></th>
+	    <th><span {_HELP_LAYOUT}>レイアウト</span></th>
 	    <td class="ckeditor"><textarea name="item_html">{HTML}</textarea></td>
 	</tr>
     </tbody>
