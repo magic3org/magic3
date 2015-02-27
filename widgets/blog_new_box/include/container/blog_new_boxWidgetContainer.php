@@ -186,7 +186,7 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		$imageTag = '';
 		if ($this->showImage){
 			$titleStr = $fetchedRow['be_name'];
-			$imageUrl = $this->gatImageUrl($entryId, $this->imageType);
+			$imageUrl = $this->getImageUrl($entryId, $this->imageType);
 			$style = '';
 			if ($this->imageWidth > 0) $style .= 'width:' . $this->imageWidth . 'px;';
 			if ($this->imageHeight > 0) $style .= 'height:' . $this->imageHeight . 'px;';
@@ -197,7 +197,7 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 		// 記事名
 		$nameTag = '<a href="' . $escapedLinkUrl . '"><span>' . $this->convertToDispString($title) . '</span></a>';
 		$nameTag .= $optionStr;
-		if ($this->showImage) $nameTag = '<div>' . $nameTag . '</div>';
+		if ($this->showImage) $nameTag = '<div class="clearfix">' . $nameTag . '</div>';
 		
 		$row = array(
 			'name' 		=> $nameTag,			// タイトル
@@ -216,7 +216,7 @@ class blog_new_boxWidgetContainer extends BaseWidgetContainer
 	 * @param string $format		画像フォーマット
 	 * @return string				URL
 	 */
-	function gatImageUrl($entryId, $format)
+	function getImageUrl($entryId, $format)
 	{
 		$filename = $this->gInstance->getImageManager()->getThumbFilename($entryId, $format);
 		$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
