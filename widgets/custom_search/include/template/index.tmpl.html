@@ -5,9 +5,9 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.tmpl.html 5910 2013-04-06 23:14:10Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 <patTemplate:tmpl name="_widget">
@@ -57,7 +57,7 @@ $(function(){
 <patTemplate:tmpl name="result_list">
 <div class="search_list">
 <h3>{NO}{TITLE}</h3>
-<div>{BODY}</div>
+{IMAGE}{BODY}
 </div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="page_link" visibility="hidden"><div class="search_page_link">{PAGE_LINK}</div></patTemplate:tmpl>

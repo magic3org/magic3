@@ -8,7 +8,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2014 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: custom_searchWidgetContainer.php 5969 2013-04-29 13:16:04Z fishbone $
  * @link       http://www.m-media.co.jp
@@ -25,10 +25,15 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	private $wikiLibObj;		// Wikiコンテンツオブジェクト
 	private $resultLength;		// 検索結果コンテンツの文字列最大長
 	private $templateType;		// 現在のテンプレートタイプ
+	private $showImage;		// 画像を表示するかどうか
+	private $imageType;				// 画像タイプ
+	private $imageWidth;			// 画像幅
+	private $imageHeight;			// 画像高さ
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カスタム検索';			// デフォルトのウィジェットタイトル
 	const FIELD_HEAD = 'item';			// フィールド名の先頭文字列
 	const DEFAULT_SEARCH_COUNT	= 20;				// デフォルトの検索結果表示数
+	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_NO_KEYWORD	= '検索キーワードが入力されていません';
 	const MESSAGE_FIND_NO_CONTENT	= '該当するコンテンツが見つかりません';
@@ -83,8 +88,13 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		// 初期値設定
 		$this->langId = $this->gEnv->getCurrentLanguage();
 		$this->currentPageUrl = $this->gEnv->createCurrentPageUrl();// 現在のページURL
+		$this->showImage		= 0;				// 画像を表示するかどうか
+		$this->imageType		= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
+		$this->imageWidth		= 0;				// 画像幅
+		$this->imageHeight		= 0;				// 画像高さ
 		
 		// 定義ID取得
 		$configId = $this->gEnv->getCurrentWidgetConfigId();
@@ -106,6 +116,10 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		if ($this->resultCount <= 0) $this->resultCount = self::DEFAULT_SEARCH_COUNT;
 		$this->resultLength = intval($targetObj->resultLength);
 		if ($this->resultLength <= 0) $this->resultLength = self::DEFAULT_RESULT_LENGTH;	// 検索結果コンテンツの文字列最大長
+		if (isset($targetObj->showImage))	$this->showImage		= $targetObj->showImage;				// 画像を表示するかどうか
+		if (isset($targetObj->imageType))	$this->imageType		= $targetObj->imageType;				// 画像タイプ
+		if (isset($targetObj->imageWidth))	$this->imageWidth		= $targetObj->imageWidth;				// 画像幅
+		if (isset($targetObj->imageHeight))	$this->imageHeight		= $targetObj->imageHeight;				// 画像高さ
 		$this->searchTextId = $targetObj->searchTextId;		// 検索用テキストフィールドのタグID
 		$this->searchButtonId = $targetObj->searchButtonId;		// 検索用ボタンのタグID
 		$this->searchResetId = $targetObj->searchResetId;		// 検索エリアリセットボタンのタグID
@@ -450,6 +464,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 					// 検索結果用のテキスト作成
 					$summary = $this->_createSummaryText($content);
 				}
+				
+				// ブログ記事画像
+				$imageUrl = $this->getImageUrl(M3_VIEW_TYPE_BLOG, $entryId, $this->imageType);
 				break;
 			case M3_VIEW_TYPE_PRODUCT:			// 商品情報の場合
 				$productId = $fetchedRow['id'];
@@ -542,12 +559,30 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			default:
 				break;
 		}
+		$title = $fetchedRow['name'];
+		$escapedTitle = $this->convertToDispString($title);
 		$titleLink = $this->convertToDispString($fetchedRow['name']);
-		if (!empty($linkUrl)) $titleLink = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $titleLink . '</a>';
+		$escapedLinkUrl = $this->convertUrlToHtmlEntity($linkUrl);
+		if (!empty($linkUrl)) $titleLink = '<a href="' . $escapedLinkUrl . '" >' . $titleLink . '</a>';
 
+		// 画像
+		$imageTag = '';
+		if ($this->showImage && !empty($imageUrl)){
+			$style = '';
+			if ($this->imageWidth > 0) $style .= 'width:' . $this->imageWidth . 'px;';
+			if ($this->imageHeight > 0) $style .= 'height:' . $this->imageHeight . 'px;';
+			if (!empty($style)) $style = 'style="' . $style . '" ';
+			$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $escapedTitle . '" title="' . $escapedTitle . '" ' . $style . '/>';
+			$imageTag = '<div style="float:left;"><a href="' . $escapedLinkUrl . '">' . $imageTag . '</a></div>';
+			
+			// コンテンツ概要
+			$summary = '<div class="clearfix">' . $summary . '</div>';
+		}
+		
 		$row = array(
-			'title' => $titleLink,			// タイトル
-			'body' => $summary			// コンテンツ概要
+			'title'		=> $titleLink,		// タイトル
+			'image'		=> $imageTag,		// 画像
+			'body'		=> $summary			// コンテンツ概要
 		);
 		$this->tmpl->addVars('result_list', $row);
 		$this->tmpl->parseTemplate('result_list', 'a');
@@ -643,6 +678,28 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			}
 		}
 		return $retVal;
+	}
+	/**
+	 * 画像のURLを取得
+	 *
+	 * @param string $contentType	コンテンツタイプ
+	 * @param string $contentId		コンテンツID
+	 * @param string $format		画像フォーマット
+	 * @return string				URL
+	 */
+	function getImageUrl($contentType, $contentId, $format)
+	{
+		$url = '';
+		if ($contentType == M3_VIEW_TYPE_BLOG){
+			$filename = $this->gInstance->getImageManager()->getThumbFilename($contentId, $format);
+			$path = $this->gInstance->getImageManager()->getSystemThumbPath($contentType, 0/*PC用*/, $filename);
+			if (!file_exists($path)){
+				$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $format);		// デフォルト画像ファイル名
+				$path = $this->gInstance->getImageManager()->getSystemThumbPath($contentType, 0/*PC用*/, $filename);
+			}
+			$url = $this->gInstance->getImageManager()->getSystemThumbUrl($contentType, 0/*PC用*/, $filename);
+		}
+		return $url;
 	}
 }
 ?>
