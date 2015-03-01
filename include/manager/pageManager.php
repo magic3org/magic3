@@ -2630,7 +2630,7 @@ class PageManager extends Core
 		}
 		// ##### スクリプト用出力用タグを埋め込む #####
 		// ウィジェット設定画面用メニューバーの作成
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面または一般画面編集モードのとき
 			echo self::MENUBAR_SCRIPT_TAGS;			// メニューバー出力用タグ
 		}
 		
@@ -2724,7 +2724,7 @@ class PageManager extends Core
 		if (!empty($this->adminSubNavbarDef)) $breadcrumbHtml .= $gDesignManager->createSubMenubar($this->adminSubNavbarDef);
 		if (!empty($this->adminBreadcrumbDef)) $breadcrumbHtml .= $gDesignManager->createAdminBreadcrumb($this->adminBreadcrumbDef);
 		$destContent = str_replace(self::MENUBAR_TAGS, $breadcrumbHtml, $srcContent);
-		
+
 		// ヘッドタグ出力
 		$replaceStr .= '<script type="text/javascript">' . M3_NL;
 		$replaceStr .= '//<![CDATA[' . M3_NL;
@@ -2749,7 +2749,7 @@ class PageManager extends Core
 		// ##### 初期処理 #####
 		$replaceStr .= '$(function(){' . M3_NL;
 		// トップ位置修正
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){		// ウィジェット詳細設定画面のとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// ウィジェット設定画面または一般画面編集モードのとき
 			if (!empty($this->adminSubNavbarDef) || !empty($this->adminBreadcrumbDef)){
 				$menubarHeight = $gDesignManager->getSubMenubarHeight();
 				$replaceStr .= str_repeat(M3_INDENT_SPACE, 1) . '$("nav.secondlevel").css("margin-top", "0");' . M3_NL;
