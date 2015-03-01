@@ -144,8 +144,8 @@ function createEyecatch(url)
 				if (parseInt($('#w').val())){
 					// 変更画像を送信
 					var postValues = $('#modalform').serialize();
-					m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&' + postValues, function(request, retcode, jsondata){		// 正常終了
-				
+					
+					m3_ajax_request('', '{AJAX_URL}&' + postValues, function(request, retcode, jsondata){		// 正常終了
 						// 画像URL取得
 						if (jsondata.url){
 							var innerText = '{MOVE_ICON_TAG}<img src="' + jsondata.url + '" />';

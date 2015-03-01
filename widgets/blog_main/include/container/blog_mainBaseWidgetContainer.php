@@ -27,6 +27,7 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected $_langId;			// 現在の言語
 	protected $_userId;			// 現在のユーザ
 	protected $_isMultiLang;			// 多言語対応画面かどうか
+	protected $_blogId;		// ブログID
 	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
 	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
 	
@@ -82,9 +83,9 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	function _preAssign($request, &$param)
 	{
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
-		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
+		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
-		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $blogId);
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -107,7 +108,7 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::$_task;
-		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
+//		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		
 		// パンくずリストの定義データ作成
 		$titles = array();

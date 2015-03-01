@@ -202,6 +202,14 @@ class blog_mainImageWidgetContainer extends blog_mainBaseWidgetContainer
 			// アイキャッチ画像削除用ボタンを表示
 			if (!empty($row['be_thumb_filename'])) $this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
 		}
+		// Ajax用URL
+		if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+			$ajaxUrl = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . '&widget=' . $this->gEnv->getCurrentWidgetId();
+		} else {
+			$ajaxUrl = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&widget=' . $this->gEnv->getCurrentWidgetId() . '&openby=other&blogid=' . $this->_blogId;
+		}
+		$this->tmpl->addVar("_widget", "ajax_url", $ajaxUrl);
+		
 		// アイキャッチ画像の情報を取得
 		$formats = $this->gInstance->getImageManager()->getSystemThumbFormat(10/*アイキャッチ画像*/);
 		$ret = $this->gInstance->getImageManager()->parseImageFormat($formats[0], $imageType, $imageAttr, $imageSize);
@@ -222,7 +230,6 @@ class blog_mainImageWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "original_eyecatch_url", $this->convertUrlToHtmlEntity($this->getUrl($originalEyecatchUrl)));		// アイキャッチ画像の元の画像
 		$this->tmpl->addVar("_widget", "eyecatch_size", $imageSize . 'x' . $imageSize);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);
-		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// 変更画像送信用
 	}
 	/**
 	 * クロップ画像を作成
@@ -328,8 +335,14 @@ class blog_mainImageWidgetContainer extends blog_mainBaseWidgetContainer
 	 */
 	function getEyecatchUrl($entryId)
 	{
-		$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
-		$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+		if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+			$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+			$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+		} else {
+			$imageUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;	// ウィジェット直接実行
+			$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+			$imageUrl .= '&openby=other&blogid=' . $this->_blogId;
+		}
 		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGE;
 		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
 		$imageUrl .= '&' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId;
