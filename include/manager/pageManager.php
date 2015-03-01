@@ -795,6 +795,15 @@ class PageManager extends Core
 		$this->isEditMode = true;
 	}
 	/**
+	 * 一般画面編集モードを取得
+	 *
+	 * @return bool		true=編集モードオン、false=編集モードオフ
+	 */
+	function idEditMode()
+	{
+		return $this->isEditMode;
+	}
+	/**
 	 * 出力フォーマットがHTMLであるかを設定
 	 *
 	 * @param bool $isHtml	HTMLフォーマットかどうか
@@ -1374,7 +1383,7 @@ class PageManager extends Core
 		if (!$gEnvManager->getIsMobileSite()){		// 携帯用URL以外のとき
 			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
-					$this->isEditMode = true;			// 一般画面編集モード
+//					$this->isEditMode = true;			// 一般画面編集モード
 					$this->isPageEditable = true;		// 一般画面ページ編集可能モードに設定(コンテキストメニュー表示)
 						
 					// 管理画面用ライブラリを追加
@@ -2638,7 +2647,7 @@ class PageManager extends Core
 			echo '<body>' . M3_NL;
 		}
 		// ウィジェット設定画面用メニューバーの作成
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面または一般画面編集モードのとき
 			// ウィジェット情報を設定
 			$desc = $row['wd_description'];		// 説明
 			$gEnvManager->setCurrentWidgetParams('desc', $desc);
@@ -2651,9 +2660,9 @@ class PageManager extends Core
 		// 別ウィンドウで表示のときは、「閉じる」ボタンを表示
 		if ($cmd == M3_REQUEST_CMD_SHOW_WIDGET ||		// ウィジェットの単体表示のとき
 			$cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||	// ウィジェット詳細設定画面のとき
-			$cmd == M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体実行のとき
+			($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// ウィジェット単体実行で一般画面編集モードのとき
 
-			if ($this->isEditMode){// 一般画面編集モードのとき
+//			if ($this->isEditMode){// 一般画面編集モードのとき
 				if (!empty($openBy)){
 					// サーバ指定されている場合はサーバ情報を取得
 					$serverName = '';
@@ -2686,7 +2695,7 @@ class PageManager extends Core
 				$titleStr = '次へ';
 				echo '<div class="m3confignext" style="display:none;"><a id="m3confignext" href="#"><img src="' . $rootUrl . self::NEXT_ICON_FILE . 
 							'" alt="' . $titleStr . '" title="' . $titleStr . '" rel="m3help" /></a></div>' . M3_NL;
-			}
+//			}
 		}
 //		echo '<div class="row">' . M3_NL;
 		echo '<!-- Widget Start -->' . M3_NL;
@@ -3286,7 +3295,7 @@ class PageManager extends Core
 			}
 
 			// ##### 共通CSS読み込み #####
-			if ($this->isEditMode){			// 一般画面編集モード
+			if (($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()) || $this->isEditMode){			// 一般画面編集モード
 				$cssURL = $scriptsUrl . '/' . self::M3_EDIT_CSS_FILE;
 				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 			}

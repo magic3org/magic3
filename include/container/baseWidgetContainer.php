@@ -240,7 +240,7 @@ class BaseWidgetContainer extends Core
 			if (method_exists($this, '_postAssign')) $this->_postAssign($request, $param);
 			
 			// サブメニューバーの作成
-			if ($isAdminDirAccess){			// 管理画面のみ
+			if ($isAdminDirAccess || $this->gPage->idEditMode()){			// 管理画面あるいは、一般画面編集モードオンの場合
 				// 設定画面用パンくずリストの作成
 				if (!empty($this->configMenubarBreadcrumbTitleDef)) $this->gPage->setAdminBreadcrumbDef($this->configMenubarBreadcrumbTitleDef);
 				
@@ -248,7 +248,11 @@ class BaseWidgetContainer extends Core
 				if (!empty($this->configMenubarMenuDef)){
 					$navbarDef = new stdClass;
 					$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
-					$navbarDef->baseurl = $this->getAdminUrlWithOptionParam(true);	// 定義ID,画面定義シリアル番号を付加
+					if ($isAdminDirAccess){
+						$navbarDef->baseurl = $this->getAdminUrlWithOptionParam(true);	// 定義ID,画面定義シリアル番号を付加
+					} else {
+						$navbarDef->baseurl = $this->getUrlWithOptionParam();
+					}
 //					$navbarDef->help	= $this->gInstance->getHelpManager()->createHelpText('ウィジェットの設定画面',
 //								'<strong>●' . M3_TITLE_BRACKET_START . $navbarDef->title . M3_TITLE_BRACKET_END . 'ウィジェットの機能</strong><br />' . $this->gEnv->getCurrentWidgetParams('desc'));// ヘルプ文字列
 					$navbarDef->help	= $this->_createWidgetInfoHelp();		// ウィジェットの説明用ヘルプ
@@ -3013,6 +3017,42 @@ class BaseWidgetContainer extends Core
 		return $destParam;
 	}
 	/**
+	 * URLに追加設定するパラメータ
+	 *
+	 * @param string $key	キー
+	 * @param string $value	値
+	 * @return 				なし
+	 */
+	function addOptionUrlParam($key, $value)
+	{
+		if (!empty($key) && !empty($value)) $this->optionUrlParam[$key] = $value;
+	}
+	/**
+	 * パラメータ付きのURLを取得
+	 *
+	 * @return string			パラメータ付きURL
+	 */
+	function getUrlWithOptionParam()
+	{
+		$cmd = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
+		
+		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){			// 一般画面のウィジェット設定画面の場合
+			$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . 
+						'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
+		} else {
+			$url = $this->gEnv->getDefaultUrl();
+		}
+		// その他のパラメータ
+		$url = createUrl($url, $this->optionUrlParam);
+
+		return $url;
+/*		
+		$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
+		$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
+		$urlparam .= 'openby=other&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $blogId;
+		$baseUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;*/
+	}
+	/**
 	 * キャッシュデータをクリア
 	 *
 	 * @param array $param	削除する対象のURLパラメータ。空のときはすべてのデータを削除。
@@ -3313,6 +3353,18 @@ class BaseWidgetContainer extends Core
 		}
 		// 一覧部の表示制御
 		$this->setListTemplateVisibility('itemlist');
+	}
+	/**
+	 * 設定画面用のメニューバー(ナビゲーションバー+パンくずリスト)の定義を設定
+	 *
+	 * @param array $titleDef		パンくずリストのタイトル定義
+	 * @param array $menuDef		メニューバーのメニュー定義
+	 * @return								なし
+	 */
+	function setConfigMenubarDef($titleDef, $menuDef)
+	{
+		$this->configMenubarBreadcrumbTitleDef = $titleDef;			// 設定画面用パンくずリストのタイトル定義
+		$this->configMenubarMenuDef = $menuDef;					// 設定画面用メニューバーのメニュー定義
 	}
 }
 ?>

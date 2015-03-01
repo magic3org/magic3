@@ -110,19 +110,6 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 		}
 	}
 	/**
-	 * URLに追加設定するパラメータ
-	 *
-	 * @param string $key	キー
-	 * @param string $value	値
-	 * @return 				なし
-	 */
-	function addOptionUrlParam($key, $value)
-	{
-//		$param = array($key, $value);
-//		array_push($this->optionUrlParam, $param);
-		$this->optionUrlParam[$key] = $value;
-	}
-	/**
 	 * パラメータ付きの管理画面用のURLを取得
 	 *
 	 * @param bool $withPageDef	ページ定義パラメータを追加するかどうか
@@ -302,18 +289,6 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 				);
 //		$this->gPage->setAdminSubNavbarDef($navbarDef);
 		$this->configMenubarMenuDef = $menu;					// 設定画面用メニューバーのメニュー定義
-	}
-	/**
-	 * 設定画面用のメニューバー(ナビゲーションバー+パンくずリスト)の定義を設定
-	 *
-	 * @param array $titleDef		パンくずリストのタイトル定義
-	 * @param array $menuDef		メニューバーのメニュー定義
-	 * @return								なし
-	 */
-	function setConfigMenubarDef($titleDef, $menuDef)
-	{
-		$this->configMenubarBreadcrumbTitleDef = $titleDef;			// 設定画面用パンくずリストのタイトル定義
-		$this->configMenubarMenuDef = $menuDef;					// 設定画面用メニューバーのメニュー定義
 	}
 }
 ?>

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -34,6 +34,8 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	const TASK_TOP				= 'top';			// トップ画面
 	const TASK_ENTRY			= 'entry';			// 記事編集画面
 	const TASK_ENTRY_DETAIL 	= 'entry_detail';			// 記事編集画面詳細
+	const TASK_IMAGE			= 'image';				// ブログ記事画像
+	const TASK_HISTORY			= 'history';			// ブログ記事履歴
 	const TASK_COMMENT			= 'comment';		// ブログ記事コメント管理
 	const TASK_COMMENT_DETAIL 	= 'comment_detail';		// ブログ記事コメント管理(詳細)
 	const TASK_LINKINFO			= 'linkinfo';		// CKEditorプラグインのリンク情報取得用
@@ -69,6 +71,22 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		$this->_isMultiLang = $this->gEnv->isMultiLanguageSite();			// 多言語対応画面かどうか
 	}
 	/**
+	 * テンプレートに前処理
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _preAssign($request, &$param)
+	{
+		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $blogId);
+	}
+	/**
 	 * テンプレートにデータ埋め込む
 	 *
 	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
@@ -91,6 +109,108 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		if (empty($task)) $task = self::$_task;
 		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		
+		// パンくずリストの定義データ作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_ENTRY:				// ブログ記事(一覧)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				break;
+			case self::TASK_ENTRY_DETAIL:		// ブログ記事(詳細)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_IMAGE:			// ブログ記事画像
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '詳細';
+				$titles[] = '画像';
+				break;
+			case self::TASK_HISTORY:			// ブログ記事履歴
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '詳細';
+				$titles[] = '履歴';
+				break;
+			case self::TASK_COMMENT:			// ブログ記事コメント(一覧)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = 'コメント一覧';
+				break;
+			case self::TASK_COMMENT_DETAIL:		// ブログ記事コメント(詳細)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = 'コメント一覧';
+				$titles[] = '詳細';
+				break;
+/*			case self::TASK_CATEGORY:			// 記事カテゴリー(一覧)
+				$titles[] = '基本';
+				$titles[] = '記事カテゴリー';
+				break;
+			case self::TASK_CATEGORY_DETAIL:	// 記事カテゴリー(詳細)
+				$titles[] = '基本';
+				$titles[] = '記事カテゴリー';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_BLOGID:			// マルチブログ設定(一覧)
+				$titles[] = '基本';
+				$titles[] = 'マルチブログ';
+				break;
+			case self::TASK_BLOGID_DETAIL:		// マルチブログ設定(詳細)
+				$titles[] = '基本';
+				$titles[] = 'マルチブログ';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_CONFIG:				// 基本設定
+				$titles[] = '基本';
+				$titles[] = '基本設定';
+				break;*/
+		}
+		
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> 'ブログ記事管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_ENTRY ||				// ブログ記事(一覧)
+											$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
+											$task == self::TASK_IMAGE ||			// ブログ記事画像
+											$task == self::TASK_HISTORY ||			// ブログ記事履歴
+											$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
+											$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '記事一覧',
+								'task'		=> self::TASK_ENTRY,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_ENTRY ||			// ブログ記事(一覧)
+													$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
+													$task == self::TASK_IMAGE ||			// ブログ記事画像
+													$task == self::TASK_HISTORY				// ブログ記事履歴
+												)
+							),
+							(Object)array(
+								'name'		=> 'コメント一覧',
+								'task'		=> self::TASK_COMMENT,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
+													$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
+												)
+							)
+						)
+					)
+				);
+		
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
+/*		
 		// パンくずリストを作成
 		switch ($task){
 			case 'entry':		// ブログ記事
@@ -139,6 +259,7 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . 'ブログ' . $linkList . '</div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+		*/
 	}
 }
 ?>
