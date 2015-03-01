@@ -1750,7 +1750,7 @@ class PageManager extends Core
 		//	$this->addScriptFile($this->selectedJQueryUiFilename);		// jQuery Coreスクリプト追加
 		} else if (strncmp($lib, 'jquery-ui.', 10) == 0 ||		// jQuery UIのwidgetsまたはeffectsのとき
 			strcmp($lib, ScriptLibInfo::LIB_ELFINDER) == 0 || strcmp($lib, ScriptLibInfo::LIB_JQUERY_TIMEPICKER) == 0){		// elFinder、timepickerを使用する場合
-			
+
 			// 依存ライブラリ追加
 			if (strncmp($lib, 'jquery-ui.', 10) == 0){
 				$jQueryUiInfo = ScriptLibInfo::getJQueryUiInfo();// ライブラリ情報取得
