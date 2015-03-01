@@ -26,7 +26,8 @@ class blog_mainHistoryWidgetContainer extends blog_mainBaseWidgetContainer
 {
 	private $totalCount;		// 編集履歴総数
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
-	const HISTORY_GET_ICON_FILE = '/images/system/history_get.png';		// 履歴データ取得用アイコン
+	const HISTORY_GET_ICON_FILE = '/images/system/history_get32.png';		// 履歴データ取得用アイコン
+	const ICON_SIZE = 32;		// アイコンのサイズ
 	
 	/**
 	 * コンストラクタ
@@ -118,13 +119,14 @@ class blog_mainHistoryWidgetContainer extends blog_mainBaseWidgetContainer
 			$no++;
 		}
 		// 操作用ボタン
-		$historyGetImg = $this->getUrl($this->gEnv->getRootUrl() . self::HISTORY_GET_ICON_FILE);		// 履歴データ取得用アイコン
-		$historyGetStr = 'データを取得';
+		$iconUrl = $this->gEnv->getRootUrl() . self::HISTORY_GET_ICON_FILE;		// 履歴データ取得用アイコン
+		$iconTitle = 'データを取得';
+		$historyGetTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+
 		$row = array(
 			'no' => $this->convertToDispString($no),													// 履歴番号
 			'serial' => $this->convertToDispString($fetchedRow['be_serial']),			// シリアル番号
-			'history_get_img' => $historyGetImg,											// 履歴データ取得用の画像
-			'history_get_str' => $historyGetStr,											// 履歴データ取得用の文字列
+			'image' => $historyGetTag,											// 履歴データ取得用の画像
 			'user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
 			'date' => $this->convertToDispDateTime($fetchedRow['be_create_dt'])	// 更新日時
 		);
