@@ -13,6 +13,13 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
+/***************************************************************************************************
+### 複製元クラス admin_blog_mainEntryWidgetContainer ###
+複製元クラスからblog_mainEntryWidgetContainerクラスを生成する
+変更行
+　・親クラスファイルの読み込み(require_once)
+　・クラス名定義
+****************************************************************************************************/
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_blog_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_mainDb.php');
 require_once($gEnvManager->getCommonPath() . '/valueCheck.php');

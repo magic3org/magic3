@@ -20,9 +20,9 @@
 　・親クラスファイルの読み込み(require_once)
 　・クラス名定義
 ****************************************************************************************************/
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/blog_mainBaseWidgetContainer.php');
 
-class admin_blog_mainHistoryWidgetContainer extends admin_blog_mainBaseWidgetContainer
+class blog_mainHistoryWidgetContainer extends blog_mainBaseWidgetContainer
 {
 	private $totalCount;		// 編集履歴総数
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数

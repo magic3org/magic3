@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -58,6 +58,8 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 		switch ($task){
 			case self::TASK_ENTRY:					// 記事編集画面(別ウィンドウ)
 			case self::TASK_ENTRY_DETAIL:			// 記事編集画面詳細
+			case self::TASK_IMAGE:			// ブログ記事画像
+			case self::TASK_HISTORY:			// ブログ記事履歴
 			case self::TASK_COMMENT:		// ブログ記事コメント管理
 			case self::TASK_COMMENT_DETAIL:		// ブログ記事コメント管理(詳細)
 				if (empty($blogId)){	// ブログIDが指定されていない場合
@@ -92,6 +94,8 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 						switch ($task){
 							case self::TASK_ENTRY:					// 記事編集画面(別ウィンドウ)
 							case self::TASK_ENTRY_DETAIL:			// 記事編集画面詳細
+							case self::TASK_IMAGE:			// ブログ記事画像
+							case self::TASK_HISTORY:			// ブログ記事履歴
 								$ret = self::$_mainDb->isExistsEntryInBlogId($serialNo, $blogId);
 								if ($ret) self::$_canEditEntry = true;		// 記事編集権限
 								break;
@@ -132,6 +136,8 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 					return true;
 				}
 				break;
+			case self::TASK_IMAGE:			// ブログ記事画像
+			case self::TASK_HISTORY:			// ブログ記事履歴
 			case self::TASK_LINKINFO:		// CKEditorプラグインのリンク情報取得用
 				if (self::$_canEditEntry){	// 記事が編集可能かどうか
 					$goWidget = true;		// サブウィジェットを実行するかどうか				

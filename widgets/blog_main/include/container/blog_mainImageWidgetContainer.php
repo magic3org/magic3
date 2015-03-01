@@ -20,9 +20,9 @@
 　・親クラスファイルの読み込み(require_once)
 　・クラス名定義
 ****************************************************************************************************/
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/blog_mainBaseWidgetContainer.php');
 
-class admin_blog_mainImageWidgetContainer extends admin_blog_mainBaseWidgetContainer
+class blog_mainImageWidgetContainer extends blog_mainBaseWidgetContainer
 {
 	const TITLE_MOVE_RIGHT = '右の画像に変更';
 	const MOVE_RIGHT_ICON_FILE = '/images/system/move_right64.png';			// 画像変更表示用アイコン
