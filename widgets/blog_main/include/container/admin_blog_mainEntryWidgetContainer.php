@@ -1063,9 +1063,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			'category' => $category,											// 記事カテゴリー
 			'view_count' => $totalViewCount,									// 総参照数
 			'reg_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 投稿者
-			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt']),	// 投稿日時
-			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
-			'update_date' => $this->convertToDispDateTime($fetchedRow['be_create_dt'])	// 更新日時
+			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');

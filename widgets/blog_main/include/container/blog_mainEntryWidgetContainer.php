@@ -13,6 +13,13 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
+/***************************************************************************************************
+### 複製元クラス admin_blog_mainEntryWidgetContainer ###
+複製元クラスからblog_mainEntryWidgetContainerクラスを生成する
+変更行
+　・親クラスファイルの読み込み(require_once)
+　・クラス名定義
+****************************************************************************************************/
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/blog_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_mainDb.php');
 require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
@@ -1058,9 +1065,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			'category' => $category,											// 記事カテゴリー
 			'view_count' => $totalViewCount,									// 総参照数
 			'reg_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 投稿者
-			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt']),	// 投稿日時
-			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
-			'update_date' => $this->convertToDispDateTime($fetchedRow['be_create_dt'])	// 更新日時
+			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
