@@ -513,7 +513,7 @@ class JFactory
 //		jimport('joomla.session.session');
 
 		//get the editor configuration setting
-		$conf =& JFactory::getConfig();
+		$conf = JFactory::getConfig();
 		$handler =  $conf->getValue('config.session_handler', 'none');
 
 		// config time is in minutes
