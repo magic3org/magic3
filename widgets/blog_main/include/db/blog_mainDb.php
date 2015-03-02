@@ -1272,14 +1272,15 @@ class blog_mainDb extends BaseDb
 	 *
 	 * @param int    $serial		記事のシリアルNo
 	 * @param string $blogId		ブログID
+	 * @param bool $isHistoryRef	履歴を参照するかどうか
 	 * @return bool					true=存在する、false=存在しない
 	 */
-	function isExistsEntryInBlogId($serial, $blogId)
+	function isExistsEntryInBlogId($serial, $blogId, $isHistoryRef = false)
 	{
 		$queryStr  = 'SELECT * FROM blog_entry ';
-		$queryStr .=   'WHERE be_deleted = false ';		// 削除されていない
-		$queryStr .=     'AND be_serial = ? ';
+		$queryStr .=   'WHERE be_serial = ? ';
 		$queryStr .=     'AND be_blog_id = ? ';
+		if (!$isHistoryRef) $queryStr .=     'AND be_deleted = false ';		// 削除されていない
 		return $this->isRecordExists($queryStr, array(intval($serial), $blogId));
 	}
 	/**

@@ -94,6 +94,9 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 						switch ($task){
 							case self::TASK_ENTRY:					// 記事編集画面(別ウィンドウ)
 							case self::TASK_ENTRY_DETAIL:			// 記事編集画面詳細
+								$ret = self::$_mainDb->isExistsEntryInBlogId($serialNo, $blogId, true/*履歴参照可*/);
+								if ($ret) self::$_canEditEntry = true;		// 記事編集権限
+								break;
 							case self::TASK_IMAGE:			// ブログ記事画像
 							case self::TASK_HISTORY:			// ブログ記事履歴
 								$ret = self::$_mainDb->isExistsEntryInBlogId($serialNo, $blogId);
