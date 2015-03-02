@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1138,7 +1138,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			'view_count' => $totalViewCount,									// 総参照数
 			'status' => $statusImg,												// 公開状況
 			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
-			'update_dt' => $this->convertToDispDateTime($fetchedRow['cn_create_dt']),	// 更新日時
+			'update_dt' => $this->convertToDispDateTime($fetchedRow['cn_create_dt'], 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
 			'visible' => $visible,											// メニュー項目表示制御
 			'limited' => $limited,											// ユーザ制限
 			'default_icon' => $defaultIcon,											// デフォルト項目
