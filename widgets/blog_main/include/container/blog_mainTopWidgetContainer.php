@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -139,19 +139,17 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		if ($act == 'search'){
 			$this->viewMode = 2;					// 表示モード(検索一覧表示)
-			//return 'search.tmpl.html';		// 検索結果一覧
-			return 'top.tmpl.html';		// 検索結果一覧
+			return 'list.tmpl.html';		// 検索結果一覧
 		} else {
 			$year = $request->trimValueOf('year');		// 年指定
 			$month = $request->trimValueOf('month');		// 月指定
 			$category = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);		// カテゴリID
 			if (!empty($category) || !empty($year) || !empty($month)){
 				$this->viewMode = 1;					// 表示モード(記事一覧表示)
-				//return 'list.tmpl.html';	// 記事一覧
-				return 'top.tmpl.html';	// 記事一覧
+				return 'list.tmpl.html';	// 記事一覧
 			} else if (empty($this->entryId)){
 				$this->viewMode = 0;					// 表示モード(トップ一覧表示)
-				return 'top.tmpl.html';		// トップ画面記事一覧
+				return 'list.tmpl.html';		// トップ画面記事一覧
 			} else {
 				$this->viewMode = 10;					// 表示モード(記事単体表示)
 				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
