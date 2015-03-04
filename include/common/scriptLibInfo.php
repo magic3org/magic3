@@ -47,6 +47,9 @@ class ScriptLibInfo
 	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
 	const LIB_NOBOOTSTRAP			= 'nobootstrap';			// Bootstrapを使用しない場合の管理画面用ライブラリ
 	
+	// Bootstrapプラグイン
+	const LIB_BOOTSTRAP_DATETIMEPICKER		= 'bootstrap.datetimepicker';
+	
 	// スマートフォン用jQueryライブラリ
 	const LIB_JQUERYS				= 'jquerys';
 	const LIB_JQUERYS_MOBILE		= 'jquery.mobile';
@@ -100,6 +103,9 @@ class ScriptLibInfo
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
 	
+	// Bootstrapプラグインバージョン
+	const BOOTSTRAP_DATETIMEPICKER_VER	= '4.0.0';
+	
 	// jQueryプラグインバージョン
 	const JQUERY_JCAROUSEL_VER		= '0.2.8';
 	const JQUERY_THICKBOX_VER		= '3.1';
@@ -150,8 +156,12 @@ class ScriptLibInfo
 	const LIB_JQUERY_UI_WIDGETS_SLIDER			= 'jquery-ui.slider';			// Widgets Slider
 	const LIB_JQUERY_UI_WIDGETS_TABS			= 'jquery-ui.tabs';				// Widgets Tabs
 	const LIB_JQUERY_UI_EFFECTS					= 'jquery-ui.effects';			// Effects
-
-	// Javascriptライブラリ用のファイル
+	
+	// Bootstrapプラグイン用のファイル
+	const BOOTSTRAP_DATETIMEPICKER_FILENAME	= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.js';
+	const BOOTSTRAP_DATETIMEPICKER_CSS		= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.min.css';
+	
+	// jQueryプラグイン用のファイル
 	const JQUERY_EASING_FILENAME		= 'jquery/jquery.easing.1.3.js';
 	//const JQUERY_JCAROUSEL_FILENAME		= 'jquery/jquery.jcarousel.0.2.4.min.js';		// jQuery1.4.2対応版
 	const JQUERY_JCAROUSEL_FILENAME		= 'jquery/jquery.jcarousel.0.2.8.min.js';		// jQuery1.4.2対応版
@@ -232,6 +242,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_M3_DROPDOWN_CSS		= 'jquery/jquery.m3dropdown.css';	// ドロップダウンメニュー
 	
 	// ライブラリの公式サイトのURL
+	const BOOTSTRAP_DATETIMEPICKER_URL	= 'https://github.com/Eonasdan/bootstrap-datetimepicker';
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
 	const JQUERY_THICKBOX_URL			= 'http://thickbox.net/';
 	const JQUERY_CLUETIP_URL			= 'http://plugins.learningjquery.com/cluetip/';
@@ -308,8 +319,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap/css/yamm.css';					// bootstrapメガメニュー
 //	const BOOTSTRAP_DIALOG_FILENAME					= 'bootstrap/bootstrap3-dialog/bootstrap-dialog.js';		// Bootstrap Dialog拡張
 //	const BOOTSTRAP_DIALOG_CSS						= 'bootstrap/bootstrap3-dialog/bootstrap-dialog.css';
-//	const BOOTSTRAP_DIALOG_FILENAME					= 'bootstrap/bootstrap3-dialog-1.34.1/bootstrap-dialog.js';		// Bootstrap Dialog拡張		// バグあり
+//	const BOOTSTRAP_DIALOG_FILENAME					= 'bootstrap/bootstrap3-dialog-1.34.1/bootstrap-dialog.js';		// Bootstrap Dialog拡張		// スクロールバーが消えるバグあり
 //	const BOOTSTRAP_DIALOG_CSS						= 'bootstrap/bootstrap3-dialog-1.34.1/bootstrap-dialog.css';
+//	const BOOTSTRAP_DIALOG_FILENAME					= 'bootstrap/bootstrap3-dialog-1.34.2/bootstrap-dialog.js';		// Bootstrap Dialog拡張		// スクロールバーが消えるバグあり
+//	const BOOTSTRAP_DIALOG_CSS						= 'bootstrap/bootstrap3-dialog-1.34.2/bootstrap-dialog.css';	// (未使用)
 	const BOOTSTRAP_DIALOG_FILENAME					= 'bootstrap/bootstrap3-dialog-1.34.0/bootstrap-dialog.js';		// Bootstrap Dialog拡張
 	const BOOTSTRAP_DIALOG_CSS						= 'bootstrap/bootstrap3-dialog-1.34.0/bootstrap-dialog.css';	// (未使用)
 	const NOBOOTSTRAP_CSS							= 'm3/nobootstrap/style.css';
@@ -434,6 +447,12 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																							self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS)),
 						self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
 																	'css'		=> array(self::NOBOOTSTRAP_CSS)),
+						
+						// Bootstrapライブラリ
+						self::LIB_BOOTSTRAP_DATETIMEPICKER		=>	array(	'script' 	=> array(self::BOOTSTRAP_DATETIMEPICKER_FILENAME),		// bootstrap.datetimepicker用
+																			'css'		=> array(self::BOOTSTRAP_DATETIMEPICKER_CSS),
+																			'url'		=> self::BOOTSTRAP_DATETIMEPICKER_URL,
+																			'version'	=> self::BOOTSTRAP_DATETIMEPICKER_VER),
 													
 						// jQueryライブラリ
 						self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル
@@ -640,9 +659,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 										//self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
 										self::LIB_ELFINDER		=>	array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 										self::LIB_ELFINDER21	=>	array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
-										self::LIB_JQUERY_TIMEPICKER		=>	array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
-										self::LIB_JQUERY_UPLOADFILE		=>	array(self::LIB_JQUERY_FORM),
-										self::LIB_JQUERY_FULLCALENDAR	=> array(self::LIB_MOMENT)
+										self::LIB_JQUERY_TIMEPICKER			=>	array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
+										self::LIB_JQUERY_UPLOADFILE			=>	array(self::LIB_JQUERY_FORM),
+										self::LIB_JQUERY_FULLCALENDAR		=> array(self::LIB_MOMENT),
+										self::LIB_BOOTSTRAP_DATETIMEPICKER	=> array(self::LIB_MOMENT)
 									);
 		
 		return $dependentLib[$lib];
