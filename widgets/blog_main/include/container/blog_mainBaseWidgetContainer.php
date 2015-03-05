@@ -29,8 +29,8 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected $_isMultiLang;			// 多言語対応画面かどうか
 	protected $_blogId;		// ブログID
 	protected $_baseUrl;		// ベースURL
-	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
-	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
+//	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
+//	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
 	
 	// 画面
 	const TASK_TOP				= 'top';			// トップ画面

@@ -23,11 +23,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 {
 	private $categoryDb;	// DB接続オブジェクト
 	private $commentDb;			// DB接続オブジェクト
-	private $preview;			// プレビューモードかどうか
 	private $entryId;	// 記事ID
-	private $title;		// 表示タイトル
-	private $widgetTitle;	// ウィジェットタイトル
-	private $message;			// ユーザ向けメッセージ
 	private $blogId;			// ブログID
 	private $startDt;
 	private $endDt;
@@ -36,19 +32,26 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $currentDay;		// 現在日
 	private $currentHour;		// 現在時間
 	private $currentPageUrl;			// 現在のページURL
-	private $isOutputComment;		// コメントを出力するかどうか
-	private $isExistsViewData;				// 表示データがあるかどうか
+	// 表示制御
 	private $isSystemManageUser;	// システム運用可能ユーザかどうか
+	private $preview;				// プレビューモードかどうか
+	private $outputHead;			// ヘッダ出力するかどうか
+	private $useWidgetTitle;		// ウィジェットタイトルを使用するかどうか
+	private $isExistsViewData;		// 表示データがあるかどうか
+	private $useMultiBlog;			// マルチブログを使用するかどうか
+	private $isOutputComment;		// コメントを出力するかどうか
+	private $receiveComment;		// コメントを受け付けるかどうか
+
+	// 表示項目
+	private $title;		// 表示タイトル
+	private $widgetTitle;	// ウィジェットタイトル
+	private $message;			// ユーザ向けメッセージ
 	private $pageTitle;				// 画面タイトル、パンくずリスト用タイトル
 	private $editIconPos;			// 編集アイコンの位置
-	private $useMultiBlog;			// マルチブログを使用するかどうか
-	private $receiveComment;		// コメントを受け付けるかどうか
-	private $useWidgetTitle;		// ウィジェットタイトルを使用するかどうか
 	private $headTitle;		// METAタグタイトル
 	private $headDesc;		// METAタグ要約
 	private $headKeyword;	// METAタグキーワード
 	private $addLib = array();		// 追加スクリプト
-	private $outputHead;			// ヘッダ出力するかどうか
 	private $viewMode;					// 表示モード
 	private $avatarSize;		// アバター画像サイズ
 	private $titleList;		// 一覧タイトル
@@ -57,6 +60,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $messageFindNoEntry;	// ブログ記事が見つからないメッセージ
 	private $startTitleTagLevel;	// 最初のタイトルタグレベル
 	private $itemTagLevel;			// 記事のタイトルタグレベル
+	
 	const CONTENT_TYPE = 'bg';
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_EXT_ENTRY		= '続きを読む';					// 投稿記事に続きがある場合の表示
@@ -65,7 +69,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	const COMMENT_PERMA_HEAD	= 'comment-';		// コメントパーマリンク
 	const COMMENT_TITLE		= ' についてのコメント';	// コメント用タイトル
 	const NO_COMMENT_TITLE = 'タイトルなし';				// 未設定時のコメントタイトル
-	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
 	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
@@ -336,7 +339,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			if ($act == 'checkcomment'){		// コメント確認のとき
 				// 入力チェック
 				$maxCommentLength = self::$_configArray[blog_mainCommonDef::CF_MAX_COMMENT_LENGTH];// コメント最大長
-				if ($maxCommentLength == '') $maxCommentLength = self::DEFAULT_COMMENT_LENGTH;
+				if ($maxCommentLength == '') $maxCommentLength = blog_mainCommonDef::DEFAULT_COMMENT_LENGTH;
 				if (empty($maxCommentLength)){		// 空のときは長さのチェックなし
 					$this->checkInput($body, 'コメント内容');
 				} else {
@@ -469,7 +472,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	{
 		// ブログ定義値取得
 		$entryViewCount	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_VIEW_COUNT];// 記事表示数
-		if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
+		if (empty($entryViewCount)) $entryViewCount = blog_mainCommonDef::DEFAULT_VIEW_COUNT;
 		$entryViewOrder	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_VIEW_ORDER];// 記事表示順
 		
 		$showTopContent = false;		// トップコンテンツを表示するかどうか
@@ -562,7 +565,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	{
 		// ブログ定義値取得
 		$entryViewCount	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_VIEW_COUNT];// 記事表示数
-		if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
+		if (empty($entryViewCount)) $entryViewCount = blog_mainCommonDef::DEFAULT_VIEW_COUNT;
 		$entryViewOrder	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_VIEW_ORDER];// 記事表示順
 		
 		$keyword = $request->trimValueOf('keyword');// 検索キーワード
@@ -624,7 +627,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	{
 		// ブログ定義値取得
 		$entryViewCount	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_VIEW_COUNT];// 記事表示数
-		if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
+		if (empty($entryViewCount)) $entryViewCount = blog_mainCommonDef::DEFAULT_VIEW_COUNT;
 		$entryViewOrder	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_VIEW_ORDER];// 記事表示順
 		
 		$category = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);		// カテゴリID

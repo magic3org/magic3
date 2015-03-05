@@ -18,7 +18,7 @@ class blog_mainCommonDef
 {
 	static $_deviceType = 0;	// デバイスタイプ
 	
-	// DB定義値
+	// ##### DB定義値 #####
 	const CF_RECEIVE_COMMENT		= 'receive_comment';		// コメントを受け付けるかどうか
 	const CF_RECEIVE_TRACKBACK		= 'receive_trackback';		// トラックバックを受け付けるかどうか
 	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
@@ -58,6 +58,11 @@ class blog_mainCommonDef
 	const DEFAULT_MESSAGE_NO_ENTRY		= 'ブログ記事は登録されていません';				// ブログ記事が登録されていないメッセージ
 	const DEFAULT_MESSAGE_FIND_NO_ENTRY	= 'ブログ記事が見つかりません';					// ブログ記事が見つからないメッセージ
 	const DEFAULT_TITLE_TAG_LEVEL		= 2;		// デフォルトのタイトルタグレベル
+	
+	// ##### デフォルト値 #####
+	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
+	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
+	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリー数
 	
 	/**
 	 * ブログ定義値をDBから取得

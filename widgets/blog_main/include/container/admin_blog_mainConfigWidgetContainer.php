@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,7 +18,6 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
 	private $tmpDir;		// 作業ディレクトリ
-	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
 	const IMAGE_TYPE_ENTRY_IMAGE = 'entryimage';			// 画像タイプ(記事デフォルト画像)
 	const ACT_UPLOAD_IMAGE	= 'uploadimage';			// 画像アップロード
 	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
@@ -174,13 +173,13 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		}
 		if ($reloadData){		// データを再取得
 			$entryViewCount	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_VIEW_COUNT);// 記事表示数
-			if (empty($entryViewCount)) $entryViewCount = self::DEFAULT_VIEW_COUNT;
+			if (empty($entryViewCount)) $entryViewCount = blog_mainCommonDef::DEFAULT_VIEW_COUNT;
 			$entryViewOrder	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_VIEW_ORDER);// 記事表示順
 			$categoryCount	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_CATEGORY_COUNT);// カテゴリ数
-			if (empty($categoryCount)) $categoryCount = self::DEFAULT_CATEGORY_COUNT;
+			if (empty($categoryCount)) $categoryCount = blog_mainCommonDef::DEFAULT_CATEGORY_COUNT;
 			$receiveComment	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_RECEIVE_COMMENT);
 			$maxCommentLength = self::$_mainDb->getConfig(blog_mainCommonDef::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
-			if ($maxCommentLength == '') $maxCommentLength = self::DEFAULT_COMMENT_LENGTH;
+			if ($maxCommentLength == '') $maxCommentLength = blog_mainCommonDef::DEFAULT_COMMENT_LENGTH;
 			$commentUserLimited = self::$_mainDb->getConfig(blog_mainCommonDef::CF_COMMENT_USER_LIMITED);	// コメントのユーザ制限
 			if (!isset($commentUserLimited)) $commentUserLimited = '0';
 			$useMultiBlog = self::$_mainDb->getConfig(blog_mainCommonDef::CF_USE_MULTI_BLOG);// マルチブログ機能を使用するかどうか

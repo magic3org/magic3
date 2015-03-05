@@ -21,8 +21,8 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	protected static $_mainDb;			// DB接続オブジェクト
 	protected static $_configArray;		// ブログ定義値
-	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
-	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
+//	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
+//	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
 	
 	// カレンダー用スクリプト
 	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル

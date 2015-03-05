@@ -308,7 +308,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 		$useMultiBlog = self::$_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
 		$useComment = self::$_configArray[blog_mainCommonDef::CF_RECEIVE_COMMENT];// コメント機能を使用するかどうか
 		$this->categoryCount = self::$_configArray[blog_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
-		if (empty($this->categoryCount)) $this->categoryCount = self::DEFAULT_CATEGORY_COUNT;
+		if (empty($this->categoryCount)) $this->categoryCount = blog_mainCommonDef::DEFAULT_CATEGORY_COUNT;
 		
 		// コンテンツレイアウトを取得
 		$contentLayout = array(self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE], self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST]);
