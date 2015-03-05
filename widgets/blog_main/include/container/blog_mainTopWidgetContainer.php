@@ -257,7 +257,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// 運用可能ユーザの場合は編集用ボタンを表示
-		//if ($this->isExistsViewData && self::$_canEditEntry){		// 記事編集権限ありのとき
 		if (self::$_canEditEntry){		// 記事編集権限ありのとき
 			// 共通ボタン埋め込み
 			$this->tmpl->setAttribute('button_list', 'visibility', 'visible');
