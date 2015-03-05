@@ -66,7 +66,25 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		
 		// ブログ定義を読み込む
 		if (!isset(self::$_configArray)) self::$_configArray = blog_mainCommonDef::loadConfig(self::$_mainDb);
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		// URLパラメータ取得
+		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
 		
+		// 共通パラメータ初期化
 		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
 		$this->_userId = $this->gEnv->getCurrentUserId();		// 現在のユーザ
 		$this->_isMultiLang = $this->gEnv->isMultiLanguageSite();			// 多言語対応画面かどうか
@@ -82,10 +100,6 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	 */
 	function _preAssign($request, &$param)
 	{
-		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
-		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
-		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
-		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -108,7 +122,6 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::$_task;
-//		$blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		
 		// パンくずリストの定義データ作成
 		$titles = array();
@@ -211,56 +224,6 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		
 		// サブメニューバーを作成
 		$this->setConfigMenubarDef($titles, $menu);
-/*		
-		// パンくずリストを作成
-		switch ($task){
-			case 'entry':		// ブログ記事
-			case 'entry_detail':	// ブログ記事詳細
-				$linkList = ' &gt;&gt; 記事';// パンくずリスト
-				break;
-			case 'comment':		// ブログ記事コメント
-			case 'comment_detail':	// ブログ記事コメント
-				$linkList = ' &gt;&gt; コメント';// パンくずリスト
-				break;
-		}
-		// ベースURL作成
-		$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
-		$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
-		$urlparam .= 'openby=other&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $blogId;
-		$baseUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
-		
-		// ####### 下段メニューの作成 #######		
-		$menuText .= '<div id="configmenu-lower">' . M3_NL;
-		$menuText .= '<ul>' . M3_NL;
-
-		if ($task == 'entry' ||		// ブログ記事管理
-			$task == 'entry_detail' ||
-			$task == 'comment' ||		// ブログ記事コメント管理
-			$task == 'comment_detail'){
-			
-			// ブログ記事一覧
-			$current = '';
-			$link = $baseUrl . '&task=entry';
-			//$link = $baseUrl . '&task=entry_detail';		// 詳細をデフォルトにする
-			if ($task == 'entry' || $task == 'entry_detail') $current = 'id="current"';
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>記事</span></a></li>' . M3_NL;
-			
-			// ブログ記事コメント一覧
-			$current = '';
-			$link = $baseUrl . '&task=comment';
-			if ($task == 'comment' || $task == 'comment_detail') $current = 'id="current"';
-			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>コメント</span></a></li>' . M3_NL;
-		}
-		
-		// 下段メニュー終了
-		$menuText .= '</ul>' . M3_NL;
-		$menuText .= '</div>' . M3_NL;
-
-		// 作成データの埋め込み
-		$linkList = '<div id="configmenu-top"><label>' . 'ブログ' . $linkList . '</div>';
-		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
-		$this->tmpl->addVar("_widget", "menu_items", $outputText);
-		*/
 	}
 }
 ?>
