@@ -55,7 +55,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	/**
 	 * ウィジェット初期化
 	 *
-	 * 以下のパターンで通常のウィジェット出力と異なる処理を行う場合の初期設定
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
 	 * ・組み込みの_setTemplate(),_assign()を使用
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
@@ -65,7 +65,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	{
 		$task = $request->trimValueOf('task');
 		if ($task == 'list'){		// 一覧画面
-			// テンプレート処理を変更。_setTemplate()、_assign()はキャンセル。
+			// 通常のテンプレート処理を組み込みのテンプレート処理に変更。_setTemplate()、_assign()はキャンセル。
 			$this->replaceAssignTemplate(self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST);		// 設定一覧(基本)
 		}
 	}

@@ -28,6 +28,7 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected $_userId;			// 現在のユーザ
 	protected $_isMultiLang;			// 多言語対応画面かどうか
 	protected $_blogId;		// ブログID
+	protected $_baseUrl;		// ベースURL
 	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
 	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
 	
@@ -79,9 +80,8 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	function _init($request)
 	{
 		// URLパラメータ取得
-		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
-		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);		// ウィンドウオープンタイプ
 		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
 		
 		// 共通パラメータ初期化

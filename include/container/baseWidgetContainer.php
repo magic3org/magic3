@@ -149,7 +149,7 @@ class BaseWidgetContainer extends Core
 		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 				
 		// ##### 初期処理 #####
-		// 組み込みのウィジェットメイン処理を行う場合は、_init()で設定を行う
+		// 独自のウィジェットメイン処理を行う場合は、_init()で設定を行う
 		if (method_exists($this, '_init')) $this->_init($request);
 		
 		// ##### ウィジェットメイン処理 #####
