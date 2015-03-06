@@ -443,7 +443,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 		}
 
-		if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+		if ($this->isSystemManageUser){		// システム管理ユーザの場合
 			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
 										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
 		} else {
@@ -518,7 +518,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		if (!$showTopContent){
 			// 総数を取得
-			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $this->startDt, $this->endDt, ''/*検索キーワード*/, $this->_langId, $targetBlogId, null, $this->preview);
 			} else {
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $this->startDt, $this->endDt, ''/*検索キーワード*/, $this->_langId, $targetBlogId, $this->_userId, $this->preview);
@@ -532,7 +532,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . $multiBlogParam);
 
 			// 記事一覧作成
-			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
 								''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $targetBlogId, null, $this->preview);
 			} else {
@@ -576,7 +576,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 			
 			// 総数を取得
-			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, ''/*期間開始*/, ''/*期間終了*/, $parsedKeywords, $this->_langId, null/*ブログID*/, null, $this->preview);
 			} else {
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, ''/*期間開始*/, ''/*期間終了*/, $parsedKeywords, $this->_langId, null/*ブログID*/, $this->_userId, $this->preview);
@@ -587,7 +587,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
 
 			// 記事一覧を表示
-			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0, ''/*期間開始*/, ''/*期間終了*/,
 													$parsedKeywords, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログID*/, null, $this->preview);
 			} else {
@@ -626,7 +626,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		if (!empty($category)){				// カテゴリー指定のとき
 			// 総数を取得
-			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				$totalCount = self::$_mainDb->getEntryItemsCountByCategory($this->now, $category, $this->_langId);
 			} else {
 				$totalCount = self::$_mainDb->getEntryItemsCountByCategory($this->now, $category, $this->_langId, $this->_userId);
@@ -637,7 +637,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 			
 			// 記事一覧を表示
-			if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				self::$_mainDb->getEntryItemsByCategory($this->entryViewCount, $this->pageNo, $this->now, $category, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'));
 			} else {
 				self::$_mainDb->getEntryItemsByCategory($this->entryViewCount, $this->pageNo, $this->now, $category, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->_userId);
@@ -664,7 +664,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$endDt = $this->getNextDay($year . '/' . $month . '/' . $day);
 				
 				// 総数を取得
-				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, null, $this->preview);
 				} else {
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId, $this->preview);
@@ -675,7 +675,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
 
 				// 記事一覧作成
-				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
 													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
 				} else {
@@ -703,7 +703,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$endDt = $this->getNextMonth($year . '/' . $month) . '/1';
 				
 				// 総数を取得
-				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, null, $this->preview);
 				} else {
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId, $this->preview);
@@ -714,7 +714,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
 				
 				// 記事一覧作成
-				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
 													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
 				} else {
@@ -741,7 +741,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$endDt = ($year + 1) . '/1/1';
 				
 				// 総数を取得
-				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, null, $this->preview);
 				} else {
 					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId, $this->preview);
@@ -752,7 +752,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year);
 				
 				// 記事一覧作成
-				if ($this->gEnv->isSystemManageUser()){		// システム管理ユーザの場合
+				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
 													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
 				} else {
@@ -849,7 +849,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	function itemsLoop($index, $fetchedRow)
 	{
 		// 参照ビューカウントを更新
-		if (!$this->gEnv->isSystemManageUser()){		// システム運用者以上の場合はカウントしない
+		if (!$this->isSystemManageUser){		// システム運用者以上の場合はカウントしない
 			$this->gInstance->getAnalyzeManager()->updateContentViewCount(self::CONTENT_TYPE, $fetchedRow['be_serial'], $this->currentDay, $this->currentHour);
 		}
 
@@ -944,14 +944,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 			
 		// コンテンツのサムネールを取得
-/*		$thumbUrl = '';
-		$thumbFilename = $fetchedRow['be_thumb_filename'];
-		if ($isDefaltContent) $thumbFilename = $defaltContentRow['be_thumb_filename'];
-		if (empty($thumbFilename)) $thumbFilename = self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE];		// 記事デフォルト画像
-		if (!empty($thumbFilename)){
-			$thumbFilenameArray = explode(';', $thumbFilename);
-			$thumbUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $thumbFilenameArray[count($thumbFilenameArray) -1]);
-		}*/
 		$thumbFilename = $fetchedRow['be_thumb_filename'];
 		if ($isDefaltContent) $thumbFilename = $defaltContentRow['be_thumb_filename'];
 		$thumbUrl = blog_mainCommonDef::getEyecatchImageUrl($thumbFilename, self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
@@ -979,15 +971,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 			$categoryTag .= implode(self::CATEGORY_BLOCK_SEPARATOR, $categoryItems);	// リンク項目を連結
 			$categoryTag .= '</div>';
-			// リストスタイルのとき
-			/*
-			$categoryTag .= '<ul class="' . self::CATEGORY_BLOCK_CLASS . '">';
-			for ($i = 0; $i < count($categoryRows); $i++){
-				$categoryUrl = $this->currentPageUrl . '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $categoryRows[$i]['bc_id'];	// カテゴリーリンク先
-				$categoryTag .= '<li><a href="' . $this->convertUrlToHtmlEntity($this->getUrl($categoryUrl)) . '">' . $this->convertToDispString($categoryRows[$i]['bc_name']);
-				$categoryTag .= '</a></li>';
-			}
-			$categoryTag .= '</ul>';*/
 		}
 		// コメントへのリンク
 		$commentLink = '';
