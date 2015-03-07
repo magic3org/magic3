@@ -52,8 +52,8 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	private $avatarSize;		// アバター画像サイズ
 	private $titleList;		// 一覧タイトル
 	private $titleNoEntry;		// 記事なし時タイトル
-	private $messageNoEntry;		// ブログ記事が登録されていないメッセージ
-	private $messageFindNoEntry;	// ブログ記事が見つからないメッセージ
+	private $messageNoEntry;		// イベント記事が登録されていないメッセージ
+	private $messageFindNoEntry;	// イベント記事が見つからないメッセージ
 	private $startTitleTagLevel;	// 最初のタイトルタグレベル
 	private $itemTagLevel;			// 記事のタイトルタグレベル
 	// イベント情報追加分
@@ -106,9 +106,9 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		if (empty($this->titleSearchList)) $this->titleSearchList = event_mainCommonDef::DEFAULT_TITLE_SEARCH_LIST;
 		$this->titleNoEntry = self::$_configArray[event_mainCommonDef::CF_TITLE_NO_ENTRY];		// 記事なし時タイトル
 		if (empty($this->titleNoEntry)) $this->titleNoEntry = event_mainCommonDef::DEFAULT_TITLE_NO_ENTRY;
-		$this->messageNoEntry = self::$_configArray[event_mainCommonDef::CF_MESSAGE_NO_ENTRY];		// ブログ記事が登録されていないメッセージ
+		$this->messageNoEntry = self::$_configArray[event_mainCommonDef::CF_MESSAGE_NO_ENTRY];		// イベント記事が登録されていないメッセージ
 		if (empty($this->messageNoEntry)) $this->messageNoEntry = event_mainCommonDef::DEFAULT_MESSAGE_NO_ENTRY;
-		$this->messageFindNoEntry = self::$_configArray[event_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY];		// ブログ記事が見つからないメッセージ
+		$this->messageFindNoEntry = self::$_configArray[event_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY];		// イベント記事が見つからないメッセージ
 		if (empty($this->messageFindNoEntry)) $this->messageFindNoEntry = event_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;
 		$this->startTitleTagLevel = self::$_configArray[event_mainCommonDef::CF_TITLE_TAG_LEVEL];	// 最初のタイトルタグレベル
 		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = event_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
@@ -171,7 +171,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$this->currentDay = date("Y/m/d");		// 日
 		$this->currentHour = (int)date("H");		// 時間
 //		$this->currentPageUrl = $this->gEnv->createCurrentPageUrl();// 現在のページURL
-//		$this->isOutputComment = false;// コメントを出力するかどうか
 		$this->isSystemManageUser = $this->gEnv->isSystemManageUser();	// システム運用可能ユーザかどうか
 		$this->pageTitle = '';		// 画面タイトル、パンくずリスト用タイトル
 		
@@ -293,15 +292,12 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			}
 		}
 		
-		if ($this->isSystemManageUser){		// システム管理ユーザの場合
-			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
-										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
-		} else {
-			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
-										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId, $this->preview);
-		}
+		// 記事表示
+		self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
+										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->preview);
+
 		
-		// ブログ記事データがないときはデータなしメッセージ追加
+		// イベント記事データがないときはデータなしメッセージ追加
 		if (!$this->isExistsViewData){
 			$this->title = $this->titleNoEntry;
 			$this->message = $this->messageNoEntry;
@@ -316,25 +312,16 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	function showTopList($request)
 	{
 		// 総数を取得
-		if ($this->isSystemManageUser){		// システム管理ユーザの場合
-			$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $this->startDt, $this->endDt, ''/*検索キーワード*/, $this->_langId, $targetBlogId, null, $this->preview);
-		} else {
-			$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $this->startDt, $this->endDt, ''/*検索キーワード*/, $this->_langId, $targetBlogId, $this->_userId, $this->preview);
-		}
+		$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $this->startDt, $this->endDt, ''/*検索キーワード*/, $this->_langId, $this->preview);
 		$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 		
 		// リンク文字列作成、ページ番号調整
-		// マルチブログのときはブログIDを付加する
 		$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl);
 
 		// 記事一覧作成
-		if ($this->isSystemManageUser){		// システム管理ユーザの場合
-			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
-							''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $targetBlogId, null, $this->preview);
-		} else {
-			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
-							''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $targetBlogId, $this->_userId, $this->preview);
-		}
+
+		self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
+							''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 		
 		if ($this->isExistsViewData){
 			// ページリンクを埋め込む
@@ -342,7 +329,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
 				$this->tmpl->addVar("page_link", "page_link", $pageLink);
 			}
-		} else {	// ブログ記事データがないときはデータなしメッセージ追加
+		} else {	// イベント記事データがないときはデータなしメッセージ追加
 			$this->title = $this->titleNoEntry;
 			$this->message = $this->messageNoEntry;
 		}
@@ -371,24 +358,15 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			}
 			
 			// 総数を取得
-			if ($this->isSystemManageUser){		// システム管理ユーザの場合
-				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, ''/*期間開始*/, ''/*期間終了*/, $parsedKeywords, $this->_langId, null/*ブログID*/, null, $this->preview);
-			} else {
-				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, ''/*期間開始*/, ''/*期間終了*/, $parsedKeywords, $this->_langId, null/*ブログID*/, $this->_userId, $this->preview);
-			}
+			$totalCount = self::$_mainDb->getEntryItemsCount($this->now, ''/*期間開始*/, ''/*期間終了*/, $parsedKeywords, $this->_langId, $this->preview);
 			$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
 
 			// 記事一覧を表示
-			if ($this->isSystemManageUser){		// システム管理ユーザの場合
-				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0, ''/*期間開始*/, ''/*期間終了*/,
-													$parsedKeywords, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログID*/, null, $this->preview);
-			} else {
-				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0, ''/*期間開始*/, ''/*期間終了*/,
-													$parsedKeywords, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログID*/, $this->_userId, $this->preview);
-			}
+			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0, ''/*期間開始*/, ''/*期間終了*/,
+													$parsedKeywords, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 			
 			if ($this->isExistsViewData){
 				// ページリンクを埋め込む
@@ -421,28 +399,20 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		
 		if (!empty($category)){				// カテゴリー指定のとき
 			// 総数を取得
-			if ($this->isSystemManageUser){		// システム管理ユーザの場合
-				$totalCount = self::$_mainDb->getEntryItemsCountByCategory($this->now, $category, $this->_langId);
-			} else {
-				$totalCount = self::$_mainDb->getEntryItemsCountByCategory($this->now, $category, $this->_langId, $this->_userId);
-			}
+			$totalCount = self::$_mainDb->getEntryItemsCountByCategory($this->now, $category, $this->_langId);
 			$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 			
 			// 記事一覧を表示
-			if ($this->isSystemManageUser){		// システム管理ユーザの場合
-				self::$_mainDb->getEntryItemsByCategory($this->entryViewCount, $this->pageNo, $this->now, $category, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'));
-			} else {
-				self::$_mainDb->getEntryItemsByCategory($this->entryViewCount, $this->pageNo, $this->now, $category, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->_userId);
-			}
+			self::$_mainDb->getEntryItemsByCategory($this->entryViewCount, $this->pageNo, $this->now, $category, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'));
 
 			// タイトルの設定
 			$ret = $this->categoryDb->getCategoryByCategoryId($category, $this->gEnv->getDefaultLanguage(), $row);
 			if ($ret) $this->title = str_replace('$1', $row['bc_name'], $this->titleList);
 			
-			// ブログ記事データがないときはデータなしメッセージ追加
+			// イベント記事データがないときはデータなしメッセージ追加
 			if ($this->isExistsViewData){
 				// ページリンクを埋め込む
 				if (!empty($pageLink)){
@@ -459,24 +429,15 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$endDt = $this->getNextDay($year . '/' . $month . '/' . $day);
 				
 				// 総数を取得
-				if ($this->isSystemManageUser){		// システム管理ユーザの場合
-					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, null, $this->preview);
-				} else {
-					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId, $this->preview);
-				}
+				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, $this->preview);
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
 
 				// 記事一覧作成
-				if ($this->isSystemManageUser){		// システム管理ユーザの場合
-					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
-													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
-				} else {
-					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
-													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId, $this->preview);
-				}
+				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
+													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 				
 				if ($this->isExistsViewData){
 					// ページリンクを埋め込む
@@ -489,7 +450,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				// 年月日の表示
 				$this->title = str_replace('$1', $year . '年 ' . $month . '月 ' . $day . '日', $this->titleList);
 				
-				// ブログ記事データがないときはデータなしメッセージ追加
+				// イベント記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
 				}
@@ -498,24 +459,15 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$endDt = $this->getNextMonth($year . '/' . $month) . '/1';
 				
 				// 総数を取得
-				if ($this->isSystemManageUser){		// システム管理ユーザの場合
-					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, null, $this->preview);
-				} else {
-					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId, $this->preview);
-				}
+				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, $this->preview);
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
 				
 				// 記事一覧作成
-				if ($this->isSystemManageUser){		// システム管理ユーザの場合
-					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
-													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
-				} else {
-					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
-													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId, $this->preview);
-				}
+				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
+													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 				
 				if ($this->isExistsViewData){
 					// ページリンクを埋め込む
@@ -527,7 +479,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				// 年月の表示
 				$this->title = str_replace('$1', $year . '年 ' . $month . '月', $this->titleList);
 				
-				// ブログ記事データがないときはデータなしメッセージ追加
+				// イベント記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
 				}
@@ -536,24 +488,15 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$endDt = ($year + 1) . '/1/1';
 				
 				// 総数を取得
-				if ($this->isSystemManageUser){		// システム管理ユーザの場合
-					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, null, $this->preview);
-				} else {
-					$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, null, $this->_userId, $this->preview);
-				}
+				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $startDt, $endDt, ''/*検索キーワード*/, $this->_langId, $this->preview);
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year);
 				
 				// 記事一覧作成
-				if ($this->isSystemManageUser){		// システム管理ユーザの場合
-					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
-													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
-				} else {
-					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
-													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId, $this->preview);
-				}
+				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
+													''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 				
 				if ($this->isExistsViewData){
 					// ページリンクを埋め込む
@@ -565,7 +508,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				// 年の表示
 				$this->title = str_replace('$1', $year . '年', $this->titleList);
 				
-				// ブログ記事データがないときはデータなしメッセージ追加
+				// イベント記事データがないときはデータなしメッセージ追加
 				if (!$this->isExistsViewData){
 					$this->message = $this->messageNoEntry;
 				}
@@ -793,9 +736,9 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		
 		if (!isset($initContentText)){
 			if ($viewMode == 10){		// 記事単体表示の場合
-				$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];			// コンテンツレイアウト(記事詳細)
+				$initContentText = self::$_configArray[event_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];			// コンテンツレイアウト(記事詳細)
 			} else {
-				$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST];			// コンテンツレイアウト(記事一覧)
+				$initContentText = self::$_configArray[event_mainCommonDef::CF_LAYOUT_ENTRY_LIST];			// コンテンツレイアウト(記事一覧)
 			}
 		}
 		
@@ -814,7 +757,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	/**
 	 * 編集用ボタンタグ作成
 	 *
-	 * @param int $serial		ブログ記事のシリアル番号(0のときは新規ボタン)
+	 * @param int $serial		イベント記事のシリアル番号(0のときは新規ボタン)
 	 * @return string			タグ
 	 */
 	function createButtonTag($serial)
@@ -822,17 +765,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$buttonList = '';
 		
 		if (empty($serial)){
-			// 投稿ユーザの場合は投稿管理画面(ブログ記事、コメントの投稿管理)への遷移用リンクを追加
-			if (!$this->isSystemManageUser){
-				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// 投稿管理アイコン
-				$iconTitle = '投稿管理';
-				$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
-				$buttonLink = '<a href="javascript:void(0);" onclick="showConfig();">' . $editImg . '</a>';
-				$buttonList .= '<div class="m3edittool" style="top:' . $this->editIconPos . 'px;position:relative;">' . $buttonLink . '</div>';		// *** スタイルは直接設定する必要あり ***
-			
-				$this->editIconPos += self::EDIT_ICON_NEXT_POS;			// アイコンの位置を更新
-			}
-			
 			$iconUrl = $this->gEnv->getRootUrl() . self::NEW_ICON_FILE;		// 新規アイコン
 			$iconTitle = '記事作成';
 			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';

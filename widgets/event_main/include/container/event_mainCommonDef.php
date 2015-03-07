@@ -16,6 +16,8 @@
  
 class event_mainCommonDef
 {
+	static $_deviceType = 0;	// デバイスタイプ
+	
 	// ##### 定義値 #####
 	const VIEW_CONTENT_TYPE = 'ev';				// 記事参照数取得用
 	const USER_ID_SEPARATOR = ',';				// ユーザID区切り用セパレータ
@@ -84,6 +86,107 @@ class event_mainCommonDef
 			}
 		}
 		return $retVal;
+	}
+	/**
+	 * レイアウトからユーザ定義フィールドを取得
+	 *
+	 * @param string,array $src		変換するデータ
+	 * @return array				フィールドID
+	 */
+	static function parseUserMacro($src)
+	{
+		global $gInstanceManager;
+		static $fields;
+		
+		if (!isset($fields)) $fields = $gInstanceManager->getTextConvManager()->parseUserMacro($src);
+		return $fields;
+	}
+	/**
+	 * アイキャッチ用画像のURLを取得
+	 *
+	 * @param string $filenames				作成済みファイル名(「;」区切り)
+	 * @param string $defaultFilenames		作成済みデフォルトファイル名(「;」区切り)
+	 * @param string $thumbTypeDef			サムネール画像タイプ定義(タイプ指定の場合)
+	 * @param string $thumbType				サムネール画像タイプ(s,m,l)(タイプ指定の場合)
+	 * @return string						画像URL
+	 */
+	static function getEyecatchImageUrl($filenames, $defaultFilenames, $thumbTypeDef = '', $thumbType = '')
+	{
+		global $gInstanceManager;
+		static $thumbTypeArray;
+		
+		$thumbUrl = '';
+		if (empty($filenames)) $filenames = $defaultFilenames;		// 記事デフォルト画像
+		if (!empty($filenames)){
+			$thumbFilename = $gInstanceManager->getImageManager()->getSystemThumbFilenameByType($filenames, $thumbTypeDef, $thumbType);
+			if (!empty($thumbFilename)) $thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_EVENT, self::$_deviceType, $thumbFilename);
+		}
+		return $thumbUrl;
+	}
+	
+	/**
+	 * アイキャッチ用画像を公開ディレクトリにコピー
+	 *
+	 * @param string    $entryId		記事ID
+	 * @return bool						true=成功、false=失敗
+	 */
+	static function copyEyecatchImageToPublicDir($entryId)
+	{
+		global $gInstanceManager;
+		
+		// 画像ファイル名、フォーマット取得
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		
+		// 画像を公開ディレクトリにコピー
+		$privateThumbDir = $gInstanceManager->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_EVENT, self::$_deviceType);
+		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_EVENT, self::$_deviceType);
+		$ret = cpFileToDir($privateThumbDir, $filenames, $publicThumbDir);
+		return $ret;
+	}
+	/**
+	 * 公開ディレクトリのアイキャッチ用画像を削除
+	 *
+	 * @param string    $entryId		記事ID
+	 * @return bool						true=成功、false=失敗
+	 */
+	static function removerEyecatchImageInPublicDir($entryId)
+	{
+		global $gInstanceManager;
+		
+		// 画像ファイル名、フォーマット取得
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
+		
+		// 公開ディレクトリ内の画像を削除
+		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_EVENT, self::$_deviceType);
+		for ($i = 0; $i < count($filenames); $i++){
+			$publicThumbPath = $publicThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
+			if (file_exists($publicThumbPath)) @unlink($publicThumbPath);
+		}
+		return true;
+	}
+	/**
+	 * 公開,非公開ディレクトリのアイキャッチ用画像を削除
+	 *
+	 * @param string    $entryId		記事ID
+	 * @return bool						true=成功、false=失敗
+	 */
+	static function removerEyecatchImage($entryId)
+	{
+		global $gInstanceManager;
+		
+		// 画像ファイル名、フォーマット取得
+		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
+
+		// 公開ディレクトリ、非公開ディレクトリの画像を削除
+		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_EVENT, self::$_deviceType);
+		$privateThumbDir = $gInstanceManager->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_EVENT, self::$_deviceType);
+		for ($i = 0; $i < count($filenames); $i++){
+			$publicThumbPath = $publicThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
+			$privateThumbPath = $privateThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
+			if (file_exists($publicThumbPath)) @unlink($publicThumbPath);
+			if (file_exists($privateThumbPath)) @unlink($privateThumbPath);
+		}
+		return true;
 	}
 }
 ?>

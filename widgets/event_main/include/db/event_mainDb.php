@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -209,73 +209,6 @@ class event_mainDb extends BaseDb
 			$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
 			return $this->selectRecordCount($queryStr, array());
 		}
-	}
-	/**
-	 * エントリー項目を検索(表示用)
-	 *
-	 * @param int		$limit				取得する項目数
-	 * @param int		$page				取得するページ(1～)
-	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
-	 * @param string	$keyword			検索キーワード
-	 * @param string	$langId				言語
-	 * @param function	$callback			コールバック関数
-	 * @return 			なし
-	 */
-	function searchEntryItemsByKeyword($limit, $page, $now, $keyword, $langId, $callback)
-	{
-		$offset = $limit * ($page -1);
-		if ($offset < 0) $offset = 0;
-		$params = array();
-		
-		$queryStr = 'SELECT * FROM event_entry ';
-		$queryStr .=   'WHERE ee_language_id = ? ';	$params[] = $langId;
-		$queryStr .=     'AND ee_deleted = false ';		// 削除されていない
-
-		// タイトルと記事を検索
-		if (!empty($keyword)){
-			// 「'"\」文字をエスケープ
-			$keyword = addslashes($keyword);
-			
-			$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\') ';
-		}
-		
-		$queryStr .=  'ORDER BY ee_start_dt desc, ee_id limit ' . $limit . ' offset ' . $offset;
-		$this->selectLoop($queryStr, $params, $callback, null);
-	}
-	/**
-	 * 検索条件のエントリー項目数を取得(表示用)
-	 *
-	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
-	 * @param string	$keyword			検索キーワード
-	 * @param string	$langId				言語
-	 * @return int							項目数
-	 */
-	function searchEntryItemsCountByKeyword($now, $keyword, $langId)
-	{
-		$params = array();
-		
-		$queryStr = 'SELECT * FROM event_entry ';
-		$queryStr .=   'WHERE ee_language_id = ? ';	$params[] = $langId;
-		$queryStr .=     'AND ee_deleted = false ';		// 削除されていない
-
-		// タイトルと記事を検索
-		if (!empty($keyword)){
-			// 「'"\」文字をエスケープ
-			$keyword = addslashes($keyword);
-			
-			$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
-			$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\') ';
-		}
-		return $this->selectRecordCount($queryStr, $params);
 	}
 	/**
 	 * エントリー項目の新規追加
@@ -664,6 +597,74 @@ class event_mainDb extends BaseDb
 	 *
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param int		$entryId			エントリーID(0のときは期間で取得)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$keywords			検索キーワード
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param function	$callback			コールバック関数
+	 * @param bool		$preview			プレビューモードかどうか
+	 * @return 			なし
+	 */
+	function getEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $keywords, $langId, $order, $callback, $preview = false)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		$params = array();
+		
+		$queryStr  = 'SELECT * FROM event_entry ';
+		$queryStr .=   'WHERE ee_deleted = false ';		// 削除されていない
+		$queryStr .=     'AND ee_language_id = ? ';	$params[] = $langId;
+		if (!empty($entryId)){
+			$queryStr .=     'AND ee_id = ? ';		$params[] = $entryId;
+		}
+		
+		// タイトルと記事、ユーザ定義フィールドを検索
+		if (!empty($keywords)){
+			for ($i = 0; $i < count($keywords); $i++){
+				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
+				$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_description LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
+			}
+		}
+	
+		// 検索条件
+		if (empty($startDt) && empty($endDt)){
+			$nowDate = date("Y/m/d", strtotime($now));
+			$queryStr .=    'AND ? <= ee_start_dt ';
+			$params[] = $nowDate;
+		} else {
+			if (!empty($startDt)){
+				$queryStr .=    'AND ? <= ee_start_dt ';
+				$params[] = $startDt;
+			}
+			if (!empty($endDt)){
+				$queryStr .=    'AND ee_start_dt < ? ';
+				$params[] = $endDt;
+			}
+		}
+		
+		if (!$preview){		// プレビューモードでないときは取得制限
+			$queryStr .=     'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
+		}
+
+		if (empty($entryId)){
+			$ord = '';
+			if (!empty($order)) $ord = 'DESC ';
+			$queryStr .=  'ORDER BY ee_start_dt ' . $ord . 'LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
+		}
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
+	 * エントリー項目を取得(表示用)
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
 	 * @param timestamp $now				現在日時(期間を指定しない場合は現在日より未来のイベントを取得)
 	 * @param int		$entryId			エントリーID(0のときは期間で取得)
 	 * @param timestamp	$startDt			期間(開始日)
@@ -674,7 +675,7 @@ class event_mainDb extends BaseDb
 	 * @param bool		$preview			プレビューモードかどうか
 	 * @return 			なし
 	 */
-	function getEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $langId, $order, $callback, $preview = false)
+/*	function getEntryItems($limit, $page, $now, $entryId, $startDt, $endDt, $langId, $order, $callback, $preview = false)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -721,8 +722,62 @@ class event_mainDb extends BaseDb
 			}
 			$this->selectLoop($queryStr, $params, $callback, null);		// 「公開」(2)データを表示
 		}
-	}
+	}*/
+	/**
+	 * エントリー項目数を取得(表示用)
+	 *
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$keywords			検索キーワード
+	 * @param string	$langId				言語
+	 * @param bool		$preview			プレビューモードかどうか
+	 * @return int							項目数
+	 */
+	function getEntryItemsCount($now, $startDt, $endDt, $keywords, $langId, $preview = false)
+	{
+		$params = array();
+		
+		$queryStr  = 'SELECT * FROM event_entry ';
+		$queryStr .=   'WHERE ee_deleted = false ';		// 削除されていない
+		$queryStr .=     'AND ee_language_id = ? ';	$params[] = $langId;
+		if (!empty($entryId)){
+			$queryStr .=     'AND ee_id = ? ';		$params[] = $entryId;
+		}
+		
+		// タイトルと記事、ユーザ定義フィールドを検索
+		if (!empty($keywords)){
+			for ($i = 0; $i < count($keywords); $i++){
+				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
+				$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_description LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
+			}
+		}
 	
+		// 検索条件
+		if (empty($startDt) && empty($endDt)){
+			$nowDate = date("Y/m/d", strtotime($now));
+			$queryStr .=    'AND ? <= ee_start_dt ';
+			$params[] = $nowDate;
+		} else {
+			if (!empty($startDt)){
+				$queryStr .=    'AND ? <= ee_start_dt ';
+				$params[] = $startDt;
+			}
+			if (!empty($endDt)){
+				$queryStr .=    'AND ee_start_dt < ? ';
+				$params[] = $endDt;
+			}
+		}
+		
+		if (!$preview){		// プレビューモードでないときは取得制限
+			$queryStr .=     'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
+		}
+		return $this->selectRecordCount($queryStr, $params);
+	}
 	/**
 	 * エントリー項目数を取得(表示用)
 	 *
@@ -733,7 +788,7 @@ class event_mainDb extends BaseDb
 	 * @param bool		$preview			プレビューモードかどうか
 	 * @return int							項目数
 	 */
-	function getEntryItemsCount($now, $startDt, $endDt, $langId, $preview = false)
+/*	function getEntryItemsCount($now, $startDt, $endDt, $langId, $preview = false)
 	{
 		$params = array();
 		
@@ -761,7 +816,7 @@ class event_mainDb extends BaseDb
 			}
 		}
 		return $this->selectRecordCount($queryStr, $params);
-	}
+	}*/
 	/**
 	 * エントリー項目をカテゴリー指定で取得(表示用)
 	 *
