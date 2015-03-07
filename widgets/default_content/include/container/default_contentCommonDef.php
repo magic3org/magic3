@@ -77,7 +77,7 @@ class default_contentCommonDef
 	 * @param string $src			変換するデータ
 	 * @return array				フィールドID
 	 */
-	static function parseUserMacro($src)
+/*	static function parseUserMacro($src)
 	{
 		$fields = array();
 		$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+):?(.*?)' . preg_quote(M3_TAG_END) . '/u';
@@ -87,6 +87,14 @@ class default_contentCommonDef
 			$value = $matches[$i][2];
 			if (!array_key_exists($key, $fields)) $fields[$key] = $value;
 		}
+		return $fields;
+	}*/
+	static function parseUserMacro($src)
+	{
+		global $gInstanceManager;
+		static $fields;
+		
+		if (!isset($fields)) $fields = $gInstanceManager->getTextConvManager()->parseUserMacro($src);
 		return $fields;
 	}
 }

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: textConvManager.php 6089 2013-06-10 12:33:15Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/htmlEdit.php');
@@ -75,6 +75,36 @@ class TextConvManager extends Core
 			$dest = str_replace(M3_TAG_START . $key . M3_TAG_END, $value, $dest);
 		}
 		return true;
+	}
+	/**
+	 * テキストからユーザ定義フィールドIDとオプションパラメータを取得
+	 *
+	 * @param string,array $src		検索するデータ
+	 * @return array				フィールドIDとオプションパラメータの連想配列
+	 */
+	function parseUserMacro($src)
+	{
+		$fields = array();
+		$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+):?(.*?)' . preg_quote(M3_TAG_END) . '/u';
+		
+		if (is_array($src)){
+			for ($j = 0; $j < count($src); $j++){
+				preg_match_all($pattern, $src[$j], $matches, PREG_SET_ORDER);
+				for ($i = 0; $i < count($matches); $i++){
+					$key = M3_TAG_MACRO_USER_KEY . $matches[$i][1];
+					$value = $matches[$i][2];
+					if (!array_key_exists($key, $fields)) $fields[$key] = $value;
+				}
+			}
+		} else {
+			preg_match_all($pattern, $src, $matches, PREG_SET_ORDER);
+			for ($i = 0; $i < count($matches); $i++){
+				$key = M3_TAG_MACRO_USER_KEY . $matches[$i][1];
+				$value = $matches[$i][2];
+				if (!array_key_exists($key, $fields)) $fields[$key] = $value;
+			}
+		}
+		return $fields;
 	}
 	/**
 	 * コンテンツマクロを変換

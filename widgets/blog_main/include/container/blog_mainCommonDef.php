@@ -108,26 +108,10 @@ class blog_mainCommonDef
 	 */
 	static function parseUserMacro($src)
 	{
-		$fields = array();
-		$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+):?(.*?)' . preg_quote(M3_TAG_END) . '/u';
+		global $gInstanceManager;
+		static $fields;
 		
-		if (is_array($src)){
-			for ($j = 0; $j < count($src); $j++){
-				preg_match_all($pattern, $src[$j], $matches, PREG_SET_ORDER);
-				for ($i = 0; $i < count($matches); $i++){
-					$key = M3_TAG_MACRO_USER_KEY . $matches[$i][1];
-					$value = $matches[$i][2];
-					if (!array_key_exists($key, $fields)) $fields[$key] = $value;
-				}
-			}
-		} else {
-			preg_match_all($pattern, $src, $matches, PREG_SET_ORDER);
-			for ($i = 0; $i < count($matches); $i++){
-				$key = M3_TAG_MACRO_USER_KEY . $matches[$i][1];
-				$value = $matches[$i][2];
-				if (!array_key_exists($key, $fields)) $fields[$key] = $value;
-			}
-		}
+		if (!isset($fields)) $fields = $gInstanceManager->getTextConvManager()->parseUserMacro($src);
 		return $fields;
 	}
 	/**
