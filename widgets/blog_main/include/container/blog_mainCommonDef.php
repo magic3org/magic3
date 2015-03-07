@@ -133,27 +133,6 @@ class blog_mainCommonDef
 		if (!empty($filenames)){
 			$thumbFilename = $gInstanceManager->getImageManager()->getSystemThumbFilenameByType($filenames, $thumbTypeDef, $thumbType);
 			if (!empty($thumbFilename)) $thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilename);
-/*			$thumbFilenameArray = explode(';', $filenames);
-			$defaultThumbFilename = $thumbFilenameArray[count($thumbFilenameArray) -1];	// 最大サイズをデフォルト画像とする
-			
-			if (empty($thumbTypeDef)){			// サイズ指定でないとき
-				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $defaultThumbFilename);		// 最大サイズ画像
-			} else {						// サイズ指定の場合
-				// コンテンツIDを取得
-				list($contentId, $tmp) = explode('_', $defaultThumbFilename);
-				$thumbFilename = '';
-				if (!isset($thumbTypeArray)) $thumbTypeArray = $gInstanceManager->getImageManager()->parseFormatType($thumbTypeDef);// サムネールタイプ
-
-				if (empty($thumbType)){
-					// サムネールタイプが設定されていない場合は最大サイズを取得
-					$thumbFilename = $contentId . '_' . end($thumbTypeArray);
-				} else {					
-					$thumbFilename = $contentId . '_' . $thumbTypeArray[$thumbType];
-					if (!in_array($thumbFilename, $thumbFilenameArray)) $thumbFilename = '';			// 作成されていない画像の場合はデフォルト画像を設定
-				}
-				if (empty($thumbFilename)) $thumbFilename = $defaultThumbFilename;	// デフォルト画像
-				$thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, self::$_deviceType, $thumbFilename);
-			}*/
 		}
 		return $thumbUrl;
 	}
@@ -212,8 +191,8 @@ class blog_mainCommonDef
 		list($filenames, $formats) = $gInstanceManager->getImageManager()->getSystemThumbFilename($entryId, 1/*クロップ画像のみ*/);
 
 		// 公開ディレクトリ、非公開ディレクトリの画像を削除
-		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
-		$privateThumbDir = $gInstanceManager->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType);
+		$publicThumbDir = $gInstanceManager->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, self::$_deviceType);
+		$privateThumbDir = $gInstanceManager->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_BLOG, self::$_deviceType);
 		for ($i = 0; $i < count($filenames); $i++){
 			$publicThumbPath = $publicThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
 			$privateThumbPath = $privateThumbDir . DIRECTORY_SEPARATOR . $filenames[$i];
