@@ -102,6 +102,7 @@ define('M3_TAG_MACRO_USER_KEY',		'USER_');								// ユーザ定義置換キー
 define('M3_TAG_MACRO_ITEM',			'ITEM');								// 項目置換キー
 define('M3_TAG_MACRO_TITLE',		'TITLE');								// タイトル置換キー
 define('M3_TAG_MACRO_BODY',			'BODY');								// 本文置換キー
+define('M3_TAG_MACRO_RESULT',		'RESULT');								// 結果置換キー
 define('M3_TAG_MACRO_DATE',			'DATE');								// 日付置換キー
 define('M3_TAG_MACRO_MESSAGE',		'MESSAGE');								// メッセージ置換キー
 define('M3_TAG_MACRO_MARK',			'MARK');								// マーク置換キー
@@ -139,8 +140,10 @@ define('M3_TAG_MACRO_CONTENT_BLOG_TITLE',	'CT_BLOG_TITLE');				// コンテン�
 define('M3_TAG_MACRO_CONTENT_SUMMARY',		'CT_SUMMARY');					// コンテンツ置換キー(概要)
 define('M3_TAG_MACRO_CONTENT_DESCRIPTION',	'CT_DESCRIPTION');				// コンテンツ置換キー(説明)
 define('M3_TAG_MACRO_CONTENT_URL',			'CT_URL');						// コンテンツ置換キー(URL)
+define('M3_TAG_MACRO_CONTENT_INFO_URL',		'CT_INFO_URL');					// コンテンツ置換キー(その他の情報URL)
 define('M3_TAG_MACRO_CONTENT_IMAGE',		'CT_IMAGE');					// コンテンツ置換キー(画像)
 define('M3_TAG_MACRO_CONTENT_LOCATION',		'CT_LOCATION');					// コンテンツ置換キー(場所)
+define('M3_TAG_MACRO_CONTENT_CONTACT',		'CT_CONTACT');					// コンテンツ置換キー(連絡先)
 define('M3_TAG_MACRO_CONTENT_CAMERA',		'CT_CAMERA');					// コンテンツ置換キー(カメラ)
 define('M3_TAG_MACRO_CONTENT_CATEGORY',		'CT_CATEGORY');					// コンテンツ置換キー(カテゴリー)
 define('M3_TAG_MACRO_CONTENT_KEYWORD',		'CT_KEYWORD');					// コンテンツ置換キー(検索キーワード)

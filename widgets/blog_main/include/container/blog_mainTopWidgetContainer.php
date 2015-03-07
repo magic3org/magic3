@@ -1020,9 +1020,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 
 		// HTMLを出力(出力内容は特にエラーチェックしない)
-		$entryText = $fetchedRow['be_html'];
+		$entryHtml = $fetchedRow['be_html'];
 		if ($this->viewMode == 10){	// 記事単体表示のとき
-			if (!empty($fetchedRow['be_html_ext'])) $entryText = $fetchedRow['be_html_ext'];// 続きがある場合は続きを出力
+			if (!empty($fetchedRow['be_html_ext'])) $entryHtml = $fetchedRow['be_html_ext'];// 続きがある場合は続きを出力
 			
 			// HTMLヘッダにタグ出力
 			if ($this->outputHead){			// ヘッダ出力するかどうか
@@ -1033,24 +1033,24 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		} else {
 			// 続きがある場合はリンクを付加
 			if (!empty($fetchedRow['be_html_ext'])){
-				$entryText .= self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a>';
+				$entryHtml .= self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a>';
 			}
 		}
-		if (!empty($entryText)) $entryText = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryText . '</div>';// DIVで括る
+		if (!empty($entryHtml)) $entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
 		
 		// コンテンツレイアウトに埋め込む
-		$contentParam = array_merge($userFields, array(M3_TAG_MACRO_TITLE => $titleTag, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_BODY => $entryText,
+		$contentParam = array_merge($userFields, array(M3_TAG_MACRO_TITLE => $titleTag, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_BODY => $entryHtml,
 														/*M3_TAG_MACRO_FILES => '', M3_TAG_MACRO_PAGES => '',*/
 														'LINKS' => $relatedContentTag, M3_TAG_MACRO_CATEGORY => $categoryTag, M3_TAG_MACRO_COMMENT_LINK => $commentLink));
-		$entryText = $this->createDetailContent($this->viewMode, $contentParam);
-		$entryText = $this->convertM3ToHtml($entryText, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
+		$entryHtml = $this->createDetailContent($this->viewMode, $contentParam);
+		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
 		
 		// コンテンツ編集権限がある場合はボタンを表示
 		$buttonList = '';
 		if (self::$_canEditEntry) $buttonList = $this->createButtonTag($fetchedRow['be_serial']);// 編集権限があるとき
 		
 		$row = array(
-			'entry' => $entryText,	// 投稿記事
+			'entry' => $entryHtml,	// 投稿記事
 			'button_list' => $buttonList	// 記事編集ボタン
 		);
 		$this->tmpl->addVars('entrylist', $row);
