@@ -19,13 +19,13 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainDb.php');
 
 class event_mainBaseWidgetContainer extends BaseWidgetContainer
 {
-//	protected static $_localDb;			// DB接続オブジェクト
 	protected static $_mainDb;			// DB接続オブジェクト
 	protected static $_configArray;		// イベント定義値
 	protected static $_paramObj;		// ウィジェットパラメータオブジェクト
 	protected static $_canEditEntry;	// 記事が編集可能かどうか
-	protected $_currentPageUrl;	// 現在のページのURL
-
+	protected $_langId;			// 現在の言語
+	protected $_userId;			// 現在のユーザ
+	protected $_baseUrl;		// ベースURL
 	const DATE_RANGE_DELIMITER		= '～';				// 日時範囲用デリミター
 	
 	// 画面
@@ -49,9 +49,6 @@ class event_mainBaseWidgetContainer extends BaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-
-		// 初期値設定
-		$this->_currentPageUrl = $this->gEnv->createCurrentPageUrl();	// 現在のページのURL
 		
 		// サブウィジェット起動のときだけ初期処理実行
 		if ($this->gEnv->getIsSubWidget()){
@@ -61,13 +58,39 @@ class event_mainBaseWidgetContainer extends BaseWidgetContainer
 			// イベント定義を読み込む
 			if (!isset(self::$_configArray)) self::$_configArray = event_mainCommonDef::loadConfig(self::$_mainDb);
 		}
-		/*
-		// DBオブジェクト作成
-		if (!isset(self::$_localDb)) self::$_localDb = new event_mainDb();
-			
-		// イベント定義を読み込む
-		if (!isset(self::$_configArray)) self::$_configArray = event_mainCommonDef::loadConfig(self::$_mainDb);
-		*/
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		// URLパラメータ取得
+		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);		// ウィンドウオープンタイプ
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
+		
+		// 共通パラメータ初期化
+		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
+		$this->_userId = $this->gEnv->getCurrentUserId();			// 現在のユーザ
+		$this->_baseUrl = $this->gEnv->createCurrentPageUrl();		// 現在のページのURL
+	}
+	/**
+	 * テンプレートに前処理
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _preAssign($request, &$param)
+	{
 	}
 	/**
 	 * テンプレートにデータ埋め込む

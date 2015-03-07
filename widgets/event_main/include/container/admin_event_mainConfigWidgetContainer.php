@@ -75,7 +75,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_USE_CALENDAR, $useCalendar);		// カレンダーを使用するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_RECEIVE_COMMENT, $receiveComment);// コメントを受け付けるかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH, $maxCommentLength);// コメント最大文字数
-				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_TOP_CONTENTS, $topContents);// トップコンテンツ
+//				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_TOP_CONTENTS, $topContents);// トップコンテンツ
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE, $msgNoEntryInFuture);	// 予定イベントなし時メッセージ
 
 				if ($ret){
@@ -108,7 +108,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 			$receiveComment	= self::$_mainDb->getConfig(event_mainCommonDef::CF_RECEIVE_COMMENT);
 			$maxCommentLength = self::$_mainDb->getConfig(event_mainCommonDef::CF_MAX_COMMENT_LENGTH);	// コメント最大文字数
 			if ($maxCommentLength == '') $maxCommentLength = event_mainCommonDef::DEFAULT_COMMENT_LENGTH;
-			$topContents = self::$_mainDb->getConfig(event_mainCommonDef::CF_TOP_CONTENTS);// トップコンテンツ
+//			$topContents = self::$_mainDb->getConfig(event_mainCommonDef::CF_TOP_CONTENTS);// トップコンテンツ
 			$msgNoEntryInFuture = self::$_mainDb->getConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE);	// 予定イベントなし時メッセージ
 			if (empty($msgNoEntryInFuture)) $msgNoEntryInFuture = event_mainCommonDef::DEFAULT_MSG_NO_ENTRY_IN_FUTURE;
 		}

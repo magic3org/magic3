@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -21,7 +21,6 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 	private $entryDays = array();		// イベントのある日付
 	private $entryInfoArray;				// イベント情報
 	private $css;	// カレンダー用CSS
-	private $langId;		// 言語
 	const TARGET_WIDGET = 'event_main';		// 呼び出しウィジェットID
 	const EVENT_PAGE_NAME = 'イベント';			// イベント表示画面名
 	
@@ -58,7 +57,6 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$this->langId = $this->gEnv->getCurrentLanguage();
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$year = $request->trimValueOf('year');		// 年指定
 		if (!(is_numeric($year) && 1 <= $year)){			// エラー値のとき
@@ -93,7 +91,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		
 		// データの存在範囲を取得
 		$rangeStartYearMonth = $rangeEndYearMonth = 0;
-		$ret = self::$_mainDb->getTermWithEntryItems($this->langId, $rangeStartDt, $rangeEndDt);
+		$ret = self::$_mainDb->getTermWithEntryItems($this->_langId, $rangeStartDt, $rangeEndDt);
 		if ($ret){
 			$this->timestampToYearMonthDay($rangeStartDt, $rangeYear, $rangeMonth, $rangeDay);
 			$rangeStartYearMonth = intval(sprintf('%04s%02s', $rangeYear, $rangeMonth));
@@ -103,8 +101,8 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 /*		
 		$prevUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $prevYear . '&month=' . $prevMonth);
 		$nextUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $nextYear . '&month=' . $nextMonth);*/
-		$prevUrl = $this->_currentPageUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $prevYear . '&month=' . $prevMonth;
-		$nextUrl = $this->_currentPageUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $nextYear . '&month=' . $nextMonth;
+		$prevUrl = $this->_baseUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $prevYear . '&month=' . $prevMonth;
+		$nextUrl = $this->_baseUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $nextYear . '&month=' . $nextMonth;
 		
 		$calendarData  = '<table class="event_main_table" style="width:100%;">' . M3_NL;
 		$calendarData .= '<caption>' . M3_NL;
@@ -154,7 +152,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 			if (!empty($weekClass)) $dayStr = '<span class="' . $weekClass . '">' . $dayStr . '</span>';
 			if (in_array($fetchedDay->thisDay(), $this->entryDays)){			// イベント記事あり
 				//$dayUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $year . '&month=' . $month . '&day=' . $fetchedDay->thisDay());
-				$dayUrl = $this->_currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $fetchedDay->thisDay();
+				$dayUrl = $this->_baseUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $fetchedDay->thisDay();
 				$dayLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($dayUrl, true/*リンク用*/)) . '">' . $dayStr . '</a>';
 				$calendarData .= '<td style="text-align:center;">'. $dayLink . '</td>' . M3_NL;
 				
@@ -220,7 +218,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		
 		// 他画面へのリンク
 		$this->tmpl->setAttribute('top_link_area', 'visibility', 'visible');
-		$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_currentPageUrl, true));
+		$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_baseUrl, true));
 		$topName = self::EVENT_PAGE_NAME;
 		$this->tmpl->addVar("top_link_area", "top_url", $topLink);
 		$this->tmpl->addVar("top_link_area", "top_name", $topName);
