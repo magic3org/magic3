@@ -44,8 +44,8 @@ class blog_mainCommonDef
 	const CF_TITLE_LIST				= 'title_list';		// 一覧タイトル
 	const CF_TITLE_SEARCH_LIST		= 'title_search_list';		// 検索結果タイトル
 	const CF_TITLE_NO_ENTRY			= 'title_no_entry';		// 記事なし時タイトル
-	const CF_MESSAGE_NO_ENTRY		= 'message_no_entry';		// ブログ記事が登録されていないメッセージ
-	const CF_MESSAGE_FIND_NO_ENTRY	= 'message_find_no_entry';		// ブログ記事が見つからないメッセージ
+	const CF_MESSAGE_NO_ENTRY		= 'msg_no_entry';		// ブログ記事が登録されていないメッセージ
+	const CF_MESSAGE_FIND_NO_ENTRY	= 'msg_find_no_entry';		// ブログ記事が見つからないメッセージ
 	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
 	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
 	

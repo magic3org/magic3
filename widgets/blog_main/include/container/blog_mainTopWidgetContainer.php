@@ -926,14 +926,20 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// ユーザ定義フィールド値取得
 		// 埋め込む文字列はHTMLエスケープする
-		$fieldInfoArray = blog_mainCommonDef::parseUserMacro(array(self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE], self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST]));
-		$fieldValueArray = $this->unserializeArray($fetchedRow['be_option_fields']);
+		if ($viewMode == 10){		// 記事単体表示の場合
+			$fieldInfoArray = blog_mainCommonDef::parseUserMacro(self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE]);
+		} else {
+			$fieldInfoArray = blog_mainCommonDef::parseUserMacro(self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST]);
+		}
 		$userFields = array();
-		$fieldKeys = array_keys($fieldInfoArray);
-		for ($i = 0; $i < count($fieldKeys); $i++){
-			$key = $fieldKeys[$i];
-			$value = $fieldValueArray[$key];
-			$userFields[$key] = isset($value) ? $this->convertToDispString($value) : '';
+		if (!empty($fieldInfoArray)){
+			$fieldValueArray = $this->unserializeArray($fetchedRow['be_option_fields']);
+			$fieldKeys = array_keys($fieldInfoArray);
+			for ($i = 0; $i < count($fieldKeys); $i++){
+				$key = $fieldKeys[$i];
+				$value = $fieldValueArray[$key];
+				$userFields[$key] = isset($value) ? $this->convertToDispString($value) : '';
+			}
 		}
 			
 		// カレント言語がデフォルト言語と異なる場合はデフォルト言語の添付ファイルを取得
@@ -1072,8 +1078,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (!isset($initContentText)){
 			if ($viewMode == 10){		// 記事単体表示の場合
 				$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];			// コンテンツレイアウト(記事詳細)
+				if (empty($initContentText)) $initContentText = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 			} else {
 				$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST];			// コンテンツレイアウト(記事一覧)
+				if (empty($initContentText)) $initContentText = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_LIST;
 			}
 		}
 		
