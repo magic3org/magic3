@@ -835,6 +835,8 @@ CREATE TABLE _page_def (
     pd_suffix            VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- インスタンスを区別するためのサフィックス文字列
     pd_title             VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- タイトル
     pd_style             TEXT                                         NOT NULL,      -- HTMLスタイル属性
+    pd_css               TEXT                                         NOT NULL,      -- CSS
+    pd_param             TEXT                                         NOT NULL,      -- パラメータオブジェクトをシリアライズしたもの
     pd_except_sub_id     TEXT                                         NOT NULL,      -- 共通時例外ページサブID(「,」区切りで複数指定可)
     pd_view_control_type INT            DEFAULT 0                     NOT NULL,      -- 表示出力の制御タイプ(0=常時表示、1=ログイン時のみ表示、2=非ログイン時のみ表示)
     pd_view_option       TEXT                                         NOT NULL,      -- 表示オプション
