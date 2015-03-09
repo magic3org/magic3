@@ -56,6 +56,10 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$categoryCount = $request->trimValueOf('category_count');		// カテゴリ数
 		$useCalendar	= $request->trimCheckedValueOf('item_use_calendar');	// カレンダーを使用するかどうか
 		$topContents = $request->valueOf('top_contents');	// トップコンテンツ
+		$layoutEntrySingle	= $request->valueOf('item_layout_entry_single');					// コンテンツレイアウト(記事詳細)
+		$layoutEntryList	= $request->valueOf('item_layout_entry_list');					// コンテンツレイアウト(記事一覧)
+		$outputHead			= $request->trimCheckedValueOf('item_output_head');		// ヘッダ出力するかどうか
+		$headViewDetail		= $request->valueOf('item_head_view_detail');					// ヘッダ出力(詳細表示)
 		$msgNoEntryInFuture = $request->trimValueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
 		
 		$reloadData = false;		// データの再ロード
@@ -69,6 +73,10 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_CATEGORY_COUNT, $categoryCount);		// カテゴリ数
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_USE_CALENDAR, $useCalendar);		// カレンダーを使用するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_TOP_CONTENTS, $topContents);// トップコンテンツ
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE, $layoutEntrySingle);		// コンテンツレイアウト(記事詳細)
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_LAYOUT_ENTRY_LIST, $layoutEntryList);		// コンテンツレイアウト(記事一覧)
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_OUTPUT_HEAD, $outputHead);		// ヘッダ出力するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_HEAD_VIEW_DETAIL, $headViewDetail);	// ヘッダ出力(詳細表示)
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE, $msgNoEntryInFuture);	// 予定イベントなし時メッセージ
 
 				if ($ret){
@@ -90,6 +98,13 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 			if (empty($categoryCount)) $categoryCount = event_mainCommonDef::DEFAULT_CATEGORY_COUNT;
 			$useCalendar	= self::$_mainDb->getConfig(event_mainCommonDef::CF_USE_CALENDAR);	// カレンダーを使用するかどうか
 			$topContents = self::$_mainDb->getConfig(event_mainCommonDef::CF_TOP_CONTENTS);// トップコンテンツ
+			$layoutEntrySingle = self::$_mainDb->getConfig(event_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE);		// コンテンツレイアウト(記事詳細)
+			if (empty($layoutEntrySingle)) $layoutEntrySingle = event_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
+			$layoutEntryList = self::$_mainDb->getConfig(event_mainCommonDef::CF_LAYOUT_ENTRY_LIST);		// コンテンツレイアウト(記事一覧)
+			if (empty($layoutEntryList)) $layoutEntryList = event_mainCommonDef::DEFAULT_LAYOUT_ENTRY_LIST;
+			$outputHead = self::$_mainDb->getConfig(event_mainCommonDef::CF_OUTPUT_HEAD);		// ヘッダ出力するかどうか
+			$headViewDetail = self::$_mainDb->getConfig(event_mainCommonDef::CF_HEAD_VIEW_DETAIL);		// ヘッダ出力(詳細表示)
+			if (empty($headViewDetail)) $headViewDetail = event_mainCommonDef::DEFAULT_HEAD_VIEW_DETAIL;
 			$msgNoEntryInFuture = self::$_mainDb->getConfig(event_mainCommonDef::CF_MSG_NO_ENTRY_IN_FUTURE);	// 予定イベントなし時メッセージ
 			if (empty($msgNoEntryInFuture)) $msgNoEntryInFuture = event_mainCommonDef::DEFAULT_MSG_NO_ENTRY_IN_FUTURE;
 		}
@@ -104,6 +119,10 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "category_count", $categoryCount);// カテゴリ数
 		$this->tmpl->addVar("_widget", "use_calendar", $this->convertToCheckedString($useCalendar));// カレンダーを使用するかどうか
 		$this->tmpl->addVar("_widget", "top_contents", $this->convertToDispString($topContents));		// トップコンテンツ
+		$this->tmpl->addVar("_widget", "layout_entry_single", $layoutEntrySingle);		// コンテンツレイアウト(記事詳細)
+		$this->tmpl->addVar("_widget", "layout_entry_list", $layoutEntryList);		// コンテンツレイアウト(記事一覧)
+		$this->tmpl->addVar("_widget", "output_head_checked", $this->convertToCheckedString($outputHead));		// ヘッダ出力するかどうか
+		$this->tmpl->addVar("_widget", "head_view_detail", $headViewDetail);		// ヘッダ出力(詳細表示)
 		$this->tmpl->addVar("_widget", "msg_no_entry_in_future", $this->convertToDispString($msgNoEntryInFuture));		// 予定イベントなし時メッセージ
 	}
 }

@@ -24,7 +24,9 @@ $(function(){
 	m3SetConfigTable('mainconfig');
 	
 	// WYSIWYGエディター作成
-	m3SetWysiwygEditor('top_contents', 200/* 高さ */);
+	m3SetWysiwygEditor('top_contents', 100/* 高さ */);
+	m3SetWysiwygEditor('item_layout_entry_single', 100/* 高さ */, false, 'layout');
+	m3SetWysiwygEditor('item_layout_entry_list', 100/* 高さ */, false, 'layout');
 });
 //]]>
 </script>
@@ -39,15 +41,14 @@ $(function(){
     <tr>
 	    <th><span {_HELP_CONFIG_FUNCTION}>機能</span></th>
 	    <td>
-		<div class="checkbox"><label><input type="checkbox" name="item_use_calendar" {USE_CALENDAR} />カレンダーを使用</label></div>
-		<div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_use_calendar" {USE_CALENDAR} />簡易カレンダーを使用</label></div>
 	    </td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_EVENT}>イベント記事</span></th>
 	    <td>
-		<div class="form-control-static col-sm-2 m3config_item">表示数：</div><div class="col-sm-1 m3config_item"><input type="text" id="entry_view_count" name="entry_view_count" class="form-control" value="{VIEW_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div>
-		<div class="form-control-static col-sm-2 m3config_item">表示順：</div>
+		<div class="form-control-static col-sm-2 m3config_item" style="width:70px;">表示数：</div><div class="col-sm-1 m3config_item"><input type="text" id="entry_view_count" name="entry_view_count" class="form-control" value="{VIEW_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div>
+		<div class="form-control-static col-sm-2 m3config_item" style="width:70px;">表示順：</div>
 		<div class="col-sm-2 m3config_item">
 		<select name="entry_view_order" class="form-control">
 	        <option value="0" {VIEW_ORDER_INC_SELECTED}>昇順</option>
@@ -59,11 +60,6 @@ $(function(){
 	    <td><div class="col-sm-1 m3config_item"><input type="text" name="category_count" class="form-control" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIG_RECEIVE_COMMENT}>コメント</span></th>
-	    <td>
-	    <div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_MAX_COMMENT_LENGTH}>最大文字数：</span></div><div class="col-sm-2 m3config_item"><input type="text" name="max_comment_length" class="form-control" value="{MAX_COMMENT_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div></td>
-	</tr>
-    <tr>
 	    <th><span {_HELP_CONFIG_MESSAGE}>メッセージ</span></th>
 	    <td>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">予定イベントなし時：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_msg_no_entry_in_future" class="form-control" value="{MSG_NO_ENTRY_IN_FUTURE}" size="60" maxlength="200" /></div><div class="clearfix"></div></div>
@@ -72,6 +68,29 @@ $(function(){
     <tr>
 	    <th><span {_HELP_CONFIG_TOP_CONTENTS}>トップコンテンツ</span></th>
 	    <td class="ckeditor"><textarea name="top_contents">{TOP_CONTENTS}</textarea></td>
+	</tr>
+    <tr>
+	    <th rowspan="4"><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></th>
+	    <td class="info">記事詳細</td>
+	</tr>
+    <tr>
+	    <td class="ckeditor"><textarea name="item_layout_entry_single">{LAYOUT_ENTRY_SINGLE}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="info">記事一覧</td>
+	</tr>
+    <tr>
+	    <td class="ckeditor"><textarea name="item_layout_entry_list">{LAYOUT_ENTRY_LIST}</textarea></td>
+	</tr>
+    <tr>
+	    <th rowspan="3"><span {_HELP_CONFIG_OUTPUT_HEAD}>ヘッダ出力</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} />ヘッダにタグを出力する(SNS連携等)</label></div></td>
+	</tr>
+    <tr>
+	    <td class="info">記事詳細</td>
+	</tr>
+    <tr>
+	    <td  class="ckeditor" style="height:50px;"><textarea name="item_head_view_detail" class="form-control">{HEAD_VIEW_DETAIL}</textarea></td>
 	</tr>
     </tbody>
 </table>
