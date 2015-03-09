@@ -1015,7 +1015,7 @@ CREATE TABLE event_entry (
     UNIQUE               (ee_id,        ee_language_id,               ee_history_index)
 ) ENGINE=innodb;
 
--- イベントコメントトラン
+-- イベントコメントトラン(廃止予定)
 DROP TABLE IF EXISTS event_comment;
 CREATE TABLE event_comment (
     eo_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号

@@ -16,12 +16,10 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/event_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainDb.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_mainCategoryDb.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_mainCommentDb.php');
 
 class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 {
 	private $categoryDb;	// DB接続オブジェクト
-	private $commentDb;			// DB接続オブジェクト
 	private $entryId;	// 記事ID
 	private $startDt;
 	private $endDt;
@@ -89,7 +87,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->categoryDb = new event_mainCategoryDb();
-		$this->commentDb = new event_mainCommentDb();
 		
 		// 初期値設定
 		$this->editIconPos = self::EDIT_ICON_MIN_POS;			// 編集アイコンの位置
@@ -170,7 +167,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$this->now = date("Y/m/d H:i:s");	// 現在日時
 		$this->currentDay = date("Y/m/d");		// 日
 		$this->currentHour = (int)date("H");		// 時間
-//		$this->currentPageUrl = $this->gEnv->createCurrentPageUrl();// 現在のページURL
 		$this->isSystemManageUser = $this->gEnv->isSystemManageUser();	// システム運用可能ユーザかどうか
 		$this->pageTitle = '';		// 画面タイトル、パンくずリスト用タイトル
 		
@@ -316,7 +312,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 		
 		// リンク文字列作成、ページ番号調整
-		$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl);
+		$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->_pageUrl);
 
 		// 記事一覧作成
 
@@ -362,7 +358,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
-			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
+			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->_pageUrl . '&act=search&keyword=' . urlencode($keyword));
 
 			// 記事一覧を表示
 			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0, ''/*期間開始*/, ''/*期間終了*/,
@@ -403,14 +399,14 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
-			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
+			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->_pageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 			
 			// 記事一覧を表示
 			self::$_mainDb->getEntryItemsByCategory($this->entryViewCount, $this->pageNo, $this->now, $category, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'));
 
 			// タイトルの設定
 			$ret = $this->categoryDb->getCategoryByCategoryId($category, $this->gEnv->getDefaultLanguage(), $row);
-			if ($ret) $this->title = str_replace('$1', $row['bc_name'], $this->titleList);
+			if ($ret) $this->title = str_replace('$1', $row['ec_name'], $this->titleList);
 			
 			// イベント記事データがないときはデータなしメッセージ追加
 			if ($this->isExistsViewData){
@@ -433,7 +429,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->_pageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
 
 				// 記事一覧作成
 				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
@@ -463,7 +459,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->_pageUrl . '&act=view&year=' . $year . '&month=' . $month);
 				
 				// 記事一覧作成
 				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
@@ -492,7 +488,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year);
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->_pageUrl . '&act=view&year=' . $year);
 				
 				// 記事一覧作成
 				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
@@ -623,8 +619,8 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			$categoryItems = array();
 			$categoryTag .= '<div class="' . self::CATEGORY_BLOCK_CLASS . '"><strong>' . self::CATEGORY_BLOCK_LABEL . '</strong>';		// カテゴリー項目のラベル
 			for ($i = 0; $i < count($categoryRows); $i++){
-				$categoryUrl = $this->currentPageUrl . '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $categoryRows[$i]['bc_id'];	// カテゴリーリンク先
-				$categoryItems[] = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($categoryUrl)) . '">' . $this->convertToDispString($categoryRows[$i]['bc_name']) . '</a>';
+				$categoryUrl = $this->_pageUrl . '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $categoryRows[$i]['ec_id'];	// カテゴリーリンク先
+				$categoryItems[] = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($categoryUrl)) . '">' . $this->convertToDispString($categoryRows[$i]['ec_name']) . '</a>';
 			}
 			$categoryTag .= implode(self::CATEGORY_BLOCK_SEPARATOR, $categoryItems);	// リンク項目を連結
 			$categoryTag .= '</div>';

@@ -101,8 +101,8 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 /*		
 		$prevUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $prevYear . '&month=' . $prevMonth);
 		$nextUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $nextYear . '&month=' . $nextMonth);*/
-		$prevUrl = $this->_baseUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $prevYear . '&month=' . $prevMonth;
-		$nextUrl = $this->_baseUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $nextYear . '&month=' . $nextMonth;
+		$prevUrl = $this->_pageUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $prevYear . '&month=' . $prevMonth;
+		$nextUrl = $this->_pageUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $nextYear . '&month=' . $nextMonth;
 		
 		$calendarData  = '<table class="event_main_table" style="width:100%;">' . M3_NL;
 		$calendarData .= '<caption>' . M3_NL;
@@ -152,7 +152,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 			if (!empty($weekClass)) $dayStr = '<span class="' . $weekClass . '">' . $dayStr . '</span>';
 			if (in_array($fetchedDay->thisDay(), $this->entryDays)){			// イベント記事あり
 				//$dayUrl = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=view&year=' . $year . '&month=' . $month . '&day=' . $fetchedDay->thisDay());
-				$dayUrl = $this->_baseUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $fetchedDay->thisDay();
+				$dayUrl = $this->_pageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $fetchedDay->thisDay();
 				$dayLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($dayUrl, true/*リンク用*/)) . '">' . $dayStr . '</a>';
 				$calendarData .= '<td style="text-align:center;">'. $dayLink . '</td>' . M3_NL;
 				
@@ -218,7 +218,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		
 		// 他画面へのリンク
 		$this->tmpl->setAttribute('top_link_area', 'visibility', 'visible');
-		$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_baseUrl, true));
+		$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_pageUrl, true));
 		$topName = self::EVENT_PAGE_NAME;
 		$this->tmpl->addVar("top_link_area", "top_url", $topLink);
 		$this->tmpl->addVar("top_link_area", "top_name", $topName);

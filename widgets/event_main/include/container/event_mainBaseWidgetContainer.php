@@ -25,6 +25,7 @@ class event_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected static $_canEditEntry;	// 記事が編集可能かどうか
 	protected $_langId;			// 現在の言語
 	protected $_userId;			// 現在のユーザ
+	protected $_pageUrl;		// 現在のページのURL
 	protected $_baseUrl;		// ベースURL
 	const DATE_RANGE_DELIMITER		= '～';				// 日時範囲用デリミター
 	
@@ -78,7 +79,8 @@ class event_mainBaseWidgetContainer extends BaseWidgetContainer
 		// 共通パラメータ初期化
 		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
 		$this->_userId = $this->gEnv->getCurrentUserId();			// 現在のユーザ
-		$this->_baseUrl = $this->gEnv->createCurrentPageUrl();		// 現在のページのURL
+		$this->_pageUrl = $this->gEnv->createCurrentPageUrl();		// 現在のページのURL
+		$this->_baseUrl = $this->getUrlWithOptionParam();			// ベースURL(オプション付き)
 	}
 	/**
 	 * テンプレートに前処理

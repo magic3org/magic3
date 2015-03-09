@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -50,11 +50,6 @@ class admin_event_mainWidgetContainer extends admin_event_mainBaseWidgetContaine
 			case 'entry':		// イベント記事管理
 			case 'entry_detail':		// イベント記事管理(詳細)
 				$task = 'entry';
-				$goWidget = true;		// サブウィジェットを実行するかどうか
-				break;
-			case 'comment':		// イベント記事コメント管理
-			case 'comment_detail':		// イベント記事コメント管理(詳細)
-				$task = 'comment';
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 			case 'user':		// ユーザ管理

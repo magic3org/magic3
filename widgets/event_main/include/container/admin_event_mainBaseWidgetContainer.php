@@ -32,8 +32,6 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_ENTRY			= 'entry';				// イベント記事(一覧)
 	const TASK_ENTRY_DETAIL		= 'entry_detail';		// イベント記事(詳細)
 	const TASK_HISTORY			= 'history';			// (未使用)イベント記事履歴
-	const TASK_COMMENT			= 'comment';			// イベント記事コメント(一覧)
-	const TASK_COMMENT_DETAIL	= 'comment_detail';		// イベント記事コメント(詳細)
 	const TASK_CATEGORY			= 'category';			// 記事カテゴリー(一覧)
 	const TASK_CATEGORY_DETAIL	= 'category_detail';	// 記事カテゴリー(詳細)
 	const TASK_CONFIG			= 'config';				// 基本設定
@@ -93,15 +91,6 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = '詳細';
 				$titles[] = '履歴';
 				break;
-			case self::TASK_COMMENT:			// イベント記事コメント(一覧)
-				$titles[] = 'イベント記事管理';
-				$titles[] = 'コメント一覧';
-				break;
-			case self::TASK_COMMENT_DETAIL:		// イベント記事コメント(詳細)
-				$titles[] = 'イベント記事管理';
-				$titles[] = 'コメント一覧';
-				$titles[] = '詳細';
-				break;
 			case self::TASK_CATEGORY:			// 記事カテゴリー(一覧)
 				$titles[] = '基本';
 				$titles[] = '記事カテゴリー';
@@ -127,9 +116,7 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 						'active'	=> (
 											$task == self::TASK_ENTRY ||				// イベント記事(一覧)
 											$task == self::TASK_ENTRY_DETAIL ||		// イベント記事(詳細)
-											$task == self::TASK_HISTORY ||			// イベント記事履歴
-											$task == self::TASK_COMMENT ||			// イベント記事コメント(一覧)
-											$task == self::TASK_COMMENT_DETAIL		// イベント記事コメント(詳細)
+											$task == self::TASK_HISTORY 			// イベント記事履歴
 										),
 						'submenu'	=> array(
 							(Object)array(
@@ -141,16 +128,6 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 													$task == self::TASK_ENTRY ||			// イベント記事(一覧)
 													$task == self::TASK_ENTRY_DETAIL ||		// イベント記事(詳細)
 													$task == self::TASK_HISTORY				// イベント記事履歴
-												)
-							),
-							(Object)array(
-								'name'		=> 'コメント一覧',
-								'task'		=> self::TASK_COMMENT,
-								'url'		=> '',
-								'tagid'		=> '',
-								'active'	=> (
-													$task == self::TASK_COMMENT ||			// イベント記事コメント(一覧)
-													$task == self::TASK_COMMENT_DETAIL		// イベント記事コメント(詳細)
 												)
 							)
 						)
