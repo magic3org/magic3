@@ -93,7 +93,7 @@ INSERT INTO _system_config
 ('site_logo_filename', 'sm=logo_80c.png;lg=logo_200c.png',  'サイトロゴファイル名(廃止)'),
 ('site_logo_format',   'sm=80c.png;lg=200c.png',            'サイトロゴ仕様'),
 ('thumb_format', '72c.jpg;80c.jpg;80x60c.jpg;160x120c.jpg;200x150c.jpg;200c.jpg',   'コンテンツ用サムネール仕様'),
-('avatar_format',      'sm=32c.png;md=80c.png;lg=128c.png', 'アバター仕様');
+('avatar_format',      'sm=32c.png;md=80c.png;lg=128c.png', 'アバター仕様'),
 ('ogp_thumb_format',             '200c.jpg',   'OGP用サムネール仕様'),
 ('wysiwyg_editor',               'ckeditor',   'WYSIWYGエディター'),
 ('site_mobile_url',              '',                        '携帯用サイトURL'),
