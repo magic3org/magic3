@@ -1009,7 +1009,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		// あらかじめ「CT_」タグをすべて取得する?
 		$contentInfo = array();
 		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $fetchedRow['be_id'];			// コンテンツ置換キー(エントリーID)
-		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id']);// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
 		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $fetchedRow['lu_name'];			// コンテンツ置換キー(著者)
 		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['be_name'];			// コンテンツ置換キー(タイトル)
 		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['be_description'];			// コンテンツ置換キー(簡易説明)
