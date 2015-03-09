@@ -114,6 +114,7 @@ define('M3_TAG_MACRO_LINKS',		'LINKS');								// 関連リンク置換キー
 define('M3_TAG_MACRO_CATEGORY',		'CATEGORY');							// カテゴリーリンク置換キー
 define('M3_TAG_MACRO_BLOG_LINK',	'BLOG_LINK');							// ブログリンク置換キー
 define('M3_TAG_MACRO_COMMENT_LINK',	'COMMENT_LINK');						// コメントリンク置換キー
+define('M3_TAG_MACRO_DETAIL_LINK',	'DETAIL_LINK');							// 詳細画面へのリンク置換キー
 define('M3_TAG_MACRO_PERMALINK',	'PERMALINK');							// パーマリンク置換キー
 define('M3_TAG_MACRO_RATE',			'RATE');								// 評価機能置換キー
 define('M3_TAG_MACRO_WIDGET',		'WIDGET');								// ウィジェット埋め込みキー

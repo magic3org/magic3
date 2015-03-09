@@ -656,7 +656,8 @@ class event_mainDb extends BaseDb
 		if (empty($entryId)){
 			$ord = '';
 			if (!empty($order)) $ord = 'DESC ';
-			$queryStr .=  'ORDER BY ee_start_dt ' . $ord . 'LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
+			//$queryStr .=  'ORDER BY ee_start_dt ' . $ord . 'LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
+			$queryStr .=  'ORDER BY ee_start_dt ' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
 		}
 		$this->selectLoop($queryStr, $params, $callback);
 	}
@@ -833,6 +834,48 @@ class event_mainDb extends BaseDb
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
+		$params = array();
+		
+		$queryStr  = 'SELECT distinct(ee_serial) FROM event_entry RIGHT JOIN event_entry_with_category ON ee_serial = ew_entry_serial ';
+		$queryStr .=  'WHERE ee_language_id = ? '; $params[] = $langId;
+		$queryStr .=    'AND ee_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND ee_status = ? '; $params[] = 2;	// 「公開」(2)データ
+		$queryStr .=    'AND ew_category_id = ? ';	$params[] = $categoryId;// 記事カテゴリー
+		
+		// シリアル番号を取得
+		$serialArray = array();
+		$ret = $this->selectRecords($queryStr, $params, $serialRows);
+		if ($ret){
+			for ($i = 0; $i < count($serialRows); $i++){
+				$serialArray[] = $serialRows[$i]['ee_serial'];
+			}
+		}
+		$serialStr = implode(',', $serialArray);
+		if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
+	
+		$queryStr  = 'SELECT * FROM event_entry ';
+		$queryStr .=   'WHERE ee_serial in (' . $serialStr . ') ';
+		$ord = '';
+		if (!empty($order)) $ord = 'DESC ';
+		$queryStr .=  'ORDER BY ee_start_dt ' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
+		$this->selectLoop($queryStr, array(), $callback, null);
+	}
+	/**
+	 * エントリー項目をカテゴリー指定で取得(表示用)
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param int		$categoryId			カテゴリーID
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+/*	function getEntryItemsByCategory($limit, $page, $now, $categoryId, $langId, $order, $callback)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
 		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
 		$params = array();
 		
@@ -860,7 +903,7 @@ class event_mainDb extends BaseDb
 		if (!empty($order)) $ord = 'DESC ';
 		$queryStr .=  'ORDER BY ee_start_dt ' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;// 投稿順
 		$this->selectLoop($queryStr, array(), $callback);
-	}
+	}*/
 	/**
 	 * エントリー項目数をカテゴリー指定で取得(表示用)
 	 *
@@ -870,6 +913,39 @@ class event_mainDb extends BaseDb
 	 * @return int							エントリー項目数
 	 */
 	function getEntryItemsCountByCategory($now, $categoryId, $langId)
+	{
+		$params = array();
+		
+		$queryStr  = 'SELECT distinct(ee_serial) FROM event_entry RIGHT JOIN event_entry_with_category ON ee_serial = ew_entry_serial ';
+		$queryStr .=  'WHERE ee_language_id = ? '; $params[] = $langId;
+		$queryStr .=    'AND ee_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND ee_status = ? '; $params[] = 2;	// 「公開」(2)データ
+		$queryStr .=    'AND ew_category_id = ? ';	$params[] = $categoryId;// 記事カテゴリー
+		
+		// シリアル番号を取得
+		$serialArray = array();
+		$ret = $this->selectRecords($queryStr, $params, $serialRows);
+		if ($ret){
+			for ($i = 0; $i < count($serialRows); $i++){
+				$serialArray[] = $serialRows[$i]['ee_serial'];
+			}
+		}
+		$serialStr = implode(',', $serialArray);
+		if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
+	
+		$queryStr  = 'SELECT * FROM event_entry ';
+		$queryStr .=   'WHERE ee_serial in (' . $serialStr . ') ';
+		return $this->selectRecordCount($queryStr, array());
+	}
+	/**
+	 * エントリー項目数をカテゴリー指定で取得(表示用)
+	 *
+	 * @param timestamp $now				現在日時(現在日時より未来の投稿日時の記事は取得しない)
+	 * @param int		$categoryId			カテゴリーID
+	 * @param string	$langId				言語
+	 * @return int							エントリー項目数
+	 */
+/*	function getEntryItemsCountByCategory($now, $categoryId, $langId)
 	{
 		$initDt = $this->gEnv->getInitValueOfTimestamp();		// 日時初期化値
 		$params = array();
@@ -894,7 +970,7 @@ class event_mainDb extends BaseDb
 		$queryStr = 'SELECT * FROM event_entry ';
 		$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
 		return $this->selectRecordCount($queryStr, array());
-	}
+	}*/
 	/**
 	 * イベント記事を取得(表示用)
 	 *

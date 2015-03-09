@@ -58,7 +58,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$categoryCount = $request->trimValueOf('category_count');		// カテゴリ数
 		$useCalendar	= $request->trimCheckedValueOf('item_use_calendar');	// カレンダーを使用するかどうか
 		$receiveComment = $request->trimCheckedValueOf('receive_comment');		// コメントを受け付けるかどうか
-		$topContents = $request->valueOf('top_contents');	// トップコンテンツ
+//		$topContents = $request->valueOf('top_contents');	// トップコンテンツ
 		$maxCommentLength = $request->trimValueOf('max_comment_length');	// コメント最大文字数
 		$msgNoEntryInFuture = $request->trimValueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
 		
@@ -124,7 +124,7 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "use_calendar", $this->convertToCheckedString($useCalendar));// カレンダーを使用するかどうか
 		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
 		$this->tmpl->addVar("_widget", "max_comment_length", $this->convertToDispString($maxCommentLength));// コメント最大文字数
-		$this->tmpl->addVar("_widget", "top_contents", $this->convertToDispString($topContents));		// トップコンテンツ
+//		$this->tmpl->addVar("_widget", "top_contents", $this->convertToDispString($topContents));		// トップコンテンツ
 		$this->tmpl->addVar("_widget", "msg_no_entry_in_future", $this->convertToDispString($msgNoEntryInFuture));		// 予定イベントなし時メッセージ
 	}
 }

@@ -30,6 +30,7 @@ class TextConvManager extends Core
 	const DEFAULT_MOBILE_IMAGE_WIDTH = 240;		// 携帯用画像のデフォルトサイズ(幅)
 	const DEFAULT_MOBILE_IMAGE_HEIGHT = 320;	// 携帯用画像のデフォルトサイズ(高さ)
 	const DEFAULT_MOBILE_IMAGE_FILE_EXT = 'gif';		// 携帯用画像の形式
+	const CONTENT_MACRO_OPTION_SEPARATOR = ';';			// コンテンツマクロのオプション設定の区切り
 	
 	/**
 	 * コンストラクタ
@@ -143,9 +144,10 @@ class TextConvManager extends Core
 		global $gPageManager;
 		static $keyValues;
 
+		$htmlEscaped = false;			// HTMLエスケープ終了かどうか
 		$destTag	= $matchData[0];
 		$typeTag	= $matchData[1];
-		$format		= $matchData[2];
+		$options	= $matchData[2];
 		if (strStartsWith($typeTag, M3_TAG_MACRO_CUSTOM_KEY)){		// キーワード置換キー
 			if (!isset($keyValues)){
 				$keyValues = array();
@@ -159,10 +161,10 @@ class TextConvManager extends Core
 		} else if (strStartsWith($typeTag, M3_TAG_MACRO_CONTENT_KEY)){		// コンテンツ置換キー
 			switch ($typeTag){
 				case 'CT_NOW':			// 現在日時
-					if (empty($format)){
+					if (empty($options)){
 						$destTag = date(M3_VIEW_FORMAT_DATETIME);
 					} else {
-						$destTag = date($format);
+						$destTag = date($options);
 					}
 					break;
 				case 'CT_CREATE_DT':			// コンテンツ作成日時
@@ -173,10 +175,10 @@ class TextConvManager extends Core
 						if (empty($value)){
 							$destTag = $value;
 						} else {
-							if (empty($format)){
+							if (empty($options)){
 								$destTag = date(M3_VIEW_FORMAT_DATETIME, strtotime($value));
 							} else {
-								$destTag = date($format, strtotime($value));
+								$destTag = date($options, strtotime($value));
 							}
 						}
 					}
@@ -187,10 +189,10 @@ class TextConvManager extends Core
 						if (empty($value)){
 							$destTag = $value;
 						} else {
-							if (empty($format)){
+							if (empty($options)){
 								$destTag = date(M3_VIEW_FORMAT_DATE, strtotime($value));
 							} else {
-								$destTag = date($format, strtotime($value));
+								$destTag = date($options, strtotime($value));
 							}
 						}
 					}
@@ -201,10 +203,10 @@ class TextConvManager extends Core
 						if (empty($value)){
 							$destTag = $value;
 						} else {
-							if (empty($format)){
+							if (empty($options)){
 								$destTag = date(M3_VIEW_FORMAT_TIME, strtotime($value));
 							} else {
-								$destTag = date($format, strtotime($value));
+								$destTag = date($options, strtotime($value));
 							}
 						}
 					}
@@ -212,9 +214,25 @@ class TextConvManager extends Core
 				case 'CT_ID':		// コンテンツID
 				case 'CT_TITLE':		// コンテンツタイトル
 				default:
+					$optionParams = $this->_parseContentMacroOption($options);
 					$value = $this->contentInfo[$typeTag];
-					//if (!empty($value)) $destTag = $value;
-					if (isset($value)) $destTag = $value;
+					if (isset($value)){
+						$destTag = $value;
+						
+						$keys = array_keys($optionParams);
+						for ($i = 0; $i < count($keys); $i++){
+							$optionKey = $keys[$i];
+							$optionValue = $optionParams[$optionKey];
+							switch ($optionKey){
+								case 'autolink':		// リンク作成
+									if (!empty($optionValue)){
+										$destTag = '<a href="' . convertUrlToHtmlEntity($destTag) . '" >' . convertToHtmlEntity($destTag) . '</a>';
+										$htmlEscaped = true;			// HTMLエスケープ終了かどうか
+									}
+									break;
+							}
+						}
+					}
 					break;
 			}
 		} else if (strStartsWith($typeTag, M3_TAG_MACRO_COMMENT_KEY)){		// コメント置換キー
@@ -225,10 +243,10 @@ class TextConvManager extends Core
 						if (empty($value)){
 							$destTag = $value;
 						} else {
-							if (empty($format)){
+							if (empty($options)){
 								$destTag = date(M3_VIEW_FORMAT_DATE, strtotime($value));
 							} else {
-								$destTag = date($format, strtotime($value));
+								$destTag = date($options, strtotime($value));
 							}
 						}
 					}
@@ -239,10 +257,10 @@ class TextConvManager extends Core
 						if (empty($value)){
 							$destTag = $value;
 						} else {
-							if (empty($format)){
+							if (empty($options)){
 								$destTag = date(M3_VIEW_FORMAT_TIME, strtotime($value));
 							} else {
-								$destTag = date($format, strtotime($value));
+								$destTag = date($options, strtotime($value));
 							}
 						}
 					}
@@ -269,11 +287,32 @@ class TextConvManager extends Core
 			}
 		}
 		// HTMLのエスケープ処理
-		if ($this->htmlEscapedValue) $destTag = convertToHtmlEntity($destTag);
+		if (!$htmlEscaped && $this->htmlEscapedValue) $destTag = convertToHtmlEntity($destTag);
 		
 		// 改行変換処理
 		if ($this->convBr) $destTag = $this->convLineBreakToBr($destTag);			// 改行変換するかどうか
 		return $destTag;
+	}
+	/**
+	 * コンテンツマクロオプションを解析
+	 *
+	 * @param string $src		変換するデータ
+	 * @return array			オプションパラメータ
+	 */
+	function _parseContentMacroOption($src)
+	{
+		$options = array();
+		$itemArray = explode(self::CONTENT_MACRO_OPTION_SEPARATOR, strtolower(trim($src)));// 小文字に変換したものを解析
+		for ($i = 0; $i < count($itemArray); $i++){
+			$pos = strpos($itemArray[$i], '=');
+			if ($pos !== false){// オプション取得
+				list($optionKey, $optionValue) = explode('=', trim($itemArray[$i]));
+				$optionKey = trim($optionKey);
+				$optionValue = trim($optionValue);
+				if ($optionKey != '' && $optionValue != '') $options[$optionKey] = $optionValue;
+			}
+		}
+		return $options;
 	}
 	/**
 	 * Magic3タグを削除

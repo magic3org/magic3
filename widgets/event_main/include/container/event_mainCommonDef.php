@@ -33,14 +33,13 @@ class event_mainCommonDef
 	const CF_HEAD_VIEW_DETAIL		= 'head_view_detail';		// ヘッダ出力(詳細表示)
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	const CF_LAYOUT_ENTRY_LIST		= 'layout_entry_list';			// コンテンツレイアウト(記事一覧)
-	const CF_LAYOUT_COMMENT_LIST	= 'layout_comment_list';			// コンテンツレイアウト(コメント一覧)
 	const CF_USE_WIDGET_TITLE		= 'use_widget_title';		// ウィジェットタイトルを使用するかどうか
 	const CF_TITLE_DEFAULT			= 'title_default';		// デフォルトタイトル
 	const CF_TITLE_LIST				= 'title_list';		// 一覧タイトル
 	const CF_TITLE_SEARCH_LIST		= 'title_search_list';		// 検索結果タイトル
 	const CF_TITLE_NO_ENTRY			= 'title_no_entry';		// 記事なし時タイトル
-	const CF_MESSAGE_NO_ENTRY		= 'message_no_entry';		// ブログ記事が登録されていないメッセージ
-	const CF_MESSAGE_FIND_NO_ENTRY	= 'message_find_no_entry';		// ブログ記事が見つからないメッセージ
+	const CF_MESSAGE_NO_ENTRY		= 'msg_no_entry';		// ブログ記事が登録されていないメッセージ
+	const CF_MESSAGE_FIND_NO_ENTRY	= 'msg_find_no_entry';		// ブログ記事が見つからないメッセージ
 	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
 	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
 	// イベント情報専用
@@ -49,12 +48,10 @@ class event_mainCommonDef
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
-	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
 	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリー数
 	const DEFAULT_MSG_NO_ENTRY_IN_FUTURE		= '今後のイベントはありません';	// 予定イベントなし時メッセージ
-	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<small>[#CT_AUTHOR#] [#CT_DATE#] [#CT_TIME#] [#BLOG_LINK#]</small>[#BODY#][#CATEGORY#][#LINKS#]';	// デフォルトのコンテンツレイアウト(記事詳細)
-	const DEFAULT_LAYOUT_ENTRY_LIST = '[#TITLE#]<small>[#CT_AUTHOR#] [#CT_DATE#] [#CT_TIME#] [#BLOG_LINK#]</small>[#BODY#][#CATEGORY#][#COMMENT_LINK#]';	// デフォルトのコンテンツレイアウト(記事一覧)
-	const DEFAULT_LAYOUT_COMMENT_LIST = '[#AVATAR#]<dl><dt>[#TITLE#] <small>[#CM_AUTHOR#] [#CM_DATE#] [#CM_TIME#] [#URL#]</small></dt><dd>[#BODY#]</dd></dl>';	// デフォルトのコンテンツレイアウト(コメント一覧)
+	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_LOCATION#]</span><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div><div><span class="event_url">URL：[#CT_INFO_URL:autolink=true;#]</span></div></div><div class="entry_content">[#BODY#][#RESULT#]</div>[#CATEGORY#][#LINKS#]';	// デフォルトのコンテンツレイアウト(記事詳細)
+	const DEFAULT_LAYOUT_ENTRY_LIST = '[#TITLE#]<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_LOCATION#]</span><div>[#DETAIL_LINK#]</div></div><div class="entry_content">[#BODY#]</div>[#CATEGORY#]';	// デフォルトのコンテンツレイアウト(記事一覧)
 	const DEFAULT_HEAD_VIEW_DETAIL = '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />';	// デフォルトのヘッダ出力(詳細表示)
 //	const DEFAULT_TITLE_DEFAULT 		= 'イベント記事新規';		// イベントタイトルのデフォルト値
 	const DEFAULT_TITLE_LIST 			= '「$1」の記事';		// 一覧タイトルのデフォルト値

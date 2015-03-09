@@ -34,7 +34,7 @@ class ImageManager extends Core
 //	const PARSE_IMAGE_FORMAT_TYPE = '/(.*?)\s*=\s*(\d+)([xX]?)(\d*)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマットタイプ解析用
 	const PARSE_IMAGE_FORMAT_TYPE = '/(.*?)\s*=\s*(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i';		// 画像フォーマットタイプ解析用
 	// DB定義値
-	const CF_SITE_LOGO_FILENAME	= 'site_logo_filename';		// サイトロゴファイル
+//	const CF_SITE_LOGO_FILENAME	= 'site_logo_filename';		// サイトロゴファイル
 	const CF_SITE_LOGO_FORMAT	= 'site_logo_format';		// サイトロゴフォーマット
 	const CF_THUMB_FORMAT		= 'thumb_format';		// サムネールフォーマット
 	const CF_AVATAR_FORMAT		= 'avatar_format';	// アバターフォーマット

@@ -46,7 +46,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	private $headTitle;		// METAタグタイトル
 	private $headDesc;		// METAタグ要約
 	private $headKeyword;	// METAタグキーワード
-	private $addLib = array();		// 追加スクリプト
 	private $viewMode;					// 表示モード
 	private $editIconPos;			// 編集アイコンの位置
 	private $avatarSize;		// アバター画像サイズ
@@ -64,13 +63,14 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_MIN_POS = 30;			// 編集アイコンの位置
 	const EDIT_ICON_NEXT_POS = 35;			// 編集アイコンの位置
+	const LABEL_DETAIL_LINK		= '詳細';					// イベント記事詳細画面へのリンク用
 	const MESSAGE_EXT_ENTRY		= '結果を見る';					// イベント記事に結果がある場合の表示
 	const MESSAGE_EXT_ENTRY_PRE	= '…&nbsp;';							// イベント記事に結果がある場合の表示
 	const DEFAULT_TITLE_SEARCH = '検索';		// 検索時のデフォルトタイトル
 	const TITLE_RELATED_CONTENT_BLOCK = '関連記事';		// 関連コンテンツブロック
 	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
 	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
-	const COOKIE_LIB = 'jquery.cookie';		// 名前保存用クッキーライブラリ
+	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const ENTRY_BODY_BLOCK_CLASS = 'event_entry_body';		// 記事本文ブロックのCSSクラス
 	const CATEGORY_BLOCK_CLASS = 'event_category_list';		// カテゴリーブロックのCSSクラス
 	const CATEGORY_BLOCK_LABEL = 'カテゴリー：';		// カテゴリーブロックのラベル
@@ -534,18 +534,22 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		return $headData;
 	}
 	/**
-	 * JavascriptライブラリをHTMLヘッダ部に設定
+	 * CSSファイルをHTMLヘッダ部に設定
 	 *
-	 * JavascriptライブラリをHTMLのheadタグ内に追加出力する。
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
 	 * _assign()よりも後に実行される。
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param object         $param			任意使用パラメータ。
-	 * @return string,array 				Javascriptライブラリ。出力しない場合は空文字列を設定。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
 	 */
-	function _addScriptLibToHead($request, &$param)
+	function _addCssFileToHead($request, &$param)
 	{
-		return $this->addLib;
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return '';
+		} else {
+			return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		}
 	}
 	/**
 	 * 取得したコンテンツ項目をテンプレートに設定する
@@ -581,14 +585,20 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		
 		// ユーザ定義フィールド値取得
 		// 埋め込む文字列はHTMLエスケープする
-		$fieldInfoArray = event_mainCommonDef::parseUserMacro(array(self::$_configArray[event_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE], self::$_configArray[event_mainCommonDef::CF_LAYOUT_ENTRY_LIST]));
-		$fieldValueArray = $this->unserializeArray($fetchedRow['ee_option_fields']);
+		if ($viewMode == 10){		// 記事単体表示の場合
+			$fieldInfoArray = event_mainCommonDef::parseUserMacro(self::$_configArray[event_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE]);
+		} else {
+			$fieldInfoArray = event_mainCommonDef::parseUserMacro(self::$_configArray[event_mainCommonDef::CF_LAYOUT_ENTRY_LIST]);
+		}
 		$userFields = array();
-		$fieldKeys = array_keys($fieldInfoArray);
-		for ($i = 0; $i < count($fieldKeys); $i++){
-			$key = $fieldKeys[$i];
-			$value = $fieldValueArray[$key];
-			$userFields[$key] = isset($value) ? $this->convertToDispString($value) : '';
+		if (!empty($fieldInfoArray)){
+			$fieldValueArray = $this->unserializeArray($fetchedRow['ee_option_fields']);
+			$fieldKeys = array_keys($fieldInfoArray);
+			for ($i = 0; $i < count($fieldKeys); $i++){
+				$key = $fieldKeys[$i];
+				$value = $fieldValueArray[$key];
+				$userFields[$key] = isset($value) ? $this->convertToDispString($value) : '';
+			}
 		}
 			
 		// カレント言語がデフォルト言語と異なる場合はデフォルト言語の添付ファイルを取得
@@ -645,7 +655,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		// あらかじめ「CT_」タグをすべて取得する?
 		$contentInfo = array();
 		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $fetchedRow['ee_id'];			// コンテンツ置換キー(エントリーID)
-		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_EVENT_ID . '=' . $fetchedRow['ee_id']);// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
 		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $fetchedRow['lu_name'];			// コンテンツ置換キー(著者)
 		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['ee_name'];			// コンテンツ置換キー(タイトル)
 		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['ee_description'];			// コンテンツ置換キー(簡易説明)
@@ -665,7 +675,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$entryHtml = $fetchedRow['ee_html'];
 		$resultHtml = '';		// 結果
 		if ($this->viewMode == 10){	// 記事単体表示のとき
-			if (!empty($fetchedRow['ee_html_ext'])){
+			if (!empty($fetchedRow['ee_html_ext'])){		// 結果データ
 			//	$entryHtml = $fetchedRow['ee_html_ext'];// 続きがある場合は続きを出力
 				$resultHtml = $fetchedRow['ee_html_ext'];		// 結果
 			}
@@ -684,7 +694,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		}
 		if (!empty($entryHtml)) $entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
 		if (!empty($resultHtml)) $resultHtml = '<div class="' . self::ENTRY_RESULT_BLOCK_CLASS . '">' . $resultHtml . '</div>';// DIVで括る
-		
+
 		// イベント開催期間
 		$dateHtml = '';
 		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
@@ -703,13 +713,16 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			}
 		}
 		
+		// 詳細画面へのリンク
+		$detailLinkTag = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::LABEL_DETAIL_LINK . '</a>';
+		
 		// コンテンツレイアウトに埋め込む
-		$contentParam = array_merge($userFields, array(M3_TAG_MACRO_TITLE => $titleTag, M3_TAG_MACRO_BODY => $entryHtml, M3_TAG_MACRO_RESULT => $resultHtml, M3_TAG_MACRO_DATE => $dateHtml,
+		$contentParam = array_merge($userFields, array(M3_TAG_MACRO_TITLE => $titleTag, M3_TAG_MACRO_BODY => $entryHtml, M3_TAG_MACRO_RESULT => $resultHtml, M3_TAG_MACRO_DATE => $dateHtml, M3_TAG_MACRO_DETAIL_LINK => $detailLinkTag, 
 														/*M3_TAG_MACRO_FILES => '', M3_TAG_MACRO_PAGES => '',*/
 														'LINKS' => $relatedContentTag, M3_TAG_MACRO_CATEGORY => $categoryTag));
 		$entryHtml = $this->createDetailContent($this->viewMode, $contentParam);
 		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
-		
+
 		// コンテンツ編集権限がある場合はボタンを表示
 		$buttonList = '';
 		if (self::$_canEditEntry) $buttonList = $this->createButtonTag($fetchedRow['ee_serial']);// 編集権限があるとき
@@ -737,8 +750,10 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		if (!isset($initContentText)){
 			if ($viewMode == 10){		// 記事単体表示の場合
 				$initContentText = self::$_configArray[event_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];			// コンテンツレイアウト(記事詳細)
+				if (empty($initContentText)) $initContentText = event_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 			} else {
 				$initContentText = self::$_configArray[event_mainCommonDef::CF_LAYOUT_ENTRY_LIST];			// コンテンツレイアウト(記事一覧)
+				if (empty($initContentText)) $initContentText = event_mainCommonDef::DEFAULT_LAYOUT_ENTRY_LIST;
 			}
 		}
 		
