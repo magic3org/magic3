@@ -43,6 +43,7 @@ class event_mainCommonDef
 	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
 	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
 	// イベント情報専用
+	const CF_TOP_CONTENTS			= 'top_contents';	// トップコンテンツ
 	const CF_USE_CALENDAR			= 'use_calendar';		// カレンダーを使用するかどうか
 	const CF_MSG_NO_ENTRY_IN_FUTURE	= 'msg_no_entry_in_future';		// 予定イベントなし時メッセージ
 	
