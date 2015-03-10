@@ -22,7 +22,7 @@
 -- イベント設定マスター
 DELETE FROM event_config;
 INSERT INTO event_config
-(bg_id,                     bg_value,    bg_name,                              bg_index) VALUES
+(eg_id,                     eg_value,    eg_name,                              eg_index) VALUES
 ('entry_view_count',        '10',        '記事表示数',                         3),
 ('entry_view_order',        '0',         '記事表示順',                         4),
 ('top_contents',            '',          'トップ画面コンテンツ',               6),
