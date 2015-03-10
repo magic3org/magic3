@@ -62,7 +62,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $startTitleTagLevel;	// 最初のタイトルタグレベル
 	private $itemTagLevel;			// 記事のタイトルタグレベル
 	
-	const CONTENT_TYPE = 'bg';
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_MIN_POS = 30;			// 編集アイコンの位置
@@ -850,7 +849,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	{
 		// 参照ビューカウントを更新
 		if (!$this->isSystemManageUser){		// システム運用者以上の場合はカウントしない
-			$this->gInstance->getAnalyzeManager()->updateContentViewCount(self::CONTENT_TYPE, $fetchedRow['be_serial'], $this->currentDay, $this->currentHour);
+			$this->gInstance->getAnalyzeManager()->updateContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $fetchedRow['be_serial'], $this->currentDay, $this->currentHour);
 		}
 
 		$entryId = $fetchedRow['be_id'];// 記事ID

@@ -19,6 +19,7 @@ class blog_mainCommonDef
 	static $_deviceType = 0;	// デバイスタイプ
 	
 	// ##### 定義値 #####
+	const VIEW_CONTENT_TYPE = 'bg';				// 記事参照数取得用
 	const USER_ID_SEPARATOR = ',';				// ユーザID区切り用セパレータ
 	const ATTACH_FILE_DIR = '/etc/blog';		// 添付ファイル格納ディレクトリ
 	const DOWNLOAD_CONTENT_TYPE = '-file';		// ダウンロードするコンテンツのタイプ

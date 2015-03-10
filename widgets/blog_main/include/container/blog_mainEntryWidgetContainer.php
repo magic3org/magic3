@@ -40,7 +40,6 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	private $fieldValueArray;		// ユーザ定義フィールド入力値
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
-	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const CATEGORY_NAME_SIZE = 20;			// カテゴリー名の最大文字列長
@@ -1024,7 +1023,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			case 3:	$status = '非公開';	break;
 		}
 		// 総参照数
-		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(self::CONTENT_TYPE, $serial);
+		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);
 		
 		// ユーザからの参照状況
 		$now = date("Y/m/d H:i:s");	// 現在日時

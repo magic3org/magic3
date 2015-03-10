@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -24,7 +24,6 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 	private $templateId;	// テンプレートID
 	private $ownerId;	// 所有者ID
 	private $limitedUserId;		// 制限ユーザID
-	const CONTENT_TYPE = 'uc';		// 参照数カウント用
 	
 	/**
 	 * コンストラクタ

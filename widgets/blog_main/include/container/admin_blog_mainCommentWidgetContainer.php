@@ -25,7 +25,6 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 	private $lang;		// 現在の選択言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $entryArray = array();		// 表示されている項目の記事ID
-	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
 	const DEFAULT_LIST_COUNT	= 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const CATEGORY_COUNT = 2;				// 記事カテゴリーの選択可能数
