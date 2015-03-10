@@ -78,7 +78,7 @@ function selpage(page){
 function clearSearchParam(){
 	document.main.search_start.value = '';
 	document.main.search_end.value = '';
-//	document.main.search_category0.value = '0';
+	document.main.search_category0.value = '0';
 	document.main.search_keyword.value = '';
 	return true;
 }
@@ -137,7 +137,7 @@ $(function(){
 	<input type="text" id="search_keyword" name="search_keyword" class="form-control" value="{SEARCH_KEYWORD}" maxlength="50" />
     </div>
 </div>
-<!--<div class="form-group">
+<div class="form-group">
     <label class="col-sm-3 control-label"><span {_HELP_ENTRY_SEARCH_CATEGORY}>カテゴリー</span></label>
     <div class="col-sm-9">
 <patTemplate:tmpl name="category">
@@ -151,7 +151,7 @@ $(function(){
 		</div>
 </patTemplate:tmpl>
     </div>
-</div>-->
+</div>
 <div class="form-group">
     <label for="search_start" class="col-sm-3 control-label"><span {_HELP_ENTRY_SEARCH_DT}>期間</span></label>
     <div class="col-sm-9">
@@ -171,8 +171,10 @@ $(function(){
     <tr>
         <th class="select"><span {_HELP_ENTRY_CHECK}>選択</span></th>
         <th style="width:50px;"><span {_HELP_ENTRY_ID}>ID</span></th>
+		<th style="width:50px;"></th>
         <th><span {_HELP_ENTRY_NAME}>タイトル</span></th>
-	    <th style="width:50px;"><span {_HELP_ENTRY_STATUS}>公開</span></th>
+		<th class="status"><span {_HELP_ENTRY_STATUS}>状態</span></th>
+	    <!--<th style="width:50px;"><span {_HELP_ENTRY_STATUS}>公開</span></th>-->
 	    <th style="width:100px;"><span {_HELP_ENTRY_DT}>開催日時</span></th>
 	    <th><span {_HELP_ENTRY_PLACE}>場所</span></th>
 	    <th style="width:50px;"><span {_HELP_ENTRY_VIEW_COUNT}>閲覧</span></th>
@@ -183,11 +185,13 @@ $(function(){
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{ID}</td>
+		<td>{EYECATCH_IMAGE}</td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
-	    <td>{STATUS}</td>
+		<td class="status">{STATUS_IMG}</td>
+	    <!--<td>{STATUS}</td>-->
 	    <td>{DATE_START}<br />{DATE_END}</td>
 	    <td>{PLACE}</td>
-	    <td>{VIEW_COUNT}</td>
+	    <td class="number">{VIEW_COUNT}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>

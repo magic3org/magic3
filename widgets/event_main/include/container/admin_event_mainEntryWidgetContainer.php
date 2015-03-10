@@ -25,14 +25,14 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	private $categoryListData;		// 全記事カテゴリー
 	private $categoryArray;			// 選択中の記事カテゴリー
 	private $categoryCount;			// カテゴリ数
-	const ICON_SIZE = 16;		// アイコンのサイズ
-//	const CONTENT_TYPE = 'bg';		// 記事参照数取得用
+	const ICON_SIZE = 32;		// アイコンのサイズ
+	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const CATEGORY_NAME_SIZE = 20;			// カテゴリー名の最大文字列長
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
-	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
-	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	
 	/**
@@ -221,25 +221,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		
 		// ページングリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
-/*
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号
-		
-		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					$link = '&nbsp;<a href="#" onclick="selpage(\'' . $i . '\');return false;">' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-		}*/
 		
 		// 記事項目リストを取得
 		self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'));
@@ -730,6 +711,27 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			}
 		}
 		
+		$isActive = false;		// 公開状態
+		if ($fetchedRow['ee_status'] == 2) $isActive = true;// 表示可能
+		
+		if ($isActive){		// コンテンツが公開状態のとき
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+			$iconTitle = '公開中';
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = '非公開';
+		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
+		// アイキャッチ画像
+		$iconUrl = event_mainCommonDef::getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[event_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+		if (empty($fetchedRow['ee_thumb_filename'])){
+			$iconTitle = 'アイキャッチ画像未設定';
+		} else {
+			$iconTitle = 'アイキャッチ画像';
+		}
+		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+
 		$row = array(
 			'index' => $index,		// 項目番号
 			'no' => $index + 1,													// 行番号
@@ -737,6 +739,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			'id' => $this->convertToDispString($fetchedRow['ee_id']),			// ID
 			'name' => $this->convertToDispString($fetchedRow['ee_name']),		// 名前
 			'lang' => $lang,													// 対応言語
+			'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
+			'status_img' => $statusImg,												// 公開状態
 			'status' => $status,													// 公開状況
 			'category' => $category,											// 記事カテゴリー
 			'date_start' => $startDtStr,	// 開催日時
