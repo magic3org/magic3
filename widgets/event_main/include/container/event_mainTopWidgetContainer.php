@@ -55,7 +55,8 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	private $itemTagLevel;			// 記事のタイトルタグレベル
 	// イベント情報追加分
 	private $useCalendar;		// カレンダーを使用するかどうか
-			
+	private $topContent;// トップコンテンツ
+	
 //	const CONTENT_TYPE = 'ev';
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const ICON_SIZE = 32;		// アイコンのサイズ
@@ -111,6 +112,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = event_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
 		// イベント情報追加分
 		$this->useCalendar	= self::$_configArray[event_mainCommonDef::CF_USE_CALENDAR];		// カレンダーを使用するかどうか
+		$this->topContent = self::$_configArray[event_mainCommonDef::CF_TOP_CONTENTS];			// トップコンテンツ
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -263,7 +265,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		// 他画面へのリンク
 		if ($this->useCalendar){
 			$this->tmpl->setAttribute('top_link_area', 'visibility', 'visible');
-			$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_baseUrl . '&task=' . self::TASK_CALENDAR, true));
+			$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_pageUrl . '&task=' . self::TASK_CALENDAR, true));
 			$topName = 'カレンダー';
 			$this->tmpl->addVar("top_link_area", "calendar_url", $topLink);
 			$this->tmpl->addVar("top_link_area", "calendar_name", $topName);
@@ -315,10 +317,15 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->_pageUrl);
 
 		// 記事一覧作成
-
 		self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
 							''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->preview);
 		
+		// ##### トップコンテンツ表示 #####
+		if ($this->pageNo == 1 && !empty($this->topContent)){			// 最初のページのみ
+			$this->tmpl->setAttribute('show_top_content', 'visibility', 'visible');
+			$this->tmpl->addVar("show_top_content", "content", $this->topContent);
+		}
+				
 		if ($this->isExistsViewData){
 			// ページリンクを埋め込む
 			if (!empty($pageLink)){
