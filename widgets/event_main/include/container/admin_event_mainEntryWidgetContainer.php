@@ -307,11 +307,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$place = $request->trimValueOf('item_place');		// 場所
 		$contact = $request->trimValueOf('item_contact');		// 連絡先
 		$url = $request->trimValueOf('item_url');		// URL
-		$note = $request->trimValueOf('item_note');		// 管理者備考
 		$status = $request->trimValueOf('item_status');		// エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 		$category = '';									// カテゴリー
-		$showComment = $request->trimCheckedValueOf('show_comment');				// コメントを表示するかどうか
-		$receiveComment = $request->trimCheckedValueOf('receive_comment');		// コメントを受け付けるかどうか
 		$isAllDay = $request->trimCheckedValueOf('item_is_all_day');			// 終日イベントかどうか
 		
 		// カテゴリーを取得
@@ -405,11 +402,11 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				}
 				
 				if ($act == 'add'){
-					$ret = self::$_mainDb->addEntryItem(0, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
-													$startDt, $endDt, $isAllDay, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
+					$ret = self::$_mainDb->addEntryItem(0, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, '', $status, $this->categoryArray, 
+													$startDt, $endDt, $isAllDay, false, false, false/*参照ユーザ制限なし*/, $newSerial);
 				} else {
-					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
-													$startDt, $endDt, $isAllDay, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
+					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, '', $status, $this->categoryArray, 
+													$startDt, $endDt, $isAllDay, false, false, false/*参照ユーザ制限なし*/, $newSerial);
 				}
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
@@ -471,8 +468,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					$endDt = $end_date . ' ' . $end_time;
 				}
 				
-				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $this->categoryArray, 
-														$startDt, $endDt, $isAllDay, $showComment, $receiveComment, false/*参照ユーザ制限なし*/, $newSerial);
+				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $summary, $place, $contact, $url, '', $status, $this->categoryArray, 
+														$startDt, $endDt, $isAllDay, false, false, false/*参照ユーザ制限なし*/, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					// シリアル番号更新
@@ -577,8 +574,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			// 所属イベントIDは親ウィンドウから引き継ぐ
 			$start_date = date("Y/m/d");		// 開催日付
 			$start_time = date("H:i:s");		// 開催時間
-			$showComment = 1;				// コメントを表示するかどうか
-			$receiveComment = 1;		// コメントを受け付けるかどうか
 			$isAllDay = 0;			// 終日イベントかどうか
 			$dataReload = true;		// データの再ロード
 		}
@@ -597,7 +592,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$place = $row['ee_place'];		// 場所
 				$contact = $row['ee_contact'];		// 連絡先
 				$url = $row['ee_url'];		// URL
-				$note = $row['ee_admin_note'];		// 管理者備考
 				$status = $row['ee_status'];				// エントリー状況
 				$update_user = $row['lu_name'];// 更新者
 				$update_dt = $this->convertToDispDateTime($row['ee_create_dt']);
@@ -605,8 +599,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$start_time = $this->convertToDispTime($row['ee_start_dt'], 1/*時分*/);	// 開催期間開始時間
 				$end_date = $this->convertToDispDate($row['ee_end_dt']);	// 開催期間終了日
 				$end_time = $this->convertToDispTime($row['ee_end_dt'], 1/*時分*/);	// 開催期間終了時間
-				$showComment = $row['ee_show_comment'];				// コメントを表示するかどうか
-				$receiveComment = $row['ee_receive_comment'];		// コメントを受け付けるかどうか
 				$isAllDay = $row['ee_is_all_day'];			// 終日イベントかどうか
 				
 				// 記事カテゴリー取得
@@ -631,7 +623,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$this->tmpl->addVar("_widget", "place", $this->convertToDispString($place));		// 場所
 		$this->tmpl->addVar("_widget", "contact", $this->convertToDispString($contact));		// 連絡先
 		$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// URL
-		$this->tmpl->addVar("_widget", "note", $this->convertToDispString($note));		// 管理者備考
 		switch ($status){
 			case 1:	$this->tmpl->addVar("_widget", "selected_edit", 'selected');	break;
 			case 2:	$this->tmpl->addVar("_widget", "selected_public", 'selected');	break;
@@ -645,8 +636,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 公開期間開始時間
 		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
 		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
-		$this->tmpl->addVar("_widget", "show_comment", $this->convertToCheckedString($showComment));// コメントを表示するかどうか
-		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
 		$this->tmpl->addVar("_widget", "is_all_day", $this->convertToCheckedString($isAllDay));// 終日イベントかどうか
 		
 		// 非表示項目を設定

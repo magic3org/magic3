@@ -77,7 +77,7 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @return 								なし
 	 */
-	function _init($request)
+	function _preInit($request)
 	{
 		// URLパラメータ取得
 		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ

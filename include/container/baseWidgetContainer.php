@@ -150,7 +150,9 @@ class BaseWidgetContainer extends Core
 				
 		// ##### 初期処理 #####
 		// 独自のウィジェットメイン処理を行う場合は、_init()で設定を行う
+		if (method_exists($this, '_preInit')) $this->_preInit($request);		// ベースクラス用
 		if (method_exists($this, '_init')) $this->_init($request);
+		if (method_exists($this, '_postInit')) $this->_postInit($request);		// ベースクラス用
 		
 		// ##### ウィジェットメイン処理 #####
 		if (method_exists($this, '_setTemplate') || $this->_assignTemplate){			// テンプレートがあるか、テンプレート処理置き換えを使用するとき

@@ -20,7 +20,6 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 {
 	private $entryDays = array();		// イベントのある日付
 	private $entryInfoArray;				// イベント情報
-	private $css;	// カレンダー用CSS
 	const TARGET_WIDGET = 'event_main';		// 呼び出しウィジェットID
 	const EVENT_PAGE_NAME = 'イベント';			// イベント表示画面名
 	
@@ -213,29 +212,12 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		$calendarData .= "</table>" . M3_NL;
 		$this->tmpl->addVar("_widget", "calendar", $calendarData);
 		
-		// CSSを作成
-		$this->css = $this->getParsedTemplateData('calendar.tmpl.css');
-		
 		// 他画面へのリンク
 		$this->tmpl->setAttribute('top_link_area', 'visibility', 'visible');
 		$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_pageUrl, true));
 		$topName = self::EVENT_PAGE_NAME;
 		$this->tmpl->addVar("top_link_area", "top_url", $topLink);
 		$this->tmpl->addVar("top_link_area", "top_name", $topName);
-	}
-	/**
-	 * CSSデータをHTMLヘッダ部に設定
-	 *
-	 * CSSデータをHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
-	 */
-	function _addCssToHead($request, &$param)
-	{
-		return $this->css;
 	}
 	/**
 	 * イベント一覧を作成

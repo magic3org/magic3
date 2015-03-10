@@ -211,16 +211,9 @@ $(function(){
         </div>
 	    </td>
 	</tr>
-	<tr>
-	    <th>コメント</th>
-	    <td colspan="5">
-		<div class="col-sm-4 m3config_item"><div class="checkbox"><label><input type="checkbox" name="show_comment" {SHOW_COMMENT} />コメントを表示する</label></div></div>
-		<div class="col-sm-4 m3config_item"><div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメントを受け付ける</label></div></div>
-		</td>
-	</tr>
-	<tr>
-	    <th><span {_HELP_ENTRY_NOTE}>備考</span></th>
-	    <td colspan="5"><input type="text" name="item_note" class="form-control" value="{NOTE}" maxlength="50" /></td>
+    <tr>
+	    <th><span {_HELP_ENTRY_RELATED_CONTENT}>関連コンテンツ</span></th>
+	    <td colspan="5"><input type="text" name="item_related_content" class="form-control" value="{RELATED_CONTENT}" size="40" maxlength="40" {RELATED_CONTENT_DISABLED} /></td>
 	</tr>
 	<tr>
 	    <th>更新者</th>

@@ -54,7 +54,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	private $startTitleTagLevel;	// 最初のタイトルタグレベル
 	private $itemTagLevel;			// 記事のタイトルタグレベル
 	// イベント情報追加分
-	private $useCalendar;		// カレンダーを使用するかどうか
 	private $topContent;// トップコンテンツ
 	
 //	const CONTENT_TYPE = 'ev';
@@ -69,7 +68,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	const TITLE_RELATED_CONTENT_BLOCK = '関連記事';		// 関連コンテンツブロック
 	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
 	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
-	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const ENTRY_BODY_BLOCK_CLASS = 'event_entry_body';		// 記事本文ブロックのCSSクラス
 	const CATEGORY_BLOCK_CLASS = 'event_category_list';		// カテゴリーブロックのCSSクラス
 	const CATEGORY_BLOCK_LABEL = 'カテゴリー：';		// カテゴリーブロックのラベル
@@ -111,7 +109,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$this->startTitleTagLevel = self::$_configArray[event_mainCommonDef::CF_TITLE_TAG_LEVEL];	// 最初のタイトルタグレベル
 		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = event_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
 		// イベント情報追加分
-		$this->useCalendar	= self::$_configArray[event_mainCommonDef::CF_USE_CALENDAR];		// カレンダーを使用するかどうか
 		$this->topContent = self::$_configArray[event_mainCommonDef::CF_TOP_CONTENTS];			// トップコンテンツ
 	}
 	/**
@@ -263,7 +260,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 			}
 		}
 		// 他画面へのリンク
-		if ($this->useCalendar){
+		if ($this->_useCalendar){		// 簡易カレンダー使用のとき
 			$this->tmpl->setAttribute('top_link_area', 'visibility', 'visible');
 			$topLink = $this->convertUrlToHtmlEntity($this->getUrl($this->_pageUrl . '&task=' . self::TASK_CALENDAR, true));
 			$topName = 'カレンダー';
@@ -535,24 +532,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 							'description' => $this->headDesc,
 							'keywords' => $this->headKeyword);
 		return $headData;
-	}
-	/**
-	 * CSSファイルをHTMLヘッダ部に設定
-	 *
-	 * CSSファイルをHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
-	 */
-	function _addCssFileToHead($request, &$param)
-	{
-		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-			return '';
-		} else {
-			return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
-		}
 	}
 	/**
 	 * 取得したコンテンツ項目をテンプレートに設定する
