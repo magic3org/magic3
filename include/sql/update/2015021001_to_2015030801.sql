@@ -39,4 +39,5 @@ INSERT INTO event_config
 
 -- イベント記事マスター
 ALTER TABLE event_entry ADD ee_thumb_filename    TEXT                                         NOT NULL;      -- サムネールファイル名(「;」区切り)
+ALTER TABLE event_entry ADD ee_option_fields     TEXT                                         NOT NULL;      -- 追加フィールド
 ALTER TABLE event_entry ADD ee_related_content   TEXT                                         NOT NULL;      -- 関連コンテンツID(「,」区切り)

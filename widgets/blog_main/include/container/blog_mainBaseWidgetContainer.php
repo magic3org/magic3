@@ -24,8 +24,6 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected static $_paramObj;		// ウィジェットパラメータオブジェクト
 	protected static $_canEditEntry;	// 記事が編集可能かどうか
 	protected static $_task;			// デフォルトのタスク
-	protected $_langId;			// 現在の言語
-	protected $_userId;			// 現在のユーザ
 	protected $_isMultiLang;			// 多言語対応画面かどうか
 	protected $_blogId;		// ブログID
 	protected $_baseUrl;		// ベースURL
@@ -85,8 +83,6 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
 		
 		// 共通パラメータ初期化
-		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
-		$this->_userId = $this->gEnv->getCurrentUserId();		// 現在のユーザ
 		$this->_isMultiLang = $this->gEnv->isMultiLanguageSite();			// 多言語対応画面かどうか
 	}
 	/**

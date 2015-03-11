@@ -53,6 +53,11 @@ class BaseWidgetContainer extends Core
 	protected $_defSerial;						// ページ定義のレコードシリアル番号
 	protected $_backUrl;						// 戻り先URL
 	protected $_openBy;							// ウィンドウオープンタイプ
+	// 現在の値
+	protected $_widgetId;		// 現在のウィジェットID
+	protected $_langId;			// 現在の言語
+	protected $_userId;			// 現在のユーザ
+	
 	// テンプレート置き換え処理用
 	protected $_localParamObj;					// パラメータオブジェクト
 	protected $_localSerialArray;					// シリアル番号
@@ -100,6 +105,11 @@ class BaseWidgetContainer extends Core
 		$this->_useHierPage = $this->gSystem->hierarchicalPage();	// 階層化ページ
 		$this->_isMultiDomain = $this->gEnv->isMultiDomain();			// マルチドメイン運用かどうか
 		
+		// 現在の値取得
+		$this->_widgetId	= $this->gEnv->getCurrentWidgetId();		// 現在のウィジェットID
+		$this->_langId		= $this->gEnv->getCurrentLanguage();			// 現在の言語
+		$this->_userId		= $this->gEnv->getCurrentUserId();			// 現在のユーザ
+
 		// 描画出力タイプ
 		$templateType = $this->gEnv->getCurrentTemplateType();
 		switch ($templateType){
@@ -147,7 +157,7 @@ class BaseWidgetContainer extends Core
 		
 		// POST,GETパラメータ取得
 		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
-				
+		
 		// ##### 初期処理 #####
 		// 独自のウィジェットメイン処理を行う場合は、_init()で設定を行う
 		if (method_exists($this, '_preInit')) $this->_preInit($request);		// ベースクラス用

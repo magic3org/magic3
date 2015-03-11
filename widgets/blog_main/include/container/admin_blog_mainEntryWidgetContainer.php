@@ -160,12 +160,9 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	 */
 	function createList($request)
 	{
-		// 初期値取得
-		$defaultLangId = $this->gEnv->getDefaultLanguage();
-		
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
-		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定
+		if (empty($this->langId)) $this->langId = $this->gEnv->getDefaultLanguage();			// 言語が選択されていないときは、デフォルト言語を設定
 		if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスの場合
 			$this->blogId = null;	// デフォルトブログ(ブログID空)を含むすべてのブログ記事にアクセス可能
 		} else {
@@ -177,7 +174,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;
-		$serializedParam = $this->_db->getWidgetParam($this->gEnv->getCurrentWidgetId());
+		$serializedParam = $this->_db->getWidgetParam($this->_widgetId);
 		if (!empty($serializedParam)){
 			$dispInfo = unserialize($serializedParam);
 			$maxListCount = $dispInfo->maxMemberListCountByAdmin;		// 会員リスト最大表示数
@@ -315,11 +312,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	 */
 	function createDetail($request)
 	{
-		// デフォルト値
-		$defaultLangId	= $this->gEnv->getDefaultLanguage();
-		$regUserId		= $this->gEnv->getCurrentUserId();			// 記事投稿ユーザ
-		//$regDt			= date("Y/m/d H:i:s");						// 投稿日時
-		
 		// コンテンツレイアウトを取得
 		$contentLayout = array(self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE], self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST]);
 		$fieldInfoArray = blog_mainCommonDef::parseUserMacro($contentLayout);
@@ -328,7 +320,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
-		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定	
+		if (empty($this->langId)) $this->langId = $this->gEnv->getDefaultLanguage();			// 言語が選択されていないときは、デフォルト言語を設定	
 		$this->entryId = $request->trimValueOf('entryid');		// 記事エントリーID
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 //		if (empty($this->serialNo)) $this->serialNo = 0;
@@ -467,13 +459,14 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 										'be_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
 										'be_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'be_option_fields'		=> $this->serializeArray($this->fieldValueArray));				// ユーザ定義フィールド値
-				//if ($act == 'add'){
+
+				// 記事データを追加
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
 					$ret = self::$_mainDb->addEntryItem($nextEntryId * (-1)/*次のコンテンツIDのチェック*/, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
-													$regUserId, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $otherParams);
+													$this->_userId, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $otherParams);
 				} else {
 					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
-													$regUserId, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $otherParams);
+													$this->_userId, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $otherParams);
 				}
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
@@ -597,6 +590,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 					// ### 履歴データを再取得すべき? ###
 				}
 			
+				// 記事データを更新
 				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $status, $this->categoryArray, $this->blogId, 
 													''/*投稿者そのまま*/, $regDt, $startDt, $endDt, $showComment, $receiveComment, $newSerial, $oldRecord, $otherParams);
 /*				if ($ret){
