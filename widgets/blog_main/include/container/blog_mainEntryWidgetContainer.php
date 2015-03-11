@@ -47,8 +47,8 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
-	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
+	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const TAG_ID_ACTIVE_TERM = 'activeterm_button';		// 公開期間エリア表示用ボタンタグ
 	const TOOLTIP_ACTIVE_TERM = '公開期間を設定';		// 公開期間エリア表示用ボタンツールチップ
 	
@@ -233,7 +233,6 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					// 運用ログを残す
 					for ($i = 0; $i < count($delEntryInfo); $i++){
 						$infoObj = $delEntryInfo[$i];
-						//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $infoObj->name, 2100, 'ID=' . $infoObj->entryId);
 						$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 												M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->entryId,
 												M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
@@ -507,7 +506,6 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 							case 3:	$statusStr = '非公開';	break;
 						}
 					}
-					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
@@ -640,7 +638,6 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 							case 3:	$statusStr = '非公開';	break;
 						}
 					}
-					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を更新(' . $statusStr . ')しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
@@ -685,7 +682,6 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->gPage->updateParentWindow();
 					
 					// 運用ログを残す
-					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
@@ -724,7 +720,6 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->gPage->updateParentWindow();
 					
 					// 運用ログを残す
-					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));

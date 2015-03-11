@@ -231,7 +231,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 					// 運用ログを残す
 					for ($i = 0; $i < count($delEntryInfo); $i++){
 						$infoObj = $delEntryInfo[$i];
-						//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $infoObj->name, 2100, 'ID=' . $infoObj->entryId);
 						$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 												M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $infoObj->entryId,
 												M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
@@ -505,7 +504,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 							case 3:	$statusStr = '非公開';	break;
 						}
 					}
-					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
@@ -638,7 +636,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 							case 3:	$statusStr = '非公開';	break;
 						}
 					}
-					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を更新(' . $statusStr . ')しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
@@ -683,7 +680,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 					$this->gPage->updateParentWindow();
 					
 					// 運用ログを残す
-					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
@@ -722,7 +718,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 					$this->gPage->updateParentWindow();
 					
 					// 運用ログを残す
-					//$this->gOpeLog->writeUserInfo(__METHOD__, 'ブログ記事を削除しました。タイトル: ' . $name, 2100, 'ID=' . $this->entryId);
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
 											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
