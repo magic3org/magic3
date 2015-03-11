@@ -211,6 +211,23 @@ class event_mainDb extends BaseDb
 		}
 	}
 	/**
+	 * 次のエントリーIDを取得
+	 *
+	 * @return int							エントリーID
+	 */
+	function getNextEntryId()
+	{
+		// エントリーIDを決定する
+		$queryStr = 'SELECT MAX(ee_id) AS mid FROM event_entry ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret){
+			$entryId = $row['mid'] + 1;
+		} else {
+			$entryId = 1;
+		}
+		return $entryId;
+	}
+	/**
 	 * エントリー項目の新規追加
 	 *
 	 * @param string  $id			エントリーID
@@ -218,24 +235,13 @@ class event_mainDb extends BaseDb
 	 * @param string  $name			イベント名
 	 * @param string  $html			HTML
 	 * @param string  $html2		HTML(続き)
-	 * @param string  $summary		要約
-	 * @param string  $place		場所
-	 * @param string  $contact		連絡先
-	 * @param string  $url			URL
-	 * @param string  $note			管理者備考
 	 * @param int     $status		エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 	 * @param array   $category		カテゴリーID
-	 * @param timestamp	$startDt	期間(開始日)
-	 * @param timestamp	$endDt		期間(終了日)
-	 * @param bool    $isAllDay		終日イベントかどうか
-	 * @param bool    $showComment	コメントを表示するかどうか
-	 * @param bool $receiveComment	コメントを受け付けるかどうか
-	 * @param bool $userLimited		参照ユーザを制限するかどうか
+	 * @param array   $otherParams	その他のフィールド値
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addEntryItem($id, $langId, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $category, $startDt, $endDt, $isAllDay, 
-									$showComment, $receiveComment, $userLimited, &$newSerial)
+	function addEntryItem($id, $langId, $name, $html, $html2, $status, $category, $otherParams, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -243,7 +249,7 @@ class event_mainDb extends BaseDb
 		// トランザクション開始
 		$this->startTransaction();
 		
-		if ($id == 0){		// エントリーIDが0のときは、エントリーIDを新規取得
+		if (intval($id) <= 0){		// エントリーIDが0以下のときは、エントリーIDを新規取得
 			// エントリーIDを決定する
 			$queryStr = 'SELECT MAX(ee_id) AS mid FROM event_entry ';
 			$ret = $this->selectRecord($queryStr, array(), $row);
@@ -251,6 +257,12 @@ class event_mainDb extends BaseDb
 				$entryId = $row['mid'] + 1;
 			} else {
 				$entryId = 1;
+			}
+			
+			// 新規記事追加のときは記事IDが変更されていないかチェック
+			if (intval($id) * (-1) != $entryId){
+				$this->endTransaction();
+				return false;
 			}
 		} else {
 			$entryId = $id;
@@ -272,6 +284,8 @@ class event_mainDb extends BaseDb
 		}
 		
 		// データを追加
+		$params = array($entryId, $langId, $historyIndex, $name, $html, $html2, $status, $userId, $now);
+												
 		$queryStr  = 'INSERT INTO event_entry ';
 		$queryStr .=   '(ee_id, ';
 		$queryStr .=   'ee_language_id, ';
@@ -279,24 +293,26 @@ class event_mainDb extends BaseDb
 		$queryStr .=   'ee_name, ';
 		$queryStr .=   'ee_html, ';
 		$queryStr .=   'ee_html_ext, ';
-		$queryStr .=   'ee_summary, ';
-		$queryStr .=   'ee_place, ';
-		$queryStr .=   'ee_contact, ';
-		$queryStr .=   'ee_url, ';
-		$queryStr .=   'ee_admin_note, ';
 		$queryStr .=   'ee_status, ';
-		$queryStr .=   'ee_is_all_day, ';
-		$queryStr .=   'ee_show_comment, ';
-		$queryStr .=   'ee_receive_comment, ';
-		$queryStr .=   'ee_user_limited, ';
-		$queryStr .=   'ee_start_dt, ';
-		$queryStr .=   'ee_end_dt, ';
 		$queryStr .=   'ee_create_user_id, ';
-		$queryStr .=   'ee_create_dt) ';
-		$queryStr .= 'VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($entryId, $langId, $historyIndex, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, 
-												intval($isAllDay), intval($showComment), intval($receiveComment), intval($userLimited), $startDt, $endDt, $userId, $now));
+		$queryStr .=   'ee_create_dt ';
+		
+		// その他のフィールド値を追加
+		$otherValueStr = '';
+		if (!empty($otherParams)){
+			$keys = array_keys($otherParams);// キーを取得
+			for ($i = 0; $i < count($keys); $i++){
+				$fieldName = $keys[$i];
+				$fieldValue = $otherParams[$fieldName];
+				if (!isset($fieldValue)) continue;
+				$params[] = $fieldValue;
+				$queryStr .= ', ' . $fieldName;
+				$otherValueStr .= ', ?';
+			}
+		}
+		$queryStr .=  ') VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
+		$this->execStatement($queryStr, $params);
 		
 		// 新規のシリアル番号取得
 		$newSerial = 0;
@@ -324,24 +340,13 @@ class event_mainDb extends BaseDb
 	 * @param string  $name			イベント名
 	 * @param string  $html			HTML
 	 * @param string  $html2		HTML(続き)
-	 * @param string  $summary		要約
-	 * @param string  $place		場所
-	 * @param string  $contact		連絡先
-	 * @param string  $url			URL
-	 * @param string  $note			管理者備考
 	 * @param int     $status		エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 	 * @param array   $category		カテゴリーID
-	 * @param timestamp	$startDt	期間(開始日)
-	 * @param timestamp	$endDt		期間(終了日)
-	 * @param bool    $isAllDay		終日イベントかどうか
-	 * @param bool    $showComment	コメントを表示するかどうか
-	 * @param bool $receiveComment	コメントを受け付けるかどうか
-	 * @param bool $userLimited		参照ユーザを制限するかどうか
+	 * @param array   $otherParams	その他のフィールド値
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateEntryItem($serial, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, $category, $startDt, $endDt, $isAllDay,
-													$showComment, $receiveComment, $userLimited, &$newSerial)
+	function updateEntryItem($serial, $name, $html, $html2, $status, $category, $otherParams, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -381,7 +386,7 @@ class event_mainDb extends BaseDb
 		$entryId = $row['ee_id'];
 		$langId = $row['ee_language_id'];
 		
-		// 新規レコード追加		
+/*		// 新規レコード追加		
 		$queryStr  = 'INSERT INTO event_entry ';
 		$queryStr .=   '(ee_id, ';
 		$queryStr .=   'ee_language_id, ';
@@ -406,7 +411,37 @@ class event_mainDb extends BaseDb
 		$queryStr .= 'VALUES ';
 		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 		$this->execStatement($queryStr, array($entryId, $langId, $historyIndex, $name, $html, $html2, $summary, $place, $contact, $url, $note, $status, 
-												intval($isAllDay), intval($showComment), intval($receiveComment), intval($userLimited), $startDt, $endDt, $userId, $now));
+												intval($isAllDay), intval($showComment), intval($receiveComment), intval($userLimited), $startDt, $endDt, $userId, $now));*/
+		// データを追加
+		$params = array($entryId, $langId, $historyIndex, $name, $html, $html2, $status, $userId, $now);
+												
+		$queryStr  = 'INSERT INTO event_entry ';
+		$queryStr .=   '(ee_id, ';
+		$queryStr .=   'ee_language_id, ';
+		$queryStr .=   'ee_history_index, ';
+		$queryStr .=   'ee_name, ';
+		$queryStr .=   'ee_html, ';
+		$queryStr .=   'ee_html_ext, ';
+		$queryStr .=   'ee_status, ';
+		$queryStr .=   'ee_create_user_id, ';
+		$queryStr .=   'ee_create_dt ';
+		
+		// その他のフィールド値を追加
+		$otherValueStr = '';
+		if (!empty($otherParams)){
+			$keys = array_keys($otherParams);// キーを取得
+			for ($i = 0; $i < count($keys); $i++){
+				$fieldName = $keys[$i];
+				$fieldValue = $otherParams[$fieldName];
+				if (!isset($fieldValue)) continue;
+				$params[] = $fieldValue;
+				$queryStr .= ', ' . $fieldName;
+				$otherValueStr .= ', ?';
+			}
+		}
+		$queryStr .=  ') VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
+		$this->execStatement($queryStr, $params);
 
 		// 新規のシリアル番号取得
 		$newSerial = 0;

@@ -112,6 +112,14 @@ $(function(){
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_html', 300/* 高さ */);
 	m3SetWysiwygEditor('item_html2', 300/* 高さ */);
+	
+	// 前後エントリー移動ボタン
+	<patTemplate:tmpl name="show_prev_button" visibility="hidden">
+	m3SetPrevButtonEvent(editEntry, {SERIAL});
+	</patTemplate:tmpl>
+	<patTemplate:tmpl name="show_next_button" visibility="hidden">
+	m3SetNextButtonEvent(editEntry, {SERIAL});
+	</patTemplate:tmpl>
 });
 //]]>
 </script>
@@ -121,7 +129,7 @@ $(function(){
 <input type="hidden" name="task" value="entry_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<input type="hidden" name="entry" value="{ENTRY}" />
+<input type="hidden" name="entryid" value="{ENTRY}" />
 <h3 class="m3config_h"><span {_HELP_ENTRY_DETAIL}>イベント記事詳細</span></h3>
 <patTemplate:tmpl name="cancel_button" visibility="visible">
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_ENTRY_BUTTONS}><div class="btn-group">
@@ -219,7 +227,7 @@ $(function(){
 	    <th>更新者</th>
 	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
 	    <th>更新日時</th>
-	    <td colspan="5"><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
+	    <td colspan="3"><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
     </tbody>
 </table>

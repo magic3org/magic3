@@ -15,16 +15,19 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_event_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/event_mainDb.php');
+require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 
 class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetContainer
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $entryId;
-	private $lang;		// 現在の選択言語
+	private $langId;		// 現在の選択言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $categoryListData;		// 全記事カテゴリー
 	private $categoryArray;			// 選択中の記事カテゴリー
 	private $categoryCount;			// カテゴリ数
+	private $isMultiLang;			// 多言語対応画面かどうか
+	private $fieldValueArray;		// ユーザ定義フィールド入力値
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
@@ -34,7 +37,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
-	
+	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
+		
 	/**
 	 * コンストラクタ
 	 */
@@ -42,6 +46,24 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		// 初期値取得
+		$this->isMultiLang = $this->gEnv->isMultiLanguageSite();			// 多言語対応画面かどうか
+		
+		// DB定義値取得
+		$this->categoryCount = self::$_configArray[event_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
+		if (empty($this->categoryCount)) $this->categoryCount = event_mainCommonDef::DEFAULT_CATEGORY_COUNT;
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -266,16 +288,12 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		// デフォルト値
 		$defaultLangId	= $this->gEnv->getDefaultLanguage();
 		
-		// DB定義値取得
-		$this->categoryCount = self::$_configArray[event_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
-		if (empty($this->categoryCount)) $this->categoryCount = event_mainCommonDef::DEFAULT_CATEGORY_COUNT;
-		
 		// 入力値取得
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
 		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定	
-		$this->entryId = $request->trimValueOf('entry');		// 記事エントリーID
+		$this->entryId = $request->trimValueOf('entryid');		// 記事エントリーID
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		if (empty($this->serialNo)) $this->serialNo = 0;
 		$name = $request->trimValueOf('item_name');
@@ -291,6 +309,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$status = $request->trimValueOf('item_status');		// エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 		$category = '';									// カテゴリー
 		$isAllDay = $request->trimCheckedValueOf('item_is_all_day');			// 終日イベントかどうか
+		$relatedContent = $request->trimValueOf('item_related_content');	// 関連コンテンツ
 		
 		// カテゴリーを取得
 		$this->categoryArray = array();
@@ -332,18 +351,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		if (!empty($start_time)) $start_time = $this->convertToProperTime($start_time, 1/*時分フォーマット*/);
 		if (!empty($end_time)) $end_time = $this->convertToProperTime($end_time, 1/*時分フォーマット*/);
 		
-		$dataReload = false;		// データの再ロード
+		$reloadData = false;		// データの再ロード
 		if ($act == 'select'){		// 一覧から選択のとき
-			//if ($act == 'select') $this->langId = $defaultLangId;		// 言語は一旦リセット
-			
-			// 登録済みのイベント記事を取得
-			//$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);
-			//if (empty($this->serialNo)){
-			//	// 取得できないときは初期化
-			//	$dataInit = true;		// データ初期化
-			//} else {
-			$dataReload = true;		// データの再ロード
-			//}
+			$reloadData = true;		// データの再ロード
 		} else if ($act == 'selectlang'){		// 項目選択の場合
 			// 登録済みのコンテンツデータを取得
 			$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);
@@ -355,7 +365,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$update_user = '';// 更新者
 				$update_dt = '';							
 			} else {
-				$dataReload = true;		// データの再ロード
+				$reloadData = true;		// データの再ロード
 			}
 		} else if ($act == 'add' || $act == 'addlang'){		// 項目追加の場合
 			// 入力チェック
@@ -366,6 +376,12 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			// 期間範囲のチェック
 			if (!empty($start_date) && !empty($end_date)){
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('開催期間が不正です');
+			}
+			
+			// 関連コンテンツのチェック
+			if (!empty($relatedContent)){
+				$contentIdArray = explode(',', $relatedContent);
+				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
 			}
 			
 			// エラーなしの場合は、データを登録
@@ -382,18 +398,45 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					$endDt = $end_date . ' ' . $end_time;
 				}
 				
-				if ($act == 'add'){
-					$ret = self::$_mainDb->addEntryItem(0, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, '', $status, $this->categoryArray, 
-													$startDt, $endDt, $isAllDay, false, false, false/*参照ユーザ制限なし*/, $newSerial);
+				// サムネール画像を取得
+				$thumbFilename = '';
+				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
+					// 次の記事IDを取得
+					$nextEntryId = self::$_mainDb->getNextEntryId();
+				
+					if ($status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
+						$thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
+						if (empty($thumbPath) && !empty($html2)) $thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
+						if (!empty($thumbPath)){
+							$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_EVENT, event_mainCommonDef::$_deviceType, $nextEntryId, $thumbPath, $destFilename);
+							if ($ret) $thumbFilename = implode(';', $destFilename);
+						}
+					}
+				}
+				
+				// 追加パラメータ
+				$otherParams = array(
+										'ee_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+										'ee_related_content'	=> $relatedContent,		// 関連コンテンツ
+										'ee_option_fields'		=> $this->serializeArray($this->fieldValueArray),		// ユーザ定義フィールド値
+										'ee_summary'			=> $summary,			// 概要
+										'ee_place'				=> $place,
+										'ee_contact'			=> $contact,
+										'ee_url'				=> $url,
+										'ee_is_all_day'			=> $isAllDay,
+										'ee_start_dt'			=> $startDt,
+										'ee_end_dt'				=> $endDt
+									);
+				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
+					$ret = self::$_mainDb->addEntryItem($nextEntryId * (-1)/*次のコンテンツIDのチェック*/, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $otherParams, $newSerial);
 				} else {
-					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $summary, $place, $contact, $url, '', $status, $this->categoryArray, 
-													$startDt, $endDt, $isAllDay, false, false, false/*参照ユーザ制限なし*/, $newSerial);
+					$ret = self::$_mainDb->addEntryItem($this->entryId, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $otherParams, $newSerial);
 				}
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					// シリアル番号更新
 					$this->serialNo = $newSerial;
-					$dataReload = true;		// データの再ロード
+					$reloadData = true;		// データの再ロード
 					
 					// キャッシュデータのクリア
 					$this->clearCacheBySerial($this->serialNo);
@@ -405,7 +448,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					$statusStr = '';
 					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 					if ($ret){
-						$entryId = $row['ee_id'];		// 記事ID
+						$this->entryId = $row['ee_id'];		// 記事ID
 						$name = $row['ee_name'];		// コンテンツ名前
 						$updateDt = $row['ee_create_dt'];		// 作成日時
 						
@@ -417,9 +460,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 						}
 					}
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
-											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
-					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2400, 'ID=' . $entryId, $eventParam);
+					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2400, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
@@ -433,6 +476,12 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			// 期間範囲のチェック
 			if (!empty($start_date) && !empty($end_date)){
 				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('開催期間が不正です');
+			}
+			
+			// 関連コンテンツのチェック
+			if (!empty($relatedContent)){
+				$contentIdArray = explode(',', $relatedContent);
+				if (!ValueCheck::isNumeric($contentIdArray)) $this->setUserErrorMsg('関連コンテンツにエラー値があります');// すべて数値であるかチェック
 			}
 			
 			// エラーなしの場合は、データを更新
@@ -449,13 +498,51 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					$endDt = $end_date . ' ' . $end_time;
 				}
 				
-				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $summary, $place, $contact, $url, '', $status, $this->categoryArray, 
-														$startDt, $endDt, $isAllDay, false, false, false/*参照ユーザ制限なし*/, $newSerial);
+				// サムネール画像を取得
+				$thumbFilename = '';
+				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
+					if ($status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
+						// コンテンツからアイキャッチ画像を作成
+						$thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
+						if (empty($thumbPath) && !empty($html2)) $thumbPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
+						if (!empty($thumbPath)){
+							$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_EVENT, event_mainCommonDef::$_deviceType, $this->entryId, $thumbPath, $destFilename);
+							if ($ret) $thumbFilename = implode(';', $destFilename);
+						}
+					
+						// 非公開ディレクトリのアイキャッチ画像をコピー
+						$ret = event_mainCommonDef::copyEyecatchImageToPublicDir($this->entryId);
+						if ($ret){			// アイキャッチ画像をコピーした場合は、ファイル名を取得
+							// 画像ファイル名、フォーマット取得
+							list($destFilename, $formats) = $this->gInstance->getImageManager()->getSystemThumbFilename($this->entryId, 1/*クロップ画像のみ*/);
+							$thumbFilename = implode(';', $destFilename);
+						}
+					} else {		// 記事非公開の場合
+						// 公開ディレクトリのアイキャッチ画像を削除
+						event_mainCommonDef::removerEyecatchImageInPublicDir($this->entryId);
+					}
+				}
+				
+				// 追加パラメータ
+				$otherParams = array(
+										'ee_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+										'ee_related_content'	=> $relatedContent,		// 関連コンテンツ
+										'ee_option_fields'		=> $this->serializeArray($this->fieldValueArray),		// ユーザ定義フィールド値
+										'ee_summary'			=> $summary,			// 概要
+										'ee_place'				=> $place,
+										'ee_contact'			=> $contact,
+										'ee_url'				=> $url,
+										'ee_is_all_day'			=> $isAllDay,
+										'ee_start_dt'			=> $startDt,
+										'ee_end_dt'				=> $endDt
+									);
+									
+				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $status, $this->categoryArray, $otherParams, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					// シリアル番号更新
 					$this->serialNo = $newSerial;
-					$dataReload = true;		// データの再ロード
+					$reloadData = true;		// データの再ロード
 					
 					// キャッシュデータのクリア
 					$this->clearCacheBySerial($this->serialNo);
@@ -467,7 +554,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					$statusStr = '';
 					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 					if ($ret){
-						$entryId = $row['ee_id'];		// 記事ID
+						$this->entryId = $row['ee_id'];		// 記事ID
 						$name = $row['ee_name'];		// コンテンツ名前
 						$updateDt = $row['ee_create_dt'];		// 作成日時
 						
@@ -479,9 +566,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 						}
 					}
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
-											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
-					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を更新(' . $statusStr . ')しました。タイトル: ' . $name, 2401, 'ID=' . $entryId, $eventParam);
+					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を更新(' . $statusStr . ')しました。タイトル: ' . $name, 2401, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
@@ -495,7 +582,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				// 削除するイベント記事の情報を取得
 				$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 				if ($ret){
-					$entryId = $row['ee_id'];		// 記事ID
+					$this->entryId = $row['ee_id'];		// 記事ID
 					$name = $row['ee_name'];		// コンテンツ名前
 				}
 				
@@ -511,9 +598,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					
 					// 運用ログを残す
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
-											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
-					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を削除しました。タイトル: ' . $name, 2402, 'ID=' . $entryId, $eventParam);
+					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を削除しました。タイトル: ' . $name, 2402, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
@@ -527,7 +614,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				// 削除するイベント記事の情報を取得
 				$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 				if ($ret){
-					$entryId = $row['ee_id'];		// 記事ID
+					$this->entryId = $row['ee_id'];		// 記事ID
 					$name = $row['ee_name'];		// コンテンツ名前
 				}
 				
@@ -543,9 +630,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					
 					// 運用ログを残す
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENT,
-											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
-					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を削除しました。タイトル: ' . $name, 2402, 'ID=' . $entryId, $eventParam);
+					$this->writeUserInfoEvent(__METHOD__, 'イベント記事を削除しました。タイトル: ' . $name, 2402, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
@@ -556,11 +643,11 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			$start_date = date("Y/m/d");		// 開催日付
 			$start_time = date("H:i:s");		// 開催時間
 			$isAllDay = 0;			// 終日イベントかどうか
-			$dataReload = true;		// データの再ロード
+			$reloadData = true;		// データの再ロード
 		}
 		
 		// 設定データを再取得
-		if ($dataReload){		// データの再ロード
+		if ($reloadData){		// データの再ロード
 			$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 			if ($ret){
 				$this->entryId = $row['ee_id'];		// 記事ID
@@ -581,9 +668,34 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$end_date = $this->convertToDispDate($row['ee_end_dt']);	// 開催期間終了日
 				$end_time = $this->convertToDispTime($row['ee_end_dt'], 1/*時分*/);	// 開催期間終了時間
 				$isAllDay = $row['ee_is_all_day'];			// 終日イベントかどうか
+				$relatedContent = $row['ee_related_content'];		// 関連コンテンツ
 				
 				// 記事カテゴリー取得
 				$this->categoryArray = $this->getCategory($categoryRow);
+			} else {
+				$this->entryId = 0;		// 記事ID
+				$name = '';				// タイトル
+				$html = '';				// HTML
+				$html2 = '';				// HTML
+				$summary = '';		// 要約
+				$place = '';		// 場所
+				$contact = '';		// 連絡先
+				$url = '';		// URL
+				$status = 0;				// エントリー状況
+				$update_user = '';// 更新者
+				$update_dt = '';
+				$start_date = '';	// 開催期間開始日
+				$start_time = '';	// 開催期間開始時間
+				$end_date = '';	// 開催期間終了日
+				$end_time = '';	// 開催期間終了時間
+				$isAllDay = 0;			// 終日イベントかどうか
+				$relatedContent = '';		// 関連コンテンツ
+				
+				// 記事カテゴリー取得
+				$this->categoryArray = array();
+				
+				// ユーザ定義フィールド
+				$this->fieldValueArray = array();
 			}
 		}
 		// カテゴリーメニューを作成
@@ -618,6 +730,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
 		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
 		$this->tmpl->addVar("_widget", "is_all_day", $this->convertToCheckedString($isAllDay));// 終日イベントかどうか
+		$this->tmpl->addVar("_widget", "related_content", $relatedContent);	// 関連コンテンツ
+		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
 		
 		// 非表示項目を設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
