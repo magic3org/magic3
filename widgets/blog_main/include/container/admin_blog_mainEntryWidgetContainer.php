@@ -35,6 +35,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	private $categoryArray;			// 選択中の記事カテゴリー
 	private $categoryCount;			// カテゴリ数
 	private $isMultiLang;			// 多言語対応画面かどうか
+	private $useMultiBlog;// マルチブログを使用するかどうか
+	private $useComment;// コメント機能を使用するかどうか
 	private $fieldValueArray;		// ユーザ定義フィールド入力値
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
@@ -57,8 +59,26 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		// 初期値取得
 		$this->isMultiLang = $this->gEnv->isMultiLanguageSite();			// 多言語対応画面かどうか
+		
+		// DB定義値取得
+		$this->useMultiBlog		= self::$_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
+		$this->useComment		= self::$_configArray[blog_mainCommonDef::CF_RECEIVE_COMMENT];// コメント機能を使用するかどうか
+		$this->categoryCount	= self::$_configArray[blog_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
+		if (empty($this->categoryCount)) $this->categoryCount = blog_mainCommonDef::DEFAULT_CATEGORY_COUNT;
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -300,12 +320,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$regUserId		= $this->gEnv->getCurrentUserId();			// 記事投稿ユーザ
 		//$regDt			= date("Y/m/d H:i:s");						// 投稿日時
 		
-		// ブログ定義値
-		$useMultiBlog = self::$_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
-		$useComment = self::$_configArray[blog_mainCommonDef::CF_RECEIVE_COMMENT];// コメント機能を使用するかどうか
-		$this->categoryCount = self::$_configArray[blog_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
-		if (empty($this->categoryCount)) $this->categoryCount = blog_mainCommonDef::DEFAULT_CATEGORY_COUNT;
-		
 		// コンテンツレイアウトを取得
 		$contentLayout = array(self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE], self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST]);
 		$fieldInfoArray = blog_mainCommonDef::parseUserMacro($contentLayout);
@@ -333,7 +347,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$showComment = ($request->trimValueOf('show_comment') == 'on') ? 1 : 0;				// コメントを表示するかどうか
 		$receiveComment = ($request->trimValueOf('receive_comment') == 'on') ? 1 : 0;		// コメントを受け付けるかどうか
 		$relatedContent = $request->trimValueOf('item_related_content');	// 関連コンテンツ
-		if (!$useComment){		// コメント機能を使用しない場合のデフォルト値
+		if (!$this->useComment){		// コメント機能を使用しない場合のデフォルト値
 			$showComment = 1;				// コメントを表示するかどうか
 			$receiveComment = 1;		// コメントを受け付けるかどうか
 		}
@@ -858,7 +872,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->createUserFields($fieldInfoArray);
 		
 		// 所属ブログ
-		if (empty($useMultiBlog)){
+		if (empty($this->useMultiBlog)){
 /*			$this->tmpl->setAttribute('show_blogid_area', 'visibility', 'visible');
 			
 			$blogName = $this->getBlogName($this->blogId);
@@ -873,7 +887,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		}
 		
 		// コメント機能の設定
-		if ($useComment){
+		if ($this->useComment){
 			$this->tmpl->setAttribute('show_comment_area', 'visibility', 'visible');
 			
 			$this->tmpl->addVar("show_comment_area", "show_comment", $this->convertToCheckedString($showComment));// コメントを表示するかどうか
