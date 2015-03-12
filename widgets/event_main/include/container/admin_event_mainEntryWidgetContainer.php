@@ -289,7 +289,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		if (empty($this->langId)) $this->langId = $this->gEnv->getDefaultLanguage();			// 言語が選択されていないときは、デフォルト言語を設定
 		$this->entryId = $request->trimValueOf('entryid');		// 記事エントリーID
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
-		if (empty($this->serialNo)) $this->serialNo = 0;
 		$name = $request->trimValueOf('item_name');
 		$html = $request->valueOf('item_html');
 		$html2 = $request->valueOf('item_html2');
@@ -669,6 +668,15 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				
 				// 記事カテゴリー取得
 				$this->categoryArray = $this->getCategory($categoryRow);
+				
+				// アイキャッチ画像
+				$iconUrl = event_mainCommonDef::getEyecatchImageUrl($row['ee_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[event_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+				if (empty($row['ee_thumb_filename'])){
+					$iconTitle = 'アイキャッチ画像未設定';
+				} else {
+					$iconTitle = 'アイキャッチ画像';
+				}
+				$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			} else {
 				$this->entryId = 0;		// 記事ID
 				$name = '';				// タイトル
@@ -734,7 +742,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
 
 		// 入力フィールドの設定、共通項目のデータ設定
-		if ($this->entryId == 0){		// 記事IDが0のときは、新規追加モードにする
+		if (empty($this->entryId)){		// 記事IDが0のときは、新規追加モードにする
 			$this->tmpl->addVar('_widget', 'id', '新規');
 			
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
@@ -746,7 +754,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		} else {
 			$this->tmpl->addVar('_widget', 'id', $this->entryId);
 			
-			if ($this->serialNo == 0){		// 未登録データのとき
+			if (empty($this->serialNo)){		// 未登録データのとき
 				// データ追加ボタン表示
 				$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
 			} else {
