@@ -8,7 +8,7 @@
  *
  * @package    カスタム検索
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2014 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -246,6 +246,7 @@ class custom_searchDb extends BaseDb
 			$queryStr .= 'FROM blog_entry ';
 			$queryStr .=  'WHERE be_language_id = ? ';	$params[] = $langId;
 			$queryStr .=    'AND be_deleted = false ';		// 削除されていない
+			$queryStr .=    'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 			$queryStr .=    'AND be_regist_dt <= ? ';	$params[] = $now;	// 投稿日時が現在日時よりも過去のものを取得
 
 			// タイトルと記事を検索
@@ -297,6 +298,7 @@ class custom_searchDb extends BaseDb
 			$queryStr .= 'FROM event_entry ';
 			$queryStr .=   'WHERE ee_language_id = ? ';	$params[] = $langId;
 			$queryStr .=     'AND ee_deleted = false ';		// 削除されていない
+			$queryStr .=     'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 			
 			// 名前、予定、結果、概要、管理者用備考、場所、連絡先を検索
 			if (!empty($keywords)){

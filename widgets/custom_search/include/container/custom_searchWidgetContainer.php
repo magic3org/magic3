@@ -505,6 +505,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 						$summary = $this->_createSummaryText($content);
 					}
 				}
+				
+				// イベント記事画像
+				$imageUrl = $this->getImageUrl(M3_VIEW_TYPE_EVENT, $eventId, $this->imageType);
 				break;
 			case M3_VIEW_TYPE_BBS:			// BBSスレッド情報の場合
 				$threadId = $fetchedRow['id'];
@@ -690,7 +693,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	function getImageUrl($contentType, $contentId, $format)
 	{
 		$url = '';
-		if ($contentType == M3_VIEW_TYPE_BLOG){
+		switch ($contentType){
+		case M3_VIEW_TYPE_BLOG:
+		case M3_VIEW_TYPE_EVENT:
 			$filename = $this->gInstance->getImageManager()->getThumbFilename($contentId, $format);
 			$path = $this->gInstance->getImageManager()->getSystemThumbPath($contentType, 0/*PC用*/, $filename);
 			if (!file_exists($path)){
@@ -698,6 +703,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$path = $this->gInstance->getImageManager()->getSystemThumbPath($contentType, 0/*PC用*/, $filename);
 			}
 			$url = $this->gInstance->getImageManager()->getSystemThumbUrl($contentType, 0/*PC用*/, $filename);
+			break;
 		}
 		return $url;
 	}
