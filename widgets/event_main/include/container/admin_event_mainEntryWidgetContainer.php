@@ -634,11 +634,6 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				}
 			}
 		} else {	// 初期画面表示のとき
-			// 初期値設定
-			// 所属イベントIDは親ウィンドウから引き継ぐ
-			$start_date = date("Y/m/d");		// 開催日付
-			$start_time = date("H:i:s");		// 開催時間
-			$isAllDay = 0;			// 終日イベントかどうか
 			$reloadData = true;		// データの再ロード
 		}
 		
@@ -689,8 +684,10 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$status = 0;				// エントリー状況
 				$update_user = '';// 更新者
 				$update_dt = '';
-				$start_date = '';	// 開催期間開始日
-				$start_time = '';	// 開催期間開始時間
+//				$start_date = '';	// 開催期間開始日
+//				$start_time = '';	// 開催期間開始時間
+				$start_date = date("Y/m/d");		// 開催日付
+				$start_time = date("H:i:s");		// 開催時間
 				$end_date = '';	// 開催期間終了日
 				$end_time = '';	// 開催期間終了時間
 				$isAllDay = 0;			// 終日イベントかどうか
