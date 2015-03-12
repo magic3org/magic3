@@ -235,7 +235,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 							//$this->gInstance->getImageManager()->delSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $oldFiles);
 							
 							// アイキャッチ画像削除
-							blog_mainCommonDef::removerEyecatchImage($infoObj->entryId);
+							blog_mainCommonDef::removeEyecatchImage($infoObj->entryId);
 						}
 					}
 
@@ -573,7 +573,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 						}
 					} else {		// 記事非公開の場合
 						// 公開ディレクトリのアイキャッチ画像を削除
-						blog_mainCommonDef::removerEyecatchImageInPublicDir($this->entryId);
+						blog_mainCommonDef::removeEyecatchImageInPublicDir($this->entryId);
 					}
 				}
 
@@ -679,7 +679,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 //						$this->gInstance->getImageManager()->delSystemDefaultThumb(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $oldFiles);
 						
 						// アイキャッチ画像削除
-						blog_mainCommonDef::removerEyecatchImage($this->entryId);
+						blog_mainCommonDef::removeEyecatchImage($this->entryId);
 					}
 						
 					// キャッシュデータのクリア
@@ -718,7 +718,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 //					$ret = blog_mainCommonDef::removeThumbnail($this->entryId);
 					
 					// アイキャッチ画像削除
-					blog_mainCommonDef::removerEyecatchImage($this->entryId);
+					blog_mainCommonDef::removeEyecatchImage($this->entryId);
 						
 					// キャッシュデータのクリア
 					$this->clearCacheBySerial($this->serialNo);

@@ -147,7 +147,7 @@ class event_mainCommonDef
 	 * @param string    $entryId		記事ID
 	 * @return bool						true=成功、false=失敗
 	 */
-	static function removerEyecatchImageInPublicDir($entryId)
+	static function removeEyecatchImageInPublicDir($entryId)
 	{
 		global $gInstanceManager;
 		
@@ -168,7 +168,7 @@ class event_mainCommonDef
 	 * @param string    $entryId		記事ID
 	 * @return bool						true=成功、false=失敗
 	 */
-	static function removerEyecatchImage($entryId)
+	static function removeEyecatchImage($entryId)
 	{
 		global $gInstanceManager;
 		

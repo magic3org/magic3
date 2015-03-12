@@ -194,6 +194,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 						$newInfoObj = new stdClass;
 						$newInfoObj->entryId = $row['ee_id'];		// 記事ID
 						$newInfoObj->name = $row['ee_name'];		// 記事タイトル
+						$newInfoObj->thumb = $row['ee_thumb_filename'];		// アイキャッチ画像
 						$delEntryInfo[] = $newInfoObj;
 					}
 				}
@@ -201,6 +202,12 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$ret = self::$_mainDb->delEntryItem($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
+					
+					// ##### アイキャッチ画像の削除 #####
+					for ($i = 0; $i < count($delEntryInfo); $i++){
+						$infoObj = $delEntryInfo[$i];
+						if (!empty($infoObj->thumb)) event_mainCommonDef::removeEyecatchImage($infoObj->entryId);
+					}
 					
 					// キャッシュデータのクリア
 					for ($i = 0; $i < count($delItems); $i++){
@@ -391,7 +398,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					$endDt = $end_date . ' ' . $end_time;
 				}
 				
-				// サムネール画像を取得
+				// アイキャッチ画像を取得
 				$thumbFilename = '';
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
 					// 次の記事IDを取得
@@ -409,7 +416,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				
 				// 追加パラメータ
 				$otherParams = array(
-										'ee_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+										'ee_thumb_filename'		=> $thumbFilename,		// アイキャッチ画像ファイル名
 										'ee_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'ee_option_fields'		=> $this->serializeArray($this->fieldValueArray),		// ユーザ定義フィールド値
 										'ee_summary'			=> $summary,			// 概要
@@ -493,7 +500,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 					$endDt = $end_date . ' ' . $end_time;
 				}
 				
-				// サムネール画像を取得
+				// アイキャッチ画像を取得
 				$thumbFilename = '';
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
 					if ($status == 2){		// 記事公開の場合のみアイキャッチ画像を作成
@@ -514,13 +521,13 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 						}
 					} else {		// 記事非公開の場合
 						// 公開ディレクトリのアイキャッチ画像を削除
-						event_mainCommonDef::removerEyecatchImageInPublicDir($this->entryId);
+						event_mainCommonDef::removeEyecatchImageInPublicDir($this->entryId);
 					}
 				}
 				
 				// 追加パラメータ
 				$otherParams = array(
-										'ee_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
+										'ee_thumb_filename'		=> $thumbFilename,		// アイキャッチ画像ファイル名
 										'ee_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'ee_option_fields'		=> $this->serializeArray($this->fieldValueArray),		// ユーザ定義フィールド値
 										'ee_summary'			=> $summary,			// 概要
@@ -586,6 +593,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 					
+					// ##### アイキャッチ画像を削除 #####
+					if (!empty($row['ee_thumb_filename'])) event_mainCommonDef::removeEyecatchImage($this->entryId);
+					
 					// キャッシュデータのクリア
 					$this->clearCacheBySerial($this->serialNo);
 					
@@ -617,6 +627,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$ret = self::$_mainDb->delEntryItemById($this->serialNo);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
+					
+					// ##### アイキャッチ画像削除 #####
+					event_mainCommonDef::removeEyecatchImage($this->entryId);
 					
 					// キャッシュデータのクリア
 					$this->clearCacheBySerial($this->serialNo);
@@ -708,6 +721,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_EVENT_ID . '=' . $this->entryId;
 		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
 		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		
+		// CKEditor用のCSSファイルを読み込む
+		$this->loadCKEditorCssFiles($previewUrl);
 		
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar('_widget', 'entry', $this->entryId);

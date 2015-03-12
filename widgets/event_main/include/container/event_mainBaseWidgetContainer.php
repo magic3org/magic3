@@ -69,9 +69,9 @@ class event_mainBaseWidgetContainer extends BaseWidgetContainer
 	function _preInit($request)
 	{
 		// URLパラメータ取得
-		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
+//		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);		// ウィンドウオープンタイプ
-		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
+//		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
 		
 		// 共通パラメータ初期化
 		$this->_pageUrl = $this->gEnv->createCurrentPageUrl();		// 現在のページのURL
