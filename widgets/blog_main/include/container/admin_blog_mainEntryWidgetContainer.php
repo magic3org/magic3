@@ -323,7 +323,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		if (empty($this->langId)) $this->langId = $this->gEnv->getDefaultLanguage();			// 言語が選択されていないときは、デフォルト言語を設定	
 		$this->entryId = $request->trimValueOf('entryid');		// 記事エントリーID
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
-//		if (empty($this->serialNo)) $this->serialNo = 0;
 		$this->blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		$name = $request->trimValueOf('item_name');
 		$entry_date = $request->trimValueOf('item_entry_date');		// 投稿日
@@ -965,7 +964,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$this->tmpl->addVar('_widget', 'id', $itemId);
 			
 			// ボタンの表示制御
-			if ($this->serialNo == 0){		// 未登録データのとき
+			if (empty($this->serialNo)){		// 未登録データのとき
 				// データ追加ボタン表示
 				$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
 			} else {
