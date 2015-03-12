@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -97,18 +97,22 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 		switch ($task){
 			case self::TASK_CONTENT:		// コンテンツ管理
 				$titles[] = 'コンテンツ管理';
+				$titles[] = 'コンテンツ一覧';
 				break;
 			case self::TASK_CONTENT_DETAIL:		// コンテンツ管理(詳細)
 				$titles[] = 'コンテンツ管理';
+				$titles[] = 'コンテンツ一覧';
 				$titles[] = '詳細';
 				break;
 			case self::TASK_HISTORY:				// コンテンツ履歴
 				$titles[] = 'コンテンツ管理';
+				$titles[] = 'コンテンツ一覧';
 				$titles[] = '詳細';
 				$titles[] = '履歴';
 				break;
 			case self::TASK_OTHER:		// その他設定
 				$titles[] = '基本';
+				$titles[] = '基本設定';
 				break;
 		}
 		
@@ -119,16 +123,44 @@ class admin_default_contentBaseWidgetContainer extends BaseAdminWidgetContainer
 						'task'		=> self::TASK_CONTENT,
 						'url'		=> '',
 						'tagid'		=> '',
-						'active'	=> ($task == self::TASK_CONTENT || $task == self::TASK_CONTENT_DETAIL || $task == self::TASK_HISTORY),
-						'submenu'	=> array()
+						'active'	=> (
+											$task == self::TASK_CONTENT ||				// コンテンツ管理(一覧)
+											$task == self::TASK_CONTENT_DETAIL ||		// コンテンツ管理(詳細)
+											$task == self::TASK_HISTORY					// コンテンツ管理履歴
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> 'コンテンツ一覧',
+								'task'		=> self::TASK_CONTENT,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CONTENT ||				// コンテンツ管理(一覧)
+													$task == self::TASK_CONTENT_DETAIL ||		// コンテンツ管理(詳細)
+													$task == self::TASK_HISTORY					// コンテンツ管理履歴
+												)
+							)
+						)
 					),
 					(Object)array(
 						'name'		=> '基本',
 						'task'		=> self::TASK_OTHER,
 						'url'		=> '',
 						'tagid'		=> '',
-						'active'	=> ($task == self::TASK_OTHER),
-						'submenu'	=> array()
+						'active'	=> (
+											$task == self::TASK_OTHER
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '基本設定',
+								'task'		=> self::TASK_OTHER,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_OTHER					// 基本設定
+												)
+							)
+						)
 					)
 				);
 
