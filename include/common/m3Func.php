@@ -385,6 +385,9 @@ function mvFileToDir($srcDir, $filenames, $destDir)
 			$destPath = $destDir . '/' . $filenames[$i];
 			$ret = mvFile($srcPath, $destPath);
 			if (!$ret) $noErr = false;
+		} else {
+			$noErr = false;
+			break;
 		}
 	}
 	return $noErr;
@@ -407,6 +410,9 @@ function cpFileToDir($srcDir, $filenames, $destDir)
 			$destPath = $destDir . '/' . $filenames[$i];
 			$ret = copy($srcPath, $destPath);
 			if (!$ret) $noErr = false;
+		} else {
+			$noErr = false;
+			break;
 		}
 	}
 	return $noErr;

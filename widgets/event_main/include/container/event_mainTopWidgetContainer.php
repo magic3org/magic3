@@ -65,7 +65,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	const MESSAGE_EXT_ENTRY		= '結果を見る';					// イベント記事に結果がある場合の表示
 	const MESSAGE_EXT_ENTRY_PRE	= '…&nbsp;';							// イベント記事に結果がある場合の表示
 	const DEFAULT_TITLE_SEARCH = '検索';		// 検索時のデフォルトタイトル
-	const TITLE_RELATED_CONTENT_BLOCK = '関連記事';		// 関連コンテンツブロック
+	const TITLE_RELATED_CONTENT_BLOCK = '関連イベント';		// 関連コンテンツブロック
 	const EDIT_ICON_FILE = '/images/system/page_edit32.png';		// 編集アイコン
 	const NEW_ICON_FILE = '/images/system/page_add32.png';		// 新規アイコン
 	const ENTRY_BODY_BLOCK_CLASS = 'event_entry_body';		// 記事本文ブロックのCSSクラス

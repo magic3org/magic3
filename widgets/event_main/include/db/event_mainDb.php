@@ -613,18 +613,37 @@ class event_mainDb extends BaseDb
 	/**
 	 * エントリー項目を取得
 	 *
-	 * @param int		$id					エントリーID
+	 * @param int,array	$id					エントリーID
 	 * @param string	$langId				言語
 	 * @param array     $row				レコード
 	 * @return bool							取得 = true, 取得なし= false
 	 */
 	function getEntryItem($id, $langId, &$row)
 	{
-		$queryStr  = 'SELECT * FROM event_entry ';
-		$queryStr .=   'WHERE ee_deleted = false ';	// 削除されていない
-		$queryStr .=   'AND ee_id = ? ';
-		$queryStr .=   'AND ee_language_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		if (is_array($id)){
+			$params = array();
+			$contentId = implode(',', $id);
+		
+			// CASE文作成
+			$caseStr = 'CASE ee_id ';
+			for ($i = 0; $i < count($id); $i++){
+				$caseStr .= 'WHEN ' . $id[$i] . ' THEN ' . $i . ' ';
+			}
+			$caseStr .= 'END AS no';
+
+			$queryStr = 'SELECT *, ' . $caseStr . ' FROM event_entry ';
+			$queryStr .=  'WHERE ee_deleted = false ';		// 削除されていない
+			$queryStr .=    'AND ee_id in (' . $contentId . ') ';
+			$queryStr .=    'AND ee_language_id = ? '; $params[] = $langId;
+			$queryStr .=  'ORDER BY no';
+			$ret = $this->selectRecords($queryStr, $params, $row);
+		} else {
+			$queryStr  = 'SELECT * FROM event_entry ';
+			$queryStr .=   'WHERE ee_deleted = false ';	// 削除されていない
+			$queryStr .=   'AND ee_id = ? ';
+			$queryStr .=   'AND ee_language_id = ? ';
+			$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		}
 		return $ret;
 	}
 	/**

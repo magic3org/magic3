@@ -145,19 +145,16 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	 */
 	function createList($request)
 	{
-		// ユーザ情報、表示言語
-		$defaultLangId = $this->gEnv->getDefaultLanguage();
-		
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
-		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定	
+		if (empty($this->langId)) $this->langId = $this->gEnv->getDefaultLanguage();			// 言語が選択されていないときは、デフォルト言語を設定
 		
 		// ##### 検索条件 #####
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;
-		$serializedParam = $this->_db->getWidgetParam($this->gEnv->getCurrentWidgetId());
+		$serializedParam = $this->_db->getWidgetParam($this->_widgetId);
 		if (!empty($serializedParam)){
 			$dispInfo = unserialize($serializedParam);
 			$maxListCount = $dispInfo->maxMemberListCountByAdmin;		// 会員リスト最大表示数
@@ -285,14 +282,11 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	 */
 	function createDetail($request)
 	{
-		// デフォルト値
-		$defaultLangId	= $this->gEnv->getDefaultLanguage();
-		
 		// 入力値取得
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
-		if (empty($this->langId)) $this->langId = $defaultLangId;			// 言語が選択されていないときは、デフォルト言語を設定	
+		if (empty($this->langId)) $this->langId = $this->gEnv->getDefaultLanguage();			// 言語が選択されていないときは、デフォルト言語を設定
 		$this->entryId = $request->trimValueOf('entryid');		// 記事エントリーID
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		if (empty($this->serialNo)) $this->serialNo = 0;
@@ -427,6 +421,8 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 										'ee_start_dt'			=> $startDt,
 										'ee_end_dt'				=> $endDt
 									);
+				
+				// 記事データを追加
 				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// 多言語でデフォルト言語、または単一言語のとき
 					$ret = self::$_mainDb->addEntryItem($nextEntryId * (-1)/*次のコンテンツIDのチェック*/, $this->langId, $name, $html, $html2, $status, $this->categoryArray, $otherParams, $newSerial);
 				} else {
@@ -537,6 +533,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 										'ee_end_dt'				=> $endDt
 									);
 									
+				// 記事データを更新
 				$ret = self::$_mainDb->updateEntryItem($this->serialNo, $name, $html, $html2, $status, $this->categoryArray, $otherParams, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');

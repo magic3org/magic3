@@ -23,8 +23,6 @@ class event_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected static $_configArray;		// イベント定義値
 	protected static $_paramObj;		// ウィジェットパラメータオブジェクト
 	protected static $_canEditEntry;	// 記事が編集可能かどうか
-	protected $_langId;			// 現在の言語
-	protected $_userId;			// 現在のユーザ
 	protected $_pageUrl;		// 現在のページのURL
 	protected $_baseUrl;		// ベースURL
 	protected $_useCalendar;		// カレンダーを使用するかどうか
@@ -76,8 +74,6 @@ class event_mainBaseWidgetContainer extends BaseWidgetContainer
 		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
 		
 		// 共通パラメータ初期化
-		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
-		$this->_userId = $this->gEnv->getCurrentUserId();			// 現在のユーザ
 		$this->_pageUrl = $this->gEnv->createCurrentPageUrl();		// 現在のページのURL
 		$this->_baseUrl = $this->getUrlWithOptionParam();			// ベースURL(オプション付き)
 		
