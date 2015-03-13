@@ -501,7 +501,8 @@ class event_mainDb extends BaseDb
 			// イベントカテゴリー
 			$queryStr  = 'SELECT * FROM event_entry_with_category LEFT JOIN event_category ON ew_category_id = ec_id AND ec_deleted = false ';
 			$queryStr .=   'WHERE ew_entry_serial = ? ';
-			$queryStr .=  'ORDER BY ew_index ';
+		//	$queryStr .=  'ORDER BY ew_index ';
+			$queryStr .=  'ORDER BY ec_sort_order, ec_id ';		// カテゴリー並び順
 			$this->selectRecords($queryStr, array(intval($serial)), $categoryRow);
 		}
 		return $ret;
@@ -1105,7 +1106,7 @@ class event_mainDb extends BaseDb
 		$queryStr = 'SELECT * FROM event_category LEFT JOIN _login_user ON ec_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=  'WHERE ec_language_id = ? ';
 		$queryStr .=    'AND ec_deleted = false ';		// 削除されていない
-		$queryStr .=  'ORDER BY ec_id';
+		$queryStr .=  'ORDER BY ec_sort_order, ec_id';	// カテゴリー並び順
 		$retValue = $this->selectRecords($queryStr, array($langId), $rows);
 		return $retValue;
 	}

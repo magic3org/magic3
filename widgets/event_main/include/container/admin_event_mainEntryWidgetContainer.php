@@ -24,6 +24,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 	private $langId;		// 現在の選択言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $categoryListData;		// 全記事カテゴリー
+	private $categorySortInfo;		// カテゴリーソート情報
 	private $categoryArray;			// 選択中の記事カテゴリー
 	private $categoryCount;			// カテゴリ数
 	private $isMultiLang;			// 多言語対応画面かどうか
@@ -320,7 +321,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				$this->categoryArray[] = $itemValue;
 			}
 		}
-
+		// カテゴリーをソート
+		$this->sortCategory($this->categoryArray);
+		
 		// 公開期間を取得
 		$start_date = $request->trimValueOf('item_start_date');		// 公開期間開始日付
 		if (!empty($start_date)) $start_date = $this->convertToProperDate($start_date);
@@ -985,6 +988,41 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			$urlParam[] = M3_REQUEST_PARAM_EVENT_ENTRY_ID_SHORT . '=' . $entryId;		// 記事ID略式
 			$this->clearCache($urlParam);
 		}
+	}
+	/**
+	 * カテゴリーを並び順でソート
+	 *
+	 * @param array $categoryArray	ソート対象のカテゴリー
+	 * @return bool					true=成功、false=失敗
+	 */
+	function sortCategory(&$categoryArray)
+	{
+		// 重複を除く
+		$categoryArray = array_unique($categoryArray);
+		
+		// ソート情報作成
+		$this->categorySortInfo = array();
+		$categoryCount = count($this->categoryListData);
+		for ($i = 0; $i < $categoryCount; $i++){
+			$key = $this->categoryListData[$i]['ec_id'];
+			$this->categorySortInfo[$key] = $i;
+		}
+		
+		// カテゴリーをソート
+		usort($categoryArray, array($this, 'sortCategoryCompare'));
+		return true;
+	}
+	/**
+	 * カテゴリーソート用
+	 *
+	 * @param int $a		比較値
+	 * @param int $b		比較値
+	 * @return int			比較結果
+	 */
+	function sortCategoryCompare($a, $b)
+	{
+		if ($this->categorySortInfo[$a] == $this->categorySortInfo[$b]) return 0;
+		return ($this->categorySortInfo[$a] < $this->categorySortInfo[$b]) ? -1 : 1;
 	}
 }
 ?>

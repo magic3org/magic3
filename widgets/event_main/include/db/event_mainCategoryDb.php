@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -40,7 +40,7 @@ class event_mainCategoryDb extends BaseDb
 		$queryStr = 'SELECT * FROM event_category LEFT JOIN _login_user ON ec_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=  'WHERE ec_language_id = ? ';
 		$queryStr .=    'AND ec_deleted = false ';		// 削除されていない
-		$queryStr .=  'ORDER BY ec_id';
+		$queryStr .=  'ORDER BY ec_sort_order, ec_id';	// カテゴリー並び順
 		$this->selectLoop($queryStr, array($lang), $callback);
 	}
 	/**
@@ -51,7 +51,7 @@ class event_mainCategoryDb extends BaseDb
 	 */
 	function getLangByCategoryId($id, &$rows)
 	{
-		$queryStr = 'SELECT ln_id, ln_name, ln_name_en FROM event_category LEFT JOIN _language ON ec_language_id = ln_id ';
+		$queryStr = 'SELECT ln_id, ln_name, ln_name_en, ln_priority, ec_id FROM event_category LEFT JOIN _language ON ec_language_id = ln_id ';
 		$queryStr .=  'WHERE ec_deleted = false ';	// 削除されていない
 		$queryStr .=    'AND ec_id = ? ';
 		$queryStr .=  'ORDER BY ec_id, ln_priority';
@@ -408,11 +408,11 @@ class event_mainCategoryDb extends BaseDb
 	function getChildCategory($id, $lang)
 	{
 		$retArray = array();
-		$queryStr = 'SELECT ec_id FROM event_category ';
+		$queryStr = 'SELECT ec_id, ec_sort_order FROM event_category ';
 		$queryStr .=  'WHERE ec_deleted = false ';	// 削除されていない
 		$queryStr .=    'AND ec_parent_id = ? ';
 		$queryStr .=    'AND ec_language_id = ? ';
-		$queryStr .=  'ORDER BY ec_sort_order';
+		$queryStr .=  'ORDER BY ec_sort_order, ec_id';		// カテゴリー並び順
 		$ret = $this->selectRecords($queryStr, array($id, $lang), $rows);
 		if ($ret){
 			for ($i = 0; $i < count($rows); $i++){
@@ -432,11 +432,11 @@ class event_mainCategoryDb extends BaseDb
 	function getChildCategoryWithRows($id, $lang, &$rows)
 	{
 		$retCount = 0;
-		$queryStr = 'SELECT ec_id,ec_name FROM event_category ';
+		$queryStr = 'SELECT ec_id, ec_name, ec_sort_order FROM event_category ';
 		$queryStr .=  'WHERE ec_deleted = false ';	// 削除されていない
 		$queryStr .=    'AND ec_parent_id = ? ';
 		$queryStr .=    'AND ec_language_id = ? ';
-		$queryStr .=  'ORDER BY ec_sort_order';
+		$queryStr .=  'ORDER BY ec_sort_order, ec_id';// カテゴリー並び順
 		$ret = $this->selectRecords($queryStr, array($id, $lang), $rows);
 		if ($ret){
 			$retCount = count($rows);
