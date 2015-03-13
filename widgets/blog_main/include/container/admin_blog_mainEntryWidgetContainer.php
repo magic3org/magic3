@@ -32,6 +32,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	private $langId;		// 現在の選択言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $categoryListData;		// 全記事カテゴリー
+	private $categorySortInfo;		// カテゴリーソート情報
 	private $categoryArray;			// 選択中の記事カテゴリー
 	private $categoryCount;			// カテゴリ数
 	private $isMultiLang;			// 多言語対応画面かどうか
@@ -79,6 +80,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->useComment		= self::$_configArray[blog_mainCommonDef::CF_RECEIVE_COMMENT];// コメント機能を使用するかどうか
 		$this->categoryCount	= self::$_configArray[blog_mainCommonDef::CF_CATEGORY_COUNT];			// カテゴリ数
 		if (empty($this->categoryCount)) $this->categoryCount = blog_mainCommonDef::DEFAULT_CATEGORY_COUNT;
+		
+		self::$_mainDb->getAllCategory($this->_langId, $this->categoryListData);		// カテゴリー情報
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -281,7 +284,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
 		
 		// カテゴリーメニューを作成
-		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		$this->createCategoryMenu(1);		// メニューは１つだけ表示
 		
 		// プレビュー用URL
@@ -352,6 +354,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$this->categoryArray[] = $itemValue;
 			}
 		}
+		// カテゴリーをソート
+		$this->sortCategory($this->categoryArray);
 
 		// 公開期間を取得
 		$start_date = $request->trimValueOf('item_start_date');		// 公開期間開始日付
@@ -858,7 +862,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			}
 		}
 		// カテゴリーメニューを作成
-		self::$_mainDb->getAllCategory($this->langId, $this->categoryListData);
 		$this->createCategoryMenu($this->categoryCount);
 		
 		// ユーザ定義フィールドを作成
@@ -1272,6 +1275,41 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$this->tmpl->parseTemplate('user_fields', 'a');
 		}
 		return true;
+	}
+	/**
+	 * カテゴリーを並び順でソート
+	 *
+	 * @param array $categoryArray	ソート対象のカテゴリー
+	 * @return bool					true=成功、false=失敗
+	 */
+	function sortCategory(&$categoryArray)
+	{
+		// 重複を除く
+		$categoryArray = array_unique($categoryArray);
+		
+		// ソート情報作成
+		$this->categorySortInfo = array();
+		$categoryCount = count($this->categoryListData);
+		for ($i = 0; $i < $categoryCount; $i++){
+			$key = $this->categoryListData[$i]['bc_id'];
+			$this->categorySortInfo[$key] = $i;
+		}
+		
+		// カテゴリーをソート
+		usort($categoryArray, array($this, 'sortCategoryCompare'));
+		return true;
+	}
+	/**
+	 * カテゴリーソート用
+	 *
+	 * @param int $a		比較値
+	 * @param int $b		比較値
+	 * @return int			比較結果
+	 */
+	function sortCategoryCompare($a, $b)
+	{
+		if ($this->categorySortInfo[$a] == $this->categorySortInfo[$b]) return 0;
+		return ($this->categorySortInfo[$a] < $this->categorySortInfo[$b]) ? -1 : 1;
 	}
 }
 ?>

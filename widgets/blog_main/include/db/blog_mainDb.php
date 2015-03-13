@@ -1121,7 +1121,7 @@ class blog_mainDb extends BaseDb
 		$queryStr = 'SELECT * FROM blog_category LEFT JOIN _login_user ON bc_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=  'WHERE bc_language_id = ? ';
 		$queryStr .=    'AND bc_deleted = false ';		// 削除されていない
-		$queryStr .=  'ORDER BY bc_id';
+		$queryStr .=  'ORDER BY bc_sort_order, bc_id';			// 表示順
 		$retValue = $this->selectRecords($queryStr, array($langId), $rows);
 		return $retValue;
 	}

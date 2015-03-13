@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_categoryDb.php 657 2008-05-27 22:25:23Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -40,7 +40,7 @@ class blog_categoryDb extends BaseDb
 		$queryStr = 'SELECT * FROM blog_category LEFT JOIN _login_user ON bc_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=  'WHERE bc_language_id = ? ';
 		$queryStr .=    'AND bc_deleted = false ';		// 削除されていない
-		$queryStr .=  'ORDER BY bc_id';
+		$queryStr .=  'ORDER BY bc_sort_order, bc_id';			// 表示順
 		$this->selectLoop($queryStr, array($lang), $callback, null);
 	}
 	/**
@@ -408,11 +408,11 @@ class blog_categoryDb extends BaseDb
 	function getChildCategory($id, $lang)
 	{
 		$retArray = array();
-		$queryStr = 'SELECT bc_id FROM blog_category ';
+		$queryStr = 'SELECT bc_id,bc_sort_order FROM blog_category ';
 		$queryStr .=  'WHERE bc_deleted = false ';	// 削除されていない
 		$queryStr .=    'AND bc_parent_id = ? ';
 		$queryStr .=    'AND bc_language_id = ? ';
-		$queryStr .=  'ORDER BY bc_sort_order';
+		$queryStr .=  'ORDER BY bc_sort_order, bc_id';		// 表示順
 		$ret = $this->selectRecords($queryStr, array($id, $lang), $rows);
 		if ($ret){
 			for ($i = 0; $i < count($rows); $i++){
@@ -432,11 +432,11 @@ class blog_categoryDb extends BaseDb
 	function getChildCategoryWithRows($id, $lang, &$rows)
 	{
 		$retCount = 0;
-		$queryStr = 'SELECT bc_id,bc_name FROM blog_category ';
+		$queryStr = 'SELECT bc_id,bc_name,bc_sort_order FROM blog_category ';
 		$queryStr .=  'WHERE bc_deleted = false ';	// 削除されていない
 		$queryStr .=    'AND bc_parent_id = ? ';
 		$queryStr .=    'AND bc_language_id = ? ';
-		$queryStr .=  'ORDER BY bc_sort_order';
+		$queryStr .=  'ORDER BY bc_sort_order, bc_id';		// 表示順
 		$ret = $this->selectRecords($queryStr, array($id, $lang), $rows);
 		if ($ret){
 			$retCount = count($rows);
