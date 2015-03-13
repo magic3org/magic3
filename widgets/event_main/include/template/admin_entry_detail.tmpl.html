@@ -73,6 +73,13 @@ function previewInOtherWindow()
 	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
 	return true;
 }
+function editEntry(serial){
+	document.main.entryid.value = '';		// 値キャンセル
+	document.main.task.value = 'entry_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
+}
 function setStatusColor(){
 	var status = $('#item_status').val();
 	if (status == 2){		// 公開状態のとき

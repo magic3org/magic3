@@ -648,6 +648,49 @@ class event_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * 前後のエントリー項目を取得
+	 *
+	 * @param int       $entryId			記事ID
+	 * @param timestamp $startDate			開始日時
+	 * @param array     $prevRow			前のレコード
+	 * @param array     $nextRow			次のレコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getPrevNextEntryByDate($entryId, $startDate, &$prevRow, &$nextRow)
+	{
+		if ($startDate == $this->gEnv->getInitValueOfTimestamp()){
+			return false;
+		} else {
+			$retStatus = false;
+			$params = array();
+			$queryStr  = 'SELECT * FROM event_entry ';
+			$queryStr .=   'WHERE ee_deleted = false ';	// 削除されていない
+			$queryStr .=     'AND (ee_start_dt < ? '; $params[] = $startDate;
+			$queryStr .=     'OR (ee_start_dt = ? '; $params[] = $startDate;
+			$queryStr .=     'AND ee_id < ?)) '; $params[] = $entryId;
+			$queryStr .=   'ORDER BY ee_start_dt, ee_id DESC LIMIT 1';// 開始日時順
+			$ret = $this->selectRecord($queryStr, $params, $row);
+			if ($ret){
+				$prevRow = $row;
+				$retStatus = true;
+			}
+			
+			$params = array();
+			$queryStr  = 'SELECT * FROM event_entry ';
+			$queryStr .=   'WHERE ee_deleted = false ';	// 削除されていない
+			$queryStr .=     'AND (? < ee_start_dt '; $params[] = $startDate;
+			$queryStr .=     'OR (ee_start_dt = ? '; $params[] = $startDate;
+			$queryStr .=     'AND ee_id > ?)) '; $params[] = $entryId;
+			$queryStr .=   'ORDER BY ee_start_dt, ee_id LIMIT 1';// 開始日時順
+			$ret = $this->selectRecord($queryStr, $params, $row);
+			if ($ret){
+				$nextRow = $row;
+				$retStatus = true;
+			}
+		}
+		return $retStatus;
+	}
+	/**
 	 * エントリー項目を取得(表示用)
 	 *
 	 * @param int		$limit				取得する項目数

@@ -680,6 +680,15 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				// 記事カテゴリー取得
 				$this->categoryArray = $this->getCategory($categoryRow);
 				
+				// 前後のエントリーのシリアル番号を取得
+				if (($this->isMultiLang && $this->langId == $this->gEnv->getDefaultLanguage()) || !$this->isMultiLang){		// // 多言語対応の場合はデフォルト言語が選択されている場合のみ処理を行う
+					$ret = self::$_mainDb->getPrevNextEntryByDate($row['ee_id'], $row['ee_start_dt'], $prevRow, $nextRow);
+					if ($ret){
+						if (!empty($prevRow)) $prevSerial = $prevRow['ee_serial'];
+						if (!empty($nextRow)) $nextSerial = $nextRow['ee_serial'];
+					}
+				}
+				
 				// アイキャッチ画像
 				$iconUrl = event_mainCommonDef::getEyecatchImageUrl($row['ee_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[event_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
 				if (empty($row['ee_thumb_filename'])){
@@ -727,6 +736,16 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		
 		// CKEditor用のCSSファイルを読み込む
 		$this->loadCKEditorCssFiles($previewUrl);
+		
+		// 前後エントリー移動ボタン
+		if (!empty($prevSerial)){
+			$this->tmpl->setAttribute('show_prev_button', 'visibility', 'visible');
+			$this->tmpl->addVar('show_prev_button', 'serial', $prevSerial);
+		}
+		if (!empty($nextSerial)){
+			$this->tmpl->setAttribute('show_next_button', 'visibility', 'visible');
+			$this->tmpl->addVar('show_next_button', 'serial', $nextSerial);
+		}
 		
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar('_widget', 'entry', $this->entryId);
