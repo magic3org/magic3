@@ -611,7 +611,8 @@ class blog_mainDb extends BaseDb
 			// ブログカテゴリー
 			$queryStr  = 'SELECT * FROM blog_entry_with_category LEFT JOIN blog_category ON bw_category_id = bc_id AND bc_deleted = false ';
 			$queryStr .=   'WHERE bw_entry_serial = ? ';
-			$queryStr .=  'ORDER BY bw_index ';
+		//	$queryStr .=  'ORDER BY bw_index ';
+			$queryStr .=  'ORDER BY bc_sort_order, bc_id ';		// カテゴリー並び順
 			$this->selectRecords($queryStr, array(intval($serial)), $categoryRow);
 		}
 		return $ret;
