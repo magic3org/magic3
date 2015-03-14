@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -182,4 +182,8 @@ $HELP['config_multi_blog_top_content']['title'] = 'マルチブログトップ�
 $HELP['config_multi_blog_top_content']['body'] = 'マルチブログを使用した場合のトップ画面のコンテンツです。各ブログへのリンク等を設定します。空文字列を設定した場合は全ブログのブログ記事が一覧表示されます。';
 $HELP['config_layout']['title'] = 'レイアウト';
 $HELP['config_layout']['body'] = 'コンテンツのレイアウトを設定します。<br />「[#～#]」は自動変換されるMagic3マクロです。「記事詳細」レイアウトでは、「[#USER_SSS#]」(Sは任意の半角英大文字)の形式で、「ユーザ定義フィールド」として任意にフィールドを追加することができます。';
+$HELP['config_title_def']['title'] = 'タイトル';
+$HELP['config_title_def']['body'] = 'タイトル表示について設定します。ウィジェットタイトルを使用する場合はウィジェット共通設定の「タイトル」項目を「表示」で空文字列に設定しておきます。';
+$HELP['config_message_def']['title'] = 'メッセージ';
+$HELP['config_message_def']['body'] = '表示されるメッセージについて設定します。';
 ?>

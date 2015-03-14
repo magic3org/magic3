@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -25,24 +25,6 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
-/*function uploadCheck(){
-	if (!document.main.upfile.value){
-		alert('画像ファイルが選択されていません');
-		return false;
-	}
-	if (!window.confirm('画像ファイルをアップロードしますか?')) return false;
-	
-	// CKEditorの入力内容を確定
-	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
-		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
-	}
-	
-	document.main.act.value = 'upload';
-	document.main.enctype = 'multipart/form-data';
-	document.main.encoding = 'multipart/form-data';			// for IE
-	document.main.submit();
-	return false;
-}*/
 function uploader_entryimage_onSuccess(files, data)
 {
 	// 画像を読み込む
@@ -92,7 +74,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_ENTRY_DEFAULT_IMAGE}>記事デフォルト画像<br />200x200</span></th>
-	    <td><img id="preview_entryimage" class="pull-left" src="{ENTRYIMAGE_URL}" /><div class="pull-right"><div id="uploader_entryimage">{UPLOAD_AREA}</div></div><!--<div id="preview_outer">{ENTRY_DEFAULT_IMAGE}</div><input type="file" name="upfile" size="50" /><input type="button" class="button" onclick="uploadCheck();" value="アップロード" />-->
+	    <td><img id="preview_entryimage" class="pull-left" src="{ENTRYIMAGE_URL}" /><div class="pull-right"><div id="uploader_entryimage">{UPLOAD_AREA}</div></div>
 		</td>
 	</tr>
     <tr>
@@ -127,7 +109,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th rowspan="3"><span {_HELP_CONFIG_OUTPUT_HEAD}>ヘッダ出力</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} />ヘッダにタグを出力する(SNS連携等)</label></div></td>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} />ヘッダにOGP(Open Graph Protocol)タグを出力する(Facebook連携等)</label></div></td>
 	</tr>
     <tr>
 	    <td class="info">記事詳細</td>
@@ -136,12 +118,17 @@ $(function(){
 	    <td  class="ckeditor" style="height:50px;"><textarea name="item_head_view_detail" class="form-control">{HEAD_VIEW_DETAIL}</textarea></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIG_TITLE_MESSAGE}>タイトル<br />メッセージ</span></th>
+	    <th><span {_HELP_CONFIG_TITLE_DEF}>タイトル</span></th>
 	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_widget_title" {USE_WIDGET_TITLE} />ウィジェットタイトルを使用</label></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">デフォルトタイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_default" class="form-control" value="{TITLE_DEFAULT}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">一覧タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_list" class="form-control" value="{TITLE_LIST}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">検索結果タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_search_list" class="form-control" value="{TITLE_SEARCH_LIST}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">記事なし時タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_no_entry" class="form-control" value="{TITLE_NO_ENTRY}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
+		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIG_MESSAGE_DEF}>メッセージ</span></th>
+	    <td>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">記事が登録されていないメッセージ：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_message_no_entry" class="form-control" value="{MESSAGE_NO_ENTRY}" size="80" maxlength="80" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">記事が見つからないメッセージ：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_message_find_no_entry" class="form-control" value="{MESSAGE_FIND_NO_ENTRY}" size="80" maxlength="80" /></div></div>
 		</td>
