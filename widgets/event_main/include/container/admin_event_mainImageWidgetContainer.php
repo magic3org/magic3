@@ -60,7 +60,7 @@ class admin_event_mainImageWidgetContainer extends admin_event_mainBaseWidgetCon
 		$userId		= $this->gEnv->getCurrentUserId();
 		$langId	= $this->gEnv->getDefaultLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
-		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ENTRY_ID);
+		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
 		$act = $request->trimValueOf('act');
 		
 		$reloadData = false;		// データを再取得するかどうか
@@ -156,12 +156,12 @@ class admin_event_mainImageWidgetContainer extends admin_event_mainBaseWidgetCon
 
 		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
 		if ($ret){
-			$html		= $row['be_html'];				// HTML
-			$html2		= $row['be_html_ext'];			// HTML続き
+			$html		= $row['ee_html'];				// HTML
+			$html2		= $row['ee_html_ext'];			// HTML続き
 		
 			// ### 現在設定されているアイキャッチ画像 ###
 			// 最大サイズのアイキャッチ画像を取得。公開ディレクトリになければデフォルト画像を表示。
-			$eyecatchUrl = event_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
+			$eyecatchUrl = event_mainCommonDef::getEyecatchImageUrl($row['ee_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
 			
 			// ### 置き換え用アイキャッチ画像 ###
 			// 画像ファイル名、フォーマット取得
@@ -185,7 +185,7 @@ class admin_event_mainImageWidgetContainer extends admin_event_mainBaseWidgetCon
 			$originalEyecatchUrl = '';
 			$privateThumbDir = $this->gInstance->getImageManager()->getSystemPrivateThumbPath(M3_VIEW_TYPE_EVENT, event_mainCommonDef::$_deviceType);
 			$imagePath = $privateThumbDir . '/' . $filename;
-			if (!empty($row['be_thumb_filename']) && !file_exists($imagePath)){// 画像が作成されていて、非公開ディレクトリに画像がない場合
+			if (!empty($row['ee_thumb_filename']) && !file_exists($imagePath)){// 画像が作成されていて、非公開ディレクトリに画像がない場合
 				// アイキャッチを作成したソース画像を取得
 				$originalEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html);
 				if (empty($originalEyecatchPath) && !empty($html2)) $originalEyecatchPath = $this->gInstance->getImageManager()->getFirstImagePath($html2);		// 本文1に画像がないときは本文2を検索
@@ -193,7 +193,7 @@ class admin_event_mainImageWidgetContainer extends admin_event_mainBaseWidgetCon
 			}
 			
 			// アイキャッチ画像削除用ボタンを表示
-			if (!empty($row['be_thumb_filename'])) $this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
+			if (!empty($row['ee_thumb_filename'])) $this->tmpl->setAttribute('delete_eyecatch_button', 'visibility', 'visible');
 		}
 		// Ajax用URL
 		$ajaxUrl = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . '&widget=' . $this->gEnv->getCurrentWidgetId();
@@ -228,7 +228,7 @@ class admin_event_mainImageWidgetContainer extends admin_event_mainBaseWidgetCon
 	 */
 	function createCropImage($request)
 	{
-		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ENTRY_ID);
+		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
 		$type = $request->trimValueOf('type');		// 画像タイプ
 		$src = $request->trimValueOf('src');	// 画像URL
 		$x = $request->trimValueOf('x');
@@ -276,7 +276,7 @@ class admin_event_mainImageWidgetContainer extends admin_event_mainBaseWidgetCon
 	 */
 	function getImageByType($request)
 	{
-		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ENTRY_ID);
+		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
 		$type = $request->trimValueOf('type');		// 画像タイプ
 		
 		// 作業ディレクトリを取得
@@ -328,7 +328,7 @@ class admin_event_mainImageWidgetContainer extends admin_event_mainBaseWidgetCon
 		$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
 		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGE;
 		$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
-		$imageUrl .= '&' . M3_REQUEST_PARAM_EVENT_ENTRY_ID . '=' . $entryId;
+		$imageUrl .= '&' . M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId;
 //		$imageUrl .= '&type=' . $type;
 		$imageUrl .= '&' . date('YmdHis');
 		return $imageUrl;

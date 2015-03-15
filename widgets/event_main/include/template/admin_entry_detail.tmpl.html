@@ -13,6 +13,11 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function newItem(){
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
 	
@@ -80,7 +85,7 @@ function previewInOtherWindow()
 	return true;
 }
 function editEntry(serial){
-	document.main.entryid.value = '';		// 値キャンセル
+	document.main.eventid.value = '';		// 値キャンセル
 	document.main.task.value = 'entry_detail';
 	document.main.act.value = 'edit';
 	document.main.serial.value = serial;
@@ -142,11 +147,11 @@ $(function(){
 <input type="hidden" name="task" value="entry_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<input type="hidden" name="entryid" value="{ENTRY}" />
+<input type="hidden" name="eventid" value="{ENTRY}" />
 <h3 class="m3config_h"><span {_HELP_ENTRY_DETAIL}>イベント記事詳細</span></h3>
 <patTemplate:tmpl name="cancel_button" visibility="visible">
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_ENTRY_BUTTONS}><div class="btn-group">
-<input type="button" class="button" onclick="listItem();" value="戻る" />
+<input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /><input type="button" class="button" onclick="listItem();" value="戻る" />
 </div></div></div>
 </patTemplate:tmpl>
 <div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_ENTRY_BUTTONS2}><div class="btn-group">

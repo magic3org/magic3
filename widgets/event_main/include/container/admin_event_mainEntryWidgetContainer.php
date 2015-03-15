@@ -295,7 +295,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$act = $request->trimValueOf('act');
 		$this->langId = $request->trimValueOf('item_lang');				// 現在メニューで選択中の言語
 		if (empty($this->langId)) $this->langId = $this->gEnv->getDefaultLanguage();			// 言語が選択されていないときは、デフォルト言語を設定
-		$this->entryId = $request->trimValueOf('entryid');		// 記事エントリーID
+		$this->entryId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);		// 記事エントリーID
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		$name = $request->trimValueOf('item_name');
 		$html = $request->valueOf('item_html');
@@ -650,7 +650,30 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 				}
 			}
 		} else {	// 初期画面表示のとき
-			$reloadData = true;		// データの再ロード
+			// ##### ブログ記事IDが設定されているとき(他ウィジェットからの表示)は、データを取得 #####
+			if (empty($this->entryId)){
+				if (!empty($this->serialNo)){		// シリアル番号で指定の場合
+					$reloadData = true;		// データの再読み込み
+				}
+			} else {
+				// 多言語対応の場合は、言語を取得
+				if ($this->isMultiLang){		// 多言語対応の場合
+					$langId = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// lang値を取得
+					if (!empty($langId)) $this->langId = $langId;
+				}
+		
+				// ブログ記事を取得
+				$ret = self::$_mainDb->getEntryItem($this->entryId, $this->langId, $row);
+				if ($ret){
+					$this->serialNo = $row['ee_serial'];		// シリアル番号
+					$reloadData = true;		// データの再読み込み
+				} else {
+					$this->serialNo = 0;
+				}
+			}
+			if (empty($this->serialNo)){
+				$reloadData = true;		// 初期データ取得
+			}
 		}
 		
 		// 設定データを再取得
@@ -785,7 +808,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 			// デフォルト言語を最初に登録
 //			$this->tmpl->addVar("default_lang", "default_lang", $defaultLangName);
 //			$this->tmpl->setAttribute('default_lang', 'visibility', 'visible');
-			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
+			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');		// プレビューボタン使用不可
+			$this->tmpl->addVar('_widget', 'image_btn_disabled', 'disabled');		// 画像ボタン使用不可
+			$this->tmpl->addVar('cancel_button', 'new_btn_disabled', 'disabled');	// 「新規」ボタン使用不可
 		} else {
 			$this->tmpl->addVar('_widget', 'id', $this->entryId);
 			

@@ -104,7 +104,7 @@ function createEyecatch(url)
 	dialogText += '<form method="post" id="modalform" name="modalform">';
 	dialogText += '<input type="hidden" name="task" value="image" />';
 	dialogText += '<input type="hidden" name="act" value="createimage" />';
-	dialogText += '<input type="hidden" name="entryid" value="{ENTRY_ID}" />';
+	dialogText += '<input type="hidden" name="eventid" value="{ENTRY_ID}" />';
 	dialogText += '<input type="hidden" id="src" name="src" value="' + url + '" />';
 	dialogText += '<input type="hidden" id="x" name="x" />';
 	dialogText += '<input type="hidden" id="y" name="y" />';
@@ -196,7 +196,7 @@ $(function()
 <form method="post" name="main">
 <input type="hidden" name="task" value="image" />
 <input type="hidden" name="act" />
-<input type="hidden" name="entryid" value="{ENTRY_ID}" />
+<input type="hidden" name="eventid" value="{ENTRY_ID}" />
 <input type="hidden" name="originaleyecatchurl" value="{ORIGINAL_EYECATCH_URL}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h"><span {_HELP_IMAGE_IMAGE}>イベント記事画像</span></h3>
