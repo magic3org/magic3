@@ -31,6 +31,7 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	// 画面
 	const TASK_ENTRY			= 'entry';				// イベント記事(一覧)
 	const TASK_ENTRY_DETAIL		= 'entry_detail';		// イベント記事(詳細)
+	const TASK_IMAGE			= 'image';				// イベント記事画像
 	const TASK_HISTORY			= 'history';			// (未使用)イベント記事履歴
 	const TASK_CATEGORY			= 'category';			// 記事カテゴリー(一覧)
 	const TASK_CATEGORY_DETAIL	= 'category_detail';	// 記事カテゴリー(詳細)
@@ -85,6 +86,12 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = '記事一覧';
 				$titles[] = '詳細';
 				break;
+			case self::TASK_IMAGE:			// イベント記事画像
+				$titles[] = 'イベント記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '詳細';
+				$titles[] = '画像';
+				break;
 			case self::TASK_HISTORY:			// イベント記事履歴
 				$titles[] = 'イベント記事管理';
 				$titles[] = '記事一覧';
@@ -114,8 +121,9 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 						'url'		=> '',
 						'tagid'		=> '',
 						'active'	=> (
-											$task == self::TASK_ENTRY ||				// イベント記事(一覧)
+											$task == self::TASK_ENTRY ||			// イベント記事(一覧)
 											$task == self::TASK_ENTRY_DETAIL ||		// イベント記事(詳細)
+											$task == self::TASK_IMAGE ||			// イベント記事画像
 											$task == self::TASK_HISTORY 			// イベント記事履歴
 										),
 						'submenu'	=> array(
@@ -127,6 +135,7 @@ class admin_event_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 								'active'	=> (
 													$task == self::TASK_ENTRY ||			// イベント記事(一覧)
 													$task == self::TASK_ENTRY_DETAIL ||		// イベント記事(詳細)
+													$task == self::TASK_IMAGE ||			// ブログ記事画像
 													$task == self::TASK_HISTORY				// イベント記事履歴
 												)
 							)

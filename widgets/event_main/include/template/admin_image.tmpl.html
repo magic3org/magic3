@@ -1,0 +1,221 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'entry_detail';
+	document.main.submit();
+	return true;
+}
+function delEyecatch(){
+	if (!window.confirm('アイキャッチ画像を削除しますか?')) return false;
+	
+	document.main.act.value = 'deleteeyecatch';
+	document.main.submit();
+	return true;
+}
+function initJcrop()
+{
+	var jcrop_api,
+		boundx,
+		boundy,
+		originalw,
+		originalh,
+
+		// Grab some information about the preview pane
+		$preview = $('#crop_preview'),
+		$pcnt = $('#crop_preview .preview-container'),
+		$pimg = $('#crop_preview .preview-container img'),
+
+		xsize = $pcnt.width(),
+		ysize = $pcnt.height();
+
+	// オリジナルの画像サイズを取得
+	var img = new Image();
+	img.onload = function() {
+		originalw = this.width;
+		originalh = this.height;
+	};
+	img.src = $("#crop_target").attr("src");
+
+	$('#crop_target').Jcrop({
+		/*			keySupport: false,*/
+		onChange: updatePreview,
+		onSelect: updatePreview,
+		aspectRatio: xsize / ysize
+	},function(){
+		// Use the API to get the real image size
+		var bounds = this.getBounds();
+		boundx = bounds[0];
+		boundy = bounds[1];
+
+		// Store the API in the jcrop_api variable
+		jcrop_api = this;
+
+		// Move the preview into the jcrop container for css positioning
+		$preview.appendTo(jcrop_api.ui.holder);
+
+		$preview.show();
+	});
+
+	function updatePreview(c)
+	{
+		if (parseInt(c.w) > 0)
+		{
+			var rx = xsize / c.w;
+			var ry = ysize / c.h;
+
+			$pimg.css({
+				width: Math.round(rx * boundx) + 'px',
+				height: Math.round(ry * boundy) + 'px',
+				marginLeft: '-' + Math.round(rx * c.x) + 'px',
+				marginTop: '-' + Math.round(ry * c.y) + 'px'
+			});
+			
+			$('#x').val(c.x * originalw / boundx);
+			$('#y').val(c.y * originalh / boundy);
+			$('#w').val(c.w * originalw / boundx);
+			$('#h').val(c.h * originalh / boundy);
+		}
+	};
+}
+// 画像作成用ダイアログ表示
+function createEyecatch(url)
+{
+	var dialogText = '';
+	
+	dialogText += '<form method="post" id="modalform" name="modalform">';
+	dialogText += '<input type="hidden" name="task" value="image" />';
+	dialogText += '<input type="hidden" name="act" value="createimage" />';
+	dialogText += '<input type="hidden" name="entryid" value="{ENTRY_ID}" />';
+	dialogText += '<input type="hidden" id="src" name="src" value="' + url + '" />';
+	dialogText += '<input type="hidden" id="x" name="x" />';
+	dialogText += '<input type="hidden" id="y" name="y" />';
+	dialogText += '<input type="hidden" id="w" name="w" />';
+	dialogText += '<input type="hidden" id="h" name="h" />';
+	dialogText += '<p>画像から切り取る領域をマウスで選択してください</p>';
+	dialogText += '<img src="' + url + '" id="crop_target" alt="selected image" />';
+	dialogText += '<div id="crop_preview" style="display:none;">';
+	dialogText += '<div class="preview-container">';
+	dialogText += '<img id="preview" src="' + url + '" class="jcrop-preview" alt="Preview" />';
+	dialogText += '</div>';
+	dialogText += '</div>';
+	dialogText += '</form>';
+		
+	// ダイアログ作成
+	BootstrapDialog.show({
+		title: '画像の部分選択',
+		message: dialogText,
+		closable: false,
+		nl2br: false,
+		onshown: function(dialog) {		// 起動時の処理
+			// 画像の部分選択機能作成
+			initJcrop();
+		},
+		buttons: [{
+			id: 'cancel',
+			label: 'キャンセル',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}, {
+			id: 'ok',
+			label: 'OK',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				// 選択状態のチェック
+				if (parseInt($('#w').val())){
+					// 変更画像を送信
+					var postValues = $('#modalform').serialize();
+					
+					m3_ajax_request('', '{AJAX_URL}&' + postValues, function(request, retcode, jsondata){		// 正常終了
+						// 画像URL取得
+						if (jsondata.url){
+							var innerText = '{MOVE_ICON_TAG}<img src="' + jsondata.url + '" />';
+							$('#eyecatch_new_area').html(innerText);
+							$('#delete_eyecatch_button').hide();			// 画像削除ボタンを非表示にする
+							
+							// ヘルプ設定
+							m3SetHelp($('#eyecatch_new_area'));
+						}
+					}, function(request){		// 異常終了
+						alert('通信に失敗しました。');
+					});
+				
+					dialog.close();
+				} else {
+					alert("切り取る領域を選択してください");
+				}
+			}
+		}]
+	});
+}
+// ファイルブラウザからの設定用
+function SetUrl(url)
+{
+	// 画像部分選択用ダイアログ表示
+	createEyecatch(url);
+}
+$(function()
+{
+	// CKEditorプラグイン直接実行
+	m3LoadCKTools();
+	
+	m3SetConfigTable('config_area');
+	
+	// 画像作成ボタンの処理
+	$("#{TAGID_CREATE_EYECATCH}").click(function (){
+		m3OpenImageFileBrowser(SetUrl);		// 画像選択
+	});
+	
+	$('#delete_eyecatch_button').click(function (){
+		delEyecatch();
+	});
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="image" />
+<input type="hidden" name="act" />
+<input type="hidden" name="entryid" value="{ENTRY_ID}" />
+<input type="hidden" name="originaleyecatchurl" value="{ORIGINAL_EYECATCH_URL}" />
+<!-- m3:PostParam -->
+<h3 class="m3config_h"><span {_HELP_IMAGE_IMAGE}>イベント記事画像</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_IMAGE_BUTTONS}><div class="btn-group">
+    <input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div></div>
+<table id="config_area">
+    <tbody>
+    <tr>
+	    <th><span {_HELP_IMAGE_EYECATCH}>アイキャッチ画像<br />{EYECATCH_SIZE}</span><div class="pull-right">{CREATE_EYECATCH_BUTTON}</div></th>
+	    <td><img id="eyecatch_preview" class="pull-left" src="{EYECATCH_URL}" /><div id="eyecatch_new_area" class="pull-left">{EYECATCH_NEW_IMAGE}</div>
+		<patTemplate:tmpl name="delete_eyecatch_button" visibility="hidden">
+		<div class="pull-right"><button id="delete_eyecatch_button" class="btn btn-sm btn-default" type="button" rel="m3help" data-container="body" title="画像を削除"><i class="glyphicon glyphicon-trash"></i></button></div>
+		</patTemplate:tmpl>
+		</td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
+</form>
+</div>
+</patTemplate:tmpl>

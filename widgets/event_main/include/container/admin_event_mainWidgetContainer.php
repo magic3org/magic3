@@ -44,21 +44,17 @@ class admin_event_mainWidgetContainer extends admin_event_mainBaseWidgetContaine
 		// コンテナを起動
 		$goWidget = false;		// サブウィジェットを実行するかどうか
 		switch ($task){
-			case 'config':		// その他設定
+			case self::TASK_CONFIG:		// その他設定
+			case self::TASK_IMAGE:		// イベント記事画像
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case 'entry':		// イベント記事管理
-			case 'entry_detail':		// イベント記事管理(詳細)
+			case self::TASK_ENTRY:				// イベント記事(一覧)
+			case self::TASK_ENTRY_DETAIL:		// イベント記事(詳細)
 				$task = 'entry';
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case 'user':		// ユーザ管理
-			case 'user_detail':		// ユーザ管理(詳細)
-				$task = 'user';
-				$goWidget = true;		// サブウィジェットを実行するかどうか
-				break;
-			case 'category':		// カテゴリー管理
-			case 'category_detail':		// カテゴリー管理(詳細)
+			case self::TASK_CATEGORY:				// 記事カテゴリー(一覧)
+			case self::TASK_CATEGORY_DETAIL:		// 記事カテゴリー(詳細)
 				$task = 'category';
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
