@@ -359,6 +359,12 @@ function mvFile($srcFile, $destFile)
 	// 移動先ファイルを削除
 	if (file_exists($destFile)) unlink($destFile);
 	
+	// コピー先ディレクトリの確認
+	$destDir = dirname($destFile);
+	if (!file_exists($destDir)){
+		if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
+	}
+	
 	// ファイルコピー
 	$ret = copy($srcFile, $destFile);
 	if (!$ret) return false;
@@ -378,6 +384,11 @@ function mvFile($srcFile, $destFile)
 function mvFileToDir($srcDir, $filenames, $destDir)
 {
 	$noErr = true;
+	
+	// コピー先ディレクトリの確認
+	if (!file_exists($destDir)){
+		if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
+	}
 	
 	for ($i = 0; $i < count($filenames); $i++){
 		$srcPath = $srcDir . '/' . $filenames[$i];
@@ -403,6 +414,11 @@ function mvFileToDir($srcDir, $filenames, $destDir)
 function cpFileToDir($srcDir, $filenames, $destDir)
 {
 	$noErr = true;
+	
+	// コピー先ディレクトリの確認
+	if (!file_exists($destDir)){
+		if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
+	}
 	
 	for ($i = 0; $i < count($filenames); $i++){
 		$srcPath = $srcDir . '/' . $filenames[$i];
@@ -479,8 +495,7 @@ function cpDirectory($srcDir, $destDir)
 {
 	// ディレクトリが存在しないときは作成
 	if (!file_exists($destDir)){
-		$ret = mkdir($destDir);
-		if (!$ret) return false;
+		if (!mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/)) return false;
 	}
 
 	if ($dirHandle = opendir($srcDir)){

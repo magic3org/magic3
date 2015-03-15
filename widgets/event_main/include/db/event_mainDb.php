@@ -463,6 +463,50 @@ class event_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * サムネールファイル名の更新
+	 *
+	 * @param string $id			エントリーID
+	 * @param string $langId		言語ID
+	 * @param string $thumbFilename	サムネールファイル名
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function updateThumbFilename($id, $langId, $thumbFilename)
+	{
+		$serial = $this->getEntrySerialNoByContentId($id, $langId);
+		if (empty($serial)) return false;
+		
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+						
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$queryStr  = 'SELECT * FROM event_entry ';
+		$queryStr .=   'WHERE ee_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['ee_deleted']){		// レコードが削除されていれば終了
+				$this->endTransaction();
+				return false;
+			}
+		} else {		// 存在しない場合は終了
+			$this->endTransaction();
+			return false;
+		}
+		// 日付を更新
+		$queryStr  = 'UPDATE event_entry ';
+		$queryStr .=   'SET ee_thumb_filename = ?, ';	// サムネールファイル名
+		$queryStr .=     'ee_update_user_id = ?, ';
+		$queryStr .=     'ee_update_dt = ? ';
+		$queryStr .=   'WHERE ee_serial = ?';
+		$this->execStatement($queryStr, array($thumbFilename, $userId, $now, intval($serial)));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
 	 * 記事カテゴリーの更新
 	 *
 	 * @param int        $serial		記事シリアル番号
