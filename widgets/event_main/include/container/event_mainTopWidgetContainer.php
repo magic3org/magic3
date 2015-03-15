@@ -545,7 +545,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 	{
 		// 参照ビューカウントを更新
 		if (!$this->isSystemManageUser){		// システム運用者以上の場合はカウントしない
-			$this->gInstance->getAnalyzeManager()->updateContentViewCount(self::CONTENT_TYPE, $fetchedRow['ee_serial'], $this->currentDay, $this->currentHour);
+			$this->gInstance->getAnalyzeManager()->updateContentViewCount(event_mainCommonDef::VIEW_CONTENT_TYPE, $fetchedRow['ee_serial'], $this->currentDay, $this->currentHour);
 		}
 
 		$entryId = $fetchedRow['ee_id'];// 記事ID
