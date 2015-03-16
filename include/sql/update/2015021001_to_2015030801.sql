@@ -25,7 +25,7 @@ INSERT INTO event_config
 (eg_id,                     eg_value,    eg_name,                              eg_index) VALUES
 ('entry_view_count',        '10',        '記事表示数',                         3),
 ('entry_view_order',        '0',         '記事表示順',                         4),
-('top_contents',            '',          'トップ画面コンテンツ',               6),
+('top_contents',            'これからのイベントを表示します。',          'トップ画面コンテンツ',               6),
 ('category_count',          '2',         '記事に設定可能なカテゴリ数',         10),
 ('thumb_type',              's=80c.jpg;mw=160x120c.jpg;l=200c.jpg', '記事サムネールタイプ定義', 0),
 ('entry_default_image',     '0_72c.jpg;0_80c.jpg;0_200c.jpg',       '記事デフォルト画像', 0),
