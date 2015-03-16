@@ -56,14 +56,8 @@ $(function(){
 	    </select></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリ数</span></th>
+	    <th><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリー数</span></th>
 	    <td><div class="col-sm-1 m3config_item"><input type="text" name="category_count" class="form-control" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_CONFIG_MESSAGE}>メッセージ</span></th>
-	    <td>
-		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">予定イベントなし時：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_msg_no_entry_in_future" class="form-control" value="{MSG_NO_ENTRY_IN_FUTURE}" size="60" maxlength="200" /></div><div class="clearfix"></div></div>
-        </td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_TOP_CONTENTS}>トップコンテンツ</span></th>
@@ -84,13 +78,34 @@ $(function(){
 	</tr>
     <tr>
 	    <th rowspan="3"><span {_HELP_CONFIG_OUTPUT_HEAD}>ヘッダ出力</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} />ヘッダにタグを出力する(SNS連携等)</label></div></td>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} />ヘッダにOGP(Open Graph Protocol)タグを出力する(Facebook連携等)</label></div></td>
 	</tr>
     <tr>
 	    <td class="info">記事詳細</td>
 	</tr>
     <tr>
 	    <td  class="ckeditor" style="height:50px;"><textarea name="item_head_view_detail" class="form-control">{HEAD_VIEW_DETAIL}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIG_TITLE_DEF}>タイトル</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_widget_title" {USE_WIDGET_TITLE} />ウィジェットタイトルを使用</label></div>
+		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">デフォルトタイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_default" class="form-control" value="{TITLE_DEFAULT}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
+		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">一覧タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_list" class="form-control" value="{TITLE_LIST}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
+		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">検索結果タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_search_list" class="form-control" value="{TITLE_SEARCH_LIST}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
+		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">記事なし時タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_no_entry" class="form-control" value="{TITLE_NO_ENTRY}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
+		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIG_MESSAGE_DEF}>メッセージ</span></th>
+	    <td>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-3 m3config_item">記事が登録されていない：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_message_no_entry" class="form-control" value="{MESSAGE_NO_ENTRY}" size="80" maxlength="80" /></div></div>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-3 m3config_item">記事が見つからない：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_message_find_no_entry" class="form-control" value="{MESSAGE_FIND_NO_ENTRY}" size="80" maxlength="80" /></div></div>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-3 m3config_item">予定イベントなし：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_msg_no_entry_in_future" class="form-control" value="{MSG_NO_ENTRY_IN_FUTURE}" size="60" maxlength="200" /></div></div>
+		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIG_CREATE_HTML}>HTML生成</span></th>
+	    <td><div class="form-control-static col-sm-3 m3config_item"><span {_HELP_CONFIG_TITLE_TAG}>タイトルHタグレベル：</span></div><div class="col-sm-1 m3config_item"><input type="text" name="item_title_tag_level" class="form-control" value="{TITLE_TAG_LEVEL}" size="1" maxlength="1" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
     </tbody>
 </table>

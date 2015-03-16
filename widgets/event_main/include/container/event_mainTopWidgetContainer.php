@@ -534,6 +534,17 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		return $headData;
 	}
 	/**
+	 * ウィジェットのタイトルを設定
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
+	 * @return string 						ウィジェットのタイトル名
+	 */
+	function _setTitle($request, &$param)
+	{
+		return $this->widgetTitle;	// ウィジェットタイトル
+	}
+	/**
 	 * 取得したコンテンツ項目をテンプレートに設定する
 	 *
 	 * @param int		$index			行番号
