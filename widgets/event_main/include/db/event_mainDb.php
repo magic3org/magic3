@@ -1156,17 +1156,18 @@ class event_mainDb extends BaseDb
 	 */
 	function getTermWithEntryItems($langId, &$startDt, &$endDt)
 	{
+		$initDt = $this->gEnv->getInitValueOfTimestamp();
 		$params = array();
 		
-		$queryStr  = 'SELECT MIN(ee_start_dt) AS mindt, MAX(ee_end_dt) AS maxdt FROM event_entry ';
+		$queryStr  = 'SELECT MIN(ee_start_dt) AS minsdt, MAX(ee_start_dt) AS maxsdt, MAX(ee_end_dt) AS maxdt FROM event_entry ';
 		$queryStr .=   'WHERE ee_deleted = false ';		// 削除されていない
 		$queryStr .=     'AND ee_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 		$queryStr .=     'AND ee_language_id = ? ';	$params[] = $langId;
 		$retValue = $this->selectRecord($queryStr, $params, $rows);
 		if ($retValue){
-			$startDt = $rows['mindt'];
-			$endDt = $rows['maxdt'];
-			$endDt = $startDt > $endDt ? $startDt : $endDt;
+			$startDt = $rows['minsdt'];				// 開始日最小
+			$endDt = $rows['maxsdt'];				// 開始日最大
+			if (!$rows['maxdt'] == $initDt && $rows['maxdt'] > $endDt) $endDt = $rows['maxdt'];
 		}
 		return $retValue;
 	}

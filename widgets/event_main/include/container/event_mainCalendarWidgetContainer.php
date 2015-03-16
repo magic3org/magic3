@@ -103,7 +103,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		$prevUrl = $this->_pageUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $prevYear . '&month=' . $prevMonth;
 		$nextUrl = $this->_pageUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $nextYear . '&month=' . $nextMonth;
 		
-		$calendarData  = '<table class="event_main_table" style="width:100%;">' . M3_NL;
+		$calendarData  = '<table class="event_calendar">' . M3_NL;
 		$calendarData .= '<caption>' . M3_NL;
 		// 前月へのリンク
 		if (!empty($rangeStartYearMonth) && $rangeStartYearMonth <= intval(sprintf('%04s%02s', $prevYear, $prevMonth))){
