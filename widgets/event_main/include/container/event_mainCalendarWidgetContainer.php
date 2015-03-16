@@ -42,8 +42,12 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 	 * @return string 						テンプレートファイル名。テンプレートライブラリを使用しない場合は空文字列「''」を返す。
 	 */
 	function _setTemplate($request, &$param)
-	{	
-		return 'calendar.tmpl.html';
+	{
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return 'calendar_bootstrap.tmpl.html';		// 記事詳細
+		} else {
+			return 'calendar.tmpl.html';		// 記事詳細
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -103,7 +107,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 		$prevUrl = $this->_pageUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $prevYear . '&month=' . $prevMonth;
 		$nextUrl = $this->_pageUrl . '&task=' . self::TASK_CALENDAR . '&act=view&year=' . $nextYear . '&month=' . $nextMonth;
 		
-		$calendarData  = '<table class="event_calendar">' . M3_NL;
+//		$calendarData  = '<table class="event_calendar">' . M3_NL;
 		$calendarData .= '<caption>' . M3_NL;
 		// 前月へのリンク
 		if (!empty($rangeStartYearMonth) && $rangeStartYearMonth <= intval(sprintf('%04s%02s', $prevYear, $prevMonth))){
@@ -209,7 +213,7 @@ class event_mainCalendarWidgetContainer extends event_mainBaseWidgetContainer
 
 			$calendarData .= "</tr>" . M3_NL;
 		}
-		$calendarData .= "</table>" . M3_NL;
+//		$calendarData .= "</table>" . M3_NL;
 		$this->tmpl->addVar("_widget", "calendar", $calendarData);
 		
 		// 他画面へのリンク

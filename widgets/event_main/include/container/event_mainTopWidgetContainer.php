@@ -143,11 +143,11 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				return 'list.tmpl.html';		// トップ画面記事一覧
 			} else {
 				$this->viewMode = 10;					// 表示モード(記事単体表示)
-				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-					return 'single_bootstrap.tmpl.html';		// 記事詳細
-				} else {
+//				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+//					return 'single_bootstrap.tmpl.html';		// 記事詳細
+//				} else {
 					return 'single.tmpl.html';		// 記事詳細
-				}
+//				}
 			}
 		}
 	}

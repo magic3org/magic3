@@ -132,11 +132,11 @@ class event_mainBaseWidgetContainer extends BaseWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
-		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-			return '';
-		} else {
+//		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+//			return '';
+//		} else {
 			return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);		// デフォルトのCSSファイル
-		}
+//		}
 	}
 }
 ?>
