@@ -770,7 +770,10 @@ class event_mainDb extends BaseDb
 				$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
 				$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
 				$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_description LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
 				$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
 			}
 		}
@@ -895,7 +898,10 @@ class event_mainDb extends BaseDb
 				$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
 				$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
 				$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_description LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
 				$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
 			}
 		}
