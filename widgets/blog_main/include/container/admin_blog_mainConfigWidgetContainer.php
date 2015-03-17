@@ -151,10 +151,12 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				
 					// 作業ディレクトリを削除
 					rmDirectory($this->tmpDir);
+					
+					// 親ウィンドウを更新
+					$this->gPage->updateParentWindow();
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
-				$this->gPage->updateParentWindow();// 親ウィンドウを更新
 			}
 		} else if ($act == self::ACT_UPLOAD_IMAGE){		// 画像アップロード
 			// 作業ディレクトリを作成
@@ -319,7 +321,6 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			// 各種画像を作成
 			switch ($type){
 			case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
-				//$formats = $this->gInstance->getImageManager()->getDefaultContentThumbFormat();
 				$formats = $this->gInstance->getImageManager()->getSystemThumbFormat();
 				$filenameBase = '0';
 				break;

@@ -139,6 +139,9 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 					
 					// 作業ディレクトリを削除
 					rmDirectory($this->tmpDir);
+					
+					// 親ウィンドウを更新
+					$this->gPage->updateParentWindow();
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
