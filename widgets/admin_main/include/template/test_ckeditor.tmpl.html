@@ -14,6 +14,16 @@
 <script type="text/javascript" src="{_SCRIPTS_URL}/ckeditor4.4.2/ckeditor.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+function updateItem(){
+	alert(document.main.editor.value);
+	
+	// CKEditorの入力内容を確定
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+	
+	alert(document.main.editor.value);
+}
 $(function(){
 
 	// WYSIWYGエディター作成
@@ -28,8 +38,13 @@ $(function(){
 //]]>
 </script>
 <div align="center">
+<form method="post" name="main">
 <!-- m3:ErrorMessage -->
 <textarea id="editor" name="editor">{ITEM_HTML}</textarea>
+<div class="well">
+<input type="button" class="button btn" onClick="updateItem()" value="更新" />
+</div>
+</form>
 </div>
 
 </patTemplate:tmpl>

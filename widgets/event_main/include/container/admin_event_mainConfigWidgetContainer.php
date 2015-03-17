@@ -17,6 +17,11 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_event_mainB
 
 class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetContainer
 {
+	private $tmpDir;		// 作業ディレクトリ
+	const IMAGE_TYPE_ENTRY_IMAGE = 'entryimage';			// 画像タイプ(記事デフォルト画像)
+	const ACT_UPLOAD_IMAGE	= 'uploadimage';			// 画像アップロード
+	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -24,6 +29,9 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// 作業ディレクトリを取得
+		$this->tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリパスを取得
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -69,11 +77,25 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$messageFindNoEntry = $request->trimValueOf('item_message_find_no_entry');		// 記事が見つからないメッセージ
 		$msgNoEntryInFuture = $request->trimValueOf('item_msg_no_entry_in_future');	// 予定イベントなし時メッセージ
 		$titleTagLevel		= $request->trimIntValueOf('item_title_tag_level', event_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL);		// タイトルタグレベル
+		$imageType			= $request->trimValueOf('type');		// 画像タイプ
+		$updatedEntryImage	= $request->trimValueOf('updated_entryimage');		// 記事デフォルト画像更新フラグ
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
 			$this->checkNumeric($entryViewCount, '記事表示順');
+			
+			// 記事デフォルト画像のエラーチェック
+			if (!empty($updatedEntryImage)){
+				list($entryImageFilenameArray, $tmpArray) = $this->gInstance->getImageManager()->getSystemThumbFilename('0'/*デフォルト画像*/);
+				for ($i = 0; $i < count($entryImageFilenameArray); $i++){
+					$path = $this->tmpDir . DIRECTORY_SEPARATOR . $entryImageFilenameArray[$i];
+					if (!file_exists($path)){
+						$this->setAppErrorMsg('記事デフォルト画像が正常にアップロードされていません');
+						break;
+					}
+				}
+			}
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 空の場合はデフォルト値を設定
@@ -102,15 +124,39 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY, $messageFindNoEntry);		// 記事が見つからないメッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_TITLE_TAG_LEVEL, $titleTagLevel);		// タイトルタグレベル
 				
+				// 画像の移動
+				if ($ret && !empty($updatedEntryImage)){		// 画像更新の場合
+					$ret = mvFileToDir($this->tmpDir, $entryImageFilenameArray, $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_EVENT, event_mainCommonDef::$_deviceType,
+								''/*ディレクトリ取得*/));
+					if ($ret){
+						$ret = self::$_mainDb->updateConfig(event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE, implode(';', $entryImageFilenameArray));
+					}
+				}
+				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$reloadData = true;		// データの再ロード
+					
+					// 作業ディレクトリを削除
+					rmDirectory($this->tmpDir);
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 			}
+		} else if ($act == self::ACT_UPLOAD_IMAGE){		// 画像アップロード
+			// 作業ディレクトリを作成
+			$this->tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+			
+			// Ajaxでのファイルアップロード処理
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $this->tmpDir);
+		} else if ($act == self::ACT_GET_IMAGE){			// 画像取得
+			// Ajaxでの画像取得
+			$this->getImageByType($imageType);
 		} else {		// 初期表示の場合
 			$reloadData = true;		// データの再ロード
+			
+			// 作業ディレクトリを削除
+			rmDirectory($this->tmpDir);
 		}
 		// データ再取得
 		if ($reloadData){
@@ -153,6 +199,26 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		} else {
 			$this->tmpl->addVar("_widget", "view_order_dec_selected", 'selected');// 記事表示順
 		}
+		
+		// アップロード実行用URL
+		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIG;
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_UPLOAD_IMAGE;
+		$this->tmpl->addVar("_widget", "upload_url_entryimage", $this->getUrl($uploadUrl . '&type=' . self::IMAGE_TYPE_ENTRY_IMAGE));		// 記事デフォルト画像
+		
+		// ##### 画像の表示 #####
+		// アップロードされているファイルがある場合は、アップロード画像を表示
+		// 記事デフォルト画像
+		$imageUrl = '';
+		$updateStatus = '0';			// 画像更新状態
+		$entryImageFilename = $this->getDefaultEntryImageFilename();		// 記事デフォルト画像名取得
+		if (!empty($entryImageFilename)){
+			$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_EVENT, event_mainCommonDef::$_deviceType, $entryImageFilename) . '?' . date('YmdHis');
+		}
+		$this->tmpl->addVar("_widget", "entryimage_url", $this->convertUrlToHtmlEntity($this->getUrl($imageUrl)));			// 記事デフォルト画像
+		$this->tmpl->addVar("_widget", "updated_entryimage", $updateStatus);
+		
 		$this->tmpl->addVar("_widget", "category_count", $categoryCount);// カテゴリ数
 		$this->tmpl->addVar("_widget", "use_calendar", $this->convertToCheckedString($useCalendar));// カレンダーを使用するかどうか
 		$this->tmpl->addVar("_widget", "top_contents", $this->convertToDispString($topContents));		// トップコンテンツ
@@ -169,6 +235,103 @@ class admin_event_mainConfigWidgetContainer extends admin_event_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "message_find_no_entry", $messageFindNoEntry);		// 記事が見つからないメッセージ
 		$this->tmpl->addVar("_widget", "msg_no_entry_in_future", $this->convertToDispString($msgNoEntryInFuture));		// 予定イベントなし時メッセージ
 		$this->tmpl->addVar("_widget", "title_tag_level", $titleTagLevel);		// タイトルタグレベル
+		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア
+	}
+	/**
+	 * 最大画像を取得
+	 *
+	 * @param string $type		画像タイプ
+	 * @return					なし
+	 */
+	function getImageByType($type)
+	{
+		// 画像パス作成
+		switch ($type){
+		case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
+			$filename = $this->getDefaultEntryImageFilename();		// 記事デフォルト画像名取得
+			break;
+		}
+		$imagePath = '';
+		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
+			
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+
+		if (is_readable($imagePath)){
+			// 画像情報を取得
+			$imageMimeType = '';
+			$imageSize = @getimagesize($imagePath);
+			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+			
+			// 画像MIMEタイプ設定
+			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
+			
+			// キャッシュの設定
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0');
+			header('Pragma: no-cache');
+		
+			// 画像ファイル読み込み
+			readfile($imagePath);
+		} else {
+			$this->gPage->showError(404);
+		}
+	
+		// システム強制終了
+		$this->gPage->exitSystem();
+	}
+	/**
+	 * アップロードファイルから各種画像を作成
+	 *
+	 * @param bool           $isSuccess		アップロード成功かどうか
+	 * @param object         $resultObj		アップロード処理結果オブジェクト
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string         $filePath		アップロードされたファイル
+	 * @param string         $destDir		アップロード先ディレクトリ
+	 * @return								なし
+	 */
+	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
+	{
+		$type = $request->trimValueOf('type');		// 画像タイプ
+		
+		if ($isSuccess){		// ファイルアップロード成功のとき
+			// 各種画像を作成
+			switch ($type){
+			case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
+				$formats = $this->gInstance->getImageManager()->getSystemThumbFormat();
+				$filenameBase = '0';
+				break;
+			}
+
+			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
+			if ($ret){			// 画像作成成功の場合
+				// 画像参照用URL
+				$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+				$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIG;
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
+				$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
+				$resultObj['url'] = $imageUrl;
+			} else {// エラーの場合
+				$resultObj = array('error' => 'Could not create resized images.');
+			}
+		}
+	}
+	/**
+	 * 記事デフォルト画像名を取得
+	 *
+	 * @return string		ファイル名
+	 */
+	function getDefaultEntryImageFilename()
+	{
+		$filename = '';
+		$value = self::$_mainDb->getConfig(event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE);
+		if (!empty($value)){
+			$filenameArray = explode(';', $value);
+			$filename = $filenameArray[count($filenameArray) -1];
+		}
+		return $filename;
 	}
 }
 ?>
