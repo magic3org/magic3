@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: admin_access_countWidgetContainer.php 5163 2012-09-05 13:53:12Z fishbone $
  * @link       http://www.magic3.org
@@ -79,6 +79,20 @@ class admin_access_countWidgetContainer extends BaseAdminWidgetContainer
 		$checked = '';
 		if (!empty($isHiddenCounter)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "checked_is_hidden_counter",	$checked);
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 }
 ?>
