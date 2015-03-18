@@ -8,13 +8,12 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: event_search_boxWidgetContainer.php 3992 2011-02-11 04:49:38Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
-require_once($gEnvManager->getCommonPath()			. '/htmlEdit.php');
 
 class event_search_boxWidgetContainer extends BaseWidgetContainer
 {
@@ -41,7 +40,11 @@ class event_search_boxWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'index.tmpl.html';
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return 'index_bootstrap.tmpl.html';
+		} else {
+			return 'index.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
