@@ -8,9 +8,9 @@
  *
  * @package    パンくずリスト
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2012-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2012-2015 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_breadcrumbWidgetContainer.php 5885 2013-03-31 22:44:38Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -167,6 +167,20 @@ class admin_breadcrumbWidgetContainer extends BaseAdminWidgetContainer
 		if ($useHiddenMenu) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "use_hidden_menu", $checked);
 		$this->tmpl->addVar("_widget", "separator_image_path", $separatorImgPath);
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 }
 ?>

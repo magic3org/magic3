@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 5883 2013-03-31 12:22:13Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -31,32 +31,35 @@ function uploadCheck(){
 	document.main.submit();
 	return false;
 }
+$(function(){
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
-<table class="simple-table">
-    <caption>パンくずリスト設定</caption>
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
     <tbody>
 	<tr>
-	    <td class="table-headside" width="100"><span {_HELP_VIEW_CONFIG}>表示設定</span></td>
-	    <td width="500"><input type="checkbox" name="item_visible" {VISIBLE} />トップページの場合にリストを表示する<br />
-	    <input type="checkbox" name="item_use_hidden_menu" {USE_HIDDEN_MENU} />非表示のメニューウィジェットの定義を使用する</td>
+	    <th><span {_HELP_VIEW_CONFIG}>表示設定</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_visible" {VISIBLE} />トップページの場合にリストを表示する</label></div>
+	    <div class="checkbox"><label><input type="checkbox" name="item_use_hidden_menu" {USE_HIDDEN_MENU} />非表示のメニューウィジェットの定義を使用する</label></div>
+		</td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside">区切り画像</td>
+    <tr>
+	    <th>区切り画像</th>
 	    <td><div id="preview_outer">{SEPARATOR_IMAGE}</div><input type="hidden" name="item_separator_image_path" value="{SEPARATOR_IMAGE_PATH}" />
                 <input type="file" name="upfile" size="50" /><input type="button" class="button" onclick="uploadCheck();" value="アップロード" />
 	    </td>
 	</tr>
-    <tr>
-	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
-	</tr>
     </tbody>
 </table>
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
