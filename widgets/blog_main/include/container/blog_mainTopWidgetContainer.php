@@ -500,6 +500,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 						if (empty($this->headTitle)) $this->headTitle = $row['bl_name'];
 						$this->headDesc .= $row['bl_meta_description'];
 						$this->headKeyword .= $row['bl_meta_keywords'];
+						
+						// マルチブログタイトル
+						$this->title = $row['bl_name'];
 					}
 				}
 			}
