@@ -19,20 +19,19 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
-function uploadCheck(){
-	if (!document.main.upfile.value){
-		alert('画像ファイルが選択されていません');
-		return false;
-	}
-	if (!window.confirm('画像ファイルをアップロードしますか?')) return false;
-	document.main.act.value = 'upload';
-	document.main.enctype = 'multipart/form-data';
-	document.main.encoding = 'multipart/form-data';			// for IE
-	document.main.submit();
-	return false;
-}
 $(function(){
 	m3SetConfigTable('mainconfig');
+	
+	// 画像アップローダー作成
+	m3CreateDragDropUploadFile('uploader_separator', '{UPLOAD_URL_SEPARATOR}', function(files, data){
+		// 画像を読み込む
+		$('#separator_preview').attr('src', data.url).load(function(){
+			m3AdjustParentWindow();// 親ウィンドウリサイズ
+		});
+
+		// 編集フラグを更新
+		document.main.separator_updated.value = '1';
+	});
 });
 //]]>
 </script>
@@ -40,19 +39,20 @@ $(function(){
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
+<input type="hidden" name="separator_updated" />
 <h3 class="m3config_h">基本設定</h3>
 <table id="mainconfig">
     <tbody>
 	<tr>
 	    <th><span {_HELP_VIEW_CONFIG}>表示設定</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_visible" {VISIBLE} />トップページの場合にリストを表示する</label></div>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_visible_on_root" {VISIBLE_ON_ROOT} />トップページの場合にリストを表示する</label></div>
 	    <div class="checkbox"><label><input type="checkbox" name="item_use_hidden_menu" {USE_HIDDEN_MENU} />非表示のメニューウィジェットの定義を使用する</label></div>
 		</td>
 	</tr>
     <tr>
 	    <th>区切り画像</th>
-	    <td><div id="preview_outer">{SEPARATOR_IMAGE}</div><input type="hidden" name="item_separator_image_path" value="{SEPARATOR_IMAGE_PATH}" />
-                <input type="file" name="upfile" size="50" /><input type="button" class="button" onclick="uploadCheck();" value="アップロード" />
+	    <td>
+			<img id="separator_preview" class="pull-left" src="{SEPARATOR_URL}" /><div class="pull-right"><div id="uploader_separator">{UPLOAD_AREA}</div></div>
 	    </td>
 	</tr>
     </tbody>

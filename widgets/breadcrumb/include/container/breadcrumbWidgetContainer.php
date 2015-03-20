@@ -8,9 +8,9 @@
  *
  * @package    パンくずリスト
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: breadcrumbWidgetContainer.php 5883 2013-03-31 12:22:13Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
@@ -99,7 +99,8 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		if (empty($separatorImgPath)){
 			$separatorImgUrl = $this->gEnv->getCurrentWidgetRootUrl() . self::DEFAULT_ARROW_IMAGE_FILE;		// デフォルトの画像
 		} else {
-			$separatorImgUrl = $this->gEnv->getRootUrl() . $separatorImgPath;		// ユーザ指定の画像
+//			$separatorImgUrl = $this->gEnv->getRootUrl() . $separatorImgPath;		// ユーザ指定の画像
+			$separatorImgUrl = $this->gEnv->getResourceUrl() . $separatorImgPath;		// ユーザ指定の画像
 		}
 		$this->iconTag = ' <img src="' . $this->getUrl($separatorImgUrl) . '" /> ';		// 両端にスペースを入れる
 	
