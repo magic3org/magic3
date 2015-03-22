@@ -19,6 +19,13 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+function resetSeparator(){
+	if (!window.confirm('区切り画像をデフォルトに戻しますか?')) return false;
+	
+	document.main.act.value = 'deleteseparator';
+	document.main.submit();
+	return true;
+}
 $(function(){
 	m3SetConfigTable('mainconfig');
 	
@@ -31,6 +38,10 @@ $(function(){
 
 		// 編集フラグを更新
 		document.main.separator_updated.value = '1';
+	});
+	// 設定画像削除ボタン
+	$('#reset_separator_button').click(function (){
+		resetSeparator();
 	});
 });
 //]]>
@@ -50,7 +61,11 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <th>区切り画像</th>
+	    <th>区切り画像
+		<patTemplate:tmpl name="reset_separator_button" visibility="hidden">
+		<div class="pull-right"><button id="reset_separator_button" class="btn btn-sm btn-default" type="button" rel="m3help" data-container="body" title="画像を削除"><i class="glyphicon glyphicon-trash"></i></button></div>
+		</patTemplate:tmpl>
+		</th>
 	    <td>
 			<img id="separator_preview" class="pull-left" src="{SEPARATOR_URL}" /><div class="pull-right"><div id="uploader_separator">{UPLOAD_AREA}</div></div>
 	    </td>

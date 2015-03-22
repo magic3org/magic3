@@ -19,11 +19,13 @@ class admin_breadcrumbWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $tmpDir;		// 作業ディレクトリ
 	const IMAGE_TYPE_SEPARATOR = 'separator';	// 画像タイプ(区切り画像)
-	const ACT_UPLOAD_IMAGE	= 'uploadimage';				// 画像アップロード
-	const ACT_GET_IMAGE		= 'getimage';					// 画像取得
 	const DEFAULT_ARROW_IMAGE_FILE = '/images/arrow.png';	// デフォルト区切り画像
 	const IMAGE_FILENAME_BASE = 'arrow';					// 画像ファイル名ベース
 	const TMP_IMAGE_FILENAME = 'tmpimgage';					// 一時画像ファイル名
+	// 操作
+	const ACT_UPLOAD_IMAGE	= 'uploadimage';				// 画像アップロード
+	const ACT_GET_IMAGE		= 'getimage';					// 画像取得
+	const ACT_DELETE_SEPARATOR = 'deleteseparator';			// 区切り画像を削除
 	
 	/**
 	 * コンストラクタ
@@ -76,32 +78,37 @@ class admin_breadcrumbWidgetContainer extends BaseAdminWidgetContainer
 			}
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
-				// 画像情報取得
-				$imageMimeType = '';
-				$imageSize = @getimagesize($tmpImagePath);
+				// 一時区切り画像がある場合は正規の位置へ移動
+				if (file_exists($tmpImagePath)){
+					// 画像情報取得
+					$imageMimeType = '';
+					$imageSize = @getimagesize($tmpImagePath);
 		
-				// 拡張子
-				$ext = '';
-				switch ($imageSize[2]){
-					case IMAGETYPE_JPEG:
-						$ext = 'jpg';
-						break;
-					case IMAGETYPE_GIF:
-						$ext = 'gif';
-						break;
-					case IMAGETYPE_PNG:
-						$ext = 'png';
-						break;
-					case IMAGETYPE_BMP:
-						$ext = 'bmp';
-						break;
-				}
+					// 拡張子
+					$ext = '';
+					switch ($imageSize[2]){
+						case IMAGETYPE_JPEG:
+							$ext = 'jpg';
+							break;
+						case IMAGETYPE_GIF:
+							$ext = 'gif';
+							break;
+						case IMAGETYPE_PNG:
+							$ext = 'png';
+							break;
+						case IMAGETYPE_BMP:
+							$ext = 'bmp';
+							break;
+					}
 		
-				// 画像ファイル名作成
-				$newImgPath = '/widgets/' . $this->gEnv->getCurrentWidgetId() . '/images/' . self::IMAGE_FILENAME_BASE . '.' . $ext;
+					// 画像ファイル名作成
+					$newImgPath = '/widgets/' . $this->gEnv->getCurrentWidgetId() . '/images/' . self::IMAGE_FILENAME_BASE . '.' . $ext;
 
-				// 画像を移動
-				$ret = mvFile($tmpImagePath, $this->gEnv->getResourcePath() . $newImgPath);
+					// 画像を移動
+					$ret = mvFile($tmpImagePath, $this->gEnv->getResourcePath() . $newImgPath);
+				} else {
+					$newImgPath = '';		// 区切り画像パス
+				}
 			
 				$paramObj = new stdClass;
 				$paramObj->visibleOnRoot	= $visibleOnRoot;
@@ -113,7 +120,8 @@ class admin_breadcrumbWidgetContainer extends BaseAdminWidgetContainer
 					$reloadData = true;		// データの再ロード
 					
 					// 作業ディレクトリを削除
-					rmDirectory($this->tmpDir);
+					$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+					rmDirectory($tmpDir);
 					
 					// 親ウィンドウを更新
 					$this->gPage->updateParentWindow();
@@ -126,73 +134,40 @@ class admin_breadcrumbWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 			
 			// Ajaxでのファイルアップロード処理
-			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $this->tmpDir);
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $this->tmpDir/*アップロード用ディレクトリ*/);
 		} else if ($act == self::ACT_GET_IMAGE){			// 画像取得
 			// Ajaxでの画像取得
 			$this->getImageByType(self::IMAGE_TYPE_SEPARATOR);
-/*		} else if ($act == 'upload'){		// 画像アップロードのとき
-			// アップロードされたファイルか？セキュリティチェックする
-			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
-				// テンポラリディレクトリの書き込み権限をチェック
-				if (!is_writable($this->gEnv->getWorkDirPath())){
-					$msg = '一時ディレクトリに書き込み権限がありません。ディレクトリ：' . $this->gEnv->getWorkDirPath();
-					$this->setAppErrorMsg($msg);
-				}
+		} else if ($act == self::ACT_DELETE_SEPARATOR){		// 区切り画像を削除
+			// 作業ディレクトリを削除
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			rmDirectory($tmpDir);
 				
-				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
-					// ファイルを保存するサーバディレクトリを指定
-					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
-		
-					// アップされたテンポラリファイルを保存ディレクトリにコピー
-					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
-					if ($ret){
-						// ファイルの内容のチェック
-						$imageSize = @getimagesize($tmpFile);// 画像情報を取得
-						if ($imageSize){
-							$imageWidth = $imageSize[0];
-							$imageHeight = $imageSize[1];
-							$imageType = $imageSize[2];
-							$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
-
-							// 受付可能なファイルタイプかどうか
-							if (!in_array($imageMimeType, $this->permitMimeType)){
-								$msg = 'アップロード画像のタイプが不正です。';
-								$this->setAppErrorMsg($msg);
-							}
-						} else {
-							$msg = 'アップロード画像が不正です。';
-							$this->setAppErrorMsg($msg);
-						}
-				
-						if ($this->getMsgCount() == 0){		// エラーが発生していないとき
-							// 画像をコピー
-							$newImgPath = $this->gEnv->getResourcePath() . DIRECTORY_SEPARATOR . 'widgets/' . $this->gEnv->getCurrentWidgetId() . self::DEFAULT_ARROW_IMAGE_FILE;
-							$newImgDir = dirname($newImgPath);
-							if (!file_exists($newImgDir)) mkdir($newImgDir, M3_SYSTEM_DIR_PERMISSION, true);		// ディレクトリ作成
-							$ret = copy($tmpFile, $newImgPath);
-							if ($ret){
-								$separatorImgPath = str_replace($this->gEnv->getSystemRootPath(), '', $newImgPath);		// 区切り画像パス
-								
-								$msg = '画像を変更しました';
-								$this->setGuidanceMsg($msg);
-							}
-						}
-					} else {
-						$msg = 'ファイルのアップロードに失敗しました';
-						$this->setAppErrorMsg($msg);
-					}
-					// テンポラリファイル削除
-					unlink($tmpFile);
-				}
+			// 設定されている区切り画像がある場合は削除
+			$paramObj = $this->getWidgetParamObj();
+			if (empty($paramObj)){
+				$ret = true;
 			} else {
-				$msg = sprintf($this->_('Uploded file not found. (detail: The file may be over maximum size to be allowed to upload. Size %s bytes.'), $this->gSystem->getMaxFileSizeForUpload());	// アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります。%dバイト)
-				$this->setAppErrorMsg($msg);
-			}*/
+				$separatorPath = $this->gEnv->getResourcePath() . $paramObj->separatorImgPath;// 区切り画像パス
+				if (file_exists($separatorPath)) @unlink($separatorPath);
+				$paramObj->separatorImgPath = '';
+				
+				// ウィジェットパラメータを更新
+				$ret = $this->updateWidgetParamObj($paramObj);
+			}
+			if ($ret){
+				$this->setMsg(self::MSG_GUIDANCE, '区切り画像を削除しました');
+				
+				$this->gPage->updateParentWindow();// 親ウィンドウを更新
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, '区切り画像削除に失敗しました');
+			}
 		} else {		// 初期表示の場合
 			$reloadData = true;		// データの再ロード
 			
 			// 作業ディレクトリを削除
-			rmDirectory($this->tmpDir);
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			rmDirectory($tmpDir);
 		}
 		// データ再取得
 		if ($reloadData){
@@ -219,12 +194,18 @@ class admin_breadcrumbWidgetContainer extends BaseAdminWidgetContainer
 			// 一時画像ファイルがある場合は取得
 			$tmpImagePath = $this->tmpDir . '/' . self::TMP_IMAGE_FILENAME;
 			if (file_exists($tmpImagePath)){
-				$separatorImgUrl = $this->getTmpImageUrl(self::IMAGE_TYPE_SEPARATOR);
+				$separatorImgUrl = $this->getTmpImageUrl(self::IMAGE_TYPE_SEPARATOR);		// 一時区切り画像
+				
+				// 区切り画像削除用ボタンを表示
+				$this->tmpl->setAttribute('reset_separator_button', 'visibility', 'visible');
 			} else {
 				$separatorImgUrl = $this->gEnv->getCurrentWidgetRootUrl() . self::DEFAULT_ARROW_IMAGE_FILE . '?' . date('YmdHis');		// デフォルトの画像
 			}
 		} else {
 			$separatorImgUrl = $this->gEnv->getResourceUrl() . $separatorImgPath . '?' . date('YmdHis');		// ユーザ指定の画像
+			
+			// 区切り画像削除用ボタンを表示
+			$this->tmpl->setAttribute('reset_separator_button', 'visibility', 'visible');
 		}
 		$this->tmpl->addVar("_widget", "separator_url", $this->convertUrlToHtmlEntity($this->getUrl($separatorImgUrl)));
 		
