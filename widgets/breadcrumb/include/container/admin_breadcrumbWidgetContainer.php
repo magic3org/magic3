@@ -79,7 +79,14 @@ class admin_breadcrumbWidgetContainer extends BaseAdminWidgetContainer
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 一時区切り画像がある場合は正規の位置へ移動
-				if (file_exists($tmpImagePath)){
+				if (empty($updatedSeparator)){		// アップロードした画像がない場合
+					$newImgPath = '';		// 区切り画像パス
+					$paramObj = $this->getWidgetParamObj();
+					if (!empty($paramObj)){		// 既存の区切り画像がある場合
+						$separatorPath = $this->gEnv->getResourcePath() . $paramObj->separatorImgPath;// 区切り画像パス
+						if (file_exists($separatorPath)) $newImgPath = $paramObj->separatorImgPath;			// 区切り画像ファイルの存在チェック
+					}
+				} else {
 					// 画像情報取得
 					$imageMimeType = '';
 					$imageSize = @getimagesize($tmpImagePath);
@@ -106,8 +113,6 @@ class admin_breadcrumbWidgetContainer extends BaseAdminWidgetContainer
 
 					// 画像を移動
 					$ret = mvFile($tmpImagePath, $this->gEnv->getResourcePath() . $newImgPath);
-				} else {
-					$newImgPath = '';		// 区切り画像パス
 				}
 			
 				$paramObj = new stdClass;
