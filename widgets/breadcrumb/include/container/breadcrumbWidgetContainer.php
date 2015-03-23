@@ -86,15 +86,6 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		$ret = $this->db->getMenuId($useHiddenMenu, $this->gEnv->getCurrentPageId(), $this->gEnv->getCurrentPageSubId(), $allMenu);
 		if (!$ret) return;
 		
-		// パンくずリスト用アイコンを取得
-/*		$iconUrl = '';
-		$iconPath = $this->gEnv->getCurrentTemplatePath() . self::TEMPLATE_ARROW_IMAGE_FILE;
-		if (file_exists($iconPath)) $iconUrl = $this->gEnv->getCurrentTemplateUrl() . self::TEMPLATE_ARROW_IMAGE_FILE;
-		
-		// テンプレートのアイコンがないときは、デフォルトのアイコンを使用
-		if (empty($iconUrl)){
-			$iconUrl = $this->gEnv->getCurrentWidgetRootUrl() . self::TEMPLATE_ARROW_IMAGE_FILE;
-		}*/
 		// 区切り画像
 		if (empty($separatorImgPath)){
 			$separatorImgUrl = $this->gEnv->getCurrentWidgetRootUrl() . self::DEFAULT_ARROW_IMAGE_FILE;		// デフォルトの画像
@@ -102,7 +93,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 //			$separatorImgUrl = $this->gEnv->getRootUrl() . $separatorImgPath;		// ユーザ指定の画像
 			$separatorImgUrl = $this->gEnv->getResourceUrl() . $separatorImgPath;		// ユーザ指定の画像
 		}
-		$this->iconTag = ' <img src="' . $this->getUrl($separatorImgUrl) . '" /> ';		// 両端にスペースを入れる
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートの場合は区切りアイコンなし
+			$this->iconTag = '';
+		} else {
+			$this->iconTag = ' <img src="' . $this->getUrl($separatorImgUrl) . '" /> ';		// 両端にスペースを入れる
+		}
 	
 		// 重複しないメニューIDを作成
 		$menuIdArray = array();
@@ -129,7 +124,8 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		$this->currentMacroUrl = $this->gEnv->getMacroPath($currentUrl);
 		if ($this->isRootUrl($this->currentMacroUrl)){// ルート位置の場合の処理
 			if ($visibleOnRoot){		// ルートのときリスト表示するとき
-				$html = '<span class="breadcrumbs pathway">' . $this->convertToDispString($homeName) . '</span>';
+				//$html = '<span class="breadcrumbs pathway">' . $this->convertToDispString($homeName) . '</span>';
+				$html = $this->_createLinkOuter($this->convertToDispString($homeName));
 				$this->tmpl->addVar("_widget", "link", $html);
 			}
 			return;
@@ -155,7 +151,8 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			$pageSubId = $this->gEnv->getCurrentPageSubId();
 			if (count($this->currentQueryArray) == 1 && $this->currentQueryArray[M3_REQUEST_PARAM_PAGE_SUB_ID] == $this->gEnv->getDefaultPageSubId()){
 				if ($visibleOnRoot){		// ルートのときリスト表示するとき
-					$html = '<span class="breadcrumbs pathway">' . $this->convertToDispString($homeName) . '</span>';
+					//$html = '<span class="breadcrumbs pathway">' . $this->convertToDispString($homeName) . '</span>';
+					$html = $this->_createLinkOuter($this->convertToDispString($homeName));
 					$this->tmpl->addVar("_widget", "link", $html);
 					return;
 				}
@@ -172,19 +169,18 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 
 				// ページサブID以外のパラメータをもつ場合のみリンクを作成
 				if (count($this->currentQueryArray) == 1 && isset($this->currentQueryArray[M3_REQUEST_PARAM_PAGE_SUB_ID])){		
-					$html = $this->convertToDispString($pageName);
+					//$html = $this->convertToDispString($pageName);
+					$html = $this->_createLink($pageName);
 				} else {
 					$pageUrl = $this->gEnv->createCurrentPageUrl();
 					$linkUrl = $this->getUrl($pageUrl, true/*リンク用*/);
-					$html = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($pageName) . '</a>';
+					//$html = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($pageName) . '</a>';
+					$html = $this->_createLink($pageName, $linkUrl);
 					
-					// getHeadSubTitle()はバージョン1.10.9以降利用可能
-					if (version_compare(M3_SYSTEM_VERSION, '1.10.9') >= 0){
-						// コンテンツ名が設定されている場合は出力
-						$titleArray = $this->gPage->getHeadSubTitle();
-						if (count($titleArray) > 0){
-							$html .= $this->createTitleLink($titleArray);
-						}
+					// コンテンツ名が設定されている場合は出力
+					$titleArray = $this->gPage->getHeadSubTitle();
+					if (count($titleArray) > 0){
+						$html .= $this->createTitleLink($titleArray);
 					}
 				}
 			}
@@ -237,8 +233,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 		}
 		if (!empty($html)){		// リンクが空のときは表示しない
 			$linkUrl = $this->getUrl($homeUrl, true/*リンク用*/);
-			$html = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($homeName) . '</a>' . $this->iconTag . $html;// リンクの間にアイコンを挿入
-			$html = '<span class="breadcrumbs pathway">' . $html . '</span>';
+			//$html = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($homeName) . '</a>' . $this->iconTag . $html;// リンクの間にアイコンを挿入
+			$html = $this->_createLink($homeName, $linkUrl) . $this->iconTag . $html;// リンクの間にアイコンを挿入
+			
+			//$html = '<span class="breadcrumbs pathway">' . $html . '</span>';
+			$html = $this->_createLinkOuter($html);
 			$this->tmpl->addVar("_widget", "link", $html);
 		}
 	}
@@ -308,9 +307,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			if ($i > 0) $outputHtml .= $this->iconTag;
 			
 			if (empty($linkUrl) || $i == $linkCount -1){		// 最後の項目はリンク作成しない
-				$outputHtml .= $this->convertToDispString($name) . M3_NL;
+				//$outputHtml .= $this->convertToDispString($name) . M3_NL;
+				$outputHtml .= $this->_createLink($name);
 			} else {
-				$outputHtml .= '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($name) . '</a>' . M3_NL;
+				//$outputHtml .= '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($name) . '</a>' . M3_NL;
+				$outputHtml .= $this->_createLink($name, $linkUrl);
 			}
 		}
 		return $outputHtml;
@@ -340,9 +341,11 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			$outputHtml .= $this->iconTag;
 			
 			if (empty($linkUrl) || $i == $linkCount -1){		// 最後の項目はリンク作成しない
-				$outputHtml .= $this->convertToDispString($name) . M3_NL;
+				//$outputHtml .= $this->convertToDispString($name) . M3_NL;
+				$outputHtml .= $this->_createLink($name);
 			} else {
-				$outputHtml .= '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($name) . '</a>' . M3_NL;
+				//$outputHtml .= '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" class="pathway">' . $this->convertToDispString($name) . '</a>' . M3_NL;
+				$outputHtml .= $this->_createLink($name, $linkUrl);
 			}
 		}
 		return $outputHtml;
@@ -414,6 +417,50 @@ class breadcrumbWidgetContainer extends BaseWidgetContainer
 			if ($queryArray[M3_REQUEST_PARAM_PAGE_SUB_ID] == $pageSubId) return true;
 		}
 		return false;
+	}
+	/**
+	 * リンク作成
+	 *
+	 * @param string  $name		タイトル
+	 * @param string  $url		リンク先URL。空の場合はリンクなし。
+	 * @return string			タグ
+	 */
+	function _createLink($name, $url = '')
+	{
+		$isNoLink = empty($url);		// リンクなし項目かどうか
+		$linkItem = '';
+		$listAttr = '';		// リストタグの属性
+		$linkAttr = '';		// リンクタグの属性
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			if ($isNoLink){		// リンクなし項目の場合
+				$linkItem = '<li' . $listAttr .'>' . $this->convertToDispString($name) . '</li>';
+			} else {
+				$listAttr = ' class="active"';
+				$linkItem = '<li' . $listAttr .'><a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a></li>';
+			}
+		} else {
+			if ($isNoLink){		// リンクなし項目の場合
+				$linkItem = $this->convertToDispString($name);
+			} else {
+				$linkAttr = ' class="pathway"';
+				$linkItem = '<a href="' . $this->convertUrlToHtmlEntity($url) . '"' . $linkAttr . '>' . $this->convertToDispString($name) . '</a>';
+			}
+		}
+		return $linkItem;
+	}
+	/**
+	 * リンクアウター作成
+	 *
+	 * @param string  $innerTags	リンク項目のタグ
+	 * @return string				タグ
+	 */
+	function _createLinkOuter($innerTags)
+	{
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return '<ol class="breadcrumb">' . $innerTags . '</ol>';
+		} else {
+			return '<span class="breadcrumbs pathway">' . $innerTags . '</span>';
+		}
 	}
 }
 ?>
