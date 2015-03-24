@@ -218,7 +218,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'whatsnew';
 INSERT INTO _widgets
 (wd_id,      wd_name,         wd_status, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_enable_operation, wd_has_rss, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('whatsnew', '新着情報-簡易', 1,         'news',          'subcontent',   true,            'default_news',          '1.0.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'サイトの最新情報をリスト表示する。', '',                '',                 true,  false, true,      true,                true,  '2014-06-30', now(),         now());
+('whatsnew', '新着情報-簡易', 1,         'news',          'subcontent',   true,            'default_news',          '1.1.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'サイトの最新情報をリスト表示する。', '',                '',                 true,  false, true,      true,                true,  '2015-03-25', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'default_news';
 INSERT INTO _widgets
 (wd_id,          wd_name,           wd_status, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
