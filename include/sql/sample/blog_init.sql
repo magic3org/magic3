@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2014 Magic3 Project.
+-- * @copyright  Copyright 2006-2015 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -19,23 +19,6 @@
 
 -- システム設定
 UPDATE _system_config SET sc_value = 'art41_sample2' WHERE sc_id = 'default_template';
-
--- 変換文字列
-DELETE FROM _key_value;
-INSERT INTO _key_value
-(kv_id,               kv_name,       kv_value, kv_group_id) VALUES
-('CUSTOM_KEY_001',      '会社名',      '', 'user'),
-('CUSTOM_KEY_002',      '所在地',      '', 'user'),
-('CUSTOM_KEY_003',      '設立',      '', 'user'),
-('CUSTOM_KEY_004',      '代表者',      '', 'user'),
-('CUSTOM_KEY_005',      '事業内容',      '', 'user'),
-('CUSTOM_KEY_006',      '主要取引銀行',      '', 'user'),
-('CUSTOM_KEY_007',      '主要取引先',      '', 'user'),
-('CUSTOM_KEY_008',      'ショップ名',      '', 'user'),
-('CUSTOM_KEY_009',      'ショップオーナー名',      '', 'user'),
-('CUSTOM_KEY_010',      'ショップ住所',      '', 'user'),
-('CUSTOM_KEY_011',      'ショップ電話番号',      '', 'user'),
-('CUSTOM_KEY_012',      'ショップメールアドレス',      '', 'user');
 
 -- 管理画面ページデータ(デフォルトを変更)
 UPDATE _page_id SET pg_default_sub_id = 'blog' WHERE pg_id = 'index' AND pg_type = 0;
@@ -85,20 +68,21 @@ INSERT INTO _nav_item
 -- 画面定義
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
-(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
-('index', '',        'user3',         2,        'default_menu',       1,            'メインメニュー設定', 'main_menu', true,             now()),
-('index', '',        'left',         4,        'templateChanger',    0,            '',                   '',          true,             now()),
-('index', '',        'right',        5,        'blog_category_menu', 0,            '',                   '',          true,             now()),
-('index', '',        'right',        7,        'blog_archive_menu',  0,            '',                   '',          true,             now()),
-('index', '',        'right',        9,        'default_login_box',  0,            '',                   '',          true,             now()),
-('index', '',        'main',         3,        'banner3',            3,            '',                   '',          false,            now()),
-('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',          false,            now()),
-('index', 'blog',    'main',         5,        'blog_main',          0,            '',                   '',          false,            now()),
-('index', 'blog',    'left',         7,        'blog_new_box',       0,            '',                   '',          true,             now()),
-('index', 'blog',    'left',         9,        'blog_calendar_box',  0,            '',                   '',          true,             now()),
-('index', 'blog',    'left',         11,       'blog_search_box',    0,            '',                   '',          true,             now()),
-('index', 'search',  'main',         5,        'custom_search',      1,            '',                   '',          false,            now()),
-('index', 'contact', 'main',         5,        'contactus',          0,            '',                   '',          false,            now());
+(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_title,   pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
+('index', '',        'user3',        2,        'default_menu',       1,            'メインメニュー設定', '',         'main_menu', true,             now()),
+('index', '',        'left',         4,        'templateChanger',    0,            '',                   '',         '',          true,             now()),
+('index', '',        'right',        5,        'blog_category_menu', 0,            '',                   '',         '',          true,             now()),
+('index', '',        'right',        7,        'blog_archive_menu',  0,            '',                   '',         '',          true,             now()),
+('index', '',        'right',        9,        'default_login_box',  0,            '',                   '',         '',          true,             now()),
+('index', '',        'main',         3,        'banner3',            3,            '',                   '',         '',          false,            now()),
+('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',         '',          false,            now()),
+('index', 'blog',    'main',         3,        'whatsnew',           0,            '',                   '新着情報', '',          true,            now()),
+('index', 'blog',    'main',         5,        'blog_main',          0,            '',                   'ブログ',   '',          true,            now()),
+('index', 'blog',    'left',         7,        'blog_new_box',       0,            '',                   '',         '',          true,             now()),
+('index', 'blog',    'left',         9,        'blog_calendar_box',  0,            '',                   '',         '',          true,             now()),
+('index', 'blog',    'left',         11,       'blog_search_box',    0,            '',                   '',         '',          true,             now()),
+('index', 'search',  'main',         5,        'custom_search',      1,            '',                   '',         '',          false,            now()),
+('index', 'contact', 'main',         5,        'contactus',          0,            '',                   '',         '',          false,            now());
 
 -- 新メニュー対応
 TRUNCATE TABLE _menu_def;
@@ -130,4 +114,4 @@ TRUNCATE TABLE bn_item;
 -- コンテンツ
 TRUNCATE TABLE content;
 INSERT INTO content (cn_type, cn_id, cn_language_id, cn_name,              cn_description,         cn_html,                        cn_default, cn_key, cn_create_user_id, cn_create_dt) VALUES 
-('', 1,     'ja',           '会社情報',   '会社情報', '<div class="ec_common">\r\n<table>\r\n    <tbody>\r\n        <tr>\r\n            <th>社　名</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>[#CUSTOM_KEY_001#]</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>所在地</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>[#CUSTOM_KEY_002#]</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>設　立</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>[#CUSTOM_KEY_003#]</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>代表者</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>[#CUSTOM_KEY_004#]</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>事業内容</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>[#CUSTOM_KEY_005#]●商品Ａの製造<br />\r\n            ●商品Ｂの卸売<br />\r\n            ●商品Ｃの販売</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>主要取引銀行</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>[#CUSTOM_KEY_006#]</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>主要取引先</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>[#CUSTOM_KEY_007#]■ＸＸＸ株式会社<br />\r\n            ■ＹＹＹ株式会社<br />\r\n            ■株式会社　ＺＺＺ</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n    </tbody>\r\n</table>\r\n</div>\r\n',              false, '',                0, now());
+('', 1,     'ja',           '会社情報',   '会社情報', '<div class="ec_common">\r\n<table>\r\n    <tbody>\r\n        <tr>\r\n            <th>社　名</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>所在地</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>設　立</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>代表者</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>事業内容</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>●商品Ａの製造<br />\r\n            ●商品Ｂの卸売<br />\r\n            ●商品Ｃの販売</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>主要取引銀行</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>主要取引先</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>■ＸＸＸ株式会社<br />\r\n            ■ＹＹＹ株式会社<br />\r\n            ■株式会社　ＺＺＺ</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n    </tbody>\r\n</table>\r\n</div>\r\n',              false, '',                0, now());
