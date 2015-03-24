@@ -4616,7 +4616,8 @@ class PageManager extends Core
 			// ウィジェットの配置位置に問題があるかどうかを表示
 			// メインコンテンツとページ属性が一致するかどうかチェック
 			$widgetContentType = $rows[$i]['wd_content_type'];
-			if (!empty($widgetContentType) && $widgetContentType != $pageContentType && 
+			//if (!empty($widgetContentType) && $widgetContentType != $pageContentType && 
+			if (!empty($widgetContentType) && $widgetContentType != $pageContentType && empty($rows[$i]['wd_content_widget_id']) &&			// 編集用のウィジェットが別にある場合は除く(2015/3/24))
 						(in_array($widgetContentType, $this->_getAllContentType()) || in_array($widgetContentType, $this->_getAllFeatureType()))){
 				//$title = 'ウィジェット配置注意';
 				$title = 'ページ属性と不一致';
