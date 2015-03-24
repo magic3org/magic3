@@ -40,5 +40,10 @@ $HELP['calendar_del_btn']['title'] = '削除ボタン';
 $HELP['calendar_del_btn']['body'] = '選択されているカレンダー設定を削除します。<br />項目を選択するには、一覧の左端のチェックボックスにチェックを入れます。';
 $HELP['calendar_ret_btn']['title'] = '戻るボタン';
 $HELP['calendar_ret_btn']['body'] = 'カレンダー設定へ戻ります。';
-
+$HELP['calendar_holiday']['title'] = '祝日';
+$HELP['calendar_holiday']['body'] = '祝日を色分け表示できます。使用するには「表示」にチェックを入れます。GoogleAPIキーを入手し「システム管理」-「基本情報」に設定する必要があります。';
+$HELP['calendar_simple_event']['title'] = '簡易イベント';
+$HELP['calendar_simple_event']['body'] = 'この「汎用カレンダー」ウィジェットで管理する簡易的なイベントです。カレンダー上にツールチップ形式で表示できます。簡易イベントを表示する場合は「表示」にチェックを入れます。';
+$HELP['calendar_event']['title'] = 'イベント情報';
+$HELP['calendar_event']['body'] = '「イベント情報」コンテンツと連携し、カレンダー上に表示することが出来ます。連携する場合は「表示」にチェックを入れます。';
 ?>

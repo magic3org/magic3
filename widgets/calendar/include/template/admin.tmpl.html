@@ -88,14 +88,14 @@ $(function(){
 		</td>
 	</tr>
 	<tr>
-	    <th>祝日表示</th>
+	    <th><span {_HELP_CALENDAR_HOLIDAY}>祝日</span></th>
 		<td colspan="2">
 		<div class="checkbox"><label><input type="checkbox" name="item_show_holiday" {SHOW_HOLIDAY} />表示(Googleカレンダーから取得)</label></div>
 		<div class="form-control-static m3config_item col-sm-2">カラー：</div><div class="col-sm-3 m3config_item"><input type="text" id="item_holiday_color" name="item_holiday_color" class="form-control" value="{HOLIDAY_COLOR}" size="10" maxlength="10" /></div><input type="button" class="button" value="カラー" onclick="showColorPicker(this,document.forms[0].item_holiday_color);" /></td>
 	</tr>
     <tr>
 	    <th rowspan="6"><span {_HELP_CALENDAR_VIEW_EVENT}>イベント表示</span></th>
-	    <th rowspan="3">簡易イベント</th>
+	    <th rowspan="3"><span {_HELP_CALENDAR_SIMPLE_EVENT}>簡易イベント</span></th>
 		<td><div class="checkbox"><label><input type="checkbox" name="item_show_simple_event" {SHOW_SIMPLE_EVENT} />表示</label></div></td>
 	</tr>
 	<tr><td class="info">デフォルトCSS</td></tr>
@@ -103,7 +103,7 @@ $(function(){
 		<div class="form-group">ツールチップ(ボーダー)：<input type="text" name="item_simple_event_tooltip_border_style" class="form-control" value="{SIMPLE_EVENT_TOOLTIP_BORDER_STYLE}" /></div></td>
 	</tr>
 	<tr>
-	    <th rowspan="3">イベント記事</th>
+	    <th rowspan="3"><span {_HELP_CALENDAR_EVENT}>イベント情報</span></th>
 		<td><div class="checkbox"><label><input type="checkbox" name="item_show_event" {SHOW_EVENT} />表示</label></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_show_event_tooltip" {SHOW_EVENT_TOOLTIP} />ツールチップを表示</label></div></td>
 	</tr>
@@ -121,7 +121,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th rowspan="2"><span {_HELP_CALENDAR_LAYOUT}>レイアウト</span></th>
-	    <td class="info" colspan="2">イベント記事ツールチップ</td>
+	    <td class="info" colspan="2">イベント情報ツールチップ</td>
 	</tr>
 	<tr><td class="ckeditor" colspan="2"><textarea name="item_layout_tooltip" >{LAYOUT_TOOLTIP}</textarea></td></tr>
     </tbody>
