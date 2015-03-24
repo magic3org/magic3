@@ -14,20 +14,14 @@
 <script type="text/javascript">
 //<![CDATA[
 function addItem(){
-	if (!window.confirm('項目を新規追加しますか?')) return false;
+	if (!window.confirm('設定を新規追加しますか?')) return false;
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
-function updateItem(serialNo){
-	if (!window.confirm('項目を更新しますか?')) return false;
-	document.main.act.value = 'update';
-	document.main.submit();
-	return true;
-}
-function delItem(serialNo){
-	if (!window.confirm('項目を削除しますか?')) return false;
-	document.main.act.value = 'delete';
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
 	document.main.submit();
 	return true;
 }
@@ -42,10 +36,9 @@ function listItem(){
 	document.main.submit();
 	return true;
 }
-function showWidgetConfig(widgetId){
-	m3ShowStandardWindow("?cmd=configwidget&openby=all&widget=" + widgetId);
-	return false;
-}
+$(function(){
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
 <div class="m3config_container">
@@ -55,53 +48,49 @@ function showWidgetConfig(widgetId){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
-<table style="margin:0 auto;">
-<tr><td><label>新着情報-簡易</label></td>
-<td align="right"><input type="button" class="button" onclick="showWidgetConfig('{EDIT_NEWS_WIDGET}');" value="新着情報を編集" />&nbsp;&nbsp;<input type="button" class="button" onclick="listItem();" value="設定一覧" />
-</td></tr>
-<tr><td colspan="2">
+<h3 class="m3config_h">基本設定</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_UNTITLED_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
 
-<table class="simple-table" style="margin:0 auto;width:950px;">
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150">名前</td>
+    <tr>
+	    <th>名前</th>
 	    <td>
-	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+		<div class="col-sm-4 m3config_item">
+	    <select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規登録 --</option>
 	        <patTemplate:tmpl name="title_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" size="40" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside">表示項目数</td>
-	    <td><input type="text" name="item_count" value="{ITEM_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />
+    <tr>
+	    <th>項目表示</th>
+	    <td><div class="form-control-static m3config_item col-sm-1">項目数：</div>
+		<div class="col-sm-1 m3config_item"><input type="text" name="item_count" class="form-control" value="{ITEM_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside">RSS配信</td>
-	    <td><input type="checkbox" name="item_use_rss" {USE_RSS} /></td>
+	    <th>RSS配信</th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_rss" {USE_RSS} />使用</label></div></td>
 	</tr>
-	<tr class="even">
-	<td align="right" colspan="2">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	</td>
-	</tr>
-    </tbody>
-</table>
-
-</td></tr>
-</table>
-
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
