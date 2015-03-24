@@ -111,6 +111,9 @@ TRUNCATE TABLE blog_entry;
 TRUNCATE TABLE blog_category;
 TRUNCATE TABLE blog_entry_with_category;
 
+-- 新着情報
+TRUNCATE TABLE news;
+
 -- バナー定義
 TRUNCATE TABLE bn_def;
 TRUNCATE TABLE bn_item;
