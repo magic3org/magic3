@@ -23,7 +23,6 @@ class admin_whatsnewWidgetContainer extends BaseAdminWidgetContainer
 	private $serialArray = array();			// 表示中のシリアル番号
 	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
-	const DEFAULT_EDIT_NEWS_WIDGET = 'default_news';		// 新着情報編集用のウィジェット
 	
 	/**
 	 * コンストラクタ
@@ -217,7 +216,6 @@ class admin_whatsnewWidgetContainer extends BaseAdminWidgetContainer
 		
 		$this->tmpl->addVar("_widget", "item_count",	$itemCount);
 		$this->tmpl->addVar("_widget", "use_rss",	$this->convertToCheckedString($useRss));// RSS配信を行うかどうか
-		$this->tmpl->addVar("_widget", "edit_news_widget", self::DEFAULT_EDIT_NEWS_WIDGET);			// 新着情報編集用ウィジェット
 		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
