@@ -22,10 +22,10 @@ class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 	protected static $_mainDb;			// DB接続オブジェクト
 	protected static $_configArray;		// 新着情報定義値
 	protected static $_task;			// 現在の画面
-	protected $_openBy;				// ウィンドウオープンタイプ
+//	protected $_openBy;				// ウィンドウオープンタイプ
 	protected $_baseUrl;			// 管理画面のベースURL
-	protected $_langId;			// 現在の言語
-	protected $_userId;			// 現在のユーザ
+//	protected $_langId;			// 現在の言語
+//	protected $_userId;			// 現在のユーザ
 	protected $_contentType;		// コンテンツタイプ
 	const DEFAULT_MESSAGE_LENGTH	= 300;				// デフォルトのコメント最大文字数
 	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
@@ -57,8 +57,8 @@ class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 		// DB定義を読み込む
 		if (!isset(self::$_configArray)) self::$_configArray = newsCommonDef::loadConfig(self::$_mainDb);
 		
-		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
-		$this->_userId = $this->gEnv->getCurrentUserId();		// 現在のユーザ
+//		$this->_langId = $this->gEnv->getCurrentLanguage();			// 現在の言語
+//		$this->_userId = $this->gEnv->getCurrentUserId();		// 現在のユーザ
 	}
 	/**
 	 * テンプレートに前処理
@@ -71,7 +71,7 @@ class admin_default_newsBaseWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _preAssign($request, &$param)
 	{
-		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+//		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		if (!empty($this->_openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);
 		
 		$this->_contentType = $request->trimValueOf(self::REQUEST_PARAM_CONTENT_TYPE);		// コンテンツタイプ
