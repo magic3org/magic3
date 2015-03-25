@@ -14,10 +14,10 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseRssContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/whatsnewDb.php');
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/whatsnewCommonDef.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() . '/news_headlineDb.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/news_headlineCommonDef.php');
 
-class rss_whatsnewWidgetContainer extends BaseRssContainer
+class rss_news_headlineWidgetContainer extends BaseRssContainer
 {
 	private $db;
 	private $langId;
@@ -42,10 +42,10 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 		$this->langId = $this->gEnv->getCurrentLanguage();
 				
 		// DBオブジェクト作成
-		$this->db = new whatsnewDb();
+		$this->db = new news_headlineDb();
 		
 		// 共通定義値取得
-		$this->configArray = whatsnewCommonDef::loadConfig($this->db);
+		$this->configArray = news_headlineCommonDef::loadConfig($this->db);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -139,7 +139,7 @@ class rss_whatsnewWidgetContainer extends BaseRssContainer
 		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
 		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
 		if (!empty($contentType) && !empty($contentId)){
-			$contentTitle = whatsnewCommonDef::getContentTitle($this->db, $this->langId, $contentType, $contentId);
+			$contentTitle = news_headlineCommonDef::getContentTitle($this->db, $this->langId, $contentType, $contentId);
 		} else {
 			$contentTitle = $fetchedRow['nw_name'];	// コンテンツタイトル
 		}

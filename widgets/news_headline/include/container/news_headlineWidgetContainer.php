@@ -14,10 +14,10 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath()	. '/whatsnewDb.php');
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/whatsnewCommonDef.php');
+require_once($gEnvManager->getCurrentWidgetDbPath()	. '/news_headlineDb.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/news_headlineCommonDef.php');
 
-class whatsnewWidgetContainer extends BaseWidgetContainer
+class news_headlineWidgetContainer extends BaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $langId;
@@ -42,10 +42,10 @@ class whatsnewWidgetContainer extends BaseWidgetContainer
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 				
 		// DB接続オブジェクト作成
-		$this->db = new whatsnewDb();
+		$this->db = new news_headlineDb();
 		
 		// 共通定義値取得
-		$this->configArray = whatsnewCommonDef::loadConfig($this->db);
+		$this->configArray = news_headlineCommonDef::loadConfig($this->db);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -90,7 +90,7 @@ class whatsnewWidgetContainer extends BaseWidgetContainer
 		}
 				
 		// 新着情報を取得
-		$this->listItemLayout = $this->configArray[whatsnewCommonDef::FD_LAYOUT_LIST_ITEM];		// 一覧項目レイアウト
+		$this->listItemLayout = $this->configArray[news_headlineCommonDef::FD_LAYOUT_LIST_ITEM];		// 一覧項目レイアウト
 		$this->db->getNewsList('', $itemCount, 1, array($this, 'itemLoop'));
 
 		if (!$this->isNews){	// 新着情報がないときはメッセージを出力
@@ -158,7 +158,7 @@ class whatsnewWidgetContainer extends BaseWidgetContainer
 		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
 		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
 		if (!empty($contentType) && !empty($contentId)){
-			$contentTitle = whatsnewCommonDef::getContentTitle($this->db, $this->langId, $contentType, $contentId);
+			$contentTitle = news_headlineCommonDef::getContentTitle($this->db, $this->langId, $contentType, $contentId);
 		} else {
 			$contentTitle = $fetchedRow['nw_name'];	// コンテンツタイトル
 		}
@@ -183,7 +183,7 @@ class whatsnewWidgetContainer extends BaseWidgetContainer
 		$keyTag = M3_TAG_START . M3_TAG_MACRO_MESSAGE . M3_TAG_END;		// メッセージ
 		$itemTag = str_replace($keyTag, $message, $itemTag);
 		$keyTag = M3_TAG_START . M3_TAG_MACRO_DATE . M3_TAG_END;		// 日付
-		$itemTag = str_replace($keyTag, date($this->configArray[whatsnewCommonDef::FD_DATE_FORMAT], strtotime($fetchedRow['nw_regist_dt'])), $itemTag);
+		$itemTag = str_replace($keyTag, date($this->configArray[news_headlineCommonDef::FD_DATE_FORMAT], strtotime($fetchedRow['nw_regist_dt'])), $itemTag);
 		$keyTag = M3_TAG_START . M3_TAG_MACRO_MARK . M3_TAG_END;		// マーク
 		$itemTag = str_replace($keyTag, '', $itemTag);
 

@@ -76,7 +76,7 @@ INSERT INTO _page_def
 ('index', '',        'right',        9,        'default_login_box',  0,            '',                   '',         '',          true,             now()),
 ('index', '',        'main',         3,        'banner3',            3,            '',                   '',         '',          false,            now()),
 ('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',         '',          false,            now()),
-('index', 'blog',    'main',         3,        'whatsnew',           1,            '',                   '新着情報', '',          true,            now()),
+('index', 'blog',    'main',         3,        'news_headline',      1,            '',                   '新着情報', '',          true,            now()),
 ('index', 'blog',    'main',         5,        'blog_main',          0,            '',                   'ブログ',   '',          true,            now()),
 ('index', 'blog',    'left',         7,        'blog_new_box',       0,            '',                   '',         '',          true,             now()),
 ('index', 'blog',    'left',         9,        'blog_calendar_box',  0,            '',                   '',         '',          true,             now()),
@@ -101,10 +101,10 @@ DELETE FROM _widget_param WHERE wp_id = 'custom_search';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
 ('custom_search', 1,            'O:8:"stdClass":15:{s:4:"name";s:16:"名称未設定1";s:11:"resultCount";s:2:"20";s:14:"searchTemplate";s:239:"<input id="custom_search_1_text" maxlength="40" size="10" type="text" /><input class="button" id="custom_search_1_button" type="button" value="検索" /><input class="button" id="custom_search_1_reset" type="button" value="リセット" />";s:12:"searchTextId";s:20:"custom_search_1_text";s:14:"searchButtonId";s:22:"custom_search_1_button";s:13:"searchResetId";s:21:"custom_search_1_reset";s:15:"isTargetContent";i:1;s:12:"isTargetUser";i:1;s:12:"isTargetBlog";i:1;s:9:"fieldInfo";a:0:{}s:15:"isTargetProduct";i:0;s:13:"isTargetEvent";i:0;s:11:"isTargetBbs";i:0;s:13:"isTargetPhoto";i:0;s:12:"isTargetWiki";i:0;}', now());
-DELETE FROM _widget_param WHERE wp_id = 'whatsnew';
+DELETE FROM _widget_param WHERE wp_id = 'news_headline';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
-('whatsnew', 1,            'O:8:"stdClass":3:{s:4:"name";s:16:"名称未設定1";s:9:"itemCount";s:2:"10";s:6:"useRss";i:1;}', now());
+('news_headline', 1,            'O:8:"stdClass":3:{s:4:"name";s:16:"名称未設定1";s:9:"itemCount";s:2:"10";s:6:"useRss";i:1;}', now());
 
 -- ブログ
 TRUNCATE TABLE blog_entry;

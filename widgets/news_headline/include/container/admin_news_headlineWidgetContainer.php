@@ -14,9 +14,9 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath()	. '/whatsnewDb.php');
+require_once($gEnvManager->getCurrentWidgetDbPath()	. '/news_headlineDb.php');
 
-class admin_whatsnewWidgetContainer extends BaseAdminWidgetContainer
+class admin_news_headlineWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $langId;
@@ -33,7 +33,7 @@ class admin_whatsnewWidgetContainer extends BaseAdminWidgetContainer
 		parent::__construct();
 		
 		// DB接続オブジェクト作成
-		$this->db = new whatsnewDb();
+		$this->db = new news_headlineDb();
 	}
 	/**
 	 * ウィジェット初期化
