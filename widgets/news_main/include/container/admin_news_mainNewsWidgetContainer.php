@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,20 +18,20 @@ require_once($gEnvManager->getWidgetContainerPath('news_main') . '/admin_news_ma
 class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContainer
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
-	private $langId;		// デフォルトの言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
-	private $contentType;		// 選択中のコンテンツタイプ
 	private $status;			// メッセージ状態(0=非公開、1=公開)
 	private $statusTypeArray;	// コメント状態メニュー作成用
 	private $firstNo;		// 一覧の先頭の番号
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
-	const ICON_SIZE = 16;		// アイコンのサイズ
+	const ICON_SIZE = 32;		// アイコンのサイズ
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
-	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
-	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
+	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
 	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
 	const UNKNOWN_CONTENT = 'タイトル不明';
 	
@@ -44,7 +44,6 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		parent::__construct();
 		
 		// 初期設定
-		$this->langId = $this->gEnv->getDefaultLanguage();
 		$this->statusTypeArray = array(	array(	'name' => '非公開',	'value' => '0'),
 										array(	'name' => '公開',	'value' => '1'));
 	}
@@ -132,8 +131,6 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		
 		// 入力値取得
 		$act = $request->trimValueOf('act');
-//		$this->contentType = $request->trimValueOf('content_type');		// 選択中のコンテンツタイプ	
-//		if (empty($this->contentType)) $this->contentType = $request->trimValueOf('item_content_type');		// 選択中のコンテンツタイプ
 
 		// ##### 検索条件 #####
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
@@ -169,9 +166,6 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 				$this->setUserErrorMsg('期間の指定範囲にエラーがあります。');
 			}
 			$pageNo = 1;		// ページ番号初期化
-		} else if ($act == 'selcontenttype'){		// コンテンツタイプ変更のとき
-		} else {
-//			$this->contentType = $this->getDefaultContentType();			// コンテンツタイプ
 		}
 		
 		// ###### 一覧の取得条件を作成 ######
@@ -179,31 +173,19 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 		
 		// 総数を取得
-		//$totalCount = self::$_mainDb->getCommentItemCount($this->contentType, $this->langId, $search_startDt, $endDt, $parsedKeywords);
-		$totalCount = self::$_mainDb->getNewsListCount($this->contentType, $parsedKeywords);
+		//$totalCount = self::$_mainDb->getNewsListCount($this->contentType, $parsedKeywords);
+		$totalCount = self::$_mainDb->getNewsListCount(''/*メッセージタイプ未指定*/, $parsedKeywords);
 
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号
 		
-		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					$link = '&nbsp;<a href="#" onclick="selpage(\'' . $i . '\');return false;">' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-		}
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// コメントリストを取得
-//		self::$_mainDb->searchCommentItems($this->_contentType, $this->langId, $maxListCount, $pageNo, $search_startDt, $endDt, $parsedKeywords, array($this, 'itemListLoop'));
-		self::$_mainDb->getNewsList($this->_contentType, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
+		//self::$_mainDb->getNewsList($this->_contentType, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
+		self::$_mainDb->getNewsList(''/*メッセージタイプ未指定*/, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コメントがないときは、一覧を表示しない
 
 		// ボタン作成
@@ -369,6 +351,11 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
 		}
 
+		// その他のボタン作成
+		$buttonTag = $this->gDesign->createEditButton(''/*同画面*/, 'URL作成', self::CHANGE_URL_TAG_ID);
+		$this->tmpl->addVar("_widget", "change_url_button", $buttonTag);
+		$this->tmpl->addVar("_widget", "tagid_change_url", self::CHANGE_URL_TAG_ID);		// URL変更タグ
+		
 		// 表示項目を埋め込む
 		$this->tmpl->addVar("_widget", "content_type", $this->convertToDispString($contentTypeName));		// コンテンツタイプ
 		$this->tmpl->addVar("_widget", "content_id", $this->convertToDispString($contentId));		// コンテンツID
