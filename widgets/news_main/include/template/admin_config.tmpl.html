@@ -20,8 +20,7 @@ function updateItem(){
 	return true;
 }
 $(function(){
-	// カラー設定
-	m3_tableWithScrollbar('item_list', -1, 0);
+	m3SetConfigTable('mainconfig');
 	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_layout_list_item', 100/* 高さ */, false, 'layout');
@@ -34,35 +33,31 @@ $(function(){
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <input type="hidden" name="task" value="config" />
-<table style="margin:0 auto;">
-<tr><td>
-<table id="item_list" class="simple-table" style="width:950px;">
-<caption><span {_HELP_CONFIG_TITLE}>新着設定</span></caption>
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" style="width:150px;"><span {_HELP_CONFIG_EVENT}>フォーマット</span></td>
-	    <td><label class="item_list_inline">日時：<input type="text" name="item_date_format" value="{DATE_FORMAT}" size="10" maxlength="10" /></label>
+	    <th><span {_HELP_CONFIG_EVENT}>フォーマット</span></th>
+	    <td><div class="form-control-static col-sm-2 m3config_item">日時：</div><div class="col-sm-4 m3config_item"><input type="text" name="item_date_format" class="form-control" value="{DATE_FORMAT}" size="10" maxlength="10" /></div>
         </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONFIG_MESSAGE}>メッセージ</span></td>
-	    <td>デフォルト：<input type="text" name="item_default_message" value="{DEFAULT_MESSAGE}" size="60" maxlength="200" style="width:80%;" />
+	    <th><span {_HELP_CONFIG_MESSAGE}>メッセージ</span></th>
+	    <td><div class="form-control-static col-sm-2 m3config_item">デフォルト：</div><div class="col-sm-10 m3config_item"><input type="text" name="item_default_message" class="form-control" value="{DEFAULT_MESSAGE}" size="60" maxlength="200" /></div>
         </td>
 	</tr>
     <tr>
-	    <td class="table-headside" rowspan="2"><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></td>
-	    <td class="table-headside">リスト項目</td>
+	    <th rowspan="2"><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></th>
+	    <th style="width:800px;">リスト項目</th>
 	</tr>
     <tr>
-	    <td><textarea name="item_layout_list_item">{LAYOUT_LIST_ITEM}</textarea></td>
+	    <td class="ckeditor"><textarea name="item_layout_list_item">{LAYOUT_LIST_ITEM}</textarea></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-<tr><td align="right">
+<div class="well m3config_update_buttons">
 <input type="button" class="button" onClick="updateItem()" value="更新" />
-</td></tr></table>
-
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
