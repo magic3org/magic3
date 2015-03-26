@@ -13,9 +13,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getWidgetContainerPath('default_news') . '/admin_default_newsBaseWidgetContainer.php');
+require_once($gEnvManager->getWidgetContainerPath('news_main') . '/admin_news_mainBaseWidgetContainer.php');
 
-class admin_default_newsNewsWidgetContainer extends admin_default_newsBaseWidgetContainer
+class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContainer
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $langId;		// デフォルトの言語

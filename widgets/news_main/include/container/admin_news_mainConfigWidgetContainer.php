@@ -8,14 +8,14 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getWidgetContainerPath('default_news') . '/admin_default_newsBaseWidgetContainer.php');
+require_once($gEnvManager->getWidgetContainerPath('news_main') . '/admin_news_mainBaseWidgetContainer.php');
 
-class admin_default_newsConfigWidgetContainer extends admin_default_newsBaseWidgetContainer
+class admin_news_mainConfigWidgetContainer extends admin_news_mainBaseWidgetContainer
 {
 	/**
 	 * コンストラクタ

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -95,8 +95,8 @@ function previewInOtherWindow(url)
 	return true;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('newslist', {LIST_COUNT}, 0);
+	// テーブルを作成
+	m3SetConfigTable('newslist');
 
 	Calendar.setup({
 		inputField  : "search_start",	// ID of the input field
@@ -119,65 +119,61 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
 <!-- m3:PostParam -->
-<table style="margin:0 auto;">
-<tr><td colspan="2">
-<div id="search_news" class="m3search" style="display:none;">
-<span {_HELP_NEWS_SEARCH}><label>新着情報検索</label></span>
-<table class="simple-table" style="margin:0 0;">
-    <tbody>
-        <tr>
-	    <td class="table-headside"><span {_HELP_NEWS_SEARCH_KEYWORD}>キーワード</span></td>
-	    <td><input type="text" id="search_keyword" name="search_keyword" value="{SEARCH_KEYWORD}" maxlength="50" style="width:98%;" /></td>
-	</tr>
-        <tr class="even">
-	    <td class="table-headside" width="100"><span {_HELP_NEWS_SEARCH_DT}>期間</span></td>
-	    <td><input type="text" id="search_start" name="search_start" value="{SEARCH_START}" size="15" maxlength="10" />～<input type="text" id="search_end" name="search_end" value="{SEARCH_END}" size="15" maxlength="10" /></td>
-	</tr>
-	<tr>
-	    <td colspan="2" align="right"><input type="button" class="button" onclick="clearSearchParam();" value="クリア" /><input type="button" class="button" onclick="search();" value="検索" /></td>
-	</tr>
-    </tbody>
-</table>
+<h3 class="m3config_h"><span {_HELP_NEWS_LIST}>新着一覧</span>
+<!--<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>-->
+</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_NEWS_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+</div></div></div>
+
+<div id="search_news" class="m3search panel panel-info" style="display:none;width:600px;">
+<div class="panel-heading">
+    <h3 class="panel-title"><span {_HELP_NEWS_SEARCH}>新着情報検索</span></h3>
 </div>
-</td></tr>
-<tr><td>
-<span {_HELP_NEWS_LIST}><label>新着一覧</label></span><!--&nbsp;&nbsp;コンテンツタイプ：
-<select name="item_content_type" onchange="selectMenu();" {CONTENT_TYPE_DISABLED}>
-	        <patTemplate:tmpl name="content_type_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select>
-		<patTemplate:tmpl name="content_type" visibility="hidden"><input type="hidden" name="item_content_type" value="{CONTENT_TYPE}" /></patTemplate:tmpl>&nbsp;&nbsp;
-<a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>-->
-</td>
-<td align="right"><span {_HELP_NEWS_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_NEWS_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_NEWS_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table id="newslist" class="simple-table" style="margin:0 auto;width:950px;">
+<div class="panel-body form-horizontal">
+<div class="form-group">
+    <label for="search_keyword" class="col-sm-3 control-label"><span {_HELP_NEWS_SEARCH_KEYWORD}>キーワード</span></label>
+    <div class="col-sm-9">
+	<input type="text" id="search_keyword" name="search_keyword" class="form-control" value="{SEARCH_KEYWORD}" maxlength="50" />
+    </div>
+</div>
+<div class="form-group">
+    <label for="search_start" class="col-sm-3 control-label"><span {_HELP_NEWS_SEARCH_DT}>期間</span></label>
+    <div class="col-sm-9">
+	<input type="text" id="search_start" name="search_start" class="form-control" value="{SEARCH_START}" size="15" maxlength="10" style="width:150px;display:inline-block;margin-right:10px;" />～<input type="text" id="search_end" name="search_end" class="form-control" value="{SEARCH_END}" size="15" maxlength="10" style="width:150px;display:inline-block;margin-left:10px;" />
+    </div>
+</div>
+<div class="form-group">
+	<div class="col-sm-12 text-right">
+	<input type="button" class="button" onclick="clearSearchParam();" value="クリア" /> <input type="button" class="button" onclick="search();" value="検索" />
+	</div>
+</div>
+</div>
+</div>
+
+<table id="newslist">
     <thead>
     <tr>
-        <th width="4%"><span {_HELP_NEWS_CHECK}>選択</span></th>
-		<th width="4%"><span {_HELP_NEWS_NO}>No</span></th>
-        <th width="65%"><span {_HELP_NEWS_CONTENT_NAME}>メッセージ</span></th>
-		<th width="5%"><span {_HELP_NEWS_STATUS}>状態</span></th>
-	    <th><span {_HELP_NEWS_DT}>登録日時</span></th>
+        <th class="select"><span {_HELP_NEWS_CHECK}>選択</span></th>
+		<th style="width:50px;"><span {_HELP_NEWS_NO}>No</span></th>
+        <th><span {_HELP_NEWS_CONTENT_NAME}>メッセージ</span></th>
+		<th class="status"><span {_HELP_NEWS_STATUS}>状態</span></th>
+	    <th style="width:110px;"><span {_HELP_NEWS_DT}>登録日時</span></th>
 	</tr>
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-		<td align="center">{NO}</td>
+	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+		<td>{NO}</td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{MESSAGE}</a></td>
-		<td align="center">{STATUS_IMG}</td>
-	    <td align="center">{DATE}</td>
+		<td class="status">{STATUS_IMG}</td>
+	    <td>{DATE}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
 {PAGE_LINK}
-</td></tr>
-</table>
 </form>
 </div>
 </patTemplate:tmpl>
