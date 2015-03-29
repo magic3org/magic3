@@ -68,21 +68,21 @@ INSERT INTO _nav_item
 -- 画面定義
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
-(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_title,   pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
-('index', '',        'user3',        2,        'default_menu',       1,            'メインメニュー設定', '',         'main_menu', true,             now()),
-('index', '',        'left',         4,        'templateChanger',    0,            '',                   '',         '',          true,             now()),
-('index', '',        'right',        5,        'blog_category_menu', 0,            '',                   '',         '',          true,             now()),
-('index', '',        'right',        7,        'blog_archive_menu',  0,            '',                   '',         '',          true,             now()),
-('index', '',        'right',        9,        'default_login_box',  0,            '',                   '',         '',          true,             now()),
-('index', '',        'main',         3,        'banner3',            3,            '',                   '',         '',          false,            now()),
-('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',         '',          false,            now()),
-('index', 'blog',    'main',         3,        'news_headline',      1,            '',                   '新着情報', '',          true,            now()),
-('index', 'blog',    'main',         5,        'blog_main',          0,            '',                   'ブログ',   '',          true,            now()),
-('index', 'blog',    'left',         7,        'blog_new_box',       0,            '',                   '',         '',          true,             now()),
-('index', 'blog',    'left',         9,        'blog_calendar_box',  0,            '',                   '',         '',          true,             now()),
-('index', 'blog',    'left',         11,       'blog_search_box',    0,            '',                   '',         '',          true,             now()),
-('index', 'search',  'main',         5,        'custom_search',      1,            '',                   '',         '',          false,            now()),
-('index', 'contact', 'main',         5,        'contactus',          0,            '',                   '',         '',          false,            now());
+(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_title,   pd_menu_id,  pd_title_visible, pd_view_page_state, pd_update_dt) VALUES
+('index', '',        'user3',        2,        'default_menu',       1,            'メインメニュー設定', '',         'main_menu', true,             0,                  now()),
+('index', '',        'left',         4,        'templateChanger',    0,            '',                   '',         '',          true,             0,                  now()),
+('index', '',        'right',        5,        'blog_category_menu', 0,            '',                   '',         '',          true,             0,                  now()),
+('index', '',        'right',        7,        'blog_archive_menu',  0,            '',                   '',         '',          true,             0,                  now()),
+('index', '',        'right',        9,        'default_login_box',  0,            '',                   '',         '',          true,             0,                  now()),
+('index', '',        'main',         3,        'banner3',            3,            '',                   '',         '',          false,            0,                  now()),
+('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',         '',          false,            0,                  now()),
+('index', 'blog',    'main',         3,        'news_headline',      1,            '',                   '新着情報', '',          true,             1,                  now()),
+('index', 'blog',    'main',         5,        'blog_main',          0,            '',                   '',         '',          true,             0,                  now()),
+('index', 'blog',    'left',         7,        'blog_new_box',       0,            '',                   '',         '',          true,             0,                  now()),
+('index', 'blog',    'left',         9,        'blog_calendar_box',  0,            '',                   '',         '',          true,             0,                  now()),
+('index', 'blog',    'left',         11,       'blog_search_box',    0,            '',                   '',         '',          true,             0,                  now()),
+('index', 'search',  'main',         5,        'custom_search',      1,            '',                   '',         '',          false,            0,                  now()),
+('index', 'contact', 'main',         5,        'contactus',          0,            '',                   '',         '',          false,            0,                  now());
 
 -- 新メニュー対応
 TRUNCATE TABLE _menu_def;
@@ -107,6 +107,14 @@ INSERT INTO _widget_param
 ('news_headline', 1,            'O:8:"stdClass":3:{s:4:"name";s:16:"名称未設定1";s:9:"itemCount";s:2:"10";s:6:"useRss";i:1;}', now());
 
 -- ブログ
+DELETE FROM blog_config WHERE bg_id = 'use_widget_title';
+INSERT INTO blog_config
+(bg_id,                     bg_value,                         bg_name) VALUES
+('use_widget_title',     '1', 'ウィジェットタイトルを使用');
+DELETE FROM blog_config WHERE bg_id = 'title_default';
+INSERT INTO blog_config
+(bg_id,                     bg_value,                         bg_name) VALUES
+('title_default',     'ブログ', 'デフォルトタイトル');
 TRUNCATE TABLE blog_entry;
 TRUNCATE TABLE blog_category;
 TRUNCATE TABLE blog_entry_with_category;
