@@ -170,6 +170,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		// 「表示制御」設定
 		$shared = ($request->trimValueOf('item_shared') == 'on') ? 1 : 0;		// 共通属性があるかどうか
 		$viewControlType = $request->trimValueOf('item_view_type');			// 表示制御タイプ
+		$viewControlPageState = $request->trimValueOf('item_view_page_state');			// ページ状況での表示制御タイプ
 		$cssClassSuffix = $request->trimValueOf('item_css_class_suffix');			// 追加CSSクラスサフィックス
 		
 		// 例外ページ
@@ -285,6 +286,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$updateData['pd_active_start_dt'] = $startDt;
 				$updateData['pd_active_end_dt'] = $endDt;
 				$updateData['pd_view_control_type'] = $viewControlType;		// 表示制御タイプ
+				$updateData['pd_view_page_state'] = $viewControlPageState;			// ページ状況での表示制御タイプ
 				
 				// 例外ページ
 				$exceptPageStr = '';
@@ -390,6 +392,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			// 「表示制御」設定
 			$shared = 0;		// 共通属性があるかどうか
 			$viewControlType = 0;		// 表示制御タイプ
+			$viewControlPageState = 0;			// ページ状況での表示制御タイプ
 			$this->exceptPageArray = array();		// 例外ページ
 			$start_date = '';	// 公開期間開始日
 			$start_time = '';	// 公開期間開始時間
@@ -453,6 +456,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$shared = 0;		// 共通属性があるかどうか
 				if (empty($row['pd_sub_id'])) $shared = 1;	// 共通ウィジェットのとき
 				$viewControlType = $row['pd_view_control_type'];		// 表示制御タイプ
+				$viewControlPageState = $row['pd_view_page_state'];			// ページ状況での表示制御タイプ
 				$start_date = $this->convertToDispDate($row['pd_active_start_dt']);	// 公開期間開始日
 				$start_time = $this->convertToDispTime($row['pd_active_start_dt'], 1/*時分*/);	// 公開期間開始時間
 				$end_date = $this->convertToDispDate($row['pd_active_end_dt']);	// 公開期間終了日
@@ -499,8 +503,6 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "remove_list_marker", $this->convertToCheckedString($removeListMarker));		// リストのマーカーを削除するかどうか
 			
 		// 「表示制御」設定
-		$checked = '';
-		if ($shared) $checked = 'checked';		// 共通属性があるかどうか
 		switch ($viewControlType){		// 表示制御タイプ
 			case 0:		// 常時表示
 			default:
@@ -513,7 +515,16 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$this->tmpl->addVar("_widget", "checked_no_login", 'checked');
 				break;
 		}
-		$this->tmpl->addVar("_widget", "shared_checked", $checked);
+		switch ($viewControlPageState){		// ページ状況での表示制御タイプ
+			case 0:		// 常時表示
+			default:
+				$this->tmpl->addVar("_widget", "checked_view_page_state_always", 'checked');
+				break;
+			case 1:		// ログイン時のみ表示
+				$this->tmpl->addVar("_widget", "checked_view_page_state_top_only", 'checked');
+				break;
+		}
+		$this->tmpl->addVar("_widget", "shared_checked", $this->convertToCheckedString($shared));// 共通属性があるかどうか
 		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 公開期間開始日
 		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 公開期間開始時間
 		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
@@ -658,10 +669,13 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_hour'] = $this->_('Hour:');		// 時間
 		$localeText['label_calendar'] = $this->_('Calendar');		// カレンダー
 		$localeText['label_view_option'] = $this->_('View Option');		// 表示オプション
-		$localeText['label_view_type'] = $this->_('View Type');		// 表示表示タイプ
+		$localeText['label_view_login_state'] = $this->_('Login State');		// ログイン状況
+		$localeText['label_view_page_state'] = $this->_('Page State');		// ページ状況
 		$localeText['label_always'] = $this->_('Always');		// 常時表示
 		$localeText['label_login'] = $this->_('When user in login');		// ログイン時のみ表示
 		$localeText['label_no_login'] = $this->_('When user not in login');		// 非ログイン時のみ表示
+		$localeText['label_view_page_state_always'] = $this->_('Always');		// 常時表示
+		$localeText['label_view_page_state_top_only'] = $this->_('Top only');		// トップ時のみ表示
 		$localeText['label_update'] = $this->_('Update');// 更新
 		
 		$localeText['label_style'] = $this->_('Style');// スタイル
