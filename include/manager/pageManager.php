@@ -28,6 +28,7 @@ class PageManager extends Core
 	private $isTransparentMode;		// 画面透過モード
 	private $isEditMode;			// 一般画面編集モード
 	private $isLayout;				// 画面レイアウト中かどうか
+	private $isPageTopUrl;			// ページトップ(サブページ内のトップ位置)のURLかどうか
 	private $tmpData;				// データ作成用
 	private $db;					// DBオブジェクト
 	private $defaultScriptFiles;	// デフォルトで読み込むスクリプトファイル
@@ -1180,15 +1181,14 @@ class PageManager extends Core
 
 				// コマンド以外のパラメータ数が1つだけのときはパラメータからページ属性を判断する
 				// 値が空でもキーがあれば属性を持つとする
-				if ($paramCount == 0 && $gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemAdmin() && empty($task)){
-					// ダッシュボード機能は、パラメータなし、管理者ディレクトリ、システム管理者の条件で使用可能
-					// POST値にタスクがある場合はダッシュボードとしない
-					$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_DASHBOARD, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+				if ($paramCount == 0){
+					$this->isPageTopUrl = true;			// ページトップ(サブページ内のトップ位置)のURLかどうか
 					
-					// ##### ダッシュボードはページの位置を示すので、ページのコンテンツ属性としない #####
-					//$this->contentType = M3_VIEW_TYPE_DASHBOARD;		// ページのコンテンツタイプ
-				//if ($paramCount == 1 || !empty($params[M3_REQUEST_PARAM_OPERATION_COMMAND])){
-				//} else if ($paramCount > 0 || !empty($params[M3_REQUEST_PARAM_OPERATION_COMMAND])){		// コマンド(プレビュー等)のとき、または複数パラメータでも可(2011/9/20)
+					if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemAdmin() && empty($task)){
+						// ダッシュボード機能は、パラメータなし、管理者ディレクトリ、システム管理者の条件で使用可能
+						// POST値にタスクがある場合はダッシュボードとしない
+						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_DASHBOARD, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+					}
 				} else if ($paramCount > 0 && !$gEnvManager->isAdminDirAccess()){		// パラメータ付きの場合(2013/3/23)
 					// ##### ページ属性から画面を選択(管理画面は対応しない) ###
 					// 最初のURLパラメータでコンテンツを判断
@@ -1272,59 +1272,6 @@ class PageManager extends Core
 								break;
 						}
 					}
-					/*
-					if (isset($params[M3_REQUEST_PARAM_CONTENT_ID]) || isset($params[M3_REQUEST_PARAM_CONTENT_ID_SHORT])){		// コンテンツIDのとき
-						// ローカルメニューのURLからページを特定。ページが特定できないときはページ属性で取得。
-						$url = $gEnvManager->getMacroPath($gEnvManager->getCurrentRequestUri());
-						$ret = $this->db->getSubPageIdByMenuItemUrl($url, $gEnvManager->getCurrentPageId(), $rows);
-						if ($ret){
-							$rowCount = count($rows);
-							for ($i = 0; $i < $rowCount; $i++){
-								// コンテンツを表示するウィジェットがあるときはページサブIDを確定
-								//$widgetId = $this->db->getWidgetIdByType($gEnvManager->getCurrentPageId(), $rows[$i]['pd_sub_id'], M3_VIEW_TYPE_CONTENT);
-								$widgetId = $this->db->getWidgetIdByContentType($gEnvManager->getCurrentPageId(), $rows[$i]['pd_sub_id'], M3_VIEW_TYPE_CONTENT);// コンテンツタイプでの取得に変更(2012/6/20)
-								if (!empty($widgetId)){
-									$subId = $rows[$i]['pd_sub_id'];
-									break;
-								}
-							}
-						}
-						if (empty($subId)) $subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_CONTENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
-						$this->contentType = M3_VIEW_TYPE_CONTENT;		// ページのコンテンツタイプ
-					} else if (isset($params[M3_REQUEST_PARAM_PRODUCT_ID]) || isset($params[M3_REQUEST_PARAM_PRODUCT_ID_SHORT])){	// 製品IDのとき
-						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PRODUCT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
-						$this->contentType = M3_VIEW_TYPE_PRODUCT;		// ページのコンテンツタイプ
-					} else if ((isset($params[M3_REQUEST_PARAM_BBS_ID]) || isset($params[M3_REQUEST_PARAM_BBS_ID_SHORT])) ||
-								(isset($params[M3_REQUEST_PARAM_BBS_THREAD_ID]) || isset($params[M3_REQUEST_PARAM_BBS_THREAD_ID_SHORT]))){	// 掲示板投稿記事のとき
-						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BBS, $gEnvManager->getCurrentPageId());// ページサブIDを取得
-						$this->contentType = M3_VIEW_TYPE_BBS;		// ページのコンテンツタイプ
-					} else if (isset($params[M3_REQUEST_PARAM_EVENT_ID]) || isset($params[M3_REQUEST_PARAM_EVENT_ID_SHORT])){	// イベント記事のとき
-						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_EVENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
-						$this->contentType = M3_VIEW_TYPE_EVENT;		// ページのコンテンツタイプ
-					} else if (isset($params[M3_REQUEST_PARAM_PHOTO_ID]) || isset($params[M3_REQUEST_PARAM_PHOTO_ID_SHORT])){	// フォトギャラリー写真のとき
-						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PHOTO, $gEnvManager->getCurrentPageId());// ページサブIDを取得
-						$this->contentType = M3_VIEW_TYPE_PHOTO;		// ページのコンテンツタイプ
-					} else if ((isset($params[M3_REQUEST_PARAM_BLOG_ID]) || isset($params[M3_REQUEST_PARAM_BLOG_ID_SHORT])) ||				// ブログIDのとき
-								(isset($params[M3_REQUEST_PARAM_BLOG_ENTRY_ID]) || isset($params[M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT]))){	// ブログ記事のとき
-						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BLOG, $gEnvManager->getCurrentPageId());// ページサブIDを取得
-						$this->contentType = M3_VIEW_TYPE_BLOG;		// ページのコンテンツタイプ
-					} else if (isset($params[M3_REQUEST_PARAM_ROOM_ID]) || isset($params[M3_REQUEST_PARAM_ROOM_ID_SHORT])){	// ユーザ作成コンテンツのとき
-						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_USER, $gEnvManager->getCurrentPageId());// ページサブIDを取得
-						$this->contentType = M3_VIEW_TYPE_USER;		// ページのコンテンツタイプ
-						
-						// コンテンツを表示するウィジェットを取得
-						//$widgetId = $this->db->getWidgetIdByType($gEnvManager->getCurrentPageId(), $subId, M3_VIEW_TYPE_USER);
-						$widgetId = $this->db->getWidgetIdByContentType($gEnvManager->getCurrentPageId(), $subId, M3_VIEW_TYPE_USER);// コンテンツタイプでの取得に変更(2012/6/20)
-						if (!empty($widgetId)){
-							// ルーム用の定義ID(所属グループID)を取得
-							$roomId = isset($params[M3_REQUEST_PARAM_ROOM_ID]) ? $params[M3_REQUEST_PARAM_ROOM_ID] : $params[M3_REQUEST_PARAM_ROOM_ID_SHORT];
-							$configId = $this->db->getWidgetConfigIdForRoom($roomId);
-
-							// グループIDを定義IDとするページのページサブIDを取得
-							$subPageId = $this->getPageSubIdByWidget($gEnvManager->getCurrentPageId(), $widgetId, $configId);
-							if (!empty($subPageId)) $subId = $subPageId;
-						}
-					}*/
 				}
 
 				// wiki用パラメータの取得
@@ -1344,6 +1291,11 @@ class PageManager extends Core
 				
 				// ページサブIDが取得できない場合はデフォルトを使用
 				if (empty($subId)) $subId = $gEnvManager->getDefaultPageSubId();
+			} else {		// ページサブIDが設定されているとき
+				// URLパラメータからコンテンツ形式を取得し、ページを選択
+				$params = $gRequestManager->getQueryArray();
+				$paramCount = count($params);
+				if ($paramCount == 1) $this->isPageTopUrl = true;			// ページトップ(サブページ内のトップ位置)のURLかどうか
 			}
 		}
 		$gEnvManager->setCurrentPageSubId($subId);// サブページIDを設定
@@ -4706,16 +4658,27 @@ class PageManager extends Core
 		}
 		
 		// ウィジェット表示タイプによる表示制御。システム管理者以上の場合は常時表示。
-		if (!$gEnvManager->isSystemAdmin() && $fetchedRow['pd_view_control_type'] != 0){
-			switch ($fetchedRow['pd_view_control_type']){
-				case 1:			// ログイン時のみ表示
-					if (!$gEnvManager->isCurrentUserLogined()) return true;		// ログインしていなければ終了
-					break;
-				case 2:			// 非ログイン時のみ表示
-					if ($gEnvManager->isCurrentUserLogined()) return true;		// ログインしていれば終了
-					break;
-				default:
-					break;
+		if (!$gEnvManager->isSystemAdmin()){
+			if (!empty($fetchedRow['pd_view_control_type'])){
+				switch ($fetchedRow['pd_view_control_type']){
+					case 1:			// ログイン時のみ表示
+						if (!$gEnvManager->isCurrentUserLogined()) return true;		// ログインしていなければ終了
+						break;
+					case 2:			// 非ログイン時のみ表示
+						if ($gEnvManager->isCurrentUserLogined()) return true;		// ログインしていれば終了
+						break;
+					default:
+						break;
+				}
+			}
+			if (!empty($fetchedRow['pd_view_page_state'])){
+				switch ($fetchedRow['pd_view_page_state']){
+					case 1:			// トップ時のみ表示
+						if (!$this->isPageTopUrl) return true;		// ページトップ(サブページ内のトップ位置)でなければ終了
+						break;
+					default:
+						break;
+				}
 			}
 		}
 		
