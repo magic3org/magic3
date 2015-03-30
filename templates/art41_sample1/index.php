@@ -125,7 +125,7 @@ JHtml::_('behavior.framework', true);
 <a title="RSS" class="art-rss-tag-icon" style="position: absolute; bottom: 5px; left: 6px; line-height: 31px;" href="#"></a><div style="position:relative;padding-left:10px;padding-right:10px"><p><a href="#">Contacts</a>|<a href="#">Privacy Policy</a>Ac feugiat. <a href="http://webtoolkit4.me/">Webtoolkit4me</a>,<a href="http://www.iconfinder.com/icondetails/37594/128/image_iphoto_nikon_photo_picture_icon">Eugen Buzuk</a>,<a href="http://www.iconfinder.com/icondetails/32045/128/browser_earth_internet_world_icon">MazeNL77</a></p><p>Id donec ut metus sit suspendisse. <br></p></div>
     <?php endif; ?>
 <p class="art-page-footer">
-        <span id="art-footnote-links"><a href="http://www.artisteer.com/?p=joomla_templates" target="_blank">Joomla template</a> created with Artisteer.</span>
+        <span id="art-footnote-links"><a href="http://www.artisteer.com/?p=magic3_templates">Magic3 template</a> created with Artisteer.</span>
     </p>
 </footer>
 

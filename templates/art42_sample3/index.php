@@ -143,7 +143,7 @@ JHtml::_('behavior.framework', true);
 
     </div>
     <p class="art-page-footer">
-        <span id="art-footnote-links"><a href="http://www.artisteer.com/?p=joomla_templates" target="_blank">Joomla template</a> created with Artisteer.</span>
+        <span id="art-footnote-links"><a href="http://www.artisteer.com/?p=magic3_templates">Magic3 template</a> created with Artisteer.</span>
     </p>
 </div>
 
