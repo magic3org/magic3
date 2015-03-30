@@ -116,7 +116,7 @@ class JFactory
 		if (!is_object($instance))
 		{
 			//get the debug configuration setting
-			$conf =& JFactory::getConfig();
+			$conf = JFactory::getConfig();
 			$debug = $conf->getValue('config.debug_lang');
 
 			$instance = JFactory::_createLanguage();
@@ -163,15 +163,15 @@ class JFactory
 /*
 		if(is_null($id))
 		{
-			$session  =& JFactory::getSession();
-			$instance =& $session->get('user');
+			$session  = JFactory::getSession();
+			$instance = $session->get('user');
 			if (!is_a($instance, 'JUser')) {
-				$instance =& JUser::getInstance();
+				$instance = JUser::getInstance();
 			}
 		}
 		else
 		{
-			$instance =& JUser::getInstance($id);
+			$instance = JUser::getInstance($id);
 		}
 */
 		$instance = new JObject();
@@ -198,7 +198,7 @@ class JFactory
 	
 		$handler = ($handler == 'function') ? 'callback' : $handler;
 
-		$conf =& JFactory::getConfig();
+		$conf = JFactory::getConfig();
 
 		if(!isset($storage)) {
 			$storage = $conf->getValue('config.cache_handler', 'file');
@@ -212,7 +212,7 @@ class JFactory
 			'storage'		=> $storage
 		);
 
-		$cache =& JCache::getInstance( $handler, $options );
+		$cache = JCache::getInstance( $handler, $options );
 		$cache->setCaching($conf->getValue('config.caching'));
 		return $cache;
 	}
@@ -272,7 +272,7 @@ class JFactory
 		if (!is_object($instance))
 		{
 			//get the debug configuration setting
-			$conf =& JFactory::getConfig();
+			$conf = JFactory::getConfig();
 			$debug = $conf->getValue('config.debug');
 
 			$instance = JFactory::_createDBO();
@@ -388,11 +388,11 @@ class JFactory
 		//get the editor configuration setting
 		if(is_null($editor))
 		{
-			$conf =& JFactory::getConfig();
+			$conf = JFactory::getConfig();
 			$editor = $conf->getValue('config.editor');
 		}
 
-		$instance =& JEditor::getInstance($editor);
+		$instance = JEditor::getInstance($editor);
 
 		return $instance;
 	}
@@ -408,7 +408,7 @@ class JFactory
 	{
 //		jimport('joomla.environment.uri');
 
-		$instance =& JURI::getInstance($uri);
+		$instance = JURI::getInstance($uri);
 		return $instance;
 	}
 
@@ -439,7 +439,7 @@ class JFactory
 			$instances = array();
 		}
 
-		$language =& JFactory::getLanguage();
+		$language = JFactory::getLanguage();
 		$locale = $language->getTag();
 
 		if(!isset($classname) || $locale != $mainLocale) {
@@ -540,10 +540,10 @@ class JFactory
 		//TODO :: take the authorization class out of the application package
 //		jimport( 'joomla.user.authorization' );
 
-		$db =&  JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		$options = array(
-			'db'				=> &$db,
+			'db'				=> $db,
 			'db_table_prefix'	=> $db->getPrefix() . 'core_acl_',
 			'debug'				=> 0
 		);
@@ -566,7 +566,7 @@ class JFactory
 		// JDatabaseクラスを読み込む
 		require_once($gEnvManager->getJoomlaRootPath() . '/class/database.php');
 		
-		$conf =& JFactory::getConfig();
+		$conf = JFactory::getConfig();
 
 		$host 		= $conf->getValue('config.host');
 		$user 		= $conf->getValue('config.user');
@@ -578,7 +578,7 @@ class JFactory
 
 		$options	= array ( 'driver' => $driver, 'host' => $host, 'user' => $user, 'password' => $password, 'database' => $database, 'prefix' => $prefix );
 
-		$db =& JDatabase::getInstance( $options );
+		$db = JDatabase::getInstance( $options );
 
 /*
 		if ( JError::isError($db) ) {
@@ -605,7 +605,7 @@ class JFactory
 	{
 //		jimport('joomla.mail.mail');
 
-		$conf	=& JFactory::getConfig();
+		$conf	= JFactory::getConfig();
 
 		$sendmail 	= $conf->getValue('config.sendmail');
 		$smtpauth 	= $conf->getValue('config.smtpauth');
@@ -617,7 +617,7 @@ class JFactory
 		$mailer 	= $conf->getValue('config.mailer');
 
 		// Create a JMail object
-		$mail 		=& JMail::getInstance();
+		$mail 		= JMail::getInstance();
 
 		// Set default sender
 		$mail->setSender(array ($mailfrom, $fromname));
@@ -652,7 +652,7 @@ class JFactory
 	{
 //		jimport('joomla.template.template');
 
-		$conf =& JFactory::getConfig();
+		$conf = JFactory::getConfig();
 
 		$tmpl = new JTemplate;
 
@@ -700,9 +700,9 @@ class JFactory
 		// JLanguageクラスを読み込む
 		require_once($gEnvManager->getJoomlaRootPath() . '/class/language.php');
 
-		$conf	=& JFactory::getConfig();
+		$conf	= JFactory::getConfig();
 		$locale	= $conf->getValue('config.language');
-		$lang	=& JLanguage::getInstance($locale);
+		$lang	= JLanguage::getInstance($locale);
 		$lang->setDebug($conf->getValue('config.debug_lang'));
 
 		return $lang;
@@ -722,7 +722,7 @@ class JFactory
 		// JDocumentクラスを読み込む
 		require_once($gEnvManager->getJoomlaRootPath() . '/class/document.php');
 
-		$lang	=& JFactory::getLanguage();
+		$lang	= JFactory::getLanguage();
 
 		//Keep backwards compatibility with Joomla! 1.0
 //		$raw	= JRequest::getBool('no_html');
@@ -736,7 +736,7 @@ class JFactory
 			'direction'	=> $lang->isRTL() ? 'rtl' : 'ltr'
 		);
 
-		$doc =& JDocument::getInstance($type, $attributes);
+		$doc = JDocument::getInstance($type, $attributes);
 		return $doc;
 	}
 }

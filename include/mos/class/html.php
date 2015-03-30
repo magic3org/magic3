@@ -172,7 +172,7 @@ class JHTML
 			$path =  JURI::root(true).'/'.$path;
 		};
 
-		$document = &JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$document->addScript( $path.$filename );
 		return;
 	}
@@ -190,7 +190,7 @@ class JHTML
 			$path =  JURI::root(true).'/'.$path;
 		};
 
-		$document = &JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$document->addStylesheet( $path.$filename, 'text/css', null, $attribs );
 		return;
 	}
@@ -212,10 +212,10 @@ class JHTML
 		}
 		if(is_null($offset))
 		{
-			$config =& JFactory::getConfig();
+			$config = JFactory::getConfig();
 			$offset = $config->getValue('config.offset');
 		}
-		$instance =& JFactory::getDate($date);
+		$instance = JFactory::getDate($date);
 		$instance->setOffset($offset);
 
 		return $instance->toFormat($format);
@@ -352,7 +352,7 @@ class JHTML
 		if (is_array($attribs)) {
 			$attribs = JArrayHelper::toString( $attribs );
 		}
-		$document =& JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$document->addScriptDeclaration('window.addEvent(\'domready\', function() {Calendar.setup({
         inputField     :    "'.$id.'",     // id of the input field
         ifFormat       :    "'.$format.'",      // format of the input field

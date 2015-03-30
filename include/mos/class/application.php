@@ -179,7 +179,7 @@ class JApplication extends JObject
 //				$error = JError::raiseError(500, JText::sprintf('JLIB_APPLICATION_ERROR_APPLICATION_LOAD', $client));
 //				return $error;
 //			}
-			$instances[$client] = &$instance;*/
+			$instances[$client] = $instance;*/
 			$instances[$client] = new JSite($config);
 		}
 
@@ -1101,7 +1101,7 @@ class JSite extends JApplication
 	 * @return	object	The parameters object
 	 * @since	1.5
 	 */
-	function &getParams($option = null)
+	function getParams($option = null)
 	{
 		static $params = array();
 		$hash = '__default';
@@ -1112,10 +1112,10 @@ class JSite extends JApplication
 			if (!$option) {
 				$option = JRequest::getCmd('option');
 			}
-			$params[$hash] =& JComponentHelper::getParams($option);
+			$params[$hash] = JComponentHelper::getParams($option);
 
 			// Get menu parameters
-			$menus	=& JSite::getMenu();
+			$menus	= JSite::getMenu();
 			$menu	= $menus->getActive();
 
 			$title       = htmlspecialchars_decode($this->getCfg('sitename' ));
@@ -1143,7 +1143,7 @@ class JSite extends JApplication
 	 * @return	object	The parameters object
 	 * @since	1.5
 	 */
-/*	function &getPageParameters( $option = null )
+/*	function getPageParameters( $option = null )
 	{
 		return $this->getParams( $option );
 	}*/
@@ -1154,8 +1154,8 @@ class JSite extends JApplication
 	 * @return object JPathway.
 	 * @since 1.5
 	 */
-	//function &getMenu()
-	static function &getMenu($name = null, $options = array())
+	//function getMenu()
+	static function getMenu($name = null, $options = array())
 	{
 //		$options = array();
 //		$menu = parent::getMenu('site', $options);

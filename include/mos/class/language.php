@@ -128,10 +128,10 @@ class JLanguage extends JObject
 	 * @return	JLanguage  The Language object.
 	 * @since	1.5
 	 */
-	function & getInstance($lang)
+	static function getInstance($lang)
 	{
 		$instance = new JLanguage($lang);
-		$reference = & $instance;
+		$reference = $instance;
 		return $reference;
 	}
 
@@ -758,7 +758,7 @@ class JLanguage extends JObject
 	 */
 	function _parseXMLLanguageFile($path)
 	{
-		$xml = & JFactory::getXMLParser('Simple');
+		$xml = JFactory::getXMLParser('Simple');
 
 		// Load the file
 		if (!$xml || !$xml->loadFile($path)) {

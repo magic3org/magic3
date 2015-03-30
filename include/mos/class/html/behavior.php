@@ -32,9 +32,9 @@ class JHTMLBehavior
 	 * @return	void
 	 * @since	1.5
 	 */
-	function mootools($debug = null)
+	static function mootools($debug = null)
 	{
-		static $loaded;
+/*		static $loaded;
 
 		// Only load once
 		if ($loaded) {
@@ -43,7 +43,7 @@ class JHTMLBehavior
 
 		// If no debugging value is set, use the configuration setting
 		if ($debug === null) {
-			$config = &JFactory::getConfig();
+			$config = JFactory::getConfig();
 			$debug = $config->getValue('config.debug');
 		}
 
@@ -55,27 +55,27 @@ class JHTMLBehavior
 		} else {
 			JHTML::script('mootools.js', 'media/system/js/', false);
 		}
-		$loaded = true;
+		$loaded = true;*/
 		return;
 	}
 
-		function caption() {
+	static function caption() {
 		JHTML::script('caption.js');
 	}
 
-	function formvalidation() {
+	static function formvalidation() {
 		JHTML::script('validate.js' );
 	}
 
-	function switcher() {
+	static function switcher() {
 		JHTML::script('switcher.js' );
 	}
 
-	function combobox() {
+	static function combobox() {
 		JHTML::script('combobox.js' );
 	}
 
-	function tooltip($selector='.hasTip', $params = array())
+	static function tooltip($selector='.hasTip', $params = array())
 	{
 		static $tips;
 
@@ -84,7 +84,7 @@ class JHTMLBehavior
 		}
 
 		// Include mootools framework
-		JHTMLBehavior::mootools();
+	//	JHTMLBehavior::mootools();
 
 		$sig = md5(serialize(array($selector,$params)));
 		if (isset($tips[$sig]) && ($tips[$sig])) {
@@ -105,7 +105,7 @@ class JHTMLBehavior
 		$options = JHTMLBehavior::_getJSObject($opt);
 
 		// Attach tooltips to document
-		$document =& JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$tooltipInit = '		window.addEvent(\'domready\', function(){ var JTooltips = new Tips($$(\''.$selector.'\'), '.$options.'); });';
 		$document->addScriptDeclaration($tooltipInit);
 
@@ -114,12 +114,12 @@ class JHTMLBehavior
 		return;
 	}
 
-	function modal($selector='a.modal', $params = array())
+	static function modal($selector='a.modal', $params = array())
 	{
 		static $modals;
 		static $included;
 
-		$document =& JFactory::getDocument();
+		$document = JFactory::getDocument();
 
 		// Load the necessary files if they haven't yet been loaded
 		if (!isset($included)) {
@@ -172,7 +172,7 @@ class JHTMLBehavior
 		return;
 	}
 
-	function uploader($id='file-upload', $params = array())
+	static function uploader($id='file-upload', $params = array())
 	{
 		JHTML::script('swf.js' );
 		JHTML::script('uploader.js' );
@@ -213,7 +213,7 @@ class JHTMLBehavior
 		$options = JHTMLBehavior::_getJSObject($opt);
 
 		// Attach tooltips to document
-		$document =& JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$uploaderInit = 'sBrowseCaption=\''.JText::_('Browse Files', true).'\';
 				sRemoveToolTip=\''.JText::_('Remove from queue', true).'\';
 				window.addEvent(\'load\', function(){
@@ -226,7 +226,7 @@ class JHTMLBehavior
 		return;
 	}
 
-	function tree($id, $params = array(), $root = array())
+	static function tree($id, $params = array(), $root = array())
 	{
 		static $trees;
 
@@ -235,9 +235,9 @@ class JHTMLBehavior
 		}
 
 		// Include mootools framework
-		JHTMLBehavior::mootools();
-		JHTML::script('mootree.js');
-		JHTML::stylesheet('mootree.css');
+	//	JHTMLBehavior::mootools();
+	//	JHTML::script('mootree.js');
+	//	JHTML::stylesheet('mootree.css');
 
 		if (isset($trees[$id]) && ($trees[$id])) {
 			return;
@@ -272,7 +272,7 @@ class JHTMLBehavior
 			tree'.$treeName.'.adopt(\''.$id.'\');})';
 
 		// Attach tooltips to document
-		$document =& JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$document->addScriptDeclaration($js);
 
 		// Set static array
@@ -280,9 +280,9 @@ class JHTMLBehavior
 		return;
 	}
 
-	function calendar()
+	static function calendar()
 	{
-		$document =& JFactory::getDocument();
+		$document = JFactory::getDocument();
 		JHTML::stylesheet('calendar-jos.css', 'media/system/css/', array(' title' => JText::_( 'green' ) ,' media' => 'all' ));
 		JHTML::script( 'calendar.js', 'media/system/js/' );
 		JHTML::script( 'calendar-setup.js', 'media/system/js/' );
@@ -296,17 +296,17 @@ class JHTMLBehavior
 	/**
 	 * Keep session alive, for example, while editing or creating an article.
 	 */
-	function keepalive()
+	static function keepalive()
 	{
 		// Include mootools framework
-		JHTMLBehavior::mootools();
+	//	JHTMLBehavior::mootools();
 
-		$config 	 =& JFactory::getConfig();
+		$config 	 = JFactory::getConfig();
 		$lifetime 	 = ( $config->getValue('lifetime') * 60000 );
 		$refreshTime =  ( $lifetime <= 60000 ) ? 30000 : $lifetime - 60000;
 		//refresh time is 1 minute less than the liftime assined in the configuration.php file
 
-		$document =& JFactory::getDocument();
+		$document = JFactory::getDocument();
 		$script  = '';
 		$script .= 'function keepAlive( ) {';
 		$script .=  '	var myAjax = new Ajax( "index.php", { method: "get" } ).request();';
@@ -327,7 +327,7 @@ class JHTMLBehavior
 	 * @return	string	JavaScript object notation representation of the array
 	 * @since	1.5
 	 */
-	function _getJSObject($array=array())
+	static function _getJSObject($array=array())
 	{
 		// Initialize variables
 		$object = '{';
@@ -360,7 +360,7 @@ class JHTMLBehavior
 	 * @return	string	JavaScript that translates the object
 	 * @since	1.5
 	 */
-	function _calendartranslation()
+	static function _calendartranslation()
 	{
 		static $jsscript = 0;
 

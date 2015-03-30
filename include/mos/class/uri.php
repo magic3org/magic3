@@ -253,7 +253,7 @@ class JURI
 		// Get the scheme
 		if(!isset($root))
 		{
-			$uri	        =& JURI::getInstance(JURI::base());
+			$uri	        = JURI::getInstance(JURI::base());
 			$root['prefix'] = $uri->toString( array('scheme', 'host', 'port') );
 			$root['path']   = rtrim($uri->toString( array('path') ), '/\\');
 		}
@@ -280,7 +280,7 @@ class JURI
 		// Get the current URL
 		if (!isset($current))
 		{
-			$uri	 = & JURI::getInstance();
+			$uri	 =  JURI::getInstance();
 			$current = $uri->toString( array('scheme', 'host', 'port', 'path'));
 		}
 
@@ -675,7 +675,7 @@ class JURI
 	 * @since	1.5
 	 */
 	public static function isInternal($url) {
-		$uri =& JURI::getInstance($url);
+		$uri = JURI::getInstance($url);
 		$base = $uri->toString(array('scheme', 'host', 'port', 'path'));
 		$host = $uri->toString(array('scheme', 'host', 'port'));
 		if(stripos($base, JURI::base()) !== 0 && !empty($host)) {

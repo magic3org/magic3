@@ -159,7 +159,7 @@ class JArrayHelper
 			$n = count($array);
 			for ($i = 0; $i < $n; $i++)
 			{
-				$item = & $array[$i];
+				$item = $array[$i];
 				if (is_array($item) && isset ($item[$index])) {
 					$result[] = $item[$index];
 				} elseif (is_object($item) && isset ($item-> $index)) {

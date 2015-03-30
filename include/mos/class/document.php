@@ -249,13 +249,13 @@ class JDocument extends JObject
 	 * if it doesn't already exist.
 	 *
 	 * This method must be invoked as:
-	 * 		<pre>  $document = &JDocument::getInstance();</pre>
+	 * 		<pre>  $document = JDocument::getInstance();</pre>
 	 *
 	 * @access public
 	 * @param type $type The document type to instantiate
 	 * @return object  The document object.
 	 */
-	function &getInstance($type = 'html', $attributes = array())
+	static function getInstance($type = 'html', $attributes = array())
 	{
 		static $instances;
 
@@ -293,7 +293,7 @@ class JDocument extends JObject
 			}
 
 			$instance	= new $class($attributes);
-			$instances[$signature] =& $instance;
+			$instances[$signature] = $instance;
 
 			if ( !is_null($ntype) )
 			{
@@ -740,7 +740,7 @@ class JDocument extends JObject
 	* @return	object
 	* @since 1.5
 	*/
-	function &loadRenderer( $type )
+	function loadRenderer( $type )
 	{
 		$null	= null;
 		$class	= 'JDocumentRenderer'.$type;
