@@ -42,7 +42,7 @@ class JHTMLContent
 		$article = new JTableContent($nodb);
 		$article->text = $text;
 		JPluginHelper::importPlugin('content');
-		$dispatcher = &JDispatcher::getInstance();
+		$dispatcher = JDispatcher::getInstance();
 		$results = $dispatcher->trigger(
 			'onPrepareContent', array (&$article, &$params, 0)
 		);

@@ -22,43 +22,6 @@
  */
 class JHTMLBehavior
 {
-	/**
-	 * Method to load the mootools framework into the document head
-	 *
-	 * - If debugging mode is on an uncompressed version of mootools is included for easier debugging.
-	 *
-	 * @static
-	 * @param	boolean	$debug	Is debugging mode on? [optional]
-	 * @return	void
-	 * @since	1.5
-	 */
-	static function mootools($debug = null)
-	{
-/*		static $loaded;
-
-		// Only load once
-		if ($loaded) {
-			return;
-		}
-
-		// If no debugging value is set, use the configuration setting
-		if ($debug === null) {
-			$config = JFactory::getConfig();
-			$debug = $config->getValue('config.debug');
-		}
-
-		// TODO NOTE: Here we are checking for Konqueror - If they fix thier issue with compressed, we will need to update this
-		$konkcheck = isset($_SERVER['HTTP_USER_AGENT']) ? strpos(strtolower($_SERVER['HTTP_USER_AGENT']), "konqueror") : null;
-
-		if ($debug || $konkcheck) {
-			JHTML::script('mootools-uncompressed.js', 'media/system/js/', false);
-		} else {
-			JHTML::script('mootools.js', 'media/system/js/', false);
-		}
-		$loaded = true;*/
-		return;
-	}
-
 	static function caption() {
 		JHTML::script('caption.js');
 	}

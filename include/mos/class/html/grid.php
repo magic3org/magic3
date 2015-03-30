@@ -92,7 +92,7 @@ class JHTMLGrid
 
 	function checkedOut( &$row, $i, $identifier = 'id' )
 	{
-		$user   =& JFactory::getUser();
+		$user   = JFactory::getUser();
 		$userid = $user->get('id');
 
 		$result = false;

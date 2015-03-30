@@ -104,7 +104,7 @@ class ContentHelperQuery
 	function buildVotingQuery($params=null)
 	{
 		if (!$params) {
-			$params = &JComponentHelper::getParams( 'com_content' );
+			$params = JComponentHelper::getParams( 'com_content' );
 		}
 		$voting = $params->get('show_vote');
 

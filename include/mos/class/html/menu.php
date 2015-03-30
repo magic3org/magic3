@@ -30,7 +30,7 @@ class JHTMLMenu
 	*/
 	function ordering( &$row, $id )
 	{
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		if ( $id )
 		{
@@ -55,7 +55,7 @@ class JHTMLMenu
 	*/
 	function linkoptions( $all=false, $unassigned=false )
 	{
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		// get a list of the menu items
 		$query = 'SELECT m.id, m.parent, m.name, m.menutype'

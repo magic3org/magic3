@@ -67,7 +67,7 @@ class JHTMLSelect
 
 		foreach ($arr as $i => $option)
 		{
-			$element =& $arr[$i]; // since current doesn't return a reference, need to do this
+			$element = $arr[$i]; // since current doesn't return a reference, need to do this
 
 			$isArray = is_array( $element );
 			$extra	 = '';

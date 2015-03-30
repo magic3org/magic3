@@ -30,7 +30,7 @@ class JHTMLList
 	*/
 	function accesslevel( &$row )
 	{
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		$query = 'SELECT id AS value, name AS text'
 		. ' FROM #__groups'
@@ -78,7 +78,7 @@ class JHTMLList
  	 */
 	function genericordering( $sql, $chop = '30' )
 	{
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 		$order = array();
 		$db->setQuery( $sql );
 		if (!($orders = $db->loadObjectList())) {
@@ -111,7 +111,7 @@ class JHTMLList
 	*/
 	function specificordering( &$row, $id, $query, $neworder = 0 )
 	{
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		if ( $id ) {
 			$order = JHTML::_('list.genericordering',  $query );
@@ -132,7 +132,7 @@ class JHTMLList
 	*/
 	function users( $name, $active, $nouser = 0, $javascript = NULL, $order = 'name', $reg = 1 )
 	{
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		$and = '';
 		if ( $reg ) {
@@ -187,7 +187,7 @@ class JHTMLList
 	*/
 	function category( $name, $section, $active = NULL, $javascript = NULL, $order = 'ordering', $size = 1, $sel_cat = 1 )
 	{
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		$query = 'SELECT id AS value, title AS text'
 		. ' FROM #__categories'
@@ -212,7 +212,7 @@ class JHTMLList
 	*/
 	function section( $name, $active = NULL, $javascript = NULL, $order = 'ordering', $uncategorized = true )
 	{
-		$db =& JFactory::getDBO();
+		$db = JFactory::getDBO();
 
 		$categories[] = JHTML::_('select.option',  '-1', '- '. JText::_( 'Select Section' ) .' -' );
 
