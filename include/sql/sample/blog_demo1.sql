@@ -70,17 +70,16 @@ DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
 (pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,         pd_config_id, pd_config_name,       pd_title,   pd_menu_id,  pd_title_visible, pd_view_page_state, pd_update_dt) VALUES
 ('index', '',        'user3',        2,        'default_menu',       1,            'メインメニュー設定', '',         'main_menu', true,             0,                  now()),
-('index', '',        'left',         4,        'templateChanger',    0,            '',                   '',         '',          true,             0,                  now()),
 ('index', '',        'right',        5,        'blog_category_menu', 0,            '',                   '',         '',          true,             0,                  now()),
 ('index', '',        'right',        7,        'blog_archive_menu',  0,            '',                   '',         '',          true,             0,                  now()),
 ('index', '',        'right',        9,        'default_login_box',  0,            '',                   '',         '',          true,             0,                  now()),
-('index', '',        'main',         3,        'banner3',            3,            '',                   '',         '',          false,            0,                  now()),
+('index', '',        'left',         7,        'blog_new_box',       0,            '',                   '',         '',          true,             0,                  now()),
+('index', '',        'left',         9,        'blog_calendar_box',  0,            '',                   '',         '',          true,             0,                  now()),
+('index', '',        'left',         11,       'blog_search_box',    0,            '',                   '',         '',          true,             0,                  now()),
+('index', '',        'banner3',      3,        'banner3',            1,            '',                   '',         '',          false,            0,                  now()),
 ('index', 'content', 'main',         6,        'default_content',    0,            '',                   '',         '',          false,            0,                  now()),
 ('index', 'blog',    'main',         3,        'news_headline',      1,            '',                   '新着情報', '',          true,             1,                  now()),
 ('index', 'blog',    'main',         5,        'blog_main',          0,            '',                   '',         '',          true,             0,                  now()),
-('index', 'blog',    'left',         7,        'blog_new_box',       0,            '',                   '',         '',          true,             0,                  now()),
-('index', 'blog',    'left',         9,        'blog_calendar_box',  0,            '',                   '',         '',          true,             0,                  now()),
-('index', 'blog',    'left',         11,       'blog_search_box',    0,            '',                   '',         '',          true,             0,                  now()),
 ('index', 'search',  'main',         5,        'custom_search',      1,            '',                   '',         '',          false,            0,                  now()),
 ('index', 'contact', 'main',         5,        'contactus',          0,            '',                   '',         '',          false,            0,                  now());
 
@@ -138,11 +137,9 @@ INSERT INTO news
 
 -- バナー定義
 TRUNCATE TABLE bn_def;
-INSERT INTO bn_def
-(bd_id, bd_item_id,                      bd_name,           bd_disp_type, bd_disp_direction, bd_disp_item_count, bd_disp_align) VALUES 
-(1,     '1,2,3,4,5,6',                   'サンプルバナー1', 0,            0,                 1,                  3),
-(2,     '11,12,13,14,15,16,17,18,19',    'サンプルバナー2', 0,            0,                 2,                  0),
-(3,     '7,8,9,10,11,12,13,14',          'サンプルバナー3', 1,            1,                 2,                  0);
+INSERT INTO bn_def 
+(bd_id, bd_item_id, bd_name, bd_disp_type, bd_disp_item_count, bd_disp_direction, bd_disp_align, bd_css_id, bd_css) VALUES
+(1,     '1,2,3,4,5,6', '名称未設定1', 0, 2, 1, 0, 'banner3_1', '#banner3_1 {\r\n    margin-top:20px;\r\n}\r\n#banner3_1 .banner_image {\r\n    margin:2px;\r\n}\r\n#banner3_1.banner_horizontal .banner_image_outer {\r\n    float:left;\r\n    width:240px;\r\n    text-align:center;\r\n    display:inline-block;\r\n}\r\n#banner3_1.banner_vertical .banner_image_outer {\r\n    float:none;\r\n    width:240px;\r\n    text-align:center;\r\n}');
 
 TRUNCATE TABLE bn_item;
 INSERT INTO bn_item (bi_id, bi_name,    bi_image_url, bi_html) VALUES 
