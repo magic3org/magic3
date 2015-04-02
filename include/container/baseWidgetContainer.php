@@ -543,6 +543,30 @@ class BaseWidgetContainer extends Core
 		$this->_useFormCheck = true;
 	}
 	/**
+	 * フォームIDをチェック
+	 *
+	 * @return bool		true=正常、false=不正
+	 */
+	function checkFormId()
+	{
+		global $gRequestManager;
+		
+		$formId = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_FORM_ID);
+		if (empty($formId)){
+			return false;
+		} else {
+			// 現在のウィジェットのポジションを取得
+			$this->gPage->getCurrentWidgetPosition($position, $index);
+			
+			$currentFormId = md5($this->_widgetId . '-' . $position . '-'  . $index);
+			if ($currentFormId == $formId){
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	/**
 	 * 遷移前のタスクを戻り先URLとするに設定
 	 *
 	 * @return なし

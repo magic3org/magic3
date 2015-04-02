@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -72,7 +72,7 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
-		if ($act == 'loginbox_login'){			// ログインのとき
+		if ($act == 'loginbox_login' && $this->checkFormId()){			// ログインのとき
 			// アカウント、パスワード取得
 			$account = $request->trimValueOf('account');
 			$password = $request->trimValueOf('password');
