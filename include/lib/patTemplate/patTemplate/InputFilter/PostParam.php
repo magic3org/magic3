@@ -35,11 +35,17 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 	*/
 	function apply( $data )
 	{
-		// 変換部作成
-		$msgTag  = '<input type="hidden" name="_pdefserial" value="{_DEF_SERIAL}" />' . M3_NL;
-		$msgTag .= '<input type="hidden" name="_pdefconfig" value="{_DEF_CONFIG}" />' . M3_NL;
-		$msgTag .= '<input type="hidden" name="_backurl" value="{_BACK_URL}" />' . M3_NL;
-
+		global $gEnvManager;
+		
+		$msgTag = '';
+		if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()){		// 管理画面へのアクセス、システム管理権限ありの場合
+			// 変換部作成
+			$msgTag .= '<input type="hidden" name="_pdefserial" value="{_DEF_SERIAL}" />' . M3_NL;
+			$msgTag .= '<input type="hidden" name="_pdefconfig" value="{_DEF_CONFIG}" />' . M3_NL;
+			$msgTag .= '<input type="hidden" name="_backurl" value="{_BACK_URL}" />' . M3_NL;
+		}
+		$msgTag .= '<input type="hidden" name="_formid" value="{_FORM_ID}" />' . M3_NL;
+		
 		// <!--m3:PostParam-->タグを一度だけ変換する
 		$data = preg_replace('/<!--[ \t].*m3:PostParam[ \t].*-->/', $msgTag, $data, 1);
 		return $data;

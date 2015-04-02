@@ -306,6 +306,7 @@ define('M3_REQUEST_PARAM_DEF_PAGE_ID',      		'_page');			// ページID(画面�
 define('M3_REQUEST_PARAM_DEF_PAGE_SUB_ID',      	'_sub');			// ページサブID(画面編集用)
 define('M3_REQUEST_PARAM_PAGE_DEF_SERIAL',			'_defserial');		// ページ定義のレコードシリアル番号(設定画面起動時)
 define('M3_REQUEST_PARAM_PAGE_DEF_CONFIG_ID',		'_defconfig');		// ページ定義のウィジェット定義ID(設定画面起動時)
+define('M3_REQUEST_PARAM_FORM_ID',					'_formid');			// フォーム識別用
 define('M3_REQUEST_PARAM_BACK_URL',					'_backurl');		// 戻り先URL
 define('M3_REQUEST_PARAM_BACKUP_URL',				'_backupurl');		// URL退避用(画面編集時)
 define('M3_REQUEST_PARAM_SERVER',					'_server');			// サーバ指定

@@ -41,6 +41,8 @@ class PageManager extends Core
 	private $headPreMobileScriptFiles = array();// ウィジェットからの追加で読み込むスクリプトファイル(jQueryMobile用挿入ファイル)
 	private $headCssFiles = array();		// ウィジェットからの追加で読み込むCSSファイル
 	private $headRssFiles = array();		// HTMLヘッダに出力するRSS配信情報
+	private $currentWidgetPosition;			// 現在のウィジェットのポジション
+	private $currentWidgetIndex;			// 現在のウィジェットのポジション番号
 	private $pageDefPosition;		// 現在取得しているページ定義のポジション
 	private $pageDefRows;			// ページ定義レコード
 	private $nonSharedWidgetCount = -1;	// 非共通ウィジェットの数(-1=ページ作成でないとき)
@@ -906,6 +908,18 @@ class PageManager extends Core
 	function isPageAbort()
 	{
 		return $this->isAbort;
+	}
+	/**
+	 * 現在のウィジェットのポジションを取得
+	 *
+	 * @param string $pos		ポジション
+	 * @param int    $index		インデックス番号
+	 * @return			なし
+	 */
+	function getCurrentWidgetPosition(&$pos, &$index)
+	{
+		$pos = $this->currentWidgetPosition;			// 現在のウィジェットのポジション
+		$index = $this->currentWidgetIndex;			// 現在のウィジェットのポジション番号
 	}
 	/**
 	 * 親ウィンドウを再描画
@@ -2086,6 +2100,10 @@ class PageManager extends Core
 					$this->lastHeadScript = '';			// 最後に設定したHTMLヘッダにJavascript出力する文字列
 					$this->lastHeadString = '';			// 最後に設定したHTMLヘッダに出力する任意文字列
 					
+					// 現在のウィジェットのポジション
+					$this->currentWidgetPosition = $position;			// 現在のウィジェットのポジション
+					$this->currentWidgetIndex = $index;			// 現在のウィジェットのポジション番号
+	
 					// バッファ作成
 					ob_start();
 
@@ -4740,6 +4758,10 @@ class PageManager extends Core
 				$this->lastHeadDescription = '';	// ヘッダ部descriptionにセットした文字列
 				$this->lastHeadKeywords = '';		// ヘッダ部keywordsにセットした文字列
 			
+				// 現在のウィジェットのポジション
+				$this->currentWidgetPosition = $position;			// 現在のウィジェットのポジション
+				$this->currentWidgetIndex = $index;			// 現在のウィジェットのポジション番号
+					
 				// Joomla!1.0テンプレートのときはウィジェットタイトルを出力
 				$joomlaTitleVisble = false;
 				if ($widgetHeaderType > 0 && empty($style)){			// Joomla!1.0テンプレートのとき

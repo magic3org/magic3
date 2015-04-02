@@ -18,7 +18,7 @@ require_once($gEnvManager->getLibPath() . '/patTemplate/patTemplate.php');
 require_once($gEnvManager->getLibPath() . '/patTemplate/patError.php');
 require_once($gEnvManager->getLibPath() . '/patTemplate/patErrorManager.php');
 require_once($gEnvManager->getCommonPath() . '/core.php');
-require_once($gEnvManager->getCommonPath() . '/htmlEdit.php');
+//require_once($gEnvManager->getCommonPath() . '/htmlEdit.php');
 
 class BaseWidgetContainer extends Core
 {
@@ -41,6 +41,7 @@ class BaseWidgetContainer extends Core
 	protected $configMenubarMenuDef;					// 設定画面用メニューバーのメニュー定義
 	protected $keepForeTaskForBackUrl = false;	// 遷移前のタスクを戻り先URLとするかどうか
 	protected $urlParamOrder;					// URLパラメータの並び順
+	protected $_useFormCheck;						// フォームチェック機能を使用するかどうか
 	protected $_useHierPage;						// 階層化ページを使用するかどうか
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
 	protected $_linkPageCount;						// ページリンク作成用ページ総数
@@ -246,6 +247,15 @@ class BaseWidgetContainer extends Core
 					}
 					if (!empty($this->_backUrl) && $useTemplate) $this->tmpl->addVar("_widget", "_back_url", $this->convertToDispString($this->_backUrl));	// 戻り先URL
 				}
+				
+				// フォームチェック機能を使用するか、システム管理権限がある場合は、フォームIDを埋め込む
+				if ($this->_useFormCheck || $this->gEnv->isSystemManageUser()){
+					// 現在のウィジェットのポジションを取得
+					$this->gPage->getCurrentWidgetPosition($position, $index);
+					
+					$formId = md5($this->_widgetId . '-' . $position . '-'  . $index);
+					$this->tmpl->addVar("_widget", "_form_id", $formId);
+				}
 			}
 				
 			// 各ウィジェットごとのテンプレート処理、テンプレートを使用しないときは出力処理(Ajax等)
@@ -391,6 +401,8 @@ class BaseWidgetContainer extends Core
 	 */
 	function __setTemplate($useSystemTemplate = false)
 	{
+		global $gEnvManager;
+		
 		// テンプレートオブジェクト作成
 		$this->tmpl = new PatTemplate();
  
@@ -423,11 +435,8 @@ class BaseWidgetContainer extends Core
 		// コメントを削除
 		//$this->tmpl->applyInputFilter('StripComments');
 		
-		// 管理画面の場合のみの処理
-		if ($this->gEnv->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-			// 管理画面用パラメータを埋め込む
-			$this->tmpl->applyInputFilter('PostParam');
-		}
+		// フォームチェック機能を使用するか、システム管理権限がある場合は、管理画面用パラメータを埋め込む
+		if ($this->_useFormCheck || $gEnvManager->isSystemManageUser()) $this->tmpl->applyInputFilter('PostParam');
 	}
 	/**
 	 * 出力用の変数に値を設定する
@@ -523,6 +532,15 @@ class BaseWidgetContainer extends Core
 			$this->_assignTemplate_filename = self::ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST;				// テンプレート処理置き換え用(ファイル名)
 			break;
 		}
+	}
+	/**
+	 * フォームチェック機能を使用
+	 *
+	 * @return なし
+	 */
+	function setFormCheck()
+	{
+		$this->_useFormCheck = true;
 	}
 	/**
 	 * 遷移前のタスクを戻り先URLとするに設定
@@ -1676,7 +1694,6 @@ class BaseWidgetContainer extends Core
 	function convertToPreviewText($src)
 	{
 		// 改行コードをbrタグに変換
-		//return HtmlEdit::convLineBreakToBr($src);
 		return $this->gInstance->getTextConvManager()->convLineBreakToBr($src);
 	}
 	/**
