@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 5158 2012-09-05 07:47:37Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -19,38 +19,34 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+$(function(){
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main" class="form">
 <input type="hidden" name="act" />
 
-<table width="90%">
-<tr><td><!--<span {_HELP_CONTACTUS_DETAIL}><label>設定詳細</label></span>--></td>
-<td align="right"><!-- <span {_HELP_CONTACTUS_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="一覧" /></span>-->
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table">
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="100">ユーザ承認</td><td width="750">
-		<select name="item_auth_type">
+    <tr>
+	    <th>ユーザ承認</th><td><div class="col-sm-6 m3config_item">
+		<select name="item_auth_type" class="form-control">
 		<option value="">-- 未選択 --</option>
 		<patTemplate:tmpl name="authtype_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 		</patTemplate:tmpl>
-		</select>
+		</select></div>
 	    </td>
-	</tr>
-        <tr class="even">
-	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-</table>
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
