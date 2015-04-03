@@ -98,7 +98,7 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 				$this->tmpl->setAttribute('login_status', 'visibility', 'visible');		// ログイン状況
 				$this->tmpl->addVar("login_status", "message", 'ログインに失敗しました');
 			}
-		} else if ($act == 'loginbox_logout'){			// ログアウトのとき
+		} else if ($act == 'loginbox_logout' && $this->checkFormId()){			// ログアウトのとき
 			$this->gAccess->userLogout();
 			
 			// 画面を全体を再表示する
