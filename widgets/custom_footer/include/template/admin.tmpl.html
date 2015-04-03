@@ -20,26 +20,29 @@ function updateItem(){
 	return true;
 }
 $(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_content', 200);
 });
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main" class="form">
 <input type="hidden" name="act" />
-<table class="simple-table" style="margin: 0 auto;width:950px;">
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150">内容</td><td><textarea name="item_content">{CONTENT}</textarea></td>
-	</tr>
-        <tr class="even">
-	    <td colspan="2" align="right"><input type="button" class="button" onclick="updateItem();" value="更新" /></td>
+    <tr>
+	    <th>内容</th><td><textarea name="item_content">{CONTENT}</textarea></td>
 	</tr>
     </tbody>
 </table>
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
