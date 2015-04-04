@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -91,6 +91,20 @@ class admin_photo_newWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "item_count",	$this->convertToDispString($itemCount));
 		$this->tmpl->addVar("_widget", "use_rss",	$this->convertToCheckedString($useRss));// RSS配信を行うかどうか
 		$this->tmpl->addVar("_widget", "show_date_checked",	$this->convertToCheckedString($showDate));// 日付を表示するかどうか
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 }
 ?>
