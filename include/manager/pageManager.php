@@ -52,7 +52,8 @@ class PageManager extends Core
 	private $isAccessPointWithAdminMenu;				// 管理メニューを使用するアクセスポイントかどうか
 	private $lateLaunchWidgetList;	// 遅延実行ウィジェットのリスト
 	private $latelaunchWidgetParam;		// 遅延実行ウィジェットのパラメータ
-	private $viewPositions = array();	// テンプレート上のポジション
+	private $defPositions = array();	// テンプレート上のポジション(画面定義データすべて)
+	private $viewPositions = array();	// テンプレート上のポジション(ウィジェット表示ありのみ)
 	private $viewPosId = array();		// テンプレート上のポジションのタグID
 	private $updateParentWindow;		// 親ウィンドウを再描画するかどうか
 	private $updateDefSerial;			// 更新する項目のページ定義シリアル番号
@@ -1437,6 +1438,19 @@ class PageManager extends Core
 			
 			// 現在のページ情報を設定
 			$this->currentPageInfo = $row;			// 現在のページのページ情報
+		}
+		
+		// テンプレートの情報を取得
+		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// 管理画面(ウィジェット付きポジション表示)のとき
+			$defPageId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_ID);
+			$defPageSubId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
+			$ret = $this->db->getPageDefOnPage($defPageId, $defPageSubId, $rows);
+			if ($ret){
+				for ($i = 0; $i < count($rows); $i++){
+					$position = $rows[$i]['pd_position_id'];
+					if (!in_array($position, $this->defPositions)) $this->defPositions[] = $position;	// 画面定義データのポジション(すべて)
+				}
+			}
 		}
 		
 		// 画面透過モードを設定
@@ -4222,7 +4236,7 @@ class PageManager extends Core
 		}
 		// ポジションを保存
 		$this->viewPositions[] = $position;
-		
+
 		return $contents;
 	}
 	/**
