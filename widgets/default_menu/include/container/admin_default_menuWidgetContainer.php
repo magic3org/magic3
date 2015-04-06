@@ -267,7 +267,10 @@ class admin_default_menuWidgetContainer extends BaseAdminWidgetContainer
 			$this->serialNo = $this->configId;
 				
 			// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
-			if (!empty($defConfigId) && !empty($defSerial)) $this->tmpl->addVar("_widget", "id_disabled", 'readonly');		// 値は送信する必要あり
+			if (!empty($defConfigId) && !empty($defSerial)){
+				$this->tmpl->addVar("_widget", "id_disabled", 'disabled');
+				$this->tmpl->addVar("_widget", "menu_id_disabled", 'readonly');		// 値は送信する必要あり
+			}
 		}
 		// 設定項目選択メニュー作成
 		$this->createItemMenu();
