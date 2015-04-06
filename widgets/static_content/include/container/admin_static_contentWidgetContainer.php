@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_static_contentWidgetContainer.php 5489 2012-12-28 13:00:45Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -27,6 +27,8 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 	private $menuHtml;	// コンテンツメニュー
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const CONTENT_WIDGET_ID = 'default_content';			// コンテンツ編集ウィジェット
+	// 画面
+	const TASK_LIST = 'list';			// 設定一覧
 	
 	/**
 	 * コンストラクタ
@@ -75,6 +77,54 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 		} else {			// 詳細設定画面
 			return $this->createDetail($request);
 		}
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// 表示画面を決定
+		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+
+		// パンくずリストの作成
+		// ダミーで作成。タイトルはJavascript側で設定。
+		$titles = array();
+		$titles[] = '設定なし';
+		$this->gPage->setAdminBreadcrumbDef($titles);
+		
+		// メニューバーの作成
+		$navbarDef = new stdClass;
+		$navbarDef->title = $this->gEnv->getCurrentWidgetTitle();		// ウィジェット名
+		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
+		$navbarDef->help	= $this->_createWidgetInfoHelp();		// ウィジェットの説明用ヘルプ// ヘルプ文字列
+		$navbarDef->menu =	array(
+								(Object)array(
+									'name'		=> 'コンテンツ',	// コンテンツ
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> 'menubar_other',
+									'active'	=> false,
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> '基本',		// 基本
+									'task'		=> '',
+									'url'		=> '',
+									'tagid'		=> 'menubar_basic',
+									'active'	=> (
+//														$task == '' ||						// 基本設定
+														$task == self::TASK_LIST			// 設定一覧
+													),
+									'submenu'	=> array()
+								)
+							);
+		$this->gPage->setAdminSubNavbarDef($navbarDef);
 	}
 	/**
 	 * 詳細画面作成
@@ -167,7 +217,7 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 			if ($ret) $this->contentId = $row['cn_id'];
 			
 			// コンテンツ選択メニューを作成
-			$this->menuHtml  = '<select name="contentid">';
+			$this->menuHtml  = '<select name="contentid" class="form-control">';
 	        $this->menuHtml .= '<option value="0">-- 未選択 --</option>';
 			$this->db->getAllContentItems(array($this, 'itemListLoop'), $this->langId);
 			$this->menuHtml .= '</select>';
@@ -175,33 +225,6 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 			$this->gInstance->getAjaxManager()->addData('menu_html', $this->menuHtml);
 		} else if ($act == 'select'){	// 定義IDを変更
 			$replaceNew = true;			// データ再取得
-		}
-
-		// 定義選択メニュー作成
-		$this->createDefListMenu();
-
-		// ナビゲーションタブ作成
-		$tabDef = array();
-		$tabItem = new stdClass;
-		$tabItem->name	= 'ウィジェット設定';
-		$tabItem->task	= '';
-		$tabItem->url	= '#widget_config';
-		$tabItem->parent	= 0;
-		$tabItem->active	= false;
-		$tabDef[] = $tabItem;
-		$tabItem = new stdClass;
-		$tabItem->name	= 'コンテンツ編集';
-		$tabItem->task	= '';
-		$tabItem->url	= '#edit_content';
-		$tabItem->parent	= 0;
-		$tabItem->active	= false;
-		$tabDef[] = $tabItem;
-		$tabHtml = $this->gDesign->createConfigNavTab($tabDef);
-		$this->tmpl->addVar("_widget", "nav_tab", $tabHtml);
-		if (empty($activeTab)){		// タブの選択
-			$this->tmpl->addVar('_widget', 'active_tab', 'widget_config');
-		} else {
-			$this->tmpl->addVar('_widget', 'active_tab', $activeTab);
 		}
 		
 		// 表示用データを取得
@@ -228,16 +251,28 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 			// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
 			if (!empty($defConfigId) && !empty($defSerial)) $this->tmpl->addVar("_widget", "id_disabled", 'disabled');
 		}
+		// 定義選択メニュー作成
+		$this->createDefListMenu();
 		
 		// コンテンツ項目リストをデフォルト言語で取得
 		$this->db->getAllContentItems(array($this, 'itemListLoop'), $this->langId);
 		
+		// 一度設定を保存している場合は、メニュー定義を前面にする(初期起動時のみ)
+		$activeIndex = 0;
+/*		if (empty($act) && !empty($this->configId)) $activeIndex = 1;
+		// 一覧画面からの戻り画面が指定されてる場合は優先する
+		if ($anchor == 'widget_config') $activeIndex = 0;
+		*/
+		if (empty($activeIndex)){		// タブの選択
+			$this->tmpl->addVar("_widget", "active_tab", 'widget_config');
+		} else {
+			$this->tmpl->addVar("_widget", "active_tab", 'edit_content');		// コンテンツ編集画面
+		}
+		
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
-		$checked = '';
-		if ($showReadMore) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "show_read_more", $checked);	// 「続きを読む」ボタンを表示
-		$this->tmpl->addVar("_widget", "read_more_title", $readMoreTitle);		// 「続きを読む」ボタンタイトル
+		$this->tmpl->addVar("_widget", "show_read_more", $this->convertToCheckedString($showReadMore));	// 「続きを読む」ボタンを表示
+		$this->tmpl->addVar("_widget", "read_more_title", $this->convertToDispString($readMoreTitle));		// 「続きを読む」ボタンタイトル
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		$this->tmpl->addVar('_widget', 'content_widget_id', self::CONTENT_WIDGET_ID);// コンテンツ表示ウィジェット
 		

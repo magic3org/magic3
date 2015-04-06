@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: top_jquery.tmpl.html 4624 2012-01-28 12:05:57Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -20,17 +20,10 @@ function addItem()
 	document.main.submit();
 	return true;
 }
-function updateItem(serialNo)
+function updateItem()
 {
 	if (!window.confirm('項目を更新しますか?')) return false;
 	document.main.act.value = 'update';
-	document.main.submit();
-	return true;
-}
-function delItem(serialNo)
-{
-	if (!window.confirm('項目を削除しますか?')) return false;
-	document.main.act.value = 'delete';
 	document.main.submit();
 	return true;
 }
@@ -62,7 +55,37 @@ function ajax_failure_func(request)
 // タブを選択
 function activateTab(tab)
 {
-	$('.nav-tabs a[href="#' + tab + '"]').tab('show');
+	if (tab == 'widget_config'){
+		// メニューバーの更新
+		$('.navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');
+		$('#menubar_basic').removeClass('btn-success').addClass('btn-primary');
+		
+		// パンくずリストの更新
+		$('.breadcrumb').html('<li>基本</li>');
+		
+		// 画面の更新
+		$('.tab-pane').removeClass('active');
+		$('#widget_config').addClass('active');
+	} else {		// メニュー定義画面の表示
+		// メニューバーの更新
+		$('.navbar-btn.btn-primary').removeClass('btn-primary').addClass('btn-success');
+		$('#menubar_other').removeClass('btn-success').addClass('btn-primary');
+		
+		// パンくずリストの更新
+		$('.breadcrumb').html('<li>コンテンツ</li>');
+		
+		// 画面の更新
+		$('.tab-pane').removeClass('active');
+		$('#edit_content').addClass('active');
+		
+		// IFRAMEの高さを調整
+		$("#default_content").height($("#default_content").contents().find("html").height());
+	}
+}
+// IFRAMEの高さを調整
+function m3AdjustWindow()
+{
+	$("#default_content").height($("#default_content").contents().find("html").height());
 }
 // コンテンツ編集画面を更新
 function reloadEditContent()
@@ -79,6 +102,20 @@ $(function(){
 	// タブを選択
 	activateTab('{ACTIVE_TAB}');
 	
+	// 画面選択処理
+	$('#menubar_basic').on('click', function(){
+		// 画面の更新
+		activateTab('widget_config');
+		
+		$('.m3messages').remove();
+	});
+	$('#menubar_other').on('click', function(){
+		// 画面の更新
+		activateTab('edit_content');
+		
+		$('.m3messages').remove();
+	});
+	
 	// コンテンツ編集タブを表示
 	$('#button_edit_content').click(function(){
 		activateTab('edit_content');
@@ -90,77 +127,85 @@ $(function(){
 		reloadEditContent();
 		return false;
 	});
+	
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
 });
 //]]>
 </script>
-{NAV_TAB}
-<div class="m3config_tabs tab-content">
-<div id="widget_config" class="tab-pane">
+<div class="tab-content">
 <!-- m3:ErrorMessage -->
+<div id="widget_config" class="tab-pane"><div class="m3config_container">
 <form method="post" name="main">
 <input type="hidden" name="task" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<input type="hidden" name="defserial" value="{DEF_SERIAL}" />
-<input type="hidden" name="defconfig" value="{DEF_CONFIG}" />
-<table width="95%" style="margin: 0 auto;">
+<!-- m3:PostParam -->
+<h3 class="m3config_h"><span {_HELP_MENU_DETAIL}>基本設定</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_MENU_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
+
+<!--<table width="95%" style="margin: 0 auto;">
 <tr><td><span {_HELP_ITEM_DETAIL}><label>固定コンテンツ設定</label></span></td>
 <td align="right"><span {_HELP_ITEM_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="設定一覧" /></span>
 </td></tr>
-<tr><td colspan="2">
+<tr><td colspan="2">-->
 
-<table class="simple-table" width="100%">
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_ITEM_NAME}>名前</span></td>
-	    <td width="800">
-	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
+    <tr>
+	    <th><span {_HELP_ITEM_NAME}>名前</span></th>
+	    <td>
+		<div class="col-sm-4 m3config_item">
+	    <select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規登録 --</option>
 	        <patTemplate:tmpl name="title_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" class="form-control" value="{NAME}" size="40" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_ITEM_CONTENT}>コンテンツ</span></td>
+    <tr>
+	    <th><span {_HELP_ITEM_CONTENT}>コンテンツ</span></th>
 	    <td>
-	    <span id="content_menu"><select id="item_contentid" name="contentid">
+		<div class="col-sm-6 m3config_item">
+	    <span id="content_menu"><select id="item_contentid" name="contentid" class="form-control">
 	        <option value="0">-- 未選択 --</option>
 	        <patTemplate:tmpl name="content_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select></span>
+		</div>
 	    <input id="button_edit_content" type="button" class="button" value="コンテンツを編集" />
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_ITEM_OPTION}>表示オプション</span></td>
+	    <th><span {_HELP_ITEM_OPTION}>表示オプション</span></th>
 	    <td>
-		<input type="checkbox" name="item_show_read_more" {SHOW_READ_MORE} />「もっと読む」ボタンを表示&nbsp;&nbsp;ボタンラベル：<input type="text" name="item_read_more_title" value="{READ_MORE_TITLE}" size="20" maxlength="20" />
+		<div class="checkbox"><label><input type="checkbox" name="item_show_read_more" {SHOW_READ_MORE} />「もっと読む」ボタンを表示</label></div>
+		<div class="form-control-static m3config_item col-sm-2">ボタンラベル：</div><div class="col-sm-4 m3config_item"><input type="text" name="item_read_more_title" class="form-control" value="{READ_MORE_TITLE}" size="20" maxlength="20" /></div>
 	    </td>
 	</tr>
-	<tr class="even">
-	<td align="right" colspan="2">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	</td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
 </form>
-	    </div>
-	    <div id="edit_content" class="tab-pane">
-	    <iframe id="default_content" name="default_content" style="width:100%; height:2000px; border:none;" allowTransparency="true" frameborder="0">{_LC_LABEL_NENU_DEF}</iframe>
-	    </div>
+</div></div>
+<div id="edit_content" class="tab-pane">
+<!--<iframe id="default_content" name="default_content" style="width:100%; height:2000px; border:none;" allowTransparency="true" frameborder="0">{_LC_LABEL_NENU_DEF}</iframe>-->
+<iframe id="default_content" name="default_content" style="width:100%; height:100%; border:none;" frameborder="0" scrolling="no" allowTransparency="true">実際の画面</iframe>
+</div>
 </div>
 </patTemplate:tmpl>
