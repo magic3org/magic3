@@ -75,14 +75,15 @@ if (typeof Object.create !== 'function'){
 			var openerCss = {};
 			var openerSelecter = '.' + self.options.openerClass;
 
-			$(openerSelecter + ' a').on('click',function(e){
+			// オープナーのクリック処理
+			self.$elem.find(openerSelecter + ' a').on('click',function(e){
 				if(self.$elem.hasClass('opened')){
 					inlineCss[self.options.position] =  -self.containerWidth + 'px';	// パネル幅
 					panelCss[self.options.position] =  '0px';
 					openerCss[self.options.position] =  '0px';		// オープナー初期値
 
 					self.$elem.animate(inlineCss, self.options.animSpeed);
-					$(openerSelecter).animate(openerCss, self.options.animSpeed);
+					$(this).parent().animate(openerCss, self.options.animSpeed);
 
 					// BODYを戻す
 					if (self.options.type == "push"){
@@ -98,25 +99,27 @@ if (typeof Object.create !== 'function'){
 					if (self.options.collapseOpener){
 						var collapseWidth;
 						if (self.options.position == 'left' || self.options.position == 'right'){
-							collapseWidth = $(openerSelecter).width();		
+							collapseWidth = $(this).parent().width();
 						} else {
-							collapseWidth = $(openerSelecter).height();
+							collapseWidth = $(this).parent().height();
 						}
 						openerCss[self.options.position] = (self.containerWidth - collapseWidth) + 'px';
 					}
-
+					
+					// パネルを移動
 					self.$elem.animate(
 							inlineCss,
 							self.options.animSpeed,
 							self.options.easing
 					);
 					
-					$(openerSelecter).animate(
+					// オープナーを移動
+					$(this).parent().animate(
 							openerCss,
 							self.options.animSpeed,
 							self.options.easing
 						);
-
+					
 					// BODYを移動
 					if (self.options.type == "push"){
 						$('body').animate(

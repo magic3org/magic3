@@ -3723,9 +3723,9 @@ class PageManager extends Core
 						$logoutTag = '<li><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
 						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 					
-						$linkStr .= '<div id="m3slidepanel">';
-						$linkStr .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';
-						$linkStr .= '<div style="top:-60px; visibility: visible;" class="m3panel_top m3-navbar-default">';
+						//$linkStr .= '<div id="m3slidepanel">';
+						$linkStr .= '<div id="m3slidepanel" class="m3panel_top m3-navbar-default" style="top:-60px; visibility: visible;">';
+						$linkStr .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';				
 						$linkStr .= '<div tabindex="0" class="m3panel_wrap">';
 						$linkStr .= '<ul class="m3-nav m3-navbar-nav">';
 						if ($gEnvManager->isSystemAdmin()){				// 管理画面、編集モードは、管理者権限がある場合のみ有効
@@ -3736,7 +3736,7 @@ class PageManager extends Core
 						$linkStr .= '</ul>';
 						$linkStr .= '</div>';
 						$linkStr .= '</div>';
-						$linkStr .= '</div>';
+					//	$linkStr .= '</div>';
 
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").append(\'' . $linkStr . '\');' . M3_NL;

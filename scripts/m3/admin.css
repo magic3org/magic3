@@ -68,6 +68,12 @@
 	left: 0px;
 	z-index:2001;
 }
+.m3panelopener.m3topright2 {
+	position: fixed;
+	top: 60px;
+	right: 0px;
+	z-index:2001;
+}
 .m3resizer.m3topright {
 	position: fixed;
 	top: 0px;
@@ -75,6 +81,7 @@
 	z-index:2001;
 }
 .m3panelopener.m3topleft a,
+.m3panelopener.m3topright2 a,
 .m3resizer.m3topright a {
 	display: block;
 	background: #2C3E50;
@@ -83,15 +90,18 @@
 	outline:none;
 }
 .m3panelopener.m3topleft a:visited,
+.m3panelopener.m3topright2 a:visited,
 .m3resizer.m3topright a:visited
 {
  	color: #fff;
 }
 .m3panelopener.m3topleft a:hover,
+.m3panelopener.m3topright2 a:hover,
 .m3resizer.m3topright a:hover {
 	text-decoration: none;
 }
 .m3panelopener.m3topleft .glyphicon,
+.m3panelopener.m3topright2 .glyphicon,
 .m3resizer.m3topright .glyphicon {
 	color: #fff;
 	font-size: 24px;
@@ -106,6 +116,15 @@
 	width: 240px;
 	height: 100%;
 	top: 0;
+	visibility: hidden;
+}
+/*** 右パネル ***/
+.m3panel_right {
+	background: #2C3E50;
+	position: fixed;
+	width: 240px;
+	height: 100%;
+	top: 60px;
 	visibility: hidden;
 }
 /*

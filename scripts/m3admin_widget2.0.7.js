@@ -410,9 +410,10 @@
 	// 初期処理
 	$(function(){
 		var widgetWindow = '';
-		widgetWindow += '<div id="m3slidepanel">';
+		// ウィジェット一覧(左パネル)
+//		widgetWindow += '<div id="m3slidepanel">';
+		widgetWindow += '<div id="m3slidepanel" class="m3panel_left m3-navbar-default" style="left:-240px; visibility:visible;">';
 		widgetWindow += '<div class="m3panelopener m3topleft"><a href="#"><i class="glyphicon glyphicon-th-list" rel="m3help" data-placement="bottom" data-container="body" title="ウィジェット一覧"></i></a></div>';
-		widgetWindow += '<div style="left:-240px; visibility:visible;" class="m3panel_left m3-navbar-default">';
 		widgetWindow += '<div class="m3paneltab">';
 		widgetWindow += '<ul>';
 		widgetWindow += '<li><a href="#m3paneltab_widget">ウィジェット</a></li>';
@@ -421,27 +422,27 @@
 		widgetWindow += '<div id="m3paneltab_widget">';
 		widgetWindow += '<div class="m3message"></div>';
 		widgetWindow += '<div id="m3paneltab_widget_list" class="m3widgetlist">';
-		
-/*		widgetWindow += '<dl class="m3accordion">';
-		widgetWindow += '<dt>Heading 1</dt>';
-		widgetWindow += '<dd>content111</dd>';
-		widgetWindow += '<dt>Heading 2</dt>';
-		widgetWindow += '<dd>content222</dd>';
-		widgetWindow += '</dl>';*/
-		
 		widgetWindow += '</div>';	// m3widgetlist end
 		widgetWindow += '</div>';	// m3paneltab_widget end
 //		widgetWindow += '<div id="m3paneltab_search" style="overflow: auto;">';
-//		widgetWindow += '<dl class="m3accordion">';
-//		widgetWindow += '<dt>Heading 1</dt>';
-//		widgetWindow += '<dd>content111</dd>';
-//		widgetWindow += '<dt>Heading 2</dt>';
-//		widgetWindow += '<dd>content222</dd>';		
-//		widgetWindow += '</dl>';
 //		widgetWindow += '</div>';	// m3paneltab_search end	
 		widgetWindow += '</div>';	// m3paneltab_wrap end
 		widgetWindow += '</div>';	// m3panel_left end
-		widgetWindow += '</div>';	// m3slidepanel end
+//		widgetWindow += '</div>';	// m3slidepanel end
+		
+		// その他ポジション(右パネル)
+//		widgetWindow += '<div id="m3slidepanel2">';
+		widgetWindow += '<div id="m3slidepanel2" class="m3panel_right m3-navbar-default" style="right:-240px; visibility:visible;">';
+		widgetWindow += '<div class="m3panelopener m3topright2"><a href="#"><i class="glyphicon glyphicon-th-list" rel="m3help" data-placement="bottom" data-container="body" title="その他のポジション"></i></a></div>';
+		widgetWindow += '<div class="m3paneltab">';
+		widgetWindow += '<div id="m3paneltab_widget">';
+		widgetWindow += '<div class="m3message"></div>';
+		widgetWindow += '<div id="m3paneltab_widget_list2" class="m3widgetlist2">';
+		widgetWindow += '</div>';	// m3widgetlist end
+		widgetWindow += '</div>';	// m3paneltab_widget end
+		widgetWindow += '</div>';	// m3paneltab_wrap end
+		widgetWindow += '</div>';	// m3panel_right end
+//		widgetWindow += '</div>';	// m3slidepanel end
 		
 		// コンテキストメニュー
 		widgetWindow += '<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">';
@@ -465,7 +466,9 @@
 		
 		// サイドパネル作成
 		$('.m3panel_left').m3slidepanel({ "position" : "left", "type" : "push" });
-	
+		$('.m3panel_right').m3slidepanel({ "position" : "right", "type" : "push" });
+		$('.m3panel_right').hide();
+
 		// タグ作成
 		$(".m3panel_left ul").idTabs();
 		
