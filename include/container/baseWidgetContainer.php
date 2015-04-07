@@ -49,7 +49,8 @@ class BaseWidgetContainer extends Core
 	protected $_assignTemplate;						// テンプレート処理置き換えを使用するかどうか
 	protected $_assignTemplate_method;				// テンプレート処理置き換え用(_assign()メソッド名)
 	protected $_assignTemplate_filename;			// テンプレート処理置き換え用(テンプレートファイル)
-	// POST,GETパラメータ
+	// POST,GETパラメータ(patTemplateのPostParam用)
+	protected $_hiddenTagInfo = array();		// 非表示INPUTタグ作成情報(任意追加用)
 	protected $_defConfigId;					// ページ定義のウィジェット定義ID
 	protected $_defSerial;						// ページ定義のレコードシリアル番号
 	protected $_backUrl;						// 戻り先URL
@@ -532,6 +533,28 @@ class BaseWidgetContainer extends Core
 			$this->_assignTemplate_filename = self::ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST;				// テンプレート処理置き換え用(ファイル名)
 			break;
 		}
+	}
+	/**
+	 * patTemplateのPostParamを使って、非表示INPUTタグを追加
+	 *
+	 * 注意)_setTemplate()またはそれ以前に呼び出す。
+	 *
+	 * @param string $name			パラメータ名
+	 * @param string $replaceKey	置換キー文字列
+	 * @return 						なし
+	 */
+	function _addHiddenTag($name, $replaceKey)
+	{
+		$this->_hiddenTagInfo[$name] = $replaceKey;
+	}
+	/**
+	 * 非表示INPUTタグ情報を取得(patTemplateのPostParam用)
+	 *
+	 * @return array 			パラメータの配列
+	 */
+	function _getHiddenTagInfo()
+	{
+		return $this->_hiddenTagInfo;
 	}
 	/**
 	 * フォームチェック機能を使用

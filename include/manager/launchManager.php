@@ -11,9 +11,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: launchManager.php 4964 2012-06-13 12:22:28Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -138,7 +138,9 @@ class LaunchManager extends Core
 			}
 			// コンテナクラスを起動
 			$widgetContainer = new $containerClass();
+			$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 			$widgetContainer->process($gRequestManager);
+			$gEnvManager->setCurrentWidgetContainerObj(null);
 		} else {			// PC用の画面からのアクセスまたは管理画面へのアクセス
 			// インナーウィジェットのチェック
 			$isIWidget = false;
@@ -172,7 +174,9 @@ class LaunchManager extends Core
 				//if (in_array($filepath, $pathArray)){
 					// 同じウィジェットの場合は起動
 					$widgetContainer = new $containerClass();
+					$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 					$widgetContainer->process($gRequestManager);
+					$gEnvManager->setCurrentWidgetContainerObj(null);
 	//			} else {
 	//				// 同じウィジェットが起動されていないときは、クラス名のバッテイングでエラー
 	//				echo 'class redefined error: ' . $containerClass;
@@ -195,7 +199,9 @@ class LaunchManager extends Core
 				}
 				// コンテナクラスを起動
 				$widgetContainer = new $containerClass();
+				$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 				$widgetContainer->process($gRequestManager);
+				$gEnvManager->setCurrentWidgetContainerObj(null);
 			}
 			// 呼び出し元ファイルパスの保存
 			$pathArray[] = $filepath;
@@ -238,7 +244,9 @@ class LaunchManager extends Core
 				
 				// コンテナクラスを起動
 				$widgetContainer = new $containerClass();
+				$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 				$widgetContainer->process($gRequestManager);
+				$gEnvManager->setCurrentWidgetContainerObj(null);
 			} else {
 				if (empty($defaultWidgetId)){
 					echo 'file not found error: ' . $containerPath;
@@ -262,7 +270,9 @@ class LaunchManager extends Core
 				
 							// コンテナクラスを起動
 							$widgetContainer = new $containerClass();
+							$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 							$widgetContainer->process($gRequestManager);
+							$gEnvManager->setCurrentWidgetContainerObj(null);
 						} else {
 							echo 'file not found error: ' . $containerPath;
 						}
@@ -302,7 +312,9 @@ class LaunchManager extends Core
 			}
 			// コンテナクラスを起動
 			$widgetContainer = new $containerClass();
+			$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 			$widgetContainer->process($gRequestManager, $install);
+			$gEnvManager->setCurrentWidgetContainerObj(null);
 		}
 	}
 	/**

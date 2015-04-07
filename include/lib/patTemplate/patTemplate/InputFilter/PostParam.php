@@ -10,9 +10,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: PostParam.php 4115 2011-05-07 10:48:07Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
@@ -37,17 +37,30 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 	{
 		global $gEnvManager;
 		
-		$msgTag = '';
+		$paramTag = '';
+		
+		// 現在のウィジェットコンテナオブジェクトを取得
+		$widgetObj = $gEnvManager->getCurrentWidgetContainerObj();
+		if (isset($widgetObj)){
+			// 非表示INPUTタグ情報を取得
+			$tagInfo = $widgetObj->_getHiddenTagInfo();
+			if (!empty($tagInfo)){
+				foreach($tagInfo as $name => $value){
+					$paramTag .= '<input type="hidden" name="' . $name . '" value="' . $value . '" />' . M3_NL;
+				}
+			}
+		}
+		
 		if ($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()){		// 管理画面へのアクセス、システム管理権限ありの場合
 			// 変換部作成
-			$msgTag .= '<input type="hidden" name="_pdefserial" value="{_DEF_SERIAL}" />' . M3_NL;
-			$msgTag .= '<input type="hidden" name="_pdefconfig" value="{_DEF_CONFIG}" />' . M3_NL;
-			$msgTag .= '<input type="hidden" name="_backurl" value="{_BACK_URL}" />' . M3_NL;
+			$paramTag .= '<input type="hidden" name="_pdefserial" value="{_DEF_SERIAL}" />' . M3_NL;
+			$paramTag .= '<input type="hidden" name="_pdefconfig" value="{_DEF_CONFIG}" />' . M3_NL;
+			$paramTag .= '<input type="hidden" name="_backurl" value="{_BACK_URL}" />' . M3_NL;
 		}
-		$msgTag .= '<input type="hidden" name="_formid" value="{_FORM_ID}" />' . M3_NL;
+		$paramTag .= '<input type="hidden" name="_formid" value="{_FORM_ID}" />' . M3_NL;
 		
 		// <!--m3:PostParam-->タグを一度だけ変換する
-		$data = preg_replace('/<!--[ \t].*m3:PostParam[ \t].*-->/', $msgTag, $data, 1);
+		$data = preg_replace('/<!--[ \t].*m3:PostParam[ \t].*-->/', $paramTag, $data, 1);
 		return $data;
 	}
 }

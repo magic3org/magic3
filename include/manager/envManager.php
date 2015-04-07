@@ -24,6 +24,7 @@ class EnvManager extends Core
 	private $currentTemplateType;	// 現在のテンプレートのタイプ
 	private $currentTemplateCleanType;	// 現在のテンプレートのクリーンタイプ
 	private $currentTemplateUseBootstrap;	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
+	private $currentWidgetContainerObj;		// 現在実行中のウィジェットコンテナオブジェクト
 	private $currentWidgetId;	// 現在作成中のウィジェットId
 	private $currentWidgetConfigId;	// 現在作成中のウィジェットの定義ID
 	private $currentIWidgetConfigId;	// 現在作成中のインナーウィジェットの定義ID
@@ -1432,6 +1433,25 @@ class EnvManager extends Core
 		list($widgetId, $iWidgetId) = explode(M3_WIDGET_ID_SEPARATOR, $this->currentIWidgetId);
 
 		return $this->getWidgetsPath() . '/' . $widgetId . '/include/iwidgets/' . $iWidgetId . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'container';
+	}
+	/**
+	 * 現在実行中のウィジェットコンテナオブジェクトを設定
+	 *
+	 * @param object $obj		ウィジェットコンテナオブジェクト
+	 * @return					なし
+	 */
+	public function setCurrentWidgetContainerObj($obj)
+	{
+		$this->currentWidgetContainerObj = $obj;
+	}
+	/**
+	 * 現在実行中のウィジェットコンテナオブジェクトを取得
+	 *
+	 * @return object		ウィジェットコンテナオブジェクト
+	 */
+	public function getCurrentWidgetContainerObj()
+	{
+		return $this->currentWidgetContainerObj;
 	}
 	/**
 	 * 現在処理中のウィジェット
