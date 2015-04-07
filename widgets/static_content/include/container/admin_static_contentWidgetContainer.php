@@ -27,6 +27,8 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 	private $menuHtml;	// コンテンツメニュー
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const CONTENT_WIDGET_ID = 'default_content';			// コンテンツ編集ウィジェット
+	const OTHER_TASK_NAME = 'コンテンツ';			// 別画面タスク名
+	
 	// 画面
 	const TASK_LIST = 'list';			// 設定一覧
 	
@@ -42,6 +44,26 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 		$this->db = new static_contentDb();
 	}
 	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		$task = $request->trimValueOf('task');
+		if ($task == 'list'){		// 一覧画面
+			// 通常のテンプレート処理を組み込みのテンプレート処理に変更。_setTemplate()、_assign()はキャンセル。
+			$this->replaceAssignTemplate(self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST_WITH_IFRAME, array('preAct' => 'preActList', 'postAct' => 'postActList'));		// IFRAME画面付き(タブ切り替え)の設定一覧(基本)
+			
+			// テンプレートに非表示INPUTタグ追加
+			$this->_addHiddenTag('contentid', '{CONTENT_ID}');
+		}
+	}
+	/**
 	 * テンプレートファイルを設定
 	 *
 	 * _assign()でデータを埋め込むテンプレートファイルのファイル名を返す。
@@ -53,12 +75,12 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return 'admin_main_list.tmpl.html';
-		} else {			// 一覧画面
-			return 'admin_main_detail.tmpl.html';
-		}
+//		$task = $request->trimValueOf('task');
+//		if ($task == 'list'){		// 一覧画面
+//			return 'admin_list.tmpl.html';
+//		} else {			// 一覧画面
+			return 'admin.tmpl.html';
+//		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -71,12 +93,12 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return $this->createList($request);
-		} else {			// 詳細設定画面
+//		$task = $request->trimValueOf('task');
+//		if ($task == 'list'){		// 一覧画面
+//			return $this->createList($request);
+//		} else {			// 詳細設定画面
 			return $this->createDetail($request);
-		}
+//		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -251,6 +273,7 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 			// 新規作成でないときは、メニューを変更不可にする(画面作成から呼ばれている場合のみ)
 			if (!empty($defConfigId) && !empty($defSerial)) $this->tmpl->addVar("_widget", "id_disabled", 'disabled');
 		}
+
 		// 定義選択メニュー作成
 		$this->createDefListMenu();
 		
@@ -268,7 +291,7 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$this->tmpl->addVar("_widget", "active_tab", 'edit_content');		// コンテンツ編集画面
 		}
-		
+
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		$this->tmpl->addVar("_widget", "show_read_more", $this->convertToCheckedString($showReadMore));	// 「続きを読む」ボタンを表示
@@ -358,87 +381,30 @@ class admin_static_contentWidgetContainer extends BaseAdminWidgetContainer
 		return $name;
 	}
 	/**
-	 * 一覧画面作成
+	 * 組み込みテンプレート処理での一覧画面作成(ACT前処理)
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param								なし
 	 */
-	function createList($request)
+	function preActList($request)
 	{
-		// ページ定義IDとページ定義のレコードシリアル番号を取得
-		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
-		
-		$userId		= $this->gEnv->getCurrentUserId();
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		$act = $request->trimValueOf('act');
-		
+	}
+	/**
+	 * 組み込みテンプレート処理での一覧画面作成(ACT後処理)
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function postActList($request)
+	{
 		// 詳細画面からの引継ぎデータ
 		$contentId = $request->trimValueOf('contentid');
 		
-		if ($act == 'delete'){		// メニュー項目の削除
-			$listedItem = explode(',', $request->trimValueOf('seriallist'));
-			$delItems = array();
-			for ($i = 0; $i < count($listedItem); $i++){
-				// 項目がチェックされているかを取得
-				$itemName = 'item' . $i . '_selected';
-				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
-				
-				if ($itemValue){		// チェック項目
-					$delItems[] = $listedItem[$i];
-				}
-			}
-			if (count($delItems) > 0){
-				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->paramObj, $delItems);
-				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg('データを削除しました');
-				} else {
-					$this->setAppErrorMsg('データ削除に失敗しました');
-				}
-			}
-		}
-		// 選択リスト作成
-		$this->createDefList();
-		
-		// メニュー定義画面のURLを作成
 		$editUrl = $this->gEnv->getDefaultAdminUrl() . '?cmd=configwidget&openby=tabs&widget=' . self::CONTENT_WIDGET_ID . '&task=content_detail&contentid=' . $contentId;
 		$this->tmpl->addVar("_widget", "url", $this->getUrl($editUrl));
 		$this->tmpl->addVar("_widget", "content_id", $contentId);
-		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		
-		// ページ定義IDとページ定義のレコードシリアル番号を更新
-		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
-	}
-	/**
-	 * 選択リスト作成
-	 *
-	 * @return なし						
-	 */
-	function createDefList()
-	{
-		for ($i = 0; $i < count($this->paramObj); $i++){
-			$id = $this->paramObj[$i]->id;// 定義ID
-			$targetObj = $this->paramObj[$i]->object;
-			$name = $targetObj->name;// 定義名
-			
-			$defCount = 0;
-			if (!empty($id)){
-				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
-			}
-			$operationDisagled = '';
-			if ($defCount > 0) $operationDisagled = 'disabled';
-			$row = array(
-				'index' => $i,
-				'ope_disabled' => $operationDisagled,			// 選択可能かどうか
-				'name' => $this->convertToDispString($name),		// 名前
-				'def_count' => $defCount							// 使用数
-			);
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
-			
-			// シリアル番号を保存
-			$this->serialArray[] = $id;
-		}
+		$this->tmpl->addVar("_widget", "default_tab", 'tab_main');		// デフォルトタブ
+		$this->tmpl->addVar("_widget", "other_task_name", self::OTHER_TASK_NAME);
 	}
 }
 ?>

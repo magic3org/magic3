@@ -49,6 +49,7 @@ class BaseWidgetContainer extends Core
 	protected $_assignTemplate;						// テンプレート処理置き換えを使用するかどうか
 	protected $_assignTemplate_method;				// テンプレート処理置き換え用(_assign()メソッド名)
 	protected $_assignTemplate_filename;			// テンプレート処理置き換え用(テンプレートファイル)
+	protected $_assignTemplate_hookArray;			// テンプレート処理置き換え用(_assign()メソッド内のフック関数用)
 	// POST,GETパラメータ(patTemplateのPostParam用)
 	protected $_hiddenTagInfo = array();		// 非表示INPUTタグ作成情報(任意追加用)
 	protected $_defConfigId;					// ページ定義のウィジェット定義ID
@@ -79,11 +80,13 @@ class BaseWidgetContainer extends Core
 	// テンプレート処理置き換え用
 	const ASSIGN_TEMPLATE_DIR = '/widgets/template';		// // テンプレート読み込みディレクトリ
 	// 出力パターン
-	const ASSIGN_TEMPLATE_BASIC_CONFIG_LIST = 'BASIC_CONFIG_LIST';			// 設定一覧(基本)
+	const ASSIGN_TEMPLATE_BASIC_CONFIG_LIST				= 'BASIC_CONFIG_LIST';					// 設定一覧(基本)
+	const ASSIGN_TEMPLATE_BASIC_CONFIG_LIST_WITH_IFRAME	= 'BASIC_CONFIG_LIST_WITH_IFRAME';		// IFRAME画面付き(タブ切り替え)の設定一覧(基本)
 	// メソッド名
 	const ASSIGN_TEMPLATE_METHOD_BASIC_CONFIG_LIST		= 'assignTemplate_createList';					// テンプレート処理置き換え用(_assign())
 	// テンプレートファイル名
-	const ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST	= 'admin_list.tmpl.html';			// 設定一覧(基本)
+	const ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST				= 'admin_list.tmpl.html';					// 設定一覧(基本)
+	const ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST_WITH_IFRAME	= 'admin_list_with_iframe.tmpl.html';		// IFRAME画面付き(タブ切り替え)の設定一覧(基本)
 	
 	/**
 	 * コンストラクタ
@@ -522,15 +525,24 @@ class BaseWidgetContainer extends Core
 	 * テンプレート処理置き換え
 	 *
 	 * @param string $outputType			テンプレート処理タイプ
+	 * @param array $hook					フック関数(フック取得キーと関数名の連想配列)
 	 * @return 								なし
 	 */
-	function replaceAssignTemplate($outputType)
+	function replaceAssignTemplate($outputType, $hook = null)
 	{
 		switch ($outputType){
 		case self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST:		// 設定一覧(基本)
 			$this->_assignTemplate			= true;		// テンプレート処理置き換えを使用
 			$this->_assignTemplate_method	= array($this, self::ASSIGN_TEMPLATE_METHOD_BASIC_CONFIG_LIST);					// テンプレート処理置き換え用(_assign())
 			$this->_assignTemplate_filename = self::ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST;				// テンプレート処理置き換え用(ファイル名)
+			break;
+		case self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST_WITH_IFRAME:		// IFRAME画面付き(タブ切り替え)の設定一覧(基本)
+			$this->_assignTemplate			= true;		// テンプレート処理置き換えを使用
+			$this->_assignTemplate_method	= array($this, self::ASSIGN_TEMPLATE_METHOD_BASIC_CONFIG_LIST);				// テンプレート処理置き換え用(_assign())
+			$this->_assignTemplate_filename = self::ASSIGN_TEMPLATE_FILENAME_BASIC_CONFIG_LIST_WITH_IFRAME;				// IFRAME画面付き(タブ切り替え)の設定一覧(基本)
+			
+			// フック関数
+			if (!empty($hook)) $this->_assignTemplate_hookArray = $hook;			// テンプレート処理置き換え用(_assign()メソッド内のフック関数用)
 			break;
 		}
 	}
@@ -3361,6 +3373,15 @@ class BaseWidgetContainer extends Core
 		// ページ定義IDとページ定義のレコードシリアル番号を取得
 		$this->startPageDefParam($defSerial, $defConfigId, $this->_localParamObj);
 		
+		// ##### フック処理(ACT前処理) #####
+		if (!empty($this->_assignTemplate_hookArray)){
+			$methodName = $this->_assignTemplate_hookArray['preAct'];		// ACT前処理
+			if (!empty($methodName)){
+				$method = array($this, $methodName);
+				if (is_callable($method)) call_user_func($method, $request);
+			}
+		}
+
 		$userId		= $this->gEnv->getCurrentUserId();
 		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
@@ -3390,6 +3411,15 @@ class BaseWidgetContainer extends Core
 		$this->assignTemplate_createItemList();
 		
 		if (!empty($this->_localSerialArray)) $this->tmpl->addVar("_widget", "serial_list", implode($this->_localSerialArray, ','));// 表示項目のシリアル番号を設定
+		
+		// ##### フック処理(ACT後処理) #####
+		if (!empty($this->_assignTemplate_hookArray)){
+			$methodName = $this->_assignTemplate_hookArray['postAct'];		// ACT後処理
+			if (!empty($methodName)){
+				$method = array($this, $methodName);
+				if (is_callable($method)) call_user_func($method, $request);
+			}
+		}
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->_localParamObj);
