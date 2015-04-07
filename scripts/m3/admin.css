@@ -58,6 +58,10 @@
 .m3resizer {
 	z-index:2000;
 }
+.m3panelopener a i,
+.m3resizer a i {
+	cursor:pointer;
+}
 .m3panelopener.m3topleft {
 	position: fixed;
 	top: 0px;
