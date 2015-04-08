@@ -467,7 +467,7 @@
 		// サイドパネル作成
 		$('.m3panel_left').m3slidepanel({ "position" : "left", "type" : "push" });
 		$('.m3panel_right').m3slidepanel({ "position" : "right", "type" : "push" });
-		$('.m3panel_right').hide();
+//		$('.m3panel_right').hide();
 
 		// タグ作成
 		$(".m3panel_left ul").idTabs();
