@@ -467,7 +467,7 @@
 		// サイドパネル作成
 		$('.m3panel_left').m3slidepanel({ "position" : "left", "type" : "push" });
 		$('.m3panel_right').m3slidepanel({ "position" : "right", "type" : "push" });
-		$('.m3panel_right').hide();
+//		$('.m3panel_right').show();
 
 		// タグ作成
 		$(".m3panel_left ul").idTabs();
@@ -525,6 +525,7 @@
 		
 		setupSortable();
 		
+		// ウィジェット一覧取得
 		$.ajax({	url: createUrl() + '&task=list',
 					type:		'get',
 					success:	function(data, textStatus){

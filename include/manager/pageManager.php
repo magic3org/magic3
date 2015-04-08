@@ -1894,11 +1894,11 @@ class PageManager extends Core
 			// 画面情報、ユーザ情報の保存は行わない
 			return $contents;
 		} else if ($cmd != M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体オペレーションのときは出力しない
-			if ($getOutput){
+/*			if ($getOutput){
 				$contents = $this->getLastContents($request);
 			} else {
 				echo $this->getLastContents($request);
-			}
+			}*/
 		}
 		
 		// セッションへユーザ情報を保存
@@ -2242,7 +2242,10 @@ class PageManager extends Core
 				}
 			}
 		}
+		
+		// ##### HTMLヘッダ出力処理 #####
 		$destBuf = $this->replaceHead($destBuf);
+		
 		return $destBuf;
 	}
 	/**
@@ -2362,110 +2365,84 @@ class PageManager extends Core
 	 * 最終HTML出力処理
 	 *
 	 * テンプレートの出力が完了した後、HTMLとして出力する最後の出力を行う
-	 * 追加するHTMLは主にウィンドウ管理用のスクリプト
+	 * 追加するHTMLは主にウィンドウ制御用のスクリプト
 	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @return string        				最終HTML
 	 */
-	function getLastContents($request)
+	function getLastContents()
 	{
 		global $gEnvManager;
-
+		global $gRequestManager;
+		
 		$contents = '';
 		$initScript = '';		// 初期化用スクリプト
 		$pageId		= $gEnvManager->getCurrentPageId();
 		$pageSubId	= $gEnvManager->getCurrentPageSubId();
-		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
+		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		
-		// RSS配信のときは終了
-		if ($cmd == M3_REQUEST_CMD_RSS) return '';
+		if (!$gEnvManager->isSystemManageUser()) return '';		// システム運用権限がない場合は終了
 		
-		if ($gEnvManager->getIsMobileSite()){		// 携帯用URLのとき
-		} else {			// PC用URLのとき
-			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
-				//if ($gEnvManager->isSystemAdmin()){		// 管理者権限がある場合のみ有効
-				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
-					// ウィジェットレイアウト用カーソル
-					if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
-						//$contents .= '<div class="clear"></div>' . M3_NL;
-						/*
-						$contents .= '<div id="m3_overlay">' . M3_NL;		// ロード中表示
-						$contents .= '<div id="preloader"><img src="' . $gEnvManager->getImagesUrl() . '/system/loader.gif" alt="" /></div>' . M3_NL;
-						$contents .= '</div>' . M3_NL;*/
-
-						// テンプレート上のポジション名
-						if (count($this->viewPosId) > 0){
-							$posArrayStr = '[';
-							for ($i = 0; $i < count($this->viewPosId); $i++){
-								$posArrayStr .= '\'#' . $this->viewPosId[$i] . '\'';
-								//$posArrayStr .= '\'' . $this->viewPosId[$i] . '\'';
-								if ($i < count($this->viewPosId) - 1) $posArrayStr .= ',';
-							}
-							$posArrayStr .= ']';
-							$contents .= 'var M3_POSITIONS=' . $posArrayStr . ';' . M3_NL;
-						}
-						// 画面定義のリビジョン番号
-						$contents .= 'var M3_REVISION=' . $this->pageDefRev . ';' . M3_NL;
-				
-						// 更新用関数追加
-						$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
-						$contents .= M3_INDENT_SPACE . 'window.m3.m3UpdateByConfig(serial);' . M3_NL;
-						$contents .= '}' . M3_NL;
-					
-						// 携帯用テンプレートのときは、プレビューウィンドウの更新を通知する
-						/*if ($gEnvManager->getCurrentTemplateType() == 1){
-							$contents .= 'if (window.parent.m3UpdateByChildWindow) window.parent.m3UpdateByChildWindow();' . M3_NL;
-						}*/
-					} else if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){			// ウィジェット設定画面
-					} else {		// ダッシュボード画面、メイン管理画面
-						// 画面更新用関数追加
-						$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
-						$contents .= M3_INDENT_SPACE . 'var href = window.location.href.split("#");' . M3_NL;
-						$contents .= M3_INDENT_SPACE . 'window.location.href = href[0];' . M3_NL;
-						$contents .= '}' . M3_NL;
+		// 処理を行わない場合は終了
+		if ($cmd == M3_REQUEST_CMD_RSS ||						// RSS配信のときは終了
+			$cmd == M3_REQUEST_CMD_DO_WIDGET) return '';		// ウィジェット単体オペレーションのときは出力しない
+		
+		if ($gEnvManager->getIsMobileSite()) return '';		// 携帯用URLのときは終了
+		
+		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+			// ウィジェットレイアウト用カーソル
+			if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
+/*				// テンプレート上のポジション名
+				if (count($this->viewPosId) > 0){
+					$posArrayStr = '[';
+					for ($i = 0; $i < count($this->viewPosId); $i++){
+						$posArrayStr .= '\'#' . $this->viewPosId[$i] . '\'';
+						if ($i < count($this->viewPosId) - 1) $posArrayStr .= ',';
 					}
-					
-					// ウィジェット単体実行以外のときの処理
-					if (!$this->showWidget){
-						if ($this->updateParentWindow){			// 管理画面からの親画面の更新
-							$initScript .= M3_INDENT_SPACE . 'm3UpdateParentWindowByConfig(' . $this->updateDefSerial . ');' . M3_NL;// 更新する項目のページ定義シリアル番号
-						}
-					}
-					
-					// ##### ヘルプシステムの組み込み #####
-					// ヘルプシステムはすべての初期処理完了後に実行する
-					// ヘルプシステムは、「span」タグで埋め込み、「title」属性を使用する
-/*					if ($this->useHelp){			// ヘルプ表示のとき
-						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').cluetip({splitTitle: \'|\', cluezIndex: 2000});' . M3_NL;
-						//if ($cmd != M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示以外のとき
-							$initScript .= M3_INDENT_SPACE . 'if (jQuery().tooltip) $(\'[rel=m3help]\').tooltip({ placement: \'top\'});' . M3_NL;		// Bootstrapツールチップ。タイトルのみ表示。
-						//}
-					} else {			// ヘルプ非表示のときは、title属性をクリアする
-						$initScript .= M3_INDENT_SPACE . '$(\'span.m3help\').attr(\'title\', \'\');' . M3_NL;
-					}*/
+					$posArrayStr .= ']';
+					$contents .= 'var M3_POSITIONS=' . $posArrayStr . ';' . M3_NL;
 				}
-			} else {		// 通常画面のとき
-				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
-					// 画面更新用関数追加
-					$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
-					$contents .= M3_INDENT_SPACE . 'var href = window.location.href.split("#");' . M3_NL;
-					$contents .= M3_INDENT_SPACE . 'window.location.href = href[0];' . M3_NL;
-					$contents .= '}' . M3_NL;
+				// 画面定義のリビジョン番号
+				$contents .= 'var M3_REVISION=' . $this->pageDefRev . ';' . M3_NL;*/
+		
+				// 更新用関数追加
+				$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
+				$contents .= M3_INDENT_SPACE . 'window.m3.m3UpdateByConfig(serial);' . M3_NL;
+				$contents .= '}' . M3_NL;
+			} else if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){			// ウィジェット設定画面
+			} else {		// ダッシュボード画面、メイン管理画面
+				// 画面更新用関数追加
+				$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
+				$contents .= M3_INDENT_SPACE . 'var href = window.location.href.split("#");' . M3_NL;
+				$contents .= M3_INDENT_SPACE . 'window.location.href = href[0];' . M3_NL;
+				$contents .= '}' . M3_NL;
+			}
+			
+			// ウィジェット単体実行以外のときの処理
+			if (!$this->showWidget){
+				if ($this->updateParentWindow){			// 管理画面からの親画面の更新
+					$initScript .= M3_INDENT_SPACE . 'm3UpdateParentWindowByConfig(' . $this->updateDefSerial . ');' . M3_NL;// 更新する項目のページ定義シリアル番号
 				}
 			}
+		} else {		// 通常画面のとき
+			// 画面更新用関数追加
+			$contents .= 'function m3UpdateByConfig(serial){' . M3_NL;
+			$contents .= M3_INDENT_SPACE . 'var href = window.location.href.split("#");' . M3_NL;
+			$contents .= M3_INDENT_SPACE . 'window.location.href = href[0];' . M3_NL;
+			$contents .= '}' . M3_NL;
 		}
+
 		$destContents = '';
 		if (!empty($contents) || !empty($initScript)){
-			$destContents .= '<script type="text/javascript">' . M3_NL;
-			$destContents .= '//<![CDATA[' . M3_NL;
+//			$destContents .= '<script type="text/javascript">' . M3_NL;
+//			$destContents .= '//<![CDATA[' . M3_NL;
 			$destContents .= $contents;
 			if (!empty($initScript)){		// 初期化用スクリプト
 				$destContents .= '$(function(){' . M3_NL;
 				$destContents .= $initScript;
 				$destContents .= '});' . M3_NL;
 			}
-			$destContents .= '//]]>' . M3_NL;
-			$destContents .= '</script>' . M3_NL;
+//			$destContents .= '//]]>' . M3_NL;
+//			$destContents .= '</script>' . M3_NL;
 		}
 		return $destContents;
 	}
@@ -3563,6 +3540,19 @@ class PageManager extends Core
 					if (isset($this->ckeditorTemplateType)){
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
 					}
+				} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
+					// テンプレート上のポジション名
+					if (count($this->viewPosId) > 0){
+						$posArrayStr = '[';
+						for ($i = 0; $i < count($this->viewPosId); $i++){
+							$posArrayStr .= '\'#' . $this->viewPosId[$i] . '\'';
+							if ($i < count($this->viewPosId) - 1) $posArrayStr .= ',';
+						}
+						$posArrayStr .= ']';
+						$replaceStr .= 'var M3_POSITIONS = ' . $posArrayStr . ';' . M3_NL;
+					}
+					// 画面定義のリビジョン番号
+					$replaceStr .= 'var M3_REVISION = ' . $this->pageDefRev . ';' . M3_NL;
 				} else if (!empty($pageId)){
 					$accessPoint = $this->gEnv->getAllDefaultPageId();
 					for ($i = 0; $i < count($accessPoint); $i++){
@@ -3878,6 +3868,10 @@ class PageManager extends Core
 				$this->initScript .= '        if ($(this).text().trim() == \'\') $(this).remove();' . M3_NL;
 				$this->initScript .= '    });' . M3_NL;
 			}
+			
+			// 管理画面用スクリプト追加
+			$replaceStr .= $this->getLastContents();
+			
 			// 初期処理用スクリプト埋め込み
 			if (!empty($this->initScript)){
 				$replaceStr .= '$(function(){' . M3_NL;

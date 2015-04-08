@@ -216,49 +216,51 @@ class BaseWidgetContainer extends Core
 					$this->_assign($request, $param);
 				}
 				
-				// 管理画面へのアクセスの場合は管理用POST値を設定
-				if ($isAdminDirAccess){
-					// 画面定義用の情報を戻す
-					if (!empty($this->_defSerial) && $useTemplate){		// シリアル番号が空のときは、ページ作成からの遷移ではないので、引き継がない
-						$this->tmpl->addVar("_widget", "_def_config", $this->_defConfigId);	// ページ定義のウィジェット定義ID
-						$this->tmpl->addVar("_widget", "_def_serial", $this->_defSerial);	// ページ定義のレコードシリアル番号
-					}
+				if (!empty($templateFile)){		// テンプレートを使用する場合
+					// 管理画面へのアクセスの場合は管理用POST値を設定
+					if ($isAdminDirAccess){
+						// 画面定義用の情報を戻す
+						if (!empty($this->_defSerial) && $useTemplate){		// シリアル番号が空のときは、ページ作成からの遷移ではないので、引き継がない
+							$this->tmpl->addVar("_widget", "_def_config", $this->_defConfigId);	// ページ定義のウィジェット定義ID
+							$this->tmpl->addVar("_widget", "_def_serial", $this->_defSerial);	// ページ定義のレコードシリアル番号
+						}
 					
-					// 戻り先URL。GETで遷移してきた場合のみ戻り先を取得。
-					if ($request->isGetMethod()){
-						if ($this->keepForeTaskForBackUrl){		// 遷移前のタスクを戻り先URLとする場合
-							// 戻り先URLを取得
+						// 戻り先URL。GETで遷移してきた場合のみ戻り先を取得。
+						if ($request->isGetMethod()){
+							if ($this->keepForeTaskForBackUrl){		// 遷移前のタスクを戻り先URLとする場合
+								// 戻り先URLを取得
+								$value = $request->trimValueOf('_backurl');		// 戻り先URL
+								if (!empty($value)) $this->_backUrl = $value;
+
+								// リファラーを解析
+								$backUrl = '';
+								if (isset($_SERVER["HTTP_REFERER"])) $backUrl = $_SERVER["HTTP_REFERER"];
+								$queryArray = array();
+								$parsedUrl = parse_url($backUrl);
+								if (!empty($parsedUrl['query'])) parse_str($parsedUrl['query'], $queryArray);		// クエリーの解析
+								$oldTask = $queryArray['task'];
+								$newTask = $request->trimValueOf('task');		// 現在のタスク
+							
+								// タスクに変更があった場合のみ戻り先URLを更新
+								if ($oldTask != $newTask) $this->_backUrl = $backUrl;
+							} else {
+								if (isset($_SERVER["HTTP_REFERER"])) $this->_backUrl = $_SERVER["HTTP_REFERER"];
+							}
+						} else {		// POSTの場合は既存値を取得
 							$value = $request->trimValueOf('_backurl');		// 戻り先URL
 							if (!empty($value)) $this->_backUrl = $value;
-
-							// リファラーを解析
-							$backUrl = '';
-							if (isset($_SERVER["HTTP_REFERER"])) $backUrl = $_SERVER["HTTP_REFERER"];
-							$queryArray = array();
-							$parsedUrl = parse_url($backUrl);
-							if (!empty($parsedUrl['query'])) parse_str($parsedUrl['query'], $queryArray);		// クエリーの解析
-							$oldTask = $queryArray['task'];
-							$newTask = $request->trimValueOf('task');		// 現在のタスク
-							
-							// タスクに変更があった場合のみ戻り先URLを更新
-							if ($oldTask != $newTask) $this->_backUrl = $backUrl;
-						} else {
-							if (isset($_SERVER["HTTP_REFERER"])) $this->_backUrl = $_SERVER["HTTP_REFERER"];
 						}
-					} else {		// POSTの場合は既存値を取得
-						$value = $request->trimValueOf('_backurl');		// 戻り先URL
-						if (!empty($value)) $this->_backUrl = $value;
+						if (!empty($this->_backUrl) && $useTemplate) $this->tmpl->addVar("_widget", "_back_url", $this->convertToDispString($this->_backUrl));	// 戻り先URL
 					}
-					if (!empty($this->_backUrl) && $useTemplate) $this->tmpl->addVar("_widget", "_back_url", $this->convertToDispString($this->_backUrl));	// 戻り先URL
-				}
 				
-				// フォームチェック機能を使用するか、システム管理権限がある場合は、フォームIDを埋め込む
-				if ($this->_useFormCheck || $this->gEnv->isSystemManageUser()){
-					// 現在のウィジェットのポジションを取得
-					$this->gPage->getCurrentWidgetPosition($position, $index);
+					// フォームチェック機能を使用するか、システム管理権限がある場合は、フォームIDを埋め込む
+					if ($this->_useFormCheck || $this->gEnv->isSystemManageUser()){
+						// 現在のウィジェットのポジションを取得
+						$this->gPage->getCurrentWidgetPosition($position, $index);
 					
-					$formId = md5($this->_widgetId . '-' . $position . '-'  . $index);
-					$this->tmpl->addVar("_widget", "_form_id", $formId);
+						$formId = md5($this->_widgetId . '-' . $position . '-'  . $index);
+						$this->tmpl->addVar("_widget", "_form_id", $formId);
+					}
 				}
 			}
 				

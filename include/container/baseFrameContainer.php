@@ -578,7 +578,7 @@ class BaseFrameContainer extends Core
 				$srcContents = ob_get_contents();
 				ob_clean();
 				
-				// 追加変換処理
+				// 追加変換処理。HTMLヘッダ出力する。
 				$destContents = $this->gPage->lateLaunchWidget($request, $srcContents);
 				
 				echo $destContents;
@@ -722,7 +722,7 @@ class BaseFrameContainer extends Core
 			$srcContents = $this->gPage->launchWidgetByJoomlaTag($srcContents, $convType);
 		}
 	
-		// 遅延実行ウィジェットの出力を埋め込む
+		// 遅延実行ウィジェットの出力を埋め込む。HTMLヘッダ出力する。
 		$destContents = $this->gPage->lateLaunchWidget($request, $srcContents);
 
 		// 携帯インターフェイスのときのときは、手動変換後、バイナリコード(絵文字等)を埋め込む
