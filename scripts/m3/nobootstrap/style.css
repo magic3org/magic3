@@ -73,6 +73,12 @@
 .glyphicon-chevron-down:before {
   content: "\e114";
 }
+.glyphicon-folder-close:before {
+  content: "\e117";
+}
+.glyphicon-folder-open:before {
+  content: "\e118";
+}
 .glyphicon-thumbs-up:before {
   content: "\e125";
 }

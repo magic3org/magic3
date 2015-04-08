@@ -52,11 +52,14 @@ if (typeof Object.create !== 'function'){
 
 			// パネル幅または高さ
 			if (self.options.position == 'left' || self.options.position == 'right'){
-				self.containerWidth = self.$elem.width();		
+				self.containerWidth = self.$elem.width();
 			} else {
 				self.containerWidth = self.$elem.height();
 			}
 			
+			// 配置面からのオープナーの距離
+			self.opnerAttachMargin = self.$elem.find('.' + self.options.openerClass).css(self.options.position);
+
 			self.display(); 
 			self.open();
 		},
@@ -80,7 +83,8 @@ if (typeof Object.create !== 'function'){
 				if(self.$elem.hasClass('opened')){
 					inlineCss[self.options.position] =  -self.containerWidth + 'px';	// パネル幅
 					panelCss[self.options.position] =  '0px';
-					openerCss[self.options.position] =  '0px';		// オープナー初期値
+				//	openerCss[self.options.position] =  '0px';		// オープナー初期値
+					openerCss[self.options.position] =  self.opnerAttachMargin;		// オープナー初期値
 
 					self.$elem.animate(inlineCss, self.options.animSpeed);
 					$(this).parent().animate(openerCss, self.options.animSpeed);

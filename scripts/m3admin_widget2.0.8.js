@@ -433,7 +433,7 @@
 		// その他ポジション(右パネル)
 //		widgetWindow += '<div id="m3slidepanel2">';
 		widgetWindow += '<div id="m3slidepanel2" class="m3panel_right m3-navbar-default" style="right:-240px; visibility:visible;">';
-		widgetWindow += '<div class="m3panelopener m3topright2"><a href="#"><i class="glyphicon glyphicon-th-list" rel="m3help" data-placement="bottom" data-container="body" title="その他のポジション"></i></a></div>';
+		widgetWindow += '<div class="m3panelopener m3topright2"><a href="#"><i class="glyphicon glyphicon-folder-open" rel="m3help" data-placement="bottom" data-container="body" title="その他のポジション"></i></a></div>';
 		widgetWindow += '<div class="m3paneltab">';
 		widgetWindow += '<div id="m3paneltab_widget">';
 		widgetWindow += '<div class="m3message"></div>';
@@ -467,7 +467,7 @@
 		// サイドパネル作成
 		$('.m3panel_left').m3slidepanel({ "position" : "left", "type" : "push" });
 		$('.m3panel_right').m3slidepanel({ "position" : "right", "type" : "push" });
-//		$('.m3panel_right').hide();
+		$('.m3panel_right').hide();
 
 		// タグ作成
 		$(".m3panel_left ul").idTabs();
