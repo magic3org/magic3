@@ -69,6 +69,10 @@ class linkInfo
 	{
 		global $gEnvManager;
 		global $gInstanceManager;
+		global $gPageManager;
+		
+		// ##### ウィジェット出力処理中断 ######
+		$gPageManager->abortWidget();
 		
 		// 入力値を取得
 		$accessPoint = $request->trimValueOf('accesspoint');

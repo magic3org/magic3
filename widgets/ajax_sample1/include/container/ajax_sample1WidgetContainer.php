@@ -56,6 +56,9 @@ class ajax_sample1WidgetContainer extends BaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		if ($param == 'ajax'){	// Ajaxインターフェイスでの対応の場合
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+
 			$this->gInstance->getAjaxManager()->addData('message', "サーバからの応答\n現在の日時は" . date(" Y年m月d日 H：i：s"));
 		}
 	}

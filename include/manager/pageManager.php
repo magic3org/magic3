@@ -76,6 +76,7 @@ class PageManager extends Core
 	private $outputHead;				// HTMLヘッダ出力を行ったかどうか
 	private $outputTheme;				// jQueryUIテーマ出力を行ったかどうか
 	private $isAbort;					// ページ作成処理を中断するかどうか
+	private $isWidgetAbort;				// 各ウィジェット処理を中断するかどうか
 	private $isRedirect;				// リダイレクトするかどうか
 	private $libFiles;					// javascript追加用ライブラリ
 	private $pageDefRev = 234;				// 画面定義のリビジョン番号
@@ -1965,6 +1966,8 @@ class PageManager extends Core
 	/**
 	 * ページ作成処理中断
 	 *
+	 * 注意)exitSystem()でシステムを終了させる必要あり
+	 *
 	 * @return 							なし
 	 */
 	function abortPage()
@@ -1984,6 +1987,15 @@ class PageManager extends Core
 		$gRequestManager->setSessionValueWithSerialize(M3_SESSION_USER_INFO, $userInfo);
 		
 		$this->isAbort = true;					// ページ作成処理を中断するかどうか
+	}
+	/**
+	 * ウィジェット処理中断
+	 *
+	 * @return 							なし
+	 */
+	function abortWidget()
+	{
+		$this->isWidgetAbort = true;					// 各ウィジェット処理を中断するかどうか
 	}
 	/**
 	 * 強制終了を実行
@@ -2094,6 +2106,9 @@ class PageManager extends Core
 		global $gEnvManager;
 		global $gErrorManager;
 		global $gDesignManager;
+		
+		// ページ作成中断またはウィジェット処理中断のときは終了
+		if ($this->isAbort || $this->isWidgetAbort) return '';
 		
 		// ウィジェットヘッダ(Joomla!1.0用)を出力のタイプを取得
 		$widgetHeaderType = $this->getTemplateWidgetHeaderType();
@@ -2457,6 +2472,9 @@ class PageManager extends Core
 	function getOptionContents($request)
 	{
 		global $gEnvManager;
+		
+		// ページ作成中断またはウィジェット処理中断のときは終了
+		if ($this->isAbort || $this->isWidgetAbort) return 'NO DATA';		// AJAXを送信する場合は空文字列では送信できないので、ダミーデータを返す
 		
 		$contents = '';
 		
@@ -4667,9 +4685,9 @@ class PageManager extends Core
 		global $gErrorManager;
 		global $gDesignManager;
 
-		// ページ作成中断のときは終了
-		if ($this->isAbort) return false;
-		
+		// ページ作成中断またはウィジェット処理中断のときは終了
+		if ($this->isAbort || $this->isWidgetAbort) return false;
+
 		// ウィジェット実行停止中のときは空で返す
 		// 管理者、運営者どのレベルで制限をかける?
 		if (!$fetchedRow['wd_active']) return true;
