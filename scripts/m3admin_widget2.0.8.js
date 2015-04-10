@@ -438,6 +438,7 @@
 		widgetWindow += '<div id="m3paneltab_widget">';
 		widgetWindow += '<div class="m3message"></div>';
 		widgetWindow += '<div id="m3paneltab_widget_list2" class="m3widgetlist2">';
+		widgetWindow += M3_REST_POSITION_DATA;			// その他のポジションデータ
 		widgetWindow += '</div>';	// m3widgetlist end
 		widgetWindow += '</div>';	// m3paneltab_widget end
 		widgetWindow += '</div>';	// m3paneltab_wrap end
@@ -467,7 +468,7 @@
 		// サイドパネル作成
 		$('.m3panel_left').m3slidepanel({ "position" : "left", "type" : "push" });
 		$('.m3panel_right').m3slidepanel({ "position" : "right", "type" : "push" });
-//		$('.m3panel_right').show();
+		if (!M3_REST_POSITION_DATA) $('.m3panel_right').hide();		// データがない場合は非表示
 
 		// タグ作成
 		$(".m3panel_left ul").idTabs();

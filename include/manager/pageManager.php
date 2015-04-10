@@ -3559,6 +3559,9 @@ class PageManager extends Core
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE = ' . $this->ckeditorTemplateType . ';' . M3_NL;
 					}
 				} else if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
+					// その他のポジションデータを取得
+					$positionData = $this->getRestPositionData();
+					
 					// テンプレート上のポジション名
 					if (count($this->viewPosId) > 0){
 						$posArrayStr = '[';
@@ -3571,6 +3574,9 @@ class PageManager extends Core
 					}
 					// 画面定義のリビジョン番号
 					$replaceStr .= 'var M3_REVISION = ' . $this->pageDefRev . ';' . M3_NL;
+					
+					// その他のポジションデータ
+					$replaceStr .= 'var M3_REST_POSITION_DATA = \'' . $positionData . '\';' . M3_NL;
 				} else if (!empty($pageId)){
 					$accessPoint = $this->gEnv->getAllDefaultPageId();
 					for ($i = 0; $i < count($accessPoint); $i++){
@@ -4238,7 +4244,8 @@ class PageManager extends Core
 				
 				// ウィジェットイメージを表示
 				$widgetTagHead = self::WIDGET_TAG_HEAD . $posId;
-				$contents .= $this->getWidgetList($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $widgetTagHead, $this->pageDefRows);
+				//$contents .= $this->getWidgetList($gEnvManager->getCurrentPageId(), $gEnvManager->getCurrentPageSubId(), $widgetTagHead, $this->pageDefRows);
+				$contents .= $this->getWidgetList($filename, $subId, $widgetTagHead, $this->pageDefRows);
 
 				$contents .= '</div>' . M3_NL;
 				break;
@@ -4250,6 +4257,49 @@ class PageManager extends Core
 		$this->viewPositions[] = $position;
 
 		return $contents;
+	}
+	/**
+	 * その他のポジションブロックデータを取得
+	 *
+	 * @param string 		ポジション作成用タグ
+	 */
+	function getRestPositionData()
+	{
+		global $gEnvManager;
+		
+		$restPositionData = '';
+		$rev = '888';
+		$pageId = $gEnvManager->getCurrentPageId();
+		$subId = $gEnvManager->getCurrentPageSubId();
+		
+		$restPositions = array_values(array_diff($this->defPositions/*全ポジション*/, $this->viewPositions/*表示済みポジション*/));
+		$positionCount = count($restPositions);
+		for ($i = 0; $i < $positionCount; $i++){
+			$posHead = '';		// アイコン付加用
+			$position = $restPositions[$i];
+			$posId = $position . '_0';
+			$viewPosId = self::POSITION_TAG_HEAD . $posId;
+
+			// 画面情報を取得
+			$ret = $this->db->getPageDef($pageId, $subId, $position, $rows);
+			if ($ret){
+				//$pageDefRows = $rows;			// ページ定義レコード
+						
+				$restPositionData .= '<div id="' . $viewPosId . '" class="m3_widgetpos_box" m3="pos:' . $position . ';rev:' . $rev . ';">';		// リビジョン番号を付加
+				$restPositionData .= '<h2 class="m3_widgetpos_box_title">' . $posHead . $position . '</h2>';
+			
+				// ウィジェットイメージを表示
+				$widgetTagHead = self::WIDGET_TAG_HEAD . $posId;
+				$contents = $this->getWidgetList($pageId, $subId, $widgetTagHead, $rows);
+				$contents = str_replace(M3_NL, '', $contents);
+				$contents = str_replace('\'', '\\\'', $contents);
+				$restPositionData .= $contents;
+				$restPositionData .= '</div>';
+				
+				$this->viewPosId[] = $viewPosId;// IDを保存
+			}
+		}
+		return $restPositionData;
 	}
 	/**
 	 * ウィジェット共通のコンテンツ追加処理
