@@ -435,9 +435,12 @@
 		widgetWindow += '<div id="m3slidepanel2" class="m3panel_right m3-navbar-default" style="right:-240px; visibility:visible;">';
 		widgetWindow += '<div class="m3panelopener m3topright2"><a href="#"><i class="glyphicon glyphicon-folder-open" rel="m3help" data-placement="bottom" data-container="body" title="その他のポジション"></i></a></div>';
 		widgetWindow += '<div class="m3paneltab">';
-		widgetWindow += '<div id="m3paneltab_widget">';
+		widgetWindow += '<ul>';
+		widgetWindow += '<li><a href="#m3paneltab_position">その他ポジション</a></li>';
+		widgetWindow += '</ul>';
+		widgetWindow += '<div id="m3paneltab_position">';
 		widgetWindow += '<div class="m3message"></div>';
-		widgetWindow += '<div id="m3paneltab_widget_list2" class="m3widgetlist2">';
+		widgetWindow += '<div id="m3paneltab_widget_list2" class="m3widgetlist">';
 		widgetWindow += M3_REST_POSITION_DATA;			// その他のポジションデータ
 		widgetWindow += '</div>';	// m3widgetlist end
 		widgetWindow += '</div>';	// m3paneltab_widget end
@@ -473,11 +476,15 @@
 		// タグ作成
 		$(".m3panel_left ul").idTabs();
 		
-		// スライドメニュー高さ調整
+		// スライドメニュー高さ調整(左パネル)
 		var pos = $('#m3paneltab_widget_list').position();
 		//var slideMenuHeight = $(window).height() - pos.top - 30;	// スクロールバー部分調整
 		var slideMenuHeight = $(window).height() - pos.top - 20;	// スクロールバー部分調整
 		$('#m3paneltab_widget_list').height(slideMenuHeight);
+		// スライドメニュー高さ調整(右パネル)
+		pos = $('#m3paneltab_widget_list2').position();
+		slideMenuHeight = $(window).height() - pos.top - 20;	// スクロールバー部分調整
+		$('#m3paneltab_widget_list2').height(slideMenuHeight);
 	
 		// 画面リサイズボタン
 		$(".m3resizer.m3topright a").click(function(){
@@ -505,11 +512,15 @@
 			
 			// 画面をリサイズ
 			parent.$("#layout_preview_outer").animate(openerCss, { 'dulation': 350, 'complete': function(){
-				// スライドメニュー高さ調整
+				// スライドメニュー高さ調整(左パネル)
 				var pos = $('#m3paneltab_widget_list').position();
 				//var slideMenuHeight = $(window).height() - pos.top - 30;	// スクロールバー部分調整
 				var slideMenuHeight = $(window).height() - pos.top - 20;	// スクロールバー部分調整
 				$('#m3paneltab_widget_list').height(slideMenuHeight);
+				// スライドメニュー高さ調整(右パネル)
+				pos = $('#m3paneltab_widget_list2').position();
+				slideMenuHeight = $(window).height() - pos.top - 20;	// スクロールバー部分調整
+				$('#m3paneltab_widget_list2').height(slideMenuHeight);
 			}});
 			
 			// リロード

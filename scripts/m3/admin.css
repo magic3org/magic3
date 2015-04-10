@@ -245,6 +245,14 @@
 	outline:0;
 }
 /*.m3paneltab div a { color:#000; font-weight:bold; } */
+/* 右パネル差分 */
+#m3slidepanel2 .m3paneltab ul {
+	margin-left:40px;
+}
+#m3slidepanel2 .m3paneltab ul li a {	/*tab top*/
+	background:#2C3E50;
+	pointer-events:none;
+}
 
 /*** タブ内アコーディオンメニュー ***/
 .m3accordion {
