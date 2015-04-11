@@ -205,16 +205,16 @@
 .m3-navbar-default .m3-navbar-nav>.disabled>a,.m3-navbar-default .m3-navbar-nav>.disabled>a:hover,.m3-navbar-default .m3-navbar-nav>.disabled>a:focus{color:#ccc;background-color:transparent}
 
 /******* スライドパネルのタブ *******/
-.m3paneltab ul {
+.m3paneltab > ul {
 	margin:5px 5px;
 	padding:0px;
 }
-.m3paneltab ul li {
+.m3paneltab > ul li {
 	list-style:none;
 	float:left;
 	height:35px;
 }
-.m3paneltab ul li a {	/*tab top*/
+.m3paneltab > ul li a {	/*tab top*/
 	outline: 0;
 	display:block;
 	padding:6px 10px;
@@ -227,11 +227,11 @@
 /*background:#444;*/
 	background:#95a5a6;
 }
-.m3paneltab ul li a:hover {
+.m3paneltab > ul li a:hover {
 	color:#FFF;
 	background:#111;
 }
-.m3paneltab ul li a.selected {
+.m3paneltab > ul li a.selected {
 	margin-bottom:0;
 	color:#000;
 	background:#fff;
@@ -247,10 +247,10 @@
 }
 /*.m3paneltab div a { color:#000; font-weight:bold; } */
 /* 右パネル差分 */
-#m3slidepanel2 .m3paneltab ul {
+#m3slidepanel2 .m3paneltab > ul {
 	margin-left:40px;
 }
-#m3slidepanel2 .m3paneltab ul li a {	/*tab top*/
+#m3slidepanel2 .m3paneltab > ul li a {	/*tab top*/
 	background:#2C3E50;
 	pointer-events:none;
 }
