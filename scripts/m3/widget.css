@@ -191,15 +191,18 @@ dl.m3_widget_sortable dt span.options a {
 	position:fixed;
 	top:0;
 	right:0;
-	margin:10px;
-/*	padding:0;*/
-	padding-top:0;
-	padding-right:0;
-	padding-bottom:0;
-	padding-left:30px;
-/*	width:32px;*/
-	height:32px;
+	margin:0;
+	padding:0;
+	width:45px;
+	height:45px;
 	z-index:2147483647;
+}
+.m3editend a {
+	margin:0;
+/*	padding:0;*/
+}
+.m3editend a img {
+	margin:7px;
 }
 /* ヘルプ、ツールチップ */
 i[rel="m3help"] { cursor: default; }
