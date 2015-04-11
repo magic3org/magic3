@@ -161,7 +161,8 @@
 				}*/
 
 				// ドラッグ中のイメージの幅を固定
-				ui.helper.css("width", DRAG_ITEM_WIDTH);
+				ui.helper.css('z-index', '2010');
+				ui.helper.css('width', DRAG_ITEM_WIDTH);
 			},
 //			stop: function(e,ui) {
 //			},

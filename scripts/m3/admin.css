@@ -212,6 +212,7 @@
 .m3paneltab ul li {
 	list-style:none;
 	float:left;
+	height:35px;
 }
 .m3paneltab ul li a {	/*tab top*/
 	outline: 0;

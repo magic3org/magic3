@@ -73,25 +73,24 @@ dl.m3_widget_sortable {
 	color:#222;
 	margin:10px 10px 0 10px;
 	border:1px solid #555;
-	cursor:hand;
+/*	cursor:hand;
 	cursor:grab;
 	cursor:-moz-grab;
-	cursor:-webkit-grab;
+	cursor:-webkit-grab;*/
 }
 /*dl.m3_widget_sortable dt {*/
 dt.m3_widget_with_check_box {
-	/*background-color:#666;*/
-background-color:#18bc9c;
-/*background-color:#3498DB;*/
+	background-color:#18bc9c;
 	color:#FFF;
 	font-weight: normal;
-/*	cursor:move;*/
 	height:2em;
 	line-height:2;
 	margin: 0;
 	padding:0 6px;
-/*	position:relative;*/ /* title NG */
-/*position:static;*/	/* OK but checkbox invisible */
+	cursor:hand;
+	cursor:grab;
+	cursor:-moz-grab;
+	cursor:-webkit-grab;
 }
 dt.m3_widget_with_check_box .m3widgettitle {
 	display:inline;
