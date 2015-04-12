@@ -2473,10 +2473,14 @@ class PageManager extends Core
 	{
 		global $gEnvManager;
 		
-		// ページ作成中断またはウィジェット処理中断のときは終了
-		if ($this->isAbort || $this->isWidgetAbort) return 'NO DATA';		// AJAXを送信する場合は空文字列では送信できないので、ダミーデータを返す
-		
 		$contents = '';
+		
+		// ページ作成中断のときは終了
+		if ($this->isAbort) return '';
+		
+		// ウィジェット処理中断のとき
+		// AJAXを送信する場合は空文字列では送信できないので、ダミーデータを返す
+		if ($this->isWidgetAbort) $contents .= 'NO DATA' . M3_NL;
 		
 		// Magic3出力コメント
 		if (!$gEnvManager->isMobile() && $this->outputByHtml){		// 携帯以外で、HTML出力のとき
@@ -3702,8 +3706,10 @@ class PageManager extends Core
 						$titleStr = '編集終了';
 						$linkUrl = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BACKUP_URL);		// 退避していたURLを取得
 						if (empty($linkUrl)) $linkUrl = $gEnvManager->getDefaultUrl();
-						$editTag = '<div class="m3editend"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
-						$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" /></a></div>';
+						//$editTag = '<div class="m3editend"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
+						//$editTag .= '<img src="' . $rootUrl . self::EDIT_END_ICON_FILE . '" alt="' . $titleStr . '" /></a></div>';
+						$editTag = '<div class="m3editend m3topright"><a href="' . convertUrlToHtmlEntity($linkUrl) . '" rel="m3help" data-placement="bottom" data-container="body" title="' . $titleStr . '">';
+						$editTag .= '<i class="glyphicon glyphicon-ok-sign"></i></a></div>';
 						$linkStr .= $editTag;
 						
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
