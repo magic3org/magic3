@@ -58,6 +58,9 @@
 .glyphicon-minus-sign:before {
   content: "\e082";
 }
+.glyphicon-ok-sign:before {
+  content: "\e084";
+}
 .glyphicon-info-sign:before {
   content: "\e086";
 }
