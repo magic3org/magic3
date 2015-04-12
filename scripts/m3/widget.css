@@ -78,6 +78,17 @@ dl.m3_widget_sortable {
 	cursor:-moz-grab;
 	cursor:-webkit-grab;*/
 }
+dl.m3_widget_sortable ul > li:before {
+	content: none !important;
+}
+dl.m3_widget_sortable img {
+	margin:0;
+}
+dl.m3_widget_sortable dd {
+	background-color:#FFF;
+	margin:0;
+	padding:3px 6px;
+}
 /*dl.m3_widget_sortable dt {*/
 dt.m3_widget_with_check_box {
 	background-color:#18bc9c;
@@ -117,11 +128,6 @@ dt.m3_widget_shared {
 /*	background-color:#E51919;*/
 	background-color:#E74C3C;
 /*	background-color:#F39C12;*/
-}
-dl.m3_widget_sortable dd {
-	background-color:#FFF;
-	margin:0;
-	padding:3px 6px;
 }
 
 /* widget in list */
