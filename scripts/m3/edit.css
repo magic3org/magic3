@@ -54,18 +54,13 @@ img.m3icon {
 	z-index:2;
 }
 /* ツールチップ */
-.m3tooltip {
+.m3_widget > .m3tooltip {
 	background-color:#FFF;
 	padding: 1px;
 	border: 2px solid #ccc;
 	z-index:1000000;
 }
-/* IE以外の設定 */
-/*:root .m3tooltip {
-	margin-top:2px;
-	margin-right:2px;
-}*/
-.m3tooltip img {
+.m3_widget > .m3tooltip img {
 	margin:3px;
 	border:0;
 	vertical-align: top;
