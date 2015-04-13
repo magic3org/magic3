@@ -1,0 +1,65 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	m3SetConfigTable('mainconfig');
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
+    <tbody>
+	<tr>
+	    <th><span {_HELP_VIEW_COUNT}>表示項目数</span></th>
+		<td><div class="col-sm-1 m3config_item"><input type="text" name="item_count" class="form-control" value="{ITEM_COUNT}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_USE_RSS}>RSS配信</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_rss" {USE_RSS} />使用</label></div></td>
+	</tr>
+	<tr>
+	    <th><span {_HELP_OPTION}>表示オプション</span></th>
+		<td><div class="checkbox"><label><input type="checkbox" name="item_option_passage" {OPTION_PASSAGE} />経過日時</label></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_show_image" {SHOW_IMAGE_CHECKED} />画像を表示</label></div>
+		<div class="form-control-static m3config_item col-sm-1" style="width:120px;">画像タイプ：</div>
+	    <div class="col-sm-3 m3config_item" style="margin-right:50px;">
+		<select name="item_image_type" class="form-control">
+	        <patTemplate:tmpl name="image_type_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+		<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像幅：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_width" class="form-control" value="{IMAGE_WIDTH}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>
+		<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像高さ：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_height" class="form-control" value="{IMAGE_HEIGHT}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>
+		</td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
+</form>
+</div>
+</patTemplate:tmpl>
