@@ -89,6 +89,10 @@ dl.m3_widget_sortable dd {
 	margin:0;
 	padding:3px 6px;
 }
+dl.m3_widget_sortable table, dl.m3_widget_sortable table td {
+	font-size:15px;
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+}
 /*dl.m3_widget_sortable dt {*/
 dt.m3_widget_with_check_box {
 	background-color:#18bc9c;
@@ -110,6 +114,14 @@ dt.m3_widget_with_check_box .m3widgettitle {
 	height:2em;
 	overflow:hidden;
 }
+dt.m3_widget_with_check_box .m3widgetdropdown b {
+	color:#FFF;
+}
+dt.m3_widget_with_check_box .m3widgetdropdown span {
+	font-size:15px;
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+}
+
 .m3widgetdropdown {
 	display:inline;
 	float:right;
