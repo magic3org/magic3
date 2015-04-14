@@ -13,36 +13,84 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
 function updateItem(){
 	if (!window.confirm('設定を更新しますか?')) return false;
 	document.main.act.value='update';
 	document.main.submit();
 	return true;
 }
+function selectItem()
+{
+	document.main.act.value = 'select';
+	document.main.submit();
+	return true;
+}
+function listItem(){
+	document.main.task.value = 'list';
+	document.main.submit();
+	return true;
+}
 $(function(){
 	m3SetConfigTable('mainconfig');
+	
+	// 入力制限
+	$(".day_count").numeric({ decimal: false });
 });
 //]]>
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
+<input type="hidden" name="task" />
 <input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<!-- m3:PostParam -->
 <h3 class="m3config_h">基本設定</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_UNTITLED_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
+
 <table id="mainconfig">
     <tbody>
-	<tr>
-	    <th><span {_HELP_VIEW_COUNT}>表示項目数</span></th>
-		<td><div class="col-sm-1 m3config_item"><input type="text" name="item_count" class="form-control" value="{ITEM_COUNT}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></td>
+        <tr>
+	    <th><span {_HELP_NAME_INPUT}>名前</span></th>
+	    <td>
+		<div class="col-sm-4 m3config_item">
+	    <select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
+	        <option value="0">-- 新規 --</option>
+	        <patTemplate:tmpl name="_config_name_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
+	    <div class="col-sm-4 m3config_item"><input type="text" class="form-control" name="item_name" value="{NAME}" size="40" maxlength="40" /></div>
+	    </patTemplate:tmpl>
+	    </td>
 	</tr>
-    <tr>
-	    <th><span {_HELP_USE_RSS}>RSS配信</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_rss" {USE_RSS} />使用</label></div></td>
-	</tr>
 	<tr>
-	    <th><span {_HELP_OPTION}>表示オプション</span></th>
-		<td><div class="checkbox"><label><input type="checkbox" name="item_option_passage" {OPTION_PASSAGE} />経過日時</label></div>
-		<div class="checkbox"><label><input type="checkbox" name="item_show_image" {SHOW_IMAGE_CHECKED} />画像を表示</label></div>
+	    <th>表示オプション</th>
+	    <td>
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-1"><span {_HELP_VIEW_COUNT}>項目数：</span></div>
+		<div class="col-sm-1 m3config_item"><input type="text" name="item_count" class="form-control" value="{ITEM_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>
+		<div class="form-control-static m3config_item col-sm-1">表示順：</div>
+		<div class="col-sm-2 m3config_item"><select name="item_sort_order" class="form-control">
+	        <patTemplate:tmpl name="sort_order">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select></div>
+		</div>
+		<div class="form-group clearfix"><div class="checkbox m3config_item col-sm-1" style="width:200px;"><label><input type="checkbox" name="item_use_base_day" {USE_BASE_DAY} />基準日以降を表示</label></div>
+		<div class="form-control-static m3config_item col-sm-1" style="width:150px;">基準日：現在から</div><div class="col-sm-1 m3config_item"><input type="text" name="item_day_count" class="form-control day_count" value="{DAY_COUNT}" maxlength="3" /></div><div class="form-control-static m3config_item col-sm-1" style="width:50px;">日後</div>
+		</div>
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_show_image" {SHOW_IMAGE_CHECKED} />画像を表示</label></div>
 		<div class="form-control-static m3config_item col-sm-1" style="width:120px;">画像タイプ：</div>
 	    <div class="col-sm-3 m3config_item" style="margin-right:50px;">
 		<select name="item_image_type" class="form-control">
@@ -52,13 +100,22 @@ $(function(){
 	    </select>
 		</div>
 		<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像幅：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_width" class="form-control" value="{IMAGE_WIDTH}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>
-		<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像高さ：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_height" class="form-control" value="{IMAGE_HEIGHT}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>
+		<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像高さ：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_height" class="form-control" value="{IMAGE_HEIGHT}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></div>
 		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_USE_RSS}>RSS配信</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_rss" {USE_RSS} />使用</label></div></td>
 	</tr>
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
-<input type="button" class="button" onclick="updateItem();" value="更新" />
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
 </div>
 </form>
 </div>

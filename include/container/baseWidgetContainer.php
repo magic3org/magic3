@@ -60,6 +60,7 @@ class BaseWidgetContainer extends Core
 	protected $_widgetId;		// 現在のウィジェットID
 	protected $_langId;			// 現在の言語
 	protected $_userId;			// 現在のユーザ
+	protected $_configParamObj;	// 設定画面のパラメータオブジェクト
 	
 	// テンプレート置き換え処理用
 	protected $_localParamObj;					// パラメータオブジェクト
@@ -77,6 +78,9 @@ class BaseWidgetContainer extends Core
 	const MSG_USER_ERR = 2;		// ユーザ操作エラー
 	const MSG_GUIDANCE = 3;		// ガイダンス
 	
+	// 設定画面用
+	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
+		
 	// テンプレート処理置き換え用
 	const ASSIGN_TEMPLATE_DIR = '/widgets/template';		// // テンプレート読み込みディレクトリ
 	// 出力パターン
@@ -2484,6 +2488,7 @@ class BaseWidgetContainer extends Core
 		$defSerial = $this->_defSerial;
 		$defConfigId = $this->_defConfigId;
 		$paramObj = $this->getWidgetParamObjectWithId($withZeroId);
+		$this->_configParamObj = $paramObj;	// 設定画面のパラメータオブジェクト
 	}
 	/**
 	 * 管理画面起動時のウィジェット定義ID、画面定義シリアル番号を更新
@@ -3473,6 +3478,57 @@ class BaseWidgetContainer extends Core
 	{
 		$this->configMenubarBreadcrumbTitleDef = $titleDef;			// 設定画面用パンくずリストのタイトル定義
 		$this->configMenubarMenuDef = $menuDef;					// 設定画面用メニューバーのメニュー定義
+	}
+	/**
+	 * [設定画面用メソッド]
+	 *
+	 * デフォルトの設定名を作成
+	 *
+	 * @return string	デフォルト名
+	 */
+	function createConfigDefaultName()
+	{
+		$name = self::DEFAULT_NAME_HEAD;
+		for ($j = 1; $j < 100; $j++){
+			$name = self::DEFAULT_NAME_HEAD . $j;
+			// 設定名の重複チェック
+			for ($i = 0; $i < count($this->_configParamObj); $i++){
+				$targetObj = $this->_configParamObj[$i]->object;
+				if ($name == $targetObj->name){		// 定義名
+					break;
+				}
+			}
+			// 重複なしのときは終了
+			if ($i == count($this->_configParamObj)) break;
+		}
+		return $name;
+	}
+	/**
+	 * [設定画面用メソッド]
+	 *
+	 * 設定選択用メニューを作成
+	 *
+	 * @param string $configId		選択中の設定ID
+	 * @return なし
+	 */
+	function createConfigNameMenu($configId)
+	{
+		for ($i = 0; $i < count($this->_configParamObj); $i++){
+			$id = $this->_configParamObj[$i]->id;// 定義ID
+			$targetObj = $this->_configParamObj[$i]->object;
+			$name = $targetObj->name;// 定義名
+			$selected = '';
+	//		if ($this->configId == $id) $selected = 'selected';
+			if ($configId == $id) $selected = 'selected';
+
+			$row = array(
+				'name' => $name,		// 名前
+				'value' => $id,		// 定義ID
+				'selected' => $selected	// 選択中の項目かどうか
+			);
+			$this->tmpl->addVars('_config_name_list', $row);
+			$this->tmpl->parseTemplate('_config_name_list', 'a');
+		}
 	}
 }
 ?>
