@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseRssContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/event_headlineCommonDef.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/event_headlineDb.php');
 
 class rss_event_headlineWidgetContainer extends BaseRssContainer
@@ -23,7 +24,6 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 	private $rssChannel;				// RSSチャンネル部出力データ
 	private $rssSeqUrl = array();					// 項目の並び
 	private $defaultUrl;	// システムのデフォルトURL
-	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
 	const DEFAULT_TITLE = 'ブログ最新記事';			// デフォルトのウィジェットタイトル
 	const DEFAULT_DESC = '最新のブログ記事が取得できます。';
 	
@@ -63,13 +63,17 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$langId = $this->gEnv->getCurrentLanguage();
+		// 定義ID取得
+		$configId = $this->gEnv->getCurrentWidgetConfigId();
+		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
+		
+		// 初期値設定
+		$itemCount = event_headlineCommonDef::DEFAULT_ITEM_COUNT;	// 表示項目数
+		$useRss = 1;							// RSS配信を行うかどうか
 		
 		// 設定値を取得
-		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
-		$useRss = 1;							// RSS配信を行うかどうか
-		$paramObj = $this->getWidgetParamObj();
-		if (!empty($paramObj)){
+		$paramObj = $this->getWidgetParamObjByConfigId($configId);
+		if (!empty($paramObj)){		// 定義データが取得できたとき
 			$itemCount	= $paramObj->itemCount;
 			$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
 			if (!isset($useRss)) $useRss = 1;

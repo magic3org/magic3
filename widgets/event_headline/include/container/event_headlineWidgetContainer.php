@@ -23,14 +23,11 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 	private $isEntry;	// 記事の投稿があるかどうか
 	private $defaultUrl;	// システムのデフォルトURL
 	private $headRssFile;				// RSS情報
-	private $optionPassage;						// 表示オプション(経過日時)
 	private $showImage;		// 画像を表示するかどうか
 	private $imageType;				// 画像タイプ
 	private $imageWidth;			// 画像幅
 	private $imageHeight;			// 画像高さ
-	const DEFAULT_ITEM_COUNT = 20;		// デフォルトの表示項目数
-	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
-	const MAX_TITLE_LENGTH = 20;			// タイトルの最大文字列長
+	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'イベントヘッドライン';		// デフォルトのウィジェットタイトル名
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
 		
@@ -70,27 +67,29 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		// 定義ID取得
+		$configId = $this->gEnv->getCurrentWidgetConfigId();
+		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
+		
 		// 初期値設定
-		$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
+		$itemCount = event_headlineCommonDef::DEFAULT_ITEM_COUNT;	// 表示項目数
 		$useRss = 1;							// RSS配信を行うかどうか
-		$this->optionPassage	= 0;						// 表示オプション(経過日時)
 		$this->showImage		= 0;				// 画像を表示するかどうか
-		$this->imageType		= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
+		$this->imageType		= event_headlineCommonDef::DEFAULT_IMAGE_TYPE;				// 画像タイプ
 		$this->imageWidth		= 0;				// 画像幅
 		$this->imageHeight		= 0;				// 画像高さ
-			
+
 		// 設定値を取得
-		$paramObj = $this->getWidgetParamObj();
-		if (!empty($paramObj)){
+		$paramObj = $this->getWidgetParamObjByConfigId($configId);
+		if (!empty($paramObj)){		// 定義データが取得できたとき
 			if (isset($paramObj->itemCount))	$itemCount	= $paramObj->itemCount;
 			if (isset($paramObj->useRss))		$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
-			if (isset($paramObj->optionPassage)) $this->optionPassage	= $paramObj->optionPassage;		// 表示オプション(経過日時)
 			if (isset($paramObj->showImage))	$this->showImage		= $paramObj->showImage;				// 画像を表示するかどうか
 			if (isset($paramObj->imageType))	$this->imageType		= $paramObj->imageType;				// 画像タイプ
 			if (isset($paramObj->imageWidth))	$this->imageWidth		= $paramObj->imageWidth;				// 画像幅
 			if (isset($paramObj->imageHeight))	$this->imageHeight		= $paramObj->imageHeight;				// 画像高さ
 		}
-		
+
 		// 新規ブログタイトルを取得
 		$this->defaultUrl = $this->gEnv->getDefaultUrl();
 		$this->db->getEntryItems($itemCount, $this->gEnv->getCurrentLanguage(), array($this, 'itemLoop'));
@@ -161,12 +160,6 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 		
 		// タイトルを設定
 		$title = $fetchedRow['be_name'];
-		// タイトルの長さは制限
-		if (function_exists('mb_substr')){
-			$title = mb_substr($title, 0, self::MAX_TITLE_LENGTH);
-		} else {
-			$title = substr($title, 0, self::MAX_TITLE_LENGTH);
-		}
 		
 		// 記事へのリンク
 		$url = $this->defaultUrl . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id'];
@@ -174,13 +167,6 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 
 		// オプション項目
 		$optionStr = '';
-		if ($this->optionPassage){
-			$time = strtotime($fetchedRow['be_regist_dt']);
-			if ($time != strtotime($this->gEnv->getInitValueOfTimestamp())){
-				$time = time() - $time;
-				$optionStr = '<div style="text-align:right;font-size:smaller;">' . $this->convertToDispString($this->convertToDispPassageTime($time) . '前') . '</div>';
-			}
-		}
 		
 		// 画像
 		$imageTag = '';

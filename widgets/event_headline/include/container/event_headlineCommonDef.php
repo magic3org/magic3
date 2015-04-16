@@ -17,6 +17,8 @@
 class event_headlineCommonDef
 {
 	// ##### 定義値 #####
+	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
+	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_EVENT_ITEM_LAYOUT = '<div style="float:left;">[#IMAGE#]</div><div class="clearfix"><div>[#TITLE#]([#CT_DATE#] [#CT_TIME#])</div><div>[#CT_SUMMARY#]</div></div>';	// イベント項目レイアウト

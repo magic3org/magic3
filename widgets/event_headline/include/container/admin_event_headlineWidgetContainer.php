@@ -23,8 +23,6 @@ class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer
 	private $sortOrder;		// ソート順
 	private $sortOrderArray;		// ソート順
 	private $imageType;		// 選択中の画像タイプ
-	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
-	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	
 	/**
 	 * コンストラクタ
@@ -217,12 +215,12 @@ class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
 				$name				= $this->createConfigDefaultName();			// デフォルトの設定名を作成
-				$itemCount			= self::DEFAULT_ITEM_COUNT;	// 表示項目数
+				$itemCount			= event_headlineCommonDef::DEFAULT_ITEM_COUNT;	// 表示項目数
 				$this->sortOrder	= '0';		// ソート順
 				$useBaseDay			= '0';		// 基準日を使用するかどうか
 				$dayCount			= 0;			// 基準日からの日数
 				$showImage			= 0;		// 画像を表示するかどうか
-				$this->imageType	= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
+				$this->imageType	= event_headlineCommonDef::DEFAULT_IMAGE_TYPE;				// 画像タイプ
 				$imageWidth			= 0;			// 画像幅
 				$imageHeight		= 0;			// 画像高さ
 				$useRss				= 1;							// RSS配信を行うかどうか
