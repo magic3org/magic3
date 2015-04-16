@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/event_headlineCommonDef.php');
 require_once($gEnvManager->getCurrentWidgetDbPath()	. '/event_headlineDb.php');
 
 class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer

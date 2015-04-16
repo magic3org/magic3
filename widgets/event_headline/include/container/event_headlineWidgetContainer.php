@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/event_headlineCommonDef.php');
 require_once($gEnvManager->getCurrentWidgetDbPath()	. '/event_headlineDb.php');
 
 class event_headlineWidgetContainer extends BaseWidgetContainer
@@ -30,7 +31,7 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_ITEM_COUNT = 20;		// デフォルトの表示項目数
 	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	const MAX_TITLE_LENGTH = 20;			// タイトルの最大文字列長
-	const DEFAULT_TITLE = 'ブログ最新記事';		// デフォルトのウィジェットタイトル名
+	const DEFAULT_TITLE = 'イベントヘッドライン';		// デフォルトのウィジェットタイトル名
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
 		
 	/**
@@ -197,7 +198,7 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 		$nameTag = '<a href="' . $escapedLinkUrl . '"><span>' . $this->convertToDispString($title) . '</span></a>';
 		$nameTag .= $optionStr;
 		if ($this->showImage) $nameTag = '<div class="clearfix">' . $nameTag . '</div>';
-		
+		$nameTag = event_headlineCommonDef::DEFAULT_EVENT_ITEM_LAYOUT;
 		$row = array(
 			'name' 		=> $nameTag,			// タイトル
 			'image'		=> $imageTag								// 画像
