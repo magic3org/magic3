@@ -30,7 +30,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	const MENUBAR_TITLE = '共通設定';
 	const HELP_ADJUSTWIDGET_CONFIG = 'adjustwidget_config';			// 機能説明ヘルプ
 	const WIDGET_TAG_HEAD = 'm3widget_';			// ウィジェットの識別用タグIDヘッダ
-	const REMOVE_LIST_MARKER_CSS = "#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n}\n#[#M3_WIDGET_CSS_ID#] ul{\n    padding-left: 0;\n    list-style: none;\n}\n";			// CSS(リストマーカー削除)
+	const REMOVE_LIST_MARKER_CSS = "#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n    margin: 0;\n    padding: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul>li {\n    padding-left: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul{\n    padding-left: 0;\n    list-style: none;\n}\n";			// CSS(リストマーカー削除)
 	
 	/**
 	 * コンストラクタ
