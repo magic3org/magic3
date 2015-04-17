@@ -162,38 +162,50 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 	 */
 	function itemLoop($index, $fetchedRow, $param)
 	{
-		$entryId = $fetchedRow['ee_id'];
-		
-		// タイトルを設定
-		$title = $fetchedRow['ee_name'];
-		
-		// イベント記事へのリンク
-		$url = $this->defaultUrl . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $fetchedRow['ee_id'];
-		$escapedLinkUrl = $this->convertUrlToHtmlEntity($this->getUrl($url, true/*リンク用*/));
+		$entryId = $fetchedRow['ee_id'];	// イベント記事ID
+		$title = $fetchedRow['ee_name'];	// タイトル
 
-		// オプション項目
-		$optionStr = '';
+		// イベント記事へのリンク
+		$url = $this->defaultUrl . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId;
+		$linkUrl = $this->getUrl($url, true/*リンク用*/);
+		$escapedLinkUrl = $this->convertUrlToHtmlEntity($linkUrl);
+
+		// タイトル作成
+		$titleTag = '<a href="' . $escapedLinkUrl . '">' . $this->convertToDispString($title) . '</a>';
 		
 		// 画像
 		$imageTag = '';
 		if ($this->showImage){
-			$titleStr = $fetchedRow['ee_name'];
+			$titleStr = $this->convertToDispString($title);
 			$imageUrl = $this->getImageUrl($entryId, $this->imageType);
 			$style = '';
 			if ($this->imageWidth > 0) $style .= 'width:' . $this->imageWidth . 'px;';
 			if ($this->imageHeight > 0) $style .= 'height:' . $this->imageHeight . 'px;';
 			if (!empty($style)) $style = 'style="' . $style . '" ';
 			$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $titleStr . '" title="' . $titleStr . '" ' . $style . '/>';
-			$imageTag = '<div style="float:left;"><a href="' . $escapedLinkUrl . '">' . $imageTag . '</a></div>';
+//			$imageTag = '<div style="float:left;"><a href="' . $escapedLinkUrl . '">' . $imageTag . '</a></div>';
+			$imageTag = '<a href="' . $escapedLinkUrl . '">' . $imageTag . '</a>';
 		}
-		// 記事名
-		$nameTag = '<a href="' . $escapedLinkUrl . '"><span>' . $this->convertToDispString($title) . '</span></a>';
-		$nameTag .= $optionStr;
-		if ($this->showImage) $nameTag = '<div class="clearfix">' . $nameTag . '</div>';
-		$nameTag = event_headlineCommonDef::DEFAULT_EVENT_ITEM_LAYOUT;
+		
+		// Magic3マクロ変換
+		// あらかじめ「CT_」タグをすべて取得する?
+		$contentInfo = array();
+		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $entryId;			// コンテンツ置換キー(エントリーID)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $linkUrl;// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $title;			// コンテンツ置換キー(タイトル)
+		$contentInfo[M3_TAG_MACRO_CONTENT_SUMMARY] = $fetchedRow['ee_summary'];			// コンテンツ置換キー(要約)
+		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($fetchedRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始日)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($fetchedRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始時間)
+		
+		// コンテンツレイアウトに埋め込む
+		$contentParam = array(	M3_TAG_MACRO_TITLE	=> $titleTag,
+								M3_TAG_MACRO_IMAGE	=> $imageTag,
+								M3_TAG_MACRO_BODY	=> $entryHtml	);
+		$entryHtml = $this->createDetailContent($contentParam);
+		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
+		
 		$row = array(
-			'name' 		=> $nameTag,			// タイトル
-			'image'		=> $imageTag								// 画像
+			'entry' 	=> $entryHtml		// イベント記事内容
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
@@ -218,6 +230,33 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 		}
 		$url = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_EVENT, 0/*PC用*/, $filename);
 		return $url;
+	}
+	/**
+	 * 詳細コンテンツを作成
+	 *
+	 * @param array	$contentParam		コンテンツ作成用パラメータ
+	 * @return string			作成コンテンツ
+	 */
+	function createDetailContent($contentParam)
+	{
+		static $initContentText;
+		
+		if (!isset($initContentText)){
+//			$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];			// コンテンツレイアウト(記事詳細)
+			if (empty($initContentText)) $initContentText = event_headlineCommonDef::DEFAULT_EVENT_ITEM_LAYOUT;
+		}
+		
+		// コンテンツを作成
+		$contentText = $initContentText;
+		$keys = array_keys($contentParam);
+		for ($i = 0; $i < count($keys); $i++){
+			$key = $keys[$i];
+			$value = str_replace('\\', '\\\\', $contentParam[$key]);	// ##### (注意)preg_replaceで変換値のバックスラッシュが解釈されるので、あらかじめバックスラッシュを2重化しておく必要がある
+			
+			$pattern = '/' . preg_quote(M3_TAG_START . $key) . ':?(.*?)' . preg_quote(M3_TAG_END) . '/u';
+			$contentText = preg_replace($pattern, $value, $contentText);
+		}
+		return $contentText;
 	}
 }
 ?>

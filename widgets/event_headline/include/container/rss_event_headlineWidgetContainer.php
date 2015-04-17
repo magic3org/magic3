@@ -68,18 +68,31 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
 		
 		// 初期値設定
-		$itemCount = event_headlineCommonDef::DEFAULT_ITEM_COUNT;	// 表示項目数
-		$useRss = 1;							// RSS配信を行うかどうか
-		
+		$itemCount			= event_headlineCommonDef::DEFAULT_ITEM_COUNT;	// 表示項目数
+		$sortOrder			= '0';		// ソート順
+		$useBaseDay			= '0';		// 基準日を使用するかどうか
+		$dayCount			= 0;			// 基準日までの日数
+//		$this->showImage	= 0;				// 画像を表示するかどうか
+//		$this->imageType	= event_headlineCommonDef::DEFAULT_IMAGE_TYPE;				// 画像タイプ
+//		$this->imageWidth	= 0;				// 画像幅
+//		$this->imageHeight	= 0;				// 画像高さ
+		$useRss				= 1;							// RSS配信を行うかどうか
+
 		// 設定値を取得
 		$paramObj = $this->getWidgetParamObjByConfigId($configId);
 		if (!empty($paramObj)){		// 定義データが取得できたとき
-			$itemCount	= $paramObj->itemCount;
-			$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
-			if (!isset($useRss)) $useRss = 1;
+			if (isset($paramObj->itemCount))	$itemCount			= $paramObj->itemCount;
+			if (isset($paramObj->sortOrder))	$sortOrder			= $paramObj->sortOrder;		// ソート順
+			if (isset($paramObj->useBaseDay))	$useBaseDay			= $paramObj->useBaseDay;		// 基準日を使用するかどうか
+			if (isset($paramObj->dayCount))		$dayCount			= $paramObj->dayCount;			// 基準日までの日数
+//			if (isset($paramObj->showImage))	$this->showImage	= $paramObj->showImage;				// 画像を表示するかどうか
+//			if (isset($paramObj->imageType))	$this->imageType	= $paramObj->imageType;				// 画像タイプ
+//			if (isset($paramObj->imageWidth))	$this->imageWidth	= $paramObj->imageWidth;				// 画像幅
+//			if (isset($paramObj->imageHeight))	$this->imageHeight	= $paramObj->imageHeight;				// 画像高さ
+			if (isset($paramObj->useRss))		$useRss				= $paramObj->useRss;// RSS配信を行うかどうか
 		}
+		
 		// RSS配信を行わないときは終了
-		//if (empty($useRss)) $this->cancelParse();		// 出力しない
 		if (empty($useRss)){
 			// ページ作成処理中断
 			$this->gPage->abortPage();
@@ -88,9 +101,10 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 			$this->gPage->exitSystem();
 		}
 					
-		// 一覧を作成
+		// イベント記事取得
 		$this->defaultUrl = $this->gEnv->getDefaultUrl();
-		$this->db->getEntryItems($itemCount, $langId, array($this, 'itemLoop'));
+		$this->db->getEntryItems($itemCount, $this->_langId, $sortOrder, $useBaseDay, $dayCount, array($this, 'itemLoop'));
+		
 		if (!$this->isExistsList) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 		
 		// RSSチャンネル部出力データ作成
@@ -123,19 +137,20 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 	 */
 	function itemLoop($index, $fetchedRow)
 	{
-		$totalViewCount = $fetchedRow['total'];
-		$name = $fetchedRow['be_name'];
+		$entryId = $fetchedRow['ee_id'];	// イベント記事ID
+		$title = $fetchedRow['ee_name'];	// タイトル
 
-		// 記事へのリンク
-		$linkUrl = $this->getUrl($this->defaultUrl . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id'], true);
+		// イベント記事へのリンク
+		$url = $this->defaultUrl . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId;
+		$linkUrl = $this->getUrl($url, true/*リンク用*/);
+		$escapedLinkUrl = $this->convertUrlToHtmlEntity($linkUrl);
 		
 		if (!empty($name)){
 			$row = array(
 				'total' => $totalViewCount,		// 閲覧数
 				'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
-				'name' => $this->convertToDispString($name),			// タイトル
-				//'date' => getW3CDate($fetchedRow['be_create_dt'])		// 更新日時
-				'date' => getW3CDate($fetchedRow['be_regist_dt'])		// 投稿日時
+				'name' => $this->convertToDispString($title),			// タイトル
+				'date' => getW3CDate($fetchedRow['ee_start_dt'])		// イベント開催日時
 			);
 			$this->tmpl->addVars('itemlist', $row);
 			$this->tmpl->parseTemplate('itemlist', 'a');
