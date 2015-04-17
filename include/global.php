@@ -106,6 +106,7 @@ define('M3_TAG_MACRO_RESULT',		'RESULT');								// 結果置換キー
 define('M3_TAG_MACRO_DATE',			'DATE');								// 日付置換キー
 define('M3_TAG_MACRO_MESSAGE',		'MESSAGE');								// メッセージ置換キー
 define('M3_TAG_MACRO_MARK',			'MARK');								// マーク置換キー
+define('M3_TAG_MACRO_IMAGE',		'IMAGE');								// サムネール画像置換キー
 define('M3_TAG_MACRO_AVATAR',		'AVATAR');								// アバター置換キー
 define('M3_TAG_MACRO_URL',			'URL');									// URL置換キー
 define('M3_TAG_MACRO_FILES',		'FILES');								// 添付ファイル置換キー

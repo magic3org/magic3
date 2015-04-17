@@ -72,30 +72,36 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
 		
 		// 初期値設定
-		$itemCount = event_headlineCommonDef::DEFAULT_ITEM_COUNT;	// 表示項目数
-		$useRss = 1;							// RSS配信を行うかどうか
-		$this->showImage		= 0;				// 画像を表示するかどうか
-		$this->imageType		= event_headlineCommonDef::DEFAULT_IMAGE_TYPE;				// 画像タイプ
-		$this->imageWidth		= 0;				// 画像幅
-		$this->imageHeight		= 0;				// 画像高さ
+		$itemCount			= event_headlineCommonDef::DEFAULT_ITEM_COUNT;	// 表示項目数
+		$sortOrder			= '0';		// ソート順
+		$useBaseDay			= '0';		// 基準日を使用するかどうか
+		$dayCount			= 0;			// 基準日までの日数
+		$this->showImage	= 0;				// 画像を表示するかどうか
+		$this->imageType	= event_headlineCommonDef::DEFAULT_IMAGE_TYPE;				// 画像タイプ
+		$this->imageWidth	= 0;				// 画像幅
+		$this->imageHeight	= 0;				// 画像高さ
+		$useRss				= 1;							// RSS配信を行うかどうか
 
 		// 設定値を取得
 		$paramObj = $this->getWidgetParamObjByConfigId($configId);
 		if (!empty($paramObj)){		// 定義データが取得できたとき
-			if (isset($paramObj->itemCount))	$itemCount	= $paramObj->itemCount;
-			if (isset($paramObj->useRss))		$useRss		= $paramObj->useRss;// RSS配信を行うかどうか
-			if (isset($paramObj->showImage))	$this->showImage		= $paramObj->showImage;				// 画像を表示するかどうか
-			if (isset($paramObj->imageType))	$this->imageType		= $paramObj->imageType;				// 画像タイプ
-			if (isset($paramObj->imageWidth))	$this->imageWidth		= $paramObj->imageWidth;				// 画像幅
-			if (isset($paramObj->imageHeight))	$this->imageHeight		= $paramObj->imageHeight;				// 画像高さ
+			if (isset($paramObj->itemCount))	$itemCount			= $paramObj->itemCount;
+			if (isset($paramObj->sortOrder))	$sortOrder			= $paramObj->sortOrder;		// ソート順
+			if (isset($paramObj->useBaseDay))	$useBaseDay			= $paramObj->useBaseDay;		// 基準日を使用するかどうか
+			if (isset($paramObj->dayCount))		$dayCount			= $paramObj->dayCount;			// 基準日までの日数
+			if (isset($paramObj->showImage))	$this->showImage	= $paramObj->showImage;				// 画像を表示するかどうか
+			if (isset($paramObj->imageType))	$this->imageType	= $paramObj->imageType;				// 画像タイプ
+			if (isset($paramObj->imageWidth))	$this->imageWidth	= $paramObj->imageWidth;				// 画像幅
+			if (isset($paramObj->imageHeight))	$this->imageHeight	= $paramObj->imageHeight;				// 画像高さ
+			if (isset($paramObj->useRss))		$useRss				= $paramObj->useRss;// RSS配信を行うかどうか
 		}
 
-		// 新規ブログタイトルを取得
+		// イベント記事取得
 		$this->defaultUrl = $this->gEnv->getDefaultUrl();
-		$this->db->getEntryItems($itemCount, $this->gEnv->getCurrentLanguage(), array($this, 'itemLoop'));
+		$this->db->getEntryItems($itemCount, $this->_langId, $sortOrder, $useBaseDay, $dayCount, array($this, 'itemLoop'));
 			
 		if (!$this->isEntry){	// 記事の投稿がないときはメッセージを出力
-			$this->tmpl->addVar("_widget", "message", '投稿記事はありません');
+			$this->tmpl->addVar("_widget", "message", 'イベント記事はありません');
 			
 			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 一覧非表示
 		}
@@ -156,13 +162,13 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 	 */
 	function itemLoop($index, $fetchedRow, $param)
 	{
-		$entryId = $fetchedRow['be_id'];
+		$entryId = $fetchedRow['ee_id'];
 		
 		// タイトルを設定
-		$title = $fetchedRow['be_name'];
+		$title = $fetchedRow['ee_name'];
 		
-		// 記事へのリンク
-		$url = $this->defaultUrl . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $fetchedRow['be_id'];
+		// イベント記事へのリンク
+		$url = $this->defaultUrl . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $fetchedRow['ee_id'];
 		$escapedLinkUrl = $this->convertUrlToHtmlEntity($this->getUrl($url, true/*リンク用*/));
 
 		// オプション項目
@@ -171,7 +177,7 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 		// 画像
 		$imageTag = '';
 		if ($this->showImage){
-			$titleStr = $fetchedRow['be_name'];
+			$titleStr = $fetchedRow['ee_name'];
 			$imageUrl = $this->getImageUrl($entryId, $this->imageType);
 			$style = '';
 			if ($this->imageWidth > 0) $style .= 'width:' . $this->imageWidth . 'px;';
@@ -205,12 +211,12 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 	function getImageUrl($entryId, $format)
 	{
 		$filename = $this->gInstance->getImageManager()->getThumbFilename($entryId, $format);
-		$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+		$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_EVENT, 0/*PC用*/, $filename);
 		if (!file_exists($path)){
 			$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $format);		// デフォルト画像ファイル名
-			$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+			$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_EVENT, 0/*PC用*/, $filename);
 		}
-		$url = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+		$url = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_EVENT, 0/*PC用*/, $filename);
 		return $url;
 	}
 }
