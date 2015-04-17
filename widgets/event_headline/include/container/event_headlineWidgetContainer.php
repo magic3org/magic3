@@ -115,7 +115,7 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 			$iconTitle = self::DEFAULT_TITLE;
 			$iconUrl = $this->gEnv->getRootUrl() . self::RSS_ICON_FILE;
 			$rssLink = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" style="border:none;" />';
-			$linkUrl = $this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId());
+			$linkUrl = $this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId(), M3_REQUEST_PARAM_CONFIG_ID . '=' . $configId);
 			$rssLink = '<a href="' . convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '">' . $rssLink . '</a>';
 			$rssLink = '<div align="right">' . $rssLink . '</div>';		// 右寄せ
 			$this->tmpl->addVar("_widget", "rss_link", $rssLink);

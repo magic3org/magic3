@@ -33,7 +33,7 @@ class event_headlineDb extends BaseDb
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$initDt = $this->gEnv->getInitValueOfTimestamp();
 		$params = array();
-		
+
 		// イベント記事を取得
 		$queryStr = 'SELECT * FROM event_entry ';
 		$queryStr .=  'WHERE ee_deleted = false ';		// 削除されていない

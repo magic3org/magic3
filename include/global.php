@@ -289,6 +289,7 @@ define('M3_REQUEST_PARAM_OPERATION_ANCHOR',			'anchor');			// 画面指定用ア
 define('M3_REQUEST_PARAM_OPERATION_ACT',			'act');				// クライアントからの実行処理
 define('M3_REQUEST_PARAM_OPERATION_LANG',			'lang');			// 言語指定表示
 define('M3_REQUEST_PARAM_SERIAL_NO',      			'serial');			// シリアル番号
+define('M3_REQUEST_PARAM_CONFIG_ID',				'config');			// 定義ID
 define('M3_REQUEST_PARAM_PAGE_NO',      			'page');			// ページ番号
 define('M3_REQUEST_PARAM_LIST_NO',      			'list');			// 一覧番号
 define('M3_REQUEST_PARAM_ITEM_NO',      			'no');				// 項目番号

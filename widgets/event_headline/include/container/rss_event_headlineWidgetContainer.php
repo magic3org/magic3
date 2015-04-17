@@ -24,6 +24,7 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 	private $rssChannel;				// RSSチャンネル部出力データ
 	private $rssSeqUrl = array();					// 項目の並び
 	private $defaultUrl;	// システムのデフォルトURL
+	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'ブログ最新記事';			// デフォルトのウィジェットタイトル
 	const DEFAULT_DESC = '最新のブログ記事が取得できます。';
 	
@@ -64,7 +65,8 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 	function _assign($request, &$param)
 	{
 		// 定義ID取得
-		$configId = $this->gEnv->getCurrentWidgetConfigId();
+		//$configId = $this->gEnv->getCurrentWidgetConfigId();
+		$configId = $request->trimValueOf(M3_REQUEST_PARAM_CONFIG_ID);
 		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
 		
 		// 初期値設定
@@ -100,7 +102,7 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 			// システム強制終了
 			$this->gPage->exitSystem();
 		}
-					
+
 		// イベント記事取得
 		$this->defaultUrl = $this->gEnv->getDefaultUrl();
 		$this->db->getEntryItems($itemCount, $this->_langId, $sortOrder, $useBaseDay, $dayCount, array($this, 'itemLoop'));
@@ -145,7 +147,7 @@ class rss_event_headlineWidgetContainer extends BaseRssContainer
 		$linkUrl = $this->getUrl($url, true/*リンク用*/);
 		$escapedLinkUrl = $this->convertUrlToHtmlEntity($linkUrl);
 		
-		if (!empty($name)){
+		if (!empty($title)){
 			$row = array(
 				'total' => $totalViewCount,		// 閲覧数
 				'link_url' => $this->convertUrlToHtmlEntity($linkUrl),		// リンク
