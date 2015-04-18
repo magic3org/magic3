@@ -67,19 +67,20 @@ INSERT INTO _nav_item
 -- 画面定義
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
-(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,          pd_config_id, pd_config_name,       pd_title,   pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
-('index', '',        'user3',        2,        'default_menu',        1,            'メインメニュー設定', '',         'main_menu', true,             now()),
-('index', '',        'left',         4,        'event_category_menu', 0,            '',                   '',         '',          true,             now()),
-('index', '',        'left',         5,        'event_category',      0,            '',                   '',         '',          true,             now()),
-('index', '',        'left',         9,        'default_login_box',   0,            '',                   '',         '',          true,             now()),
-('index', 'front',   'main',         3,        'static_content',      1,            '名称未設定1',        '',         '',          true,             now()),
-('index', 'front',   'main',         5,        'news_headline',       1,            '名称未設定1',        '新着情報', '',          true,            now()),
-('index', 'front',   'main',         7,        'event_headline',      1,            '名称未設定1',        'イベント', '',          true,            now()),
-('index', 'content', 'main',         6,        'default_content',     0,            '',                   '',         '',          true,            now()),
-('index', 'event',   'main',         5,        'event_main',          0,            '',                   'イベント', '',          true,            now()),
-('index', 'calendar','main',         5,        'calendar',            1,            '名称未設定1',        '',         '',          true,            now()),
-('index', 'search',  'main',         5,        'custom_search',       1,            '名称未設定1',        '',         '',          true,            now()),
-('index', 'contact', 'main',         5,        'contactus',           0,            '',                   '',         '',          true,            now());
+(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,          pd_config_id, pd_config_name,       pd_title,         pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
+('index', '',        'user3',        2,        'default_menu',        1,            'メインメニュー設定', '',               'main_menu', true,             now()),
+('index', '',        'left',         4,        'event_category_menu', 0,            '',                   '',               '',          true,             now()),
+('index', '',        'left',         5,        'event_category',      0,            '',                   '',               '',          true,             now()),
+('index', '',        'left',         7,        'event_headline',      2,            '名称未設定2',        '過去のイベント', '',          true,             now()),
+('index', '',        'left',         9,        'default_login_box',   0,            '',                   '',               '',          true,             now()),
+('index', 'front',   'main',         3,        'static_content',      1,            '名称未設定1',        '',               '',          true,             now()),
+('index', 'front',   'main',         5,        'news_headline',       1,            '名称未設定1',        '新着情報',       '',          true,            now()),
+('index', 'front',   'main',         7,        'event_headline',      1,            '名称未設定1',        '今後のイベント', '',          true,            now()),
+('index', 'content', 'main',         6,        'default_content',     0,            '',                   '',               '',          true,            now()),
+('index', 'event',   'main',         5,        'event_main',          0,            '',                   'イベント',       '',          true,            now()),
+('index', 'calendar','main',         5,        'calendar',            1,            '名称未設定1',        '',               '',          true,            now()),
+('index', 'search',  'main',         5,        'custom_search',       1,            '名称未設定1',        '',               '',          true,            now()),
+('index', 'contact', 'main',         5,        'contactus',           0,            '',                   '',               '',          true,            now());
 
 -- 新メニュー対応
 TRUNCATE TABLE _menu_def;
@@ -110,7 +111,8 @@ INSERT INTO _widget_param
 DELETE FROM _widget_param WHERE wp_id = 'event_headline';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
-('event_headline', 1,            'O:8:"stdClass":11:{s:4:"name";s:16:"名称未設定1";s:9:"itemCount";s:2:"10";s:9:"sortOrder";s:1:"0";s:15:"futureEventOnly";s:1:"0";s:6:"useRss";s:1:"1";s:10:"useBaseDay";s:1:"1";s:8:"dayCount";s:1:"0";s:9:"showImage";s:1:"1";s:9:"imageType";s:7:"72c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;}', now());
+('event_headline', 1,            'O:8:"stdClass":11:{s:4:"name";s:16:"名称未設定1";s:9:"itemCount";s:2:"10";s:9:"sortOrder";s:1:"0";s:15:"futureEventOnly";s:1:"0";s:6:"useRss";s:1:"1";s:10:"useBaseDay";s:1:"1";s:8:"dayCount";s:1:"0";s:9:"showImage";s:1:"1";s:9:"imageType";s:7:"72c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;}', now()),
+('event_headline', 2,            'O:8:"stdClass":10:{s:4:"name";s:16:"名称未設定2";s:9:"itemCount";s:2:"10";s:9:"sortOrder";s:1:"1";s:10:"useBaseDay";s:1:"1";s:8:"dayCount";s:2:"-1";s:9:"showImage";s:1:"0";s:9:"imageType";s:7:"80c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;s:6:"useRss";s:1:"1";}', now());
 DELETE FROM _widget_param WHERE wp_id = 'calendar';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
