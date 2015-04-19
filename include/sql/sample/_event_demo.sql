@@ -67,20 +67,36 @@ INSERT INTO _nav_item
 -- 画面定義
 DELETE FROM _page_def WHERE pd_id = 'index';
 INSERT INTO _page_def
-(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,          pd_config_id, pd_config_name,       pd_title,         pd_menu_id,  pd_title_visible, pd_update_dt) VALUES
-('index', '',        'user3',        2,        'default_menu',        1,            'メインメニュー設定', '',               'main_menu', true,             now()),
-('index', '',        'left',         4,        'event_category_menu', 0,            '',                   '',               '',          true,             now()),
-('index', '',        'left',         5,        'event_category',      0,            '',                   '',               '',          true,             now()),
-('index', '',        'left',         7,        'event_headline',      2,            '名称未設定2',        '過去のイベント', '',          true,             now()),
-('index', '',        'left',         9,        'default_login_box',   0,            '',                   '',               '',          true,             now()),
-('index', 'front',   'main',         3,        'static_content',      1,            '名称未設定1',        '',               '',          true,             now()),
-('index', 'front',   'main',         5,        'news_headline',       1,            '名称未設定1',        '新着情報',       '',          true,            now()),
-('index', 'front',   'main',         7,        'event_headline',      1,            '名称未設定1',        '今後のイベント', '',          true,            now()),
-('index', 'content', 'main',         6,        'default_content',     0,            '',                   '',               '',          true,            now()),
-('index', 'event',   'main',         5,        'event_main',          0,            '',                   'イベント',       '',          true,            now()),
-('index', 'calendar','main',         5,        'calendar',            1,            '名称未設定1',        '',               '',          true,            now()),
-('index', 'search',  'main',         5,        'custom_search',       1,            '名称未設定1',        '',               '',          true,            now()),
-('index', 'contact', 'main',         5,        'contactus',           0,            '',                   '',               '',          true,            now());
+(pd_id,   pd_sub_id, pd_position_id, pd_index, pd_widget_id,          pd_config_id, pd_config_name,       pd_title,         pd_menu_id,  pd_title_visible,
+pd_css, pd_param) VALUES
+('index', '',        'user3',        2,        'default_menu',        1,            'メインメニュー設定', '',               'main_menu', true,
+'',     ''),
+('index', '',        'left',         4,        'event_category_menu', 0,            '',                   '',               '',          true,
+'',     ''),
+('index', '',        'left',         5,        'event_category',      0,            '',                   '',               '',          true,
+'',     ''),
+('index', '',        'left',         7,        'event_headline',      2,            '名称未設定2',        '過去のイベント', '',          true,
+'#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n    margin: 0;\n    padding: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul>li {\n    padding-left: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul{\n    padding-left: 0;\n    list-style: none;\n}\n',
+'O:8:"stdClass":2:{s:16:"removeListMarker";s:1:"1";s:3:"css";s:0:"";}'),
+('index', '',        'left',         9,        'default_login_box',   0,            '',                   '',               '',          true,
+'',     ''),
+('index', 'front',   'main',         3,        'static_content',      1,            '名称未設定1',        '',               '',          true,
+'',     ''),
+('index', 'front',   'main',         5,        'news_headline',       1,            '名称未設定1',        '新着情報',       '',          true,
+'',     ''),
+('index', 'front',   'main',         7,        'event_headline',      1,            '名称未設定1',        '今後のイベント', '',          true,
+'#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n    margin: 0;\n    padding: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul>li {\n    padding-left: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul{\n    padding-left: 0;\n    list-style: none;\n}\n',
+'O:8:"stdClass":2:{s:16:"removeListMarker";s:1:"1";s:3:"css";s:0:"";}'),
+('index', 'content', 'main',         6,        'default_content',     0,            '',                   '',               '',          true,
+'',     ''),
+('index', 'event',   'main',         5,        'event_main',          0,            '',                   'イベント',       '',          true,
+'',     ''),
+('index', 'calendar','main',         5,        'calendar',            1,            '名称未設定1',        '',               '',          true,
+'',     ''),
+('index', 'search',  'main',         5,        'custom_search',       1,            '名称未設定1',        '',               '',          true,
+'',     ''),
+('index', 'contact', 'main',         5,        'contactus',           0,            '',                   '',               '',          true,
+'',     '');
 
 -- 新メニュー対応
 TRUNCATE TABLE _menu_def;
@@ -99,7 +115,7 @@ INSERT INTO _widget_param
 DELETE FROM _widget_param WHERE wp_id = 'custom_search';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
-('custom_search', 1,            'O:8:"stdClass":15:{s:4:"name";s:16:"名称未設定1";s:11:"resultCount";s:2:"20";s:14:"searchTemplate";s:239:"<input id="custom_search_1_text" maxlength="40" size="10" type="text" /><input class="button" id="custom_search_1_button" type="button" value="検索" /><input class="button" id="custom_search_1_reset" type="button" value="リセット" />";s:12:"searchTextId";s:20:"custom_search_1_text";s:14:"searchButtonId";s:22:"custom_search_1_button";s:13:"searchResetId";s:21:"custom_search_1_reset";s:15:"isTargetContent";i:1;s:12:"isTargetUser";i:1;s:12:"isTargetBlog";i:1;s:9:"fieldInfo";a:0:{}s:15:"isTargetProduct";i:0;s:13:"isTargetEvent";i:0;s:11:"isTargetBbs";i:0;s:13:"isTargetPhoto";i:0;s:12:"isTargetWiki";i:0;}', now());
+('custom_search', 1,            'O:8:"stdClass":20:{s:4:"name";s:16:"名称未設定1";s:11:"resultCount";s:2:"20";s:14:"searchTemplate";s:247:"<br />\r\n<input id="custom_search_1_text" maxlength="40" size="10" type="text" /><input class="button" id="custom_search_1_button" type="button" value="検索" /><input class="button" id="custom_search_1_reset" type="button" value="リセット" />";s:12:"searchTextId";s:20:"custom_search_1_text";s:14:"searchButtonId";s:22:"custom_search_1_button";s:13:"searchResetId";s:21:"custom_search_1_reset";s:15:"isTargetContent";i:1;s:12:"isTargetUser";i:1;s:12:"isTargetBlog";i:1;s:9:"fieldInfo";a:0:{}s:15:"isTargetProduct";i:0;s:13:"isTargetEvent";i:1;s:11:"isTargetBbs";i:0;s:13:"isTargetPhoto";i:0;s:12:"isTargetWiki";i:0;s:12:"resultLength";s:3:"200";s:9:"showImage";s:1:"0";s:9:"imageType";s:7:"72c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;}', now());
 DELETE FROM _widget_param WHERE wp_id = 'static_content';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
@@ -140,3 +156,8 @@ INSERT INTO content
 ('', 1,     'ja',           '運営会社', '<table class="table">\r\n	<tbody>\r\n		<tr>\r\n			<th>社　名</th>\r\n			<td>\r\n			<p>株式会社サファリ</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>所在地</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>設　立</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>代表者</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>事業内容</th>\r\n			<td>\r\n			<p>●サファリパークの運営</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引銀行</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>主要取引先</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th></th>\r\n			<td></td>\r\n		</tr>\r\n	</tbody>\r\n</table>\r\n\r\n<div class="googlemaps" id="gmap201472916954" style="width:100%;height:300px;display:none;margin:0 auto;">\r\n<script type="text/javascript">\r\n//<![CDATA[\r\n// Magic3 googlemaps v1.00 mapid:201472916954\r\n$(function(){\r\n	var mapStyle = [{"featureType":"water","stylers":[{"visibility":"on"},{"color":"#acbcc9"}]},{"featureType":"landscape","stylers":[{"color":"#f2e5d4"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#c5c6c6"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#e4d7c6"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#fbfaf7"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#c5dac6"}]},{"featureType":"administrative","stylers":[{"visibility":"on"},{"lightness":33}]},{"featureType":"road"},{"featureType":"poi.park","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":20}]},{},{"featureType":"road","stylers":[{"lightness":20}]}];\r\n	var allMapTypes = [	"original",\r\n						google.maps.MapTypeId.SATELLITE,\r\n						google.maps.MapTypeId.HYBRID,\r\n						google.maps.MapTypeId.TERRAIN	];\r\n	var opts = {	mapTypeControlOptions: {	mapTypeIds: allMapTypes } };\r\n	var mapDiv = document.getElementById("gmap201472916954");\r\n	var map = new google.maps.Map(mapDiv, opts);\r\n	var originalMapType = new google.maps.StyledMapType(mapStyle, { name: "地図" });\r\n	map.mapTypes.set("original", originalMapType);\r\n	map.setMapTypeId("original");\r\n	map.setMapTypeId(allMapTypes[0]);\r\n	map.setCenter(new google.maps.LatLng(34.69116, 135.52506));\r\n	map.setZoom(11);\r\n	mapDiv.style.display = "";\r\n	m3GooglemapsAddMarkers(map, [{lat:34.68732, lon:135.5262, text:''場所はここ''}]);\r\n});\r\n//]]></script>\r\n</div>\r\n',              false, '',                0, now()),
 ('', 2,     'ja',           'サイト説明',   '<p>このサイトはイベントを紹介するサンプルサイトです。<br />\r\n&nbsp;</p>\r\n',              false, '',                0, now());
 
+-- 新着情報
+TRUNCATE TABLE news;
+INSERT INTO news 
+(nw_id, nw_type, nw_server_id, nw_device_type, nw_regist_dt, nw_name, nw_content_type, nw_content_id, nw_url, nw_link, nw_content_dt, nw_message, nw_site_name, nw_site_link, nw_site_url, nw_summary, nw_mark, nw_visible, nw_user_limited, nw_create_user_id, nw_create_dt, nw_update_user_id, nw_update_dt, nw_deleted) VALUES
+(1, '', '', 0, '2015-04-19 23:39:20', '', 'event', '2', '[#M3_ROOT_URL#]/index.php?eventid=2', '', '0000-00-00 00:00:00', '「[#TITLE#]」を追加しました', '', '', '', '', 0, 1, 0, 1, '2015-03-24 05:46:24', 0, '0000-00-00 00:00:00', 0);
