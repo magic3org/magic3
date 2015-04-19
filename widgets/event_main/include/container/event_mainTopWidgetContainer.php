@@ -286,7 +286,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 				$this->pageTitle = $this->title;
 			}
 		}
-		
+
 		// 記事表示
 		self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
 										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->preview);

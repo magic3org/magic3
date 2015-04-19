@@ -759,39 +759,39 @@ class event_mainDb extends BaseDb
 		$queryStr  = 'SELECT * FROM event_entry ';
 		$queryStr .=   'WHERE ee_deleted = false ';		// 削除されていない
 		$queryStr .=     'AND ee_language_id = ? ';	$params[] = $langId;
-		if (!empty($entryId)){
-			$queryStr .=     'AND ee_id = ? ';		$params[] = $entryId;
-		}
-		
-		// タイトルと記事、ユーザ定義フィールドを検索
-		if (!empty($keywords)){
-			for ($i = 0; $i < count($keywords); $i++){
-				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
-				$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
-				$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
+		if (empty($entryId)){		// 記事IDがないときは条件指定
+			// タイトルと記事、ユーザ定義フィールドを検索
+			if (!empty($keywords)){
+				for ($i = 0; $i < count($keywords); $i++){
+					$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
+					$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
+				}
 			}
-		}
 	
-		// 検索条件
-		if (empty($startDt) && empty($endDt)){
-			$nowDate = date("Y/m/d", strtotime($now));
-			$queryStr .=    'AND ? <= ee_start_dt ';
-			$params[] = $nowDate;
-		} else {
-			if (!empty($startDt)){
+			// 検索条件
+			if (empty($startDt) && empty($endDt)){
+				$nowDate = date("Y/m/d", strtotime($now));
 				$queryStr .=    'AND ? <= ee_start_dt ';
-				$params[] = $startDt;
+				$params[] = $nowDate;
+			} else {
+				if (!empty($startDt)){
+					$queryStr .=    'AND ? <= ee_start_dt ';
+					$params[] = $startDt;
+				}
+				if (!empty($endDt)){
+					$queryStr .=    'AND ee_start_dt < ? ';
+					$params[] = $endDt;
+				}
 			}
-			if (!empty($endDt)){
-				$queryStr .=    'AND ee_start_dt < ? ';
-				$params[] = $endDt;
-			}
+		} else {
+			$queryStr .=     'AND ee_id = ? ';		$params[] = $entryId;
 		}
 		
 		if (!$preview){		// プレビューモードでないときは取得制限
