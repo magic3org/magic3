@@ -61,7 +61,7 @@ $(function(){
 		<div class="col-sm-4 m3config_item">
 	    <select name="item_id" class="form-control" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
-	        <patTemplate:tmpl name="title_list">
+	        <patTemplate:tmpl name="_config_name_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
