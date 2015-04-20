@@ -357,6 +357,9 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		$reloadData = false;		// データの再ロード
 		if ($act == 'select'){		// 一覧から選択のとき
 			$reloadData = true;		// データの再ロード
+		} else if ($act == 'new'){
+			$this->serialNo = 0;
+			$reloadData = true;		// データの再読み込み
 		} else if ($act == 'selectlang'){		// 項目選択の場合
 			// 登録済みのコンテンツデータを取得
 			$this->serialNo = self::$_mainDb->getEntrySerialNoByContentId($this->entryId, $this->langId);
