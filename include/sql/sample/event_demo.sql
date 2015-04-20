@@ -76,8 +76,7 @@ pd_css, pd_param) VALUES
 ('index', '',        'left',         5,        'event_category',      1,            '名称未設定1',        '',               '',          true,
 '',     ''),
 ('index', '',        'left',         7,        'event_headline',      2,            '名称未設定2',        '過去のイベント', '',          true,
-'#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n    margin: 0;\n    padding: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul>li {\n    padding-left: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul{\n    padding-left: 0;\n    list-style: none;\n}\n',
-'O:8:"stdClass":2:{s:16:"removeListMarker";s:1:"1";s:3:"css";s:0:"";}'),
+'',     ''),
 ('index', '',        'left',         9,        'default_login_box',   0,            '',                   '',               '',          true,
 '',     ''),
 ('index', 'front',   'main',         3,        'static_content',      1,            '名称未設定1',        '',               '',          true,
@@ -127,8 +126,8 @@ INSERT INTO _widget_param
 DELETE FROM _widget_param WHERE wp_id = 'event_headline';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
-('event_headline', 1,            'O:8:"stdClass":11:{s:4:"name";s:16:"名称未設定1";s:9:"itemCount";s:1:"5";s:9:"sortOrder";s:1:"0";s:15:"futureEventOnly";s:1:"0";s:6:"useRss";s:1:"1";s:10:"useBaseDay";s:1:"1";s:8:"dayCount";s:1:"0";s:9:"showImage";s:1:"1";s:9:"imageType";s:7:"72c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;}', now()),
-('event_headline', 2,            'O:8:"stdClass":10:{s:4:"name";s:16:"名称未設定2";s:9:"itemCount";s:2:"10";s:9:"sortOrder";s:1:"1";s:10:"useBaseDay";s:1:"1";s:8:"dayCount";s:2:"-1";s:9:"showImage";s:1:"0";s:9:"imageType";s:7:"80c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;s:6:"useRss";s:1:"0";}', now());
+('event_headline', 1,            'O:8:"stdClass":12:{s:4:"name";s:16:"名称未設定1";s:9:"itemCount";s:1:"5";s:9:"sortOrder";s:1:"0";s:15:"futureEventOnly";s:1:"0";s:6:"useRss";s:1:"1";s:10:"useBaseDay";s:1:"1";s:8:"dayCount";s:1:"0";s:9:"showImage";s:1:"1";s:9:"imageType";s:7:"72c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;s:6:"layout";s:157:"<div style="float:left;">[#IMAGE#]</div>\r\n\r\n<div class="clearfix">\r\n<div>[#TITLE#] ([#CT_DATE#] [#CT_TIME|H:i#])</div>\r\n\r\n<div>[#CT_SUMMARY#]</div>\r\n</div>\r\n";}', now()),
+('event_headline', 2,            'O:8:"stdClass":11:{s:4:"name";s:16:"名称未設定2";s:9:"itemCount";s:2:"10";s:9:"sortOrder";s:1:"1";s:10:"useBaseDay";s:1:"1";s:8:"dayCount";s:2:"-1";s:9:"showImage";s:1:"0";s:9:"imageType";s:7:"80c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;s:6:"useRss";s:1:"0";s:6:"layout";s:39:"[#TITLE#] ([#CT_DATE#] [#CT_TIME|H:i#])";}', now());
 DELETE FROM _widget_param WHERE wp_id = 'calendar';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 

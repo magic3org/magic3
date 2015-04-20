@@ -161,8 +161,9 @@ define('M3_EVENT_HOOK_PARAM_CONTENT_ID',	'content_id');					// コンテンツID
 define('M3_EVENT_HOOK_PARAM_UPDATE_DT',		'update_dt');					// 更新日時
 
 // データ作成用
-define('M3_WIDGET_ID_SEPARATOR',	',');									// ウィジェットIDと付加情報を連結
-define('M3_LANG_SEPARATOR',			'|');									// 言語IDと内容を連結
+define('M3_WIDGET_ID_SEPARATOR',		',');									// ウィジェットIDと付加情報を連結
+define('M3_LANG_SEPARATOR',				'|');									// 言語IDと内容を連結
+define('M3_MACRO_OPTION_SEPARATOR',		'|');									// マクロキーとオプションを連結
 
 // テンプレートタイプ
 define('M3_TEMPLATE_JOOMLA_10',			0);		// Joomla!v1.0テンプレート

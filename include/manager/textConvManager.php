@@ -86,7 +86,8 @@ class TextConvManager extends Core
 	function parseUserMacro($src)
 	{
 		$fields = array();
-		$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+):?(.*?)' . preg_quote(M3_TAG_END) . '/u';
+//		$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+):?(.*?)' . preg_quote(M3_TAG_END) . '/u';
+		$pattern = '/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+)\|?(.*?)' . preg_quote(M3_TAG_END) . '/u';	// オプションパラメータは「|」以降(2015/4/20変更)
 		
 		if (is_array($src)){
 			for ($j = 0; $j < count($src); $j++){
@@ -126,7 +127,8 @@ class TextConvManager extends Core
 		$this->htmlEscapedValue = $htmlEscapedValue;	// 変換後の値をHTMLエスケープ処理するかどうか
 		
 		// Magic3マクロを検索(「[#」と「#]」で区切られた文字列)
-		$pattern = '/' . preg_quote(M3_TAG_START) . '([A-Z0-9_]+):?(.*?)' . preg_quote(M3_TAG_END) . '/u';
+		//$pattern = '/' . preg_quote(M3_TAG_START) . '([A-Z0-9_]+):?(.*?)' . preg_quote(M3_TAG_END) . '/u';
+		$pattern = '/' . preg_quote(M3_TAG_START) . '([A-Z0-9_]+)\|?(.*?)' . preg_quote(M3_TAG_END) . '/u';			// オプションパラメータは「|」以降(2015/4/20変更)
 		$dest = preg_replace_callback($pattern, array($this, '_replace_content_macro_callback'), $src);
 		return $dest;
 	}
