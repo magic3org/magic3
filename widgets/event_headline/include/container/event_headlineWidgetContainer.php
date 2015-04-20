@@ -27,6 +27,7 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 	private $imageType;				// 画像タイプ
 	private $imageWidth;			// 画像幅
 	private $imageHeight;			// 画像高さ
+	private $layout;					// イベント項目レイアウト
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'イベントヘッドライン';		// デフォルトのウィジェットタイトル名
 	const RSS_ICON_FILE = '/images/system/rss14.png';		// RSSリンク用アイコン
@@ -81,6 +82,7 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 		$this->imageWidth	= 0;				// 画像幅
 		$this->imageHeight	= 0;				// 画像高さ
 		$useRss				= 1;							// RSS配信を行うかどうか
+		$this->layout		= event_headlineCommonDef::DEFAULT_EVENT_ITEM_LAYOUT;					// イベント項目レイアウト
 
 		// 設定値を取得
 		$paramObj = $this->getWidgetParamObjByConfigId($configId);
@@ -94,6 +96,7 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 			if (isset($paramObj->imageWidth))	$this->imageWidth	= $paramObj->imageWidth;				// 画像幅
 			if (isset($paramObj->imageHeight))	$this->imageHeight	= $paramObj->imageHeight;				// 画像高さ
 			if (isset($paramObj->useRss))		$useRss				= $paramObj->useRss;// RSS配信を行うかどうか
+			if (isset($paramObj->layout) && !empty($paramObj->layout))		$this->layout				= $paramObj->layout;					// イベント項目レイアウト
 		}
 
 		// イベント記事取得
@@ -239,15 +242,8 @@ class event_headlineWidgetContainer extends BaseWidgetContainer
 	 */
 	function createDetailContent($contentParam)
 	{
-		static $initContentText;
-		
-		if (!isset($initContentText)){
-//			$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];			// コンテンツレイアウト(記事詳細)
-			if (empty($initContentText)) $initContentText = event_headlineCommonDef::DEFAULT_EVENT_ITEM_LAYOUT;
-		}
-		
 		// コンテンツを作成
-		$contentText = $initContentText;
+		$contentText = $this->layout;
 		$keys = array_keys($contentParam);
 		for ($i = 0; $i < count($keys); $i++){
 			$key = $keys[$i];

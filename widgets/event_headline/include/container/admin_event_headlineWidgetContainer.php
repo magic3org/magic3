@@ -123,6 +123,7 @@ class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer
 		$imageHeight		= $request->trimIntValueOf('item_image_height', '0');			// 画像高さ(空文字列をOKとする)
 		$useRss				= $request->trimCheckedValueOf('item_use_rss');		// RSS配信を行うかどうか
 		$this->sortOrder	= $request->trimValueOf('item_sort_order');		// ソート順
+		$layout				= $request->valueOf('item_layout');					// イベント項目レイアウト
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
@@ -157,6 +158,7 @@ class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer
 				$newObj->imageWidth		= intval($imageWidth);			// 画像幅
 				$newObj->imageHeight	= intval($imageHeight);			// 画像高さ
 				$newObj->useRss			= $useRss;
+				$newObj->layout			= empty($layout) ? event_headlineCommonDef::DEFAULT_EVENT_ITEM_LAYOUT : $layout;					// イベント項目レイアウト
 				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
 				if ($ret){
@@ -191,6 +193,7 @@ class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer
 					$targetObj->imageWidth		= intval($imageWidth);			// 画像幅
 					$targetObj->imageHeight		= intval($imageHeight);			// 画像高さ
 					$targetObj->useRss			= $useRss;
+					$targetObj->layout			= empty($layout) ? event_headlineCommonDef::DEFAULT_EVENT_ITEM_LAYOUT : $layout;					// イベント項目レイアウト
 				}
 				
 				// 設定値を更新
@@ -224,6 +227,7 @@ class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer
 				$imageWidth			= 0;			// 画像幅
 				$imageHeight		= 0;			// 画像高さ
 				$useRss				= 1;							// RSS配信を行うかどうか
+				$layout				= event_headlineCommonDef::DEFAULT_EVENT_ITEM_LAYOUT;					// イベント項目レイアウト
 			}
 			$this->serialNo = 0;
 		} else {
@@ -241,6 +245,7 @@ class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer
 					$imageHeight		= intval($targetObj->imageHeight);			// 画像高さ
 					$useRss				= $targetObj->useRss;// RSS配信を行うかどうか
 					if (!isset($useRss)) $useRss = 1;
+					$layout				= $targetObj->layout;					// イベント項目レイアウト
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -272,6 +277,7 @@ class admin_event_headlineWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "image_width",			$this->convertToDispString($imageWidth));// 画像幅
 		$this->tmpl->addVar("_widget", "image_height",			$this->convertToDispString($imageHeight));// 画像高さ
 		$this->tmpl->addVar("_widget", "use_rss",				$this->convertToCheckedString($useRss));			// RSS配信を行うかどうか
+		$this->tmpl->addVar("_widget", "layout",				$layout);		// イベント項目レイアウト
 		
 		// ボタンの表示制御
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき

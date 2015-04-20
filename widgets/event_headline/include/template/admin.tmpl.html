@@ -39,6 +39,9 @@ function listItem(){
 $(function(){
 	m3SetConfigTable('mainconfig');
 	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_layout', 100/* 高さ */, false, 'layout');
+	
 	// 入力制限
 	$(".day_count").numeric({ decimal: false });
 });
@@ -106,6 +109,10 @@ $(function(){
     <tr>
 	    <th><span {_HELP_USE_RSS}>RSS配信</span></th>
 	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_rss" {USE_RSS} />使用</label></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></th>
+		<td class="ckeditor"><textarea name="item_layout">{LAYOUT}</textarea></td>
 	</tr>
     </tbody>
 </table>
