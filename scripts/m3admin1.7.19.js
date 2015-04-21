@@ -724,6 +724,10 @@ function m3SetConfigTable(object)
 	// カラー設定
 	$(tableObj).addClass('table table-condensed table-bordered table-striped m3config_table');
 	$(tableObj).find('th').addClass('info');		// ヘッダ部
+	
+	$(tableObj).find('textarea').addClass('form-control');
+	$(tableObj).find('select').addClass('form-control');
+	$(tableObj).find('input[type=text]').addClass('form-control');
 //	$(tableObj).find('.buttonlist').addClass('pull-right');		// ボタン右寄せ
 	//$(tableObj).find('tbody tr:odd').addClass("table table-bordered table-striped table-hover");
 }
@@ -745,6 +749,9 @@ function m3SetConfigSubTable(object)
 	// カラー設定
 	$(tableObj).addClass('table table-condensed table-bordered table-striped');
 	$(tableObj).find('th').addClass('info');		// ヘッダ部
+	
+	$(tableObj).find('select').addClass('form-control');
+	$(tableObj).find('input[type=text]').addClass('form-control');
 }
 /**
  * モーダル入力用テーブルのカラー設定
