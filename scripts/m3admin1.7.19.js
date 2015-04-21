@@ -662,12 +662,15 @@ function m3CancelSafeContentEdit()
 /**
  * ヘルプを設定
  *
- * @param object parentObj		親オブジェクト
+ * @param object parentObj		親オブジェクトまたはタグID
  * @return なし
  */
 function m3SetHelp(parentObj)
 {
 	if (parentObj){
+		if (typeof parentObj == 'string'){
+			parentObj = $('#' + parentObj);
+		}
 	    if (jQuery().cluetip){
 			parentObj.find('span.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:500, timeout:0 }});
 			parentObj.find('div.m3help').cluetip({ splitTitle: '|', cluezIndex: 2000, hoverIntent:{ sensitivity:1, interval:500, timeout:0 }});
@@ -717,19 +720,18 @@ function m3SetConfigTable(object)
 	var tableObj;		// テーブルオブジェクト
 	
 	if (typeof object == 'string'){
-		tableObj = document.getElementById(object);
+		//tableObj = document.getElementById(object);
+		tableObj = $('#' + object);
 	} else {
 		tableObj = object;
 	}
 	// カラー設定
-	$(tableObj).addClass('table table-condensed table-bordered table-striped m3config_table');
-	$(tableObj).find('th').addClass('info');		// ヘッダ部
+	tableObj.addClass('table table-condensed table-bordered table-striped m3config_table');
+	tableObj.find('th').addClass('info');		// ヘッダ部
 	
-	$(tableObj).find('textarea').addClass('form-control');
-	$(tableObj).find('select').addClass('form-control');
-	$(tableObj).find('input[type=text]').addClass('form-control');
-//	$(tableObj).find('.buttonlist').addClass('pull-right');		// ボタン右寄せ
-	//$(tableObj).find('tbody tr:odd').addClass("table table-bordered table-striped table-hover");
+	tableObj.find('textarea').addClass('form-control');
+	tableObj.find('select').addClass('form-control');
+	tableObj.find('input[type=text]').addClass('form-control');
 }
 /**
  * 設定入力用サブテーブルのカラー設定
@@ -742,16 +744,17 @@ function m3SetConfigSubTable(object)
 	var tableObj;		// テーブルオブジェクト
 	
 	if (typeof object == 'string'){
-		tableObj = document.getElementById(object);
+		//tableObj = document.getElementById(object);
+		tableObj = $('#' + object);
 	} else {
 		tableObj = object;
 	}
 	// カラー設定
-	$(tableObj).addClass('table table-condensed table-bordered table-striped');
-	$(tableObj).find('th').addClass('info');		// ヘッダ部
+	tableObj.addClass('table table-condensed table-bordered table-striped');
+	tableObj.find('th').addClass('info');		// ヘッダ部
 	
-	$(tableObj).find('select').addClass('form-control');
-	$(tableObj).find('input[type=text]').addClass('form-control');
+	tableObj.find('select').addClass('form-control');
+	tableObj.find('input[type=text]').addClass('form-control');
 }
 /**
  * モーダル入力用テーブルのカラー設定
