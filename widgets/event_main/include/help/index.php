@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 3978 2011-02-04 05:34:23Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 直接アクセスの防止
@@ -42,6 +42,10 @@ $HELP['entry_dt']['title'] = '投稿日時';
 $HELP['entry_dt']['body'] = 'イベントの開催日時です。<br />時間を設定しない場合は「終日」にチェックを入れます。';
 $HELP['entry_active_term']['title'] = '公開期間';
 $HELP['entry_active_term']['body'] = 'イベント記事をユーザに公開する期間を設定します。空の場合は制限なしを示します。';
+$HELP['entry_place']['title'] = '開催場所';
+$HELP['entry_place']['body'] = 'イベントの開催場所です。<br />リンクを作成する場合は「|」の後にURLが続く文字列を付加します。<br />(設定例)「サンプル|http://www.example.com」';
+$HELP['entry_contact']['title'] = '連絡先';
+$HELP['entry_contact']['body'] = 'イベントの連絡先です。<br />リンクを作成する場合は「|」の後にURLが続く文字列を付加します。<br />(設定例)「サンプル|http://www.example.com」';
 $HELP['entry_view_count']['title'] = '閲覧数';
 $HELP['entry_view_count']['body'] = 'イベント記事の閲覧数です。管理権限ユーザの閲覧はカウントされません。';
 $HELP['entry_content']['title'] = '投稿内容';

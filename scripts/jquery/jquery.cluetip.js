@@ -19,7 +19,7 @@
  *
  * @credit Inspired by Cody Lindley's jTip (http://www.codylindley.com)
  * @credit Thanks to the following people for their many and varied contributions:
-      Shelane Enos, Glen Lipka, Hector Santos, Torben Schreiter, Dan G. Switzer, Jörn Zaefferer 
+      Shelane Enos, Glen Lipka, Hector Santos, Torben Schreiter, Dan G. Switzer, J旦rn Zaefferer 
  * @credit Thanks to Jonathan Chaffer, as always, for help with the hard parts. :-)
  */
 
@@ -107,7 +107,7 @@
       var defHeight = isNaN(parseInt(opts.height, 10)) ? 'auto' : (/\D/g).test(opts.height) ? opts.height : opts.height + 'px';
       var sTop, linkTop, posY, tipY, mouseY, baseline;
       // horizontal measurement variables
-      var tipInnerWidth = isNaN(parseInt(opts.width, 10)) ? 275 : parseInt(opts.width, 10);
+      var tipInnerWidth = isNaN(parseInt(opts.width, 10)) ? 300 : parseInt(opts.width, 10);
       var tipWidth = tipInnerWidth + (parseInt($cluetip.css('paddingLeft'))||0) + (parseInt($cluetip.css('paddingRight'))||0) + dropShadowSteps;
       var linkWidth = this.offsetWidth;
       var linkLeft, posX, tipX, mouseX, winWidth;
@@ -117,7 +117,14 @@
       var tipTitle = (opts.attribute != 'title') ? $this.attr(opts.titleAttribute) : '';
       if (opts.splitTitle) {
         if(tipTitle == undefined) {tipTitle = '';}
-        tipParts = tipTitle.split(opts.splitTitle);
+//        tipParts = tipTitle.split(opts.splitTitle);
+        // limit separate count. (2015/4/22 by naoki)
+        var splitPos = tipTitle.indexOf(opts.splitTitle);
+        if (splitPos > -1){
+          tipParts = [ tipTitle.substr(0, splitPos), tipTitle.substr(splitPos + 1) ];
+        } else {
+          tipParts = tipTitle.split(opts.splitTitle);
+        }
         tipTitle = tipParts.shift();
       }
       var localContent;
@@ -443,7 +450,7 @@ clearTimeout(closeOnDelay);
  */
   
   $.fn.cluetip.defaults = {  // set up default options
-    width:            275,      // The width of the clueTip
+    width:            300,      // The width of the clueTip
     height:           'auto',   // The height of the clueTip
     cluezIndex:       97,       // Sets the z-index style property of the clueTip
     positionBy:       'auto',   // Sets the type of positioning: 'auto', 'mouse','bottomTop', 'fixed'
