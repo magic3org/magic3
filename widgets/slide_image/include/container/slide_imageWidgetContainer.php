@@ -8,17 +8,15 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() . '/slide_imageDb.php');
 
 class slide_imageWidgetContainer extends BaseWidgetContainer
 {
-	private $db;			// DB接続オブジェクト
 	private $paramObj;		// 定義取得用
 	private $imageInfoArray = array();			// 画像情報
 	private $cssId;			// タグのID
@@ -32,9 +30,6 @@ class slide_imageWidgetContainer extends BaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		$this->db = new slide_imageDb();
 	}
 	/**
 	 * テンプレートファイルを設定
