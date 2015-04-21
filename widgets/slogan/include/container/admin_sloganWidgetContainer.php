@@ -84,6 +84,20 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 		return $this->createDetail($request);
 	}
 	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
+	}
+	/**
 	 * 詳細画面作成
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
@@ -235,20 +249,6 @@ class admin_sloganWidgetContainer extends BaseAdminWidgetContainer
 		
 		// ページ定義IDとページ定義のレコードシリアル番号を更新
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
-	}
-	/**
-	 * テンプレートにデータ埋め込む
-	 *
-	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @return								なし
-	 */
-	function _postAssign($request, &$param)
-	{
-		// メニューバー、パンくずリスト作成(簡易版)
-		$this->createBasicConfigMenubar($request);
 	}
 	/**
 	 * CSS用のデフォルトのIDを取得
