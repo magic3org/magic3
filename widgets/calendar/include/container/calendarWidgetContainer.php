@@ -237,7 +237,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 				$contentInfo = array();
 				$contentInfo[M3_TAG_MACRO_CONTENT_START_TIME]	= "' + (event.start ? (moment(event.start).format('H:mm')) : '') + '";		// コンテンツ置換キー(開始時間)
 				$contentInfo[M3_TAG_MACRO_CONTENT_END_TIME]		= "' + (event.end ? (moment(event.end).format('H:mm')) : '') + '";		// コンテンツ置換キー(終了時間)
-				$contentInfo[M3_TAG_MACRO_CONTENT_LOCATION]		= "' + event.location + '";			// コンテンツ置換キー(場所)
+				$contentInfo[M3_TAG_MACRO_CONTENT_PLACE]		= "' + event.place + '";			// コンテンツ置換キー(場所)
 				$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION]	= "' + event.description + '";			// コンテンツ置換キー(概要)
 				$contentText = $this->convertM3ToText($layoutTooltip, $contentInfo, true/*改行コード削除*/);
 				$contentText = "'" . $contentText . "'";		// 「'」で括る
@@ -355,7 +355,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 
 						// ツールチップ用データ
 						'content'	=> $fetchedRow['cv_html']			// ツールチップコンテンツ
-//						'location' => $fetchedRow['cv_place'],			// 場所
+//						'place' => $fetchedRow['cv_place'],			// 場所
 //						'description' => $fetchedRow['cv_summary']		// 概要
 						);	
 		
@@ -404,7 +404,8 @@ class calendarWidgetContainer extends BaseWidgetContainer
 						'className'	=> self::DEFAULT_EVENT_CLASS_NAME,				// イベントクラス名
 
 						// ツールチップ用データ
-						'location' => $fetchedRow['ee_place'],			// 場所
+//						'location' => $fetchedRow['ee_place'],			// 場所
+						'place' => $fetchedRow['ee_place'],			// 場所
 						'description' => $fetchedRow['ee_summary']		// 概要
 						);	
 		

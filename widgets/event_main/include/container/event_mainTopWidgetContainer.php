@@ -658,7 +658,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $fetchedRow['ee_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
 		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $fetchedRow['ee_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
 		// イベント情報追加分
-		$contentInfo[M3_TAG_MACRO_CONTENT_LOCATION]	= $this->getCurrentLangString($fetchedRow['ee_place']);// 開催場所
+		$contentInfo[M3_TAG_MACRO_CONTENT_PLACE]	= $this->getCurrentLangString($fetchedRow['ee_place']);// 開催場所
 		$contentInfo[M3_TAG_MACRO_CONTENT_CONTACT]	= $this->getCurrentLangString($fetchedRow['ee_contact']);		// 連絡先
 		$contentInfo[M3_TAG_MACRO_CONTENT_INFO_URL]		= $fetchedRow['ee_url'];		// その他の情報のURL
 		

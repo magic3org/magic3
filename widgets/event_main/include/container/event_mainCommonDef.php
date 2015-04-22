@@ -51,8 +51,8 @@ class event_mainCommonDef
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数
 	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリー数
 	const DEFAULT_MSG_NO_ENTRY_IN_FUTURE		= '今後のイベントはありません';	// 予定イベントなし時メッセージ
-	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_LOCATION#]</span><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div><div><span class="event_url">URL：[#CT_INFO_URL:autolink=true;#]</span></div></div><div class="entry_content">[#BODY#][#RESULT#]</div>[#CATEGORY#][#LINKS#]';	// デフォルトのコンテンツレイアウト(記事詳細)
-	const DEFAULT_LAYOUT_ENTRY_LIST = '[#TITLE#]<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_LOCATION#]</span><div>[#DETAIL_LINK#]</div></div><div class="entry_content">[#BODY#]</div>[#CATEGORY#]';	// デフォルトのコンテンツレイアウト(記事一覧)
+	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_PLACE#]</span><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div><div><span class="event_url">URL：[#CT_INFO_URL:autolink=true;#]</span></div></div><div class="entry_content">[#BODY#][#RESULT#]</div>[#CATEGORY#][#LINKS#]';	// デフォルトのコンテンツレイアウト(記事詳細)
+	const DEFAULT_LAYOUT_ENTRY_LIST = '[#TITLE#]<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_PLACE#]</span><div>[#DETAIL_LINK#]</div></div><div class="entry_content">[#BODY#]</div>[#CATEGORY#]';	// デフォルトのコンテンツレイアウト(記事一覧)
 	const DEFAULT_HEAD_VIEW_DETAIL = '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />';	// デフォルトのヘッダ出力(詳細表示)
 //	const DEFAULT_TITLE_DEFAULT 		= 'イベント記事新規';		// イベントタイトルのデフォルト値
 	const DEFAULT_TITLE_LIST 			= '「$1」の記事';		// 一覧タイトルのデフォルト値
