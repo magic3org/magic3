@@ -175,7 +175,7 @@ class TextConvManager extends Core
 					$value = $this->contentInfo[$typeTag];
 					if (isset($value)){
 						if (empty($value)){
-							$destTag = $value;
+							$destTag = '';		// 出力をクリア
 						} else {
 							if (empty($options)){
 								$destTag = date(M3_VIEW_FORMAT_DATETIME, strtotime($value));
@@ -189,7 +189,7 @@ class TextConvManager extends Core
 					$value = $this->contentInfo[$typeTag];
 					if (isset($value)){
 						if (empty($value)){
-							$destTag = $value;
+							$destTag = '';	// 出力をクリア
 						} else {
 							if (empty($options)){
 								$destTag = date(M3_VIEW_FORMAT_DATE, strtotime($value));
@@ -203,7 +203,7 @@ class TextConvManager extends Core
 					$value = $this->contentInfo[$typeTag];
 					if (isset($value)){
 						if (empty($value)){
-							$destTag = $value;
+							$destTag = '';	// 出力をクリア
 						} else {
 							if (empty($options)){
 								$destTag = date(M3_VIEW_FORMAT_TIME, strtotime($value));
@@ -216,26 +216,46 @@ class TextConvManager extends Core
 				case 'CT_ID':		// コンテンツID
 				case 'CT_TITLE':		// コンテンツタイトル
 				default:
+					// コンテンツマクロオプションを解析
 					$optionParams = $this->_parseContentMacroOption($options);
+					
 					$value = $this->contentInfo[$typeTag];
 					if (isset($value)){
-						$destTag = $value;
+						if (empty($value)){
+							$destTag = '';	// 出力をクリア
+						} else {
+							$destTag = $value;
 						
-						$keys = array_keys($optionParams);
-						for ($i = 0; $i < count($keys); $i++){
-							$optionKey = $keys[$i];
-							$optionValue = $optionParams[$optionKey];
-							switch ($optionKey){
-								case 'autolink':		// リンク作成
-									if (!empty($optionValue)){
-										$destTag = '<a href="' . convertUrlToHtmlEntity($destTag) . '" >' . convertToHtmlEntity($destTag) . '</a>';
-										$htmlEscaped = true;			// HTMLエスケープ終了かどうか
-									}
-									break;
+							// コンテンツマクロオプション処理
+							$keys = array_keys($optionParams);
+							for ($i = 0; $i < count($keys); $i++){
+								$optionKey = $keys[$i];
+								$optionValue = $optionParams[$optionKey];
+								switch ($optionKey){
+									case 'autolink':		// リンク作成
+										if (!empty($optionValue)){
+											$destTag = '<a href="' . convertUrlToHtmlEntity($destTag) . '" >' . convertToHtmlEntity($destTag) . '</a>';
+											$htmlEscaped = true;			// HTMLエスケープ終了かどうか
+										}
+										break;
+								}
 							}
 						}
 					}
 					break;
+			}
+			// リンク用URLが設定されている場合はリンクを作成(フォーマット「リンク元文字列|リンク先URL」の場合)
+			if (!$htmlEscaped && !empty($destTag)){
+				// URLを取得
+				list($linkStr, $url) = $this->_parseLinkString($destTag);
+				$linkStr = trim($linkStr);
+				$url = trim($url);
+				if (empty($url)){
+					$destTag = $linkStr;
+				} else {
+					$destTag = '<a href="' . convertUrlToHtmlEntity($url) . '" >' . convertToHtmlEntity($linkStr) . '</a>';
+					$htmlEscaped = true;			// HTMLエスケープ終了かどうか
+				}
 			}
 		} else if (strStartsWith($typeTag, M3_TAG_MACRO_COMMENT_KEY)){		// コメント置換キー
 			switch ($typeTag){
@@ -1213,6 +1233,27 @@ class TextConvManager extends Core
 	 */
 	function _trim_search_keyword($src){
 		return trim($src, "\"'\n\r ");
+	}
+	/**
+	 * 文字列からリンク対象とリンク先URLを取得
+	 *
+	 * @param string $str		解析文字列
+	 * @return array			リンク対象語文字列とリンク先URL
+	 */
+	function _parseLinkString($str)
+	{
+		$destStr = '';
+		$url = '';
+		
+		// リンク元文字列を取得
+		$pos = strpos($str, '|');
+		if ($pos === false){
+			$destStr = $str;
+		} else {
+			list($destStr, $url) = explode('|', $str, 2);
+		}
+			
+		return array($destStr, $url);
 	}
 }
 ?>

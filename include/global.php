@@ -162,7 +162,10 @@ define('M3_EVENT_HOOK_PARAM_UPDATE_DT',		'update_dt');					// 更新日時
 
 // データ作成用
 define('M3_WIDGET_ID_SEPARATOR',		',');									// ウィジェットIDと付加情報を連結
-define('M3_LANG_SEPARATOR',				'|');									// 言語IDと内容を連結
+//define('M3_LANG_SEPARATOR',				'|');									// 言語IDと内容を連結
+define('M3_LANG_SEPARATOR',				"\t");									// 言語IDと内容を連結
+define('M3_MACRO_SEPARATOR',			'|');									// マクロキーと値を連結(変更予定)
+//define('M3_MACRO_SEPARATOR',			"\t");									// マクロキーと値を連結
 define('M3_MACRO_OPTION_SEPARATOR',		'|');									// マクロキーとオプションを連結
 
 // テンプレートタイプ

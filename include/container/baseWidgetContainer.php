@@ -3173,7 +3173,7 @@ class BaseWidgetContainer extends Core
 		for ($i = 0; $i < $keyCount; $i++){
 			$langId = $keys[$i];
 			if (empty($langId)) continue;
-			$destStr .= $langId . '|' . $langs[$langId];
+			$destStr .= $langId . M3_LANG_SEPARATOR . $langs[$langId];
 			if ($i < $keyCount -1) $destStr .= M3_TAG_START . M3_TAG_MACRO_SEPARATOR . M3_TAG_END;
 		}
 		return $destStr;
@@ -3193,12 +3193,12 @@ class BaseWidgetContainer extends Core
 		for ($i = 0; $i < count($itemArray); $i++){
 			$line = $itemArray[$i];
 			if (empty($line)) continue;
-			$pos = strpos($line, '|');		// 言語ID取得
+			$pos = strpos($line, M3_LANG_SEPARATOR);		// 言語ID取得
 			if ($pos === false){		// 言語IDがないときはデフォルトの言語IDを使用
 				$langId = $this->gEnv->getDefaultLanguage();
 				$langStr = $line;
 			} else {
-				list($langId, $langStr) = explode('|', $line, 2);
+				list($langId, $langStr) = explode(M3_LANG_SEPARATOR, $line, 2);
 				if (empty($langId)) continue;
 			}
 			$langs[$langId] = $langStr;
@@ -3258,7 +3258,7 @@ class BaseWidgetContainer extends Core
 		for ($i = 0; $i < $keyCount; $i++){
 			$key = $keys[$i];
 			if (empty($key)) continue;
-			$destStr .= $key . '|' . $fields[$key];
+			$destStr .= $key . M3_MACRO_SEPARATOR . $fields[$key];
 			if ($i < $keyCount -1) $destStr .= M3_TAG_START . M3_TAG_MACRO_SEPARATOR . M3_TAG_END;
 		}
 		return $destStr;
@@ -3279,11 +3279,11 @@ class BaseWidgetContainer extends Core
 			$line = $itemArray[$i];
 			if (empty($line)) continue;
 			
-			$pos = strpos($line, '|');		// キー取得
+			$pos = strpos($line, M3_MACRO_SEPARATOR);		// キー取得
 			if ($pos === false){		// キーがないとき
 				continue;
 			} else {
-				list($key, $valueStr) = explode('|', $line, 2);
+				list($key, $valueStr) = explode(M3_MACRO_SEPARATOR, $line, 2);
 				if (empty($key)) continue;
 			}
 			$fields[$key] = $valueStr;

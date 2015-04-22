@@ -565,8 +565,6 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
 		// イベント情報追加分
 		$summary = $row['ee_summary'];		// 要約
-		$place = $fetchedRow['ee_place'];// 開催場所
-		$contact = $fetchedRow['ee_contact'];		// 連絡先
 		$url = $fetchedRow['ee_url'];		// URL
 		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
 		
@@ -575,7 +573,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		
 		// タイトル作成
 		$titleTag = '<h' . $this->itemTagLevel . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $this->convertToDispString($title) . '</a></h' . $this->itemTagLevel . '>';
-		
+				
 		// ユーザ定義フィールド値取得
 		// 埋め込む文字列はHTMLエスケープする
 		if ($viewMode == 10){		// 記事単体表示の場合
@@ -660,8 +658,8 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $fetchedRow['ee_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
 		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $fetchedRow['ee_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
 		// イベント情報追加分
-		$contentInfo[M3_TAG_MACRO_CONTENT_LOCATION]	= $fetchedRow['ee_place'];// 開催場所
-		$contentInfo[M3_TAG_MACRO_CONTENT_CONTACT]	= $fetchedRow['ee_contact'];		// 連絡先
+		$contentInfo[M3_TAG_MACRO_CONTENT_LOCATION]	= $this->getCurrentLangString($fetchedRow['ee_place']);// 開催場所
+		$contentInfo[M3_TAG_MACRO_CONTENT_CONTACT]	= $this->getCurrentLangString($fetchedRow['ee_contact']);		// 連絡先
 		$contentInfo[M3_TAG_MACRO_CONTENT_INFO_URL]		= $fetchedRow['ee_url'];		// その他の情報のURL
 		
 		// HTMLを出力(出力内容は特にエラーチェックしない)

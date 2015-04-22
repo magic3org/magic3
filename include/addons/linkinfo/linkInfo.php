@@ -479,12 +479,12 @@ class linkInfo
 		for ($i = 0; $i < count($itemArray); $i++){
 			$line = $itemArray[$i];
 			if (empty($line)) continue;
-			$pos = strpos($line, '|');		// 言語ID取得
+			$pos = strpos($line, M3_LANG_SEPARATOR);		// 言語ID取得
 			if ($pos === false){		// 言語IDがないときはデフォルトの言語IDを使用
 				$langId = $gEnvManager->getDefaultLanguage();
 				$langStr = $line;
 			} else {
-				list($langId, $langStr) = explode('|', $line, 2);
+				list($langId, $langStr) = explode(M3_LANG_SEPARATOR, $line, 2);
 				if (empty($langId)) continue;
 			}
 			$langs[$langId] = $langStr;
