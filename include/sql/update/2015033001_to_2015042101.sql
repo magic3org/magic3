@@ -24,3 +24,11 @@
 ALTER TABLE event_entry MODIFY ee_summary TEXT NOT NULL;      -- 概要
 ALTER TABLE event_entry MODIFY ee_place TEXT NOT NULL;        -- 場所
 ALTER TABLE event_entry MODIFY ee_contact TEXT NOT NULL;      -- 連絡先(Eメール,電話番号)
+
+-- イベント設定マスター
+DELETE FROM event_config WHERE eg_id = 'layout_entry_single';
+DELETE FROM event_config WHERE eg_id = 'layout_entry_list';
+INSERT INTO event_config
+(eg_id,                     eg_value,    eg_name,                              eg_index) VALUES
+('layout_entry_single',     '<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_PLACE#]</span><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div><div><span class="event_url">URL：[#CT_INFO_URL:autolink=true;#]</span></div></div><div class="entry_content">[#BODY#][#RESULT#]</div>[#CATEGORY#][#LINKS#]', 'コンテンツレイアウト(記事詳細)',               0),
+('layout_entry_list',       '[#TITLE#]<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_PLACE#]</span><div>[#DETAIL_LINK#]</div></div><div class="entry_content">[#BODY#]</div>[#CATEGORY#]', 'コンテンツレイアウト(記事一覧)',               0);
