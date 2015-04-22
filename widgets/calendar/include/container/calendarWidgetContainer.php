@@ -403,10 +403,10 @@ class calendarWidgetContainer extends BaseWidgetContainer
 						'url'	=> $linkUrl,		// リンク先
 						'className'	=> self::DEFAULT_EVENT_CLASS_NAME,				// イベントクラス名
 
-						// ツールチップ用データ
+						// ツールチップ用データ。HTMLエスケープ済みのテキストを返す。
 //						'location' => $fetchedRow['ee_place'],			// 場所
-						'place' => $fetchedRow['ee_place'],			// 場所
-						'description' => $fetchedRow['ee_summary']		// 概要
+						'place'			=> $this->gDesign->createLinkFromLinkFomatText($this->getCurrentLangString($fetchedRow['ee_place'])),			// 場所
+						'description'	=> $this->getCurrentLangString($fetchedRow['ee_summary'])		// 概要
 						);	
 		
 		$this->events[] = $event;

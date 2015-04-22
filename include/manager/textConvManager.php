@@ -144,6 +144,7 @@ class TextConvManager extends Core
 		global $gInstanceManager;
 		global $gEnvManager;
 		global $gPageManager;
+		global $gDesignManager;
 		static $keyValues;
 
 		$htmlEscaped = false;			// HTMLエスケープ終了かどうか
@@ -227,6 +228,7 @@ class TextConvManager extends Core
 							$destTag = $value;
 						
 							// コンテンツマクロオプション処理
+							// コンテンツマクロオプションはHTMLエスケープ($this->htmlEscapedValue)しない場合でも強制的に処理を行う。
 							$keys = array_keys($optionParams);
 							for ($i = 0; $i < count($keys); $i++){
 								$optionKey = $keys[$i];
@@ -246,16 +248,24 @@ class TextConvManager extends Core
 			}
 			// リンク用URLが設定されている場合はリンクを作成(フォーマット「リンク元文字列|リンク先URL」の場合)
 			if (!$htmlEscaped && !empty($destTag)){
-				// URLを取得
+				if ($this->htmlEscapedValue){		// HTMLエスケープ処理する場合
+					$destTag = $gDesignManager->createLinkFromLinkFomatText($destTag, true/*HTMLエスケープあり*/);
+					$htmlEscaped = true;			// HTMLエスケープ終了かどうか
+				} else {
+					// リンク元文字列のみ返る
+					$destTag = $gDesignManager->createLinkFromLinkFomatText($destTag, false/*HTMLエスケープなし*/);
+				}
+				
+/*				// URLを取得
 				list($linkStr, $url) = $this->_parseLinkString($destTag);
 				$linkStr = trim($linkStr);
 				$url = trim($url);
-				if (empty($url)){
-					$destTag = $linkStr;
-				} else {
+				$destTag = $linkStr;		// デフォルトはリンク元文字列
+				
+				if (!empty($url) && $this->htmlEscapedValue){		// エスケープ処理する場合のみリンク作成
 					$destTag = '<a href="' . convertUrlToHtmlEntity($url) . '" >' . convertToHtmlEntity($linkStr) . '</a>';
 					$htmlEscaped = true;			// HTMLエスケープ終了かどうか
-				}
+				}*/
 			}
 		} else if (strStartsWith($typeTag, M3_TAG_MACRO_COMMENT_KEY)){		// コメント置換キー
 			switch ($typeTag){
@@ -1240,7 +1250,7 @@ class TextConvManager extends Core
 	 * @param string $str		解析文字列
 	 * @return array			リンク対象語文字列とリンク先URL
 	 */
-	function _parseLinkString($str)
+/*	function _parseLinkString($str)
 	{
 		$destStr = '';
 		$url = '';
@@ -1254,6 +1264,6 @@ class TextConvManager extends Core
 		}
 			
 		return array($destStr, $url);
-	}
+	}*/
 }
 ?>

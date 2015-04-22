@@ -338,6 +338,27 @@ class DesignManager extends Core
 		return $destTag;
 	}
 	/**
+	 * 文字列からリンク対象とリンク先URLを取得
+	 *
+	 * @param string $str		解析文字列
+	 * @return array			リンク対象語文字列とリンク先URL
+	 */
+	function _parseLinkString($str)
+	{
+		$destStr = '';
+		$url = '';
+		
+		// リンク元文字列を取得
+		$pos = strpos($str, '|');
+		if ($pos === false){
+			$destStr = $str;
+		} else {
+			list($destStr, $url) = explode('|', $str, 2);
+		}
+			
+		return array($destStr, $url);
+	}
+	/**
 	 * 管理画面用ナビゲーションタブを作成
 	 *
 	 * @param array $tabDef				タブの定義
@@ -368,6 +389,29 @@ class DesignManager extends Core
 		}
 		$tabHtml .= '</ul>';
 		return $tabHtml;
+	}
+	/**
+	 * リンクフォーマットテキスト(「|」でURLを連結)からリンクタグを作成
+	 *
+	 * @param string $src			フォーマットテキスト
+	 * @param bool $htmlEscape		HTMLエスケープするかどうか。falseの場合はリンク元文字列のみ返す。
+	 * @return string 				リンクタグ。リンクが設定されていない場合はHTMLエスケープ済みの文字列を返す。
+	 */
+	function createLinkFromLinkFomatText($src, $htmlEscape = true)
+	{
+		list($linkStr, $url) = $this->_parseLinkString($src);
+		$linkStr = trim($linkStr);
+		$url = trim($url);
+		if ($htmlEscape){
+			if (empty($url)){
+				$destTag = convertToHtmlEntity($linkStr);
+			} else {
+				$destTag = '<a href="' . convertUrlToHtmlEntity($url) . '" >' . convertToHtmlEntity($linkStr) . '</a>';
+			}
+		} else {
+			$destTag = $linkStr;
+		}
+		return $destTag;
 	}
 	/**
 	 * ドラッグ&ドロップファイルアップロード用タグを作成
