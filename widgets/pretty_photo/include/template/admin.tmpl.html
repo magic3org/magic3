@@ -15,14 +15,14 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
-	document.main.imagecount.value = $('#image_list').find('.dragRow').length;
+	document.main.imagecount.value = $('#field_list').find('.dragRow').length;
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
 function updateItem(){
 	if (!window.confirm('設定を更新しますか?')) return false;
-	document.main.imagecount.value = $('#image_list').find('.dragRow').length;
+	document.main.imagecount.value = $('#field_list').find('.dragRow').length;
 	document.main.act.value='update';
 	document.main.submit();
 	return true;
@@ -51,26 +51,32 @@ var SetUrl = function(url)
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="hidden" name="item_url[]" value="' + url + '" />' + filename + '</td>';
 	lineText += '<td><input type="text" name="item_title[]" size="20" maxlength="60" /></td>';
 	lineText += '<td><input type="text" name="item_desc[]" size="30" maxlength="100" /></td>';
-	lineText += '<td><a class="delImage" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
-	$('#image_list').append(lineText);
+	lineText += '<td><a class="delImage" href="#"><img src="{_ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></td></tr>';
+	$('#field_list').append(lineText);
 
 	// 画像一覧を再設定
 	setupList();
 }
 function setupList()
 {
-	$("#image_list").tableDnD({
+	$("#field_list").tableDnD({
 		dragHandle: "dragHandle"
 	});
-	$("#image_list tr").hover(function(){
+	$("#field_list tr").hover(function(){
 		$(this.cells[0]).addClass('currentHandle');
 	}, function() {
 		$(this.cells[0]).removeClass('currentHandle');
 	});
 	// 画像項目削除処理
-	$("#image_list tr .delImage").click(function(){
+	$("#field_list tr .delImage").click(function(){
 		$(this).parents('.dragRow').remove();
 	});
+	
+	// スタイル再設定
+	m3SetConfigSubTable('field_list');
+	
+	// HELP追加
+	m3SetHelp($("#field_list"));
 }
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow()
@@ -109,31 +115,33 @@ $(function(){
     <tr>
 	    <th><span {_HELP_UNTITLED_NAME_INPUT}>名前</span></th>
 	    <td>
+		<div class="col-sm-4 m3config_item">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
 	        <patTemplate:tmpl name="_config_name_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" value="{NAME}" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
     <tr>
 	    <th><span {_HELP_UNTITLED_FILE}>画像</span></th>
 	    <td>
-	    <table id="image_list" class="simple-table-inner" width="100%">
+	    <table id="field_list">
 	    <thead>
-	    <tr><th width="35">移動</th><th width="200">ファイル名</th><th width="200">タイトル名</th><th>説明</th><th>操作</th></tr>
+	    <tr><th style="width:35px;">移動</th><th>ファイル名</th><th>タイトル名</th><th>説明</th><th style="width:50px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="image_list">
-            <tr class="dragRow">
+        <tr class="dragRow">
 	    <td class="dragHandle"></td>
 	    <td><input type="hidden" name="item_url[]" value="{URL}" />{FILENAME}</td>
 	    <td><input type="text" name="item_title[]" value="{TITLE}" size="20" maxlength="60" /></td>
 	    <td><input type="text" name="item_desc[]" value="{DESC}" size="30" maxlength="100" /></td>
-	    <td><a class="delImage" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    <td><a class="delImage" href="#"><img src="{ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
@@ -143,26 +151,34 @@ $(function(){
     <tr>
 	    <th><span {_HELP_UNTITLED_SIZE}>画像サイズ</span></th>
 	    <td>
-	    <input type="text" name="item_size" value="{SIZE}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" />px
+	    <div class="col-sm-1 m3config_item"><input type="text" name="item_size" value="{SIZE}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div><div class="form-control-static m3config_item col-sm-1">px</div>
 	    </td>
 	</tr>
     <tr>
 	    <th><span {_HELP_OPTION}>オプション</span></th>
 	    <td>
-		テーマ：
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-1">テーマ：</div>
+		<div class="col-sm-4 m3config_item">
 	    <select name="item_theme">
 	        <patTemplate:tmpl name="theme_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
-	    </select><br />
-		<input type="checkbox" name="item_show_title" {SHOW_TITLE_CHECKED}/>タイトルを表示<br />
-	    <input type="checkbox" name="item_show_social_button" {SHOW_SOCIAL_BUTTON_CHECKED}/>ソーシャルボタンを表示<br />
-		透明度(0-1)：<input type="text" name="item_opacity" value="{OPACITY}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" />
+	    </select>
+		</div>
+		</div>
+		<div class="form-group clearfix">
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_title" {SHOW_TITLE_CHECKED}/>タイトルを表示</label></div>
+	    <div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_social_button" {SHOW_SOCIAL_BUTTON_CHECKED}/>ソーシャルボタンを表示</label></div>
+		</div>
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-2">透明度(0-1)：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_opacity" value="{OPACITY}" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div>
+		</div>
 	    </td>
 	</tr>
     <tr>
 	    <th><span {_HELP_UNTITLED_CSS_ID}>CSS用ID</span></th>
-	    <td>{CSS_ID}<input type="hidden" name="item_css_id" value="{CSS_ID}" />
+	    <td><div class="form-control-static m3config_item col-sm-4">{CSS_ID}</div><input type="hidden" name="item_css_id" value="{CSS_ID}" />
 	    </td>
 	</tr>
     <tr>
