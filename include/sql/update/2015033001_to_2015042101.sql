@@ -18,6 +18,11 @@
 
 -- *** システムベーステーブル ***
 -- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'art42_sample4';
+INSERT INTO _templates
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_create_dt) VALUES
+('art42_sample4',                 'art42_sample4',                 2,       0,              false,     false,            true,         0,             now());
+
 
 -- *** システム標準テーブル ***
 -- イベント記事マスター
