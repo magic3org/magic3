@@ -322,6 +322,7 @@ define('M3_REQUEST_PARAM_CATEGORY_ID',      		'categoryid');		// カテゴリID(
 define('M3_REQUEST_PARAM_WIDTH',      				'width');			// 幅
 define('M3_REQUEST_PARAM_HEIGHT',      				'height');			// 高さ
 define('M3_REQUEST_PARAM_COMMENT_ID',      			'commentid');		// コメント識別用ID
+define('M3_REQUEST_PARAM_PLACE_ID',      			'placeid');			// 場所識別用ID
 define('M3_REQUEST_PARAM_CONTENT_ID',      			'contentid');		// 汎用コンテンツID
 define('M3_REQUEST_PARAM_CONTENT_ID_SHORT',      	'cid');				// 汎用コンテンツID(略式)
 define('M3_REQUEST_PARAM_PRODUCT_ID',      			'productid');		// 製品ID
