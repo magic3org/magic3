@@ -3,7 +3,7 @@ body
   background: #FFFEF5;
   margin: 0 auto;
   font-size: 13px;
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+  font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
   font-weight: normal;
   font-style: normal;
   min-height: 100%;
@@ -15,7 +15,7 @@ body
 table
 {
   font-size: 13px;
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   font-weight: normal;
   font-style: normal;
 }
@@ -33,7 +33,7 @@ body
 
 body, li, table, a, a:link, a:visited, a.visited, a:hover, a.hovered
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   line-height: 175%;
 }
 
@@ -45,7 +45,7 @@ p
 h1, h1 a, h1 a:link, h1 a:visited, h1 a:hover, h2, h2 a, h2 a:link, h2 a:visited, h2 a:hover, h3, h3 a, h3 a:link, h3 a:visited, h3 a:hover, h4, h4 a, h4 a:link, h4 a:visited, h4 a:hover, h5, h5 a, h5 a:link, h5 a:visited, h5 a:hover, h6, h6 a, h6 a:link, h6 a:visited, h6 a:hover
 {
   font-size: 22px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
   font-weight: normal;
   font-style: normal;
   line-height: 120%;
@@ -53,21 +53,21 @@ h1, h1 a, h1 a:link, h1 a:visited, h1 a:hover, h2, h2 a, h2 a:link, h2 a:visited
 
 a, a:link
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   text-decoration: none;
   color: #16A0CA;
 }
 
 a:visited, a.visited
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   text-decoration: none;
   color: #878159;
 }
 
 a:hover, a.hover
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   text-decoration: underline;
   color: #27BBE8;
 }
@@ -77,13 +77,13 @@ h1
   color: #16A0CA;
   margin: 10px 0 0;
   font-size: 26px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h1 a, h1 a:link, h1 a:hover, h1 a:visited
 {
   font-size: 26px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h2
@@ -91,13 +91,13 @@ h2
   color: #16A0CA;
   margin: 10px 0 0;
   font-size: 22px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h2 a, h2 a:link, h2 a:hover, h2 a:visited
 {
   font-size: 22px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h3
@@ -105,13 +105,13 @@ h3
   color: #878159;
   margin: 10px 0 0;
   font-size: 20px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h3 a, h3 a:link, h3 a:hover, h3 a:visited
 {
   font-size: 20px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h4
@@ -119,13 +119,13 @@ h4
   color: #312F20;
   margin: 10px 0 0;
   font-size: 18px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h4 a, h4 a:link, h4 a:hover, h4 a:visited
 {
   font-size: 18px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h5
@@ -133,13 +133,13 @@ h5
   color: #312F20;
   margin: 10px 0 0;
   font-size: 15px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h5 a, h5 a:link, h5 a:hover, h5 a:visited
 {
   font-size: 15px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h6
@@ -147,13 +147,13 @@ h6
   color: #686445;
   margin: 10px 0 0;
   font-size: 13px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 h6 a, h6 a:link, h6 a:hover, h6 a:visited
 {
   font-size: 13px;
-  font-family: 'Palatino Linotype', Georgia, 'Times New Roman', Times, Serif;
+
 }
 
 header, footer, nav
@@ -265,7 +265,7 @@ input, select, textarea
 {
   vertical-align: middle;
   font-size: 13px;
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   font-weight: normal;
   font-style: normal;
 }
@@ -283,7 +283,7 @@ input[type="text"], input[type="password"], input[type="email"], input[type="url
   padding: 6px 0;
   color: #312F20 !important;
   font-size: 13px;
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   font-weight: normal;
   font-style: normal;
   text-shadow: none;
@@ -369,7 +369,7 @@ ul>li:before
 
 li
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   color: #4A4631;
   margin: 3px 0 0 11px;
 }
@@ -421,7 +421,7 @@ blockquote
   padding: 15px 15px 15px 39px;
   margin: 0 0 0 15px;
   color: #12120C;
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   font-weight: normal;
   font-style: italic;
   text-align: left;
@@ -432,7 +432,7 @@ blockquote
 blockquote a, blockquote a, blockquote a:link, blockquote a:link, blockquote a:visited, blockquote a:visited, blockquote a:hover, blockquote a:hover
 {
   color: #12120C;
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   font-weight: normal;
   font-style: italic;
   text-align: left;
@@ -459,31 +459,31 @@ blockquote p, blockquote p
 .Sorter a
 {
   position: relative;
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   color: #138AAF;
 }
 
 .Sorter a:link
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   color: #138AAF;
 }
 
 .Sorter a:visited, .Sorter a.visited
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   color: #138AAF;
 }
 
 .Sorter a:hover, .Sorter a.hover
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   color: #0E6A85;
 }
 
 .Sorter
 {
-  font-family: Verdana, Geneva, Arial, Helvetica, Sans-Serif;
+
   color: #0C576E;
 }
 
