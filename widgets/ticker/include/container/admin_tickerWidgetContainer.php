@@ -24,7 +24,6 @@ class admin_tickerWidgetContainer extends BaseAdminWidgetContainer
 	private $fieldInfoArray = array();			// お問い合わせ項目情報
 	private $css;			// CSS
 	private $cssId;			// CSS用ID
-	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	
 	/**
 	 * コンストラクタ
