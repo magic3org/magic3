@@ -817,7 +817,9 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			//$pathParts = pathinfo($filePath);
 			////$file = basename($filePath);
 			//$file = $pathParts['basename'];
-			$file = end(explode('/', $filePath));			// pathinfo,basenameは日本語処理できないので日本語対応
+//			$file = end(explode('/', $filePath));			// pathinfo,basenameは日本語処理できないので日本語対応
+			$filePathArray = explode('/', $filePath);		// pathinfo,basenameは日本語処理できないので日本語対応
+			$file = end($filePathArray);
 			$size = '';
 			$fileLink = '';
 			$filenameOption = '';			// ファイル名オプション
