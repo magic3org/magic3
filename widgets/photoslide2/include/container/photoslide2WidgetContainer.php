@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: photoslide2WidgetContainer.php 4699 2012-02-19 14:14:58Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -64,8 +64,6 @@ class photoslide2WidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		
 		// 定義ID取得
 		$configId = $this->gEnv->getCurrentWidgetConfigId();
 		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
@@ -99,7 +97,7 @@ class photoslide2WidgetContainer extends BaseWidgetContainer
 				break;
 			case 'photo':
 				if (!$this->db->getConfig(self::CF_PHOTO_CATEGORY_PASSWORD)){			// カテゴリーパスワード制限がかかっているときは画像の表示不可
-					$this->db->getPhotoItems($imageCount, $langId, $this->sortKey, $sortOrder, array($this, 'itemLoop'));
+					$this->db->getPhotoItems($imageCount, $this->_langId, $this->sortKey, $sortOrder, array($this, 'itemLoop'));
 				}
 				break;
 		}
