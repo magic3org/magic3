@@ -289,7 +289,7 @@ class admin_photoslide2WidgetContainer extends BaseAdminWidgetContainer
 		$this->createEffectMenu();
 		
 		// プレビュースライドショー用画像一覧作成
-		switch ($imageType){
+/*		switch ($imageType){
 			case 'directory':
 				$this->createImageList($dir);
 				break;
@@ -298,11 +298,11 @@ class admin_photoslide2WidgetContainer extends BaseAdminWidgetContainer
 					$this->db->getPhotoItems($imageCount, $this->_langId, $this->sortKey, $sortOrder, array($this, 'itemLoop'));
 				}
 				break;
-		}
+		}*/
 		
 		// エフェクト設定を作成
-		$effectStr = $this->createEffect($this->effect, $this->speed);
-		$this->tmpl->addVar('_widget', 'effect', $effectStr);
+//		$effectStr = $this->createEffect($this->effect, $this->speed);
+//		$this->tmpl->addVar('_widget', 'effect', $effectStr);
 		
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
@@ -397,7 +397,7 @@ class admin_photoslide2WidgetContainer extends BaseAdminWidgetContainer
 	 * @param string $dir		画像のあるディレクトリ
 	 * @return なし							
 	 */
-	function createImageList($dir)
+/*	function createImageList($dir)
 	{
 		// 画像ディレクトリを読み込み
 		$searchPath	= $this->gEnv->getSystemRootPath() . $dir;		// 画像検索パス
@@ -428,7 +428,7 @@ class admin_photoslide2WidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVars('image_list2', $row);
 			$this->tmpl->parseTemplate('image_list2', 'a');
 		}
-	}
+	}*/
 	/**
 	 * 取得したデータをテンプレートに設定する
 	 *

@@ -39,47 +39,59 @@ function listItem(){
 function selectEffect(){
 	return true;
 }
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow()
+{
+	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
+	return true;
+}
 $(function(){
-	$('#{CSS_ID}').cycle({
-		{EFFECT}
-	});
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+	
+//	$('#{CSS_ID}').cycle({
+//		{EFFECT}
+//	});
 });
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
-<table width="90%">
-<tr><td><label>画像スライドショー設定</label></td>
-<td align="right"><input type="button" class="button" onclick="listItem();" value="一覧" />
-</td></tr>
-<tr><td colspan="2">
+<h3 class="m3config_h">基本設定</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_UNTITLED_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_UNTITLED_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_DISABLED}/>
+</div></div></div>
 
-<table class="simple-table" style="margin:0 auto;">
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150">名前</td>
-	    <td width="800">
+    <tr>
+	    <th><span {_HELP_UNTITLED_NAME_INPUT}>名前</span></th>
+	    <td>
+		<div class="col-sm-4 m3config_item">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規登録 --</option>
 	        <patTemplate:tmpl name="_config_name_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside">画像</td>
+    <tr>
+	    <th><span {_HELP_UNTITLED_IMAGE}>画像</span></th>
 	    <td><input type="radio" name="item_image_type" value="directory" {IMAGE_TYPE_DIRECTORY_CHECKED} />ディレクトリ画像<br />
-	    画像読み込みディレクトリ：<input type="text" name="item_dir" value="{DIR}" size="80" maxlength="120" style="width:60%;" /><br />
+	    画像読み込みディレクトリ：<input type="text" name="item_dir" value="{DIR}" size="80" maxlength="120" /><br />
 	    表示順：
     <select name="item_disptype">
         <patTemplate:tmpl name="disp_type_list">
@@ -99,8 +111,8 @@ $(function(){
 	    </select>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside">エフェクト</td>
+    <tr>
+	    <th>エフェクト</th>
 	    <td>
 	    <select name="item_effect" onchange="selectEffect();">
 	        <option value="">-- 未選択 --</option>
@@ -116,49 +128,32 @@ $(function(){
 	    </select>
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside">CSS用ID</td>
-	    <td>{CSS_ID}<input type="hidden" name="item_css_id" value="{CSS_ID}" />
+    <tr>
+	    <th><span {_HELP_UNTITLED_CSS_ID}>CSS用ID</span></th>
+	    <td><div class="form-control-static m3config_item col-sm-4">{CSS_ID}</div><input type="hidden" name="item_css_id" value="{CSS_ID}" />
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside">CSS</td>
-	    <td><textarea name="item_css" rows="10" style="width:100%;">{CSS}</textarea>
+    <tr>
+	    <th><span {_HELP_UNTITLED_CSS}>CSS</span></th>
+	    <td><textarea name="item_css" rows="10">{CSS}</textarea>
 	    </td>
 	</tr>
-	<tr class="even">
-	    <td align="right" colspan="2">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-
-</td></tr>
-<tr><td colspan="2">
-<br />
-<div>
-<label>プレビュー</label></div>
-<div id="preview_outer">
-<div id="{CSS_ID}" class="photoslide">
-  <patTemplate:tmpl name="image_list"><img src="{URL}" />
-  </patTemplate:tmpl>
-</div>
 </div>
 
-</td></tr>
-<tr><td colspan="2">
-<br />
+<!--
 <div><label>表示画像一覧</label></div>
   <patTemplate:tmpl name="image_list2"><img src="{URL}" />
   </patTemplate:tmpl>
-</td></tr>
-</table>
+-->
 </form>
 </div>
 </patTemplate:tmpl>
