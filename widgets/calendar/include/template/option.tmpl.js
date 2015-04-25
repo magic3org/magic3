@@ -27,5 +27,5 @@ header: {
 // イベントの表示項目数の制限
 eventLimit: true,	// カラムの高さで制限
 // イベントの時刻表示フォーマット
-timeFormat: 'H(:mm)',
+timeFormat: 'H:mm',
 </patTemplate:tmpl>
