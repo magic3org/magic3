@@ -31,6 +31,8 @@ class TextConvManager extends Core
 	const DEFAULT_MOBILE_IMAGE_HEIGHT = 320;	// 携帯用画像のデフォルトサイズ(高さ)
 	const DEFAULT_MOBILE_IMAGE_FILE_EXT = 'gif';		// 携帯用画像の形式
 	const CONTENT_MACRO_OPTION_SEPARATOR = ';';			// コンテンツマクロのオプション設定の区切り
+	const NO_DATA_DISP_LABEL = '名称未設定';			// データがない場合の表示ラベル
+	const NO_TIME_DATA_DISP_LABEL = '名称未設定';			// 時間データがない場合の表示ラベル
 	
 	/**
 	 * コンストラクタ
@@ -174,43 +176,43 @@ class TextConvManager extends Core
 				case 'CT_UPDATE_DT':			// コンテンツ更新日時
 				case 'CT_REGIST_DT':			// コンテンツ登録日時
 					$value = $this->contentInfo[$typeTag];
-					if (isset($value)){
-						if (empty($value)){
-							$destTag = '';		// 出力をクリア
+					if (!isset($value)) $value = self::NO_TIME_DATA_DISP_LABEL;		// 未設定の場合は時間データなしの表示ラベルを設定
+					
+					if (empty($value)){
+						$destTag = '';		// 出力をクリア
+					} else {
+						if (empty($options)){
+							$destTag = date(M3_VIEW_FORMAT_DATETIME, strtotime($value));
 						} else {
-							if (empty($options)){
-								$destTag = date(M3_VIEW_FORMAT_DATETIME, strtotime($value));
-							} else {
-								$destTag = date($options, strtotime($value));
-							}
+							$destTag = date($options, strtotime($value));
 						}
 					}
 					break;
 				case 'CT_DATE':					// コンテンツ登録日
 					$value = $this->contentInfo[$typeTag];
-					if (isset($value)){
-						if (empty($value)){
-							$destTag = '';	// 出力をクリア
+					if (!isset($value)) $value = self::NO_TIME_DATA_DISP_LABEL;		// 未設定の場合は時間データなしの表示ラベルを設定
+					
+					if (empty($value)){
+						$destTag = '';	// 出力をクリア
+					} else {
+						if (empty($options)){
+							$destTag = date(M3_VIEW_FORMAT_DATE, strtotime($value));
 						} else {
-							if (empty($options)){
-								$destTag = date(M3_VIEW_FORMAT_DATE, strtotime($value));
-							} else {
-								$destTag = date($options, strtotime($value));
-							}
+							$destTag = date($options, strtotime($value));
 						}
 					}
 					break;
 				case 'CT_TIME':					// コンテンツ登録時
 					$value = $this->contentInfo[$typeTag];
-					if (isset($value)){
-						if (empty($value)){
-							$destTag = '';	// 出力をクリア
+					if (!isset($value)) $value = self::NO_TIME_DATA_DISP_LABEL;		// 未設定の場合は時間データなしの表示ラベルを設定
+					
+					if (empty($value)){
+						$destTag = '';	// 出力をクリア
+					} else {
+						if (empty($options)){
+							$destTag = date(M3_VIEW_FORMAT_TIME, strtotime($value));
 						} else {
-							if (empty($options)){
-								$destTag = date(M3_VIEW_FORMAT_TIME, strtotime($value));
-							} else {
-								$destTag = date($options, strtotime($value));
-							}
+							$destTag = date($options, strtotime($value));
 						}
 					}
 					break;
@@ -220,27 +222,28 @@ class TextConvManager extends Core
 					// コンテンツマクロオプションを解析
 					$optionParams = $this->_parseContentMacroOption($options);
 					
+					// 置き換える文字列を取得
 					$value = $this->contentInfo[$typeTag];
-					if (isset($value)){
-						if (empty($value)){
-							$destTag = '';	// 出力をクリア
-						} else {
-							$destTag = $value;
-						
-							// コンテンツマクロオプション処理
-							// コンテンツマクロオプションはHTMLエスケープ($this->htmlEscapedValue)しない場合でも強制的に処理を行う。
-							$keys = array_keys($optionParams);
-							for ($i = 0; $i < count($keys); $i++){
-								$optionKey = $keys[$i];
-								$optionValue = $optionParams[$optionKey];
-								switch ($optionKey){
-									case 'autolink':		// リンク作成
-										if (!empty($optionValue)){
-											$destTag = '<a href="' . convertUrlToHtmlEntity($destTag) . '" >' . convertToHtmlEntity($destTag) . '</a>';
-											$htmlEscaped = true;			// HTMLエスケープ終了かどうか
-										}
-										break;
-								}
+					if (!isset($value)) $value = self::NO_DATA_DISP_LABEL;		// 未設定の場合はデータなしの表示ラベルを設定
+
+					if (empty($value)){
+						$destTag = '';	// 出力をクリア
+					} else {
+						$destTag = $value;
+					
+						// コンテンツマクロオプション処理
+						// コンテンツマクロオプションはHTMLエスケープ($this->htmlEscapedValue)しない場合でも強制的に処理を行う。
+						$keys = array_keys($optionParams);
+						for ($i = 0; $i < count($keys); $i++){
+							$optionKey = $keys[$i];
+							$optionValue = $optionParams[$optionKey];
+							switch ($optionKey){
+								case 'autolink':		// リンク作成
+									if (!empty($optionValue)){
+										$destTag = '<a href="' . convertUrlToHtmlEntity($destTag) . '" >' . convertToHtmlEntity($destTag) . '</a>';
+										$htmlEscaped = true;			// HTMLエスケープ終了かどうか
+									}
+									break;
 							}
 						}
 					}
@@ -255,17 +258,6 @@ class TextConvManager extends Core
 					// リンク元文字列のみ返る
 					$destTag = $gDesignManager->createLinkFromLinkFomatText($destTag, false/*HTMLエスケープなし*/);
 				}
-				
-/*				// URLを取得
-				list($linkStr, $url) = $this->_parseLinkString($destTag);
-				$linkStr = trim($linkStr);
-				$url = trim($url);
-				$destTag = $linkStr;		// デフォルトはリンク元文字列
-				
-				if (!empty($url) && $this->htmlEscapedValue){		// エスケープ処理する場合のみリンク作成
-					$destTag = '<a href="' . convertUrlToHtmlEntity($url) . '" >' . convertToHtmlEntity($linkStr) . '</a>';
-					$htmlEscaped = true;			// HTMLエスケープ終了かどうか
-				}*/
 			}
 		} else if (strStartsWith($typeTag, M3_TAG_MACRO_COMMENT_KEY)){		// コメント置換キー
 			switch ($typeTag){
