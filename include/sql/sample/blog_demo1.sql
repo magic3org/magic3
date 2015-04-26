@@ -96,6 +96,10 @@ DELETE FROM _widget_param WHERE wp_id = 'default_menu';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
 ('default_menu', 1,            'O:\8:"stdClass":3:{s:6:"menuId";s:9:"main_menu";s:4:"name";s:27:"メインメニュー設定";s:9:"limitUser";i:0;}', now());
+DELETE FROM _widget_param WHERE wp_id = 'blog_new_box';
+INSERT INTO _widget_param
+(wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
+('blog_new_box', 0,            'O:8:"stdClass":7:{s:9:"itemCount";s:1:"5";s:6:"useRss";s:1:"1";s:13:"optionPassage";s:1:"0";s:9:"showImage";s:1:"0";s:9:"imageType";s:7:"80c.jpg";s:10:"imageWidth";i:0;s:11:"imageHeight";i:0;}', now());
 DELETE FROM _widget_param WHERE wp_id = 'custom_search';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
