@@ -88,7 +88,7 @@ TRUNCATE TABLE _menu_def;
 INSERT INTO _menu_def
 (md_id, md_index, md_menu_id,  md_name,        md_link_url,                                         md_update_dt) VALUES
 (1,     1,        'main_menu', 'ホーム',       '[#M3_ROOT_URL#]/',                                   now()),
-(2,     2,        'main_menu', '会社情報',     '[#M3_ROOT_URL#]/index.php?contentid=1', now()),
+(2,     2,        'main_menu', '運営',     '[#M3_ROOT_URL#]/index.php?contentid=1', now()),
 (3,     3,        'main_menu', 'お問い合わせ', '[#M3_ROOT_URL#]/index.php?sub=contact',             now());
 
 -- ウィジェットパラメータ
@@ -114,20 +114,41 @@ DELETE FROM blog_config WHERE bg_id = 'title_default';
 INSERT INTO blog_config
 (bg_id,                     bg_value,                         bg_name) VALUES
 ('title_default',     'ブログ', 'デフォルトタイトル');
+DELETE FROM blog_config WHERE bg_id = 'entry_view_count';
+INSERT INTO blog_config
+(bg_id,                     bg_value,                         bg_name) VALUES
+('entry_view_count',     '3', '記事表示数');
+
 TRUNCATE TABLE blog_entry;
-INSERT INTO blog_entry (be_id, be_language_id, be_history_index, be_name, be_html, be_status, be_regist_user_id, be_regist_dt) VALUES 
-(1, 'ja', 0, '富士山登山', '<p>富士山に初めて登りました。 <br />\r\n天候がよく、実にすばらしい登山日和でした。</p>\r\n<p><br />\r\n高地の空気になれるため、少しずつ上っていきます。<br />\r\n下界がどんどん遠ざかっていきます。</p>\r\n<p><img width="420" height="280" src="[#M3_ROOT_URL#]/resource/image/sample/blog/fuji1.jpg" alt="" /></p>\r\n<p>山頂には神社があります。</p>\r\n<p><img width="267" height="400" src="[#M3_ROOT_URL#]/resource/image/sample/blog/fuji2.jpg" alt="" /></p>\r\n<p>&nbsp;</p>\r\n<p>下山はひたすら砂地を下っていきます。</p>\r\n<p><img width="267" height="400" src="[#M3_ROOT_URL#]/resource/image/sample/blog/fuji3.jpg" alt="" /></p>', 2, 1, '2007-08-28 19:56:04'),
-(2, 'ja', 0, '多摩川の夕日', '<p>8月も終わりになりました。まだまだ暑いですが、夜は少し涼しく、ピークは過ぎた感じです。<br />\r\n部屋から夕日が沈んでゆくのが見えます。</p>\r\n<p><img width="410" height="272" src="[#M3_ROOT_URL#]/resource/image/sample/blog/tama1.jpg" alt="" /></p>', 2, 1, '2007-08-29 13:39:20');
+INSERT INTO blog_entry
+(be_id, be_language_id, be_name, be_html, be_status, be_regist_user_id, be_regist_dt, be_related_content) VALUES 
+(1, 'ja', 'ブログ-A1', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top01.jpg" style="width: 288px; height: 193px;" />', 2, 1, '2014-04-10 00:00:00', '2,3'),
+(2, 'ja', 'ブログ-A2', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top02.jpg" style="width: 300px; height: 355px;" />', 2, 1, '2014-04-19 07:00:00', '1,3'),
+(3, 'ja', 'ブログ-A3', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top03.jpg" style="width: 150px; height: 207px;" />', 2, 1, '2014-05-01 01:00:00', '1,2'),
+(4, 'ja', 'ブログ-A4', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top04.jpg" style="width: 336px; height: 223px;" />', 2, 1, '2014-08-02 07:00:00', '5,8'),
+(5, 'ja', 'ブログ-A5', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top05.jpg" style="height: 200px; width: 300px;" />', 2, 1, '2014-09-19 07:00:00', '4,8'),
+(6, 'ja', 'ブログ-A6', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top06.jpg" style="width: 150px; height: 113px;" />', 2, 1, '2014-10-01 12:00:00', '7'),
+(7, 'ja', 'ブログ-A7', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top07.jpg" style="width: 150px; height: 113px;" />', 2, 1, '2014-10-19 04:00:00', '6'),
+(8, 'ja', 'ブログ-A8', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top08.jpg" style="width: 402px; height: 302px;" />', 2, 1, '2014-11-22 08:00:00', '4,5');
 
 TRUNCATE TABLE blog_category;
 INSERT INTO blog_category (bc_id, bc_language_id, bc_name, bc_sort_order) VALUES 
-(1, 'ja', '登山', 1),
-(2, 'ja', '風景', 2);
+(1, 'ja', 'カテゴリー●●●', 1),
+(2, 'ja', 'カテゴリー△△△', 2),
+(3, 'ja', 'カテゴリー■■■', 3);
 
 TRUNCATE TABLE blog_entry_with_category;
 INSERT INTO blog_entry_with_category (bw_entry_serial, bw_index, bw_category_id) VALUES 
 (1,  0, 1),
-(2,  0, 2);
+(2,  0, 2),
+(3,  0, 2),
+(4,  0, 1),
+(4,  1, 2),
+(5,  0, 3),
+(6,  0, 2),
+(7,  0, 1),
+(7,  1, 3),
+(8,  0, 1);
 
 -- 新着情報
 TRUNCATE TABLE news;
@@ -165,5 +186,8 @@ INSERT INTO bn_item (bi_id, bi_name,    bi_image_url, bi_html) VALUES
 
 -- コンテンツ
 TRUNCATE TABLE content;
-INSERT INTO content (cn_type, cn_id, cn_language_id, cn_name,              cn_description,         cn_html,                        cn_default, cn_key, cn_create_user_id, cn_create_dt) VALUES 
-('', 1,     'ja',           '会社情報',   '会社情報', '<div class="ec_common">\r\n<table>\r\n    <tbody>\r\n        <tr>\r\n            <th>社　名</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>所在地</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>設　立</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>代表者</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>事業内容</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>●商品Ａの製造<br />\r\n            ●商品Ｂの卸売<br />\r\n            ●商品Ｃの販売</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>主要取引銀行</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n        <tr>\r\n            <th>主要取引先</th>\r\n            <td>\r\n            <p>&nbsp;</p>\r\n            <p>■ＸＸＸ株式会社<br />\r\n            ■ＹＹＹ株式会社<br />\r\n            ■株式会社　ＺＺＺ</p>\r\n            <p>&nbsp;</p>\r\n            <p>&nbsp;</p>\r\n            </td>\r\n        </tr>\r\n    </tbody>\r\n</table>\r\n</div>\r\n',              false, '',                0, now());
+INSERT INTO content
+(cn_type, cn_id, cn_language_id, cn_name,              cn_html,                        cn_default, cn_key, cn_create_user_id, cn_create_dt) VALUES 
+('', 1,     'ja',           '運営会社', '<table class="table">\r\n	<tbody>\r\n		<tr>\r\n			<th>社　名</th>\r\n			<td>\r\n			<p>株式会社ブログ</p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>所在地</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>設　立</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>代表者</th>\r\n			<td>\r\n			<p></p>\r\n			</td>\r\n		</tr>\r\n		<tr>\r\n			<th>事業内容</th>\r\n			<td>\r\n			<p>●ブログサイトの運営</p>\r\n			</td>\r\n		</tr>\r\n				</tbody>\r\n</table><br /><div class="googlemaps" id="gmap201472916954" style="width:100%;height:300px;display:none;margin:0 auto;">\r\n<script type="text/javascript">\r\n//<![CDATA[\r\n// Magic3 googlemaps v1.00 mapid:201472916954\r\n$(function(){\r\n	var mapStyle = [{"featureType":"water","stylers":[{"visibility":"on"},{"color":"#acbcc9"}]},{"featureType":"landscape","stylers":[{"color":"#f2e5d4"}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"color":"#c5c6c6"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"color":"#e4d7c6"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"color":"#fbfaf7"}]},{"featureType":"poi.park","elementType":"geometry","stylers":[{"color":"#c5dac6"}]},{"featureType":"administrative","stylers":[{"visibility":"on"},{"lightness":33}]},{"featureType":"road"},{"featureType":"poi.park","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":20}]},{},{"featureType":"road","stylers":[{"lightness":20}]}];\r\n	var allMapTypes = [	"original",\r\n						google.maps.MapTypeId.SATELLITE,\r\n						google.maps.MapTypeId.HYBRID,\r\n						google.maps.MapTypeId.TERRAIN	];\r\n	var opts = {	mapTypeControlOptions: {	mapTypeIds: allMapTypes } };\r\n	var mapDiv = document.getElementById("gmap201472916954");\r\n	var map = new google.maps.Map(mapDiv, opts);\r\n	var originalMapType = new google.maps.StyledMapType(mapStyle, { name: "地図" });\r\n	map.mapTypes.set("original", originalMapType);\r\n	map.setMapTypeId("original");\r\n	map.setMapTypeId(allMapTypes[0]);\r\n	map.setCenter(new google.maps.LatLng(34.69116, 135.52506));\r\n	map.setZoom(11);\r\n	mapDiv.style.display = "";\r\n	m3GooglemapsAddMarkers(map, [{lat:34.68732, lon:135.5262, text:''場所はここ''}]);\r\n});\r\n//]]></script>\r\n</div>\r\n',              false, '',                0, now()),
+('', 2,     'ja',           'サイト説明',   '<p>このサイトはブログのサンプルサイトです。<br />\r\n&nbsp;</p>\r\n',              false, '',                0, now());
+
