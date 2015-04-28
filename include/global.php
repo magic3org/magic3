@@ -217,7 +217,9 @@ define('M3_VIEW_TYPE_BLOG',			'blog');				// ブログ
 define('M3_VIEW_TYPE_WIKI',			'wiki');				// Wiki
 define('M3_VIEW_TYPE_USER',			'user');				// ユーザ作成コンテンツ
 define('M3_VIEW_TYPE_EVENT',		'event');				// イベント情報
+define('M3_VIEW_TYPE_EVENTENTRY',	'evententry');			// イベント参加
 define('M3_VIEW_TYPE_PHOTO',		'photo');				// フォトギャラリー
+
 // すべての機能タイプ
 $M3_ALL_FEATURE_TYPE	= array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード
 									M3_VIEW_TYPE_SEARCH,			// 検索結果
@@ -233,6 +235,7 @@ $M3_ALL_CONTENT_TYPE	= array(	M3_VIEW_TYPE_NEWS,				// 新着情報
 									M3_VIEW_TYPE_WIKI,				// Wiki
 									M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 									M3_VIEW_TYPE_EVENT,				// イベント情報
+									M3_VIEW_TYPE_EVENTENTRY,		// イベント参加
 									M3_VIEW_TYPE_PHOTO);			// フォトギャラリー
 
 // コンテンツ取得用キー

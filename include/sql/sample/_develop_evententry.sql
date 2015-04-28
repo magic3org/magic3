@@ -14,19 +14,19 @@
 -- *
 -- [開発ウィジェット登録]   *****仕様変更あり注意*****
 -- 開発中のウィジェットの登録を行う。
--- ・参加申し込み機能
+-- ・イベント参加機能
 
--- 参加申し込み情報マスター
-DROP TABLE IF EXISTS entry_request_info;
-CREATE TABLE entry_request_info (
+-- イベント参加情報マスター
+DROP TABLE IF EXISTS evententry_info;
+CREATE TABLE evententry_info (
     ei_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    ei_id                INT            DEFAULT 0                     NOT NULL,      -- 参加申し込み情報ID
+    ei_id                INT            DEFAULT 0                     NOT NULL,      -- イベント参加情報ID
     ei_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- コンテンツ種別
     ei_contents_id       VARCHAR(32)    DEFAULT ''                    NOT NULL,      -- 共通コンテンツID
     ei_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 受付タイプ
     ei_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
     
-    ei_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 参加申し込みコード
+    ei_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント参加コード
     ei_html              TEXT                                         NOT NULL,      -- 説明
     ei_max_entry         INT            DEFAULT 0                     NOT NULL,      -- 最大受付数(0は定員なし)
     ei_expire_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限
@@ -40,11 +40,11 @@ CREATE TABLE entry_request_info (
     UNIQUE               (ei_id,        ei_content_type,      ei_contents_id,       ei_type,       ei_history_index)
 ) ENGINE=innodb;
 
--- 参加申し込みトラン
-DROP TABLE IF EXISTS entry_request;
-CREATE TABLE entry_request (
+-- イベント参加要求トラン
+DROP TABLE IF EXISTS evententry_request;
+CREATE TABLE evententry_request (
     er_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    er_info_id           INT            DEFAULT 0                     NOT NULL,      -- 参加申し込み情報ID
+    er_info_id           INT            DEFAULT 0                     NOT NULL,      -- イベント参加情報ID
     er_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
     
     er_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 受付コード
