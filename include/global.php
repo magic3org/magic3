@@ -208,7 +208,6 @@ define('M3_VIEW_TYPE_SEARCH',		'search');				// 検索結果
 define('M3_VIEW_TYPE_COMMERCE',		'commerce');			// Eコマース
 define('M3_VIEW_TYPE_CALENDAR',		'calendar');			// カレンダー
 // コンテンツタイプ
-define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
 define('M3_VIEW_TYPE_MEMBER',		'member');				// 会員情報
 define('M3_VIEW_TYPE_CONTENT',		'content');				// 汎用コンテンツ
 define('M3_VIEW_TYPE_PRODUCT',		'product');				// 商品情報
@@ -217,8 +216,12 @@ define('M3_VIEW_TYPE_BLOG',			'blog');				// ブログ
 define('M3_VIEW_TYPE_WIKI',			'wiki');				// Wiki
 define('M3_VIEW_TYPE_USER',			'user');				// ユーザ作成コンテンツ
 define('M3_VIEW_TYPE_EVENT',		'event');				// イベント情報
-define('M3_VIEW_TYPE_EVENTENTRY',	'evententry');			// イベント参加
 define('M3_VIEW_TYPE_PHOTO',		'photo');				// フォトギャラリー
+// 補助コンテンツ
+define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
+define('M3_VIEW_TYPE_COMMENT',		'comment');				// コメント
+define('M3_VIEW_TYPE_EVENTENTRY',	'evententry');			// イベント参加
+define('M3_VIEW_TYPE_BANNER',		'banner');				// バナー
 
 // すべての機能タイプ
 $M3_ALL_FEATURE_TYPE	= array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード

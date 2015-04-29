@@ -87,6 +87,7 @@ class PageManager extends Core
 	private $configWidgetInfo;			// ウィジェット設定画面のウィジェットの情報
 	private $contentType = '';				// ページのコンテンツタイプ
 	private $mainContentTypeInfo;				// 一般画面で使用する主要コンテンツタイプ
+	private $subContentTypeInfo;				// 一般画面で使用する補助コンテンツタイプ
 	private $mainFeatureTypeInfo;				// 一般画面で使用する主要機能タイプ
 	private $rssVersion;					// RSSバージョン
 	private $rssChannel;				// RSSチャンネルデータ
@@ -303,7 +304,7 @@ class PageManager extends Core
 		$this->rssVersion = self::DEFAULT_RSS_VERSION;					// RSSバージョン
 		
 		// 一般画面で使用する主要コンテンツタイプ
-		$this->mainContentTypeInfo	 = array(	array(	'name' => '新着情報',					'value' => M3_VIEW_TYPE_NEWS),
+		$this->mainContentTypeInfo	 = array(
 												array(	'name' => '会員情報',					'value' => M3_VIEW_TYPE_MEMBER),
 												array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
 												array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
@@ -311,8 +312,15 @@ class PageManager extends Core
 												array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
 												array(	'name' => 'Wiki',						'value' => M3_VIEW_TYPE_WIKI),
 												array(	'name' => 'ユーザ作成コンテンツ',		'value' => M3_VIEW_TYPE_USER),
-												array(	'name' => 'イベント情報',					'value' => M3_VIEW_TYPE_EVENT),
-												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO));
+												array(	'name' => 'イベント情報',				'value' => M3_VIEW_TYPE_EVENT),
+												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO)
+											);
+		// 一般画面で使用する補助コンテンツタイプ
+		$this->subContentTypeInfo	 = array(	array(	'name' => '新着情報',					'value' => M3_VIEW_TYPE_NEWS),
+												array(	'name' => 'コメント',					'value' => M3_VIEW_TYPE_COMMENT),
+												array(	'name' => 'イベント参加',				'value' => M3_VIEW_TYPE_EVENTENTRY),
+												array(	'name' => 'バナー',						'value' => M3_VIEW_TYPE_BANNER)
+											);
 		// 一般画面で使用する主要機能タイプ(「ダッシュボード」は含まない)
 		$this->mainFeatureTypeInfo	 = array(	array(	'name' => '検索',						'value' => M3_VIEW_TYPE_SEARCH),
 												array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE),
@@ -1043,6 +1051,15 @@ class PageManager extends Core
 	function getMainContentTypeInfo()
 	{
 		return $this->mainContentTypeInfo;				// 主要コンテンツタイプ
+	}
+	/**
+	 * 一般画面で使用する補助コンテンツタイプの情報取得
+	 *
+	 * @return array			コンテンツタイプの情報の連想配列
+	 */
+	function getSubContentTypeInfo()
+	{
+		return $this->subContentTypeInfo;				// 補助コンテンツタイプ
 	}
 	/**
 	 * 一般画面で使用する主要コンテンツタイプを取得

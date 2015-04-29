@@ -593,6 +593,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	function createContentMenu($deviceType, $isVisibleSite)
 	{
 		static $mainContentTypeArray;
+		static $subContentTypeArray;
+		static $mainFeatureTypeArray;
 		
 		if (!isset($mainContentTypeArray)){
 			$mainContentTypeArray = array();
@@ -601,6 +603,24 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$value = $mainContentTypeInfo[$i]['value'];
 				$name = $mainContentTypeInfo[$i]['name'];
 				$mainContentTypeArray[$value] = $name;
+			}
+		}
+		if (!isset($subContentTypeArray)){
+			$subContentTypeArray = array();
+			$subContentTypeInfo = $this->gPage->getSubContentTypeInfo();		// 補助コンテンツタイプ情報
+			for ($i = 0; $i < count($subContentTypeInfo); $i++){
+				$value = $subContentTypeInfo[$i]['value'];
+				$name = $subContentTypeInfo[$i]['name'];
+				$subContentTypeArray[$value] = $name;
+			}
+		}
+		if (!isset($mainFeatureTypeArray)){
+			$mainFeatureTypeArray = array();
+			$mainFeatureTypeInfo = $this->gPage->getMainFeatureTypeInfo();		// 主要機能タイプ情報
+			for ($i = 0; $i < count($mainFeatureTypeInfo); $i++){
+				$value = $mainFeatureTypeInfo[$i]['value'];
+				$name = $mainFeatureTypeInfo[$i]['name'];
+				$mainFeatureTypeArray[$value] = $name;
 			}
 		}
 
@@ -702,17 +722,22 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				if (empty($title)){
 					// コンテンツ単位でタイトルを取得
 					$contentType = $subMenu[$i]['wd_content_type'];
-					switch ($contentType){
+					$title = $subContentTypeArray[$contentType];
+					if (empty($title)) $title = $mainFeatureTypeArray[$contentType];
+/*					switch ($contentType){
 						case 'banner':				// バナー
 							$title = 'バナー';
 							break;
 						case 'news':				// 新着情報
 							$title = '新着情報';
 							break;
+						case 'evententry':				// イベント参加
+							$title = 'イベント参加';
+							break;
 						default:
 							$title = '';
 							break;
-					}
+					}*/
 				}
 				if (empty($title)) $title = $subMenu[$i]['wd_name'];		// サブコンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;

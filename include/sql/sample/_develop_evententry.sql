@@ -16,6 +16,12 @@
 -- 開発中のウィジェットの登録を行う。
 -- ・イベント参加機能
 
+-- ウィジェット情報
+DELETE FROM _widgets WHERE wd_id = 'evententry_main';
+INSERT INTO _widgets
+(wd_id,             wd_name,               wd_type, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('evententry_main', 'イベント参加-メイン', '', 'evententry',    'event',   true,            '',                   '0.0.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベントの参加申し込み管理を行う。', '',                'elfinder',                true,  true,         false,                true,  '2015-04-29', now(),         now());
+
 -- イベント参加情報マスター
 DROP TABLE IF EXISTS evententry_info;
 CREATE TABLE evententry_info (
