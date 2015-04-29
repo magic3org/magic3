@@ -33,8 +33,8 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	
 	// 画面
 	const TASK_CONFIG			= 'config';				// 基本設定
-	const TASK_EVENT			= 'event';				// 受付イベント一覧
-	const TASK_EVENT_DETAIL 	= 'event_detail';		// 受付イベント詳細
+	const TASK_EVENT			= 'event';				// イベント一覧
+	const TASK_EVENT_DETAIL 	= 'event_detail';		// イベント詳細
 	const TASK_REQUEST			= 'request';			// 参加要求一覧
 	const TASK_REQUEST_DETAIL	= 'request_detail';		// 参加要求詳細
 	const DEFAULT_TASK			= 'event';
@@ -88,13 +88,13 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// パンくずリストの定義データ作成
 		$titles = array();
 		switch ($task){
-			case self::TASK_EVENT:		// 受付イベント一覧
+			case self::TASK_EVENT:		// イベント一覧
 				$titles[] = 'イベント参加管理';
-				$titles[] = '受付イベント一覧';
+				$titles[] = 'イベント一覧';
 				break;
-			case self::TASK_EVENT_DETAIL:		// 受付イベント詳細
+			case self::TASK_EVENT_DETAIL:		// イベント詳細
 				$titles[] = 'イベント参加管理';
-				$titles[] = '受付イベント一覧';
+				$titles[] = 'イベント一覧';
 				$titles[] = '詳細';
 				break;
 			case self::TASK_CONFIG:		// 基本設定
@@ -111,18 +111,18 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 						'url'		=> '',
 						'tagid'		=> '',
 						'active'	=> (
-											$task == self::TASK_EVENT ||			// 受付イベント一覧
-											$task == self::TASK_EVENT_DETAIL		// 受付イベント詳細
+											$task == self::TASK_EVENT ||			// イベント一覧
+											$task == self::TASK_EVENT_DETAIL		// イベント詳細
 										),
 						'submenu'	=> array(
 							(Object)array(
-								'name'		=> '受付イベント一覧',
+								'name'		=> 'イベント一覧',
 								'task'		=> self::TASK_EVENT,
 								'url'		=> '',
 								'tagid'		=> '',
 								'active'	=> (
-													$task == self::TASK_EVENT ||			// 受付イベント一覧
-													$task == self::TASK_EVENT_DETAIL		// 受付イベント詳細
+													$task == self::TASK_EVENT ||			// イベント一覧
+													$task == self::TASK_EVENT_DETAIL		// イベント詳細
 												)
 							)
 						)

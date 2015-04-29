@@ -13,7 +13,7 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getWidgetContainerPath('news_main') . '/admin_evententry_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getWidgetContainerPath('evententry_main') . '/admin_evententry_mainBaseWidgetContainer.php');
 
 class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBaseWidgetContainer
 {

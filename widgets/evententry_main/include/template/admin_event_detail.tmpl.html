@@ -88,19 +88,19 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <!-- m3:PostParam -->
-<h3 class="m3config_h"><span {_HELP_NEWS_DETAIL}>新着詳細</span></h3>
-<div class="m3config_h_side_buttons pull-right"><div {_HELP_NEWS_BUTTONS}><div class="btn-group">
+<h3 class="m3config_h"><span {_HELP_EVENT_DETAIL}>イベント詳細</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_EVENT_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="cancelItem();" value="戻る" />
 </div></div></div>
 
 <table id="mainconfig">
     <tbody>
 	<tr>
-	    <th><span {_HELP_NEWS_DATE}>投稿日時</span></th>
+	    <th><span {_HELP_EVENT_DATE}>投稿日時</span></th>
 	    <td style="width:400px;"><!--日付：<input type="text" id="item_date" class="form-control" name="item_date" value="{DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_time" class="form-control" name="item_time" value="{TIME}" size="15" maxlength="10" style="width:100px;" />-->
 		<div class="form-group"><div class="form-control-static col-sm-2 m3config_item" >日付：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_date" name="item_date" value="{DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-2 m3config_item" >時間：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_time" name="item_time" value="{TIME}" size="20" maxlength="10" /></div></div>
 		</td>
-	    <th><span {_HELP_NEWS_STATUS}>状態</span></th>
+	    <th><span {_HELP_EVENT_STATUS}>状態</span></th>
 	    <td id="status_field" class="warning">
 		<div class="col-sm-6 m3config_item">
 		<select id="item_status" name="item_status" class="form-control">
@@ -112,21 +112,21 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <th><span {_HELP_NEWS_URL}>メッセージ</span></th>
+	    <th><span {_HELP_EVENT_URL}>メッセージ</span></th>
 	    <td colspan="3"><input type="text" name="item_message" class="form-control" value="{MESSAGE}" size="60" maxlength="200" /></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_NEWS_CONTENT_TYPE}>コンテンツ種別</span></th>
+	    <th><span {_HELP_EVENT_CONTENT_TYPE}>コンテンツ種別</span></th>
 	    <td><div class="form-control-static m3config_item">{CONTENT_TYPE}</div></td>
-	    <th><span {_HELP_NEWS_CONTENT_TITLE}>コンテンツID</span></th>
+	    <th><span {_HELP_EVENT_CONTENT_TITLE}>コンテンツID</span></th>
 	    <td><div class="form-control-static m3config_item">{CONTENT_ID}</div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_NEWS_CONTENT_TITLE}>コンテンツタイトル</span></th>
+	    <th><span {_HELP_EVENT_CONTENT_TITLE}>コンテンツタイトル</span></th>
 	    <td colspan="3"><input type="text" name="item_content_title" class="form-control" value="{CONTENT_TITLE}" size="60" maxlength="200" {CONTENT_TITLE_DISABLED} /></td>
 	</tr>
 	<tr>
-	    <th><span {_HELP_NEWS_LINK}>リンク</span><div class="pull-right">{CHANGE_URL_BUTTON}</div></th>
+	    <th><span {_HELP_EVENT_LINK}>リンク</span><div class="pull-right">{CHANGE_URL_BUTTON}</div></th>
 	    <td colspan="3"><input type="text" id="item_url" name="item_url" class="form-control" value="{URL}" size="60" maxlength="200" /></td>
 	</tr>
     </tbody>

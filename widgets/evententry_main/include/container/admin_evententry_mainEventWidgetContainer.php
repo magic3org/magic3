@@ -61,9 +61,9 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	{
 		$task = $request->trimValueOf('task');
 		if ($task == 'news_detail'){		// 詳細画面
-			return 'admin_news_detail.tmpl.html';
+			return 'admin_event_detail.tmpl.html';
 		} else {			// 一覧画面
-			return 'admin_news.tmpl.html';
+			return 'admin_event.tmpl.html';
 		}
 	}
 	/**

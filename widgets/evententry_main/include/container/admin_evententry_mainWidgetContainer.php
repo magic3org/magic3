@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getWidgetContainerPath('evententry_main') . '/admin_evententry_mainBaseWidgetContainer.php');
 
-class admin_evententry_mainWidgetContainer.php extends admin_evententry_mainBaseWidgetContainer
+class admin_evententry_mainWidgetContainer extends admin_evententry_mainBaseWidgetContainer
 {
 	/**
 	 * コンストラクタ
