@@ -73,7 +73,7 @@ class event_mainDb extends BaseDb
 	 * @param int		$page				取得するページ(1～)
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$category			カテゴリーID(キー=カテゴリー種別、値=カテゴリー値)
+	 * @param array		$category			カテゴリーID
 	 * @param string	$keyword			検索キーワード
 	 * @param string	$langId				言語
 	 * @param function	$callback			コールバック関数
@@ -147,7 +147,7 @@ class event_mainDb extends BaseDb
 	 *
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
-	 * @param array		$category			カテゴリーID(キー=カテゴリー種別、値=カテゴリー値)
+	 * @param array		$category			カテゴリーID
 	 * @param string	$keyword			検索キーワード
 	 * @param string	$langId				言語
 	 * @return int							項目数

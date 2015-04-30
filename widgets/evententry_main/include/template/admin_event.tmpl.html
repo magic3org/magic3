@@ -94,6 +94,60 @@ function previewInOtherWindow(url)
 	m3ShowPreviewWindow(0, url);
 	return true;
 }
+// イベント選択画面のページング
+function selEventPage(page)
+{
+	// 選択中の画像を取得
+	var selectedItems;
+	selectedItems = $('#items').val();
+	if (!selectedItems) selectedItems = $('#item_banner').val();
+	
+	// Ajaxで画像一覧を取得
+	m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=event&act=geteventlist&page=' + page + '&items=' + selectedItems, function(request, retcode, jsondata){		// 正常終了
+		// 画像選択テーブルを作成
+		if (jsondata.html) imageModal.setMessage(jsondata.html);
+	}, function(request){		// 異常終了
+		alert('通信に失敗しました。');
+	});
+	return true;
+}
+// イベントを選択
+function selectEvent()
+{
+	imageModal = BootstrapDialog.show({
+		size: BootstrapDialog.SIZE_WIDE,
+		title: '画像の選択',
+		message: 'データ読み込み中...',
+		closable: false,
+		nl2br: false,
+		onshow: function(dialog) {
+			selEventPage(1);
+		},
+		buttons: [{
+			id: 'cancel',
+			label: 'キャンセル',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}, {
+			id: 'ok',
+			label: 'OK',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+			newItem();
+				var value = document.modalform.items.value;
+				if (value == ''){
+					alert('画像を選択してください');
+				} else {
+					// 画像選択を更新
+					$('#item_banner').val(value);
+					dialog.close();
+				}
+			}
+		}]
+	});
+	return true;
+}
 $(function(){
 	// テーブルを作成
 	m3SetConfigTable('newslist');
@@ -123,7 +177,7 @@ $(function(){
 <!--<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>-->
 </h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_EVENT_BUTTONS}><div class="btn-group">
-<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+<input type="button" class="button" onclick="selectEvent();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
 
 <div id="search_news" class="m3search panel panel-info" style="display:none;width:600px;">

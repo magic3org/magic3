@@ -1,0 +1,150 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_tmpl">
+<script type="text/javascript">
+//<![CDATA[
+function showPreview(id, name, type, url, width, height, link_url){
+	// プレビュー画像設定
+	var innerText;
+	var preOuter = $('#preview_image');
+	if (type == 0){
+		innerText = '<img src="' + url + '"';
+		if (width != '') innerText += ' width="' + width + '"';
+		if (height != '') innerText += ' height="' + height + '"';
+		innerText += ' />';
+	} else {
+		innerText = '<object id="preview_obj" data="' + url + '" type="application/x-shockwave-flash"';
+		if (width != '') innerText += ' width="' + width + '"';
+		if (height != '') innerText += ' height="' + height + '"';
+		innerText += '><param id="preview_param" name="movie" value="' + url + '" /><param name="wmode" value="transparent" /></object>';
+	}
+	preOuter.html(innerText);
+	// ID、名前、リンク先URL設定
+	$('#preview_id').text(id);
+	$('#preview_name').text(name);
+	$('#preview_link_url').text(link_url);
+	$('#previewtable').show();
+}
+function clickItem()
+{
+	// 選択項目を更新
+	var i, j;
+	var value;
+	var items = new Array();
+	var itemsOnPage = new Array();
+	var itemsArray = new Array();
+	value = document.modalform.items.value;
+	if (value) items = value.split(',');
+	value = document.modalform.idlist.value;
+	if (value) itemsOnPage = value.split(",");
+	
+	for (i = 0; i < items.length; i++){
+		var id = items[i];
+		for (j = 0; j < itemsOnPage.length; j++){
+			if (id == itemsOnPage[j]){
+				var name = "document.modalform.item" + j + "_selected";
+				var itemObj = eval(name);
+				// チェックありのときは追加
+				if (itemObj && itemObj.checked) itemsArray[itemsArray.length] = id;
+				break;
+			}
+		}
+		if (j == itemsOnPage.length) itemsArray[itemsArray.length] = id;
+	}
+	for (i = 0; i < itemsOnPage.length; i++){
+		var id = itemsOnPage[i];
+		for (j = 0; j < items.length; j++){
+			if (id == items[j]) break;
+		}
+		if (j == items.length){
+			var name = "document.modalform.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは追加
+			if (itemObj && itemObj.checked) itemsArray[itemsArray.length] = id;
+		}
+	}
+	// IDでソート
+	itemsArray.sortByNumber();
+	var itemsValue = '';
+	for (i = 0; i < itemsArray.length; i++)
+	{
+		itemsValue += itemsArray[i];
+		if (i != itemsArray.length -1) itemsValue += ',';
+	}
+	document.modalform.items.value = itemsValue;
+	$('#items_label').text(itemsValue);
+}
+$(function(){
+	// テーブルを作成
+	m3SetModalTable($('.modaltable'));
+	m3SetModalTable($('.previewtable'));
+	
+	// ヘルプを設定
+	m3SetHelp($('#modalform'));
+});
+//]]>
+</script>
+<div id="imagelist_msg">{MSG}</div>
+<div>選択項目：<span id="items_label">{ITEMS_LABEL}</span></div>
+<form method="post" id="modalform" name="modalform">
+<input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="idlist" value="{ID_LIST}" />
+<input type="hidden" id="items" name="items" value="{ITEMS}" />
+<h3 class="m3config_h"><span {_HELP_IMAGE_LIST}>画像一覧</span></h3>
+<table class="modaltable">
+    <thead>
+    <tr>
+        <th style="width:50px;"><span {_HELP_IMAGE_CHECK}>選択</span></th>
+        <th style="width:50px;"><span {_HELP_IMAGE_ID}>ID</span></th>
+        <th style="width:25%;"><span {_HELP_IMAGE_NAME}>名前</span></th>
+	    <th style="width:25%;"><span {_HELP_IMAGE_FILENAME}>ファイル名</span></th>
+	    <th style="width:25%;"><span {_HELP_IMAGE_LINK_URL}>リンク先</span></th>
+	    <th style="width:50px;"><span {_HELP_IMAGE_VISIBLE}>公開</span></th>
+	</tr>
+    </thead>
+    <tbody>
+    <patTemplate:tmpl name="itemlist">
+    <tr>
+	    <td><input type="checkbox" name="item{INDEX}_selected" onchange="clickItem();" {CHECKED} /></td>
+	    <td>{ID}</td>
+	    <td>{NAME}</td>
+	    <td>{FILENAME}<div class="pull-right">{PREVIEW_IMAGE_BUTTON}</div></td>
+	    <td>{LINK_URL_SHORT}</td>
+	    <td><input type="checkbox" disabled {VISIBLE} /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+<div>{PAGE_LINK}</div>
+
+<h3 class="m3config_h"><span {_HELP_IMAGE_PREVIEW}>プレビュー</span></h3>
+<table id="previewtable" class="previewtable" style="display:none;">
+    <tbody>
+    <tr>
+	    <th style="width:150px;"><span {_HELP_IMAGE_ID}>ID</span></th>
+	    <td style="width:150px;"><div id="preview_id"></div></td>
+	    <th style="width:150px;"><span {_HELP_IMAGE_NAME}>名前</span></th>
+	    <td><div id="preview_name"></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_IMAGE_IMAGE}>表示画像</span></th>
+	    <td colspan="3"><div id="preview_image"></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_IMAGE_LINK_URL}>リンク先URL</span></th>
+	    <td colspan="3"><div id="preview_link_url"></div></td>
+	</tr>
+    </tbody>
+</table>
+</form>
+</patTemplate:tmpl>

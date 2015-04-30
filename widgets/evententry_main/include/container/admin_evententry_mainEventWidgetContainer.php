@@ -169,6 +169,14 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				$this->setUserErrorMsg('期間の指定範囲にエラーがあります。');
 			}
 			$pageNo = 1;		// ページ番号初期化
+		} else if ($act == 'geteventlist'){		// イベント一覧取得
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+		
+			$this->act = $act;				// 実行act
+			$eventList = $this->getParsedTemplateData('default_eventlist.tmpl.html', array($this, 'makeEventList'), $request);// イベント一覧作成
+			$this->gInstance->getAjaxManager()->addData('html', $eventList);
+			return;
 		}
 		
 		// ###### 一覧の取得条件を作成 ######
@@ -203,10 +211,11 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->tmpl->addVar("_widget", "search_end", $search_endDt);	// 終了日付
 		$this->tmpl->addVar("_widget", "search_keyword", $keyword);	// 検索キーワード
 
-		// 非表示項目を設定
+		// その他の項目
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "list_count", $maxListCount);	// 一覧表示項目数
+		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// 画像選択ダイアログ用
 	}
 	/**
 	 * 詳細画面作成
@@ -427,6 +436,55 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->serialArray[] = $serial;
 		return true;
 	}
+	/**
+	 * 画像一覧データ作成処理コールバック
+	 *
+	 * @param object	$tmpl			テンプレートオブジェクト
+	 * @param object	$request		任意パラメータ(HTTPリクエストオブジェクト)
+	 * @param							なし
+	 */
+	function makeEventList($tmpl, $request)
+	{
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
+		
+		// 画像選択画面で使用
+		$this->selectedItems = explode(',', $request->trimValueOf('items'));
+		sort($this->selectedItems, SORT_NUMERIC);		// ID順にソート
+debug("------");			
+		// 総数を取得
+		$totalCount = self::$_mainDb->getImageCount();
+
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, self::IMAGE_LIST_COUNT);
+		
+		// #### 画像リストを作成 ####
+		self::$_mainDb->getImageList(self::IMAGE_LIST_COUNT, $pageNo, array($this, 'imageListLoop'), $tmpl);
+		//$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
+		if (empty($this->idArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
+		
+		// ページングリンク作成
+		$currentBaseUrl = '';		// POST用のリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
+		
+		// メッセージ設定
+		if (empty($this->idArray)){
+			$msg = 'バナー用の画像が登録されていません。先に画像を登録してください。';
+		} else {
+			$msg = 'バナー用の画像を選択してください(複数可)';
+		}
+		
+		// 表示項目
+		$itemsStr = $this->convertToDispString(implode($this->selectedItems, ','));
+		$tmpl->addVar("_tmpl", "items_label", $itemsStr);	// 画像選択項目
+		$tmpl->addVar("_tmpl", "msg", $this->convertToDispString($msg));	// 画像選択項目
+		
+		// 非表示項目
+		$tmpl->addVar("_tmpl", "page_link", $pageLink);
+		$tmpl->addVar("_tmpl", "page", $this->convertToDispString($pageNo));	// ページ番号
+		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->idArray, ',')));		// 表示画像のID
+		$tmpl->addVar("_tmpl", "items", $itemsStr);								// 選択中の画像
+	}
+	/**
 	/**
 	 * コンテンツタイトル取得
 	 *
