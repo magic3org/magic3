@@ -19,7 +19,7 @@ function selectMenu(){
 	return true;
 }
 function newItem(){
-	document.main.task.value = 'news_detail';
+	document.main.task.value = 'event_detail';
 	document.main.act.value = 'new';
 	document.main.submit();
 	return true;
@@ -42,7 +42,7 @@ function editItem(){
 	return true;
 }
 function editItemBySerial(serial){
-	document.main.task.value = 'news_detail';
+	document.main.task.value = 'event_detail';
 	document.main.act.value = 'edit';
 	document.main.serial.value = serial;
 	document.main.submit();
@@ -128,7 +128,7 @@ $(function(){
 
 <div id="search_news" class="m3search panel panel-info" style="display:none;width:600px;">
 <div class="panel-heading">
-    <h3 class="panel-title"><span {_HELP_EVENT_SEARCH}>新着情報検索</span></h3>
+    <h3 class="panel-title"><span {_HELP_EVENT_SEARCH}>イベント検索</span></h3>
 </div>
 <div class="panel-body form-horizontal">
 <div class="form-group">
@@ -155,20 +155,20 @@ $(function(){
     <thead>
     <tr>
         <th class="select"><span {_HELP_EVENT_CHECK}>選択</span></th>
-		<th style="width:50px;"><span {_HELP_EVENT_NO}>No</span></th>
-        <th><span {_HELP_EVENT_CONTENT_NAME}>メッセージ</span></th>
-		<th class="status"><span {_HELP_EVENT_STATUS}>状態</span></th>
-	    <th style="width:110px;"><span {_HELP_EVENT_DT}>登録日時</span></th>
+        <th><span {_HELP_EVENT_NAME}>イベント名</span></th>
+		<th style="width:110px;"><span {_HELP_EVENT_DT}>開催日時</span></th>
+		<th class="status"><span {_HELP_EVENT_STATUS}>受付状態</span></th>
+		<th style="width:50px;"><span {_HELP_EVENT_ENTRY_COUNT}>参加数</span></th>
 	</tr>
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
-		<td>{NO}</td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{MESSAGE}</a></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
+		<td>{DATE}</td>
 		<td class="status">{STATUS_IMG}</td>
-	    <td>{DATE}</td>
+		<td>{ENTRY_COUNT}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>

@@ -33,6 +33,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
 	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
 	const UNKNOWN_CONTENT = 'タイトル不明';
+	const DEFAULT_CONTENT_TYPE = 'event';			// イベント参加対象となるコンテンツタイプ
 	
 	/**
 	 * コンストラクタ
@@ -156,7 +157,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = self::$_mainDb->delNewsItem($delItems);
+				$ret = self::$_mainDb->delEventItem($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
@@ -175,7 +176,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 		
 		// 総数を取得
-		$totalCount = self::$_mainDb->getNewsListCount(''/*メッセージタイプ未指定*/, $parsedKeywords);
+		$totalCount = self::$_mainDb->getEventListCount(self::DEFAULT_CONTENT_TYPE, $this->_langId, $parsedKeywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
@@ -184,7 +185,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// イベントリストを取得
-		self::$_mainDb->getNewsList(''/*メッセージタイプ未指定*/, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
+		self::$_mainDb->getEventList(self::DEFAULT_CONTENT_TYPE, $this->_langId, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// イベントがないときは、一覧を表示しない
 
 		// ボタン作成
@@ -240,8 +241,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				// 入力データの修正
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
 				
-				//$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $message, $url, $newSerial);
-				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				$ret = self::$_mainDb->updateEventItem(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -267,8 +267,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
 				$url = $this->gEnv->getMacroPath($url);// パスをマクロ形式に変換
 				
-				//$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message, $url, $newSerial);
-				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				$ret = self::$_mainDb->updateEventItem($this->serialNo, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -288,7 +287,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			}
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
-				$ret = self::$_mainDb->delNewsItem(array($this->serialNo));
+				$ret = self::$_mainDb->delEventItem(array($this->serialNo));
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 				} else {
@@ -300,7 +299,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		}
 		// 設定データを再取得
 		if ($reloadData){		// データの再ロード
-			$ret = self::$_mainDb->getNewsItem($this->serialNo, $row);
+			$ret = self::$_mainDb->getEventItem($this->serialNo, $row);
 			if ($ret){
 				$date = $this->timestampToDate($row['nw_regist_dt']);		// 登録日
 				$time = $this->timestampToTime($row['nw_regist_dt']);		// 登録時間
@@ -327,7 +326,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				$date = date("Y/m/d");		// 登録日
 				$time = date("H:i:s");		// 登録時間
 				$this->status = 0;			// 状態(0=非公開、1=公開)
-				$message = self::$_configArray[newsCommonDef::FD_DEFAULT_MESSAGE];				// メッセージ
+				$message = self::$_configArray[evententryCommonDef::FD_DEFAULT_MESSAGE];				// メッセージ
 				
 				$contentType = '';	// コンテンツタイプ
 				$contentId = '';	// コンテンツID

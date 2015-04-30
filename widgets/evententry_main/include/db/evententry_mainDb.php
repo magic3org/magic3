@@ -18,7 +18,7 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class evententry_mainDb extends BaseDb
 {
 	/**
-	 * 新着情報定義値を取得をすべて取得
+	 * イベント参加定義値を取得をすべて取得
 	 *
 	 * @param array  $rows			レコード
 	 * @return bool					1行以上取得 = true, 取得なし= false
@@ -31,7 +31,7 @@ class evententry_mainDb extends BaseDb
 		return $retValue;
 	}
 	/**
-	 * 新着情報定義値を取得
+	 * イベント参加定義値を取得
 	 *
 	 * @param string $key		キーとなる項目値
 	 * @return string $value	値
@@ -46,7 +46,7 @@ class evententry_mainDb extends BaseDb
 		return $retValue;
 	}
 	/**
-	 * 新着情報定義値を更新
+	 * イベント参加定義値を更新
 	 *
 	 * @param string $key		キーとなる項目値
 	 * @param string $value		値
@@ -67,63 +67,111 @@ class evententry_mainDb extends BaseDb
 		}
 	}
 	/**
-	 * 新着情報数を取得(管理用)
+	 * イベント項目数を取得(管理用)
 	 *
-	 * @param string	$contentType		コンテンツタイプ
-	 * @param string	$keywords			検索キーワード
+	 * @param string $contentType		コンテンツタイプ
+	 * @param string $langId			言語ID
+	 * @param array	 $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	function getNewsListCount($contentType, $keywords)
+	function getEventListCount($contentType, $langId, $keywords)
 	{
 		$params = array();
-		$queryStr = 'SELECT * FROM news ';
-		$queryStr .=  'WHERE nw_deleted = false ';		// 削除されていない
-		if (!empty($contentType)) $queryStr .=    'AND nw_type = ? ';$params[] = $contentType;
+		switch ($contentType){
+		case M3_VIEW_TYPE_EVENT:		// イベント情報
+			$queryStr  = 'SELECT * FROM evententry_info LEFT JOIN event_entry ON ei_contents_id = ee_id AND ee_deleted = false ';
+			$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
+			break;
+		default:
+			$queryStr = 'SELECT * FROM evententry_info ';
+			break;
+		}
+		$queryStr .=  'WHERE ei_deleted = false ';				// 削除されていない
+		$queryStr .=    'AND ei_content_type = ? '; $params[] = $contentType;	// コンテンツタイプ
 
-		// タイトル、本文、ユーザ定義フィールドを検索
+		// 検索キーワード条件
 		if (!empty($keywords)){
 			for ($i = 0; $i < count($keywords); $i++){
 				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
-				$queryStr .=    'AND (nw_message LIKE \'%' . $keyword . '%\' ';		// メッセージ
-				$queryStr .=    'OR nw_summary LIKE \'%' . $keyword . '%\') ';		// 概要
+				
+				switch ($contentType){
+				case M3_VIEW_TYPE_EVENT:		// イベント情報
+					$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
+					break;
+				default:
+					break;
+				}
+				$queryStr .=    'AND (ei_code LIKE \'%' . $keyword . '%\' ';		// イベント参加受付コード
+				$queryStr .=    'OR ei_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
 		}
 		return $this->selectRecordCount($queryStr, $params);
 	}
 	/**
-	 * 新着情報項目を検索(管理用)
+	 * イベント項目を検索(管理用)
 	 *
 	 * @param string	$contentType		コンテンツタイプ
+	 * @param string    $langId				言語ID
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
 	 * @param array		$keywords			検索キーワード
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getNewsList($contentType, $limit, $page, $keywords, $callback)
+	function getEventList($contentType, $langId, $limit, $page, $keywords, $callback)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
 		
 		$params = array();
-		$queryStr = 'SELECT * FROM news ';
-		$queryStr .=  'WHERE nw_deleted = false ';		// 削除されていない
-		if (!empty($contentType)) $queryStr .=    'AND nw_type = ? ';$params[] = $contentType;
+		switch ($contentType){
+		case M3_VIEW_TYPE_EVENT:		// イベント情報
+			$queryStr  = 'SELECT * FROM evententry_info LEFT JOIN event_entry ON ei_contents_id = ee_id AND ee_deleted = false ';
+			$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
+			break;
+		default:
+			$queryStr = 'SELECT * FROM evententry_info ';
+			break;
+		}
+		$queryStr .=  'WHERE ei_deleted = false ';				// 削除されていない
+		$queryStr .=    'AND ei_content_type = ? '; $params[] = $contentType;	// コンテンツタイプ
 
-		// タイトル、本文、ユーザ定義フィールドを検索
+		// 検索キーワード条件
 		if (!empty($keywords)){
 			for ($i = 0; $i < count($keywords); $i++){
 				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
-				$queryStr .=    'AND (nw_message LIKE \'%' . $keyword . '%\' ';		// メッセージ
-				$queryStr .=    'OR nw_summary LIKE \'%' . $keyword . '%\') ';		// 概要
+				
+				switch ($contentType){
+				case M3_VIEW_TYPE_EVENT:		// イベント情報
+					$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
+					$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
+					break;
+				default:
+					break;
+				}
+				$queryStr .=    'AND (ei_code LIKE \'%' . $keyword . '%\' ';		// イベント参加受付コード
+				$queryStr .=    'OR ei_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
 		}
 		
-		$queryStr .=  'ORDER BY nw_regist_dt desc limit ' . $limit . ' offset ' . $offset;
+		$queryStr .=  'ORDER BY ei_contents_id DESC, ei_type limit ' . $limit . ' offset ' . $offset;			// コンテンツID、受付タイプ
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**
-	 * 新着情報項目の追加、更新
+	 * イベント項目の追加、更新
 	 *
 	 * @param int     $serial		シリアル番号(0のときは新規追加)
 	
@@ -136,7 +184,7 @@ class evententry_mainDb extends BaseDb
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateNewsItem($serial, $name, $message, $url, $mark, $visible, $regDt, &$newSerial)
+	function updateEventItem($serial, $name, $message, $url, $mark, $visible, $regDt, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -150,7 +198,7 @@ class evententry_mainDb extends BaseDb
 		$otherValueStr = '';
 			
 		if (empty($serial)){		// シリアル番号が0のときはIDを新規取得
-			// 新着情報IDを決定する
+			// イベント参加情報IDを決定する
 			$queryStr = 'SELECT MAX(nw_id) AS mid FROM news';
 			$ret = $this->selectRecord($queryStr, array(), $row);
 			if ($ret){
@@ -231,12 +279,12 @@ class evententry_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * 新着情報項目の削除
+	 * イベント項目の削除
 	 *
 	 * @param array $serial			シリアルNo
 	 * @return						true=成功、false=失敗
 	 */
-	function delNewsItem($serial)
+	function delEventItem($serial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -272,13 +320,13 @@ class evententry_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * 新着情報項目をシリアル番号で取得
+	 * イベント項目をシリアル番号で取得
 	 *
 	 * @param string	$serial				シリアル番号
 	 * @param array     $row				レコード
 	 * @return bool							取得 = true, 取得なし= false
 	 */
-	function getNewsItem($serial, &$row)
+	function getEventItem($serial, &$row)
 	{
 		$queryStr  = 'SELECT * FROM news LEFT JOIN _login_user ON nw_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'WHERE nw_serial = ? ';
