@@ -17,7 +17,7 @@
 -- Eコマース機能にアクセスしやすいようにカスタマイズした管理画面
 
 -- システム設定
-UPDATE _system_config SET sc_value = 'art41_sample2' WHERE sc_id = 'default_template';
+UPDATE _system_config SET sc_value = 'art42_sample5' WHERE sc_id = 'default_template';
 
 -- 変換文字列
 DELETE FROM _key_value;

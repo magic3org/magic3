@@ -50,7 +50,7 @@ INSERT INTO _system_config
 ('install_dt',                  '',                         'インストール日時'),
 ('log_dir',                     '',                         'ログ出力ディレクトリ'),
 ('work_dir',                    '',                         '作業用ディレクトリ'),
-('default_template',            'art41_sample2',            'PC一般画面用デフォルトテンプレート'),
+('default_template',            'art42_sample5',            'PC一般画面用デフォルトテンプレート'),
 ('admin_default_template',      '_admin4',                  '管理画面用デフォルトテンプレート'),
 ('mobile_default_template',     'm/default',                '携帯画面用デフォルトテンプレート'),
 ('smartphone_default_template', 's/default_jquery',         'スマートフォン画面用デフォルトテンプレート'),
