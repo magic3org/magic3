@@ -30,40 +30,75 @@ class searchLib
 	/**
 	 * コンテンツを検索
 	 *
-	 * @param string $contentType		コンテンツタイプ
-	 * @param string $contentId			コンテンツID
-	 * @param string					パラメータ文字列
+	 * @param string    $contentType		コンテンツタイプ
+	 * @param string	$langId				言語
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$category			カテゴリーID
+	 * @param array     $keywords			検索キーワード
+	 * @param int       $order				検索ソート順(0=降順、1=昇順)
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param function	$callback			コールバック関数
+	 * @return 								なし
 	 */
-	private function _searchContent($contentType, $contentId)
+	private function getContent($contentType, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback)
 	{
-		$param = '';
 		switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				$param = M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId;
 				break;
 			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-				$param = M3_REQUEST_PARAM_PRODUCT_ID . '=' . $contentId;
 				break;
 			case M3_VIEW_TYPE_BBS:					// BBS
-				$param = M3_REQUEST_PARAM_BBS_THREAD_ID . '=' . $contentId;
 				break;
 			case M3_VIEW_TYPE_BLOG:				// ブログ
-				$param = M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $contentId;
 				break;
 			case M3_VIEW_TYPE_WIKI:				// wiki
-				$param = $contentId;
 				break;
 			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$param = M3_REQUEST_PARAM_ROOM_ID . '=' . $contentId;
 				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$param = M3_REQUEST_PARAM_EVENT_ID . '=' . $contentId;
+				$this->db->getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback);
 				break;
 			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-				$param = M3_REQUEST_PARAM_PHOTO_ID . '=' . $contentId;
 				break;
 		}
-		return $url . '?' . $param;
+	}
+	/**
+	 * 検索したコンテンツ数を取得
+	 *
+	 * @param string    $contentType		コンテンツタイプ
+	 * @param string	$langId				言語
+	 * @param timestamp	$startDt			期間(開始日)
+	 * @param timestamp	$endDt				期間(終了日)
+	 * @param array		$category			カテゴリーID
+	 * @param array     $keywords			検索キーワード
+	 * @return int							項目数
+	 */
+	private function getContentCount($contentType, $langId, $startDt, $endDt, $category, $keywords)
+	{
+		$rowCount = 0;
+		
+		switch ($contentType){
+			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
+				break;
+			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
+				break;
+			case M3_VIEW_TYPE_BBS:					// BBS
+				break;
+			case M3_VIEW_TYPE_BLOG:				// ブログ
+				break;
+			case M3_VIEW_TYPE_WIKI:				// wiki
+				break;
+			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
+				break;
+			case M3_VIEW_TYPE_EVENT:				// イベント情報
+				$rowCount = $this->db->getEventCount($langId, $startDt, $endDt, $category, $keywords);
+				break;
+			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
+				break;
+		}
+		return $rowCount;
 	}
 }
 ?>

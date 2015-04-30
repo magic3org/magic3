@@ -29,7 +29,7 @@ class searchLibDb extends BaseDb
 	 */
 	function getEventCount($langId, $startDt, $endDt, $category, $keywords)
 	{
-		return $this->_findEvent(0/*検索数取得*/, $langId, $startDt, $endDt, $category, $keywords);
+		return $this->_searchEvent(0/*検索数取得*/, $langId, $startDt, $endDt, $category, $keywords);
 	}
 	/**
 	 * イベント項目一覧を取得(管理用)
@@ -47,7 +47,7 @@ class searchLibDb extends BaseDb
 	 */
 	function getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback)
 	{
-		$this->_findEvent(1/*検索データ取得*/, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback);
+		$this->_searchEvent(1/*検索データ取得*/, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback);
 	}
 	/**
 	 * イベント項目一覧を取得(管理用)
@@ -64,7 +64,7 @@ class searchLibDb extends BaseDb
 	 * @param function	$callback			コールバック関数[データ取得時のみ]
 	 * @return 			int					項目数(検索データループ処理の場合は0を返す)
 	 */
-	function _findEvent($operation, $langId, $startDt, $endDt, $category, $keywords, $order = 0, $limit = 0, $page = 0, $callback = null)
+	function _searchEvent($operation, $langId, $startDt, $endDt, $category, $keywords, $order = 0, $limit = 0, $page = 0, $callback = null)
 	{
 		$params = array();
 		if (count($category) == 0){		// カテゴリー指定なしのとき
@@ -129,9 +129,11 @@ class searchLibDb extends BaseDb
 				$offset = $limit * ($page -1);
 				if ($offset < 0) $offset = 0;
 				
+				$ord = '';
+				if (empty($order)) $ord = ' DESC';
 				$queryStr = 'SELECT * FROM event_entry ';
 				$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
-				$queryStr .=  'ORDER BY ee_start_dt desc, ee_id limit ' . $limit . ' offset ' . $offset;
+				$queryStr .=  'ORDER BY ee_start_dt' . $ord . ', ee_id LIMIT ' . $limit . ' OFFSET ' . $offset;
 				$this->selectLoop($queryStr, array(), $callback);
 				return 0;
 			}
