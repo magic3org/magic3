@@ -32,10 +32,14 @@ CREATE TABLE evententry_info (
     ei_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 受付タイプ
     ei_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
     
-    ei_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント参加コード
+    ei_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント参加受付コード
     ei_html              TEXT                                         NOT NULL,      -- 説明
-    ei_max_entry         INT            DEFAULT 0                     NOT NULL,      -- 最大受付数(0は定員なし)
-    ei_expire_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 有効期限
+    ei_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=非公開、2=公開、3=受付停止)
+    ei_show_entry_count  BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者数を表示するかどうか
+    ei_show_entry_member BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者を表示するかどうか(会員対象)
+    ei_max_entry         INT            DEFAULT 0                     NOT NULL,      -- 定員(0は定員なし)
+    ei_start_dt          TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(開始)
+    ei_end_dt            TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(終了)
     
     ei_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
     ei_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時

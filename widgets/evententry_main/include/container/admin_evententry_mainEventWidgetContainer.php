@@ -19,9 +19,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
-	private $status;			// メッセージ状態(0=非公開、1=公開)
-	private $statusTypeArray;	// コメント状態メニュー作成用
-	private $firstNo;		// 一覧の先頭の番号
+	private $status;			// 参加受付状態(1=非公開、2=公開、3=受付停止)
+	private $statusTypeArray;	// イベント状態メニュー作成用
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
@@ -44,8 +43,11 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		parent::__construct();
 		
 		// 初期設定
-		$this->statusTypeArray = array(	array(	'name' => '非公開',	'value' => '0'),
-										array(	'name' => '公開',	'value' => '1'));
+		$this->statusTypeArray = array (
+									array(	'name' => '非公開',		'value' => '1'),
+									array(	'name' => '公開',		'value' => '2'),
+									array(	'name' => '受付停止',	'value' => '3')
+								);			// 参加受付状態
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -60,7 +62,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'news_detail'){		// 詳細画面
+		if ($task == self::TASK_EVENT_DETAIL){		// 詳細画面
 			return 'admin_event_detail.tmpl.html';
 		} else {			// 一覧画面
 			return 'admin_event.tmpl.html';
@@ -78,7 +80,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'news_detail'){	// 詳細画面
+		if ($task == self::TASK_EVENT_DETAIL){	// 詳細画面
 			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);
@@ -173,20 +175,17 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 		
 		// 総数を取得
-		//$totalCount = self::$_mainDb->getNewsListCount($this->contentType, $parsedKeywords);
 		$totalCount = self::$_mainDb->getNewsListCount(''/*メッセージタイプ未指定*/, $parsedKeywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
-		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号
 		
 		// ページングリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
-		// コメントリストを取得
-		//self::$_mainDb->getNewsList($this->_contentType, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
+		// イベントリストを取得
 		self::$_mainDb->getNewsList(''/*メッセージタイプ未指定*/, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
-		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コメントがないときは、一覧を表示しない
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// イベントがないときは、一覧を表示しない
 
 		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
@@ -378,7 +377,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	function itemListLoop($index, $fetchedRow, $param)
 	{
 		$serial = $fetchedRow['nw_serial'];// シリアル番号
-		$no = $this->firstNo + $index;
 		
 		// 公開状態
 		if ($fetchedRow['nw_visible']){		// コンテンツが公開状態のとき
@@ -418,7 +416,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$row = array(
 			'index' => $index,		// 項目番号
 			'serial' => $serial,			// シリアル番号
-			'no'	=> $no,			// 項目番号(表示用)
 			'id'	=> $this->convertToDispString($fetchedRow['nw_id']),		// ID
 			'message' => $message,		// メッセージ
 			'status_img' => $statusImg,													// 公開状況
@@ -488,7 +485,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		return array($contentTypeName, $contentName);
 	}
 	/**
-	 * コメント状態選択タイプメニュー作成
+	 * イベント状態選択タイプメニュー作成
 	 *
 	 * @return なし
 	 */
