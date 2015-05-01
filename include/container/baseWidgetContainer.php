@@ -3243,6 +3243,18 @@ class BaseWidgetContainer extends Core
 		}
 	}
 	/**
+	 * 現在の言語のラベル用の文字列を取得
+	 *
+	 * @param string $str		取得元文字列
+	 * @return string			ラベル用テキスト
+	 */
+	function getLabelText($str)
+	{
+		$labelText = $this->getCurrentLangString($str);
+		$labelText = $this->gDesign->createLinkFromLinkFomatText($labelText, false/*HTMLエスケープなし*/);
+		return $labelText;
+	}
+	/**
 	 * 連想配列のDB格納用文字列を作成
 	 *
 	 * @param array $fields		連想配列

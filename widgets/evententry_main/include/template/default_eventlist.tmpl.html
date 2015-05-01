@@ -100,20 +100,44 @@ $(function(){
 <input type="hidden" name="page" value="{PAGE}" />
 <input type="hidden" name="idlist" value="{ID_LIST}" />
 <input type="hidden" id="items" name="items" value="{ITEMS}" />
-<h3 class="m3config_h"><span {_HELP_IMAGE_LIST}>画像一覧</span></h3>
+<h3 class="m3config_h"><span {_HELP_EVENT_LIST}>イベント一覧</span></h3>
 <table class="modaltable">
     <thead>
     <tr>
-        <th style="width:50px;"><span {_HELP_IMAGE_CHECK}>選択</span></th>
-        <th style="width:50px;"><span {_HELP_IMAGE_ID}>ID</span></th>
-        <th style="width:25%;"><span {_HELP_IMAGE_NAME}>名前</span></th>
-	    <th style="width:25%;"><span {_HELP_IMAGE_FILENAME}>ファイル名</span></th>
-	    <th style="width:25%;"><span {_HELP_IMAGE_LINK_URL}>リンク先</span></th>
-	    <th style="width:50px;"><span {_HELP_IMAGE_VISIBLE}>公開</span></th>
+        <th class="select"><span {_HELP_ENTRY_CHECK}>選択</span></th>
+        <th style="width:50px;"><span {_HELP_ENTRY_ID}>ID</span></th>
+		<th style="width:50px;"></th>
+        <th><span {_HELP_ENTRY_NAME}>タイトル</span></th>
+		<th class="status"><span {_HELP_ENTRY_STATUS}>状態</span></th>
+	    <th style="width:100px;"><span {_HELP_ENTRY_DT}>開催日時</span></th>
+	    <th><span {_HELP_ENTRY_PLACE}>場所</span></th>
 	</tr>
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
+    <tr>
+	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td>{ID}</td>
+		<td>{EYECATCH_IMAGE}</td>
+	    <td>{NAME}<div class="pull-right">{PREVIEW_IMAGE_BUTTON}</div></td>
+		<td class="status">{STATUS_IMG}</td>
+	    <td>{DATE_START}<br />{DATE_END}</td>
+	    <td>{PLACE}</td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+<!--    <thead>
+    <tr>
+        <th style="width:50px;"><span {_HELP_EVENT_CHECK}>選択</span></th>
+        <th style="width:50px;"><span {_HELP_EVENT_ID}>ID</span></th>
+        <th style="width:25%;"><span {_HELP_EVENT_NAME}>名前</span></th>
+	    <th style="width:25%;"><span {_HELP_EVENT_FILENAME}>ファイル名</span></th>
+	    <th style="width:25%;"><span {_HELP_EVENT_LINK_URL}>リンク先</span></th>
+	    <th style="width:50px;"><span {_HELP_EVENT_VISIBLE}>公開</span></th>
+	</tr>
+    </thead>
+    <tbody>
+    <patTemplate:tmpl name="item_list">
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" onchange="clickItem();" {CHECKED} /></td>
 	    <td>{ID}</td>
@@ -123,25 +147,25 @@ $(function(){
 	    <td><input type="checkbox" disabled {VISIBLE} /></td>
 	</tr>
 	</patTemplate:tmpl>
-    </tbody>
+    </tbody>-->
 </table>
 <div>{PAGE_LINK}</div>
 
-<h3 class="m3config_h"><span {_HELP_IMAGE_PREVIEW}>プレビュー</span></h3>
+<h3 class="m3config_h"><span {_HELP_EVENT_PREVIEW}>コンテンツ内容</span></h3>
 <table id="previewtable" class="previewtable" style="display:none;">
     <tbody>
     <tr>
-	    <th style="width:150px;"><span {_HELP_IMAGE_ID}>ID</span></th>
+	    <th style="width:150px;"><span {_HELP_EVENT_ID}>ID</span></th>
 	    <td style="width:150px;"><div id="preview_id"></div></td>
-	    <th style="width:150px;"><span {_HELP_IMAGE_NAME}>名前</span></th>
+	    <th style="width:150px;"><span {_HELP_EVENT_NAME}>名前</span></th>
 	    <td><div id="preview_name"></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_IMAGE_IMAGE}>表示画像</span></th>
+	    <th><span {_HELP_EVENT_IMAGE}>表示画像</span></th>
 	    <td colspan="3"><div id="preview_image"></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_IMAGE_LINK_URL}>リンク先URL</span></th>
+	    <th><span {_HELP_EVENT_LINK_URL}>リンク先URL</span></th>
 	    <td colspan="3"><div id="preview_link_url"></div></td>
 	</tr>
     </tbody>

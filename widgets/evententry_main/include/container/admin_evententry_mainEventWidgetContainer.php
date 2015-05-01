@@ -21,7 +21,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $status;			// 参加受付状態(1=非公開、2=公開、3=受付停止)
 	private $statusTypeArray;	// イベント状態メニュー作成用
-	
+	private $contentType;		// コンテンツタイプ
+	const SEARCH_OBJ_ID = 'searchlib';		// 検索用オブジェクト
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
@@ -34,7 +35,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
 	const UNKNOWN_CONTENT = 'タイトル不明';
 	const DEFAULT_CONTENT_TYPE = 'event';			// イベント参加対象となるコンテンツタイプ
-	
+
 	/**
 	 * コンストラクタ
 	 */
@@ -49,6 +50,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 									array(	'name' => '公開',		'value' => '2'),
 									array(	'name' => '受付停止',	'value' => '3')
 								);			// 参加受付状態
+		$this->contentType = self::DEFAULT_CONTENT_TYPE;		// コンテンツタイプ
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -182,9 +184,9 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		// ###### 一覧の取得条件を作成 ######
 		if (!empty($search_endDt)) $endDt = $this->getNextDay($search_endDt);
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
-		
+
 		// 総数を取得
-		$totalCount = self::$_mainDb->getEventListCount(self::DEFAULT_CONTENT_TYPE, $this->_langId, $parsedKeywords);
+		$totalCount = self::$_mainDb->getEventListCount($this->contentType, $this->_langId, $parsedKeywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
@@ -193,7 +195,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// イベントリストを取得
-		self::$_mainDb->getEventList(self::DEFAULT_CONTENT_TYPE, $this->_langId, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
+		self::$_mainDb->getEventList($this->contentType, $this->_langId, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// イベントがないときは、一覧を表示しない
 
 		// ボタン作成
@@ -445,29 +447,34 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	 */
 	function makeEventList($tmpl, $request)
 	{
+		// 検索用オブジェクト取得
+		$searchObj = $this->gInstance->getObject(self::SEARCH_OBJ_ID);
+		if (!isset($searchObj)) return;
+				
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 画像選択画面で使用
 		$this->selectedItems = explode(',', $request->trimValueOf('items'));
 		sort($this->selectedItems, SORT_NUMERIC);		// ID順にソート
-debug("------");			
+			
 		// 総数を取得
-		$totalCount = self::$_mainDb->getImageCount();
+		$totalCount = $searchObj->getContentCount($this->contentType, $this->_langId, $startDt, $endDt, $category, $keywords);
 
 		// ページング計算
-		$this->calcPageLink($pageNo, $totalCount, self::IMAGE_LIST_COUNT);
+		$this->calcPageLink($pageNo, $totalCount, self::DEFAULT_LIST_COUNT);
 		
 		// #### 画像リストを作成 ####
-		self::$_mainDb->getImageList(self::IMAGE_LIST_COUNT, $pageNo, array($this, 'imageListLoop'), $tmpl);
+		$searchObj->getContent($this->contentType, $this->_langId, $startDt, $endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
+		//self::$_mainDb->getImageList(self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'imageListLoop'), $tmpl);
 		//$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
-		if (empty($this->idArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
+		if (empty($this->serialArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
 		// ページングリンク作成
 		$currentBaseUrl = '';		// POST用のリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
 		
 		// メッセージ設定
-		if (empty($this->idArray)){
+		if (empty($this->serialArray)){
 			$msg = 'バナー用の画像が登録されていません。先に画像を登録してください。';
 		} else {
 			$msg = 'バナー用の画像を選択してください(複数可)';
@@ -481,7 +488,7 @@ debug("------");
 		// 非表示項目
 		$tmpl->addVar("_tmpl", "page_link", $pageLink);
 		$tmpl->addVar("_tmpl", "page", $this->convertToDispString($pageNo));	// ページ番号
-		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->idArray, ',')));		// 表示画像のID
+		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->serialArray, ',')));		// 表示画像のID
 		$tmpl->addVar("_tmpl", "items", $itemsStr);								// 選択中の画像
 	}
 	/**
@@ -562,6 +569,87 @@ debug("------");
 			$this->tmpl->addVars('status_list', $row);
 			$this->tmpl->parseTemplate('status_list', 'a');
 		}
+	}
+	/**
+	 * 取得したデータをテンプレートに設定する
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $tmpl			テンプレートオブジェクト(画像選択データ用)
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function eventListLoop($index, $fetchedRow, $tmpl)
+	{
+		$serial = $fetchedRow['ee_serial'];// シリアル番号
+		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
+		
+		// 公開状態
+		switch ($fetchedRow['ee_status']){
+			case 1:	$status = '<font color="orange">編集中</font>';	break;
+			case 2:	$status = '<font color="green">公開</font>';	break;
+			case 3:	$status = '非公開';	break;
+		}
+		
+		// イベント開催期間
+		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// // 期間終了がないとき
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$startDtStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$endDtStr = '';
+			} else {
+				$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+				$endDtStr = '';
+			}
+		} else {
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$startDtStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$endDtStr = $this->convertToDispDate($fetchedRow['ee_end_dt']);
+			} else {
+				$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+				$endDtStr = $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+			}
+		}
+		
+		$isActive = false;		// 公開状態
+		if ($fetchedRow['ee_status'] == 2) $isActive = true;// 表示可能
+		
+		if ($isActive){		// コンテンツが公開状態のとき
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+			$iconTitle = '公開中';
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = '非公開';
+		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
+		// アイキャッチ画像
+//		$iconUrl = event_mainCommonDef::getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[event_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+/*		if (empty($fetchedRow['ee_thumb_filename'])){
+			$iconTitle = 'アイキャッチ画像未設定';
+		} else {
+			$iconTitle = 'アイキャッチ画像';
+		}
+		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+*/
+		// 場所
+		$place = $this->getLabelText($fetchedRow['ee_place']);		// ラベル用文字列取得
+		
+		$row = array(
+			'serial' => $serial,			// シリアル番号
+			'id' => $this->convertToDispString($fetchedRow['ee_id']),			// ID
+			'name' => $this->convertToDispString($fetchedRow['ee_name']),		// 名前
+			'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
+			'status_img' => $statusImg,												// 公開状態
+			'status' => $status,													// 公開状況
+			'date_start' => $startDtStr,	// 開催日時
+			'place' => $this->convertToDispString($place)	// 開催場所
+		);
+
+		$tmpl->addVars('itemlist', $row);
+		$tmpl->parseTemplate('itemlist', 'a');
+		
+		// 表示中項目のシリアル番号を保存
+		$this->serialArray[] = $serial;
+		return true;
 	}
 }
 ?>
