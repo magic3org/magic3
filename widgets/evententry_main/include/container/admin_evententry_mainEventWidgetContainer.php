@@ -22,7 +22,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	private $status;			// 参加受付状態(1=非公開、2=公開、3=受付停止)
 	private $statusTypeArray;	// イベント状態メニュー作成用
 	private $contentType;		// コンテンツタイプ
-	const SEARCH_OBJ_ID = 'searchlib';		// 検索用オブジェクト
+	const EVENT_OBJ_ID = 'eventlib';		// 検索用オブジェクト
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
@@ -448,8 +448,26 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	function makeEventList($tmpl, $request)
 	{
 		// 検索用オブジェクト取得
-		$searchObj = $this->gInstance->getObject(self::SEARCH_OBJ_ID);
-		if (!isset($searchObj)) return;
+		switch ($this->contentType){
+			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
+				break;
+			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
+				break;
+			case M3_VIEW_TYPE_BBS:					// BBS
+				break;
+			case M3_VIEW_TYPE_BLOG:				// ブログ
+				break;
+			case M3_VIEW_TYPE_WIKI:				// wiki
+				break;
+			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
+				break;
+			case M3_VIEW_TYPE_EVENT:				// イベント情報
+				$eventObj = $this->gInstance->getObject(self::EVENT_OBJ_ID);
+				break;
+			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
+				break;
+		}
+		if (!isset($eventObj)) return;
 				
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
@@ -475,13 +493,13 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		sort($this->selectedItems, SORT_NUMERIC);		// ID順にソート
 			
 		// 総数を取得
-		$totalCount = $searchObj->getContentCount($this->contentType, $this->_langId, $search_startDt, $search_endDt, $category, $keywords);
+		$totalCount = $eventObj->getContentCount($this->contentType, $this->_langId, $search_startDt, $search_endDt, $category, $keywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, self::DEFAULT_LIST_COUNT);
 		
 		// #### 画像リストを作成 ####
-		$searchObj->getContent($this->contentType, $this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
+		$eventObj->getContent($this->contentType, $this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
 		//self::$_mainDb->getImageList(self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'imageListLoop'), $tmpl);
 		//$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
 		if (empty($this->serialArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
