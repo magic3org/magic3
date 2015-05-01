@@ -18,6 +18,7 @@ require_once(dirname(__FILE__) . '/eventLibDb.php');
 class eventLib
 {
 	private $db;				// DB接続オブジェクト
+	private $configArray;		// イベント情報定義値
 	
 	/**
 	 * コンストラクタ
@@ -26,6 +27,9 @@ class eventLib
 	{
 		// DBオブジェクト作成
 		$this->db = new eventLibDb();
+		
+		// 定義値読み込み
+		$this->configArray = $this->_loadConfig($this->db);
 	}
 	/**
 	 * コンテンツを検索
@@ -60,6 +64,52 @@ class eventLib
 	{
 		$rowCount = $this->db->getEventCount($langId, $startDt, $endDt, $category, $keywords);
 		return $rowCount;
+	}
+	/**
+	 * アイキャッチ用画像のURLを取得
+	 *
+	 * @param string $filenames				作成済みファイル名(「;」区切り)
+	 * @param string $defaultFilenames		作成済みデフォルトファイル名(「;」区切り)
+	 * @param string $thumbTypeDef			サムネール画像タイプ定義(タイプ指定の場合)
+	 * @param string $thumbType				サムネール画像タイプ(s,m,l)(タイプ指定の場合)
+	 * @param int    $deviceType			デバイスタイプ(0=PC、1=携帯、2=スマートフォン)
+	 * @return string						画像URL
+	 */
+	function getEyecatchImageUrl($filenames, $defaultFilenames, $thumbTypeDef = '', $thumbType = '', $deviceType = 0)
+	{
+		global $gInstanceManager;
+		static $thumbTypeArray;
+		
+		$thumbUrl = '';
+		if (empty($filenames)) $filenames = $defaultFilenames;		// 記事デフォルト画像
+		if (!empty($filenames)){
+			$thumbFilename = $gInstanceManager->getImageManager()->getSystemThumbFilenameByType($filenames, $thumbTypeDef, $thumbType);
+			if (!empty($thumbFilename)) $thumbUrl = $gInstanceManager->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_EVENT, $deviceType, $thumbFilename);
+		}
+		return $thumbUrl;
+	}
+	/**
+	 * イベント定義値をDBから取得
+	 *
+	 * @param object $db	DBオブジェクト
+	 * @return array		取得データ
+	 */
+	private function _loadConfig($db)
+	{
+		$retVal = array();
+
+		// イベント情報定義を読み込み
+		$ret = $db->getAllConfig($rows);
+		if ($ret){
+			// 取得データを連想配列にする
+			$configCount = count($rows);
+			for ($i = 0; $i < $configCount; $i++){
+				$key = $rows[$i]['eg_id'];
+				$value = $rows[$i]['eg_value'];
+				$retVal[$key] = $value;
+			}
+		}
+		return $retVal;
 	}
 }
 ?>

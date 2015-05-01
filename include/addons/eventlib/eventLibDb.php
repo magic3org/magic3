@@ -18,6 +18,19 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class eventLibDb extends BaseDb
 {
 	/**
+	 * イベント定義値を取得をすべて取得
+	 *
+	 * @param array  $rows			レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getAllConfig(&$rows)
+	{
+		$queryStr  = 'SELECT * FROM event_config ';
+		$queryStr .=   'ORDER BY eg_index';
+		$retValue = $this->selectRecords($queryStr, array(), $rows);
+		return $retValue;
+	}
+	/**
 	 * イベント項目数を取得(管理用)
 	 *
 	 * @param string	$langId				言語
