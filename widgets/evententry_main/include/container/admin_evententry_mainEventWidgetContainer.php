@@ -493,15 +493,13 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		sort($this->selectedItems, SORT_NUMERIC);		// ID順にソート
 			
 		// 総数を取得
-		$totalCount = $eventObj->getContentCount($this->contentType, $this->_langId, $search_startDt, $search_endDt, $category, $keywords);
+		$totalCount = $eventObj->getContentCount($this->_langId, $search_startDt, $search_endDt, $category, $keywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, self::DEFAULT_LIST_COUNT);
 		
 		// #### 画像リストを作成 ####
-		$eventObj->getContent($this->contentType, $this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
-		//self::$_mainDb->getImageList(self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'imageListLoop'), $tmpl);
-		//$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
+		$eventObj->getContent($this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
 		if (empty($this->serialArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
 		// ページングリンク作成

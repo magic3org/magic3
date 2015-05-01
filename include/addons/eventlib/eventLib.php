@@ -30,7 +30,6 @@ class eventLib
 	/**
 	 * コンテンツを検索
 	 *
-	 * @param string    $contentType		コンテンツタイプ
 	 * @param string	$langId				言語
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
@@ -43,32 +42,13 @@ class eventLib
 	 * @param object    $tmpl				出力テンプレート
 	 * @return 								なし
 	 */
-	function getContent($contentType, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl = null)
+	function getContent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl = null)
 	{
-		switch ($contentType){
-			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				break;
-			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-				break;
-			case M3_VIEW_TYPE_BBS:					// BBS
-				break;
-			case M3_VIEW_TYPE_BLOG:				// ブログ
-				break;
-			case M3_VIEW_TYPE_WIKI:				// wiki
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				break;
-			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$this->db->getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl);
-				break;
-			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-				break;
-		}
+		$this->db->getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl);
 	}
 	/**
 	 * 検索したコンテンツ数を取得
 	 *
-	 * @param string    $contentType		コンテンツタイプ
 	 * @param string	$langId				言語
 	 * @param timestamp	$startDt			期間(開始日)
 	 * @param timestamp	$endDt				期間(終了日)
@@ -76,29 +56,9 @@ class eventLib
 	 * @param array     $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	function getContentCount($contentType, $langId, $startDt, $endDt, $category, $keywords)
+	function getContentCount($langId, $startDt, $endDt, $category, $keywords)
 	{
-		$rowCount = 0;
-		
-		switch ($contentType){
-			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				break;
-			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-				break;
-			case M3_VIEW_TYPE_BBS:					// BBS
-				break;
-			case M3_VIEW_TYPE_BLOG:				// ブログ
-				break;
-			case M3_VIEW_TYPE_WIKI:				// wiki
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				break;
-			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$rowCount = $this->db->getEventCount($langId, $startDt, $endDt, $category, $keywords);
-				break;
-			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-				break;
-		}
+		$rowCount = $this->db->getEventCount($langId, $startDt, $endDt, $category, $keywords);
 		return $rowCount;
 	}
 }
