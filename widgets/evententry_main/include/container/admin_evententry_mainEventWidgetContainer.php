@@ -22,11 +22,13 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	private $status;			// 参加受付状態(1=非公開、2=公開、3=受付停止)
 	private $statusTypeArray;	// イベント状態メニュー作成用
 	private $contentType;		// コンテンツタイプ
+	private $contentObj;			// コンテンツ情報ライブラリ
 	const EVENT_OBJ_ID = 'eventlib';		// 検索用オブジェクト
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
 	const ICON_SIZE = 32;		// アイコンのサイズ
+	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
@@ -462,12 +464,12 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
 				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$eventObj = $this->gInstance->getObject(self::EVENT_OBJ_ID);
+				$this->contentObj = $this->gInstance->getObject(self::EVENT_OBJ_ID);
 				break;
 			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
 				break;
 		}
-		if (!isset($eventObj)) return;
+		if (!isset($this->contentObj)) return;
 				
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
@@ -493,13 +495,13 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		sort($this->selectedItems, SORT_NUMERIC);		// ID順にソート
 			
 		// 総数を取得
-		$totalCount = $eventObj->getContentCount($this->_langId, $search_startDt, $search_endDt, $category, $keywords);
+		$totalCount = $this->contentObj->getContentCount($this->_langId, $search_startDt, $search_endDt, $category, $keywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, self::DEFAULT_LIST_COUNT);
 		
 		// #### 画像リストを作成 ####
-		$eventObj->getContent($this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
+		$this->contentObj->getContent($this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
 		if (empty($this->serialArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
 		// ページングリンク作成
@@ -655,14 +657,15 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// アイキャッチ画像
+		$iconUrl = $this->contentObj->getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], 's'/*sサイズ画像*/);
 //		$iconUrl = event_mainCommonDef::getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[event_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
-/*		if (empty($fetchedRow['ee_thumb_filename'])){
+		if (empty($fetchedRow['ee_thumb_filename'])){
 			$iconTitle = 'アイキャッチ画像未設定';
 		} else {
 			$iconTitle = 'アイキャッチ画像';
 		}
 		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-*/
+
 		// 場所
 		$place = $this->getLabelText($fetchedRow['ee_place']);		// ラベル用文字列取得
 		

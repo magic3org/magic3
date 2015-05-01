@@ -19,6 +19,24 @@ class eventLib
 {
 	private $db;				// DB接続オブジェクト
 	private $configArray;		// イベント情報定義値
+	// ##### DB定義値 #####
+	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
+	const CF_ENTRY_VIEW_ORDER		= 'entry_view_order';			// 記事表示方向
+	const CF_ENTRY_DEFAULT_IMAGE	= 'entry_default_image';		// 記事デフォルト画像
+	const CF_CATEGORY_COUNT			= 'category_count';				// カテゴリ数
+	const CF_OUTPUT_HEAD			= 'output_head';		// ヘッダ出力するかどうか
+	const CF_HEAD_VIEW_DETAIL		= 'head_view_detail';		// ヘッダ出力(詳細表示)
+	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
+	const CF_LAYOUT_ENTRY_LIST		= 'layout_entry_list';			// コンテンツレイアウト(記事一覧)
+	const CF_USE_WIDGET_TITLE		= 'use_widget_title';		// ウィジェットタイトルを使用するかどうか
+	const CF_TITLE_DEFAULT			= 'title_default';		// デフォルトタイトル
+	const CF_TITLE_LIST				= 'title_list';		// 一覧タイトル
+	const CF_TITLE_SEARCH_LIST		= 'title_search_list';		// 検索結果タイトル
+	const CF_TITLE_NO_ENTRY			= 'title_no_entry';		// 記事なし時タイトル
+	const CF_MESSAGE_NO_ENTRY		= 'msg_no_entry';		// ブログ記事が登録されていないメッセージ
+	const CF_MESSAGE_FIND_NO_ENTRY	= 'msg_find_no_entry';		// ブログ記事が見つからないメッセージ
+	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
+	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
 	
 	/**
 	 * コンストラクタ
@@ -69,13 +87,26 @@ class eventLib
 	 * アイキャッチ用画像のURLを取得
 	 *
 	 * @param string $filenames				作成済みファイル名(「;」区切り)
+	 * @param string $thumbType				サムネール画像タイプ(s,m,l)(タイプ指定の場合)
+	 * @param int    $deviceType			デバイスタイプ(0=PC、1=携帯、2=スマートフォン)
+	 * @return string						画像URL
+	 */
+	function getEyecatchImageUrl($filenames, $thumbType = '', $deviceType = 0)
+	{
+		$thumbUrl = $this->_getEyecatchImageUrl($filenames, $this->configArray[self::CF_ENTRY_DEFAULT_IMAGE], $this->configArray[self::CF_THUMB_TYPE], $thumbType, $deviceType);
+		return $thumbUrl;
+	}
+	/**
+	 * アイキャッチ用画像のURLを取得
+	 *
+	 * @param string $filenames				作成済みファイル名(「;」区切り)
 	 * @param string $defaultFilenames		作成済みデフォルトファイル名(「;」区切り)
 	 * @param string $thumbTypeDef			サムネール画像タイプ定義(タイプ指定の場合)
 	 * @param string $thumbType				サムネール画像タイプ(s,m,l)(タイプ指定の場合)
 	 * @param int    $deviceType			デバイスタイプ(0=PC、1=携帯、2=スマートフォン)
 	 * @return string						画像URL
 	 */
-	function getEyecatchImageUrl($filenames, $defaultFilenames, $thumbTypeDef = '', $thumbType = '', $deviceType = 0)
+	private function _getEyecatchImageUrl($filenames, $defaultFilenames, $thumbTypeDef = '', $thumbType = '', $deviceType = 0)
 	{
 		global $gInstanceManager;
 		static $thumbTypeArray;
