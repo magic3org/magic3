@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
-class searchLibDb extends BaseDb
+class eventLibDb extends BaseDb
 {
 	/**
 	 * イベント項目数を取得(管理用)

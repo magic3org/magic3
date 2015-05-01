@@ -13,9 +13,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once(dirname(__FILE__) . '/searchLibDb.php');
+require_once(dirname(__FILE__) . '/eventLibDb.php');
 
-class searchLib
+class eventLib
 {
 	private $db;				// DB接続オブジェクト
 	
@@ -25,7 +25,7 @@ class searchLib
 	function __construct()
 	{
 		// DBオブジェクト作成
-		$this->db = new searchLibDb();
+		$this->db = new eventLibDb();
 	}
 	/**
 	 * コンテンツを検索
