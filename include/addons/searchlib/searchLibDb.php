@@ -43,11 +43,12 @@ class searchLibDb extends BaseDb
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
 	 * @param function	$callback			コールバック関数
+	 * @param object    $tmpl				出力テンプレート
 	 * @return 			なし
 	 */
-	function getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback)
+	function getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl)
 	{
-		$this->_searchEvent(1/*検索データ取得*/, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback);
+		$this->_searchEvent(1/*検索データ取得*/, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl);
 	}
 	/**
 	 * イベント項目一覧を取得(管理用)
@@ -62,9 +63,10 @@ class searchLibDb extends BaseDb
 	 * @param int		$limit				取得する項目数[データ取得時のみ]
 	 * @param int		$page				取得するページ(1～)[データ取得時のみ]
 	 * @param function	$callback			コールバック関数[データ取得時のみ]
+	 * @param object    $tmpl				出力テンプレート[データ取得時のみ]
 	 * @return 			int					項目数(検索データループ処理の場合は0を返す)
 	 */
-	function _searchEvent($operation, $langId, $startDt, $endDt, $category, $keywords, $order = 0, $limit = 0, $page = 0, $callback = null)
+	function _searchEvent($operation, $langId, $startDt, $endDt, $category, $keywords, $order = 0, $limit = 0, $page = 0, $callback = null, $tmpl = null)
 	{
 		$params = array();
 		if (count($category) == 0){		// カテゴリー指定なしのとき
@@ -135,7 +137,7 @@ class searchLibDb extends BaseDb
 			
 			if (count($category) == 0){
 				$queryStr .=  'ORDER BY ee_start_dt' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;
-				$this->selectLoop($queryStr, $params, $callback);
+				$this->selectLoop($queryStr, $params, $callback, $tmpl);
 			} else {
 				// シリアル番号を取得
 				$serialArray = array();
@@ -151,7 +153,7 @@ class searchLibDb extends BaseDb
 				$queryStr = 'SELECT * FROM event_entry ';
 				$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
 				$queryStr .=  'ORDER BY ee_start_dt' . $ord . ', ee_id LIMIT ' . $limit . ' OFFSET ' . $offset;
-				$this->selectLoop($queryStr, array(), $callback);
+				$this->selectLoop($queryStr, array(), $callback, $tmpl);
 			}
 			return 0;
 		}

@@ -40,9 +40,10 @@ class searchLib
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
 	 * @param function	$callback			コールバック関数
+	 * @param object    $tmpl				出力テンプレート
 	 * @return 								なし
 	 */
-	function getContent($contentType, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback)
+	function getContent($contentType, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl = null)
 	{
 		switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
@@ -58,7 +59,7 @@ class searchLib
 			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
 				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$this->db->getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback);
+				$this->db->getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl);
 				break;
 			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
 				break;
