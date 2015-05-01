@@ -453,18 +453,35 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
+		// 検索条件
+		$search_startDt = $request->trimValueOf('search_start');		// 検索範囲開始日付
+		if (!empty($search_startDt)) $search_startDt = $this->convertToProperDate($search_startDt);
+		$search_endDt = $request->trimValueOf('search_end');			// 検索範囲終了日付
+		if (!empty($search_endDt)) $search_endDt = $this->convertToProperDate($search_endDt);
+		$search_categoryId = $request->trimValueOf('search_category0');			// 検索カテゴリー
+		$search_keyword = $request->trimValueOf('search_keyword');			// 検索キーワード
+		
+		// キーワード分割
+		$keywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($search_keyword);
+			
+		// カテゴリーを格納
+		$category = array();
+		if (!empty($search_categoryId)){		// 0以外の値を取得
+			$category[] = $search_categoryId;
+		}
+		
 		// 画像選択画面で使用
 		$this->selectedItems = explode(',', $request->trimValueOf('items'));
 		sort($this->selectedItems, SORT_NUMERIC);		// ID順にソート
 			
 		// 総数を取得
-		$totalCount = $searchObj->getContentCount($this->contentType, $this->_langId, $startDt, $endDt, $category, $keywords);
+		$totalCount = $searchObj->getContentCount($this->contentType, $this->_langId, $search_startDt, $search_endDt, $category, $keywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, self::DEFAULT_LIST_COUNT);
 		
 		// #### 画像リストを作成 ####
-		$searchObj->getContent($this->contentType, $this->_langId, $startDt, $endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
+		$searchObj->getContent($this->contentType, $this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
 		//self::$_mainDb->getImageList(self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'imageListLoop'), $tmpl);
 		//$this->setListTemplateVisibility('itemlist');	// 一覧部の表示制御
 		if (empty($this->serialArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
@@ -475,9 +492,9 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		
 		// メッセージ設定
 		if (empty($this->serialArray)){
-			$msg = 'バナー用の画像が登録されていません。先に画像を登録してください。';
+			$msg = '参加を受け付けるイベントが登録されていません。先にイベント情報を登録してください。';
 		} else {
-			$msg = 'バナー用の画像を選択してください(複数可)';
+			$msg = '参加を受け付けるイベントを選択してください';
 		}
 		
 		// 表示項目
@@ -633,6 +650,10 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		// 場所
 		$place = $this->getLabelText($fetchedRow['ee_place']);		// ラベル用文字列取得
 		
+		// 画像プレビュー用ボタンを作成
+		$eventAttr = 'onclick="showPreview(\''. $id . '\', \'' . $name . '\', \'' . $type . '\', \'' . $this->getUrl($url) . '\', \'' . $width .'\', \'' . $height . '\');"';
+		$previewButtonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+		
 		$row = array(
 			'serial' => $serial,			// シリアル番号
 			'id' => $this->convertToDispString($fetchedRow['ee_id']),			// ID
@@ -641,7 +662,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			'status_img' => $statusImg,												// 公開状態
 			'status' => $status,													// 公開状況
 			'date_start' => $startDtStr,	// 開催日時
-			'place' => $this->convertToDispString($place)	// 開催場所
+			'place' => $this->convertToDispString($place),	// 開催場所
+			'preview_image_button'	=> $previewButtonTag					// 画像プレビューボタン
 		);
 
 		$tmpl->addVars('itemlist', $row);

@@ -13,7 +13,7 @@
 <patTemplate:tmpl name="_tmpl">
 <script type="text/javascript">
 //<![CDATA[
-function showPreview(id, name, type, url, width, height, link_url){
+function showPreview(id, name, type, url, width, height){
 	// プレビュー画像設定
 	var innerText;
 	var preOuter = $('#preview_image');
@@ -32,7 +32,6 @@ function showPreview(id, name, type, url, width, height, link_url){
 	// ID、名前、リンク先URL設定
 	$('#preview_id').text(id);
 	$('#preview_name').text(name);
-	$('#preview_link_url').text(link_url);
 	$('#previewtable').show();
 }
 function clickItem()
@@ -73,16 +72,6 @@ function clickItem()
 			if (itemObj && itemObj.checked) itemsArray[itemsArray.length] = id;
 		}
 	}
-	// IDでソート
-	itemsArray.sortByNumber();
-	var itemsValue = '';
-	for (i = 0; i < itemsArray.length; i++)
-	{
-		itemsValue += itemsArray[i];
-		if (i != itemsArray.length -1) itemsValue += ',';
-	}
-	document.modalform.items.value = itemsValue;
-	$('#items_label').text(itemsValue);
 }
 $(function(){
 	// テーブルを作成
@@ -95,7 +84,6 @@ $(function(){
 //]]>
 </script>
 <div id="imagelist_msg">{MSG}</div>
-<div>選択項目：<span id="items_label">{ITEMS_LABEL}</span></div>
 <form method="post" id="modalform" name="modalform">
 <input type="hidden" name="page" value="{PAGE}" />
 <input type="hidden" name="idlist" value="{ID_LIST}" />
@@ -163,10 +151,6 @@ $(function(){
     <tr>
 	    <th><span {_HELP_EVENT_IMAGE}>表示画像</span></th>
 	    <td colspan="3"><div id="preview_image"></div></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_EVENT_LINK_URL}>リンク先URL</span></th>
-	    <td colspan="3"><div id="preview_link_url"></div></td>
 	</tr>
     </tbody>
 </table>
