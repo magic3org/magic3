@@ -42,7 +42,7 @@ class searchLib
 	 * @param function	$callback			コールバック関数
 	 * @return 								なし
 	 */
-	private function getContent($contentType, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback)
+	function getContent($contentType, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback)
 	{
 		switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
@@ -75,7 +75,7 @@ class searchLib
 	 * @param array     $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	private function getContentCount($contentType, $langId, $startDt, $endDt, $category, $keywords)
+	function getContentCount($contentType, $langId, $startDt, $endDt, $category, $keywords)
 	{
 		$rowCount = 0;
 		

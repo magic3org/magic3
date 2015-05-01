@@ -105,38 +105,55 @@ class searchLibDb extends BaseDb
 			$queryStr .=    'AND ee_start_dt < ? ';
 			$params[] = $endDt;
 		}
-		
-		if (count($category) == 0){
-			$queryStr .=  'ORDER BY ee_start_dt desc, ee_id limit ' . $limit . ' offset ' . $offset;
-			$this->selectLoop($queryStr, $params, $callback, null);
-		} else {
-			// シリアル番号を取得
-			$serialArray = array();
-			$ret = $this->selectRecords($queryStr, $params, $serialRows);
-			if ($ret){
-				for ($i = 0; $i < count($serialRows); $i++){
-					$serialArray[] = $serialRows[$i]['ee_serial'];
+		if (empty($operation)){			// 検索数取得の場合
+			if (count($category) == 0){
+				return $this->selectRecordCount($queryStr, $params);
+			} else {
+				// シリアル番号を取得
+				$serialArray = array();
+				$ret = $this->selectRecords($queryStr, $params, $serialRows);
+				if ($ret){
+					for ($i = 0; $i < count($serialRows); $i++){
+						$serialArray[] = $serialRows[$i]['ee_serial'];
+					}
 				}
-			}
-			$serialStr = implode(',', $serialArray);
-			if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
+				$serialStr = implode(',', $serialArray);
+				if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
 		
-			if (empty($operation)){			// 検索数取得の場合
 				$queryStr = 'SELECT * FROM event_entry ';
 				$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
 				return $this->selectRecordCount($queryStr, array());
+			}
+		} else {
+			// ページ番号修正
+			$offset = $limit * ($page -1);
+			if ($offset < 0) $offset = 0;
+			
+			// ソート順
+			$ord = '';
+			if (empty($order)) $ord = ' DESC';
+			
+			if (count($category) == 0){
+				$queryStr .=  'ORDER BY ee_start_dt' . $ord . ', ee_id LIMIT ' . $limit . ' offset ' . $offset;
+				$this->selectLoop($queryStr, $params, $callback);
 			} else {
-				$offset = $limit * ($page -1);
-				if ($offset < 0) $offset = 0;
-				
-				$ord = '';
-				if (empty($order)) $ord = ' DESC';
+				// シリアル番号を取得
+				$serialArray = array();
+				$ret = $this->selectRecords($queryStr, $params, $serialRows);
+				if ($ret){
+					for ($i = 0; $i < count($serialRows); $i++){
+						$serialArray[] = $serialRows[$i]['ee_serial'];
+					}
+				}
+				$serialStr = implode(',', $serialArray);
+				if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
+	
 				$queryStr = 'SELECT * FROM event_entry ';
 				$queryStr .=  'WHERE ee_serial in (' . $serialStr . ') ';
 				$queryStr .=  'ORDER BY ee_start_dt' . $ord . ', ee_id LIMIT ' . $limit . ' OFFSET ' . $offset;
 				$this->selectLoop($queryStr, array(), $callback);
-				return 0;
 			}
+			return 0;
 		}
 	}
 }
