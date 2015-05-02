@@ -34,45 +34,6 @@ function showPreview(id, name, type, url, width, height){
 	$('#preview_name').text(name);
 	$('#previewtable').show();
 }
-function clickItem()
-{
-	// 選択項目を更新
-	var i, j;
-	var value;
-	var items = new Array();
-	var itemsOnPage = new Array();
-	var itemsArray = new Array();
-	value = document.modalform.items.value;
-	if (value) items = value.split(',');
-	value = document.modalform.idlist.value;
-	if (value) itemsOnPage = value.split(",");
-	
-	for (i = 0; i < items.length; i++){
-		var id = items[i];
-		for (j = 0; j < itemsOnPage.length; j++){
-			if (id == itemsOnPage[j]){
-				var name = "document.modalform.item" + j + "_selected";
-				var itemObj = eval(name);
-				// チェックありのときは追加
-				if (itemObj && itemObj.checked) itemsArray[itemsArray.length] = id;
-				break;
-			}
-		}
-		if (j == itemsOnPage.length) itemsArray[itemsArray.length] = id;
-	}
-	for (i = 0; i < itemsOnPage.length; i++){
-		var id = itemsOnPage[i];
-		for (j = 0; j < items.length; j++){
-			if (id == items[j]) break;
-		}
-		if (j == items.length){
-			var name = "document.modalform.item" + i + "_selected";
-			var itemObj = eval(name);
-			// チェックありのときは追加
-			if (itemObj && itemObj.checked) itemsArray[itemsArray.length] = id;
-		}
-	}
-}
 $(function(){
 	// テーブルを作成
 	m3SetModalTable($('.modaltable'));
@@ -87,16 +48,16 @@ $(function(){
 <form method="post" id="modalform" name="modalform">
 <input type="hidden" name="page" value="{PAGE}" />
 <input type="hidden" name="idlist" value="{ID_LIST}" />
-<input type="hidden" id="items" name="items" value="{ITEMS}" />
+<!--<input type="hidden" id="items" name="items" value="{ITEMS}" />-->
 <h3 class="m3config_h"><span {_HELP_EVENT_LIST}>イベント一覧</span></h3>
 <table class="modaltable">
     <thead>
     <tr>
-        <th class="select"><span {_HELP_ENTRY_CHECK}>選択</span></th>
+        <th class="select" style="width:50px;"><span {_HELP_ENTRY_CHECK}>選択</span></th>
         <th style="width:50px;"><span {_HELP_ENTRY_ID}>ID</span></th>
 		<th style="width:50px;"></th>
         <th><span {_HELP_ENTRY_NAME}>タイトル</span></th>
-		<th class="status"><span {_HELP_ENTRY_STATUS}>状態</span></th>
+		<th class="status" style="width:50px;"><span {_HELP_ENTRY_STATUS}>状態</span></th>
 	    <th style="width:100px;"><span {_HELP_ENTRY_DT}>開催日時</span></th>
 	    <th><span {_HELP_ENTRY_PLACE}>場所</span></th>
 	</tr>
@@ -114,28 +75,6 @@ $(function(){
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
-<!--    <thead>
-    <tr>
-        <th style="width:50px;"><span {_HELP_EVENT_CHECK}>選択</span></th>
-        <th style="width:50px;"><span {_HELP_EVENT_ID}>ID</span></th>
-        <th style="width:25%;"><span {_HELP_EVENT_NAME}>名前</span></th>
-	    <th style="width:25%;"><span {_HELP_EVENT_FILENAME}>ファイル名</span></th>
-	    <th style="width:25%;"><span {_HELP_EVENT_LINK_URL}>リンク先</span></th>
-	    <th style="width:50px;"><span {_HELP_EVENT_VISIBLE}>公開</span></th>
-	</tr>
-    </thead>
-    <tbody>
-    <patTemplate:tmpl name="item_list">
-    <tr>
-	    <td><input type="checkbox" name="item{INDEX}_selected" onchange="clickItem();" {CHECKED} /></td>
-	    <td>{ID}</td>
-	    <td>{NAME}</td>
-	    <td>{FILENAME}<div class="pull-right">{PREVIEW_IMAGE_BUTTON}</div></td>
-	    <td>{LINK_URL_SHORT}</td>
-	    <td><input type="checkbox" disabled {VISIBLE} /></td>
-	</tr>
-	</patTemplate:tmpl>
-    </tbody>-->
 </table>
 <div>{PAGE_LINK}</div>
 

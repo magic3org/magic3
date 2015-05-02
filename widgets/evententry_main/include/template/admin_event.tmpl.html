@@ -13,11 +13,6 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function selectMenu(){
-	document.main.act.value = 'selcontenttype';
-	document.main.submit();
-	return true;
-}
 function newItem(){
 	document.main.task.value = 'event_detail';
 	document.main.act.value = 'new';
@@ -67,6 +62,22 @@ function delItem(){
 	}
 	return true;
 }
+function updateSelectedEvent(){
+	if (document.modalform && document.modalform.idlist.value){
+		var items = document.modalform.idlist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.modalform.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){
+			document.main.eventid.value = '';
+		} else {
+			document.main.eventid.value = items[i];
+		}
+	}
+}
 function search(){
 	document.main.act.value = 'search';
 	document.main.submit();
@@ -97,13 +108,8 @@ function previewInOtherWindow(url)
 // イベント選択画面のページング
 function selEventPage(page)
 {
-	// 選択中のイベントを取得
-	var selectedItems;
-	selectedItems = $('#items').val();
-	if (!selectedItems) selectedItems = $('#item_banner').val();
-	
 	// Ajaxでイベント一覧を取得
-	m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=event&act=geteventlist&page=' + page + '&items=' + selectedItems, function(request, retcode, jsondata){		// 正常終了
+	m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=event&act=geteventlist&page=' + page, function(request, retcode, jsondata){		// 正常終了
 		// イベント選択テーブルを作成
 		if (jsondata.html) imageModal.setMessage(jsondata.html);
 	}, function(request){		// 異常終了
@@ -134,14 +140,18 @@ function selectEvent()
 			label: 'OK',
 			cssClass: 'btn-primary',
 			action: function(dialog) {
-			newItem();
-				var value = document.modalform.items.value;
+				// 選択中のイベントを更新
+				updateSelectedEvent();
+
+				var value = document.main.eventid.value;
 				if (value == ''){
 					alert('イベントを選択してください');
 				} else {
-					// イベント選択を更新
-					$('#item_banner').val(value);
+					// ダイアログ閉じる
 					dialog.close();
+					
+					// 選択イベントを送信
+					newItem();
 				}
 			}
 		}]
@@ -164,7 +174,6 @@ $(function(){
 //]]>
 </script>
 <div class="m3config_container">
-{MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="event"/>
@@ -172,6 +181,7 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="eventid" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h"><span {_HELP_EVENT_LIST}>受付イベント一覧</span>
 <!--<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>-->

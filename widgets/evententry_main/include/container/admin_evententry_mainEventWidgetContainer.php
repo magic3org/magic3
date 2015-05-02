@@ -19,12 +19,13 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
+	private $idArray = array();			// 表示されているイベントID
 	private $status;			// 参加受付状態(1=非公開、2=公開、3=受付停止)
 	private $statusTypeArray;	// イベント状態メニュー作成用
 	private $contentType;		// コンテンツタイプ
 	private $contentObj;			// コンテンツ情報ライブラリ
 	const EVENT_OBJ_ID = 'eventlib';		// 検索用オブジェクト
-	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT = 2;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
 	const ICON_SIZE = 32;		// アイコンのサイズ
@@ -241,6 +242,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->status = $request->trimValueOf('item_status');		// メッセージ状態(0=非公開、1=公開)
 		$mark = 0;
 		$contentTitleDisabled = '';
+		$eventId = $request->trimValueOf('eventid');			// イベントID
+debug($eventId);
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'add'){		// メッセージを追加
@@ -506,7 +509,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		
 		// ページングリンク作成
 		$currentBaseUrl = '';		// POST用のリンク作成
-		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selpage($1);return false;');
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl, 'selEventPage($1);return false;');
 		
 		// メッセージ設定
 		if (empty($this->serialArray)){
@@ -523,8 +526,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		// 非表示項目
 		$tmpl->addVar("_tmpl", "page_link", $pageLink);
 		$tmpl->addVar("_tmpl", "page", $this->convertToDispString($pageNo));	// ページ番号
-		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->serialArray, ',')));		// 表示画像のID
-		$tmpl->addVar("_tmpl", "items", $itemsStr);								// 選択中の画像
+		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->idArray, ',')));		// 表示イベントのID
+//		$tmpl->addVar("_tmpl", "items", $itemsStr);								// 選択中の画像
 	}
 	/**
 	/**
@@ -616,6 +619,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	function eventListLoop($index, $fetchedRow, $tmpl)
 	{
 		$serial = $fetchedRow['ee_serial'];// シリアル番号
+		$id = $fetchedRow['ee_id'];// イベントID
 		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
 		
 		// 公開状態
@@ -674,8 +678,9 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$previewButtonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
 		
 		$row = array(
+			'index' => $index,				// 項目インデックス
 			'serial' => $serial,			// シリアル番号
-			'id' => $this->convertToDispString($fetchedRow['ee_id']),			// ID
+			'id' => $this->convertToDispString($id),			// ID
 			'name' => $this->convertToDispString($fetchedRow['ee_name']),		// 名前
 			'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
 			'status_img' => $statusImg,												// 公開状態
@@ -690,6 +695,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		
 		// 表示中項目のシリアル番号を保存
 		$this->serialArray[] = $serial;
+		$this->idArray[] = $id;
 		return true;
 	}
 }
