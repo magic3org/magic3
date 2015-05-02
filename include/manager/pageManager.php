@@ -315,10 +315,10 @@ class PageManager extends Core
 												array(	'name' => 'イベント情報',				'value' => M3_VIEW_TYPE_EVENT),
 												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO)
 											);
-		// 一般画面で使用する補助コンテンツタイプ
+		// 一般画面で使用する補助コンテンツタイプ(ページ属性に対応しない)
 		$this->subContentTypeInfo	 = array(	array(	'name' => '新着情報',					'value' => M3_VIEW_TYPE_NEWS),
 												array(	'name' => 'コメント',					'value' => M3_VIEW_TYPE_COMMENT),
-												array(	'name' => 'イベント参加',				'value' => M3_VIEW_TYPE_EVENTENTRY),
+												array(	'name' => 'イベント予約',				'value' => M3_VIEW_TYPE_EVENTENTRY),
 												array(	'name' => 'バナー',						'value' => M3_VIEW_TYPE_BANNER)
 											);
 		// 一般画面で使用する主要機能タイプ(「ダッシュボード」は含まない)

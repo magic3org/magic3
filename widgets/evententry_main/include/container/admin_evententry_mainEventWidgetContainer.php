@@ -36,7 +36,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
 	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
 	const UNKNOWN_CONTENT = 'タイトル不明';
-	const DEFAULT_CONTENT_TYPE = 'event';			// イベント参加対象となるコンテンツタイプ
+	const DEFAULT_CONTENT_TYPE = 'event';			// 予約対象となるコンテンツタイプ
 
 	/**
 	 * コンストラクタ

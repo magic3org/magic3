@@ -14,25 +14,25 @@
 -- *
 -- [開発ウィジェット登録]   *****仕様変更あり注意*****
 -- 開発中のウィジェットの登録を行う。
--- ・イベント参加機能
+-- ・イベント予約機能
 
 -- ウィジェット情報
 DELETE FROM _widgets WHERE wd_id = 'evententry_main';
 INSERT INTO _widgets
 (wd_id,             wd_name,               wd_type, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('evententry_main', 'イベント参加-メイン', '', 'evententry',    'event',   true,            '',                   '0.0.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベントの参加受付管理を行う。', '',                'elfinder',                true,  true,         false,                true,  '2015-04-29', now(),         now());
+('evententry_main', 'イベント予約-メイン', '', 'evententry',    'event',   true,            '',                   '0.0.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベントの参加受付管理を行う。', '',                'elfinder',                true,  true,         false,                true,  '2015-04-29', now(),         now());
 
--- イベント参加情報マスター
+-- イベント予約情報マスター
 DROP TABLE IF EXISTS evententry_info;
 CREATE TABLE evententry_info (
     ei_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    ei_id                INT            DEFAULT 0                     NOT NULL,      -- イベント参加情報ID
+    ei_id                INT            DEFAULT 0                     NOT NULL,      -- イベント予約情報ID
     ei_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- コンテンツ種別
     ei_contents_id       VARCHAR(32)    DEFAULT ''                    NOT NULL,      -- 共通コンテンツID
     ei_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 受付タイプ
     ei_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
     
-    ei_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント参加受付コード
+    ei_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント予約受付コード
     ei_html              TEXT                                         NOT NULL,      -- 説明
     ei_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=非公開、2=公開、3=受付停止)
     ei_show_entry_count  BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者数を表示するかどうか
@@ -50,11 +50,11 @@ CREATE TABLE evententry_info (
     UNIQUE               (ei_id,        ei_content_type,      ei_contents_id,       ei_type,       ei_history_index)
 ) ENGINE=innodb;
 
--- イベント参加要求トラン
+-- イベント予約要求トラン
 DROP TABLE IF EXISTS evententry_request;
 CREATE TABLE evententry_request (
     er_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    er_info_id           INT            DEFAULT 0                     NOT NULL,      -- イベント参加情報ID
+    er_info_id           INT            DEFAULT 0                     NOT NULL,      -- イベント予約情報ID
     er_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
     
     er_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 受付コード

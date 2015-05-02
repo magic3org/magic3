@@ -220,7 +220,7 @@ define('M3_VIEW_TYPE_PHOTO',		'photo');				// フォトギャラリー
 // 補助コンテンツ
 define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
 define('M3_VIEW_TYPE_COMMENT',		'comment');				// コメント
-define('M3_VIEW_TYPE_EVENTENTRY',	'evententry');			// イベント参加
+define('M3_VIEW_TYPE_EVENTENTRY',	'evententry');			// イベント予約
 define('M3_VIEW_TYPE_BANNER',		'banner');				// バナー
 
 // すべての機能タイプ
@@ -238,7 +238,7 @@ $M3_ALL_CONTENT_TYPE	= array(	M3_VIEW_TYPE_NEWS,				// 新着情報
 									M3_VIEW_TYPE_WIKI,				// Wiki
 									M3_VIEW_TYPE_USER,				// ユーザ作成コンテンツ
 									M3_VIEW_TYPE_EVENT,				// イベント情報
-									M3_VIEW_TYPE_EVENTENTRY,		// イベント参加
+									M3_VIEW_TYPE_EVENTENTRY,		// イベント予約
 									M3_VIEW_TYPE_PHOTO);			// フォトギャラリー
 
 // コンテンツ取得用キー

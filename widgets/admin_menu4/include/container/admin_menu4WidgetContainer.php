@@ -731,8 +731,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 						case 'news':				// 新着情報
 							$title = '新着情報';
 							break;
-						case 'evententry':				// イベント参加
-							$title = 'イベント参加';
+						case 'evententry':				// イベント予約
+							$title = 'イベント予約';
 							break;
 						default:
 							$title = '';

@@ -18,7 +18,7 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class evententry_mainDb extends BaseDb
 {
 	/**
-	 * イベント参加定義値を取得をすべて取得
+	 * イベント予約定義値を取得をすべて取得
 	 *
 	 * @param array  $rows			レコード
 	 * @return bool					1行以上取得 = true, 取得なし= false
@@ -31,7 +31,7 @@ class evententry_mainDb extends BaseDb
 		return $retValue;
 	}
 	/**
-	 * イベント参加定義値を取得
+	 * イベント予約定義値を取得
 	 *
 	 * @param string $key		キーとなる項目値
 	 * @return string $value	値
@@ -46,7 +46,7 @@ class evententry_mainDb extends BaseDb
 		return $retValue;
 	}
 	/**
-	 * イベント参加定義値を更新
+	 * イベント予約定義値を更新
 	 *
 	 * @param string $key		キーとなる項目値
 	 * @param string $value		値
@@ -108,7 +108,7 @@ class evententry_mainDb extends BaseDb
 				default:
 					break;
 				}
-				$queryStr .=    'AND (ei_code LIKE \'%' . $keyword . '%\' ';		// イベント参加受付コード
+				$queryStr .=    'AND (ei_code LIKE \'%' . $keyword . '%\' ';		// イベント予約受付コード
 				$queryStr .=    'OR ei_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
 		}
@@ -162,7 +162,7 @@ class evententry_mainDb extends BaseDb
 				default:
 					break;
 				}
-				$queryStr .=    'AND (ei_code LIKE \'%' . $keyword . '%\' ';		// イベント参加受付コード
+				$queryStr .=    'AND (ei_code LIKE \'%' . $keyword . '%\' ';		// イベント予約受付コード
 				$queryStr .=    'OR ei_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
 		}
@@ -198,7 +198,7 @@ class evententry_mainDb extends BaseDb
 		$otherValueStr = '';
 			
 		if (empty($serial)){		// シリアル番号が0のときはIDを新規取得
-			// イベント参加情報IDを決定する
+			// イベント予約情報IDを決定する
 			$queryStr = 'SELECT MAX(nw_id) AS mid FROM news';
 			$ret = $this->selectRecord($queryStr, array(), $row);
 			if ($ret){

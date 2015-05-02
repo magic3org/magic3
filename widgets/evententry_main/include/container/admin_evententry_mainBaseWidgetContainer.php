@@ -20,7 +20,7 @@ require_once($gEnvManager->getWidgetDbPath('evententry_main') . '/evententry_mai
 class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	protected static $_mainDb;			// DB接続オブジェクト
-	protected static $_configArray;		// イベント参加定義値
+	protected static $_configArray;		// イベント予約定義値
 	protected static $_task;			// 現在の画面
 	protected $_baseUrl;			// 管理画面のベースURL
 	protected $_contentType;		// コンテンツタイプ
