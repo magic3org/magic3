@@ -89,11 +89,11 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$titles = array();
 		switch ($task){
 			case self::TASK_EVENT:		// 受付イベント一覧
-				$titles[] = '参加受付管理';
+				$titles[] = 'イベント予約管理';
 				$titles[] = '受付イベント一覧';
 				break;
 			case self::TASK_EVENT_DETAIL:		// 受付イベント詳細
-				$titles[] = '参加受付管理';
+				$titles[] = 'イベント予約管理';
 				$titles[] = '受付イベント一覧';
 				$titles[] = '詳細';
 				break;
@@ -106,7 +106,7 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// メニューバーの定義データ作成
 		$menu =	array(
 					(Object)array(
-						'name'		=> '参加受付管理',
+						'name'		=> 'イベント予約管理',
 						'task'		=> self::TASK_EVENT,
 						'url'		=> '',
 						'tagid'		=> '',

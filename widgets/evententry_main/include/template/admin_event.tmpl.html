@@ -97,14 +97,14 @@ function previewInOtherWindow(url)
 // イベント選択画面のページング
 function selEventPage(page)
 {
-	// 選択中の画像を取得
+	// 選択中のイベントを取得
 	var selectedItems;
 	selectedItems = $('#items').val();
 	if (!selectedItems) selectedItems = $('#item_banner').val();
 	
-	// Ajaxで画像一覧を取得
+	// Ajaxでイベント一覧を取得
 	m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=event&act=geteventlist&page=' + page + '&items=' + selectedItems, function(request, retcode, jsondata){		// 正常終了
-		// 画像選択テーブルを作成
+		// イベント選択テーブルを作成
 		if (jsondata.html) imageModal.setMessage(jsondata.html);
 	}, function(request){		// 異常終了
 		alert('通信に失敗しました。');
@@ -116,7 +116,7 @@ function selectEvent()
 {
 	imageModal = BootstrapDialog.show({
 		size: BootstrapDialog.SIZE_WIDE,
-		title: '画像の選択',
+		title: 'イベントの選択',
 		message: 'データ読み込み中...',
 		closable: false,
 		nl2br: false,
@@ -137,9 +137,9 @@ function selectEvent()
 			newItem();
 				var value = document.modalform.items.value;
 				if (value == ''){
-					alert('画像を選択してください');
+					alert('イベントを選択してください');
 				} else {
-					// 画像選択を更新
+					// イベント選択を更新
 					$('#item_banner').val(value);
 					dialog.close();
 				}
@@ -173,7 +173,7 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
 <!-- m3:PostParam -->
-<h3 class="m3config_h"><span {_HELP_EVENT_LIST}>イベント一覧</span>
+<h3 class="m3config_h"><span {_HELP_EVENT_LIST}>受付イベント一覧</span>
 <!--<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>-->
 </h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_EVENT_BUTTONS}><div class="btn-group">
