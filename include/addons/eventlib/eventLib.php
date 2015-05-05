@@ -64,9 +64,9 @@ class eventLib
 	 * @param object    $tmpl				出力テンプレート
 	 * @return 								なし
 	 */
-	function getContent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl = null)
+	function searchEntry($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl = null)
 	{
-		$this->db->getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl);
+		$this->db->searchEntry($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl);
 	}
 	/**
 	 * 検索したコンテンツ数を取得
@@ -78,10 +78,22 @@ class eventLib
 	 * @param array     $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	function getContentCount($langId, $startDt, $endDt, $category, $keywords)
+	function searchEntryCount($langId, $startDt, $endDt, $category, $keywords)
 	{
-		$rowCount = $this->db->getEventCount($langId, $startDt, $endDt, $category, $keywords);
+		$rowCount = $this->db->searchEntryCount($langId, $startDt, $endDt, $category, $keywords);
 		return $rowCount;
+	}
+	/**
+	 * イベント記事を取得
+	 *
+	 * @param string	$langId				言語
+	 * @param int,array	$id					エントリーID
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getEntry($langId, $id, &$row)
+	{
+		return $this->db->getEntry($langId, $id, $row);
 	}
 	/**
 	 * アイキャッチ用画像のURLを取得

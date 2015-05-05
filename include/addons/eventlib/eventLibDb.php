@@ -40,9 +40,9 @@ class eventLibDb extends BaseDb
 	 * @param array     $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	function getEventCount($langId, $startDt, $endDt, $category, $keywords)
+	function searchEntryCount($langId, $startDt, $endDt, $category, $keywords)
 	{
-		return $this->_searchEvent(0/*検索数取得*/, $langId, $startDt, $endDt, $category, $keywords);
+		return $this->_searchEntry(0/*検索数取得*/, $langId, $startDt, $endDt, $category, $keywords);
 	}
 	/**
 	 * イベント項目一覧を取得(管理用)
@@ -59,9 +59,45 @@ class eventLibDb extends BaseDb
 	 * @param object    $tmpl				出力テンプレート
 	 * @return 			なし
 	 */
-	function getEvent($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl)
+	function searchEntry($langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl)
 	{
-		$this->_searchEvent(1/*検索データ取得*/, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl);
+		$this->_searchEntry(1/*検索データ取得*/, $langId, $startDt, $endDt, $category, $keywords, $order, $limit, $page, $callback, $tmpl);
+	}
+	/**
+	 * イベント記事を取得
+	 *
+	 * @param string	$langId				言語
+	 * @param int,array	$id					エントリーID
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getEntry($langId, $id, &$row)
+	{
+		if (is_array($id)){
+			$params = array();
+			$contentId = implode(',', $id);
+		
+			// CASE文作成
+			$caseStr = 'CASE ee_id ';
+			for ($i = 0; $i < count($id); $i++){
+				$caseStr .= 'WHEN ' . $id[$i] . ' THEN ' . $i . ' ';
+			}
+			$caseStr .= 'END AS no';
+
+			$queryStr = 'SELECT *, ' . $caseStr . ' FROM event_entry ';
+			$queryStr .=  'WHERE ee_deleted = false ';		// 削除されていない
+			$queryStr .=    'AND ee_id in (' . $contentId . ') ';
+			$queryStr .=    'AND ee_language_id = ? '; $params[] = $langId;
+			$queryStr .=  'ORDER BY no';
+			$ret = $this->selectRecords($queryStr, $params, $row);
+		} else {
+			$queryStr  = 'SELECT * FROM event_entry ';
+			$queryStr .=   'WHERE ee_deleted = false ';	// 削除されていない
+			$queryStr .=   'AND ee_id = ? ';
+			$queryStr .=   'AND ee_language_id = ? ';
+			$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
+		}
+		return $ret;
 	}
 	/**
 	 * イベント項目一覧を取得(管理用)
@@ -79,7 +115,7 @@ class eventLibDb extends BaseDb
 	 * @param object    $tmpl				出力テンプレート[データ取得時のみ]
 	 * @return 			int					項目数(検索データループ処理の場合は0を返す)
 	 */
-	function _searchEvent($operation, $langId, $startDt, $endDt, $category, $keywords, $order = 0, $limit = 0, $page = 0, $callback = null, $tmpl = null)
+	function _searchEntry($operation, $langId, $startDt, $endDt, $category, $keywords, $order = 0, $limit = 0, $page = 0, $callback = null, $tmpl = null)
 	{
 		$params = array();
 		if (count($category) == 0){		// カテゴリー指定なしのとき
