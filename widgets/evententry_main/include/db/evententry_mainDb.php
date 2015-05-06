@@ -318,7 +318,7 @@ class evententry_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * エントリー項目をシリアル番号で取得
+	 * イベント項目をシリアル番号で取得
 	 *
 	 * @param string	$serial				シリアル番号
 	 * @param array     $row				レコード
@@ -329,6 +329,26 @@ class evententry_mainDb extends BaseDb
 		$queryStr  = 'SELECT * FROM evententry ';
 		$queryStr .=   'WHERE et_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+		return $ret;
+	}
+	/**
+	 * イベント項目を共通コンテンツIDで取得
+	 *
+	 * @param string  $contentType	コンテンツタイプ
+	 * @param string  $contentsId	共通コンテンツID
+	 * @param string  $entryType	受付タイプ
+	 * @param array     $row				レコード
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function getEntryByContentsId($contentType, $contentsId, $entryType, &$row)
+	{
+		$params = array();
+		$queryStr  = 'SELECT * FROM evententry ';
+		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
+		$queryStr .=     'AND et_content_type = ? '; $params[] = $contentType;
+		$queryStr .=     'AND et_contents_id = ? '; $params[] = $contentsId;
+		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
+		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;
 	}
 	/**

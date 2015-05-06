@@ -293,6 +293,13 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'new'){			// 新規の場合
+			// 目的の受付イベントが作成されている場合はエラー
+			$ret = self::$_mainDb->getEntryByContentsId($this->contentType, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
+			if ($ret){
+				$this->setAppErrorMsg('既に受付イベントが作成されています');
+				$eventId = '';			// イベントIDをリセット
+			}
+			
 			$this->serialNo = 0;
 			$reloadData = true;		// データの再読み込み
 		} else if ($act == 'add'){		// メッセージを追加
@@ -441,7 +448,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		}
 		// 設定データを再取得
 		if ($reloadData){		// データの再ロード
-			$ret = self::$_mainDb->getEntryBySerial($serial, $row);
+			$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row);
 			if ($ret){
 				$eventId = $row['et_contents_id'];		// イベントID
 				$this->status = intval($row['et_status']);			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
@@ -501,13 +508,15 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->createStatusMenu();
 
 		// 入力フィールドの設定
-		if (empty($this->serialNo)){		// 未登録データのとき
-			// データ追加ボタン表示
-			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
-		} else {
-			// データ更新、削除ボタン表示
-			$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
-			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+		if (!empty($eventId)){			// イベントIDがない場合はエラー
+			if (empty($this->serialNo)){		// 未登録データのとき
+				// データ追加ボタン表示
+				$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
+			} else {
+				// データ更新、削除ボタン表示
+				$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
+				$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+			}
 		}
 		
 		// 表示項目を埋め込む
