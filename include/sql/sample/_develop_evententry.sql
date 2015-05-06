@@ -78,5 +78,5 @@ CREATE TABLE evententry_request (
     er_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
     er_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
     PRIMARY KEY          (er_serial),
-    UNIQUE               (er_info_id,   er_index)
+    UNIQUE               (er_evententry_id,   er_index)
 ) ENGINE=innodb;
