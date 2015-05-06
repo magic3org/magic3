@@ -224,7 +224,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 
 		// 総数を取得
-		$totalCount = self::$_mainDb->getEventListCount($this->contentType, $this->_langId, $parsedKeywords);
+		$totalCount = self::$_mainDb->getEntryListCount($this->contentType, $this->_langId, $parsedKeywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
@@ -233,7 +233,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// イベントリストを取得
-		self::$_mainDb->getEventList($this->contentType, $this->_langId, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
+		self::$_mainDb->getEntryList($this->contentType, $this->_langId, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// イベントがないときは、一覧を表示しない
 
 		// ボタン作成
@@ -301,16 +301,26 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			$reloadData = true;		// データの再読み込み
 		} else if ($act == 'add'){		// メッセージを追加
 			// 入力チェック
-			$this->checkInput($message, 'メッセージ');
-			$this->checkDate($date, '登録日付');
-			$this->checkTime($time, '登録時間');
+			// 期間範囲のチェック
+			if (!empty($start_date) && !empty($end_date)){
+				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('受付期間が不正です');
+			}
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				// 入力データの修正
-				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
+				// 保存データ作成
+				if (empty($start_date)){
+					$startDt = $this->gEnv->getInitValueOfTimestamp();
+				} else {
+					$startDt = $start_date . ' ' . $start_time;
+				}
+				if (empty($end_date)){
+					$endDt = $this->gEnv->getInitValueOfTimestamp();
+				} else {
+					$endDt = $end_date . ' ' . $end_time;
+				}
 				
-				$ret = self::$_mainDb->updateEventItem(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				$ret = self::$_mainDb->updateEntry(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -326,17 +336,26 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			}
 		} else if ($act == 'update'){		// 項目更新の場合
 			// 入力チェック
-			$this->checkInput($message, 'メッセージ');
-			$this->checkDate($date, '登録日付');
-			$this->checkTime($time, '登録時間');
+			// 期間範囲のチェック
+			if (!empty($start_date) && !empty($end_date)){
+				if (strtotime($start_date . ' ' . $start_time) >= strtotime($end_date . ' ' . $end_time)) $this->setUserErrorMsg('受付期間が不正です');
+			}
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				// 入力データの修正
-				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
-				$url = $this->gEnv->getMacroPath($url);// パスをマクロ形式に変換
+				// 保存データ作成
+				if (empty($start_date)){
+					$startDt = $this->gEnv->getInitValueOfTimestamp();
+				} else {
+					$startDt = $start_date . ' ' . $start_time;
+				}
+				if (empty($end_date)){
+					$endDt = $this->gEnv->getInitValueOfTimestamp();
+				} else {
+					$endDt = $end_date . ' ' . $end_time;
+				}
 				
-				$ret = self::$_mainDb->updateEventItem($this->serialNo, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				$ret = self::$_mainDb->updateEntry($this->serialNo, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -346,6 +365,26 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 					
 					// 親ウィンドウを更新
 					$this->gPage->updateParentWindow($this->serialNo);
+					
+					// 運用ログを残す
+					$statusStr = '';
+					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
+					if ($ret){
+						$this->entryId = $row['ee_id'];		// 記事ID
+						$name = $row['ee_name'];		// コンテンツ名前
+						$updateDt = $row['ee_create_dt'];		// 作成日時
+						
+						// 公開状態
+						switch ($row['ee_status']){
+							case 1:	$statusStr = '編集中';	break;
+							case 2:	$statusStr = '公開';	break;
+							case 3:	$statusStr = '非公開';	break;
+						}
+					}
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENTENTRY,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, 'イベント受付を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2400, 'ID=' . $this->entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
@@ -368,21 +407,22 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		}
 		// 設定データを再取得
 		if ($reloadData){		// データの再ロード
-			$ret = self::$_mainDb->getEventItem($this->serialNo, $row);
+			//$ret = self::$_mainDb->getEventItem($this->serialNo, $row);
+			$ret = self::$_mainDb->getEntryBySerial($serial, $row);
 			if ($ret){
-				$eventId = $row['ei_contents_id'];		// イベントID
-				$this->status = intval($row['ei_status']);			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
+				$eventId = $row['et_contents_id'];		// イベントID
+				$this->status = intval($row['et_status']);			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
 
-				$eventCode	= $row['ei_code'];		// 受付イベントコード
-//				$start_date = $this->convertToDispDate($row['ei_start_dt']);			// 受付期間開始日
-//				$start_time = $this->convertToDispTime($row['ei_start_dt'], 1/*時分*/);	// 受付期間開始時間
-//				$end_date = $this->convertToDispDate($row['ei_end_dt']);				// 受付期間終了日
-//				$end_time = $this->convertToDispTime($row['ei_end_dt'], 1/*時分*/);		// 受付期間終了時間
-				$start_date	= $row['ei_start_dt'];			// 受付期間開始日
-				$start_time	= $row['ei_start_dt'];	// 受付期間開始時間
-				$end_date	= $row['ei_end_dt'];				// 受付期間終了日
-				$end_time	= $row['ei_end_dt'];		// 受付期間終了時間
-				$html		= $row['ei_html'];				// 説明
+				$eventCode	= $row['et_code'];		// 受付イベントコード
+//				$start_date = $this->convertToDispDate($row['et_start_dt']);			// 受付期間開始日
+//				$start_time = $this->convertToDispTime($row['et_start_dt'], 1/*時分*/);	// 受付期間開始時間
+//				$end_date = $this->convertToDispDate($row['et_end_dt']);				// 受付期間終了日
+//				$end_time = $this->convertToDispTime($row['et_end_dt'], 1/*時分*/);		// 受付期間終了時間
+				$start_date	= $row['et_start_dt'];			// 受付期間開始日
+				$start_time	= $row['et_start_dt'];	// 受付期間開始時間
+				$end_date	= $row['et_end_dt'];				// 受付期間終了日
+				$end_time	= $row['et_end_dt'];		// 受付期間終了時間
+				$html		= $row['et_html'];				// 説明
 			} else {		// データ初期化
 				$this->serialNo = 0;
 				$this->status = 0;			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
@@ -395,6 +435,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				$html		= '';				// 説明
 			}
 			
+			// イベント情報を取得
 			$ret = $this->contentObj->getEntry($this->_langId, $eventId, $row);
 			if ($ret){
 				$eventId	= $row['ee_id'];
@@ -402,11 +443,15 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				
 				// イベント開催期間
 				if ($row['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// // 期間終了がないとき
-					$startDtStr = $this->convertToDispDateTime($row['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
-					$endDtStr = '';
+//					$startDtStr = $this->convertToDispDateTime($row['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+//					$endDtStr = '';
+					$startDt = $row['ee_start_dt'];
+					$endDt = '';
 				} else {
-					$startDtStr = $this->convertToDispDateTime($row['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
-					$endDtStr = $this->convertToDispDateTime($row['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+//					$startDtStr = $this->convertToDispDateTime($row['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+//					$endDtStr = $this->convertToDispDateTime($row['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+					$startDt = $row['ee_start_dt'];
+					$endDt = $row['ee_end_dt'];
 				}
 			}
 		}
@@ -435,10 +480,10 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->tmpl->addVar("_widget", "start_time", $this->convertToDispTime($start_time, 1/*時分*/));	// 受付期間開始時間
 		$this->tmpl->addVar("_widget", "end_date", $this->convertToDispDate($end_date));				// 受付期間終了日
 		$this->tmpl->addVar("_widget", "end_time", $this->convertToDispTime($end_time, 1/*時分*/));		// 受付期間終了時間
-		
-		$this->tmpl->addVar("_widget", "date_start", $startDtStr);		// イベント開催日時(開始)
-		$this->tmpl->addVar("_widget", "date_end", $endDtStr);		// イベント開催日時(終了)
-			
+//		$this->tmpl->addVar("_widget", "date_start", $startDtStr);		// イベント開催日時(開始)
+//		$this->tmpl->addVar("_widget", "date_end", $endDtStr);		// イベント開催日時(終了)
+		$this->tmpl->addVar("_widget", "date_start", $this->convertToDispDateTime($startDt, 0/*ロングフォーマット*/, 10/*時分*/));		// イベント開催日時(開始)
+		$this->tmpl->addVar("_widget", "date_end", $this->convertToDispDateTime($endDt, 0/*ロングフォーマット*/, 10/*時分*/));		// イベント開催日時(終了)
 		$this->tmpl->addVar("_widget", "html", $html);		// 説明
 		
 		// その他の項目

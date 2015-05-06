@@ -74,20 +74,20 @@ class evententry_mainDb extends BaseDb
 	 * @param array	 $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	function getEventListCount($contentType, $langId, $keywords)
+	function getEntryListCount($contentType, $langId, $keywords)
 	{
 		$params = array();
 		switch ($contentType){
 		case M3_VIEW_TYPE_EVENT:		// イベント情報
-			$queryStr  = 'SELECT * FROM evententry_info LEFT JOIN event_entry ON ei_contents_id = ee_id AND ee_deleted = false ';
+			$queryStr  = 'SELECT * FROM evententry LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
 			$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
 			break;
 		default:
-			$queryStr = 'SELECT * FROM evententry_info ';
+			$queryStr = 'SELECT * FROM evententry ';
 			break;
 		}
-		$queryStr .=  'WHERE ei_deleted = false ';				// 削除されていない
-		$queryStr .=    'AND ei_content_type = ? '; $params[] = $contentType;	// コンテンツタイプ
+		$queryStr .=  'WHERE et_deleted = false ';				// 削除されていない
+		$queryStr .=    'AND et_content_type = ? '; $params[] = $contentType;	// コンテンツタイプ
 
 		// 検索キーワード条件
 		if (!empty($keywords)){
@@ -108,8 +108,8 @@ class evententry_mainDb extends BaseDb
 				default:
 					break;
 				}
-				$queryStr .=    'AND (ei_code LIKE \'%' . $keyword . '%\' ';		// イベント予約受付コード
-				$queryStr .=    'OR ei_html LIKE \'%' . $keyword . '%\') ';			// 説明
+				$queryStr .=    'AND (et_code LIKE \'%' . $keyword . '%\' ';		// イベント予約受付コード
+				$queryStr .=    'OR et_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
 		}
 		return $this->selectRecordCount($queryStr, $params);
@@ -125,7 +125,7 @@ class evententry_mainDb extends BaseDb
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getEventList($contentType, $langId, $limit, $page, $keywords, $callback)
+	function getEntryList($contentType, $langId, $limit, $page, $keywords, $callback)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -133,15 +133,15 @@ class evententry_mainDb extends BaseDb
 		$params = array();
 		switch ($contentType){
 		case M3_VIEW_TYPE_EVENT:		// イベント情報
-			$queryStr  = 'SELECT * FROM evententry_info LEFT JOIN event_entry ON ei_contents_id = ee_id AND ee_deleted = false ';
+			$queryStr  = 'SELECT * FROM evententry LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
 			$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
 			break;
 		default:
-			$queryStr = 'SELECT * FROM evententry_info ';
+			$queryStr = 'SELECT * FROM evententry ';
 			break;
 		}
-		$queryStr .=  'WHERE ei_deleted = false ';				// 削除されていない
-		$queryStr .=    'AND ei_content_type = ? '; $params[] = $contentType;	// コンテンツタイプ
+		$queryStr .=  'WHERE et_deleted = false ';				// 削除されていない
+		$queryStr .=    'AND et_content_type = ? '; $params[] = $contentType;	// コンテンツタイプ
 
 		// 検索キーワード条件
 		if (!empty($keywords)){
@@ -162,12 +162,12 @@ class evententry_mainDb extends BaseDb
 				default:
 					break;
 				}
-				$queryStr .=    'AND (ei_code LIKE \'%' . $keyword . '%\' ';		// イベント予約受付コード
-				$queryStr .=    'OR ei_html LIKE \'%' . $keyword . '%\') ';			// 説明
+				$queryStr .=    'AND (et_code LIKE \'%' . $keyword . '%\' ';		// イベント予約受付コード
+				$queryStr .=    'OR et_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
 		}
 		
-		$queryStr .=  'ORDER BY ei_contents_id DESC, ei_type limit ' . $limit . ' offset ' . $offset;			// コンテンツID、受付タイプ
+		$queryStr .=  'ORDER BY et_contents_id DESC, et_type limit ' . $limit . ' offset ' . $offset;			// コンテンツID、受付タイプ
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**
@@ -184,7 +184,7 @@ class evententry_mainDb extends BaseDb
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateEventItem($serial, $name, $message, $url, $mark, $visible, $regDt, &$newSerial)
+	function updateEntry($serial, $name, $message, $url, $mark, $visible, $regDt, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -279,6 +279,20 @@ class evententry_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * エントリー項目をシリアル番号で取得
+	 *
+	 * @param string	$serial				シリアル番号
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getEntryBySerial($serial, &$row)
+	{
+		$queryStr  = 'SELECT * FROM evententry ';
+		$queryStr .=   'WHERE et_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+		return $ret;
+	}
+	/**
 	 * イベント項目の削除
 	 *
 	 * @param array $serial			シリアルNo
@@ -319,123 +333,6 @@ class evententry_mainDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
-	/**
-	 * イベント項目をシリアル番号で取得
-	 *
-	 * @param string	$serial				シリアル番号
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getEventItem($serial, &$row)
-	{
-		$queryStr  = 'SELECT * FROM news LEFT JOIN _login_user ON nw_create_user_id = lu_id AND lu_deleted = false ';
-		$queryStr .=   'WHERE nw_serial = ? ';
-		$ret = $this->selectRecord($queryStr, array($serial), $row);
-		return $ret;
-	}
-	/**
-	 * コンテンツ項目をコンテンツIDで取得
-	 *
-	 * @param string  $contentType		コンテンツタイプ
-	 * @param string	$langId			言語ID
-	 * @param string	$contentId		コンテンツID
-	 * @param array     $row			レコード
-	 * @return bool						取得 = true, 取得なし= false
-	 */
-	function getContentById($contentType, $langId, $contentId, &$row)
-	{
-		$queryStr  = 'SELECT * FROM content LEFT JOIN _login_user ON cn_create_user_id = lu_id AND lu_deleted = false ';
-		$queryStr .=   'WHERE cn_deleted = false ';	// 削除されていない
-		$queryStr .=    'AND cn_type = ? ';
-		$queryStr .=   'AND cn_id = ? ';
-		$queryStr .=   'AND cn_language_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($contentType, $contentId, $langId), $row);
-		return $ret;
-	}
-	/**
-	 * 商品を商品ID、言語IDで取得
-	 *
-	 * @param int		$id					商品ID
-	 * @param string	$langId				言語ID
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getProductById($id, $langId, &$row)
-	{
-		$queryStr  = 'SELECT * FROM product LEFT JOIN product_record ON pt_id = pe_product_id AND pt_language_id = pe_language_id ';
-		$queryStr .=   'WHERE pt_deleted = false ';	// 削除されていない
-		$queryStr .=    'AND pt_visible = true ';		// 表示可能な商品
-		$queryStr .=    'AND pt_id = ? ';
-		$queryStr .=    'AND pt_language_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
-		return $ret;
-	}
-	/**
-	 * ブログ記事をエントリーIDで取得
-	 *
-	 * @param string	$id					エントリーID
-	 * @param string	$langId				言語ID
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getEntryById($id, $langId, &$row)
-	{
-		$queryStr  = 'SELECT * FROM blog_entry ';
-		$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
-		$queryStr .=   'AND be_id = ? ';
-		$queryStr .=   'AND be_language_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
-		return $ret;
-	}
-	/**
-	 * ルーム情報を識別IDで取得
-	 *
-	 * @param string	$id					識別ID
-	 * @param string	$langId				言語
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getRoomById($id, $langId, &$row)
-	{
-		$queryStr  = 'SELECT * FROM user_content_room ';
-		$queryStr .=   'WHERE ur_deleted = false ';
-		$queryStr .=   'AND ur_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id), $row);
-		return $ret;
-	}
-	/**
-	 * イベント情報を取得
-	 *
-	 * @param int		$id					イベントID
-	 * @param string	$langId				言語
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getEventById($id, $langId, &$row)
-	{
-		$queryStr  = 'SELECT * FROM event_entry ';
-		$queryStr .=   'WHERE ee_deleted = false ';	// 削除されていない
-		$queryStr .=   'AND ee_id = ? ';
-		$queryStr .=   'AND ee_language_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
-		return $ret;
-	}
-	/**
-	 * フォト情報を取得
-	 *
-	 * @param int		$id					公開画像ID
-	 * @param string	$langId				言語
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
-	 */
-	function getPhotoById($id, $langId, &$row)
-	{
-		$queryStr  = 'SELECT * FROM photo LEFT JOIN _login_user ON ht_owner_id = lu_id AND lu_deleted = false ';
-		$queryStr .=   'WHERE ht_deleted = false ';
-		$queryStr .=     'AND ht_public_id = ? ';
-		$queryStr .=     'AND ht_language_id = ? ';
-		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
-		return $ret;
-	}
+
 }
 ?>
