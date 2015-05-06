@@ -87,7 +87,7 @@ artxComponentWrapper($document);
          <?php echo artxModules($document, 'syndicate'); ?>
         <div class="art-footer-text">
           <?php if (artxCountModules($document, 'copyright') == 0): ?>
-<p>Copyright &copy; 2006-2012 <a href="http://www.magic3.org/">Magic3.org</a>.<br />
+<p>Copyright &copy; 2006-2015 <a href="http://www.magic3.org/">Magic3.org</a>.<br />
 All Rights Reserved.</p>
 
           <?php else: ?>
