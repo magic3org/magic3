@@ -34,7 +34,7 @@ CREATE TABLE evententry_info (
     
     ei_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント予約受付コード
     ei_html              TEXT                                         NOT NULL,      -- 説明
-    ei_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=非公開、2=公開、3=受付停止)
+    ei_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
     ei_show_entry_count  BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者数を表示するかどうか
     ei_show_entry_member BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者を表示するかどうか(会員対象)
     ei_max_entry         INT            DEFAULT 0                     NOT NULL,      -- 定員(0は定員なし)
