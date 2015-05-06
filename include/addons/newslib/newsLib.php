@@ -147,13 +147,21 @@ class newsLib
 				$param = M3_REQUEST_PARAM_ROOM_ID . '=' . $contentId;
 				break;
 			case M3_VIEW_TYPE_EVENT:				// イベント情報
+			case M3_VIEW_TYPE_EVENTENTRY:			// イベント予約
 				$param = M3_REQUEST_PARAM_EVENT_ID . '=' . $contentId;
 				break;
 			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
 				$param = M3_REQUEST_PARAM_PHOTO_ID . '=' . $contentId;
 				break;
+			default:
+				$param = '';
+				break;
 		}
-		return $url . '?' . $param;
+		if (empty($param)){
+			return '';
+		} else {
+			return $url . '?' . $param;
+		}
 	}
 }
 ?>
