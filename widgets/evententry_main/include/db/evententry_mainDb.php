@@ -131,13 +131,20 @@ class evententry_mainDb extends BaseDb
 		if ($offset < 0) $offset = 0;
 		
 		$params = array();
+		$orderStr = '';
 		switch ($contentType){
 		case M3_VIEW_TYPE_EVENT:		// イベント情報
 			$queryStr  = 'SELECT * FROM evententry LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
 			$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
+			
+			// 並び順
+			$orderStr = 'ee_start_dt DESC, ee_id ';
 			break;
 		default:
 			$queryStr = 'SELECT * FROM evententry ';
+			
+			// 並び順
+			$orderStr = 'et_contents_id DESC, et_type ';
 			break;
 		}
 		$queryStr .=  'WHERE et_deleted = false ';				// 削除されていない
@@ -166,8 +173,7 @@ class evententry_mainDb extends BaseDb
 				$queryStr .=    'OR et_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
 		}
-		
-		$queryStr .=  'ORDER BY et_contents_id DESC, et_type limit ' . $limit . ' offset ' . $offset;			// コンテンツID、受付タイプ
+		$queryStr .=  'ORDER BY ' . $orderStr . 'LIMIT ' . $limit . ' OFFSET ' . $offset;			// コンテンツID、受付タイプ
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**

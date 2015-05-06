@@ -553,7 +553,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	function itemListLoop($index, $fetchedRow, $param)
 	{
 		$serial = $fetchedRow['et_serial'];// シリアル番号
-		
+
 		// 公開状態
 		$iconTitle = $this->_getStatusLabel($fetchedRow['et_status']);
 		if ($fetchedRow['et_status'] == 2){		// コンテンツが公開状態のとき
@@ -587,7 +587,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$row = array(
 			'index'		=> $index,		// 項目番号
 			'serial'	=> $serial,			// シリアル番号
-			'id'		=> $this->convertToDispString($fetchedRow['et_id']),		// ID
 			'name'		=> $this->convertToDispString($fetchedRow['ee_name']),		// イベント名
 			'status_img' => $statusImg,													// 公開状況
 			'date'		=> $startDtStr	// 開催日時
@@ -699,6 +698,12 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$id = $fetchedRow['ee_id'];// イベントID
 		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
 		
+		// チェックボックス選択可否
+		// 目的の受付イベントが作成されている場合はエラー
+		$checkDisabled = '';
+		$ret = self::$_mainDb->getEntryByContentsId($this->contentType, $id, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
+		if ($ret) $checkDisabled = 'disabled';
+		
 		// 公開状態
 		switch ($fetchedRow['ee_status']){
 			case 1:	$status = '<font color="orange">編集中</font>';	break;
@@ -763,7 +768,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			'status' => $status,													// 公開状況
 			'date_start' => $startDtStr,	// 開催日時
 			'place' => $this->convertToDispString($place),	// 開催場所
-			'preview_image_button'	=> $previewButtonTag					// 画像プレビューボタン
+			'preview_image_button'	=> $previewButtonTag,					// 画像プレビューボタン
+			'check_disabled'	=> $checkDisabled			// チェックボックス選択可否
 		);
 
 		$tmpl->addVars('itemlist', $row);

@@ -65,7 +65,7 @@ $(function(){
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
-	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><input type="checkbox" name="item{INDEX}_selected" {CHECK_DISABLED} /></td>
 	    <td>{ID}</td>
 		<td>{EYECATCH_IMAGE}</td>
 	    <td>{NAME}<div class="pull-right">{PREVIEW_IMAGE_BUTTON}</div></td>
