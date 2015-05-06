@@ -35,8 +35,8 @@ CREATE TABLE evententry (
     et_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント予約受付コード
     et_html              TEXT                                         NOT NULL,      -- 説明
     et_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
-    et_show_entry_count  BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者数を表示するかどうか
-    et_show_entry_member BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者を表示するかどうか(会員対象)
+    et_show_entry_count  BOOLEAN        DEFAULT false                 NOT NULL,      -- 参加者数を表示するかどうか
+    et_show_entry_member BOOLEAN        DEFAULT false                 NOT NULL,      -- 参加者を表示するかどうか(会員対象)
     et_max_entry         INT            DEFAULT 0                     NOT NULL,      -- 定員(0は定員なし)
     et_start_dt          TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(開始)
     et_end_dt            TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(終了)

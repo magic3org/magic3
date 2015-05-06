@@ -51,7 +51,7 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		if (!isset(self::$_mainDb)) self::$_mainDb = new evententry_mainDb();
 		
 		// DB定義を読み込む
-		if (!isset(self::$_configArray)) self::$_configArray = evententryCommonDef::loadConfig(self::$_mainDb);
+//		if (!isset(self::$_configArray)) self::$_configArray = evententryCommonDef::loadConfig(self::$_mainDb);
 	}
 	/**
 	 * テンプレートに前処理

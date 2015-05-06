@@ -25,8 +25,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	private $contentType;		// コンテンツタイプ
 	private $contentObj;			// コンテンツ情報ライブラリ
 	const EVENT_OBJ_ID = 'eventlib';		// 検索用オブジェクト
-	const DEFAULT_LIST_COUNT = 2;			// 最大リスト表示数
-	const LINK_PAGE_COUNT		= 20;			// リンクページ数
+	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
@@ -34,8 +34,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
-	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
-	const UNKNOWN_CONTENT = 'タイトル不明';
 	const DEFAULT_CONTENT_TYPE = 'event';			// 予約対象となるコンテンツタイプ
 	const DEFAULT_ENTRY_TYPE = '';			// デフォルトのイベント受付タイプ
 	// 受付イベントコード自動生成用
@@ -177,7 +175,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 
 		// ##### 検索条件 #####
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
-
 		$search_startDt = $request->trimValueOf('search_start');		// 検索範囲開始日付
 		if (!empty($search_startDt)) $search_startDt = $this->convertToProperDate($search_startDt);
 		$search_endDt = $request->trimValueOf('search_end');			// 検索範囲終了日付
@@ -254,7 +251,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		// その他の項目
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-		$this->tmpl->addVar("_widget", "list_count", $maxListCount);	// 一覧表示項目数
 		$this->tmpl->addVar("_widget", "target_widget", $this->gEnv->getCurrentWidgetId());// 画像選択ダイアログ用
 	}
 	/**
@@ -272,7 +268,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$html			= $request->valueOf('item_html');			// 説明
 		$this->status	= $request->trimValueOf('item_status');		// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
 		$eventId		= $request->trimValueOf('eventid');			// イベントID
-		$eventCode		= $request->trimValueOf('item_status');		// イベントコード
+		$eventCode		= $request->trimValueOf('item_code');		// イベントコード
 		
 		// 公開期間を取得
 		$start_date = $request->trimValueOf('item_start_date');		// 公開期間開始日付
@@ -319,8 +315,16 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				} else {
 					$endDt = $end_date . ' ' . $end_time;
 				}
-				
-				$ret = self::$_mainDb->updateEntry(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+
+				// 追加パラメータ
+				$otherParams = array(
+										'et_code'			=> $eventCode,
+										'et_html'			=> $html,
+										'et_status'			=> $this->status,
+										'et_start_dt'		=> $startDt,
+										'et_end_dt'			=> $endDt
+									);
+				$ret = self::$_mainDb->addEntry($this->contentType, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $otherParams, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -330,6 +334,27 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 					
 					// 親ウィンドウを更新
 					$this->gPage->updateParentWindow($this->serialNo);
+					
+					// 運用ログを残す
+					$statusStr = '';
+					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row);
+					if ($ret){
+						$entryId	= $row['et_contents_id'];	// コンテンツID
+						$updateDt	= $row['et_create_dt'];		// 作成日時
+						
+						// 公開状態
+						$statusStr = $this->_getStatusLabel($row['et_status']);
+
+						// イベント情報を取得
+						$ret = $this->contentObj->getEntry($this->_langId, $entryId, $row);
+						if ($ret){
+							$eventName	= $row['ee_name'];			// イベント名
+						}
+					}
+					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENTENTRY,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+					$this->writeUserInfoEvent(__METHOD__, '受付イベントを追加(' . $statusStr . ')しました。タイトル: ' . $eventName, 2400, 'イベントID=' . $entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
@@ -355,7 +380,15 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 					$endDt = $end_date . ' ' . $end_time;
 				}
 				
-				$ret = self::$_mainDb->updateEntry($this->serialNo, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				// 追加パラメータ
+				$otherParams = array(
+										'et_code'			=> $eventCode,
+										'et_html'			=> $html,
+										'et_status'			=> $this->status,
+										'et_start_dt'		=> $startDt,
+										'et_end_dt'			=> $endDt
+									);
+				$ret = self::$_mainDb->updateEntry($this->serialNo, $otherParams, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -368,23 +401,24 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 					
 					// 運用ログを残す
 					$statusStr = '';
-					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
+					$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row);
 					if ($ret){
-						$this->entryId = $row['ee_id'];		// 記事ID
-						$name = $row['ee_name'];		// コンテンツ名前
-						$updateDt = $row['ee_create_dt'];		// 作成日時
+						$entryId	= $row['et_contents_id'];	// コンテンツID
+						$updateDt	= $row['et_create_dt'];		// 作成日時
 						
 						// 公開状態
-						switch ($row['ee_status']){
-							case 1:	$statusStr = '編集中';	break;
-							case 2:	$statusStr = '公開';	break;
-							case 3:	$statusStr = '非公開';	break;
+						$statusStr = $this->_getStatusLabel($row['et_status']);
+
+						// イベント情報を取得
+						$ret = $this->contentObj->getEntry($this->_langId, $entryId, $row);
+						if ($ret){
+							$eventName	= $row['ee_name'];			// イベント名
 						}
 					}
 					$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_EVENTENTRY,
-											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $this->entryId,
+											M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
 											M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
-					$this->writeUserInfoEvent(__METHOD__, 'イベント受付を追加(' . $statusStr . ')しました。タイトル: ' . $name, 2400, 'ID=' . $this->entryId, $eventParam);
+					$this->writeUserInfoEvent(__METHOD__, '受付イベントを更新(' . $statusStr . ')しました。タイトル: ' . $eventName, 2400, 'イベントID=' . $entryId, $eventParam);
 				} else {
 					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
@@ -407,21 +441,20 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		}
 		// 設定データを再取得
 		if ($reloadData){		// データの再ロード
-			//$ret = self::$_mainDb->getEventItem($this->serialNo, $row);
 			$ret = self::$_mainDb->getEntryBySerial($serial, $row);
 			if ($ret){
 				$eventId = $row['et_contents_id'];		// イベントID
 				$this->status = intval($row['et_status']);			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
 
 				$eventCode	= $row['et_code'];		// 受付イベントコード
-//				$start_date = $this->convertToDispDate($row['et_start_dt']);			// 受付期間開始日
-//				$start_time = $this->convertToDispTime($row['et_start_dt'], 1/*時分*/);	// 受付期間開始時間
-//				$end_date = $this->convertToDispDate($row['et_end_dt']);				// 受付期間終了日
-//				$end_time = $this->convertToDispTime($row['et_end_dt'], 1/*時分*/);		// 受付期間終了時間
-				$start_date	= $row['et_start_dt'];			// 受付期間開始日
-				$start_time	= $row['et_start_dt'];	// 受付期間開始時間
-				$end_date	= $row['et_end_dt'];				// 受付期間終了日
-				$end_time	= $row['et_end_dt'];		// 受付期間終了時間
+				$start_date = $this->convertToDispDate($row['et_start_dt']);			// 受付期間開始日
+				$start_time = $this->convertToDispTime($row['et_start_dt'], 1/*時分*/);	// 受付期間開始時間
+				$end_date = $this->convertToDispDate($row['et_end_dt']);				// 受付期間終了日
+				$end_time = $this->convertToDispTime($row['et_end_dt'], 1/*時分*/);		// 受付期間終了時間
+//				$start_date	= $row['et_start_dt'];			// 受付期間開始日
+//				$start_time	= $row['et_start_dt'];	// 受付期間開始時間
+//				$end_date	= $row['et_end_dt'];				// 受付期間終了日
+//				$end_time	= $row['et_end_dt'];		// 受付期間終了時間
 				$html		= $row['et_html'];				// 説明
 			} else {		// データ初期化
 				$this->serialNo = 0;
@@ -453,6 +486,15 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 					$startDt = $row['ee_start_dt'];
 					$endDt = $row['ee_end_dt'];
 				}
+				
+				// アイキャッチ画像
+				$iconUrl = $this->contentObj->getEyecatchImageUrl($row['ee_thumb_filename'], 's'/*sサイズ画像*/);
+				if (empty($fetchedRow['ee_thumb_filename'])){
+					$iconTitle = 'アイキャッチ画像未設定';
+				} else {
+					$iconTitle = 'アイキャッチ画像';
+				}
+				$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
 		}
 		// 状態メニュー作成
@@ -472,19 +514,20 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->tmpl->addVar("_widget", "event_name", $this->convertToDispString($eventName));		// イベント名
 		$this->tmpl->addVar("_widget", "event_id", $this->convertToDispString($eventId));		// イベントID
 		$this->tmpl->addVar("_widget", "event_code", $this->convertToDispString($eventCode));		// 受付イベントコード
-//		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 受付期間開始日
-//		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 受付期間開始時間
-//		$this->tmpl->addVar("_widget", "end_date", $end_date);		// 受付期間終了日
-//		$this->tmpl->addVar("_widget", "end_time", $end_time);		// 受付期間終了時間
-		$this->tmpl->addVar("_widget", "start_date", $this->convertToDispDate($start_date));			// 受付期間開始日
-		$this->tmpl->addVar("_widget", "start_time", $this->convertToDispTime($start_time, 1/*時分*/));	// 受付期間開始時間
-		$this->tmpl->addVar("_widget", "end_date", $this->convertToDispDate($end_date));				// 受付期間終了日
-		$this->tmpl->addVar("_widget", "end_time", $this->convertToDispTime($end_time, 1/*時分*/));		// 受付期間終了時間
+		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 受付期間開始日
+		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 受付期間開始時間
+		$this->tmpl->addVar("_widget", "end_date", $end_date);		// 受付期間終了日
+		$this->tmpl->addVar("_widget", "end_time", $end_time);		// 受付期間終了時間
+//		$this->tmpl->addVar("_widget", "start_date", $this->convertToDispDate($start_date));			// 受付期間開始日
+//		$this->tmpl->addVar("_widget", "start_time", $this->convertToDispTime($start_date, 1/*時分*/));	// 受付期間開始時間
+//		$this->tmpl->addVar("_widget", "end_date", $this->convertToDispDate($end_date));				// 受付期間終了日
+//		$this->tmpl->addVar("_widget", "end_time", $this->convertToDispTime($end_time, 1/*時分*/));		// 受付期間終了時間
 //		$this->tmpl->addVar("_widget", "date_start", $startDtStr);		// イベント開催日時(開始)
 //		$this->tmpl->addVar("_widget", "date_end", $endDtStr);		// イベント開催日時(終了)
 		$this->tmpl->addVar("_widget", "date_start", $this->convertToDispDateTime($startDt, 0/*ロングフォーマット*/, 10/*時分*/));		// イベント開催日時(開始)
 		$this->tmpl->addVar("_widget", "date_end", $this->convertToDispDateTime($endDt, 0/*ロングフォーマット*/, 10/*時分*/));		// イベント開催日時(終了)
 		$this->tmpl->addVar("_widget", "html", $html);		// 説明
+		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
 		
 		// その他の項目
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
@@ -500,36 +543,45 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		$serial = $fetchedRow['nw_serial'];// シリアル番号
+		$serial = $fetchedRow['et_serial'];// シリアル番号
 		
 		// 公開状態
-		if ($fetchedRow['nw_visible']){		// コンテンツが公開状態のとき
+		$iconTitle = $this->_getStatusLabel($fetchedRow['et_status']);
+		if ($fetchedRow['et_status'] == 2){		// コンテンツが公開状態のとき
 			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-			$iconTitle = '公開中';
+//			$iconTitle = '公開中';
 		} else {
 			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-			$iconTitle = '非公開';
+//			$iconTitle = '非公開';
 		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-				
-		// メッセージ
-		$message = $this->convertToDispString($fetchedRow['nw_message']);
-		$keyTag = M3_TAG_START . M3_TAG_MACRO_TITLE . M3_TAG_END;
-		$message = str_replace($keyTag, $contentTitle, $message);// タイトルを変換
-				
-/*		if (function_exists('mb_strimwidth')){
-			$message = mb_strimwidth($message, 0, self::MESSAGE_SIZE, '…');
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
+		// イベント開催期間
+		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// // 期間終了がないとき
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$startDtStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$endDtStr = '';
+			} else {
+				$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+				$endDtStr = '';
+			}
 		} else {
-			$message = substr($message, 0, self::MESSAGE_SIZE) . '...';
-		}*/
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$startDtStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$endDtStr = $this->convertToDispDate($fetchedRow['ee_end_dt']);
+			} else {
+				$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+				$endDtStr = $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+			}
+		}
 		
 		$row = array(
-			'index' => $index,		// 項目番号
-			'serial' => $serial,			// シリアル番号
-			'id'	=> $this->convertToDispString($fetchedRow['nw_id']),		// ID
-			'message' => $message,		// メッセージ
+			'index'		=> $index,		// 項目番号
+			'serial'	=> $serial,			// シリアル番号
+			'id'		=> $this->convertToDispString($fetchedRow['et_id']),		// ID
+			'name'		=> $this->convertToDispString($fetchedRow['ee_name']),		// イベント名
 			'status_img' => $statusImg,													// 公開状況
-			'date' => $this->convertToDispDateTime($fetchedRow['nw_regist_dt'])	// 投稿日時
+			'date'		=> $startDtStr	// 開催日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
@@ -636,6 +688,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	{
 		$serial = $fetchedRow['ee_serial'];// シリアル番号
 		$id = $fetchedRow['ee_id'];// イベントID
+		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
 		
 		// 公開状態
 		switch ($fetchedRow['ee_status']){
@@ -677,7 +730,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		
 		// アイキャッチ画像
 		$iconUrl = $this->contentObj->getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], 's'/*sサイズ画像*/);
-//		$iconUrl = event_mainCommonDef::getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[event_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
 		if (empty($fetchedRow['ee_thumb_filename'])){
 			$iconTitle = 'アイキャッチ画像未設定';
 		} else {
@@ -719,10 +771,27 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	 * @param string $id	イベントID
 	 * @return string		生成した受付イベントコード
 	 */
-	public function _generateEventCode($id)
+	function _generateEventCode($id)
 	{
 		$code = self::EVENT_CODE_HEAD . sprintf("%0" . self::EVENT_CODE_LENGTH . "d", $id);
 		return $code;
+	}
+	/**
+	 * 状態表示ラベルテキスト取得
+	 *
+	 * @param int $status	状態
+	 * @return string		$status
+	 */
+	function _getStatusLabel($status)
+	{
+		$statusStr = '取得失敗';
+		switch ($status){
+			case 1:	$statusStr = '未設定';	break;
+			case 1:	$statusStr = '非公開';	break;
+			case 2:	$statusStr = '受付中';	break;
+			case 3:	$statusStr = '受付終了';	break;
+		}
+		return $statusStr;
 	}
 }
 ?>

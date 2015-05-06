@@ -25,7 +25,7 @@ class evententry_mainDb extends BaseDb
 	 */
 	function getAllConfig(&$rows)
 	{
-		$queryStr  = 'SELECT * FROM news_config ';
+		$queryStr  = 'SELECT * FROM evententry_config ';
 		$queryStr .=   'ORDER BY nc_index';
 		$retValue = $this->selectRecords($queryStr, array(), $rows);
 		return $retValue;
@@ -39,7 +39,7 @@ class evententry_mainDb extends BaseDb
 	function getConfig($key)
 	{
 		$retValue = '';
-		$queryStr = 'SELECT nc_value FROM news_config ';
+		$queryStr = 'SELECT nc_value FROM evententry_config ';
 		$queryStr .=  'WHERE nc_id  = ?';
 		$ret = $this->selectRecord($queryStr, array($key), $row);
 		if ($ret) $retValue = $row['nc_value'];
@@ -55,14 +55,14 @@ class evententry_mainDb extends BaseDb
 	function updateConfig($key, $value)
 	{
 		// データの確認
-		$queryStr = 'SELECT nc_value FROM news_config ';
+		$queryStr = 'SELECT nc_value FROM evententry_config ';
 		$queryStr .=  'WHERE nc_id  = ?';
 		$ret = $this->isRecordExists($queryStr, array($key));
 		if ($ret){
-			$queryStr = "UPDATE news_config SET nc_value = ? WHERE nc_id = ?";
+			$queryStr = "UPDATE evententry_config SET nc_value = ? WHERE nc_id = ?";
 			return $this->execStatement($queryStr, array($value, $key));
 		} else {
-			$queryStr = "INSERT INTO news_config (nc_id, nc_value) VALUES (?, ?)";
+			$queryStr = "INSERT INTO evententry_config (nc_id, nc_value) VALUES (?, ?)";
 			return $this->execStatement($queryStr, array($key, $value));
 		}
 	}
@@ -171,106 +171,145 @@ class evententry_mainDb extends BaseDb
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**
-	 * イベント項目の追加、更新
+	 * イベント項目の新規追加
 	 *
-	 * @param int     $serial		シリアル番号(0のときは新規追加)
-	
-	 * @param string  $name			コンテンツタイトル
-	 * @param string  $message		メッセージ
-	 * @param string  $url			リンク先URL
-	 * @param int     $mark			表示マーク
-	 * @param bool    $visible		表示するかどうか
-	 * @param timestamp $regDt		登録日時
+	 * @param string  $contentType	コンテンツタイプ
+	 * @param string  $contentsId	共通コンテンツID
+	 * @param string  $entryType	受付タイプ
+	 * @param array   $otherParams	その他のフィールド値
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateEntry($serial, $name, $message, $url, $mark, $visible, $regDt, &$newSerial)
+	function addEntry($contentType, $contentsId, $entryType, $otherParams, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
 			
 		// トランザクション開始
 		$this->startTransaction();
-		
-		// 引継ぎパラメータ初期化
-		$otherParams = array();
-		$otherQueryStr = '';
-		$otherValueStr = '';
 			
-		if (empty($serial)){		// シリアル番号が0のときはIDを新規取得
-			// イベント予約情報IDを決定する
-			$queryStr = 'SELECT MAX(nw_id) AS mid FROM news';
-			$ret = $this->selectRecord($queryStr, array(), $row);
-			if ($ret){
-				$newsId = $row['mid'] + 1;
-			} else {
-				$newsId = 1;
-			}
-			$historyIndex = 0;		// 履歴番号
+		// イベント予約IDを決定する
+		$queryStr = 'SELECT MAX(et_id) AS mid FROM evententry';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret){
+			$id = $row['mid'] + 1;
 		} else {
-			// 指定のシリアルNoのレコードが削除状態でないかチェック
-			$queryStr  = 'SELECT * FROM news ';
-			$queryStr .=   'WHERE nw_serial = ? ';
-			$ret = $this->selectRecord($queryStr, array($serial), $row);
-			if ($ret){		// 既に登録レコードがあるとき
-				if ($row['nw_deleted']){		// レコードが削除されていれば終了
-					$this->endTransaction();
-					return false;
-				}
-				$newsId = $row['nw_id'];
-				$historyIndex = $row['nw_history_index'] + 1;
-			} else {		// 存在しない場合は終了
-				$this->endTransaction();
-				return false;
-			}
-			// 古いレコードを削除
-			$queryStr  = 'UPDATE news ';
-			$queryStr .=   'SET nw_deleted = true, ';	// 削除
-			$queryStr .=     'nw_update_user_id = ?, ';
-			$queryStr .=     'nw_update_dt = ? ';
-			$queryStr .=   'WHERE nw_serial = ?';
-			$this->execStatement($queryStr, array($userId, $now, $serial));
-			
-			$keepFields = array();	// 値を引き継ぐフィールド名
-			$keepFields[] = 'nw_type';
-			$keepFields[] = 'nw_server_id';
-			$keepFields[] = 'nw_content_type';
-			$keepFields[] = 'nw_content_id';
-			$keepFields[] = 'nw_content_dt';
-			$keepFields[] = 'nw_site_name';
-			$keepFields[] = 'nw_site_url';
-		
-			// 値を引き継ぐフィールドをセット
-			for ($i = 0; $i < count($keepFields); $i++){
-				$fieldName = $keepFields[$i];
-				$otherParams[] = $row[$fieldName];
-				$otherQueryStr .= ', ' . $fieldName;
+			$id = 1;
+		}
+		$historyIndex = 0;		// 履歴番号
+	
+		// 固定フィールドを作成
+		$params = array();
+		$queryStr  = 'INSERT INTO evententry ';
+		$queryStr .=   '(';
+		$queryStr .=   'et_id, ';				$params[] = $id;
+		$queryStr .=   'et_content_type, ';		$params[] = $contentType;
+		$queryStr .=   'et_contents_id, ';		$params[] = $contentsId;
+		$queryStr .=   'et_type, ';				$params[] = $entryType;
+		$queryStr .=   'et_history_index, ';	$params[] = $historyIndex;
+		$queryStr .=   'et_create_user_id, ';	$params[] = $userId;
+		$queryStr .=   'et_create_dt';			$params[] = $now;
+
+		// その他のフィールド値を追加
+		$otherValueStr = '';
+		if (!empty($otherParams)){
+			$keys = array_keys($otherParams);// キーを取得
+			for ($i = 0; $i < count($keys); $i++){
+				$fieldName = $keys[$i];
+				$fieldValue = $otherParams[$fieldName];
+				if (!isset($fieldValue)) continue;
+				$params[] = $fieldValue;
+				$queryStr .= ', ' . $fieldName;
 				$otherValueStr .= ', ?';
 			}
 		}
-	
-		// データを追加
-		$params = array();
-		$queryStr  = 'INSERT INTO news ';
-		$queryStr .=   '(nw_id, ';				$params[] = $newsId;
-		$queryStr .=   'nw_history_index, ';	$params[] = $historyIndex;
-		$queryStr .=   'nw_name, ';				$params[] = $name;
-		$queryStr .=   'nw_message, ';			$params[] = $message;
-		$queryStr .=   'nw_url, ';				$params[] = $url;
-		$queryStr .=   'nw_mark, ';				$params[] = $mark;
-		$queryStr .=   'nw_visible, ';			$params[] = intval($visible);
-		$queryStr .=   'nw_regist_dt, ';		$params[] = $regDt;
-		$queryStr .=   'nw_create_user_id, ';	$params[] = $userId;
-		$queryStr .=   'nw_create_dt';			$params[] = $now;
-		$queryStr .=   $otherQueryStr . ') ';
-		$queryStr .= 'VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?';
+		$queryStr .= ') VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?';
 		$queryStr .=   $otherValueStr . ') ';
-		$this->execStatement($queryStr, array_merge($params, $otherParams));
+		$this->execStatement($queryStr, $params);
+
+		// 新規のシリアル番号取得
+		$newSerial = 0;
+		$queryStr = 'SELECT MAX(et_serial) AS ns FROM evententry ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+			
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * イベント項目の更新
+	 *
+	 * @param int     $serial		シリアル番号
+	 * @param array   $otherParams	その他のフィールド値
+	 * @param int     $newSerial	新規シリアル番号
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function updateEntry($serial, $otherParams, &$newSerial)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+			
+		// トランザクション開始
+		$this->startTransaction();
+			
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$queryStr  = 'SELECT * FROM evententry ';
+		$queryStr .=   'WHERE et_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['et_deleted']){		// レコードが削除されていれば終了
+				$this->endTransaction();
+				return false;
+			}
+			$id = $row['et_id'];
+			$historyIndex = $row['et_history_index'] + 1;
+		} else {		// 存在しない場合は終了
+			$this->endTransaction();
+			return false;
+		}
+		// 古いレコードを削除
+		$queryStr  = 'UPDATE evententry ';
+		$queryStr .=   'SET et_deleted = true, ';	// 削除
+		$queryStr .=     'et_update_user_id = ?, ';
+		$queryStr .=     'et_update_dt = ? ';
+		$queryStr .=   'WHERE et_serial = ?';
+		$this->execStatement($queryStr, array($userId, $now, $serial));
+		
+		// 固定フィールドを作成
+		$params = array();
+		$queryStr  = 'INSERT INTO evententry ';
+		$queryStr .=   '(';
+		$queryStr .=   'et_id, ';				$params[] = $row['et_id'];
+		$queryStr .=   'et_content_type, ';		$params[] = $row['et_content_type'];
+		$queryStr .=   'et_contents_id, ';		$params[] = $row['et_contents_id'];
+		$queryStr .=   'et_type, ';				$params[] = $row['et_type'];
+		$queryStr .=   'et_history_index, ';	$params[] = $historyIndex;
+		$queryStr .=   'et_create_user_id, ';	$params[] = $userId;
+		$queryStr .=   'et_create_dt';			$params[] = $now;
+
+		// その他のフィールド値を追加
+		$otherValueStr = '';
+		if (!empty($otherParams)){
+			$keys = array_keys($otherParams);// キーを取得
+			for ($i = 0; $i < count($keys); $i++){
+				$fieldName = $keys[$i];
+				$fieldValue = $otherParams[$fieldName];
+				if (!isset($fieldValue)) continue;
+				$params[] = $fieldValue;
+				$queryStr .= ', ' . $fieldName;
+				$otherValueStr .= ', ?';
+			}
+		}
+		$queryStr .= ') VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?';
+		$queryStr .=   $otherValueStr . ') ';
+		$this->execStatement($queryStr, $params);
 		
 		// 新規のシリアル番号取得
 		$newSerial = 0;
-		$queryStr = 'SELECT MAX(nw_serial) AS ns FROM news ';
+		$queryStr = 'SELECT MAX(et_serial) AS ns FROM evententry ';
 		$ret = $this->selectRecord($queryStr, array(), $row);
 		if ($ret) $newSerial = $row['ns'];
 			
@@ -310,9 +349,9 @@ class evententry_mainDb extends BaseDb
 		
 		// 指定のシリアルNoのレコードが削除状態でないかチェック
 		for ($i = 0; $i < count($serial); $i++){
-			$queryStr  = 'SELECT * FROM news ';
-			$queryStr .=   'WHERE nw_deleted = false ';		// 未削除
-			$queryStr .=     'AND nw_serial = ? ';
+			$queryStr  = 'SELECT * FROM evententry ';
+			$queryStr .=   'WHERE et_deleted = false ';		// 未削除
+			$queryStr .=     'AND et_serial = ? ';
 			$ret = $this->isRecordExists($queryStr, array($serial[$i]));
 			// 存在しない場合は、既に削除されたとして終了
 			if (!$ret){
@@ -322,11 +361,11 @@ class evententry_mainDb extends BaseDb
 		}
 		
 		// レコードを削除
-		$queryStr  = 'UPDATE news ';
-		$queryStr .=   'SET nw_deleted = true, ';	// 削除
-		$queryStr .=     'nw_update_user_id = ?, ';
-		$queryStr .=     'nw_update_dt = ? ';
-		$queryStr .=   'WHERE nw_serial in (' . implode($serial, ',') . ') ';
+		$queryStr  = 'UPDATE evententry ';
+		$queryStr .=   'SET et_deleted = true, ';	// 削除
+		$queryStr .=     'et_update_user_id = ?, ';
+		$queryStr .=     'et_update_dt = ? ';
+		$queryStr .=   'WHERE et_serial in (' . implode($serial, ',') . ') ';
 		$this->execStatement($queryStr, array($user, $now));
 		
 		// トランザクション確定
