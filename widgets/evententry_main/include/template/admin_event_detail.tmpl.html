@@ -36,19 +36,9 @@ function cancelItem(){
 	document.main.submit();
 	return true;
 }
-// 作成リンク取得用
-function setLinkUrl(url)
-{
-	$('#item_url').val(url);
-}
-// URL作成
-function createUrl()
-{
-	m3CreateLinkUrl(0, '', setLinkUrl);
-}
 function setStatusColor(){
 	var status = $('#item_status').val();
-	if (status == 1){		// 公開状態のとき
+	if (status == 2){		// 公開状態のとき
 		$('#status_field').removeClass('warning').addClass('success');
 	} else {
 		$('#status_field').removeClass('success').addClass('warning');
@@ -61,21 +51,25 @@ $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
 	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_html', 200/* 高さ */);
+	
 	// 編集状態メニューのイベント設定
 	$('#item_status').change(function() {
 		setStatusColor();
 	});
 	setStatusColor();
 	
-	// URL変更ボタン
-	$("#{TAGID_CHANGE_URL}").click(function (){		// デフォルトURL
-		createUrl();
-	});
-	
+	// カレンダー作成
 	Calendar.setup({
-		inputField  : "item_date",         // ID of the input field
+		inputField  : "item_start_date",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
 		button      : "calenderbutton1"       // ID of the button
+	});
+	Calendar.setup({
+		inputField  : "item_end_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton2"       // ID of the button
 	});
 });
 //]]>
@@ -86,6 +80,7 @@ $(function(){
 <input type="hidden" name="task" value="event_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="eventid" value="{EVENT_ID}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h"><span {_HELP_EVENT_DETAIL}>受付イベント詳細</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_EVENT_BUTTONS}><div class="btn-group">
@@ -95,11 +90,9 @@ $(function(){
 <table id="mainconfig">
     <tbody>
 	<tr>
-	    <th><span {_HELP_EVENT_DATE}>投稿日時</span></th>
-	    <td style="width:400px;"><!--日付：<input type="text" id="item_date" class="form-control" name="item_date" value="{DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_time" class="form-control" name="item_time" value="{TIME}" size="15" maxlength="10" style="width:100px;" />-->
-		<div class="form-group"><div class="form-control-static col-sm-2 m3config_item" >日付：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_date" name="item_date" value="{DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-2 m3config_item" >時間：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_time" name="item_time" value="{TIME}" size="20" maxlength="10" /></div></div>
-		</td>
-	    <th><span {_HELP_EVENT_STATUS}>状態</span></th>
+	    <th><span {_HELP_ENTRY_ID}>イベントID</span></th>
+	    <td style="width:200px;"><div class="form-control-static m3config_item col-sm-6">{EVENT_ID}</div><div class="pull-right">{EYECATCH_IMAGE}</div></td>
+	    <th><span {_HELP_EVENT_STATUS}>受付状態</span></th>
 	    <td id="status_field" class="warning">
 		<div class="col-sm-6 m3config_item">
 		<select id="item_status" name="item_status" class="form-control">
@@ -110,23 +103,26 @@ $(function(){
 		</div>
 		</td>
 	</tr>
-    <tr>
-	    <th><span {_HELP_EVENT_URL}>メッセージ</span></th>
-	    <td colspan="3"><input type="text" name="item_message" class="form-control" value="{MESSAGE}" size="60" maxlength="200" /></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_EVENT_CONTENT_TYPE}>コンテンツ種別</span></th>
-	    <td><div class="form-control-static m3config_item">{CONTENT_TYPE}</div></td>
-	    <th><span {_HELP_EVENT_CONTENT_TITLE}>コンテンツID</span></th>
-	    <td><div class="form-control-static m3config_item">{CONTENT_ID}</div></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_EVENT_CONTENT_TITLE}>コンテンツタイトル</span></th>
-	    <td colspan="3"><input type="text" name="item_content_title" class="form-control" value="{CONTENT_TITLE}" size="60" maxlength="200" {CONTENT_TITLE_DISABLED} /></td>
+	<tr>
+	    <th><span {_HELP_ENTRY_NAME}>イベント名</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{EVENT_NAME}</div></td>
 	</tr>
 	<tr>
-	    <th><span {_HELP_EVENT_LINK}>リンク</span><div class="pull-right">{CHANGE_URL_BUTTON}</div></th>
-	    <td colspan="3"><input type="text" id="item_url" name="item_url" class="form-control" value="{URL}" size="60" maxlength="200" /></td>
+	    <th><span {_HELP_ENTRY_CODE}>受付イベントコード</span></th>
+	    <td><input type="text" name="item_code" class="form-control" value="{EVENT_CODE}" maxlength="10" /></td>
+	    <th><span {_HELP_ENTRY_DATE}>開催期間</span></th>
+	    <td><div class="form-control-static">{DATE_START} ～ {DATE_END}</div></td>
+	</tr>
+	<tr>
+	    <th><span {_HELP_CONTENT_ACTIVE_TERM}>受付期間</span></th>
+	    <td colspan="3">
+	    <div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:25px;padding-left:3px;"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">時間：</div><div class="col-sm-2 m3config_item" style="width:110px;"><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:10px;padding-left:3px;margin-right:5px;">～</div>
+        <div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:25px;padding-left:3px;"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">時間：</div><div class="col-sm-2 m3config_item" style="width:110px;"><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div>
+		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_EVENT_URL}>説明</span></th>
+	    <td class="ckeditor" colspan="3"><textarea name="item_html">{HTML}</textarea></td>
 	</tr>
     </tbody>
 </table>

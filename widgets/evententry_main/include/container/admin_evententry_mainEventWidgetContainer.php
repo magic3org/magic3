@@ -34,11 +34,14 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
-	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
 	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
 	const UNKNOWN_CONTENT = 'タイトル不明';
 	const DEFAULT_CONTENT_TYPE = 'event';			// 予約対象となるコンテンツタイプ
-
+	const DEFAULT_ENTRY_TYPE = '';			// デフォルトのイベント受付タイプ
+	// 受付イベントコード自動生成用
+	const EVENT_CODE_HEAD = 'eve';			// 自動生成する受付イベントコードのヘッダ部
+	const EVENT_CODE_LENGTH = 5;			// 自動生成する受付イベントコードの数値桁数
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -46,14 +49,46 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
 		// 初期設定
 		$this->statusTypeArray = array (
 									array(	'name' => '非公開',		'value' => '1'),
-									array(	'name' => '公開',		'value' => '2'),
-									array(	'name' => '受付停止',	'value' => '3')
+									array(	'name' => '受付中',		'value' => '2'),
+									array(	'name' => '受付終了',	'value' => '3')
 								);			// 参加受付状態
 		$this->contentType = self::DEFAULT_CONTENT_TYPE;		// コンテンツタイプ
+		
+		switch ($this->contentType){
+			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
+				break;
+			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
+				break;
+			case M3_VIEW_TYPE_BBS:					// BBS
+				break;
+			case M3_VIEW_TYPE_BLOG:				// ブログ
+				break;
+			case M3_VIEW_TYPE_WIKI:				// wiki
+				break;
+			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
+				break;
+			case M3_VIEW_TYPE_EVENT:				// イベント情報
+				$this->contentObj = $this->gInstance->getObject(self::EVENT_OBJ_ID);
+				break;
+			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
+				break;
+		}
+		if (!isset($this->contentObj)) $this->setAppErrorMsg('情報取得オブジェクトが作成できません');
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -234,19 +269,37 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		if (empty($this->serialNo)) $this->serialNo = 0;
 		
-		$contentTitle = $request->trimValueOf('item_content_title');			// コンテンツタイトル
-		$date = $request->trimValueOf('item_date');		// 投稿日
-		$time = $request->trimValueOf('item_time');		// 投稿時間
-		$message = $request->valueOf('item_message');		// メッセージ
-		$url = $request->valueOf('item_url');
-		$this->status = $request->trimValueOf('item_status');		// メッセージ状態(0=非公開、1=公開)
-		$mark = 0;
-		$contentTitleDisabled = '';
-		$eventId = $request->trimValueOf('eventid');			// イベントID
-debug($eventId);
+		$html			= $request->valueOf('item_html');			// 説明
+		$this->status	= $request->trimValueOf('item_status');		// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
+		$eventId		= $request->trimValueOf('eventid');			// イベントID
+		$eventCode		= $request->trimValueOf('item_status');		// イベントコード
+		
+		// 公開期間を取得
+		$start_date = $request->trimValueOf('item_start_date');		// 公開期間開始日付
+		if (!empty($start_date)) $start_date = $this->convertToProperDate($start_date);
+		$start_time = $request->trimValueOf('item_start_time');		// 公開期間開始時間
+		if (empty($start_date)){
+			$start_time = '';					// 日付が空のときは時刻も空に設定する
+		} else {
+			if (empty($start_time)) $start_time = '00:00';		// 日付が入っているときは時間にデフォルト値を設定
+		}
+		$end_date = $request->trimValueOf('item_end_date');		// 公開期間終了日付
+		if (!empty($end_date)) $end_date = $this->convertToProperDate($end_date);
+		$end_time = $request->trimValueOf('item_end_time');		// 公開期間終了時間
+		if (empty($end_date)){
+			$end_time = '';					// 日付が空のときは時刻も空に設定する
+		} else {
+			if (empty($end_time)) $end_time = '00:00';		// 日付が入っているときは時間にデフォルト値を設定
+		}
+		// 時間を修正
+		if (!empty($start_time)) $start_time = $this->convertToProperTime($start_time, 1/*時分フォーマット*/);
+		if (!empty($end_time)) $end_time = $this->convertToProperTime($end_time, 1/*時分フォーマット*/);
 		
 		$reloadData = false;		// データの再ロード
-		if ($act == 'add'){		// メッセージを追加
+		if ($act == 'new'){			// 新規の場合
+			$this->serialNo = 0;
+			$reloadData = true;		// データの再読み込み
+		} else if ($act == 'add'){		// メッセージを追加
 			// 入力チェック
 			$this->checkInput($message, 'メッセージ');
 			$this->checkDate($date, '登録日付');
@@ -317,43 +370,48 @@ debug($eventId);
 		if ($reloadData){		// データの再ロード
 			$ret = self::$_mainDb->getEventItem($this->serialNo, $row);
 			if ($ret){
-				$date = $this->timestampToDate($row['nw_regist_dt']);		// 登録日
-				$time = $this->timestampToTime($row['nw_regist_dt']);		// 登録時間
-				$this->status = intval($row['nw_visible']);			// 状態(0=非公開、1=公開)
+				$eventId = $row['ei_contents_id'];		// イベントID
+				$this->status = intval($row['ei_status']);			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
 
-				$message = $row['nw_message'];				// メッセージ
-				$url = $row['nw_url'];				// URL
-				$url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);		// URLを修正
-
-				// コンテンツタイトル取得
-				$contentType = $row['nw_content_type'];	// コンテンツタイプ
-				$contentId = $row['nw_content_id'];	// コンテンツID
-				if (!empty($contentType) && !empty($contentId)){
-					list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
-					
-					// コンテンツタイトルを編集不可にする
-					$contentTitleDisabled = 'disabled';
-				} else {
-					$contentTypeName = '';
-					$contentTitle = $row['nw_name'];	// コンテンツタイトル
-				}
-			} else {
+				$eventCode	= $row['ei_code'];		// 受付イベントコード
+//				$start_date = $this->convertToDispDate($row['ei_start_dt']);			// 受付期間開始日
+//				$start_time = $this->convertToDispTime($row['ei_start_dt'], 1/*時分*/);	// 受付期間開始時間
+//				$end_date = $this->convertToDispDate($row['ei_end_dt']);				// 受付期間終了日
+//				$end_time = $this->convertToDispTime($row['ei_end_dt'], 1/*時分*/);		// 受付期間終了時間
+				$start_date	= $row['ei_start_dt'];			// 受付期間開始日
+				$start_time	= $row['ei_start_dt'];	// 受付期間開始時間
+				$end_date	= $row['ei_end_dt'];				// 受付期間終了日
+				$end_time	= $row['ei_end_dt'];		// 受付期間終了時間
+				$html		= $row['ei_html'];				// 説明
+			} else {		// データ初期化
 				$this->serialNo = 0;
-				$date = date("Y/m/d");		// 登録日
-				$time = date("H:i:s");		// 登録時間
-				$this->status = 0;			// 状態(0=非公開、1=公開)
-				$message = self::$_configArray[evententryCommonDef::FD_DEFAULT_MESSAGE];				// メッセージ
+				$this->status = 0;			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
+
+				$eventCode	= $this->_generateEventCode($eventId);		// 受付イベントコードを生成
+				$start_date	= '';	// 受付期間開始日
+				$start_time	= '';	// 受付期間開始時間
+				$end_date	= '';		// 受付期間終了日
+				$end_time	= '';		// 受付期間終了時間
+				$html		= '';				// 説明
+			}
+			
+			$ret = $this->contentObj->getEntry($this->_langId, $eventId, $row);
+			if ($ret){
+				$eventId	= $row['ee_id'];
+				$eventName	= $row['ee_name'];
 				
-				$contentType = '';	// コンテンツタイプ
-				$contentId = '';	// コンテンツID
-				$contentTitle = '';			// コンテンツタイトル
+				// イベント開催期間
+				if ($row['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// // 期間終了がないとき
+					$startDtStr = $this->convertToDispDateTime($row['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+					$endDtStr = '';
+				} else {
+					$startDtStr = $this->convertToDispDateTime($row['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+					$endDtStr = $this->convertToDispDateTime($row['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+				}
 			}
 		}
 		// 状態メニュー作成
 		$this->createStatusMenu();
-		
-		// 非表示項目を設定
-		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
 
 		// 入力フィールドの設定
 		if (empty($this->serialNo)){		// 未登録データのとき
@@ -364,21 +422,27 @@ debug($eventId);
 			$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
 		}
-
-		// その他のボタン作成
-		$buttonTag = $this->gDesign->createEditButton(''/*同画面*/, 'URL作成', self::CHANGE_URL_TAG_ID);
-		$this->tmpl->addVar("_widget", "change_url_button", $buttonTag);
-		$this->tmpl->addVar("_widget", "tagid_change_url", self::CHANGE_URL_TAG_ID);		// URL変更タグ
 		
 		// 表示項目を埋め込む
-		$this->tmpl->addVar("_widget", "content_type", $this->convertToDispString($contentTypeName));		// コンテンツタイプ
-		$this->tmpl->addVar("_widget", "content_id", $this->convertToDispString($contentId));		// コンテンツID
-		$this->tmpl->addVar("_widget", "content_title", $this->convertToDispString($contentTitle));		// コンテンツタイトル
-		$this->tmpl->addVar("_widget", "content_title_disabled", $contentTitleDisabled);		// コンテンツタイトルフィールド
-		$this->tmpl->addVar("_widget", "message", $this->convertToDispString($message));		// メッセージ
-		$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// URL
-		$this->tmpl->addVar("_widget", "date", $date);	// 投稿日
-		$this->tmpl->addVar("_widget", "time", $time);	// 投稿時間
+		$this->tmpl->addVar("_widget", "event_name", $this->convertToDispString($eventName));		// イベント名
+		$this->tmpl->addVar("_widget", "event_id", $this->convertToDispString($eventId));		// イベントID
+		$this->tmpl->addVar("_widget", "event_code", $this->convertToDispString($eventCode));		// 受付イベントコード
+//		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 受付期間開始日
+//		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 受付期間開始時間
+//		$this->tmpl->addVar("_widget", "end_date", $end_date);		// 受付期間終了日
+//		$this->tmpl->addVar("_widget", "end_time", $end_time);		// 受付期間終了時間
+		$this->tmpl->addVar("_widget", "start_date", $this->convertToDispDate($start_date));			// 受付期間開始日
+		$this->tmpl->addVar("_widget", "start_time", $this->convertToDispTime($start_time, 1/*時分*/));	// 受付期間開始時間
+		$this->tmpl->addVar("_widget", "end_date", $this->convertToDispDate($end_date));				// 受付期間終了日
+		$this->tmpl->addVar("_widget", "end_time", $this->convertToDispTime($end_time, 1/*時分*/));		// 受付期間終了時間
+		
+		$this->tmpl->addVar("_widget", "date_start", $startDtStr);		// イベント開催日時(開始)
+		$this->tmpl->addVar("_widget", "date_end", $endDtStr);		// イベント開催日時(終了)
+			
+		$this->tmpl->addVar("_widget", "html", $html);		// 説明
+		
+		// その他の項目
+		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 	}
 	/**
@@ -402,20 +466,6 @@ debug($eventId);
 			$iconTitle = '非公開';
 		}
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		
-		// コンテンツタイトル取得
-		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
-		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
-		if (!empty($contentType) && !empty($contentId)){
-			list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
-			if ($contentTitle == self::UNKNOWN_CONTENT){
-				$contentTitle = '<span class="error">' . $this->convertToDispString($contentTitle) . '</span>';
-			} else {
-				$contentTitle = $this->convertToDispString($contentTitle);
-			}
-		} else {
-			$contentTitle = $this->convertToDispString($fetchedRow['nw_name']);	// コンテンツタイトル
-		}
 				
 		// メッセージ
 		$message = $this->convertToDispString($fetchedRow['nw_message']);
@@ -452,28 +502,6 @@ debug($eventId);
 	 */
 	function makeEventList($tmpl, $request)
 	{
-		// 検索用オブジェクト取得
-		switch ($this->contentType){
-			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				break;
-			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-				break;
-			case M3_VIEW_TYPE_BBS:					// BBS
-				break;
-			case M3_VIEW_TYPE_BLOG:				// ブログ
-				break;
-			case M3_VIEW_TYPE_WIKI:				// wiki
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				break;
-			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$this->contentObj = $this->gInstance->getObject(self::EVENT_OBJ_ID);
-				break;
-			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-				break;
-		}
-		if (!isset($this->contentObj)) return;
-				
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 検索条件
@@ -498,13 +526,13 @@ debug($eventId);
 		sort($this->selectedItems, SORT_NUMERIC);		// ID順にソート
 			
 		// 総数を取得
-		$totalCount = $this->contentObj->getContentCount($this->_langId, $search_startDt, $search_endDt, $category, $keywords);
+		$totalCount = $this->contentObj->searchEntryCount($this->_langId, $search_startDt, $search_endDt, $category, $keywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, self::DEFAULT_LIST_COUNT);
 		
 		// #### 画像リストを作成 ####
-		$this->contentObj->getContent($this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
+		$this->contentObj->searchEntry($this->_langId, $search_startDt, $search_endDt, $category, $keywords, 0/*降順*/, self::DEFAULT_LIST_COUNT, $pageNo, array($this, 'eventListLoop'), $tmpl);
 		if (empty($this->serialArray)) $tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		
 		// ページングリンク作成
@@ -528,63 +556,6 @@ debug($eventId);
 		$tmpl->addVar("_tmpl", "page", $this->convertToDispString($pageNo));	// ページ番号
 		$tmpl->addVar("_tmpl", "id_list", $this->convertToDispString(implode($this->idArray, ',')));		// 表示イベントのID
 //		$tmpl->addVar("_tmpl", "items", $itemsStr);								// 選択中の画像
-	}
-	/**
-	/**
-	 * コンテンツタイトル取得
-	 *
-	 * @param string $contentType		コンテンツタイプ
-	 * @param string $contentId			コンテンツID
-	 * @param array						コンテンツタイプ、タイトルの配列
-	 */
-	function getContentTitle($contentType, $contentId)
-	{
-		$contentTypeName = self::UNKNOWN_CONTENT_TYPE;
-		$contentName = self::UNKNOWN_CONTENT;
-		
-		// コンテンツタイプ名取得
-		$mainContentType = $this->gPage->getMainContentTypeInfo();
-		for ($i = 0; $i < count($mainContentType); $i++){
-			$contentTypeRow = $mainContentType[$i];
-			if ($contentTypeRow['value'] == $contentType){
-				$contentTypeName = $contentTypeRow['name'];
-				break;
-			}
-		}
-		
-		switch ($contentType){
-			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				$ret = self::$_mainDb->getContentById(''/*PC用コンテンツ*/, $this->_langId, $contentId, $row);
-				if ($ret) $contentName = $row['cn_name'];
-				break;
-			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-				$ret = self::$_mainDb->getProductById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['pt_name'];
-				break;
-			case M3_VIEW_TYPE_BBS:					// BBS
-				// 未使用
-				break;
-			case M3_VIEW_TYPE_BLOG:				// ブログ
-				$ret = self::$_mainDb->getEntryById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['be_name'];
-				break;
-			case M3_VIEW_TYPE_WIKI:				// wiki
-				$contentName = $contentId;
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$ret = self::$_mainDb->getRoomById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ur_name'];
-				break;
-			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$ret = self::$_mainDb->getEventById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ee_name'];
-				break;
-			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-				$ret = self::$_mainDb->getPhotoById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ht_name'];
-				break;
-		}
-		return array($contentTypeName, $contentName);
 	}
 	/**
 	 * イベント状態選択タイプメニュー作成
@@ -620,7 +591,6 @@ debug($eventId);
 	{
 		$serial = $fetchedRow['ee_serial'];// シリアル番号
 		$id = $fetchedRow['ee_id'];// イベントID
-		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
 		
 		// 公開状態
 		switch ($fetchedRow['ee_status']){
@@ -697,6 +667,17 @@ debug($eventId);
 		$this->serialArray[] = $serial;
 		$this->idArray[] = $id;
 		return true;
+	}
+	/**
+	 * 受付イベントコードを生成
+	 *
+	 * @param string $id	イベントID
+	 * @return string		生成した受付イベントコード
+	 */
+	public function _generateEventCode($id)
+	{
+		$code = self::EVENT_CODE_HEAD . sprintf("%0" . self::EVENT_CODE_LENGTH . "d", $id);
+		return $code;
 	}
 }
 ?>
