@@ -60,6 +60,7 @@ class BaseWidgetContainer extends Core
 	protected $_widgetId;		// 現在のウィジェットID
 	protected $_langId;			// 現在の言語
 	protected $_userId;			// 現在のユーザ
+	protected $_now;			// 現在日時
 	protected $_configParamObj;	// 設定画面のパラメータオブジェクト
 	
 	// テンプレート置き換え処理用
@@ -116,9 +117,10 @@ class BaseWidgetContainer extends Core
 		
 		// 現在の値取得
 		$this->_widgetId	= $this->gEnv->getCurrentWidgetId();		// 現在のウィジェットID
-		$this->_langId		= $this->gEnv->getCurrentLanguage();			// 現在の言語
+		$this->_langId		= $this->gEnv->getCurrentLanguage();		// 現在の言語
 		$this->_userId		= $this->gEnv->getCurrentUserId();			// 現在のユーザ
-
+		$this->_now			= date("Y/m/d H:i:s");						// 現在日時
+		
 		// 描画出力タイプ
 		$templateType = $this->gEnv->getCurrentTemplateType();
 		switch ($templateType){
@@ -455,9 +457,6 @@ class BaseWidgetContainer extends Core
 	 */
 	function __assign()
 	{
-		// テンプレートに値を設定
-		$now = date("Y/m/d H:i:s");
-		
 		// システム用変数のデフォルト変換
 		$rootUrl = $this->gEnv->getRootUrl();
 		$currentWidgetUrl = $this->gEnv->getCurrentWidgetRootUrl();
@@ -3379,7 +3378,7 @@ class BaseWidgetContainer extends Core
 	 */
 	function loadCKEditorCssFiles($url = '')
 	{
-		if (empty($url)) $url = $this->gEnv->getDefaultUrl();
+		if (empty($url)) $url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
 		$this->gPage->getCssFilesByHttp($url);
 	}
 	

@@ -64,7 +64,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->statusTypeArray = array (
 									array(	'name' => '非公開',		'value' => '1'),
 									array(	'name' => '受付中',		'value' => '2'),
-									array(	'name' => '受付終了',	'value' => '3')
+									array(	'name' => '受付停止',	'value' => '3'),
+									array(	'name' => '受付終了',	'value' => '4')
 								);			// 参加受付状態
 		$this->contentType = self::DEFAULT_CONTENT_TYPE;		// コンテンツタイプ
 		
@@ -272,7 +273,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		if (empty($this->serialNo)) $this->serialNo = 0;
 		
 		$html			= $request->valueOf('item_html');			// 説明
-		$this->status	= $request->trimValueOf('item_status');		// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
+		$this->status	= $request->trimValueOf('item_status');		// 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
 		$eventId		= $request->trimValueOf('eventid');			// イベントID
 		$eventCode		= $request->trimValueOf('item_code');		// イベントコード
 		
@@ -457,7 +458,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row);
 			if ($ret){
 				$eventId = $row['et_contents_id'];		// イベントID
-				$this->status = intval($row['et_status']);			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
+				$this->status = intval($row['et_status']);			// 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
 
 				$eventCode	= $row['et_code'];		// 受付イベントコード
 				$start_date = $this->convertToDispDate($row['et_start_dt']);			// 受付期間開始日
@@ -471,7 +472,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				$html		= $row['et_html'];				// 説明
 			} else {		// データ初期化
 				$this->serialNo = 0;
-				$this->status = 0;			// 状態(0=未設定、1=非公開、2=受付中、3=受付終了)
+				$this->status = 0;			// 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
 
 				$eventCode	= $this->_generateEventCode($eventId);		// 受付イベントコードを生成
 				$start_date	= '';	// 受付期間開始日
@@ -560,14 +561,25 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	{
 		$serial = $fetchedRow['et_serial'];// シリアル番号
 
-		// 公開状態
-		$iconTitle = $this->_getStatusLabel($fetchedRow['et_status']);
-		if ($fetchedRow['et_status'] == 2){		// コンテンツが公開状態のとき
-			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-//			$iconTitle = '公開中';
-		} else {
+		// イベントが開始されている場合は受付終了
+		$iconTitle = '';
+		if (strtotime($this->_now) >= strtotime($fetchedRow['ee_start_dt'])){
+			$iconTitle = '受付期間終了';
 			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-//			$iconTitle = '非公開';
+		} else if (($fetchedRow['et_start_dt'] != $this->gEnv->getInitValueOfTimestamp() && strtotime($this->_now) < strtotime($fetchedRow['et_start_dt'])) ||
+					($fetchedRow['et_end_dt'] != $this->gEnv->getInitValueOfTimestamp() && strtotime($fetchedRow['et_end_dt']) < strtotime($this->_now))){		// 受付期間外のとき
+			$iconTitle = '受付期間外';
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+		}
+		
+		// 公開状態
+		if (empty($iconTitle)){			// 非公開状態にない場合
+			$iconTitle = $this->_getStatusLabel($fetchedRow['et_status']);
+			if ($fetchedRow['et_status'] == 2){		// コンテンツが公開状態のとき
+				$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			}
 		}
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
@@ -589,7 +601,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				$endDtStr = $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
 			}
 		}
-		
+
 		$row = array(
 			'index'		=> $index,		// 項目番号
 			'serial'	=> $serial,			// シリアル番号
@@ -807,10 +819,11 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	{
 		$statusStr = '取得失敗';
 		switch ($status){
-			case 1:	$statusStr = '未設定';	break;
+			case 0:	$statusStr = '未設定';	break;
 			case 1:	$statusStr = '非公開';	break;
 			case 2:	$statusStr = '受付中';	break;
-			case 3:	$statusStr = '受付終了';	break;
+			case 3:	$statusStr = '受付停止';	break;
+			case 4:	$statusStr = '受付終了';	break;
 		}
 		return $statusStr;
 	}
