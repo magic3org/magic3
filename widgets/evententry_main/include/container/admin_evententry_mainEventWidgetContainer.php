@@ -55,9 +55,10 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	 * ・組み込みの_setTemplate(),_assign()を使用
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string $task					処理タスク
 	 * @return 								なし
 	 */
-	function _init($request)
+	function _init($request, $task)
 	{
 		// 初期設定
 		$this->statusTypeArray = array (
@@ -87,6 +88,11 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				break;
 		}
 		if (!isset($this->contentObj)) $this->setAppErrorMsg('情報取得オブジェクトが作成できません');
+		
+		// CKEditor初期化
+		if ($task == self::TASK_EVENT_DETAIL){		// 詳細画面
+			$this->loadCKEditorCssFiles();
+		}
 	}
 	/**
 	 * テンプレートファイルを設定

@@ -166,12 +166,13 @@ class BaseWidgetContainer extends Core
 		
 		// POST,GETパラメータ取得
 		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);			// 処理タスク
 		
 		// ##### 初期処理 #####
 		// 独自のウィジェットメイン処理を行う場合は、_init()で設定を行う
-		if (method_exists($this, '_preInit')) $this->_preInit($request);		// ベースクラス用
-		if (method_exists($this, '_init')) $this->_init($request);
-		if (method_exists($this, '_postInit')) $this->_postInit($request);		// ベースクラス用
+		if (method_exists($this, '_preInit')) $this->_preInit($request, $task);		// ベースクラス用
+		if (method_exists($this, '_init')) $this->_init($request, $task);
+		if (method_exists($this, '_postInit')) $this->_postInit($request, $task);		// ベースクラス用
 		
 		// ##### ウィジェットメイン処理 #####
 		if (method_exists($this, '_setTemplate') || $this->_assignTemplate){			// テンプレートがあるか、テンプレート処理置き換えを使用するとき
@@ -3376,8 +3377,9 @@ class BaseWidgetContainer extends Core
 	 * @param string $url	取得元画面のURL
 	 * @return 				なし
 	 */
-	function loadCKEditorCssFiles($url)
+	function loadCKEditorCssFiles($url = '')
 	{
+		if (empty($url)) $url = $this->gEnv->getDefaultUrl();
 		$this->gPage->getCssFilesByHttp($url);
 	}
 	
