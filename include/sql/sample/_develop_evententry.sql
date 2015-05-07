@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2014 Magic3 Project.
+-- * @copyright  Copyright 2006-2015 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -20,7 +20,7 @@
 DELETE FROM _widgets WHERE wd_id = 'evententry_main';
 INSERT INTO _widgets
 (wd_id,             wd_name,               wd_type, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('evententry_main', 'イベント予約-メイン', '', 'evententry',    'event',   true,            '',                   '0.0.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベントの予約受付管理を行う。', '',                'elfinder',                true,  true,         false,                true,  '2015-04-29', now(),         now());
+('evententry_main', 'イベント予約-メイン', '', 'evententry',    'event',   true,            '',                   '0.0.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベントの予約管理を行う。', '',                'elfinder',                true,  true,         false,                true,  '2015-04-29', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'evententry_attachment';
 INSERT INTO _widgets
 (wd_id,                   wd_name,                       wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                   wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
@@ -37,6 +37,12 @@ CREATE TABLE evententry_config (
     PRIMARY KEY          (ef_id)
 ) ENGINE=innodb;
 
+INSERT INTO evententry_config
+(ef_id,                  ef_value,    ef_name) VALUES
+('show_entry_count',     '0',         '参加者数を表示するかどうか'),
+('show_entry_member',    '0',         '参加者を表示するかどうか(会員対象)');
+
+
 -- イベント予約マスター
 DROP TABLE IF EXISTS evententry;
 CREATE TABLE evententry (
@@ -50,8 +56,8 @@ CREATE TABLE evententry (
     et_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント予約受付コード
     et_html              TEXT                                         NOT NULL,      -- 説明
     et_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
-    et_show_entry_count  BOOLEAN        DEFAULT false                 NOT NULL,      -- 参加者数を表示するかどうか
-    et_show_entry_member BOOLEAN        DEFAULT false                 NOT NULL,      -- 参加者を表示するかどうか(会員対象)
+    et_show_entry_count  BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者数を表示するかどうか
+    et_show_entry_member BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者を表示するかどうか(会員対象)
     et_max_entry         INT            DEFAULT 0                     NOT NULL,      -- 定員(0は定員なし)
     et_start_dt          TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(開始)
     et_end_dt            TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(終了)
@@ -84,3 +90,4 @@ CREATE TABLE evententry_request (
     PRIMARY KEY          (er_serial),
     UNIQUE               (er_evententry_id,   er_index)
 ) ENGINE=innodb;
+
