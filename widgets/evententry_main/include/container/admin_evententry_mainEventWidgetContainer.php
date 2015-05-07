@@ -276,6 +276,9 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->status	= $request->trimValueOf('item_status');		// 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
 		$eventId		= $request->trimValueOf('eventid');			// イベントID
 		$eventCode		= $request->trimValueOf('item_code');		// イベントコード
+		$maxEntry		= $request->trimValueOf('item_max_entry');		// 定員
+		$showEntryCount 	= $request->trimCheckedValueOf('item_show_entry_count');		// 参加者数を表示するかどうか
+		$showEntryMember 	= $request->trimCheckedValueOf('item_show_entry_member');		// 参加者を表示するかどうか(会員対象)
 		
 		// 公開期間を取得
 		$start_date = $request->trimValueOf('item_start_date');		// 公開期間開始日付
@@ -332,11 +335,14 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 
 				// 追加パラメータ
 				$otherParams = array(
-										'et_code'			=> $eventCode,
-										'et_html'			=> $html,
-										'et_status'			=> $this->status,
-										'et_start_dt'		=> $startDt,
-										'et_end_dt'			=> $endDt
+										'et_code'				=> $eventCode,
+										'et_html'				=> $html,
+										'et_status'				=> $this->status,
+										'et_max_entry'			=> $maxEntry,		// 定員
+										'et_show_entry_count'	=> $showEntryCount,		// 参加者数を表示するかどうか
+										'et_show_entry_member'	=> $showEntryMember,		// 参加者を表示するかどうか(会員対象)
+										'et_start_dt'			=> $startDt,
+										'et_end_dt'				=> $endDt
 									);
 				$ret = self::$_mainDb->addEntry($this->contentType, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $otherParams, $newSerial);
 				if ($ret){
@@ -396,11 +402,14 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				
 				// 追加パラメータ
 				$otherParams = array(
-										'et_code'			=> $eventCode,
-										'et_html'			=> $html,
-										'et_status'			=> $this->status,
-										'et_start_dt'		=> $startDt,
-										'et_end_dt'			=> $endDt
+										'et_code'				=> $eventCode,
+										'et_html'				=> $html,
+										'et_status'				=> $this->status,
+										'et_max_entry'			=> $maxEntry,		// 定員
+										'et_show_entry_count'	=> $showEntryCount,		// 参加者数を表示するかどうか
+										'et_show_entry_member'	=> $showEntryMember,		// 参加者を表示するかどうか(会員対象)
+										'et_start_dt'			=> $startDt,
+										'et_end_dt'				=> $endDt
 									);
 				$ret = self::$_mainDb->updateEntry($this->serialNo, $otherParams, $newSerial);
 				if ($ret){
@@ -470,6 +479,9 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 //				$end_date	= $row['et_end_dt'];				// 受付期間終了日
 //				$end_time	= $row['et_end_dt'];		// 受付期間終了時間
 				$html		= $row['et_html'];				// 説明
+				$maxEntry			= $row['et_max_entry'];		// 定員
+				$showEntryCount 	= $row['et_show_entry_count'];		// 参加者数を表示するかどうか
+				$showEntryMember 	= $row['et_show_entry_member'];		// 参加者を表示するかどうか(会員対象)
 			} else {		// データ初期化
 				$this->serialNo = 0;
 				$this->status = 0;			// 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
@@ -480,6 +492,9 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				$end_date	= '';		// 受付期間終了日
 				$end_time	= '';		// 受付期間終了時間
 				$html		= '';				// 説明
+				$maxEntry			= 0;		// 定員
+				$showEntryCount 	= 0;		// 参加者数を表示するかどうか
+				$showEntryMember 	= 0;		// 参加者を表示するかどうか(会員対象)
 			}
 			
 			// イベント情報を取得
@@ -544,6 +559,9 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->tmpl->addVar("_widget", "date_end", $this->convertToDispDateTime($endDt, 0/*ロングフォーマット*/, 10/*時分*/));		// イベント開催日時(終了)
 		$this->tmpl->addVar("_widget", "html", $html);		// 説明
 		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
+		$this->tmpl->addVar("_widget", "max_entry", $this->convertToDispString($maxEntry));		// 定員
+		$this->tmpl->addVar("_widget", "show_entry_count_checked", $this->convertToCheckedString($showEntryCount));		// 参加者数を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_entry_member_checked", $this->convertToCheckedString($showEntryMember));		// 参加者を表示するかどうか(会員対象)
 		
 		// その他の項目
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号

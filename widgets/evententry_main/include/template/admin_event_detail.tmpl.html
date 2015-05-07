@@ -120,6 +120,15 @@ $(function(){
         <div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:25px;padding-left:3px;"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">時間：</div><div class="col-sm-2 m3config_item" style="width:110px;"><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div>
 		</td>
 	</tr>
+	<tr>
+	    <th><span {_HELP_ENTRY_VIEW_ITEMS}>表示項目</span></th>
+	    <td colspan="3">
+		<div class="form-group clearfix">
+		<div class="form-control-static col-sm-2 m3config_item" style="width:70px;">定員：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_max_entry" class="form-control" value="{MAX_ENTRY}" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_show_entry_count" {SHOW_ENTRY_COUNT_CHECKED} />参加者数を表示するかどうか</label></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_show_entry_member" {SHOW_ENTRY_MEMBER_CHECKED} />参加者を表示するかどうか(会員対象)</label></div>
+		</td>
+	</tr>
     <tr>
 	    <th><span {_HELP_EVENT_URL}>説明</span></th>
 	    <td class="ckeditor" colspan="3"><textarea name="item_html">{HTML}</textarea></td>
