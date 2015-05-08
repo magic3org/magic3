@@ -177,7 +177,8 @@ class BaseWidgetContainer extends Core
 		if (method_exists($this, '_postInit')) $this->_postInit($request, $task);		// ベースクラス用
 		
 		// ##### ウィジェットメイン処理 #####
-		if (method_exists($this, '_setTemplate') || $this->_assignTemplate){			// テンプレートがあるか、テンプレート処理置き換えを使用するとき
+		if (!$this->parseCancel &&														// テンプレート変換しない場合はすべてのテンプレート処理をキャンセル
+			(method_exists($this, '_setTemplate') || $this->_assignTemplate)){			// テンプレートがあるか、テンプレート処理置き換えを使用するとき
 			// テンプレートファイル名を取得
 			// $paramは、任意使用パラメータ
 			if ($this->_assignTemplate){
@@ -400,10 +401,10 @@ class BaseWidgetContainer extends Core
 				if ($this->displayMessage) $this->displayMsg();
 	
 				// HTML生成
-				if (!$this->parseCancel) $this->__parse();
+				if (!$this->parseCancel) $this->__parse();		// _assign()でキャンセルされた場合はHTML出力しない
 			}
-		} else {	// メソッドが存在しないときはエラーメッセージを出力
-			echo 'method not found: BaseWidgetContainer::_setTemplate()';
+//		} else {	// メソッドが存在しないときはエラーメッセージを出力
+//			echo 'method not found: BaseWidgetContainer::_setTemplate()';
 		}
 	}
 	/**

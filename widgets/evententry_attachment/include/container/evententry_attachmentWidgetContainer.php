@@ -19,10 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/evententry_attachmentDb.
 class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 {
 	private $db;
-	private $itemCount;					// リスト項目数
-	private $isExistsList;				// リスト項目が存在するかどうか
-	private $currentDate;				// 現在日付
-	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
 	const DEFAULT_TITLE = 'イベント予約';			// デフォルトのウィジェットタイトル
 	const DATE_FORMAT = 'Y年 n月 j日';		// 日付フォーマット
 	
@@ -36,6 +32,31 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new evententry_attachmentDb();
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string $task					処理タスク
+	 * @return 								なし
+	 */
+	function _init($request, $task)
+	{
+		// ##### ウィジェットの表示制御 #####
+		// イベント情報が単体で表示されてる場合のみウィジェットを表示する
+		$this->contentType = $this->gPage->getContentType();		// ページのコンテンツタイプを取得
+		if ($this->contentType == M3_VIEW_TYPE_EVENT){		// イベント情報
+			$contentsId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
+			if (empty($contentsId)) $contentsId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID_SHORT);
+		}
+
+		// 共通コンテンツIDがない場合は非表示にする
+		if (empty($contentsId)){
+			$this->cancelParse();		// テンプレート変換処理中断
+		}
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -62,28 +83,10 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$langId = $this->gEnv->getDefaultLanguage();
-		
-		$this->itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
+//		$this->itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
 			$this->itemCount	= $paramObj->itemCount;
-		}
-		
-		// 一覧を作成
-		$this->db->getUpdatePages($this->itemCount, 1/*1ページ目*/, array($this, 'itemsLoop'));
-			
-		// 一覧データがない場合は非表示
-		if ($this->isExistsList){
-			// 前の日付を表示
-			$dateRow = array(
-				'date'		=> $this->convertToDispString($this->currentDate)			// 日付
-			);
-			$this->tmpl->addVars('date_list', $dateRow);
-			$this->tmpl->parseTemplate('date_list', 'a');
-		} else {
-			$this->tmpl->setAttribute('date_list', 'visibility', 'hidden');
 		}
 	}
 	/**
@@ -96,52 +99,6 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
-	}
-	/**
-	 * 取得したメニュー項目をテンプレートに設定する
-	 *
-	 * @param int		$index			行番号
-	 * @param array		$fetchedRow		取得行
-	 * @param object	$param			任意使用パラメータ
-	 * @return bool						trueを返すとループ続行。falseを返すとその時点で終了。
-	 */
-	function itemsLoop($index, $fetchedRow)
-	{
-		$name = $fetchedRow['wc_id'];
-		$date = date(self::DATE_FORMAT, strtotime($fetchedRow['wc_content_dt']));
-		
-		// リンク先の作成
-		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . $fetchedRow['wc_id'], true);
-
-		if (!isset($this->currentDate)){
-			// 日付を更新
-			$this->currentDate = $date;
-			
-			// バッファ更新
-			$this->tmpl->clearTemplate('item_list');
-		} else if ($date != $this->currentDate){
-			// 前の日付を表示
-			$dateRow = array(
-				'date'		=> $this->convertToDispString($this->currentDate)			// 日付
-			);
-			$this->tmpl->addVars('date_list', $dateRow);
-			$this->tmpl->parseTemplate('date_list', 'a');
-			
-			// 日付を更新
-			$this->currentDate = $date;
-			
-			// バッファ更新
-			$this->tmpl->clearTemplate('item_list');
-		}
-		$row = array(
-			'link_url'	=> $this->convertUrlToHtmlEntity($linkUrl),		// リンク
-			'name'		=> $this->convertToDispString($name)			// タイトル
-		);
-		$this->tmpl->addVars('item_list', $row);
-		$this->tmpl->parseTemplate('item_list', 'a');
-		
-		$this->isExistsList = true;		// リスト項目が存在するかどうか
-		return true;
 	}
 }
 ?>
