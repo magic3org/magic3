@@ -561,7 +561,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	{
 		$menuItems = array(array(), array(), array());
 		$pageIdArray = array($this->gEnv->getDefaultPageId(), $this->gEnv->getDefaultMobilePageId(), $this->gEnv->getDefaultSmartphonePageId());
-		$ret = $this->db->getEditSubWidgetOnPage($pageIdArray, $rows);
+		$contentType = $this->gPage->getSubContentTypes();
+		$ret = $this->db->getEditSubWidgetOnPage($pageIdArray, $contentType, $rows);
 		if ($ret){
 			$rowCount = count($rows);
 			for ($i = 0; $i < $rowCount; $i++){

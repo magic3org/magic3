@@ -89,14 +89,14 @@ class admin_menuDb extends BaseDb
 		$pageStr = rtrim($pageStr, ', ');
 		
 		$caseStr .= 'CASE wd_type ';
-		$contentStr = '';
+//		$contentStr = '';
 		for ($i = 0; $i < count($contentTypeArray); $i++){
 			$caseStr .= 'WHEN \'' . $contentTypeArray[$i] . '\' THEN ' . $i . ' ';
-			$contentStr .= '\'' . $contentTypeArray[$i] . '\', ';
+//			$contentStr .= '\'' . $contentTypeArray[$i] . '\', ';
 		}
 		$caseStr .= 'ELSE 100 ';		// デフォルトでないメインコンテンツ編集ウィジェットは後にする
 		$caseStr .= 'END AS contentno';
-		$contentStr = rtrim($contentStr, ', ');
+//		$contentStr = rtrim($contentStr, ', ');
 		
 		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_type, wd_content_name, ' . $caseStr . ' FROM _page_def ';
 		$queryStr .=   'LEFT JOIN _widgets ON pd_widget_id = wd_id AND wd_deleted = false ';
@@ -119,11 +119,12 @@ class admin_menuDb extends BaseDb
 	 * 画面配置しているサブコンテンツ編集ウィジェットを取得
 	 *
 	 * @param array $pageIdArray		ページID
+	 * @param array $contentTypeArray   コンテンツタイプ
 	 * @param array  $rows				取得レコード
 	 * @param int    $setId				定義セットID
 	 * @return							true=取得、false=取得せず
 	 */
-	function getEditSubWidgetOnPage($pageIdArray, &$rows, $setId = 0)
+	function getEditSubWidgetOnPage($pageIdArray, $contentTypeArray, &$rows, $setId = 0)
 	{
 		// CASE文作成
 		$caseStr = 'CASE pd_id ';
@@ -132,8 +133,19 @@ class admin_menuDb extends BaseDb
 			$caseStr .= 'WHEN \'' . $pageIdArray[$i] . '\' THEN ' . $i . ' ';
 			$pageStr .= '\'' . $pageIdArray[$i] . '\', ';
 		}
-		$caseStr .= 'END AS pageno';
+		$caseStr .= 'END AS pageno,';
 		$pageStr = rtrim($pageStr, ', ');
+		
+	//	$caseStr .= 'CASE wd_type ';
+		$caseStr .= 'CASE wd_content_type ';
+//		$contentStr = '';
+		for ($i = 0; $i < count($contentTypeArray); $i++){
+			$caseStr .= 'WHEN \'' . $contentTypeArray[$i] . '\' THEN ' . $i . ' ';
+//			$contentStr .= '\'' . $contentTypeArray[$i] . '\', ';
+		}
+		$caseStr .= 'ELSE 100 ';		// デフォルトでないメインコンテンツ編集ウィジェットは後にする
+		$caseStr .= 'END AS contentno';
+//		$contentStr = rtrim($contentStr, ', ');
 		
 //		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_content_type, wd_sort_order, ' . $caseStr . ' FROM _page_def ';
 		$queryStr  = 'SELECT DISTINCT pd_id, wd_id, wd_name, wd_content_type, wd_sort_order, wd_content_widget_id, ' . $caseStr . ' FROM _page_def ';
@@ -148,7 +160,8 @@ class admin_menuDb extends BaseDb
 		$queryStr .=   'AND wd_edit_content = true ';
 		$queryStr .=   'AND wd_type = \'\' ';
 //		$queryStr .=   'AND wd_use_instance_def = true ';		// インスタンス定義が必要であるウィジェットをサブコンテンツ編集ウィジェットとする
-		$queryStr .= 'ORDER BY pageno, wd_sort_order';
+	//	$queryStr .= 'ORDER BY pageno, wd_sort_order';
+		$queryStr .= 'ORDER BY pageno, contentno';
 		$retValue = $this->selectRecords($queryStr, array($setId), $rows);
 		return $retValue;
 	}
