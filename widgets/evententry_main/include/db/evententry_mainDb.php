@@ -69,12 +69,12 @@ class evententry_mainDb extends BaseDb
 	/**
 	 * イベント項目数を取得(管理用)
 	 *
-	 * @param string $contentType		コンテンツタイプ
 	 * @param string $langId			言語ID
+	 * @param string $contentType		コンテンツタイプ
 	 * @param array	 $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	function getEntryListCount($contentType, $langId, $keywords)
+	function getEntryListCount($langId, $contentType, $keywords)
 	{
 		$params = array();
 		switch ($contentType){
@@ -117,15 +117,15 @@ class evententry_mainDb extends BaseDb
 	/**
 	 * イベント項目を検索(管理用)
 	 *
-	 * @param string	$contentType		コンテンツタイプ
 	 * @param string    $langId				言語ID
+	 * @param string	$contentType		コンテンツタイプ
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
 	 * @param array		$keywords			検索キーワード
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getEntryList($contentType, $langId, $limit, $page, $keywords, $callback)
+	function getEntryList($langId, $contentType, $limit, $page, $keywords, $callback)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -326,30 +326,37 @@ class evententry_mainDb extends BaseDb
 	/**
 	 * イベント項目をシリアル番号で取得
 	 *
-	 * @param string	$serial				シリアル番号
-	 * @param array     $row				レコード
-	 * @return bool							取得 = true, 取得なし= false
+	 * @param string    $langId		言語ID
+	 * @param string	$serial		シリアル番号
+	 * @param array     $row		レコード
+	 * @return bool					取得 = true, 取得なし= false
 	 */
-	function getEntryBySerial($serial, &$row)
+	function getEntryBySerial($langId, $serial, &$row)
 	{
+		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
-		$queryStr .=   'WHERE et_serial = ? ';
-		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+		$queryStr .=   'LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
+		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
+		$queryStr .=   'WHERE et_serial = ? '; $params[] = intval($serial);
+		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;
 	}
 	/**
 	 * イベント項目を共通コンテンツIDで取得
 	 *
+	 * @param string  $langId		言語ID
 	 * @param string  $contentType	コンテンツタイプ
 	 * @param string  $contentsId	共通コンテンツID
 	 * @param string  $entryType	受付タイプ
 	 * @param array     $row				レコード
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function getEntryByContentsId($contentType, $contentsId, $entryType, &$row)
+	function getEntryByContentsId($langId, $contentType, $contentsId, $entryType, &$row)
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
+		$queryStr .=   'LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
+		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
 		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
 		$queryStr .=     'AND et_content_type = ? '; $params[] = $contentType;
 		$queryStr .=     'AND et_contents_id = ? '; $params[] = $contentsId;
@@ -363,7 +370,7 @@ class evententry_mainDb extends BaseDb
 	 * @param array $serial			シリアルNo
 	 * @return						true=成功、false=失敗
 	 */
-	function delEventItem($serial)
+	function delEntry($serial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -398,6 +405,5 @@ class evententry_mainDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
-
 }
 ?>
