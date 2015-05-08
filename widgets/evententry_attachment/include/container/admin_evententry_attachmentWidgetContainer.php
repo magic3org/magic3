@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/evententry_attachmentCommonDef.php');
 
 class admin_evententry_attachmentWidgetContainer extends BaseAdminWidgetContainer
 {
@@ -52,14 +53,15 @@ class admin_evententry_attachmentWidgetContainer extends BaseAdminWidgetContaine
 	 */
 	function _assign($request, &$param)
 	{
-		$act = $request->trimValueOf('act');
+		// 入力値を取得
+		$act 		= $request->trimValueOf('act');
+		$layout		= $request->valueOf('item_layout');					// イベント予約レイアウト
+		
 		if ($act == 'update'){		// 設定更新のとき
-			// 入力値を取得
-			$itemCount	= $request->valueOf('item_count');			// 表示項目数
-			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
+				if (empty($layout)) $layout = evententry_attachmentCommonDef::DEFAULT_LAYOUT;	// イベント予約レイアウト
 				$paramObj = new stdClass;
-				$paramObj->itemCount	= $itemCount;
+				$paramObj->layout	= $layout;
 				$ret = $this->updateWidgetParamObj($paramObj);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -70,15 +72,17 @@ class admin_evententry_attachmentWidgetContainer extends BaseAdminWidgetContaine
 			}
 		} else {		// 初期表示の場合
 			// デフォルト値設定
-			$itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
+			$layout = evententry_attachmentCommonDef::DEFAULT_LAYOUT;	// イベント予約レイアウト
+			
+			// 保存値取得
 			$paramObj = $this->getWidgetParamObj();
 			if (!empty($paramObj)){
-				$itemCount	= $paramObj->itemCount;
+				$layout	= $paramObj->layout;
 			}
 		}
 		
 		// 画面にデータを埋め込む
-		$this->tmpl->addVar("_widget", "item_count",	$itemCount);
+		$this->tmpl->addVar("_widget", "layout",	$layout);
 	}
 	/**
 	 * テンプレートにデータ埋め込む

@@ -20,7 +20,11 @@ function updateItem(){
 	return true;
 }
 $(function(){
+	// テーブル作成
 	m3SetConfigTable('mainconfig');
+	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_layout', 100/* 高さ */, false, 'layout');
 });
 //]]>
 </script>
@@ -31,9 +35,9 @@ $(function(){
 <h3 class="m3config_h">基本設定</h3>
 <table id="mainconfig">
     <tbody>
-	<tr>
-	    <th><span {_HELP_VIEW_COUNT}>表示項目数</span></th>
-		<td><div class="col-sm-1 m3config_item"><input type="text" name="item_count" class="form-control" value="{ITEM_COUNT}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></td>
+    <tr>
+	    <th><span {_HELP_UNTITLED_LAYOUT}>レイアウト</span></th>
+		<td class="ckeditor"><textarea name="item_layout">{LAYOUT}</textarea></td>
 	</tr>
     </tbody>
 </table>
