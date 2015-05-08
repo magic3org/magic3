@@ -1072,6 +1072,16 @@ class PageManager extends Core
 		return array_map(create_function('$a', 'return $a["value"];'), $this->mainContentTypeInfo);
 	}
 	/**
+	 * 一般画面で使用するサブコンテンツタイプを取得
+	 *
+	 * @return array			コンテンツタイプの配列
+	 */
+	function getSubContentTypes()
+	{
+		// 「value」値のみ取得
+		return array_map(create_function('$a', 'return $a["value"];'), $this->subContentTypeInfo);
+	}
+	/**
 	 * 一般画面で使用する主要機能タイプ情報を取得
 	 *
 	 * @return array			機能タイプの情報の連想配列
