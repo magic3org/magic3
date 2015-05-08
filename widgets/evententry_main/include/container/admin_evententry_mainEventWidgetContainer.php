@@ -27,7 +27,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	const EVENT_OBJ_ID = 'eventlib';		// 検索用オブジェクト
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
-	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
+	const DEFAULT_RESULT_LENGTH = 200;			// コンテンツの文字列最大長
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
@@ -830,8 +830,13 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		// 場所
 		$place = $this->getLabelText($fetchedRow['ee_place']);		// ラベル用文字列取得
 		
+		// プレビュー用コンテンツ			
+		$previewContent = $this->gInstance->getTextConvManager()->htmlToText($fetchedRow['ee_html']);// テキストに変換。HTMLタグ削除。
+		$previewContent = $this->_createSummaryText($previewContent);				// 文字数を制限
+		$previewContent = addslashes($previewContent);			// Javascript文字列用のエスケープ処理
+		
 		// 画像プレビュー用ボタンを作成
-		$eventAttr = 'onclick="showPreview(\''. $id . '\', \'' . $name . '\', \'' . $type . '\', \'' . $this->getUrl($url) . '\', \'' . $width .'\', \'' . $height . '\');"';
+		$eventAttr = 'onclick="showPreview(\'' . $previewContent . '\');"';
 		$previewButtonTag = $this->gDesign->createPreviewImageButton(''/*同画面*/, 'プレビュー', ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
 		
 		$row = array(
@@ -844,6 +849,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			'status' => $status,													// 公開状況
 			'date_start' => $startDtStr,	// 開催日時
 			'place' => $this->convertToDispString($place),	// 開催場所
+//			'preview_content' => $this->convertToDispString($previewContent),	// プレビュー用コンテンツ
 			'preview_image_button'	=> $previewButtonTag,					// 画像プレビューボタン
 			'check_disabled'	=> $checkDisabled			// チェックボックス選択可否
 		);
@@ -884,6 +890,25 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			case 4:	$statusStr = '受付終了';	break;
 		}
 		return $statusStr;
+	}
+	/**
+	 * 要約テキスト作成
+	 *
+	 * @param string $src			変換するテキスト
+	 * @return string				変換済みテキスト
+	 */
+	function _createSummaryText($src)
+	{
+		// 検索結果用にテキストを詰める。改行、タブ、スペース削除。
+		$content = str_replace(array("\r", "\n", "\t", " "), '', $src);
+
+		// 文字列長を修正
+		if (function_exists('mb_strimwidth')){
+			$content = mb_strimwidth($content, 0, self::DEFAULT_RESULT_LENGTH, '…');
+		} else {
+			$content = substr($content, 0, self::DEFAULT_RESULT_LENGTH) . '...';
+		}
+		return $content;
 	}
 }
 ?>

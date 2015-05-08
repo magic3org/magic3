@@ -13,25 +13,9 @@
 <patTemplate:tmpl name="_tmpl">
 <script type="text/javascript">
 //<![CDATA[
-function showPreview(id, name, type, url, width, height){
-	// プレビュー画像設定
-	var innerText;
-	var preOuter = $('#preview_image');
-	if (type == 0){
-		innerText = '<img src="' + url + '"';
-		if (width != '') innerText += ' width="' + width + '"';
-		if (height != '') innerText += ' height="' + height + '"';
-		innerText += ' />';
-	} else {
-		innerText = '<object id="preview_obj" data="' + url + '" type="application/x-shockwave-flash"';
-		if (width != '') innerText += ' width="' + width + '"';
-		if (height != '') innerText += ' height="' + height + '"';
-		innerText += '><param id="preview_param" name="movie" value="' + url + '" /><param name="wmode" value="transparent" /></object>';
-	}
-	preOuter.html(innerText);
-	// ID、名前、リンク先URL設定
-	$('#preview_id').text(id);
-	$('#preview_name').text(name);
+function showPreview(content)
+{
+	$('#preview_content').text(content);
 	$('#previewtable').show();
 }
 $(function(){
@@ -82,14 +66,7 @@ $(function(){
 <table id="previewtable" class="previewtable" style="display:none;">
     <tbody>
     <tr>
-	    <th style="width:150px;"><span {_HELP_EVENT_ID}>ID</span></th>
-	    <td style="width:150px;"><div id="preview_id"></div></td>
-	    <th style="width:150px;"><span {_HELP_EVENT_NAME}>名前</span></th>
-	    <td><div id="preview_name"></div></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_EVENT_IMAGE}>表示画像</span></th>
-	    <td colspan="3"><div id="preview_image"></div></td>
+	    <td><div id="preview_content"></div></td>
 	</tr>
     </tbody>
 </table>
