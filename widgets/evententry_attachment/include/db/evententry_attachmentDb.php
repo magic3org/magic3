@@ -26,7 +26,7 @@ class evententry_attachmentDb extends BaseDb
 	function getAllConfig(&$rows)
 	{
 		$queryStr  = 'SELECT * FROM evententry_config ';
-		$queryStr .=   'ORDER BY nc_index';
+		$queryStr .=   'ORDER BY ef_index';
 		$retValue = $this->selectRecords($queryStr, array(), $rows);
 		return $retValue;
 	}

@@ -20,7 +20,9 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/evententry_attachmentDb.
 class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 {
 	private $db;
-	private $entryStatus;			// 予約情報の状態
+	private $configArray;		// 新着情報定義値
+	private $entryStatus;		// 予約情報の状態
+	private $entryRow;			// 予約情報レコード
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const DEFAULT_TITLE = 'イベント予約';			// デフォルトのウィジェットタイトル
 	const DATE_FORMAT = 'Y年 n月 j日';		// 日付フォーマット
@@ -36,7 +38,11 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		// DBオブジェクト作成
 		$this->db = new evententry_attachmentDb();
 		
+		// イベント情報オブジェクト取得
 		$this->eventObj = $this->gInstance->getObject(self::EVENT_OBJ_ID);
+		
+		// イベント予約情報定義値取得
+		$this->configArray = evententry_attachmentCommonDef::loadConfig($this->db);
 	}
 	/**
 	 * ウィジェット初期化
@@ -65,10 +71,10 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		}
 		
 		// イベントが非公開の場合は表示しない
-		$ret = $this->db->getEntry($this->_langId, $eventId, ''/*予約タイプ*/, $row);
+		$ret = $this->db->getEntry($this->_langId, $eventId, ''/*予約タイプ*/, $this->entryRow);
 		if ($ret){
 			// イベントの表示状態を取得
-			$visible =$this->eventObj->isEntryVisible($row);
+			$visible =$this->eventObj->isEntryVisible($this->entryRow);
 			if (!$visible){
 				$this->cancelParse();		// テンプレート変換処理中断
 				return;
@@ -79,7 +85,7 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		}
 		
 		// イベント予約情報が非公開の場合は表示しない
-		$this->entryStatus = $row['et_status'];			// 予約情報の状態
+		$this->entryStatus = $this->entryRow['et_status'];			// 予約情報の状態
 		if ($this->entryStatus < 2){				// 	未設定(0),非公開(1)のときは非表示。受付中(2),受付停止(3),受付終了(4)のとき表示。
 			$this->cancelParse();		// テンプレート変換処理中断
 			return;
@@ -129,6 +135,27 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 			$iconTitle = '受付期間外';
 			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
 		}*/
+
+		// ##### 表示コンテンツ作成 #####
+		// コンテンツレイアウトに埋め込む
+		$contentParam = array(	M3_TAG_MACRO_TITLE	=> $titleTag,
+								M3_TAG_MACRO_IMAGE	=> $imageTag,
+								M3_TAG_MACRO_BODY	=> $this->entryRow['et_html']	);
+		$entryHtml = $this->createDetailContent($layout, $contentParam);
+		
+		// Magic3マクロ変換
+		// あらかじめ「CT_」タグをすべて取得する?
+		$contentInfo = array();
+		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $entryId;			// コンテンツ置換キー(エントリーID)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $linkUrl;// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $title;			// コンテンツ置換キー(タイトル)
+		$contentInfo[M3_TAG_MACRO_CONTENT_SUMMARY] = $fetchedRow['ee_summary'];			// コンテンツ置換キー(要約)
+		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($fetchedRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始日)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($fetchedRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始時間)
+		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
+		
+		// 画面にデータを埋め込む
+		$this->tmpl->addVar("_widget", "content",	$entryHtml);
 	}
 	/**
 	 * ウィジェットのタイトルを設定
@@ -140,6 +167,26 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
+	}
+	/**
+	 * 詳細コンテンツを作成
+	 *
+	 * @param string $layout		レイアウト
+	 * @param array	$contentParam	コンテンツ作成用パラメータ
+	 * @return string				作成コンテンツ
+	 */
+	function createDetailContent($layout, $contentParam)
+	{
+		// コンテンツを作成
+		$keys = array_keys($contentParam);
+		for ($i = 0; $i < count($keys); $i++){
+			$key = $keys[$i];
+			$value = str_replace('\\', '\\\\', $contentParam[$key]);	// ##### (注意)preg_replaceで変換値のバックスラッシュが解釈されるので、あらかじめバックスラッシュを2重化しておく必要がある
+			
+			$pattern = '/' . preg_quote(M3_TAG_START . $key) . ':?(.*?)' . preg_quote(M3_TAG_END) . '/u';
+			$layout = preg_replace($pattern, $value, $layout);
+		}
+		return $layout;
 	}
 }
 ?>

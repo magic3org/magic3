@@ -22,5 +22,29 @@ class evententry_attachmentCommonDef
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_LAYOUT = '[#BODY#]<div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div>[#BUTTON:title=参加する#]';	// イベント予約レイアウト
+	
+	/**
+	 * 定義値をDBから取得
+	 *
+	 * @param object $db	DBオブジェクト
+	 * @return array		取得データ
+	 */
+	static function loadConfig($db)
+	{
+		$retVal = array();
+
+		// 汎用コンテンツ定義を読み込み
+		$ret = $db->getAllConfig($rows);
+		if ($ret){
+			// 取得データを連想配列にする
+			$configCount = count($rows);
+			for ($i = 0; $i < $configCount; $i++){
+				$key = $rows[$i]['ef_id'];
+				$value = $rows[$i]['ef_value'];
+				$retVal[$key] = $value;
+			}
+		}
+		return $retVal;
+	}
 }
 ?>
