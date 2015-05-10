@@ -14,11 +14,14 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/evententry_attachmentCommonDef.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/evententry_attachmentDb.php');
 
 class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 {
 	private $db;
+	private $entryStatus;			// 予約情報の状態
+	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const DEFAULT_TITLE = 'イベント予約';			// デフォルトのウィジェットタイトル
 	const DATE_FORMAT = 'Y年 n月 j日';		// 日付フォーマット
 	
@@ -32,6 +35,8 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new evententry_attachmentDb();
+		
+		$this->eventObj = $this->gInstance->getObject(self::EVENT_OBJ_ID);
 	}
 	/**
 	 * ウィジェット初期化
@@ -49,13 +54,35 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		// イベント情報が単体で表示されてる場合のみウィジェットを表示する
 		$this->contentType = $this->gPage->getContentType();		// ページのコンテンツタイプを取得
 		if ($this->contentType == M3_VIEW_TYPE_EVENT){		// イベント情報
-			$contentsId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
-			if (empty($contentsId)) $contentsId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID_SHORT);
+			$eventId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
+			if (empty($eventId)) $eventId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID_SHORT);
 		}
 
-		// 共通コンテンツIDがない場合は非表示にする
-		if (empty($contentsId)){
+		// イベントIDがない場合は非表示にする
+		if (empty($eventId)){
 			$this->cancelParse();		// テンプレート変換処理中断
+			return;
+		}
+		
+		// イベントが非公開の場合は表示しない
+		$ret = $this->db->getEntry($this->_langId, $eventId, ''/*予約タイプ*/, $row);
+		if ($ret){
+			// イベントの表示状態を取得
+			$visible =$this->eventObj->isEntryVisible($row);
+			if (!$visible){
+				$this->cancelParse();		// テンプレート変換処理中断
+				return;
+			}
+		} else {			// 受付イベントがない場合
+			$this->cancelParse();		// テンプレート変換処理中断
+			return;
+		}
+		
+		// イベント予約情報が非公開の場合は表示しない
+		$this->entryStatus = $row['et_status'];			// 予約情報の状態
+		if ($this->entryStatus < 2){				// 	未設定(0),非公開(1)のときは非表示。受付中(2),受付停止(3),受付終了(4)のとき表示。
+			$this->cancelParse();		// テンプレート変換処理中断
+			return;
 		}
 	}
 	/**
@@ -83,11 +110,25 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-//		$this->itemCount = self::DEFAULT_ITEM_COUNT;	// 表示項目数
+		// 初期化
+		$layout = evententry_attachmentCommonDef::DEFAULT_LAYOUT;	// イベント予約レイアウト
+		
+		// 保存値取得
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
-			$this->itemCount	= $paramObj->itemCount;
+			$layout	= $paramObj->layout;
 		}
+		
+/*		// イベントが開始されている場合は受付終了
+		$iconTitle = '';
+		if (strtotime($this->_now) >= strtotime($fetchedRow['ee_start_dt'])){
+			$iconTitle = '受付期間終了';
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+		} else if (($fetchedRow['et_start_dt'] != $this->gEnv->getInitValueOfTimestamp() && strtotime($this->_now) < strtotime($fetchedRow['et_start_dt'])) ||
+					($fetchedRow['et_end_dt'] != $this->gEnv->getInitValueOfTimestamp() && strtotime($fetchedRow['et_end_dt']) < strtotime($this->_now))){		// 受付期間外のとき
+			$iconTitle = '受付期間外';
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+		}*/
 	}
 	/**
 	 * ウィジェットのタイトルを設定
