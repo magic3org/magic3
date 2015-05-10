@@ -96,6 +96,18 @@ class eventLib
 		return $this->db->getEntry($langId, $id, $row);
 	}
 	/**
+	 * イベント記事が表示可能かどうかを取得
+	 *
+	 * @param array     $row				イベント記事レコード
+	 * @return bool							true = 表示可能, false = 表示不可
+	 */
+	function isEntryVisible($row)
+	{
+		$visible = false;
+		if ($row['ee_status'] == 2) $visible = true;		// 「公開」(2)データを表示
+		return $visible;
+	}
+	/**
 	 * アイキャッチ用画像のURLを取得
 	 *
 	 * @param string $filenames				作成済みファイル名(「;」区切り)

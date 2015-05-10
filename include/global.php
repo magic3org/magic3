@@ -118,6 +118,7 @@ define('M3_TAG_MACRO_COMMENT_LINK',	'COMMENT_LINK');						// コメントリン�
 define('M3_TAG_MACRO_DETAIL_LINK',	'DETAIL_LINK');							// 詳細画面へのリンク置換キー
 define('M3_TAG_MACRO_PERMALINK',	'PERMALINK');							// パーマリンク置換キー
 define('M3_TAG_MACRO_RATE',			'RATE');								// 評価機能置換キー
+define('M3_TAG_MACRO_BUTTON',		'BUTTON');								// ボタン置換キー
 define('M3_TAG_MACRO_WIDGET',		'WIDGET');								// ウィジェット埋め込みキー
 define('M3_TAG_MACRO_SITE_NAME',		'SITE_NAME');						// サイト情報置換キー(サイト名)
 define('M3_TAG_MACRO_SITE_URL',			'SITE_URL');						// サイト情報置換キー(URL)
@@ -140,7 +141,7 @@ define('M3_TAG_MACRO_CONTENT_AUTHOR',		'CT_AUTHOR');					// コンテンツ置�
 define('M3_TAG_MACRO_CONTENT_TITLE',		'CT_TITLE');					// コンテンツ置換キー(タイトル)
 define('M3_TAG_MACRO_CONTENT_BLOG_TITLE',	'CT_BLOG_TITLE');				// コンテンツ置換キー(ブログタイトル)
 define('M3_TAG_MACRO_CONTENT_SUMMARY',		'CT_SUMMARY');					// コンテンツ置換キー(概要)
-define('M3_TAG_MACRO_CONTENT_DESCRIPTION',	'CT_DESCRIPTION');				// コンテンツ置換キー(説明)
+define('M3_TAG_MACRO_CONTENT_DESCRIPTION',	'CT_DESCRIPTION');				// コンテンツ置換キー(説明(テキストのみ))
 define('M3_TAG_MACRO_CONTENT_URL',			'CT_URL');						// コンテンツ置換キー(URL)
 define('M3_TAG_MACRO_CONTENT_INFO_URL',		'CT_INFO_URL');					// コンテンツ置換キー(その他の情報URL)
 define('M3_TAG_MACRO_CONTENT_IMAGE',		'CT_IMAGE');					// コンテンツ置換キー(画像)
@@ -148,11 +149,14 @@ define('M3_TAG_MACRO_CONTENT_PLACE',		'CT_PLACE');					// コンテンツ置換�
 define('M3_TAG_MACRO_CONTENT_LOCATION',		'CT_LOCATION');					// コンテンツ置換キー(緯度経度)
 define('M3_TAG_MACRO_CONTENT_CONTACT',		'CT_CONTACT');					// コンテンツ置換キー(連絡先)
 define('M3_TAG_MACRO_CONTENT_CAMERA',		'CT_CAMERA');					// コンテンツ置換キー(カメラ)
+define('M3_TAG_MACRO_CONTENT_QUOTA',		'CT_QUOTA');					// コンテンツ置換キー(定員)
+define('M3_TAG_MACRO_CONTENT_ENTRY_COUNT',	'CT_ENTRY_COUNT');				// コンテンツ置換キー(登録数)
 define('M3_TAG_MACRO_CONTENT_CATEGORY',		'CT_CATEGORY');					// コンテンツ置換キー(カテゴリー)
 define('M3_TAG_MACRO_CONTENT_KEYWORD',		'CT_KEYWORD');					// コンテンツ置換キー(検索キーワード)
 define('M3_TAG_MACRO_COMMENT_DATE',			'CM_DATE');						// コメント置換キー(登録日)
 define('M3_TAG_MACRO_COMMENT_TIME',			'CM_TIME');						// コメント置換キー(登録時)
 define('M3_TAG_MACRO_COMMENT_AUTHOR',		'CM_AUTHOR');					// コメント置換キー(著者)
+define('M3_TAG_MACRO_DB_COLUMN',			'DB_COLUMN');					// DBデータ置換キー(カラム値)
 
 // イベントフックタイプ
 define('M3_EVENT_HOOK_TYPE_OPELOG',			'opelog');						// 運用ログ
