@@ -137,21 +137,27 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		}*/
 
 		// ##### 表示コンテンツ作成 #####
-		// コンテンツレイアウトに埋め込む
-		$contentParam = array(	M3_TAG_MACRO_TITLE	=> $titleTag,
-								M3_TAG_MACRO_IMAGE	=> $imageTag,
-								M3_TAG_MACRO_BODY	=> $this->entryRow['et_html']	);
+		// 変換データ作成
+		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
+		$entryCountStr = '';				// 参加数
+		
+		// コンテンツレイアウトにHTMLタグを埋め込む
+		$contentParam = array(	
+								M3_TAG_MACRO_BODY	=> $this->entryRow['et_html'],			// 説明
+								M3_TAG_MACRO_BUTTON	=> '',									// ボタン
+							);
 		$entryHtml = $this->createDetailContent($layout, $contentParam);
 		
 		// Magic3マクロ変換
 		// あらかじめ「CT_」タグをすべて取得する?
 		$contentInfo = array();
-		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $entryId;			// コンテンツ置換キー(エントリーID)
-		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $linkUrl;// コンテンツ置換キー(エントリーURL)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $title;			// コンテンツ置換キー(タイトル)
-		$contentInfo[M3_TAG_MACRO_CONTENT_SUMMARY] = $fetchedRow['ee_summary'];			// コンテンツ置換キー(要約)
-		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($fetchedRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始日)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($fetchedRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始時間)
+		$contentInfo[M3_TAG_MACRO_CONTENT_ID]			= $entryId;				// コンテンツ置換キー(エントリーID)
+		$contentInfo[M3_TAG_MACRO_CONTENT_QUOTA]		= $quotaStr;			// コンテンツ置換キー(定員)
+		$contentInfo[M3_TAG_MACRO_CONTENT_ENTRY_COUNT]	= $entryCountStr;		// コンテンツ置換キー(登録数)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $title;			// コンテンツ置換キー(タイトル)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_SUMMARY] = $fetchedRow['ee_summary'];			// コンテンツ置換キー(要約)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($fetchedRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始日)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($fetchedRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始時間)
 		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
 		
 		// 画面にデータを埋め込む
