@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: reg_userProfileWidgetContainer.php 5371 2012-11-10 14:10:10Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/reg_userBaseWidgetContainer.php');
@@ -291,7 +291,13 @@ class reg_userProfileWidgetContainer extends reg_userBaseWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
-		return array(parent::_addCssFileToHead($request, $param), $this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_UPLOAD_CSS_FILE));
+		//return array(parent::_addCssFileToHead($request, $param), $this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_UPLOAD_CSS_FILE));
+		$parentCss = parent::_addCssFileToHead($request, $param);
+		if (is_array($parentCss)){
+			return array_merge($parentCss, array($this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_UPLOAD_CSS_FILE)));
+		} else {
+			return array($parentCss, $this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_UPLOAD_CSS_FILE));
+		}
 	}
 	/**
 	 * 性別選択メニュー作成
