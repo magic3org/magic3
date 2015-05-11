@@ -8,16 +8,16 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: reg_userBaseWidgetContainer.php 5221 2012-09-18 13:00:52Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class reg_userBaseWidgetContainer extends BaseWidgetContainer
 {
-	private $_userId;			// 現在のユーザ
+//	private $_userId;			// 現在のユーザ
 	private $cssFilePath = array();			// CSSファイル
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const EMAIL_LOGIN_URL		= '&task=emaillogin&account=%s&pwd=%s';		// Eメールからのログイン用URL
@@ -32,7 +32,7 @@ class reg_userBaseWidgetContainer extends BaseWidgetContainer
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		$this->_userId = $this->gEnv->getCurrentUserId();
+//		$this->_userId = $this->gEnv->getCurrentUserId();
 		
 		// CSSファイルの追加
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートのとき
