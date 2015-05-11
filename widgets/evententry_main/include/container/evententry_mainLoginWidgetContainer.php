@@ -14,12 +14,11 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/evententry_mainBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() .	'/ec_mainMemberDb.php');
+require_once($gEnvManager->getCurrentWidgetDbPath() .	'/evententry_mainDb.php');
 
 class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetContainer
 {
 	private $memberDb;
-	private $ecMailObj;	// メール連携オブジェクト
 	const MAIL_OBJ_ID = 'ecmail';
 	const EC_LIB_ID = "eclib";		// EC共通ライブラリオブジェクトID
 	const WORD_KEY_ACCOUNT = 'word_account';		// 用語取得キー(アカウント)
@@ -33,10 +32,7 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 		parent::__construct();
 		
 		// DB接続オブジェクト作成
-		$this->memberDb = new ec_mainMemberDb();
-		
-		// メール連携オブジェクト取得
-		$this->ecMailObj = $this->gInstance->getObject(self::MAIL_OBJ_ID);
+		$this->memberDb = new evententry_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -80,9 +76,6 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 					$ret = $this->gInstance->getObject(self::EC_LIB_ID)->makeTmpMemberToProperMember($userId);
 					if ($ret){
 						$this->_db->makeNormalLoginUser($userId);// 一般ログインユーザに設定
-					
-						// ######## 会員登録のメールをイントラネット側に送信 ########
-						$this->ecMailObj->sendMemberInfoToBackoffice(0/*新規登録*/, $userId);
 					}
 				}
 				if (empty($forward)){
@@ -118,13 +111,13 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 		if ($task == 'emaillogin'){
 			$this->tmpl->setAttribute('field_regmember', 'visibility', 'hidden');// 会員登録への遷移を削除
 		} else {
-			// 非会員の購入を許可している場合は、遷移可能にする
+/*			// 非会員の購入を許可している場合は、遷移可能にする
 			$value = $this->_getConfig(photo_shopCommonDef::CF_PERMIT_NON_MEMBER_ORDER);
 			if (!empty($value)){
 				$this->tmpl->setAttribute('field_nonmember', 'visibility', 'visible');
 				//$this->tmpl->addVar("field_nonmember", "url_order", $this->getUrl($this->gEnv->createCurrentPageUrl() . '&task=order', true));				// 購入画面遷移用
 				$this->tmpl->addVar("field_nonmember", "url_order", $this->getUrl($this->gEnv->createCurrentPageUrl() . '&' . $forward, true));				// 購入画面遷移用
-			}
+			}*/
 		}
 				
 		// パラメータを画面に埋め込む

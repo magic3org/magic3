@@ -30,22 +30,19 @@ function login(){
 <input type="hidden" name="password" />
 <input type="hidden" name="forward" value="{FORWARD}" />
 <div id="evententry_shop">
+参加登録にはログインが必要です。
 <patTemplate:tmpl name="field_regmember">
-<h2>初めてのお客様</h2>
+<h2>初めての方</h2>
 <div>会員登録を行って、{WORD_ACCOUNT}を登録してください。</div>
 <div class="evententry_bottom"><input type="button" class="button" onclick="location.href='{URL_REGMEMBER}'" value="会員登録" /></div>
 </patTemplate:tmpl>
-<h2>登録済みの{WORD_ACCOUNT}をお持ちのお客様</h2>
+<h2>登録済みの{WORD_ACCOUNT}をお持ちの方</h2>
 <div>{WORD_ACCOUNT}とパスワードを入力して、ログインしてください。</div>
 <div>{MESSAGE}</div>
-<label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{PHOTO_ACCOUNT}" size="20" maxlength="40" style="width:120px" /></label>
+<label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{PHOTO_ACCOUNT}" size="20" maxlength="40" style="width:120px" /></label><br />
 <label><span class="evententry_title">パスワード</span><input type="password" name="evententry_password" value="{PHOTO_PASSWORD}" size="20" maxlength="40" style="width:120px" /></label>
 <div class="evententry_bottom"><input type="button" class="button" onclick="login();" value="ログイン" /></div>
-<patTemplate:tmpl name="field_nonmember" visibility="hidden">
-<h2>登録なしでご購入のお客様</h2>
-<div>会員登録を行わないでご購入の場合はこちらを利用してください。</div>
-<div class="evententry_bottom"><input type="button" class="button" onclick="location.href='{URL_ORDER}'" value="購入へ進む" /></div>
-</patTemplate:tmpl>
+
 </div>
 </form>
 </patTemplate:tmpl>

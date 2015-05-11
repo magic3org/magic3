@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -25,20 +25,13 @@ class evententry_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected static $_canEditEntry;	// 記事が編集可能かどうか
 	protected $_pageUrl;		// 現在のページのURL
 	protected $_baseUrl;		// ベースURL
-	protected $_useCalendar;		// カレンダーを使用するかどうか
 	const DATE_RANGE_DELIMITER		= '～';				// 日時範囲用デリミター
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 
 	// 画面
-	const TASK_TOP			= 'top';			// トップ画面
-	const TASK_CALENDAR		= 'calendar';		// カレンダー画面
-	const DEFAULT_TASK		= 'top';
-	
-	// カレンダー用スクリプト
-	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル
-	const CALENDAR_LANG_FILE = '/jscalendar-1.0/lang/calendar-ja.js';	// カレンダー言語ファイル
-	const CALENDAR_SETUP_FILE = '/jscalendar-1.0/calendar-setup.js';	// カレンダーセットアップファイル
-	const CALENDAR_CSS_FILE = '/jscalendar-1.0/calendar-win2k-1.css';		// カレンダー用CSSファイル
+	const TASK_REGIST		= 'regist';			// 参加登録画面
+	const TASK_LOGIN		= 'login';			// ログイン画面
+	const DEFAULT_TASK		= 'regist';
 		
 	/**
 	 * コンストラクタ
@@ -54,7 +47,7 @@ class evententry_mainBaseWidgetContainer extends BaseWidgetContainer
 			if (!isset(self::$_mainDb)) self::$_mainDb = new evententry_mainDb();
 		
 			// イベント定義を読み込む
-			if (!isset(self::$_configArray)) self::$_configArray = event_mainCommonDef::loadConfig(self::$_mainDb);
+			if (!isset(self::$_configArray)) self::$_configArray = evententry_mainCommonDef::loadConfig(self::$_mainDb);
 		}
 	}
 	/**
@@ -69,15 +62,11 @@ class evententry_mainBaseWidgetContainer extends BaseWidgetContainer
 	function _preInit($request)
 	{
 		// URLパラメータ取得
-//		$this->_blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);		// 所属ブログ
 		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);		// ウィンドウオープンタイプ
-//		$this->addOptionUrlParam(M3_REQUEST_PARAM_BLOG_ID, $this->_blogId);
 		
 		// 共通パラメータ初期化
 		$this->_pageUrl = $this->gEnv->createCurrentPageUrl();		// 現在のページのURL
 		$this->_baseUrl = $this->getUrlWithOptionParam();			// ベースURL(オプション付き)
-		
-		$this->_useCalendar	= self::$_configArray[event_mainCommonDef::CF_USE_CALENDAR];		// カレンダーを使用するかどうか
 	}
 	/**
 	 * テンプレートに前処理
@@ -117,7 +106,7 @@ class evententry_mainBaseWidgetContainer extends BaseWidgetContainer
 	{
 		// CSSを作成
 		$css = '';
-		if ($this->_useCalendar) $css = $this->getParsedTemplateData('calendar.tmpl.css');
+//		if ($this->_useCalendar) $css = $this->getParsedTemplateData('calendar.tmpl.css');
 		return $css;
 	}
 	/**
@@ -132,11 +121,7 @@ class evententry_mainBaseWidgetContainer extends BaseWidgetContainer
 	 */
 	function _addCssFileToHead($request, &$param)
 	{
-//		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-//			return '';
-//		} else {
-			return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);		// デフォルトのCSSファイル
-//		}
+		return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);		// デフォルトのCSSファイル
 	}
 }
 ?>

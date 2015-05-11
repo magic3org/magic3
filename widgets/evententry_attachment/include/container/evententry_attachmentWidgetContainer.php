@@ -25,7 +25,7 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	private $entryRow;			// 予約情報レコード
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const DEFAULT_TITLE = 'イベント予約';			// デフォルトのウィジェットタイトル
-	const DATE_FORMAT = 'Y年 n月 j日';		// 日付フォーマット
+	const FORWARD_TASK_REGIST = 'regist';			// イベント予約画面遷移用
 	
 	/**
 	 * コンストラクタ
@@ -140,11 +140,15 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		// 変換データ作成
 		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
 		$entryCountStr = '';				// 参加数
-		
+		// 予約画面
+		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_EVENTENTRY, M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::FORWARD_TASK_REGIST);// コンテンツタイプが「イベント予約」のページを取得
+		$linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
+		$buttonTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">参加</a>';
+						
 		// コンテンツレイアウトにHTMLタグを埋め込む
 		$contentParam = array(	
 								M3_TAG_MACRO_BODY	=> $this->entryRow['et_html'],			// 説明
-								M3_TAG_MACRO_BUTTON	=> '',									// ボタン
+								M3_TAG_MACRO_BUTTON	=> $buttonTag,									// ボタン
 							);
 		$entryHtml = $this->createDetailContent($layout, $contentParam);
 		

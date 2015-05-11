@@ -14,7 +14,7 @@
  * @link       http://www.magic3.org
  */
  
-class evententryCommonDef
+class evententry_mainCommonDef
 {
 	static $_deviceType = 0;				// デバイスタイプ(PC)
 	static $_viewContentType = M3_VIEW_TYPE_EVENTENTRY;		// コンテンツタイプ

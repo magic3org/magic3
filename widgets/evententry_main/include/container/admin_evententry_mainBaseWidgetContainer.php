@@ -14,7 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
-require_once($gEnvManager->getWidgetContainerPath('evententry_main') . '/evententryCommonDef.php');
+require_once($gEnvManager->getWidgetContainerPath('evententry_main') . '/evententry_mainCommonDef.php');
 require_once($gEnvManager->getWidgetDbPath('evententry_main') . '/evententry_mainDb.php');
 
 class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
@@ -51,7 +51,7 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		if (!isset(self::$_mainDb)) self::$_mainDb = new evententry_mainDb();
 		
 		// DB定義を読み込む
-//		if (!isset(self::$_configArray)) self::$_configArray = evententryCommonDef::loadConfig(self::$_mainDb);
+//		if (!isset(self::$_configArray)) self::$_configArray = evententry_mainCommonDef::loadConfig(self::$_mainDb);
 	}
 	/**
 	 * テンプレートに前処理
