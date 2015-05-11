@@ -1,0 +1,51 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript" src="{_ROOT_URL}/scripts/md5.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+function login(){
+	var pwd = document.evententry_main.evententry_password.value;
+	document.evententry_main.act.value = 'evententry_login';
+    document.evententry_main.password.value = hex_md5(pwd);
+	document.evententry_main.submit();
+	return true;
+}
+//]]>
+</script>
+<!-- m3:ErrorMessage -->
+<form method="post" name="evententry_main" class="form">
+<input type="hidden" name="task" value="{TASK}"/>
+<input type="hidden" name="act" />
+<input type="hidden" name="password" />
+<input type="hidden" name="forward" value="{FORWARD}" />
+<div id="evententry_shop">
+<patTemplate:tmpl name="field_regmember">
+<h2>初めてのお客様</h2>
+<div>会員登録を行って、{WORD_ACCOUNT}を登録してください。</div>
+<div class="evententry_bottom"><input type="button" class="button" onclick="location.href='{URL_REGMEMBER}'" value="会員登録" /></div>
+</patTemplate:tmpl>
+<h2>登録済みの{WORD_ACCOUNT}をお持ちのお客様</h2>
+<div>{WORD_ACCOUNT}とパスワードを入力して、ログインしてください。</div>
+<div>{MESSAGE}</div>
+<label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{PHOTO_ACCOUNT}" size="20" maxlength="40" style="width:120px" /></label>
+<label><span class="evententry_title">パスワード</span><input type="password" name="evententry_password" value="{PHOTO_PASSWORD}" size="20" maxlength="40" style="width:120px" /></label>
+<div class="evententry_bottom"><input type="button" class="button" onclick="login();" value="ログイン" /></div>
+<patTemplate:tmpl name="field_nonmember" visibility="hidden">
+<h2>登録なしでご購入のお客様</h2>
+<div>会員登録を行わないでご購入の場合はこちらを利用してください。</div>
+<div class="evententry_bottom"><input type="button" class="button" onclick="location.href='{URL_ORDER}'" value="購入へ進む" /></div>
+</patTemplate:tmpl>
+</div>
+</form>
+</patTemplate:tmpl>
