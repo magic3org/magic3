@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainPageinfoWidgetContainer.php 5903 2013-04-05 03:09:02Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainMainteBaseWidgetContainer.php');
@@ -38,7 +38,9 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->db = new admin_mainDb();
 		
 		// コンテンツタイプ
-		$this->contentTypeArray = array(	array(	'name' => '指定なし',					'value' => ''),
+		$this->contentTypeArray = array(	array(	'name' => '[指定なし]',					'value' => ''));
+		$this->contentTypeArray = array_merge($this->contentTypeArray, $this->gPage->getAllPageAttributeTypeInfo());			// すべてのページ属性を取得
+/*		$this->contentTypeArray = array(	array(	'name' => '指定なし',					'value' => ''),
 											array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
 											array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
 											array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
@@ -48,7 +50,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 											array(	'name' => 'イベント',					'value' => M3_VIEW_TYPE_EVENT),
 											array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO),
 											array(	'name' => '検索結果',					'value' => M3_VIEW_TYPE_SEARCH),
-											array(	'name' => 'ダッシュボード',				'value' => M3_VIEW_TYPE_DASHBOARD));
+											array(	'name' => 'ダッシュボード',				'value' => M3_VIEW_TYPE_DASHBOARD));*/
 	}
 	/**
 	 * テンプレートファイルを設定

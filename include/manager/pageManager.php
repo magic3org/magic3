@@ -89,6 +89,7 @@ class PageManager extends Core
 	private $mainContentTypeInfo;				// 一般画面で使用する主要コンテンツタイプ
 	private $subContentTypeInfo;				// 一般画面で使用する補助コンテンツタイプ
 	private $mainFeatureTypeInfo;				// 一般画面で使用する主要機能タイプ
+	private $adminFeatureTypeInfo;						// 管理画面専用で使用する主要機能タイプ
 	private $rssVersion;					// RSSバージョン
 	private $rssChannel;				// RSSチャンネルデータ
 	private $selectedJQueryFilename;		// 使用対象のjQueryファイル
@@ -325,6 +326,9 @@ class PageManager extends Core
 		$this->mainFeatureTypeInfo	 = array(	array(	'name' => '検索',						'value' => M3_VIEW_TYPE_SEARCH),
 												array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE),
 												array(	'name' => 'カレンダー',					'value' => M3_VIEW_TYPE_CALENDAR)
+											);
+		// 管理画面専用で使用する機能タイプ
+		$this->adminFeatureTypeInfo	 = array(	array(	'name' => 'ダッシュボード',				'value' => M3_VIEW_TYPE_DASHBOARD)
 											);
 											
 		// URLパラメータ並び順
@@ -1099,6 +1103,16 @@ class PageManager extends Core
 	{
 		// 「value」値のみ取得
 		return array_map(create_function('$a', 'return $a["value"];'), $this->mainFeatureTypeInfo);
+	}
+	
+	/**
+	 * すべてのページ属性情報を取得
+	 *
+	 * @return array			ページ属性情報の連想配列
+	 */
+	function getAllPageAttributeTypeInfo()
+	{
+		return array_merge($this->mainContentTypeInfo, $this->subContentTypeInfo, $this->mainFeatureTypeInfo, $this->adminFeatureTypeInfo);
 	}
 	/**
 	 * 管理画面用のサブメニューバーの定義を設定
