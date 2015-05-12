@@ -23,6 +23,7 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	private $configArray;		// 新着情報定義値
 	private $entryStatus;		// 予約情報の状態
 	private $entryRow;			// 予約情報レコード
+	private $_contentParam;		// コンテンツ変換用
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const DEFAULT_TITLE = 'イベント予約';			// デフォルトのウィジェットタイトル
 	const FORWARD_TASK_REGIST = 'regist';			// イベント予約画面遷移用
@@ -141,16 +142,17 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
 		$entryCountStr = '';				// 参加数
 		// 予約画面
-		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_EVENTENTRY, M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::FORWARD_TASK_REGIST);// コンテンツタイプが「イベント予約」のページを取得
+		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_EVENTENTRY, 
+					M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::FORWARD_TASK_REGIST . '&' .
+					M3_REQUEST_PARAM_EVENT_ID . '=' . $this->entryRow['et_contents_id']);// コンテンツタイプが「イベント予約」のページを取得
 		$linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
-		$buttonTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">参加</a>';
 						
-		// コンテンツレイアウトにHTMLタグを埋め込む
+		// コンテンツレイアウトのプレマクロ変換(ブロック型マクロを変換してコンテンツマクロのみ残す)
 		$contentParam = array(	
 								M3_TAG_MACRO_BODY	=> $this->entryRow['et_html'],			// 説明
-								M3_TAG_MACRO_BUTTON	=> $buttonTag,									// ボタン
+								M3_TAG_MACRO_BUTTON	=> $linkUrl,							// ボタン
 							);
-		$entryHtml = $this->createDetailContent($layout, $contentParam);
+		$entryHtml = $this->createMacroContent($layout, $contentParam);
 		
 		// Magic3マクロ変換
 		// あらかじめ「CT_」タグをすべて取得する?
@@ -179,24 +181,55 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		return self::DEFAULT_TITLE;
 	}
 	/**
-	 * 詳細コンテンツを作成
+	 * コンテンツのプレマクロ変換
 	 *
 	 * @param string $layout		レイアウト
 	 * @param array	$contentParam	コンテンツ作成用パラメータ
 	 * @return string				作成コンテンツ
 	 */
-	function createDetailContent($layout, $contentParam)
+	function createMacroContent($layout, $contentParam)
 	{
-		// コンテンツを作成
-		$keys = array_keys($contentParam);
-		for ($i = 0; $i < count($keys); $i++){
-			$key = $keys[$i];
-			$value = str_replace('\\', '\\\\', $contentParam[$key]);	// ##### (注意)preg_replaceで変換値のバックスラッシュが解釈されるので、あらかじめバックスラッシュを2重化しておく必要がある
-			
-			$pattern = '/' . preg_quote(M3_TAG_START . $key) . ':?(.*?)' . preg_quote(M3_TAG_END) . '/u';
-			$layout = preg_replace($pattern, $value, $layout);
+		$this->_contentParam = $contentParam;
+		$dest = preg_replace_callback(M3_PATTERN_TAG_MACRO, array($this, '_replace_macro_callback'), $layout);
+		return $dest;
+	}
+	/**
+	 * コンテンツマクロ変換コールバック関数
+	 * 変換される文字列はHTMLタグではないテキストで、変換後のテキストはHTMLタグ(改行)を含むか、HTMLエスケープしたテキスト
+	 *
+	 * @param array $matchData		検索マッチデータ
+	 * @return string				変換後データ
+	 */
+    function _replace_macro_callback($matchData)
+	{
+		$destTag	= $matchData[0];		// マッチした文字列全体
+		$typeTag	= $matchData[1];		// マクロキー
+		$options	= $matchData[2];		// マクロオプション
+
+		switch ($typeTag){
+		case M3_TAG_MACRO_BODY:		// 説明
+			$destTag = $this->_contentParam[$typeTag];
+			break;
+		case M3_TAG_MACRO_BUTTON:		// ボタン
+			// コンテンツマクロオプションを解析
+			$optionParams = $this->gInstance->getTextConvManager()->parseMacroOption($options);
+
+			// コンテンツマクロオプション処理
+			$keys = array_keys($optionParams);
+			for ($i = 0; $i < count($keys); $i++){
+				$optionKey = $keys[$i];
+				$optionValue = $optionParams[$optionKey];
+
+				switch ($optionKey){
+				case 'title':		// ボタンタイトル
+					$title = $optionValue;
+					break;
+				}
+			}
+			$destTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($this->_contentParam[$typeTag]) . '">' . $this->convertToDispString($title) . '</a>';
+			break;
 		}
-		return $layout;
+		return $destTag;
 	}
 }
 ?>
