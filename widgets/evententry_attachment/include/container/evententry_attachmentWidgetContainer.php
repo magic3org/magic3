@@ -20,6 +20,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/evententry_attachmentDb.
 class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 {
 	private $db;
+	private $eventObj;			// イベント情報用取得オブジェクト
 	private $configArray;		// 新着情報定義値
 	private $entryStatus;		// 予約情報の状態
 	private $entryRow;			// 予約情報レコード

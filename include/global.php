@@ -159,8 +159,8 @@ define('M3_TAG_MACRO_COMMENT_AUTHOR',		'CM_AUTHOR');					// コメント置換�
 define('M3_TAG_MACRO_DB_COLUMN',			'DB_COLUMN');					// DBデータ置換キー(カラム値)
 
 // 解析用
-define('M3_PATTERN_TAG_MACRO',				'/' . M3_TAG_START . '([A-Z0-9_]+)\|?(.*?)' . M3_TAG_END . '/u');								// システムマクロパターン
-define('M3_PATTERN_TAG_MACRO_USER_KEY',		'/' . M3_TAG_START . M3_TAG_MACRO_USER_KEY . '([A-Z0-9_]+)\|?(.*?)' . M3_TAG_END . '/u');		// ユーザ定義マクロパターン
+define('M3_PATTERN_TAG_MACRO',				'/' . preg_quote(M3_TAG_START) . '([A-Z0-9_]+)\|?(.*?)' . preg_quote(M3_TAG_END) . '/u');							// システムマクロパターン
+define('M3_PATTERN_TAG_MACRO_USER_KEY',		'/' . preg_quote(M3_TAG_START . M3_TAG_MACRO_USER_KEY) . '([A-Z0-9_]+)\|?(.*?)' . preg_quote(M3_TAG_END) . '/u');	// ユーザ定義マクロパターン
 
 // イベントフックタイプ
 define('M3_EVENT_HOOK_TYPE_OPELOG',			'opelog');						// 運用ログ
