@@ -220,7 +220,7 @@ class TextConvManager extends Core
 				case 'CT_TITLE':		// コンテンツタイトル
 				default:
 					// コンテンツマクロオプションを解析
-					$optionParams = $this->_parseContentMacroOption($options);
+					$optionParams = $this->parseMacroOption($options);
 					
 					// 置き換える文字列を取得
 					$value = $this->contentInfo[$typeTag];
@@ -318,12 +318,12 @@ class TextConvManager extends Core
 		return $destTag;
 	}
 	/**
-	 * コンテンツマクロオプションを解析
+	 * マクロオプションを解析
 	 *
 	 * @param string $src		変換するデータ
 	 * @return array			オプションパラメータ
 	 */
-	function _parseContentMacroOption($src)
+	function parseMacroOption($src)
 	{
 		$options = array();
 		$itemArray = explode(self::CONTENT_MACRO_OPTION_SEPARATOR, strtolower(trim($src)));// 小文字に変換したものを解析
