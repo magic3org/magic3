@@ -20,7 +20,7 @@
 DELETE FROM _widgets WHERE wd_id = 'evententry_main';
 INSERT INTO _widgets
 (wd_id,             wd_name,               wd_type, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('evententry_main', 'イベント予約-メイン', '', 'evententry',    'event',   true,            '',                   '0.0.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベントの予約管理を行う。', '',                '',                true,  true,         false,                true,  '2015-04-29', now(),         now());
+('evententry_main', 'イベント予約-メイン', '', 'evententry',    'event',   true,            '',                   '0.0.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベントの予約管理を行う。', 'login=md5',                '',                true,  true,         false,                true,  '2015-04-29', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'evententry_attachment';
 INSERT INTO _widgets
 (wd_id,                   wd_name,                       wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                   wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

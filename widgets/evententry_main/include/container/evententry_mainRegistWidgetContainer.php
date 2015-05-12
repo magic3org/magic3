@@ -19,13 +19,16 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/evententry_mainDb.php');
 class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
-	private $langId;		// 言語
+	private $eventObj;			// イベント情報用取得オブジェクト
 	private $showWidget;		// ウィジェットを表示するかどうか
-	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
+	
+	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
+	
+//	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'イベント予約';		// デフォルトのウィジェットタイトル名
 	
-	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
-	const CF_USE_MULTI_BLOG			= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
+//	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
+//	const CF_USE_MULTI_BLOG			= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
 
 	/**
 	 * コンストラクタ
@@ -37,6 +40,50 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		
 		// DBオブジェクト作成
 		$this->db = new evententry_mainDb();
+		
+		// イベント情報オブジェクト取得
+		$this->eventObj = $this->gInstance->getObject(self::EVENT_OBJ_ID);
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string $task					処理タスク
+	 * @return 								なし
+	 */
+	function _init($request, $task)
+	{
+		// ##### ウィジェットの表示制御 #####
+		// イベントIDがない場合は非表示にする
+		$eventId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
+		if (empty($eventId)){
+			$this->cancelParse();		// テンプレート変換処理中断
+			return;
+		}
+		
+		// イベントが非公開の場合は表示しない
+		$ret = $this->db->getEntry($this->_langId, $eventId, ''/*予約タイプ*/, $this->entryRow);
+		if ($ret){
+			// イベントの表示状態を取得
+			$visible =$this->eventObj->isEntryVisible($this->entryRow);
+			if (!$visible){
+				$this->cancelParse();		// テンプレート変換処理中断
+				return;
+			}
+		} else {			// 受付イベントがない場合
+			$this->cancelParse();		// テンプレート変換処理中断
+			return;
+		}
+		
+		// イベント予約情報が非公開の場合は表示しない
+		$this->entryStatus = $this->entryRow['et_status'];			// 予約情報の状態
+		if ($this->entryStatus < 2){				// 	未設定(0),非公開(1)のときは非表示。受付中(2),受付停止(3),受付終了(4)のとき表示。
+			$this->cancelParse();		// テンプレート変換処理中断
+			return;
+		}
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -63,17 +110,7 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	 */
 	function _assign($request, &$param)
 	{
-		// ブログリストを作成
-		$this->db->getAllBlog(array($this, 'blogListLoop'));
-		
-		// 表示データがない場合はウィジェットを表示しない
-		if (empty($this->showWidget)) $this->cancelParse();// 出力抑止
-		
-		$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
-		if (isset($blogLibObj)){
-			$value = $blogLibObj->getConfig(self::CF_USE_MULTI_BLOG);
-			if (!$value) $this->SetMsg(self::MSG_APP_ERR, "マルチブログモードが選択されていません");
-		}
+
 	}
 	/**
 	 * ウィジェットのタイトルを設定
@@ -85,29 +122,6 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
-	}
-	/**
-	 * 取得したデータをテンプレートに設定する
-	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
-	 */
-	function blogListLoop($index, $fetchedRow, $param)
-	{
-		// リンク先の作成
-		$name = $fetchedRow['bl_name'];
-		$linkUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ID . '=' . $fetchedRow['bl_id'];
-		$row = array(
-			'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
-			'name' => $this->convertToDispString($name)			// タイトル
-		);
-		$this->tmpl->addVars('itemlist', $row);
-		$this->tmpl->parseTemplate('itemlist', 'a');
-		
-		$this->showWidget = true;		// ウィジェットを表示
-		return true;
 	}
 }
 ?>

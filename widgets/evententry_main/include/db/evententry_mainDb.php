@@ -26,7 +26,7 @@ class evententry_mainDb extends BaseDb
 	function getAllConfig(&$rows)
 	{
 		$queryStr  = 'SELECT * FROM evententry_config ';
-		$queryStr .=   'ORDER BY nc_index';
+		$queryStr .=   'ORDER BY ef_index';
 		$retValue = $this->selectRecords($queryStr, array(), $rows);
 		return $retValue;
 	}
@@ -39,10 +39,10 @@ class evententry_mainDb extends BaseDb
 	function getConfig($key)
 	{
 		$retValue = '';
-		$queryStr = 'SELECT nc_value FROM evententry_config ';
-		$queryStr .=  'WHERE nc_id  = ?';
+		$queryStr = 'SELECT ef_value FROM evententry_config ';
+		$queryStr .=  'WHERE ef_id  = ?';
 		$ret = $this->selectRecord($queryStr, array($key), $row);
-		if ($ret) $retValue = $row['nc_value'];
+		if ($ret) $retValue = $row['ef_value'];
 		return $retValue;
 	}
 	/**
@@ -55,14 +55,14 @@ class evententry_mainDb extends BaseDb
 	function updateConfig($key, $value)
 	{
 		// データの確認
-		$queryStr = 'SELECT nc_value FROM evententry_config ';
-		$queryStr .=  'WHERE nc_id  = ?';
+		$queryStr = 'SELECT ef_value FROM evententry_config ';
+		$queryStr .=  'WHERE ef_id  = ?';
 		$ret = $this->isRecordExists($queryStr, array($key));
 		if ($ret){
-			$queryStr = "UPDATE evententry_config SET nc_value = ? WHERE nc_id = ?";
+			$queryStr = "UPDATE evententry_config SET ef_value = ? WHERE ef_id = ?";
 			return $this->execStatement($queryStr, array($value, $key));
 		} else {
-			$queryStr = "INSERT INTO evententry_config (nc_id, nc_value) VALUES (?, ?)";
+			$queryStr = "INSERT INTO evententry_config (ef_id, ef_value) VALUES (?, ?)";
 			return $this->execStatement($queryStr, array($key, $value));
 		}
 	}
@@ -360,6 +360,28 @@ class evententry_mainDb extends BaseDb
 		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
 		$queryStr .=     'AND et_content_type = ? '; $params[] = $contentType;
 		$queryStr .=     'AND et_contents_id = ? '; $params[] = $contentsId;
+		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
+		$ret = $this->selectRecord($queryStr, $params, $row);
+		return $ret;
+	}
+	/**
+	 * イベント項目を共通コンテンツIDで取得
+	 *
+	 * @param string  $langId		言語ID
+	 * @param string  $eventId		イベントID
+	 * @param string  $entryType	受付タイプ
+	 * @param array   $row			レコード
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function getEntry($langId, $eventId, $entryType, &$row)
+	{
+		$params = array();
+		$queryStr  = 'SELECT * FROM evententry ';
+		$queryStr .=   'LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
+		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
+		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
+		$queryStr .=     'AND et_content_type = ? '; $params[] = 'event';
+		$queryStr .=     'AND et_contents_id = ? '; $params[] = $eventId;
 		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;

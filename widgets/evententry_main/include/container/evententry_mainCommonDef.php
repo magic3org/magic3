@@ -42,8 +42,8 @@ class evententry_mainCommonDef
 			// 取得データを連想配列にする
 			$configCount = count($rows);
 			for ($i = 0; $i < $configCount; $i++){
-				$key = $rows[$i]['nc_id'];
-				$value = $rows[$i]['nc_value'];
+				$key = $rows[$i]['ef_id'];
+				$value = $rows[$i]['ef_value'];
 				$retVal[$key] = $value;
 			}
 		}

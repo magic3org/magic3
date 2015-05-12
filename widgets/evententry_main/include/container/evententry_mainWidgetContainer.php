@@ -45,10 +45,6 @@ class evententry_mainWidgetContainer extends evententry_mainBaseWidgetContainer
 		if (empty($task)) $task = self::DEFAULT_TASK;
 
 		// ##### アクセス制御 #####
-/*		self::$_canEditEntry = false;		// 記事編集権限
-		if ($this->gEnv->isSystemManageUser()){			// システム運用可能ユーザのとき
-			self::$_canEditEntry = true;		// 記事編集権限
-		}*/
 		// ログインが必要な処理の場合は、ログイン状況をチェックする
 		switch ($task){
 			case self::TASK_REGIST:		// 参加登録画面
