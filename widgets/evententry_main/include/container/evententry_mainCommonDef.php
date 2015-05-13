@@ -19,12 +19,14 @@ class evententry_mainCommonDef
 	static $_deviceType = 0;				// デバイスタイプ(PC)
 	static $_viewContentType = M3_VIEW_TYPE_EVENTENTRY;		// コンテンツタイプ
 	
-	// デフォルト値
+	// ##### 定義値 #####
+	const DATE_RANGE_DELIMITER		= '～';				// 日時範囲用デリミター
+		
+	// ##### DB定義値 #####
+	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	
-	// DBフィールド名
-	const FD_DEFAULT_MESSAGE	= 'default_message';		// デフォルトメッセージ
-	const FD_DATE_FORMAT		= 'date_format';			// 日時フォーマット
-	const FD_LAYOUT_LIST_ITEM	= 'layout_list_item';		// リスト項目レイアウト
+	// ##### デフォルト値 #####
+	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_PLACE#]</span><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div></div><div class="entry_content">[#BODY#]</div><div>[#BODY#]<div class="evententry_info">定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div></div>[#BUTTON|type=ok;title=参加する#]';	// デフォルトのコンテンツレイアウト(記事詳細)
 
 	/**
 	 * 新着情報定義値をDBから取得

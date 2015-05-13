@@ -13,29 +13,13 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-<patTemplate:tmpl name="admin_script" visibility="hidden">
-function showConfig(){
-	m3ShowStandardWindow("{CONFIG_URL}");
-	return false;
-}
-function editEntry(serial){
-	m3ShowStandardWindow("{EDIT_URL}&serial=" + serial);
-	return false;
-}
-</patTemplate:tmpl>
-<patTemplate:tmpl name="edit_script" visibility="hidden">
-function editEntry(serial){
-	m3_showConfigWindow("{EDIT_URL}&serial=" + serial);
-	return false;
-}
-</patTemplate:tmpl>
 //]]>
 </script>
-<patTemplate:tmpl name="top_link_area" visibility="hidden"><div class="link_top"><a href="{CALENDAR_URL}"><strong>{CALENDAR_NAME}</strong></a></div></patTemplate:tmpl>
 <!-- m3:ErrorMessage -->
 <form method="post" name="event_main" class="form">
 <input type="hidden" name="act" />
 <input type="hidden" name="entryid" value="{ENTRY_ID}" />
+<input type="hidden" name="entrytype" value="{ENTRY_TYPE}" />
 <input type="hidden" name="ticket" value="{TICKET}" />
 <patTemplate:tmpl name="show_title" visibility="hidden">{TITLE}</patTemplate:tmpl>
 <patTemplate:tmpl name="message" visibility="hidden"><div>{MESSAGE}</div></patTemplate:tmpl>

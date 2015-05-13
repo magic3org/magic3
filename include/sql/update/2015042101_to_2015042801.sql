@@ -17,6 +17,9 @@
 -- --------------------------------------------------------------------------------------------------
 
 -- *** システムベーステーブル ***
+-- ページ定義マスター
+ALTER TABLE _page_def ADD pd_h_tag_level INT            DEFAULT 0                     NOT NULL;      -- タイトル用のHタグのトップレベル(0=設定なし、0以外=Hタグレベル)
+
 -- ページIDマスター
 DELETE FROM _page_id WHERE pg_type = 1;
 INSERT INTO _page_id 

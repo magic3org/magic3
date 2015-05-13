@@ -23,7 +23,8 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	private $showWidget;		// ウィジェットを表示するかどうか
 	
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
-	
+	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
+
 //	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'イベント予約';		// デフォルトのウィジェットタイトル名
 	
@@ -110,7 +111,15 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	 */
 	function _assign($request, &$param)
 	{
-
+		// 入力値取得
+		$act = $request->trimValueOf('act');
+		
+		if ($act == 'regist'){		// 登録の場合
+		} else if ($act == 'cancel'){		// 登録キャンセルの場合
+		}
+		
+		// イベント予約画面作成
+		$this->createSingle($request);
 	}
 	/**
 	 * ウィジェットのタイトルを設定
@@ -122,6 +131,89 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	function _setTitle($request, &$param)
 	{
 		return self::DEFAULT_TITLE;
+	}
+	/**
+	 * イベント予約画面作成
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function createSingle($request)
+	{
+		$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
+		
+		$entryId = $fetchedRow['ee_id'];// 記事ID
+		$title = $fetchedRow['ee_name'];// タイトル
+		$date = $fetchedRow['ee_regist_dt'];// 日付
+		$accessPointUrl = $this->gEnv->getDefaultUrl();
+		// イベント情報追加分
+		$summary = $row['ee_summary'];		// 要約
+		$url = $fetchedRow['ee_url'];		// URL
+		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
+		
+		// 記事へのリンクを生成
+		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
+		
+		// タイトル作成
+		$titleTag = '<h' . $this->itemTagLevel . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $this->convertToDispString($title) . '</a></h' . $this->itemTagLevel . '>';
+				
+			
+		// コンテンツのサムネールを取得
+//		$thumbFilename = $fetchedRow['ee_thumb_filename'];
+//		if ($isDefaltContent) $thumbFilename = $defaltContentRow['ee_thumb_filename'];
+//		$thumbUrl = event_mainCommonDef::getEyecatchImageUrl($thumbFilename, self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
+		// アイキャッチ画像
+		$iconUrl = $this->eventObj->getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], 's'/*sサイズ画像*/);
+		if (empty($fetchedRow['ee_thumb_filename'])){
+			$iconTitle = 'アイキャッチ画像未設定';
+		} else {
+			$iconTitle = 'アイキャッチ画像';
+		}
+		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+
+
+
+		// Magic3マクロ変換
+		// あらかじめ「CT_」タグをすべて取得する?
+		$contentInfo = array();
+		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $fetchedRow['ee_id'];			// コンテンツ置換キー(エントリーID)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $fetchedRow['lu_name'];			// コンテンツ置換キー(著者)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['ee_name'];			// コンテンツ置換キー(タイトル)
+		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['ee_description'];			// コンテンツ置換キー(簡易説明)
+		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
+		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $fetchedRow['ee_create_dt'];		// コンテンツ置換キー(更新日時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $fetchedRow['ee_regist_dt'];		// コンテンツ置換キー(登録日時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($fetchedRow['ee_regist_dt']);		// コンテンツ置換キー(登録日)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($fetchedRow['ee_regist_dt']);		// コンテンツ置換キー(登録時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $fetchedRow['ee_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $fetchedRow['ee_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
+		// イベント情報追加分
+		$contentInfo[M3_TAG_MACRO_CONTENT_PLACE]	= $this->getCurrentLangString($fetchedRow['ee_place']);// 開催場所
+		$contentInfo[M3_TAG_MACRO_CONTENT_CONTACT]	= $this->getCurrentLangString($fetchedRow['ee_contact']);		// 連絡先
+		$contentInfo[M3_TAG_MACRO_CONTENT_INFO_URL]		= $fetchedRow['ee_url'];		// その他の情報のURL
+		
+			
+
+//$entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
+
+		// イベント開催期間
+		$dateHtml = '';
+		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
+			if ($isAllDay){		// 終日イベントのとき
+				$dateHtml = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+			} else {
+				$dateHtml = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+			}
+		} else {
+			if ($isAllDay){		// 終日イベントのとき
+				$dateHtml = $this->convertToDispDate($fetchedRow['ee_start_dt']) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
+				$dateHtml .= $this->convertToDispDate($fetchedRow['ee_end_dt']);
+			} else {
+				$dateHtml = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
+				$dateHtml .= $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+			}
+		}
 	}
 }
 ?>
