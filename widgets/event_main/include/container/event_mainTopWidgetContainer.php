@@ -564,7 +564,7 @@ class event_mainTopWidgetContainer extends event_mainBaseWidgetContainer
 		$date = $fetchedRow['ee_regist_dt'];// 日付
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
 		// イベント情報追加分
-		$summary = $row['ee_summary'];		// 要約
+		$summary = $fetchedRow['ee_summary'];		// 要約
 		$url = $fetchedRow['ee_url'];		// URL
 		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
 		

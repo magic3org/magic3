@@ -21,7 +21,7 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	private $db;			// DB接続オブジェクト
 	private $eventObj;			// イベント情報用取得オブジェクト
 	private $showWidget;		// ウィジェットを表示するかどうか
-	
+	private $_contentParam;		// コンテンツ変換用	
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 
@@ -141,15 +141,16 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	function createSingle($request)
 	{
 		$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
+		if (empty($layout)) $layout = evententry_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 		
-		$entryId = $fetchedRow['ee_id'];// 記事ID
-		$title = $fetchedRow['ee_name'];// タイトル
-		$date = $fetchedRow['ee_regist_dt'];// 日付
+		$entryId = $this->entryRow['ee_id'];// 記事ID
+		$title = $this->entryRow['ee_name'];// タイトル
+		$date = $this->entryRow['ee_regist_dt'];// 日付
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
 		// イベント情報追加分
-		$summary = $row['ee_summary'];		// 要約
-		$url = $fetchedRow['ee_url'];		// URL
-		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
+		$summary	= $this->entryRow['ee_summary'];		// 要約
+		$url		= $this->entryRow['ee_url'];		// URL
+		$isAllDay	= $this->entryRow['ee_is_all_day'];			// 終日イベントかどうか
 		
 		// 記事へのリンクを生成
 		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
@@ -159,61 +160,136 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 				
 			
 		// コンテンツのサムネールを取得
-//		$thumbFilename = $fetchedRow['ee_thumb_filename'];
+//		$thumbFilename = $this->entryRow['ee_thumb_filename'];
 //		if ($isDefaltContent) $thumbFilename = $defaltContentRow['ee_thumb_filename'];
 //		$thumbUrl = event_mainCommonDef::getEyecatchImageUrl($thumbFilename, self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
 		// アイキャッチ画像
-		$iconUrl = $this->eventObj->getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], 's'/*sサイズ画像*/);
-		if (empty($fetchedRow['ee_thumb_filename'])){
+		$iconUrl = $this->eventObj->getEyecatchImageUrl($this->entryRow['ee_thumb_filename'], 's'/*sサイズ画像*/);
+		if (empty($this->entryRow['ee_thumb_filename'])){
 			$iconTitle = 'アイキャッチ画像未設定';
 		} else {
 			$iconTitle = 'アイキャッチ画像';
 		}
-		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 
-
-
+		// ##### 表示コンテンツ作成 #####
+		// 変換データ作成
+		
+		// コンテンツレイアウトのプレマクロ変換(ブロック型マクロを変換してコンテンツマクロのみ残す)
+		$contentParam = array(	M3_TAG_MACRO_TITLE	=> $titleTag,
+								M3_TAG_MACRO_IMAGE	=> $imageTag,
+								M3_TAG_MACRO_BODY	=> $entryHtml	);
+		$entryHtml = $this->createMacroContent($layout, $contentParam);
+		
 		// Magic3マクロ変換
 		// あらかじめ「CT_」タグをすべて取得する?
 		$contentInfo = array();
-		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $fetchedRow['ee_id'];			// コンテンツ置換キー(エントリーID)
-		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
-		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $fetchedRow['lu_name'];			// コンテンツ置換キー(著者)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['ee_name'];			// コンテンツ置換キー(タイトル)
-		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['ee_description'];			// コンテンツ置換キー(簡易説明)
-		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
-		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $fetchedRow['ee_create_dt'];		// コンテンツ置換キー(更新日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $fetchedRow['ee_regist_dt'];		// コンテンツ置換キー(登録日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($fetchedRow['ee_regist_dt']);		// コンテンツ置換キー(登録日)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($fetchedRow['ee_regist_dt']);		// コンテンツ置換キー(登録時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $fetchedRow['ee_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $fetchedRow['ee_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
-		// イベント情報追加分
-		$contentInfo[M3_TAG_MACRO_CONTENT_PLACE]	= $this->getCurrentLangString($fetchedRow['ee_place']);// 開催場所
-		$contentInfo[M3_TAG_MACRO_CONTENT_CONTACT]	= $this->getCurrentLangString($fetchedRow['ee_contact']);		// 連絡先
-		$contentInfo[M3_TAG_MACRO_CONTENT_INFO_URL]		= $fetchedRow['ee_url'];		// その他の情報のURL
+		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $entryId;			// コンテンツ置換キー(エントリーID)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $linkUrl;// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $title;			// コンテンツ置換キー(タイトル)
+		$contentInfo[M3_TAG_MACRO_CONTENT_SUMMARY] = $this->entryRow['ee_summary'];			// コンテンツ置換キー(要約)
+		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($this->entryRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始日)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($this->entryRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始時間)
 		
-			
+/*		// Magic3マクロ変換
+		// あらかじめ「CT_」タグをすべて取得する?
+		$contentInfo = array();
+		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $this->entryRow['ee_id'];			// コンテンツ置換キー(エントリーID)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $this->entryRow['lu_name'];			// コンテンツ置換キー(著者)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $this->entryRow['ee_name'];			// コンテンツ置換キー(タイトル)
+		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $this->entryRow['ee_description'];			// コンテンツ置換キー(簡易説明)
+		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
+		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $this->entryRow['ee_create_dt'];		// コンテンツ置換キー(更新日時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $this->entryRow['ee_regist_dt'];		// コンテンツ置換キー(登録日時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($this->entryRow['ee_regist_dt']);		// コンテンツ置換キー(登録日)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($this->entryRow['ee_regist_dt']);		// コンテンツ置換キー(登録時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $this->entryRow['ee_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $this->entryRow['ee_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
+		// イベント情報追加分
+		$contentInfo[M3_TAG_MACRO_CONTENT_PLACE]	= $this->getCurrentLangString($this->entryRow['ee_place']);// 開催場所
+		$contentInfo[M3_TAG_MACRO_CONTENT_CONTACT]	= $this->getCurrentLangString($this->entryRow['ee_contact']);		// 連絡先
+		$contentInfo[M3_TAG_MACRO_CONTENT_INFO_URL]		= $this->entryRow['ee_url'];		// その他の情報のURL
+		*/
+		
+		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
 
 //$entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
 
 		// イベント開催期間
 		$dateHtml = '';
-		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
+		if ($this->entryRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
 			if ($isAllDay){		// 終日イベントのとき
-				$dateHtml = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$dateHtml = $this->convertToDispDate($this->entryRow['ee_start_dt']);
 			} else {
-				$dateHtml = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+				$dateHtml = $this->convertToDispDateTime($this->entryRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
 			}
 		} else {
 			if ($isAllDay){		// 終日イベントのとき
-				$dateHtml = $this->convertToDispDate($fetchedRow['ee_start_dt']) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
-				$dateHtml .= $this->convertToDispDate($fetchedRow['ee_end_dt']);
+				$dateHtml = $this->convertToDispDate($this->entryRow['ee_start_dt']) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
+				$dateHtml .= $this->convertToDispDate($this->entryRow['ee_end_dt']);
 			} else {
-				$dateHtml = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
-				$dateHtml .= $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+				$dateHtml = $this->convertToDispDateTime($this->entryRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
+				$dateHtml .= $this->convertToDispDateTime($this->entryRow['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
 			}
 		}
+		
+		// テンプレートに表示データを埋め込む
+		$this->tmpl->addVar("_widget", "entry", $entryHtml);
+	}
+	/**
+	 * コンテンツのプレマクロ変換
+	 *
+	 * @param string $layout		レイアウト
+	 * @param array	$contentParam	コンテンツ作成用パラメータ
+	 * @return string				作成コンテンツ
+	 */
+	function createMacroContent($layout, $contentParam)
+	{
+		$this->_contentParam = $contentParam;
+		$dest = preg_replace_callback(M3_PATTERN_TAG_MACRO, array($this, '_replace_macro_callback'), $layout);
+		return $dest;
+	}
+	/**
+	 * コンテンツマクロ変換コールバック関数
+	 * 変換される文字列はHTMLタグではないテキストで、変換後のテキストはHTMLタグ(改行)を含むか、HTMLエスケープしたテキスト
+	 *
+	 * @param array $matchData		検索マッチデータ
+	 * @return string				変換後データ
+	 */
+    function _replace_macro_callback($matchData)
+	{
+		$destTag	= $matchData[0];		// マッチした文字列全体
+		$typeTag	= $matchData[1];		// マクロキー
+		$options	= $matchData[2];		// マクロオプション
+
+		switch ($typeTag){
+		case M3_TAG_MACRO_BODY:		// 説明
+			$destTag = $this->_contentParam[$typeTag];
+			break;
+		case M3_TAG_MACRO_BUTTON:		// ボタン
+			// コンテンツマクロオプションを解析
+			$optionParams = $this->gInstance->getTextConvManager()->parseMacroOption($options);
+
+			// コンテンツマクロオプション処理
+			$keys = array_keys($optionParams);
+			for ($i = 0; $i < count($keys); $i++){
+				$optionKey = $keys[$i];
+				$optionValue = $optionParams[$optionKey];
+
+				switch ($optionKey){
+				case 'title':		// ボタンタイトル
+					$title = $optionValue;
+					break;
+				}
+			}
+			$destTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($this->_contentParam[$typeTag]) . '">' . $this->convertToDispString($title) . '</a>';
+			break;
+		case M3_TAG_MACRO_IMAGE:		// サムネール
+			$destTag = $this->_contentParam[$typeTag];
+			break;			
+		}
+		return $destTag;
 	}
 }
 ?>
