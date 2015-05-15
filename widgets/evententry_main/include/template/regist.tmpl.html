@@ -15,14 +15,14 @@
 //<![CDATA[
 function regist(){
 	if (!window.confirm('このイベントに参加しますか?')) return false;
-	document.photo_main.act.value = 'regist';
-	document.photo_main.submit();
+	document.evententry_main.act.value = 'regist';
+	document.evententry_main.submit();
 	return true;
 }
 //]]>
 </script>
 <!-- m3:ErrorMessage -->
-<form method="post" name="event_main" class="form">
+<form method="post" name="evententry_main" class="form">
 <input type="hidden" name="act" />
 <input type="hidden" name="entryid" value="{ENTRY_ID}" />
 <input type="hidden" name="entrytype" value="{ENTRY_TYPE}" />

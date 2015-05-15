@@ -20,17 +20,11 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 {
 	private $db;			// DB接続オブジェクト
 	private $eventObj;			// イベント情報用取得オブジェクト
-	private $showWidget;		// ウィジェットを表示するかどうか
 	private $_contentParam;		// コンテンツ変換用	
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
-
-//	const TARGET_WIDGET = 'blog_main';		// 呼び出しウィジェットID
 	const DEFAULT_TITLE = 'イベント予約';		// デフォルトのウィジェットタイトル名
 	
-//	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
-//	const CF_USE_MULTI_BLOG			= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
-
 	/**
 	 * コンストラクタ
 	 */
@@ -112,14 +106,35 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	function _assign($request, &$param)
 	{
 		// 入力値取得
-		$act = $request->trimValueOf('act');
+		$act		= $request->trimValueOf('act');
+		$postTicket = $request->trimValueOf('ticket');		// POST確認用
 		
 		if ($act == 'regist'){		// 登録の場合
+			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
+				// 入力エラーがない場合は登録
+				if ($this->getMsgCount() == 0){
+					$this->setGuidanceMsg('登録完了しました');
+					//$this->setUserErrorMsg('登録に失敗しました');
+				} else {
+					// ハッシュキー作成
+					$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
+					$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
+				}
+			} else {		// ハッシュキーが異常のとき
+				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
+			}
 		} else if ($act == 'cancel'){		// 登録キャンセルの場合
+		} else {
+			// ハッシュキー作成
+			$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
+			$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
 		}
 		
 		// イベント予約画面作成
 		$this->createSingle($request);
+		
+		// 画面確認用のハッシュを設定
+		$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面確認用
 	}
 	/**
 	 * ウィジェットのタイトルを設定
@@ -140,14 +155,13 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	 */
 	function createSingle($request)
 	{
-		$entryId	= $this->entryRow['ee_id'];// 記事ID
-		$title		= $this->entryRow['ee_name'];// タイトル
-		$date		= $this->entryRow['ee_regist_dt'];// 日付
-		$accessPointUrl = $this->gEnv->getDefaultUrl();
-		// イベント情報追加分
-		$summary	= $this->entryRow['ee_summary'];		// 要約
+		// イベント情報
+		$entryId	= $this->entryRow['ee_id'];			// 記事ID
+		$title		= $this->entryRow['ee_name'];		// タイトル
+		$summary	= $this->entryRow['ee_summary'];	// 要約
 		$url		= $this->entryRow['ee_url'];		// URL
-		$isAllDay	= $this->entryRow['ee_is_all_day'];			// 終日イベントかどうか
+		$isAllDay	= $this->entryRow['ee_is_all_day'];	// 終日イベントかどうか
+		// イベント予約情報
 		$entryHtml	= $this->entryRow['et_html'];		// 説明
 		
 		// ##### コンテンツ作成用レイアウト取得 #####
@@ -171,6 +185,10 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// ##### 表示コンテンツ作成 #####
+		// 変換データ作成
+		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
+		$entryCountStr = '';				// 参加数
+		
 		// イベント開催期間
 		$dateHtml = '';
 		if ($this->entryRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
@@ -201,33 +219,17 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		// Magic3マクロ変換
 		// あらかじめ「CT_」タグをすべて取得する?
 		$contentInfo = array();
-		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $entryId;			// コンテンツ置換キー(エントリーID)
-		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $linkUrl;// コンテンツ置換キー(エントリーURL)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $title;			// コンテンツ置換キー(タイトル)
-		$contentInfo[M3_TAG_MACRO_CONTENT_SUMMARY] = $this->entryRow['ee_summary'];			// コンテンツ置換キー(要約)
-//		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($this->entryRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始日)
-//		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($this->entryRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始時間)
-		
-/*		// Magic3マクロ変換
-		// あらかじめ「CT_」タグをすべて取得する?
-		$contentInfo = array();
-		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $this->entryRow['ee_id'];			// コンテンツ置換キー(エントリーID)
-		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
-		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $this->entryRow['lu_name'];			// コンテンツ置換キー(著者)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $this->entryRow['ee_name'];			// コンテンツ置換キー(タイトル)
-		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $this->entryRow['ee_description'];			// コンテンツ置換キー(簡易説明)
-		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
-		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $this->entryRow['ee_create_dt'];		// コンテンツ置換キー(更新日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $this->entryRow['ee_regist_dt'];		// コンテンツ置換キー(登録日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($this->entryRow['ee_regist_dt']);		// コンテンツ置換キー(登録日)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($this->entryRow['ee_regist_dt']);		// コンテンツ置換キー(登録時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $this->entryRow['ee_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $this->entryRow['ee_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
-		// イベント情報追加分
+		$contentInfo[M3_TAG_MACRO_CONTENT_ID]		= $entryId;			// コンテンツ置換キー(エントリーID)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL]		= $linkUrl;			// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE]	= $title;			// コンテンツ置換キー(タイトル)
+		$contentInfo[M3_TAG_MACRO_CONTENT_SUMMARY]	= $summary;			// コンテンツ置換キー(要約)
 		$contentInfo[M3_TAG_MACRO_CONTENT_PLACE]	= $this->getCurrentLangString($this->entryRow['ee_place']);// 開催場所
 		$contentInfo[M3_TAG_MACRO_CONTENT_CONTACT]	= $this->getCurrentLangString($this->entryRow['ee_contact']);		// 連絡先
-		$contentInfo[M3_TAG_MACRO_CONTENT_INFO_URL]		= $this->entryRow['ee_url'];		// その他の情報のURL
-		*/
+		// イベント予約情報
+		$contentInfo[M3_TAG_MACRO_CONTENT_QUOTA]		= $quotaStr;			// コンテンツ置換キー(定員)
+		$contentInfo[M3_TAG_MACRO_CONTENT_ENTRY_COUNT]	= $entryCountStr;		// コンテンツ置換キー(登録数)
+		// 会員情報
+		$contentInfo[M3_TAG_MACRO_CONTENT_MEMBER_NAME]	= $this->gEnv->getCurrentUserName();		// コンテンツ置換キー(会員名)
 		
 		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
 		
@@ -289,7 +291,7 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 					break;
 				}
 			}
-			$destTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($this->_contentParam[$typeTag]) . '">' . $this->convertToDispString($title) . '</a>';
+			$destTag = '<a class="button" href="#" onclick="regist();">' . $this->convertToDispString($title) . '</a>';
 			break;		
 		}
 		return $destTag;
