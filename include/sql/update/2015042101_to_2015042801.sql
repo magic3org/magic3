@@ -17,6 +17,12 @@
 -- --------------------------------------------------------------------------------------------------
 
 -- *** システムベーステーブル ***
+-- システム設定マスター
+DELETE FROM _system_config WHERE sc_id = 'default_h_tag_level';
+INSERT INTO _system_config 
+(sc_id,                 sc_value, sc_name) VALUES
+('default_h_tag_level', '2',      'ウィジェットのHタグレベル');
+
 -- ページ定義マスター
 ALTER TABLE _page_def ADD pd_h_tag_level INT            DEFAULT 0                     NOT NULL;      -- タイトル用のHタグのトップレベル(0=設定なし、0以外=Hタグレベル)
 

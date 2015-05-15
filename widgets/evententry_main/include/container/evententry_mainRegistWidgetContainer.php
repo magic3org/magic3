@@ -140,17 +140,19 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	 */
 	function createSingle($request)
 	{
-		$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
-		if (empty($layout)) $layout = evententry_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
-		
-		$entryId = $this->entryRow['ee_id'];// 記事ID
-		$title = $this->entryRow['ee_name'];// タイトル
-		$date = $this->entryRow['ee_regist_dt'];// 日付
+		$entryId	= $this->entryRow['ee_id'];// 記事ID
+		$title		= $this->entryRow['ee_name'];// タイトル
+		$date		= $this->entryRow['ee_regist_dt'];// 日付
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
 		// イベント情報追加分
 		$summary	= $this->entryRow['ee_summary'];		// 要約
 		$url		= $this->entryRow['ee_url'];		// URL
 		$isAllDay	= $this->entryRow['ee_is_all_day'];			// 終日イベントかどうか
+		$entryHtml	= $this->entryRow['et_html'];		// 説明
+		
+		// ##### コンテンツ作成用レイアウト取得 #####
+		$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
+		if (empty($layout)) $layout = evententry_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 		
 		// 記事へのリンクを生成
 		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
@@ -158,11 +160,6 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		// タイトル作成
 		$titleTag = '<h' . $this->itemTagLevel . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $this->convertToDispString($title) . '</a></h' . $this->itemTagLevel . '>';
 				
-			
-		// コンテンツのサムネールを取得
-//		$thumbFilename = $this->entryRow['ee_thumb_filename'];
-//		if ($isDefaltContent) $thumbFilename = $defaltContentRow['ee_thumb_filename'];
-//		$thumbUrl = event_mainCommonDef::getEyecatchImageUrl($thumbFilename, self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE]);
 		// アイキャッチ画像
 		$iconUrl = $this->eventObj->getEyecatchImageUrl($this->entryRow['ee_thumb_filename'], 's'/*sサイズ画像*/);
 		if (empty($this->entryRow['ee_thumb_filename'])){
@@ -170,15 +167,35 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		} else {
 			$iconTitle = 'アイキャッチ画像';
 		}
-		$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-
+	//	$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
 		// ##### 表示コンテンツ作成 #####
-		// 変換データ作成
+		// イベント開催期間
+		$dateHtml = '';
+		if ($this->entryRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
+			if ($isAllDay){		// 終日イベントのとき
+				$dateHtml = $this->convertToDispDate($this->entryRow['ee_start_dt']);
+			} else {
+				$dateHtml = $this->convertToDispDateTime($this->entryRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+			}
+		} else {
+			if ($isAllDay){		// 終日イベントのとき
+				$dateHtml = $this->convertToDispDate($this->entryRow['ee_start_dt']) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
+				$dateHtml .= $this->convertToDispDate($this->entryRow['ee_end_dt']);
+			} else {
+				$dateHtml = $this->convertToDispDateTime($this->entryRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
+				$dateHtml .= $this->convertToDispDateTime($this->entryRow['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
+			}
+		}
 		
 		// コンテンツレイアウトのプレマクロ変換(ブロック型マクロを変換してコンテンツマクロのみ残す)
-		$contentParam = array(	M3_TAG_MACRO_TITLE	=> $titleTag,
+		$contentParam = array(	
+								// M3_TAG_MACRO_TITLE	=> $titleTag,
 								M3_TAG_MACRO_IMAGE	=> $imageTag,
-								M3_TAG_MACRO_BODY	=> $entryHtml	);
+								M3_TAG_MACRO_DATE	=> $dateHtml,		// 開催期間
+								M3_TAG_MACRO_BODY	=> $entryHtml		// 説明
+							);
 		$entryHtml = $this->createMacroContent($layout, $contentParam);
 		
 		// Magic3マクロ変換
@@ -188,8 +205,8 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $linkUrl;// コンテンツ置換キー(エントリーURL)
 		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $title;			// コンテンツ置換キー(タイトル)
 		$contentInfo[M3_TAG_MACRO_CONTENT_SUMMARY] = $this->entryRow['ee_summary'];			// コンテンツ置換キー(要約)
-		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($this->entryRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始日)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($this->entryRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始時間)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($this->entryRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始日)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($this->entryRow['ee_start_dt']);		// コンテンツ置換キー(イベント開始時間)
 		
 /*		// Magic3マクロ変換
 		// あらかじめ「CT_」タグをすべて取得する?
@@ -213,29 +230,16 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		*/
 		
 		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
-
-//$entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
-
-		// イベント開催期間
-		$dateHtml = '';
-		if ($this->entryRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// 開催開始日時のみ表示のとき
-			if ($isAllDay){		// 終日イベントのとき
-				$dateHtml = $this->convertToDispDate($this->entryRow['ee_start_dt']);
-			} else {
-				$dateHtml = $this->convertToDispDateTime($this->entryRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
-			}
-		} else {
-			if ($isAllDay){		// 終日イベントのとき
-				$dateHtml = $this->convertToDispDate($this->entryRow['ee_start_dt']) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
-				$dateHtml .= $this->convertToDispDate($this->entryRow['ee_end_dt']);
-			} else {
-				$dateHtml = $this->convertToDispDateTime($this->entryRow['ee_start_dt'], 0/*ロングフォーマット*/, 10/*時分*/) . evententry_mainCommonDef::DATE_RANGE_DELIMITER;
-				$dateHtml .= $this->convertToDispDateTime($this->entryRow['ee_end_dt'], 0/*ロングフォーマット*/, 10/*時分*/);
-			}
-		}
 		
-		// テンプレートに表示データを埋め込む
+		// メイン領域を出力
 		$this->tmpl->addVar("_widget", "entry", $entryHtml);
+		
+		// タイトル領域を出力
+		if (!empty($title)){
+			$this->startTitleTagLevel = 2;
+			$this->tmpl->setAttribute('show_title', 'visibility', 'visible');		// 年月表示
+			$this->tmpl->addVar("show_title", "title", '<h' . $this->startTitleTagLevel . '>' . $this->convertToDispString($title) . '</h' . $this->startTitleTagLevel . '>');
+		}
 	}
 	/**
 	 * コンテンツのプレマクロ変換
@@ -264,6 +268,8 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		$options	= $matchData[2];		// マクロオプション
 
 		switch ($typeTag){
+		case M3_TAG_MACRO_IMAGE:		// サムネール
+		case M3_TAG_MACRO_DATE:		// 開催期間
 		case M3_TAG_MACRO_BODY:		// 説明
 			$destTag = $this->_contentParam[$typeTag];
 			break;
@@ -284,10 +290,7 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 				}
 			}
 			$destTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($this->_contentParam[$typeTag]) . '">' . $this->convertToDispString($title) . '</a>';
-			break;
-		case M3_TAG_MACRO_IMAGE:		// サムネール
-			$destTag = $this->_contentParam[$typeTag];
-			break;			
+			break;		
 		}
 		return $destTag;
 	}

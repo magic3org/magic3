@@ -26,7 +26,7 @@ class evententry_mainCommonDef
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	
 	// ##### デフォルト値 #####
-	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<div class="entry_info"><div style="float:left;">[#IMAGE#]</div><div class="clearfix"><div>[#CT_SUMMARY#]</div></div><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_PLACE#]</span><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div></div><div class="evententry_content">[#BODY#]</div><div class="evententry_info"><div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div></div><div><strong>会員名: [#CT_MEMBER_NAME#]</strong></div>[#BUTTON|type=ok;title=登録する#]';	// デフォルトのコンテンツレイアウト(記事詳細)
+	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<div class="entry_info"><div style="float:left;">[#IMAGE#]</div><div class="clearfix"><div>[#CT_SUMMARY#]</div></div><div><span class="event_date">日時：[#DATE#]</span> <span class="event_location">場所：[#CT_PLACE#]</span></div><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div></div><div class="evententry_content">[#BODY#]</div><div class="evententry_info"><div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div></div><div><strong>会員名: [#CT_MEMBER_NAME#]</strong></div>[#BUTTON|type=ok;title=登録する#]';	// デフォルトのコンテンツレイアウト(記事詳細)
 
 	/**
 	 * 新着情報定義値をDBから取得
