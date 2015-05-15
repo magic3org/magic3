@@ -21,7 +21,10 @@ class evententry_mainCommonDef
 	
 	// ##### 定義値 #####
 	const DATE_RANGE_DELIMITER		= '～';				// 日時範囲用デリミター
-		
+	// 受付イベントコード自動生成用
+	const EVENT_CODE_HEAD = 'eve';			// 自動生成する受付イベントコードのヘッダ部
+	const EVENT_CODE_LENGTH = 5;			// 自動生成する受付イベントコードの数値桁数
+	
 	// ##### DB定義値 #####
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	
@@ -50,6 +53,29 @@ class evententry_mainCommonDef
 			}
 		}
 		return $retVal;
+	}
+	/**
+	 * イベント予約コードを生成
+	 *
+	 * @param string $id	イベントID
+	 * @return string		生成した受付イベントコード
+	 */
+	static function generateEventCode($id)
+	{
+		$code = self::EVENT_CODE_HEAD . sprintf("%0" . self::EVENT_CODE_LENGTH . "d", $id);
+		return $code;
+	}
+	/**
+	 * イベント予約受付コードを生成
+	 *
+	 * @param string $id	イベントID
+	 * @param string $type	予約タイプ
+	 * @return string		生成した受付イベントコード
+	 */
+	static function generateEntryCode($id, $type)
+	{
+		$code = self::generateEventCode($eventId) . "-%04d";
+		return $code;
 	}
 }
 ?>

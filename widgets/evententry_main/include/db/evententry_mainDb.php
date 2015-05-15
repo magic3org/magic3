@@ -427,5 +427,61 @@ class evententry_mainDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
+	/**
+	 * イベント予約の新規追加
+	 *
+	 * @param string  $id			イベント予約ID
+	 * @param int     $entryUserId	登録ユーザID
+	 * @param string  $codeFormat	受付コードフォーマット(sprintfタイプの文字列)
+	 * @param int     $newSerial	新規シリアル番号
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function addEventEntry($id, $entryUserId, $codeFormat, &$newSerial)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$status = 1;			// 参加
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// エントリーIDを決定する
+		$queryStr = 'SELECT MAX(er_index) AS mid FROM evententry_request ';
+		$queryStr .=  'WHERE er_evententry_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id), $row);
+		if ($ret){
+			$index = $row['mid'] + 1;
+		} else {
+			$index = 1;
+		}
+		// 予約コード
+		$code = sprintf($codeFormat, $index);
+		
+		// データを追加
+		$queryStr  = 'INSERT INTO evententry_request ';
+		$queryStr .=   '(';
+		$queryStr .=   'er_evententry_id, ';
+		$queryStr .=   'er_index, ';
+		$queryStr .=   'er_code, ';
+		$queryStr .=   'er_user_id, ';
+		$queryStr .=   'er_status, ';
+		
+		$queryStr .=   'er_create_user_id, ';
+		$queryStr .=   'er_create_dt';
+		$queryStr .=   ') ';
+		$queryStr .= 'VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($id, $index, $code, $entryUserId, $status, $userId, $now));
+		
+		// 新規のシリアル番号取得
+		$newSerial = 0;
+		$queryStr = 'SELECT MAX(er_serial) AS ns FROM evententry_request ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+			
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
 }
 ?>

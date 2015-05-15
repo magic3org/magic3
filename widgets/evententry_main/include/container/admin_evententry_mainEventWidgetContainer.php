@@ -36,9 +36,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const DEFAULT_CONTENT_TYPE = 'event';			// 予約対象となるコンテンツタイプ
 	const DEFAULT_ENTRY_TYPE = '';			// デフォルトのイベント受付タイプ
-	// 受付イベントコード自動生成用
-	const EVENT_CODE_HEAD = 'eve';			// 自動生成する受付イベントコードのヘッダ部
-	const EVENT_CODE_LENGTH = 5;			// 自動生成する受付イベントコードの数値桁数
 	
 	/**
 	 * コンストラクタ
@@ -526,7 +523,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				$this->serialNo = 0;
 				$this->status = 0;			// 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
 
-				$eventCode	= $this->_generateEventCode($eventId);		// 受付イベントコードを生成
+				$eventCode	= evententry_mainCommonDef::generateEventCode($eventId);		// 受付イベントコードを生成
 				$start_date	= '';	// 受付期間開始日
 				$start_time	= '';	// 受付期間開始時間
 				$end_date	= '';		// 受付期間終了日
@@ -861,17 +858,6 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$this->serialArray[] = $serial;
 		$this->idArray[] = $id;
 		return true;
-	}
-	/**
-	 * 受付イベントコードを生成
-	 *
-	 * @param string $id	イベントID
-	 * @return string		生成した受付イベントコード
-	 */
-	function _generateEventCode($id)
-	{
-		$code = self::EVENT_CODE_HEAD . sprintf("%0" . self::EVENT_CODE_LENGTH . "d", $id);
-		return $code;
 	}
 	/**
 	 * 状態表示ラベルテキスト取得

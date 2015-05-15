@@ -108,13 +108,26 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		// 入力値取得
 		$act		= $request->trimValueOf('act');
 		$postTicket = $request->trimValueOf('ticket');		// POST確認用
+		$eventId	= $request->trimValueOf('eventid');		// イベントID
+		$entryType	= $request->trimValueOf('entrytype');	// イベント予約タイプ
 		
 		if ($act == 'regist'){		// 登録の場合
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// 入力エラーがない場合は登録
 				if ($this->getMsgCount() == 0){
-					$this->setGuidanceMsg('登録完了しました');
-					//$this->setUserErrorMsg('登録に失敗しました');
+					// イベントID、予約タイプからイベント予約IDを取得
+					$ret = $this->db->getEntry($this->_langId, $eventId, $entryType, $row);
+					if ($ret) $eventEntryId	= $row['et_id'];			// イベント予約ID
+					
+					// イベント予約登録
+					$codeFormat = evententry_mainCommonDef::generateEntryCode($eventId, $entryType);
+					if ($ret) $ret = $this->db->addEventEntry($eventEntryId, $this->_userId, $codeFormat, $newSerial);
+
+					if ($ret){
+						$this->setGuidanceMsg('登録完了しました');
+					} else {
+						$this->setUserErrorMsg('登録に失敗しました');
+					}
 				} else {
 					// ハッシュキー作成
 					$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
@@ -162,7 +175,8 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		$url		= $this->entryRow['ee_url'];		// URL
 		$isAllDay	= $this->entryRow['ee_is_all_day'];	// 終日イベントかどうか
 		// イベント予約情報
-		$entryHtml	= $this->entryRow['et_html'];		// 説明
+		$eventEntryId	= $this->entryRow['et_id'];			// 予約ID
+		$entryHtml		= $this->entryRow['et_html'];		// 説明
 		
 		// ##### コンテンツ作成用レイアウト取得 #####
 		$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
@@ -242,6 +256,11 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 			$this->tmpl->setAttribute('show_title', 'visibility', 'visible');		// 年月表示
 			$this->tmpl->addVar("show_title", "title", '<h' . $this->startTitleTagLevel . '>' . $this->convertToDispString($title) . '</h' . $this->startTitleTagLevel . '>');
 		}
+		
+		// フォーム用非表示パラメータ
+		$entryType = '';				// イベント予約タイプ
+		$this->tmpl->addVar("_widget", "event_id", $this->convertToDispString($entryId));
+		$this->tmpl->addVar("_widget", "entry_type", $this->convertToDispString($entryType));
 	}
 	/**
 	 * コンテンツのプレマクロ変換

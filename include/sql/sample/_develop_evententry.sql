@@ -76,9 +76,9 @@ DROP TABLE IF EXISTS evententry_request;
 CREATE TABLE evententry_request (
     er_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
     er_evententry_id     INT            DEFAULT 0                     NOT NULL,      -- イベント予約ID
-    er_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(0～)
+    er_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(1～)
     
-    er_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 受付コード
+    er_code              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 受付コード
     er_user_id           INT            DEFAULT 0                     NOT NULL,      -- 参加者
     er_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=参加、2=キャンセル)
     
