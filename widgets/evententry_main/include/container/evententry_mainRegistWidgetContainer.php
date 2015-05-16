@@ -113,15 +113,22 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		
 		if ($act == 'regist'){		// 登録の場合
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
+				// イベントID、予約タイプからイベント予約IDを取得
+				$ret = $this->db->getEntry($this->_langId, $eventId, $entryType, $row);
+				if ($ret) $eventEntryId	= $row['et_id'];			// イベント予約ID
+				
+				// ##### 入力エラーチェック #####
+				if (empty($eventEntryId)) $this->setAppErrorMsg('イベント予約情報が見つかりません');
+				
+				// ユーザが登録済みかどうか確認
+				$userExists = $this->db->isExistsEntryUser($eventEntryId, $this->_userId);
+				if ($userExists) $this->setUserErrorMsg('登録済みです');
+
 				// 入力エラーがない場合は登録
 				if ($this->getMsgCount() == 0){
-					// イベントID、予約タイプからイベント予約IDを取得
-					$ret = $this->db->getEntry($this->_langId, $eventId, $entryType, $row);
-					if ($ret) $eventEntryId	= $row['et_id'];			// イベント予約ID
-					
 					// イベント予約登録
 					$codeFormat = evententry_mainCommonDef::generateEntryCode($eventId, $entryType);
-					if ($ret) $ret = $this->db->addEventEntry($eventEntryId, $this->_userId, $codeFormat, $newSerial);
+					$ret = $this->db->addEventEntry($eventEntryId, $this->_userId, $codeFormat, $newSerial);
 
 					if ($ret){
 						$this->setGuidanceMsg('登録完了しました');
@@ -177,7 +184,7 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		// イベント予約情報
 		$eventEntryId	= $this->entryRow['et_id'];			// 予約ID
 		$entryHtml		= $this->entryRow['et_html'];		// 説明
-		
+
 		// ##### コンテンツ作成用レイアウト取得 #####
 		$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
 		if (empty($layout)) $layout = evententry_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
@@ -201,7 +208,7 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		// ##### 表示コンテンツ作成 #####
 		// 変換データ作成
 		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
-		$entryCountStr = '';				// 参加数
+		$entryCountStr = $this->db->getEntryUserCount($eventEntryId) . '名';		// 参加数
 		
 		// イベント開催期間
 		$dateHtml = '';
@@ -310,6 +317,11 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 					break;
 				}
 			}
+			
+			// ユーザが登録済みかどうか確認
+			$userExists = $this->db->isExistsEntryUser($eventEntryId, $this->_userId);
+			//if ($userExists) $this->setUserErrorMsg('登録済みです');
+				
 			$destTag = '<a class="button" href="#" onclick="regist();">' . $this->convertToDispString($title) . '</a>';
 			break;		
 		}

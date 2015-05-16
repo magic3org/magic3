@@ -52,5 +52,19 @@ class evententry_attachmentDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;
 	}
+	/**
+	 * ユーザの予約数を取得
+	 *
+	 * @param string  $id			イベント予約ID
+	 * @return bool					true=存在する、false=存在しない
+	 */
+	function getEntryUserCount($id)
+	{
+		$queryStr  = 'SELECT * FROM evententry_request ';
+		$queryStr .=   'WHERE er_deleted = false ';			// 削除されていない
+		$queryStr .=     'AND er_status = 1 ';				// 「参加」のみ
+		$queryStr .=     'AND er_evententry_id = ? ';
+		return $this->selectRecordCount($queryStr, array($id));
+	}
 }
 ?>

@@ -118,7 +118,17 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		// 初期化
+		// イベント情報
+		$entryId	= $this->entryRow['ee_id'];			// 記事ID
+		$title		= $this->entryRow['ee_name'];		// タイトル
+		$summary	= $this->entryRow['ee_summary'];	// 要約
+		$url		= $this->entryRow['ee_url'];		// URL
+		$isAllDay	= $this->entryRow['ee_is_all_day'];	// 終日イベントかどうか
+		// イベント予約情報
+		$eventEntryId	= $this->entryRow['et_id'];			// 予約ID
+		$entryHtml		= $this->entryRow['et_html'];		// 説明
+
+		// ##### コンテンツ作成用レイアウト取得 #####
 		$layout = evententry_attachmentCommonDef::DEFAULT_LAYOUT;	// イベント予約レイアウト
 		
 		// 保存値取得
@@ -141,7 +151,7 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		// ##### 表示コンテンツ作成 #####
 		// 変換データ作成
 		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
-		$entryCountStr = '';				// 参加数
+		$entryCountStr = $this->db->getEntryUserCount($eventEntryId) . '名';		// 参加数
 		// 予約画面
 		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_EVENTENTRY, 
 					M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::FORWARD_TASK_REGIST . '&' .

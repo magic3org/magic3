@@ -445,6 +445,17 @@ class evententry_mainDb extends BaseDb
 		// トランザクション開始
 		$this->startTransaction();
 		
+		// 既に登録済みの場合は終了
+		$queryStr  = 'SELECT * FROM evententry_request ';
+		$queryStr .=   'WHERE er_deleted = false ';			// 削除されていない
+		$queryStr .=     'AND er_evententry_id = ? ';
+		$queryStr .=     'AND er_user_id = ? ';
+		$ret = $this->selectRecord($queryStr, array($id, $entryUserId), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			$this->endTransaction();
+			return false;
+		}
+		
 		// エントリーIDを決定する
 		$queryStr = 'SELECT MAX(er_index) AS mid FROM evententry_request ';
 		$queryStr .=  'WHERE er_evententry_id = ? ';
@@ -482,6 +493,35 @@ class evententry_mainDb extends BaseDb
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
+	}
+	/**
+	 * ユーザの予約状況の確認
+	 *
+	 * @param string  $id			イベント予約ID
+	 * @param int     $entryUserId	登録ユーザID
+	 * @return bool					true=存在する、false=存在しない
+	 */
+	function isExistsEntryUser($id, $userId)
+	{
+		$queryStr  = 'SELECT * FROM evententry_request ';
+		$queryStr .=   'WHERE er_deleted = false ';			// 削除されていない
+		$queryStr .=     'AND er_evententry_id = ? ';
+		$queryStr .=     'AND er_user_id = ? ';
+		return $this->isRecordExists($queryStr, array($id, $userId));
+	}
+	/**
+	 * ユーザの予約数を取得
+	 *
+	 * @param string  $id			イベント予約ID
+	 * @return bool					true=存在する、false=存在しない
+	 */
+	function getEntryUserCount($id)
+	{
+		$queryStr  = 'SELECT * FROM evententry_request ';
+		$queryStr .=   'WHERE er_deleted = false ';			// 削除されていない
+		$queryStr .=     'AND er_status = 1 ';				// 「参加」のみ
+		$queryStr .=     'AND er_evententry_id = ? ';
+		return $this->selectRecordCount($queryStr, array($id));
 	}
 }
 ?>
