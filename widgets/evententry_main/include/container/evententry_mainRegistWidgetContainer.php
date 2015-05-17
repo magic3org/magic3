@@ -20,6 +20,7 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 {
 	private $db;			// DB接続オブジェクト
 	private $eventObj;			// イベント情報用取得オブジェクト
+	private $eventEntryId;		// イベント予約ID
 	private $_contentParam;		// コンテンツ変換用	
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
@@ -184,6 +185,8 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 		// イベント予約情報
 		$eventEntryId	= $this->entryRow['et_id'];			// 予約ID
 		$entryHtml		= $this->entryRow['et_html'];		// 説明
+		// コンテンツ作成用
+		$this->eventEntryId = $eventEntryId;		// イベント予約ID
 
 		// ##### コンテンツ作成用レイアウト取得 #####
 		$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
@@ -312,6 +315,9 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 				$optionValue = $optionParams[$optionKey];
 
 				switch ($optionKey){
+				case 'type':		// ボタンタイプ
+					$type = $optionValue;
+					break;
 				case 'title':		// ボタンタイトル
 					$title = $optionValue;
 					break;
@@ -319,10 +325,23 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 			}
 			
 			// ユーザが登録済みかどうか確認
-			$userExists = $this->db->isExistsEntryUser($eventEntryId, $this->_userId);
-			//if ($userExists) $this->setUserErrorMsg('登録済みです');
+			$userExists = $this->db->isExistsEntryUser($this->eventEntryId, $this->_userId);
+
+			// タイトル解析
+			list($title, $title2) = explode('|', $title);
 				
-			$destTag = '<a class="button" href="#" onclick="regist();">' . $this->convertToDispString($title) . '</a>';
+			switch ($type){
+			case 'ok':			// OKボタンのとき
+				if ($userExists){			// 登録済みの場合
+					$destTag = '<a class="button" href="#" onclick="return false;" style="pointer-events:none;">' . $this->convertToDispString($title2) . '</a>';
+				} else {
+					$destTag = '<a class="button" href="#" onclick="regist();">' . $this->convertToDispString($title) . '</a>';
+				}
+				break;
+			case 'cancel':		// キャンセルボタンのとき
+				$destTag = '<a class="button" href="#" onclick="cancel();">' . $this->convertToDispString($title) . '</a>';
+				break;
+			}
 			break;		
 		}
 		return $destTag;
