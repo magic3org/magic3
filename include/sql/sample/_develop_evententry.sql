@@ -40,8 +40,8 @@ CREATE TABLE evententry_config (
 INSERT INTO evententry_config
 (ef_id,                  ef_value,    ef_name) VALUES
 ('show_entry_count',     '0',         '参加者数を表示するかどうか'),
-('show_entry_member',    '0',         '参加者を表示するかどうか(会員対象)');
-
+('show_entry_member',    '0',         '参加者を表示するかどうか(会員対象)'),
+('enable_cancel',        '0',         'キャンセル機能を使用可能にするかどうか');
 
 -- イベント予約マスター
 DROP TABLE IF EXISTS evententry;
@@ -58,6 +58,7 @@ CREATE TABLE evententry (
     et_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
     et_show_entry_count  BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者数を表示するかどうか
     et_show_entry_member BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者を表示するかどうか(会員対象)
+    et_enable_cancel     BOOLEAN        DEFAULT true                  NOT NULL,      -- キャンセル機能を使用可能にするかどうか
     et_max_entry         INT            DEFAULT 0                     NOT NULL,      -- 定員(0は定員なし)
     et_start_dt          TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(開始)
     et_end_dt            TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(終了)
