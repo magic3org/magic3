@@ -251,9 +251,9 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 			case 'ok':			// OKボタンのとき
 			default:
 				if ($userExists){			// 登録済みの場合
-					$destTag = '<a class="button" href="#" onclick="return false;" style="pointer-events:none;">' . $this->convertToDispString($title2) . '</a>';
+					$destTag = '<a class="button" href="#" style="pointer-events:none;">' . $this->convertToDispString($title2) . '</a>';
 				} else {
-					$destTag = '<a class="button" href="#" onclick="regist();">' . $this->convertToDispString($title) . '</a>';
+					$destTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($this->_contentParam[$typeTag]) . '">' . $this->convertToDispString($title) . '</a>';
 				}
 				break;
 			}
