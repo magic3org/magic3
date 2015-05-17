@@ -24,6 +24,7 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	private $configArray;		// 新着情報定義値
 	private $entryStatus;		// 予約情報の状態
 	private $entryRow;			// 予約情報レコード
+	private $eventEntryId;		// イベント予約ID
 	private $_contentParam;		// コンテンツ変換用
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const DEFAULT_TITLE = 'イベント予約';			// デフォルトのウィジェットタイトル
@@ -127,7 +128,9 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		// イベント予約情報
 		$eventEntryId	= $this->entryRow['et_id'];			// 予約ID
 		$entryHtml		= $this->entryRow['et_html'];		// 説明
-
+		// コンテンツ作成用
+		$this->eventEntryId = $eventEntryId;		// イベント予約ID
+		
 		// ##### コンテンツ作成用レイアウト取得 #####
 		$layout = evententry_attachmentCommonDef::DEFAULT_LAYOUT;	// イベント予約レイアウト
 		
@@ -237,7 +240,23 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 					break;
 				}
 			}
-			$destTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($this->_contentParam[$typeTag]) . '">' . $this->convertToDispString($title) . '</a>';
+		//	$destTag = '<a class="button" href="' . $this->convertUrlToHtmlEntity($this->_contentParam[$typeTag]) . '">' . $this->convertToDispString($title) . '</a>';
+			// ユーザが登録済みかどうか確認
+			$userExists = $this->db->isExistsEntryUser($this->eventEntryId, $this->_userId);
+
+			// タイトル解析
+			list($title, $title2) = explode('|', $title);
+				
+			switch ($type){
+			case 'ok':			// OKボタンのとき
+			default:
+				if ($userExists){			// 登録済みの場合
+					$destTag = '<a class="button" href="#" onclick="return false;" style="pointer-events:none;">' . $this->convertToDispString($title2) . '</a>';
+				} else {
+					$destTag = '<a class="button" href="#" onclick="regist();">' . $this->convertToDispString($title) . '</a>';
+				}
+				break;
+			}
 			break;
 		}
 		return $destTag;

@@ -66,5 +66,20 @@ class evententry_attachmentDb extends BaseDb
 		$queryStr .=     'AND er_evententry_id = ? ';
 		return $this->selectRecordCount($queryStr, array($id));
 	}
+	/**
+	 * ユーザの予約状況の確認
+	 *
+	 * @param string  $id			イベント予約ID
+	 * @param int     $entryUserId	登録ユーザID
+	 * @return bool					true=存在する、false=存在しない
+	 */
+	function isExistsEntryUser($id, $userId)
+	{
+		$queryStr  = 'SELECT * FROM evententry_request ';
+		$queryStr .=   'WHERE er_deleted = false ';			// 削除されていない
+		$queryStr .=     'AND er_evententry_id = ? ';
+		$queryStr .=     'AND er_user_id = ? ';
+		return $this->isRecordExists($queryStr, array($id, $userId));
+	}
 }
 ?>
