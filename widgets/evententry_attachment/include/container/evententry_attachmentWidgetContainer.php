@@ -28,7 +28,7 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	private $_contentParam;		// コンテンツ変換用
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const DEFAULT_TITLE = 'イベント予約';			// デフォルトのウィジェットタイトル
-	const FORWARD_TASK_REGIST = 'regist';			// イベント予約画面遷移用
+	const FORWARD_TASK_REQUEST = 'request';			// イベント予約画面遷移用
 	
 	/**
 	 * コンストラクタ
@@ -157,7 +157,7 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		$entryCountStr = $this->db->getEntryUserCount($eventEntryId) . '名';		// 参加数
 		// 予約画面
 		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_EVENTENTRY, 
-					M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::FORWARD_TASK_REGIST . '&' .
+					M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::FORWARD_TASK_REQUEST . '&' .
 					M3_REQUEST_PARAM_EVENT_ID . '=' . $this->entryRow['et_contents_id']);// コンテンツタイプが「イベント予約」のページを取得
 		$linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
 						
