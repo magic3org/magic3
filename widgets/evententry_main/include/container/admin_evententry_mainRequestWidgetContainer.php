@@ -71,6 +71,7 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 	function createList($request)
 	{
 		$act = $request->trimValueOf('act');
+		$eventId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
 		
 		if ($act == 'delete'){		// 項目削除の場合
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
@@ -96,25 +97,18 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 		// #### カテゴリーリストを作成 ####
 //		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->langId);// デフォルト言語で取得
 		
+		// イベントが非公開の場合は表示しない
+		$ret = self::$_mainDb->getEventEntryByEventId($this->_langId, $eventId, ''/*予約タイプ*/, $entryRow);
+		if ($ret){
+			$eventName = $entryRow['ee_name'];
+		}
+		$this->tmpl->addVar("_widget", "event_name", $this->convertToDispString($eventName));	// イベント名
+		
 		if (count($this->serialArray) > 0){
 			$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		} else {
 			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 		}
 	}
-	/**
-	 * テンプレートにデータ埋め込む
-	 *
-	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @return								なし
-	 */
-/*	function _postAssign($request, &$param)
-	{
-		// メニューバー、パンくずリスト作成(簡易版)
-		$this->createBasicConfigMenubar($request);
-	}*/
 }
 ?>

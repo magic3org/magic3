@@ -201,7 +201,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 				// 削除するイベント記事の情報を取得
 				$delEntryInfo = array();
 				for ($i = 0; $i < count($delItems); $i++){
-					$ret = self::$_mainDb->getEntryBySerial($this->_langId, $delItems[$i], $row);
+					$ret = self::$_mainDb->getEventEntryBySerial($this->_langId, $delItems[$i], $row);
 					if ($ret){
 						$newInfoObj = new stdClass;
 						$newInfoObj->eventId = $row['ee_id'];		// イベント記事ID
@@ -210,7 +210,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 					}
 				}
 				
-				$ret = self::$_mainDb->delEntry($delItems);
+				$ret = self::$_mainDb->delEventEntry($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 					
@@ -250,7 +250,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 
 		// 総数を取得
-		$totalCount = self::$_mainDb->getEntryListCount($this->_langId, $this->contentType, $parsedKeywords);
+		$totalCount = self::$_mainDb->getEventEntryListCount($this->_langId, $this->contentType, $parsedKeywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
@@ -259,7 +259,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// イベントリストを取得
-		self::$_mainDb->getEntryList($this->_langId, $this->contentType, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
+		self::$_mainDb->getEventEntryList($this->_langId, $this->contentType, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// イベントがないときは、一覧を表示しない
 
 		// ボタン作成
@@ -326,7 +326,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$reloadData = false;		// データの再ロード
 		if ($act == 'new'){			// 新規の場合
 			// 目的の受付イベントが作成されている場合はエラー
-			$ret = self::$_mainDb->getEntryByContentsId($this->_langId, $this->contentType, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
+			$ret = self::$_mainDb->getEventEntryByContentsId($this->_langId, $this->contentType, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
 			if ($ret){
 				$this->setAppErrorMsg('既に受付イベントが作成されています');
 				$eventId = '';			// イベントIDをリセット
@@ -366,7 +366,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 										'et_start_dt'			=> $startDt,
 										'et_end_dt'				=> $endDt
 									);
-				$ret = self::$_mainDb->addEntry($this->contentType, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $otherParams, $newSerial);
+				$ret = self::$_mainDb->addEventEntry($this->contentType, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $otherParams, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -379,7 +379,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 					
 					// 運用ログを残す
 					$statusStr = '';
-					$ret = self::$_mainDb->getEntryBySerial($this->_langId, $this->serialNo, $row);
+					$ret = self::$_mainDb->getEventEntryBySerial($this->_langId, $this->serialNo, $row);
 					if ($ret){
 						$eventId	= $row['et_contents_id'];	// コンテンツID
 						$updateDt	= $row['et_create_dt'];		// 作成日時
@@ -433,7 +433,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 										'et_start_dt'			=> $startDt,
 										'et_end_dt'				=> $endDt
 									);
-				$ret = self::$_mainDb->updateEntry($this->serialNo, $otherParams, $newSerial);
+				$ret = self::$_mainDb->updateEventEntry($this->serialNo, $otherParams, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -446,7 +446,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 					
 					// 運用ログを残す
 					$statusStr = '';
-					$ret = self::$_mainDb->getEntryBySerial($this->_langId, $this->serialNo, $row);
+					$ret = self::$_mainDb->getEventEntryBySerial($this->_langId, $this->serialNo, $row);
 					if ($ret){
 						$eventId	= $row['et_contents_id'];	// コンテンツID
 						$updateDt	= $row['et_create_dt'];		// 作成日時
@@ -475,13 +475,13 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
 				// 削除するイベント記事の情報を取得
-				$ret = self::$_mainDb->getEntryBySerial($this->_langId, $this->serialNo, $row);
+				$ret = self::$_mainDb->getEventEntryBySerial($this->_langId, $this->serialNo, $row);
 				if ($ret){
 					$eventId = $row['ee_id'];		// イベント記事ID
 					$name = $row['ee_name'];		// イベント記事名
 				}
 				
-				$ret = self::$_mainDb->delEntry(array($this->serialNo));
+				$ret = self::$_mainDb->delEventEntry(array($this->serialNo));
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');
 					
@@ -501,7 +501,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		}
 		// 設定データを再取得
 		if ($reloadData){		// データの再ロード
-			$ret = self::$_mainDb->getEntryBySerial($this->_langId, $this->serialNo, $row);
+			$ret = self::$_mainDb->getEventEntryBySerial($this->_langId, $this->serialNo, $row);
 			if ($ret){
 				$eventId = $row['et_contents_id'];		// イベントID
 				$this->status = intval($row['et_status']);			// 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
@@ -614,10 +614,12 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		$serial = $fetchedRow['et_serial'];// シリアル番号
 		// イベント予約情報
+		$serial = $fetchedRow['et_serial'];// シリアル番号
 		$eventEntryId	= $fetchedRow['et_id'];			// 予約ID
 		$maxEntry		= $fetchedRow['et_max_entry'];	// 定員
+		// イベント情報
+		$eventId = $fetchedRow['ee_id'];// イベントID
 		
 		// イベントが開始されている場合は受付終了
 		$iconTitle = '';
@@ -671,7 +673,8 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$requestLinkUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
 		$requestLinkUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
 		$requestLinkUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_REQUEST;
-		$requestLinkUrl .= '&evententryid=' . $eventEntryId;			// イベント予約ID
+		$requestLinkUrl .= '&eventid=' . $eventId;			// イベントID
+		$requestLinkUrl .= '&entrytype=' . '';			// イベント予約タイプ
 		$entryCountTag = '<a href="' . $this->convertUrlToHtmlEntity($requestLinkUrl) . '">' . $this->convertToDispString($entryCountText) . '</a>';
 		
 		$row = array(
@@ -792,7 +795,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		// チェックボックス選択可否
 		// 目的の受付イベントが作成されている場合はエラー
 		$checkDisabled = '';
-		$ret = self::$_mainDb->getEntryByContentsId($this->_langId, $this->contentType, $id, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
+		$ret = self::$_mainDb->getEventEntryByContentsId($this->_langId, $this->contentType, $id, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
 		if ($ret) $checkDisabled = 'disabled';
 		
 		// 公開状態

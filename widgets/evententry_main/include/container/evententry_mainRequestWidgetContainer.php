@@ -61,7 +61,7 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 		}
 		
 		// イベントが非公開の場合は表示しない
-		$ret = $this->db->getEntry($this->_langId, $eventId, ''/*予約タイプ*/, $this->entryRow);
+		$ret = $this->db->getEventEntryByEventId($this->_langId, $eventId, ''/*予約タイプ*/, $this->entryRow);
 		if ($ret){
 			// イベントの表示状態を取得
 			$visible =$this->eventObj->isEntryVisible($this->entryRow);
@@ -115,7 +115,7 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 		if ($act == 'regist'){		// 登録の場合
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// イベントID、予約タイプからイベント予約IDを取得
-				$ret = $this->db->getEntry($this->_langId, $eventId, $entryType, $row);
+				$ret = $this->db->getEventEntryByEventId($this->_langId, $eventId, $entryType, $row);
 				if ($ret) $eventEntryId	= $row['et_id'];			// イベント予約ID
 				
 				// ##### 入力エラーチェック #####
@@ -129,7 +129,7 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 				if ($this->getMsgCount() == 0){
 					// イベント予約登録
 					$codeFormat = evententry_mainCommonDef::generateEntryCode($eventId, $entryType);
-					$ret = $this->db->addEventEntry($eventEntryId, $this->_userId, $codeFormat, $newSerial);
+					$ret = $this->db->addEventEntryRequest($eventEntryId, $this->_userId, $codeFormat, $newSerial);
 
 					if ($ret){
 						$this->setGuidanceMsg('登録完了しました');

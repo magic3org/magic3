@@ -74,7 +74,7 @@ class evententry_mainDb extends BaseDb
 	 * @param array	 $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	function getEntryListCount($langId, $contentType, $keywords)
+	function getEventEntryListCount($langId, $contentType, $keywords)
 	{
 		$params = array();
 		switch ($contentType){
@@ -125,7 +125,7 @@ class evententry_mainDb extends BaseDb
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getEntryList($langId, $contentType, $limit, $page, $keywords, $callback)
+	function getEventEntryList($langId, $contentType, $limit, $page, $keywords, $callback)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
@@ -186,7 +186,7 @@ class evententry_mainDb extends BaseDb
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addEntry($contentType, $contentsId, $entryType, $otherParams, &$newSerial)
+	function addEventEntry($contentType, $contentsId, $entryType, $otherParams, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -252,7 +252,7 @@ class evententry_mainDb extends BaseDb
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateEntry($serial, $otherParams, &$newSerial)
+	function updateEventEntry($serial, $otherParams, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -331,7 +331,7 @@ class evententry_mainDb extends BaseDb
 	 * @param array     $row		レコード
 	 * @return bool					取得 = true, 取得なし= false
 	 */
-	function getEntryBySerial($langId, $serial, &$row)
+	function getEventEntryBySerial($langId, $serial, &$row)
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
@@ -351,7 +351,7 @@ class evententry_mainDb extends BaseDb
 	 * @param array     $row				レコード
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function getEntryByContentsId($langId, $contentType, $contentsId, $entryType, &$row)
+	function getEventEntryByContentsId($langId, $contentType, $contentsId, $entryType, &$row)
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
@@ -365,7 +365,7 @@ class evententry_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * イベント項目を共通コンテンツIDで取得
+	 * イベント項目をイベントIDで取得
 	 *
 	 * @param string  $langId		言語ID
 	 * @param string  $eventId		イベントID
@@ -373,7 +373,7 @@ class evententry_mainDb extends BaseDb
 	 * @param array   $row			レコード
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function getEntry($langId, $eventId, $entryType, &$row)
+	function getEventEntryByEventId($langId, $eventId, $entryType, &$row)
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
@@ -392,7 +392,7 @@ class evententry_mainDb extends BaseDb
 	 * @param array $serial			シリアルNo
 	 * @return						true=成功、false=失敗
 	 */
-	function delEntry($serial)
+	function delEventEntry($serial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -436,7 +436,7 @@ class evententry_mainDb extends BaseDb
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addEventEntry($id, $entryUserId, $codeFormat, &$newSerial)
+	function addEventEntryRequest($id, $entryUserId, $codeFormat, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ

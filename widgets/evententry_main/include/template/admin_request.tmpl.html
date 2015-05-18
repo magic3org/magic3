@@ -13,11 +13,10 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function newItem(){
-    document.main.task.value = 'category_detail';
-    document.main.act.value = 'new';
-    document.main.submit();
-    return true;
+function cancelItem(){
+	document.main.task.value = 'event';
+	document.main.submit();
+	return true;
 }
 function editItem(){
     if (document.main.seriallist.value){
@@ -31,7 +30,7 @@ function editItem(){
 	if (i == items.length){			
 	    window.alert('編集する項目を選択してください');
 	} else {
-            document.main.task.value = 'category_detail';
+            document.main.task.value = 'request_detail';
             document.main.act.value = 'edit';
 	    document.main.serial.value = items[i];
             document.main.submit();
@@ -40,7 +39,7 @@ function editItem(){
     return true;
 }
 function editItemBySerial(serial){
-    document.main.task.value = 'category_detail';
+    document.main.task.value = 'request_detail';
     document.main.act.value = 'edit';
     document.main.serial.value = serial;
     document.main.submit();
@@ -66,40 +65,38 @@ function delItem(){
 }
 $(function(){
 	// テーブルを作成
-	m3SetConfigTable('categorylist');
+	m3SetConfigTable('requestlist');
 });
 //]]>
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="task" value="category" />
+<input type="hidden" name="task" value="request" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-<h3 class="m3config_h"><span {_HELP_CATEGORY_LIST}>カテゴリー一覧</span></h3>
-<div class="m3config_h_side_buttons pull-right"><div {_HELP_CATEGORY_BUTTONS}><div class="btn-group">
-<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+<h3 class="m3config_h"><span {_HELP_REQUEST_LIST}>参加者一覧</span>({EVENT_NAME})</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_REQUEST_BUTTONS}><div class="btn-group">
+<!--<input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />--><input type="button" class="button" onclick="cancelItem();" value="戻る" />
 </div></div></div>
 
-<table id="categorylist">
+<table id="requestlist">
     <thead>
     <tr>
-        <th class="select"><span {_HELP_CATEGORY_CHECK}>選択</span></th>
-        <th style="width:50px;"><span {_HELP_CATEGORY_ID}>ID</span></th>
-        <th><span {_HELP_CATEGORY_NAME}>カテゴリー名</span></th>
-	    <th style="width:50px;"><span {_HELP_CATEGORY_INDEX}>表示順</span></th>
-	    <th style="width:50px;"><span {_HELP_CATEGORY_VISIBLE}>公開</span></th>
+        <th class="select"><span {_HELP_REQUEST_CHECK}>選択</span></th>
+        <th style="width:50px;"><span {_HELP_REQUEST_NO}>NO</span></th>
+        <th><span {_HELP_REQUEST_NAME}>会員名</span></th>
+	    <th style="width:50px;"><span {_HELP_REQUEST_INDEX}>状態</span></th>
 	</tr>
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
 	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td>{ID}</td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
-	    <td>{VIEW_INDEX}</td>
-	    <td><input type="checkbox" name="item_visible" {VISIBLE} disabled /></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});" rel="m3help" title="参加要求を編集">{NO}</a></td>
+	    <td><a href="#" onclick="editUser({USER_ID});">{NAME}</a></td>
+	    <td>{STATUS}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
