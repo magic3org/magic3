@@ -55,9 +55,14 @@ class admin_evententry_mainWidgetContainer extends admin_evententry_mainBaseWidg
 				$task = self::TASK_CONFIG;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case self::TASK_EVENT:				// 新着情報一覧
-			case self::TASK_EVENT_DETAIL:		// 新着情報詳細
+			case self::TASK_EVENT:				// 受付イベント一覧
+			case self::TASK_EVENT_DETAIL:		// 受付イベント詳細
 				$task = self::TASK_EVENT;
+				$goWidget = true;		// サブウィジェットを実行するかどうか
+				break;
+			case self::TASK_REQUEST:			// 参加要求一覧
+			case self::TASK_REQUEST_DETAIL:		// 参加要求詳細
+				$task = self::TASK_REQUEST;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 		}

@@ -26,7 +26,7 @@ class evententry_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected $_baseUrl;		// ベースURL
 
 	// 画面
-	const TASK_REGIST		= 'regist';			// 参加登録画面
+	const TASK_REQUEST		= 'request';			// 参加登録画面
 	const TASK_LOGIN		= 'login';			// ログイン画面
 	const DEFAULT_TASK		= 'top';			// トップ画面
 		

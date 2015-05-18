@@ -615,7 +615,10 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	function itemListLoop($index, $fetchedRow, $param)
 	{
 		$serial = $fetchedRow['et_serial'];// シリアル番号
-
+		// イベント予約情報
+		$eventEntryId	= $fetchedRow['et_id'];			// 予約ID
+		$maxEntry		= $fetchedRow['et_max_entry'];	// 定員
+		
 		// イベントが開始されている場合は受付終了
 		$iconTitle = '';
 		if (strtotime($this->_now) >= strtotime($fetchedRow['ee_start_dt'])){
@@ -657,12 +660,27 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			}
 		}
 
+		// 参加数
+		$entryCountText = '';
+		if (empty($maxEntry)){			// 定員なしの場合
+			$entryCountText = self::$_mainDb->getEntryUserCount($eventEntryId);
+		} else {
+			$entryCountText = self::$_mainDb->getEntryUserCount($eventEntryId) . ' / ' . $maxEntry;		// 参加数
+		}
+		// 参加状況一覧
+		$requestLinkUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+		$requestLinkUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+		$requestLinkUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_REQUEST;
+		$requestLinkUrl .= '&evententryid=' . $eventEntryId;			// イベント予約ID
+		$entryCountTag = '<a href="' . $this->convertUrlToHtmlEntity($requestLinkUrl) . '">' . $this->convertToDispString($entryCountText) . '</a>';
+		
 		$row = array(
-			'index'		=> $index,		// 項目番号
-			'serial'	=> $serial,			// シリアル番号
-			'name'		=> $this->convertToDispString($fetchedRow['ee_name']),		// イベント名
-			'status_img' => $statusImg,													// 公開状況
-			'date'		=> $startDtStr	// 開催日時
+			'index'			=> $index,		// 項目番号
+			'serial'		=> $serial,			// シリアル番号
+			'name'			=> $this->convertToDispString($fetchedRow['ee_name']),		// イベント名
+			'status_img' 	=> $statusImg,													// 公開状況
+			'date'			=> $startDtStr,	// 開催日時
+			'entry_count'	=> $entryCountTag			// 参加数
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');

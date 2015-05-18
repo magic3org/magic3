@@ -16,7 +16,7 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/evententry_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/evententry_mainDb.php');
 
-class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetContainer
+class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetContainer
 {
 	private $db;			// DB接続オブジェクト
 	private $eventObj;			// イベント情報用取得オブジェクト
@@ -93,7 +93,7 @@ class evententry_mainRegistWidgetContainer extends evententry_mainBaseWidgetCont
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'regist.tmpl.html';
+		return 'request.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む

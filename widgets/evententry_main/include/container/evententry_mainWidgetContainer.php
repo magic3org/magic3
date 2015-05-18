@@ -47,7 +47,7 @@ class evententry_mainWidgetContainer extends evententry_mainBaseWidgetContainer
 		// ##### アクセス制御 #####
 		// ログインが必要な処理の場合は、ログイン状況をチェックする
 		switch ($task){
-			case self::TASK_REGIST:		// 参加登録画面
+			case self::TASK_REQUEST:		// 参加登録画面
 				// ログイン状態を取得
 				if (!$this->gEnv->isCurrentUserLogined()){		// ログインされていない場合
 					$loginPage = $this->gEnv->createCurrentPageUrl() . '&task=' . self::TASK_LOGIN . '&' . M3_REQUEST_PARAM_FORWARD . '=' . urlencode($this->gEnv->getCurrentRequestUri());
@@ -62,7 +62,7 @@ class evententry_mainWidgetContainer extends evententry_mainBaseWidgetContainer
 		// ##### コンテナを起動 #####
 		$goWidget = false;		// サブウィジェットを実行するかどうか
 		switch ($task){
-			case self::TASK_REGIST:		// 参加登録画面
+			case self::TASK_REQUEST:		// 参加登録画面
 			case self::TASK_LOGIN:		// ログイン画面
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
@@ -105,7 +105,7 @@ class evententry_mainWidgetContainer extends evententry_mainBaseWidgetContainer
 
 		// 要求画面によってテンプレートを変更
 		switch ($task){
-			case self::TASK_REGIST:			// 参加登録画面
+			case self::TASK_REQUEST:			// 参加登録画面
 			default:
 				break;
 		}
