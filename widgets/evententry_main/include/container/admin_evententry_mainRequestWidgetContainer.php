@@ -94,21 +94,112 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 				}
 			}
 		}
-		// #### カテゴリーリストを作成 ####
-//		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->langId);// デフォルト言語で取得
+		// 総数を取得
+		$totalCount = self::$_mainDb->getEntryItemCount($search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId);
+
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		
-		// イベントが非公開の場合は表示しない
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		
+		// 記事項目リストを取得
+		self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'));
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		
+		
+		// 受付イベント取得
 		$ret = self::$_mainDb->getEventEntryByEventId($this->_langId, $eventId, ''/*予約タイプ*/, $entryRow);
 		if ($ret){
 			$eventName = $entryRow['ee_name'];
 		}
 		$this->tmpl->addVar("_widget", "event_name", $this->convertToDispString($eventName));	// イベント名
+	}
+	/**
+	 * 取得したデータをテンプレートに設定する
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function itemListLoop($index, $fetchedRow, $param)
+	{
+		$serial = $fetchedRow['ee_serial'];// シリアル番号
+		$isAllDay = $fetchedRow['ee_is_all_day'];			// 終日イベントかどうか
 		
-		if (count($this->serialArray) > 0){
-			$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		} else {
-			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
+		// 公開状態
+		switch ($fetchedRow['ee_status']){
+			case 1:	$status = '<font color="orange">編集中</font>';	break;
+			case 2:	$status = '<font color="green">公開</font>';	break;
+			case 3:	$status = '非公開';	break;
 		}
+		// 総参照数
+		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(event_mainCommonDef::VIEW_CONTENT_TYPE, $serial);
+		
+		// イベント開催期間
+		if ($fetchedRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// // 期間終了がないとき
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$startDtStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$endDtStr = '';
+			} else {
+				$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+				$endDtStr = '';
+			}
+		} else {
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$startDtStr = $this->convertToDispDate($fetchedRow['ee_start_dt']);
+				$endDtStr = $this->convertToDispDate($fetchedRow['ee_end_dt']);
+			} else {
+				$startDtStr = $this->convertToDispDateTime($fetchedRow['ee_start_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+				$endDtStr = $this->convertToDispDateTime($fetchedRow['ee_end_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
+			}
+		}
+		
+		$isActive = false;		// 公開状態
+		if ($fetchedRow['ee_status'] == 2) $isActive = true;// 表示可能
+		
+		if ($isActive){		// コンテンツが公開状態のとき
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+			$iconTitle = '公開中';
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = '非公開';
+		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
+		// アイキャッチ画像
+		$iconUrl = event_mainCommonDef::getEyecatchImageUrl($fetchedRow['ee_thumb_filename'], self::$_configArray[event_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[event_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+		if (empty($fetchedRow['ee_thumb_filename'])){
+			$iconTitle = 'アイキャッチ画像未設定';
+		} else {
+			$iconTitle = 'アイキャッチ画像';
+		}
+		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+
+		$row = array(
+			'index' => $index,		// 項目番号
+			'no' => $index + 1,													// 行番号
+			'serial' => $serial,			// シリアル番号
+			'id' => $this->convertToDispString($fetchedRow['ee_id']),			// ID
+			'name' => $this->convertToDispString($fetchedRow['ee_name']),		// 名前
+			'lang' => $lang,													// 対応言語
+			'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
+			'status_img' => $statusImg,												// 公開状態
+			'status' => $status,													// 公開状況
+			'date_start' => $startDtStr,	// 開催日時
+			'date_end' => $endDtStr,	// 開催日時
+			'place' => $this->convertToDispString($fetchedRow['ee_place']),	// 開催場所
+			'view_count' => $totalViewCount,									// 総参照数
+			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
+			'update_date' => $this->convertToDispDateTime($fetchedRow['ee_create_dt'])	// 更新日時
+		);
+		$this->tmpl->addVars('itemlist', $row);
+		$this->tmpl->parseTemplate('itemlist', 'a');
+		
+		// 表示中項目のシリアル番号を保存
+		$this->serialArray[] = $serial;
+		return true;
 	}
 }
 ?>

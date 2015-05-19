@@ -70,44 +70,29 @@ class evententry_mainDb extends BaseDb
 	 * イベント項目数を取得(管理用)
 	 *
 	 * @param string $langId			言語ID
-	 * @param string $contentType		コンテンツタイプ
 	 * @param array	 $keywords			検索キーワード
 	 * @return int							項目数
 	 */
-	function getEventEntryListCount($langId, $contentType, $keywords)
+	function getEventEntryListCount($langId, $keywords)
 	{
 		$params = array();
-		switch ($contentType){
-		case M3_VIEW_TYPE_EVENT:		// イベント情報
-			$queryStr  = 'SELECT * FROM evententry LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
-			$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
-			break;
-		default:
-			$queryStr = 'SELECT * FROM evententry ';
-			break;
-		}
+		$queryStr  = 'SELECT * FROM evententry LEFT JOIN event_entry ON et_event_id = ee_id AND ee_deleted = false ';
+		$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
 		$queryStr .=  'WHERE et_deleted = false ';				// 削除されていない
-		$queryStr .=    'AND et_content_type = ? '; $params[] = $contentType;	// コンテンツタイプ
 
 		// 検索キーワード条件
 		if (!empty($keywords)){
 			for ($i = 0; $i < count($keywords); $i++){
 				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
 				
-				switch ($contentType){
-				case M3_VIEW_TYPE_EVENT:		// イベント情報
-					$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
-					break;
-				default:
-					break;
-				}
+				$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
 				$queryStr .=    'AND (et_code LIKE \'%' . $keyword . '%\' ';		// イベント予約受付コード
 				$queryStr .=    'OR et_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
@@ -118,57 +103,39 @@ class evententry_mainDb extends BaseDb
 	 * イベント項目を検索(管理用)
 	 *
 	 * @param string    $langId				言語ID
-	 * @param string	$contentType		コンテンツタイプ
 	 * @param int		$limit				取得する項目数
 	 * @param int		$page				取得するページ(1～)
 	 * @param array		$keywords			検索キーワード
 	 * @param function	$callback			コールバック関数
 	 * @return 			なし
 	 */
-	function getEventEntryList($langId, $contentType, $limit, $page, $keywords, $callback)
+	function getEventEntryList($langId, $limit, $page, $keywords, $callback)
 	{
 		$offset = $limit * ($page -1);
 		if ($offset < 0) $offset = 0;
 		
 		$params = array();
 		$orderStr = '';
-		switch ($contentType){
-		case M3_VIEW_TYPE_EVENT:		// イベント情報
-			$queryStr  = 'SELECT * FROM evententry LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
-			$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
-			
-			// 並び順
-			$orderStr = 'ee_start_dt DESC, ee_id ';
-			break;
-		default:
-			$queryStr = 'SELECT * FROM evententry ';
-			
-			// 並び順
-			$orderStr = 'et_contents_id DESC, et_type ';
-			break;
-		}
+		$queryStr  = 'SELECT * FROM evententry LEFT JOIN event_entry ON et_event_id = ee_id AND ee_deleted = false ';
+		$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
+		
+		// 並び順
+		$orderStr = 'ee_start_dt DESC, ee_id ';
 		$queryStr .=  'WHERE et_deleted = false ';				// 削除されていない
-		$queryStr .=    'AND et_content_type = ? '; $params[] = $contentType;	// コンテンツタイプ
 
 		// 検索キーワード条件
 		if (!empty($keywords)){
 			for ($i = 0; $i < count($keywords); $i++){
 				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
 				
-				switch ($contentType){
-				case M3_VIEW_TYPE_EVENT:		// イベント情報
-					$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
-					$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
-					break;
-				default:
-					break;
-				}
+				$queryStr .=    'AND (ee_name LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_html LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_html_ext LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_summary LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_place LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_contact LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_url LIKE \'%' . $keyword . '%\' ';
+				$queryStr .=    'OR ee_option_fields LIKE \'%' . $keyword . '%\') ';	// ユーザ定義フィールド
 				$queryStr .=    'AND (et_code LIKE \'%' . $keyword . '%\' ';		// イベント予約受付コード
 				$queryStr .=    'OR et_html LIKE \'%' . $keyword . '%\') ';			// 説明
 			}
@@ -179,14 +146,13 @@ class evententry_mainDb extends BaseDb
 	/**
 	 * イベント項目の新規追加
 	 *
-	 * @param string  $contentType	コンテンツタイプ
-	 * @param string  $contentsId	共通コンテンツID
+	 * @param string  $eventId		イベントID
 	 * @param string  $entryType	受付タイプ
 	 * @param array   $otherParams	その他のフィールド値
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addEventEntry($contentType, $contentsId, $entryType, $otherParams, &$newSerial)
+	function addEventEntry($eventId, $entryType, $otherParams, &$newSerial)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -209,8 +175,7 @@ class evententry_mainDb extends BaseDb
 		$queryStr  = 'INSERT INTO evententry ';
 		$queryStr .=   '(';
 		$queryStr .=   'et_id, ';				$params[] = $id;
-		$queryStr .=   'et_content_type, ';		$params[] = $contentType;
-		$queryStr .=   'et_contents_id, ';		$params[] = $contentsId;
+		$queryStr .=   'et_event_id, ';			$params[] = $eventId;
 		$queryStr .=   'et_type, ';				$params[] = $entryType;
 		$queryStr .=   'et_history_index, ';	$params[] = $historyIndex;
 		$queryStr .=   'et_create_user_id, ';	$params[] = $userId;
@@ -288,8 +253,7 @@ class evententry_mainDb extends BaseDb
 		$queryStr  = 'INSERT INTO evententry ';
 		$queryStr .=   '(';
 		$queryStr .=   'et_id, ';				$params[] = $row['et_id'];
-		$queryStr .=   'et_content_type, ';		$params[] = $row['et_content_type'];
-		$queryStr .=   'et_contents_id, ';		$params[] = $row['et_contents_id'];
+		$queryStr .=   'et_event_id, ';			$params[] = $row['et_event_id'];
 		$queryStr .=   'et_type, ';				$params[] = $row['et_type'];
 		$queryStr .=   'et_history_index, ';	$params[] = $historyIndex;
 		$queryStr .=   'et_create_user_id, ';	$params[] = $userId;
@@ -335,7 +299,7 @@ class evententry_mainDb extends BaseDb
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
-		$queryStr .=   'LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
+		$queryStr .=   'LEFT JOIN event_entry ON et_event_id = ee_id AND ee_deleted = false ';
 		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
 		$queryStr .=   'WHERE et_serial = ? '; $params[] = intval($serial);
 		$ret = $this->selectRecord($queryStr, $params, $row);
@@ -345,21 +309,19 @@ class evententry_mainDb extends BaseDb
 	 * イベント項目を共通コンテンツIDで取得
 	 *
 	 * @param string  $langId		言語ID
-	 * @param string  $contentType	コンテンツタイプ
-	 * @param string  $contentsId	共通コンテンツID
+	 * @param string  $eventId		イベントID
 	 * @param string  $entryType	受付タイプ
 	 * @param array     $row				レコード
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function getEventEntryByContentsId($langId, $contentType, $contentsId, $entryType, &$row)
+	function getEventEntryByContentsId($langId, $eventId, $entryType, &$row)
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
-		$queryStr .=   'LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
+		$queryStr .=   'LEFT JOIN event_entry ON et_event_id = ee_id AND ee_deleted = false ';
 		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
 		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
-		$queryStr .=     'AND et_content_type = ? '; $params[] = $contentType;
-		$queryStr .=     'AND et_contents_id = ? '; $params[] = $contentsId;
+		$queryStr .=     'AND et_event_id = ? '; $params[] = $eventId;
 		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;
@@ -377,11 +339,10 @@ class evententry_mainDb extends BaseDb
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
-		$queryStr .=   'LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
+		$queryStr .=   'LEFT JOIN event_entry ON et_event_id = ee_id AND ee_deleted = false ';
 		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
 		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
-		$queryStr .=     'AND et_content_type = ? '; $params[] = 'event';
-		$queryStr .=     'AND et_contents_id = ? '; $params[] = $eventId;
+		$queryStr .=     'AND et_event_id = ? '; $params[] = $eventId;
 		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;

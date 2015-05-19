@@ -158,7 +158,7 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		// 予約画面
 		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_EVENTENTRY, 
 					M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::FORWARD_TASK_REQUEST . '&' .
-					M3_REQUEST_PARAM_EVENT_ID . '=' . $this->entryRow['et_contents_id']);// コンテンツタイプが「イベント予約」のページを取得
+					M3_REQUEST_PARAM_EVENT_ID . '=' . $this->entryRow['et_event_id']);// コンテンツタイプが「イベント予約」のページを取得
 		$linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
 						
 		// コンテンツレイアウトのプレマクロ変換(ブロック型マクロを変換してコンテンツマクロのみ残す)

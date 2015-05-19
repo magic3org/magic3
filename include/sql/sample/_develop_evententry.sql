@@ -50,8 +50,7 @@ CREATE TABLE evententry (
     et_id                INT            DEFAULT 0                     NOT NULL,      -- イベント予約ID
     et_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
     
-    et_content_type      VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- コンテンツ種別
-    et_contents_id       VARCHAR(32)    DEFAULT ''                    NOT NULL,      -- 共通コンテンツID
+    et_event_id          VARCHAR(32)    DEFAULT ''                    NOT NULL,      -- イベントID
     et_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 受付タイプ
     et_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント予約受付コード
     et_html              TEXT                                         NOT NULL,      -- 説明

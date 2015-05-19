@@ -23,7 +23,7 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	protected static $_configArray;		// イベント予約定義値
 	protected static $_task;			// 現在の画面
 	protected $_baseUrl;			// 管理画面のベースURL
-	protected $_contentType;		// コンテンツタイプ
+//	protected $_contentType;		// コンテンツタイプ
 	
 	// カレンダー用スクリプト
 	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル

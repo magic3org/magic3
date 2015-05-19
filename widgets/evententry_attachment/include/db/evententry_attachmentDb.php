@@ -43,10 +43,10 @@ class evententry_attachmentDb extends BaseDb
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
-		$queryStr .=   'LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
+		$queryStr .=   'LEFT JOIN event_entry ON et_event_id = ee_id AND ee_deleted = false ';
 		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
 		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
-		$queryStr .=     'AND et_contents_id = ? '; $params[] = $eventId;
+		$queryStr .=     'AND et_event_id = ? '; $params[] = $eventId;
 		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;
