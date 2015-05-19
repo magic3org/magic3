@@ -39,6 +39,7 @@ function editItem(){
     return true;
 }
 function editItemBySerial(serial){
+	return;
     document.main.task.value = 'request_detail';
     document.main.act.value = 'edit';
     document.main.serial.value = serial;
@@ -96,7 +97,7 @@ $(function(){
     <tr>
 	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});" rel="m3help" title="参加要求を編集">{NO}</a></td>
-	    <td><a href="#" onclick="editUser({USER_ID});">{NAME}</a></td>
+	    <td><a href="{NAME_URL}">{NAME}</a></td>
 	    <td>{STATUS}</td>
 		<td>{DATE}</td>
 	</tr>

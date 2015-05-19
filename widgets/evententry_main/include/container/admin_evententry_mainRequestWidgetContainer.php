@@ -136,25 +136,26 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 		$serial = $fetchedRow['ee_serial'];// シリアル番号
 		
 		// 受付状態
-		// 公開状態
-		if (empty($iconTitle)){			// 非公開状態にない場合
-//			$iconTitle = $this->_getStatusLabel($fetchedRow['et_status']);
-			if ($fetchedRow['et_status'] == 2){		// コンテンツが公開状態のとき
-				$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-				$iconTitle = '参加';
-			} else {
-				$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-				$iconTitle = 'キャンセル';
-			}
+		switch ($fetchedRow['er_status']){
+		case 0:			// 未設定
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非アクティブアイコン
+			$iconTitle = '未設定';
+			break;
+		case 1:			// 参加
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// アクティブアイコン
+			$iconTitle = '参加';
+			break;
+		case 2:			// キャンセル
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非アクティブアイコン
+			$iconTitle = 'キャンセル';
+			break;
 		}
+
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
+		// ユーザ詳細画面(管理画面用メニューバーを非表示にする)
+		$userDetailUrl	= '?task=userlist_detail&' . M3_REQUEST_PARAM_USER_ID . '=' . $fetchedRow['lu_id'] . '&menu=off';		// ユーザ詳細画面URL
 		
-		switch ($fetchedRow['ee_status']){
-			case 1:	$status = '<font color="orange">編集中</font>';	break;
-			case 2:	$status = '<font color="green">公開</font>';	break;
-			case 3:	$status = '非公開';	break;
-		}
 		// 登録日時
 		$dateTag = $this->convertToDispDateTime($fetchedRow['er_create_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
 		
@@ -163,8 +164,9 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 			'serial'	=> $serial,			// シリアル番号
 			'no'		=> $this->convertToDispString($fetchedRow['er_index']),		// 受付番号
 			'name'		=> $this->convertToDispString($fetchedRow['lu_name']),		// 名前
+			'name_url'	=> $this->convertUrlToHtmlEntity($userDetailUrl),
 			'status'	=> $statusImg,												// 状態
-			'date'		=> $dateTag,				// 登録日時
+			'date'		=> $dateTag						// 登録日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
