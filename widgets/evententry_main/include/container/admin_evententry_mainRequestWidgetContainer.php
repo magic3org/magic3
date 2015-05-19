@@ -77,7 +77,6 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 	function createList($request)
 	{
 		$act = $request->trimValueOf('act');
-		//$eventId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
 		$eventEntryId = $request->trimValueOf('evententryid');			// 受付イベントID
 		
 		if ($act == 'delete'){		// 項目削除の場合
@@ -114,14 +113,13 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 		self::$_mainDb->getEventEntryRequestList($this->_langId, $eventEntryId, self::DEFAULT_LIST_COUNT, $pageNo, ''/*検索キーワードなし*/, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 記事がないときは、一覧を表示しない
 		
-		
 		// 受付イベント取得
-//		$ret = self::$_mainDb->getEventEntryByEventId($this->_langId, $eventId, ''/*予約タイプ*/, $entryRow);
 		$ret = self::$_mainDb->getEventEntryById($this->_langId, $eventEntryId, $entryRow);
-		if ($ret){
-			$eventName = $entryRow['ee_name'];
-		}
+		if ($ret) $eventName = $entryRow['ee_name'];
+
+		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "event_name", $this->convertToDispString($eventName));	// イベント名
+		$this->tmpl->addVar("_widget", "page_link", $pageLink);			// ページリンク
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する
