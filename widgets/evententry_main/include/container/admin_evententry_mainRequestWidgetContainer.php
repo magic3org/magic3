@@ -79,6 +79,14 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 		$act = $request->trimValueOf('act');
 		$eventEntryId = $request->trimValueOf('evententryid');			// 受付イベントID
 		
+		// ##### 検索条件 #####
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
+		$search_startDt = $request->trimValueOf('search_start');		// 検索範囲開始日付
+		if (!empty($search_startDt)) $search_startDt = $this->convertToProperDate($search_startDt);
+		$search_endDt = $request->trimValueOf('search_end');			// 検索範囲終了日付
+		if (!empty($search_endDt)) $search_endDt = $this->convertToProperDate($search_endDt);
+		$keyword = $request->trimValueOf('search_keyword');			// 検索キーワード
+		
 		if ($act == 'delete'){		// 項目削除の場合
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
 			$delItems = array();
@@ -117,9 +125,12 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 		$ret = self::$_mainDb->getEventEntryById($this->_langId, $eventEntryId, $entryRow);
 		if ($ret) $eventName = $entryRow['ee_name'];
 
-		// 画面にデータを埋め込む
-		$this->tmpl->addVar("_widget", "event_name", $this->convertToDispString($eventName));	// イベント名
+		// 検索条件
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);			// ページリンク
+		$this->tmpl->addVar("_widget", "total_count", $totalCount);
+		
+		// その他の値
+		$this->tmpl->addVar("_widget", "event_name", $this->convertToDispString($eventName));	// イベント名
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する

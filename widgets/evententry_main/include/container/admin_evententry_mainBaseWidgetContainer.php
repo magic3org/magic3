@@ -123,7 +123,9 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 						'tagid'		=> '',
 						'active'	=> (
 											$task == self::TASK_EVENT ||			// 受付イベント一覧
-											$task == self::TASK_EVENT_DETAIL		// 受付イベント詳細
+											$task == self::TASK_EVENT_DETAIL ||		// 受付イベント詳細
+											$task == self::TASK_REQUEST ||			// 参加要求一覧
+											$task == self::TASK_REQUEST_DETAIL		// 参加要求詳細
 										),
 						'submenu'	=> array(
 							(Object)array(
@@ -133,7 +135,9 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 								'tagid'		=> '',
 								'active'	=> (
 													$task == self::TASK_EVENT ||			// 受付イベント一覧
-													$task == self::TASK_EVENT_DETAIL		// 受付イベント詳細
+													$task == self::TASK_EVENT_DETAIL ||		// 受付イベント詳細
+													$task == self::TASK_REQUEST ||			// 参加要求一覧
+													$task == self::TASK_REQUEST_DETAIL		// 参加要求詳細
 												)
 							)
 						)
