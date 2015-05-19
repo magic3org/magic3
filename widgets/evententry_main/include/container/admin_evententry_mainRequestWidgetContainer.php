@@ -17,6 +17,9 @@ require_once($gEnvManager->getWidgetContainerPath('evententry_main') . '/admin_e
 
 class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainBaseWidgetContainer
 {
+	const DEFAULT_LIST_COUNT	= 20;			// 一覧の項目数
+	const LINK_PAGE_COUNT		= 5;			// ページング用リンク数
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -71,7 +74,8 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 	function createList($request)
 	{
 		$act = $request->trimValueOf('act');
-		$eventId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
+		//$eventId = $request->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
+		$eventEntryId = $request->trimValueOf('evententryid');			// 受付イベントID
 		
 		if ($act == 'delete'){		// 項目削除の場合
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
@@ -95,21 +99,22 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 			}
 		}
 		// 総数を取得
-		$totalCount = self::$_mainDb->getEntryItemCount($search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId);
+		$totalCount = self::$_mainDb->getEventEntryRequestListCount($this->_langId, $eventEntryId, ''/*検索キーワードなし*/);
 
 		// ページング計算
-		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		$this->calcPageLink($pageNo, $totalCount, self::DEFAULT_LIST_COUNT);
 		
 		// ページングリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// 記事項目リストを取得
-		self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'));
-		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		self::$_mainDb->getEventEntryRequestList($this->_langId, $eventEntryId, self::DEFAULT_LIST_COUNT, $pageNo, ''/*検索キーワードなし*/, array($this, 'itemListLoop'));
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 記事がないときは、一覧を表示しない
 		
 		
 		// 受付イベント取得
-		$ret = self::$_mainDb->getEventEntryByEventId($this->_langId, $eventId, ''/*予約タイプ*/, $entryRow);
+//		$ret = self::$_mainDb->getEventEntryByEventId($this->_langId, $eventId, ''/*予約タイプ*/, $entryRow);
+		$ret = self::$_mainDb->getEventEntryById($this->_langId, $eventEntryId, $entryRow);
 		if ($ret){
 			$eventName = $entryRow['ee_name'];
 		}

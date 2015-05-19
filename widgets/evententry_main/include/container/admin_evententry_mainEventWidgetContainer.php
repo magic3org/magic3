@@ -653,8 +653,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$requestLinkUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
 		$requestLinkUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
 		$requestLinkUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_REQUEST;
-		$requestLinkUrl .= '&eventid=' . $eventId;			// イベントID
-		$requestLinkUrl .= '&entrytype=' . '';			// イベント予約タイプ
+		$requestLinkUrl .= '&evententryid=' . $eventEntryId;			// 受付イベントID
 		$entryCountTag = '<a href="' . $this->convertUrlToHtmlEntity($requestLinkUrl) . '">' . $this->convertToDispString($entryCountText) . '</a>';
 		
 		$row = array(

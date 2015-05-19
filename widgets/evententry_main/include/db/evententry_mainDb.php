@@ -195,7 +195,7 @@ class evententry_mainDb extends BaseDb
 			}
 		}
 		$queryStr .= ') VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?';
 		$queryStr .=   $otherValueStr . ') ';
 		$this->execStatement($queryStr, $params);
 
@@ -273,7 +273,7 @@ class evententry_mainDb extends BaseDb
 			}
 		}
 		$queryStr .= ') VALUES ';
-		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?';
 		$queryStr .=   $otherValueStr . ') ';
 		$this->execStatement($queryStr, $params);
 		
@@ -306,23 +306,20 @@ class evententry_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * イベント項目をイベントIDで取得
+	 * 受付イベントをIDで取得
 	 *
 	 * @param string  $langId		言語ID
-	 * @param string  $eventId		イベントID
-	 * @param string  $entryType	受付タイプ
-	 * @param array     $row				レコード
+	 * @param string  $id			受付ID
+	 * @param array   $row			レコード
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function getEventEntryByEventId($langId, $eventId, $entryType, &$row)
+	function getEventEntryById($langId, $id, &$row)
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';
 		$queryStr .=   'LEFT JOIN event_entry ON et_event_id = ee_id AND ee_deleted = false ';
 		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
-		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
-		$queryStr .=     'AND et_event_id = ? '; $params[] = $eventId;
-		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
+		$queryStr .=   'WHERE et_id = ? '; $params[] = intval($id);
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;
 	}
@@ -347,6 +344,27 @@ class evententry_mainDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, $params, $row);
 		return $ret;
 	}
+	/**
+	 * イベント項目をイベントIDで取得
+	 *
+	 * @param string  $langId		言語ID
+	 * @param string  $eventId		イベントID
+	 * @param string  $entryType	受付タイプ
+	 * @param array   $row			レコード
+	 * @return bool					true = 成功、false = 失敗
+	 */
+/*	function getEventEntryByEventId($langId, $eventId, $entryType, &$row)
+	{
+		$params = array();
+		$queryStr  = 'SELECT * FROM evententry ';
+		$queryStr .=   'LEFT JOIN event_entry ON et_event_id = ee_id AND ee_deleted = false ';
+		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
+		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
+		$queryStr .=     'AND et_event_id = ? '; $params[] = $eventId;
+		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
+		$ret = $this->selectRecord($queryStr, $params, $row);
+		return $ret;
+	}*/
 	/**
 	 * イベント項目の削除
 	 *
@@ -387,6 +405,79 @@ class evententry_mainDb extends BaseDb
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
+	}
+	/**
+	 * イベント予約要求数を取得(管理用)
+	 *
+	 * @param string $langId			言語ID
+	 * @param ing    $eventEntryId		受付イベントID
+	 * @param array	 $keywords			検索キーワード
+	 * @return int						項目数
+	 */
+	function getEventEntryRequestListCount($langId, $eventEntryId, $keywords)
+	{
+		$params = array();
+		$orderStr = '';
+		$queryStr  = 'SELECT * FROM evententry_request LEFT JOIN _login_user ON er_user_id = lu_id AND lu_deleted = false ';
+//		$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
+		
+		// 並び順
+		$orderStr = 'er_index DESC ';
+		$queryStr .=  'WHERE er_deleted = false ';				// 削除されていない
+		$queryStr .=    'AND er_evententry_id = ? '; $params[] = intval($eventEntryId);
+		
+		// 検索キーワード条件
+		if (!empty($keywords)){
+			for ($i = 0; $i < count($keywords); $i++){
+				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
+				
+				$queryStr .=    'AND (';
+				$queryStr .=      'lu_name LIKE \'%' . $keyword . '%\' ';			// ユーザ名
+				$queryStr .=      'OR ' . 'lu_account LIKE \'%' . $keyword . '%\' ';		// ユーザアカウント
+				$queryStr .=    ') ';
+			}
+		}
+		return $this->selectRecordCount($queryStr, $params);
+	}
+	/**
+	 * イベント予約要求を検索(管理用)
+	 *
+	 * @param string    $langId				言語ID
+	 * @param ing       $eventEntryId		受付イベントID
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param array		$keywords			検索キーワード
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getEventEntryRequestList($langId, $eventEntryId, $limit, $page, $keywords, $callback)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		
+		$params = array();
+		$orderStr = '';
+		$queryStr  = 'SELECT * FROM evententry_request LEFT JOIN _login_user ON er_user_id = lu_id AND lu_deleted = false ';
+//		$queryStr .=   'AND ee_language_id = ? '; $params[] = $langId;
+		
+		// 並び順
+		$orderStr = 'er_index DESC ';
+		$queryStr .=  'WHERE er_deleted = false ';				// 削除されていない
+		$queryStr .=    'AND er_evententry_id = ? '; $params[] = intval($eventEntryId);
+		
+		// 検索キーワード条件
+		if (!empty($keywords)){
+			for ($i = 0; $i < count($keywords); $i++){
+				$keyword = addslashes($keywords[$i]);// 「'"\」文字をエスケープ
+				
+				$queryStr .=    'AND (';
+				$queryStr .=      'lu_name LIKE \'%' . $keyword . '%\' ';			// ユーザ名
+				$queryStr .=      'OR ' . 'lu_account LIKE \'%' . $keyword . '%\' ';		// ユーザアカウント
+				$queryStr .=    ') ';
+			}
+		}
+		$queryStr .=  'ORDER BY ' . $orderStr . 'LIMIT ' . $limit . ' OFFSET ' . $offset;			// コンテンツID、受付タイプ
+		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**
 	 * イベント予約の新規追加
