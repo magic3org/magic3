@@ -31,7 +31,7 @@ class evententry_attachmentDb extends BaseDb
 		return $retValue;
 	}
 	/**
-	 * イベント項目を共通コンテンツIDで取得
+	 * イベント項目をイベントIDで取得
 	 *
 	 * @param string  $langId		言語ID
 	 * @param string  $eventId		イベントID
@@ -46,7 +46,6 @@ class evententry_attachmentDb extends BaseDb
 		$queryStr .=   'LEFT JOIN event_entry ON et_contents_id = ee_id AND ee_deleted = false ';
 		$queryStr .=     'AND ee_language_id = ? '; $params[] = $langId;
 		$queryStr .=   'WHERE et_deleted = false ';	// 削除されていない
-		$queryStr .=     'AND et_content_type = ? '; $params[] = 'event';
 		$queryStr .=     'AND et_contents_id = ? '; $params[] = $eventId;
 		$queryStr .=     'AND et_type = ? '; $params[] = $entryType;
 		$ret = $this->selectRecord($queryStr, $params, $row);
