@@ -306,7 +306,7 @@ class evententry_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * イベント項目を共通コンテンツIDで取得
+	 * イベント項目をイベントIDで取得
 	 *
 	 * @param string  $langId		言語ID
 	 * @param string  $eventId		イベントID
@@ -314,7 +314,7 @@ class evententry_mainDb extends BaseDb
 	 * @param array     $row				レコード
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function getEventEntryByContentsId($langId, $eventId, $entryType, &$row)
+	function getEventEntryByEventId($langId, $eventId, $entryType, &$row)
 	{
 		$params = array();
 		$queryStr  = 'SELECT * FROM evententry ';

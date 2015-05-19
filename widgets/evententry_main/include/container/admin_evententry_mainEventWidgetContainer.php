@@ -306,7 +306,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		$reloadData = false;		// データの再ロード
 		if ($act == 'new'){			// 新規の場合
 			// 目的の受付イベントが作成されている場合はエラー
-			$ret = self::$_mainDb->getEventEntryByContentsId($this->_langId, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
+			$ret = self::$_mainDb->getEventEntryByEventId($this->_langId, $eventId, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
 			if ($ret){
 				$this->setAppErrorMsg('既に受付イベントが作成されています');
 				$eventId = '';			// イベントIDをリセット
@@ -775,7 +775,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		// チェックボックス選択可否
 		// 目的の受付イベントが作成されている場合はエラー
 		$checkDisabled = '';
-		$ret = self::$_mainDb->getEventEntryByContentsId($this->_langId, $id, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
+		$ret = self::$_mainDb->getEventEntryByEventId($this->_langId, $id, self::DEFAULT_ENTRY_TYPE/*受付タイプ*/, $row);
 		if ($ret) $checkDisabled = 'disabled';
 		
 		// 公開状態
