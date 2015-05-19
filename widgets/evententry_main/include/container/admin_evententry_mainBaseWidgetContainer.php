@@ -97,6 +97,17 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = '受付イベント一覧';
 				$titles[] = '詳細';
 				break;
+			case self::TASK_REQUEST:			// 参加要求一覧
+				$titles[] = 'イベント予約管理';
+				$titles[] = '受付イベント一覧';
+				$titles[] = '参加者一覧';
+				break;
+			case self::TASK_REQUEST_DETAIL:		// 参加要求詳細
+				$titles[] = 'イベント予約管理';
+				$titles[] = '受付イベント一覧';
+				$titles[] = '参加者一覧';
+				$titles[] = '参加者詳細';
+				break;
 			case self::TASK_CONFIG:		// 基本設定
 				$titles[] = '基本';
 				$titles[] = '基本設定';
