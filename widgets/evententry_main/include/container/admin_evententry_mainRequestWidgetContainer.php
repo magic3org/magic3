@@ -163,7 +163,8 @@ class admin_evententry_mainRequestWidgetContainer extends admin_evententry_mainB
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// ユーザ詳細画面(管理画面用メニューバーを非表示にする)
-		$userDetailUrl	= '?task=userlist_detail&' . M3_REQUEST_PARAM_USER_ID . '=' . $fetchedRow['lu_id'] . '&menu=off';		// ユーザ詳細画面URL
+//		$userDetailUrl	= '?task=userlist_detail&' . M3_REQUEST_PARAM_USER_ID . '=' . $fetchedRow['lu_id'] . '&openby=other&menu=off';		// ユーザ詳細画面URL
+		$userDetailUrl	= '?task=userlist_detail&' . M3_REQUEST_PARAM_USER_ID . '=' . $fetchedRow['lu_id'] . '&openby=other';		// ユーザ詳細画面URL
 		
 		// 登録日時
 		$dateTag = $this->convertToDispDateTime($fetchedRow['er_create_dt'], 1/*ショートフォーマット*/, 10/*時分*/);
