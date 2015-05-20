@@ -3388,13 +3388,6 @@ class PageManager extends Core
 				}
 			}
 			// ##### 外部出力用CSS読み込み #####
-			// 外部出力用CSSデータがある場合はURLを追加
-			if (!empty($this->exportCss)){
-				$cssUrl = $this->createCssCmdUrl(date('YmdHis'));
-				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
-				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
-			}
-			
 			// ウィジェットからの追加のCSS読み込み
 			$count = count($this->headCssFiles);
 			for ($i = 0; $i < $count; $i++){
@@ -3402,7 +3395,14 @@ class PageManager extends Core
 				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
 				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
 			}
-
+			
+			// 外部出力用CSSデータがある場合はURLを追加
+			if (!empty($this->exportCss)){
+				$cssUrl = $this->createCssCmdUrl(date('YmdHis'));
+				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
+				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
+			}
+			
 			// ##### RSS配信情報の読み込み #####
 			$count = count($this->headRssFiles);
 			for ($i = 0; $i < $count; $i++){
