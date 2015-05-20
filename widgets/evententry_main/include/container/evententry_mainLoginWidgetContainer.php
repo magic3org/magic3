@@ -22,6 +22,7 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 	const MAIL_OBJ_ID = 'ecmail';
 	const EC_LIB_ID = "eclib";		// EC共通ライブラリオブジェクトID
 	const WORD_KEY_ACCOUNT = 'word_account';		// 用語取得キー(アカウント)
+	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	
 	/**
 	 * コンストラクタ
@@ -126,6 +127,24 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "task", $task);
 		$this->tmpl->addVar("_widget", "word_account", $this->convertToDispString($this->gInstance->getMessageManager()->getWord(self::WORD_KEY_ACCOUNT)));		// 用語(アカウント)
 		$this->tmpl->addVar("field_regmember", "word_account", $this->convertToDispString($this->gInstance->getMessageManager()->getWord(self::WORD_KEY_ACCOUNT)));		// 用語(アカウント)
+	}
+	/**
+	 * CSSファイルをHTMLヘッダ部に設定
+	 *
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssFileToHead($request, &$param)
+	{
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return '';
+		} else {
+			return $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);
+		}
 	}
 }
 ?>

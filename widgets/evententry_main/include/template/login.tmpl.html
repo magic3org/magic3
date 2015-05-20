@@ -38,8 +38,8 @@ function login(){
 <h2>登録済みの{WORD_ACCOUNT}をお持ちの方</h2>
 <div>{WORD_ACCOUNT}とパスワードを入力して、ログインしてください。</div>
 <div>{MESSAGE}</div>
-<label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{PHOTO_ACCOUNT}" size="20" maxlength="40" style="width:120px" /></label><br />
-<label><span class="evententry_title">パスワード</span><input type="password" name="evententry_password" value="{PHOTO_PASSWORD}" size="20" maxlength="40" style="width:120px" /></label>
+<div class="evententry_control"><label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{PHOTO_ACCOUNT}" maxlength="40" /></label></div>
+<div class="evententry_control"><label><span class="evententry_title">パスワード</span><input type="password" name="evententry_password" value="{PHOTO_PASSWORD}" maxlength="40" /></label></div>
 <div class="evententry_bottom"><input type="button" class="button" onclick="login();" value="ログイン" /></div>
 
 </div>

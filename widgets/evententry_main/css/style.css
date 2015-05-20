@@ -1,0 +1,18 @@
+.evententry_control label {
+	display:block;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+.evententry_control span.evententry_title {
+	display:inline-block;
+	padding-right:6px;
+	width:100px;
+	text-align:right;
+	font-weight:bold;
+}
+.evententry_control input[type=text] {
+	width:120px;
+}
+.evententry_control input[type=password] {
+	width:120px;
+}
