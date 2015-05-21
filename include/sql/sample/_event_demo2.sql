@@ -118,6 +118,8 @@ pd_css, pd_param) VALUES
 '',     ''),
 ('index', 'evententry',   'main',         5,        'evententry_main',          0,            '',                   'イベント予約',       '',          true,
 '',     ''),
+('index', 'member',   'main',         5,        'reg_user',          0,            '',                   '',       '',          true,
+'',     ''),
 ('index', 'calendar','main',         5,        'calendar',            1,            '名称未設定1',        '',               '',          true,
 '',     ''),
 ('index', 'search',  'main',         5,        'custom_search',       1,            '名称未設定1',        '検索',               '',          true,
