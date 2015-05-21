@@ -25,6 +25,8 @@ class evententry_mainBaseWidgetContainer extends BaseWidgetContainer
 	protected $_pageUrl;		// 現在のページのURL
 	protected $_baseUrl;		// ベースURL
 
+	const DEFAULT_TITLE = 'イベント予約';		// デフォルトのウィジェットタイトル名
+	
 	// 画面
 	const TASK_REQUEST		= 'request';			// 参加登録画面
 	const TASK_LOGIN		= 'login';			// ログイン画面
@@ -64,6 +66,17 @@ class evententry_mainBaseWidgetContainer extends BaseWidgetContainer
 		// 共通パラメータ初期化
 		$this->_pageUrl = $this->gEnv->createCurrentPageUrl();		// 現在のページのURL
 		$this->_baseUrl = $this->getUrlWithOptionParam();			// ベースURL(オプション付き)
+	}
+	/**
+	 * ウィジェットのタイトルを設定
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
+	 * @return string 						ウィジェットのタイトル名
+	 */
+	function _setTitle($request, &$param)
+	{
+		return self::DEFAULT_TITLE;
 	}
 }
 ?>

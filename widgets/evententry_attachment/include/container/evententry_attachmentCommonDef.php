@@ -21,7 +21,7 @@ class evententry_attachmentCommonDef
 //	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	
 	// ##### デフォルト値 #####
-	const DEFAULT_LAYOUT = '[#BODY#]<div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div>[#BUTTON|title=参加登録画面へ|登録済み#]';	// イベント予約レイアウト
+	const DEFAULT_LAYOUT = '[#BODY#]<div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div>[#BUTTON|title=予約画面へ|予約済み#]';	// イベント予約レイアウト
 	
 	/**
 	 * 定義値をDBから取得

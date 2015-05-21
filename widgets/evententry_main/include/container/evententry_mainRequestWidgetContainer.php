@@ -24,7 +24,6 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 	private $_contentParam;		// コンテンツ変換用	
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
-	const DEFAULT_TITLE = 'イベント予約';		// デフォルトのウィジェットタイトル名
 	
 	/**
 	 * コンストラクタ
@@ -156,17 +155,6 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 		
 		// 画面確認用のハッシュを設定
 		$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面確認用
-	}
-	/**
-	 * ウィジェットのタイトルを設定
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
-	 * @return string 						ウィジェットのタイトル名
-	 */
-	function _setTitle($request, &$param)
-	{
-		return self::DEFAULT_TITLE;
 	}
 	/**
 	 * イベント予約画面作成
