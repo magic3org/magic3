@@ -1175,30 +1175,31 @@ class PageManager extends Core
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$pageId = $gEnvManager->getCurrentPageId();
 
-		// クライアントIDの読み込み、再設定
+		// ###### クライアントIDの読み込み、再設定 ######
+		// この後、クライアントIDがアクセスログに記録される
 		$clientId = $request->getCookieValue(M3_COOKIE_CLIENT_ID);
-		if (empty($clientId)){	// クライアントIDが設定されていないとき
+		if (empty($clientId)){	// クライアントIDが設定されていないとき(初回アクセス)
 			// クライアントIDを生成
 			$clientId = $this->gAccess->createClientId();
 		} else {
 			$this->gAccess->setClientId($clientId);	// クライアントIDを設定
-			
+		
 			// クッキーの使用可否を設定
 			$this->gEnv->setCanUseCookie(true);
 		}
 		$request->setCookieValue(M3_COOKIE_CLIENT_ID, $clientId, M3_COOKIE_EXPIRE_CLIENT_ID);
 			
-		// 管理者キーがあればGETまたはPOST値のセッションIDを使用する
-		if ($gEnvManager->isAdminDirAccess()){
-			if ($gAccessManager->isValidAdminKey()) session_id($gRequestManager->trimValueOf(session_name()));
-		}
-
 		// インストール時の管理画面用ライブラリを追加(フレームコンテナでの設定を反映)
 		if (defined('M3_STATE_IN_INSTALL')){
 			// Bootstrapライブラリ追加
 			if ($this->useBootstrap){
 				$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// 管理画面でBootstrapを使用するかどうか
 				$this->addAdminScript('', ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);	// Bootstrap管理画面オプション
+			}
+		} else {
+			// 管理者キーがあればGETまたはPOST値のセッションIDを使用する
+			if ($gEnvManager->isAdminDirAccess()){
+				if ($gAccessManager->isValidAdminKey()) session_id($gRequestManager->trimValueOf(session_name()));
 			}
 		}
 

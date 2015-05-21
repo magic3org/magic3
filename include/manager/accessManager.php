@@ -511,9 +511,14 @@ class AccessManager extends Core
 	function createClientId()
 	{
 		global $gRequestManager;
+		global $gEnvManager;
 			
 		// アクセスログの最大シリアルNoを取得
-		$max = $this->db->getMaxSerialOfAccessLog();
+		if ($gEnvManager->canUseDb()){	// DB接続可能なとき
+			$max = $this->db->getMaxSerialOfAccessLog();
+		} else {
+			$max = 0;
+		}
 		$this->_clientId = md5(time() . $gRequestManager->trimServerValueOf('REMOTE_ADDR') . ($max + 1));
 		return $this->_clientId;				// クライアントID(クッキー用)
 	}
