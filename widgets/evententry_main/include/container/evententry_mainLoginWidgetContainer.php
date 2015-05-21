@@ -45,7 +45,11 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'login.tmpl.html';
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+			return 'login_bootstrap.tmpl.html';
+		} else {
+			return 'login.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む

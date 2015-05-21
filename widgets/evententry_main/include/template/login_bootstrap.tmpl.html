@@ -23,7 +23,7 @@ function evententry_login(){
 //]]>
 </script>
 <!-- m3:ErrorMessage -->
-<form method="post" name="evententry_main" class="form">
+<form method="post" name="evententry_main" class="form form-horizontal" role="form">
 <input type="hidden" name="task" value="{TASK}"/>
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
@@ -37,8 +37,8 @@ function evententry_login(){
 <h2>登録済みの{WORD_ACCOUNT}をお持ちの方</h2>
 <div>{WORD_ACCOUNT}とパスワードを入力して、ログインしてください。</div>
 <div>{MESSAGE}</div>
-<div class="evententry_control"><label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{ACCOUNT}" maxlength="40" /></label></div>
-<div class="evententry_control"><label><span class="evententry_title">パスワード</span><input type="password" name="evententry_password" value="{PASSWORD}" maxlength="40" /></label></div>
+<div class="form-group"><label for="evententry_account" class="col-sm-2 control-label">{WORD_ACCOUNT}</label><div class="col-sm-3"><input type="text" id="evententry_account" name="evententry_account" class="form-control" value="{ACCOUNT}" maxlength="40" /></div></div>
+<div class="form-group"><label for="evententry_password" class="col-sm-2 control-label">パスワード</label><div class="col-sm-3"><input type="password" id="evententry_password" name="evententry_password" class="form-control" value="{PASSWORD}" maxlength="40" /></div></div>
 <input type="button" class="button" onclick="evententry_login();" value="ログイン" />
 </form>
 </patTemplate:tmpl>
