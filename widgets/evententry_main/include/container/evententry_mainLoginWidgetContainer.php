@@ -18,9 +18,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/evententry_mainDb.php');
 
 class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetContainer
 {
-	private $memberDb;
-	const MAIL_OBJ_ID = 'ecmail';
-	const EC_LIB_ID = "eclib";		// EC共通ライブラリオブジェクトID
+	private $db;
 	const WORD_KEY_ACCOUNT = 'word_account';		// 用語取得キー(アカウント)
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	
@@ -33,7 +31,7 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 		parent::__construct();
 		
 		// DB接続オブジェクト作成
-		$this->memberDb = new evententry_mainDb();
+		$this->db = new evententry_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -63,9 +61,9 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 		$task = $request->trimValueOf('task');
 		$act = $request->trimValueOf('act');
 		$forward = $request->trimValueOf(M3_REQUEST_PARAM_FORWARD);		// 画面遷移用パラメータ
-		$account = $request->trimValueOf('photo_account');
+		$account = $request->trimValueOf('evententry_account');
 		
-		if ($act == 'photo_login'){			// 会員ログインのとき
+		if ($act == 'evententry_login'){			// ログインのとき
 			// アカウント、パスワード取得
 			$password = $request->trimValueOf('password');
 			
@@ -74,10 +72,7 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 				// 初回ログインのときは、仮会員を正会員にする
 				$userId = $this->gEnv->getCurrentUserId();
 				if ($userId != 0){
-					$ret = $this->gInstance->getObject(self::EC_LIB_ID)->makeTmpMemberToProperMember($userId);
-					if ($ret){
-						$this->_db->makeNormalLoginUser($userId);// 一般ログインユーザに設定
-					}
+					$this->_db->makeNormalLoginUser($userId);// 一般ログインユーザに設定
 				}
 				if (empty($forward)){
 					// 会員メニューへ
@@ -94,7 +89,6 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 				
 				$this->tmpl->addVar("_widget", "message", 'ログインに失敗しました');
 			}
-		//} else if ($act == photo_shopCommonDef::EMAIL_LOGIN_ACT){			// メールからの会員ログインのとき
 		} else {		// 初期画面
 			// Eメールのリンクでのログインの場合
 			if ($task == 'emaillogin'){
@@ -103,8 +97,8 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 				$pwd = $request->trimValueOf('pwd');
 				$forward = 'task=changepwd';		// パスワードを変更
 			
-				$this->tmpl->addVar("_widget", "photo_account", $account);
-				$this->tmpl->addVar("_widget", "photo_password", $pwd);
+				$this->tmpl->addVar("_widget", "account", $account);
+				$this->tmpl->addVar("_widget", "password", $pwd);
 				$this->tmpl->addVar("_widget", "savepwd", $pwd);
 			}
 		}

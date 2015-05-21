@@ -24,7 +24,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 	private $statusTypeArray;	// イベント状態メニュー作成用
 	private $contentObj;			// コンテンツ情報ライブラリ
 	const EVENT_OBJ_ID = 'eventlib';		// 検索用オブジェクト
-	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT = 20;			// 一覧表示数
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const DEFAULT_RESULT_LENGTH = 200;			// コンテンツの文字列最大長
 	const ICON_SIZE = 32;		// アイコンのサイズ
@@ -650,16 +650,14 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 			$entryCountText = self::$_mainDb->getEntryUserCount($eventEntryId) . ' / ' . $maxEntry;		// 参加数
 		}
 		// 参加状況一覧
-//		$requestLinkUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
-//		$requestLinkUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
-//		$requestLinkUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_REQUEST;
-		$requestLinkUrl .= $this->_baseUrl. '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_REQUEST;
-		$requestLinkUrl .= '&evententryid=' . $eventEntryId;			// 受付イベントID
-		$entryCountTag = '<a href="' . $this->convertUrlToHtmlEntity($requestLinkUrl) . '">' . $this->convertToDispString($entryCountText) . '</a>';
+//		$requestLinkUrl .= $this->_baseUrl. '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_REQUEST;
+//		$requestLinkUrl .= '&evententryid=' . $eventEntryId;			// 受付イベントID
+//		$entryCountTag = '<a href="' . $this->convertUrlToHtmlEntity($requestLinkUrl) . '">' . $this->convertToDispString($entryCountText) . '</a>';
+		$entryCountTag = '<a href="#" onclick="viewEventEntryRequest(' . $this->convertToDispString($eventEntryId) . ');">' . $this->convertToDispString($entryCountText) . '</a>';
 		
 		$row = array(
 			'index'			=> $index,		// 項目番号
-			'serial'		=> $serial,			// シリアル番号
+			'serial'		=> $this->convertToDispString($serial),			// シリアル番号
 			'name'			=> $this->convertToDispString($fetchedRow['ee_name']),		// イベント名
 			'status_img' 	=> $statusImg,													// 公開状況
 			'date'			=> $startDtStr,	// 開催日時

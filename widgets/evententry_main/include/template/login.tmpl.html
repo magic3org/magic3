@@ -13,7 +13,7 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function login(){
+function evententry_login(){
 	var pwd = document.evententry_main.evententry_password.value;
 	document.evententry_main.act.value = 'evententry_login';
     document.evententry_main.password.value = hex_md5(pwd);
@@ -38,9 +38,9 @@ function login(){
 <h2>登録済みの{WORD_ACCOUNT}をお持ちの方</h2>
 <div>{WORD_ACCOUNT}とパスワードを入力して、ログインしてください。</div>
 <div>{MESSAGE}</div>
-<div class="evententry_control"><label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{PHOTO_ACCOUNT}" maxlength="40" /></label></div>
-<div class="evententry_control"><label><span class="evententry_title">パスワード</span><input type="password" name="evententry_password" value="{PHOTO_PASSWORD}" maxlength="40" /></label></div>
-<div class="evententry_bottom"><input type="button" class="button" onclick="login();" value="ログイン" /></div>
+<div class="evententry_control"><label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{ACCOUNT}" maxlength="40" /></label></div>
+<div class="evententry_control"><label><span class="evententry_title">パスワード</span><input type="password" name="evententry_password" value="{PASSWORD}" maxlength="40" /></label></div>
+<div class="evententry_bottom"><input type="button" class="button" onclick="evententry_login();" value="ログイン" /></div>
 
 </div>
 </form>
