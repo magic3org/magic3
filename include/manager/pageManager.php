@@ -75,6 +75,7 @@ class PageManager extends Core
 	private $outputByHtml = true;				// HTMLフォーマットで出力するかどうか
 	private $outputHead;				// HTMLヘッダ出力を行ったかどうか
 	private $outputTheme;				// jQueryUIテーマ出力を行ったかどうか
+	private $outputAjaxResponseBody;	// AJAX用のレスポンスボディデータかどうか
 	private $isAbort;					// ページ作成処理を中断するかどうか
 	private $isWidgetAbort;				// 各ウィジェット処理を中断するかどうか
 	private $isRedirect;				// リダイレクトするかどうか
@@ -196,7 +197,7 @@ class PageManager extends Core
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.5.js';			// 一般、管理機能共通スクリプト
 //	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.2.js';			// 一般画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
-	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt1.1.0.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
+	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt1.2.0.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
 	const M3_ADMIN_CSS_FILE					= 'm3/admin.css';			// 管理機能用のCSS
 	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
 	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// 一般画面共通のデフォルトCSS
@@ -829,6 +830,17 @@ class PageManager extends Core
 	function setOutputByHtml($isHtml)
 	{
 		$this->outputByHtml = $isHtml;
+	}
+	
+	/**
+	 * AJAX用のレスポンスボディデータかどうかを設定
+	 *
+	 * @param bool $isResponseBody	レスポンスボディデータかどうか
+	 * @return 						なし
+	 */	
+	function setOutputAjaxResponseBody($isResponseBody)
+	{
+		$this->outputAjaxResponseBody = $isResponseBody;
 	}
 	/**
 	 * ヘルプ機能の使用可否を設定
@@ -2519,6 +2531,9 @@ class PageManager extends Core
 		
 		// ページ作成中断のときは終了
 		if ($this->isAbort) return '';
+		
+		// AJAX用のレスポンスボディデータのときは終了
+		if ($this->outputAjaxResponseBody) return '';
 		
 		// ウィジェット処理中断のとき
 		// AJAXを送信する場合は空文字列では送信できないので、ダミーデータを返す

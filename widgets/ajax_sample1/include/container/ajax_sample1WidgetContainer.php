@@ -37,12 +37,12 @@ class ajax_sample1WidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		if ($request->trimValueOf('act') == 'getmsg'){	// Ajaxインターフェイスでの対応
+/*		if ($request->trimValueOf('act') == 'getmsg'){	// Ajaxインターフェイスでの対応
 			$param = 'ajax';
 			return '';		// テンプレートは使用しない
-		} else {
+		} else {*/
 			return 'index.tmpl.html';
-		}
+//		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -55,11 +55,17 @@ class ajax_sample1WidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		if ($param == 'ajax'){	// Ajaxインターフェイスでの対応の場合
+		$act = $request->trimValueOf('act');
+		if ($act == 'getmsg'){	// Ajaxインターフェイスでの対応の場合
 			// ##### ウィジェット出力処理中断 ######
 			$this->gPage->abortWidget();
 
 			$this->gInstance->getAjaxManager()->addData('message', "サーバからの応答\n現在の日時は" . date(" Y年m月d日 H：i：s"));
+		} else if ($act == 'getmsg2'){
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+
+			$this->gInstance->getAjaxManager()->addDataToBody("サーバからの応答\n現在の日時は" . date(" Y年m月d日 H：i：s"));
 		}
 	}
 }

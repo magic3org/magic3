@@ -7,9 +7,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: m3opt1.1.0.js 3414 2010-07-22 01:52:56Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 /**
@@ -46,9 +46,43 @@ function m3_ajax_request(request_widget, request_params, success_func, failure_f
 			});
 }
 /**
+ * Ajax非同期通信(レスポンスボディも使用してデータを受信)
+ * @param string request_widget		指定ウィジェット
+ * @param string request_params		リクエストパラメータ
+ * @param function success_func(request, retcode, jsondata)	通信成功時の呼び出し関数
+ * @param function failure_func(request)					通信失敗時の呼び出し関数
+ * @param string request_url		リクエスト先URL
+ */
+function m3_ajax_request_ex(request_widget, request_params, success_func, failure_func, request_url)
+{
+	if (request_url == null || request_url == "") request_url = document.location.pathname;
+
+	var params = "";
+	if (request_widget != null && request_widget != "") params += "cmd=dowidget&widget=" + request_widget;
+	if (request_params != null && request_params != "") params += "&" + request_params;
+	
+	$.ajax({	url: request_url,
+				type:		'post',
+				data:		params,
+				dataType:	'json',
+				success:	function(data, textStatus){
+								if (data) alert("JSON data must be in header with 'X-JSON' type");
+							},
+				error:		function(request, textStatus, errorThrown){
+								if (request.status == 200){
+									var json = eval(request.getResponseHeader("X-JSON"));
+									m3_ajax_success_ex(request, json, success_func, request.responseText);
+								} else {
+									m3_ajax_failure(request, json, failure_func);
+								}
+							}
+			});
+}
+/**
  * Ajax非同期通信正常時に呼ばれるデフォルト関数
- * @param XMLHttpRequest	request		サーバからのレスポンス
- * @param Object			json		JSON型データ
+ * @param XMLHttpRequest request		サーバからのレスポンス
+ * @param Object         json			JSON型データ
+ * @param function       success_func	呼び出し関数
  */
 function m3_ajax_success(request, json, success_func)
 {
@@ -63,6 +97,30 @@ function m3_ajax_success(request, json, success_func)
 				jsondata = json.data;
 			}
 			success_func(request, retcode, jsondata);
+		} else {
+			alert('cannot found success function');
+		}
+	}
+}
+/**
+ * Ajax非同期通信正常時に呼ばれるデフォルト関数
+ * @param XMLHttpRequest request		サーバからのレスポンス
+ * @param Object         json			JSON型データ
+ * @param function       success_func	呼び出し関数
+ */
+function m3_ajax_success_ex(request, json, success_func, responseText)
+{
+	if (success_func == ''){
+		alert(request.statusText + "\nstatus code = " + request.status);
+	} else if (success_func){
+		if (typeof success_func == "function"){
+			var retcode = -1;
+			var jsondata;
+			if (json != null){
+				retcode = json.retcode;
+				if (json.data) jsondata = json.data;
+			}
+			success_func(request, retcode, jsondata, responseText);
 		} else {
 			alert('cannot found success function');
 		}

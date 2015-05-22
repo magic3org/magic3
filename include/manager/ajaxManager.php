@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ajaxManager.php 5009 2012-07-03 13:55:38Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 class AjaxManager
@@ -21,7 +21,8 @@ class AjaxManager
      * $jsonData['retcode']		// レスポンス戻り値
      * $jsonData['data']		// JSON実データ
      */
-    var $jsonData;
+    private $jsonData;		// レスポンスヘッダ用JSONデータ
+	private $bodyData;		// レスポンスボディ用データ
 	
 	/**
 	 * コンストラクタ
@@ -40,6 +41,7 @@ class AjaxManager
 	 *
 	 * @param string key			キー項目
 	 * @param string value			値項目
+	 * @return						なし
 	 */
 	function addData($key, $value='')
 	{
@@ -53,6 +55,37 @@ class AjaxManager
 		// 送信に設定
 		$this->_sendJsonToClient = true;
 	}
+	/**
+	 * レスポンスボディ用テキストデータで出力する値を追加
+	 *
+	 * @param string value			値項目
+	 * @return						なし
+	 */
+	function addDataToBody($value='')
+	{
+		global $gPageManager;
+		
+		$this->bodyData = $value;
+
+		// 送信に設定
+		$this->_sendJsonToClient = true;
+		
+		// ページマネージャーに出力形式を指定
+		$gPageManager->setOutputAjaxResponseBody(true);
+	}
+	/**
+	 * レスポンスボディ用テキストデータが設定されているかどうか
+	 *
+	 * @return bool			true=設定データあり、false=設定データなし
+	 */
+/*	function isExistsResposeBodyData()
+	{
+		if (empty($this->bodyData)){
+			return false;
+		} else {
+			return true;
+		}
+	}*/
 	/**
 	 * JSON型データで出力する値をすべて消去
 	 */
@@ -101,6 +134,11 @@ class AjaxManager
 		}
 		$retData = $json->encode($this->jsonData);
 		if (!empty($retData)) header('X-JSON: ' . '(' . $retData . ')');
+		
+		// レスポンスボディ用データがある場合は出力
+		if (!empty($this->bodyData)){
+			echo $this->bodyData;
+		}
 	}
 	/**
 	 * JSONデータを作成

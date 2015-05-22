@@ -5,6 +5,10 @@ function go()
 {
 	m3_ajax_request('ajax_sample1', 'act=getmsg', ajax_success_func, ajax_failure_func);
 }
+function go2()
+{
+	m3_ajax_request_ex('ajax_sample1', 'act=getmsg2', ajax_success_func2, ajax_failure_func2);
+}
 function ajax_success_func(request, retcode, jsondata)
 {
 //	alert(request.responseText);
@@ -14,7 +18,18 @@ function ajax_failure_func(request)
 {
 	alert('ajax failure!');
 }
+function ajax_success_func2(request, retcode, jsondata, planedata)
+{
+//	alert(request.responseText);
+//	alert(jsondata.message);
+	alert(planedata);
+}
+function ajax_failure_func2(request)
+{
+	alert('ajax failure!');
+}
 -->
 </script>
-<input class="button" type="button" onclick="go();" value="Ajax実行" />
+<input class="button" type="button" onclick="go();" value="Ajax実行(レスポンスヘッダ使用)" />
+<input class="button" type="button" onclick="go2();" value="Ajax実行(レスポンスボディ使用)" />
 </patTemplate:tmpl>
