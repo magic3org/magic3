@@ -221,7 +221,7 @@ class admin_evententry_mainEventWidgetContainer extends admin_evententry_mainBas
 		
 			$this->act = $act;				// 実行act
 			$eventList = $this->getParsedTemplateData('default_eventlist.tmpl.html', array($this, 'makeEventList'), $request);// イベント一覧作成
-			$this->gInstance->getAjaxManager()->addData('html', $eventList);
+			$this->gInstance->getAjaxManager()->addDataToBody($eventList);
 			return;
 		}
 		
