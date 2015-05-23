@@ -383,7 +383,7 @@ hr.fc-divider {
 }
 
 .fc td.fc-today {
-	border-style: double; /* overcome neighboring borders */
+/*	border-style: double; *//* overcome neighboring borders *//* removed for Magic3 by naoki */
 }
 
 

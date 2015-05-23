@@ -32,7 +32,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カレンダー';		// デフォルトのウィジェットタイトル名
 	const MAX_ITEM_COUNT = 100;				// カレンダーに表示する項目の最大数
-	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-2.2.6/gcal.js';				// Googleカレンダー用スクリプト
+	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-2.3.1/gcal.js';				// Googleカレンダー用スクリプト
 	const DEFAULT_EVENT_TOOLTIP_TITLE_STYLE		= "color: '#fff', background: 'red'";		// ツールチップ(タイトル)のスタイル
 	const DEFAULT_EVENT_TOOLTIP_BORDER_STYLE	= "width: 2, radius: 5, color: '#444'";		// ツールチップ(ボーダー)のスタイル
 	const DEFAULT_SIMPLE_EVENT_CLASS_NAME = 'simple_event_default';			// デフォルトのクラス名(簡易イベント)
