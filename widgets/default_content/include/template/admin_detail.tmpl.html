@@ -427,7 +427,9 @@ $(function(){
 	</tr>
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_PASSWORD}>パスワード</span></th>
-	    <td><input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="10" maxlength="15" autocomplete="off" {PASSWORD_DISABLED} /></td>
+	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
+		<input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="10" maxlength="15" autocomplete="off" {PASSWORD_DISABLED} />
+		</td>
 	    <th><span {_HELP_CONTENT_KEY}>外部参照用キー</span></th>
 	    <td><input type="text" name="item_key" class="form-control" value="{SEL_ITEM_KEY}" size="20" maxlength="20" {KEY_DISABLED} /></td>
 	</tr>
