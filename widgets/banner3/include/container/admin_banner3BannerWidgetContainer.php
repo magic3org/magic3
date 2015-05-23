@@ -170,10 +170,14 @@ class admin_banner3BannerWidgetContainer extends admin_banner3BaseWidgetContaine
 			$replaceNew = true;			// データ再取得
 		} else if ($act == 'update_preview'){	// プレビュー再表示
 		} else if ($act == 'getimagelist'){		// 画像一覧取得
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+			
 			$this->act = $act;				// 実行act
 
 			$imageList = $this->getParsedTemplateData('default_imagelist.tmpl.html', array($this, 'makeImageList'), $request);// 画像一覧作成
-			$this->gInstance->getAjaxManager()->addData('html', $imageList);
+			//$this->gInstance->getAjaxManager()->addData('html', $imageList);
+			$this->gInstance->getAjaxManager()->addDataToBody($imageList);
 			return;
 		} else {			// 初期起動時
 			// デフォルト値設定

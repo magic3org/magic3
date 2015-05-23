@@ -46,9 +46,10 @@ function selpage(page)
 	if (!selectedItems) selectedItems = $('#item_banner').val();
 	
 	// Ajaxで画像一覧を取得
-	m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=banner&act=getimagelist&page=' + page + '&items=' + selectedItems, function(request, retcode, jsondata){		// 正常終了
+	m3_ajax_request_ex('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=banner&act=getimagelist&page=' + page + '&items=' + selectedItems, function(request, retcode, jsondata, html){		// 正常終了
 		// 画像選択テーブルを作成
-		if (jsondata.html) imageModal.setMessage(jsondata.html);
+		//if (jsondata.html) imageModal.setMessage(jsondata.html);
+		if (html) imageModal.setMessage(html);
 	}, function(request){		// 異常終了
 		alert('通信に失敗しました。');
 	});
