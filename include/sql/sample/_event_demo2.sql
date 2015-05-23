@@ -166,6 +166,10 @@ DELETE FROM _widget_param WHERE wp_id = 'event_category';
 INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
 ('event_category', 1,            'O:8:"stdClass":6:{s:4:"name";s:16:"名称未設定1";s:10:"categoryId";s:1:"1";s:9:"itemCount";s:2:"10";s:9:"sortOrder";s:1:"1";s:15:"futureEventOnly";s:1:"0";s:6:"useRss";s:1:"0";}', now());
+DELETE FROM _widget_param WHERE wp_id = 'reg_user';
+INSERT INTO _widget_param
+(wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
+('reg_user', 0,            'O:8:"stdClass":1:{s:8:"authType";s:4:"auto";}', now());
 
 -- イベント
 TRUNCATE TABLE event_entry;
