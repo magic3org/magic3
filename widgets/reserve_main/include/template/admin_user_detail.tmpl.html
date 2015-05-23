@@ -127,7 +127,8 @@ function cancelItem(){
 	</tr>
         <tr>
 	    <td class="table-headside" width="100px"><span {_HELP_MEMBER_PWD}>パスワード</span></td>
-	    <td colspan="3"><input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" AUTOCOMPLETE = "off"></td>
+	    <td colspan="3"><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
+		<input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" AUTOCOMPLETE = "off"></td>
 	    <!--<td colspan="3">
 	    <input type="button" class="button" onClick="sendPassword()" value="再作成して、メール送信" {SEND_PWD}>&nbsp;&nbsp;
 	    {SEND_MESSAGE} {PWD_MESSAGE}</td>-->

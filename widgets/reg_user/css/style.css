@@ -9,8 +9,8 @@
 	margin-bottom:5px;
 }
 #reguser_input label span.title {
-	display:block;
-	float:left;
+	display:inline-block;
+/*	float:left;*/
 	padding-right:6px;
 	width:100px;
 	text-align:right;

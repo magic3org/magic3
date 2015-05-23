@@ -84,7 +84,8 @@ function cancelItem(){
     </select>
 	    </td>
 	    <td class="table-headside"><span {_HELP_CATEGORY_PASSWORD}>パスワード</span></td>
-	    <td><input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></td>
+	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
+		<input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></td>
 	</tr>
         <tr class="even">
 	    <td class="table-headside">更新者</td>

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -102,7 +102,8 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_PWD}>{_LC_LABEL_PASSWORD}</span></th>
-	    <td colspan="3"><div class="col-sm-4 m3config_item"><input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></div></td>
+	    <td colspan="3"><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
+		<div class="col-sm-4 m3config_item"><input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_USERLIST_USERTYPE}>{_LC_LABEL_USER_TYPE}</span></th>

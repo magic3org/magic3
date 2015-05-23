@@ -84,7 +84,8 @@ function cancelItem(){
 	</tr>
         <tr class="even">
 	    <td class="table-headside"><span {_HELP_AUTHOR_PWD}>{_LC_LABEL_PASSWORD}</span></td>
-	    <td><input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></td>
+	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
+		<input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></td>
 	</tr>
         <tr>
 	    <td class="table-headside"><span {_HELP_AUTHOR_LOGIN}>{_LC_LABEL_LOGIN_ENABLE}</span></td>

@@ -21,6 +21,7 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 	private $db;
 	const WORD_KEY_ACCOUNT = 'word_account';		// 用語取得キー(アカウント)
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
+	const TASK_MEMBER_REGIST = 'regist';			// 会員登録画面遷移用
 	
 	/**
 	 * コンストラクタ
@@ -107,24 +108,22 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 			}
 		}
 		// 画面修正
-		if ($task == 'emaillogin'){
-			$this->tmpl->setAttribute('field_regmember', 'visibility', 'hidden');// 会員登録への遷移を削除
-		} else {
-/*			// 非会員の購入を許可している場合は、遷移可能にする
-			$value = $this->_getConfig(photo_shopCommonDef::CF_PERMIT_NON_MEMBER_ORDER);
-			if (!empty($value)){
-				$this->tmpl->setAttribute('field_nonmember', 'visibility', 'visible');
-				//$this->tmpl->addVar("field_nonmember", "url_order", $this->getUrl($this->gEnv->createCurrentPageUrl() . '&task=order', true));				// 購入画面遷移用
-				$this->tmpl->addVar("field_nonmember", "url_order", $this->getUrl($this->gEnv->createCurrentPageUrl() . '&' . $forward, true));				// 購入画面遷移用
-			}*/
+		if ($task == 'emaillogin'){			// Eメールからのログインの場合
+			$this->tmpl->setAttribute('regmember_area', 'visibility', 'hidden');// 会員登録への遷移を削除
+		} else {		// 通常の画面(会員登録画面へのリンクとログインエリアを表示)
+			// コンテンツタイプが「会員」のページを取得
+			$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_MEMBER, M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_MEMBER_REGIST);
+			$linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
+
+			// パラメータを画面に埋め込む
+			$this->tmpl->addVar("regmember_area", "url_regmember", $this->convertUrlToHtmlEntity($linkUrl));		// 会員登録画面遷移用
+			$this->tmpl->addVar("regmember_area", "word_account", $this->convertToDispString($this->gInstance->getMessageManager()->getWord(self::WORD_KEY_ACCOUNT)));		// 用語(アカウント)
 		}
-				
+						
 		// パラメータを画面に埋め込む
-		$this->tmpl->addVar("field_regmember", "url_regmember", $this->getUrl($this->gEnv->createCurrentPageUrl() . '&task=regmember', true));		// 会員登録画面遷移用
 		$this->tmpl->addVar("_widget", "forward", $forward);		// 遷移先を維持
 		$this->tmpl->addVar("_widget", "task", $task);
 		$this->tmpl->addVar("_widget", "word_account", $this->convertToDispString($this->gInstance->getMessageManager()->getWord(self::WORD_KEY_ACCOUNT)));		// 用語(アカウント)
-		$this->tmpl->addVar("field_regmember", "word_account", $this->convertToDispString($this->gInstance->getMessageManager()->getWord(self::WORD_KEY_ACCOUNT)));		// 用語(アカウント)
 	}
 	/**
 	 * CSSファイルをHTMLヘッダ部に設定
