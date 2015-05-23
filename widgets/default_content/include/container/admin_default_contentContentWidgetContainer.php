@@ -682,8 +682,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			// システム強制終了
 			$this->gPage->exitSystem();
 		} else if ($act == 'getmenu'){		// メニュー定義取得
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+			
 			$menuList = $this->getParsedTemplateData('default_menulist.tmpl.html', array($this, 'makeMenuList'), $contentId);// メニュー定義一覧
-			$this->gInstance->getAjaxManager()->addData('html', $menuList);
+			//$this->gInstance->getAjaxManager()->addData('html', $menuList);
+			$this->gInstance->getAjaxManager()->addDataToBody($menuList);
 			return;
 		} else if ($act == 'addtomenu'){			// メニューに項目を追加
 			$serialList = $request->trimValueOf('seriallist');

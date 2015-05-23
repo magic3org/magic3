@@ -121,9 +121,10 @@ function addToMenu(selId)
 		nl2br: false,
 		onshow: function(dialog) {
 			// Ajaxでメニュー定義一覧を取得
-			m3_ajax_request('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=content_detail&act=getmenu&contentid=' + selId, function(request, retcode, jsondata){		// 正常終了
+			m3_ajax_request_ex('', 'cmd=configwidget&widget={TARGET_WIDGET}&task=content_detail&act=getmenu&contentid=' + selId, function(request, retcode, jsondata, html){		// 正常終了
 				// メニュー選択テーブルを作成
-				if (jsondata.html) dialog.setMessage(jsondata.html);
+				//if (jsondata.html) dialog.setMessage(jsondata.html);
+				if (html) dialog.setMessage(html);
 			}, function(request){		// 異常終了
 				alert('通信に失敗しました。');
 			});
