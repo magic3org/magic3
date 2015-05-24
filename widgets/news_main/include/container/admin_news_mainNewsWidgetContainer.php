@@ -440,7 +440,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 	 */
 	function getContentTitle($contentType, $contentId)
 	{
-		$contentTypeName = self::UNKNOWN_CONTENT_TYPE;
+		$contentTypeName = '';
 		$contentName = self::UNKNOWN_CONTENT;
 		
 		// コンテンツタイプ名取得
@@ -452,7 +452,20 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 				break;
 			}
 		}
-		
+		// サブコンテンツを検索
+		if (empty($contentTypeName)){
+			$subContentType = $this->gPage->getSubContentTypeInfo();
+			for ($i = 0; $i < count($subContentType); $i++){
+				$contentTypeRow = $subContentType[$i];
+				if ($contentTypeRow['value'] == $contentType){
+					$contentTypeName = $contentTypeRow['name'];
+					break;
+				}
+			}
+		}
+		// コンテンツタイプ名が不明な場合
+		if (empty($contentTypeName)) $contentTypeName = self::UNKNOWN_CONTENT_TYPE;
+				
 		switch ($contentType){
 			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
 				$ret = self::$_mainDb->getContentById(''/*PC用コンテンツ*/, $this->_langId, $contentId, $row);
