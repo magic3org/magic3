@@ -68,6 +68,9 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 		$forward = $request->trimValueOf(M3_REQUEST_PARAM_FORWARD);		// 画面遷移用パラメータ
 		$account = $request->trimValueOf('evententry_account');
 		
+		// 画面遷移用URLをチェック
+		if (!empty($forward) && !$this->gEnv->isSystemUrlAccess($forward)) $forward = '';
+		
 		if ($act == 'evententry_login'){			// ログインのとき
 			// アカウント、パスワード取得
 			$password = $request->trimValueOf('password');
@@ -102,9 +105,9 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 				$pwd = $request->trimValueOf('pwd');
 				$forward = 'task=changepwd';		// パスワードを変更
 			
-				$this->tmpl->addVar("_widget", "account", $account);
-				$this->tmpl->addVar("_widget", "password", $pwd);
-				$this->tmpl->addVar("_widget", "savepwd", $pwd);
+				$this->tmpl->addVar("_widget", "account",	$this->convertToDispString($account));
+				$this->tmpl->addVar("_widget", "password",	$this->convertToDispString($pwd));
+				$this->tmpl->addVar("_widget", "savepwd",	$this->convertToDispString($pwd));
 			}
 		}
 		// 画面修正
@@ -112,7 +115,11 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 			$this->tmpl->setAttribute('regmember_area', 'visibility', 'hidden');// 会員登録への遷移を削除
 		} else {		// 通常の画面(会員登録画面へのリンクとログインエリアを表示)
 			// コンテンツタイプが「会員」のページを取得
-			$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_MEMBER, M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_MEMBER_REGIST);
+			$linkUrl  = $this->gPage->createContentPageUrl(
+															M3_VIEW_TYPE_MEMBER, 
+															M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_MEMBER_REGIST . '&' .
+															M3_REQUEST_PARAM_FORWARD . '=' . urlencode($forward)
+															);
 			$linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
 
 			// パラメータを画面に埋め込む
@@ -121,9 +128,9 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 		}
 						
 		// パラメータを画面に埋め込む
-		$this->tmpl->addVar("_widget", "forward", $forward);		// 遷移先を維持
-		$this->tmpl->addVar("_widget", "task", $task);
-		$this->tmpl->addVar("_widget", "word_account", $this->convertToDispString($this->gInstance->getMessageManager()->getWord(self::WORD_KEY_ACCOUNT)));		// 用語(アカウント)
+		$this->tmpl->addVar("_widget", "forward",		$this->convertToDispString($forward));		// 遷移先を維持
+		$this->tmpl->addVar("_widget", "task",			$this->convertToDispString($task));
+		$this->tmpl->addVar("_widget", "word_account",	$this->convertToDispString($this->gInstance->getMessageManager()->getWord(self::WORD_KEY_ACCOUNT)));		// 用語(アカウント)
 	}
 	/**
 	 * CSSファイルをHTMLヘッダ部に設定

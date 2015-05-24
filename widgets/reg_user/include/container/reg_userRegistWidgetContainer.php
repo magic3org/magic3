@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -49,9 +49,9 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートのとき
-			return 'index_bootstrap.tmpl.html';
+			return 'regist_bootstrap.tmpl.html';
 		} else {
-			return 'index.tmpl.html';
+			return 'regist.tmpl.html';
 		}
 	}
 	/**
@@ -86,7 +86,11 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 		$name = $request->trimValueOf('item_name');			// 名前
 		$email = $request->trimValueOf('item_email');	// Email
 		$email2 = $request->trimValueOf('item_email2');	// Email確認用
+		$forward = $request->trimValueOf(M3_REQUEST_PARAM_FORWARD);		// 画面遷移用パラメータ
 	
+		// 画面遷移用URLをチェック
+		if (!empty($forward) && !$this->gEnv->isSystemUrlAccess($forward)) $forward = '';
+		
 		if ($act == 'regist'){			// ユーザ登録
 			$this->checkInput($name, '名前');
 			$this->checkMailAddress($email, 'Eメール');
@@ -153,18 +157,18 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 				$this->tmpl->addVar("_widget", "send_button_disabled", 'disabled');// 送信ボタン
 			}
 		}
-	
-		// 入力値を戻す
-		$this->tmpl->addVar("_widget", "name", $name);
-		$this->tmpl->addVar("_widget", "email", $email);
-		$this->tmpl->addVar("_widget", "email2", $email2);
-		
 		// ボタンの状態を設定
 		if (!$inputEnabled){			// 入力の許可状態
 			$this->tmpl->addVar('_widget', 'name_disabled', 'disabled');
 			$this->tmpl->addVar('_widget', 'email_disabled', 'disabled');
 			$this->tmpl->addVar('_widget', 'email2_disabled', 'disabled');
 		}
+		
+		// 入力値を戻す
+		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));
+		$this->tmpl->addVar("_widget", "email", $this->convertToDispString($email));
+		$this->tmpl->addVar("_widget", "email2", $this->convertToDispString($email2));
+		$this->tmpl->addVar("_widget", "forward", $this->convertToDispString($forward));		// 遷移先を維持
 	}
 	/**
 	 * ウィジェットのタイトルを設定
