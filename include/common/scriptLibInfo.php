@@ -84,6 +84,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_CLOUDCAROUSEL	= 'jquery.cloudcarousel';
 	const LIB_JQUERY_SCROLLTO		= 'jquery.scrollto';
 	const LIB_JQUERY_FULLCALENDAR	= 'jquery.fullcalendar';
+	const LIB_JQUERY_FULLCALENDAR_GOOGLE	= 'jquery.fullcalendar.google';			// Google連携オプション
 	const LIB_JQUERY_TIMEPICKER		= 'jquery.timepicker';
 	const LIB_JQUERY_JSON			= 'jquery.json';
 	const LIB_JQUERY_FITTEXT		= 'jquery.fittext';
@@ -216,9 +217,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 /*	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-2.2.6/fullcalendar.js';
 	const JQUERY_FULLCALENDAR_LANG_FILENAME	= 'jquery/fullcalendar-2.2.6/lang/{LANG}.js';			// 言語ファイル
 	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-2.2.6/fullcalendar.css';*/
-	const JQUERY_FULLCALENDAR_FILENAME	= 'jquery/fullcalendar-2.3.1/fullcalendar.js';
-	const JQUERY_FULLCALENDAR_LANG_FILENAME	= 'jquery/fullcalendar-2.3.1/lang/{LANG}.js';			// 言語ファイル
-	const JQUERY_FULLCALENDAR_CSS		= 'jquery/fullcalendar-2.3.1/fullcalendar.css';
+	const JQUERY_FULLCALENDAR_FILENAME			= 'jquery/fullcalendar-2.3.1/fullcalendar.js';
+	const JQUERY_FULLCALENDAR_LANG_FILENAME		= 'jquery/fullcalendar-2.3.1/lang/{LANG}.js';			// 言語ファイル
+	const JQUERY_FULLCALENDAR_CSS				= 'jquery/fullcalendar-2.3.1/fullcalendar.css';
+	const JQUERY_FULLCALENDAR_GOOGLE_FILENAME	= 'jquery/fullcalendar-2.3.1/gcal.js';				// FullCalendarプラグインのGoogle連携オプション
 	const JQUERY_TIMEPICKER_FILENAME	= 'jquery/timepicker/jquery.ui.timepicker.js';
 	const JQUERY_TIMEPICKER_LANG_FILENAME	= 'jquery/timepicker/i18n/jquery.ui.timepicker-ja.js';
 	const JQUERY_TIMEPICKER_CSS			= 'jquery/timepicker/jquery.ui.timepicker.css';
@@ -530,6 +532,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 																	'url'		=> self::JQUERY_FULLCALENDAR_URL,
 																	'version'	=> self::JQUERY_FULLCALENDAR_VER,
 																	'script_lang'	=> array(	array( 'script' 	=> self::JQUERY_FULLCALENDAR_LANG_FILENAME,	'default_lang'	=> ''))),	// 言語ファイル(ファイルパスのLANG値を現在の言語IDに変換するためのオプション。デフォルトの言語IDを指定。デフォルトが空の場合、ファイルパスを返さないの意。)
+						self::LIB_JQUERY_FULLCALENDAR_GOOGLE	=> array(	'script' 	=> array(self::JQUERY_FULLCALENDAR_GOOGLE_FILENAME)),	// jquery.FullCalendarのGoogle連携オプション
 						self::LIB_JQUERY_TIMEPICKER		=>	array(	'script' 	=> array(self::JQUERY_TIMEPICKER_FILENAME,		// jquery.timepicker用のファイル
 																						self::JQUERY_TIMEPICKER_LANG_FILENAME),	// 言語ファイル
 																	'css'		=> array(self::JQUERY_TIMEPICKER_CSS),
@@ -658,12 +661,13 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 		// ##### 依存ライブラリ情報 #####
 		static $dependentLib = array(
 										//self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
-										self::LIB_ELFINDER		=>	array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
-										self::LIB_ELFINDER21	=>	array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
-										self::LIB_JQUERY_TIMEPICKER			=>	array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
-										self::LIB_JQUERY_UPLOADFILE			=>	array(self::LIB_JQUERY_FORM),
-										self::LIB_JQUERY_FULLCALENDAR		=> array(self::LIB_MOMENT),
-										self::LIB_BOOTSTRAP_DATETIMEPICKER	=> array(self::LIB_MOMENT)
+										self::LIB_ELFINDER						=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
+										self::LIB_ELFINDER21					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
+										self::LIB_JQUERY_TIMEPICKER				=> array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
+										self::LIB_JQUERY_UPLOADFILE				=> array(self::LIB_JQUERY_FORM),
+										self::LIB_JQUERY_FULLCALENDAR			=> array(self::LIB_MOMENT),
+										self::LIB_JQUERY_FULLCALENDAR_GOOGLE	=> array(self::LIB_MOMENT,		self::LIB_JQUERY_FULLCALENDAR),		// MomentをFullCalendarより先に読み込む
+										self::LIB_BOOTSTRAP_DATETIMEPICKER		=> array(self::LIB_MOMENT)
 									);
 		
 		return $dependentLib[$lib];

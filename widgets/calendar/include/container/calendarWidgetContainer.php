@@ -24,7 +24,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	private $dates;			// 有効日
 	private $langId;		// 言語
 	private $css;		// デザインCSS
-	private $addScript = array();		// 追加スクリプト
+//	private $addScript = array();		// 追加スクリプト
 	private $showEventTooltip;		// イベント記事用のツールチップを表示するかどうか
 	private $dateTypeInfo;		// 日付データタイプ
 	private $optionDateTypeInfo;		// 日付データタイプ(基本日オプション)
@@ -32,7 +32,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カレンダー';		// デフォルトのウィジェットタイトル名
 	const MAX_ITEM_COUNT = 100;				// カレンダーに表示する項目の最大数
-	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-2.3.1/gcal.js';				// Googleカレンダー用スクリプト
+//	const GOOGLE_SCRIPT_FILE	= '/jquery/fullcalendar-2.3.1/gcal.js';				// Googleカレンダー用スクリプト
 	const DEFAULT_EVENT_TOOLTIP_TITLE_STYLE		= "color: '#fff', background: 'red'";		// ツールチップ(タイトル)のスタイル
 	const DEFAULT_EVENT_TOOLTIP_BORDER_STYLE	= "width: 2, radius: 5, color: '#444'";		// ツールチップ(ボーダー)のスタイル
 	const DEFAULT_SIMPLE_EVENT_CLASS_NAME = 'simple_event_default';			// デフォルトのクラス名(簡易イベント)
@@ -125,9 +125,23 @@ class calendarWidgetContainer extends BaseWidgetContainer
 	 * @param object         $param			任意使用パラメータ。
 	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
 	 */
-	function _addScriptFileToHead($request, &$param)
+/*	function _addScriptFileToHead($request, &$param)
 	{
 		return $this->addScript;
+	}*/
+	/**
+	 * JavascriptライブラリをHTMLヘッダ部に設定
+	 *
+	 * JavascriptライブラリをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string,array 				Javascriptライブラリ。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptLibToHead($request, &$param)
+	{
+		return ScriptLibInfo::LIB_JQUERY_FULLCALENDAR_GOOGLE;			// FullCalendarのGoogle連携オプション
 	}
 	/**
 	 * カレンダー表示
@@ -188,7 +202,7 @@ class calendarWidgetContainer extends BaseWidgetContainer
 		}
 		
 		// 追加スクリプト
-		$this->addScript = array($this->getUrl($this->gEnv->getScriptsUrl() . self::GOOGLE_SCRIPT_FILE));
+//		$this->addScript = array($this->getUrl($this->gEnv->getScriptsUrl() . self::GOOGLE_SCRIPT_FILE));
 		
 		// 取得コンテンツタイプ
 		$typeArray = array();
