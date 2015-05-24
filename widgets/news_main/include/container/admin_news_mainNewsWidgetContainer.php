@@ -480,6 +480,10 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 				$ret = self::$_mainDb->getEventById($contentId, $this->_langId, $row);
 				if ($ret) $contentName = $row['ee_name'];
 				break;
+			case M3_VIEW_TYPE_EVENTENTRY:				// イベント予約
+				$ret = self::$_mainDb->getEventById($contentId, $this->_langId, $row);
+				if ($ret) $contentName = $row['ee_name'] . 'の予約';
+				break;
 			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
 				$ret = self::$_mainDb->getPhotoById($contentId, $this->_langId, $row);
 				if ($ret) $contentName = $row['ht_name'];
