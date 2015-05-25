@@ -57,6 +57,13 @@ class evententry_mainWidgetContainer extends evententry_mainBaseWidgetContainer
 //					$this->gPage->redirect($this->gEnv->createCurrentPageUrl());
 //					return true;
 				}
+			case self::TASK_LOGIN:		// ログイン
+				$forward = $request->trimValueOf(M3_REQUEST_PARAM_FORWARD);		// 画面遷移用パラメータ
+				if ($this->gEnv->isCurrentUserLogined() && !empty($forward)){	// ログインされていて遷移先がある場合は画面遷移
+					$this->gPage->redirect($forward);
+					return;
+				}
+				break;
 		}
 		
 		// ##### コンテナを起動 #####
