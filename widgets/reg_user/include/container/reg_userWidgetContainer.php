@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: reg_userWidgetContainer.php 5200 2012-09-13 04:48:21Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/reg_userBaseWidgetContainer.php');
@@ -37,36 +37,47 @@ class reg_userWidgetContainer extends reg_userBaseWidgetContainer
 	 */
 	function _dispatch($request, &$param)
 	{
+//debug("*****************");
 		// 実行処理を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = 'regist';
-
+		if (empty($task)) $task = self::DEFAULT_TASK;
+//debug($task);
 		// ##### アクセス制御 #####
 		// ログインが必要な処理の場合は、ログイン状況をチェックする
 		switch ($task){
-			case 'changepwd':		// パスワード変更
-			case 'profile':			// ユーザプロフィール
+			case self::TASK_CHANGE_PASSWORD:	// パスワード変更
+			case self::TASK_PROFILE:			// ユーザプロフィール
 				// ログイン状態を取得
 				if (!$this->gEnv->isCurrentUserLogined()){		// ログインされていない場合
 					$this->SetMsg(self::MSG_APP_ERR, "ログインが必要です");
+					
+					// トップページへ遷移
+//					$this->gPage->redirect($this->gEnv->createCurrentPageUrl());
 					return true;
 				}
 		}
 		
+		// ##### 遷移先を決定 #####
+		switch ($task){
+			case self::TASK_LOGIN:		// Eログイン
+				if ($this->gEnv->isCurrentUserLogined()) $task = self::TASK_PROFILE;		// プロフィール
+				break;
+		}
+			
 		// ##### 起動タスクを変更 #####
 		switch ($task){
-			case 'emaillogin':
-				$task = 'login';
+			case self::TASK_EMAIL_LOGIN:		// Eメールログイン
+				$task = self::TASK_LOGIN;		// ログイン
 				break;
 		}
 		
 		// ##### コンテナを起動 #####
 		switch ($task){
-			case 'login':			// ログイン
-			case 'regist':			// ユーザ登録
-			case 'changepwd':		// パスワード変更
-			case 'sendpwd':			// パスワード送信
-			case 'profile':			// ユーザプロフィール
+			case self::TASK_LOGIN:				// ログイン
+			case self::TASK_REGIST:				// ユーザ登録
+			case self::TASK_SEND_PASSWORD:		// パスワード送信
+			case self::TASK_CHANGE_PASSWORD:	// パスワード変更
+			case self::TASK_PROFILE:			// ユーザプロフィール
 				$this->gLaunch->goSubWidget($task);
 				return false;
 			default:
@@ -90,8 +101,8 @@ class reg_userWidgetContainer extends reg_userBaseWidgetContainer
 
 		// 要求画面によってテンプレートを変更
 		switch ($task){
-			case 'changepwd':		// パスワード変更
-			case 'profile':			// ユーザプロフィール
+			case self::TASK_CHANGE_PASSWORD:	// パスワード変更
+			case self::TASK_PROFILE:			// ユーザプロフィール
 				// ログインが必要であるメッセージを表示
 				return 'message_login.tmpl.html';
 			default:
@@ -113,8 +124,8 @@ class reg_userWidgetContainer extends reg_userBaseWidgetContainer
 
 		// 要求画面によってテンプレートを変更
 		switch ($task){
-			case 'changepwd':		// パスワード変更
-			case 'profile':			// ユーザプロフィール
+			case self::TASK_CHANGE_PASSWORD:	// パスワード変更
+			case self::TASK_PROFILE:			// ユーザプロフィール
 				// ログインが必要であるメッセージを表示
 				$this->tmpl->addVar("_widget", "login_url", $this->getUrl($this->gEnv->createCurrentPageUrl() . '&task=login', true));		// ログイン用URL
 				break;

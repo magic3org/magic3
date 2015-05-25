@@ -132,8 +132,8 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 					$fromAddress = $this->getFromAddress();	// 送信元アドレス
 					$toAddress = $email;			// eメール(ログインアカウント)
 					$ccAddress = $fromAddress;		// CCメール
-					//$url = $this->gEnv->createCurrentPageUrl() . '&task=login&act=user_maillogin&account=' . urlencode($email) . '&pwd=' . urlencode($password);		// ログイン用URL
 					$url = $this->gEnv->createCurrentPageUrl() . sprintf(self::EMAIL_LOGIN_URL, urlencode($email), urlencode($password));		// ログイン用URL
+					if (!empty($forward)) $url .= '&' . M3_REQUEST_PARAM_FORWARD . '=' . urlencode($forward);			// 遷移画面が設定されている場合は追加
 					$mailParam = array();
 					$mailParam['PASSWORD'] = $password;
 					$mailParam['URL']		= $this->getUrl($url, true);		// ログイン用URL

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -66,6 +66,11 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 				
 		$act = $request->trimValueOf('act');
 		$task = $request->trimValueOf('task');
+		$forward = $request->trimValueOf(M3_REQUEST_PARAM_FORWARD);		// 画面遷移用パラメータ
+		
+		// 画面遷移用URLをチェック
+		if (!empty($forward) && !$this->gEnv->isSystemUrlAccess($forward)) $forward = '';
+		
 		if ($act == 'user_login'){			// 会員ログインのとき
 			// アカウント、パスワード取得
 			$account = $request->trimValueOf('user_account');
@@ -93,15 +98,34 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 									$isErr = false;				// 正常終了
 								}
 							} else {	// 承認済みのとき
-								$message = 'ログインしました';
-								$isErr = false;				// 正常終了
+								// 遷移先がある場合はリダイレクト
+								if (empty($forward)){
+									// 画面再表示
+									$this->gPage->redirect($this->gEnv->getCurrentRequestUri());
+									return;
+									//$message = 'ログインしました';
+									//$isErr = false;				// 正常終了
+								} else {
+									$this->gPage->redirect($forward);
+									return;
+								}
 							}
 						}
 					}
 				} else if ($this->authType == 'admin'){		// 管理者による承認のとき
 					if ($this->gAccess->userLoginByAccount($account, $password)){
-						$message = 'ログインしました';
-						$isErr = false;				// 正常終了
+						// 遷移先がある場合はリダイレクト
+						if (empty($forward)){
+							// 画面再表示
+							$this->gPage->redirect($this->gEnv->getCurrentRequestUri());
+							return;
+//							$message = 'ログインしました';
+//							$isErr = false;				// 正常終了
+						} else {
+							// 画面を全体を再表示する
+							$this->gPage->redirect($forward);
+							return;
+						}
 					}
 				}
 			}
@@ -136,6 +160,9 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 		$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
 		$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
 		$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
+		
+		// パラメータを画面に埋め込む
+		$this->tmpl->addVar("_widget", "forward", $this->convertToDispString($forward));		// 遷移先を維持
 	}
 	/**
 	 * ウィジェットのタイトルを設定

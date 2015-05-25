@@ -17,12 +17,18 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class reg_userBaseWidgetContainer extends BaseWidgetContainer
 {
-//	private $_userId;			// 現在のユーザ
 	private $cssFilePath = array();			// CSSファイル
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const EMAIL_LOGIN_URL		= '&task=emaillogin&account=%s&pwd=%s';		// Eメールからのログイン用URL
+	
 	// 画面
-	const TASK_PROFILE = 'profile';			// プロフィール画面
+	const TASK_REGIST			= 'regist';			// 会員登録
+	const TASK_LOGIN			= 'login';			// ログイン
+	const TASK_EMAIL_LOGIN		= 'emaillogin';		// Eメールからのログイン
+	const TASK_SEND_PASSWORD	= 'sendpwd';		// パスワード送信
+	const TASK_PROFILE			= 'profile';		// プロフィール画面(要ログイン)
+	const TASK_CHANGE_PASSWORD	= 'changepwd';		// パスワード変更(要ログイン)
+	const DEFAULT_TASK			= 'login';			// デフォルト画面
 	
 	/**
 	 * コンストラクタ
@@ -31,8 +37,6 @@ class reg_userBaseWidgetContainer extends BaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-//		$this->_userId = $this->gEnv->getCurrentUserId();
 		
 		// CSSファイルの追加
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートのとき
