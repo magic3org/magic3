@@ -114,11 +114,13 @@ class evententry_mainLoginWidgetContainer extends evententry_mainBaseWidgetConta
 		if ($task == 'emaillogin'){			// Eメールからのログインの場合
 			$this->tmpl->setAttribute('regmember_area', 'visibility', 'hidden');// 会員登録への遷移を削除
 		} else {		// 通常の画面(会員登録画面へのリンクとログインエリアを表示)
-			// コンテンツタイプが「会員」のページを取得
+			// 会員登録画面へ遷移する場合は、foword遷移先をイベント情報画面にする
+			$forwardAfterRegist = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_EVENT);
+
 			$linkUrl  = $this->gPage->createContentPageUrl(
 															M3_VIEW_TYPE_MEMBER, 
 															M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_MEMBER_REGIST . '&' .
-															M3_REQUEST_PARAM_FORWARD . '=' . urlencode($forward)
+															M3_REQUEST_PARAM_FORWARD . '=' . urlencode($forwardAfterRegist)
 															);
 			$linkUrl = $this->getUrl($linkUrl, true/*リンク用*/);
 
