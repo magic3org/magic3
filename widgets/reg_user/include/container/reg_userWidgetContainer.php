@@ -37,11 +37,10 @@ class reg_userWidgetContainer extends reg_userBaseWidgetContainer
 	 */
 	function _dispatch($request, &$param)
 	{
-//debug("*****************");
 		// 実行処理を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TASK;
-//debug($task);
+
 		// ##### アクセス制御 #####
 		// ログインが必要な処理の場合は、ログイン状況をチェックする
 		switch ($task){
@@ -59,7 +58,7 @@ class reg_userWidgetContainer extends reg_userBaseWidgetContainer
 		
 		// ##### 遷移先を決定 #####
 		switch ($task){
-			case self::TASK_LOGIN:		// Eログイン
+			case self::TASK_LOGIN:		// ログイン
 				if ($this->gEnv->isCurrentUserLogined()) $task = self::TASK_PROFILE;		// プロフィール
 				break;
 		}
