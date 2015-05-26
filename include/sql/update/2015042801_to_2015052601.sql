@@ -18,6 +18,4 @@
 
 -- *** システムベーステーブル ***
 
--- 定型メールフォーム
-ALTER TABLE _mail_form ADD mf_name           VARCHAR(100)   DEFAULT ''                    NOT NULL;      -- フォーム名
 

@@ -17,6 +17,9 @@
 -- ・イベント予約機能
 
 -- 定型メールフォーム
+ALTER TABLE _mail_form ADD mf_name           VARCHAR(100)   DEFAULT ''                    NOT NULL;      -- フォーム名
+
+-- 定型メールフォーム
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_auto';
 INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
 VALUES                 ('regist_user_auto', 'ja',           '会員自動登録', '[[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\nこのパスワードでログインすると会員として承認されます。\n\n[#URL#]\n\nパスワード:　[#PASSWORD#]', now());
