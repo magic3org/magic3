@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -40,20 +40,21 @@ class MailManager extends Core
 	 * メールの内容は、メールフォームテーブルから取得し、パラメータを変換して作成。
 	 * 送信したメールの内容はログテーブルに残す
 	 *
-	 * @param int $type				メール送信タイプ(0=未設定、1=自動送信、2=手動送信)
-	 * @param string $widgetId		送信を行ったウィジェットID
-	 * @param string $toAddress		送信先メールアドレス(「|」区切りで複数送信可。フォーマット「アドレス1|cc:アドレス2|bcc:アドレス3」)
-	 * @param string $fromAddress	送信元メールアドレス
-	 * @param string $replytoAddress	返信先メールアドレス(空の場合は$fromAddressを使用)
-	 * @param string $subject		件名(空のときは、メールフォームテーブルから取得)
-	 * @param string $formId		メールフォームID(空のときは$mailFormにメールフォームを設定)
-	 * @param array,string  $params	本文置き換え文字列、連想配列で設定。
-	 * @param string $ccAddress		CCメールアドレス
-	 * @param string $bccAddress	BCCメールアドレス
-	 * @param string $mailForm		メールフォームデータ($formIdが空のときに使用)
-	 * @return bool					true=成功、false=失敗
+	 * @param int          $type			メール送信タイプ(0=未設定、1=自動送信、2=手動送信)
+	 * @param string       $widgetId		送信を行ったウィジェットID
+	 * @param string       $toAddress		送信先メールアドレス(「|」区切りで複数送信可。フォーマット「アドレス1|cc:アドレス2|bcc:アドレス3」)
+	 * @param string       $fromAddress		送信元メールアドレス
+	 * @param string       $replytoAddress	返信先メールアドレス(空の場合は$fromAddressを使用)
+	 * @param string       $subject			件名(空のときは、メールフォームテーブルから取得)
+	 * @param string       $formId			メールフォームID(空のときは$mailFormにメールフォームを設定)
+	 * @param array,string $params			本文置き換え文字列、連想配列で設定。
+	 * @param string       $ccAddress		CCメールアドレス
+	 * @param string       $bccAddress		BCCメールアドレス
+	 * @param string       $mailForm		メールフォームデータ($formIdが空のときに使用)
+	 * @param array,string $titleParams		本文置き換え文字列、連想配列で設定。
+	 * @return bool							true=成功、false=失敗
 	 */
-	public function sendFormMail($type, $widgetId, $toAddress, $fromAddress, $replytoAddress, $subject, $formId, $params, $ccAddress = '', $bccAddress = '', $mailForm = '')
+	public function sendFormMail($type, $widgetId, $toAddress, $fromAddress, $replytoAddress, $subject, $formId, $params, $ccAddress = '', $bccAddress = '', $mailForm = '', $titleParams = '')
 	{
 		global $gEnvManager;
 		
