@@ -117,7 +117,8 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 												'account=' . $email . ', userid=' . $loginUserId, 'account=' . $email/*検索補助データ*/);
 						
 						// メールフォームタイプ
-						$formType = self::REGIST_USER_AUTO_FORM;		// パスワード送信用フォーム(自動登録)
+						//$formType = self::REGIST_USER_AUTO_FORM;		// パスワード送信用フォーム(自動登録)
+						$formType = reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO;		// メールテンプレート(会員自動登録)
 						$message = '登録完了しました。Eメールアドレス宛てにパスワードが送信されます。<br />ログインにより自動承認されます。';
 					} else if ($this->authType == 'admin'){			// 管理者による認証
 						// 運用ログを残す
@@ -125,19 +126,25 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 												'account=' . $email . ', userid=' . $loginUserId, 'account=' . $email/*検索補助データ*/, self::OPERATION_LOG_LINK/*リンク先*/);
 						
 						// メールフォームタイプ
-						$formType = self::REGIST_USER_AUTH_FORM;		// パスワード送信用フォーム(管理者認証)
+						//$formType = self::REGIST_USER_AUTH_FORM;		// パスワード送信用フォーム(管理者認証)
+						$formType = reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTH;		// メールテンプレート(会員承認登録)
 						$message = '登録完了しました。Eメールアドレス宛てにパスワードが送信されます。<br />管理者からの承認後、ログイン可能になります。';
 					}
 
 					$fromAddress = $this->getFromAddress();	// 送信元アドレス
 					$toAddress = $email;			// eメール(ログインアカウント)
-					$ccAddress = $fromAddress;		// CCメール
+				//	$ccAddress = $fromAddress;		// CCメール
 					$url = $this->gEnv->createCurrentPageUrl() . sprintf(self::EMAIL_LOGIN_URL, urlencode($email), urlencode($password));		// ログイン用URL
 					if (!empty($forward)) $url .= '&' . M3_REQUEST_PARAM_FORWARD . '=' . urlencode($forward);			// 遷移画面が設定されている場合は追加
+					// メール件名、本文マクロ
 					$mailParam = array();
-					$mailParam['PASSWORD'] = $password;
-					$mailParam['URL']		= $this->getUrl($url, true);		// ログイン用URL
-					$ret = $this->gInstance->getMailManager()->sendFormMail(1, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', $formType, $mailParam, $ccAddress);// 自動送信
+					$mailParam[M3_TAG_MACRO_PASSWORD]	= $password;
+					$mailParam[M3_TAG_MACRO_URL]		= $this->getUrl($url, true);		// ログイン用URL
+					$titleParam = array();
+					$titleParam[M3_TAG_MACRO_SITE_NAME] = $this->gEnv->getSiteName();			// サイト名
+					$titleParam[M3_TAG_MACRO_ACCOUNT]	= $email;							// ログインアカウント
+					$ret = $this->gInstance->getMailManager()->sendFormMail(1, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', $formType, $mailParam,
+																			''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*任意テンプレート*/, $titleParam);// 自動送信
 					$this->setGuidanceMsg($message);
 											
 					// 項目を入力不可に設定

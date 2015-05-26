@@ -19,16 +19,16 @@
 -- 定型メールフォーム
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_auto';
 INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
-VALUES                 ('regist_user_auto', 'ja',           '会員自動登録', '[#OPTIONAL#][[#SITE_NAME#]]会員登録([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\nこのパスワードでログインすると会員として承認されます。\n\n[#URL#]\n\nパスワード:　[#PASSWORD#]', now());
+VALUES                 ('regist_user_auto', 'ja',           '会員自動登録', '[[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\nこのパスワードでログインすると会員として承認されます。\n\n[#URL#]\n\nパスワード:　[#PASSWORD#]', now());
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth';
 INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
-VALUES                 ('regist_user_auth', 'ja',           '会員承認登録', '[#OPTIONAL#][[#SITE_NAME#]]会員登録([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\n管理者からの承認後、このパスワードでログイン可能になります。\n\nパスワード:　[#PASSWORD#]', now());
+VALUES                 ('regist_user_auth', 'ja',           '会員承認登録', '[[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\n管理者からの承認後、このパスワードでログイン可能になります。\n\nパスワード:　[#PASSWORD#]', now());
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_auto_completed';
 INSERT INTO _mail_form (mf_id,                   mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
-VALUES                 ('regist_user_auto_completed', 'ja',           '会員自動登録完了', '[#OPTIONAL#][[#SITE_NAME#]]会員自動登録完了([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
-DELETE FROM _mail_form WHERE mf_id = 'regist_user_completed';
+VALUES                 ('regist_user_auto_completed', 'ja',           '会員自動登録完了', '[[#SITE_NAME#]] 会員自動登録完了 ([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth_completed';
 INSERT INTO _mail_form (mf_id,                   mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
-VALUES                 ('regist_user_completed', 'ja',           '会員承認登録完了', '[#OPTIONAL#][[#SITE_NAME#]]会員登録完了([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
+VALUES                 ('regist_user_auth_completed', 'ja',           '会員承認登録完了', '[[#SITE_NAME#]] 会員登録完了 ([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
 
 -- ウィジェット情報
 DELETE FROM _widgets WHERE wd_id = 'evententry_main';

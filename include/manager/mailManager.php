@@ -52,9 +52,12 @@ class MailManager extends Core
 	 * @param string       $bccAddress		BCCメールアドレス
 	 * @param string       $mailForm		メールフォームデータ($formIdが空のときに使用)
 	 * @param array,string $titleParams		本文置き換え文字列、連想配列で設定。
+	 * @param string       $tilteHeadStr	タイトルの先頭に追加する文字列
+	 * @param string       $contentHeadStr	本文の先頭に追加する文字列
 	 * @return bool							true=成功、false=失敗
 	 */
-	public function sendFormMail($type, $widgetId, $toAddress, $fromAddress, $replytoAddress, $subject, $formId, $params, $ccAddress = '', $bccAddress = '', $mailForm = '', $titleParams = '')
+	public function sendFormMail($type, $widgetId, $toAddress, $fromAddress, $replytoAddress, $subject, $formId, $params, 
+								$ccAddress = '', $bccAddress = '', $mailForm = '', $titleParams = '', $tilteHeadStr = '', $contentHeadStr = '')
 	{
 		global $gEnvManager;
 		
@@ -120,7 +123,7 @@ class MailManager extends Core
 			return false;
 		}
 		
-		// メール件名、本文を取得
+		// ##### メール件名、本文を取得 #####
 		if (empty($formId)){	// メールフォームIDが空のときは独自メールフォールを使用
 			if (empty($subject) || empty($mailForm)){
 				$this->gOpeLog->writeError(__METHOD__, 'メール件名または本文が設定されていません。。', 1100);
@@ -136,7 +139,7 @@ class MailManager extends Core
 			$destSubject = empty($subject) ? $row['mf_subject'] : $subject;
 			$destContent = $row['mf_content'];
 		}
-	
+		
 		$destHeader = '';
 		if (empty($replytoAddress)) $replytoAddress = $fromAddress;
 		$errAddress = $fromAddress;		// エラーメールの送信先
@@ -165,15 +168,27 @@ class MailManager extends Core
 		if (!empty($bccAddress)) $destHeader .= 'Bcc: ' . $bccAddress . "\n";
 		$destHeader .= implode('', array_map(create_function('$a', 'return "Bcc: " . $a . "\n";'), $bccAddressArray));
 
-		// 本文を置き換え
+		// ##### メール件名、本文のマクロを置換 #####
+		// 件名を置換
+		if (!empty($titleParams)){		// 変換パラメータが設定されているとき
+			while (list($key, $val) = each($titleParams)){
+				$destSubject = str_replace(M3_TAG_START . $key . M3_TAG_END, $val, $destSubject);
+			}
+		}
+		// 本文を置換
 		if (!empty($params)){		// 変換パラメータが設定されているとき
 			while (list($key, $val) = each($params)){
-				$destContent = preg_replace("/\[#" . $key . "#\]/", $val, $destContent);
+				//$destContent = preg_replace("/\[#" . $key . "#\]/", $val, $destContent);
+				$destContent = str_replace(M3_TAG_START . $key . M3_TAG_END, $val, $destContent);
 			}
 		}
 		
 		// 半角カナを全角に変換(メールでは半角カナは使用できないため)
 		if (function_exists('mb_convert_kana')) $destContent = mb_convert_kana($destContent, "KV");
+		
+		// メール件名、本文に追加文字列を連結
+		$destSubject = $tilteHeadStr . $destSubject;
+		$destContent = $contentHeadStr . $destContent;
 		
 		$option = '-f' . $errAddress;		// エラーメールを返すアドレスを設定
 

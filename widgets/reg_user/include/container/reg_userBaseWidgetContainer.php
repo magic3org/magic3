@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/reg_userCommonDef.php');
 
 class reg_userBaseWidgetContainer extends BaseWidgetContainer
 {
