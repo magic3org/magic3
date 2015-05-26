@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/reg_userCommonDef.php');
 
 class admin_reg_userWidgetContainer extends BaseAdminWidgetContainer
 {
@@ -69,6 +70,9 @@ class admin_reg_userWidgetContainer extends BaseAdminWidgetContainer
 				$paramObj = new stdClass;
 				$paramObj->authType	= $this->authType;		// 承認タイプ
 				$ret = $this->updateWidgetParamObj($paramObj);
+				
+				if ($ret) 		$ret = $this->gInstance->getMailManager()->updateMailForm($formId, $this->_langId, $content, $subject);
+				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;		// データを再取得するかどうか

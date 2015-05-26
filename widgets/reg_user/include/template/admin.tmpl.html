@@ -33,7 +33,8 @@ $(function(){
 <table id="mainconfig">
     <tbody>
     <tr>
-	    <th>ユーザ承認</th><td><div class="col-sm-6 m3config_item">
+	<th>ユーザ承認</th>
+		<td><div class="col-sm-6 m3config_item">
 		<select name="item_auth_type" class="form-control">
 		<option value="">-- 未選択 --</option>
 		<patTemplate:tmpl name="authtype_list">
@@ -41,6 +42,51 @@ $(function(){
 		</patTemplate:tmpl>
 		</select></div>
 	    </td>
+	</tr>
+    <tr>
+	    <th rowspan="12"><span {_HELP_CONFIG_MAIL_TEMPLATE}>メール<br />テンプレート</span></th>
+	    <td class="info">会員自動登録</td>
+	</tr>
+    <tr>
+	    <td>
+		<div class="form-control-static col-sm-2 m3config_item">タイトル：</div><div class="col-sm-10 m3config_item"><input type="text" name="item_title_regist_auto" class="form-control" value="{TITLE_REGIST_AUTO}" maxlength="40" /></div>
+		</td>
+	</tr>
+    <tr>
+	    <td class="ckeditor" style="height:50px;"><textarea name="item_content_regist_auto" class="form-control">{CONTENT_REGIST_AUTO}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="info">会員自動登録完了</td>
+	</tr>
+    <tr>
+	    <td>
+		<div class="form-control-static col-sm-2 m3config_item">タイトル：</div><div class="col-sm-10 m3config_item"><input type="text" name="item_title_regist_auto_completed" class="form-control" value="{TITLE_REGIST_AUTO_COMPLETED}" size="40" maxlength="40" /></div>
+		</td>
+	</tr>
+    <tr>
+	    <td class="ckeditor" style="height:50px;"><textarea name="item_content_regist_auto_completed" class="form-control">{CONTENT_REGIST_AUTO_COMPLETED}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="info">会員承認登録</td>
+	</tr>
+    <tr>
+	    <td>
+		<div class="form-control-static col-sm-2 m3config_item">タイトル：</div><div class="col-sm-10 m3config_item"><input type="text" name="item_title_regist_auth" class="form-control" value="{TITLE_REGIST_AUTH}" maxlength="40" /></div>
+		</td>
+	</tr>
+    <tr>
+	    <td class="ckeditor" style="height:50px;"><textarea name="item_content_regist_auth" class="form-control">{CONTENT_REGIST_AUTH}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="info">会員承認登録完了</td>
+	</tr>
+    <tr>
+	    <td>
+		<div class="form-control-static col-sm-2 m3config_item">タイトル：</div><div class="col-sm-10 m3config_item"><input type="text" name="item_title_regist_auth_completed" class="form-control" value="{TITLE_REGIST_AUTH_COMPLETED}" size="40" maxlength="40" /></div>
+		</td>
+	</tr>
+    <tr>
+	    <td class="ckeditor" style="height:50px;"><textarea name="item_content_regist_auth_completed" class="form-control">{CONTENT_REGIST_AUTH_COMPLETED}</textarea></td>
 	</tr>
     </tbody>
 </table>
