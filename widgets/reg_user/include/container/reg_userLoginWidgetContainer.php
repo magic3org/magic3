@@ -18,7 +18,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/reg_userBaseWidge
 class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 {
 	const DEFAULT_TITLE = 'ログイン';		// 画面タイトル
-	const REGIST_USER_COMPLETED_FORM = 'regist_user_completed';		// メールフォーム
+//	const REGIST_USER_COMPLETED_FORM = 'regist_user_completed';		// メールフォーム
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
 	
 	/**
@@ -91,9 +91,14 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 								if ($ret){
 									$fromAddress = $this->getFromAddress();	// 送信元アドレス
 									$toAddress = $fromAddress;
+									// メール件名、本文マクロ
 									$mailParam = array();
 									$mailParam['ACCOUNT'] = $account;
-									$ret = $this->gInstance->getMailManager()->sendFormMail(1, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', self::REGIST_USER_COMPLETED_FORM, $mailParam);// 自動送信
+									$titleParam = array();
+									$titleParam[M3_TAG_MACRO_SITE_NAME] = $this->gEnv->getSiteName();			// サイト名
+									$titleParam[M3_TAG_MACRO_ACCOUNT]	= $account;							// ログインアカウント
+									$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO_COMPLETED, $mailParam,
+																							''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*デフォルトテンプレート*/, $titleParam);
 									$message = 'ログインしました。ユーザが自動承認されました。';
 									$isErr = false;				// 正常終了
 								}

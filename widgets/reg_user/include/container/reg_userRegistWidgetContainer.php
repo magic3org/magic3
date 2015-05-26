@@ -21,8 +21,6 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 	private $db;	// DB接続オブジェクト
 	const DEFAULT_TITLE = '会員登録';		// 画面タイトル
 	const DEFAULT_CAN_REGIST = 1;			// ユーザ登録を使用するかどうか
-	const REGIST_USER_AUTO_FORM = 'regist_user_auto';		// パスワード送信用フォーム(自動登録)
-	const REGIST_USER_AUTH_FORM = 'regist_user_auth';		// パスワード送信用フォーム(管理者認証)
 	const OPERATION_LOG_LINK = 'task=userlist';				// 運用ログリンク先
 	
 	/**
@@ -116,8 +114,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザが登録されました。ユーザはログインにより自動承認されます。アカウント: ' . $email . ', 名前: ' . $name, 2350,
 												'account=' . $email . ', userid=' . $loginUserId, 'account=' . $email/*検索補助データ*/);
 						
-						// メールフォームタイプ
-						//$formType = self::REGIST_USER_AUTO_FORM;		// パスワード送信用フォーム(自動登録)
+						// メールテンプレート
 						$formType = reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO;		// メールテンプレート(会員自動登録)
 						$message = '登録完了しました。Eメールアドレス宛てにパスワードが送信されます。<br />ログインにより自動承認されます。';
 					} else if ($this->authType == 'admin'){			// 管理者による認証
@@ -125,8 +122,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 						$this->gOpeLog->writeUserRequest(__METHOD__, 'ユーザが登録されました。ユーザを認証してください。アカウント: ' . $email . ', 名前: ' . $name, 2350,
 												'account=' . $email . ', userid=' . $loginUserId, 'account=' . $email/*検索補助データ*/, self::OPERATION_LOG_LINK/*リンク先*/);
 						
-						// メールフォームタイプ
-						//$formType = self::REGIST_USER_AUTH_FORM;		// パスワード送信用フォーム(管理者認証)
+						// メールテンプレート
 						$formType = reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTH;		// メールテンプレート(会員承認登録)
 						$message = '登録完了しました。Eメールアドレス宛てにパスワードが送信されます。<br />管理者からの承認後、ログイン可能になります。';
 					}
@@ -143,8 +139,8 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 					$titleParam = array();
 					$titleParam[M3_TAG_MACRO_SITE_NAME] = $this->gEnv->getSiteName();			// サイト名
 					$titleParam[M3_TAG_MACRO_ACCOUNT]	= $email;							// ログインアカウント
-					$ret = $this->gInstance->getMailManager()->sendFormMail(1, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', $formType, $mailParam,
-																			''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*任意テンプレート*/, $titleParam);// 自動送信
+					$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', $formType, $mailParam,
+																			''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*デフォルトテンプレート*/, $titleParam);
 					$this->setGuidanceMsg($message);
 											
 					// 項目を入力不可に設定
