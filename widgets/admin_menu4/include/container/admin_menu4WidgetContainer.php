@@ -666,35 +666,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 					// コンテンツ単位でタイトルを取得
 					$contentType = $menu[$i]['wd_type'];
 					$title = $mainContentTypeArray[$contentType];
-/*					switch ($contentType){
-						case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-							$title = '汎用コンテンツ';
-							break;
-						case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-							$title = '商品情報';
-							break;
-						case M3_VIEW_TYPE_BBS:					// BBS
-							$title = 'BBS';
-							break;
-						case M3_VIEW_TYPE_BLOG:				// ブログ
-							$title = 'ブログ';
-							break;
-						case M3_VIEW_TYPE_WIKI:				// Wiki
-							$title = 'Wiki';
-							break;
-						case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-							$title = 'ユーザ作成コンテンツ';
-							break;
-						case M3_VIEW_TYPE_EVENT:				// イベント
-							$title = 'イベント';
-							break;
-						case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-							$title = 'フォトギャラリー';
-							break;
-						default:
-							$title = '';
-							break;
-					}*/
 				}
 				if (empty($title)) $title = $menu[$i]['wd_name'];		// コンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;
@@ -721,24 +692,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$title = $this->getCurrentLangString($subMenu[$i]['wd_content_name']);		// ウィジェットのコンテンツ名を取得
 				
 				if (empty($title)){
-					// コンテンツ単位でタイトルを取得
+					// コンテンツ単位でタイトルを取得(主要コンテンツ、補助コンテンツ、主要機能タイプの順に探す)
 					$contentType = $subMenu[$i]['wd_content_type'];
-					$title = $subContentTypeArray[$contentType];
+					$title = $mainContentTypeArray[$contentType];
+					if (empty($title)) $title = $subContentTypeArray[$contentType];
 					if (empty($title)) $title = $mainFeatureTypeArray[$contentType];
-/*					switch ($contentType){
-						case 'banner':				// バナー
-							$title = 'バナー';
-							break;
-						case 'news':				// 新着情報
-							$title = '新着情報';
-							break;
-						case 'evententry':				// イベント予約
-							$title = 'イベント予約';
-							break;
-						default:
-							$title = '';
-							break;
-					}*/
 				}
 				if (empty($title)) $title = $subMenu[$i]['wd_name'];		// サブコンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;
