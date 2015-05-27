@@ -19,6 +19,7 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/reg_userCommonDef
 class reg_userBaseWidgetContainer extends BaseWidgetContainer
 {
 	private $cssFilePath = array();			// CSSファイル
+	protected $_authType;			// 承認タイプ
 	const CSS_FILE = '/style.css';		// CSSファイルのパス
 	const EMAIL_LOGIN_URL		= '&task=emaillogin&account=%s&pwd=%s';		// Eメールからのログイン用URL
 	
@@ -43,6 +44,22 @@ class reg_userBaseWidgetContainer extends BaseWidgetContainer
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートのとき
 		} else {
 			$this->cssFilePath[] = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::CSS_FILE);		// CSSファイル
+		}
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _preInit($request)
+	{
+		$paramObj = $this->getWidgetParamObj();
+		if (!empty($paramObj)){
+			$this->_authType	= $paramObj->authType;			// 承認タイプ
 		}
 	}
 	/**

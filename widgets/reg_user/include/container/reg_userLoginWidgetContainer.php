@@ -58,11 +58,8 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$paramObj = $this->getWidgetParamObj();
-		if (!empty($paramObj)){
-			$this->authType	= $paramObj->authType;			// 承認タイプ
-		}
-		if (empty($this->authType)) return;		// 承認タイプが設定されていないときは終了
+
+		if (empty($this->_authType)) return;		// 承認タイプが設定されていないときは終了
 				
 		$act = $request->trimValueOf('act');
 		$task = $request->trimValueOf('task');
@@ -81,7 +78,7 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 			$isErr = true;	// エラー発生状況
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// ユーザ認証
-				if ($this->authType == 'auto'){		// ユーザ自動承認のとき
+				if ($this->_authType == 'auto'){		// ユーザ自動承認のとき
 					if ($this->gAccess->userLoginByAccount($account, $password, false/*アクセス権はチェックしない*/)){
 						// ユーザ自動認証のときは未承認ユーザから一般ユーザへ変更
 						$userId = $this->gEnv->getCurrentUserId();
@@ -90,7 +87,11 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 								$ret = $this->_db->makeNormalLoginUser($userId);// 一般ログインユーザに設定
 								if ($ret){
 									$fromAddress = $this->getFromAddress();	// 送信元アドレス
-									$toAddress = $fromAddress;
+									$toAddress = $account;					// ログインユーザに送信
+									
+									// 管理者に通知を行う場合はBCCアドレスを設定
+									$bccAddress = $fromAddress;		// CCメール
+									
 									// メール件名、本文マクロ
 									$mailParam = array();
 									$mailParam['ACCOUNT'] = $account;
@@ -98,7 +99,7 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 									$titleParam[M3_TAG_MACRO_SITE_NAME] = $this->gEnv->getSiteName();			// サイト名
 									$titleParam[M3_TAG_MACRO_ACCOUNT]	= $account;							// ログインアカウント
 									$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO_COMPLETED, $mailParam,
-																							''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*デフォルトテンプレート*/, $titleParam);
+																							''/*CCアドレス*/, $bccAddress/*BCCアドレス*/, ''/*デフォルトテンプレート*/, $titleParam);
 									$message = 'ログインしました。ユーザが自動承認されました。';
 									$isErr = false;				// 正常終了
 								}
@@ -117,7 +118,7 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 							}
 						}
 					}
-				} else if ($this->authType == 'admin'){		// 管理者による承認のとき
+				} else if ($this->_authType == 'admin'){		// 管理者による承認のとき
 					if ($this->gAccess->userLoginByAccount($account, $password)){
 						// 遷移先がある場合はリダイレクト
 						if (empty($forward)){

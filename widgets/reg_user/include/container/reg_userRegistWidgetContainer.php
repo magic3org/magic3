@@ -63,11 +63,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$paramObj = $this->getWidgetParamObj();
-		if (!empty($paramObj)){
-			$this->authType	= $paramObj->authType;			// 承認タイプ
-		}
-		if (empty($this->authType)){
+		if (empty($this->_authType)){
 			$this->setAppErrorMsg('承認タイプが設定されていません');
 			
 			$this->tmpl->addVar("_widget", "send_button_label", '設定なし');// 送信ボタンラベル
@@ -109,7 +105,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 				// ログインユーザを作成
 				$ret = $this->db->addUser($name, $email, $password, $this->gEnv->getCurrentWidgetId(), $loginUserId);		// 新規ログインユーザIDを取得
 				if ($ret){
-					if ($this->authType == 'auto'){			// 自動認証
+					if ($this->_authType == 'auto'){			// 自動認証
 						// 運用ログを残す
 						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザが登録されました。ユーザはログインにより自動承認されます。アカウント: ' . $email . ', 名前: ' . $name, 2350,
 												'account=' . $email . ', userid=' . $loginUserId, 'account=' . $email/*検索補助データ*/);
@@ -117,7 +113,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 						// メールテンプレート
 						$formType = reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO;		// メールテンプレート(会員自動登録)
 						$message = '登録完了しました。Eメールアドレス宛てにパスワードが送信されます。<br />ログインにより自動承認されます。';
-					} else if ($this->authType == 'admin'){			// 管理者による認証
+					} else if ($this->_authType == 'admin'){			// 管理者による認証
 						// 運用ログを残す
 						$this->gOpeLog->writeUserRequest(__METHOD__, 'ユーザが登録されました。ユーザを認証してください。アカウント: ' . $email . ', 名前: ' . $name, 2350,
 												'account=' . $email . ', userid=' . $loginUserId, 'account=' . $email/*検索補助データ*/, self::OPERATION_LOG_LINK/*リンク先*/);
