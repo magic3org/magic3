@@ -13,9 +13,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getWidgetContainerPath('news_main') . '/admin_news_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_member_mainBaseWidgetContainer.php');
 
-class admin_member_mainWidgetContainer extends admin_news_mainBaseWidgetContainer
+class admin_member_mainWidgetContainer extends admin_member_mainBaseWidgetContainer
 {
 	/**
 	 * コンストラクタ
@@ -43,7 +43,7 @@ class admin_member_mainWidgetContainer extends admin_news_mainBaseWidgetContaine
 			if ($this->getLaunchFromPagedef($request)){		// 画面編集からの起動の場合
 				$task = self::TASK_CONFIG;
 			} else {
-				$task = self::TASK_NEWS;
+				$task = self::TASK_MEMBER;
 			}
 		}
 		self::$_task = $task;			// 現在の画面
@@ -55,9 +55,9 @@ class admin_member_mainWidgetContainer extends admin_news_mainBaseWidgetContaine
 				$task = self::TASK_CONFIG;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case self::TASK_NEWS:				// 新着情報一覧
-			case self::TASK_NEWS_DETAIL:		// 新着情報詳細
-				$task = self::TASK_NEWS;
+			case self::TASK_MEMBER:				// 新着情報一覧
+			case self::TASK_MEMBER_DETAIL:		// 新着情報詳細
+				$task = self::TASK_MEMBER;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 		}

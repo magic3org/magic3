@@ -35,8 +35,8 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	
 	// 画面
 	const TASK_CONFIG			= 'config';				// 基本設定
-	const TASK_NEWS				= 'news';				// 新着情報一覧
-	const TASK_NEWS_DETAIL 		= 'news_detail';		// 新着情報詳細
+	const TASK_MEMBER			= 'member';				// 新着情報一覧
+	const TASK_MEMBER_DETAIL 	= 'member_detail';		// 新着情報詳細
 	const DEFAULT_TASK			= 'config';
 	
 	/**
@@ -51,7 +51,7 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		if (!isset(self::$_mainDb)) self::$_mainDb = new member_mainDb();
 		
 		// DB定義を読み込む
-		if (!isset(self::$_configArray)) self::$_configArray = newsCommonDef::loadConfig(self::$_mainDb);
+		if (!isset(self::$_configArray)) self::$_configArray = member_mainCommonDef::loadConfig(self::$_mainDb);
 	}
 	/**
 	 * テンプレートに前処理
@@ -88,11 +88,11 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// パンくずリストの定義データ作成
 		$titles = array();
 		switch ($task){
-			case self::TASK_NEWS:		// 新着情報一覧
+			case self::TASK_MEMBER:		// 新着情報一覧
 				$titles[] = '新着情報管理';
 				$titles[] = '新着一覧';
 				break;
-			case self::TASK_NEWS_DETAIL:		// 新着情報詳細
+			case self::TASK_MEMBER_DETAIL:		// 新着情報詳細
 				$titles[] = '新着情報管理';
 				$titles[] = '新着一覧';
 				$titles[] = '詳細';
@@ -107,22 +107,22 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$menu =	array(
 					(Object)array(
 						'name'		=> '新着情報管理',
-						'task'		=> self::TASK_NEWS,
+						'task'		=> self::TASK_MEMBER,
 						'url'		=> '',
 						'tagid'		=> '',
 						'active'	=> (
-											$task == self::TASK_NEWS ||			// 新着情報一覧
-											$task == self::TASK_NEWS_DETAIL		// 新着情報詳細
+											$task == self::TASK_MEMBER ||			// 新着情報一覧
+											$task == self::TASK_MEMBER_DETAIL		// 新着情報詳細
 										),
 						'submenu'	=> array(
 							(Object)array(
 								'name'		=> '新着一覧',
-								'task'		=> self::TASK_NEWS,
+								'task'		=> self::TASK_MEMBER,
 								'url'		=> '',
 								'tagid'		=> '',
 								'active'	=> (
-													$task == self::TASK_NEWS ||			// 新着情報一覧
-													$task == self::TASK_NEWS_DETAIL		// 新着情報詳細
+													$task == self::TASK_MEMBER ||			// 新着情報一覧
+													$task == self::TASK_MEMBER_DETAIL		// 新着情報詳細
 												)
 							)
 						)

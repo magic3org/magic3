@@ -13,7 +13,7 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getWidgetContainerPath('news_main') . '/admin_member_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_member_mainBaseWidgetContainer.php');
 
 class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidgetContainer
 {
@@ -60,10 +60,10 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'news_detail'){		// 詳細画面
-			return 'admin_news_detail.tmpl.html';
+		if ($task == self::TASK_MEMBER_DETAIL){		// 詳細画面
+			return 'admin_member_detail.tmpl.html';
 		} else {			// 一覧画面
-			return 'admin_news.tmpl.html';
+			return 'admin_member.tmpl.html';
 		}
 	}
 	/**
@@ -78,7 +78,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'news_detail'){	// 詳細画面
+		if ($task == self::TASK_MEMBER_DETAIL){	// 詳細画面
 			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);
@@ -173,8 +173,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 		
 		// 総数を取得
-		//$totalCount = self::$_mainDb->getNewsListCount($this->contentType, $parsedKeywords);
-		$totalCount = self::$_mainDb->getNewsListCount(''/*メッセージタイプ未指定*/, $parsedKeywords);
+//		$totalCount = self::$_mainDb->getNewsListCount(''/*メッセージタイプ未指定*/, $parsedKeywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
@@ -184,8 +183,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// コメントリストを取得
-		//self::$_mainDb->getNewsList($this->_contentType, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
-		self::$_mainDb->getNewsList(''/*メッセージタイプ未指定*/, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
+//		self::$_mainDb->getNewsList(''/*メッセージタイプ未指定*/, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コメントがないときは、一覧を表示しない
 
 		// ボタン作成
