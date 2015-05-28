@@ -103,7 +103,10 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 				$password = $this->makePassword();
 
 				// ログインユーザを作成
-				$ret = $this->db->addUser($name, $email, $password, $this->gEnv->getCurrentWidgetId(), $loginUserId);		// 新規ログインユーザIDを取得
+				//$ret = $this->db->addUser($name, $email, $password, $this->gEnv->getCurrentWidgetId(), $loginUserId);		// 新規ログインユーザIDを取得
+				$ret = $this->_db->addNewLoginUser($name, $email/*アカウント*/, md5($password), UserInfo::USER_TYPE_NOT_AUTHENTICATED/*未承認ユーザ*/, true/*ログイン可*/, null/*有効期間開始*/, null/*有効期間終了*/, $newSerial);
+				if ($ret) $ret = $this->_db->getLoginUserRecordBySerial($newSerial, $row, $groupRows);
+				if ($ret) $loginUserId = $row['lu_id'];
 				if ($ret){
 					if ($this->_authType == 'auto'){			// 自動認証
 						// 運用ログを残す

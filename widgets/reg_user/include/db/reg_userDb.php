@@ -27,7 +27,7 @@ class reg_userDb extends BaseDb
 	 * @param int     $newId		新規に作成したログインユーザID
 	 * @return						true=成功、false=失敗
 	 */
-	function addUser($name, $account, $password, $widgetId, &$newId)
+/*	function addUser($name, $account, $password, $widgetId, &$newId)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -76,6 +76,6 @@ class reg_userDb extends BaseDb
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
-	}
+	}*/
 }
 ?>
