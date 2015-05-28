@@ -20,23 +20,14 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/member_mainDb.php');
 class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	protected static $_mainDb;			// DB接続オブジェクト
-	protected static $_configArray;		// 新着情報定義値
+	protected static $_configArray;		// 会員情報定義値
 	protected static $_task;			// 現在の画面
 	protected $_baseUrl;			// 管理画面のベースURL
-	protected $_contentType;		// コンテンツタイプ
-	const DEFAULT_MESSAGE_LENGTH	= 300;				// デフォルトのコメント最大文字数
-	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
-	
-	// カレンダー用スクリプト
-	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル
-	const CALENDAR_LANG_FILE = '/jscalendar-1.0/lang/calendar-ja.js';	// カレンダー言語ファイル
-	const CALENDAR_SETUP_FILE = '/jscalendar-1.0/calendar-setup.js';	// カレンダーセットアップファイル
-	const CALENDAR_CSS_FILE = '/jscalendar-1.0/calendar-win2k-1.css';		// カレンダー用CSSファイル
 	
 	// 画面
 	const TASK_CONFIG			= 'config';				// 基本設定
-	const TASK_MEMBER			= 'member';				// 新着情報一覧
-	const TASK_MEMBER_DETAIL 	= 'member_detail';		// 新着情報詳細
+	const TASK_MEMBER			= 'member';				// 会員情報一覧
+	const TASK_MEMBER_DETAIL 	= 'member_detail';		// 会員情報詳細
 	const DEFAULT_TASK			= 'config';
 	
 	/**
@@ -51,7 +42,7 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		if (!isset(self::$_mainDb)) self::$_mainDb = new member_mainDb();
 		
 		// DB定義を読み込む
-		if (!isset(self::$_configArray)) self::$_configArray = member_mainCommonDef::loadConfig(self::$_mainDb);
+//		if (!isset(self::$_configArray)) self::$_configArray = member_mainCommonDef::loadConfig(self::$_mainDb);
 	}
 	/**
 	 * テンプレートに前処理
@@ -88,13 +79,13 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// パンくずリストの定義データ作成
 		$titles = array();
 		switch ($task){
-			case self::TASK_MEMBER:		// 新着情報一覧
-				$titles[] = '新着情報管理';
-				$titles[] = '新着一覧';
+			case self::TASK_MEMBER:		// 会員情報一覧
+				$titles[] = '会員情報管理';
+				$titles[] = '会員一覧';
 				break;
-			case self::TASK_MEMBER_DETAIL:		// 新着情報詳細
-				$titles[] = '新着情報管理';
-				$titles[] = '新着一覧';
+			case self::TASK_MEMBER_DETAIL:		// 会員情報詳細
+				$titles[] = '会員情報管理';
+				$titles[] = '会員一覧';
 				$titles[] = '詳細';
 				break;
 			case self::TASK_CONFIG:		// 基本設定
@@ -106,23 +97,23 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// メニューバーの定義データ作成
 		$menu =	array(
 					(Object)array(
-						'name'		=> '新着情報管理',
+						'name'		=> '会員情報管理',
 						'task'		=> self::TASK_MEMBER,
 						'url'		=> '',
 						'tagid'		=> '',
 						'active'	=> (
-											$task == self::TASK_MEMBER ||			// 新着情報一覧
-											$task == self::TASK_MEMBER_DETAIL		// 新着情報詳細
+											$task == self::TASK_MEMBER ||			// 会員情報一覧
+											$task == self::TASK_MEMBER_DETAIL		// 会員情報詳細
 										),
 						'submenu'	=> array(
 							(Object)array(
-								'name'		=> '新着一覧',
+								'name'		=> '会員一覧',
 								'task'		=> self::TASK_MEMBER,
 								'url'		=> '',
 								'tagid'		=> '',
 								'active'	=> (
-													$task == self::TASK_MEMBER ||			// 新着情報一覧
-													$task == self::TASK_MEMBER_DETAIL		// 新着情報詳細
+													$task == self::TASK_MEMBER ||			// 会員情報一覧
+													$task == self::TASK_MEMBER_DETAIL		// 会員情報詳細
 												)
 							)
 						)

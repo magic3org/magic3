@@ -13,13 +13,8 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function selectMenu(){
-	document.main.act.value = 'selcontenttype';
-	document.main.submit();
-	return true;
-}
 function newItem(){
-	document.main.task.value = 'news_detail';
+	document.main.task.value = 'member_detail';
 	document.main.act.value = 'new';
 	document.main.submit();
 	return true;
@@ -42,7 +37,7 @@ function editItem(){
 	return true;
 }
 function editItemBySerial(serial){
-	document.main.task.value = 'news_detail';
+	document.main.task.value = 'member_detail';
 	document.main.act.value = 'edit';
 	document.main.serial.value = serial;
 	document.main.submit();
@@ -86,58 +81,52 @@ function clearSearchParam(){
 }
 function showSearchArea()
 {
-	$('#search_news').slideToggle('slow');
-}
-// プレビューを別ウィンドウで表示
-function previewInOtherWindow(url)
-{
-	m3ShowPreviewWindow(0, url);
-	return true;
+	$('#search_member').slideToggle('slow');
 }
 $(function(){
 	// テーブルを作成
-	m3SetConfigTable('newslist');
+	m3SetConfigTable('memberlist');
 
-	Calendar.setup({
+/*	Calendar.setup({
 		inputField  : "search_start",	// ID of the input field
 		ifFormat    : "%Y/%m/%d"		// the date format
 	});
 	Calendar.setup({
 		inputField  : "search_end",	// ID of the input field
 		ifFormat    : "%Y/%m/%d"		// the date format
-	});
+	});*/
 });
 //]]>
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="task" value="news"/>
+<input type="hidden" name="task" value="member"/>
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
 <!-- m3:PostParam -->
-<h3 class="m3config_h"><span {_HELP_NEWS_LIST}>新着一覧</span>
+<h3 class="m3config_h"><span {_HELP_MEMBER_LIST}>会員一覧</span>
 <!--<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>-->
 </h3>
-<div class="m3config_h_side_buttons pull-right"><div {_HELP_NEWS_BUTTONS}><div class="btn-group">
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_MEMBER_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
 
-<div id="search_news" class="m3search panel panel-info" style="display:none;width:600px;">
+<div id="search_member" class="m3search panel panel-info" style="display:none;width:600px;">
 <div class="panel-heading">
-    <h3 class="panel-title"><span {_HELP_NEWS_SEARCH}>新着情報検索</span></h3>
+    <h3 class="panel-title"><span {_HELP_MEMBER_SEARCH}>会員情報検索</span></h3>
 </div>
 <div class="panel-body form-horizontal">
 <div class="form-group">
-    <label for="search_keyword" class="col-sm-3 control-label"><span {_HELP_NEWS_SEARCH_KEYWORD}>キーワード</span></label>
+    <label for="search_keyword" class="col-sm-3 control-label"><span {_HELP_MEMBER_SEARCH_KEYWORD}>キーワード</span></label>
     <div class="col-sm-9">
 	<input type="text" id="search_keyword" name="search_keyword" class="form-control" value="{SEARCH_KEYWORD}" maxlength="50" />
     </div>
 </div>
 <div class="form-group">
-    <label for="search_start" class="col-sm-3 control-label"><span {_HELP_NEWS_SEARCH_DT}>期間</span></label>
+    <label for="search_start" class="col-sm-3 control-label"><span {_HELP_MEMBER_SEARCH_DT}>期間</span></label>
     <div class="col-sm-9">
 	<input type="text" id="search_start" name="search_start" class="form-control" value="{SEARCH_START}" size="15" maxlength="10" style="width:150px;display:inline-block;margin-right:10px;" />～<input type="text" id="search_end" name="search_end" class="form-control" value="{SEARCH_END}" size="15" maxlength="10" style="width:150px;display:inline-block;margin-left:10px;" />
     </div>
@@ -150,22 +139,24 @@ $(function(){
 </div>
 </div>
 
-<table id="newslist">
+<table id="memberlist">
     <thead>
     <tr>
-        <th class="select"><span {_HELP_NEWS_CHECK}>選択</span></th>
-		<th style="width:50px;"><span {_HELP_NEWS_NO}>No</span></th>
-        <th><span {_HELP_NEWS_CONTENT_NAME}>メッセージ</span></th>
-		<th class="status"><span {_HELP_NEWS_STATUS}>状態</span></th>
-	    <th style="width:110px;"><span {_HELP_NEWS_DT}>登録日時</span></th>
+        <th class="select"><span {_HELP_MEMBER_CHECK}>選択</span></th>
+		<th style="width:50px;"><span {_HELP_MEMBER_NO}>No</span></th>
+        <th><span {_HELP_MEMBER_ACCOUNT}>アカウント</span></th>
+		<th><span {_HELP_MEMBER_NAME}>会員名</span></th>
+		<th class="status"><span {_HELP_MEMBER_STATUS}>登録状態</span></th>
+	    <th style="width:110px;"><span {_HELP_MEMBER_DT}>登録日時</span></th>
 	</tr>
     </thead>
     <tbody>
-    <patTemplate:tmpl name="itemlist">
+    <patTemplate:tmpl name="userlist">
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 		<td>{NO}</td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{MESSAGE}</a></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ACCOUNT}</a></td>
+		<td>{NAME}</td>
 		<td class="status">{STATUS_IMG}</td>
 	    <td>{DATE}</td>
 	</tr>

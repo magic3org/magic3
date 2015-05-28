@@ -29,7 +29,7 @@ class member_mainCommonDef
 	 * @param object $db	DBオブジェクト
 	 * @return array		取得データ
 	 */
-	static function loadConfig($db)
+/*	static function loadConfig($db)
 	{
 		$retVal = array();
 
@@ -45,6 +45,6 @@ class member_mainCommonDef
 			}
 		}
 		return $retVal;
-	}
+	}*/
 }
 ?>

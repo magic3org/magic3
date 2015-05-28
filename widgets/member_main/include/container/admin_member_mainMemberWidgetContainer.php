@@ -20,7 +20,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $status;			// メッセージ状態(0=非公開、1=公開)
-	private $statusTypeArray;	// コメント状態メニュー作成用
+	private $totalCount;	// 会員総数
 	private $firstNo;		// 一覧の先頭の番号
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
@@ -28,12 +28,8 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
-	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
-	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
-	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
-	const UNKNOWN_CONTENT = 'タイトル不明';
 	
 	/**
 	 * コンストラクタ
@@ -42,10 +38,6 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// 初期設定
-		$this->statusTypeArray = array(	array(	'name' => '非公開',	'value' => '0'),
-										array(	'name' => '公開',	'value' => '1'));
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -83,38 +75,6 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		} else {			// 一覧画面
 			return $this->createList($request);
 		}
-	}
-	/**
-	 * JavascriptファイルをHTMLヘッダ部に設定
-	 *
-	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
-	 */
-	function _addScriptFileToHead($request, &$param)
-	{
-		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_SCRIPT_FILE),		// カレンダースクリプトファイル
-							$this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_LANG_FILE),	// カレンダー言語ファイル
-							$this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_SETUP_FILE));	// カレンダーセットアップファイル
-		return $scriptArray;
-
-	}
-	/**
-	 * CSSファイルをHTMLヘッダ部に設定
-	 *
-	 * CSSファイルをHTMLのheadタグ内に追加出力する。
-	 * _assign()よりも後に実行される。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
-	 */
-	function _addCssFileToHead($request, &$param)
-	{
-		return $this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_CSS_FILE);
 	}
 	/**
 	 * 一覧画面作成
@@ -173,16 +133,18 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 		
 		// 総数を取得
+		$this->totalCount = self::$_mainDb->getMemberListCount($parsedKeywords);
 //		$totalCount = self::$_mainDb->getNewsListCount(''/*メッセージタイプ未指定*/, $parsedKeywords);
 
 		// ページング計算
-		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		$this->calcPageLink($pageNo, $this->totalCount, $maxListCount);
 		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号
 		
 		// ページングリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
-		// コメントリストを取得
+		// 会員一覧を取得
+		self::$_mainDb->getMemberList($maxListCount, $pageNo, $parsedKeywords, array($this, 'userListLoop'));
 //		self::$_mainDb->getNewsList(''/*メッセージタイプ未指定*/, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コメントがないときは、一覧を表示しない
 
@@ -194,7 +156,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $totalCount);
+		$this->tmpl->addVar("_widget", "total_count", $this->totalCount);
 		
 		// 検索条件
 		$this->tmpl->addVar("_widget", "search_start", $search_startDt);	// 開始日付
@@ -348,11 +310,6 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 			$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
 		}
-
-		// その他のボタン作成
-		$buttonTag = $this->gDesign->createEditButton(''/*同画面*/, 'URL作成', self::CHANGE_URL_TAG_ID);
-		$this->tmpl->addVar("_widget", "change_url_button", $buttonTag);
-		$this->tmpl->addVar("_widget", "tagid_change_url", self::CHANGE_URL_TAG_ID);		// URL変更タグ
 		
 		// 表示項目を埋め込む
 		$this->tmpl->addVar("_widget", "content_type", $this->convertToDispString($contentTypeName));		// コンテンツタイプ
@@ -363,166 +320,45 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// URL
 		$this->tmpl->addVar("_widget", "date", $date);	// 投稿日
 		$this->tmpl->addVar("_widget", "time", $time);	// 投稿時間
-		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 	}
 	/**
-	 * 取得したデータをテンプレートに設定する
+	 * ユーザリスト、取得したデータをテンプレートに設定する
 	 *
 	 * @param int $index			行番号(0～)
 	 * @param array $fetchedRow		フェッチ取得した行
 	 * @param object $param			未使用
 	 * @return bool					true=処理続行の場合、false=処理終了の場合
 	 */
-	function itemListLoop($index, $fetchedRow, $param)
+	function userListLoop($index, $fetchedRow, $param)
 	{
-		$serial = $fetchedRow['nw_serial'];// シリアル番号
-		$no = $this->firstNo + $index;
+		// 会員No(会員、仮会員の登録順)
+		$no = $this->totalCount - $this->firstNo - $index +1;
 		
-		// 公開状態
-		if ($fetchedRow['nw_visible']){		// コンテンツが公開状態のとき
-			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-			$iconTitle = '公開中';
-		} else {
-			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-			$iconTitle = '非公開';
+		// 登録状態
+		if ($fetchedRow['lu_user_type'] == UserInfo::USER_TYPE_NORMAL){		// 正会員
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// アクティブアイコン
+			$iconTitle = '正会員';
+		} else {		// 未承認または仮登録のとき
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非アクティブアイコン
+			$iconTitle = '仮会員';
 		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		
-		// コンテンツタイトル取得
-		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
-		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
-		if (!empty($contentType) && !empty($contentId)){
-			list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
-			if ($contentTitle == self::UNKNOWN_CONTENT){
-				$contentTitle = '<span class="error">' . $this->convertToDispString($contentTitle) . '</span>';
-			} else {
-				$contentTitle = $this->convertToDispString($contentTitle);
-			}
-		} else {
-			$contentTitle = $this->convertToDispString($fetchedRow['nw_name']);	// コンテンツタイトル
-		}
-				
-		// メッセージ
-		$message = $this->convertToDispString($fetchedRow['nw_message']);
-		$keyTag = M3_TAG_START . M3_TAG_MACRO_TITLE . M3_TAG_END;
-		$message = str_replace($keyTag, $contentTitle, $message);// タイトルを変換
-				
-/*		if (function_exists('mb_strimwidth')){
-			$message = mb_strimwidth($message, 0, self::MESSAGE_SIZE, '…');
-		} else {
-			$message = substr($message, 0, self::MESSAGE_SIZE) . '...';
-		}*/
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
 		
 		$row = array(
-			'index' => $index,		// 項目番号
-			'serial' => $serial,			// シリアル番号
-			'no'	=> $no,			// 項目番号(表示用)
-			'id'	=> $this->convertToDispString($fetchedRow['nw_id']),		// ID
-			'message' => $message,		// メッセージ
-			'status_img' => $statusImg,													// 公開状況
-			'date' => $this->convertToDispDateTime($fetchedRow['nw_regist_dt'])	// 投稿日時
+			'serial'		=> $this->convertToDispString($fetchedRow['lu_serial']),	// シリアル番号
+			'no'			=> $this->convertToDispString($no),							// 会員No(会員、仮会員の登録順)
+			'id'			=> $this->convertToDispString($fetchedRow['lu_id']),		// ID
+			'name'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 名前
+			'account'		=> $this->convertToDispString($fetchedRow['lu_account']),	// アカウント
+			'status_img'	=> $statusImg,												// 登録状態
+			'date'			=> $this->convertToDispDateTime($fetchedRow['lu_regist_dt'], 0, 10/*時分表示*/)	// 登録日時
 		);
-		$this->tmpl->addVars('itemlist', $row);
-		$this->tmpl->parseTemplate('itemlist', 'a');
+		$this->tmpl->addVars('userlist', $row);
+		$this->tmpl->parseTemplate('userlist', 'a');
 		
-		// 表示中項目のシリアル番号を保存
-		$this->serialArray[] = $serial;
+		// 表示中のコンテンツIDを保存
+		$this->serialArray[] = $fetchedRow['lu_serial'];
 		return true;
-	}
-	/**
-	 * コンテンツタイトル取得
-	 *
-	 * @param string $contentType		コンテンツタイプ
-	 * @param string $contentId			コンテンツID
-	 * @param array						コンテンツタイプ、タイトルの配列
-	 */
-	function getContentTitle($contentType, $contentId)
-	{
-		$contentTypeName = '';
-		$contentName = self::UNKNOWN_CONTENT;
-		
-		// コンテンツタイプ名取得
-		$mainContentType = $this->gPage->getMainContentTypeInfo();
-		for ($i = 0; $i < count($mainContentType); $i++){
-			$contentTypeRow = $mainContentType[$i];
-			if ($contentTypeRow['value'] == $contentType){
-				$contentTypeName = $contentTypeRow['name'];
-				break;
-			}
-		}
-		// サブコンテンツを検索
-		if (empty($contentTypeName)){
-			$subContentType = $this->gPage->getSubContentTypeInfo();
-			for ($i = 0; $i < count($subContentType); $i++){
-				$contentTypeRow = $subContentType[$i];
-				if ($contentTypeRow['value'] == $contentType){
-					$contentTypeName = $contentTypeRow['name'];
-					break;
-				}
-			}
-		}
-		// コンテンツタイプ名が不明な場合
-		if (empty($contentTypeName)) $contentTypeName = self::UNKNOWN_CONTENT_TYPE;
-				
-		switch ($contentType){
-			case M3_VIEW_TYPE_CONTENT:				// 汎用コンテンツ
-				$ret = self::$_mainDb->getContentById(''/*PC用コンテンツ*/, $this->_langId, $contentId, $row);
-				if ($ret) $contentName = $row['cn_name'];
-				break;
-			case M3_VIEW_TYPE_PRODUCT:				// 商品情報(Eコマース)
-				$ret = self::$_mainDb->getProductById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['pt_name'];
-				break;
-			case M3_VIEW_TYPE_BBS:					// BBS
-				// 未使用
-				break;
-			case M3_VIEW_TYPE_BLOG:				// ブログ
-				$ret = self::$_mainDb->getEntryById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['be_name'];
-				break;
-			case M3_VIEW_TYPE_WIKI:				// wiki
-				$contentName = $contentId;
-				break;
-			case M3_VIEW_TYPE_USER:				// ユーザ作成コンテンツ
-				$ret = self::$_mainDb->getRoomById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ur_name'];
-				break;
-			case M3_VIEW_TYPE_EVENT:				// イベント情報
-				$ret = self::$_mainDb->getEventById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ee_name'];
-				break;
-			case M3_VIEW_TYPE_EVENTENTRY:				// イベント予約
-				$ret = self::$_mainDb->getEventById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ee_name'] . 'の予約';
-				break;
-			case M3_VIEW_TYPE_PHOTO:				// フォトギャラリー
-				$ret = self::$_mainDb->getPhotoById($contentId, $this->_langId, $row);
-				if ($ret) $contentName = $row['ht_name'];
-				break;
-		}
-		return array($contentTypeName, $contentName);
-	}
-	/**
-	 * コメント状態選択タイプメニュー作成
-	 *
-	 * @return なし
-	 */
-	function createStatusMenu()
-	{
-		for ($i = 0; $i < count($this->statusTypeArray); $i++){
-			$value = $this->statusTypeArray[$i]['value'];
-			$name = $this->statusTypeArray[$i]['name'];
-			$selected = '';
-			if ($this->status == $value) $selected = 'selected';
-			
-			$row = array(
-				'value'    => $value,			// タイプ値
-				'name'     => $this->convertToDispString($name),			// タイプ名
-				'selected' => $selected			// 選択中かどうか
-			);
-			$this->tmpl->addVars('status_list', $row);
-			$this->tmpl->parseTemplate('status_list', 'a');
-		}
 	}
 }
 ?>
