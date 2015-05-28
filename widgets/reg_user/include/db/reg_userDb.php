@@ -55,6 +55,7 @@ class reg_userDb extends BaseDb
 		$queryStr .=   'lu_assign, ';
 		$queryStr .=   'lu_enable_login, ';
 		$queryStr .=   'lu_widget_id, ';
+		$queryStr .=   'lu_regist_dt, ';		// 登録日時
 		$queryStr .=   'lu_create_user_id, ';
 		$queryStr .=   'lu_create_dt ';
 		$queryStr .= ') VALUES (';
@@ -68,8 +69,9 @@ class reg_userDb extends BaseDb
 		$queryStr .=   '?, ';
 		$queryStr .=   '?, ';
 		$queryStr .=   '?, ';
+		$queryStr .=   '?, ';
 		$queryStr .=   '?) ';
-		$ret = $this->execStatement($queryStr, array($newId, 0, $name, $account, $password, $userType, '', 1, $widgetId, $userId, $now));
+		$ret = $this->execStatement($queryStr, array($newId, 0, $name, $account, $password, $userType, '', 1, $widgetId, $now, $userId, $now));
 
 		// トランザクション確定
 		$ret = $this->endTransaction();
