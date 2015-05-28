@@ -1932,15 +1932,22 @@ class SystemDb extends BaseDb
 			$assign = str_replace($replaceStr, '', $assign);
 		}
 
-		// 古いレコードを削除
-		$queryStr  = 'UPDATE _login_user ';
-		$queryStr .=   'SET lu_deleted = true, ';	// 削除
-		$queryStr .=     'lu_update_user_id = ?, ';
-		$queryStr .=     'lu_update_dt = ? ';
-		$queryStr .=   'WHERE lu_serial = ?';
-		$ret = $this->execStatement($queryStr, array($userId, $now, $row['lu_serial']));
-		
 		if (!$deleteUser || !empty($assign)){		// ユーザ削除しないとき
+			$fieldArray = array();
+			$fieldArray['lu_assign'] = $assign;				// アサイン情報
+		
+			// フィールドを指定して更新
+			$ret = $this->updateLoginUserByField($id, $fieldArray, $newSerial);
+		} else {
+			// 古いレコードを削除
+			$queryStr  = 'UPDATE _login_user ';
+			$queryStr .=   'SET lu_deleted = true, ';	// 削除
+			$queryStr .=     'lu_update_user_id = ?, ';
+			$queryStr .=     'lu_update_dt = ? ';
+			$queryStr .=   'WHERE lu_serial = ?';
+			$ret = $this->execStatement($queryStr, array($userId, $now, $row['lu_serial']));
+		}
+/*		if (!$deleteUser || !empty($assign)){		// ユーザ削除しないとき
 			// 新規レコード追加
 			$queryStr  = 'INSERT INTO _login_user (';
 			$queryStr .=   'lu_id, ';
@@ -1972,7 +1979,7 @@ class SystemDb extends BaseDb
 			$queryStr .=   '?) ';
 			$ret = $this->execStatement($queryStr, array($row['lu_id'], $row['lu_history_index'] + 1, $row['lu_name'], $row['lu_account'], $row['lu_password'], 
 														$row['lu_user_type'], $assign, $row['lu_widget_id'], $row['lu_enable_login'], $row['lu_active_start_dt'], $row['lu_active_end_dt'], $userId, $now));
-		}
+		}*/
 		
 		// トランザクション確定
 		if ($startTran) $ret = $this->endTransaction();
