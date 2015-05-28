@@ -2430,11 +2430,11 @@ class SystemDb extends BaseDb
 	 */
 	function updateLoginUserPassword($id, $password, $isMd5=false)
 	{
-		global $gEnvManager;
+//		global $gEnvManager;
 		
 		$startTran = false;			// この関数でトランザクションを開始したかどうか
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$userId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
+//		$now = date("Y/m/d H:i:s");	// 現在日時
+//		$userId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
 				
 		// トランザクション開始
 		if (!$this->isInTransaction()){
@@ -2442,6 +2442,17 @@ class SystemDb extends BaseDb
 			$startTran = true;
 		}
 		
+		$fieldArray = array();
+		if ($isMd5){		// MD5化されているパスワードのときはそのまま格納
+			$fieldArray['lu_password'] = $account;				// パスワード
+		} else {
+			$fieldArray['lu_password'] = md5($account);				// パスワード
+		}
+		
+		// フィールドを指定して更新
+		$ret = $this->updateLoginUserByField($id, $fieldArray, $newSerial);
+		
+/*
 		// 指定のIDのレコードが削除状態でないかチェック
 		$queryStr  = 'select * from _login_user ';
 		$queryStr .=   'WHERE lu_id = ? ';
@@ -2509,7 +2520,7 @@ class SystemDb extends BaseDb
 				if ($startTran) $ret = $this->endTransaction();
 				return false;
 			}
-		}
+		}*/
 		
 		// トランザクション確定
 		if ($startTran) $ret = $this->endTransaction();
@@ -2524,7 +2535,12 @@ class SystemDb extends BaseDb
 	 */
 	function updateLoginUserAccount($id, $account)
 	{
-		global $gEnvManager;
+		$fieldArray = array();
+		$fieldArray['lu_account'] = $account;				// アカウント
+		
+		// フィールドを指定して更新
+		$ret = $this->updateLoginUserByField($id, $fieldArray, $newSerial);
+/*		global $gEnvManager;
 		
 		$startTran = false;			// この関数でトランザクションを開始したかどうか
 		$now = date("Y/m/d H:i:s");	// 現在日時
@@ -2603,6 +2619,7 @@ class SystemDb extends BaseDb
 		// トランザクション確定
 		if ($startTran) $ret = $this->endTransaction();
 		return $ret;
+		*/
 	}
 	/**
 	 * ユーザのタイプを一般ユーザに変更
@@ -2612,16 +2629,15 @@ class SystemDb extends BaseDb
 	 */
 	function makeNormalLoginUser($userId)
 	{
-		global $gEnvManager;
-		
-		$now = date("Y/m/d H:i:s");	// 現在日時
-		$updateUserId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
+//		global $gEnvManager;
+//		
+//		$now = date("Y/m/d H:i:s");	// 現在日時
+//		$updateUserId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
 			
 		// トランザクション開始
 		$this->startTransaction();
 		
 		// 指定のシリアルNoのレコードが削除状態でないかチェック
-		$historyIndex = 0;		// 履歴番号
 		$queryStr  = 'SELECT * FROM _login_user ';
 		$queryStr .=   'WHERE lu_id = ? AND lu_deleted = false';
 		$ret = $this->selectRecord($queryStr, array($userId), $row);
@@ -2630,13 +2646,18 @@ class SystemDb extends BaseDb
 				$this->endTransaction();
 				return true;
 			}
-			$historyIndex = $row['lu_history_index'] + 1;
 		} else {		// 存在しない場合は終了
 			$this->endTransaction();
 			return false;
 		}
-		$userType = UserInfo::USER_TYPE_NORMAL;		// 一般ユーザ
+		// 更新フィールドを設定
+		$fieldArray = array();
+		$fieldArray['lu_user_type'] = UserInfo::USER_TYPE_NORMAL;		// 一般ユーザ
 		
+		// フィールドを指定して更新
+		$ret = $this->updateLoginUserByField($userId, $fieldArray, $newSerial);
+		
+		/*
 		// 古いレコードを削除
 		$queryStr  = 'UPDATE _login_user ';
 		$queryStr .=   'SET lu_deleted = true, ';	// 削除
@@ -2676,6 +2697,7 @@ class SystemDb extends BaseDb
 		$queryStr .=   '?) ';
 		$ret = $this->execStatement($queryStr, array($userId, $historyIndex, $row['lu_name'], $row['lu_account'], $row['lu_password'],
 								$userType, $row['lu_assign'], $row['lu_enable_login'], $row['lu_widget_id'], $row['lu_active_start_dt'], $row['lu_active_end_dt'], $updateUserId, $now));
+								*/
 								
 		// トランザクション確定
 		$ret = $this->endTransaction();
