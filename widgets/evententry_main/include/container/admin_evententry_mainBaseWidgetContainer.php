@@ -52,6 +52,10 @@ class admin_evententry_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// DB定義を読み込む
 //		if (!isset(self::$_configArray)) self::$_configArray = evententry_mainCommonDef::loadConfig(self::$_mainDb);
+
+		// サイトのメールアドレスが設定されているかチェック
+		$email = $this->gEnv->getSiteEmail();// サイトのメールアドレス
+		if (empty($email)) $this->setUserErrorMsg('メール送信機能を使用するために「システム管理」-「基本情報」-「サイト情報」の「メールアドレス」の設定が必要です');
 	}
 	/**
 	 * テンプレートに前処理
