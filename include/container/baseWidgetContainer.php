@@ -2852,17 +2852,22 @@ class BaseWidgetContainer extends Core
 		return $ret;
 	}
 	/**
-	 * 自ウィジェットの管理画面用のURLを作成
+	 * 自ウィジェットまたは他ウィジェットの管理画面用のURLを作成
 	 *
 	 * @param string,array $param		URLに付加するパラメータ
+	 * @param string       $widgetId	ウィジェット指定の場合はウィジェットID。空の場合は現在のウィジェットが対象。
 	 * @return string					作成したURL
 	 */
-	function getConfigAdminUrl($param = '')
+	function getConfigAdminUrl($param = '', $widgetId = '')
 	{
 		// パラメータを作成
 		$paramArray = array();
 		$paramArray[M3_REQUEST_PARAM_OPERATION_COMMAND] = M3_REQUEST_CMD_CONFIG_WIDGET;			// ウィジェット定義
-		$paramArray[M3_REQUEST_PARAM_WIDGET_ID] = $this->gEnv->getCurrentWidgetId();			// ウィジェットID
+		if (empty($widgetId)){
+			$paramArray[M3_REQUEST_PARAM_WIDGET_ID] = $this->gEnv->getCurrentWidgetId();			// ウィジェットID
+		} else {
+			$paramArray[M3_REQUEST_PARAM_WIDGET_ID] = $widgetId;			// ウィジェットID
+		}
 		if (is_array($param)){
 			$paramArray = array_merge($paramArray, $param);
 		} else if (is_string($param) && !empty($param)){

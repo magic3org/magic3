@@ -22,6 +22,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 	const DEFAULT_TITLE = '会員登録';		// 画面タイトル
 	const DEFAULT_CAN_REGIST = 1;			// ユーザ登録を使用するかどうか
 	const OPERATION_LOG_LINK = 'task=userlist';				// 運用ログリンク先
+	const MEMBER_WIDGET = 'member_main';	// 会員情報ウィジェット
 	
 	/**
 	 * コンストラクタ
@@ -126,6 +127,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 						$message = '登録完了しました。Eメールアドレス宛てにパスワードが送信されます。<br />管理者からの承認後、ログイン可能になります。';
 					}
 
+					// ##### 登録者にメールを送信 #####
 					$fromAddress = $this->getFromAddress();	// 送信元アドレス
 					$toAddress = $email;			// eメール(ログインアカウント)
 				//	$ccAddress = $fromAddress;		// CCメール
@@ -140,6 +142,26 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 					$titleParam[M3_TAG_MACRO_ACCOUNT]	= $email;							// ログインアカウント
 					$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', $formType, $mailParam,
 																			''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*デフォルトテンプレート*/, $titleParam);
+					
+					// ##### 管理者にメールを送信 #####													
+					if ($this->_authType == 'admin'){			// 管理者による認証
+						$fromAddress = $this->getFromAddress();	// 送信元アドレス
+						$toAddress = $fromAddress;			// 送信先は管理者
+						// 承認設定画面
+						$param = /*'openby=other&' .*/ M3_REQUEST_PARAM_OPERATION_TASK . '=member_detail&account=' . $email;		// 「openby」は使えない?
+						$url = $this->getConfigAdminUrl($param, self::MEMBER_WIDGET);
+						
+						// メール件名、本文マクロ
+						$mailParam = array();
+						$mailParam[M3_TAG_MACRO_URL]		= $this->getUrl($url, true);		// 承認設定画面
+						$titleParam = array();
+						$titleParam[M3_TAG_MACRO_SITE_NAME] = $this->gEnv->getSiteName();			// サイト名
+						$titleParam[M3_TAG_MACRO_ACCOUNT]	= $email;							// ログインアカウント
+						$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTH_ADMIN, $mailParam,
+																				''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*デフォルトテンプレート*/, $titleParam);
+					}
+					
+					// ##### 画面の設定 #####
 					$this->setGuidanceMsg($message);
 											
 					// 項目を入力不可に設定

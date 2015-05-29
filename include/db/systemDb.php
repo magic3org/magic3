@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1836,14 +1836,14 @@ class SystemDb extends BaseDb
 	 * @param array     $groupRows			ユーザグループ
 	 * @return bool							取得 = true, 取得なし= false
 	 */
-	function getLoginUserRecordBySerial($serial, &$row, &$groupRows)
+	function getLoginUserRecordBySerial($serial, &$row, &$groupRows = null)
 	{
 		$queryStr  = 'SELECT * FROM _login_user ';
 		$queryStr .=   'WHERE lu_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		
 		// ユーザグループを取得
-		if ($ret){
+		if ($ret && !is_null($groupRows)){
 			$queryStr  = 'SELECT * FROM _user_with_group LEFT JOIN _user_group ON uw_group_id = ug_id AND ug_deleted = false ';
 			$queryStr .=   'WHERE uw_user_serial = ? ';
 			$queryStr .=  'ORDER BY uw_index ';
@@ -2632,9 +2632,10 @@ class SystemDb extends BaseDb
 	 * ユーザのタイプを一般ユーザに変更
 	 *
 	 * @param int $userId			ユーザID
+	 * @param int $newSerial		新規シリアル番号
 	 * @return						true=成功、false=失敗
 	 */
-	function makeNormalLoginUser($userId)
+	function makeNormalLoginUser($userId, &$newSerial = null)
 	{
 //		global $gEnvManager;
 //		
@@ -2662,7 +2663,8 @@ class SystemDb extends BaseDb
 		$fieldArray['lu_user_type'] = UserInfo::USER_TYPE_NORMAL;		// 一般ユーザ
 		
 		// フィールドを指定して更新
-		$ret = $this->updateLoginUserByField($userId, $fieldArray, $newSerial);
+		$ret = $this->updateLoginUserByField($userId, $fieldArray, $updatedSerial);
+		if ($ret && !is_null($newSerial)) $newSerial = $updatedSerial;		// シリアル番号を取得
 		
 		/*
 		// 古いレコードを削除

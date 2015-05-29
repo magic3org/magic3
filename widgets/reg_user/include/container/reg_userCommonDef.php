@@ -18,6 +18,7 @@ class reg_userCommonDef
 {
 	const MAIL_TMPL_REGIST_USER_AUTO	= 'regist_user_auto';						// メールテンプレート(会員自動登録)
 	const MAIL_TMPL_REGIST_USER_AUTH	= 'regist_user_auth';						// メールテンプレート(会員承認登録)
+	const MAIL_TMPL_REGIST_USER_AUTH_ADMIN	= 'regist_user_auth_a';					// メールテンプレート(会員承認登録(管理者用))
 	const MAIL_TMPL_REGIST_USER_AUTO_COMPLETED	= 'regist_user_auto_completed';		// メールテンプレート(会員自動登録完了)
 	const MAIL_TMPL_REGIST_USER_AUTH_COMPLETED	= 'regist_user_auth_completed';		// メールテンプレート(会員承認登録完了)
 }
