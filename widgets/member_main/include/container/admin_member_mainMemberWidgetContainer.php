@@ -19,13 +19,11 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
-	private $status;			// メッセージ状態(0=非公開、1=公開)
 	private $totalCount;	// 会員総数
 	private $firstNo;		// 一覧の先頭の番号
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
-	const LINK_PAGE_COUNT		= 20;			// リンクページ数
-	const MESSAGE_SIZE = 40;			// メッセージの最大文字列長
+	const LINK_PAGE_COUNT	= 5;			// リンクページ数
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
@@ -134,7 +132,6 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		
 		// 総数を取得
 		$this->totalCount = self::$_mainDb->getMemberListCount($parsedKeywords);
-//		$totalCount = self::$_mainDb->getNewsListCount(''/*メッセージタイプ未指定*/, $parsedKeywords);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $this->totalCount, $maxListCount);
@@ -145,8 +142,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		
 		// 会員一覧を取得
 		self::$_mainDb->getMemberList($maxListCount, $pageNo, $parsedKeywords, array($this, 'userListLoop'));
-//		self::$_mainDb->getNewsList(''/*メッセージタイプ未指定*/, $maxListCount, $pageNo, $parsedKeywords, array($this, 'itemListLoop'));
-		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// コメントがないときは、一覧を表示しない
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// データがないときは、一覧を表示しない
 
 		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
@@ -178,21 +174,10 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 	{
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
-		if (empty($this->serialNo)) $this->serialNo = 0;
-		
-		$contentTitle = $request->trimValueOf('item_content_title');			// コンテンツタイトル
-		$date = $request->trimValueOf('item_date');		// 投稿日
-		$time = $request->trimValueOf('item_time');		// 投稿時間
-		$message = $request->valueOf('item_message');		// メッセージ
-		$url = $request->valueOf('item_url');
-		$this->status = $request->trimValueOf('item_status');		// メッセージ状態(0=非公開、1=公開)
-		$mark = 0;
-		$contentTitleDisabled = '';
 		
 		$reloadData = false;		// データの再ロード
-		if ($act == 'add'){		// メッセージを追加
+		if ($act == 'add'){		// 会員を追加
 			// 入力チェック
-			$this->checkInput($message, 'メッセージ');
 			$this->checkDate($date, '登録日付');
 			$this->checkTime($time, '登録時間');
 			
@@ -201,8 +186,8 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 				// 入力データの修正
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
 				
-				//$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $message, $url, $newSerial);
-				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				// 会員を追加
+//				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -214,33 +199,6 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 					$this->gPage->updateParentWindow($this->serialNo);
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
-				}
-			}
-		} else if ($act == 'update'){		// 項目更新の場合
-			// 入力チェック
-			$this->checkInput($message, 'メッセージ');
-			$this->checkDate($date, '登録日付');
-			$this->checkTime($time, '登録時間');
-			
-			// エラーなしの場合は、データを更新
-			if ($this->getMsgCount() == 0){
-				// 入力データの修正
-				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
-				$url = $this->gEnv->getMacroPath($url);// パスをマクロ形式に変換
-				
-				//$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message, $url, $newSerial);
-				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
-				if ($ret){
-					$this->setGuidanceMsg('データを更新しました');
-					
-					// シリアル番号更新
-					$this->serialNo = $newSerial;
-					$reloadData = true;		// データの再読み込み
-					
-					// 親ウィンドウを更新
-					$this->gPage->updateParentWindow($this->serialNo);
-				} else {
-					$this->setAppErrorMsg('データ更新に失敗しました');
 				}
 			}
 		} else if ($act == 'delete'){		// 項目削除の場合
@@ -256,51 +214,71 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
 			}
+		} else if ($act == 'authorize'){		// ユーザを会員承認するとき
+			$ret = $this->_db->getLoginUserRecordBySerial($this->serialNo, $row);
+			if ($ret){
+				$userId	= $row['lu_id'];		// ユーザID
+				$account = $row['lu_account'];		// アカウント
+				
+				$ret = $this->_db->makeNormalLoginUser($userId);// 一般ログインユーザに設定
+				if ($ret){
+					$fromAddress = $this->getFromAddress();	// 送信元アドレス
+					$toAddress = $account;					// ログインユーザに送信
+				
+					// メール件名、本文マクロ
+					$mailParam = array();
+					$mailParam['ACCOUNT'] = $account;
+					$titleParam = array();
+					$titleParam[M3_TAG_MACRO_SITE_NAME] = $this->gEnv->getSiteName();			// サイト名
+					$titleParam[M3_TAG_MACRO_ACCOUNT]	= $account;							// ログインアカウント
+					$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO_COMPLETED, $mailParam,
+																		''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*デフォルトテンプレート*/, $titleParam);
+					$this->setGuidanceMsg('ユーザを承認しました');
+				} else {
+					$this->setAppErrorMsg('ユーザの承認に失敗しました');
+				}
+			}
 		} else {	// 初期画面表示のとき
 			$reloadData = true;		// データの再ロード
 		}
 		// 設定データを再取得
+		$userAuthorized = false;		// ユーザが承認されているかどうか
 		if ($reloadData){		// データの再ロード
-			$ret = self::$_mainDb->getNewsItem($this->serialNo, $row);
+			$ret = $this->_db->getLoginUserRecordBySerial($this->serialNo, $row);
 			if ($ret){
-				$date = $this->timestampToDate($row['nw_regist_dt']);		// 登録日
-				$time = $this->timestampToTime($row['nw_regist_dt']);		// 登録時間
-				$this->status = intval($row['nw_visible']);			// 状態(0=非公開、1=公開)
+				$account	= $row['lu_account'];		// アカウント
+				$name		= $row['lu_name'];			// 名前
+				$regDate	= $row['lu_regist_dt'];		// 登録日時
 
-				$message = $row['nw_message'];				// メッセージ
-				$url = $row['nw_url'];				// URL
-				$url = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $url);		// URLを修正
-
-				// コンテンツタイトル取得
-				$contentType = $row['nw_content_type'];	// コンテンツタイプ
-				$contentId = $row['nw_content_id'];	// コンテンツID
-				if (!empty($contentType) && !empty($contentId)){
-					list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
+				// 登録状態
+				if ($row['lu_user_type'] == UserInfo::USER_TYPE_NORMAL){		// 正会員
+					$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// アクティブアイコン
+					$iconTitle = '正会員';
 					
-					// コンテンツタイトルを編集不可にする
-					$contentTitleDisabled = 'disabled';
-				} else {
-					$contentTypeName = '';
-					$contentTitle = $row['nw_name'];	// コンテンツタイトル
+					$userAuthorized = true;		// ユーザが承認されているかどうか
+				} else {		// 未承認または仮登録のとき
+					$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非アクティブアイコン
+					$iconTitle = '仮会員';
 				}
+				$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
 			} else {
 				$this->serialNo = 0;
-				$date = date("Y/m/d");		// 登録日
-				$time = date("H:i:s");		// 登録時間
-				$this->status = 0;			// 状態(0=非公開、1=公開)
-				$message = self::$_configArray[newsCommonDef::FD_DEFAULT_MESSAGE];				// メッセージ
-				
-				$contentType = '';	// コンテンツタイプ
-				$contentId = '';	// コンテンツID
-				$contentTitle = '';			// コンテンツタイトル
+				$account	= '';		// アカウント
+				$name		= '';			// 名前
+				$regDate	= '';		// 登録日時
 			}
 		}
-		// 状態メニュー作成
-		$this->createStatusMenu();
+		// 承認ボタンの設定
+		if ($userAuthorized){		// 承認済みのとき
+			$authLabel = '承認済み';
+			$authButtonDisabled = 'disabled';
+		} else {
+			$authLabel = '承認する';
+			$authButtonDisabled = '';
+		}
+		$this->tmpl->addVar("_widget", "auth_button_label", $this->convertToDispString($authLabel));			// 承認ボタンラベル
+		$this->tmpl->addVar("_widget", "auth_button_disabled", $authButtonDisabled);			// 承認ボタン
 		
-		// 非表示項目を設定
-		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
-
 		// 入力フィールドの設定
 		if (empty($this->serialNo)){		// 未登録データのとき
 			// データ追加ボタン表示
@@ -308,18 +286,17 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		} else {
 			// データ更新、削除ボタン表示
 			$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
-			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+//			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
 		}
 		
 		// 表示項目を埋め込む
-		$this->tmpl->addVar("_widget", "content_type", $this->convertToDispString($contentTypeName));		// コンテンツタイプ
-		$this->tmpl->addVar("_widget", "content_id", $this->convertToDispString($contentId));		// コンテンツID
-		$this->tmpl->addVar("_widget", "content_title", $this->convertToDispString($contentTitle));		// コンテンツタイトル
-		$this->tmpl->addVar("_widget", "content_title_disabled", $contentTitleDisabled);		// コンテンツタイトルフィールド
-		$this->tmpl->addVar("_widget", "message", $this->convertToDispString($message));		// メッセージ
-		$this->tmpl->addVar("_widget", "url", $this->convertToDispString($url));		// URL
-		$this->tmpl->addVar("_widget", "date", $date);	// 投稿日
-		$this->tmpl->addVar("_widget", "time", $time);	// 投稿時間
+		$this->tmpl->addVar("_widget", "account", $this->convertToDispString($account));	// アカウント
+		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));			// 名前
+		$this->tmpl->addVar("_widget", "reg_date", $this->convertToDispDateTime($regDate));	// 登録日時
+		$this->tmpl->addVar("_widget", "status_img", $statusImg);	// 登録状態
+		
+		// 非表示項目を設定
+		$this->tmpl->addVar("_widget", "serial", $this->convertToDispString($this->serialNo));	// シリアル番号
 	}
 	/**
 	 * ユーザリスト、取得したデータをテンプレートに設定する
