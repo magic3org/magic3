@@ -29,7 +29,7 @@ INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,
 VALUES                 ('regist_user_auth', 'ja',           '会員承認登録', '[[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\n管理者からの承認後、このパスワードでログイン可能になります。\n\nパスワード:　[#PASSWORD#]', now());
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth_a';
 INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                  mf_admin,                                               mf_create_dt) 
-VALUES                 ('regist_user_auth_a', 'ja',           '会員承認登録(管理者用)', '=> [[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       '承認が必要な会員の登録がありました。\nユーザ管理画面からユーザ種別を「一般ユーザ」に変更して下さい。\n\n[#URL#]', true, now());
+VALUES                 ('regist_user_auth_a', 'ja',           '会員承認登録(管理者用)', '=> [[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       '承認が必要な会員の登録がありました。\n会員管理画面からユーザを承認して下さい。\n\n[#URL#]', true, now());
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_auto_completed';
 INSERT INTO _mail_form (mf_id,                   mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
 VALUES                 ('regist_user_auto_completed', 'ja',           '会員自動登録完了', '[[#SITE_NAME#]] 会員自動登録完了 ([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
