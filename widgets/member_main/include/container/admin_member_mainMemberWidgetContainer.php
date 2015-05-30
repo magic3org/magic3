@@ -142,7 +142,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		
 		// 会員一覧を取得
 		self::$_mainDb->getMemberList($maxListCount, $pageNo, $parsedKeywords, array($this, 'userListLoop'));
-		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// データがないときは、一覧を表示しない
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('userlist', 'visibility', 'hidden');// データがないときは、一覧を表示しない
 
 		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);

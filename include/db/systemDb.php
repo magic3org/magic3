@@ -1843,7 +1843,9 @@ class SystemDb extends BaseDb
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		
 		// ユーザグループを取得
-		if ($ret && !is_null($groupRows)){
+		// 第3引数が省略されていない場合はユーザグループを取得
+		if ($ret && func_num_args() > 2){
+		//if ($ret && !is_null($groupRows)){
 			$queryStr  = 'SELECT * FROM _user_with_group LEFT JOIN _user_group ON uw_group_id = ug_id AND ug_deleted = false ';
 			$queryStr .=   'WHERE uw_user_serial = ? ';
 			$queryStr .=  'ORDER BY uw_index ';
@@ -2664,7 +2666,9 @@ class SystemDb extends BaseDb
 		
 		// フィールドを指定して更新
 		$ret = $this->updateLoginUserByField($userId, $fieldArray, $updatedSerial);
-		if ($ret && !is_null($newSerial)) $newSerial = $updatedSerial;		// シリアル番号を取得
+		// 第2引数が省略されていない場合はシリアル番号を取得
+		//if ($ret && !is_null($newSerial)) $newSerial = $updatedSerial;		// シリアル番号を取得
+		if ($ret && func_num_args() > 1) $newSerial = $updatedSerial;		// シリアル番号を取得
 		
 		/*
 		// 古いレコードを削除
