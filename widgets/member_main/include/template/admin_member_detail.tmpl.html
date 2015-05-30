@@ -38,7 +38,7 @@ function cancelItem(){
 }
 function authorizeUser(){
 	if (!window.confirm('会員として承認しますか?')) return false;
-	document.main.task.value = 'authorize';
+	document.main.act.value = 'authorize';
 	document.main.submit();
 	return true;
 }

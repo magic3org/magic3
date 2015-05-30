@@ -223,8 +223,8 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 				$ret = $this->_db->makeNormalLoginUser($userId, $newSerial);// 一般ログインユーザに設定
 				if ($ret){
 					// ユーザにメール通知
-					$fromAddress = $this->getFromAddress();	// 送信元アドレス
-					$toAddress = $account;					// ログインユーザに送信
+					$fromAddress = $this->gEnv->getSiteEmail();		// 送信元アドレス(サイトのメールアドレス)
+					$toAddress = $account;							// ログインユーザに送信
 				
 					// メール件名、本文マクロ
 					$mailParam = array();
@@ -232,7 +232,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 					$titleParam = array();
 					$titleParam[M3_TAG_MACRO_SITE_NAME] = $this->gEnv->getSiteName();			// サイト名
 					$titleParam[M3_TAG_MACRO_ACCOUNT]	= $account;							// ログインアカウント
-					$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO_COMPLETED, $mailParam,
+					$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', '', member_mainCommonDef::MAIL_TMPL_REGIST_USER_AUTH_COMPLETED, $mailParam,
 																		''/*CCアドレス*/, ''/*BCCアドレス*/, ''/*デフォルトテンプレート*/, $titleParam);
 																		
 					$this->setGuidanceMsg('ユーザを承認しました');
