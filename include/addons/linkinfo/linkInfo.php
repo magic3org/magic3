@@ -613,6 +613,22 @@ class linkInfo
 		return $destPath;
 	}
 	/**
+	 * コンテンツ編集用のメインウィジェットを取得
+	 *
+	 * @param string $contentType	コンテンツタイプ
+	 * @return string				ウィジェットID
+	 */
+	function getContentEditWidget($contentType)
+	{
+		$widgetId = '';
+		
+		// 画面に配置しているウィジェットの主要コンテンツタイプを取得
+		$ret = $this->db->getContentEditWidget($contentType, 0/*デバイスタイプはPCに限定*/, $rows);
+		if ($ret) $widgetId = $rows[0]['wd_id'];
+		return $widgetId;
+	}
+	
+	/**
 	 * 相対パスからURLを作成
 	 *
 	 * @param bool $isSslPage		現在のページがSSL使用になっているかどうか

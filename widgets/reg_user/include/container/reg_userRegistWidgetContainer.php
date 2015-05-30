@@ -19,10 +19,10 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/reg_userDb.php');
 class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
+	const LINKINFO_OBJ_ID = 'linkinfo';	// リンク情報オブジェクトID
 	const DEFAULT_TITLE = '会員登録';		// 画面タイトル
 	const DEFAULT_CAN_REGIST = 1;			// ユーザ登録を使用するかどうか
 	const OPERATION_LOG_LINK = 'task=userlist';				// 運用ログリンク先
-	const MEMBER_WIDGET = 'member_main';	// 会員情報ウィジェット
 	
 	/**
 	 * コンストラクタ
@@ -85,7 +85,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 	
 		// 画面遷移用URLをチェック
 		if (!empty($forward) && !$this->gEnv->isSystemUrlAccess($forward)) $forward = '';
-		
+
 		if ($act == 'regist'){			// ユーザ登録
 			$this->checkInput($name, '名前');
 			$this->checkMailAddress($email, 'Eメール');
@@ -147,9 +147,14 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 					if ($this->_authType == 'admin'){			// 管理者による認証
 						$fromAddress = $this->getFromAddress();	// 送信元アドレス
 						$toAddress = $fromAddress;			// 送信先は管理者
+						
+						// 表示用ウィジェット取得
+						$linkInfoObj = $this->gInstance->getObject(self::LINKINFO_OBJ_ID);
+						if (isset($linkInfoObj)) $editWidgetId = $linkInfoObj->getContentEditWidget(M3_VIEW_TYPE_MEMBER);		// 会員情報メインウィジェット
+		
 						// 承認設定画面
 						$param = /*'openby=other&' .*/ M3_REQUEST_PARAM_OPERATION_TASK . '=member_detail&account=' . $email;		// 「openby」は使えない?
-						$url = $this->getConfigAdminUrl($param, self::MEMBER_WIDGET);
+						$url = $this->getConfigAdminUrl($param, $editWidgetId);
 						
 						// メール件名、本文マクロ
 						$mailParam = array();

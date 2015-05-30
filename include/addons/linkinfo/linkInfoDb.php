@@ -372,5 +372,25 @@ class linkInfoDb extends BaseDb
 		$queryStr .=     'AND wc_type = ? ';$params[] = $type;
 		return $this->selectRecordCount($queryStr, $params);
 	}
+	/**
+	 * コンテンツ編集用のメインウィジェットを取得
+	 *
+	 * @param string $contentType	コンテンツタイプ
+	 * @param int $deviceType		デバイスタイプ
+	 * @param array  $rows			レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getContentEditWidget($contentType, $deviceType, &$rows)
+	{
+		$queryStr  = 'SELECT * FROM _widgets ';
+		$queryStr .=   'WHERE wd_deleted = false ';	// 削除されていない
+		$queryStr .=     'AND wd_edit_content = true ';				// コンテンツ編集可能
+		$queryStr .=     'AND wd_content_widget_id = \'\' ';		// メインタイプ
+		$queryStr .=     'AND wd_content_type = ? ';		// コンテンツタイプ
+		$queryStr .=     'AND wd_device_type = ? ';		// デバイスタイプ
+		$queryStr .=   'ORDER BY wd_priority';
+		$retValue = $this->selectRecords($queryStr, array($contentType, $deviceType), $rows);
+		return $retValue;
+	}
 }
 ?>
