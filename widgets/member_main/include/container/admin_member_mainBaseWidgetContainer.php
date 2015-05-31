@@ -117,8 +117,8 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 												)
 							)
 						)
-					),
-					(Object)array(
+					)
+/*					(Object)array(
 						'name'		=> '基本',
 						'task'		=> self::TASK_CONFIG,
 						'url'		=> '',
@@ -137,7 +137,7 @@ class admin_member_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 												)
 							)
 						)
-					)
+					)*/
 				);
 
 		// サブメニューバーを作成

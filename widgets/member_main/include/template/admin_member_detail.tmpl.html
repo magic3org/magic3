@@ -84,13 +84,13 @@ $(function(){
 <div class="well m3config_update_buttons">
 <input type="button" class="button pull-left" onclick="authorizeUser();" value="{AUTH_BUTTON_LABEL}" {AUTH_BUTTON_DISABLED} />
 <patTemplate:tmpl name="delete_button" visibility="hidden">
-		<input type="button" class="button" onclick="delItem();" value="削除" />
+		<input type="button" class="button" onclick="delItem();" value="削除" {BUTTON_DISABLED} />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="update_button" visibility="hidden">
-		<input type="button" class="button" onclick="updateItem();" value="更新" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" {BUTTON_DISABLED} />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
-		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+		<input type="button" class="button" onclick="addItem();" value="新規追加" {BUTTON_DISABLED} />
 </patTemplate:tmpl>
 </div>
 

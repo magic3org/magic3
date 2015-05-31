@@ -176,6 +176,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
 		
 		$reloadData = false;		// データの再ロード
+		$userDeleted = false;		// ユーザ削除状態
 		if ($act == 'add'){		// 会員を追加
 			// 入力チェック
 			$this->checkDate($date, '登録日付');
@@ -202,16 +203,29 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 				}
 			}
 		} else if ($act == 'delete'){		// 項目削除の場合
-			if (empty($this->serialNo)){
-				$this->setUserErrorMsg('削除項目が選択されていません');
-			}
+			// エラーチェック
+			if (empty($this->serialNo)) $this->setUserErrorMsg('削除項目が選択されていません');
+
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
-				$ret = self::$_mainDb->delNewsItem(array($this->serialNo));
+				$ret = self::$_mainDb->delUserBySerial(array($this->serialNo));
 				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg('データを削除しました');
+					$this->setMsg(self::MSG_GUIDANCE, 'データを削除しました');
+				
+					// 運用ログ出力
+					$ret = self::$_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
+					if ($ret){
+						$loginUserId	= $row['lu_id'];
+						$account		= $row['lu_account'];		// アカウント
+						$name			= $row['lu_name'];			// 名前
+						$regDate		= $row['lu_regist_dt'];		// 登録日時
+						$userType		= $row['lu_user_type'];		// ユーザタイプ
+					}
+					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
+					
+					$userDeleted = true;		// ユーザ削除状態
 				} else {
-					$this->setAppErrorMsg('データ削除に失敗しました');
+					$this->setMsg(self::MSG_APP_ERR, 'データ削除に失敗しました');
 				}
 			}
 		} else if ($act == 'authorize'){		// ユーザを会員承認するとき
@@ -255,18 +269,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 				$account	= $row['lu_account'];		// アカウント
 				$name		= $row['lu_name'];			// 名前
 				$regDate	= $row['lu_regist_dt'];		// 登録日時
-
-				// 登録状態
-				if ($row['lu_user_type'] == UserInfo::USER_TYPE_NORMAL){		// 正会員
-					$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// アクティブアイコン
-					$iconTitle = '正会員';
-					
-					$userAuthorized = true;		// ユーザが承認されているかどうか
-				} else {		// 未承認または仮登録のとき
-					$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非アクティブアイコン
-					$iconTitle = '仮会員';
-				}
-				$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+				$userType	= $row['lu_user_type'];		// ユーザタイプ
 			} else {
 				$this->serialNo = 0;
 				$account	= '';		// アカウント
@@ -274,6 +277,18 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 				$regDate	= '';		// 登録日時
 			}
 		}
+		// 登録状態
+		if ($userType == UserInfo::USER_TYPE_NORMAL){		// 正会員
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// アクティブアイコン
+			$iconTitle = '正会員';
+			
+			$userAuthorized = true;		// ユーザが承認されているかどうか
+		} else {		// 未承認または仮登録のとき
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非アクティブアイコン
+			$iconTitle = '仮会員';
+		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+				
 		// 承認ボタンの設定
 		if ($userAuthorized){		// 承認済みのとき
 			$authLabel = '承認済み';
@@ -282,6 +297,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 			$authLabel = '承認する';
 			$authButtonDisabled = '';
 		}
+		if ($userDeleted) $authButtonDisabled = 'disabled';		// ユーザ削除済みの時は使用不可
 		$this->tmpl->addVar("_widget", "auth_button_label", $this->convertToDispString($authLabel));			// 承認ボタンラベル
 		$this->tmpl->addVar("_widget", "auth_button_disabled", $authButtonDisabled);			// 承認ボタン
 		
@@ -293,6 +309,10 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 			// データ更新、削除ボタン表示
 			$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
 //			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+		}
+		if ($userDeleted){			// ユーザ削除のとき
+			$this->tmpl->addVar('add_button', 'button_disabled', 'disabled');
+			$this->tmpl->addVar("delete_button", "button_disabled", 'disabled');
 		}
 		
 		// 表示項目を埋め込む
@@ -328,6 +348,7 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
 		
 		$row = array(
+			'index'			=> $index,		// 項目番号
 			'serial'		=> $this->convertToDispString($fetchedRow['lu_serial']),	// シリアル番号
 			'no'			=> $this->convertToDispString($no),							// 会員No(会員、仮会員の登録順)
 			'id'			=> $this->convertToDispString($fetchedRow['lu_id']),		// ID
