@@ -18,4 +18,104 @@
 
 -- *** システムベーステーブル ***
 
+-- 定型メールフォーム
+ALTER TABLE _mail_form ADD mf_name           VARCHAR(100)   DEFAULT ''                    NOT NULL;      -- フォーム名
+ALTER TABLE _mail_form ADD mf_admin          BOOLEAN        DEFAULT false                 NOT NULL;      -- 管理用専用かどうか
+
+-- 定型メールフォーム
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auto';
+INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('regist_user_auto', 'ja',           '会員自動登録', '[[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\nこのパスワードでログインすると会員として承認されます。\n\n[#URL#]\n\nパスワード:　[#PASSWORD#]', now());
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth';
+INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('regist_user_auth', 'ja',           '会員承認登録', '[[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\n管理者からの承認後、このパスワードでログイン可能になります。\n\nパスワード:　[#PASSWORD#]', now());
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth_a';
+INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                  mf_admin,                                               mf_create_dt) 
+VALUES                 ('regist_user_auth_a', 'ja',           '会員承認登録(管理者用)', '=> [[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       '承認が必要な会員の登録がありました。\n会員管理画面からユーザを承認して下さい。\n\n[#URL#]', true, now());
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auto_completed';
+INSERT INTO _mail_form (mf_id,                   mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('regist_user_auto_completed', 'ja',           '会員自動登録完了', '[[#SITE_NAME#]] 会員自動登録完了 ([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth_completed';
+INSERT INTO _mail_form (mf_id,                   mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('regist_user_auth_completed', 'ja',           '会員承認登録完了', '[[#SITE_NAME#]] 会員登録完了 ([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
+
+-- ウィジェット情報
+DELETE FROM _widgets WHERE wd_id = 'evententry_main';
+INSERT INTO _widgets
+(wd_id,             wd_name,               wd_type, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('evententry_main', 'イベント予約-メイン', '', 'evententry',    'event',   true,            '',                   '0.9.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベントの予約管理を行う。', 'login=md5',                '',                true,  true,         false,                true,  '2015-04-29', now(),         now());
+DELETE FROM _widgets WHERE wd_id = 'evententry_attachment';
+INSERT INTO _widgets
+(wd_id,                   wd_name,                       wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                   wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('evententry_attachment', 'イベント予約-アタッチメント', 'evententry',    'event',        true,            'evententry_main',                   'bootstrap',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'イベント情報に予約機能を付加。', '',                '',                  true,  false,              true, '2015-05-07', now(),         now());
+DELETE FROM _widgets WHERE wd_id = 'member_main';
+INSERT INTO _widgets
+(wd_id,          wd_name,          wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('member_main', '会員情報-メイン', 'member',          'subcontent',   true,            '',                   '1.0.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '会員管理ウィジェット', '',                '',                false,  true,         false,                true,  '2015-05-27', now(),         now());
+
+-- イベント予約設定マスター
+DROP TABLE IF EXISTS evententry_config;
+CREATE TABLE evententry_config (
+    ef_id                VARCHAR(30)    DEFAULT ''                    NOT NULL,      -- ID(Key)
+    ef_value             TEXT                                         NOT NULL,      -- 値
+    ef_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 名称
+    ef_description       VARCHAR(80)    DEFAULT ''                    NOT NULL,      -- 説明
+    ef_index             INT            DEFAULT 0                     NOT NULL,      -- ソート用
+    PRIMARY KEY          (ef_id)
+) ENGINE=innodb;
+
+INSERT INTO evententry_config
+(ef_id,                  ef_value,    ef_name) VALUES
+('show_entry_count',     '0',         '参加者数を表示するかどうか'),
+('show_entry_member',    '0',         '参加者を表示するかどうか(会員対象)'),
+('enable_cancel',        '0',         'キャンセル機能を使用可能にするかどうか');
+
+-- イベント予約マスター
+DROP TABLE IF EXISTS evententry;
+CREATE TABLE evententry (
+    et_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    et_id                INT            DEFAULT 0                     NOT NULL,      -- イベント予約ID
+    et_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
+    
+    et_event_id          VARCHAR(32)    DEFAULT ''                    NOT NULL,      -- イベントID
+    et_type              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 受付タイプ
+    et_code              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- イベント予約受付コード
+    et_html              TEXT                                         NOT NULL,      -- 説明
+    et_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=非公開、2=受付中、3=受付停止、4=受付終了)
+    et_show_entry_count  BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者数を表示するかどうか
+    et_show_entry_member BOOLEAN        DEFAULT true                  NOT NULL,      -- 参加者を表示するかどうか(会員対象)
+    et_enable_cancel     BOOLEAN        DEFAULT true                  NOT NULL,      -- キャンセル機能を使用可能にするかどうか
+    et_max_entry         INT            DEFAULT 0                     NOT NULL,      -- 定員(0は定員なし)
+    et_start_dt          TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(開始)
+    et_end_dt            TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- 受付期間(終了)
+    
+    et_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
+    et_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
+    et_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    et_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    et_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
+    PRIMARY KEY          (et_serial),
+    UNIQUE               (et_id,        et_history_index)
+) ENGINE=innodb;
+
+-- イベント予約要求トラン
+DROP TABLE IF EXISTS evententry_request;
+CREATE TABLE evententry_request (
+    er_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
+    er_evententry_id     INT            DEFAULT 0                     NOT NULL,      -- イベント予約ID
+    er_index             INT            DEFAULT 0                     NOT NULL,      -- インデックス番号(1～)
+    
+    er_code              VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 受付コード
+    er_user_id           INT            DEFAULT 0                     NOT NULL,      -- 参加者
+    er_status            SMALLINT       DEFAULT 0                     NOT NULL,      -- 状態(0=未設定、1=参加、2=キャンセル)
+    
+    er_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
+    er_create_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード作成日時
+    er_update_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード更新者
+    er_update_dt         TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- レコード更新日時
+    er_deleted           BOOLEAN        DEFAULT false                 NOT NULL,      -- レコード削除状態
+    PRIMARY KEY          (er_serial),
+    UNIQUE               (er_evententry_id,   er_index)
+) ENGINE=innodb;
+
 

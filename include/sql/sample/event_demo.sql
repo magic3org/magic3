@@ -161,6 +161,12 @@ INSERT INTO _widget_param
 (wp_id,          wp_config_id, wp_param,                                                                                                wp_create_dt) VALUES 
 ('event_category', 1,            'O:8:"stdClass":6:{s:4:"name";s:16:"名称未設定1";s:10:"categoryId";s:1:"1";s:9:"itemCount";s:2:"10";s:9:"sortOrder";s:1:"1";s:15:"futureEventOnly";s:1:"0";s:6:"useRss";s:1:"0";}', now());
 
+-- イベント定義
+DELETE FROM event_config WHERE eg_id = 'entry_view_count';
+INSERT INTO event_config
+(eg_id,                     eg_value,                         eg_name) VALUES
+('entry_view_count',     '3', '記事表示数');
+
 -- イベント
 TRUNCATE TABLE event_entry;
 INSERT INTO event_entry
@@ -168,13 +174,24 @@ INSERT INTO event_entry
 (1, 'ja', 'イベント-A1', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="216" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL1.jpg" width="288" />', 'イベント-A1の説明', 'A会場', 2, '2015-04-10 00:00:00', '2,3'),
 (2, 'ja', 'イベント-A2', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="301" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL4.jpg" width="402" />', 'イベント-A2の説明', 'A会場', 2, '2015-04-19 07:00:00', '1,3'),
 (3, 'ja', 'イベント-A3', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample1.jpg" style="width: 150px; height: 113px;" />', 'イベント-A3の説明', 'A会場', 2, '2015-05-01 01:00:00', '1,2'),
-(4, 'ja', 'イベント-A4', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="224" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL5.jpg" width="336" />', 'イベント-A4の説明', 'A会場', 2, '2015-08-02 07:00:00', ''),
-(5, 'ja', 'イベント-A6', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="381" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL6.jpg" width="254" />', 'イベント-A6の説明', 'A会場', 2, '2015-09-19 07:00:00', ''),
-(6, 'ja', 'イベント-A8', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample2.jpg" style="width: 150px; height: 113px;" />', 'イベント-A8の説明', 'A会場|http://example.com/', 2, '2016-01-01 12:00:00', ''),
-(7, 'ja', 'イベント-A9', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample4.jpg" style="width: 150px; height: 113px;" />', 'イベント-A9の説明', 'A会場|http://example.com/', 2, '2016-04-19 04:00:00', '2,3,4'),
-(8, 'ja', 'イベント-A5', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="301" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL4.jpg" width="402" />', 'イベント-A5の説明', 'A会場|http://example.com/', 3, '2015-08-31 23:00:00', '4,5'),
-(9, 'ja', 'イベント-A10', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="254" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL3.jpg" width="339" />', 'イベント-A10の説明', 'A会場|http://example.com/', 2, '2017-03-31 16:00:00', '6'),
-(10, 'ja', 'イベント-A11', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample3.jpg" style="width: 150px; height: 113px;" />', 'イベント-A11の説明', 'A会場|http://example.com/', 2,  '2021-08-07 23:00:00', '');
+(4, 'ja', 'イベント-A4', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="224" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL5.jpg" width="336" />', 'イベント-A4の説明', 'A会場', 2, '2015-06-02 08:00:00', '5,6'),
+(5, 'ja', 'イベント-A5', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="224" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL5.jpg" width="336" />', 'イベント-A5の説明', 'A会場', 2, '2015-06-04 07:00:00', '7,8'),
+(6, 'ja', 'イベント-A6', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="224" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL5.jpg" width="336" />', 'イベント-A6の説明', 'A会場', 2, '2015-07-01 12:00:00', ''),
+(7, 'ja', 'イベント-A7', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="224" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL5.jpg" width="336" />', 'イベント-A7の説明', 'A会場', 2, '2015-08-02 21:00:00', '5,8'),
+(8, 'ja', 'イベント-A8', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="381" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL6.jpg" width="254" />', 'イベント-A8の説明', 'A会場', 2, '2015-9-19 09:00:00', '5,7'),
+(9, 'ja', 'イベント-A9', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="381" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL6.jpg" width="254" />', 'イベント-A9の説明', 'A会場', 2, '2015-10-12 11:00:00', ''),
+(10, 'ja', 'イベント-A10', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="381" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL6.jpg" width="254" />', 'イベント-A10の説明', 'A会場', 2, '2015-10-21 07:00:00', ''),
+(11, 'ja', 'イベント-A11', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample2.jpg" style="width: 150px; height: 113px;" />', 'イベント-A11の説明', 'A会場|http://example.com/', 2, '2015-11-01 12:00:00', ''),
+(12, 'ja', 'イベント-A12', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample2.jpg" style="width: 150px; height: 113px;" />', 'イベント-A12の説明', 'A会場|http://example.com/', 2, '2015-12-25 12:00:00', ''),
+(13, 'ja', 'イベント-A13', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample2.jpg" style="width: 150px; height: 113px;" />', 'イベント-A13の説明', 'A会場|http://example.com/', 2, '2016-01-01 12:00:00', ''),
+(14, 'ja', 'イベント-A14', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample4.jpg" style="width: 150px; height: 113px;" />', 'イベント-A14の説明', 'A会場|http://example.com/', 2, '2016-02-19 14:00:00', '2,4'),
+(15, 'ja', 'イベント-A15', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample4.jpg" style="width: 150px; height: 113px;" />', 'イベント-A15の説明', 'A会場|http://example.com/', 2, '2016-03-19 13:00:00', '2,3'),
+(16, 'ja', 'イベント-A16', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample4.jpg" style="width: 150px; height: 113px;" />', 'イベント-A16の説明', 'A会場|http://example.com/', 2, '2016-04-19 13:00:00', '2,3,4'),
+(17, 'ja', 'イベント-A17', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample4.jpg" style="width: 150px; height: 113px;" />', 'イベント-A17の説明', 'A会場|http://example.com/', 2, '2016-05-19 12:00:00', '2,3,4'),
+(18, 'ja', 'イベント-A18', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="301" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL4.jpg" width="402" />', 'イベント-A18の説明', 'A会場|http://example.com/', 3, '2016-06-31 23:00:00', '4,5'),
+(19, 'ja', 'イベント-A19', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="254" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL3.jpg" width="339" />', 'イベント-A19の説明', 'A会場|http://example.com/', 2, '2017-03-31 16:00:00', '6'),
+(20, 'ja', 'イベント-A20', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample3.jpg" style="width: 150px; height: 113px;" />', 'イベント-A20の説明', 'A会場|http://example.com/', 2,  '2021-08-07 23:00:00', '');
+
 -- イベントカテゴリー
 TRUNCATE TABLE event_category;
 INSERT INTO event_category
