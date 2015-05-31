@@ -3304,6 +3304,11 @@ class SystemDb extends BaseDb
 		
 		$logSerial = $gEnvManager->getCurrentAccessLogSerial();	// 現在のアクセスログシリアル番号
 		
+		// リンク先修正
+		if (!empty($link)){
+			$link = str_replace($gEnvManager->getDefaultAdminUrl() . '?', '', $link);		// クエリー文字列以外を削除
+		}
+		
 		// トランザクション開始
 		$this->startTransaction();
 		

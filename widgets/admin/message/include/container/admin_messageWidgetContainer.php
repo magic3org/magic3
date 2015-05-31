@@ -146,11 +146,17 @@ class admin_messageWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 操作画面リンク
 		if (!empty($fetchedRow['ol_link'])){
+			$iconTag = $this->gDesign->createAdminPageLink($iconTag, $fetchedRow['ol_link']);
+			
+			// メッセージのリンク先
+			$linkTag = $this->gDesign->createAdminPageLink('<i class="glyphicon glyphicon-new-window"></i>', $fetchedRow['ol_link']);
+		/*
 			$linkUrl = $this->gEnv->getDefaultAdminUrl() . '?' . $fetchedRow['ol_link'];
 			$iconTag = '<a href="'. $this->getUrl($linkUrl) .'">' . $iconTag . '</a>';
 			
 			// メッセージのリンク先
 			$linkTag = '<a href="' . $linkUrl . '"><i class="glyphicon glyphicon-new-window"></i></a>';
+			*/
 		}
 
 		$row = array(

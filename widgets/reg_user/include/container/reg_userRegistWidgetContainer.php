@@ -22,7 +22,7 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 	const LINKINFO_OBJ_ID = 'linkinfo';	// リンク情報オブジェクトID
 	const DEFAULT_TITLE = '会員登録';		// 画面タイトル
 	const DEFAULT_CAN_REGIST = 1;			// ユーザ登録を使用するかどうか
-	const OPERATION_LOG_LINK = 'task=userlist';				// 運用ログリンク先
+//	const OPERATION_LOG_LINK = 'task=userlist';				// 運用ログリンク先
 	
 	/**
 	 * コンストラクタ
@@ -109,6 +109,10 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 				if ($ret) $ret = $this->_db->getLoginUserRecordBySerial($newSerial, $row, $groupRows);
 				if ($ret) $loginUserId = $row['lu_id'];
 				if ($ret){
+					// 表示用ウィジェット取得
+					$linkInfoObj = $this->gInstance->getObject(self::LINKINFO_OBJ_ID);
+					if (isset($linkInfoObj)) $editWidgetId = $linkInfoObj->getContentEditWidget(M3_VIEW_TYPE_MEMBER);		// 会員情報メインウィジェット
+						
 					if ($this->_authType == 'auto'){			// 自動認証
 						// 運用ログを残す
 						$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザが登録されました。ユーザはログインにより自動承認されます。アカウント: ' . $email . ', 名前: ' . $name, 2350,
@@ -118,9 +122,13 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 						$formType = reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO;		// メールテンプレート(会員自動登録)
 						$message = '登録完了しました。Eメールアドレス宛てにパスワードが送信されます。<br />ログインにより自動承認されます。';
 					} else if ($this->_authType == 'admin'){			// 管理者による認証
+						// 承認用画面
+						$param = 'openby=other&' . M3_REQUEST_PARAM_OPERATION_TASK . '=member_detail&account=' . $email;		// 「openby」は使えない?
+						$url = $this->getConfigAdminUrl($param, $editWidgetId);
+						
 						// 運用ログを残す
-						$this->gOpeLog->writeUserRequest(__METHOD__, 'ユーザが登録されました。ユーザを認証してください。アカウント: ' . $email . ', 名前: ' . $name, 2350,
-												'account=' . $email . ', userid=' . $loginUserId, 'account=' . $email/*検索補助データ*/, self::OPERATION_LOG_LINK/*リンク先*/);
+						$this->gOpeLog->writeUserRequest(__METHOD__, '承認が必要なユーザの登録がありました。会員管理画面からユーザを承認して下さい。アカウント: ' . $email . ', 名前: ' . $name, 2350,
+												'account=' . $email . ', userid=' . $loginUserId, 'account=' . $email/*検索補助データ*/, $url/*リンク先*/);
 						
 						// メールテンプレート
 						$formType = reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTH;		// メールテンプレート(会員承認登録)
@@ -147,12 +155,8 @@ class reg_userRegistWidgetContainer extends reg_userBaseWidgetContainer
 					if ($this->_authType == 'admin'){			// 管理者による認証
 						$fromAddress = $this->getFromAddress();	// 送信元アドレス
 						$toAddress = $fromAddress;			// 送信先は管理者
-						
-						// 表示用ウィジェット取得
-						$linkInfoObj = $this->gInstance->getObject(self::LINKINFO_OBJ_ID);
-						if (isset($linkInfoObj)) $editWidgetId = $linkInfoObj->getContentEditWidget(M3_VIEW_TYPE_MEMBER);		// 会員情報メインウィジェット
 		
-						// 承認設定画面
+						// 承認用画面
 						$param = /*'openby=other&' .*/ M3_REQUEST_PARAM_OPERATION_TASK . '=member_detail&account=' . $email;		// 「openby」は使えない?
 						$url = $this->getConfigAdminUrl($param, $editWidgetId);
 						

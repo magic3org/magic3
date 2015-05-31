@@ -246,10 +246,10 @@ class DesignManager extends Core
 					switch ($style){
 						case 2:			// Bootstrap型のとき
 						case -1:		// 管理画面
-							$link = '<li>' . $this->_createLink($i, convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
+							$link = '<li>' . $this->_createLink($i, $linkUrl, $clickScript) . '</li>';
 							break;
 						default:
-							$link = '&nbsp;' . $this->_createLink($i, convertUrlToHtmlEntity($linkUrl), $clickScript);
+							$link = '&nbsp;' . $this->_createLink($i, $linkUrl, $clickScript);
 							break;
 					}
 				}
@@ -279,10 +279,10 @@ class DesignManager extends Core
 			switch ($style){
 				case 2:			// Bootstrap型のとき
 				case -1:		// 管理画面
-					$link = '<li>' . $this->_createLink('&laquo;', convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
+					$link = '<li>' . $this->_createLink('&laquo;', $linkUrl, $clickScript) . '</li>';
 					break;
 				default:
-					$link = $this->_createLink('&laquo; 前へ', convertUrlToHtmlEntity($linkUrl), $clickScript);
+					$link = $this->_createLink('&laquo; 前へ', $linkUrl, $clickScript);
 					break;
 			}
 			$pageLink = $link . $pageLink;
@@ -298,10 +298,10 @@ class DesignManager extends Core
 			switch ($style){
 				case 2:			// Bootstrap型のとき
 				case -1:		// 管理画面
-					$link = '<li>' . $this->_createLink('&raquo;', convertUrlToHtmlEntity($linkUrl), $clickScript) . '</li>';
+					$link = '<li>' . $this->_createLink('&raquo;', $linkUrl, $clickScript) . '</li>';
 					break;
 				default:
-					$link = '&nbsp;' . $this->_createLink('次へ &raquo;', convertUrlToHtmlEntity($linkUrl), $clickScript);
+					$link = '&nbsp;' . $this->_createLink('次へ &raquo;', $linkUrl, $clickScript);
 					break;
 			}
 			$pageLink .= $link;
@@ -320,20 +320,42 @@ class DesignManager extends Core
 		return $pageLink;
 	}
 	/**
+	 * 管理画面遷移用タグ作成
+	 *
+	 * @param string $src		リンク対象の文字列またはタグ
+	 * @param string $url		リンク先URL
+	 * @return string			リンクHTML
+	 */
+	function createAdminPageLink($src, $url)
+	{
+		// ウィジェット設定画面の場合は別画面で表示
+		$attr = '';		// 別ウィンドウで画面を開くかどうか
+		$pos = strpos($url, M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET);
+		if ($pos !== false) $attr = 'target="_blank"';
+		
+		// 絶対パスに直す
+		if (strncasecmp($url, 'http://', strlen('http://')) != 0 && strncasecmp($url, 'https://', strlen('https://')) != 0) $url = $this->gEnv->getDefaultAdminUrl() . '?' . $url;
+		
+		// リンクタグを作成
+		$linkTag = $this->_createLink($src, $url, ''/*クリックイベントなし*/, $attr);
+		return $linkTag;
+	}
+	/**
 	 * Aタグリンク作成
 	 *
-	 * @param string $name				リンクされる文字列
+	 * @param string $name				リンクされる文字列またはタグ
 	 * @param string $url				URL
 	 * @param string $clickEvent		クリックイベント用JavaScript。イベントが設定されている場合はイベントを優先。
+	 * @param string $attr				追加属性
 	 * @return string 					タグ文字列
 	 */
-	function _createLink($name, $url, $clickEvent = '')
+	function _createLink($name, $url, $clickEvent = '', $attr = '')
 	{
 		$destTag = '';
 		if (empty($clickEvent)){
-			$destTag = '<a href="' . $url . '" >' . $name . '</a>';
+			$destTag = '<a href="' . convertUrlToHtmlEntity($url) . '" ' . $attr . ' >' . $name . '</a>';
 		} else {
-			$destTag = '<a href="javascript:void(0)" onclick="' . $clickEvent . '" >' . $name . '</a>';
+			$destTag = '<a href="javascript:void(0)" onclick="' . $clickEvent . '" ' . $attr . ' >' . $name . '</a>';
 		}
 		return $destTag;
 	}

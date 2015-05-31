@@ -183,8 +183,9 @@ class admin_opelogWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 操作画面リンク
 		if (!empty($fetchedRow['ol_link'])){
-			$link = $this->gEnv->getDefaultAdminUrl() . '?' . $fetchedRow['ol_link'];
-			$iconTag = '<a href="'. $this->getUrl($link) .'">' . $iconTag . '</a>';
+			$iconTag = $this->gDesign->createAdminPageLink($iconTag, $fetchedRow['ol_link']);
+//			$link = $this->gEnv->getDefaultAdminUrl() . '?' . $fetchedRow['ol_link'];
+//			$iconTag = '<a href="'. $this->getUrl($link) .'">' . $iconTag . '</a>';
 		}
 		
 		// 日時

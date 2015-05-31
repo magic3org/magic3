@@ -373,9 +373,13 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 				$msgTypeTag = $row['ot_name'];
 				// 操作画面リンク
 				if (!empty($row['ol_link'])){
+					$iconTag = $this->gDesign->createAdminPageLink($iconTag, $fetchedRow['ol_link']);
+					$msgTypeTag = $this->gDesign->createAdminPageLink($msgTypeTag, $fetchedRow['ol_link']);
+				/*
 					$link = $this->gEnv->getDefaultAdminUrl() . '?' . $row['ol_link'];
 					$iconTag = '<a href="'. $this->getUrl($link) .'">' . $iconTag . '</a>';
 					$msgTypeTag = '<a href="'. $this->getUrl($link) .'">' . $msgTypeTag . '</a>';
+					*/
 				}
 				
 				$isMsgChecked = $row['ol_checked'];		// 確認済みかどうか
@@ -485,8 +489,9 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		
 		// 操作画面リンク
 		if (!empty($fetchedRow['ol_link'])){
-			$link = $this->gEnv->getDefaultAdminUrl() . '?' . $fetchedRow['ol_link'];
-			$iconTag = '<a href="'. $this->getUrl($link) .'">' . $iconTag . '</a>';
+			$iconTag = $this->gDesign->createAdminPageLink($iconTag, $fetchedRow['ol_link']);
+			//$link = $this->gEnv->getDefaultAdminUrl() . '?' . $fetchedRow['ol_link'];
+			//$iconTag = '<a href="'. $this->getUrl($link) .'">' . $iconTag . '</a>';
 		}
 		
 		$row = array(
