@@ -262,17 +262,32 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 			}
 		} else {	// 初期画面表示のとき
 			// ##### アカウントが設定されているとき(他ウィジェットからの表示)は、データを取得 #####
-			if (!empty($loginAccount)){
-				// ユーザ情報を取得
-				$ret = $this->_db->getLoginUserRecord($loginAccount, $row);
-				if ($ret){
-					$this->serialNo = $row['lu_serial'];		// ユーザシリアル番号
+			if (empty($this->serialNo)){
+				if (empty($loginAccount)){
 					$reloadData = true;		// データの再読み込み
-				} else {
-					$this->serialNo = 0;
+				} else {			// アカウント指定で表示のとき
+					// ユーザ情報を取得
+					$ret = $this->_db->getLoginUserRecord($loginAccount, $row);
+					if ($ret){
+						$this->serialNo = $row['lu_serial'];		// ユーザシリアル番号
+				
+						// 承認済みの場合はメッセージを表示
+						if ($row['lu_user_type'] == UserInfo::USER_TYPE_NORMAL)	$this->setGuidanceMsg('ユーザは承認済みです');	// ユーザタイプ
+				
+						$reloadData = true;		// データの再読み込み
+					} else {
+						$this->serialNo = 0;
+						$account		= $loginAccount;			// 表示用にアカウントのみ設定
+				
+						$this->setAppErrorMsg('ユーザが見つかりません');
+						$userDeleted = true;		// ボタン使用不可
+					}
 				}
+			} else {			// シリアル番号が設定されている場合は優先する
+				$reloadData = true;		// データの再読み込み
 			}
 		}
+
 		// 設定データを再取得
 		$userAuthorized = false;		// ユーザが承認されているかどうか
 		if ($reloadData){		// データの再ロード
