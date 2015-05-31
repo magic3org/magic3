@@ -172,8 +172,10 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 	 */
 	function createDetail($request)
 	{
+		// 入力値を取得
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
+		$loginAccount = $request->trimValueOf('account');		// アカウント(他ウィジェットからの直接呼び出し用)
 		
 		$reloadData = false;		// データの再ロード
 		$userDeleted = false;		// ユーザ削除状態
@@ -259,7 +261,17 @@ class admin_member_mainMemberWidgetContainer extends admin_member_mainBaseWidget
 				}
 			}
 		} else {	// 初期画面表示のとき
-			$reloadData = true;		// データの再ロード
+			// ##### アカウントが設定されているとき(他ウィジェットからの表示)は、データを取得 #####
+			if (!empty($loginAccount)){
+				// ユーザ情報を取得
+				$ret = $this->_db->getLoginUserRecord($loginAccount, $row);
+				if ($ret){
+					$this->serialNo = $row['lu_serial'];		// ユーザシリアル番号
+					$reloadData = true;		// データの再読み込み
+				} else {
+					$this->serialNo = 0;
+				}
+			}
 		}
 		// 設定データを再取得
 		$userAuthorized = false;		// ユーザが承認されているかどうか
