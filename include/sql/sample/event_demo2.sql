@@ -13,8 +13,8 @@
 -- * @link       http://www.magic3.org
 -- *
 -- [イベント予約サイトデモ]
--- イベント情報サイト。予約機能付き。
--- 主な機能は、イベント情報、イベント予約、カレンダー。
+-- イベント情報サイト。会員登録による予約機能付き。
+-- 主な機能は、イベント情報、イベント予約、会員情報、カレンダー。
 
 -- システム設定
 UPDATE _system_config SET sc_value = 'art42_sample3' WHERE sc_id = 'default_template';
