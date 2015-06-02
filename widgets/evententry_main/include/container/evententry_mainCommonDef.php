@@ -26,6 +26,9 @@ class evententry_mainCommonDef
 	const EVENT_CODE_LENGTH = 5;			// 自動生成する受付イベントコードの数値桁数
 	
 	// ##### DB定義値 #####
+	const CF_SHOW_ENTRY_COUNT		= 'show_entry_count';			// 参加者数を表示するかどうか
+	const CF_SHOW_ENTRY_MEMBER		= 'show_entry_member';			// 参加者を表示するかどうか(会員対象)
+	const CF_ENABLE_CANCEL			= 'enable_cancel';				// キャンセル機能を使用可能にするかどうか
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	
 	// ##### デフォルト値 #####

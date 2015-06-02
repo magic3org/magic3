@@ -51,18 +51,17 @@ class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBa
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
-		$defaultMessage	= $request->trimValueOf('item_default_message');		// デフォルトメッセージ
-		$dateFormat		= $request->trimValueOf('item_date_format');			// 日時フォーマット
-		$layoutListItem = $request->trimValueOf('item_layout_list_item');		// リスト項目レイアウト
+		$showEntryCount 	= $request->trimCheckedValueOf('item_show_entry_count');		// 参加者数を表示するかどうか
+		$showEntryMember 	= $request->trimCheckedValueOf('item_show_entry_member');		// 参加者を表示するかどうか(会員対象)
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
-				$ret = self::$_mainDb->updateConfig(newsCommonDef::FD_DEFAULT_MESSAGE, $defaultMessage); // デフォルトメッセージ
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::FD_DATE_FORMAT, $dateFormat);// 日時フォーマット
-				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::FD_LAYOUT_LIST_ITEM, $layoutListItem);		// リスト項目レイアウト
+				$ret = true;
+				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_COUNT, $showEntryCount);			// 参加者数を表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_MEMBER, $showEntryMember);		// 参加者を表示するかどうか(会員対象)
 
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -76,15 +75,13 @@ class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBa
 		}
 		// データ再取得
 		if ($reloadData){
-			$defaultMessage	= self::$_mainDb->getConfig(newsCommonDef::FD_DEFAULT_MESSAGE);// デフォルトメッセージ
-			$dateFormat		= self::$_mainDb->getConfig(newsCommonDef::FD_DATE_FORMAT);// 日時フォーマット
-			$layoutListItem	= self::$_mainDb->getConfig(newsCommonDef::FD_LAYOUT_LIST_ITEM);// リスト項目レイアウト
+			$showEntryCount		= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_COUNT);			// 参加者数を表示するかどうか
+			$showEntryMember	= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_MEMBER);		// 参加者を表示するかどうか(会員対象)
 		}
 		
 		// 画面に書き戻す
-		$this->tmpl->addVar("_widget", "default_message",	$this->convertToDispString($defaultMessage));// デフォルトメッセージ
-		$this->tmpl->addVar("_widget", "date_format",		$this->convertToDispString($dateFormat));// 日時フォーマット
-		$this->tmpl->addVar("_widget", "layout_list_item",	$this->convertToDispString($layoutListItem));// リスト項目レイアウト
+		$this->tmpl->addVar("_widget", "show_entry_count_checked", $this->convertToCheckedString($showEntryCount));		// 参加者数を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_entry_member_checked", $this->convertToCheckedString($showEntryMember));		// 参加者を表示するかどうか(会員対象)
 	}
 }
 ?>

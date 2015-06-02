@@ -21,36 +21,23 @@ function updateItem(){
 }
 $(function(){
 	m3SetConfigTable('mainconfig');
-	
-	// WYSIWYGエディター作成
-	m3SetWysiwygEditor('item_layout_list_item', 100/* 高さ */, false, 'layout');
 });
 //]]>
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="act" />
 <input type="hidden" name="task" value="config" />
+<input type="hidden" name="act" />
 <h3 class="m3config_h">基本設定</h3>
 <table id="mainconfig">
     <tbody>
-    <tr>
-	    <th><span {_HELP_CONFIG_EVENT}>フォーマット</span></th>
-	    <td><div class="form-control-static col-sm-2 m3config_item">日時：</div><div class="col-sm-4 m3config_item"><input type="text" name="item_date_format" class="form-control" value="{DATE_FORMAT}" size="10" maxlength="10" /></div>
-        </td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_CONFIG_MESSAGE}>メッセージ</span></th>
-	    <td><div class="form-control-static col-sm-2 m3config_item">デフォルト：</div><div class="col-sm-10 m3config_item"><input type="text" name="item_default_message" class="form-control" value="{DEFAULT_MESSAGE}" size="60" maxlength="200" /></div>
-        </td>
-	</tr>
-    <tr>
-	    <th rowspan="2"><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></th>
-	    <th style="width:800px;">リスト項目</th>
-	</tr>
-    <tr>
-	    <td class="ckeditor"><textarea name="item_layout_list_item">{LAYOUT_LIST_ITEM}</textarea></td>
+	<tr>
+	    <th><span {_HELP_ENTRY_VIEW_OPTION}>表示オプション</span></th>
+	    <td>
+		<div class="checkbox"><label><input type="checkbox" name="item_show_entry_count" {SHOW_ENTRY_COUNT_CHECKED} />参加者数を表示するかどうか</label></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_show_entry_member" {SHOW_ENTRY_MEMBER_CHECKED} />参加者を表示するかどうか(会員対象)</label></div>
+		</td>
 	</tr>
     </tbody>
 </table>
