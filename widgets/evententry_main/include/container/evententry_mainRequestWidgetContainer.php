@@ -177,7 +177,8 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 		$this->eventEntryId = $eventEntryId;		// イベント予約ID
 
 		// ##### コンテンツ作成用レイアウト取得 #####
-		$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
+		//$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
+		$layout = self::$_configArray[evententry_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];
 		if (empty($layout)) $layout = evententry_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 		
 		// 記事へのリンクを生成

@@ -20,7 +20,11 @@ function updateItem(){
 	return true;
 }
 $(function(){
+	// テーブル作成
 	m3SetConfigTable('mainconfig');
+	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_layout_entry_single', 100/* 高さ */, false, 'layout');
 });
 //]]>
 </script>
@@ -38,6 +42,10 @@ $(function(){
 		<div class="checkbox"><label><input type="checkbox" name="item_show_entry_count" {SHOW_ENTRY_COUNT_CHECKED} />参加者数を表示するかどうか</label></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_show_entry_member" {SHOW_ENTRY_MEMBER_CHECKED} />参加者を表示するかどうか(会員対象)</label></div>
 		</td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_UNTITLED_LAYOUT}>レイアウト</span></th>
+		<td class="ckeditor"><textarea name="item_layout_entry_single">{LAYOUT_ENTRY_SINGLE}</textarea></td>
 	</tr>
     </tbody>
 </table>

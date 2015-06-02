@@ -53,15 +53,19 @@ class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBa
 		$act = $request->trimValueOf('act');
 		$showEntryCount 	= $request->trimCheckedValueOf('item_show_entry_count');		// 参加者数を表示するかどうか
 		$showEntryMember 	= $request->trimCheckedValueOf('item_show_entry_member');		// 参加者を表示するかどうか(会員対象)
+		$layoutEntrySingle	= $request->valueOf('item_layout_entry_single');				// イベント予約レイアウト(記事詳細)
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
+				if (empty($layoutEntrySingle)) $layoutEntrySingle = evententry_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;	// イベント予約レイアウト(記事詳細)
+				
 				$ret = true;
 				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_COUNT, $showEntryCount);			// 参加者数を表示するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_MEMBER, $showEntryMember);		// 参加者を表示するかどうか(会員対象)
+				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE, $layoutEntrySingle);	// イベント予約レイアウト(記事詳細)
 
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -77,11 +81,13 @@ class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBa
 		if ($reloadData){
 			$showEntryCount		= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_COUNT);			// 参加者数を表示するかどうか
 			$showEntryMember	= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_MEMBER);		// 参加者を表示するかどうか(会員対象)
+			$layoutEntrySingle	= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE);		// イベント予約レイアウト(記事詳細)
 		}
 		
 		// 画面に書き戻す
 		$this->tmpl->addVar("_widget", "show_entry_count_checked", $this->convertToCheckedString($showEntryCount));		// 参加者数を表示するかどうか
 		$this->tmpl->addVar("_widget", "show_entry_member_checked", $this->convertToCheckedString($showEntryMember));		// 参加者を表示するかどうか(会員対象)
+		$this->tmpl->addVar("_widget", "layout_entry_single", $layoutEntrySingle);		// 参加者を表示するかどうか(会員対象)
 	}
 }
 ?>
