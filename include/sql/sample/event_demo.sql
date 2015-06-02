@@ -171,7 +171,7 @@ INSERT INTO event_config
 TRUNCATE TABLE event_entry;
 INSERT INTO event_entry
 (ee_id, ee_language_id, ee_name, ee_html, ee_summary, ee_place, ee_status, ee_start_dt, ee_related_content) VALUES
-(1, 'ja', 'イベント-A1', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="216" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL1.jpg" width="288" />', 'イベント-A1の説明', 'A会場', 2, '2015-04-10 00:00:00', '2,3'),
+(1, 'ja', 'イベント-A1', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="216" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL1.jpg" width="288" />', 'イベント-A1の説明', 'A会場', 2, '2015-04-10 10:00:00', '2,3'),
 (2, 'ja', 'イベント-A2', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="301" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL4.jpg" width="402" />', 'イベント-A2の説明', 'A会場', 2, '2015-04-19 07:00:00', '1,3'),
 (3, 'ja', 'イベント-A3', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/photo/sample1.jpg" style="width: 150px; height: 113px;" />', 'イベント-A3の説明', 'A会場', 2, '2015-05-01 01:00:00', '1,2'),
 (4, 'ja', 'イベント-A4', 'イベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\nイベントサンプル　イベントサンプル　イベントサンプル　イベントサンプル<br />\r\n<br />\r\n<img alt="" height="224" src="[#M3_ROOT_URL#]/resource/image/sample/photo/samleL5.jpg" width="336" />', 'イベント-A4の説明', 'A会場', 2, '2015-06-02 08:00:00', '5,6'),
