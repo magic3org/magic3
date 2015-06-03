@@ -49,3 +49,24 @@
   display: block;
   content: " ";
 }
+/* error message */
+.error-message, .warning-message, .guide-message, .success-message {
+	margin: 10px 0px;
+	padding:12px;
+}
+.error-message {
+	color: #D8000C;
+	background-color: #FFBABA;
+}
+.warning-message {
+	color: #9F6000;
+	background-color: #FEEFB3;
+}
+.guide-message {
+	color: #00529B;
+	background-color: #BDE5F8;
+}
+.success-message {
+	color: #4F8A10;
+	background-color: #DFF2BF;
+}
