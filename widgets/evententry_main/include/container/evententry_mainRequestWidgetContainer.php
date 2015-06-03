@@ -21,7 +21,10 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 	private $db;			// DB接続オブジェクト
 	private $eventObj;			// イベント情報用取得オブジェクト
 	private $eventEntryId;		// イベント予約ID
-	private $_contentParam;		// コンテンツ変換用	
+	private $_contentParam;		// コンテンツ変換用
+	private $showEntryCount;		// 参加者数を表示するかどうか
+	private $showEntryMember;		// 参加者を表示するかどうか(会員対象)
+	private $layoutEntrySingle;			// コンテンツレイアウト(記事詳細)
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	
@@ -79,6 +82,12 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 			$this->cancelParse();		// テンプレート変換処理中断
 			return;
 		}
+		
+		// DB定義値取得
+		$this->showEntryCount = self::$_configArray[evententry_mainCommonDef::CF_SHOW_ENTRY_COUNT];		// 参加者数を表示するかどうか
+		$this->showEntryMember = self::$_configArray[evententry_mainCommonDef::CF_SHOW_ENTRY_MEMBER];		// 参加者を表示するかどうか(会員対象)
+		$this->layoutEntrySingle = self::$_configArray[evententry_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];			// コンテンツレイアウト(記事詳細)
+		if (empty($this->layoutEntrySingle)) $this->layoutEntrySingle = evententry_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -175,11 +184,6 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 		$entryHtml		= $this->entryRow['et_html'];		// 説明
 		// コンテンツ作成用
 		$this->eventEntryId = $eventEntryId;		// イベント予約ID
-
-		// ##### コンテンツ作成用レイアウト取得 #####
-		//$layout = self::$_configArray[DEFAULT_LAYOUT_ENTRY_SINGLE];
-		$layout = self::$_configArray[evententry_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];
-		if (empty($layout)) $layout = evententry_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 		
 		// 記事へのリンクを生成
 		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
@@ -200,7 +204,8 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 		// ##### 表示コンテンツ作成 #####
 		// 変換データ作成
 		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
-		$entryCountStr = $this->db->getEntryUserCount($eventEntryId) . '名';		// 参加数
+		// 参加者数を表示する場合は表示文字列を作成
+		$entryCountStr = ($this->showEntryCount && $this->entryRow['et_show_entry_count']) ? $this->db->getEntryUserCount($eventEntryId) . '名' : '';// 参加数
 		
 		// イベント開催期間
 		$dateHtml = '';
@@ -227,7 +232,7 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 								M3_TAG_MACRO_DATE	=> $dateHtml,		// 開催期間
 								M3_TAG_MACRO_BODY	=> $entryHtml		// 説明
 							);
-		$entryHtml = $this->createMacroContent($layout, $contentParam);
+		$entryHtml = $this->createMacroContent($this->layoutEntrySingle, $contentParam);
 		
 		// Magic3マクロ変換
 		// あらかじめ「CT_」タグをすべて取得する?

@@ -17,8 +17,10 @@
 class evententry_attachmentCommonDef
 {
 	// ##### 定義値 #####
-//	const DEFAULT_ITEM_COUNT = 10;		// デフォルトの表示項目数
-//	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
+	const CF_SHOW_ENTRY_COUNT		= 'show_entry_count';			// 参加者数を表示するかどうか
+	const CF_SHOW_ENTRY_MEMBER		= 'show_entry_member';			// 参加者を表示するかどうか(会員対象)
+	const CF_ENABLE_CANCEL			= 'enable_cancel';				// キャンセル機能を使用可能にするかどうか
+	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// (未使用)コンテンツレイアウト(記事詳細)
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_LAYOUT = '[#BODY#]<div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div>[#BUTTON|title=予約画面へ|予約済み#]';	// イベント予約レイアウト

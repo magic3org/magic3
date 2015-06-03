@@ -26,9 +26,16 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 	private $entryRow;			// 予約情報レコード
 	private $eventEntryId;		// イベント予約ID
 	private $_contentParam;		// コンテンツ変換用
+	private $showEntryCount;		// 参加者数を表示するかどうか
+	private $showEntryMember;		// 参加者を表示するかどうか(会員対象)
 	const EVENT_OBJ_ID = 'eventlib';		// イベント情報取得用オブジェクト
 	const DEFAULT_TITLE = 'イベント予約';			// デフォルトのウィジェットタイトル
 	const FORWARD_TASK_REQUEST = 'request';			// イベント予約画面遷移用
+	// ##### DB定義値 #####
+	const CF_SHOW_ENTRY_COUNT		= 'show_entry_count';			// 参加者数を表示するかどうか
+	const CF_SHOW_ENTRY_MEMBER		= 'show_entry_member';			// 参加者を表示するかどうか(会員対象)
+	const CF_ENABLE_CANCEL			= 'enable_cancel';				// キャンセル機能を使用可能にするかどうか
+	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	
 	/**
 	 * コンストラクタ
@@ -93,6 +100,10 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 			$this->cancelParse();		// テンプレート変換処理中断
 			return;
 		}
+		
+		// DB定義値取得
+		$this->showEntryCount = $this->configArray[evententry_attachmentCommonDef::CF_SHOW_ENTRY_COUNT];		// 参加者数を表示するかどうか
+		$this->showEntryMember = $this->configArray[evententry_attachmentCommonDef::CF_SHOW_ENTRY_MEMBER];		// 参加者を表示するかどうか(会員対象)
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -131,9 +142,9 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		// コンテンツ作成用
 		$this->eventEntryId = $eventEntryId;		// イベント予約ID
 		
-		// ##### コンテンツ作成用レイアウト取得 #####
+		// デフォルト値設定
 		$layout = evententry_attachmentCommonDef::DEFAULT_LAYOUT;	// イベント予約レイアウト
-		
+				
 		// 保存値取得
 		$paramObj = $this->getWidgetParamObj();
 		if (!empty($paramObj)){
@@ -154,7 +165,9 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		// ##### 表示コンテンツ作成 #####
 		// 変換データ作成
 		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
-		$entryCountStr = $this->db->getEntryUserCount($eventEntryId) . '名';		// 参加数
+		// 参加者数を表示する場合は表示文字列を作成
+		$entryCountStr = ($this->showEntryCount && $this->entryRow['et_show_entry_count']) ? $this->db->getEntryUserCount($eventEntryId) . '名' : '';// 参加数
+		
 		// 予約画面
 		$linkUrl = $this->gPage->createContentPageUrl(M3_VIEW_TYPE_EVENTENTRY, 
 					M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::FORWARD_TASK_REQUEST . '&' .
