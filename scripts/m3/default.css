@@ -50,7 +50,7 @@
   content: " ";
 }
 /* error message */
-.error-message, .warning-message, .guide-message, .success-message {
+#art-main .error-message, #art-main .warning-message, #art-main .guide-message, #art-main .success-message {
 	margin: 10px 0px;
 	padding:12px;
 }
