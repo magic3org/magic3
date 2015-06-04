@@ -21,6 +21,13 @@ class evententry_attachmentCommonDef
 	const CF_SHOW_ENTRY_MEMBER		= 'show_entry_member';			// 参加者を表示するかどうか(会員対象)
 	const CF_ENABLE_CANCEL			= 'enable_cancel';				// キャンセル機能を使用可能にするかどうか
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// (未使用)コンテンツレイアウト(記事詳細)
+	const CF_MSG_ENTRY_EXCEED_MAX		= 'msg_entry_exceed_max';			// 予約定員オーバーメッセージ
+	const CF_MSG_ENTRY_OUT_OF_TERM		= 'msg_entry_out_of_term';			// 受付期間外メッセージ
+	const CF_MSG_ENTRY_TERM_EXPIRED		= 'msg_entry_term_expired';			// 受付期間終了メッセージ
+	const CF_MSG_ENTRY_STOPPED			= 'msg_entry_stopped';				// 受付中断メッセージ
+	const CF_MSG_ENTRY_CLOSED			= 'msg_entry_closed';				// 受付終了メッセージ
+	const CF_MSG_EVENT_CLOSED			= 'msg_event_closed';				// イベント終了メッセージ
+	const CF_MSG_ENTRY_USER_REGISTERED	= 'msg_entry_user_registered';		// 予約済みメッセージ
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_LAYOUT = '[#BODY#]<div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div>[#BUTTON|title=予約画面へ|予約済み#]';	// イベント予約レイアウト
