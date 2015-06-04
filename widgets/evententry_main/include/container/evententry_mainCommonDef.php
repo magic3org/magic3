@@ -30,7 +30,13 @@ class evententry_mainCommonDef
 	const CF_SHOW_ENTRY_MEMBER		= 'show_entry_member';			// 参加者を表示するかどうか(会員対象)
 	const CF_ENABLE_CANCEL			= 'enable_cancel';				// キャンセル機能を使用可能にするかどうか
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
-	
+	const CF_MSG_ENTRY_EXCEED_MAX		= 'msg_entry_exceed_max';			// 予約定員オーバーメッセージ
+	const CF_MSG_ENTRY_TERM_EXPIRED		= 'msg_entry_term_expired';			// 受付期間終了メッセージ
+	const CF_MSG_ENTRY_STOPPED			= 'msg_entry_stopped';				// 受付中断メッセージ
+	const CF_MSG_ENTRY_CLOSED			= 'msg_entry_closed';				// 受付終了メッセージ
+	const CF_MSG_EVENT_CLOSED			= 'msg_event_closed';				// イベント終了メッセージ
+	const CF_MSG_ENTRY_USER_REGISTERED	= 'msg_entry_user_registered';		// 予約済みメッセージ
+
 	// ##### デフォルト値 #####
 	const DEFAULT_LAYOUT_ENTRY_SINGLE = '<div class="entry_info"><div style="float:left;">[#IMAGE#]</div><div class="clearfix"><div>[#CT_SUMMARY#]</div></div><div><span class="event_date">日時：[#DATE#]</span> <span class="event_location">場所：[#CT_PLACE#]</span></div><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div></div><div class="evententry_content">[#BODY#]</div><div class="evententry_info"><div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div></div><div><strong>会員名: [#CT_MEMBER_NAME#]</strong></div>[#BUTTON|type=ok;title=予約する|予約済み#]';	// デフォルトのコンテンツレイアウト(記事詳細)
 
