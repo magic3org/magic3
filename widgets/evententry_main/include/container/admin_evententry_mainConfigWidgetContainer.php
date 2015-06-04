@@ -55,7 +55,8 @@ class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBa
 		$showEntryMember 	= $request->trimCheckedValueOf('item_show_entry_member');		// 参加者を表示するかどうか(会員対象)
 		$layoutEntrySingle	= $request->valueOf('item_layout_entry_single');				// イベント予約レイアウト(記事詳細)
 		$msgEntryExceedMax		= $request->valueOf('item_msg_entry_exceed_max');		// 予約定員オーバーメッセージ
-		$msgEntryTermExpired	= $request->valueOf('item_msg_entry_term_expired');	// 受付期間終了メッセージ
+		$msgEntryOutOfTerm		= $request->valueOf('item_msg_entry_out_of_term');		// 受付期間外メッセージ
+		$msgEntryTermExpired	= $request->valueOf('item_msg_entry_term_expired');		// 受付期間終了メッセージ
 		$msgEntryStopped		= $request->valueOf('item_msg_entry_stopped');	// 受付中断メッセージ
 		$msgEntryClosed			= $request->valueOf('item_msg_entry_closed');	// 受付終了メッセージ
 		$msgEventClosed			= $request->valueOf('item_msg_event_closed');	// イベント終了メッセージ
@@ -73,6 +74,7 @@ class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBa
 				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_MEMBER, $showEntryMember);		// 参加者を表示するかどうか(会員対象)
 				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE, $layoutEntrySingle);	// イベント予約レイアウト(記事詳細)
 				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_MSG_ENTRY_EXCEED_MAX,		$msgEntryExceedMax);		// 予約定員オーバーメッセージ
+				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_MSG_ENTRY_OUT_OF_TERM,		$msgEntryOutOfTerm);		// 受付期間外メッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_MSG_ENTRY_TERM_EXPIRED,		$msgEntryTermExpired);		// 受付期間終了メッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_MSG_ENTRY_STOPPED,			$msgEntryStopped);			// 受付中断メッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(evententry_mainCommonDef::CF_MSG_ENTRY_CLOSED,			$msgEntryClosed);			// 受付終了メッセージ
@@ -95,6 +97,7 @@ class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBa
 			$showEntryMember	= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_SHOW_ENTRY_MEMBER);		// 参加者を表示するかどうか(会員対象)
 			$layoutEntrySingle	= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE);		// イベント予約レイアウト(記事詳細)
 			$msgEntryExceedMax		= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_MSG_ENTRY_EXCEED_MAX);			// 予約定員オーバーメッセージ
+			$msgEntryOutOfTerm		= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_MSG_ENTRY_OUT_OF_TERM);		// 受付期間外メッセージ
 			$msgEntryTermExpired	= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_MSG_ENTRY_TERM_EXPIRED);		// 受付期間終了メッセージ
 			$msgEntryStopped		= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_MSG_ENTRY_STOPPED);			// 受付中断メッセージ
 			$msgEntryClosed			= self::$_mainDb->getConfig(evententry_mainCommonDef::CF_MSG_ENTRY_CLOSED);				// 受付終了メッセージ
@@ -107,6 +110,7 @@ class admin_evententry_mainConfigWidgetContainer extends admin_evententry_mainBa
 		$this->tmpl->addVar("_widget", "show_entry_member_checked", $this->convertToCheckedString($showEntryMember));		// 参加者を表示するかどうか(会員対象)
 		$this->tmpl->addVar("_widget", "layout_entry_single",		$layoutEntrySingle);		// 参加者を表示するかどうか(会員対象)
 		$this->tmpl->addVar("_widget", "msg_entry_exceed_max",		$msgEntryExceedMax);		// 予約定員オーバーメッセージ
+		$this->tmpl->addVar("_widget", "msg_entry_out_of_term",		$msgEntryOutOfTerm);		// 受付期間外メッセージ
 		$this->tmpl->addVar("_widget", "msg_entry_term_expired",	$msgEntryTermExpired);		// 受付期間終了メッセージ
 		$this->tmpl->addVar("_widget", "msg_entry_stopped",			$msgEntryStopped);			// 受付中断メッセージ
 		$this->tmpl->addVar("_widget", "msg_entry_closed",			$msgEntryClosed);			// 受付終了メッセージ

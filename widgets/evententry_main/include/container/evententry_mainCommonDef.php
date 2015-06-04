@@ -31,6 +31,7 @@ class evententry_mainCommonDef
 	const CF_ENABLE_CANCEL			= 'enable_cancel';				// キャンセル機能を使用可能にするかどうか
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	const CF_MSG_ENTRY_EXCEED_MAX		= 'msg_entry_exceed_max';			// 予約定員オーバーメッセージ
+	const CF_MSG_ENTRY_OUT_OF_TERM		= 'msg_entry_out_of_term';			// 受付期間外メッセージ
 	const CF_MSG_ENTRY_TERM_EXPIRED		= 'msg_entry_term_expired';			// 受付期間終了メッセージ
 	const CF_MSG_ENTRY_STOPPED			= 'msg_entry_stopped';				// 受付中断メッセージ
 	const CF_MSG_ENTRY_CLOSED			= 'msg_entry_closed';				// 受付終了メッセージ
