@@ -1533,12 +1533,12 @@ class BaseWidgetContainer extends Core
 	/**
 	 * 年月日(yyyy/mm/dd)から翌日を求める
 	 *
-	 * @param string $strYMD		年月日
+	 * @param string $strYMD		年月日(時刻付きも可)
 	 * @return string				翌日
 	 */
 	function getNextDay($srcstr)
 	{
-		list($yyyy, $mm, $dd) = preg_split('/[\/\.\-]/', $srcstr);
+		list($yyyy, $mm, $dd) = preg_split('/[\/\.\- ]/', $srcstr);
 		return date("Y/m/d", mktime(0, 0, 0, $mm, $dd + 1, $yyyy));
 	}
 	/**
