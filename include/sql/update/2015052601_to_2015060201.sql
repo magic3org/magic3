@@ -35,7 +35,7 @@ INSERT INTO evententry_config
 ('msg_entry_term_expired',   '受付期間を終了しました',     '受付期間終了メッセージ'),
 ('msg_entry_stopped',        '受付は一時中断しています',   '受付中断メッセージ'),
 ('msg_entry_closed',         '受付を終了しました',         '受付終了メッセージ'),
-('msg_event_closed',         'このイベントは終了しました',         'イベント終了メッセージ'),
-('msg_entry_user_registered',       'このイベントは予約済みです', '予約済みメッセージ');
+('msg_event_closed',         'イベントは終了しました',         'イベント終了メッセージ'),
+('msg_entry_user_registered',       'このイベントを予約しました', '予約済みメッセージ');
 
 
