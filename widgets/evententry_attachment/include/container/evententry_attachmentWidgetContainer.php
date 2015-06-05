@@ -173,14 +173,14 @@ class evententry_attachmentWidgetContainer extends BaseWidgetContainer
 		} else {
 			// 受付状態をチェック
 			if ($this->entryRow['et_status'] == 3){			// 受付停止(3)
-				$this->setGuidanceMsg($msgEntryStopped);		// 受付中断メッセージ
+				$this->setUserErrorMsg($msgEntryStopped);		// 受付中断メッセージ
 			} else if ($this->entryRow['et_status'] == 4){			// 受付終了(4)
-				$this->setGuidanceMsg($msgEntryClosed);		// 受付終了メッセージ
+				$this->setUserErrorMsg($msgEntryClosed);		// 受付終了メッセージ
 			} else if ($this->entryRow['et_start_dt'] != $this->gEnv->getInitValueOfTimestamp() && strtotime($this->_now) < strtotime($this->entryRow['et_start_dt'])){		// 受付開始前のとき
-				$this->setGuidanceMsg($msgEntryOutOfTerm);		// 受付期間外メッセージ
+				$this->setUserErrorMsg($msgEntryOutOfTerm);		// 受付期間外メッセージ
 			} else if (strtotime($this->_now) >= strtotime($this->entryRow['ee_start_dt']) ||			// イベントが開始されているとき、または、受付終了日時以降のとき
 					($this->entryRow['et_end_dt'] != $this->gEnv->getInitValueOfTimestamp() && strtotime($this->entryRow['et_end_dt']) < strtotime($this->_now))){
-				$this->setGuidanceMsg($msgEntryTermExpired);		// 受付期間終了メッセージ
+				$this->setUserErrorMsg($msgEntryTermExpired);		// 受付期間終了メッセージ
 			} else if (!empty($this->entryRow['et_max_entry']) && $userCount >= $this->entryRow['et_max_entry']){
 				$this->setUserErrorMsg($msgEntryExceedMax);		// 予約定員オーバーメッセージ
 			}
