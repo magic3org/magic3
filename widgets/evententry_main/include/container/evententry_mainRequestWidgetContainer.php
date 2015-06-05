@@ -21,6 +21,7 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 	private $db;			// DB接続オブジェクト
 	private $eventObj;			// イベント情報用取得オブジェクト
 	private $eventEntryId;		// イベント予約ID
+	private $userExists;		// ユーザが登録済みかどうか
 	private $_contentParam;		// コンテンツ変換用
 	private $showEntryCount;		// 参加者数を表示するかどうか
 	private $showEntryMember;		// 参加者を表示するかどうか(会員対象)
@@ -173,6 +174,15 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 	 */
 	function createSingle($request)
 	{
+		// ##### DB定義値取得 #####
+		$msgEntryExceedMax		= self::$_configArray[evententry_mainCommonDef::CF_MSG_ENTRY_EXCEED_MAX];		// 予約定員オーバーメッセージ
+		$msgEntryOutOfTerm		= self::$_configArray[evententry_mainCommonDef::CF_MSG_ENTRY_OUT_OF_TERM];		// 受付期間外メッセージ
+		$msgEntryTermExpired	= self::$_configArray[evententry_mainCommonDef::CF_MSG_ENTRY_TERM_EXPIRED];	// 受付期間終了メッセージ
+		$msgEntryStopped		= self::$_configArray[evententry_mainCommonDef::CF_MSG_ENTRY_STOPPED];			// 受付中断メッセージ
+		$msgEntryClosed			= self::$_configArray[evententry_mainCommonDef::CF_MSG_ENTRY_CLOSED];			// 受付終了メッセージ
+		$msgEventClosed			= self::$_configArray[evententry_mainCommonDef::CF_MSG_EVENT_CLOSED];			// イベント終了メッセージ
+		$msgEntryUserRegistered	= self::$_configArray[evententry_mainCommonDef::CF_MSG_ENTRY_USER_REGISTERED];	// 予約済みメッセージ
+		
 		// イベント情報
 		$entryId	= $this->entryRow['ee_id'];			// 記事ID
 		$title		= $this->entryRow['ee_name'];		// タイトル
@@ -182,9 +192,46 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 		// イベント予約情報
 		$eventEntryId	= $this->entryRow['et_id'];			// 予約ID
 		$entryHtml		= $this->entryRow['et_html'];		// 説明
-		// コンテンツ作成用
-		$this->eventEntryId = $eventEntryId;		// イベント予約ID
+
+		// ユーザが登録済みかどうか確認
+		$this->userExists = $this->db->isExistsEntryUser($eventEntryId, $this->_userId);
 		
+		// 登録数取得
+		$userCount = $this->db->getEntryUserCount($eventEntryId);
+		
+		// ##### 出力メッセージを設定 #####
+		// イベントの終了状況をチェック
+		if ($this->entryRow['ee_end_dt'] == $this->gEnv->getInitValueOfTimestamp()){		// // 期間終了がないとき
+			$endDt = $this->getNextDay($this->entryRow['ee_start_dt']);
+		} else {
+			if ($isAllDay){		// 終日イベントのときは時間を表示しない
+				$endDt = $this->getNextDay($this->entryRow['ee_end_dt']);
+			} else {
+				$endDt = $this->entryRow['ee_end_dt'];
+			}
+		}
+		if (strtotime($this->_now) >= strtotime($endDt)){			// イベント終了かどうか
+			// イベント終了はメッセージを単独で表示
+			$this->setUserErrorMsg($msgEventClosed);		// イベント終了メッセージ
+		} else {
+			// 受付状態をチェック
+			if ($this->entryRow['et_status'] == 3){			// 受付停止(3)
+				$this->setUserErrorMsg($msgEntryStopped);		// 受付中断メッセージ
+			} else if ($this->entryRow['et_status'] == 4){			// 受付終了(4)
+				$this->setUserErrorMsg($msgEntryClosed);		// 受付終了メッセージ
+			} else if ($this->entryRow['et_start_dt'] != $this->gEnv->getInitValueOfTimestamp() && strtotime($this->_now) < strtotime($this->entryRow['et_start_dt'])){		// 受付開始前のとき
+				$this->setUserErrorMsg($msgEntryOutOfTerm);		// 受付期間外メッセージ
+			} else if (strtotime($this->_now) >= strtotime($this->entryRow['ee_start_dt']) ||			// イベントが開始されているとき、または、受付終了日時以降のとき
+					($this->entryRow['et_end_dt'] != $this->gEnv->getInitValueOfTimestamp() && strtotime($this->entryRow['et_end_dt']) < strtotime($this->_now))){
+				$this->setUserErrorMsg($msgEntryTermExpired);		// 受付期間終了メッセージ
+			} else if (!empty($this->entryRow['et_max_entry']) && $userCount >= $this->entryRow['et_max_entry']){
+				$this->setUserErrorMsg($msgEntryExceedMax);		// 予約定員オーバーメッセージ
+			}
+			// ユーザの登録状況はワーニングメッセージに関わらず表示
+			if ($this->userExists) $this->setGuidanceMsg($msgEntryUserRegistered);		// 予約済みメッセージ
+		}
+		
+		// ##### 表示コンテンツ作成 #####
 		// 記事へのリンクを生成
 		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_EVENT_ID . '=' . $entryId, true/*リンク用*/);
 		
@@ -201,11 +248,10 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 	//	$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
-		// ##### 表示コンテンツ作成 #####
 		// 変換データ作成
 		$quotaStr = intval($this->entryRow['et_max_entry']) == 0 ? '定員なし' : $this->entryRow['et_max_entry'] . '名';		// 定員
 		// 参加者数を表示する場合は表示文字列を作成
-		$entryCountStr = ($this->showEntryCount && $this->entryRow['et_show_entry_count']) ? $this->db->getEntryUserCount($eventEntryId) . '名' : '';// 参加数
+		$entryCountStr = ($this->showEntryCount && $this->entryRow['et_show_entry_count']) ? $userCount . '名' : '';// 参加数
 		
 		// イベント開催期間
 		$dateHtml = '';
@@ -299,6 +345,12 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 			$destTag = $this->_contentParam[$typeTag];
 			break;
 		case M3_TAG_MACRO_BUTTON:		// ボタン
+			// メッセージを出力する場合はボタンを非表示にする
+			if ($this->getMsgCount() > 0){		// メッセージを出力する場合
+				$destTag = '';
+				break;
+			}
+			
 			// コンテンツマクロオプションを解析
 			$optionParams = $this->gInstance->getTextConvManager()->parseMacroOption($options);
 
@@ -317,16 +369,13 @@ class evententry_mainRequestWidgetContainer extends evententry_mainBaseWidgetCon
 					break;
 				}
 			}
-			
-			// ユーザが登録済みかどうか確認
-			$userExists = $this->db->isExistsEntryUser($this->eventEntryId, $this->_userId);
 
 			// タイトル解析
 			list($title, $title2) = explode('|', $title);
 				
 			switch ($type){
 			case 'ok':			// OKボタンのとき
-				if ($userExists){			// 登録済みの場合
+				if ($this->userExists){			// 登録済みの場合
 					$destTag = '<a class="button" href="#" onclick="return false;" style="pointer-events:none;">' . $this->convertToDispString($title2) . '</a>';
 				} else {
 					$destTag = '<a class="button" href="#" onclick="regist();">' . $this->convertToDispString($title) . '</a>';
