@@ -28,10 +28,8 @@ function reguser_login(){
 <input type="hidden" name="password" />
 <input type="hidden" name="ticket" value="{TICKET}" />
 <input type="hidden" name="forward" value="{FORWARD}" />
-<div id="reguser_input">
-<label><span class="title">アカウント</span><input type="text" name="user_account" value="{USER_ACCOUNT}" size="20" maxlength="40" {ACCOUNT_DISABLED} /></label>
-<label><span class="title">パスワード</span><input type="password" name="user_password" value="{USER_PASSWORD}" size="20" maxlength="40" {PSSWORD_DISABLED} /></label>
-<div class="bottom"><input type="button" class="button" onclick="reguser_login();" value="ログイン" {LOGIN_DISABLED} /></div>
-</div>
+<div class="reguser_control"><label><span class="reguser_title">アカウント</span><input type="text" name="user_account" value="{USER_ACCOUNT}" maxlength="40" {ACCOUNT_DISABLED} /></label></div>
+<div class="reguser_control"><label><span class="reguser_title">パスワード</span><input type="password" name="user_password" value="{USER_PASSWORD}" maxlength="40" {PSSWORD_DISABLED} /></label></div>
+<input type="button" class="button" onclick="reguser_login();" value="ログイン" {LOGIN_DISABLED} />
 </form>
 </patTemplate:tmpl>

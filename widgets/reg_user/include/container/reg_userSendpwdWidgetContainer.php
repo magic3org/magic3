@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: reg_userSendpwdWidgetContainer.php 5197 2012-09-13 04:36:13Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/reg_userBaseWidgetContainer.php');
@@ -39,8 +39,12 @@ class reg_userSendpwdWidgetContainer extends reg_userBaseWidgetContainer
 	 * @return string 						テンプレートファイル名。テンプレートライブラリを使用しない場合は空文字列「''」を返す。
 	 */
 	function _setTemplate($request, &$param)
-	{	
-		return 'sendpwd.tmpl.html';
+	{
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートのとき
+			return 'sendpwd_bootstrap.tmpl.html';
+		} else {
+			return 'sendpwd.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む

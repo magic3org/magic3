@@ -1,4 +1,22 @@
-#reguser_input {
+.reguser_control label {
+	display:block;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+.reguser_control span.reguser_title {
+	display:inline-block;
+	padding-right:6px;
+	width:120px;
+	text-align:right;
+	font-weight:bold;
+}
+.reguser_control input[type=text] {
+	width:120px;
+}
+.reguser_control input[type=password] {
+	width:120px;
+}
+/*#reguser_input {
 	margin:10px 20px;
 }
 #reguser_input label {
@@ -10,7 +28,6 @@
 }
 #reguser_input label span.title {
 	display:inline-block;
-/*	float:left;*/
 	padding-right:6px;
 	width:100px;
 	text-align:right;
@@ -47,3 +64,4 @@
 #file-uploader {
 	margin-left:106px;
 }
+*/
