@@ -21,10 +21,11 @@ function sendpwd(){
 //]]>
 </script>
 <!-- m3:ErrorMessage -->
-<form method="post" name="reguser_main" class="form">
+<form method="post" name="reguser_main" class="form form-horizontal" role="form">
+<input type="hidden" name="task" value="sendpwd" />
 <input type="hidden" name="act" />
-<div>送信先のEメール(アカウント)アドレスを入力してください。</div>
-<input type="text" name="account" maxlength="50" value="{ACCOUNT}" {ACCOUNT_DISABLED} />
-<div class="col-sm-4"><input type="button" class="button" onclick="sendpwd();" value="{BUTTON_LABEL}" {BUTTON_DISABLED} /></div>
+<p>送信先のEメールアドレス(アカウント)を入力してください。</p>
+<div class="form-group"><div class="col-sm-4"><input type="text" name="account" maxlength="50" value="{ACCOUNT}" {ACCOUNT_DISABLED} /></div></div>
+<input type="button" class="button" onclick="sendpwd();" value="{BUTTON_LABEL}" {BUTTON_DISABLED} />
 </form>
 </patTemplate:tmpl>

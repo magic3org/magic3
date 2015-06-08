@@ -63,6 +63,7 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 				
 		$act = $request->trimValueOf('act');
 		$task = $request->trimValueOf('task');
+		if ($task != self::TASK_EMAIL_LOGIN) $task = self::TASK_LOGIN;
 		$forward = $request->trimValueOf(M3_REQUEST_PARAM_FORWARD);		// 画面遷移用パラメータ
 		
 		// 画面遷移用URLをチェック
@@ -153,7 +154,7 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 			}
 			$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 		} else {
-			if ($task == 'emaillogin'){		// Eメールからのログイン画面の表示
+			if ($task == self::TASK_EMAIL_LOGIN){		// Eメールからのログイン画面の表示
 				$account = $request->trimValueOf('account');
 				$pwd = $request->trimValueOf('pwd');
 			
@@ -168,6 +169,7 @@ class reg_userLoginWidgetContainer extends reg_userBaseWidgetContainer
 		$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
 		
 		// パラメータを画面に埋め込む
+		$this->tmpl->addVar("_widget", "task",			$this->convertToDispString($task));
 		$this->tmpl->addVar("_widget", "forward", $this->convertToDispString($forward));		// 遷移先を維持
 	}
 	/**

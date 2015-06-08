@@ -34,12 +34,13 @@ function changepwd(){
 </script>
 <!-- m3:ErrorMessage -->
 <form method="post" name="reguser_main" class="form">
+<input type="hidden" name="task" value="changepwd" />
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
 <input type="hidden" name="length" />
-<div><span>{MESSAGE}</span></div>
-<div class="reguser_control"><label><span class="reguser_title">パスワード</span><input type="password" name="password1" value="{PWD_VALUE}" maxlength="12" {PWD1_DISABLED} /></label></div>
-<div class="reguser_control"><label><span class="reguser_title">パスワード(確認)</span><input type="password" name="password2" value="{PWD_VALUE}" maxlength="12" {PWD2_DISABLED} /></label></div>
+<p><span>{MESSAGE}</span></p>
+<div class="reguser_control"><label><span class="title">パスワード</span><input type="password" name="password1" value="{PWD_VALUE}" maxlength="12" {PWD1_DISABLED} /></label></div>
+<div class="reguser_control"><label><span class="title">パスワード(確認)</span><input type="password" name="password2" value="{PWD_VALUE}" maxlength="12" {PWD2_DISABLED} /></label></div>
 <input type="button" class="button" onclick="changepwd();" value="{BUTTON_LABEL}" {BUTTON_DISABLED} />
 </form>
 </patTemplate:tmpl>
