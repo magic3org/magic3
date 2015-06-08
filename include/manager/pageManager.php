@@ -5566,6 +5566,18 @@ class PageManager extends Core
 		return $widgetId;
 	}
 	/**
+	 * ページコンテンツタイプ、コンテンツタイプからウィジェットIDを取得
+	 *
+	 * @param string $pageId		ページID
+	 * @param string $contentType    コンテンツタイプ
+	 * @return string				ウィジェットID
+	 */
+	function getWidgetIdWithPageInfoByContentType($pageId, $contentType)
+	{
+		$widgetId = $this->db->getWidgetIdWithPageInfoByContentType($pageId, $contentType);
+		return $widgetId;
+	}
+	/**
 	 * 現在アクティブなメインウィジェットをウィジェット種別で取得
 	 *
 	 * @param string $widgetType	対象ウィジェットタイプ

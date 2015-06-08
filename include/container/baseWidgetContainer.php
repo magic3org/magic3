@@ -2852,6 +2852,21 @@ class BaseWidgetContainer extends Core
 		return $ret;
 	}
 	/**
+	 * 指定コンテンツタイプの利用可能なウィジェットがあるか確認
+	 *
+	 * @param string $contentType	コンテンツタイプ
+	 * @return bool					true=呼び出し可能、false=呼び出し不可
+	 */
+	function canFindWidgetByContentType($contentType)
+	{
+		$widgetId = $this->gPage->getWidgetIdWithPageInfoByContentType($this->gEnv->getCurrentPageId(), $contentType);
+		if (empty($widgetId)){
+			return false;
+		} else {
+			return true;
+		}
+	}
+	/**
 	 * 自ウィジェットまたは他ウィジェットの管理画面用のURLを作成
 	 *
 	 * @param string,array $param		URLに付加するパラメータ

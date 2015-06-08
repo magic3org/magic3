@@ -27,7 +27,10 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	const CF_AUTO_LOGIN = 'auto_login';		// 自動ログイン機能を使用するかどうか
 	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
 	const CF_USE_MULTI_BLOG			= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
-	
+	const TASK_MEMBER_REGIST = 'regist';			// 会員登録画面遷移用
+	const TASK_MEMBER_SEND_PASSWORD	= 'sendpwd';		// パスワード送信
+	const TASK_MEMBER_PROFILE			= 'profile';		// プロフィール画面(要ログイン)
+	const TASK_MEMBER_CHANGE_PASSWORD	= 'changepwd';		// パスワード変更(要ログイン)
 	/**
 	 * コンストラクタ
 	 */
@@ -114,17 +117,26 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->setAttribute('login_button', 'visibility', 'visible');
 			
 			// 会員登録機能
-			if ($this->canFindWidget(self::TARGET_WIDGET)){			// ウィジェット実行可能なとき
+			//if ($this->canFindWidget(self::TARGET_WIDGET)){			// ウィジェット実行可能なとき
+			if ($this->canFindWidgetByContentType(M3_VIEW_TYPE_MEMBER)){		// 会員機能が利用可能な場合
 				$this->tmpl->setAttribute('regmember_button', 'visibility', 'visible');		// 会員登録ボタン、パスワード再送信ボタンを表示
 				
 				// パスワード送信画面へのリンク
-				$sendpwdUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'task=sendpwd');
-				$this->tmpl->addVar("regmember_button", "sendpwd_url", $this->getUrl($sendpwdUrl, true));
-		
+				//$sendpwdUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'task=sendpwd');
+				$sendpwdUrl = $this->gPage->createContentPageUrl(
+															M3_VIEW_TYPE_MEMBER, 
+															M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_MEMBER_SEND_PASSWORD
+															);
+				$this->tmpl->addVar("regmember_button", "sendpwd_url", $this->convertUrlToHtmlEntity($this->getUrl($sendpwdUrl, true)));
+				
 				// ユーザ登録画面へのリンク
 				//$regUserUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'task=reguser');
-				$regUserUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET);
-				$this->tmpl->addVar("regmember_button", "reguser_url", $this->getUrl($regUserUrl, true));
+				//$regUserUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET);
+				$regUserUrl = $this->gPage->createContentPageUrl(
+															M3_VIEW_TYPE_MEMBER, 
+															M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_MEMBER_REGIST
+															);
+				$this->tmpl->addVar("regmember_button", "reguser_url", $this->convertUrlToHtmlEntity($this->getUrl($regUserUrl, true)));
 			}
 			
 			// 自動ログイン機能
@@ -138,16 +150,25 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->setAttribute('logout_button', 'visibility', 'visible');
 			
 			// 会員登録機能
-			if ($this->canFindWidget(self::TARGET_WIDGET)){			// ウィジェット実行可能なとき
+			//if ($this->canFindWidget(self::TARGET_WIDGET)){			// ウィジェット実行可能なとき
+			if ($this->canFindWidgetByContentType(M3_VIEW_TYPE_MEMBER)){		// 会員機能が利用可能な場合
 				$this->tmpl->setAttribute('member_button', 'visibility', 'visible');		// 会員の場合のみ表示
 				
 				// パスワード変更画面へのリンク
-				$changepwdUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'task=changepwd');
-				$this->tmpl->addVar("member_button", "changepwd_url", $this->getUrl($changepwdUrl, true));
+//				$changepwdUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'task=changepwd');
+				$changepwdUrl = $this->gPage->createContentPageUrl(
+															M3_VIEW_TYPE_MEMBER, 
+															M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_MEMBER_CHANGE_PASSWORD
+															);
+				$this->tmpl->addVar("member_button", "changepwd_url", $this->convertUrlToHtmlEntity($this->getUrl($changepwdUrl, true)));
 		
 				// プロフィール画面へのリンク
-				$profileUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'task=profile');
-				$this->tmpl->addVar("member_button", "profile_url", $this->getUrl($profileUrl, true));
+				//$profileUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'task=profile');
+				$profileUrl = $this->gPage->createContentPageUrl(
+															M3_VIEW_TYPE_MEMBER, 
+															M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_MEMBER_PROFILE
+															);
+				$this->tmpl->addVar("member_button", "profile_url", $this->convertUrlToHtmlEntity($this->getUrl($profileUrl, true)));
 			}
 			
 			// マルチブログを使用している場合はブログリストを表示

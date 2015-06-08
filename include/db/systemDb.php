@@ -1109,6 +1109,30 @@ class SystemDb extends BaseDb
 		return $retValue;
 	}
 	/**
+	 * ページコンテンツタイプ、コンテンツタイプからウィジェットIDを取得
+	 *
+	 * @param string $pageId		ページID
+	 * @param string $contentType    コンテンツタイプ
+	 * @param int    $setId			定義セットID
+	 * @param array  $row			取得レコード
+	 * @return string 				ウィジェットID(見つからないときは空文字列を返す)
+	 */
+	function getWidgetIdWithPageInfoByContentType($pageId, $contentType, $setId = 0, &$row = array())
+	{
+		$retValue = '';
+		$queryStr  = 'SELECT * FROM _page_def LEFT JOIN _widgets ON pd_widget_id = wd_id AND wd_deleted = false ';
+		$queryStr .=   'LEFT JOIN _page_info ON pd_id = pn_id AND pd_sub_id = pn_sub_id AND pn_deleted = false AND pn_language_id = \'\' ';
+		$queryStr .=   'WHERE pd_visible = true ';		// ウィジェットを表示
+		$queryStr .=     'AND pd_id = ? ';
+		$queryStr .=     'AND pd_set_id = ? ';
+		$queryStr .=     'AND wd_content_type = ? ';
+		$queryStr .=     'AND pn_content_type = ? ';
+		$queryStr .=   'ORDER BY pd_serial';
+		$ret = $this->selectRecord($queryStr, array($pageId, $setId, $contentType, $contentType), $row);
+		if ($ret) $retValue = $row['wd_id'];
+		return $retValue;
+	}
+	/**
 	 * ウィジェットタイプからメインウィジェットのウィジェットIDを取得
 	 *
 	 * アクセスポイントは考慮しなくてもよい?
