@@ -28,15 +28,15 @@ function evententry_login(){
 <input type="hidden" name="act" />
 <input type="hidden" name="password" />
 <input type="hidden" name="forward" value="{FORWARD}" />
-イベント予約にはログインが必要です。
+<p>イベント予約にはログインが必要です。</p>
 <patTemplate:tmpl name="regmember_area">
 <h2>初めての方</h2>
-<div>会員登録を行って、{WORD_ACCOUNT}を登録してください。</div>
+<p>会員登録を行って、{WORD_ACCOUNT}を登録してください。</p>
 <input type="button" class="button" onclick="location.href='{URL_REGMEMBER}'" value="会員登録" />
 </patTemplate:tmpl>
 <h2>登録済みの{WORD_ACCOUNT}をお持ちの方</h2>
-<div>{WORD_ACCOUNT}とパスワードを入力して、ログインしてください。</div>
-<div>{MESSAGE}</div>
+<p>{WORD_ACCOUNT}とパスワードを入力して、ログインしてください。</p>
+<p>{MESSAGE}</p>
 <div class="evententry_control"><label><span class="evententry_title">{WORD_ACCOUNT}</span><input type="text" name="evententry_account" value="{ACCOUNT}" maxlength="40" /></label></div>
 <div class="evententry_control"><label><span class="evententry_title">パスワード</span><input type="password" name="evententry_password" value="{PASSWORD}" maxlength="40" /></label></div>
 <input type="button" class="button" onclick="evententry_login();" value="ログイン" />
