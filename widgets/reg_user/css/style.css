@@ -10,6 +10,12 @@
 	text-align:right;
 	font-weight:bold;
 }
+.reguser_control span.title.top {
+	vertical-align:top;
+}
+.reguser_control img.avatar {
+	margin:0;
+}
 .reguser_control input[type=text] {
 	width:120px;
 }

@@ -58,8 +58,12 @@ class reg_userProfileWidgetContainer extends reg_userBaseWidgetContainer
 	 * @return string 						テンプレートファイル名。テンプレートライブラリを使用しない場合は空文字列「''」を返す。
 	 */
 	function _setTemplate($request, &$param)
-	{	
-		return 'profile.tmpl.html';
+	{
+		if ($this->_renderType == M3_RENDER_BOOTSTRAP){			// Bootstrap型テンプレートのとき
+			return 'profile_bootstrap.tmpl.html';
+		} else {
+			return 'profile.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -256,7 +260,7 @@ class reg_userProfileWidgetContainer extends reg_userBaseWidgetContainer
 			$avatarUrl = $this->gEnv->getResourceUrl() . self::AVATAR_DIR . $avatar;
 		}*/
 		$iconTitle = 'アバター画像';
-		$avatarTag = '<img id="avatar" src="' . $this->getUrl($avatarUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$avatarTag = '<img id="avatar" class="avatar" src="' . $this->getUrl($avatarUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// 入力値を戻す
 		$this->tmpl->addVar("_widget", "account", $this->convertToDispString($account));
