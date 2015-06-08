@@ -37,43 +37,41 @@ $(function(){
 //]]>
 </script>
 <!-- m3:ErrorMessage -->
-<form method="post" name="reguser_main" class="form">
+<form method="post" name="reguser_main" class="form form-horizontal" role="form">
 <input type="hidden" name="task" value="profile" />
 <input type="hidden" name="act" />
-<div class="reguser_control"><label><span class="title">アカウント</span>{ACCOUNT}</label></div>
-<div class="reguser_control"><label><span class="title">名前</span><input type="text" name="item_name" value="{NAME}" maxlength="20" {NAME_DISABLED} /><span class="required">*</span></label></div>
-<div class="reguser_control"><label><span class="title">性別</span>
-<select id="item_gender" name="item_gender" {GENDER_DISABLED}>
+<div class="form-group"><label class="col-sm-3 control-label"><span class="title">アカウント</span></label><div class="col-sm-4 form-control-static">{ACCOUNT}</div></div>
+<div class="form-group"><label class="col-sm-3 control-label" for="item_name" ><span class="title">名前</span></label><div class="col-sm-4"><input type="text" id="item_name" name="item_name" value="{NAME}" maxlength="20" {NAME_DISABLED} /></div><p class="col-sm-2 form-control-static"><span class="label label-danger required">必須</span></p></div>
+<div class="form-group"><label class="col-sm-3 control-label"><span class="title">性別</span></label>
+<div class="col-sm-2"><select id="item_gender" name="item_gender" class="form-control" {GENDER_DISABLED}>
 <option value="">&nbsp;</option>
 <patTemplate:tmpl name="gender_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>{GENDER_HIDDEN}
-</label></div>
-<div class="reguser_control"><label><span class="title">生年月日</span>
-<select id="item_year" name="item_year" {YEAR_DISABLED}>
+</select></div>
+</div>
+<div class="form-group"><label class="col-sm-3 control-label"><span class="title">生年月日</span></label>
+<div class="col-sm-2"><select id="item_year" name="item_year" class="form-control" {YEAR_DISABLED}>
 <option value="">&nbsp;</option>
 <patTemplate:tmpl name="year_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>{YEAR_HIDDEN}年&nbsp;
-<select id="item_month" name="item_month" {MONTH_DISABLED}>
+</select></div><div class="col-sm-1 form-control-static" style="width:30px;">年</div>
+<div class="col-sm-2"><select id="item_month" name="item_month" class="form-control" {MONTH_DISABLED}>
 <option value="">&nbsp;</option>
 <patTemplate:tmpl name="month_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>{MONTH_HIDDEN}月&nbsp;
-<select id="item_day" name="item_day" {DAY_DISABLED}>
+</select></div><div class="col-sm-1 form-control-static" style="width:30px;">月</div>
+<div class="col-sm-2"><select id="item_day" name="item_day" class="form-control" {DAY_DISABLED}>
 <option value="">&nbsp;</option>
 <patTemplate:tmpl name="day_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>{DAY_HIDDEN}日
-</label>
+</select></div><div class="col-sm-1 form-control-static" style="width:30px;">日</div>
 </div>
-<div class="reguser_control"><label><span class="title top">アバター</span>{IMAGE}</label></div>
-<div id="file-uploader"></div>
-<div><small><span class="required">*は必須入力項目です。</span></small></div>
+<div class="form-group"><label class="col-sm-3 control-label"><span class="title top">アバター</span></label><div class="col-sm-4">{IMAGE}</div></div>
+<div class="form-group"><div class="col-sm-3"> </div><div class="col-sm-4"><div id="file-uploader"></div></div></div>
 <input type="button" class="button" onclick="regist();" value="更新する" />
 </form>
 </patTemplate:tmpl>

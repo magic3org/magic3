@@ -48,7 +48,7 @@ $(function(){
 <patTemplate:tmpl name="gender_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>{GENDER_HIDDEN}
+</select>
 </label></div>
 <div class="reguser_control"><label><span class="title">生年月日</span>
 <select id="item_year" name="item_year" {YEAR_DISABLED}>
@@ -56,23 +56,23 @@ $(function(){
 <patTemplate:tmpl name="year_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>{YEAR_HIDDEN}年&nbsp;
+</select>年&nbsp;
 <select id="item_month" name="item_month" {MONTH_DISABLED}>
 <option value="">&nbsp;</option>
 <patTemplate:tmpl name="month_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>{MONTH_HIDDEN}月&nbsp;
+</select>月&nbsp;
 <select id="item_day" name="item_day" {DAY_DISABLED}>
 <option value="">&nbsp;</option>
 <patTemplate:tmpl name="day_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
-</select>{DAY_HIDDEN}日
+</select>日
 </label>
 </div>
 <div class="reguser_control"><label><span class="title top">アバター</span>{IMAGE}</label></div>
-<div id="file-uploader"></div>
+<div class="reguser_control"><div id="file-uploader" class="file-uploader"></div></div>
 <div><small><span class="required">*は必須入力項目です。</span></small></div>
 <input type="button" class="button" onclick="regist();" value="更新する" />
 </form>

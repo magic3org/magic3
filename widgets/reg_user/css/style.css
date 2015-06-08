@@ -13,6 +13,9 @@
 .reguser_control span.title.top {
 	vertical-align:top;
 }
+.reguser_control .file-uploader {
+	margin-left:120px;
+}
 .reguser_control img.avatar {
 	margin:0;
 }
@@ -22,52 +25,3 @@
 .reguser_control input[type=password] {
 	width:120px;
 }
-/*#reguser_input {
-	margin:10px 20px;
-}
-#reguser_input label {
-	display:block;
-	margin-bottom:5px;
-}
-#reguser_input .field {
-	margin-bottom:5px;
-}
-#reguser_input label span.title {
-	display:inline-block;
-	padding-right:6px;
-	width:100px;
-	text-align:right;
-	font-weight:bold;
-}
-#reguser_input label span.required {
-	margin-left:3px;
-	color:red;
-}
-#reguser_input div.msg {
-	margin:10px;
-}
-#reguser_input div span.required_msg {
-	margin-left:106px;
-	color:red;
-}
-#reguser_input input[type=button] {
-	margin-top:10px;
-	margin-left:106px;
-}
-#reguser_input input[type=text] {
-	width:120px;
-}
-#reguser_input input[type=password] {
-	width:120px;
-}
-#reguser_input .bottom {
-	margin-top:20px;
-}
-#reguser_input img {
-	margin:0;
-	padding:0;
-}
-#file-uploader {
-	margin-left:106px;
-}
-*/
