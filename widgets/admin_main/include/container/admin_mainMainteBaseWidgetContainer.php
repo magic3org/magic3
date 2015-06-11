@@ -27,6 +27,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_MENUID			= 'menuid';		// メニューID
 	const TASK_MENUID_DETAIL	= 'menuid_detail';		// メニューID
 	const TASK_INITSYSTEM		= 'initsystem';		// DBメンテナンス
+	const TASK_INSTALLDATA		= 'installdata';	// データインストール
 	const TASK_DBBACKUP			= 'dbbackup';		// DBバックアップ
 	const TASK_DBCONDITION		= 'dbcondition';	// DB状況
 	const TASK_INITWIZARD		= 'initwizard';		// システム初期化ウィザード
@@ -102,7 +103,11 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				break;
 			case self::TASK_INITSYSTEM:		// DBメンテナンス
 				$titles[] = 'DB管理';
-				$titles[] = 'データ初期化';
+				$titles[] = 'システム再インストール';
+				break;
+			case self::TASK_INSTALLDATA:	// データインストール
+				$titles[] = 'DB管理';
+				$titles[] = 'データインストール';
 				break;
 			case self::TASK_DBBACKUP:		// DBバックアップ
 				$titles[] = 'DB管理';
@@ -203,18 +208,18 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> (
-														$task == self::TASK_INITSYSTEM ||		// DBメンテナンス
+														$task == self::TASK_INSTALLDATA ||	// データインストール
 														$task == self::TASK_DBBACKUP ||			// DBバックアップ
 														$task == self::TASK_DBCONDITION			// DB状況
 													),
 									'submenu'	=> array(
 										(Object)array(
-											'name'		=> 'データ初期化',
-											'task'		=> self::TASK_INITSYSTEM,
+											'name'		=> 'データインストール',
+											'task'		=> self::TASK_INSTALLDATA,
 											'url'		=> '',
 											'tagid'		=> '',
 											'active'	=> (
-																$task == self::TASK_INITSYSTEM		// DBメンテナンス
+																$task == self::TASK_INSTALLDATA		// データインストール
 															)
 										),
 										(Object)array(
@@ -245,7 +250,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'tagid'		=> '',
 									'active'	=> (
 														$task == self::TASK_INITWIZARD ||		// システム初期化ウィザード
-														$task == self::TASK_EDITMENU			// 管理メニュー編集
+														$task == self::TASK_EDITMENU ||			// 管理メニュー編集
+														$task == self::TASK_INITSYSTEM			// システム再インストール
 													),
 									'submenu'	=> array(
 										(Object)array(
@@ -265,7 +271,16 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 											'active'	=> (
 																$task == self::TASK_EDITMENU		// 管理メニュー編集
 															)
-										)
+										),
+										(Object)array(
+											'name'		=> 'システム再インストール',
+											'task'		=> self::TASK_INITSYSTEM,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_INITSYSTEM		// システム再インストール
+															)
+										),
 									)
 								)
 							);

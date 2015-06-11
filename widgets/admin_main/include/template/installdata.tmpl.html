@@ -1,0 +1,76 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function installSampleData(){
+	if (!window.confirm('サンプルデータをインストールしますか?')) return false;
+	
+	// 処理中ダイアログ表示
+	m3ShowProcessModal();
+	
+	document.main.act.value='installsampledata';
+	document.main.submit();
+	return true;
+}
+function selectFile(){
+	document.main.act.value = 'selectfile';
+	document.main.submit();
+	return true;
+}
+function showDevelop(){
+	document.main.act.value = 'develop';
+	document.main.submit();
+	return true;
+}
+function selectConnectOfficial(){
+	document.main.submit();
+	return true;
+}
+$(function(){
+	// メニュー編集機能キー登録
+	$(document).keyup(function(e){
+		if (e.shiftKey === true && e.which === 27){		// Shift+ESCキー
+			showDevelop();	// 開発用機能表示
+		} else if (e.shiftKey === true && e.which === 123){		// Shift+「F12」キー
+			showDevelop();	// 開発用機能表示
+		}
+	});
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main" class="form form-inline">
+<input type="hidden" name="act" />
+<input type="hidden" name="develop" value="{DEVELOP}" />
+<div class="panel panel-info" style="width:500px;margin:20px auto;" >
+    <div class="panel-heading">サンプルデータ</div>
+    <ul class="list-group">
+        <li class="list-group-item">
+		<div class="form-group">
+	    <select name="sample_sql" onChange="selectFile();" class="form-control" style="width:200px;">
+	        <patTemplate:tmpl name="sample__sql_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+		<div class="form-group"><label class="checkbox-inline"><input type="checkbox" name="item_connect_official" onchange="selectConnectOfficial();" {CONNECT_OFFICIAL} />公式サイトへ接続</label></div>
+		</li>
+		<li class="list-group-item">{CONTENT}</li>
+    </ul>
+    <div class="panel-footer"><input type="button" class="button" onclick="installSampleData();" value="インストール" /></div>
+</div>
+</form>
+</div>
+</patTemplate:tmpl>
