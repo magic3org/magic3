@@ -244,6 +244,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'widgetlist':	// ウィジェットリスト
 						case 'templist':	// テンプレートリスト
 						case 'pagedef':		// 画面定義
+						case 'help':	// ヘルプ画面
 						case 'initsystem':	// システム初期化
 						case 'installdata':	// データインストール
 						case 'dbbackup':	// DBバックアップ
