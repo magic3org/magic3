@@ -87,8 +87,14 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
+		// 現在の言語に対応したテキストを取得
+		$name = $this->getCurrentLangString($fetchedRow['ni_name']);
+		
+		// リンクを付加
+		$itemTag = $this->gDesign->createAdminPageLink($this->convertToDispString($name), $fetchedRow['ni_url']);
+		
 		$row = array(
-			'item' => $index
+			'item' => $itemTag
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
