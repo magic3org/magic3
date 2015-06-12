@@ -18,3 +18,13 @@
 -- 最後に実行されるスクリプトファイル
 -- --------------------------------------------------------------------------------------------------
 
+DELETE FROM _nav_item WHERE ni_nav_id = 'helplink';
+INSERT INTO _nav_item
+(ni_nav_id,  ni_id, ni_index, ni_url,        ni_name) VALUES
+('helplink', 1,     1,        'task=configsite',       'サイト運用に必要な最小限の設定を行うには？'),
+('helplink', 2,     2,        'task=initwizard_site',       '使用する機能を選択するには？'),
+('helplink', 3,     3,        'task=initwizard_site',       'デフォルトページを変更するには？'),
+('helplink', 4,     4,        'task=initwizard_site',       'メニューを階層化して定義するには？'),
+('helplink', 5,     5,        'task=installdata',       'サンプルデータをインストールするには？'),
+('helplink', 6,     6,        'task=templist',       'テンプレートを追加するには？');
+

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -23,6 +23,7 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 	protected $_taskTitleArray;		// 管理下のタスク名
 	protected $_prevTask;
 	protected $_nextTask;
+	const BREADCRUMB_TITLE = 'システム初期化ウィザード';		// 画面タイトル名(パンくずリスト)
 	const TASK_START		= 'initwizard';
 	const TASK_SITE			= 'initwizard_site';		// サイト情報
 	const TASK_ADMIN		= 'initwizard_admin';		// システム管理者
@@ -123,6 +124,9 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 			$this->tmpl->setAttribute('show_next_button', 'visibility', 'visible');
 			$this->tmpl->addVar('show_next_button', 'task', '');
 		}
+		
+		// パンくずリストの作成
+		$this->gPage->setAdminBreadcrumbDef(array(self::BREADCRUMB_TITLE));
 	}
 	/**
 	 * 次のタスクがある場合は画面遷移

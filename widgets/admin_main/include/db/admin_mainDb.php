@@ -1915,6 +1915,23 @@ class admin_mainDb extends BaseDb
 	 *
 	 * @param string $navId			ナビゲーションバー識別ID
 	 * @param string $parentId		親項目ID
+	 * @param function	$callback	コールバック関数
+	 * @return 			なし
+	 */
+	function getNavItemsByLoop($navId, $parentId, $callback)
+	{
+		$queryStr  = 'SELECT * FROM _nav_item ';
+		$queryStr .=   'WHERE ni_nav_id = ? ';
+		$queryStr .=     'AND ni_parent_id = ? ';
+		$queryStr .=     'AND ni_visible = true ';
+		$queryStr .=   'ORDER BY ni_index';
+		$this->selectLoop($queryStr, array($navId, $parentId), $callback);
+	}
+	/**
+	 * ナビゲーションバー項目を取得
+	 *
+	 * @param string $navId			ナビゲーションバー識別ID
+	 * @param string $parentId		親項目ID
 	 * @param array  $rows			取得レコード
 	 * @return						true=取得、false=取得せず
 	 */

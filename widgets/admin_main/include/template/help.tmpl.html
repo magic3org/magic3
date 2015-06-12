@@ -17,13 +17,11 @@
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
-<form method="post" name="main">
-<input type="hidden" name="act" />
-<div class="panel panel-info" style="width:500px;margin:20px auto;" >
-    <div class="panel-heading">ディスク使用量</div>
-    <div class="panel-body"><table class="table"><tr><td>アクセスログ(_access_log)</td><td>{SIZE_ACCESS_LOG}</td></tr>
-	</table></div>
-</div>
-</form>
+<h3>FAQ</h3>
+<ul>
+<patTemplate:tmpl name="itemlist">
+<li>{ITEM}</li>
+</patTemplate:tmpl>
+</ul>
 </div>
 </patTemplate:tmpl>
