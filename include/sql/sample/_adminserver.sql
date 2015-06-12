@@ -31,7 +31,8 @@ UPDATE _page_id SET pg_active = false WHERE pg_id = 's_index' AND pg_type = 0;
 UPDATE _page_id SET pg_active = false WHERE pg_id = 'm_index' AND pg_type = 0;
 
 -- 管理画面メニューデータ
-DELETE FROM _nav_item;
+DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';
+DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu.en';
 INSERT INTO _nav_item
 (ni_id, ni_parent_id, ni_index, ni_nav_id,    ni_task_id,        ni_view_control, ni_param, ni_name,                ni_help_title,          ni_help_body) VALUES
 (200,   0,            2,        'admin_menu', '_adminserver',    0,               '',       'サーバ運用',         '',                     ''),

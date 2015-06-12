@@ -28,7 +28,8 @@ INSERT INTO _page_def
 ('admin_index', 'content',      'main',         1,        'admin_main',   0,            true,       false, false);
 
 -- 管理画面メニューデータ
-DELETE FROM _nav_item;
+DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';
+DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu.en';
 INSERT INTO _nav_item
 (ni_id, ni_parent_id, ni_index, ni_nav_id,    ni_task_id,        ni_view_control, ni_param, ni_name,                ni_help_title,          ni_help_body) VALUES
 (100,   0,            0,        'admin_menu', '_page',           0,               '',       '画面管理',             '画面管理',             'Webサイトのデザインや機能を管理します。'),

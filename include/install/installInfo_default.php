@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: installInfo_default.php 3640 2010-09-27 09:55:04Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 class InstallInfo
@@ -42,9 +42,14 @@ class InstallInfo
 													'name'			=> 'システム標準データ登録',				// 表示名
 													'description'	=> 'システムを通常使用するのに必要なデータの登録'));	// 説明
 													
-		$this->updateTableScripts = array(	array(	'filename' 		=> 'update_widgets.sql',					// ファイル名
+		$this->updateTableScripts = array(
+											array(	'filename' 		=> 'update_widgets.sql',					// ファイル名
 													'name'			=> 'ウィジェット情報更新',				// 表示名
-													'description'	=> 'ウィジェットの更新に合わせてウィジェット情報を更新'));	// 説明
+													'description'	=> 'ウィジェットの更新に合わせてウィジェット情報を更新'),
+											array(	'filename' 		=> 'update_others.sql',					// ファイル名
+													'name'			=> 'その他テーブル更新',				// 表示名
+													'description'	=> '常に最新にする必要があるテーブルを更新')
+									);	// 説明
 	}
 	/**
 	 * テーブル作成スクリプトを取得
