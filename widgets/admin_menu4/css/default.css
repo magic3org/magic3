@@ -32,11 +32,16 @@ img.avatar {
 .dropdown-menu-large > li > ul > li {
 	width:180px;
 }
-.dropdown-menu-large a.help {
+/*.dropdown-menu-large a.help {
 	margin-bottom:-50px;
 	margin-right:15px;
+}*/
+.dropdown-menu-large a.help {
+	position: absolute;
+	right:20px;
+	bottom:10px;
+	font-size:150%;
 }
-
 ul.pos-right {
 	float:right;
 }
