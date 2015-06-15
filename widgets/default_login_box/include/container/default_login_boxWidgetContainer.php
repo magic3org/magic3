@@ -96,10 +96,9 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 				// ログイン状態を削除
 				$this->gAccess->userLogout();
 				
-//				$this->tmpl->addVar("_widget", "account", $account);		// アカウント
-//				$this->tmpl->addVar("_widget", "message", 'ログインに失敗しました');		// メッセージ
-				$this->tmpl->setAttribute('login_status', 'visibility', 'visible');		// ログイン状況
-				$this->tmpl->addVar("login_status", "message", 'ログインに失敗しました');
+//				$this->tmpl->setAttribute('login_status', 'visibility', 'visible');		// ログイン状況
+//				$this->tmpl->addVar("login_status", "message", 'ログインに失敗しました');
+				$this->setUserErrorMsg('ログインに失敗しました');
 			}
 		} else if ($act == 'loginbox_logout' && $this->checkFormId()){			// ログアウトのとき
 			$this->gAccess->userLogout();
