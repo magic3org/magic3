@@ -97,8 +97,8 @@ class WikiConfig
 		// ユーザ認証方法
 		$value = self::$db->getConfig(self::CONFIG_KEY_AUTH_TYPE);// ユーザの認証方法
 		if (empty($value)){
-			//self::$authType = self::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限
-			self::$authType = self::AUTH_TYPE_PASSWORD;		// 認証タイプ(共通パスワード)
+			self::$authType = self::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限
+			//self::$authType = self::AUTH_TYPE_PASSWORD;		// 認証タイプ(共通パスワード)
 		} else {
 			self::$authType = $value;
 		}

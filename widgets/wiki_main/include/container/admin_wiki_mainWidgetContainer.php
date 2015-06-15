@@ -14,24 +14,13 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/wiki_mainCommonDef.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
 
 class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 {
-	private $langId;
 	private $authType;		// 認証方法
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
-	const DEFAULT_PAGE = 'FrontPage';		// デフォルトのページ
-	const AUTH_TYPE_ADMIN		= 'admin';		// 認証タイプ(管理権限ユーザ)
-	const AUTH_TYPE_LOGIN_USER	= 'loginuser';		// 認証タイプ(ログインユーザ)
-	const AUTH_TYPE_PASSWORD	= 'password';		// 認証タイプ(共通パスワード)
-	const CONFIG_KEY_AUTH_TYPE = 'auth_type';			// 認証タイプ(admin=管理権限ユーザ、loginuser=ログインユーザ、password=共通パスワード)
-	const CONFIG_KEY_SHOW_PAGE_TITLE		= 'show_page_title';		// タイトル表示
-	const CONFIG_KEY_SHOW_PAGE_RELATED		= 'show_page_related';// 関連ページ
-	const CONFIG_KEY_SHOW_PAGE_ATTACH_FILES	= 'show_page_attach_files';// 添付ファイル
-	const CONFIG_KEY_SHOW_PAGE_LAST_MODIFIED	= 'show_page_last_modified';// 最終更新
-	const CONFIG_KEY_PASSWORD = 'password';		// 共通パスワード
-	const CONFIG_KEY_DEFAULT_PAGE = 'default_page';		// デフォルトページ
 	
 	/**
 	 * コンストラクタ
@@ -56,7 +45,6 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
 		return 'admin.tmpl.html';
 	}
 	/**
@@ -96,16 +84,16 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 	function createDetail($request)
 	{
 		$userId			= $this->gEnv->getCurrentUserId();
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
 
 		$this->authType	= $request->trimValueOf('item_auth');				// 認証方法
 		$password		= $request->trimValueOf('password');				// パスワード
 		$defaultPage	= $request->trimValueOf('item_default_page');		// デフォルトページ名
-		$showTitle = ($request->trimValueOf('item_showtitle') == 'on') ? 1 : 0;		// タイトルを表示するかどうか
-		$showPageRelated = ($request->trimValueOf('item_showpagerelated') == 'on') ? 1 : 0;		// 関連ページを表示するかどうか
-		$showPageAttachFiles = ($request->trimValueOf('item_showpageattachfiles') == 'on') ? 1 : 0;		// 添付ファイルを表示するかどうか
-		$showPageLastModified = ($request->trimValueOf('item_showlastmodified') == 'on') ? 1 : 0;		// 最終更新を表示するかどうか
+		$showTitle			= $request->trimCheckedValueOf('item_showtitle');		// タイトルを表示するかどうか
+		$showPageRelated	= $request->trimCheckedValueOf('item_showpagerelated');		// 関連ページを表示するかどうか
+		$showPageAttachFiles	= $request->trimCheckedValueOf('item_showpageattachfiles');		// 添付ファイルを表示するかどうか
+		$showPageLastModified	= $request->trimCheckedValueOf('item_showlastmodified');		// 最終更新を表示するかどうか
+		$showToolbar			= $request->trimCheckedValueOf('item_show_toolbar');		// ツールバーを表示するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -117,23 +105,25 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				$ret = true;		// エラー値リセット
 				// 認証タイプ
-				if ($ret) $ret = $this->db->updateConfig(self::CONFIG_KEY_AUTH_TYPE, $this->authType);
+				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_AUTH_TYPE, $this->authType);
 	
 				// パスワードが設定されているときは更新
-				if (!empty($password)) $ret = $this->db->updateConfig(self::CONFIG_KEY_PASSWORD, $password);
+				if (!empty($password)) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_PASSWORD, $password);
 
 				// デフォルトページ
-				if ($ret) $ret = $this->db->updateConfig(self::CONFIG_KEY_DEFAULT_PAGE, $defaultPage);
+				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_DEFAULT_PAGE, $defaultPage);
 				
 				// ##### ページ構成 #####
 				// タイトルの表示状態
-				if ($ret) $ret = $this->db->updateConfig(self::CONFIG_KEY_SHOW_PAGE_TITLE, $showTitle);
+				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE, $showTitle);
 				// 関連ページを表示
-				if ($ret) $ret = $this->db->updateConfig(self::CONFIG_KEY_SHOW_PAGE_RELATED, $showPageRelated);
+				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED, $showPageRelated);
 				// 添付ファイルを表示
-				if ($ret) $ret = $this->db->updateConfig(self::CONFIG_KEY_SHOW_PAGE_ATTACH_FILES, $showPageAttachFiles);
+				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES, $showPageAttachFiles);
 				// 最終更新を表示
-				if ($ret) $ret = $this->db->updateConfig(self::CONFIG_KEY_SHOW_PAGE_LAST_MODIFIED, $showPageLastModified);
+				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED, $showPageLastModified);
+				
+				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR, $showToolbar);// ツールバーを表示するかどうか
 				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -145,43 +135,20 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 			}
 		}
 		if ($replaceNew){			// データ再取得
-			$value = $this->db->getConfig(self::CONFIG_KEY_AUTH_TYPE);// 認証方法
-			if ($value == ''){
-				$this->authType = self::AUTH_TYPE_PASSWORD;		// 認証タイプ(共通パスワード)
-			} else {
-				$this->authType = $value;
-			}
-			$value = $this->db->getConfig(self::CONFIG_KEY_DEFAULT_PAGE);// デフォルトページ
-			if (empty($value)){
-				$defaultPage = self::DEFAULT_PAGE;
-			} else {
-				$defaultPage = $value;
-			}
-			// ##### ページ構成 #####
-			$value = $this->db->getConfig(self::CONFIG_KEY_SHOW_PAGE_TITLE);// タイトル表示状態
-			if ($value == ''){
-				$showTitle = '1';		// 表示
-			} else {
-				$showTitle = $value;
-			}
-			$value = $this->db->getConfig(self::CONFIG_KEY_SHOW_PAGE_RELATED);// 関連ページを表示
-			if ($value == ''){
-				$showPageRelated = '1';		// 表示
-			} else {
-				$showPageRelated = $value;
-			}
-			$value = $this->db->getConfig(self::CONFIG_KEY_SHOW_PAGE_ATTACH_FILES);// 添付ファイルを表示
-			if ($value == ''){
-				$showPageAttachFiles = '1';		// 表示
-			} else {
-				$showPageAttachFiles = $value;
-			}
-			$value = $this->db->getConfig(self::CONFIG_KEY_SHOW_PAGE_LAST_MODIFIED);// 最終更新を表示
-			if ($value == ''){
-				$showPageLastModified = '1';		// 表示
-			} else {
-				$showPageLastModified = $value;
-			}
+			$this->authType = $this->db->getConfig(wiki_mainCommonDef::CF_AUTH_TYPE);// 認証方法
+			if (empty($this->authType)) $this->authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// 認証タイプ(管理権限ユーザ)
+			$defaultPage = $this->db->getConfig(wiki_mainCommonDef::CF_DEFAULT_PAGE);// デフォルトページ
+			if (empty($defaultPage)) $defaultPage = wiki_mainCommonDef::DEFAULT_DEFAULT_PAGE;	// デフォルトページ
+			$showTitle = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE);// タイトル表示状態
+			if ($showTitle == '') $showTitle = '1';		// タイトル表示状態
+			$showPageRelated = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED);// 関連ページを表示
+			if ($showPageRelated == '') $showPageRelated = '1';		// 関連ページを表示
+			$showPageAttachFiles = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES);// 添付ファイルを表示
+			if ($showPageAttachFiles == '') $showPageAttachFiles = '1';		// 添付ファイルを表示
+			$showPageLastModified = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED);// 最終更新を表示
+			if ($showPageLastModified == '') $showPageLastModified = '1';		// 最終更新を表示
+			$showToolbar = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR);// ツールバーを表示するかどうか
+			if ($showToolbar == '') $showToolbar = '1';		// ツールバーを表示するかどうか
 		}
 		
 		// 認証方法メニュー作成
@@ -192,19 +159,11 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "default_page", $defaultPage);		// デフォルトページ
-		$checked = '';
-		if ($showTitle) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "show_title", $checked);	// タイトルを表示するかどうか
-		
-		$checked = '';
-		if ($showPageRelated) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "show_page_related", $checked);	// 関連ページを表示するかどうか
-		$checked = '';
-		if ($showPageAttachFiles) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "show_page_attach_files", $checked);	// 添付ファイルを表示するかどうか
-		$checked = '';
-		if ($showPageLastModified) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "show_last_modified", $checked);	// 最終更新を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_title", $this->convertToCheckedString($showTitle));	// タイトルを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_page_related", $this->convertToCheckedString($showPageRelated));	// 関連ページを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_page_attach_files", $this->convertToCheckedString($showPageAttachFiles));	// 添付ファイルを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_last_modified", $this->convertToCheckedString($showPageLastModified));	// 最終更新を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_toolbar", $this->convertToCheckedString($showToolbar));	// ツールバーを表示するかどうか
 		
 		// アップロードディレクトリ
 		//$uploadDir = $this->gEnv->getCurrentWidgetRootPath() . '/upload';		// 暫定
@@ -226,9 +185,9 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createAuthMenu()
 	{
-		$authMenu = array(	array(	'name' => '管理権限ユーザ',	'value' => 'admin'),
-							array(	'name' => 'ログインユーザ', 'value' => 'loginuser'),
-							array(	'name' => '共通パスワード', 'value' => 'password'));
+		$authMenu = array(	array(	'name' => '管理権限ユーザ',	'value' => wiki_mainCommonDef::AUTH_TYPE_ADMIN),
+							array(	'name' => 'ログインユーザ', 'value' => wiki_mainCommonDef::AUTH_TYPE_LOGIN_USER),
+							array(	'name' => '共通パスワード', 'value' => wiki_mainCommonDef::AUTH_TYPE_PASSWORD));
 		for ($i = 0; $i < count($authMenu); $i++){
 			$name = $authMenu[$i]['name'];// 定義名
 			$value = $authMenu[$i]['value'];// 設定値

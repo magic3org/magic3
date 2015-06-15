@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/wiki_mainCommonDef.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
 // Magic3追加ファイル
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');

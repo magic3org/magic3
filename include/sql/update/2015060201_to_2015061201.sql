@@ -25,4 +25,16 @@ ALTER TABLE _nav_item ADD PRIMARY KEY (ni_nav_id, ni_id);                       
 ALTER TABLE _nav_item MODIFY ni_name              TEXT                                         NOT NULL;      -- 名前
 ALTER TABLE _nav_item ADD ni_url               TEXT                                         NOT NULL;      -- リンク先URL
 
+-- Wiki設定マスター
+DELETE FROM wiki_config;
+INSERT INTO wiki_config
+(wg_id,                     wg_value,    wg_name) VALUES
+('password',                '',          '共通パスワード'),
+('default_page',            'FrontPage', 'デフォルトページ'),
+('auth_type',               'admin',     '認証タイプ'),
+('show_page_title',         '1',         'タイトル表示するかどうか'),
+('show_page_related',       '1',         '関連ページを表示するかどうか'),
+('show_page_attach_files',  '1',         '添付ファイルを表示するかどうか'),
+('show_page_last_modified', '1',         '最終更新を表示するかどうか'),
+('show_toolbar',            '1',         'ツールバーを表示するかどうか');
 

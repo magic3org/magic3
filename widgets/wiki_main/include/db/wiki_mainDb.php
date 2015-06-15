@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: wiki_mainDb.php 4953 2012-06-09 10:09:55Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -539,6 +539,19 @@ class wiki_mainDb extends BaseDb
 		// トランザクション終了
 		$ret = $this->endTransaction();
 		return $ret;
+	}
+	/**
+	 * wiki定義値を取得をすべて取得
+	 *
+	 * @param array  $rows			レコード
+	 * @return bool					1行以上取得 = true, 取得なし= false
+	 */
+	function getAllConfig(&$rows)
+	{
+		$queryStr  = 'SELECT * FROM wiki_config ';
+		$queryStr .=   'ORDER BY wg_index';
+		$retValue = $this->selectRecords($queryStr, array(), $rows);
+		return $retValue;
 	}
 	/**
 	 * 設定値が存在するかチェック
