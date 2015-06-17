@@ -29,7 +29,7 @@ class wiki_mainCommonDef
 	const CF_SHOW_PAGE_RELATED			= 'show_page_related';			// 関連ページ
 	const CF_SHOW_PAGE_ATTACH_FILES		= 'show_page_attach_files';		// 添付ファイル
 	const CF_SHOW_PAGE_LAST_MODIFIED	= 'show_page_last_modified';	// 最終更新
-	const CF_SHOW_TOOLBAR				= 'show_toolbar';				// ツールバーを表示するかどうか
+	const CF_SHOW_TOOLBAR_FOR_ALL_USER	= 'show_toolbar_for_all_user';				// ツールバーを表示するかどうか
 
 	// ##### デフォルト値 #####
 	const DEFAULT_DEFAULT_PAGE = 'FrontPage';		// デフォルトページ

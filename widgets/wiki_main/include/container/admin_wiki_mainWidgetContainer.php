@@ -93,7 +93,7 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 		$showPageRelated	= $request->trimCheckedValueOf('item_showpagerelated');		// 関連ページを表示するかどうか
 		$showPageAttachFiles	= $request->trimCheckedValueOf('item_showpageattachfiles');		// 添付ファイルを表示するかどうか
 		$showPageLastModified	= $request->trimCheckedValueOf('item_showlastmodified');		// 最終更新を表示するかどうか
-		$showToolbar			= $request->trimCheckedValueOf('item_show_toolbar');		// ツールバーを表示するかどうか
+		$showToolbarForAllUser			= $request->trimCheckedValueOf('item_show_toolbar_for_all_user');		// ツールバーを表示するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -123,7 +123,7 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 				// 最終更新を表示
 				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED, $showPageLastModified);
 				
-				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR, $showToolbar);// ツールバーを表示するかどうか
+				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER, $showToolbarForAllUser);// ツールバーを表示するかどうか
 				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -147,8 +147,8 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 			if ($showPageAttachFiles == '') $showPageAttachFiles = '1';		// 添付ファイルを表示
 			$showPageLastModified = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED);// 最終更新を表示
 			if ($showPageLastModified == '') $showPageLastModified = '1';		// 最終更新を表示
-			$showToolbar = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR);// ツールバーを表示するかどうか
-			if ($showToolbar == '') $showToolbar = '1';		// ツールバーを表示するかどうか
+			$showToolbarForAllUser = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER);// ツールバーを表示するかどうか
+			if ($showToolbarForAllUser == '') $showToolbarForAllUser = '1';		// ツールバーを表示するかどうか
 		}
 		
 		// 認証方法メニュー作成
@@ -163,7 +163,7 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "show_page_related", $this->convertToCheckedString($showPageRelated));	// 関連ページを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_page_attach_files", $this->convertToCheckedString($showPageAttachFiles));	// 添付ファイルを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_last_modified", $this->convertToCheckedString($showPageLastModified));	// 最終更新を表示するかどうか
-		$this->tmpl->addVar("_widget", "show_toolbar", $this->convertToCheckedString($showToolbar));	// ツールバーを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_toolbar_for_all_user", $this->convertToCheckedString($showToolbarForAllUser));	// ツールバーを表示するかどうか
 		
 		// アップロードディレクトリ
 		//$uploadDir = $this->gEnv->getCurrentWidgetRootPath() . '/upload';		// 暫定
