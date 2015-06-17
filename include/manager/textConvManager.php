@@ -33,6 +33,7 @@ class TextConvManager extends Core
 	const CONTENT_MACRO_OPTION_SEPARATOR = ';';			// コンテンツマクロのオプション設定の区切り
 	const NO_DATA_DISP_LABEL = '名称未設定';			// データがない場合の表示ラベル
 	const NO_TIME_DATA_DISP_LABEL = '名称未設定';			// 時間データがない場合の表示ラベル
+	const MACRO_SEPARATOR_EXP = '[:\|]';				// マクロIDとオプション間のセパレータ
 	
 	/**
 	 * コンストラクタ
@@ -428,7 +429,8 @@ class TextConvManager extends Core
 	{
 		$startTag = str_replace('[', '\[', M3_TAG_START . M3_TAG_MACRO_EMOJI_CODE);		// 「[」を正規表現用に「\[」に変換
 		$endTag = str_replace(']', '\]', M3_TAG_END);		// 「[」を正規表現用に「\[」に変換
-		$str = '/' . $startTag . ':(\d+?)' . $endTag . '/';
+		//$str = '/' . $startTag . ':(\d+?)' . $endTag . '/';
+		$str = '/' . $startTag . self::MACRO_SEPARATOR_EXP . '(\d+?)' . $endTag . '/';				// セパレータを「:」または「|」どちらでも使用可にする
         $dest = preg_replace_callback($str, array($this, "_replace_from_emoji_tag_callback"), $src);
 		return true;
 	}
@@ -468,7 +470,8 @@ class TextConvManager extends Core
 	{
 		$startTag = str_replace('[', '\[', M3_TAG_START . M3_TAG_MACRO_EMOJI_CODE);		// 「[」を正規表現用に「\[」に変換
 		$endTag = str_replace(']', '\]', M3_TAG_END);		// 「[」を正規表現用に「\[」に変換
-		$str = '/' . $startTag . ':(\d+?)' . $endTag . '/';
+		//$str = '/' . $startTag . ':(\d+?)' . $endTag . '/';
+		$str = '/' . $startTag . self::MACRO_SEPARATOR_EXP . '(\d+?)' . $endTag . '/';			// セパレータを「:」または「|」どちらでも使用可にする
         $dest = preg_replace_callback($str, array($this, "_replace_emoji_callback"), $src);
 		return true;
 	}
@@ -1171,7 +1174,8 @@ class TextConvManager extends Core
 	{
 		$startTag = str_replace('[', '\[', M3_TAG_START . M3_TAG_MACRO_WIDGET);		// 「[」を正規表現用に「\[」に変換
 		$endTag = str_replace(']', '\]', M3_TAG_END);		// 「]」を正規表現用に「\]」に変換
-		$str = '/' . $startTag . ':(.*?)' . M3_WIDGET_ID_SEPARATOR . '(\d+?)' . $endTag . '/';
+	//	$str = '/' . $startTag . ':(.*?)' . M3_WIDGET_ID_SEPARATOR . '(\d+?)' . $endTag . '/';
+		$str = '/' . $startTag . self::MACRO_SEPARATOR_EXP . '(.*?)' . M3_WIDGET_ID_SEPARATOR . '(\d+?)' . $endTag . '/';				// セパレータを「:」または「|」どちらでも使用可にする
         $dest = preg_replace_callback($str, array($this, '_replace_widget_tag_callback'), $src);
 		return true;
 	}

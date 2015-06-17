@@ -26,5 +26,7 @@ INSERT INTO _nav_item
 ('helplink', 3,     3,        'task=initwizard_site',       'デフォルトページを変更するには？'),
 ('helplink', 4,     4,        'task=initwizard_site',       'メニューを階層化して定義するには？'),
 ('helplink', 5,     5,        'task=installdata',       'サンプルデータをインストールするには？'),
-('helplink', 6,     6,        'task=templist',       'テンプレートを追加するには？');
+('helplink', 6,     6,        'task=templist',       'テンプレートを追加するには？'),
+('helplink', 7,     7,        'task=configsys',       'サイトを非公開にするには？'),
+('helplink', 8,     8,        'task=configmessage',       'サイト非公開時のメッセージを変更するには？');
 

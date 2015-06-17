@@ -29,6 +29,7 @@ class PageManager extends Core
 	private $isEditMode;			// 一般画面編集モード
 	private $isLayout;				// 画面レイアウト中かどうか
 	private $isPageTopUrl;			// ページトップ(サブページ内のトップ位置)のURLかどうか
+	private $isContentDetailPage;	// コンテンツ詳細画面のページかどうか
 	private $tmpData;				// データ作成用
 	private $db;					// DBオブジェクト
 	private $defaultScriptFiles;	// デフォルトで読み込むスクリプトファイル
@@ -1288,11 +1289,17 @@ class PageManager extends Core
 								}
 								if (empty($subId)) $subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_CONTENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_CONTENT;		// ページのコンテンツタイプ
+								
+								// コンテンツ詳細ページかどうかを設定
+								if ($firstKey == M3_REQUEST_PARAM_CONTENT_ID || $firstKey == M3_REQUEST_PARAM_CONTENT_ID_SHORT) $this->isContentDetailPage = true;
 								break;
 							case M3_REQUEST_PARAM_PRODUCT_ID:	// 製品IDのとき
 							case M3_REQUEST_PARAM_PRODUCT_ID_SHORT:
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PRODUCT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_PRODUCT;		// ページのコンテンツタイプ
+								
+								// コンテンツ詳細ページかどうかを設定
+								$this->isContentDetailPage = true;
 								break;
 							case M3_REQUEST_PARAM_BBS_ID:		// 掲示板投稿記事のとき
 							case M3_REQUEST_PARAM_BBS_ID_SHORT:
@@ -1300,16 +1307,25 @@ class PageManager extends Core
 							case M3_REQUEST_PARAM_BBS_THREAD_ID_SHORT:
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BBS, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_BBS;		// ページのコンテンツタイプ
+								
+								// コンテンツ詳細ページかどうかを設定
+								if ($firstKey == M3_REQUEST_PARAM_BBS_THREAD_ID || $firstKey == M3_REQUEST_PARAM_BBS_THREAD_ID_SHORT) $this->isContentDetailPage = true;
 								break;
 							case M3_REQUEST_PARAM_EVENT_ID:		// イベント記事のとき
 							case M3_REQUEST_PARAM_EVENT_ID_SHORT:
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_EVENT, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_EVENT;		// ページのコンテンツタイプ
+								
+								// コンテンツ詳細ページかどうかを設定
+								$this->isContentDetailPage = true;
 								break;
 							case M3_REQUEST_PARAM_PHOTO_ID:		// フォトギャラリー写真のとき
 							case M3_REQUEST_PARAM_PHOTO_ID_SHORT:
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_PHOTO, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_PHOTO;		// ページのコンテンツタイプ
+								
+								// コンテンツ詳細ページかどうかを設定
+								$this->isContentDetailPage = true;
 								break;
 							case M3_REQUEST_PARAM_BLOG_ID:		// ブログIDのとき
 							case M3_REQUEST_PARAM_BLOG_ID_SHORT:
@@ -1317,12 +1333,18 @@ class PageManager extends Core
 							case M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT:
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_BLOG, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_BLOG;		// ページのコンテンツタイプ
+								
+								// コンテンツ詳細ページかどうかを設定
+								if ($firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID || $firstKey == M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT) $this->isContentDetailPage = true;
 								break;
 							case M3_REQUEST_PARAM_ROOM_ID:		// ユーザ作成コンテンツのとき
 							case M3_REQUEST_PARAM_ROOM_ID_SHORT:
 								$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_USER, $gEnvManager->getCurrentPageId());// ページサブIDを取得
 								$this->contentType = M3_VIEW_TYPE_USER;		// ページのコンテンツタイプ
 						
+								// コンテンツ詳細ページかどうかを設定
+								$this->isContentDetailPage = true;
+								
 								// コンテンツを表示するウィジェットを取得
 								//$widgetId = $this->db->getWidgetIdByType($gEnvManager->getCurrentPageId(), $subId, M3_VIEW_TYPE_USER);
 								$widgetId = $this->db->getWidgetIdByContentType($gEnvManager->getCurrentPageId(), $subId, M3_VIEW_TYPE_USER);// コンテンツタイプでの取得に変更(2012/6/20)
@@ -1354,6 +1376,9 @@ class PageManager extends Core
 						// ページサブIDを取得
 						$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_WIKI, $gEnvManager->getCurrentPageId());
 						$this->contentType = M3_VIEW_TYPE_WIKI;		// ページのコンテンツタイプ
+						
+						// コンテンツ詳細ページかどうかを設定
+						$this->isContentDetailPage = true;
 					}
 				}
 				// その他のGET,POSTパラメータからページサブID取得
@@ -5720,6 +5745,7 @@ class PageManager extends Core
 	function createCssCmdUrl($optionParam = '')
 	{
 		global $gEnvManager;
+		global $gRequestManager;
 		
 		// 現在のページURLを取得
 		$url = $gEnvManager->createPageUrl() . '?';
@@ -5727,6 +5753,51 @@ class PageManager extends Core
 		// ページサブIDを取得
 		$pageSubId = $this->gEnv->getCurrentPageSubId();
 		$url .= M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId . '&';
+		
+		// コンテンツ詳細画面の場合はコンテンツパラメータを追加
+		if ($this->isContentDetailPage){
+			switch ($this->contentType){
+				case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_CONTENT_ID);
+					if (empty($contentsId)) $contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_CONTENT_ID_SHORT);
+					if (!empty($contentsId)) $url .= M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentsId . '&';
+					break;
+				case M3_VIEW_TYPE_PRODUCT:	// 製品
+					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_PRODUCT_ID);
+					if (empty($contentsId)) $contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_PRODUCT_ID_SHORT);
+					if (!empty($contentsId)) $url .= M3_REQUEST_PARAM_PRODUCT_ID . '=' . $contentsId . '&';
+					break;
+				case M3_VIEW_TYPE_BBS:	// BBS
+					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BBS_THREAD_ID);
+					if (empty($contentsId)) $contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BBS_THREAD_ID_SHORT);
+					if (!empty($contentsId)) $url .= M3_REQUEST_PARAM_BBS_THREAD_ID . '=' . $contentsId . '&';
+					break;
+				case M3_VIEW_TYPE_BLOG:	// ブログ
+					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
+					if (empty($contentsId)) $contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT);
+					if (!empty($contentsId)) $url .= M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $contentsId . '&';
+					break;
+				case M3_VIEW_TYPE_WIKI:	// Wiki
+					$contentsId = $gRequestManager->getWikiPageFromQuery();		// 「=」なしのパラメータはwikiパラメータとする
+					if (!empty($contentsId)) $url .= $contentsId . '&';
+					break;
+				case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_ROOM_ID);
+					if (empty($contentsId)) $contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_ROOM_ID_SHORT);
+					if (!empty($contentsId)) $url .= M3_REQUEST_PARAM_ROOM_ID . '=' . $contentsId . '&';
+					break;
+				case M3_VIEW_TYPE_EVENT:	// イベント
+					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_EVENT_ID);
+					if (empty($contentsId)) $contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_EVENT_ID_SHORT);
+					if (!empty($contentsId)) $url .= M3_REQUEST_PARAM_EVENT_ID . '=' . $contentsId . '&';
+					break;
+				case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+					$contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_PHOTO_ID);
+					if (empty($contentsId)) $contentsId = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_PHOTO_ID_SHORT);
+					if (!empty($contentsId)) $url .= M3_REQUEST_PARAM_PHOTO_ID . '=' . $contentsId . '&';
+					break;
+			}
+		}
 		
 		$url .= M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CSS;
 		if (!empty($optionParam)) $url .= '&' . $optionParam;
