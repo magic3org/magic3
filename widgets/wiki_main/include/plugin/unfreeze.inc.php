@@ -22,7 +22,7 @@ function plugin_unfreeze_action()
 	global $script, $function_freeze;
 	global $dummy_password;
 	global $_title_isunfreezed, $_title_unfreezed, $_title_unfreeze;
-	global $_msg_invalidpass, $_msg_unfreezing, $_btn_unfreeze;
+	global $_msg_invalidpass, $_msg_unfreezing, $_btn_unfreeze, $_msg_no_operation_allowed;
 	global $gEnvManager;
 
 	$page = WikiParam::getPage();
@@ -30,6 +30,8 @@ function plugin_unfreeze_action()
 
 	$pass = WikiParam::getVar('pass');
 	$msg = $body = '';
+	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
+			
 	if (! is_freeze($page)) {
 		// Unfreezed already
 		$msg  = $_title_isunfreezed;
@@ -57,6 +59,8 @@ function plugin_unfreeze_action()
 			$msg  = $_title_unfreezed;
 			$body = '';
 		}
+	} else if (!WikiConfig::isPasswordAuth() && !$editAuth){			// パスワード認証以外(管理権限ユーザまたはログインユーザ)の場合で、編集権限がない場合
+		$body = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
 	} else {
 		// Show unfreeze form
 		$msg    = $_title_unfreeze;
@@ -65,8 +69,6 @@ function plugin_unfreeze_action()
 		
 		// modified for Magic3 by naoki on 2008/10/10
 		$postScript = $script . WikiParam::convQuery("?");
-
-		$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 		
 		// テンプレートタイプに合わせて出力を変更
 		$templateType = $gEnvManager->getCurrentTemplateType();

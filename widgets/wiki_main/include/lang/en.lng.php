@@ -40,6 +40,7 @@ global $_msg_help;
 global $_msg_week;
 global $_msg_content_back_to_top;
 global $_msg_word;
+global $_msg_no_operation_allowed;
 global $_symbol_anchor;
 global $_symbol_noexists;
 global $_btn_preview;
@@ -203,7 +204,7 @@ $_msg_help        = 'View Text Formatting Rules';
 $_msg_week        = array('Sun','Mon','Tue','Wed','Thu','Fri','Sat');
 $_msg_content_back_to_top = '<div class="jumpmenu"><a href="#wiki_top">&uarr;</a></div>';
 $_msg_word        = 'These search terms have been highlighted:';
-
+$_msg_no_operation_allowed = 'This operation is not allowed.';
 ///////////////////////////////////////
 // Symbols
 $_symbol_anchor   = '&dagger;';

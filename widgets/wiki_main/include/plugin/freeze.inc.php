@@ -20,7 +20,7 @@ function plugin_freeze_action()
 	global $script, $function_freeze;
 	global $dummy_password;
 	global $_title_isfreezed, $_title_freezed, $_title_freeze;
-	global $_msg_invalidpass, $_msg_freezing, $_btn_freeze;
+	global $_msg_invalidpass, $_msg_freezing, $_btn_freeze, $_msg_no_operation_allowed;
 	global $gEnvManager;
 	
 	$page = WikiParam::getPage();
@@ -28,7 +28,8 @@ function plugin_freeze_action()
 
 	$pass = WikiParam::getVar('pass');
 	$msg = $body = '';
-	
+	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
+		
 	if (is_freeze($page)) {
 		// Freezed already
 		$msg  = $_title_isfreezed;
@@ -42,13 +43,14 @@ function plugin_freeze_action()
 		WikiParam::setCmd('read');
 		$msg  = $_title_freezed;
 		$body = '';
+	} else if (!WikiConfig::isPasswordAuth() && !$editAuth){			// パスワード認証以外(管理権限ユーザまたはログインユーザ)の場合で、編集権限がない場合
+		$body = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
 	} else {
 		// Show a freeze form
 		$msg    = $_title_freeze;
 		$s_page = htmlspecialchars($page);
 		$body   = ($pass == '') ? '' : "<p><strong>$_msg_invalidpass</strong></p>\n";
 		$postScript = $script . WikiParam::convQuery("?");
-		$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 		
 		// テンプレートタイプに合わせて出力を変更
 		// 編集権限ありの場合はパスワードを入力しない

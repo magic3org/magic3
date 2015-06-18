@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,6 +17,7 @@ function plugin_newpage_convert()
 {
 	//global $script, $vars, $_btn_edit, $_msg_newpage, $BracketName;
 	global $script, $_btn_edit, $_msg_newpage, $BracketName;
+	global $_msg_no_operation_allowed;
 	global $gEnvManager;
 	static $id = 0;
 
@@ -33,31 +34,33 @@ function plugin_newpage_convert()
 	++$id;
 
 	$postScript = $script . WikiParam::convQuery("?");
+	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 	
-	// テンプレートタイプに合わせて出力を変更
-	$templateType = $gEnvManager->getCurrentTemplateType();
-	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-		$ret = <<<EOD
-<form action="$postScript" method="post" class="form form-inline" role="form">
-  <input type="hidden" name="plugin" value="newpage" />
-  <input type="hidden" name="refer"  value="$s_page" />
-  <div class="form-group"><label for="_p_newpage_$id">$_msg_newpage:</label>
-  <input type="text" class="form-control" name="page" id="_p_newpage_$id" value="$s_newpage" size="30" /></div>
-  <input type="submit" class="button btn" value="$_btn_edit" />
-</form>
-EOD;
+	if (!WikiConfig::isPasswordAuth() && !$editAuth){			// パスワード認証以外(管理権限ユーザまたはログインユーザ)の場合で、編集権限がない場合
+		$ret = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
 	} else {
-		$ret = <<<EOD
-<form action="$postScript" method="post" class="form">
- <div>
-  <input type="hidden" name="plugin" value="newpage" />
-  <input type="hidden" name="refer"  value="$s_page" />
-  <label for="_p_newpage_$id">$_msg_newpage:</label>
-  <input type="text"   name="page" id="_p_newpage_$id" value="$s_newpage" size="30" />
-  <input type="submit" class="button" value="$_btn_edit" />
- </div>
-</form>
-EOD;
+		// テンプレートタイプに合わせて出力を変更
+		$ret = '';
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$ret .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+			$ret .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
+			$ret .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+			$ret .= '<div class="form-group"><label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
+			$ret .= '<input type="text" class="form-control" name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" /></div>' . M3_NL;
+			$ret .= '<input type="submit" class="button btn" value="' . $_btn_edit . '" />' . M3_NL;
+			$ret .= '</form>' . M3_NL;
+		} else {
+			$ret .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+			$ret .= '<div>' . M3_NL;
+			$ret .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
+			$ret .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+			$ret .= '<label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
+			$ret .= '<input type="text"   name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" />' . M3_NL;
+			$ret .= '<input type="submit" class="button" value="' . $_btn_edit . '" />' . M3_NL;
+			$ret .= '</div>' . M3_NL;
+			$ret .= '</form>' . M3_NL;
+		}
 	}
 	return $ret;
 }

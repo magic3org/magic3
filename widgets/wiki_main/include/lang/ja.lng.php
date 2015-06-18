@@ -41,6 +41,7 @@ global $_msg_help;
 global $_msg_week;
 global $_msg_content_back_to_top;
 global $_msg_word;
+global $_msg_no_operation_allowed;
 global $_symbol_anchor;
 global $_symbol_noexists;
 global $_btn_preview;
@@ -205,7 +206,7 @@ $_msg_help           = 'テキスト整形のルールを表示する';
 $_msg_week           = array('日','月','火','水','木','金','土');
 $_msg_content_back_to_top = '<div class="jumpmenu"><a href="#wiki_top">&uarr;</a></div>';
 $_msg_word           = 'これらのキーワードがハイライトされています：';
-
+$_msg_no_operation_allowed = 'この操作は実行できません';
 ///////////////////////////////////////
 // Symbols
 $_symbol_anchor   = '&dagger;';
