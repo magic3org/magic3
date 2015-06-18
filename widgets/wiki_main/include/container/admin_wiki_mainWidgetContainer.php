@@ -148,7 +148,7 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 			$showPageLastModified = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED);// 最終更新を表示
 			if ($showPageLastModified == '') $showPageLastModified = '1';		// 最終更新を表示
 			$showToolbarForAllUser = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER);// ツールバーを表示するかどうか
-			if ($showToolbarForAllUser == '') $showToolbarForAllUser = '1';		// ツールバーを表示するかどうか
+			if ($showToolbarForAllUser == '') $showToolbarForAllUser = '0';		// ツールバーを表示するかどうか
 		}
 		
 		// 認証方法メニュー作成

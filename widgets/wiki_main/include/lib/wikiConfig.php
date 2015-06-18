@@ -69,7 +69,7 @@ class WikiConfig
 		self::$isShowPageLastModified = self::$_configArray[wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED];			// 最終更新を表示するかどうか
 		if (!isset(self::$isShowPageLastModified)) self::$isShowPageLastModified = '1';
 		self::$isShowToolbarForAllUser = self::$_configArray[wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER];// 全ユーザ向けにツールバーを表示するかどうか
-		if (!isset(self::$isShowToolbarForAllUser)) self::$isShowToolbarForAllUser = '1';
+		if (!isset(self::$isShowToolbarForAllUser)) self::$isShowToolbarForAllUser = '0';
 		
 		// デフォルトページを取得
 		self::$defaultPage = self::$_configArray[wiki_mainCommonDef::CF_DEFAULT_PAGE];// デフォルトページ

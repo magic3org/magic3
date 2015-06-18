@@ -36,5 +36,5 @@ INSERT INTO wiki_config
 ('show_page_related',       '1',         '関連ページを表示するかどうか'),
 ('show_page_attach_files',  '1',         '添付ファイルを表示するかどうか'),
 ('show_page_last_modified', '1',         '最終更新を表示するかどうか'),
-('show_toolbar_for_all_user', '1',         'すべてのユーザにツールバーを表示するかどうか');
+('show_toolbar_for_all_user', '0',         'すべてのユーザにツールバーを表示するかどうか');
 
