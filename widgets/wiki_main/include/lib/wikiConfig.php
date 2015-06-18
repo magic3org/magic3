@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: wikiConfig.php 1166 2008-11-01 09:36:07Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
@@ -18,6 +18,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
 class WikiConfig
 {
 	private static $db;		// DBオブジェクト
+	private static $sessionObj;		// セッションオブジェクト
 	private static $_configArray;	// Wiki設定(DB定義値)
 	private static $defaultPage;	// デフォルトページ名
 	private static $authType;	// ユーザの認証方法
@@ -317,8 +318,7 @@ class WikiConfig
 	 */
 	public static function getPassword()
 	{
-//		$value = self::$db->getConfig(wiki_mainCommonDef::CF_PASSWORD);
-		return $value;
+		return self::$_configArray[wiki_mainCommonDef::CF_PASSWORD];
 	}
 	/**
 	 * アクセス中のユーザにデータ編集権限があるかを判断
@@ -331,17 +331,20 @@ class WikiConfig
 		
 		$ret = false;
 		switch (self::$authType){
-			case wiki_mainCommonDef::AUTH_TYPE_ADMIN:		// 認証タイプ(管理権限ユーザ)
-				if ($gEnvManager->isSystemAdmin()) $ret = true;
+			case wiki_mainCommonDef::AUTH_TYPE_ADMIN:		// 認証タイプ(システム運用権限ユーザのみ)
 				break;
 			case wiki_mainCommonDef::AUTH_TYPE_LOGIN_USER:		// 認証タイプ(ログインユーザ)
 				if ($gEnvManager->isCurrentUserLogined()) $ret = true;
 				break;
 			case wiki_mainCommonDef::AUTH_TYPE_PASSWORD:		// 認証タイプ(共通パスワード)
+				if (self::$sessionObj->editAuth) $ret = true;		// パスワード認証が通っている場合
 				break;
 			default:
 				break;
 		}
+		
+		// システム運用権限ありの場合はどの認証タイプの場合でも編集可能
+		if ($gEnvManager->isSystemManageUser()) $ret = true;
 		return $ret;
 	}
 	/**
@@ -365,6 +368,42 @@ class WikiConfig
 		} else {
 			return false;
 		}
+	}
+	/**
+	 * パスワード認証を許可する
+	 *
+	 * @return 				なし
+	 */
+	public static function permitPasswordAuth()
+	{
+		if (!empty(self::$sessionObj)){
+			self::$sessionObj->editAuth = true;			// 編集権限あり
+		}
+	}
+	/**
+	 * セッションオブジェクトを設定
+	 *
+	 * @param object $obj	セッションオブジェクト
+	 * @return 				なし
+	 */
+	public static function setSessionObj($obj)
+	{
+		if (empty($obj)){
+			$obj = new stdClass;		// 空の場合は作成
+			$obj->editAuth = false;
+			self::$sessionObj = $obj;
+		} else {
+			self::$sessionObj = $obj;		// セッションオブジェクト
+		}
+	}
+	/**
+	 * セッションオブジェクトを取得
+	 *
+	 * @return object		セッションオブジェクト
+	 */
+	public static function getSessionObj()
+	{
+		return self::$sessionObj;
 	}
 }
 ?>

@@ -42,6 +42,7 @@ global $_msg_week;
 global $_msg_content_back_to_top;
 global $_msg_word;
 global $_msg_no_operation_allowed;
+global $_msg_password;
 global $_symbol_anchor;
 global $_symbol_noexists;
 global $_btn_preview;
@@ -160,6 +161,7 @@ global $_vote_plugin_choice;
 global $_vote_plugin_votes;
 global $_title_yetlist;
 global $_err_notexist;
+global $_title_no_operation_allowed;
 
 // Encoding hint
 $_LANG['encode_hint']['ja'] = 'ぷ';
@@ -206,7 +208,10 @@ $_msg_help           = 'テキスト整形のルールを表示する';
 $_msg_week           = array('日','月','火','水','木','金','土');
 $_msg_content_back_to_top = '<div class="jumpmenu"><a href="#wiki_top">&uarr;</a></div>';
 $_msg_word           = 'これらのキーワードがハイライトされています：';
+$_title_no_operation_allowed = '実行不可';
 $_msg_no_operation_allowed = 'この操作は実行できません';
+$_msg_password		= '管理者パスワード';
+
 ///////////////////////////////////////
 // Symbols
 $_symbol_anchor   = '&dagger;';

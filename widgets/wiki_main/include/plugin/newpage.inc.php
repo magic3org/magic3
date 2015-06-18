@@ -15,8 +15,8 @@
  */
 function plugin_newpage_convert()
 {
-	//global $script, $vars, $_btn_edit, $_msg_newpage, $BracketName;
-	global $script, $_btn_edit, $_msg_newpage, $BracketName;
+	global $script, $_btn_edit, $_msg_newpage, $BracketName, $_msg_password;
+	global $dummy_password;
 	global $_msg_no_operation_allowed;
 	global $gEnvManager;
 	static $id = 0;
@@ -35,50 +35,68 @@ function plugin_newpage_convert()
 
 	$postScript = $script . WikiParam::convQuery("?");
 	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
-	
+
 	if (!WikiConfig::isPasswordAuth() && !$editAuth){			// パスワード認証以外(管理権限ユーザまたはログインユーザ)の場合で、編集権限がない場合
-		$ret = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
+		$body = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
 	} else {
 		// テンプレートタイプに合わせて出力を変更
-		$ret = '';
+		$body = '';
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-			$ret .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
-			$ret .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
-			$ret .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
-			$ret .= '<div class="form-group"><label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
-			$ret .= '<input type="text" class="form-control" name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" /></div>' . M3_NL;
-			$ret .= '<input type="submit" class="button btn" value="' . $_btn_edit . '" />' . M3_NL;
-			$ret .= '</form>' . M3_NL;
+			$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+			$body .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
+			$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+			$body .= '<div class="form-group"><label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
+			$body .= '<input type="text" class="form-control" name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" /></div>' . M3_NL;
+			
+			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+			if ($editAuth){
+				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+			} else {
+				$body .= '<div class="form-group"><label>' . $_msg_password . ':<input type="password" class="form-control" name="password" size="12" /></label></div>' . M3_NL;
+			}
+			//$body .= '<input type="submit" class="button btn" value="' . $_btn_edit . '" />' . M3_NL;
+			$body .= '<input type="submit" class="button btn" value="' . $_btn_edit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+			$body .= '</form>' . M3_NL;
 		} else {
-			$ret .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
-			$ret .= '<div>' . M3_NL;
-			$ret .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
-			$ret .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
-			$ret .= '<label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
-			$ret .= '<input type="text"   name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" />' . M3_NL;
-			$ret .= '<input type="submit" class="button" value="' . $_btn_edit . '" />' . M3_NL;
-			$ret .= '</div>' . M3_NL;
-			$ret .= '</form>' . M3_NL;
+			$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+			$body .= '<div>' . M3_NL;
+			$body .= '<input type="hidden" name="plugin" value="newpage" />' . M3_NL;
+			$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+			$body .= '<label for="_p_newpage_' . $id . '">' . $_msg_newpage . ':</label>' . M3_NL;
+			$body .= '<input type="text"   name="page" id="_p_newpage_' . $id . '" value="' . $s_newpage . '" size="30" />' . M3_NL;
+			
+			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+			if ($editAuth){
+				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+			} else {
+				$body .= '<label>' . $_msg_password . ':<input type="password" name="password" size="12" /></label>' . M3_NL;
+			}
+			//$body .= '<input type="submit" class="button" value="' . $_btn_edit . '" />' . M3_NL;
+			$body .= '<input type="submit" class="button" value="' . $_btn_edit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+			$body .= '</div>' . M3_NL;
+			$body .= '</form>' . M3_NL;
 		}
 	}
-	return $ret;
+	return $body;
 }
 
 function plugin_newpage_action()
 {
-	//global $vars, $_btn_edit, $_msg_newpage;
 	global $_btn_edit, $_msg_newpage;
+	global $gPageManager;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	$page = WikiParam::getPage();
-	//if ($vars['page'] == '') {
+	$pass = WikiParam::getVar('pass');
+
 	if ($page == '') {
+		// ページ名入力フィールド表示
 		$retvars['msg']  = $_msg_newpage;
 		$retvars['body'] = plugin_newpage_convert();
 		return $retvars;
-	} else {
+	} else if ($pass != '' && pkwk_login($pass)){
 		/*$page    = strip_bracket($vars['page']);
 		$r_page  = rawurlencode(isset($vars['refer']) ? get_fullname($page, $vars['refer']) : $page);
 		$r_refer = rawurlencode($vars['refer']);*/
@@ -88,10 +106,11 @@ function plugin_newpage_action()
 		$r_page  = rawurlencode(($refer == '') ? $page : get_fullname($page, $refer));
 		$r_refer = rawurlencode($refer);
 		
-		pkwk_headers_sent();
+//		pkwk_headers_sent();
 		//header('Location: ' . get_script_uri() . '?cmd=read&page=' . $r_page . '&refer=' . $r_refer);
-		header('Location: ' . get_script_uri() . WikiParam::convQuery('?cmd=read&page=' . $r_page . '&refer=' . $r_refer, false));
-		exit;
+//		header('Location: ' . get_script_uri() . WikiParam::convQuery('?cmd=read&page=' . $r_page . '&refer=' . $r_refer, false));
+//		exit;
+		$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?cmd=read&page=' . $r_page . '&refer=' . $r_refer, false));
 	}
 }
 ?>

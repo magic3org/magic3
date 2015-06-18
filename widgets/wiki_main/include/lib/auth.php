@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: auth.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C) 2003-2005 PukiWiki Developers Team
@@ -40,6 +40,7 @@ function pkwk_login($pass = '')
 			} else if ($pass != $password){
 				return false;
 			} else {
+				WikiConfig::permitPasswordAuth();			// パスワード認証を許可
 				return true;
 			}
 		} else {

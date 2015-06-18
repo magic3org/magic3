@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: edit.inc.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // PukiWiki - Yet another WikiWikiWeb clone.
@@ -22,16 +22,23 @@ define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
 
 function plugin_edit_action()
 {
-	// modified for Magic3 by naoki on 2008/10/6
-	//global $vars, $_title_edit, $load_template_func;
-	global $_title_edit, $load_template_func;
+	global $_title_edit, $load_template_func, $_title_no_operation_allowed, $_msg_no_operation_allowed;
 	global $script, $_title_cannotedit, $_msg_unfreeze;		// add for magic3
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
-	//$page = isset($vars['page']) ? $vars['page'] : '';
 	$page = WikiParam::getPage();
+	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 
+	// 編集画面を表示する場合は編集権限をチェック
+	if (!$editAuth){			// 編集権限がない場合
+		$body = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
+		return array(
+			'msg'	=> $_title_no_operation_allowed,
+			'body'	=> $body
+		);
+	}
+		
 	// modified for Magic3 by naoki on 2008/10/6
 	//check_editable($page, true, true);
 	if (!check_editable($page, true, true)){		// 編集不可のとき
@@ -231,10 +238,10 @@ function plugin_edit_inline()
 function plugin_edit_write()
 {
 	// modified for Magic3 by naoki on 2008/10/6
-	//global $vars, $trackback;
 	global $trackback;
 	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
 	global $notimeupdate, $_msg_invalidpass, $do_update_diff_table;
+	global $gPageManager;
 
 /*	$page   = isset($vars['page'])   ? $vars['page']   : '';
 	$add    = isset($vars['add'])    ? $vars['add']    : '';
@@ -313,21 +320,24 @@ function plugin_edit_write()
 	}
 
 	page_write($page, $postdata, $notimeupdate != 0 && $notimestamp);
-	pkwk_headers_sent();
+//	pkwk_headers_sent();
 	// modified for Magic3 by naoki on 2008/10/6
 	//header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
-	header('Location: ' . get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
-	exit;
+//	header('Location: ' . get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
+//	exit;
+	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
 }
 
 // Cancel (Back to the page / Escape edit page)
 function plugin_edit_cancel()
 {
+	global $gPageManager;
 	//global $vars;
-	pkwk_headers_sent();
+//	pkwk_headers_sent();
 	// modified for Magic3 by naoki on 2008/10/6
 	//header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['page']));
-	header('Location: ' . get_script_uri() . WikiParam::convQuery('?' . rawurlencode(WikiParam::getPage()), false));
-	exit;
+//	header('Location: ' . get_script_uri() . WikiParam::convQuery('?' . rawurlencode(WikiParam::getPage()), false));
+//	exit;
+	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode(WikiParam::getPage()), false));
 }
 ?>

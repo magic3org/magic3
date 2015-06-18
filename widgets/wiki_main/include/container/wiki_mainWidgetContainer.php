@@ -68,6 +68,9 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		WikiConfig::init($this->db);
 		WikiPage::init($this->db);		// Wikiページ管理クラス
 		WikiParam::init($this->db);		// URLパラメータ管理クラス
+		
+		// セッションオブジェクトを初期化
+		WikiConfig::setSessionObj($this->getWidgetSessionObj());
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -276,6 +279,10 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		if ($pageInfo){
 			$this->tmpl->setAttribute('show_page_info', 'visibility', 'visible');
 		}
+		
+		// セッションオブジェクトをセッションに保存
+		$sessionObj = WikiConfig::getSessionObj();
+		$this->setWidgetSessionObj($sessionObj);
 	}
 	/**
 	 * ウィジェットのタイトルを設定
