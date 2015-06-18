@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: pukiwiki.ini.php 3478 2010-08-14 08:33:30Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -43,6 +43,7 @@ global $read_auth_pages;
 global $edit_auth;
 global $edit_auth_pages;
 global $search_auth;
+global $dummy_password;
 // page config
 global $maxshow;
 global $maxshow_deleted;
@@ -340,6 +341,10 @@ $edit_auth_pages = array(
 // 0: Disabled (Search read-prohibited page contents)
 // 1: Enabled  (Search only permitted pages for the user)
 $search_auth = 0;
+
+/////////////////////////////////////////////////
+// ダミーのパスワード
+$dummy_password = '******';
 
 /////////////////////////////////////////////////
 // $whatsnew: Max number of RecentChanges

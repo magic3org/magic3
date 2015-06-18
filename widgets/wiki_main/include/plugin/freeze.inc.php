@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: freeze.inc.php 1601 2009-03-21 05:51:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 function plugin_freeze_convert() { return ''; }
@@ -18,6 +18,7 @@ function plugin_freeze_convert() { return ''; }
 function plugin_freeze_action()
 {
 	global $script, $function_freeze;
+	global $dummy_password;
 	global $_title_isfreezed, $_title_freezed, $_title_freeze;
 	global $_msg_invalidpass, $_msg_freezing, $_btn_freeze;
 	global $gEnvManager;
@@ -27,6 +28,7 @@ function plugin_freeze_action()
 
 	$pass = WikiParam::getVar('pass');
 	$msg = $body = '';
+	
 	if (is_freeze($page)) {
 		// Freezed already
 		$msg  = $_title_isfreezed;
@@ -46,33 +48,39 @@ function plugin_freeze_action()
 		$s_page = htmlspecialchars($page);
 		$body   = ($pass == '') ? '' : "<p><strong>$_msg_invalidpass</strong></p>\n";
 		$postScript = $script . WikiParam::convQuery("?");
+		$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 		
 		// テンプレートタイプに合わせて出力を変更
+		// 編集権限ありの場合はパスワードを入力しない
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-			$body  .= <<<EOD
-<p>$_msg_freezing</p>
-<form action="$postScript" method="post" class="form form-inline" role="form">
-  <input type="hidden"   name="wcmd"  value="freeze" />
-  <input type="hidden"   name="page" value="$s_page" />
-  <input type="hidden"   name="pass" />
-  <div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>
-  <input type="submit"   name="ok"   class="button btn" value="$_btn_freeze" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
-</form>
-EOD;
+			if (!$editAuth) $body .= '<p>' . $_msg_freezing . '</p>' . M3_NL;
+			$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+			$body .= '<input type="hidden"   name="wcmd"  value="freeze" />' . M3_NL;
+			$body .= '<input type="hidden"   name="page" value="' . $s_page . '" />' . M3_NL;
+			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+			if ($editAuth){
+				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+			} else {
+				$body .= '<div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>' . M3_NL;
+			}
+			$body .= '<input type="submit"   name="ok"   class="button btn" value="' . $_btn_freeze . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+			$body .= '</form>' . M3_NL;
 		} else {
-			$body  .= <<<EOD
-<p>$_msg_freezing</p>
-<form action="$postScript" method="post" class="form">
- <div>
-  <input type="hidden"   name="wcmd"  value="freeze" />
-  <input type="hidden"   name="page" value="$s_page" />
-  <input type="hidden"   name="pass" />
-  <input type="password" name="password" size="12" />
-  <input type="submit"   name="ok"   class="button" value="$_btn_freeze" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
- </div>
-</form>
-EOD;
+			if (!$editAuth) $body .= '<p>' . $_msg_freezing . '</p>' . M3_NL;
+			$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+			$body .= '<div>' . M3_NL;
+			$body .= '<input type="hidden"   name="wcmd"  value="freeze" />' . M3_NL;
+			$body .= '<input type="hidden"   name="page" value="' . $s_page . '" />' . M3_NL;
+			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+			if ($editAuth){
+				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+			} else {
+				$body .= '<input type="password" name="password" size="12" />' . M3_NL;
+			}
+			$body .= '<input type="submit"   name="ok"   class="button" value="' . $_btn_freeze . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+			$body .= '</div>' . M3_NL;
+			$body .= '</form>' . M3_NL;
 		}
 	}
 
