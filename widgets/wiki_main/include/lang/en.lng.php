@@ -54,6 +54,7 @@ global $_btn_template;
 global $_btn_load;
 global $_btn_edit;
 global $_btn_delete;
+global $_btn_submit;
 global $_title_cannotread;
 global $_msg_auth;
 global $rule_page;
@@ -161,6 +162,8 @@ global $_vote_plugin_votes;
 global $_title_yetlist;
 global $_err_notexist;
 global $_title_no_operation_allowed;
+global $_title_authorization_required;
+global $_msg_authorization_required;
 
 // Encoding hint
 $_LANG['encode_hint']['en'] = '';
@@ -209,6 +212,8 @@ $_msg_word        = 'These search terms have been highlighted:';
 $_title_no_operation_allowed = 'No Operation Allowed';
 $_msg_no_operation_allowed = 'This operation is not allowed.';
 $_msg_password		= 'Administrator password';
+$_title_authorization_required	= 'Authorization_Required';
+$_msg_authorization_required	= 'This page requires authorization.';
 
 ///////////////////////////////////////
 // Symbols
@@ -227,6 +232,7 @@ $_btn_template  = 'Use page as template';
 $_btn_load      = 'Load';
 $_btn_edit      = 'Edit';
 $_btn_delete    = 'Delete';
+$_btn_submit	= 'Submit';
 
 ///////////////////////////////////////
 // Authentication

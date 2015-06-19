@@ -55,6 +55,7 @@ global $_btn_template;
 global $_btn_load;
 global $_btn_edit;
 global $_btn_delete;
+global $_btn_submit;
 global $_title_cannotread;
 global $_msg_auth;
 global $rule_page;
@@ -162,6 +163,8 @@ global $_vote_plugin_votes;
 global $_title_yetlist;
 global $_err_notexist;
 global $_title_no_operation_allowed;
+global $_title_authorization_required;
+global $_msg_authorization_required;
 
 // Encoding hint
 $_LANG['encode_hint']['ja'] = 'ぷ';
@@ -211,6 +214,8 @@ $_msg_word           = 'これらのキーワードがハイライトされて�
 $_title_no_operation_allowed = '実行不可';
 $_msg_no_operation_allowed = 'この操作は実行できません';
 $_msg_password		= '管理者パスワード';
+$_title_authorization_required	= 'アクセス権';
+$_msg_authorization_required	= 'この画面を参照するにはアクセス権が必要です';
 
 ///////////////////////////////////////
 // Symbols
@@ -229,6 +234,7 @@ $_btn_template  = '雛形とするページ';
 $_btn_load      = '読込';
 $_btn_edit      = '編集';
 $_btn_delete    = '削除';
+$_btn_submit	= '実行';
 
 ///////////////////////////////////////
 // Authentication

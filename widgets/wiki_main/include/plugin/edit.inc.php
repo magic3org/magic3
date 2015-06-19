@@ -22,51 +22,60 @@ define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
 
 function plugin_edit_action()
 {
-	global $_title_edit, $load_template_func, $_title_no_operation_allowed, $_msg_no_operation_allowed;
+	global $_title_edit, $load_template_func, $_msg_password, $_btn_submit, $_title_authorization_required, $_msg_authorization_required;
 	global $script, $_title_cannotedit, $_msg_unfreeze;		// add for magic3
+	global $gEnvManager;
 
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	$page = WikiParam::getPage();
+	$pass = WikiParam::getVar('pass');
 	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 
-	// 編集画面を表示する場合は編集権限をチェック
+	// 編集権限をチェック
 	if (!$editAuth){			// 編集権限がない場合
-		$body = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
-		return array(
-			'msg'	=> $_title_no_operation_allowed,
-			'body'	=> $body
-		);
+		if ($pass != '' && pkwk_login($pass)){		// パスワードが送信されてい場合はログイン処理
+		} else {
+			// パスワード入力画面を作成
+			$body = "<p><strong>$_msg_authorization_required</strong></p>\n";
+
+			$templateType = $gEnvManager->getCurrentTemplateType();
+			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+				$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
+				$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+				$body .= '<div class="form-group"><label>' . $_msg_password . ':<input type="password" class="form-control" name="password" size="12" /></label>' . M3_NL;
+				$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" /></div>' . M3_NL;
+				$body .= '</form>' . M3_NL;
+			} else {
+				$body .= '<form method="post" class="form">' . M3_NL;
+				$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+				$body .= '<label>' . $_msg_password . ':<input type="password" name="password" size="12" /></label>' . M3_NL;
+				$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+				$body .= '</form>' . M3_NL;
+			}
+			return array(
+				'msg'	=> $_title_authorization_required,
+				'body'	=> $body
+			);
+		}
 	}
 		
-	// modified for Magic3 by naoki on 2008/10/6
-	//check_editable($page, true, true);
 	if (!check_editable($page, true, true)){		// 編集不可のとき
-		//$body = $title = str_replace('$1',
-			//htmlspecialchars(strip_bracket($page)), $_title_cannotedit);
-		//$body = $title = str_replace('$1', make_search($page), $_title_cannotedit);
 		$body = $title = str_replace('$1', make_pagelink($page), $_title_cannotedit);
 		if (is_freeze($page)){
 			$body .= '(<a href="' . $script . WikiParam::convQuery('?cmd=unfreeze&amp;page=' . rawurlencode($page)) . '">' . $_msg_unfreeze . '</a>)';
 		}
-		//$page = str_replace('$1', make_search($page), $_title_cannotedit);
 		return array('msg' => $title, 'body' => $body);
 	}
 
-	// modified for Magic3 by naoki on 2008/10/6
-	//if (isset($vars['preview']) || ($load_template_func && isset($vars['template']))) {
 	if (WikiParam::getVar('preview') != '' || ($load_template_func && WikiParam::getVar('template') != '')) {
 		return plugin_edit_preview();
-	//} else if (isset($vars['write'])) {
 	} else if (WikiParam::getVar('write') != '') {
 		return plugin_edit_write();
-	//} else if (isset($vars['cancel'])) {
 	} else if (WikiParam::getVar('cancel') != '') {
 		return plugin_edit_cancel();
 	}
 
-	// modified for Magic3 by naoki on 2008/10/6
-	//$postdata = @join('', get_source($page));
 	$postdata = get_source($page, true);
 	if ($postdata == '') $postdata = auto_template($page);
 	return array('msg'=>$_title_edit, 'body'=>edit_form($page, $postdata));
@@ -75,15 +84,11 @@ function plugin_edit_action()
 // Preview
 function plugin_edit_preview()
 {
-	// modified for Magic3 by naoki on 2008/10/6
-	//global $vars;
 	global $_title_preview, $_msg_preview, $_msg_preview_delete;
 
-	//$page = isset($vars['page']) ? $vars['page'] : '';
 	$page = WikiParam::getPage();
 
 	// Loading template
-	//if (isset($vars['template_page']) && is_page($vars['template_page'])) {
 	$templatePage = WikiParam::getVar('template_page');
 	if ($templatePage != '' && is_page($templatePage)) {
 /*		$vars['msg'] = join('', get_source($vars['template_page']));
