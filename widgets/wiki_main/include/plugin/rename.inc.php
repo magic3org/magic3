@@ -20,8 +20,46 @@ define('PLUGIN_RENAME_LOGPAGE', ':RenameLog');
 
 function plugin_rename_action()
 {
+	global $_msg_password, $_btn_submit, $_title_authorization_required, $_msg_authorization_required;		// パスワード認証用
+	global $gEnvManager;
+	
 	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 
+	// ###### パスワード認証処理 #####
+	$pass = WikiParam::getVar('pass');
+	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
+	
+	// 編集権限をチェック
+	if (!$editAuth){			// 編集権限がない場合
+		if ($pass != '' && pkwk_login($pass)){		// パスワードが送信されてい場合はログイン処理
+		} else {
+			// パスワード入力画面を作成
+			$body = "<p><strong>$_msg_authorization_required</strong></p>\n";
+
+			// パスワード認証の場合は入力フィールドを表示
+			if (WikiConfig::isPasswordAuth()){
+				$templateType = $gEnvManager->getCurrentTemplateType();
+				if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+					$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
+					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+					$body .= '<div class="form-group"><label>' . $_msg_password . ':<input type="password" class="form-control" name="password" size="12" /></label>' . M3_NL;
+					$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" /></div>' . M3_NL;
+					$body .= '</form>' . M3_NL;
+				} else {
+					$body .= '<form method="post" class="form">' . M3_NL;
+					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+					$body .= '<label>' . $_msg_password . ':<input type="password" name="password" size="12" /></label>' . M3_NL;
+					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+					$body .= '</form>' . M3_NL;
+				}
+			}
+			return array(
+				'msg'	=> $_title_authorization_required,
+				'body'	=> $body
+			);
+		}
+	}
+	
 	$method = plugin_rename_getvar('method');
 	if ($method == 'regex') {
 		$src = plugin_rename_getvar('src');
@@ -60,7 +98,6 @@ function plugin_rename_action()
 			return plugin_rename_phase2('already', $page);
 		} else {
 			// ページ名変更処理
-			//return plugin_rename_refer();
 			return plugin_rename_refer($page, $refer);
 		}
 	}
@@ -69,8 +106,6 @@ function plugin_rename_action()
 // 変数を取得する
 function plugin_rename_getvar($key)
 {
-	//global $vars;
-	//return isset($vars[$key]) ? $vars[$key] : '';
 	return WikiParam::getVar($key);
 }
 
@@ -228,7 +263,6 @@ EOD;
 }
 
 //ページ名と関連するページを列挙し、phase3へ
-//function plugin_rename_refer()
 function plugin_rename_refer($page, $refer)
 {
 //	$page  = plugin_rename_getvar('page');
@@ -274,6 +308,7 @@ function plugin_rename_phase3($pages)
 {
 	// $pagesには、「$pages[旧ページ名]=[新規ページ名]」の形式で変更対象のページ名がすべて格納されている
 	global $script, $_rename_messages;
+	global $dummy_password;
 	global $gEnvManager;
 	
 	$msg = $input = '';
@@ -289,12 +324,16 @@ function plugin_rename_phase3($pages)
 		}
 	}
 
-	$pass = plugin_rename_getvar('pass');
+/*	$pass = plugin_rename_getvar('pass');
 	if ($pass != '' && pkwk_login($pass)) {		// パスワードの入力チェック
 		return plugin_rename_proceed($pages, $files, $exists);
 	} else if ($pass != '') {
 		$msg = plugin_rename_err('adminpass');
-	}
+	}*/
+	// リネーム処理
+	$pass = plugin_rename_getvar('pass');
+	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
+	if ($pass != '' && $editAuth) return plugin_rename_proceed($pages, $files, $exists);
 
 	$method = plugin_rename_getvar('method');
 	if ($method == 'regex') {
@@ -341,49 +380,47 @@ function plugin_rename_phase3($pages)
 	}
 
 	$postScript = $script . WikiParam::convQuery("?");
-	$ret = array();
-	$ret['msg'] = $_rename_messages['msg_title'];
+	$msg = $_rename_messages['msg_title'];
 
 	// テンプレートタイプに合わせて出力を変更
+	$body = '';
 	$templateType = $gEnvManager->getCurrentTemplateType();
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-		$ret['body'] = <<<EOD
-<p>$msg</p>
-<form action="$postScript" method="post" class="form form-inline" role="form">
-  <input type="hidden" name="plugin" value="rename" />
-  <input type="hidden" name="pass" />
-  $input
-  <div class="form-group"><label for="_p_rename_adminpass">{$_rename_messages['msg_adminpass']}</label>
-  <input type="password" class="form-control" name="password" id="_p_rename_adminpass" size="12" /></div>
-  <input type="submit" class="button btn" value="{$_rename_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
-</form>
-<p>{$_rename_messages['msg_confirm']}</p>
-EOD;
+		$body .= '<p>' . $msg . '</p>' . M3_NL;
+		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="rename" />' . M3_NL;
+		$body .= '<input type="hidden" name="pass" />' . M3_NL;
+		$body .= $input;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= '<input type="submit" class="button btn" value="' . $_rename_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '</form>' . M3_NL;
+		$body .= '<p>' . $_rename_messages['msg_confirm'] . '</p>' . M3_NL;
 	} else {
-		$ret['body'] = <<<EOD
-<p>$msg</p>
-<form action="$postScript" method="post" class="form">
- <div>
-  <input type="hidden" name="plugin" value="rename" />
-  <input type="hidden" name="pass" />
-  $input
-  <label for="_p_rename_adminpass">{$_rename_messages['msg_adminpass']}</label>
-  <input type="password" name="password" id="_p_rename_adminpass" size="12" />
-  <input type="submit" class="button" value="{$_rename_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
- </div>
-</form>
-<p>{$_rename_messages['msg_confirm']}</p>
-EOD;
+		$body .= '<p>' . $msg . '</p>' . M3_NL;
+		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+		$body .= '<div>' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="rename" />' . M3_NL;
+		$body .= '<input type="hidden" name="pass" />' . M3_NL;
+		$body .= $input;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= '<input type="submit" class="button" value="' . $_rename_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '</form>' . M3_NL;
+		$body .= '<p>' . $_rename_messages['msg_confirm'] . '</p>' . M3_NL;
 	}
 	
+	// 変更するページ名をリスト表示
 	//ksort($pages);
-	$ret['body'] .= '<ul>' . "\n";
+	$body .= '<ul>' . "\n";
 	foreach ($pages as $old=>$new){
-		//$ret['body'] .= '<li>' .  make_pagelink(decode($old)) . $_rename_messages['msg_arrow'] . htmlspecialchars(decode($new)) .  '</li>' . "\n";
-		$ret['body'] .= '<li>' .  make_pagelink($old) . $_rename_messages['msg_arrow'] . htmlspecialchars($new) .  '</li>' . "\n";
+		$body .= '<li>' .  make_pagelink($old) . ' ' . $_rename_messages['msg_arrow'] . ' ' . htmlspecialchars($new) .  '</li>' . "\n";
 	}
-	$ret['body'] .= '</ul>' . "\n";
-	return $ret;
+	$body .= '</ul>' . "\n";
+	
+	return array(
+		'msg'	=> $msg,
+		'body'	=> $body
+	);
 }
 function plugin_rename_get_files($pages)
 {
@@ -424,6 +461,7 @@ function plugin_rename_get_files($pages)
 function plugin_rename_proceed($pages, $files, $exists)
 {
 	global $now, $_rename_messages;
+	global $gPageManager;
 
 	if (plugin_rename_getvar('exist') == ''){
 		foreach ($exists as $key=>$arr)
@@ -532,10 +570,11 @@ function plugin_rename_proceed($pages, $files, $exists)
 	$page = plugin_rename_getvar('page');
 	if ($page == '') $page = PLUGIN_RENAME_LOGPAGE;
 
-	pkwk_headers_sent();
+//	pkwk_headers_sent();
 	//header('Location: ' . get_script_uri() . '?' . rawurlencode($page));
-	header('Location: ' . get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
-	exit;
+//	header('Location: ' . get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
+//	exit;
+	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
 }
 
 function plugin_rename_getrelated($page)
