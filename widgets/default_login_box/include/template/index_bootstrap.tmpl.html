@@ -42,8 +42,8 @@ function default_login_logout(){
 </div>
 <patTemplate:tmpl name="auto_login" visibility="hidden"><div class="form-group"><div class="col-sm-12"><div class="checkbox"><label><input type="checkbox" id="autologin" name="autologin" class="" checked />ログイン状態を保持する</label></div></div></div></patTemplate:tmpl>
 </patTemplate:tmpl>
-<patTemplate:tmpl name="logout_button" visibility="hidden"><input type="button" class="button btn btn-success" onclick="default_login_logout();" value="ログアウト" /></patTemplate:tmpl>
-<patTemplate:tmpl name="login_button" visibility="hidden"><input type="button" class="button btn btn-success" onclick="default_login_login();" value="ログイン" /></patTemplate:tmpl>
+<patTemplate:tmpl name="logout_button" visibility="hidden"><input type="submit" class="button btn btn-success" onclick="default_login_logout();" value="ログアウト" /></patTemplate:tmpl>
+<patTemplate:tmpl name="login_button" visibility="hidden"><input type="submit" class="button btn btn-success" onclick="default_login_login();" value="ログイン" /></patTemplate:tmpl>
 </form>
 <patTemplate:tmpl name="regmember_button" visibility="hidden">
 <ul>

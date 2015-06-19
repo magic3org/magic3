@@ -39,8 +39,8 @@ function default_login_logout(){
 <label><span class="default_login_title">パスワード</span><input type="password" name="login_password" size="8" maxlength="10" /></label>
 <patTemplate:tmpl name="auto_login" visibility="hidden"><label><input type="checkbox" name="autologin" checked />ログイン状態を保持する</label></patTemplate:tmpl>
 </patTemplate:tmpl>
-<patTemplate:tmpl name="logout_button" visibility="hidden"><input type="button" class="button" onclick="default_login_logout();" value="ログアウト" /></patTemplate:tmpl>
-<patTemplate:tmpl name="login_button" visibility="hidden"><input type="button" class="button" onclick="default_login_login();" value="ログイン" /></patTemplate:tmpl>
+<patTemplate:tmpl name="logout_button" visibility="hidden"><input type="submit" class="button" onclick="default_login_logout();" value="ログアウト" /></patTemplate:tmpl>
+<patTemplate:tmpl name="login_button" visibility="hidden"><input type="submit" class="button" onclick="default_login_login();" value="ログイン" /></patTemplate:tmpl>
 </div>
 </form>
 <patTemplate:tmpl name="regmember_button" visibility="hidden">
