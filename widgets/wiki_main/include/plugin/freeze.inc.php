@@ -18,7 +18,7 @@ function plugin_freeze_convert() { return ''; }
 function plugin_freeze_action()
 {
 	global $script, $function_freeze;
-	global $dummy_password;
+//	global $dummy_password;
 	global $_title_isfreezed, $_title_freezed, $_title_freeze;
 	global $_msg_invalidpass, $_msg_freezing, $_btn_freeze, $_msg_no_operation_allowed;
 	global $gEnvManager;
@@ -32,7 +32,7 @@ function plugin_freeze_action()
 	if (! $function_freeze || ! is_page($page)) return array('msg' => '', 'body' => '');
 
 	$pass = WikiParam::getVar('pass');
-	$done = WikiParam::getVar('done');			// 次画面遷移用
+	$action = WikiParam::getVar('action');			// 次画面遷移用
 	$msg = $body = '';
 		
 	if (is_freeze($page)) {
@@ -40,7 +40,7 @@ function plugin_freeze_action()
 		$msg  = $_title_isfreezed;
 		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_isfreezed);
 	//} else if ($pass != '' && pkwk_login($pass)) {
-	} else if (!empty($done)){			// 「凍結」ボタン実行の場合
+	} else if (!empty($action)){			// 「凍結」ボタン実行の場合
 		// ページをロックする
 		WikiPage::lockPage($page, true);
 
@@ -66,7 +66,7 @@ function plugin_freeze_action()
 			$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
 			$body .= '<input type="hidden"   name="wcmd"  value="freeze" />' . M3_NL;
 			$body .= '<input type="hidden"   name="page" value="' . $s_page . '" />' . M3_NL;
-			$body .= '<input type="hidden" name="done" value="1" />' . M3_NL;		// 次画面遷移用
+			$body .= '<input type="hidden" name="action" value="done" />' . M3_NL;		// 次画面遷移用
 			
 //			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
 //			if ($editAuth){
@@ -83,7 +83,7 @@ function plugin_freeze_action()
 			$body .= '<div>' . M3_NL;
 			$body .= '<input type="hidden"   name="wcmd"  value="freeze" />' . M3_NL;
 			$body .= '<input type="hidden"   name="page" value="' . $s_page . '" />' . M3_NL;
-			$body .= '<input type="hidden" name="done" value="1" />' . M3_NL;		// 次画面遷移用
+			$body .= '<input type="hidden" name="action" value="done" />' . M3_NL;		// 次画面遷移用
 			
 //			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
 //			if ($editAuth){

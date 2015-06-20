@@ -20,7 +20,7 @@ define('PLUGIN_UNFREEZE_EDIT', TRUE);
 function plugin_unfreeze_action()
 {
 	global $script, $function_freeze;
-	global $dummy_password;
+//	global $dummy_password;
 	global $_title_isunfreezed, $_title_unfreezed, $_title_unfreeze;
 	global $_msg_invalidpass, $_msg_unfreezing, $_btn_unfreeze, $_msg_no_operation_allowed;
 	global $gEnvManager;
@@ -34,7 +34,7 @@ function plugin_unfreeze_action()
 	if (!$function_freeze || !is_page($page)) return array('msg' => '', 'body' => '');
 
 	$pass = WikiParam::getVar('pass');
-	$done = WikiParam::getVar('done');			// 次画面遷移用
+	$action = WikiParam::getVar('action');			// 次画面遷移用
 	$msg = $body = '';
 //	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 			
@@ -43,7 +43,7 @@ function plugin_unfreeze_action()
 		$msg  = $_title_isunfreezed;
 		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_isunfreezed);
 	//} else if ($pass != '' && pkwk_login($pass)) {
-	} else if (!empty($done)){			// 「解凍」ボタン実行の場合
+	} else if (!empty($action)){			// 「解凍」ボタン実行の場合
 		// Unfreeze
 		//$postdata = get_source($page);
 		//array_shift($postdata);
@@ -85,7 +85,7 @@ function plugin_unfreeze_action()
 			$body .= '<input type="hidden"   name="wcmd"  value="unfreeze" />' . M3_NL;
 			$body .= '<input type="hidden"   name="page" value="' . $s_page . '" />' . M3_NL;
 //			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-			$body .= '<input type="hidden" name="done" value="1" />' . M3_NL;		// 次画面遷移用
+			$body .= '<input type="hidden" name="action" value="done" />' . M3_NL;		// 次画面遷移用
 			
 //			if ($editAuth){
 //				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
@@ -102,7 +102,7 @@ function plugin_unfreeze_action()
 			$body .= '<input type="hidden"   name="wcmd"  value="unfreeze" />' . M3_NL;
 			$body .= '<input type="hidden"   name="page" value="' . $s_page . '" />' . M3_NL;
 //			$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-			$body .= '<input type="hidden" name="done" value="1" />' . M3_NL;		// 次画面遷移用
+			$body .= '<input type="hidden" name="action" value="done" />' . M3_NL;		// 次画面遷移用
 			
 //			if ($editAuth){
 //				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;

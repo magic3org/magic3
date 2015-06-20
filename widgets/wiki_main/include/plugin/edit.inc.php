@@ -23,48 +23,17 @@ define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
 function plugin_edit_action()
 {
 	global $_title_edit, $load_template_func;
-	global $_msg_password, $_btn_submit, $_title_authorization_required, $_msg_authorization_required;		// パスワード認証用
 	global $script, $_title_cannotedit, $_msg_unfreeze;		// add for magic3
 	global $gEnvManager;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
+//	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
-	$page = WikiParam::getPage();
+	// ### パスワード認証フォーム表示 ###
+	// 認証されている場合はスルーして関数以降を実行
+	$retStatus = password_form();
+	if (!empty($retStatus)) return $retStatus;
 	
-	// ###### パスワード認証処理 #####
-	$pass = WikiParam::getVar('pass');
-	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
-
-	// 編集権限をチェック
-	if (!$editAuth){			// 編集権限がない場合
-		if ($pass != '' && pkwk_login($pass)){		// パスワードが送信されてい場合はログイン処理
-		} else {
-			// パスワード入力画面を作成
-			$body = "<p><strong>$_msg_authorization_required</strong></p>\n";
-
-			// パスワード認証の場合は入力フィールドを表示
-			if (WikiConfig::isPasswordAuth()){
-				$templateType = $gEnvManager->getCurrentTemplateType();
-				if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-					$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
-					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-					$body .= '<div class="form-group"><label>' . $_msg_password . ':<input type="password" class="form-control" name="password" size="12" /></label>' . M3_NL;
-					$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" /></div>' . M3_NL;
-					$body .= '</form>' . M3_NL;
-				} else {
-					$body .= '<form method="post" class="form">' . M3_NL;
-					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-					$body .= '<label>' . $_msg_password . ':<input type="password" name="password" size="12" /></label>' . M3_NL;
-					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
-					$body .= '</form>' . M3_NL;
-				}
-			}
-			return array(
-				'msg'	=> $_title_authorization_required,
-				'body'	=> $body
-			);
-		}
-	}
+	$page = WikiParam::getPage();
 		
 	if (!check_editable($page, true, true)){		// 編集不可のとき
 		$body = $title = str_replace('$1', make_pagelink($page), $_title_cannotedit);

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: attach.inc.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -24,7 +24,7 @@
 //    This feature is disabled at newer version of PHP.
 //    Set this at php.ini if you want.
 // Max file size for upload on PHP (PHP default: 2MB)
-ini_set('upload_max_filesize', '2M');
+//ini_set('upload_max_filesize', '2M');
 
 // Max file size for upload on script of PukiWikiX_FILESIZE
 define('PLUGIN_ATTACH_MAX_FILESIZE', (1024 * 1024)); // default: 1MB
@@ -60,9 +60,6 @@ define('PLUGIN_ATTACH_CONFIG_PAGE_MIME', 'plugin/attach/mime-type');
 //-------- convert
 function plugin_attach_convert()
 {
-//	global $vars;
-
-	//$page = isset($vars['page']) ? $vars['page'] : '';
 	$page = WikiParam::getPage();
 
 	$nolist = $noform = FALSE;
@@ -88,23 +85,12 @@ function plugin_attach_convert()
 //-------- action
 function plugin_attach_action()
 {
-	//global $vars, $_attach_messages;
 	global $_attach_messages;
-	
-	// Backward compatible
-	/*if (isset($vars['openfile'])) {
-		$vars['file'] = $vars['openfile'];
-		$vars['pcmd'] = 'open';
-	}
-	if (isset($vars['delfile'])) {
-		$vars['file'] = $vars['delfile'];
-		$vars['pcmd'] = 'delete';
-	}*/
 
-	/*$pcmd  = isset($vars['pcmd'])  ? $vars['pcmd']  : '';
-	$refer = isset($vars['refer']) ? $vars['refer'] : '';
-	$pass  = isset($vars['pass'])  ? $vars['pass']  : NULL;
-	$page  = isset($vars['page'])  ? $vars['page']  : '';*/
+	// ### パスワード認証フォーム表示 ###
+	// 認証されている場合はスルーして関数以降を実行
+	$retStatus = password_form();
+	if (!empty($retStatus)) return $retStatus;
 	
 	$pcmd = WikiParam::getVar('pcmd');
 	$refer = WikiParam::getRefer();
@@ -151,10 +137,8 @@ function plugin_attach_action()
 //-------- call from skin
 function attach_filelist()
 {
-	//global $vars, $_attach_messages;
 	global $_attach_messages;
 
-	//$page = isset($vars['page']) ? $vars['page'] : '';
 	$page = WikiParam::getPage();
 
 	$obj = new AttachPages($page, 0);
@@ -384,11 +368,7 @@ function attach_list()
 // アップロードフォームを表示 (action時)
 function attach_showform()
 {
-	//global $vars, $_attach_messages;
 	global $_attach_messages;
-
-	/*$page = isset($vars['page']) ? $vars['page'] : '';
-	$vars['refer'] = $page;*/
 	
 	$page = WikiParam::getPage();
 	WikiParam::setRefer($page);
@@ -440,8 +420,8 @@ function attach_mime_content_type($filename)
 // アップロードフォームの出力
 function attach_form($page)
 {
-	//global $script, $vars, $_attach_messages;
 	global $script, $_attach_messages;
+	global $dummy_password;
 	global $gEnvManager;
 
 	// テンプレートタイプに合わせて出力を変更
@@ -482,69 +462,71 @@ EOD;*/
 	$maxsize = PLUGIN_ATTACH_MAX_FILESIZE;
 	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'], number_format($maxsize/1024) . 'KB');
 
-	$pass = '';
+	//$pass = '';
 	$hiddenPath = '';
 	//if (PLUGIN_ATTACH_PASSWORD_REQUIRE || PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY) {
 	if (PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY) {
 		$title = $_attach_messages[PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY ? 'msg_adminpass' : 'msg_password'];
 		
 		// テンプレートタイプに合わせて出力を変更
-		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+/*		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$pass = '<div class="form-group"><label for="_p_attach_password">' . $title . ':' . '</label> <input type="password" class="form-control" id="_p_attach_password" name="password" size="12" /></div>';
 		} else {
 			$pass = '<br />' . $title . ': <input type="password" name="password" size="12" />';
-		}
+		}*/
 		$hiddenPath = '<input type="hidden" name="pass" />';
 	}
 	$postScript = $script . WikiParam::convQuery("?");
 	
 	// テンプレートタイプに合わせて出力を変更
+	$body = '';
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-		$retValue = <<<EOD
-<form enctype="multipart/form-data" action="$postScript" method="post" class="form form-inline" role="form">
-  <input type="hidden" name="plugin" value="attach" />
-  <input type="hidden" name="pcmd"   value="post" />
-  <input type="hidden" name="refer"  value="$s_page" />
-  <input type="hidden" name="max_file_size" value="$maxsize" />
-  $hiddenPath
-  $navi
-  <p>
-   $msg_maxsize
-  </p>
-  <div class="form-group">
-    <div class="input-group">
-      <span class="input-group-btn">
-        <span class="btn btn-primary btn-file">{$_attach_messages['msg_select_file']}<input type="file" name="attach_file"></span>
-      </span>
-      <input type="text" class="form-control" readonly>
-    </div>
-  </div>
-  <div>$pass
-  <input type="submit" class="button btn" value="{$_attach_messages['btn_upload']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
-  </div>
-</form>
-EOD;
+		$body .= '<form enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
+		$body .= '<input type="hidden" name="pcmd"   value="post" />' . M3_NL;
+		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+		$body .= '<input type="hidden" name="max_file_size" value="' . $maxsize . '" />' . M3_NL;
+		//$body .= $hiddenPath;
+		$body .= '<input type="hidden" name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= $navi;
+		$body .= '<p>' . M3_NL;
+		$body .= $msg_maxsize;
+		$body .= '</p>' . M3_NL;
+		$body .= '<div class="form-group">' . M3_NL;
+		$body .= '<div class="input-group">' . M3_NL;
+		$body .= '<span class="input-group-btn">' . M3_NL;
+		$body .= '<span class="btn btn-primary btn-file">' . $_attach_messages['msg_select_file'] . '<input type="file" name="attach_file"></span>' . M3_NL;
+		$body .= '</span>' . M3_NL;
+		$body .= '<input type="text" class="form-control" readonly>' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '<div>' . M3_NL;
+//		$body .= $pass;
+		$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_upload'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '</form>' . M3_NL;
 	} else {
-		$retValue = <<<EOD
-<form enctype="multipart/form-data" action="$postScript" method="post" class="form">
- <div>
-  <input type="hidden" name="plugin" value="attach" />
-  <input type="hidden" name="pcmd"   value="post" />
-  <input type="hidden" name="refer"  value="$s_page" />
-  <input type="hidden" name="max_file_size" value="$maxsize" />
-  $hiddenPath
-  $navi
-  <span class="small">
-   $msg_maxsize
-  </span><br />
-  <label for="_p_attach_file">{$_attach_messages['msg_file']}:</label> <input type="file" name="attach_file" id="_p_attach_file" />
-  $pass
-  <input type="submit" class="button" value="{$_attach_messages['btn_upload']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
- </div>
-</form>
-EOD;
+		$body .= '<form enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form">' . M3_NL;
+		$body .= '<div>' . M3_NL;
+		$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
+		$body .= '<input type="hidden" name="pcmd"   value="post" />' . M3_NL;
+		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
+		$body .= '<input type="hidden" name="max_file_size" value="' . $maxsize . '" />' . M3_NL;
+	//	$body .= $hiddenPath;
+		$body .= '<input type="hidden" name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+		$body .= $navi;
+		$body .= '<span class="small">' . M3_NL;
+		$body .= $msg_maxsize;
+		$body .= '</span><br />' . M3_NL;
+		$body .= '<label for="_p_attach_file">' . $_attach_messages['msg_file'] . ':</label> <input type="file" name="attach_file" id="_p_attach_file" />' . M3_NL;
+//		$body .= $pass;
+		$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_upload'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '</form>' . M3_NL;
 	}
-	return $retValue;
+	return $body;
 }
 
 //-------- クラス
@@ -657,7 +639,7 @@ class AttachFile
 	}
 
 	// 日付の比較関数
-	function datecomp($a, $b) {
+	static function datecomp($a, $b) {
 		return ($a->time == $b->time) ? 0 : (($a->time > $b->time) ? -1 : 1);
 	}
 

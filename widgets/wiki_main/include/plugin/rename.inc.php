@@ -20,45 +20,14 @@ define('PLUGIN_RENAME_LOGPAGE', ':RenameLog');
 
 function plugin_rename_action()
 {
-	global $_msg_password, $_btn_submit, $_title_authorization_required, $_msg_authorization_required;		// パスワード認証用
 	global $gEnvManager;
 	
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
+//	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 
-	// ###### パスワード認証処理 #####
-	$pass = WikiParam::getVar('pass');
-	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
-	
-	// 編集権限をチェック
-	if (!$editAuth){			// 編集権限がない場合
-		if ($pass != '' && pkwk_login($pass)){		// パスワードが送信されてい場合はログイン処理
-		} else {
-			// パスワード入力画面を作成
-			$body = "<p><strong>$_msg_authorization_required</strong></p>\n";
-
-			// パスワード認証の場合は入力フィールドを表示
-			if (WikiConfig::isPasswordAuth()){
-				$templateType = $gEnvManager->getCurrentTemplateType();
-				if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-					$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
-					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-					$body .= '<div class="form-group"><label>' . $_msg_password . ':<input type="password" class="form-control" name="password" size="12" /></label>' . M3_NL;
-					$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" /></div>' . M3_NL;
-					$body .= '</form>' . M3_NL;
-				} else {
-					$body .= '<form method="post" class="form">' . M3_NL;
-					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
-					$body .= '<label>' . $_msg_password . ':<input type="password" name="password" size="12" /></label>' . M3_NL;
-					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
-					$body .= '</form>' . M3_NL;
-				}
-			}
-			return array(
-				'msg'	=> $_title_authorization_required,
-				'body'	=> $body
-			);
-		}
-	}
+	// ### パスワード認証フォーム表示 ###
+	// 認証されている場合はスルーして関数以降を実行
+	$retStatus = password_form();
+	if (!empty($retStatus)) return $retStatus;
 	
 	$method = plugin_rename_getvar('method');
 	if ($method == 'regex') {
@@ -332,8 +301,7 @@ function plugin_rename_phase3($pages)
 	}*/
 	// リネーム処理
 	$pass = plugin_rename_getvar('pass');
-	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
-	if ($pass != '' && $editAuth) return plugin_rename_proceed($pages, $files, $exists);
+	if ($pass != '') return plugin_rename_proceed($pages, $files, $exists);
 
 	$method = plugin_rename_getvar('method');
 	if ($method == 'regex') {
