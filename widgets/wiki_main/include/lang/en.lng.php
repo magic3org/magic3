@@ -211,7 +211,7 @@ $_msg_content_back_to_top = '<div class="jumpmenu"><a href="#wiki_top">&uarr;</a
 $_msg_word        = 'These search terms have been highlighted:';
 $_title_no_operation_allowed = 'No Operation Allowed';
 $_msg_no_operation_allowed = 'This operation is not allowed.';
-$_msg_password		= 'Administrator password';
+$_msg_password		= 'Password';
 $_title_authorization_required	= 'Authorization_Required';
 $_msg_authorization_required	= 'This page requires authorization.';
 

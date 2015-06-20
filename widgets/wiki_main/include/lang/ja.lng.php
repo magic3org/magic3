@@ -213,7 +213,7 @@ $_msg_content_back_to_top = '<div class="jumpmenu"><a href="#wiki_top">&uarr;</a
 $_msg_word           = 'これらのキーワードがハイライトされています：';
 $_title_no_operation_allowed = '実行不可';
 $_msg_no_operation_allowed = 'この操作は実行できません';
-$_msg_password		= '管理者パスワード';
+$_msg_password		= 'パスワード';
 $_title_authorization_required	= 'アクセス制限';
 $_msg_authorization_required	= 'この画面を参照するにはアクセス権が必要です';
 
