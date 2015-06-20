@@ -682,6 +682,7 @@ class AttachFile
 	function info($err)
 	{
 		global $script, $_attach_messages;
+		global $dummy_password;
 		global $gEnvManager;
 
 		// テンプレートタイプに合わせて出力を変更
@@ -699,31 +700,27 @@ class AttachFile
 			if ($this->age) {
 				$msg_freezed = '';
 				$msg_delete  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-					'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
-					$_attach_messages['msg_require'] . '</label></div></div>';
+					'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] . '</label></div></div>';
 				$msg_freeze  = '';
 			} else {
 				if ($this->status['freeze']) {
 					$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 					$msg_delete  = '';
 					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
-						'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
-						$_attach_messages['msg_require'] . '</label></div></div>';
+						'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] . '</label></div></div>';
 				} else {
 					$msg_freezed = '';
 					$msg_delete = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
 						'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
-					if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
-						$msg_delete .= $_attach_messages['msg_require'];
+//					if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
+//						$msg_delete .= $_attach_messages['msg_require'];
 					$msg_delete .= '</label></div></div>';
 					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
-						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
-						$_attach_messages['msg_require'] . '</label></div></div>';
+						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] . '</label></div></div>';
 
 					if (PLUGIN_ATTACH_RENAME_ENABLE) {
 						$msg_rename  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
-							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
-							$_attach_messages['msg_require'] . '</label></div></div>' .
+							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] . '</label></div></div>' .
 							'<div class="form-group"><label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
 							':</label> ' .
 							'<input type="text" name="newname" id="_p_attach_newname" class="form-control" size="40" value="' .
@@ -735,31 +732,27 @@ class AttachFile
 			if ($this->age) {
 				$msg_freezed = '';
 				$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-					'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] .
-					$_attach_messages['msg_require'] . '</label><br />';
+					'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] . '</label><br />';
 				$msg_freeze  = '';
 			} else {
 				if ($this->status['freeze']) {
 					$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 					$msg_delete  = '';
 					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
-						'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] .
-						$_attach_messages['msg_require'] . '</label><br />';
+						'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] . '</label><br />';
 				} else {
 					$msg_freezed = '';
 					$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
 						'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
-					if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
-						$msg_delete .= $_attach_messages['msg_require'];
+				//	if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
+				//		$msg_delete .= $_attach_messages['msg_require'];
 					$msg_delete .= '</label><br />';
 					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
-						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] .
-						$_attach_messages['msg_require'] . '</label><br />';
+						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] . '</label><br />';
 
 					if (PLUGIN_ATTACH_RENAME_ENABLE) {
 						$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
-							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] .
-							$_attach_messages['msg_require'] . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
+							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
 							'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
 							':</label> ' .
 							'<input type="text" name="newname" id="_p_attach_newname" size="40" value="' .
@@ -773,82 +766,81 @@ class AttachFile
 		$postScript 	= $script . WikiParam::convQuery("?");
 		$linkList		= $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=list&amp;refer=$r_page");
 		$linkListAll	= $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=list");
-		$retval			= array('msg'=>sprintf($_attach_messages['msg_info'], htmlspecialchars($this->file)));
+		$msg			= sprintf($_attach_messages['msg_info'], htmlspecialchars($this->file));
+		$body			= '';
 		$filename		= basename($this->filename);
 		
 		// テンプレートタイプに合わせて出力を変更
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-			$retval['body'] = <<< EOD
-<p>
- [<a href="$linkList">{$_attach_messages['msg_list']}</a>]
- [<a href="$linkListAll">{$_attach_messages['msg_listall']}</a>]
-</p>
-<dl class="wiki_list">
- <dt>$info</dt>
- <dd>{$_attach_messages['msg_page']}: $s_page</dd>
- <dd>{$_attach_messages['msg_filename']}: {$filename}</dd>
- <dd>{$_attach_messages['msg_md5hash']}: {$this->md5hash}</dd>
- <dd>{$_attach_messages['msg_filesize']}: {$this->size_str} ({$this->size} bytes)</dd>
- <dd>Content-type: {$this->type}</dd>
- <dd>{$_attach_messages['msg_date']}: {$this->time_str}</dd>
- <dd>{$_attach_messages['msg_dlcount']}: {$this->status['count'][$this->age]}</dd>
- $msg_freezed
-</dl>
-<hr />
-$s_err
-<form action="$postScript" method="post" class="form form-inline" role="form">
-  <input type="hidden" name="plugin" value="attach" />
-  <input type="hidden" name="refer" value="$s_page" />
-  <input type="hidden" name="file" value="$s_file" />
-  <input type="hidden" name="age" value="{$this->age}" />
-  <input type="hidden" name="pass" />
-  $msg_delete
-  $msg_freeze
-  $msg_rename
-  <br /><br />
-  <div class="form-group"><label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
-  <input type="password" name="password" id="_p_attach_password" class="form-control" size="12" /></div>
-  <input type="submit" class="button btn" value="{$_attach_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
-</form>
-EOD;
+			$body .= '<p>' . M3_NL;
+			$body .= '[<a href="' . $linkList . '">' . $_attach_messages['msg_list'] . '</a>]' . M3_NL;
+			$body .= '[<a href="' . $linkListAll . '">' . $_attach_messages['msg_listall'] . '</a>]' . M3_NL;
+			$body .= '</p>' . M3_NL;
+			$body .= '<dl class="wiki_list">' . M3_NL;
+			$body .= '<dt>' . $info . '</dt>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . $s_page . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_filename'] . ': ' . $filename . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_md5hash'] . ': ' . $this->md5hash . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_filesize'] . ': ' . $this->size_str . ' (' . $this->size . ' bytes)</dd>' . M3_NL;
+			$body .= '<dd>Content-type: ' . $this->type . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_date'] . ': ' . $this->time_str . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_dlcount'] . ': ' . $this->status['count'][$this->age] . '</dd>' . M3_NL;
+			$body .= $msg_freezed;
+			$body .= '</dl>' . M3_NL;
+			$body .= '<hr />' . M3_NL;
+			$body .= $s_err;
+			$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+			$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
+			$body .= '<input type="hidden" name="refer" value="' . $s_page . '" />' . M3_NL;
+			$body .= '<input type="hidden" name="file" value="' . $s_file . '" />' . M3_NL;
+			$body .= '<input type="hidden" name="age" value="' . $this->age . '" />' . M3_NL;
+			$body .= '<input type="hidden" name="pass" />' . M3_NL;
+			$body .= $msg_delete;
+			$body .= $msg_freeze;
+			$body .= $msg_rename;
+			$body .= '<br /><br />' . M3_NL;
+//			$body .= '<div class="form-group"><label for="_p_attach_password">' . $_attach_messages['msg_password'] . ':</label>' . M3_NL;
+//			$body .= '<input type="password" name="password" id="_p_attach_password" class="form-control" size="12" /></div>' . M3_NL;
+			$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+			$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+			$body .= '</form>' . M3_NL;
 		} else {
-			$retval['body'] = <<< EOD
-<p class="small">
- [<a href="$linkList">{$_attach_messages['msg_list']}</a>]
- [<a href="$linkListAll">{$_attach_messages['msg_listall']}</a>]
-</p>
-<dl class="wiki_list">
- <dt>$info</dt>
- <dd>{$_attach_messages['msg_page']}: $s_page</dd>
- <dd>{$_attach_messages['msg_filename']}: {$filename}</dd>
- <dd>{$_attach_messages['msg_md5hash']}: {$this->md5hash}</dd>
- <dd>{$_attach_messages['msg_filesize']}: {$this->size_str} ({$this->size} bytes)</dd>
- <dd>Content-type: {$this->type}</dd>
- <dd>{$_attach_messages['msg_date']}: {$this->time_str}</dd>
- <dd>{$_attach_messages['msg_dlcount']}: {$this->status['count'][$this->age]}</dd>
- $msg_freezed
-</dl>
-<hr />
-$s_err
-<form action="$postScript" method="post" class="form">
- <div>
-  <input type="hidden" name="plugin" value="attach" />
-  <input type="hidden" name="refer" value="$s_page" />
-  <input type="hidden" name="file" value="$s_file" />
-  <input type="hidden" name="age" value="{$this->age}" />
-  <input type="hidden" name="pass" />
-  $msg_delete
-  $msg_freeze
-  $msg_rename
-  <br />
-  <label for="_p_attach_password">{$_attach_messages['msg_password']}:</label>
-  <input type="password" name="password" id="_p_attach_password" size="12" />
-  <input type="submit" class="button" value="{$_attach_messages['btn_submit']}" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
- </div>
-</form>
-EOD;
+			$body .= '<p class="small">' . M3_NL;
+			$body .= '[<a href="' . $linkList . '">' . $_attach_messages['msg_list'] . '</a>]' . M3_NL;
+			$body .= '[<a href="' . $linkListAll . '">' . $_attach_messages['msg_listall'] . '</a>]' . M3_NL;
+			$body .= '</p>' . M3_NL;
+			$body .= '<dl class="wiki_list">' . M3_NL;
+			$body .= '<dt>' . $info . '</dt>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . $s_page . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_filename'] . ': ' . $filename . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_md5hash'] . ': ' . $this->md5hash . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_filesize'] . ': ' . $this->size_str . ' (' . $this->size . ' bytes)</dd>' . M3_NL;
+			$body .= '<dd>Content-type: ' . $this->type . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_date'] . ': ' . $this->time_str . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_dlcount'] . ': ' . $this->status['count'][$this->age] . '</dd>' . M3_NL;
+			$body .= $msg_freezed;
+			$body .= '</dl>' . M3_NL;
+			$body .= '<hr />' . M3_NL;
+			$body .= $s_err;
+			$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+			$body .= '<div>' . M3_NL;
+			$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
+			$body .= '<input type="hidden" name="refer" value="' . $s_page . '" />' . M3_NL;
+			$body .= '<input type="hidden" name="file" value="' . $s_file . '" />' . M3_NL;
+			$body .= '<input type="hidden" name="age" value="' . $this->age . '" />' . M3_NL;
+			$body .= '<input type="hidden" name="pass" />' . M3_NL;
+			$body .= $msg_delete;
+			$body .= $msg_freeze;
+			$body .= $msg_rename;
+			$body .= '<br />' . M3_NL;
+//			$body .= '<label for="_p_attach_password">' . $_attach_messages['msg_password'] . ':</label>' . M3_NL;
+//			$body .= '<input type="password" name="password" id="_p_attach_password" size="12" />' . M3_NL;
+			$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+			$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+			$body .= '</div>' . M3_NL;
+			$body .= '</form>' . M3_NL;
 		}
-		return $retval;
+		return array('msg' => $msg, 'body' => $body);
 	}
 
 	function delete($pass)
