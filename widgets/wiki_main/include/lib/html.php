@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: html.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -391,92 +391,53 @@ function pkwk_common_headers()
 		}
 	}
 }
-
-// DTD definitions
-/*define('PKWK_DTD_XHTML_1_1',              17); // Strict only
-define('PKWK_DTD_XHTML_1_0',              16); // Strict
-define('PKWK_DTD_XHTML_1_0_STRICT',       16);
-define('PKWK_DTD_XHTML_1_0_TRANSITIONAL', 15);
-define('PKWK_DTD_XHTML_1_0_FRAMESET',     14);
-define('PKWK_DTD_HTML_4_01',               3); // Strict
-define('PKWK_DTD_HTML_4_01_STRICT',        3);
-define('PKWK_DTD_HTML_4_01_TRANSITIONAL',  2);
-define('PKWK_DTD_HTML_4_01_FRAMESET',      1);
-define('PKWK_DTD_TYPE_XHTML',  1);
-define('PKWK_DTD_TYPE_HTML',   0);*/
-
-// Output HTML DTD, <html> start tag. Return content-type.
-/*function pkwk_output_dtd($pkwk_dtd = PKWK_DTD_XHTML_1_1, $charset = CONTENT_CHARSET)
+/**
+ * パスワード認証画面を作成
+ *
+ * 機能：パスワード認証が必要な場合は認証画面を作成、認証が通った場合やすでに認証されている場合は空のデータを返す
+ *
+ * @return array		認証画面の連想配列データ(title=タイトル、body=フォーム内容)。認証の必要がない場合は空を返す。
+ */
+function password_form()
 {
-	static $called;
-	if (isset($called)) die('pkwk_output_dtd() already called. Why?');
-	$called = TRUE;
+	global $_msg_password, $_btn_submit, $_title_authorization_required, $_msg_authorization_required;		// パスワード認証用
+	global $gEnvManager;
+	
+	// ###### パスワード認証処理 #####
+	$pass = WikiParam::getVar('pass');
+	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 
-	$type = PKWK_DTD_TYPE_XHTML;
-	$option = '';
-	switch($pkwk_dtd){
-	case PKWK_DTD_XHTML_1_1             :
-		$version = '1.1' ;
-		$dtd     = 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd';
-		break;
-	case PKWK_DTD_XHTML_1_0_STRICT      :
-		$version = '1.0' ;
-		$option  = 'Strict';
-		$dtd     = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd';
-		break;
-	case PKWK_DTD_XHTML_1_0_TRANSITIONAL:
-		$version = '1.0' ;
-		$option  = 'Transitional';
-		$dtd     = 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd';
-		break;
+	// 編集権限をチェック
+	if (!$editAuth){			// 編集権限がない場合
+		if ($pass != '' && pkwk_login($pass)){		// パスワードが送信されてい場合はログイン処理
+		} else {
+			// パスワード入力画面を作成
+			$body = "<p><strong>$_msg_authorization_required</strong></p>\n";
 
-	case PKWK_DTD_HTML_4_01_STRICT      :
-		$type    = PKWK_DTD_TYPE_HTML;
-		$version = '4.01';
-		$dtd     = 'http://www.w3.org/TR/html4/strict.dtd';
-		break;
-	case PKWK_DTD_HTML_4_01_TRANSITIONAL:
-		$type    = PKWK_DTD_TYPE_HTML;
-		$version = '4.01';
-		$option  = 'Transitional';
-		$dtd     = 'http://www.w3.org/TR/html4/loose.dtd';
-		break;
-
-	default: die('DTD not specified or invalid DTD');
-		break;
+			// パスワード認証の場合は入力フィールドを表示
+			if (WikiConfig::isPasswordAuth()){
+				$templateType = $gEnvManager->getCurrentTemplateType();
+				if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+					$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
+					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+					$body .= '<div class="form-group"><label>' . $_msg_password . ':<input type="password" class="form-control" name="password" size="12" /></label>' . M3_NL;
+					$body .= '<input type="submit" class="button btn" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" /></div>' . M3_NL;
+					$body .= '</form>' . M3_NL;
+				} else {
+					$body .= '<form method="post" class="form">' . M3_NL;
+					$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+					$body .= '<label>' . $_msg_password . ':<input type="password" name="password" size="12" /></label>' . M3_NL;
+					$body .= '<input type="submit" class="button" value="' . $_btn_submit . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+					$body .= '</form>' . M3_NL;
+				}
+			}
+			return array(
+				'msg'	=> $_title_authorization_required,
+				'body'	=> $body
+			);
+		}
 	}
-
-	$charset = htmlspecialchars($charset);
-
-	// Output XML or not
-	if ($type == PKWK_DTD_TYPE_XHTML) echo '<?xml version="1.0" encoding="' . $charset . '" ?>' . "\n";
-
-	// Output doctype
-	echo '<!DOCTYPE html PUBLIC "-//W3C//DTD ' .
-		($type == PKWK_DTD_TYPE_XHTML ? 'XHTML' : 'HTML') . ' ' .
-		$version .
-		($option != '' ? ' ' . $option : '') .
-		'//EN" "' .
-		$dtd .
-		'">' . "\n";
-
-	// Output <html> start tag
-	echo '<html';
-	if ($type == PKWK_DTD_TYPE_XHTML) {
-		echo ' xmlns="http://www.w3.org/1999/xhtml"'; // dir="ltr"
-		echo ' xml:lang="' . LANG . '"';
-		if ($version == '1.0') echo ' lang="' . LANG . '"'; // Only XHTML 1.0
-	} else {
-		echo ' lang="' . LANG . '"'; // HTML
-	}
-	echo '>' . "\n"; // <html>
-
-	// Return content-type (with MIME type)
-	if ($type == PKWK_DTD_TYPE_XHTML) {
-		// NOTE: XHTML 1.1 browser will ignore http-equiv
-		return '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . $charset . '" />' . "\n";
-	} else {
-		return '<meta http-equiv="content-type" content="text/html; charset=' . $charset . '" />' . "\n";
-	}
-}*/
+	// 認証を通った場合
+	return array();
+}
 ?>
