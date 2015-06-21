@@ -28,5 +28,6 @@ INSERT INTO _nav_item
 ('helplink', 5,     5,        'task=installdata',       'サンプルデータをインストールするには？'),
 ('helplink', 6,     6,        'task=templist',       'テンプレートを追加するには？'),
 ('helplink', 7,     7,        'task=configsys',       'サイトを非公開にするには？'),
-('helplink', 8,     8,        'task=configmessage',       'サイト非公開時のメッセージを変更するには？');
+('helplink', 8,     8,        'task=configmessage',       'サイト非公開時のメッセージを変更するには？'),
+('helplink', 9,     9,        'task=userlist',       '管理者のパスワードを変更するには？');
 

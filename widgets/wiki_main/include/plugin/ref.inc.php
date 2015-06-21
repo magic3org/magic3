@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ref.inc.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -157,8 +157,10 @@ function plugin_ref_body($args)
 	// 第一引数: "[ページ名および/]添付ファイル名"、あるいは"URL"を取得
 	$name = array_shift($args);
 	$is_url = is_url($name);
-
-	if(! $is_url) {
+	// 「/」で始まる名前はドキュメントルートからの相対URLとする
+	if (strncmp($name, '/', 1) == 0) $is_url = true;
+	
+	if (!$is_url){
 		// 添付ファイル
 		if (! is_dir(UPLOAD_DIR)) {
 			$params['_error'] = 'No UPLOAD_DIR';
@@ -218,8 +220,7 @@ function plugin_ref_body($args)
 			$is_file = is_file($file);
 		}
 		if (! $is_file) {
-			$params['_error'] = htmlspecialchars('File not found: "' .
-				$name . '" at page "' . $page . '"');
+			$params['_error'] = htmlspecialchars('File not found: "' . $name . '" at page "' . $page . '"');
 			return $params;
 		}
 	}
