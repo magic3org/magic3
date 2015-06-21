@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: backup.inc.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -29,6 +29,11 @@ function plugin_backup_action()
 	global $_title_backupdiff, $_title_backupnowdiff, $_title_backupsource;
 	global $_title_backup, $_title_pagebackuplist, $_title_backuplist;
 
+	// ### パスワード認証フォーム表示 ###
+	// 認証されている場合はスルーして関数以降を実行
+	$retStatus = password_form();
+	if (!empty($retStatus)) return $retStatus;
+	
 	if (! $do_backup) return;
 
 	$page = WikiParam::getPage();
@@ -144,6 +149,7 @@ function plugin_backup_delete($page)
 {
 	global $_title_backup_delete, $_title_pagebackuplist, $_msg_backup_deleted;
 	global $_msg_backup_adminpass, $_btn_delete, $_msg_invalidpass;
+	global $dummy_password;
 	global $gEnvManager;
 	
 	//if (! _backup_file_exists($page))
@@ -169,31 +175,29 @@ function plugin_backup_delete($page)
 	// テンプレートタイプに合わせて出力を変更
 	$templateType = $gEnvManager->getCurrentTemplateType();
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-		$body .= <<<EOD
-<p>$_msg_backup_adminpass</p>
-<form action="$postScript" method="post" class="form form-inline" role="form">
-  <input type="hidden"   name="wcmd"    value="backup" />
-  <input type="hidden"   name="page"   value="$s_page" />
-  <input type="hidden"   name="action" value="delete" />
-  <input type="hidden"   name="pass" />
-  <div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>
-  <input type="submit"   name="ok"     class="button btn" value="$_btn_delete" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
-</form>
-EOD;
+//		$body .= '<p>' . $_msg_backup_adminpass . '</p>' . M3_NL;
+		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+		$body .= '<input type="hidden"   name="wcmd"    value="backup" />' . M3_NL;
+		$body .= '<input type="hidden"   name="page"   value="' . $s_page . '" />' . M3_NL;
+		$body .= '<input type="hidden"   name="action" value="delete" />' . M3_NL;
+		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+//		$body .= '<div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>' . M3_NL;
+		$body .= '<input type="submit"   name="ok"     class="button btn" value="' . $_btn_delete . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '</form>' . M3_NL;
 	} else {
-		$body .= <<<EOD
-<p>$_msg_backup_adminpass</p>
-<form action="$postScript" method="post" class="form">
- <div>
-  <input type="hidden"   name="wcmd"    value="backup" />
-  <input type="hidden"   name="page"   value="$s_page" />
-  <input type="hidden"   name="action" value="delete" />
-  <input type="hidden"   name="pass" />
-  <input type="password" name="password" size="12" />
-  <input type="submit"   name="ok"     class="button" value="$_btn_delete" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
- </div>
-</form>
-EOD;
+//		$body .= '<p>' . $_msg_backup_adminpass . '</p>' . M3_NL;
+		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+		$body .= '<div>' . M3_NL;
+		$body .= '<input type="hidden"   name="wcmd"    value="backup" />' . M3_NL;
+		$body .= '<input type="hidden"   name="page"   value="' . $s_page . '" />' . M3_NL;
+		$body .= '<input type="hidden"   name="action" value="delete" />' . M3_NL;
+		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+//		$body .= '<input type="password" name="password" size="12" />' . M3_NL;
+		$body .= '<input type="submit"   name="ok"     class="button" value="' . $_btn_delete . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '</form>' . M3_NL;
 	}
 	return	array('msg'=>$_title_backup_delete, 'body'=>$body);
 }

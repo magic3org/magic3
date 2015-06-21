@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,6 +20,11 @@
 
 function plugin_diff_action()
 {
+	// ### パスワード認証フォーム表示 ###
+	// 認証されている場合はスルーして関数以降を実行
+	$retStatus = password_form();
+	if (!empty($retStatus)) return $retStatus;
+	
 	$page = WikiParam::getPage();
 	check_readable($page, true, true);
 
@@ -39,26 +44,26 @@ function plugin_diff_view($page)
 	
 	$r_page = rawurlencode($page);
 	$s_page = htmlspecialchars($page);
+	$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
 
 	$menu = array(
 		'<li>' . $_msg_addline . '</li>',
 		'<li>' . $_msg_delline . '</li>'
 	);
-
+	
 	$is_page = is_page($page);
 	if ($is_page) {
-		$menu[] = ' <li>' . str_replace('$1', '<a href="' . $script . WikiParam::convQuery("?$r_page") . '">' .
-			$s_page . '</a>', $_msg_goto) . '</li>';
-	} else {
+		$menu[] = ' <li>' . str_replace('$1', '<a href="' . $script . WikiParam::convQuery("?$r_page") . '">' . $s_page . '</a>', $_msg_goto) . '</li>';
+	} else {	// ページがない場合
 		$menu[] = ' <li>' . str_replace('$1', $s_page, $_msg_deleted) . '</li>';
 	}
 
 	$diffData = WikiPage::getPageDiff($page, true);
 	if (!empty($diffData)){
-		if (! PKWK_READONLY) {
-			$menu[] = '<li><a href="' . $script . WikiParam::convQuery("?cmd=diff&amp;action=delete&amp;page=$r_page") .
-				'">' . str_replace('$1', $s_page, $_title_diff_delete) . '</a></li>';
-		}
+//		if (! PKWK_READONLY) {
+//		if ($editAuth){	// 編集権限がある場合のみ「削除」のリンクを表示
+			$menu[] = '<li><a href="' . $script . WikiParam::convQuery("?cmd=diff&amp;action=delete&amp;page=$r_page") . '">' . str_replace('$1', $s_page, $_title_diff_delete) . '</a></li>';
+//		}
 		$msg = '<pre class="wiki_pre">' . diff_style_to_css(htmlspecialchars($diffData)) . '</pre>' . "\n";
 	} else if ($is_page) {
 		$diffData = trim(htmlspecialchars(get_source($page, true)));
@@ -68,13 +73,9 @@ function plugin_diff_view($page)
 	}
 
 	$menu = join("\n", $menu);
-	$body = <<<EOD
-<ul>
-$menu
-</ul>
-EOD;
+	$body = '<ul>' . $menu . '</ul>';
 
-	return array('msg'=>$_title_diff, 'body'=>$body . $msg);
+	return array('msg' => $_title_diff, 'body' => $body . $msg);
 }
 
 function plugin_diff_delete($page)
@@ -82,6 +83,7 @@ function plugin_diff_delete($page)
 	global $script;
 	global $_title_diff_delete, $_msg_diff_deleted;
 	global $_msg_diff_adminpass, $_btn_delete, $_msg_invalidpass;
+	global $dummy_password;
 	global $gEnvManager;
 	
 	$body = '';
@@ -110,32 +112,30 @@ function plugin_diff_delete($page)
 	// テンプレートタイプに合わせて出力を変更
 	$templateType = $gEnvManager->getCurrentTemplateType();
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-		$body .= <<<EOD
-<p>$_msg_diff_adminpass</p>
-<form action="$postScript" method="post" class="form form-inline" role="form">
-  <input type="hidden"   name="wcmd"    value="diff" />
-  <input type="hidden"   name="page"   value="$s_page" />
-  <input type="hidden"   name="action" value="delete" />
-  <input type="hidden"   name="pass" />
-  <div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>
-  <input type="submit"   name="ok"     class="button btn" value="$_btn_delete" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
-</form>
-EOD;
+//		$body .= '<p>' . $_msg_diff_adminpass . '</p>' . M3_NL;
+		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+		$body .= '<input type="hidden"   name="wcmd"    value="diff" />' . M3_NL;
+		$body .= '<input type="hidden"   name="page"   value="' . $s_page . '" />' . M3_NL;
+		$body .= '<input type="hidden"   name="action" value="delete" />' . M3_NL;
+		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+//		$body .= '<div class="form-group"><input type="password" class="form-control" name="password" size="12" /></div>' . M3_NL;
+		$body .= '<input type="submit"   name="ok"     class="button btn" value="' . $_btn_delete . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '</form>' . M3_NL;
 	} else {
-		$body .= <<<EOD
-<p>$_msg_diff_adminpass</p>
-<form action="$postScript" method="post" class="form">
- <div>
-  <input type="hidden"   name="wcmd"    value="diff" />
-  <input type="hidden"   name="page"   value="$s_page" />
-  <input type="hidden"   name="action" value="delete" />
-  <input type="hidden"   name="pass" />
-  <input type="password" name="password" size="12" />
-  <input type="submit"   name="ok"     class="button" value="$_btn_delete" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />
- </div>
-</form>
-EOD;
+//		$body .= '<p>' . $_msg_diff_adminpass . '</p>' . M3_NL;
+		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+		$body .= '<div>' . M3_NL;
+		$body .= '<input type="hidden"   name="wcmd"    value="diff" />' . M3_NL;
+		$body .= '<input type="hidden"   name="page"   value="' . $s_page . '" />' . M3_NL;
+		$body .= '<input type="hidden"   name="action" value="delete" />' . M3_NL;
+		$body .= '<input type="hidden"   name="pass" />' . M3_NL;
+		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+//		$body .= '<input type="password" name="password" size="12" />' . M3_NL;
+		$body .= '<input type="submit"   name="ok"     class="button" value="' . $_btn_delete . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '</div>' . M3_NL;
+		$body .= '</form>' . M3_NL;
 	}
-	return array('msg'=>$_title_diff_delete, 'body'=>$body);
+	return array('msg' => $_title_diff_delete, 'body' => $body);
 }
 ?>
