@@ -21,6 +21,14 @@ function plugin_read_action()
 	$page = WikiParam::getPage();
 	
 	if (is_page($page)) {
+		// 「:」で始まるシステム用ページはアクセス権をチェックする
+		if (strncmp($page, ':', 1) == 0){
+			// ### パスワード認証フォーム表示 ###
+			// 認証されている場合はスルーして関数以降を実行
+			$retStatus = password_form();
+			if (!empty($retStatus)) return $retStatus;
+		}
+		
 		// ページを表示
 		check_readable($page, true, true);
 		header_lastmod($page);

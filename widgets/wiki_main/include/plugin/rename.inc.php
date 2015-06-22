@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: rename.inc.php 1601 2009-03-21 05:51:06Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 //
@@ -325,16 +325,13 @@ function plugin_rename_phase3($pages)
 	if (! empty($exists)) {
 		$msg .= $_rename_messages['err_already_below'] . '<ul>';
 		foreach ($exists as $page=>$arr) {
-			//$msg .= '<li>' . make_pagelink(decode($page));
 			$msg .= '<li>' . make_pagelink($page);
-			$msg .= $_rename_messages['msg_arrow'];
-			//$msg .= htmlspecialchars(decode($pages[$page]));
+			$msg .= ' ' . $_rename_messages['msg_arrow'] . ' ';
 			$msg .= htmlspecialchars($pages[$page]);
 			if (! empty($arr)) {
 				$msg .= '<ul>' . "\n";
 				foreach ($arr as $ofile=>$nfile)
-					$msg .= '<li>' . $ofile .
-					$_rename_messages['msg_arrow'] . $nfile . '</li>' . "\n";
+					$msg .= '<li>' . $ofile . ' ' . $_rename_messages['msg_arrow'] . ' ' . $nfile . '</li>' . "\n";
 				$msg .= '</ul>';
 			}
 			$msg .= '</li>' . "\n";
@@ -504,29 +501,26 @@ function plugin_rename_proceed($pages, $files, $exists)
 	$postdata[] = '*' . $now . "\n";
 	if (plugin_rename_getvar('method') == 'regex') {
 		$postdata[] = '-' . $_rename_messages['msg_regex'] . "\n";
-		$postdata[] = '--From:[[' . plugin_rename_getvar('src') . ']]' . "\n";
-		$postdata[] = '--To:[['   . plugin_rename_getvar('dst') . ']]' . "\n";
+		$postdata[] = '--From: [[' . plugin_rename_getvar('src') . ']]' . "\n";
+		$postdata[] = '--To: [['   . plugin_rename_getvar('dst') . ']]' . "\n";
 	} else {
 		$postdata[] = '-' . $_rename_messages['msg_page'] . "\n";
-		$postdata[] = '--From:[[' . plugin_rename_getvar('refer') . ']]' . "\n";
-		$postdata[] = '--To:[['   . plugin_rename_getvar('page')  . ']]' . "\n";
+		$postdata[] = '--From: [[' . plugin_rename_getvar('refer') . ']]' . "\n";
+		$postdata[] = '--To: [['   . plugin_rename_getvar('page')  . ']]' . "\n";
 	}
 
 	if (! empty($exists)) {
 		$postdata[] = "\n" . $_rename_messages['msg_result'] . "\n";
 		foreach ($exists as $page=>$arr) {
-			//$postdata[] = '-' . decode($page) . $_rename_messages['msg_arrow'] . decode($pages[$page]) . "\n";
-			$postdata[] = '-' . $page . $_rename_messages['msg_arrow'] . $pages[$page] . "\n";
+			$postdata[] = '-' . $page . ' ' . $_rename_messages['msg_arrow'] . ' ' . $pages[$page] . "\n";
 			foreach ($arr as $ofile=>$nfile)
-				$postdata[] = '--' . $ofile .
-					$_rename_messages['msg_arrow'] . $nfile . "\n";
+				$postdata[] = '--' . $ofile . ' ' . $_rename_messages['msg_arrow'] . ' ' . $nfile . "\n";
 		}
 		$postdata[] = '----' . "\n";
 	}
 
 	foreach ($pages as $old=>$new){
-		//$postdata[] = '-' . decode($old) . $_rename_messages['msg_arrow'] . decode($new) . "\n";
-		$postdata[] = '-' . $old . $_rename_messages['msg_arrow'] . $new . "\n";
+		$postdata[] = '-' . $old . ' ' . $_rename_messages['msg_arrow'] . ' ' . $new . "\n";
 	}
 
 	// 更新の衝突はチェックしない。
