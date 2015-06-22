@@ -1,3 +1,6 @@
+.img_margin img {
+	margin: 10px;
+}
 /* default edit content area */
 .edit_form {
 	width:100%;
