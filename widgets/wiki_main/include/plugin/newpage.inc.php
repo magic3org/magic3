@@ -72,7 +72,7 @@ function plugin_newpage_convert()
 
 function plugin_newpage_action()
 {
-	global $_btn_edit, $_msg_newpage;
+	global $_btn_edit, $_msg_newpage, $_title_invalid_pagename, $_msg_invalid_pagename;
 	global $gPageManager;
 
 	//if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
@@ -90,9 +90,12 @@ function plugin_newpage_action()
 		$retvars['body'] = plugin_newpage_convert();
 		return $retvars;
 	} else {
-		/*$page    = strip_bracket($vars['page']);
-		$r_page  = rawurlencode(isset($vars['refer']) ? get_fullname($page, $vars['refer']) : $page);
-		$r_refer = rawurlencode($vars['refer']);*/
+		// 「:」で始まるシステム用ページは作成不可
+		if (strncmp($page, ':', 1) == 0){
+			$msg  = $_title_invalid_pagename;
+			$body = sprintf($_msg_invalid_pagename, $page);
+			return array('msg' => $msg, 'body' => $body);
+		}
 
 		$page    = strip_bracket($page);
 		$refer = WikiParam::getRefer();

@@ -23,7 +23,7 @@ define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
 function plugin_edit_action()
 {
 	global $_title_edit, $load_template_func;
-	global $script, $_title_cannotedit, $_msg_unfreeze;		// add for magic3
+	global $script, $_title_cannotedit, $_msg_unfreeze, $_title_invalid_pagename, $_msg_invalid_pagename;
 	global $gEnvManager;
 
 //	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
@@ -34,6 +34,13 @@ function plugin_edit_action()
 	if (!empty($retStatus)) return $retStatus;
 	
 	$page = WikiParam::getPage();
+
+	// 「:」で始まるシステム用ページは作成不可
+	if (strncmp($page, ':', 1) == 0){
+		$msg  = $_title_invalid_pagename;
+		$body = sprintf($_msg_invalid_pagename, $page);
+		return array('msg' => $msg, 'body' => $body);
+	}
 		
 	if (!check_editable($page, true, true)){		// 編集不可のとき
 		$body = $title = str_replace('$1', make_pagelink($page), $_title_cannotedit);

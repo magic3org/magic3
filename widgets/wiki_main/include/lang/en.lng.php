@@ -164,6 +164,8 @@ global $_err_notexist;
 global $_title_no_operation_allowed;
 global $_title_authorization_required;
 global $_msg_authorization_required;
+global $_title_invalid_pagename;
+global $_msg_invalid_pagename;
 
 // Encoding hint
 $_LANG['encode_hint']['en'] = '';
@@ -212,8 +214,10 @@ $_msg_word        = 'These search terms have been highlighted:';
 $_title_no_operation_allowed = 'No Operation Allowed';
 $_msg_no_operation_allowed = 'This operation is not allowed.';
 $_msg_password		= 'Password';
-$_title_authorization_required	= 'Authorization_Required';
+$_title_authorization_required	= 'Authorization Required';
 $_msg_authorization_required	= 'This page requires authorization.';
+$_title_invalid_pagename	= 'Invalid Page Name';
+$_msg_invalid_pagename		= '[%s] is an invalid page name.';
 
 ///////////////////////////////////////
 // Symbols

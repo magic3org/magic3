@@ -165,6 +165,8 @@ global $_err_notexist;
 global $_title_no_operation_allowed;
 global $_title_authorization_required;
 global $_msg_authorization_required;
+global $_title_invalid_pagename;
+global $_msg_invalid_pagename;
 
 // Encoding hint
 $_LANG['encode_hint']['ja'] = 'ぷ';
@@ -216,6 +218,8 @@ $_msg_no_operation_allowed = 'この操作は実行できません';
 $_msg_password		= 'パスワード';
 $_title_authorization_required	= 'アクセス制限';
 $_msg_authorization_required	= 'この画面を参照するにはアクセス権が必要です';
+$_title_invalid_pagename	= 'ページ名不正';
+$_msg_invalid_pagename		= 'ページ名 [%s] が不正です';
 
 ///////////////////////////////////////
 // Symbols
