@@ -13,11 +13,9 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/wiki_mainCommonDef.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_wiki_mainBaseWidgetContainer.php');
 
-class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
+class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetContainer
 {
 	private $authType;		// 認証方法
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
@@ -70,11 +68,11 @@ class admin_wiki_mainWidgetContainer extends BaseAdminWidgetContainer
 	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
 	 * @return								なし
 	 */
-	function _postAssign($request, &$param)
+/*	function _postAssign($request, &$param)
 	{
 		// メニューバー、パンくずリスト作成(簡易版)
-		$this->createBasicConfigMenubar($request);
-	}
+//		$this->createBasicConfigMenubar($request);
+	}*/
 	/**
 	 * 詳細画面作成
 	 *
