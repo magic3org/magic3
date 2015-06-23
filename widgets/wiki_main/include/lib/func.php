@@ -456,11 +456,12 @@ function catrule()
 {
 	global $rule_page;
 
-	if (! is_page($rule_page)) {
-		return '<p>Sorry, page \'' . htmlspecialchars($rule_page) .
-			'\' unavailable.</p>';
-	} else {
+	if (is_page($rule_page)){
 		return convert_html(get_source($rule_page));
+	} else if (is_page(':' . $rule_page)){		// システム用ファイルがあれば取得
+		return convert_html(get_source(':' . $rule_page));
+	} else {
+		return '<p>Sorry, page \'' . htmlspecialchars($rule_page) . '\' unavailable.</p>';
 	}
 }
 
