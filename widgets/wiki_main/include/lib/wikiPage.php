@@ -152,7 +152,6 @@ class WikiPage
 	public static function getPageFile($name, &$data)
 	{
 		global $gEnvManager;
-		//global $gLogManager;
 		
 		$data = '';		// データ初期化
 					
@@ -160,19 +159,12 @@ class WikiPage
 		if (empty($name)) return false;
 		
 		$path = $gEnvManager->getCurrentWidgetIncludePath() . '/data/' . encode($name) . '.txt';
-		if ($fData = @file_get_contents($path)){		// ファイルが読み込めないときはファイルがないとする
+		if ($fData = file_get_contents($path)){		// ファイルが読み込めないときはファイルがないとする
 			$data = $fData;
 			return true;
 		} else {
 			return false;
 		}
-		/*if (!($file = @fopen($path, "r"))){
- 			$gLogManager->error(__METHOD__, 'ファイルのオープンに失敗しました ファイル=' . $path);
- 			return false;
-		}
-		$data = @fread($file, filesize($path));
-		@fclose($file);
-		return true;*/
 	}
 	/**
 	 * ページデータを取得
