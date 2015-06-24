@@ -72,7 +72,6 @@ class admin_wiki_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				break;
 			case self::TASK_CONFIG:				// 基本設定
 				$titles[] = '基本';
-//				$titles[] = '簡易イベント';
 				break;
 		}
 		
@@ -108,28 +107,6 @@ class admin_wiki_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 						'active'	=> (
 											$task == self::TASK_CONFIG 	// 基本設定
 										)
-/*						'submenu'	=> array(
-							(Object)array(
-								'name'		=> '日付定義',
-								'task'		=> self::TASK_DATE,
-								'url'		=> '',
-								'tagid'		=> '',
-								'active'	=> (
-													$task == self::TASK_DATE ||			// 日付定義
-													$task == self::TASK_DATE_DETAIL		// 日付定義詳細
-												)
-							),
-							(Object)array(
-								'name'		=> '日付タイプ',
-								'task'		=> self::TASK_DATETYPE,
-								'url'		=> '',
-								'tagid'		=> '',
-								'active'	=> (
-													$task == self::TASK_DATETYPE || 	// 日付タイプ
-													$task == self::TASK_DATETYPE_DETAIL 	// 日付タイプ詳細
-												)
-							)
-						)*/
 					)
 				);
 

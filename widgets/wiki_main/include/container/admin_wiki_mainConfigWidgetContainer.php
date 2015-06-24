@@ -43,7 +43,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'admin.tmpl.html';
+		return 'admin_config.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
