@@ -22,10 +22,10 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	private $firstNo;			// 項目番号
 	private $configType;		// 設定タイプ
 	private $serialArray = array();		// 表示されている項目シリアル番号
-	const DEFAULT_RES_TYPE = 0;	// デフォルトの設定タイプ(常設)
 	const DEFAULT_CONFIG_ID = 0;	// デフォルトの設定ID
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
-		
+	const LINK_PAGE_COUNT		= 5;			// リンクページ数
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -34,6 +34,9 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		// 親クラスを呼び出す
 		parent::__construct();
 		
+		// パラメータ初期化
+		$this->maxListCount = self::DEFAULT_LIST_COUNT;
+				
 		// DBオブジェクト作成
 //		$this->db = new blog_categoryDb();
 	}
@@ -50,7 +53,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'category_detail'){		// 詳細画面
+		if ($task == 'page_detail'){		// 詳細画面
 			return 'admin_page_detail.tmpl.html';
 		} else {
 			return 'admin_page.tmpl.html';
@@ -68,7 +71,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'category_detail'){	// 詳細画面
+		if ($task == 'page_detail'){	// 詳細画面
 			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);
@@ -82,8 +85,8 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	 */
 	function createList($request)
 	{
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		if ($act == 'delete'){		// 項目削除の場合
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
@@ -106,14 +109,31 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 				}
 			}
 		}
-		// #### カテゴリーリストを作成 ####
-//		$this->db->getAllCategory(array($this, 'categoryListLoop'), $this->langId);// デフォルト言語で取得
+		// #### Wikiページリストを作成 ####
+		// 総数を取得
+		$totalCount = self::$_mainDb->getNormalPageListCount();
+
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $this->maxListCount);
 		
-		if (count($this->serialArray) > 0){
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		
+		// イベントリストを取得
+		self::$_mainDb->getNormalPageList($this->maxListCount, $pageNo, array($this, 'itemListLoop'));
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
+		
+		// 一覧用項目
+		$this->tmpl->addVar("_widget", "page_link", $pageLink);
+		$this->tmpl->addVar("_widget", "total_count", $totalCount);
+		
+		// その他の項目
+		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+/*		if (count($this->serialArray) > 0){
 			$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		} else {
 			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
-		}
+		}*/
 	}
 	/**
 	 * 詳細画面作成
@@ -123,7 +143,6 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	 */
 	function createDetail($request)
 	{
-		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$userId = $this->gEnv->getCurrentUserId();
 		
 		$act = $request->trimValueOf('act');
@@ -141,7 +160,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->addCategory(0, $this->langId, $name, 0, $index, $visible, $userId, $newSerial);
+//				$ret = $this->db->addCategory(0, $this->langId, $name, 0, $index, $visible, $userId, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -181,7 +200,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			// 入力値初期化
 			if (empty($this->serialNo)){		// シリアル番号
 				$name = '';		// 名前
-				$index = $this->db->getMaxIndex($this->langId) + 1;	// 表示順
+//				$index = $this->db->getMaxIndex($this->langId) + 1;	// 表示順
 				$visible = 1;	// 表示状態
 			} else {
 				$replaceNew = true;			// データを再取得
@@ -193,7 +212,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			if ($ret){
 				// 取得値を設定
 				$id = $row['bc_id'];		// ID
-				$this->langId = $row['bc_language_id'];		// 言語ID
+//				$this->langId = $row['bc_language_id'];		// 言語ID
 				$name = $row['bc_name'];		// 名前
 				$index = $row['bc_sort_order'];	// 表示順
 				$visible = $row['bc_visible'];	// 表示状態
@@ -229,85 +248,22 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	 * @param object $param			未使用
 	 * @return bool					true=処理続行の場合、false=処理終了の場合
 	 */
-	function categoryListLoop($index, $fetchedRow, $param)
+	function itemListLoop($index, $fetchedRow, $param)
 	{
-		$serial = $fetchedRow['bc_serial'];
-		$id = $this->convertToDispString($fetchedRow['bc_id']);
-
+		// イベント予約情報
+		$serial		= $fetchedRow['wc_serial'];// シリアル番号
+		$id			= $fetchedRow['wc_id'];			// WikiページID
 		
-		// 対応言語を取得
-		$lang = '';
-		$ret = $this->db->getLangByCategoryId($fetchedRow['bc_id'], $rows);
-		if ($ret){
-			$count = count($rows);
-			for ($i = 0; $i < $count; $i++){
-				if ($this->gEnv->getCurrentLanguage() == 'ja'){	// 日本語の場合
-					$lang .= $rows[$i]['ln_name'];
-					if ($i != $count -1) $lang .= ',';
-				} else {
-					$lang .= $rows[$i]['ln_name_en'];
-					if ($i != $count -1) $lang .= ',';
-				}
-			}
-		}
-		// 親カテゴリー名を取得
-		$pcatId = $fetchedRow['bc_parent_id'];
-		$pcategoryName = '';
-		if ($pcatId != 0){
-			$ret = $this->db->getCategoryByCategoryId($pcatId, $this->gEnv->getDefaultLanguage(), $row);
-			if ($ret) $pcategoryName = $this->convertToDispString($row['bc_name']);
-		}
-		$visible = '';
-		if ($fetchedRow['bc_visible']){	// 項目の表示
-			$visible = 'checked';
-		}		
 		$row = array(
-			'index' => $index,													// 行番号
-			'serial' => $serial,	// シリアル番号
-			'id' => $id,			// ID
-			'name' => $this->convertToDispString($fetchedRow['bc_name']),		// 名前
-			'pcategory_name' => $pcategoryName,		// 親カテゴリー名前
-			'view_index' => $this->convertToDispString($fetchedRow['bc_sort_order']),		// 表示順
-			'lang' => $lang,													// 対応言語
-			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
-			'update_dt' => $this->convertToDispDateTime($fetchedRow['bc_create_dt']),	// 更新日時
-			'visible' => $visible,											// メニュー項目表示制御
-			'default' => $default											// デフォルト項目
+			'index'			=> $index,		// 項目番号
+			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
+			'id'			=> $this->convertToDispString($id),		// WikiページID
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
-
+		
 		// 表示中項目のシリアル番号を保存
 		$this->serialArray[] = $serial;
-		return true;
-	}
-	/**
-	 * 取得した言語をテンプレートに設定する
-	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
-	 */
-	function langLoop($index, $fetchedRow, $param)
-	{
-		$selected = '';
-		if ($fetchedRow['ln_id'] == $this->langId){
-			$selected = 'selected';
-		}
-		if ($this->gEnv->getCurrentLanguage() == 'ja'){		// 日本語表示の場合
-			$name = $this->convertToDispString($fetchedRow['ln_name']);
-		} else {
-			$name = $this->convertToDispString($fetchedRow['ln_name_en']);
-		}
-
-		$row = array(
-			'value'    => $this->convertToDispString($fetchedRow['ln_id']),			// 言語ID
-			'name'     => $name,			// 言語名
-			'selected' => $selected														// 選択中かどうか
-		);
-		$this->tmpl->addVars('lang_list', $row);
-		$this->tmpl->parseTemplate('lang_list', 'a');
 		return true;
 	}
 }

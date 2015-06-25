@@ -149,6 +149,40 @@ class wiki_mainDb extends BaseDb
 		return $retValue;
 	}
 	/**
+	 * 利用可能なWikiページ一覧を取得
+	 *
+	 * @param int		$limit				取得する項目数
+	 * @param int		$pageNo				取得するページ(1～)
+	 * @param function	$callback			コールバック関数
+	 * @return 								なし
+	 */
+	function getNormalPageList($limit, $pageNo, $callback)
+	{
+		$offset = $limit * ($pageNo -1);
+		if ($offset < 0) $offset = 0;
+		
+		$type = '';			// 取得ページタイプ(一般)
+		$queryStr  = 'SELECT wc_id FROM wiki_content ';
+		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
+		$queryStr .=     'AND wc_type = ? ';
+		$queryStr .=   'ORDER BY wc_id LIMIT ' . $limit . ' OFFSET ' . $offset;
+		$this->selectLoop($queryStr, array($type), $callback);
+	}
+	/**
+	 * 利用可能なWikiページ数を取得
+	 *
+	 * @param function	$callback			コールバック関数
+	 * @return int							ページ数
+	 */
+	function getNormalPageListCount()
+	{
+		$type = '';			// 取得ページタイプ(一般)
+		$queryStr  = 'SELECT wc_id FROM wiki_content ';
+		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
+		$queryStr .=     'AND wc_type = ? ';
+		return $this->selectRecordCount($queryStr, array($type));
+	}
+	/**
 	 * すべてのWikiページ名の取得
 	 *
 	 * @param string  $type			ページタイプ
