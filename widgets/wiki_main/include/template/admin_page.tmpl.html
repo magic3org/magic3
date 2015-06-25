@@ -64,6 +64,12 @@ function delItem(){
 	}
 	return true;
 }
+function selpage(page){
+	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;
+}
 $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
@@ -77,7 +83,8 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-<h3 class="m3config_h"><span {_HELP_PAGE_LIST}>ページ一覧</span></h3>
+<input type="hidden" name="page" value="{PAGE}" />
+<h3 class="m3config_h"><span {_HELP_PAGE_LIST}>Wikiページ一覧</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_PAGE_BUTTONS}><div class="btn-group">
 <!--<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" />--><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
@@ -87,13 +94,15 @@ $(function(){
     <tr>
         <th class="select"><span {_HELP_PAGE_CHECK}>選択</span></th>
         <th><span {_HELP_PAGE_ID}>ID</span></th>
+		<th>更新日時</th>
 	</tr>
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
+	    <td><!--<a href="#" onclick="editItemBySerial({SERIAL});">-->{ID}<!--</a>--></td>
+		<td>{DATE}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>

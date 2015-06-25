@@ -124,16 +124,12 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
 		
 		// 一覧用項目
+		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		
 		// その他の項目
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-/*		if (count($this->serialArray) > 0){
-			$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		} else {
-			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
-		}*/
 	}
 	/**
 	 * 詳細画面作成
@@ -253,11 +249,13 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		// イベント予約情報
 		$serial		= $fetchedRow['wc_serial'];// シリアル番号
 		$id			= $fetchedRow['wc_id'];			// WikiページID
+		$date		= $fetchedRow['wc_content_dt'];	// 更新日時
 		
 		$row = array(
 			'index'			=> $index,		// 項目番号
 			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
 			'id'			=> $this->convertToDispString($id),		// WikiページID
+			'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');

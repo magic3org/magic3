@@ -162,9 +162,10 @@ class wiki_mainDb extends BaseDb
 		if ($offset < 0) $offset = 0;
 		
 		$type = '';			// 取得ページタイプ(一般)
-		$queryStr  = 'SELECT wc_id FROM wiki_content ';
+		$queryStr  = 'SELECT * FROM wiki_content ';
 		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
 		$queryStr .=     'AND wc_type = ? ';
+		$queryStr .=     'AND wc_id NOT LIKE \':%\' ';				// システムファイルは除く
 		$queryStr .=   'ORDER BY wc_id LIMIT ' . $limit . ' OFFSET ' . $offset;
 		$this->selectLoop($queryStr, array($type), $callback);
 	}
@@ -177,9 +178,10 @@ class wiki_mainDb extends BaseDb
 	function getNormalPageListCount()
 	{
 		$type = '';			// 取得ページタイプ(一般)
-		$queryStr  = 'SELECT wc_id FROM wiki_content ';
+		$queryStr  = 'SELECT * FROM wiki_content ';
 		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
 		$queryStr .=     'AND wc_type = ? ';
+		$queryStr .=     'AND wc_id NOT LIKE \':%\' ';				// システムファイルは除く
 		return $this->selectRecordCount($queryStr, array($type));
 	}
 	/**
