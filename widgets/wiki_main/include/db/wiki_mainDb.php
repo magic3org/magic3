@@ -50,6 +50,20 @@ class wiki_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * シリアル番号からWikiページデータの取得
+	 *
+	 * @param int  $serial			シリアル番号
+	 * @param array   $row			レコード
+	 * @return bool					取得 = true, 取得なし= false
+	 */
+	function getPageBySerial($serial, &$row)
+	{
+		$queryStr  = 'SELECT * FROM wiki_content ';
+		$queryStr .=   'WHERE wc_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
+		return $ret;
+	}
+	/**
 	 * Wikiページデータを履歴番号で取得
 	 *
 	 * @param string  $name			ウィキページ名

@@ -14,15 +14,19 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_wiki_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/pukiwiki.ini.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiPage.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/func.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/file.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/diff.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/make_link.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/link.php');
 
 class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
 	private $serialNo;			// シリアル番号
-	private $firstNo;			// 項目番号
-	private $configType;		// 設定タイプ
 	private $serialArray = array();		// 表示されている項目シリアル番号
-	const DEFAULT_CONFIG_ID = 0;	// デフォルトの設定ID
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	
@@ -36,9 +40,6 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		
 		// パラメータ初期化
 		$this->maxListCount = self::DEFAULT_LIST_COUNT;
-				
-		// DBオブジェクト作成
-//		$this->db = new blog_categoryDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -72,7 +73,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	{
 		$task = $request->trimValueOf('task');
 		if ($task == 'page_detail'){	// 詳細画面
-			return $this->createDetail($request);
+//			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);
 		}
@@ -101,12 +102,20 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = $this->db->delCategoryBySerial($delItems);
-				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg('データを削除しました');
-				} else {
-					$this->setAppErrorMsg('データ削除に失敗しました');
+				// ### Wikiページライブラリ初期化 ###
+				WikiPage::init(self::$_mainDb);
+				
+				// 指定のWikiページを削除
+				for ($i = 0; $i < count($delItems); $i++){
+					$ret = self::$_mainDb->getPageBySerial($delItems[$i], $row);
+					if ($ret) page_write($row['wc_id'], '');
 				}
+//				$ret = $this->db->delCategoryBySerial($delItems);
+//				if ($ret){		// データ削除成功のとき
+					$this->setGuidanceMsg('データを削除しました');
+//				} else {
+//					$this->setAppErrorMsg('データ削除に失敗しました');
+//				}
 			}
 		}
 		// #### Wikiページリストを作成 ####
