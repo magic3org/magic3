@@ -142,6 +142,27 @@ class wiki_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * すべてのWikiページ名の取得
+	 *
+	 * @param string  $type			ページタイプ
+	 * @return array				ページ名
+	 */
+	function getAllPages($type='')
+	{
+		$retValue = array();
+		$queryStr  = 'SELECT DISTINCT wc_id FROM wiki_content ';
+		$queryStr .=   'WHERE wc_type = ? ';
+		$queryStr .=     'AND wc_id NOT LIKE \':%\' ';				// システムファイルは除く(追加)
+		$queryStr .=   'ORDER BY wc_id';
+		$ret = $this->selectRecords($queryStr, array($type), $rows);
+		if ($ret){
+			for ($i = 0; $i < count($rows); $i++){
+				$retValue[] = $rows[$i]['wc_id'];
+			}
+		}
+		return $retValue;
+	}
+	/**
 	 * 取得可能なWikiページ名の取得
 	 *
 	 * @param string  $type			ページタイプ
@@ -152,8 +173,9 @@ class wiki_mainDb extends BaseDb
 		$retValue = array();
 		$queryStr  = 'SELECT wc_id FROM wiki_content ';
 		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
-		$queryStr .=    'AND wc_type = ? ';
-		$queryStr .=    'ORDER BY wc_id';
+		$queryStr .=     'AND wc_type = ? ';
+		$queryStr .=     'AND wc_id NOT LIKE \':%\' ';				// システムファイルは除く(追加)
+		$queryStr .=   'ORDER BY wc_id';
 		$ret = $this->selectRecords($queryStr, array($type), $rows);
 		if ($ret){
 			for ($i = 0; $i < count($rows); $i++){
@@ -197,26 +219,6 @@ class wiki_mainDb extends BaseDb
 		$queryStr .=     'AND wc_type = ? ';
 		$queryStr .=     'AND wc_id NOT LIKE \':%\' ';				// システムファイルは除く
 		return $this->selectRecordCount($queryStr, array($type));
-	}
-	/**
-	 * すべてのWikiページ名の取得
-	 *
-	 * @param string  $type			ページタイプ
-	 * @return array				ページ名
-	 */
-	function getAllPages($type='')
-	{
-		$retValue = array();
-		$queryStr  = 'SELECT DISTINCT wc_id FROM wiki_content ';
-		$queryStr .=   'WHERE wc_type = ? ';
-		$queryStr .=    'ORDER BY wc_id';
-		$ret = $this->selectRecords($queryStr, array($type), $rows);
-		if ($ret){
-			for ($i = 0; $i < count($rows); $i++){
-				$retValue[] = $rows[$i]['wc_id'];
-			}
-		}
-		return $retValue;
 	}
 	/**
 	 * Wikiページの更新
