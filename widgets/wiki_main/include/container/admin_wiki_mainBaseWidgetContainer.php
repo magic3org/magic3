@@ -25,7 +25,7 @@ class admin_wiki_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_PAGE			= 'page';				// Wikiページ管理(一覧)
 	const TASK_PAGE_DETAIL	= 'page_detail';		// Wikiページ管理(詳細)
 	const TASK_CONFIG		= 'config';				// 基本設定
-	const DEFAULT_TASK		= 'config';				// デフォルト画面
+	const DEFAULT_TASK		= 'page';				// デフォルト画面
 	
 	/**
 	 * コンストラクタ
