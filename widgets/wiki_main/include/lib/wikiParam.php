@@ -268,10 +268,6 @@ class WikiParam
 		$arg = strip_bracket($arg);
 		
 		// 日本語パラメータにも対応
-		/*$arg = array($arg);
-		//mb_convert_variables(SOURCE_ENCODING, 'auto', $arg);
-		mb_convert_variables(SOURCE_ENCODING, 'UTF-8,SJIS-win,ASCII', $arg);
-		$arg = $arg[0];*/
 		$arg = mb_convert_encoding($arg, SOURCE_ENCODING, 'UTF-8,SJIS-win,ASCII');		// 出力するコードに変換
 		return $arg;
 	}

@@ -85,7 +85,7 @@ global $fixed_heading_anchor;
 global $preformat_ltrim;
 global $line_break;
 global $usedatetime;
-global $agents;
+//global $agents;
 
 // Special
 //define('PKWK_READONLY',  1);
@@ -511,7 +511,7 @@ $usedatetime = 1;
 // If you want to to ignore desktop-PC browsers for simple wikisite,
 // copy keitai.ini.php to default.ini.php and customize it.
 
-$agents = array(
+/*$agents = array(
 // pattern: A regular-expression that matches device(browser)'s name and version
 // profile: A group of browsers
 
@@ -605,4 +605,5 @@ $agents = array(
 
 	array('pattern'=>'#^#',	'profile'=>'default'),	// Sentinel
 );
+*/
 ?>

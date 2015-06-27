@@ -168,9 +168,6 @@ global $_msg_authorization_required;
 global $_title_invalid_pagename;
 global $_msg_invalid_pagename;
 
-// Encoding hint
-$_LANG['encode_hint']['ja'] = 'ぷ';
-
 ///////////////////////////////////////
 // Page titles
 $_title_cannotedit = '$1 は編集できません';

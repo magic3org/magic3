@@ -108,12 +108,6 @@ function do_plugin_action($name)
 
 	$retvar = call_user_func('plugin_' . $name . '_action');
 
-	// Insert a hidden field, supports idenrtifying text enconding
-	if (PKWK_ENCODING_HINT != '')
-		$retvar =  preg_replace('/(<form[^>]*>)/', '$1' . "\n" .
-			'<div><input type="hidden" name="encode_hint" value="' .
-			PKWK_ENCODING_HINT . '" /></div>', $retvar);
-
 	return $retvar;
 }
 
@@ -150,11 +144,6 @@ function do_plugin_convert($name, $args = '')
 	if ($retvar === FALSE) {
 		return htmlspecialchars('#' . $name .
 			($args != '' ? '(' . $args . ')' : ''));
-	} else if (PKWK_ENCODING_HINT != '') {
-		// Insert a hidden field, supports idenrtifying text enconding
-		return preg_replace('/(<form[^>]*>)/', '$1 ' . "\n" .
-			'<div><input type="hidden" name="encode_hint" value="' .
-			PKWK_ENCODING_HINT . '" /></div>', $retvar);
 	} else {
 		return $retvar;
 	}

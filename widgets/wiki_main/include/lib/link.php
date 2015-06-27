@@ -63,7 +63,8 @@ function links_get_related_db($page)
 // modified for Magic3 by naoki on 2008/10/15
 function links_update($page)
 {
-	if (PKWK_READONLY) return; // Do nothing
+	global $WikiName, $autolink, $nowikiname, $search_non_list;
+//	if (PKWK_READONLY) return; // Do nothing
 
 	//if (ini_get('safe_mode') == '0') set_time_limit(0);
 
@@ -117,8 +118,6 @@ function links_update($page)
 	links_add($page, array_diff($rel_new, $rel_old), $rel_auto);
 	links_delete($page, array_diff($rel_old, $rel_new));
 
-	global $WikiName, $autolink, $nowikiname, $search_non_list;
-
 	// $pageが新規作成されたページで、AutoLinkの対象となり得る場合
 	/*if ($time && ! $rel_file_exist && $autolink
 		&& (preg_match("/^$WikiName$/", $page) ? $nowikiname : strlen($page) >= $autolink))*/
@@ -153,7 +152,7 @@ function links_update($page)
 function links_init()
 {
 //	global $whatsnew;
-	if (PKWK_READONLY) return; // Do nothing
+//	if (PKWK_READONLY) return; // Do nothing
 
 	//if (ini_get('safe_mode') == '0') set_time_limit(0);
 

@@ -14,9 +14,13 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_wiki_mainBaseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/pukiwiki.ini.php');
+//require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/pukiwiki.ini.php');
+//require_once($gEnvManager->getCurrentWidgetLibPath() . '/init.php');
+// Magic3追加ファイル
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiPage.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiParam.php');
+// PukiWikiファイル
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/func.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/file.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/diff.php');
@@ -103,7 +107,12 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			}
 			if (count($delItems) > 0){
 				// ### Wikiページライブラリ初期化 ###
-				WikiPage::init(self::$_mainDb);
+				WikiConfig::init(self::$_mainDb);
+				WikiPage::init(self::$_mainDb);		// Wikiページ管理クラス
+				WikiParam::init(self::$_mainDb);		// URLパラメータ管理クラス
+		
+				global $gEnvManager;
+				require_once($gEnvManager->getCurrentWidgetLibPath() . '/init.php');
 				
 				// 指定のWikiページを削除
 				for ($i = 0; $i < count($delItems); $i++){

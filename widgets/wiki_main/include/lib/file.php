@@ -90,6 +90,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 {
 	global $trackback;
 	global $notify, $notify_diff_only, $notify_subject;
+	global $whatsdeleted, $maxshow_deleted;
 
 //	if (PKWK_READONLY) return; // Do nothing
 

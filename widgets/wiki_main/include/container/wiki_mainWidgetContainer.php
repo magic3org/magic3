@@ -129,16 +129,16 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 
 		// Load *.ini.php files and init PukiWiki
 		global $gEnvManager;
-		require($wikiLibDir . '/init.php');
+		require_once($wikiLibDir . '/init.php');
 
 		// Load optional libraries
 		if ($notify) {
-			require($wikiLibDir . '/mail.php'); // Mail notification
+			require_once($wikiLibDir . '/mail.php'); // Mail notification
 		}
 		if ($trackback || $referer) {
 			// Referer functionality uses trackback functions
 			// without functional reason now
-			require($wikiLibDir . '/trackback.php'); // TrackBack
+			require_once($wikiLibDir . '/trackback.php'); // TrackBack
 		}
 		// 初期データをインストールしたときは、リンク再構築
 		if ($init) links_init();

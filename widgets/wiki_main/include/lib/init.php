@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: init.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -77,7 +77,7 @@ $die = '';
 if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 	$die .= 'File is not found. (INI_FILE)' . "\n";
 } else {
-	require(INI_FILE);
+	require_once(INI_FILE);
 }
 if ($die) die_message(nl2br("\n\n" . $die));
 
@@ -100,29 +100,9 @@ case 'ko': define('MB_LANGUAGE', 'Korean'  ); break;
 default: die_message('No such language "' . LANG . '"'); break;
 }
 
-// removed for Magic3 by naoki on 2008/9/22
-//define('PKWK_UTF8_ENABLE', 1);
-//if (defined('PKWK_UTF8_ENABLE')) {
-	define('SOURCE_ENCODING', 'UTF-8');
-	define('CONTENT_CHARSET', 'UTF-8');
-/*} else {
-	switch (LANG){
-	case 'en':
-		define('SOURCE_ENCODING', 'ASCII');
-		define('CONTENT_CHARSET', 'iso-8859-1');
-		break;
-	case 'ja':
-		define('SOURCE_ENCODING', 'EUC-JP');
-		define('CONTENT_CHARSET', 'EUC-JP');
-		break;
-	}
-}
-mb_language(MB_LANGUAGE);
-mb_internal_encoding(SOURCE_ENCODING);
-ini_set('mbstring.http_input', 'pass');
-mb_http_output('pass');
-mb_detect_order('auto');
-*/
+// エンコーディングの設定
+define('SOURCE_ENCODING', 'UTF-8');
+define('CONTENT_CHARSET', 'UTF-8');
 
 /////////////////////////////////////////////////
 // INI_FILE: Require LANG_FILE
@@ -142,12 +122,6 @@ foreach (array('LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
 if ($die) die_message(nl2br("\n\n" . $die));
 
 /////////////////////////////////////////////////
-// LANG_FILE: Init encoding hint
-
-define('PKWK_ENCODING_HINT', isset($_LANG['encode_hint'][LANG]) ? $_LANG['encode_hint'][LANG] : '');
-unset($_LANG['encode_hint']);
-
-/////////////////////////////////////////////////
 // LANG_FILE: Init severn days of the week
 
 $weeklabels = $_msg_week;
@@ -162,7 +136,7 @@ if (isset($script)) {
 
 /////////////////////////////////////////////////
 // INI_FILE: $agents:  UserAgentの識別
-
+/*
 $ua = 'HTTP_USER_AGENT';
 $user_agent = $matches = array();
 
@@ -187,12 +161,14 @@ define('UA_INI_FILE', $gEnvManager->getCurrentWidgetIncludePath() . '/conf/' . U
 if (! file_exists(UA_INI_FILE) || ! is_readable(UA_INI_FILE)) {
 	die_message('UA_INI_FILE for "' . UA_PROFILE . '" not found.');
 } else {
-	require(UA_INI_FILE); // Also manually
+	require_once(UA_INI_FILE); // Also manually
 }
 
 define('UA_NAME', isset($user_agent['name']) ? $user_agent['name'] : '');
 define('UA_VERS', isset($user_agent['vers']) ? $user_agent['vers'] : '');
 unset($user_agent);	// Unset after reading UA_INI_FILE
+*/
+require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/default.ini.php');
 
 /////////////////////////////////////////////////
 // ディレクトリのチェック
@@ -230,10 +206,7 @@ unset($die, $temp);
 
 /////////////////////////////////////////////////
 // 必須のページが存在しなければ、空のファイルを作成する
-//foreach(array($defaultpage, $whatsnew, $interwiki) as $page){
-foreach(array(WikiConfig::getDefaultPage(), $whatsnew, $interwiki) as $page){
-	//if (! is_page($page)) touch(get_filename($page));
-	// modified for Magic3 by naoki on 2008/9/22
+foreach (array(WikiConfig::getDefaultPage(), $whatsnew, $interwiki) as $page){
 	if (!WikiPage::isPage($page)){
 		//WikiPage::getPageFile($page, $data);		// ファイルから初期データを読み込む
 		//$ret = WikiPage::initPage($page, $data);
@@ -241,177 +214,14 @@ foreach(array(WikiConfig::getDefaultPage(), $whatsnew, $interwiki) as $page){
 		WikiPage::initPage($page, '');
 	}
 }
-// removed for Magic3 by naoki on 2008/9/22
-/*
-/////////////////////////////////////////////////
-// 外部からくる変数のチェック
-// Prohibit $_GET attack
-foreach (array('msg', 'pass') as $key) {
-	if (isset($_GET[$key])) die_message('Sorry, already reserved: ' . $key . '=');
-}
-// Expire risk
-unset($HTTP_GET_VARS, $HTTP_POST_VARS);	//, 'SERVER', 'ENV', 'SESSION', ...
-unset($_REQUEST);	// Considered harmful
 
-// Remove null character etc.
-$_GET    = input_filter($_GET);
-$_POST   = input_filter($_POST);
-$_COOKIE = input_filter($_COOKIE);
-
-// 文字コード変換 ($_POST)
-// <form> で送信された文字 (ブラウザがエンコードしたデータ) のコードを変換
-// POST method は常に form 経由なので、必ず変換する
-//
-if (isset($_POST['encode_hint']) && $_POST['encode_hint'] != '') {
-	// do_plugin_xxx() の中で、<form> に encode_hint を仕込んでいるので、
-	// encode_hint を用いてコード検出する。
-	// 全体を見てコード検出すると、機種依存文字や、妙なバイナリ
-	// コードが混入した場合に、コード検出に失敗する恐れがある。
-	$encode = mb_detect_encoding($_POST['encode_hint']);
-	mb_convert_variables(SOURCE_ENCODING, $encode, $_POST);
-
-} else if (isset($_POST['charset']) && $_POST['charset'] != '') {
-	// TrackBack Ping で指定されていることがある
-	// うまくいかない場合は自動検出に切り替え
-	if (mb_convert_variables(SOURCE_ENCODING,
-	    $_POST['charset'], $_POST) !== $_POST['charset']) {
-		mb_convert_variables(SOURCE_ENCODING, 'auto', $_POST);
-	}
-
-} else if (! empty($_POST)) {
-	// 全部まとめて、自動検出／変換
-	mb_convert_variables(SOURCE_ENCODING, 'auto', $_POST);
-}
-
-// 文字コード変換 ($_GET)
-// GET method は form からの場合と、<a href="http://script/?key=value> の場合がある
-// <a href...> の場合は、サーバーが rawurlencode しているので、コード変換は不要
-if (isset($_GET['encode_hint']) && $_GET['encode_hint'] != '')
-{
-	// form 経由の場合は、ブラウザがエンコードしているので、コード検出・変換が必要。
-	// encode_hint が含まれているはずなので、それを見て、コード検出した後、変換する。
-	// 理由は、post と同様
-	$encode = mb_detect_encoding($_GET['encode_hint']);
-	mb_convert_variables(SOURCE_ENCODING, $encode, $_GET);
-}
-*/
-/////////////////////////////////////////////////
-// QUERY_STRINGを取得
-
-// cmdもpluginも指定されていない場合は、QUERY_STRINGを
-// ページ名かInterWikiNameであるとみなす
-// modified for Magic3 by naoki on 2008/9/26
-/*$arg = '';
-if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING']) {
-	$arg = $_SERVER['QUERY_STRING'];
-} else if (isset($_SERVER['argv']) && ! empty($_SERVER['argv'])) {
-	$arg = $_SERVER['argv'][0];
-}
-if (PKWK_QUERY_STRING_MAX && strlen($arg) > PKWK_QUERY_STRING_MAX) {
-	// Something nasty attack?
-	pkwk_common_headers();
-	sleep(1);	// Fake processing, and/or process other threads
-	echo('Query string too long');
-	exit;
-}
-$arg = input_filter($arg); // \0 除去
-
-// unset QUERY_STRINGs
-foreach (array('QUERY_STRING', 'argv', 'argc') as $key) {
-	unset(${$key}, $_SERVER[$key], $HTTP_SERVER_VARS[$key]);
-}
-// $_SERVER['REQUEST_URI'] is used at func.php NOW
-unset($REQUEST_URI, $HTTP_SERVER_VARS['REQUEST_URI']);
-
-// mb_convert_variablesのバグ(?)対策: 配列で渡さないと落ちる
-$arg = array($arg);
-mb_convert_variables(SOURCE_ENCODING, 'auto', $arg);
-$arg = $arg[0];
-
-/////////////////////////////////////////////////
-// QUERY_STRINGを分解してコード変換し、$_GET に上書き
-
-// URI を urlencode せずに入力した場合に対処する
-$matches = array();
-foreach (explode('&', $arg) as $key_and_value) {
-	if (preg_match('/^([^=]+)=(.+)/', $key_and_value, $matches) &&
-	    mb_detect_encoding($matches[2]) != 'ASCII') {
-		$_GET[$matches[1]] = $matches[2];
-	}
-}
-unset($matches);
-
-/////////////////////////////////////////////////
-// GET, POST, COOKIE
-$get    = $_GET;
-$post   = $_POST;
-$cookie = $_COOKIE;
-
-// GET + POST = $vars
-if (empty($_POST)) {
-	$vars = $_GET;  // Major pattern: Read-only access via GET
-} else if (empty($_GET)) {
-	$vars = $_POST; // Minor pattern: Write access via POST etc.
-} else {
-	$vars = array_merge($_GET, $_POST); // Considered reliable than $_REQUEST
-}
-*/
-// 入力チェック: 'cmd=' and 'plugin=' can't live together
-// modified for Magic3 by naoki on 2008/9/22
-//if (isset($vars['cmd']) && isset($vars['plugin']))
-//die('Using both cmd= and plugin= is not allowed');
+// 入力チェック
 if (!WikiParam::checkParam()) die('Using both cmd= and plugin= is not allowed');
 
-// 入力チェック: cmd, plugin の文字列は英数字以外ありえない
-// removed for Magic3 by naoki on 2008/9/22
-/*foreach(array('cmd', 'plugin') as $var) {
-	if (isset($vars[$var]) && ! preg_match('/^[a-zA-Z][a-zA-Z0-9_]*$/', $vars[$var]))
-		unset($get[$var], $post[$var], $vars[$var]);
-}*/
-
-// removed for Magic3 by naoki on 2008/9/22
-/*
-// 整形: page, strip_bracket()
-if (isset($vars['page'])) {
-	$get['page'] = $post['page'] = $vars['page']  = strip_bracket($vars['page']);
-} else {
-	$get['page'] = $post['page'] = $vars['page'] = '';
-}
-
-// 整形: msg, 改行を取り除く
-if (isset($vars['msg'])) {
-	$get['msg'] = $post['msg'] = $vars['msg'] = str_replace("\r", '', $vars['msg']);
-}
-
-// 後方互換性 (?md5=...)
-if (isset($get['md5']) && $get['md5'] != '' &&
-    ! isset($vars['cmd']) && ! isset($vars['plugin'])) {
-	$get['cmd'] = $post['cmd'] = $vars['cmd'] = 'md5';
-}
-*/
 // TrackBack Ping
 if (isset($vars['tb_id']) && $vars['tb_id'] != '') {
 	$get['cmd'] = $post['cmd'] = $vars['cmd'] = 'tb';
 }
-
-// cmdもpluginも指定されていない場合は、QUERY_STRINGをページ名かInterWikiNameであるとみなす
-// modified for Magic3 by naoki on 2008/9/22
-//if (! isset($vars['cmd']) && ! isset($vars['plugin'])) {
-/*$cmd = WikiParam::getCmd();
-$plugin = WikiParam::getPlugin();
-if (empty($cmd) && empty($plugin)){
-	//$get['cmd']  = $post['cmd']  = $vars['cmd']  = 'read';
-	WikiParam::setCmd('read');
-	
-	$arg = WikiParam::getUnbraketArg();
-	if ($arg == '') $arg = $defaultpage;
-	
-	//$get['page'] = $post['page'] = $vars['page'] = $arg;
-	WikiParam::setPage($arg);
-	$vars['page'] = $arg;
-} else {
-	$vars['page'] = WikiParam::getPage();
-}*/
 
 /////////////////////////////////////////////////
 // 初期設定($WikiName,$BracketNameなど)
@@ -437,7 +247,7 @@ $NotePattern = '/\(\(((?:(?>(?:(?!\(\()(?!\)\)(?:[^\)]|$)).)+)|(?R))*)\)\)/';		/
 // 初期設定(ユーザ定義ルール読み込み)
 //require(DATA_HOME . 'rules.ini.php');
 // modified for Magic3 by naoki on 2008/9/22
-require($gEnvManager->getCurrentWidgetIncludePath() . '/conf/rules.ini.php');
+require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/rules.ini.php');
 
 /////////////////////////////////////////////////
 // 初期設定(その他のグローバル変数)
