@@ -27,9 +27,6 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		$this->db = new wiki_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -60,20 +57,6 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		return $this->createDetail($request);
 	}
 	/**
-	 * テンプレートにデータ埋め込む
-	 *
-	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @return								なし
-	 */
-/*	function _postAssign($request, &$param)
-	{
-		// メニューバー、パンくずリスト作成(簡易版)
-//		$this->createBasicConfigMenubar($request);
-	}*/
-	/**
 	 * 詳細画面作成
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
@@ -81,17 +64,18 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 	 */
 	function createDetail($request)
 	{
-		$userId			= $this->gEnv->getCurrentUserId();
 		$act = $request->trimValueOf('act');
 
 		$this->authType	= $request->trimValueOf('item_auth');				// 認証方法
 		$password		= $request->trimValueOf('password');				// パスワード
-		$defaultPage	= $request->trimValueOf('item_default_page');		// デフォルトページ名
-		$showTitle			= $request->trimCheckedValueOf('item_showtitle');		// タイトルを表示するかどうか
-		$showPageRelated	= $request->trimCheckedValueOf('item_showpagerelated');		// 関連ページを表示するかどうか
+		$defaultPage		= $request->trimValueOf('item_default_page');			// デフォルトページ名
+		$whatsnewPage		= $request->trimValueOf('item_whatsnew_page');			// 最終更新ページ名
+		$whatsdeletedPage	= $request->trimValueOf('item_whatsdeleted_page');		// 最終削除ページ名
+		$showTitle				= $request->trimCheckedValueOf('item_showtitle');		// タイトルを表示するかどうか
+		$showPageRelated		= $request->trimCheckedValueOf('item_showpagerelated');		// 関連ページを表示するかどうか
 		$showPageAttachFiles	= $request->trimCheckedValueOf('item_showpageattachfiles');		// 添付ファイルを表示するかどうか
 		$showPageLastModified	= $request->trimCheckedValueOf('item_showlastmodified');		// 最終更新を表示するかどうか
-		$showToolbarForAllUser			= $request->trimCheckedValueOf('item_show_toolbar_for_all_user');		// ツールバーを表示するかどうか
+		$showToolbarForAllUser	= $request->trimCheckedValueOf('item_show_toolbar_for_all_user');		// ツールバーを表示するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -101,27 +85,34 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			// 入力値のエラーチェック
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
+				// デフォルト値の設定
+				if (empty($defaultPage)) $defaultPage			= wiki_mainCommonDef::DEFAULT_DEFAULT_PAGE;		// デフォルトページ名
+				if (empty($whatsnewPage)) $whatsnewPage			= wiki_mainCommonDef::DEFAULT_WHATSNEW_PAGE;	// 最終更新ページ名
+				if (empty($whatsdeletedPage)) $whatsdeletedPage = wiki_mainCommonDef::DEFAULT_WHATSDELETED_PAGE;	// 最終削除ページ名
+				
 				$ret = true;		// エラー値リセット
 				// 認証タイプ
-				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_AUTH_TYPE, $this->authType);
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_AUTH_TYPE, $this->authType);
 
 				// パスワードが設定されているときは更新
-				if (!empty($password)) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_PASSWORD, $password);
+				if (!empty($password)) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_PASSWORD, $password);
 
-				// デフォルトページ
-				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_DEFAULT_PAGE, $defaultPage);
+				// Wikiページ名
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_DEFAULT_PAGE, $defaultPage);				// デフォルトページ名
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_WHATSNEW_PAGE, $whatsnewPage);				// 最終更新ページ名
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_WHATSDELETED_PAGE, $whatsdeletedPage);		// 最終削除ページ名
 				
 				// ##### ページ構成 #####
 				// タイトルの表示状態
-				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE, $showTitle);
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE, $showTitle);
 				// 関連ページを表示
-				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED, $showPageRelated);
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED, $showPageRelated);
 				// 添付ファイルを表示
-				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES, $showPageAttachFiles);
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES, $showPageAttachFiles);
 				// 最終更新を表示
-				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED, $showPageLastModified);
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED, $showPageLastModified);
 				
-				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER, $showToolbarForAllUser);// ツールバーを表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER, $showToolbarForAllUser);// ツールバーを表示するかどうか
 				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -133,19 +124,23 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			}
 		}
 		if ($replaceNew){			// データ再取得
-			$this->authType = $this->db->getConfig(wiki_mainCommonDef::CF_AUTH_TYPE);// 認証方法
+			$this->authType = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_AUTH_TYPE);// 認証方法
 			if (empty($this->authType)) $this->authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// 認証タイプ(管理権限ユーザ)
-			$defaultPage = $this->db->getConfig(wiki_mainCommonDef::CF_DEFAULT_PAGE);// デフォルトページ
+			$defaultPage = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_DEFAULT_PAGE);// デフォルトページ
 			if (empty($defaultPage)) $defaultPage = wiki_mainCommonDef::DEFAULT_DEFAULT_PAGE;	// デフォルトページ
-			$showTitle = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE);// タイトル表示状態
+			$whatsnewPage = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_WHATSNEW_PAGE);		// 最終更新ページ名
+			if (empty($whatsnewPage)) $whatsnewPage = wiki_mainCommonDef::DEFAULT_WHATSNEW_PAGE;
+			$whatsdeletedPage = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_WHATSDELETED_PAGE);		// 最終削除ページ名
+			if (empty($whatsdeletedPage)) $whatsdeletedPage = wiki_mainCommonDef::DEFAULT_WHATSDELETED_PAGE;
+			$showTitle = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE);// タイトル表示状態
 			if ($showTitle == '') $showTitle = '1';		// タイトル表示状態
-			$showPageRelated = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED);// 関連ページを表示
+			$showPageRelated = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED);// 関連ページを表示
 			if ($showPageRelated == '') $showPageRelated = '1';		// 関連ページを表示
-			$showPageAttachFiles = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES);// 添付ファイルを表示
+			$showPageAttachFiles = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES);// 添付ファイルを表示
 			if ($showPageAttachFiles == '') $showPageAttachFiles = '1';		// 添付ファイルを表示
-			$showPageLastModified = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED);// 最終更新を表示
+			$showPageLastModified = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED);// 最終更新を表示
 			if ($showPageLastModified == '') $showPageLastModified = '1';		// 最終更新を表示
-			$showToolbarForAllUser = $this->db->getConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER);// ツールバーを表示するかどうか
+			$showToolbarForAllUser = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER);// ツールバーを表示するかどうか
 			if ($showToolbarForAllUser == '') $showToolbarForAllUser = '0';		// ツールバーを表示するかどうか
 		}
 		
@@ -157,6 +152,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "default_page", $defaultPage);		// デフォルトページ
+		$this->tmpl->addVar("_widget", "whatsnew_page", $whatsnewPage);		// 最終更新ページ名
+		$this->tmpl->addVar("_widget", "whatsdeleted_page", $whatsdeletedPage);		// 最終削除ページ名
 		$this->tmpl->addVar("_widget", "show_title", $this->convertToCheckedString($showTitle));	// タイトルを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_page_related", $this->convertToCheckedString($showPageRelated));	// 関連ページを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_page_attach_files", $this->convertToCheckedString($showPageAttachFiles));	// 添付ファイルを表示するかどうか

@@ -22,8 +22,10 @@ class wiki_mainCommonDef
 	const AUTH_TYPE_PASSWORD	= 'password';		// 認証タイプ(共通パスワード)
 	
 	// ##### DB定義値 #####
-	const CF_PASSWORD		= 'password';			// 共通パスワード
-	const CF_DEFAULT_PAGE	= 'default_page';		// デフォルトページ
+	const CF_PASSWORD			= 'password';			// 共通パスワード
+	const CF_DEFAULT_PAGE		= 'default_page';		// デフォルトページ
+	const CF_WHATSNEW_PAGE		= 'whatsnew_page';		// 最終更新ページ
+	const CF_WHATSDELETED_PAGE	= 'whatsdeleted_page';	// 最終削除ページ
 	const CF_AUTH_TYPE		= 'auth_type';			// 認証タイプ(admin=管理権限ユーザ、loginuser=ログインユーザ、password=共通パスワード)
 	const CF_SHOW_PAGE_TITLE			= 'show_page_title';			// タイトル表示
 	const CF_SHOW_PAGE_RELATED			= 'show_page_related';			// 関連ページ
@@ -33,6 +35,8 @@ class wiki_mainCommonDef
 
 	// ##### デフォルト値 #####
 	const DEFAULT_DEFAULT_PAGE = 'FrontPage';		// デフォルトページ
+	const DEFAULT_WHATSNEW_PAGE		= 'RecentChanges';		// 最終更新ページ
+	const DEFAULT_WHATSDELETED_PAGE	= 'RecentDeleted';		// 最終削除ページ
 	
 	/**
 	 * 定義値をDBから取得
