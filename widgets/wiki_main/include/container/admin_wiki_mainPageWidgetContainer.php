@@ -275,6 +275,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			'index'			=> $index,		// 項目番号
 			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
 			'id'			=> $idTag,		// WikiページID
+			'user'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 更新者
 			'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
 		);
 		$this->tmpl->addVars('itemlist', $row);

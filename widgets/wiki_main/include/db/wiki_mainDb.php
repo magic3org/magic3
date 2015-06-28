@@ -198,7 +198,7 @@ class wiki_mainDb extends BaseDb
 		if ($offset < 0) $offset = 0;
 		
 		$type = '';			// 取得ページタイプ(一般)
-		$queryStr  = 'SELECT * FROM wiki_content ';
+		$queryStr  = 'SELECT * FROM wiki_content LEFT JOIN _login_user ON wc_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
 		$queryStr .=     'AND wc_type = ? ';
 		$queryStr .=     'AND wc_id NOT LIKE \':%\' ';				// システムファイルは除く
