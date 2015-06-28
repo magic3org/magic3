@@ -104,7 +104,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 				$ret = true;		// エラー値リセット
 				// 認証タイプ
 				if ($ret) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_AUTH_TYPE, $this->authType);
-	
+
 				// パスワードが設定されているときは更新
 				if (!empty($password)) $ret = $this->db->updateConfig(wiki_mainCommonDef::CF_PASSWORD, $password);
 

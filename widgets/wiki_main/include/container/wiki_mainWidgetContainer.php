@@ -238,7 +238,8 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		
 		// ##### ページ構成 #####
 		// ツールバー表示制御
-		if ($this->gEnv->isSystemAdmin() || WikiConfig::isShowToolbarForAllUser()){
+//		if ($this->gEnv->isSystemManageUser() || WikiConfig::isShowToolbarForAllUser()){		// システム運用者以上は常に表示
+		if (WikiConfig::isUserWithEditAuth() || WikiConfig::isShowToolbarForAllUser()){		// 編集権限ありまたは常時ツールバーを表示の場合
 			$this->tmpl->setAttribute('show_toolbar', 'visibility', 'visible');
 			$this->tmpl->addVar("show_toolbar", "toolbar", $toolbar);		// 操作ツールバー
 		}

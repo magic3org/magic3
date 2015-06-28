@@ -277,7 +277,7 @@ class WikiConfig
 	public static function isUserWithEditAuth()
 	{
 		global $gEnvManager;
-		
+
 		$ret = false;
 		switch (self::$authType){
 			case wiki_mainCommonDef::AUTH_TYPE_ADMIN:		// 認証タイプ(システム運用権限ユーザのみ)
