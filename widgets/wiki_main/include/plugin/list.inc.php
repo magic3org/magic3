@@ -30,11 +30,10 @@ function plugin_list_action()
 // Get a list
 function plugin_list_getlist($withfilename = FALSE)
 {
-	//global $non_list, $whatsnew;
 	global $non_list;
 
-	//$pages = array_diff(get_existpages(), array($whatsnew));
-	$pages = array_diff(get_existpages(), array(WikiConfig::getWhatsnewPage()));
+//	$pages = array_diff(get_existpages(), array(WikiConfig::getWhatsnewPage()));
+	$pages = array_diff(get_existpages(), array());
 	if (! $withfilename)
 		$pages = array_diff($pages, preg_grep('/' . $non_list . '/S', $pages));
 	if (empty($pages)) return '';

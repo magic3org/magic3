@@ -14,8 +14,6 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_wiki_mainBaseWidgetContainer.php');
-//require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/pukiwiki.ini.php');
-//require_once($gEnvManager->getCurrentWidgetLibPath() . '/init.php');
 // Magic3追加ファイル
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiPage.php');
@@ -31,6 +29,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 {
 	private $serialNo;			// シリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
+	private $builtinPages;		// 自動生成されるWikiページ
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	
@@ -42,8 +41,16 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		// 親クラスを呼び出す
 		parent::__construct();
 		
+		// ### Wikiページライブラリ初期化 ###
+		WikiConfig::init(self::$_mainDb);
+		WikiPage::init(self::$_mainDb);		// Wikiページ管理クラス
+		WikiParam::init(self::$_mainDb);		// URLパラメータ管理クラス
+		global $gEnvManager;
+		require_once($gEnvManager->getCurrentWidgetLibPath() . '/init.php');			// Wiki機能初期化
+				
 		// パラメータ初期化
 		$this->maxListCount = self::DEFAULT_LIST_COUNT;
+		$this->builtinPages	= array( WikiConfig::getDefaultPage(), WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );		// 自動生成されるWikiページ
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -106,14 +113,6 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 				}
 			}
 			if (count($delItems) > 0){
-				// ### Wikiページライブラリ初期化 ###
-				WikiConfig::init(self::$_mainDb);
-				WikiPage::init(self::$_mainDb);		// Wikiページ管理クラス
-				WikiParam::init(self::$_mainDb);		// URLパラメータ管理クラス
-		
-				global $gEnvManager;
-				require_once($gEnvManager->getCurrentWidgetLibPath() . '/init.php');
-				
 				// 指定のWikiページを削除
 				for ($i = 0; $i < count($delItems); $i++){
 					$ret = self::$_mainDb->getPageBySerial($delItems[$i], $row);
@@ -269,10 +268,13 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		$id			= $fetchedRow['wc_id'];			// WikiページID
 		$date		= $fetchedRow['wc_content_dt'];	// 更新日時
 		
+		$idTag = $this->convertToDispString($id);
+		if (in_array($id, $this->builtinPages)) $idTag = '<strong>' . $idTag . '</strong>';
+		
 		$row = array(
 			'index'			=> $index,		// 項目番号
 			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
-			'id'			=> $this->convertToDispString($id),		// WikiページID
+			'id'			=> $idTag,		// WikiページID
 			'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
 		);
 		$this->tmpl->addVars('itemlist', $row);

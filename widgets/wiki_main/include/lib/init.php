@@ -206,7 +206,8 @@ unset($die, $temp);
 
 /////////////////////////////////////////////////
 // 必須のページが存在しなければ、空のファイルを作成する
-foreach (array(WikiConfig::getDefaultPage(), $whatsnew, $interwiki) as $page){
+//foreach (array(WikiConfig::getDefaultPage(), $whatsnew, $interwiki) as $page){
+foreach (array(WikiConfig::getDefaultPage()) as $page){
 	if (!WikiPage::isPage($page)){
 		//WikiPage::getPageFile($page, $data);		// ファイルから初期データを読み込む
 		//$ret = WikiPage::initPage($page, $data);

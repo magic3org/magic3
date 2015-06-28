@@ -20,8 +20,7 @@
 //
 // PukiWiki main setting file
 global $page_title;
-global $modifier;
-global $modifierlink;
+//global $script_directory_index;
 // pages
 global $whatsnew;
 global $whatsdeleted;
@@ -203,17 +202,8 @@ default  :
 // Also used as RSS feed's channel name etc
 $page_title = 'PukiWiki';
 
-// Specify PukiWiki URL (default: auto)
-//$script = 'http://example.com/pukiwiki/';
-
 // Shorten $script: Cut its file name (default: not cut)
 //$script_directory_index = 'index.php';
-
-// Site admin's name (CHANGE THIS)
-$modifier = 'anonymous';
-
-// Site admin's Web page (CHANGE THIS)
-$modifierlink = 'http://pukiwiki.example.com/';
 
 // Default page name
 //$defaultpage  = 'FrontPage';     // Top / Default page

@@ -27,19 +27,6 @@ class WikiConfig
 	private static $isShowPageRelated;				// 関連ページを表示するかどうか
 	private static $isShowPageAttachFiles;				// 添付ファイルを表示するかどうか
 	private static $isShowPageLastModified;				// 最終更新を表示するかどうか
-/*	const SHOW_TOOLBAR_FOR_ALL_USER = 'show_toolbar_for_all_user';
-	const AUTH_TYPE_ADMIN		= 'admin';		// 認証タイプ(管理権限ユーザ)
-	const AUTH_TYPE_LOGIN_USER	= 'loginuser';		// 認証タイプ(ログインユーザ)
-	const AUTH_TYPE_PASSWORD	= 'password';		// 認証タイプ(共通パスワード)
-	const DEFAULT_PAGE = 'FrontPage';		// デフォルトのページ
-	const CONFIG_KEY_AUTH_TYPE = 'auth_type';			// 認証タイプ(admin=管理権限ユーザ、loginuser=ログインユーザ、password=共通パスワード)
-	const CONFIG_KEY_SHOW_PAGE_TITLE		= 'show_page_title';		// タイトル表示
-	const CONFIG_KEY_SHOW_PAGE_RELATED		= 'show_page_related';// 関連ページ
-	const CONFIG_KEY_SHOW_PAGE_ATTACH_FILES	= 'show_page_attach_files';// 添付ファイル
-	const CONFIG_KEY_SHOW_PAGE_LAST_MODIFIED	= 'show_page_last_modified';// 最終更新
-	const CONFIG_KEY_PASSWORD = 'password';		// 共通パスワード
-	const CONFIG_KEY_DEFAULT_PAGE = 'default_page';		// デフォルトページ
-	*/
 	
 	/**
 	 * コンストラクタ
@@ -56,7 +43,6 @@ class WikiConfig
 	public static function init($db)
 	{
 		global $defaultpage;
-//		self::$db = $db;
 		
 		// 設定値を取得
 		self::$_configArray = wiki_mainCommonDef::loadConfig($db);
@@ -80,53 +66,6 @@ class WikiConfig
 		// ユーザ認証方法
 		self::$authType = self::$_configArray[wiki_mainCommonDef::CF_AUTH_TYPE];
 		if (empty(self::$authType)) self::$authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限
-		
-/*		$value = self::$db->getConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER);		// 全ユーザ向けにツールバーを表示するかどうか
-		if ($value == ''){
-			self::$isShowToolbarForAllUser = true;		// デフォルトは表示
-		} else {
-			if (!empty($value)) self::$isShowToolbarForAllUser = true;
-		}
-		$value = self::$db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE);		// ページタイトルを表示するかどうか
-		if ($value == ''){
-			self::$isShowPageTitle = true;				// デフォルトは表示
-		} else {
-			if (!empty($value)) self::$isShowPageTitle = true;
-		}
-		$value = self::$db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED);		// 関連ページを表示するかどうか
-		if ($value == ''){
-			self::$isShowPageRelated = true;				// デフォルトは表示
-		} else {
-			if (!empty($value)) self::$isShowPageRelated = true;
-		}
-		$value = self::$db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES);		// 添付ファイルを表示するかどうか
-		if ($value == ''){
-			self::$isShowPageAttachFiles = true;				// デフォルトは表示
-		} else {
-			if (!empty($value)) self::$isShowPageAttachFiles = true;
-		}
-		$value = self::$db->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED);		// 最終更新を表示するかどうか
-		if ($value == ''){
-			self::$isShowPageLastModified = true;				// デフォルトは表示
-		} else {
-			if (!empty($value)) self::$isShowPageLastModified = true;
-		}
-		$value = self::$db->getConfig(wiki_mainCommonDef::CF_DEFAULT_PAGE);// デフォルトページ
-		if (empty($value)){
-			self::$defaultPage = wiki_mainCommonDef::DEFAULT_DEFAULT_PAGE;
-		} else {
-			self::$defaultPage = $value;
-		}
-		$defaultpage = self::$defaultPage;	// グローバル値にも設定
-		
-		// ユーザ認証方法
-		$value = self::$db->getConfig(wiki_mainCommonDef::CF_AUTH_TYPE);// ユーザの認証方法
-		if (empty($value)){
-			self::$authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限
-			//self::$authType = self::AUTH_TYPE_PASSWORD;		// 認証タイプ(共通パスワード)
-		} else {
-			self::$authType = $value;
-		}*/
 	}
 	/**
 	 * デフォルトのページ名を取得
@@ -146,6 +85,16 @@ class WikiConfig
 	{
 		global $whatsnew;
 		return $whatsnew;
+	}
+	/**
+	 * 「削除されたページ」のページ名を取得
+	 *
+	 * @return string		ページ名
+	 */
+	public static function getWhatsdeletedPage()
+	{
+		global $whatsdeleted;
+		return $whatsdeleted;
 	}
 	/**
 	 * インターWikiページ名を取得
