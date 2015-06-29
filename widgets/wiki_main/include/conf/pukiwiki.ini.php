@@ -207,8 +207,8 @@ $page_title = 'PukiWiki';
 
 // Default page name
 //$defaultpage  = 'FrontPage';     // Top / Default page
-$whatsnew     = 'RecentChanges'; // Modified page list
-$whatsdeleted = 'RecentDeleted'; // Removeed page list
+//$whatsnew     = 'RecentChanges'; // Modified page list
+//$whatsdeleted = 'RecentDeleted'; // Removeed page list
 $interwiki    = 'InterWikiName'; // Set InterWiki definition here
 $menubar      = 'MenuBar';       // Menu
 

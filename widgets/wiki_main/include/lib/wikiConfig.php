@@ -21,6 +21,8 @@ class WikiConfig
 	private static $sessionObj;		// セッションオブジェクト
 	private static $_configArray;	// Wiki設定(DB定義値)
 	private static $defaultPage;	// デフォルトページ名
+	private static $whatsnewPage;		// 最終更新ページ
+	private static $whatsdeletedPage;	// 最終削除ページ
 	private static $authType;	// ユーザの認証方法
 	private static $isShowToolbarForAllUser;	// 全ユーザ向けにツールバーを表示するかどうか
 	private static $isShowPageTitle;				// ページタイトルを表示するかどうか
@@ -43,6 +45,8 @@ class WikiConfig
 	public static function init($db)
 	{
 		global $defaultpage;
+		global $whatsnew;
+		global $whatsdeleted;
 		
 		// 設定値を取得
 		self::$_configArray = wiki_mainCommonDef::loadConfig($db);
@@ -62,7 +66,13 @@ class WikiConfig
 		self::$defaultPage = self::$_configArray[wiki_mainCommonDef::CF_DEFAULT_PAGE];// デフォルトページ
 		if (empty(self::$defaultPage)) self::$defaultPage = wiki_mainCommonDef::DEFAULT_DEFAULT_PAGE;
 		$defaultpage = self::$defaultPage;	// グローバル値にも設定
-		
+		self::$whatsnewPage = self::$_configArray[wiki_mainCommonDef::CF_WHATSNEW_PAGE];		// 最終更新ページ名
+		if (empty(self::$whatsnewPage)) self::$whatsnewPage = wiki_mainCommonDef::DEFAULT_WHATSNEW_PAGE;
+		$whatsnew = self::$whatsnewPage;
+		self::$whatsdeletedPage = self::$_configArray[wiki_mainCommonDef::CF_WHATSDELETED_PAGE];		// 最終削除ページ名
+		if (empty(self::$whatsdeletedPage)) self::$whatsdeletedPage = wiki_mainCommonDef::DEFAULT_WHATSDELETED_PAGE;
+		$whatsdeleted = self::$whatsdeletedPage;
+
 		// ユーザ認証方法
 		self::$authType = self::$_configArray[wiki_mainCommonDef::CF_AUTH_TYPE];
 		if (empty(self::$authType)) self::$authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限
@@ -83,8 +93,9 @@ class WikiConfig
 	 */
 	public static function getWhatsnewPage()
 	{
-		global $whatsnew;
-		return $whatsnew;
+//		global $whatsnew;
+//		return $whatsnew;
+		return self::$whatsnewPage;
 	}
 	/**
 	 * 「削除されたページ」のページ名を取得
@@ -93,8 +104,9 @@ class WikiConfig
 	 */
 	public static function getWhatsdeletedPage()
 	{
-		global $whatsdeleted;
-		return $whatsdeleted;
+//		global $whatsdeleted;
+//		return $whatsdeleted;
+		return self::$whatsdeletedPage;
 	}
 	/**
 	 * インターWikiページ名を取得
