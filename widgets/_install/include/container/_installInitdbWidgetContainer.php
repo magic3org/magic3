@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -258,8 +258,8 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				$this->gOpeLog->writeInfo(__METHOD__, $installMsg, 1000);
 				
 				// 初期設定用画面への遷移を通知
-				$guideMsg = $this->_('If you want initializing the system easily, use \'System Initialize Wizard\'. Select \'Maintenance / Core Control / System Initialize Wizard\' on the main menu.');	// システムの初期化を簡単に行うには「システム初期化ウィザード」を使用します。メインメニューから「メンテナンス / コア制御 / システム初期化ウィザード」を選択します。
-				$this->gOpeLog->writeGuide(__METHOD__, $guideMsg, 3000, '', '', 'task=initwizard', true/*トップ表示*/);
+//				$guideMsg = $this->_('If you want initializing the system easily, use \'System Initialize Wizard\'. Select \'Maintenance / Core Control / System Initialize Wizard\' on the main menu.');	// システムの初期化を簡単に行うには「システム初期化ウィザード」を使用します。メインメニューから「メンテナンス / コア制御 / システム初期化ウィザード」を選択します。
+//				$this->gOpeLog->writeGuide(__METHOD__, $guideMsg, 3000, '', '', 'task=initwizard', true/*トップ表示*/);
 				
 				// 次の画面へ遷移
 				$this->gPage->redirect('?task=initother&install_type=' . $type . '&from=initdb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
