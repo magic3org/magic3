@@ -20,6 +20,7 @@ class RequestManager extends Core
 	private $db;						// DBオブジェクト
 	private $tmpCookie;		// クッキー送信前のクッキー格納データ
 	private $magicQuote;	// バックスラッシュでの文字エスケープ処理
+	private $sessionNoUpdate;		// セッションの更新を停止するかどうか(参照は可能)
 	
 	/**
 	 * コンストラクタ
@@ -387,11 +388,15 @@ class RequestManager extends Core
 	 *
 	 * @param string $name		キー値
 	 * @param string $value  	格納値
-	 * @return 					なし
+	 * @return bool				true=更新、false=更新なし
 	 */
 	public function setSessionValue($name, $value = '')
 	{
+		// セッション更新が停止されている場合は終了
+		if ($this->sessionNoUpdate) return false;
+		
 		$_SESSION[$name] = $value;
+		return true;
 	}
 	/**
 	 * セッション格納値を開放
@@ -399,11 +404,15 @@ class RequestManager extends Core
 	 * $_SESSIONの指定値を開放する
 	 *
 	 * @param string $name		キー値
-	 * @return 					なし
+	 * @return bool				true=更新、false=更新なし
 	 */
 	public function unsetSessionValue($name)
 	{
+		// セッション更新が停止されている場合は終了
+		if ($this->sessionNoUpdate) return false;
+		
 		unset($_SESSION[$name]);
+		return true;
 	}
 	/**
 	 * セッションからシリアライズされた値を取得
@@ -421,15 +430,28 @@ class RequestManager extends Core
 	 *
 	 * @param string $name		キー値
 	 * @param object $value  	格納するオブジェクト、nullをセットした場合はセッション値を削除
-	 * @return 					なし
+	 * @return bool				true=更新、false=更新なし
 	 */
 	public function setSessionValueWithSerialize($name, $value = null)
 	{
+		// セッション更新が停止されている場合は終了
+		if ($this->sessionNoUpdate) return false;
+		
 		if ($value == null){
 			unset($_SESSION[$name]);
 		} else {
 			$_SESSION[$name] = serialize($value);
 		}
+		return true;
+	}
+	/**
+	 * セッションの値の更新を停止する
+	 *
+	 * @return 					なし
+	 */
+	public function stopSessionUpdate()
+	{
+		$this->sessionNoUpdate = true;		// セッションの更新を停止するかどうか(参照は可能)
 	}
 	/**
 	 * クッキーから値を取得

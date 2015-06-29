@@ -1216,9 +1216,14 @@ class PageManager extends Core
 			}
 		}
 
+		// 最終HTML(ページ全体で使用するHTML)の出力
+		if ($cmd == M3_REQUEST_CMD_CSS){		// CSS生成のとき
+			$gRequestManager->stopSessionUpdate();			// セッションの更新を停止
+		}
+		
 		// セッション変数を取得可能にする
 		session_start();
-
+		
 		// ##### インストール時はここで終了 #####
 		if (defined('M3_STATE_IN_INSTALL')) return;		// インストール時は実行しない
 		
