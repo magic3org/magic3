@@ -58,6 +58,21 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		//$this->setUserErrorMsg('エラーメッセージテスト1231312312312313321312321313213131312');
 		$this->setAppErrorMsg('エラーメッセージテスト1231312312312313321312321313213131312');
+		
+
+		$postTicket = $request->trimValueOf('ticket');		// POST確認用
+		$act = $request->trimValueOf('act');
+		
+		if ($act == 'update'){				// 送信確認
+			echo '<h4>Session value check</h4>';
+			echo 'old='.$postTicket.'<br>';
+			echo 'current='.$request->getSessionValue(M3_SESSION_POST_TICKET);
+		} else {
+			// ハッシュキー作成
+			$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
+			$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
+			$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
+		}
 	}
 }
 ?>

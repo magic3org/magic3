@@ -13,6 +13,12 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
 $(function(){
 	m3SetConfigTable('config_table');
 	
@@ -26,6 +32,7 @@ $(function(){
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
 <!--<h3><span {_HELP_UNTITLED_TEST}>ウィジェット設定画面テスト</span></h3>-->
 <h3 class="m3config_h"><span {_HELP_EVENT_LIST}>受付イベント一覧</span>
 <!--<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>-->
@@ -60,7 +67,7 @@ $(function(){
 	</tr>
     </tbody>
 </table>
-<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="ボタンサンプル" /></div>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
 </form>
 </div>
 </patTemplate:tmpl>
