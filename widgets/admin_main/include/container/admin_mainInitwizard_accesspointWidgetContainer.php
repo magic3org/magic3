@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -91,6 +91,9 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 		$this->tmpl->addVar("_widget", "site_open_pc_checked",			$this->convertToCheckedString($siteOpenPc));
 		$this->tmpl->addVar("_widget", "site_open_smartphone_checked",	$this->convertToCheckedString($siteOpenSmartphone));
 		$this->tmpl->addVar("_widget", "site_open_mobile_checked",		$this->convertToCheckedString($siteOpenMobile));
+		$this->tmpl->addVar("_widget", "url_pc",			$this->convertToDispString($this->gEnv->getDefaultUrl()));
+		$this->tmpl->addVar("_widget", "url_smartphone",	$this->convertToDispString($this->gEnv->getDefaultSmartphoneUrl()));
+		$this->tmpl->addVar("_widget", "url_mobile",		$this->convertToDispString($this->gEnv->getDefaultMobileUrl()));
 	}
 	/**
 	 * アクセスポイントが有効かどうか
