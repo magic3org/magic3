@@ -211,7 +211,8 @@ class banner3WidgetContainer extends BaseWidgetContainer
 					if (!empty($key)) $linkUrl .= '&stamp=' . $key;
 					//$linkUrl .= '&url=' . urlencode($row['bi_link_url']);		// URLはエンコードする
 					$linkUrl .= '&url=' . urlencode($redirectUrl);		// URLはエンコードする
-					$link = '<a style="margin:0;padding:0;" href="' . $this->convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '"';
+			//		$link = '<a style="margin:0;padding:0;" href="' . $this->convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '"';
+					$link = '<a style="margin:0;padding:0;" href="' . $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)) . '"';
 					if (!empty($targetType)) $link .= ' target="' . $targetType . '"';		// リンクターゲット
 					$link .= '>';
 					$link .= $destImg;
