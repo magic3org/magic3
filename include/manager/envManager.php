@@ -2129,9 +2129,10 @@ class EnvManager extends Core
 	 * 指定ページIDのURLを作成
 	 *
 	 * @param string $pageId	ページID。空のときは現在のページIDから作成
+	 * @param string $isSslPage	SSLが必要なページかどうか
 	 * @return string			作成したURL
 	 */
-	public function createPageUrl($pageId='')
+	public function createPageUrl($pageId='', $isSslPage = false)
 	{
 		if (empty($pageId)) $pageId = $this->getCurrentPageId();
 		if (empty($pageId)) $pageId = $this->getDefaultPageId();// 空のときはデフォルトページIDを設定
@@ -2146,7 +2147,11 @@ class EnvManager extends Core
 				$path .= '/' . $pathArray[$i];
 			}
 		}
-		$url = $this->getRootUrl() . $path . '.php';
+		if ($isSslPage){			// SSLページのとき
+			$url = $this->getSslRootUrl() . $path . '.php';
+		} else {
+			$url = $this->getRootUrl() . $path . '.php';
+		}
 		return $url;
 	}
 	/**

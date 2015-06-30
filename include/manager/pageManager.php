@@ -3444,7 +3444,7 @@ class PageManager extends Core
 			
 			// 外部出力用CSSデータがある場合はURLを追加
 			if (!empty($this->exportCss)){
-				$cssUrl = $this->createCssCmdUrl(date('YmdHis'));
+				$cssUrl = $this->createCssCmdUrl($isSslPage, date('YmdHis'));
 				if ($isSslPage) $cssUrl = str_replace('http://', 'https://', $cssUrl);			// SSL化が必要なときは変換
 				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . convertUrlToHtmlEntity($cssUrl) . '" />' . M3_NL;
 			}
@@ -5744,16 +5744,18 @@ class PageManager extends Core
 	/**
 	 * CSS生成用のURLを生成
 	 *
+	 * @param bool   $isSslPage		SSLが必要なページかどうか
 	 * @param string $optionParam	追加パラメータ
 	 * @return string				生成したURL
 	 */
-	function createCssCmdUrl($optionParam = '')
+	function createCssCmdUrl($isSslPage, $optionParam = '')
 	{
 		global $gEnvManager;
 		global $gRequestManager;
 		
 		// 現在のページURLを取得
-		$url = $gEnvManager->createPageUrl() . '?';
+	//	$url = $gEnvManager->createPageUrl() . '?';
+		$url = $gEnvManager->createPageUrl(''/*現在のページ*/, $isSslPage) . '?';
 		
 		// ページサブIDを取得
 		$pageSubId = $this->gEnv->getCurrentPageSubId();
