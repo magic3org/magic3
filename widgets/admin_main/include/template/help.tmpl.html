@@ -13,12 +13,27 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+$(function(){
+	var menuList = $(".helpmenu").children('li');
+	var menuDetails = menuList.children('div');
+	menuDetails.hide();
+	menuList.on("click", function(){
+		var menuDetail = $(this).children("div");
+
+		menuDetails.slideUp(400);
+		if (!(menuDetail.is(":visible"))){
+			menuList.removeClass("selected");
+			menuDetail.slideDown(400);
+			$(this).addClass("selected");
+		};
+	});
+});
 //]]>
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <h3>作業を選ぶ</h3>
-<ul>
+<ul class="helpmenu">
 <patTemplate:tmpl name="itemlist">
 <li>{ITEM}</li>
 </patTemplate:tmpl>

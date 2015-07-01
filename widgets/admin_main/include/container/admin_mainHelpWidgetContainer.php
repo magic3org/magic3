@@ -89,9 +89,14 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 現在の言語に対応したテキストを取得
 		$name = $this->getCurrentLangString($fetchedRow['ni_name']);
+		$detail = $this->getCurrentLangString($fetchedRow['ni_help_body']);		// 説明
 		
 		// リンクを付加
-		$itemTag = $this->gDesign->createAdminPageLink($this->convertToDispString($name), $fetchedRow['ni_url']);
+		$itemTag  = '<a href="#">' . $this->convertToDispString($name) . '</a>';	//$this->gDesign->createAdminPageLink($this->convertToDispString($name), $fetchedRow['ni_url']);
+		$itemTag .= '<div>';
+		$itemTag .= $this->convertToDispString($detail) . ' ';
+		$itemTag .= $this->gDesign->createAdminPageLink('<i class="glyphicon glyphicon-new-window"></i>', $fetchedRow['ni_url']);			// リンクを付加
+		$itemTag .= '</div>';
 		
 		$row = array(
 			'item' => $itemTag
