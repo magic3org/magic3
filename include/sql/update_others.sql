@@ -20,15 +20,15 @@
 
 DELETE FROM _nav_item WHERE ni_nav_id = 'helplink';
 INSERT INTO _nav_item
-(ni_nav_id,  ni_id, ni_index, ni_url,        ni_name) VALUES
-('helplink', 1,     1,        'task=configsite',       'サイト運用に必要な最小限の設定を行うには？'),
-('helplink', 2,     2,        'task=initwizard_site',       '使用する機能を選択するには？'),
-('helplink', 3,     3,        'task=initwizard_site',       'デフォルトページを変更するには？'),
-('helplink', 4,     4,        'task=initwizard_site',       'メニューを階層化して定義するには？'),
-('helplink', 5,     5,        'task=installdata',       'サンプルデータをインストールするには？'),
-('helplink', 6,     6,        'task=templist',       'テンプレートを追加するには？'),
-('helplink', 7,     7,        'task=configsys',       'サイトを非公開にするには？'),
-('helplink', 8,     8,        'task=configmessage',       'サイト非公開時のメッセージを変更するには？'),
-('helplink', 9,     9,        'task=userlist',       '管理者のパスワードを変更するには？'),
-('helplink', 10,     10,        'task=configsys',       '共有SSLを設定するには？');
+(ni_nav_id,  ni_id, ni_index, ni_url,        ni_name, ni_help_body) VALUES
+('helplink', 1,     1,        'task=configsite',       'サイト運用に必要な最小限の設定を行うには？', '「サイト情報」の必須項目を設定します。'),
+('helplink', 2,     2,        'task=initwizard_content',       '表示するコンテンツや機能を選択するには？', '「システム初期化ウィザード」の「コンテンツ」画面を設定し、次へ進みます。'),
+('helplink', 3,     3,        'task=initwizard_page2',       'デフォルトページを変更するには？', '「システム初期化ウィザード」の「ページ2」画面を設定し、次へ進みます。'),
+('helplink', 4,     4,        'task=initwizard_menu',       'メニューを階層化して定義するには？', '「システム初期化ウィザード」の「メニュー」画面を設定し、次へ進みます。'),
+('helplink', 5,     5,        'task=installdata',       'サンプルデータをインストールするには？', '「データインストール」画面からインストールするデータを選択し「インストール」ボタンを押します。公式サイトのデータを取得することも出来ます。'),
+('helplink', 6,     6,        'task=templist',       'テンプレートを追加するには？', '「テンプレート管理」画面の「アップロード」ボタンからZIP圧縮形式のテンプレートを追加します。'),
+('helplink', 7,     7,        'task=configsys',       'サイトを非公開にするには？', '「システム基本設定」画面の「サイトの状態」のボタンで制御します。'),
+('helplink', 8,     8,        'task=configmessage',       'サイト非公開時のメッセージを変更するには？', '「メッセージ設定」画面の「サイトメンテナンス中」を変更します。'),
+('helplink', 9,     9,        'task=userlist',       '管理者のパスワードを変更するには？', '「ユーザ一覧」画面から管理者を選択し、パスワードを変更します。'),
+('helplink', 10,     10,        'task=configsys',       '共有SSLを設定するには？', '「システム基本設定」画面の「SSL」の「一般画面にSSLを使用」にチェックを入れ、「共有SSLのルートURL」に共有SSL用のURLを設定します。');
 
