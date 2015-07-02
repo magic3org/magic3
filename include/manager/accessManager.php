@@ -447,6 +447,7 @@ class AccessManager extends Core
 		$referer	= $gRequestManager->trimServerValueOf('HTTP_REFERER');
 		$agent		= $gRequestManager->trimServerValueOf('HTTP_USER_AGENT');		// クライアントアプリケーション
 		$language	= $gRequestManager->trimServerValueOf('HTTP_ACCEPT_LANGUAGE');	// クライアント認識可能言語
+		$cmd		= $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);	// 実行コマンド
 		
 		$request = '';
 		foreach ($_REQUEST as $strKey => $strValue ) {
@@ -459,11 +460,12 @@ class AccessManager extends Core
 		$path = $gEnvManager->getAccessPath();
 		
 		// アクセスの種別を取得
-		$isCookie = !empty($_COOKIE);			// クッキーがあるかどうか
+		$isCookie = !empty($_COOKIE);	// クッキーがあるかどうか
 		$isCrawler = false;				// クローラかどうか
+		$isCmd = !empty($cmd);			// コマンド実行かどうか
 		
 		// アクセスログのシリアルNoを保存
-		$this->_accessLogSerialNo = $this->db->accessLog($userId, $cookieVal, $session, $ip, $method, $uri, $referer, $request, $agent, $language, $path, $isCookie, $isCrawler);
+		$this->_accessLogSerialNo = $this->db->accessLog($userId, $cookieVal, $session, $ip, $method, $uri, $referer, $request, $agent, $language, $path, $isCookie, $isCrawler, $isCmd);
 		
 		// 即時アクセス解析
 		if (M3_SYSTEM_REALTIME_ANALYTICS) $gInstanceManager->getAnalyzeManager()->realtimeAnalytics($this->_accessLogSerialNo, $cookieVal);
