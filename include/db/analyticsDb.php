@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -96,6 +96,11 @@ class analyticsDb extends BaseDb
 	 */
 	public function calcDatePv($date)
 	{
+		global $gSystemManager;
+		
+		// 現在のDBバージョンを取得
+		$currentVer = $gSystemManager->getSystemConfig(M3_TB_FIELD_DB_VERSION);
+		
 		// 一旦データをすべて削除
 		$queryStr  = 'DELETE FROM _analyze_page_view ';
 		$queryStr .=   'WHERE ap_date = ? ';
@@ -121,6 +126,10 @@ class analyticsDb extends BaseDb
 			$queryStr .=   'WHERE (? <= al_dt AND al_dt < ?) ';
 			$params[] = $startDt;
 			$params[] = $endDt;
+			// ### コマンド実行のログは除く ###
+			if ($currentVer >= 2015070201){			// バージョン2015070201以降で「al_is_cmd(コマンド実行かどうか)」を追加(2015/7/2)
+				$queryStr .=     'AND al_is_cmd = false ';
+			}
 			//$queryStr .=  'GROUP BY al_uri ';
 			$queryStr .=  'GROUP BY al_uri, al_path ';			// 2011/6/2 PostgreSQL9対応
 			$queryStr .=  'ORDER BY total DESC';
@@ -205,6 +214,10 @@ class analyticsDb extends BaseDb
 		$queryStr .=   'WHERE (? <= al_dt AND al_dt < ?) ';
 		$params[] = $startDt;
 		$params[] = $endDt;
+		// ### コマンド実行のログは除く ###
+		if ($currentVer >= 2015070201){			// バージョン2015070201以降で「al_is_cmd(コマンド実行かどうか)」を追加(2015/7/2)
+			$queryStr .=     'AND al_is_cmd = false ';
+		}
 		//$queryStr .=  'GROUP BY al_uri ';
 		$queryStr .=  'GROUP BY al_uri, al_path ';		// 2011/6/2 PostgreSQL9対応
 		$queryStr .=  'ORDER BY total DESC';
@@ -279,6 +292,10 @@ class analyticsDb extends BaseDb
 		$queryStr .=   'WHERE (? <= al_dt AND al_dt < ?) ';
 		$params[] = $startDt;
 		$params[] = $endDt;
+		// ### コマンド実行のログは除く ###
+		if ($currentVer >= 2015070201){			// バージョン2015070201以降で「al_is_cmd(コマンド実行かどうか)」を追加(2015/7/2)
+			$queryStr .=     'AND al_is_cmd = false ';
+		}
 		$queryStr .=  'GROUP BY al_path ';
 		$queryStr .=  'ORDER BY total DESC';
 		$ret = $this->selectRecords($queryStr, $params, $rows);
@@ -316,6 +333,10 @@ class analyticsDb extends BaseDb
 		$queryStr .=   'WHERE (? <= al_dt AND al_dt < ?) ';
 		$params[] = $startDt;
 		$params[] = $endDt;
+		// ### コマンド実行のログは除く ###
+		if ($currentVer >= 2015070201){			// バージョン2015070201以降で「al_is_cmd(コマンド実行かどうか)」を追加(2015/7/2)
+			$queryStr .=     'AND al_is_cmd = false ';
+		}
 		$queryStr .=  'ORDER BY total DESC';
 		$ret = $this->selectRecord($queryStr, $params, $row);
 
@@ -346,6 +367,10 @@ class analyticsDb extends BaseDb
 		$queryStr .=   'WHERE (? <= al_dt AND al_dt < ?) ';
 		$params[] = $startDt;
 		$params[] = $endDt;
+		// ### コマンド実行のログは除く ###
+		if ($currentVer >= 2015070201){			// バージョン2015070201以降で「al_is_cmd(コマンド実行かどうか)」を追加(2015/7/2)
+			$queryStr .=     'AND al_is_cmd = false ';
+		}
 		//$queryStr .=  'GROUP BY al_uri ';
 		$queryStr .=  'GROUP BY al_uri, al_path ';				// 2011/6/2 PostgreSQL9対応
 		$queryStr .=  'ORDER BY total DESC';
@@ -420,6 +445,10 @@ class analyticsDb extends BaseDb
 		$queryStr .=   'WHERE (? <= al_dt AND al_dt < ?) ';
 		$params[] = $startDt;
 		$params[] = $endDt;
+		// ### コマンド実行のログは除く ###
+		if ($currentVer >= 2015070201){			// バージョン2015070201以降で「al_is_cmd(コマンド実行かどうか)」を追加(2015/7/2)
+			$queryStr .=     'AND al_is_cmd = false ';
+		}
 		$queryStr .=  'GROUP BY al_path ';
 		$queryStr .=  'ORDER BY total DESC';
 		$ret = $this->selectRecords($queryStr, $params, $rows);
@@ -454,6 +483,10 @@ class analyticsDb extends BaseDb
 		$queryStr .=   'WHERE (? <= al_dt AND al_dt < ?) ';
 		$params[] = $startDt;
 		$params[] = $endDt;
+		// ### コマンド実行のログは除く ###
+		if ($currentVer >= 2015070201){			// バージョン2015070201以降で「al_is_cmd(コマンド実行かどうか)」を追加(2015/7/2)
+			$queryStr .=     'AND al_is_cmd = false ';
+		}
 		$queryStr .=  'ORDER BY total DESC';
 		$ret = $this->selectRecord($queryStr, $params, $row);
 	
