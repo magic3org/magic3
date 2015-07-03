@@ -28,7 +28,7 @@ global $interwiki;
 global $menubar;
 
 global $nofollow;
-global $trackback;
+//global $trackback;
 global $referer;
 global $nowikiname;
 global $autolink;
@@ -221,7 +221,7 @@ $nofollow = 0; // 1 = Try hiding from search engines
 // TrackBack feature
 
 // Enable Trackback
-$trackback = 0;
+//$trackback = 0;
 
 /////////////////////////////////////////////////
 // Referer list feature

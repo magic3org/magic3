@@ -125,7 +125,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$wikiLibDir = $this->gEnv->getCurrentWidgetLibPath();
 		
 		// Defaults
-		$notify = $trackback = $referer = 0;
+		$notify = $referer = 0;
 
 		// Load *.ini.php files and init PukiWiki
 		global $gEnvManager;
@@ -135,7 +135,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		if ($notify) {
 			require_once($wikiLibDir . '/mail.php'); // Mail notification
 		}
-		if ($trackback || $referer) {
+		if ($referer) {
 			// Referer functionality uses trackback functions
 			// without functional reason now
 			require_once($wikiLibDir . '/trackback.php'); // TrackBack
@@ -213,7 +213,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 				$this->gInstance->getAnalyzeManager()->updateContentViewCount(self::CONTENT_TYPE, $serial);
 			}
 
-			if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
+//			if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
 			if ($referer) ref_save($base);
 		}
 		// ##### タイトルを設定 #####
@@ -346,10 +346,10 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$this->resLink['rss20']    = $script . WikiParam::convQuery("?cmd=rss&amp;ver=2.0");
 		$this->resLink['search']   = $script . WikiParam::convQuery("?cmd=search");
 		$this->resLink['top']      = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getDefaultPage()));
-		if ($trackback) {
+/*		if ($trackback) {
 			$tb_id = tb_get_id($page);
 			$this->resLink['trackback'] = $script . WikiParam::convQuery("?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id");
-		}
+		}*/
 		$this->resLink['unfreeze'] = $script . WikiParam::convQuery("?cmd=unfreeze&amp;page=$r_page");
 		$this->resLink['upload']   = $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=upload&amp;page=$r_page");
 

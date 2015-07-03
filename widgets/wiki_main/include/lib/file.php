@@ -88,7 +88,7 @@ function get_filename($page)
 // modified for Magic3 by naoki on 2008/10/15
 function page_write($page, $postdata, $notimestamp = FALSE)
 {
-	global $trackback;
+//	global $trackback;
 	global $notify, $notify_diff_only, $notify_subject;
 	global $whatsdeleted, $maxshow_deleted;
 
@@ -183,13 +183,13 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	// リンクを更新
 	links_update($page);
 	
-	if ($trackback) {
+/*	if ($trackback) {
 		// TrackBack Ping
 		$_diff = explode("\n", $diffdata);
 		$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
 		$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
 		tb_send($page, $plus, $minus);
-	}
+	}*/
 }
 
 // Modify original text with user-defined / system-defined rules

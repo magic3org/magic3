@@ -225,7 +225,7 @@ function plugin_edit_inline()
 function plugin_edit_write()
 {
 	// modified for Magic3 by naoki on 2008/10/6
-	global $trackback;
+//	global $trackback;
 	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
 	global $notimeupdate, $_msg_invalidpass, $do_update_diff_table;
 	global $gPageManager;
@@ -290,7 +290,7 @@ function plugin_edit_write()
 		$retvars['msg' ] = $_title_deleted;
 		$retvars['body'] = str_replace('$1', htmlspecialchars($page), $_title_deleted);
 
-		if ($trackback) tb_delete($page);
+//		if ($trackback) tb_delete($page);
 
 		return $retvars;
 	}

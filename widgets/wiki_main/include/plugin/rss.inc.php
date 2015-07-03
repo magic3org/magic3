@@ -23,7 +23,7 @@
 function plugin_rss_action()
 {
 	//global $vars, $rss_max, $page_title, $whatsnew, $trackback;
-	global $rss_max, $page_title, $trackback;
+	global $rss_max, $page_title;
 	global $gPageManager;
 
 	//$version = isset($vars['ver']) ? $vars['ver'] : '';
@@ -87,18 +87,17 @@ EOD;*/
 			$rdf_li .= '    <rdf:li rdf:resource="' . $self . WikiParam::convQuery('?' . $r_page) . '" />' . "\n";
 
 			$date = substr_replace(get_date('Y-m-d\TH:i:sO', $time), ':', -2, 0);
-			$trackback_ping = '';
+/*			$trackback_ping = '';
 			if ($trackback) {
 				$tb_id = md5($r_page);
 				$trackback_ping = ' <trackback:ping>' . $self . WikiParam::convQuery('?tb_id=' . $tb_id, false) . '</trackback:ping>';
-			}
+			}*/
 			$items .= <<<EOD
 <item rdf:about="$pageUrl">
  <title>$title</title>
  <link>$pageUrl</link>
  <dc:date>$date</dc:date>
  <dc:identifier>$pageUrl</dc:identifier>
-$trackback_ping
 </item>
 EOD;
 /*
@@ -162,12 +161,10 @@ EOD;
 		break;
 
 	case '1.0':
-		$xmlns_trackback = $trackback ?
-			'  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"' : '';
+//		$xmlns_trackback = $trackback ? '  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"' : '';
 		print <<<EOD
 <rdf:RDF
   xmlns:dc="http://purl.org/dc/elements/1.1/"
-$xmlns_trackback
   xmlns="http://purl.org/rss/1.0/"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xml:lang="$lang">
