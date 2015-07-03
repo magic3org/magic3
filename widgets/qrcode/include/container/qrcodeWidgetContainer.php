@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: qrcodeWidgetContainer.php 2263 2009-08-28 05:21:34Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() .			'/baseWidgetContainer.php');
@@ -63,7 +63,13 @@ class qrcodeWidgetContainer extends BaseWidgetContainer
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'genarate'){			// QRコード生成のとき
+			// ページ作成処理中断
+			$this->gPage->abortPage();
+		
 			require_once($this->gEnv->getLibPath() .	'/qr_img0.50g/php/qr_img.php');
+			
+			// システム強制終了
+			$this->gPage->exitSystem();
 		} else {
 			// QRコード生成パスを設定
 			$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';

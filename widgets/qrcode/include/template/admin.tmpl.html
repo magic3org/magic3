@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,35 +19,36 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+$(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
-<table class="simple-table" width="950">
-<caption>QRコード作成</caption>
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150">説明</td>
-	    <td><input type="text" name="desc" value="{DESC}" size="100" maxlength="100" style="width:100%;" /></td>
+    <tr>
+	    <th>説明</th>
+	    <td><input type="text" name="desc" value="{DESC}" maxlength="100" /></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside">QRコード化するデータ</td>
-	    <td><input type="text" name="qr_data" value="{QR_DATA}" size="100" maxlength="100" style="width:100%;" /></td>
+    <tr>
+	    <th>QRコード化するデータ</th>
+	    <td><input type="text" name="qr_data" value="{QR_DATA}" maxlength="100" /></td>
 	</tr>
-        <tr>
-	    <td class="table-headside">QRコード画像作成用URL</td>
+<!--    <tr>
+	    <th>QRコード画像作成用URL</th>
 	    <td>{GURL}</td>
-	</tr>
-	<tr class="even">
-	<td colspan="2" align="right">
-		<input type="button" class="button" onclick="updateItem();" value="更新" />
-	</td>
-	</tr>
+	</tr>-->
     </tbody>
 </table>
-
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
