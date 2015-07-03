@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_blogparts_boxWidgetContainer.php 2240 2009-08-21 03:22:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -41,6 +41,23 @@ class admin_blogparts_boxWidgetContainer extends BaseAdminWidgetContainer
 		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		$task = $request->trimValueOf('task');
+		if ($task == 'list'){		// 一覧画面
+			// 通常のテンプレート処理を組み込みのテンプレート処理に変更。_setTemplate()、_assign()はキャンセル。
+			$this->replaceAssignTemplate(self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST);		// 設定一覧(基本)
+		}
+	}
+	/**
 	 * テンプレートファイルを設定
 	 *
 	 * _assign()でデータを埋め込むテンプレートファイルのファイル名を返す。
@@ -52,12 +69,12 @@ class admin_blogparts_boxWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return 'admin_list.tmpl.html';
-		} else {			// 一覧画面
+//		$task = $request->trimValueOf('task');
+//		if ($task == 'list'){		// 一覧画面
+//			return 'admin_list.tmpl.html';
+//		} else {			// 一覧画面
 			return 'admin_detail.tmpl.html';
-		}
+//		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -70,12 +87,26 @@ class admin_blogparts_boxWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return $this->createList($request);
-		} else {			// 詳細設定画面
+//		$task = $request->trimValueOf('task');
+//		if ($task == 'list'){		// 一覧画面
+//			return $this->createList($request);
+//		} else {			// 詳細設定画面
 			return $this->createDetail($request);
-		}
+//		}
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 	/**
 	 * 詳細画面作成
