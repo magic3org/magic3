@@ -29,7 +29,7 @@ global $menubar;
 
 global $nofollow;
 //global $trackback;
-global $referer;
+//global $referer;
 global $nowikiname;
 global $autolink;
 global $function_freeze;
@@ -225,7 +225,7 @@ $nofollow = 0; // 1 = Try hiding from search engines
 
 /////////////////////////////////////////////////
 // Referer list feature
-$referer = 0;
+//$referer = 0;
 //$referer = 1;			// tmp for magic3
 
 /////////////////////////////////////////////////

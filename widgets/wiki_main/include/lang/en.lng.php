@@ -130,7 +130,7 @@ global $_msg_pcomment_restrict;
 global $_popular_plugin_frame;
 global $_popular_plugin_today_frame;
 global $_recent_plugin_frame;
-global $_referer_msg;
+//global $_referer_msg;
 global $_rename_messages;
 global $_title_search;
 global $_title_result;
@@ -495,7 +495,7 @@ $_recent_plugin_frame = '<h5>recent(%d)</h5>
 
 ///////////////////////////////////////
 // referer.inc.php
-$_referer_msg = array(
+/*$_referer_msg = array(
 	'msg_H0_Refer'       => 'Referer',
 	'msg_Hed_LastUpdate' => 'LastUpdate',
 	'msg_Hed_1stDate'    => 'First Register',
@@ -504,7 +504,7 @@ $_referer_msg = array(
 	'msg_Fmt_Date'       => 'F j, Y, g:i A',
 	'msg_Chr_uarr'       => '&uArr;',
 	'msg_Chr_darr'       => '&dArr;',
-);
+);*/
 
 ///////////////////////////////////////
 // rename.inc.php

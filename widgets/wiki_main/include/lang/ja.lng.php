@@ -131,7 +131,7 @@ global $_msg_pcomment_restrict;
 global $_popular_plugin_frame;
 global $_popular_plugin_today_frame;
 global $_recent_plugin_frame;
-global $_referer_msg;
+//global $_referer_msg;
 global $_rename_messages;
 global $_title_search;
 global $_title_result;
@@ -497,7 +497,7 @@ $_recent_plugin_frame = '<h5>最新の%d件</h5>
 
 ///////////////////////////////////////
 // referer.inc.php
-$_referer_msg = array(
+/*$_referer_msg = array(
 	'msg_H0_Refer'       => 'リンク元の表示',
 	'msg_Hed_LastUpdate' => '最終更新日時',
 	'msg_Hed_1stDate'    => '初回登録日時',
@@ -506,7 +506,7 @@ $_referer_msg = array(
 	'msg_Fmt_Date'       => 'Y年n月j日 H:i',
 	'msg_Chr_uarr'       => '↑',
 	'msg_Chr_darr'       => '↓',
-);
+);*/
 
 ///////////////////////////////////////
 // rename.inc.php

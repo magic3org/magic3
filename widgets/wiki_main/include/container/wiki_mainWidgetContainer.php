@@ -125,7 +125,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$wikiLibDir = $this->gEnv->getCurrentWidgetLibPath();
 		
 		// Defaults
-		$notify = $referer = 0;
+		$notify = 0;
 
 		// Load *.ini.php files and init PukiWiki
 		global $gEnvManager;
@@ -135,11 +135,11 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		if ($notify) {
 			require_once($wikiLibDir . '/mail.php'); // Mail notification
 		}
-		if ($referer) {
+/*		if ($referer) {
 			// Referer functionality uses trackback functions
 			// without functional reason now
 			require_once($wikiLibDir . '/trackback.php'); // TrackBack
-		}
+		}*/
 		// 初期データをインストールしたときは、リンク再構築
 		if ($init) links_init();
 		
@@ -214,7 +214,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			}
 
 //			if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
-			if ($referer) ref_save($base);
+//			if ($referer) ref_save($base);
 		}
 		// ##### タイトルを設定 #####
 		// ウィジェットタイトル作成
@@ -338,7 +338,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$this->resLink['new']      = $script . WikiParam::convQuery("?plugin=newpage&amp;refer=$r_page");
 		$this->resLink['rdf']      = $script . WikiParam::convQuery("?cmd=rss&amp;ver=1.0");
 		$this->resLink['recent']   = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getWhatsnewPage()));
-		$this->resLink['refer']    = $script . WikiParam::convQuery("?plugin=referer&amp;page=$r_page");
+//		$this->resLink['refer']    = $script . WikiParam::convQuery("?plugin=referer&amp;page=$r_page");
 		$this->resLink['reload']   = $script . WikiParam::convQuery("?$r_page");
 		$this->resLink['rename']   = $script . WikiParam::convQuery("?plugin=rename&amp;refer=$r_page");
 		$this->resLink['rss']      = $script . WikiParam::convQuery("?cmd=rss");
