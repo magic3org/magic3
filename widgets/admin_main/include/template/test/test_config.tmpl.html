@@ -19,11 +19,45 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+// ファイルブラウザ起動
+function selectImage()
+{
+	m3OpenImageFileBrowser(SetUrl);
+}
+// ファイルブラウザからの設定用
+function SetUrl(url)
+{
+	$('#item_html').insertAtCaret(url);
+	
+	alert(url);
+/*	// URL設定
+	$('#image_url').text(url);
+	$('#item_image_url').val(url);
+	
+	// Flashの場合はデフォルトサイズを設定
+	if ($('#item_type').val() == '1'){
+		$('#image_width').val('130');
+		$('#image_height').val('130');
+	}
+	
+	// 画像表示
+	updateImage();*/
+}
+
 $(function(){
+	// CKEditorプラグイン直接実行
+	m3LoadCKTools();
+	
 	m3SetConfigTable('config_table');
 	
 	// WYSIWYGエディター作成
-	m3SetWysiwygEditor('item_html', 200/* 高さ */);
+//	m3SetWysiwygEditor('item_html', 200/* 高さ */);
+	// 画像選択
+	$("#selimage").click(function (){
+		selectImage();
+	});
+	
+	$('#item_html').insertAtCaret('input here!');
 });
 //]]>
 </script>
@@ -62,8 +96,8 @@ $(function(){
 	    <td colspan="3"><i class="glyphicon glyphicon-question-sign text-warning" style="font-size:150%;"></i><div class="form-control-static m3config_item">{EVENT_NAME}</div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_EVENT_URL}>説明</span></th>
-	    <td class="ckeditor" colspan="3"><textarea name="item_html">{HTML}</textarea></td>
+	    <th><span {_HELP_EVENT_URL}>説明</span><div class="pull-right"><a id="selimage" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" data-container="body"><i class="glyphicon glyphicon-edit"></i></a></div></th>
+	    <td class="ckeditor" colspan="3"><textarea id="item_html" name="item_html">{HTML}</textarea></td>
 	</tr>
     </tbody>
 </table>

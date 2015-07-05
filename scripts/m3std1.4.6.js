@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -399,3 +399,35 @@ function m3SetSafeWysiwygEditor(id, height)
 	config['toolbar'] = 'Safe';
 	CKEDITOR.replace(id, config);
 }
+/**
+ * (jQueryの機能拡張)テキストエリアのカーソルの位置に文字列を追加
+ *
+ * @param string value		追加する文字列
+ * @return なし
+ */
+$.fn.extend({
+	insertAtCaret: function(value){
+		return this.each(function(i){
+			if (document.selection){
+				//For browsers like Internet Explorer
+				this.focus();
+				var sel = document.selection.createRange();
+				sel.text = value;
+				this.focus();
+			} else if (this.selectionStart || this.selectionStart == '0'){
+				//For browsers like Firefox and Webkit based
+				var startPos = this.selectionStart;
+				var endPos = this.selectionEnd;
+				var scrollTop = this.scrollTop;
+				this.value = this.value.substring(0, startPos) + value + this.value.substring(endPos, this.value.length);
+				this.focus();
+				this.selectionStart = startPos + value.length;
+				this.selectionEnd = startPos + value.length;
+				this.scrollTop = scrollTop;
+			} else {
+				this.value += value;
+				this.focus();
+			}
+		});
+	}
+});
