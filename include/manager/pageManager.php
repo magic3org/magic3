@@ -3399,7 +3399,12 @@ class PageManager extends Core
 				$count = count($this->defaultCssFiles);
 				for ($i = 0; $i < $count; $i++){
 					// CSSへのURLを作成
-					$cssURL = $scriptsUrl . '/' . $this->defaultCssFiles[$i];
+					$cssFilename = $this->defaultCssFiles[$i];
+					if (strncasecmp($cssFilename, 'http://', 7) == 0 || strncasecmp($cssFilename, 'https://', 8) == 0){
+						$cssURL = $cssFilename;
+					} else {
+						$cssURL = $scriptsUrl . '/' . $cssFilename;
+					}
 					$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 				}
 			}
