@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: wikiPage.php 1161 2008-10-30 08:47:27Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
@@ -31,7 +31,7 @@ class WikiPage
 	const CONTENT_TYPE_UPLOAD		= 'upload';		// 添付ファイル情報データ
 	const CONTENT_TYPE_CACHE_REL	= 'cache_rel';			// キャッシュデータ(関連ページ)
 	const CONTENT_TYPE_CACHE_REF	= 'cache_ref';			// キャッシュデータ(参照ページ)
-	const CONTENT_TYPE_TRACKBACK	= 'trackback';			// トラックバックデータ
+//	const CONTENT_TYPE_TRACKBACK	= 'trackback';			// トラックバックデータ
 	const CONTENT_TYPE_CACHE		= 'cache';				// 共通キャッシュデータ
 	
 	/**
@@ -448,14 +448,14 @@ class WikiPage
 	 * @param  string $data		更新データ
 	 * @return bool				true=成功、false=失敗
 	 */
-	public static function updatePageTrackback($name, $data)
+/*	public static function updatePageTrackback($name, $data)
 	{
 		// 引数エラーチェック
 		if (empty($name)) return false;
 		
 		$ret = self::$db->updatePageOther($name, $data, self::CONTENT_TYPE_TRACKBACK);
 		return $ret;
-	}
+	}*/
 	/**
 	 * ページトラックバックデータを取得
 	 *
@@ -463,22 +463,22 @@ class WikiPage
 	 * @param bool $join		データ連結するかどうか
 	 * @return string		取得データ
 	 */
-	public static function getPageTrackback($name, $join=false)
+/*	public static function getPageTrackback($name, $join=false)
 	{
 		$value = self::$db->getPageOther($name, self::CONTENT_TYPE_TRACKBACK);
 		if (!$join) $value = preg_split('/(?<=\n)/', $value);// 行単位(改行コード含む)の配列にして返すとき
 		return $value;
-	}
+	}*/
 	/**
 	 * ページトラックバックデータを削除
 	 *
 	 * @param string $name		ページ名
 	 * @return bool				true=成功、false=失敗
 	 */
-	public static function clearPageTrackback($name='')
+/*	public static function clearPageTrackback($name='')
 	{
 		return self::$db->clearPageOther($name, self::CONTENT_TYPE_TRACKBACK);
-	}
+	}*/
 	/**
 	 * 最終更新キャッシュデータを更新
 	 *
@@ -598,11 +598,11 @@ class WikiPage
 	 *
 	 * @return array		ページ名
 	 */
-	public static function getTrackbackPages()
+/*	public static function getTrackbackPages()
 	{
 		$retVal = self::$db->getAvailablePages(self::CONTENT_TYPE_TRACKBACK);
 		return $retVal;
-	}
+	}*/
 	/**
 	 * キャッシュデータ(関連ページ)が存在するページ名を取得
 	 *

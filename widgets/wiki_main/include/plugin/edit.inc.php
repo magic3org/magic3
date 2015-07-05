@@ -93,9 +93,7 @@ function plugin_edit_preview()
 //	WikiParam::setMsg($msg);		// tmp
 	$postdata = $msg;
 	
-	//if (isset($vars['add']) && $vars['add']) {
 	if (WikiParam::getVar('add')) {
-		//if (isset($vars['add_top']) && $vars['add_top']) {
 		if (WikiParam::getVar('add_top')) {
 			//$postdata  = $postdata . "\n\n" . @join('', get_source($page));
 			$postdata  = $postdata . "\n\n" . get_source($page, true);
@@ -126,8 +124,6 @@ function plugin_edit_preview()
 function plugin_edit_inline()
 {
 	static $usage = '&edit(pagename#anchor[[,noicon],nolabel])[{label}];';
-	// modified for Magic3 by naoki on 2008/10/6
-	//global $script, $vars, $fixed_heading_anchor_edit;
 	global $script, $fixed_heading_anchor_edit;
 
 	if (PKWK_READONLY) return ''; // Show nothing 
@@ -154,7 +150,6 @@ function plugin_edit_inline()
 	list($s_page, $id, $editable) = anchor_explode($page, TRUE);
 
 	// Default: This one
-	//if ($s_page == '') $s_page = isset($vars['page']) ? $vars['page'] : '';
 	if ($s_page == '') $s_page = WikiParam::getPage();
 
 	// $s_page fixed
@@ -224,15 +219,10 @@ function plugin_edit_inline()
 // Write, add, or insert new comment
 function plugin_edit_write()
 {
-	// modified for Magic3 by naoki on 2008/10/6
-//	global $trackback;
 	global $_title_collided, $_msg_collided_auto, $_msg_collided, $_title_deleted;
 	global $notimeupdate, $_msg_invalidpass, $do_update_diff_table;
 	global $gPageManager;
 
-/*	$page   = isset($vars['page'])   ? $vars['page']   : '';
-	$add    = isset($vars['add'])    ? $vars['add']    : '';
-	$digest = isset($vars['digest']) ? $vars['digest'] : '';*/
 	$page   = WikiParam::getPage();
 	$add    = WikiParam::getVar('add');
 	$digest = WikiParam::getVar('digest');		// POST値を取得
@@ -267,7 +257,6 @@ function plugin_edit_write()
 	// Action?
 	if ($add) {
 		// Add
-		//if (isset($vars['add_top']) && $vars['add_top']) {
 		if (WikiParam::getVar('add_top')) {
 			//$postdata  = $msg . "\n\n" . @join('', get_source($page));
 			$postdata  = $msg . "\n\n" . get_source($page, true);

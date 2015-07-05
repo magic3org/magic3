@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,6 +20,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiPage.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiParam.php');
+require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiScript.php');
 // PukiWikiファイル
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/func.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/file.php');
@@ -235,6 +236,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// テンプレートに出力
 		$this->tmpl->addVar("_widget", "content", $body);	// メインコンテンツ
 		$this->tmpl->addVar("_widget", "note", $notes);		// 追記
+		$this->tmpl->addVar("_widget", "script", WikiScript::getScript());		// Javascript
 		
 		// ##### ページ構成 #####
 		// ツールバー表示制御
@@ -281,7 +283,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			$this->tmpl->setAttribute('show_page_info', 'visibility', 'visible');
 		}
 		
-		// セッションオブジェクトをセッションに保存
+		// ### セッションオブジェクトをセッションに保存 ###
 		$sessionObj = WikiConfig::getSessionObj();
 		$this->setWidgetSessionObj($sessionObj);
 	}
@@ -309,6 +311,24 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	function _addCssFileToHead($request, &$param)
 	{
 		return $this->cssFilePath;
+	}
+	/**
+	 * JavascriptライブラリをHTMLヘッダ部に設定
+	 *
+	 * JavascriptライブラリをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string,array 				Javascriptライブラリ。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptLibToHead($request, &$param)
+	{
+		if (WikiConfig::isUserWithEditAuth()){		// 編集権限ありのとき
+			return ScriptLibInfo::LIB_ELFINDER;
+		} else {
+			return '';
+		}
 	}
 	/**
 	 * 表示用データ作成
