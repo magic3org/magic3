@@ -400,7 +400,7 @@ function m3SetSafeWysiwygEditor(id, height)
 	CKEDITOR.replace(id, config);
 }
 /**
- * (jQueryの機能拡張)テキストエリアのカーソルの位置に文字列を追加
+ * (jQueryの機能拡張)TextAreaやINPUTタグのテキストのカーソルの位置に文字列を追加
  *
  * @param string value		追加する文字列
  * @return なし

@@ -28,8 +28,7 @@ function selectImage()
 function SetUrl(url)
 {
 	$('#item_html').insertAtCaret(url);
-	
-	alert(url);
+	$('#item_input').insertAtCaret(url);
 /*	// URL設定
 	$('#image_url').text(url);
 	$('#item_image_url').val(url);
@@ -58,6 +57,7 @@ $(function(){
 	});
 	
 	$('#item_html').insertAtCaret('input here!');
+	$('#item_input').insertAtCaret('input here!');
 });
 //]]>
 </script>
@@ -98,6 +98,10 @@ $(function(){
     <tr>
 	    <th><span {_HELP_EVENT_URL}>説明</span><div class="pull-right"><a id="selimage" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" data-container="body"><i class="glyphicon glyphicon-edit"></i></a></div></th>
 	    <td class="ckeditor" colspan="3"><textarea id="item_html" name="item_html">{HTML}</textarea></td>
+	</tr>
+	<tr>
+	    <th><span {_HELP_ENTRY_NAME}>入力</span></th>
+	    <td colspan="3"><input type="text" id="item_input" name="item_input" class="form-control" size="30" maxlength="30" /></td>
 	</tr>
     </tbody>
 </table>
