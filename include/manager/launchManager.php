@@ -138,9 +138,9 @@ class LaunchManager extends Core
 			}
 			// コンテナクラスを起動
 			$widgetContainer = new $containerClass();
-			$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+			$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 			$widgetContainer->process($gRequestManager);
-			$gEnvManager->setCurrentWidgetContainerObj(null);
+			$gEnvManager->setCurrentWidgetObj(null);
 		} else {			// PC用の画面からのアクセスまたは管理画面へのアクセス
 			// インナーウィジェットのチェック
 			$isIWidget = false;
@@ -174,9 +174,9 @@ class LaunchManager extends Core
 				//if (in_array($filepath, $pathArray)){
 					// 同じウィジェットの場合は起動
 					$widgetContainer = new $containerClass();
-					$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+					$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 					$widgetContainer->process($gRequestManager);
-					$gEnvManager->setCurrentWidgetContainerObj(null);
+					$gEnvManager->setCurrentWidgetObj(null);
 	//			} else {
 	//				// 同じウィジェットが起動されていないときは、クラス名のバッテイングでエラー
 	//				echo 'class redefined error: ' . $containerClass;
@@ -199,9 +199,9 @@ class LaunchManager extends Core
 				}
 				// コンテナクラスを起動
 				$widgetContainer = new $containerClass();
-				$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+				$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 				$widgetContainer->process($gRequestManager);
-				$gEnvManager->setCurrentWidgetContainerObj(null);
+				$gEnvManager->setCurrentWidgetObj(null);
 			}
 			// 呼び出し元ファイルパスの保存
 			$pathArray[] = $filepath;
@@ -244,9 +244,9 @@ class LaunchManager extends Core
 				
 				// コンテナクラスを起動
 				$widgetContainer = new $containerClass();
-				$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+				$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 				$widgetContainer->process($gRequestManager);
-				$gEnvManager->setCurrentWidgetContainerObj(null);
+				$gEnvManager->setCurrentWidgetObj(null);
 			} else {
 				if (empty($defaultWidgetId)){
 					echo 'file not found error: ' . $containerPath;
@@ -270,9 +270,9 @@ class LaunchManager extends Core
 				
 							// コンテナクラスを起動
 							$widgetContainer = new $containerClass();
-							$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+							$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 							$widgetContainer->process($gRequestManager);
-							$gEnvManager->setCurrentWidgetContainerObj(null);
+							$gEnvManager->setCurrentWidgetObj(null);
 						} else {
 							echo 'file not found error: ' . $containerPath;
 						}
@@ -312,9 +312,9 @@ class LaunchManager extends Core
 			}
 			// コンテナクラスを起動
 			$widgetContainer = new $containerClass();
-			$gEnvManager->setCurrentWidgetContainerObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+			$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 			$widgetContainer->process($gRequestManager, $install);
-			$gEnvManager->setCurrentWidgetContainerObj(null);
+			$gEnvManager->setCurrentWidgetObj(null);
 		}
 	}
 	/**

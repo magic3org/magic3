@@ -39,8 +39,8 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 		
 		$paramTag = '';
 		
-		// 現在のウィジェットコンテナオブジェクトを取得
-		$widgetObj = $gEnvManager->getCurrentWidgetContainerObj();
+		// 現在のウィジェットオブジェクトを取得
+		$widgetObj = $gEnvManager->getCurrentWidgetObj();
 		if (isset($widgetObj)){
 			// 非表示INPUTタグ情報を取得
 			$tagInfo = $widgetObj->_getHiddenTagInfo();
