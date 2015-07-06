@@ -19,14 +19,12 @@ function selectImage()
 // ファイルブラウザからの設定用
 function SetUrl(url)
 {
-	$('#{TEXTAREA}').insertAtCaret(url);
+	$('#{TEXTAREA}').insertAtCaret('#ref(' + url + ')');
 }
 
 $(function(){
 	// CKEditorプラグイン直接実行
 	m3LoadCKTools();
-	
-	m3SetConfigTable('config_table');
 	
 	// ボタンイベント
 	$("#{BUTTON}").click(function (){
