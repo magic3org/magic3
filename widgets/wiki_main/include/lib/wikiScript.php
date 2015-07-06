@@ -22,7 +22,7 @@ class WikiScript
 	 */
 	function __construct()
 	{
-		$this->scriptBody = '';
+		self::$scriptBody = '';
 	}
 	/**
 	 * オブジェクトを初期化
@@ -42,7 +42,7 @@ class WikiScript
 	{
 		$scriptTag  = '<script type="text/javascript">' . M3_NL . $script;
 		$scriptTag .= '//<![CDATA[' . M3_NL;
-		$scriptTag .= $this->scriptBody;
+		$scriptTag .= self::$scriptBody;
 		$scriptTag = rtrim($scriptTag, M3_NL) . M3_NL;		// 改行が付加されていれば削除
 		$scriptTag .= '//]]>' . M3_NL . $script;
 		$scriptTag .= '</script>' . M3_NL . $script;
@@ -52,12 +52,34 @@ class WikiScript
 	 * Javascriptを追加
 	 *
 	 * @param string $type			スクリプトタイプ(「selectimage」=画像選択)
-	 * @param string $buttonId		起動ボタンのID
+	 * @param array  $replaceData	テンプレート置換データ。キーと値の連想配列。
 	 * @return						なし
 	 */
-	public static function addScript($type, $buttonId)
+	public static function addScript($type, $replaceData)
 	{
-		$this->scriptBody .= '';
+		global $gEnvManager;
+		
+		// 実行中のウィジェットを取得
+		$widgetObj = $gEnvManager->getCurrentWidgetObj();
+		
+		switch ($type){
+		case 'selectimage':
+			self::$scriptBody .= $widgetObj->getParsedTemplateData('selectimage.tmpl.js', array('WikiScript', 'makeScript'), $replaceData);
+			break;
+		}
+	}
+	/**
+	 * Javascriptデータ作成処理コールバック
+	 *
+	 * @param object $tmpl			テンプレートオブジェクト
+	 * @param array  $replaceData	テンプレート置換データ。キーと値の連想配列。
+	 * @param						なし
+	 */
+	public static function makeScript($tmpl, $replaceData)
+	{
+		foreach ($replaceData as $key => $value) {
+			$tmpl->addVar("_tmpl", $key, $value);
+		}
 	}
 }
 ?>

@@ -26,7 +26,6 @@ define('EDIT_COLS_BOOTSTRAP', 40); // Columns of textarea
 //function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='')
 {
-	//global $script, $vars, $rows, $cols, $hr, $function_freeze;
 	global $script, $rows, $cols, $hr, $function_freeze;
 	global $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel, $_msg_help;
 	global $whatsnew, $_btn_template, $_btn_load, $load_template_func;
@@ -84,12 +83,13 @@ EOD;
 $s_pages
   </select>
   <input type="submit" name="template" class="button" value="$_btn_load" accesskey="r" />
-  <br />
 EOD;
 		}
-
-		/*if (isset($vars['refer']) && $vars['refer'] != '')
-			$refer = '[[' . strip_bracket($vars['refer']) . ']]' . "\n\n";*/
+  		$template .= '<div class="pull-right"><a id="selimage" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" data-container="body" rel="m3help" title="画像を挿入" ><i class="glyphicon glyphicon-picture"></i></a></div>';
+  
+  		// 画像選択ダイアログ(elFinder)追加
+		WikiScript::addScript('selectimage', array( 'button' => 'selimage', 'textarea' => 'wiki_edit' ));
+		
 		$referValue = WikiParam::getVar('refer');
 		if ($referValue != '') $refer = '[[' . strip_bracket($referValue) . ']]' . "\n\n";
 	}
@@ -145,7 +145,7 @@ $template
   <input type="hidden" name="wcmd"    value="edit" />
   <input type="hidden" name="page"   value="$s_page" />
   <input type="hidden" name="digest" value="$s_digest" />
-  <div><textarea class="wiki_edit form-control" name="msg" rows="$rows" cols="$cols">$s_postdata</textarea></div>
+  <div><textarea id="wiki_edit" name="msg" class="wiki_edit form-control" rows="$rows" cols="$cols">$s_postdata</textarea></div>
    <input type="submit" name="preview" class="button btn" value="$btn_preview" accesskey="p" />
    <input type="submit" name="write"   class="button btn" value="$_btn_update" accesskey="s" />
    $add_top
@@ -168,7 +168,7 @@ $template
   <input type="hidden" name="wcmd"    value="edit" />
   <input type="hidden" name="page"   value="$s_page" />
   <input type="hidden" name="digest" value="$s_digest" />
-  <textarea name="msg" class="wiki_edit" rows="$rows" cols="$cols">$s_postdata</textarea>
+  <textarea id="wiki_edit" name="msg" class="wiki_edit" rows="$rows" cols="$cols">$s_postdata</textarea>
   <br />
   <div style="float:left;">
    <input type="submit" name="preview" class="button" value="$btn_preview" accesskey="p" />

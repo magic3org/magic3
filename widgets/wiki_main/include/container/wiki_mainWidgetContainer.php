@@ -325,7 +325,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	function _addScriptLibToHead($request, &$param)
 	{
 		if (WikiConfig::isUserWithEditAuth()){		// 編集権限ありのとき
-			return ScriptLibInfo::LIB_ELFINDER;
+			return array( ScriptLibInfo::LIB_CKEDITOR, ScriptLibInfo::LIB_ELFINDER );
 		} else {
 			return '';
 		}
