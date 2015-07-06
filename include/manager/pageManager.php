@@ -234,13 +234,10 @@ class PageManager extends Core
 		}
 		$this->useHelp = true;		// ヘルプ機能
 		
-		// 共通スクリプトファイル
-		// 「ルート/scripts」ディレクトリからの相対パスで指定する
-		$this->defaultScriptFiles = array(self::M3_STD_SCRIPT_FILENAME);
-		$this->defaultCssFiles = array(self::M3_DEFAULT_CSS_FILE);			// 一般画面共通のデフォルトCSS
-		
+		// デフォルトのWYSIWYGエディターを取得
 		$this->wysiwygEditor = $gSystemManager->getSystemConfig(self::CF_WYSIWYG_EDITOR);				// 管理画面用WYSIWYGエディター
 		
+		// ##### jQueryバージョン設定 #####
 		// アクセスする画面に応じてjQueryのバージョンを設定
 		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 			$value = $gSystemManager->getSystemConfig(self::CF_ADMIN_JQUERY_VERSION);// 管理画面用jQueryバージョン
@@ -266,23 +263,35 @@ class PageManager extends Core
 		$this->selectedJQueryFilename = ScriptLibInfo::getJQueryFilename(0);			// 使用対象のjQueryファイル
 		$this->selectedJQueryUiFilename = ScriptLibInfo::getJQueryFilename(1);		// 使用対象のjQuery UIファイル
 
-		// 管理機能用Javascript取得
+		// ##### 一般画面用のデフォルトのJavascript、CSSを取得 #####
+		$this->defaultScriptFiles	=	array(
+											$this->selectedJQueryFilename,			// jQuery
+											self::M3_STD_SCRIPT_FILENAME
+										);
+		$this->defaultCssFiles		=	array(
+											self::M3_DEFAULT_CSS_FILE				// 一般画面共通のデフォルトCSS
+										);
+		
+		// ##### 管理機能用のデフォルトのJavascript、CSSを取得 #####
 		if (defined('M3_STATE_IN_INSTALL')){		// インストーラの場合のスクリプト
-			$this->defaultAdminScriptFiles = array($this->selectedJQueryFilename,			// jQuery
-											//	self::M3_STD_SCRIPT_FILENAME,
-												self::M3_ADMIN_SCRIPT_FILENAME);
-											//	self::M3_OPTION_SCRIPT_FILENAME);
-			
-			$this->defaultAdminCssFiles = array();	// 管理機能用のCSS
+			$this->defaultAdminScriptFiles	=	array(
+													$this->selectedJQueryFilename,			// jQuery
+												//	self::M3_STD_SCRIPT_FILENAME,
+													self::M3_ADMIN_SCRIPT_FILENAME
+												);
+			$this->defaultAdminCssFiles		= 	array();	// 管理機能用のCSS
 		} else {
-			$this->defaultAdminScriptFiles = array($this->selectedJQueryFilename,			// jQuery
-												$this->selectedJQueryUiFilename,				// jQuery UI Core
-												ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME,		// jQuery Contextmenu Lib
-												self::M3_STD_SCRIPT_FILENAME,
-												self::M3_ADMIN_SCRIPT_FILENAME,
-												self::M3_OPTION_SCRIPT_FILENAME);
-								
-			$this->defaultAdminCssFiles = array(self::M3_ADMIN_CSS_FILE);// 管理機能用のCSS	
+			$this->defaultAdminScriptFiles	=	array(
+													$this->selectedJQueryFilename,			// jQuery
+													$this->selectedJQueryUiFilename,				// jQuery UI Core
+													ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME,		// jQuery Contextmenu Lib
+													self::M3_STD_SCRIPT_FILENAME,
+													self::M3_ADMIN_SCRIPT_FILENAME,
+													self::M3_OPTION_SCRIPT_FILENAME
+												);
+			$this->defaultAdminCssFiles		=	array(
+													self::M3_ADMIN_CSS_FILE			// 管理機能用のCSS
+												);
 			
 			// Javascriptライブラリ
 			$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用

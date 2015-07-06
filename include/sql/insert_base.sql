@@ -58,7 +58,7 @@ INSERT INTO _system_config
 ('use_template_id_in_session',  '1',                        'セッションにテンプレートIDを保存'),
 ('use_content_maintenance',     '0',                        'メンテナンス画面用コンテンツの取得'),
 ('use_content_access_deny',     '0',                        'アクセス不可画面用コンテンツの取得'),
-('use_jquery',                  '1',                        '一般画面にjQueryを使用'),
+('use_jquery',                  '1',                        '一般画面にjQueryを使用(廃止予定)'),
 ('default_theme',               'black-tie',                '一般画面用jQueryUIテーマ'),
 ('admin_default_theme',         'black-tie',                '管理画面用jQueryUIテーマ'),
 ('jquery_version',               '1.8',                     'jQueryバージョン(PC用)'),
