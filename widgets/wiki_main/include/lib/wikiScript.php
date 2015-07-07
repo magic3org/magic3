@@ -16,6 +16,7 @@
 class WikiScript
 {
 	private static $scriptBody;		// Javascript
+	const SCRIPT_TYPE_EDIT_TOOLBAR = 'edittoolbar';// Wikiページ編集用ツールバー
 	
 	/**
 	 * コンストラクタ
@@ -63,8 +64,8 @@ class WikiScript
 		$widgetObj = $gEnvManager->getCurrentWidgetObj();
 		
 		switch ($type){
-		case 'selectimage':
-			self::$scriptBody .= $widgetObj->getParsedTemplateData('selectimage.tmpl.js', array('WikiScript', 'makeScript'), $replaceData);
+		case self::SCRIPT_TYPE_EDIT_TOOLBAR:			// Wikiページ編集用ツールバー
+			self::$scriptBody .= $widgetObj->getParsedTemplateData('edittoolbar.tmpl.js', array('WikiScript', 'makeScript'), $replaceData);
 			break;
 		}
 	}

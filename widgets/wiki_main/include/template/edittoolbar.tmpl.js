@@ -14,21 +14,31 @@
 // ファイルブラウザ起動
 function selectImage()
 {
-	m3OpenImageFileBrowser(SetUrl);
+	m3OpenImageFileBrowser(SetUrl_image);
+}
+function selectFile()
+{
+	m3OpenFileBrowser(SetUrl_file);
 }
 // ファイルブラウザからの設定用
-function SetUrl(url)
+function SetUrl_image(url)
 {
 	$('#{TEXTAREA}').insertAtCaret('#ref(' + url + ')');
 }
-
+function SetUrl_file(url)
+{
+	$('#{TEXTAREA}').insertAtCaret('#ref(' + url + ')');
+}
 $(function(){
 	// CKEditorプラグイン直接実行
 	m3LoadCKTools();
 	
 	// ボタンイベント
-	$("#{BUTTON}").click(function (){
+	$("#{BUTTON_IMAGE}").click(function (){
 		selectImage();
+	});
+	$("#{BUTTON_FILE}").click(function (){
+		selectFile();
 	});
 });
 </patTemplate:tmpl>

@@ -347,6 +347,37 @@ function m3Confirm(type, message, callback, title)
 	}).open();
 }
 /**
+ * ファイルブラウザを表示
+ *
+ * @param function	seturl_callback	コールバック関数
+ * @return なし
+ */
+function m3OpenFileBrowser(seturl_callback)
+{
+	$('<div />').dialog({
+		title: "ファイルを選択",
+		modal: true,
+		width: "80%",
+		zIndex: 99999,
+		open: function(){
+			$(this).parent().css("padding", "0px");
+			$(this).css("padding", "0px");
+		},
+		create: function(event, ui){
+			$(this).elfinder({
+				url : M3_ROOT_URL + '/scripts/elfinder-2.1/php/connector.php?dirtype=file',
+				height: '500px',
+				lang: 'ja',
+				resizable: false,
+				getFileCallback: function(url){
+					seturl_callback(url.url);
+					$('a.ui-dialog-titlebar-close[role="button"]').click();
+				}
+			}).elfinder('instance');
+		}
+	});
+}
+/**
  * 画像ファイルブラウザを表示
  *
  * @param function	seturl_callback	コールバック関数
