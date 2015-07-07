@@ -74,19 +74,29 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 			$template .= $s_pages;
 			$template .= '</select>' . M3_NL;
 			$template .= '<input type="submit" name="template" class="button btn" value="' . $_btn_load . '" accesskey="r" />' . M3_NL;
+			
+			// 編集用ツールバー追加
+			$template .= '<div class="pull-right">';
+			$template .= '<div class="btn-group btn-group-sm" role="group" aria-label="edit toolbar">';
+			$template .= '<a id="selfile" href="javascript:void(0);" class="btn btn-warning" role="button" data-container="body" rel="m3help" title="ファイルを挿入" ><i class="glyphicon glyphicon-file"></i></a>';
+	  		$template .= '<a id="selimage" href="javascript:void(0);" class="btn btn-warning" role="button" data-container="body" rel="m3help" title="画像を挿入" ><i class="glyphicon glyphicon-picture"></i></a>';
+			$template .= '</div>';
+			$template .= '</div>';
 		} else {
 			$template  = '<select name="template_page">' . M3_NL;
 			$template .= '<option value="">-- ' . $_btn_template . ' --</option>' . M3_NL;
 			$template .= $s_pages;
 			$template .= '</select>' . M3_NL;
 			$template .= '<input type="submit" name="template" class="button" value="' . $_btn_load . '" accesskey="r" />' . M3_NL;
+			
+			// 編集用ツールバー追加
+			$template .= '<div class="pull-right">';
+			$template .= '<div class="btn-group" role="group" aria-label="edit toolbar">';
+			$template .= '<a id="selfile" href="javascript:void(0);" class="btn btn-warning" role="button" data-container="body" rel="m3help" title="ファイルを挿入" ><i class="glyphicon glyphicon-file"></i></a>';
+	  		$template .= '<a id="selimage" href="javascript:void(0);" class="btn btn-warning" role="button" data-container="body" rel="m3help" title="画像を挿入" ><i class="glyphicon glyphicon-picture"></i></a>';
+			$template .= '</div>';
+			$template .= '</div>';
 		}
-		$template .= '<div class="pull-right">';
-		$template .= '<div class="btn-group btn-group-sm" role="group" aria-label="edit toolbar">';
-		$template .= '<a id="selfile" href="javascript:void(0);" class="btn btn-warning" role="button" data-container="body" rel="m3help" title="ファイルを挿入" ><i class="glyphicon glyphicon-file"></i></a>';
-  		$template .= '<a id="selimage" href="javascript:void(0);" class="btn btn-warning" role="button" data-container="body" rel="m3help" title="画像を挿入" ><i class="glyphicon glyphicon-picture"></i></a>';
-		$template .= '</div>';
-		$template .= '</div>';
   
   		// 画像選択ダイアログ(elFinder)追加
 		WikiScript::addScript(WikiScript::SCRIPT_TYPE_EDIT_TOOLBAR/*Wikiページ編集用ツールバー*/, array( 'button_image' => 'selimage', 'button_file' => 'selfile', 'textarea' => 'wiki_edit' ));
