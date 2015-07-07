@@ -234,6 +234,9 @@ tfoot th.style_th {
 }
 .small { font-size:80%; }
 
+img.facemark {
+	border: none !important;
+}
 /***** plugin *****/
 /* hr plugin */
 hr.wiki_hr_short {
