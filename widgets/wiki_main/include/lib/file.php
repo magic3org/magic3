@@ -204,7 +204,7 @@ function make_str_rules($source)
 	$multiline = 0;
 	$matches   = array();
 	for ($i = 0; $i < $count; $i++) {
-		$line = $lines[$i]; // Modify directly
+		$line = &$lines[$i]; // Modify directly
 
 		// Ignore null string and preformatted texts
 		if ($line == '' || $line{0} == ' ' || $line{0} == "\t") continue;
