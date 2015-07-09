@@ -57,7 +57,7 @@ function plugin_youtube_convert()
 		break;
 	}
 
-	$body  = '<div style="text-align:' . $outerStyle . '"><iframe class="youtube-player" width="' . $width . '" height="' . $height . '" src="https://www.youtube.com/embed/' . $movieId . '" frameborder="0" allowfullscreen></iframe></div>';
+	$body  = '<div class="youtube-wrap" style="text-align:' . $outerStyle . '"><iframe class="youtube" width="' . $width . '" height="' . $height . '" src="https://www.youtube.com/embed/' . $movieId . '" frameborder="0" allowfullscreen></iframe></div>';
 	return $body;
 }
 ?>

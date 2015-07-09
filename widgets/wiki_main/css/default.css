@@ -2,13 +2,25 @@
 img.facemark {
 	border: none !important;
 }
-.youtube-player {
+
+.youtube-wrap iframe {
 	padding: 10px;
 }
 @media screen and (max-width: 767px) {
-	.youtube-player {
+	.youtube-wrap {
+		position: relative;
+		padding-bottom: 56.25%;
+/*		padding-top: 30px;*/
+		height: 0;
+		overflow: hidden;
+	}
+	.youtube-wrap iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 		padding: 10px 0;
-		max-width: 100%;
 	}
 }
 
