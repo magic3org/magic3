@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: func.php 4950 2012-06-09 09:07:02Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -708,11 +708,12 @@ function csv_explode($separator, $string)
 	    $_separator . '/', $string . $separator, $matches))
 		return array();
 
-	foreach ($matches[1] as $str) {
+	foreach ($matches[1] as $str){
 		$len = strlen($str);
-		if ($len > 1 && $str{0} == '"' && $str{$len - 1} == '"')
-			$str = str_replace('""', '"', substr($str, 1, -1));
-		$retval[] = $str;
+		if ($len > 1 && $str{0} == '"' && $str{$len - 1} == '"') $str = str_replace('""', '"', substr($str, 1, -1));
+			
+		//$retval[] = $str;
+		$retval[] = trim($str);				// 前後空白削除 for Magic3
 	}
 	return $retval;
 }

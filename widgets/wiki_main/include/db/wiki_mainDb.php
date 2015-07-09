@@ -236,7 +236,8 @@ class wiki_mainDb extends BaseDb
 		$historyIndex = 0;		// 履歴番号
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$contentNow = $now;			// コンテンツ更新日時
-		$locked = 1;		// コンテンツロック状態
+	//	$locked = 1;		// コンテンツロック状態
+		$locked = 0;		// コンテンツロック状態(初期状態はロックしない)
 		$userId = $gEnvManager->getCurrentUserId();	// 現在のユーザ
 		
 		// トランザクションスタート

@@ -44,11 +44,6 @@ function plugin_unfreeze_action()
 		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_isunfreezed);
 	//} else if ($pass != '' && pkwk_login($pass)) {
 	} else if (!empty($action)){			// 「解凍」ボタン実行の場合
-		// Unfreeze
-		//$postdata = get_source($page);
-		//array_shift($postdata);
-		//$postdata = join('', $postdata);
-		//file_write(DATA_DIR, $page, $postdata, TRUE);
 		// ページをロックを解除
 		WikiPage::lockPage($page, false);
 

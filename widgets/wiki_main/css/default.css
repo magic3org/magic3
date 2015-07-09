@@ -1,3 +1,17 @@
+/* 画像 */
+img.facemark {
+	border: none !important;
+}
+.youtube-player {
+	padding: 10px;
+}
+@media screen and (max-width: 767px) {
+	.youtube-player {
+		padding: 10px 0;
+		max-width: 100%;
+	}
+}
+
 pre.wiki_pre {
 	border-top:#DDDDEE 1px solid;
 	border-bottom:#888899 1px solid;
@@ -234,9 +248,6 @@ tfoot th.style_th {
 }
 .small { font-size:80%; }
 
-img.facemark {
-	border: none !important;
-}
 /***** plugin *****/
 /* hr plugin */
 hr.wiki_hr_short {

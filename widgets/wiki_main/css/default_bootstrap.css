@@ -1,6 +1,20 @@
-.img_margin img {
+/* 画像 */
+img.facemark {
+	border: none !important;
+}
+.image_outer img {
 	margin: 10px;
 }
+.youtube-player {
+	padding: 10px;
+}
+@media screen and (max-width: 767px) {
+	.youtube-player {
+		padding: 10px 0;
+		max-width: 100%;
+	}
+}
+
 /* default edit content area */
 .edit_form {
 	width:100%;

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: file.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -102,7 +102,6 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	$diffdata    = do_diff($oldpostdata, $postdata);
 
 	// ページdiffデータ更新
-	//file_write(DIFF_DIR, $page, $diffdata);
 	if ($diffdata != " \n"){
 		$diffdata = rtrim(preg_replace('/' . "\r" . '/', '', $diffdata)) . "\n";
 		WikiPage::updatePageDiff($page, $diffdata);
@@ -122,7 +121,6 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	//make_backup($page, $postdata == ''); // Is $postdata null?
 
 	// Create wiki text
-	//file_write(DATA_DIR, $page, $postdata, $notimestamp);
 	if ($postdata === ''){		// データが空のときはページを削除
 		// Update RecentDeleted (Add the $page)
 		add_recent($page, $whatsdeleted, '', $maxshow_deleted);
@@ -283,97 +281,6 @@ function file_head($file, $count = 1, $lock = TRUE, $buffer = 8192)
 
 	return $array;
 }
-
-// Output to a file
-// ######### 未使用関数 ######### for magic3
-function file_write($dir, $page, $str, $notimestamp = FALSE)
-{
-	global $_msg_invalidiwn, $notify, $notify_diff_only, $notify_subject;
-	global $whatsdeleted, $maxshow_deleted;
-
-	if (PKWK_READONLY) return; // Do nothing
-	if ($dir != DATA_DIR && $dir != DIFF_DIR) die('file_write(): Invalid directory');
-
-	$page = strip_bracket($page);
-	$file = $dir . encode($page) . '.txt';
-	$file_exists = file_exists($file);
-
-	// ----
-	// Delete?
-	// 設定データが空のときはページを削除
-	if ($dir == DATA_DIR && $str === '') {
-		// Page deletion
-		if (! $file_exists) return; // Ignore null posting for DATA_DIR
-
-		// Update RecentDeleted (Add the $page)
-		add_recent($page, $whatsdeleted, '', $maxshow_deleted);
-
-		// Remove the page
-		unlink($file);
-
-		// Update RecentDeleted, and remove the page from RecentChanges
-		lastmodified_add($whatsdeleted, $page);
-
-		// Clear is_page() cache
-		//is_page($page, TRUE);
-
-		return;
-
-	} else if ($dir == DIFF_DIR && $str === " \n") {
-		return; // Ignore null posting for DIFF_DIR
-	}
-
-	// ----
-	// File replacement (Edit)
-
-	if (! is_pagename($page))
-		die_message(str_replace('$1', htmlspecialchars($page),
-		            str_replace('$2', 'WikiName', $_msg_invalidiwn)));
-
-	$str = rtrim(preg_replace('/' . "\r" . '/', '', $str)) . "\n";
-	/*
-	$timestamp = ($file_exists && $notimestamp) ? filemtime($file) : FALSE;
-
-	// modified for Magic3 by naoki on 2008/10/10
-	$fp = fopen($file, 'a') or die('fopen() failed: ' .
-		htmlspecialchars(basename($dir) . '/' . encode($page) . '.txt') .	
-		'<br />' . "\n" .
-		'Maybe permission is not writable or filename is too long');
-	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
-	ftruncate($fp, 0);
-	rewind($fp);
-	fputs($fp, $str);
-	flock($fp, LOCK_UN);
-	fclose($fp);
-
-	if ($timestamp) pkwk_touch_file($file, $timestamp);		// 保持したタイムスタンプで保存
-	*/
-	$ret = WikiPage::updatePage($page, $str, $notimestamp);
-
-	// Optional actions
-	if ($dir == DATA_DIR) {
-		// Update RecentChanges (Add or renew the $page)
-		if ($timestamp === FALSE) lastmodified_add($page);
-
-		// Command execution per update
-		if (defined('PKWK_UPDATE_EXEC') && PKWK_UPDATE_EXEC)
-			system(PKWK_UPDATE_EXEC . ' > /dev/null &');
-
-	} else if ($dir == DIFF_DIR && $notify) {
-		if ($notify_diff_only) $str = preg_replace('/^[^-+].*\n/m', '', $str);
-		$footer['ACTION'] = 'Page update';
-		$footer['PAGE']   = $page;
-		$footer['URI']    = get_script_uri() . '?' . rawurlencode($page);
-		$footer['USER_AGENT']  = TRUE;
-		$footer['REMOTE_ADDR'] = TRUE;
-		pkwk_mail_notify($notify_subject, $str, $footer) or
-			die('pkwk_mail_notify(): Failed');
-	}
-
-	//is_page($page, TRUE); // Clear is_page() cache
-}
-
 // Update RecentDeleted
 function add_recent($page, $recentpage, $subject = '', $limit = 0)
 {

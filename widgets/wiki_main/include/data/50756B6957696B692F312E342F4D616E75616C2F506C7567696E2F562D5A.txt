@@ -69,7 +69,7 @@
 :備考|
 ~自分以外の誰かがページを書くかもしれないという点は非常にWiki的ですが、実際の運用面ではcommentに記述された一見さんの名前やWikiName同様のパラメータ名など、ページ化しにくいキーワードが大量に引っかかってしまいます。
 
-**youtube [#g835a7e8]
+**youtube(Magic3拡張) [#g835a7e8]
 :種別|
 ~ブロック型プラグイン
 :重要度|
@@ -77,12 +77,14 @@
 :書式|
 ~''#youtube(''
 &color(blue){動画ID};,
-[&color(blue){left};|&color(blue){center};|&color(blue){right};]
+[&color(blue){left};|&color(blue){center};|&color(blue){right};],
+[&color(blue){small};|&color(blue){medium};|&color(blue){large};|&color(blue){extralarge};]
 '')''
 :概要|
 ~YouTUbe（https://www.youtube.com/）が提供する動画を表示します。
 :引数|
-~left,center,right で動画の出力方式を指定します。
+~left,center,right,small,medium,large,extralarge で動画の出力方式を指定します。
 --left|center|right - 表示時の位置を指定します。省略時はleftです。
+--small|medium|large|extralarge - 動画の表示サイズをsmall(560x315),medium(640x360),large(835x480),extralarge(1280x720)で指定します。省略時はmediumです。
 
 #navi(../)
