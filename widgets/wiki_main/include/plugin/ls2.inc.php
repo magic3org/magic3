@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ls2.inc.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 /*
@@ -35,33 +35,37 @@ define('PLUGIN_LS2_ANCHOR_PREFIX', '#content_1_');
 define('PLUGIN_LS2_ANCHOR_ORIGIN', 0);
 
 // 見出しレベルを調整する(デフォルト値)
-define('PLUGIN_LS2_LIST_COMPACT', FALSE);
+//define('PLUGIN_LS2_LIST_COMPACT', FALSE);
 
 function plugin_ls2_action()
 {
-	global $vars, $_ls2_msg_title;
+//	global $vars, $_ls2_msg_title;
+	global $_ls2_msg_title;
 
 	$params = array();
-	foreach (array('title', 'include', 'reverse') as $key)
-		$params[$key] = isset($vars[$key]);
+	foreach (array('title', 'include', 'reverse') as $key){
+		//$params[$key] = isset($vars[$key]);
+		$params[$key] = (WikiParam::getVar($key) != '');
+	}
 
-	$prefix = isset($vars['prefix']) ? $vars['prefix'] : '';
+//	$prefix = isset($vars['prefix']) ? $vars['prefix'] : '';
+	$prefix = WikiParam::getVar('prefix');
 	$body = plugin_ls2_show_lists($prefix, $params);
 
-	return array('body'=>$body,
-		'msg'=>str_replace('$1', htmlspecialchars($prefix), $_ls2_msg_title));
+	return array('body'=>$body, 'msg'=>str_replace('$1', htmlspecialchars($prefix), $_ls2_msg_title));
 }
 
 function plugin_ls2_convert()
 {
-	global $script, $vars, $_ls2_msg_title;
+	//global $script, $vars, $_ls2_msg_title;
+	global $script, $_ls2_msg_title;
 
 	$params = array(
 		'link'    => FALSE,
 		'title'   => FALSE,
 		'include' => FALSE,
 		'reverse' => FALSE,
-		'compact' => PLUGIN_LS2_LIST_COMPACT,
+//		'compact' => PLUGIN_LS2_LIST_COMPACT,
 		'_args'   => array(),
 		'_done'   => FALSE
 	);
@@ -72,24 +76,22 @@ function plugin_ls2_convert()
 		$args   = func_get_args();
 		$prefix = array_shift($args);
 	}
-	if ($prefix == '') $prefix = strip_bracket($vars['page']) . '/';
 
-	// fixed by naoki on 2008/9/30
-	array_walk($args, 'plugin_ls2_check_arg', $params);
+	if ($prefix == '') $prefix = strip_bracket(WikiParam::getPage()) . '/';
+
+	foreach ($args as $arg) plugin_ls2_check_arg($arg, $params);
 
 	$title = (! empty($params['_args'])) ? join(',', $params['_args']) :   // Manual
 		str_replace('$1', htmlspecialchars($prefix), $_ls2_msg_title); // Auto
 
-	if (! $params['link'])
-		return plugin_ls2_show_lists($prefix, $params);
+	if (! $params['link']) return plugin_ls2_show_lists($prefix, $params);
 
 	$tmp = array();
 	$tmp[] = 'plugin=ls2&amp;prefix=' . rawurlencode($prefix);
 	if (isset($params['title']))   $tmp[] = 'title=1';
 	if (isset($params['include'])) $tmp[] = 'include=1';
 
-	return '<p><a href="' . $script . '?' . join('&amp;', $tmp) . '">' .
-		$title . '</a></p>' . "\n";
+	return '<p><a href="' . $script . '?' . join('&amp;', $tmp) . '">' . $title . '</a></p>' . "\n";
 }
 
 function plugin_ls2_show_lists($prefix, & $params)
@@ -157,13 +159,10 @@ function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 			$id    = make_heading($line);
 			$level = strlen($matches[1]);
 			$id    = PLUGIN_LS2_ANCHOR_PREFIX . $anchor++;
+
 			plugin_ls2_list_push($params, $level + strlen($level));
-			array_push($params['result'],
-				'<li><a href="' . $href . $id . '">' . $line . '</a>');
-		} else if ($params['include'] &&
-			preg_match('/^#include\((.+)\)/', $line, $matches) &&
-			is_page($matches[1]))
-		{
+			array_push($params['result'], '<li><a href="' . $href . $id . '">' . $line . '</a>');
+		} else if ($params['include'] && preg_match('/^#include\((.+)\)/', $line, $matches) && is_page($matches[1])){
 			plugin_ls2_get_headings($matches[1], $params, $level + 1, TRUE);
 		}
 	}
@@ -174,8 +173,8 @@ function plugin_ls2_list_push(& $params, $level)
 {
 	global $_ul_left_margin, $_ul_margin, $_list_pad_str;
 
-	$result = $params['result'];
-	$saved  = $params['saved'];
+	$result = &$params['result'];		// 変換値を戻す
+	$saved  = &$params['saved'];		// 変換値を戻す
 	$cont   = TRUE;
 	$open   = '<ul%s>';
 	$close  = '</li></ul>';
@@ -192,6 +191,7 @@ function plugin_ls2_list_push(& $params, $level)
 		$cont = FALSE;
 		array_unshift($saved, $close);
 
+/*
 		$left = ($level == $margin) ? $_ul_left_margin : 0;
 		if ($params['compact']) {
 			$left  += $_ul_margin;   // マージンを固定
@@ -199,7 +199,8 @@ function plugin_ls2_list_push(& $params, $level)
 		} else {
 			$left += $margin * $_ul_margin;
 		}
-		$str = sprintf($_list_pad_str, $level, $left, $left);
+		$str = sprintf($_list_pad_str, $level, $left, $left);*/
+		$str = sprintf($_list_pad_str, $level);
 		array_push($result, sprintf($open, $str));
 	}
 
@@ -207,7 +208,7 @@ function plugin_ls2_list_push(& $params, $level)
 }
 
 // オプションを解析する
-function plugin_ls2_check_arg($value, $key, & $params)
+function plugin_ls2_check_arg($value, & $params)
 {
 	if ($value == '') {
 		$params['_done'] = TRUE;
@@ -225,6 +226,7 @@ function plugin_ls2_check_arg($value, $key, & $params)
 		$params['_done'] = TRUE;
 	}
 
+//	$params['_args'][] = htmlsc($value); // Link title
 	$params['_args'][] = htmlspecialchars($value); // Link title
 }
 ?>

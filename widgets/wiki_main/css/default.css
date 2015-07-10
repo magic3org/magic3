@@ -70,10 +70,10 @@ hr.note_hr {
 	text-align:center;
 	margin:1em auto 0em auto;
 }
-ul.wiki_list li {
+/*ul.wiki_list li {
 	margin-left: .5em;
 	margin-right: 0;
-}
+}*/
 /*
 ul.wiki_list1 { list-style-type:disc; }
 ul.wiki_list2 { list-style-type:circle; }
@@ -82,26 +82,23 @@ ol.wiki_list1 { list-style-type:decimal; }
 ol.wiki_list2 { list-style-type:lower-roman; }
 ol.wiki_list3 { list-style-type:lower-alpha; }
 */
+/*
 dl.wiki_list dt {
 	font-weight:bold;
 	margin-top:1em;
-/*	margin-left:1em;*/
 }
 dl.wiki_list1 dt {
 	font-weight:bold;
 	margin-top:1em;
-/*	margin-left:1em;*/
 }
 dl.wiki_list2 dt {
 	font-weight:bold;
 	margin-top:1em;
-/*	margin-left:1em;*/
 }
 dl.wiki_list3 dt {
 	font-weight:bold;
 	margin-top:1em;
-/*	margin-left:1em;*/
-}
+}*/
 span.noexists {
 	color:inherit;
 	background-color:#FFFACC;
