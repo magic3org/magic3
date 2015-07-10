@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: navi.inc.php 1088 2008-10-19 07:42:08Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 /*
@@ -98,12 +98,10 @@ function plugin_navi_convert()
 			'home1'=>'',
 		);
 
-		$pages = preg_grep('/^' . preg_quote($home, '/') .
-			'($|\/)/', get_existpages());
+		$pages = preg_grep('/^' . preg_quote($home, '/') . '($|\/)/', get_existpages());
 		if (PLUGIN_NAVI_EXCLUSIVE_REGEX != '') {
 			// If old PHP could use preg_grep(,,PREG_GREP_INVERT)...
-			$pages = array_diff($pages,
-				preg_grep(PLUGIN_NAVI_EXCLUSIVE_REGEX, $pages));
+			$pages = array_diff($pages, preg_grep(PLUGIN_NAVI_EXCLUSIVE_REGEX, $pages));
 		}
 		$pages[] = $current; // Sentinel :)
 		$pages   = array_unique($pages);
@@ -151,7 +149,7 @@ function plugin_navi_convert()
 		}
 	}
 
-	$ret = '';
+	$body = '';
 
 	if ($is_home) {
 		// Show contents
@@ -161,38 +159,33 @@ function plugin_navi_convert()
 		} else if ($count == 1) {
 			// Sentinel only: Show usage and warning
 			$home = htmlspecialchars($home);
-			$ret .= '#navi(' . $home . '): No child page like: ' .
+			$body .= '#navi(' . $home . '): No child page like: ' .
 				$home . '/Foo';
 		} else {
-			$ret .= '<ul>';
+			$body .= '<ul>';
 			foreach ($pages as $page)
 				if ($page != $home)
-					$ret .= ' <li>' . make_pagelink($page) . '</li>';
-			$ret .= '</ul>';
+					$body .= ' <li>' . make_pagelink($page) . '</li>';
+			$body .= '</ul>';
 		}
 
-	} else if (! $footer) {
+	} else if (! $footer){
 		// Header
-		$ret = <<<EOD
-<ul class="navi">
- <li class="navi_left">{$navi[$home]['prev1']}</li>
- <li class="navi_right">{$navi[$home]['next1']}</li>
- <li class="navi_none">{$navi[$home]['home']}</li>
-</ul>
-<hr class="full_hr" />
-EOD;
-
+		$body  = '<ul class="navi">' . M3_NL;
+		$body .= '<li class="navi_left"><strong>' . $navi[$home]['prev1'] . '</strong></li>' . M3_NL;
+		$body .= '<li class="navi_right"><strong>' . $navi[$home]['next1'] . '</strong></li>' . M3_NL;
+		$body .= '<li class="navi_none"><strong>' . $navi[$home]['home'] . '</strong></li>' . M3_NL;
+		$body .= '</ul>' . M3_NL;
+		$body .= '<hr class="full_hr" />' . M3_NL;
 	} else {
 		// Footer
-		$ret = <<<EOD
-<hr class="full_hr" />
-<ul class="navi">
- <li class="navi_left">{$navi[$home]['prev1']}<br />{$navi[$home]['prev']}</li>
- <li class="navi_right">{$navi[$home]['next1']}<br />{$navi[$home]['next']}</li>
- <li class="navi_none">{$navi[$home]['home1']}<br />{$navi[$home]['up']}</li>
-</ul>
-EOD;
+		$body  = '<hr class="full_hr" />' . M3_NL;
+		$body .= '<ul class="navi">' . M3_NL;
+		$body .= '<li class="navi_left"><strong>' . $navi[$home]['prev1'] . '<br />' . $navi[$home]['prev'] . '</strong></li>' . M3_NL;
+		$body .= '<li class="navi_right"><strong>' . $navi[$home]['next1'] . '<br />' . $navi[$home]['next'] . '</strong></li>' . M3_NL;
+		$body .= '<li class="navi_none"><strong>' . $navi[$home]['home1'] . '<br />' . $navi[$home]['up'] . '</strong></li>' . M3_NL;
+		$body .= '</ul>' . M3_NL;
 	}
-	return $ret;
+	return $body;
 }
 ?>

@@ -373,6 +373,39 @@ span.calendar_viewer_right {
 div.toolbar img {
 	border:none;
 }
+/* navi */
+ul.navi {
+	margin:0px;
+	padding:0px;
+	text-align:center;
+}
+li.navi_none {
+	display:inline;
+	float:none;
+}
+li.navi_left {
+	display:inline;
+	float:left;
+	text-align:left;
+}
+li.navi_right {
+	display:inline;
+	float:right;
+	text-align:right;
+}
+/* remove list mark */
+ul.navi > li:before {
+    content: none !important;
+    margin: 0;
+    padding: 0;
+}
+ul.navi > li {
+    padding-left: 0;
+}
+ul.navi {
+    padding-left: 0;
+    list-style: none;
+}
 /***** add for magic3 *****/
 textarea.wiki_edit {
 	width: 100%;
