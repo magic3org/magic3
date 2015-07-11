@@ -114,7 +114,7 @@ EOD;
 	}
 
 	// divで包む
-	return "<div class=\"image_outer\" style=\"$style\">{$params['_body']}</div>\n";
+	return "<div class=\"image_wrap\" style=\"$style\">{$params['_body']}</div>\n";
 }
 
 function plugin_ref_body($args)
