@@ -403,6 +403,35 @@ ul.navi {
     padding-left: 0;
     list-style: none;
 }
+/* ソーシャルシェアボタン */
+/* remove list mark */
+ul.social-button > li:before {
+    content: none !important;
+    margin: 0;
+    padding: 0;
+}
+ul.social-button > li {
+    padding-left: 0;
+}
+ul.social-button {
+    padding-left: 0;
+    list-style: none;
+}
+ul.social-button li {
+	overflow: hidden;
+	float: left;
+	text-align: center;
+	width:80px;
+	height: 71px;
+/*	margin: 0 8px;
+	padding:0;*/
+}
+.button-twitter {
+	width: 71px;
+}
+.button-facebook {
+	width: 69px;
+}
 /***** add for magic3 *****/
 textarea.wiki_edit {
 	width: 100%;
