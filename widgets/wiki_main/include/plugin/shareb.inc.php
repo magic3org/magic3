@@ -43,6 +43,8 @@ function plugin_shareb_convert()
 	// はてなブックマーク
 	$body .= '<li class="button-hatena"><a href="http://b.hatena.ne.jp/entry/' . $url . '" class="hatena-bookmark-button" data-hatena-bookmark-layout="vertical-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a></li>';
 	
+	// Google+
+	$body .= '<li class="button-google"><div data-href="' . $url . '" class="g-plusone" data-size="tall"></div></li>';
 	$body .= '</ul>';
 		
 	// Javascript読み込み
@@ -70,9 +72,8 @@ function plugin_shareb_addScript($type, $replaceData)
 	// Javascriptを追加
 	$gPageManager->addHeadScript($scriptBody);
 	
-	// JavascriptのURLを追加
-	$gPageManager->addHeadScriptFile('https://b.st-hatena.com/js/bookmark_button.js');
-	//<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+	// 非同期でJavascriptのURLを追加
+//	$gPageManager->addHeadScriptFile('https://b.st-hatena.com/js/bookmark_button.js');
 }
 /**
  * Javascriptデータ作成処理コールバック

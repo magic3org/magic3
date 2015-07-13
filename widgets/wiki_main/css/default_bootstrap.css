@@ -306,8 +306,12 @@ ul.social-button li {
 .button-twitter {
 	width: 71px;
 }
-
 .button-facebook {
 	width: 67px;
+}
+.button-hatena {
+	width: 85px;
+}
+.button-google {
 }
 
