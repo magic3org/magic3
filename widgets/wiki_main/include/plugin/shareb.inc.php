@@ -39,8 +39,12 @@ function plugin_shareb_convert()
 	
 	// Twitterボタン
 	$body .= '<li class="button-twitter"><a href="https://twitter.com/share" class="twitter-share-button" data-lang="ja" data-url="' . $url . '" data-count="vertical"></a></li>';
-	$body .= '</ul>';
 
+	// はてなブックマーク
+	$body .= '<li class="button-hatena"><a href="http://b.hatena.ne.jp/entry/' . $url . '" class="hatena-bookmark-button" data-hatena-bookmark-layout="vertical-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a></li>';
+	
+	$body .= '</ul>';
+		
 	// Javascript読み込み
 	plugin_shareb_addScript($type, $replaceData);
 	
@@ -63,7 +67,12 @@ function plugin_shareb_addScript($type, $replaceData)
 	
 	$scriptBody = $widgetObj->getParsedTemplateData('plugin_shareb.tmpl.js', 'plugin_shareb_makeScript'/*コールバック関数*/, $replaceData);
 
+	// Javascriptを追加
 	$gPageManager->addHeadScript($scriptBody);
+	
+	// JavascriptのURLを追加
+	$gPageManager->addHeadScriptFile('https://b.st-hatena.com/js/bookmark_button.js');
+	//<script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
 }
 /**
  * Javascriptデータ作成処理コールバック

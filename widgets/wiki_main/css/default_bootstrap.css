@@ -298,16 +298,16 @@ li.navi_right {
 ul.social-button li {
 	overflow: hidden;
 	float: left;
-	text-align: center;
-/*	height: 71px;
+/*	text-align: center;*/
+	height: 71px;
 	margin: 0 8px;
-	padding:0;*/
+	padding:0;
 }
 .button-twitter {
 	width: 71px;
 }
 
 .button-facebook {
-	width: 69px;
+	width: 67px;
 }
 
