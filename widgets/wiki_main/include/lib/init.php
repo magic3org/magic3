@@ -23,7 +23,6 @@
 //global $foot_explain;	// Footnotes
 global $related;	// Related pages
 global $head_tags;	// XHTML tags in <head></head>
-global $vars;
 global $line_rules;
 global $WikiName;
 global $BracketName;
@@ -32,6 +31,8 @@ global $NotePattern;
 global $weeklabels;
 global $script;
 global $now;
+global $datetime_rules;
+global $str_rules;
 
 // PukiWiki version / Copyright / Licence
 define('S_VERSION', '1.4.7');
@@ -248,7 +249,39 @@ $NotePattern = '/\(\(((?:(?>(?:(?!\(\()(?!\)\)(?:[^\)]|$)).)+)|(?R))*)\)\)/';		/
 // 初期設定(ユーザ定義ルール読み込み)
 //require(DATA_HOME . 'rules.ini.php');
 // modified for Magic3 by naoki on 2008/9/22
-require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/rules.ini.php');
+//require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/rules.ini.php');
+/////////////////////////////////////////////////
+// 日時置換ルール (閲覧時に置換)
+// $usedatetime = 1なら日時置換ルールが適用されます
+// 必要のない方は $usedatetimeを0にしてください。
+$datetime_rules = array(
+	'&amp;_now;'	=> format_date(UTIME),
+	'&amp;_date;'	=> get_date($date_format),
+	'&amp;_time;'	=> get_date($time_format),
+);
+
+/////////////////////////////////////////////////
+// ユーザ定義ルール(保存時に置換)
+//  正規表現で記述してください。?(){}-*./+\$^|など
+//  は \? のようにクォートしてください。
+//  前後に必ず / を含めてください。行頭指定は ^ を頭に。
+//  行末指定は $ を後ろに。
+//
+$page_array = explode('/', WikiParam::getPage()); // with array_pop()
+
+$str_rules = array(
+	'now\?' 	=> format_date(UTIME),
+	'date\?'	=> get_date($date_format),
+	'time\?'	=> get_date($time_format),
+	'&now;' 	=> format_date(UTIME),
+	'&date;'	=> get_date($date_format),
+	'&time;'	=> get_date($time_format),
+	'&page;'	=> array_pop($page_array),
+	'&fpage;'	=> WikiParam::getPage(),
+	'&t;'   	=> "\t",
+);
+
+unset($page_array);
 
 /////////////////////////////////////////////////
 // 初期設定(その他のグローバル変数)

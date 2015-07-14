@@ -128,7 +128,21 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// Defaults
 		$notify = 0;
 
-		// Load *.ini.php files and init PukiWiki
+		// ##### コマンド,プラグイン,ページIDの取得 #####
+		// コマンド、プラグインが設定されていない場合は、クエリー文字列をInterWikiNameとする
+		$cmd = WikiParam::getCmd();
+		$plugin = WikiParam::getPlugin();
+		if (empty($cmd) && empty($plugin)){		
+			WikiParam::setCmd('read');
+	
+			$arg = WikiParam::getUnbraketArg();
+			if ($arg == '') $arg = WikiConfig::getDefaultPage();
+			WikiParam::setPage($arg);
+		}
+		// グローバル変数に値を格納
+		$vars['page'] = WikiParam::getPage();
+		
+		// ##### ページID設定後、各種パラメータの初期化 #####
 		global $gEnvManager;
 		require_once($wikiLibDir . '/init.php');
 
@@ -144,23 +158,10 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// 初期データをインストールしたときは、リンク再構築
 		if ($init) links_init();
 		
-		// コマンド、プラグインが設定されていない場合は、クエリー文字列をInterWikiNameとする
-		$cmd = WikiParam::getCmd();
-		$plugin = WikiParam::getPlugin();
-		if (empty($cmd) && empty($plugin)){		
-			WikiParam::setCmd('read');
-	
-			$arg = WikiParam::getUnbraketArg();
-			if ($arg == '') $arg = WikiConfig::getDefaultPage();
-			WikiParam::setPage($arg);
-		}
-		// グローバル変数に値を格納
-		$vars['page'] = WikiParam::getPage();
-			
 		$retvars = array();
 		$is_cmd = FALSE;
-		$cmd = WikiParam::getCmd();
-		$plugin = WikiParam::getPlugin();
+		$cmd = WikiParam::getCmd();		// 再取得
+//		$plugin = WikiParam::getPlugin();
 		if (!empty($cmd)) {
 			$is_cmd  = TRUE;
 			$plugin = $cmd;
