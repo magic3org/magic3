@@ -661,18 +661,18 @@ class AttachFile
 		$openUrl = $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=open$param");
 		if ($showinfo) {
 			// テンプレートタイプに合わせて出力を変更
-			$templateType = $gEnvManager->getCurrentTemplateType();
-			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+//			$templateType = $gEnvManager->getCurrentTemplateType();
+//			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 				$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
 				$info = "\n[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]\n";
 				$count = ($showicon && ! empty($this->status['count'][$this->age])) ?
 					sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
-			} else {
+/*			} else {
 				$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
-				$info = "\n<span class=\"small\">[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]</span>\n";
+				$info = "\n[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]\n";
 				$count = ($showicon && ! empty($this->status['count'][$this->age])) ?
 					sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
-			}
+			}*/
 		}
 //		return "<a href=\"$openUrl\" title=\"$title\">$label</a>$count$info";
 		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\">$label</a>$count$info";

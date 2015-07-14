@@ -519,8 +519,8 @@ EOD;
 		if (! empty($links)) {
 			$output .= "<ul>\n";
 			foreach(array_keys($links) as $page) {
-				$ismatch = preg_match('/#googlemaps3_mark\(([^, \)]+), *([^, \)]+)(.*?)\)/i', 
-					get_source($page, TRUE, TRUE), $matches);
+		//		$ismatch = preg_match('/#googlemaps3_mark\(([^, \)]+), *([^, \)]+)(.*?)\)/i', get_source($page, TRUE, TRUE), $matches);
+				$ismatch = preg_match('/#googlemaps3_mark\(([^, \)]+), *([^, \)]+)(.*?)\)/i', get_source($page, TRUE), $matches);
 				if ($ismatch) {
 					$markersource = "&googlemaps3_mark(" . 
 						$matches[1] . "," . $matches[2] . 
