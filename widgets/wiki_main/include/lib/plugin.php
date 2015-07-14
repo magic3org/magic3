@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: plugin.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -28,20 +28,20 @@ function set_plugin_messages($messages)
 			$GLOBALS[$name] = $val;
 }
 
-// Check plugin '$name' is here
+/**
+ * プラグインの存在確認
+ *
+ * @param string $name			プラグイン名
+ * @return bool					true=プラグイン存在する(ファイルが必要であればロードする)、false=存在しない
+ */
 function exist_plugin($name)
 {
-	//global $vars;
 	static $exist = array(), $count = array();
 
 	$page = WikiParam::getPage();
 	$name = strtolower($name);
 	if(isset($exist[$name])) {
 		if (++$count[$name] > PKWK_PLUGIN_CALL_TIME_LIMIT){
-			/*die('Alert: plugin "' . htmlspecialchars($name) . '" was called over ' . PKWK_PLUGIN_CALL_TIME_LIMIT .
-			' times. SPAM or someting?<br />' . "\n" .
-			'<a href="' . get_script_uri() . '?cmd=edit&amp;page='. rawurlencode($vars['page']) . '">Try to edit this page</a><br />' . "\n" .
-			'<a href="' . get_script_uri() . '">Return to frontpage</a>');*/
 			die('Alert: plugin "' . htmlspecialchars($name) . '" was called over ' . PKWK_PLUGIN_CALL_TIME_LIMIT .
 			' times. SPAM or someting?<br />' . "\n" .
 			'<a href="' . get_script_uri() . WikiParam::convQuery('?cmd=edit&amp;page='. rawurlencode($page)) . '">Try to edit this page</a><br />' . "\n" .
@@ -49,15 +49,31 @@ function exist_plugin($name)
 		}
 		return $exist[$name];
 	}
-	if (preg_match('/^\w{1,64}$/', $name) &&
-	    file_exists(PLUGIN_DIR . $name . '.inc.php')) {
+	if (preg_match('/^\w{1,64}$/', $name)){		// 文字と数字それにアンダースコア のいずれかにマッチ
+	    if (file_exists(PLUGIN_DIR . $name . '.inc.php')) {
 	    	$exist[$name] = TRUE;
 	    	$count[$name] = 1;
-		require_once(PLUGIN_DIR . $name . '.inc.php');
-		return TRUE;
-	} else {
-	    	$exist[$name] = FALSE;
+			require_once(PLUGIN_DIR . $name . '.inc.php');
+			return TRUE;
+		}
+		// 「dirname_xxxx」のプラグインの場合は「dirname」のサブディレクトリを検索
+		$parsedName = explode('_', $name);
+		$nameHead = $parsedName[0];
+		
+		$pluginDir = PLUGIN_DIR . $nameHead;
+		if (is_dir($pluginDir) && file_exists($pluginDir . '/' . $name . '.inc.php')){		// プラグインファイルが存在するとき
+	    	$exist[$name] = TRUE;
 	    	$count[$name] = 1;
+			require_once($pluginDir . '/' . $name . '.inc.php');
+			return TRUE;
+		} else {
+		    $exist[$name] = FALSE;
+		    $count[$name] = 1;
+			return FALSE;
+		}
+	} else {
+	    $exist[$name] = FALSE;
+	    $count[$name] = 1;
 		return FALSE;
 	}
 }
