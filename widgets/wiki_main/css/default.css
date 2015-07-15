@@ -23,6 +23,14 @@ img.facemark {
 		padding: 10px 0;
 	}
 }
+.googlemaps_wrap {
+	margin: 10px;
+}
+@media screen and (max-width: 767px) {
+	.googlemaps_wrap {
+		margin: 10px 0;
+	}
+}
 
 pre.wiki_pre {
 	border-top:#DDDDEE 1px solid;

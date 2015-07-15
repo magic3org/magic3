@@ -130,6 +130,7 @@ define ('PLUGIN_GOOGLEMAPS3_DEF_PRESERVEVIEWPORT', false); //KMLレイヤー表�
 define ('PLUGIN_GOOGLEMAPS3_DEF_IMPORTICON', '');          //アイコンを取得するPukiwikiページ
 define ('PLUGIN_GOOGLEMAPS3_DEF_BACKLINKMARKER', false);   //バックリンクでマーカーを集める
 define ('PLUGIN_GOOGLEMAPS3_DEF_SCRIPT', 'http://maps.google.com/maps/api/js?v=3.10&sensor=true&libraries=places');			// GoogleMapsスクリプト
+define ('PLUGIN_GOOGLEMAPS3_DEF_CLASS', 'googlemaps');			// GoogleMapsのCSSクラス
 
 //Pukiwikiは1.4.5から携帯電話などのデバイスごとにプロファイルを用意して
 //UAでスキンを切り替えて表示できるようになったが、この定数ではGoogleMapsを
@@ -330,8 +331,24 @@ function plugin_googlemaps3_output($doInit, $params) {
 	}
 
 	$pukiwikiname = $options['mapname'];
+	
+	// 表示位置
+	$align     = $options['align'];
+	switch ($align){
+	case 'left':
+	default:
+		$attr = 'margin:0 auto 0 0;';
+		break;
+	case 'center':
+		$attr = 'margin:0 auto;';
+		break;
+	case 'right':		// 右寄せ
+		$attr = 'margin:0 0 0 auto;';
+		break;
+	}
+	
 	$output .= <<<EOD
-<div id="$mapname" style="width: $width; height: $height;"></div>
+<div class="googlemaps_wrap"><div id="$mapname" style="width:$width; height:$height; $attr"></div></div>
 
 <script type="text/javascript">
 //<![CDATA[
