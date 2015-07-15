@@ -16,10 +16,6 @@
 
 function plugin_related_convert()
 {
-	// modified for Magic3 by naoki on 2008/10/10
-	//global $vars;
-	//
-	//return make_related($vars['page'], 'p');
 	return make_related(WikiParam::getPage(), 'p');
 }
 

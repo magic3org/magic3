@@ -50,13 +50,11 @@ function plugin_unfreeze_action()
 		// Update 
 		is_freeze($page, TRUE);
 		if (PLUGIN_UNFREEZE_EDIT) {
-			//$vars['cmd'] = 'read'; // To show 'Freeze' link
 			WikiParam::setCmd('read');
 			$msg  = $_title_unfreezed;
 			//$body = edit_form($page, $postdata);
 			$body = edit_form($page, get_source($page, true));
 		} else {
-			//$vars['cmd'] = 'read';
 			WikiParam::setCmd('read');
 			$msg  = $_title_unfreezed;
 			$body = '';

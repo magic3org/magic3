@@ -1,4 +1,18 @@
-<?php /* vim: set ts=4 noexpandtab : */
+<?php
+/**
+ * GoogleMapsプラグイン
+ *
+ * PHP versions 5
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
 /* Pukiwiki GoogleMaps plugin 3.2.0
  * http://reddog.s35.xrea.com
  * -------------------------------------------------------------------
@@ -115,6 +129,7 @@ define ('PLUGIN_GOOGLEMAPS3_DEF_KML'         , '');        //読み読むKMLフ�
 define ('PLUGIN_GOOGLEMAPS3_DEF_PRESERVEVIEWPORT', false); //KMLレイヤー表示時にビューポートの設定を変更しない
 define ('PLUGIN_GOOGLEMAPS3_DEF_IMPORTICON', '');          //アイコンを取得するPukiwikiページ
 define ('PLUGIN_GOOGLEMAPS3_DEF_BACKLINKMARKER', false);   //バックリンクでマーカーを集める
+define ('PLUGIN_GOOGLEMAPS3_DEF_SCRIPT', 'http://maps.google.com/maps/api/js?v=3.10&sensor=true&libraries=places');			// GoogleMapsスクリプト
 
 //Pukiwikiは1.4.5から携帯電話などのデバイスごとにプロファイルを用意して
 //UAでスキンを切り替えて表示できるようになったが、この定数ではGoogleMapsを
@@ -300,9 +315,20 @@ function plugin_googlemaps3_output($doInit, $params) {
 	// 初期化処理の出力
 	if ($doInit) {
 		$output = plugin_googlemaps3_init_output($noiconname);
+		
+		// Javascriptファイルの追加
+		global $gEnvManager;
+		global $gPageManager;
+	
+		// 実行中のウィジェットを取得
+		$widgetObj = $gEnvManager->getCurrentWidgetObj();
+	
+		// JavascriptのURLを追加
+		$gPageManager->addHeadScriptFile(PLUGIN_GOOGLEMAPS3_DEF_SCRIPT);
 	} else {
 		$output = "";
 	}
+
 	$pukiwikiname = $options['mapname'];
 	$output .= <<<EOD
 <div id="$mapname" style="width: $width; height: $height;"></div>
@@ -558,7 +584,6 @@ function plugin_googlemaps3_init_output($noiconname) {
 	global $vars;
 	$page = $vars['page'];
 	return <<<EOD
-<script src="http://maps.google.com/maps/api/js?v=3.10&sensor=true&libraries=places" type="text/javascript" charset="UTF-8"></script>
 <script type="text/javascript">
 //<![CDATA[
 

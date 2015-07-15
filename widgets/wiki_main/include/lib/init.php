@@ -220,11 +220,6 @@ foreach (array(WikiConfig::getDefaultPage()) as $page){
 // 入力チェック
 if (!WikiParam::checkParam()) die('Using both cmd= and plugin= is not allowed');
 
-// TrackBack Ping
-/*if (isset($vars['tb_id']) && $vars['tb_id'] != '') {
-	$get['cmd'] = $post['cmd'] = $vars['cmd'] = 'tb';
-}*/
-
 /////////////////////////////////////////////////
 // 初期設定($WikiName,$BracketNameなど)
 // $WikiName = '[A-Z][a-z]+(?:[A-Z][a-z]+)+';

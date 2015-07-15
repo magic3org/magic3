@@ -23,13 +23,12 @@
 
 function convert_html($lines)
 {
-	global $vars, $digest;
+	global $digest;
 	static $contents_id = 0;
 
 	// comment for Magic3 by naoki on 2008/9/30
 	// get_sourceが2度実行されている
 	// Set digest
-	//$digest = md5(join('', get_source($vars['page'])));
 	$digest = md5(get_source(WikiParam::getPage(), true));
 	WikiParam::setDigest($digest);		// ダイジェストの設定はここで行う
 
@@ -960,13 +959,10 @@ class Body extends Element
 
 	function toString()
 	{
-		global $vars;
-
 		$text = parent::toString();
 
 		// #contents
-		$text = preg_replace_callback('/<#_contents_>/',
-			array($this, 'replace_contents'), $text);
+		$text = preg_replace_callback('/<#_contents_>/', array($this, 'replace_contents'), $text);
 
 		return $text . "\n";
 	}
