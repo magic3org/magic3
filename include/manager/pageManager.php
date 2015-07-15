@@ -2701,7 +2701,7 @@ class PageManager extends Core
 						
 						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-						echo '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+						echo '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 					}
 				}
 				$dir->close();
@@ -3203,7 +3203,7 @@ class PageManager extends Core
 			
 				// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 				if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-				$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+				$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 			}
 			
 			// ##### ページへJavascriptの埋め込む #####
@@ -3496,13 +3496,13 @@ class PageManager extends Core
 						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 						//$scriptURL = $scriptsUrl . '/' . $scriptFilename;
 						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-						$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+						$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 					}
 					if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示のときは、ウィジェット操作ライブラリを読み込む
 						// wigetのドラッグドロップ用
 						$scriptURL = $scriptsUrl . '/' . self::M3_ADMIN_WIDGET_SCRIPT_FILENAME;
 						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();// スクリプトをキャッシュ保存しない場合は、パラメータを付加
-						$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+						$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 					}
 				} else {		// システム運用権限がない場合
 					// 管理権限なしで管理ディレクトリアクセスで必要なスクリプトを読み込む
@@ -3513,7 +3513,7 @@ class PageManager extends Core
 						// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 						$scriptURL = $scriptsUrl . '/' . $scriptFilename;
 						if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-						$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+						$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 					}
 				}
 			} else {			// 通常画面
@@ -3554,7 +3554,7 @@ class PageManager extends Core
 
 					// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 					if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-					$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+					$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 				}
 				
 				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW){				// ログイン、ログアウト場合
@@ -3566,7 +3566,7 @@ class PageManager extends Core
 							// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 							$scriptURL = $scriptsUrl . '/' . $scriptFilename;
 							if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-							$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+							$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 						}
 					}
 				}
@@ -3589,7 +3589,7 @@ class PageManager extends Core
 							$scriptURL = $widgetsUrl . '/' . $rows[$i]['wd_id'] . '/' . M3_DIR_NAME_SCRIPTS . '/' . $file;
 							// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 							if (!$this->hasScriptCache) $scriptURL .= $this->getCacheParam();
-							$replaceStr .=  '<script type="text/javascript" src="' . $scriptURL . '"></script>' . M3_NL;
+							$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptURL) . '"></script>' . M3_NL;
 						}
 					}
 					$dir->close();
@@ -3603,7 +3603,7 @@ class PageManager extends Core
 		
 				// スクリプトをキャッシュ保存しない場合は、パラメータを付加
 				if (!$this->hasScriptCache) $scriptUrl .= $this->getCacheParam();
-				$replaceStr .=  '<script type="text/javascript" src="' . $scriptUrl . '"></script>' . M3_NL;
+				$replaceStr .=  '<script type="text/javascript" src="' . convertUrlToHtmlEntity($scriptUrl) . '"></script>' . M3_NL;
 			}
 			
 			// 設定値取得
