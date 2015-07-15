@@ -91,7 +91,7 @@ class wiki_updateWidgetContainer extends BaseWidgetContainer
 		// RSS用リンク作成
 		$iconTitle = self::DEFAULT_TITLE;
 		$iconUrl = $this->gEnv->getRootUrl() . self::RSS_ICON_FILE;
-		$rssLink = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$rssLink = '<img src="' . $this->getUrl($iconUrl) . '" class="icon" style="border:none;" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		$linkUrl = $this->gPage->createRssCmdUrl($this->gEnv->getCurrentWidgetId());
 		$rssLink = '<a href="' . convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '">' . $rssLink . '</a>';
 		$rssLink = '<div align="right">' . $rssLink . '</div>';		// 右寄せ

@@ -44,10 +44,14 @@
 }
 .clearfix:after
 {
-  clear: both;
-  font: 0/0 serif;
-  display: block;
-  content: " ";
+	clear: both;
+	font: 0/0 serif;
+	display: block;
+	content: " ";
+}
+img.icon
+{
+	border:none;
 }
 /* error message */
 #art-main .error-message, #art-main .warning-message, #art-main .guide-message, #art-main .success-message {
