@@ -320,7 +320,7 @@ $_attach_messages = array(
 	'msg_file'     => '添付ファイル',
 	'msg_select_file'     => 'ファイル選択',
 	'msg_maxsize'  => 'アップロード可能最大ファイルサイズは %s です。',
-	'msg_count'    => ' <span class="small">%s件</span>',
+	'msg_count'    => '%s件',
 	'msg_password' => 'パスワード',
 	'msg_adminpass'=> '管理者パスワード',
 	'msg_delete'   => 'ファイルを削除',

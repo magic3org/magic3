@@ -318,7 +318,7 @@ $_attach_messages = array(
 	'msg_file'     => 'Attach file',
 	'msg_select_file'     => 'Select file',
 	'msg_maxsize'  => 'Maximum file size is %s.',
-	'msg_count'    => ' <span class="small">%s download</span>',
+	'msg_count'    => '%s download',
 	'msg_password' => 'password',
 	'msg_adminpass'=> 'Administrator password',
 	'msg_delete'   => 'Delete file.',

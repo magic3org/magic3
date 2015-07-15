@@ -82,5 +82,138 @@
 :概要|
 Googleマップを表示します。~
 (API参考)http://reddog.s35.xrea.com/wiki/Pukiwiki%E3%81%A7GoogleMaps3.html 
+:引数|
+--align 表示位置を指定します。省略時はleftです。(left, center, right)
+--mapname 複数の地図を張る場合に必ずユニークな名前を指定してください。一枚だけの時は省略可。
+--width 横幅。スタイル指定。ex. 640px, 100%など。
+--height 縦幅。スタイル指定。
+--lat 中心座標の緯度
+--lng 中心座標の経度
+--zoom 倍率(0～19)
+--type 地図のタイプ（normal, roadmap, satellite, hybrid) normalはroadmapと同じです。
+--zoomctrl 地図の倍率変更スライダとかボタン。(none, normal, small, large) normalは地図の大きさによってsmall,large自動切換
+--panctrl 地図の移動。(none,normal)
+--typectrl 地図と衛星写真の切り替えボタン。（none, normal, horizontal, dropdown)
+--scalectrl 縮尺定規の表示。(none, normal)
+--rotatectrl 45度回転ボタン。地図が対応していないと表示されないみたい。
+--streetviewctrl ストリートビューコントロール。(none, normal)
+--overviewctrl オーバービューマップの表示。hide, showはどちらも表示だが、初期状態が隠れているか表示しているかの違い。(none, hide, show)
+--crossctrl 地図中央のセンタークロス(none, normal)
+--searchctrl 検索ボックス(none, normal)
+--togglemarker マーカーの表示を切り替えるチェックボックスの表示。(true, false)
+--noiconname togglemarkerで使用する。アイコン無しマーカーに使用するラベル。
+--dbclickzoom ダブルクリックでズームする。(true, false)
+--kml KMLファイルへのURL、もしくはページに添付されたファイル名。
+--preserveviewport KML読み込み時にビューポートを変更しない(true, false)。規定値はfalse(変更する)。
+--importicon Pukiwikiのページ名。指定されたページのgooglemaps3_iconを全て読み込む。
+--backlinkmarker 地図のページへリンクしている全てのページから最初に見つかったgooglemap3_markを各ページにつき一つ読み込んで表示する。バックリンクが多いと重くなるかもしれない。(true, false)
+
+**googlemaps3_mark(Magic3版拡張) [#eac86f0e]
+:種別|
+~ブロック型プラグイン
+~インライン型プラグイン
+:重要度|
+~★☆☆☆☆
+:書式|
+~''#googlemaps3_mark''
+~''&googlemaps3_mark'''';''
+:概要|
+Googleマップを表示します。~
+(API参考)http://reddog.s35.xrea.com/wiki/Pukiwiki%E3%81%A7GoogleMaps3.html 
+:引数|
+--map マーカーをつけるマップ名。googlemaps3のmapname。省略したらデフォの値になる。
+--title マーカーの名前
+--caption マーカーの説明
+--image 画像。名前がhttp～で始まらないものはページに添付された画像と判断する。
+--zoom 倍率(0～17）
+--icon マーカーのアイコン（googlemaps3_iconでiconを事前に作成しておく）
+--nolist 地図以外のマーカーリスト（上の例でいえば地図の下のやつ）に出力しない。(0 or 1)
+--noinfowindow フキダシを表示しない(0 or 1)
+--noicon アイコンを表示しない(0 or 1)。これがtrueだとnoinfowindowもtrueになる。
+--alink マップ上のinfoWindowと本文中のテキストをリンクさせる(0 or 1)
+--maxzoom マーカーを表示する、地図の最大ズーム値(0～17)
+--minzoom マーカーを表示する、地図の最小ズーム値(0～17)
+--titleispagename titleをページ名にする。
+
+**googlemaps3_icon(Magic3版拡張) [#r4941d87]
+:種別|
+~ブロック型プラグイン
+~インライン型プラグイン
+:重要度|
+~★☆☆☆☆
+:書式|
+~''#googlemaps3_icon''
+~''&googlemaps3_icon'''';''
+:概要|
+Googleマップを表示します。~
+(API参考)http://reddog.s35.xrea.com/wiki/Pukiwiki%E3%81%A7GoogleMaps3.html 
+:引数|
+--image アイコン画像
+--shadow 影の画像
+--iw アイコン画像の横幅
+--ih アイコン画像の縦幅
+--sw 影の画像の横幅
+--sh 影の画像の縦幅
+--ianchorx アイコンの位置調整
+--ianchory アイコンの位置調整
+--sanchorx フキダシの位置調整
+--sanchory フキダシの位置調整
+--area アイコンの透明領域のcoordsリスト。クリッカブルマップ。例 area="1 1 4 1 4 4 1 4"
+--transparent アイコンの透明領域指定用pngファイル。
+
+**googlemaps3_draw(Magic3版拡張) [#x9c49679]
+:種別|
+~ブロック型プラグイン
+~インライン型プラグイン
+:重要度|
+~★☆☆☆☆
+:書式|
+~''#googlemaps3_draw''
+~''&googlemaps3_draw'''';''
+:概要|
+Googleマップを表示します。~
+(API参考)http://reddog.s35.xrea.com/wiki/Pukiwiki%E3%81%A7GoogleMaps3.html 
+:引数|
+--コマンド
+---line
+---rectangle
+---circle
+---arc
+---ngon
+---polygon
+--opacity 線の透明度 0.0～1.0
+--weight 線の太さ
+--color 線の色 #RRGGBB指定
+--fillcolor 塗りつぶしの色 #RRGGBB指定 (2.2から)
+--fillopacity 塗りつぶしの透明度 0.0～1.0 (2.2から)
+--map 描画対象のmap名
+--lat 緯度
+--lng 経度
+--lat1 緯度1
+--lng1 経度1
+--lat2 緯度2
+--lng2 経度2
+--radius 半径。単位はkm
+--inradius arcを描画する時の内側の半径。単位はkm。(2.2から)
+--stangle 開始角
+--edangle 終了角
+--rotate 回転度数
+--n 正n角形の頂点数
+
+**googlemaps3_insertmarker(Magic3版拡張) [#na43ec6b]
+:種別|
+~ブロック型プラグイン
+~インライン型プラグイン
+:重要度|
+~★☆☆☆☆
+:書式|
+~''#googlemaps3_insertmarker''
+~''&googlemaps3_insertmarker'''';''
+:概要|
+Googleマップを表示します。~
+(API参考)http://reddog.s35.xrea.com/wiki/Pukiwiki%E3%81%A7GoogleMaps3.html 
+:引数|
+--map マーカーをつけるマップ名。googlemaps3のmapname。省略したらデフォの値になる。
+--direction マーカーリストを上に追加していくか、下に追加していくか。(up or down)
 
 #navi(../)

@@ -675,7 +675,7 @@ class AttachFile
 			}*/
 		}
 //		return "<a href=\"$openUrl\" title=\"$title\">$label</a>$count$info";
-		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\">$label</a>$count$info";
+		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\">$label</a> $count $info";
 	}
 
 	// 情報表示
