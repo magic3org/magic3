@@ -327,4 +327,24 @@
 	padding-left:8px;
 	padding-bottom:1px;
 }
-
+/*** 一般画面用 ***/
+/* ウィジェットツールボタン */
+.m3widgettoolbutton {
+	padding-top:5px;
+	padding-right:100px;
+}
+.m3widgettoolbutton .btn.active {
+	display: none;
+}
+.m3widgettoolbutton .btn span:nth-of-type(1) {
+	display: none;
+}
+.m3widgettoolbutton .btn span:last-child {
+	display: block;
+}
+.m3widgettoolbutton .btn.active  span:nth-of-type(1) {
+	display: block;
+}
+.m3widgettoolbutton .btn.active span:last-child {
+	display: none;
+}
