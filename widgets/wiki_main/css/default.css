@@ -292,10 +292,10 @@ td.vote_td2 {
 .wiki_spacer {
 }
 /* clear plugin */
-.wiki_clear {
+/*.wiki_clear {
 	margin:0px;
 	clear:both;
-}
+}*/
 /* calendar plugin */
 .style_calendar {
 	padding:0px;
