@@ -330,7 +330,6 @@
 /*** 一般画面用 ***/
 /* ウィジェットツールボタン */
 .m3widgettoolbutton {
-	padding-top:5px;
 	padding-right:100px;
 }
 .m3widgettoolbutton .btn.active {
@@ -347,4 +346,332 @@
 }
 .m3widgettoolbutton .btn.active span:last-child {
 	display: none;
+}
+/* メニューバー上のボタン */
+.m3-navbar-btn {
+	margin-top: 8.5px;
+	margin-bottom: 8.5px;
+}
+.m3-navbar-btn.btn-sm {
+	margin-top: 13.5px;
+	margin-bottom: 13.5px;
+}
+.m3-navbar-btn.btn-xs {
+	margin-top: 19px;
+	margin-bottom: 19px;
+}
+.m3widgettoolbutton .m3-navbar-btn.btn-lg,
+.m3widgettoolbutton .m3-navbar-btn.btn-group-lg > .btn {
+	padding: 18px 27px;
+	font-size: 19px;
+	line-height: 1.33;
+	border-radius: 6px;
+}
+.m3widgettoolbutton .m3-navbar-btn.btn-sm,
+.m3widgettoolbutton .m3-navbar-btn.btn-group-sm > .btn {
+	padding: 6px 9px;
+	font-size: 13px;
+	line-height: 1.5;
+	border-radius: 3px;
+}
+.m3widgettoolbutton .m3-navbar-btn.btn-xs,
+.m3widgettoolbutton .m3-navbar-btn.btn-group-xs > .btn {
+	padding: 1px 5px;
+	font-size: 13px;
+	line-height: 1.5;
+	border-radius: 3px;
+}
+.m3-navbar-btn.btn {
+	display: inline-block;
+	margin-bottom: 0;
+	font-weight: normal;
+	text-align: center;
+	vertical-align: middle;
+	cursor: pointer;
+	background-image: none;
+	border: 1px solid transparent;
+	white-space: nowrap;
+	padding: 10px 15px;
+	font-size: 15px;
+	line-height: 1.42857143;
+	border-radius: 4px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+.m3-navbar-btn.btn:focus,
+.m3-navbar-btn.btn:active:focus,
+.m3-navbar-btn.btn.active:focus {
+	outline: thin dotted;
+	outline: 5px auto -webkit-focus-ring-color;
+	outline-offset: -2px;
+}
+.m3-navbar-btn.btn:hover,
+.m3-navbar-btn.btn:focus {
+	color: #ffffff;
+	text-decoration: none;
+}
+.m3-navbar-btn.btn:active,
+.m3-navbar-btn.btn.active {
+	outline: 0;
+	background-image: none;
+	-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+	box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+.m3-navbar-btn.btn.disabled,
+.m3-navbar-btn.btn[disabled],
+fieldset[disabled] .m3-navbar-btn.btn {
+	cursor: not-allowed;
+	pointer-events: none;
+	opacity: 0.65;
+	filter: alpha(opacity=65);
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.m3-navbar-btn.btn-default {
+	color: #ffffff;
+	background-color: #95a5a6;
+	border-color: #95a5a6;
+}
+.m3-navbar-btn.btn-default:hover,
+.m3-navbar-btn.btn-default:focus,
+.m3-navbar-btn.btn-default:active,
+.m3-navbar-btn.btn-default.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-default {
+	color: #ffffff;
+	background-color: #798d8f;
+	border-color: #74898a;
+}
+.m3-navbar-btn.btn-default:active,
+.m3-navbar-btn.btn-default.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-default {
+	background-image: none;
+}
+.m3-navbar-btn.btn-default.disabled,
+.m3-navbar-btn.btn-default[disabled],
+fieldset[disabled] .m3-navbar-btn.btn-default,
+.m3-navbar-btn.btn-default.disabled:hover,
+.m3-navbar-btn.btn-default[disabled]:hover,
+fieldset[disabled] .m3-navbar-btn.btn-default:hover,
+.m3-navbar-btn.btn-default.disabled:focus,
+.m3-navbar-btn.btn-default[disabled]:focus,
+fieldset[disabled] .m3-navbar-btn.btn-default:focus,
+.m3-navbar-btn.btn-default.disabled:active,
+.m3-navbar-btn.btn-default[disabled]:active,
+fieldset[disabled] .m3-navbar-btn.btn-default:active,
+.m3-navbar-btn.btn-default.disabled.active,
+.m3-navbar-btn.btn-default[disabled].active,
+fieldset[disabled] .m3-navbar-btn.btn-default.active {
+	background-color: #95a5a6;
+	border-color: #95a5a6;
+}
+.m3-navbar-btn.btn-default .badge {
+	color: #95a5a6;
+	background-color: #ffffff;
+}
+.m3-navbar-btn.btn-primary {
+	color: #ffffff;
+	background-color: #2c3e50;
+	border-color: #2c3e50;
+}
+.m3-navbar-btn.btn-primary:hover,
+.m3-navbar-btn.btn-primary:focus,
+.m3-navbar-btn.btn-primary:active,
+.m3-navbar-btn.btn-primary.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-primary {
+	color: #ffffff;
+	background-color: #1a242f;
+	border-color: #161f29;
+}
+.m3-navbar-btn.btn-primary:active,
+.m3-navbar-btn.btn-primary.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-primary {
+	background-image: none;
+}
+.m3-navbar-btn.btn-primary.disabled,
+.m3-navbar-btn.btn-primary[disabled],
+fieldset[disabled] .m3-navbar-btn.btn-primary,
+.m3-navbar-btn.btn-primary.disabled:hover,
+.m3-navbar-btn.btn-primary[disabled]:hover,
+fieldset[disabled] .m3-navbar-btn.btn-primary:hover,
+.m3-navbar-btn.btn-primary.disabled:focus,
+.m3-navbar-btn.btn-primary[disabled]:focus,
+fieldset[disabled] .m3-navbar-btn.btn-primary:focus,
+.m3-navbar-btn.btn-primary.disabled:active,
+.m3-navbar-btn.btn-primary[disabled]:active,
+fieldset[disabled] .m3-navbar-btn.btn-primary:active,
+.m3-navbar-btn.btn-primary.disabled.active,
+.m3-navbar-btn.btn-primary[disabled].active,
+fieldset[disabled] .m3-navbar-btn.btn-primary.active {
+	background-color: #2c3e50;
+	border-color: #2c3e50;
+}
+.m3-navbar-btn.btn-primary .badge {
+	color: #2c3e50;
+	background-color: #ffffff;
+}
+.m3-navbar-btn.btn-success {
+	color: #ffffff;
+	background-color: #18bc9c;
+	border-color: #18bc9c;
+}
+.m3-navbar-btn.btn-success:hover,
+.m3-navbar-btn.btn-success:focus,
+.m3-navbar-btn.btn-success:active,
+.m3-navbar-btn.btn-success.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-success {
+	color: #ffffff;
+	background-color: #128f76;
+	border-color: #11866f;
+}
+.m3-navbar-btn.btn-success:active,
+.m3-navbar-btn.btn-success.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-success {
+	background-image: none;
+}
+.m3-navbar-btn.btn-success.disabled,
+.m3-navbar-btn.btn-success[disabled],
+fieldset[disabled] .m3-navbar-btn.btn-success,
+.m3-navbar-btn.btn-success.disabled:hover,
+.m3-navbar-btn.btn-success[disabled]:hover,
+fieldset[disabled] .m3-navbar-btn.btn-success:hover,
+.m3-navbar-btn.btn-success.disabled:focus,
+.m3-navbar-btn.btn-success[disabled]:focus,
+fieldset[disabled] .m3-navbar-btn.btn-success:focus,
+.m3-navbar-btn.btn-success.disabled:active,
+.m3-navbar-btn.btn-success[disabled]:active,
+fieldset[disabled] .m3-navbar-btn.btn-success:active,
+.m3-navbar-btn.btn-success.disabled.active,
+.m3-navbar-btn.btn-success[disabled].active,
+fieldset[disabled] .m3-navbar-btn.btn-success.active {
+	background-color: #18bc9c;
+	border-color: #18bc9c;
+}
+.m3-navbar-btn.btn-success .badge {
+	color: #18bc9c;
+	background-color: #ffffff;
+}
+.m3-navbar-btn.btn-info {
+	color: #ffffff;
+	background-color: #3498db;
+	border-color: #3498db;
+}
+.m3-navbar-btn.btn-info:hover,
+.m3-navbar-btn.btn-info:focus,
+.m3-navbar-btn.btn-info:active,
+.m3-navbar-btn.btn-info.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-info {
+	color: #ffffff;
+	background-color: #217dbb;
+	border-color: #2077b2;
+}
+.m3-navbar-btn.btn-info:active,
+.m3-navbar-btn.btn-info.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-info {
+	background-image: none;
+}
+.m3-navbar-btn.btn-info.disabled,
+.m3-navbar-btn.btn-info[disabled],
+fieldset[disabled] .m3-navbar-btn.btn-info,
+.m3-navbar-btn.btn-info.disabled:hover,
+.m3-navbar-btn.btn-info[disabled]:hover,
+fieldset[disabled] .m3-navbar-btn.btn-info:hover,
+.m3-navbar-btn.btn-info.disabled:focus,
+.m3-navbar-btn.btn-info[disabled]:focus,
+fieldset[disabled] .m3-navbar-btn.btn-info:focus,
+.m3-navbar-btn.btn-info.disabled:active,
+.m3-navbar-btn.btn-info[disabled]:active,
+fieldset[disabled] .m3-navbar-btn.btn-info:active,
+.m3-navbar-btn.btn-info.disabled.active,
+.m3-navbar-btn.btn-info[disabled].active,
+fieldset[disabled] .m3-navbar-btn.btn-info.active {
+	background-color: #3498db;
+	border-color: #3498db;
+}
+.m3-navbar-btn.btn-info .badge {
+	color: #3498db;
+	background-color: #ffffff;
+}
+.m3-navbar-btn.btn-warning {
+	color: #ffffff;
+	background-color: #f39c12;
+	border-color: #f39c12;
+}
+.m3-navbar-btn.btn-warning:hover,
+.m3-navbar-btn.btn-warning:focus,
+.m3-navbar-btn.btn-warning:active,
+.m3-navbar-btn.btn-warning.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-warning {
+	color: #ffffff;
+	background-color: #c87f0a;
+	border-color: #be780a;
+}
+.m3-navbar-btn.btn-warning:active,
+.m3-navbar-btn.btn-warning.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-warning {
+	background-image: none;
+}
+.m3-navbar-btn.btn-warning.disabled,
+.m3-navbar-btn.btn-warning[disabled],
+fieldset[disabled] .m3-navbar-btn.btn-warning,
+.m3-navbar-btn.btn-warning.disabled:hover,
+.m3-navbar-btn.btn-warning[disabled]:hover,
+fieldset[disabled] .m3-navbar-btn.btn-warning:hover,
+.m3-navbar-btn.btn-warning.disabled:focus,
+.m3-navbar-btn.btn-warning[disabled]:focus,
+fieldset[disabled] .m3-navbar-btn.btn-warning:focus,
+.m3-navbar-btn.btn-warning.disabled:active,
+.m3-navbar-btn.btn-warning[disabled]:active,
+fieldset[disabled] .m3-navbar-btn.btn-warning:active,
+.m3-navbar-btn.btn-warning.disabled.active,
+.m3-navbar-btn.btn-warning[disabled].active,
+fieldset[disabled] .m3-navbar-btn.btn-warning.active {
+	background-color: #f39c12;
+	border-color: #f39c12;
+}
+.m3-navbar-btn.btn-warning .badge {
+	color: #f39c12;
+	background-color: #ffffff;
+}
+.m3-navbar-btn.btn-danger {
+	color: #ffffff;
+	background-color: #e74c3c;
+	border-color: #e74c3c;
+}
+.m3-navbar-btn.btn-danger:hover,
+.m3-navbar-btn.btn-danger:focus,
+.m3-navbar-btn.btn-danger:active,
+.m3-navbar-btn.btn-danger.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-danger {
+	color: #ffffff;
+	background-color: #d62c1a;
+	border-color: #cd2a19;
+}
+.m3-navbar-btn.btn-danger:active,
+.m3-navbar-btn.btn-danger.active,
+.open > .dropdown-toggle.m3-navbar-btn.btn-danger {
+	background-image: none;
+}
+.m3-navbar-btn.btn-danger.disabled,
+.m3-navbar-btn.btn-danger[disabled],
+fieldset[disabled] .m3-navbar-btn.btn-danger,
+.m3-navbar-btn.btn-danger.disabled:hover,
+.m3-navbar-btn.btn-danger[disabled]:hover,
+fieldset[disabled] .m3-navbar-btn.btn-danger:hover,
+.m3-navbar-btn.btn-danger.disabled:focus,
+.m3-navbar-btn.btn-danger[disabled]:focus,
+fieldset[disabled] .m3-navbar-btn.btn-danger:focus,
+.m3-navbar-btn.btn-danger.disabled:active,
+.m3-navbar-btn.btn-danger[disabled]:active,
+fieldset[disabled] .m3-navbar-btn.btn-danger:active,
+.m3-navbar-btn.btn-danger.disabled.active,
+.m3-navbar-btn.btn-danger[disabled].active,
+fieldset[disabled] .m3-navbar-btn.btn-danger.active {
+	background-color: #e74c3c;
+	border-color: #e74c3c;
+}
+.m3-navbar-btn.btn-danger .badge {
+	color: #e74c3c;
+	background-color: #ffffff;
 }

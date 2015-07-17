@@ -3845,15 +3845,14 @@ class PageManager extends Core
 						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 					
 						// ウィジェットツール表示制御ボタン
-				//		$widgetToolTag .= '<div class="m3widgettoolbutton nav navbar-nav navbar-right" data-toggle="buttons">';
 						$widgetToolTag .= '<div class="m3widgettoolbutton m3-nav m3-navbar-nav navbar-right" data-toggle="buttons">';
-						$widgetToolTag .= '<label class="navbar-btn btn btn-sm btn-success active">';
+						$widgetToolTag .= '<label class="m3-navbar-btn btn btn-sm btn-success active">';
 						$widgetToolTag .= '<input type="radio" name="options" id="option1" autocomplete="off" checked>';
-						$widgetToolTag .= '<i class="fa fa-check"></i> ウィジェットツール';
+						$widgetToolTag .= '<i class="glyphicon glyphicon-play"></i> ウィジェットツール';
 						$widgetToolTag .= '</label>';
-						$widgetToolTag .= '<label class="navbar-btn btn btn-sm btn-danger">';
+						$widgetToolTag .= '<label class="m3-navbar-btn btn btn-sm btn-danger">';
 						$widgetToolTag .= '<input type="radio" name="options" id="option2" autocomplete="off">';
-						$widgetToolTag .= '<i class="fa fa-warning"></i> ウィジェットツール';
+						$widgetToolTag .= '<i class="glyphicon glyphicon-stop"></i> ウィジェットツール';
 						$widgetToolTag .= '</label>';
 						$widgetToolTag .= '</div>';
 						
@@ -3868,7 +3867,7 @@ class PageManager extends Core
 						}
 						$menubarTag .= $logoutTag;
 						$menubarTag .= '</ul>';
-						$menubarTag .= $widgetToolTag;
+		//				$menubarTag .= $widgetToolTag;
 						$menubarTag .= '</div>';
 						$menubarTag .= '</div>';
 					//	$menubarTag .= '</div>';
