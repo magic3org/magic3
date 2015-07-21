@@ -20,7 +20,6 @@ var _m3ContentEdited;		// 入力コンテンツが変更されたかどうか
 var _m3CheckContentEdit;	// 入力コンテンツの変更をチェックするかどうか
 var _m3ShowWidgetTool;		// ウィジェットツールを表示するかどうか
 
-
 // 親ウィンドウを更新
 function m3UpdateParentWindow()
 {
@@ -863,7 +862,8 @@ function m3CreateDragDropUploadFile(id, url, callback, type, width)
  */
 function m3SetupWidgetTool(switchButtonClass)
 {
-	$('.' + switchButtonClass).each(function (){
+	$('.' + switchButtonClass).each(function ()
+	{
 		// Settings
 		var $widget = $(this);
 		var $button = $widget.find('button');
@@ -879,17 +879,24 @@ function m3SetupWidgetTool(switchButtonClass)
 			};
 
 		// Event Handlers
-		$button.on('click', function (){
+		$button.on('click', function ()
+		{
+			// チェックボックスの状態を変更し、ボタンを再描画
 			$checkbox.prop('checked', !$checkbox.is(':checked'));
-			$checkbox.triggerHandler('change');
-			updateDisplay();
+//			$checkbox.triggerHandler('change');
+			updateButton();
+			
+			// ウィジェットツールの表示制御
+			updateWidgetTool();
 		});
-		$checkbox.on('change', function (){
-			updateDisplay();
+		$checkbox.on('change', function ()
+		{
+			updateButton();
 		});
 
-		// Actions
-		function updateDisplay(){
+		// ボタン更新
+		function updateButton()
+		{
 			var isChecked = $checkbox.is(':checked');
 
 			// Set the button's state
@@ -906,9 +913,20 @@ function m3SetupWidgetTool(switchButtonClass)
 			}
 		}
 
+		// ウィジェットツールの表示制御
+		function updateWidgetTool()
+		{
+			var isChecked = $checkbox.is(':checked');
+			if (isChecked){
+				_m3ShowWidgetTool = true;		// ウィジェットツールを表示するかどうか
+			} else {
+				_m3ShowWidgetTool = false;		// ウィジェットツールを表示するかどうか
+			}
+		}
+		
 		// Initialization
 		function init(){
-			updateDisplay();
+			updateButton();
 
 			// Inject the icon if applicable
 			if ($button.find('.state-icon').length == 0){

@@ -3931,14 +3931,16 @@ class PageManager extends Core
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '});' . M3_NL;
 					// ウィジェットボーダーハイライト、ツールチップ表示
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).hover(function(){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).addClass(\'m3_widget_highlight\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var pos = $(this).position();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var width = $(this).outerWidth();' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipWidth = tooltipObj.outerWidth(true);' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var x = pos.left + width - tooltipWidth;' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var y = pos.top;' . M3_NL;
-    				$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'tooltipObj.css({position: "absolute",top: y + "px", left: x + "px"}).show();' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (_m3ShowWidgetTool){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '$(this).addClass(\'m3_widget_highlight\');' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var pos = $(this).position();' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var width = $(this).outerWidth();' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var tooltipWidth = tooltipObj.outerWidth(true);' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var x = pos.left + width - tooltipWidth;' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'var y = pos.top;' . M3_NL;
+    				$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'tooltipObj.css({position: "absolute",top: y + "px", left: x + "px"}).show();' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}, function(){' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '$(this).removeClass(\'m3_widget_highlight\');' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
