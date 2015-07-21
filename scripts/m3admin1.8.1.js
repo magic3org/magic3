@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,6 +18,8 @@ var _m3AccessPoint;		// アクセスポイント(空=PC,m=携帯,s=スマート�
 var _m3SetUrlCallback;	// リンク作成用コールバック
 var _m3ContentEdited;		// 入力コンテンツが変更されたかどうか
 var _m3CheckContentEdit;	// 入力コンテンツの変更をチェックするかどうか
+var _m3ShowWidgetTool;		// ウィジェットツールを表示するかどうか
+
 
 // 親ウィンドウを更新
 function m3UpdateParentWindow()
@@ -852,6 +854,69 @@ function m3CreateDragDropUploadFile(id, url, callback, type, width)
 		}
 	});
 	return true;
+}
+/**
+ * ウィジェットツールの準備
+ *
+ * @param string switchButtonClass			切り替えボタンのクラス
+ * @return なし
+ */
+function m3SetupWidgetTool(switchButtonClass)
+{
+	$('.' + switchButtonClass).each(function (){
+		// Settings
+		var $widget = $(this);
+		var $button = $widget.find('button');
+		var $checkbox = $widget.find('input:checkbox');
+		var color = $button.data('color'),
+			settings = {
+				on: {
+					icon: 'glyphicon glyphicon-check'
+				},
+				off: {
+					icon: 'glyphicon glyphicon-unchecked'
+				}
+			};
+
+		// Event Handlers
+		$button.on('click', function (){
+			$checkbox.prop('checked', !$checkbox.is(':checked'));
+			$checkbox.triggerHandler('change');
+			updateDisplay();
+		});
+		$checkbox.on('change', function (){
+			updateDisplay();
+		});
+
+		// Actions
+		function updateDisplay(){
+			var isChecked = $checkbox.is(':checked');
+
+			// Set the button's state
+			$button.data('state', (isChecked) ? "on" : "off");
+
+			// Set the button's icon
+			$button.find('.state-icon').removeClass().addClass('state-icon ' + settings[$button.data('state')].icon);
+
+			// Update the button's color
+			if (isChecked){
+				$button.removeClass('btn-default').addClass('btn-' + color + ' active');
+			} else {
+				$button.removeClass('btn-' + color + ' active').addClass('btn-default');
+			}
+		}
+
+		// Initialization
+		function init(){
+			updateDisplay();
+
+			// Inject the icon if applicable
+			if ($button.find('.state-icon').length == 0){
+				$button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+			}
+		}
+		init();
+	});
 }
 /**
  * 管理画面初期処理

@@ -193,7 +193,7 @@ class PageManager extends Core
 	const IWIDTET_CMD_CALC = 'calc';			// 計算
 	
 	// Magic3用スクリプト
-	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.8.0.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
+	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.8.1.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.8.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.6.js';			// 一般、管理機能共通スクリプト
@@ -1495,6 +1495,7 @@ class PageManager extends Core
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
+						$this->addScript('', ScriptLibInfo::LIB_JQUERY_COOKIE);			// 管理パネル用スクリプト追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_EASING);			// 管理パネル用スクリプト追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
@@ -3845,21 +3846,26 @@ class PageManager extends Core
 						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 					
 						// ウィジェットツール表示制御ボタン
-						$widgetToolTag .= '<div class="m3widgettoolbutton m3-nav m3-navbar-nav navbar-right" data-toggle="buttons">';
+/*						$widgetToolTag .= '<div class="m3widgettoolbutton m3-nav m3-navbar-nav navbar-right" data-toggle="buttons">';
 						$widgetToolTag .= '<label class="m3-navbar-btn btn btn-sm btn-success active">';
-						$widgetToolTag .= '<input type="radio" name="options" id="option1" autocomplete="off" checked>';
+						$widgetToolTag .= '<input type="radio" name="widgettool" id="widgettool_on" autocomplete="off">';
 						$widgetToolTag .= '<i class="glyphicon glyphicon-play"></i> ウィジェットツール';
 						$widgetToolTag .= '</label>';
 						$widgetToolTag .= '<label class="m3-navbar-btn btn btn-sm btn-danger">';
-						$widgetToolTag .= '<input type="radio" name="options" id="option2" autocomplete="off">';
+						$widgetToolTag .= '<input type="radio" name="widgettool" id="widgettool_off" autocomplete="off">';
 						$widgetToolTag .= '<i class="glyphicon glyphicon-stop"></i> ウィジェットツール';
 						$widgetToolTag .= '</label>';
+						$widgetToolTag .= '</div>';*/
+						$widgetToolTag .= '<div class="m3widgettoolbutton m3-nav m3-navbar-nav navbar-right" data-toggle="buttons">';
+						$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success"> ウィジェットツール</button>';
+						$widgetToolTag .= '<input type="checkbox" class="hidden" />';
 						$widgetToolTag .= '</div>';
 						
 						//$menubarTag .= '<div id="m3slidepanel">';
 						$menubarTag .= '<div id="m3slidepanel" class="m3panel_top m3-navbar-default" style="top:-60px; visibility: visible;">';
 						$menubarTag .= '<div class="m3panelopener m3topleft"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="メニューバーを表示"><i class="glyphicon glyphicon-align-justify"></i></a></div>';				
-						$menubarTag .= '<div tabindex="0" class="m3panel_wrap">';
+				//		$menubarTag .= '<div tabindex="0" class="m3panel_wrap">';
+						$menubarTag .= '<div>';
 						$menubarTag .= '<ul class="m3-nav m3-navbar-nav">';
 						if ($gEnvManager->isSystemAdmin()){				// 管理画面、編集モードは、管理者権限がある場合のみ有効
 							$menubarTag .= $adminTag;
@@ -3867,7 +3873,7 @@ class PageManager extends Core
 						}
 						$menubarTag .= $logoutTag;
 						$menubarTag .= '</ul>';
-		//				$menubarTag .= $widgetToolTag;
+						$menubarTag .= $widgetToolTag;
 						$menubarTag .= '</div>';
 						$menubarTag .= '</div>';
 					//	$menubarTag .= '</div>';
@@ -3877,7 +3883,8 @@ class PageManager extends Core
 						//$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("#m3slidemenubarpanel").m3SlideMenubar();' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(".m3panel_top").m3slidepanel({ "position": "top", "type": "push" });' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").css("position", "relative");' . M3_NL;
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetHelp();' . M3_NL;
+						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetHelp($(\'#m3slidepanel\'));' . M3_NL;
+	$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetupWidgetTool(\'m3widgettoolbutton\');' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
 					}
 				}

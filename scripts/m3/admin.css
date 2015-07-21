@@ -332,21 +332,6 @@
 .m3widgettoolbutton {
 	padding-right:100px;
 }
-.m3widgettoolbutton .btn.active {
-	display: none;
-}
-.m3widgettoolbutton .btn span:nth-of-type(1) {
-	display: none;
-}
-.m3widgettoolbutton .btn span:last-child {
-	display: block;
-}
-.m3widgettoolbutton .btn.active  span:nth-of-type(1) {
-	display: block;
-}
-.m3widgettoolbutton .btn.active span:last-child {
-	display: none;
-}
 /* メニューバー上のボタン */
 .m3-navbar-btn {
 	margin-top: 8.5px;
@@ -403,9 +388,10 @@
 .m3-navbar-btn.btn:focus,
 .m3-navbar-btn.btn:active:focus,
 .m3-navbar-btn.btn.active:focus {
-	outline: thin dotted;
+/*	outline: thin dotted;
 	outline: 5px auto -webkit-focus-ring-color;
-	outline-offset: -2px;
+	outline-offset: -2px;*/
+	outline: none;
 }
 .m3-navbar-btn.btn:hover,
 .m3-navbar-btn.btn:focus {
