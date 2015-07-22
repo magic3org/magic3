@@ -209,6 +209,7 @@ define('M3_COOKIE_LANG',				'LANG');			// 言語
 define('M3_COOKIE_CART_ID',				'CARTID');			// EコマースカートID
 define('M3_COOKIE_DISP_ID',				'DISPID');			// クライアント画面設定ID
 define('M3_COOKIE_AUTO_LOGIN',			'LOGIN');			// 自動ログインID
+define('M3_COOKIE_ADMIN_WIDGET_TOOL',	'M3WIDGETTOOL');			// (管理機能用)ウィジェットツール状態
 
 // 表示データフォーマット
 define('M3_VIEW_FORMAT_DATETIME',		'Y/m/d H:i:s');		// 日時

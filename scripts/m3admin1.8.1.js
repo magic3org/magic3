@@ -919,13 +919,30 @@ function m3SetupWidgetTool(switchButtonClass)
 			var isChecked = $checkbox.is(':checked');
 			if (isChecked){
 				_m3ShowWidgetTool = true;		// ウィジェットツールを表示するかどうか
+				
+				// クッキーに状態を保存
+				$.cookie('M3WIDGETTOOL', 'on', { expires: 30 });
 			} else {
 				_m3ShowWidgetTool = false;		// ウィジェットツールを表示するかどうか
+				
+				// クッキーに状態を保存
+				$.cookie('M3WIDGETTOOL', 'off', { expires: 30 });
 			}
 		}
 		
 		// Initialization
 		function init(){
+			// ボタン初期化
+			var status = $.cookie('M3WIDGETTOOL');
+			if (status == "undefined") status = 'on';		// 初期値設定
+			if (status == 'on'){
+				$checkbox.prop('checked', true);
+			} else {
+				$checkbox.prop('checked', false);
+			}
+			updateWidgetTool();
+			
+			// ボタン表示
 			updateButton();
 
 			// Inject the icon if applicable
