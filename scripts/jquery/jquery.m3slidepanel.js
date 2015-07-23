@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -80,6 +80,12 @@ if (typeof Object.create !== 'function'){
 
 			// オープナーのクリック処理
 			self.$elem.find(openerSelecter + ' a').on('click',function(e){
+				// 不要なCSSを削除
+				var className = 'art-button';
+				self.$elem.find("a." + className + ", button." + className + ", input." + className).each(function(){
+					$(this).removeClass(className);
+				});
+				
 				if(self.$elem.hasClass('opened')){
 					inlineCss[self.options.position] =  -self.containerWidth + 'px';	// パネル幅
 					panelCss[self.options.position] =  '0px';

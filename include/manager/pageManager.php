@@ -3846,16 +3846,6 @@ class PageManager extends Core
 						$logoutTag .= '<img src="' . $rootUrl . self::LOGOUT_ICON_FILE . '" alt="' . $titleStr . '" /></a></li>';
 					
 						// ウィジェットツール表示制御ボタン
-/*						$widgetToolTag .= '<div class="m3widgettoolbutton m3-nav m3-navbar-nav navbar-right" data-toggle="buttons">';
-						$widgetToolTag .= '<label class="m3-navbar-btn btn btn-sm btn-success active">';
-						$widgetToolTag .= '<input type="radio" name="widgettool" id="widgettool_on" autocomplete="off">';
-						$widgetToolTag .= '<i class="glyphicon glyphicon-play"></i> ウィジェットツール';
-						$widgetToolTag .= '</label>';
-						$widgetToolTag .= '<label class="m3-navbar-btn btn btn-sm btn-danger">';
-						$widgetToolTag .= '<input type="radio" name="widgettool" id="widgettool_off" autocomplete="off">';
-						$widgetToolTag .= '<i class="glyphicon glyphicon-stop"></i> ウィジェットツール';
-						$widgetToolTag .= '</label>';
-						$widgetToolTag .= '</div>';*/
 						$widgetToolTag .= '<div class="m3widgettoolbutton m3-nav m3-navbar-nav navbar-right" data-toggle="buttons">';
 						$widgetToolTag .= '<button type="button" class="m3-navbar-btn btn btn-sm" data-color="success"> ウィジェットツール</button>';
 						$widgetToolTag .= '<input type="checkbox" class="hidden" />';
@@ -3884,7 +3874,7 @@ class PageManager extends Core
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(".m3panel_top").m3slidepanel({ "position": "top", "type": "push" });' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").css("position", "relative");' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetHelp($(\'#m3slidepanel\'));' . M3_NL;
-	$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetupWidgetTool(\'m3widgettoolbutton\');' . M3_NL;
+						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'm3SetupWidgetTool(\'m3widgettoolbutton\');' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
 					}
 				}
