@@ -3928,7 +3928,9 @@ class PageManager extends Core
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).click(function(){' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'var tooltipObj = $(this).children(\'.m3tooltip\');' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (tooltipObj.css(\'display\') == \'none\'){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'tooltipObj.show();' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'if (_m3ShowWidgetTool){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 5) . 'tooltipObj.show();' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . '}' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '} else {' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'tooltipObj.hide();' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
