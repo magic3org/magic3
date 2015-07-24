@@ -233,6 +233,23 @@ SHA-1 アルゴリズムを利用するためには、PHP 4.3.0 以降を使用�
 ~デフォルトのメニュー用ページをMenuBar以外のページとする場合は、pukiwiki.ini.php の $menubar を変更して下さい。
 
 
+**meta(Magic3版拡張) [#ue156326]
+:種別|
+~ブロック型プラグイン
+~インライン型プラグイン
+:重要度|
+~★★☆☆☆
+:書式|
+~''#meta(''
+&color(blue){name};&color(blue){,content};
+'')''
+~''&meta(''
+&color(blue){name};&color(blue){,content};
+'');''
+:概要|
+~HTMLヘッダ部にname,content形式のMETAタグを追加します。
+
+
 
 ------------------------------
 * N [#ge4daaa6]
