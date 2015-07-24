@@ -512,6 +512,20 @@ class PageManager extends Core
 		}
 	}
 	/**
+	 * HTMLヘッダに出力するタグ文字列を追加
+	 *
+	 * @param string $str   出力文字列
+	 * @return なし
+	 */
+	function addHeadOthers($str)
+	{
+		if (is_string($str) && !empty($str)){
+			// 追加されていない場合のみ追加
+			$pos = strpos($this->headOthers, $str);
+			if ($pos === false) $this->headOthers .= $str;
+		}
+	}
+	/**
 	 * HTMLヘッダに出力するタグ文字列を取得
 	 *
 	 * @return string $str   出力文字列
