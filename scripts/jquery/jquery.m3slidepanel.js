@@ -77,14 +77,19 @@ if (typeof Object.create !== 'function'){
 			var panelCss = {};
 			var openerCss = {};
 			var openerSelecter = '.' + self.options.openerClass;
+			var initCss;			// CSS初期化
 
 			// オープナーのクリック処理
 			self.$elem.find(openerSelecter + ' a').on('click',function(e){
-				// 不要なCSSを削除
-				var className = 'art-button';
-				self.$elem.find("a." + className + ", button." + className + ", input." + className).each(function(){
-					$(this).removeClass(className);
-				});
+				// スライドパネル上のエレメントのCSS初期化
+				if (!initCss){
+					// 不要なCSSを削除
+					var className = 'art-button';
+					self.$elem.find("a." + className + ", button." + className + ", input." + className).each(function(){
+						$(this).removeClass(className);
+					});
+					initCss = true;		// 初期化完了
+				}
 				
 				if(self.$elem.hasClass('opened')){
 					inlineCss[self.options.position] =  -self.containerWidth + 'px';	// パネル幅
