@@ -241,10 +241,10 @@ SHA-1 アルゴリズムを利用するためには、PHP 4.3.0 以降を使用�
 ~★★☆☆☆
 :書式|
 ~''#meta(''
-&color(blue){name};&color(blue){,content};
+&color(blue){name};, &color(blue){content};
 '')''
 ~''&meta(''
-&color(blue){name};&color(blue){,content};
+&color(blue){name};, &color(blue){content};
 '');''
 :概要|
 ~HTMLヘッダ部にname,content形式のMETAタグを追加します。

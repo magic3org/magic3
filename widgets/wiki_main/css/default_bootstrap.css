@@ -252,6 +252,9 @@ span.calendar_viewer_right {
 	background-color:inherit;
 	float:right;
 }
+div.toolbar {
+	margin:10px 0;
+}
 div.toolbar img {
 	border:none;
 }
