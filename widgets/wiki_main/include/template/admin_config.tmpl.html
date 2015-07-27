@@ -73,6 +73,7 @@ $(function(){
     <tr>
 	    <th>コンテンツ表示</th>
 	    <td>
+		<h4>ページコンポーネント</h4>
 		<div class="form-group clearfix">
 		<span {_HELP_VISIBLE_ITEMS_LABEL}>表示項目：</span>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_showtitle" {SHOW_TITLE} />タイトル</label></div>
@@ -80,7 +81,14 @@ $(function(){
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_showpagerelated" {SHOW_PAGE_RELATED} />関連ページリンク</label></div>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_showlastmodified" {SHOW_LAST_MODIFIED} />最終更新</label></div>
 		</div>
-		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_show_toolbar_for_all_user" {SHOW_TOOLBAR_FOR_ALL_USER} />常にツールバーを表示</label></div></div>
+		<h4>ツールバー</h4>
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_show_toolbar_for_all_user" {SHOW_TOOLBAR_FOR_ALL_USER} />常に表示</label></div></div>
+		<div class="form-group clearfix">
+		<span>表示項目：</span>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_freeze_button" {SHOW_FREEZE_BUTTON} />凍結・解凍ボタン</label></div>
+		</div>
+		<h4>その他</h4>
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_show_top_link" {SHOW_TOP_LINK} />トップ移動リンクを表示</label></div></div>
 	    </td>
 	</tr>
     <tr>

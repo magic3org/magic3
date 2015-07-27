@@ -11,6 +11,15 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[}
+$(function(){
+	// アンカーの移動位置を修正
+	var paddingTop = $('body').css('padding-top');
+	if (paddingTop) $('.anchor_super').css('padding-top', paddingTop);
+});
+//]]>
+</script>
 {SCRIPT}
 <div class="jump_anchor"></div>
 <!-- m3:ErrorMessage -->

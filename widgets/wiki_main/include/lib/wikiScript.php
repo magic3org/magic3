@@ -41,12 +41,15 @@ class WikiScript
 	 */
 	public static function getScript()
 	{
-		$scriptTag  = '<script type="text/javascript">' . M3_NL . $script;
-		$scriptTag .= '//<![CDATA[' . M3_NL;
-		$scriptTag .= self::$scriptBody;
-		$scriptTag = rtrim($scriptTag, M3_NL) . M3_NL;		// 改行が付加されていれば削除
-		$scriptTag .= '//]]>' . M3_NL . $script;
-		$scriptTag .= '</script>' . M3_NL . $script;
+		$scriptTag = '';
+		if (!empty(self::$scriptBody)){
+			$scriptTag  = '<script type="text/javascript">' . M3_NL . $script;
+			$scriptTag .= '//<![CDATA[' . M3_NL;
+			$scriptTag .= self::$scriptBody;
+			$scriptTag = rtrim($scriptTag, M3_NL) . M3_NL;		// 改行が付加されていれば削除
+			$scriptTag .= '//]]>' . M3_NL . $script;
+			$scriptTag .= '</script>' . M3_NL . $script;
+		}
 		return $scriptTag;
 	}
 	/**
