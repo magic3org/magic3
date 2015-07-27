@@ -53,6 +53,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	const CONTENT_TYPE = 'wk';		// 参照数カウント用
 	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
 	const DEFAULT_BOOTSTRAP_CSS_FILE = '/default_bootstrap.css';		// Bootstrap用CSSファイル
+	const INIT_SCRIPT = 'initscript.tmpl.js';				// Wiki初期化スクリプト
 	
 	/**
 	 * コンストラクタ
@@ -107,14 +108,14 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_BOOTSTRAP_CSS_FILE);		// CSSファイル
-			
-			// Javaスクリプトを実行
-			$script = $this->getParsedTemplateData('bootstrap.tmpl.js');
-			$gPageManager->addHeadScript($script);
 		} else {
 			$this->cssFilePath = $this->getUrl($this->gEnv->getCurrentWidgetCssUrl() . self::DEFAULT_CSS_FILE);		// CSSファイル
 		}
 		
+		// 初期化用Javascript
+		$script = $this->getParsedTemplateData(self::INIT_SCRIPT, array($this, 'makeScript'));
+		$gPageManager->addHeadScript($script);
+			
 		// 初期設定が完了していなときは、初期データ読み込み
 		$init = false;
 		if (!WikiPage::isInit()){		// 初期化未実行のとき
@@ -552,6 +553,24 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 				'</a>';
 		}
 		return $button;
+	}
+	/**
+	 * Script作成処理コールバック
+	 *
+	 * @param object         $tmpl			テンプレートオブジェクト
+	 * @param								なし
+	 */
+	function makeScript($tmpl)
+	{
+		global $gEnvManager;
+		
+		// CSSファイルの設定
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			if (WikiConfig::isUserWithEditAuth()){		// 編集権限ありのとき
+				$tmpl->setAttribute('fileselect', 'visibility', 'visible');// ファイル選択UI作成
+			}
+		}
 	}
 }
 ?>

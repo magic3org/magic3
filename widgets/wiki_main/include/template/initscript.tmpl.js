@@ -12,6 +12,10 @@
  */
 <patTemplate:tmpl name="_tmpl">
 $(function(){
+	// アンカーの移動位置を修正
+	var paddingTop = $('body').css('padding-top');
+	if (paddingTop) $('.anchor_super').css('padding-top', paddingTop);
+<patTemplate:tmpl name="fileselect" visibility="hidden">
 	// アップロードファイル選択
 	$('.btn-file :file').on('fileselect', function(event, numFiles, label){
 		var input = $(this).parents('.input-group').find(':text'),
@@ -30,5 +34,6 @@ $(function(){
 	        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
 	    input.trigger('fileselect', [numFiles, label]);
 	});
+</patTemplate:tmpl>
 });
 </patTemplate:tmpl>
