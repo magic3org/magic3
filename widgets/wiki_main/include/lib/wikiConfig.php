@@ -309,6 +309,24 @@ class WikiConfig
 		return $ret;
 	}
 	/**
+	 * アクセス中のユーザにページ凍結・解凍権限があるかを判断
+	 *
+	 * @return bool		true=権限あり、false=権限なし
+	 */
+	public static function isUserWithFreezeAuth()
+	{
+		global $gEnvManager;
+		
+		// 凍結解凍権限を制限する場合は、システム運用権限ユーザのみが凍結解凍権限あり
+		$ret = false;
+		if (self::$_configArray[wiki_mainCommonDef::CF_USER_LIMITED_FREEZE]){
+			if ($gEnvManager->isSystemManageUser()) $ret = true;
+		} else {
+			if (self::isUserWithEditAuth()) $ret = true;			
+		}
+		return $ret;
+	}
+	/**
 	 * アクセス中のユーザにデータ参照権限があるかを判断
 	 *
 	 * @return bool		true=権限あり、false=権限なし

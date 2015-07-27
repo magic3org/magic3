@@ -44,7 +44,7 @@ function plugin_edit_action()
 		
 	if (!check_editable($page, true, true)){		// 編集不可のとき
 		$body = $title = str_replace('$1', make_pagelink($page), $_title_cannotedit);
-		if (is_freeze($page)){
+		if (is_freeze($page) && WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
 			$body .= '(<a href="' . $script . WikiParam::convQuery('?cmd=unfreeze&amp;page=' . rawurlencode($page)) . '">' . $_msg_unfreeze . '</a>)';
 		}
 		return array('msg' => $title, 'body' => $body);

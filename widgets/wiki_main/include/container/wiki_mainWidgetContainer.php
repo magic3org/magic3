@@ -477,8 +477,14 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		if ($this->isPage){
 			$toolbar .= '&nbsp;';
 			if ($pageEditable){
-				$toolbar .= $this->createToolbarButton('edit');
-				if ($this->isRead && WikiConfig::isPageFreeze()){
+				if (WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
+					$toolbar .= $this->createToolbarButton('edit');
+				} else if (!$this->isFreeze){		 // 解凍・凍結権限なしの場合は、凍結されている場合は編集ボタン非表示
+					$toolbar .= $this->createToolbarButton('edit');
+				}
+				
+			//	if ($this->isRead && WikiConfig::isPageFreeze() && WikiConfig::getFreezeButtonVisibility()){	// 凍結・解凍ボタンを表示する場合
+				if ($this->isRead && WikiConfig::isPageFreeze() && WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
 					if ($this->isFreeze){
 						$toolbar .= $this->createToolbarButton('unfreeze');
 					} else {

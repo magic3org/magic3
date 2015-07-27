@@ -41,14 +41,17 @@ function plugin_freeze_action()
 		$body = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_isfreezed);
 	//} else if ($pass != '' && pkwk_login($pass)) {
 	} else if (!empty($action)){			// 「凍結」ボタン実行の場合
-		// ページをロックする
-		WikiPage::lockPage($page, true);
+		// 解凍・凍結権限ありの場合のみ凍結可能
+		if (WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
+			// ページをロックする
+			WikiPage::lockPage($page, true);
 
-		// Update
-		is_freeze($page, TRUE);
-		WikiParam::setCmd('read');
-		$msg  = $_title_freezed;
-		$body = '';
+			// Update
+			is_freeze($page, TRUE);
+			WikiParam::setCmd('read');
+			$msg  = $_title_freezed;
+			$body = '';
+		}
 //	} else if (!WikiConfig::isPasswordAuth() && !$editAuth){			// パスワード認証以外(管理権限ユーザまたはログインユーザ)の場合で、編集権限がない場合
 //		$body = "<p><strong>$_msg_no_operation_allowed</strong></p>\n";
 	} else {

@@ -163,20 +163,12 @@ function check_editable($page, $auth_flag = TRUE, $exit_flag = TRUE)
 			return FALSE; // Without exit
 		} else {
 			// With exit
-			$body = $title = str_replace('$1',
-				htmlspecialchars(strip_bracket($page)), $_title_cannotedit);
-			// modified for Magic3 by naoki on 2008/10/10
-			/*if (is_freeze($page))
-				$body .= '(<a href="' . $script . '?cmd=unfreeze&amp;page=' .
-					rawurlencode($page) . '">' . $_msg_unfreeze . '</a>)';*/
-			if (is_freeze($page)){
+			$body = $title = str_replace('$1', htmlspecialchars(strip_bracket($page)), $_title_cannotedit);
+
+			if (is_freeze($page) && WikiConfig::isUserWithFreezeAuth()){			// 解凍・凍結権限ありの場合
 				$body .= '(<a href="' . $script . WikiParam::convQuery('?cmd=unfreeze&amp;page=' . rawurlencode($page)) . '">' . $_msg_unfreeze . '</a>)';
 			}
 			$page = str_replace('$1', make_search($page), $_title_cannotedit);
-			// modified for Magic3 by naoki on 2008/9/29
-			//catbody($title, $page, $body);
-			//catbody($body);
-			//exit;
 		}
 	}
 }
