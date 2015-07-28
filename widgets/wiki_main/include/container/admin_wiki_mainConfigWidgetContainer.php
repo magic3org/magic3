@@ -76,7 +76,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$showPageAttachFiles	= $request->trimCheckedValueOf('item_showpageattachfiles');		// 添付ファイルを表示するかどうか
 		$showPageLastModified	= $request->trimCheckedValueOf('item_showlastmodified');		// 最終更新を表示するかどうか
 		$showToolbarForAllUser	= $request->trimCheckedValueOf('item_show_toolbar_for_all_user');		// ツールバーを表示するかどうか
-		$userLimitedFreeze		= $request->trimCheckedValueOf('item_user_limited_freeze');		// 凍結・解凍機能のユーザ制限
+		$userLimitedFreeze		= $request->trimCheckedValueOf('item_user_limited_freeze');				// 凍結・解凍機能のユーザ制限
+		$showAutoHeadingAnchor	= $request->trimCheckedValueOf('item_show_auto_heading_anchor');		// 見出し自動アンカーを表示するかどうか
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -117,6 +118,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_USER_LIMITED_FREEZE, $userLimitedFreeze);		// 凍結・解凍機能のユーザ制限
 				
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR, $showAutoHeadingAnchor);		// 見出し自動アンカーを表示するかどうか
+				
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データ再取得
@@ -147,6 +150,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			if ($showToolbarForAllUser == '') $showToolbarForAllUser = '0';		// ツールバーを表示するかどうか
 			$userLimitedFreeze = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_USER_LIMITED_FREEZE);// 凍結・解凍機能のユーザ制限
 			if ($userLimitedFreeze == '') $userLimitedFreeze = '0';
+			$showAutoHeadingAnchor = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR);		// 見出し自動アンカーを表示するかどうか
+			if ($showAutoHeadingAnchor == '') $showAutoHeadingAnchor = '1';
 		}
 		
 		// 認証方法メニュー作成
@@ -165,7 +170,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "show_last_modified", $this->convertToCheckedString($showPageLastModified));	// 最終更新を表示するかどうか
 		$this->tmpl->addVar("_widget", "show_toolbar_for_all_user", $this->convertToCheckedString($showToolbarForAllUser));	// ツールバーを表示するかどうか
 		$this->tmpl->addVar("_widget", "user_limited_freeze", $this->convertToCheckedString($userLimitedFreeze));	// 凍結・解凍機能のユーザ制限
-		
+		$this->tmpl->addVar("_widget", "show_auto_heading_anchor", $this->convertToCheckedString($showAutoHeadingAnchor));		// 見出し自動アンカーを表示するかどうか
+			
 		// アップロードディレクトリ
 		//$uploadDir = $this->gEnv->getCurrentWidgetRootPath() . '/upload';		// 暫定
 		$uploadDir = $this->gEnv->getResourcePath() . '/widgets/wiki/upload';

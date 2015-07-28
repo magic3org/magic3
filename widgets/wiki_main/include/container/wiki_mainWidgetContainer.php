@@ -53,7 +53,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	const CONTENT_TYPE = 'wk';		// 参照数カウント用
 	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
 	const DEFAULT_BOOTSTRAP_CSS_FILE = '/default_bootstrap.css';		// Bootstrap用CSSファイル
-	const INIT_SCRIPT = 'initscript.tmpl.js';				// Wiki初期化スクリプト
+	const INIT_SCRIPT = 'init_script.tmpl.js';				// Wiki初期化スクリプト
 	
 	/**
 	 * コンストラクタ

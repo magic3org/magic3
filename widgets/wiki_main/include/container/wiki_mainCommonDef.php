@@ -33,6 +33,7 @@ class wiki_mainCommonDef
 	const CF_SHOW_PAGE_LAST_MODIFIED	= 'show_page_last_modified';	// 最終更新
 	const CF_SHOW_TOOLBAR_FOR_ALL_USER	= 'show_toolbar_for_all_user';				// ツールバーを表示するかどうか
 	const CF_USER_LIMITED_FREEZE		= 'user_limited_freeze';				// 凍結・解凍機能のユーザ制限
+	const CF_SHOW_AUTO_HEADING_ANCHOR	= 'show_auto_heading_anchor';			// 見出し自動アンカーを表示するかどうか
 
 	// ##### デフォルト値 #####
 	const DEFAULT_DEFAULT_PAGE = 'FrontPage';		// デフォルトページ

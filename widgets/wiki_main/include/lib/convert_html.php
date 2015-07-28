@@ -926,7 +926,6 @@ class Body extends Element
 
 	function getAnchor($text, $level)
 	{
-	//	global $top, $_symbol_anchor;
 		global $_symbol_anchor;
 
 		// Heading id (auto-generated)
@@ -934,13 +933,14 @@ class Body extends Element
 		$this->count++;
 
 		// Heading id (specified by users)
+		$anchor = '';
 		$id = make_heading($text, FALSE); // Cut fixed-anchor from $text
 		if ($id == '') {
 			// Not specified
 			$id     = $autoid;
-			$anchor = '';
 		} else {
-			$anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
+			// 見出し位置の自動生成アンカー
+			if (WikiConfig::getAutoHeadingAnchorVisibility()) $anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
 		}
 
 		$text = ' ' . $text;

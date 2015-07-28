@@ -282,6 +282,15 @@ class WikiConfig
 		return self::$_configArray[wiki_mainCommonDef::CF_PASSWORD];
 	}
 	/**
+	 * 見出し自動アンカーを表示するかどうかを取得
+	 *
+	 * @return bool			true=表示、false=非表示
+	 */
+	public static function getAutoHeadingAnchorVisibility()
+	{
+		return self::$_configArray[wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR];
+	}
+	/**
 	 * アクセス中のユーザにデータ編集権限があるかを判断
 	 *
 	 * @return bool		true=権限あり、false=権限なし
