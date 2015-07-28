@@ -67,7 +67,7 @@ function plugin_shareb_addScript($type, $replaceData)
 	// 実行中のウィジェットを取得
 	$widgetObj = $gEnvManager->getCurrentWidgetObj();
 	
-	$scriptBody = $widgetObj->getParsedTemplateData('plugin_shareb.tmpl.js', 'plugin_shareb_makeScript'/*コールバック関数*/, $replaceData);
+	$scriptBody = $widgetObj->getParsedTemplateData('plugin/shareb.tmpl.js', 'plugin_shareb_makeScript'/*コールバック関数*/, $replaceData);
 
 	// Javascriptを追加
 	$gPageManager->addHeadScript($scriptBody);
