@@ -481,7 +481,8 @@ EOD;*/
 	// テンプレートタイプに合わせて出力を変更
 	$body = '';
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
-		$body .= '<form enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+//		$body .= '<form enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+		$body .= '<form name="wiki_main" enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
 		$body .= '<input type="hidden" name="pcmd"   value="post" />' . M3_NL;
 		$body .= '<input type="hidden" name="refer"  value="' . $s_page . '" />' . M3_NL;
@@ -503,11 +504,13 @@ EOD;*/
 		$body .= '</div>' . M3_NL;
 		$body .= '<div>' . M3_NL;
 //		$body .= $pass;
-		$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_upload'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+//		$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_upload'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '<input type="submit" id="wiki_main_submit" class="button btn" value="' . $_attach_messages['btn_upload'] . '" />' . M3_NL;
 		$body .= '</div>' . M3_NL;
 		$body .= '</form>' . M3_NL;
 	} else {
-		$body .= '<form enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form">' . M3_NL;
+//		$body .= '<form enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form">' . M3_NL;
+		$body .= '<form name="wiki_main" enctype="multipart/form-data" action="' . $postScript . '" method="post" class="form">' . M3_NL;
 		$body .= '<div>' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
 		$body .= '<input type="hidden" name="pcmd"   value="post" />' . M3_NL;
@@ -522,13 +525,35 @@ EOD;*/
 		$body .= '</span><br />' . M3_NL;
 		$body .= '<label for="_p_attach_file">' . $_attach_messages['msg_file'] . ':</label> <input type="file" name="attach_file" id="_p_attach_file" />' . M3_NL;
 //		$body .= $pass;
-		$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_upload'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+//		$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_upload'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+		$body .= '<input type="submit" id="wiki_main_submit" class="button" value="' . $_attach_messages['btn_upload'] . '" />' . M3_NL;
 		$body .= '</div>' . M3_NL;
 		$body .= '</form>' . M3_NL;
 	}
+	
+	// Javascript読み込み
+	plugin_attach_addScript();
+	
 	return $body;
 }
+/**
+ * Javascriptを追加
+ *
+ * @return						なし
+ */
+function plugin_attach_addScript()
+{
+	global $gEnvManager;
+	global $gPageManager;
+	
+	// 実行中のウィジェットを取得
+	$widgetObj = $gEnvManager->getCurrentWidgetObj();
+	
+	$scriptBody = $widgetObj->getParsedTemplateData('plugin/attach.tmpl.js');
 
+	// Javascriptを追加
+	$gPageManager->addHeadScript($scriptBody);
+}
 //-------- クラス
 // ファイル
 class AttachFile
