@@ -926,7 +926,8 @@ class Body extends Element
 
 	function getAnchor($text, $level)
 	{
-		global $top, $_symbol_anchor;
+	//	global $top, $_symbol_anchor;
+		global $_symbol_anchor;
 
 		// Heading id (auto-generated)
 		$autoid = 'content_' . $this->id . '_' . $this->count;
@@ -948,7 +949,8 @@ class Body extends Element
 		$this->contents_last = $this->contents_last->add(new Contents_UList($text, $level, $id));
 
 		// Add heding
-		return array($text . $anchor, $this->count > 1 ? "\n" . $top : '', $autoid);
+	//	return array($text . $anchor, $this->count > 1 ? "\n" . $top : '', $autoid);
+		return array($text . $anchor, '', $autoid);
 	}
 
 	function insert($obj)

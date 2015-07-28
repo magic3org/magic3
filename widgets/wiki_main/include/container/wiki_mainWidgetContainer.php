@@ -564,7 +564,6 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	{
 		global $gEnvManager;
 		
-		// CSSファイルの設定
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			if (WikiConfig::isUserWithEditAuth()){		// 編集権限ありのとき

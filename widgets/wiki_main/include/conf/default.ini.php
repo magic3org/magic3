@@ -20,7 +20,7 @@ global $_dl_margin;
 global $_list_pad_str;
 global $cols;
 global $rows;
-global $top;
+//global $top;
 global $attach_link;
 global $related_link;
 global $related_str;
@@ -75,7 +75,7 @@ $rows = 20;
 
 /////////////////////////////////////////////////
 // 大・小見出しから目次へ戻るリンクの文字
-$top = $_msg_content_back_to_top;
+//$top = $_msg_content_back_to_top;
 
 /////////////////////////////////////////////////
 // 添付ファイルの一覧を常に表示する (負担がかかります)

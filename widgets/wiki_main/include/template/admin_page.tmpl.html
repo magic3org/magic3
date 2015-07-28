@@ -94,8 +94,9 @@ $(function(){
     <tr>
         <th class="select"><span {_HELP_PAGE_CHECK}>選択</span></th>
         <th><span {_HELP_PAGE_ID}>ID</span></th>
-		<th>更新者</th>
-		<th>更新日時</th>
+		<th style="width:50px;">状態</th>
+		<th style="width:110px;">更新者</th>
+		<th style="width:110px;">更新日時</th>
 	</tr>
     </thead>
     <tbody>
@@ -103,6 +104,7 @@ $(function(){
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td><!--<a href="#" onclick="editItemBySerial({SERIAL});">-->{ID}<!--</a>--></td>
+		<td>{STATUS}</td>
 		<td>{USER}</td>
 		<td>{DATE}</td>
 	</tr>

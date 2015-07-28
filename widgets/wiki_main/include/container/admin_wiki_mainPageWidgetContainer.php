@@ -32,6 +32,9 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	private $builtinPages;		// 自動生成されるWikiページ
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
+	const ICON_SIZE = 32;		// アイコンのサイズ
+	const LOCK_ICON_FILE = '/images/system/lock32.png';			// ロック状態アイコン
+	const UNLOCK_ICON_FILE = '/images/system/unlock32_inactive.png';		// アンロック状態アイコン
 	
 	/**
 	 * コンストラクタ
@@ -263,18 +266,29 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		// イベント予約情報
 		$serial		= $fetchedRow['wc_serial'];// シリアル番号
 		$id			= $fetchedRow['wc_id'];			// WikiページID
 		$date		= $fetchedRow['wc_content_dt'];	// 更新日時
+		$isLocked	= $fetchedRow['wc_locked'];		// ロック状態
 		
 		$idTag = $this->convertToDispString($id);
 		if (in_array($id, $this->builtinPages)) $idTag = '<strong>' . $idTag . '</strong>';
 		
+		// Wikiページ状態
+		if ($isLocked){
+			$iconUrl = $this->gEnv->getRootUrl() . self::LOCK_ICON_FILE;			// ロック状態アイコン
+			$iconTitle = 'ロック';
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::UNLOCK_ICON_FILE;		// アンロック状態アイコン
+			$iconTitle = 'アンロック';
+		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+	
 		$row = array(
 			'index'			=> $index,		// 項目番号
 			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
 			'id'			=> $idTag,		// WikiページID
+			'status'		=> $statusImg,		// Wikiページ状態
 			'user'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 更新者
 			'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
 		);

@@ -55,11 +55,10 @@ a.note_super {
 	font-size:60%;
 	vertical-align:super;
 }
-div.jumpmenu {
+/*div.jumpmenu {
 	font-size:60%;
 	text-align:right;
-}
-
+}*/
 hr.full_hr {
 	border-style:ridge;
 	border-color:#333333;
