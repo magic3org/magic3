@@ -55,12 +55,11 @@ define('PLUGIN_NAVI_LINK_TAGS', FALSE);	// FALSE, TRUE
 
 function plugin_navi_convert()
 {
-	//global $vars, $script, $head_tags;
 	global $script, $head_tags;
 	global $_navi_prev, $_navi_next, $_navi_up, $_navi_home;
+	global $gEnvManager;
 	static $navi = array();
 
-	//$current = $vars['page'];
 	$current = WikiParam::getPage();
 	$reverse = FALSE;
 	if (func_num_args()) {
@@ -80,7 +79,6 @@ function plugin_navi_convert()
 		}
 		$reverse = (strtolower($reverse) == 'reverse');
 	} else {
-		//$home    = $vars['page'];
 		$home    = WikiParam::getPage();
 		$is_home = TRUE; // $home == $current
 	}
@@ -150,6 +148,9 @@ function plugin_navi_convert()
 	}
 
 	$body = '';
+	
+	// テンプレートタイプに合わせて出力を変更
+	$templateType = $gEnvManager->getCurrentTemplateType();
 
 	if ($is_home) {
 		// Show contents
@@ -159,8 +160,7 @@ function plugin_navi_convert()
 		} else if ($count == 1) {
 			// Sentinel only: Show usage and warning
 			$home = htmlspecialchars($home);
-			$body .= '#navi(' . $home . '): No child page like: ' .
-				$home . '/Foo';
+			$body .= '#navi(' . $home . '): No child page like: ' . $home . '/Foo';
 		} else {
 			$body .= '<ul>';
 			foreach ($pages as $page)
@@ -168,23 +168,32 @@ function plugin_navi_convert()
 					$body .= ' <li>' . make_pagelink($page) . '</li>';
 			$body .= '</ul>';
 		}
-
 	} else if (! $footer){
 		// Header
-		$body  = '<ul class="navi">' . M3_NL;
+		$body = '<ul class="navi">' . M3_NL;
 		$body .= '<li class="navi_left"><strong>' . $navi[$home]['prev1'] . '</strong></li>' . M3_NL;
 		$body .= '<li class="navi_right"><strong>' . $navi[$home]['next1'] . '</strong></li>' . M3_NL;
 		$body .= '<li class="navi_none"><strong>' . $navi[$home]['home'] . '</strong></li>' . M3_NL;
 		$body .= '</ul>' . M3_NL;
-		$body .= '<hr class="full_hr" />' . M3_NL;
+		
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body = '<div class="well">' . $body . '</div>';
+		} else {
+			$body .= '<hr class="full_hr" />' . M3_NL;
+		}
 	} else {
 		// Footer
-		$body  = '<hr class="full_hr" />' . M3_NL;
-		$body .= '<ul class="navi">' . M3_NL;
+		$body = '<ul class="navi">' . M3_NL;
 		$body .= '<li class="navi_left"><strong>' . $navi[$home]['prev1'] . '<br />' . $navi[$home]['prev'] . '</strong></li>' . M3_NL;
 		$body .= '<li class="navi_right"><strong>' . $navi[$home]['next1'] . '<br />' . $navi[$home]['next'] . '</strong></li>' . M3_NL;
 		$body .= '<li class="navi_none"><strong>' . $navi[$home]['home1'] . '<br />' . $navi[$home]['up'] . '</strong></li>' . M3_NL;
 		$body .= '</ul>' . M3_NL;
+		
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$body = '<div class="well">' . $body . '</div>';
+		} else {
+			$body = '<hr class="full_hr" />' . M3_NL . $body;
+		}
 	}
 	return $body;
 }
