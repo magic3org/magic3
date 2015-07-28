@@ -336,7 +336,8 @@ EOD;
 		WikiPage::addFootNote($id, '<a id="notefoot_' . $id . '" href="' .
 			$script . '#notetext_' . $id . '" class="note_super">*' .
 			$id . '</a>' . "\n" .
-			'<span class="small">' . $note . '</span><br />');
+			//'<span class="small">' . $note . '</span><br />');
+			'<small>' . $note . '</small><br />');
 
 		// A hyperlink, content-body to footnote
 		if (! is_numeric(PKWK_FOOTNOTE_TITLE_MAX) || PKWK_FOOTNOTE_TITLE_MAX <= 0) {
@@ -349,7 +350,7 @@ EOD;
 			$title = ' title="' . $title . $abbr . '"';
 		}
 		$name = '<a id="notetext_' . $id . '" href="' . $script .
-			'#notefoot_' . $id . '" class="note_super jump_anchor"' . $title .
+			'#notefoot_' . $id . '" class="note_super"' . $title .
 			'>*' . $id . '</a>';				// ジャンプ先
 		return parent::setParam($page, $name, $body);
 	}

@@ -49,17 +49,27 @@ p.wiki_small_title {
 	text-align:right;
 }
 a.note_super {
+	font-weight:bold;
+	font-size:75%;
+	vertical-align:super;
+}
+/*
+.super_index {
 	color:#DD3333;
 	background-color:inherit;
 	font-weight:bold;
 	font-size:60%;
+	vertical-align:super;
+}*/
+.anchor_super {
+	font-size:xx-small;
 	vertical-align:super;
 }
 /*div.jumpmenu {
 	font-size:60%;
 	text-align:right;
 }*/
-hr.full_hr {
+/*hr.full_hr {
 	border-style:ridge;
 	border-color:#333333;
 	border-width:1px 0px;
@@ -68,12 +78,12 @@ hr.wiki_hr {
 	border-style:ridge;
 	border-color:#333333;
 	border-width:1px 0px;
-}
+}*/
 hr.note_hr {
 	width:90%;
-	border-style:ridge;
+/*	border-style:ridge;
 	border-color:#333333;
-	border-width:1px 0px;
+	border-width:1px 0px;*/
 	text-align:center;
 	margin:1em auto 0em auto;
 }
@@ -246,23 +256,11 @@ tfoot th.style_th {
 	color:inherit;
 	background-color:#EEF5FF;
 }
-
-.super_index {
-	color:#DD3333;
-	background-color:inherit;
-	font-weight:bold;
-	font-size:60%;
-	vertical-align:super;
-}
-.anchor_super {
-	font-size:xx-small;
-	vertical-align:super;
-}
 /* html.php/edit_form() */
 .edit_form {
 	/*clear:both;*/
 }
-.small { font-size:80%; }
+/*.small { font-size:80%; }*/
 
 /***** plugin *****/
 /* hr plugin */

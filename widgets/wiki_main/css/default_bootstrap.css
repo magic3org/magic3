@@ -62,11 +62,6 @@ img.facemark {
 	padding-top: 80px;
 	margin-top: -80px;
 }*/
-/*.jump_anchor {*/
-	/* ジャンプ位置を修正 */
-/*	padding-top: 80px;
-	margin-top: -80px;
-}*/
 span.noexists {
 	color:inherit;
 	background-color:#FFFACC;
@@ -125,6 +120,11 @@ tfoot th.style_th {
 /*	color:inherit;
 	background-color:#EEF5FF;*/
 }
+a.note_super {
+	font-weight:bold;
+	font-size:75%;
+	vertical-align:super;
+}
 /*
 .super_index {
 	color:#DD3333;
@@ -132,12 +132,12 @@ tfoot th.style_th {
 	font-weight:bold;
 	font-size:60%;
 	vertical-align:super;
-}
-.anchor_super {
+}*/
+/*.anchor_super {
 	font-size:xx-small;
 	vertical-align:super;
-}
-*/
+}*/
+
 /* html.php/edit_form() */
 /*.small { font-size:80%; }*/
 
