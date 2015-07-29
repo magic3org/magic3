@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: convert_html.php 4951 2012-06-09 09:55:41Z fishbone $
  * @link       http://www.magic3.org
@@ -83,8 +83,7 @@ class Element
 
 	function wrap($string, $tag, $param = '', $canomit = TRUE)
 	{
-		return ($canomit && $string == '') ? '' :
-			'<' . $tag . $param . '>' . $string . '</' . $tag . '>';
+		return ($canomit && $string == '') ? '' : '<' . $tag . $param . '>' . $string . '</' . $tag . '>';
 	}
 
 	function toString()
@@ -576,7 +575,8 @@ class Table extends Element
 	var $type;
 	var $types;
 	var $col; // number of column
-
+	public $align;		// テーブル表示位置
+	
 	function Table($out)
 	{
 		parent::Element();
@@ -606,6 +606,8 @@ class Table extends Element
 
 	function toString()
 	{
+		global $gEnvManager;
+		
 		static $parts = array('h'=>'thead', 'f'=>'tfoot', ''=>'tbody');
 
 		// Set rowspan (from bottom, to top)
@@ -664,9 +666,29 @@ class Table extends Element
 			}
 			$string .= $this->wrap($part_string, $part);
 		}
-		$string = $this->wrap($string, 'table', ' class="style_table" cellspacing="1" border="0"');
-
-		//return $this->wrap($string, 'div', ' class="ie5"');
+		
+		// 表示位置クラス
+		switch ($this->align){
+		case 'left':
+		default:
+			$addClass = '';
+			break;
+		case 'center':
+			$addClass = ' center';
+			break;
+		case 'right':
+			$addClass = ' right';
+			break;
+		}
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$addClass .= ' table table-bordered';
+		}
+			
+		$string = $this->wrap($string, 'table', ' class="style_table' . $addClass . '"');
+		$string = $this->wrap($string, 'div', ' class="table_wrap"');
 		return $string;
 	}
 }
@@ -677,6 +699,7 @@ class Table extends Element
 class YTable extends Element
 {
 	var $col;
+	public $align;		// テーブル表示位置
 
 	function YTable($_value)
 	{
@@ -726,11 +749,37 @@ class YTable extends Element
 
 	function toString()
 	{
+		global $gEnvManager;
+		
 		$rows = '';
-		foreach ($this->elements as $str)
+		foreach ($this->elements as $str){
 			$rows .= "\n" . '<tr class="style_tr">' . $str . '</tr>' . "\n";
-		$rows = $this->wrap($rows, 'table', ' class="style_table" cellspacing="1" border="0"');
+		}
+//		$rows = $this->wrap($rows, 'table', ' class="style_table" cellspacing="1" border="0"');
 		//return $this->wrap($rows, 'div', ' class="ie5"');
+		
+		// 表示位置クラス
+		switch ($this->align){
+		case 'left':
+		default:
+			$addClass = '';
+			break;
+		case 'center':
+			$addClass = ' center';
+			break;
+		case 'right':
+			$addClass = ' right';
+			break;
+		}
+		
+		// テンプレートタイプに合わせて出力を変更
+		$templateType = $gEnvManager->getCurrentTemplateType();
+		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+			$addClass .= ' table table-bordered';
+		}
+		
+		$rows = $this->wrap($rows, 'table', ' class="style_table' . $addClass . '"');
+		$rows = $this->wrap($rows, 'div', ' class="table_wrap"');
 		return $rows;
 	}
 }
@@ -801,8 +850,17 @@ class Align extends Element
 		$this->align = $align;
 	}
 
+/*	function canContain($obj)
+	{
+		return is_a($obj, 'Inline');
+	}*/
 	function canContain($obj)
 	{
+		// テーブルの表示位置
+		if (is_a($obj,'Table') or is_a($obj,'YTable'))
+		{
+			$obj->align = $this->align;
+		}
 		return is_a($obj, 'Inline');
 	}
 

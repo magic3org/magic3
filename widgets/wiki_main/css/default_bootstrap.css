@@ -5,15 +5,16 @@ img.facemark {
 .image_wrap img {
 	margin: 10px;
 }
+.youtube-wrap iframe {
+	padding: 10px;
+}
+.googlemaps_wrap {
+	margin: 10px;
+}
 @media screen and (max-width: 767px) {
 	.image_wrap img {
 		margin: 10px 0;
 	}
-}
-.youtube-wrap iframe {
-	padding: 10px;
-}
-@media screen and (max-width: 767px) {
 	.youtube-wrap {
 		position: relative;
 		padding-bottom: 56.25%;
@@ -29,15 +30,11 @@ img.facemark {
 		height: 100%;
 		padding: 10px 0;
 	}
-}
-.googlemaps_wrap {
-	margin: 10px;
-}
-@media screen and (max-width: 767px) {
 	.googlemaps_wrap {
 		margin: 10px 0;
 	}
 }
+
 /* default edit content area */
 .edit_form {
 	width:100%;
@@ -88,7 +85,24 @@ span.new5 {
 	background-color:transparent;
 	font-size:xx-small;
 }*/
-
+/* テーブル */
+.table_wrap {
+	margin: 10px;
+}
+@media screen and (max-width: 767px) {
+	.table_wrap {
+		margin: 10px 0;
+	}
+}
+.style_table {
+	margin:0 auto 0 0;
+}
+.style_table.center {
+	margin:0 auto;
+}
+.style_table.right {
+	margin:0 0 0 auto;
+}
 /*thead td.style_td,
 tfoot td.style_td {
 	color:inherit;
@@ -108,15 +122,15 @@ tfoot th.style_th {
 	background-color:#ccd5dd;
 }*/
 .style_th {
-	padding:5px;
-	margin:1px;
+/*	padding:5px;
+	margin:1px;*/
 /*	text-align:center;
 	color:inherit;
 	background-color:#EEEEEE;*/
 }
 .style_td {
-	padding:5px;
-	margin:1px;
+/*	padding:5px;
+	margin:1px;*/
 /*	color:inherit;
 	background-color:#EEF5FF;*/
 }
