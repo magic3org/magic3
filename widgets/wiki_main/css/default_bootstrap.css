@@ -51,17 +51,31 @@ img.facemark {
 	color:black;
 	background-color:#F0F8FF;
 }*/
-/*div.jumpmenu {
-	font-size:60%;
-	text-align:right;
-}*/
-/*#wiki_top {
-	padding-top: 80px;
-	margin-top: -80px;
-}*/
 span.noexists {
 	color:inherit;
 	background-color:#FFFACC;
+}
+/* 相対フォントサイズ */
+span.size1 {
+	font-size:xx-small;
+}
+span.size2 {
+	font-size:x-small;
+}
+span.size3 {
+	font-size:small;
+}
+span.size4 {
+	font-size:medium;
+}
+span.size5 {
+	font-size:large;
+}
+span.size6 {
+	font-size:x-large;
+}
+span.size7 {
+	font-size:xx-large;
 }
 /* diff.inc.php */
 span.diff_added {

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: size.inc.php 1103 2008-10-23 05:12:30Z fishbone $
  * @link       http://www.magic3.org
@@ -33,8 +33,6 @@ function plugin_size_inline()
 		return PLUGIN_SIZE_USAGE;
 
 	$size = max(PLUGIN_SIZE_MIN, min(PLUGIN_SIZE_MAX, $size));
-	return '<span style="font-size:' . $size .
-		'px;display:inline-block;line-height:130%;text-indent:0px">' .
-		$body . '</span>';
+	return '<span style="font-size:' . $size . 'px;">' . $body . '</span>';
 }
 ?>

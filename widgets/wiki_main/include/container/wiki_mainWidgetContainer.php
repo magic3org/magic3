@@ -258,7 +258,8 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 				$r_page   = rawurlencode($page);
 				$pageHref = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?$r_page");
 				$pageUrl = $this->gEnv->getDefaultUrl() . htmlspecialchars(WikiParam::convQuery("?$r_page", false));
-				$permaLink = "<div class=\"wiki_small_title\"><a href=\"$pageHref\">$pageUrl</a></div>";
+		//		$permaLink = "<div class=\"wiki_small_title\"><a href=\"$pageHref\">$pageUrl</a></div>";
+				$permaLink = "<small><a href=\"$pageHref\">$pageUrl</a></small>";
 				$this->tmpl->addVar("show_title", "title_small", $permaLink);	// リンク用URL
 			}
 		}
