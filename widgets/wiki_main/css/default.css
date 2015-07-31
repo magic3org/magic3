@@ -69,14 +69,11 @@ hr.wiki_hr {
 	border-color:#333333;
 	border-width:1px 0px;
 }*/
-hr.note_hr {
+/*hr.note_hr {
 	width:90%;
-/*	border-style:ridge;
-	border-color:#333333;
-	border-width:1px 0px;*/
 	text-align:center;
 	margin:1em auto 0em auto;
-}
+}*/
 /*ul.wiki_list li {
 	margin-left: .5em;
 	margin-right: 0;
