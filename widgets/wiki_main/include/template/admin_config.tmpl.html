@@ -36,6 +36,9 @@ function selAuth(value){
 $(function(){
 	// テーブル作成
 	m3SetConfigTable('mainconfig');
+	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_layout', 100/* 高さ */, false, 'layout');
 });
 //]]>
 </script>
@@ -98,6 +101,10 @@ $(function(){
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_auto_heading_anchor" {SHOW_AUTO_HEADING_ANCHOR} />見出し自動アンカー</label></div>
 		</div>
 	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></th>
+		<td class="ckeditor"><textarea name="item_layout">{LAYOUT}</textarea></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ATTACH_FILES_LABEL}>添付ファイルアップロードディレクトリ</span></th>
