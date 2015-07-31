@@ -11,34 +11,7 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<script type="text/javascript">
-//<![CDATA[}
-//$(function(){
-//});
-//]]>
-</script>
 {SCRIPT}
 <!-- m3:ErrorMessage -->
-<article>
-<patTemplate:tmpl name="show_title" visibility="hidden">
-<header>
-<h1 class="contentheading">{TITLE}</h1>
-{TITLE_SMALL}
-</header>
-</patTemplate:tmpl>
-<section><div class="content">{CONTENT}</div></section>
-<footer><div class="note">{NOTE}</div></footer>
-</article>
-<patTemplate:tmpl name="show_toolbar" visibility="hidden">
-<div class="toolbar breadcrumb">{TOOLBAR}</div>
-</patTemplate:tmpl>
-<patTemplate:tmpl name="show_page_attach" visibility="hidden">
-<hr class="wiki_hr_full" />
-<div>{CONTENT}</div>
-</patTemplate:tmpl>
-<patTemplate:tmpl name="show_page_info" visibility="hidden">
-<hr class="wiki_hr_full" />
-<patTemplate:tmpl name="show_last_modified" visibility="hidden"><div>最終更新: {CONTENT}</div></patTemplate:tmpl>
-<patTemplate:tmpl name="show_page_related" visibility="hidden"><div>リンク: {CONTENT}</div></patTemplate:tmpl>
-</patTemplate:tmpl>
+{CONTENT}
 </patTemplate:tmpl>

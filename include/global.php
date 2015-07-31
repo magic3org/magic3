@@ -111,6 +111,7 @@ define('M3_TAG_MACRO_AVATAR',		'AVATAR');								// アバター置換キー
 define('M3_TAG_MACRO_URL',			'URL');									// URL置換キー
 define('M3_TAG_MACRO_ACCOUNT',		'ACCOUNT');								// アカウント置換キー
 define('M3_TAG_MACRO_PASSWORD',		'PASSWORD');							// パスワード置換キー
+define('M3_TAG_MACRO_UPDATES',		'UPDATES');								// 更新情報置換キー
 define('M3_TAG_MACRO_FILES',		'FILES');								// 添付ファイル置換キー
 define('M3_TAG_MACRO_PAGES',		'PAGES');								// ページリンク置換キー
 define('M3_TAG_MACRO_LINKS',		'LINKS');								// 関連リンク置換キー
@@ -122,6 +123,7 @@ define('M3_TAG_MACRO_PERMALINK',	'PERMALINK');							// パーマリンク置換
 define('M3_TAG_MACRO_RATE',			'RATE');								// 評価機能置換キー
 define('M3_TAG_MACRO_BUTTON',		'BUTTON');								// ボタン置換キー
 define('M3_TAG_MACRO_WIDGET',		'WIDGET');								// ウィジェット埋め込みキー
+define('M3_TAG_MACRO_TOOLBAR',		'TOOLBAR');								// ツールバー置換キー
 define('M3_TAG_MACRO_OPTIONAL',		'OPTIONAL');							// 任意オプション置換キー
 define('M3_TAG_MACRO_SITE_NAME',		'SITE_NAME');						// サイト情報置換キー(サイト名)
 define('M3_TAG_MACRO_SITE_URL',			'SITE_URL');						// サイト情報置換キー(URL)

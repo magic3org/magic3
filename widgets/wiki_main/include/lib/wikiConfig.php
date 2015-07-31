@@ -26,6 +26,7 @@ class WikiConfig
 	private static $authType;	// ユーザの認証方法
 	private static $isShowToolbarForAllUser;	// 全ユーザ向けにツールバーを表示するかどうか
 	private static $isShowPageTitle;				// ページタイトルを表示するかどうか
+	private static $isShowPageUrl;					// ページURLを表示するかどうか
 	private static $isShowPageRelated;				// 関連ページを表示するかどうか
 	private static $isShowPageAttachFiles;				// 添付ファイルを表示するかどうか
 	private static $isShowPageLastModified;				// 最終更新を表示するかどうか
@@ -53,6 +54,8 @@ class WikiConfig
 		
 		self::$isShowPageTitle = self::$_configArray[wiki_mainCommonDef::CF_SHOW_PAGE_TITLE];			// ページタイトルを表示するかどうか
 		if (!isset(self::$isShowPageTitle)) self::$isShowPageTitle = '1';
+		self::$isShowPageUrl = self::$_configArray[wiki_mainCommonDef::CF_SHOW_PAGE_URL];			// ページURLを表示するかどうか
+		if (!isset(self::$isShowPageUrl)) self::$isShowPageUrl = '1';
 		self::$isShowPageRelated = self::$_configArray[wiki_mainCommonDef::CF_SHOW_PAGE_RELATED];			// 関連ページを表示するかどうか
 		if (!isset(self::$isShowPageRelated)) self::$isShowPageRelated = '1';
 		self::$isShowPageAttachFiles = self::$_configArray[wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES];			// 添付ファイルを表示するかどうか
@@ -76,6 +79,16 @@ class WikiConfig
 		// ユーザ認証方法
 		self::$authType = self::$_configArray[wiki_mainCommonDef::CF_AUTH_TYPE];
 		if (empty(self::$authType)) self::$authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限
+	}
+	/**
+	 * ID指定で設定値を取得
+	 *
+	 * @param string $id	定義ID
+	 * @return string		共通パスワード
+	 */
+	public static function getConfig($id)
+	{
+		return self::$_configArray[$id];
 	}
 	/**
 	 * デフォルトのページ名を取得
@@ -244,6 +257,15 @@ class WikiConfig
 	public static function isShowPageTitle()
 	{
 		return self::$isShowPageTitle;
+	}
+	/**
+	 * URLを表示するかどうか
+	 *
+	 * @return bool		true=表示、false=非表示
+	 */
+	public static function isShowPageUrl()
+	{
+		return self::$isShowPageUrl;
 	}
 	/**
 	 * 関連ファイル表示するかどうか

@@ -50,7 +50,8 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	private $lastModified;				// 最終更新表示用
 	private $widgetTitle;				// ウィジェットタイトル
 	private $cssFilePath;				// CSSファイル
-	const CONTENT_TYPE = 'wk';		// 参照数カウント用
+	private $_contentParam;				// コンテンツ変換用
+	const CONTENT_TYPE = 'wiki';		// 参照数カウント用
 	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
 	const DEFAULT_BOOTSTRAP_CSS_FILE = '/default_bootstrap.css';		// Bootstrap用CSSファイル
 	const INIT_SCRIPT = 'init_script.tmpl.js';				// Wiki初期化スクリプト
@@ -133,7 +134,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// コマンド、プラグインが設定されていない場合は、クエリー文字列をInterWikiNameとする
 		$cmd = WikiParam::getCmd();
 		$plugin = WikiParam::getPlugin();
-		if (empty($cmd) && empty($plugin)){		
+		if (empty($cmd) && empty($plugin)){			// Wikiページ名で画面を表示の場合
 			WikiParam::setCmd('read');
 	
 			$arg = WikiParam::getUnbraketArg();
@@ -195,9 +196,9 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			//$pageTitle  = str_replace('$1', $pageTitle,  $retvars['msg']);
 			$pageTitle  = str_replace('$1', make_pagelink($base),  $retvars['msg']);// バックリンクではなくて通常のリンクに変更 by magic3
 		}
-		if (isset($retvars['body']) && $retvars['body'] != '') {
+		if (isset($retvars['body']) && $retvars['body'] != ''){
 			$body = $retvars['body'];
-		} else {
+		} else {			// Wikiページ表示の場合
 			if ($base == '' || !is_page($base)){
 				$base = WikiConfig::getDefaultPage();
 				//$headTitle = htmlspecialchars(strip_bracket($base));
@@ -226,29 +227,26 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// HTMLサブタイトルを設定
 		$this->gPage->setHeadSubTitle($this->widgetTitle);
 			
-		// 表示データ作成
+		// ### ページデータ作成 ###
 		list($body, $notes) = $this->createViewData($body);
 		
 		// 「{」「}」で囲まれた文字が変換されないようにする(patTemplate用の設定)
 		$regexp = '/{([^a-z]+)}/U';
 		$body = preg_replace($regexp, '\\{\\1\\}', $body);
 		
-		$toolbar = $this->createToolbar();// ツールバー作成
-		
-		// テンプレートに出力
-		$this->tmpl->addVar("_widget", "content", $body);	// メインコンテンツ
-		$this->tmpl->addVar("_widget", "note", $notes);		// 追記
+		// Javascript追加
+//		$this->tmpl->addVar("_widget", "content", $body);	// メインコンテンツ
+//		$this->tmpl->addVar("_widget", "note", $notes);		// 追記
 		$this->tmpl->addVar("_widget", "script", WikiScript::getScript());		// Javascript
 		
 		// ##### ページ構成 #####
 		// ツールバー表示制御
-//		if ($this->gEnv->isSystemManageUser() || WikiConfig::isShowToolbarForAllUser()){		// システム運用者以上は常に表示
-		if (WikiConfig::isUserWithEditAuth() || WikiConfig::isShowToolbarForAllUser()){		// 編集権限ありまたは常時ツールバーを表示の場合
+/*		if (WikiConfig::isUserWithEditAuth() || WikiConfig::isShowToolbarForAllUser()){		// 編集権限ありまたは常時ツールバーを表示の場合
 			$this->tmpl->setAttribute('show_toolbar', 'visibility', 'visible');
 			$this->tmpl->addVar("show_toolbar", "toolbar", $toolbar);		// 操作ツールバー
-		}
+		}*/
 		// タイトル表示制御
-		if (WikiConfig::isShowPageTitle()){
+/*		if (WikiConfig::isShowPageTitle()){
 			$this->tmpl->setAttribute('show_title', 'visibility', 'visible');
 			$this->tmpl->addVar("show_title", "title", $pageTitle);	// ページタイトル
 			
@@ -258,33 +256,62 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 				$r_page   = rawurlencode($page);
 				$pageHref = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?$r_page");
 				$pageUrl = $this->gEnv->getDefaultUrl() . htmlspecialchars(WikiParam::convQuery("?$r_page", false));
-		//		$permaLink = "<div class=\"wiki_small_title\"><a href=\"$pageHref\">$pageUrl</a></div>";
 				$permaLink = "<small><a href=\"$pageHref\">$pageUrl</a></small>";
 				$this->tmpl->addVar("show_title", "title_small", $permaLink);	// リンク用URL
 			}
-		}
+		}*/
 		// 添付ファイルの表示
-		if (WikiConfig::isShowPageAttachFiles() && !empty($this->attachContents)){
+/*		if (WikiConfig::isShowPageAttachFiles() && !empty($this->attachContents)){
 			$this->tmpl->setAttribute('show_page_attach', 'visibility', 'visible');
 			$this->tmpl->addVar("show_page_attach", "content", $this->attachContents);
-		}
+		}*/
 		// ##### その他のページの情報 #####
-		$pageInfo = false;
+//		$pageInfo = false;
 		// 最終更新の表示
-		if (WikiConfig::isShowPageLastModified() && !empty($this->lastModified)){
+/*		if (WikiConfig::isShowPageLastModified() && !empty($this->lastModified)){
 			$this->tmpl->setAttribute('show_last_modified', 'visibility', 'visible');
 			$this->tmpl->addVar("show_last_modified", "content", $this->lastModified);
 			$pageInfo = true;
-		}
+		}*/
 		// 関連ページの表示
-		if (WikiConfig::isShowPageRelated() && !empty($this->relatedContents)){
+/*		if (WikiConfig::isShowPageRelated() && !empty($this->relatedContents)){
 			$this->tmpl->setAttribute('show_page_related', 'visibility', 'visible');
 			$this->tmpl->addVar("show_page_related", "content", $this->relatedContents);
 			$pageInfo = true;
-		}
-		if ($pageInfo){
+		}*/
+/*		if ($pageInfo){
 			$this->tmpl->setAttribute('show_page_info', 'visibility', 'visible');
+		}*/
+
+		// ##### ページ作成 #####
+		$layout = WikiConfig::getConfig(wiki_mainCommonDef::CF_LAYOUT_MAIN);
+		if (empty($layout)) $layout = wiki_mainCommonDef::DEFAULT_LAYOUT_MAIN;	// レイアウト
+		
+		// ページのパーマリンクを取得
+		$permaLink = '';
+		if ($cmd == 'read'){
+			$page = WikiParam::getPage();
+			$r_page   = rawurlencode($page);
+			$pageHref = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?$r_page");
+			$pageUrl = $this->gEnv->getDefaultUrl() . htmlspecialchars(WikiParam::convQuery("?$r_page", false));
+			$permaLink = "<small><a href=\"$pageHref\">$pageUrl</a></small>";
 		}
+		
+		// ツールバー
+		$toolbar = $this->createToolbar();		// 編集権限ありまたは常時ツールバーを表示の場合
+				
+		// コンテンツレイアウトのプレマクロ変換(ブロック型マクロを変換してコンテンツマクロのみ残す)
+		$contentParam = array(
+								M3_TAG_MACRO_TITLE		=> $pageTitle,							// ページタイトル
+								M3_TAG_MACRO_URL		=> $permaLink,							// ページパーマリンク
+								M3_TAG_MACRO_BODY		=> array($body, $notes),			// ページコンテンツ
+								M3_TAG_MACRO_FILES		=> $this->attachContents,				// 添付ファイル
+								M3_TAG_MACRO_UPDATES	=> $this->lastModified,					// 更新情報
+								M3_TAG_MACRO_LINKS		=> $this->relatedContents,				// 関連ページ
+								M3_TAG_MACRO_TOOLBAR	=> $toolbar					// ツールバー
+							);
+		$content = $this->createMacroContent($layout, $contentParam);
+		$this->tmpl->addVar("_widget", "content", $content);
 		
 		// ### セッションオブジェクトをセッションに保存 ###
 		$sessionObj = WikiConfig::getSessionObj();
@@ -343,6 +370,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	{
 		global $related_link;
 		global $attach_link;
+		global $note_hr;
 
 		$page = WikiParam::getPage();
 		$r_page = rawurlencode($page);
@@ -402,24 +430,19 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$this->isRead = (arg_check('read') && is_page($page));
 		$this->isFreeze = is_freeze($page);
 
-		// Last modification date (string) of the page
-		//$lastmodified = $this->isRead ?  format_date(get_filetime($page)) . ' ' . get_pg_passage($page, FALSE) : '';
-		$this->lastModified = $this->isRead ?  format_date(get_filetime($page)) . ' ' . get_pg_passage($page, FALSE) : '';
+		// 添付ファイル
+		if (WikiConfig::isShowPageAttachFiles()) $this->attachContents = ($attach_link && $this->isRead && exist_plugin_action('attach')) ? attach_filelist() : '';
 
-		// List of attached files to the page
-		//$attaches = ($attach_link && $this->isRead && exist_plugin_action('attach')) ? attach_filelist() : '';
-		$this->attachContents = ($attach_link && $this->isRead && exist_plugin_action('attach')) ? attach_filelist() : '';
+		// 最終更新
+		if (WikiConfig::isShowPageLastModified()) $this->lastModified = $this->isRead ?  format_date(get_filetime($page)) . ' ' . get_pg_passage($page, FALSE) : '';
+		
+		// 関連ページ
+		if (WikiConfig::isShowPageRelated()) $this->relatedContents = ($related_link && $this->isRead) ? make_related($page) : '';
 
-		// List of related pages
-		//$related  = ($related_link && $this->isRead) ? make_related($page) : '';
-		$this->relatedContents = ($related_link && $this->isRead) ? make_related($page) : '';
-
-		// List of footnotes
+		// 注釈
 		$footNote = WikiPage::getFootNote();
 		ksort($footNote, SORT_NUMERIC);
 		$notes = ! empty($footNote) ? $note_hr . join("\n", $footNote) : '';
-		//ksort($foot_explain, SORT_NUMERIC);
-		//$notes = ! empty($foot_explain) ? $note_hr . join("\n", $foot_explain) : '';
 		
 		// Tags will be inserted into <head></head>
 		$head_tag = ! empty($head_tags) ? join("\n", $head_tags) ."\n" : '';
@@ -473,6 +496,9 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	 */
 	function createToolbar()
 	{
+		// 編集権限ありまたは常時ツールバーを表示、以外の場合は作成しない
+		if (!WikiConfig::isUserWithEditAuth() && !WikiConfig::isShowToolbarForAllUser()) return '';
+		
 		$pageEditable = WikiConfig::isPageEditable();		// ページ編集可能かどうか
 		
 		$toolbar = $this->createToolbarButton('top');
@@ -571,6 +597,105 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 				$tmpl->setAttribute('fileselect', 'visibility', 'visible');// ファイル選択UI作成
 			}
 		}
+	}
+	/**
+	 * コンテンツのプレマクロ変換
+	 *
+	 * @param string $layout		レイアウト
+	 * @param array	$contentParam	コンテンツ作成用パラメータ
+	 * @return string				作成コンテンツ
+	 */
+	function createMacroContent($layout, $contentParam)
+	{
+		$this->_contentParam = $contentParam;
+		$dest = preg_replace_callback(M3_PATTERN_TAG_MACRO, array($this, '_replace_macro_callback'), $layout);
+		return $dest;
+	}
+	/**
+	 * コンテンツマクロ変換コールバック関数
+	 * 変換される文字列はHTMLタグではないテキストで、変換後のテキストはHTMLタグ(改行)を含むか、HTMLエスケープしたテキスト
+	 *
+	 * @param array $matchData		検索マッチデータ
+	 * @return string				変換後データ
+	 */
+    function _replace_macro_callback($matchData)
+	{
+		$destTag	= $matchData[0];		// マッチした文字列全体
+		$typeTag	= $matchData[1];		// マクロキー
+		$options	= $matchData[2];		// マクロオプション
+		
+		switch ($typeTag){
+		case M3_TAG_MACRO_TITLE:		// ページタイトル
+			// 置換データがない場合は空文字列を返す
+			if (empty($this->_contentParam[$typeTag])) return '';
+		
+			if (WikiConfig::isShowPageTitle()){
+				$destTag = '<h1 class="contentheading">' . $this->_contentParam[$typeTag] . '</h1>';
+			} else {
+				$destTag = '';
+			}
+			break;
+		case M3_TAG_MACRO_URL:		// ページURL
+			// 置換データがない場合は空文字列を返す
+			if (empty($this->_contentParam[$typeTag])) return '';
+			
+			if (WikiConfig::isShowPageUrl()){
+				$destTag = $this->_contentParam[$typeTag];
+			} else {
+				$destTag = '';
+			}
+			break;
+		case M3_TAG_MACRO_BODY:		// ページコンテンツ
+			list($body, $notes) = $this->_contentParam[$typeTag];
+			
+			$destTag = '';
+			if (!empty($body)) $destTag .= '<section><div class="content">' . $body . '</div></section>';
+			if (!empty($notes)) $destTag .= '<footer><div class="note">' . $notes . '</div></footer>';
+			break;
+		case M3_TAG_MACRO_FILES:		// 添付ファイル
+		case M3_TAG_MACRO_UPDATES:		// 最終更新
+		case M3_TAG_MACRO_LINKS:		// 関連ページ
+			// コンテンツマクロオプションを解析
+			$optionParams = $this->gInstance->getTextConvManager()->parseMacroOption($options);
+
+			// コンテンツマクロオプション処理
+			$keys = array_keys($optionParams);
+			for ($i = 0; $i < count($keys); $i++){
+				$optionKey = $keys[$i];
+				$optionValue = $optionParams[$optionKey];
+
+				switch ($optionKey){
+				case 'pretag':		// 前方出力タグ
+					$preTagSrc = $optionValue;
+					break;
+				case 'posttag':		// 後方出力タグ
+					$postTagSrc = $optionValue;
+					break;
+				}
+			}
+
+			// 置換データがない場合は後のデータを取得
+			if (empty($this->_contentParam[$typeTag])){
+				list($tmp, $preTag) = explode('|', $preTagSrc);
+				list($tmp, $postTag) = explode('|', $postTagSrc);
+			} else {
+				list($preTag, $tmp) = explode('|', $preTagSrc);
+				list($postTag, $tmp) = explode('|', $postTagSrc);
+			}
+			
+			$destTag = '';
+			if (!empty($preTag)) $destTag .= convert_html($preTag);			// Wiki記法をHTMLタグに直す
+			$destTag .= '<div>' . $this->_contentParam[$typeTag] . '</div>';
+			if (!empty($postTag)) $destTag .= convert_html($postTag);			// Wiki記法をHTMLタグに直す
+			break;
+		case M3_TAG_MACRO_TOOLBAR:			// ツールバー
+			// 置換データがない場合は空文字列を返す
+			if (empty($this->_contentParam[$typeTag])) return '';
+			
+			$destTag = '<div class="toolbar breadcrumb">' . $this->_contentParam[$typeTag] . '</div>';
+			break;
+		}
+		return $destTag;
 	}
 }
 ?>

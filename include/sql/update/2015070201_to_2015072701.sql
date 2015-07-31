@@ -27,10 +27,12 @@ INSERT INTO wiki_config
 ('whatsnew_page',           'RecentChanges', '最終更新ページ'),
 ('whatsdeleted_page',       'RecentDeleted', '最終削除ページ'),
 ('auth_type',               'admin',     '認証タイプ'),
-('show_page_title',         '1',         'タイトル表示するかどうか'),
+('show_page_title',         '1',         'タイトルを表示するかどうか'),
+('show_page_url',         '1',         'URLを表示するかどうか'),
 ('show_page_related',       '1',         '関連ページを表示するかどうか'),
 ('show_page_attach_files',  '1',         '添付ファイルを表示するかどうか'),
 ('show_page_last_modified', '1',         '最終更新を表示するかどうか'),
 ('show_toolbar_for_all_user', '0',         'すべてのユーザにツールバーを表示するかどうか'),
 ('user_limited_freeze',       '0',         '凍結・解凍機能のユーザ制限'),
-('show_auto_heading_anchor',       '1',         '見出し自動アンカー');
+('show_auto_heading_anchor',       '1',         '見出し自動アンカー'),
+('layout_main',             '<article><header>[#TITLE#][#URL#]</header>[#TOOLBAR#][#BODY#]</article>[#TOOLBAR#][#FILES|pretag=----#][#UPDATES|pretag=----#][#LINKS#]', 'ページレイアウト(メイン)');

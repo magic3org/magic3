@@ -28,17 +28,20 @@ class wiki_mainCommonDef
 	const CF_WHATSDELETED_PAGE	= 'whatsdeleted_page';	// 最終削除ページ
 	const CF_AUTH_TYPE		= 'auth_type';			// 認証タイプ(admin=管理権限ユーザ、loginuser=ログインユーザ、password=共通パスワード)
 	const CF_SHOW_PAGE_TITLE			= 'show_page_title';			// タイトル表示
+	const CF_SHOW_PAGE_URL				= 'show_page_url';			// URL表示
 	const CF_SHOW_PAGE_RELATED			= 'show_page_related';			// 関連ページ
 	const CF_SHOW_PAGE_ATTACH_FILES		= 'show_page_attach_files';		// 添付ファイル
 	const CF_SHOW_PAGE_LAST_MODIFIED	= 'show_page_last_modified';	// 最終更新
 	const CF_SHOW_TOOLBAR_FOR_ALL_USER	= 'show_toolbar_for_all_user';				// ツールバーを表示するかどうか
 	const CF_USER_LIMITED_FREEZE		= 'user_limited_freeze';				// 凍結・解凍機能のユーザ制限
 	const CF_SHOW_AUTO_HEADING_ANCHOR	= 'show_auto_heading_anchor';			// 見出し自動アンカーを表示するかどうか
-
+	const CF_LAYOUT_MAIN				= 'layout_main';						// ページレイアウト(メイン)
+	
 	// ##### デフォルト値 #####
 	const DEFAULT_DEFAULT_PAGE = 'FrontPage';		// デフォルトページ
 	const DEFAULT_WHATSNEW_PAGE		= 'RecentChanges';		// 最終更新ページ
 	const DEFAULT_WHATSDELETED_PAGE	= 'RecentDeleted';		// 最終削除ページ
+	const DEFAULT_LAYOUT_MAIN		= '<article><header>[#TITLE#][#URL#]</header>[#TOOLBAR#][#BODY#]</article>[#TOOLBAR#][#FILES|pretag=----#][#UPDATES|pretag=----#][#LINKS#]';	// ページレイアウト(メイン)
 	
 	/**
 	 * 定義値をDBから取得

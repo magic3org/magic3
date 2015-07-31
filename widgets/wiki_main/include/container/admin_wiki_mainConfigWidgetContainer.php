@@ -72,6 +72,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$whatsnewPage		= $request->trimValueOf('item_whatsnew_page');			// 最終更新ページ名
 		$whatsdeletedPage	= $request->trimValueOf('item_whatsdeleted_page');		// 最終削除ページ名
 		$showTitle				= $request->trimCheckedValueOf('item_showtitle');		// タイトルを表示するかどうか
+		$showUrl				= $request->trimCheckedValueOf('item_show_url');		// URLを表示するかどうか
 		$showPageRelated		= $request->trimCheckedValueOf('item_showpagerelated');		// 関連ページを表示するかどうか
 		$showPageAttachFiles	= $request->trimCheckedValueOf('item_showpageattachfiles');		// 添付ファイルを表示するかどうか
 		$showPageLastModified	= $request->trimCheckedValueOf('item_showlastmodified');		// 最終更新を表示するかどうか
@@ -105,14 +106,15 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_WHATSDELETED_PAGE, $whatsdeletedPage);		// 最終削除ページ名
 				
 				// ##### ページ構成 #####
-				// タイトルの表示状態
-				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE, $showTitle);
-				// 関連ページを表示
-				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED, $showPageRelated);
-				// 添付ファイルを表示
-				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES, $showPageAttachFiles);
-				// 最終更新を表示
-				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED, $showPageLastModified);
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE, $showTitle);// タイトルの表示状態
+				
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_URL, $showUrl);		// URLの表示状態
+				
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED, $showPageRelated);// 関連ページを表示
+				
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES, $showPageAttachFiles);// 添付ファイルを表示
+				
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_PAGE_LAST_MODIFIED, $showPageLastModified);// 最終更新を表示
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER, $showToolbarForAllUser);// ツールバーを表示するかどうか
 				
@@ -140,6 +142,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			if (empty($whatsdeletedPage)) $whatsdeletedPage = wiki_mainCommonDef::DEFAULT_WHATSDELETED_PAGE;
 			$showTitle = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_TITLE);// タイトル表示状態
 			if ($showTitle == '') $showTitle = '1';		// タイトル表示状態
+			$showUrl = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_URL);// URLの表示状態
+			if ($showUrl == '') $showUrl = '1';
 			$showPageRelated = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_RELATED);// 関連ページを表示
 			if ($showPageRelated == '') $showPageRelated = '1';		// 関連ページを表示
 			$showPageAttachFiles = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_PAGE_ATTACH_FILES);// 添付ファイルを表示
@@ -165,6 +169,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "whatsnew_page", $whatsnewPage);		// 最終更新ページ名
 		$this->tmpl->addVar("_widget", "whatsdeleted_page", $whatsdeletedPage);		// 最終削除ページ名
 		$this->tmpl->addVar("_widget", "show_title", $this->convertToCheckedString($showTitle));	// タイトルを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_url", $this->convertToCheckedString($showUrl));	// URLを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_page_related", $this->convertToCheckedString($showPageRelated));	// 関連ページを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_page_attach_files", $this->convertToCheckedString($showPageAttachFiles));	// 添付ファイルを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_last_modified", $this->convertToCheckedString($showPageLastModified));	// 最終更新を表示するかどうか
