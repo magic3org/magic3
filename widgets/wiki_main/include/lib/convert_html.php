@@ -998,7 +998,11 @@ class Body extends Element
 			$id     = $autoid;
 		} else {
 			// 見出し位置の自動生成アンカー
-			if (WikiConfig::getAutoHeadingAnchorVisibility()) $anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
+			if (WikiConfig::getAutoHeadingAnchorVisibility()){
+				$anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
+			} else {			// 非表示の場合
+				$anchor = ' &aname(' . $id . ',super,full,hidden){' . $_symbol_anchor . '};';
+			}
 		}
 
 		$text = ' ' . $text;

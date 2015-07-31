@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id: aname.inc.php 1098 2008-10-22 11:43:09Z fishbone $
  * @link       http://www.magic3.org
@@ -92,6 +92,7 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	$f_noid  = in_array('noid',  $args); // Option: Without id attribute
 	$f_super = in_array('super', $args); // Option: CSS class
 	$f_full  = in_array('full',  $args); // Option: With full(absolute) URI
+	$f_hidden  = in_array('hidden',  $args);		// 非表示にするかどうか
 
 	if ($body == '') {
 		if ($f_noid)  return plugin_aname_usage($convert, 'Meaningless(No link-title with \'noid\')');
@@ -114,8 +115,6 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	$id = htmlspecialchars($id); // Insurance
 	$class   = $f_super ? 'anchor_super' : 'anchor';
 	$attr_id = $f_noid  ? '' : ' id="' . $id . '"';
-	// modified for Magic3 by naoki on 2008/10/6
-	//$url     = $f_full  ? get_script_uri() . '?' . rawurlencode($vars['page']) : '';
 	$url     = $f_full  ? get_script_uri() . WikiParam::convQuery('?' . rawurlencode(WikiParam::getPage())) : '';
 	if ($body != '') {
 		$href  = ' href="' . $url . '#' . $id . '"';
@@ -123,8 +122,7 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	} else {
 		$href = $title = '';
 	}
-
-	return '<a class="' . $class . '"' . $attr_id . $href . $title . '>' .
-		$body . '</a>';
+	$style = $f_hidden ? ' style="display:none;"' : '';			// CSS
+	return '<a class="' . $class . '"' . $attr_id . $href . $title . $style . '>' . $body . '</a>';
 }
 ?>
