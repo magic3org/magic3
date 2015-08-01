@@ -16,6 +16,8 @@
  
 class wiki_mainCommonDef
 {
+	static $_viewContentType = 'wiki';		// 参照数カウント用コンテンツタイプ
+	
 	// ##### 共通定義値 #####
 	const AUTH_TYPE_ADMIN		= 'admin';		// 認証タイプ(管理権限ユーザ)
 	const AUTH_TYPE_LOGIN_USER	= 'loginuser';		// 認証タイプ(ログインユーザ)

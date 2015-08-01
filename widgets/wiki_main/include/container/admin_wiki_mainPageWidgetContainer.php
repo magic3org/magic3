@@ -284,11 +284,15 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		}
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 	
+		// 総参照数
+		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
+		
 		$row = array(
 			'index'			=> $index,		// 項目番号
 			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
 			'id'			=> $idTag,		// WikiページID
 			'status'		=> $statusImg,		// Wikiページ状態
+			'view_count'	=> $totalViewCount,									// 総参照数
 			'user'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 更新者
 			'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
 		);

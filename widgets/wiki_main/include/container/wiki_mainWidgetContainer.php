@@ -51,7 +51,6 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	private $widgetTitle;				// ウィジェットタイトル
 	private $cssFilePath;				// CSSファイル
 	private $_contentParam;				// コンテンツ変換用
-	const CONTENT_TYPE = 'wiki';		// 参照数カウント用
 	const DEFAULT_CSS_FILE = '/default.css';				// CSSファイル
 	const DEFAULT_BOOTSTRAP_CSS_FILE = '/default_bootstrap.css';		// Bootstrap用CSSファイル
 	const INIT_SCRIPT = 'init_script.tmpl.js';				// Wiki初期化スクリプト
@@ -214,7 +213,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 
 			// ビューカウントを更新
 			if ($serial != 0 && !$this->gEnv->isSystemManageUser()){		// システム運用者以上の場合はカウントしない
-				$this->gInstance->getAnalyzeManager()->updateContentViewCount(self::CONTENT_TYPE, $serial);
+				$this->gInstance->getAnalyzeManager()->updateContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
 			}
 
 //			if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
