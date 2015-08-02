@@ -73,6 +73,7 @@ class EnvManager extends Core
 	private $workDir;			// 作業用ディレクトリ
 	private $userAgent = array();	// アクセス端末の情報
 	private $menuAttr = array();		// メニューの表示属性
+	private $joomlaDocument;		// Joomla!ドキュメント
 	private $joomlaMenuContent;		// Joomla!v1.5用メニューコンテンツ
 	private $joomlaMenuData;		// Joomla!v2.5用メニュー階層データ
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
@@ -2790,6 +2791,25 @@ class EnvManager extends Core
 	public function getMenuAttr()
 	{
 		return $this->menuAttr;
+	}
+	/**
+	 * Joomla!ドキュメントを設定
+	 *
+	 * @param object $doc			Joomla!ドキュメントオブジェクト
+	 * @return 						なし
+	 */
+	public function setJoomlaDocument($text)
+	{
+		$this->joomlaDocument = $text;
+	}
+	/**
+	 * Joomla!ドキュメントを取得
+	 *
+	 * @return object		Joomla!ドキュメントオブジェクト
+	 */
+	public function getJoomlaDocument()
+	{
+		return $this->joomlaDocument;
 	}
 	/**
 	 * Joomla!v1.5用メニューコンテンツを設定

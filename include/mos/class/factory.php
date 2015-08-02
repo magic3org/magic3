@@ -137,10 +137,13 @@ class JFactory
 	 */
 	public static function getDocument()
 	{
+		global $gEnvManager;
+		
 		static $instance;
 
 		if (!is_object( $instance )) {
-			$instance = JFactory::_createDocument();
+			//$instance = JFactory::_createDocument();
+			$instance = $gEnvManager->getJoomlaDocument();
 		}
 
 		return $instance;

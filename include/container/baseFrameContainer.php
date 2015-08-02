@@ -667,6 +667,7 @@ class BaseFrameContainer extends Core
 						
 			// Joomla!v1.5用の設定
 			define('JPATH_BASE', dirname(__FILE__));
+			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
 			define('DS', DIRECTORY_SEPARATOR);
 			$this->language = $this->gEnv->getCurrentLanguage();
 			$this->template = $curTemplate;
@@ -674,6 +675,9 @@ class BaseFrameContainer extends Core
 			$this->baseurl		= $this->gEnv->getRootUrlByCurrentPage();
 			$this->direction = 'ltr';
 			$this->params   = $params;
+			
+			// 現在のJoomla!ドキュメントを設定
+			$this->gEnv->setJoomlaDocument($this);
 		} else {			// デフォルト(Joomla!v1.0テンプレート)テンプレートのとき(PC用および携帯用)
 			// Joomla!テンプレート共通の設定
 			define('_JEXEC', 1);
@@ -1013,6 +1017,41 @@ class BaseFrameContainer extends Core
 		$data['script']		= $this->_script;
 		$data['custom']		= $this->_custom;*/
 		return $data;
+	}
+	/**
+	 * BASEタグ設定用
+	 *
+	 * @return string				ベースパス
+	 */
+	function getBase()
+	{
+		return '';
+	}
+	 /**
+	 * Adds a linked script to the page
+	 *
+	 * @param	string  $url		URL to the linked script
+	 * @param	string  $type		Type of script. Defaults to 'text/javascript'
+	 * @access   public
+	 */
+	function addScript($url, $type="text/javascript") {
+		$this->_scripts[$url] = $type;
+	}
+	/**
+	 * Adds a script to the page
+	 *
+	 * @access   public
+	 * @param	string  $content   Script
+	 * @param	string  $type	Scripting mime (defaults to 'text/javascript')
+	 * @return   void
+	 */
+	function addScriptDeclaration($content, $type = 'text/javascript')
+	{
+		if (!isset($this->_script[strtolower($type)])) {
+			$this->_script[strtolower($type)] = $content;
+		} else {
+			$this->_script[strtolower($type)] .= chr(13).$content;
+		}
 	}
 }
 ?>
