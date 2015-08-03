@@ -279,6 +279,10 @@ DELETE FROM _widgets WHERE wd_id = 'wiki_main';
 INSERT INTO _widgets
 (wd_id,       wd_name,       wd_category_id,    wd_type, wd_content_type, wd_edit_content, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,     wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('wiki_main', 'Wiki-メイン', 'wiki',            'wiki',  'wiki',          true,           'bootstrap',      '3.2.1',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Wikiを表示する。', 'md5',             'md5',               true,                       true,               '2015-08-01', now(),    now());
+DELETE FROM _widgets WHERE wd_id = 'wiki_simple';
+INSERT INTO _widgets (
+wd_id,          wd_name,                   wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                   wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_install_dt, wd_create_dt) VALUES
+('wiki_simple', 'Wiki-Wiki記法コンテンツ', 'wiki',         'bootstrap',      '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'Wiki記法のコンテンツを表示', '', true,         true,                true,          now(), now());
 DELETE FROM _widgets WHERE wd_id = 'wiki_update';
 INSERT INTO _widgets
 (wd_id,                wd_name,                       wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,  wd_add_script_lib, wd_add_script_lib_a,                         wd_has_admin, wd_use_instance_def, wd_initialized, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
