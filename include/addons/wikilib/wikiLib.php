@@ -60,7 +60,9 @@ class wikiLib
 	 */
 	function convertToHtml($src)
 	{
-		return '';
+		$wikiExternalObj = new wikiExternal();
+		$dest = $wikiExternalObj->convertToHtml($src);
+		return $dest;
 	}
 }
 ?>

@@ -13,7 +13,7 @@
  * @version    SVN: $Id: wikiParam.php 4952 2012-06-09 09:56:59Z fishbone $
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
+//require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
 
 class WikiParam
 {
