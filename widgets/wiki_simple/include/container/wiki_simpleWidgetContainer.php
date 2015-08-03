@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
-class simple_wikiWidgetContainer extends BaseWidgetContainer
+class wiki_simpleWidgetContainer extends BaseWidgetContainer
 {
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = '汎用HTML';		// デフォルトのウィジェットタイトル名

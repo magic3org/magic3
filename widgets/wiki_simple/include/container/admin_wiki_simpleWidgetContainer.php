@@ -15,7 +15,7 @@
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
-class admin_simple_wikiWidgetContainer extends BaseAdminWidgetContainer
+class admin_wiki_simpleWidgetContainer extends BaseAdminWidgetContainer
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();			// 表示中のシリアル番号
