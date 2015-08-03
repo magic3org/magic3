@@ -39,9 +39,6 @@ function listItem(){
 $(function(){
 	// テーブル作成
 	m3SetConfigTable('mainconfig');
-	
-	// WYSIWYGエディター作成
-	m3SetWysiwygEditor('item_html', 300);
 });
 //]]>
 </script>
@@ -76,8 +73,8 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
-	    <th>HTML</th>
-	    <td class="ckeditor"><textarea name="item_html">{HTML}</textarea></td>
+	    <th>コンテンツ</th>
+	    <td class="ckeditor"><textarea name="item_text" rows="20">{TEXT}</textarea></td>
 	</tr>
     </tbody>
 </table>

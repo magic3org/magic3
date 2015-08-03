@@ -8,11 +8,12 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
+require_once($gEnvManager->getWidgetIncludePath('wiki_main') . '/lib/wikiExternal.php');
 require_once(dirname(__FILE__) . '/wikiLibDb.php');
 
 class wikiLib
@@ -50,6 +51,16 @@ class wikiLib
 		$dest = $body->toString();		// HTML形式で出力
 		$dest = strip_tags($dest);			// HTMLタグを削除
 		return $dest;
+	}
+	/**
+	 * WikiコンテンツをHTMLに変換
+	 *
+	 * @param string  $src	Wikiコンテンツソースデータ
+	 * @return string		取得データ
+	 */
+	function convertToHtml($src)
+	{
+		return '';
 	}
 }
 ?>

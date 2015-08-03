@@ -106,8 +106,8 @@ class admin_wiki_simpleWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($this->configId)) $this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 		
 		// 入力値を取得
-		$name	= $request->trimValueOf('item_name');			// ヘッダタイトル
-		$html	= $request->valueOf('item_html');		// 汎用HTMLコンテンツ
+		$name	= $request->trimValueOf('item_name');	// ヘッダタイトル
+		$text	= $request->valueOf('item_text');		// コンテンツ
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){// 新規追加
@@ -129,7 +129,7 @@ class admin_wiki_simpleWidgetContainer extends BaseAdminWidgetContainer
 				$newObj = new stdClass;
 				$newObj->id		= $newConfigId;// 定義ID
 				$newObj->name	= $name;// 表示名
-				$newObj->html = $html;		// 汎用HTMLコンテンツ
+				$newObj->text = $text;		// コンテンツ
 			
 				// ウィジェットパラメータオブジェクト更新
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
@@ -149,7 +149,7 @@ class admin_wiki_simpleWidgetContainer extends BaseAdminWidgetContainer
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
 					// ウィジェットオブジェクト更新
-					$targetObj->html		= $html;					// 汎用HTMLコンテンツ
+					$targetObj->text		= $text;					// コンテンツ
 				}
 				
 				// 設定値を更新
@@ -177,15 +177,15 @@ class admin_wiki_simpleWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('item_name_visible', 'visibility', 'visible');// 名前入力フィールド表示
 			if ($replaceNew){		// データ再取得時
 				$name = $this->createDefaultName();			// デフォルト登録項目名
-				$html = '';		// 汎用HTMLコンテンツ
+				$text = '';		// コンテンツ
 			}
 			$this->serialNo = 0;
 		} else {
 			if ($replaceNew){// データ再取得時
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
-					$name		= $targetObj->name;	// 名前
-					$html = $targetObj->html;		// 汎用HTMLコンテンツ
+					$name	= $targetObj->name;	// 名前
+					$text	= $targetObj->text;		// コンテンツ
 				}
 			}
 			$this->serialNo = $this->configId;
@@ -197,7 +197,7 @@ class admin_wiki_simpleWidgetContainer extends BaseAdminWidgetContainer
 		// 画面にデータを埋め込む
 		if (!empty($this->configId)) $this->tmpl->addVar("_widget", "id", $this->configId);		// 定義ID
 		$this->tmpl->addVar("item_name_visible", "name",	$name);
-		$this->tmpl->addVar("_widget", "html",	$html);					// 汎用HTMLコンテンツ
+		$this->tmpl->addVar("_widget", "text",	$text);					// コンテンツ
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		
 		// ボタンの表示制御

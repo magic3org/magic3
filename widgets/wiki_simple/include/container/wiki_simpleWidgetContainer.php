@@ -17,8 +17,10 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class wiki_simpleWidgetContainer extends BaseWidgetContainer
 {
+	private $wikiLibObj;		// Wikiコンテンツオブジェクト
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = '汎用HTML';		// デフォルトのウィジェットタイトル名
+	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
 	
 	/**
 	 * コンストラクタ
@@ -27,6 +29,9 @@ class wiki_simpleWidgetContainer extends BaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// Wikiコンテンツオブジェクト取得
+		$this->wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -64,11 +69,12 @@ class wiki_simpleWidgetContainer extends BaseWidgetContainer
 			return;
 		}
 		
-		// 値取得
-		$html = $targetObj->html;		// 汎用HTMLコンテンツ
+		// wikiコンテンツを変換
+		$text = $targetObj->text;		// コンテンツ
+		$text = $this->wikiLibObj->convertToHtml($text);
 							
 		// 画面に埋め込む
-		$this->tmpl->addVar("_widget", "content", $html);
+		$this->tmpl->addVar("_widget", "content", $text);
 	}
 	/**
 	 * ウィジェットのタイトルを設定

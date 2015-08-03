@@ -471,6 +471,18 @@ class EnvManager extends Core
 		return $this->getWidgetsPath() . DIRECTORY_SEPARATOR . $widgetId . DIRECTORY_SEPARATOR . 'include' . DIRECTORY_SEPARATOR . 'container';
 	}
 	/**
+	 * ウィジェットのincludeディレクトリへのパスを取得
+	 *
+	 * 例) /var/www/html/magic3/widgets/xxxxx/include
+	 *
+	 * @param string $widgetId			ウィジェットID
+	 * @return string					パス
+	 */
+	public function getWidgetIncludePath($widgetId)
+	{
+		return $this->getWidgetsPath() . DIRECTORY_SEPARATOR . $widgetId . DIRECTORY_SEPARATOR . 'include';
+	}
+	/**
 	 * システムのルートURLを取得
 	 */
 	public function getRootUrl()
