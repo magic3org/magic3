@@ -110,7 +110,7 @@ function plugin_ls2_show_lists($prefix, & $params)
 
 	foreach ($pages as $page) $params["page_$page"] = 0;
 
-	if (empty($pages)){			// サブページがある場合
+	if (empty($pages)){			// サブページがない場合
 		if (WikiConfig::isErrorMsg()){			// エラーメッセージを出力する場合
 			return str_replace('$1', htmlspecialchars($prefix), $_ls2_err_nopages);
 		} else {
@@ -118,8 +118,9 @@ function plugin_ls2_show_lists($prefix, & $params)
 		}
 	} else {
 		$params['result'] = $params['saved'] = array();
-		foreach ($pages as $page)
+		foreach ($pages as $page){
 			plugin_ls2_get_headings($page, $params, 1);
+		}
 		return join("\n", $params['result']) . join("\n", $params['saved']);
 	}
 }
@@ -138,7 +139,8 @@ function plugin_ls2_get_headings($page, & $params, $level, $include = FALSE)
 	$title  = $s_page . ' ' . get_pg_passage($page, FALSE);
 	// modified for Magic3 by naoki on 2008/10/1
 	//$href   = $script . '?cmd=read&amp;page=' . $r_page;
-	$href   = $script . WikiParam::convQuery('?cmd=read&amp;page=' . $r_page);
+	//$href   = $script . WikiParam::convQuery('?cmd=read&amp;page=' . $r_page);
+	$href   = $script . WikiParam::convQuery('?' . rawurlencode($page));
 
 	plugin_ls2_list_push($params, $level);
 	$ret = $include ? '<li>include ' : '<li>';

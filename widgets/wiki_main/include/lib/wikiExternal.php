@@ -66,6 +66,13 @@ class wikiExternal
 		
 		// ページ指定でWikiコンテンツ作成の場合はパラメータを初期化
 		if (!empty($pageId)){
+			// 一旦退避
+			$saveVarCmd = $vars['cmd'];
+			$saveVarPage = $vars['page'];
+			$saveCmd = WikiParam::getCmd();
+			$savePage = WikiParam::getPage();
+			
+			// 一時的に変更
 			$vars['cmd']  = 'read';
 			$vars['page'] = $pageId;
 			WikiParam::setCmd('read');
@@ -75,10 +82,15 @@ class wikiExternal
 		
 		// ページ指定でWikiコンテンツ作成の場合はパラメータをリセット
 		if (!empty($pageId)){
-			$vars['cmd']  = '';
+			// 値を戻す
+/*			$vars['cmd']  = '';
 			$vars['page'] = '';
 			WikiParam::setCmd('');
-			WikiParam::setPage('');
+			WikiParam::setPage('');*/
+			$vars['cmd']  = $saveVarCmd;
+			$vars['page'] = $saveVarPage;
+			WikiParam::setCmd($saveCmd);
+			WikiParam::setPage($savePage);
 		}
 		return $dest;
 	}

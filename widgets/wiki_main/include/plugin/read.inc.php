@@ -19,7 +19,7 @@ function plugin_read_action()
 	global $_title_invalidwn, $_msg_invalidiwn;
 
 	$page = WikiParam::getPage();
-	
+
 	if (is_page($page)) {
 		// 「:」で始まるシステム用ページはアクセス権をチェックする
 		if (strncmp($page, ':', 1) == 0){
