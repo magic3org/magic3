@@ -48,6 +48,9 @@ class WikiConfig
 		global $defaultpage;
 		global $whatsnew;
 		global $whatsdeleted;
+		static $init = false;		// 初期化完了かどうか
+		
+		if ($init) return;
 		
 		// 設定値を取得
 		self::$_configArray = wiki_mainCommonDef::loadConfig($db);
@@ -79,6 +82,9 @@ class WikiConfig
 		// ユーザ認証方法
 		self::$authType = self::$_configArray[wiki_mainCommonDef::CF_AUTH_TYPE];
 		if (empty(self::$authType)) self::$authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限
+		
+		// 初期化完了
+		$init = true;
 	}
 	/**
 	 * ID指定で設定値を取得
@@ -187,7 +193,8 @@ class WikiConfig
 	public static function getLibDir()
 	{
 		global $gEnvManager;
-		return $gEnvManager->getCurrentWidgetLibPath() . '/';
+//		return $gEnvManager->getCurrentWidgetLibPath() . '/';
+		return dirname(__FILE__) . '/';
 	}
 	/**
 	 * DBディレクトリを取得
@@ -197,7 +204,8 @@ class WikiConfig
 	public static function getDbDir()
 	{
 		global $gEnvManager;
-		return $gEnvManager->getCurrentWidgetDbPath() . '/';
+//		return $gEnvManager->getCurrentWidgetDbPath() . '/';
+		return dirname(dirname(__FILE__)) . '/db/';
 	}
 	/**
 	 * ページが編集可能かどうかを取得

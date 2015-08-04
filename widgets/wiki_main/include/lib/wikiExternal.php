@@ -13,14 +13,15 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once(dirname(dirname(__FILE__)) .	'/container/wiki_mainCommonDef.php');
 require_once(dirname(dirname(__FILE__)) .	'/db/wiki_mainDb.php');
+require_once(dirname(dirname(__FILE__)) .	'/container/wiki_mainCommonDef.php');
 // Magic3追加ファイル
 require_once(dirname(__FILE__) . '/wikiConfig.php');
 require_once(dirname(__FILE__) . '/wikiPage.php');
 require_once(dirname(__FILE__) . '/wikiParam.php');
 require_once(dirname(__FILE__) . '/wikiScript.php');
 // PukiWikiファイル
+require_once(dirname(__FILE__) . '/func.php');
 require_once(dirname(__FILE__) . '/file.php');
 require_once(dirname(__FILE__) . '/plugin.php');
 require_once(dirname(__FILE__) . '/html.php');
@@ -40,6 +41,17 @@ class wikiExternal
 	 */
 	function __construct()
 	{
+		// DBオブジェクト取得
+		$db = wiki_mainCommonDef::getDb();
+
+		// クラス初期化
+		WikiConfig::init($db);
+		WikiPage::init($db);		// Wikiページ管理クラス
+		WikiParam::init($db);		// URLパラメータ管理クラス
+		
+		// 初期化。WikiページID取得等
+		
+		require_once(dirname(__FILE__) . '/init.php');
 	}
 	/**
 	 * 表示用データ作成

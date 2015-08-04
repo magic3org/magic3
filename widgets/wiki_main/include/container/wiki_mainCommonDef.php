@@ -13,7 +13,7 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
- 
+
 class wiki_mainCommonDef
 {
 	static $_viewContentType = 'wiki';		// 参照数カウント用コンテンツタイプ
@@ -67,6 +67,18 @@ class wiki_mainCommonDef
 			}
 		}
 		return $retVal;
+	}
+	/**
+	 * DBオブジェクト取得
+	 *
+	 * @return object		DBオブジェクト
+	 */
+	static function getDb()
+	{
+		static $db;
+		
+		if (!isset($db)) $db = new wiki_mainDb();
+		return $db;
 	}
 }
 ?>

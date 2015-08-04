@@ -73,7 +73,7 @@ define('MUTIME', getmicrotime());
 
 //define('INI_FILE',  DATA_HOME . 'pukiwiki.ini.php');
 // modified for Magic3 by naoki on 2008/9/22
-define('INI_FILE',  $gEnvManager->getCurrentWidgetIncludePath() . '/conf/pukiwiki.ini.php');
+define('INI_FILE',  dirname(dirname(__FILE__)) . '/conf/pukiwiki.ini.php');
 $die = '';
 if (! file_exists(INI_FILE) || ! is_readable(INI_FILE)) {
 	$die .= 'File is not found. (INI_FILE)' . "\n";
@@ -110,8 +110,8 @@ define('CONTENT_CHARSET', 'UTF-8');
 //define('LANG_FILE_HINT', DATA_HOME . LANG . '.lng.php');	// For encoding hint
 //define('LANG_FILE',      DATA_HOME . UI_LANG . '.lng.php');	// For UI resource
 // modified for Magic3 by naoki on 2008/9/22
-define('LANG_FILE_HINT', $gEnvManager->getCurrentWidgetIncludePath() . '/lang/' . LANG . '.lng.php');	// For encoding hint
-define('LANG_FILE',      $gEnvManager->getCurrentWidgetIncludePath() . '/lang/' . UI_LANG . '.lng.php');	// For UI resource
+define('LANG_FILE_HINT', dirname(dirname(__FILE__)) . '/lang/' . LANG . '.lng.php');	// For encoding hint
+define('LANG_FILE',      dirname(dirname(__FILE__)) . '/lang/' . UI_LANG . '.lng.php');	// For UI resource
 $die = '';
 foreach (array('LANG_FILE_HINT', 'LANG_FILE') as $langfile) {
 	if (! file_exists(constant($langfile)) || ! is_readable(constant($langfile))) {
@@ -158,7 +158,7 @@ unset($agents, $matches);
 define('UA_PROFILE', isset($user_agent['profile']) ? $user_agent['profile'] : '');
 //define('UA_INI_FILE', DATA_HOME . UA_PROFILE . '.ini.php');
 // modified for Magic3 by naoki on 2008/9/22
-define('UA_INI_FILE', $gEnvManager->getCurrentWidgetIncludePath() . '/conf/' . UA_PROFILE . '.ini.php');
+define('UA_INI_FILE', dirname(dirname(__FILE__)) . '/conf/' . UA_PROFILE . '.ini.php');
 if (! file_exists(UA_INI_FILE) || ! is_readable(UA_INI_FILE)) {
 	die_message('UA_INI_FILE for "' . UA_PROFILE . '" not found.');
 } else {
@@ -169,7 +169,7 @@ define('UA_NAME', isset($user_agent['name']) ? $user_agent['name'] : '');
 define('UA_VERS', isset($user_agent['vers']) ? $user_agent['vers'] : '');
 unset($user_agent);	// Unset after reading UA_INI_FILE
 */
-require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/default.ini.php');
+require_once(dirname(dirname(__FILE__)) . '/conf/default.ini.php');
 
 /////////////////////////////////////////////////
 // ディレクトリのチェック
@@ -244,7 +244,7 @@ $NotePattern = '/\(\(((?:(?>(?:(?!\(\()(?!\)\)(?:[^\)]|$)).)+)|(?R))*)\)\)/';		/
 // 初期設定(ユーザ定義ルール読み込み)
 //require(DATA_HOME . 'rules.ini.php');
 // modified for Magic3 by naoki on 2008/9/22
-//require_once($gEnvManager->getCurrentWidgetIncludePath() . '/conf/rules.ini.php');
+//require_once(dirname(dirname(__FILE__)) . '/conf/rules.ini.php');
 /////////////////////////////////////////////////
 // 日時置換ルール (閲覧時に置換)
 // $usedatetime = 1なら日時置換ルールが適用されます

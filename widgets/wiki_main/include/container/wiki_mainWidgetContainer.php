@@ -14,8 +14,8 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/wiki_mainCommonDef.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() .	'/wiki_mainDb.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/wiki_mainCommonDef.php');
 // Magic3追加ファイル
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiPage.php');
@@ -37,7 +37,6 @@ require_once($gEnvManager->getCurrentWidgetLibPath() . '/proxy.php');
 
 class wiki_mainWidgetContainer extends BaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
 	private $langId;		// 現在の言語
 	private $resLang = array();			// テキスト取得用
 	private $resImage = array();		// 画像取得用
@@ -63,13 +62,13 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		// DBオブジェクト作成
-		$this->db = new wiki_mainDb();
+		// DBオブジェクト取得
+		$db = wiki_mainCommonDef::getDb();
 
 		// クラス初期化
-		WikiConfig::init($this->db);
-		WikiPage::init($this->db);		// Wikiページ管理クラス
-		WikiParam::init($this->db);		// URLパラメータ管理クラス
+		WikiConfig::init($db);
+		WikiPage::init($db);		// Wikiページ管理クラス
+		WikiParam::init($db);		// URLパラメータ管理クラス
 		
 		// セッションオブジェクトを初期化
 		WikiConfig::setSessionObj($this->getWidgetSessionObj());

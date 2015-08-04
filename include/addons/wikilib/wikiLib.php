@@ -19,6 +19,7 @@ require_once(dirname(__FILE__) . '/wikiLibDb.php');
 class wikiLib
 {
 	private $db;				// DB接続オブジェクト
+	private $wikiExternalObj;	// Wikiメイン外部アクセスオブジェクト
 	
 	/**
 	 * コンストラクタ
@@ -27,6 +28,8 @@ class wikiLib
 	{
 		// DBオブジェクト作成
 		$this->db = new wikiLibDb();
+		
+		$this->wikiExternalObj = new wikiExternal();
 	}
 	/**
 	 * Wikiコンテンツをプレーンなテキストに変換
@@ -38,13 +41,14 @@ class wikiLib
 	{
 		if (!is_array($src)) $src = explode("\n", $src);
 
-		// クラスが存在しない場合はライブラリを読み込む
+/*		// クラスが存在しない場合はライブラリを読み込む
 		if (!class_exists('Body')){
 			require_once(dirname(__FILE__) . '/htmlElement.php');
 			require_once(dirname(__FILE__) . '/make_link.php');
 			require_once(dirname(__FILE__) . '/html.php');
 			require_once(dirname(__FILE__) . '/func.php');
-		}
+		}*/
+
 		
 		$body = new Body(1);
 		$body->parse($src);
@@ -60,8 +64,8 @@ class wikiLib
 	 */
 	function convertToHtml($src)
 	{
-		$wikiExternalObj = new wikiExternal();
-		$dest = $wikiExternalObj->convertToHtml($src);
+		//$wikiExternalObj = new wikiExternal();
+		$dest = $this->wikiExternalObj->convertToHtml($src);
 		return $dest;
 	}
 }

@@ -86,6 +86,9 @@ global $line_break;
 global $usedatetime;
 //global $agents;
 
+// Magic3用
+global $gEnvManager;
+
 // Special
 //define('PKWK_READONLY',  1);
 if (!$gEnvManager->isSystemManageUser()) define('PKWK_SAFE_MODE', 1);			// システム運用者でない場合はセーフモードで立ち上げ
@@ -166,7 +169,8 @@ define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // Plugin directory
 // modified for Magic3 by naoki on 2008/9/26
 //define('UPLOAD_DIR',    $gEnvManager->getCurrentWidgetRootPath() . '/upload/'); // Attached files and logs
 define('UPLOAD_DIR',    $gEnvManager->getResourcePath() . '/widgets/wiki/upload/');
-define('PLUGIN_DIR',    $gEnvManager->getCurrentWidgetIncludePath() . '/plugin/'); // Plugin directory
+//define('PLUGIN_DIR',    $gEnvManager->getCurrentWidgetIncludePath() . '/plugin/'); // Plugin directory
+define('PLUGIN_DIR',    dirname(dirname(__FILE__)) . '/plugin/'); // Plugin directory
 
 /////////////////////////////////////////////////
 // Directory settings II (ended with '/')
@@ -178,10 +182,9 @@ define('PLUGIN_DIR',    $gEnvManager->getCurrentWidgetIncludePath() . '/plugin/'
 // CSSs(*.css) and JavaScripts(*.js) are needed at
 // ./SKIN_DIR from index.php.
 
-// Static image files
-// modified for Magic3 by naoki on 2008/9/29
-//define('IMAGE_DIR', 'image/');
-define('IMAGE_DIR', $gEnvManager->getCurrentWidgetRootUrl() . '/image/');
+// Wikiウィジェット用の画像ディレクトリ
+//define('IMAGE_DIR', $gEnvManager->getCurrentWidgetRootUrl() . '/image/');
+define('IMAGE_DIR', $gEnvManager->getUrlToPath(dirname(dirname(dirname(__FILE__)))) . '/image/');
 
 /////////////////////////////////////////////////
 // Local time setting
