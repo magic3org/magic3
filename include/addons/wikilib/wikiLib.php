@@ -68,8 +68,11 @@ class wikiLib
 	 */
 	function convertToHtml($src)
 	{
-		//$wikiExternalObj = new wikiExternal();
-		$dest = $this->wikiExternalObj->convertToHtml($src);
+		// WikiページIDを取得
+		$pageId = WikiParam::getUnbraketArg();
+		if (empty($pageId)) $pageId = WikiConfig::getDefaultPage();
+			
+		$dest = $this->wikiExternalObj->convertToHtml($src, $pageId);
 		return $dest;
 	}
 }
