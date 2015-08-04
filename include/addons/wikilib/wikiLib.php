@@ -71,8 +71,14 @@ class wikiLib
 		// WikiページIDを取得
 		$pageId = WikiParam::getUnbraketArg();
 		if (empty($pageId)) $pageId = WikiConfig::getDefaultPage();
-			
+		
+		// エラーメッセージを抑止
+		WikiConfig::setErrorMsgOff();
+		
 		$dest = $this->wikiExternalObj->convertToHtml($src, $pageId);
+		
+		// エラーメッセージを再開
+		WikiConfig::resetErrorMsg();
 		return $dest;
 	}
 }

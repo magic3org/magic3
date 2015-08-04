@@ -20,6 +20,7 @@ class WikiConfig
 	private static $db;		// DBオブジェクト
 	private static $sessionObj;		// セッションオブジェクト
 	private static $_configArray;	// Wiki設定(DB定義値)
+	private static $isErrorMsg;			// エラーメッセージを出力するかどうか
 	private static $defaultPage;	// デフォルトページ名
 	private static $whatsnewPage;		// 最終更新ページ
 	private static $whatsdeletedPage;	// 最終削除ページ
@@ -36,6 +37,7 @@ class WikiConfig
 	 */
 	function __construct()
 	{
+		self::$isErrorMsg = true;			// エラーメッセージを出力するかどうか
 	}
 	/**
 	 * オブジェクトを初期化
@@ -95,6 +97,33 @@ class WikiConfig
 	public static function getConfig($id)
 	{
 		return self::$_configArray[$id];
+	}
+	/**
+	 * エラーメッセージを出力するかどうかを取得
+	 *
+	 * @return bool				true=出力、false=出力しない
+	 */
+	public static function isErrorMsg()
+	{
+		return self::$isErrorMsg;			// エラーメッセージを出力するかどうか
+	}
+	/**
+	 * エラーメッセージを出力しないに設定
+	 *
+	 * @return			なし
+	 */
+	public static function setErrorMsgOff()
+	{
+		self::$isErrorMsg = false;			// エラーメッセージを出力するかどうか
+	}
+	/**
+	 * エラーメッセージ出力を初期状態(出力する)に戻す
+	 *
+	 * @return			なし
+	 */
+	public static function resetErrorMsg()
+	{
+		self::$isErrorMsg = true;			// エラーメッセージを出力するかどうか
 	}
 	/**
 	 * デフォルトのページ名を取得

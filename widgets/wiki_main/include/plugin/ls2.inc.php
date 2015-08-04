@@ -39,7 +39,6 @@ define('PLUGIN_LS2_ANCHOR_ORIGIN', 0);
 
 function plugin_ls2_action()
 {
-//	global $vars, $_ls2_msg_title;
 	global $_ls2_msg_title;
 
 	$params = array();
@@ -48,7 +47,6 @@ function plugin_ls2_action()
 		$params[$key] = (WikiParam::getVar($key) != '');
 	}
 
-//	$prefix = isset($vars['prefix']) ? $vars['prefix'] : '';
 	$prefix = WikiParam::getVar('prefix');
 	$body = plugin_ls2_show_lists($prefix, $params);
 
@@ -112,8 +110,12 @@ function plugin_ls2_show_lists($prefix, & $params)
 
 	foreach ($pages as $page) $params["page_$page"] = 0;
 
-	if (empty($pages)) {
-		return str_replace('$1', htmlspecialchars($prefix), $_ls2_err_nopages);
+	if (empty($pages)){			// サブページがある場合
+		if (WikiConfig::isErrorMsg()){			// エラーメッセージを出力する場合
+			return str_replace('$1', htmlspecialchars($prefix), $_ls2_err_nopages);
+		} else {
+			return '';
+		}
 	} else {
 		$params['result'] = $params['saved'] = array();
 		foreach ($pages as $page)
