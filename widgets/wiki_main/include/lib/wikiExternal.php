@@ -57,11 +57,30 @@ class wikiExternal
 	 * 表示用データ作成
 	 *
 	 * @param string $src		Wikiコンテンツテキスト
+	 * @param string  $pageId	WikiページID
 	 * @return string			HTML
 	 */
-	function convertToHtml($src)
+	function convertToHtml($src, $pageId = '')
 	{
-		return convert_html($src);
+		global $vars;
+		
+		// ページ指定でWikiコンテンツ作成の場合はパラメータを初期化
+		if (!empty($pageId)){
+			$vars['cmd']  = 'read';
+			$vars['page'] = $pageId;
+			WikiParam::setCmd('read');
+			WikiParam::setPage($pageId);
+		}
+		$dest = convert_html($src);
+		
+		// ページ指定でWikiコンテンツ作成の場合はパラメータをリセット
+		if (!empty($pageId)){
+			$vars['cmd']  = '';
+			$vars['page'] = '';
+			WikiParam::setCmd('');
+			WikiParam::setPage('');
+		}
+		return $dest;
 	}
 }
 ?>

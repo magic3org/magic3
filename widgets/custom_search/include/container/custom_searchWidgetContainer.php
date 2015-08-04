@@ -553,7 +553,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				// Wikiコンテンツを取得
 				$ret = $this->db->getWiki($wikiId, $row);
 				if ($ret){
-					$content = $this->wikiLibObj->convertToText($row['wc_data']);
+					$content = $this->wikiLibObj->convertToText($row['wc_data'], $wikiId);
 				
 					// 検索結果用のテキスト作成
 					$summary = $this->_createSummaryText($content);

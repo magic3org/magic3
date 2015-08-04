@@ -19,7 +19,7 @@ class wiki_simpleWidgetContainer extends BaseWidgetContainer
 {
 	private $wikiLibObj;		// Wikiコンテンツオブジェクト
 	const DEFAULT_CONFIG_ID = 0;
-	const DEFAULT_TITLE = 'Wikiコンテンツ';		// デフォルトのウィジェットタイトル名
+	const DEFAULT_TITLE = '簡易Wikiコンテンツ';		// デフォルトのウィジェットタイトル名
 	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
 	
 	/**

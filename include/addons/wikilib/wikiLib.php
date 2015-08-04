@@ -27,19 +27,20 @@ class wikiLib
 	function __construct()
 	{
 		// DBオブジェクト作成
-		$this->db = new wikiLibDb();
+//		$this->db = new wikiLibDb();
 		
 		$this->wikiExternalObj = new wikiExternal();
 	}
 	/**
 	 * Wikiコンテンツをプレーンなテキストに変換
 	 *
-	 * @param string  $src	Wikiコンテンツソースデータ
-	 * @return string		取得データ
+	 * @param string  $src		Wikiコンテンツソースデータ
+	 * @param string  $pageId	WikiページID
+	 * @return string			取得データ
 	 */
-	function convertToText($src)
+	function convertToText($src, $pageId = '')
 	{
-		if (!is_array($src)) $src = explode("\n", $src);
+//		if (!is_array($src)) $src = explode("\n", $src);
 
 /*		// クラスが存在しない場合はライブラリを読み込む
 		if (!class_exists('Body')){
@@ -50,9 +51,12 @@ class wikiLib
 		}*/
 
 		
-		$body = new Body(1);
+/*		$body = new Body(1);
 		$body->parse($src);
 		$dest = $body->toString();		// HTML形式で出力
+		$dest = strip_tags($dest);			// HTMLタグを削除
+		*/
+		$dest = $this->wikiExternalObj->convertToHtml($src, $pageId);
 		$dest = strip_tags($dest);			// HTMLタグを削除
 		return $dest;
 	}
