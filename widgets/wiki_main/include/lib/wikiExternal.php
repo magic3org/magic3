@@ -49,8 +49,7 @@ class wikiExternal
 		WikiPage::init($db);		// Wikiページ管理クラス
 		WikiParam::init($db);		// URLパラメータ管理クラス
 		
-		// 初期化。WikiページID取得等
-		
+		// 初期化
 		require_once(dirname(__FILE__) . '/init.php');
 	}
 	/**

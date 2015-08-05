@@ -999,7 +999,9 @@ class Body extends Element
 		} else {
 			// 見出し位置の自動生成アンカー
 			if (WikiConfig::getAutoHeadingAnchorVisibility()){
-				$anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
+				// プラグインの出力制限がある場合はアンカーを出力しない
+				$dispOffPlugin = WikiConfig::getDispOffPlugin();
+				if (empty($dispOffPlugin)) $anchor = ' &aname(' . $id . ',super,full){' . $_symbol_anchor . '};';
 			} else {			// 非表示の場合
 				$anchor = ' &aname(' . $id . ',super,full,hidden){' . $_symbol_anchor . '};';
 			}

@@ -56,8 +56,14 @@ class wikiLib
 		$dest = $body->toString();		// HTML形式で出力
 		$dest = strip_tags($dest);			// HTMLタグを削除
 		*/
+		// 必要のないプラグインの出力を停止
+		WikiConfig::setDispOffPlugin(array('navi', 'contents'));
+		
 		$dest = $this->wikiExternalObj->convertToHtml($src, $pageId);
 		$dest = strip_tags($dest);			// HTMLタグを削除
+		
+		// プラグインを再開
+		WikiConfig::resetDispOffPlugin();
 		return $dest;
 	}
 	/**

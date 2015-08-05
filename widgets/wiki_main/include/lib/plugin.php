@@ -132,6 +132,9 @@ function do_plugin_convert($name, $args = '')
 {
 	global $digest;
 
+	// 出力抑止中のプラグインの場合は実行しない
+	if (in_array($name, WikiConfig::getDispOffPlugin())) return '';
+	
 	if(do_plugin_init($name) === FALSE)
 		return '[Plugin init failed: ' . $name . ']';
 
@@ -170,6 +173,9 @@ function do_plugin_inline($name, $args, & $body)
 {
 	global $digest;
 
+	// 出力抑止中のプラグインの場合は実行しない
+	if (in_array($name, WikiConfig::getDispOffPlugin())) return '';
+	
 	if(do_plugin_init($name) === FALSE)
 		return '[Plugin init failed: ' . $name . ']';
 

@@ -20,7 +20,6 @@ class WikiConfig
 	private static $db;		// DBオブジェクト
 	private static $sessionObj;		// セッションオブジェクト
 	private static $_configArray;	// Wiki設定(DB定義値)
-	private static $isErrorMsg;			// エラーメッセージを出力するかどうか
 	private static $defaultPage;	// デフォルトページ名
 	private static $whatsnewPage;		// 最終更新ページ
 	private static $whatsdeletedPage;	// 最終削除ページ
@@ -31,6 +30,9 @@ class WikiConfig
 	private static $isShowPageRelated;				// 関連ページを表示するかどうか
 	private static $isShowPageAttachFiles;				// 添付ファイルを表示するかどうか
 	private static $isShowPageLastModified;				// 最終更新を表示するかどうか
+	// 出力制御
+	private static $isErrorMsg;							// エラーメッセージを出力するかどうか
+	private static $dispOffPlugin = array();			// 表示一時停止のプラグイン
 	
 	/**
 	 * コンストラクタ
@@ -124,6 +126,34 @@ class WikiConfig
 	public static function resetErrorMsg()
 	{
 		self::$isErrorMsg = true;			// エラーメッセージを出力するかどうか
+	}
+	/**
+	 * 表示一時停止のプラグインを設定
+	 *
+	 * @param array	$plugin		プラグインIDの配列
+	 * @return					なし
+	 */
+	public static function setDispOffPlugin($plugin)
+	{
+		self::$dispOffPlugin = $plugin;
+	}
+	/**
+	 * 表示一時停止のプラグインを取得
+	 *
+	 * @return array	プラグインIDの配列
+	 */
+	public static function getDispOffPlugin()
+	{
+		return self::$dispOffPlugin;
+	}
+	/**
+	 * 表示一時停止のプラグインを初期状態に戻す
+	 *
+	 * @return			なし
+	 */
+	public static function resetDispOffPlugin()
+	{
+		self::$dispOffPlugin = array();
 	}
 	/**
 	 * デフォルトのページ名を取得
