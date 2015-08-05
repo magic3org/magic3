@@ -86,7 +86,6 @@ EOD;
 		}
 	} else if ($action == 'update'){
 		links_init();
-//		$foot_explain = array(); // Exhaust footnotes
 		$msg  = $_links_messages['title_update'];
 		$body = $_links_messages['msg_done'    ];
 	} else {

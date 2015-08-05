@@ -311,7 +311,7 @@ EOD;
 	function set($arr, $page)
 	{
 		global $vars;
-		static $note_id = 0;
+		static $note_id = 0;		// ### STATICでカウントされるので複数ウィジェットの場合注意 ###
 
 		list(, $body) = $this->splice($arr);
 
@@ -327,18 +327,15 @@ EOD;
 		$note = make_link($body);
 		$page = isset($vars['page']) ? rawurlencode($vars['page']) : '';
 
-		// Footnote
-		// modified for Magic3 by naoki on 2008/10/1
-		/*$foot_explain[$id] = '<a id="notefoot_' . $id . '" href="' .
-			$script . '#notetext_' . $id . '" class="note_super">*' .
-			$id . '</a>' . "\n" .
-			'<span class="small">' . $note . '</span><br />';*/
-		WikiPage::addFootNote($id, '<a id="notefoot_' . $id . '" href="' .
-			$script . '#notetext_' . $id . '" class="note_super">*' .
-			$id . '</a>' . "\n" .
-			//'<span class="small">' . $note . '</span><br />');
-			'<small>' . $note . '</small><br />');
-
+		// 注釈を作成
+		// 出力抑止中のプラグインの場合は注釈番号を出力しない
+		$dispOffPlugin = WikiConfig::getDispOffPlugin();
+		if (empty($dispOffPlugin)){		// 出力抑止中のプラグインがない場合
+			WikiPage::addFootNote($id, '<a id="notefoot_' . $id . '" href="' . $script . '#notetext_' . $id . '" class="note_super">*' . $id . '</a>' . "\n" . '<small>' . $note . '</small><br />');
+		} else {
+			WikiPage::addFootNote($id, '<small>' . $note . '</small><br />');
+		}
+		
 		// A hyperlink, content-body to footnote
 		if (! is_numeric(PKWK_FOOTNOTE_TITLE_MAX) || PKWK_FOOTNOTE_TITLE_MAX <= 0) {
 			$title = '';
@@ -349,9 +346,12 @@ EOD;
 			$abbr  = (mb_strlen($title) < $count) ? '...' : '';
 			$title = ' title="' . $title . $abbr . '"';
 		}
-		$name = '<a id="notetext_' . $id . '" href="' . $script .
-			'#notefoot_' . $id . '" class="note_super"' . $title .
-			'>*' . $id . '</a>';				// ジャンプ先
+		
+		if (empty($dispOffPlugin)){			// 出力抑止中のプラグインがない場合
+			$name = '<a id="notetext_' . $id . '" href="' . $script . '#notefoot_' . $id . '" class="note_super"' . $title . '>*' . $id . '</a>';				// ジャンプ先
+		} else {
+			$name = '';				// ジャンプ先
+		}
 		return parent::setParam($page, $name, $body);
 	}
 

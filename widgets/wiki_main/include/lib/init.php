@@ -20,7 +20,6 @@
 //
 // Init PukiWiki here
 // PukiWiki用グローバル変数		// add for Magic3 by naoki on 2008/9/28
-//global $foot_explain;	// Footnotes
 global $related;	// Related pages
 global $head_tags;	// XHTML tags in <head></head>
 global $line_rules;
@@ -56,8 +55,6 @@ foreach (array('SCRIPT_NAME', 'SERVER_ADMIN', 'SERVER_NAME',
 
 /////////////////////////////////////////////////
 // Init grobal variables
-
-//$foot_explain = array();	// Footnotes
 $related      = array();	// Related pages
 $head_tags    = array();	// XHTML tags in <head></head>
 
