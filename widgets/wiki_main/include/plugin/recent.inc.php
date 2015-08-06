@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: recent.inc.php 1098 2008-10-22 11:43:09Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -25,21 +25,11 @@
 // Default number of 'Show latest N changes'
 define('PLUGIN_RECENT_DEFAULT_LINES', 10);
 
-// Limit number of executions
-define('PLUGIN_RECENT_EXEC_LIMIT', 2); // N times per one output
-
-// ----
-
 define('PLUGIN_RECENT_USAGE', '#recent(number-to-show)');
-
-// Place of the cache of 'RecentChanges'
-//define('PLUGIN_RECENT_CACHE', CACHE_DIR . 'recent.dat');
 
 function plugin_recent_convert()
 {
-	//global $vars, $date_format, $_recent_plugin_frame, $show_passage;
 	global $date_format, $_recent_plugin_frame, $show_passage;
-	static $exec_count = 1;
 
 	$recent_lines = PLUGIN_RECENT_DEFAULT_LINES;
 	if (func_num_args()) {
@@ -51,21 +41,6 @@ function plugin_recent_convert()
 		}
 	}
 
-	// Show only N times
-	if ($exec_count > PLUGIN_RECENT_EXEC_LIMIT) {
-		return '#recent(): You called me too much' . '<br />' . "\n";
-	} else {
-		++$exec_count;
-	}
-
-/*
-	if (! file_exists(PLUGIN_RECENT_CACHE))
-		return '#recent(): Cache file of RecentChanges not found' . '<br />';
-
-	// Get latest N changes
-	$lines = file_head(PLUGIN_RECENT_CACHE, $recent_lines);
-	if ($lines == FALSE) return '#recent(): File can not open' . '<br />' . "\n";
-*/
 	// 最終更新データを取得
 	$lines = WikiPage::getCacheRecentChanges();
 
@@ -87,8 +62,7 @@ function plugin_recent_convert()
 		}
 
 		$s_page = htmlspecialchars($page);
-		//if($page == $vars['page']) {
-		if($page == WikiParam::getPage()){
+		if ($page == WikiParam::getPage()){
 			// No need to link to the page you just read, or notify where you just read
 			$items .= ' <li>' . $s_page . '</li>' . "\n";
 		} else {
