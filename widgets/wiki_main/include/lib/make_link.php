@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: make_link.php 3474 2010-08-13 10:36:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C)
@@ -371,6 +371,9 @@ class Link_url extends Link
 
 	function get_pattern()
 	{
+		// URLのマッチパターンは、オリジナルの
+		// (?:(?:https?|ftp|news):\/\/|mailto:)[\w\/\@\$()!?&%#:;.,~'=*+-]+
+		// を改良して、最後が「)」などで終了しないようにする。(by magic3)
 		$s1 = $this->start + 1;
 		return <<<EOD
 (\[\[             # (1) open bracket
@@ -378,12 +381,11 @@ class Link_url extends Link
  (?:>|:)
 )?
 (                 # (3) url
- (?:(?:https?|ftp|news):\/\/|mailto:)[\w\/\@\$()!?&%#:;.,~'=*+-]+
+ (?:(?:https?|ftp|news):\/\/|mailto:)[\w\/\@\$()!?&%#:;.,~'=*+-]+[\w\/]+
 )
 (?($s1)\]\])      # close bracket
 EOD;
 	}
-
 	function get_count()
 	{
 		return 3;
@@ -392,8 +394,7 @@ EOD;
 	function set($arr, $page)
 	{
 		list(, , $alias, $name) = $this->splice($arr);
-		return parent::setParam($page, htmlspecialchars($name),
-			'', 'url', $alias == '' ? $name : $alias);
+		return parent::setParam($page, htmlspecialchars($name), '', 'url', $alias == '' ? $name : $alias);
 	}
 
 	function toString()
@@ -543,6 +544,7 @@ EOD;
 		$this->url = ($url === FALSE) ?
 			$script . '?' . WikiParam::convQuery(rawurlencode('[[' . $name . ':' . $this->param . ']]')) :
 			htmlspecialchars($url);
+			
 		return parent::setParam(
 			$page,
 			htmlspecialchars($name . ':' . $this->param),
@@ -703,8 +705,8 @@ class Link_autolink extends Link
 		list($name) = $this->splice($arr);
 
 		// Ignore pages listed, or Expire ones not found
-		if (in_array($name, $this->forceignorepages) || ! is_page($name))
-			return FALSE;
+		if (in_array($name, $this->forceignorepages) || ! is_page($name)) return FALSE;
+		
 		return parent::setParam($page, $name, '', 'pagename', $name);
 	}
 
