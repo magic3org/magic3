@@ -52,6 +52,8 @@ class WikiConfig
 		global $defaultpage;
 		global $whatsnew;
 		global $whatsdeleted;
+		global $date_format;		// 日付フォーマット
+		global $time_format;		// 時間フォーマット
 		static $init = false;		// 初期化完了かどうか
 		
 		if ($init) return;
@@ -87,6 +89,14 @@ class WikiConfig
 		self::$authType = self::$_configArray[wiki_mainCommonDef::CF_AUTH_TYPE];
 		if (empty(self::$authType)) self::$authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限
 		
+		// フォーマットを取得
+		$dateFormat = self::$_configArray[wiki_mainCommonDef::CF_DATE_FORMAT];		// 日付フォーマット
+		if (empty($dateFormat)) $dateFormat = wiki_mainCommonDef::DEFAULT_DATE_FORMAT;
+		$date_format = $dateFormat;
+		$timeFormat = self::$_configArray[wiki_mainCommonDef::CF_TIME_FORMAT];		// 時間フォーマット
+		if (empty($timeFormat)) $timeFormat = wiki_mainCommonDef::DEFAULT_TIME_FORMAT;
+		$time_format = $timeFormat;
+
 		// 初期化完了
 		$init = true;
 	}

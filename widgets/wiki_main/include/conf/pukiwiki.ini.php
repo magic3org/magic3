@@ -357,10 +357,10 @@ $lastmod = 0;
 
 /////////////////////////////////////////////////
 // Date format
-$date_format = 'Y-m-d';
+//$date_format = 'Y-m-d';
 
 // Time format
-$time_format = 'H:i:s';
+//$time_format = 'H:i:s';
 
 /////////////////////////////////////////////////
 // Max number of RSS feed

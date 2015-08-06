@@ -27,7 +27,8 @@ $HELP['visible_items_label']['title'] = '表示項目';
 $HELP['visible_items_label']['body'] = '画面に表示する項目の表示制御を行います。';
 $HELP['attach_files_label']['title'] = '添付ファイルアップロードディレクトリ';
 $HELP['attach_files_label']['body'] = 'Wikiページに添付するファイルの格納ディレクトリです。ファイルをアップロードするには、ディレクトリの書き込み権限が必要です。';
-
+$HELP['page_status']['title'] = 'Wikiページ状態';
+$HELP['page_status']['body'] = 'Wikiページの編集可否状態をロック(編集不可)またはアンロック(編集可)で示します。状態はフロントのツールバーから「解凍」「凍結」ボタンで変更します。';
 $HELP['page_view_count']['title'] = '閲覧数';
 $HELP['page_view_count']['body'] = 'Wikiコンテンツがユーザに閲覧された回数です。管理者の閲覧はカウントされません。';
 

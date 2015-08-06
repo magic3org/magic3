@@ -38,12 +38,16 @@ class wiki_mainCommonDef
 	const CF_USER_LIMITED_FREEZE		= 'user_limited_freeze';				// 凍結・解凍機能のユーザ制限
 	const CF_SHOW_AUTO_HEADING_ANCHOR	= 'show_auto_heading_anchor';			// 見出し自動アンカーを表示するかどうか
 	const CF_LAYOUT_MAIN				= 'layout_main';						// ページレイアウト(メイン)
-	
+	const CF_DATE_FORMAT				= 'date_format';					// 日付フォーマット
+	const CF_TIME_FORMAT				= 'time_format';					// 時間フォーマット
+
 	// ##### デフォルト値 #####
 	const DEFAULT_DEFAULT_PAGE = 'FrontPage';		// デフォルトページ
 	const DEFAULT_WHATSNEW_PAGE		= 'RecentChanges';		// 最終更新ページ
 	const DEFAULT_WHATSDELETED_PAGE	= 'RecentDeleted';		// 最終削除ページ
 	const DEFAULT_LAYOUT_MAIN		= '<article><header>[#TITLE#][#URL#]</header>[#TOOLBAR#][#BODY#]</article>[#TOOLBAR#][#FILES|pretag=----#][#UPDATES|pretag=----#][#LINKS#]';	// ページレイアウト(メイン)
+	const DEFAULT_DATE_FORMAT		= 'Y-m-d';					// 日付フォーマット
+	const DEFAULT_TIME_FORMAT		= 'H:i:s';					// 時間フォーマット
 	
 	/**
 	 * 定義値をDBから取得
