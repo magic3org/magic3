@@ -37,6 +37,8 @@ class wiki_mainCommonDef
 	const CF_SHOW_TOOLBAR_FOR_ALL_USER	= 'show_toolbar_for_all_user';				// ツールバーを表示するかどうか
 	const CF_USER_LIMITED_FREEZE		= 'user_limited_freeze';				// 凍結・解凍機能のユーザ制限
 	const CF_SHOW_AUTO_HEADING_ANCHOR	= 'show_auto_heading_anchor';			// 見出し自動アンカーを表示するかどうか
+	const CF_SHOW_USER_ON_WHATSNEW		= 'show_user_on_whatsnew';				// 最終更新ページにユーザを表示するかどうか
+	const CF_AUTO_LINK_WIKINAME			= 'auto_link_wikiname';					// Wiki名を自動リンクするかどうか
 	const CF_LAYOUT_MAIN				= 'layout_main';						// ページレイアウト(メイン)
 	const CF_DATE_FORMAT				= 'date_format';					// 日付フォーマット
 	const CF_TIME_FORMAT				= 'time_format';					// 時間フォーマット

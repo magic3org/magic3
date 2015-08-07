@@ -98,14 +98,17 @@ $(function(){
 		<h4>その他</h4>
 		<div class="form-group clearfix">
 		<span {_HELP_VISIBLE_ITEMS_LABEL}>表示項目：</span>
-		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_auto_heading_anchor" {SHOW_AUTO_HEADING_ANCHOR} />見出し自動アンカー</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_auto_heading_anchor" {SHOW_AUTO_HEADING_ANCHOR} />見出しの自動アンカー</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_user_on_whatsnew" {SHOW_USER_ON_WHATSNEW} />最終更新ページのユーザ名</label></div>
 		</div>
 	    </td>
 	</tr>
     <tr>
-	    <th><span {_HELP_PAGE_FORMAT}>フォーマット</span></th>
-	    <td><div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right">日付：</div><div class="col-sm-6 m3config_item"><input type="text" name="item_date_format" value="{DATE_FORMAT}" maxlength="50" /></div></div>
-		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right">時間：</div><div class="col-sm-6 m3config_item"><input type="text" name="item_time_format" value="{TIME_FORMAT}" maxlength="50" /></div></div>
+	    <th><span {_HELP_PAGE_CONVERT}>コンテンツ変換</span></th>
+	    <td>
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_auto_link_wikiname" {AUTO_LINK_WIKINAME} />Wiki名を自動リンク</label></div></div>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right" style="width:150px;">日付フォーマット：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_date_format" value="{DATE_FORMAT}" maxlength="50" /></div></div>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right" style="width:150px;">時間フォーマット：</div><div class="col-sm-2 m3config_item"><input type="text" name="item_time_format" value="{TIME_FORMAT}" maxlength="50" /></div></div>
 		</td>
 	</tr>
     <tr>

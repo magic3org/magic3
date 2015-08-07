@@ -68,9 +68,9 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 
 		$this->authType	= $request->trimValueOf('item_auth');				// 認証方法
 		$password		= $request->trimValueOf('password');				// パスワード
-		$defaultPage		= $request->trimValueOf('item_default_page');			// デフォルトページ名
-		$whatsnewPage		= $request->trimValueOf('item_whatsnew_page');			// 最終更新ページ名
-		$whatsdeletedPage	= $request->trimValueOf('item_whatsdeleted_page');		// 最終削除ページ名
+		$defaultPage			= $request->trimValueOf('item_default_page');			// デフォルトページ名
+		$whatsnewPage			= $request->trimValueOf('item_whatsnew_page');			// 最終更新ページ名
+		$whatsdeletedPage		= $request->trimValueOf('item_whatsdeleted_page');		// 最終削除ページ名
 		$showTitle				= $request->trimCheckedValueOf('item_showtitle');		// タイトルを表示するかどうか
 		$showUrl				= $request->trimCheckedValueOf('item_show_url');		// URLを表示するかどうか
 		$showPageRelated		= $request->trimCheckedValueOf('item_showpagerelated');		// 関連ページを表示するかどうか
@@ -79,9 +79,11 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$showToolbarForAllUser	= $request->trimCheckedValueOf('item_show_toolbar_for_all_user');		// ツールバーを表示するかどうか
 		$userLimitedFreeze		= $request->trimCheckedValueOf('item_user_limited_freeze');				// 凍結・解凍機能のユーザ制限
 		$showAutoHeadingAnchor	= $request->trimCheckedValueOf('item_show_auto_heading_anchor');		// 見出し自動アンカーを表示するかどうか
+		$showUserOnWhatsnew		= $request->trimCheckedValueOf('item_show_user_on_whatsnew');		// 最終更新ページにユーザを表示するかどうか
+		$autoLinkWikiname		= $request->trimCheckedValueOf('item_auto_link_wikiname');					// Wiki名を自動リンクするかどうか
 		$layout					= $request->valueOf('item_layout');						// ページレイアウト(メイン)
-		$dateFormat				= $request->valueOf('item_date_format');						// 日付フォーマット
-		$timeFormat				= $request->valueOf('item_time_format');						// 時間フォーマット
+		$dateFormat				= $request->trimValueOf('item_date_format');						// 日付フォーマット
+		$timeFormat				= $request->trimValueOf('item_time_format');						// 時間フォーマット
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -124,6 +126,9 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_USER_LIMITED_FREEZE, $userLimitedFreeze);		// 凍結・解凍機能のユーザ制限
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR, $showAutoHeadingAnchor);		// 見出し自動アンカーを表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_USER_ON_WHATSNEW, $showUserOnWhatsnew);			// 最終更新ページにユーザを表示するかどうか
+				
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_AUTO_LINK_WIKINAME, $autoLinkWikiname);				// Wiki名を自動リンクするかどうか
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_LAYOUT_MAIN, $layout);		// ページレイアウト(メイン)
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_DATE_FORMAT, $dateFormat);						// 日付フォーマット
@@ -163,6 +168,10 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			if ($userLimitedFreeze == '') $userLimitedFreeze = '0';
 			$showAutoHeadingAnchor = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR);		// 見出し自動アンカーを表示するかどうか
 			if ($showAutoHeadingAnchor == '') $showAutoHeadingAnchor = '1';
+			$showUserOnWhatsnew = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_USER_ON_WHATSNEW);		// 最終更新ページにユーザを表示するかどうか
+			if ($showUserOnWhatsnew == '') $showUserOnWhatsnew = '0';
+			$autoLinkWikiname = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_AUTO_LINK_WIKINAME);		// Wiki名を自動リンクするかどうか
+			if ($autoLinkWikiname == '') $autoLinkWikiname = '1';
 			$layout = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_LAYOUT_MAIN);		// ページレイアウト(メイン)
 			if (empty($layout)) $layout = wiki_mainCommonDef::DEFAULT_LAYOUT_MAIN;
 			$dateFormat = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_DATE_FORMAT);		// 日付フォーマット
@@ -178,9 +187,9 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		if ($this->authType != 'password') $this->tmpl->addVar("_widget", "pwd_style", 'style="display:none;"');
 		
 		// 画面にデータを埋め込む
-		$this->tmpl->addVar("_widget", "default_page", $defaultPage);		// デフォルトページ
-		$this->tmpl->addVar("_widget", "whatsnew_page", $whatsnewPage);		// 最終更新ページ名
-		$this->tmpl->addVar("_widget", "whatsdeleted_page", $whatsdeletedPage);		// 最終削除ページ名
+		$this->tmpl->addVar("_widget", "default_page", $this->convertToDispString($defaultPage));		// デフォルトページ
+		$this->tmpl->addVar("_widget", "whatsnew_page", $this->convertToDispString($whatsnewPage));		// 最終更新ページ名
+		$this->tmpl->addVar("_widget", "whatsdeleted_page", $this->convertToDispString($whatsdeletedPage));		// 最終削除ページ名
 		$this->tmpl->addVar("_widget", "show_title", $this->convertToCheckedString($showTitle));	// タイトルを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_url", $this->convertToCheckedString($showUrl));	// URLを表示するかどうか
 		$this->tmpl->addVar("_widget", "show_page_related", $this->convertToCheckedString($showPageRelated));	// 関連ページを表示するかどうか
@@ -189,9 +198,11 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "show_toolbar_for_all_user", $this->convertToCheckedString($showToolbarForAllUser));	// ツールバーを表示するかどうか
 		$this->tmpl->addVar("_widget", "user_limited_freeze", $this->convertToCheckedString($userLimitedFreeze));	// 凍結・解凍機能のユーザ制限
 		$this->tmpl->addVar("_widget", "show_auto_heading_anchor", $this->convertToCheckedString($showAutoHeadingAnchor));		// 見出し自動アンカーを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_user_on_whatsnew", $this->convertToCheckedString($showUserOnWhatsnew));		// 最終更新ページにユーザを表示するかどうか
+		$this->tmpl->addVar("_widget", "auto_link_wikiname", $this->convertToCheckedString($autoLinkWikiname));		// Wiki名を自動リンクするかどうか
 		$this->tmpl->addVar("_widget", "layout",	$layout);// ページレイアウト(メイン)
-		$this->tmpl->addVar("_widget", "date_format",	$dateFormat);		// 日付フォーマット
-		$this->tmpl->addVar("_widget", "time_format",	$timeFormat);		// 時間フォーマット
+		$this->tmpl->addVar("_widget", "date_format",	$this->convertToDispString($dateFormat));		// 日付フォーマット
+		$this->tmpl->addVar("_widget", "time_format",	$this->convertToDispString($timeFormat));		// 時間フォーマット
 			
 		// アップロードディレクトリ
 		//$uploadDir = $this->gEnv->getCurrentWidgetRootPath() . '/upload';		// 暫定

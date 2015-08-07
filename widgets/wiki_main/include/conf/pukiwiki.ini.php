@@ -233,7 +233,7 @@ $nofollow = 0; // 1 = Try hiding from search engines
 
 /////////////////////////////////////////////////
 // _Disable_ WikiName auto-linking
-$nowikiname = 0;
+//$nowikiname = 0;
 
 /////////////////////////////////////////////////
 // AutoLink feature

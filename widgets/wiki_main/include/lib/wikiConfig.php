@@ -52,6 +52,7 @@ class WikiConfig
 		global $defaultpage;
 		global $whatsnew;
 		global $whatsdeleted;
+		global $nowikiname;
 		global $date_format;		// 日付フォーマット
 		global $time_format;		// 時間フォーマット
 		static $init = false;		// 初期化完了かどうか
@@ -73,7 +74,13 @@ class WikiConfig
 		if (!isset(self::$isShowPageLastModified)) self::$isShowPageLastModified = '1';
 		self::$isShowToolbarForAllUser = self::$_configArray[wiki_mainCommonDef::CF_SHOW_TOOLBAR_FOR_ALL_USER];// 全ユーザ向けにツールバーを表示するかどうか
 		if (!isset(self::$isShowToolbarForAllUser)) self::$isShowToolbarForAllUser = '0';
-		
+		$value = self::$_configArray[wiki_mainCommonDef::CF_AUTO_LINK_WIKINAME];			// Wiki名を自動リンクするかどうか
+		if ($value == ''){
+			$nowikiname = '0';
+		} else {
+			$nowikiname = !$value;
+		}
+
 		// デフォルトページを取得
 		self::$defaultPage = self::$_configArray[wiki_mainCommonDef::CF_DEFAULT_PAGE];// デフォルトページ
 		if (empty(self::$defaultPage)) self::$defaultPage = wiki_mainCommonDef::DEFAULT_DEFAULT_PAGE;
