@@ -371,9 +371,11 @@ class Link_url extends Link
 
 	function get_pattern()
 	{
-		// URLのマッチパターンは、オリジナルの
+		// ### Magic3での改良 ###
+		// ・URLのマッチパターンは、オリジナルの
 		// (?:(?:https?|ftp|news):\/\/|mailto:)[\w\/\@\$()!?&%#:;.,~'=*+-]+
-		// を改良して、最後が「)」などで終了しないようにする。(by magic3)
+		// を改良して、最後が「)」などで終了しないようにする。
+		// ・URLの前に「+」を付加すると別ウィンドで開く仕様を追加
 		$s1 = $this->start + 1;
 		return <<<EOD
 (\[\[             # (1) open bracket
@@ -381,11 +383,12 @@ class Link_url extends Link
  (?:>|:)
 )?
 (                 # (3) url
- (?:(?:https?|ftp|news):\/\/|mailto:)[\w\/\@\$()!?&%#:;.,~'=*+-]+[\w\/]+
+ (?:(?:\+?https?|\+?ftp|\+?news):\/\/|mailto:)[\w\/\@\$()!?&%#:;.,~'=*+-]+[\w\/]+
 )
 (?($s1)\]\])      # close bracket
 EOD;
 	}
+// (?:(?:\+?https?|\+?ftp|\+?news):\/\/|mailto:)[\w\/\@\$()!?&%#:;.,~'=*+-]+[\w\/]+
 	function get_count()
 	{
 		return 3;
@@ -404,7 +407,14 @@ EOD;
 		} else {
 			$rel = ' rel="nofollow"';
 		}
-		return '<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>';
+		// URLの前に「+」を付加すると別ウィンドで開く仕様を追加
+//		return '<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>';
+//		if (ereg("^(\+)(.*)", $this->name, $regs)) {
+		if (preg_match("/^(\+)(.*)/", $this->name, $regs)) {
+			return '<a href="' . $regs[2] . '" target="_blank" ' . $rel . '>' . $this->alias . '</a>';
+		}else{
+			return '<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>';
+		}
 	}
 }
 
