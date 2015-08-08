@@ -92,6 +92,9 @@ class WikiPage
 			}
 			$ret = self::$db->updateConfig(self::CONFIG_INIT, '1');
 			if ($ret) $status = true;
+			
+			// ##### 利用可能なページ名を更新 #####
+			self::updateAvailablePages();
 		}
 		return $status;
 	}
@@ -563,6 +566,15 @@ class WikiPage
 		$value = self::$db->getPageOther(self::CACHE_USER_ONLINE_DATA, self::CONTENT_TYPE_CACHE);
 		if (!$join) $value = preg_split('/(?<=\n)/', $value);// 行単位(改行コード含む)の配列にして返すとき
 		return $value;
+	}
+	/**
+	 * 利用可能なページ名を更新
+	 *
+	 * @return				なし
+	 */
+	public static function updateAvailablePages()
+	{
+		self::$availablePages = self::$db->getAvailablePages();
 	}
 	/**
 	 * ページ名を取得

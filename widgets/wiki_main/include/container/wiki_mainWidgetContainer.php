@@ -115,7 +115,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$script = $this->getParsedTemplateData(self::INIT_SCRIPT, array($this, 'makeScript'));
 		$gPageManager->addHeadScript($script);
 			
-		// 初期設定が完了していなときは、初期データ読み込み
+		// 初期設定が完了していなときは、ページ初期データ読み込み
 		$init = false;
 		if (!WikiPage::isInit()){		// 初期化未実行のとき
 			set_time_limit(0);			// タイムアウトを解除

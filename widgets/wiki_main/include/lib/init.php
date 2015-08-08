@@ -202,17 +202,10 @@ if ($temp) {
 if($die) die_message(nl2br("\n\n" . $die));
 unset($die, $temp);
 
-/////////////////////////////////////////////////
-// 必須のページが存在しなければ、空のファイルを作成する
-//foreach (array(WikiConfig::getDefaultPage(), $whatsnew, $interwiki) as $page){
+// ### 必須のページが存在しなければ、空のページを作成する ###
 foreach (array(WikiConfig::getDefaultPage()) as $page){
-	if (!WikiPage::isExistsPage($page)){
-//	if (!is_page($page)){
-		//WikiPage::getPageFile($page, $data);		// ファイルから初期データを読み込む
-		//$ret = WikiPage::initPage($page, $data);
-		//if (!$ret) die_message('Cannot create init pages.');
-		WikiPage::initPage($page, '');
-	}
+	// 初期化前にDBの内容を必ず確認する
+	if (!WikiPage::isExistsPage($page)) WikiPage::initPage($page, '');		// ページ初期化
 }
 
 // 入力チェック
