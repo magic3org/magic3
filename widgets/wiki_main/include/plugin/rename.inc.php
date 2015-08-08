@@ -486,6 +486,8 @@ function plugin_rename_proceed($pages, $files, $exists)
 		// ページ名を変更
 		WikiPage::renamePage($oldPage, $newPage);
 	}
+	// ページ一覧を更新
+	WikiPage::updateAvailablePages();
 	
 	// ##### データ移行完了後の処理 #####
 	// リンク更新

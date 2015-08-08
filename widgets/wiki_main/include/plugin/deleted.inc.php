@@ -45,12 +45,8 @@ function plugin_deleted_action()
 /*	if (! isset($_DIR[$dir]))
 		return array('msg'=>'Deleted plugin', 'body'=>'No such setting: Choose backup or diff');
 		*/
-
-/*	$deleted_pages  = array_diff(
-		get_existpages($_DIR[$dir]['dir'], $_DIR[$dir]['ext']),
-		get_existpages());*/
 	// 削除済みのページリストを作成
-	$deleted_pages = array_diff(WikiPage::getAllPages(), WikiPage::getPages());
+	$deleted_pages = array_diff(WikiPage::getAllPages(), get_existpages());
 
 	/*if ($withfilename) {
 		$retval['msg'] = $_deleted_plugin_title_withfilename;

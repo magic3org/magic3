@@ -205,9 +205,9 @@ unset($die, $temp);
 // ### 必須のページが存在しなければ、空のページを作成する ###
 foreach (array(WikiConfig::getDefaultPage()) as $page){
 	// 初期化前にDBの内容を必ず確認する
-	if (!WikiPage::isExistsPage($page)) WikiPage::initPage($page, '');		// ページ初期化
+	if (!WikiPage::isExistsPage($page)) WikiPage::initPage($page, '', true/*ページ一覧更新*/);		// ページ初期化
 }
-
+	
 // 入力チェック
 if (!WikiParam::checkParam()) die('Using both cmd= and plugin= is not allowed');
 

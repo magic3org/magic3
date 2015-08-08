@@ -126,7 +126,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 		add_recent($page, $whatsdeleted, '', $maxshow_deleted);
 
 		// ページデータとページに関するデータを削除
-		$ret = WikiPage::deletePage($page);
+		$ret = WikiPage::deletePage($page, true/*ページ一覧更新*/);
 		if ($ret){
 			// 運用ログを残す
 			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
@@ -159,7 +159,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	} else {		// 更新データがあるときはデータを更新
 		$postdata = rtrim(preg_replace('/' . "\r" . '/', '', $postdata)) . "\n";
 		
-		$ret = WikiPage::updatePage($page, $postdata, $notimestamp);
+		$ret = WikiPage::updatePage($page, $postdata, $notimestamp, true/*ページ一覧更新*/);
 		if ($ret){
 			// 運用ログを残す
 			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
@@ -323,7 +323,7 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 	$newData = '';
 	$newData .= '#norelated' . "\n";
 	$newData .= join('', $lines);
-	$ret = WikiPage::updatePage($recentpage, $newData);
+	$ret = WikiPage::updatePage($recentpage, $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 }
 
 // Update PKWK_MAXSHOW_CACHE itself (Add or renew about the $page) (Light)
@@ -436,7 +436,7 @@ function lastmodified_add($update = '', $remove = '')
 		$newData .= '-' . htmlspecialchars(format_date($time)) . ' - ' . '[[' . htmlspecialchars($_page) . ']]' . "\n";
 	}
 	$newData .= '#norelated' . "\n";
-	WikiPage::updatePage(WikiConfig::getWhatsnewPage(), $newData);
+	WikiPage::updatePage(WikiConfig::getWhatsnewPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 }
 
 // Re-create PKWK_MAXSHOW_CACHE (Heavy)
@@ -520,7 +520,7 @@ function put_lastmodified()
 		$newData .= '-' . $s_lastmod . ' - [[' . $s_page . ']]' . "\n";
 	}
 	$newData .= '#norelated' . "\n";
-	WikiPage::updatePage(WikiConfig::getWhatsnewPage(), $newData);	
+	WikiPage::updatePage(WikiConfig::getWhatsnewPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 
 	// For AutoLink
 	if ($autolink) {
@@ -574,29 +574,10 @@ function header_lastmod($page = NULL)
 }
 
 // Get a page list of this wiki
-function get_existpages($dir = DATA_DIR, $ext = '.txt')
+function get_existpages()
 {
-	// comment for Magic3 by naoki on 2008/9/30
-	// $extに来る値は、「.txt」(通常のページ),「.ref」(キャッシュ),「.count」(ページ参照数),「.gz」(バックアップ)
-	
-	// modified for Magic3 by naoki on 2008/9/30
-	//$aryret = array();
-	
-	/*$pattern = '((?:[0-9A-F]{2})+)';
-	if ($ext != '') $ext = preg_quote($ext, '/');
-	$pattern = '/^' . $pattern . $ext . '$/';
-
-	$dp = @opendir($dir) or
-		die_message($dir . ' is not found or not readable.');
-	$matches = array();
-	while ($file = readdir($dp))
-		if (preg_match($pattern, $file, $matches))
-			$aryret[$file] = decode($matches[1]);
-	closedir($dp);*/
-
 	$pages = WikiPage::getPages();
 	return $pages;
-	//return $aryret;
 }
 
 // Get PageReading(pronounce-annotated) data in an array()

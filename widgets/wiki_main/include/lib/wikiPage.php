@@ -56,6 +56,15 @@ class WikiPage
 		self::$availablePages = self::$db->getAvailablePages();
 	}
 	/**
+	 * 利用可能なページ名を更新
+	 *
+	 * @return				なし
+	 */
+	public static function updateAvailablePages()
+	{
+		self::$availablePages = self::$db->getAvailablePages();
+	}
+	/**
 	 * 初期データ読み込み
 	 *
 	 * @return bool			true=成功、false=失敗
@@ -150,16 +159,22 @@ class WikiPage
 	/**
 	 * ページを初期作成
 	 *
-	 * @param  string $name		Wiki名
-	 * @param  string $data		初期データ
+	 * @param string $name		Wiki名
+	 * @param string $data		初期データ
+	 * @param bool   $updateAvailablePages		利用可能なページ一覧
 	 * @return bool			true=成功、false=失敗
 	 */
-	public static function initPage($name, $data='')
+	public static function initPage($name, $data='', $updateAvailablePages = false)
 	{
 		// 引数エラーチェック
 		if (empty($name)) return false;
 		
-		return self::$db->updatePage($name, $data);
+		$ret = self::$db->updatePage($name, $data);
+		
+		// 利用可能なページ名を更新
+		if ($updateAvailablePages) self::updateAvailablePages();
+
+		return $ret;
 	}
 	/**
 	 * ページの初期データファイルを読み込む
@@ -212,26 +227,34 @@ class WikiPage
 	 * ページデータを更新
 	 *
 	 * @param string $name		ページ名
-	 * @param  string $data		更新データ
+	 * @param string $data		更新データ
 	 * @param bool $keepTime	更新日時を維持するかどうか
+	 * @param bool $updateAvailablePages		利用可能なページ一覧
 	 * @return bool				true=成功、false=失敗
 	 */
-	public static function updatePage($name, $data, $keepTime=false)
+	public static function updatePage($name, $data, $keepTime = false, $updateAvailablePages = false)
 	{
 		// 引数エラーチェック
 		if (empty($name)) return false;
 		
 		$type = '';		// ページタイプ
 		$ret = self::$db->updatePage($name, $data, $type, $keepTime);
+		
+		// 関連データ更新
+		if ($ret){
+			// ##### 利用可能なページ名を更新 #####
+			if ($updateAvailablePages) self::updateAvailablePages();
+		}
 		return $ret;
 	}
 	/**
 	 * ページを削除
 	 *
 	 * @param string $name		ページ名
+	 * @param bool   $updateAvailablePages		利用可能なページ一覧
 	 * @return bool				true=成功、false=失敗
 	 */
-	public static function deletePage($name)
+	public static function deletePage($name, $updateAvailablePages = false)
 	{
 		$type = '';		// ページタイプ
 		$ret = self::$db->deletePage($name, $type);
@@ -243,7 +266,10 @@ class WikiPage
 			self::clearPageUpload($name);		// アップロードファイル管理データ
 			self::clearCacheRel($name);			// ページキャッシュデータ(関連ページ)
 			self::clearCacheRef($name);			// ページキャッシュデータ(参照ページ)
-			self::clearPageTrackback($name);	// ページトラックバックデータ
+//			self::clearPageTrackback($name);	// ページトラックバックデータ
+			
+			// ##### 利用可能なページ名を更新 #####
+			if ($updateAvailablePages) self::updateAvailablePages();
 		}
 		return $ret;
 	}
@@ -252,9 +278,10 @@ class WikiPage
 	 *
 	 * @param string $oldName		旧ページ名
 	 * @param string $newName		新ページ名
+	 * @param bool   $updateAvailablePages		利用可能なページ一覧
 	 * @return bool					true=成功、false=失敗
 	 */
-	public static function renamePage($oldName, $newName)
+	public static function renamePage($oldName, $newName, $updateAvailablePages = false)
 	{
 		$type = '';		// ページタイプ
 		$ret = self::$db->renamePage($oldName, $newName, $type);
@@ -266,7 +293,10 @@ class WikiPage
 			self::clearPageUpload($oldName);		// アップロードファイル管理データ
 			self::clearCacheRel($oldName);			// ページキャッシュデータ(関連ページ)
 			self::clearCacheRef($oldName);			// ページキャッシュデータ(参照ページ)
-			self::clearPageTrackback($oldName);	// ページトラックバックデータ
+//			self::clearPageTrackback($oldName);	// ページトラックバックデータ
+			
+			// ##### 利用可能なページ名を更新 #####
+			if ($updateAvailablePages) self::updateAvailablePages();
 		}
 		return $ret;
 	}
@@ -274,7 +304,7 @@ class WikiPage
 	 * ページdiffデータを更新
 	 *
 	 * @param string $name		ページ名
-	 * @param  string $data		更新データ
+	 * @param string $data		更新データ
 	 * @return bool				true=成功、false=失敗
 	 */
 	public static function updatePageDiff($name, $data)
@@ -566,15 +596,6 @@ class WikiPage
 		$value = self::$db->getPageOther(self::CACHE_USER_ONLINE_DATA, self::CONTENT_TYPE_CACHE);
 		if (!$join) $value = preg_split('/(?<=\n)/', $value);// 行単位(改行コード含む)の配列にして返すとき
 		return $value;
-	}
-	/**
-	 * 利用可能なページ名を更新
-	 *
-	 * @return				なし
-	 */
-	public static function updateAvailablePages()
-	{
-		self::$availablePages = self::$db->getAvailablePages();
 	}
 	/**
 	 * ページ名を取得
