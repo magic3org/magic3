@@ -121,6 +121,16 @@ class WikiPage
 		return in_array($name, self::$availablePages);
 	}
 	/**
+	 * ページデータが存在するかどうかをチェック(DBを確認)
+	 *
+	 * @param  string $name		Wiki名
+	 * @return bool				true=存在する、false=存在しない
+	 */
+	public static function isExistsPage($name)
+	{
+		return self::$db->isExistsPage($name);
+	}
+	/**
 	 * ページがロックされているかどうかをチェック
 	 *
 	 * @param  string $name		Wiki名
