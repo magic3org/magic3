@@ -32,7 +32,6 @@ global $nofollow;
 //global $referer;
 global $nowikiname;
 global $autolink;
-global $function_freeze;
 global $notimeupdate;
 // auth
 global $auth_users;
@@ -240,10 +239,6 @@ $nofollow = 0; // 1 = Try hiding from search engines
 
 // AutoLink minimum length of page name
 $autolink = 0; // Bytes, 0 = OFF (try 8)
-
-/////////////////////////////////////////////////
-// Enable Freeze / Unfreeze feature
-$function_freeze = 1;
 
 /////////////////////////////////////////////////
 // Allow to use 'Do not change timestamp' checkbox

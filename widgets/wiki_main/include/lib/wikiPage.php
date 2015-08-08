@@ -19,6 +19,7 @@ class WikiPage
 {
 	private static $db;		// DBオブジェクト
 	private static $footNote = array();
+	private static $availablePages;			// 利用可能なすべてのページ
 	const CACHE_ENTITY_DATA			= 'entities_dat';		// 判定用データ定義名
 	const CACHE_RECENT_DATA			= 'recent_dat';			// 最終更新データ
 	const CACHE_AUTOLINK_DATA		= 'autolink_dat';		// オートリンク用データ
@@ -49,6 +50,10 @@ class WikiPage
 	public static function init($db)
 	{
 		self::$db = $db;
+		
+		// 利用可能なページIDをすべて取得
+		//self::$availablePages = self::getPages();
+		self::$availablePages = self::$db->getAvailablePages();
 	}
 	/**
 	 * 初期データ読み込み
@@ -112,7 +117,8 @@ class WikiPage
 	 */
 	public static function isPage($name)
 	{
-		return self::$db->isExistsPage($name);
+//		return self::$db->isExistsPage($name);
+		return in_array($name, self::$availablePages);
 	}
 	/**
 	 * ページがロックされているかどうかをチェック
@@ -555,8 +561,9 @@ class WikiPage
 	 */
 	public static function getPages()
 	{
-		$retVal = self::$db->getAvailablePages();
-		return $retVal;
+//		$retVal = self::$db->getAvailablePages();
+//		return $retVal;
+		return self::$availablePages;			// 利用可能なすべてのページ
 	}
 	/**
 	 * 削除済みを含めたすべてのページ名を取得
@@ -750,16 +757,6 @@ class WikiPage
 	{
 		$ret = self::$db->setOldPageVisible($name, $visible);
 		return $ret;
-	}
-	
-	/**
-	 * 判定用データが存在するかどうかをチェック
-	 *
-	 * @return bool			true=存在する、false=存在しない
-	 */
-	public static function isEntity()
-	{
-		return self::$db->isExistsPage($name);
 	}
 	/**
 	 * 判定用データファイル(entities.dat)を読み込む

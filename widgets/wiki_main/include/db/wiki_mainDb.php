@@ -192,7 +192,7 @@ class wiki_mainDb extends BaseDb
 	 * @param function	$callback			コールバック関数
 	 * @return 								なし
 	 */
-	function getNormalPageList($limit, $pageNo, $callback)
+	function getAvailablePageList($limit, $pageNo, $callback)
 	{
 		$offset = $limit * ($pageNo -1);
 		if ($offset < 0) $offset = 0;
@@ -211,7 +211,7 @@ class wiki_mainDb extends BaseDb
 	 * @param function	$callback			コールバック関数
 	 * @return int							ページ数
 	 */
-	function getNormalPageListCount()
+	function getAvailablePageListCount()
 	{
 		$type = '';			// 取得ページタイプ(一般)
 		$queryStr  = 'SELECT * FROM wiki_content ';

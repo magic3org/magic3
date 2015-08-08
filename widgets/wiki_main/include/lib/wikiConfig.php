@@ -311,20 +311,6 @@ class WikiConfig
 		}
 	}
 	/**
-	 * ページが凍結可能かどうかを取得
-	 *
-	 * @return bool				true=可能、false=不可
-	 */
-	public static function isPageFreeze()
-	{
-		global $function_freeze;
-		if ($function_freeze){
-			return true;
-		} else {
-			return false;
-		}
-	}
-	/**
 	 * すべてのユーザ向けにツールバーを表示するかどうかを取得
 	 *
 	 * @return bool		true=すべてのユーザに表示、false=管理者のみ表示

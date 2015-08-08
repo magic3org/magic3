@@ -60,7 +60,9 @@ function is_url($str, $only_http = FALSE)
 //function is_page($page, $clearcache = FALSE)
 function is_page($page)
 {
-	return WikiPage::isPage($page);
+	// 利用可能なすべてのページの配列を取得。DBを読み出さない。
+	return in_array($page, WikiPage::getPages());
+//	return WikiPage::isPage($page);
 }
 
 function is_editable($page)
@@ -81,29 +83,16 @@ function is_editable($page)
 
 function is_freeze($page, $clearcache = FALSE)
 {
-	global $function_freeze;
 	static $is_freeze = array();
 
 	if ($clearcache === TRUE) $is_freeze = array();
 	if (isset($is_freeze[$page])) return $is_freeze[$page];
 
-	if (! $function_freeze || ! is_page($page)) {
+	if (!is_page($page)){
 		$is_freeze[$page] = FALSE;
 		return FALSE;
 	} else {
-		// modified for Magic3 by naoki on 2008/10/4
 		// ページの編集ロック状態を取得
-		/*
-		$fp = fopen(get_filename($page), 'rb') or
-			die('is_freeze(): fopen() failed: ' . htmlspecialchars($page));
-		flock($fp, LOCK_SH) or die('is_freeze(): flock() failed');
-		rewind($fp);
-		$buffer = fgets($fp, 9);
-		flock($fp, LOCK_UN) or die('is_freeze(): flock() failed');
-		fclose($fp) or die('is_freeze(): fclose() failed: ' . htmlspecialchars($page));
-
-		$is_freeze[$page] = ($buffer != FALSE && rtrim($buffer, "\r\n") == '#freeze');
-		*/
 		$is_freeze[$page] = WikiPage::isPageLocked($page);
 		return $is_freeze[$page];
 	}

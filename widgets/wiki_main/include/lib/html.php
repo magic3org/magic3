@@ -26,7 +26,7 @@ define('EDIT_COLS_BOOTSTRAP', 40); // Columns of textarea
 //function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE)
 function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='')
 {
-	global $script, $rows, $cols, $hr, $function_freeze;
+	global $script, $rows, $cols, $hr;
 	global $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel, $_msg_help;
 	global $whatsnew, $_btn_template, $_btn_load, $load_template_func;
 	global $notimeupdate;

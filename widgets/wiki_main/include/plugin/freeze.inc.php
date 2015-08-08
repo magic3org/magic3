@@ -17,7 +17,7 @@ function plugin_freeze_convert() { return ''; }
 
 function plugin_freeze_action()
 {
-	global $script, $function_freeze;
+	global $script;
 //	global $dummy_password;
 	global $_title_isfreezed, $_title_freezed, $_title_freeze;
 	global $_msg_invalidpass, $_msg_freezing, $_btn_freeze, $_msg_no_operation_allowed;
@@ -29,7 +29,7 @@ function plugin_freeze_action()
 	if (!empty($retStatus)) return $retStatus;
 	
 	$page = WikiParam::getPage();
-	if (! $function_freeze || ! is_page($page)) return array('msg' => '', 'body' => '');
+	if (!is_page($page)) return array('msg' => '', 'body' => '');
 
 	$pass = WikiParam::getVar('pass');
 	$action = WikiParam::getVar('action');			// 次画面遷移用

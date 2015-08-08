@@ -131,7 +131,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		}
 		// #### Wikiページリストを作成 ####
 		// 総数を取得
-		$totalCount = self::$_mainDb->getNormalPageListCount();
+		$totalCount = self::$_mainDb->getAvailablePageListCount();
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $this->maxListCount);
@@ -140,7 +140,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// イベントリストを取得
-		self::$_mainDb->getNormalPageList($this->maxListCount, $pageNo, array($this, 'itemListLoop'));
+		self::$_mainDb->getAvailablePageList($this->maxListCount, $pageNo, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 表示データないときは、一覧を表示しない
 		
 		// 一覧用項目
