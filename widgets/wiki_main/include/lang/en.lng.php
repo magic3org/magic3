@@ -166,6 +166,8 @@ global $_title_authorization_required;
 global $_msg_authorization_required;
 global $_title_invalid_pagename;
 global $_msg_invalid_pagename;
+global $_msg_returnto;
+global $_msg_no_related_pages;
 
 ///////////////////////////////////////
 // Page titles
@@ -609,4 +611,8 @@ $_vote_plugin_votes  = 'Vote';
 // yetlist.inc.php
 $_title_yetlist = 'List of pages which have not yet been created.';
 $_err_notexist  = 'All pages have been created.';
+
+// relatedプラグイン
+$_msg_returnto		= 'Return to $1';
+$_msg_no_related_pages	= 'No related pages found.';
 ?>

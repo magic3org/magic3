@@ -167,6 +167,8 @@ global $_title_authorization_required;
 global $_msg_authorization_required;
 global $_title_invalid_pagename;
 global $_msg_invalid_pagename;
+global $_msg_returnto;
+global $_msg_no_related_pages;
 
 ///////////////////////////////////////
 // Page titles
@@ -612,4 +614,8 @@ $_vote_plugin_votes  = '投票';
 // yetlist.inc.php
 $_title_yetlist = '未作成のページ一覧';
 $_err_notexist  = '未作成のページはありません。';
+
+// relatedプラグイン
+$_msg_returnto		= '$1 へ戻る';
+$_msg_no_related_pages	= '関連ページが見つかりません';
 ?>
