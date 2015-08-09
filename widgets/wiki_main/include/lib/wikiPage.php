@@ -445,12 +445,13 @@ class WikiPage
 	/**
 	 * ページキャッシュデータ(関連ページ)をすべて削除
 	 *
-	 * @param string $name		ページ名
+	 * @param string $name		ページ名(空の場合はすべてのページが対象)
 	 * @return bool				true=成功、false=失敗
 	 */
-	public static function clearCacheRel($name='')
+	public static function clearCacheRel($name = '')
 	{
-		return self::$db->clearPageOther($name, self::CONTENT_TYPE_CACHE_REL);
+		$ret = self::$db->clearPageOther($name, self::CONTENT_TYPE_CACHE_REL);
+		return $ret;
 	}
 	/**
 	 * ページキャッシュデータ(参照ページ)を更新
@@ -483,12 +484,13 @@ class WikiPage
 	/**
 	 * ページキャッシュデータ(参照ページ)をクリア
 	 *
-	 * @param string $name		ページ名
+	 * @param string $name		ページ名(空の場合はすべてのページが対象)
 	 * @return bool				true=成功、false=失敗
 	 */
-	public static function clearCacheRef($name='')
+	public static function clearCacheRef($name = '')
 	{
-		return self::$db->clearPageOther($name, self::CONTENT_TYPE_CACHE_REF);
+		$ret = self::$db->clearPageOther($name, self::CONTENT_TYPE_CACHE_REF);
+		return $ret;
 	}
 	/**
 	 * ページトラックバックデータを更新
