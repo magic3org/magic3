@@ -436,10 +436,16 @@ class WikiPage
 	 * @param bool $join		データ連結するかどうか
 	 * @return string		取得データ
 	 */
-	public static function getPageCacheRel($name, $join=false)
+	public static function getPageCacheRel($name, $join = false)
 	{
 		$value = self::$db->getPageOther($name, self::CONTENT_TYPE_CACHE_REL);
-		if (!$join) $value = preg_split('/(?<=\n)/', $value);// 行単位(改行コード含む)の配列にして返すとき
+		if (!$join){	// 行単位(改行コード含む)の配列にして返すとき
+			if (empty($value)){
+				$value = array();
+			} else {
+				$value = preg_split('/(?<=\n)/', $value);
+			}
+		}
 		return $value;
 	}
 	/**
@@ -475,10 +481,16 @@ class WikiPage
 	 * @param bool $join		データ連結するかどうか
 	 * @return string		取得データ
 	 */
-	public static function getPageCacheRef($name, $join=false)
+	public static function getPageCacheRef($name, $join = false)
 	{
 		$value = self::$db->getPageOther($name, self::CONTENT_TYPE_CACHE_REF);
-		if (!$join) $value = preg_split('/(?<=\n)/', $value);// 行単位(改行コード含む)の配列にして返すとき
+		if (!$join){		// 行単位(改行コード含む)の配列にして返すとき
+			if (empty($value)){
+				$value = array();
+			} else {
+				$value = preg_split('/(?<=\n)/', $value);
+			}
+		}
 		return $value;
 	}
 	/**

@@ -71,10 +71,18 @@ function get_source($page = NULL, $join = false, &$serial=null)
 // Get last-modified filetime of the page
 function get_filetime($page)
 {
+	static $fileTimes = array();
+	
+	$fileTime = $fileTimes[$page];
+	if (!isset($fileTime)){
+		$fileTime = is_page($page) ? WikiPage::getPageTime($page) : 0;
+		$fileTimes[$page] = $fileTime;
+	}
+	return $fileTime;
 	// modified for Magic3 by naoki on 2008/9/28
 	//return is_page($page) ? filemtime(get_filename($page)) - LOCALZONE : 0;
 	//return is_page($page) ? WikiPage::getPageTime($page) - LOCALZONE : 0;
-	return is_page($page) ? WikiPage::getPageTime($page) : 0;
+	//return is_page($page) ? WikiPage::getPageTime($page) : 0;
 }
 
 // Get physical file name of the page

@@ -44,12 +44,9 @@
 // データベースから関連ページを得る
 function links_get_related_db($page)
 {
-	//$ref_name = CACHE_DIR . encode($page) . '.ref';
-	//if (! file_exists($ref_name)) return array();
 	$refPage = WikiPage::getPageCacheRef($page);
 
 	$times = array();
-	//foreach (file($ref_name) as $line) {
 	foreach ($refPage as $line){
 		list($_page) = explode("\t", rtrim($line));
 		if (empty($_page)) continue;
@@ -164,6 +161,7 @@ function links_init()
 		// キャッシュを作成しないページはとばす
 		if ($page == WikiConfig::getWhatsnewPage()) continue;
 
+		// ページキャッシュデータ(リンク情報)を更新
 		$rel   = array(); // 参照先
 		$links = links_get_objects($page);
 		foreach ($links as $_obj) {
@@ -176,21 +174,11 @@ function links_init()
 				$ref[$_obj->name][$page] = 0;
 		}
 		$rel = array_unique($rel);
-		if (!empty($rel)){
-			/*$fp = fopen(CACHE_DIR . encode($page) . '.rel', 'w')
-				or die_message('cannot write ' . htmlspecialchars(CACHE_DIR . encode($page) . '.rel'));
-			fputs($fp, join("\t", $rel));
-			fclose($fp);*/
-			WikiPage::updatePageCacheRel($page, join("\t", $rel));
-		}
+		if (!empty($rel)) WikiPage::updatePageCacheRel($page, join("\t", $rel));
 	}
 
+	// ページキャッシュデータ(関連ページ)を更新
 	foreach ($ref as $page=>$arr) {
-		/*$fp  = fopen(CACHE_DIR . encode($page) . '.ref', 'w')
-			or die_message('cannot write ' . htmlspecialchars(CACHE_DIR . encode($page) . '.ref'));
-		foreach ($arr as $ref_page=>$ref_auto)
-			fputs($fp, $ref_page . "\t" . $ref_auto . "\n");
-		fclose($fp);*/
 		$updateData = '';
 		foreach ($arr as $ref_page=>$ref_auto){
 			$updateData .= $ref_page . "\t" . $ref_auto . "\n";
