@@ -64,9 +64,6 @@ function links_get_related_db($page)
 function links_update($page)
 {
 	global $WikiName, $autolink, $nowikiname, $search_non_list;
-//	if (PKWK_READONLY) return; // Do nothing
-
-	//if (ini_get('safe_mode') == '0') set_time_limit(0);
 
 	//$time = is_page($page, TRUE) ? get_filetime($page) : 0;
 
@@ -135,7 +132,8 @@ function links_update($page)
 
 	// $pageが削除されたときに、
 	//if (! $time && file_exists($ref_file)) {
-	if (!WikiPage::isPage($page)){
+	//if (!WikiPage::isPage($page)){
+	if (!is_page($page)){
 		//foreach (file($ref_file) as $line) {
 		$refPage = WikiPage::getPageCacheRef($page);
 		foreach ($refPage as $line){
@@ -143,7 +141,9 @@ function links_update($page)
 			if (empty($ref_page)) continue;
 
 			// $pageをAutoLinkでしか参照していないページを一斉更新する(おいおい)
-			if ($ref_auto) links_delete($ref_page, array($page));
+			if ($ref_auto){
+				links_delete($ref_page, array($page));
+			}
 		}
 	}
 }
@@ -151,16 +151,6 @@ function links_update($page)
 // Init link cache (Called from link plugin)
 function links_init()
 {
-//	global $whatsnew;
-//	if (PKWK_READONLY) return; // Do nothing
-
-	//if (ini_get('safe_mode') == '0') set_time_limit(0);
-
-	// Init database
-	/*foreach (get_existfiles(CACHE_DIR, '.ref') as $cache)
-		unlink($cache);
-	foreach (get_existfiles(CACHE_DIR, '.rel') as $cache)
-		unlink($cache);*/
 	// キャッシュクリア
 	WikiPage::clearCacheRef();
 	WikiPage::clearCacheRel();
@@ -171,7 +161,6 @@ function links_init()
 		$value = trim($page);
 		if (empty($value)) continue;
 		
-		//if ($page == $whatsnew) continue;
 		// キャッシュを作成しないページはとばす
 		if ($page == WikiConfig::getWhatsnewPage()) continue;
 

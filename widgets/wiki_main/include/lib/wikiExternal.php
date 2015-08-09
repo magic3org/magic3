@@ -93,5 +93,14 @@ class wikiExternal
 		}
 		return $dest;
 	}
+	/**
+	 * リンク情報再構築
+	 *
+	 * @return				なし
+	 */
+	function initLinks()
+	{
+		links_init();
+	}
 }
 ?>

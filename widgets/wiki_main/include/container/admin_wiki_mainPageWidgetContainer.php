@@ -35,6 +35,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const LOCK_ICON_FILE = '/images/system/lock32.png';			// ロック状態アイコン
 	const UNLOCK_ICON_FILE = '/images/system/unlock32_inactive.png';		// アンロック状態アイコン
+	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
 	
 	/**
 	 * コンストラクタ
@@ -121,6 +122,10 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 					$ret = self::$_mainDb->getPageBySerial($delItems[$i], $row);
 					if ($ret) page_write($row['wc_id'], '');
 				}
+				
+				// リンク情報再構築
+				$wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);// Wikiコンテンツオブジェクト取得
+				$wikiLibObj->initLinks();
 //				$ret = $this->db->delCategoryBySerial($delItems);
 //				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');

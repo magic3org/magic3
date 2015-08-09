@@ -366,7 +366,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	 */
 	function createViewData($body)
 	{
-		global $related_link;
+		global $related_link;		// 関連ページを表示するかどうか。プラグインでOFFにする場合あり。
 		global $attach_link;
 		global $note_hr;
 

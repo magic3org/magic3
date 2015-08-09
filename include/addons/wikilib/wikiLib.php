@@ -87,5 +87,14 @@ class wikiLib
 		WikiConfig::resetErrorMsg();
 		return $dest;
 	}
+	/**
+	 * リンク情報再構築
+	 *
+	 * @return				なし
+	 */
+	function initLinks()
+	{
+		$this->wikiExternalObj->initLinks();
+	}
 }
 ?>

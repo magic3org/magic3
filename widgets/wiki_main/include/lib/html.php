@@ -221,7 +221,6 @@ EOD;
 // Related pages
 function make_related($page, $tag = '')
 {
-	//global $script, $vars, $rule_related_str, $related_str;
 	global $script, $rule_related_str, $related_str;
 	global $_ul_left_margin, $_ul_margin, $_list_pad_str;
 
@@ -246,11 +245,8 @@ function make_related($page, $tag = '')
 			$s_page . ' ' . $passage . '">' . $s_page . '</a>' :
 			'<a href="' . $script . '?' . $r_page . '">' .
 			$s_page . '</a>' . $passage;*/
-		$_links[] = $tag ?
-			'<a href="' . $script . WikiParam::convQuery("?$r_page") . '" title="' .
-			$s_page . ' ' . $passage . '">' . $s_page . '</a>' :
-			'<a href="' . $script . WikiParam::convQuery("?$r_page") . '">' .
-			$s_page . '</a>' . $passage;
+		$_links[] = $tag ? '<a href="' . $script . WikiParam::convQuery("?$r_page") . '" title="' . $s_page . ' ' . $passage . '">' . $s_page . '</a>' :
+					'<a href="' . $script . WikiParam::convQuery("?$r_page") . '">' . $s_page . '</a>' . $passage;
 	}
 	if (empty($_links)) return ''; // Nothing
 
