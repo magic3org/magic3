@@ -58,7 +58,7 @@ class wiki_mainDb extends BaseDb
 	 */
 	function getPageBySerial($serial, &$row)
 	{
-		$queryStr  = 'SELECT * FROM wiki_content ';
+		$queryStr  = 'SELECT * FROM wiki_content LEFT JOIN _login_user ON wc_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'WHERE wc_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		return $ret;
@@ -308,9 +308,10 @@ class wiki_mainDb extends BaseDb
 	 *
 	 * @param string  $name			ウィキページ名
 	 * @param string  $type			ページタイプ
+	 * @param int $delSerial		削除したレコードのシリアル番号
 	 * @return bool					true=成功、false=失敗
 	 */
-	function deletePage($name, $type='')
+	function deletePage($name, $type, &$delSerial)
 	{
 		global $gEnvManager;
 		
@@ -331,6 +332,7 @@ class wiki_mainDb extends BaseDb
 			$ret = $this->endTransaction();
 			return false;
 		}
+		$delSerial = $row['wc_serial'];
 		
 		$queryStr  = 'UPDATE wiki_content ';
 		$queryStr .=   'SET wc_deleted = true, ';	// 削除

@@ -38,7 +38,8 @@ class wikiLib
 	 */
 	function getBuiltinPages()
 	{
-		return 	array( WikiConfig::getDefaultPage(), WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );
+		//return 	array( WikiConfig::getDefaultPage(), WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );
+		return WikiConfig::getBuiltinPages();
 	}
 	/**
 	 * Wikiコンテンツをプレーンなテキストに変換

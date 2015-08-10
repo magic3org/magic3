@@ -242,6 +242,24 @@ class WikiConfig
 		return $menubar;
 	}
 	/**
+	 * システム専用ページ取得(デフォルトページ含む)
+	 *
+	 * @return array		ページ名の配列
+	 */
+	public static function getBuiltinPages()
+	{
+		return 	array( WikiConfig::getDefaultPage()/*デフォルトページ*/, WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );
+	}
+	/**
+	 * リンク情報を管理しないページ取得
+	 *
+	 * @return array		ページ名の配列
+	 */
+	public static function getNoLinkPages()
+	{
+		return 	array( WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );
+	}
+	/**
 	 * 現在日時を取得
 	 *
 	 * @return string		現在日時
