@@ -48,6 +48,7 @@ function plugin_recent_convert()
 	$date = $items = '';
 	$lineCount = 0;			// 行数カウント用
 	foreach ($lines as $line) {
+		// 最終更新データの行を解析
 		list($time, $page) = explode("\t", rtrim($line));
 		if (empty($page)) continue;				// フォーマットに合わないデータは読み飛ばす
 

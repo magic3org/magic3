@@ -688,6 +688,47 @@ class WikiPage
 		return $retVal;
 	}
 	/**
+	 * ページ情報を最新更新分から取得
+	 *
+	 * @param int $count			取得数
+	 * @param string $exceptPage	取得しないページ
+	 * @return array				ページ情報オブジェクト(time,userid,usermame)の配列
+	 */
+	public static function getLastPageInfo($count, $exceptPage)
+	{
+		$pageInfoArray = array();
+		$ret = self::$db->getLastPageInfoArray($count, $exceptPage, $rows);
+		if ($ret){
+			for ($i = 0; $i < count($rows); $i++){
+				$page = $rows[$i]['wc_id'];		// WikiページID
+				
+				$newObj = new stdClass;
+				$newObj->time		= strtotime($rows[$i]['wc_content_dt']) - LOCALZONE;// コンテンツ更新日時
+				$newObj->userId		= $rows[$i]['wc_create_user_id'];					// 更新ユーザID
+				$newObj->userName	= $rows[$i]['lu_name'];								// 更新ユーザ名
+				$pageInfoArray[$page] = $newObj;
+			}
+		}
+		return $pageInfoArray;
+	}
+	/**
+	 * ページ情報を取得
+	 *
+	 * @param string $name			ページ名
+	 * @return object				ページ情報オブジェクト(time,userid,usermame)
+	 */
+	public static function getPageInfo($name)
+	{
+		$ret = self::$db->getPage($name, $row);
+		if ($ret){
+			$newObj = new stdClass;
+			$newObj->time		= strtotime($row['wc_content_dt']) - LOCALZONE;// コンテンツ更新日時
+			$newObj->userId		= $row['wc_create_user_id'];					// 更新ユーザID
+			$newObj->userName	= $row['lu_name'];								// 更新ユーザ名
+		}
+		return $newObj;
+	}
+	/**
 	 * ページ更新日時を取得
 	 *
 	 * @param string $name		ページ名

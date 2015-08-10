@@ -391,6 +391,15 @@ class WikiConfig
 		return self::$_configArray[wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR];
 	}
 	/**
+	 * ユーザ名を表示するかどうかを取得
+	 *
+	 * @return bool			true=表示、false=非表示
+	 */
+	public static function isShowUserName()
+	{
+		return self::$_configArray[wiki_mainCommonDef::CF_SHOW_USERNAME];
+	}
+	/**
 	 * アクセス中のユーザにデータ編集権限があるかを判断
 	 *
 	 * @return bool		true=権限あり、false=権限なし

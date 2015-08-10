@@ -15,18 +15,20 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_wiki_mainBaseWidgetContainer.php');
 // Magic3追加ファイル
-require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');
-require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiPage.php');
-require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiParam.php');
+//require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');
+//require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiPage.php');
+//require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiParam.php');
 // PukiWikiファイル
-require_once($gEnvManager->getCurrentWidgetLibPath() . '/func.php');
+/*require_once($gEnvManager->getCurrentWidgetLibPath() . '/func.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/file.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/diff.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/make_link.php');
 require_once($gEnvManager->getCurrentWidgetLibPath() . '/link.php');
+*/
 
 class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContainer
 {
+	private $wikiLibObj;		// Wikiコンテンツオブジェクト
 	private $serialNo;			// シリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $builtinPages;		// 自動生成されるWikiページ
@@ -45,16 +47,19 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		// 親クラスを呼び出す
 		parent::__construct();
 		
+		$this->wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);// Wikiコンテンツオブジェクト取得
+				
 		// ### Wikiページライブラリ初期化 ###
-		WikiConfig::init(self::$_mainDb);
+/*		WikiConfig::init(self::$_mainDb);
 		WikiPage::init(self::$_mainDb);		// Wikiページ管理クラス
 		WikiParam::init(self::$_mainDb);		// URLパラメータ管理クラス
 		global $gEnvManager;
-		require_once($gEnvManager->getCurrentWidgetLibPath() . '/init.php');			// Wiki機能初期化
+		require_once($gEnvManager->getCurrentWidgetLibPath() . '/init.php');			// Wiki機能初期化*/
 				
 		// パラメータ初期化
 		$this->maxListCount = self::DEFAULT_LIST_COUNT;
-		$this->builtinPages	= array( WikiConfig::getDefaultPage(), WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );		// 自動生成されるWikiページ
+		//$this->builtinPages	= array( WikiConfig::getDefaultPage(), WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );		// 自動生成されるWikiページ
+		$this->builtinPages	= $this->wikiLibObj->getBuiltinPages();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -124,8 +129,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 				}
 				
 				// リンク情報再構築
-				$wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);// Wikiコンテンツオブジェクト取得
-				$wikiLibObj->initLinks();
+				$this->wikiLibObj->initLinks();
 //				$ret = $this->db->delCategoryBySerial($delItems);
 //				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg('データを削除しました');

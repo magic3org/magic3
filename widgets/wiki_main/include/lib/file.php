@@ -18,11 +18,6 @@
 //   2001-2002 Originally written by yu-ji
 // License: GPL v2 or (at your option) any later version
 //
-// File related functions
-// RecentChanges
-define('PKWK_MAXSHOW_ALLOWANCE', 10);
-//define('PKWK_MAXSHOW_CACHE', 'recent.dat');
-
 // 運用ログメッセージ
 define('LOG_MSG_ADD_CONTENT',		'Wikiコンテンツを追加しました。タイトル: %s');
 define('LOG_MSG_UPDATE_CONTENT',	'Wikiコンテンツを更新しました。タイトル: %s');
@@ -154,7 +149,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 			@unlink($filename);
 		}
 		
-		// Update RecentDeleted, and remove the page from RecentChanges
+		// 最終更新情報(最終更新データ、最終更新ページ)を更新
 		lastmodified_add($whatsdeleted, $page);
 	} else {		// 更新データがあるときはデータを更新
 		$postdata = rtrim(preg_replace('/' . "\r" . '/', '', $postdata)) . "\n";
@@ -172,8 +167,8 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 			}
 		}
 		
-		// Update RecentChanges (Add or renew the $page)
-		if ($notimestamp === FALSE) lastmodified_add($page);
+		// 最終更新情報(最終更新データ、最終更新ページ)を更新
+		if ($notimestamp === FALSE) lastmodified_add($page);		// 更新日時を更新する場合
 	}
 	// キャッシュクリア
 	//is_page($page, TRUE); // Clear is_page() cache
@@ -278,8 +273,13 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 	$ret = WikiPage::updatePage($recentpage, $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 }
 
-// Update PKWK_MAXSHOW_CACHE itself (Add or renew about the $page) (Light)
-// Use without $autolink
+/**
+ * 最終更新情報(最終更新データ、最終更新ページ)を更新
+ *
+ * @param string $update			更新したページ
+ * @param string $remove			削除したページ
+ * @return							なし
+ */
 function lastmodified_add($update = '', $remove = '')
 {
 	global $maxshow, $autolink;
@@ -292,6 +292,7 @@ function lastmodified_add($update = '', $remove = '')
 
 	if (($update == '' || check_non_list($update)) && $remove == '') return; // No need
 
+	// ##### 以下はページ削除の場合のみ実行される? #####
 	// 最終更新データを取得
 	$lines = WikiPage::getCacheRecentChanges();
 	if (empty($lines)){
@@ -299,47 +300,76 @@ function lastmodified_add($update = '', $remove = '')
 		return;
 	}
 
+	// ユーザ名を表示するかどうか
+	$showUserName = WikiConfig::isShowUserName();
+	
 	// Read (keep the order of the lines)
-	$recent_pages = $matches = array();
+	//$recent_pages = $matches = array();
+	$recent_pages = array();
 
-	$lineCount = $maxshow + PKWK_MAXSHOW_ALLOWANCE < count($lines) ? $maxshow + PKWK_MAXSHOW_ALLOWANCE : count($lines);
+	$lineCount = $maxshow < count($lines) ? $maxshow : count($lines);
 	for ($i = 0; $i < $lineCount; $i++){
-		if (preg_match('/^([0-9]+)\t(.+)/', $lines[$i], $matches)){
+		// 最終更新データの行を解析
+		list($time, $page, $userName) = explode("\t", rtrim($lines[$i]));
+//		$recent_pages[$page] = $time;
+/*		if (preg_match('/^([0-9]+)\t(.+)/', $lines[$i], $matches)){
 			$recent_pages[$matches[2]] = $matches[1];
-		}
+		}*/
+
+		$newObj = new stdClass;
+		$newObj->time		= $time;// コンテンツ更新日時
+		$newObj->userName	= $userName;								// 更新ユーザ名
+		$recent_pages[$page] = $newObj;
 	}
 
 	// Remove if it exists inside
 	if (isset($recent_pages[$update])) unset($recent_pages[$update]);
 	if (isset($recent_pages[$remove])) unset($recent_pages[$remove]);
 
-	// Add to the top: like array_unshift()
-	if ($update != '')
-		$recent_pages = array($update => get_filetime($update)) + $recent_pages;
+	// 先頭に更新したページの情報を追加
+//	$recent_pages = array($update => get_filetime($update)) + $recent_pages;
+	$pageInfoObj = WikiPage::getPageInfo($update);
+	if (isset($pageInfoObj)) $recent_pages = array($update => $pageInfoObj) + $recent_pages;
 
 	// Check
 	$abort = count($recent_pages) < $maxshow;
 
 	if ($abort){
 		put_lastmodified(); // Try to (re)create ALL
-		return;
-	} else {
+	} else {		// 最大行数を超えた場合は最新更新データを更新
 		$newData = '';
-		foreach ($recent_pages as $_page => $time){
+/*		foreach ($recent_pages as $_page => $time){
 			$newData .= $time . "\t" . $_page . "\n";
+		}*/
+		foreach ($recent_pages as $_page => $pageInfoObj){
+			if ($showUserName){		// ユーザ名を表示する場合
+				$newData .= $pageInfoObj->time . "\t" . $_page . "\t" . $pageInfoObj->userName ."\n";
+			} else {
+				$newData .= $pageInfoObj->time . "\t" . $_page . "\n";
+			}
 		}
 		WikiPage::updateCacheRecentChanges($newData);
-	}
+		
+		// 最終更新ページを更新
+		$recent_pages = array_splice($recent_pages, 0, $maxshow);
 	
-	// 最終更新ページを更新
-	$recent_pages = array_splice($recent_pages, 0, $maxshow);
-	
-	$newData = '';
-	foreach ($recent_pages as $_page => $time){
-		$newData .= '-' . htmlspecialchars(format_date($time)) . ' - ' . '[[' . htmlspecialchars($_page) . ']]' . "\n";
+		$newData = '';
+/*		foreach ($recent_pages as $_page => $time){
+			// 文字エスケープ必要なし?
+		//	$newData .= '-' . htmlspecialchars(format_date($time)) . ' - ' . '[[' . htmlspecialchars($_page) . ']]' . "\n";
+			$newData .= '-' . format_date($time) . ' - ' . '[[' . $_page . ']]' . "\n";
+		}*/
+		foreach ($recent_pages as $_page => $pageInfoObj){
+			// 文字エスケープ必要なし?
+			if ($showUserName){		// ユーザ名を表示する場合
+				$newData .= '-' . format_date($pageInfoObj->time) . ' - ' . '[[' . $_page . ']] -- ' . $pageInfoObj->userName . "\n";
+			} else {
+				$newData .= '-' . format_date($pageInfoObj->time) . ' - ' . '[[' . $_page . ']]' . "\n";
+			}
+		}
+		$newData .= '#norelated' . "\n";
+		WikiPage::updatePage(WikiConfig::getWhatsnewPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 	}
-	$newData .= '#norelated' . "\n";
-	WikiPage::updatePage(WikiConfig::getWhatsnewPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 }
 
 /**
@@ -351,43 +381,72 @@ function put_lastmodified()
 {
 	global $maxshow, $whatsnew, $autolink;
 
+	// ユーザ名を表示するかどうか
+	$showUserName = WikiConfig::isShowUserName();
+/*
 	// Get WHOLE page list
 	$pages = get_existpages();
 
 	// Check ALL filetime
 	$recent_pages = array();
 	foreach($pages as $page){
-		if ($page != $whatsnew && ! check_non_list($page)) $recent_pages[$page] = get_filetime($page);
+		if ($page == $whatsnew || check_non_list($page)) continue;
+		
+		// ページの更新日時、更新ユーザを取得
+//		$recent_pages[$page] = get_filetime($page);
+		$recent_pages[$page] = WikiPage::getPageInfo($page);		// ページ情報オブジェクト取得
 	}
 
 	// Sort decending order of last-modification date
-	arsort($recent_pages, SORT_NUMERIC);
+	arsort($recent_pages, SORT_NUMERIC);*/
 
-	// Cut unused lines
+/*	// Cut unused lines
 	// BugTrack2/179: array_splice() will break integer keys in hashtable
-	$count   = $maxshow + PKWK_MAXSHOW_ALLOWANCE;
+	$count   = $maxshow;
 	$_recent = array();
 	foreach($recent_pages as $key=>$value) {
 		unset($recent_pages[$key]);
 		$_recent[$key] = $value;
 		if (--$count < 1) break;
 	}
-	$recent_pages = $_recent;
-	
+	$recent_pages = $_recent;*/
+
+	// 最新更新分からページの更新日時、更新ユーザの情報を取得
+	$recent_pages = WikiPage::getLastPageInfo($maxshow, $whatsnew);
+
 	// 最終更新データを更新
 	$newData = '';
-	foreach ($recent_pages as $page => $time){
+/*	foreach ($recent_pages as $page => $time){
 		$newData .= $time . "\t" . $page . "\n";
+	}*/
+	foreach ($recent_pages as $page => $pageInfoObj){
+		if ($showUserName){		// ユーザ名を表示する場合
+			$newData .= $pageInfoObj->time . "\t" . $page . "\t" . $pageInfoObj->userName ."\n";
+		} else {
+			$newData .= $pageInfoObj->time . "\t" . $page . "\n";
+		}
 	}
 	WikiPage::updateCacheRecentChanges($newData);
 	
 	// 最終更新ページを更新
 	$newData = '';
-	foreach (array_keys($recent_pages) as $page){
+/*	foreach (array_keys($recent_pages) as $page){
 		$time      = $recent_pages[$page];
-		$s_lastmod = htmlspecialchars(format_date($time));
-		$s_page    = htmlspecialchars($page);
-		$newData .= '-' . $s_lastmod . ' - [[' . $s_page . ']]' . "\n";
+//		$s_lastmod = htmlspecialchars(format_date($time));
+//		$s_page    = htmlspecialchars($page);
+//		$newData .= '-' . $s_lastmod . ' - [[' . $s_page . ']]' . "\n";
+		// 文字エスケープ必要なし?
+		$newData .= '-' . format_date($time) . ' - [[' . $page . ']]' . "\n";
+	}*/
+	foreach (array_keys($recent_pages) as $page){
+		$pageInfoObj = $recent_pages[$page];
+		
+		// 文字エスケープ必要なし?
+		if ($showUserName){		// ユーザ名を表示する場合
+			$newData .= '-' . format_date($pageInfoObj->time) . ' - [[' . $page . ']] -- ' . $pageInfoObj->userName . "\n";
+		} else {
+			$newData .= '-' . format_date($pageInfoObj->time) . ' - [[' . $page . ']]' . "\n";
+		}
 	}
 	$newData .= '#norelated' . "\n";
 	WikiPage::updatePage(WikiConfig::getWhatsnewPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);

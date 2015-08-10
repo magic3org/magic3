@@ -52,7 +52,7 @@ function plugin_rss_action()
 
 	$lineCount = $rss_max < count($lines) ? $rss_max : count($lines);
 	for ($i = 0; $i < $lineCount; $i++){
-		//list($time, $page) = explode("\t", rtrim($line));
+		// 最終更新データの行を解析
 		list($time, $page) = explode("\t", rtrim($lines[$i]));
 		$r_page = rawurlencode($page);
 		$title  = mb_convert_encoding($page, 'UTF-8', SOURCE_ENCODING);

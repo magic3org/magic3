@@ -42,7 +42,7 @@ class wiki_mainDb extends BaseDb
 	 */
 	function getPage($name, &$row, $type='')
 	{
-		$queryStr  = 'SELECT * FROM wiki_content ';
+		$queryStr  = 'SELECT * FROM wiki_content LEFT JOIN _login_user ON wc_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'WHERE wc_deleted = false ';	// 削除されていない
 		$queryStr .=    'AND wc_type = ? ';
 		$queryStr .=   'AND wc_id = ? ';
@@ -109,7 +109,6 @@ class wiki_mainDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
-	
 	/**
 	 * 履歴情報を取得
 	 *
@@ -139,6 +138,31 @@ class wiki_mainDb extends BaseDb
 		}
 		$queryStr .= 'ORDER BY wc_history_index';
 		$ret = $this->selectRecords($queryStr, $param, $rows);
+		return $ret;
+	}
+	/**
+	 * ページ情報を取得
+	 *
+	 * @param int $count			取得数
+	 * @param string $exceptPage	取得しないページ
+	 * @param array   $rows			取得レコード
+	 * @param string  $type			ページタイプ
+	 * @return bool					取得 = true, 取得なし= false
+	 */
+	function getLastPageInfoArray($count, $exceptPage, &$rows, $type = '')
+	{
+		$queryStr .= 'SELECT wc_serial, ';
+		$queryStr .=   'wc_id, ';
+		$queryStr .=   'wc_content_dt, ';
+		$queryStr .=   'wc_create_user_id, ';
+		$queryStr .=   'lu_name ';
+		$queryStr .= 'FROM wiki_content LEFT JOIN _login_user ON wc_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .= 'WHERE wc_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND wc_type = ? ';
+		$queryStr .=   'AND wc_id NOT LIKE \':%\' ';				// システムファイルは除く(追加)
+		$queryStr .=   'AND wc_id != ? ';			// 除外するページ
+		$queryStr .= 'ORDER BY wc_content_dt DESC LIMIT ' . intval($count);
+		$ret = $this->selectRecords($queryStr, array($type, $exceptPage), $rows);
 		return $ret;
 	}
 	/**

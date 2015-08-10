@@ -32,6 +32,15 @@ class wikiLib
 		$this->wikiExternalObj = new wikiExternal();
 	}
 	/**
+	 * Wikiシステム専用ページ取得
+	 *
+	 * @return array		ページの配列
+	 */
+	function getBuiltinPages()
+	{
+		return 	array( WikiConfig::getDefaultPage(), WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );
+	}
+	/**
 	 * Wikiコンテンツをプレーンなテキストに変換
 	 *
 	 * @param string  $src		Wikiコンテンツソースデータ

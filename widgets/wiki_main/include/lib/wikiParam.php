@@ -23,7 +23,7 @@ class WikiParam
 	private static $plugin;			// プラグイン
 	private static $page;			// ページ値
 	private static $msg;			// 編集データ値
-	//private static $original;		// 編集元データ値
+	private static $original;		// 編集元データ値
 	private static $refer;
 	private static $digest;
 	private static $arg;			// URLパラメータ
@@ -54,7 +54,7 @@ class WikiParam
 		self::$plugin	= $gRequestManager->trimValueOf('plugin');
 		self::$page		= strip_bracket($gRequestManager->trimValueOf('page'));
 		self::$msg		= str_replace("\r", '', $gRequestManager->valueOf('msg'));
-		//self::$original	= str_replace("\r", '', $gRequestManager->valueOf('original'));
+		self::$original	= str_replace("\r", '', $gRequestManager->valueOf('original'));
 		//self::$digest	= $gRequestManager->trimValueOf('digest');
 		self::$refer	= $gRequestManager->trimValueOf('refer');
 		self::$arg		= $_SERVER['QUERY_STRING'];
@@ -225,10 +225,10 @@ class WikiParam
 	 *
 	 * @return string	編集元データ値
 	 */
-/*	public static function getOriginal()
+	public static function getOriginal()
 	{
 		return self::$original;
-	}*/
+	}
 	/**
 	 * ダイジェスト値を取得
 	 *
