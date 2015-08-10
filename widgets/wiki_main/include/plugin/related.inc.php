@@ -32,7 +32,8 @@ function plugin_related_action()
 	$data = links_get_related_db($_page);
 	if (! empty($data)) {
 		foreach (array_keys($data) as $page){
-			if ($page == WikiConfig::getWhatsnewPage() || check_non_list($page)) unset($data[$page]);
+			// システム用ページは除外する
+			if (in_array($page, WikiConfig::getNoLinkPages()) || check_non_list($page)) unset($data[$page]);
 		}
 	}
 

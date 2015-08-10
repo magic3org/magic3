@@ -234,7 +234,9 @@ function make_related($page, $tag = '')
 
 	$_links = array();
 	foreach ($links as $page=>$lastmod) {
-		if (check_non_list($page)) continue;
+		// システム用ページは除外する
+		//if (check_non_list($page)) continue;
+		if (in_array($page, WikiConfig::getNoLinkPages()) || check_non_list($page)) continue;
 
 		$r_page   = rawurlencode($page);
 		$s_page   = htmlspecialchars($page);
