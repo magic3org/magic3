@@ -50,7 +50,6 @@ function plugin_rss_action()
 	// Creating <item>
 	$items = $rdf_li = '';
 
-	//foreach (file_head($recent, $rss_max) as $line) {
 	$lineCount = $rss_max < count($lines) ? $rss_max : count($lines);
 	for ($i = 0; $i < $lineCount; $i++){
 		//list($time, $page) = explode("\t", rtrim($line));

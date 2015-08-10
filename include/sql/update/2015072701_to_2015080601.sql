@@ -38,5 +38,7 @@ INSERT INTO wiki_config
 ('layout_main',             '<article><header>[#TITLE#][#URL#]</header>[#TOOLBAR#][#BODY#]</article>[#TOOLBAR#][#FILES|pretag=----#][#UPDATES|pretag=----#][#LINKS#]', 'ページレイアウト(メイン)'),
 ('date_format', 'Y-m-d',         '日付フォーマット'),
 ('time_format', 'H:i:s',         '時間フォーマット'),
-('show_user_on_whatsnew', '0',         '最終更新ページにユーザを表示するかどうか'),
-('auto_link_wikiname', '1',         'Wiki名を自動リンクするかどうか');
+('show_username', '0',         'ユーザ名を表示するかどうか'),
+('auto_link_wikiname', '1',         'Wiki名を自動リンクするかどうか'),
+('recent_changes_count', '100',         '最終更新ページ最大項目数'),
+('recent_deleted_count', '100',         '最終削除ページ最大項目数');

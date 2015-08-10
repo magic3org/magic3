@@ -23,8 +23,6 @@
 define('PKWK_MAXSHOW_ALLOWANCE', 10);
 //define('PKWK_MAXSHOW_CACHE', 'recent.dat');
 
-// AutoLink
-//define('PKWK_AUTOLINK_REGEX_CACHE', 'autolink.dat');
 // 運用ログメッセージ
 define('LOG_MSG_ADD_CONTENT',		'Wikiコンテンツを追加しました。タイトル: %s');
 define('LOG_MSG_UPDATE_CONTENT',	'Wikiコンテンツを更新しました。タイトル: %s');
@@ -71,6 +69,7 @@ function get_source($page = NULL, $join = false, &$serial=null)
 // Get last-modified filetime of the page
 function get_filetime($page)
 {
+	// ##### ページの更新日時はWikiPage::$availablePagesに含める? #####
 	static $fileTimes = array();
 	
 	$fileTime = $fileTimes[$page];
@@ -79,10 +78,6 @@ function get_filetime($page)
 		$fileTimes[$page] = $fileTime;
 	}
 	return $fileTime;
-	// modified for Magic3 by naoki on 2008/9/28
-	//return is_page($page) ? filemtime(get_filename($page)) - LOCALZONE : 0;
-	//return is_page($page) ? WikiPage::getPageTime($page) - LOCALZONE : 0;
-	//return is_page($page) ? WikiPage::getPageTime($page) : 0;
 }
 
 // Get physical file name of the page
@@ -96,11 +91,8 @@ function get_filename($page)
 // modified for Magic3 by naoki on 2008/10/15
 function page_write($page, $postdata, $notimestamp = FALSE)
 {
-//	global $trackback;
 	global $notify, $notify_diff_only, $notify_subject;
 	global $whatsdeleted, $maxshow_deleted;
-
-//	if (PKWK_READONLY) return; // Do nothing
 
 	$postdata = make_str_rules($postdata);
 
@@ -188,14 +180,6 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 	
 	// リンクを更新
 	links_update($page);
-	
-/*	if ($trackback) {
-		// TrackBack Ping
-		$_diff = explode("\n", $diffdata);
-		$plus  = join("\n", preg_replace('/^\+/', '', preg_grep('/^\+/', $_diff)));
-		$minus = join("\n", preg_replace('/^-/',  '', preg_grep('/^-/',  $_diff)));
-		tb_send($page, $plus, $minus);
-	}*/
 }
 
 // Modify original text with user-defined / system-defined rules
@@ -265,40 +249,16 @@ function generate_fixed_heading_anchor_id($seed)
 		substr(md5(uniqid(substr($seed, 0, 100), TRUE)),
 		mt_rand(0, 24), 7);
 }
-
-// Read top N lines as an array
-// (Use PHP file() function if you want to get ALL lines)
-// ######### 未使用関数 ######### for magic3
-function file_head($file, $count = 1, $lock = TRUE, $buffer = 8192)
-{
-	$array = array();
-
-	$fp = @fopen($file, 'r');
-	if ($fp === FALSE) return FALSE;
-	set_file_buffer($fp, 0);
-	if ($lock) flock($fp, LOCK_SH);
-	rewind($fp);
-	$index = 0;
-	while (! feof($fp)) {
-		$line = fgets($fp, $buffer);
-		if ($line != FALSE) $array[] = $line;
-		if (++$index >= $count) break;
-	}
-	if ($lock) flock($fp, LOCK_UN);
-	if (! fclose($fp)) return FALSE;
-
-	return $array;
-}
 // Update RecentDeleted
 function add_recent($page, $recentpage, $subject = '', $limit = 0)
 {
-	if (PKWK_READONLY || $limit == 0 || $page == '' || $recentpage == '' || check_non_list($page)) return;
+	if ($limit == 0 || $page == '' || $recentpage == '' || check_non_list($page)) return;
 
 	// Load
 	$lines = $matches = array();
-	foreach (get_source($recentpage) as $line)
-		if (preg_match('/^-(.+) - (\[\[.+\]\])$/', $line, $matches))
-			$lines[$matches[2]] = $line;
+	foreach (get_source($recentpage) as $line){
+		if (preg_match('/^-(.+) - (\[\[.+\]\])$/', $line, $matches)) $lines[$matches[2]] = $line;
+	}
 
 	$_page = '[[' . $page . ']]';
 
@@ -306,27 +266,11 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 	if (isset($lines[$_page])) unset($lines[$_page]);
 
 	// Add
-	array_unshift($lines, '-' . format_date(UTIME) . ' - ' . $_page .
-		htmlspecialchars($subject) . "\n");
+	array_unshift($lines, '-' . format_date(UTIME) . ' - ' . $_page . htmlspecialchars($subject) . "\n");
 
 	// Get latest $limit reports
 	$lines = array_splice($lines, 0, $limit);
 
-	/*
-	// Update
-	$fp = fopen(get_filename($recentpage), 'w') or
-		die_message('Cannot write page file ' .
-		htmlspecialchars($recentpage) .
-		'<br />Maybe permission is not writable or filename is too long');
-	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
-	rewind($fp);
-	//fputs($fp, '#freeze'    . "\n");			// removed for magic3
-	fputs($fp, '#norelated' . "\n"); // :)
-	fputs($fp, join('', $lines));
-	flock($fp, LOCK_UN);
-	fclose($fp);
-	*/
 	// ページを更新
 	$newData = '';
 	$newData .= '#norelated' . "\n";
@@ -338,7 +282,6 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 // Use without $autolink
 function lastmodified_add($update = '', $remove = '')
 {
-	//global $maxshow, $whatsnew, $autolink;
 	global $maxshow, $autolink;
 
 	// AutoLink implimentation needs everything, for now
@@ -347,14 +290,8 @@ function lastmodified_add($update = '', $remove = '')
 		return;
 	}
 
-	if (($update == '' || check_non_list($update)) && $remove == '')
-		return; // No need
+	if (($update == '' || check_non_list($update)) && $remove == '') return; // No need
 
-/*	$file = CACHE_DIR . PKWK_MAXSHOW_CACHE;
-	if (! file_exists($file)) {
-		put_lastmodified(); // Try to (re)create ALL
-		return;
-	}*/
 	// 最終更新データを取得
 	$lines = WikiPage::getCacheRecentChanges();
 	if (empty($lines)){
@@ -362,18 +299,9 @@ function lastmodified_add($update = '', $remove = '')
 		return;
 	}
 
-	// Open
-	/*pkwk_touch_file($file);
-	$fp = fopen($file, 'r+') or
-		die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
-	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);*/
-
 	// Read (keep the order of the lines)
 	$recent_pages = $matches = array();
-	/*foreach(file_head($file, $maxshow + PKWK_MAXSHOW_ALLOWANCE, FALSE) as $line)
-		if (preg_match('/^([0-9]+)\t(.+)/', $line, $matches))
-			$recent_pages[$matches[2]] = $matches[1];*/
+
 	$lineCount = $maxshow + PKWK_MAXSHOW_ALLOWANCE < count($lines) ? $maxshow + PKWK_MAXSHOW_ALLOWANCE : count($lines);
 	for ($i = 0; $i < $lineCount; $i++){
 		if (preg_match('/^([0-9]+)\t(.+)/', $lines[$i], $matches)){
@@ -392,76 +320,45 @@ function lastmodified_add($update = '', $remove = '')
 	// Check
 	$abort = count($recent_pages) < $maxshow;
 
-	if (! $abort) {
-		// Write
-		/*ftruncate($fp, 0);
-		rewind($fp);
-		foreach ($recent_pages as $_page=>$time)
-			fputs($fp, $time . "\t" . $_page . "\n");*/
+	if ($abort){
+		put_lastmodified(); // Try to (re)create ALL
+		return;
+	} else {
 		$newData = '';
-		foreach ($recent_pages as $_page=>$time){
+		foreach ($recent_pages as $_page => $time){
 			$newData .= $time . "\t" . $_page . "\n";
 		}
 		WikiPage::updateCacheRecentChanges($newData);
 	}
-
-	/*flock($fp, LOCK_UN);
-	fclose($fp);*/
-
-	if ($abort) {
-		put_lastmodified(); // Try to (re)create ALL
-		return;
-	}
-	/*
-	// Update the page 'RecentChanges'
-	$recent_pages = array_splice($recent_pages, 0, $maxshow);
-	$file = get_filename($whatsnew);
-
-	// Open
-	pkwk_touch_file($file);
-	$fp = fopen($file, 'r+') or
-		die_message('Cannot open ' . htmlspecialchars($whatsnew));
-	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
-
-	// Recreate
-	ftruncate($fp, 0);
-	rewind($fp);
-	foreach ($recent_pages as $_page=>$time)
-		fputs($fp, '-' . htmlspecialchars(format_date($time)) .
-			' - ' . '[[' . htmlspecialchars($_page) . ']]' . "\n");
-	fputs($fp, '#norelated' . "\n"); // :)
-
-	flock($fp, LOCK_UN);
-	fclose($fp);
-	*/
 	
 	// 最終更新ページを更新
 	$recent_pages = array_splice($recent_pages, 0, $maxshow);
 	
 	$newData = '';
-	foreach ($recent_pages as $_page=>$time){
+	foreach ($recent_pages as $_page => $time){
 		$newData .= '-' . htmlspecialchars(format_date($time)) . ' - ' . '[[' . htmlspecialchars($_page) . ']]' . "\n";
 	}
 	$newData .= '#norelated' . "\n";
 	WikiPage::updatePage(WikiConfig::getWhatsnewPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 }
 
-// Re-create PKWK_MAXSHOW_CACHE (Heavy)
+/**
+ * 最終更新情報(最終更新データ、最終更新ページ)を更新
+ *
+ * @return				なし
+ */
 function put_lastmodified()
 {
 	global $maxshow, $whatsnew, $autolink;
-
-	if (PKWK_READONLY) return; // Do nothing
 
 	// Get WHOLE page list
 	$pages = get_existpages();
 
 	// Check ALL filetime
 	$recent_pages = array();
-	foreach($pages as $page)
-		if ($page != $whatsnew && ! check_non_list($page))
-			$recent_pages[$page] = get_filetime($page);
+	foreach($pages as $page){
+		if ($page != $whatsnew && ! check_non_list($page)) $recent_pages[$page] = get_filetime($page);
+	}
 
 	// Sort decending order of last-modification date
 	arsort($recent_pages, SORT_NUMERIC);
@@ -476,52 +373,17 @@ function put_lastmodified()
 		if (--$count < 1) break;
 	}
 	$recent_pages = $_recent;
-
-/*
-	// Re-create PKWK_MAXSHOW_CACHE
-	$file = CACHE_DIR . PKWK_MAXSHOW_CACHE;
-	pkwk_touch_file($file);
-	$fp = fopen($file, 'r+') or
-		die_message('Cannot open' . 'CACHE_DIR/' . PKWK_MAXSHOW_CACHE);
-	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
-	ftruncate($fp, 0);
-	rewind($fp);
-	foreach ($recent_pages as $page=>$time)
-		fputs($fp, $time . "\t" . $page . "\n");
-	flock($fp, LOCK_UN);
-	fclose($fp);*/
 	
 	// 最終更新データを更新
 	$newData = '';
-	foreach ($recent_pages as $page=>$time){
+	foreach ($recent_pages as $page => $time){
 		$newData .= $time . "\t" . $page . "\n";
 	}
 	WikiPage::updateCacheRecentChanges($newData);
-		
-/*
-	// Create RecentChanges
-	$file = get_filename($whatsnew);
-	pkwk_touch_file($file);
-	$fp = fopen($file, 'r+') or
-		die_message('Cannot open ' . htmlspecialchars($whatsnew));
-	set_file_buffer($fp, 0);
-	flock($fp, LOCK_EX);
-	ftruncate($fp, 0);
-	rewind($fp);
-	foreach (array_keys($recent_pages) as $page) {
-		$time      = $recent_pages[$page];
-		$s_lastmod = htmlspecialchars(format_date($time));
-		$s_page    = htmlspecialchars($page);
-		fputs($fp, '-' . $s_lastmod . ' - [[' . $s_page . ']]' . "\n");
-	}
-	fputs($fp, '#norelated' . "\n"); // :)
-	flock($fp, LOCK_UN);
-	fclose($fp);*/
 	
 	// 最終更新ページを更新
 	$newData = '';
-	foreach (array_keys($recent_pages) as $page) {
+	foreach (array_keys($recent_pages) as $page){
 		$time      = $recent_pages[$page];
 		$s_lastmod = htmlspecialchars(format_date($time));
 		$s_page    = htmlspecialchars($page);
@@ -534,20 +396,6 @@ function put_lastmodified()
 	if ($autolink) {
 		list($pattern, $pattern_a, $forceignorelist) = get_autolink_pattern($pages);
 
-/*
-		$file = CACHE_DIR . PKWK_AUTOLINK_REGEX_CACHE;
-		pkwk_touch_file($file);
-		$fp = fopen($file, 'r+') or
-			die_message('Cannot open ' . 'CACHE_DIR/' . PKWK_AUTOLINK_REGEX_CACHE);
-		set_file_buffer($fp, 0);
-		flock($fp, LOCK_EX);
-		ftruncate($fp, 0);
-		rewind($fp);
-		fputs($fp, $pattern   . "\n");
-		fputs($fp, $pattern_a . "\n");
-		fputs($fp, join("\t", $forceignorelist) . "\n");
-		flock($fp, LOCK_UN);
-		fclose($fp);*/
 		// 自動リンクデータを更新
 		$newData = '';
 		$newData .= $pattern   . "\n";
@@ -750,7 +598,7 @@ function get_readings()
 }
 
 // Get a list of encoded files (must specify a directory and a suffix)
-function get_existfiles($dir, $ext)
+/*function get_existfiles($dir, $ext)
 {
 	$pattern = '/^(?:[0-9A-F]{2})+' . preg_quote($ext, '/') . '$/';
 	$aryret = array();
@@ -760,7 +608,7 @@ function get_existfiles($dir, $ext)
 			$aryret[] = $dir . $file;
 	closedir($dp);
 	return $aryret;
-}
+}*/
 
 // Get a list of related pages of the page
 function links_get_related($page)

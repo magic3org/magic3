@@ -75,10 +75,14 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <th><span {_HELP_DEFAULT_PAGE_LABEL}>画面</span></th>
-	    <td><div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right">デフォルト：</div><div class="col-sm-6 m3config_item"><input type="text" name="item_default_page" value="{DEFAULT_PAGE}" maxlength="50" /></div></div>
-		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right">最終更新：</div><div class="col-sm-6 m3config_item"><input type="text" name="item_whatsnew_page" value="{WHATSNEW_PAGE}" maxlength="50" /></div></div>
-		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right">最終削除：</div><div class="col-sm-6 m3config_item"><input type="text" name="item_whatsdeleted_page" value="{WHATSDELETED_PAGE}" maxlength="50" /></div></div>
+	    <th><span {_HELP_DEFAULT_PAGE_LABEL}>Wikiページ</span></th>
+	    <td><div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right">デフォルト：</div><div class="col-sm-4 m3config_item"><input type="text" name="item_default_page" value="{DEFAULT_PAGE}" maxlength="50" /></div></div>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right">最終更新：</div><div class="col-sm-4 m3config_item"><input type="text" name="item_whatsnew_page" value="{WHATSNEW_PAGE}" maxlength="50" /></div>
+		<div class="form-control-static col-sm-2 m3config_item text-right">項目数：</div><div class="col-sm-1 m3config_item" style="width:100px;"><input type="text" name="item_recent_changes_count" value="{RECENT_CHANGES_COUNT}" /></div>
+		</div>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item text-right">最終削除：</div><div class="col-sm-4 m3config_item"><input type="text" name="item_whatsdeleted_page" value="{WHATSDELETED_PAGE}" maxlength="50" /></div>
+		<div class="form-control-static col-sm-2 m3config_item text-right">項目数：</div><div class="col-sm-1 m3config_item" style="width:100px;"><input type="text" name="item_recent_deleted_count" value="{RECENT_DELETED_COUNT}" /></div>
+		</div>
 		</td>
 	</tr>
     <tr>
@@ -99,7 +103,7 @@ $(function(){
 		<div class="form-group clearfix">
 		<span {_HELP_VISIBLE_ITEMS_LABEL}>表示項目：</span>
 		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_auto_heading_anchor" {SHOW_AUTO_HEADING_ANCHOR} />見出しの自動アンカー</label></div>
-		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_user_on_whatsnew" {SHOW_USER_ON_WHATSNEW} />最終更新ページのユーザ名</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_username" {SHOW_USERNAME} />ユーザ名</label></div>
 		</div>
 	    </td>
 	</tr>

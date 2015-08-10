@@ -55,6 +55,8 @@ class WikiConfig
 		global $nowikiname;
 		global $date_format;		// 日付フォーマット
 		global $time_format;		// 時間フォーマット
+		global $maxshow;			// 最終更新ページ最大項目数
+		global $maxshow_deleted;	// 最終削除ページ最大項目数
 		static $init = false;		// 初期化完了かどうか
 		
 		if ($init) return;
@@ -87,11 +89,17 @@ class WikiConfig
 		$defaultpage = self::$defaultPage;	// グローバル値にも設定
 		self::$whatsnewPage = self::$_configArray[wiki_mainCommonDef::CF_WHATSNEW_PAGE];		// 最終更新ページ名
 		if (empty(self::$whatsnewPage)) self::$whatsnewPage = wiki_mainCommonDef::DEFAULT_WHATSNEW_PAGE;
-		$whatsnew = self::$whatsnewPage;
+		$whatsnew = self::$whatsnewPage;	// グローバル値にも設定
 		self::$whatsdeletedPage = self::$_configArray[wiki_mainCommonDef::CF_WHATSDELETED_PAGE];		// 最終削除ページ名
 		if (empty(self::$whatsdeletedPage)) self::$whatsdeletedPage = wiki_mainCommonDef::DEFAULT_WHATSDELETED_PAGE;
-		$whatsdeleted = self::$whatsdeletedPage;
-
+		$whatsdeleted = self::$whatsdeletedPage;	// グローバル値にも設定
+		$value = self::$_configArray[wiki_mainCommonDef::CF_RECENT_CHANGES_COUNT];		// 最終更新ページ最大項目数
+		if ($value == '') $value = wiki_mainCommonDef::DEFAULT_RECENT_CHANGES_COUNT;
+		$maxshow = $value;		// グローバル値にも設定
+		$value = self::$_configArray[wiki_mainCommonDef::CF_RECENT_DELETED_COUNT];		// 最終削除ページ最大項目数
+		if ($value == '') $value = wiki_mainCommonDef::DEFAULT_RECENT_DELETED_COUNT;
+		$maxshow_deleted = $value;		// グローバル値にも設定
+			
 		// ユーザ認証方法
 		self::$authType = self::$_configArray[wiki_mainCommonDef::CF_AUTH_TYPE];
 		if (empty(self::$authType)) self::$authType = wiki_mainCommonDef::AUTH_TYPE_ADMIN;		// デフォルトの認証タイプは管理権限

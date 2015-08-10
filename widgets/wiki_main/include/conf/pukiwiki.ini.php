@@ -336,11 +336,11 @@ $dummy_password = '******';
 
 /////////////////////////////////////////////////
 // $whatsnew: Max number of RecentChanges
-$maxshow = 60;
+//$maxshow = 60;
 
 // $whatsdeleted: Max number of RecentDeleted
 // (0 = Disabled)
-$maxshow_deleted = 60;
+//$maxshow_deleted = 60;
 
 /////////////////////////////////////////////////
 // Page names can't be edit via PukiWiki

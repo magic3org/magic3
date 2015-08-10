@@ -37,11 +37,13 @@ class wiki_mainCommonDef
 	const CF_SHOW_TOOLBAR_FOR_ALL_USER	= 'show_toolbar_for_all_user';				// ツールバーを表示するかどうか
 	const CF_USER_LIMITED_FREEZE		= 'user_limited_freeze';				// 凍結・解凍機能のユーザ制限
 	const CF_SHOW_AUTO_HEADING_ANCHOR	= 'show_auto_heading_anchor';			// 見出し自動アンカーを表示するかどうか
-	const CF_SHOW_USER_ON_WHATSNEW		= 'show_user_on_whatsnew';				// 最終更新ページにユーザを表示するかどうか
+	const CF_SHOW_USERNAME				= 'show_username';				// ユーザ名を表示するかどうか
 	const CF_AUTO_LINK_WIKINAME			= 'auto_link_wikiname';					// Wiki名を自動リンクするかどうか
 	const CF_LAYOUT_MAIN				= 'layout_main';						// ページレイアウト(メイン)
 	const CF_DATE_FORMAT				= 'date_format';					// 日付フォーマット
 	const CF_TIME_FORMAT				= 'time_format';					// 時間フォーマット
+	const CF_RECENT_CHANGES_COUNT		= 'recent_changes_count';			// 最終更新ページ最大項目数
+	const CF_RECENT_DELETED_COUNT		= 'recent_deleted_count';			// 最終削除ページ最大項目数
 
 	// ##### デフォルト値 #####
 	const DEFAULT_DEFAULT_PAGE = 'FrontPage';		// デフォルトページ
@@ -50,6 +52,8 @@ class wiki_mainCommonDef
 	const DEFAULT_LAYOUT_MAIN		= '<article><header>[#TITLE#][#URL#]</header>[#TOOLBAR#][#BODY#]</article>[#TOOLBAR#][#FILES|pretag=----#][#UPDATES|pretag=----#][#LINKS#]';	// ページレイアウト(メイン)
 	const DEFAULT_DATE_FORMAT		= 'Y-m-d';					// 日付フォーマット
 	const DEFAULT_TIME_FORMAT		= 'H:i:s';					// 時間フォーマット
+	const DEFAULT_RECENT_CHANGES_COUNT		= 60;			// 最終更新ページ最大項目数
+	const DEFAULT_RECENT_DELETED_COUNT		= 60;			// 最終削除ページ最大項目数
 	
 	/**
 	 * 定義値をDBから取得

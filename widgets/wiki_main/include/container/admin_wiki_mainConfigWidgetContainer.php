@@ -79,11 +79,13 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$showToolbarForAllUser	= $request->trimCheckedValueOf('item_show_toolbar_for_all_user');		// ツールバーを表示するかどうか
 		$userLimitedFreeze		= $request->trimCheckedValueOf('item_user_limited_freeze');				// 凍結・解凍機能のユーザ制限
 		$showAutoHeadingAnchor	= $request->trimCheckedValueOf('item_show_auto_heading_anchor');		// 見出し自動アンカーを表示するかどうか
-		$showUserOnWhatsnew		= $request->trimCheckedValueOf('item_show_user_on_whatsnew');		// 最終更新ページにユーザを表示するかどうか
+		$showUsername			= $request->trimCheckedValueOf('item_show_username');		// ユーザ名を表示するかどうか
 		$autoLinkWikiname		= $request->trimCheckedValueOf('item_auto_link_wikiname');					// Wiki名を自動リンクするかどうか
 		$layout					= $request->valueOf('item_layout');						// ページレイアウト(メイン)
 		$dateFormat				= $request->trimValueOf('item_date_format');						// 日付フォーマット
 		$timeFormat				= $request->trimValueOf('item_time_format');						// 時間フォーマット
+		$recentChangesCount		= $request->trimValueOf('item_recent_changes_count');						// 最終更新ページ最大項目数
+		$recentDeletedCount		= $request->trimValueOf('item_recent_deleted_count');						// 最終削除ページ最大項目数
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -91,6 +93,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			$replaceNew = true;			// データ再取得
 		} else if ($act == 'update'){		// 設定更新のとき
 			// 入力値のエラーチェック
+			$this->checkNumeric($recentChangesCount, '最終更新ページ項目数');
+			$this->checkNumeric($recentDeletedCount, '最終削除ページ項目数');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// デフォルト値の設定
@@ -126,13 +130,16 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_USER_LIMITED_FREEZE, $userLimitedFreeze);		// 凍結・解凍機能のユーザ制限
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR, $showAutoHeadingAnchor);		// 見出し自動アンカーを表示するかどうか
-				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_USER_ON_WHATSNEW, $showUserOnWhatsnew);			// 最終更新ページにユーザを表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_SHOW_USERNAME, $showUsername);			// ユーザ名を表示するかどうか
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_AUTO_LINK_WIKINAME, $autoLinkWikiname);				// Wiki名を自動リンクするかどうか
 				
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_LAYOUT_MAIN, $layout);		// ページレイアウト(メイン)
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_DATE_FORMAT, $dateFormat);						// 日付フォーマット
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_TIME_FORMAT, $timeFormat);						// 時間フォーマット
+		
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_RECENT_CHANGES_COUNT, $recentChangesCount);						// 最終更新ページ最大項目数
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_RECENT_DELETED_COUNT, $recentDeletedCount);						// 最終削除ページ最大項目数
 		
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -168,8 +175,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			if ($userLimitedFreeze == '') $userLimitedFreeze = '0';
 			$showAutoHeadingAnchor = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_AUTO_HEADING_ANCHOR);		// 見出し自動アンカーを表示するかどうか
 			if ($showAutoHeadingAnchor == '') $showAutoHeadingAnchor = '1';
-			$showUserOnWhatsnew = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_USER_ON_WHATSNEW);		// 最終更新ページにユーザを表示するかどうか
-			if ($showUserOnWhatsnew == '') $showUserOnWhatsnew = '0';
+			$showUsername = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_SHOW_USERNAME);		// ユーザ名を表示するかどうか
+			if ($showUsername == '') $showUsername = '0';
 			$autoLinkWikiname = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_AUTO_LINK_WIKINAME);		// Wiki名を自動リンクするかどうか
 			if ($autoLinkWikiname == '') $autoLinkWikiname = '1';
 			$layout = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_LAYOUT_MAIN);		// ページレイアウト(メイン)
@@ -178,6 +185,10 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			if (empty($dateFormat)) $dateFormat = wiki_mainCommonDef::DEFAULT_DATE_FORMAT;
 			$timeFormat = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_TIME_FORMAT);		// 時間フォーマット
 			if (empty($timeFormat)) $timeFormat = wiki_mainCommonDef::DEFAULT_TIME_FORMAT;
+			$recentChangesCount = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_RECENT_CHANGES_COUNT);		// 最終更新ページ最大項目数
+			if ($recentChangesCount == '') $recentChangesCount = wiki_mainCommonDef::DEFAULT_RECENT_CHANGES_COUNT;
+			$recentDeletedCount = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_RECENT_DELETED_COUNT);		// 最終削除ページ最大項目数
+			if ($recentDeletedCount == '') $recentDeletedCount = wiki_mainCommonDef::DEFAULT_RECENT_DELETED_COUNT;
 		}
 		
 		// 認証方法メニュー作成
@@ -198,11 +209,13 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "show_toolbar_for_all_user", $this->convertToCheckedString($showToolbarForAllUser));	// ツールバーを表示するかどうか
 		$this->tmpl->addVar("_widget", "user_limited_freeze", $this->convertToCheckedString($userLimitedFreeze));	// 凍結・解凍機能のユーザ制限
 		$this->tmpl->addVar("_widget", "show_auto_heading_anchor", $this->convertToCheckedString($showAutoHeadingAnchor));		// 見出し自動アンカーを表示するかどうか
-		$this->tmpl->addVar("_widget", "show_user_on_whatsnew", $this->convertToCheckedString($showUserOnWhatsnew));		// 最終更新ページにユーザを表示するかどうか
+		$this->tmpl->addVar("_widget", "show_username", $this->convertToCheckedString($showUsername));		// ユーザ名を表示するかどうか
 		$this->tmpl->addVar("_widget", "auto_link_wikiname", $this->convertToCheckedString($autoLinkWikiname));		// Wiki名を自動リンクするかどうか
 		$this->tmpl->addVar("_widget", "layout",	$layout);// ページレイアウト(メイン)
 		$this->tmpl->addVar("_widget", "date_format",	$this->convertToDispString($dateFormat));		// 日付フォーマット
 		$this->tmpl->addVar("_widget", "time_format",	$this->convertToDispString($timeFormat));		// 時間フォーマット
+		$this->tmpl->addVar("_widget", "recent_changes_count",	$this->convertToDispString($recentChangesCount));		// 最終更新ページ最大項目数
+		$this->tmpl->addVar("_widget", "recent_deleted_count",	$this->convertToDispString($recentDeletedCount));		// 最終削除ページ最大項目数
 			
 		// アップロードディレクトリ
 		//$uploadDir = $this->gEnv->getCurrentWidgetRootPath() . '/upload';		// 暫定
