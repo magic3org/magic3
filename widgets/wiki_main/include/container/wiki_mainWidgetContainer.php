@@ -540,8 +540,8 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$toolbar .= $this->createToolbarButton('recent');
 		$toolbar .= '&nbsp;';
 		$toolbar .= $this->createToolbarButton('help');
-		$toolbar .= '&nbsp;';
-		$toolbar .= $this->createToolbarButton('rss10', 36, 14);
+//		$toolbar .= '&nbsp;';
+//		$toolbar .= $this->createToolbarButton('rss10', 36, 14);
 		return $toolbar;
 	}
 	/**
