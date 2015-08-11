@@ -155,6 +155,7 @@ function links_init()
 	// キャッシュクリア
 	WikiPage::clearCacheRef();
 	WikiPage::clearCacheRel();
+	WikiPage::clearCache();
 
 	$ref   = array(); // 参照元
 	foreach (get_existpages() as $page) {

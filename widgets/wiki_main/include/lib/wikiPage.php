@@ -636,6 +636,16 @@ class WikiPage
 		return $value;
 	}
 	/**
+	 * キャッシュデータをすべて削除
+	 *
+	 * @return bool				true=成功、false=失敗
+	 */
+	public static function clearCache()
+	{
+		$ret = self::$db->clearPageOther('', self::CONTENT_TYPE_CACHE);
+		return $ret;
+	}
+	/**
 	 * ページ名を取得
 	 *
 	 * @return array		ページ名
