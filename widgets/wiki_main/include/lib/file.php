@@ -117,12 +117,12 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 
 	// Create wiki text
 	if ($postdata === ''){		// データが空のときはページを削除
-		// Update RecentDeleted (Add the $page)
-		add_recent($page, $whatsdeleted, '', $maxshow_deleted);
-
 		// ページデータとページに関するデータを削除
-		$ret = WikiPage::deletePage($page, true/*ページ一覧更新*/);
+		$ret = WikiPage::deletePage($page, $delSerial, true/*ページ一覧更新*/);
 		if ($ret){
+			// 最終削除ページに記録
+			add_recentdeleted($page, $delSerial, $maxshow_deleted);
+			
 			// 運用ログを残す
 			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
 									M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
@@ -245,13 +245,65 @@ function generate_fixed_heading_anchor_id($seed)
 		mt_rand(0, 24), 7);
 }
 // Update RecentDeleted
-function add_recent($page, $recentpage, $subject = '', $limit = 0)
+function add_recentdeleted($deletePage, $delSerial, $limit = 0)
 {
-	if ($limit == 0 || $page == '' || $recentpage == '' || check_non_list($page)) return;
+	if ($limit == 0 || in_array($deletePage, WikiConfig::getNoLinkPages()) || check_non_list($deletePage)) return;
 
-	// Load
+	// ユーザ名を表示するかどうか
+	$showUserName = WikiConfig::isShowUserName();
+
+	// 削除ページの情報を取得
+	$recent_pages = array();
+	$lines = WikiPage::getCacheRecentDeleted();
+	$lineCount = count($lines);
+	for ($i = 0; $i < $lineCount; $i++){
+		// 最終更新データの行を解析
+		list($time, $page, $userName) = explode("\t", rtrim($lines[$i]));
+		if (empty($page)) continue;			// ページ名が見つからないときは取得しない
+		
+		$newObj = new stdClass;
+		$newObj->time		= $time;// コンテンツ更新日時
+		$newObj->userName	= $userName;								// 更新ユーザ名
+		$recent_pages[$page] = $newObj;
+	}
+	
+	// 既に削除済みページとして登録されていれば削除
+	if (isset($recent_pages[$deletePage])) unset($recent_pages[$deletePage]);
+
+	// 先頭に削除したページの情報を追加
+	$pageInfoObj = WikiPage::getDeletedPageInfoBySerial($delSerial);
+	if (isset($pageInfoObj)) $recent_pages = array($deletePage => $pageInfoObj) + $recent_pages;
+
+	// 行数の制限
+	$recent_pages = array_splice($recent_pages, 0, $limit);
+
+	// 最終削除データを更新
+	$newData = '';
+	foreach ($recent_pages as $page => $pageInfoObj){
+		if ($showUserName){		// ユーザ名を表示する場合
+			$newData .= $pageInfoObj->time . "\t" . $page . "\t" . $pageInfoObj->userName ."\n";
+		} else {
+			$newData .= $pageInfoObj->time . "\t" . $page . "\n";
+		}
+	}
+	WikiPage::updateCacheRecentDeleted($newData);
+	
+	// 最終削除ページを更新
+	$newData = '';
+	foreach ($recent_pages as $page => $pageInfoObj){
+		// 文字エスケープ必要なし?
+		if ($showUserName){		// ユーザ名を表示する場合
+			$newData .= '-' . format_date($pageInfoObj->time) . ' - [[' . $page . ']] -- [[' . $pageInfoObj->userName . "]]\n";
+		} else {
+			$newData .= '-' . format_date($pageInfoObj->time) . ' - [[' . $page . ']]' . "\n";
+		}
+	}
+	$newData .= '#norelated' . "\n";
+	WikiPage::updatePage(WikiConfig::getWhatsdeletedPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
+
+/*	// Load
 	$lines = $matches = array();
-	foreach (get_source($recentpage) as $line){
+	foreach (get_source(WikiConfig::getWhatsdeletedPage()) as $line){
 		if (preg_match('/^-(.+) - (\[\[.+\]\])$/', $line, $matches)) $lines[$matches[2]] = $line;
 	}
 
@@ -261,16 +313,16 @@ function add_recent($page, $recentpage, $subject = '', $limit = 0)
 	if (isset($lines[$_page])) unset($lines[$_page]);
 
 	// Add
-	array_unshift($lines, '-' . format_date(UTIME) . ' - ' . $_page . htmlspecialchars($subject) . "\n");
+	array_unshift($lines, '-' . format_date(UTIME) . ' - ' . $_page . "\n");
 
 	// Get latest $limit reports
-	$lines = array_splice($lines, 0, $limit);
+	$lines = array_splice($lines, 0, $limit);*/
 
-	// ページを更新
-	$newData = '';
-	$newData .= '#norelated' . "\n";
-	$newData .= join('', $lines);
-	$ret = WikiPage::updatePage($recentpage, $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
+//	// ページを更新
+//	$newData = '';
+//	$newData .= '#norelated' . "\n";
+//	$newData .= join('', $lines);
+//	$ret = WikiPage::updatePage(WikiConfig::getWhatsdeletedPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 }
 
 /**
@@ -362,7 +414,7 @@ function lastmodified_add($update = '', $remove = '')
 		foreach ($recent_pages as $_page => $pageInfoObj){
 			// 文字エスケープ必要なし?
 			if ($showUserName){		// ユーザ名を表示する場合
-				$newData .= '-' . format_date($pageInfoObj->time) . ' - ' . '[[' . $_page . ']] -- ' . $pageInfoObj->userName . "\n";
+				$newData .= '-' . format_date($pageInfoObj->time) . ' - ' . '[[' . $_page . ']] -- [[' . $pageInfoObj->userName . "]]\n";
 			} else {
 				$newData .= '-' . format_date($pageInfoObj->time) . ' - ' . '[[' . $_page . ']]' . "\n";
 			}
@@ -438,12 +490,12 @@ function put_lastmodified()
 		// 文字エスケープ必要なし?
 		$newData .= '-' . format_date($time) . ' - [[' . $page . ']]' . "\n";
 	}*/
-	foreach (array_keys($recent_pages) as $page){
-		$pageInfoObj = $recent_pages[$page];
-		
+//	foreach (array_keys($recent_pages) as $page){
+//		$pageInfoObj = $recent_pages[$page];
+	foreach ($recent_pages as $page => $pageInfoObj){
 		// 文字エスケープ必要なし?
 		if ($showUserName){		// ユーザ名を表示する場合
-			$newData .= '-' . format_date($pageInfoObj->time) . ' - [[' . $page . ']] -- ' . $pageInfoObj->userName . "\n";
+			$newData .= '-' . format_date($pageInfoObj->time) . ' - [[' . $page . ']] -- [[' . $pageInfoObj->userName . "]]\n";
 		} else {
 			$newData .= '-' . format_date($pageInfoObj->time) . ' - [[' . $page . ']]' . "\n";
 		}

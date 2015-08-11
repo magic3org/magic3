@@ -40,8 +40,12 @@
 
 // ------------------------------------------------------------
 
-// modified for Magic3 by naoki on 2008/10/15
-// データベースから関連ページを得る
+/**
+ * 関連ページの更新日時を取得
+ *
+ * @param string $page		Wikiページ名
+ * @return array			関連ページ名とUNIXタイムスタンプの連想配列
+ */
 function links_get_related_db($page)
 {
 	$refPage = WikiPage::getPageCacheRef($page);
@@ -159,7 +163,8 @@ function links_init()
 		if (empty($value)) continue;
 		
 		// キャッシュを作成しないページはとばす
-		if ($page == WikiConfig::getWhatsnewPage()) continue;
+	//	if ($page == WikiConfig::getWhatsnewPage()) continue;
+		if (in_array($page, WikiConfig::getNoLinkPages())) continue;
 
 		// ページキャッシュデータ(リンク情報)を更新
 		$rel   = array(); // 参照先
