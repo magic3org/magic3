@@ -22,6 +22,7 @@ class WikiPage
 	private static $availablePages;			// 利用可能なすべてのページ
 	const CACHE_ENTITY_DATA			= 'entities_dat';		// 判定用データ定義名
 	const CACHE_RECENT_DATA			= 'recent_dat';			// 最終更新データ
+	const CACHE_RECENT_DELETED_DATA	= 'recent_deleted_dat';	// 最終削除データ
 	const CACHE_AUTOLINK_DATA		= 'autolink_dat';		// オートリンク用データ
 	const CACHE_USER_ONLINE_DATA	= 'user_online_dat';		// 現在参照中のユーザ
 	const CONFIG_INIT = 'initialized';		// 初期設定(初期データインストール等)が完了しているかどうか
@@ -254,10 +255,10 @@ class WikiPage
 	 * @param bool   $updateAvailablePages		利用可能なページ一覧
 	 * @return bool				true=成功、false=失敗
 	 */
-	public static function deletePage($name, $updateAvailablePages = false)
+	public static function deletePage($name, &$delSerial, $updateAvailablePages = false)
 	{
 		$type = '';		// ページタイプ
-		$ret = self::$db->deletePage($name, $type);
+		$ret = self::$db->deletePage($name, $type, $delSerial);
 		
 		// 関連データも削除
 		if ($ret){
@@ -566,6 +567,29 @@ class WikiPage
 		return $value;
 	}
 	/**
+	 * 最終削除キャッシュデータを更新
+	 *
+	 * @param  string $data		更新データ
+	 * @return bool				true=成功、false=失敗
+	 */
+	public static function updateCacheRecentDeleted($data)
+	{
+		$ret = self::$db->updatePageOther(self::CACHE_RECENT_DELETED_DATA, $data, self::CONTENT_TYPE_CACHE);
+		return $ret;
+	}
+	/**
+	 * 最終削除キャッシュデータを取得
+	 *
+	 * @param bool $join		データ連結するかどうか
+	 * @return string		取得データ
+	 */
+	public static function getCacheRecentDeleted($join=false)
+	{
+		$value = self::$db->getPageOther(self::CACHE_RECENT_DELETED_DATA, self::CONTENT_TYPE_CACHE);
+		if (!$join) $value = preg_split('/(?<=\n)/', $value);// 行単位(改行コード含む)の配列にして返すとき
+		return $value;
+	}
+	/**
 	 * 自動リンクキャッシュデータを更新
 	 *
 	 * @param  string $data		更新データ
@@ -725,6 +749,25 @@ class WikiPage
 			$newObj->time		= strtotime($row['wc_content_dt']) - LOCALZONE;// コンテンツ更新日時
 			$newObj->userId		= $row['wc_create_user_id'];					// 更新ユーザID
 			$newObj->userName	= $row['lu_name'];								// 更新ユーザ名
+		}
+		return $newObj;
+	}
+	/**
+	 * 削除ページのページ情報をシリアル番号で取得
+	 *
+	 * @param int $serial			シリアル番号
+	 * @return object				ページ情報オブジェクト(time,userid,usermame)
+	 */
+	public static function getDeletedPageInfoBySerial($serial)
+	{
+		$ret = self::$db->getPageBySerial($serial, $row);
+		if ($ret){
+			$newObj = new stdClass;
+//			$newObj->time		= strtotime($row['wc_content_dt']) - LOCALZONE;// コンテンツ更新日時
+//			$newObj->userId		= $row['wc_create_user_id'];					// 更新ユーザID
+			$newObj->time		= strtotime($row['wc_update_dt']) - LOCALZONE;// コンテンツ更新日時
+			$newObj->userId		= $row['wc_update_user_id'];					// 更新ユーザID
+			$newObj->userName	= $row['update_user_name'];						// 更新ユーザ名
 		}
 		return $newObj;
 	}

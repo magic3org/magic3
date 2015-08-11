@@ -58,7 +58,9 @@ class wiki_mainDb extends BaseDb
 	 */
 	function getPageBySerial($serial, &$row)
 	{
-		$queryStr  = 'SELECT * FROM wiki_content LEFT JOIN _login_user ON wc_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr  = 'SELECT wc_id, wc_content_dt, wc_create_user_id, wc_update_user_id, wc_update_dt, t1.lu_name AS create_user_name, t2.lu_name AS update_user_name ';
+		$queryStr .=   'FROM wiki_content LEFT JOIN _login_user AS t1 ON wc_create_user_id = t1.lu_id AND t1.lu_deleted = false ';
+		$queryStr .=     'LEFT JOIN _login_user AS t2 ON wc_update_user_id = t2.lu_id AND t2.lu_deleted = false ';
 		$queryStr .=   'WHERE wc_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		return $ret;
