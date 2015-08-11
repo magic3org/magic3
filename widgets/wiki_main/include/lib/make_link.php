@@ -743,7 +743,11 @@ class Link_autolink_a extends Link_autolink
 function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolink = FALSE)
 {
 	global $script, $vars, $link_compact, $related, $_symbol_noexists;
-
+	static $editAuth;
+	
+	// 編集権限を取得
+	if (!isset($editAuth)) $editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
+			
 	$s_page = htmlspecialchars(strip_bracket($page));
 	$s_alias = ($alias == '') ? $s_page : $alias;
 	
@@ -774,19 +778,12 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 		} else {
 			$al_left = $al_right = '';
 		}
-		return $al_left . '<a ' . 'href="' . $script . '?' . $r_page . $anchor .
-			'"' . $title . '>' . $s_alias . '</a>' . $al_right;
+		return $al_left . '<a ' . 'href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' . $s_alias . '</a>' . $al_right;
 	} else {
-		// Dangling link
-		if (PKWK_READONLY) return $s_alias; // No dacorations
-
-		// modified for Magic3 by naoki on 2008/9/28
-		/*$retval = $s_alias . '<a href="' .
-			$script . '?cmd=edit&amp;page=' . $r_page . $r_refer . '">' .
-			$_symbol_noexists . '</a>';*/
-		$retval = $s_alias . '<a href="' .
-			$script . '?' . WikiParam::convQuery(WikiParam::getCmdKey() . '=edit&amp;page=' . $r_page) . $r_refer . '">' .
-			$_symbol_noexists . '</a>';
+		// 編集権限がない場合は編集画面へのリンクを表示しない
+		if (!$editAuth) return $s_alias;
+		
+		$retval = $s_alias . '<a href="' . $script . '?' . WikiParam::convQuery(WikiParam::getCmdKey() . '=edit&amp;page=' . $r_page) . $r_refer . '">' . $_symbol_noexists . '</a>';
 			
 		if ($link_compact) {
 			return $retval;
