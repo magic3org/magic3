@@ -325,7 +325,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		global $search_word_color;		// 検索語ハイライトを行うかどうか
 		global $_msg_word, $hr;
 
-		$word = $request->trimValueOf('word');
+		$word = $request->valueOf('word');
 		$page = WikiParam::getPage();
 		$r_page = rawurlencode($page);
 		$script = WikiParam::getScript();
