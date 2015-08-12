@@ -77,6 +77,51 @@ span.size6 {
 span.size7 {
 	font-size:xx-large;
 }
+/* 検索キーワード */
+strong.word {
+	background-color:#FFFF66;
+	color:black;
+}
+strong.word0 {
+	background-color:#FFFF66;
+	color:black;
+}
+strong.word1 {
+	background-color:#A0FFFF;
+	color:black;
+}
+strong.word2 {
+	background-color:#99FF99;
+	color:black;
+}
+strong.word3 {
+	background-color:#FF9999;
+	color:black;
+}
+strong.word4 {
+	background-color:#FF66FF;
+	color:black;
+}
+strong.word5 {
+	background-color:#880000;
+	color:white;
+}
+strong.word6 {
+	background-color:#00AA00;
+	color:white;
+}
+strong.word7 {
+	background-color:#886800;
+	color:white;
+}
+strong.word8 {
+	background-color:#004699;
+	color:white;
+}
+strong.word9 {
+	background-color:#990099;
+	color:white;
+}
 /* diff.inc.php */
 span.diff_added {
 	color:blue;

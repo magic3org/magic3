@@ -129,8 +129,12 @@ span.size6 {
 span.size7 {
 	font-size:xx-large;
 }
-/* html.php/catbody() */
-/*strong.word0 {
+/* 検索キーワード */
+strong.word {
+	background-color:#FFFF66;
+	color:black;
+}
+strong.word0 {
 	background-color:#FFFF66;
 	color:black;
 }
@@ -169,7 +173,7 @@ strong.word8 {
 strong.word9 {
 	background-color:#990099;
 	color:white;
-}*/
+}
 /* diff.inc.php */
 span.diff_added {
 	color:blue;

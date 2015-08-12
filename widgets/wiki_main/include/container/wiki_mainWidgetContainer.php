@@ -214,8 +214,6 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			if ($serial != 0 && !$this->gEnv->isSystemManageUser()){		// システム運用者以上の場合はカウントしない
 				$this->gInstance->getAnalyzeManager()->updateContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
 			}
-
-//			if ($trackback) $body .= tb_get_rdf($base); // Add TrackBack-Ping URI
 //			if ($referer) ref_save($base);
 		}
 		// ##### タイトルを設定 #####
@@ -226,60 +224,14 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$this->gPage->setHeadSubTitle($this->widgetTitle);
 			
 		// ### ページデータ作成 ###
-		list($body, $notes) = $this->createViewData($body);
+		list($body, $notes) = $this->createViewData($request, $body);
 		
 		// 「{」「}」で囲まれた文字が変換されないようにする(patTemplate用の設定)
 		$regexp = '/{([^a-z]+)}/U';
 		$body = preg_replace($regexp, '\\{\\1\\}', $body);
 		
 		// Javascript追加
-//		$this->tmpl->addVar("_widget", "content", $body);	// メインコンテンツ
-//		$this->tmpl->addVar("_widget", "note", $notes);		// 追記
 		$this->tmpl->addVar("_widget", "script", WikiScript::getScript());		// Javascript
-		
-		// ##### ページ構成 #####
-		// ツールバー表示制御
-/*		if (WikiConfig::isUserWithEditAuth() || WikiConfig::isShowToolbarForAllUser()){		// 編集権限ありまたは常時ツールバーを表示の場合
-			$this->tmpl->setAttribute('show_toolbar', 'visibility', 'visible');
-			$this->tmpl->addVar("show_toolbar", "toolbar", $toolbar);		// 操作ツールバー
-		}*/
-		// タイトル表示制御
-/*		if (WikiConfig::isShowPageTitle()){
-			$this->tmpl->setAttribute('show_title', 'visibility', 'visible');
-			$this->tmpl->addVar("show_title", "title", $pageTitle);	// ページタイトル
-			
-			// Wikiページ表示のときは、リンク用URLを付加
-			if (WikiParam::getCmd() == 'read'){
-				$page = WikiParam::getPage();
-				$r_page   = rawurlencode($page);
-				$pageHref = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?$r_page");
-				$pageUrl = $this->gEnv->getDefaultUrl() . htmlspecialchars(WikiParam::convQuery("?$r_page", false));
-				$permaLink = "<small><a href=\"$pageHref\">$pageUrl</a></small>";
-				$this->tmpl->addVar("show_title", "title_small", $permaLink);	// リンク用URL
-			}
-		}*/
-		// 添付ファイルの表示
-/*		if (WikiConfig::isShowPageAttachFiles() && !empty($this->attachContents)){
-			$this->tmpl->setAttribute('show_page_attach', 'visibility', 'visible');
-			$this->tmpl->addVar("show_page_attach", "content", $this->attachContents);
-		}*/
-		// ##### その他のページの情報 #####
-//		$pageInfo = false;
-		// 最終更新の表示
-/*		if (WikiConfig::isShowPageLastModified() && !empty($this->lastModified)){
-			$this->tmpl->setAttribute('show_last_modified', 'visibility', 'visible');
-			$this->tmpl->addVar("show_last_modified", "content", $this->lastModified);
-			$pageInfo = true;
-		}*/
-		// 関連ページの表示
-/*		if (WikiConfig::isShowPageRelated() && !empty($this->relatedContents)){
-			$this->tmpl->setAttribute('show_page_related', 'visibility', 'visible');
-			$this->tmpl->addVar("show_page_related", "content", $this->relatedContents);
-			$pageInfo = true;
-		}*/
-/*		if ($pageInfo){
-			$this->tmpl->setAttribute('show_page_info', 'visibility', 'visible');
-		}*/
 
 		// ##### ページ作成 #####
 		$layout = WikiConfig::getConfig(wiki_mainCommonDef::CF_LAYOUT_MAIN);
@@ -361,15 +313,19 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	/**
 	 * 表示用データ作成
 	 *
-	 * @param string $body		本体HTML
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string         $body			本体HTML
 	 * @return 			なし
 	 */
-	function createViewData($body)
+	function createViewData($request, $body)
 	{
 		global $related_link;		// 関連ページを表示するかどうか。プラグインでOFFにする場合あり。
 		global $attach_link;
 		global $note_hr;
+		global $search_word_color;		// 検索語ハイライトを行うかどうか
+		global $_msg_word, $hr;
 
+		$word = $request->trimValueOf('word');
 		$page = WikiParam::getPage();
 		$r_page = rawurlencode($page);
 		$script = WikiParam::getScript();
@@ -395,10 +351,6 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$this->resLink['rss20']    = $script . WikiParam::convQuery("?cmd=rss&amp;ver=2.0");
 		$this->resLink['search']   = $script . WikiParam::convQuery("?cmd=search");
 		$this->resLink['top']      = $script . WikiParam::convQuery("?" . rawurlencode(WikiConfig::getDefaultPage()));
-/*		if ($trackback) {
-			$tb_id = tb_get_id($page);
-			$this->resLink['trackback'] = $script . WikiParam::convQuery("?plugin=tb&amp;__mode=view&amp;tb_id=$tb_id");
-		}*/
 		$this->resLink['unfreeze'] = $script . WikiParam::convQuery("?cmd=unfreeze&amp;page=$r_page");
 		$this->resLink['upload']   = $script . WikiParam::convQuery("?plugin=attach&amp;pcmd=upload&amp;page=$r_page");
 
@@ -446,18 +398,20 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$head_tag = ! empty($head_tags) ? join("\n", $head_tags) ."\n" : '';
 
 		// Search words
-		if ($search_word_color && isset($vars['word'])) {
-			$body = '<div class="small">' . $_msg_word . htmlspecialchars($vars['word']) .
-				'</div>' . $hr . "\n" . $body;
+//		if ($search_word_color && isset($vars['word'])){
+		if ($search_word_color && $word != ''){
+			//$body = '<div class="small">' . $_msg_word . htmlspecialchars($vars['word']) . '</div>' . $hr . "\n" . $body;
+			$body = '<div>' . $_msg_word . htmlspecialchars($word) . '</div>' . $hr . "\n" . $body;
 
 			// BugTrack2/106: Only variables can be passed by reference from PHP 5.0.5
 			// with array_splice(), array_flip()
-			$words = preg_split('/\s+/', $vars['word'], -1, PREG_SPLIT_NO_EMPTY);
+	//		$words = preg_split('/\s+/', $vars['word'], -1, PREG_SPLIT_NO_EMPTY);
+			$words = preg_split('/\s+/', $word, -1, PREG_SPLIT_NO_EMPTY);
 			$words = array_splice($words, 0, 10); // Max: 10 words
 			$words = array_flip($words);
 
 			$keys = array();
-			foreach ($words as $word=>$id) $keys[$word] = strlen($word);
+			foreach ($words as $word => $id) $keys[$word] = strlen($word);
 			arsort($keys, SORT_NUMERIC);
 			$keys = get_search_words(array_keys($keys), TRUE);
 			$id = 0;
@@ -472,7 +426,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 				$decorate_Nth_word = create_function(
 					'$matches',
 					'return (isset($matches[1])) ? ' .
-						'\'<strong class="word' .
+						'\'<strong class="word word' .
 							$id .
 						'">\' . $matches[1] . \'</strong>\' : ' .
 						'$matches[0];'
