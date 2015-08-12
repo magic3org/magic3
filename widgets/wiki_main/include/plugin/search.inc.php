@@ -8,16 +8,11 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-
-// Allow search via GET method 'index.php?plugin=search&word=keyword'
-// NOTE: Also allows DoS to your site more easily by SPAMbot or worm or ...
-define('PLUGIN_SEARCH_DISABLE_GET_ACCESS', 1); // 1, 0
-
 define('PLUGIN_SEARCH_MAX_LENGTH', 80);
 define('PLUGIN_SEARCH_MAX_BASE',   16); // #search(1,2,3,...,15,16)
 
@@ -39,14 +34,11 @@ function plugin_search_action()
 {
 	//global $post, $vars, $_title_result, $_title_search, $_msg_searching;
 	global $_title_result, $_title_search, $_msg_searching;
+	global $gRequestManager;
 
-	if (PLUGIN_SEARCH_DISABLE_GET_ACCESS) {
-		//$s_word = isset($post['word']) ? htmlspecialchars($post['word']) : '';
-		$word = WikiParam::getPostVar('word');
-	} else {
-		//$s_word = isset($vars['word']) ? htmlspecialchars($vars['word']) : '';
-		$word = WikiParam::getVar('word');
-	}
+	//$s_word = isset($post['word']) ? htmlspecialchars($post['word']) : '';
+	//$word = WikiParam::getPostVar('word');
+	$word = $gRequestManager->valueOf('word');			// HTMLタグの検索も可能とする
 	$s_word = htmlspecialchars($word);
 	
 	if (strlen($s_word) > PLUGIN_SEARCH_MAX_LENGTH) {
