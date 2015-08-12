@@ -178,7 +178,7 @@ function plugin_tracker_action()
 	$fields = plugin_tracker_get_fields($page,$refer,$config);
 
 	// Creating an empty page, before attaching files
-	touch(get_filename($page));
+//	touch(get_filename($page));
 
 	foreach (array_keys($fields) as $key)
 	{

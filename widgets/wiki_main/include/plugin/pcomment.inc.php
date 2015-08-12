@@ -348,7 +348,7 @@ function plugin_pcomment_insert()
 	page_write($page, $postdata, PLUGIN_PCOMMENT_TIMESTAMP);
 
 	if (PLUGIN_PCOMMENT_TIMESTAMP) {
-		if ($refer != '') pkwk_touch_file(get_filename($refer));
+//		if ($refer != '') pkwk_touch_file(get_filename($refer));
 		put_lastmodified();
 	}
 

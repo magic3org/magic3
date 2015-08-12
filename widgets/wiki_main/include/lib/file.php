@@ -23,44 +23,23 @@ define('LOG_MSG_ADD_CONTENT',		'Wikiコンテンツを追加しました。タ�
 define('LOG_MSG_UPDATE_CONTENT',	'Wikiコンテンツを更新しました。タイトル: %s');
 define('LOG_MSG_DEL_CONTENT',		'Wikiコンテンツを削除しました。タイトル: %s');
 	
-// Get source(wiki text) data of the page
-// modified for Magic3 by naoki on 2008/9/28
-//function get_source($page = NULL, $lock = TRUE, $join = FALSE)
-function get_source($page = NULL, $join = false, &$serial=null)
+/**
+ * ページのソースコードを取得
+ *
+ * @param string $page		Wikiページ名
+ * @param bool   $join		行を連結するかどうか
+ * @param int    $serial	取得したレコードのシリアル番号
+ * @return string,array		ソースコード。存在しない場合は空文字列または空配列が返る。
+ */
+function get_source($page, $join = false, &$serial = null)
 {
 	$result = $join ? '' : array();
-
-	// modified for Magic3 by naoki on 2008/9/28
-	/*
-	if (is_page($page)) {
-		$path  = get_filename($page);
-
-		if ($lock) {
-			$fp = @fopen($path, 'r');
-			if ($fp == FALSE) return $result;
-			flock($fp, LOCK_SH);
-		}
-
-		if ($join) {
-			// Returns a value
-			$result = str_replace("\r", '', fread($fp, filesize($path)));
-		} else {
-			// Returns an array
-			// Removing line-feeds: Because file() doesn't remove them.
-			$result = str_replace("\r", '', file($path));
-		}
-
-		if ($lock) {
-			flock($fp, LOCK_UN);
-			@fclose($fp);
-		}
-	}*/
 	if (is_page($page)){
+		// 改行コードを削除
 		$result = str_replace("\r", '', WikiPage::getPage($page, $join, $serial));
 	}
 	return $result;
 }
-
 // Get last-modified filetime of the page
 function get_filetime($page)
 {
@@ -74,14 +53,6 @@ function get_filetime($page)
 	}
 	return $fileTime;
 }
-
-// Get physical file name of the page
-// ######### 未使用関数 ######### for magic3
-function get_filename($page)
-{
-	return DATA_DIR . encode($page) . '.txt';
-}
-
 // Put a data(wiki text) into a physical file(diff, backup, text)
 // modified for Magic3 by naoki on 2008/10/15
 function page_write($page, $postdata, $notimestamp = FALSE)
@@ -240,9 +211,7 @@ function make_str_rules($source)
 function generate_fixed_heading_anchor_id($seed)
 {
 	// A random alphabetic letter + 7 letters of random strings from md()
-	return chr(mt_rand(ord('a'), ord('z'))) .
-		substr(md5(uniqid(substr($seed, 0, 100), TRUE)),
-		mt_rand(0, 24), 7);
+	return chr(mt_rand(ord('a'), ord('z'))) . substr(md5(uniqid(substr($seed, 0, 100), TRUE)), mt_rand(0, 24), 7);
 }
 // Update RecentDeleted
 function add_recentdeleted($deletePage, $delSerial, $limit = 0)
@@ -300,29 +269,6 @@ function add_recentdeleted($deletePage, $delSerial, $limit = 0)
 	}
 	$newData .= '#norelated' . "\n";
 	WikiPage::updatePage(WikiConfig::getWhatsdeletedPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
-
-/*	// Load
-	$lines = $matches = array();
-	foreach (get_source(WikiConfig::getWhatsdeletedPage()) as $line){
-		if (preg_match('/^-(.+) - (\[\[.+\]\])$/', $line, $matches)) $lines[$matches[2]] = $line;
-	}
-
-	$_page = '[[' . $page . ']]';
-
-	// Remove a report about the same page
-	if (isset($lines[$_page])) unset($lines[$_page]);
-
-	// Add
-	array_unshift($lines, '-' . format_date(UTIME) . ' - ' . $_page . "\n");
-
-	// Get latest $limit reports
-	$lines = array_splice($lines, 0, $limit);*/
-
-//	// ページを更新
-//	$newData = '';
-//	$newData .= '#norelated' . "\n";
-//	$newData .= join('', $lines);
-//	$ret = WikiPage::updatePage(WikiConfig::getWhatsdeletedPage(), $newData, false/*更新日時維持しない*/, true/*ページ一覧更新*/);
 }
 
 /**
@@ -736,85 +682,6 @@ function links_get_related($page)
 	$links[$page] += links_get_related_db(WikiParam::getPage());
 
 	return $links[$page];
-}
-
-// _If needed_, re-create the file to change/correct ownership into PHP's
-// NOTE: Not works for Windows
-function pkwk_chown($filename, $preserve_time = TRUE)
-{
-	static $php_uid; // PHP's UID
-
-	if (! isset($php_uid)) {
-		if (extension_loaded('posix')) {
-			$php_uid = posix_getuid(); // Unix
-		} else {
-			$php_uid = 0; // Windows
-		}
-	}
-
-	// Lock for pkwk_chown()
-	$lockfile = CACHE_DIR . 'pkwk_chown.lock';
-	$flock = fopen($lockfile, 'a') or
-		die('pkwk_chown(): fopen() failed for: CACHEDIR/' .
-			basename(htmlspecialchars($lockfile)));
-	flock($flock, LOCK_EX) or die('pkwk_chown(): flock() failed for lock');
-
-	// Check owner
-	$stat = stat($filename) or
-		die('pkwk_chown(): stat() failed for: '  . basename(htmlspecialchars($filename)));
-	if ($stat[4] === $php_uid) {
-		// NOTE: Windows always here
-		$result = TRUE; // Seems the same UID. Nothing to do
-	} else {
-		$tmp = $filename . '.' . getmypid() . '.tmp';
-
-		// Lock source $filename to avoid file corruption
-		// NOTE: Not 'r+'. Don't check write permission here
-		$ffile = fopen($filename, 'r') or
-			die('pkwk_chown(): fopen() failed for: ' .
-				basename(htmlspecialchars($filename)));
-
-		// Try to chown by re-creating files
-		// NOTE:
-		//   * touch() before copy() is for 'rw-r--r--' instead of 'rwxr-xr-x' (with umask 022).
-		//   * (PHP 4 < PHP 4.2.0) touch() with the third argument is not implemented and retuns NULL and Warn.
-		//   * @unlink() before rename() is for Windows but here's for Unix only
-		flock($ffile, LOCK_EX) or die('pkwk_chown(): flock() failed');
-		$result = touch($tmp) && copy($filename, $tmp) &&
-			($preserve_time ? (touch($tmp, $stat[9], $stat[8]) || touch($tmp, $stat[9])) : TRUE) &&
-			rename($tmp, $filename);
-		flock($ffile, LOCK_UN) or die('pkwk_chown(): flock() failed');
-
-		fclose($ffile) or die('pkwk_chown(): fclose() failed');
-
-		if ($result === FALSE) @unlink($tmp);
-	}
-
-	// Unlock for pkwk_chown()
-	flock($flock, LOCK_UN) or die('pkwk_chown(): flock() failed for lock');
-	fclose($flock) or die('pkwk_chown(): fclose() failed for lock');
-
-	return $result;
-}
-
-// touch() with trying pkwk_chown()
-// ######### 未使用関数 ######### for magic3
-function pkwk_touch_file($filename, $time = FALSE, $atime = FALSE)
-{
-	// Is the owner incorrected and unable to correct?
-	if (! file_exists($filename) || pkwk_chown($filename)) {
-		if ($time === FALSE) {
-			$result = touch($filename);
-		} else if ($atime === FALSE) {
-			$result = touch($filename, $time);
-		} else {
-			$result = touch($filename, $time, $atime);
-		}
-		return $result;
-	} else {
-		die('pkwk_touch_file(): Invalid UID and (not writable for the directory or not a flie): ' .
-			htmlspecialchars(basename($filename)));
-	}
 }
 /**
  * ユーザ操作運用ログ出力とイベント処理
