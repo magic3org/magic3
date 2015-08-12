@@ -412,8 +412,9 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 
 			$keys = array();
 			foreach ($words as $word => $id) $keys[$word] = strlen($word);
-			arsort($keys, SORT_NUMERIC);
+			arsort($keys, SORT_NUMERIC);	// 長いワードから並べる
 			$keys = get_search_words(array_keys($keys), TRUE);
+
 			$id = 0;
 			foreach ($keys as $key=>$pattern) {
 				$s_key    = htmlspecialchars($key);
