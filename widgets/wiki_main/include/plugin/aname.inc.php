@@ -124,5 +124,6 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	}
 	$style = $f_hidden ? ' style="display:none;"' : '';			// CSS
 	return '<a class="' . $class . '"' . $attr_id . $href . $title . $style . '>' . $body . '</a>';
+	//return '<a class="' . $class . '"' . $attr_id . $href . $title . $style . ' rel="tooltip" data-toggle="tooltip">' . $body . '</a>';			// Bootstrapのナビゲーションメニューを固定位置にしたとき、ツールチップの表示位置が上のずれる。
 }
 ?>

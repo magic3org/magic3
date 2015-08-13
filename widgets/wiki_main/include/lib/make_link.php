@@ -348,7 +348,8 @@ EOD;
 		}
 		
 		if (empty($dispOffPlugin)){			// 出力抑止中のプラグインがない場合
-			$name = '<a id="notetext_' . $id . '" href="' . $script . '#notefoot_' . $id . '" class="note_super"' . $title . '>*' . $id . '</a>';				// ジャンプ先
+	//		$name = '<a id="notetext_' . $id . '" href="' . $script . '#notefoot_' . $id . '" class="note_super"' . $title . '>*' . $id . '</a>';				// ジャンプ先
+			$name = '<a id="notetext_' . $id . '" href="' . $script . '#notefoot_' . $id . '" class="note_super"' . $title . ' rel="tooltip" data-toggle="tooltip">*' . $id . '</a>';				// ジャンプ先
 		} else {
 			$name = '';				// ジャンプ先
 		}
@@ -566,8 +567,8 @@ EOD;
 
 	function toString()
 	{
-		return '<a href="' . $this->url . $this->anchor . '" title="' .
-			$this->name . '" rel="nofollow">' . $this->alias . '</a>';
+//		return '<a href="' . $this->url . $this->anchor . '" title="' . $this->name . '" rel="nofollow">' . $this->alias . '</a>';
+		return '<a href="' . $this->url . $this->anchor . '" title="' . $this->name . '" rel="tooltip" data-toggle="tooltip">' . $this->alias . '</a>';
 	}
 }
 
@@ -778,7 +779,7 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 		} else {
 			$al_left = $al_right = '';
 		}
-		return $al_left . '<a ' . 'href="' . $script . '?' . $r_page . $anchor . '"' . $title . '>' . $s_alias . '</a>' . $al_right;
+		return $al_left . '<a ' . 'href="' . $script . '?' . $r_page . $anchor . '"' . $title . ' rel="tooltip" data-toggle="tooltip">' . $s_alias . '</a>' . $al_right;
 	} else {
 		// 編集権限がない場合は編集画面へのリンクを表示しない
 		if (!$editAuth) return $s_alias;
