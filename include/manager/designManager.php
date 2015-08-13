@@ -32,6 +32,7 @@ class DesignManager extends Core
 	const DEFAULT_CONFIG_WINDOW_STYLE	= 'toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900';// 設定画面のウィンドウスタイルデフォルト値
 	const UPLOAD_ICON_FILE = '/images/system/upload_box32.png';		// アップロードボックスアイコン
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
+	const DEFAULT_META_NO_INDEX = '<meta name="robots" content="noindex,nofollow" />';		// METAタグ(検索エンジン登録拒否)
 	
 	/**
 	 * コンストラクタ
@@ -66,6 +67,23 @@ class DesignManager extends Core
 	{
 		$destUrl = call_user_func($this->_getUrlCallback, $path, $isLink, $param);
 		return $destUrl;
+	}
+	/**
+	 * システム標準のMetaタグを取得
+	 *
+	 * @param int $type				タグのタイプ(0=検索エンジンに登録しない)
+	 * @return string 				タグ
+	 */
+	function getMetaTag($type = 0)
+	{
+		$tag = '';
+		
+		switch ($type){
+		case 0:
+			$tag = self::DEFAULT_META_NO_INDEX;		// 検索エンジン登録拒否
+			break;
+		}
+		return $tag;
 	}
 	/**
 	 * デフォルトウィジェットテーブルのパラメータを取得

@@ -411,7 +411,7 @@ EOD;
 //		return '<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>';
 //		if (ereg("^(\+)(.*)", $this->name, $regs)) {
 		if (preg_match("/^(\+)(.*)/", $this->name, $regs)) {
-			return '<a href="' . $regs[2] . '" target="_blank" ' . $rel . '>' . $this->alias . '</a>';
+			return '<a href="' . $regs[2] . '" class="external" target="_blank" ' . $rel . '>' . $this->alias . '</a>';
 		}else{
 			return '<a href="' . $this->name . '"' . $rel . '>' . $this->alias . '</a>';
 		}

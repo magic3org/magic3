@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: nofollow.inc.php 1100 2008-10-23 02:36:14Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // Copyright (C) 2005 PukiWiki Developers Team
@@ -18,14 +18,10 @@
 // Output contents with "nofollow,noindex" option
 function plugin_nofollow_convert()
 {
-	//global $vars, $nofollow;
 	global $nofollow;
 
-/*	$page = isset($vars['page']) ? $vars['page'] : '';
-
-	if(is_freeze($page)) $nofollow = 1;*/
-	if(is_freeze(WikiParam::getPage())) $nofollow = 1;
-
+	$nofollow = 1;
+	
 	return '';
 }
 ?>

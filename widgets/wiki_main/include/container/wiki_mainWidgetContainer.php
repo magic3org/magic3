@@ -100,8 +100,10 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 	{
 		// PukiWiki用グローバル変数		// add for Magic3 by naoki on 2008/9/28
 		global $vars;
+		global $nofollow;
 		global $gEnvManager;
 		global $gPageManager;
+		global $gDesignManager;
 		
 		// CSSファイルの設定
 		$templateType = $gEnvManager->getCurrentTemplateType();
@@ -216,6 +218,9 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			}
 //			if ($referer) ref_save($base);
 		}
+		// ##### METAタグ追加 #####
+		if ($nofollow) $gPageManager->addHeadOthers($gDesignManager->getMetaTag(0/*検索エンジン登録拒否*/));		// 検索エンジンのアクセス制御
+		
 		// ##### タイトルを設定 #####
 		// ウィジェットタイトル作成
 		$this->widgetTitle = strip_tags($pageTitle);
