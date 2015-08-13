@@ -53,6 +53,11 @@ img.icon
 {
 	border:none;
 }
+/* 外部リンクアイコン */
+a.external {
+	background: url(../../images/system/link14.png) center right no-repeat;
+	padding-right: 16px;
+}
 /* error message */
 #art-main .error-message, #art-main .warning-message, #art-main .guide-message, #art-main .success-message {
 	margin: 10px 0px;

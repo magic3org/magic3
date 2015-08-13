@@ -3893,7 +3893,7 @@ class PageManager extends Core
 					}
 				}
 			}
-			// 一般画面からのウィジェット操作用ツールバー
+			// ##### 一般画面からのウィジェット操作用ツールバー #####
 			if (!$gEnvManager->isAdminDirAccess() && 
 				$cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
 				$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない
@@ -4015,6 +4015,10 @@ class PageManager extends Core
 					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
 				}
 			}
+			// ##### 一般画面のデフォルトのJavaスクリプト #####
+//			if (!$gEnvManager->isAdminDirAccess()){
+//				$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (jQuery().tooltip) $(\'[rel=tooltip]\').tooltip();' . M3_NL;		// 標準ツールチップ作成
+//			}
 			// ポップアップメッセージがある場合は表示
 			if (!empty($this->popupMsg)){
 				$replaceStr .=  'alert("' . $this->popupMsg . '");' . M3_NL;
