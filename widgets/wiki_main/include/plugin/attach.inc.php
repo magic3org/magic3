@@ -27,7 +27,7 @@
 //ini_set('upload_max_filesize', '2M');
 
 // Max file size for upload on script of PukiWikiX_FILESIZE
-define('PLUGIN_ATTACH_MAX_FILESIZE', (1024 * 1024)); // default: 1MB
+//define('PLUGIN_ATTACH_MAX_FILESIZE', (1024 * 1024)); // default: 1MB
 
 // 管理者だけが添付ファイルをアップロードできるようにする
 define('PLUGIN_ATTACH_UPLOAD_ADMIN_ONLY', TRUE); // FALSE or TRUE
@@ -110,12 +110,12 @@ function plugin_attach_action()
 		// Upload
 		return attach_upload($_FILES['attach_file'], $refer, $pass);
 	} else {
-		switch ($pcmd) {
-		case 'delete':	/*FALLTHROUGH*/
+/*		switch ($pcmd) {
+		case 'delete':
 		case 'freeze':
 		case 'unfreeze':
 			if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-		}
+		}*/
 		switch ($pcmd) {
 		case 'info'     : return attach_info();
 		case 'delete'   : return attach_delete();
@@ -159,8 +159,6 @@ function attach_upload($file, $page, $pass = NULL)
 {
 	global $_attach_messages, $notify, $notify_subject;
 
-	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-
 	// Check query-string
 	$query = 'plugin=attach&amp;pcmd=info&amp;refer=' . rawurlencode($page) . '&amp;file=' . rawurlencode($file['name']);
 
@@ -172,7 +170,8 @@ function attach_upload($file, $page, $pass = NULL)
 		die_message('No such page');
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
 		return array('result'=>FALSE);
-	} else if ($file['size'] > PLUGIN_ATTACH_MAX_FILESIZE) {
+//	} else if ($file['size'] > PLUGIN_ATTACH_MAX_FILESIZE) {
+	} else if ($file['size'] > WikiConfig::getUploadFilesize()) {
 		return array(
 			'result'=>FALSE,
 			'msg'=>$_attach_messages['err_exceed']);
@@ -459,8 +458,10 @@ EOD;*/
 	if (! ini_get('file_uploads')) return '#attach(): file_uploads disabled<br />' . $navi;
 	if (! is_page($page))          return '#attach(): No such page<br />'          . $navi;
 
-	$maxsize = PLUGIN_ATTACH_MAX_FILESIZE;
-	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'], number_format($maxsize/1024) . 'KB');
+//	$maxsize = PLUGIN_ATTACH_MAX_FILESIZE;
+//	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'], number_format($maxsize/1024) . 'KB');
+	$maxsize = WikiConfig::getUploadFilesize();				// アップロードファイル最大サイズ
+	$msg_maxsize = sprintf($_attach_messages['msg_maxsize'], WikiConfig::getUploadFilesize(true/*文字列表記*/));
 
 	//$pass = '';
 	$hiddenPath = '';

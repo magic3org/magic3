@@ -28,7 +28,7 @@ class wiki_mainCommonDef
 	const CF_DEFAULT_PAGE		= 'default_page';		// デフォルトページ
 	const CF_WHATSNEW_PAGE		= 'whatsnew_page';		// 最終更新ページ
 	const CF_WHATSDELETED_PAGE	= 'whatsdeleted_page';	// 最終削除ページ
-	const CF_AUTH_TYPE		= 'auth_type';			// 認証タイプ(admin=管理権限ユーザ、loginuser=ログインユーザ、password=共通パスワード)
+	const CF_AUTH_TYPE			= 'auth_type';			// 認証タイプ(admin=管理権限ユーザ、loginuser=ログインユーザ、password=共通パスワード)
 	const CF_SHOW_PAGE_TITLE			= 'show_page_title';			// タイトル表示
 	const CF_SHOW_PAGE_URL				= 'show_page_url';			// URL表示
 	const CF_SHOW_PAGE_RELATED			= 'show_page_related';			// 関連ページ
@@ -44,9 +44,10 @@ class wiki_mainCommonDef
 	const CF_TIME_FORMAT				= 'time_format';					// 時間フォーマット
 	const CF_RECENT_CHANGES_COUNT		= 'recent_changes_count';			// 最終更新ページ最大項目数
 	const CF_RECENT_DELETED_COUNT		= 'recent_deleted_count';			// 最終削除ページ最大項目数
+	const CF_UPLOAD_FILESIZE			= 'upload_filesize';				// アップロードファイルの最大サイズ
 
 	// ##### デフォルト値 #####
-	const DEFAULT_DEFAULT_PAGE = 'FrontPage';		// デフォルトページ
+	const DEFAULT_DEFAULT_PAGE 		= 'FrontPage';		// デフォルトページ
 	const DEFAULT_WHATSNEW_PAGE		= 'RecentChanges';		// 最終更新ページ
 	const DEFAULT_WHATSDELETED_PAGE	= 'RecentDeleted';		// 最終削除ページ
 	const DEFAULT_LAYOUT_MAIN		= '<article><header>[#TITLE#][#URL#]</header>[#TOOLBAR#][#BODY#]</article>[#TOOLBAR#][#FILES|pretag=----#][#UPDATES|pretag=----#][#LINKS#]';	// ページレイアウト(メイン)
@@ -54,6 +55,7 @@ class wiki_mainCommonDef
 	const DEFAULT_TIME_FORMAT		= 'H:i:s';					// 時間フォーマット
 	const DEFAULT_RECENT_CHANGES_COUNT		= 60;			// 最終更新ページ最大項目数
 	const DEFAULT_RECENT_DELETED_COUNT		= 60;			// 最終削除ページ最大項目数
+	const DEFAULT_UPLOAD_FILESIZE	= '1M';					// アップロードファイルの最大サイズデフォルトサイズ
 	
 	/**
 	 * 定義値をDBから取得

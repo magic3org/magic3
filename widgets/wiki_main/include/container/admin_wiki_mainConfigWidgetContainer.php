@@ -86,6 +86,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$timeFormat				= $request->trimValueOf('item_time_format');						// 時間フォーマット
 		$recentChangesCount		= $request->trimValueOf('item_recent_changes_count');						// 最終更新ページ最大項目数
 		$recentDeletedCount		= $request->trimValueOf('item_recent_deleted_count');						// 最終削除ページ最大項目数
+		$uploadFilesize			= $request->trimValueOf('upload_filesize');						// アップロードファイルの最大サイズ
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
@@ -101,6 +102,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 				if (empty($defaultPage)) $defaultPage			= wiki_mainCommonDef::DEFAULT_DEFAULT_PAGE;		// デフォルトページ名
 				if (empty($whatsnewPage)) $whatsnewPage			= wiki_mainCommonDef::DEFAULT_WHATSNEW_PAGE;	// 最終更新ページ名
 				if (empty($whatsdeletedPage)) $whatsdeletedPage = wiki_mainCommonDef::DEFAULT_WHATSDELETED_PAGE;	// 最終削除ページ名
+				if (empty($uploadFilesize))	$uploadFilesize		= wiki_mainCommonDef::DEFAULT_UPLOAD_FILESIZE;		// アップロードファイルの最大サイズ
 				
 				$ret = true;		// エラー値リセット
 				// 認証タイプ
@@ -140,6 +142,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_RECENT_CHANGES_COUNT, $recentChangesCount);						// 最終更新ページ最大項目数
 				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_RECENT_DELETED_COUNT, $recentDeletedCount);						// 最終削除ページ最大項目数
+				if ($ret) $ret = self::$_mainDb->updateConfig(wiki_mainCommonDef::CF_UPLOAD_FILESIZE, $uploadFilesize);			// アップロードファイルの最大サイズ
 		
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -189,6 +192,8 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 			if ($recentChangesCount == '') $recentChangesCount = wiki_mainCommonDef::DEFAULT_RECENT_CHANGES_COUNT;
 			$recentDeletedCount = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_RECENT_DELETED_COUNT);		// 最終削除ページ最大項目数
 			if ($recentDeletedCount == '') $recentDeletedCount = wiki_mainCommonDef::DEFAULT_RECENT_DELETED_COUNT;
+			$uploadFilesize = self::$_mainDb->getConfig(wiki_mainCommonDef::CF_UPLOAD_FILESIZE);		// アップロードファイルの最大サイズ
+			if (empty($uploadFilesize)) $uploadFilesize = wiki_mainCommonDef::DEFAULT_UPLOAD_FILESIZE;
 		}
 		
 		// 認証方法メニュー作成
@@ -216,6 +221,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "time_format",	$this->convertToDispString($timeFormat));		// 時間フォーマット
 		$this->tmpl->addVar("_widget", "recent_changes_count",	$this->convertToDispString($recentChangesCount));		// 最終更新ページ最大項目数
 		$this->tmpl->addVar("_widget", "recent_deleted_count",	$this->convertToDispString($recentDeletedCount));		// 最終削除ページ最大項目数
+		$this->tmpl->addVar("_widget", "upload_filesize",	$this->convertToDispString($uploadFilesize));		// アップロードファイルの最大サイズ
 			
 		// アップロードディレクトリ
 		//$uploadDir = $this->gEnv->getCurrentWidgetRootPath() . '/upload';		// 暫定

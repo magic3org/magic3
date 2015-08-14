@@ -520,5 +520,23 @@ class WikiConfig
 	{
 		return self::$sessionObj;
 	}
+	/**
+	 * アップロードファイルの最大サイズを取得
+	 *
+	 * @param bool $byString	バイトサイズを文字列で返すかどうか
+	 * @return int,string		ファイルサイズ(バイト数)
+	 */
+	public static function getUploadFilesize($byString = false)
+	{
+		$value = self::$_configArray[wiki_mainCommonDef::CF_UPLOAD_FILESIZE];		// アップロードファイルの最大サイズ
+		if (empty($value)) $value = wiki_mainCommonDef::DEFAULT_UPLOAD_FILESIZE;
+		
+		// 文字列を数値に変換
+		if ($byString){		// 文字列で返す場合
+			return $value;
+		} else {
+			return convBytes($value);
+		}
+	}
 }
 ?>
