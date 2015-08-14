@@ -33,4 +33,8 @@ $HELP['page_view_count']['title'] = '閲覧数';
 $HELP['page_view_count']['body'] = 'Wikiページがユーザに閲覧された回数です。管理者の閲覧はカウントされません。';
 $HELP['page_attach_count']['title'] = '添付ファイル数';
 $HELP['page_attach_count']['body'] = 'ページの添付ファイル数です。';
+$HELP['config_attach_dir']['title'] = '添付ファイルディレクトリ';
+$HELP['config_attach_dir']['body'] = 'Wikiページに添付するファイルの格納ディレクトリです。ファイルをアップロードするには、ディレクトリの書き込み権限が必要です。';
+$HELP['config_upload_filesize']['title'] = 'アップロードファイル最大サイズ';
+$HELP['config_upload_filesize']['body'] = 'アップロードする添付ファイルの最大サイズです。';
 ?>

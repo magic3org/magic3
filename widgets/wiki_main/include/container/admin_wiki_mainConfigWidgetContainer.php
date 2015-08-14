@@ -86,7 +86,7 @@ class admin_wiki_mainConfigWidgetContainer extends admin_wiki_mainBaseWidgetCont
 		$timeFormat				= $request->trimValueOf('item_time_format');						// 時間フォーマット
 		$recentChangesCount		= $request->trimValueOf('item_recent_changes_count');						// 最終更新ページ最大項目数
 		$recentDeletedCount		= $request->trimValueOf('item_recent_deleted_count');						// 最終削除ページ最大項目数
-		$uploadFilesize			= $request->trimValueOf('upload_filesize');						// アップロードファイルの最大サイズ
+		$uploadFilesize			= $request->trimValueOf('item_upload_filesize');						// アップロードファイルの最大サイズ
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if (empty($act)){// 初期起動時
