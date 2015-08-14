@@ -43,7 +43,7 @@ define('PLUGIN_ATTACH_DELETE_ADMIN_NOBACKUP', TRUE); // FALSE or TRUE
 //define('PLUGIN_ATTACH_PASSWORD_REQUIRE', FALSE); // FALSE or TRUE
 
 // 添付ファイル名を変更できるようにする
-define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE); // FALSE or TRUE
+//define('PLUGIN_ATTACH_RENAME_ENABLE', TRUE); // FALSE or TRUE
 
 // ファイルのアクセス権
 define('PLUGIN_ATTACH_FILE_MODE', 0644);
@@ -171,11 +171,11 @@ function attach_upload($file, $page, $pass = NULL)
 	} else if ($file['tmp_name'] == '' || ! is_uploaded_file($file['tmp_name'])) {
 		return array('result'=>FALSE);
 //	} else if ($file['size'] > PLUGIN_ATTACH_MAX_FILESIZE) {
-	} else if ($file['size'] > WikiConfig::getUploadFilesize()) {
+	} else if ($file['size'] > WikiConfig::getUploadFilesize()){			// アップロードファイルのサイズチェック
 		return array(
 			'result'=>FALSE,
 			'msg'=>$_attach_messages['err_exceed']);
-	} else if (! is_pagename($page) || ($pass !== TRUE && ! is_editable($page))) {
+	} else if (!is_pagename($page) || ($pass !== TRUE && !is_editable($page))){		// 凍結されている場合はファイルアップロード不可
 		return array(
 			'result'=>FALSE,
 			'msg'=>$_attach_messages['err_noparm']);
@@ -248,9 +248,7 @@ function attach_info($err = '')
 	$age = WikiParam::getVar('age');
 	
 	$obj = new AttachFile($refer, $file, $age);
-	return $obj->getstatus() ?
-		$obj->info($err) :
-		array('msg'=>$_attach_messages['err_notfound']);
+	return $obj->getstatus() ? $obj->info($err) : array('msg'=>$_attach_messages['err_notfound']);
 }
 
 // 削除
@@ -718,72 +716,68 @@ class AttachFile
 		$s_page = htmlspecialchars($this->page);
 		$s_file = htmlspecialchars($this->file);
 		$s_err = ($err == '') ? '' : '<p style="font-weight:bold">' . $_attach_messages[$err] . '</p>';
-
 		$msg_rename  = '';
 
 		// テンプレートタイプに合わせて出力を変更
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			if ($this->age) {
-				$msg_freezed = '';
+//				$msg_freezed = '';
 				$msg_delete  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
 					'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] . '</label></div></div>';
-				$msg_freeze  = '';
+//				$msg_freeze  = '';
 			} else {
 				if ($this->status['freeze']) {
-					$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
+//					$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 					$msg_delete  = '';
-					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
-						'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] . '</label></div></div>';
+//					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' . '<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] . '</label></div></div>';
 				} else {
-					$msg_freezed = '';
-					$msg_delete = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
-						'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
+//					$msg_freezed = '';
+					$msg_delete = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' . '<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
 //					if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
 //						$msg_delete .= $_attach_messages['msg_require'];
 					$msg_delete .= '</label></div></div>';
-					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
-						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] . '</label></div></div>';
+//					$msg_freeze  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' . '<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] . '</label></div></div>';
 
-					if (PLUGIN_ATTACH_RENAME_ENABLE) {
+//					if (PLUGIN_ATTACH_RENAME_ENABLE) {
 						$msg_rename  = '<div><div class="radio"><input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
 							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] . '</label></div></div>' .
 							'<div class="form-group"><label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
 							':</label> ' .
 							'<input type="text" name="newname" id="_p_attach_newname" class="form-control" size="40" value="' .
 							$this->file . '" /></div>';
-					}
+//					}
 				}
 			}
 		} else {
 			if ($this->age) {
-				$msg_freezed = '';
+//				$msg_freezed = '';
 				$msg_delete  = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
 					'<label for="_p_attach_delete">' .  $_attach_messages['msg_delete'] . '</label><br />';
-				$msg_freeze  = '';
+//				$msg_freeze  = '';
 			} else {
 				if ($this->status['freeze']) {
-					$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
+//					$msg_freezed = "<dd>{$_attach_messages['msg_isfreeze']}</dd>";
 					$msg_delete  = '';
-					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
+//					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_unfreeze" value="unfreeze" />' .
 						'<label for="_p_attach_unfreeze">' .  $_attach_messages['msg_unfreeze'] . '</label><br />';
 				} else {
-					$msg_freezed = '';
+//					$msg_freezed = '';
 					$msg_delete = '<input type="radio" name="pcmd" id="_p_attach_delete" value="delete" />' .
 						'<label for="_p_attach_delete">' . $_attach_messages['msg_delete'];
 				//	if (PLUGIN_ATTACH_DELETE_ADMIN_ONLY || $this->age)
 				//		$msg_delete .= $_attach_messages['msg_require'];
 					$msg_delete .= '</label><br />';
-					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
+//					$msg_freeze  = '<input type="radio" name="pcmd" id="_p_attach_freeze" value="freeze" />' .
 						'<label for="_p_attach_freeze">' .  $_attach_messages['msg_freeze'] . '</label><br />';
 
-					if (PLUGIN_ATTACH_RENAME_ENABLE) {
+//					if (PLUGIN_ATTACH_RENAME_ENABLE) {
 						$msg_rename  = '<input type="radio" name="pcmd" id="_p_attach_rename" value="rename" />' .
 							'<label for="_p_attach_rename">' .  $_attach_messages['msg_rename'] . '</label><br />&nbsp;&nbsp;&nbsp;&nbsp;' .
 							'<label for="_p_attach_newname">' . $_attach_messages['msg_newname'] .
 							':</label> ' .
 							'<input type="text" name="newname" id="_p_attach_newname" size="40" value="' .
 							$this->file . '" /><br />';
-					}
+//					}
 				}
 			}
 		}
@@ -806,30 +800,32 @@ class AttachFile
 			$body .= '<dt>' . $info . '</dt>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . $s_page . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_filename'] . ': ' . $filename . '</dd>' . M3_NL;
-			$body .= '<dd>' . $_attach_messages['msg_md5hash'] . ': ' . $this->md5hash . '</dd>' . M3_NL;
+//			$body .= '<dd>' . $_attach_messages['msg_md5hash'] . ': ' . $this->md5hash . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_filesize'] . ': ' . $this->size_str . ' (' . $this->size . ' bytes)</dd>' . M3_NL;
 			$body .= '<dd>Content-type: ' . $this->type . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_date'] . ': ' . $this->time_str . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_dlcount'] . ': ' . $this->status['count'][$this->age] . '</dd>' . M3_NL;
-			$body .= $msg_freezed;
+//			$body .= $msg_freezed;
 			$body .= '</dl>' . M3_NL;
-			$body .= '<hr />' . M3_NL;
-			$body .= $s_err;
-			$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
-			$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
-			$body .= '<input type="hidden" name="refer" value="' . $s_page . '" />' . M3_NL;
-			$body .= '<input type="hidden" name="file" value="' . $s_file . '" />' . M3_NL;
-			$body .= '<input type="hidden" name="age" value="' . $this->age . '" />' . M3_NL;
-			$body .= '<input type="hidden" name="pass" />' . M3_NL;
-			$body .= $msg_delete;
-			$body .= $msg_freeze;
-			$body .= $msg_rename;
-			$body .= '<br /><br />' . M3_NL;
-//			$body .= '<div class="form-group"><label for="_p_attach_password">' . $_attach_messages['msg_password'] . ':</label>' . M3_NL;
-//			$body .= '<input type="password" name="password" id="_p_attach_password" class="form-control" size="12" /></div>' . M3_NL;
-			$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
-			$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
-			$body .= '</form>' . M3_NL;
+			if (is_editable($this->page)){		// ページが編集可能な場合のみ添付ファイルの削除、ファイル名変更が可能
+				$body .= '<hr />' . M3_NL;
+				$body .= $s_err;
+				$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+				$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
+				$body .= '<input type="hidden" name="refer" value="' . $s_page . '" />' . M3_NL;
+				$body .= '<input type="hidden" name="file" value="' . $s_file . '" />' . M3_NL;
+				$body .= '<input type="hidden" name="age" value="' . $this->age . '" />' . M3_NL;
+				$body .= '<input type="hidden" name="pass" />' . M3_NL;
+				$body .= $msg_delete;
+//				$body .= $msg_freeze;
+				$body .= $msg_rename;
+				$body .= '<br /><br />' . M3_NL;
+	//			$body .= '<div class="form-group"><label for="_p_attach_password">' . $_attach_messages['msg_password'] . ':</label>' . M3_NL;
+	//			$body .= '<input type="password" name="password" id="_p_attach_password" class="form-control" size="12" /></div>' . M3_NL;
+				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+				$body .= '<input type="submit" class="button btn" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+				$body .= '</form>' . M3_NL;
+			}
 		} else {
 			$body .= '<p class="small">' . M3_NL;
 			$body .= '[<a href="' . $linkList . '">' . $_attach_messages['msg_list'] . '</a>]' . M3_NL;
@@ -839,32 +835,34 @@ class AttachFile
 			$body .= '<dt>' . $info . '</dt>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . $s_page . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_filename'] . ': ' . $filename . '</dd>' . M3_NL;
-			$body .= '<dd>' . $_attach_messages['msg_md5hash'] . ': ' . $this->md5hash . '</dd>' . M3_NL;
+//			$body .= '<dd>' . $_attach_messages['msg_md5hash'] . ': ' . $this->md5hash . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_filesize'] . ': ' . $this->size_str . ' (' . $this->size . ' bytes)</dd>' . M3_NL;
 			$body .= '<dd>Content-type: ' . $this->type . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_date'] . ': ' . $this->time_str . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_dlcount'] . ': ' . $this->status['count'][$this->age] . '</dd>' . M3_NL;
-			$body .= $msg_freezed;
+//			$body .= $msg_freezed;
 			$body .= '</dl>' . M3_NL;
-			$body .= '<hr />' . M3_NL;
-			$body .= $s_err;
-			$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
-			$body .= '<div>' . M3_NL;
-			$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
-			$body .= '<input type="hidden" name="refer" value="' . $s_page . '" />' . M3_NL;
-			$body .= '<input type="hidden" name="file" value="' . $s_file . '" />' . M3_NL;
-			$body .= '<input type="hidden" name="age" value="' . $this->age . '" />' . M3_NL;
-			$body .= '<input type="hidden" name="pass" />' . M3_NL;
-			$body .= $msg_delete;
-			$body .= $msg_freeze;
-			$body .= $msg_rename;
-			$body .= '<br />' . M3_NL;
-//			$body .= '<label for="_p_attach_password">' . $_attach_messages['msg_password'] . ':</label>' . M3_NL;
-//			$body .= '<input type="password" name="password" id="_p_attach_password" size="12" />' . M3_NL;
-			$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
-			$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
-			$body .= '</div>' . M3_NL;
-			$body .= '</form>' . M3_NL;
+			if (is_editable($this->page)){		// ページが編集可能な場合のみ添付ファイルの削除、ファイル名変更が可能
+				$body .= '<hr />' . M3_NL;
+				$body .= $s_err;
+				$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+				$body .= '<div>' . M3_NL;
+				$body .= '<input type="hidden" name="plugin" value="attach" />' . M3_NL;
+				$body .= '<input type="hidden" name="refer" value="' . $s_page . '" />' . M3_NL;
+				$body .= '<input type="hidden" name="file" value="' . $s_file . '" />' . M3_NL;
+				$body .= '<input type="hidden" name="age" value="' . $this->age . '" />' . M3_NL;
+				$body .= '<input type="hidden" name="pass" />' . M3_NL;
+				$body .= $msg_delete;
+//				$body .= $msg_freeze;
+				$body .= $msg_rename;
+				$body .= '<br />' . M3_NL;
+	//			$body .= '<label for="_p_attach_password">' . $_attach_messages['msg_password'] . ':</label>' . M3_NL;
+	//			$body .= '<input type="password" name="password" id="_p_attach_password" size="12" />' . M3_NL;
+				$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
+				$body .= '<input type="submit" class="button" value="' . $_attach_messages['btn_submit'] . '" onclick="this.form.pass.value = hex_md5(this.form.password.value);" />' . M3_NL;
+				$body .= '</div>' . M3_NL;
+				$body .= '</form>' . M3_NL;
+			}
 		}
 		return array('msg' => $msg, 'body' => $body);
 	}
@@ -938,9 +936,9 @@ class AttachFile
 		if (file_exists($newbase)) {
 			return array('msg'=>$_attach_messages['err_exists']);
 		}
-		if (! PLUGIN_ATTACH_RENAME_ENABLE || ! rename($this->basename, $newbase)) {
+/*		if (! PLUGIN_ATTACH_RENAME_ENABLE || ! rename($this->basename, $newbase)) {
 			return array('msg'=>$_attach_messages['err_rename']);
-		}
+		}*/
 
 		return array('msg'=>$_attach_messages['msg_renamed']);
 	}

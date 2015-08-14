@@ -73,8 +73,8 @@ function is_editable($page)
 	if (! isset($is_editable[$page])) {
 		$is_editable[$page] = (
 			is_pagename($page) &&
-			! is_freeze($page) &&
-			! in_array($page, $cantedit)
+			! is_freeze($page) &&				// 凍結されていない
+			! in_array($page, $cantedit)		// 編集不可ページでない
 		);
 	}
 

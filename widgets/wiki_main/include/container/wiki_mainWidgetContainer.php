@@ -483,11 +483,13 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 				$toolbar .= $this->createToolbarButton('backup');
 			}
 			if ($pageEditable){
-				if ((bool)ini_get('file_uploads')){
+				if ((bool)ini_get('file_uploads') && !$this->isFreeze){				// 凍結されていない場合のみファイル添付可能
 					$toolbar .= $this->createToolbarButton('upload');
 				}
 				$toolbar .= $this->createToolbarButton('copy');
-				$toolbar .= $this->createToolbarButton('rename');
+				if (!$this->isFreeze){				// 凍結されていない場合のみファイル名変更可能
+					$toolbar .= $this->createToolbarButton('rename');
+				}
 			}
 			$toolbar .= $this->createToolbarButton('reload');
 		}
