@@ -134,7 +134,11 @@ function plugin_attach_action()
 	}
 }
 
-//-------- call from skin
+/**
+ * Wikiページ画面用の添付ファイルリストを作成
+ *
+ * @return			なし
+ */
 function attach_filelist()
 {
 	global $_attach_messages;
@@ -143,11 +147,10 @@ function attach_filelist()
 
 	$obj = new AttachPages($page, 0);
 
-	if (! isset($obj->pages[$page])) {
+	if (!isset($obj->pages[$page])){
 		return '';
 	} else {
-		return $_attach_messages['msg_file'] . ': ' .
-		$obj->toString($page, TRUE) . "\n";
+		return $_attach_messages['msg_file'] . ': ' . $obj->toString($page, TRUE) . "\n";
 	}
 }
 
@@ -355,9 +358,7 @@ function attach_list()
 	$obj = new AttachPages($refer);
 
 	$msg = $_attach_messages[($refer == '') ? 'msg_listall' : 'msg_listpage'];
-	$body = ($refer == '' || isset($obj->pages[$refer])) ?
-		$obj->toString($refer, FALSE) :
-		$_attach_messages['err_noexist'];
+	$body = ($refer == '' || isset($obj->pages[$refer])) ? $obj->toString($refer, FALSE) : $_attach_messages['err_noexist'];
 
 	return array('msg'=>$msg, 'body'=>$body);
 }
@@ -439,7 +440,7 @@ function attach_form($page)
 EOD;
 	} else {
 		$navi = <<<EOD
-  <span class="small">
+  <span>
    [<a href="$linkList">{$_attach_messages['msg_list']}</a>]
    [<a href="$linkListAll">{$_attach_messages['msg_listall']}</a>]
   </span><br />
@@ -447,7 +448,7 @@ EOD;
 	}
 /*
 	$navi = <<<EOD
-  <span class="small">
+  <span>
    [<a href="$script?plugin=attach&amp;pcmd=list&amp;refer=$r_page">{$_attach_messages['msg_list']}</a>]
    [<a href="$script?plugin=attach&amp;pcmd=list">{$_attach_messages['msg_listall']}</a>]
   </span><br />
@@ -519,7 +520,7 @@ EOD;*/
 		$body .= '<input type="hidden" name="pass" />' . M3_NL;
 		$body .= '<input type="hidden" name="password" value="' . $dummy_password . '" />' . M3_NL;
 		$body .= $navi;
-		$body .= '<span class="small">' . M3_NL;
+		$body .= '<span>' . M3_NL;
 		$body .= $msg_maxsize;
 		$body .= '</span><br />' . M3_NL;
 		$body .= '<label for="_p_attach_file">' . $_attach_messages['msg_file'] . ':</label> <input type="file" name="attach_file" id="_p_attach_file" />' . M3_NL;
@@ -672,6 +673,8 @@ class AttachFile
 		global $script, $_attach_messages;
 		global $gEnvManager;
 
+		$editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
+		
 		$this->getstatus();
 		$param  = '&amp;file=' . rawurlencode($this->file) . '&amp;refer=' . rawurlencode($this->page) .
 			($this->age ? '&amp;age=' . $this->age : '');
@@ -688,9 +691,14 @@ class AttachFile
 //			$templateType = $gEnvManager->getCurrentTemplateType();
 //			if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 				$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
-				$info = "\n[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]\n";
-				$count = ($showicon && ! empty($this->status['count'][$this->age])) ?
-					sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
+				
+				// 添付ファイルの詳細情報はページ編集権限がある場合のみ表示
+				if ($editAuth){
+					$info = "\n[<a href=\"$infoUrl\" title=\"$_title\" rel=\"tooltip\" data-toggle=\"tooltip\">{$_attach_messages['btn_info']}</a>]\n";
+				
+					// ダウンロード数は制限する?
+					$count = ($showicon && ! empty($this->status['count'][$this->age])) ? sprintf($_attach_messages['msg_count'], $this->status['count'][$this->age]) : '';
+				}
 /*			} else {
 				$_title = str_replace('$1', rawurlencode($this->file), $_attach_messages['msg_info']);
 				$info = "\n[<a href=\"$infoUrl\" title=\"$_title\">{$_attach_messages['btn_info']}</a>]\n";
@@ -699,7 +707,7 @@ class AttachFile
 			}*/
 		}
 //		return "<a href=\"$openUrl\" title=\"$title\">$label</a>$count$info";
-		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\">$label</a> $count $info";
+		return "<a href=\"$openUrl\" title=\"$title\" target=\"_blank\" rel=\"tooltip\" data-toggle=\"tooltip\">$label</a> $count $info";
 	}
 
 	// 情報表示
@@ -798,7 +806,8 @@ class AttachFile
 			$body .= '</p>' . M3_NL;
 			$body .= '<dl class="wiki_list">' . M3_NL;
 			$body .= '<dt>' . $info . '</dt>' . M3_NL;
-			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . $s_page . '</dd>' . M3_NL;
+//			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . $s_page . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . make_pagelink($this->page) . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_filename'] . ': ' . $filename . '</dd>' . M3_NL;
 //			$body .= '<dd>' . $_attach_messages['msg_md5hash'] . ': ' . $this->md5hash . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_filesize'] . ': ' . $this->size_str . ' (' . $this->size . ' bytes)</dd>' . M3_NL;
@@ -827,13 +836,14 @@ class AttachFile
 				$body .= '</form>' . M3_NL;
 			}
 		} else {
-			$body .= '<p class="small">' . M3_NL;
+			$body .= '<p>' . M3_NL;
 			$body .= '[<a href="' . $linkList . '">' . $_attach_messages['msg_list'] . '</a>]' . M3_NL;
 			$body .= '[<a href="' . $linkListAll . '">' . $_attach_messages['msg_listall'] . '</a>]' . M3_NL;
 			$body .= '</p>' . M3_NL;
 			$body .= '<dl class="wiki_list">' . M3_NL;
 			$body .= '<dt>' . $info . '</dt>' . M3_NL;
-			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . $s_page . '</dd>' . M3_NL;
+//			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . $s_page . '</dd>' . M3_NL;
+			$body .= '<dd>' . $_attach_messages['msg_page'] . ': ' . make_pagelink($this->page) . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_filename'] . ': ' . $filename . '</dd>' . M3_NL;
 //			$body .= '<dd>' . $_attach_messages['msg_md5hash'] . ': ' . $this->md5hash . '</dd>' . M3_NL;
 			$body .= '<dd>' . $_attach_messages['msg_filesize'] . ': ' . $this->size_str . ' (' . $this->size . ' bytes)</dd>' . M3_NL;
