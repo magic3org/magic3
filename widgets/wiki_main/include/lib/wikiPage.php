@@ -218,13 +218,11 @@ class WikiPage
 			if ($join){		// 文字列を返すとき
 				$retVal = $row['wc_data'];
 			} else {		// 行単位(改行コード含む)の配列にして返すとき
-				$retVal = preg_split('/(?<=\n)/', $row['wc_data']);
-//				$retVal = preg_split('/\R/', $row['wc_data']);		// CR,CF両方除く(うまく動作しない 2015/8/15)
-				array_pop($retVal);			// 最後の空行削除
-				
-				// 改行コードを削除
-				$retVal = str_replace("\r", '', $retVal);
+				$retVal = preg_split('/(?<=\n)/', $row['wc_data']);		// 改行(LF)を残して行分割
+//				$retVal = preg_split('/\R/', $row['wc_data']);		// CR,CF両方除く(マルチバイトはうまく処理できない? 2015/8/15)
+				array_pop($retVal);			// preg_split()で行分割すると空行が付加されるので削除
 			}
+				
 			$serial = $row['wc_serial'];
 		}
 		return $retVal;

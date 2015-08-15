@@ -35,9 +35,8 @@ function get_source($page, $join = false, &$serial = null)
 {
 	$result = $join ? '' : array();
 	if (is_page($page)){
-		// 改行コードを削除
-//		$result = str_replace("\r", '', WikiPage::getPage($page, $join, $serial));
-		$result = WikiPage::getPage($page, $join, $serial);
+		// 改行コード(CR)を削除
+		$result = str_replace("\r", '', WikiPage::getPage($page, $join, $serial));
 	}
 	return $result;
 }
