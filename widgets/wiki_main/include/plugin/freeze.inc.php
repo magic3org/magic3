@@ -66,7 +66,8 @@ function plugin_freeze_action()
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 //			if (!$editAuth) $body .= '<p>' . $_msg_freezing . '</p>' . M3_NL;
-			$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+//			$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+			$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
 			$body .= '<input type="hidden"   name="wcmd"  value="freeze" />' . M3_NL;
 			$body .= '<input type="hidden"   name="page" value="' . $s_page . '" />' . M3_NL;
 			$body .= '<input type="hidden" name="action" value="done" />' . M3_NL;		// 次画面遷移用
@@ -82,7 +83,8 @@ function plugin_freeze_action()
 			$body .= '</form>' . M3_NL;
 		} else {
 //			if (!$editAuth) $body .= '<p>' . $_msg_freezing . '</p>' . M3_NL;
-			$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+//			$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+			$body .= '<form method="post" class="form">' . M3_NL;
 			$body .= '<div>' . M3_NL;
 			$body .= '<input type="hidden"   name="wcmd"  value="freeze" />' . M3_NL;
 			$body .= '<input type="hidden"   name="page" value="' . $s_page . '" />' . M3_NL;
