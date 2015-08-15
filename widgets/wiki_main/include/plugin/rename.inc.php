@@ -126,9 +126,10 @@ function plugin_rename_phase1($err = '', $page = '')
 	// テンプレートタイプに合わせて出力を変更
 	$templateType = $gEnvManager->getCurrentTemplateType();
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+//<form action="$postScript" method="post" class="form form-inline" role="form">
 		$ret['body'] = <<<EOD
 $msg
-<form action="$postScript" method="post" class="form form-inline" role="form">
+<form method="post" class="form form-inline" role="form">
   <input type="hidden" name="plugin" value="rename" />
   <div><div class="radio"><input type="radio"  name="method" id="_p_rename_page" value="page"$radio_page />
   <label for="_p_rename_page">{$_rename_messages['msg_page']}:</label></div> $select_refer</div>
@@ -142,9 +143,10 @@ $msg
 </form>
 EOD;
 	} else {
+//<form action="$postScript" method="post" class="form">
 		$ret['body'] = <<<EOD
 $msg
-<form action="$postScript" method="post" class="form">
+<form method="post" class="form">
  <div>
   <input type="hidden" name="plugin" value="rename" />
   <input type="radio"  name="method" id="_p_rename_page" value="page"$radio_page />
@@ -193,9 +195,10 @@ function plugin_rename_phase2($err = '', $page = '')
 	// テンプレートタイプに合わせて出力を変更
 	$templateType = $gEnvManager->getCurrentTemplateType();
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
+//<form action="$postScript" method="post" class="form form-inline" role="form">
 		$ret['body'] = <<<EOD
 $msg
-<form action="$postScript" method="post" class="form form-inline" role="form">
+<form method="post" class="form form-inline" role="form">
   <input type="hidden" name="plugin" value="rename" />
   <input type="hidden" name="refer"  value="$s_refer" />
   $msg_rename<br />
@@ -206,9 +209,10 @@ $msg
 </form>
 EOD;
 	} else {
+//<form action="$postScript" method="post" class="form">
 		$ret['body'] = <<<EOD
 $msg
-<form action="$postScript" method="post" class="form">
+<form method="post" class="form">
  <div>
   <input type="hidden" name="plugin" value="rename" />
   <input type="hidden" name="refer"  value="$s_refer" />
@@ -353,7 +357,8 @@ function plugin_rename_phase3($pages)
 	$templateType = $gEnvManager->getCurrentTemplateType();
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 		$body .= '<p>' . $msg . '</p>' . M3_NL;
-		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+//		$body .= '<form action="' . $postScript . '" method="post" class="form form-inline" role="form">' . M3_NL;
+		$body .= '<form method="post" class="form form-inline" role="form">' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="rename" />' . M3_NL;
 		$body .= '<input type="hidden" name="pass" />' . M3_NL;
 		$body .= $input;
@@ -363,7 +368,8 @@ function plugin_rename_phase3($pages)
 		$body .= '<p>' . $_rename_messages['msg_confirm'] . '</p>' . M3_NL;
 	} else {
 		$body .= '<p>' . $msg . '</p>' . M3_NL;
-		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+//		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+		$body .= '<form method="post" class="form">' . M3_NL;
 		$body .= '<div>' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="rename" />' . M3_NL;
 		$body .= '<input type="hidden" name="pass" />' . M3_NL;

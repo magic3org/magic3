@@ -152,9 +152,11 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 	
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 		$cols = EDIT_COLS_BOOTSTRAP;
+// <form action="$postScript" method="post" class="form form-inline" role="form">
+// <form action="$postScript" method="post" class="form form-inline" role="form">
 		$body = <<<EOD
 <div class="edit_form">
- <form action="$postScript" method="post" class="form form-inline" role="form">
+ <form method="post" class="form form-inline" role="form">
 $template
   $addtag
   <input type="hidden" name="wcmd"    value="edit" />
@@ -167,7 +169,7 @@ $template
    $add_notimestamp
   <textarea name="original" style="display:none">$s_original</textarea>
  </form>
- <form action="$postScript" method="post" class="form form-inline" role="form">
+ <form method="post" class="form form-inline" role="form">
   <input type="hidden" name="wcmd"    value="edit" />
   <input type="hidden" name="page"   value="$s_page" />
   <input type="submit" name="cancel" class="button btn" value="$_btn_cancel" accesskey="c" />
@@ -175,9 +177,11 @@ $template
 </div>
 EOD;
 	} else {
+// <form action="$postScript" method="post" style="margin-bottom:0px;" class="form">
+// <form action="$postScript" method="post" style="margin-top:0px;" class="form">
 		$body = <<<EOD
 <div class="edit_form">
- <form action="$postScript" method="post" style="margin-bottom:0px;" class="form">
+ <form method="post" style="margin-bottom:0px;" class="form">
 $template
   $addtag
   <input type="hidden" name="wcmd"    value="edit" />
@@ -193,7 +197,7 @@ $template
   </div>
   <textarea name="original" rows="1" cols="1" style="display:none">$s_original</textarea>
  </form>
- <form action="$postScript" method="post" style="margin-top:0px;" class="form">
+ <form method="post" style="margin-top:0px;" class="form">
   <input type="hidden" name="wcmd"    value="edit" />
   <input type="hidden" name="page"   value="$s_page" />
   <input type="submit" name="cancel" class="button" value="$_btn_cancel" accesskey="c" />
@@ -210,9 +214,7 @@ EOD;
 		/*$body .= '<ul><li><a href="' .
 			$script . '?cmd=edit&amp;help=true&amp;page=' . $r_page .
 			'">' . $_msg_help . '</a></li></ul>';*/
-		$body .= '<ul><li><a href="' .
-			$script . WikiParam::convQuery("?cmd=edit&amp;help=true&amp;page=$r_page") .
-			'">' . $_msg_help . '</a></li></ul>';
+		$body .= '<ul><li><a href="' . $script . WikiParam::convQuery("?cmd=edit&amp;help=true&amp;page=$r_page") . '">' . $_msg_help . '</a></li></ul>';
 	}
 
 	return $body;

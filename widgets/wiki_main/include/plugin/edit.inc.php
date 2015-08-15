@@ -26,8 +26,6 @@ function plugin_edit_action()
 	global $script, $_title_cannotedit, $_msg_unfreeze, $_title_invalid_pagename, $_msg_invalid_pagename;
 	global $gEnvManager;
 
-//	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
-
 	// ### パスワード認証フォーム表示 ###
 	// 認証されている場合はスルーして関数以降を実行
 	$retStatus = password_form();
@@ -54,7 +52,7 @@ function plugin_edit_action()
 		return plugin_edit_preview();
 	} else if (WikiParam::getVar('write') != '') {
 		return plugin_edit_write();
-	} else if (WikiParam::getVar('cancel') != '') {
+	} else if (WikiParam::getVar('cancel') != '') {	// キャンセルボタンが押されたとき
 		return plugin_edit_cancel();
 	}
 
@@ -125,8 +123,6 @@ function plugin_edit_inline()
 {
 	static $usage = '&edit(pagename#anchor[[,noicon],nolabel])[{label}];';
 	global $script, $fixed_heading_anchor_edit;
-
-	if (PKWK_READONLY) return ''; // Show nothing 
 
 	// Arguments
 	$args = func_get_args();
@@ -304,16 +300,21 @@ function plugin_edit_write()
 	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
 }
 
-// Cancel (Back to the page / Escape edit page)
+/**
+ * キャンセルボタンが押されたときの処理
+ *
+ * @return				なし
+ */
 function plugin_edit_cancel()
 {
 	global $gPageManager;
-	//global $vars;
-//	pkwk_headers_sent();
-	// modified for Magic3 by naoki on 2008/10/6
-	//header('Location: ' . get_script_uri() . '?' . rawurlencode($vars['page']));
-//	header('Location: ' . get_script_uri() . WikiParam::convQuery('?' . rawurlencode(WikiParam::getPage()), false));
-//	exit;
-	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode(WikiParam::getPage()), false));
+
+	$page = WikiParam::getPage();
+	
+	// リファラがある場合はリファラのページへ遷移
+	$refer = WikiParam::getRefer();
+	if (!empty($refer)) $page = $refer;
+	
+	$gPageManager->redirect(get_script_uri() . WikiParam::convQuery('?' . rawurlencode($page), false));
 }
 ?>
