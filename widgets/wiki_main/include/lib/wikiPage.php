@@ -218,7 +218,9 @@ class WikiPage
 			if ($join){		// 文字列を返すとき
 				$retVal = $row['wc_data'];
 			} else {		// 行単位(改行コード含む)の配列にして返すとき
-				$retVal = preg_split('/(?<=\n)/', $row['wc_data']);
+//				$retVal = preg_split('/(?<=\n)/', $row['wc_data']);
+				$retVal = preg_split('/\R/', $row['wc_data']);		// CR,CF両方除く
+				array_pop($retVal);			// 最後の空行削除
 			}
 			$serial = $row['wc_serial'];
 		}

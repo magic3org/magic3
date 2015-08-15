@@ -36,7 +36,8 @@ function get_source($page, $join = false, &$serial = null)
 	$result = $join ? '' : array();
 	if (is_page($page)){
 		// 改行コードを削除
-		$result = str_replace("\r", '', WikiPage::getPage($page, $join, $serial));
+//		$result = str_replace("\r", '', WikiPage::getPage($page, $join, $serial));
+		$result = WikiPage::getPage($page, $join, $serial);
 	}
 	return $result;
 }
@@ -123,8 +124,7 @@ function page_write($page, $postdata, $notimestamp = FALSE)
 		// 最終更新情報(最終更新データ、最終更新ページ)を更新
 		lastmodified_add($whatsdeleted, $page);
 	} else {		// 更新データがあるときはデータを更新
-		$postdata = rtrim(preg_replace('/' . "\r" . '/', '', $postdata)) . "\n";
-		
+		$postdata = rtrim(preg_replace('/' . "\r" . '/', '', $postdata)) . "\n";		// 改行付加
 		$ret = WikiPage::updatePage($page, $postdata, $notimestamp, true/*ページ一覧更新*/);
 		if ($ret){
 			// 運用ログを残す
