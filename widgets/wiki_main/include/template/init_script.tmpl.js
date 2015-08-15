@@ -16,6 +16,7 @@ $(function(){
 	var paddingTop = $('body').css('padding-top');
 	if (paddingTop) $('.anchor_super').css('padding-top', paddingTop).css('margin-top', '-' + paddingTop);
 //	if (paddingTop) $('.anchor_super').css('padding-top', paddingTop);
+//	if (paddingTop) $('.anchor_super').css('margin-top', paddingTop);
 <patTemplate:tmpl name="fileselect" visibility="hidden">
 	// アップロードファイル選択
 	$('.btn-file :file').on('fileselect', function(event, numFiles, label){

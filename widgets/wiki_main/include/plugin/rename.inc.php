@@ -21,8 +21,6 @@ define('PLUGIN_RENAME_LOGPAGE', ':RenameLog');
 function plugin_rename_action()
 {
 	global $gEnvManager;
-	
-//	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits this');
 
 	// ### パスワード認証フォーム表示 ###
 	// 認証されている場合はスルーして関数以降を実行
@@ -36,14 +34,16 @@ function plugin_rename_action()
 
 		$src_pattern = '/' . preg_quote($src, '/') . '/';
 		$arr0 = preg_grep($src_pattern, get_existpages());
-		if (! is_array($arr0) || empty($arr0))
-			return plugin_rename_phase1('nomatch');
+		if (! is_array($arr0) || empty($arr0)) return plugin_rename_phase1('nomatch');
+		foreach ($arr0 as $page){
+			if (!is_editable($page)) return plugin_rename_phase1('norename', $page);			// 凍結ファイルは変更不可
+		}
 
 		$dst = plugin_rename_getvar('dst');
 		$arr1 = preg_replace($src_pattern, $dst, $arr0);
-		foreach ($arr1 as $page)
-			if (! is_pagename($page))
-				return plugin_rename_phase1('notvalid');
+		foreach ($arr1 as $page){
+			if (!is_pagename($page)) return plugin_rename_phase1('notvalid');
+		}
 
 		return plugin_rename_regex($arr0, $arr1);
 
@@ -56,7 +56,8 @@ function plugin_rename_action()
 			return plugin_rename_phase1();
 		} else if (!is_page($refer)) {
 			return plugin_rename_phase1('notpage', $refer);
-		} else if ($refer == WikiConfig::getWhatsnewPage()) {
+//		} else if ($refer == WikiConfig::getWhatsnewPage()) {
+		} else if ($refer == WikiConfig::getNoLinkPages() || !is_editable($refer)) {			// 凍結ファイルは変更不可
 			return plugin_rename_phase1('norename', $refer);
 		} else if ($page == '' || $page == $refer) {	// 新規ページ名未入力、または、新旧ページ名が同じとき
 			// 新規ページ名入力フィールド表示
@@ -257,9 +258,9 @@ function plugin_rename_refer($page, $refer)
 function plugin_rename_regex($arr_from, $arr_to)
 {
 	$exists = array();
-	foreach ($arr_to as $page)
-		if (is_page($page))
-			$exists[] = $page;
+	foreach ($arr_to as $page){
+		if (is_page($page)) $exists[] = $page;
+	}
 
 	if (! empty($exists)) {
 		return plugin_rename_phase1('already', $exists);
