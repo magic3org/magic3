@@ -24,8 +24,6 @@ function plugin_template_action()
 	global $_btn_template_create, $_title_template;
 	global $_err_template_already, $_err_template_invalid, $_msg_template_force;
 	global $gEnvManager;
-	
-//	if (PKWK_READONLY) die_message('PKWK_READONLY prohibits editing');
 
 	// ### パスワード認証フォーム表示 ###
 	// 認証されている場合はスルーして関数以降を実行
@@ -58,7 +56,7 @@ function plugin_template_action()
 		$msg		= $_title_edit;
 		$body		= edit_form($page, $postdata);
 		WikiParam::setRefer($page);
-		array('msg' => $msg, 'body' => $body);
+		return array('msg' => $msg, 'body' => $body);
 	}
 	$begin_select = $end_select = '';
 	for ($i = 0; $i < count($lines); $i++) {
@@ -93,6 +91,7 @@ function plugin_template_action()
 	// テンプレートタイプに合わせて出力を変更
 	if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 		$body .= '<form action="' . $postScript . '" method="post" class="form" role="form">' . M3_NL;
+//		$body .= '<form method="post" class="form" role="form">' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="template" />' . M3_NL;
 		$body .= '<input type="hidden" name="refer"  value="' . $s_refer . '" />' . M3_NL;
 		$body .= '<div class="form-group"><label for="_p_template_begin">' . $_msg_template_start . '</label><select class="form-control" name="begin" id="_p_template_begin" size="10">' . $begin_select . '</select></div>' . M3_NL;
@@ -102,6 +101,7 @@ function plugin_template_action()
 		$body .= '</form>' . M3_NL;
 	} else {
 		$body .= '<form action="' . $postScript . '" method="post" class="form">' . M3_NL;
+//		$body .= '<form method="post" class="form">' . M3_NL;
 		$body .= '<div>' . M3_NL;
 		$body .= '<input type="hidden" name="plugin" value="template" />' . M3_NL;
 		$body .= '<input type="hidden" name="refer"  value="' . $s_refer . '" />' . M3_NL;
