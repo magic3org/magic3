@@ -46,6 +46,9 @@
 .glyphicon-align-justify:before {
   content: "\e055";
 }
+.glyphicon-check:before {
+  content: "\e067";
+}
 .glyphicon-chevron-left:before {
   content: "\e079";
 }
@@ -87,6 +90,9 @@
 }
 .glyphicon-wrench:before {
   content: "\e136";
+}
+.glyphicon-unchecked:before {
+  content: "\e157";
 }
 .glyphicon-tower:before {
   content: "\e184";

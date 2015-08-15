@@ -332,6 +332,10 @@
 .m3widgettoolbutton {
 	padding-right:100px;
 }
+.m3widgettoolbutton .hidden {	/* 状態チェックボックス */
+	display: none !important;
+	visibility: hidden !important;
+}
 /* メニューバー上のボタン */
 .m3-navbar-btn {
 	margin-top: 8.5px;
