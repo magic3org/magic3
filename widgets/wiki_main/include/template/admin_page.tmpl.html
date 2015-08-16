@@ -64,6 +64,16 @@ function delItem(){
 	}
 	return true;
 }
+function uploadCheck(){
+	if (!document.upload.upfile.value){
+		alert('ファイルが選択されていません');
+		return false;
+	}
+	if (!window.confirm('アップロードしますか?')) return false;
+	document.upload.act.value = 'upload';
+	document.upload.submit();
+	return false;
+}
 function selpage(page){
 	document.main.act.value = 'selpage';
 	document.main.page.value = page;
@@ -73,6 +83,9 @@ function selpage(page){
 $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
+	
+	// ファイル選択ダイアログ用
+	m3SetFileSelectButton();
 });
 //]]>
 </script>
@@ -86,6 +99,7 @@ $(function(){
 <input type="hidden" name="page" value="{PAGE}" />
 <h3 class="m3config_h"><span {_HELP_PAGE_LIST}>Wikiページ一覧</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_PAGE_BUTTONS}><div class="btn-group">
+<input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="アップロード" />
 <!--<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" />--><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
 
@@ -117,5 +131,32 @@ $(function(){
 </table>
 {PAGE_LINK}
 </form>
+</div>
+
+<!-- File upload dialog -->
+<div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="uploadModalLabel">Wikiページファイルアップロード</h4>
+            </div>
+            <div class="modal-body">
+			    <p>アップロードするWikiページファイルを選択してください</p>
+                <form enctype="multipart/form-data" method="post" name="upload">
+                    <input type="hidden" name="act" />
+					<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+                    <div class="input-group">
+                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>
+                        <input type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-success" onclick="uploadCheck();">アップロード</button>
+            </div>
+        </div>
+    </div>
 </div>
 </patTemplate:tmpl>

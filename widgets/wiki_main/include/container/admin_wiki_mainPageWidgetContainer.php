@@ -14,17 +14,6 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_wiki_mainBaseWidgetContainer.php');
-// Magic3追加ファイル
-//require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiConfig.php');
-//require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiPage.php');
-//require_once($gEnvManager->getCurrentWidgetLibPath() . '/wikiParam.php');
-// PukiWikiファイル
-/*require_once($gEnvManager->getCurrentWidgetLibPath() . '/func.php');
-require_once($gEnvManager->getCurrentWidgetLibPath() . '/file.php');
-require_once($gEnvManager->getCurrentWidgetLibPath() . '/diff.php');
-require_once($gEnvManager->getCurrentWidgetLibPath() . '/make_link.php');
-require_once($gEnvManager->getCurrentWidgetLibPath() . '/link.php');
-*/
 
 class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContainer
 {
@@ -49,17 +38,9 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		
 		$this->wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);// Wikiコンテンツオブジェクト取得
 				
-		// ### Wikiページライブラリ初期化 ###
-/*		WikiConfig::init(self::$_mainDb);
-		WikiPage::init(self::$_mainDb);		// Wikiページ管理クラス
-		WikiParam::init(self::$_mainDb);		// URLパラメータ管理クラス
-		global $gEnvManager;
-		require_once($gEnvManager->getCurrentWidgetLibPath() . '/init.php');			// Wiki機能初期化*/
-				
 		// パラメータ初期化
 		$this->maxListCount = self::DEFAULT_LIST_COUNT;
-		//$this->builtinPages	= array( WikiConfig::getDefaultPage(), WikiConfig::getWhatsnewPage(), WikiConfig::getWhatsdeletedPage() );		// 自動生成されるWikiページ
-		$this->builtinPages	= $this->wikiLibObj->getBuiltinPages();
+		$this->builtinPages	= $this->wikiLibObj->getBuiltinPages();			// 自動生成されるWikiページ
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -136,6 +117,65 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 //				} else {
 //					$this->setAppErrorMsg('データ削除に失敗しました');
 //				}
+			}
+		} else if ($act == 'upload'){		// ファイルアップロードの場合
+			// アップロードされたファイルか？セキュリティチェックする
+			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
+				$uploadFilename = $_FILES['upfile']['name'];		// アップロードされたファイルのファイル名取得
+
+				// ファイル名の解析
+				$pathParts = pathinfo($uploadFilename);
+				$ext = $pathParts['extension'];		// 拡張子
+				$filename = basename($uploadFilename, '.' . $ext);		// 拡張子をはずす
+				$ext = strtolower($ext);			
+
+				// 拡張子のチェック
+				if ($ext != 'txt'){
+					$this->setAppErrorMsg('対応外のファイルタイプです');
+				} else {
+					// ファイル名のチェック
+					$pageName = @decode($filename);
+					if (empty($pageName)) $this->setAppErrorMsg('対応外のファイルです');
+				}
+				
+				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
+					// ファイルを保存するサーバディレクトリを指定
+					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
+		
+					// アップされたテンポラリファイルを保存ディレクトリにコピー
+					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
+					if ($ret){
+						// ファイルの内容から文字コードを判断
+						$fileData = file_get_contents($tmpFile);
+						$encoding = mb_detect_encoding($fileData, 'UTF-8,EUC-JP,JIS');
+						if (empty($encoding)) $encoding = M3_ENCODING;
+
+						// ページデータをUTF-8に変換
+						if ($encoding != M3_ENCODING){
+							$fileData = mb_convert_encoding($fileData, M3_ENCODING, $encoding);
+							$pageName = mb_convert_encoding($pageName, M3_ENCODING, $encoding);
+						}
+						
+						// 既にページが存在しているか確認
+						$ret = true;
+						if (is_page($pageName)){
+							$this->setAppErrorMsg('ページが存在しています。ページ=' . $pageName);
+							$ret = false;
+						}
+						
+						// WikiデータをDBに格納
+						if ($ret) $ret = WikiPage::initPage($pageName, $fileData);
+						
+						if ($ret) $this->setGuidanceMsg('ページを読み込みました。ページ=' . $pageName);
+					} else {
+						$this->setAppErrorMsg('ファイルのアップロードに失敗しました');
+					}
+					// テンポラリファイル削除
+					unlink($tmpFile);
+				}
+			} else {
+				$msg = 'アップロードファイルが見つかりません(要因：アップロード可能なファイルのMaxサイズを超えている可能性があります - ' . $this->gSystem->getMaxFileSizeForUpload() . 'バイト)';
+				$this->setAppErrorMsg($msg);
 			}
 		}
 		// #### Wikiページリストを作成 ####
