@@ -331,12 +331,6 @@ div.toolbar {
 div.toolbar img {
 	border:none;
 }
-/*textarea.wiki_edit {
-	width: 100%;
-	font-size: 100%;
-	margin-top: 0.1em;
-	margin-bottom: 0.1em;
-}*/
 /* navi */
 ul.navi {
 	margin:0px;
@@ -401,4 +395,10 @@ ul.social-button li {
 .contentheading span.locked {	/* locked page title */
 	all: initial;
 	font-size: 16px;
+}
+#wiki_edit {
+	width: 100%;
+	font-size: 100%;
+	margin-top: 0.1em;
+	margin-bottom: 0.1em;
 }

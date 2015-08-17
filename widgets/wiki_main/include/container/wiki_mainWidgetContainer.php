@@ -197,7 +197,7 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			if (!is_editable($base)) $pageTitle  = str_replace('$1', make_pagelink($base),  $retvars['msg']);// バックリンクではなくて通常のリンクに変更 by magic3
 		} else {
 			// ページが編集不可の場合はロック中マークを付加
-			if (WikiConfig::isUserWithEditAuth() && !is_editable($base)) $pageTitle .= '<span class="locked"><i class="glyphicon glyphicon-lock" title="ページロック" rel="tooltip" data-toggle="tooltip"></i></span>';
+			if (WikiConfig::isUserWithEditAuth() && !is_editable($base)) $pageTitle .= '<span class="locked"><i class="glyphicon glyphicon-lock" title="ページロック状態" rel="tooltip" data-toggle="tooltip"></i></span>';
 		}
 		
 		if (isset($retvars['body']) && $retvars['body'] != ''){

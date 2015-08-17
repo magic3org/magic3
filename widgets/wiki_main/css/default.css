@@ -439,8 +439,7 @@ ul.social-button li {
 	all: initial;
 	font-size: 16px;
 }
-/***** add for magic3 *****/
-textarea.wiki_edit {
+#wiki_edit {
 	width: 100%;
 	font-size: 100%;
 	margin-top: 0.1em;
