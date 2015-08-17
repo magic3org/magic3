@@ -320,10 +320,6 @@ function make_search($page)
 
 	$s_page = htmlspecialchars($page);
 	$r_page = rawurlencode($page);
-
-	// modified for Magic3 by naoki on 2008/10/6
-/*	return '<a href="' . $script . '?plugin=related&amp;page=' . $r_page .
-		'">' . $s_page . '</a> ';*/
 	return '<a href="' . $script . WikiParam::convQuery("?plugin=related&amp;page=$r_page") . '">' . $s_page . '</a> ';
 }
 

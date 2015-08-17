@@ -748,7 +748,7 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 	
 	// 編集権限を取得
 	if (!isset($editAuth)) $editAuth = WikiConfig::isUserWithEditAuth();		// 編集権限があるかどうか
-			
+
 	$s_page = htmlspecialchars(strip_bracket($page));
 	$s_alias = ($alias == '') ? $s_page : $alias;
 	
@@ -761,8 +761,7 @@ function make_pagelink($page, $alias = '', $anchor = '', $refer = '', $isautolin
 
 	$r_refer = ($refer == '') ? '' : '&amp;refer=' . rawurlencode($refer);
 
-	if (! isset($related[$page]) && $page != $vars['page'] && is_page($page))
-		$related[$page] = get_filetime($page);
+	if (! isset($related[$page]) && $page != $vars['page'] && is_page($page)) $related[$page] = get_filetime($page);
 
 	if ($isautolink || is_page($page)) {
 		// Hyperlink to the page

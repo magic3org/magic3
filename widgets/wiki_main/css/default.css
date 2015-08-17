@@ -434,6 +434,11 @@ ul.social-button li {
 }
 .button-google {
 }
+/*** for edit mode ***/
+.contentheading span.locked {	/* locked page title */
+	all: initial;
+	font-size: 16px;
+}
 /***** add for magic3 *****/
 textarea.wiki_edit {
 	width: 100%;
