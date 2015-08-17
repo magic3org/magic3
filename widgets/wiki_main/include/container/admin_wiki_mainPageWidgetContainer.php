@@ -119,6 +119,8 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 //				}
 			}
 		} else if ($act == 'upload'){		// ファイルアップロードの場合
+			$overwritePage = $request->trimCheckedValueOf('item_overwrite');		// ページを上書きするかどうか
+
 			// アップロードされたファイルか？セキュリティチェックする
 			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
 				$uploadFilename = $_FILES['upfile']['name'];		// アップロードされたファイルのファイル名取得
@@ -134,8 +136,8 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 					$this->setAppErrorMsg('対応外のファイルタイプです');
 				} else {
 					// ファイル名のチェック
-					$pageName = @decode($filename);
-					if (empty($pageName)) $this->setAppErrorMsg('対応外のファイルです');
+					$page = @decode($filename);
+					if (empty($page)) $this->setAppErrorMsg('対応外のファイルです');
 				}
 				
 				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
@@ -153,20 +155,38 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 						// ページデータをUTF-8に変換
 						if ($encoding != M3_ENCODING){
 							$fileData = mb_convert_encoding($fileData, M3_ENCODING, $encoding);
-							$pageName = mb_convert_encoding($pageName, M3_ENCODING, $encoding);
+							$page = mb_convert_encoding($page, M3_ENCODING, $encoding);
 						}
 						
 						// 既にページが存在しているか確認
 						$ret = true;
-						if (is_page($pageName)){
-							$this->setAppErrorMsg('ページが存在しています。ページ=' . $pageName);
-							$ret = false;
+						if (is_page($page)){
+							if ($overwritePage){		// 上書きの場合
+								$ret = WikiPage::updatePage($page, $fileData, false/*更新日時を更新*/, true/*ページ一覧更新*/);
+								if (!$ret) $this->setAppErrorMsg('ページの更新に失敗しました。ページ=' . $page);
+							} else {
+								$this->setAppErrorMsg('ページが存在しています。ページ=' . $page);
+								$ret = false;
+							}
+						} else {			// ページが存在しない場合
+							// ページ新規作成
+							$ret = WikiPage::initPage($page, $fileData);
+							if (!$ret) $this->setAppErrorMsg('ページの作成に失敗しました。ページ=' . $page);
 						}
 						
-						// WikiデータをDBに格納
-						if ($ret) $ret = WikiPage::initPage($pageName, $fileData);
-						
-						if ($ret) $this->setGuidanceMsg('ページを読み込みました。ページ=' . $pageName);
+						if ($ret){
+							$this->setGuidanceMsg('ページを読み込みました。ページ=' . $page);
+							
+							// 運用ログを残す
+							$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+													M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
+													M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+							if ($overwritePage){			// 更新の場合
+								_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_UPDATE_CONTENT, $page), 2401, 'ID=' . $page, $eventParam);
+							} else {			// 新規の場合
+								_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_ADD_CONTENT, $page), 2400, 'ID=' . $page, $eventParam);
+							}
+						}
 					} else {
 						$this->setAppErrorMsg('ファイルのアップロードに失敗しました');
 					}
