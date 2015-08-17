@@ -464,25 +464,6 @@ function die_message($msg)
 EOD;
 
 	pkwk_common_headers();
-	//if(defined('SKIN_FILE') && file_exists(SKIN_FILE) && is_readable(SKIN_FILE)) {
-		// modified for Magic3 by naoki on 2008/9/29
-		//catbody($title, $page, $body);
-		//catbody($body);
-	/*} else {
-		header('Content-Type: text/html; charset=euc-jp');
-		print <<<EOD
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
- <head>
-  <title>$title</title>
-  <meta http-equiv="content-type" content="text/html; charset=euc-jp">
- </head>
- <body>
- $body
- </body>
-</html>
-EOD;
-	}*/
 	exit;
 }
 

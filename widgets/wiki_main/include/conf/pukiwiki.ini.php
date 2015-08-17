@@ -92,7 +92,6 @@ global $gEnvManager;
 //define('PKWK_READONLY',  1);
 if (!$gEnvManager->isSystemManageUser()) define('PKWK_SAFE_MODE', 1);			// システム運用者でない場合はセーフモードで立ち上げ
 //define('PKWK_OPTIMISE',  1);
-//define('TDIARY_THEME',   'digital_gadgets');
 
 /////////////////////////////////////////////////
 // Functionality settings
@@ -170,16 +169,6 @@ define('PLUGIN_DIR',    DATA_HOME . 'plugin/'   ); // Plugin directory
 define('UPLOAD_DIR',    $gEnvManager->getResourcePath() . '/widgets/wiki/upload/');
 //define('PLUGIN_DIR',    $gEnvManager->getCurrentWidgetIncludePath() . '/plugin/'); // Plugin directory
 define('PLUGIN_DIR',    dirname(dirname(__FILE__)) . '/plugin/'); // Plugin directory
-
-/////////////////////////////////////////////////
-// Directory settings II (ended with '/')
-
-// Skins / Stylesheets
-//define('SKIN_DIR', 'skin/');
-// Skin files (SKIN_DIR/*.skin.php) are needed at
-// ./DATAHOME/SKIN_DIR from index.php, but
-// CSSs(*.css) and JavaScripts(*.js) are needed at
-// ./SKIN_DIR from index.php.
 
 // Wikiウィジェット用の画像ディレクトリ
 //define('IMAGE_DIR', $gEnvManager->getCurrentWidgetRootUrl() . '/image/');

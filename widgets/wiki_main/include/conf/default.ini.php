@@ -8,6 +8,7 @@
 //
 // PukiWiki setting file (user agent:default)
 // PukiWiki用グローバル変数		// add for Magic3 by naoki on 2008/10/6
+//global $load_template_func;
 global $search_word_color;
 global $list_index;
 global $_ul_left_margin;
@@ -33,13 +34,8 @@ global $line_rules;
 global $facemark_rules;
 
 /////////////////////////////////////////////////
-// Skin file
-/*
-if (defined('TDIARY_THEME')) {
-	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'tdiary.skin.php');
-} else {
-	define('SKIN_FILE', DATA_HOME . SKIN_DIR . 'pukiwiki.skin.php');
-}*/
+// 雛形とするページの読み込みを可能にする
+$load_template_func = 1;
 
 /////////////////////////////////////////////////
 // 検索文字列を色分けする
