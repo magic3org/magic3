@@ -14,6 +14,7 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_wiki_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCommonPath()		. '/archive.php');
 
 class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContainer
 {
@@ -132,12 +133,13 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 				$ext = strtolower($ext);			
 
 				// 拡張子のチェック
-				if ($ext != 'txt'){
-					$this->setAppErrorMsg('対応外のファイルタイプです');
-				} else {
-					// ファイル名のチェック
-					$page = @decode($filename);
-					if (empty($page)) $this->setAppErrorMsg('対応外のファイルです');
+				if ($ext != 'txt' && $ext != 'zip'){
+					$this->setAppErrorMsg("対応外のファイルタイプです\n読み込み可能なページファイルの形式は、単一のtxtファイル(UTF-8またはEUC-JP)またはtxtファイル(UTF-8のみ)を格納したディレクトリのzip圧縮ファイルです。");
+				}
+				
+				// テンポラリディレクトリの書き込み権限をチェック
+				if (!is_writable($this->gEnv->getWorkDirPath())){
+					$this->setAppErrorMsg('一時ディレクトリに書き込み権限がありません。ディレクトリ：' . $this->gEnv->getWorkDirPath());
 				}
 				
 				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
@@ -147,45 +149,147 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 					// アップされたテンポラリファイルを保存ディレクトリにコピー
 					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
 					if ($ret){
-						// ファイルの内容から文字コードを判断
-						$fileData = file_get_contents($tmpFile);
-						$encoding = mb_detect_encoding($fileData, 'UTF-8,EUC-JP,JIS');
-						if (empty($encoding)) $encoding = M3_ENCODING;
-
-						// ページデータをUTF-8に変換
-						if ($encoding != M3_ENCODING){
-							$fileData = mb_convert_encoding($fileData, M3_ENCODING, $encoding);
-							$page = mb_convert_encoding($page, M3_ENCODING, $encoding);
-						}
+						if ($ext == 'txt'){
+							// ファイル名のチェック
+							$page = @decode($filename);
+							if (empty($page)) $this->setAppErrorMsg('対応外のファイルです');
+					
+							if ($this->getMsgCount() == 0){		// エラーが発生していないとき
+								// ### 単一ファイルの場合は日本語コード自動変換あり ###
+								// ページ名、ページファイルをUTF-8に変換
+								list($page, $fileData) = self::convertPageFile($page, $tmpFile);
+				
+								// 「:」で始まるシステム用ページは作成不可
+								$ret = true;
+								if (strncmp($page, ':', 1) == 0){
+									$this->setAppErrorMsg('ページ名が不正です。ページ=' . $page);
+									$ret = false;
+								} else if (is_page($page)){			// 既にページが存在しているか確認
+									if ($overwritePage){		// 上書きの場合
+										$ret = WikiPage::updatePage($page, $fileData, false/*更新日時を更新*/, true/*ページ一覧更新*/);
+										if (!$ret) $this->setAppErrorMsg('ページの更新に失敗しました。ページ=' . $page);
+									} else {
+										$this->setAppErrorMsg('ページが存在しています。ページ=' . $page);
+										$ret = false;
+									}
+								} else {			// ページが存在しない場合
+									// ページ新規作成
+									$ret = WikiPage::initPage($page, $fileData);
+									if (!$ret) $this->setAppErrorMsg('ページの作成に失敗しました。ページ=' . $page);
+								}
 						
-						// 既にページが存在しているか確認
-						$ret = true;
-						if (is_page($page)){
-							if ($overwritePage){		// 上書きの場合
-								$ret = WikiPage::updatePage($page, $fileData, false/*更新日時を更新*/, true/*ページ一覧更新*/);
-								if (!$ret) $this->setAppErrorMsg('ページの更新に失敗しました。ページ=' . $page);
-							} else {
-								$this->setAppErrorMsg('ページが存在しています。ページ=' . $page);
-								$ret = false;
-							}
-						} else {			// ページが存在しない場合
-							// ページ新規作成
-							$ret = WikiPage::initPage($page, $fileData);
-							if (!$ret) $this->setAppErrorMsg('ページの作成に失敗しました。ページ=' . $page);
-						}
-						
-						if ($ret){
-							$this->setGuidanceMsg('ページを読み込みました。ページ=' . $page);
+								if ($ret){
+									$this->setGuidanceMsg('ページを読み込みました。ページ=' . $page);
 							
-							// 運用ログを残す
-							$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
-													M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
-													M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
-							if ($overwritePage){			// 更新の場合
-								_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_UPDATE_CONTENT, $page), 2401, 'ID=' . $page, $eventParam);
-							} else {			// 新規の場合
-								_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_ADD_CONTENT, $page), 2400, 'ID=' . $page, $eventParam);
+									// 運用ログを残す
+									$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+															M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
+															M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+									if ($overwritePage){			// 更新の場合
+										_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_UPDATE_CONTENT, $page), 2401, 'ID=' . $page, $eventParam);
+									} else {			// 新規の場合
+										_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_ADD_CONTENT, $page), 2400, 'ID=' . $page, $eventParam);
+									}
+								}
 							}
+						} else if ($ext == 'zip'){
+							// 解凍先ディレクトリ取得
+							$extDir = $this->gEnv->getTempDir();
+						
+							// ファイルを解凍
+							$archiver = new Archive();
+							$ret = $archiver->extract($tmpFile, $extDir, $ext);
+							if ($ret){
+								// 作成されたファイルを取得
+								$fileList = getFileList($extDir);
+								if (count($fileList) == 1 && is_dir($extDir . '/' . $fileList[0])){		// 単一ディレクトリのとき
+									$srcDir = $extDir . '/' . $fileList[0];
+								} else {
+									// 設定ファイルを取得
+									$srcDir = $extDir;
+								}
+								
+								// 格納ファイル名取得
+								$targetFiles = array();			// 処理対象ファイル
+								$srcFiles = getFileList($srcDir, true/*ファイルのみ*/);
+								for ($i = 0; $i < count($srcFiles); $i++){
+									$filename = $srcFiles[$i];
+
+									// ファイル名の解析
+									$pathParts = pathinfo($filename);
+									$ext = $pathParts['extension'];		// 拡張子
+									$basename = basename($filename, '.' . $ext);		// 拡張子をはずす
+									$ext = strtolower($ext);
+									
+									// 拡張子が「txt」でエンコードされているファイルのみ取得
+									if ($ext == 'txt'){
+										$page = @decode($basename);
+										if (!empty($page) && strncmp($page, ':', 1) != 0) $targetFiles[$page] = $filename;// 「:」で始まるシステム用ページは不可
+									}
+								}
+								
+								// ページの日本語コードをチェック
+								$ret = true;
+								$errPages = array();		// エラーありのファイル
+								foreach ($targetFiles as $page => $filename){
+									$path = $srcDir . '/' . $filename;
+									$ret = self::checkPageFile($page, $path);
+									if (!$ret) $errPages[] = $page;
+								}
+								if (!empty($errPages)) $this->setAppErrorMsg('ページファイルから日本語コードEUC-JPを検出しました。ページ=' . implode(',', $errPages));
+								
+								// ページが既に登録されていないかチェック
+								if ($ret && !$overwritePage){			// 上書きしない場合
+									$existsPages = WikiPage::getPages();		// 既に登録されているページ
+									
+									$pages = array_keys($targetFiles);
+									for ($i = 0; $i < count($pages); $i++){
+										$page = $pages[$i];
+										if (in_array($page, $pages)) $this->setAppErrorMsg('ページが既に登録されています。ページ=' . $page);
+									}
+								}
+							
+								if ($this->getMsgCount() == 0){		// エラーが発生していないとき
+									$completePages = array();		// 登録完了のファイル
+									foreach ($targetFiles as $page => $filename){
+										$path = $srcDir . '/' . $filename;
+										$fileData = file_get_contents($path);		// ファイル読み込み
+										
+										$ret = true;
+										if (is_page($page)){			// 既にページが存在しているか確認
+											if ($overwritePage){		// 上書きの場合
+												$ret = WikiPage::updatePage($page, $fileData, false/*更新日時を更新*/, true/*ページ一覧更新*/);
+												if (!$ret) $this->setAppErrorMsg('ページの更新に失敗しました。ページ=' . $page);
+											} else {
+												$this->setAppErrorMsg('ページが存在しています。ページ=' . $page);
+												$ret = false;
+											}
+										} else {			// ページが存在しない場合
+											// ページ新規作成
+											$ret = WikiPage::initPage($page, $fileData);
+											if (!$ret) $this->setAppErrorMsg('ページの作成に失敗しました。ページ=' . $page);
+										}
+					
+										if ($ret){
+											// 登録したページを追加
+											$completePages[] = $page;
+											
+											// 運用ログを残す
+											$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_WIKI,
+																	M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $page,
+																	M3_EVENT_HOOK_PARAM_UPDATE_DT		=> date("Y/m/d H:i:s"));
+											if ($overwritePage){			// 更新の場合
+												_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_UPDATE_CONTENT, $page), 2401, 'ID=' . $page, $eventParam);
+											} else {			// 新規の場合
+												_writeUserInfoEvent(__METHOD__, sprintf(LOG_MSG_ADD_CONTENT, $page), 2400, 'ID=' . $page, $eventParam);
+											}
+										}
+									}
+									if (!empty($completePages)) $this->setGuidanceMsg('ページを読み込みました。ページ=' . implode(',', $completePages));
+								}
+							}
+							// 解凍用ディレクトリを削除
+							if (file_exists($extDir)) rmDirectory($extDir);
 						}
 					} else {
 						$this->setAppErrorMsg('ファイルのアップロードに失敗しました');
@@ -224,7 +328,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	 * 詳細画面作成
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
+	 * @return								なし
 	 */
 	function createDetail($request)
 	{
@@ -377,6 +481,51 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		
 		// 表示中項目のシリアル番号を保存
 		$this->serialArray[] = $serial;
+		return true;
+	}
+	/**
+	 * ページ名、ページファイルをUTF-8に変換
+	 *
+	 * @param string $page		ページ名
+	 * @param string $path		ページファイルパス
+	 * @return array			ページ名とファイル内容が返る
+	 */
+	function convertPageFile($page, $path)
+	{
+		// ファイルの内容から文字コードを判断
+		$fileData = file_get_contents($path);
+		$encoding = mb_detect_encoding($fileData, 'ASCII,UTF-8,EUC-JP');
+		if (empty($encoding)) $encoding = M3_ENCODING;
+
+		// ページデータをUTF-8に変換
+		if ($encoding != M3_ENCODING){
+			$fileData = mb_convert_encoding($fileData, M3_ENCODING, $encoding);
+			
+			if ($encoding == 'ASCII'){		// 1バイトコードとして判定されている場合はページ名のみ再度判定
+				$encoding = mb_detect_encoding($page, 'ASCII,UTF-8,EUC-JP');
+				$page = mb_convert_encoding($page, M3_ENCODING, $encoding);
+			}
+		}
+		return array($page, $fileData);
+	}
+	/**
+	 * ページ名、ファイル内容の日本語コードをチェック
+	 *
+	 * @param string $page		ページ名
+	 * @param string $path		ページファイルパス
+	 * @return bool				true=問題なし、false=変換が必要
+	 */
+	function checkPageFile($page, $path)
+	{
+		// ページ名の日本語コードをチェック
+		$encoding = mb_detect_encoding($page, 'ASCII,UTF-8,EUC-JP');
+		if ($encoding == 'EUC-JP') return false;
+				
+		// ファイルの内容から文字コードを判断
+		$fileData = file_get_contents($path);
+		$encoding = mb_detect_encoding($fileData, 'ASCII,UTF-8,EUC-JP');
+		if ($encoding == 'EUC-JP') return false;
+		
 		return true;
 	}
 }

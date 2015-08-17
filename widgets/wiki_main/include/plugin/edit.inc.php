@@ -22,7 +22,7 @@ define('PLUGIN_EDIT_FREEZE_REGEX', '/^(?:#freeze(?!\w)\s*)+/im');
 
 function plugin_edit_action()
 {
-	global $_title_edit, $load_template_func;
+	global $_title_edit;
 	global $script, $_title_cannotedit, $_msg_unfreeze, $_title_invalid_pagename, $_msg_invalid_pagename;
 	global $gEnvManager;
 
@@ -48,7 +48,7 @@ function plugin_edit_action()
 		return array('msg' => $title, 'body' => $body);
 	}
 
-	if (WikiParam::getVar('preview') != '' || ($load_template_func && WikiParam::getVar('template') != '')) {
+	if (WikiParam::getVar('preview') != '' || WikiParam::getVar('template') != '') {
 		return plugin_edit_preview();
 	} else if (WikiParam::getVar('write') != '') {
 		return plugin_edit_write();

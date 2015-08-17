@@ -28,7 +28,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 {
 	global $script, $rows, $cols, $hr;
 	global $_btn_preview, $_btn_repreview, $_btn_update, $_btn_cancel, $_msg_help;
-	global $whatsnew, $_btn_template, $_btn_load, $load_template_func;
+	global $whatsnew, $_btn_template, $_btn_load;
 	global $notimeupdate;
 	global $_btn_addtop;
 	global $gEnvManager;
@@ -56,7 +56,7 @@ function edit_form($page, $postdata, $digest = FALSE, $b_template = TRUE, $cmd='
 		}
 	}
 
-	if($load_template_func && $b_template) {
+	if ($b_template){
 		$pages  = array();
 		foreach(get_existpages() as $_page) {
 			if ($_page == $whatsnew || check_non_list($_page))

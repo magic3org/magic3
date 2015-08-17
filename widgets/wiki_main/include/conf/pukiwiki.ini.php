@@ -381,18 +381,6 @@ $del_backup = 0;
 define('PKWK_SPLITTER', '>>>>>>>>>>');
 
 /////////////////////////////////////////////////
-// Command execution per update
-
-define('PKWK_UPDATE_EXEC', '');
-
-// Sample: Namazu (Search engine)
-//$target     = '/var/www/wiki/';
-//$mknmz      = '/usr/bin/mknmz';
-//$output_dir = '/var/lib/namazu/index/';
-//define('PKWK_UPDATE_EXEC',
-//	$mknmz . ' --media-type=text/pukiwiki' .
-//	' -O ' . $output_dir . ' -L ja -c -K ' . $target);
-
 /////////////////////////////////////////////////
 // HTTP proxy setting (for TrackBack etc)
 
