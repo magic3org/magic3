@@ -181,8 +181,7 @@ foreach(array('DATA_DIR', 'DIFF_DIR', 'BACKUP_DIR', 'CACHE_DIR') as $dir){
 
 // 設定ファイルの変数チェック
 $temp = '';
-foreach(array('rss_max', 'page_title', 'note_hr', 'related_link', 'show_passage',
-	'rule_related_str', 'load_template_func') as $var){
+foreach(array('rss_max', 'page_title', 'note_hr', 'related_link', 'show_passage', 'rule_related_str') as $var){
 	if (! isset(${$var})) $temp .= '$' . $var . "\n";
 }
 if ($temp) {

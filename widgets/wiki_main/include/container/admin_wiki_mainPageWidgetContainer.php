@@ -36,9 +36,9 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
+
 		$this->wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);// Wikiコンテンツオブジェクト取得
-				
+
 		// パラメータ初期化
 		$this->maxListCount = self::DEFAULT_LIST_COUNT;
 		$this->builtinPages	= $this->wikiLibObj->getBuiltinPages();			// 自動生成されるWikiページ

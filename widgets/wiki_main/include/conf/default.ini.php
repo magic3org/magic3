@@ -8,7 +8,6 @@
 //
 // PukiWiki setting file (user agent:default)
 // PukiWiki用グローバル変数		// add for Magic3 by naoki on 2008/10/6
-//global $load_template_func;
 global $search_word_color;
 global $list_index;
 global $_ul_left_margin;
@@ -32,10 +31,6 @@ global $link_compact;
 global $usefacemark;
 global $line_rules;
 global $facemark_rules;
-
-/////////////////////////////////////////////////
-// 雛形とするページの読み込みを可能にする
-$load_template_func = 1;
 
 /////////////////////////////////////////////////
 // 検索文字列を色分けする

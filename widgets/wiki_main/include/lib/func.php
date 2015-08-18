@@ -457,6 +457,9 @@ function catrule()
 // Show (critical) error message
 function die_message($msg)
 {
+	// デバッグ出力
+	debug($msg);
+	
 	$title = $page = 'Runtime error';
 	$body = <<<EOD
 <h3>Runtime error</h3>
