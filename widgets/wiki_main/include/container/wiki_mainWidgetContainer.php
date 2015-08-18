@@ -399,9 +399,6 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		$footNote = WikiPage::getFootNote();
 		ksort($footNote, SORT_NUMERIC);
 		$notes = ! empty($footNote) ? $note_hr . join("\n", $footNote) : '';
-		
-		// Tags will be inserted into <head></head>
-		$head_tag = ! empty($head_tags) ? join("\n", $head_tags) ."\n" : '';
 
 		// Search words
 //		if ($search_word_color && isset($vars['word'])){

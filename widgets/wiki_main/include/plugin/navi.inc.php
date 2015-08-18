@@ -48,14 +48,11 @@
 define('PLUGIN_NAVI_EXCLUSIVE_REGEX', '');
 //define('PLUGIN_NAVI_EXCLUSIVE_REGEX', '#/_#'); // Ignore 'foobar/_memo' etc.
 
-// Insert <link rel=... /> tags into XHTML <head></head>
-define('PLUGIN_NAVI_LINK_TAGS', FALSE);	// FALSE, TRUE
-
 // ----
 
 function plugin_navi_convert()
 {
-	global $script, $head_tags;
+	global $script;
 	global $_navi_prev, $_navi_next, $_navi_up, $_navi_home;
 	global $gEnvManager;
 	static $navi = array();
@@ -129,22 +126,6 @@ function plugin_navi_convert()
 		}
 		$navi[$home]['home']  = make_pagelink($home);
 		$navi[$home]['home1'] = make_pagelink($home, $_navi_home);
-
-		// Generate <link> tag: start next prev(previous) parent(up)
-		// Not implemented: contents(toc) search first(begin) last(end)
-		if (PLUGIN_NAVI_LINK_TAGS) {
-			foreach (array('start'=>$home, 'next'=>$next,
-			    'prev'=>$prev, 'up'=>$up) as $rel=>$_page) {
-				if ($_page != '') {
-					$s_page = htmlspecialchars($_page);
-					$r_page = rawurlencode($_page);
-					$head_tags[] = ' <link rel="' .
-						$rel . '" href="' . $script .
-						'?' . $r_page . '" title="' .
-						$s_page . '" />';
-				}
-			}
-		}
 	}
 
 	$body = '';
