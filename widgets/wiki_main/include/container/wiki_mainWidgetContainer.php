@@ -187,14 +187,11 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 				$base = WikiConfig::getDefaultPage();
 			}
 		}
-		//$headTitle = htmlspecialchars(strip_bracket($base));	// HTMLヘッダタイトル
 		$pageTitle  = make_search($base);
 		
 		// msgパラメータからタイトルを作成
 		if (isset($retvars['msg']) && $retvars['msg'] != '') {		// プラグイン実行の戻り値がある場合
-			//$headTitle = str_replace('$1', $headTitle, $retvars['msg']);
-			//$pageTitle  = str_replace('$1', $pageTitle,  $retvars['msg']);
-			if (!is_editable($base)) $pageTitle  = str_replace('$1', make_pagelink($base),  $retvars['msg']);// バックリンクではなくて通常のリンクに変更 by magic3
+			$pageTitle  = str_replace('$1', make_pagelink($base),  $retvars['msg']);// バックリンクではなくて通常のリンクに変更 by magic3
 		} else {
 			// ページが編集不可の場合はロック中マークを付加
 			if (WikiConfig::isUserWithEditAuth() && !is_editable($base)) $pageTitle .= '<span class="locked"><i class="glyphicon glyphicon-lock" title="ページロック状態" rel="tooltip" data-toggle="tooltip"></i></span>';
