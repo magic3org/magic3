@@ -198,12 +198,12 @@
 
 .m3-navbar-nav{margin:9.75px -15px;padding-left:30px;/*left icon position*/}
 .m3-navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:21px;}
-@media(min-width:768px){
+/*@media(min-width:768px){*/
 	.m3-navbar-nav{float:left;margin:0}
 	.m3-navbar-nav>li{float:left}
 	/*.m3-navbar-nav>li>a{padding-top:19.5px;padding-bottom:19.5px}*/
 	.m3-navbar-nav>li>a{padding-top:14px;padding-bottom:14px/*for 32x32 icon top position*/}
-}
+/*}*/
 
 .m3-navbar-default{background-color:#2c3e50;border-color:#202d3b}
 .m3-navbar-default .navbar-brand{color:#fff}
@@ -330,7 +330,18 @@
 /*** 一般画面用 ***/
 /* ウィジェットツールボタン */
 .m3widgettoolbutton {
-	padding-right:100px;
+/*	padding-right:100px;*/
+}
+.m3widgettoolbutton .title {
+	display:none;
+}
+@media(min-width:768px){
+/*	.m3widgettoolbutton {
+		padding-right:100px;
+	}*/
+	.m3widgettoolbutton .title {
+		display:inline;
+	}
 }
 .m3widgettoolbutton .hidden {	/* 状態チェックボックス */
 	display: none !important;
