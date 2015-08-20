@@ -42,7 +42,7 @@ $(function(){
 </head>
 <body>
 <header>
-<jdoc:include type="modules" name="user3" bootstyle="navbar-fixed-top" />
+<jdoc:include type="modules" name="user3" style="bootstyle" bootstyle="navbar-fixed-top" />
 <div class="hidden-xs"><jdoc:include type="modules" name="header-hide" style="none" /></div>
 </header>
 <div class="container">

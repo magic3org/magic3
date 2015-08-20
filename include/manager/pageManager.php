@@ -2133,7 +2133,7 @@ class PageManager extends Core
 		$matches = array();
 		$destBuf = $srcBuf;
 		
-		if (preg_match_all('#<jdoc:include\ type="([^"]+)" (.*)\/>#iU', $srcBuf, $matches)){
+		if (preg_match_all('#<jdoc:include\ type="([^"]+)" (.*)\s*\/>#iU', $srcBuf, $matches)){
 			$count = count($matches[1]);
 			for ($i = 0; $i < $count; $i++)
 			{
@@ -2149,7 +2149,28 @@ class PageManager extends Core
 					$name = '';			// ポジション名
 					$style = '';		// 表示スタイル
 					$params = explode(' ', $matches[2][$i]);
+					$paramArray = array();
 					for ($j = 0; $j < count($params); $j++){
+						list($key, $value) = explode('=', $params[$j]);
+						$key = trim($key);
+						$value = trim($value, "\"'");
+						if (!empty($key)) $paramArray[$key] = $value;
+					}
+					$value = $paramArray['name'];
+					if (isset($value)){
+						$name = $value;
+						$attr['name'] = $value;
+					}
+					
+					// スタイルが設定されている場合は属性を取得
+					$value = $paramArray['style'];
+					if (isset($value)){
+						$style = $value;
+						
+						$attrStyle = $paramArray[$value];
+						if (isset($attrStyle)) $attr[$value] = $attrStyle;
+					}
+/*					for ($j = 0; $j < count($params); $j++){
 						list($key, $value) = explode('=', $params[$j]);
 						if (strcasecmp($key, 'name') == 0){
 							$name = strtolower(trim($value, "\"'"));
@@ -2161,18 +2182,27 @@ class PageManager extends Core
 							$attr['artstyle'] = trim($value, "\"'");
 						} else if (strcasecmp($key, 'bootstyle') == 0){		// テンプレート側指定の表示スタイル(Bootstrap用)
 							$attr['bootstyle'] = trim($value, "\"'");
+						} else if (strcasecmp($key, 'drstyle') == 0){		// テンプレート側指定の表示スタイル(Themer用)
+							$attr['drstyle'] = trim($value, "\"'");
 						}
-					}
+					}*/
+
 					if (!empty($name)){		// ポジション名が取得できたとき
 						// Joomla!では、テンプレートの「jdoc:include」タグの属性styleが空のときは「none」で処理される
 						// Joomla!デフォルトで設定可能なのは「none,table,horz,xhtml,rounded,outline」
-						if (empty($style)){
+/*						if (empty($style)){
 							if (strStartsWith($name, 'user') ||		// ナビゲーションメニュー位置の場合
 								strcasecmp($name, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
 								$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
 							} else {
 								$style = 'none';
 							}
+						}*/
+						if (strStartsWith($name, 'user') ||		// ナビゲーションメニュー位置の場合
+							strcasecmp($name, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
+							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+						} else if (empty($style)){
+							$style = 'none';
 						}
 						// ウィジェットの出力を取得
 						$contents = $this->getContents($name, $style, $templateVer, $attr);
