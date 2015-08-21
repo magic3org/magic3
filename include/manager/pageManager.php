@@ -2147,6 +2147,7 @@ class PageManager extends Core
 				} else if (strcasecmp($type, 'modules') == 0 || 
 							strcasecmp($type, 'module') == 0){		// ポジションタグの場合
 					$name = '';			// ポジション名
+					$posType = '';		// ポジションのタイプ
 					$style = '';		// 表示スタイル
 					$params = explode(' ', $matches[2][$i]);
 					$paramArray = array();
@@ -2161,14 +2162,22 @@ class PageManager extends Core
 						$name = $value;
 						$attr['name'] = $value;
 					}
+					$value = $paramArray['type'];		// ポジションのタイプ
+					if (isset($value)){
+						$posType = $value;
+						$attr['type'] = $value;
+					}
+					$value = $paramArray['id'];
+					if (isset($value)) $attr['id'] = $value;
 					
-					// スタイルが設定されている場合は属性を取得
+					// スタイルが設定されている場合はオプションスタイルを取得
 					$value = $paramArray['style'];
 					if (isset($value)){
 						$style = $value;
+						$attr['style'] = $value;
 						
-						$attrStyle = $paramArray[$value];
-						if (isset($attrStyle)) $attr[$value] = $attrStyle;
+						$optionStyle = $paramArray[$value];		// オプションのスタイル
+						if (isset($optionStyle)) $attr[$value] = $optionStyle;
 					}
 /*					for ($j = 0; $j < count($params); $j++){
 						list($key, $value) = explode('=', $params[$j]);
@@ -2199,7 +2208,8 @@ class PageManager extends Core
 							}
 						}*/
 						if (strStartsWith($name, 'user') ||		// ナビゲーションメニュー位置の場合
-							strcasecmp($name, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
+							strcasecmp($name, 'position-1') == 0 ||		// Joomla!v2.5テンプレート対応
+							strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
 							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
 						} else if (empty($style)){
 							$style = 'none';
@@ -4224,7 +4234,11 @@ class PageManager extends Core
 				} else {			// Joomla!v1.5テンプレートの場合
 					// テンプレート側で指定されたメニューの表示属性を設定
 					$gEnvManager->setMenuAttr($attr);
-							
+					
+					// ポジションタイプ
+					$posType = '';
+					if (!empty($attr['type'])) $posType = $attr['type'];
+					
 					for ($i = 0; $i < $count; $i++){
 						$pageDefParam = $this->pageDefRows[$i];			// 画面定義パラメータ
 						$widgetId = $this->pageDefRows[$i]['wd_id'];
@@ -4287,7 +4301,9 @@ class PageManager extends Core
 								
 											$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 										} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
-												strcasecmp($position, 'position-1') == 0){				// Joomla!v2.5テンプレート対応
+												strcasecmp($position, 'position-1') == 0 ||				// Joomla!v2.5テンプレート対応
+												strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
+												
 											$moduleContent = '';
 											if ($style == self::WIDGET_STYLE_NAVMENU){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
 												if ($widgetType == 'menu') $moduleContent = $render->getNavMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);

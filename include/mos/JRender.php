@@ -85,7 +85,8 @@ class JRender
 				if ($templateVer == 2){// Joomla!v2.5テンプレート
 					$content = $this->getMenuContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer);
 				} else {
-					$params->set('startLevel',		0);
+				//	$params->set('startLevel',		0);
+					$params->set('startLevel',		1);
 					$params->set('endLevel',		0);
 					$params->set('showAllChildren',	1);		// サブメニュー表示
 					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_mainmenu/default.php';		// メニュー出力用スクリプト
@@ -311,7 +312,8 @@ $this->item->title = '****';*/
 		
 		// パラメータ作成
 		$params   = new JParameter();
-		$params->set('startLevel',		0);
+	//	$params->set('startLevel',		0);
+		$params->set('startLevel',		1);
 		$params->set('endLevel',		0);
 		$params->set('showAllChildren',	1);		// サブメニュー表示
 		if (isset($paramsOther['moduleclass_sfx'])) $params->set('moduleclass_sfx', $paramsOther['moduleclass_sfx']);
