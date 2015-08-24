@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -42,6 +42,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 //	const UPLOAD_ICON_FILE = '/images/system/upload32.png';		// ウィジェットアップロード用アイコン
 	const RELOAD_ICON_FILE = '/images/system/reload32.png';		// 再読み込み用アイコン
 //	const AREA_OPEN_ICON_FILE = '/images/system/area_open32.png';		// 拡張領域表示アイコン
+	const THEMLER_APP_FILENAME = '/app/themler.version';		// Themlerテンプレートかどうかを判断するためのファイル
 	
 	/**
 	 * コンストラクタ
@@ -458,7 +459,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		$localeText['label_show_detail'] = $this->_('Show detail');			// 詳細表示
 		$localeText['label_template_name'] = $this->_('Name');			// 名前
 		$localeText['label_template_format'] = $this->_('Format');			// 形式
-		$localeText['label_template_creator'] = $this->_('Artisteer Version');			// Artisteerバージョン
+		$localeText['label_template_creator'] = $this->_('Genarator - Version');			// 生成ソフト - バージョン
 		$localeText['label_template_default'] = $this->_('Default');			// デフォルト
 		$localeText['label_template_date'] = $this->_('Update Date');			// 更新日時
 		$localeText['label_template_operation'] = $this->_('Operation');			// 操作
@@ -478,6 +479,9 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function tempListLoop($index, $fetchedRow, $param)
 	{
+		$genarator = $fetchedRow['tm_generator'];			// テンプレート作成アプリケーション
+		$version = $fetchedRow['tm_version'];				// テンプレートバージョン
+
 		// テンプレートが存在するかどうかチェック
 		$isExistsTemplate = false;
 		$templateId = $fetchedRow['tm_id'];// テンプレートID
@@ -533,15 +537,19 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		$formatType .= ' /<br />';
 		
-		// テンプレートを作成したArtisteerのバージョンを取得
-		if (file_exists($templateIndexFile)){
-			$content = file_get_contents($templateIndexFile);
-			$version = $this->getArtVersion($content);
-			if (empty($version)){
-				$formatType .= $this->_('Not Detected');		// 未検出
-			} else {
-				$formatType .= $version;
+		// テンプレートを作成したアプリケーション、バージョンを取得
+		if (empty($genarator)){
+			if (file_exists($templateIndexFile)){
+				$content = file_get_contents($templateIndexFile);
+				$version = $this->getArtVersion($content);
+				if (empty($version)){
+					$formatType .= $this->_('Not Detected');		// 未検出
+				} else {
+					$formatType .= 'artisteer - ' . $version;
+				}
 			}
+		} else {
+			$formatType .= $genarator . ' - ' . $version;
 		}
 
 		// 削除ボタン
@@ -561,7 +569,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		$downloadButtonTag = '<img src="' . $downloadImg . '" width="32" height="32" alt="' . $downloadStr . '" />';
 		$downloadButtonTag = '<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadTemplate(\'' . $templateId . '\');" rel="m3help" data-container="body" title="' . $downloadStr . '" ' . $downloadDisabled . '>' . $downloadButtonTag . '</a>';
-		
+
 		$row = array(
 			'no' => $index + 1,													// 行番号
 			'serial' => $this->convertToDispString($fetchedRow['tm_serial']),			// シリアル番号
@@ -594,7 +602,10 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		$ret = false;
 		$templType = 0;			// テンプレートのタイプデフォルト値(Joomla!1.0)
 		$cleanType = 0;			// HTMLの出力のクリーニングタイプ
-		
+		$genarator = '';		// テンプレート作成アプリケーション
+		$version = '';			// テンプレートバージョン
+		$templateDir = $this->gEnv->getTemplatesPath() . '/' . $id;			// テンプレートディレクトリ
+				
 		// テンプレートの種別を判定
 		switch ($type){
 			case '0':		// PC用テンプレート
@@ -626,11 +637,22 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 						}
 					}
 				}
+				// ##### テンプレート作成アプリケーションを取得 #####
+				// Artisteerテンプレートかどうか確認
+				$content = file_get_contents($templateDir . '/index.php');
+				$version = $this->getArtVersion($content);
+				if (!empty($version)){
+					$genarator = 'artisteer';		// テンプレート作成アプリケーション
+				} else {
+					// Themlerテンプレートかどうか確認
+					$ret = $this->isTemlerTemplate($templateDir, $version);
+					if ($ret) $genarator = 'themler';
+				}
 				break;
 		}
 		
 		// テンプレートを登録
-		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType);
+		$ret = $this->db->addNewTemplate($id, $id, $templType, intval($type), $cleanType, $genarator, $version);
 		return $ret;
 	}
 	/**
@@ -729,6 +751,26 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
         $ret = preg_match($pattern, $src, $matches);
 		if ($ret) $version = $matches[1];
 		return $version;
+	}
+	/**
+	 * Themlerテンプレートかどうかを判断
+	 *
+	 * @param string $dir		テンプレートのディレクトリ
+	 * @param string $version	Themlerテンプレートの場合、テンプレートのバージョンが返る
+	 * @return bool				true=Themlerテンプレート、false=Themlerテンプレート以外
+	 */
+	function isTemlerTemplate($dir, &$version)
+	{
+		// Themlerテンプレートを判断するファイル
+		$appFile = $dir . '/' . self::THEMLER_APP_FILENAME;
+		$ret = file_exists($appFile);
+		
+		if ($ret){
+			@require_once($dir . '/functions.php');		// エラーメッセージ抑止
+			$verSrc = addThemeVersion('');
+			list($tmp, $version) = explode('=', $verSrc);
+		}
+		return $ret;
 	}
 }
 ?>
