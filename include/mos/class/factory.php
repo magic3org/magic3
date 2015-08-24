@@ -199,7 +199,7 @@ class JFactory
 		// JCacheクラスを読み込む
 		require_once($gEnvManager->getJoomlaRootPath() . '/class/cache.php');
 	
-		$handler = ($handler == 'function') ? 'callback' : $handler;
+/*		$handler = ($handler == 'function') ? 'callback' : $handler;
 
 		$conf = JFactory::getConfig();
 
@@ -216,7 +216,7 @@ class JFactory
 		);
 
 		$cache = JCache::getInstance( $handler, $options );
-		$cache->setCaching($conf->getValue('config.caching'));
+		$cache->setCaching($conf->getValue('config.caching'));*/
 		return $cache;
 	}
 

@@ -18,6 +18,7 @@ require_once($this->gEnv->getJoomlaRootPath() . '/class/html.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/arrayhelper.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/uri.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/plugin.php');
+require_once($this->gEnv->getJoomlaRootPath() . '/class/pluginHelper.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/filteroutput.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/factory.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/application.php');
