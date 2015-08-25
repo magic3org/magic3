@@ -37,6 +37,7 @@ class JRender
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	const DEFAULT_RENDER_DIR = '/render/';					// デフォルトのビュー作成スクリプトディレクトリ
 	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
+	const TEMPLATE_GENERATOR_THEMLER = 'themler';			// テンプレート作成アプリケーション(Themler)
 
 	/**
 	 * コンストラクタ
@@ -268,6 +269,23 @@ $this->item->title = '****';*/
 		require($path);		// 毎回実行する
 		$contents = ob_get_contents();
 		ob_clean();
+		
+		// テンプレート固有の追加処理
+		if ($gEnvManager->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){			// テンプレート作成アプリケーションがThemlerの場合
+			// サブテンプレートIDを取得。取得できない場合はテンプレートのデフォルト値を取得。
+			$subTemplateId = $gEnvManager->getCurrentSubTemplateId();
+			if (empty($subTemplateId)) $subTemplateId = getCurrentTemplateByType('');		// トップ用テンプレート
+
+			$subTemplateFile = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/templates/' . $subTemplateId . '.php';
+			if (is_readable($subTemplateFile)){
+				$subTemplate = file_get_contents($subTemplateFile);
+				
+				// 必要な部分のみフィルタリングする
+				if (preg_match('/\$document->view->componentWrapper\(\'(.*?)\'\);/', $subTemplate, $matches)){
+					$contents = getCustomComponentContent($contents, $matches[1]);
+				}
+			}
+		}
 		return $contents;
 	}
 	/**

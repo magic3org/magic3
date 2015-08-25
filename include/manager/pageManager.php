@@ -6088,12 +6088,16 @@ class PageManager extends Core
 	/**
 	 * 現在のページ情報からテンプレートIDを取得
 	 *
-	 * @return string		テンプレートID
+	 * @param string $subTemplateId		テンプレートIDが取得できるときはサブページIDが返る
+	 * @return string					テンプレートID
 	 */	
-	function getTemplateIdFromCurrentPageInfo()
+	function getTemplateIdFromCurrentPageInfo(&$subTemplateId)
 	{
 		$templateId = '';
-		if (!empty($this->currentPageInfo)) $templateId = $this->currentPageInfo['pn_template_id'];
+		if (!empty($this->currentPageInfo)){
+			$templateId = $this->currentPageInfo['pn_template_id'];
+			$subTemplateId = $this->currentPageInfo['pn_sub_template_id'];			// サブテンプレートID
+		}
 		return $templateId;
 	}
 	/**

@@ -21,6 +21,7 @@ class EnvManager extends Core
 {
 	public  $sysVersion;		// システムバージョンオブジェクト
 	private $currentTemplateId;	// 現在のテンプレートID(ディレクトリ名)
+	private $currentSubTemplateId;	// 現在のサブテンプレートID
 	private $currentTemplateType;	// 現在のテンプレートのタイプ
 	private $currentTemplateGenerator;		// テンプレート作成アプリケーション
 	private $currentTemplateVersion;		// テンプレートバージョン
@@ -1224,15 +1225,20 @@ class EnvManager extends Core
 	}
 	// ##################### カレントのテンプレート関係 #####################
 	/**
-	 * 現在のテンプレート
+	 * 現在のテンプレートを設定
+	 *
+	 * @param string $name				テンプレートID
+	 * @param string $subTemplateId		サブテンプレートID
+	 * @return							なし
 	 */
-	public function setCurrentTemplateId($name)
+	public function setCurrentTemplateId($name, $subTemplateId)
 	{
 		global $gPageManager;
 		
 		$this->currentTemplateId = $name;
 
 		// テンプレートの属性を取得
+		$this->currentSubTemplateId = '';	// 現在のサブテンプレートID
 		$this->currentTemplateType = 0;
 		$this->currentTemplateGenerator = '';		// テンプレート作成アプリケーション
 		$this->currentTemplateVersion = '';		// テンプレートバージョン
@@ -1248,15 +1254,28 @@ class EnvManager extends Core
 				
 				// テンプレートが設定された段階でBootstrapの使用があればページマネージャーに反映する。ウィジェット側で使用状況を参照してビューを作成することがあるため。
 				if ($this->currentTemplateUseBootstrap) $gPageManager->useBootstrap();
+				
+				if (!empty($subTemplateId)) $this->currentSubTemplateId = $subTemplateId;	// 現在のサブテンプレートID
 			}
 		}
 	}
 	/**
-	 * 現在テンプレート
+	 * 現在のテンプレートを取得
+	 *
+	 * @return string		テンプレートID
 	 */
 	public function getCurrentTemplateId()
 	{
 		return $this->currentTemplateId;
+	}
+	/**
+	 * 現在のサブテンプレートを取得
+	 *
+	 * @return string		サブテンプレートID
+	 */
+	public function getCurrentSubTemplateId()
+	{
+		return $this->currentSubTemplateId;
 	}
 	/**
 	 * 現在のテンプレートタイプ

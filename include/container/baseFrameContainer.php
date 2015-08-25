@@ -19,13 +19,15 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 class BaseFrameContainer extends Core
 {
 	protected $_db;	// DB接続オブジェクト
+	private $joomlaBufArray = array();			// Joomla!データ受け渡し用
 	const SYSTEM_TEMPLATE = '_system';		// システム画面用テンプレート
 	const M_ADMIN_TEMPLATE = 'm/_admin';	// 携帯用管理画面テンプレート
 	const ERR_MESSAGE_ACCESS_DENY = 'Access denied.';		// ウィジェットアクセスエラーのメッセージ
 	const SITE_ACCESS_EXCEPTION_IP = 'site_access_exception_ip';		// アクセス制御、例外とするIP
 	const CONFIG_KEY_MSG_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
 //	const CF_MOBILE_AUTO_REDIRECT = 'mobile_auto_redirect';		// 携帯の自動遷移
-	
+	const TEMPLATE_GENERATOR_THEMLER = 'themler';			// テンプレート作成アプリケーション(Themler)
+		
 	/**
 	 * コンストラクタ
 	 */
@@ -336,10 +338,10 @@ class BaseFrameContainer extends Core
 			
 			if (empty($cacheData)){		// キャッシュデータがないときは画面を作成
 				// カレントのテンプレートを決定
-				$curTemplateId = $this->_defineTemplate($request);
+				$curTemplateId = $this->_defineTemplate($request, $subTemplateId);
 		
 				// 画面を作成
-				$pageData = $this->_createPage($request, $curTemplateId);
+				$pageData = $this->_createPage($request, $curTemplateId, $subTemplateId);
 				
 				// 使用した非共通ウィジェットの数をチェック
 				$nonSharedWidgetCount = $this->gPage->getNonSharedWidgetCount();
@@ -609,14 +611,15 @@ class BaseFrameContainer extends Core
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param string $curTemplate			テンプレートID
+	 * @param string $subTemplateId			サブページID
 	 * @return string						画面出力
 	 */
-	function _createPage($request, $curTemplate)
+	function _createPage($request, $curTemplate, $subTemplateId = '')
 	{
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// 実行コマンドを取得
 		
 		// カレントのテンプレートIDを設定
-		$this->gEnv->setCurrentTemplateId($curTemplate);
+		$this->gEnv->setCurrentTemplateId($curTemplate, $subTemplateId);
 
 		// テンプレート情報を取得
 		$convType = 0;		// 変換処理タイプ(0=デフォルト(Joomla!v1.0)、-1=携帯用、1=Joomla!v1.5、2=Joomla!v2.5)
@@ -675,6 +678,14 @@ class BaseFrameContainer extends Core
 			$this->baseurl		= $this->gEnv->getRootUrlByCurrentPage();
 			$this->direction = 'ltr';
 			$this->params   = $params;
+			
+			// サブテンプレート用の設定
+			if ($this->gEnv->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){		// Themlerテンプレートの場合はサブテンプレート用のパラメータを設定
+//		$subTemplateId = 'post_6';
+//		$subTemplateId = 'home_1';
+				// サブテンプレートIDを埋め込む
+				if (!empty($subTemplateId)) $this->setBuffer('<!--TEMPLATE ' . $subTemplateId . ' /-->', 'component');
+			}
 			
 			// 現在のJoomla!ドキュメントを設定
 			$this->gEnv->setJoomlaDocument($this);
@@ -757,11 +768,11 @@ class BaseFrameContainer extends Core
 	/**
 	 * テンプレートを決定
 	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param bool $useSubClassDefine		サブクラスでの定義を使用するかどうか
-	 * @return string		テンプレート名
+	 * @param RequestManager $request	HTTPリクエスト処理クラス
+	 * @param string $subTemplateId		テンプレートIDが取得できるときはサブページIDが返る
+	 * @return string					テンプレート名
 	 */
-	function _defineTemplate($request, $useSubClassDefine = true)
+	function _defineTemplate($request, &$subTemplateId)
 	{
 		// ########### テンプレートID(ディレクトリ名)を設定 ############
 		// テンプレートIDの指定の方法は2パターン
@@ -774,6 +785,7 @@ class BaseFrameContainer extends Core
 		// 　3.DBのデフォルト値
 		$curTemplate = '';
 		$isSystemManageUser = $this->gEnv->isSystemManageUser();		// システム運用可能かどうか
+		$useSubClassDefine = true;			// サブクラスでの定義を使用するかどうか
 		
 		// テンプレート変更のときは、セッションのテンプレートIDを変更
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);		// 実行コマンドを取得
@@ -833,7 +845,7 @@ class BaseFrameContainer extends Core
 				}
 			} else {
 				// ページ用のテンプレートがあるときは優先
-				$pageTemplateId = $this->gPage->getTemplateIdFromCurrentPageInfo();
+				$pageTemplateId = $this->gPage->getTemplateIdFromCurrentPageInfo($subTemplateId);
 				if (!empty($pageTemplateId)) $curTemplate = $pageTemplateId;
 
 				// テンプレートIDをセッションから取得
@@ -983,10 +995,15 @@ class BaseFrameContainer extends Core
 	}
 	function getBuffer($type = null, $name = null, $attribs = array())
 	{
-		return '';
+		if (isset($this->joomlaBufArray[$type])){
+			return $this->joomlaBufArray[$type];
+		} else {
+			return '';
+		}
 	}
 	function setBuffer($contents, $type, $name = null)
 	{
+		$this->joomlaBufArray[$type] = $contents;
 		return;
 	}
 	/**
