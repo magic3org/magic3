@@ -22,6 +22,8 @@ class EnvManager extends Core
 	public  $sysVersion;		// システムバージョンオブジェクト
 	private $currentTemplateId;	// 現在のテンプレートID(ディレクトリ名)
 	private $currentTemplateType;	// 現在のテンプレートのタイプ
+	private $currentTemplateGenerator;		// テンプレート作成アプリケーション
+	private $currentTemplateVersion;		// テンプレートバージョン
 	private $currentTemplateCleanType;	// 現在のテンプレートのクリーンタイプ
 	private $currentTemplateUseBootstrap;	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
 	private $currentWidgetObj;		// 現在実行中のウィジェットオブジェクト
@@ -1232,11 +1234,15 @@ class EnvManager extends Core
 
 		// テンプレートの属性を取得
 		$this->currentTemplateType = 0;
+		$this->currentTemplateGenerator = '';		// テンプレート作成アプリケーション
+		$this->currentTemplateVersion = '';		// テンプレートバージョン
 		$this->currentTemplateCleanType = 0;
 		$this->currentTemplateUseBootstrap = false;	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
 		if ($this->canUseDb){		// DB使用可能なとき
 			if ($this->db->getTemplate($name, $row)){
 				$this->currentTemplateType = $row['tm_type'];		// テンプレートタイプ
+				$this->currentTemplateGenerator = $row['tm_generator'];		// テンプレート作成アプリケーション
+				$this->currentTemplateVersion = $row['tm_version'];		// テンプレートバージョン
 				$this->currentTemplateCleanType = $row['tm_clean_type'];	// 現在のテンプレートのクリーンタイプ
 				$this->currentTemplateUseBootstrap = $row['tm_use_bootstrap'];	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
 				
@@ -1260,6 +1266,24 @@ class EnvManager extends Core
 	public function getCurrentTemplateType()
 	{
 		return $this->currentTemplateType;
+	}
+	/**
+	 * テンプレート作成アプリケーション
+	 *
+	 * @return string		テンプレート作成アプリケーション(artisteer,themler)
+	 */
+	public function getCurrentTemplateGenerator()
+	{
+		return $this->currentTemplateGenerator;
+	}
+	/**
+	 * テンプレートバージョン
+	 *
+	 * @return string		バージョン文字列
+	 */
+	public function getCurrentTemplateVersion()
+	{
+		return $this->currentTemplateVersion;
 	}
 	/**
 	 * 現在のテンプレートのクリーンタイプ

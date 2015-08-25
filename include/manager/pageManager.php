@@ -4423,7 +4423,9 @@ class PageManager extends Core
 					}
 				}
 				$posHead = '';
-				if (strcasecmp($position, 'user3') == 0 || strcasecmp($position, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+				// ナビゲーション型のポジションの場合はアイコン付加
+				//if (strcasecmp($position, 'user3') == 0 || strcasecmp($position, 'position-1') == 0) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
+				if ($style == self::WIDGET_STYLE_NAVMENU) $posHead = self::POS_HEAD_NAV_MENU;		// 特殊ポジションブロックのアイコン付加
 				$contents .= '<div id="' . $viewPosId . '" class="m3_widgetpos_box" m3="pos:' . $position . ';rev:' . $rev . ';">' . M3_NL;		// リビジョン番号を付加
 				$contents .= '<h2 class="m3_widgetpos_box_title">' . $posHead . $position . '</h2>' . M3_NL;
 				
