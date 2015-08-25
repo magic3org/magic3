@@ -1231,7 +1231,7 @@ class EnvManager extends Core
 	 * @param string $subTemplateId		サブテンプレートID
 	 * @return							なし
 	 */
-	public function setCurrentTemplateId($name, $subTemplateId)
+	public function setCurrentTemplateId($name, $subTemplateId = '')
 	{
 		global $gPageManager;
 		
