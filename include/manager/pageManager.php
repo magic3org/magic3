@@ -2207,7 +2207,8 @@ class PageManager extends Core
 								$style = 'none';
 							}
 						}*/
-						if (strStartsWith($name, 'user') ||		// ナビゲーションメニュー位置の場合
+						//if (strStartsWith($name, 'user') ||		// ナビゲーションメニュー位置の場合
+						if (strcasecmp($name, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
 							strcasecmp($name, 'position-1') == 0 ||		// Joomla!v2.5テンプレート対応
 							strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
 							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
@@ -4300,7 +4301,8 @@ class PageManager extends Core
 											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 								
 											$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-										} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
+								//		} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
+										} else if (strcasecmp($position, 'user3') ||				// ナビゲーションメニュー位置の場合
 												strcasecmp($position, 'position-1') == 0 ||				// Joomla!v2.5テンプレート対応
 												strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
 												
