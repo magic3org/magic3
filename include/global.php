@@ -12,7 +12,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    Release 2.12.x SVN: $Id$
+ * @version    Release 2.13.x SVN: $Id$
  * @link       http://www.magic3.org
  */
 if (defined("M3_SYSTEM_DEFINE_INCLUDED")) return;
@@ -191,6 +191,9 @@ define('M3_TEMPLATE_JOOMLA_15',			1);		// Joomla!v1.5テンプレート
 define('M3_TEMPLATE_JOOMLA_25',			2);		// Joomla!v2.5テンプレート
 define('M3_TEMPLATE_BOOTSTRAP_30',		10);		// Bootstrap v3.0テンプレート
 define('M3_TEMPLATE_JQUERY_MOBILE_10',	20);		// jQuery Mobile v1.0テンプレート
+// テンプレート作成アプリケーションタイプ
+define('M3_TEMPLATE_GENERATOR_ARTISTEER',	'artisteer');	// Artisteer
+define('M3_TEMPLATE_GENERATOR_THEMLER',		'themler');		// Themler
 
 // 描画出力タイプ
 define('M3_RENDER_JOOMLA_OLD',		'joomla_old');		// Joomla! 1.0テンプレート

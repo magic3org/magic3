@@ -25,6 +25,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $position;	// 表示ポジション
 	private $defaultPageSubId;		// デフォルトのページID
 	private $templateId;		// テンプレートID
+private $subTemplateId;		// サブテンプレートID
 	private $pageTemplateId;	// 個別ページのテンプレートID
 	private $pageTitle;	// 選択ページのタイトル
 	private $templateTitle;	// テンプレートタイトル
@@ -178,7 +179,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	 * 画面定義画面作成
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
+	 * @return								なし
 	 */
 	function createView($request)
 	{
@@ -290,6 +291,9 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		
 		// テンプレート選択メニュー作成
 		$this->db->getAllTemplateList($deviceType, array($this, 'templateIdLoop'));
+		
+		// サブテンプレート選択メニュー作成
+		$this->createSubTemplateMenu();
 		
 		// タイトル(Bootstrap型設定画面用)
 		$this->tmpl->addVar("_widget", "page_title", $this->pageTitle);			// ページタイトル(エスケープ済み)
@@ -707,6 +711,29 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVars('position_list', $row);
 		$this->tmpl->parseTemplate('position_list', 'a');
 		return true;
+	}
+	/**
+	 * サブテンプレート選択メニュー作成
+	 *
+	 * @return								なし
+	 */
+	function createSubTemplateMenu()
+	{
+		// 選択中のテンプレート情報取得
+		$selectedTemplateId = $this->templateId;
+		if (!empty($this->pageTemplateId)) $selectedTemplateId = $this->pageTemplateId;// 個別ページのテンプレートが選択されている場合は優先
+		
+		$ret = $this->db->getTemplate($selectedTemplateId, $row);
+		if (!$ret) return;
+		
+		$generator	= $row['tm_generator'];
+		$version	= $row['tm_version'];		// テンプレートバージョン
+		switch ($generator){
+		case M3_TEMPLATE_GENERATOR_THEMLER:		// Themler
+		
+			$this->tmpl->setAttribute('select_subtemplate', 'visibility', 'visible');
+			break;
+		}
 	}
 }
 ?>

@@ -1588,19 +1588,19 @@ class admin_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
-	 * ユーザアカウントが存在するかチェック
+	 * テンプレート情報の取得
 	 *
-	 * @param string $account	アカウント
-	 * @return					true=存在する、false=存在しない
+	 * @param string  $id			テンプレートID
+	 * @return						true=正常、false=異常
 	 */
-	 /*
-	function isExistsAccount($account)
+	function getTemplate($id, &$row)
 	{
-		$queryStr = 'SELECT * from _login_user ';
-		$queryStr .=  'WHERE lu_account = ? ';
-		$queryStr .=    'AND lu_deleted = false';
-		return $this->isRecordExists($queryStr, array($account));
-	}*/
+		$queryStr  = 'SELECT * FROM _templates ';
+		$queryStr .=   'WHERE tm_id = ? ';
+		$queryStr .=   'AND tm_deleted = false';
+		$ret = $this->selectRecord($queryStr, array($id), $row);
+		return $ret;
+	}
 	/**
 	 * テンプレートリスト取得
 	 *
