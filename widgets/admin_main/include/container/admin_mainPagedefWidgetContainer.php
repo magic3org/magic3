@@ -25,7 +25,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $position;	// 表示ポジション
 	private $defaultPageSubId;		// デフォルトのページID
 	private $templateId;		// テンプレートID
-private $subTemplateId;		// サブテンプレートID
+	private $subTemplateId;		// サブテンプレートID
 	private $pageTemplateId;	// 個別ページのテンプレートID
 	private $pageTitle;	// 選択ページのタイトル
 	private $templateTitle;	// テンプレートタイトル
@@ -144,7 +144,6 @@ private $subTemplateId;		// サブテンプレートID
 		$localeText['label_maximize'] = $this->_('Maximize');		// 最大化
 		$localeText['label_preview_in_other_window'] = $this->_('Preview in other window');		// 別画面でプレビュー
 		$localeText['label_site_preview'] = $this->_('Site Preview');// 実際の画面
-		// (Bootstrap型設定画面用)
 		$localeText['label_page'] = $this->_('Page');		// ページ
 		$localeText['label_template'] = $this->_('Template');		// テンプレート
 		$localeText['label_default_value'] = $this->_('Default Value');		// デフォルト値
@@ -253,6 +252,21 @@ private $subTemplateId;		// サブテンプレートID
 				
 				// デフォルトテンプレート変更
 				$this->templateId = $templateId;
+				
+				// デフォルトのテンプレートを使用しているページのサブテンプレートIDは初期化
+				// ページIDですべてのページ情報を取得
+				$ret = $this->db->getPageInfoByPageId($this->pageId, ''/*言語*/, $pageInfoRows);
+				if ($ret){
+					for ($i = 0; $i < count($pageInfoRows); $i++){
+						$pageInfo = $pageInfoRows[$i];
+						$pageSubId = $pageInfo['pg_id'];
+						$templateId = $pageInfo['pn_template_id'];
+						if (!is_null($templateId) && empty($templateId) && !empty($pageInfo['pn_sub_template_id'])){		// デフォルトテンプレートを使用、サブテンプレート設定ありの場合
+							$ret = $this->db->getPageInfo($this->pageId, $pageSubId, $row);
+							if ($ret) $this->db->updatePageInfo($this->pageId, $pageSubId, $row['pn_content_type'], $row['pn_template_id'], ''/*サブテンプレートID*/, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+						}
+					}
+				}
 			}
 		} else if ($act == 'changepagetemplate'){		// 個別ページ用テンプレート選択
 			$templateId = $request->trimValueOf('sel_page_template');		// テンプレートID
@@ -261,19 +275,31 @@ private $subTemplateId;		// サブテンプレートID
 			// デフォルトと同じ場合はリセット
 			//if ($templateId == $this->templateId) $templateId = '';
 			
+			// ページ情報更新。サブテンプレートIDは初期化。
 			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 			if ($ret){
 				if (is_null($row['pn_content_type'])){		// ページ情報レコードがない場合
-					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $templateId);
+					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $templateId, ''/*サブテンプレートID*/);
 				} else {
 					// 既存の設定値と同じ場合はリセット
 					if ($templateId == $row['pn_template_id']) $templateId = '';
 					
-					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $templateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $templateId, ''/*サブテンプレートID*/, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+				}
+			}
+		} else if ($act == 'changesubtemplate'){		// サブテンプレート選択
+			$this->subTemplateId = $request->trimValueOf('subtemplateid');		// サブテンプレートID
+
+			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
+			if ($ret){
+				if (is_null($row['pn_content_type'])){		// ページ情報レコードがない場合
+					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $row['pn_template_id'], $this->subTemplateId);
+				} else {
+					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $row['pn_template_id'], $this->subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
 				}
 			}
 		}
-		// ページIDでページ情報を取得(Bootstrap型設定画面用)
+		// ページIDでページ情報を取得
 		$ret = $this->db->getPageInfoByPageId($this->pageId, ''/*言語*/, $this->pageInfoRows);
 		
 		// ページメインIDメニュー作成
@@ -295,7 +321,7 @@ private $subTemplateId;		// サブテンプレートID
 		// サブテンプレート選択メニュー作成
 		$this->createSubTemplateMenu();
 		
-		// タイトル(Bootstrap型設定画面用)
+		// タイトル
 		$this->tmpl->addVar("_widget", "page_title", $this->pageTitle);			// ページタイトル(エスケープ済み)
 		$this->tmpl->addVar("_widget", "template_title", $this->templateTitle);	// テンプレートタイトル(エスケープ済み)
 		
@@ -321,15 +347,11 @@ private $subTemplateId;		// サブテンプレートID
 		$this->tmpl->addVar("_widget", "device_type", $deviceType);			// デバイスタイプ
 		$this->tmpl->addVar("_widget", "preview_width", $previewWidth);			// プレビュー幅
 		$this->tmpl->addVar("_widget", "task", $taskStr);			// タスク
+		$this->tmpl->addVar("_widget", "default_template_id", $this->convertToDispString($this->templateId));	// デフォルトのテンプレートID
 		
 		// 管理用URL設定
 		$adminUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_DEF_PAGE_ID . '=' . $this->pageId . '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $this->pageSubId;
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($adminUrl));
-		
-		// Bootstrap型設定画面用
-//		$detailPageUrl 
-//		$this->tmpl->addVar("_widget", "detail_url", $this->getUrl($adminUrl));
-		$this->tmpl->addVar("_widget", "default_template_id", $this->convertToDispString($this->templateId));	// デフォルトのテンプレートID
 		
 		// アイコンを設定
 		$iconUrl = $this->gEnv->getRootUrl() . self::TEMPLATE_NORMAL_ICON_FILE;
@@ -564,9 +586,10 @@ private $subTemplateId;		// サブテンプレートID
 		$checked = '';
 		$value = $fetchedRow['pg_id'];
 
-		// ページ情報(Bootstrap型設定画面)
+		// ページ情報
 		$contentType = '';
 		$templateId = '';
+		$subTemplateId = '';
 		$useSsl = false;		// SSL使用状況
 		$pageInfoCount = count($this->pageInfoRows);
 		for ($i = 0; $i < $pageInfoCount; $i++){
@@ -574,8 +597,12 @@ private $subTemplateId;		// サブテンプレートID
 			if ($pageInfo['pg_id'] == $value){
 				$contentType = strval($pageInfo['pn_content_type']);			// NULL値あり
 				$templateId = $pageInfo['pn_template_id'];
+				$subTemplateId = $pageInfo['pn_sub_template_id'];
 				$useSsl = $pageInfo['pn_use_ssl'];
-				if ($value == $this->pageSubId) $this->pageTemplateId = $templateId;	// 個別ページのテンプレートID
+				if ($value == $this->pageSubId){		// 表示中のページの場合
+					$this->pageTemplateId = $templateId;	// 個別ページのテンプレートID
+					$this->subTemplateId = $subTemplateId;		// サブテンプレートID
+				}
 				break;
 			}
 		}
@@ -584,7 +611,7 @@ private $subTemplateId;		// サブテンプレートID
 		$name = $this->convertToDispString($fetchedRow['pg_name']);
 		$nameWithAttr = $name . '(' . $this->convertToDispString($value) . ')';
 
-		// ページタイトル(Bootstrap型設定画面)
+		// ページタイトル
 		$pageTitle = '';
 		$preTitle = '';
 		if ($value == $this->defaultPageSubId) $preTitle .= self::TITLE_PRE_ICON_HOME;		// デフォルトページ(homeアイコン)
@@ -602,20 +629,24 @@ private $subTemplateId;		// サブテンプレートID
 //			if (!$fetchedRow['pg_active']) $this->pageTitle .= ' [' . $this->_('Unpublished') . ']';			// 非公開
 		}
 		
-		// 表示ラベル(Bootstrap型設定画面)
+		// 表示ラベル
 		if ($value == $this->defaultPageSubId) $nameWithAttr .= ' [' . $this->_('Default') . ']';			// デフォルトのページサブIDのときは、説明を付加
 		if (!$fetchedRow['pg_active']) $nameWithAttr .= ' [' . $this->_('Unpublished') . ']';			// 非公開
+		
+		// テンプレートIDの表示
+		$dispTemplateId = $templateId;
+		if (!empty($subTemplateId)) $dispTemplateId .= '(' . $subTemplateId . ')';
 		
 		$row = array(
 			'value'    => $this->convertToDispString($value),			// ページID
 			'name'     => $nameWithAttr,			// ページ名
 			'selected' => $selected,														// 選択中かどうか
 			
-			// Bootstrap型設定画面用
 			'col_title'	=> $pageTitle,		// ページ名
 			'col_id'	=> $this->convertToDispString($value),			// ページID
 			'col_content_type'	=> $this->convertToDispString($contentType),		// コンテンツタイプ
-			'col_template_id'	=> $this->convertToDispString($templateId),			// テンプレートID
+//			'col_template_id'	=> $this->convertToDispString($templateId),			// テンプレートID
+			'col_template_id'	=> $this->convertToDispString($dispTemplateId),			// テンプレートID
 			'col_checked'		=> $checked				// 選択状態
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
@@ -641,7 +672,7 @@ private $subTemplateId;		// サブテンプレートID
 		if ($value == $this->templateId){			// デフォルトのテンプレート
 			$selected = 'selected';
 			$checked = 'checked';
-			
+		
 			if (empty($this->templateTitle)){
 				$this->templateTitle = $this->convertToDispString($name);	// 選択テンプレートのタイトル
 				
@@ -678,7 +709,6 @@ private $subTemplateId;		// サブテンプレートID
 			'name'     => $this->convertToDispString($name),			// テンプレート名名
 			'selected' => $selected,													// 選択中かどうか
 			
-			// Bootstrap型設定画面用
 			'col_id'		=> $this->convertToDispString($value),			// テンプレートID
 			'col_image'		=> $imagetTag,									// テンプレート画像
 			'col_checked'	=> $checked,				// 選択状態
@@ -730,8 +760,38 @@ private $subTemplateId;		// サブテンプレートID
 		$version	= $row['tm_version'];		// テンプレートバージョン
 		switch ($generator){
 		case M3_TEMPLATE_GENERATOR_THEMLER:		// Themler
-		
+			// テンプレート選択メニューを表示
 			$this->tmpl->setAttribute('select_subtemplate', 'visibility', 'visible');
+			
+			$subTemplateInfoFile = $this->gEnv->getTemplatesPath() . '/' . $selectedTemplateId . '/templates/list.php';
+			if (is_readable($subTemplateInfoFile)){
+				require_once($subTemplateInfoFile);
+				
+				// 選択なし値追加
+				$row = array(
+					'value'    => '',
+					'name'     => $this->convertToDispString('-- ' . $this->_('No Select') . ' --'),
+					'selected' => ''														// 選択中かどうか
+				);
+				$this->tmpl->addVars('subtemplate_list', $row);
+				$this->tmpl->parseTemplate('subtemplate_list', 'a');
+				
+				foreach ($templatesInfo as $key => $templateInfo){
+					$subTemplateId = $templateInfo['fileName'];
+					if (empty($subTemplateId)) continue;
+					
+					$selected = '';
+					if ($subTemplateId == $this->subTemplateId) $selected = 'selected';		// サブテンプレートID
+					
+					$row = array(
+						'value'    => $this->convertToDispString($subTemplateId),
+						'name'     => $this->convertToDispString($templateInfo['defaultTemplateCaption'] . '(' . $templateInfo['fileName'] . ')'),
+						'selected' => $selected														// 選択中かどうか
+					);
+					$this->tmpl->addVars('subtemplate_list', $row);
+					$this->tmpl->parseTemplate('subtemplate_list', 'a');
+				}
+			}
 			break;
 		}
 	}

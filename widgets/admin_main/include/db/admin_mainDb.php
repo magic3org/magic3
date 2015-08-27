@@ -741,12 +741,13 @@ class admin_mainDb extends BaseDb
 	 * @param string $pageSubId		ページサブID
 	 * @param string $contentType	コンテンツタイプ
 	 * @param string $template		テンプレートID
+	 * @param string $subTemplateId	サブテンプレートID
 	 * @param int $authType			アクセス制御タイプ(0=管理者のみ、1=制限なし、2=ログインユーザ)
 	 * @param bool $ssl				SSLを使用するかどうか
 	 * @param bool $userLimited		ユーザ制限するかどうか
 	 * @return					true = 正常、false=異常
 	 */
-	function updatePageInfo($pageId, $pageSubId, $contentType='', $template='', $authType=0, $ssl = false, $userLimited = false)
+	function updatePageInfo($pageId, $pageSubId, $contentType = '', $template = '', $subTemplateId = '', $authType = 0, $ssl = false, $userLimited = false)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -808,6 +809,7 @@ class admin_mainDb extends BaseDb
 		$queryStr .=  'pn_language_id, ';// 言語ID(2010/2/23追加)
 		$queryStr .=  'pn_history_index, ';
 		$queryStr .=  'pn_template_id, ';
+		$queryStr .=  'pn_sub_template_id, ';
 		$queryStr .=  'pn_meta_title, ';
 		$queryStr .=  'pn_meta_description, ';
 		$queryStr .=  'pn_meta_keywords, ';
@@ -818,8 +820,8 @@ class admin_mainDb extends BaseDb
 		$queryStr .=  'pn_create_user_id, ';
 		$queryStr .=  'pn_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$ret =$this->execStatement($queryStr, array($pageId, $pageSubId, ''/*言語なし*/, $historyIndex, $template, $metaTitle, $metaDesc, $metaKeyword, $contentType, $authType, intval($ssl), intval($userLimited), $user, $now));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$ret =$this->execStatement($queryStr, array($pageId, $pageSubId, ''/*言語なし*/, $historyIndex, $template, $subTemplateId, $metaTitle, $metaDesc, $metaKeyword, $contentType, $authType, intval($ssl), intval($userLimited), $user, $now));
 			
 		// トランザクション確定
 		$ret = $this->endTransaction();

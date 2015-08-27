@@ -39,6 +39,12 @@ function changeTemplate()
 	document.main.act.value = 'changetemplate';
 	document.main.submit();
 }
+// サブテンプレートを選択
+function changeSubTemplate()
+{
+	document.main.act.value = 'changesubtemplate';
+	document.main.submit();
+}
 // 個別ページ用テンプレートを選択
 function changePageTemplate(templateId)
 {
@@ -253,7 +259,7 @@ URL：{DISP_URL}
 </div>
 <div class="col-lg-2">
 <patTemplate:tmpl name="select_subtemplate" visibility="hidden">
-	    <select name="subtemplate" class="form-control" style="margin-top:-18px;">
+	    <select name="subtemplateid" class="form-control" onchange="changeSubTemplate();" style="margin-top:-18px;">
 	        <patTemplate:tmpl name="subtemplate_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>

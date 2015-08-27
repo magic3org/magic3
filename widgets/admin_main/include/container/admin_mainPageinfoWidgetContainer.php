@@ -146,7 +146,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 				
 				// ページ情報の更新
 				if ($ret) $ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $this->contentType,
-														$this->templateId, 0/*アクセス制御ユーザタイプ*/, $useSsl, $userLimited);
+														$this->templateId, ''/*サブテンプレートID*/, 0/*アクセス制御ユーザタイプ*/, $useSsl, $userLimited);
 
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');

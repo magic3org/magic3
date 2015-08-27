@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 10:42+0900\n"
-"PO-Revision-Date: 2015-08-24 10:43+0900\n"
+"POT-Creation-Date: 2015-08-26 21:53+0900\n"
+"PO-Revision-Date: 2015-08-26 21:53+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -74,7 +74,7 @@ msgid "Margin Right"
 msgstr "マージン右"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:219
-#: ../container/admin_mainPagedefWidgetContainer.php:160
+#: ../container/admin_mainPagedefWidgetContainer.php:161
 #: ../help/help_widgetlist.php:43
 msgid "Widget ID"
 msgstr "ウィジェットID"
@@ -118,7 +118,7 @@ msgstr "タイトル"
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:644
 #: ../container/admin_mainMenudefWidgetContainer.php:172
 #: ../container/admin_mainMenudefWidgetContainer.php:197
-#: ../container/admin_mainPagedefWidgetContainer.php:163
+#: ../container/admin_mainPagedefWidgetContainer.php:164
 #: ../container/admin_mainSmenudefWidgetContainer.php:166
 #: ../container/admin_mainSmenudefWidgetContainer.php:190
 #: ../help/help_menudef.php:63 ../help/help_pagedef.php:87
@@ -312,15 +312,15 @@ msgstr "全 %d 件"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:164
 #: ../container/admin_mainOpelogWidgetContainer.php:337
-#: ../container/admin_mainPagedefWidgetContainer.php:403
+#: ../container/admin_mainPagedefWidgetContainer.php:407
 #: ../container/admin_mainPortalWidgetContainer.php:118
 msgid "Data updated."
 msgstr "データを更新しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:166
 #: ../container/admin_mainOpelogWidgetContainer.php:341
-#: ../container/admin_mainPagedefWidgetContainer.php:405
 #: ../container/admin_mainPagedefWidgetContainer.php:409
+#: ../container/admin_mainPagedefWidgetContainer.php:413
 #: ../container/admin_mainPortalWidgetContainer.php:120
 msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
@@ -708,8 +708,8 @@ msgid "Configure page information."
 msgstr "ページの情報設定を行います。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:118
-#: ../container/admin_mainPagedefWidgetContainer.php:135
 #: ../container/admin_mainPagedefWidgetContainer.php:136
+#: ../container/admin_mainPagedefWidgetContainer.php:137
 #: ../help/help_pagedef.php:31
 msgid "Page Id"
 msgstr "ページID"
@@ -755,7 +755,7 @@ msgstr "管理メニューその他"
 #: ../container/admin_mainLoginstatusWidgetContainer.php:149
 #: ../container/admin_mainMenudefWidgetContainer.php:160
 #: ../container/admin_mainOpelogWidgetContainer.php:185
-#: ../container/admin_mainPagedefWidgetContainer.php:157
+#: ../container/admin_mainPagedefWidgetContainer.php:158
 #: ../container/admin_mainSmenudefWidgetContainer.php:154
 #: ../container/admin_mainUserlistWidgetContainer.php:137
 msgid "Go back"
@@ -934,7 +934,7 @@ msgstr "パス："
 #: ../container/admin_mainMenudefWidgetContainer.php:191
 #: ../container/admin_mainSmenudefWidgetContainer.php:171
 #: ../container/admin_mainSmenudefWidgetContainer.php:184
-#: ../container/admin_mainTemplistWidgetContainer.php:550
+#: ../container/admin_mainTemplistWidgetContainer.php:557
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
 msgid "Delete"
@@ -1243,7 +1243,7 @@ msgid "Edit"
 msgstr "編集"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:198
-#: ../container/admin_mainPagedefWidgetContainer.php:165
+#: ../container/admin_mainPagedefWidgetContainer.php:166
 #: ../container/admin_mainSmenudefWidgetContainer.php:191
 #: ../container/admin_mainTemplistWidgetContainer.php:465
 #: ../container/admin_mainWidgetlistWidgetContainer.php:668
@@ -1340,7 +1340,7 @@ msgstr "コンテンツを編集"
 
 #: ../container/admin_mainOpelogWidgetContainer.php:60
 #: ../container/admin_mainOpelogWidgetContainer.php:63
-#: ../container/admin_mainPagedefWidgetContainer.php:155
+#: ../container/admin_mainPagedefWidgetContainer.php:156
 msgid "All"
 msgstr "すべて"
 
@@ -1418,144 +1418,148 @@ msgstr "レベル："
 msgid "Status:"
 msgstr "ステータス："
 
-#: ../container/admin_mainPagedefWidgetContainer.php:137
+#: ../container/admin_mainPagedefWidgetContainer.php:138
 msgid "Show Detail"
 msgstr "詳細"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:138
+#: ../container/admin_mainPagedefWidgetContainer.php:139
 #: ../help/help_pagedef.php:55 ../help/help_templist.php:55
 msgid "Default Template"
 msgstr "デフォルトテンプレート"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:139
+#: ../container/admin_mainPagedefWidgetContainer.php:140
 #: ../help/help_pagedef.php:59
 msgid "Change Template"
 msgstr "変更"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:140
+#: ../container/admin_mainPagedefWidgetContainer.php:141
 #: ../help/help_pagedef.php:67
 msgid "Page Layout"
 msgstr "画面デザイン"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:141
+#: ../container/admin_mainPagedefWidgetContainer.php:142
 msgid "Layout"
 msgstr "レイアウト"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:142
-#: ../container/admin_mainTemplistWidgetContainer.php:553
+#: ../container/admin_mainPagedefWidgetContainer.php:143
+#: ../container/admin_mainTemplistWidgetContainer.php:560
 msgid "Preview"
 msgstr "プレビュー"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:143
+#: ../container/admin_mainPagedefWidgetContainer.php:144
 msgid "Maximize"
 msgstr "最大化"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:144
+#: ../container/admin_mainPagedefWidgetContainer.php:145
 #: ../help/help_pagedef.php:51
 msgid "Preview in other window"
 msgstr "別画面でプレビュー"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:145
+#: ../container/admin_mainPagedefWidgetContainer.php:146
 msgid "Site Preview"
 msgstr "実際の画面"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:147
+#: ../container/admin_mainPagedefWidgetContainer.php:148
 #: ../help/help_pagedef.php:97
 msgid "Page"
 msgstr "ページ"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:148
+#: ../container/admin_mainPagedefWidgetContainer.php:149
 #: ../help/help_pagedef.php:101
 msgid "Template"
 msgstr "テンプレート"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:149
+#: ../container/admin_mainPagedefWidgetContainer.php:150
 msgid "Default Value"
 msgstr "デフォルト値"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:152
+#: ../container/admin_mainPagedefWidgetContainer.php:153
 msgid "Update line data?"
 msgstr "データを更新しますか?"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:153
+#: ../container/admin_mainPagedefWidgetContainer.php:154
 msgid "Delete line data?"
 msgstr "データを削除しますか?"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:154
+#: ../container/admin_mainPagedefWidgetContainer.php:155
 msgid "Delete all line data?"
 msgstr "すべての項目を削除しますか?"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:156
+#: ../container/admin_mainPagedefWidgetContainer.php:157
 msgid "Page Definition Detail"
 msgstr "ページ定義詳細"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:158
+#: ../container/admin_mainPagedefWidgetContainer.php:159
 #: ../help/help_pagedef.php:75
 msgid "Position"
 msgstr "ポジション名"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:159
-#: ../container/admin_mainPagedefWidgetContainer.php:396
+#: ../container/admin_mainPagedefWidgetContainer.php:160
+#: ../container/admin_mainPagedefWidgetContainer.php:400
 #: ../help/help_pagedef.php:79
 msgid "Order"
 msgstr "表示順"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:161
+#: ../container/admin_mainPagedefWidgetContainer.php:162
 #: ../help/help_widgetlist.php:47
 msgid "Widget Name"
 msgstr "ウィジェット名"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:162
+#: ../container/admin_mainPagedefWidgetContainer.php:163
 #: ../help/help_pagedef.php:83
 msgid "Config ID"
 msgstr "定義ID"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:164
+#: ../container/admin_mainPagedefWidgetContainer.php:165
 #: ../help/help_pagedef.php:91
 msgid "Shared"
 msgstr "共通"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:166
+#: ../container/admin_mainPagedefWidgetContainer.php:167
 msgid "Include shared items."
 msgstr "共通項目含む"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:167
+#: ../container/admin_mainPagedefWidgetContainer.php:168
 msgid "Delete all"
 msgstr "すべて削除"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:416
-#: ../container/admin_mainPagedefWidgetContainer.php:426
+#: ../container/admin_mainPagedefWidgetContainer.php:420
+#: ../container/admin_mainPagedefWidgetContainer.php:430
 msgid "Data deleted."
 msgstr "データを削除しました"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:418
-#: ../container/admin_mainPagedefWidgetContainer.php:428
+#: ../container/admin_mainPagedefWidgetContainer.php:422
+#: ../container/admin_mainPagedefWidgetContainer.php:432
 msgid "Failed in deleting data."
 msgstr "データ削除に失敗しました"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:509
+#: ../container/admin_mainPagedefWidgetContainer.php:513
 #: ../container/admin_mainWidgetlistWidgetContainer.php:68
 msgid "Update line"
 msgstr "行を更新"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:510
+#: ../container/admin_mainPagedefWidgetContainer.php:514
 #: ../container/admin_mainWidgetlistWidgetContainer.php:69
 msgid "Delete line"
 msgstr "行を削除"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:514
+#: ../container/admin_mainPagedefWidgetContainer.php:518
 #: ../container/admin_mainWidgetlistWidgetContainer.php:70
 msgid "Show config window"
 msgstr "設定画面を表示"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:602
+#: ../container/admin_mainPagedefWidgetContainer.php:606
 #: ../container/admin_mainTemplistWidgetContainer.php:463
 msgid "Default"
 msgstr "デフォルト"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:603
+#: ../container/admin_mainPagedefWidgetContainer.php:607
 msgid "Unpublished"
 msgstr "非公開"
+
+#: ../container/admin_mainPagedefWidgetContainer.php:743
+msgid "No Select"
+msgstr "選択なし"
 
 #: ../container/admin_mainPortalWidgetContainer.php:102
 msgid "Category"
@@ -1797,17 +1801,17 @@ msgstr "テンプレートアップロード(zip圧縮ファイル)"
 msgid "Select file to upload."
 msgstr "アップロードするファイルを選択してください"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:512
+#: ../container/admin_mainTemplistWidgetContainer.php:515
 msgid "Template not found."
 msgstr "テンプレートが見つかりません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:532
-#: ../container/admin_mainTemplistWidgetContainer.php:542
+#: ../container/admin_mainTemplistWidgetContainer.php:535
+#: ../container/admin_mainTemplistWidgetContainer.php:546
 msgid "Not Detected"
 msgstr "未検出"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:609
-#: ../container/admin_mainTemplistWidgetContainer.php:666
+#: ../container/admin_mainTemplistWidgetContainer.php:616
+#: ../container/admin_mainTemplistWidgetContainer.php:673
 msgid "SimpleXML module not installed."
 msgstr "SimpleXML拡張モジュールがインストールされていません"
 
