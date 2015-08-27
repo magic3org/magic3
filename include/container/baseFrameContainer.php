@@ -822,7 +822,10 @@ class BaseFrameContainer extends Core
 				if (empty($curTemplate)){
 					$pageSubId = $request->trimValueOf(M3_REQUEST_PARAM_DEF_PAGE_SUB_ID);
 					$line = $this->gPage->getPageInfo($pageId, $pageSubId);
-					if (!empty($line)) $pageTemplateId = $line['pn_template_id'];
+					if (!empty($line)){
+						$pageTemplateId = $line['pn_template_id'];
+						$subTemplateId = $line['pn_sub_template_id'];		// サブテンプレートID
+					}
 					if (!empty($pageTemplateId)) $curTemplate = $pageTemplateId;
 				}
 				
