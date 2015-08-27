@@ -681,10 +681,12 @@ class BaseFrameContainer extends Core
 			
 			// サブテンプレート用の設定
 			if ($this->gEnv->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){		// Themlerテンプレートの場合はサブテンプレート用のパラメータを設定
-//		$subTemplateId = 'post_6';
-//		$subTemplateId = 'home_1';
+				// JRequest経由でレンダー側にサブテンプレートIDを渡す
+				JRequest::injectSetVar('file_template_name', $subTemplateId);
+
+				// サブテンプレートIDの渡し方は以下の方法もある
 				// サブテンプレートIDを埋め込む
-				if (!empty($subTemplateId)) $this->setBuffer('<!--TEMPLATE ' . $subTemplateId . ' /-->', 'component');
+//				if (!empty($subTemplateId)) $this->setBuffer('<!--TEMPLATE ' . $subTemplateId . ' /-->', 'component');
 			}
 			
 			// 現在のJoomla!ドキュメントを設定

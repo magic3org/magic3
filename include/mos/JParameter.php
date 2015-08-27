@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: JParameter.php 5552 2013-01-14 12:37:43Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($this->gEnv->getJoomlaRootPath() . '/class/error.php');
@@ -164,6 +164,8 @@ class JText
 }
 class JRequest
 {
+	private static $injectParams = array();		// Magic3からの設定用
+	
 	public static function getURI()
 	{
 		global $gEnvManager;
@@ -179,7 +181,16 @@ class JRequest
 	{
 		global $gRequestManager;
 		
-		return $gRequestManager->trimValueOf($name);
+		$value = self::$injectParams[$name];
+		if (isset($value)){
+			return $value;
+		} else {
+			return $gRequestManager->trimValueOf($name);
+		}
+	}
+	public static function injectSetVar($name, $value)
+	{
+		self::$injectParams[$name] = $value;
 	}
 	public static function getInt($name, $default = 0, $hash = 'default')
 	{
