@@ -778,7 +778,9 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				
 				foreach ($templatesInfo as $key => $templateInfo){
 					$subTemplateId = $templateInfo['fileName'];
+					$type = $templateInfo['kind'];
 					if (empty($subTemplateId)) continue;
+					if ($type == 'error404') continue;		// エラーメッセージ表示用の404タイプのサブテンプレートは表示しない
 					
 					$selected = '';
 					if ($subTemplateId == $this->subTemplateId) $selected = 'selected';		// サブテンプレートID
