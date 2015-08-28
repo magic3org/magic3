@@ -23,6 +23,7 @@ class SystemManager extends Core
 	private $_siteDefArray = array();			// サイト定義値
 	private $defaultAdminTemplateId;				// 管理画面用テンプレートID
 	private $defaultTemplateId;						// PC用テンプレートID
+	private $defaultSubTemplateId;						// PC用サブテンプレートID
 	private $defaultMobileTemplateId;				// 携帯用テンプレートID
 	private $defaultSmartphoneTemplateId;				// スマートフォン用テンプレートID
 	private $adminDefaultTheme;			// 管理画面用jQueryUIテーマ
@@ -51,6 +52,7 @@ class SystemManager extends Core
 	const CF_USE_PAGE_CACHE = 'use_page_cache';		// 画面キャッシュ機能を使用するかどうか
 	const CF_PAGE_CACHE_LIFETIME = 'page_cache_lifetime';		// 画面キャッシュの更新時間(分)
 	const CF_DEFAULT_TEMPLATE			= 'default_template';			// システム定義値取得用キー(PC用デフォルトテンプレート)
+	const CF_DEFAULT_SUB_TEMPLATE		= 'default_sub_template';			// システム定義値取得用キー(PC用デフォルトサブテンプレート)
 	const CF_DEFAULT_TEMPLATE_MOBILE	= 'mobile_default_template';	// システム定義値取得用キー(携帯用デフォルトテンプレート)
 	const CF_DEFAULT_TEMPLATE_SMARTPHONE	= 'smartphone_default_template';	// システム定義値取得用キー(スマートフォン用デフォルトテンプレート)
 	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
@@ -79,6 +81,7 @@ class SystemManager extends Core
 		// 初期値を設定
 		$this->defaultAdminTemplateId = '';				// 管理画面用テンプレートID
 		$this->defaultTemplateId = '';						// PC用テンプレートID
+		$this->defaultSubTemplateId = '';						// PC用サブテンプレートID
 		$this->defaultMobileTemplateId = '';				// 携帯用テンプレートID
 		$this->defaultSmartphoneTemplateId = '';			// スマートフォン用テンプレートID
 		$this->adminDefaultTheme = '';			// 管理画面用jQueryUIテーマ
@@ -162,6 +165,7 @@ class SystemManager extends Core
 			// メンバー変数に再設定
 			$this->defaultAdminTemplateId	= $this->getSystemConfig(self::CF_ADMIN_DEFAULT_TEMPLATE);				// 管理画面用テンプレートID
 			$this->defaultTemplateId		= $this->getSystemConfig(self::CF_DEFAULT_TEMPLATE);	// PC用テンプレートID
+			$this->defaultSubTemplateId		= $this->getSystemConfig(self::CF_DEFAULT_SUB_TEMPLATE);						// PC用サブテンプレートID
 			$this->defaultMobileTemplateId	= $this->getSystemConfig(self::CF_DEFAULT_TEMPLATE_MOBILE);// 携帯用テンプレートID
 			$this->defaultSmartphoneTemplateId = $this->getSystemConfig(self::CF_DEFAULT_TEMPLATE_SMARTPHONE);		// スマートフォン用テンプレートID
 			$this->adminDefaultTheme = $this->getSystemConfig(self::CF_ADMIN_DEFAULT_THEME);			// 管理画面用jQueryUIテーマ
@@ -333,6 +337,19 @@ class SystemManager extends Core
 		return $this->defaultTemplateId;
 	}
 	/**
+	 * デフォルトのサブテンプレートIDを取得
+	 *
+	 * @param bool $reload	再取得するかどうか
+	 * @return string	デフォルトのテンプレートID
+	 */
+	function defaultSubTemplateId($reload = false)
+	{
+		if ($reload){
+			$this->defaultSubTemplateId		= $this->db->getSystemConfig(self::CF_DEFAULT_SUB_TEMPLATE);
+		}
+		return $this->defaultSubTemplateId;
+	}
+	/**
 	 * 携帯用デフォルトのテンプレートIDを取得
 	 *
 	 * @param bool $reload	再取得するかどうか
@@ -359,17 +376,20 @@ class SystemManager extends Core
 		return $this->defaultSmartphoneTemplateId;
 	}
 	/**
-	 * デフォルトテンプレートの変更
+	 * デフォルトテンプレート、サブテンプレートの変更
 	 *
-	 * @param string  $templateId	デフォルトテンプレートID
-	 * @return						true=成功、false=失敗
+	 * @param string  $templateId		デフォルトテンプレートID
+	 * @param string  $subTemplateId	デフォルトのサブテンプレートID
+	 * @return							true=成功、false=失敗
 	 */
-	function changeDefaultTemplate($templateId)
+	function changeDefaultTemplate($templateId, $subTemplateId = '')
 	{
 		$ret = $this->db->updateSystemConfig(self::CF_DEFAULT_TEMPLATE, $templateId);
+		$ret = $this->db->updateSystemConfig(self::CF_DEFAULT_SUB_TEMPLATE, $subTemplateId);
 		
 		// データ再取得
 		$this->defaultTemplateId(true);
+		$this->defaultSubTemplateId(true);
 		return $ret;
 	}
 	/**

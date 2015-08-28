@@ -17,6 +17,10 @@
 -- --------------------------------------------------------------------------------------------------
 
 -- *** システムベーステーブル ***
+-- システム設定マスター
+INSERT INTO _system_config 
+(sc_id,                          sc_value,                  sc_name) VALUES
+('default_sub_template',            '',            'PC一般画面用デフォルトサブテンプレート');
 
 -- ページ情報マスター
 ALTER TABLE _page_info ADD pn_sub_template_id           VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- サブテンプレートID

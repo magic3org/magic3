@@ -27,10 +27,12 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	private $templateId;		// テンプレートID
 	private $subTemplateId;		// サブテンプレートID
 	private $pageTemplateId;	// 個別ページのテンプレートID
+	private $pageSubTemplateId;	// 個別ページのサブテンプレートID
 	private $pageTitle;	// 選択ページのタイトル
 	private $templateTitle;	// テンプレートタイトル
 	private $pageInfoRows;			// ページ情報
 	private $isExistsDefItems;		// ページ定義項目が存在するかどうか
+	private $subTemplateInfo;		// サブテンプレート情報(Themler設定ファイルからの読み込み用)
 	const BREADCRUMB_TITLE_PC			= 'PC画面';		// 画面タイトル名(パンくずリスト)
 	const BREADCRUMB_TITLE_MOBILE		= '携帯画面';		// 画面タイトル名(パンくずリスト)
 	const BREADCRUMB_TITLE_SMARTPHONE	= 'スマートフォン画面';		// 画面タイトル名(パンくずリスト)
@@ -223,6 +225,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				break;
 			default:
 				$this->templateId = $this->gSystem->defaultTemplateId();
+				$this->subTemplateId = $this->gSystem->defaultSubTemplateId();			// サブテンプレートID
 				$deviceType = 0;		// デバイスタイプ(PC)
 				$taskStr = 'pagedef';
 				$previewWidth = '100%';
@@ -241,7 +244,11 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 						$this->gSystem->changeDefaultSmartphoneTemplate($templateId);
 						break;
 					default:						// PC用画面のとき
-						$this->gSystem->changeDefaultTemplate($templateId);
+						// Themlerテンプレートの場合はサブテンプレートIDを取得
+						$subTemplateId = $this->getDefaultSubTemplateId($templateId);
+						
+						// 現在のテンプレート、サブテンプレートを変更
+						$this->gSystem->changeDefaultTemplate($templateId, $subTemplateId);
 			
 						// セッションのテンプレートIDを更新
 						$request->setSessionValue(M3_SESSION_CURRENT_TEMPLATE, $templateId);
@@ -252,50 +259,87 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				
 				// デフォルトテンプレート変更
 				$this->templateId = $templateId;
+				$this->subTemplateId = $subTemplateId;
 				
-				// デフォルトのテンプレートを使用しているページのサブテンプレートIDは初期化
-				// ページIDですべてのページ情報を取得
-				$ret = $this->db->getPageInfoByPageId($this->pageId, ''/*言語*/, $pageInfoRows);
-				if ($ret){
-					for ($i = 0; $i < count($pageInfoRows); $i++){
-						$pageInfo = $pageInfoRows[$i];
-						$pageSubId = $pageInfo['pg_id'];
-						$templateId = $pageInfo['pn_template_id'];
-						if (!is_null($templateId) && empty($templateId) && !empty($pageInfo['pn_sub_template_id'])){		// デフォルトテンプレートを使用、サブテンプレート設定ありの場合
-							$ret = $this->db->getPageInfo($this->pageId, $pageSubId, $row);
-							if ($ret) $this->db->updatePageInfo($this->pageId, $pageSubId, $row['pn_content_type'], $row['pn_template_id'], ''/*サブテンプレートID*/, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
-						}
-					}
-				}
+//				// デフォルトテンプレートを使用しているページのサブテンプレートIDは初期化
+//				// ページIDですべてのページ情報を取得
+//				$ret = $this->db->getPageInfoByPageId($this->pageId, ''/*言語*/, $pageInfoRows);
+//				if ($ret){
+//					for ($i = 0; $i < count($pageInfoRows); $i++){
+//						$pageInfo = $pageInfoRows[$i];
+//						$pageSubId = $pageInfo['pg_id'];
+//						$templateId = $pageInfo['pn_template_id'];
+//						if (!is_null($templateId)/*データ情報あり*/ && empty($templateId) && !empty($pageInfo['pn_sub_template_id'])){		// デフォルトテンプレートを使用、サブテンプレート設定ありの場合
+//							$ret = $this->db->getPageInfo($this->pageId, $pageSubId, $row);
+//							if ($ret) $this->db->updatePageInfo($this->pageId, $pageSubId, $row['pn_content_type'], $row['pn_template_id'], ''/*サブテンプレートID*/, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+//						}
+//					}
+//				}
 			}
 		} else if ($act == 'changepagetemplate'){		// 個別ページ用テンプレート選択
 			$templateId = $request->trimValueOf('sel_page_template');		// テンプレートID
 			
 			// ページ用テンプレートの更新
-			// デフォルトと同じ場合はリセット
-			//if ($templateId == $this->templateId) $templateId = '';
-			
-			// ページ情報更新。サブテンプレートIDは初期化。
-			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
-			if ($ret){
-				if (is_null($row['pn_content_type'])){		// ページ情報レコードがない場合
-					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $templateId, ''/*サブテンプレートID*/);
+			// デフォルトと同じ場合はトグル切り替え
+/*			if ($templateId == $this->templateId){
+				$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
+				if ($ret && !is_null($row['pn_template_id'])){		// ページ情報レコードがある場合
+					if (empty($row['pn_template_id'])){
+						// 個別のテンプレート設定の場合はデフォルトのサブテンプレートIDを取得
+						$subTemplateId = $this->getDefaultSubTemplateId($templateId);
+					} else {			// トグルオフの場合はテンプレートID、サブテンプレートIDを初期化
+						$templateId = '';
+						$subTemplateId = '';
+					}
 				} else {
-					// 既存の設定値と同じ場合はリセット
-					if ($templateId == $row['pn_template_id']) $templateId = '';
+					// 個別のテンプレート設定の場合はデフォルトのサブテンプレートIDを取得
+					$subTemplateId = $this->getDefaultSubTemplateId($templateId);
+				}
+			} else {
+				// 個別のテンプレート設定の場合はデフォルトのサブテンプレートIDを取得
+				$subTemplateId = $this->getDefaultSubTemplateId($templateId);
+			}*/
+			if (!empty($templateId)){
+				// 個別のテンプレート設定の場合はデフォルトのサブテンプレートIDを取得
+				$subTemplateId = $this->getDefaultSubTemplateId($templateId);
+				
+				// 表示中のページについてページ情報更新
+				$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
+				if ($ret){
+					if (is_null($row['pn_template_id'])){		// ページ情報レコードがない場合
+						$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $templateId, $subTemplateId);
+					} else {
+						// 既存の設定値と同じ場合はリセット(トグルオフ)
+						if ($templateId == $row['pn_template_id']){
+							$templateId = '';
+							$subTemplateId = '';
+						}
 					
-					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $templateId, ''/*サブテンプレートID*/, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+						$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $templateId, $subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+					}
 				}
 			}
 		} else if ($act == 'changesubtemplate'){		// サブテンプレート選択
-			$this->subTemplateId = $request->trimValueOf('subtemplateid');		// サブテンプレートID
-
+			$subTemplateId = $request->trimValueOf('subtemplateid');		// サブテンプレートID
+						
+//			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
+//			if ($ret){
+//				if (is_null($row['pn_content_type'])){		// ページ情報レコードがない場合
+//					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $row['pn_template_id'], $subTemplateId);
+//				} else {
+//					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $row['pn_template_id'], $subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+//				}
+//			}
 			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
-			if ($ret){
-				if (is_null($row['pn_content_type'])){		// ページ情報レコードがない場合
-					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId,''/*コンテンツタイプ*/, $row['pn_template_id'], $this->subTemplateId);
+			if ($ret && !is_null($row['pn_template_id'])){		// ページ情報レコードがある場合
+				$templateId = $row['pn_template_id'];
+				if (empty($templateId)){			// 個別にテンプレートが設定されていない場合
+					// デフォルトのサブテンプレートを変更
+					$this->subTemplateId = $subTemplateId;
+					$this->gSystem->changeDefaultTemplate($this->templateId, $this->subTemplateId);
 				} else {
-					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $row['pn_template_id'], $this->subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
+					// 個別のページのサブテンプレートを変更
+					$ret = $this->db->updatePageInfo($this->pageId, $this->pageSubId, $row['pn_content_type'], $row['pn_template_id'], $subTemplateId, $row['pn_auth_type'], $row['pn_use_ssl'], $row['pn_user_limited']);
 				}
 			}
 		}
@@ -340,6 +384,10 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			$dispUrl .= '?<strong>sub=' . $this->pageSubId . '</strong>';
 			$urlWithSession = $url . '&' . $this->gAccess->getSessionIdUrlParam();		// セッションIDをURLに追加
 		}
+		// デフォルトテンプレート、サブテンプレート
+		$defaultTemplate = $this->templateId;
+		if (!empty($this->subTemplateId)) $defaultTemplate .= '(' . $this->subTemplateId . ')';		// サブテンプレートがある場合は付加
+		
 		$this->tmpl->addVar("_widget", "url", $url);		// getUrl()は掛けない
 		$this->tmpl->addVar("_widget", "disp_url", $dispUrl);		// 表示用URL
 		$this->tmpl->addVar("_widget", "url_with_session", $urlWithSession);		// セッションID付きURL(携帯のみ使用)。getUrl()は掛けない
@@ -347,7 +395,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("_widget", "device_type", $deviceType);			// デバイスタイプ
 		$this->tmpl->addVar("_widget", "preview_width", $previewWidth);			// プレビュー幅
 		$this->tmpl->addVar("_widget", "task", $taskStr);			// タスク
-		$this->tmpl->addVar("_widget", "default_template_id", $this->convertToDispString($this->templateId));	// デフォルトのテンプレートID
+		$this->tmpl->addVar("_widget", "default_template_id", $this->convertToDispString($defaultTemplate));	// デフォルトのテンプレートID
 		
 		// 管理用URL設定
 		$adminUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_DEF_PAGE_ID . '=' . $this->pageId . '&' . M3_REQUEST_PARAM_DEF_PAGE_SUB_ID . '=' . $this->pageSubId;
@@ -601,7 +649,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				$useSsl = $pageInfo['pn_use_ssl'];
 				if ($value == $this->pageSubId){		// 表示中のページの場合
 					$this->pageTemplateId = $templateId;	// 個別ページのテンプレートID
-					$this->subTemplateId = $subTemplateId;		// サブテンプレートID
+					$this->pageSubTemplateId = $subTemplateId;		// サブテンプレートID
 				}
 				break;
 			}
@@ -765,25 +813,31 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			
 			$subTemplateInfoFile = $this->gEnv->getTemplatesPath() . '/' . $selectedTemplateId . '/templates/list.php';
 			if (is_readable($subTemplateInfoFile)){
+				// サブテンプレート情報ファイル読み込み
 				require_once($subTemplateInfoFile);
+				if (!isset($this->subTemplateInfo)) $this->subTemplateInfo = $templatesInfo;		// ローカル変数へコピー
 				
-				// 選択なし値追加
+/*				// 選択なし値追加
 				$row = array(
 					'value'    => '',
 					'name'     => $this->convertToDispString('-- ' . $this->_('No Select') . ' --'),
 					'selected' => ''														// 選択中かどうか
 				);
 				$this->tmpl->addVars('subtemplate_list', $row);
-				$this->tmpl->parseTemplate('subtemplate_list', 'a');
+				$this->tmpl->parseTemplate('subtemplate_list', 'a');*/
 				
-				foreach ($templatesInfo as $key => $templateInfo){
+				foreach ($this->subTemplateInfo as $key => $templateInfo){
 					$subTemplateId = $templateInfo['fileName'];
 					$type = $templateInfo['kind'];
 					if (empty($subTemplateId)) continue;
 					if ($type == 'error404') continue;		// エラーメッセージ表示用の404タイプのサブテンプレートは表示しない
 					
 					$selected = '';
-					if ($subTemplateId == $this->subTemplateId) $selected = 'selected';		// サブテンプレートID
+					if (empty($this->pageTemplateId)){			// ページ個別のテンプレートが設定されていない場合
+						if ($subTemplateId == $this->subTemplateId) $selected = 'selected';		// サブテンプレートID
+					} else {
+						if ($subTemplateId == $this->pageSubTemplateId) $selected = 'selected';		// サブテンプレートID
+					}
 					
 					$row = array(
 						'value'    => $this->convertToDispString($subTemplateId),
@@ -796,6 +850,45 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			}
 			break;
 		}
+	}
+	/**
+	 * デフォルトのサブテンプレートIDを取得
+	 *
+	 * @param string  $templateId	テンプレートID
+	 * @return string				サブテンプレートID
+	 */
+	function getDefaultSubTemplateId($templateId)
+	{
+		$subTemplateId = '';
+		
+		$ret = $this->db->getTemplate($templateId, $row);
+		if (!$ret) return $subTemplateId;
+		
+		$generator	= $row['tm_generator'];
+		$version	= $row['tm_version'];		// テンプレートバージョン
+		switch ($generator){
+		case M3_TEMPLATE_GENERATOR_THEMLER:		// Themler
+			// デフォルトのサブテンプレートIDを取得
+			$subTemplateInfoFile = $this->gEnv->getTemplatesPath() . '/' . $templateId . '/templates/list.php';
+			if (is_readable($subTemplateInfoFile)){
+				// サブテンプレート情報ファイル読み込み
+				require_once($subTemplateInfoFile);
+				if (!isset($this->subTemplateInfo)) $this->subTemplateInfo = $templatesInfo;		// ローカル変数へコピー
+				
+				foreach ($this->subTemplateInfo as $key => $templateInfo){
+					$id = $templateInfo['fileName'];
+					$type = $templateInfo['kind'];
+					if (empty($id)) continue;
+					
+					if ($type == 'default'){
+						$subTemplateId = $id;
+						break;
+					}
+				}
+			}
+			break;
+		}
+		return $subTemplateId;
 	}
 }
 ?>

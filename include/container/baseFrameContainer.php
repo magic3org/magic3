@@ -682,7 +682,7 @@ class BaseFrameContainer extends Core
 			// サブテンプレート用の設定
 			if ($this->gEnv->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){		// Themlerテンプレートの場合はサブテンプレート用のパラメータを設定
 				// JRequest経由でレンダー側にサブテンプレートIDを渡す
-				JRequest::injectSetVar('file_template_name', $subTemplateId);
+				if (!empty($subTemplateId)) JRequest::injectSetVar('file_template_name', $subTemplateId);
 
 				// サブテンプレートIDの渡し方は以下の方法もある
 				// サブテンプレートIDを埋め込む
@@ -786,6 +786,7 @@ class BaseFrameContainer extends Core
 		// 　2.セッションに持っている値
 		// 　3.DBのデフォルト値
 		$curTemplate = '';
+		$subTemplateId = '';
 		$isSystemManageUser = $this->gEnv->isSystemManageUser();		// システム運用可能かどうか
 		$useSubClassDefine = true;			// サブクラスでの定義を使用するかどうか
 		
@@ -877,6 +878,7 @@ class BaseFrameContainer extends Core
 						$curTemplate = $this->gSystem->defaultSmartphoneTemplateId();		// スマートフォン用デフォルトテンプレート
 					} else {
 						$curTemplate = $this->gSystem->defaultTemplateId();
+						$subTemplateId = $this->gSystem->defaultSubTemplateId();
 					}
 				}
 			}
