@@ -339,7 +339,7 @@ class BaseFrameContainer extends Core
 			if (empty($cacheData)){		// キャッシュデータがないときは画面を作成
 				// カレントのテンプレートを決定
 				$curTemplateId = $this->_defineTemplate($request, $subTemplateId);
-		
+
 				// 画面を作成
 				$pageData = $this->_createPage($request, $curTemplateId, $subTemplateId);
 				
@@ -836,6 +836,7 @@ class BaseFrameContainer extends Core
 				if (empty($curTemplate)){
 					if ($pageId == $this->gEnv->getDefaultPageId()){		// 通常サイトのとき
 						$curTemplate = $this->gSystem->defaultTemplateId();
+						$subTemplateId = $this->gSystem->defaultSubTemplateId();
 					} else if ($pageId == $this->gEnv->getDefaultMobilePageId()){		// 携帯サイトのとき
 						$curTemplate = $this->gSystem->defaultMobileTemplateId();		// 携帯用デフォルトテンプレート
 					} else if ($pageId == $this->gEnv->getDefaultSmartphonePageId()){		// スマートフォン用サイトのとき
