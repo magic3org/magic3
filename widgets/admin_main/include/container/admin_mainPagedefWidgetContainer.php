@@ -48,7 +48,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	const BUTTON_ICON_TEMPLATE_UNCHECKED = '<i class="glyphicon glyphicon-unchecked"></i> ';	// テンプレート一覧付加用アイコン(チェックなし)
 	const BUTTON_ICON_TEMPLATE_CHECK_WITH_HELP = '<i class="glyphicon glyphicon-check" rel="m3help" title="ページに固定"></i> ';		// テンプレート一覧付加用アイコン(チェックあり)
 	const HELP_SELECT_BUTTON = 'rel="m3help" title="ページに固定"';			// テンプレート一覧付加用ボタンのヘルプ(ページ専用テンプレート)
-	const TEMPLATE_TYPE_LABEL_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型">B</span>';			// Boostrap型テンプレートラベル
+	const TEMPLATE_TYPE_LABEL_BOOTSTRAP = ' <span class="label label-info" rel="m3help" title="Bootstrap型">B</span>';			// Boostrap型テンプレートラベル
+	const TEMPLATE_TYPE_LABEL_THEMLER = ' <span class="label label-info" rel="m3help" title="Themler製">T</span>';			// Themler製テンプレートラベル
 	
 	/**
 	 * コンストラクタ
@@ -714,6 +715,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$value = $fetchedRow['tm_id'];
 		$name = $fetchedRow['tm_name'];
 		$type = $fetchedRow['tm_type'];		// テンプレートタイプ
+		$generator = $fetchedRow['tm_generator'];		// テンプレート作成アプリケーション
 		$selected = '';
 		$checked = '';
 		
@@ -727,6 +729,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				// テンプレートタイプのアイコンを付加
 				if (10 <= $type && $type < 20){			// Bootstrap型
 					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_BOOTSTRAP;
+				} else if ($generator == M3_TEMPLATE_GENERATOR_THEMLER){		// Themler製テンプレートの場合
+					$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_THEMLER;
 				}
 			}
 		}
@@ -745,6 +749,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			// テンプレートタイプのアイコンを付加
 			if (10 <= $type && $type < 20){			// Bootstrap型
 				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_BOOTSTRAP;
+			} else if ($generator == M3_TEMPLATE_GENERATOR_THEMLER){		// Themler製テンプレートの場合
+				$this->templateTitle .= self::TEMPLATE_TYPE_LABEL_THEMLER;
 			}
 		} else {
 			$selectButtonIcon = self::BUTTON_ICON_TEMPLATE_UNCHECKED;
