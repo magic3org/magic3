@@ -308,6 +308,9 @@ background-color: #0081c2;
 #layout_preview_title {
 	margin-top:10px;
 }
+#subtemplate_select {
+	margin-top:-18px;
+}
 #layout_preview
 {
 /*	border-top:2px solid #2C3E50;*/

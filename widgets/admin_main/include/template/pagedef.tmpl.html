@@ -259,7 +259,7 @@ URL：{DISP_URL}
 </div>
 <div class="col-lg-2">
 <patTemplate:tmpl name="select_subtemplate" visibility="hidden">
-	    <select name="subtemplateid" class="form-control" onchange="changeSubTemplate();" style="margin-top:-18px;">
+	    <select id="subtemplate_select" name="subtemplateid" class="form-control" onchange="changeSubTemplate();">
 	        <patTemplate:tmpl name="subtemplate_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
