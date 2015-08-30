@@ -28,3 +28,9 @@ ALTER TABLE _page_info ADD pn_sub_template_id           VARCHAR(20)    DEFAULT '
 -- テンプレート情報マスター
 ALTER TABLE _templates ADD tm_generator      VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- テンプレート作成アプリケーション(値=artisteer,themler)
 
+-- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'themler_sample1';
+INSERT INTO _templates
+(tm_id,                    tm_name,                 tm_type, tm_generator, tm_version) VALUES
+('themler_sample1',        'themler_sample1',       2,       'themler',    '1.0.33');
+

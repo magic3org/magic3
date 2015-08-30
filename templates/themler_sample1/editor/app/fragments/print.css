@@ -1,0 +1,39 @@
+#marker-start-L2FwcC9mcmFnbWVudHMvcHJpbnQuY3Nz.Lw {}
+@media print {
+  a[href]:after {
+    content: "";
+  }
+  .print-action {
+    display: none;
+  }
+}
+#bd-main {
+  position: relative;
+  width: 100%;
+  left: 0;
+  top: 0;
+  cursor: default;
+}
+#bd-page-background-glare,
+#bd-page-background-middle-texture,
+#bd-page-background-top-texture {
+  display: none;
+}
+.cleared {
+  float: none;
+  clear: both;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 1px;
+}
+form {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+table.position {
+  position: relative;
+  width: 100%;
+  table-layout: fixed;
+}
+#marker-end-L2FwcC9mcmFnbWVudHMvcHJpbnQuY3Nz.Lw {}

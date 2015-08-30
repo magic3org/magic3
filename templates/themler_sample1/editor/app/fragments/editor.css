@@ -1,0 +1,18 @@
+#marker-start-L2FwcC9mcmFnbWVudHMvZWRpdG9yLmNzcw.Lw {}
+/* Compatibility rules for the default TinyMCE skin: */
+td {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  margin: inherit;
+}
+abbr {
+  border-bottom: 0px none;
+}
+cite {
+  border-bottom: 0px none;
+}
+body {
+  border-collapse: collapse;
+}
+#marker-end-L2FwcC9mcmFnbWVudHMvZWRpdG9yLmNzcw.Lw {}

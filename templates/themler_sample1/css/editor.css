@@ -1,0 +1,60 @@
+#marker-start-L2Nzcy9lZGl0b3IuY3Nz.Lw {}
+/* Compatibility rules for the default TinyMCE skin: */
+td {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  margin: inherit;
+}
+abbr {
+  border-bottom: 0px none;
+}
+cite {
+  border-bottom: 0px none;
+}
+body {
+  border-collapse: collapse;
+}
+a {
+  color: #f0c30e;
+}
+a:hover {
+  color: #f6d85e;
+  text-decoration: underline;
+}
+h3 {
+  line-height: 42.85714287px;
+  font-weight: 200;
+  font-size: 30px;
+}
+h2 {
+  line-height: 68.57142859px;
+  margin-top: 0;
+  font-weight: 200;
+  font-size: 48px;
+}
+h1 {
+  line-height: 102.85714289px;
+  font-weight: 200;
+  font-size: 72px;
+}
+#marker-end-L2Nzcy9lZGl0b3IuY3Nz.Lw {}
+#marker-start-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50MQ {}
+#marker-end-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50MQ {}
+#marker-start-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50Mw {}
+#marker-end-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50Mw {}
+#marker-start-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50NA {}
+.bd-postcontent-4 .bd-postcontent-4 {
+  color: #333333;
+}
+#marker-end-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50NA {}
+#marker-start-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50NQ {}
+#marker-end-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50NQ {}
+#marker-start-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50Ng {}
+#marker-end-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2FydGljbGVDb250ZW50Ng {}
+#marker-start-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2Jsb2dBcnRpY2xlQ29udGVudA {}
+.bd-postcontent-2 {
+  margin-right: 50px;
+  margin-top: 10px;
+}
+#marker-end-L2Nzcy9lZGl0b3IuY3Nz.L2NvbnRyb2xzL2Jsb2dBcnRpY2xlQ29udGVudA {}
