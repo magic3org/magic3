@@ -91,11 +91,33 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 		$name = $this->getCurrentLangString($fetchedRow['ni_name']);
 		$detail = $this->getCurrentLangString($fetchedRow['ni_help_body']);		// 説明
 		
+		// URLをリンクに変換
+		$destMsg = '';
+		$offset = 0;
+		$exp = '/https?[\w\/\@\$()!?&%#:;.,~\'=*+-]+[\w\/]+/';
+		while (preg_match($exp, $detail, $matches, PREG_OFFSET_CAPTURE, $offset)){
+			$matchStart = $matches[0][1];
+			$matchLength = strlen($matches[0][0]);
+			$url = $matches[0][0];
+			
+			// 検出位置までの文字列を連結(HTMLエスケープ処理)
+			$destMsg .= $this->convertToDispString(substr($detail, $offset, $matchStart - $offset));
+			
+			// リンクを作成
+			$destMsg .= '<a href="' . $this->convertUrlToHtmlEntity($url) . '" class="external" target="_blank">' . $this->convertToDispString($url) . '</a>';
+			
+			// 読み込み位置を更新
+			$offset = $matchStart + $matchLength;
+		}
+		// 残りの部分を連結
+		$destMsg .= substr($detail, $offset);
+		
 		// リンクを付加
-		$itemTag  = '<a href="#">' . $this->convertToDispString($name) . '</a>';	//$this->gDesign->createAdminPageLink($this->convertToDispString($name), $fetchedRow['ni_url']);
+		$itemTag  = '<a href="#">' . $this->convertToDispString($name) . '</a>';
 		$itemTag .= '<div>';
-		$itemTag .= $this->convertToDispString($detail) . ' ';
-		$itemTag .= $this->gDesign->createAdminPageLink('<i class="glyphicon glyphicon-new-window"></i>', $fetchedRow['ni_url']);			// リンクを付加
+		//$itemTag .= $this->convertToDispString($detail) . ' ';
+		$itemTag .= $destMsg . ' ';
+		if (!empty($fetchedRow['ni_url'])) $itemTag .= $this->gDesign->createAdminPageLink('<i class="glyphicon glyphicon-new-window"></i>', $fetchedRow['ni_url']);			// リンクを付加
 		$itemTag .= '</div>';
 		
 		$row = array(
