@@ -525,16 +525,15 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 		if (! isset($image[$key])) { $button = 'IMAGE NOT FOUND'; return $button; }
 
 		// テンプレートタイプに合わせて出力を変更
+		// Lightbox回避用のクラス付加
 		$templateType = $gEnvManager->getCurrentTemplateType();
 		if ($templateType == M3_TEMPLATE_BOOTSTRAP_30){		// Bootstrap型テンプレートの場合
 			$button = '<a href="' . $link[$key] . '">' .
-				'<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $width . '" height="' . $height . '" ' .
-					'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" rel="tooltip" data-toggle="tooltip" />' .
+				'<img src="' . IMAGE_DIR . $image[$key] . '" class="no-lightbox" width="' . $width . '" height="' . $height . '" alt="' . $lang[$key] . '" title="' . $lang[$key] . '" rel="tooltip" data-toggle="tooltip" />' .
 				'</a>';
 		} else {
 			$button = '<a href="' . $link[$key] . '">' .
-				'<img src="' . IMAGE_DIR . $image[$key] . '" width="' . $width . '" height="' . $height . '" ' .
-					'alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
+				'<img src="' . IMAGE_DIR . $image[$key] . '" class="no-lightbox" width="' . $width . '" height="' . $height . '" alt="' . $lang[$key] . '" title="' . $lang[$key] . '" />' .
 				'</a>';
 		}
 		return $button;
