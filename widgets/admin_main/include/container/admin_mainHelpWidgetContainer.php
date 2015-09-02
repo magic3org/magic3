@@ -94,7 +94,7 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 		// URLをリンクに変換
 		$destMsg = '';
 		$offset = 0;
-		$exp = '/https?[\w\/\@\$()!?&%#:;.,~\'=*+-]+[\w\/]+/';
+		$exp = '/https?:\/\/[\w\/\@\$()!?&%#:;.,~\'=*+-]+[\w\/]+/';		// URLを検出
 		while (preg_match($exp, $detail, $matches, PREG_OFFSET_CAPTURE, $offset)){
 			$matchStart = $matches[0][1];
 			$matchLength = strlen($matches[0][0]);
