@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -536,7 +536,7 @@ class BaseDb extends Core
 	 * @param  array  $ret		クエリー行の配列
 	 * @return bool				true=正常終了、false=異常終了
 	 */
-	function _splitSql(&$ret, $sql)
+	function _splitSql($sql, &$ret)
 	{
 		$sql               = trim($sql);
 		$sql_len           = strlen($sql);
@@ -908,7 +908,7 @@ class BaseDb extends Core
 		$fileData = fread(fopen($scriptFullPath, 'r'), filesize($scriptFullPath));
 				
 		// ファイル内容を解析
-		$ret = self::_splitSql($lines, $fileData);
+		$ret = self::_splitSql($fileData, $lines);
 		if ($ret){
 			$lineCount = count($lines);
 			for ($i = 0; $i < $lineCount; $i++) {
@@ -946,7 +946,7 @@ class BaseDb extends Core
 		}
 						
 		// ファイル内容を解析
-		$ret = self::_splitSql($lines, $fileData);
+		$ret = self::_splitSql($fileData, $lines);
 		if ($ret){
 			$lineCount = count($lines);
 			for ($i = 0; $i < $lineCount; $i++){
