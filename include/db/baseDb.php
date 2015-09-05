@@ -620,6 +620,104 @@ class BaseDb extends Core
 		return true;
 	}
 	/**
+	 * テキストデータをクエリーの実行行単位に解析(マルチバイト対応)
+	 *
+	 * 機能:変換内容は、コメントの削除、行末改行コードと「;」の削除、行単位の分割。
+	 *
+	 * @param  string $sql		解析を行うテキストデータ
+	 * @param  array  $ret		クエリー行の配列
+	 * @return bool				true=正常終了、false=異常終了
+	 */
+	function _splitMultibyteSql($sql, &$ret)
+	{
+		$sql			= trim($sql);
+		$sql			= preg_split("//u", $sql, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
+		$sqlLen			= count($sql);
+		$char			= '';
+		$stringStart	= '';
+		$inString		= false;
+		$ret			= array();		// 戻り値初期化
+
+		for ($i = 0; $i < $sqlLen; $i++){
+			$char = $sql[$i];
+
+			// クォート等、改行を跨るテキストの処理
+			if ($inString){
+				for (;;){
+					$pos = $i;
+					$i = array_search($stringStart, array_slice($sql, $i));
+					if ($i !== false) $i += $pos;
+					
+					if (!$i){		// // 見つからないときは終了
+						$ret[] = implode('', $sql);
+						return true;
+					} else if ($stringStart == '`' || $sql[$i - 1] != '\\'){
+						$stringStart      = '';
+						$inString         = false;
+						break;
+					} else {
+						// バックスラッシュのエスケープ文字をチェック
+						$j                     = 2;
+						$escaped_backslash     = false;
+						while ($i - $j > 0 && $sql[$i - $j] == '\\'){
+							$escaped_backslash = !$escaped_backslash;
+							$j++;
+						}
+						if ($escaped_backslash){
+							$stringStart  = '';
+							$inString     = false;
+							break;
+						} else {
+							$i++;
+						}
+					}
+				}
+			} else if ($char == ';'){
+				// 行末を検出した場合はテキストを戻り配列に格納して、読み込み位置を更新
+				$ret[]	= implode('', array_slice($sql, 0, $i));
+				$sql	= ltrim(implode('', array_slice($sql, min($i + 1, $sqlLen))));		// 先頭の改行コード削除
+				$sql	= preg_split("//u", $sql, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
+				$sqlLen	= count($sql);
+				if ($sqlLen > 0){
+					$i      = -1;		// 検索文字列の先頭から読み込む
+				} else {
+					return true;
+				}
+			} else if (($char == '"') || ($char == '\'') || ($char == '`')){
+				$inString    = true;
+				$stringStart = $char;
+			} else if ($char == '#' || ($char == ' ' && $i > 1 && $sql[$i - 2] . $sql[$i - 1] == '--')){		// 「#」「-- 」形式のコメント行の場合
+				// コメント開始位置を検出
+				$commentStartPos = (($char == '#') ? $i : $i - 2);
+
+				// コメント終了位置を検出
+				$commentEndPos = array_search("\012", $sql, $i + 1);		// LF
+				if ($commentEndPos === false){
+					// コメントの前にテキストがある場合は取得
+					$last	= trim(implode('', array_slice($sql, 0, $commentStartPos)));		// 改行コード削除
+					$sql	= preg_split("//u", $last, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
+					if (!empty($sql) && ($sql[0] != '#' && $sql[0] != '-')){		// コメント行でなければ追加
+						$ret[] = $last;
+					}
+					return true;
+				} else {
+					// コメントを読み飛ばす
+					$commentEndPos++;
+					$sql	= implode('', array_slice($sql, 0, $commentStartPos)) . ltrim(implode('', array_slice($sql, $commentEndPos)));		// 前行の改行コードを削除
+					$sql	= preg_split("//u", $sql, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
+					$sqlLen	= count($sql);
+					$i--;			// 再度同じ位置を読み込む
+				}
+			}
+		}
+		// ##### 行末に「;」がないコードなどコメント以外で問題のありそうなコードは、スクリプト処理でエラー表示させるために残す #####
+		if (!empty($sql)){
+			$sql = trim(implode('', array_slice($sql, 0)));
+			if (!empty($sql)) $ret[] = $sql;
+		}
+		return true;
+	}
+	/**
 	 * SQLを実行する
 	 *
 	 * @param  string $query			SQL文
