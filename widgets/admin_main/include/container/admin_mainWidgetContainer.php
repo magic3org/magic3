@@ -303,6 +303,14 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						default:
 							foreach ($this->permitTask as $taskStart){
 								if (strStartsWith($task, $taskStart)){	// 「taskA」「taskA_」パターン
+									// テストタスクの場合はクラスロード用ディレクトリ追加
+									switch ($taskStart){
+									case self::TASK_TEST:
+										$path = $this->gEnv->getCurrentWidgetContainerPath() . '/' . self::TASK_TEST;
+										$this->gLaunch->addLoadPath($path);
+										break;
+									}
+								
 									$this->gLaunch->goSubWidget($taskStart);
 									return false;
 								}

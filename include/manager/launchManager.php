@@ -20,6 +20,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class LaunchManager extends Core
 {
+	private $loadPath;								// クラス検索ロード用のパス
 	const DEFAULT_RSS_CLASS_PREFIX = 'rss_';		// RSS実行用クラスの先頭文字列
 	
 	/**
@@ -29,6 +30,8 @@ class LaunchManager extends Core
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		$this->loadPath = array();								// クラス検索ロード用のパス
 	}
 
 	/**
@@ -247,6 +250,14 @@ class LaunchManager extends Core
 				$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
 				$widgetContainer->process($gRequestManager);
 				$gEnvManager->setCurrentWidgetObj(null);
+			} else if (!empty($this->loadPath)){		// クラス検索用パスが設定されているとき
+				require_once($containerClass . '.php');
+				
+				// コンテナクラスを起動
+				$widgetContainer = new $containerClass();
+				$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+				$widgetContainer->process($gRequestManager);
+				$gEnvManager->setCurrentWidgetObj(null);
 			} else {
 				if (empty($defaultWidgetId)){
 					echo 'file not found error: ' . $containerPath;
@@ -396,6 +407,19 @@ class LaunchManager extends Core
 		$class = $basename . 'FrameContainer';
 		$mainContainer = new $class();
 		$mainContainer->process($gRequestManager);
+	}
+	/**
+	 * クラス検索ロード用のパスを追加
+	 *
+	 * @param string $path		追加パス
+	 * @return 					なし
+	 */
+	function addLoadPath($path)
+	{
+		if (!empty($path) && !in_array($path, $this->loadPath)){
+			set_include_path(get_include_path() . PATH_SEPARATOR . $path);
+			$this->loadPath[] = $path;
+		}
 	}
 }
 ?>

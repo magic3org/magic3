@@ -16,7 +16,7 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
-class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
@@ -44,7 +44,7 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test/test_config.tmpl.html';
+		return 'test/test_script.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -57,25 +57,14 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		//$this->setUserErrorMsg('エラーメッセージテスト1231312312312313321312321313213131312');
-		$this->setAppErrorMsg('エラーメッセージテスト1231312312312313321312321313213131312');
-		
-
-		$postTicket = $request->trimValueOf('ticket');		// POST確認用
 		$act = $request->trimValueOf('act');
 		
 		if ($act == 'update'){				// 送信確認
-/*			echo '<h4>Session value check</h4>';
-			echo 'old='.$postTicket.'<br>';
-			echo 'current='.$request->getSessionValue(M3_SESSION_POST_TICKET);
-			*/
+
 			
 			$this->testScript();
 		} else {
-			// ハッシュキー作成
-			$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
-			$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
-			$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
+
 		}
 	}
 	function testScript()
