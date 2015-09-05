@@ -18,7 +18,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
+//	private $db;	// DB接続オブジェクト
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	
 	/**
@@ -30,7 +30,7 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 		parent::__construct();
 		
 		// DB接続オブジェクト作成
-		$this->db = new admin_mainDb();
+//		$this->db = new admin_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -58,42 +58,93 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
-		
-		if ($act == 'update'){				// 送信確認
-
+		$this->sampleId = $request->trimValueOf('sample_sql');
+		if ($act == 'exec'){				// テスト実行
+			// ファイルデータ取得
+			$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
+			$fileData = file_get_contents($scriptPath);
 			
-			$this->testScript();
-		} else {
+			// クエリー行取得
+			$ret = $this->_db->_splitSql($fileData, $lines);
+//			$ret = $this->_splitMultibyteSql($fileData, $lines2);
+			if ($ret){
+				$ret = $this->_db->_splitMultibyteSql($fileData, $lines2);
 
-		}
-	}
-	function testScript()
-	{
-		// スクリプトファイルを読み込み
-		$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/_test.sql';
-//		$fileData = fread(fopen($scriptPath, 'r'), filesize($scriptPath));
-		$fileData = file_get_contents($scriptPath);
-				
-		// ファイル内容を解析
-//		$ret = $this->_db->_splitSql($lines, $fileData);
-$ret = $this->_splitMultibyteSql($fileData, $lines);
-		if ($ret){
-			var_dump($lines);
+				$lineCount = count($lines);
+				$lineCount2 = count($lines2);
+				if ($lineCount == $lineCount2){
+					for ($i = 0; $i < $lineCount; $i++) {
+						if ($lines[$i] != $lines2[$i]){
+							$this->setMsg(self::MSG_APP_ERR, "行データエラー file=" . $this->sampleId);
+							$this->setMsg(self::MSG_APP_ERR, $lines[$i]);
+							$this->setMsg(self::MSG_APP_ERR, $lines2[$i]);
+							break;
+						}
+					}
+					if ($i == $lineCount) $this->setMsg(self::MSG_GUIDANCE, 'データエラーなし file=' . $this->sampleId . ' 行数:' . $lineCount);
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, "行数がマッチしません file=" . $this->sampleId);
+				}
+
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, "ファイルが読み込めません file=" . $this->sampleId);
+			}
 		}
 		
-/*		$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
-	
-		// スクリプト実行
-		if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
-			$this->setMsg(self::MSG_GUIDANCE, 'スクリプト実行完了しました');
-		} else {
-			$this->setMsg(self::MSG_APP_ERR, "スクリプト実行に失敗しました");
+		// サンプルSQLスクリプトディレクトリのチェック
+		$searchPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR;
+		$files = $this->getScript($searchPath);
+		sort($files);		// ファイル名をソート
+
+		// スクリプト選択メニュー作成
+		for ($i = 0; $i < count($files); $i++){
+			$file = $files[$i];
+			$name = preg_replace("/(.+)(\.[^.]+$)/", "$1", $file);		// 拡張子除く
+			
+			// デフォルトのファイル名を決定
+			if (empty($this->sampleId)) $this->sampleId = $file;
+			
+			$selected = '';
+			if ($file == $this->sampleId) $selected = 'selected';
+
+			$row = array(
+				'value'    => $this->convertToDispString($file),			// ファイル名
+				'name'     => $this->convertToDispString($name),			// ファイル名
+				'selected' => $selected														// 選択中かどうか
+			);
+			$this->tmpl->addVars('sample__sql_list', $row);
+			$this->tmpl->parseTemplate('sample__sql_list', 'a');
 		}
-		if (!empty($errors)){
-			foreach ($errors as $error) {
-				$this->setMsg(self::MSG_APP_ERR, $error);
-			}
-		}*/
 	}
+	/**
+	 * ディレクトリ内のスクリプトファイルを取得
+	 *
+	 * @param string $path		ディレクトリのパス
+	 * @return array			スクリプトファイル名
+	 */
+	function getScript($path)
+	{
+		static $basePath;
+		
+		if (!isset($basePath)) $basePath = $path . '/';
+		$files = array();
+		
+		if ($dirHandle = @opendir($path)){
+			while ($file = @readdir($dirHandle)) {
+				if ($file == '..' || strStartsWith($file, '.')) continue;	
+				
+				// ディレクトリのときはサブディレクトリもチェック
+				$filePath = $path . '/' . $file;
+				if (is_dir($filePath)){
+					$files = array_merge($files, $this->getScript($filePath));
+				} else {
+					$files[] = str_replace($basePath, '', $filePath);
+				}
+			}
+			closedir($dirHandle);
+		}
+		return $files;
+	}
+
 }
 ?>

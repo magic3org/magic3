@@ -59,52 +59,20 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		//$this->setUserErrorMsg('エラーメッセージテスト1231312312312313321312321313213131312');
 		$this->setAppErrorMsg('エラーメッセージテスト1231312312312313321312321313213131312');
-		
 
 		$postTicket = $request->trimValueOf('ticket');		// POST確認用
 		$act = $request->trimValueOf('act');
 		
 		if ($act == 'update'){				// 送信確認
-/*			echo '<h4>Session value check</h4>';
+			echo '<h4>Session value check</h4>';
 			echo 'old='.$postTicket.'<br>';
 			echo 'current='.$request->getSessionValue(M3_SESSION_POST_TICKET);
-			*/
-			
-			$this->testScript();
 		} else {
 			// ハッシュキー作成
 			$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());
 			$request->setSessionValue(M3_SESSION_POST_TICKET, $postTicket);		// セッションに保存
 			$this->tmpl->addVar("_widget", "ticket", $postTicket);				// 画面に書き出し
 		}
-	}
-	function testScript()
-	{
-		// スクリプトファイルを読み込み
-		$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/_test.sql';
-//		$fileData = fread(fopen($scriptPath, 'r'), filesize($scriptPath));
-		$fileData = file_get_contents($scriptPath);
-				
-		// ファイル内容を解析
-//		$ret = $this->_db->_splitSql($lines, $fileData);
-$ret = $this->_splitMultibyteSql($fileData, $lines);
-		if ($ret){
-			var_dump($lines);
-		}
-		
-/*		$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
-	
-		// スクリプト実行
-		if ($this->gInstance->getDbManager()->execScriptWithConvert($scriptPath, $errors)){// 正常終了の場合
-			$this->setMsg(self::MSG_GUIDANCE, 'スクリプト実行完了しました');
-		} else {
-			$this->setMsg(self::MSG_APP_ERR, "スクリプト実行に失敗しました");
-		}
-		if (!empty($errors)){
-			foreach ($errors as $error) {
-				$this->setMsg(self::MSG_APP_ERR, $error);
-			}
-		}*/
 	}
 }
 ?>

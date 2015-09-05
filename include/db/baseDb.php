@@ -691,7 +691,8 @@ class BaseDb extends Core
 				$commentStartPos = (($char == '#') ? $i : $i - 2);
 
 				// コメント終了位置を検出
-				$commentEndPos = array_search("\012", $sql, $i + 1);		// LF
+			//	$commentEndPos = array_search("\012", $sql, $i + 1);		// LF
+				$commentEndPos = array_search("\012", array_slice($sql, $i + 1));		// LF
 				if ($commentEndPos === false){
 					// コメントの前にテキストがある場合は取得
 					$last	= trim(implode('', array_slice($sql, 0, $commentStartPos)));		// 改行コード削除
@@ -702,7 +703,8 @@ class BaseDb extends Core
 					return true;
 				} else {
 					// コメントを読み飛ばす
-					$commentEndPos++;
+					//$commentEndPos++;
+					$commentEndPos += $i + 1;
 					$sql	= implode('', array_slice($sql, 0, $commentStartPos)) . ltrim(implode('', array_slice($sql, $commentEndPos)));		// 前行の改行コードを削除
 					$sql	= preg_split("//u", $sql, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
 					$sqlLen	= count($sql);
