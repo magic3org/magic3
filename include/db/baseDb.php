@@ -540,7 +540,7 @@ class BaseDb extends Core
 	 * @param  array  $ret		クエリー行の配列
 	 * @return bool				true=正常終了、false=異常終了
 	 */
-	function _splitSql($sql, &$ret)
+/*	function _splitSql($sql, &$ret)
 	{
 		$sql               = trim($sql);
 		$sql_len           = strlen($sql);
@@ -626,6 +626,96 @@ class BaseDb extends Core
 		if (!empty($sql) && trim($sql) != ''){
 			$ret[] = $sql;
 			//$ret[] = str_replace(array("\r", "\n"), '', $sql);			// 改行コード削除
+		}
+		return true;
+	}*/
+	function _splitSql($sql, &$ret)
+	{
+		$sql               = trim($sql);
+		$sql_len           = strlen($sql);
+		$char              = '';
+		$string_start      = '';
+		$in_string         = false;
+		$ret = array();		// 戻り値初期化
+
+		for ($i = 0; $i < $sql_len; $i++){
+			$char = $sql[$i];
+
+			// 文字列のまとまりで切り取る
+			if ($in_string){
+				for (;;){
+					$i = strpos($sql, $string_start, $i);
+					if (!$i){		// // 見つからないときは終了
+						//$ret[] = $sql;
+						$ret[] = str_replace(array("\r", "\n"), '', $sql);			// 改行コード削除
+						return true;
+					} else if ($string_start == '`' || $sql[$i-1] != '\\'){
+						$string_start      = '';
+						$in_string         = false;
+						break;
+					} else {
+						// バックスラッシュのエスケープ文字をチェック
+						$j                     = 2;
+						$escaped_backslash     = false;
+						while ($i - $j > 0 && $sql[$i - $j] == '\\'){
+							$escaped_backslash = !$escaped_backslash;
+							$j++;
+						}
+						if ($escaped_backslash){
+							$string_start  = '';
+							$in_string     = false;
+							break;
+						} else {
+							$i++;
+						}
+					}
+				}
+			} else if ($char == ';'){
+				// if delimiter found, add the parsed part to the returned array
+	//			$ret[]    = substr($sql, 0, $i);
+				$ret[] = str_replace(array("\r", "\n"), '', substr($sql, 0, $i));			// 改行コード削除
+				$sql      = ltrim(substr($sql, min($i + 1, $sql_len)));
+				$sql_len  = strlen($sql);
+				if ($sql_len){
+					$i      = -1;
+				} else {
+					// The submited statement(s) end(s) here
+					return true;
+				}
+			} else if (($char == '"') || ($char == '\'') || ($char == '`')){
+				$in_string    = true;
+				$string_start = $char;
+			} else if ($char == '#' || ($char == ' ' && $i > 1 && $sql[$i-2] . $sql[$i-1] == '--')){		// 「#」「-- 」形式のコメント行の場合
+				// starting position of the comment depends on the comment type
+				$start_of_comment = (($sql[$i] == '#') ? $i : $i - 2);
+
+/*				$end_of_comment   = (strpos(' ' . $sql, "\012", $i+2))
+										? strpos(' ' . $sql, "\012", $i+2)
+										: strpos(' ' . $sql, "\015", $i+2);*/
+			//	$end_of_comment   = (strpos(' ' . $sql, "\012", $i + 1));
+				$end_of_comment   = strpos($sql, "\012", $i + 1);
+				if (!$end_of_comment){
+					//$last = trim(substr($sql, 0, $i-1));
+					$last = trim(substr($sql, 0, $start_of_comment));
+					if (!empty($last) && ($last[0] != '#' && $last[0] != '-')){		// コメント行でなければ追加
+						//$ret[] = $last;
+						$ret[] = str_replace(array("\r", "\n"), '', $last);			// 改行コード削除
+					}
+					return true;
+				} else {
+
+					$sql     = substr($sql, 0, $start_of_comment) . ltrim(substr($sql, $end_of_comment));
+					$sql_len = strlen($sql);
+				//	$i--;
+					$i = $start_of_comment - 1;
+				}
+			}
+		}
+
+		// add any rest to the returned array
+		if (!empty($sql) && trim($sql) != ''){
+			//$ret[] = $sql;
+			$ret[] = str_replace(array("\r", "\n"), '', $sql);			// 改行コード削除
 		}
 		return true;
 	}
