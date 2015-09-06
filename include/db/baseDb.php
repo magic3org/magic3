@@ -1012,8 +1012,12 @@ class BaseDb extends Core
 		$fileData = fread(fopen($scriptFullPath, 'r'), filesize($scriptFullPath));
 				
 		// ファイル内容を解析
-//		$ret = self::_splitSql($fileData, $lines);
-		$ret = self::_splitMultibyteSql($fileData, $lines);
+		if (M3_DB_MULTIBYTE_SCRIPT){			// マルチバイト対応のSQLスクリプト処理
+			$ret = self::_splitMultibyteSql($fileData, $lines);
+		} else {
+			$ret = self::_splitSql($fileData, $lines);
+		}
+		
 		if ($ret){
 			$lineCount = count($lines);
 			for ($i = 0; $i < $lineCount; $i++) {
@@ -1051,8 +1055,12 @@ class BaseDb extends Core
 		}
 						
 		// ファイル内容を解析
-//		$ret = self::_splitSql($fileData, $lines);
-		$ret = self::_splitMultibyteSql($fileData, $lines);
+		if (M3_DB_MULTIBYTE_SCRIPT){			// マルチバイト対応のSQLスクリプト処理
+			$ret = self::_splitMultibyteSql($fileData, $lines);
+		} else {
+			$ret = self::_splitSql($fileData, $lines);
+		}
+		
 		if ($ret){
 			$lineCount = count($lines);
 			for ($i = 0; $i < $lineCount; $i++){

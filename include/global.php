@@ -25,6 +25,8 @@ define('M3_SYSTEM',			true);
 define('M3_SYSTEM_DEMO',	false);		// システム起動モード、デモモードフラグ
 define('M3_SYSTEM_DEBUG',	false);		// システム起動モード、デバッグモードフラグ
 define('M3_SESSION_DB',		true);		// セッションの保存先にDBを使用するかどうか
+// ######### システム処理モード #########
+define('M3_DB_MULTIBYTE_SCRIPT',		false);		// マルチバイト対応でのSQLスクリプトファイルの読み込み
 
 // ######### 出力の制御 #########
 ini_set('display_errors', '1');		// コメントをはずすと画面にエラー出力する(以下はエラーレベルの設定)
