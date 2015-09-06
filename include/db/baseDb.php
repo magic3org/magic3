@@ -558,6 +558,7 @@ class BaseDb extends Core
 					$i = strpos($sql, $string_start, $i);
 					if (!$i){		// // 見つからないときは終了
 						$ret[] = $sql;
+						//$ret[] = str_replace(array("\r", "\n"), '', $sql);			// 改行コード削除
 						return true;
 					} else if ($string_start == '`' || $sql[$i-1] != '\\'){
 						$string_start      = '';
@@ -583,6 +584,7 @@ class BaseDb extends Core
 			} else if ($char == ';'){
 				// if delimiter found, add the parsed part to the returned array
 				$ret[]    = substr($sql, 0, $i);
+				//$ret[] = str_replace(array("\r", "\n"), '', substr($sql, 0, $i));			// 改行コード削除
 				$sql      = ltrim(substr($sql, min($i + 1, $sql_len)));
 				$sql_len  = strlen($sql);
 				if ($sql_len){
@@ -596,23 +598,26 @@ class BaseDb extends Core
 				$string_start = $char;
 			} else if ($char == '#' || ($char == ' ' && $i > 1 && $sql[$i-2] . $sql[$i-1] == '--')){		// 「#」「-- 」形式のコメント行の場合
 				// starting position of the comment depends on the comment type
-				$start_of_comment = (($sql[$i] == '#') ? $i : $i-2);
+				$start_of_comment = (($sql[$i] == '#') ? $i : $i - 2);
 				// if no "\n" exits in the remaining string, checks for "\r"
 				// (Mac eol style)
 				$end_of_comment   = (strpos(' ' . $sql, "\012", $i+2))
 										? strpos(' ' . $sql, "\012", $i+2)
 										: strpos(' ' . $sql, "\015", $i+2);
+				//$end_of_comment   = (strpos(' ' . $sql, "\012", $i + 1));
 				if (!$end_of_comment){
 					$last = trim(substr($sql, 0, $i-1));
-					//if (!empty($last) && $last[0] != '#'){		// コメント行でなければ追加
+					//$last = trim(substr($sql, 0, $start_of_comment));
 					if (!empty($last) && ($last[0] != '#' && $last[0] != '-')){		// コメント行でなければ追加
 						$ret[] = $last;
+						//$ret[] = str_replace(array("\r", "\n"), '', $last);			// 改行コード削除
 					}
 					return true;
 				} else {
 					$sql     = substr($sql, 0, $start_of_comment) . ltrim(substr($sql, $end_of_comment));
 					$sql_len = strlen($sql);
 					$i--;
+					//$i = $end_of_comment - 1;
 				}
 			}
 		}
@@ -620,6 +625,7 @@ class BaseDb extends Core
 		// add any rest to the returned array
 		if (!empty($sql) && trim($sql) != ''){
 			$ret[] = $sql;
+			//$ret[] = str_replace(array("\r", "\n"), '', $sql);			// 改行コード削除
 		}
 		return true;
 	}
