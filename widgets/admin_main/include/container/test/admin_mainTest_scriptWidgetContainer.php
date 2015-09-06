@@ -18,7 +18,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 {
-//	private $db;	// DB接続オブジェクト
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	
 	/**
@@ -28,9 +27,6 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DB接続オブジェクト作成
-//		$this->db = new admin_mainDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -58,42 +54,41 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		$act = $request->trimValueOf('act');
+		$path = $request->trimValueOf('path');
 		$this->sampleId = $request->trimValueOf('sample_sql');
 		if ($act == 'exec'){				// テスト実行
-			// ファイルデータ取得
-			$scriptPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
-			$fileData = file_get_contents($scriptPath);
+			$filePath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
 			
-			// クエリー行取得
-			$ret = $this->_db->_splitSql($fileData, $lines);
-//			$ret = $this->_splitMultibyteSql($fileData, $lines2);
-			if ($ret){
-				$ret = $this->_db->_splitMultibyteSql($fileData, $lines2);
-
-				$lineCount = count($lines);
-				$lineCount2 = count($lines2);
-				if ($lineCount == $lineCount2){
-					for ($i = 0; $i < $lineCount; $i++) {
-						if ($lines[$i] != $lines2[$i]){
-							$this->setMsg(self::MSG_APP_ERR, "行データエラー file=" . $this->sampleId);
-							$this->setMsg(self::MSG_APP_ERR, $lines[$i]);
-							$this->setMsg(self::MSG_APP_ERR, $lines2[$i]);
-							break;
-						}
-					}
-					if ($i == $lineCount) $this->setMsg(self::MSG_GUIDANCE, 'データエラーなし file=' . $this->sampleId . ' 行数:' . $lineCount);
-				} else {
-					$this->setMsg(self::MSG_APP_ERR, "行数がマッチしません file=" . $this->sampleId);
-				}
-
+			// ファイル内容チェック
+			$this->checkFile($filePath);
+		} else if ($act == 'execdir'){				// ディレクトリテスト実行
+			// サンプルSQLスクリプトディレクトリのチェック
+			$searchPath = $this->gEnv->getSqlPath() . '/' . $path;
+			
+			// トップディレクトリの場合はサブディレクトリ参照しない
+			if (empty($path)){
+				$files = $this->getScript($searchPath);
 			} else {
-				$this->setMsg(self::MSG_APP_ERR, "ファイルが読み込めません file=" . $this->sampleId);
+				$files = $this->getScript($searchPath, true);
+			}
+			sort($files);		// ファイル名をソート
+
+			set_time_limit(0);
+			for ($i = 0; $i < count($files); $i++){
+				if (empty($path)){
+					$filePath = $this->gEnv->getSqlPath() . '/' . $files[$i];
+				} else {
+					$filePath = $this->gEnv->getSqlPath() . '/' . $path . '/' . $files[$i];
+				}
+				
+				// ファイル内容チェック
+				$this->checkFile($filePath);
 			}
 		}
 		
 		// サンプルSQLスクリプトディレクトリのチェック
 		$searchPath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR;
-		$files = $this->getScript($searchPath);
+		$files = $this->getScript($searchPath, true);
 		sort($files);		// ファイル名をソート
 
 		// スクリプト選択メニュー作成
@@ -120,9 +115,10 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 	 * ディレクトリ内のスクリプトファイルを取得
 	 *
 	 * @param string $path		ディレクトリのパス
+	 * @param bool $subDir		サブディレクトリを参照するかどうか
 	 * @return array			スクリプトファイル名
 	 */
-	function getScript($path)
+	function getScript($path, $subDir = false)
 	{
 		static $basePath;
 		
@@ -136,7 +132,7 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 				// ディレクトリのときはサブディレクトリもチェック
 				$filePath = $path . '/' . $file;
 				if (is_dir($filePath)){
-					$files = array_merge($files, $this->getScript($filePath));
+					if ($subDir) $files = array_merge($files, $this->getScript($filePath, true));
 				} else {
 					$files[] = str_replace($basePath, '', $filePath);
 				}
@@ -145,6 +141,43 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		return $files;
 	}
+	/**
+	 * ファイルの内容をチェック
+	 *
+	 * @param string $path		ディレクトリのパス
+	 * @return bool				true=問題なし,false=エラーあり
+	 */
+	function checkFile($path)
+	{
+		$basename = basename($path);
+		
+		// ファイルデータ取得
+		$fileData = file_get_contents($path);
+		
+		// クエリー行取得
+		$ret = $this->_db->_splitSql($fileData, $lines);
+		if ($ret){
+			$ret = $this->_db->_splitMultibyteSql($fileData, $lines2);
 
+			$lineCount = count($lines);
+			$lineCount2 = count($lines2);
+			if ($lineCount == $lineCount2){
+				for ($i = 0; $i < $lineCount; $i++) {
+					if ($lines[$i] != $lines2[$i]){
+						$this->setMsg(self::MSG_APP_ERR, "行データエラー file=" . $basename);
+						$this->setMsg(self::MSG_APP_ERR, $lines[$i]);
+						$this->setMsg(self::MSG_APP_ERR, $lines2[$i]);
+						break;
+					}
+				}
+				if ($i == $lineCount) $this->setMsg(self::MSG_GUIDANCE, 'データエラーなし file=' . $basename . ' 行数:' . $lineCount);
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, "行数がマッチしません file=" . $basename);
+			}
+
+		} else {
+			$this->setMsg(self::MSG_APP_ERR, "ファイルが読み込めません file=" . $basename);
+		}
+	}
 }
 ?>

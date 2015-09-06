@@ -23,6 +23,18 @@ function selectFile(){
 	document.main.submit();
 	return true;
 }
+function execTopDir(){
+	document.main.act.value='execdir';
+	document.main.path.value='';
+	document.main.submit();
+	return true;
+}
+function execUpdateDir(){
+	document.main.act.value='execdir';
+	document.main.path.value='update';
+	document.main.submit();
+	return true;
+}
 $(function(){
 });
 //]]>
@@ -31,6 +43,7 @@ $(function(){
 <!-- m3:ErrorMessage -->
 <form method="post" name="main" class="form form-inline">
 <input type="hidden" name="act" />
+<input type="hidden" name="path" />
 <div class="panel panel-info" style="width:500px;margin:20px auto;" >
     <div class="panel-heading">テストデータ</div>
     <ul class="list-group">
@@ -45,6 +58,13 @@ $(function(){
 		</li>
     </ul>
     <div class="panel-footer"><input type="button" class="button" onclick="execTest();" value="実行" /></div>
+</div>
+<div class="panel panel-info" style="width:500px;margin:20px auto;" >
+    <div class="panel-heading">ディレクトリテスト</div>
+	<ul class="list-group">
+	<li class="list-group-item"><input type="button" class="button" onclick="execTopDir();" value="トップディレクトリチェック" /></li>
+    <li class="list-group-item"><input type="button" class="button" onclick="execUpdateDir();" value="updateディレクトリチェック" /></li>
+	</ul>
 </div>
 </form>
 </div>
