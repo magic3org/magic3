@@ -190,6 +190,7 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 		$fileData = file_get_contents($path);
 		
 		// クエリー行取得
+//$ret = $this->_splitMultibyteSql($fileData, $lines2);
 		$ret = $this->_db->_splitSql($fileData, $lines);
 		if ($ret){
 			$ret = $this->_db->_splitMultibyteSql($fileData, $lines2);

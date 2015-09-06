@@ -431,7 +431,7 @@ class BaseDb extends Core
 	
 		// エラーメッセージ
 		$errMsg = $ex->getMessage();
-		if (M3_DB_ERROR_OUTPUT_QUERY) $errMsg .= '[' . $this->_statement . ']';			// クエリー文字列を出力する場合
+		if (M3_DB_ERROR_OUTPUT_STATEMENT) $errMsg .= ' [' . $this->_statement . ']';			// クエリー文字列を出力する場合
 		
 		if (self::$_displayErrMessage){		// エラーメッセージを出力する場合
 			echo 'DB failed: ' . $errMsg;
@@ -713,7 +713,8 @@ class BaseDb extends Core
 					$sql	= implode('', array_slice($sql, 0, $commentStartPos)) . ltrim(implode('', array_slice($sql, $commentEndPos)));		// 前行の改行コードを削除
 					$sql	= preg_split("//u", $sql, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
 					$sqlLen	= count($sql);
-					$i--;			// 再度同じ位置を読み込む
+//					$i--;			// 再度同じ位置を読み込む
+					$i = $commentStartPos -1;	// コメントの位置の先頭から再度読み込む
 				}
 			}
 		}
