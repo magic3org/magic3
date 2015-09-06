@@ -429,11 +429,15 @@ class BaseDb extends Core
 		// エラーステータスセット
 		self::$_tranStatus = self::DB_ERROR;
 	
+		// エラーメッセージ
+		$errMsg = $ex->getMessage();
+		if (M3_DB_ERROR_OUTPUT_QUERY) $errMsg .= '[' . $this->_statement . ']';			// クエリー文字列を出力する場合
+		
 		if (self::$_displayErrMessage){		// エラーメッセージを出力する場合
-			echo 'DB failed: ' . $ex->getMessage();
+			echo 'DB failed: ' . $errMsg;
 			echo '    error code: ' . $ex->getCode();
 		}
-		array_push($this->_errorMsg, $ex->getMessage());
+		array_push($this->_errorMsg, $errMsg);
 		
 		// ログにエラーメッセージを出力
 		if (!empty($message)) $msg = ': ' . $message;
@@ -447,7 +451,7 @@ class BaseDb extends Core
 		$msg .= ' [BACKTRACE]' . $backTraceMsg;*/
 		$msg .= ' [BACKTRACE]' . $ex->getTraceAsString();
 		
-		$gLogManager->error(__METHOD__, 'DBエラー発生: ' . $ex->getMessage() . $msg);
+		$gLogManager->error(__METHOD__, 'DBエラー発生: ' . $errMsg . $msg);
 	}
 	/**
 	 * エラーメッセージの出力を行うかどうか
