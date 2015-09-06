@@ -55,12 +55,27 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		$act = $request->trimValueOf('act');
 		$path = $request->trimValueOf('path');
-		$this->sampleId = $request->trimValueOf('sample_sql');
+		$sampleId = $request->trimValueOf('sample_sql');
+		$installId = $request->trimValueOf('install_sql');
 		if ($act == 'exec'){				// テスト実行
-			$filePath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $this->sampleId;
+			$filePath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $sampleId;
 			
 			// ファイル内容チェック
 			$this->checkFile($filePath);
+		} else if ($act == 'install'){				// インストールテスト実行
+			$filePath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $installId;
+			
+			// インストール実行
+			if ($this->gInstance->getDbManager()->execScriptWithConvert($filePath, $errors)){// 正常終了の場合
+				$this->setMsg(self::MSG_GUIDANCE, 'スクリプト実行完了しました');
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, "スクリプト実行に失敗しました");
+			}
+			if (!empty($errors)){
+				foreach ($errors as $error) {
+					$this->setMsg(self::MSG_APP_ERR, $error);
+				}
+			}
 		} else if ($act == 'execdir'){				// ディレクトリテスト実行
 			// サンプルSQLスクリプトディレクトリのチェック
 			$searchPath = $this->gEnv->getSqlPath() . '/' . $path;
@@ -97,10 +112,10 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 			$name = preg_replace("/(.+)(\.[^.]+$)/", "$1", $file);		// 拡張子除く
 			
 			// デフォルトのファイル名を決定
-			if (empty($this->sampleId)) $this->sampleId = $file;
+			if (empty($sampleId)) $sampleId = $file;
 			
 			$selected = '';
-			if ($file == $this->sampleId) $selected = 'selected';
+			if ($file == $sampleId) $selected = 'selected';
 
 			$row = array(
 				'value'    => $this->convertToDispString($file),			// ファイル名
@@ -109,6 +124,26 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 			);
 			$this->tmpl->addVars('sample__sql_list', $row);
 			$this->tmpl->parseTemplate('sample__sql_list', 'a');
+		}
+		
+		// スクリプト選択メニュー作成
+		for ($i = 0; $i < count($files); $i++){
+			$file = $files[$i];
+			$name = preg_replace("/(.+)(\.[^.]+$)/", "$1", $file);		// 拡張子除く
+			
+			// デフォルトのファイル名を決定
+			if (empty($installId)) $installId = $file;
+			
+			$selected = '';
+			if ($file == $installId) $selected = 'selected';
+
+			$row = array(
+				'value'    => $this->convertToDispString($file),			// ファイル名
+				'name'     => $this->convertToDispString($name),			// ファイル名
+				'selected' => $selected														// 選択中かどうか
+			);
+			$this->tmpl->addVars('sample__sql_list2', $row);
+			$this->tmpl->parseTemplate('sample__sql_list2', 'a');
 		}
 	}
 	/**
@@ -164,7 +199,7 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 			if ($lineCount == $lineCount2){
 				for ($i = 0; $i < $lineCount; $i++) {
 					if ($lines[$i] != $lines2[$i]){
-						$this->setMsg(self::MSG_APP_ERR, "行データエラー file=" . $basename);
+						$this->setMsg(self::MSG_APP_ERR, "行データエラー file=" . $basename . ', line='. ($i + 1));
 						$this->setMsg(self::MSG_APP_ERR, $lines[$i] . '<br>length=' . strlen($lines[$i]));
 						$this->setMsg(self::MSG_APP_ERR, $lines2[$i] . '<br>length=' . strlen($lines2[$i]));
 						break;
