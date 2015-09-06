@@ -649,7 +649,8 @@ class BaseDb extends Core
 					if ($i !== false) $i += $pos;
 					
 					if (!$i){		// // 見つからないときは終了
-						$ret[] = implode('', $sql);
+						//$ret[] = implode('', $sql);
+						$ret[] = str_replace(array("\r", "\n"), '', implode('', $sql));			// 改行コード削除
 						return true;
 					} else if ($stringStart == '`' || $sql[$i - 1] != '\\'){
 						$stringStart      = '';
@@ -674,7 +675,8 @@ class BaseDb extends Core
 				}
 			} else if ($char == ';'){
 				// 行末を検出した場合はテキストを戻り配列に格納して、読み込み位置を更新
-				$ret[]	= implode('', array_slice($sql, 0, $i));
+				//$ret[]	= implode('', array_slice($sql, 0, $i));
+				$ret[]	= str_replace(array("\r", "\n"), '', implode('', array_slice($sql, 0, $i)));		// 改行コード削除
 				$sql	= ltrim(implode('', array_slice($sql, min($i + 1, $sqlLen))));		// 先頭の改行コード削除
 				$sql	= preg_split("//u", $sql, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
 				$sqlLen	= count($sql);
@@ -691,19 +693,18 @@ class BaseDb extends Core
 				$commentStartPos = (($char == '#') ? $i : $i - 2);
 
 				// コメント終了位置を検出
-			//	$commentEndPos = array_search("\012", $sql, $i + 1);		// LF
 				$commentEndPos = array_search("\012", array_slice($sql, $i + 1));		// LF
 				if ($commentEndPos === false){
 					// コメントの前にテキストがある場合は取得
 					$last	= trim(implode('', array_slice($sql, 0, $commentStartPos)));		// 改行コード削除
 					$sql	= preg_split("//u", $last, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
 					if (!empty($sql) && ($sql[0] != '#' && $sql[0] != '-')){		// コメント行でなければ追加
-						$ret[] = $last;
+						//$ret[] = $last;
+						$ret[] = str_replace(array("\r", "\n"), '', $last);			// 改行コード削除
 					}
 					return true;
 				} else {
 					// コメントを読み飛ばす
-					//$commentEndPos++;
 					$commentEndPos += $i + 1;
 					$sql	= implode('', array_slice($sql, 0, $commentStartPos)) . ltrim(implode('', array_slice($sql, $commentEndPos)));		// 前行の改行コードを削除
 					$sql	= preg_split("//u", $sql, -1, PREG_SPLIT_NO_EMPTY);			// マルチバイト文字に分割
@@ -715,7 +716,10 @@ class BaseDb extends Core
 		// ##### 行末に「;」がないコードなどコメント以外で問題のありそうなコードは、スクリプト処理でエラー表示させるために残す #####
 		if (!empty($sql)){
 			$sql = trim(implode('', array_slice($sql, 0)));
-			if (!empty($sql)) $ret[] = $sql;
+			if (!empty($sql)){
+				//$ret[] = $sql;
+				$ret[] = str_replace(array("\r", "\n"), '', $sql);		// 改行コード削除
+			}
 		}
 		return true;
 	}
@@ -1008,7 +1012,8 @@ class BaseDb extends Core
 		$fileData = fread(fopen($scriptFullPath, 'r'), filesize($scriptFullPath));
 				
 		// ファイル内容を解析
-		$ret = self::_splitSql($fileData, $lines);
+//		$ret = self::_splitSql($fileData, $lines);
+		$ret = self::_splitMultibyteSql($fileData, $lines);
 		if ($ret){
 			$lineCount = count($lines);
 			for ($i = 0; $i < $lineCount; $i++) {
@@ -1046,7 +1051,8 @@ class BaseDb extends Core
 		}
 						
 		// ファイル内容を解析
-		$ret = self::_splitSql($fileData, $lines);
+//		$ret = self::_splitSql($fileData, $lines);
+		$ret = self::_splitMultibyteSql($fileData, $lines);
 		if ($ret){
 			$lineCount = count($lines);
 			for ($i = 0; $i < $lineCount; $i++){

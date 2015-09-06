@@ -165,8 +165,8 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 				for ($i = 0; $i < $lineCount; $i++) {
 					if ($lines[$i] != $lines2[$i]){
 						$this->setMsg(self::MSG_APP_ERR, "行データエラー file=" . $basename);
-						$this->setMsg(self::MSG_APP_ERR, $lines[$i]);
-						$this->setMsg(self::MSG_APP_ERR, $lines2[$i]);
+						$this->setMsg(self::MSG_APP_ERR, $lines[$i] . '<br>length=' . strlen($lines[$i]));
+						$this->setMsg(self::MSG_APP_ERR, $lines2[$i] . '<br>length=' . strlen($lines2[$i]));
 						break;
 					}
 				}
