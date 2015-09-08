@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -43,6 +43,9 @@ class LogManager
 		static $logger;
 		
 		if (!is_object($logger)){
+			// ログ出力に「SimpleXML」が必要なのでチェックする
+			if (!extension_loaded('SimpleXML')) die("PHP extention module not found: SimpleXML");
+			
 			// ログオブジェクト作成
 			require_once(M3_SYSTEM_LIB_PATH . '/apache-log4php-2.3.0/Logger.php');		// log4Php取り込み
 			Logger::configure(M3_SYSTEM_CONF_PATH . '/log4php.xml');					// 設定ファイル読み込み
