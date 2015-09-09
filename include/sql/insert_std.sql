@@ -7,9 +7,9 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2013 Magic3 Project.
+-- * @copyright  Copyright 2006-2015 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
--- * @version    SVN: $Id: insert_std.sql 6135 2013-06-26 01:14:43Z fishbone $
+-- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
 -- *
 -- --------------------------------------------------------------------------------------------------
@@ -40,8 +40,29 @@ INSERT INTO news_config
 ('layout_list_item',  '[#DATE#] [#MESSAGE#][#MARK#]', 'リスト項目レイアウト',               1);
 
 -- Wiki設定マスター
-INSERT INTO wiki_config (wg_id,        wg_value,     wg_name,                 wg_index)
-VALUES                  ('password',   md5('admin'), '共通パスワード',        1);
+INSERT INTO wiki_config
+(wg_id,                     wg_value,        wg_name) VALUES
+('password',                '',              '共通パスワード'),
+('default_page',            'FrontPage',     'デフォルトページ'),
+('whatsnew_page',           'RecentChanges', '最終更新ページ'),
+('whatsdeleted_page',       'RecentDeleted', '最終削除ページ'),
+('auth_type',               'admin',     '認証タイプ'),
+('show_page_title',         '1',         'タイトルを表示するかどうか'),
+('show_page_url',         '1',         'URLを表示するかどうか'),
+('show_page_related',       '1',         '関連ページを表示するかどうか'),
+('show_page_attach_files',  '1',         '添付ファイルを表示するかどうか'),
+('show_page_last_modified', '1',         '最終更新を表示するかどうか'),
+('show_toolbar_for_all_user', '0',         'すべてのユーザにツールバーを表示するかどうか'),
+('user_limited_freeze',       '0',         '凍結・解凍機能のユーザ制限'),
+('show_auto_heading_anchor',       '1',         '見出し自動アンカー'),
+('layout_main',             '<article><header>[#TITLE#][#URL#]</header>[#TOOLBAR#][#BODY#]</article>[#TOOLBAR#][#FILES|pretag=----#][#UPDATES|pretag=----#][#LINKS#]', 'ページレイアウト(メイン)'),
+('date_format', 'Y-m-d',         '日付フォーマット'),
+('time_format', 'H:i:s',         '時間フォーマット'),
+('show_username', '0',         'ユーザ名を表示するかどうか'),
+('auto_link_wikiname', '1',         'Wiki名を自動リンクするかどうか'),
+('recent_changes_count', '100',         '最終更新ページ最大項目数'),
+('recent_deleted_count', '100',         '最終削除ページ最大項目数'),
+('upload_filesize',   '1M',             'アップロードファイルの最大サイズ(バイト数)');
 
 -- ブログ設定マスター
 INSERT INTO blog_config
@@ -180,11 +201,20 @@ DELETE FROM _mail_form WHERE mf_id = 'test';
 INSERT INTO _mail_form (mf_id,  mf_language_id, mf_subject,     mf_content,                                       mf_create_dt) 
 VALUES                 ('test', 'ja',           'テストメール', 'このメールはテスト用のメールです。\n\n[#BODY#]', now());
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_auto';
-INSERT INTO _mail_form (mf_id,              mf_language_id, mf_subject,         mf_content,                                                                 mf_create_dt) 
-VALUES                 ('regist_user_auto', 'ja',           'ユーザ登録',       'ご登録ありがとうございました。\nパスワードを送信します。\nこのパスワードでログインするとユーザとして承認されます。\n\n[#URL#]\n\nパスワード:　[#PASSWORD#]', now());
+INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('regist_user_auto', 'ja',           '会員自動登録', '[[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\nこのパスワードでログインすると会員として承認されます。\n\n[#URL#]\n\nパスワード:　[#PASSWORD#]', now());
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth';
-INSERT INTO _mail_form (mf_id,              mf_language_id, mf_subject,         mf_content,                                                                 mf_create_dt) 
-VALUES                 ('regist_user_auth', 'ja',           'ユーザ登録',       'ご登録ありがとうございました。\nパスワードを送信します。\n管理者からの承認後、このパスワードでログイン可能になります。\n\nパスワード:　[#PASSWORD#]', now());
+INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('regist_user_auth', 'ja',           '会員承認登録', '[[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       'ご登録ありがとうございます。\nパスワードを送信します。\n管理者からの承認後、このパスワードでログイン可能になります。\n\nパスワード:　[#PASSWORD#]', now());
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth_a';
+INSERT INTO _mail_form (mf_id,              mf_language_id, mf_name, mf_subject,         mf_content,                  mf_admin,                                               mf_create_dt) 
+VALUES                 ('regist_user_auth_a', 'ja',           '会員承認登録(管理者用)', '=> [[#SITE_NAME#]] 会員登録 ([#ACCOUNT#])',       '承認が必要な会員の登録がありました。\n会員管理画面からユーザを承認して下さい。\n\n[#URL#]', true, now());
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auto_completed';
+INSERT INTO _mail_form (mf_id,                   mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('regist_user_auto_completed', 'ja',           '会員自動登録完了', '[[#SITE_NAME#]] 会員自動登録完了 ([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
+DELETE FROM _mail_form WHERE mf_id = 'regist_user_auth_completed';
+INSERT INTO _mail_form (mf_id,                   mf_language_id, mf_name, mf_subject,         mf_content,                                                                 mf_create_dt) 
+VALUES                 ('regist_user_auth_completed', 'ja',           '会員承認登録完了', '[[#SITE_NAME#]] 会員登録完了 ([#ACCOUNT#])',   '会員の登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
 DELETE FROM _mail_form WHERE mf_id = 'regist_user_completed';
 INSERT INTO _mail_form (mf_id,                   mf_language_id, mf_subject,         mf_content,                                                                 mf_create_dt) 
 VALUES                 ('regist_user_completed', 'ja',           'ユーザ自動登録完了',   'ユーザの登録を承認しました。\n\nアカウント:　[#ACCOUNT#]', now());
@@ -195,22 +225,26 @@ VALUES                 ('send_tmp_password', 'ja',           '仮パスワード
 -- テンプレート情報
 TRUNCATE TABLE _templates;
 INSERT INTO _templates
-(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_create_dt) VALUES
-('_admin4',                       '_admin4',                       2,       0,              false,     true,             false,        0,             now()),
-('_system',                       '_system',                       1,       0,              false,     false,            false,        0,             now()),
-('_layout',                       '_layout',                       1,       0,              false,     false,            false,        0,             now()),
-('art41_sample1',                 'art41_sample1',                 2,       0,              false,     false,            true,         0,             now()),
-('art41_sample2',                 'art41_sample2',                 2,       0,              false,     false,            true,         0,             now()),
-('bootstrap_yeti',                'bootstrap_yeti',                10,      0,              false,     true,             true,         0,             now()),
-('bootstrap_cerulean',            'bootstrap_cerulean',            10,      0,              false,     true,             true,         0,             now()),
-('bootstrap_united',              'bootstrap_united',              10,      0,              false,     true,             true,         0,             now()),
-('bootstrap_cerulean_head',       'bootstrap_cerulean_head',       10,      0,              false,     true,             true,         0,             now()),
-('m/default',                     'm/default',                     0,       1,              true,      false,            true,         0,             now()),
-('m/smallfont',                   'm/smallfont',                   0,       1,              true,      false,            true,         0,             now()),
-('s/default_simple',              's/default_simple',              1,       2,              false,     false,            true,         0,             now()),
-('s/default_jquery',              's/default_jquery',              1,       2,              false,     false,            true,         0,             now()),
-('s/default_jquery13',           's/default_jquery13',             1,       2,              false,     false,            true,         0,             now()),
-('s/art42_sample2',               's/art42_sample2',               1,       2,              false,     false,            true,         0,             now());
+(tm_id,                           tm_name,                         tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_generator, tm_version) VALUES
+('_admin4',                       '_admin4',                       2,       0,              false,     true,             false,        '',           ''),
+('_system',                       '_system',                       1,       0,              false,     false,            false,        '',           ''),
+('_layout',                       '_layout',                       1,       0,              false,     false,            false,        '',           ''),
+('art41_sample1',                 'art41_sample1',                 2,       0,              false,     false,            true,         '',           ''),
+('art41_sample2',                 'art41_sample2',                 2,       0,              false,     false,            true,         '',           ''),
+('art42_sample3',                 'art42_sample3',                 2,       0,              false,     false,            true,         '',           ''),
+('art42_sample4',                 'art42_sample4',                 2,       0,              false,     false,            true,         '',           ''),
+('art42_sample5',                 'art42_sample5',                 2,       0,              false,     false,            true,         '',           ''),
+('themler_sample1',               'themler_sample1',               2,       0,              false,     false,            true,         'themler',    '1.0.33'),
+('bootstrap_yeti',                'bootstrap_yeti',                10,      0,              false,     true,             true,         '',           ''),
+('bootstrap_cerulean',            'bootstrap_cerulean',            10,      0,              false,     true,             true,         '',           ''),
+('bootstrap_united',              'bootstrap_united',              10,      0,              false,     true,             true,         '',           ''),
+('bootstrap_cerulean_head',       'bootstrap_cerulean_head',       10,      0,              false,     true,             true,         '',           ''),
+('m/default',                     'm/default',                     0,       1,              true,      false,            true,         '',           ''),
+('m/smallfont',                   'm/smallfont',                   0,       1,              true,      false,            true,         '',           ''),
+('s/default_simple',              's/default_simple',              1,       2,              false,     false,            true,         '',           ''),
+('s/default_jquery',              's/default_jquery',              1,       2,              false,     false,            true,         '',           ''),
+('s/default_jquery13',           's/default_jquery13',             1,       2,              false,     false,            true,         '',           ''),
+('s/art42_sample2',               's/art42_sample2',               1,       2,              false,     false,            true,         '',           '');
 
 -- メニューIDマスター
 INSERT INTO _menu_id
@@ -338,17 +372,34 @@ INSERT INTO mblog_config
 -- イベント設定マスター
 INSERT INTO event_config
 (eg_id,                     eg_value,    eg_name,                              eg_index) VALUES
-('receive_comment',         '0',         'コメントの受け付け',                 1),
-('entry_view_count',        '10',        '記事表示数',                         2),
-('entry_view_order',        '0',         '記事表示順',                         3),
-('comment_count',           '100',       '1投稿記事のコメント最大数',          4),
-('comment_open_time',       '30',        'コメント投稿可能期間(日)',           5),
-('top_contents',            '',          'トップ画面コンテンツ',               6),
-('msg_no_entry_in_future',  '今後のイベントはありません',         '予定イベントなし時メッセージ',                 0),
-('catagory_count',          '2', 'カテゴリー最大数', 0),
-('m:entry_view_count',      '3',         '記事表示数(携帯)',                   7),
-('m:entry_view_order',      '1',         '記事表示順(携帯)',                   8),
-('m:top_contents',          '',          'トップ画面コンテンツ(携帯)',         9);
+('entry_view_count',        '10',        '記事表示数',                         3),
+('entry_view_order',        '0',         '記事表示順',                         4),
+('top_contents',            'これからのイベントを表示します。',          'トップ画面コンテンツ',               6),
+('category_count',          '2',         '記事に設定可能なカテゴリ数',         10),
+('thumb_type',              's=80c.jpg;mw=160x120c.jpg;l=200c.jpg', '記事サムネールタイプ定義', 0),
+('entry_default_image',     '0_72c.jpg;0_80c.jpg;0_200c.jpg',       '記事デフォルト画像', 0),
+('msg_no_entry',            'イベント記事は登録されていません',     'イベント記事が登録されていないメッセージ',                 0),
+('msg_find_no_entry',       'イベント記事が見つかりません',         'イベント記事が見つからないメッセージ',                 0),
+('msg_no_entry_in_future',  '今後のイベントはありません',           '予定イベントなし時メッセージ',                 0),
+('layout_entry_single',     '<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_PLACE#]</span><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div><div><span class="event_url">URL：[#CT_INFO_URL:autolink=true;#]</span></div></div><div class="entry_content">[#BODY#][#RESULT#]</div>[#CATEGORY#][#LINKS#]', 'コンテンツレイアウト(記事詳細)',               0),
+('layout_entry_list',       '[#TITLE#]<div class="entry_head"><span class="event_date">日時：[#DATE#]</span><span class="event_location">場所：[#CT_PLACE#]</span><div>[#DETAIL_LINK#]</div></div><div class="entry_content">[#BODY#]</div>[#CATEGORY#]', 'コンテンツレイアウト(記事一覧)',               0),
+('output_head',      '0', 'HTMLヘッダ出力', 0),
+('head_view_detail', '<meta property="og:type" content="article" /><meta property="og:title" content="[#CT_TITLE#]" /><meta property="og:url" content="[#CT_URL#]" /><meta property="og:image" content="[#CT_IMAGE#]" /><meta property="og:description" content="[#CT_DESCRIPTION#]" /><meta property="og:site_name" content="[#SITE_NAME#]" />', 'HTMLヘッダ(詳細表示)',               0);
+
+-- イベント予約設定マスター
+INSERT INTO evententry_config
+(ef_id,                 ef_value,    ef_name) VALUES
+('show_entry_count',     '0',         '参加者数を表示するかどうか'),
+('show_entry_member',    '0',         '参加者を表示するかどうか(会員対象)'),
+('enable_cancel',        '0',         'キャンセル機能を使用可能にするかどうか'),
+('layout_entry_single', '<div class="entry_info"><div style="float:left;">[#IMAGE#]</div><div class="clearfix"><div>[#CT_SUMMARY#]</div></div><div><span class="event_date">日時：[#DATE#]</span> <span class="event_location">場所：[#CT_PLACE#]</span></div><div><span class="event_contact">連絡先：[#CT_CONTACT#]</span></div></div><div class="evententry_content">[#BODY#]</div><div class="evententry_info"><div>定員: [#CT_QUOTA#]</div><div>参加: [#CT_ENTRY_COUNT#]</div></div><div><strong>会員名: [#CT_MEMBER_NAME#]</strong></div>[#BUTTON|type=ok;title=予約する|予約済み#]',         'レイアウト(記事詳細)'),
+('msg_entry_exceed_max',     '予約が定員に達しました',     '予約定員オーバーメッセージ'),
+('msg_entry_out_of_term',   '受付期間外です',     '受付期間外メッセージ'),
+('msg_entry_term_expired',   '受付期間を終了しました',     '受付期間終了メッセージ'),
+('msg_entry_stopped',        '受付は一時中断しています',   '受付中断メッセージ'),
+('msg_entry_closed',         '受付を終了しました',         '受付終了メッセージ'),
+('msg_event_closed',         'イベントは終了しました',         'イベント終了メッセージ'),
+('msg_entry_user_registered',       'このイベントを予約しました', '予約済みメッセージ');
 
 -- --------------------------------------------------------------------------------------------------
 -- フォトギャラリー用

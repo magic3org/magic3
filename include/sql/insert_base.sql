@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2014 Magic3 Project.
+-- * @copyright  Copyright 2006-2015 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -22,7 +22,7 @@
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
 ('system_name',                 'Magic3',                   'システム名称'),
-('db_version',                  '2015021001',               'DBバージョン'),
+('db_version',                  '2015082501',               'DBバージョン'),
 ('server_id',                   '',                         'サーバ識別用ID'),
 ('server_url',                  '',                         'サーバURL'),
 ('default_lang',                'ja',                       'デフォルト言語'),
@@ -54,6 +54,7 @@ INSERT INTO _system_config
 ('admin_default_template',      '_admin4',                  '管理画面用デフォルトテンプレート'),
 ('mobile_default_template',     'm/default',                '携帯画面用デフォルトテンプレート'),
 ('smartphone_default_template', 's/default_jquery',         'スマートフォン画面用デフォルトテンプレート'),
+('default_sub_template',        '',                         'PC一般画面用デフォルトサブテンプレート'),
 ('msg_template',                '_system',                  'メッセージ表示用テンプレート'),
 ('use_template_id_in_session',  '1',                        'セッションにテンプレートIDを保存'),
 ('use_content_maintenance',     '0',                        'メンテナンス画面用コンテンツの取得'),
@@ -65,6 +66,7 @@ INSERT INTO _system_config
 ('admin_jquery_version',         '1.8',                     '管理画面用jQueryバージョン'),
 ('s:jquery_version',             '1.8',                     'jQueryバージョン(スマートフォン用)'),
 ('head_title_format',           '$1;$1 - $2;$1 - $2 - $3;', 'HTMLヘッダタイトルフォーマット'),
+('default_h_tag_level',         '2',                        'ウィジェットのHタグレベル'),
 ('mobile_auto_redirect',        '0',                        '携帯アクセスの自動遷移'),
 ('mobile_use_session',           '1',                       '携帯セッション管理'),
 ('smartphone_auto_redirect',    '0',                        'スマートフォンアクセスの自動遷移'),
@@ -99,8 +101,8 @@ INSERT INTO _system_config
 ('site_mobile_url',              '',                        '携帯用サイトURL'),
 ('site_smartphone_url',          '',                        'スマートフォン用サイトURL'),
 ('multi_domain',                 '0',                       'マルチドメイン運用'),
-('auto_login',        '1',                        '一般画面自動ログイン機能'),
-('auto_login_admin',        '0',                        '管理画面自動ログイン機能'),
+('auto_login',                   '1',                        '一般画面自動ログイン機能'),
+('auto_login_admin',             '0',                        '管理画面自動ログイン機能'),
 ('access_in_intranet',               '0',                       'イントラネット運用'),
 ('awstats_data_path', '../tools/awstats', 'Awstatsデータのデータパス');
 
@@ -120,7 +122,8 @@ INSERT INTO _addons
 ('contentlib', 'contentLib',  '汎用コンテンツライブラリ', '',             false),
 ('newslib',    'newsLib',     '新着情報ライブラリ',       '',             true),
 ('wikilib',    'wikiLib',     'Wikiライブラリ',           '',             false),
-('linkinfo',   'linkInfo',    'リンク情報',               '',             false);
+('linkinfo',   'linkInfo',    'リンク情報',               '',             false),
+('eventlib',   'eventLib',    'イベント情報ライブラリ',   '',             false);
 
 -- 管理画面メニューデータ
 INSERT INTO _nav_item
@@ -185,7 +188,8 @@ INSERT INTO _page_id
 ('reguser',      1,            'ユーザ登録',                       'ユーザ登録画面用',                   12,          true,      true,       true,        false),
 ('reserve',      1,            '予約',                             '予約画面用',                         19,          true,      true,       true,        false),
 ('member',       1,            '会員',                             '会員画面用',                         20,          true,      true,       true,        true),
-('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true,        true),
+('evententry',   1,            'イベント予約',                     'イベント予約画面用',                 21,          true,      true,       true,        true),
+('search',       1,            '検索',                             '検索画面用',                         22,          true,      true,       true,        true),
 ('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          true,      true,       true,        true),
 ('deploy',       1,            'ウィジェット有効化用',             'ウィジェット有効化用',               100,         true,      false,      true,        false),
 ('test',         1,            'ウィジェットテスト用',             'ウィジェットテスト用非公開画面',     101,         false,     true,       true,        false);
@@ -204,6 +208,7 @@ INSERT INTO _page_info
 ('index',     'event',     'event',         false),
 ('index',     'photo',     'photo',         false),
 ('index',     'member',    'member',        true),
+('index',     'evententry','evententry',    false),
 ('index',     'search',    'search',        false),
 ('index',     'contact',   '',              true),
 ('index',     'contact2',  '',              true),
@@ -218,6 +223,7 @@ INSERT INTO _page_info
 ('m_index',   'event',     'event',         false),
 ('m_index',   'photo',     'photo',         false),
 ('m_index',   'member',    'member',        true),
+('m_index',   'evententry','evententry',    false),
 ('m_index',   'search',    'search',        false),
 ('s_index',   'content',   'content',       false),
 ('s_index',   'shop',      'product',       false),
@@ -230,6 +236,7 @@ INSERT INTO _page_info
 ('s_index',   'event',     'event',         false),
 ('s_index',   'photo',     'photo',         false),
 ('s_index',   'member',    'member',        true),
+('s_index',   'evententry','evententry',    false),
 ('s_index',   'search',    'search',        false),
 ('s_index',   'contact',   '',              true),
 ('s_index',   'contact2',  '',              true),

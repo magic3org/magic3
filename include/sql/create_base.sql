@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2014 Magic3 Project.
+-- * @copyright  Copyright 2006-2015 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -363,6 +363,7 @@ CREATE TABLE _access_log (
     al_user_agent        TEXT                                         NOT NULL,      -- アクセスプログラム
     al_accept_language   VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- クライアントの認識可能言語
     al_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス
+    al_is_cmd            BOOLEAN        DEFAULT false                 NOT NULL,      -- コマンド実行かどうか
     al_cookie            BOOLEAN        DEFAULT false                 NOT NULL,      -- クッキーがあるかどうか
     al_crawler           BOOLEAN        DEFAULT false                 NOT NULL,      -- クローラかどうか
     al_is_first          BOOLEAN        DEFAULT false                 NOT NULL,      -- 最初のアクセスかどうか(クッキー値でチェック)
@@ -428,20 +429,21 @@ CREATE TABLE _access_ip (
 -- ナビゲーション項目マスター
 DROP TABLE IF EXISTS _nav_item;
 CREATE TABLE _nav_item (
+    ni_nav_id            VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ナビゲーション種別識別ID
     ni_id                INT            DEFAULT 0                     NOT NULL,      -- 項目ID
+    
     ni_parent_id         INT            DEFAULT 0                     NOT NULL,      -- 親項目ID(親がないときは0)
     ni_index             INT            DEFAULT 0                     NOT NULL,      -- 表示順(0～)、ni_parent_id=0のときは親間の表示順
-    ni_nav_id            VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ナビゲーション種別識別ID
     ni_task_id           VARCHAR(70)    DEFAULT ''                    NOT NULL,      -- 起動タスクID、「_」で始まるときはリンクなし
     ni_param             VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 追加パラメータ
     ni_group_id          VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- 項目グループ識別ID
     ni_view_control      INT            DEFAULT 0                     NOT NULL,      -- 項目制御(0=リンク,1=改行,2=使用不可,3=セパレータ)
-    ni_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- 名前
+    ni_name              TEXT                                         NOT NULL,      -- 名前
     ni_help_title        TEXT                                         NOT NULL,      -- ヘルプタイトル
     ni_help_body         TEXT                                         NOT NULL,      -- ヘルプ本文
+    ni_url               TEXT                                         NOT NULL,      -- リンク先URL
     ni_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示するかどうか
-    PRIMARY KEY          (ni_id),
-    UNIQUE               (ni_nav_id,    ni_task_id,                   ni_param)
+    PRIMARY KEY          (ni_nav_id,    ni_id)
 ) ENGINE=innodb;
 
 -- 添付ファイルマスター
@@ -538,6 +540,7 @@ CREATE TABLE _templates (
     tm_type              INT            DEFAULT 0                     NOT NULL,      -- テンプレート種別(0=デフォルトテンプレート(Joomla!v1.0),1=Joomla!v1.5,2=Joomla!v2.5,10=Bootstrap v3.0,20=jQuery Mobile)
     tm_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     tm_language          TEXT                                         NOT NULL,      -- 対応言語ID(「,」区切りで複数指定可)
+    tm_generator         VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- テンプレート作成アプリケーション(値=artisteer,themler)
     tm_version           VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- テンプレートバージョン文字列
     tm_name              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレート名
     tm_description       VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 説明
@@ -797,6 +800,7 @@ CREATE TABLE _page_info (
 
     pn_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名
     pn_template_id       VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- テンプレートID(個別)
+    pn_sub_template_id   VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- サブテンプレートID
     pn_layout_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- レイアウトID(個別)
     pn_meta_title        TEXT                                         NOT NULL,      -- METAタグ、タイトル(個別)
     pn_meta_description  TEXT                                         NOT NULL,      -- METAタグ、ページ要約(個別)
@@ -834,11 +838,13 @@ CREATE TABLE _page_def (
     pd_menu_id           VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- メニューID
     pd_suffix            VARCHAR(10)    DEFAULT ''                    NOT NULL,      -- インスタンスを区別するためのサフィックス文字列
     pd_title             VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- タイトル
+    pd_h_tag_level       INT            DEFAULT 0                     NOT NULL,      -- タイトル用のHタグのトップレベル(0=設定なし、0以外=Hタグレベル)
     pd_style             TEXT                                         NOT NULL,      -- HTMLスタイル属性
     pd_css               TEXT                                         NOT NULL,      -- CSS
     pd_param             TEXT                                         NOT NULL,      -- パラメータオブジェクトをシリアライズしたもの
     pd_except_sub_id     TEXT                                         NOT NULL,      -- 共通時例外ページサブID(「,」区切りで複数指定可)
     pd_view_control_type INT            DEFAULT 0                     NOT NULL,      -- 表示出力の制御タイプ(0=常時表示、1=ログイン時のみ表示、2=非ログイン時のみ表示)
+    pd_view_page_state   INT            DEFAULT 0                     NOT NULL,      -- ページ状況での表示制御タイプ(0=常時表示、1=トップ時のみ表示)
     pd_view_option       TEXT                                         NOT NULL,      -- 表示オプション
     pd_edit_status       SMALLINT       DEFAULT 0                     NOT NULL,      -- 編集状態(0=編集完了、1=編集中)
     pd_top_content       TEXT                                         NOT NULL,      -- 上部コンテンツ
@@ -937,8 +943,10 @@ CREATE TABLE _mail_form (
     mf_language_id       VARCHAR(2)     DEFAULT ''                    NOT NULL,      -- 言語ID
     mf_history_index     INT            DEFAULT 0                     NOT NULL,      -- 履歴管理用インデックスNo(0～)
     
+    mf_name              VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- フォーム名
     mf_subject           VARCHAR(100)   DEFAULT ''                    NOT NULL,      -- 件名
     mf_content           TEXT                                         NOT NULL,      -- コンテンツ
+    mf_admin             BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理用専用かどうか
     mf_check_out_user_id INT            DEFAULT 0                     NOT NULL,      -- チェックアウトユーザID(0のときはチェックイン状態)
     mf_check_out_dt      TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- チェックアウト日時
     mf_create_user_id    INT            DEFAULT 0                     NOT NULL,      -- レコード作成者
