@@ -57,6 +57,7 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 		$path = $request->trimValueOf('path');
 		$sampleId = $request->trimValueOf('sample_sql');
 		$installId = $request->trimValueOf('install_sql');
+		$convertId = $request->trimValueOf('convert_sql');
 		if ($act == 'exec'){				// テスト実行
 			$filePath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $sampleId;
 			
@@ -76,6 +77,11 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 					$this->setMsg(self::MSG_APP_ERR, $error);
 				}
 			}
+		} else if ($act == 'convert'){				// 変換テスト実行
+			$filePath = $this->gEnv->getSqlPath() . '/' . self::SAMPLE_DIR . '/' . $convertId;
+			
+			// 変換テスト
+			$this->convertFile($filePath);
 		} else if ($act == 'execdir'){				// ディレクトリテスト実行
 			// サンプルSQLスクリプトディレクトリのチェック
 			$searchPath = $this->gEnv->getSqlPath() . '/' . $path;
@@ -145,6 +151,26 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->tmpl->addVars('sample__sql_list2', $row);
 			$this->tmpl->parseTemplate('sample__sql_list2', 'a');
 		}
+		
+		// 変換ファイル選択メニュー作成
+		for ($i = 0; $i < count($files); $i++){
+			$file = $files[$i];
+			$name = preg_replace("/(.+)(\.[^.]+$)/", "$1", $file);		// 拡張子除く
+			
+			// デフォルトのファイル名を決定
+			if (empty($convertId)) $convertId = $file;
+			
+			$selected = '';
+			if ($file == $convertId) $selected = 'selected';
+
+			$row = array(
+				'value'    => $this->convertToDispString($file),			// ファイル名
+				'name'     => $this->convertToDispString($name),			// ファイル名
+				'selected' => $selected														// 選択中かどうか
+			);
+			$this->tmpl->addVars('sample__sql_list3', $row);
+			$this->tmpl->parseTemplate('sample__sql_list3', 'a');
+		}
 	}
 	/**
 	 * ディレクトリ内のスクリプトファイルを取得
@@ -212,6 +238,33 @@ class admin_mainTest_scriptWidgetContainer extends admin_mainBaseWidgetContainer
 				$this->setMsg(self::MSG_APP_ERR, "行数がマッチしません file=" . $basename);
 			}
 
+		} else {
+			$this->setMsg(self::MSG_APP_ERR, "ファイルが読み込めません file=" . $basename);
+		}
+	}
+	/**
+	 * ファイルの内容を変換
+	 *
+	 * @param string $path		ディレクトリのパス
+	 * @return bool				true=問題なし,false=エラーあり
+	 */
+	function convertFile($path)
+	{
+		$basename = basename($path);
+		
+		// ファイルデータ取得
+		$fileData = file_get_contents($path);
+		
+		$this->setMsg(self::MSG_GUIDANCE, $fileData);
+		
+		// クエリー行取得
+		$ret = $this->_db->_splitMultibyteSql($fileData, $lines2);
+		if ($ret){
+			$lineCount2 = count($lines2);
+
+			for ($i = 0; $i < $lineCount2; $i++) {
+				$this->setMsg(self::MSG_GUIDANCE, $lines2[$i]);
+			}
 		} else {
 			$this->setMsg(self::MSG_APP_ERR, "ファイルが読み込めません file=" . $basename);
 		}

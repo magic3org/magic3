@@ -23,6 +23,11 @@ function execInstall(){
 	document.main.submit();
 	return true;
 }
+function execConvert(){
+	document.main.act.value='convert';
+	document.main.submit();
+	return true;
+}
 function selectFile(){
 	document.main.act.value = 'selectfile';
 	document.main.submit();
@@ -30,6 +35,11 @@ function selectFile(){
 }
 function installFile(){
 	document.main.act.value = 'installfile';
+	document.main.submit();
+	return true;
+}
+function convertFile(){
+	document.main.act.value = 'convertfile';
 	document.main.submit();
 	return true;
 }
@@ -88,6 +98,21 @@ function execUpdateDir(){
 		</li>
     </ul>
     <div class="panel-footer"><input type="button" class="button" onclick="execInstall();" value="実行" /></div>
+</div>
+<div class="panel panel-info" style="width:500px;margin:20px auto;" >
+    <div class="panel-heading">変換処理</div>
+    <ul class="list-group">
+        <li class="list-group-item">
+		<div class="form-group">
+	    <select name="convert_sql" onChange="convertFile();" class="form-control" style="width:200px;">
+	        <patTemplate:tmpl name="sample__sql_list3">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+		</li>
+    </ul>
+    <div class="panel-footer"><input type="button" class="button" onclick="execConvert();" value="変換" /></div>
 </div>
 </form>
 </div>
