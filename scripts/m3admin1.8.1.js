@@ -954,6 +954,47 @@ function m3SetupWidgetTool(switchButtonClass)
 	});
 }
 /**
+ * 拡張表示機能を作成
+ *
+ * @param string showButtonId		表示ボタンのタグID
+ * @param string hideButtonId		非表示ボタンのタグID
+ * @param string optionAreaClass	表示制御する領域のクラス
+ * @param bool isShow				拡張領域の初期状態(true=表示、false=非表示)
+ * @return なし
+ */
+function m3CreateOptionButton(showButtonId, hideButtonId, optionAreaClass, isShow)
+{
+	// オプション入力制御
+	if (isShow){
+		$('.' + optionAreaClass).slideDown(300);
+		$('#' + showButtonId).css({'display':'none'});
+		$('#' + hideButtonId).css({'display':'block'});
+	} else {
+		$('.' + optionAreaClass).slideUp(300);
+		$('#' + showButtonId).css({'display':'block'});
+		$('#' + hideButtonId).css({'display':'none'});
+	}
+	
+	$('#' + showButtonId).click(function(){
+		$('.' + optionAreaClass).slideDown(300);
+		$('#' + showButtonId).css({'display':'none'});
+		$('#' + hideButtonId).css({'display':'block'});
+		
+		// 画面サイズ調整
+		m3AdjustParentWindow();
+		return false;
+	});
+	$('#' + hideButtonId).click(function(){
+		$('.' + optionAreaClass).slideUp(300);
+		$('#' + showButtonId).css({'display':'block'});
+		$('#' + hideButtonId).css({'display':'none'});
+		
+		// 画面サイズ調整
+		m3AdjustParentWindow();
+		return false;
+	});
+}
+/**
  * 管理画面初期処理
  *
  * @return なし

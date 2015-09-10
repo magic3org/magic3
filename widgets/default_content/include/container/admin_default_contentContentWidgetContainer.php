@@ -996,12 +996,12 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			$this->tmpl->addVar('_widget', 'option_area_open', 'false');
 		}
 		$iconUrl = $this->gEnv->getRootUrl() . self::OPEN_PANEL_ICON_FILE;		// 拡張エリア表示用アイコン
-		$iconTitle = '拡張設定を表示';
+		$iconTitle = 'オプションを表示';
 		$openButton = '<a id="button_open" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '"><i class="glyphicon glyphicon-plus"></i></a>';
 		//$openButton = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::PANEL_BUTTON_SIZE . '" height="' . self::PANEL_BUTTON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		$this->tmpl->addVar('_widget', 'open_button', $openButton);
 		$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_PANEL_ICON_FILE;		// 拡張エリア非表示用アイコン
-		$iconTitle = '拡張設定を非表示';
+		$iconTitle = 'オプションを非表示';
 		$closeButton = '<a id="button_close" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="' . $iconTitle . '"><i class="glyphicon glyphicon-minus"></i></a>';
 		//$closeButton = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::PANEL_BUTTON_SIZE . '" height="' . self::PANEL_BUTTON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		$this->tmpl->addVar('_widget', 'close_button', $closeButton);

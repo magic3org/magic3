@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -30,6 +30,7 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	private $isMultiLang;			// 多言語対応画面かどうか
 	private $availableLangRows;	// 利用可能な言語
 	private $availableLangArray;	// 利用可能な言語
+	private $isOpenOptionArea;		// 拡張エリアを開くかどうか
 	const BREADCRUMB_TITLE = 'メニュー管理(単階層)';		// 画面タイトル名(パンくずリスト)
 	const MAIN_MENU_ID = 'main_menu';			// メインメニューID
 	const CREATE_URL_TAG_ID = 'createurl';			// URL作成ボタンタグID
@@ -48,6 +49,10 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 	const WINDOW_ICON_FILE = '/images/system/window32.png';		// 同じウィンドウアイコン
 	const OTHER_WINDOW_ICON_FILE = '/images/system/other_window32.png';		// 別のウィンドウアイコン
 	const STOP_ICON_FILE = '/images/system/closed32.png';		// 停止中(項目非表示)アイコン
+	const TAG_ID_OPEN_OPTION = 'open_area';		// オプション領域表示用ボタンタグ
+	const TOOLTIP_OPEN_OPTION = 'オプションを表示';		// オプション領域表示用ボタンツールチップ
+	const TAG_ID_CLOSE_OPTION = 'close_area';				// オプション領域非表示用ボタンタグ
+	const TOOLTIP_CLOSE_OPTION = 'オプションを非表示';		// オプション領域非表示用ボタンツールチップ
 	
 	/**
 	 * コンストラクタ
@@ -520,6 +525,19 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->createInputTitleLangText($titleLangArray);
 		}
 
+		// 拡張エリア制御
+		$openButton = $this->gDesign->createOptionButton(0/*表示ボタン*/, ''/*同画面*/, self::TOOLTIP_OPEN_OPTION, self::TAG_ID_OPEN_OPTION);
+		$this->tmpl->addVar('_widget', 'open_button', $openButton);
+		$this->tmpl->addVar('_widget', 'open_button_id', self::TAG_ID_OPEN_OPTION);
+		$closeButton = $this->gDesign->createOptionButton(1/*非表示ボタン*/, ''/*同画面*/, self::TOOLTIP_CLOSE_OPTION, self::TAG_ID_CLOSE_OPTION);
+		$this->tmpl->addVar('_widget', 'close_button', $closeButton);
+		$this->tmpl->addVar('_widget', 'close_button_id', self::TAG_ID_CLOSE_OPTION);
+		if ($this->isOpenOptionArea){
+			$this->tmpl->addVar('_widget', 'option_area_open', 'true');
+		} else {
+			$this->tmpl->addVar('_widget', 'option_area_open', 'false');
+		}
+		
 		// ### 入力値を再設定 ###
 		$this->tmpl->addVar("_widget", "sel_item_name", $name);		// 名前
 		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// タイトル(HTML可)

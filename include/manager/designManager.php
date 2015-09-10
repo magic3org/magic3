@@ -763,5 +763,37 @@ class DesignManager extends Core
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-time"></i></a>';
 		return $buttonTag;
 	}
+	/**
+	 * オプション表示ボタンを作成
+	 *
+	 * @param int    $buttonType	ボタンタイプ(0=表示用ボタン,1=非表示用ボタン)
+	 * @param string $url			リンク先(リンク先がない場合は空文字列)
+	 * @param string $title			ツールチップ用文字列
+	 * @param string $tagId			タグのID
+	 * @param string $attr			その他の追加属性
+	 * @param string $btnClass		ボタンのカラークラス
+	 * @return string 				ボタンのタグ
+	 */
+	function createOptionButton($buttonType, $url, $title = '', $tagId = '', $attr = '', $btnClass = 'btn-warning')
+	{
+		if (empty($url)){
+			$urlAttr = ' href="javascript:void(0);"';
+		} else {
+			$urlAttr = ' href="' . convertUrlToHtmlEntity($this->getUrl($url)) . '"';
+		}
+		$idAttr = '';
+		if (!empty($tagId)) $idAttr = ' id="' . $tagId . '"';
+		$otherAttr = '';
+		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
+		if (!empty($attr)) $otherAttr .= ' ' . $attr;
+		$tagClass = 'btn btn-sm ' . $btnClass;
+		
+		// アイコンタイプ
+		$iconType = 'glyphicon-plus';
+		if ($buttonType == 1) $iconType = 'glyphicon-minus';
+		
+		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon ' . $iconType . '"></i></a>';
+		return $buttonTag;
+	}
 }
 ?>
