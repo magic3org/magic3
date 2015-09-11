@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: help_adjustwidget.php 4900 2012-05-03 12:03:21Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCommonPath()	. '/helpConv.php' );
@@ -40,16 +40,12 @@ class help_adjustwidget extends HelpConv
 				'body' =>	$this->_('Control widget view.')		// ウィジェットの表示制御を行います。
 			),
 			'adjustwidget_title' => array(	
-				'title' =>	$this->_('Widget Title'),	// ウィジェットタイトル名
+				'title' =>	$this->_('Title'),	// タイトル
 				'body' =>	$this->_('Configure the title on the top of widget. If you set blank for the title, default title is displayed. You can control the title visible status by checking \'Visible\' checkbox. This configure takes first priority over other configures.')		// ウィジェットの上部に表示されるタイトル名を設定します。空に設定した場合はデフォルトのタイトル名が表示されます。「表示」チェックボックスでタイトルの表示、非表示の制御を行います。ここでの設定は他のすべての設定に優先します。
 			),
-			'adjustwidget_align' => array(	
-				'title' =>	$this->_('Contents Position'),	// テキスト表示位置
-				'body' =>	$this->_('Adjust widget contents position.')		// ウィジェットの表示内容のテキストの位置を設定します。
-			),
-			'adjustwidget_margin' => array(	
-				'title' =>	$this->_('Contents Margin'),	// マージン
-				'body' =>	$this->_('Adjust widget contents margin. If you set blank for margin field, the margin has no value.')		// ウィジェットの表示内容のマージンを設定します。空に設定したフィールドは指定なしになります。
+			'adjustwidget_style' => array(	
+				'title' =>	$this->_('Style'),	// スタイル
+				'body' =>	$this->_('Adjust widget contents style.<br /><strong>Contents Margin</strong> - Adjust widget contents margin. If you set blank for margin field, the margin has no value.<br /><strong>Contents Position</strong> - Adjust widget contents position.<br /><strong>Remove list marker</strong> - If list has image marker, remove it.')		// ウィジェットの表示内容のスタイルを調整します。マージン - ウィジェットの表示内容のマージンを設定します。空に設定したフィールドは指定なしになります。テキスト表示位置 - ウィジェットの表示内容のテキストの位置を設定します。リストのマーカーを削除 - リストが画像マーカーの場合削除します。
 			),
 			'adjustwidget_render' => array(	
 				'title' =>	$this->_('Render'),	// 描画処理

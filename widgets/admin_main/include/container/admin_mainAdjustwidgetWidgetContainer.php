@@ -27,7 +27,6 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ITEM_HEAD_EXCEPT_PAGE = 'item_except_';			// 例外ページサブIDの項目名ヘッダ
 	const WIDGET_CSS_CLASS_HEAD = 'm3_';			// ウィジェットCSSクラスのヘッダ部
-	const MENUBAR_TITLE = '共通設定';
 	const HELP_ADJUSTWIDGET_CONFIG = 'adjustwidget_config';			// 機能説明ヘルプ
 	const WIDGET_TAG_HEAD = 'm3widget_';			// ウィジェットの識別用タグIDヘッダ
 	const REMOVE_LIST_MARKER_CSS = "#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n    margin: 0;\n    padding: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul>li {\n    padding-left: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul{\n    padding-left: 0;\n    list-style: none;\n}\n";			// CSS(リストマーカー削除)
@@ -93,7 +92,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		
 		// メニューバーの作成
 		$navbarDef = new stdClass;
-		$navbarDef->title = self::MENUBAR_TITLE;
+		$navbarDef->title = $this->_('Widget Common Configure');			// ウィジェット共通設定
 		$navbarDef->baseurl = $this->getAdminUrlWithOptionParam();
 		$navbarDef->help	= $this->gInstance->getHelpManager()->getHelpText(self::HELP_ADJUSTWIDGET_CONFIG);// ヘルプ文字列
 		$navbarDef->menu =	array(
@@ -120,7 +119,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 											'active'	=> false
 										),
 										(Object)array(
-											'name'		=> $this->_('Style'),		// スタイル
+											'name'		=> $this->_('Style Detail'),		// スタイル詳細
 											'task'		=> '',
 											'url'		=> '',
 											'tagid'		=> 'menubar_style',
@@ -639,7 +638,8 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_config_other'] = $this->_('Others');			// その他
 		$localeText['label_config_view_control'] = $this->_('View Control');			// 表示制御
 		$localeText['label_config_style'] = $this->_('Style');			// スタイル
-		$localeText['label_adjust_widget'] = $this->_('Adjust Widget Title and Contents');			// ウィジェットタイトル、位置調整
+		$localeText['label_adjust_widget'] = $this->_('Adjust Title and Style');			// ウィジェットタイトル・スタイル調整
+		$localeText['label_additional_content'] = $this->_('Additional Content');			// 補助コンテンツ
 		$localeText['label_title'] = $this->_('Title');			// タイトル名
 		$localeText['label_visible'] = $this->_('Visible');			// 表示
 		$localeText['label_margin'] = $this->_('Margin');			// マージン

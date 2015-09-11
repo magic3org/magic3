@@ -453,7 +453,7 @@
 		widgetWindow += '<div class="m3_contextmenu" id="m3_widgetmenu" style="visibility:hidden;">';
 		widgetWindow += '<ul>';
 		widgetWindow += '<li id="m3_wconfig"><img src="' + M3_ROOT_URL + '/images/system/config.png" />&nbsp;<span>ウィジェットの設定</span></li>';
-		widgetWindow += '<li id="m3_wadjust"><img src="' + M3_ROOT_URL + '/images/system/adjust_widget.png" />&nbsp;<span>タイトル・位置調整</span></li>';
+		widgetWindow += '<li id="m3_wadjust"><img src="' + M3_ROOT_URL + '/images/system/adjust_widget.png" />&nbsp;<span>タイトル・スタイル調整</span></li>';
 		widgetWindow += '<li id="m3_wshared"><img src="' + M3_ROOT_URL + '/images/system/shared.png" />&nbsp;<span>ページ共通属性</span></li>';
 		widgetWindow += '<li id="m3_wdelete"><img src="' + M3_ROOT_URL + '/images/system/delete.png" />&nbsp;<span>このウィジェットを削除</span></li>';
 		widgetWindow += '</ul>';

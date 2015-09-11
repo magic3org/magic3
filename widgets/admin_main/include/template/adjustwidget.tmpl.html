@@ -131,6 +131,7 @@ $(function(){
 	
 	// テーブル作成
 	m3SetConfigTable('widget_config_table');
+	m3SetConfigTable('widget_content_table');
 	m3SetConfigTable('widget_view_control_table');
 	m3SetConfigTable('widget_style_table');
 	
@@ -163,52 +164,63 @@ $(function(){
 <h3><span {_HELP_ADJUSTWIDGET}>{_LC_LABEL_ADJUST_WIDGET}</span></h3>
 <table id="widget_config_table">
     <tbody>
-        <tr>
+    <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_TITLE}>{_LC_LABEL_TITLE}</span></th>
 	    <td><div class="col-sm-8 m3config_item"><input type="text" name="item_title" class="form-control" value="{TITLE}" size="30" maxlength="30" /></div>
 	    <div class="col-sm-4"><div class="checkbox"><label><input type="checkbox" name="item_title_visible" {TITLE_VISIBLE} />{_LC_LABEL_VISIBLE}</label></div></div>
 	    </td>
 	</tr>
     <tr>
-	    <th><span {_HELP_ADJUSTWIDGET_MARGIN}>{_LC_LABEL_MARGIN}</span></th>
-	    <td><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_TOP}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_top" class="form-control pixelsize" maxlength="4" value="{TOP}" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_BOTTOM}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_bottom" class="form-control pixelsize" maxlength="4" value="{BOTTOM}" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_LEFT}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_left" class="form-control pixelsize" maxlength="4" value="{LEFT}" /></div><div class="form-control-static col-sm-1 m3config_item">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_RIGHT}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_right" class="form-control pixelsize" maxlength="4" value="{RIGHT}" /></div><div class="form-control-static col-sm-1 m3config_item">px</div>
+	    <th><span {_HELP_ADJUSTWIDGET_RENDER}>{_LC_LABEL_RENDER}</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_render" {USE_RENDER} />{_LC_LABEL_USE_JOOMLA_RENDER}</label></div>
 	    </td>
 	</tr>
-	<tr>
-	    <th><span {_HELP_ADJUSTWIDGET_ALIGN}>{_LC_LABEL_POSITION}</span></th>
-	    <td><div class="col-sm-3 m3config_item">
+    <tr>
+	    <th><span {_HELP_ADJUSTWIDGET_STYLE}>{_LC_LABEL_STYLE}</span></th>
+	    <td>
+			<div class="form-group clearfix">
+			<!--<div class="form-control-static col-sm-1 m3config_item" style="width:80px;"><span {_HELP_ADJUSTWIDGET_MARGIN}><strong></strong></span></div>-->
+<div class="form-control-static col-sm-1 m3config_item" style="width:100px;">{_LC_LABEL_MARGIN} {_LC_LABEL_TOP}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_top" class="form-control pixelsize" maxlength="4" value="{TOP}" /></div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_BOTTOM}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_bottom" class="form-control pixelsize" maxlength="4" value="{BOTTOM}" /></div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_LEFT}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_left" class="form-control pixelsize" maxlength="4" value="{LEFT}" /></div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">px</div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">{_LC_LABEL_RIGHT}</div><div class="col-sm-1 m3config_item" style="width:80px;"><input type="text" name="item_right" class="form-control pixelsize" maxlength="4" value="{RIGHT}" /></div><div class="form-control-static col-sm-1 m3config_item" style="width:50px;">px</div>
+			</div>
+			<div class="form-group clearfix">
+			<div class="form-control-static col-sm-2 m3config_item">{_LC_LABEL_POSITION}</div>
+		<div class="col-sm-3 m3config_item">
 	    <select name="item_align" class="form-control">
                 <patTemplate:tmpl name="item_align_list">
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>
-	    </div></td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_ADJUSTWIDGET_RENDER}>{_LC_LABEL_RENDER}</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_render" {USE_RENDER} />{_LC_LABEL_USE_JOOMLA_RENDER}</label></div>
+	    </div>
+			</div>
+	        <div class="form-group">
+            <div class="checkbox"><label><input type="checkbox" name="item_remove_list_marker" {REMOVE_LIST_MARKER} />{_LC_LABEL_REMOVE_LIST_MARKER}</label></div>
+			</div>
 	    </td>
 	</tr>
-        <tr>
+    </tbody>
+</table>
+<h3><span {_HELP_ADJUSTWIDGET_ADDITIONAL_CONTENT}>{_LC_LABEL_ADDITIONAL_CONTENT}</span></h3>
+<table id="widget_content_table">
+    <tbody>
+    <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_TOP_CONTENT}>{_LC_LABEL_TOP_CONTENT}</span></th>
 	    <td class="ckeditor"><textarea name="item_top_content" class="form-control">{TOP_CONTENT}</textarea></td>
 	</tr>
-        <tr>
+    <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_BOTTOM_CONTENT}>{_LC_LABEL_BOTTOM_CONTENT}</span></th>
 	    <td class="ckeditor"><textarea name="item_bottom_content" class="form-control">{BOTTOM_CONTENT}</textarea></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_READMORE}>{_LC_LABEL_READMORE}</span></th>
 	    <td>
-		<div class="form-group"><div class="col-sm-2 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_show_readmore" {SHOW_READMORE_CHECKED} />{_LC_LABEL_VISIBLE}</label></div></div><div class="form-control-static col-sm-2 text-right m3config_item">{_LC_LABEL_READMORE_TITLE}</div><div class="col-sm-8"><input type="text" name="item_readmore_title" class="form-control spacer_bottom" value="{READMORE_TITLE}" maxlength="30" /></div></div><div style="clear:both;"></div>
-		<div class="form-group"><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_READMORE_URL}</div><div class="col-sm-8 m3config_item"><input type="text" id="item_readmore_url" name="item_readmore_url" class="form-control" value="{READMORE_URL}" maxlength="200" /></div><div class="col-sm-2"><input type="button" class="button" onclick="createUrl();" value="URL作成" /></div></div>
-	    </td>
-	</tr>
-    <tr>
-	    <th><span {_HELP_ADJUSTWIDGET_CSS}>{_LC_LABEL_CSS}</span></th>
-	    <td>
-	        <!--<h4>{_LC_LABEL_FOR_JOOMLA_TEMPLATE}</h4>-->
-            <div class="checkbox"><label><input type="checkbox" name="item_remove_list_marker" {REMOVE_LIST_MARKER} />{_LC_LABEL_REMOVE_LIST_MARKER}</label></div>
+		<div class="form-group clearfix">
+		<div class="col-sm-1 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_show_readmore" {SHOW_READMORE_CHECKED} />{_LC_LABEL_VISIBLE}</label></div></div>
+		<div class="form-control-static col-sm-2 text-right m3config_item">{_LC_LABEL_READMORE_TITLE}</div>
+		<div class="col-sm-7 m3config_item"><input type="text" name="item_readmore_title" class="form-control spacer_bottom" value="{READMORE_TITLE}" maxlength="30" /></div>
+		</div>
+		<div class="form-group">
+		<div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_READMORE_URL}</div><div class="col-sm-9 m3config_item"><input type="text" id="item_readmore_url" name="item_readmore_url" class="form-control" value="{READMORE_URL}" maxlength="200" /></div><div class="col-sm-2 m3config_item"><input type="button" class="button" onclick="createUrl();" value="URL作成" /></div>
+		</div>
 	    </td>
 	</tr>
     </tbody>
@@ -262,7 +274,7 @@ $(function(){
 <form method="post" name="main_style">
 <input type="hidden" name="act" />
 <input type="hidden" name="widget_id" value="{WIDGET_ID}" />
-<h3><span {_HELP_ADJUSTWIDGET_STYLE}>{_LC_LABEL_STYLE}</span></h3>
+<h3><span {_HELP_ADJUSTWIDGET_STYLE_DETAIL}>{_LC_LABEL_STYLE}</span></h3>
 <table id="widget_style_table">
     <tbody>
     <tr>
