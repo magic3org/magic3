@@ -43,6 +43,7 @@ class ScriptLibInfo
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
 	const LIB_SWFOBJECT				= 'swfobject';
+	const LIB_JSCALENDAR			= 'jscalendar';			// カレンダーライブラリ
 	const LIB_BOOTSTRAP				= 'bootstrap';
 	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
 	const LIB_NOBOOTSTRAP			= 'nobootstrap';			// Bootstrapを使用しない場合の管理画面用ライブラリ
@@ -309,6 +310,10 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const MOMENT_FILENAME			= 'moment-with-locales-2.9.0.js';			// Moment.js
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
+	const JSCALENDAR_FILENAME		= 'jscalendar-1.0/calendar.js';				// jscalendar
+	const JSCALENDAR_LANG_FILENAME	= 'jscalendar-1.0/lang/calendar-ja.js';		// jscalendar言語ファイル
+	const JSCALENDAR_SETUP_FILENAME	= 'jscalendar-1.0/calendar-setup.js';		// jscalendarセットアップファイル
+	const JSCALENDAR_CSS			= 'jscalendar-1.0/calendar-win2k-1.css';	// jscalendarCSS
 
 	// Bootstrapライブラリ
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.2.0/js/bootstrap.min.js';			// bootstrap
@@ -436,6 +441,14 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 						self::LIB_ELFINDER21			=>	array(	'script' 	=> array(self::ELFINDER21_FILENAME, self::ELFINDER21_LANG_FILENAME),		// elFinder v2.1
 																	'css'		=> array(self::ELFINDER21_THEME_CSS, self::ELFINDER21_CSS, self::ELFINDER21_OPTION_CSS)),	// テーマは最初に読み込む
 						self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
+						self::LIB_JSCALENDAR			=>	array(	'script' 	=> array(
+																							self::JSCALENDAR_FILENAME,			// jscalendar
+																							self::JSCALENDAR_LANG_FILENAME,		// jscalendar言語ファイル
+																							self::JSCALENDAR_SETUP_FILENAME		// jscalendarセットアップファイル
+																						),
+																	'css'		=> array(
+																							self::JSCALENDAR_CSS				// jscalendarCSS
+																						)),
 						self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																	'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
 	//					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap

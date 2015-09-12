@@ -547,6 +547,20 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
 	}
 	/**
+	 * JavascriptライブラリをHTMLヘッダ部に設定
+	 *
+	 * JavascriptライブラリをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string,array 				Javascriptライブラリ。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptLibToHead($request, &$param)
+	{
+		return array( ScriptLibInfo::LIB_JSCALENDAR );
+	}
+	/**
 	 * JavascriptファイルをHTMLヘッダ部に設定
 	 *
 	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
@@ -556,14 +570,14 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	 * @param object         $param			任意使用パラメータ。
 	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
 	 */
-	function _addScriptFileToHead($request, &$param)
+/*	function _addScriptFileToHead($request, &$param)
 	{
 		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_SCRIPT_FILE),		// カレンダースクリプトファイル
 							$this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_LANG_FILE),	// カレンダー言語ファイル
 							$this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_SETUP_FILE));	// カレンダーセットアップファイル
 		return $scriptArray;
 
-	}
+	}*/
 	/**
 	 * CSSファイルをHTMLヘッダ部に設定
 	 *
@@ -574,10 +588,10 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	 * @param object         $param			任意使用パラメータ。
 	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
 	 */
-	function _addCssFileToHead($request, &$param)
+/*	function _addCssFileToHead($request, &$param)
 	{
 		return $this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_CSS_FILE);
-	}
+	}*/
 	/**
 	 * 表示位置選択メニュー作成
 	 *
