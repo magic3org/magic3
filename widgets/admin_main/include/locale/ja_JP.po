@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-11 20:33+0900\n"
-"PO-Revision-Date: 2015-09-11 20:37+0900\n"
+"POT-Creation-Date: 2015-09-14 08:37+0900\n"
+"PO-Revision-Date: 2015-09-14 08:37+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -13,112 +13,138 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-SearchPath-0: ../container\n"
 "X-Poedit-SearchPath-1: ../help\n"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:46
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:53
 msgid "Not selected"
 msgstr "指定なし"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:47
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:54
 msgid "Left"
 msgstr "左"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:48
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:55
 msgid "Center"
 msgstr "中央"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:49
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:56
 msgid "Right"
 msgstr "右"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:95
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:102
 msgid "Widget Common Configure"
 msgstr "ウィジェット共通設定"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:100
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:637
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:107
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:722
 msgid "Basic"
 msgstr "基本"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:108
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:638
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:115
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:723
 #: ../container/admin_mainEditmenuWidgetContainer.php:199
 #: ../container/admin_mainUserlistWidgetContainer.php:158
 msgid "Others"
 msgstr "その他"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:115
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:639
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:662
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:122
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:724
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:747
 #: ../help/help_adjustwidget.php:39
 msgid "View Control"
 msgstr "表示制御"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:122
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:129
 msgid "Style Detail"
 msgstr "スタイル詳細"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:214
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:222
 msgid "Margin Top"
 msgstr "マージン上"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:215
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:223
 msgid "Margin Bottom"
 msgstr "マージン下"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:216
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:224
 msgid "Margin Left"
 msgstr "マージン左"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:217
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:225
 msgid "Margin Right"
 msgstr "マージン右"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:218
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:226
 #: ../container/admin_mainPagedefWidgetContainer.php:163
 #: ../help/help_widgetlist.php:43
 msgid "Widget ID"
 msgstr "ウィジェットID"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:251
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:302
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:359
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:276
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:327
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:385
 #: ../container/admin_mainEditmenuWidgetContainer.php:438
 msgid "Configration updated."
 msgstr "データを更新しました"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:260
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:311
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:368
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:285
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:336
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:394
 #: ../container/admin_mainEditmenuWidgetContainer.php:435
 msgid "Failed in updating configration."
 msgstr "データ更新に失敗しました"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:266
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:291
 msgid "Invalid view term."
 msgstr "表示期間が不正です"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:635
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:516
+#: ../container/admin_mainUserlistWidgetContainer.php:129
+msgid "Start Date:"
+msgstr "開始日："
+
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:516
+#: ../container/admin_mainUserlistWidgetContainer.php:131
+msgid "Hour:"
+msgstr "時間："
+
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:516
+#: ../container/admin_mainUserlistWidgetContainer.php:130
+msgid "End Date:"
+msgstr "終了日："
+
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:516
+#: ../container/admin_mainUserlistWidgetContainer.php:136
+msgid "Calendar"
+msgstr "カレンダー"
+
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:684
+#: ../container/admin_mainPagedefWidgetContainer.php:152
+msgid "Default Value"
+msgstr "デフォルト値"
+
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:720
 #: ../container/admin_mainConfigsiteWidgetContainer.php:246
 msgid "Update config?"
 msgstr "設定を更新しますか?"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:640
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:681
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:725
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:762
 #: ../help/help_adjustwidget.php:47
 msgid "Style"
 msgstr "スタイル"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:641
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:726
 msgid "Adjust Title and Style"
 msgstr "タイトル・スタイル調整"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:642
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:727
 msgid "Additional Content"
 msgstr "補助コンテンツ"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:643
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:728
 #: ../container/admin_mainEditmenuWidgetContainer.php:56
 #: ../container/admin_mainMenudefWidgetContainer.php:178
 #: ../container/admin_mainSmenudefWidgetContainer.php:172
@@ -126,7 +152,7 @@ msgstr "補助コンテンツ"
 msgid "Title"
 msgstr "タイトル"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:644
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:729
 #: ../container/admin_mainMenudefWidgetContainer.php:177
 #: ../container/admin_mainMenudefWidgetContainer.php:202
 #: ../container/admin_mainPagedefWidgetContainer.php:166
@@ -136,143 +162,123 @@ msgstr "タイトル"
 msgid "Visible"
 msgstr "表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:645
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:730
 msgid "Margin"
 msgstr "マージン"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:646
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:731
 msgid "Top:"
 msgstr "上："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:647
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:732
 msgid "Bottom:"
 msgstr "下："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:648
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:733
 msgid "Left:"
 msgstr "左："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:649
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:734
 msgid "Right:"
 msgstr "右："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:650
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:735
 msgid "Contents Position"
 msgstr "テキスト表示位置"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:651
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:736
 #: ../help/help_adjustwidget.php:51
 msgid "Render"
 msgstr "描画処理"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:652
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:737
 msgid "Render by Joomla! style"
 msgstr "Joomla!スタイルの描画処理を使用"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:653
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:738
 #: ../help/help_adjustwidget.php:55
 msgid "Additional Top Content"
 msgstr "補助コンテンツ(上)"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:654
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:739
 #: ../help/help_adjustwidget.php:59
 msgid "Additional Bottom Content"
 msgstr "補助コンテンツ(下)"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:655
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:740
 #: ../help/help_adjustwidget.php:63
 msgid "Readmore Button"
 msgstr "もっと読むボタン"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:656
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:741
 msgid "Title:"
 msgstr "タイトル："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:657
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:742
 msgid "Url:"
 msgstr "URL："
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:658
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:743
 msgid "CSS"
 msgstr "CSS"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:659
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:744
 msgid "Configure for Joomla! style template"
 msgstr "Joomla!スタイルテンプレート用の設定"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:660
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:745
 msgid "Remove list marker"
 msgstr "リストのマーカーを削除"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:663
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:748
 #: ../help/help_adjustwidget.php:67
 msgid "Page Shared Attribute"
 msgstr "ページ共通属性"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:664
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:749
 msgid "On"
 msgstr "オン"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:665
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:750
 #: ../help/help_adjustwidget.php:71
 msgid "View Term"
 msgstr "表示期間"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:666
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:751
 msgid "Except Page"
 msgstr "例外ページ"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:667
-#: ../container/admin_mainUserlistWidgetContainer.php:129
-msgid "Start Date:"
-msgstr "開始日："
-
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:668
-#: ../container/admin_mainUserlistWidgetContainer.php:130
-msgid "End Date:"
-msgstr "終了日："
-
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:669
-#: ../container/admin_mainUserlistWidgetContainer.php:131
-msgid "Hour:"
-msgstr "時間："
-
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:670
-#: ../container/admin_mainUserlistWidgetContainer.php:136
-msgid "Calendar"
-msgstr "カレンダー"
-
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:671
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:752
 #: ../help/help_adjustwidget.php:75
 msgid "View Option"
 msgstr "表示オプション"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:672
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:753
 msgid "Login State"
 msgstr "ログイン状況"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:673
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:754
 msgid "Page State"
 msgstr "ページ状況"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:674
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:677
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:755
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:758
 msgid "Always"
 msgstr "常時表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:675
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:756
 msgid "When user in login"
 msgstr "ログイン時のみ表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:676
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:757
 msgid "When user not in login"
 msgstr "非ログイン時のみ表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:678
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:759
 msgid "Top only"
 msgstr "トップ時のみ表示"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:679
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:760
 #: ../container/admin_mainConfigsiteWidgetContainer.php:262
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
@@ -283,27 +289,31 @@ msgstr "トップ時のみ表示"
 msgid "Update"
 msgstr "更新"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:682
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:763
 #: ../container/admin_mainEditmenuWidgetContainer.php:193
 #: ../container/admin_mainEditmenuWidgetContainer.php:559
 msgid "Widget"
 msgstr "ウィジェット"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:683
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:764
 msgid "Element ID"
 msgstr "エレメントID"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:684
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:765
 msgid "Dynamic"
 msgstr "動的"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:685
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:766
 msgid "Replace Tag"
 msgstr "置換タグ"
 
-#: ../container/admin_mainAdjustwidgetWidgetContainer.php:686
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:767
 msgid "Additional CSS Class"
 msgstr "追加CSSクラス"
+
+#: ../container/admin_mainAdjustwidgetWidgetContainer.php:768
+msgid "H Tag Level"
+msgstr "Hタグレベル"
 
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:86
 #: ../container/admin_mainLoginstatusWidgetContainer.php:148
@@ -1479,10 +1489,6 @@ msgstr "ページ"
 msgid "Template"
 msgstr "テンプレート"
 
-#: ../container/admin_mainPagedefWidgetContainer.php:152
-msgid "Default Value"
-msgstr "デフォルト値"
-
 #: ../container/admin_mainPagedefWidgetContainer.php:155
 msgid "Update line data?"
 msgstr "データを更新しますか?"
@@ -2183,13 +2189,14 @@ msgid ""
 "Adjust widget contents style.<br /><strong>Contents Margin</strong> - Adjust "
 "widget contents margin. If you set blank for margin field, the margin has no "
 "value.<br /><strong>Contents Position</strong> - Adjust widget contents "
-"position.<br /><strong>Remove list marker</strong> - If list has image "
-"marker, remove it."
+"position.<br /><strong>Remove list marker</strong> - If list has the marker, "
+"remove it."
 msgstr ""
 "ウィジェットの表示内容のスタイルを調整します。<br />マージン - ウィジェットの"
 "表示内容のマージンを設定します。空に設定したフィールドは指定なしになります。"
 "<br />テキスト表示位置 - ウィジェットの表示内容のテキストの位置を設定します。"
-"<br />リストのマーカーを削除 - リストが画像マーカーの場合削除します。"
+"<br />リストのマーカーを削除 - リストがマーカー付きの場合マーカーを削除しま"
+"す。"
 
 #: ../help/help_adjustwidget.php:52
 msgid ""

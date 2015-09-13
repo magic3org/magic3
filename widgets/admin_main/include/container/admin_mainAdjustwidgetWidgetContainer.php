@@ -24,6 +24,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	private $align;		// 表示位置
 	private $subIdRecords;		// サブページID
 	private $exceptPageArray;		// 例外ページ
+	private $hTagLevel;		// Hタグレベル
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ITEM_HEAD_EXCEPT_PAGE = 'item_except_';			// 例外ページサブIDの項目名ヘッダ
 	const WIDGET_CSS_CLASS_HEAD = 'm3_';			// ウィジェットCSSクラスのヘッダ部
@@ -212,7 +213,8 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		
 		// 「スタイル」設定
 		$css = $request->trimValueOf('item_css');		// 任意CSS
-		
+		$this->hTagLevel = $request->trimValueOf('item_h_tag_level');		// Hタグレベル
+
 		$act = $request->trimValueOf('act');
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'update'){		// 行更新のとき
@@ -252,7 +254,24 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$paramObj->removeListMarker = $removeListMarker;		// リストのマーカーを削除するかどうか
 				$paramObj->css				= $paramCss;				// 保存値を使用
 				
-				$ret = $this->db->updatePageDefInfo($defSerial, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, serialize($paramObj), $generateCss);
+		//		$ret = $this->db->updatePageDefInfo($defSerial, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, serialize($paramObj), $generateCss);
+				// 更新データ
+				$updateData = array();
+				$updateData['pd_style']				= $style;
+				$updateData['pd_title']				= $title;
+				$updateData['pd_title_visible']		= intval($titleVisible);
+				$updateData['pd_use_render']		= intval($useRender);
+				$updateData['pd_top_content']		= $topContent;
+				$updateData['pd_bottom_content']	= $bottomContent;
+				$updateData['pd_show_readmore']		= intval($showReadmore);
+				$updateData['pd_readmore_title']	= $readmoreTitle;
+				$updateData['pd_readmore_url']		= $readmoreUrl;
+				$updateData['pd_param']				= serialize($paramObj);
+				$updateData['pd_css']				= $generateCss;
+				
+				// ページ定義を更新
+				$ret = $this->db->updatePageDefRecord($defSerial, $updateData);
+				
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Configration updated.'));		// データを更新しました
 					$replaceNew = true;			// データを再取得
@@ -350,13 +369,14 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				// その他のパラメータ
 				$paramObj = new stdClass;
 				$paramObj->removeListMarker = $paramRemoveListMarker;		// リストのマーカーを削除するかどうか
-				$paramObj->css				= $css;					// 入力されたCSSをそのまま残す
+				$paramObj->css				= $css;							// 入力されたCSSをそのまま残す
 				
-				// 追加CSSクラス
+				// 更新データ
 				$updateData = array();
-				$updateData['pd_suffix']	= $cssClassSuffix;			// 追加CSSクラスサフィックス
-				$updateData['pd_css']		= $generateCss;					// CSS
-				$updateData['pd_param']		= serialize($paramObj);
+				$updateData['pd_suffix']		= $cssClassSuffix;			// 追加CSSクラスサフィックス
+				$updateData['pd_css']			= $generateCss;				// CSS
+				$updateData['pd_param']			= serialize($paramObj);
+				$updateData['pd_h_tag_level']	= $this->hTagLevel;			// Hタグレベル
 				
 				// ページ定義を更新
 				$ret = $this->db->updatePageDefRecord($defSerial, $updateData);
@@ -407,6 +427,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			// 「スタイル」設定
 			$cssClassSuffix = '';			// 追加CSSクラスサフィックス
 			$css = '';
+			$this->hTagLevel = '';			// Hタグレベル
 				
 			$replaceNew = true;
 		}
@@ -469,6 +490,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				
 				// 「スタイル」設定
 				$cssClassSuffix = $row['pd_suffix'];			// 追加CSSクラスサフィックス
+				$this->hTagLevel = $row['pd_h_tag_level'];			// Hタグレベル
 
 				//例外ページ
 				$this->exceptPageArray = array();
@@ -484,6 +506,9 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		
 		// ページID選択チェックボックス作成
 		$this->createPageSubIdList();
+		
+		// Hタグレベルメニュー作成
+		$this->createHTagLevelMenu();
 		
 		// 期間入力部作成
 		$rangeTag = $this->gDesign->createCalendarRangeControl(self::START_DATE_ID/*開始日タグID、タグ名*/, self::START_TIME_ID/*開始時間タグID、タグ名*/, self::END_DATE_ID/*終了日タグID、タグ名*/, self::END_TIME_ID/*終了時間タグID、タグ名*/, 
@@ -649,6 +674,42 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		}
 	}
 	/**
+	 * Hタグレベルの選択メニューを作成
+	 *
+	 * @return なし
+	 */
+	function createHTagLevelMenu()
+	{
+		$value = '';
+		$name = $this->_('Default Value');
+		
+		$selected = '';
+		if ($value == $this->hTagLevel) $selected = 'selected';
+		$row = array(
+			'value'		=> $value,			// 値
+			'name'		=> $this->convertToDispString($name),			// 名前
+			'selected'	=> $selected														// 選択中かどうか
+		);
+		$this->tmpl->addVars('h_tag_list', $row);
+		$this->tmpl->parseTemplate('h_tag_list', 'a');
+			
+		for ($i = 1; $i < 7; $i++){
+			$value = $i;
+			$name = $i;
+			
+			$selected = '';
+			if ($value == $this->hTagLevel) $selected = 'selected';
+			
+			$row = array(
+				'value'		=> $value,			// 値
+				'name'		=> $this->convertToDispString($name),			// 名前
+				'selected'	=> $selected														// 選択中かどうか
+			);
+			$this->tmpl->addVars('h_tag_list', $row);
+			$this->tmpl->parseTemplate('h_tag_list', 'a');
+		}
+	}
+	/**
 	 * テキストをローカライズ
 	 *
 	 * @return なし
@@ -704,6 +765,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_dynamic'] = $this->_('Dynamic');		// 動的
 		$localeText['label_replace_tag'] = $this->_('Replace Tag');		// 置換タグ
 		$localeText['label_css_class'] = $this->_('Additional CSS Class');		// 追加CSSクラス
+		$localeText['label_h_tag_level'] = $this->_('H Tag Level');		// Hタグレベル
 		
 		$this->setLocaleText($localeText);
 	}

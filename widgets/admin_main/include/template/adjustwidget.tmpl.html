@@ -293,6 +293,16 @@ $(function(){
 	    <th><span {_HELP_ADJUSTWIDGET_CSS}>{_LC_LABEL_CSS}</span></th>
 	    <td class="ckeditor" colspan="3"><textarea name="item_css" class="form-control" rows="10">{CSS}</textarea></td>
 	</tr>
+    <tr>
+	    <th><span {_HELP_ADJUSTWIDGET_H_TAG_LEVEL}>{_LC_LABEL_H_TAG_LEVEL}</span></th>
+	    <td colspan="3">
+        <div class="col-sm-2 m3config_item" style="width:180px;"><select name="item_h_tag_level" class="form-control">
+	        <patTemplate:tmpl name="h_tag_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select></div>
+		</td>
+	</tr>
     </tbody>
 </table>
 <div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateStyle();" value="{_LC_LABEL_UPDATE}" /></div>

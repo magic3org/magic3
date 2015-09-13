@@ -45,7 +45,7 @@ class help_adjustwidget extends HelpConv
 			),
 			'adjustwidget_style' => array(	
 				'title' =>	$this->_('Style'),	// スタイル
-				'body' =>	$this->_('Adjust widget contents style.<br /><strong>Contents Margin</strong> - Adjust widget contents margin. If you set blank for margin field, the margin has no value.<br /><strong>Contents Position</strong> - Adjust widget contents position.<br /><strong>Remove list marker</strong> - If list has image marker, remove it.')		// ウィジェットの表示内容のスタイルを調整します。マージン - ウィジェットの表示内容のマージンを設定します。空に設定したフィールドは指定なしになります。テキスト表示位置 - ウィジェットの表示内容のテキストの位置を設定します。リストのマーカーを削除 - リストが画像マーカーの場合削除します。
+				'body' =>	$this->_('Adjust widget contents style.<br /><strong>Contents Margin</strong> - Adjust widget contents margin. If you set blank for margin field, the margin has no value.<br /><strong>Contents Position</strong> - Adjust widget contents position.<br /><strong>Remove list marker</strong> - If list has the marker, remove it.')		// ウィジェットの表示内容のスタイルを調整します。マージン - ウィジェットの表示内容のマージンを設定します。空に設定したフィールドは指定なしになります。テキスト表示位置 - ウィジェットの表示内容のテキストの位置を設定します。リストのマーカーを削除 - リストがマーカー付きの場合マーカーを削除します。
 			),
 			'adjustwidget_render' => array(	
 				'title' =>	$this->_('Render'),	// 描画処理

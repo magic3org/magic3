@@ -1212,7 +1212,7 @@ class admin_mainDb extends BaseDb
 	 * @param string $exportCss		外部出力用CSS
 	 * @return						true=成功、false=失敗
 	 */
-	function updatePageDefInfo($serialNo, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, $serializedParam, $exportCss)
+/*	function updatePageDefInfo($serialNo, $style, $title, $titleVisible, $useRender, $topContent, $bottomContent, $showReadmore, $readmoreTitle, $readmoreUrl, $serializedParam, $exportCss)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$user = $this->gEnv->getCurrentUserId();	// 現在のユーザ
@@ -1242,7 +1242,7 @@ class admin_mainDb extends BaseDb
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
-	}
+	}*/
 	/**
 	 * ページ定義レコードを更新
 	 *
