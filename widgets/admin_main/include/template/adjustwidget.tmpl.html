@@ -138,12 +138,12 @@ $(function(){
 	Calendar.setup({
 		inputField  : "item_start_date",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
-		button      : "calenderbutton1"       // ID of the button
+		button      : "{START_BUTTON_ID}"       // ID of the button
 	});
 	Calendar.setup({
 		inputField  : "item_end_date",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
-		button      : "calenderbutton2"       // ID of the button
+		button      : "{END_BUTTON_ID}"       // ID of the button
 	});
 	
 	// WYSIWYGエディター作成
@@ -248,8 +248,9 @@ $(function(){
 	</tr>
         <tr>
 	    <th><span {_HELP_ADJUSTWIDGET_TERM}>{_LC_LABEL_VIEW_TERM}</span></th>
-	    <td><div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_START_DATE}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_HOUR}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-5">～</div></div><div style="clear:both;"></div>
-<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_END_DATE}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_HOUR}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div></div>
+	    <td>{CALENDAR_RANGE_CONTROL}
+		<!--<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_START_DATE}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item">{_LC_LABEL_HOUR}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-5">～</div></div><div style="clear:both;"></div>
+<div class="form-group"><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_END_DATE}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="{_LC_LABEL_CALENDAR}" title="{_LC_LABEL_CALENDAR}" border="0" /></a></div><div class="form-control-static col-sm-1 m3config_item" >{_LC_LABEL_HOUR}</div><div class="col-sm-2 m3config_item" ><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div></div>-->
 	    </td>
 	</tr>
     <tr>

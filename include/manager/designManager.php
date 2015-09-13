@@ -31,6 +31,7 @@ class DesignManager extends Core
 	const CF_CONFIG_WINDOW_STYLE		= 'config_window_style';	// 設定画面のウィンドウスタイル取得用キー
 	const DEFAULT_CONFIG_WINDOW_STYLE	= 'toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900';// 設定画面のウィンドウスタイルデフォルト値
 	const UPLOAD_ICON_FILE = '/images/system/upload_box32.png';		// アップロードボックスアイコン
+	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
 	const DEFAULT_META_NO_INDEX = '<meta name="robots" content="noindex,nofollow" />';		// METAタグ(検索エンジン登録拒否)
 	
@@ -794,6 +795,45 @@ class DesignManager extends Core
 		
 		$buttonTag = '<a' . $idAttr . $urlAttr . ' class="' . $tagClass . '" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon ' . $iconType . '"></i></a>';
 		return $buttonTag;
+	}
+	/**
+	 * カレンダーによる期間入力フィールドを作成
+	 *
+	 * @param string $startDateId		開始日タグID,タグ名
+	 * @param string $startTimeId		開始時間タグID,タグ名
+	 * @param string $endDateId			終了日タグID,タグ名
+	 * @param string $endTimeId			終了時間タグID,タグ名
+	 * @param string $startDateValue	開始日
+	 * @param string $startTimeValue	開始時間
+	 * @param string $endDateValue		終了日
+	 * @param string $endTimeValue		終了時間
+	 * @param string $startDateLabel	開始日ラベル
+	 * @param string $startTimeLabel	開始時間ラベル
+	 * @param string $endDateLabel		終了日ラベル
+	 * @param string $endTimeLabeld		終了時間ラベル
+	 * @param string $calendarLabel		カレンダーラベル
+	 * @param string $startDateButtonId	開始日用カレンダー起動ボタンタグID
+	 * @param string $endDateButtonId	終了日用カレンダー起動ボタンタグID
+	 * @return string 					タグ
+	 */
+	function createCalendarRangeControl($startDateId, $startTimeId, $endDateId, $endTimeId, 
+										$startDateValue, $startTimeValue, $endDateValue, $endTimeValue, 
+										$startDateLabel, $startTimeLabel, $endDateLabel, $endTimeLabel, $calendarLabel, $startDateButtonId, $endDateButtonId)
+	{
+		$dateIconUrl = call_user_func($this->_getUrlCallback, $this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE);		// カレンダーアイコン
+				
+		$tag  = '<div class="form-control-static col-sm-1 m3config_item" >' . convertToHtmlEntity($startDateLabel) . '</div>';
+		$tag .= '<div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control spacer_bottom" id="' . $startDateId . '" name="' . $startDateId . '" value="' . convertToHtmlEntity($startDateValue) . '" maxlength="10" /></div>';
+		$tag .= '<div class="form-control-static col-sm-1" style="width:25px;padding-left:3px;"><a href="#" id="' . $startDateButtonId . '"><img src="' . $dateIconUrl . '" alt="' . convertToHtmlEntity($calendarLabel) . '" title="' . convertToHtmlEntity($calendarLabel) . '" rel="m3help" /></a></div>';
+		$tag .= '<div class="form-control-static col-sm-1 m3config_item" style="width:50px;">' . convertToHtmlEntity($startTimeLabel) . '</div>';
+		$tag .= '<div class="col-sm-2 m3config_item" style="width:110px;"><input type="text" class="form-control spacer_bottom" id="' . $startTimeId . '" name="' . $startTimeId . '" value="' . convertToHtmlEntity($startTimeValue) . '" maxlength="10" /></div>';
+		$tag .= '<div class="form-control-static col-sm-1" style="width:10px;padding-left:3px;margin-right:5px;">～</div>';
+        $tag .= '<div class="form-control-static col-sm-1 m3config_item" >' . convertToHtmlEntity($endDateLabel) . '</div>';
+		$tag .= '<div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="' . $endDateId . '" name="' . $endDateId . '" value="' . convertToHtmlEntity($endDateValue) . '" maxlength="10" /></div>';
+		$tag .= '<div class="form-control-static col-sm-1" style="width:25px;padding-left:3px;"><a href="#" id="' . $endDateButtonId . '"><img src="' . $dateIconUrl . '" alt="' . convertToHtmlEntity($calendarLabel) . '" title="' . convertToHtmlEntity($calendarLabel) . '" rel="m3help" /></a></div>';
+		$tag .= '<div class="form-control-static col-sm-1 m3config_item" style="width:50px;">' . convertToHtmlEntity($endTimeLabel) . '</div>';
+		$tag .= '<div class="col-sm-2 m3config_item" style="width:110px;"><input type="text" class="form-control" id="' . $endTimeId . '" name="' . $endTimeId . '" value="' . convertToHtmlEntity($endTimeValue) . '" maxlength="10" /></div>';
+		return $tag;
 	}
 }
 ?>

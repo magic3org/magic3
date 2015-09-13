@@ -30,6 +30,12 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	const HELP_ADJUSTWIDGET_CONFIG = 'adjustwidget_config';			// 機能説明ヘルプ
 	const WIDGET_TAG_HEAD = 'm3widget_';			// ウィジェットの識別用タグIDヘッダ
 	const REMOVE_LIST_MARKER_CSS = "#[#M3_WIDGET_CSS_ID#] ul>li:before {\n    content: none !important;\n    margin: 0;\n    padding: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul>li {\n    padding-left: 0;\n}\n#[#M3_WIDGET_CSS_ID#] ul{\n    padding-left: 0;\n    list-style: none;\n}\n";			// CSS(リストマーカー削除)
+	const START_DATE_ID		= 'item_start_date';		// 公開期間開始日タグID、タグ名
+	const START_TIME_ID		= 'item_start_time';		// 公開期間開始時間タグID、タグ名
+	const END_DATE_ID		= 'item_end_date';			// 公開期間終了日タグID、タグ名
+	const END_TIME_ID		= 'item_end_time';			// 公開期間終了時間タグID、タグ名
+	const START_BUTTON_ID	= 'calenderbutton1';			// 開始日用カレンダー表示ボタンのID
+	const END_BUTTON_ID		= 'calenderbutton2';			// 終了日用カレンダー表示ボタンのID
 	
 	/**
 	 * コンストラクタ
@@ -479,6 +485,14 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		// ページID選択チェックボックス作成
 		$this->createPageSubIdList();
 		
+		// 期間入力部作成
+		$rangeTag = $this->gDesign->createCalendarRangeControl(self::START_DATE_ID/*開始日タグID、タグ名*/, self::START_TIME_ID/*開始時間タグID、タグ名*/, self::END_DATE_ID/*終了日タグID、タグ名*/, self::END_TIME_ID/*終了時間タグID、タグ名*/, 
+																$start_date, $start_time, $end_date, $end_time, 
+																$this->_('Start Date:'), $this->_('Hour:'), $this->_('End Date:'), $this->_('Hour:'), $this->_('Calendar'), self::START_BUTTON_ID, self::END_BUTTON_ID);
+		$this->tmpl->addVar('_widget', 'calendar_range_control', $rangeTag);
+		$this->tmpl->addVar('_widget', 'start_button_id', self::START_BUTTON_ID);// 開始日用カレンダー表示ボタンのID
+		$this->tmpl->addVar('_widget', 'end_button_id', self::END_BUTTON_ID);// 終了日用カレンダー表示ボタンのID
+		
 		// ナビゲーションタブ作成
 		if (empty($activeTab)){		// タブの選択
 			$this->tmpl->addVar('_widget', 'active_tab', 'widget_config');
@@ -524,10 +538,6 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				break;
 		}
 		$this->tmpl->addVar("_widget", "shared_checked", $this->convertToCheckedString($shared));// 共通属性があるかどうか
-		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 公開期間開始日
-		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 公開期間開始時間
-		$this->tmpl->addVar("_widget", "end_date", $end_date);	// 公開期間終了日
-		$this->tmpl->addVar("_widget", "end_time", $end_time);	// 公開期間終了時間
 		
 		// 「スタイル」設定
 		$widgetOuterClass = self::WIDGET_CSS_CLASS_HEAD . str_replace('/', '_', $widgetId);
@@ -678,10 +688,6 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_on'] = $this->_('On');// オン
 		$localeText['label_view_term'] = $this->_('View Term');// 表示期間
 		$localeText['label_except_page'] = $this->_('Except Page');		// 例外ページ
-		$localeText['label_start_date'] = $this->_('Start Date:');		// 開始日
-		$localeText['label_end_date'] = $this->_('End Date:');		// 終了日
-		$localeText['label_hour'] = $this->_('Hour:');		// 時間
-		$localeText['label_calendar'] = $this->_('Calendar');		// カレンダー
 		$localeText['label_view_option'] = $this->_('View Option');		// 表示オプション
 		$localeText['label_view_login_state'] = $this->_('Login State');		// ログイン状況
 		$localeText['label_view_page_state'] = $this->_('Page State');		// ページ状況
