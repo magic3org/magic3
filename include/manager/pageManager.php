@@ -4043,7 +4043,11 @@ class PageManager extends Core
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onContextMenu: function(e){' . M3_NL;
-					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'return true;' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'if (_m3ShowWidgetTool){' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'return true;' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '} else {' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 4) . 'return false;' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '}' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '},' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'onShowMenu: function(e, menu){' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . '// メニュー項目の変更' . M3_NL;
