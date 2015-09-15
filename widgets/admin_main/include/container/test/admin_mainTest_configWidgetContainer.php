@@ -15,6 +15,7 @@
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
+require_once($gEnvManager->getLibPath()				. '/GUMP-1.3/gump.class.php' );
 
 class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 {
@@ -67,6 +68,21 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 			echo '<h4>Session value check</h4>';
 			echo 'old='.$postTicket.'<br>';
 			echo 'current='.$request->getSessionValue(M3_SESSION_POST_TICKET);
+			
+
+$data = array(
+    'street' => 'aasadfa'
+);
+
+$validated = GUMP::is_valid($data, array(
+    'street' => 'required|street_address'
+));
+
+if($validated === true) {
+    echo "Valid Street Address!";
+} else {
+    print_r($validated);
+}
 		} else {
 			// ハッシュキー作成
 			$postTicket = md5(time() . $this->gAccess->getAccessLogSerialNo());

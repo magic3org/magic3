@@ -12,14 +12,14 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    Release 2.13.x SVN: $Id$
+ * @version    Release 2.14.x SVN: $Id$
  * @link       http://www.magic3.org
  */
 if (defined("M3_SYSTEM_DEFINE_INCLUDED")) return;
 define("M3_SYSTEM_DEFINE_INCLUDED", true);
 
 // ######### PHPバージョンチェック #########
-if (version_compare(PHP_VERSION, '5.2.0') < 0) die("PHP version error: ver=" . PHP_VERSION . ". Magic3 can move above version 5.2.0.");
+if (version_compare(PHP_VERSION, '5.3.0') < 0) die("PHP version error: ver=" . PHP_VERSION . ". Magic3 can move above version 5.3.0.");
 // ######### システム起動状況 #########
 define('M3_SYSTEM',			true);
 define('M3_SYSTEM_DEMO',	false);		// システム起動モード、デモモードフラグ
@@ -55,7 +55,7 @@ define('M3_TITLE_BRACKET_END',		'」');					// タイトルを括弧表記する
 // ########## システム関係 ##########
 // システム基本情報
 define('M3_SYSTEM_NAME',			'Magic3');		// システム名称
-define('M3_SYSTEM_VERSION',			'2.13.8');		// システムのバージョン
+define('M3_SYSTEM_VERSION',			'2.14.0');		// システムのバージョン
 define('M3_SYSTEM_RELEASE_DATE',	'2015/9/14');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
