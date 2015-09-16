@@ -3746,6 +3746,8 @@ class PageManager extends Core
 							break;
 						}
 					}
+				} else {		// メインの管理画面の場合
+					$replaceStr .= 'var M3_CONFIG_WIDGET_DEVICE_TYPE = 0;' . M3_NL;			// 管理画面画面の端末タイプ(主にテスト用に使用)
 				}
 						
 				if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
