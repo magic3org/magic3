@@ -53,14 +53,15 @@ $(function(){
 	m3SetFileSelectButton();
 
 	// WYSIWYGエディター作成
-//	m3SetWysiwygEditor('item_html', 200/* 高さ */);
+	m3SetWysiwygEditor('item_html', 100/* 高さ */);
+	
 	// 画像選択
 	$("#selimage").click(function (){
 		selectImage();
 	});
 	
-	$('#item_html').insertAtCaret('input here!');
-	$('#item_input').insertAtCaret('input here!');
+//	$('#item_html').insertAtCaret('input here!');
+//	$('#item_input').insertAtCaret('input here!');
 });
 //]]>
 </script>
@@ -70,8 +71,7 @@ $(function(){
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <input type="hidden" name="ticket" value="{TICKET}" />
-<!--<h3><span {_HELP_UNTITLED_TEST}>ウィジェット設定画面テスト</span></h3>-->
-<h3 class="m3config_h"><span {_HELP_EVENT_LIST}>受付イベント一覧</span>
+<h3 class="m3config_h"><span {_HELP_EVENT_LIST}>ヘッダタイトル</span>
 <!--<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>-->
 </h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_EVENT_BUTTONS}><div class="btn-group">
@@ -96,8 +96,12 @@ $(function(){
 		</td>
 	</tr>
 	<tr>
-	    <th><span {_HELP_ENTRY_NAME}>イベント名</span></th>
-	    <td colspan="3"><i class="glyphicon glyphicon-question-sign text-warning" style="font-size:150%;"></i><div class="form-control-static m3config_item">{EVENT_NAME}</div></td>
+	    <th><span {_HELP_ENTRY_NAME}>テキスト入力</span></th>
+	    <td colspan="3"><input type="text" name="item_name" class="form-control" maxlength="30" value="{NAME}" /></td>
+	</tr>
+	<tr>
+	    <th><span {_HELP_ENTRY_NAME}>テキスト固定</span></th>
+	    <td colspan="3">{STATIC_NAME}</td>
 	</tr>
     <tr>
 	    <th><span {_HELP_EVENT_URL}>説明</span><div class="pull-right"><a id="selimage" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" data-container="body"><i class="glyphicon glyphicon-edit"></i></a></div></th>
@@ -105,7 +109,7 @@ $(function(){
 	</tr>
 	<tr>
 	    <th><span {_HELP_ENTRY_NAME}>入力</span></th>
-	    <td colspan="3"><input type="text" id="item_input" name="item_input" class="form-control" size="30" maxlength="30" /></td>
+	    <td colspan="3"><input type="text" id="item_input" name="item_input" class="form-control" maxlength="30" /></td>
 	</tr>
     </tbody>
 </table>

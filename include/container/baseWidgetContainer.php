@@ -37,6 +37,7 @@ class BaseWidgetContainer extends Core
 	protected $successMessage	= array();		// 成功メッセージ
 	protected $optionUrlParam = array();		// URLに付加する値
 	protected $localeText = array();			// ローカライズ用テキストの定義
+	protected $inputFieldInfo = array();		// 入力フィールド情報
 	protected $configMenubarBreadcrumbTitleDef;			// 設定画面用パンくずリストのタイトル定義
 	protected $configMenubarMenuDef;					// 設定画面用メニューバーのメニュー定義
 	protected $keepForeTaskForBackUrl = false;	// 遷移前のタスクを戻り先URLとするかどうか
@@ -821,6 +822,114 @@ class BaseWidgetContainer extends Core
 		// 変換文字「&<>"'」
 		//return htmlspecialchars($src, ENT_QUOTES, M3_HTML_CHARSET);
 		return convertUrlToHtmlEntity($src);
+	}
+	/**
+	 * 入力フィールドの値を取得
+	 *
+	 * @param string $fieldValue		値が代入される変数
+	 * @param string $name				POST,GET値の取得キー
+	 * @param string $inputType			入力値のタイプ(text(trimValueOf)、int(trimIntOf)、html(valueOf)、url(trimValueOf)、空の場合はtext)。「:」でデフォルト値が付加可能。
+	 * @param string $outputType		出力値のタイプ(空の場合は、入力タイプ別の処理、textまたはint(HTMLエンティティのエスケープ)、html(エスケープなし)、url(URLのみのエスケープ)を行う。)
+	 * @param string $validateRule		デフォルトの入力チェックルール
+	 * @return							なし
+	 */
+	function getInputField(&$fieldValue, $name, $inputType = '', $outputType = '', $validateRule = '', $fieldNameHead = 'item_')
+	{
+		global $gRequestManager;
+		
+		// パレメータエラーチェック
+		// 名前が空の場合は終了
+		if (empty($name)){
+			echo 'Input field error: no name parameter.';
+			return;
+		}
+		// 値が設定されている場合は終了
+		if (isset($fieldValue)){
+			echo 'Input field error: ' . $name . ' is already initialized.';
+			return;
+		}
+		// 既存データの場合は終了
+		if (in_array($name, $this->inputFieldInfo)){
+			echo 'Input field error: ' . $name . ' already exists.';
+			return;
+		}
+		// 変数を解析
+		list($inputType, $inputParam) = explode(':', strtolower($inputType));
+		$inputType = trim($inputType);
+		$inputParam = trim($inputParam);
+		list($outputType, $outputParam) = explode(':', strtolower($outputType));
+		$outputType = trim($outputType);
+		$outputParam = trim($outputParam);
+		if (empty($inputType)) $inputType = 'text';
+		if (empty($outputType)) $outputType = $inputType;
+		
+		// 入力値を取得
+		$inputFieldName = $fieldNameHead . $name;
+		switch ($inputType){
+		case 'text':
+		case 'url':
+		default:
+			$fieldValue = $gRequestManager->trimValueOf($inputFieldName);
+			break;
+		case 'int':
+			if (is_int($inputParam)){			// デフォルト値がある場合
+				$fieldValue = $gRequestManager->trimIntValueOf($inputFieldName, $inputParam);
+			} else {
+				echo 'Input field error: ' . $name . ' must have default value.';
+				return;
+			}
+			break;
+		case 'html':
+			$fieldValue = $gRequestManager->valueOf($inputFieldName);
+			if ($inputParam == 'trim') $fieldValue = trim($fieldValue);		// 「trim」オプション付きの場合
+			break;
+		case 'checkbox':
+			$fieldValue = $gRequestManager->trimCheckedValueOf($inputFieldName);
+			break;
+		}
+		
+		// フィールド情報を保存
+		$fieldObj = new stdClass;
+		$fieldObj->inputType	= $inputType;
+		$fieldObj->inputParam	= $inputParam;
+		$fieldObj->outputType	= $outputType;
+		$fieldObj->outputParam	= $outputParam;
+		$fieldObj->validateRule	= $validateRule;
+		$fieldObj->fieldValue	= &$fieldValue;			// putInputFieldsで値を取得するために参照渡しにする
+		$this->inputFieldInfo[$name] = $fieldObj;
+	}
+	/**
+	 * すべての入力フィールドの値をテンプレート出力
+	 *
+	 * @return							なし
+	 */
+	function putInputFields()
+	{
+		foreach ($this->inputFieldInfo as $name => $fieldObj){
+			$inputType		= $fieldObj->inputType;
+			$inputParam		= $fieldObj->inputParam;
+			$outputType		= $fieldObj->outputType;
+			$outputParam	= $fieldObj->outputParam;
+			$validateRule	= $fieldObj->validateRule;
+			$fieldValue		= $fieldObj->fieldValue;		// 現在の値を取得
+			
+			switch ($inputType){
+			case 'text':
+			case 'int':
+			default:
+				$this->tmpl->addVar('_widget', $name, $this->convertToDispString($fieldValue));
+				break;
+			case 'url':
+				$this->tmpl->addVar('_widget', $name, $this->convertUrlToHtmlEntity($fieldValue));
+				break;
+			case 'html':
+				$this->tmpl->addVar('_widget', $name, $fieldValue);
+				break;
+			case 'checkbox':
+				$this->tmpl->addVar('_widget', $name, $this->convertToCheckedString($fieldValue));
+				break;
+			}
+		}
 	}
 	/**
 	 * 未入力チェック
