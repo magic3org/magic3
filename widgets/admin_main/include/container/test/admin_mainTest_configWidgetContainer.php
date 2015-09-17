@@ -60,9 +60,6 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		//$this->setUserErrorMsg('エラーメッセージテスト1231312312312313321312321313213131312');
 		$this->setAppErrorMsg('エラーメッセージテスト1231312312312313321312321313213131312');
-
-
-		$act = $request->trimValueOf('act');
 		
 		// 入力値取得
 		$this->getInputField($act,	'act');
@@ -87,9 +84,8 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 			}
 		} else {
 		}
-		$name = 200;
 		// 画面にデータ埋め込み
-		$this->putInputFields();
+		$this->putInputField();
 	}
 }
 ?>

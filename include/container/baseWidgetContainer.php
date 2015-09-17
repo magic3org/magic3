@@ -828,8 +828,9 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @param string $fieldValue		値が代入される変数
 	 * @param string $name				POST,GET値の取得キー
-	 * @param string $inputType			入力値のタイプ(text(trimValueOf)、int(trimIntOf)、html(valueOf)、url(trimValueOf)、空の場合はtext)。「:」でデフォルト値が付加可能。
-	 * @param string $outputType		出力値のタイプ(空の場合は、入力タイプ別の処理、textまたはint(HTMLエンティティのエスケープ)、html(エスケープなし)、url(URLのみのエスケープ)を行う。)
+	 * @param string $inputType			入力値のタイプ(text(trimValueOf)、int(trimIntOf)、html(valueOf)、url(trimValueOf)、checkbox(trimCheckedValueOf)、init(出力なし)、none(出力のみ)、空の場合はtext)。「:」でデフォルト値が付加可能。
+	 * @param string $outputType		出力値のタイプ(text(HTMLエンティティのエスケープ)、html(エスケープなし)、url(URLのみのエスケープ、checkbox(checked文字列))。
+	 * 									空の場合は、入力タイプ別の規定処理、textまたはint(HTMLエンティティのエスケープ)、html(エスケープなし)、url(URLのみのエスケープ、checkbox(checked文字列))を行う。
 	 * @param string $validateRule		デフォルトの入力チェックルール
 	 * @return							なし
 	 */
@@ -878,6 +879,7 @@ class BaseWidgetContainer extends Core
 				echo 'Input field error: ' . $name . ' must have default value.';
 				return;
 			}
+			$outputType = 'text';
 			break;
 		case 'html':
 			$fieldValue = $gRequestManager->valueOf($inputFieldName);
@@ -885,6 +887,9 @@ class BaseWidgetContainer extends Core
 			break;
 		case 'checkbox':
 			$fieldValue = $gRequestManager->trimCheckedValueOf($inputFieldName);
+			break;
+		case 'none':		// 出力のみ
+			$fieldValue = '';		// 空文字列で初期化
 			break;
 		}
 		
@@ -903,7 +908,7 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @return							なし
 	 */
-	function putInputFields()
+	function putInputField()
 	{
 		foreach ($this->inputFieldInfo as $name => $fieldObj){
 			$inputType		= $fieldObj->inputType;
@@ -913,22 +918,55 @@ class BaseWidgetContainer extends Core
 			$validateRule	= $fieldObj->validateRule;
 			$fieldValue		= $fieldObj->fieldValue;		// 現在の値を取得
 			
-			switch ($inputType){
+			switch ($outputType){
 			case 'text':
-			case 'int':
-			default:
 				$this->tmpl->addVar('_widget', $name, $this->convertToDispString($fieldValue));
-				break;
-			case 'url':
-				$this->tmpl->addVar('_widget', $name, $this->convertUrlToHtmlEntity($fieldValue));
 				break;
 			case 'html':
 				$this->tmpl->addVar('_widget', $name, $fieldValue);
 				break;
+			case 'url':
+				$this->tmpl->addVar('_widget', $name, $this->convertUrlToHtmlEntity($fieldValue));
+				break;
 			case 'checkbox':
 				$this->tmpl->addVar('_widget', $name, $this->convertToCheckedString($fieldValue));
 				break;
+			case 'init':		// 出力なし
+				break;
+			default:
+				echo 'Input field error: ' . $name . ' must have valid output type.';
+				break;
 			}
+		}
+	}
+	/**
+	 * 値をテンプレート出力
+	 *
+	 * @param string $name				テンプレートタグ名
+	 * @param string $str				出力文字列
+	 * @param string $outputType		出力値のタイプ(text(HTMLエンティティのエスケープ)、html(エスケープなし)、url(URLのみのエスケープ)、checkbox(checkedまたは空文字列)、disabled(disabledまたは空文字列))
+	 * @return							なし
+	 */
+	function putTemplateVar($name, $str, $outputType = '')
+	{
+		$outputType = strtolower($outputType);
+		switch ($outputType){
+		case 'text':
+		default:
+			$this->tmpl->addVar('_widget', $name, $this->convertToDispString($str));
+			break;
+		case 'html':
+			$this->tmpl->addVar('_widget', $name, $str);
+			break;
+		case 'url':
+			$this->tmpl->addVar('_widget', $name, $this->convertUrlToHtmlEntity($str));
+			break;
+		case 'checkbox':
+			$this->tmpl->addVar('_widget', $name, $this->convertToCheckedString($str));
+			break;
+		case 'disabled':
+			$this->tmpl->addVar('_widget', $name, $this->convertToDisabledString($str));
+			break;
 		}
 	}
 	/**
