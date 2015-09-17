@@ -64,6 +64,7 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 		// 入力値取得
 		$this->getInputField($act,	'act');
 		$this->getInputField($name,	'name');
+		$this->getInputField($staticName,	'static_name', 'none');			// 出力のみ
 		
 		if ($act == 'update'){				// 送信確認
 
@@ -84,6 +85,8 @@ class admin_mainTest_configWidgetContainer extends admin_mainBaseWidgetContainer
 			}
 		} else {
 		}
+		$staticName = '固定で出力';			// 出力のみテキスト
+		
 		// 画面にデータ埋め込み
 		$this->putInputField();
 	}

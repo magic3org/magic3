@@ -869,7 +869,6 @@ class BaseWidgetContainer extends Core
 		switch ($inputType){
 		case 'text':
 		case 'url':
-		default:
 			$fieldValue = $gRequestManager->trimValueOf($inputFieldName);
 			break;
 		case 'int':
@@ -889,7 +888,13 @@ class BaseWidgetContainer extends Core
 			$fieldValue = $gRequestManager->trimCheckedValueOf($inputFieldName);
 			break;
 		case 'none':		// 出力のみ
+			// 出力タイプが設定されていない場合はデフォルト変換を行う
+			if ($outputType == 'none') $outputType = 'text';
+
 			$fieldValue = '';		// 空文字列で初期化
+			break;
+		default:
+			echo 'Input field error: ' . $name . ' must have valid input type.';
 			break;
 		}
 		
