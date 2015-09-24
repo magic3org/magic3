@@ -234,7 +234,7 @@ INSERT INTO _templates
 ('art42_sample3',                 'art42_sample3',                 2,       0,              false,     false,            true,         '',           ''),
 ('art42_sample4',                 'art42_sample4',                 2,       0,              false,     false,            true,         '',           ''),
 ('art42_sample5',                 'art42_sample5',                 2,       0,              false,     false,            true,         '',           ''),
-('themler_sample1',               'themler_sample1',               2,       0,              false,     false,            true,         'themler',    '1.0.33'),
+('themler_sample1',               'themler_sample1',               2,       0,              false,     false,            true,         'themler',    '1.0.39'),
 ('bootstrap_yeti',                'bootstrap_yeti',                10,      0,              false,     true,             true,         '',           ''),
 ('bootstrap_cerulean',            'bootstrap_cerulean',            10,      0,              false,     true,             true,         '',           ''),
 ('bootstrap_united',              'bootstrap_united',              10,      0,              false,     true,             true,         '',           ''),
