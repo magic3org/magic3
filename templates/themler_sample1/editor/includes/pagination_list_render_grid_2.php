@@ -2,6 +2,7 @@
 
 function pagination_list_render_grid_2($list)
 {
+    if (is_string($list)) return $list;
 	// Initialise variables.
 	$lang = JFactory::getLanguage();
     ob_start();

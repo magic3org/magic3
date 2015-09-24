@@ -31,7 +31,7 @@ function pagination_list_render($list)
     if ('specific' === $activePaginator) {
         return $list;
     } else {
-        echo renderTemplateFromIncludes('pagination_list_render_' . $activePaginator, array($list),
+        return renderTemplateFromIncludes('pagination_list_render_' . $activePaginator, array($list),
             'common' == $activePaginator ? 'prototypes' : 'includes');
 	} 
 }

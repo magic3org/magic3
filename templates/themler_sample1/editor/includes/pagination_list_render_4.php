@@ -2,8 +2,10 @@
 
 function pagination_list_render_4($list)
 {
+    if (is_string($list)) return $list;
     // Initialise variables.
     $lang = JFactory::getLanguage();
+    ob_start();
 ?>
     <ul class="data-control-id-1405 bd-pagination pagination">
     <?php if ($list['start']['active']) : ?>
@@ -39,4 +41,5 @@ function pagination_list_render_4($list)
     <?php endif; ?>
 </ul>
 <?php
+    return ob_get_clean();
 }

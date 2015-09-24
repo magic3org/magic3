@@ -67,14 +67,17 @@ function modChrome_block($module, &$params, &$attribs)
 {
     $result = '';
     if (!empty ($module->content)) {
-        $args = array($module->showtitle != 0 ? $module->title : '',
-            $module->content,
-            $params->get('moduleclass_sfx'),
-            $module->id);
-        if ('' !== $attribs['funcStyling'])
+        $args = array('title' => $module->showtitle != 0 ? $module->title : '',
+            'content' => $module->content,
+            'classes' => $params->get('moduleclass_sfx'),
+            'id' => $module->id);
+        if ('' !== $attribs['funcStyling']) {
+            $args['extraClass'] = isset($attribs['extraClass']) ? $attribs['extraClass'] : '';
             $result = renderTemplateFromIncludes($attribs['funcStyling'], $args);
-        else
+        }
+        else {
             $result = $module->content;
+        }
     }
     echo $result;
 }

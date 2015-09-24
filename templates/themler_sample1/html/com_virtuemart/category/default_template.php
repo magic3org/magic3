@@ -169,8 +169,9 @@
         <div class="separated-grid row">
           <?php foreach ( $this->products as $product ) : ?>
     <?php
+        $customfieldsModel = VmModel::getModel('customfields');
+        $product->customfields = $customfieldsModel->getCustomEmbeddedProductCustomFields($product->allIds, 0, 1);
         if ($product->customfields){
-            $customfieldsModel = VmModel::getModel ('Customfields');
             $customfieldsModel->displayProductCustomfieldFE($product, $product->customfields);
         }
         //create product title decorator object
@@ -265,12 +266,13 @@
 </div>
 <?php endif; ?>
 	
-		<?php if (isset($productItems->productDesc)) : ?>
+		<?php $descLength = intval('40'); ?>
+<?php if (isset($productItems->productDesc)) : ?>
 <div class=" bd-productdesc-9">
-    <?php if (property_exists($productItems->productDesc, 'isFull')) :
+    <?php if (property_exists($productItems->productDesc, 'isFull') || $descLength <= 0) :
         echo $productItems->productDesc->desc;
     else :
-        echo shopFunctionsF::limitStringByWord($productItems->productDesc->desc, 40, '...');
+        echo shopFunctionsF::limitStringByWord($productItems->productDesc->desc, $descLength, '...');
     ?>
     <?php endif; ?>
 </div>
@@ -448,12 +450,13 @@
 </div>
 <?php endif; ?>
 	
-		<?php if (isset($productItems->productDesc)) : ?>
+		<?php $descLength = intval('40'); ?>
+<?php if (isset($productItems->productDesc)) : ?>
 <div class=" bd-productdesc-11">
-    <?php if (property_exists($productItems->productDesc, 'isFull')) :
+    <?php if (property_exists($productItems->productDesc, 'isFull') || $descLength <= 0) :
         echo $productItems->productDesc->desc;
     else :
-        echo shopFunctionsF::limitStringByWord($productItems->productDesc->desc, 40, '...');
+        echo shopFunctionsF::limitStringByWord($productItems->productDesc->desc, $descLength, '...');
     ?>
     <?php endif; ?>
 </div>

@@ -12,7 +12,9 @@ abstract class Storage
         $this->_file = $file;
         if (file_exists($this->_file)) {
             $content = Helper::readFile($this->_file);
-            $this->_data = json_decode($content, true);
+            $ret = json_decode($content, true);
+            if (null !== $ret)
+                $this->_data = $ret;
         }
     }
 

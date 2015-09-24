@@ -98,7 +98,7 @@ $counter = 0;
 <?php if (count($pagination_list) > 0) : ?>
     <div class="data-control-id-2919 bd-blogpagination-1">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_1', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_1', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>
@@ -207,7 +207,7 @@ $counter = 0;
 <?php if (count($pagination_list) > 0) : ?>
     <div class="data-control-id-3237 bd-blogpagination-3">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_3', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_3', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>
@@ -316,7 +316,7 @@ $counter = 0;
 <?php if (count($pagination_list) > 0) : ?>
     <div class="data-control-id-3078 bd-blogpagination-2">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_2', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_2', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>
@@ -425,7 +425,7 @@ $counter = 0;
 <?php if (count($pagination_list) > 0) : ?>
     <div class="data-control-id-1406 bd-blogpagination-4">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_4', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_4', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>
@@ -534,7 +534,7 @@ $counter = 0;
 <?php if (count($pagination_list) > 0) : ?>
     <div class="data-control-id-1657 bd-blogpagination-5">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_5', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_5', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>

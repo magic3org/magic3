@@ -14,14 +14,14 @@ function shoppingcart_block_1($caption, $content, $classes = '', $id = '')
         <div class="bd-container-inner">
         <?php if ($hasCaption) : ?>
     
-    <div class="data-control-id-3535 bd-container-55 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-imagestyles bd-custom-table">
+    <div class="data-control-id-3535 bd-container-55 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-image bd-custom-table">
         <h4><?php echo $caption; ?></h4>
     </div>
     
 <?php endif; ?>
         <?php if ($hasContent) : ?>
     
-    <div class="data-control-id-3567 bd-container-56 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-imagestyles bd-custom-table">
+    <div class="data-control-id-3567 bd-container-56 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-image bd-custom-table">
     <?php echo funcPostprocessBlockContent($content); ?>
     </div>
     

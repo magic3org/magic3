@@ -2,7 +2,7 @@
 <!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/1.6/template-install.dtd">
 <extension version="2.5" client="site" type="template" method="upgrade">
   <name>themler_sample1</name>
-  <creationDate>2015-08-19</creationDate>
+  <creationDate>2015-09-18</creationDate>
   <version>1.0</version>
   <author/>
   <authorUrl/>
@@ -41,7 +41,6 @@
   </files>
   <positions>
     <position>breadcrumb</position>
-    <position>currency</position>
     <position>features-home</position>
     <position>footer1</position>
     <position>hmenu</position>

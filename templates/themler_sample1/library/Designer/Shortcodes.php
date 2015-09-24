@@ -152,7 +152,7 @@ function googlemap_styling($atts){
     }
 
     $divs = '<div style="' . $css . '"><div class="embed-responsive" style="height: 100%; width: 100%;">';
-    $iframe = '<iframe class="embed-responsive-item" src="http://maps.google.com/maps?output=embed' . $address . $zoom . $map_type . $language . '"></iframe>';
+    $iframe = '<iframe class="embed-responsive-item" src="//maps.google.com/maps?output=embed' . $address . $zoom . $map_type . $language . '"></iframe>';
     $divEnd = '</div>';
 
     return $divs . $iframe . $divEnd . $divEnd;

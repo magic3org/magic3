@@ -85,7 +85,7 @@
 	
 		<div class="container data-control-id-329 bd-containereffect-4"><div class="bd-sheetstyles bd-contentlayout-3 data-control-id-331">
     <div class="bd-container-inner">
-        <div class="bd-flex-vertical">
+        <div class="bd-flex-vertical bd-stretch-inner">
             
             <div class="bd-flex-horizontal bd-flex-wide">
                 

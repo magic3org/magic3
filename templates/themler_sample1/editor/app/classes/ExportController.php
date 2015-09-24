@@ -36,8 +36,10 @@ class ExportController
                 if (isset($data['desktop']))  $params[] = 'desktop=' . $data['desktop'];
                 if (count($params) > 0)       $params = '&' . implode('&', $params);
 
-                $credentials = array( 'username' => $username, 'password' => $password);
-                $app->login($credentials, array('action' => 'core.login.admin'));
+                if ('' !== $username) {
+                    $credentials = array( 'username' => $username, 'password' => $password);
+                    $app->login($credentials, array('action' => 'core.login.admin'));
+                }
 
                 $current = dirname(JURI::current()) . '/';
                 $return = dirname(dirname(dirname($current))) . '/administrator/';
@@ -49,7 +51,7 @@ class ExportController
 
                 if ($styleId) {
                     $return .= 'index.php?option=com_templates&view=style&layout=edit&id=' .
-                        $styleId . '&editor=1' . $params;
+                        $styleId . '&editor=1&theme=' . Config::getStyleObject()->template .  $params;
                 }
                 $app->redirect($return);
             }
@@ -114,11 +116,8 @@ class ExportController
 
         $templateName = $data['template'];
         $chunk = new Chunk();
+        $chunk->save($info);
 
-        if (!$chunk->save($info)) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request', true, 400);
-            return '';
-        }
         $timeLogging->end('[PHP] Chunk save');
 
         if ($chunk->last()) {
@@ -249,42 +248,10 @@ class ExportController
             ));
         }
 
-        $templateName = $data['template'];
-        $themeDir     = JPATH_SITE . '/templates/' . $templateName;
-        //create manifests folder
-        $manifestsDir = JPATH_SITE . '/templates/manifests';
-        if (!file_exists($manifestsDir))
-            Helper::createDir($manifestsDir);
-        Helper::writeFile($manifestsDir . '/manifest.php',
-            Helper::readFile($themeDir . '/app/start/manifest.php'));
-
-        $manifestPath = $themeDir . '/app/themler.manifest';
-        $versionPath = $themeDir . '/app/themler.version';
-        $themeManifestsDir = $themeDir . '/app/manifests';
-        if (file_exists($manifestPath)) {
-            $content = Helper::readFile($manifestPath);
-            if (preg_match('#\#ver:(\d+)#i', $content, $matches)) {
-                $v = trim($matches[1]);
-                $newManifestName = 'themler-' . $v . '.manifest';
-                Helper::writeFile($manifestsDir . '/' . $newManifestName, $content);
-                Helper::createDir($themeManifestsDir);
-                Helper::writeFile($themeManifestsDir . '/' . $newManifestName, $content);
-                Helper::writeFile($versionPath, $v);
-                Helper::deleteFile($manifestPath);
-            }
-        }
-
-        $version = '';
-        if (file_exists($versionPath)) {
-            $version = Helper::readFile($versionPath);
-            $fileName = 'themler-' . $version . '.manifest';
-            if (!file_exists($manifestsDir . '/' . $fileName) &&
-                file_exists($themeManifestsDir . '/' . $fileName)) {
-                Helper::copyFile($themeManifestsDir . '/' . $fileName, $manifestsDir . '/' . $fileName);
-            }
-        }
-
-        return $this->_response(array('result' => 'done', 'version' => $version));
+        return $this->_response(array(
+            'result' => 'done',
+            'version' => Config::buildAppManifestVersion($data['template'])
+        ));
     }
 
     /**
@@ -397,11 +364,11 @@ class ExportController
             $thumbnailDir = file_exists($themeDir . '/template_thumbnail.png') ?
                 $root . '/templates/' . $item->element . '/template_thumbnail.png' : '';
             $versionPath = $themeDir . '/app/themler.version';
-            $version = file_exists($versionPath) ? '&ver=' . file_get_contents($versionPath) : '';
+            $version = file_exists($versionPath) ? '&ver=' . Helper::readFile($versionPath) : '';
             $openUrl = $root . '/templates/' . $item->element .
                 '/app/index.php?auto_authorization=1&username=&password=&domain=' . $version;
             $result[$item->id] = array(
-                'themeName' => $item->name,
+                'themeName' => $item->element,
                 'thumbnailUrl' => $thumbnailDir,
                 'openUrl' => $openUrl,
                 'isActive' => $this->themeIsActive($item->element)
@@ -458,11 +425,7 @@ class ExportController
             $response = 'ok';
         } else {
             $chunk = new Chunk();
-
-            if (!$chunk->save($this->_getChunkInfo($data))) {
-                header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request', true, 400);
-                return '';
-            }
+            $chunk->save($this->_getChunkInfo($data));
 
             if ($chunk->last()) {
                 $files = json_decode($chunk->complete(), true);
@@ -482,6 +445,163 @@ class ExportController
 
         return $this->_response($response);
     }
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function zip($data)
+    {
+        $templateName = $data['template'];
+        $info = $this->_getChunkInfo($data);
+
+        $chunk = new Chunk();
+        $chunk->save($info);
+
+        if (!$chunk->last()) {
+            return $this->_response(array('result' => 'processed'));
+        }
+
+        $data = json_decode($chunk->complete(), true);
+        if (!isset($data['fso']))
+            trigger_error('Fso not found' . print_r($data, true), E_USER_ERROR);
+
+        $zipFiles = $this->_convertFsoToZipFiles($data['fso']);
+        if (null === $zipFiles) {
+            trigger_error('Zip files not found' . print_r($zipFiles, true), E_USER_ERROR);
+        }
+
+        $tmp = JPATH_SITE . '/templates/' . $templateName . '/tmp';
+        Helper::createDir($tmp);
+
+        jimport('joomla.filesystem.archive');
+        jimport('joomla.filesystem.file');
+        $archivePath = $tmp . '/' . 'zip-data.zip';
+        $zip = JArchive::getAdapter('zip');
+        $zip->create($archivePath, $zipFiles);
+        $result = array('result' => 'done', 'data' => base64_encode(Helper::readFile($archivePath)));
+        Helper::removeDir($tmp);
+        return $this->_response($result);
+    }
+
+    /**
+     * @param $data
+     * @return array|mixed
+     */
+    public function unZip($data)
+    {
+        $templateName = $data['template'];
+        $tmp = JPATH_SITE . '/templates/' . $templateName . '/tmp';
+        Helper::createDir($tmp);
+
+        $filename = isset($data['filename']) ? $data['filename'] : '';
+
+        if ('' === $filename) {
+            $result = array(
+                'status' => 'error',
+                'message' => 'Empty file name'
+            );
+        } else {
+            $uploadPath = $tmp . '/' . $filename;
+            $isLast = isset($data['last']) ? $data['last'] : '';
+            $result = $this->_uploadFileChunk($uploadPath, $isLast);
+
+            if ($result['status'] === 'done') {
+                $info = pathinfo($uploadPath);
+                $suffix = isset($info['extension']) ? '.'.$info['extension'] : '';
+                $fileName =  basename($uploadPath, $suffix);
+                $extractDir = dirname($uploadPath) . '/' . $fileName;
+                Helper::createDir($extractDir);
+
+                if (version_compare(JVERSION, '3.0', '<')) {
+                    jimport('joomla.filesystem.archive');
+                    $result = JArchive::extract($uploadPath, $extractDir);
+                    if ($result === false) {
+                        return array(
+                            'status' => 'error',
+                            'message' => 'Invalid type.'
+                        );
+                    }
+                } else {
+                    try {
+                        JArchive::extract($uploadPath, $extractDir);
+                    } catch (Exception $e) {
+                        return array(
+                            'status' => 'error',
+                            'message' => $e->getMessage()
+                        );
+                    }
+                }
+                $fso = $this->_convertZipFilesToFso($extractDir);
+                Helper::removeDir($tmp);
+                $result['fso'] = $fso;
+            }
+        }
+        return $this->_response($result);
+    }
+
+    /**
+     * @param $path
+     * @return array
+     */
+    public function _convertZipFilesToFso($path) {
+        $result = array();
+        if (is_file($path)) {
+            $type = 'text';
+            $content = Helper::readFile($path);
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            if (in_array($ext, array('jpg', 'jpeg', 'bmp', 'png', 'gif'))) {
+                $type = 'data';
+                $content = base64_encode($content);
+            }
+            return array('type' => $type, 'content' => $content);
+        }
+
+        if (is_dir($path)) {
+            $result = array('type' => 'dir', 'items' => array());
+            if ($dh = opendir($path)) {
+                while (($name = readdir($dh)) !== false) {
+                    if (in_array($name, array('.', '..'))) {
+                        continue;
+                    }
+                    $result['items'][$name] = $this->_convertZipFilesToFso($path . '/' . $name);
+                }
+                closedir($dh);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param $fso
+     * @param string $relative
+     * @return array|null
+     */
+    private function _convertFsoToZipFiles($fso, $relative = '')
+    {
+        static $zipFiles = array();
+
+        if(!array_key_exists('items', $fso) || !is_array($fso['items'])) {
+            return null;
+        }
+        foreach ($fso['items'] as $name => $file) {
+            if(isset($file['content']) && isset($file['type'])) {
+                switch ($file['type']) {
+                    case 'text':
+                        $zipFiles[] = array('name' => $relative . $name, 'data' => $file['content']);
+                        break;
+                    case 'data':
+                        $zipFiles[] = array('name' => $relative . $name, 'data' => base64_decode($file['content']));
+                        break;
+                }
+            } elseif(isset($file['items']) && isset($file['type'])) {
+                $this->_convertFsoToZipFiles($file, $relative . $name . '/');
+            }
+        }
+        return $zipFiles;
+    }
+
     /**
      * @param $data
      * @return mixed
@@ -550,7 +670,8 @@ class ExportController
             if ($result['status'] === 'done') {
                 $current = dirname(JURI::current()) . '/';
                 $root = dirname(dirname(dirname($current)));
-                $result['url'] = $root . '/templates/' . $templateName . '/editor/' . $desImagesFolder . $filename;            }
+                $result['url'] = $root . '/templates/' . $templateName . '/editor/' . $desImagesFolder . $filename;
+            }
         }
 
         return $this->_response($result);
@@ -882,7 +1003,7 @@ class ExportController
         foreach($items as $item) {
             $themeNames[] = $item->element;
         }
-        $xml = simplexml_load_string(file_get_contents($pathManifest));
+        $xml = simplexml_load_string(Helper::readFile($pathManifest));
         $currentThemeName = (string)$xml->name;
 
         $newThemeName = $this->_getNewName($currentThemeName, $themeNames);
@@ -1039,7 +1160,7 @@ class ExportController
 
         if (flock($f, LOCK_EX)) {
             fseek($f, (int) $rangeBegin);
-            fwrite($f, file_get_contents($_FILES['chunk']['tmp_name']));
+            fwrite($f, Helper::readFile($_FILES['chunk']['tmp_name']));
 
             flock($f, LOCK_UN);
             fclose($f);

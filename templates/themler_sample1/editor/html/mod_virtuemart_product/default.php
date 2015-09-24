@@ -259,7 +259,7 @@ if ($_widthXs) {
         <span class="data-control-id-241 bd-label-6">
             <?php echo JText::_($oldPriceProps['description']); ?>
         </span>
-    <span class="data-control-id-273 bd-container-8 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-imagestyles bd-custom-table basePrice">
+    <span class="data-control-id-273 bd-container-8 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-image bd-custom-table basePrice">
         <?php echo $html; ?>
     </span>
 </div>
@@ -271,7 +271,7 @@ if ($_widthXs) {
         <span class="data-control-id-207 bd-label-5">
             <?php echo JText::_($regularPriceProps['description']); ?>
         </span>
-    <span class="data-control-id-239 bd-container-7 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-imagestyles bd-custom-table salesPrice">
+    <span class="data-control-id-239 bd-container-7 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-image bd-custom-table salesPrice">
         <?php echo $html; ?>
     </span>
 

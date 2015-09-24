@@ -85,7 +85,7 @@
 	
 		<div class="container  bd-containereffect-8"><div class="bd-sheetstyles-4 bd-contentlayout-7 ">
     <div class="bd-container-inner">
-        <div class="bd-flex-vertical">
+        <div class="bd-flex-vertical bd-stretch-inner">
             
  <?php renderTemplateFromIncludes('sidebar_area_22'); ?>
             <div class="bd-flex-horizontal bd-flex-wide">

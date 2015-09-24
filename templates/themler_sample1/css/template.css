@@ -44,6 +44,10 @@ h1 {
   margin: -1px;
   padding: 1px;
 }
+.bd-vertical-align-section-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+}
 .row.bd-row-flex {
   display: -webkit-box;
   display: -webkit-flex;
@@ -212,6 +216,8 @@ h1 {
   -webkit-flex-shrink: 1;
   -ms-flex-negative: 1;
   flex-shrink: 1;
+  min-width: 0;
+  min-height: 0;
 }
 .bd-flex-wide:not(.bd-flex-horizontal) {
   width: 100%;
@@ -1168,9 +1174,9 @@ select[multiple]input[type="tel"].input-sm,
 select[multiple]input[type="color"].input-sm {
   height: auto;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   display: inline-block;
   margin-bottom: 0;
   font-weight: normal;
@@ -1189,48 +1195,48 @@ select[multiple]input[type="color"].input-sm {
   -ms-user-select: none;
   user-select: none;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active:focus {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active:focus {
   outline: thin dotted;
   outline: 5px auto -webkit-focus-ring-color;
   outline-offset: -2px;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus {
   color: #333333;
   text-decoration: none;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active {
   outline: 0;
   background-image: none;
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled],
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled],
-.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled],
-fieldset[disabled] .bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-fieldset[disabled] .bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-fieldset[disabled] .bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled],
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled],
+.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled],
+fieldset[disabled] .bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+fieldset[disabled] .bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+fieldset[disabled] .bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   cursor: not-allowed;
   pointer-events: none;
   opacity: 0.65;
@@ -1238,585 +1244,585 @@ fieldset[disabled] .bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton inpu
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #333333;
   background-color: #ffffff;
   border-color: #cccccc;
 }
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #333333;
   background-color: #ebebeb;
   border-color: #adadad;
 }
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   background-image: none;
 }
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled],
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled],
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled],
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"],
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:hover,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:focus,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:active,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled.active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled.active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled.active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled].active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled].active,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled].active,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active {
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled],
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled],
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled],
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"],
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:hover,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:focus,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:active,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled.active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled.active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled.active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled].active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled].active,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled].active,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+fieldset[disabled] .bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active {
   background-color: #ffffff;
   border-color: #cccccc;
 }
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button .badge,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"] .badge,
-.bd-btn-default.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] .badge {
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button .badge,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"] .badge,
+.bd-btn-default.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] .badge {
   color: #ffffff;
   background-color: #333333;
 }
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #428bca;
   border-color: #357ebd;
 }
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #3276b1;
   border-color: #285e8e;
 }
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   background-image: none;
 }
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled],
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled],
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled],
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"],
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:hover,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:focus,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:active,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled.active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled.active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled.active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled].active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled].active,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled].active,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active {
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled],
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled],
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled],
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"],
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:hover,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:focus,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:active,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled.active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled.active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled.active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled].active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled].active,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled].active,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+fieldset[disabled] .bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active {
   background-color: #428bca;
   border-color: #357ebd;
 }
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button .badge,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"] .badge,
-.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] .badge {
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button .badge,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"] .badge,
+.bd-btn-primary.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] .badge {
   color: #428bca;
   background-color: #ffffff;
 }
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #f0ad4e;
   border-color: #eea236;
 }
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #ed9c28;
   border-color: #d58512;
 }
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   background-image: none;
 }
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled],
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled],
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled],
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"],
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:hover,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:focus,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:active,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled.active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled.active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled.active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled].active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled].active,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled].active,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active {
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled],
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled],
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled],
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"],
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:hover,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:focus,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:active,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled.active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled.active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled.active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled].active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled].active,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled].active,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+fieldset[disabled] .bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active {
   background-color: #f0ad4e;
   border-color: #eea236;
 }
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button .badge,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"] .badge,
-.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] .badge {
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button .badge,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"] .badge,
+.bd-btn-warning.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] .badge {
   color: #f0ad4e;
   background-color: #ffffff;
 }
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #d9534f;
   border-color: #d43f3a;
 }
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #d2322d;
   border-color: #ac2925;
 }
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   background-image: none;
 }
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled],
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled],
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled],
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"],
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:hover,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:focus,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:active,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled.active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled.active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled.active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled].active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled].active,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled].active,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active {
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled],
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled],
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled],
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"],
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:hover,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:focus,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:active,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled.active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled.active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled.active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled].active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled].active,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled].active,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+fieldset[disabled] .bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active {
   background-color: #d9534f;
   border-color: #d43f3a;
 }
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button .badge,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"] .badge,
-.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] .badge {
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button .badge,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"] .badge,
+.bd-btn-danger.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] .badge {
   color: #d9534f;
   background-color: #ffffff;
 }
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #47a447;
   border-color: #398439;
 }
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   background-image: none;
 }
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled],
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled],
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled],
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"],
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:hover,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:focus,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:active,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled.active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled.active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled.active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled].active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled].active,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled].active,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active {
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled],
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled],
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled],
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"],
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:hover,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:focus,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:active,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled.active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled.active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled.active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled].active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled].active,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled].active,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+fieldset[disabled] .bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active {
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button .badge,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"] .badge,
-.bd-btn-success.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] .badge {
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button .badge,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"] .badge,
+.bd-btn-success.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] .badge {
   color: #5cb85c;
   background-color: #ffffff;
 }
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #5bc0de;
   border-color: #46b8da;
 }
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   color: #ffffff;
   background-color: #39b3d7;
   border-color: #269abc;
 }
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active,
-.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active,
+.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.open .dropdown-toggle.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   background-image: none;
 }
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled],
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled],
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled],
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"],
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:hover,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:hover,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:hover,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:hover,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:focus,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:focus,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:focus,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:focus,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled]:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled]:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled]:active,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button:active,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"]:active,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"]:active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.disabled.active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].disabled.active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].disabled.active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button[disabled].active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"][disabled].active,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"][disabled].active,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button.active,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"].active,
-fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"].active {
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled],
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled],
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled],
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"],
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:hover,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:hover,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:hover,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:hover,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:focus,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:focus,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:focus,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:focus,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled]:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled]:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled]:active,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button:active,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"]:active,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"]:active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.disabled.active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].disabled.active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].disabled.active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button[disabled].active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"][disabled].active,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"][disabled].active,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button.active,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"].active,
+fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"].active {
   background-color: #5bc0de;
   border-color: #46b8da;
 }
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button .badge,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"] .badge,
-.bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] .badge {
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button .badge,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"] .badge,
+.bd-btn-info.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] .badge {
   color: #5bc0de;
   background-color: #ffffff;
 }
-.bd-btn-lg.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-lg.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-lg.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-lg.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-lg.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-lg.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   padding: 10px 16px;
   font-size: 18px;
   line-height: 1.33;
   border-radius: 6px;
 }
-.bd-btn-sm.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-sm.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-sm.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-sm.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-sm.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-sm.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   padding: 5px 10px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
 }
-.bd-btn-xs.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton button,
-.bd-btn-xs.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="submit"],
-.bd-btn-xs.bd-tagstyles:not(.shape-only).bd-custom-bootstrapbutton input[type="button"] {
+.bd-btn-xs.bd-tagstyles:not(.shape-only).bd-bootstrap-btn button,
+.bd-btn-xs.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="submit"],
+.bd-btn-xs.bd-tagstyles:not(.shape-only).bd-bootstrap-btn input[type="button"] {
   padding: 1px 5px;
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
 }
-.bd-img-responsive.bd-tagstyles:not(.shape-only).bd-custom-bootstrapimage img {
+.bd-img-responsive.bd-tagstyles:not(.shape-only).bd-bootstrap-img img {
   display: block;
   max-width: 100%;
   height: auto;
 }
-.bd-img-rounded.bd-tagstyles:not(.shape-only).bd-custom-bootstrapimage img {
+.bd-img-rounded.bd-tagstyles:not(.shape-only).bd-bootstrap-img img {
   border-radius: 6px;
 }
-.bd-img-thumbnail.bd-tagstyles:not(.shape-only).bd-custom-bootstrapimage img {
+.bd-img-thumbnail.bd-tagstyles:not(.shape-only).bd-bootstrap-img img {
   padding: 4px;
   line-height: 1.42857143;
   background-color: #000000;
@@ -1828,71 +1834,71 @@ fieldset[disabled] .bd-btn-info.bd-tagstyles:not(.shape-only).bd-custom-bootstra
   max-width: 100%;
   height: auto;
 }
-.bd-img-circle.bd-tagstyles:not(.shape-only).bd-custom-bootstrapimage img {
+.bd-img-circle.bd-tagstyles:not(.shape-only).bd-bootstrap-img img {
   border-radius: 50%;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table {
   width: 100%;
   margin-bottom: 20px;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > th,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr > th,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tfoot > tr > th,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > td,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr > td,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tfoot > tr > td {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > th,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr > th,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tfoot > tr > th,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > td,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr > td,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tfoot > tr > td {
   padding: 8px;
   line-height: 1.42857143;
   vertical-align: top;
   border-top: 1px solid #dddddd;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > th {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > th {
   vertical-align: bottom;
   border-bottom: 2px solid #dddddd;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > caption + thead > tr:first-child > th,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > colgroup + thead > tr:first-child > th,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead:first-child > tr:first-child > th,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > caption + thead > tr:first-child > td,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > colgroup + thead > tr:first-child > td,
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead:first-child > tr:first-child > td {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > caption + thead > tr:first-child > th,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > colgroup + thead > tr:first-child > th,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead:first-child > tr:first-child > th,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > caption + thead > tr:first-child > td,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > colgroup + thead > tr:first-child > td,
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead:first-child > tr:first-child > td {
   border-top: 0;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody + tbody {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody + tbody {
   border-top: 2px solid #dddddd;
 }
-.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table .table {
+.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table .table {
   background-color: #000000;
 }
-.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > th,
-.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr > th,
-.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tfoot > tr > th,
-.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > td,
-.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr > td,
-.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tfoot > tr > td {
+.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > th,
+.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr > th,
+.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tfoot > tr > th,
+.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > td,
+.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr > td,
+.bd-table-condensed.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tfoot > tr > td {
   padding: 5px;
 }
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table {
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table {
   border: 1px solid #dddddd;
 }
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > th,
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr > th,
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tfoot > tr > th,
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > td,
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr > td,
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tfoot > tr > td {
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > th,
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr > th,
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tfoot > tr > th,
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > td,
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr > td,
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tfoot > tr > td {
   border: 1px solid #dddddd;
 }
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > th,
-.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > thead > tr > td {
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > th,
+.bd-table-bordered.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > thead > tr > td {
   border-bottom-width: 2px;
 }
-.bd-table-striped.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr:nth-child(odd) > td,
-.bd-table-striped.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr:nth-child(odd) > th {
+.bd-table-striped.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr:nth-child(odd) > td,
+.bd-table-striped.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr:nth-child(odd) > th {
   background-color: #f9f9f9;
 }
-.bd-table-hover.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr:hover > td,
-.bd-table-hover.bd-tagstyles:not(.shape-only).bd-custom-bootstraptables table > tbody > tr:hover > th {
+.bd-table-hover.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr:hover > td,
+.bd-table-hover.bd-tagstyles:not(.shape-only).bd-bootstrap-tables table > tbody > tr:hover > th {
   background-color: #f5f5f5;
 }
 .bd-container-inner {
@@ -2605,9 +2611,9 @@ html[dir="ltr"] .bd-lightbox .arrow-b {
 }
 .bd-container-56:not(.shape-only) blockquote,
 .bd-blockquotes-23 {
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
   border-left: 5px solid #333333;
   border-radius: 0px;
 }
@@ -2636,6 +2642,15 @@ button.bd-button-25,
 input.bd-button-25,
 a.bd-button-25[href],
 .bd-button-25,
+.bd-container-56:not(.shape-only) button:link,
+.bd-container-56:not(.shape-only) input[type="submit"]:link,
+.bd-container-56:not(.shape-only) input[type="button"]:link,
+.bd-container-56:not(.shape-only) a.bd-button-25[href]:link,
+.bd-container-56:not(.shape-only) .bd-button-25:link,
+button.bd-button-25:link,
+input.bd-button-25:link,
+a.bd-button-25[href]:link,
+.bd-button-25:link,
 .bd-container-56:not(.shape-only) button:visited,
 .bd-container-56:not(.shape-only) input[type="submit"]:visited,
 .bd-container-56:not(.shape-only) input[type="button"]:visited,
@@ -2767,9 +2782,9 @@ a.bd-button-25[href]:focus,
 }
 .bd-container-55:not(.shape-only) blockquote,
 .bd-blockquotes-22 {
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
   border-left: 5px solid #333333;
   border-radius: 0px;
 }
@@ -2798,6 +2813,15 @@ button.bd-button-24,
 input.bd-button-24,
 a.bd-button-24[href],
 .bd-button-24,
+.bd-container-55:not(.shape-only) button:link,
+.bd-container-55:not(.shape-only) input[type="submit"]:link,
+.bd-container-55:not(.shape-only) input[type="button"]:link,
+.bd-container-55:not(.shape-only) a.bd-button-24[href]:link,
+.bd-container-55:not(.shape-only) .bd-button-24:link,
+button.bd-button-24:link,
+input.bd-button-24:link,
+a.bd-button-24[href]:link,
+.bd-button-24:link,
 .bd-container-55:not(.shape-only) button:visited,
 .bd-container-55:not(.shape-only) input[type="submit"]:visited,
 .bd-container-55:not(.shape-only) input[type="button"]:visited,
@@ -3101,9 +3125,9 @@ a.removelink:hover {
 blockquote:not([class]),
 .bd-tagstyles:not(.bd-custom-blockquotes) blockquote,
 .bd-blockquotes {
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
   border-left: 5px solid #555555;
 }
 blockquote:not([class]),
@@ -3124,7 +3148,6 @@ blockquote:not([class]) p,
 .bd-tagstyles:not(.bd-custom-bulletlist):not(.shape-only) ul li,
 .bd-bulletlist li {
   list-style-position: inside;
-  position: relative;
 }
 .bd-icon-1:before {
   display: inline-block;
@@ -3154,9 +3177,9 @@ blockquote:not([class]) p,
 button:not([class]),
 input[type="submit"]:not([class]),
 input[type="button"]:not([class]),
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) button,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="submit"],
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="button"],
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) button,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="submit"],
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="button"],
 button.bd-button,
 input.bd-button,
 a.bd-button[href],
@@ -3167,19 +3190,29 @@ a.bd-button[href],
 button:not([class]),
 input[type="submit"]:not([class]),
 input[type="button"]:not([class]),
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) button,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="submit"],
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="button"],
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) button,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="submit"],
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="button"],
 button.bd-button,
 input.bd-button,
 a.bd-button[href],
 .bd-button,
+button:not([class]):link,
+input[type="submit"]:not([class]):link,
+input[type="button"]:not([class]):link,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) button:link,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="submit"]:link,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="button"]:link,
+button.bd-button:link,
+input.bd-button:link,
+a.bd-button[href]:link,
+.bd-button:link,
 button:not([class]):visited,
 input[type="submit"]:not([class]):visited,
 input[type="button"]:not([class]):visited,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) button:visited,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="submit"]:visited,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="button"]:visited,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) button:visited,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="submit"]:visited,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="button"]:visited,
 button.bd-button:visited,
 input.bd-button:visited,
 a.bd-button[href]:visited,
@@ -3200,9 +3233,9 @@ a.bd-button[href]:visited,
 button:not([class]):hover,
 input[type="submit"]:not([class]):hover,
 input[type="button"]:not([class]):hover,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) button:hover,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="submit"]:hover,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="button"]:hover,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) button:hover,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="submit"]:hover,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="button"]:hover,
 button.bd-button:hover,
 input.bd-button:hover,
 a.bd-button[href]:hover,
@@ -3210,9 +3243,9 @@ a.bd-button[href]:hover,
 button:not([class]):focus,
 input[type="submit"]:not([class]):focus,
 input[type="button"]:not([class]):focus,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) button:focus,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="submit"]:focus,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="button"]:focus,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) button:focus,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="submit"]:focus,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="button"]:focus,
 button.bd-button:focus,
 input.bd-button:focus,
 a.bd-button[href]:focus,
@@ -3225,9 +3258,9 @@ a.bd-button[href]:focus,
 button:not([class]):active,
 input[type="submit"]:not([class]):active,
 input[type="button"]:not([class]):active,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) button:active,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="submit"]:active,
-.bd-tagstyles:not(.bd-custom-button):not(.bd-custom-bootstrapbutton):not(.shape-only) input[type="button"]:active,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) button:active,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="submit"]:active,
+.bd-tagstyles:not(.bd-custom-button):not(.shape-only) input[type="button"]:active,
 button.bd-button:active,
 input.bd-button:active,
 a.bd-button[href]:active,
@@ -3532,7 +3565,7 @@ img:not([class]),
   border: 0 solid #777777;
   border-radius: 0;
 }
-.bd-tagstyles:not(.bd-custom-imagestyles):not(.shape-only) img {
+.bd-tagstyles:not(.bd-custom-image):not(.shape-only) img {
   max-width: 100%;
   vertical-align: middle;
   display: inline-block;
@@ -3657,27 +3690,27 @@ input[type="text"]:not([class]):-ms-input-placeholder {
   background: none;
   border: none;
 }
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="text"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="password"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="datetime"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="datetime-local"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="date"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="month"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="time"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="week"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="number"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="email"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="url"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="search"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="tel"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="color"],
-.bd-tagstyles:not(.bd-custom-bootstrapinput) textarea,
-.bd-tagstyles:not(.bd-custom-bootstrapinput) select {
+.bd-tagstyles:not(.bd-custom-inputs) input[type="text"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="password"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="datetime"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="datetime-local"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="date"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="month"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="time"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="week"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="number"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="email"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="url"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="search"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="tel"],
+.bd-tagstyles:not(.bd-custom-inputs) input[type="color"],
+.bd-tagstyles:not(.bd-custom-inputs) textarea,
+.bd-tagstyles:not(.bd-custom-inputs) select {
   border-radius: 0px;
 }
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="text"]::-webkit-input-placeholder,
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="text"]:-moz-placeholder,
-.bd-tagstyles:not(.bd-custom-bootstrapinput) input[type="text"]:-ms-input-placeholder {
+.bd-tagstyles:not(.bd-custom-inputs) input[type="text"]::-webkit-input-placeholder,
+.bd-tagstyles:not(.bd-custom-inputs) input[type="text"]:-moz-placeholder,
+.bd-tagstyles:not(.bd-custom-inputs) input[type="text"]:-ms-input-placeholder {
   border-radius: 0px;
   padding: 0;
   background: none;
@@ -4383,14 +4416,11 @@ a.bd-carousel-1:hover {
 }
 .bd-icon-12:before {
   display: inline-block;
-  border-top-width: 0px;
-  border-right-width: 0px;
-  border-bottom-width: 0px;
-  border-left-width: 0px;
   background-color: #555555;
   font-size: 20px;
   color: #000000;
   padding: 5px;
+  border: 0px;
   line-height: 28.57142858px;
   line-height: 20px;
   vertical-align: middle;
@@ -4570,88 +4600,51 @@ input[type="text"].bd-bootstrapinput-2.form-control.input-sm:-ms-input-placehold
     float: none;
   }
 }
-.bd-vmenu-1 .collapse-button {
-  direction: ltr;
-}
-.bd-vmenu-1 .collapse-button + .navbar-collapse {
-  max-height: none;
-  border: 0 none transparent;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-@media (min-width: 768px) {
-  .bd-vmenu-1 .collapse-button {
-    display: none;
-  }
-}
-.bd-responsivemenu-11 .bd-menuitem-9,
-.bd-vmenu-1 .collapse-button {
+.bd-responsivemenu-11 .bd-menuitem-9 {
   list-style: none;
   position: relative;
 }
 .bd-responsivemenu-11 .bd-menuitem-9 > a,
 .bd-responsivemenu-11 .bd-menuitem-9 > a:link,
-.bd-responsivemenu-11 .bd-menuitem-9 > a:visited,
-.bd-vmenu-1 .collapse-button > a,
-.bd-vmenu-1 .collapse-button > a:link,
-.bd-vmenu-1 .collapse-button > a:visited {
+.bd-responsivemenu-11 .bd-menuitem-9 > a:visited {
   display: block;
   white-space: nowrap;
 }
 .bd-responsivemenu-11 .bd-menuitem-9 > a:before,
 .bd-responsivemenu-11 .bd-menuitem-9 > a:link:before,
-.bd-responsivemenu-11 .bd-menuitem-9 > a:visited:before,
-.bd-vmenu-1 .collapse-button > a:before,
-.bd-vmenu-1 .collapse-button > a:link:before,
-.bd-vmenu-1 .collapse-button > a:visited:before {
+.bd-responsivemenu-11 .bd-menuitem-9 > a:visited:before {
   display: inline-block;
   vertical-align: middle;
   text-decoration: none;
 }
 .bd-responsivemenu-11 .bd-menuitem-9 > a > *,
 .bd-responsivemenu-11 .bd-menuitem-9 > a:link > *,
-.bd-responsivemenu-11 .bd-menuitem-9 > a:visited > *,
-.bd-vmenu-1 .collapse-button > a > *,
-.bd-vmenu-1 .collapse-button > a:link > *,
-.bd-vmenu-1 .collapse-button > a:visited > * {
+.bd-responsivemenu-11 .bd-menuitem-9 > a:visited > * {
   vertical-align: middle;
 }
-.bd-responsivemenu-11 .bd-menuitem-9 > a:focus,
-.bd-vmenu-1 .collapse-button > a:focus {
+.bd-responsivemenu-11 .bd-menuitem-9 > a:focus {
   outline-width: 0;
 }
 .bd-responsivemenu-11 .bd-menuitem-9:not(.active) > a.hover:not(.active),
 .bd-responsivemenu-11 .bd-menuitem-9:not(.active) > a:hover:not(.active),
 .bd-responsivemenu-11 .bd-menuitem-9:not(.active) > a:focus:not(.active),
-.bd-responsivemenu-11 .bd-menuitem-9:hover:not(.active) > a:not(.active),
-.bd-vmenu-1 .collapse-button:not(.active) > a.hover:not(.active),
-.bd-vmenu-1 .collapse-button:not(.active) > a:hover:not(.active),
-.bd-vmenu-1 .collapse-button:not(.active) > a:focus:not(.active),
-.bd-vmenu-1 .collapse-button:hover:not(.active) > a:not(.active) {
+.bd-responsivemenu-11 .bd-menuitem-9:hover:not(.active) > a:not(.active) {
   display: block;
 }
 .bd-responsivemenu-11 .bd-menuitem-9:not(.active) > a.hover:not(.active):before,
 .bd-responsivemenu-11 .bd-menuitem-9:not(.active) > a:hover:not(.active):before,
 .bd-responsivemenu-11 .bd-menuitem-9:not(.active) > a:focus:not(.active):before,
-.bd-responsivemenu-11 .bd-menuitem-9:hover:not(.active) > a:not(.active):before,
-.bd-vmenu-1 .collapse-button:not(.active) > a.hover:not(.active):before,
-.bd-vmenu-1 .collapse-button:not(.active) > a:hover:not(.active):before,
-.bd-vmenu-1 .collapse-button:not(.active) > a:focus:not(.active):before,
-.bd-vmenu-1 .collapse-button:hover:not(.active) > a:not(.active):before {
+.bd-responsivemenu-11 .bd-menuitem-9:hover:not(.active) > a:not(.active):before {
   display: inline-block;
   vertical-align: middle;
   text-decoration: none;
 }
 .bd-responsivemenu-11 .bd-menuitem-9 > a.active,
-.bd-responsivemenu-11 .bd-menuitem-9.active > a,
-.bd-vmenu-1 .collapse-button > a.active,
-.bd-vmenu-1 .collapse-button.active > a {
+.bd-responsivemenu-11 .bd-menuitem-9.active > a {
   display: block;
 }
 .bd-responsivemenu-11 .bd-menuitem-9 > a.active:before,
-.bd-responsivemenu-11 .bd-menuitem-9.active > a:before,
-.bd-vmenu-1 .collapse-button > a.active:before,
-.bd-vmenu-1 .collapse-button.active > a:before {
+.bd-responsivemenu-11 .bd-menuitem-9.active > a:before {
   display: inline-block;
   vertical-align: middle;
   text-decoration: none;
@@ -6976,9 +6969,9 @@ html[dir="ltr"] .bd-lightbox-2 .arrow-b {
 }
 .bd-postcontent-2:not(.shape-only) blockquote,
 .bd-blockquotes-16 {
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
   border-left: 5px solid #555555;
   border-radius: 0px;
 }
@@ -6997,7 +6990,6 @@ html[dir="ltr"] .bd-lightbox-2 .arrow-b {
 .bd-postcontent-2:not(.shape-only) ul li,
 .bd-bulletlist-9 li {
   list-style-position: inside;
-  position: relative;
 }
 .bd-icon-26:before {
   display: inline-block;
@@ -7530,348 +7522,6 @@ a.bd-itemremovelink-1:hover {
   margin-left: 30px;
 }
 #marker-end-L3N0eWxlLmNzcw.L2NvbnRyb2xzL2NvbnRlbnRDb250YWluZXJTaW5nbGVQb3N0VGVtcGxhdGU {}
-#marker-start-L3N0eWxlLmNzcw.L2NvbnRyb2xzL2N1cnJlbmN5 {}
-.bd-currency-3 {
-  margin: 0px 2px;
-}
-@media (max-width: 767px) {
-  .bd-currency-3 .bd-menuitem-110:hover > .bd-menu-111-popup {
-    display: block;
-    visibility: visible;
-    pointer-events: auto;
-  }
-}
-@media (min-width: 768px) {
-  .bd-currency-3 .bd-menuitem-110:hover > .bd-menu-111-popup {
-    display: block;
-    visibility: visible;
-    pointer-events: auto;
-  }
-}
-.bd-currency-3 .bd-menu-110 .bd-menuitem-110 .caret,
-.bd-currency-3 .bd-menu-110 .bd-menuitem-110:hover .caret {
-  border-top-color: #dddddd;
-  border-bottom-color: #dddddd;
-}
-.bd-currency-3 .bd-menu-110 .bd-menuitem-110:hover .caret {
-  border-top-color: #f0c30e;
-  border-bottom-color: #f0c30e;
-}
-@media (min-width: 768px) {
-  [data-responsive-menu="true"] .bd-horizontalmenu-53 .bd-menuitem-110:last-child > a {
-    border-right-width: 0 !important;
-  }
-}
-[data-responsive-menu="false"] .bd-horizontalmenu-53 .bd-menuitem-110:last-child > a {
-  border-right-width: 0 !important;
-}
-.bd-menu-110.nav.nav-pills > li + li {
-  margin: 0;
-}
-.bd-menu-110 {
-  /* reset default bootstrap values */
-  padding: 0;
-  margin: 0;
-}
-.bd-menuitem-110 > a {
-  cursor: pointer;
-  /* Safari click events fix */
-}
-.bd-menu-110.nav-pills .bd-menuitem-110 {
-  list-style: none;
-  position: relative;
-}
-.bd-menu-110.nav-pills .bd-menuitem-110 > a,
-.bd-menu-110.nav-pills .bd-menuitem-110 > a:link,
-.bd-menu-110.nav-pills .bd-menuitem-110 > a:visited {
-  color: #dddddd;
-  padding: 10px;
-  border-radius: 0px;
-  display: block;
-  white-space: nowrap;
-}
-.bd-menu-110.nav-pills .bd-menuitem-110 > a:before,
-.bd-menu-110.nav-pills .bd-menuitem-110 > a:link:before,
-.bd-menu-110.nav-pills .bd-menuitem-110 > a:visited:before {
-  display: inline-block;
-  vertical-align: middle;
-  text-decoration: none;
-}
-.bd-menu-110.nav-pills .bd-menuitem-110 > a > *,
-.bd-menu-110.nav-pills .bd-menuitem-110 > a:link > *,
-.bd-menu-110.nav-pills .bd-menuitem-110 > a:visited > * {
-  vertical-align: middle;
-}
-.bd-menu-110.nav-pills .bd-menuitem-110 > a:focus {
-  outline-width: 0;
-}
-.bd-menu-110.nav-pills .bd-menuitem-110:not(.active) > a.hover:not(.active),
-.bd-menu-110.nav-pills .bd-menuitem-110:not(.active) > a:hover:not(.active),
-.bd-menu-110.nav-pills .bd-menuitem-110:not(.active) > a:focus:not(.active),
-.bd-menu-110.nav-pills .bd-menuitem-110:hover:not(.active) > a:not(.active) {
-  color: #f0c30e;
-  text-decoration: none;
-  background-color: #ededed;
-  background-image: none;
-  display: block;
-}
-.bd-menu-110.nav-pills .bd-menuitem-110:not(.active) > a.hover:not(.active):before,
-.bd-menu-110.nav-pills .bd-menuitem-110:not(.active) > a:hover:not(.active):before,
-.bd-menu-110.nav-pills .bd-menuitem-110:not(.active) > a:focus:not(.active):before,
-.bd-menu-110.nav-pills .bd-menuitem-110:hover:not(.active) > a:not(.active):before {
-  display: inline-block;
-  vertical-align: middle;
-  text-decoration: none;
-}
-.bd-menu-110.nav-pills .bd-menuitem-110 > a.active,
-.bd-menu-110.nav-pills .bd-menuitem-110.active > a {
-  color: #f0c30e;
-  background-color: #000000;
-  background-image: none;
-  display: block;
-}
-.bd-menu-110.nav-pills .bd-menuitem-110 > a.active:before,
-.bd-menu-110.nav-pills .bd-menuitem-110.active > a:before {
-  display: inline-block;
-  vertical-align: middle;
-  text-decoration: none;
-}
-.bd-menu-111-popup {
-  visibility: hidden;
-  pointer-events: none;
-  position: absolute;
-  z-index: 1001;
-}
-.bd-menu-111-popup.bd-popup-left {
-  left: auto;
-  right: 0;
-}
-.bd-menu-111-popup,
-.bd-menu-111-popup.bd-popup-right {
-  left: 0;
-  right: auto;
-}
-.bd-menuitem-111 > .bd-menu-111-popup {
-  top: -1px;
-}
-.bd-menuitem-111 > .bd-menu-111-popup.bd-popup-left {
-  left: auto;
-  right: 100%;
-}
-.bd-menuitem-111 > .bd-menu-111-popup,
-.bd-menuitem-111 > .bd-menu-111-popup.bd-popup-right {
-  left: 100%;
-  right: auto;
-}
-.bd-menu-111 .bd-menuitem-111:last-child > a:not(.active):not(:hover) {
-  border-bottom-width: 0;
-}
-.bd-menu-111 .bd-menuitem-111:last-child > a:hover {
-  border-bottom-width: 0;
-}
-.bd-menu-111 .bd-menuitem-111:last-child > a.active {
-  border-bottom-width: 0;
-}
-.bd-menu-111 {
-  /* reset default bootstrap values */
-  padding: 0;
-  margin: 0;
-  background-color: #000000;
-  min-width: 160px;
-  position: relative;
-  -webkit-box-shadow: 4px 4px 0px 0 rgba(0, 0, 0, 0.09);
-  -o-box-shadow: 4px 4px 0px 0 rgba(0, 0, 0, 0.09);
-  -ms-box-shadow: 4px 4px 0px 0 rgba(0, 0, 0, 0.09);
-  -moz-box-shadow: 4px 4px 0px 0 rgba(0, 0, 0, 0.09);
-  box-shadow: 4px 4px 0px 0 rgba(0, 0, 0, 0.09);
-  border: 1px solid #cccccc;
-}
-.bd-menu-111 .bd-menuitem-111 {
-  list-style: none;
-  position: relative;
-}
-.bd-menu-111 .bd-menuitem-111 > a,
-.bd-menu-111 .bd-menuitem-111 > a:link,
-.bd-menu-111 .bd-menuitem-111 > a:visited {
-  color: #777777;
-  padding: 5px;
-  display: block;
-  white-space: nowrap;
-}
-.bd-menu-111 .bd-menuitem-111 > a:before,
-.bd-menu-111 .bd-menuitem-111 > a:link:before,
-.bd-menu-111 .bd-menuitem-111 > a:visited:before {
-  display: inline-block;
-  vertical-align: middle;
-  text-decoration: none;
-}
-.bd-menu-111 .bd-menuitem-111 > a > *,
-.bd-menu-111 .bd-menuitem-111 > a:link > *,
-.bd-menu-111 .bd-menuitem-111 > a:visited > * {
-  vertical-align: middle;
-}
-.bd-menu-111 .bd-menuitem-111 > a:focus {
-  outline-width: 0;
-}
-.bd-menu-111 .bd-menuitem-111:not(.active) > a.hover:not(.active),
-.bd-menu-111 .bd-menuitem-111:not(.active) > a:hover:not(.active),
-.bd-menu-111 .bd-menuitem-111:not(.active) > a:focus:not(.active),
-.bd-menu-111 .bd-menuitem-111:hover:not(.active) > a:not(.active) {
-  color: #f0c30e;
-  text-decoration: none;
-  background-color: #ededed;
-  background-image: none;
-  display: block;
-}
-.bd-menu-111 .bd-menuitem-111:not(.active) > a.hover:not(.active):before,
-.bd-menu-111 .bd-menuitem-111:not(.active) > a:hover:not(.active):before,
-.bd-menu-111 .bd-menuitem-111:not(.active) > a:focus:not(.active):before,
-.bd-menu-111 .bd-menuitem-111:hover:not(.active) > a:not(.active):before {
-  display: inline-block;
-  vertical-align: middle;
-  text-decoration: none;
-}
-.bd-menu-111 .bd-menuitem-111 > a.active,
-.bd-menu-111 .bd-menuitem-111.active > a {
-  color: #f0c30e;
-  background-color: #333333;
-  background-image: none;
-  display: block;
-}
-.bd-menu-111 .bd-menuitem-111 > a.active:before,
-.bd-menu-111 .bd-menuitem-111.active > a:before {
-  display: inline-block;
-  vertical-align: middle;
-  text-decoration: none;
-}
-.bd-currency-3 .collapse-button {
-  direction: ltr;
-}
-.bd-currency-3 .collapse-button + .navbar-collapse {
-  max-height: none;
-  border: 0 none transparent;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-@media (min-width: 768px) {
-  .bd-currency-3 .collapse-button {
-    display: none;
-  }
-}
-.bd-responsivemenu-7 .bd-menuitem-5,
-.bd-currency-3 .collapse-button {
-  list-style: none;
-  position: relative;
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:link,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:visited,
-.bd-currency-3 .collapse-button > a,
-.bd-currency-3 .collapse-button > a:link,
-.bd-currency-3 .collapse-button > a:visited {
-  text-decoration: inherit;
-  display: inline-block;
-  speak: none;
-  display: block;
-  white-space: nowrap;
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a:before,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:link:before,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:visited:before,
-.bd-currency-3 .collapse-button > a:before,
-.bd-currency-3 .collapse-button > a:link:before,
-.bd-currency-3 .collapse-button > a:visited:before {
-  font-family: 'Billion Web Font';
-  font-style: normal;
-  font-weight: normal;
-  text-decoration: inherit;
-  text-align: center;
-  text-transform: none;
-  width: 1em;
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a:before,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:link:before,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:visited:before,
-.bd-currency-3 .collapse-button > a:before,
-.bd-currency-3 .collapse-button > a:link:before,
-.bd-currency-3 .collapse-button > a:visited:before {
-  content: '\1b8';
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a:before,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:link:before,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:visited:before,
-.bd-currency-3 .collapse-button > a:before,
-.bd-currency-3 .collapse-button > a:link:before,
-.bd-currency-3 .collapse-button > a:visited:before {
-  width: auto;
-  visibility: inherit;
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a:before,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:link:before,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:visited:before,
-.bd-currency-3 .collapse-button > a:before,
-.bd-currency-3 .collapse-button > a:link:before,
-.bd-currency-3 .collapse-button > a:visited:before {
-  display: inline-block;
-  font-size: 20px;
-  color: #777777;
-  padding: 10px;
-  line-height: 28.57142858px;
-  line-height: 20px;
-  vertical-align: middle;
-  text-decoration: none;
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a > *,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:link > *,
-.bd-responsivemenu-7 .bd-menuitem-5 > a:visited > *,
-.bd-currency-3 .collapse-button > a > *,
-.bd-currency-3 .collapse-button > a:link > *,
-.bd-currency-3 .collapse-button > a:visited > * {
-  vertical-align: middle;
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a:focus,
-.bd-currency-3 .collapse-button > a:focus {
-  outline-width: 0;
-}
-.bd-responsivemenu-7 .bd-menuitem-5:not(.active) > a.hover:not(.active),
-.bd-responsivemenu-7 .bd-menuitem-5:not(.active) > a:hover:not(.active),
-.bd-responsivemenu-7 .bd-menuitem-5:not(.active) > a:focus:not(.active),
-.bd-responsivemenu-7 .bd-menuitem-5:hover:not(.active) > a:not(.active),
-.bd-currency-3 .collapse-button:not(.active) > a.hover:not(.active),
-.bd-currency-3 .collapse-button:not(.active) > a:hover:not(.active),
-.bd-currency-3 .collapse-button:not(.active) > a:focus:not(.active),
-.bd-currency-3 .collapse-button:hover:not(.active) > a:not(.active) {
-  display: block;
-}
-.bd-responsivemenu-7 .bd-menuitem-5:not(.active) > a.hover:not(.active):before,
-.bd-responsivemenu-7 .bd-menuitem-5:not(.active) > a:hover:not(.active):before,
-.bd-responsivemenu-7 .bd-menuitem-5:not(.active) > a:focus:not(.active):before,
-.bd-responsivemenu-7 .bd-menuitem-5:hover:not(.active) > a:not(.active):before,
-.bd-currency-3 .collapse-button:not(.active) > a.hover:not(.active):before,
-.bd-currency-3 .collapse-button:not(.active) > a:hover:not(.active):before,
-.bd-currency-3 .collapse-button:not(.active) > a:focus:not(.active):before,
-.bd-currency-3 .collapse-button:hover:not(.active) > a:not(.active):before {
-  display: inline-block;
-  background-color: #ededed;
-  color: #f0c30e;
-  vertical-align: middle;
-  text-decoration: none;
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a.active,
-.bd-responsivemenu-7 .bd-menuitem-5.active > a,
-.bd-currency-3 .collapse-button > a.active,
-.bd-currency-3 .collapse-button.active > a {
-  display: block;
-}
-.bd-responsivemenu-7 .bd-menuitem-5 > a.active:before,
-.bd-responsivemenu-7 .bd-menuitem-5.active > a:before,
-.bd-currency-3 .collapse-button > a.active:before,
-.bd-currency-3 .collapse-button.active > a:before {
-  display: inline-block;
-  vertical-align: middle;
-  text-decoration: none;
-}
-#marker-end-L3N0eWxlLmNzcw.L2NvbnRyb2xzL2N1cnJlbmN5 {}
 #marker-start-L3N0eWxlLmNzcw.L2NvbnRyb2xzL2Zvb3RlcjE {}
 .bd-layoutbox-2 {
   background-color: #1d1e20;
@@ -8037,6 +7687,9 @@ a.bd-itemremovelink-1:hover {
   }
 }
 @media (max-width: 767px) {
+  .bd-hmenu-1 {
+    /* since 3.1.0 */
+  }
   .bd-hmenu-1 .navbar-collapse .bd-horizontalmenu .bd-menu-55-popup {
     display: none;
     position: static;
@@ -8046,12 +7699,26 @@ a.bd-itemremovelink-1:hover {
     visibility: visible;
     pointer-events: auto;
   }
+  .bd-hmenu-1 .navbar-collapse .bd-horizontalmenu .nav {
+    float: none !important;
+  }
   .bd-hmenu-1 .navbar-collapse .bd-horizontalmenu .nav > li {
     float: none;
   }
   .bd-hmenu-1 .navbar-collapse .bd-horizontalmenu .bd-menu-55 {
     float: none;
-    /*margin: 0 0 10px;*/
+  }
+  .bd-hmenu-1 .navbar-toggle {
+    display: block;
+  }
+  .bd-hmenu-1 .navbar-collapse.collapse {
+    display: none !important;
+  }
+  .bd-hmenu-1 .navbar-collapse.collapse.in {
+    display: block !important;
+  }
+  .bd-hmenu-1 .collapsing {
+    overflow: hidden !important;
   }
 }
 .bd-hmenu-1 .collapse-button {
@@ -8069,16 +7736,16 @@ a.bd-itemremovelink-1:hover {
   }
 }
 .bd-responsivemenu-8 .bd-menuitem-6,
-.bd-hmenu-1 .collapse-button {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 {
   list-style: none;
   position: relative;
 }
 .bd-responsivemenu-8 .bd-menuitem-6 > a,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:link,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:visited,
-.bd-hmenu-1 .collapse-button > a,
-.bd-hmenu-1 .collapse-button > a:link,
-.bd-hmenu-1 .collapse-button > a:visited {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:link,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:visited {
   text-decoration: inherit;
   display: inline-block;
   speak: none;
@@ -8089,9 +7756,9 @@ a.bd-itemremovelink-1:hover {
   .bd-responsivemenu-8 .bd-menuitem-6 > a,
   .bd-responsivemenu-8 .bd-menuitem-6 > a:link,
   .bd-responsivemenu-8 .bd-menuitem-6 > a:visited,
-  .bd-hmenu-1 .collapse-button > a,
-  .bd-hmenu-1 .collapse-button > a:link,
-  .bd-hmenu-1 .collapse-button > a:visited {
+  .bd-hmenu-1 .collapse-button .bd-menuitem-6 > a,
+  .bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:link,
+  .bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:visited {
     color: #777777;
     text-transform: uppercase;
   }
@@ -8099,9 +7766,9 @@ a.bd-itemremovelink-1:hover {
 .bd-responsivemenu-8 .bd-menuitem-6 > a:before,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:link:before,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:visited:before,
-.bd-hmenu-1 .collapse-button > a:before,
-.bd-hmenu-1 .collapse-button > a:link:before,
-.bd-hmenu-1 .collapse-button > a:visited:before {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:link:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:visited:before {
   font-family: 'Billion Web Font';
   font-style: normal;
   font-weight: normal;
@@ -8113,26 +7780,26 @@ a.bd-itemremovelink-1:hover {
 .bd-responsivemenu-8 .bd-menuitem-6 > a:before,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:link:before,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:visited:before,
-.bd-hmenu-1 .collapse-button > a:before,
-.bd-hmenu-1 .collapse-button > a:link:before,
-.bd-hmenu-1 .collapse-button > a:visited:before {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:link:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:visited:before {
   content: '\1b8';
 }
 .bd-responsivemenu-8 .bd-menuitem-6 > a:before,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:link:before,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:visited:before,
-.bd-hmenu-1 .collapse-button > a:before,
-.bd-hmenu-1 .collapse-button > a:link:before,
-.bd-hmenu-1 .collapse-button > a:visited:before {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:link:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:visited:before {
   width: auto;
   visibility: inherit;
 }
 .bd-responsivemenu-8 .bd-menuitem-6 > a:before,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:link:before,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:visited:before,
-.bd-hmenu-1 .collapse-button > a:before,
-.bd-hmenu-1 .collapse-button > a:link:before,
-.bd-hmenu-1 .collapse-button > a:visited:before {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:link:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:visited:before {
   display: inline-block;
   font-size: 20px;
   color: #777777;
@@ -8145,33 +7812,33 @@ a.bd-itemremovelink-1:hover {
 .bd-responsivemenu-8 .bd-menuitem-6 > a > *,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:link > *,
 .bd-responsivemenu-8 .bd-menuitem-6 > a:visited > *,
-.bd-hmenu-1 .collapse-button > a > *,
-.bd-hmenu-1 .collapse-button > a:link > *,
-.bd-hmenu-1 .collapse-button > a:visited > * {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a > *,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:link > *,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:visited > * {
   vertical-align: middle;
 }
 .bd-responsivemenu-8 .bd-menuitem-6 > a:focus,
-.bd-hmenu-1 .collapse-button > a:focus {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a:focus {
   outline-width: 0;
 }
 .bd-responsivemenu-8 .bd-menuitem-6:not(.active) > a.hover:not(.active),
 .bd-responsivemenu-8 .bd-menuitem-6:not(.active) > a:hover:not(.active),
 .bd-responsivemenu-8 .bd-menuitem-6:not(.active) > a:focus:not(.active),
 .bd-responsivemenu-8 .bd-menuitem-6:hover:not(.active) > a:not(.active),
-.bd-hmenu-1 .collapse-button:not(.active) > a.hover:not(.active),
-.bd-hmenu-1 .collapse-button:not(.active) > a:hover:not(.active),
-.bd-hmenu-1 .collapse-button:not(.active) > a:focus:not(.active),
-.bd-hmenu-1 .collapse-button:hover:not(.active) > a:not(.active) {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6:not(.active) > a.hover:not(.active),
+.bd-hmenu-1 .collapse-button .bd-menuitem-6:not(.active) > a:hover:not(.active),
+.bd-hmenu-1 .collapse-button .bd-menuitem-6:not(.active) > a:focus:not(.active),
+.bd-hmenu-1 .collapse-button .bd-menuitem-6:hover:not(.active) > a:not(.active) {
   display: block;
 }
 .bd-responsivemenu-8 .bd-menuitem-6:not(.active) > a.hover:not(.active):before,
 .bd-responsivemenu-8 .bd-menuitem-6:not(.active) > a:hover:not(.active):before,
 .bd-responsivemenu-8 .bd-menuitem-6:not(.active) > a:focus:not(.active):before,
 .bd-responsivemenu-8 .bd-menuitem-6:hover:not(.active) > a:not(.active):before,
-.bd-hmenu-1 .collapse-button:not(.active) > a.hover:not(.active):before,
-.bd-hmenu-1 .collapse-button:not(.active) > a:hover:not(.active):before,
-.bd-hmenu-1 .collapse-button:not(.active) > a:focus:not(.active):before,
-.bd-hmenu-1 .collapse-button:hover:not(.active) > a:not(.active):before {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6:not(.active) > a.hover:not(.active):before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6:not(.active) > a:hover:not(.active):before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6:not(.active) > a:focus:not(.active):before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6:hover:not(.active) > a:not(.active):before {
   display: inline-block;
   background-color: #ededed;
   color: #f0c30e;
@@ -8180,14 +7847,14 @@ a.bd-itemremovelink-1:hover {
 }
 .bd-responsivemenu-8 .bd-menuitem-6 > a.active,
 .bd-responsivemenu-8 .bd-menuitem-6.active > a,
-.bd-hmenu-1 .collapse-button > a.active,
-.bd-hmenu-1 .collapse-button.active > a {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a.active,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6.active > a {
   display: block;
 }
 .bd-responsivemenu-8 .bd-menuitem-6 > a.active:before,
 .bd-responsivemenu-8 .bd-menuitem-6.active > a:before,
-.bd-hmenu-1 .collapse-button > a.active:before,
-.bd-hmenu-1 .collapse-button.active > a:before {
+.bd-hmenu-1 .collapse-button .bd-menuitem-6 > a.active:before,
+.bd-hmenu-1 .collapse-button .bd-menuitem-6.active > a:before {
   display: inline-block;
   vertical-align: middle;
   text-decoration: none;
@@ -9440,9 +9107,9 @@ a.bd-carousel-3:hover {
 }
 .bd-container-37:not(.shape-only) blockquote,
 .bd-blockquotes-5 {
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
   border-left: 5px solid #333333;
   border-radius: 0px;
 }
@@ -9471,6 +9138,15 @@ button.bd-button-5,
 input.bd-button-5,
 a.bd-button-5[href],
 .bd-button-5,
+.bd-container-37:not(.shape-only) button:link,
+.bd-container-37:not(.shape-only) input[type="submit"]:link,
+.bd-container-37:not(.shape-only) input[type="button"]:link,
+.bd-container-37:not(.shape-only) a.bd-button-5[href]:link,
+.bd-container-37:not(.shape-only) .bd-button-5:link,
+button.bd-button-5:link,
+input.bd-button-5:link,
+a.bd-button-5[href]:link,
+.bd-button-5:link,
 .bd-container-37:not(.shape-only) button:visited,
 .bd-container-37:not(.shape-only) input[type="submit"]:visited,
 .bd-container-37:not(.shape-only) input[type="button"]:visited,
@@ -9588,9 +9264,9 @@ a.bd-button-5[href]:focus,
 }
 .bd-container-36:not(.shape-only) blockquote,
 .bd-blockquotes-4 {
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
   border-left: 5px solid #333333;
   border-radius: 0px;
 }
@@ -9619,6 +9295,15 @@ button.bd-button-4,
 input.bd-button-4,
 a.bd-button-4[href],
 .bd-button-4,
+.bd-container-36:not(.shape-only) button:link,
+.bd-container-36:not(.shape-only) input[type="submit"]:link,
+.bd-container-36:not(.shape-only) input[type="button"]:link,
+.bd-container-36:not(.shape-only) a.bd-button-4[href]:link,
+.bd-container-36:not(.shape-only) .bd-button-4:link,
+button.bd-button-4:link,
+input.bd-button-4:link,
+a.bd-button-4[href]:link,
+.bd-button-4:link,
 .bd-container-36:not(.shape-only) button:visited,
 .bd-container-36:not(.shape-only) input[type="submit"]:visited,
 .bd-container-36:not(.shape-only) input[type="button"]:visited,
@@ -9913,9 +9598,9 @@ a.bd-button-4[href]:focus,
 }
 .bd-container-8:not(.shape-only) blockquote,
 .bd-blockquotes-3 {
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
   border-left: 5px solid #333333;
   border-radius: 0px;
 }
@@ -9944,6 +9629,15 @@ button.bd-button-3,
 input.bd-button-3,
 a.bd-button-3[href],
 .bd-button-3,
+.bd-container-8:not(.shape-only) button:link,
+.bd-container-8:not(.shape-only) input[type="submit"]:link,
+.bd-container-8:not(.shape-only) input[type="button"]:link,
+.bd-container-8:not(.shape-only) a.bd-button-3[href]:link,
+.bd-container-8:not(.shape-only) .bd-button-3:link,
+button.bd-button-3:link,
+input.bd-button-3:link,
+a.bd-button-3[href]:link,
+.bd-button-3:link,
 .bd-container-8:not(.shape-only) button:visited,
 .bd-container-8:not(.shape-only) input[type="submit"]:visited,
 .bd-container-8:not(.shape-only) input[type="button"]:visited,
@@ -10057,9 +9751,9 @@ a.bd-button-3[href]:focus,
 }
 .bd-container-7:not(.shape-only) blockquote,
 .bd-blockquotes-2 {
-  border-top-width: 0;
-  border-right-width: 0;
-  border-bottom-width: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
   border-left: 5px solid #333333;
   border-radius: 0px;
 }
@@ -10088,6 +9782,15 @@ button.bd-button-2,
 input.bd-button-2,
 a.bd-button-2[href],
 .bd-button-2,
+.bd-container-7:not(.shape-only) button:link,
+.bd-container-7:not(.shape-only) input[type="submit"]:link,
+.bd-container-7:not(.shape-only) input[type="button"]:link,
+.bd-container-7:not(.shape-only) a.bd-button-2[href]:link,
+.bd-container-7:not(.shape-only) .bd-button-2:link,
+button.bd-button-2:link,
+input.bd-button-2:link,
+a.bd-button-2[href]:link,
+.bd-button-2:link,
 .bd-container-7:not(.shape-only) button:visited,
 .bd-container-7:not(.shape-only) input[type="submit"]:visited,
 .bd-container-7:not(.shape-only) input[type="button"]:visited,
@@ -10198,6 +9901,10 @@ a.bd-button-2[href]:focus,
 }
 #marker-end-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0QmxvZ1RlbXBsYXRl {}
 #marker-start-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0RGVmYXVsdA {}
+.bd-contentlayout-2 {
+  clear: both;
+  /* DR-15613 */
+}
 .bd-contentlayout-2 .bd-flex-horizontal {
   margin-left: -5px;
   margin-right: -5px;
@@ -10224,6 +9931,10 @@ a.bd-button-2[href]:focus,
 }
 #marker-end-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0RGVmYXVsdA {}
 #marker-start-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0UGFnZVRlbXBsYXRl {}
+.bd-contentlayout-7 {
+  clear: both;
+  /* DR-15613 */
+}
 @media (max-width: 991px) {
   .bd-contentlayout-7 .bd-flex-horizontal {
     -webkit-box-orient: vertical;
@@ -10247,6 +9958,10 @@ a.bd-button-2[href]:focus,
 }
 #marker-end-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0UGFnZVRlbXBsYXRl {}
 #marker-start-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0UHJvZHVjdE92ZXJ2aWV3 {}
+.bd-contentlayout-4 {
+  clear: both;
+  /* DR-15613 */
+}
 .bd-contentlayout-4 .bd-flex-horizontal {
   margin-left: -5px;
   margin-right: -5px;
@@ -10277,6 +9992,10 @@ a.bd-button-2[href]:focus,
 }
 #marker-end-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0UHJvZHVjdE92ZXJ2aWV3 {}
 #marker-start-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0UHJvZHVjdHM {}
+.bd-contentlayout-3 {
+  clear: both;
+  /* DR-15613 */
+}
 .bd-contentlayout-3 .bd-flex-horizontal {
   margin-left: -5px;
   margin-right: -5px;
@@ -10303,6 +10022,10 @@ a.bd-button-2[href]:focus,
 }
 #marker-end-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0UHJvZHVjdHM {}
 #marker-start-L3N0eWxlLmNzcw.L2NvbnRyb2xzL3NoZWV0U2hvcHBpbmdDYXJ0 {}
+.bd-contentlayout-8 {
+  clear: both;
+  /* DR-15613 */
+}
 .bd-contentlayout-8 .bd-flex-horizontal {
   margin-left: -5px;
   margin-right: -5px;
@@ -10769,10 +10492,10 @@ a.bd-button-2[href]:focus,
   padding: 0;
   margin: 0;
   margin-bottom: -1px;
-  border-top-width: 0px;
-  border-left-width: 0px;
-  border-right-width: 0px;
+  border-top: 0px;
+  border-right: 0px;
   border-bottom: 0px solid #333333;
+  border-left: 0px;
 }
 .bd-menuitem-12 > a {
   cursor: pointer;

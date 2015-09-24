@@ -3,7 +3,8 @@ function joomlaposition_10() {
     $document = JFactory::getDocument();
     $view = $document->view;
     $isPreview  = $GLOBALS['theme_settings']['is_preview'];
-    $GLOBALS['isModuleContentExists'] = $view->containsModules('features-home') ? true : false;
+    if (isset($GLOBALS['isModuleContentExists']) && false == $GLOBALS['isModuleContentExists'])
+        $GLOBALS['isModuleContentExists'] = $view->containsModules('features-home') ? true : false;
 ?>
     <?php if ($isPreview || $view->containsModules('features-home')) : ?>
 

@@ -108,10 +108,19 @@ if ($ret) {
 	
 		<div class=" bd-cartprice-1">
     <?php echo $product['quantity'] ?> x <div class=" bd-pricetext-3">
-    <?php if(!class_exists('calculationHelper')) require(JPATH_VM_ADMINISTRATOR.DS.'helpers'.DS.'calculationh.php');
-          $calculator = calculationHelper::getInstance ();
-          $calculator->_roundindig = 0;
-    echo  $calculator->roundInternal($product['subtotal_with_tax'] / $product['quantity'], 'basePriceWithTax'); ?>
+<?php
+    $currency = '';
+    $parts = explode(' ', str_replace(',', '.', $product['subtotal_with_tax']));
+    $value = trim($parts[0]);
+    if (count($parts) > 1)
+        $currency = ' ' . trim($parts[1]);
+    $price = $value / $product['quantity'];
+    if(!class_exists('calculationHelper'))
+        require(JPATH_VM_ADMINISTRATOR.DS.'helpers'.DS.'calculationh.php');
+    $calculator = calculationHelper::getInstance ();
+    $calculator->_roundindig = 0;
+    echo  $calculator->roundInternal($price, 'salesPrice') . $currency;
+?>
 </div>
 </div></div></div>
 </div>

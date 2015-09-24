@@ -149,7 +149,7 @@ var DataProvider = (function () {
             data: {
                 template: config.templateName,
                 resultType: 'content',
-                themeName: options.themeName || config.infoData.themeName,
+                themeName: options.themeName || config.templateName,
                 includeEditor: options.includeEditor
             },
             success: function getThemeSuccess(data, status, xhr) {
@@ -197,14 +197,14 @@ var DataProvider = (function () {
             url: url,
             dataType: "json",
             data: {
-                oldThemeName: config.infoData.themeName,
-                newThemeName: themeName || config.infoData.themeName
+                oldThemeName: config.templateName,
+                newThemeName: themeName || config.templateName
             },
             success: function renameSuccess(response, status, xhr) {
                 var error = DataProvider.validateResponse(xhr);
                 if (!error) {
                     var href = context.location.href,
-                        name = config.infoData.themeName,
+                        name = config.templateName,
                         regExp = new RegExp('theme=' + name);
                     if (href.search(regExp) === -1) {
                         href = href.replace('editor=1', 'editor=1&theme=' +  themeName);
@@ -267,6 +267,26 @@ var DataProvider = (function () {
         DataProviderHelper.chunkedRequest(request, callback);
     };
 
+    provider.zip = function zip(data, callback) {
+        var request = {
+            'save': {
+                'post': {
+                    data: JSON.stringify(data),
+                    template : config.templateName
+                },
+                'url': config.index + '?action=zip'
+            },
+            'clear': {
+                'post': {},
+                'url': config.index + '?action=clearChunks'
+            },
+            'errorHandler': DataProvider.validateResponse,
+            'encode': true,
+            'blob': true
+        };
+        DataProviderHelper.chunkedRequest(request, callback);
+    };
+
     provider.load = function () {
         return JSON.parse(context.atob(config.projectData)) || {};
     };
@@ -316,14 +336,14 @@ var DataProvider = (function () {
                 var error = DataProvider.validateResponse(xhr);
                 if (!error) {
                     var href = context.location.href,
-                        name = config.infoData.themeName,
+                        name = config.templateName,
                         regExp = new RegExp('theme=' + name);
                     if (name.search(regExp) === -1) {
                         href = href.replace('editor=1', 'editor=1&theme=' +  themeName);
                     } else {
                         href = href.replace(regExp, 'theme=' + newName);
                     }
-                    callback(null, config.infoData.themeName === themeName ? href : null);
+                    callback(null, config.templateName === themeName ? href : null);
                 } else {
                     callback(error);
                 }
@@ -420,6 +440,7 @@ var DataProvider = (function () {
             isThemeActive : config.infoData.isThemeActive,
             uploadImage : config.index + '?action=uploadImage&template=' + config.templateName,
             uploadTheme : config.index + '?action=uploadTheme&template=' + config.templateName,
+            unZip: config.index + '?action=unZip&template=' + config.templateName,
             themes : $.extend({}, config.infoData.themes),
             pathToManifest : '/app/themler.manifest'
         };

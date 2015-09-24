@@ -22,6 +22,7 @@ if ($ret) {
 /*BEGIN_EDITOR_CLOSE*/ ?>
 <?php
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'functions.php';
+$attribs['extraClass'] = ' shape-only';
 ?>
 <form role="form" class=" bd-searchwidget-2 form-inline" name="search" action="<?php echo JRoute::_('index.php');?>" method="post">
     <div class="bd-container-inner">

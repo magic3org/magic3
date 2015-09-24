@@ -24,7 +24,7 @@ if ($ret) {
 <?php
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'functions.php';
 
-$productsCount = count($this->product->customfieldsRelatedProducts);
+$productsCount = count($this->product->customfieldsSorted['related_products']);
 $i = 0;
 
 $themeParams = JFactory::getApplication()->getTemplate(true)->params;
@@ -64,6 +64,7 @@ if ($_widthXs) {
     $_itemClass .= ' col-xs-' . $_widthXs;
 }
 ?>
+    <?php if ($productsCount > 0) : ?>
     
 	<div data-slider-id="relatedproducts_slider" class="data-control-id-2825 bd-productsslider-1">
 	    <div class="bd-container-inner">
@@ -77,7 +78,7 @@ if ($_widthXs) {
                     <div class="separated-grid row">
                         <div class="carousel slide<?php if ($productsCount <= $_itemsInRow): ?> single<?php endif; ?> adjust-slides">
                             <div class="carousel-inner">
-                    <?php foreach ($this->product->customfieldsRelatedProducts as $field):	?>
+                    <?php foreach ($this->product->customfieldsSorted['related_products'] as $field):	?>
                         <?php if ($i % $_itemsInRow == 0): ?>
                             <div class="item<?php if ($i == 0): ?> active<?php endif ?>">
                         <?php endif; ?>
@@ -230,7 +231,7 @@ if ($_widthXs) {
         <span class="data-control-id-241 bd-label-6">
             <?php echo JText::_($oldPriceProps['description']); ?>
         </span>
-    <span class="data-control-id-273 bd-container-8 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-imagestyles bd-custom-table basePrice">
+    <span class="data-control-id-273 bd-container-8 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-image bd-custom-table basePrice">
         <?php echo $html; ?>
     </span>
 </div>
@@ -242,7 +243,7 @@ if ($_widthXs) {
         <span class="data-control-id-207 bd-label-5">
             <?php echo JText::_($regularPriceProps['description']); ?>
         </span>
-    <span class="data-control-id-239 bd-container-7 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-imagestyles bd-custom-table salesPrice">
+    <span class="data-control-id-239 bd-container-7 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-image bd-custom-table salesPrice">
         <?php echo $html; ?>
     </span>
 
@@ -281,4 +282,5 @@ if ($_widthXs) {
 	</div>
 	</div>
 	
+	<?php endif; ?>
 <?php /*END_EDITOR_OPEN*/ } /*END_EDITOR_CLOSE*/ ?>

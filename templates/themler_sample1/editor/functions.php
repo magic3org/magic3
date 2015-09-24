@@ -640,9 +640,13 @@ if (!defined('_DESIGNER_FUNCTIONS')) {
 
         $exts_media = array('gif', 'jpg', 'jpeg', 'png', 'wbmp', 'bmp');
 
-        if (is_array($address)){
+        $startQuote = '"';
+        $endQuote = '"';
+        if (is_array($address)) {
             $attributeName = $address[1];
-            $route = $address[2];
+            $route = $address[3];
+            $startQuote = $address[2];
+            $endQuote = $address[4];
         } else {
             $route = $address;
         }
@@ -689,12 +693,12 @@ if (!defined('_DESIGNER_FUNCTIONS')) {
         if ('.href' === $attributeName) {
             return $attributeName . "='" . $route . "'" . '"';
         } else {
-            return $attributeName ? $attributeName . '="' . $route . '"' : $route;
+            return $attributeName ? $attributeName . '=' . $startQuote . $route . $endQuote : $route;
         }
     }
 
     function funcContentRoutesCorrector($content) {
-        return preg_replace_callback('/([\s\.]href|action)=[\"\']?([^"\']*)[\"\']/', "funcBuildRoute", $content);
+        return preg_replace_callback('/([\s\.]href|[\s]action)=([\"\'])?([^"\']*)([\"\'])/', "funcBuildRoute", $content);
     }
 
     function addClassToTag($tagHtml, $value) {
@@ -702,7 +706,7 @@ if (!defined('_DESIGNER_FUNCTIONS')) {
     }
 
     function addThemeVersion($url) {
-        return $url . "?version=1.0.33";
+        return $url . "?version=1.0.39";
     }
 
     function buildDataPositionAttr($name)
@@ -742,19 +746,25 @@ if (!defined('_DESIGNER_FUNCTIONS')) {
         $defaultTemplate = '';
         $templatesInfo = array();
         $editor = $GLOBALS['theme_settings']['is_preview'] ? '/editor' : '';
+        $templateNameFromUrl = JRequest::getVar('file_template_name', '');
+        $templateTypeFromUrl = $templateType;
         $listPath = $themePath . $editor . '/templates/list.php';
         // including this file to create a variable - $resultTemplatesList, $templatesInfo
         include($listPath);
+        $defaultTemplateFound = false;
         foreach($templatesInfo as $item) {
-            if ($templateType == $item['kind'] && 'false' == $item['isCustom']) {
+            if ($templateType == $item['kind'] && 'false' == $item['isCustom'] && !$defaultTemplateFound) {
                 $defaultTemplate = $item['fileName'];
-                break;
+                $defaultTemplateFound = true;
+            }
+            if ($templateNameFromUrl && $item['fileName'] == $templateNameFromUrl) {
+                $templateTypeFromUrl = $item['kind'];
             }
         }
 
         $themeParams = JFactory::getApplication()->getTemplate(true)->params;
-        if ('' !== JRequest::getVar('file_template_name', '')) {
-            $currentTemplate = JRequest::getVar('file_template_name', '');
+        if ('' !== $templateNameFromUrl && $templateTypeFromUrl == $templateType) {
+            $currentTemplate = $templateNameFromUrl;
         } else if ('' !== $themeParams->get($templateType, '')) {
             $currentTemplate = $themeParams->get($templateType, '');
         } else {

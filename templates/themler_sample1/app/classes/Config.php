@@ -39,6 +39,7 @@ class Config
             $app = JFactory::getApplication('administrator');
             $adminThemeDir = JPATH_ADMINISTRATOR . '/templates/' . $app->getTemplate();
             try {
+                Config::buildAppManifestVersion($themeName);
                 // copy new exported template
                 Helper::copyFile($themeDir . '/app/start/themler.php', $adminThemeDir . '/themler.php');
                 // change admin template
@@ -58,10 +59,6 @@ EOF;
                 $app->redirect(JURI::root() . 'templates/' . $themeName . '/app/tmpl/_warning.php');
             }
         } else {
-            $memoryWarning = Config::getMemoryWarning();
-            $phpCompatibilityResult = Config::checkPhpCompatibility();
-            $permissionsResult = Config::checkPermissions();
-
             ob_start();
             ?>
             <script>if ('undefined' != typeof jQuery) document._jQuery = jQuery;</script>
@@ -117,9 +114,11 @@ EOF;
                                 params : null
                             },
                             success : function(data) {
-                                var phpCompatibilityResult = '<?php echo $phpCompatibilityResult; ?>',
-                                    permissionsResult = '<?php echo $permissionsResult; ?>',
-                                    memoryWarning = '<?php echo $memoryWarning; ?>';
+                                var phpCompatibilityResult = '<?php echo Config::checkPhpCompatibility(); ?>',
+                                    permissionsResult = '<?php echo Config::checkPermissions(); ?>',
+                                    memoryWarning = '<?php echo Config::getMemoryWarning(); ?>',
+                                    offlineWarning = '<?php echo Config::getSiteOfflineWarning(); ?>',
+                                    query = '&editor=1&theme=<?php echo $themeName; ?>';
 
                                 if (data.error) {
                                     switch(data.error) {
@@ -140,7 +139,12 @@ EOF;
                                     if (permissionsResult) {
                                         return warningCallback(permissionsResult, 555, 460);
                                     }
-                                    document.location.href += '&editor=1&theme=<?php echo $themeName; ?>&ver=' + parseInt(data.version);
+                                    query = query + '&ver=' + parseInt(data.version ? data.version : 0);
+                                    if (offlineWarning)
+                                        return warningCallback(offlineWarning, 400, 140, function() {
+                                            document.location.href += query;
+                                        });
+                                    document.location.href += query;
                                 }
                             },
                             error: function (xhr, status) {
@@ -174,7 +178,7 @@ EOF;
                             error: function (xhr, status) {}
                         });
 
-                        check(function (content, windowX, windowY) {
+                        check(function (content, windowX, windowY, callbackEdit) {
                             var uniqueId = new Date().getTime();
                             SqueezeBox.fromElement(appPath + '/tmpl/warning.html?id=' + uniqueId, {
                                 size : {x : windowX, y : windowY},
@@ -183,6 +187,7 @@ EOF;
                                 onOpen : function (container, showContent) {
                                     var ifrDoc = container.firstChild.contentDocument;
                                     $('#warning', ifrDoc).replaceWith(atob(content));
+                                    $('#edit', ifrDoc).bind('click', callbackEdit);
                                     $('#cancel', ifrDoc).bind('click', function () {
                                         SqueezeBox.close();
                                     });
@@ -207,6 +212,71 @@ EOF;
             </button>
             <?php
             return ob_get_clean();
+        }
+    }
+
+    public static function buildAppManifestVersion($templateName) {
+        $themeDir     = JPATH_SITE . '/templates/' . $templateName;
+        //create manifests folder
+        $manifestsDir = JPATH_SITE . '/templates/manifests';
+        if (!file_exists($manifestsDir))
+            Helper::createDir($manifestsDir);
+        Helper::writeFile($manifestsDir . '/manifest.php',
+            Helper::readFile($themeDir . '/app/start/manifest.php'));
+
+        $manifestPath = $themeDir . '/app/themler.manifest';
+        $versionPath = $themeDir . '/app/themler.version';
+        $themeManifestsDir = $themeDir . '/app/manifests';
+        if (file_exists($manifestPath)) {
+            $content = Helper::readFile($manifestPath);
+            if (preg_match('#\#ver:(\d+)#i', $content, $matches)) {
+                $v = trim($matches[1]);
+                $newManifestName = 'themler-' . $v . '.manifest';
+                Helper::writeFile($manifestsDir . '/' . $newManifestName, $content);
+                Helper::createDir($themeManifestsDir);
+                Helper::writeFile($themeManifestsDir . '/' . $newManifestName, $content);
+                Helper::writeFile($versionPath, $v);
+                Helper::deleteFile($manifestPath);
+            }
+        }
+
+        $version = '';
+        if (file_exists($versionPath)) {
+            $version = Helper::readFile($versionPath);
+            $fileName = 'themler-' . $version . '.manifest';
+            if (!file_exists($manifestsDir . '/' . $fileName) &&
+                file_exists($themeManifestsDir . '/' . $fileName)) {
+                Helper::copyFile($themeManifestsDir . '/' . $fileName, $manifestsDir . '/' . $fileName);
+            }
+        }
+        return $version;
+    }
+
+    public static function getSiteOfflineWarning() {
+        if ('1' == JFactory::getConfig()->get('offline')) {
+            $content = <<<EOF
+<style>
+    .msgbox button { width: 60px; height: 25px; font-size: 13px; margin-left: 5px; }
+    .msgbox { font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 20px; }
+    .msgbox h3 { font-family: Arial, Helvetica, sans-serif; font-size: 13px; margin: 0 0 10px 0; }
+    .msgbox p { margin: 15px 0 0 0; text-align: justify;}
+    .msgbox .buttons { text-align: center; }
+    .msgbox button { height: 25px; font-size: 14px; margin-left: 5px; }
+</style>
+<div class="msgbox">
+    <p>
+        <p>Your website is offline.</p>
+        <p>Please make sure that you are logged in to your front-end before opening your template in Themler.</p>
+    </p>
+    <p class="buttons">
+        <button id="edit">Edit</button>
+        <button id="cancel">Cancel</button>
+    </p>
+</div>
+EOF;
+            return base64_encode($content);
+        } else {
+            return '';
         }
     }
 
@@ -463,8 +533,6 @@ EOL;
         $themeDir     = JPATH_SITE . '/templates/' . $themeName;
 
         $infoData['isThemeActive'] = 1 == $themeObject->home ? true : false;
-        $titleParts = explode(' ', $themeObject->title);
-        $infoData['themeName'] = $titleParts[0];
 
         $infoData['cmsVersion'] = Config::getVersions();
         $infoData['maxRequestSize'] = Config::getMaxRequestSize();
@@ -511,6 +579,9 @@ EOL;
         $homeLink = $root;
         if (null !== $defaultMenu) {
             $homeLink = $defaultMenu->link . (isset($defaultMenu->id) ? '&Itemid=' . $defaultMenu->id : '');
+            $parts = explode('-', JComponentHelper::getParams('com_languages')->get('site', 'en-GB'));
+            if ($parts > 1)
+                $homeLink .= '&lang=' . array_shift($parts);
         }
         return $root . ($homeLink ? $homeLink . '&' : '?') . 'template=' . $themeName . '&is_preview=on&uid='. $uid;
     }
@@ -712,7 +783,6 @@ EOL;
             if (null !== $defaultMenu) {
                 // home link
                 $homeLink = $defaultMenu->link . (isset($defaultMenu->id) ? '&Itemid=' . $defaultMenu->id : '');
-                $allTemplatesList['#'] = array('url' => $homeLink, 'selected' => 'false');
 
                 if (0 == JRequest::setVar('Itemid'))
                     JRequest::setVar('Itemid', $defaultMenu->id);
@@ -734,6 +804,7 @@ EOL;
                     require_once JPATH_SITE . '/modules/mod_menu/helper.php';
                     $list = modMenuHelper::getList($params);
                     foreach($list as $item) {
+                        if ($item->type !== 'component') continue;
                         if (isset($item->query['option'])) {
                             $value = $item->query['option'];
                             $link = $item->link . (isset($item->id) ? '&Itemid=' . $item->id : '');
@@ -745,11 +816,17 @@ EOL;
                                 }
                             }
 
+                            $parts = explode('-', $item->language);
+                            $lang = $parts > 1 ? '&lang=' . array_shift($parts) : '';
                             if (!array_key_exists($value, $allTemplatesList) && $homeLink !== $link)
-                                $allTemplatesList[$value] = array('url' => $link, 'selected' => 'false');
+                                $allTemplatesList[$value] = array('url' => $link . $lang, 'selected' => 'false');
                         }
                     }
                 }
+                $parts = explode('-', JComponentHelper::getParams('com_languages')->get('site', 'en-GB'));
+                if ($parts > 1)
+                    $homeLink .= '&lang=' . array_shift($parts);
+                $allTemplatesList['#'] = array('url' => $homeLink, 'selected' => 'false');
             }
 
             $uid = JFactory::getUser()->id;

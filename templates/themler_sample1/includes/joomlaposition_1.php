@@ -3,7 +3,8 @@ function joomlaposition_1() {
     $document = JFactory::getDocument();
     $view = $document->view;
     $isPreview  = $GLOBALS['theme_settings']['is_preview'];
-    $GLOBALS['isModuleContentExists'] = $view->containsModules('left') ? true : false;
+    if (isset($GLOBALS['isModuleContentExists']) && false == $GLOBALS['isModuleContentExists'])
+        $GLOBALS['isModuleContentExists'] = $view->containsModules('left') ? true : false;
 ?>
     <?php if ($isPreview || $view->containsModules('left')) : ?>
 

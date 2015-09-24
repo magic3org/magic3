@@ -3,7 +3,8 @@ function joomlaposition_9() {
     $document = JFactory::getDocument();
     $view = $document->view;
     $isPreview  = $GLOBALS['theme_settings']['is_preview'];
-    $GLOBALS['isModuleContentExists'] = $view->containsModules('slide2') ? true : false;
+    if (isset($GLOBALS['isModuleContentExists']) && false == $GLOBALS['isModuleContentExists'])
+        $GLOBALS['isModuleContentExists'] = $view->containsModules('slide2') ? true : false;
 ?>
     <?php if ($isPreview || $view->containsModules('slide2')) : ?>
 

@@ -118,7 +118,7 @@ if (($this->params->def('show_pagination', 1) == 1 || $this->params->get('show_p
 <?php if (count($pagination_list) > 0) : ?>
     <div class=" bd-blogpagination-1">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_1', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_1', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>
@@ -247,7 +247,7 @@ if (($this->params->def('show_pagination', 1) == 1 || $this->params->get('show_p
 <?php if (count($pagination_list) > 0) : ?>
     <div class=" bd-blogpagination-3">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_3', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_3', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>
@@ -376,7 +376,7 @@ if (($this->params->def('show_pagination', 1) == 1 || $this->params->get('show_p
 <?php if (count($pagination_list) > 0) : ?>
     <div class=" bd-blogpagination-2">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_2', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_2', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>
@@ -505,7 +505,7 @@ if (($this->params->def('show_pagination', 1) == 1 || $this->params->get('show_p
 <?php if (count($pagination_list) > 0) : ?>
     <div class=" bd-blogpagination-4">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_4', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_4', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>
@@ -634,7 +634,7 @@ if (($this->params->def('show_pagination', 1) == 1 || $this->params->get('show_p
 <?php if (count($pagination_list) > 0) : ?>
     <div class=" bd-blogpagination-5">
         <?php
-            renderTemplateFromIncludes('pagination_list_render_5', array($pagination_list));
+            echo renderTemplateFromIncludes('pagination_list_render_5', array($pagination_list));
         ?>
     </div>
 <?php endif; ?>

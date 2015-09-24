@@ -49,7 +49,7 @@
 	
 		<div class="container  bd-containereffect-12"><div class="bd-sheetstyles-5 bd-contentlayout-8 ">
     <div class="bd-container-inner">
-        <div class="bd-flex-vertical">
+        <div class="bd-flex-vertical bd-stretch-inner">
             
             <div class="bd-flex-horizontal bd-flex-wide">
                 

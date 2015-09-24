@@ -1,5 +1,5 @@
 <?php
-function joomlaposition_block_14($caption, $content, $classes = '', $id = '')
+function joomlaposition_block_14($caption, $content, $classes = '', $id = '', $extraClass = '')
 {
     $hasCaption = (null !== $caption && strlen(trim($caption)) > 0);
     $hasContent = (null !== $content && strlen(trim($content)) > 0);
@@ -21,7 +21,7 @@ function joomlaposition_block_14($caption, $content, $classes = '', $id = '')
 <?php endif; ?>
     <?php if ($hasContent) : ?>
     
-    <div class=" bd-container-45 bd-tagstyles">
+    <div class="bd-container-45 bd-tagstyles<?php echo $extraClass;?>">
         <?php echo funcPostprocessBlockContent($content); ?>
     </div>
     

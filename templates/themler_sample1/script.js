@@ -86,30 +86,25 @@ var PREVIEW = false;
 
 // IE10+ flex fix
 if (1-'\0') {
-    jQuery(function () {
-        'use strict';
 
-        var fixHeight = function fixHeight() {
-            jQuery('[class*=" bd-layoutitemsbox"].bd-flex-wide, [class^="bd-layoutitemsbox"].bd-flex-wide').each(function () {
-                var content = jQuery(this);
+    var fixHeight = function fixHeight() {
+        jQuery('[class*=" bd-layoutitemsbox"].bd-flex-wide, [class^="bd-layoutitemsbox"].bd-flex-wide').each(function () {
+            var content = jQuery(this);
+            var wrapper = content.children('.bd-fix-flex-height');
+            if (!wrapper.length) {
                 content.wrapInner('<div class="bd-fix-flex-height"></div>');
-                var wrapper = content.children('.bd-fix-flex-height');
-                var height = wrapper.outerHeight(true);
-                wrapper.children(':first').unwrap();
-                content.css({
-                    '-ms-flex-preferred-size': height + 'px',
-                    'flex-basis': height + 'px'
-                });
+            }
+            var height = wrapper.outerHeight(true);
+            content.css({
+                '-ms-flex-preferred-size': height + 'px',
+                'flex-basis': height + 'px'
             });
-        };
-
-        var resizeTimeout = 0;
-        $(window).on('resize', function () {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(fixHeight, 25);
         });
-        setTimeout(fixHeight, 25);
-    });
+
+        setTimeout(fixHeight, 500);
+    };
+
+    jQuery(fixHeight);
 }
 
 /*!
@@ -280,93 +275,94 @@ jQuery(function ($) {
     });
 });
 
-window.separatedGridResize = (function ($) {
+(function ($) {
     'use strict';
-    var timeoutId, row = [];
-    var getOffset = function(el) {
-        var isInline = false;
-        el.css('position','relative');
-        if(el.css('display') === 'inline') {
-            el.css('display','inline-block');
-            isInline = true;
-        }
-        var offset = el.position().top;
-        if(isInline) {
-            el.css('display','inline');
-        }
-        return offset;
-    };
-    var getCollapsedMargin = function(el){
-        if(el.css('display') === 'block') {
-            var m0 = parseFloat(el.css('margin-top'));
-            if (m0 > 0) {
-                var p = el.prev();
-                var prop = 'margin-bottom';
-                if (p.length < 1) {
-                    p = el.parent();
-                    prop = 'margin-top';
-                }
-                if (p.length > 0 && p.css('display') === 'block') {
-                    var m = parseFloat(p.css(prop));
-                    if (m > 0){
-                        return Math.min(m0, m);
+    var row = [],
+        getOffset = function (el) {
+            var isInline = false;
+            el.css('position', 'relative');
+            if (el.css('display') === 'inline') {
+                el.css('display', 'inline-block');
+                isInline = true;
+            }
+            var offset = el.position().top;
+            if (isInline) {
+                el.css('display', 'inline');
+            }
+            return offset;
+        },
+        getCollapsedMargin = function (el) {
+            if (el.css('display') === 'block') {
+                var m0 = parseFloat(el.css('margin-top'));
+                if (m0 > 0) {
+                    var p = el.prev();
+                    var prop = 'margin-bottom';
+                    if (p.length < 1) {
+                        p = el.parent();
+                        prop = 'margin-top';
+                    }
+                    if (p.length > 0 && p.css('display') === 'block') {
+                        var m = parseFloat(p.css(prop));
+                        if (m > 0) {
+                            return Math.min(m0, m);
+                        }
                     }
                 }
             }
-        }
-        return 0;
-    };
-    var classRE = new RegExp('.*(bd-\\S+[-\\d]*).*');
-    var childFilter = function(){
-        return classRE.test(this.className);
-    };
-    var calcOrder = function(items){
-        var roots = items;
-        while(roots.eq(0).children().length === 1){
-            roots = roots.children();
-        }
-        var childrenClasses = [];
-        var childrenWeights = {};
-        var getNextWeight = function(children, i, l){
-            for (var j = i + 1; j < l; j++){
-                var cls = children[j].className.replace(classRE,'$1');
-                if (childrenClasses.indexOf(cls) !== -1){
-                    return childrenWeights[cls];
-                }
+            return 0;
+        },
+        classRE = new RegExp('.*(bd-\\S+[-\\d]*).*'),
+        childFilter = function () {
+            return classRE.test(this.className);
+        },
+        calcOrder = function (items) {
+            var roots = items;
+            while (roots.eq(0).children().length === 1) {
+                roots = roots.children();
             }
-            return 100; //%
+            var childrenClasses = [];
+            var childrenWeights = {};
+            var getNextWeight = function (children, i, l) {
+                for (var j = i + 1; j < l; j++) {
+                    var cls = children[j].className.replace(classRE, '$1');
+                    if (childrenClasses.indexOf(cls) !== -1) {
+                        return childrenWeights[cls];
+                    }
+                }
+                return 100; //%
+            };
+            roots.each(function (i, root) {
+                var children = $(root).children().filter(childFilter);
+                var previousWeight = 0;
+                for (var c = 0, l = children.length; c < l; c++) {
+                    var cls = children[c].className.replace(classRE, '$1');
+                    if (childrenClasses.indexOf(cls) === -1) {
+                        var nextWeight = getNextWeight(children, c, l);
+                        childrenWeights[cls] = previousWeight + (nextWeight - previousWeight) / 10; //~max unique child
+                        childrenClasses.push(cls);
+                    }
+                    previousWeight = childrenWeights[cls];
+                }
+            });
+            childrenClasses.sort(function (a, b) {
+                return childrenWeights[a] > childrenWeights[b];
+            });
+            return childrenClasses;
         };
-        roots.each(function(i, root){
-            var children  = $(root).children().filter(childFilter);
-            var previousWeight = 0;
-            for (var c = 0, l = children.length; c < l; c++){
-                var cls = children[c].className.replace(classRE,'$1');
-                if (childrenClasses.indexOf(cls) === -1){
-                    var nextWeight = getNextWeight(children, c, l);
-                    childrenWeights[cls] = previousWeight + (nextWeight - previousWeight) / 10; //~max unique child
-                    childrenClasses.push(cls);
-                }
-                previousWeight = childrenWeights[cls];
-            }
-        });
-        childrenClasses.sort(function(a, b){ return childrenWeights[a] > childrenWeights[b];});
-        return childrenClasses;
-    };
-    var calcRow = function (last, order) {
-        $.each(row, function (i, e) {
-            $(e).css({'overflow':'visible', 'height':'auto'})
-                .toggleClass('last-row', last);
-        });
+    var calcRow = function (helpNodes, last, order) {
+
+        $(row).css({'overflow': 'visible', 'height': 'auto'}).toggleClass('last-row', last);
+
         if (row.length > 0) {
             var roots = $(row);
             roots.removeClass('last-col').last().addClass('last-col');
-            while(roots.eq(0).children().length === 1){
+            while (roots.eq(0).children().length === 1) {
                 roots = roots.children();
             }
             var cls = '';
             var maxOffset = 0;
-            var calcMaxOffsets = function(i, root){
-                var el = $(root).children().filter('.'+cls+':visible:first');
+            var calcMaxOffsets = function (i, root) {
+                var el = $(root).children().filter('.' + cls + ':visible:first');
                 if (el.length < 1 || el.css('position') === 'absolute') {
                     return;
                 }
@@ -375,18 +371,22 @@ window.separatedGridResize = (function ($) {
                     maxOffset = offset;
                 }
             };
-            var setMaxOffsets = function(i, root){
-                var el =  $(root).children().filter('.'+cls+':visible:first');
+            var setMaxOffsets = function (i, root) {
+                var el = $(root).children().filter('.' + cls + ':visible:first');
                 if (el.length < 1 || el.css('position') === 'absolute') {
                     return;
                 }
-                var offset =  getOffset(el);
+                var offset = getOffset(el);
                 var fix = maxOffset - offset - getCollapsedMargin(el);
                 if (fix > 0) {
-                    el.before('<div class="bd-empty-grid-item" style="height:'+ fix +'px"></div>');
+                    var helpNode = document.createElement('div');
+                    helpNode.setAttribute('style', 'height:' + fix + 'px');
+                    helpNode.className = 'bd-empty-grid-item';
+                    helpNodes.push(helpNode);
+                    el.before(helpNode);
                 }
             };
-            for (var c = 0; c < order.length; c++){
+            for (var c = 0; c < order.length; c++) {
                 maxOffset = 0;
                 cls = order[c];
                 roots.each(calcMaxOffsets).each(setMaxOffsets);
@@ -402,95 +402,119 @@ window.separatedGridResize = (function ($) {
                 var el = $(e);
                 var fix = hMax - el.outerHeight();
                 if (fix > 0) {
-                    el.append('<div class="bd-empty-grid-item" style="height:'+ fix +'px"></div>');
+                    var helpNode = document.createElement('div');
+                    helpNode.setAttribute('style', 'height:' + fix + 'px');
+                    helpNode.className = 'bd-empty-grid-item';
+                    helpNodes.push(helpNode);
+                    el.append(helpNode);
                 }
             });
         }
         row = [];
     };
-    var itemsRE = new RegExp('.*(separated-item[^\\s]+).*');
-    return function () {
-        clearTimeout(timeoutId);
-        var grid = $('.separated-grid');
-        grid.each(function (i, gridElement) {
-            var g = $(gridElement);
-            if (!g.is(':visible')) {
-                return;
-            }
-
-            var item = g.find('div[class*=separated-item]:visible:first');
-            if (0 === item.length){
-                return;
-            }
-            var items = g.find('div.'+item.attr('class').replace(itemsRE, '$1'));
-            if (items.length < 1) {
-                return;
-            }
-
-            var h = 0;
-            for(var k = 0; k < items.length; k++){
-                var el = $(items[k]);
-                var _h = el.height();
-                if (el.is('.first-col')){
-                    h = _h;
+    var itemsRE = new RegExp('.*(separated-item[^\\s]+).*'),
+        resize =  function () {
+            var grid = $('.separated-grid');
+            grid.each(function (i, gridElement) {
+                var g = $(gridElement);
+                if (!g.is(':visible')) {
+                    return;
                 }
-                if (h !== _h){
-                    gridElement._height = 0;
-                }
-            }
-
-
-            if (g.innerHeight() === gridElement._height && g.innerWidth() === gridElement._width) {
-                return;
-            }
-
-            var windowScrollTop = $(window).scrollTop();
-            items.css({'overflow': 'hidden', 'height': '10px'}).removeClass('last-row');
-            g.find('div.bd-empty-grid-item').remove();
-            var firstLeft = items.position().left;
-            var order = calcOrder(items);
-            var notDisplayed = [];
-            var lastItem = null;
-            items.each(function (i, gridItem) {
-                var item = $(gridItem);
-                var p = item;
-                do {
-                    if (p.css('display') === 'none'){
-                        p.data('style', p.attr('style')).css('display', 'block');
-                        notDisplayed.push(p[0]);
+                if (!gridElement._item || !gridElement._item.length || !gridElement._item.is(':visible')){
+                    gridElement._item = g.find('div[class*=separated-item]:visible:first');
+                    if (!gridElement._item.length){
+                        return;
                     }
-                    p = p.parent();
+                    gridElement._items =  g.find(
+                        'div.' + gridElement._item.attr('class').replace(itemsRE, '$1')
+                    ).filter(function () {
+                            return $(this).parents('.separated-grid')[0] === gridElement;
+                        })
+                }
+                var items = gridElement._items;
+                if (!items.length){
+                    return;
+                }
+                var h = 0;
+                for (var k = 0; k < items.length; k++) {
+                    var el = $(items[k]);
+                    var _h = el.height();
+                    if (el.is('.first-col')) {
+                        h = _h;
+                    }
+                    if (h !== _h) {
+                        gridElement._height = 0;
+                    }
+                }
 
-                } while (p.length > 0 && p[0] !== gridElement && !item.is(':visible'));
-                var first = firstLeft >= item.position().left;
-                if (first && row.length > 0) {
-                    calcRow(lastItem && lastItem.parentNode !== gridItem.parentNode, order);
+
+                if (g.innerHeight() === gridElement._height && g.innerWidth() === gridElement._width) {
+                    return;
                 }
-                row.push(gridItem);
-                item.toggleClass('first-col', first);
-                if (i === items.length - 1) {
-                    calcRow(true, order);
+
+                var windowScrollTop = $(window).scrollTop();
+                items.css({'overflow': 'hidden', 'height': '10px'}).removeClass('last-row');
+                if (gridElement._helpNodes) {
+                    $(gridElement._helpNodes).remove();
                 }
-                lastItem = gridItem;
+                gridElement._helpNodes = [];
+                var firstLeft = items.position().left;
+                var order = calcOrder(items);
+                var notDisplayed = [];
+                var lastItem = null;
+                items.each(function (i, gridItem) {
+                    var item = $(gridItem);
+                    var p = item;
+                    do {
+                        if (p.css('display') === 'none') {
+                            p.data('style', p.attr('style')).css('display', 'block');
+                            notDisplayed.push(p[0]);
+                        }
+                        p = p.parent();
+
+                    } while (p.length > 0 && p[0] !== gridElement && !item.is(':visible'));
+                    var first = firstLeft >= item.position().left;
+                    if (first && row.length > 0) {
+                        calcRow(gridElement._helpNodes, lastItem && lastItem.parentNode !== gridItem.parentNode, order);
+                    }
+                    row.push(gridItem);
+                    item.toggleClass('first-col', first);
+                    if (i === items.length - 1) {
+                        calcRow(gridElement._helpNodes, true, order);
+                    }
+                    lastItem = gridItem;
+                });
+                $(notDisplayed).each(function (i, e) {
+                    var el = $(e);
+                    var css = el.data('style');
+                    el.removeData('style');
+                    if ('undefined' !== typeof css) {
+                        el.attr('style', css);
+                    } else {
+                        el.removeAttr('style');
+                    }
+                });
+                gridElement._width = g.innerWidth();
+                gridElement._height = g.innerHeight();
+                $(window).scrollTop(windowScrollTop);
+                $(window).off('resize', lazy);
+                $(window).resize();
+                $(window).on('resize', lazy);
             });
-            $(notDisplayed).each(function(i, e){
-                var el = $(e);
-                var css = el.data('style');
-                el.removeData('style');
-                if ('undefined' !== typeof css) {
-                    el.attr('style', css);
-                } else {
-                    el.removeAttr('style');
-                }
-            });
-            gridElement._width =  g.innerWidth();
-            gridElement._height = g.innerHeight();
-            $(window).scrollTop(windowScrollTop);
-        });
-        timeoutId = setTimeout(window.separatedGridResize, 350);
-    };
+        },
+        timeoutLazy,
+        lazy = function(){
+            clearTimeout(timeoutLazy);
+            timeoutLazy = setTimeout(resize, 100);
+        },
+        interval =function (){
+            lazy();
+            setTimeout(interval, 1000);
+        };
+    $(window).resize(lazy);
+    $(interval);
 })(jQuery);
-jQuery(window.separatedGridResize);
+
 
 (function ($) {
     'use strict';
@@ -515,7 +539,6 @@ jQuery(function ($) {
 
         if (responsiveBtn.length &&
                 !responsiveBtn.is(':visible') ||
-                $('body').width() >= 768 ||
                 (responsiveLevels !== 'expand on click' && responsiveLevels !== '') ||
                 !menu.data('responsiveMenu')) {
             return true;
@@ -924,6 +947,7 @@ if ('undefined' !== typeof jQuery && 'undefined' !== typeof MooTools) {
     };
 
     window.onEventSetProductType = function(product) {
+        product.attr('data-updating-content', true);
         $("form.product", product).each(function() {
             var form = $(this),
                 select = form.find('select:not(.no-vm-bind)'),

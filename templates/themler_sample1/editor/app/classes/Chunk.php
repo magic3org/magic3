@@ -19,9 +19,9 @@ class Chunk
      */
     public function save($info) 
     {
-        $validationResult = $this->validate($info);
-        if ('' !== $validationResult)
-            trigger_error($validationResult, E_USER_ERROR);
+        $ret = $this->validate($info);
+        if ('' !== $ret)
+            trigger_error($ret, E_USER_ERROR);
 
         $this->_lastChunk = $info;
         $this->_chunkFolder = $this->UPLOAD_PATH . $info['id'];
@@ -44,10 +44,10 @@ class Chunk
 
             if (!empty($this->_lastChunk['blob'])) {
                 if (empty($_FILES['content']['tmp_name'])) {
-                    return false;
+                    trigger_error('Chunk content is empty: ' . print_r($_FILES, true), E_USER_ERROR);
                 }
-                $content = file_get_contents($_FILES['content']['tmp_name']);
-                unlink($_FILES['content']['tmp_name']);
+                $content = Helper::readFile($_FILES['content']['tmp_name']);
+                Helper::deleteFile($_FILES['content']['tmp_name']);
             }
 
             Helper::writeFile($this->_chunkFolder . '/' . (int) $info['current'], $content);

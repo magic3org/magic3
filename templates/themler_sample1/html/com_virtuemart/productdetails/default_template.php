@@ -144,7 +144,7 @@ $productItems->askquestion_url = JRoute::_('index.php?option=com_virtuemart&view
         <span class=" bd-label-18">
             <?php echo JText::_($oldPriceProps['description']); ?>
         </span>
-    <span class=" bd-container-37 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-imagestyles bd-custom-table basePrice">
+    <span class=" bd-container-37 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-image bd-custom-table basePrice">
         <?php echo $html; ?>
     </span>
 </div>
@@ -156,7 +156,7 @@ $productItems->askquestion_url = JRoute::_('index.php?option=com_virtuemart&view
         <span class=" bd-label-17">
             <?php echo JText::_($regularPriceProps['description']); ?>
         </span>
-    <span class=" bd-container-36 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-imagestyles bd-custom-table salesPrice">
+    <span class=" bd-container-36 bd-tagstyles bd-custom-blockquotes bd-custom-button bd-custom-image bd-custom-table salesPrice">
         <?php echo $html; ?>
     </span>
 
@@ -186,12 +186,13 @@ $productItems->askquestion_url = JRoute::_('index.php?option=com_virtuemart&view
 </div>
 <?php endif; ?>
 	
-		<?php if (isset($productItems->productDesc)) : ?>
+		<?php $descLength = intval('40'); ?>
+<?php if (isset($productItems->productDesc)) : ?>
 <div class=" bd-productdesc-13">
-    <?php if (property_exists($productItems->productDesc, 'isFull')) :
+    <?php if (property_exists($productItems->productDesc, 'isFull') || $descLength <= 0) :
         echo $productItems->productDesc->desc;
     else :
-        echo shopFunctionsF::limitStringByWord($productItems->productDesc->desc, 40, '...');
+        echo shopFunctionsF::limitStringByWord($productItems->productDesc->desc, $descLength, '...');
     ?>
     <?php endif; ?>
 </div>
@@ -319,6 +320,12 @@ echo vmJsApi::writeJS();
     jQuery(function ($) {
         'use strict';
         window.onEventSetProductType($('.bd-productoverview'));
+        setInterval(function() {
+            var attr = $('.bd-productoverview').attr('data-updating-content')
+            if (typeof attr !== typeof undefined && attr !== false) {
+                window.onEventSetProductType($('.bd-productoverview'));
+            }
+        }, 350);
     });
 </script>
 <?php
