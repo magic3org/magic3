@@ -684,9 +684,9 @@ class BaseFrameContainer extends Core
 				// JRequest経由でレンダー側にサブテンプレートIDを渡す
 				if (!empty($subTemplateId)) JRequest::injectSetVar('file_template_name', $subTemplateId);
 
-				// サブテンプレートIDの渡し方は以下の方法もある
+				// サブテンプレートIDの渡し方は以下の方法もある(Themlerテンプレート1.39以降はこちらが有効)
 				// サブテンプレートIDを埋め込む
-//				if (!empty($subTemplateId)) $this->setBuffer('<!--TEMPLATE ' . $subTemplateId . ' /-->', 'component');
+				if (!empty($subTemplateId)) $this->setBuffer('<!--TEMPLATE ' . $subTemplateId . ' /-->', 'component');
 			}
 			
 			// 現在のJoomla!ドキュメントを設定
