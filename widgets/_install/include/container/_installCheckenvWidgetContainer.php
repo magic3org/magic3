@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installCheckenvWidgetContainer.php 3791 2010-11-08 07:07:17Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
@@ -19,7 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	const PHP_MIN_VERSION = '5.2.0';				// インストールに必要なPHP最小バージョン
+	const PHP_MIN_VERSION = '5.3.0';				// インストールに必要なPHP最小バージョン
 	
 	/**
 	 * コンストラクタ
@@ -111,7 +111,7 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 		$this->tmpl->addVar("_widget","current_mysql_status", $data);
 		
 		// PHPのバージョンをチェック
-		$data = '<b><font color="green">' . $this->_('5.2.0 more') . '</font></b>';		// 5.2.0 以上
+		$data = '<b><font color="green">' . $this->_('5.3.0 more') . '</font></b>';		// 5.3.0 以上
 		$this->tmpl->addVar("_widget","config_php_version", $data);
 		
 		$phpVer = phpversion();

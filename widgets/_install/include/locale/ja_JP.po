@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-14 11:32+0900\n"
-"PO-Revision-Date: 2014-12-14 11:32+0900\n"
+"POT-Creation-Date: 2015-09-24 09:45+0900\n"
+"PO-Revision-Date: 2015-09-24 09:46+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -11,8 +11,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
-"X-Poedit-Basepath: ../\n"
+"X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-SearchPath-0: container\n"
 
 #: container/_installBaseWidgetContainer.php:51
@@ -94,8 +95,8 @@ msgid "not available(pdo_mysql not installed)"
 msgstr "利用不可(pdo_mysqlがインストールされていません)"
 
 #: container/_installCheckenvWidgetContainer.php:114
-msgid "5.2.0 more"
-msgstr "5.2.0 以上"
+msgid "5.3.0 more"
+msgstr "5.3.0 以上"
 
 #: container/_installCheckenvWidgetContainer.php:126
 msgid "bytes(encouraged)"
@@ -388,16 +389,6 @@ msgstr ""
 msgid "Succeeded in creating database. Current Database Version: %s"
 msgstr "DB構築処理が正常に終了しました。現在のDBバージョン: %s"
 
-#: container/_installInitdbWidgetContainer.php:261
-msgid ""
-"If you want initializing the system easily, use 'System Initialize Wizard'. "
-"Select 'Maintenance / Core Control / System Initialize Wizard' on the main "
-"menu."
-msgstr ""
-"システムの初期化を簡単に行うには「システム初期化ウィザード」を使用します。メ"
-"インメニューから「メンテナンス / コア制御 / システム初期化ウィザード」を選択"
-"します。"
-
 #: container/_installInitdbWidgetContainer.php:269
 msgid "Failed in initializing database."
 msgstr "ＤＢ初期化に失敗しました"
@@ -493,85 +484,93 @@ msgstr "公式サイトへ接続"
 msgid "Can't use database."
 msgstr "DBが使用できません"
 
-#: container/_installInputparamWidgetContainer.php:130
-#: container/_installInputparamWidgetContainer.php:224
+#: container/_installInputparamWidgetContainer.php:131
+#: container/_installInputparamWidgetContainer.php:257
 msgid "User"
 msgstr "DBユーザ"
 
-#: container/_installInputparamWidgetContainer.php:133
-#: container/_installInputparamWidgetContainer.php:223
+#: container/_installInputparamWidgetContainer.php:134
+#: container/_installInputparamWidgetContainer.php:256
 msgid "Database Name"
 msgstr "DB名"
 
-#: container/_installInputparamWidgetContainer.php:138
+#: container/_installInputparamWidgetContainer.php:139
 msgid "Database Type not selected."
 msgstr "DB種別が設定されていません"
 
-#: container/_installInputparamWidgetContainer.php:154
+#: container/_installInputparamWidgetContainer.php:155
 msgid "Configration updated."
 msgstr "設定値を更新しました"
 
-#: container/_installInputparamWidgetContainer.php:158
+#: container/_installInputparamWidgetContainer.php:159
 msgid "Failed in updating configration."
 msgstr "設定値の更新に失敗しました"
 
-#: container/_installInputparamWidgetContainer.php:164
+#: container/_installInputparamWidgetContainer.php:168
 msgid "Succeeded in connecting database."
 msgstr "接続正常"
 
-#: container/_installInputparamWidgetContainer.php:167
+#: container/_installInputparamWidgetContainer.php:190
+msgid "Incorrect encoding for Japanese."
+msgstr "日本語を使用するためのエンコード設定が不正です。"
+
+#: container/_installInputparamWidgetContainer.php:195
+msgid "Incollect encoding."
+msgstr "エンコーディングエラー"
+
+#: container/_installInputparamWidgetContainer.php:199
 msgid "Succeeded in creating table."
 msgstr "テーブル作成正常"
 
-#: container/_installInputparamWidgetContainer.php:169
+#: container/_installInputparamWidgetContainer.php:201
 msgid "Failed in creating table."
 msgstr "テーブル作成エラー"
 
-#: container/_installInputparamWidgetContainer.php:173
+#: container/_installInputparamWidgetContainer.php:206
 msgid "Failed in connecting database."
 msgstr "接続エラー"
 
-#: container/_installInputparamWidgetContainer.php:212
+#: container/_installInputparamWidgetContainer.php:245
 msgid "Update Config"
 msgstr "設定値を更新"
 
-#: container/_installInputparamWidgetContainer.php:213
+#: container/_installInputparamWidgetContainer.php:246
 msgid "Test Connection"
 msgstr "接続テスト"
 
-#: container/_installInputparamWidgetContainer.php:214
+#: container/_installInputparamWidgetContainer.php:247
 msgid "Configration changed.\\nUpdate configration?"
 msgstr "設定値が変更されています\\n設定値を保存しますか?"
 
-#: container/_installInputparamWidgetContainer.php:215
+#: container/_installInputparamWidgetContainer.php:248
 msgid "Update configration?"
 msgstr "設定値を更新しますか?"
 
-#: container/_installInputparamWidgetContainer.php:216
+#: container/_installInputparamWidgetContainer.php:249
 msgid "Input Site Information"
 msgstr "サイト情報入力"
 
-#: container/_installInputparamWidgetContainer.php:218
+#: container/_installInputparamWidgetContainer.php:251
 msgid "Site Information"
 msgstr "サイト情報"
 
-#: container/_installInputparamWidgetContainer.php:219
+#: container/_installInputparamWidgetContainer.php:252
 msgid "Root URL"
 msgstr "ルートURL"
 
-#: container/_installInputparamWidgetContainer.php:220
+#: container/_installInputparamWidgetContainer.php:253
 msgid "Database Information"
 msgstr "DB接続情報"
 
-#: container/_installInputparamWidgetContainer.php:221
+#: container/_installInputparamWidgetContainer.php:254
 msgid "Database Type"
 msgstr "DB種別"
 
-#: container/_installInputparamWidgetContainer.php:222
+#: container/_installInputparamWidgetContainer.php:255
 msgid "Hostname"
 msgstr "ホスト名"
 
-#: container/_installInputparamWidgetContainer.php:225
+#: container/_installInputparamWidgetContainer.php:258
 msgid "Password"
 msgstr "パスワード"
 
@@ -582,6 +581,15 @@ msgstr "言語"
 #: container/_installTopWidgetContainer.php:68
 msgid "Start Installing"
 msgstr "インストールを開始します"
+
+#~ msgid ""
+#~ "If you want initializing the system easily, use 'System Initialize "
+#~ "Wizard'. Select 'Maintenance / Core Control / System Initialize Wizard' "
+#~ "on the main menu."
+#~ msgstr ""
+#~ "システムの初期化を簡単に行うには「システム初期化ウィザード」を使用します。"
+#~ "メインメニューから「メンテナンス / コア制御 / システム初期化ウィザード」を"
+#~ "選択します。"
 
 #~ msgid "Processing"
 #~ msgstr "処理中"

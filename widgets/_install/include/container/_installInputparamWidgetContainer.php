@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installInputparamWidgetContainer.php 3791 2010-11-08 07:07:17Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
@@ -75,6 +75,7 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 		$isConfigured = false;		// 設定ファイルが作成されたかどうか
 		$isTested = false;			// 接続テスト完了かどうか
 		$act = $request->trimValueOf('act');
+		$lang = $request->trimValueOf('lang');
 		if (empty($act)){		// 初期状態
 			// 使用可能なDBが１つのときはデフォルトとする
 			if ($canUsePgsql && !$canUseMysql){
@@ -160,15 +161,47 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 				} else if ($act == 'testdb'){		// DB接続テスト
 					$dsn = $dbtype . ':' . 'host=' . $hostname . ';dbname=' . $dbname;
 					$db = new _installDB();
+					
+					// 接続テスト
 					if ($db->testDbConnection($dsn, $dbuser, $password)){
+						$isErr = false;			// エラーありかどうか
 						$msg = '<b><font color="green">' . $this->_('Succeeded in connecting database.') . '</font></b>';			// 接続正常
-						$msg .= ' => ';
-						if ($db->testDbTable($dsn, $dbuser, $password)){
-							$msg .= '<b><font color="green">' . $this->_('Succeeded in creating table.') . '</font></b>';	// テーブル作成正常
-						} else {
-							$msg .= '<b><font color="red">' . $this->_('Failed in creating table.') . '</font></b>';			// テーブル作成エラー
+						
+						// MySQLで日本語の場合は日本語エンコーディングをチェック
+						if ($dbtype == M3_DB_TYPE_MYSQL && $lang == 'ja'){
+							$errMsg = '';
+							$ret = $db->testDBEncoding($dsn, $dbuser, $password, $rows);
+							if ($ret){			// 取得可能な場合のみチェック
+								foreach ($rows as $row){
+									$name = $row['Variable_name'];
+									$value = $row['Value'];
+									
+									$errMsg .= $name . ' ' . $value;
+									if ($name != 'character_set_filesystem'){
+										if ($value != 'utf8'){
+											$errMsg .= '(NG)';
+											$isErr = true;
+										}
+									}
+									$errMsg .= '<br />';
+								}
+							}
+							// エラーありの場合
+							if ($isErr) $this->setMsg(self::MSG_APP_ERR, $this->_('Incorrect encoding for Japanese.') . '<br />' . $errMsg);		// 日本語を使用するためのエンコード設定が不正です。
 						}
-						$isTested = true;			// 接続テスト完了かどうか
+						
+						if ($isErr){
+							$msg .= ' => ';
+							$msg .= '<b><font color="red">' . $this->_('Incollect encoding.') . '</font></b>';			// エンコードエラー
+						} else {
+							$msg .= ' => ';
+							if ($db->testDbTable($dsn, $dbuser, $password)){
+								$msg .= '<b><font color="green">' . $this->_('Succeeded in creating table.') . '</font></b>';	// テーブル作成正常
+							} else {
+								$msg .= '<b><font color="red">' . $this->_('Failed in creating table.') . '</font></b>';			// テーブル作成エラー
+							}
+							$isTested = true;			// 接続テスト完了かどうか
+						}
 					} else {
 						$msg .= '<b><font color="red">' . $this->_('Failed in connecting database.') . '</font></b>';		// 接続エラー
 					}

@@ -1298,6 +1298,49 @@ class BaseDb extends Core
 		return $status;
 	}
 	/**
+	 * DBエンコード環境取得
+	 *
+	 * @param string  $dsn			接続用DSN
+	 * @param string  $user			接続ユーザ
+	 * @param string  $password		接続パスワード	 
+	 * @param  array  $rows			取得した行
+	 * @return bool					true=データあり, false=データなし
+	 */
+	function testDBEncoding($dsn, $user, $password, &$rows)
+	{
+		$retValue = false;	// 終了ステータス(データなし)
+		$con = null;
+		
+		try {
+			$con = new PDO($dsn, $user, $password);
+			$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			$dbType = $con->getAttribute(PDO::ATTR_DRIVER_NAME);					// DBのタイプ
+			if ($dbType == 'mysql') {	// MySQLの場合
+				$con->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+			}
+
+			// エンコーディング環境取得
+			$stmt = $con->prepare("SHOW VARIABLES LIKE 'character\_set\_%'");
+			$stmt->execute();
+			
+			$retRows = array();
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				$retRows[] = $row;
+				$retValue = true;// データあり
+			}
+			$rows = $retRows;
+			
+			// ステートメントを開放
+			$stmt = null;
+			$con = null;
+		} catch (PDOException $e) {
+			// 共通エラー処理
+			self::_onError($e, 'DSN=' . $dsn . ';' . 'USER=' . $user . ';' . 'PWD=' . $password);
+		}
+		return $retValue;
+	}
+	/**
 	 * MySQL用のSQL文をPostgreSQLのSQL文に変換
 	 *
 	 * @param  string $src		MySQL用のSQL文
