@@ -393,6 +393,12 @@ $this->item->title = '****';*/
 						'classes' => array('a' => 'readon'),
 						'link' => $url,
 						'content' => str_replace(' ', '&#160;', $title))) . '</p>';
+		} else if (function_exists('funcLinkButton')){
+			$dest .= '<p class="readmore">' . funcLinkButton(array(
+						'classes' => array('a' => 'readon'),
+						'link' => $url,
+						'content' => str_replace(' ', '&#160;', $title))) . '</p>';
+//			$dest .= readmore($title, $url);
 		} else {
 			$dest .= '<p class="readmore"><a class="button art-button" href="' . convertUrlToHtmlEntity($url) . '">' . convertToHtmlEntity($title) . '</a></p>';
 		}
