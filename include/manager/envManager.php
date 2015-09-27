@@ -27,6 +27,7 @@ class EnvManager extends Core
 	private $currentTemplateVersion;		// テンプレートバージョン
 	private $currentTemplateCleanType;	// 現在のテンプレートのクリーンタイプ
 	private $currentTemplateUseBootstrap;	// 現在のテンプレートでBootstrapライブラリを使用するかどうか
+	private $currentRenderType;		// 現在のビュー作成タイプ
 	private $currentWidgetObj;		// 現在実行中のウィジェットオブジェクト
 	private $currentWidgetId;	// 現在作成中のウィジェットId
 	private $currentWidgetConfigId;	// 現在作成中のウィジェットの定義ID
@@ -1321,6 +1322,25 @@ class EnvManager extends Core
 	public function getCurrentTemplateUseBootstrap()
 	{
 		return $this->currentTemplateUseBootstrap;
+	}
+	/**
+	 * 現在のビュー作成タイプを設定
+	 *
+	 * @param string $renderType	ビュー作成タイプ
+	 * @return						なし
+	 */
+	public function setCurrentRenderType($renderType)
+	{
+		$this->currentRenderType = $renderType;
+	}
+	/**
+	 * 現在のビュー作成タイプを取得
+	 *
+	 * @return string			ビュー作成タイプ
+	 */
+	public function getCurrentRenderType()
+	{
+		return $this->currentRenderType;
 	}
 	/**
 	 * 現在のテンプレートへのパスを取得
