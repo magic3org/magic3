@@ -164,6 +164,7 @@ class JRender
 		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
 		
 		// 設定を作成
+		// 「$this->item」はテンプレート内では「$this->article」として認識される
 		$contents = '';
 		$this->params   = new JParameter();
 		$this->item = new stdClass;
@@ -200,6 +201,12 @@ $this->item->readmore_link = '******';
 $this->item->readmore = '******';
 $this->item->title = '****';*/
 
+		// Themlerテンプレート用
+		// ページ遷移の設定
+		$this->item->pagination = '';		// 出力内容
+		$this->item->paginationposition = 0;// 0または1
+		$this->item->paginationrelative = 0;// 0または1
+		
 		// スクリプトを実行
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
 		
