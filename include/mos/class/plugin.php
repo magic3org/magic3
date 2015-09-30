@@ -25,8 +25,8 @@
  * @subpackage	Plugin
  * @since		1.5
  */
-//class JPlugin extends JEvent
-class JPlugin
+//class JPlugin
+class JPlugin extends JEvent
 {
 	/**
 	 * A JParameter object holding the parameters for the plugin

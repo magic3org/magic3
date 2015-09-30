@@ -30,7 +30,7 @@ class PlgContentPagenavigation extends JPlugin
 	 */
 	public function onContentBeforeDisplay($context, &$row, &$params, $page = 0)
 	{
-		$app   = JFactory::getApplication();
+/*		$app   = JFactory::getApplication();
 		$view  = $app->input->get('view');
 		$print = $app->input->getBool('print');
 
@@ -38,10 +38,10 @@ class PlgContentPagenavigation extends JPlugin
 		{
 			return false;
 		}
-
+*/
 		if (($context == 'com_content.article') && ($view == 'article') && $params->get('show_item_navigation'))
 		{
-			$db       = JFactory::getDbo();
+/*			$db       = JFactory::getDbo();
 			$user     = JFactory::getUser();
 			$lang     = JFactory::getLanguage();
 			$nullDate = $db->getNullDate();
@@ -52,12 +52,13 @@ class PlgContentPagenavigation extends JPlugin
 			$uid        = $row->id;
 			$option     = 'com_content';
 			$canPublish = $user->authorise('core.edit.state', $option . '.article.' . $row->id);
-
+*/
 			/**
 			 * The following is needed as different menu items types utilise a different param to control ordering.
 			 * For Blogs the `orderby_sec` param is the order controlling param.
 			 * For Table and List views it is the `orderby` param.
 			**/
+/*
 			$params_list = $params->toArray();
 
 			if (array_key_exists('orderby_sec', $params_list))
@@ -150,7 +151,7 @@ class PlgContentPagenavigation extends JPlugin
 
 			$db->setQuery($query);
 			$list = $db->loadObjectList('id');
-
+*/
 			// This check needed if incorrect Itemid is given resulting in an incorrect result.
 			if (!is_array($list))
 			{
@@ -218,7 +219,7 @@ class PlgContentPagenavigation extends JPlugin
 			}
 		}
 
-		return;
+//		return;
 	}
 
 	/**

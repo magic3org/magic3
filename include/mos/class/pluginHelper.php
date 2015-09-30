@@ -37,7 +37,7 @@ abstract class JPluginHelper
 	 */
 	public static function getLayoutPath($type, $name, $layout = 'default')
 	{
-		$template = JFactory::getApplication()->getTemplate();
+/*		$template = JFactory::getApplication()->getTemplate();
 		$defaultLayout = $layout;
 
 		if (strpos($layout, ':') !== false)
@@ -66,7 +66,12 @@ abstract class JPluginHelper
 		else
 		{
 			return $dPath;
-		}
+		}*/
+		
+		global $gEnvManager;
+		
+		$path = $gEnvManager->getJoomlaRootPath() . '/class/plugins/' . $name . '/tmpl/default.php';
+		return $path;
 	}
 
 	/**
@@ -291,6 +296,11 @@ abstract class JPluginHelper
 		}
 
 		static::$plugins = array();
+		$pluginObj = new stdClass;
+		$pluginObj->type = 'content';
+		$pluginObj->name = 'pagenavigation';
+		$pluginObj->params = '{"position":"1"}';
+		static::$plugins[] = $pluginObj;
 /*		$user = JFactory::getUser();
 		$cache = JFactory::getCache('com_plugins', '');
 

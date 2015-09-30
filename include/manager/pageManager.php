@@ -4305,7 +4305,6 @@ class PageManager extends Core
 											// ウィジェットの内枠(コンテンツ外枠)を設定
 											// ウィジェットの内枠はレンダーで設定
 											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
-								
 											$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
 //										} else if (strStartsWith($position, 'user') ||				// ナビゲーションメニュー位置の場合
 										} else if (strcasecmp($position, 'user3') == 0 ||				// ナビゲーションメニュー位置の場合

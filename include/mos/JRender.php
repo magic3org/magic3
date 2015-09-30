@@ -17,6 +17,10 @@ require_once($this->gEnv->getJoomlaRootPath() . '/JParameter.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/html.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/arrayhelper.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/uri.php');
+
+require_once($this->gEnv->getJoomlaRootPath() . '/class/event.php');
+require_once($this->gEnv->getJoomlaRootPath() . '/class/dispatcher.php');
+
 require_once($this->gEnv->getJoomlaRootPath() . '/class/plugin.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/pluginHelper.php');
 require_once($this->gEnv->getJoomlaRootPath() . '/class/filteroutput.php');
@@ -155,6 +159,10 @@ class JRender
 		global $gEnvManager;
 		global $gInstanceManager;
 
+		// ビューの描画タイプ(archive,article(デフォルト),category,featured,form)を取得
+		$renderType = $gEnvManager->getCurrentRenderType();
+		if (empty($renderType)) $renderType = 'article';
+		
 		// 前後コンテンツ追加
 		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
 		// 「もっと読む」ボタンを追加
@@ -202,10 +210,25 @@ $this->item->readmore = '******';
 $this->item->title = '****';*/
 
 		// Themlerテンプレート用
-		// ページ遷移の設定
+		// ページ遷移の設定(com_contentのarchive,article,category,featuredで有効)
 		$this->item->pagination = '';		// 出力内容
 		$this->item->paginationposition = 0;// 0または1
 		$this->item->paginationrelative = 0;// 0または1
+		$this->item->event = new stdClass;
+		$this->item->event->beforeDisplayContent = '';		// ページ遷移用タグ(前置)
+		$this->item->event->afterDisplayContent = '';		// ページ遷移用タグ(後置)
+		
+		// ページ遷移プラグイン作成
+//		require_once($gEnvManager->getJoomlaRootPath() . '/class/plugins/content/pagenavigation/pagenavigation.php');
+//		$plugin = new PlgContentPagenavigation();
+//		$dispatcher = JEventDispatcher::getInstance();
+//		$results = $dispatcher->trigger('onContentBeforeDisplay', array('com_content.article', &$item, &$item->params, $offset));
+//		onContentBeforeDisplay($context, &$row, &$params, $page = 0)
+		JPluginHelper::importPlugin('content');		// JEventDispatcherのattach()が実行される
+		$dispatcher = JEventDispatcher::getInstance();
+		$results = $dispatcher->trigger(
+			'onContentBeforeDisplay', array ('com_content.article', &$item, &$item->params, $offset)
+		);
 		
 		// スクリプトを実行
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;

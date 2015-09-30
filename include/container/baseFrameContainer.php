@@ -671,6 +671,7 @@ class BaseFrameContainer extends Core
 			// Joomla!v1.5用の設定
 			define('JPATH_BASE', dirname(__FILE__));
 			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
+			define('JPATH_PLUGINS', $gEnvManager->getJoomlaRootPath() . '/class/plugins');			// プラグインパス
 			define('DS', DIRECTORY_SEPARATOR);
 			$this->language = $this->gEnv->getCurrentLanguage();
 			$this->template = $curTemplate;
