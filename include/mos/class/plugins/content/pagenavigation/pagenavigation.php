@@ -39,7 +39,8 @@ class PlgContentPagenavigation extends JPlugin
 			return false;
 		}
 */
-		if (($context == 'com_content.article') && ($view == 'article') && $params->get('show_item_navigation'))
+		//if (($context == 'com_content.article') && ($view == 'article') && $params->get('show_item_navigation'))
+		if (($context == 'com_content.article') && $params->get('show_item_navigation'))
 		{
 /*			$db       = JFactory::getDbo();
 			$user     = JFactory::getUser();
@@ -151,7 +152,7 @@ class PlgContentPagenavigation extends JPlugin
 
 			$db->setQuery($query);
 			$list = $db->loadObjectList('id');
-*/
+
 			// This check needed if incorrect Itemid is given resulting in an incorrect result.
 			if (!is_array($list))
 			{
@@ -200,7 +201,17 @@ class PlgContentPagenavigation extends JPlugin
 				$row->next_label = '';
 				$row->next = '';
 			}
-
+			*/
+			global $gEnvManager;
+			
+			$pageNavData = $gEnvManager->getJoomlaPageNavData();
+			if (!empty($pageNavData)){
+				$row->prev = convertUrlToHtmlEntity($pageNavData['prev']);
+				$row->next = convertUrlToHtmlEntity($pageNavData['next']);
+				$row->prev_label = convertToHtmlEntity($pageNavData['prev_label']);
+				$row->next_label = convertToHtmlEntity($pageNavData['next_label']);
+			}
+			
 			// Output.
 			if ($row->prev || $row->next)
 			{
@@ -218,8 +229,6 @@ class PlgContentPagenavigation extends JPlugin
 				$row->paginationrelative = $this->params->get('relative', 0);
 			}
 		}
-
-//		return;
 	}
 
 	/**

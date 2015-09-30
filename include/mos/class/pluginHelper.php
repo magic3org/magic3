@@ -70,7 +70,7 @@ abstract class JPluginHelper
 		
 		global $gEnvManager;
 		
-		$path = $gEnvManager->getJoomlaRootPath() . '/class/plugins/' . $name . '/tmpl/default.php';
+		$path = JPATH_PLUGINS . '/' . $type . '/' . $name . '/tmpl/default.php';
 		return $path;
 	}
 

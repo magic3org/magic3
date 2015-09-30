@@ -219,16 +219,16 @@ $this->item->title = '****';*/
 		$this->item->event->afterDisplayContent = '';		// ページ遷移用タグ(後置)
 		
 		// ページ遷移プラグイン作成
-//		require_once($gEnvManager->getJoomlaRootPath() . '/class/plugins/content/pagenavigation/pagenavigation.php');
-//		$plugin = new PlgContentPagenavigation();
-//		$dispatcher = JEventDispatcher::getInstance();
-//		$results = $dispatcher->trigger('onContentBeforeDisplay', array('com_content.article', &$item, &$item->params, $offset));
-//		onContentBeforeDisplay($context, &$row, &$params, $page = 0)
-		JPluginHelper::importPlugin('content');		// JEventDispatcherのattach()が実行される
-		$dispatcher = JEventDispatcher::getInstance();
-		$results = $dispatcher->trigger(
-			'onContentBeforeDisplay', array ('com_content.article', &$item, &$item->params, $offset)
-		);
+		$pageNavData = $gEnvManager->getJoomlaPageNavData();
+		if (empty($pageNavData)){
+			$this->item->params->set('show_item_navigation', 1);		// ページ遷移ナビゲーション表示
+			
+			JPluginHelper::importPlugin('content');		// JEventDispatcherのattach()が実行される
+			$dispatcher = JEventDispatcher::getInstance();
+			$results = $dispatcher->trigger(
+				'onContentBeforeDisplay', array ('com_content.article', &$item, &$this->item->params)
+			);
+		}
 		
 		// スクリプトを実行
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;

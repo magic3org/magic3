@@ -80,6 +80,7 @@ class EnvManager extends Core
 	private $joomlaDocument;		// Joomla!ドキュメント
 	private $joomlaMenuContent;		// Joomla!v1.5用メニューコンテンツ
 	private $joomlaMenuData;		// Joomla!v2.5用メニュー階層データ
+	private $joomlaPageNavData;		// Joomla!v2.5用ページ遷移データ
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
 	private $defaultLacaleArray;	// デフォルトのロケール取得用
 	private $selectedMenuItems = array();				// 現在選択中のメニュー項目
@@ -2923,6 +2924,25 @@ class EnvManager extends Core
 	public function getJoomlaMenuData()
 	{
 		return $this->joomlaMenuData;
+	}
+	/**
+	 * Joomla!v2.5用ページ遷移データを設定
+	 *
+	 * @param array $navData		ページ遷移データ
+	 * @return 						なし
+	 */
+	public function setJoomlaPageNavData($navData)
+	{
+		$this->joomlaPageNavData = $navData;
+	}
+	/**
+	 * Joomla!v2.5用ページ遷移データを取得
+	 *
+	 * @return array		ページ遷移データ
+	 */
+	public function getJoomlaPageNavData()
+	{
+		return $this->joomlaPageNavData;
 	}
 	/**
 	 * Joomla!用ビュー作成用データを設定
