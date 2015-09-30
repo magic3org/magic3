@@ -3486,6 +3486,24 @@ class BaseWidgetContainer extends Core
 		return str_replace(array(M3_TAG_START, M3_TAG_END), array('', ''), $str);
 	}
 	/**
+	 * 前画面、次画面遷移用のボタンを追加(一般画面用)
+	 *
+	 * @param string $prevUrl	前画面のURL(作成しない場合は空文字列)
+	 * @param string $nextUrl	次画面のURL(作成しない場合は空文字列)
+	 * @param string $prevTitle	前画面のタイトル
+	 * @param string $nextTitle	次画面のタイトル
+	 * @return					なし
+	 */
+	function addPrevNextButton($prevUrl, $nextUrl, $prevTitle = '', $nextTitle = '')
+	{
+		$pageNavData = array();
+		$pageNavData['prev']		= $prevUrl;
+		$pageNavData['next']		= $nextUrl;
+		$pageNavData['prev_label']	= $prevTitle;
+		$pageNavData['next_label']	= $nextTitle;
+		$this->gEnv->setJoomlaPageNavData($pageNavData);
+	}
+	/**
 	 * ページリンク計算
 	 *
 	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整

@@ -220,14 +220,19 @@ $this->item->title = '****';*/
 		
 		// ページ遷移プラグイン作成
 		$pageNavData = $gEnvManager->getJoomlaPageNavData();
-		if (empty($pageNavData)){
+		if (!empty($pageNavData)){
 			$this->item->params->set('show_item_navigation', 1);		// ページ遷移ナビゲーション表示
 			
 			JPluginHelper::importPlugin('content');		// JEventDispatcherのattach()が実行される
 			$dispatcher = JEventDispatcher::getInstance();
 			$results = $dispatcher->trigger(
-				'onContentBeforeDisplay', array ('com_content.article', &$item, &$this->item->params)
+				'onContentBeforeDisplay', array ('com_content.article', &$this->item, &$this->item->params)
 			);
+			$this->item->event->beforeDisplayContent = trim(implode("\n", $results));		// ページ遷移用タグ(前置)
+			$results = $dispatcher->trigger(
+				'onContentAfterDisplay', array ('com_content.article', &$this->item, &$this->item->params)
+			);
+			$this->item->event->afterDisplayContent = trim(implode("\n", $results));		// ページ遷移用タグ(後置)
 		}
 		
 		// スクリプトを実行

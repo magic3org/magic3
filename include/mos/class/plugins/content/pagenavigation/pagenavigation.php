@@ -204,6 +204,8 @@ class PlgContentPagenavigation extends JPlugin
 			*/
 			global $gEnvManager;
 			
+//			$row = new stdClass;
+			
 			$pageNavData = $gEnvManager->getJoomlaPageNavData();
 			if (!empty($pageNavData)){
 				$row->prev = convertUrlToHtmlEntity($pageNavData['prev']);
