@@ -3490,11 +3490,11 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @param string $prevUrl	前画面のURL(作成しない場合は空文字列)
 	 * @param string $nextUrl	次画面のURL(作成しない場合は空文字列)
-	 * @param string $prevTitle	前画面のタイトル
-	 * @param string $nextTitle	次画面のタイトル
+	 * @param string $prevTitle	前画面のタイトル(省略時はデフォルトのテキスト)
+	 * @param string $nextTitle	次画面のタイトル(省略時はデフォルトのテキスト)
 	 * @return					なし
 	 */
-	function addPrevNextButton($prevUrl, $nextUrl, $prevTitle = '', $nextTitle = '')
+	function addPrevNextButton($prevUrl, $nextUrl, $prevTitle = null, $nextTitle = null)
 	{
 		$pageNavData = array();
 		$pageNavData['prev']		= $prevUrl;

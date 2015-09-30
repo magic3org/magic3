@@ -210,8 +210,11 @@ class PlgContentPagenavigation extends JPlugin
 			if (!empty($pageNavData)){
 				$row->prev = convertUrlToHtmlEntity($pageNavData['prev']);
 				$row->next = convertUrlToHtmlEntity($pageNavData['next']);
-				$row->prev_label = convertToHtmlEntity($pageNavData['prev_label']);
-				$row->next_label = convertToHtmlEntity($pageNavData['next_label']);
+				
+				$prevLabel = isset($pageNavData['prev_label']) ? $pageNavData['prev_label'] : JText::_('COM_CONTENT_PREV');
+				$nextLabel = isset($pageNavData['next_label']) ? $pageNavData['next_label'] : JText::_('COM_CONTENT_NEXT');
+				$row->prev_label = convertToHtmlEntity($prevLabel);
+				$row->next_label = convertToHtmlEntity($nextLabel);
 			}
 			
 			// Output.
