@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_related_categoryWidgetContainer.php 5268 2012-10-04 11:33:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -94,7 +94,7 @@ class blog_related_categoryWidgetContainer extends BaseWidgetContainer
 	{
 		// リンク先の作成
 		$name = $fetchedRow['bc_name'];
-		$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $fetchedRow['bc_id']);
+		$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, M3_REQUEST_PARAM_CATEGORY_ID . '=' . $fetchedRow['bc_id']);
 		$row = array(
 			'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
 			'name' => $this->convertToDispString($name)			// タイトル

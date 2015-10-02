@@ -856,15 +856,113 @@ class blog_mainDb extends BaseDb
 			$queryStr .=     'AND be_language_id = ? ';	$params[] = $langId;
 			$queryStr .=     'AND ? < be_regist_dt '; $params[] = $regDate;
 			
-/*			// ブログID
-			if (isset($blogId)){
-				$queryStr .=    'AND be_blog_id = ? ';
-				$params[] = $blogId;
-			}*/
 			// 検索条件を付加
 			list($condQueryStr, $condParams) = $this->_createSearchCondition($startDt, $endDt, $keywords, $blogId, $userId);
 			$queryStr .= $condQueryStr;
 			$params = array_merge($params, $condParams);
+			
+			$queryStr .=   'ORDER BY be_regist_dt LIMIT 1';// 投稿順
+			$ret = $this->selectRecord($queryStr, $params, $row);
+			if ($ret){
+				$nextRow = $row;
+				$retStatus = true;
+			}
+			
+			// ### 降順の場合は前後入れ替え ###
+			if (!empty($order)){
+				$tmp = $prevRow;
+				$prevRow = $nextRow;
+				$nextRow = $tmp;
+			}
+		}
+		return $retStatus;
+	}
+	/**
+	 * カテゴリー選択で前後のエントリー項目を取得(一般用)
+	 *
+	 * @param timestamp $regDate			登録日時
+	 * @param string	$langId				言語
+	 * @param int		$order				取得順(0=昇順,1=降順)
+	 * @param int		$categoryId			カテゴリーID
+	 * @param string	$blogId				ブログID(nullのとき指定なし)
+	 * @param int       $userId				参照制限する場合のユーザID
+	 * @param array     $prevRow			前のレコード
+	 * @param array     $nextRow			次のレコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getPrevNextEntryByCategory($regDate, $langId, $order, $categoryId, $blogId, $userId, &$prevRow, &$nextRow)
+	{
+		if ($regDate == $this->gEnv->getInitValueOfTimestamp()){
+			return false;
+		} else {
+			$retStatus = false;
+			
+			// ### 前の日時の記事を取得 ###
+			$params = array();
+//			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr  = 'SELECT distinct(be_serial) FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr .=   'RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
+			$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+			$queryStr .=     'AND be_language_id = ? ';	$params[] = $langId;
+			$queryStr .=     'AND be_regist_dt < ? '; $params[] = $regDate;
+			$queryStr .=     'AND bw_category_id = ? ';	$params[] = $categoryId;// 記事カテゴリー
+		
+			// 検索条件を付加
+			list($condQueryStr, $condParams) = $this->_createSearchCondition(null, null, null, $blogId, $userId);
+			$queryStr .= $condQueryStr;
+			$params = array_merge($params, $condParams);
+		
+			// シリアル番号を取得
+			$serialArray = array();
+			$ret = $this->selectRecords($queryStr, $params, $serialRows);
+			if ($ret){
+				for ($i = 0; $i < count($serialRows); $i++){
+					$serialArray[] = $serialRows[$i]['be_serial'];
+				}
+			}
+			$serialStr = implode(',', $serialArray);
+			if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
+	
+			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr .=   'LEFT JOIN _login_user ON be_regist_user_id = lu_id AND lu_deleted = false ';
+			$queryStr .=   'WHERE be_serial in (' . $serialStr . ') ';
+		
+			$queryStr .=   'ORDER BY be_regist_dt DESC LIMIT 1';// 投稿順
+			$ret = $this->selectRecord($queryStr, $params, $row);
+			if ($ret){
+				$prevRow = $row;
+				$retStatus = true;
+			}
+		
+			// ### 後の日時の記事を取得 ###
+			$params = array();
+//			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr  = 'SELECT distinct(be_serial) FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr .=   'RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
+			$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+			$queryStr .=     'AND be_language_id = ? ';	$params[] = $langId;
+			$queryStr .=     'AND ? < be_regist_dt '; $params[] = $regDate;
+			$queryStr .=     'AND bw_category_id = ? ';	$params[] = $categoryId;// 記事カテゴリー
+			
+			// 検索条件を付加
+			list($condQueryStr, $condParams) = $this->_createSearchCondition(null, null, null, $blogId, $userId);
+			$queryStr .= $condQueryStr;
+			$params = array_merge($params, $condParams);
+			
+			// シリアル番号を取得
+			$serialArray = array();
+			$ret = $this->selectRecords($queryStr, $params, $serialRows);
+			if ($ret){
+				for ($i = 0; $i < count($serialRows); $i++){
+					$serialArray[] = $serialRows[$i]['be_serial'];
+				}
+			}
+			$serialStr = implode(',', $serialArray);
+			if (empty($serialStr)) $serialStr = '0';	// 0レコードのときはダミー値を設定
+	
+			$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+			$queryStr .=   'LEFT JOIN _login_user ON be_regist_user_id = lu_id AND lu_deleted = false ';
+			$queryStr .=   'WHERE be_serial in (' . $serialStr . ') ';
 			
 			$queryStr .=   'ORDER BY be_regist_dt LIMIT 1';// 投稿順
 			$ret = $this->selectRecord($queryStr, $params, $row);

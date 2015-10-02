@@ -53,6 +53,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $headKeyword;	// METAタグキーワード
 	private $addLib = array();		// 追加スクリプト
 	private $viewMode;					// 表示モード
+	private $showListType;				// 一覧表示タイプ
+	private $viewParam = array();					// 表示用パラメータ
 	private $editIconPos;			// 編集アイコンの位置
 	private $avatarSize;		// アバター画像サイズ
 	private $titleList;		// 一覧タイトル
@@ -140,7 +142,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (empty($this->blogId)) $this->blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID_SHORT);		// 略式ブログID
 		$keyword = $request->trimValueOf('keyword');// 検索キーワード
 		
-		if ($act == 'search' || !empty($keyword)){
+/*		if ($act == 'search' || !empty($keyword)){
 			$this->viewMode = 2;					// 表示モード(検索一覧表示)
 			return 'list.tmpl.html';		// 検索結果一覧
 		} else {
@@ -160,6 +162,29 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				} else {
 					return 'single.tmpl.html';		// 記事詳細
 				}
+			}
+		}*/
+		if (!empty($this->entryId)){		// 記事IDがある場合を優先
+			$this->viewMode = 10;					// 表示モード(記事単体表示)
+			if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+				return 'single_bootstrap.tmpl.html';		// 記事詳細
+			} else {
+				return 'single.tmpl.html';		// 記事詳細
+			}
+		} else if ($act == 'search' || !empty($keyword)){
+			$this->viewMode = 2;					// 表示モード(検索一覧表示)
+			return 'list.tmpl.html';		// 検索結果一覧
+		} else {
+			$year = $request->trimValueOf('year');		// 年指定
+			$month = $request->trimValueOf('month');		// 月指定
+			$category = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);		// カテゴリID
+			
+			if (!empty($category) || !empty($year) || !empty($month)){
+				$this->viewMode = 1;					// 表示モード(記事一覧表示)
+				return 'list.tmpl.html';	// 記事一覧
+			} else {
+				$this->viewMode = 0;					// 表示モード(トップ一覧表示)
+				return 'list.tmpl.html';		// トップ画面記事一覧
 			}
 		}
 	}
@@ -485,7 +510,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$ret = self::$_mainDb->getPrevNextEntryByKeyword($regDate, $this->_langId, $this->entryViewOrder, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/, $parsedKeywords, $this->blogId, $this->_userId, $prevRow, $nextRow);
 			}
 		} else {	// カテゴリーで取得の場合
-
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
+				$ret = self::$_mainDb->getPrevNextEntryByCategory($regDate, $this->_langId, $this->entryViewOrder, $category, $this->blogId, null/*ユーザ指定なし*/, $prevRow, $nextRow);
+			} else {
+				$ret = self::$_mainDb->getPrevNextEntryByCategory($regDate, $this->_langId, $this->entryViewOrder, $category, $this->blogId, $this->_userId, $prevRow, $nextRow);
+			}
 		}
 		if ($ret){
 			$prevUrl = '';
@@ -493,11 +522,13 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			if (!empty($prevRow)){
 				$url = $this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $prevRow['be_id'];
 				if (!empty($keyword)) $url .= '&keyword=' . $keyword;
+				if (!empty($category)) $url .= '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category;
 				$prevUrl = $this->getUrl($url, true/*リンク用*/);
 			}
 			if (!empty($nextRow)){
 				$url = $this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $nextRow['be_id'];
 				if (!empty($keyword)) $url .= '&keyword=' . $keyword;
+				if (!empty($category)) $url .= '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category;
 				$nextUrl = $this->getUrl($url, true/*リンク用*/);
 			}
 			
@@ -669,6 +700,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$day = $request->trimValueOf('day');		// 日指定
 		
 		if (!empty($category)){				// カテゴリー指定のとき
+			$this->showListType = 'category';				// 一覧表示タイプ(カテゴリー)
+			$this->viewParam['category'] = $category;					// 表示用パラメータ
+			
 			// 総数を取得
 			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				$totalCount = self::$_mainDb->getEntryItemsCountByCategory($this->now, $category, $this->_langId);
@@ -678,7 +712,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 
 			// リンク文字列作成、ページ番号調整
-			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
+			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 			
 			// 記事一覧を表示
 			if ($this->isSystemManageUser){		// システム管理ユーザの場合
@@ -704,6 +738,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 		} else if (!empty($year)){			// 年月日指定のとき
 			if (!empty($month) && !empty($day)){		// 日指定のとき
+				$this->showListType = 'day';				// 一覧表示タイプ(日)
+				
 				$startDt = $year . '/' . $month . '/' . $day;
 				$endDt = $this->getNextDay($year . '/' . $month . '/' . $day);
 				
@@ -716,7 +752,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month . '&day=' . $day);
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&year=' . $year . '&month=' . $month . '&day=' . $day);
 
 				// 記事一覧作成
 				if ($this->isSystemManageUser){		// システム管理ユーザの場合
@@ -743,6 +779,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->message = $this->messageNoEntry;
 				}
 			} else if (!empty($month)){		// 月指定のとき
+				$this->showListType = 'month';				// 一覧表示タイプ(月)
+				
 				$startDt = $year . '/' . $month . '/1';
 				$endDt = $this->getNextMonth($year . '/' . $month) . '/1';
 				
@@ -755,7 +793,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year . '&month=' . $month);
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&year=' . $year . '&month=' . $month);
 				
 				// 記事一覧作成
 				if ($this->isSystemManageUser){		// システム管理ユーザの場合
@@ -781,6 +819,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->message = $this->messageNoEntry;
 				}
 			} else {		// 年指定のとき
+				$this->showListType = 'year';				// 一覧表示タイプ(年)
+				
 				$startDt = $year . '/1/1';
 				$endDt = ($year + 1) . '/1/1';
 				
@@ -793,7 +833,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->calcPageLink($this->pageNo, $totalCount, $this->entryViewCount);
 				
 				// リンク文字列作成、ページ番号調整
-				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=view&year=' . $year);
+				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&year=' . $year);
 				
 				// 記事一覧作成
 				if ($this->isSystemManageUser){		// システム管理ユーザの場合
@@ -963,7 +1003,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// 記事へのリンクを生成
-		$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId, true/*リンク用*/);
+		switch ($this->showListType){	// 一覧表示タイプ
+		case 'category':				// 一覧表示タイプ(カテゴリー)
+			$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId . '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $this->viewParam['category'], true/*リンク用*/);		// カテゴリーID付加
+			break;
+		default:
+			$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId, true/*リンク用*/);
+			break;
+		}
 		
 		// タイトル作成
 		$titleTag = '<h' . $this->itemTagLevel . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $this->convertToDispString($title) . '</a></h' . $this->itemTagLevel . '>';

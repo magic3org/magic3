@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -101,7 +101,7 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 						// メニュー項目を作成
 						if ($entryCount > 0){		// 記事数が0以上のとき
 							$name = $foreYear . '年' . $foreMonth . '月(' . $entryCount . ')';
-							$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear . '&month=' . $foreMonth);
+							$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'year=' . $foreYear . '&month=' . $foreMonth);
 							$row = array(
 								'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
 								'name' => $this->convertToDispString($name)			// タイトル
@@ -125,7 +125,7 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 				// メニュー項目を作成
 				if ($entryCount > 0){		// 記事数が0以上のとき
 					$name = $foreYear . '年' . $foreMonth . '月(' . $entryCount . ')';
-					$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear . '&month=' . $foreMonth);
+					$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'year=' . $foreYear . '&month=' . $foreMonth);
 					$row = array(
 						'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
 						'name' => $this->convertToDispString($name)			// タイトル
@@ -146,7 +146,7 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 						// メニュー項目を作成
 						if ($entryCount > 0){		// 記事数が0以上のとき
 							$name = $foreYear . '年(' . $entryCount . ')';
-							$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear);
+							$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'year=' . $foreYear);
 							$row = array(
 								'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
 								'name' => $this->convertToDispString($name)			// タイトル
@@ -169,7 +169,7 @@ class blog_archive_menuWidgetContainer extends BaseWidgetContainer
 				// メニュー項目を作成
 				if ($entryCount > 0){		// 記事数が0以上のとき
 					$name = $foreYear . '年(' . $entryCount . ')';
-					$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'act=view&year=' . $foreYear);
+					$linkUrl = $this->createCmdUrlToWidget(self::TARGET_WIDGET, 'year=' . $foreYear);
 					$row = array(
 						'link_url' => $this->convertUrlToHtmlEntity($this->getUrl($linkUrl, true/*リンク用*/)),		// リンク
 						'name' => $this->convertToDispString($name)			// タイトル
