@@ -138,8 +138,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (empty($this->entryId)) $this->entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID_SHORT);		// 略式ブログ記事ID
 		$this->blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID);
 		if (empty($this->blogId)) $this->blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID_SHORT);		// 略式ブログID
+		$keyword = $request->trimValueOf('keyword');// 検索キーワード
 		
-		if ($act == 'search'){
+		if ($act == 'search' || !empty($keyword)){
 			$this->viewMode = 2;					// 表示モード(検索一覧表示)
 			return 'list.tmpl.html';		// 検索結果一覧
 		} else {
@@ -444,10 +445,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 
 		if ($this->isSystemManageUser){		// システム管理ユーザの場合
 			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
-										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, null, $this->preview);
+										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログ指定なし*/, null/*ユーザ指定なし*/, $this->preview);
 		} else {
 			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
-										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null, $this->_userId, $this->preview);
+										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログ指定なし*/, $this->_userId, $this->preview);
 		}
 		
 		// マルチブログのときはパンくずリストにブログ名を追加
@@ -461,6 +462,47 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (!$this->isExistsViewData){
 			$this->title = $this->titleNoEntry;
 			$this->message = $this->messageNoEntry;
+		}
+
+		// ### 前画面、次画面への遷移ボタンを追加 ###
+		if (empty($entryRow)) return;			// ブログ記事情報がない場合は終了
+		$regDate = $entryRow['be_regist_dt'];	// 登録日付
+				
+		$year = $request->trimValueOf('year');		// 年指定
+		$month = $request->trimValueOf('month');		// 月指定
+		$category = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);		// カテゴリID
+		$keyword = $request->trimValueOf('keyword');// 検索キーワード
+		$order = $request->trimValueOf('order');// 並び順(未使用)
+		
+		if (empty($category)){	// 年月、キーワード検索、条件なし取得の場合
+			// キーワード分割
+			// 検索キーワードは記録しない
+			$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
+			
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
+				$ret = self::$_mainDb->getPrevNextEntryByKeyword($regDate, $this->_langId, $this->entryViewOrder, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/, $parsedKeywords, $this->blogId, null/*ユーザ指定なし*/, $prevRow, $nextRow);
+			} else {
+				$ret = self::$_mainDb->getPrevNextEntryByKeyword($regDate, $this->_langId, $this->entryViewOrder, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/, $parsedKeywords, $this->blogId, $this->_userId, $prevRow, $nextRow);
+			}
+		} else {	// カテゴリーで取得の場合
+
+		}
+		if ($ret){
+			$prevUrl = '';
+			$nextUrl = '';
+			if (!empty($prevRow)){
+				$url = $this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $prevRow['be_id'];
+				if (!empty($keyword)) $url .= '&keyword=' . $keyword;
+				$prevUrl = $this->getUrl($url, true/*リンク用*/);
+			}
+			if (!empty($nextRow)){
+				$url = $this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $nextRow['be_id'];
+				if (!empty($keyword)) $url .= '&keyword=' . $keyword;
+				$nextUrl = $this->getUrl($url, true/*リンク用*/);
+			}
+			
+			// 前画面、次画面遷移ボタン追加
+			$this->addPrevNextButton($prevUrl, $nextUrl);
 		}
 	}
 	/**
@@ -857,7 +899,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 
 		$entryId = $fetchedRow['be_id'];// 記事ID
 		$title = $fetchedRow['be_name'];// タイトル
-		$date = $fetchedRow['be_regist_dt'];// 日付
+		$date = $fetchedRow['be_regist_dt'];// 登録日付
 		$showComment = $fetchedRow['be_show_comment'];				// コメントを表示するかどうか
 		$blogId = $fetchedRow['be_blog_id'];						// ブログID
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
