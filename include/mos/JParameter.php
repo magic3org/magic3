@@ -60,12 +60,17 @@ class JParameter
 	/**
 	 * キーを指定して値を取得
 	 *
-	 * @param string $key		取得キー
-	 * @return string			取得値
+	 * @param string $key			取得キー
+	 * @param int,string $default	デフォルト値
+	 * @return string				取得値
 	 */
-	public function get($key)
+	public function get($key, $default = null)
 	{
-		return isset($this->params[$key]) ? $this->params[$key] : '';
+		if (isset($this->params[$key])){
+			return $this->params[$key];
+		} else {
+			return isset($default) ? $default : '';
+		}
 	}
 	/**
 	 * デフォルト値を設定して値を取得

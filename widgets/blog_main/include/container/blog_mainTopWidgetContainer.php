@@ -533,7 +533,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 			
 			// 前画面、次画面遷移ボタン追加
-			$this->addPrevNextButton($prevUrl, $nextUrl);
+			$showPrevNextEntryLinkPos	= self::$_configArray[blog_mainCommonDef::CF_SHOW_PREV_NEXT_ENTRY_LINK];	// 前後記事リンクを表示するかどうか
+			$prevNextEntryLinkPos		= self::$_configArray[blog_mainCommonDef::CF_PREV_NEXT_ENTRY_LINK_POS];				// 前後記事リンク表示位置
+			if ($showPrevNextEntryLinkPos) $this->addPrevNextButton($prevNextEntryLinkPos, $prevUrl, $nextUrl);
 		}
 	}
 	/**

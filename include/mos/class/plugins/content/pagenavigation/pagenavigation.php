@@ -208,6 +208,7 @@ class PlgContentPagenavigation extends JPlugin
 			
 			$pageNavData = $gEnvManager->getJoomlaPageNavData();
 			if (!empty($pageNavData)){
+				$pos = $pageNavData['pos'];
 				$row->prev = convertUrlToHtmlEntity($pageNavData['prev']);
 				$row->next = convertUrlToHtmlEntity($pageNavData['next']);
 				
@@ -228,7 +229,8 @@ class PlgContentPagenavigation extends JPlugin
 				include $path;
 				$row->pagination = ob_get_clean();
 
-				$row->paginationposition = $this->params->get('position', 1);
+		//		$row->paginationposition = $this->params->get('position', 1);	// 表示位置(0(前置)または1(後置))
+				$row->paginationposition = empty($pos) ? 0 : 1;	// 表示位置(0(前置)または1(後置))
 
 				// This will default to the 1.5 and 1.6-1.7 behavior.
 				$row->paginationrelative = $this->params->get('relative', 0);

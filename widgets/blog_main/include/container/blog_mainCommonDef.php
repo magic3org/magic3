@@ -49,6 +49,8 @@ class blog_mainCommonDef
 	const CF_MESSAGE_FIND_NO_ENTRY	= 'msg_find_no_entry';		// ブログ記事が見つからないメッセージ
 	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
 	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
+	const CF_SHOW_PREV_NEXT_ENTRY_LINK	= 'show_prev_next_entry_link';			// 前後記事リンクを表示するかどうか
+	const CF_PREV_NEXT_ENTRY_LINK_POS	= 'prev_next_entry_link_pos';		// 前後記事リンク表示位置
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数

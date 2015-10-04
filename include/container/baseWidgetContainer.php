@@ -3488,15 +3488,17 @@ class BaseWidgetContainer extends Core
 	/**
 	 * 前画面、次画面遷移用のボタンを追加(一般画面用)
 	 *
+	 * @param int $pos			ボタンの表示位置(0=上部、1=下部)
 	 * @param string $prevUrl	前画面のURL(作成しない場合は空文字列)
 	 * @param string $nextUrl	次画面のURL(作成しない場合は空文字列)
 	 * @param string $prevTitle	前画面のタイトル(省略時はデフォルトのテキスト)
 	 * @param string $nextTitle	次画面のタイトル(省略時はデフォルトのテキスト)
 	 * @return					なし
 	 */
-	function addPrevNextButton($prevUrl, $nextUrl, $prevTitle = null, $nextTitle = null)
+	function addPrevNextButton($pos, $prevUrl, $nextUrl, $prevTitle = null, $nextTitle = null)
 	{
 		$pageNavData = array();
+		$pageNavData['pos']			= $pos;
 		$pageNavData['prev']		= $prevUrl;
 		$pageNavData['next']		= $nextUrl;
 		$pageNavData['prev_label']	= $prevTitle;

@@ -212,7 +212,7 @@ $this->item->title = '****';*/
 		// Themlerテンプレート用
 		// ページ遷移の設定(com_contentのarchive,article,category,featuredで有効)
 		$this->item->pagination = '';		// 出力内容
-		$this->item->paginationposition = 0;// 0または1
+		$this->item->paginationposition = 1;// 0(前置)または1(後置)
 		$this->item->paginationrelative = 0;// 0または1
 		$this->item->event = new stdClass;
 		$this->item->event->beforeDisplayContent = '';		// ページ遷移用タグ(前置)

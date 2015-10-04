@@ -86,6 +86,8 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$titleTagLevel		= $request->trimIntValueOf('item_title_tag_level', blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL);		// タイトルタグレベル
 		$imageType			= $request->trimValueOf('type');		// 画像タイプ
 		$updatedEntryImage	= $request->trimValueOf('updated_entryimage');		// 記事デフォルト画像更新フラグ
+		$showPrevNextEntryLinkPos	= $request->trimCheckedValueOf('item_show_prev_next_entry_link');	// 前後記事リンクを表示するかどうか
+		$prevNextEntryLinkPos		= $request->trimValueOf('item_prev_next_entry_link_pos');				// 前後記事リンク表示位置
 		
 		$reloadData = false;		// データの再読み込み
 		if ($act == 'update'){		// 設定更新のとき
@@ -134,7 +136,9 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_MESSAGE_NO_ENTRY, $messageNoEntry);		// 記事が登録されていないメッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY, $messageFindNoEntry);		// 記事が見つからないメッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_TAG_LEVEL, $titleTagLevel);		// タイトルタグレベル
-					
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_SHOW_PREV_NEXT_ENTRY_LINK, $showPrevNextEntryLinkPos);	// 前後記事リンクを表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_PREV_NEXT_ENTRY_LINK_POS, $prevNextEntryLinkPos);				// 前後記事リンク表示位置
+		
 				// 画像の移動
 				if ($ret && !empty($updatedEntryImage)){		// 画像更新の場合
 					$ret = mvFileToDir($this->tmpDir, $entryImageFilenameArray, $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType,
@@ -208,7 +212,9 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$messageFindNoEntry = self::$_mainDb->getConfig(blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY);		// 記事が見つからないメッセージ
 			if (empty($messageFindNoEntry)) $messageFindNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;
 			$titleTagLevel = self::$_mainDb->getConfig(blog_mainCommonDef::CF_TITLE_TAG_LEVEL);		// タイトルタグレベル
-			if (empty($titleTagLevel)) $titleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;	
+			if (empty($titleTagLevel)) $titleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
+			$showPrevNextEntryLinkPos	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_PREV_NEXT_ENTRY_LINK);	// 前後記事リンクを表示するかどうか
+			$prevNextEntryLinkPos		= self::$_mainDb->getConfig(blog_mainCommonDef::CF_PREV_NEXT_ENTRY_LINK_POS);				// 前後記事リンク表示位置
 		}
 		
 		// 画面に書き戻す
@@ -258,6 +264,9 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "message_find_no_entry", $messageFindNoEntry);		// 記事が見つからないメッセージ
 		$this->tmpl->addVar("_widget", "title_tag_level", $titleTagLevel);		// タイトルタグレベル
 		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア
+		$this->tmpl->addVar("_widget", "show_prev_next_entry_link",	$this->convertToCheckedString($showPrevNextEntryLinkPos));	// 前後記事リンクを表示するかどうか	
+		$this->tmpl->addVar("_widget", "prev_next_entry_link_pos_top", $this->convertToSelectedString($prevNextEntryLinkPos, 0));// 前後記事リンク表示位置(0=上、1=下)
+		$this->tmpl->addVar("_widget", "prev_next_entry_link_pos_bottom", $this->convertToSelectedString($prevNextEntryLinkPos, 1));// 前後記事リンク表示位置(0=上、1=下)
 	}
 	/**
 	 * 最大画像を取得
