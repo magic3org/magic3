@@ -47,6 +47,7 @@ class BaseWidgetContainer extends Core
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
 	protected $_linkPageCount;						// ページリンク作成用ページ総数
 	protected $_renderType;							// 描画出力タイプ
+	protected $_renderDetailType;					// 描画出力タイプ(詳細)
 	protected $_assignTemplate;						// テンプレート処理置き換えを使用するかどうか
 	protected $_assignTemplate_method;				// テンプレート処理置き換え用(_assign()メソッド名)
 	protected $_assignTemplate_filename;			// テンプレート処理置き換え用(テンプレートファイル)
@@ -690,6 +691,30 @@ class BaseWidgetContainer extends Core
 		
 		// システム強制終了
 		$this->gPage->exitSystem();
+	}
+	/**
+	 * 描画出力タイプをリスト型に設定
+	 *
+	 * @return bool				true=成功、false=失敗
+	 */
+	function setListRender()
+	{
+		$retStatus = false;
+		
+		switch ($this->_renderType){
+			case M3_RENDER_JOOMLA_OLD:		// Joomla! 1.0テンプレート
+			case M3_RENDER_BOOTSTRAP:		// Bootstrap 3.0テンプレート
+			case M3_RENDER_JQUERY_MOBILE:	// jQuery Mobileテンプレート
+			default:
+				break;
+			case M3_RENDER_JOOMLA_NEW:		// Joomla! 1.5以上のテンプレート(デフォルト)
+				$this->gEnv->setCurrentRenderType('category');		// Joomla!テンプレートcom_contentのcategoryタイプ
+				$this->_renderDetailType = 'list';					// 描画出力タイプ(詳細)
+		
+				$retStatus = true;
+				break;
+		}
+		return $retStatus;
 	}
 	/**
 	 * ウィジェットの説明のヘルプ文字列を作成
