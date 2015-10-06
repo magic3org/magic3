@@ -33,7 +33,7 @@ require_once($this->gEnv->getJoomlaRootPath() . '/class/menu.php');
 ////require_once($this->gEnv->getJoomlaRootPath() . '/class/cache.php');
 ////require_once($this->gEnv->getJoomlaRootPath() . '/class/database.php');
 	
-class JRender
+class JRender extends JParameter
 {
 	private $templateId;		// テンプレートID
 	private $viewBaseDir;			// ビュー作成用スクリプトベースディレクトリ
@@ -162,6 +162,7 @@ class JRender
 		// ビューの描画タイプ(archive,article(デフォルト),category,featured,form)を取得
 		$renderType = $gEnvManager->getCurrentRenderType();
 		if (empty($renderType)) $renderType = 'article';
+		if (isset($paramsOther['moduleclass_sfx']) && $paramsOther['moduleclass_sfx'] == 'featured') $renderType = 'featured';		// 特集コンテンツ表示の場合
 		
 		// 前後コンテンツ追加
 		$content = $pageDefParam['pd_top_content'] . $content . $pageDefParam['pd_bottom_content'];
@@ -209,7 +210,7 @@ $this->item->readmore_link = '******';
 $this->item->readmore = '******';
 $this->item->title = '****';*/
 
-		// Themlerテンプレート用
+		// Artisteer,Themlerテンプレート用
 		// ページ遷移の設定(com_contentのarchive,article,category,featuredで有効)
 		$this->item->pagination = '';		// 出力内容
 		$this->item->paginationposition = 1;// 0(前置)または1(後置)
@@ -218,8 +219,8 @@ $this->item->title = '****';*/
 		$this->item->event->beforeDisplayContent = '';		// ページ遷移用タグ(前置)
 		$this->item->event->afterDisplayContent = '';		// ページ遷移用タグ(後置)
 		
-		// ページ遷移プラグイン作成
-		$pageNavData = $gEnvManager->getJoomlaPageNavData();
+		// ページ遷移ナビゲーション作成
+		$pageNavData = $gEnvManager->getJoomlaPageNavData();		// ナビゲーション情報取得
 		if (!empty($pageNavData)){
 			$this->item->params->set('show_item_navigation', 1);		// ページ遷移ナビゲーション表示
 			
@@ -235,71 +236,84 @@ $this->item->title = '****';*/
 			$this->item->event->afterDisplayContent = trim(implode("\n", $results));		// ページ遷移用タグ(後置)
 		}
 		
-		// スクリプトを実行
+		// 処理を行うテンプレートを取得
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
 		
-		if (isset($paramsOther['moduleclass_sfx']) && $paramsOther['moduleclass_sfx'] == 'featured'){		// 特集コンテンツ表示の場合
-			// ウィジェットで生成したコンテンツ情報を取得
-			$viewData = $gEnvManager->getJoomlaViewData();
-			$contentItems = $viewData['Items'];		// コンテンツ情報
-			$leadContentCount = $viewData['leadContentCount'];		// 先頭のコンテンツ数(Magic3拡張)
-			if ($leadContentCount > count($contentItems)) $leadContentCount = count($contentItems);
-			$columnContentCount = $viewData['columnContentCount'];		// カラム部のコンテンツ数(Magic3拡張)
-			if ($columnContentCount > count($contentItems) - $leadContentCount) $columnContentCount = count($contentItems) - $leadContentCount;
+		switch ($templateVer){
+		case 1:		// Joomla!v1.5テンプレート
+		case 2:		// Joomla!v2.5テンプレート(Artisteer,Themler)
+			switch ($renderType){
+			case 'article':		// 単一記事型出力
+			default:
+				$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article/default.php';		// ビュー作成処理
+				$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article';			// ビュー作成用スクリプトベースディレクトリ
+				$this->viewRenderType = 'com_content/article';		// ビュー作成タイプ
+				break;
+			case 'category':		// リスト記事型出力
+			case 'featured':		// 特集表示型出力
+				// ウィジェットで生成したコンテンツ情報を取得
+				$viewData = $gEnvManager->getJoomlaViewData();
+				$contentItems = $viewData['Items'];		// コンテンツ情報
+				$leadContentCount = $viewData['leadContentCount'];		// 先頭のコンテンツ数(Magic3拡張)
+				if ($leadContentCount > count($contentItems)) $leadContentCount = count($contentItems);
+				$columnContentCount = $viewData['columnContentCount'];		// カラム部のコンテンツ数(Magic3拡張)
+				if ($columnContentCount > count($contentItems) - $leadContentCount) $columnContentCount = count($contentItems) - $leadContentCount;
 			
-			$readMoreTitle = $viewData['readMoreTitle'];		// 「続きを読む」ボタンタイトル
-			if (!empty($readMoreTitle)) $gInstanceManager->getMessageManager()->replaceJoomlaText('COM_CONTENT_READ_MORE_TITLE', $readMoreTitle);		// メッセージを変更
+				$readMoreTitle = $viewData['readMoreTitle'];		// 「続きを読む」ボタンタイトル
+				if (!empty($readMoreTitle)) $gInstanceManager->getMessageManager()->replaceJoomlaText('COM_CONTENT_READ_MORE_TITLE', $readMoreTitle);		// メッセージを変更
 			
-			// 個別のコンテンツの付加情報
-			for ($i = 0; $i < count($contentItems); $i++){
-				$contentItem = $contentItems[$i];
+				// 個別のコンテンツの付加情報
+				for ($i = 0; $i < count($contentItems); $i++){
+					$contentItem = $contentItems[$i];
 
-				$contentViewInfo = new JParameter();
-				$contentItem->params = $contentViewInfo;
-				if (!empty($contentItem->title)) $contentViewInfo->set('show_title', 1);		// タイトルが設定されている場合は表示
-				if (!empty($contentItem->created)) $contentViewInfo->set('show_create_date', 1);
-				if (!empty($contentItem->modified)) $contentViewInfo->set('show_modify_date', 1);
-				if (!empty($contentItem->published)) $contentViewInfo->set('show_publish_date', 1);
-				if (!empty($contentItem->readmore)) $contentViewInfo->set('show_readmore', 1);		// 「もっと読む」ボタン表示
-				$contentViewInfo->set('link_titles', 1);		// タイトルにリンクを付加(タイトルのリンク作成用)
-				$contentViewInfo->set('access-view', 1);		// (タイトルのリンク作成用)
-				$contentItem->slug = $contentItem->url;			// コンテンツへのリンク
-				//$contentItem->catslug = '';			// カテゴリーID
-			}
+					$contentViewInfo = new JParameter();
+					$contentItem->params = $contentViewInfo;
+					if (!empty($contentItem->title)) $contentViewInfo->set('show_title', 1);		// タイトルが設定されている場合は表示
+					if (!empty($contentItem->created)) $contentViewInfo->set('show_create_date', 1);
+					if (!empty($contentItem->modified)) $contentViewInfo->set('show_modify_date', 1);
+					if (!empty($contentItem->published)) $contentViewInfo->set('show_publish_date', 1);
+					if (!empty($contentItem->readmore)) $contentViewInfo->set('show_readmore', 1);		// 「もっと読む」ボタン表示
+					$contentViewInfo->set('link_titles', 1);		// タイトルにリンクを付加(タイトルのリンク作成用)
+					$contentViewInfo->set('access-view', 1);		// (タイトルのリンク作成用)
+					$contentItem->slug = $contentItem->url;			// コンテンツへのリンク
+					//$contentItem->catslug = '';			// カテゴリーID
+				}
 			
-			$this->lead_items = array();
-			$this->intro_items = array();
-			$this->link_items = array();
-			for ($i = 0; $i < $leadContentCount; $i++){
-				$this->lead_items[$i] = $contentItems[$i];
-			}
-			for (; $i < $leadContentCount + $columnContentCount; $i++){
-				$this->intro_items[$i] = $contentItems[$i];
-			}
-			for (; $i < count($contentItems); $i++){
-				$this->link_items[$i] = $contentItems[$i];
-			}
-			$this->columns = $viewData['columnCount'];		// カラム数(Magic3拡張)
+				$this->lead_items = array();
+				$this->intro_items = array();
+				$this->link_items = array();
+				for ($i = 0; $i < $leadContentCount; $i++){
+					$this->lead_items[$i] = $contentItems[$i];
+				}
+				for (; $i < $leadContentCount + $columnContentCount; $i++){
+					$this->intro_items[$i] = $contentItems[$i];
+				}
+				for (; $i < count($contentItems); $i++){
+					$this->link_items[$i] = $contentItems[$i];
+				}
+				$this->columns = $viewData['columnCount'];		// カラム数(Magic3拡張)
 			
-			$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/featured/default.php';		// ビュー作成処理
-			$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/featured';			// ビュー作成用スクリプトベースディレクトリ
-			$this->viewRenderType = 'com_content/featured';		// ビュー作成タイプ
-		} else {
-			switch ($templateVer){
-				case 1:		// Joomla!v1.5テンプレート
-				case 2:		// Joomla!v2.5テンプレート
-					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article/default.php';		// ビュー作成処理
-					$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article';			// ビュー作成用スクリプトベースディレクトリ
-					$this->viewRenderType = 'com_content/article';		// ビュー作成タイプ
-					break;
-				case 10:		// Bootstrap v3.0
-					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/article/default.php';		// ビュー作成処理
-					break;
+				if ($renderType == 'category'){
+					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/category/blog.php';		// ビュー作成処理
+					$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/category';			// ビュー作成用スクリプトベースディレクトリ
+					$this->viewRenderType = 'com_content/category';		// ビュー作成タイプ
+				} else if ($renderType == 'featured'){
+					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/featured/default.php';		// ビュー作成処理
+					$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/featured';			// ビュー作成用スクリプトベースディレクトリ
+					$this->viewRenderType = 'com_content/featured';		// ビュー作成タイプ
+				}
+				break;
 			}
+			break;
+		case 10:		// Bootstrap v3.0
+			$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/article/default.php';		// ビュー作成処理
+			break;
 		}
 		if (!is_readable($path)){// テンプレートの変換処理がない場合はデフォルトを使用
 			$path = $gEnvManager->getJoomlaRootPath() . '/render/default.php';
 		}
+		
+		// ビューの作成
 		ob_clean();
 		require($path);		// 毎回実行する
 		$contents = ob_get_contents();
@@ -318,6 +332,7 @@ $this->item->title = '****';*/
 				// 必要な部分のみフィルタリングする
 				if (preg_match('/\$document->view->componentWrapper\(\'(.*?)\'\);/', $subTemplate, $matches)){
 					$contents = getCustomComponentContent($contents, $matches[1]);
+//debug('#content area='.$matches[1]);		// デバッグ用
 				}
 			}
 		}
@@ -451,7 +466,7 @@ $this->item->title = '****';*/
 		return convertToHtmlEntity($src);
 	}
 	/**
-	 * ビュー作成処理(Joomla!v2.5テンプレート用)
+	 * ビュー作成処理(テンプレート側からの呼び出し用)
 	 *
 	 * @param string $viewId	ビューファイル識別ID
 	 * @return string			変換文字列
@@ -460,15 +475,19 @@ $this->item->title = '****';*/
 	{
 		global $gEnvManager;
 		
-		ob_start();
-
+		$renderType = $gEnvManager->getCurrentRenderType();
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
-		$viewFile = $this->viewBaseDir . '/default_' . $viewId . '.php';
-		
+		$viewFileHead = ($renderType == 'category') ? 'blog' : 'default';
+//		$viewFile = $this->viewBaseDir . '/default_' . $viewId . '.php';
+		$viewFile = $this->viewBaseDir . '/' . $viewFileHead . '_' . $viewId . '.php';
+
 		// テンプレートのビュー作成スクリプトがない場合はデフォルトのスクリプトを読み込む
 		if (!is_readable($viewFile)){
-			$viewFile = $gEnvManager->getJoomlaRootPath() . self::DEFAULT_RENDER_DIR . $this->viewRenderType . '/default_' . $viewId . '.php';
+			$viewFile = $gEnvManager->getJoomlaRootPath() . self::DEFAULT_RENDER_DIR . $this->viewRenderType . '/' . $viewFileHead . '_' . $viewId . '.php';
 		}
+		
+		// 出力を取得
+		ob_start();
 		if (is_readable($viewFile)) include $viewFile;
 
 		$this->_output = ob_get_contents();

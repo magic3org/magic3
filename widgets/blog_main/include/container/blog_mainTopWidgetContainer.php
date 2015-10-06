@@ -32,6 +32,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $currentDay;		// 現在日
 	private $currentHour;		// 現在時間
 	private $currentPageUrl;			// 現在のページURL
+	private $viewItemsData = array();			// Joomla!ビュー用データ
 	// 表示制御
 	private $isSystemManageUser;	// システム運用可能ユーザかどうか
 	private $preview;				// プレビューモードかどうか
@@ -41,6 +42,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $useMultiBlog;			// マルチブログを使用するかどうか
 	private $isOutputComment;		// コメントを出力するかどうか
 	private $receiveComment;		// コメントを受け付けるかどうか
+	private $listRender;			// リスト型出力かどうか
 	// 表示項目
 	private $entryViewCount;// 記事表示数
 	private $entryViewOrder;// 記事表示順
@@ -247,10 +249,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			case 0:			// トップ一覧表示
 			default:
 				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
+				$this->listRender = $this->setListRender();			// 一覧タイプで出力
 				$this->showTopList($request);
 				break;
 			case 1:			// 記事一覧表示
 				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
+				$this->listRender = $this->setListRender();			// 一覧タイプで出力
 				$this->showList($request);
 				break;
 			case 2:			// 検索一覧表示
@@ -628,6 +632,17 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->message = $this->messageNoEntry;
 			}
 		}
+		
+	// Joomla!ビュー用データを設定
+	$viewData = array();
+	$viewData['Items'] = $this->viewItemsData;
+	// Magic3追加分
+//	$viewData['leadContentCount']	= $leadContentCount;			// 先頭のコンテンツ数
+	$viewData['leadContentCount']	= 5;			// 先頭のコンテンツ数
+	$viewData['columnContentCount']	= $columnContentCount;			// カラム部のコンテンツ数
+	$viewData['columnCount']		= $columnCount;					// カラム数
+	$viewData['readMoreTitle']		= $this->readMoreTitle;		// 「続きを読む」ボタンタイトル
+	$this->gEnv->setJoomlaViewData($viewData);
 	}
 	/**
 	 * 検索結果画面表示
@@ -1155,6 +1170,38 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->addVars('entrylist', $row);
 		$this->tmpl->parseTemplate('entrylist', 'a');
 		$this->isExistsViewData = true;				// 表示データがあるかどうか
+		
+		
+		
+		
+		$contentText = $entryHtml;
+		// Joomla!ビュー用データ作成
+		$viewItem = new stdClass;
+		$viewItem->url		= $contentUrl;		// コンテンツへのリンク(Magic3拡張)
+		$viewItem->id		= $contentId;	// コンテンツID
+		$viewItem->title	= $contentName;	// コンテンツ名
+		$viewItem->introtext	= $contentText;	// コンテンツ内容
+		$viewItem->text = $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
+		$viewItem->state	= 1;			// 表示モード(0=新着,1=表示済み)
+		if (!empty($this->showReadMore) && $isMoreContentExists) $viewItem->readmore	= $this->readMoreTitle;			// 続きがある場合は「もっと読む」ボタンタイトルを設定
+
+		// 以下は表示する項目のみ値を設定する
+		if (!empty($this->showCreateDate)){		// 表示項目(作成日)
+			for ($i = 0; $i < count($this->createDateRows); $i++){
+				$row = $this->createDateRows[$i];
+				if ($row['cn_id'] ==  $contentId){
+					$viewItem->created = $row['cn_create_dt'];		// コンテンツ作成日時
+					break;
+				}
+			}
+		}
+		if (!empty($this->showModifiedDate)){		// 表示項目(更新日)
+			$viewItem->modified	= $fetchedRow['cn_create_dt'];		// コンテンツ更新日時
+		}
+		if (!empty($this->showPublishedDate)){		// 表示項目(公開日)
+			if ($fetchedRow['cn_active_start_dt'] != $this->gEnv->getInitValueOfTimestamp()) $viewItem->published	= $fetchedRow['cn_active_start_dt'];		// コンテンツ公開日時
+		}
+		$this->viewItemsData[] = $viewItem;			// Joomla!ビュー用データ
 		return true;
 	}
 	/**
