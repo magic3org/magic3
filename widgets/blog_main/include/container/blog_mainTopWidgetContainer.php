@@ -493,6 +493,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->message = $this->messageNoEntry;
 		}
 
+		// ##### 記事データを設定 #####
+		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*「もっと読む」ボタンのタイトル*/);
+		
 		// ### 前画面、次画面への遷移ボタンを追加 ###
 		if (empty($entryRow)) return;			// ブログ記事情報がない場合は終了
 		$regDate = $entryRow['be_regist_dt'];	// 登録日付
@@ -633,16 +636,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 		}
 		
-	// Joomla!ビュー用データを設定
-	$viewData = array();
-	$viewData['Items'] = $this->viewItemsData;
-	// Magic3追加分
-//	$viewData['leadContentCount']	= $leadContentCount;			// 先頭のコンテンツ数
-	$viewData['leadContentCount']	= 5;			// 先頭のコンテンツ数
-	$viewData['columnContentCount']	= $columnContentCount;			// カラム部のコンテンツ数
-	$viewData['columnCount']		= $columnCount;					// カラム数
-	$viewData['readMoreTitle']		= $this->readMoreTitle;		// 「続きを読む」ボタンタイトル
-	$this->gEnv->setJoomlaViewData($viewData);
+		// ##### 記事データを設定 #####
+		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*「もっと読む」ボタンのタイトル*/);
 	}
 	/**
 	 * 検索結果画面表示
@@ -701,6 +696,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		$this->title = $this->titleSearchList;				// 検索一覧タイトル
 		$this->pageTitle = self::DEFAULT_TITLE_SEARCH;		// 画面タイトル、パンくずリスト用タイトル
+		
+		// ##### 記事データを設定 #####
+		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*「もっと読む」ボタンのタイトル*/);
 	}
 	/**
 	 * カテゴリー、アーカイブからの一覧画面表示
@@ -878,6 +876,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 		}
 		$this->pageTitle = $this->title;		// カテゴリー名を画面タイトルにする
+		
+		// ##### 記事データを設定 #####
+		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*「もっと読む」ボタンのタイトル*/);
 	}
 	/**
 	 * ヘッダ部メタタグの設定
@@ -1171,16 +1172,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->parseTemplate('entrylist', 'a');
 		$this->isExistsViewData = true;				// 表示データがあるかどうか
 		
-		
-		
-		
-		$contentText = $entryHtml;
-		// Joomla!ビュー用データ作成
+		// ##### Joomla!ビュー用データ作成 #####
 		$viewItem = new stdClass;
 		$viewItem->url		= $contentUrl;		// コンテンツへのリンク(Magic3拡張)
 		$viewItem->id		= $contentId;	// コンテンツID
 		$viewItem->title	= $contentName;	// コンテンツ名
-		$viewItem->introtext	= $contentText;	// コンテンツ内容
+		$viewItem->introtext	= $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
 		$viewItem->text = $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state	= 1;			// 表示モード(0=新着,1=表示済み)
 		if (!empty($this->showReadMore) && $isMoreContentExists) $viewItem->readmore	= $this->readMoreTitle;			// 続きがある場合は「もっと読む」ボタンタイトルを設定

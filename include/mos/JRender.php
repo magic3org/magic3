@@ -319,7 +319,7 @@ $this->item->title = '****';*/
 		if (!is_readable($path)){// テンプレートの変換処理がない場合はデフォルトを使用
 			$path = $gEnvManager->getJoomlaRootPath() . '/render/default.php';
 		}
-		
+
 		// ビューの作成
 		ob_clean();
 		require($path);		// 毎回実行する

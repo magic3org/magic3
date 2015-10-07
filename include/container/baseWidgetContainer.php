@@ -3531,6 +3531,28 @@ class BaseWidgetContainer extends Core
 		$this->gEnv->setJoomlaPageNavData($pageNavData);
 	}
 	/**
+	 * 記事表示データを設定(一般画面用)
+	 *
+	 * @param array $viewItemsData		記事データ一覧
+	 * @param int $leadContentCount		先頭(leading部)のコンテンツ数
+	 * @param int $columnContentCount	カラム部(intro部)のコンテンツ数
+	 * @param int $columnCount			カラム部(intro部)のカラム数
+	 * @param string $readMoreTitle		「もっと読む」ボタンのタイトル
+	 * @return					なし
+	 */
+	function setEntryViewData($viewItemsData, $leadContentCount, $columnContentCount, $columnCount, $readMoreTitle)
+	{
+		// Joomla!ビュー用データを設定
+		$viewData = array();
+		$viewData['Items'] = $viewItemsData;
+		// Magic3追加分
+		$viewData['leadContentCount']	= $leadContentCount;			// 先頭(leading部)のコンテンツ数
+		$viewData['columnContentCount']	= $columnContentCount;			// カラム部(intro部)のコンテンツ数
+		$viewData['columnCount']		= $columnCount;					// カラム部(intro部)のカラム数
+		$viewData['readMoreTitle']		= $readMoreTitle;				// 「続きを読む」ボタンタイトル
+		$this->gEnv->setJoomlaViewData($viewData);
+	}
+	/**
 	 * ページリンク計算
 	 *
 	 * @param int $pageNo			ページ番号(1～)。ページ番号が範囲外にある場合は自動的に調整
