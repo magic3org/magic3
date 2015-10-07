@@ -104,6 +104,7 @@ define('M3_TAG_MACRO_COMMENT_KEY',	'CM_');									// コメントマクロ置�
 define('M3_TAG_MACRO_USER_KEY',		'USER_');								// ユーザ定義置換キー
 define('M3_TAG_MACRO_ITEM',			'ITEM');								// 項目置換キー
 define('M3_TAG_MACRO_TITLE',		'TITLE');								// タイトル置換キー
+define('M3_TAG_MACRO_NOTITLE',		'NOTITLE');								// タイトル置換キー(タイトルなしの場合)
 define('M3_TAG_MACRO_BODY',			'BODY');								// 本文置換キー
 define('M3_TAG_MACRO_RESULT',		'RESULT');								// 結果置換キー
 define('M3_TAG_MACRO_DATE',			'DATE');								// 日付置換キー

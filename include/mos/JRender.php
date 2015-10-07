@@ -181,14 +181,21 @@ class JRender extends JParameter
 		$this->item->params = new JParameter();
 		$this->pagination = new JParameter();		// 暫定(2013/1/7)
 		$this->user = new JUser();
-		if (!empty($title)){
-			$this->params->set('show_title', 1);
+		
+		// ページタイトルの設定
+		if (!empty($title) && $title != M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END){
+			// 旧タイトル設定方法
+/*			$this->params->set('show_title', 1);
 			//$this->params->set('link_titles', 1);
 			$this->article->title = $title;
 			
 			// Joomla!2.5テンプレート用追加設定(2012/4/4 追加)
 			$this->item->title = $title;
 			$this->item->params->set('show_title', 1);
+			*/
+			// ページタイトルの設定方法を以下に変更(2015/10/6)
+			$this->params->set('show_page_heading', 1);
+			$this->params->set('page_heading', $title);
 		}
 		$this->article->text = $content;
 		
@@ -235,7 +242,7 @@ $this->item->title = '****';*/
 			);
 			$this->item->event->afterDisplayContent = trim(implode("\n", $results));		// ページ遷移用タグ(後置)
 		}
-		
+
 		// 処理を行うテンプレートを取得
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
 		

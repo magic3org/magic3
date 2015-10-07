@@ -141,7 +141,7 @@ INSERT INTO blog_config
 DELETE FROM blog_config WHERE bg_id = 'title_default';
 INSERT INTO blog_config
 (bg_id,                     bg_value,                         bg_name) VALUES
-('title_default',     'ブログ', 'デフォルトタイトル');
+('title_default',     '[#NOTITLE#]', 'デフォルトタイトル');
 DELETE FROM blog_config WHERE bg_id = 'entry_view_count';
 INSERT INTO blog_config
 (bg_id,                     bg_value,                         bg_name) VALUES
