@@ -76,7 +76,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		if (strlen($topContent) <= 10){ // FCKEditorのバグの対応(空の場合でもBRタグが送信される)
 			$topContent = '';
 		}
-		$useWidgetTitle 	= $request->trimCheckedValueOf('item_use_widget_title');		// ウィジェットタイトルを使用するかどうか
+//		$useWidgetTitle 	= $request->trimCheckedValueOf('item_use_widget_title');		// ウィジェットタイトルを使用するかどうか
 		$titleDefault		= $request->trimValueOf('item_title_default');		// デフォルトタイトル
 		$titleList			= $request->trimValueOf('item_title_list');		// 一覧タイトル
 		$titleSearchList	= $request->trimValueOf('item_title_search_list');		// 検索結果タイトル
@@ -88,6 +88,8 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$updatedEntryImage	= $request->trimValueOf('updated_entryimage');		// 記事デフォルト画像更新フラグ
 		$showPrevNextEntryLinkPos	= $request->trimCheckedValueOf('item_show_prev_next_entry_link');	// 前後記事リンクを表示するかどうか
 		$prevNextEntryLinkPos		= $request->trimValueOf('item_prev_next_entry_link_pos');				// 前後記事リンク表示位置
+		$showEntryAuthor	= $request->trimCheckedValueOf('item_show_entry_author');	// 投稿者を表示するかどうか
+		$showEntryRegistDt	= $request->trimCheckedValueOf('item_show_entry_regist_dt');	// 投稿日時を表示するかどうか
 		
 		$reloadData = false;		// データの再読み込み
 		if ($act == 'update'){		// 設定更新のとき
@@ -128,7 +130,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_LAYOUT_COMMENT_LIST, $layoutCommentList);		// コンテンツレイアウト(コメント一覧)
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_OUTPUT_HEAD, $outputHead);		// ヘッダ出力するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_HEAD_VIEW_DETAIL, $headViewDetail);	// ヘッダ出力(詳細表示)
-				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_USE_WIDGET_TITLE, $useWidgetTitle);		// ウィジェットタイトルを使用するかどうか
+//				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_USE_WIDGET_TITLE, $useWidgetTitle);		// ウィジェットタイトルを使用するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_DEFAULT, $titleDefault);		// デフォルトタイトル
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_LIST, $titleList);			// 一覧タイトル
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_SEARCH_LIST, $titleSearchList);		// 検索結果タイトル
@@ -138,6 +140,8 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_TITLE_TAG_LEVEL, $titleTagLevel);		// タイトルタグレベル
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_SHOW_PREV_NEXT_ENTRY_LINK, $showPrevNextEntryLinkPos);	// 前後記事リンクを表示するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_PREV_NEXT_ENTRY_LINK_POS, $prevNextEntryLinkPos);				// 前後記事リンク表示位置
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR, $showEntryAuthor);	// 投稿者を表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT, $showEntryRegistDt);	// 投稿日時を表示するかどうか
 		
 				// 画像の移動
 				if ($ret && !empty($updatedEntryImage)){		// 画像更新の場合
@@ -199,7 +203,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			if (empty($layoutCommentList)) $layoutCommentList = blog_mainCommonDef::DEFAULT_LAYOUT_COMMENT_LIST;
 			$outputHead = self::$_mainDb->getConfig(blog_mainCommonDef::CF_OUTPUT_HEAD);		// ヘッダ出力するかどうか
 			$headViewDetail = self::$_mainDb->getConfig(blog_mainCommonDef::CF_HEAD_VIEW_DETAIL);		// ヘッダ出力(詳細表示)
-			$useWidgetTitle = self::$_mainDb->getConfig(blog_mainCommonDef::CF_USE_WIDGET_TITLE);		// ウィジェットタイトルを使用するかどうか
+//			$useWidgetTitle = self::$_mainDb->getConfig(blog_mainCommonDef::CF_USE_WIDGET_TITLE);		// ウィジェットタイトルを使用するかどうか
 			$titleDefault = self::$_mainDb->getConfig(blog_mainCommonDef::CF_TITLE_DEFAULT);		// デフォルトタイトル
 			$titleList = self::$_mainDb->getConfig(blog_mainCommonDef::CF_TITLE_LIST);		// 一覧タイトル
 			if (empty($titleList)) $titleList = blog_mainCommonDef::DEFAULT_TITLE_LIST;
@@ -215,6 +219,8 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			if (empty($titleTagLevel)) $titleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
 			$showPrevNextEntryLinkPos	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_PREV_NEXT_ENTRY_LINK);	// 前後記事リンクを表示するかどうか
 			$prevNextEntryLinkPos		= self::$_mainDb->getConfig(blog_mainCommonDef::CF_PREV_NEXT_ENTRY_LINK_POS);				// 前後記事リンク表示位置
+			$showEntryAuthor	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR);	// 投稿者を表示するかどうか
+			$showEntryRegistDt	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT);	// 投稿日時を表示するかどうか
 		}
 		
 		// 画面に書き戻す
@@ -255,7 +261,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "layout_comment_list", $layoutCommentList);		// コンテンツレイアウト(コメント一覧)
 		$this->tmpl->addVar("_widget", "output_head_checked", $this->convertToCheckedString($outputHead));		// ヘッダ出力するかどうか
 		$this->tmpl->addVar("_widget", "head_view_detail", $headViewDetail);		// ヘッダ出力(詳細表示)
-		$this->tmpl->addVar("_widget", "use_widget_title",	$this->convertToCheckedString($useWidgetTitle));// ウィジェットタイトルを使用するかどうか
+//		$this->tmpl->addVar("_widget", "use_widget_title",	$this->convertToCheckedString($useWidgetTitle));// ウィジェットタイトルを使用するかどうか
 		$this->tmpl->addVar("_widget", "title_default", $titleDefault);		// デフォルトタイトル
 		$this->tmpl->addVar("_widget", "title_list", $titleList);		// 一覧タイトル
 		$this->tmpl->addVar("_widget", "title_search_list", $titleSearchList);		// 検索結果タイトル
@@ -267,6 +273,8 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "show_prev_next_entry_link",	$this->convertToCheckedString($showPrevNextEntryLinkPos));	// 前後記事リンクを表示するかどうか	
 		$this->tmpl->addVar("_widget", "prev_next_entry_link_pos_top", $this->convertToSelectedString($prevNextEntryLinkPos, 0));// 前後記事リンク表示位置(0=上、1=下)
 		$this->tmpl->addVar("_widget", "prev_next_entry_link_pos_bottom", $this->convertToSelectedString($prevNextEntryLinkPos, 1));// 前後記事リンク表示位置(0=上、1=下)
+		$this->tmpl->addVar("_widget", "show_entry_author",	$this->convertToCheckedString($showEntryAuthor));	// 投稿者を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_entry_regist_dt",	$this->convertToCheckedString($showEntryRegistDt));	// 投稿日時を表示するかどうか
 	}
 	/**
 	 * 最大画像を取得

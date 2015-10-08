@@ -37,7 +37,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $isSystemManageUser;	// システム運用可能ユーザかどうか
 	private $preview;				// プレビューモードかどうか
 	private $outputHead;			// ヘッダ出力するかどうか
-	private $useWidgetTitle;		// ウィジェットタイトルを使用するかどうか
+//	private $useWidgetTitle;		// ウィジェットタイトルを使用するかどうか
 	private $isExistsViewData;		// 表示データがあるかどうか
 	private $useMultiBlog;			// マルチブログを使用するかどうか
 	private $isOutputComment;		// コメントを出力するかどうか
@@ -65,7 +65,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $messageFindNoEntry;	// ブログ記事が見つからないメッセージ
 	private $startTitleTagLevel;	// 最初のタイトルタグレベル
 	private $itemTagLevel;			// 記事のタイトルタグレベル
-	
+	private $showEntryAuthor;	// 投稿者を表示するかどうか
+	private $showEntryRegistDt;	// 投稿日時を表示するかどうか
+			
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_MIN_POS = 30;			// 編集アイコンの位置
@@ -105,7 +107,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->outputHead = self::$_configArray[blog_mainCommonDef::CF_OUTPUT_HEAD];			// ヘッダ出力するかどうか
 		$this->useMultiBlog = self::$_configArray[blog_mainCommonDef::CF_USE_MULTI_BLOG];// マルチブログを使用するかどうか
 		$this->receiveComment = self::$_configArray[blog_mainCommonDef::CF_RECEIVE_COMMENT];		// コメントを受け付けるかどうか
-		$this->useWidgetTitle = self::$_configArray[blog_mainCommonDef::CF_USE_WIDGET_TITLE];		// ウィジェットタイトルを使用するかどうか
+//		$this->useWidgetTitle = self::$_configArray[blog_mainCommonDef::CF_USE_WIDGET_TITLE];		// ウィジェットタイトルを使用するかどうか
 		
 		$this->entryViewCount	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_VIEW_COUNT];// 記事表示数
 		if (empty($this->entryViewCount)) $this->entryViewCount = blog_mainCommonDef::DEFAULT_VIEW_COUNT;
@@ -123,6 +125,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (empty($this->messageFindNoEntry)) $this->messageFindNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;
 		$this->startTitleTagLevel = self::$_configArray[blog_mainCommonDef::CF_TITLE_TAG_LEVEL];	// 最初のタイトルタグレベル
 		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
+		$this->showEntryAuthor		= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR];		// 投稿者を表示するかどうか
+		$this->showEntryRegistDt	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT];		// 投稿日時を表示するかどうか
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -235,11 +239,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		switch ($this->viewMode){					// 表示モード
 			case 0:			// トップ一覧表示
 			default:
-				if (!$this->useWidgetTitle && !empty($this->title)) $this->itemTagLevel++;
+//				if (!$this->useWidgetTitle && !empty($this->title)) $this->itemTagLevel++;
 				break;
 			case 1:			// 記事一覧表示
 			case 2:			// 検索一覧表示
-				if (!$this->useWidgetTitle) $this->itemTagLevel++;
+//				if (!$this->useWidgetTitle) $this->itemTagLevel++;
 				break;
 			case 10:			// 記事単体表示
 				break;
@@ -1195,8 +1199,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (!empty($this->showReadMore) && $isMoreContentExists) $viewItem->readmore	= $this->readMoreTitle;			// 続きがある場合は「もっと読む」ボタンタイトルを設定
 
 		// 以下は表示する項目のみ値を設定する
-	$viewItem->published	= $date;		// 投稿日時
-	$viewItem->author		= $author;		// 投稿者
+		if ($this->showEntryAuthor) $viewItem->author		= $author;		// 投稿者
+		if ($this->showEntryRegistDt) $viewItem->published	= $date;		// 投稿日時
 		$this->viewItemsData[] = $viewItem;			// Joomla!ビュー用データ
 		return true;
 	}

@@ -40,7 +40,7 @@ class blog_mainCommonDef
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
 	const CF_LAYOUT_ENTRY_LIST		= 'layout_entry_list';			// コンテンツレイアウト(記事一覧)
 	const CF_LAYOUT_COMMENT_LIST	= 'layout_comment_list';			// コンテンツレイアウト(コメント一覧)
-	const CF_USE_WIDGET_TITLE		= 'use_widget_title';		// ウィジェットタイトルを使用するかどうか
+	const CF_USE_WIDGET_TITLE		= 'use_widget_title';		// ウィジェットタイトルを使用するかどうか(廃止予定)
 	const CF_TITLE_DEFAULT			= 'title_default';		// デフォルトタイトル
 	const CF_TITLE_LIST				= 'title_list';		// 一覧タイトル
 	const CF_TITLE_SEARCH_LIST		= 'title_search_list';		// 検索結果タイトル
@@ -51,6 +51,8 @@ class blog_mainCommonDef
 	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
 	const CF_SHOW_PREV_NEXT_ENTRY_LINK	= 'show_prev_next_entry_link';			// 前後記事リンクを表示するかどうか
 	const CF_PREV_NEXT_ENTRY_LINK_POS	= 'prev_next_entry_link_pos';		// 前後記事リンク表示位置
+	const CF_SHOW_ENTRY_AUTHOR		= 'show_entry_author';				// 投稿者を表示するかどうか
+	const CF_SHOW_ENTRY_REGIST_DT	= 'show_entry_regist_dt';			// 投稿日時を表示するかどうか
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数

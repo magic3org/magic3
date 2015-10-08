@@ -163,6 +163,8 @@ INSERT INTO blog_config
 ('category_count',          '2',         '記事に設定可能なカテゴリ数'),
 ('show_prev_next_entry_link',     '1', '前後記事リンク'),
 ('prev_next_entry_link_pos',     '1', '前後記事リンク表示位置'),
+('show_entry_author',     '1', '投稿者を表示するかどうか'),
+('show_entry_regist_dt',     '1', '投稿日時を表示するかどうか'),
 ('thumb_type',              's=80c.jpg;mw=160x120c.jpg;l=200c.jpg', '記事サムネールタイプ定義'),
 ('entry_default_image',     '0_72c.jpg;0_80c.jpg;0_200c.jpg',       '記事デフォルト画像'),
 ('comment_user_limited',      '0',       'コメントのユーザ制限'),

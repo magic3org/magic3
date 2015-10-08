@@ -69,8 +69,12 @@ $(function(){
 		<div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_VIEW_ORDER}>記事表示順：</span></div><div class="col-sm-2 m3config_item"><select name="entry_view_order" class="form-control">
 	        <option value="0" {VIEW_ORDER_INC_SELECTED}>昇順</option>
 		<option value="1" {VIEW_ORDER_DEC_SELECTED}>降順</option>
-	    </select></div>
-		<div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリー数：</span></div><div class="col-sm-1 m3config_item"><input type="text" name="category_count" class="form-control" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div>
+	    </select></div></div>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリー数：</span></div><div class="col-sm-1 m3config_item"><input type="text" name="category_count" class="form-control" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div></div>
+		<div class="form-group clearfix">
+		<span {_HELP_VISIBLE_ITEMS_LABEL}>表示項目：</span>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_entry_regist_dt" {SHOW_ENTRY_REGIST_DT} />公開日</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_entry_author" {SHOW_ENTRY_AUTHOR} />投稿者</label></div>
 		</div>
 		<div class="form-group clearfix"><div class="col-sm-3 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_show_prev_next_entry_link" {SHOW_PREV_NEXT_ENTRY_LINK} />前後記事リンクを表示</label></div></div>
 		<div class="form-control-static col-sm-2 m3config_item" style="width:80px;"><span>表示位置：</span></div>
@@ -128,7 +132,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_TITLE_DEF}>タイトル</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_widget_title" {USE_WIDGET_TITLE} />ウィジェットタイトルを使用</label></div>
+	    <td><!--<div class="checkbox"><label><input type="checkbox" name="item_use_widget_title" {USE_WIDGET_TITLE} />ウィジェットタイトルを使用</label></div>-->
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">デフォルトタイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_default" class="form-control" value="{TITLE_DEFAULT}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">一覧タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_list" class="form-control" value="{TITLE_LIST}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">検索結果タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_search_list" class="form-control" value="{TITLE_SEARCH_LIST}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
