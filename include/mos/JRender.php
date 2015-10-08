@@ -181,6 +181,8 @@ class JRender extends JParameter
 		$this->item->params = new JParameter();
 		$this->pagination = new JParameter();		// 暫定(2013/1/7)
 		$this->user = new JUser();
+		// Bootstrapテンプレート用
+		$this->pageheading = '';		// ページタイトル用
 		
 		// ページタイトルの設定
 		if (!empty($title) && $title != M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END){
@@ -196,6 +198,8 @@ class JRender extends JParameter
 			// ページタイトルの設定方法を以下に変更(2015/10/6)
 			$this->params->set('show_page_heading', 1);
 			$this->params->set('page_heading', $title);
+			// Bootstrapテンプレート用
+			$this->pageheading = $title;		// ページタイトル用
 		}
 		$this->article->text = $content;
 		
