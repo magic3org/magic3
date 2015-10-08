@@ -262,6 +262,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->showSearchList($request);
 				break;
 			case 10:			// 記事単体表示
+				// ### ウィジェットタイトルはデフォルトで非表示 ###
+				$this->title = M3_TAG_START . M3_TAG_MACRO_NOTITLE . M3_TAG_END;
+				
 				$avatarFormat = $this->gInstance->getImageManager()->getDefaultAvatarFormat();		// 画像フォーマット取得
 				$this->gInstance->getImageManager()->parseImageFormat($avatarFormat, $imageType, $imageAttr, $this->avatarSize);		// 画像情報取得
 		
@@ -273,14 +276,16 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->gPage->setHeadSubTitle($this->pageTitle);
 		
 		// タイトルの設定
-		if ($this->useWidgetTitle){			// ウィジェットタイトルを使用するとき
+/*		if ($this->useWidgetTitle){			// ウィジェットタイトルを使用するとき
 			if (!empty($this->title)) $this->widgetTitle = $this->title;	// ウィジェットタイトル
 		} else {
 			if (!empty($this->title)){
 				$this->tmpl->setAttribute('show_title', 'visibility', 'visible');		// 年月表示
 				$this->tmpl->addVar("show_title", "title", '<h' . $this->startTitleTagLevel . '>' . $this->convertToDispString($this->title) . '</h' . $this->startTitleTagLevel . '>');
 			}
-		}
+		}*/
+		// ウィジェットタイトルの使用に限定(2015/10/7)
+		if (!empty($this->title)) $this->widgetTitle = $this->title;	// ウィジェットタイトル
 
 		// メッセージを表示
 		if (!empty($this->message)){
@@ -351,9 +356,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (!empty($this->entryId)){
 			$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $entryRow);
 			if ($ret){
+				// ### ウィジェットタイトルは表示しない ###
 				// ページのタイトル設定
-				$this->title = $entryRow['be_name'];
-				$this->pageTitle = $this->title;
+			//	$this->title = $entryRow['be_name'];		// ウィジェットタイトル
+				$this->pageTitle = $entryRow['be_name'];			// 画面タイトル
 			}
 		}
 		
@@ -383,7 +389,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					// コメントタイトル作成
 					if (!empty($entryRow)){		// 記事レコードがあるとき
 						$this->title = $entryRow['be_name'] . self::COMMENT_TITLE;
-						$this->pageTitle = $this->title;
+						$this->pageTitle = $entryRow['be_name'] . self::COMMENT_TITLE;
 					}
 /*					$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $row);
 					if ($ret) $this->title = $row['be_name'] . self::COMMENT_TITLE;
@@ -472,6 +478,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 		}
 
+		// 記事の取得
 		if ($this->isSystemManageUser){		// システム管理ユーザの場合
 			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
 										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログ指定なし*/, null/*ユーザ指定なし*/, $this->preview);
@@ -957,7 +964,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 
 		$entryId = $fetchedRow['be_id'];// 記事ID
 		$title = $fetchedRow['be_name'];// タイトル
-		$date = $fetchedRow['be_regist_dt'];// 登録日付
+		$date = $fetchedRow['be_regist_dt'];// 登録日時
+		$author	= $fetchedRow['lu_name'];	// 投稿者
 		$showComment = $fetchedRow['be_show_comment'];				// コメントを表示するかどうか
 		$blogId = $fetchedRow['be_blog_id'];						// ブログID
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
@@ -1021,6 +1029,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// 記事へのリンクを生成
+		$permaLinkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId, true/*リンク用*/);		// 記事単体
 		switch ($this->showListType){	// 一覧表示タイプ
 		case 'category':				// 一覧表示タイプ(カテゴリー)
 			$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId . '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $this->viewParam['category'], true/*リンク用*/);		// カテゴリーID付加
@@ -1119,14 +1128,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$contentInfo = array();
 		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $fetchedRow['be_id'];			// コンテンツ置換キー(エントリーID)
 		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
-		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $fetchedRow['lu_name'];			// コンテンツ置換キー(著者)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $author;			// コンテンツ置換キー(著者)
 		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['be_name'];			// コンテンツ置換キー(タイトル)
 		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['be_description'];			// コンテンツ置換キー(簡易説明)
 		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
 		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $fetchedRow['be_create_dt'];		// コンテンツ置換キー(更新日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $fetchedRow['be_regist_dt'];		// コンテンツ置換キー(登録日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($fetchedRow['be_regist_dt']);		// コンテンツ置換キー(登録日)
-		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($fetchedRow['be_regist_dt']);		// コンテンツ置換キー(登録時)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $date;		// コンテンツ置換キー(登録日時)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($date);		// コンテンツ置換キー(登録日)
+//		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($date);		// コンテンツ置換キー(登録時)
 		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $fetchedRow['be_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
 		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $fetchedRow['be_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
 		if ($this->useMultiBlog && !empty($blogId)){
@@ -1154,7 +1163,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (!empty($entryHtml)) $entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
 		
 		// コンテンツレイアウトに埋め込む
-		$contentParam = array_merge($userFields, array(M3_TAG_MACRO_TITLE => $titleTag, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_BODY => $entryHtml,
+		/*$contentParam = array_merge($userFields, array(M3_TAG_MACRO_TITLE => $titleTag, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_BODY => $entryHtml,
+														//M3_TAG_MACRO_FILES => '', M3_TAG_MACRO_PAGES => '',
+														'LINKS' => $relatedContentTag, M3_TAG_MACRO_CATEGORY => $categoryTag, M3_TAG_MACRO_COMMENT_LINK => $commentLink));*/
+		$contentParam = array_merge($userFields, array(	M3_TAG_MACRO_TITLE => ''/*タイトル*/, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_BODY => $entryHtml,
 														/*M3_TAG_MACRO_FILES => '', M3_TAG_MACRO_PAGES => '',*/
 														'LINKS' => $relatedContentTag, M3_TAG_MACRO_CATEGORY => $categoryTag, M3_TAG_MACRO_COMMENT_LINK => $commentLink));
 		$entryHtml = $this->createDetailContent($this->viewMode, $contentParam);
@@ -1174,30 +1186,17 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// ##### Joomla!ビュー用データ作成 #####
 		$viewItem = new stdClass;
-		$viewItem->url		= $contentUrl;		// コンテンツへのリンク(Magic3拡張)
-		$viewItem->id		= $contentId;	// コンテンツID
-		$viewItem->title	= $contentName;	// コンテンツ名
+		$viewItem->url		= $linkUrl;		// コンテンツへのリンク(Magic3拡張)
+		$viewItem->id		= $entryId;	// コンテンツID
+		$viewItem->title	= $title;	// コンテンツ名
 		$viewItem->introtext	= $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
 		$viewItem->text = $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state	= 1;			// 表示モード(0=新着,1=表示済み)
 		if (!empty($this->showReadMore) && $isMoreContentExists) $viewItem->readmore	= $this->readMoreTitle;			// 続きがある場合は「もっと読む」ボタンタイトルを設定
 
 		// 以下は表示する項目のみ値を設定する
-		if (!empty($this->showCreateDate)){		// 表示項目(作成日)
-			for ($i = 0; $i < count($this->createDateRows); $i++){
-				$row = $this->createDateRows[$i];
-				if ($row['cn_id'] ==  $contentId){
-					$viewItem->created = $row['cn_create_dt'];		// コンテンツ作成日時
-					break;
-				}
-			}
-		}
-		if (!empty($this->showModifiedDate)){		// 表示項目(更新日)
-			$viewItem->modified	= $fetchedRow['cn_create_dt'];		// コンテンツ更新日時
-		}
-		if (!empty($this->showPublishedDate)){		// 表示項目(公開日)
-			if ($fetchedRow['cn_active_start_dt'] != $this->gEnv->getInitValueOfTimestamp()) $viewItem->published	= $fetchedRow['cn_active_start_dt'];		// コンテンツ公開日時
-		}
+	$viewItem->published	= $date;		// 投稿日時
+	$viewItem->author		= $author;		// 投稿者
 		$this->viewItemsData[] = $viewItem;			// Joomla!ビュー用データ
 		return true;
 	}

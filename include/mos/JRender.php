@@ -252,6 +252,25 @@ $this->item->title = '****';*/
 			switch ($renderType){
 			case 'article':		// 単一記事型出力
 			default:
+				// ウィジェットで生成したコンテンツ情報を取得
+				$viewData = $gEnvManager->getJoomlaViewData();
+				if (!empty($viewData)){
+					$contentItems = $viewData['Items'];		// コンテンツ情報
+					$contentItem = $contentItems[0];
+					$this->item->title = $contentItem->title;
+					$this->item->params->set('show_title', 1);
+//					$this->item->titleLink = $contentItem->url;
+//					$this->item->params->set('link_titles', 1);		// リンク表示
+					if (!empty($contentItem->published)){		// 登録日時
+						$this->item->publish_up = $contentItem->published;
+						$this->item->params->set('show_publish_date', 1);
+					}
+					if (!empty($contentItem->author)){		// 投稿者
+						$this->item->author = $contentItem->author;
+						$this->item->params->set('show_author', 1);
+					}
+				}
+
 				$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article/default.php';		// ビュー作成処理
 				$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article';			// ビュー作成用スクリプトベースディレクトリ
 				$this->viewRenderType = 'com_content/article';		// ビュー作成タイプ
@@ -278,7 +297,14 @@ $this->item->title = '****';*/
 					if (!empty($contentItem->title)) $contentViewInfo->set('show_title', 1);		// タイトルが設定されている場合は表示
 					if (!empty($contentItem->created)) $contentViewInfo->set('show_create_date', 1);
 					if (!empty($contentItem->modified)) $contentViewInfo->set('show_modify_date', 1);
-					if (!empty($contentItem->published)) $contentViewInfo->set('show_publish_date', 1);
+					if (!empty($contentItem->published)){			// 登録日時
+						$contentItem->publish_up = $contentItem->published;
+						$contentViewInfo->set('show_publish_date', 1);
+					}
+					if (!empty($contentItem->author)){		// 投稿者
+						$contentItem->author = $contentItem->author;
+						$contentViewInfo->set('show_author', 1);
+					}
 					if (!empty($contentItem->readmore)) $contentViewInfo->set('show_readmore', 1);		// 「もっと読む」ボタン表示
 					$contentViewInfo->set('link_titles', 1);		// タイトルにリンクを付加(タイトルのリンク作成用)
 					$contentViewInfo->set('access-view', 1);		// (タイトルのリンク作成用)
