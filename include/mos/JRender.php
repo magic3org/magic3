@@ -289,8 +289,10 @@ $this->item->title = '****';*/
 				$columnContentCount = $viewData['columnContentCount'];		// カラム部のコンテンツ数(Magic3拡張)
 				if ($columnContentCount > count($contentItems) - $leadContentCount) $columnContentCount = count($contentItems) - $leadContentCount;
 			
-				$readMoreTitle = $viewData['readMoreTitle'];		// 「続きを読む」ボタンタイトル
-				if (!empty($readMoreTitle)) $gInstanceManager->getMessageManager()->replaceJoomlaText('COM_CONTENT_READ_MORE_TITLE', $readMoreTitle);		// メッセージを変更
+				// 「もっと読む」ボタンのデフォルトのタイトルを取得
+				$readMoreTitle = $viewData['readMoreTitle'];		// 「もっと読む」ボタンタイトル
+				$defaultReadMoreTitle = $gInstanceManager->getMessageManager()->getJoomlaText('COM_CONTENT_READ_MORE_TITLE');
+				if (!empty($readMoreTitle)) $gInstanceManager->getMessageManager()->replaceJoomlaText('COM_CONTENT_READ_MORE_TITLE', $readMoreTitle);		// 「もっと読む」デフォルトのタイトルを変更
 			
 				// 個別のコンテンツの付加情報
 				for ($i = 0; $i < count($contentItems); $i++){
@@ -309,13 +311,21 @@ $this->item->title = '****';*/
 						$contentItem->author = $contentItem->author;
 						$contentViewInfo->set('show_author', 1);
 					}
-					if (!empty($contentItem->readmore)) $contentViewInfo->set('show_readmore', 1);		// 「もっと読む」ボタン表示
+					// 「もっと読む」のボタンを表示するかどうかは$contentItem->urlに値が設定されているかどうかで判断する
+					if (!empty($contentItem->url)){
+						$contentItem->slug = $contentItem->url;			// コンテンツへのリンク
+						$contentViewInfo->set('show_readmore', 1);		// 「もっと読む」ボタン表示
+						//$contentViewInfo->set('show_readmore_title', 1);		// 「もっと読む」の後にタイトル名付加
+						//$contentViewInfo->set('readmore_limit', 10);			// タイトル名の長さ
+						
+						if (empty($contentItem->readmore)) $contentItem->readmore = $defaultReadMoreTitle;		// $contentItem->readmoreにダミー値をセット
+						// 記事個別に$contentItem->readmoreが設定されている場合は、「もっと読む」ボタンのタイトルを変更する(現在は変更不可)
+					}
 					$contentViewInfo->set('link_titles', 1);		// タイトルにリンクを付加(タイトルのリンク作成用)
 					$contentViewInfo->set('access-view', 1);		// (タイトルのリンク作成用)
-					$contentItem->slug = $contentItem->url;			// コンテンツへのリンク
 					//$contentItem->catslug = '';			// カテゴリーID
 				}
-			
+				
 				$this->lead_items = array();
 				$this->intro_items = array();
 				$this->link_items = array();

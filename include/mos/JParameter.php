@@ -317,6 +317,99 @@ class JConfig {
 		$this->tmp_path = $gEnvManager->getWorkDirPath();		// 一時ディレクトリ
 	}
 }
+class JString
+{
+	/**
+	 * UTF-8 aware replacement for trim()
+	 * Strip whitespace (or other characters) from the beginning and end of a string
+	 * Note: you only need to use this if you are supplying the charlist
+	 * optional arg and it contains UTF-8 characters. Otherwise trim will
+	 * work normally on a UTF-8 string
+	 *
+	 * @param   string  $str       The string to be trimmed
+	 * @param   string  $charlist  The optional charlist of additional characters to trim
+	 *
+	 * @return  string  The trimmed string
+	 *
+	 * @see     http://www.php.net/trim
+	 * @since   1.0
+	 */
+	public static function trim($str, $charlist = false)
+	{
+/*		if (empty($charlist) && $charlist !== false)
+		{
+			return $str;
+		}
+
+		require_once __DIR__ . '/phputf8/trim.php';
+
+		if ($charlist === false)
+		{
+			return utf8_trim($str);
+		}
+
+		return utf8_trim($str, $charlist);*/
+		return trim($str, $charlist);
+	}
+	/**
+	 * UTF-8 aware alternative to substr
+	 * Return part of a string given character offset (and optionally length)
+	 *
+	 * @param   string   $str     String being processed
+	 * @param   integer  $offset  Number of UTF-8 characters offset (from left)
+	 * @param   integer  $length  Optional length in UTF-8 characters from offset
+	 *
+	 * @return  mixed string or FALSE if failure
+	 *
+	 * @see     http://www.php.net/substr
+	 * @since   1.0
+	 */
+	public static function substr($str, $offset, $length = false)
+	{
+/*		if ($length === false)
+		{
+			return utf8_substr($str, $offset);
+		}
+
+		return utf8_substr($str, $offset, $length);*/
+		return substr($str, $offset, $length);
+	}
+	/**
+	 * UTF-8 aware alternative to strlen.
+	 *
+	 * Returns the number of characters in the string (NOT THE NUMBER OF BYTES),
+	 *
+	 * @param   string  $str  UTF-8 string.
+	 *
+	 * @return  integer  Number of UTF-8 characters in string.
+	 *
+	 * @see http://www.php.net/strlen
+	 * @since   1.0
+	 */
+	public static function strlen($str)
+	{
+		//return utf8_strlen($str);
+		return strlen($str);
+	}
+	/**
+	 * UTF-8 aware alternative to strrpos
+	 * Finds position of last occurrence of a string
+	 *
+	 * @param   string   $str     String being examined.
+	 * @param   string   $search  String being searched for.
+	 * @param   integer  $offset  Offset from the left of the string.
+	 *
+	 * @return  mixed  Number of characters before the last match or false on failure
+	 *
+	 * @see     http://www.php.net/strrpos
+	 * @since   1.0
+	 */
+	public static function strrpos($str, $search, $offset = 0)
+	{
+		//return utf8_strrpos($str, $search, $offset);
+		return strrpos($str, $search, $offset);
+	}
+}
 /**
  * Version information class for the Joomla CMS.
  * テンプレートからは、RELEASE値以外はまず使用されない

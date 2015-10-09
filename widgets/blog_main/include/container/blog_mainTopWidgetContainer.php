@@ -43,6 +43,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $isOutputComment;		// コメントを出力するかどうか
 	private $receiveComment;		// コメントを受け付けるかどうか
 	private $listRender;			// リスト型出力かどうか
+
 	// 表示項目
 	private $entryViewCount;// 記事表示数
 	private $entryViewOrder;// 記事表示順
@@ -72,7 +73,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_MIN_POS = 30;			// 編集アイコンの位置
 	const EDIT_ICON_NEXT_POS = 35;			// 編集アイコンの位置
-	const MESSAGE_EXT_ENTRY		= '続きを読む';					// 投稿記事に続きがある場合の表示
+	const MESSAGE_EXT_ENTRY		= 'もっと読む';					// 投稿記事に続きがある場合の表示
 	const MESSAGE_EXT_ENTRY_PRE	= '…&nbsp;';							// 投稿記事に続きがある場合の表示
 	const DEFAULT_TITLE_SEARCH = '検索';		// 検索時のデフォルトページタイトル
 	const TITLE_RELATED_CONTENT_BLOCK = '関連記事';		// 関連コンテンツブロック
@@ -127,7 +128,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 //		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
 		$this->showEntryAuthor		= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR];		// 投稿者を表示するかどうか
 		$this->showEntryRegistDt	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT];		// 投稿日時を表示するかどうか
-		
 		$this->itemTagLevel = $this->getHTagLevel();			// 記事のタイトルタグレベル
 	}
 	/**
@@ -506,7 +506,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 
 		// ##### 記事データを設定 #####
-		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*「もっと読む」ボタンのタイトル*/);
+		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
 		
 		// ### 前画面、次画面への遷移ボタンを追加 ###
 		if (empty($entryRow)) return;			// ブログ記事情報がない場合は終了
@@ -1149,6 +1149,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 
 		// HTMLを出力(出力内容は特にエラーチェックしない)
+		$isMoreContentExists = false;		// 「もっと読む」ボタンを作成するかどうか
 		$entryHtml = $fetchedRow['be_html'];
 		if ($this->viewMode == 10){	// 記事単体表示のとき
 			if (!empty($fetchedRow['be_html_ext'])) $entryHtml = $fetchedRow['be_html_ext'];// 続きがある場合は続きを出力
@@ -1160,9 +1161,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->gPage->setHeadOthers($headText);
 			}
 		} else {
-			// 続きがある場合はリンクを付加
+			// ##### 「もっと読む」ボタンの作成 #####
 			if (!empty($fetchedRow['be_html_ext'])){
-				$entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a></div>';
+				// 旧テンプレート処理の場合は「もっと読む」ボタンを出力
+				if ($this->_renderType != M3_RENDER_JOOMLA_NEW) $entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a></div>';
+				
+				$isMoreContentExists = true;	// 「もっと読む」ボタンを表示する
 			}
 		}
 		if (!empty($entryHtml)) $entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
@@ -1191,14 +1195,17 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// ##### Joomla!ビュー用データ作成 #####
 		$viewItem = new stdClass;
-		$viewItem->url		= $linkUrl;		// コンテンツへのリンク(Magic3拡張)
+
 		$viewItem->id		= $entryId;	// コンテンツID
 		$viewItem->title	= $title;	// コンテンツ名
 		$viewItem->introtext	= $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
 		$viewItem->text = $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state	= 1;			// 表示モード(0=新着,1=表示済み)
-//		if (!empty($this->showReadMore) && $isMoreContentExists) $viewItem->readmore	= $this->readMoreTitle;			// 続きがある場合は「もっと読む」ボタンタイトルを設定
-	$viewItem->readmore	= 'テスト読む';			// 続きがある場合は「もっと読む」ボタンタイトルを設定
+		if ($isMoreContentExists){			// 「もっと読む」のボタンを表示する場合
+			// 「もっと読む」のボタンを表示するかどうかは$viewItem->urlに値が設定されているかどうかで判断する
+			$viewItem->url		= $linkUrl;						// リンク先(Magic3拡張)
+		//	$viewItem->readmore	= 'テスト(もっと読む)';			// 「もっと読む」のボタンタイトルを記事単位で変更する場合は、$viewItem->readmoreにタイトルを設定する。(現在は個別設定不可)
+		}
 
 		// 以下は表示する項目のみ値を設定する
 		if ($this->showEntryAuthor) $viewItem->author		= $author;		// 投稿者
