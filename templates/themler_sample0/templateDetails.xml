@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE install PUBLIC "-//Joomla! 2.5//DTD template 1.0//EN" "http://www.joomla.org/xml/dtd/1.6/template-install.dtd">
+<extension version="2.5" client="site" type="template" method="upgrade">
+  <name>untitled</name>
+  <creationDate>2015-08-25</creationDate>
+  <version>1.0</version>
+  <author/>
+  <authorUrl/>
+  <description/>
+  <files>
+    <folder>app</folder>
+    <folder>css</folder>
+    <folder>editor</folder>
+    <folder>fields</folder>
+    <folder>html</folder>
+    <folder>images</folder>
+    <folder>includes</folder>
+    <folder>js</folder>
+    <folder>language</folder>
+    <folder>library</folder>
+    <folder>prototypes</folder>
+    <folder>templates</folder>
+    <file>CloudZoom.js</file>
+    <file>Readme.txt</file>
+    <file>blank.png</file>
+    <file>bootstrap.min.js</file>
+    <file>component.php</file>
+    <file>error.php</file>
+    <file>functions.php</file>
+    <file>index.html</file>
+    <file>index.php</file>
+    <file>jquery.js</file>
+    <file>modrender.php</file>
+    <file>script.ie.js</file>
+    <file>script.js</file>
+    <file>style.ie.css</file>
+    <file>templateDetails.xml</file>
+    <file>template_preview.png</file>
+    <file>template_thumbnail.png</file>
+    <file>virtuemart.js</file>
+  </files>
+  <positions>
+    <position>breadcrumb</position>
+    <position>currency</position>
+    <position>footer1</position>
+    <position>footer2</position>
+    <position>footer3</position>
+    <position>footer4</position>
+    <position>hmenu</position>
+    <position>language</position>
+    <position>left</position>
+  </positions>
+  <config>
+    <fields name="params" addfieldpath="/templates/untitled/fields">
+      <fieldset name="basic">
+        <field name="siteTitle" default="Headline" type="text" size="50" label="TPL_SITE_TITLE" description="TPL_SITE_TITLE_DESCRIPTION"/>
+        <field name="siteSlogan" default="Slogan" type="text" size="50" label="TPL_SITE_SLOGAN" description="TPL_SITE_SLOGAN_DESCRIPTION"/>
+        <field name="logoFile" default="" type="media" label="TPL_LOGO_LABEL" description="TPL_LOGO_DESC"/>
+        <field name="logoLink" default="" type="text" label="TPL_LOGOLINK_LABEL" description="TPL_LOGOLINK_DESC"/>
+        <field type="spacer" name="spacer" hr="true"/>
+        <field name="editor" type="designer" label="TPL_EDITOR" text="TPL_EDITOR"/>
+      </fieldset>
+      <fieldset name="templates">
+        <field type="templates" name="home" kind="home" default="" label="TPL_HOME_TEMPLATE"/>
+        <field type="templates" name="blog" kind="blog" default="" label="TPL_BLOG_TEMPLATE"/>
+        <field type="templates" name="post" kind="post" default="" label="TPL_POST_TEMPLATE"/>
+        <field type="templates" name="page" kind="page" default="" label="TPL_PAGE_TEMPLATE"/>
+        <field type="templates" name="products" kind="products" default="" label="TPL_PRODUCTS_TEMPLATE"/>
+        <field type="templates" name="productoverview" kind="productoverview" default="" label="TPL_PRODUCTOVERVIEW_TEMPLATE"/>
+        <field type="templates" name="shoppingcart" kind="shoppingcart" default="" label="TPL_SHOPPINGCART_TEMPLATE"/>
+        <field type="templates" name="default" kind="default" default="" label="TPL_DEFAULT_TEMPLATE"/>
+        <field type="templates" name="error404" kind="error404" default="" label="TPL_TEMPLATE404_TEMPLATE"/>
+      </fieldset>
+    </fields>
+  </config>
+  <languages folder="language">
+    <language tag="en-GB">en-GB/en-GB.tpl_untitled.ini</language>
+  </languages>
+</extension>

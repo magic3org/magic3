@@ -146,6 +146,12 @@ INSERT INTO _language_string
 (10,      'SATURDAY',                      'en',           'Saturday',           ''),
 (10,      'LAST_UPDATED2',                 'en',           'Last Updated on %s', '旧バージョン互換用');
 
+-- テンプレート情報
+DELETE FROM _templates WHERE tm_id = 'themler_sample0';
+INSERT INTO _templates
+(tm_id,                    tm_name,                 tm_type, tm_generator, tm_version) VALUES
+('themler_sample0',        'themler_sample0',       2,       'themler',    '1.0.220');
+
 -- *** システム標準テーブル ***
 -- ブログ設定マスター
 DELETE FROM blog_config;

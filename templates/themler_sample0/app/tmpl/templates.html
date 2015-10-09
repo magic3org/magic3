@@ -1,0 +1,191 @@
+<html>
+<head>
+    <style type="text/css">
+        body {
+            background-color: #eee;
+        }
+        .active {
+            font-size: 18px;
+            display: block;
+            margin:0 auto;
+            width:800px;
+            padding-top:50px;
+            line-height: 27px;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function(e){
+            var href = window.location.href,
+                    parts = href.split('?'),
+                    element = null, gets;
+            if (parts.length > 1) {
+                gets = parts[1].split('&');
+                element = document.getElementById(gets[0]);
+                element.className = 'active';
+                element.removeAttribute('style');
+            }
+        }
+    </script>
+</head>
+<body>
+<div id="default" style="display: none;">
+    <h3>Default Template is disabled.</h3>
+    <p>The Default Template is used for all components which <b>have no appropriate templates</b> (Post, Page, Blog, etc). For example, Joomla Category List Layout, Login page, etc. </p>
+    <p>Also the Default Template will be applied to the pages created by the <b>external components</b> except VirtueMart pages which have own Page Templates.</p>
+    <p>To turn on the Default Template, simply create a <b>Menu Item</b> of the chosen Type that has no appropriate Page Template.</p>
+    <p><b>Note:</b> The menu item should be accessible from the website <b>Front-End</b>.</p>
+</div>
+<div id="page" style="display: none;">
+    <h3>Page Template is disabled.</h3>
+    <p>The Page Template is used for Single Article Layouts.
+        The feature of this template is that the article does not have any metadata (author, date, print, email, etc.) by default.</p>
+
+    <p>To turn on the Page Template, please follow these steps:</p>
+    <ol>
+        <li><b>Create an Article</b>: in Joomla Content >> Article Manager choose <b>Add New Article</b>.
+            <ul>
+                <li>Add Article Title, Category, content.</li>
+                <li>Publish the Article.</li>
+            </ul>
+        </li>
+        <li>Once you have created the Article you need to link it to the <b>Menu</b> of your website: in Joomla Menus create a Menu or choose an existing one and click on <b>Add New Menu Item</b>.
+            <ul>
+                <li>Specify the "Single Article" menu item type.</li>
+                <li>Select the Article you have created.</li>
+                <li><b>Hide</b> all the Article Metadata under the Article Options.</li>
+                <li>Publish the item.</li>
+            </ul>
+        </li>
+    </ol>
+    <p><b>Note:</b> The menu item should be accessible from the website <b>Front-End</b>.</p>
+</div>
+<div id="blog" style="display: none;">
+    <h3>Blog Template is disabled.</h3>
+    <p>The Blog Template is used for Category Blog and Featured Articles Layouts.</p>
+    <p>To turn on the Blog Template please follow these steps:</p>
+    <ol>
+        <li><b>Create a Category with Article(s)</b> in Joomla Content.
+            <ul>
+                <li>Create a Category in Joomla >> Content >> Category Manager >> Add New Category</li>
+                <li>Save the Category.</li>
+                <li>Create an Article(s) in Joomla Content >> Article Manager >> Add New Article.</li>
+                <li>Add Article Title, Category, content.</li>
+                <li>Mark the Article as Featured if needed.</li>
+                <li>Publish the Article.</li>
+            </ul>
+        </li>
+        <li>Once you have created a Category with Articles you need to link it to the <b>Menu</b> of your website: in Joomla Menus create a Menu or choose an existing one and click on <b>Add New Menu Item</b>.
+            <ul>
+                <li>Specify the "Category Blog" or "Featured Articles" menu item type.</li>
+                <li>Choose the Category.</li>
+                <li>Publish the item.</li>
+            </ul>
+        </li>
+    </ol>
+    <p><b>Note:</b> The menu item should be accessible from the website <b>Front-End</b>.</p>
+</div>
+<div id="post" style="display: none;">
+    <h3>Post Template is disabled.</h3>
+    <p>The Post Template is used for Single Article Layouts.
+        The feature of this template is that the article should have some article metadata (author, date, print, email, etc).</p>
+    <p>To turn on the Post Template please follow these steps:</p>
+    <ol>
+        <li><b>Create an Article</b>: in Joomla Content >> Article Manager choose <b>Add New Article</b>.
+            <ul>
+                <li>Add Article Title, Category, content.</li>
+                <li>Publish the Article.</li>
+            </ul>
+        </li>
+        <li>Once you have created the Article you need to link it to the <b>Menu</b> of your website: in Joomla Menus create a Menu or choose an existing one and click on <b>Add New Menu Item</b>.
+            <ul>
+                <li>Specify the "Single Article" menu item type.</li>
+                <li>Select the Article you have created.</li>
+                <li>Show any of the article metadata under the Article Options</li>
+                <li>Publish the item.</li>
+            </ul>
+        </li>
+    </ol>
+    <p><b>Note:</b> The menu item should be accessible from the website <b>Front-End</b>.</p>
+</div>
+<div id="shoppingcart" style="display: none;">
+    <h3>Shopping Cart Template is disabled.</h3>
+    <p>The Shopping Cart Template is used for VirtueMart Shopping Cart.</p>
+    <p>To turn on the Shopping Cart Template you need to create a link to it in the Menu of your website: in Joomla Menus create Menu or choose the existing one and click on Add New Menu Item.</p>
+    <ul>
+        <li>Specify the "VirtueMart Shopping Cart" menu item type.</li>
+        <li>Publish the Item.</li>
+    </ul>
+    <p><b>Note:</b> The menu item should be accessible from the website <b>Front-End</b>.</p>
+</div>
+<div id="products" style="display: none;">
+    <h3>Products Template is disabled.</h3>
+    <p>The Products Template is used for VirtueMart Category Layout.</p>
+    <p>To turn on the Products Template please follow these steps:</p>
+    <ol>
+        <li>Create a Product Category with Products in Joomla >> Components >> VirtueMart.
+            <ul>
+                <li>Create a Product Category in Joomla >> Components >> VirtueMart >> Product Categories.</li>
+                <li>Save the Category.</li>
+                <li>Create Product(s) in Joomla >> Components >> VirtueMart >> Products.</li>
+                <li>Add Product Name, Category, Price, etc.</li>
+                <li>Publish the Product.</li>
+            </ul>
+        </li>
+        <li>Once you have created a Product Category with Products you need to link it to the <b>Menu</b> of your website: in Joomla Menus create a Menu or choose an existing one and click on <b>Add New Menu Item</b>.
+            <ul>
+                <li>Specify the "VirtueMart Category Layout" menu item type.</li>
+                <li>Choose the Category.</li>
+                <li>Publish the Item.</li>
+            </ul>
+        </li>
+    </ol>
+    <p><b>Note:</b> The menu item should be accessible from the website <b>Front-End</b>.</p>
+</div>
+<div id="productoverview" style="display: none;">
+    <h3>Product Details Template is disabled.</h3>
+    <p>The Product Details Template is used for VirtueMart Product Details Layout.</p>
+    <p>To turn on the Product Details Template please follow these steps:</p>
+    <ol>
+        <li>Create the Product in Joomla >> Components >> VirtueMart >> Products
+            <ul>
+                <li>Add Product Name, Price, etc.</li>
+                <li>Publish the Product.</li>
+            </ul>
+        </li>
+        <li>Once you have created the Product you need to link it to the <b>Menu</b> of your website: in Joomla Menus create a Menu or choose an existing one and click on <b>Add New Menu Item</b>.
+            <ul>
+                <li>Specify the "VirtueMart Product Details Layout" menu item type.</li>
+                <li>Choose the Product.</li>
+                <li>Publish the Item.</li>
+            </ul>
+        </li>
+    </ol>
+    <p><b>Note:</b> The menu item should be accessible from the website <b>Front-End</b>.</p>
+</div>
+<div id="vm" style="display: none;">
+    <h3>VirtueMart Page Templates are disabled.</h3>
+    <p>There can be two reasons:</p>
+    <ol>
+        <li><p>You are working in Themler Cloud and chose a theme without VirtueMart.</p>
+            <p>To enable VirtueMart Page Template please access <b>Joomla Admin Panel &gt;&gt; Extensions &gt;&gt; Extensions Manager &gt;&gt; Manage</b> and enable VirtueMart Components and Modules.</p></li>
+
+        <li>You are working in <b>your CMS</b> and you do not have VirtueMart extension installed.</li>
+    </ol>
+    <p>To install VirtueMart please follow these steps:</p>
+    <ol>
+        <li>Download the latest stable version <a href="http://virtuemart.net/downloads">here</a>.</li>
+        <li><p>Unzip the downloaded file <i>com_virtuemart.2.x.y.extract_first.zip</i></p>
+            <p>This will extract two more zip-files:</p>
+            <ul>
+                <li>com_virtuemart.2.x.y.zip - which holds the main VirtueMart component. </li>
+                <li>com_virtuemart.2.x.y_ext_aio.zip - which holds all modules and plugins essential for VirtueMart. </li>
+            </ul>
+        </li>
+        <li>Log in to your <b>Joomla Admin Panel</b> and go to the <b>Extensions Manager</b>.</li>
+        <li>First, install the <i>com_virtuemart.2.x.y.zip</i> extension.</li>
+        <li>Second, install <i>com_virtuemart.2.x.y_ext_aio.zip</i> extension.</li>
+    </ol>
+
+</div>
+</body>
+</html>

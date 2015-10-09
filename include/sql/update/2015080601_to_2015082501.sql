@@ -32,5 +32,5 @@ ALTER TABLE _templates ADD tm_generator      VARCHAR(20)    DEFAULT ''          
 DELETE FROM _templates WHERE tm_id = 'themler_sample1';
 INSERT INTO _templates
 (tm_id,                    tm_name,                 tm_type, tm_generator, tm_version) VALUES
-('themler_sample1',        'themler_sample1',       2,       'themler',    '1.0.33');
+('themler_sample1',        'themler_sample1',       2,       'themler',    '1.0.39');
 
