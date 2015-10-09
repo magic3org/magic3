@@ -36,6 +36,7 @@ class EnvManager extends Core
 	private $currentPageId;		// 現在のページId
 	private $currentPageSubId;	// 現在のページサブId
 	private $currentPageDefSerial;	// 現在処理を行っているページ定義のレコードのシリアル番号
+	private $currentPageDefRec;		// 現在処理中のウィジェットのページ定義レコード
 	private $defaultPageSubId;	// デフォルトのページサブId
 	private $currentPageDeviceType;		// 現在のページの端末タイプ
 	private $currentWidgetPrefix;	// 現在作成中のウィジェットのプレフィックス文字列
@@ -1719,6 +1720,25 @@ class EnvManager extends Core
 	public function getCurrentPageDefSerial()
 	{
 		return $this->currentPageDefSerial;
+	}
+	/**
+	 * 現在処理を行っているページ定義レコードを設定
+	 *
+	 * @param array $rec			ページ定義レコード
+	 * @return						なし
+	 */
+	public function setCurrentPageDefRec($rec = null)
+	{
+		$this->currentPageDefRec = $rec;
+	}
+	/**
+	 * 現在処理を行っているページ定義レコードを取得
+	 *
+	 * @return array			ページ定義レコード
+	 */
+	public function getCurrentPageDefRec()
+	{
+		return $this->currentPageDefRec;
 	}
 	// ##################### ユーザ情報 #####################
 	/**

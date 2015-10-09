@@ -47,7 +47,7 @@ class blog_mainCommonDef
 	const CF_TITLE_NO_ENTRY			= 'title_no_entry';		// 記事なし時タイトル
 	const CF_MESSAGE_NO_ENTRY		= 'msg_no_entry';		// ブログ記事が登録されていないメッセージ
 	const CF_MESSAGE_FIND_NO_ENTRY	= 'msg_find_no_entry';		// ブログ記事が見つからないメッセージ
-	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
+//	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
 	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
 	const CF_SHOW_PREV_NEXT_ENTRY_LINK	= 'show_prev_next_entry_link';			// 前後記事リンクを表示するかどうか
 	const CF_PREV_NEXT_ENTRY_LINK_POS	= 'prev_next_entry_link_pos';		// 前後記事リンク表示位置
@@ -68,7 +68,7 @@ class blog_mainCommonDef
 	const DEFAULT_TITLE_NO_ENTRY		= 'ブログ記事未登録';
 	const DEFAULT_MESSAGE_NO_ENTRY		= 'ブログ記事は登録されていません';				// ブログ記事が登録されていないメッセージ
 	const DEFAULT_MESSAGE_FIND_NO_ENTRY	= 'ブログ記事が見つかりません';					// ブログ記事が見つからないメッセージ
-	const DEFAULT_TITLE_TAG_LEVEL		= 2;		// デフォルトのタイトルタグレベル
+//	const DEFAULT_TITLE_TAG_LEVEL		= 2;		// デフォルトのタイトルタグレベル
 	
 	/**
 	 * ブログ定義値をDBから取得

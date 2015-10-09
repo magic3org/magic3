@@ -2271,7 +2271,7 @@ class PageManager extends Core
 			// 実行パラメータ取得
 			$count = count($this->latelaunchWidgetParam);
 			for ($i = 0; $i < $count; $i++){
-				list($wId, $maxNo, $confId, $preId, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index) = $this->latelaunchWidgetParam[$i];
+				list($wId, $maxNo, $confId, $preId, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index, $pageDefRec) = $this->latelaunchWidgetParam[$i];
 				if ($wId == $widgetId){
 					// パラメータ初期化
 					$this->lastHeadCss = '';			// 最後に設定したHTMLヘッダにCSS出力する文字列
@@ -2325,6 +2325,9 @@ class PageManager extends Core
 					// ページ定義のシリアル番号を設定
 					$gEnvManager->setCurrentPageDefSerial($serial);
 		
+					// ページ定義レコードを設定
+					$gEnvManager->setCurrentPageDefRec($pageDefRec);
+				
 					// パラメータを設定
 					$gEnvManager->setCurrentWidgetPrefix($prefix);		// プレフィックス文字列
 		
@@ -2357,6 +2360,9 @@ class PageManager extends Core
 					// ページ定義のシリアル番号を解除
 					$gEnvManager->setCurrentPageDefSerial(0);
 		
+					// ページ定義レコードを解除
+					$gEnvManager->setCurrentPageDefRec();
+					
 					// パラメータを解除
 					$gEnvManager->setCurrentWidgetPrefix('');				// プレフィックス文字列
 					
@@ -5001,14 +5007,14 @@ class PageManager extends Core
 			$maxNo = 0;		// 最大シリアル番号
 			$count = count($this->latelaunchWidgetParam);
 			for ($i = 0; $i < $count; $i++){
-				list($wId, $maxNo, $tmp1, $tmp2, $tmp3, $tmp4, $tmp5, $tmp6, $tmp7, $tmp8, $tmp9, $tmp10) = $this->latelaunchWidgetParam[$i];
+				list($wId, $maxNo, $tmp1, $tmp2, $tmp3, $tmp4, $tmp5, $tmp6, $tmp7, $tmp8, $tmp9, $tmp10, $tmp11) = $this->latelaunchWidgetParam[$i];
 				if ($wId == $widgetId) $maxNo = $maxNo + 1;
 			}
 			// Joomla!1.0テンプレートの場合はタイトルを修正
 			if ($widgetHeaderType > 0 && empty($style)){			// Joomla!1.0テンプレートのとき
 				if (!empty($fetchedRow['pd_title'])) $title = $fetchedRow['pd_title'];
 			}
-			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index);
+			$this->latelaunchWidgetParam[] = array($widgetId, $maxNo, $configId, $prefix, $serial, $style, $cssStyle, $title, $shared, $exportCss, $position, $index, $fetchedRow);
 			
 			// 遅延実行用タグを埋め込む
 			echo self::WIDGET_ID_TAG_START . $widgetId . self::WIDGET_ID_SEPARATOR . $maxNo . self::WIDGET_ID_TAG_END;
@@ -5067,7 +5073,10 @@ class PageManager extends Core
 			
 				// ページ定義のシリアル番号を設定
 				$gEnvManager->setCurrentPageDefSerial($fetchedRow['pd_serial']);
-					
+				
+				// ページ定義レコードを設定
+				$gEnvManager->setCurrentPageDefRec($fetchedRow);
+				
 				// パラメータを設定
 				$gEnvManager->setCurrentWidgetPrefix($prefix);		// プレフィックス文字列
 			
@@ -5101,6 +5110,9 @@ class PageManager extends Core
 				// ページ定義のシリアル番号を解除
 				$gEnvManager->setCurrentPageDefSerial(0);
 			
+				// ページ定義レコードを解除
+				$gEnvManager->setCurrentPageDefRec();
+				
 				// パラメータを解除
 				$gEnvManager->setCurrentWidgetPrefix('');				// プレフィックス文字列
 

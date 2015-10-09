@@ -63,7 +63,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $titleNoEntry;		// 記事なし時タイトル
 	private $messageNoEntry;		// ブログ記事が登録されていないメッセージ
 	private $messageFindNoEntry;	// ブログ記事が見つからないメッセージ
-	private $startTitleTagLevel;	// 最初のタイトルタグレベル
+//	private $startTitleTagLevel;	// 最初のタイトルタグレベル
 	private $itemTagLevel;			// 記事のタイトルタグレベル
 	private $showEntryAuthor;	// 投稿者を表示するかどうか
 	private $showEntryRegistDt;	// 投稿日時を表示するかどうか
@@ -123,10 +123,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (empty($this->messageNoEntry)) $this->messageNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_NO_ENTRY;
 		$this->messageFindNoEntry = self::$_configArray[blog_mainCommonDef::CF_MESSAGE_FIND_NO_ENTRY];		// ブログ記事が見つからないメッセージ
 		if (empty($this->messageFindNoEntry)) $this->messageFindNoEntry = blog_mainCommonDef::DEFAULT_MESSAGE_FIND_NO_ENTRY;
-		$this->startTitleTagLevel = self::$_configArray[blog_mainCommonDef::CF_TITLE_TAG_LEVEL];	// 最初のタイトルタグレベル
-		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
+//		$this->startTitleTagLevel = self::$_configArray[blog_mainCommonDef::CF_TITLE_TAG_LEVEL];	// 最初のタイトルタグレベル
+//		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
 		$this->showEntryAuthor		= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR];		// 投稿者を表示するかどうか
 		$this->showEntryRegistDt	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT];		// 投稿日時を表示するかどうか
+		
+		$this->itemTagLevel = $this->getHTagLevel();			// 記事のタイトルタグレベル
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -235,7 +237,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// タイトルのタグレベル
-		$this->itemTagLevel = $this->startTitleTagLevel;			// 記事のタイトルタグレベル
 		switch ($this->viewMode){					// 表示モード
 			case 0:			// トップ一覧表示
 			default:
@@ -1161,7 +1162,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		} else {
 			// 続きがある場合はリンクを付加
 			if (!empty($fetchedRow['be_html_ext'])){
-				$entryHtml .= self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a>';
+				$entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a></div>';
 			}
 		}
 		if (!empty($entryHtml)) $entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
@@ -1196,7 +1197,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$viewItem->introtext	= $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
 		$viewItem->text = $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state	= 1;			// 表示モード(0=新着,1=表示済み)
-		if (!empty($this->showReadMore) && $isMoreContentExists) $viewItem->readmore	= $this->readMoreTitle;			// 続きがある場合は「もっと読む」ボタンタイトルを設定
+//		if (!empty($this->showReadMore) && $isMoreContentExists) $viewItem->readmore	= $this->readMoreTitle;			// 続きがある場合は「もっと読む」ボタンタイトルを設定
+	$viewItem->readmore	= 'テスト読む';			// 続きがある場合は「もっと読む」ボタンタイトルを設定
 
 		// 以下は表示する項目のみ値を設定する
 		if ($this->showEntryAuthor) $viewItem->author		= $author;		// 投稿者

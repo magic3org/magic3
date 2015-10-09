@@ -73,8 +73,9 @@ class BaseWidgetContainer extends Core
 	const HELP_HEAD = '_help_';		// ヘルプ埋め込み用タグのヘッダ部
 	const LOCAL_TEXT_HEAD = '_lc_';		// ローカライズテキストタグのヘッダ部
 	const LOCAL_TYPE_SYSTEM = 'system';	// ローカライズテキストのタイプ(システム用言語)
-	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
 	const DETECT_GOOGLEMAPS = 'Magic3 googlemaps v';		// Googleマップ検出用文字列
+	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
+	const CF_DEFAULT_H_TAG_LEVEL = 'default_h_tag_level';	// ウィジェットのコンテンツ用のHタグレベルデフォルト値
 	
 	// メッセージの種別
 	const MSG_APP_ERR  = 1;		// アプリケーションエラー
@@ -2545,6 +2546,21 @@ class BaseWidgetContainer extends Core
 			$password = makePassword(self::PASSWORD_LENGTH);
 		}
 		return $password;
+	}
+	/**
+	 * ページ定義のHタグレベルを取得
+	 *
+	 * @return int				Hタグレベル
+	 */
+	function getHTagLevel()
+	{
+		$tagLevel = $this->gSystem->getSystemConfig(self::CF_DEFAULT_H_TAG_LEVEL);
+		$pageDefRec = $this->gEnv->getCurrentPageDefRec();
+		if (!empty($pageDefRec)){
+			$level = $pageDefRec['pd_h_tag_level'];		// Hタグレベル
+			if (!empty($level)) $tagLevel = $level;
+		}
+		return $tagLevel;
 	}
 	/**
 	 * ウィジェットパラメータオブジェクトを取得
