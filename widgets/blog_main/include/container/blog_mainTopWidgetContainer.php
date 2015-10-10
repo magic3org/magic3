@@ -1169,10 +1169,20 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = '';		// コンテンツ置換キー(登録日)
 			$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = '';		// コンテンツ置換キー(登録時)
 		} else {
-			$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $author;			// コンテンツ置換キー(著者)
-			$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $date;		// コンテンツ置換キー(登録日時)
-			$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($date);		// コンテンツ置換キー(登録日)
-			$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($date);		// コンテンツ置換キー(登録時)
+			if ($this->showEntryAuthor){		// 投稿者
+				$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $author;			// コンテンツ置換キー(著者)
+			} else {
+				$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = '';			// コンテンツ置換キー(著者)
+			}
+			if ($this->showEntryRegistDt){		// 投稿日時
+				$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $date;		// コンテンツ置換キー(登録日時)
+				$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($date);		// コンテンツ置換キー(登録日)
+				$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($date);		// コンテンツ置換キー(登録時)
+			} else {
+				$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = '';		// コンテンツ置換キー(登録日時)
+				$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = '';		// コンテンツ置換キー(登録日)
+				$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = '';		// コンテンツ置換キー(登録時)
+			}
 		}
 		
 		// HTMLを出力(出力内容は特にエラーチェックしない)
