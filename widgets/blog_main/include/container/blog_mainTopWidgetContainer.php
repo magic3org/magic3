@@ -1201,10 +1201,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$viewItem->introtext	= $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
 		$viewItem->text = $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state	= 1;			// 表示モード(0=新着,1=表示済み)
-		if ($isMoreContentExists){			// 「もっと読む」のボタンを表示する場合
-			// 「もっと読む」のボタンを表示するかどうかは$viewItem->urlに値が設定されているかどうかで判断する
-			$viewItem->url		= $linkUrl;						// リンク先(Magic3拡張)
-		//	$viewItem->readmore	= 'テスト(もっと読む)';			// 「もっと読む」のボタンタイトルを記事単位で変更する場合は、$viewItem->readmoreにタイトルを設定する。(現在は個別設定不可)
+		$viewItem->url		= $linkUrl;						// リンク先。viewItem->urlはMagic3の拡張値。
+		
+		// 「もっと読む」のボタンを表示するかどうかは$viewItem->readmoreに値が設定されているかどうかで判断する
+		if ($isMoreContentExists){
+			$viewItem->readmore	= 1;			// 「もっと読む」のボタンを表示する場合
+			//$viewItem->readmorelavel	= 'some text';			// 個別に変更する場合
 		}
 
 		// 以下は表示する項目のみ値を設定する

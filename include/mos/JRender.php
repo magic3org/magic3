@@ -38,6 +38,7 @@ class JRender extends JParameter
 	private $templateId;		// テンプレートID
 	private $viewBaseDir;			// ビュー作成用スクリプトベースディレクトリ
 	private $viewRenderType;		// ビュー作成タイプ
+	private $_hookPoints = array();			// フック管理用
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	const DEFAULT_RENDER_DIR = '/render/';					// デフォルトのビュー作成スクリプトディレクトリ
 	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
@@ -288,18 +289,22 @@ $this->item->title = '****';*/
 				if ($leadContentCount > count($contentItems)) $leadContentCount = count($contentItems);
 				$columnContentCount = $viewData['columnContentCount'];		// カラム部のコンテンツ数(Magic3拡張)
 				if ($columnContentCount > count($contentItems) - $leadContentCount) $columnContentCount = count($contentItems) - $leadContentCount;
-			
-				// 「もっと読む」ボタンのデフォルトのタイトルを取得
-				$readMoreTitle = $viewData['readMoreTitle'];		// 「もっと読む」ボタンタイトル
+				
+				// 「もっと読む」ボタンのデフォルトのタイトルを設定
+				$readMoreTitle = $viewData['readMoreTitle'];		// 「もっと読む」ボタンタイトル(ウィジェットのデフォルト値)
 				$defaultReadMoreTitle = $gInstanceManager->getMessageManager()->getJoomlaText('COM_CONTENT_READ_MORE_TITLE');
 				if (!empty($readMoreTitle)) $gInstanceManager->getMessageManager()->replaceJoomlaText('COM_CONTENT_READ_MORE_TITLE', $readMoreTitle);		// 「もっと読む」デフォルトのタイトルを変更
 			
+				// 出力制御用のフック処理追加
+				$this->_addHook('loadtemplate.start', array($this, '_loadtemplateStartHook'));
+	
 				// 個別のコンテンツの付加情報
 				for ($i = 0; $i < count($contentItems); $i++){
 					$contentItem = $contentItems[$i];
 
 					$contentViewInfo = new JParameter();
 					$contentItem->params = $contentViewInfo;
+					$contentItem->slug = $contentItem->url;			// コンテンツへのリンク
 					if (!empty($contentItem->title)) $contentViewInfo->set('show_title', 1);		// タイトルが設定されている場合は表示
 					if (!empty($contentItem->created)) $contentViewInfo->set('show_create_date', 1);
 					if (!empty($contentItem->modified)) $contentViewInfo->set('show_modify_date', 1);
@@ -311,14 +316,13 @@ $this->item->title = '****';*/
 						$contentItem->author = $contentItem->author;
 						$contentViewInfo->set('show_author', 1);
 					}
-					// 「もっと読む」のボタンを表示するかどうかは$contentItem->urlに値が設定されているかどうかで判断する
-					if (!empty($contentItem->url)){
-						$contentItem->slug = $contentItem->url;			// コンテンツへのリンク
+					// 「もっと読む」のボタンを表示するかどうかは$contentItem->readmoreに値が設定されているかどうかで判断する
+					if (!empty($contentItem->readmore)){
 						$contentViewInfo->set('show_readmore', 1);		// 「もっと読む」ボタン表示
 						//$contentViewInfo->set('show_readmore_title', 1);		// 「もっと読む」の後にタイトル名付加
 						//$contentViewInfo->set('readmore_limit', 10);			// タイトル名の長さ
 						
-						if (empty($contentItem->readmore)) $contentItem->readmore = $defaultReadMoreTitle;		// $contentItem->readmoreにダミー値をセット
+						//if (empty($contentItem->readmore)) $contentItem->readmore = $defaultReadMoreTitle;		// $contentItem->readmoreにダミー値をセット
 						// 記事個別に$contentItem->readmoreが設定されている場合は、「もっと読む」ボタンのタイトルを変更する(現在は変更不可)
 					}
 					$contentViewInfo->set('link_titles', 1);		// タイトルにリンクを付加(タイトルのリンク作成用)
@@ -366,6 +370,12 @@ $this->item->title = '****';*/
 		$contents = ob_get_contents();
 		ob_clean();
 		
+		// 出力制御用のフック処理を戻す
+		$this->_removeAllHook();
+		
+		// 変更したリソースを戻す
+		if (!empty($readMoreTitle)) $gInstanceManager->getMessageManager()->replaceJoomlaText('COM_CONTENT_READ_MORE_TITLE', $defaultReadMoreTitle);		// 「もっと読む」デフォルトのタイトルを変更
+			
 		// テンプレート固有の追加処理
 		if ($gEnvManager->getCurrentTemplateGenerator() == self::TEMPLATE_GENERATOR_THEMLER){			// テンプレート作成アプリケーションがThemlerの場合
 			// サブテンプレートIDを取得。取得できない場合はテンプレートのデフォルト値を取得。
@@ -533,6 +543,9 @@ $this->item->title = '****';*/
 			$viewFile = $gEnvManager->getJoomlaRootPath() . self::DEFAULT_RENDER_DIR . $this->viewRenderType . '/' . $viewFileHead . '_' . $viewId . '.php';
 		}
 		
+		// フック処理を実行
+		$this->_execHook('loadtemplate.start', array($this->item));
+		
 		// 出力を取得
 		ob_start();
 		if (is_readable($viewFile)) include $viewFile;
@@ -540,7 +553,74 @@ $this->item->title = '****';*/
 		$this->_output = ob_get_contents();
 		ob_end_clean();
 
+		// フック処理を実行
+		$this->_execHook('loadtemplate.end');
+		
 		return $this->_output;
+	}
+	/**
+	 * イベントフック処理
+	 *
+	 * @return				なし
+	 */
+	public function _loadtemplateStartHook()
+	{
+		global $gInstanceManager;
+		
+		$item = func_get_arg(0);
+		
+		// 個別記事で「もっと読む」ボタンのラベルが設定されている場合は、ラベルを変更
+		if (!empty($item->readmorelavel)) $gInstanceManager->getMessageManager()->replaceJoomlaText('COM_CONTENT_READ_MORE_TITLE', $item->readmorelavel);
+	}
+	/**
+	 * フック処理を追加
+	 *
+	 * @param string $name			フックポイント名
+	 * @param object $method		実行メソッド
+	 * @param array $methodParam	メソッド用パラメータ
+	 * @return bool					true=成功、false=失敗
+	 */
+	private function _addHook($name, $method)
+	{
+		$this->_hookPoints[$name] = $method;			// フック管理用
+		return true;
+	}
+	/**
+	 * フック処理を削除
+	 *
+	 * @param string $name			フックポイント名
+	 * @return bool					true=成功、false=失敗
+	 */
+	private function _removeHook($name)
+	{
+		unset($this->_hookPoints[$name]);
+		return true;
+	}
+	/**
+	 * すべてのフック処理を削除
+	 *
+	 * @return bool					true=成功、false=失敗
+	 */
+	private function _removeAllHook()
+	{
+		if (!empty($this->_hookPoints)) $this->_hookPoints = array();			// フック管理用
+		return true;
+	}
+	/**
+	 * フック処理を実行
+	 *
+	 * @param string $name			フックポイント名
+	 * @param array $methodParam	メソッド用パラメータ
+	 * @return bool					true=成功、false=失敗
+	 */
+	private function _execHook($name, $methodParam = array())
+	{
+		$method = $this->_hookPoints[$name];			// フック管理用
+		
+		if (is_callable($method)){
+			call_user_func_array($method, $methodParam);
+		}
+		return true;
 	}
 }
 ?>
