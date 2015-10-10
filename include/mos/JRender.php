@@ -197,6 +197,7 @@ class JRender extends JParameter
 			$this->item->params->set('show_title', 1);
 			*/
 			// ページタイトルの設定方法を以下に変更(2015/10/6)
+			// Joomla!新型描画処理用(Joomla!1.5以上、Themler)
 			$this->params->set('show_page_heading', 1);
 			$this->params->set('page_heading', $title);
 			// Bootstrapテンプレート用

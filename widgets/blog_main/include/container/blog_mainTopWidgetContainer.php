@@ -33,6 +33,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $currentHour;		// 現在時間
 	private $currentPageUrl;			// 現在のページURL
 	private $viewItemsData = array();			// Joomla!ビュー用データ
+	private $buttonList;		// コンテンツ編集ボタン
 	// 表示制御
 	private $isSystemManageUser;	// システム運用可能ユーザかどうか
 	private $preview;				// プレビューモードかどうか
@@ -231,9 +232,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// 共通ボタン作成
 		if (self::$_canEditEntry){		// 記事編集権限ありのとき
-			$buttonList = $this->createButtonTag(0);// 新規作成ボタン
+			$this->buttonList = $this->createButtonTag(0);// 新規作成ボタン
 		} else {
-			$buttonList = '';
+			$this->buttonList = '';
 		}
 		
 		// タイトルのタグレベル
@@ -302,7 +303,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (self::$_canEditEntry){		// 記事編集権限ありのとき
 			// 共通ボタン埋め込み
 			$this->tmpl->setAttribute('button_list', 'visibility', 'visible');
-			$this->tmpl->addVar("button_list", "button_list", $buttonList);
+			$this->tmpl->addVar("button_list", "button_list", $this->buttonList);
 			
 			// 設定画面表示用のスクリプトを埋め込む
 			$multiBlogParam = '';		// マルチブログ時の追加パラメータ
@@ -1133,21 +1134,28 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$contentInfo = array();
 		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $fetchedRow['be_id'];			// コンテンツ置換キー(エントリーID)
 		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
-//		$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $author;			// コンテンツ置換キー(著者)
 		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['be_name'];			// コンテンツ置換キー(タイトル)
 		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['be_description'];			// コンテンツ置換キー(簡易説明)
 		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
 		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $fetchedRow['be_create_dt'];		// コンテンツ置換キー(更新日時)
-//		$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $date;		// コンテンツ置換キー(登録日時)
-//		$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($date);		// コンテンツ置換キー(登録日)
-//		$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($date);		// コンテンツ置換キー(登録時)
 		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $fetchedRow['be_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
 		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $fetchedRow['be_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
 		if ($this->useMultiBlog && !empty($blogId)){
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_ID]		= $blogId;			// コンテンツ置換キー(ブログID)
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_TITLE]	= $fetchedRow['bl_name'];			// コンテンツ置換キー(ブログタイトル)
 		}
-
+		if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!最新テンプレートの場合
+			$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = '';			// コンテンツ置換キー(著者)
+			$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = '';		// コンテンツ置換キー(登録日時)
+			$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = '';		// コンテンツ置換キー(登録日)
+			$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = '';		// コンテンツ置換キー(登録時)
+		} else {
+			$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $author;			// コンテンツ置換キー(著者)
+			$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = $date;		// コンテンツ置換キー(登録日時)
+			$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = $this->timestampToDate($date);		// コンテンツ置換キー(登録日)
+			$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = $this->timestampToTime($date);		// コンテンツ置換キー(登録時)
+		}
+		
 		// HTMLを出力(出力内容は特にエラーチェックしない)
 		$isMoreContentExists = false;		// 「もっと読む」ボタンを作成するかどうか
 		$entryHtml = $fetchedRow['be_html'];
@@ -1181,6 +1189,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$entryHtml = $this->createDetailContent($this->viewMode, $contentParam);
 		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
 		
+		// タイトルを付加
+		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) $entryHtml = $titleTag . $entryHtml;
+		
 		// コンテンツ編集権限がある場合はボタンを表示
 		$buttonList = '';
 		if (self::$_canEditEntry) $buttonList = $this->createButtonTag($fetchedRow['be_serial']);// 編集権限があるとき
@@ -1193,15 +1204,17 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->tmpl->parseTemplate('entrylist', 'a');
 		$this->isExistsViewData = true;				// 表示データがあるかどうか
 		
-		// ##### Joomla!ビュー用データ作成 #####
+		//##### Joomla!新型描画処理でない場合は終了 #####
+		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) return true;
+		
+		// ### Joomla!ビュー用データ作成 ###
 		$viewItem = new stdClass;
-
-		$viewItem->id		= $entryId;	// コンテンツID
-		$viewItem->title	= $title;	// コンテンツ名
-		$viewItem->introtext	= $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
-		$viewItem->text = $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
-		$viewItem->state	= 1;			// 表示モード(0=新着,1=表示済み)
-		$viewItem->url		= $linkUrl;						// リンク先。viewItem->urlはMagic3の拡張値。
+		$viewItem->id			= $entryId;	// コンテンツID
+		$viewItem->title		= $title;	// コンテンツ名
+		$viewItem->introtext	= $this->buttonList . $buttonList . $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
+		$viewItem->text			= $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
+		$viewItem->state		= 1;			// 表示モード(0=新着,1=表示済み)
+		$viewItem->url			= $linkUrl;						// リンク先。viewItem->urlはMagic3の拡張値。
 		
 		// 「もっと読む」のボタンを表示するかどうかは$viewItem->readmoreに値が設定されているかどうかで判断する
 		if ($isMoreContentExists){
