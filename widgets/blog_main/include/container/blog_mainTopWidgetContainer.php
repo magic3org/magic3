@@ -56,6 +56,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $headDesc;		// METAタグ要約
 	private $headKeyword;	// METAタグキーワード
 	private $addLib = array();		// 追加スクリプト
+	private $headScript;	// HTMLヘッダに埋め込むJavascript
 	private $viewMode;					// 表示モード
 	private $showListType;				// 一覧表示タイプ
 	private $viewParam = array();					// 表示用パラメータ
@@ -254,17 +255,17 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		switch ($this->viewMode){					// 表示モード
 			case 0:			// トップ一覧表示
 			default:
-				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
+//				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
 				$this->listRender = $this->setListRender();			// 一覧タイプで出力
 				$this->showTopList($request);
 				break;
 			case 1:			// 記事一覧表示
-				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
+//				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
 				$this->listRender = $this->setListRender();			// 一覧タイプで出力
 				$this->showList($request);
 				break;
 			case 2:			// 検索一覧表示
-				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
+//				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
 				$this->showSearchList($request);
 				break;
 			case 10:			// 記事単体表示
@@ -322,9 +323,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			if ($this->isSystemManageUser){		// 管理者権限ありのとき
 				$editUrl = $this->getConfigAdminUrl('openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam);
 				$configUrl = $this->getConfigAdminUrl('openby=other');
-				$this->tmpl->setAttribute('admin_script', 'visibility', 'visible');
+				
+/*				$this->tmpl->setAttribute('admin_script', 'visibility', 'visible');
 				$this->tmpl->addVar("admin_script", "edit_url", $editUrl);
-				$this->tmpl->addVar("admin_script", "config_url", $configUrl);
+				$this->tmpl->addVar("admin_script", "config_url", $configUrl);*/
+				$this->headScript = $this->getParsedTemplateData('edit.tmpl.js', array($this, 'makeScript'), array(0/*管理者用スクリプト*/, $multiBlogParam));
 			} else {			// 投稿ユーザのとき
 				// 投稿管理画面へのURL作成
 				$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
@@ -340,9 +343,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$editUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
 
 				// 設定画面表示用のスクリプトを埋め込む
-				$this->tmpl->setAttribute('edit_script', 'visibility', 'visible');
+/*				$this->tmpl->setAttribute('edit_script', 'visibility', 'visible');
 				$this->tmpl->addVar("edit_script", "config_url", $this->getUrl($configUrl));
 				$this->tmpl->addVar("edit_script", "edit_url", $this->getUrl($editUrl));
+				*/
+				$this->headScript = $this->getParsedTemplateData('edit.tmpl.js', array($this, 'makeScript'), array(1/*投稿者用スクリプト*/, $multiBlogParam));
 			}
 		}
 	}
@@ -925,6 +930,20 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		return $this->addLib;
 	}
 	/**
+	 * JavascriptをHTMLヘッダ部に設定
+	 *
+	 * CSSデータをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptToHead($request, &$param)
+	{
+		return $this->headScript;
+	}
+	/**
 	 * CSSファイルをHTMLヘッダ部に設定
 	 *
 	 * CSSファイルをHTMLのheadタグ内に追加出力する。
@@ -1323,6 +1342,47 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->editIconPos = self::EDIT_ICON_MIN_POS;			// アイコンの位置を初期位置に戻す
 		}
 		return $buttonList;
+	}
+	/**
+	 * Javascriptデータ作成処理コールバック
+	 *
+	 * @param object  $tmpl			テンプレートオブジェクト
+	 * @param array   $params		スクリプトのタイプ(0=管理者用、1=投稿者用)とマルチブログ用クエリー文字列の配列
+	 * @param						なし
+	 */
+	function makeScript($tmpl, $params)
+	{
+		list($type, $multiBlogParam) = $params;
+		
+		switch ($type){
+		case 0:		// 管理者用
+			$editUrl = $this->getConfigAdminUrl('openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam);
+			$configUrl = $this->getConfigAdminUrl('openby=other');
+			
+			$tmpl->setAttribute('admin_script', 'visibility', 'visible');
+			$tmpl->addVar("admin_script", "edit_url", $editUrl);
+			$tmpl->addVar("admin_script", "config_url", $configUrl);
+			break;
+		case 1:		// 投稿者用
+			// 投稿管理画面へのURL作成
+			$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
+			$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
+			$urlparam .= 'openby=other' . $multiBlogParam;
+			$configUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
+
+			// 編集用画面へのURL作成
+			$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
+			$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
+			$urlparam .= 'openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
+			//$urlparam .= 'openby=other&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
+			$editUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
+
+			// 設定画面表示用のスクリプトを埋め込む
+			$tmpl->setAttribute('edit_script', 'visibility', 'visible');
+			$tmpl->addVar("edit_script", "config_url", $this->getUrl($configUrl));
+			$tmpl->addVar("edit_script", "edit_url", $this->getUrl($editUrl));
+			break;
+		}
 	}
 }
 ?>
