@@ -43,7 +43,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $useMultiBlog;			// マルチブログを使用するかどうか
 	private $isOutputComment;		// コメントを出力するかどうか
 	private $receiveComment;		// コメントを受け付けるかどうか
-	private $listRender;			// リスト型出力かどうか
 
 	// 表示項目
 	private $entryViewCount;// 記事表示数
@@ -221,16 +220,20 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			case 0:			// トップ一覧表示
 			default:
 //				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
-				$this->listRender = $this->setListRender();			// 一覧タイプで出力
+				$this->setListRender();			// 一覧タイプで出力
+				
 				$this->showTopList($request);
 				break;
 			case 1:			// 記事一覧表示
 //				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
-				$this->listRender = $this->setListRender();			// 一覧タイプで出力
+				$this->setListRender();			// 一覧タイプで出力
+				
 				$this->showList($request);
 				break;
 			case 2:			// 検索一覧表示
 //				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
+				$this->setListRender();			// 一覧タイプで出力
+				
 				$this->showSearchList($request);
 				break;
 			case 10:			// 記事単体表示
@@ -271,7 +274,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// ##### Joomla!新型テンプレートに記事データを設定 #####
-		if ($this->_renderType == M3_RENDER_JOOMLA_NEW) $this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
+		if ($this->_renderType == M3_RENDER_JOOMLA_NEW) $this->setEntryViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
 		
 		// ##### 運用可能ユーザの場合は編集用ボタンを表示 #####
 		$this->createEditButton();
