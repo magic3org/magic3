@@ -180,7 +180,7 @@ class JRender extends JParameter
 		$this->item = new stdClass;
 		$this->article = new stdClass;
 		$this->item->params = new JParameter();
-		$this->pagination = new JParameter();		// 暫定(2013/1/7)
+		$this->pagination = new JParameter();
 		$this->user = new JUser();
 		// Bootstrapテンプレート用
 		$this->pageheading = '';		// ページタイトル用
@@ -232,7 +232,7 @@ $this->item->title = '****';*/
 		$this->item->event->beforeDisplayContent = '';		// ページ遷移用タグ(前置)
 		$this->item->event->afterDisplayContent = '';		// ページ遷移用タグ(後置)
 		
-		// ページ遷移ナビゲーション作成
+		// ページ前後遷移ナビゲーション作成
 		$pageNavData = $gEnvManager->getJoomlaPageNavData();		// ナビゲーション情報取得
 		if (!empty($pageNavData)){
 			$this->item->params->set('show_item_navigation', 1);		// ページ遷移ナビゲーション表示
@@ -248,7 +248,14 @@ $this->item->title = '****';*/
 			);
 			$this->item->event->afterDisplayContent = trim(implode("\n", $results));		// ページ遷移用タグ(後置)
 		}
-
+		// ページ番号遷移ナビゲーション作成
+		$paginationData = $gEnvManager->getJoomlaPaginationData();
+		if (empty($paginationData)){
+			require_once($gEnvManager->getJoomlaRootPath() . '/class/paginationObject.php');
+			require_once($gEnvManager->getJoomlaRootPath() . '/class/pagination.php');
+			$this->pagination = new JPagination(5, 1, 10);
+		}
+		
 		// 処理を行うテンプレートを取得
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
 		

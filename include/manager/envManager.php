@@ -81,7 +81,8 @@ class EnvManager extends Core
 	private $joomlaDocument;		// Joomla!ドキュメント
 	private $joomlaMenuContent;		// Joomla!v1.5用メニューコンテンツ
 	private $joomlaMenuData;		// Joomla!v2.5用メニュー階層データ
-	private $joomlaPageNavData;		// Joomla!v2.5用ページ遷移データ
+	private $joomlaPageNavData;		// Joomla!v2.5用ページ前後遷移データ
+	private $joomlaPaginationData;	// Joomla!v2.5用ページ番号遷移データ
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
 	private $defaultLacaleArray;	// デフォルトのロケール取得用
 	private $selectedMenuItems = array();				// 現在選択中のメニュー項目
@@ -2946,7 +2947,7 @@ class EnvManager extends Core
 		return $this->joomlaMenuData;
 	}
 	/**
-	 * Joomla!v2.5用ページ遷移データを設定
+	 * Joomla!v2.5用ページ前後遷移データを設定
 	 *
 	 * @param array $navData		ページ遷移データ
 	 * @return 						なし
@@ -2956,13 +2957,32 @@ class EnvManager extends Core
 		$this->joomlaPageNavData = $navData;
 	}
 	/**
-	 * Joomla!v2.5用ページ遷移データを取得
+	 * Joomla!v2.5用ページ前後遷移データを取得
 	 *
 	 * @return array		ページ遷移データ
 	 */
 	public function getJoomlaPageNavData()
 	{
 		return $this->joomlaPageNavData;
+	}
+	/**
+	 * Joomla!v2.5用ページ番号遷移データを設定
+	 *
+	 * @param array $data		ページ遷移データ
+	 * @return 					なし
+	 */
+	public function setJoomlaPaginationData($data)
+	{
+		$this->joomlaPaginationData = $data;
+	}
+	/**
+	 * Joomla!v2.5用ページ番号遷移データを取得
+	 *
+	 * @return array		ページ遷移データ
+	 */
+	public function getJoomlaPaginationData()
+	{
+		return $this->joomlaPaginationData;
 	}
 	/**
 	 * Joomla!用ビュー作成用データを設定
