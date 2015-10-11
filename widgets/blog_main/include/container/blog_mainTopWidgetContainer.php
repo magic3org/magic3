@@ -152,28 +152,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if (empty($this->blogId)) $this->blogId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ID_SHORT);		// 略式ブログID
 		$keyword = $request->trimValueOf('keyword');// 検索キーワード
 		
-/*		if ($act == 'search' || !empty($keyword)){
-			$this->viewMode = 2;					// 表示モード(検索一覧表示)
-			return 'list.tmpl.html';		// 検索結果一覧
-		} else {
-			$year = $request->trimValueOf('year');		// 年指定
-			$month = $request->trimValueOf('month');		// 月指定
-			$category = $request->trimValueOf(M3_REQUEST_PARAM_CATEGORY_ID);		// カテゴリID
-			if (!empty($category) || !empty($year) || !empty($month)){
-				$this->viewMode = 1;					// 表示モード(記事一覧表示)
-				return 'list.tmpl.html';	// 記事一覧
-			} else if (empty($this->entryId)){
-				$this->viewMode = 0;					// 表示モード(トップ一覧表示)
-				return 'list.tmpl.html';		// トップ画面記事一覧
-			} else {
-				$this->viewMode = 10;					// 表示モード(記事単体表示)
-				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
-					return 'single_bootstrap.tmpl.html';		// 記事詳細
-				} else {
-					return 'single.tmpl.html';		// 記事詳細
-				}
-			}
-		}*/
 		if (!empty($this->entryId)){		// 記事IDがある場合を優先
 			$this->viewMode = 10;					// 表示モード(記事単体表示)
 			if ($this->_renderType == M3_RENDER_BOOTSTRAP){
@@ -238,20 +216,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->buttonList = '';
 		}
 		
-		// タイトルのタグレベル
-		switch ($this->viewMode){					// 表示モード
-			case 0:			// トップ一覧表示
-			default:
-//				if (!$this->useWidgetTitle && !empty($this->title)) $this->itemTagLevel++;
-				break;
-			case 1:			// 記事一覧表示
-			case 2:			// 検索一覧表示
-//				if (!$this->useWidgetTitle) $this->itemTagLevel++;
-				break;
-			case 10:			// 記事単体表示
-				break;
-		}
-		
+		// ビューデータ作成
 		switch ($this->viewMode){					// 表示モード
 			case 0:			// トップ一覧表示
 			default:
@@ -296,60 +261,20 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 
 		// メッセージを表示
 		if (!empty($this->message)){
-			$this->tmpl->setAttribute('message', 'visibility', 'visible');
-			$this->tmpl->addVar("message", "message", $this->convertToDispString($this->message, true/*タグを残す*/));
+			if ($this->_renderType == M3_RENDER_JOOMLA_NEW){
+				// Joomla!新型テンプレートの先頭にメッセージ追加
+				$this->addPageHeadingContent($this->message);
+			} else {
+				$this->tmpl->setAttribute('message', 'visibility', 'visible');
+				$this->tmpl->addVar("message", "message", $this->convertToDispString($this->message, true/*タグを残す*/));
+			}
 		}
 		
-		// 運用可能ユーザの場合は編集用ボタンを表示
-		if (self::$_canEditEntry){		// 記事編集権限ありのとき
-			// 共通ボタン埋め込み
-			$this->tmpl->setAttribute('button_list', 'visibility', 'visible');
-			$this->tmpl->addVar("button_list", "button_list", $this->buttonList);
-			
-			// 設定画面表示用のスクリプトを埋め込む
-			$multiBlogParam = '';		// マルチブログ時の追加パラメータ
-			if ($this->useMultiBlog){
-				// ブログIDが空のときは取得
-				if (empty($this->blogId)){
-					$bId = '';
-					$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
-					if (isset($blogLibObj)) $bId = $blogLibObj->getBlogId();
-					if (!empty($bId)) $multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $bId;
-				} else {
-					$multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $this->blogId;
-				}
-			}
-			
-			if ($this->isSystemManageUser){		// 管理者権限ありのとき
-				$editUrl = $this->getConfigAdminUrl('openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam);
-				$configUrl = $this->getConfigAdminUrl('openby=other');
-				
-/*				$this->tmpl->setAttribute('admin_script', 'visibility', 'visible');
-				$this->tmpl->addVar("admin_script", "edit_url", $editUrl);
-				$this->tmpl->addVar("admin_script", "config_url", $configUrl);*/
-				$this->headScript = $this->getParsedTemplateData('edit.tmpl.js', array($this, 'makeScript'), array(0/*管理者用スクリプト*/, $multiBlogParam));
-			} else {			// 投稿ユーザのとき
-				// 投稿管理画面へのURL作成
-				$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
-				$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
-				$urlparam .= 'openby=other' . $multiBlogParam;
-				$configUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
-
-				// 編集用画面へのURL作成
-				$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
-				$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
-				$urlparam .= 'openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
-				//$urlparam .= 'openby=other&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
-				$editUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
-
-				// 設定画面表示用のスクリプトを埋め込む
-/*				$this->tmpl->setAttribute('edit_script', 'visibility', 'visible');
-				$this->tmpl->addVar("edit_script", "config_url", $this->getUrl($configUrl));
-				$this->tmpl->addVar("edit_script", "edit_url", $this->getUrl($editUrl));
-				*/
-				$this->headScript = $this->getParsedTemplateData('edit.tmpl.js', array($this, 'makeScript'), array(1/*投稿者用スクリプト*/, $multiBlogParam));
-			}
-		}
+		// ##### Joomla!新型テンプレートに記事データを設定 #####
+		if ($this->_renderType == M3_RENDER_JOOMLA_NEW) $this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
+		
+		// ##### 運用可能ユーザの場合は編集用ボタンを表示 #####
+		$this->createEditButton();
 	}
 	/**
 	 * 記事単体表示
@@ -510,9 +435,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->title = $this->titleNoEntry;
 			$this->message = $this->messageNoEntry;
 		}
-
-		// ##### 記事データを設定 #####
-		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
 		
 		// ### 前画面、次画面への遷移ボタンを追加 ###
 		if (empty($entryRow)) return;			// ブログ記事情報がない場合は終了
@@ -653,9 +575,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->message = $this->messageNoEntry;
 			}
 		}
-		
-		// ##### 記事データを設定 #####
-		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*「もっと読む」ボタンのタイトル*/);
 	}
 	/**
 	 * 検索結果画面表示
@@ -714,9 +633,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		$this->title = $this->titleSearchList;				// 検索一覧タイトル
 		$this->pageTitle = self::DEFAULT_TITLE_SEARCH;		// 画面タイトル、パンくずリスト用タイトル
-		
-		// ##### 記事データを設定 #####
-		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*「もっと読む」ボタンのタイトル*/);
 	}
 	/**
 	 * カテゴリー、アーカイブからの一覧画面表示
@@ -894,9 +810,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 		}
 		$this->pageTitle = $this->title;		// カテゴリー名を画面タイトルにする
-		
-		// ##### 記事データを設定 #####
-		$this->setEntryViewData($this->viewItemsData, $this->entryViewCount/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*「もっと読む」ボタンのタイトル*/);
 	}
 	/**
 	 * ヘッダ部メタタグの設定
@@ -1163,7 +1076,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_ID]		= $blogId;			// コンテンツ置換キー(ブログID)
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_TITLE]	= $fetchedRow['bl_name'];			// コンテンツ置換キー(ブログタイトル)
 		}
-		if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!最新テンプレートの場合
+		if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!新型テンプレートの場合
 			$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = '';			// コンテンツ置換キー(著者)
 			$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = '';		// コンテンツ置換キー(登録日時)
 			$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = '';		// コンテンツ置換キー(登録日)
@@ -1236,7 +1149,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		//##### Joomla!新型描画処理でない場合は終了 #####
 		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) return true;
 		
-		// ### Joomla!ビュー用データ作成 ###
+		// ### Joomla!新型テンプレート用データ作成 ###
 		$viewItem = new stdClass;
 		$viewItem->id			= $entryId;	// コンテンツID
 		$viewItem->title		= $title;	// コンテンツ名
@@ -1392,6 +1305,80 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$tmpl->addVar("edit_script", "config_url", $this->getUrl($configUrl));
 			$tmpl->addVar("edit_script", "edit_url", $this->getUrl($editUrl));
 			break;
+		}
+	}
+	/**
+	 * メッセージを追加
+	 *
+	 * @param string $msgHtml				メッセージコンテンツ
+	 * @return								なし
+	 */
+	function addPageHeadingContent($msgHtml)
+	{
+		// ### Joomla!新型テンプレート用データ作成 ###
+		$viewItem = new stdClass;
+		$viewItem->introtext	= $msgHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
+		$viewItem->text			= $msgHtml;	// コンテンツ内容(Joomla!1.5テンプレート用)
+		$viewItem->state		= 1;			// 表示モード(0=新着,1=表示済み)
+		
+		// 既存のビューデータの先頭に追加
+		$this->viewItemsData = array_merge(array($viewItem), $this->viewItemsData);
+	}
+	/**
+	 * 記事編集用のボタンを作成
+	 *
+	 * @return								なし
+	 */
+	function createEditButton()
+	{
+		if (self::$_canEditEntry){		// 記事編集権限ありのとき
+			// ### 共通ボタンタグ埋め込み ###
+			$this->tmpl->setAttribute('button_list', 'visibility', 'visible');
+			$this->tmpl->addVar("button_list", "button_list", $this->buttonList);
+			
+			// ### 編集ボタン用のスクリプトを埋め込む ###
+			$multiBlogParam = '';		// マルチブログ時の追加パラメータ
+			if ($this->useMultiBlog){
+				// ブログIDが空のときは取得
+				if (empty($this->blogId)){
+					$bId = '';
+					$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
+					if (isset($blogLibObj)) $bId = $blogLibObj->getBlogId();
+					if (!empty($bId)) $multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $bId;
+				} else {
+					$multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $this->blogId;
+				}
+			}
+			
+			if ($this->isSystemManageUser){		// 管理者権限ありのとき
+				$editUrl = $this->getConfigAdminUrl('openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam);
+				$configUrl = $this->getConfigAdminUrl('openby=other');
+				
+/*				$this->tmpl->setAttribute('admin_script', 'visibility', 'visible');
+				$this->tmpl->addVar("admin_script", "edit_url", $editUrl);
+				$this->tmpl->addVar("admin_script", "config_url", $configUrl);*/
+				$this->headScript = $this->getParsedTemplateData('edit.tmpl.js', array($this, 'makeScript'), array(0/*管理者用スクリプト*/, $multiBlogParam));
+			} else {			// 投稿ユーザのとき
+				// 投稿管理画面へのURL作成
+				$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
+				$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
+				$urlparam .= 'openby=other' . $multiBlogParam;
+				$configUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
+
+				// 編集用画面へのURL作成
+				$urlparam  = M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . '&';
+				$urlparam .= M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() .'&';
+				$urlparam .= 'openby=simple&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
+				//$urlparam .= 'openby=other&task=' . self::TASK_ENTRY_DETAIL . $multiBlogParam;
+				$editUrl = $this->gEnv->getDefaultUrl() . '?' . $urlparam;
+
+				// 設定画面表示用のスクリプトを埋め込む
+/*				$this->tmpl->setAttribute('edit_script', 'visibility', 'visible');
+				$this->tmpl->addVar("edit_script", "config_url", $this->getUrl($configUrl));
+				$this->tmpl->addVar("edit_script", "edit_url", $this->getUrl($editUrl));
+				*/
+				$this->headScript = $this->getParsedTemplateData('edit.tmpl.js', array($this, 'makeScript'), array(1/*投稿者用スクリプト*/, $multiBlogParam));
+			}
 		}
 	}
 }

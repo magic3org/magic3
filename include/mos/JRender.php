@@ -392,6 +392,7 @@ $this->item->title = '****';*/
 					$contents = getCustomComponentContent($contents, $matches[1]);
 //debug('#content area='.$matches[1]);		// デバッグ用
 				}
+				// ### ウィジェットエラーメッセージはここでコンテンツの先頭に追加して表示する? ###
 			}
 		}
 		return $contents;

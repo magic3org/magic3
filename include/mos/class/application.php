@@ -452,8 +452,16 @@ class JApplication extends JObject
 	 */
 	public function getMessageQueue()
 	{
+		global $gEnvManager;
+		
+		// ウィジェット実行後に呼ばれる。セッションから値を取得するのがよい?
+/*		$widgetObj = $gEnvManager->getCurrentWidgetObj();
+		var_dump($widgetObj->errorMessage);
+		debug($gEnvManager->getCurrentWidgetId());
+		*/
+		//count($this->dangerMessage) + count($this->errorMessage) + count($this->warningMessage) + count($this->infoMessage) + count($this->guideMessage) + count($this->successMessage);
 		// For empty queue, if messages exists in the session, enqueue them.
-		if (!count($this->_messageQueue)) {
+/*		if (!count($this->_messageQueue)) {
 			$session = JFactory::getSession();
 			$sessionQueue = $session->get('application.queue');
 
@@ -462,8 +470,9 @@ class JApplication extends JObject
 				$session->set('application.queue', null);
 			}
 		}
-
 		return $this->_messageQueue;
+		*/
+//		$this->_messageQueue[] = array('message' => 'message', 'type' => 'info');
 	}
 
 	/**
