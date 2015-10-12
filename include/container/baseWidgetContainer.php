@@ -3538,6 +3538,9 @@ class BaseWidgetContainer extends Core
 	 */
 	function setJoomlaPageNavData($pos, $prevUrl, $nextUrl, $prevTitle = null, $nextTitle = null)
 	{
+		// Joomla!新型テンプレートでない場合は終了
+		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) return;
+		
 		$pageNavData = array();
 		$pageNavData['pos']			= $pos;
 		$pageNavData['prev']		= $prevUrl;
@@ -3558,6 +3561,9 @@ class BaseWidgetContainer extends Core
 	 */
 	function setJoomlaViewData($viewItemsData, $leadContentCount, $columnContentCount, $columnCount, $readMoreTitle = '')
 	{
+		// Joomla!新型テンプレートでない場合は終了
+		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) return;
+		
 		// Joomla!ビュー用データを設定
 		$viewData = array();
 		$viewData['Items'] = $viewItemsData;
@@ -3571,15 +3577,19 @@ class BaseWidgetContainer extends Core
 	/**
 	 * ページ番号遷移データを設定(一般画面用)
 	 *
-	 * @param int $totalCount	項目総数
-	 * @param int $itemOffset	最初の項目のオフセット
-	 * @param int $viewCount	1ページあたりの表示項目数
-	 * @return					なし
+	 * @param array $pageLinkInfo	リンクページ情報
+	 * @param int $totalCount		項目総数
+	 * @param int $itemOffset		最初の項目のオフセット
+	 * @param int $viewCount		1ページあたりの表示項目数
+	 * @return						なし
 	 */
-	function setJoomlaPaginationData($totalCount, $itemOffset, $viewCount)
+	function setJoomlaPaginationData($pageLinkInfo, $totalCount, $itemOffset, $viewCount)
 	{
+		// Joomla!新型テンプレートでない場合は終了
+		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) return;
+		
 		$paginationData = array();
-//		$paginationData['Items'] = $viewItemsData;
+		$paginationData['pagelinks'] = $pageLinkInfo;
 		
 		$paginationData['total']	= $totalCount;				// 項目総数
 		$paginationData['offset']	= $itemOffset;				// 最初の項目のオフセット
@@ -3630,6 +3640,15 @@ class BaseWidgetContainer extends Core
 			$pageLink = $this->gDesign->createPageLink($pageNo, $this->_linkPageCount, $linkCount, $this->getUrl($baseUrl, true/*リンク用*/), ''/*追加パラメータなし*/, $style);
 		}
 		return $pageLink;
+	}
+	/**
+	 * ページリンク情報取得
+	 *
+	 * @return array			ページリンク情報
+	 */
+	function getPageLinkInfo()
+	{
+		return $this->gDesign->getPageLinkInfo();
 	}
 	/**
 	 * 現在のウィジェットがナビゲーションメニュー対応すべきかを取得

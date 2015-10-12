@@ -754,6 +754,12 @@ class JPagination
 	 */
 	protected function _buildDataObject()
 	{
+		global $gEnvManager;
+		
+		// ##### ページ遷移ナビゲーション情報を取得 #####
+		$paginationData = $gEnvManager->getJoomlaPaginationData();
+		if (!empty($paginationData)) $pageLinkInfo = $paginationData['pagelinks'];
+		
 		$data = new stdClass;
 
 		// Build the additional URL parameters string.
@@ -772,7 +778,7 @@ class JPagination
 		if (!$this->viewall)
 		{
 			$data->all->base = '0';
-			$data->all->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=');
+//			$data->all->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=');
 		}
 
 		// Set the start and previous data objects.
@@ -787,9 +793,11 @@ class JPagination
 			// @todo remove code: $page = $page == 0 ? '' : $page;
 
 			$data->start->base = '0';
-			$data->start->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=0');
+//			$data->start->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=0');
+			$data->start->link = $pageLinkInfo['start']['link'];
 			$data->previous->base = $page;
-			$data->previous->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $page);
+//			$data->previous->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $page);
+			$data->previous->link = $pageLinkInfo['previous']['link'];
 		}
 
 		// Set the next and end data objects.
@@ -802,9 +810,11 @@ class JPagination
 			$end = ($this->pagesTotal - 1) * $this->limit;
 
 			$data->next->base = $next;
-			$data->next->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $next);
+//			$data->next->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $next);
+			$data->next->link = $pageLinkInfo['next']['link'];
 			$data->end->base = $end;
-			$data->end->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $end);
+//			$data->end->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $end);
+			$data->end->link = $pageLinkInfo['end']['link'];
 		}
 
 		$data->pages = array();
@@ -819,7 +829,13 @@ class JPagination
 			if ($i != $this->pagesCurrent || $this->viewall)
 			{
 				$data->pages[$i]->base = $offset;
-				$data->pages[$i]->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $offset);
+//				$data->pages[$i]->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $offset);
+				if ($i == 1){
+					$data->pages[$i]->link = $data->start->link;
+				} else {
+					$linkFormat = $pageLinkInfo['format'];
+					$data->pages[$i]->link = str_replace('$1', $i, $linkFormat);
+				}
 			}
 			else
 			{

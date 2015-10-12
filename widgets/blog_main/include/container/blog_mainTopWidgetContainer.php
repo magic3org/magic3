@@ -274,7 +274,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// ##### Joomla!新型テンプレートに記事データを設定 #####
-		if ($this->_renderType == M3_RENDER_JOOMLA_NEW) $this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
+		$this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
 		
 		// ##### 運用可能ユーザの場合は編集用ボタンを表示 #####
 		$this->createEditButton();
@@ -557,6 +557,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$multiBlogParam = '';		// マルチブログ時の追加パラメータ
 			if ($this->useMultiBlog) $multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $targetBlogId;
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . $multiBlogParam);
+			
+			// 作成されたページリンク情報を取得
+			$pageLinkInfo = $this->getPageLinkInfo();
 
 			// 記事一覧作成
 			if ($this->isSystemManageUser){		// システム管理ユーザの場合
@@ -574,7 +577,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->tmpl->addVar("page_link", "page_link", $pageLink);
 				}
 				// ##### ページ番号遷移ナビゲーションを作成 #####
-				$this->setJoomlaPaginationData($totalCount, ($this->pageNo -1) * $this->entryViewCount/*先頭に表示する項目のオフセット番号*/, $this->entryViewCount);
+				$this->setJoomlaPaginationData($pageLinkInfo, $totalCount, ($this->pageNo -1) * $this->entryViewCount/*先頭に表示する項目のオフセット番号*/, $this->entryViewCount);
 			} else {	// ブログ記事データがないときはデータなしメッセージ追加
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;

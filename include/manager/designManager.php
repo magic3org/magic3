@@ -22,6 +22,7 @@ class DesignManager extends Core
 	private $_getUrlCallback;		// URL変換(getUrl())用コールバック関数
 	private $db;						// DBオブジェクト
 	private $defaultMenuParam;			// デフォルトメニュー用パラメータ
+	private $pageLinkInfo;				// ページリンク情報
 	private $iconExts = array('png', 'gif');
 	const DEFAULT_MENU_PARAM_KEY = 'default_menu_param';		// designテーブルのフィールド名
 //	const DEFAULT_MENU_PARAM_INIT_VALUE = 'class="moduletable" width="100%" border="0" cellpadding="0" cellspacing="1"';	// デフォルトメニューのtagのパラメータデフォルト値
@@ -235,6 +236,9 @@ class DesignManager extends Core
 	 */
 	function createPageLink($pageNo, $pageCount, $linkCount, $baseUrl, $urlParams = '', $style = 0, $clickEvent = '')
 	{
+		// ページリンク情報初期化
+		$this->pageLinkInfo = array();
+		
 		// パラメータ修正
 		if (!empty($urlParams) && !strStartsWith($urlParams, '&')) $urlParams = '&' . $urlParams;
 		
@@ -286,6 +290,9 @@ class DesignManager extends Core
 						break;
 				}
 			}
+			
+			// ### Joomla!新型テンプレート用のページ遷移ナビゲーションデータを作成 ###
+			$this->pageLinkInfo['format']	= $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=$1' . $urlParams;
 		}
 		if ($pageNo > 1){		// 前ページがあるとき
 			$linkUrl = '';
@@ -305,6 +312,10 @@ class DesignManager extends Core
 					break;
 			}
 			$pageLink = $link . $pageLink;
+			
+			// ### Joomla!新型テンプレート用のページ遷移ナビゲーションデータを作成 ###
+			$this->pageLinkInfo['start']	= array( 'link' => $baseUrl . $urlParams );
+			$this->pageLinkInfo['previous']	= array( 'link' => $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo -1) . $urlParams );
 		}
 		if ($pageNo < $pageCount){		// 次ページがあるとき
 			$linkUrl = '';
@@ -324,6 +335,10 @@ class DesignManager extends Core
 					break;
 			}
 			$pageLink .= $link;
+			
+			// ### Joomla!新型テンプレート用のページ遷移ナビゲーションデータを作成 ###
+			$this->pageLinkInfo['next']		= array( 'link' => $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . ($pageNo +1) . $urlParams );
+			$this->pageLinkInfo['end']		= array( 'link' => $baseUrl . '&' . M3_REQUEST_PARAM_PAGE_NO . '=' . $pageCount . $urlParams );
 		}
 		if (!empty($pageLink)){
 			switch ($style){
@@ -337,6 +352,15 @@ class DesignManager extends Core
 			}
 		}
 		return $pageLink;
+	}
+	/**
+	 * ページリンク情報取得
+	 *
+	 * @return array			ページリンク情報
+	 */
+	function getPageLinkInfo()
+	{
+		return $this->pageLinkInfo;
 	}
 	/**
 	 * 管理画面遷移用タグ作成
