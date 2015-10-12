@@ -261,12 +261,15 @@ class JPagination
 	public function getPagesCounter()
 	{
 		$html = null;
-
+		
+		// 現在のページ番号、総ページ数は使用しない
+/*
 		if ($this->pagesTotal > 1)
 		{
-			$html .= JText::sprintf('JLIB_HTML_PAGE_CURRENT_OF_TOTAL', $this->pagesCurrent, $this->pagesTotal);
+//			$html .= JText::sprintf('JLIB_HTML_PAGE_CURRENT_OF_TOTAL', $this->pagesCurrent, $this->pagesTotal);
+			$html .= JText::sprintf('COM_CONTENT_PAGE_CURRENT_OF_TOTAL', $this->pagesCurrent, $this->pagesTotal);
 		}
-
+*/
 		return $html;
 	}
 
@@ -705,7 +708,7 @@ class JPagination
 
 		if (!is_numeric($item->text))
 		{
-			JHtml::_('bootstrap.tooltip');
+//			JHtml::_('bootstrap.tooltip');
 			$title = ' title="' . $item->text . '"';
 			$class = 'hasTooltip ';
 		}
@@ -773,8 +776,8 @@ class JPagination
 		}
 
 		// Set the start and previous data objects.
-		$data->start = new JPaginationObject(JText::_('JLIB_HTML_START'), $this->prefix);
-		$data->previous = new JPaginationObject(JText::_('JPREV'), $this->prefix);
+		$data->start = new JPaginationObject(JText::_('COM_CONTENT_START'), $this->prefix);
+		$data->previous = new JPaginationObject(JText::_('COM_CONTENT_PREV'), $this->prefix);
 
 		if ($this->pagesCurrent > 1)
 		{
@@ -790,8 +793,8 @@ class JPagination
 		}
 
 		// Set the next and end data objects.
-		$data->next = new JPaginationObject(JText::_('JNEXT'), $this->prefix);
-		$data->end = new JPaginationObject(JText::_('JLIB_HTML_END'), $this->prefix);
+		$data->next = new JPaginationObject(JText::_('COM_CONTENT_NEXT'), $this->prefix);
+		$data->end = new JPaginationObject(JText::_('COM_CONTENT_END'), $this->prefix);
 
 		if ($this->pagesCurrent < $this->pagesTotal)
 		{
@@ -840,7 +843,7 @@ class JPagination
 	 */
 	public function set($property, $value = null)
 	{
-		JLog::add('JPagination::set() is deprecated. Access the properties directly.', JLog::WARNING, 'deprecated');
+//		JLog::add('JPagination::set() is deprecated. Access the properties directly.', JLog::WARNING, 'deprecated');
 
 		if (strpos($property, '.'))
 		{
@@ -865,7 +868,7 @@ class JPagination
 	 */
 	public function get($property, $default = null)
 	{
-		JLog::add('JPagination::get() is deprecated. Access the properties directly.', JLog::WARNING, 'deprecated');
+//		JLog::add('JPagination::get() is deprecated. Access the properties directly.', JLog::WARNING, 'deprecated');
 
 		if (strpos($property, '.'))
 		{

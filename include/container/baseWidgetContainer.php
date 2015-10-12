@@ -3536,7 +3536,7 @@ class BaseWidgetContainer extends Core
 	 * @param string $nextTitle	次画面のタイトル(省略時はデフォルトのテキスト)
 	 * @return					なし
 	 */
-	function addPrevNextButton($pos, $prevUrl, $nextUrl, $prevTitle = null, $nextTitle = null)
+	function setJoomlaPageNavData($pos, $prevUrl, $nextUrl, $prevTitle = null, $nextTitle = null)
 	{
 		$pageNavData = array();
 		$pageNavData['pos']			= $pos;
@@ -3556,7 +3556,7 @@ class BaseWidgetContainer extends Core
 	 * @param string $readMoreTitle		「もっと読む」ボタンのタイトル(ウィジェットでのデフォルト値)
 	 * @return					なし
 	 */
-	function setEntryViewData($viewItemsData, $leadContentCount, $columnContentCount, $columnCount, $readMoreTitle = '')
+	function setJoomlaViewData($viewItemsData, $leadContentCount, $columnContentCount, $columnCount, $readMoreTitle = '')
 	{
 		// Joomla!ビュー用データを設定
 		$viewData = array();
@@ -3567,6 +3567,24 @@ class BaseWidgetContainer extends Core
 		$viewData['columnCount']		= $columnCount;					// カラム部(intro部)のカラム数
 		$viewData['readMoreTitle']		= $readMoreTitle;				// 「もっと読む」ボタンタイトル
 		$this->gEnv->setJoomlaViewData($viewData);
+	}
+	/**
+	 * ページ番号遷移データを設定(一般画面用)
+	 *
+	 * @param int $totalCount	項目総数
+	 * @param int $itemOffset	最初の項目のオフセット
+	 * @param int $viewCount	1ページあたりの表示項目数
+	 * @return					なし
+	 */
+	function setJoomlaPaginationData($totalCount, $itemOffset, $viewCount)
+	{
+		$paginationData = array();
+//		$paginationData['Items'] = $viewItemsData;
+		
+		$paginationData['total']	= $totalCount;				// 項目総数
+		$paginationData['offset']	= $itemOffset;				// 最初の項目のオフセット
+		$paginationData['viewcount']	= $viewCount;			// 1ページあたりの表示項目数
+		$this->gEnv->setJoomlaPaginationData($paginationData);
 	}
 	/**
 	 * ページリンク計算

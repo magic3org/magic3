@@ -250,10 +250,15 @@ $this->item->title = '****';*/
 		}
 		// ページ番号遷移ナビゲーション作成
 		$paginationData = $gEnvManager->getJoomlaPaginationData();
-		if (empty($paginationData)){
+		if (!empty($paginationData)){
 			require_once($gEnvManager->getJoomlaRootPath() . '/class/paginationObject.php');
 			require_once($gEnvManager->getJoomlaRootPath() . '/class/pagination.php');
-			$this->pagination = new JPagination(5, 1, 10);
+			
+			$totalCount = $paginationData['total'];				// 項目総数
+			$itemOffset	= $paginationData['offset'];			// 最初の項目のオフセット
+			$viewCount	= $paginationData['viewcount'];			// 1ページあたりの表示項目数
+			$this->pagination = new JPagination($totalCount, $itemOffset, $viewCount);
+//			$this->pagination = new JPagination(10, 2, 3);
 		}
 		
 		// 処理を行うテンプレートを取得

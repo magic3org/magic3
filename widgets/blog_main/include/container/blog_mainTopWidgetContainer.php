@@ -274,7 +274,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// ##### Joomla!新型テンプレートに記事データを設定 #####
-		if ($this->_renderType == M3_RENDER_JOOMLA_NEW) $this->setEntryViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
+		if ($this->_renderType == M3_RENDER_JOOMLA_NEW) $this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
 		
 		// ##### 運用可能ユーザの場合は編集用ボタンを表示 #####
 		$this->createEditButton();
@@ -485,7 +485,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			// 前画面、次画面遷移ボタン追加
 			$showPrevNextEntryLinkPos	= self::$_configArray[blog_mainCommonDef::CF_SHOW_PREV_NEXT_ENTRY_LINK];	// 前後記事リンクを表示するかどうか
 			$prevNextEntryLinkPos		= self::$_configArray[blog_mainCommonDef::CF_PREV_NEXT_ENTRY_LINK_POS];				// 前後記事リンク表示位置
-			if ($showPrevNextEntryLinkPos) $this->addPrevNextButton($prevNextEntryLinkPos, $prevUrl, $nextUrl);
+			if ($showPrevNextEntryLinkPos) $this->setJoomlaPageNavData($prevNextEntryLinkPos, $prevUrl, $nextUrl);
 		}
 	}
 	/**
@@ -536,14 +536,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if ($showTopContent){		// トップコンテンツを表示するとき
 			// トップコンテンツを表示。トップコンテンツがない場合はブログ記事表示
 			$topContent = self::$_configArray[blog_mainCommonDef::CF_MULTI_BLOG_TOP_CONTENT];// マルチブログ用トップコンテンツ
-			if (empty($topContent)){
+			if (empty($topContent)){		// トップコンテンツが設定されていない場合
 				$showTopContent = false;
 			} else {
 				$this->tmpl->setAttribute('show_top_content', 'visibility', 'visible');
 				$this->tmpl->addVar("show_top_content", "content", $topContent);
 			}
 		}
-		if (!$showTopContent){
+		if (!$showTopContent){				// トップコンテンツを表示しないとき
 			// 総数を取得
 			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				$totalCount = self::$_mainDb->getEntryItemsCount($this->now, $this->startDt, $this->endDt, ''/*検索キーワード*/, $this->_langId, $targetBlogId, null, $this->preview);
@@ -573,6 +573,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
 					$this->tmpl->addVar("page_link", "page_link", $pageLink);
 				}
+				// ##### ページ番号遷移ナビゲーションを作成 #####
+				$this->setJoomlaPaginationData($totalCount, ($this->pageNo -1) * $this->entryViewCount/*先頭に表示する項目のオフセット番号*/, $this->entryViewCount);
 			} else {	// ブログ記事データがないときはデータなしメッセージ追加
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;
