@@ -985,9 +985,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			break;
 		}
 		
-		// タイトル作成
-		$titleTag = '<h' . $this->itemTagLevel . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $this->convertToDispString($title) . '</a></h' . $this->itemTagLevel . '>';
-		
 		// ユーザ定義フィールド値取得
 		// 埋め込む文字列はHTMLエスケープする
 		if ($viewMode == 10){		// 記事単体表示の場合
@@ -1057,7 +1054,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$contentIdArray = array_map('trim', explode(',', $relatedContent));
 				$ret = self::$_mainDb->getEntryItem($contentIdArray, $this->_langId, $rows);
 				if ($ret){
-					$relatedContentTag .= '<h' . ($this->itemTagLevel + 1) . '>' . self::TITLE_RELATED_CONTENT_BLOCK . '</h' . ($this->itemTagLevel + 1) . '>';
+					if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!新型テンプレートのとき
+						$relatedContentTag .= '<h' . ($this->itemTagLevel) . '>' . self::TITLE_RELATED_CONTENT_BLOCK . '</h' . ($this->itemTagLevel) . '>';
+					} else {
+						$relatedContentTag .= '<h' . ($this->itemTagLevel + 1) . '>' . self::TITLE_RELATED_CONTENT_BLOCK . '</h' . ($this->itemTagLevel + 1) . '>';
+					}
 					$relatedContentTag .= '<ul>';
 					for ($i = 0; $i < count($rows); $i++){
 						$relatedUrl = $accessPointUrl . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $rows[$i]['be_id'];	// 関連コンテンツリンク先
@@ -1139,8 +1140,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$entryHtml = $this->createDetailContent($this->viewMode, $contentParam);
 		$entryHtml = $this->convertM3ToHtml($entryHtml, true/*改行コーをbrタグに変換*/, $contentInfo);		// コンテンツマクロ変換
 		
-		// タイトルを付加
-		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) $entryHtml = $titleTag . $entryHtml;
+		// タイトルを付加(コンテンツの先頭にタイトルを置く、旧タイトル設定方法)
+		if ($this->_renderType != M3_RENDER_JOOMLA_NEW){
+			$titleTag = '<h' . $this->itemTagLevel . '><a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $this->convertToDispString($title) . '</a></h' . $this->itemTagLevel . '>';
+			$entryHtml = $titleTag . $entryHtml;
+		}
 		
 		// コンテンツ編集権限がある場合はボタンを表示
 		$buttonList = '';
