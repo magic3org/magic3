@@ -318,6 +318,8 @@ class JPagination
 	 */
 	public function getPagesLinks()
 	{
+		global $gEnvManager;
+		
 		// Build the page navigation list.
 		$data = $this->_buildDataObject();
 
@@ -327,7 +329,8 @@ class JPagination
 		$itemOverride = false;
 		$listOverride = false;
 
-		$chromePath = JPATH_THEMES . '/' . $this->app->getTemplate() . '/html/pagination.php';
+//		$chromePath = JPATH_THEMES . '/' . $this->app->getTemplate() . '/html/pagination.php';
+		$chromePath = $gEnvManager->getTemplatesPath() . '/' . $this->app->getTemplate() . '/html/pagination.php';
 
 		if (file_exists($chromePath))
 		{
@@ -511,8 +514,11 @@ class JPagination
 	 */
 	public function getListFooter()
 	{
+		global $gEnvManager;
+		
 		// Keep B/C for overrides done with chromes
-		$chromePath = JPATH_THEMES . '/' . $this->app->getTemplate() . '/html/pagination.php';
+//		$chromePath = JPATH_THEMES . '/' . $this->app->getTemplate() . '/html/pagination.php';
+		$chromePath = $gEnvManager->getTemplatesPath() . '/' . $this->app->getTemplate() . '/html/pagination.php';
 
 		if (file_exists($chromePath))
 		{

@@ -672,6 +672,7 @@ class BaseFrameContainer extends Core
 			define('JPATH_BASE', dirname(__FILE__));
 			define('JPATH_SITE', $this->gEnv->getSystemRootPath());
 			define('JPATH_PLUGINS', $gEnvManager->getJoomlaRootPath() . '/class/plugins');			// プラグインパス
+//			define('JPATH_THEMES', $gEnvManager->getTemplatesPath());								// テンプレートパス		## テンプレート内でエラーが発生するのでここでは定義しない(2015/10/13)
 			define('DS', DIRECTORY_SEPARATOR);
 			$this->language = $this->gEnv->getCurrentLanguage();
 			$this->template = $curTemplate;
