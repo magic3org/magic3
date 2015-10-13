@@ -688,7 +688,8 @@ class Link_autolink extends Link
 
 		// modified for Magic3 by naoki on 2008/9/28
 		//if (! $autolink || ! file_exists(CACHE_DIR . 'autolink.dat'))
-		$dataDir = $gEnvManager->getCurrentWidgetIncludePath() . '/data';
+//		$dataDir = $gEnvManager->getCurrentWidgetIncludePath() . '/data';
+		$dataDir = dirname(dirname(__FILE__)) . '/data';
 		if (! $autolink || ! file_exists($dataDir . '/autolink.dat'))
 			return;
 
