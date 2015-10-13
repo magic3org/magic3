@@ -558,7 +558,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			if ($this->useMultiBlog) $multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $targetBlogId;
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . $multiBlogParam);
 			
-			// 作成されたページリンク情報を取得
+			// ##### 作成されたページリンク情報を取得 #####
 			$pageLinkInfo = $this->getPageLinkInfo();
 
 			// 記事一覧作成
@@ -618,6 +618,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			// リンク文字列作成、ページ番号調整
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=search&keyword=' . urlencode($keyword));
 
+			// ##### 作成されたページリンク情報を取得 #####
+			$pageLinkInfo = $this->getPageLinkInfo();
+			
 			// 記事一覧を表示
 			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0, ''/*期間開始*/, ''/*期間終了*/,
@@ -634,6 +637,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->tmpl->addVar("page_link", "page_link", $pageLink);
 				}
 				$this->message = '検索キーワード：' . $keyword;
+				
+				// ##### ページ番号遷移ナビゲーションを作成 #####
+				$this->setJoomlaPaginationData($pageLinkInfo, $totalCount, ($this->pageNo -1) * $this->entryViewCount/*先頭に表示する項目のオフセット番号*/, $this->entryViewCount);
 			} else {	// 検索結果なしの場合
 				$this->tmpl->setAttribute('entrylist', 'visibility', 'hidden');
 				$this->message = $this->messageFindNoEntry . '<br />検索キーワード：' . $keyword;
@@ -671,6 +677,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			// リンク文字列作成、ページ番号調整
 			$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&' . M3_REQUEST_PARAM_CATEGORY_ID . '=' . $category);
 			
+			// ##### 作成されたページリンク情報を取得 #####
+			$pageLinkInfo = $this->getPageLinkInfo();
+			
 			// 記事一覧を表示
 			if ($this->isSystemManageUser){		// システム管理ユーザの場合
 				self::$_mainDb->getEntryItemsByCategory($this->entryViewCount, $this->pageNo, $this->now, $category, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'));
@@ -689,6 +698,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 					$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
 					$this->tmpl->addVar("page_link", "page_link", $pageLink);
 				}
+				
+				// ##### ページ番号遷移ナビゲーションを作成 #####
+				$this->setJoomlaPaginationData($pageLinkInfo, $totalCount, ($this->pageNo -1) * $this->entryViewCount/*先頭に表示する項目のオフセット番号*/, $this->entryViewCount);
 			} else {
 				$this->title = $this->titleNoEntry;
 				$this->message = $this->messageNoEntry;
@@ -711,6 +723,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				// リンク文字列作成、ページ番号調整
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&year=' . $year . '&month=' . $month . '&day=' . $day);
 
+				// ##### 作成されたページリンク情報を取得 #####
+				$pageLinkInfo = $this->getPageLinkInfo();
+			
 				// 記事一覧作成
 				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
@@ -726,6 +741,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 						$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
 						$this->tmpl->addVar("page_link", "page_link", $pageLink);
 					}
+					
+					// ##### ページ番号遷移ナビゲーションを作成 #####
+					$this->setJoomlaPaginationData($pageLinkInfo, $totalCount, ($this->pageNo -1) * $this->entryViewCount/*先頭に表示する項目のオフセット番号*/, $this->entryViewCount);
 				}
 				
 				// 年月日の表示
@@ -752,6 +770,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				// リンク文字列作成、ページ番号調整
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&year=' . $year . '&month=' . $month);
 				
+				// ##### 作成されたページリンク情報を取得 #####
+				$pageLinkInfo = $this->getPageLinkInfo();
+			
 				// 記事一覧作成
 				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
@@ -767,6 +788,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 						$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
 						$this->tmpl->addVar("page_link", "page_link", $pageLink);
 					}
+					
+					// ##### ページ番号遷移ナビゲーションを作成 #####
+					$this->setJoomlaPaginationData($pageLinkInfo, $totalCount, ($this->pageNo -1) * $this->entryViewCount/*先頭に表示する項目のオフセット番号*/, $this->entryViewCount);
 				}
 				// 年月の表示
 				$this->title = str_replace('$1', $year . '年 ' . $month . '月', $this->titleList);
@@ -792,6 +816,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				// リンク文字列作成、ページ番号調整
 				$pageLink = $this->createPageLink($this->pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&year=' . $year);
 				
+				// ##### 作成されたページリンク情報を取得 #####
+				$pageLinkInfo = $this->getPageLinkInfo();
+			
 				// 記事一覧作成
 				if ($this->isSystemManageUser){		// システム管理ユーザの場合
 					self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, 0/*期間で指定*/, $startDt/*期間開始*/, $endDt/*期間終了*/,
@@ -807,6 +834,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 						$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
 						$this->tmpl->addVar("page_link", "page_link", $pageLink);
 					}
+					
+					// ##### ページ番号遷移ナビゲーションを作成 #####
+					$this->setJoomlaPaginationData($pageLinkInfo, $totalCount, ($this->pageNo -1) * $this->entryViewCount/*先頭に表示する項目のオフセット番号*/, $this->entryViewCount);
 				}
 				// 年の表示
 				$this->title = str_replace('$1', $year . '年', $this->titleList);
