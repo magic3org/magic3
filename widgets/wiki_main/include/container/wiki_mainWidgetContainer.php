@@ -587,7 +587,9 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			if (empty($this->_contentParam[$typeTag])) return '';
 		
 			if (WikiConfig::isShowPageTitle()){
-				$destTag = '<h1 class="contentheading">' . $this->_contentParam[$typeTag] . '</h1>';
+				$hTagLevel = $this->getHTagLevel();			// コンテンツ内のヘッダタイトルのタグレベル
+				//$destTag = '<h1 class="contentheading">' . $this->_contentParam[$typeTag] . '</h1>';
+				$destTag = '<h' . $hTagLevel . ' class="contentheading">' . $this->_contentParam[$typeTag] . '</h' . $hTagLevel . '>';
 			} else {
 				$destTag = '';
 			}

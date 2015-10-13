@@ -272,8 +272,20 @@ class Heading extends Element
 
 	function toString()
 	{
-		return $this->msg_top .  $this->wrap(parent::toString(),
-			'h' . $this->level, ' id="' . $this->id . '"');
+		global $gEnvManager;
+		static $baseHTagLevel;		// コンテンツ内のヘッダタグレベル
+		
+		// 実行中のウィジェットを取得
+		if (!isset($baseHTagLevel)){
+			$widgetObj = $gEnvManager->getCurrentWidgetObj();
+			if (!empty($widgetObj)) $baseHTagLevel = $widgetObj->getHTagLevel();
+
+			// コンテンツにタイトルを表示している場合はタグレベルを更新
+			if (WikiConfig::isShowPageTitle()) $baseHTagLevel++;
+		}
+
+//		return $this->msg_top .  $this->wrap(parent::toString(), 'h' . $this->level, ' id="' . $this->id . '"');
+		return $this->msg_top .  $this->wrap(parent::toString(), 'h' . ($baseHTagLevel + $this->level -2), ' id="' . $this->id . '"');
 	}
 }
 
