@@ -80,7 +80,8 @@ class WikiPage
 		$init = self::$db->getConfig(self::CONFIG_INIT);
 		if (empty($init)){
 			// 初期データディレクトリ内のページデータファイルをすべて読み込む
-			$path = $gEnvManager->getCurrentWidgetIncludePath() . '/data';
+	//		$path = $gEnvManager->getCurrentWidgetIncludePath() . '/data';
+			$path = dirname(dirname(__FILE__)) . '/data';
 			if (is_dir($path)){
 				$dir = dir($path);
 				while (($file = $dir->read()) !== false){
@@ -193,7 +194,8 @@ class WikiPage
 		// パラメータエラーチェック
 		if (empty($name)) return false;
 		
-		$path = $gEnvManager->getCurrentWidgetIncludePath() . '/data/' . encode($name) . '.txt';
+//		$path = $gEnvManager->getCurrentWidgetIncludePath() . '/data/' . encode($name) . '.txt';
+		$path = dirname(dirname(__FILE__)) . '/data/' . encode($name) . '.txt';
 		if ($fData = file_get_contents($path)){		// ファイルが読み込めないときはファイルがないとする
 			$data = $fData;
 			return true;
