@@ -926,7 +926,8 @@ class WikiPage
 			return self::$db->getPageOther(self::CACHE_ENTITY_DATA, self::CONTENT_TYPE_CACHE);
 		} else {
 			// DBに存在しない場合は初期化
-			$path = $gEnvManager->getCurrentWidgetIncludePath() . '/data/entities.dat';
+			//$path = $gEnvManager->getCurrentWidgetIncludePath() . '/data/entities.dat';
+			$path = dirname(dirname(__FILE__)) . '/data/entities.dat';
 			if ($fData = file_get_contents($path)){
 				if (self::$db->updatePageOther(self::CACHE_ENTITY_DATA, $fData, self::CONTENT_TYPE_CACHE)){
 					return $fData;
