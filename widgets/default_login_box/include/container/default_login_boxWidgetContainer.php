@@ -58,6 +58,7 @@ class default_login_boxWidgetContainer extends BaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{	
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+		//if ($this->_renderType == M3_RENDER_BOOTSTRAP || $this->_templateGeneratorType == M3_TEMPLATE_GENERATOR_THEMLER){
 			return 'index_bootstrap.tmpl.html';
 		} else {
 			return 'index.tmpl.html';

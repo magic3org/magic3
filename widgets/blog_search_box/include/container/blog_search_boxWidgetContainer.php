@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -41,8 +41,9 @@ class blog_search_boxWidgetContainer extends BaseWidgetContainer
 	 * @return string 						テンプレートファイル名。テンプレートライブラリを使用しない場合は空文字列「''」を返す。
 	 */
 	function _setTemplate($request, &$param)
-	{	
+	{
 		if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+		//if ($this->_renderType == M3_RENDER_BOOTSTRAP || $this->_templateGeneratorType == M3_TEMPLATE_GENERATOR_THEMLER){
 			return 'index_bootstrap.tmpl.html';
 		} else {
 			return 'index.tmpl.html';

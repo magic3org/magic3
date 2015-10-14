@@ -18,7 +18,6 @@ require_once($gEnvManager->getLibPath() . '/patTemplate/patTemplate.php');
 require_once($gEnvManager->getLibPath() . '/patTemplate/patError.php');
 require_once($gEnvManager->getLibPath() . '/patTemplate/patErrorManager.php');
 require_once($gEnvManager->getCommonPath() . '/core.php');
-//require_once($gEnvManager->getCommonPath() . '/htmlEdit.php');
 
 class BaseWidgetContainer extends Core
 {
@@ -48,6 +47,7 @@ class BaseWidgetContainer extends Core
 	protected $_linkPageCount;						// ページリンク作成用ページ総数
 	protected $_renderType;							// 描画出力タイプ
 	protected $_renderDetailType;					// 描画出力タイプ(詳細)
+	protected $_templateGeneratorType;				// テンプレート作成アプリケーション
 	protected $_assignTemplate;						// テンプレート処理置き換えを使用するかどうか
 	protected $_assignTemplate_method;				// テンプレート処理置き換え用(_assign()メソッド名)
 	protected $_assignTemplate_filename;			// テンプレート処理置き換え用(テンプレートファイル)
@@ -140,6 +140,8 @@ class BaseWidgetContainer extends Core
 				$this->_renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
 				break;
 		}
+		// テンプレート作成アプリケーション
+		$this->_templateGeneratorType = $this->gEnv->getCurrentTemplateGenerator();
 		
 		// URL変換用コールバック関数を設定
 		$this->gDesign->_setGetUrlCallback(array($this, 'getUrl'));

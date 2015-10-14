@@ -35,12 +35,16 @@ function default_login_logout(){
 <div id="default_login">
 <patTemplate:tmpl name="login_status" visibility="hidden"><p class="default_login_top">{MESSAGE}{USER_NAME}</p></patTemplate:tmpl>
 <patTemplate:tmpl name="login_field" visibility="hidden">
-<label><span class="default_login_title">アカウント</span><input type="text" name="account" size="8" maxlength="40" /></label>
-<label><span class="default_login_title">パスワード</span><input type="password" name="login_password" size="8" maxlength="10" /></label>
-<patTemplate:tmpl name="auto_login" visibility="hidden"><label><input type="checkbox" name="autologin" checked />ログイン状態を保持する</label></patTemplate:tmpl>
+<div class="control-group"><div class="controls">
+<label for="account">アカウント</label><input type="text" id="account" name="account" class="input-small" maxlength="40" />
+</div></div>
+<div class="control-group"><div class="controls">
+<label for="login_password">パスワード</label><input type="password" id="login_password" name="login_password" class="input-small" maxlength="10" />
+</div></div>
+<patTemplate:tmpl name="auto_login" visibility="hidden"><div class="control-group checkbox"><label><input type="checkbox" name="autologin" checked />ログイン状態を保持する</label></div></patTemplate:tmpl>
 </patTemplate:tmpl>
-<patTemplate:tmpl name="logout_button" visibility="hidden"><input type="submit" class="button" onclick="default_login_logout();" value="ログアウト" /></patTemplate:tmpl>
-<patTemplate:tmpl name="login_button" visibility="hidden"><input type="submit" class="button" onclick="default_login_login();" value="ログイン" /></patTemplate:tmpl>
+<patTemplate:tmpl name="logout_button" visibility="hidden"><div class="control-group"><div class="controls"><input type="submit" class="button" onclick="default_login_logout();" value="ログアウト" /></div></div></patTemplate:tmpl>
+<patTemplate:tmpl name="login_button" visibility="hidden"><div class="control-group"><div class="controls"><input type="submit" class="button" onclick="default_login_login();" value="ログイン" /></div></div></patTemplate:tmpl>
 </div>
 </form>
 <patTemplate:tmpl name="regmember_button" visibility="hidden">
