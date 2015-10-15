@@ -64,21 +64,24 @@ class blog_categoryDb extends BaseDb
 	 * @param int	  $id	カテゴリーID
 	 * @param string  $lang			言語ID
 	 * @param string  $name			名前
+	 * @param string  $html			説明
 	 * @param int     $pcategory	親カテゴリーID
 	 * @param int     $index		表示順
 	 * @param bool    $visible		表示、非表示
-	 * @param int     $userId		更新者ユーザID
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function addCategory($id, $lang, $name, $pcategory, $index, $visible, $userId, &$newSerial)
-	{	
+	function addCategory($id, $lang, $name, $html, $pcategory, $index, $visible, &$newSerial)
+	{
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		
 		// トランザクション開始
 		$this->startTransaction();
 		
 		if ($id == 0){		// IDが0のときは、カテゴリーIDを新規取得
 			// コンテンツIDを決定する
-			$queryStr = 'select max(bc_id) as mid from blog_category ';
+			$queryStr = 'SELECT MAX(bc_id) AS mid FROM blog_category ';
 			$ret = $this->selectRecord($queryStr, array(), $row);
 			if ($ret){
 				$cId = $row['mid'] + 1;
@@ -106,13 +109,13 @@ class blog_categoryDb extends BaseDb
 		
 		// データを追加
 		$queryStr = 'INSERT INTO blog_category ';
-		$queryStr .=  '(bc_id, bc_language_id, bc_history_index, bc_name, bc_parent_id, bc_sort_order, bc_visible, bc_create_user_id, bc_create_dt) ';
+		$queryStr .=  '(bc_id, bc_language_id, bc_history_index, bc_name, bc_html, bc_parent_id, bc_sort_order, bc_visible, bc_create_user_id, bc_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, now())';
-		$this->execStatement($queryStr, array($cId, $lang, $historyIndex, $name, $pcategory, $index, $visible, $userId));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, now())';
+		$this->execStatement($queryStr, array($cId, $lang, $historyIndex, $name, $html, $pcategory, $index, $visible, $userId));
 		
 		// 新規のシリアル番号取得
-		$queryStr = 'select max(bc_serial) as ns from blog_category ';
+		$queryStr = 'SELECT MAX(bc_serial) AS ns FROM blog_category ';
 		$ret = $this->selectRecord($queryStr, array(), $row);
 		if ($ret) $newSerial = $row['ns'];
 			
@@ -156,15 +159,16 @@ class blog_categoryDb extends BaseDb
 	 *
 	 * @param int     $serial		シリアル番号
 	 * @param string  $name			名前
+	 * @param string  $html			説明
 	 * @param int     $pcategory	親カテゴリーID
 	 * @param int     $index		表示順
 	 * @param bool    $visible		表示、非表示
-	 * @param int     $userId		更新者ユーザID
 	 * @param int     $newSerial	新規シリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateCategory($serial, $name, $pcategory, $index, $visible, $userId, &$newSerial)
-	{	
+	function updateCategory($serial, $name, $html, $pcategory, $index, $visible, &$newSerial)
+	{
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
 		$now = date("Y/m/d H:i:s");	// 現在日時
 				
 		// トランザクション開始
@@ -173,8 +177,8 @@ class blog_categoryDb extends BaseDb
 		// 指定のシリアルNoのレコードが削除状態でないかチェック
 		$changePCategory = false;		// 親カテゴリを変更かどうか
 		$historyIndex = 0;		// 履歴番号
-		$queryStr  = 'select * from blog_category ';
-		$queryStr .=   'where bc_serial = ? ';
+		$queryStr  = 'SELECT * FROM blog_category ';
+		$queryStr .=   'WHERE bc_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		if ($ret){		// 既に登録レコードがあるとき
 			if ($row['bc_deleted']){		// レコードが削除されていれば終了
@@ -218,10 +222,10 @@ class blog_categoryDb extends BaseDb
 		
 		// 新規レコード追加
 		$queryStr = 'INSERT INTO blog_category ';
-		$queryStr .=  '(bc_id, bc_language_id, bc_history_index, bc_name, bc_parent_id, bc_sort_order, bc_visible, bc_create_user_id, bc_create_dt) ';
+		$queryStr .=  '(bc_id, bc_language_id, bc_history_index, bc_name, bc_html, bc_parent_id, bc_sort_order, bc_visible, bc_create_user_id, bc_create_dt) ';
 		$queryStr .=  'VALUES ';
-		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($row['bc_id'], $row['bc_language_id'], $historyIndex, $name, $pcategory, $index, $visible, $userId, $now));
+		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+		$this->execStatement($queryStr, array($row['bc_id'], $row['bc_language_id'], $historyIndex, $name, $html, $pcategory, $index, $visible, $userId, $now));
 
 		// 新規のシリアル番号取得
 		$queryStr = 'select max(bc_serial) as ns from blog_category ';
@@ -282,11 +286,13 @@ class blog_categoryDb extends BaseDb
 	 * カテゴリーの削除
 	 *
 	 * @param int $serialNo			シリアルNo
-	 * @param int $userId			ユーザID(データ更新者)
 	 * @return						true=成功、false=失敗
 	 */
-	function delCategory($serialNo, $userId)
+	function delCategory($serialNo)
 	{
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		
 		// トランザクション開始
 		$this->startTransaction();
 		
@@ -362,11 +368,13 @@ class blog_categoryDb extends BaseDb
 	 * カテゴリーIDで削除
 	 *
 	 * @param int $serial			シリアルNo
-	 * @param int $userId			ユーザID(データ更新者)
 	 * @return						true=成功、false=失敗
 	 */
-	function delCategoryById($serial, $userId)
+	function delCategoryById($serial)
 	{
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		
 		// トランザクション開始
 		$this->startTransaction();
 		
@@ -487,6 +495,19 @@ class blog_categoryDb extends BaseDb
 			$index = 0;
 		}
 		return $index;
+	}
+	/**
+	 * カテゴリーが使用中か確認
+	 *
+	 * @param string $categoryId	カテゴリーID
+	 * @return bool					true=使用中、false=未使用
+	 */
+	function isUsedCategory($categoryId)
+	{
+		$queryStr  = 'SELECT distinct(be_serial) FROM blog_entry RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
+		$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND bw_category_id = ? ';	// 記事カテゴリー
+		return $this->isRecordExists($queryStr, array($categoryId));
 	}
 }
 ?>

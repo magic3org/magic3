@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_blog_mainCategoryWidgetContainer.php 5145 2012-08-29 13:21:42Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBaseWidgetContainer.php');
@@ -22,6 +22,7 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 	private $serialNo;			// シリアル番号
 	private $firstNo;			// 項目番号
 	private $configType;		// 設定タイプ
+	private $langId;			// 選択中の言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	const DEFAULT_RES_TYPE = 0;	// デフォルトの設定タイプ(常設)
 	const DEFAULT_CONFIG_ID = 0;	// デフォルトの設定ID
@@ -99,11 +100,29 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = $this->db->delCategoryBySerial($delItems);
-				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg('データを削除しました');
-				} else {
-					$this->setAppErrorMsg('データ削除に失敗しました');
+				// カテゴリーが使用中かどうかチェック
+				for ($i = 0; $i < count($delItems); $i++){
+					// カテゴリーID取得
+					$ret = $this->db->getCategoryBySerial($delItems[$i], $row);
+					if ($ret){
+						$ret = $this->db->isUsedCategory($row['bc_id']);		// カテゴリーIDを確認
+						if ($ret){
+							$this->setAppErrorMsg('使用中のカテゴリーは削除できません');
+							break;
+						}
+					} else {
+						$this->setAppErrorMsg('カテゴリー情報の取得に失敗しました');
+						break;
+					}
+				}
+				// エラーなしの場合は、データを削除
+				if ($this->getMsgCount() == 0){
+					$ret = $this->db->delCategoryBySerial($delItems);
+					if ($ret){		// データ削除成功のとき
+						$this->setGuidanceMsg('データを削除しました');
+					} else {
+						$this->setAppErrorMsg('データ削除に失敗しました');
+					}
 				}
 			}
 		}
@@ -125,7 +144,6 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 	function createDetail($request)
 	{
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		$userId = $this->gEnv->getCurrentUserId();
 		
 		$act = $request->trimValueOf('act');
 		$this->serialNo = $request->trimValueOf('serial');		// 選択項目のシリアル番号
@@ -133,6 +151,7 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$name	= $request->trimValueOf('item_name');		// カテゴリー名称
 		$index	= $request->trimValueOf('item_index');		// 表示順
 		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;			// 表示するかどうか
+		$html = $request->valueOf('item_html');		// 説明
 		
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 項目追加の場合
@@ -142,7 +161,7 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->addCategory(0, $this->langId, $name, 0, $index, $visible, $userId, $newSerial);
+				$ret = $this->db->addCategory(0, $this->langId, $name, $html, 0/*親カテゴリーID*/, $index, $visible, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -160,7 +179,7 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->updateCategory($this->serialNo, $name, 0, $index, $visible, $userId, $newSerial);
+				$ret = $this->db->updateCategory($this->serialNo, $name, $html, 0/*親カテゴリーID*/, $index, $visible, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -172,16 +191,29 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 				}
 			}
 		} else if ($act == 'delete'){		// 項目削除の場合
-			$ret = $this->db->delCategoryBySerial(array($this->serialNo));
-			if ($ret){		// データ削除成功のとき
-				$this->setGuidanceMsg('データを削除しました');
+			// カテゴリーが使用中かどうかチェック
+			$ret = $this->db->getCategoryBySerial($this->serialNo, $row);// カテゴリーID取得
+			if ($ret){
+				$ret = $this->db->isUsedCategory($row['bc_id']);		// カテゴリーIDを確認
+				if ($ret) $this->setAppErrorMsg('使用中のカテゴリーは削除できません');
 			} else {
-				$this->setAppErrorMsg('データ削除に失敗しました');
+				$this->setAppErrorMsg('カテゴリー情報の取得に失敗しました');
+			}
+					
+			// エラーなしの場合は、データを登録
+			if ($this->getMsgCount() == 0){
+				$ret = $this->db->delCategoryBySerial(array($this->serialNo));
+				if ($ret){		// データ削除成功のとき
+					$this->setGuidanceMsg('データを削除しました');
+				} else {
+					$this->setAppErrorMsg('データ削除に失敗しました');
+				}
 			}
 		} else {	// 初期表示
 			// 入力値初期化
 			if (empty($this->serialNo)){		// シリアル番号
 				$name = '';		// 名前
+				$html = '';		// 説明
 				$index = $this->db->getMaxIndex($this->langId) + 1;	// 表示順
 				$visible = 1;	// 表示状態
 			} else {
@@ -193,9 +225,10 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 			$ret = $this->db->getCategoryBySerial($this->serialNo, $row);
 			if ($ret){
 				// 取得値を設定
-				$id = $row['bc_id'];		// ID
+				$id = $row['bc_id'];		// カテゴリーID
 				$this->langId = $row['bc_language_id'];		// 言語ID
 				$name = $row['bc_name'];		// 名前
+				$html = $row['bc_html'];		// 説明
 				$index = $row['bc_sort_order'];	// 表示順
 				$visible = $row['bc_visible'];	// 表示状態
 				$updateUser = $this->convertToDispString($row['lu_name']);	// 更新者
@@ -211,8 +244,9 @@ class admin_blog_mainCategoryWidgetContainer extends admin_blog_mainBaseWidgetCo
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
 		}
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
-		$this->tmpl->addVar("_widget", "name", $name);		// 名前
-		$this->tmpl->addVar("_widget", "index", $index);		// 表示順
+		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// 名前
+		$this->tmpl->addVar("_widget", "html", $html);		// 説明
+		$this->tmpl->addVar("_widget", "index", $this->convertToDispString($index));		// 表示順
 		
 		$visibleStr = '';
 		if ($visible){	// 項目の表示
