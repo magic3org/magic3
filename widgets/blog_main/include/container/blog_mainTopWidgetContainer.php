@@ -43,7 +43,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $useMultiBlog;			// マルチブログを使用するかどうか
 	private $isOutputComment;		// コメントを出力するかどうか
 	private $receiveComment;		// コメントを受け付けるかどうか
-
+	private $isAccessWithPageNo;	// ページ番号付きのアクセスかどうか(一覧の先頭かどうかを判断)
+	
 	// 表示項目
 	private $entryViewCount;// 記事表示数
 	private $entryViewOrder;// 記事表示順
@@ -203,6 +204,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->pageNo = $request->trimIntValueOf('page', '1');				// ページ番号
 		$this->startDt = $request->trimValueOf('start');
 		$this->endDt = $request->trimValueOf('end');
+		$this->isAccessWithPageNo = ($request->trimValueOf('page') == '') ? false : true;		// ページ番号付きのアクセスかどうか(一覧の先頭かどうかを判断)
 		
 		// 管理者でプレビューモードのときは表示制限しない
 		$this->preview = false;
@@ -694,8 +696,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			if ($ret){
 				$this->title = str_replace('$1', $row['bc_name'], $this->titleList);
 				
-				// カテゴリーの説明
-				$this->categoryDesc = $row['bc_html'];
+				// 一覧の先頭の場合は、カテゴリーの説明を付加
+				if (!$this->isAccessWithPageNo) $this->categoryDesc = $row['bc_html'];// ページ番号付きのアクセスかどうか
 			}
 			
 			// ブログ記事データがないときはデータなしメッセージ追加
