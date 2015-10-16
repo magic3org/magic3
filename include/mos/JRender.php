@@ -287,6 +287,10 @@ $this->item->title = '****';*/
 						$this->item->author = $contentItem->author;
 						$this->item->params->set('show_author', 1);
 					}
+					if (!empty($contentItem->hits)){		// アクセス数
+						$this->item->hits = $contentItem->hits;
+						$this->item->params->set('show_hits', 1);
+					}
 				}
 
 				$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/article/default.php';		// ビュー作成処理
@@ -325,10 +329,9 @@ $this->item->title = '****';*/
 						$contentItem->publish_up = $contentItem->published;
 						$contentViewInfo->set('show_publish_date', 1);
 					}
-					if (!empty($contentItem->author)){		// 投稿者
-						$contentItem->author = $contentItem->author;
-						$contentViewInfo->set('show_author', 1);
-					}
+					if (!empty($contentItem->author)) $contentViewInfo->set('show_author', 1);		// 投稿者
+					if (!empty($contentItem->hits)) $contentViewInfo->set('show_hits', 1);		// アクセス数
+
 					// 「もっと読む」のボタンを表示するかどうかは$contentItem->readmoreに値が設定されているかどうかで判断する
 					if (!empty($contentItem->readmore)){
 						$contentViewInfo->set('show_readmore', 1);		// 「もっと読む」ボタン表示
@@ -356,7 +359,15 @@ $this->item->title = '****';*/
 					$this->link_items[$i] = $contentItems[$i];
 				}
 				$this->columns = $viewData['columnCount'];		// カラム数(Magic3拡張)
-			
+
+				// カテゴリータイトル(サブタイトル)
+				//$this->params->set('show_category_title', 1);
+				//$this->article->params->set('show_category', 1);
+				// カテゴリーの説明
+//				$this->params->set('show_description', 1);
+//				$this->category = new stdClass;
+//				$this->category->description = 'SAMPLE';
+
 				if ($renderType == 'category'){
 					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/category/blog.php';		// ビュー作成処理
 					$this->viewBaseDir = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/category';			// ビュー作成用スクリプトベースディレクトリ

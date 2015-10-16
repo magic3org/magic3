@@ -12,7 +12,7 @@
 * See COPYRIGHT.php for copyright notices and details.
 */
 
-JLoader::register('JTableContent', JPATH_LIBRARIES . DS . 'joomla' . DS . 'database' . DS . 'table' . DS . 'content.php');
+//JLoader::register('JTableContent', JPATH_LIBRARIES . DS . 'joomla' . DS . 'database' . DS . 'table' . DS . 'content.php');
 
 /**
  * Utility class to fire onPrepareContent for non-article based content.
@@ -30,7 +30,8 @@ class JHTMLContent
 	 * @param array The content params.
 	 * @return string The content after transformation.
 	 */
-	function prepare($text, $params = null)
+//	function prepare($text, $params = null)
+	static function prepare($text, $params = null)
 	{
 		if ($params === null) {
 			$params = array();
@@ -38,11 +39,13 @@ class JHTMLContent
 		/*
 		 * Create a skeleton of an article. This is a bit of a hack.
 		 */
-		$nodb = null;
-		$article = new JTableContent($nodb);
+//		$nodb = null;
+//		$article = new JTableContent($nodb);
+		$article = new stdClass;
 		$article->text = $text;
 		JPluginHelper::importPlugin('content');
-		$dispatcher = JDispatcher::getInstance();
+//		$dispatcher = JDispatcher::getInstance();
+		$dispatcher = JEventDispatcher::getInstance();
 		$results = $dispatcher->trigger(
 			'onPrepareContent', array (&$article, &$params, 0)
 		);
