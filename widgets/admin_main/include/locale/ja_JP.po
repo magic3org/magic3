@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-14 08:37+0900\n"
-"PO-Revision-Date: 2015-09-14 08:37+0900\n"
+"POT-Creation-Date: 2015-10-17 07:44+0900\n"
+"PO-Revision-Date: 2015-10-17 07:44+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -211,8 +211,8 @@ msgid "Readmore Button"
 msgstr "もっと読むボタン"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:741
-msgid "Title:"
-msgstr "タイトル："
+msgid "Label:"
+msgstr "ラベル："
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:742
 msgid "Url:"
@@ -3025,6 +3025,9 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "Title:"
+#~ msgstr "タイトル："
 
 #~ msgid "Widget Title"
 #~ msgstr "ウィジェットタイトル名"

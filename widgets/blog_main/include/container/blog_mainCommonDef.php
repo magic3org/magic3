@@ -35,9 +35,10 @@ class blog_mainCommonDef
 	const CF_COMMENT_USER_LIMITED	= 'comment_user_limited';		// コメントのユーザ制限
 	const CF_USE_MULTI_BLOG			= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
 	const CF_MULTI_BLOG_TOP_CONTENT	= 'multi_blog_top_content';		// マルチブログ時のトップコンテンツ
-	const CF_OUTPUT_HEAD			= 'output_head';		// ヘッダ出力するかどうか
-	const CF_HEAD_VIEW_DETAIL		= 'head_view_detail';		// ヘッダ出力(詳細表示)
-	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';			// コンテンツレイアウト(記事詳細)
+	const CF_READMORE_LABEL			= 'readmore_label';				//「もっと読む」ボタンラベル
+	const CF_OUTPUT_HEAD			= 'output_head';				// ヘッダ出力するかどうか
+	const CF_HEAD_VIEW_DETAIL		= 'head_view_detail';			// ヘッダ出力(詳細表示)
+	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';		// コンテンツレイアウト(記事詳細)
 	const CF_LAYOUT_ENTRY_LIST		= 'layout_entry_list';			// コンテンツレイアウト(記事一覧)
 	const CF_LAYOUT_COMMENT_LIST	= 'layout_comment_list';			// コンテンツレイアウト(コメント一覧)
 	const CF_USE_WIDGET_TITLE		= 'use_widget_title';		// ウィジェットタイトルを使用するかどうか(廃止予定)
@@ -49,10 +50,11 @@ class blog_mainCommonDef
 	const CF_MESSAGE_FIND_NO_ENTRY	= 'msg_find_no_entry';		// ブログ記事が見つからないメッセージ
 //	const CF_TITLE_TAG_LEVEL		= 'title_tag_level';		// タイトルのタグレベル
 	const CF_THUMB_TYPE				= 'thumb_type';				// サムネールタイプ
-	const CF_SHOW_PREV_NEXT_ENTRY_LINK	= 'show_prev_next_entry_link';			// 前後記事リンクを表示するかどうか
-	const CF_PREV_NEXT_ENTRY_LINK_POS	= 'prev_next_entry_link_pos';		// 前後記事リンク表示位置
+	const CF_SHOW_PREV_NEXT_ENTRY_LINK	= 'show_prev_next_entry_link';	// 前後記事リンクを表示するかどうか
+	const CF_PREV_NEXT_ENTRY_LINK_POS	= 'prev_next_entry_link_pos';	// 前後記事リンク表示位置
 	const CF_SHOW_ENTRY_AUTHOR		= 'show_entry_author';				// 投稿者を表示するかどうか
 	const CF_SHOW_ENTRY_REGIST_DT	= 'show_entry_regist_dt';			// 投稿日時を表示するかどうか
+	const CF_SHOW_VIEW_COUNT		= 'show_view_count';				// 閲覧数を表示するかどうか
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数

@@ -738,7 +738,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_top_content'] = $this->_('Additional Top Content');// 補助コンテンツ(上)
 		$localeText['label_bottom_content'] = $this->_('Additional Bottom Content');// 補助コンテンツ(下)
 		$localeText['label_readmore'] = $this->_('Readmore Button');// 「もっと読む」ボタン
-		$localeText['label_readmore_title'] = $this->_('Title:');// タイトル：
+		$localeText['label_readmore_label'] = $this->_('Label:');// ラベル：
 		$localeText['label_readmore_url'] = $this->_('Url:');// URL：
 		$localeText['label_css'] = $this->_('CSS');		// CSS
 		$localeText['label_for_joomla_template'] = $this->_('Configure for Joomla! style template');		// Joomla!スタイルテンプレート用の設定
