@@ -1,56 +1,45 @@
 <?php
 /**
-* @version		$Id: content.php 1795 2009-04-24 09:29:31Z fishbone $
-* @package		Joomla.Framework
-* @subpackage	HTML
-* @copyright	Copyright (C) 2005 - 2008 Open Source Matters. All rights reserved.
-* @license		GNU/GPL, see LICENSE.php
-* Joomla! is free software. This version may have been modified pursuant
-* to the GNU General Public License, and as distributed it includes or
-* is derivative of works licensed under the GNU General Public License or
-* other free or open source software licenses.
-* See COPYRIGHT.php for copyright notices and details.
-*/
+ * @package     Joomla.Libraries
+ * @subpackage  HTML
+ *
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE
+ */
 
-//JLoader::register('JTableContent', JPATH_LIBRARIES . DS . 'joomla' . DS . 'database' . DS . 'table' . DS . 'content.php');
+//defined('JPATH_PLATFORM') or die;
 
 /**
- * Utility class to fire onPrepareContent for non-article based content.
+ * Utility class to fire onContentPrepare for non-article based content.
  *
- * @package 	Joomla.Framework
- * @subpackage	HTML
- * @since		1.5
+ * @since  1.5
  */
-class JHTMLContent
+abstract class JHtmlContent
 {
 	/**
-	 * Fire onPrepareContent for content that isn't part of an article.
+	 * Fire onContentPrepare for content that isn't part of an article.
 	 *
-	 * @param string The content to be transformed.
-	 * @param array The content params.
-	 * @return string The content after transformation.
+	 * @param   string  $text     The content to be transformed.
+	 * @param   array   $params   The content params.
+	 * @param   string  $context  The context of the content to be transformed.
+	 *
+	 * @return  string   The content after transformation.
+	 *
+	 * @since   1.5
 	 */
-//	function prepare($text, $params = null)
-	static function prepare($text, $params = null)
+	public static function prepare($text, $params = null, $context = 'text')
 	{
-		if ($params === null) {
-			$params = array();
+		if ($params === null)
+		{
+			$params = new JObject;
 		}
-		/*
-		 * Create a skeleton of an article. This is a bit of a hack.
-		 */
-//		$nodb = null;
-//		$article = new JTableContent($nodb);
+
 		$article = new stdClass;
 		$article->text = $text;
 		JPluginHelper::importPlugin('content');
-//		$dispatcher = JDispatcher::getInstance();
 		$dispatcher = JEventDispatcher::getInstance();
-		$results = $dispatcher->trigger(
-			'onPrepareContent', array (&$article, &$params, 0)
-		);
+		$dispatcher->trigger('onContentPrepare', array($context, &$article, &$params, 0));
 
 		return $article->text;
 	}
-
 }

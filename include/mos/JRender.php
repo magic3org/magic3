@@ -315,6 +315,18 @@ $this->item->title = '****';*/
 				// 出力制御用のフック処理追加
 				$this->_addHook('loadtemplate.start', array($this, '_loadtemplateStartHook'));
 	
+				// ### カテゴリーの情報 ###
+				$categoryDesc = $viewData['categoryDesc'];
+				if (!empty(Description)){
+					// カテゴリーの説明
+					$this->category = new stdClass;
+					$this->category->description = $categoryDesc;
+					$this->params->set('show_description', 1);
+				}
+				// カテゴリータイトル(サブタイトル)
+				//$this->params->set('show_category_title', 1);
+				//$this->article->params->set('show_category', 1);
+
 				// 個別のコンテンツの付加情報
 				for ($i = 0; $i < count($contentItems); $i++){
 					$contentItem = $contentItems[$i];
@@ -359,14 +371,6 @@ $this->item->title = '****';*/
 					$this->link_items[$i] = $contentItems[$i];
 				}
 				$this->columns = $viewData['columnCount'];		// カラム数(Magic3拡張)
-
-				// カテゴリータイトル(サブタイトル)
-				//$this->params->set('show_category_title', 1);
-				//$this->article->params->set('show_category', 1);
-				// カテゴリーの説明
-//				$this->params->set('show_description', 1);
-//				$this->category = new stdClass;
-//				$this->category->description = 'SAMPLE';
 
 				if ($renderType == 'category'){
 					$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/com_content/category/blog.php';		// ビュー作成処理

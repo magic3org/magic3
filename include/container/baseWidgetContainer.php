@@ -3558,10 +3558,11 @@ class BaseWidgetContainer extends Core
 	 * @param int $leadContentCount		先頭(leading部)のコンテンツ数
 	 * @param int $columnContentCount	カラム部(intro部)のコンテンツ数
 	 * @param int $columnCount			カラム部(intro部)のカラム数
+	 * @param string $categoryDesc		カテゴリーの説明
 	 * @param string $readMoreTitle		「もっと読む」ボタンのタイトル(ウィジェットでのデフォルト値)
 	 * @return					なし
 	 */
-	function setJoomlaViewData($viewItemsData, $leadContentCount, $columnContentCount, $columnCount, $readMoreTitle = '')
+	function setJoomlaViewData($viewItemsData, $leadContentCount, $columnContentCount, $columnCount, $categoryDesc = '', $readMoreTitle = '')
 	{
 		// Joomla!新型テンプレートでない場合は終了
 		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) return;
@@ -3573,6 +3574,7 @@ class BaseWidgetContainer extends Core
 		$viewData['leadContentCount']	= $leadContentCount;			// 先頭(leading部)のコンテンツ数
 		$viewData['columnContentCount']	= $columnContentCount;			// カラム部(intro部)のコンテンツ数
 		$viewData['columnCount']		= $columnCount;					// カラム部(intro部)のカラム数
+		$viewData['categoryDesc']		= $categoryDesc;				// カテゴリーの説明
 		$viewData['readMoreTitle']		= $readMoreTitle;				// 「もっと読む」ボタンタイトル
 		$this->gEnv->setJoomlaViewData($viewData);
 	}

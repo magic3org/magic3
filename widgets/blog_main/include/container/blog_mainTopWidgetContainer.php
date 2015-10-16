@@ -54,6 +54,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $headTitle;		// METAタグタイトル
 	private $headDesc;		// METAタグ要約
 	private $headKeyword;	// METAタグキーワード
+	private $categoryDesc;	// カテゴリーの説明
 	private $addLib = array();		// 追加スクリプト
 	private $headScript;	// HTMLヘッダに埋め込むJavascript
 	private $viewMode;					// 表示モード
@@ -194,7 +195,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->isOutputComment = false;// コメントを出力するかどうか
 		$this->isSystemManageUser = $this->gEnv->isSystemManageUser();	// システム運用可能ユーザかどうか
 		$this->pageTitle = '';		// 画面タイトル、パンくずリスト用タイトル
-		
+		$this->categoryDesc = '';	// カテゴリーの説明
+
 		// 入力値取得
 		$act = $request->trimValueOf('act');
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
@@ -274,7 +276,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// ##### Joomla!新型テンプレートに記事データを設定 #####
-		$this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/);
+		$this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, $this->categoryDesc/*カテゴリーの説明*/);
 		
 		// ##### 運用可能ユーザの場合は編集用ボタンを表示 #####
 		$this->createEditButton();
@@ -687,9 +689,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				self::$_mainDb->getEntryItemsByCategory($this->entryViewCount, $this->pageNo, $this->now, $category, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), $this->_userId);
 			}
 
-			// タイトルの設定
+			// カテゴリータイトル、説明の設定
 			$ret = $this->categoryDb->getCategoryByCategoryId($category, $this->gEnv->getDefaultLanguage(), $row);
-			if ($ret) $this->title = str_replace('$1', $row['bc_name'], $this->titleList);
+			if ($ret){
+				$this->title = str_replace('$1', $row['bc_name'], $this->titleList);
+				
+				// カテゴリーの説明
+				$this->categoryDesc = $row['bc_html'];
+			}
 			
 			// ブログ記事データがないときはデータなしメッセージ追加
 			if ($this->isExistsViewData){
