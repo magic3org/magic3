@@ -160,10 +160,11 @@ INSERT INTO blog_entry
 (8, 'ja', 'ブログ-A8', 'ブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\nブログサンプル　ブログサンプル　ブログサンプル　ブログサンプル<br />\r\n<br />\r\n<img alt="" src="[#M3_ROOT_URL#]/resource/image/sample/animal/top08.jpg" style="width: 402px; height: 302px;" />', 2, 1, '2014-11-22 08:00:00', '4,5');
 
 TRUNCATE TABLE blog_category;
-INSERT INTO blog_category (bc_id, bc_language_id, bc_name, bc_sort_order) VALUES 
-(1, 'ja', 'カテゴリー●●●', 1),
-(2, 'ja', 'カテゴリー△△△', 2),
-(3, 'ja', 'カテゴリー■■■', 3);
+INSERT INTO blog_category
+(bc_id, bc_language_id, bc_name,            bc_html, bc_sort_order) VALUES 
+(1,     'ja',           'カテゴリー●●●', 'カテゴリー●●●の説明...', 1),
+(2,     'ja',           'カテゴリー△△△', 'カテゴリー△△△の説明...', 2),
+(3,     'ja',           'カテゴリー■■■', 'カテゴリー■■■の説明...', 3);
 
 TRUNCATE TABLE blog_entry_with_category;
 INSERT INTO blog_entry_with_category (bw_entry_serial, bw_index, bw_category_id) VALUES 
