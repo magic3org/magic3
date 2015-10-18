@@ -36,6 +36,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $buttonList;		// コンテンツ編集ボタン
 	// 表示制御
 	private $isSystemManageUser;	// システム運用可能ユーザかどうか
+	private $isCmdAccess;			// cmd付きアクセスかどうか
 	private $preview;				// プレビューモードかどうか
 	private $outputHead;			// ヘッダ出力するかどうか
 //	private $useWidgetTitle;		// ウィジェットタイトルを使用するかどうか
@@ -71,6 +72,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $itemTagLevel;			// 記事のタイトルタグレベル
 	private $showEntryAuthor;	// 投稿者を表示するかどうか
 	private $showEntryRegistDt;	// 投稿日時を表示するかどうか
+	private $showEntryViewCount;	// 閲覧数を表示するかどうか
 			
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const ICON_SIZE = 32;		// アイコンのサイズ
@@ -131,6 +133,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 //		if (empty($this->startTitleTagLevel)) $this->startTitleTagLevel = blog_mainCommonDef::DEFAULT_TITLE_TAG_LEVEL;
 		$this->showEntryAuthor		= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR];		// 投稿者を表示するかどうか
 		$this->showEntryRegistDt	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT];		// 投稿日時を表示するかどうか
+		$this->showEntryViewCount	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_VIEW_COUNT];	// 閲覧数を表示するかどうか
 		$this->itemTagLevel = $this->getHTagLevel();			// 記事のタイトルタグレベル
 	}
 	/**
@@ -195,6 +198,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->currentPageUrl = $this->gEnv->createCurrentPageUrl();// 現在のページURL
 		$this->isOutputComment = false;// コメントを出力するかどうか
 		$this->isSystemManageUser = $this->gEnv->isSystemManageUser();	// システム運用可能ユーザかどうか
+		$this->isCmdAccess = $request->isCmdAccess();			// cmd付きアクセスかどうか
 		$this->pageTitle = '';		// 画面タイトル、パンくずリスト用タイトル
 		$this->categoryDesc = '';	// カテゴリーの説明
 
@@ -943,10 +947,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	function itemsLoop($index, $fetchedRow)
 	{
 		// 参照ビューカウントを更新
-		if (!$this->isSystemManageUser){		// システム運用者以上の場合はカウントしない
+		if (!$this->isSystemManageUser &&		// システム運用者以上の場合はカウントしない
+			!$this->isCmdAccess){				// cmd付きアクセスでない
 			$this->gInstance->getAnalyzeManager()->updateContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $fetchedRow['be_serial'], $this->currentDay, $this->currentHour);
 		}
 
+		$serial = $fetchedRow['be_serial'];		// シリアル番号
 		$entryId = $fetchedRow['be_id'];// 記事ID
 		$title = $fetchedRow['be_name'];// タイトル
 		$date = $fetchedRow['be_regist_dt'];// 登録日時
@@ -1129,6 +1135,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = '';		// コンテンツ置換キー(登録日時)
 			$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = '';		// コンテンツ置換キー(登録日)
 			$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = '';		// コンテンツ置換キー(登録時)
+			if ($this->showEntryViewCount) $viewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);
+			$contentInfo[M3_TAG_MACRO_CONTENT_VIEW_COUNT] = '';			// コンテンツ置換キー(閲覧数)
 		} else {
 			if ($this->showEntryAuthor){		// 投稿者
 				$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $author;			// コンテンツ置換キー(著者)
@@ -1143,6 +1151,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = '';		// コンテンツ置換キー(登録日時)
 				$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = '';		// コンテンツ置換キー(登録日)
 				$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = '';		// コンテンツ置換キー(登録時)
+			}
+			if ($this->showEntryViewCount){		// 閲覧数を表示するかどうか
+				$viewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);
+				$contentInfo[M3_TAG_MACRO_CONTENT_VIEW_COUNT] = $viewCount;			// コンテンツ置換キー(閲覧数)
+			} else {
+				$contentInfo[M3_TAG_MACRO_CONTENT_VIEW_COUNT] = '';			// コンテンツ置換キー(閲覧数)
 			}
 		}
 		
@@ -1218,6 +1232,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		// 以下は表示する項目のみ値を設定する
 		if ($this->showEntryAuthor) $viewItem->author		= $author;		// 投稿者
 		if ($this->showEntryRegistDt) $viewItem->published	= $date;		// 投稿日時
+		if ($this->showEntryViewCount) $viewItem->hits		= $viewCount;	// 閲覧数
 		$this->viewItemsData[] = $viewItem;			// Joomla!ビュー用データ
 		return true;
 	}
@@ -1366,7 +1381,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	 */
 	function addPageHeadingContent($msgHtml)
 	{
-		// ### Joomla!新型テンプレート用データ作成 ###
+		// メッセージをカテゴリー説明の前に追加
+		$this->categoryDesc = '<div>' . $msgHtml . '</div>' . $this->categoryDesc;
+/*		// ### Joomla!新型テンプレート用データ作成 ###
 		$viewItem = new stdClass;
 		$viewItem->introtext	= $msgHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
 		$viewItem->text			= $msgHtml;	// コンテンツ内容(Joomla!1.5テンプレート用)
@@ -1374,6 +1391,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// 既存のビューデータの先頭に追加
 		$this->viewItemsData = array_merge(array($viewItem), $this->viewItemsData);
+		*/
 	}
 	/**
 	 * 記事編集用のボタンを作成

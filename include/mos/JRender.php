@@ -287,7 +287,7 @@ $this->item->title = '****';*/
 						$this->item->author = $contentItem->author;
 						$this->item->params->set('show_author', 1);
 					}
-					if (!empty($contentItem->hits)){		// アクセス数
+					if (isset($contentItem->hits)){		// アクセス数
 						$this->item->hits = $contentItem->hits;
 						$this->item->params->set('show_hits', 1);
 					}
@@ -342,7 +342,7 @@ $this->item->title = '****';*/
 						$contentViewInfo->set('show_publish_date', 1);
 					}
 					if (!empty($contentItem->author)) $contentViewInfo->set('show_author', 1);		// 投稿者
-					if (!empty($contentItem->hits)) $contentViewInfo->set('show_hits', 1);		// アクセス数
+					if (isset($contentItem->hits)) $contentViewInfo->set('show_hits', 1);		// アクセス数
 
 					// 「もっと読む」のボタンを表示するかどうかは$contentItem->readmoreに値が設定されているかどうかで判断する
 					if (!empty($contentItem->readmore)){

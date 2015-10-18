@@ -54,7 +54,7 @@ class blog_mainCommonDef
 	const CF_PREV_NEXT_ENTRY_LINK_POS	= 'prev_next_entry_link_pos';	// 前後記事リンク表示位置
 	const CF_SHOW_ENTRY_AUTHOR		= 'show_entry_author';				// 投稿者を表示するかどうか
 	const CF_SHOW_ENTRY_REGIST_DT	= 'show_entry_regist_dt';			// 投稿日時を表示するかどうか
-	const CF_SHOW_VIEW_COUNT		= 'show_view_count';				// 閲覧数を表示するかどうか
+	const CF_SHOW_ENTRY_VIEW_COUNT	= 'show_entry_view_count';				// 閲覧数を表示するかどうか
 	
 	// ##### デフォルト値 #####
 	const DEFAULT_VIEW_COUNT	= 10;				// デフォルトの表示記事数

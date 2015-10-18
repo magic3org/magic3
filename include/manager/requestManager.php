@@ -347,6 +347,17 @@ class RequestManager extends Core
 		}
 	}
 	/**
+	 * cmdパラメータ付きのアクセスかどうか
+	 *
+	 * @return bool			true=cmd付きアクセス、false=cmdなし
+	 */
+	function isCmdAccess()
+	{
+		$cmd = $this->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);	// 実行コマンド
+		$isCmd = !empty($cmd);			// コマンド実行かどうか
+		return $isCmd;
+	}
+	/**
 	 * $_SERVERから値を取得(トリミング(前後の空白削除)あり)
 	 *
 	 * $_SERVERから値を取得し、トリミング(前後の空白削除)する

@@ -90,6 +90,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$prevNextEntryLinkPos		= $request->trimValueOf('item_prev_next_entry_link_pos');				// 前後記事リンク表示位置
 		$showEntryAuthor	= $request->trimCheckedValueOf('item_show_entry_author');	// 投稿者を表示するかどうか
 		$showEntryRegistDt	= $request->trimCheckedValueOf('item_show_entry_regist_dt');	// 投稿日時を表示するかどうか
+		$showEntryViewCount	= $request->trimCheckedValueOf('item_show_entry_view_count');				// 閲覧数を表示するかどうか
 		
 		$reloadData = false;		// データの再読み込み
 		if ($act == 'update'){		// 設定更新のとき
@@ -142,6 +143,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_PREV_NEXT_ENTRY_LINK_POS, $prevNextEntryLinkPos);				// 前後記事リンク表示位置
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR, $showEntryAuthor);	// 投稿者を表示するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT, $showEntryRegistDt);	// 投稿日時を表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_SHOW_ENTRY_VIEW_COUNT, $showEntryViewCount);	// 閲覧数を表示するかどうか
 		
 				// 画像の移動
 				if ($ret && !empty($updatedEntryImage)){		// 画像更新の場合
@@ -221,6 +223,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$prevNextEntryLinkPos		= self::$_mainDb->getConfig(blog_mainCommonDef::CF_PREV_NEXT_ENTRY_LINK_POS);				// 前後記事リンク表示位置
 			$showEntryAuthor	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR);	// 投稿者を表示するかどうか
 			$showEntryRegistDt	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT);	// 投稿日時を表示するかどうか
+			$showEntryViewCount	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_ENTRY_VIEW_COUNT);				// 閲覧数を表示するかどうか
 		}
 		
 		// 画面に書き戻す
@@ -275,6 +278,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "prev_next_entry_link_pos_bottom", $this->convertToSelectedString($prevNextEntryLinkPos, 1));// 前後記事リンク表示位置(0=上、1=下)
 		$this->tmpl->addVar("_widget", "show_entry_author",	$this->convertToCheckedString($showEntryAuthor));	// 投稿者を表示するかどうか
 		$this->tmpl->addVar("_widget", "show_entry_regist_dt",	$this->convertToCheckedString($showEntryRegistDt));	// 投稿日時を表示するかどうか
+		$this->tmpl->addVar("_widget", "show_entry_view_count",	$this->convertToCheckedString($showEntryViewCount));	// 閲覧数を表示するかどうか
 	}
 	/**
 	 * 最大画像を取得

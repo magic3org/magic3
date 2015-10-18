@@ -160,6 +160,7 @@ define('M3_TAG_MACRO_CONTENT_CONTACT',			'CT_CONTACT');					// コンテンツ�
 define('M3_TAG_MACRO_CONTENT_CAMERA',			'CT_CAMERA');					// コンテンツ置換キー(カメラ)
 define('M3_TAG_MACRO_CONTENT_QUOTA',			'CT_QUOTA');					// コンテンツ置換キー(定員)
 define('M3_TAG_MACRO_CONTENT_ENTRY_COUNT',		'CT_ENTRY_COUNT');				// コンテンツ置換キー(登録数)
+define('M3_TAG_MACRO_CONTENT_VIEW_COUNT',		'CT_VIEW_COUNT');				// コンテンツ置換キー(閲覧数)
 define('M3_TAG_MACRO_CONTENT_CATEGORY',			'CT_CATEGORY');					// コンテンツ置換キー(カテゴリー)
 define('M3_TAG_MACRO_CONTENT_KEYWORD',			'CT_KEYWORD');					// コンテンツ置換キー(検索キーワード)
 define('M3_TAG_MACRO_CONTENT_MEMBER_NAME',		'CT_MEMBER_NAME');				// コンテンツ置換キー(会員名)
