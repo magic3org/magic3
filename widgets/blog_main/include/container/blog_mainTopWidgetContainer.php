@@ -282,7 +282,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// ##### Joomla!新型テンプレートに記事データを設定 #####
-		$this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, $this->categoryDesc/*カテゴリーの説明*/);
+		$readmoreLabel = $topContent = self::$_configArray[blog_mainCommonDef::CF_READMORE_LABEL];// 「もっと読む」ボタンラベル
+		$this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, $this->categoryDesc/*カテゴリーの説明*/, $readmoreLabel);
 		
 		// ##### 運用可能ユーザの場合は編集用ボタンを表示 #####
 		$this->createEditButton();

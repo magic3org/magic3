@@ -66,6 +66,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$receiveComment = $request->trimCheckedValueOf('receive_comment');		// コメントを受け付けるかどうか
 		$useMultiBlog	= $request->trimCheckedValueOf('use_multi_blog');		// マルチブログ機能を使用するかどうか
 		$topContent		= $request->valueOf('top_content');	// トップコンテンツ
+		$readmoreLabel	= $request->trimValueOf('item_readmore_label');			//「もっと読む」ボタンラベル
 		$maxCommentLength	= $request->valueOf('max_comment_length');	// コメント最大文字数
 		$layoutEntrySingle	= $request->valueOf('item_layout_entry_single');					// コンテンツレイアウト(記事詳細)
 		$layoutEntryList	= $request->valueOf('item_layout_entry_list');					// コンテンツレイアウト(記事一覧)
@@ -126,6 +127,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_COMMENT_USER_LIMITED, $commentUserLimited);// コメントのユーザ制限
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_USE_MULTI_BLOG, $useMultiBlog);		// マルチブログ機能を使用するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_MULTI_BLOG_TOP_CONTENT, $topContent);	// マルチブログ時のトップコンテンツ
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_READMORE_LABEL, $readmoreLabel);			//「もっと読む」ボタンラベル
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE, $layoutEntrySingle);		// コンテンツレイアウト(記事詳細)
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST, $layoutEntryList);		// コンテンツレイアウト(記事一覧)
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_LAYOUT_COMMENT_LIST, $layoutCommentList);		// コンテンツレイアウト(コメント一覧)
@@ -197,6 +199,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$useMultiBlog = self::$_mainDb->getConfig(blog_mainCommonDef::CF_USE_MULTI_BLOG);// マルチブログ機能を使用するかどうか
 			if (!isset($useMultiBlog)) $useMultiBlog = '0';
 			$topContent = self::$_mainDb->getConfig(blog_mainCommonDef::CF_MULTI_BLOG_TOP_CONTENT);// マルチブログ時のトップコンテンツ
+			$readmoreLabel = self::$_mainDb->getConfig(blog_mainCommonDef::CF_READMORE_LABEL);			//「もっと読む」ボタンラベル
 			$layoutEntrySingle = self::$_mainDb->getConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE);		// コンテンツレイアウト(記事詳細)
 			if (empty($layoutEntrySingle)) $layoutEntrySingle = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 			$layoutEntryList = self::$_mainDb->getConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST);		// コンテンツレイアウト(記事一覧)
@@ -253,12 +256,13 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "entryimage_url", $this->convertUrlToHtmlEntity($this->getUrl($imageUrl)));			// 記事デフォルト画像
 		$this->tmpl->addVar("_widget", "updated_entryimage", $updateStatus);
 		
-		$this->tmpl->addVar("_widget", "category_count", $categoryCount);// カテゴリ数
+		$this->tmpl->addVar("_widget", "category_count", $this->convertToDispString($categoryCount));// カテゴリ数
 		$this->tmpl->addVar("_widget", "receive_comment", $this->convertToCheckedString($receiveComment));// コメントを受け付けるかどうか
-		$this->tmpl->addVar("_widget", "max_comment_length", $maxCommentLength);// コメント最大文字数
+		$this->tmpl->addVar("_widget", "max_comment_length", $this->convertToDispString($maxCommentLength));// コメント最大文字数
 		$this->tmpl->addVar("_widget", "comment_user_limited", $this->convertToCheckedString($commentUserLimited));// コメントのユーザ制限
 		$this->tmpl->addVar("_widget", "use_multi_blog", $this->convertToCheckedString($useMultiBlog));// マルチブログ機能を使用するかどうか
 		$this->tmpl->addVar("_widget", "top_content", $topContent);		// マルチブログ時のトップコンテンツ
+		$this->tmpl->addVar("_widget", "readmore_label", $this->convertToDispString($readmoreLabel));			//「もっと読む」ボタンラベル
 		$this->tmpl->addVar("_widget", "layout_entry_single", $layoutEntrySingle);		// コンテンツレイアウト(記事詳細)
 		$this->tmpl->addVar("_widget", "layout_entry_list", $layoutEntryList);		// コンテンツレイアウト(記事一覧)
 		$this->tmpl->addVar("_widget", "layout_comment_list", $layoutCommentList);		// コンテンツレイアウト(コメント一覧)
