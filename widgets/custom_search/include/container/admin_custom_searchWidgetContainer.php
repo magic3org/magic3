@@ -211,6 +211,15 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
+				// 空の場合デフォルト値を設定
+				if (empty($searchTemplate)){
+					if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+						$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+					} else {
+						$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+					}
+				}
+				
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name	= $name;// 表示名
@@ -252,6 +261,15 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			$this->checkNumeric($resultLength, 'テキストサイズ');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
+				// 空の場合デフォルト値を設定
+				if (empty($searchTemplate)){
+					if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+						$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+					} else {
+						$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+					}
+				}
+				
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
@@ -309,7 +327,11 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				$this->searchTextId = $tagHead . '_text';		// 検索用テキストフィールドのタグID
 				$this->searchButtonId = $tagHead . '_button';		// 検索用ボタンのタグID
 				$this->searchResetId = $tagHead . '_reset';		// 検索エリアリセットボタンのタグID
-				$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+					$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				} else {
+					$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				}
 				
 				$isTargetContent = 1;		// 汎用コンテンツを検索対象とするかどうか
 				$isTargetUser = 1;			// ユーザ作成コンテンツを検索対象とするかどうか
