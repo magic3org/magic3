@@ -31,6 +31,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	private $categoryArray;		// カテゴリ種別メニュー
 	private $selTypeArray;	// 項目選択タイプメニュー
 	private $imageType;		// 選択中の画像タイプ
+	private $targetRenderType;		// 実際に表示する画面の描画出力タイプ
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const MESSAGE_NO_USER_CATEGORY = 'カテゴリが登録されていません';			// ユーザ作成コンテンツ用のカテゴリが登録されていないときのメッセージ
 	const DEFAULT_SEARCH_COUNT	= 20;				// デフォルトの検索結果表示数
@@ -51,6 +52,10 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		// 項目選択タイプ
 		$this->selTypeArray = array(	array(	'name' => '単一選択',	'value' => 'single'),
 										array(	'name' => '複数選択',	'value' => 'multi'));
+		
+		// 実際に表示する画面の描画出力タイプを取得
+		$templateType = $this->_getTemplateType($this->gSystem->defaultTemplateId());// デフォルトのテンプレートIDからテンプレートタイプを取得
+		$this->targetRenderType = $this->_getRenderType($templateType);
 	}
 	/**
 	 * ウィジェット初期化
@@ -213,7 +218,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			if ($this->getMsgCount() == 0){
 				// 空の場合デフォルト値を設定
 				if (empty($searchTemplate)){
-					if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+					if ($this->targetRenderType == M3_RENDER_BOOTSTRAP){
 						$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
 					} else {
 						$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
@@ -263,7 +268,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 空の場合デフォルト値を設定
 				if (empty($searchTemplate)){
-					if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+					if ($this->targetRenderType == M3_RENDER_BOOTSTRAP){
 						$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
 					} else {
 						$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
@@ -327,7 +332,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				$this->searchTextId = $tagHead . '_text';		// 検索用テキストフィールドのタグID
 				$this->searchButtonId = $tagHead . '_button';		// 検索用ボタンのタグID
 				$this->searchResetId = $tagHead . '_reset';		// 検索エリアリセットボタンのタグID
-				if ($this->_renderType == M3_RENDER_BOOTSTRAP){
+				if ($this->targetRenderType == M3_RENDER_BOOTSTRAP){
 					$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
 				} else {
 					$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート

@@ -126,7 +126,8 @@ class BaseWidgetContainer extends Core
 		
 		// 描画出力タイプ
 		$templateType = $this->gEnv->getCurrentTemplateType();
-		switch ($templateType){
+		$this->_renderType = $this->_getRenderType($templateType);
+/*		switch ($templateType){
 			case 0:
 				$this->_renderType = M3_RENDER_JOOMLA_OLD;		// Joomla! 1.0テンプレート
 				break;
@@ -139,7 +140,7 @@ class BaseWidgetContainer extends Core
 			default:
 				$this->_renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
 				break;
-		}
+		}*/
 		// テンプレート作成アプリケーション
 		$this->_templateGeneratorType = $this->gEnv->getCurrentTemplateGenerator();
 		
@@ -557,6 +558,42 @@ class BaseWidgetContainer extends Core
 			if (!empty($hook)) $this->_assignTemplate_hookArray = $hook;			// テンプレート処理置き換え用(_assign()メソッド内のフック関数用)
 			break;
 		}
+	}
+	/**
+	 * テンプレートタイプから描画出力タイプを取得
+	 *
+	 * @param string $templateType	テンプレートタイプ
+	 * @return string				描画出力タイプ
+	 */
+	function _getRenderType($templateType)
+	{
+		switch ($templateType){
+			case 0:
+				$renderType = M3_RENDER_JOOMLA_OLD;		// Joomla! 1.0テンプレート
+				break;
+			case 10:
+				$renderType = M3_RENDER_BOOTSTRAP;		// Bootstrap 3.0テンプレート
+				break;
+			case 20:
+				$renderType = M3_RENDER_JQUERY_MOBILE;		// jQuery Mobileテンプレート
+				break;
+			default:
+				$renderType = M3_RENDER_JOOMLA_NEW;		// Joomla! 1.5以上のテンプレート
+				break;
+		}
+		return $renderType;
+	}
+	/**
+	 * テンプレートIDからテンプレートタイプを取得
+	 *
+	 * @param string $templateId	テンプレートID
+	 * @return string				テンプレートタイプ
+	 */
+	function _getTemplateType($templateId)
+	{
+		$templateType = '';
+		if ($this->_db->getTemplate($templateId, $row)) $templateType = $row['tm_type'];		// テンプレートタイプ
+		return $templateType;
 	}
 	/**
 	 * patTemplateのPostParamを使って、非表示INPUTタグを追加
