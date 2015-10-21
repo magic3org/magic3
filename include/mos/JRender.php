@@ -75,7 +75,7 @@ class JRender extends JParameter
 	public function getModuleContents($style, $content, $title = '', $attribs = array(), $paramsOther = array(), $pageDefParam = array(), $templateVer = 0)
 	{
 		global $gEnvManager;
-		
+
 		// 必要なスクリプトを読み込む
 		$templateId = empty($this->templateId) ? $gEnvManager->getCurrentTemplateId() : $this->templateId;
 		$path = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/modules.php';		// テンプレート独自の変換処理
@@ -316,11 +316,17 @@ $this->item->title = '****';*/
 				$this->_addHook('loadtemplate.start', array($this, '_loadtemplateStartHook'));
 	
 				// ### カテゴリーの情報 ###
+				// カテゴリー説明を優先
 				$categoryDesc = $viewData['categoryDesc'];
-				if (!empty(Description)){
+				if (!empty($categoryDesc)){
 					// カテゴリーの説明
 					$this->category = new stdClass;
 					$this->category->description = $categoryDesc;
+					$this->params->set('show_description', 1);
+				} else if ($viewData['withDefaultOutput']){				// ウィジェット出力をカテゴリー説明部に出力する場合
+					// カテゴリーの説明
+					$this->category = new stdClass;
+					$this->category->description = $content;
 					$this->params->set('show_description', 1);
 				}
 				// カテゴリータイトル(サブタイトル)
