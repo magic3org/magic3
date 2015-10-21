@@ -737,7 +737,7 @@ class BaseWidgetContainer extends Core
 	 *
 	 * @return bool				true=成功、false=失敗
 	 */
-	function setListRender()
+	function selectListRender()
 	{
 		$retStatus = false;
 		

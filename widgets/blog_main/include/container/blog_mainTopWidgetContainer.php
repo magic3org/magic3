@@ -228,19 +228,19 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			case 0:			// トップ一覧表示
 			default:
 //				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
-				$this->setListRender();			// 一覧タイプで出力
+				$this->selectListRender();			// 一覧タイプで出力
 				
 				$this->showTopList($request);
 				break;
 			case 1:			// 記事一覧表示
 //				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
-				$this->setListRender();			// 一覧タイプで出力
+				$this->selectListRender();			// 一覧タイプで出力
 				
 				$this->showList($request);
 				break;
 			case 2:			// 検索一覧表示
 //				if (self::$_canEditEntry) $this->tmpl->setAttribute('show_script', 'visibility', 'visible');		// 編集機能表示
-				$this->setListRender();			// 一覧タイプで出力
+				$this->selectListRender();			// 一覧タイプで出力
 				
 				$this->showSearchList($request);
 				break;
