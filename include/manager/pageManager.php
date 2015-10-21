@@ -1410,7 +1410,11 @@ class PageManager extends Core
 					}
 				}
 				// その他のGET,POSTパラメータからページサブID取得
-				if (empty($subId)) $subId = $this->getPageSubIdByParam($request, $gEnvManager->getCurrentPageId());
+				if (empty($subId)){
+					// 検索用パラメータなどでリダイレクト先のURLが取得できた場合は遷移
+					$subId = $this->getPageSubIdByParam($request, $redirectUrl);
+					if (!empty($subId) && !empty($redirectUrl)) $this->redirect($redirectUrl);
+				}
 				
 				// ページサブIDが取得できない場合はデフォルトを使用
 				if (empty($subId)) $subId = $gEnvManager->getDefaultPageSubId();
@@ -5654,17 +5658,28 @@ class PageManager extends Core
 	 * その他のGET,POSTパラメータからページサブID取得
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param string $pageId		ページID
-	 * @return string				ページサブID
+	 * @param string $redirectUrl			リダイレクト用URL
+	 * @return string						ページサブID
 	 */
-	function getPageSubIdByParam($request, $pageId)
+	function getPageSubIdByParam($request, &$redirectUrl)
 	{
+		global $gEnvManager;
+		
 		$subId = '';
+		$redirectUrl = '';
 		$task = $request->trimValueOf('task');
 		$option = $request->trimValueOf('option');
 		if ($task == 'search' && $option == 'com_search'){		// joomla!の検索結果表示の場合
-			$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_SEARCH, $pageId);// ページサブIDを取得
 			$this->contentType = M3_VIEW_TYPE_SEARCH;		// ページのコンテンツタイプ
+				
+			$subId = $this->db->getSubPageIdWithContent(M3_VIEW_TYPE_SEARCH, $gEnvManager->getCurrentPageId());// ページサブIDを取得
+			if (!empty($subId)){
+				// リダイレクト用URLを作成
+				$keyword = $request->trimValueOf('searchword');
+				$redirectUrl = $gEnvManager->createPageUrl();
+				$redirectUrl .= '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $subId;
+				$redirectUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=search&' . M3_REQUEST_PARAM_KEYWORD . '=' . urlencode($keyword);
+			}
 		}
 		return $subId;
 	}

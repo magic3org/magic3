@@ -316,18 +316,20 @@ $this->item->title = '****';*/
 				$this->_addHook('loadtemplate.start', array($this, '_loadtemplateStartHook'));
 	
 				// ### カテゴリーの情報 ###
-				// カテゴリー説明を優先
-				$categoryDesc = $viewData['categoryDesc'];
-				if (!empty($categoryDesc)){
-					// カテゴリーの説明
-					$this->category = new stdClass;
-					$this->category->description = $categoryDesc;
-					$this->params->set('show_description', 1);
-				} else if ($viewData['withDefaultOutput']){				// ウィジェット出力をカテゴリー説明部に出力する場合
+				// ウィジェットデフォルト描画出力を使用する場合はカテゴリー説明を出力しない
+				if ($viewData['withDefaultOutput']){				// ウィジェット出力をカテゴリー説明部に出力する場合
 					// カテゴリーの説明
 					$this->category = new stdClass;
 					$this->category->description = $content;
 					$this->params->set('show_description', 1);
+				} else {
+					$categoryDesc = $viewData['categoryDesc'];
+					if (!empty($categoryDesc)){
+						// カテゴリーの説明
+						$this->category = new stdClass;
+						$this->category->description = $categoryDesc;
+						$this->params->set('show_description', 1);
+					}
 				}
 				// カテゴリータイトル(サブタイトル)
 				//$this->params->set('show_category_title', 1);
