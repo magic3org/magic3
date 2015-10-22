@@ -10,7 +10,7 @@
  * @author     株式会社 毎日メディアサービス
  * @copyright  Copyright 2010-2015 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: custom_searchWidgetContainer.php 5969 2013-04-29 13:16:04Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/custom_searchDb.php');
 class custom_searchWidgetContainer extends BaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $langId;		// 現在の言語
 	private $categoryInfoArray = array();		// カテゴリ種別メニュー
 	private $resultCount;				// 結果表示件数
 	private $wikiLibObj;		// Wikiコンテンツオブジェクト
@@ -29,6 +28,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	private $imageType;				// 画像タイプ
 	private $imageWidth;			// 画像幅
 	private $imageHeight;			// 画像高さ
+	private $topContent;			// トップコンテンツ
+	private $hTagLevel;			// コンテンツのタグレベル
+	private $viewItemsData = array();			// Joomla!ビュー用データ
 	const DEFAULT_CONFIG_ID = 0;
 	const DEFAULT_TITLE = 'カスタム検索';			// デフォルトのウィジェットタイトル
 	const FIELD_HEAD = 'item';			// フィールド名の先頭文字列
@@ -56,6 +58,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		
 		// Wikiコンテンツオブジェクト取得
 		$this->wikiLibObj = $this->gInstance->getObject(self::WIKI_OBJ_ID);
+		
+		// 一覧タイプで出力
+		$this->selectListRender();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -90,12 +95,13 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	function _assign($request, &$param)
 	{
 		// 初期値設定
-		$this->langId = $this->gEnv->getCurrentLanguage();
 		$this->currentPageUrl = $this->gEnv->createCurrentPageUrl();// 現在のページURL
 		$this->showImage		= 0;				// 画像を表示するかどうか
 		$this->imageType		= self::DEFAULT_IMAGE_TYPE;				// 画像タイプ
 		$this->imageWidth		= 0;				// 画像幅
 		$this->imageHeight		= 0;				// 画像高さ
+		$this->topContent		= '';				// トップコンテンツ
+		$this->hTagLevel = $this->getHTagLevel();			// コンテンツのタグレベル
 		
 		// 定義ID取得
 		$configId = $this->gEnv->getCurrentWidgetConfigId();
@@ -157,12 +163,13 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$option = $request->trimValueOf('option');
 		
 		if ($act == self::DEFAULT_SEARCH_ACT ||			// 検索実行
-			($task == 'search' && $option == 'com_search')){		// joomla!検索インターフェイスからの検索
+			//($task == 'search' && $option == 'com_search')){		// joomla!検索インターフェイスからの検索
+			$task == 'search'){		// joomla!検索インターフェイスからの検索
 			
 			// ##### joomla!検索インターフェイスからの実行の場合 #####
-			if ($task == 'search' && $option == 'com_search'){
-				$keyword = $request->trimValueOf('searchword');		// 検索キーワード
-			}
+/*			if ($task == 'search' && $option == 'com_search'){
+				if (empty($keyword)) $keyword = $request->trimValueOf('searchword');		// 検索キーワード
+			}*/
 			
 			// 検索キーワードが空以外の場合は、キーワードログを残す
 			$parsedKeywords = array();
@@ -198,7 +205,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$contentUsePassword = $configArray[self::CF_USE_PASSWORD];			// パスワードによるコンテンツ閲覧制限
 		
 				// 総数を取得
-				$totalCount = $this->db->searchContentsByKeyword(0/*項目数取得*/, 0/*ダミー*/, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog,
+				$totalCount = $this->db->searchContentsByKeyword(0/*項目数取得*/, 0/*ダミー*/, $parsedKeywords, $selectCategory, $this->_langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog,
 								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $isTargetWiki, $contentUsePassword);
 				$this->calcPageLink($pageNo, $totalCount, $this->resultCount);		// ページ番号修正
 				
@@ -207,19 +214,25 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				if ($this->templateType == M3_TEMPLATE_BOOTSTRAP_30) $linkStyle = 2;		// Bootstrap型テンプレートの場合
 				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword),
 													''/*追加パラメータなし*/, $linkStyle);
-				
+
+				// ##### 作成されたページリンク情報を取得 #####
+				$pageLinkInfo = $this->getPageLinkInfo();
+
 				// 検出項目を表示
-				$this->db->searchContentsByKeyword($this->resultCount, $pageNo, $parsedKeywords, $selectCategory, $this->langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
+				$this->db->searchContentsByKeyword($this->resultCount, $pageNo, $parsedKeywords, $selectCategory, $this->_langId, $isAll, $isTargetContent, $isTargetUser, $isTargetBlog, 
 								$isTargetProduct, $isTargetEvent, $isTargetBbs, $isTargetPhoto, $isTargetWiki, $contentUsePassword, array($this, 'searchItemsLoop'));
 				
 				if ($this->isExistsViewData){
 					// ページリンクを埋め込む
-					if (!empty($pageLink)){
+					if (!empty($pageLink) && $this->_renderType != M3_RENDER_JOOMLA_NEW){					// Joomla!新型描画処理でない場合
 						$this->tmpl->setAttribute('page_link_top', 'visibility', 'visible');		// リンク表示
 						$this->tmpl->setAttribute('page_link', 'visibility', 'visible');		// リンク表示
 						$this->tmpl->addVar("page_link_top", "page_link", $pageLink);
 						$this->tmpl->addVar("page_link", "page_link", $pageLink);
 					}
+					
+					// ##### ページ番号遷移ナビゲーションを作成 #####
+					$this->setJoomlaPaginationData($pageLinkInfo, $totalCount, ($pageNo -1) * $this->resultCount/*先頭に表示する項目のオフセット番号*/, $this->resultCount);
 				} else {	// 検索結果なしの場合
 					$this->tmpl->setAttribute('result_list', 'visibility', 'hidden');
 					$message = self::MESSAGE_FIND_NO_CONTENT;
@@ -227,7 +240,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			}
 		}
 		// カテゴリ情報を取得
-		$ret = $this->db->getAllCategoryForMenu($this->langId, $categoryArray, $rows);
+		$ret = $this->db->getAllCategoryForMenu($this->_langId, $categoryArray, $rows);
 		if ($ret){
 			$line = array();
 			$rowCount = count($rows);
@@ -243,8 +256,13 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		}
 		// メッセージを表示
 		if (!empty($message)){
-			$this->tmpl->setAttribute('message', 'visibility', 'visible');
-			$this->tmpl->addVar("message", "message", $this->convertToDispString($message));
+//			if ($this->_renderType == M3_RENDER_JOOMLA_NEW){
+//				// Joomla!新型テンプレートの先頭にメッセージ追加
+//				$this->addTopMessage($message);
+//			} else {
+				$this->tmpl->setAttribute('message', 'visibility', 'visible');
+				$this->tmpl->addVar("message", "message", $this->convertToDispString($message));
+//			}
 		}
 		
 		// 検索画面作成
@@ -259,6 +277,10 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "search_form_id",	$searchFormId);		// 検索フォームのタグID
 		$this->tmpl->addVar("_widget", "keyword",	$keyword);		// 検索キーワード
 		$this->tmpl->addVar("_widget", "search_act",	self::DEFAULT_SEARCH_ACT);		// 検索実行処理
+		
+		// ##### Joomla!新型テンプレートに記事データを設定 #####
+		$this->topContent = '';
+		$this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, ''/*$this->topContent*//*トップコンテンツ*/, ''/*「もっと読む」ボタンラベル*/, true/*ウィジェットデフォルト描画出力を使用*/);
 	}
 	/**
 	 * ウィジェットのタイトルを設定
@@ -367,7 +389,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_CONTENT_ID . '=' . $contentId, true/*リンク用*/);
 
 				// コンテンツを取得
-				$ret = $this->db->getContentByContentId(''/*汎用コンテンツ*/, $contentId, $this->langId, $row);
+				$ret = $this->db->getContentByContentId(''/*汎用コンテンツ*/, $contentId, $this->_langId, $row);
 				if ($ret){
 					// テキストに変換。HTMLタグ削除。
 					$content = $this->gInstance->getTextConvManager()->htmlToText($row['cn_html']);
@@ -388,11 +410,11 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?'. M3_REQUEST_PARAM_ROOM_ID . '=' . $roomId, true/*リンク用*/);
 				
 				// ルームIDに対応したコンテンツをすべて取得
-				$contentArray = $this->getAllContent($roomId, $this->langId, $searchListItemId);
+				$contentArray = $this->getAllContent($roomId, $this->_langId, $searchListItemId);
 					
 				if (empty($searchListItemId)){		// 検索一覧用データがないとき
 					// タブ情報を取得
-					$ret = $this->db->getDefaultTab($this->langId, $groupId, $defaultTabRow);
+					$ret = $this->db->getDefaultTab($this->_langId, $groupId, $defaultTabRow);
 					
 					// 検索一覧用のコンテンツかデフォルトのタブの内容を表示
 					if ($ret){
@@ -454,7 +476,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId, true/*リンク用*/);
 
 				// ブログ記事を取得
-				$ret = $this->db->getEntryByEntryId($entryId, $this->langId, $row);
+				$ret = $this->db->getEntryByEntryId($entryId, $this->_langId, $row);
 				if ($ret){
 					$content = trim($row['be_html']);
 					if (empty($content)) $content = trim($row['be_html_ext']);		// 本文1がない場合は本文2を表示
@@ -476,7 +498,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PRODUCT_ID . '=' . $productId, true/*リンク用*/);
 
 				// 商品情報を取得
-				$ret = $this->db->getProductByProductId($productId, $this->langId, $row);
+				$ret = $this->db->getProductByProductId($productId, $this->_langId, $row);
 				if ($ret){
 					$summary = $row['pt_description_short'];
 					if (empty($summary)){
@@ -495,7 +517,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_EVENT_ID . '=' . $eventId, true/*リンク用*/);
 
 				// イベント情報を取得
-				$ret = $this->db->getEvent($eventId, $this->langId, $row);
+				$ret = $this->db->getEvent($eventId, $this->_langId, $row);
 				if ($ret){
 					$summary = $row['ee_summary'];
 					if (empty($summary)){
@@ -533,7 +555,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PHOTO_ID . '=' . $photoId, true/*リンク用*/);
 
 				// フォト情報を取得
-				$ret = $this->db->getPhoto($photoId, $this->langId, $row);
+				$ret = $this->db->getPhoto($photoId, $this->_langId, $row);
 				if ($ret){
 					$summary = $row['ht_summary'];
 					if (empty($summary)){
@@ -583,14 +605,37 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			$summary = '<div class="clearfix">' . $summary . '</div>';
 		}
 		
-		$row = array(
-			'title'		=> $titleLink,		// タイトル
-			'image'		=> $imageTag,		// 画像
-			'body'		=> $summary			// コンテンツ概要
-		);
-		$this->tmpl->addVars('result_list', $row);
-		$this->tmpl->parseTemplate('result_list', 'a');
+		if ($this->_renderType != M3_RENDER_JOOMLA_NEW){
+			$row = array(
+				'title'		=> $titleLink,		// タイトル
+				'image'		=> $imageTag,		// 画像
+				'body'		=> $summary			// コンテンツ概要
+			);
+			$this->tmpl->addVars('result_list', $row);
+			$this->tmpl->parseTemplate('result_list', 'a');
+		}
 		$this->isExistsViewData = true;				// 表示データがあるかどうか
+
+		//##### Joomla!新型描画処理でない場合は終了 #####
+		if ($this->_renderType != M3_RENDER_JOOMLA_NEW) return true;
+		
+		// ### Joomla!新型テンプレート用データ作成 ###
+		$titleTag = '<h' . $this->hTagLevel . '>' . $titleLink . '</h' . $this->hTagLevel . '>';
+		$summaryHtml = $titleTag . $summary;		// タイトルを付加
+		
+		$viewItem = new stdClass;
+//		$viewItem->id			= $entryId;	// コンテンツID
+//		$viewItem->title		= $title;	// コンテンツ名。コンテンツのタイトルを変更。	// *** ThemlerテンプレートではHタグの上が過度に空いてしまう問題あり(2015/10/21) ***
+		$viewItem->introtext	= $summaryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
+		$viewItem->text			= $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
+		$viewItem->state		= 1;			// 表示モード(0=新着,1=表示済み)
+		$viewItem->url			= $linkUrl;						// リンク先。viewItem->urlはMagic3の拡張値。
+
+//		// 以下は表示する項目のみ値を設定する
+//		if ($this->showEntryAuthor) $viewItem->author		= $author;		// 投稿者
+//		if ($this->showEntryRegistDt) $viewItem->published	= $date;		// 投稿日時
+//		if ($this->showEntryViewCount) $viewItem->hits		= $viewCount;	// 閲覧数
+		$this->viewItemsData[] = $viewItem;			// Joomla!ビュー用データ
 		return true;
 	}
 	/**
@@ -707,6 +752,17 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			break;
 		}
 		return $url;
+	}
+	/**
+	 * トップメッセージを追加
+	 *
+	 * @param string $msgHtml				メッセージコンテンツ
+	 * @return								なし
+	 */
+	function addTopMessage($msgHtml)
+	{
+		// トップコンテンツの先頭にメッセージを追加
+		$this->topContent = '<div>' . $msgHtml . '</div>' . $this->topContent;
 	}
 }
 ?>
