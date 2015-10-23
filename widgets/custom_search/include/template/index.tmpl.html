@@ -17,9 +17,9 @@ function content_search(){
 	$('#{SEARCH_TEXT_ID}').attr('disabled', 'disabled');
 	$('#{SEARCH_BUTTON_ID}').attr('disabled', 'disabled');
 	var value = $('#{SEARCH_TEXT_ID}').val();
-	if (value) document.custom_search_box.keyword.value = value;
-	document.custom_search_box.act.value = '{SEARCH_ACT}';
-	document.custom_search_box.submit();
+	if (value) document.custom_search.keyword.value = value;
+	document.custom_search.act.value = '{SEARCH_ACT}';
+	document.custom_search.submit();
 	return true;
 }
 function content_search_reset(){
@@ -46,7 +46,7 @@ $(function(){
 });
 //]]>
 </script>
-<form id="{SEARCH_FORM_ID}" name="custom_search_box" method="get" class="form" onsubmit="content_search();">
+<form id="{SEARCH_FORM_ID}" name="custom_search" method="get" class="form" onsubmit="content_search();">
 <input type="hidden" name="sub" value="{PAGE_SUB}" />
 <input type="hidden" name="act" />
 <input type="hidden" name="keyword" />

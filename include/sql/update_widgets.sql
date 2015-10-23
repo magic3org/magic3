@@ -242,8 +242,8 @@ INSERT INTO _widgets
 ('custom_search', 'カスタム検索', 'search',        'search',       '3.0.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                '各種コンテンツが検索可能で表示レイアウトもカスタマイズ可能な検索ウィジェット', 'jquery', 'jquery.tablednd,ckeditor_m3toolbar', true, false, true, true,          1, -1, '2015-10-20', now(), now());
 DELETE FROM _widgets WHERE wd_id = 'custom_search_box';
 INSERT INTO _widgets
-(wd_id,               wd_name,            wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                     wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('custom_search_box', 'カスタム検索連携', 'search',       '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'カスタム検索に検索結果を表示する検索ボックス', 'jquery', 'ckeditor_m3toolbar',     true,         true,true,               1, -1, now(),    now());
+(wd_id,               wd_name,            wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                                     wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('custom_search_box', 'カスタム検索連携', 'search',       '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'カスタム検索ウィジェットに検索結果を表示する検索ボックス', 'jquery', 'ckeditor_m3toolbar',     true,         true,true,               '2015-05-27', now(),    now());
 -- ウィジェット情報(PC用/会員)
 DELETE FROM _widgets WHERE wd_id = 'member_main';
 INSERT INTO _widgets

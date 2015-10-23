@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: custom_search_boxWidgetContainer.php 3596 2010-09-16 07:38:11Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
@@ -88,8 +88,15 @@ class custom_search_boxWidgetContainer extends BaseWidgetContainer
 				$message = self::MESSAGE_NO_INPUT;
 			} else {
 				// カスタム検索に検索結果を表示させる
-				$url = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=custom_search&keyword=' . urlencode($keyword));
-				$this->gPage->redirect($url);
+//				$url = $this->gPage->createWidgetCmdUrl(self::TARGET_WIDGET, $this->gEnv->getCurrentWidgetId(), 'act=custom_search&keyword=' . urlencode($keyword));
+//				$this->gPage->redirect($url);
+
+				// 検索結果画面に結果を表示させる
+				$searchUrl = $this->gPage->createContentPageUrl(
+								M3_VIEW_TYPE_SEARCH, 
+								M3_REQUEST_PARAM_OPERATION_TASK . '=search&' . M3_REQUEST_PARAM_KEYWORD . '=' . urlencode($keyword)
+							);
+				$this->gPage->redirect($this->getUrl($searchUrl, true/*リンク先ページのSSL状態を判断*/));
 			}
 		}
 		// メッセージを表示
@@ -99,7 +106,6 @@ class custom_search_boxWidgetContainer extends BaseWidgetContainer
 		}
 		
 		// 表示データ埋め込み
-		$this->tmpl->addVar("_widget", "page_sub",	$this->gEnv->getCurrentPageSubId());		// ページサブID
 		$this->tmpl->addVar("_widget", "html",	$searchTemplate);
 		$this->tmpl->addVar("_widget", "search_text_id",	$searchTextId);		// 検索用テキストフィールドのタグID
 		$this->tmpl->addVar("_widget", "search_button_id",	$searchButtonId);		// 検索用ボタンのタグID
