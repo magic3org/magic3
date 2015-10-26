@@ -24,6 +24,7 @@ class admin_custom_search_boxWidgetContainer extends BaseAdminWidgetContainer
 	private $searchTextId;		// 検索用テキストフィールドのタグID
 	private $searchButtonId;		// 検索用ボタンのタグID
 	private $searchResetId;		// 検索エリアリセットボタンのタグID
+	private $targetRenderType;		// 実際に表示する画面の描画出力タイプ
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	
 	/**
@@ -33,6 +34,10 @@ class admin_custom_search_boxWidgetContainer extends BaseAdminWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// 実際に表示する画面の描画出力タイプを取得
+		$templateType = $this->_getTemplateType($this->gSystem->defaultTemplateId());// デフォルトのテンプレートIDからテンプレートタイプを取得
+		$this->targetRenderType = $this->_getRenderType($templateType);
 	}
 	/**
 	 * ウィジェット初期化
@@ -139,6 +144,15 @@ class admin_custom_search_boxWidgetContainer extends BaseAdminWidgetContainer
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
+				// 空の場合デフォルト値を設定
+				if (empty($searchTemplate)){
+					if ($this->targetRenderType == M3_RENDER_BOOTSTRAP){
+						$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+					} else {
+						$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+					}
+				}
+				
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name	= $name;// 表示名
@@ -161,6 +175,15 @@ class admin_custom_search_boxWidgetContainer extends BaseAdminWidgetContainer
 			// 入力値のエラーチェック
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
+				// 空の場合デフォルト値を設定
+				if (empty($searchTemplate)){
+					if ($this->targetRenderType == M3_RENDER_BOOTSTRAP){
+						$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+					} else {
+						$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+					}
+				}
+				
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
@@ -199,7 +222,12 @@ class admin_custom_search_boxWidgetContainer extends BaseAdminWidgetContainer
 				$this->searchTextId = $tagHead . '_text';		// 検索用テキストフィールドのタグID
 				$this->searchButtonId = $tagHead . '_button';		// 検索用ボタンのタグID
 				$this->searchResetId = $tagHead . '_reset';		// 検索エリアリセットボタンのタグID
-				$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+//				$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				if ($this->targetRenderType == M3_RENDER_BOOTSTRAP){
+					$searchTemplate = $this->getParsedTemplateData('default_bootstrap.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				} else {
+					$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
+				}
 			}
 			$this->serialNo = 0;
 		} else {		// 更新の場合
