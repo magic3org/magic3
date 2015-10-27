@@ -212,7 +212,8 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 				// リンク文字列作成、ページ番号調整
 				$linkStyle = 0;			// HTMLの出力タイプ
 				if ($this->templateType == M3_TEMPLATE_BOOTSTRAP_30) $linkStyle = 2;		// Bootstrap型テンプレートの場合
-				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword),
+	//			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&act=' . self::DEFAULT_SEARCH_ACT . '&keyword=' . urlencode($keyword),
+				$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $this->currentPageUrl . '&task=search&keyword=' . urlencode($keyword),
 													''/*追加パラメータなし*/, $linkStyle);
 
 				// ##### 作成されたページリンク情報を取得 #####
