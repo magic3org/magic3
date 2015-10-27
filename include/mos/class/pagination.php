@@ -800,10 +800,12 @@ class JPagination
 
 			$data->start->base = '0';
 //			$data->start->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=0');
-			$data->start->link = $pageLinkInfo['start']['link'];
+//			$data->start->link = $pageLinkInfo['start']['link'];
+			$data->start->link = convertUrlToHtmlEntity($pageLinkInfo['start']['link']);		// HTMLエンティティ文字のエスケープ処理追加(2015/10/27)
 			$data->previous->base = $page;
 //			$data->previous->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $page);
-			$data->previous->link = $pageLinkInfo['previous']['link'];
+//			$data->previous->link = $pageLinkInfo['previous']['link'];
+			$data->previous->link = convertUrlToHtmlEntity($pageLinkInfo['previous']['link']);	// HTMLエンティティ文字のエスケープ処理追加(2015/10/27)
 		}
 
 		// Set the next and end data objects.
@@ -817,10 +819,12 @@ class JPagination
 
 			$data->next->base = $next;
 //			$data->next->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $next);
-			$data->next->link = $pageLinkInfo['next']['link'];
+//			$data->next->link = $pageLinkInfo['next']['link'];
+			$data->next->link = convertUrlToHtmlEntity($pageLinkInfo['next']['link']);		// HTMLエンティティ文字のエスケープ処理追加(2015/10/27)
 			$data->end->base = $end;
 //			$data->end->link = JRoute::_($params . '&' . $this->prefix . 'limitstart=' . $end);
-			$data->end->link = $pageLinkInfo['end']['link'];
+//			$data->end->link = $pageLinkInfo['end']['link'];
+			$data->end->link = convertUrlToHtmlEntity($pageLinkInfo['end']['link']);		// HTMLエンティティ文字のエスケープ処理追加(2015/10/27)
 		}
 
 		$data->pages = array();
@@ -840,7 +844,8 @@ class JPagination
 					$data->pages[$i]->link = $data->start->link;
 				} else {
 					$linkFormat = $pageLinkInfo['format'];
-					$data->pages[$i]->link = str_replace('$1', $i, $linkFormat);
+			//		$data->pages[$i]->link = str_replace('$1', $i, $linkFormat);
+					$data->pages[$i]->link = convertUrlToHtmlEntity(str_replace('$1', $i, $linkFormat));		// HTMLエンティティ文字のエスケープ処理追加(2015/10/27)
 				}
 			}
 			else
