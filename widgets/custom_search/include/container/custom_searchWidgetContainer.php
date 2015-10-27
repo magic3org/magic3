@@ -593,7 +593,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 
 		// 画像
 		$imageTag = '';
-		if ($this->showImage && !empty($imageUrl)){
+		if ($this->showImage && !empty($imageUrl)){	// サムネール画像を表示する場合
 			$style = '';
 			if ($this->imageWidth > 0) $style .= 'width:' . $this->imageWidth . 'px;';
 			if ($this->imageHeight > 0) $style .= 'height:' . $this->imageHeight . 'px;';
@@ -630,7 +630,11 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$viewItem->text			= $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state		= 1;			// 表示モード(0=新着,1=表示済み)
 		$viewItem->url			= $linkUrl;						// リンク先。viewItem->urlはMagic3の拡張値。
-
+		if ($this->showImage && !empty($imageUrl)){	// サムネール画像を表示する場合
+			$viewItem->thumbUrl	= $imageUrl;
+			$viewItem->thumbAlt	= $title;
+		}
+		
 //		// 以下は表示する項目のみ値を設定する
 //		if ($this->showEntryAuthor) $viewItem->author		= $author;		// 投稿者
 //		if ($this->showEntryRegistDt) $viewItem->published	= $date;		// 投稿日時

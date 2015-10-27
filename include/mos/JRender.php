@@ -364,6 +364,16 @@ $this->item->title = '****';*/
 					$contentViewInfo->set('link_titles', 1);		// タイトルにリンクを付加(タイトルのリンク作成用)
 					$contentViewInfo->set('access-view', 1);		// (タイトルのリンク作成用)
 					//$contentItem->catslug = '';			// カテゴリーID
+					
+					// サムネール画像(intro,fulltext)
+					if (!empty($contentItem->thumbUrl)){		// サムネールのURLが設定されている場合
+						$images = array();
+						$images['image_intro'] = $contentItem->thumbUrl;
+						$images['float_intro'] = 'left';
+						$images['image_intro_caption'] = '';
+						$images['image_intro_alt'] = $contentItem->thumbAlt;
+						$contentItem->images = json_encode($images);
+					}
 				}
 				
 				$this->lead_items = array();
