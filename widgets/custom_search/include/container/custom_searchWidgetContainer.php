@@ -35,6 +35,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	const DEFAULT_TITLE = 'カスタム検索';			// デフォルトのウィジェットタイトル
 	const FIELD_HEAD = 'item';			// フィールド名の先頭文字列
 	const DEFAULT_SEARCH_COUNT	= 20;				// デフォルトの検索結果表示数
+	const DEFAULT_IMAGE_FILENAME_HEAD = 'default';		// デフォルトの画像ファイル名ヘッダ
 	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const MESSAGE_NO_KEYWORD	= '検索キーワードが入力されていません';
@@ -592,6 +593,9 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 		$escapedLinkUrl = $this->convertUrlToHtmlEntity($linkUrl);
 		if (!empty($linkUrl)) $titleLink = '<a href="' . $escapedLinkUrl . '" >' . $titleLink . '</a>';
 
+		// 画像がない場合はデフォルト画像を取得
+		if (empty($imageUrl)) $imageUrl = $this->getDefaultImageUrl($this->imageType);
+		
 		// 画像
 		$imageTag = '';
 		if ($this->showImage && !empty($imageUrl)){	// サムネール画像を表示する場合
@@ -757,6 +761,17 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 			break;
 		}
 		return $url;
+	}
+	/**
+	 * デフォルトの画像のURLを取得
+	 *
+	 * @param string $format		画像フォーマット
+	 * @return string				URL
+	 */
+	function getDefaultImageUrl($format)
+	{
+		$filename = $this->gInstance->getImageManager()->getThumbFilename(self::DEFAULT_IMAGE_FILENAME_HEAD, $format);
+		$url = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_SEARCH, 0/*PC用*/, $filename);
 	}
 	/**
 	 * トップメッセージを追加
