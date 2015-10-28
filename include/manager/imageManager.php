@@ -98,13 +98,16 @@ class ImageManager extends Core
 		
 		for ($i = 0; $i < count($formatArray); $i++){
 			$format = trim($formatArray[$i]);
-			$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
+//			$ret = preg_match('/(\d+)(.*)\.(gif|png|jpg|jpeg|bmp)$/i', $format, $matches);
+			$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize, $imageWidthHeight);
 			if ($ret){
-				$thumbSize = $matches[1];
-				$thumbAttr = strtolower($matches[2]);
-				$ext = strtolower($matches[3]);
+				$thumbSize = $imageWidthHeight;
+				$thumbAttr = $imageAttr;
+//				$thumbSize = $matches[1];
+//				$thumbAttr = strtolower($matches[2]);
+//				$ext = strtolower($matches[3]);
 
-				$imageType = IMAGETYPE_JPEG;
+/*				$imageType = IMAGETYPE_JPEG;
 				switch ($ext){
 					case 'jpg':
 					case 'jpeg':
@@ -119,7 +122,7 @@ class ImageManager extends Core
 					case 'bmp':
 						$imageType = IMAGETYPE_BMP;
 						break;
-				}
+				}*/
 				$thumbFilename = $contentId . '_' . $format;
 				$thumbPath = $thumbDir . DIRECTORY_SEPARATOR . $thumbFilename;
 
@@ -184,7 +187,7 @@ class ImageManager extends Core
 		case 1:		// クロップ画像(c)のみ
 			for ($i = 0; $i < count($formatArray); $i++){
 				$format = trim($formatArray[$i]);
-				$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+				$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize, $imageWidthHeight);
 				if ($ret){
 					if ($imageAttr == 'c') $formats[] = $format;
 				}
@@ -498,6 +501,7 @@ class ImageManager extends Core
 			$destWidth = $size;		// サムネールの幅
 			$destHeight = $size;		// サムネールの高さ
 		}
+
 		if ($useCrop){		// 画像切り取りありのとき
 			if (is_array($size)){
 				if ($height / $destHeight < $width / $destWidth){
@@ -546,7 +550,7 @@ class ImageManager extends Core
 		$thumbObj = imagecreatetruecolor($destWidth, $destHeight);
 		
 		// 背景色の設定		
-		if (!$useCrop){			// 切り取りなしのとき
+//		if (!$useCrop){			// 切り取りなしのとき
 			// サムネールの背景色を取得
 			$bgColorR = intval(substr($bgColor, 1, 2), 16);
 			$bgColorG = intval(substr($bgColor, 3, 2), 16);
@@ -556,7 +560,7 @@ class ImageManager extends Core
 		//	$thumbObj = imagecreatetruecolor($size, $size);
 			$bgcolor = imagecolorallocate($thumbObj, $bgColorR, $bgColorG, $bgColorB);		// 背景色設定
 			imagefill($thumbObj, 0, 0, $bgcolor);
-		}
+//		}
 		
 		// 画像リサイズ
 		// imagecopyresampledの方がimagecopyresizedよりも画質が良いのでこちらを使用
@@ -897,7 +901,7 @@ class ImageManager extends Core
 	function getSiteLogoFormatInfo($sizeId, &$imageType, &$imageAttr, &$imageSize)
 	{
 		$format = $this->getSiteLogoFormat($sizeId);
-		$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+		$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize, $imageWidthHeight);
 		return $ret;
 	}
 	/**
@@ -1045,7 +1049,7 @@ class ImageManager extends Core
 	function getAvatarFormatInfo($sizeId, &$imageType, &$imageAttr, &$imageSize)
 	{
 		$format = $this->getAvatarFormat($sizeId);
-		$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+		$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize, $imageWidthHeight);
 		return $ret;
 	}
 	/**
@@ -1170,7 +1174,7 @@ class ImageManager extends Core
 
 		for ($i = 0; $i < count($formatArray); $i++){
 			$format = $formatArray[$i];
-			$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize);
+			$ret = $this->parseImageFormat($format, $imageType, $imageAttr, $imageSize, $imageWidthHeight);
 			if ($ret){
 				$newFilename = $destFilenameBase . '_' . $format;
 				$newPath = $destDir . DIRECTORY_SEPARATOR . $newFilename;
