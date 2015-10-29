@@ -108,6 +108,16 @@ function setupNo()
 		$(this).val(replaceTag);
 	});
 }
+function uploader_entryimage_onSuccess(files, data)
+{
+	// 画像を読み込む
+	$('#preview_entryimage').attr('src', data.url).load(function(){
+		m3AdjustParentWindow();// 親ウィンドウリサイズ
+	});
+
+	// 編集フラグを更新
+	document.main.updated_entryimage.value = '1';
+}
 $(function(){
 	// テーブル作成
 	m3SetConfigTable('mainconfig');
@@ -118,6 +128,9 @@ $(function(){
 	
 	// カテゴリ項目作成
 	setupList();
+	
+	// 画像アップローダー作成
+	m3CreateDragDropUploadFile('uploader_entryimage', '{UPLOAD_URL_ENTRYIMAGE}', uploader_entryimage_onSuccess);
 });
 //]]>
 </script>
@@ -129,6 +142,7 @@ $(function(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="fieldcount" />
 <input type="hidden" name="titlevisible" />
+<input type="hidden" name="updated_entryimage" value="{UPDATED_ENTRYIMAGE}" />
 <!-- m3:PostParam -->
 <h3 class="m3config_h">基本設定</h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_CONFIG_UNTITLED_BUTTONS}><div class="btn-group">
@@ -175,6 +189,7 @@ $(function(){
 		<div class="col-sm-1 m3config_item"><input type="text" name="item_result_length" class="form-control" value="{RESULT_LENGTH}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></div>
 		<div class="checkbox"><label><input type="checkbox" name="item_show_image" {SHOW_IMAGE_CHECKED} />画像を表示</label></div>
 		<div class="form-control-static m3config_item col-sm-1" style="width:120px;">画像タイプ：</div>
+		<div class="form-group clearfix">
 	    <div class="col-sm-3 m3config_item" style="margin-right:50px;">
 		<select name="item_image_type" class="form-control">
 	        <patTemplate:tmpl name="image_type_list">
@@ -182,6 +197,8 @@ $(function(){
 	        </patTemplate:tmpl>
 	    </select>
 		</div>
+		</div>
+		<div class="form-group clearfix"><img id="preview_entryimage" class="pull-left" src="{ENTRYIMAGE_URL}" /><div class="pull-right"><div id="uploader_entryimage">{UPLOAD_AREA}</div></div></div>
 		<!--<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像幅：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_width" class="form-control" value="{IMAGE_WIDTH}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>
 		<div class="form-control-static m3config_item col-sm-1" style="width:80px;">画像高さ：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_image_height" class="form-control" value="{IMAGE_HEIGHT}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div>-->
 		</td>

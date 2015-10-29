@@ -32,11 +32,16 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	private $selTypeArray;	// 項目選択タイプメニュー
 	private $imageType;		// 選択中の画像タイプ
 	private $targetRenderType;		// 実際に表示する画面の描画出力タイプ
+	private $tmpDir;		// 作業ディレクトリ
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const MESSAGE_NO_USER_CATEGORY = 'カテゴリが登録されていません';			// ユーザ作成コンテンツ用のカテゴリが登録されていないときのメッセージ
 	const DEFAULT_SEARCH_COUNT	= 20;				// デフォルトの検索結果表示数
 	const DEFAULT_RESULT_LENGTH = 200;			// 検索結果コンテンツの文字列最大長
 	const DEFAULT_IMAGE_TYPE = '80c.jpg';		// デフォルトの画像タイプ
+	const DEFAULT_IMAGE_FILENAME_HEAD = 'default';		// デフォルトの画像ファイル名ヘッダ
+	const IMAGE_TYPE_ENTRY_IMAGE = 'entryimage';			// 画像タイプ(記事デフォルト画像)
+	const ACT_UPLOAD_IMAGE	= 'uploadimage';			// 画像アップロード
+	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
 	
 	/**
 	 * コンストラクタ
@@ -56,6 +61,9 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		// 実際に表示する画面の描画出力タイプを取得
 		$templateType = $this->_getTemplateType($this->gSystem->defaultTemplateId());// デフォルトのテンプレートIDからテンプレートタイプを取得
 		$this->targetRenderType = $this->_getRenderType($templateType);
+		
+		// 作業ディレクトリを取得
+		$this->tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリパスを取得
 	}
 	/**
 	 * ウィジェット初期化
@@ -158,6 +166,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		$this->imageType	= $request->trimValueOf('item_image_type');				// 画像タイプ
 		$imageWidth		= $request->trimIntValueOf('item_image_width', '0');			// 画像幅(空文字列をOKとする)
 		$imageHeight	= $request->trimIntValueOf('item_image_height', '0');			// 画像高さ(空文字列をOKとする)
+		$updatedEntryImage	= $request->trimValueOf('updated_entryimage');		// 記事デフォルト画像更新フラグ
 
 		// 検索対象
 		$isTargetContent = ($request->trimValueOf('item_target_content') == 'on') ? 1 : 0;		// 汎用コンテンツを検索対象とするかどうか
@@ -197,6 +206,9 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			// デフォルト値設定
 			$this->configId = $defConfigId;		// 呼び出しウィンドウから引き継いだ定義ID
 			$replaceNew = true;			// データ再取得
+			
+			// 作業ディレクトリを削除
+			rmDirectory($this->tmpDir);
 		} else if ($act == 'add'){// 新規追加
 			// 入力チェック
 			$this->checkInput($name, '名前');
@@ -214,6 +226,18 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 				}
 			}
 			
+			// 記事デフォルト画像のエラーチェック
+			if (!empty($updatedEntryImage)){
+				list($entryImageFilenameArray, $tmpArray) = $this->gInstance->getImageManager()->getSystemThumbFilename(self::DEFAULT_IMAGE_FILENAME_HEAD/*デフォルト画像*/);
+				for ($i = 0; $i < count($entryImageFilenameArray); $i++){
+					$path = $this->tmpDir . DIRECTORY_SEPARATOR . $entryImageFilenameArray[$i];
+					if (!file_exists($path)){
+						$this->setAppErrorMsg('コンテンツデフォルト画像が正常にアップロードされていません');
+						break;
+					}
+				}
+			}
+			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// 空の場合デフォルト値を設定
@@ -223,6 +247,11 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 					} else {
 						$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
 					}
+				}
+				
+				// 画像の移動
+				if (!empty($updatedEntryImage)){		// 画像更新の場合
+					$ret = mvFileToDir($this->tmpDir, $entryImageFilenameArray, $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_SEARCH, 0/*PC用*/, ''/*ディレクトリ取得*/));
 				}
 				
 				// 追加オブジェクト作成
@@ -254,6 +283,9 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 					
 					$this->configId = $defConfigId;		// 定義定義IDを更新
 					$replaceNew = true;			// データ再取得
+					
+					// 作業ディレクトリを削除
+					rmDirectory($this->tmpDir);
 				} else {
 					$this->setAppErrorMsg('データ追加に失敗しました');
 				}
@@ -265,6 +297,18 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			$this->checkNumeric($resultCount, '表示件数');
 			$this->checkNumeric($resultLength, 'テキストサイズ');
 			
+			// 記事デフォルト画像のエラーチェック
+			if (!empty($updatedEntryImage)){
+				list($entryImageFilenameArray, $tmpArray) = $this->gInstance->getImageManager()->getSystemThumbFilename(self::DEFAULT_IMAGE_FILENAME_HEAD/*デフォルト画像*/);
+				for ($i = 0; $i < count($entryImageFilenameArray); $i++){
+					$path = $this->tmpDir . DIRECTORY_SEPARATOR . $entryImageFilenameArray[$i];
+					if (!file_exists($path)){
+						$this->setAppErrorMsg('コンテンツデフォルト画像が正常にアップロードされていません');
+						break;
+					}
+				}
+			}
+			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 空の場合デフォルト値を設定
 				if (empty($searchTemplate)){
@@ -273,6 +317,11 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 					} else {
 						$searchTemplate = $this->getParsedTemplateData('default.tmpl.html', array($this, 'makeSearcheTemplate'));// デフォルト用の検索テンプレート
 					}
+				}
+				
+				// 画像の移動
+				if (!empty($updatedEntryImage)){		// 画像更新の場合
+					$ret = mvFileToDir($this->tmpDir, $entryImageFilenameArray, $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_SEARCH, 0/*PC用*/, ''/*ディレクトリ取得*/));
 				}
 				
 				// 現在の設定値を取得
@@ -306,10 +355,24 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					
 					$replaceNew = true;			// データ再取得
+					
+					// 作業ディレクトリを削除
+					rmDirectory($this->tmpDir);
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
 				}
 			}
+		} else if ($act == self::ACT_UPLOAD_IMAGE){		// 画像アップロード
+			// 作業ディレクトリを作成
+			$this->tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+			
+			// Ajaxでのファイルアップロード処理
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $this->tmpDir);
+		} else if ($act == self::ACT_GET_IMAGE){			// 画像取得
+			$imageType = $request->trimValueOf('type');		// 画像タイプ
+			
+			// Ajaxでの画像取得
+			$this->getImageByType($imageType);
 		} else if ($act == 'select'){	// 定義IDを変更
 			$replaceNew = true;			// データ再取得
 		}
@@ -413,6 +476,26 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("_widget", "user_content_message",	$messageStr);		// ユーザ作成コンテンツ用メッセージ
 		}
 		
+		// アップロード実行用URL
+		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+//		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIG;
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_UPLOAD_IMAGE;
+		$this->tmpl->addVar("_widget", "upload_url_entryimage", $this->getUrl($uploadUrl . '&type=' . self::IMAGE_TYPE_ENTRY_IMAGE));		// 記事デフォルト画像
+		
+		// ##### 画像の表示 #####
+		// アップロードされているファイルがある場合は、アップロード画像を表示
+		// 記事デフォルト画像
+		$imageUrl = '';
+		$updateStatus = '0';			// 画像更新状態
+/*		$entryImageFilename = $this->getDefaultEntryImageFilename();		// 記事デフォルト画像名取得
+		if (!empty($entryImageFilename)){
+			$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, blog_mainCommonDef::$_deviceType, $entryImageFilename) . '?' . date('YmdHis');
+		}*/
+		$imageUrl = $this->getDefaultImageUrl(self::DEFAULT_IMAGE_TYPE, $filename) . '?' . date('YmdHis');
+		$this->tmpl->addVar("_widget", "entryimage_url", $this->convertUrlToHtmlEntity($this->getUrl($imageUrl)));			// 記事デフォルト画像
+		$this->tmpl->addVar("_widget", "updated_entryimage", $updateStatus);
+		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("item_name_visible", "name", $name);		// 名前
 		$this->tmpl->addVar("_widget", "result_count",	$resultCount);			// 表示項目数
@@ -422,6 +505,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		$imageHeight = empty($imageHeight) ? '' : $imageHeight;
 		$this->tmpl->addVar("_widget", "image_width",	$this->convertToDispString($imageWidth));// 画像幅
 		$this->tmpl->addVar("_widget", "image_height",	$this->convertToDispString($imageHeight));// 画像高さ
+		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア
 		$this->tmpl->addVar("_widget", "html",	$searchTemplate);
 		$this->tmpl->addVar("_widget", "search_text",	$this->searchTextId);		// 検索用テキストフィールドのタグID
 		$this->tmpl->addVar("_widget", "search_button",	$this->searchButtonId);		// 検索用ボタンのタグID
@@ -646,6 +730,101 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVars('image_type_list', $row);
 			$this->tmpl->parseTemplate('image_type_list', 'a');
 		}
+	}
+	/**
+	 * 最大画像を取得
+	 *
+	 * @param string $type		画像タイプ
+	 * @return					なし
+	 */
+	function getImageByType($type)
+	{
+		// 画像パス作成
+		switch ($type){
+		case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
+//			$filename = $this->getDefaultEntryImageFilename();		// 記事デフォルト画像名取得
+			$this->getDefaultImageUrl(self::DEFAULT_IMAGE_TYPE, $filename);
+			break;
+		}
+		$imagePath = '';
+		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
+			
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+
+		if (is_readable($imagePath)){
+			// 画像情報を取得
+			$imageMimeType = '';
+			$imageSize = @getimagesize($imagePath);
+			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+			
+			// 画像MIMEタイプ設定
+			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
+			
+			// キャッシュの設定
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0');
+			header('Pragma: no-cache');
+		
+			// 画像ファイル読み込み
+			readfile($imagePath);
+		} else {
+			$this->gPage->showError(404);
+		}
+	
+		// システム強制終了
+		$this->gPage->exitSystem();
+	}
+	/**
+	 * アップロードファイルから各種画像を作成
+	 *
+	 * @param bool           $isSuccess		アップロード成功かどうか
+	 * @param object         $resultObj		アップロード処理結果オブジェクト
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string         $filePath		アップロードされたファイル
+	 * @param string         $destDir		アップロード先ディレクトリ
+	 * @return								なし
+	 */
+	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
+	{
+		$type = $request->trimValueOf('type');		// 画像タイプ
+		
+		if ($isSuccess){		// ファイルアップロード成功のとき
+			// 各種画像を作成
+			switch ($type){
+			case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
+				$formats = $this->gInstance->getImageManager()->getSystemThumbFormat();
+				$filenameBase = self::DEFAULT_IMAGE_FILENAME_HEAD;
+				break;
+			}
+
+			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
+			if ($ret){			// 画像作成成功の場合
+				// 画像参照用URL
+				$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+				$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+//				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIG;
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
+				$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
+				$resultObj['url'] = $imageUrl;
+			} else {// エラーの場合
+				$resultObj = array('error' => 'Could not create resized images.');
+			}
+		}
+	}
+	/**
+	 * デフォルトの画像のURLを取得
+	 *
+	 * @param string $format		画像フォーマット
+	 * @param string $filename		ファイル名
+	 * @return string				URL
+	 */
+	function getDefaultImageUrl($format, &$filename)
+	{
+		$filename = $this->gInstance->getImageManager()->getThumbFilename(self::DEFAULT_IMAGE_FILENAME_HEAD, $format);
+		$url = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_SEARCH, 0/*PC用*/, $filename);
+		return $url;
 	}
 }
 ?>
