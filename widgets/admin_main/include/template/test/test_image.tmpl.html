@@ -1,0 +1,118 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function updateItem(){
+	if (!window.confirm('設定を更新しますか?')) return false;
+	document.main.act.value='update';
+	document.main.submit();
+	return true;
+}
+// ファイルブラウザ起動
+function selectImage()
+{
+	m3OpenImageFileBrowser(SetUrl);
+}
+// ファイルブラウザからの設定用
+function SetUrl(url)
+{
+	$('#item_input').insertAtCaret(url);
+/*	// URL設定
+	$('#image_url').text(url);
+	$('#item_image_url').val(url);
+	
+	// Flashの場合はデフォルトサイズを設定
+	if ($('#item_type').val() == '1'){
+		$('#image_width').val('130');
+		$('#image_height').val('130');
+	}
+	
+	// 画像表示
+	updateImage();*/
+}
+
+$(function(){
+	// CKEditorプラグイン直接実行
+//	m3LoadCKTools();
+	
+	m3SetConfigTable('config_table');
+	
+	// ファイル選択ダイアログ用
+	m3SetFileSelectButton();
+	
+	// 画像選択
+	$("#selimage").click(function (){
+		selectImage();
+	});
+});
+//]]>
+</script>
+
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="act" />
+<input type="hidden" name="ticket" value="{TICKET}" />
+<h3 class="m3config_h"><span {_HELP_EVENT_LIST}>ヘッダタイトル</span>
+<!--<a href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" rel="m3help" data-container="body" title="記事を検索" onclick="showSearchArea();"><i class="glyphicon glyphicon-search"></i></a>-->
+</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_EVENT_BUTTONS}><div class="btn-group">
+<input type="button" class="button" data-toggle="modal" data-target="#uploadModal" value="アップロード" />
+</div></div></div>
+
+<table id="config_table">
+    <tbody>
+	<tr>
+	    <th><span {_HELP_ENTRY_NAME}>画像</span></th>
+	    <td colspan="3">
+			<h4>取得パス:{PATH}</h4>
+			<patTemplate:tmpl name="image_list">
+			<div><h4>{TITLE}</h4>
+	        <img src="{IMAGE_URL}" title="{TITLE}" /></div>
+	        </patTemplate:tmpl>
+		</td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
+</form>
+</div>
+
+<!-- File upload dialog -->
+<div id="uploadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="uploadModalLabel">Wikiページファイルアップロード</h4>
+            </div>
+            <div class="modal-body">
+			    <p>アップロードするWikiページファイルを選択してください</p>
+                <form enctype="multipart/form-data" method="post" name="upload">
+                    <input type="hidden" name="act" />
+					<input type="hidden" name="MAX_FILE_SIZE" value="10000000" />
+                    <div class="input-group">
+                        <span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>
+                        <input type="text" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">キャンセル</button>
+                <button type="button" class="btn btn-success" onclick="uploadCheck();">アップロード</button>
+            </div>
+        </div>
+    </div>
+</div>
+</patTemplate:tmpl>
