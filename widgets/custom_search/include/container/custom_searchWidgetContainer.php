@@ -772,6 +772,7 @@ class custom_searchWidgetContainer extends BaseWidgetContainer
 	{
 		$filename = $this->gInstance->getImageManager()->getThumbFilename(self::DEFAULT_IMAGE_FILENAME_HEAD, $format);
 		$url = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_SEARCH, 0/*PC用*/, $filename);
+		return $url;
 	}
 	/**
 	 * トップメッセージを追加
