@@ -492,8 +492,8 @@ class ImageManager extends Core
 		$y = 0;
 		$newX = 0;
 		$newY = 0;
-		$width = imagesx($imageObj);
-		$height = imagesy($imageObj);
+		$width = imagesx($imageObj);	// 元の画像幅
+		$height = imagesy($imageObj);	// 元の画像高さ
 		if (is_array($size)){
 			$destWidth = $size['width'];		// サムネールの幅
 			$destHeight = $size['height'];		// サムネールの高さ
@@ -515,6 +515,36 @@ class ImageManager extends Core
 					$x = 0;
 					$y = ceil(($newHeight - $destHeight) / 2);
 				}
+//				$ret = $this->createCropImage($path, 0, 0, $width, $height, $destPath, $destWidth, $destHeight, $type, $imageQuality);
+//				return $ret;
+/*				
+				// 画像サイズ取得
+				$newX = $x;
+				$newY = $y;
+				$newWidth = $width;
+				$newHeight = $height;
+				if ($destWidth > $destHeight){		// 横長タイプの画像に変換の場合
+					// 横方向に拡張
+					$newWidth = round($height * $destWidth / $destHeight);
+					$newX = round($x + $width / 2 - $newWidth / 2);
+					if ($newX < 0 || $newX + $newWidth > $srcWidth){	// 横方向に拡張できない場合は縦を縮小
+						$newHeight = round($width * $destHeight / $destWidth);
+						$newY = round($y + $height / 2 - $newHeight / 2);
+						$newX = $x;
+						$newWidth = $width;
+					}
+				} else if ($destWidth < $destHeight){		// 縦長タイプの画像に変換の場合
+					// 縦方向に拡張
+					$newHeight = round($width * $destHeight / $destWidth);
+					$newY = round($y + $height / 2 - $newHeight / 2);
+					if ($newY < 0 || $newY + $newHeight > $srcHeight){	// 縦方向に拡張できない場合は横を縮小
+						$newWidth = round($height * $destWidth / $destHeight);
+						$newX = round($x + $width / 2 - $newWidth / 2);
+						$newY = $y;
+						$newHeight = $height;
+					}
+				}
+				*/
 			} else {
 				if ($width > $height){
 					$newHeight	= $size;
@@ -1181,9 +1211,11 @@ class ImageManager extends Core
 
 				// サムネールの作成
 				if ($imageAttr == 'c'){		// 切り取りサムネールの場合
-					$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, true);
+					$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, true);				// ### OLD ###
+	//				$ret = $this->createThumb($path, $newPath, $imageWidthHeight, $imageType, true);
 				} else {
-					$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, false);
+					$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, false);				// ### OLD ###
+	//				$ret = $this->createThumb($path, $newPath, $imageWidthHeight, $imageType, false);
 				}
 				if ($ret){
 					$destFilename[] = $newFilename;
