@@ -1318,6 +1318,9 @@ class BaseDb extends Core
 			$dbType = $con->getAttribute(PDO::ATTR_DRIVER_NAME);					// DBのタイプ
 			if ($dbType == 'mysql') {	// MySQLの場合
 				$con->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+				
+				// 文字化け防止SQL実行(MySQL4.1以上)
+				$con->exec('SET NAMES utf8');// クライアントの文字セットを設定
 			}
 
 			// エンコーディング環境取得
