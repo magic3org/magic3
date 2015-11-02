@@ -504,47 +504,20 @@ class ImageManager extends Core
 
 		if ($useCrop){		// 画像切り取りありのとき
 			if (is_array($size)){
-				if ($height / $destHeight < $width / $destWidth){
+//				if ($height / $destHeight < $width / $destWidth){
+				if ($height * $destWidth < $width * $destHeight){	// 縦を基準にして横を調整する場合
 					$newHeight	= $destHeight;
 					$newWidth	= round($destHeight * $width / $height);
-					$x = ceil(($newWidth - $destWidth) / 2);
+				//	$x = ceil(($newWidth - $destWidth) / 2);
+					$x = ceil(($width - $destWidth * $height / $destHeight) / 2);
 					$y = 0;
-				} else {
+				} else {			// 横を基準にして縦を調整する場合
 					$newWidth	= $destWidth;
 					$newHeight	= round($destWidth * $height / $width);
 					$x = 0;
-					$y = ceil(($newHeight - $destHeight) / 2);
+				//	$y = ceil(($newHeight - $destHeight) / 2);
+					$y = ceil(($height - $destHeight * $width / $destWidth) / 2);
 				}
-//				$ret = $this->createCropImage($path, 0, 0, $width, $height, $destPath, $destWidth, $destHeight, $type, $imageQuality);
-//				return $ret;
-/*				
-				// 画像サイズ取得
-				$newX = $x;
-				$newY = $y;
-				$newWidth = $width;
-				$newHeight = $height;
-				if ($destWidth > $destHeight){		// 横長タイプの画像に変換の場合
-					// 横方向に拡張
-					$newWidth = round($height * $destWidth / $destHeight);
-					$newX = round($x + $width / 2 - $newWidth / 2);
-					if ($newX < 0 || $newX + $newWidth > $srcWidth){	// 横方向に拡張できない場合は縦を縮小
-						$newHeight = round($width * $destHeight / $destWidth);
-						$newY = round($y + $height / 2 - $newHeight / 2);
-						$newX = $x;
-						$newWidth = $width;
-					}
-				} else if ($destWidth < $destHeight){		// 縦長タイプの画像に変換の場合
-					// 縦方向に拡張
-					$newHeight = round($width * $destHeight / $destWidth);
-					$newY = round($y + $height / 2 - $newHeight / 2);
-					if ($newY < 0 || $newY + $newHeight > $srcHeight){	// 縦方向に拡張できない場合は横を縮小
-						$newWidth = round($height * $destWidth / $destHeight);
-						$newX = round($x + $width / 2 - $newWidth / 2);
-						$newY = $y;
-						$newHeight = $height;
-					}
-				}
-				*/
 			} else {
 				if ($width > $height){
 					$newHeight	= $size;
@@ -1211,11 +1184,11 @@ class ImageManager extends Core
 
 				// サムネールの作成
 				if ($imageAttr == 'c'){		// 切り取りサムネールの場合
-					$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, true);				// ### OLD ###
-	//				$ret = $this->createThumb($path, $newPath, $imageWidthHeight, $imageType, true);
+	//				$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, true);				// ### OLD ###
+					$ret = $this->createThumb($path, $newPath, $imageWidthHeight, $imageType, true);
 				} else {
-					$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, false);				// ### OLD ###
-	//				$ret = $this->createThumb($path, $newPath, $imageWidthHeight, $imageType, false);
+	//				$ret = $this->createThumb($path, $newPath, $imageSize, $imageType, false);				// ### OLD ###
+					$ret = $this->createThumb($path, $newPath, $imageWidthHeight, $imageType, false);
 				}
 				if ($ret){
 					$destFilename[] = $newFilename;
