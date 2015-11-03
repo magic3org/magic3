@@ -1270,11 +1270,6 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			return false;
 		}
 		// ##### システム用サムネール作成 #####
-/*		$ret = $this->gInstance->getImageManager()->createDefaultThumb(M3_VIEW_TYPE_PHOTO, $photoId, $imagePath);
-		if (!$ret){
-			$this->writeError(__METHOD__, 'システム用画像ファイル作成に失敗しました。', 1100,
-								'元のファイル名=' . $originalFilename);// 運用ログに記録
-		}*/
 		$ret = $this->gInstance->getImageManager()->createSystemDefaultThumb(M3_VIEW_TYPE_PHOTO, 0/*PC用*/, $photoId, $imagePath, $destFilename);
 		if ($ret){
 			$thumbFilename = implode(';', $destFilename);

@@ -190,7 +190,7 @@ class commentCommonDef
 					if (!file_exists($destDir)) mkdir($destDir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
 
 					// サムネール作成
-					$ret = $gInstanceManager->getImageManager()->createDefaultThumb(M3_VIEW_TYPE_BLOG, $entryId, $imagePath);
+					$ret = $gInstanceManager->getImageManager()->createDefaultThumb(M3_VIEW_TYPE_BLOG, $entryId, $imagePath);	// ### OLD ###
 					if (!$ret) $thumbUrl = '';
 				} else {
 					$thumbUrl = '';

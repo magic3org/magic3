@@ -393,7 +393,7 @@ class ImageManager extends Core
 		}
 	}
 	/**
-	 * デフォルトのサムネールを作成
+	 * デフォルトのサムネールを作成(廃止予定)
 	 *
 	 * @param string $contentType	コンテンツタイプ
 	 * @param string $contentId		コンテンツID
