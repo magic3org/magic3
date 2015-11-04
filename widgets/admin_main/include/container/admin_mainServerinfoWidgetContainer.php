@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,6 +20,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $cmdPath;		// ジョブ格納ディレクトリ
 	const MAGIC3_SRC_VER_FILE = '/var/magic3/src_version';
+	const MAGIC3_SHELL_CREATEDOMAIN = '/root/tools/createdomain.sh';		// ドメイン作成用シェルプログラム
 	const WATCH_JOB_STATUS_FILE = 'STATUS';		// ジョブ状態確認用ファイル
 	const CMD_FILENAME_CREATE_SITE = 'CMD_00_CREATESITE';			// サイト作成ジョブファイル名
 	const CMD_FILENAME_REMOVE_SITE = 'CMD_00_REMOVESITE';			// サイト削除ジョブファイル名
@@ -128,6 +129,9 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$versionInfoStr = '<span class="available">(最新版 ' . $latestVersion . ')</span>';
 		} else {
 			$srcVer = '未取得';
+			
+			// ソースの更新は不可
+			if (!file_exists(self::MAGIC3_SHELL_CREATEDOMAIN)) $this->tmpl->addVar("_widget", "update_src_button_disabled", $this->convertToDisabledString(1));
 		}
 		
 		// ジョブ監視状況
