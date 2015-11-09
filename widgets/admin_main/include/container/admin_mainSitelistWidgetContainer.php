@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -30,6 +30,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	const CMD_FILENAME_CREATE_SITE = 'CMD_00_CREATESITE';			// サイト作成ジョブファイル名
 	const CMD_FILENAME_REMOVE_SITE = 'CMD_00_REMOVESITE';			// サイト削除ジョブファイル名
 	const CMD_FILENAME_UPDATE_INSTALL_PACKAGE = 'CMD_00_UPDATEINSTALLPACKAGE';			// インストールパッケージ取得ジョブファイル名
+	const MAX_SITE_COUNT = 3;		// 管理サイト最大数
 	
 	/**
 	 * コンストラクタ
@@ -193,6 +194,9 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 			$this->tmpl->addVars('sitelist', $row);
 			$this->tmpl->parseTemplate('sitelist', 'a');
 		}
+		
+		// 管理可能なホスト数の上限を超えている場合は新規ボタンを使用不可にする
+		if (count($hostArray) >= self::MAX_SITE_COUNT) $this->tmpl->addVar('_widget', 'add_button_disabled', $this->convertToDisabledString(1));
 	}
 	/**
 	 * 詳細画面作成
@@ -218,6 +222,8 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		$reloadData = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
+			if (count($vhostList) > self::MAX_SITE_COUNT) $this->setUserErrorMsg('管理可能なホスト数を超えています');
+			
 			// 入力チェック
 			$ret = $this->checkInput($hostname, 'ホスト名');		// ホスト名
 			if ($ret && !preg_match('/^(?:[-A-Za-z0-9]+\.)+[A-Za-z]{2,6}$/', $hostname)) $this->setUserErrorMsg('不正なホスト名です');

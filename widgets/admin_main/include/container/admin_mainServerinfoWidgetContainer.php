@@ -73,6 +73,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 
 		// マスターホストのディレクトリ名
 		$masterHostId = basename(dirname($this->gEnv->getSystemRootPath()));
+		if (basename(dirname(dirname($this->gEnv->getSystemRootPath()))) != 'home') $masterHostId = 'なし';		// homeディレクトリ以外の場合はホストIDなし
 		
 		$act = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_ACT);
 		if ($act == 'getnewsrc'){		// 最新インストールパッケージ取得のとき
