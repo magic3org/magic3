@@ -430,6 +430,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "install_dir", $installDir);// インストールディレクトリ
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));// 管理用URL
+		$this->tmpl->addVar("_widget", "max_file_size", $this->gSystem->getMaxFileSizeForUpload(true));			// アップロードファイルの最大サイズ
 /*		// テンプレートアップロード
 		$imageUrl = $this->getUrl($this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
 		$imageTitle = 'テンプレートアップロード';
