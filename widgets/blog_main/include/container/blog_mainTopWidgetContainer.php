@@ -73,6 +73,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $showEntryAuthor;	// 投稿者を表示するかどうか
 	private $showEntryRegistDt;	// 投稿日時を表示するかどうか
 	private $showEntryViewCount;	// 閲覧数を表示するかどうか
+	private $showReadmore;			// 「もっと読む」ボタンを表示するかどうか
 	private $entryListDispType;		// 記事一覧表示タイプ
 	private $showEntryListImage;		// 記事一覧に画像を表示するかどうか
 	private $entryListImageType;	// 記事一覧用画像タイプ
@@ -137,6 +138,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->showEntryAuthor		= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_AUTHOR];		// 投稿者を表示するかどうか
 		$this->showEntryRegistDt	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT];		// 投稿日時を表示するかどうか
 		$this->showEntryViewCount	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_VIEW_COUNT];	// 閲覧数を表示するかどうか
+		$this->showReadmore = true;			// 「もっと読む」ボタンを表示するかどうか
+		if (empty(self::$_configArray[blog_mainCommonDef::CF_READMORE_LABEL])) $this->showReadmore = false;			// 「もっと読む」ボタンのラベルが空の場合はボタンを非表示にする
 		$this->itemTagLevel = $this->getHTagLevel();			// 記事のタイトルタグレベル
 		$this->entryListDispType	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_LIST_DISP_TYPE];		// 記事一覧表示タイプ
 		$this->showEntryListImage	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_LIST_IMAGE];		// 記事一覧に画像を表示するかどうか
@@ -1237,24 +1240,26 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$viewItem->url			= $linkUrl;						// リンク先。viewItem->urlはMagic3の拡張値。
 
 		// サムネール画像の設定
-		if ($this->entryListDispType == 1 && $this->showEntryListImage){	// 記事一覧表示タイプがタイトル・概要表示の場合
-			$filename = $this->gInstance->getImageManager()->getThumbFilename($entryId, $this->entryListImageType);
-			$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
-			if (!file_exists($path)){
-				$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $this->entryListImageType);		// デフォルト画像ファイル名
+		if ($this->entryListDispType == 1){	// 記事一覧表示タイプが概要表示の場合
+			if ($this->showEntryListImage){			// サムネール画像を表示する場合
+				$filename = $this->gInstance->getImageManager()->getThumbFilename($entryId, $this->entryListImageType);
 				$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
-			}
-			$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
- 			if (!empty($imageUrl)){
-				$viewItem->thumbUrl	= $imageUrl;
-				$viewItem->thumbAlt	= $title;
+				if (!file_exists($path)){
+					$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $this->entryListImageType);		// デフォルト画像ファイル名
+					$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+				}
+				$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+	 			if (!empty($imageUrl)){
+					$viewItem->thumbUrl	= $imageUrl;
+					$viewItem->thumbAlt	= $title;
+				}
 			}
 			
-			$isMoreContentExists = true;
+			$isMoreContentExists = true;		// 「もっと読む」ボタンを表示
 		}
 		
 		// 「もっと読む」のボタンを表示するかどうかは$viewItem->readmoreに値が設定されているかどうかで判断する
-		if ($isMoreContentExists){
+		if ($this->showReadmore && $isMoreContentExists){
 			$viewItem->readmore	= 1;			// 「もっと読む」のボタンを表示する場合
 			//$viewItem->readmorelavel	= 'some text';			// 個別に変更する場合
 		}
