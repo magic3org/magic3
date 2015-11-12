@@ -61,24 +61,13 @@ $(function(){
     <tbody>
     <tr>
 	    <th><span {_HELP_CONFIG_OPERATION}>機能</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="use_multi_blog" {USE_MULTI_BLOG} />マルチブログを使用</label></div><div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></div></td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="use_multi_blog" {USE_MULTI_BLOG} />マルチブログを使用</label></div><div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメント機能を使用</label></div></td>
 	</tr>
     <tr>
-	    <th>記事表示</th>
-	    <td><div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_VIEW_COUNT}>記事表示数：</span></div><div class="col-sm-1 m3config_item"><input type="text" name="entry_view_count" class="form-control" value="{VIEW_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div>
-		<div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_VIEW_ORDER}>記事表示順：</span></div><div class="col-sm-2 m3config_item"><select name="entry_view_order" class="form-control">
-	        <option value="0" {VIEW_ORDER_INC_SELECTED}>昇順</option>
-		<option value="1" {VIEW_ORDER_DEC_SELECTED}>降順</option>
-	    </select></div></div>
-		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリー数：</span></div><div class="col-sm-1 m3config_item"><input type="text" name="category_count" class="form-control" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div></div>
-		<div class="form-group clearfix"><div class="form-control-static col-sm-4 m3config_item"><span {_HELP_CONFIG_READMORE_LABEL}>「もっと読む」ボタンラベル：</span></div><div class="col-sm-3 m3config_item"><input type="text" name="item_readmore_label" class="form-control" value="{READMORE_LABEL}" maxlength="10" /></div></div>
-		<div class="form-group clearfix">
-		<span {_HELP_VISIBLE_ITEMS_LABEL}>表示項目：</span>
-		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_entry_regist_dt" {SHOW_ENTRY_REGIST_DT} />公開日</label></div>
-		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_entry_author" {SHOW_ENTRY_AUTHOR} />作成者</label></div>
-		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_entry_view_count" {SHOW_ENTRY_VIEW_COUNT} />ヒット数</label></div>
-		</div>
-		<div class="form-group clearfix"><div class="col-sm-3 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_show_prev_next_entry_link" {SHOW_PREV_NEXT_ENTRY_LINK} />前後記事リンクを表示</label></div></div>
+	    <th rowspan="3">記事表示</th>
+	    <th>詳細</th>
+	    <td>
+		<div class="form-group clearfix"><div class="col-sm-4 m3config_item"><div class="checkbox"><label><input type="checkbox" name="item_show_prev_next_entry_link" {SHOW_PREV_NEXT_ENTRY_LINK} />前後記事リンクを表示</label></div></div>
 		<div class="form-control-static col-sm-2 m3config_item" style="width:80px;"><span>表示位置：</span></div>
 		<div class="col-sm-1 m3config_item" style="width:100px;"><select name="item_prev_next_entry_link_pos" class="form-control">
 	        <option value="0" {PREV_NEXT_ENTRY_LINK_POS_TOP}>上</option>
@@ -88,53 +77,101 @@ $(function(){
 		</td>
 	</tr>
     <tr>
+	    <th>一覧</th>
+		<td>
+		<div class="form-control-static m3config_item col-sm-1" style="width:120px;">表示タイプ：</div>
+		<div class="form-group clearfix">
+	    <div class="col-sm-3 m3config_item" style="margin-right:50px;">
+		<select name="item_entry_list_disp_type" class="form-control">
+	        <patTemplate:tmpl name="entry_list_disp_type_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+		</div>
+		<div class="form-group clearfix">
+<div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_VIEW_COUNT}>記事表示数：</span></div><div class="col-sm-1 m3config_item"><input type="text" name="entry_view_count" class="form-control" value="{VIEW_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div>
+		<div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_VIEW_ORDER}>記事表示順：</span></div><div class="col-sm-2 m3config_item"><select name="entry_view_order" class="form-control">
+	        <option value="0" {VIEW_ORDER_INC_SELECTED}>昇順</option>
+		<option value="1" {VIEW_ORDER_DEC_SELECTED}>降順</option>
+	    </select></div></div>
+		<h4>コンテンツ表示用</h4>
+<div class="form-control-static col-sm-5 m3config_item"><span {_HELP_CONFIG_READMORE_LABEL}>「もっと読む」ボタンラベル：</span></div><div class="col-sm-3 m3config_item"><input type="text" name="item_readmore_label" class="form-control" value="{READMORE_LABEL}" maxlength="10" /></div>
+<div class="clearfix"></div>
+		<h4>タイトル・概要表示用</h4>
+		<div class="checkbox"><label><input type="checkbox" name="item_show_entry_list_image" {SHOW_ENTRY_LIST_IMAGE} />画像を表示</label></div>
+		<div class="form-control-static m3config_item col-sm-1" style="width:120px;">画像タイプ：</div>
+		<div class="form-group clearfix">
+	    <div class="col-sm-3 m3config_item" style="margin-right:50px;">
+		<select name="item_entry_list_image_type" class="form-control">
+	        <patTemplate:tmpl name="entry_list_image_type_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+		</div>
+		</td>
+	</tr>
+    <tr>
+	    <th>共通</th>
+		<td>
+<div class="form-group clearfix"><div class="form-control-static col-sm-3 m3config_item"><span {_HELP_CONFIG_CATEGORY_COUNT}>カテゴリー数：</span></div><div class="col-sm-1 m3config_item"><input type="text" name="category_count" class="form-control" value="{CATEGORY_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div></div>
+		<div class="form-group clearfix">
+		<span {_HELP_VISIBLE_ITEMS_LABEL}>表示項目：</span>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_entry_regist_dt" {SHOW_ENTRY_REGIST_DT} />公開日</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_entry_author" {SHOW_ENTRY_AUTHOR} />作成者</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_show_entry_view_count" {SHOW_ENTRY_VIEW_COUNT} />ヒット数</label></div>
+		</div>
+		</td>
+	</tr>
+    <tr>
 	    <th><span {_HELP_CONFIG_ENTRY_DEFAULT_IMAGE}>記事デフォルト画像<br />200x200</span></th>
-	    <td><img id="preview_entryimage" class="pull-left" src="{ENTRYIMAGE_URL}" /><div class="pull-right"><div id="uploader_entryimage">{UPLOAD_AREA}</div></div>
+	    <td colspan="2"><img id="preview_entryimage" class="pull-left" src="{ENTRYIMAGE_URL}" /><div class="pull-right"><div id="uploader_entryimage">{UPLOAD_AREA}</div></div>
 		</td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_RECEIVE_COMMENT}>コメント</span></th>
-	    <td>
+	    <td colspan="2">
 	    <div class="form-control-static col-sm-2 m3config_item"><span {_HELP_CONFIG_MAX_COMMENT_LENGTH}>最大文字数：</span></div><div class="col-sm-1 m3config_item"><input type="text" name="max_comment_length" class="form-control" value="{MAX_COMMENT_LENGTH}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div><div class="clearfix"></div>
 		<div class="checkbox"><label><input type="checkbox" name="comment_user_limited" {COMMENT_USER_LIMITED} />ログインしたユーザに投稿を制限</label></div>
 		</td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_MULTI_BLOG_TOP_CONTENT}>マルチブログ<br />トップコンテンツ</span></th>
-	    <td class="ckeditor"><textarea name="top_content">{TOP_CONTENT}</textarea></td>
+	    <td class="ckeditor" colspan="2"><textarea name="top_content">{TOP_CONTENT}</textarea></td>
 	</tr>
     <tr>
 	    <th rowspan="6"><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></th>
-	    <td class="info">記事詳細</td>
+	    <td class="info" colspan="2">記事詳細</td>
 	</tr>
     <tr>
-	    <td class="ckeditor"><textarea name="item_layout_entry_single">{LAYOUT_ENTRY_SINGLE}</textarea></td>
+	    <td class="ckeditor" colspan="2"><textarea name="item_layout_entry_single">{LAYOUT_ENTRY_SINGLE}</textarea></td>
 	</tr>
     <tr>
-	    <td class="info">記事一覧</td>
+	    <td class="info" colspan="2">記事一覧</td>
 	</tr>
     <tr>
-	    <td class="ckeditor"><textarea name="item_layout_entry_list">{LAYOUT_ENTRY_LIST}</textarea></td>
+	    <td class="ckeditor" colspan="2"><textarea name="item_layout_entry_list">{LAYOUT_ENTRY_LIST}</textarea></td>
 	</tr>
     <tr>
-	    <td class="info">コメント一覧</td>
+	    <td class="info" colspan="2">コメント一覧</td>
 	</tr>
     <tr>
-	    <td class="ckeditor"><textarea name="item_layout_comment_list">{LAYOUT_COMMENT_LIST}</textarea></td>
+	    <td class="ckeditor" colspan="2"><textarea name="item_layout_comment_list">{LAYOUT_COMMENT_LIST}</textarea></td>
 	</tr>
     <tr>
 	    <th rowspan="3"><span {_HELP_CONFIG_OUTPUT_HEAD}>ヘッダ出力</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} />ヘッダにOGP(Open Graph Protocol)タグを出力する(Facebook連携等)</label></div></td>
+	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_output_head" {OUTPUT_HEAD_CHECKED} />ヘッダにOGP(Open Graph Protocol)タグを出力する(Facebook連携等)</label></div></td>
 	</tr>
     <tr>
-	    <td class="info">記事詳細</td>
+	    <td class="info" colspan="2">記事詳細</td>
 	</tr>
     <tr>
-	    <td  class="ckeditor" style="height:50px;"><textarea name="item_head_view_detail" class="form-control">{HEAD_VIEW_DETAIL}</textarea></td>
+	    <td  class="ckeditor" colspan="2" style="height:50px;"><textarea name="item_head_view_detail" class="form-control">{HEAD_VIEW_DETAIL}</textarea></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_TITLE_DEF}>タイトル</span></th>
-	    <td><!--<div class="checkbox"><label><input type="checkbox" name="item_use_widget_title" {USE_WIDGET_TITLE} />ウィジェットタイトルを使用</label></div>-->
+	    <td colspan="2"><!--<div class="checkbox"><label><input type="checkbox" name="item_use_widget_title" {USE_WIDGET_TITLE} />ウィジェットタイトルを使用</label></div>-->
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">デフォルトタイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_default" class="form-control" value="{TITLE_DEFAULT}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">一覧タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_list" class="form-control" value="{TITLE_LIST}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">検索結果タイトル：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_title_search_list" class="form-control" value="{TITLE_SEARCH_LIST}" size="40" maxlength="40" /></div><div class="clearfix"></div></div>
@@ -143,7 +180,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIG_MESSAGE_DEF}>メッセージ</span></th>
-	    <td>
+	    <td colspan="2">
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">記事が登録されていないメッセージ：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_message_no_entry" class="form-control" value="{MESSAGE_NO_ENTRY}" size="80" maxlength="80" /></div><div class="clearfix"></div></div>
 		<div class="form-group"><div class="form-control-static col-sm-3 m3config_item">記事が見つからないメッセージ：</div><div class="col-sm-9 m3config_item"><input type="text" name="item_message_find_no_entry" class="form-control" value="{MESSAGE_FIND_NO_ENTRY}" size="80" maxlength="80" /></div></div>
 		</td>

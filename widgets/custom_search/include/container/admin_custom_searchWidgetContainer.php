@@ -448,7 +448,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 		$this->createItemMenu();
 		
 		// 画像タイプ選択メニュー作成
-		$this->createpImageTypeList();
+		$this->createImageTypeList();
 		
 		// カテゴリ情報取得
 		$this->categoryArray = array();		// カテゴリ種別メニュー
@@ -711,7 +711,7 @@ class admin_custom_searchWidgetContainer extends BaseAdminWidgetContainer
 	 *
 	 * @return なし
 	 */
-	function createpImageTypeList()
+	function createImageTypeList()
 	{
 		$formats = $this->gInstance->getImageManager()->getSystemThumbFormat(1/*クロップ画像のみ*/);
 		

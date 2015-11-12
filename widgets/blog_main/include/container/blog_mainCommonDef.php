@@ -36,6 +36,9 @@ class blog_mainCommonDef
 	const CF_USE_MULTI_BLOG			= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
 	const CF_MULTI_BLOG_TOP_CONTENT	= 'multi_blog_top_content';		// マルチブログ時のトップコンテンツ
 	const CF_READMORE_LABEL			= 'readmore_label';				//「もっと読む」ボタンラベル
+	const CF_ENTRY_LIST_DISP_TYPE	= 'entry_list_disp_type';		// 一覧の表示タイプ
+	const CF_SHOW_ENTRY_LIST_IMAGE	= 'show_entry_list_image';		// 記事一覧に画像を表示するかどうか
+	const CF_ENTRY_LIST_IMAGE_TYPE	= 'entry_list_image_type';		// 一覧の画像タイプ
 	const CF_OUTPUT_HEAD			= 'output_head';				// ヘッダ出力するかどうか
 	const CF_HEAD_VIEW_DETAIL		= 'head_view_detail';			// ヘッダ出力(詳細表示)
 	const CF_LAYOUT_ENTRY_SINGLE	= 'layout_entry_single';		// コンテンツレイアウト(記事詳細)

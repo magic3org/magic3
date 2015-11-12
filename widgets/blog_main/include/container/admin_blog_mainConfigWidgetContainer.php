@@ -18,9 +18,13 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
 	private $tmpDir;		// 作業ディレクトリ
+	private $entryListImageType;	// 記事一覧用画像タイプ
+	private $entryListDispType;		// 記事一覧表示タイプ
 	const IMAGE_TYPE_ENTRY_IMAGE = 'entryimage';			// 画像タイプ(記事デフォルト画像)
 	const ACT_UPLOAD_IMAGE	= 'uploadimage';			// 画像アップロード
 	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
+	const DEFAULT_ENTRY_LIST_IMAGE_TYPE	= '80c.jpg';				// 画像タイプデフォルト
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -31,6 +35,10 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		
 		// 作業ディレクトリを取得
 		$this->tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリパスを取得
+		
+		// 記事一覧表示タイプ
+		$this->entryListDispTypeArray = array(	array(	'name' => 'コンテンツ',	'value' => '0'),
+												array(	'name' => 'タイトル・概要',	'value' => '1'));
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -67,6 +75,9 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$useMultiBlog	= $request->trimCheckedValueOf('use_multi_blog');		// マルチブログ機能を使用するかどうか
 		$topContent		= $request->valueOf('top_content');	// トップコンテンツ
 		$readmoreLabel	= $request->trimValueOf('item_readmore_label');			//「もっと読む」ボタンラベル
+		$this->entryListDispType	= $request->trimValueOf('item_entry_list_disp_type');		// 記事一覧表示タイプ
+		$showEntryListImage			= $request->trimCheckedValueOf('item_show_entry_list_image');		// 記事一覧に画像を表示するかどうか
+		$this->entryListImageType	= $request->trimValueOf('item_entry_list_image_type');		// 一覧用画像タイプ
 		$maxCommentLength	= $request->valueOf('max_comment_length');	// コメント最大文字数
 		$layoutEntrySingle	= $request->valueOf('item_layout_entry_single');					// コンテンツレイアウト(記事詳細)
 		$layoutEntryList	= $request->valueOf('item_layout_entry_list');					// コンテンツレイアウト(記事一覧)
@@ -128,6 +139,9 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_USE_MULTI_BLOG, $useMultiBlog);		// マルチブログ機能を使用するかどうか
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_MULTI_BLOG_TOP_CONTENT, $topContent);	// マルチブログ時のトップコンテンツ
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_READMORE_LABEL, $readmoreLabel);			//「もっと読む」ボタンラベル
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_ENTRY_LIST_DISP_TYPE, $this->entryListDispType);// 記事一覧表示タイプ
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_SHOW_ENTRY_LIST_IMAGE, $showEntryListImage);// 記事一覧に画像を表示するかどうか
+				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_ENTRY_LIST_IMAGE_TYPE, $this->entryListImageType);		// 一覧用画像タイプ
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE, $layoutEntrySingle);		// コンテンツレイアウト(記事詳細)
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST, $layoutEntryList);		// コンテンツレイアウト(記事一覧)
 				if ($ret) $ret = self::$_mainDb->updateConfig(blog_mainCommonDef::CF_LAYOUT_COMMENT_LIST, $layoutCommentList);		// コンテンツレイアウト(コメント一覧)
@@ -200,6 +214,10 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			if (!isset($useMultiBlog)) $useMultiBlog = '0';
 			$topContent = self::$_mainDb->getConfig(blog_mainCommonDef::CF_MULTI_BLOG_TOP_CONTENT);// マルチブログ時のトップコンテンツ
 			$readmoreLabel = self::$_mainDb->getConfig(blog_mainCommonDef::CF_READMORE_LABEL);			//「もっと読む」ボタンラベル
+			$this->entryListDispType	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_LIST_DISP_TYPE);// 記事一覧表示タイプ
+			$showEntryListImage			= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_ENTRY_LIST_IMAGE);// 記事一覧に画像を表示するかどうか
+			$this->entryListImageType	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_LIST_IMAGE_TYPE);		// 一覧用画像タイプ
+			if (empty($this->entryListImageType)) $this->entryListImageType = self::DEFAULT_ENTRY_LIST_IMAGE_TYPE;				// 画像タイプデフォルト
 			$layoutEntrySingle = self::$_mainDb->getConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE);		// コンテンツレイアウト(記事詳細)
 			if (empty($layoutEntrySingle)) $layoutEntrySingle = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 			$layoutEntryList = self::$_mainDb->getConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST);		// コンテンツレイアウト(記事一覧)
@@ -237,6 +255,12 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$this->tmpl->addVar("_widget", "view_order_dec_selected", 'selected');// 記事表示順
 		}
 		
+		// 記事一覧表示タイプ選択メニュー作成
+		$this->createEntryListDispTypeMenu();
+	
+		// 一覧画像タイプ選択メニュー作成
+		$this->createEntryListImageTypeMenu();
+		
 		// アップロード実行用URL
 		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
@@ -263,6 +287,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		$this->tmpl->addVar("_widget", "use_multi_blog", $this->convertToCheckedString($useMultiBlog));// マルチブログ機能を使用するかどうか
 		$this->tmpl->addVar("_widget", "top_content", $topContent);		// マルチブログ時のトップコンテンツ
 		$this->tmpl->addVar("_widget", "readmore_label", $this->convertToDispString($readmoreLabel));			//「もっと読む」ボタンラベル
+		$this->tmpl->addVar("_widget", "show_entry_list_image",	$this->convertToCheckedString($showEntryListImage));// 記事一覧に画像を表示するかどうか
 		$this->tmpl->addVar("_widget", "layout_entry_single", $layoutEntrySingle);		// コンテンツレイアウト(記事詳細)
 		$this->tmpl->addVar("_widget", "layout_entry_list", $layoutEntryList);		// コンテンツレイアウト(記事一覧)
 		$this->tmpl->addVar("_widget", "layout_comment_list", $layoutCommentList);		// コンテンツレイアウト(コメント一覧)
@@ -379,6 +404,53 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$filename = $filenameArray[count($filenameArray) -1];
 		}
 		return $filename;
+	}
+	/**
+	 * 画像タイプ選択メニュー作成
+	 *
+	 * @return なし
+	 */
+	function createEntryListImageTypeMenu()
+	{
+		$formats = $this->gInstance->getImageManager()->getSystemThumbFormat(1/*クロップ画像のみ*/);
+		
+		for ($i = 0; $i < count($formats); $i++){
+			$id = $formats[$i];
+			$name = $id;
+			
+			$selected = '';
+			if ($id == $this->entryListImageType) $selected = 'selected';
+
+			$row = array(
+				'value'			=> $this->convertToDispString($id),				// 値
+				'name'			=> $this->convertToDispString($name),			// 名前
+				'selected'		=> $selected			// 選択中かどうか
+			);
+			$this->tmpl->addVars('entry_list_image_type_list', $row);
+			$this->tmpl->parseTemplate('entry_list_image_type_list', 'a');
+		}
+	}
+	/**
+	 * 記事一覧表示タイプ選択メニュー作成
+	 *
+	 * @return なし
+	 */
+	function createEntryListDispTypeMenu()
+	{
+		for ($i = 0; $i < count($this->entryListDispTypeArray); $i++){
+			$value = $this->entryListDispTypeArray[$i]['value'];
+			$name = $this->entryListDispTypeArray[$i]['name'];
+			$selected = '';
+			if ($this->entryListDispType == $value) $selected = 'selected';
+			
+			$row = array(
+				'value'    => $value,			// タイプ値
+				'name'     => $this->convertToDispString($name),			// タイプ名
+				'selected' => $selected			// 選択中かどうか
+			);
+			$this->tmpl->addVars('entry_list_disp_type_list', $row);
+			$this->tmpl->parseTemplate('entry_list_disp_type_list', 'a');
+		}
 	}
 }
 ?>
