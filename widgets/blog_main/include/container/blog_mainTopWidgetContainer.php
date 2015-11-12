@@ -73,7 +73,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $showEntryAuthor;	// 投稿者を表示するかどうか
 	private $showEntryRegistDt;	// 投稿日時を表示するかどうか
 	private $showEntryViewCount;	// 閲覧数を表示するかどうか
-			
+	private $entryListDispType;		// 記事一覧表示タイプ
+	private $showEntryListImage;		// 記事一覧に画像を表示するかどうか
+	private $entryListImageType;	// 記事一覧用画像タイプ
+	
 	const LINK_PAGE_COUNT		= 5;			// リンクページ数
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_MIN_POS = 30;			// 編集アイコンの位置
@@ -135,6 +138,10 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->showEntryRegistDt	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_REGIST_DT];		// 投稿日時を表示するかどうか
 		$this->showEntryViewCount	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_VIEW_COUNT];	// 閲覧数を表示するかどうか
 		$this->itemTagLevel = $this->getHTagLevel();			// 記事のタイトルタグレベル
+		$this->entryListDispType	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_LIST_DISP_TYPE];		// 記事一覧表示タイプ
+		$this->showEntryListImage	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_LIST_IMAGE];		// 記事一覧に画像を表示するかどうか
+		$this->entryListImageType	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_LIST_IMAGE_TYPE];	// 記事一覧用画像タイプ
+		if (empty($this->entryListImageType)) $this->entryListImageType = blog_mainCommonDef::DEFAULT_ENTRY_LIST_IMAGE_TYPE;
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -958,6 +965,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$title = $fetchedRow['be_name'];// タイトル
 		$date = $fetchedRow['be_regist_dt'];// 登録日時
 		$author	= $fetchedRow['lu_name'];	// 投稿者
+		$summary	= $fetchedRow['be_description'];	// 概要
 		$showComment = $fetchedRow['be_show_comment'];				// コメントを表示するかどうか
 		$blogId = $fetchedRow['be_blog_id'];						// ブログID
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
@@ -1219,10 +1227,31 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$viewItem = new stdClass;
 		$viewItem->id			= $entryId;	// コンテンツID
 		$viewItem->title		= $title;	// コンテンツ名
-		$viewItem->introtext	= $this->buttonList . $buttonList . $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
+		if ($this->entryListDispType == 0){			// コンテンツ表示の場合
+			$viewItem->introtext	= $this->buttonList . $buttonList . $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
+		} else {		// タイトル・概要表示の場合
+			$viewItem->introtext	= $this->convertToDispString($summary);		// 概要
+		}
 		$viewItem->text			= $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state		= 1;			// 表示モード(0=新着,1=表示済み)
 		$viewItem->url			= $linkUrl;						// リンク先。viewItem->urlはMagic3の拡張値。
+
+		// サムネール画像の設定
+		if ($this->entryListDispType == 1 && $this->showEntryListImage){	// 記事一覧表示タイプがタイトル・概要表示の場合
+			$filename = $this->gInstance->getImageManager()->getThumbFilename($entryId, $this->entryListImageType);
+			$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+			if (!file_exists($path)){
+				$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $this->entryListImageType);		// デフォルト画像ファイル名
+				$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+			}
+			$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+ 			if (!empty($imageUrl)){
+				$viewItem->thumbUrl	= $imageUrl;
+				$viewItem->thumbAlt	= $title;
+			}
+			
+			$isMoreContentExists = true;
+		}
 		
 		// 「もっと読む」のボタンを表示するかどうかは$viewItem->readmoreに値が設定されているかどうかで判断する
 		if ($isMoreContentExists){

@@ -18,12 +18,11 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
 	private $tmpDir;		// 作業ディレクトリ
-	private $entryListImageType;	// 記事一覧用画像タイプ
 	private $entryListDispType;		// 記事一覧表示タイプ
+	private $entryListImageType;	// 記事一覧用画像タイプ
 	const IMAGE_TYPE_ENTRY_IMAGE = 'entryimage';			// 画像タイプ(記事デフォルト画像)
 	const ACT_UPLOAD_IMAGE	= 'uploadimage';			// 画像アップロード
 	const ACT_GET_IMAGE		= 'getimage';		// 画像取得
-	const DEFAULT_ENTRY_LIST_IMAGE_TYPE	= '80c.jpg';				// 画像タイプデフォルト
 	
 	/**
 	 * コンストラクタ
@@ -38,7 +37,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 		
 		// 記事一覧表示タイプ
 		$this->entryListDispTypeArray = array(	array(	'name' => 'コンテンツ',	'value' => '0'),
-												array(	'name' => 'タイトル・概要',	'value' => '1'));
+												array(	'name' => '概要',	'value' => '1'));
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -217,7 +216,7 @@ class admin_blog_mainConfigWidgetContainer extends admin_blog_mainBaseWidgetCont
 			$this->entryListDispType	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_LIST_DISP_TYPE);// 記事一覧表示タイプ
 			$showEntryListImage			= self::$_mainDb->getConfig(blog_mainCommonDef::CF_SHOW_ENTRY_LIST_IMAGE);// 記事一覧に画像を表示するかどうか
 			$this->entryListImageType	= self::$_mainDb->getConfig(blog_mainCommonDef::CF_ENTRY_LIST_IMAGE_TYPE);		// 一覧用画像タイプ
-			if (empty($this->entryListImageType)) $this->entryListImageType = self::DEFAULT_ENTRY_LIST_IMAGE_TYPE;				// 画像タイプデフォルト
+			if (empty($this->entryListImageType)) $this->entryListImageType = blog_mainCommonDef::DEFAULT_ENTRY_LIST_IMAGE_TYPE;				// 画像タイプデフォルト
 			$layoutEntrySingle = self::$_mainDb->getConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE);		// コンテンツレイアウト(記事詳細)
 			if (empty($layoutEntrySingle)) $layoutEntrySingle = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 			$layoutEntryList = self::$_mainDb->getConfig(blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST);		// コンテンツレイアウト(記事一覧)

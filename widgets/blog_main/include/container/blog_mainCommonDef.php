@@ -74,6 +74,7 @@ class blog_mainCommonDef
 	const DEFAULT_MESSAGE_NO_ENTRY		= 'ブログ記事は登録されていません';				// ブログ記事が登録されていないメッセージ
 	const DEFAULT_MESSAGE_FIND_NO_ENTRY	= 'ブログ記事が見つかりません';					// ブログ記事が見つからないメッセージ
 //	const DEFAULT_TITLE_TAG_LEVEL		= 2;		// デフォルトのタイトルタグレベル
+	const DEFAULT_ENTRY_LIST_IMAGE_TYPE	= '80c.jpg';				// 画像タイプデフォルト
 	
 	/**
 	 * ブログ定義値をDBから取得
