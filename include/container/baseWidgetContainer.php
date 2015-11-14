@@ -802,9 +802,6 @@ class BaseWidgetContainer extends Core
 	{
 		// テンプレートオブジェクト作成
 		$tmpl = new PatTemplate();
-		
-//		// テンプレート読み込みディレクトリを設定
-//		$tmpl->setRoot($this->gEnv->getCurrentWidgetTemplatePath());
 
 		// ##### テンプレート読み込みディレクトリ #####
 		$dirArray = array();

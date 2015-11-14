@@ -34,6 +34,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $currentPageUrl;			// 現在のページURL
 	private $viewItemsData = array();			// Joomla!ビュー用データ
 	private $buttonList;		// コンテンツ編集ボタン
+	
 	// 表示制御
 	private $isSystemManageUser;	// システム運用可能ユーザかどうか
 	private $isCmdAccess;			// cmd付きアクセスかどうか
@@ -175,7 +176,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 		} else if ($act == 'search' || !empty($keyword)){
 			$this->viewMode = 2;					// 表示モード(検索一覧表示)
-			return 'list.tmpl.html';		// 検索結果一覧
 		} else {
 			$year = $request->trimValueOf('year');		// 年指定
 			$month = $request->trimValueOf('month');		// 月指定
@@ -183,12 +183,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			
 			if (!empty($category) || !empty($year) || !empty($month)){
 				$this->viewMode = 1;					// 表示モード(記事一覧表示)
-				return 'list.tmpl.html';	// 記事一覧
 			} else {
 				$this->viewMode = 0;					// 表示モード(トップ一覧表示)
-				return 'list.tmpl.html';		// トップ画面記事一覧
 			}
 		}
+		return 'list.tmpl.html';		// トップ画面記事一覧
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -1131,7 +1130,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		// あらかじめ「CT_」タグをすべて取得する?
 		$contentInfo = array();
 		$contentInfo[M3_TAG_MACRO_CONTENT_ID] = $fetchedRow['be_id'];			// コンテンツ置換キー(エントリーID)
-		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $this->getUrl($linkUrl);// コンテンツ置換キー(エントリーURL)
+		$contentInfo[M3_TAG_MACRO_CONTENT_URL] = $linkUrl;// コンテンツ置換キー(エントリーURL)
 		$contentInfo[M3_TAG_MACRO_CONTENT_TITLE] = $fetchedRow['be_name'];			// コンテンツ置換キー(タイトル)
 		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['be_description'];			// コンテンツ置換キー(簡易説明)
 		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
@@ -1142,14 +1141,14 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_ID]		= $blogId;			// コンテンツ置換キー(ブログID)
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_TITLE]	= $fetchedRow['bl_name'];			// コンテンツ置換キー(ブログタイトル)
 		}
-		if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!新型テンプレートの場合
+/*		if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!新型テンプレートの場合
 			$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = '';			// コンテンツ置換キー(著者)
 			$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = '';		// コンテンツ置換キー(登録日時)
 			$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = '';		// コンテンツ置換キー(登録日)
 			$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = '';		// コンテンツ置換キー(登録時)
 			if ($this->showEntryViewCount) $viewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);
 			$contentInfo[M3_TAG_MACRO_CONTENT_VIEW_COUNT] = '';			// コンテンツ置換キー(閲覧数)
-		} else {
+		} else {*/
 			if ($this->showEntryAuthor){		// 投稿者
 				$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $author;			// コンテンツ置換キー(著者)
 			} else {
@@ -1170,11 +1169,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {
 				$contentInfo[M3_TAG_MACRO_CONTENT_VIEW_COUNT] = '';			// コンテンツ置換キー(閲覧数)
 			}
-		}
+/*		}*/
 		
 		// HTMLを出力(出力内容は特にエラーチェックしない)
 		$isMoreContentExists = false;		// 「もっと読む」ボタンを作成するかどうか
 		$entryHtml = $fetchedRow['be_html'];
+		$imageTag = '';			// 記事サムネール画像(リンク付き)
 		if ($this->viewMode == 10){	// 記事単体表示のとき
 			if (!empty($fetchedRow['be_html_ext'])) $entryHtml = $fetchedRow['be_html_ext'];// 続きがある場合は続きを出力
 			
@@ -1185,12 +1185,31 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->gPage->setHeadOthers($headText);
 			}
 		} else {
-			// ##### 「もっと読む」ボタンの作成 #####
-			if (!empty($fetchedRow['be_html_ext'])){
+			switch ($this->entryListDispType){
+			case 0:		// 記事一覧表示タイプがコンテンツ表示の場合
+			default:
+				// ##### 「もっと読む」ボタンの作成 #####
+				if (!empty($fetchedRow['be_html_ext'])){
+					// 旧テンプレート処理の場合は「もっと読む」ボタンを出力
+					if ($this->_renderType != M3_RENDER_JOOMLA_NEW) $entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a></div>';
+				
+					$isMoreContentExists = true;	// 「もっと読む」ボタンを表示する
+				}
+				break;
+			case 1:		// 記事一覧表示タイプが概要表示の場合
+				$entryHtml = $this->convertToDispString($summary);		// 概要
+				
+				// 画像タグ作成
+				$imageUrl = $this->getListImageUrl($entryId);
+				$imageTitle = $this->convertToDispString($title);
+				$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
+				$imageTag = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $imageTag . '</a>';
+				
 				// 旧テンプレート処理の場合は「もっと読む」ボタンを出力
 				if ($this->_renderType != M3_RENDER_JOOMLA_NEW) $entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a></div>';
-				
-				$isMoreContentExists = true;	// 「もっと読む」ボタンを表示する
+					
+				$isMoreContentExists = true;		// 「もっと読む」ボタンを表示
+				break;
 			}
 		}
 		if (!empty($entryHtml)) $entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
@@ -1199,7 +1218,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		/*$contentParam = array_merge($userFields, array(M3_TAG_MACRO_TITLE => $titleTag, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_BODY => $entryHtml,
 														//M3_TAG_MACRO_FILES => '', M3_TAG_MACRO_PAGES => '',
 														'LINKS' => $relatedContentTag, M3_TAG_MACRO_CATEGORY => $categoryTag, M3_TAG_MACRO_COMMENT_LINK => $commentLink));*/
-		$contentParam = array_merge($userFields, array(	M3_TAG_MACRO_TITLE => ''/*タイトル*/, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_BODY => $entryHtml,
+		$contentParam = array_merge($userFields, array(	M3_TAG_MACRO_TITLE => ''/*タイトル*/, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_IMAGE => $imageTag, M3_TAG_MACRO_BODY => $entryHtml,
 														/*M3_TAG_MACRO_FILES => '', M3_TAG_MACRO_PAGES => '',*/
 														'LINKS' => $relatedContentTag, M3_TAG_MACRO_CATEGORY => $categoryTag, M3_TAG_MACRO_COMMENT_LINK => $commentLink));
 		$entryHtml = $this->createDetailContent($this->viewMode, $contentParam);
@@ -1242,20 +1261,12 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		// サムネール画像の設定
 		if ($this->entryListDispType == 1){	// 記事一覧表示タイプが概要表示の場合
 			if ($this->showEntryListImage){			// サムネール画像を表示する場合
-				$filename = $this->gInstance->getImageManager()->getThumbFilename($entryId, $this->entryListImageType);
-				$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
-				if (!file_exists($path)){
-					$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $this->entryListImageType);		// デフォルト画像ファイル名
-					$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
-				}
-				$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
-	 			if (!empty($imageUrl)){
+				$imageUrl = $this->getListImageUrl($entryId);
+				if (!empty($imageUrl)){
 					$viewItem->thumbUrl	= $imageUrl;
 					$viewItem->thumbAlt	= $title;
 				}
 			}
-			
-			$isMoreContentExists = true;		// 「もっと読む」ボタンを表示
 		}
 		
 		// 「もっと読む」のボタンを表示するかどうかは$viewItem->readmoreに値が設定されているかどうかで判断する
@@ -1287,8 +1298,16 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_SINGLE];			// コンテンツレイアウト(記事詳細)
 				if (empty($initContentText)) $initContentText = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_SINGLE;
 			} else {
-				$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST];			// コンテンツレイアウト(記事一覧)
-				if (empty($initContentText)) $initContentText = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_LIST;
+				switch ($this->entryListDispType){
+				case 0:		// 記事一覧表示タイプがコンテンツ表示の場合
+				default:
+					$initContentText = self::$_configArray[blog_mainCommonDef::CF_LAYOUT_ENTRY_LIST];			// コンテンツレイアウト(記事一覧)
+					if (empty($initContentText)) $initContentText = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_LIST;
+					break;
+				case 1:		// 記事一覧表示タイプが概要表示の場合
+					$initContentText = blog_mainCommonDef::DEFAULT_LAYOUT_ENTRY_LIST_SUMMARY;
+					break;
+				}
 			}
 		}
 		
@@ -1484,6 +1503,25 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->headScript = $this->getParsedTemplateData('edit.tmpl.js', array($this, 'makeScript'), array(1/*投稿者用スクリプト*/, $multiBlogParam));
 			}
 		}
+	}
+	/**
+	 * 一覧用画像URLの取得
+	 *
+	 * @param string $entryId				記事ID
+	 * @return string						画像のURL
+	 */
+	function getListImageUrl($entryId)
+	{
+		$imageUrl = '';
+		$filename = $this->gInstance->getImageManager()->getThumbFilename($entryId, $this->entryListImageType);
+		$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+		if (!file_exists($path)){
+			$filename = $this->gInstance->getImageManager()->getThumbFilename(0, $this->entryListImageType);		// デフォルト画像ファイル名
+			$path = $this->gInstance->getImageManager()->getSystemThumbPath(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+		}
+		$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
+		
+		return $imageUrl;
 	}
 }
 ?>

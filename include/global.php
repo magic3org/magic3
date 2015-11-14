@@ -102,6 +102,7 @@ define('M3_TAG_MACRO_ITEM_KEY',		'ITEM_KEY_');							// 汎用置換キー
 define('M3_TAG_MACRO_CONTENT_KEY',	'CT_');									// コンテンツマクロ置換キー
 define('M3_TAG_MACRO_COMMENT_KEY',	'CM_');									// コメントマクロ置換キー
 define('M3_TAG_MACRO_USER_KEY',		'USER_');								// ユーザ定義置換キー
+define('M3_TAG_MACRO_DEFAULT',		'DEFAULT');								// システムデフォルト値に置換
 define('M3_TAG_MACRO_ITEM',			'ITEM');								// 項目置換キー
 define('M3_TAG_MACRO_TITLE',		'TITLE');								// タイトル置換キー
 define('M3_TAG_MACRO_NOTITLE',		'NOTITLE');								// タイトル置換キー(タイトルなしの場合)
