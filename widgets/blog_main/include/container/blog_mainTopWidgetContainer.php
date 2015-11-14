@@ -75,6 +75,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	private $showEntryRegistDt;	// 投稿日時を表示するかどうか
 	private $showEntryViewCount;	// 閲覧数を表示するかどうか
 	private $showReadmore;			// 「もっと読む」ボタンを表示するかどうか
+	private $readmoreLabel;			// 「もっと読む」ボタンラベル
 	private $entryListDispType;		// 記事一覧表示タイプ
 	private $showEntryListImage;		// 記事一覧に画像を表示するかどうか
 	private $entryListImageType;	// 記事一覧用画像タイプ
@@ -83,7 +84,6 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EDIT_ICON_MIN_POS = 30;			// 編集アイコンの位置
 	const EDIT_ICON_NEXT_POS = 35;			// 編集アイコンの位置
-	const MESSAGE_EXT_ENTRY		= 'もっと読む';					// 投稿記事に続きがある場合の表示
 	const MESSAGE_EXT_ENTRY_PRE	= '…&nbsp;';							// 投稿記事に続きがある場合の表示
 	const DEFAULT_TITLE_SEARCH = '検索';		// 検索時のデフォルトページタイトル
 	const TITLE_RELATED_CONTENT_BLOCK = '関連記事';		// 関連コンテンツブロック
@@ -141,6 +141,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$this->showEntryViewCount	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_VIEW_COUNT];	// 閲覧数を表示するかどうか
 		$this->showReadmore = true;			// 「もっと読む」ボタンを表示するかどうか
 		if (empty(self::$_configArray[blog_mainCommonDef::CF_READMORE_LABEL])) $this->showReadmore = false;			// 「もっと読む」ボタンのラベルが空の場合はボタンを非表示にする
+		$this->readmoreLabel = self::$_configArray[blog_mainCommonDef::CF_READMORE_LABEL];// 「もっと読む」ボタンラベル
 		$this->itemTagLevel = $this->getHTagLevel();			// 記事のタイトルタグレベル
 		$this->entryListDispType	= self::$_configArray[blog_mainCommonDef::CF_ENTRY_LIST_DISP_TYPE];		// 記事一覧表示タイプ
 		$this->showEntryListImage	= self::$_configArray[blog_mainCommonDef::CF_SHOW_ENTRY_LIST_IMAGE];		// 記事一覧に画像を表示するかどうか
@@ -291,8 +292,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		}
 		
 		// ##### Joomla!新型テンプレートに記事データを設定 #####
-		$readmoreLabel = self::$_configArray[blog_mainCommonDef::CF_READMORE_LABEL];// 「もっと読む」ボタンラベル
-		$this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, $this->categoryDesc/*カテゴリーの説明*/, $readmoreLabel);
+		$this->setJoomlaViewData($this->viewItemsData, count($this->viewItemsData)/*先頭(leading部)のコンテンツ数*/, 0/*カラム部(intro部)のコンテンツ数*/, 0/*カラム部(intro部)のカラム数*/, $this->categoryDesc/*カテゴリーの説明*/, $this->readmoreLabel);
 		
 		// ##### 運用可能ユーザの場合は編集用ボタンを表示 #####
 		$this->createEditButton();
@@ -1141,14 +1141,15 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_ID]		= $blogId;			// コンテンツ置換キー(ブログID)
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_TITLE]	= $fetchedRow['bl_name'];			// コンテンツ置換キー(ブログタイトル)
 		}
-/*		if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!新型テンプレートの場合
+		// ### Joomla!新型テンプレートの場合はテンプレートに組み込みの表示機能を使用する ###
+		if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!新型テンプレートの場合
 			$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = '';			// コンテンツ置換キー(著者)
 			$contentInfo[M3_TAG_MACRO_CONTENT_REGIST_DT] = '';		// コンテンツ置換キー(登録日時)
 			$contentInfo[M3_TAG_MACRO_CONTENT_DATE] = '';		// コンテンツ置換キー(登録日)
 			$contentInfo[M3_TAG_MACRO_CONTENT_TIME] = '';		// コンテンツ置換キー(登録時)
 			if ($this->showEntryViewCount) $viewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);
 			$contentInfo[M3_TAG_MACRO_CONTENT_VIEW_COUNT] = '';			// コンテンツ置換キー(閲覧数)
-		} else {*/
+		} else {
 			if ($this->showEntryAuthor){		// 投稿者
 				$contentInfo[M3_TAG_MACRO_CONTENT_AUTHOR] = $author;			// コンテンツ置換キー(著者)
 			} else {
@@ -1169,9 +1170,9 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {
 				$contentInfo[M3_TAG_MACRO_CONTENT_VIEW_COUNT] = '';			// コンテンツ置換キー(閲覧数)
 			}
-/*		}*/
+		}
 		
-		// HTMLを出力(出力内容は特にエラーチェックしない)
+		// メインのコンテンツデータを作成
 		$isMoreContentExists = false;		// 「もっと読む」ボタンを作成するかどうか
 		$entryHtml = $fetchedRow['be_html'];
 		$imageTag = '';			// 記事サムネール画像(リンク付き)
@@ -1191,7 +1192,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				// ##### 「もっと読む」ボタンの作成 #####
 				if (!empty($fetchedRow['be_html_ext'])){
 					// 旧テンプレート処理の場合は「もっと読む」ボタンを出力
-					if ($this->_renderType != M3_RENDER_JOOMLA_NEW) $entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a></div>';
+					if ($this->_renderType != M3_RENDER_JOOMLA_NEW && $this->showReadmore) $entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $this->convertToDispString($this->readmoreLabel) . '</a></div>';
 				
 					$isMoreContentExists = true;	// 「もっと読む」ボタンを表示する
 				}
@@ -1200,13 +1201,15 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$entryHtml = $this->convertToDispString($summary);		// 概要
 				
 				// 画像タグ作成
-				$imageUrl = $this->getListImageUrl($entryId);
-				$imageTitle = $this->convertToDispString($title);
-				$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
-				$imageTag = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $imageTag . '</a>';
+				if ($this->showEntryListImage){			// サムネール画像を表示する場合
+					$imageUrl = $this->getListImageUrl($entryId);
+					$imageTitle = $this->convertToDispString($title);
+					$imageTag = '<img src="' . $this->getUrl($imageUrl) . '" alt="' . $imageTitle . '" title="' . $imageTitle . '" />';
+					$imageTag = '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $imageTag . '</a>';
+				}
 				
 				// 旧テンプレート処理の場合は「もっと読む」ボタンを出力
-				if ($this->_renderType != M3_RENDER_JOOMLA_NEW) $entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . self::MESSAGE_EXT_ENTRY . '</a></div>';
+				if ($this->_renderType != M3_RENDER_JOOMLA_NEW && $this->showReadmore) $entryHtml .= '<div>' . self::MESSAGE_EXT_ENTRY_PRE . '<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '" >' . $this->convertToDispString($this->readmoreLabel) . '</a></div>';
 					
 				$isMoreContentExists = true;		// 「もっと読む」ボタンを表示
 				break;
