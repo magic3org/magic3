@@ -318,8 +318,11 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	// Bootstrapライブラリ
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.2.0/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.2.0/css/bootstrap.min.css';
+//	const BOOTSTRAP_FILENAME		= 'bootstrap-3.3.5/js/bootstrap.min.js';			// bootstrap
+//	const BOOTSTRAP_CSS				= 'bootstrap-3.3.5/css/bootstrap.min.css';
 	// BootstrapオプションはBootstrapのディレクトリ配下に格納
 	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.2.0/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
+//	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.3.5/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap/css/bootsnipp_largedropdownmenu.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap/css/yamm.css';					// bootstrapメガメニュー
 //	const BOOTSTRAP_DIALOG_FILENAME					= 'bootstrap/bootstrap3-dialog/bootstrap-dialog.js';		// Bootstrap Dialog拡張
