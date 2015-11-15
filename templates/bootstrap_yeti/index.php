@@ -21,6 +21,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 	<script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
 	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
 	<![endif]-->
+	<script src="<?php echo $templateUrl; ?>/bootstrap.min.js"></script>
 	<script src="<?php echo $templateUrl; ?>/m3custom.js"></script>
 <?php global $gPageManager;if (!$gPageManager->isLayout()): ?>
 <script type="text/javascript">

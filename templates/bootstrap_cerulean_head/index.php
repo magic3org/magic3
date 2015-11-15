@@ -33,6 +33,7 @@ if (empty($parsedUrl['query']) || $gPageManager->isLayout()) $isTop = true;
 	<script src="<?php echo $templateUrl; ?>/html5shiv.js"></script>
 	<script src="<?php echo $templateUrl; ?>/respond.min.js"></script>
 	<![endif]-->
+	<script src="<?php echo $templateUrl; ?>/bootstrap.min.js"></script>
 	<script src="<?php echo $templateUrl; ?>/m3custom.js"></script>
 <?php if (!$gPageManager->isLayout()): ?>
 <script type="text/javascript">
