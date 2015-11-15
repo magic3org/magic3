@@ -1255,7 +1255,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if ($this->entryListDispType == 0){			// コンテンツ表示の場合
 			$viewItem->introtext	= $this->buttonList . $buttonList . $entryHtml;	// コンテンツ内容(Joomla!2.5以降テンプレート用)
 		} else {		// タイトル・概要表示の場合
-			$viewItem->introtext	= $this->convertToDispString($summary);		// 概要
+			$viewItem->introtext	= $this->buttonList . $buttonList . $this->convertToDispString($summary);		// 概要
 		}
 		$viewItem->text			= $viewItem->introtext;	// コンテンツ内容(Joomla!1.5テンプレート用)
 		$viewItem->state		= 1;			// 表示モード(0=新着,1=表示済み)
