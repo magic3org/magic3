@@ -81,13 +81,13 @@ $(function(){
 	    <th>{_LC_LABEL_WIDGET_NAME}<br />{_LC_LABEL_WIDGET_ID}</th>
 	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_CONFIG_ID}>{_LC_LABEL_CONFIG_ID}</span></th>
 	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_VISIBLE}>{_LC_LABEL_VISIBLE}</span></th>
-	    <th style="width:50px;"><span {_HELP_PAGEDEF_WIDGET_COMMON}>{_LC_LABEL_SHARED}</span></th>
+	    <th style="width:70px;"><span {_HELP_PAGEDEF_WIDGET_COMMON}>{_LC_LABEL_SHARED}</span></th>
 	    <th style="width:100px;">{_LC_LABEL_OPERATION}</th>
 	</tr>
     </thead>
     <tfoot>
     <tr>
-	    <th colspan="7"><div class="pull-right"><input type="button" class="button" onclick="deleteAll();" value="{_LC_LABEL_DELETE_ALL}" {DEL_ALL_BUTTON} /></div><div class="checkbox pull-right col-sm-2"><label><input type="checkbox" name="with_common" checked />{_LC_LABEL_SHARED_ITEM}</label></div></th>
+	    <th colspan="7"><div class="pull-right"><input type="button" class="button" onclick="deleteAll();" value="{_LC_LABEL_DELETE_ALL}" {DEL_ALL_BUTTON} /></div><div class="checkbox pull-right" style="width:300px;"><label><input type="checkbox" name="with_common" checked />{_LC_LABEL_SHARED_ITEM}</label></div></th>
 	</tr>
     </tfoot>
     <tbody>
