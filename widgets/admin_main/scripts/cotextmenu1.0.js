@@ -43,23 +43,6 @@ $(function(){
 				m3ShowConfigWindow(attrs['widgetid'], attrs['configid'], attrs['serial']);
 			}
 		}
-/*		onContextMenu: function(e) {
-			var attrs = m3_splitAttr($(e.target).parents('dl').attr('m3'));
-			if (attrs['shared'] == '0'){	// 共通ウィジェットでない
-				$('#m3_wshared span').text('ページ共通属性を設定');
-			} else {
-				$('#m3_wshared span').text('ページ共通属性を解除');
-			}
-			return true;
-		},*/
-/*		onShowMenu: function(e, menu) {
-			// メニュー項目の変更
-			var attrs = m3_splitAttr($(e.target).parents('dl').attr('m3'));
-			if (attrs['useconfig'] == '0'){
-				$('#m3_wconfig', menu).remove();
-			}
-			return menu;
-		}*/
 	}).addClass('m3_widget_contextmenu');		// コンテキストメニュークラス追加
 });
 

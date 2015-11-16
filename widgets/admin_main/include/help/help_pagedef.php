@@ -65,7 +65,7 @@ class help_pagedef extends HelpConv
 			),
 			'pagedef_layout' => array(	
 				'title' =>	$this->_('Page Layout'),			// 画面レイアウト
-				'body'	=>	$this->_('<strong>Widget Layout</strong> - Create page with layouting widgets. Get widgets from widget list by mouse drag & drops. Layout widgets by dropping on any position. If you click on close box on the top right position, you can delete widget from layout page. The widget on layout page can move between any positions. If you click on miximize button or push down ESC key, you can maximize layout page. If pushing down ESC key, go back to former state.<br /><strong>Widget Context Menu</strong> - If clicking on the widget by mouse right button, Widget context menu shows. You can configure widgets and delete widgets by using the context menu. The widget with shared attribute always shows on every page. The shared widget shows with red color.')		// (ウィジェットの配置)<br />テンプレートにウィジェットを配置し、画面を作成します。ウィジェット一覧からマウスドラッグでウィジェットを取り出します。レイアウト画面の任意のポジション位置にドロップするとウィジェットが配置できます。レイアウト画面からウィジェットを削除するには、削除するウィジェットの右上のクローズボックスをクリックします。一度ドロップしたウィジェットは、ドラッグドロップでページ上の移動が可能です。最大化ボタンまたはESCキーでレイアウト画面が最大化できます。最大化状態から元に戻るにはESCキーを押します。<br />(ウィジェットコンテキストメニュー)<br />ウィジェットをマウス右クリックするとコンテキストメニューが表示されます。ウィジェットの設定を行ったり、ウィジェットの削除を行います。「ページ共通」属性を設定したウィジェットは、ページに関わらず常に表示されます。(赤色表示)
+				'body'	=>	$this->_('<strong>Widget Layout</strong> - Create page with layouting widgets. Get widgets from widget list by mouse drag & drops. Layout widgets by dropping on any position. If you click on close box on the top right position, you can delete widget from layout page. The widget on layout page can move between any positions. If you click on miximize button or push down ESC key, you can maximize layout page. If pushing down ESC key, go back to former state.<br /><strong>Widget Context Menu</strong> - If clicking on the widget by mouse right button, Widget context menu shows. You can configure widgets and delete widgets by using the context menu. The widget with global attribute always shows on every page. The global widget shows with red color.')		// (ウィジェットの配置)<br />テンプレートにウィジェットを配置し、画面を作成します。ウィジェット一覧からマウスドラッグでウィジェットを取り出します。レイアウト画面の任意のポジション位置にドロップするとウィジェットが配置できます。レイアウト画面からウィジェットを削除するには、削除するウィジェットの右上のクローズボックスをクリックします。一度ドロップしたウィジェットは、ドラッグドロップでページ上の移動が可能です。最大化ボタンまたはESCキーでレイアウト画面が最大化できます。最大化状態から元に戻るにはESCキーを押します。<br />(ウィジェットコンテキストメニュー)<br />ウィジェットをマウス右クリックするとコンテキストメニューが表示されます。ウィジェットの設定を行ったり、ウィジェットの削除を行います。グローバル属性を設定したウィジェットは、ページに関わらず常に表示されます。(赤色表示)
 			),
 			'pagedef_refresh' => array(	
 				'title' =>	$this->_('Refresh Window'),			// 画面再表示
@@ -88,8 +88,8 @@ class help_pagedef extends HelpConv
 				'body'	=>	$this->_('Control widget visible status.')		// ウィジェットの表示、非表示を制御します。
 			),
 			'pagedef_widget_common' => array(	
-				'title' =>	$this->_('Shared'),			// ページ共通属性
-				'body'	=>	$this->_('The Shared means widget shared status by pages. If widget has shared attribute, it always shows on evey page.')		// 同ページIDで、サブページIDに関わらずウィジェットを表示するかどうかを指定します。
+				'title' =>	$this->_('Global Attribute'),			// グローバル属性
+				'body'	=>	$this->_('If the widget has global attribute, it always shows on all pages.')		// ページに関わらずウィジェットを表示するかどうかを指定します。
 			),
 			
 			// (Bootstrap型設定画面用)

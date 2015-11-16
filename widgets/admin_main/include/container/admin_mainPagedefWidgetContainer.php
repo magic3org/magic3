@@ -164,9 +164,9 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 		$localeText['label_widget_name'] = $this->_('Widget Name');// ウィジェット名
 		$localeText['label_config_id'] = $this->_('Config ID');// 定義ID
 		$localeText['label_visible'] = $this->_('Visible');// 表示
-		$localeText['label_shared'] = $this->_('Shared');// 共通
+		$localeText['label_shared'] = $this->_('Global');// グローバル属性
 		$localeText['label_operation'] = $this->_('Operation');// 操作
-		$localeText['label_shared_item'] = $this->_('Include shared items.');// 共通項目含む
+		$localeText['label_shared_item'] = $this->_('Include global widgets.');// グローバル属性ウィジェット含む
 		$localeText['label_delete_all'] = $this->_('Delete all');// すべて削除
 		$this->setLocaleText($localeText);
 		
@@ -463,8 +463,8 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 				$updatePos = $row['pd_position_id'];
 				$updateWidgetId = $row['pd_widget_id'];
 				
-				// 「共通」項目に合わせて、ページサブIDの修正
-				$updatePageSubId = '';// 共通使用
+				// 「グローバル」項目に合わせて、ページサブIDの修正
+				$updatePageSubId = '';// グローバル属性使用
 				if ($request->trimValueOf('item' . $selectedItemNo . '_shared') != 'on') $updatePageSubId = $this->pageSubId;
 			
 				// 入力チェック
@@ -495,7 +495,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			// キャッシュデータをクリア
 			$this->gCache->clearAllCache();
 		} else if ($act == 'deleteall'){		// すべて削除のとき
-			$withCommon = ($request->trimValueOf('with_common') == 'on') ? 1 : 0;		// 共通項目も削除するかどうか
+			$withCommon = ($request->trimValueOf('with_common') == 'on') ? 1 : 0;		// グローバル属性項目も削除するかどうか
 			$ret = $this->db->delPageDefAll($this->pageId, $this->pageSubId, $this->position, $withCommon);
 			if ($ret){		// データ削除成功のとき
 				$this->setMsg(self::MSG_GUIDANCE, $this->_('Data deleted.'));			// データを削除しました
@@ -540,7 +540,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function pageListLoop($index, $fetchedRow, $param)
 	{
-		// サブIDが空のときは、共通項目とする
+		// サブIDが空のときは、グローバル属性ウィジェットとする
 		$isSharedItem = '';
 		if (empty($fetchedRow['pd_sub_id'])){
 			$isSharedItem = 'checked';
@@ -579,7 +579,7 @@ class admin_mainPagedefWidgetContainer extends BaseAdminWidgetContainer
 			'widget_name'		=> $this->convertToDispString($fetchedRow['wd_name']),				// ウィジェット名
 			'def_id'		=> $this->convertToDispString($defId),			// 定義ID
 			'suffix'		=> $this->convertToDispString($fetchedRow['pd_suffix']),			// サフィックス
-			'shared'		=> $isSharedItem,												// 共通項目かどうか
+			'shared'		=> $isSharedItem,												// グローバル属性ウィジェットかどうか
 			'visible'		=> $itemVisible,												// 画面に表示するかどうか
 			'update_line'	=> $this->convertToDispString($this->_('Update line')),							// 行を更新
 			'delete_line'	=> $this->convertToDispString($this->_('Delete line')),							// 行を削除

@@ -64,8 +64,8 @@ class help_adjustwidget extends HelpConv
 				'body' =>	$this->_('If you check \'Visible\' checkbox, \'Read more Button\' is displayed. Input the button \'Title\' and the link \'Url\'.')		// 「表示」をオンにするともっと読むボタン表示されます。ボタンのタイトルとリンク先URLを入力します。
 			),
 			'adjustwidget_shared' => array(	
-				'title' =>	$this->_('Page Shared Attribute'),	// ページ共通属性
-				'body' =>	$this->_('Control page shared attribute of widget. If its attribute is on, the widget always shows on any pages.<br />When its attribute is on, the widget does not show on the exception page.')		// ウィジェットのページ共通属性を設定します。共通属性をオンにするとページIDに関わらずウィジェットが常時表示されます。ページ共通属性がオンの場合、例外ページで選択されたページ上にはウィジェットは表示されません。
+				'title' =>	$this->_('Global Attribute'),	// グローバル属性
+				'body' =>	$this->_('Control global attribute of widget. If its attribute is on, the widget always shows on all pages.<br />When its attribute is on, the widget does not show on the exception page.')		// ウィジェットのグローバル属性を設定します。共通属性をオンにするとすべてのページでウィジェットが常時表示されます。グローバル属性がオンの場合、例外ページで選択されたページ上にはウィジェットは表示されません。
 			),
 			'adjustwidget_term' => array(	
 				'title' =>	$this->_('View Term'),	// 表示期間

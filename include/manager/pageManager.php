@@ -129,8 +129,8 @@ class PageManager extends Core
 //	const WIDGET_TAG_HEAD_SHORT = 'm3_';			// ウィジェットの識別用タグIDヘッダ
 	const WIDGET_TYPE_TAG_HEAD = 'm3widgettype_';			// ウィジェット種別の識別用タグIDヘッダ
 	const WIDTET_CLASS_NAME = 'm3widget';			// ウィジェットオブジェクトのタグクラス名
-	const WIDTET_CLASS_TYPE_0 = 'm3widget_type0';			// ウィジェットオブジェクトのタグクラス(ページ共通でない)
-	const WIDTET_CLASS_TYPE_1 = 'm3widget_type1';			// ウィジェットオブジェクトのタグクラス(ページ共通)
+	const WIDTET_CLASS_TYPE_0 = 'm3widget_type0';			// ウィジェットオブジェクトのタグクラス(グローバル属性でない)
+	const WIDTET_CLASS_TYPE_1 = 'm3widget_type1';			// ウィジェットオブジェクトのタグクラス(グローバル属性)
 	const POSITION_CLASS_NAME = 'm3position';		// ポジションオブジェクトのタグクラス名
 	const JOOMLA10_DEFAULT_WIDGET_MENU_PARAM = 'class="moduletable"';	// Joomla!1.0用デフォルトメニューパラメータ値
 	const ADMIN_TEMPLATE = '_admin';		// PC管理用テンプレートID
@@ -158,7 +158,7 @@ class PageManager extends Core
 	const THEME_CSS_FILE = 'jquery-ui.custom.css';		// テーマファイル
 	const CONFIG_ICON_FILE = '/images/system/config.png';			// ウィジェット定義画面アイコン
 	const ADJUST_ICON_FILE = '/images/system/adjust_widget.png';	// 位置調整アイコン
-	const SHARED_ICON_FILE = '/images/system/shared.png';	// ページ共通属性
+	const SHARED_ICON_FILE = '/images/system/shared.png';	// グローバル属性
 	const DELETE_ICON_FILE = '/images/system/delete.png';	// ウィジェット削除
 	const CONFIG_ICON32_FILE = '/images/system/config32.png';			// ウィジェット定義画面アイコン(ツールチップ用)
 	const ADJUST_ICON32_FILE = '/images/system/adjust_widget32.png';	// 位置調整アイコン(ツールチップ用)
@@ -2341,7 +2341,7 @@ class PageManager extends Core
 					// ウィジェットのスタイルを設定
 					$gEnvManager->setCurrentWidgetStyle($style);
 				
-					// ウィジェットのページ共通状況を設定
+					// ウィジェットのグローバル属性状況を設定
 					$gEnvManager->setIsCurrentWidgetShared($shared);
 				
 					// 実行ログを残す
@@ -2373,7 +2373,7 @@ class PageManager extends Core
 					// ウィジェットのスタイルを解除
 					$gEnvManager->setCurrentWidgetStyle('');
 					
-					// ウィジェットのページ共通状況を解除
+					// ウィジェットのグローバル属性状況を解除
 					$gEnvManager->setIsCurrentWidgetShared(false);
 					
 					// ウィジェットのタイトルを取得
@@ -4906,9 +4906,9 @@ class PageManager extends Core
 			if ($hasAdmin) $operationMenu .= '<li class="m3_wconfig"><a href="#"><img src="' . $rootUrl . self::CONFIG_ICON_FILE . '" /> <span>ウィジェットの設定</span></a></li>';
 			$operationMenu .= '<li class="m3_wadjust"><a href="#"><img src="' . $rootUrl . self::ADJUST_ICON_FILE . '" /> <span>タイトル・スタイル調整</span></a></li>';
 			if ($shared){
-				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>ページ共通属性を解除</span></a></li>';
+				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>グローバル属性を解除</span></a></li>';
 			} else {
-				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>ページ共通属性を設定</span></a></li>';
+				$operationMenu .= '<li class="m3_wshared"><a href="#"><img src="' . $rootUrl . self::SHARED_ICON_FILE . '" /> <span>グローバル属性を設定</span></a></li>';
 			}
 			$operationMenu .= '<li class="m3_wdelete"><a href="#"><img src="' . $rootUrl . self::DELETE_ICON_FILE . '" /> <span>このウィジェットを削除</span></a></li>';
 			$operationMenu .= '</ul>';
@@ -4947,7 +4947,7 @@ class PageManager extends Core
 		// 管理者、運営者どのレベルで制限をかける?
 		if (!$fetchedRow['wd_active']) return true;
 		
-		// ページ共通属性ありの場合は現在のページが例外ページにないかチェック
+		// グローバル属性ありの場合は現在のページが例外ページにないかチェック
 		if (empty($fetchedRow['pd_sub_id'])){
 			$exceptPageStr = $fetchedRow['pd_except_sub_id'];
 			if (!empty($exceptPageStr)){
@@ -5091,7 +5091,7 @@ class PageManager extends Core
 				// ウィジェットのスタイルを設定
 				$gEnvManager->setCurrentWidgetStyle($style);
 				
-				// ウィジェットのページ共通状況を設定
+				// ウィジェットのグローバル属性状況を設定
 				$gEnvManager->setIsCurrentWidgetShared($shared);
 					
 				// 実行ログを残す
@@ -5124,7 +5124,7 @@ class PageManager extends Core
 				// ウィジェットのスタイルを解除
 				$gEnvManager->setCurrentWidgetStyle('');
 				
-				// ウィジェットのページ共通状況を解除
+				// ウィジェットのグローバル属性状況を解除
 				$gEnvManager->setIsCurrentWidgetShared(false);
 				
 				// ウィジェットの後出力
@@ -5193,7 +5193,7 @@ class PageManager extends Core
 		// ウィジェットのタイトルを設定
 		//$gEnvManager->setCurrentWidgetTitle($title);
 		
-		// ウィジェットのページ共通状況を設定
+		// ウィジェットのグローバル属性状況を設定
 		//$gEnvManager->setIsCurrentWidgetShared($shared);
 			
 		// 実行ログを残す
@@ -5224,7 +5224,7 @@ class PageManager extends Core
 		// パラメータを解除
 		//$gEnvManager->setCurrentWidgetPrefix('');				// プレフィックス文字列
 
-		// ウィジェットのページ共通状況を解除
+		// ウィジェットのグローバル属性状況を解除
 		//$gEnvManager->setIsCurrentWidgetShared(false);
 
 		// 現在のバッファ内容を取得し、バッファを破棄
@@ -5862,7 +5862,7 @@ class PageManager extends Core
 		$url = $gEnvManager->createPageUrl() . '?';
 		
 		// ページサブIDを取得
-		if (empty($pageSubId)) $pageSubId = $this->gEnv->getCurrentWidgetPageSubId();	// ページ共通属性ありのときは空
+		if (empty($pageSubId)) $pageSubId = $this->gEnv->getCurrentWidgetPageSubId();	// グローバル属性ありのときは空
 		if (!empty($pageSubId)) $url .= M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId . '&';
 		
 		$url .= M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_RSS;
@@ -5961,7 +5961,7 @@ class PageManager extends Core
 		}
 		
 		// ページサブIDを取得
-		if (empty($pageSubId)) $pageSubId = $this->gEnv->getCurrentWidgetPageSubId();	// ページ共通属性ありのときは空
+		if (empty($pageSubId)) $pageSubId = $this->gEnv->getCurrentWidgetPageSubId();	// グローバル属性ありのときは空
 		if (!empty($pageSubId)) $url .= M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $pageSubId . '&';
 		
 		$url .= M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET;
@@ -6007,7 +6007,7 @@ class PageManager extends Core
 			
 			// ページが表示可能かチェック
 			if (!$pageVisible || !$pageSubVisible) return false;
-			
+
 			if (!$gEnvManager->isCurrentUserLogined() && $this->isUserLimitedPage($pageId, $pageSubId)){			// ユーザがログインされていない状態でユーザ制限されていればアクセス不可
 				return false;
 			} else {

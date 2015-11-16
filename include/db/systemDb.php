@@ -667,7 +667,7 @@ class SystemDb extends BaseDb
 	 *
 	 * アクセス可能なウィジェットは以下のすべての条件を満たすもの
 	 * ・ウィジェット単体起動が許可されている
-	 * ・ウィジェットが公開ページ上にあるか、または、ページ共通属性が設定されている
+	 * ・ウィジェットが公開ページ上にあるか、または、グローバル属性が設定されている
 	 *
 	 * @param string $widgetId		ウィジェットID
 	 * @param int    $setId			定義セットID
@@ -685,7 +685,7 @@ class SystemDb extends BaseDb
 //		$queryStr .=   'AND wd_enable_operation = true ';	// 単体実行可能
 		$queryStr .=   'AND wd_active = true ';				// 一般ユーザが実行可能かどうか
 		//$queryStr .=   'AND pg_active = true ';			// 公開中のページ
-		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// ページ共通ウィジェットか公開中のページ上のウィジェット
+		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// グローバル属性ウィジェットか公開中のページ上のウィジェット
 		$params = array($widgetId, $setId);
 		$ret = $this->isRecordExists($queryStr, $params);
 		return $ret;
@@ -710,7 +710,7 @@ class SystemDb extends BaseDb
 		$queryStr .=   'AND pd_visible = true ';			// ウィジェットは表示中
 		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
 		if ($activePageOnly){
-			$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// ページ共通ウィジェットか公開中のページ上のウィジェット
+			$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// グローバル属性ウィジェットか公開中のページ上のウィジェット
 		}
 		$params = array($pageId, $widgetId, $setId);
 		$ret = $this->isRecordExists($queryStr, $params);

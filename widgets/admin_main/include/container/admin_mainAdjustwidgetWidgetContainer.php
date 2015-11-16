@@ -320,7 +320,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				// ページ定義を更新
 				$ret = $this->db->updatePageDefRecord($defSerial, $updateData);
 				
-				// ページ共通属性を更新
+				// グローバル属性を更新
 				if ($ret) $ret = $this->db->toggleSharedWidget($pageId, $pageSubId, $defSerial, $shared);
 				
 				if ($ret){		// データ追加成功のとき
@@ -745,7 +745,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$localeText['label_remove_list_marker'] = $this->_('Remove list marker');		// リストのマーカーを削除
 		
 		$localeText['label_view_control'] = $this->_('View Control');// 表示制御
-		$localeText['label_shared_attr'] = $this->_('Page Shared Attribute');// ページ共通属性
+		$localeText['label_shared_attr'] = $this->_('Global Attribute');// グローバル属性
 		$localeText['label_on'] = $this->_('On');// オン
 		$localeText['label_view_term'] = $this->_('View Term');// 表示期間
 		$localeText['label_except_page'] = $this->_('Except Page');		// 例外ページ

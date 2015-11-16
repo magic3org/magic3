@@ -106,7 +106,7 @@ class admin_menuDb extends BaseDb
 		//$queryStr .=   'AND pd_visible = true ';			// ウィジェットは表示中に限定しない
 		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
 		$queryStr .=   'AND wd_active = true ';				// 一般ユーザが実行可能かどうか
-		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// ページ共通ウィジェットか公開中のページ上のウィジェット
+		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// グローバル属性ウィジェットか公開中のページ上のウィジェット
 		$queryStr .=   'AND wd_edit_content = true ';
 //		$queryStr .=   'AND wd_type in (' . $contentStr . ') ';
 		$queryStr .=   'AND wd_type != \'\' ';
@@ -156,7 +156,7 @@ class admin_menuDb extends BaseDb
 		//$queryStr .=   'AND pd_visible = true ';			// ウィジェットは表示中に限定しない
 		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
 		$queryStr .=   'AND wd_active = true ';				// 一般ユーザが実行可能かどうか
-		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// ページ共通ウィジェットか公開中のページ上のウィジェット
+		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// グローバル属性ウィジェットか公開中のページ上のウィジェット
 		$queryStr .=   'AND wd_edit_content = true ';
 		$queryStr .=   'AND wd_type = \'\' ';
 //		$queryStr .=   'AND wd_use_instance_def = true ';		// インスタンス定義が必要であるウィジェットをサブコンテンツ編集ウィジェットとする

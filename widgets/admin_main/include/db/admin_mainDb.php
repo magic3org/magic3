@@ -3256,7 +3256,7 @@ class admin_mainDb extends BaseDb
 		//$queryStr .=   'AND pd_visible = true ';			// ウィジェットは表示中に限定しない
 		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
 		$queryStr .=   'AND wd_active = true ';				// 一般ユーザが実行可能かどうか
-		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// ページ共通ウィジェットか公開中のページ上のウィジェット
+		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// グローバル属性ウィジェットか公開中のページ上のウィジェット
 //		$queryStr .=   'AND wd_edit_content = true ';			// ##### メインウィジェットに限定しない #####
 		$queryStr .=   'AND wd_type in (' . $contentStr . ') ';	// ##### パラメータのコンテンツタイプに限定 #####
 //		$queryStr .=   'AND wd_type != \'\' ';
@@ -3306,7 +3306,7 @@ class admin_mainDb extends BaseDb
 		//$queryStr .=   'AND pd_visible = true ';			// ウィジェットは表示中に限定しない
 		$queryStr .=   'AND wd_deleted = false ';			// ウィジェットは削除されていない
 		$queryStr .=   'AND wd_active = true ';				// 一般ユーザが実行可能かどうか
-		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// ページ共通ウィジェットか公開中のページ上のウィジェット
+		$queryStr .=   'AND (pd_sub_id = \'\' OR pg_active = true) ';		// グローバル属性ウィジェットか公開中のページ上のウィジェット
 //		$queryStr .=   'AND wd_edit_content = true ';			// ##### メインウィジェットに限定しない #####
 		$queryStr .=   'AND wd_content_type in (' . $contentStr . ') ';	// コンテンツタイプに主要コンテンツ、主要機能がある場合
 //		$queryStr .=   'AND wd_type != \'\' ';

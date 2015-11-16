@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-17 07:44+0900\n"
-"PO-Revision-Date: 2015-10-17 07:44+0900\n"
+"POT-Creation-Date: 2015-11-17 07:44+0900\n"
+"PO-Revision-Date: 2015-11-17 07:44+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -231,9 +231,9 @@ msgid "Remove list marker"
 msgstr "リストのマーカーを削除"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:748
-#: ../help/help_adjustwidget.php:67
-msgid "Page Shared Attribute"
-msgstr "ページ共通属性"
+#: ../help/help_adjustwidget.php:67 ../help/help_pagedef.php:91
+msgid "Global Attribute"
+msgstr "グローバル属性"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:749
 msgid "On"
@@ -822,7 +822,7 @@ msgstr "未設定"
 #: ../container/admin_mainSmenudefWidgetContainer.php:191
 #: ../container/admin_mainSmenudefWidgetContainer.php:376
 #: ../container/admin_mainSmenudefWidgetContainer.php:419
-#: ../container/admin_mainTemplistWidgetContainer.php:460
+#: ../container/admin_mainTemplistWidgetContainer.php:461
 #: ../container/admin_mainUserlistWidgetContainer.php:122
 #: ../container/admin_mainUserlistWidgetContainer.php:150
 #: ../container/admin_mainUserlistWidgetContainer.php:304
@@ -860,7 +860,7 @@ msgid "Menu Definition Script"
 msgstr "管理メニュー定義ファイル"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:204
-#: ../container/admin_mainTemplistWidgetContainer.php:468
+#: ../container/admin_mainTemplistWidgetContainer.php:469
 #: ../container/admin_mainWidgetlistWidgetContainer.php:672
 msgid "Upload"
 msgstr "アップロード"
@@ -954,7 +954,7 @@ msgstr "パス："
 #: ../container/admin_mainMenudefWidgetContainer.php:196
 #: ../container/admin_mainSmenudefWidgetContainer.php:176
 #: ../container/admin_mainSmenudefWidgetContainer.php:189
-#: ../container/admin_mainTemplistWidgetContainer.php:557
+#: ../container/admin_mainTemplistWidgetContainer.php:558
 #: ../container/admin_mainUserlistWidgetContainer.php:138
 #: ../container/admin_mainUserlistWidgetContainer.php:161
 msgid "Delete"
@@ -984,7 +984,7 @@ msgid "Permission"
 msgstr "パーミッション"
 
 #: ../container/admin_mainFilebrowseWidgetContainer.php:204
-#: ../container/admin_mainTemplistWidgetContainer.php:464
+#: ../container/admin_mainTemplistWidgetContainer.php:465
 #: ../container/admin_mainUserlistWidgetContainer.php:156
 #: ../help/help_browse.php:66
 msgid "Update Date"
@@ -1018,7 +1018,7 @@ msgid "Select Files"
 msgstr "ファイルを選択"
 
 #: ../container/admin_mainFilebrowseWidgetContainer.php:211
-#: ../container/admin_mainTemplistWidgetContainer.php:469
+#: ../container/admin_mainTemplistWidgetContainer.php:470
 #: ../container/admin_mainWidgetlistWidgetContainer.php:673
 msgid "Cancel"
 msgstr "キャンセル"
@@ -1265,7 +1265,7 @@ msgstr "編集"
 #: ../container/admin_mainMenudefWidgetContainer.php:203
 #: ../container/admin_mainPagedefWidgetContainer.php:168
 #: ../container/admin_mainSmenudefWidgetContainer.php:196
-#: ../container/admin_mainTemplistWidgetContainer.php:465
+#: ../container/admin_mainTemplistWidgetContainer.php:466
 #: ../container/admin_mainWidgetlistWidgetContainer.php:668
 #: ../help/help_menudef.php:67 ../help/help_templist.php:59
 #: ../help/help_widgetlist.php:63
@@ -1462,7 +1462,7 @@ msgid "Layout"
 msgstr "レイアウト"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:146
-#: ../container/admin_mainTemplistWidgetContainer.php:560
+#: ../container/admin_mainTemplistWidgetContainer.php:561
 msgid "Preview"
 msgstr "プレビュー"
 
@@ -1527,13 +1527,12 @@ msgid "Config ID"
 msgstr "定義ID"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:167
-#: ../help/help_pagedef.php:91
-msgid "Shared"
-msgstr "共通"
+msgid "Global"
+msgstr "グローバル"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:169
-msgid "Include shared items."
-msgstr "共通項目含む"
+msgid "Include global widgets."
+msgstr "グローバル属性ウィジェット含む"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:170
 msgid "Delete all"
@@ -1565,7 +1564,7 @@ msgid "Show config window"
 msgstr "設定画面を表示"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:682
-#: ../container/admin_mainTemplistWidgetContainer.php:463
+#: ../container/admin_mainTemplistWidgetContainer.php:464
 msgid "Default"
 msgstr "デフォルト"
 
@@ -1669,8 +1668,8 @@ msgstr "ポータルのサイト情報を更新"
 msgid "Save"
 msgstr "保存"
 
-#: ../container/admin_mainServerinfoWidgetContainer.php:98
-#: ../container/admin_mainSitelistWidgetContainer.php:148
+#: ../container/admin_mainServerinfoWidgetContainer.php:100
+#: ../container/admin_mainSitelistWidgetContainer.php:149
 #: ../container/admin_mainWidgetContainer.php:322
 msgid "Can not access the page."
 msgstr "アクセスできません"
@@ -1756,74 +1755,74 @@ msgstr "ディレクトリの移動に失敗しました。(ディレクトリ�
 msgid "Failed in uploading file."
 msgstr "ファイルのアップロードに失敗しました"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:451
+#: ../container/admin_mainTemplistWidgetContainer.php:452
 #: ../container/admin_mainWidgetlistWidgetContainer.php:651
 msgid "Update line?"
 msgstr "行を更新しますか?"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:452
+#: ../container/admin_mainTemplistWidgetContainer.php:453
 msgid "Delete tmplate?"
 msgstr "テンプレートを削除しますか?"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:453
+#: ../container/admin_mainTemplistWidgetContainer.php:454
 #: ../container/admin_mainWidgetlistWidgetContainer.php:653
 msgid "File not selected."
 msgstr "アップロードするファイルが選択されていません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:454
+#: ../container/admin_mainTemplistWidgetContainer.php:455
 #: ../container/admin_mainWidgetlistWidgetContainer.php:654
 msgid "Upload file."
 msgstr "ファイルをアップロードします"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:455
+#: ../container/admin_mainTemplistWidgetContainer.php:456
 #: ../help/help_templist.php:31
 msgid "Template List"
 msgstr "テンプレート一覧"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:457
+#: ../container/admin_mainTemplistWidgetContainer.php:458
 #: ../container/admin_mainWidgetlistWidgetContainer.php:658
 msgid "Install Directory:"
 msgstr "インストールディレクトリ:"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:458
+#: ../container/admin_mainTemplistWidgetContainer.php:459
 #: ../container/admin_mainWidgetlistWidgetContainer.php:659
 #: ../help/help_templist.php:71 ../help/help_widgetlist.php:75
 msgid "Reload directory"
 msgstr "ディレクトリ再読み込み"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:459
+#: ../container/admin_mainTemplistWidgetContainer.php:460
 #: ../help/help_templist.php:67
 msgid "Show detail"
 msgstr "詳細表示"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:461
+#: ../container/admin_mainTemplistWidgetContainer.php:462
 msgid "Format"
 msgstr "形式"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:462
+#: ../container/admin_mainTemplistWidgetContainer.php:463
 msgid "Genarator - Version"
 msgstr "生成ソフト - バージョン"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:466
+#: ../container/admin_mainTemplistWidgetContainer.php:467
 msgid "Template Upload (zip compressed file)"
 msgstr "テンプレートアップロード(zip圧縮ファイル)"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:467
+#: ../container/admin_mainTemplistWidgetContainer.php:468
 #: ../container/admin_mainWidgetlistWidgetContainer.php:670
 msgid "Select file to upload."
 msgstr "アップロードするファイルを選択してください"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:515
+#: ../container/admin_mainTemplistWidgetContainer.php:516
 msgid "Template not found."
 msgstr "テンプレートが見つかりません"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:535
-#: ../container/admin_mainTemplistWidgetContainer.php:546
+#: ../container/admin_mainTemplistWidgetContainer.php:536
+#: ../container/admin_mainTemplistWidgetContainer.php:547
 msgid "Not Detected"
 msgstr "未検出"
 
-#: ../container/admin_mainTemplistWidgetContainer.php:616
-#: ../container/admin_mainTemplistWidgetContainer.php:673
+#: ../container/admin_mainTemplistWidgetContainer.php:617
+#: ../container/admin_mainTemplistWidgetContainer.php:674
 msgid "SimpleXML module not installed."
 msgstr "SimpleXML拡張モジュールがインストールされていません"
 
@@ -2225,13 +2224,13 @@ msgstr ""
 
 #: ../help/help_adjustwidget.php:68
 msgid ""
-"Control page shared attribute of widget. If its attribute is on, the widget "
-"always shows on any pages.<br />When its attribute is on, the widget does "
+"Control global attribute of widget. If its attribute is on, the widget "
+"always shows on all pages.<br />When its attribute is on, the widget does "
 "not show on the exception page."
 msgstr ""
-"ウィジェットのページ共通属性を設定します。共通属性をオンにするとページIDに関"
-"わらずウィジェットが常時表示されます。ページ共通属性がオンの場合、例外ページ"
-"で選択されたページ上にはウィジェットは表示されません。"
+"ウィジェットのグローバル属性を設定します。共通属性をオンにするとすべてのペー"
+"ジでウィジェットが常時表示されます。グローバル属性がオンの場合、例外ページで"
+"選択されたページ上にはウィジェットは表示されません。"
 
 #: ../help/help_adjustwidget.php:72
 msgid "Control visible term of widget."
@@ -2639,8 +2638,8 @@ msgid ""
 "you can maximize layout page. If pushing down ESC key, go back to former "
 "state.<br /><strong>Widget Context Menu</strong> - If clicking on the widget "
 "by mouse right button, Widget context menu shows. You can configure widgets "
-"and delete widgets by using the context menu. The widget with shared "
-"attribute always shows on every page. The shared widget shows with red color."
+"and delete widgets by using the context menu. The widget with global "
+"attribute always shows on every page. The global widget shows with red color."
 msgstr ""
 "(ウィジェットの配置)<br />テンプレートにウィジェットを配置し、画面を作成しま"
 "す。ウィジェット一覧からマウスドラッグでウィジェットを取り出します。レイアウ"
@@ -2651,8 +2650,8 @@ msgstr ""
 "できます。最大化状態から元に戻るにはESCキーを押します。<br />(ウィジェットコ"
 "ンテキストメニュー)<br />ウィジェットをマウス右クリックするとコンテキストメ"
 "ニューが表示されます。ウィジェットの設定を行ったり、ウィジェットの削除を行い"
-"ます。「ページ共通」属性を設定したウィジェットは、ページに関わらず常に表示さ"
-"れます。(赤色表示)"
+"ます。グローバル属性を設定したウィジェットは、ページに関わらず常に表示されま"
+"す。(赤色表示)"
 
 #: ../help/help_pagedef.php:71
 msgid "Refresh Window"
@@ -2680,12 +2679,8 @@ msgid "Control widget visible status."
 msgstr "ウィジェットの表示、非表示を制御します。"
 
 #: ../help/help_pagedef.php:92
-msgid ""
-"The Shared means widget shared status by pages. If widget has shared "
-"attribute, it always shows on evey page."
-msgstr ""
-"同ページIDで、サブページIDに関わらずウィジェットを表示するかどうかを指定しま"
-"す。"
+msgid "If the widget has global attribute, it always shows on all pages."
+msgstr "ページに関わらずウィジェットを表示するかどうかを指定します。"
 
 #: ../help/help_pagedef.php:98
 msgid ""
@@ -3025,6 +3020,9 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "Shared"
+#~ msgstr "共通"
 
 #~ msgid "Title:"
 #~ msgstr "タイトル："
