@@ -164,6 +164,7 @@ class PageManager extends Core
 	const ADJUST_ICON32_FILE = '/images/system/adjust_widget32.png';	// 位置調整アイコン(ツールチップ用)
 	const CLOSE_BOX_ICON32_FILE = '/images/system/close_box.png';		// ウィンドウ閉じるアイコン(ツールチップ用)
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// ウィジェット配置注意アイコン
+	const ALERT_ICON_FILE = '/images/system/alert16.png';		// ウィジェット配置警告アイコン
 //	const ADMIN_ICON_FILE = '/images/system/admin64.png';		// パネルメニュー管理画面遷移用アイコン
 //	const LOGOUT_ICON_FILE = '/images/system/logout64.png';		// パネルメニューログアウト用アイコン
 //	const EDIT_PAGE_ICON_FILE = '/images/system/create_page64.png';		// パネルメニュー編集用アイコン	
@@ -177,7 +178,7 @@ class PageManager extends Core
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	const POS_HEAD_NAV_MENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー" data-placement="auto"></i> ';		// 特殊ポジションブロック(ナビゲーションメニュー)
-	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メインウィジェット" data-placement="auto"></i> ';		// ウィジェットの機能マーク(メインウィジェット)
+	const WIDGET_MARK_MAIN = '<i class="glyphicon glyphicon-tower" rel="m3help" title="メイン型" data-placement="auto"></i> ';		// ウィジェットの機能マーク(メイン型ウィジェット)
 	const WIDGET_MARK_NAVMENU = '<i class="glyphicon glyphicon-th" rel="m3help" title="ナビゲーションメニュー" data-placement="auto"></i> ';		// ウィジェットの機能マーク(ナビゲーションメニュー)
 	const WIDGET_FUNCTION_MARK_BOOTSTRAP = ' <span class="label label-warning" rel="m3help" title="Bootstrap型テンプレート対応" data-placement="auto">B</span>';			// ウィジェット機能マーク(Boostrap型テンプレート
 	const WIDGET_STYLE_NAVMENU = '_navmenu';		// ウィジェットの表示スタイル(ナビゲーションメニュー)
@@ -4673,7 +4674,7 @@ class PageManager extends Core
 					
 					// ウィジェット機能マーク
 					$widgetMark = '';
-					if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetMark = self::WIDGET_MARK_MAIN;					// メインウィジェット
+					if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetMark = self::WIDGET_MARK_MAIN;					// メイン型ウィジェット
 					if ($rows[$i]['wd_type'] == 'menu' && $rows[$i]['wd_type_option'] == 'nav') $widgetMark = self::WIDGET_MARK_NAVMENU;		// ナビゲーションメニュー
 
 					// ウィジェット機能一覧
@@ -4841,6 +4842,7 @@ class PageManager extends Core
 			$widgetIndex = $rows[$i]['pd_index'];		// 表示順
 			$configId = $rows[$i]['pd_config_id'];		// 定義ID
 			$serial = $rows[$i]['pd_serial'];		// シリアル番号
+			$isShared = empty($rows[$i]['pd_sub_id']);			// グローバル属性が設定されているかどうか
 			$widgetTag = $widgetTagHead . '_' . $i;				// ウィジェット識別用ユニークタグ
 			$image = $gDesignManager->getWidgetIconUrl($widgetId, self::WIDGET_ICON_IMG_SIZE);
 			if ($gEnvManager->getUseSslAdmin()){
@@ -4874,6 +4876,10 @@ class PageManager extends Core
 				$title = 'ページ属性と不一致';
 				$configImg .= '<span rel="m3help" data-container="body" title="' . $title . '"><img src="' . $rootUrl . self::NOTICE_ICON_FILE . '" alt="' . $title . '" /></span>&nbsp;';
 			}
+			if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type']) && $isShared){					// メイン型ウィジェットがグローバル属性を持つとき
+				$title = 'メイン型ウィジェットはグローバル属性を設定できません';
+				$configImg .= '<span rel="m3help" data-container="body" title="' . $title . '"><img src="' . $rootUrl . self::ALERT_ICON_FILE . '" alt="' . $title . '" /></span>&nbsp;';
+			}
 			if ($rows[$i]['wd_has_admin']){
 				$hasAdmin = '1';
 				$title = 'ウィジェット設定';
@@ -4885,15 +4891,16 @@ class PageManager extends Core
 			
 			$shared = '0';		// 共通属性があるかどうか
 			$sharedClassName = '';
-			if (empty($rows[$i]['pd_sub_id'])){
-				$shared = '1';	// 共通ウィジェットのとき
+			//if (empty($rows[$i]['pd_sub_id'])){
+			if ($isShared){					// グローバル属性ウィジェットのとき
+				$shared = '1';
 				$sharedClassName = 'm3_widget_shared';			// 共通ウィジェットのクラス
 			}
 			$m3Option = 'm3="widgetid:' . $widgetId . '; serial:' . $serial . '; configid:' . $configId . '; useconfig:' . $hasAdmin . '; shared:' . $shared . '"';
 			
 			// ウィジェット機能マーク
 			$widgetMark = '';
-			if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetMark = self::WIDGET_MARK_MAIN;					// メインウィジェット
+			if ($rows[$i]['wd_edit_content'] && !empty($rows[$i]['wd_type'])) $widgetMark = self::WIDGET_MARK_MAIN;					// メイン型ウィジェット
 			if ($rows[$i]['wd_type'] == 'menu' && $rows[$i]['wd_type_option'] == 'nav') $widgetMark = self::WIDGET_MARK_NAVMENU;		// ナビゲーションメニュー
 			
 			// 操作メニュー
@@ -5737,7 +5744,7 @@ class PageManager extends Core
 		return $widgetId;
 	}
 	/**
-	 * 現在アクティブなメインウィジェットをウィジェット種別で取得
+	 * 現在アクティブなメイン型ウィジェットをウィジェット種別で取得
 	 *
 	 * @param string $widgetType	対象ウィジェットタイプ
 	 * @return string				ウィジェットID
