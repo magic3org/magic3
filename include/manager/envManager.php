@@ -842,7 +842,7 @@ class EnvManager extends Core
 	public function getCurrentScriptUrl()
 	{
 		//return $_SERVER["SCRIPT_URI"];		// SCRIPT_URIはサーバによってはundefinedになる
-		return self::getServerUrl() . $_SERVER["PHP_SELF"];
+		return $this->getServerUrl() . $_SERVER["PHP_SELF"];
 	}
 	/**
 	 * クライアントから要求されたURI(パラメータ付き)を取得
@@ -851,7 +851,7 @@ class EnvManager extends Core
 	 */
 	public function getCurrentRequestUri()
 	{
-		return self::getServerUrl() . $_SERVER["REQUEST_URI"];
+		return $this->getServerUrl() . $_SERVER["REQUEST_URI"];
 	}
 	/**
 	 * 現在実行中のスクリプトファイルのパスを取得
@@ -896,8 +896,8 @@ class EnvManager extends Core
 	public function calcSystemRootUrl()
 	{	
 		// 相対パスを得る
-		$base = explode(DIRECTORY_SEPARATOR, self::getSystemRootPath());
-		$target = explode(DIRECTORY_SEPARATOR, self::getCurrentScriptPath());
+		$base = explode(DIRECTORY_SEPARATOR, $this->getSystemRootPath());
+		$target = explode(DIRECTORY_SEPARATOR, $this->getCurrentScriptPath());
 		
 		for ($i = 0; $i < count($base); $i++)
 		{
@@ -910,9 +910,9 @@ class EnvManager extends Core
 		}
 		// システムルートディレクトリ取得
 		$sytemRootUrl = '';
-		$pos = strrpos(self::getCurrentScriptUrl(), $relativePath);
+		$pos = strrpos($this->getCurrentScriptUrl(), $relativePath);
 		if (!($pos === false)){
-			$sytemRootUrl = substr(self::getCurrentScriptUrl(), 0, $pos);
+			$sytemRootUrl = substr($this->getCurrentScriptUrl(), 0, $pos);
 		}
 		return $sytemRootUrl;
 	}

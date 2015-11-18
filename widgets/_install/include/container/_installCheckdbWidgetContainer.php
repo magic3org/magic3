@@ -92,7 +92,8 @@ class _installCheckdbWidgetContainer extends _installBaseWidgetContainer
 		} else {
 			if (empty($currentVer)){		// 新規インストールのとき
 				// DB構築画面へ遷移
-				$this->gPage->redirect('?task=initdb&from=inputparam' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+//				$this->gPage->redirect('?task=initdb&from=inputparam' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+				$this->gPage->redirectInInstall('?task=initdb&from=inputparam' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 			} else {
 				$msg = 'このDBのバージョン(' . $currentVer . ')はバージョンアップ対象外です<br />バージョンアップ機能はシステムバージョン1.7.0以降のDBが対象です';
 				$this->tmpl->addVar("_widget", "message", $msg);

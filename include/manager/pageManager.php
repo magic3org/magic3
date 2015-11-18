@@ -5417,9 +5417,10 @@ class PageManager extends Core
 	 * @param string $url			遷移先URL。未指定の場合は現在のスクリプト。URLでないときは、現在のスクリプトに付加。
 	 * @param bool $noMessage		画面を遷移させたとき、ドコモ携帯端末でダイアログ(サイトが移動しました(301))が出ないようにするオプション
 	 * @param int  $responseCode	レスポンスコード
+	 * @param bool $autoSsl			リダイレクト先のページの状態に合わせてSSLを制御するかどうか
 	 * @return 						なし
 	 */
-	function redirect($url = '', $noMessage = false, $responseCode = 0)
+	function redirect($url = '', $noMessage = false, $responseCode = 0, $autoSsl = true)
 	{
 		global $gEnvManager;
 
@@ -5434,41 +5435,43 @@ class PageManager extends Core
 		}
 
 		// SSL化が必要な場合はhttpsに変更
-		$isSslPage = false;
-		if ($gEnvManager->isAdminUrlAccess($toUrl)){		// 管理画面へのアクセスのとき
-			// 管理画面のSSL状態を参照
-			if ($gEnvManager->getUseSslAdmin()) $isSslPage = true;		// 管理画面でSSLを使用するとき
-		} else {
-			// ファイル名を取得
-			$paramArray = array();
-			//list($filename, $query) = explode('?', basename($toUrl));
-			list($url, $query) = explode('?', $toUrl);
-			$baseUrl = dirname($url);
-			$filename = basename($url);
-			if (empty($filename)) $filename = M3_FILENAME_INDEX;
-			if (!empty($query)) parse_str($query, $paramArray);		// クエリーの解析
+		if ($autoSsl){
+			$isSslPage = false;
+			if ($gEnvManager->isAdminUrlAccess($toUrl)){		// 管理画面へのアクセスのとき
+				// 管理画面のSSL状態を参照
+				if ($gEnvManager->getUseSslAdmin()) $isSslPage = true;		// 管理画面でSSLを使用するとき
+			} else {
+				// ファイル名を取得
+				$paramArray = array();
+				//list($filename, $query) = explode('?', basename($toUrl));
+				list($url, $query) = explode('?', $toUrl);
+				$baseUrl = dirname($url);
+				$filename = basename($url);
+				if (empty($filename)) $filename = M3_FILENAME_INDEX;
+				if (!empty($query)) parse_str($query, $paramArray);		// クエリーの解析
 		
-			// ページIDを取得
-			$pageId = basename($filename, '.php');
-			$pageSubId = $paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID];
+				// ページIDを取得
+				$pageId = basename($filename, '.php');
+				$pageSubId = $paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID];
 			
-			// ページのSSL設定状況を取得
-			$isSslPage = $this->isSslPage($pageId, $pageSubId);
+				// ページのSSL設定状況を取得
+				$isSslPage = $this->isSslPage($pageId, $pageSubId);
 			
-			// 階層化ページの場合はURLを修正
-			if ($this->gSystem->hierarchicalPage() && $filename == M3_FILENAME_INDEX){
-				$toUrl = $baseUrl . '/' . $pageSubId . '/';
-				unset($paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID]);
+				// 階層化ページの場合はURLを修正
+				if ($this->gSystem->hierarchicalPage() && $filename == M3_FILENAME_INDEX){
+					$toUrl = $baseUrl . '/' . $pageSubId . '/';
+					unset($paramArray[M3_REQUEST_PARAM_PAGE_SUB_ID]);
 					
-				$paramStr = $this->_createUrlParamStr($paramArray);
-				if (!empty($paramStr)) $toUrl .= '?' . $paramStr;
+					$paramStr = $this->_createUrlParamStr($paramArray);
+					if (!empty($paramStr)) $toUrl .= '?' . $paramStr;
+				}
 			}
-		}
-		if ($isSslPage){
-			//$toUrl = str_replace('http://', 'https://', $toUrl);
-			$toUrl = $gEnvManager->getSslUrl($toUrl);		// SSL用URLに変換
-		} else {
-			$toUrl = str_replace('https://', 'http://', $toUrl);
+			if ($isSslPage){
+				//$toUrl = str_replace('http://', 'https://', $toUrl);
+				$toUrl = $gEnvManager->getSslUrl($toUrl);		// SSL用URLに変換
+			} else {
+				$toUrl = str_replace('https://', 'http://', $toUrl);
+			}
 		}
 
 		// バッファ内容が残っているときは破棄
@@ -5507,7 +5510,6 @@ class PageManager extends Core
 		header('Location: ' . $toUrl);
 		
 		$this->isRedirect = true;				// リダイレクトするかどうか
-//		exit();
 	}
 	/**
 	 * リダイレクト処理かどうかを返す
@@ -5533,6 +5535,16 @@ class PageManager extends Core
 		$this->redirect($dirPath, false, 303);			// Firefoxでredirect先がキャッシュに残る問題を回避(2012/7/23)
 	}
 	/**
+	 * インストール時のリダイレクト処理
+	 *
+	 * @param string $url			遷移先URL
+	 * @return 						なし
+	 */
+	function redirectInInstall($url)
+	{
+		$this->redirect($url, false, 303, false/*SSLは自動制御しない*/);			// Firefoxでredirect先がキャッシュに残る問題を回避(2012/8/1)
+	}
+	/**
 	 * インストール用URLへリダイレクト
 	 *
 	 * @return 						なし
@@ -5543,7 +5555,7 @@ class PageManager extends Core
 		
 		$sytemRootUrl = $gEnvManager->calcSystemRootUrl();
 		//$this->redirect($sytemRootUrl . '/admin/install.php');
-		$this->redirect($sytemRootUrl . '/admin/install.php', false, 303);			// Firefoxでredirect先がキャッシュに残る問題を回避(2012/8/1)
+		$this->redirect($sytemRootUrl . '/admin/install.php', false, 303, false/*SSLは自動制御しない*/);			// Firefoxでredirect先がキャッシュに残る問題を回避(2012/8/1)
 	}
 	/**
 	 * ログイン、ログアウト処理を行った後、リダイレクト

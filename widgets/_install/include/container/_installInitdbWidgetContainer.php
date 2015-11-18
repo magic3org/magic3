@@ -262,7 +262,8 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 //				$this->gOpeLog->writeGuide(__METHOD__, $guideMsg, 3000, '', '', 'task=initwizard', true/*トップ表示*/);
 				
 				// 次の画面へ遷移
-				$this->gPage->redirect('?task=initother&install_type=' . $type . '&from=initdb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+//				$this->gPage->redirect('?task=initother&install_type=' . $type . '&from=initdb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+				$this->gPage->redirectInInstall('?task=initother&install_type=' . $type . '&from=initdb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 			} else {
 				//$msg = 'ＤＢ初期化に失敗しました';
 				//if (!empty($filename)) $msg .= '(スクリプト名=' . $filename . ')';
@@ -364,7 +365,8 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				}
 			
 				$type = 'all';
-				$this->gPage->redirect('?task=copyfile&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+//				$this->gPage->redirect('?task=copyfile&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
+				$this->gPage->redirectInInstall('?task=copyfile&install_type=' . $type . '&from=updatedb' . '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->gEnv->getCurrentLanguage());
 			} else {
 				// エラーメッセージ追加
 				if (!$ret){
