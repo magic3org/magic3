@@ -369,4 +369,8 @@ $HELP['initwizard_admin_password']['title'] = 'パスワード';
 $HELP['initwizard_admin_password']['body'] = 'ログインに使用するパスワードです。';
 $HELP['initwizard_admin_email']['title'] = 'Eメール';
 $HELP['initwizard_admin_email']['body'] = '管理者のメールアドレスです。パスワード再送などで使用されます。';
+
+// ########## サイト管理 ##########
+$HELP['sitelist_host_name']['title'] = 'ホスト名';
+$HELP['sitelist_host_name']['body'] = 'サイトを識別するための名前を設定します。ホスト名は運用するサイトのURL http://xxxxx.xxxxx.xxxxx/ の「xxxxx.xxxxx.xxxxx」の部分を設定します。';
 ?>

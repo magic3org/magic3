@@ -94,7 +94,7 @@ $(function(){
 <table id="config_table">
     <tbody>
     <tr>
-	    <th>ホスト名</th>
+	    <th><span {_HELP_SITELIST_HOST_NAME}>ホスト名</span></th>
 	    <td colspan="3"><patTemplate:tmpl name="input_hostname" visibility="hidden"><input type="text" name="item_hostname" class="form-control" value="{HOSTNAME}" maxlength="100" /></patTemplate:tmpl>{HOSTNAME}</td>
 	</tr>
     <tr>
@@ -104,7 +104,7 @@ $(function(){
 	    <td>{HOST_ID}</td>
 	</tr>
     <tr>
-	    <th>作成日</th>
+	    <th>作成日時</th>
 	    <td>{DATE}</td>
 	    <th>Magic3バージョン</th>
 	    <td>{VERSION}</td>

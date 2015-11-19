@@ -187,7 +187,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 				'host'		=> $hostStr,	// ホスト名
 				'status'	=> $statusTag,	// 状態
 				'dir'		=> $this->convertToDispString($line['dir']),			// ディレクトリ名
-				'date'		=> $this->convertToDispDate(date("Y/m/d H:i:s", $line['date'])),			// 作成日時
+				'date'		=> $this->convertToDispDateTime(date("Y/m/d H:i:s", $line['date']), 0/*ロングフォーマット*/, 10/*時分*/),			// 作成日時
 				'disksize'	=> $this->convertToDispString(convFromBytes($line['disksize'])),			// ディスク使用量
 				'link'		=> $linkTag
 			);
@@ -337,7 +337,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($id));		// ID(ホスト名)
 		$this->tmpl->addVar("_widget", "host_id", $this->convertToDispString($hostId));		// ホストID
-		$this->tmpl->addVar("_widget", "date", $this->convertToDispDate($createDt));		// 作成日付
+		$this->tmpl->addVar("_widget", "date", $this->convertToDispDateTime($createDt, 0/*ロングフォーマット*/, 10/*時分*/));		// 作成日付
 		$this->tmpl->addVar("_widget", "version", $this->convertToDispString($version));		// Magic3バージョン
 		$this->tmpl->addVar("_widget", "msg_completed", $msgCompleted);		// 処理完了メッセージ
 		$this->tmpl->addVar("_widget", "msg_error", $msgError);		// 処理エラーメッセージ
