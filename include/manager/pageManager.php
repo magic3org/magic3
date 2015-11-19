@@ -5532,7 +5532,7 @@ class PageManager extends Core
 		// ファイル名を削除
 		$dirPath = dirname($gEnvManager->getCurrentScriptUrl()) . '/';
 		//$this->redirect($dirPath);
-		$this->redirect($dirPath, false, 303);			// Firefoxでredirect先がキャッシュに残る問題を回避(2012/7/23)
+		$this->redirect($dirPath, false, 303, false/*SSLは自動制御しない*/);			// Firefoxでredirect先がキャッシュに残る問題を回避(2012/7/23)
 	}
 	/**
 	 * インストール時のリダイレクト処理
