@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2014 Magic3 Project.
+-- * @copyright  Copyright 2006-2015 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -17,6 +17,7 @@
 
 -- システム設定マスター(PCサイト非公開)
 UPDATE _system_config SET sc_value = '0' WHERE sc_id = 'site_pc_in_public';
+UPDATE _system_config SET sc_value = 'serveradmin' WHERE sc_id = 'system_type';
 
 -- サイト定義マスター
 DELETE FROM _site_def WHERE sd_id = 'site_name';

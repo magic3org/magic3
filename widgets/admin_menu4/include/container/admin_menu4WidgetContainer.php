@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -32,6 +32,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 //	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
 	const HELP_ICON_FILE = '/images/system/help24.gif';		// ヘルプアイコン
 	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
+	const TOP_SERVER_ADMIN_ICON_FILE = '/images/system/globe32.png';		// トップ遷移アイコン(サーバ管理運用の場合)
 	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
@@ -64,6 +65,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const CF_SITE_PC_IN_PUBLIC		= 'site_pc_in_public';				// PC用サイトの公開状況
 	const CF_SITE_MOBILE_IN_PUBLIC	= 'site_mobile_in_public';		// 携帯用サイトの公開状況
 	const CF_SITE_SMARTPHONE_IN_PUBLIC = 'site_smartphone_in_public';		// スマートフォン用サイトの公開状況
+	const CF_SYSTEM_TYPE			= 'system_type';		// システム運用タイプ
+	const SYSTEM_TYPE_SERVER_ADMIN	= 'serveradmin';		// システム運用タイプ(サーバ管理)
 	
 	/**
 	 * コンストラクタ
@@ -313,7 +316,12 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			//$this->tmpl->addVar("menu", "site", '<label><a href="#" onclick="previewSite(\'' . $siteUrl . '\');">' . $siteUrl . '</a></label>');
 			
 			// トップアイコンを設定
-			$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
+			$value = $this->gSystem->getSystemConfig(self::CF_SYSTEM_TYPE);		// システム運用タイプ
+			if ($value == self::SYSTEM_TYPE_SERVER_ADMIN){		// サーバ管理の場合
+				$iconUrl = $this->gEnv->getRootUrl() . self::TOP_SERVER_ADMIN_ICON_FILE;
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
+			}
 			$iconTitle = $this->_('Top Page');		// トップ画面
 			$imageSize = self::SITE_ICON_SIZE;
 			$iconTag = '<img class="home" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
