@@ -131,8 +131,9 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		} else {
 			$srcVer = '未取得';
 			
-			// ソースの更新は不可
-			if (!file_exists(self::MAGIC3_SHELL_CREATEDOMAIN)) $this->tmpl->addVar("_widget", "update_src_button_disabled", $this->convertToDisabledString(1));
+//			if (!file_exists(self::MAGIC3_SHELL_CREATEDOMAIN)){		// apacheユーザから/root/tools以下は参照できない
+//				$this->tmpl->addVar("_widget", "update_src_button_disabled", $this->convertToDisabledString(1));
+//			}
 		}
 		
 		// ジョブ監視状況
