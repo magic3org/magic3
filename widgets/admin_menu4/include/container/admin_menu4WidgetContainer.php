@@ -24,6 +24,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	protected $subContentMenu;			// サブコンテンツ編集メニュー
 	protected $useMenu;				// メニューを使用するかどうか
 	protected $useCloseButton;				// 「閉じる」を使用するかどうか
+	protected $systemType;			// システム運用タイプ
 	const DEFAULT_CSS_FILE = '/default.css';		// CSSファイル
 	const WIDGET_CSS_FILE = '/widget.css';			// ウィジェット単体表示用CSS
 	const DEFAULT_NAV_ID = 'admin_menu';			// ナビゲーションメニューID
@@ -316,8 +317,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			//$this->tmpl->addVar("menu", "site", '<label><a href="#" onclick="previewSite(\'' . $siteUrl . '\');">' . $siteUrl . '</a></label>');
 			
 			// トップアイコンを設定
-			$value = $this->gSystem->getSystemConfig(self::CF_SYSTEM_TYPE);		// システム運用タイプ
-			if ($value == self::SYSTEM_TYPE_SERVER_ADMIN){		// サーバ管理の場合
+			$this->systemType = $this->gSystem->getSystemConfig(self::CF_SYSTEM_TYPE);		// システム運用タイプ
+			if ($this->systemType == self::SYSTEM_TYPE_SERVER_ADMIN){		// サーバ管理の場合
 				$iconUrl = $this->gEnv->getRootUrl() . self::TOP_SERVER_ADMIN_ICON_FILE;
 			} else {
 				$iconUrl = $this->gEnv->getRootUrl() . self::TOP_ICON_FILE;
@@ -713,6 +714,10 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;"><span >' . $this->convertToDispString($title) . '</span></a></li>' . M3_NL;
 			}
 		}
+		
+		// サーバ管理でのシステム運用の場合はアクセスポイントの制御項目を表示しない
+		if ($this->systemType == self::SYSTEM_TYPE_SERVER_ADMIN) return $menuTag;		// サーバ管理の場合
+
 		// セパレータ
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 		$menuTag .= '<li class="divider"></li>' . M3_NL;
@@ -730,7 +735,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 		$menuTag .= '<li><a href="#" onclick="siteOpen(' . $deviceType . ',' . intval(!$isVisibleSite) . ');return false;">';
 		$menuTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />' . $openSiteMessage . '</a></li>' . M3_NL;
-
 		return $menuTag;
 	}
 	/**
