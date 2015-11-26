@@ -481,13 +481,58 @@ class DesignManager extends Core
 	/**
 	 * ドラッグ&ドロップファイルアップロード用タグを作成
 	 *
-	 * @param string $id			親のタグID
 	 * @return string 				アップロード用HTML
 	 */
 	function createDragDropFileUploadHtml()
 	{
 		$iconUrl = call_user_func($this->_getUrlCallback, $this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
 		$html = '<h4 align="center"><img src="' . $iconUrl . '" />ファイルアップロード</h4><p align="center">ここにドラッグ＆ドロップまたはクリック</p>';
+		return $html;
+	}
+	/**
+	 * アップロード用ダイアログのタグを作成
+	 *
+	 * @param string $id				ダイアログタグID
+	 * @param string $title				ダイアログタイトル
+	 * @param string $message			ダイアログメッセージ
+	 * @param string $uploadButtonLabel	アップロードボタンのラベル
+	 * @param string $cancelButtonLabel	キャンセルボタンのラベル
+	 * @param string $formName			フォーム名
+	 * @param int $maxFileSize			最大ファイルサイズ(0のときはデフォルト値)
+	 * @return string 					アップロード用HTML
+	 */
+	function createFileUploadDialogHtml($id, $title = 'ファイルアップロード', $message = 'ファイルを選択してください。', $uploadButtonLabel = 'アップロード', $cancelButtonLabel = 'キャンセル', $formName = 'upload', $maxFileSize = 0)
+	{
+		global $gSystemManager;
+		
+		if (empty($maxFileSize)) $maxFileSize = $gSystemManager->getMaxFileSizeForUpload(true/*数値のバイト数*/);
+		
+		$html  = '<div id="' . $id . '" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">';
+		$html .= '<div class="modal-dialog">';
+		$html .= '<div class="modal-content">';
+		$html .= '<div class="modal-header">';
+		$html .= '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>';
+		$html .= '<h4 class="modal-title" id="uploadModalLabel">' . convertToHtmlEntity($title) . '</h4>';
+		$html .= '</div>';
+		$html .= '<div class="modal-body">';
+		$html .= '<p>' . convertToHtmlEntity($message) . '</p>';
+		$html .= '<form enctype="multipart/form-data" method="post" name="' . $formName . '">';
+		$html .= '<input type="hidden" name="act" />';
+		$html .= '<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxFileSize . '" />';
+		$html .= '<input type="hidden" name="item_type" />';
+		$html .= '<div class="input-group">';
+		$html .= '<span class="input-group-addon btn-file"><i class="glyphicon glyphicon-folder-open"></i><input type="file" name="upfile"></span>';
+		$html .= '<input type="text" class="form-control">';
+		$html .= '</div>';
+		$html .= '</form>';
+		$html .= '</div>';
+		$html .= '<div class="modal-footer">';
+		$html .= '<button type="button" class="btn btn-default" data-dismiss="modal">' . convertToHtmlEntity($cancelButtonLabel) . '</button>';
+		$html .= '<button type="button" class="btn btn-success" onclick="uploadCheck();">' . convertToHtmlEntity($uploadButtonLabel) . '</button>';
+		$html .= '</div>';
+		$html .= '</div>';
+		$html .= '</div>';
+		$html .= '</div>';
 		return $html;
 	}
 	/**

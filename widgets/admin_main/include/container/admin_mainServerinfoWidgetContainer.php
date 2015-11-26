@@ -25,6 +25,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	const CMD_FILENAME_CREATE_SITE = 'CMD_00_CREATESITE';			// サイト作成ジョブファイル名
 	const CMD_FILENAME_REMOVE_SITE = 'CMD_00_REMOVESITE';			// サイト削除ジョブファイル名
 	const CMD_FILENAME_UPDATE_INSTALL_PACKAGE = 'CMD_00_UPDATEINSTALLPACKAGE';			// インストールパッケージ取得ジョブファイル名
+	const DIALOG_ID_SSL = 'uploadModal';			// SSL認証書アップロード用ダイアログのID
 	
 	/**
 	 * コンストラクタ
@@ -92,6 +93,44 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 				$this->gInstance->getAjaxManager()->addData('code', '1');
 			}
 			return;
+		} else if ($act == 'upload'){		// ファイルアップロードの場合
+			// アップロードされたファイルか？セキュリティチェックする
+			if (is_uploaded_file($_FILES['upfile']['tmp_name'])){
+				$uploadFilename = $_FILES['upfile']['name'];		// アップロードされたファイルのファイル名取得
+				
+				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
+					// ファイルを保存するサーバディレクトリを指定
+					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
+		
+					// アップされたテンポラリファイルを保存ディレクトリにコピー
+					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
+					if ($ret){
+						// ファイル内容の確認
+						$fileContent = file_get_contents($tmpFile);
+						$parsedCert = openssl_x509_parse($fileContent);
+						$expireDt = $parsedCert['validTo_time_t'];
+						$sslDomain = $parsedCert['subject']['CN'];		// ドメイン名
+
+						if (time() <= $expireDt){
+							$expireDt = date("Y/m/d H:i:s", $expireDt);
+							$expireDtTag = '<span class="available">' . $this->convertToDispDateTime($expireDt) . '</span>';
+						} else {
+							$expireDt = date("Y/m/d H:i:s", $expireDt);
+							$expireDtTag = '<span class="stopped">' . $this->convertToDispDateTime($expireDt) . '</span>';
+						}
+						$sslUpdateInfo = '<br />=>&nbsp' . $expireDtTag . '&emsp;ドメイン名：' . $this->convertToDispString($sslDomain);
+					} else {
+						//$msg = 'ファイルのアップロードに失敗しました';
+						$msg = $this->_('Failed in uploading file.');		// ファイルのアップロードに失敗しました
+						$this->setAppErrorMsg($msg);
+					}
+					// テンポラリファイル削除
+					unlink($tmpFile);
+				}
+			} else {
+				$msg = 'アップロードファイルが見つかりません';
+				$this->setAppErrorMsg($msg);
+			}
 		}
 
 		//全体サイズ
@@ -175,6 +214,9 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar('_widget', 'src_version',	$this->convertToDispString($srcVer) . $versionInfoStr);
 		$this->tmpl->addVar('_widget', 'ssl_expire_dt',	$expireDtTag);
 		$this->tmpl->addVar('_widget', 'domain_name',	$sslDomainTag);
+		$this->tmpl->addVar('_widget', 'ssl_update_info',	$sslUpdateInfo);
+		$this->tmpl->addVar('_widget', 'ssl_dialog_id',	self::DIALOG_ID_SSL);			// SSL認証書アップロード用ダイアログのタグID
+		$this->tmpl->addVar('_widget', 'ssl_dialog',	$this->gDesign->createFileUploadDialogHtml(self::DIALOG_ID_SSL));		// SSL認証書アップロード用ダイアログ
 	}
 	/**
 	 * ジョブの実行状況を表示
