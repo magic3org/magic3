@@ -148,7 +148,24 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			if (time() - $time < 60 * 10) $watchJobStatus = '<span class="running">稼動中</span>';
 		}
 		
+		// SSL期限
+		$expireDt = $this->_getSslExpireDt($this->gEnv->getRootUrl(), $sslDomain);
+		if (empty($expireDt)){
+			$expireDtTag = '未取得';
+			$sslDomainTag = '';
+		} else {
+			if (time() <= $expireDt){
+				$expireDt = date("Y/m/d H:i:s", $expireDt);
+				$expireDtTag = '<span class="available">' . $this->convertToDispDateTime($expireDt) . '</span>';
+			} else {
+				$expireDt = date("Y/m/d H:i:s", $expireDt);
+				$expireDtTag = '<span class="stopped">' . $this->convertToDispDateTime($expireDt) . '</span>';
+			}
+			$sslDomainTag = '&emsp;ドメイン名：' . $this->convertToDispString($sslDomain);
+		}
+		
 		// 値を埋め込む
+		$this->tmpl->addVar('_widget', 'site_url',	$this->convertToDispString($this->gEnv->getAdminUrl()));
 		$this->tmpl->addVar('_widget', 'host_id',	$this->convertToDispString($masterHostId));			// ホストID
 		$this->tmpl->addVar('_widget', 'total_size',	$this->convertToDispString($totalStr));
 		$this->tmpl->addVar('_widget', 'free_size',		$this->convertToDispString($freeStr));
@@ -156,6 +173,8 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar('_widget', 'used_rate',		$this->convertToDispString($usedRateStr));
 		$this->tmpl->addVar('_widget', 'watch_job_status',		$watchJobStatus);
 		$this->tmpl->addVar('_widget', 'src_version',	$this->convertToDispString($srcVer) . $versionInfoStr);
+		$this->tmpl->addVar('_widget', 'ssl_expire_dt',	$expireDtTag);
+		$this->tmpl->addVar('_widget', 'domain_name',	$sslDomainTag);
 	}
 	/**
 	 * ジョブの実行状況を表示
@@ -183,6 +202,50 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$isShown = true;			// メッセージ表示あり
 		}
 		return $isShown;
+	}
+	/**
+	 * SSLの期限を取得
+	 *
+	 * @param string $url		SSL証明書を取得するURL
+	 * @param string $sslDomain	SSLの対象となるドメイン名
+	 * @return int				UNIXタイムスタンプ。取得できない場合は0。
+	 */
+	function _getSslExpireDt($url, &$sslDomain)
+	{
+		$arr = parse_url($url);
+		if ($arr == false)  return '';
+		
+		$hostname = $arr['host'];
+
+		$stream_context = stream_context_create(array(
+			'ssl' => array('capture_peer_cert' => true)
+		));
+		$fp = @stream_socket_client(
+			'ssl://' . $hostname . ':443',
+			$errno,
+			$errstr,
+			30,
+			STREAM_CLIENT_CONNECT,
+			$stream_context
+		);
+		if (!$fp) return 0;		// 取得不可の場合は終了
+		
+		$cont = stream_context_get_params($fp);
+		$parsed = openssl_x509_parse($cont['options']['ssl']['peer_certificate']);
+//		$expireDt = date("Y/m/d H:i:s", $parsed['validTo_time_t']);
+		$expireDt = $parsed['validTo_time_t'];
+		$sslDomain = $parsed['subject']['CN'];		// ドメイン名
+		
+		// ファイルポインタ閉じる
+		fclose($fp);
+		
+		// ドメイン名のチェック
+		if (strStartsWith($sslDomain, '*.')){		// ワイルドカードSSLの場合
+			if (!strEndsWith($hostname, substr($sslDomain, 1))) $expireDt = 0;
+		} else {
+			if (!strEndsWith($hostname, '.' . $sslDomain)) $expireDt = 0;
+		}
+		return $expireDt;
 	}
 }
 ?>
