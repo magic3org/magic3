@@ -20,6 +20,7 @@ class admin_mainServeradminBaseWidgetContainer extends admin_mainBaseWidgetConta
 	protected $cmdPath;		// ジョブ格納ディレクトリ
 	
 	const BREADCRUMB_TITLE	= 'サーバ管理';		// パンくずリストトップタイトル
+	const JOB_OPTION_FILE_DIR	= 'file';		// ジョブ用ファイル格納ディレクトリ
 	// 画面
 	const TASK_SERVERINFO		= 'serverinfo';			// サーバ情報
 	const TASK_SITELIST			= 'sitelist';			// サイト一覧

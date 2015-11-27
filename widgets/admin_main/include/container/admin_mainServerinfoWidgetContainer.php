@@ -131,16 +131,35 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 				$this->setAppErrorMsg($msg);
 			}
 		} else if ($act == 'updatessl' && $status == '1'){		// SSL認証書を更新のとき
-			// コマンドファイルにパラメータを書き込む
-			$cmdContent = '';
-			$email = $this->gEnv->getSiteEmail();
-			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
-			// ドメイン名
+			// SSL認証書を保存
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			$tmpFile = $tmpDir . DIRECTORY_SEPARATOR . self::DEFAULT_SSL_FILENAME;
+			$ret = mvFileToDir($tmpDir, array(self::DEFAULT_SSL_FILENAME), $this->cmdPath . '/' . self::JOB_OPTION_FILE_DIR);
 			
-			$ret = file_put_contents($cmdFile_update_ssl, $cmdContent, LOCK_EX/*排他的アクセス*/);
-			if ($ret !== false){
-				$this->tmpl->setAttribute('show_process_dialog', 'visibility', 'visible');		// 処理結果監視
+			if ($ret){
+				// コマンドファイルにパラメータを書き込む
+				$cmdContent = '';
+				$email = $this->gEnv->getSiteEmail();
+				if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
+			
+				// SSL認証書ファイル
+				$sslFile = self::JOB_OPTION_FILE_DIR . '/' . self::DEFAULT_SSL_FILENAME;
+				$cmdContent .= 'file=' . $sslFile . "\n";
+			
+				$ret = file_put_contents($cmdFile_update_ssl, $cmdContent, LOCK_EX/*排他的アクセス*/);
+				if ($ret !== false){
+					$this->tmpl->setAttribute('show_process_dialog', 'visibility', 'visible');		// 処理結果監視
+				}
+			} else {
+				$msg = 'エラーが発生しました';
+				$this->setAppErrorMsg($msg);
 			}
+			
+			// 作業ディレクトリを削除
+			rmDirectory($tmpDir);
+			
+			// 処理状態をリセット
+			$status = '';
 		} else {
 			// 作業ディレクトリを削除
 			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
