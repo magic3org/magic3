@@ -45,6 +45,7 @@ define('M3_SYSTEM_DEBUG_OUT', true);			// デバッグ文出力を行うかど�
 define('M3_SYSTEM_REALTIME_ANALYTICS', false);	// 即時アクセス解析を行うかどうか
 
 // ######### 別名定義 #########
+define('M3_DS',	'/');				// ディレクトリセパレータ
 define('M3_NL',	"\n");				// 改行
 define('M3_TB',	"\t");				// タブ
 define('M3_INDENT_SPACE', '    ');	// 字下げスペース

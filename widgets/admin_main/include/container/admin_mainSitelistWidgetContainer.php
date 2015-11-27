@@ -103,7 +103,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 		if ($ret = @is_dir($searchPath)){
 			$dir = dir($searchPath);
 			while (($file = $dir->read()) !== false){
-				$filePath = $searchPath . DIRECTORY_SEPARATOR . $file;
+				$filePath = $searchPath . M3_DS . $file;
 				$pathParts = pathinfo($file);
 					
 				// ディレクトリのときは、ドメイン名を取得
@@ -166,9 +166,9 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 			$titleStr = self::LINK_ADMIN_PAGE;
 			$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;		// 管理画面アイコン
 			if ($isSslAdminUrl){		// マスターホストの管理画面がSSLでのアクセスの場合は、管理対象のホストの管理画面もSSLアクセスとする
-				$linkUrl = 'https://' . $line['hostname'] . '/' . M3_DIR_NAME_ADMIN . '/';
+				$linkUrl = 'https://' . $line['hostname'] . M3_DS . M3_DIR_NAME_ADMIN . M3_DS;
 			} else {
-				$linkUrl = 'http://' . $line['hostname'] . '/' . M3_DIR_NAME_ADMIN . '/';
+				$linkUrl = 'http://' . $line['hostname'] . M3_DS . M3_DIR_NAME_ADMIN . M3_DS;
 			}
 			$linkTag = '<a href="' . convertUrlToHtmlEntity($linkUrl) . '" target="_blank" rel="m3help" title="' . $titleStr . '">';
 			$linkTag .= '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $titleStr . '" /></a>';
@@ -206,8 +206,8 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 		$vhostList = $this->_getVirtualHostInfo();
 
 		// ジョブ実行ファイル
-		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンドファイル
-		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンドファイル
+		$cmdFile_create_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンドファイル
+		$cmdFile_remove_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンドファイル
 		
 		// ジョブの実行状況を表示
 		$isShownJobStatus = $this->_showJobStatus();
@@ -298,7 +298,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 			}
 			if (!empty($hostId)){
 				// ディレクトリ日付取得
-				$siteDir = self::HOME_DIR . DIRECTORY_SEPARATOR . $hostId;
+				$siteDir = self::HOME_DIR . M3_DS . $hostId;
 				if (file_exists($siteDir)){
 					$createDt = date("Y/m/d H:i:s", filemtime($siteDir));
 				

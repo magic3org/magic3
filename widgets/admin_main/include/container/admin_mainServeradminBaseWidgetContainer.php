@@ -107,9 +107,9 @@ class admin_mainServeradminBaseWidgetContainer extends admin_mainBaseWidgetConta
 		$isShown = false;
 		
 		// ジョブの実行状況を表示
-		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
-		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
-		$cmdFile_update_insatll_package = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;			// インストールパッケージ取得ジョブファイル名
+		$cmdFile_create_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
+		$cmdFile_remove_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
+		$cmdFile_update_insatll_package = $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;			// インストールパッケージ取得ジョブファイル名
 		if (file_exists($cmdFile_create_site)){
 			$this->setUserErrorMsg('サイトの作成中です');
 			$isShown = true;			// メッセージ表示あり

@@ -60,8 +60,8 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 		$units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB' );
 		$base = 1024;
 		$path = '/';
-		$cmdFile_update_install_package = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;		// インストールパッケージの更新、コマンド実行ファイル
-		$cmdFile_update_ssl				= $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_SSL;		// SSL認証書の更新、コマンド実行ファイル
+		$cmdFile_update_install_package = $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;		// インストールパッケージの更新、コマンド実行ファイル
+		$cmdFile_update_ssl				= $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_SSL;		// SSL認証書の更新、コマンド実行ファイル
 		
 		// ジョブの実行状況を表示
 		$isShownJobStatus = $this->_showJobStatus();
@@ -96,7 +96,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
 					// 作業ディレクトリ作成
 					$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
-					$tmpFile = $tmpDir . DIRECTORY_SEPARATOR . self::DEFAULT_SSL_FILENAME;
+					$tmpFile = $tmpDir . M3_DS . self::DEFAULT_SSL_FILENAME;
 					
 					// アップされたテンポラリファイルを保存ディレクトリにコピー
 					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
@@ -131,19 +131,29 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 				$this->setAppErrorMsg($msg);
 			}
 		} else if ($act == 'updatessl' && $status == '1'){		// SSL認証書を更新のとき
-			// SSL認証書を保存
+			// 一時ファイルのSSL認証書取得
 			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
-			$tmpFile = $tmpDir . DIRECTORY_SEPARATOR . self::DEFAULT_SSL_FILENAME;
-			$ret = mvFileToDir($tmpDir, array(self::DEFAULT_SSL_FILENAME), $this->cmdPath . '/' . self::JOB_OPTION_FILE_DIR);
+			$tmpFile = $tmpDir . M3_DS . self::DEFAULT_SSL_FILENAME;
 			
+			// ドメイン名取得
+			$fileContent = file_get_contents($tmpFile);
+			$parsedCert = openssl_x509_parse($fileContent);
+			$sslDomain = $parsedCert['subject']['CN'];		// ドメイン名
+			$sslDomain = ltrim($sslDomain, '*.');
+			
+			// SSL認証書を保存
+			$ret = mvFileToDir($tmpDir, array(self::DEFAULT_SSL_FILENAME), $this->cmdPath . M3_DS . self::JOB_OPTION_FILE_DIR);
 			if ($ret){
 				// コマンドファイルにパラメータを書き込む
 				$cmdContent = '';
 				$email = $this->gEnv->getSiteEmail();
 				if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
 			
+				// ドメイン名
+				$cmdContent .= 'domain=' . $sslDomain . "\n";
+				
 				// SSL認証書ファイル
-				$sslFile = self::JOB_OPTION_FILE_DIR . '/' . self::DEFAULT_SSL_FILENAME;
+				$sslFile = self::JOB_OPTION_FILE_DIR . M3_DS . self::DEFAULT_SSL_FILENAME;
 				$cmdContent .= 'file=' . $sslFile . "\n";
 			
 				$ret = file_put_contents($cmdFile_update_ssl, $cmdContent, LOCK_EX/*排他的アクセス*/);
@@ -207,16 +217,16 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 //			if (!file_exists(self::MAGIC3_SHELL_CREATEDOMAIN)){		// apacheユーザから/root/tools以下は参照できない
 //				$this->tmpl->addVar("_widget", "update_src_button_disabled", $this->convertToDisabledString(1));
 //			}
-			if (!file_exists($this->cmdPath . DIRECTORY_SEPARATOR . self::WATCH_JOB_STATUS_FILE)){
+			if (!file_exists($this->cmdPath . M3_DS . self::WATCH_JOB_STATUS_FILE)){
 				$this->tmpl->addVar("_widget", "update_src_button_disabled", $this->convertToDisabledString(1));
 			}
 		}
 		
 		// ジョブ監視状況
 		$watchJobStatus = '<span class="stopped">停止</span>';
-		if (file_exists($this->cmdPath . DIRECTORY_SEPARATOR . self::WATCH_JOB_STATUS_FILE)){
+		if (file_exists($this->cmdPath . M3_DS . self::WATCH_JOB_STATUS_FILE)){
 			// 10分以内にジョブが実行されている場合は稼動にする
-			$time = filemtime($this->cmdPath . DIRECTORY_SEPARATOR . self::WATCH_JOB_STATUS_FILE);
+			$time = filemtime($this->cmdPath . M3_DS . self::WATCH_JOB_STATUS_FILE);
 			if (time() - $time < 60 * 10) $watchJobStatus = '<span class="running">稼動中</span>';
 		}
 		
@@ -271,9 +281,9 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 		$isShown = false;
 		
 		// ジョブの実行状況を表示
-		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
-		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
-		$cmdFile_update_insatll_package = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;			// インストールパッケージ取得ジョブファイル名
+		$cmdFile_create_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
+		$cmdFile_remove_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
+		$cmdFile_update_insatll_package = $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;			// インストールパッケージ取得ジョブファイル名
 		if (file_exists($cmdFile_create_site)){
 			$this->setUserErrorMsg('サイトの作成中です');
 			$isShown = true;			// メッセージ表示あり
