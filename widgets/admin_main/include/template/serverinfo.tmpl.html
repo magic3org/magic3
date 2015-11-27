@@ -49,13 +49,19 @@ function startWatchProcess()
 	// サーバ処理監視
 	watchProcess();
 }
-function uploadCheck(){
+function uploadCheck()
+{
 	if (!document.upload.upfile.value){
 		alert('ファイルが選択されていません');
 		return false;
 	}
-	if (!window.confirm('ファイルをアップロードしますか?')) return false;
 	document.upload.act.value = 'upload';
+	document.upload.submit();
+	return false;
+}
+function updateSsl()
+{
+	document.upload.act.value = 'updatessl';
 	document.upload.submit();
 	return false;
 }
@@ -79,11 +85,15 @@ $(function(){
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
+<input type="hidden" name="status" value="{STATUS}" />
 <h3>サーバ情報</h3>
 <table id="server_info">
     <tbody>
 	<tr><th>URL</th><td colspan="2">{SITE_URL}</td></tr>
-	<tr><th>SSL期限</th><td colspan="2">{SSL_EXPIRE_DT}{DOMAIN_NAME}{SSL_UPDATE_INFO}<div class="pull-right"><input type="button" class="button" data-toggle="modal" data-target="#{SSL_DIALOG_ID}" value="認証書をアップロード" /></div></td></tr>
+	<tr><th>SSL期限</th><td colspan="2">{SSL_EXPIRE_DT}{DOMAIN_NAME}{SSL_UPDATE_INFO}<div class="pull-right">
+	<patTemplate:tmpl name="show_ssl_upload" visibility="hidden"><input type="button" class="button" data-toggle="modal" data-target="#{SSL_DIALOG_ID}" value="認証書をアップロード" /></patTemplate:tmpl>
+	<patTemplate:tmpl name="show_ssl_update" visibility="hidden"><input type="button" class="button btn-success" value="認証書を更新" onclick="updateSsl();" /></patTemplate:tmpl>
+	</div></td></tr>
 	<tr><th>ホストID</th><td colspan="2">{HOST_ID}</td></tr>
     <tr><th rowspan="4">ディスク</th><th>全体サイズ</th><td>{TOTAL_SIZE}</td></tr>
 	<tr><th>空き容量</th><td>{FREE_SIZE}</td></tr>

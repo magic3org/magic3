@@ -13,19 +13,16 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainServeradminBaseWidgetContainer.php');
 require_once($gEnvManager->getCommonPath() .	'/gitRepo.php');
 
-class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidgetContainer
 {
-	private $cmdPath;		// ジョブ格納ディレクトリ
 	const MAGIC3_SRC_VER_FILE = '/var/magic3/src_version';
 	const MAGIC3_SHELL_CREATEDOMAIN = '/root/tools/createdomain.sh';		// ドメイン作成用シェルプログラム
 	const WATCH_JOB_STATUS_FILE = 'STATUS';		// ジョブ状態確認用ファイル
-	const CMD_FILENAME_CREATE_SITE = 'CMD_00_CREATESITE';			// サイト作成ジョブファイル名
-	const CMD_FILENAME_REMOVE_SITE = 'CMD_00_REMOVESITE';			// サイト削除ジョブファイル名
-	const CMD_FILENAME_UPDATE_INSTALL_PACKAGE = 'CMD_00_UPDATEINSTALLPACKAGE';			// インストールパッケージ取得ジョブファイル名
 	const DIALOG_ID_SSL = 'uploadModal';			// SSL認証書アップロード用ダイアログのID
+	const DEFAULT_SSL_FILENAME = 'SSL_CRT';		// SSL認証書デフォルトファイル名
 	
 	/**
 	 * コンストラクタ
@@ -34,10 +31,6 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// ジョブ格納ディレクトリ
-		$this->cmdPath = $this->gEnv->getCronjobsPath();
-		if (!file_exists($this->cmdPath)) mkdir($this->cmdPath, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -68,6 +61,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$base = 1024;
 		$path = '/';
 		$cmdFile_update_install_package = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;		// インストールパッケージの更新、コマンド実行ファイル
+		$cmdFile_update_ssl				= $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_SSL;		// SSL認証書の更新、コマンド実行ファイル
 		
 		// ジョブの実行状況を表示
 		$isShownJobStatus = $this->_showJobStatus();
@@ -77,6 +71,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		if (basename(dirname(dirname($this->gEnv->getSystemRootPath()))) != 'home') $masterHostId = 'なし';		// homeディレクトリ以外の場合はホストIDなし
 		
 		$act = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_ACT);
+		$status	= $request->trimValueOf('status');
 		if ($act == 'getnewsrc'){		// 最新インストールパッケージ取得のとき
 			// コマンドファイルにパラメータを書き込む
 			$cmdContent = '';
@@ -99,9 +94,10 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 				$uploadFilename = $_FILES['upfile']['name'];		// アップロードされたファイルのファイル名取得
 				
 				if ($this->getMsgCount() == 0){		// エラーが発生していないとき
-					// ファイルを保存するサーバディレクトリを指定
-					$tmpFile = tempnam($this->gEnv->getWorkDirPath(), M3_SYSTEM_WORK_UPLOAD_FILENAME_HEAD);
-		
+					// 作業ディレクトリ作成
+					$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+					$tmpFile = $tmpDir . DIRECTORY_SEPARATOR . self::DEFAULT_SSL_FILENAME;
+					
 					// アップされたテンポラリファイルを保存ディレクトリにコピー
 					$ret = move_uploaded_file($_FILES['upfile']['tmp_name'], $tmpFile);
 					if ($ret){
@@ -119,18 +115,36 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 							$expireDtTag = '<span class="stopped">' . $this->convertToDispDateTime($expireDt) . '</span>';
 						}
 						$sslUpdateInfo = '<br />=>&nbsp' . $expireDtTag . '&emsp;ドメイン名：' . $this->convertToDispString($sslDomain);
+						
+						$status = '1';			// 画面状態(SSL更新表示)
+						$msg = 'この内容で証明書を更新する場合は、更新ボタンを押してください';
+						$this->setInfoMsg($msg);
 					} else {
-						//$msg = 'ファイルのアップロードに失敗しました';
-						$msg = $this->_('Failed in uploading file.');		// ファイルのアップロードに失敗しました
+						$msg = 'ファイルのアップロードに失敗しました';
 						$this->setAppErrorMsg($msg);
 					}
 					// テンポラリファイル削除
-					unlink($tmpFile);
+					//unlink($tmpFile);
 				}
 			} else {
 				$msg = 'アップロードファイルが見つかりません';
 				$this->setAppErrorMsg($msg);
 			}
+		} else if ($act == 'updatessl' && $status == '1'){		// SSL認証書を更新のとき
+			// コマンドファイルにパラメータを書き込む
+			$cmdContent = '';
+			$email = $this->gEnv->getSiteEmail();
+			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
+			// ドメイン名
+			
+			$ret = file_put_contents($cmdFile_update_ssl, $cmdContent, LOCK_EX/*排他的アクセス*/);
+			if ($ret !== false){
+				$this->tmpl->setAttribute('show_process_dialog', 'visibility', 'visible');		// 処理結果監視
+			}
+		} else {
+			// 作業ディレクトリを削除
+			$tmpDir = $this->gEnv->getTempDirBySession();		// セッション単位の作業ディレクトリを取得
+			rmDirectory($tmpDir);
 		}
 
 		//全体サイズ
@@ -203,7 +217,18 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$sslDomainTag = '&emsp;ドメイン名：' . $this->convertToDispString($sslDomain);
 		}
 		
+		// ボタンの表示制御
+		if (empty($status)){
+			$this->tmpl->setAttribute('show_ssl_upload', 'visibility', 'visible');		// 「SSL認証書をアップロード」ボタン
+		} else {
+			$this->tmpl->setAttribute('show_ssl_update', 'visibility', 'visible');		// 「SSL認証書を更新」ボタン
+		}
+		// SSL認証書アップロード用ダイアログ
+		$eventAttr = 'onclick="uploadCheck();"';
+		$this->tmpl->addVar('_widget', 'ssl_dialog',	$this->gDesign->createFileUploadDialogHtml(self::DIALOG_ID_SSL, ''/*OKボタンのIDなし*/, $eventAttr));		// SSL認証書アップロード用ダイアログ
+		
 		// 値を埋め込む
+		$this->tmpl->addVar('_widget', 'status',	$this->convertToDispString($status));			// 画面状態
 		$this->tmpl->addVar('_widget', 'site_url',	$this->convertToDispString($this->gEnv->getAdminUrl()));
 		$this->tmpl->addVar('_widget', 'host_id',	$this->convertToDispString($masterHostId));			// ホストID
 		$this->tmpl->addVar('_widget', 'total_size',	$this->convertToDispString($totalStr));
@@ -215,15 +240,14 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVar('_widget', 'ssl_expire_dt',	$expireDtTag);
 		$this->tmpl->addVar('_widget', 'domain_name',	$sslDomainTag);
 		$this->tmpl->addVar('_widget', 'ssl_update_info',	$sslUpdateInfo);
-		$this->tmpl->addVar('_widget', 'ssl_dialog_id',	self::DIALOG_ID_SSL);			// SSL認証書アップロード用ダイアログのタグID
-		$this->tmpl->addVar('_widget', 'ssl_dialog',	$this->gDesign->createFileUploadDialogHtml(self::DIALOG_ID_SSL));		// SSL認証書アップロード用ダイアログ
+		$this->tmpl->addVar('show_ssl_upload', 'ssl_dialog_id',	self::DIALOG_ID_SSL);			// SSL認証書アップロード用ダイアログのタグID
 	}
 	/**
 	 * ジョブの実行状況を表示
 	 *
 	 * @return bool			メッセージ表示ありかどうか
 	 */
-	function _showJobStatus()
+/*	function _showJobStatus()
 	{
 		$isShown = false;
 		
@@ -244,7 +268,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainBaseWidgetContainer
 			$isShown = true;			// メッセージ表示あり
 		}
 		return $isShown;
-	}
+	}*/
 	/**
 	 * SSLの期限を取得
 	 *

@@ -13,11 +13,10 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWidgetContainer.php');
+require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainServeradminBaseWidgetContainer.php');
 
-class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
+class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetContainer
 {
-	private $cmdPath;		// ジョブ格納ディレクトリ
 	const HOME_DIR = '/home';
 	const SITE_DEF_FILE = '/public_html/include/siteDef.php';
 	const GLOBAL_FILE = '/public_html/include/global.php';
@@ -27,9 +26,6 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 運用中アイコン
 	const NOT_INSTALLED_ICON_FILE = '/images/system/notice32.png';			// インストール未実行アイコン
 	const WINDOW_ICON_FILE = '/images/system/window32.png';			// 管理画面アイコン
-	const CMD_FILENAME_CREATE_SITE = 'CMD_00_CREATESITE';			// サイト作成ジョブファイル名
-	const CMD_FILENAME_REMOVE_SITE = 'CMD_00_REMOVESITE';			// サイト削除ジョブファイル名
-	const CMD_FILENAME_UPDATE_INSTALL_PACKAGE = 'CMD_00_UPDATEINSTALLPACKAGE';			// インストールパッケージ取得ジョブファイル名
 	const MAX_SITE_COUNT = 3;		// 管理サイト最大数
 	
 	/**
@@ -39,10 +35,6 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// ジョブ格納ディレクトリ
-		$this->cmdPath = $this->gEnv->getCronjobsPath();
-		if (!file_exists($this->cmdPath)) mkdir($this->cmdPath, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -366,33 +358,6 @@ class admin_mainSitelistWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		
 		return $vhostList;
-	}
-	/**
-	 * ジョブの実行状況を表示
-	 *
-	 * @return bool			メッセージ表示ありかどうか
-	 */
-	function _showJobStatus()
-	{
-		$isShown = false;
-		
-		// ジョブの実行状況を表示
-		$cmdFile_create_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
-		$cmdFile_remove_site = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
-		$cmdFile_update_insatll_package = $this->cmdPath . DIRECTORY_SEPARATOR . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;			// インストールパッケージ取得ジョブファイル名
-		if (file_exists($cmdFile_create_site)){
-			$this->setUserErrorMsg('サイトの作成中です');
-			$isShown = true;			// メッセージ表示あり
-		}
-		if (file_exists($cmdFile_remove_site)){
-			$this->setUserErrorMsg('サイトの削除中です');
-			$isShown = true;			// メッセージ表示あり
-		}
-		if (file_exists($cmdFile_update_insatll_package)){
-			$this->setUserErrorMsg('インストーラの更新中です');
-			$isShown = true;			// メッセージ表示あり
-		}
-		return $isShown;
 	}
 }
 ?>

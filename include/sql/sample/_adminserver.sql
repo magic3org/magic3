@@ -36,7 +36,7 @@ DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu.en';
 INSERT INTO _nav_item
 (ni_id, ni_parent_id, ni_index, ni_nav_id,    ni_task_id,        ni_view_control, ni_param, ni_name,                ni_help_title,          ni_help_body) VALUES
-(200,   0,            2,        'admin_menu', '_adminserver',    0,               '',       'サーバ運用',         '',                     ''),
+(200,   0,            2,        'admin_menu', '_adminserver',    0,               '',       'サーバ管理',         '',                     ''),
 (201,   200,          0,        'admin_menu', 'serverinfo',      0,               '',       'サーバ情報',           'サーバ情報',           'このサーバについての情報を表示します。'),
 (202,   200,          1,        'admin_menu', 'sitelist',        0,               '',       'サイト一覧',           'サイト一覧',           '運営中のサイトの情報を表示します。'),
 (299,   0,            3,        'admin_menu', '_299',            1,               '',       '改行',                 '',                     ''),

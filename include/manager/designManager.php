@@ -492,20 +492,27 @@ class DesignManager extends Core
 	/**
 	 * アップロード用ダイアログのタグを作成
 	 *
-	 * @param string $id				ダイアログタグID
-	 * @param string $title				ダイアログタイトル
-	 * @param string $message			ダイアログメッセージ
-	 * @param string $uploadButtonLabel	アップロードボタンのラベル
-	 * @param string $cancelButtonLabel	キャンセルボタンのラベル
-	 * @param string $formName			フォーム名
-	 * @param int $maxFileSize			最大ファイルサイズ(0のときはデフォルト値)
-	 * @return string 					アップロード用HTML
+	 * @param string $id					ダイアログタグID
+	 * @param string $uploadButtonTagId		アップロードボタンのタグのID
+	 * @param string $uploadButtonAttr		アップロードボタンのその他の追加属性
+	 * @param string $title					ダイアログタイトル
+	 * @param string $message				ダイアログメッセージ
+	 * @param string $uploadButtonLabel		アップロードボタンのラベル
+	 * @param string $cancelButtonLabel		キャンセルボタンのラベル
+	 * @param string $formName				フォーム名
+	 * @param int $maxFileSize				最大ファイルサイズ(0のときはデフォルト値)
+	 * @return string 						アップロード用HTML
 	 */
-	function createFileUploadDialogHtml($id, $title = 'ファイルアップロード', $message = 'ファイルを選択してください。', $uploadButtonLabel = 'アップロード', $cancelButtonLabel = 'キャンセル', $formName = 'upload', $maxFileSize = 0)
+	function createFileUploadDialogHtml($id, $uploadButtonTagId = '', $uploadButtonAttr = '', $title = 'ファイルアップロード', $message = 'ファイルを選択してください。', $uploadButtonLabel = 'アップロード', $cancelButtonLabel = 'キャンセル', $formName = 'upload', $maxFileSize = 0)
 	{
 		global $gSystemManager;
 		
 		if (empty($maxFileSize)) $maxFileSize = $gSystemManager->getMaxFileSizeForUpload(true/*数値のバイト数*/);
+		
+		$uploadButtonIdAttr = '';
+		if (!empty($uploadButtonTagId)) $uploadButtonIdAttr = ' id="' . $uploadButtonTagId . '"';
+		$uploadButtonOtherAttr = '';
+		if (!empty($uploadButtonAttr)) $uploadButtonOtherAttr .= ' ' . $uploadButtonAttr;
 		
 		$html  = '<div id="' . $id . '" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">';
 		$html .= '<div class="modal-dialog">';
@@ -528,7 +535,7 @@ class DesignManager extends Core
 		$html .= '</div>';
 		$html .= '<div class="modal-footer">';
 		$html .= '<button type="button" class="btn btn-default" data-dismiss="modal">' . convertToHtmlEntity($cancelButtonLabel) . '</button>';
-		$html .= '<button type="button" class="btn btn-success" onclick="uploadCheck();">' . convertToHtmlEntity($uploadButtonLabel) . '</button>';
+		$html .= '<button type="button"' . $uploadButtonIdAttr . ' class="btn btn-success"' . $uploadButtonOtherAttr . '>' . convertToHtmlEntity($uploadButtonLabel) . '</button>';
 		$html .= '</div>';
 		$html .= '</div>';
 		$html .= '</div>';
