@@ -95,7 +95,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 		$masterHostId = basename(dirname($this->gEnv->getSystemRootPath()));
 		
 		// ジョブの実行状況を表示
-		$isShownJobStatus = $this->_showJobStatus();
+//		$isShownJobStatus = $this->_showJobStatus();
 		
 		// ディレクトリ一覧を取得
 		$hostArray = array();
@@ -206,11 +206,11 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 		$vhostList = $this->_getVirtualHostInfo();
 
 		// ジョブ実行ファイル
-		$cmdFile_create_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンドファイル
-		$cmdFile_remove_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンドファイル
+//		$cmdFile_create_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンドファイル
+//		$cmdFile_remove_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンドファイル
 		
 		// ジョブの実行状況を表示
-		$isShownJobStatus = $this->_showJobStatus();
+//		$isShownJobStatus = $this->_showJobStatus();
 		
 		$reloadData = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
@@ -237,7 +237,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 				$email = $this->gEnv->getSiteEmail();
 				if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
 				$cmdContent .= 'hostname=' . $hostname . "\n";
-				$ret = file_put_contents($cmdFile_create_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
+				$ret = file_put_contents($this->cmdFile_create_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
 				if ($ret !== false){
 					$id = $hostname;
 					$reloadData = true;			// データを再取得
@@ -259,7 +259,7 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 				$email = $this->gEnv->getSiteEmail();
 				if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
 				$cmdContent .= 'hostname=' . $id . "\n";
-				$ret = file_put_contents($cmdFile_remove_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
+				$ret = file_put_contents($this->cmdFile_remove_site, $cmdContent, LOCK_EX/*排他的アクセス*/);
 				if ($ret !== false){
 					$reloadData = true;			// データを再取得
 
@@ -272,9 +272,9 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 		} else if ($act == 'getinfo'){		// 最新情報取得
 			$type = $request->trimValueOf('type');			// 実行コマンドタイプ
 			if ($type == 'create_site'){
-				$cmdFile = $cmdFile_create_site;		// サイト作成、コマンドファイル
+				$cmdFile = $this->cmdFile_create_site;		// サイト作成、コマンドファイル
 			} else if ($type == 'remove_site'){
-				$cmdFile = $cmdFile_remove_site;		// サイト削除、コマンドファイル
+				$cmdFile = $this->cmdFile_remove_site;		// サイト削除、コマンドファイル
 			}
 			if (file_exists($cmdFile)){
 				$this->gInstance->getAjaxManager()->addData('code', '0');
@@ -319,13 +319,13 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 			$this->tmpl->addVar("input_hostname", "hostname", $this->convertToDispString($hostname));			// ホスト名
 			
 			// ジョブメッセージが表示されているときはボタン使用不可
-			$this->tmpl->addVar("add_button", "add_button_disabled", $this->convertToDisabledString($isShownJobStatus));
+			$this->tmpl->addVar("add_button", "add_button_disabled", $this->convertToDisabledString($this->isShownJobStatus));
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 削除ボタン表示
 			$this->tmpl->addVar("_widget", "hostname", $this->convertToDispString($hostname));			// ホスト名
 			
 			// ジョブメッセージが表示されているときはボタン使用不可
-			$this->tmpl->addVar("update_button", "del_button_disabled", $this->convertToDisabledString($isShownJobStatus));
+			$this->tmpl->addVar("update_button", "del_button_disabled", $this->convertToDisabledString($this->isShownJobStatus));
 		}
 		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($id));		// ID(ホスト名)
 		$this->tmpl->addVar("_widget", "host_id", $this->convertToDispString($hostId));		// ホストID

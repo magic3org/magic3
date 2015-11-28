@@ -60,11 +60,11 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 		$units = array( 'B', 'KB', 'MB', 'GB', 'TB', 'EB', 'ZB', 'YB' );
 		$base = 1024;
 		$path = '/';
-		$cmdFile_update_install_package = $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;		// インストールパッケージの更新、コマンド実行ファイル
-		$cmdFile_update_ssl				= $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_SSL;		// SSL認証書の更新、コマンド実行ファイル
+//		$cmdFile_update_install_package = $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;		// インストールパッケージの更新、コマンド実行ファイル
+//		$cmdFile_update_ssl				= $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_SSL;		// SSL認証書の更新、コマンド実行ファイル
 		
 		// ジョブの実行状況を表示
-		$isShownJobStatus = $this->_showJobStatus();
+//		$isShownJobStatus = $this->_showJobStatus();
 
 		// マスターホストのディレクトリ名
 		$masterHostId = basename(dirname($this->gEnv->getSystemRootPath()));
@@ -77,15 +77,32 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 			$cmdContent = '';
 			$email = $this->gEnv->getSiteEmail();
 			if (!empty($email)) $cmdContent .= 'mailto=' . $email . "\n";
-			$ret = file_put_contents($cmdFile_update_install_package, $cmdContent, LOCK_EX/*排他的アクセス*/);
+			$ret = file_put_contents($this->cmdFile_update_install_package, $cmdContent, LOCK_EX/*排他的アクセス*/);
 			if ($ret !== false){
 				$this->tmpl->setAttribute('show_process_dialog', 'visibility', 'visible');		// 処理結果監視
+				
+				// ジョブタイプ設定
+				$this->tmpl->addVar('show_process_dialog', 'type',	self::JOB_TYPE_UPDATE_INSTALL_PACKAGE);// インストールパッケージ取得ジョブ
 			}
 		} else if ($act == 'getinfo'){		// 最新情報取得
-			if (file_exists($cmdFile_update_install_package)){
-				$this->gInstance->getAjaxManager()->addData('code', '0');
-			} else {			// インストールパッケージ更新完了のとき
-				$this->gInstance->getAjaxManager()->addData('code', '1');
+			// 処理タイプ
+			$type	= $request->trimValueOf('type');
+			
+			switch ($type){
+			case self::JOB_TYPE_UPDATE_INSTALL_PACKAGE:	// インストールパッケージ取得ジョブ
+				if (file_exists($this->cmdFile_update_install_package)){
+					$this->gInstance->getAjaxManager()->addData('code', '0');
+				} else {			// インストールパッケージ更新完了のとき
+					$this->gInstance->getAjaxManager()->addData('code', '1');
+				}
+				break;
+			case self::JOB_TYPE_UPDATE_SSL:				// SSL認証書の更新ジョブ
+				if (file_exists($this->cmdFile_update_ssl)){
+					$this->gInstance->getAjaxManager()->addData('code', '0');
+				} else {			// インストールパッケージ更新完了のとき
+					$this->gInstance->getAjaxManager()->addData('code', '1');
+				}
+				break;
 			}
 			return;
 		} else if ($act == 'upload'){		// ファイルアップロードの場合
@@ -156,9 +173,12 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 				$sslFile = self::JOB_OPTION_FILE_DIR . M3_DS . self::DEFAULT_SSL_FILENAME;
 				$cmdContent .= 'file=' . $sslFile . "\n";
 			
-				$ret = file_put_contents($cmdFile_update_ssl, $cmdContent, LOCK_EX/*排他的アクセス*/);
+				$ret = file_put_contents($this->cmdFile_update_ssl, $cmdContent, LOCK_EX/*排他的アクセス*/);
 				if ($ret !== false){
 					$this->tmpl->setAttribute('show_process_dialog', 'visibility', 'visible');		// 処理結果監視
+					
+					// ジョブタイプ設定
+					$this->tmpl->addVar('show_process_dialog', 'type',	self::JOB_TYPE_UPDATE_SSL);// SSL認証書の更新ジョブ
 				}
 			} else {
 				$msg = 'エラーが発生しました';
@@ -206,7 +226,7 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 			$srcVer = trim($srcVer);
 			
 			// 最新バージョンの場合はインストール不可
-			$this->tmpl->addVar("_widget", "update_src_button_disabled", $this->convertToDisabledString((!empty($srcVer) && version_compare($srcVer, $latestVersion) == 0) || $isShownJobStatus));
+			$this->tmpl->addVar("_widget", "update_src_button_disabled", $this->convertToDisabledString((!empty($srcVer) && version_compare($srcVer, $latestVersion) == 0) || $this->isShownJobStatus));
 			
 			// 最新バージョン表示用
 			$versionInfoStr = '<span class="available">(最新版 ' . $latestVersion . ')</span>';
@@ -271,33 +291,6 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 		$this->tmpl->addVar('_widget', 'ssl_update_info',	$sslUpdateInfo);
 		$this->tmpl->addVar('show_ssl_upload', 'ssl_dialog_id',	self::DIALOG_ID_SSL);			// SSL認証書アップロード用ダイアログのタグID
 	}
-	/**
-	 * ジョブの実行状況を表示
-	 *
-	 * @return bool			メッセージ表示ありかどうか
-	 */
-/*	function _showJobStatus()
-	{
-		$isShown = false;
-		
-		// ジョブの実行状況を表示
-		$cmdFile_create_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_CREATE_SITE;		// サイト作成、コマンド実行ファイル
-		$cmdFile_remove_site = $this->cmdPath . M3_DS . self::CMD_FILENAME_REMOVE_SITE;		// サイト削除、コマンド実行ファイル
-		$cmdFile_update_insatll_package = $this->cmdPath . M3_DS . self::CMD_FILENAME_UPDATE_INSTALL_PACKAGE;			// インストールパッケージ取得ジョブファイル名
-		if (file_exists($cmdFile_create_site)){
-			$this->setUserErrorMsg('サイトの作成中です');
-			$isShown = true;			// メッセージ表示あり
-		}
-		if (file_exists($cmdFile_remove_site)){
-			$this->setUserErrorMsg('サイトの削除中です');
-			$isShown = true;			// メッセージ表示あり
-		}
-		if (file_exists($cmdFile_update_insatll_package)){
-			$this->setUserErrorMsg('インストーラの更新中です');
-			$isShown = true;			// メッセージ表示あり
-		}
-		return $isShown;
-	}*/
 	/**
 	 * SSLの期限を取得
 	 *

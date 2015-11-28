@@ -24,30 +24,51 @@ function updateSrc()
 		}
 	});
 }
-function watchProcess(){
-	m3_ajax_request('', 'task=serverinfo&act=getinfo', function(request, retcode, jsondata){		// 正常終了
+function watchProcess(type)
+{
+	m3_ajax_request('', 'task=serverinfo&act=getinfo&type=' + type, function(request, retcode, jsondata){		// 正常終了
 		if (jsondata.code == '0'){			// 処理中の場合
-			watchProcess();
+			watchProcess(type);
 		} else {		// 処理完了の場合
 			// 処理中ダイアログを非表示
 			m3HideProcessModal();
 			
-			m3Alert('success', 'インストーラの更新完了しました', function(){
+			var message = '';
+			switch (type){
+			case '{JOB_TYPE_UPDATE_INSTALL_PACKAGE}':
+				message = 'インストーラの更新完了しました';
+				break;
+			case '{JOB_TYPE_UPDATE_SSL}':
+				message = 'SSL証明書の更新完了しました';
+				break;
+			}
+			
+			m3Alert('success', message, function(){
 				// 画面再表示
 				window.location.href = window.location.href;
 			});
 		}
 	}, function(request){		// 異常終了
-		m3Alert("error", "インストーラの更新に失敗しました");
+		var message = '';
+		switch (type){
+		case '{JOB_TYPE_UPDATE_INSTALL_PACKAGE}':
+			message = 'インストーラの更新に失敗しました';
+			break;
+		case '{JOB_TYPE_UPDATE_SSL}':
+			message = 'SSL証明書の更新に失敗しました';
+			break;
+		}
+			
+		m3Alert("error", message);
 	});
 }
-function startWatchProcess()
+function startWatchProcess(type)
 {
 	// 処理中ダイアログ表示
 	m3ShowProcessModal();
 	
 	// サーバ処理監視
-	watchProcess();
+	watchProcess(type);
 }
 function uploadCheck()
 {
@@ -76,7 +97,7 @@ $(function(){
 	
 <patTemplate:tmpl name="show_process_dialog" visibility="hidden">
 	// 処理結果監視を開始
-	startWatchProcess();
+	startWatchProcess('{TYPE}');
 </patTemplate:tmpl>
 });
 //]]>
