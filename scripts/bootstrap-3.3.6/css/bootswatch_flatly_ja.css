@@ -6803,10 +6803,12 @@ button.close {
 .text-info:hover {
   color: #3498db;
 }
+/* remove underline in table for magic3 */
+/*
 table a:not(.btn),
 .table a:not(.btn) {
   text-decoration: underline;
-}
+}*/
 table .dropdown-menu a,
 .table .dropdown-menu a {
   text-decoration: none;
