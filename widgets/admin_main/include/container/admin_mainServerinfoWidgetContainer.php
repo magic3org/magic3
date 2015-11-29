@@ -153,13 +153,19 @@ class admin_mainServerinfoWidgetContainer extends admin_mainServeradminBaseWidge
 			$tmpFile = $tmpDir . M3_DS . self::DEFAULT_SSL_FILENAME;
 			
 			// ドメイン名取得
-			$fileContent = file_get_contents($tmpFile);
-			$parsedCert = openssl_x509_parse($fileContent);
-			$sslDomain = $parsedCert['subject']['CN'];		// ドメイン名
-			$sslDomain = ltrim($sslDomain, '*.');
+			if (file_exists($tmpFile)){
+				$fileContent = file_get_contents($tmpFile);
+				$parsedCert = openssl_x509_parse($fileContent);
+				$sslDomain = $parsedCert['subject']['CN'];		// ドメイン名
+				$sslDomain = ltrim($sslDomain, '*.');
+				
+				$ret = true;
+			} else {
+				$ret = false;
+			}
 			
 			// SSL認証書を保存
-			$ret = mvFileToDir($tmpDir, array(self::DEFAULT_SSL_FILENAME), $this->cmdPath . M3_DS . self::JOB_OPTION_FILE_DIR);
+			if ($ret) $ret = mvFileToDir($tmpDir, array(self::DEFAULT_SSL_FILENAME), $this->cmdPath . M3_DS . self::JOB_OPTION_FILE_DIR);
 			if ($ret){
 				// コマンドファイルにパラメータを書き込む
 				$cmdContent = '';
