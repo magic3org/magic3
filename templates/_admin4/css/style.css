@@ -728,7 +728,11 @@ input[type="password"]{
 .nav-tabs > li.active > a:focus {
 	outline: 0;
 }
-/*** サブメニューバー ***/
+/*** メインナビゲーションバー ***/
+nav.navbar-fixed-top .dropdown-menu {
+	margin-top: -1px;
+}
+/*** サブナビゲーションバー ***/
 nav.secondlevel {
 	z-index:900;
 	height:50px;
@@ -787,7 +791,8 @@ nav.secondlevel.minimized .btn.navbar-btn {
 	height:34px;/*for chrome*/
 }
 nav.secondlevel .btn.navbar-btn {
-	height:41px;
+/*	height:41px;*/
+	height:42px;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
 }
@@ -807,6 +812,7 @@ nav.secondlevel a.btn.navbar-btn.btn-primary:hover {
 }
 nav.secondlevel .dropdown-menu {
 	margin-top: -8px;
+/*	margin-top: -7px;*/
 }
 nav.secondlevel.minimized .dropdown-menu {
 	margin-top: 0px;
