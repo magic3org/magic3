@@ -16,7 +16,7 @@
 class ScriptLibInfo
 {
 	private static $libs;						// ライブラリ情報
-	private static $jQueryVer = '1.8';			// デフォルトで使用するjQueryのバージョン
+	private static $jQueryVer = '1.9';			// デフォルトで使用するjQueryのバージョン
 	private static $jQueryVersionArray = array(	'1.6'	=> 'jquery-1.6.4.min.js',// jQueryバージョン
 												'1.7'	=> 'jquery-1.7.2.min.js',
 												'1.8'	=> 'jquery-1.8.3.min.js',
