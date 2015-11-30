@@ -135,7 +135,8 @@ function m3ShowPreviewWindow(type, url)
  */
 function m3LoadOptionUI()
 {
-	// ダイアログ用定義値
+	// ダイアログ用設定
+	$('.modal-header').addClass('bg-primary');		// タイトル背景色
 	if (typeof(BootstrapDialog) != "undefined"){
 		BootstrapDialog.DEFAULT_TEXTS['CANCEL'] = 'キャンセル';
 	}
