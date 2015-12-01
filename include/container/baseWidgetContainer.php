@@ -41,6 +41,7 @@ class BaseWidgetContainer extends Core
 	protected $configMenubarMenuDef;					// 設定画面用メニューバーのメニュー定義
 	protected $keepForeTaskForBackUrl = false;	// 遷移前のタスクを戻り先URLとするかどうか
 	protected $urlParamOrder;					// URLパラメータの並び順
+	protected $_configMode;						// 設定画面用の入力設定(TEXTフィールドの自動入力をオフにする等)にするかどうか
 	protected $_useFormCheck;						// フォームチェック機能を使用するかどうか
 	protected $_useHierPage;						// 階層化ページを使用するかどうか
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
@@ -616,6 +617,26 @@ class BaseWidgetContainer extends Core
 	function _getHiddenTagInfo()
 	{
 		return $this->_hiddenTagInfo;
+	}
+	/**
+	 * 設定画面用の入力設定にする(一般画面用)
+	 *
+	 * ・TEXTフィールドの自動入力をオフにする
+	 *
+	 * @return なし
+	 */
+	function setConfigMode()
+	{
+		$this->_configMode = true;
+	}
+	/**
+	 * 設定画面用の入力設定にするかどうかを取得(一般画面用)
+	 *
+	 * @return bool			true=設定画面用の入力設定にする、false=設定画面用の入力設定にしない
+	 */
+	function getConfigMode()
+	{
+		return $this->_configMode;
 	}
 	/**
 	 * フォームチェック機能を使用

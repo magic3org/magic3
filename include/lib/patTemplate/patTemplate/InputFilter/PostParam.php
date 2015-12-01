@@ -60,8 +60,11 @@ class patTemplate_InputFilter_PostParam extends patTemplate_InputFilter
 		$paramTag .= '<input type="hidden" name="_formid" value="{_FORM_ID}" />' . M3_NL;
 		
 		// Firefoxの自動入力の問題を回避(2015/12/1)
-		$paramTag .= '<input type="text" name="_account_dummy" class="noeditcheck" style="display:none;" />' . M3_NL;
-		$paramTag .= '<input type="password" name="_password_dummy" class="noeditcheck" style="display:none;" />' . M3_NL;
+		if (($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()) ||		// 管理画面にログインしている場合
+			(isset($widgetObj) && $widgetObj->getConfigMode())){								// ウィジェットが設定入力モードの場合(一般画面)
+			$paramTag .= '<input type="text" name="_account_dummy" class="noeditcheck" style="display:none;" />' . M3_NL;
+			$paramTag .= '<input type="password" name="_password_dummy" class="noeditcheck" style="display:none;" />' . M3_NL;
+		}
 		
 		// <!--m3:PostParam-->タグを一度だけ変換する
 		$data = preg_replace('/<!--[ \t].*m3:PostParam[ \t].*-->/', $paramTag, $data, 1);
