@@ -301,6 +301,7 @@ $(function(){
 <input type="hidden" name="contentid" value="{SEL_ITEM_ID}" />
 <input type="hidden" name="password" />
 <input type="hidden" name="attachfilecount" />
+<!-- m3:PostParam -->
 <h3 class="m3config_h">コンテンツ詳細</h3>
 
 <div class="m3config_h_side_buttons pull-right">
@@ -409,7 +410,8 @@ $(function(){
 	</patTemplate:tmpl>
     <tr>
 	    <th><span {_HELP_CONTENT_META_TITLE}>タイトル名</span></th>
-	    <td colspan="3"><input type="text" name="item_meta_title" class="form-control" value="{META_TITLE}" size="30" maxlength="40" /></td>
+	    <td colspan="3">
+		<input type="text" name="item_meta_title" class="form-control" value="{META_TITLE}" size="30" maxlength="40" /></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_CONTENT_META_DESCRIPTION}>ページ要約</span></th>
@@ -427,7 +429,7 @@ $(function(){
 	</tr>
 	<tr class="option_area" style="display:none;">
 	    <th><span {_HELP_CONTENT_PASSWORD}>パスワード</span></th>
-	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
+	    <td>
 		<input type="password" name="item_password" class="form-control" value="{PASSWORD}" size="10" maxlength="15" autocomplete="off" {PASSWORD_DISABLED} />
 		</td>
 	    <th><span {_HELP_CONTENT_KEY}>外部参照用キー</span></th>
