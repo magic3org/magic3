@@ -679,7 +679,11 @@ function m3SetSafeContentEdit()
 			return "このページを離れようとしています。";
 		}
 	});
-	$("form input, form select, form textarea").change(function(){
+/*	$("form input, form select, form textarea").change(function(){
+		_m3ContentEdited = true;
+	});*/
+	// Firefox対応(2015/12/1)
+	$("form input:not(.noeditcheck), form select, form textarea").change(function(){
 		_m3ContentEdited = true;
 	});
 }
