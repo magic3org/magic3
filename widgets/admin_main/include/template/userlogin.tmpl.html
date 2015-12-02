@@ -26,7 +26,8 @@ function loginUser(){
 		$.cookie('login_account', $('#account').val(), { expires: 30 });
 	}
 	document.login.pwd_button.disabled = true;
-	document.login.pwd.disabled = true;
+//	document.login.pwd.disabled = true;
+	document.login.pwd.value = document.login.pwd.value.replace(/./g, '*');
 	document.login.submit();
 	return true;
 }
