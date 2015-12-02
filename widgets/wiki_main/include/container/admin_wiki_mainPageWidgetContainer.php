@@ -27,6 +27,7 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const LOCK_ICON_FILE = '/images/system/lock32.png';			// ロック状態アイコン
 	const UNLOCK_ICON_FILE = '/images/system/unlock32_inactive.png';		// アンロック状態アイコン
+	const PREVIEW_ICON_FILE = '/images/system/window32.png';		// プレビュー用アイコン
 	const WIKI_OBJ_ID = 'wikilib';			// Wikiコンテンツオブジェクト
 	
 	/**
@@ -466,6 +467,12 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		$obj = new AttachPages($id);			// 現状では世代管理なし
 		if (isset($obj->pages[$id])) $attachCount = count($obj->pages[$id]->files);
 	
+		// プレビュー用URL
+		$previewUrl = $this->gEnv->getDefaultUrl() . WikiParam::convQuery("?" . rawurlencode($id), false/*URLエンコードしない*/);
+//		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;// プレビュー用URL
+		$previewImg = $this->getUrl($this->gEnv->getRootUrl() . self::PREVIEW_ICON_FILE);
+		$previewStr = 'プレビュー';
+		
 		$row = array(
 			'index'			=> $index,		// 項目番号
 			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
@@ -475,6 +482,9 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			'attach_count'	=> $attachCount,									// 添付ファイル数
 			'user'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 更新者
 			'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
+			'preview_url'	=> $previewUrl,											// プレビュー用のURL
+			'preview_img'	=> $previewImg,											// プレビュー用の画像
+			'preview_str'	=> $previewStr									// プレビュー文字列
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');

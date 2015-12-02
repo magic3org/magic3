@@ -111,8 +111,8 @@ $(function(){
 		<th style="width:50px;"><span {_HELP_PAGE_STATUS}>状態</span></th>
 		<th style="width:50px;"><span {_HELP_PAGE_VIEW_COUNT}>閲覧</span></th>
 		<th style="width:50px;"><span {_HELP_PAGE_ATTACH_COUNT}>添付</span></th>
-		<th style="width:110px;">更新者</th>
 		<th style="width:110px;">更新日時</th>
+		<th style="width:60px;"><span {_HELP_CONTENT_ACT}>操作</span></th>
 	</tr>
     </thead>
     <tbody>
@@ -123,8 +123,9 @@ $(function(){
 		<td>{STATUS}</td>
 		<td class="number">{VIEW_COUNT}</td>
 		<td class="number">{ATTACH_COUNT}</td>
-		<td>{USER}</td>
 		<td>{DATE}</td>
+		<td><a href="javascript:void(0);" onclick="m3ShowPreviewWindow(0, '{PREVIEW_URL}');"><img src="{PREVIEW_IMG}" width="32" height="32" rel="m3help" alt="{PREVIEW_STR}" title="{PREVIEW_STR}" /></a>
+		</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
