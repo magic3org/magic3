@@ -4,7 +4,8 @@
 function login_box_login(){
 	document.login_box.act.value = 'bbsloginbox_login';
 	document.login_box.password.value = hex_md5(document.login_box.bbs_password.value);
-	document.login_box.bbs_password.disabled = true;
+//	document.login_box.bbs_password.disabled = true;
+	document.login_box.bbs_password.value = document.login_box.bbs_password.replace(/./g, '*');
 	document.login_box.submit();
 	return true;
 }

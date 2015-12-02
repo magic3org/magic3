@@ -21,6 +21,7 @@ function nav_login(){
 	document.nav_account.act.value = 'nav_login';
 	document.nav_account.password.value = hex_md5(document.nav_account.login_password.value);
 //	document.nav_account.login_password.disabled = true;
+	document.nav_account.login_password.value = document.nav_account.login_password.replace(/./g, '*');
 	document.nav_account.submit();
 	return true;
 }

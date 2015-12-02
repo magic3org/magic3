@@ -16,7 +16,8 @@
 function login_box_login(){
 	document.login_box.act.value = 'loginbox_login';
 	document.login_box.password.value = hex_md5(document.login_box.login_password.value);
-	document.login_box.login_password.disabled = true;
+//	document.login_box.login_password.disabled = true;
+	document.login_box.login_password.value = document.login_box.login_password.replace(/./g, '*');
 	document.login_box.submit();
 	return true;
 }
