@@ -124,13 +124,19 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 					if (file_exists($siteInfoFile)){
 						$line['dir'] = $file;
 //						$line['date'] = date("Y/m/d H:i:s", filemtime($siteInfoFile));
+						$contents = file_get_contents($siteInfoFile);
 						
 						// URL取得
 						$url = '';
-						$contents = file_get_contents($siteInfoFile);
 						$key = 'M3_SYSTEM_ROOT_URL';
 						if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)) $url = $matches[1];
 						$line['url'] = $url;
+						
+						// 管理画面URL取得
+						$adminUrl = '';
+						$key = 'M3_SYSTEM_ADMIN_URL';
+						if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'](.*)[\"'][ \t]*\)/m", $contents, $matches)) $adminUrl = $matches[1];
+						$line['admin_url'] = $adminUrl;
 					}
 					$hostArray[] = $line;
 				}
@@ -165,10 +171,11 @@ class admin_mainSitelistWidgetContainer extends admin_mainServeradminBaseWidgetC
 			// 管理画面アイコン
 			$titleStr = self::LINK_ADMIN_PAGE;
 			$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;		// 管理画面アイコン
-			if ($isSslAdminUrl){		// マスターホストの管理画面がSSLでのアクセスの場合は、管理対象のホストの管理画面もSSLアクセスとする
-				$linkUrl = 'https://' . $line['hostname'] . M3_DS . M3_DIR_NAME_ADMIN . M3_DS;
-			} else {
+			$adminUrl = $line['admin_url'];			// 管理画面用URL
+			if (empty($adminUrl)){		// 管理画面用URLが設定されていない場合は、ドメイン名から作成
 				$linkUrl = 'http://' . $line['hostname'] . M3_DS . M3_DIR_NAME_ADMIN . M3_DS;
+			} else {
+				$linkUrl = $adminUrl . M3_DS;
 			}
 			$linkTag = '<a href="' . convertUrlToHtmlEntity($linkUrl) . '" target="_blank" rel="m3help" title="' . $titleStr . '">';
 			$linkTag .= '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $titleStr . '" /></a>';
