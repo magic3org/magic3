@@ -239,6 +239,9 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 			}
 			
 			if ($ret){// 正常終了の場合
+				// ##### サイト定義ファイルのオプション定義をクリアする #####
+				$ret = $this->gConfig->removeOptionParam($msg);
+				
 				// DBのバージョン取得
 				$currentVer = $this->_db->getSystemConfig(M3_TB_FIELD_DB_VERSION);
 								

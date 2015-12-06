@@ -306,6 +306,14 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$uploadImageAutoresize = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE);		// アップロード画像の自動リサイズを行うかどうか
 			$uploadImageAutoresizeMaxWidth = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_WIDTH);	// アップロード画像の自動リサイズ、画像最大幅
 			$uploadImageAutoresizeMaxHeight = $this->db->getSystemConfig(SystemManager::CF_UPLOAD_IMAGE_AUTORESIZE_MAX_HEIGHT);	// アップロード画像の自動リサイズ、画像最大高さ
+			
+			// ### サイト定義ファイル(siteDef.php)にオプション定義を追加 ###
+			$adminUrl = $this->gEnv->getAdminUrl();			// 管理機能URL
+			$params = array();
+			$params['M3_SYSTEM_ADMIN_URL'] = $adminUrl;
+			$ret = $this->gConfig->updateOptionParam($params, $msg);
+			if (!$ret) var_dump($msg);
+			
 		} else if ($act == 'updateip'){		// IPアドレスを更新のとき
 			$exceptIp = $request->trimValueOf('except_ip');
 

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: configManager.php 2610 2009-12-04 05:47:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -19,6 +19,7 @@ class ConfigManager extends Core
 {
 	private $configFile = 'siteDef.php';		// 設定ファイル名
     private $defParam = array();				// 定義項目
+	const OPTION_DEF_COMMENT = '// #################### オプション定義項目 ####################' . M3_NL . '// ### インストール時に削除します' . M3_NL;		// オプション追加用のコメント
 	
 	/**
 	 * コンストラクタ
@@ -129,8 +130,6 @@ class ConfigManager extends Core
 		}
 		
 		// テンポラリファイルに保存
-		//if (!($tmpFilename = tempnam(M3_SYSTEM_WORK_DIR_PATH, "m3_"))){
-		//	$errMsg = 'テンポラリファイルの作成に失敗しました ディレクトリ=' . M3_SYSTEM_WORK_DIR_PATH;
 		if (!($tmpFilename = tempnam($this->gEnv->getWorkDirPath(), "m3_"))){
 			$errMsg = 'テンポラリファイルの作成に失敗しました ディレクトリ=' . $this->gEnv->getWorkDirPath();
  			$this->gLog->error(__METHOD__, $errMsg);
@@ -176,6 +175,94 @@ class ConfigManager extends Core
 		// 古い設定ファイルを削除
 		unlink($tmpConfigFilePath);
 		return true;
+	}
+	/**
+	 * オプションパラメータの追加または更新
+	 *
+	 * @param array $params		キーと値の連想配列
+	 * @param string $msg		エラーの場合のエラーメッセージ
+	 * @return bool				true=成功、false=失敗
+	 */
+	function updateOptionParam($params, &$msg)
+	{
+		$ret = $this->_editFileContent(array($this, '_updateOptionParam'), $params, $msg);
+		return $ret;
+	}
+	/**
+	 * オプションパラメータの追加または更新のコールバックメソッド
+	 *
+	 * @param array $params		オプションパラメータ
+	 * @param string $content	ファイル内容
+	 * @param string $msg		エラーの場合のエラーメッセージ
+	 * @return bool				true=成功、false=失敗
+	 */
+	function _updateOptionParam($params, &$content, &$msg)
+	{
+		// ##### 定義内容変換処理 #####
+		// 一旦PHPの終了タグを削除
+		$content = str_replace('?>', '', $content);
+		
+		// 引数で渡ってきた値を再設定する。コメント行は処理しない。
+		foreach ($params as $key => $val){
+			if (preg_match("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'].*[\"'][ \t]*\)/m", $content)){
+				$content = preg_replace("/^[ \t]*define\([ \t]*[\"']" . $key . "[\"'][ \t]*,[ \t]*[\"'].*[\"'][ \t]*\)/m",
+					"define('" . $key . "', '" . addslashes($val) . "')", $content);
+			} else {		// キーが見つからない場合はファイルの最後に追加
+				// オプション追加のコメントがない場合はコメントを追加
+				$pos = strpos($content, self::OPTION_DEF_COMMENT);
+				if ($pos === false){
+					$content = rtrim($content);
+					$content .= M3_NL . M3_NL . self::OPTION_DEF_COMMENT;
+				}
+				
+				// 定義文を追加
+				$content = rtrim($content);
+				$content .= M3_NL . "define('" . $key . "', '" . addslashes($val) . "');" . M3_NL;
+			}
+		}
+		
+		// PHPの終了タグを追加
+		$content = rtrim($content);
+		$content .= M3_NL . '?>' . M3_NL;
+		
+		return true;		// 正常終了
+	}
+	/**
+	 * オプションパラメータを削除
+	 *
+	 * @param string $msg		エラーの場合のエラーメッセージ
+	 * @return bool				true=成功、false=失敗
+	 */
+	function removeOptionParam(&$msg)
+	{
+		$ret = $this->_editFileContent(array($this, '_removeOptionParam'), array(), $msg);
+		return $ret;
+	}
+	/**
+	 * オプションパラメータの追加または更新のコールバックメソッド
+	 *
+	 * @param array $params		オプションパラメータ(未使用)
+	 * @param string $content	ファイル内容
+	 * @param string $msg		エラーの場合のエラーメッセージ
+	 * @return bool				true=成功、false=失敗
+	 */
+	function _removeOptionParam($params, &$content, &$msg)
+	{
+		// ##### 定義内容変換処理 #####
+		// 一旦PHPの終了タグを削除
+		$content = str_replace('?>', '', $content);
+		
+		// オプション追加のコメント以降を削除
+		$pos = strpos($content, self::OPTION_DEF_COMMENT);
+		if ($pos !== false){
+			$content = substr($content, 0, $pos);
+		}
+
+		// PHPの終了タグを追加
+		$content = rtrim($content);
+		$content .= M3_NL . '?>' . M3_NL;
+		
+		return true;		// 正常終了
 	}
 	/**
 	 * システムのルートURL
@@ -262,6 +349,80 @@ class ConfigManager extends Core
 	public function getDbConnectPassword()
 	{
 		return $this->defParam['M3_DB_CONNECT_PASSWORD'];
+	}
+	/**
+	 * 設定ファイル内容を編集
+	 *
+	 * @param function  $callback		コールバック関数
+	 * @param array $params				キーと値の連想配列
+	 * @param string $msg				エラーの場合のエラーメッセージ
+	 * @return bool						true=成功、false=失敗
+	 */
+	function _editFileContent($callback, $params, &$msg)
+	{
+		// 設定ファイルのフルパス
+		$configFilePath = $this->gEnv->getIncludePath() . '/' . $this->configFile;
+		
+		// 現在の設定ファイルを読み込む
+		if (!($file = @fopen($configFilePath, "r"))){
+			$errMsg = '設定ファイルのオープンに失敗しました ファイル=' . $configFilePath;
+ 			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+ 			return false;
+		}
+		$content = @fread($file, filesize($configFilePath));
+		@fclose($file);
+		
+		// ##### ファイルコンテンツ編集処理 #####
+		$result = call_user_func_array($callback, array($params, &$content, &$msg));
+		if (!$result) return false;
+		
+		// テンポラリファイルに保存
+		if (!($tmpFilename = tempnam($this->gEnv->getWorkDirPath(), "m3_"))){
+			$errMsg = 'テンポラリファイルの作成に失敗しました ディレクトリ=' . $this->gEnv->getWorkDirPath();
+ 			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+ 			return false;
+		}
+		if (!($tmpFHandle = fopen($tmpFilename, "w"))){
+			$errMsg = 'テンポラリファイルのオープンに失敗しました ファイル=' . $tmpFilename;
+ 			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+			
+			// 作成した設定ファイルを削除
+			unlink($tmpFilename);
+ 			return false;
+		}
+		fwrite($tmpFHandle, $content);
+		fclose($tmpFHandle);
+		
+		// 現在の設定ファイルとテンポラリファイルを入れ替え
+		$tmpConfigFilePath = $configFilePath . '_tmp';
+		if (!renameFile($configFilePath, $tmpConfigFilePath)){
+			$errMsg = '設定ファイルを退避できません';
+			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+			
+			// 作成した設定ファイルを削除
+			unlink($tmpFilename);
+			return false;
+		}
+		if (!renameFile($tmpFilename, $configFilePath)){
+			$errMsg = '設定ファイルを作成できません';
+			$this->gLog->error(__METHOD__, $errMsg);
+			$msg = $errMsg;
+			
+			// 作成した設定ファイルを削除
+			unlink($tmpFilename);
+			
+			// 設定ファイルを戻す
+			renameFile($tmpConfigFilePath, $configFilePath);
+			return false;
+		}
+		
+		// 古い設定ファイルを削除
+		unlink($tmpConfigFilePath);
+		return true;
 	}
 }
 ?>
