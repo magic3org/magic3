@@ -219,7 +219,7 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 			if (defined('M3_INSTALL_PRE_FIXED_DB') && M3_INSTALL_PRE_FIXED_DB){			// DB接続を固定する場合
 				$dbname = defined('M3_INSTALL_DB_NAME') ? M3_INSTALL_DB_NAME : '';
 				$dbuser = defined('M3_INSTALL_DB_USER') ? M3_INSTALL_DB_USER : '';
-				$password = defined('M3_INSTALL_DB_PASSWORD') ? M3_INSTALL_DB_PASSWORD : '';
+//				$password = defined('M3_INSTALL_DB_PASSWORD') ? M3_INSTALL_DB_PASSWORD : '';
 				
 				$this->dbFixed = true;			// DB接続を固定
 			}
@@ -232,8 +232,10 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 			$this->tmpl->addVar("db_mysql", "checked", "checked");
 		}
 		$this->tmpl->addVar("_widget", "root_url",	$rooturl);
-
-		
+		$this->tmpl->addVar("_widget", "hostname",	$hostname);
+		$this->tmpl->addVar("_widget", "dbname",	$dbname);
+		$this->tmpl->addVar("_widget", "dbuser",	$dbuser);
+		$this->tmpl->addVar("_widget", "password",	$password);
 		
 		if ($this->dbFixed){			// DB接続を固定する場合
 			$this->tmpl->setAttribute("static_hostname", "visibility", "visible");
@@ -245,8 +247,8 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 			$this->tmpl->setAttribute("static_dbuser", "visibility", "visible");
 			$this->tmpl->addVar("static_dbuser", "dbuser",		$dbuser);
 			
-			$this->tmpl->setAttribute("static_password", "visibility", "visible");
-			$this->tmpl->addVar("static_password", "password",	$password);
+//			$this->tmpl->setAttribute("static_password", "visibility", "visible");
+//			$this->tmpl->addVar("static_password", "password",	$password);
 		} else {
 			$this->tmpl->setAttribute("input_hostname", "visibility", "visible");
 			$this->tmpl->addVar("input_hostname", "hostname",	$hostname);
@@ -257,9 +259,11 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 			$this->tmpl->setAttribute("input_dbuser", "visibility", "visible");
 			$this->tmpl->addVar("input_dbuser", "dbuser",		$dbuser);
 			
-			$this->tmpl->setAttribute("input_password", "visibility", "visible");
-			$this->tmpl->addVar("input_password", "password",	$password);
+//			$this->tmpl->setAttribute("input_password", "visibility", "visible");
+//			$this->tmpl->addVar("input_password", "password",	$password);
 		}
+		$this->tmpl->setAttribute("input_password", "visibility", "visible");
+		$this->tmpl->addVar("input_password", "password",	$password);
 		
 		// 設定ファイルの内容をみて、ボタンを制御
 		if (!$this->gConfig->isConfigured() && !$isConfigured) $this->tmpl->addVar('_widget', 'button_disabled', 'disabled');

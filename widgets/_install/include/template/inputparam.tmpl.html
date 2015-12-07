@@ -77,8 +77,8 @@ function isInputValueChanged(){
 <!-- m3:ErrorMessage -->
 <h3>{_LC_LABEL_SITE_INFO}</h3>
 <div class="form-group">
-<label for="rooturl" class="col-lg-2 control-label">{_LC_LABEL_ROOT_URL}</label>
-<div class="col-lg-6"><input id="rooturl" name="rooturl" type="text" class="form-control textbox-imeoff" size="50" maxlength="100" value="{ROOT_URL}" /></div>
+<label class="col-lg-2 control-label">{_LC_LABEL_ROOT_URL}</label>
+<div class="col-lg-6"><input name="rooturl" type="text" class="form-control textbox-imeoff" size="50" maxlength="100" value="{ROOT_URL}" /></div>
 </div>
 <h3>{_LC_LABEL_DB_INFO}</h3>
 <div class="form-group">
@@ -93,31 +93,31 @@ function isInputValueChanged(){
 </div>
 </div>
 <div class="form-group">
-<label for="hostname" class="col-lg-2 control-label">{_LC_LABEL_DB_HOSTNAME}</label>
+<label class="col-lg-2 control-label">{_LC_LABEL_DB_HOSTNAME}</label>
 <div class="col-lg-4">
-<patTemplate:tmpl name="input_hostname" visibility="hidden"><input id="hostname" name="hostname" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{HOSTNAME}" /></patTemplate:tmpl>
-<patTemplate:tmpl name="static_hostname" visibility="hidden"><input id="hostname" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{HOSTNAME}" disabled /><input type="hidden" name="hostname" value="{HOSTNAME}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="input_hostname" visibility="hidden"><input name="hostname" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{HOSTNAME}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="static_hostname" visibility="hidden"><input type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{HOSTNAME}" disabled /><input type="hidden" name="hostname" value="{HOSTNAME}" /></patTemplate:tmpl>
 </div>
 </div>
 <div class="form-group">
-<label for="dbname" class="col-lg-2 control-label">{_LC_LABEL_DB_NAME}</label>
+<label class="col-lg-2 control-label">{_LC_LABEL_DB_NAME}</label>
 <div class="col-lg-4">
-<patTemplate:tmpl name="input_dbname" visibility="hidden"><input id="dbname" name="dbname" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{DBNAME}" /></patTemplate:tmpl>
-<patTemplate:tmpl name="static_dbname" visibility="hidden"><input id="dbname" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{DBNAME}" disabled /><input type="hidden" name="dbname" value="{DBNAME}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="input_dbname" visibility="hidden"><input name="dbname" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{DBNAME}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="static_dbname" visibility="hidden"><input type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{DBNAME}" disabled /><input type="hidden" name="dbname" value="{DBNAME}" /></patTemplate:tmpl>
 </div>
 </div>
 <div class="form-group">
-<label for="dbuser" class="col-lg-2 control-label">{_LC_LABEL_DB_USER}</label>
+<label class="col-lg-2 control-label">{_LC_LABEL_DB_USER}</label>
 <div class="col-lg-4">
-<patTemplate:tmpl name="input_dbuser" visibility="hidden"><input id="dbuser" name="dbuser" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{DBUSER}" /></patTemplate:tmpl>
-<patTemplate:tmpl name="static_dbuser" visibility="hidden"><input id="dbuser" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{DBUSER}" disabled /><input type="hidden" name="dbuser" value="{DBUSER}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="input_dbuser" visibility="hidden"><input name="dbuser" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{DBUSER}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="static_dbuser" visibility="hidden"><input type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{DBUSER}" disabled /><input type="hidden" name="dbuser" value="{DBUSER}" /></patTemplate:tmpl>
 </div>
 </div>
 <div class="form-group">
-<label for="password" class="col-lg-2 control-label">{_LC_LABEL_DB_PASSWORD}</label>
+<label class="col-lg-2 control-label">{_LC_LABEL_DB_PASSWORD}</label>
 <div class="col-lg-4">
-<patTemplate:tmpl name="input_password" visibility="hidden"><input id="password" name="password" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{PASSWORD}" /></patTemplate:tmpl>
-<patTemplate:tmpl name="static_password" visibility="hidden"><input id="password" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{PASSWORD}" disabled /><input type="hidden" name="password" value="{PASSWORD}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="input_password" visibility="hidden"><input name="password" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{PASSWORD}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="static_password" visibility="hidden"><input type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{PASSWORD}" disabled /><input type="hidden" name="password" value="{PASSWORD}" /></patTemplate:tmpl>
 </div>
 </div>
 <div class="form-group">
