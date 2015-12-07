@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -94,19 +94,31 @@ function isInputValueChanged(){
 </div>
 <div class="form-group">
 <label for="hostname" class="col-lg-2 control-label">{_LC_LABEL_DB_HOSTNAME}</label>
-<div class="col-lg-4"><input id="hostname" name="hostname" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{HOSTNAME}" /></div>
+<div class="col-lg-4">
+<patTemplate:tmpl name="input_hostname" visibility="hidden"><input id="hostname" name="hostname" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{HOSTNAME}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="static_hostname" visibility="hidden"><input id="hostname" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{HOSTNAME}" disabled /><input type="hidden" name="hostname" value="{HOSTNAME}" /></patTemplate:tmpl>
+</div>
 </div>
 <div class="form-group">
 <label for="dbname" class="col-lg-2 control-label">{_LC_LABEL_DB_NAME}</label>
-<div class="col-lg-4"><input id="dbname" name="dbname" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{DBNAME}" /></div>
+<div class="col-lg-4">
+<patTemplate:tmpl name="input_dbname" visibility="hidden"><input id="dbname" name="dbname" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{DBNAME}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="static_dbname" visibility="hidden"><input id="dbname" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{DBNAME}" disabled /><input type="hidden" name="dbname" value="{DBNAME}" /></patTemplate:tmpl>
+</div>
 </div>
 <div class="form-group">
 <label for="dbuser" class="col-lg-2 control-label">{_LC_LABEL_DB_USER}</label>
-<div class="col-lg-4"><input id="dbuser" name="dbuser" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{DBUSER}" /></div>
+<div class="col-lg-4">
+<patTemplate:tmpl name="input_dbuser" visibility="hidden"><input id="dbuser" name="dbuser" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{DBUSER}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="static_dbuser" visibility="hidden"><input id="dbuser" type="text" class="form-control textbox-imeoff" size="30" maxlength="30" value="{DBUSER}" disabled /><input type="hidden" name="dbuser" value="{DBUSER}" /></patTemplate:tmpl>
+</div>
 </div>
 <div class="form-group">
 <label for="password" class="col-lg-2 control-label">{_LC_LABEL_DB_PASSWORD}</label>
-<div class="col-lg-4"><input id="password" name="password" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{PASSWORD}" /></div>
+<div class="col-lg-4">
+<patTemplate:tmpl name="input_password" visibility="hidden"><input id="password" name="password" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{PASSWORD}" /></patTemplate:tmpl>
+<patTemplate:tmpl name="static_password" visibility="hidden"><input id="password" type="text" class="form-control textbox-imeoff" size="30" maxlength="64" value="{PASSWORD}" disabled /><input type="hidden" name="password" value="{PASSWORD}" /></patTemplate:tmpl>
+</div>
 </div>
 <div class="form-group">
 <div class="col-lg-offset-2 col-lg-2"><button class="btn {BUTTON_TEST_CONNECTION}" onclick="testdb();">{_LC_LABEL_TEST_CONNECTION}</button></div>
