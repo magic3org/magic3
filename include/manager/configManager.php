@@ -19,7 +19,7 @@ class ConfigManager extends Core
 {
 	private $configFile = 'siteDef.php';		// 設定ファイル名
     private $defParam = array();				// 定義項目
-	const OPTION_DEF_COMMENT = '// #################### オプション定義項目 ####################' . M3_NL . '// ### インストール時に削除します' . M3_NL;		// オプション追加用のコメント
+	private $OPTION_DEF_COMMENT = '// #################### オプション定義項目 ####################' . M3_NL . '// ### インストール時に削除します' . M3_NL;		// オプション追加用のコメント
 	
 	/**
 	 * コンストラクタ
@@ -209,10 +209,10 @@ class ConfigManager extends Core
 					"define('" . $key . "', '" . addslashes($val) . "')", $content);
 			} else {		// キーが見つからない場合はファイルの最後に追加
 				// オプション追加のコメントがない場合はコメントを追加
-				$pos = strpos($content, self::OPTION_DEF_COMMENT);
+				$pos = strpos($content, $this->OPTION_DEF_COMMENT);
 				if ($pos === false){
 					$content = rtrim($content);
-					$content .= M3_NL . M3_NL . self::OPTION_DEF_COMMENT;
+					$content .= M3_NL . M3_NL . $this->OPTION_DEF_COMMENT;
 				}
 				
 				// 定義文を追加
@@ -253,7 +253,7 @@ class ConfigManager extends Core
 		$content = str_replace('?>', '', $content);
 		
 		// オプション追加のコメント以降を削除
-		$pos = strpos($content, self::OPTION_DEF_COMMENT);
+		$pos = strpos($content, $this->OPTION_DEF_COMMENT);
 		if ($pos !== false){
 			$content = substr($content, 0, $pos);
 		}
