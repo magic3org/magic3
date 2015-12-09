@@ -19,7 +19,7 @@ class ConfigManager extends Core
 {
 	private $configFile = 'siteDef.php';		// 設定ファイル名
     private $defParam = array();				// 定義項目
-	private $OPTION_DEF_COMMENT = '// #################### オプション定義項目 ####################' . M3_NL . '// ### インストール時に削除します' . M3_NL;		// オプション追加用のコメント
+	private $OPTION_DEF_COMMENT;		// オプション追加用のコメント
 	
 	/**
 	 * コンストラクタ
@@ -29,6 +29,8 @@ class ConfigManager extends Core
 		// 親クラスを呼び出す
 		parent::__construct();
 		
+		// 初期化
+		$this->OPTION_DEF_COMMENT = '// #################### オプション定義項目 ####################' . M3_NL . '// ### インストール時に削除します' . M3_NL;		// オプション追加用のコメント
 		$this->defParam['M3_SYSTEM_ROOT_URL'] = '';
 		$this->defParam['M3_DB_CONNECT_DSN'] = '';
 		$this->defParam['M3_DB_CONNECT_USER'] = '';
