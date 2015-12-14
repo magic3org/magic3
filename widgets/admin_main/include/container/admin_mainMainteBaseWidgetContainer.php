@@ -30,7 +30,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_INSTALLDATA		= 'installdata';	// データインストール
 	const TASK_DBBACKUP			= 'dbbackup';		// DBバックアップ
 	const TASK_DBCONDITION		= 'dbcondition';	// DB状況
-	const TASK_INITWIZARD		= 'initwizard';		// システム初期化ウィザード
+	const TASK_INITWIZARD		= 'initwizard';		// 管理画面カスタムウィザード
 	const TASK_EDITMENU			= 'editmenu';		// 管理メニュー編集
 	const TASK_MAIN				= 'mainte';			// 全体(メンテナンス)
 	const DEFAULT_TASK			= 'resbrowse';		// デフォルト(ファイルブラウザ)
@@ -117,9 +117,9 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$titles[] = 'DB管理';
 				$titles[] = '状況';
 				break;
-			case self::TASK_INITWIZARD:		// システム初期化ウィザード
+			case self::TASK_INITWIZARD:		// 管理画面カスタムウィザード
 				$titles[] = 'コア制御';
-				$titles[] = 'システム初期化ウィザード';
+				$titles[] = '管理画面カスタムウィザード';
 				break;
 			case self::TASK_EDITMENU:		// 管理メニュー編集
 				$titles[] = 'コア制御';
@@ -249,18 +249,18 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> (
-														$task == self::TASK_INITWIZARD ||		// システム初期化ウィザード
+														$task == self::TASK_INITWIZARD ||		// 管理画面カスタムウィザード
 														$task == self::TASK_EDITMENU ||			// 管理メニュー編集
 														$task == self::TASK_INITSYSTEM			// システム再インストール
 													),
 									'submenu'	=> array(
 										(Object)array(
-											'name'		=> 'システム初期化ウィザード',
+											'name'		=> '管理画面カスタムウィザード',
 											'task'		=> self::TASK_INITWIZARD,
 											'url'		=> '',
 											'tagid'		=> '',
 											'active'	=> (
-																$task == self::TASK_INITWIZARD		// システム初期化ウィザード
+																$task == self::TASK_INITWIZARD		// 管理画面カスタムウィザード
 															)
 										),
 										(Object)array(

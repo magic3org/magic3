@@ -23,7 +23,7 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 	protected $_taskTitleArray;		// 管理下のタスク名
 	protected $_prevTask;
 	protected $_nextTask;
-	const BREADCRUMB_TITLE = 'システム初期化ウィザード';		// 画面タイトル名(パンくずリスト)
+	const BREADCRUMB_TITLE = '管理画面カスタムウィザード';		// 画面タイトル名(パンくずリスト)
 	const TASK_START		= 'initwizard';
 	const TASK_SITE			= 'initwizard_site';		// サイト情報
 	const TASK_ADMIN		= 'initwizard_admin';		// システム管理者

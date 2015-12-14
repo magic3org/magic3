@@ -352,7 +352,7 @@ $HELP['initsystem']['body'] = 'DBのデータを初期化します。';
 $HELP['dbbackup']['title'] = 'DBバックアップ';
 $HELP['dbbackup']['body'] = 'DBのデータをバックアップします。';
 
-// ########## システム初期化ウィザード ##########
+// ########## 管理画面カスタムウィザード ##########
 $HELP['initwizard_site_name']['title'] = 'サイト名';
 $HELP['initwizard_site_name']['body'] = 'サイトの名前を設定します。';
 $HELP['initwizard_site_email']['title'] = 'Eメール';
