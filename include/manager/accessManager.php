@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: accessManager.php 6084 2013-06-06 12:58:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -18,6 +18,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 class AccessManager extends Core
 {
 	private $db;						// DBオブジェクト
+	private $_clientIp;					// クライアントのIPアドレス
 	private $_clientId;					// クライアントID(クッキー用)
 	private $_oldSessionId;				// 古いセッションID
 	private $_accessLogSerialNo;		// アクセスログのシリアルNo
@@ -117,11 +118,11 @@ class AccessManager extends Core
 		if ($retValue){
 			// ユーザログインログを残す
 			$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザがログインしました。アカウント: ' . $account, 2300,
-											'account=' . $account . ', passward=' . $password . ', userid=' . $this->gEnv->getCurrentUserId(), 'account=' . $account/*検索補助データ*/);
+											'account=' . $account . ', passward=' . $password . ', userid=' . $this->gEnv->getCurrentUserId() . ', IP=' . $this->_clientIp, 'account=' . $account/*検索補助データ*/);
 		} else {
 			// ユーザエラーログを残す
 			$this->gOpeLog->writeUserError(__METHOD__, 'ユーザがログインに失敗しました。アカウント: ' . $account, 2310,
-											'account=' . $account . ', passward=' . $password, 'account=' . $account/*検索補助データ*/);
+											'account=' . $account . ', passward=' . $password . ', IP=' . $this->_clientIp, 'account=' . $account/*検索補助データ*/);
 			
 			// 入力アカウントを保存
 			//$this->db->addErrorLoginLog($account, $accessIp, $this->_accessLogSerialNo);
@@ -441,7 +442,7 @@ class AccessManager extends Core
 		$cookieVal	= isset($this->_clientId) ? $this->_clientId : '';			// アクセス管理用クッキー
 		$session	= session_id();				// セッションID
 		//$ip			= $gRequestManager->trimServerValueOf('REMOTE_ADDR');		// クライアントIP
-		$ip			= $this->_getClientIp($gRequestManager);		// クライアントIP
+		$this->_clientIp	= $this->_getClientIp($gRequestManager);		// クライアントIP
 		$method		= $gRequestManager->trimServerValueOf('REQUEST_METHOD');	// アクセスメソッド
 		$uri		= $gRequestManager->trimServerValueOf('REQUEST_URI');
 		$referer	= $gRequestManager->trimServerValueOf('HTTP_REFERER');
@@ -465,10 +466,19 @@ class AccessManager extends Core
 		$isCmd = !empty($cmd);			// コマンド実行かどうか
 		
 		// アクセスログのシリアルNoを保存
-		$this->_accessLogSerialNo = $this->db->accessLog($userId, $cookieVal, $session, $ip, $method, $uri, $referer, $request, $agent, $language, $path, $isCookie, $isCrawler, $isCmd);
+		$this->_accessLogSerialNo = $this->db->accessLog($userId, $cookieVal, $session, $this->_clientIp, $method, $uri, $referer, $request, $agent, $language, $path, $isCookie, $isCrawler, $isCmd);
 		
 		// 即時アクセス解析
 		if (M3_SYSTEM_REALTIME_ANALYTICS) $gInstanceManager->getAnalyzeManager()->realtimeAnalytics($this->_accessLogSerialNo, $cookieVal);
+	}
+	/**
+	 * アクセス元のIPを取得
+	 *
+	 * @return string						IPアドレス
+	 */
+	function getClientIp()
+	{
+		return $this->_clientIp;
 	}
 	/**
 	 * アクセス元のIPを取得
