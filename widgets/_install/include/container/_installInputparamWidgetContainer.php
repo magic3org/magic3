@@ -177,7 +177,7 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 							
 							// 「sql_mode」をチェック
 							$ret = $db->testDBSqlMode($dsn, $dbuser, $password, $mode);
-							if ($ret){			// 取得可能な場合のみチェック
+							if ($ret && !empty($mode)){			// 取得可能な場合のみチェック
 								$this->setMsg(self::MSG_APP_ERR, $this->_('Invalid sql_mode. It requires blank value.') . '<br />sql_mode=' . $mode);		// sql_modeが不正です。空文字列に設定して下さい。
 								$errMsgSub = $this->_('Invalid sql_mode.');// sql_mode不正
 								
