@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-22 07:13+0900\n"
-"PO-Revision-Date: 2015-12-22 07:13+0900\n"
+"POT-Creation-Date: 2015-12-22 08:19+0900\n"
+"PO-Revision-Date: 2015-12-22 08:20+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -489,12 +489,12 @@ msgid "Can't use database."
 msgstr "DBが使用できません"
 
 #: container/_installInputparamWidgetContainer.php:134
-#: container/_installInputparamWidgetContainer.php:301
+#: container/_installInputparamWidgetContainer.php:318
 msgid "User"
 msgstr "DBユーザ"
 
 #: container/_installInputparamWidgetContainer.php:137
-#: container/_installInputparamWidgetContainer.php:300
+#: container/_installInputparamWidgetContainer.php:317
 msgid "Database Name"
 msgstr "DB名"
 
@@ -514,67 +514,75 @@ msgstr "設定値の更新に失敗しました"
 msgid "Succeeded in connecting database."
 msgstr "接続正常"
 
-#: container/_installInputparamWidgetContainer.php:193
-msgid "Incorrect encoding for Japanese."
+#: container/_installInputparamWidgetContainer.php:181
+msgid "Invalid sql_mode. It requires blank value."
+msgstr "sql_modeが不正です。空文字列に設定して下さい。"
+
+#: container/_installInputparamWidgetContainer.php:182
+msgid "Invalid sql_mode."
+msgstr "sql_mode不正"
+
+#: container/_installInputparamWidgetContainer.php:207
+msgid "Invalid encoding for Japanese."
 msgstr "日本語を使用するためのエンコード設定が不正です。"
 
-#: container/_installInputparamWidgetContainer.php:198
+#: container/_installInputparamWidgetContainer.php:208
 msgid "Incollect encoding."
 msgstr "エンコーディングエラー"
 
-#: container/_installInputparamWidgetContainer.php:202
+#: container/_installInputparamWidgetContainer.php:219
 msgid "Succeeded in creating table."
 msgstr "テーブル作成正常"
 
-#: container/_installInputparamWidgetContainer.php:204
+#: container/_installInputparamWidgetContainer.php:221
 msgid "Failed in creating table."
 msgstr "テーブル作成エラー"
 
-#: container/_installInputparamWidgetContainer.php:209
+#: container/_installInputparamWidgetContainer.php:226
 msgid "Failed in connecting database."
 msgstr "接続エラー"
 
-#: container/_installInputparamWidgetContainer.php:289
+#: container/_installInputparamWidgetContainer.php:306
 msgid "Update Config"
 msgstr "設定値を更新"
 
-#: container/_installInputparamWidgetContainer.php:290
+#: container/_installInputparamWidgetContainer.php:307
 msgid "Test Connection"
 msgstr "接続テスト"
 
-#: container/_installInputparamWidgetContainer.php:291
+#: container/_installInputparamWidgetContainer.php:308
 msgid "Configration changed.\\nUpdate configration?"
 msgstr "設定値が変更されています\\n設定値を保存しますか?"
 
-#: container/_installInputparamWidgetContainer.php:292
+#: container/_installInputparamWidgetContainer.php:309
 msgid "Update configration?"
 msgstr "設定値を更新しますか?"
 
-#: container/_installInputparamWidgetContainer.php:293
+#: container/_installInputparamWidgetContainer.php:310
 msgid "Input Site Information"
 msgstr "サイト情報入力"
 
-#: container/_installInputparamWidgetContainer.php:295
+#: container/_installInputparamWidgetContainer.php:312
 msgid "Site Information"
 msgstr "サイト情報"
 
-#: container/_installInputparamWidgetContainer.php:296
+#: container/_installInputparamWidgetContainer.php:313
 msgid "Root URL"
 msgstr "ルートURL"
 
-#: container/_installInputparamWidgetContainer.php:297
+#: container/_installInputparamWidgetContainer.php:314
 msgid "Database Information"
 msgstr "DB接続情報"
 
-#: container/_installInputparamWidgetContainer.php:298
+#: container/_installInputparamWidgetContainer.php:315
 msgid "Database Type"
 msgstr "DB種別"
 
-#: container/_installInputparamWidgetContainer.php:299
+#: container/_installInputparamWidgetContainer.php:316
 msgid "Hostname"
 msgstr "ホスト名"
 
-#: container/_installInputparamWidgetContainer.php:302
+#: container/_installInputparamWidgetContainer.php:319
 msgid "Password"
 msgstr "パスワード"
 

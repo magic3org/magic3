@@ -1344,6 +1344,53 @@ class BaseDb extends Core
 		return $retValue;
 	}
 	/**
+	 * SQL MODE取得
+	 *
+	 * @param string  $dsn			接続用DSN
+	 * @param string  $user			接続ユーザ
+	 * @param string  $password		接続パスワード	 
+	 * @param string  $mode			SQL MODE文字列
+	 * @return bool					true=データあり, false=データなし
+	 */
+	function testDBSqlMode($dsn, $user, $password, &$mode)
+	{
+		$retValue = false;	// 終了ステータス(データなし)
+		$mode = '';
+		$con = null;
+		
+		try {
+			$con = new PDO($dsn, $user, $password);
+			$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			
+			$dbType = $con->getAttribute(PDO::ATTR_DRIVER_NAME);					// DBのタイプ
+			if ($dbType == 'mysql') {	// MySQLの場合
+				$con->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
+				
+				// 文字化け防止SQL実行(MySQL4.1以上)
+				$con->exec('SET NAMES utf8');// クライアントの文字セットを設定
+			}
+
+			// エンコーディング環境取得
+			$stmt = $con->prepare("SHOW VARIABLES LIKE 'sql_mode'");
+			$stmt->execute();
+			
+			// 結果取得
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			if ($row){		// 正常終了
+				$mode  = $row['Value'];
+				$retValue = true;
+			}		
+			
+			// ステートメントを開放
+			$stmt = null;
+			$con = null;
+		} catch (PDOException $e) {
+			// 共通エラー処理
+			self::_onError($e, 'DSN=' . $dsn . ';' . 'USER=' . $user . ';' . 'PWD=' . $password);
+		}
+		return $retValue;
+	}
+	/**
 	 * MySQL用のSQL文をPostgreSQLのSQL文に変換
 	 *
 	 * @param  string $src		MySQL用のSQL文

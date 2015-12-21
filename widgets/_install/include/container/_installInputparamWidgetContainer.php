@@ -170,32 +170,49 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 						$isErr = false;			// エラーありかどうか
 						$msg = '<b><font color="green">' . $this->_('Succeeded in connecting database.') . '</font></b>';			// 接続正常
 						
-						// MySQLで日本語の場合は日本語エンコーディングをチェック
-						if ($dbtype == M3_DB_TYPE_MYSQL && $lang == 'ja'){
+						// MySQLの場合はその他のテストを実行
+						if ($dbtype == M3_DB_TYPE_MYSQL){
 							$errMsg = '';
-							$ret = $db->testDBEncoding($dsn, $dbuser, $password, $rows);
+							$errMsgSub = '';
+							
+							// 「sql_mode」をチェック
+							$ret = $db->testDBSqlMode($dsn, $dbuser, $password, $mode);
 							if ($ret){			// 取得可能な場合のみチェック
-								foreach ($rows as $row){
-									$name = $row['Variable_name'];
-									$value = $row['Value'];
+								$this->setMsg(self::MSG_APP_ERR, $this->_('Invalid sql_mode. It requires blank value.') . '<br />sql_mode=' . $mode);		// sql_modeが不正です。空文字列に設定して下さい。
+								$errMsgSub = $this->_('Invalid sql_mode.');// sql_mode不正
+								
+								$isErr = true;
+							}
+							
+							// 日本語の場合は日本語エンコーディングをチェック
+							if (!$isErr && $lang == 'ja'){
+								$ret = $db->testDBEncoding($dsn, $dbuser, $password, $rows);
+								if ($ret){			// 取得可能な場合のみチェック
+									foreach ($rows as $row){
+										$name = $row['Variable_name'];
+										$value = $row['Value'];
 									
-									$errMsg .= $name . ' ' . $value;
-									if ($name != 'character_set_filesystem'){
-										if ($value != 'utf8'){
-											$errMsg .= '(NG)';
-											$isErr = true;
+										$errMsg .= $name . ' ' . $value;
+										if ($name != 'character_set_filesystem'){
+											if ($value != 'utf8'){
+												$errMsg .= '(NG)';
+												$isErr = true;
+											}
 										}
+										$errMsg .= '<br />';
 									}
-									$errMsg .= '<br />';
+								}
+								// エラーありの場合
+								if ($isErr){
+									$this->setMsg(self::MSG_APP_ERR, $this->_('Invalid encoding for Japanese.') . '<br />' . $errMsg);		// 日本語を使用するためのエンコード設定が不正です。
+									$errMsgSub = $this->_('Incollect encoding.');// エンコードエラー
 								}
 							}
-							// エラーありの場合
-							if ($isErr) $this->setMsg(self::MSG_APP_ERR, $this->_('Incorrect encoding for Japanese.') . '<br />' . $errMsg);		// 日本語を使用するためのエンコード設定が不正です。
 						}
 						
-						if ($isErr){
+						if ($isErr){		// エラーの場合
 							$msg .= ' => ';
-							$msg .= '<b><font color="red">' . $this->_('Incollect encoding.') . '</font></b>';			// エンコードエラー
+							$msg .= '<b><font color="red">' . $errMsgSub . '</font></b>';			
 						} else {
 							$msg .= ' => ';
 							if ($db->testDbTable($dsn, $dbuser, $password)){
