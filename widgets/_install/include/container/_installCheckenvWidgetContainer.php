@@ -101,8 +101,10 @@ class _installCheckenvWidgetContainer extends _installBaseWidgetContainer
 				$status .= '(' . $version . ')';
 				$data = '<b><font color="green">' . $status . '</font></b>';
 			} else {
-				$status = $this->_('version not match') . '(' . $version . ')';
-				$data = '<b><font color="red">' . $status . '</font></b>';
+				//$status = $this->_('version not match') . '(' . $version . ')';
+				$status = $this->_('supported version') . '(' . $version . ')';
+				$detail = $this->_('my.cnf required');
+				$data = '<b><font color="red">' . $status . '<br />' . $detail . ':<br />sql_mode=\'\'</font></b>';
 			}
 		} else {
 			$status = $this->_('not available(pdo_mysql not installed)');			// 利用不可(pdo_mysqlがインストールされていません)
