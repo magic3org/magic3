@@ -659,12 +659,10 @@ class AccessManager extends Core
 		
 		if (!isset($isValidAdminKey)){
 			// 管理者一時キーを取得
-			//$adminKey = $request->trimValueOf(M3_REQUEST_PARAM_ADMIN_KEY);
 			$adminKey = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_ADMIN_KEY);
 			if (empty($adminKey)){
 				$isValidAdminKey = false;
 			} else {
-				//$ret = $this->db->isValidAdminKey($adminKey, $request->trimServerValueOf('REMOTE_ADDR'));
 				$isValidAdminKey = $this->db->isValidAdminKey($adminKey, $gRequestManager->trimServerValueOf('REMOTE_ADDR'));
 			}
 		}
