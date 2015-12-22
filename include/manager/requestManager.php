@@ -44,6 +44,13 @@ class RequestManager extends Core
 										array($this, '_sessionWrite'),
 										array($this, '_sessionDestroy'),
 										array($this, '_sessionGc'));
+										
+			// シャットダウン時の処理(2015/12/21 追加)
+			if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+				session_register_shutdown();
+			} else {
+				register_shutdown_function('session_write_close');
+			}
 		}
 		
 		// その他パラメータ初期化
