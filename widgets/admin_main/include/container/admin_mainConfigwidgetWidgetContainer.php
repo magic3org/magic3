@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainConfigwidgetWidgetContainer.php 6052 2013-05-29 11:33:35Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWidgetContainer.php');
@@ -19,8 +19,8 @@ class admin_mainConfigwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 {
 //	const JQUERY_IFRAME_FILE = '/jquery/jquery.iframe-auto-height.plugin.1.5.0.min.js';	// jQueryプラグイン
 //	const JQUERY_IFRAME_FILE = '/jquery/jquery.iframe-auto-height.plugin.1.7.1.min.js';	// jQueryプラグイン
-	const JQUERY_IFRAME_FILE = '/jquery/jquery.iframe-auto-height.plugin.1.9.1.min.js';	// jQueryプラグイン
-		
+//	const JQUERY_IFRAME_FILE = '/jquery/jquery.iframe-auto-height.plugin.1.9.1.min.js';	// jQueryプラグイン
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -75,7 +75,8 @@ class admin_mainConfigwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	 */
 	function _addScriptFileToHead($request, &$param)
 	{
-		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . self::JQUERY_IFRAME_FILE));
+//		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . self::JQUERY_IFRAME_FILE));
+		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . '/' . ScriptLibInfo::JQUERY_IFRAME_FILENAME));
 		return $scriptArray;
 	}
 }
