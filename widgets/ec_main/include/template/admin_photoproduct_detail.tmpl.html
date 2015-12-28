@@ -1,0 +1,222 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function selectItem(selId)
+{
+	document.main.act.value = 'select';
+	document.main.serial.value = selId;
+	document.main.submit();
+	return true;
+}
+function addItem()
+{
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem()
+{
+	if (!window.confirm('項目を更新しますか?')) return false;
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+function delItem()
+{
+	if (!window.confirm('項目を削除しますか?')) return false;
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function delId()
+{
+	if (!window.confirm('商品を削除しますか?')) return false;
+	document.main.act.value = 'deleteid';
+	document.main.submit();
+	return true;
+}
+function cancelItem(){
+	document.main.task.value = 'photoproduct';
+	document.main.submit();
+	return true;
+}
+$(function(){
+	// テーブル行をカラー化
+	m3_tableWithCololor('product', false);
+	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_description', 250/* 高さ */);
+});
+//]]>
+</script>
+<div align="center">
+{MENU_ITEMS}
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="photoproduct_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="imageurl_s" value="{IMAGE_URL_S}" />
+<input type="hidden" name="imageurl_m" value="{IMAGE_URL_M}" />
+<input type="hidden" name="imageurl_l" value="{IMAGE_URL_L}" />
+<input type="hidden" name="current_image" />
+<table width="90%"><tr><td>
+<label>フォト関連商品詳細</label>
+</td><td align="right"><patTemplate:tmpl name="cancel_button" visibility="visible">
+<span {_HELP_CONTENT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
+</patTemplate:tmpl></td></tr>
+<tr><td colspan="2">
+<table id="product" class="simple-table" align="center">
+    <tbody>
+        <tr>
+	    <td class="table-headside" width="100">商品ID</td>
+	    <td colspan="3">{ID}</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">商品名</td>
+	    <td><input type="text" name="item_name" value="{NAME}" size="60" maxlength="60" {NAME_DISABLED} /></td>
+	    <td class="table-headside">商品コード</td>
+	    <td><input type="text" name="item_code" value="{CODE}" size="60" maxlength="60" {CODE_DISABLED} /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">公開</td>
+	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>
+	    <td class="table-headside">表示順</td>
+	    <td><input type="text" name="item_index" value="{INDEX}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">商品ステータス</td>
+	    <td colspan="3"><input type="checkbox" name="item_new" {NEW} />新着&nbsp;&nbsp;<input type="checkbox" name="item_suggest" {SUGGEST} />おすすめ</td>
+	</tr>
+        <tr>
+	    <td class="table-headside">販売価格</td>
+	    <td>
+	    <input type="text" name="item_price" value="{PRICE}" size="10" maxlength="10" onkeypress="return m3_numericKey(event,true);" />円(税抜)&nbsp;&nbsp;&nbsp;&nbsp;{PRICE_WITH_TAX}円(税込)
+	    </td>
+	    <td class="table-headside">課税種別</td>
+	    <td>
+    <select name="item_tax_type" {TAX_TYPE_DISABLE}>
+        <option value="">-- 未選択 --</option>
+        <patTemplate:tmpl name="tax_type_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+	</patTemplate:tmpl>
+    </select>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">表示在庫数</td>
+	    <td>
+	    <input type="text" name="item_stock_count" value="{STOCK_COUNT}" size="5" maxlength="5" onkeypress="return m3_numericKey(event,true);" />
+	    </td>
+	    <td class="table-headside">販売単位/単位数量</td>
+	    <td>
+    <select name="item_unit_type" {UNIT_TYPE_DISABLE}>
+        <option value="" {UNIT_TYPE_SELECTED}>-- 未選択 --</option>
+        <patTemplate:tmpl name="unit_type_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+	</patTemplate:tmpl>
+    </select>
+	    <input type="text" name="item_unit_quantity" value="{UNIT_QUANTITY}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" />
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">配送種別</td>
+	    <td>
+    <select name="item_deliv_type" {TAX_TYPE_DISABLE}>
+        <option value="">-- デフォルト --</option>
+        <patTemplate:tmpl name="deliv_type_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+	</patTemplate:tmpl>
+    </select>
+	    </td>
+	    <td class="table-headside">送料基準</td>
+	    <td>
+	    送料単価：<input type="text" name="item_deliv_price" value="{DELIV_PRICE}" size="6" maxlength="6" onkeypress="return m3_numericKey(event,true);" />&nbsp;&nbsp;
+	    重量：<input type="text" name="item_deliv_weight" value="{DELIV_WEIGHT}" size="8" maxlength="8" onkeypress="return m3_numericKey(event,true);" />
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">規定画像(小)<br />サイズ {IMAGE_S_WIDTH}x{IMAGE_S_HEIGHT}</td>
+	    <td colspan="3" valign="bottom">
+	    <div>{IMAGE_S}</div>
+            <div><input type="button" class="button" onclick="BrowseServer('small');" value="変更" /> {IMAGE_URL_S}</div>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">規定画像(標準)<br />サイズ {IMAGE_M_WIDTH}x{IMAGE_M_HEIGHT}</td>
+	    <td colspan="3" valign="bottom">
+	    <div>{IMAGE_M}</div>
+            <div><input type="button" class="button" onclick="BrowseServer('medium');" value="変更" /> {IMAGE_URL_M}</div>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">規定画像(大)<br />サイズ {IMAGE_L_WIDTH}x{IMAGE_L_HEIGHT}</td>
+	    <td colspan="3" valign="bottom">
+	    <div>{IMAGE_L}</div>
+            <div><input type="button" class="button" onclick="BrowseServer('large');" value="変更" /> {IMAGE_URL_L}</div>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">商品説明(簡易)</td>
+	    <td colspan="3"><input type="text" name="item_desc_short" value="{DESC_SHORT}" maxlength="300" style="width:100%" /></td>
+	</tr>
+	<tr>
+	    <td class="table-headside">商品説明<br />(詳細)</td>
+	    <td colspan="3">
+	    <textarea name="item_description">{DESCRIPTION}</textarea>
+	    </td>
+	</tr>
+        <tr>
+	    <td class="table-headside">検索キーワード</td>
+	    <td colspan="3"><input type="text" name="item_keyword" value="{KEYWORD}" maxlength="300" style="width:100%" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">詳細情報URL</td>
+	    <td colspan="3"><input type="text" name="item_url" value="{URL}" maxlength="300" style="width:100%" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">管理者用備考</td>
+	    <td colspan="3"><input type="text" name="item_admin_note" value="{ADMIN_NOTE}" maxlength="300" style="width:100%" /></td>
+	</tr>
+        <tr>
+	    <td class="table-headside">更新者</td>
+	    <td>{UPDATE_USER}</td>
+	    <td class="table-headside">更新日時</td>
+	    <td>{UPDATE_DT}</td>
+	</tr>
+	<tr>
+	<td colspan="4" align="right">
+	{MESSAGE}
+<patTemplate:tmpl name="delete_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="delete_id_button" visibility="hidden">
+		<input type="button" class="button" onclick="delId();" value="削除" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+	</td>
+	</tr>
+    </tbody>
+</table>
+</td></tr></table>
+</form>
+</div>
+</patTemplate:tmpl>
