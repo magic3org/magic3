@@ -17,10 +17,6 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainBaseWid
 
 class admin_mainConfigwidgetWidgetContainer extends admin_mainBaseWidgetContainer
 {
-//	const JQUERY_IFRAME_FILE = '/jquery/jquery.iframe-auto-height.plugin.1.5.0.min.js';	// jQueryプラグイン
-//	const JQUERY_IFRAME_FILE = '/jquery/jquery.iframe-auto-height.plugin.1.7.1.min.js';	// jQueryプラグイン
-//	const JQUERY_IFRAME_FILE = '/jquery/jquery.iframe-auto-height.plugin.1.9.1.min.js';	// jQueryプラグイン
-	
 	/**
 	 * コンストラクタ
 	 */
@@ -64,20 +60,18 @@ class admin_mainConfigwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "url", $url);
 	}
 	/**
-	 * JavascriptファイルをHTMLヘッダ部に設定
+	 * JavascriptライブラリをHTMLヘッダ部に設定
 	 *
-	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
+	 * JavascriptライブラリをHTMLのheadタグ内に追加出力する。
 	 * _assign()よりも後に実行される。
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param object         $param			任意使用パラメータ。
-	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
+	 * @return string,array 				Javascriptライブラリ。出力しない場合は空文字列を設定。
 	 */
-	function _addScriptFileToHead($request, &$param)
+	function _addScriptLibToHead($request, &$param)
 	{
-//		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . self::JQUERY_IFRAME_FILE));
-		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . '/' . ScriptLibInfo::JQUERY_IFRAME_FILENAME));
-		return $scriptArray;
+		return array( ScriptLibInfo::LIB_JQUERY_IFRAME );		// IFRAMEの高さ調節ライブラリ
 	}
 }
 ?>

@@ -121,7 +121,7 @@ class ScriptLibInfo
 //	const JQUERY_JQPLOT_VER			= '1.0.7';
 	const JQUERY_JQPLOT_VER			= '1.0.8';
 	const JQUERY_JSTREE_VER			= '1.0-rc3';
-	const JQUERY_IFRAME_VER			= '1.5.0';
+	const JQUERY_IFRAME_VER			= '2.0.0';
 	const JQUERY_RATY_VER			= '1.4.3';
 	const JQUERY_MOUSEWHEEL_VER		= '3.0.6';
 	const JQUERY_CLOUDCAROUSEL_VER	= '1.0.5';
@@ -212,6 +212,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 //	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.plugin.1.7.1.min.js';
 //	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.plugin.1.9.1.min.js';
 	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.2.0.0.min.js';
+	const JQUERY_IFRAME_BROWSER_FILENAME	= 'jquery/jquery.iframe-auto-height.browser.js';			// jQuery.iframe用ブラウザ判定
 	const JQUERY_RATY_FILENAME			= 'jquery/raty/jquery.raty.js';
 	const JQUERY_MOUSEWHEEL_FILENAME	= 'jquery/jquery.mousewheel.js';
 	const JQUERY_CLOUDCAROUSEL_FILENAME	= 'jquery/cloud-carousel.1.0.5.min.js';
@@ -528,7 +529,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 						self::LIB_JQUERY_JSTREE			=>	array(	'script' 	=> array(self::JQUERY_JSTREE_FILENAME),	// jquery.jstree用のファイル
 																	'url'		=> self::JQUERY_JSTREE_URL,
 																	'version'	=> self::JQUERY_JSTREE_VER),
-						self::LIB_JQUERY_IFRAME			=>	array(	'script'	=> array(self::JQUERY_IFRAME_FILENAME),		// jquery.iframe-auto-height用のファイル
+						self::LIB_JQUERY_IFRAME			=>	array(	'script'	=> array(self::JQUERY_IFRAME_FILENAME, self::JQUERY_IFRAME_BROWSER_FILENAME),		// jquery.iframe-auto-height用のファイル
 																	'url'		=> self::JQUERY_IFRAME_URL,
 																	'version'	=> self::JQUERY_IFRAME_VER),
 						self::LIB_JQUERY_RATY			=>	array(	'script'	=> array(self::JQUERY_RATY_FILENAME),		// jquery.raty用のファイル
