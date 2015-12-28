@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_cartWidgetContainer.php 5970 2013-04-30 00:45:47Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath()		. '/baseWidgetContainer.php');
@@ -209,9 +209,9 @@ class ec_cartWidgetContainer extends BaseWidgetContainer
 					$imageArray = $this->getImage($row, self::PRODUCT_IMAGE_SMALL);// 商品画像小
 					$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageArray['im_url']);
 					$imagePath = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getSystemRootPath(), $imageArray['im_url']);
-					if (!file_exists($imagePath)){
-						$imageUrl = $this->getProductImageUrl('0_' . $this->productImageWidth . 'x' . $this->productImageHeight . self::DEFAULT_PRODUCT_IMAGE_TYPE);
-					}
+				}
+				if (!file_exists($imagePath)){
+					$imageUrl = $this->getProductImageUrl('0_' . $this->productImageWidth . 'x' . $this->productImageHeight . self::DEFAULT_PRODUCT_IMAGE_TYPE);
 				}
 				$imageWidth = $this->productImageWidth;
 				$imageHeight = $this->productImageHeight;
