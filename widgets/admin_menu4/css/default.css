@@ -6,7 +6,8 @@
 	font-weight: bold;	/* added by Magic3 */
 }
 /* メニューバー固定用 */
-body { padding-top: 85px; }
+/*body { padding-top: 85px; }*/
+body { padding-top: 60px; }
 
 /*** パンくずリスト修正 ***/
 ol.breadcrumb {

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_mainBaseWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/ec_mainCommonDef.php');
@@ -20,11 +20,11 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/ec_mainDb.php');
 class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	protected static $_mainDb;			// DB接続オブジェクト
-	protected static $_configArray;		// BBS定義値
-	protected $_openBy;				// ウィンドウオープンタイプ
+	protected static $_configArray;		// Eコマース定義値
+//	protected $_openBy;				// ウィンドウオープンタイプ
 	protected $_baseUrl;			// 管理画面のベースURL
-	protected $_langId;			// 現在の言語
-	protected $_userId;			// 現在のユーザ
+//	protected $_langId;			// 現在の言語
+//	protected $_userId;			// 現在のユーザ
 	const DEFAULT_TOP_TITLE = 'ショップ';
 	const DEFAULT_TASK = 'product';		// デフォルトタスク
 	
@@ -34,6 +34,25 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const CALENDAR_SETUP_FILE = '/jscalendar-1.0/calendar-setup.js';	// カレンダーセットアップファイル
 	const CALENDAR_CSS_FILE = '/jscalendar-1.0/calendar-win2k-1.css';		// カレンダー用CSSファイル
 	
+	// 画面
+	const TASK_MEMBER			= 'member';				// 会員管理(一覧)
+	const TASK_MEMBER_DETAIL	= 'member_detail';		// 会員管理(詳細)
+	const TASK_ORDER			= 'order';				// 受注管理(一覧)
+	const TASK_ORDER_DETAIL		= 'order_detail';		// 受注管理(詳細)
+	const TASK_PRODUCT					= 'product';					// 商品管理(一覧)
+	const TASK_PRODUCT_DETAIL			= 'product_detail';				// 商品管理(詳細)
+	const TASK_PHOTOPRODUCT				= 'photoproduct';				// フォト関連商品(一覧)
+	const TASK_PHOTOPRODUCT_DETAIL		= 'photoproduct_detail';		// フォト関連商品(詳細)
+	const TASK_PRODUCTCATEGORY			= 'productcategory';			// 商品カテゴリー管理(一覧)
+	const TASK_PRODUCTCATEGORY_DETAIL	= 'productcategory_detail';		// 商品カテゴリー管理(詳細)
+	const TASK_DELIVMETHOD			= 'delivmethod';			// 配送方法(一覧)
+	const TASK_DELIVMETHOD_DETAIL	= 'delivmethod_detail';		// 配送方法(詳細)
+	const TASK_PAYMETHOD			= 'paymethod';				// 支払方法(一覧)
+	const TASK_PAYMETHOD_DETAIL		= 'paymethod_detail';		// 支払方法(詳細)
+	const TASK_CALCORDER			= 'calcorder';				// 注文計算(一覧)
+	const TASK_CALCORDER_DETAIL		= 'calcorder_detail';		// 注文計算(詳細)
+	const TASK_OTHER				= 'other';					// その他設定
+
 	/**
 	 * コンストラクタ
 	 */
@@ -47,10 +66,6 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 			
 		// ブログ定義を読み込む
 		if (!isset(self::$_configArray)) self::$_configArray = photo_shopCommonDef::loadConfig(self::$_mainDb);
-		
-		// 変数初期化
-		$this->_langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		$this->_userId = $this->gEnv->getCurrentUserId();
 	}
 	/**
 	 * テンプレートに前処理
@@ -86,7 +101,241 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 		if (empty($task)) $task = self::DEFAULT_TASK;
 		
-		// パンくずリストを作成
+		// パンくずリストの定義データ作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_MEMBER:				// 会員管理(一覧)
+				$titles[] = '会員管理';
+				$titles[] = '会員一覧';
+				break;
+			case self::TASK_MEMBER_DETAIL:		// 会員管理(詳細)
+				$titles[] = '会員管理';
+				$titles[] = '会員一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_ORDER:				// 受注管理(一覧)
+				$titles[] = '受注管理';
+				$titles[] = '受注一覧';
+				break;
+			case self::TASK_ORDER_DETAIL:		// 受注管理(詳細)
+				$titles[] = '受注管理';
+				$titles[] = '受注一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_PRODUCT:				// 商品管理(一覧)
+				$titles[] = '商品管理';
+				$titles[] = '一般商品一覧';
+				break;
+			case self::TASK_PRODUCT_DETAIL:		// 商品管理(詳細)
+				$titles[] = '商品管理';
+				$titles[] = '一般商品一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_PHOTOPRODUCT:				// フォト関連商品(一覧)
+				$titles[] = '商品管理';
+				$titles[] = 'フォト関連商品一覧';
+				break;
+			case self::TASK_PHOTOPRODUCT_DETAIL:		// フォト関連商品(詳細)
+				$titles[] = '商品管理';
+				$titles[] = 'フォト関連商品一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_PRODUCTCATEGORY:				// 商品カテゴリー管理(一覧)
+				$titles[] = '商品管理';
+				$titles[] = 'カテゴリー一覧';
+				break;
+			case self::TASK_PRODUCTCATEGORY_DETAIL:		// 商品カテゴリー管理(詳細)
+				$titles[] = '商品管理';
+				$titles[] = 'カテゴリー一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_DELIVMETHOD:				// 配送方法(一覧)
+				$titles[] = '基本設定';
+				$titles[] = '配送方法一覧';
+				break;
+			case self::TASK_DELIVMETHOD_DETAIL:		// 配送方法(詳細)
+				$titles[] = '基本設定';
+				$titles[] = '配送方法一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_PAYMETHOD:				// 支払方法(一覧)
+				$titles[] = '基本設定';
+				$titles[] = '支払方法一覧';
+				break;
+			case self::TASK_PAYMETHOD_DETAIL:		// 支払方法(詳細)
+				$titles[] = '基本設定';
+				$titles[] = '支払方法一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_CALCORDER:				// 注文計算(一覧)
+				$titles[] = '基本設定';
+				$titles[] = '注文計算一覧';
+				break;
+			case self::TASK_CALCORDER_DETAIL:		// 注文計算(詳細)
+				$titles[] = '基本設定';
+				$titles[] = '注文計算一覧';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_OTHER:				// その他設定
+				$titles[] = '基本設定';
+				$titles[] = 'その他';
+				break;
+		}
+		
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> '受注管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_ORDER ||				// 受注管理(一覧)
+											$task == self::TASK_ORDER_DETAIL		// 受注管理(詳細)
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '受注一覧',
+								'task'		=> self::TASK_ORDER,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_ORDER ||			// 受注管理(一覧)
+													$task == self::TASK_ORDER_DETAIL		// 受注管理(詳細)
+												)
+							)
+						)
+					),
+					(Object)array(
+						'name'		=> '会員管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_MEMBER ||			// 会員管理(一覧)
+											$task == self::TASK_MEMBER_DETAIL		// 会員管理(詳細)
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '会員一覧',
+								'task'		=> self::TASK_MEMBER,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_MEMBER ||			// 会員管理(一覧)
+													$task == self::TASK_MEMBER_DETAIL		// 会員管理(詳細)
+												)
+							)
+						)
+					),
+					(Object)array(
+						'name'		=> '商品管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_PRODUCT ||				// 商品管理(一覧)
+											$task == self::TASK_PRODUCT_DETAIL ||		// 商品管理(詳細)
+											$task == self::TASK_PHOTOPRODUCT ||			// フォト関連商品(一覧)
+											$task == self::TASK_PHOTOPRODUCT_DETAIL ||			// フォト関連商品(詳細)
+											$task == self::TASK_PRODUCTCATEGORY ||			// 商品カテゴリー管理(一覧)
+											$task == self::TASK_PRODUCTCATEGORY_DETAIL		// 商品カテゴリー管理(詳細)
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '商品一覧',
+								'task'		=> self::TASK_PRODUCT,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_PRODUCT ||				// 商品管理(一覧)
+													$task == self::TASK_PRODUCT_DETAIL			// 商品管理(詳細)
+												)
+							),
+/*							(Object)array(
+								'name'		=> 'フォト関連商品一覧',
+								'task'		=> self::TASK_PHOTOPRODUCT,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_PHOTOPRODUCT ||			// フォト関連商品(一覧)
+													$task == self::TASK_PHOTOPRODUCT_DETAIL		// フォト関連商品(詳細)
+												)
+							),*/
+							(Object)array(
+								'name'		=> '商品カテゴリー',
+								'task'		=> self::TASK_PRODUCTCATEGORY,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_PRODUCTCATEGORY ||			// 商品カテゴリー管理(一覧)
+													$task == self::TASK_PRODUCTCATEGORY_DETAIL		// 商品カテゴリー管理(詳細)
+												)
+							)
+						)
+					),
+					(Object)array(
+						'name'		=> '基本',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_DELIVMETHOD ||			// 配送方法(一覧)
+											$task == self::TASK_DELIVMETHOD_DETAIL ||	// 配送方法(詳細)
+											$task == self::TASK_PAYMETHOD ||			// 支払方法(一覧)
+											$task == self::TASK_PAYMETHOD_DETAIL ||		// 支払方法(詳細)
+											$task == self::TASK_CALCORDER ||			// 注文計算(一覧)
+											$task == self::TASK_CALCORDER_DETAIL ||		// 注文計算(詳細)
+											$task == self::TASK_OTHER					// その他設定
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '配送方法',
+								'task'		=> self::TASK_DELIVMETHOD,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_DELIVMETHOD ||			// 配送方法(一覧)
+													$task == self::TASK_DELIVMETHOD_DETAIL		// 配送方法(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> '支払方法',
+								'task'		=> self::TASK_PAYMETHOD,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_PAYMETHOD ||			// 支払方法(一覧)
+													$task == self::TASK_PAYMETHOD_DETAIL		// 支払方法(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> '注文計算',
+								'task'		=> self::TASK_CALCORDER,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CALCORDER ||			// 注文計算(一覧)
+													$task == self::TASK_CALCORDER_DETAIL		// 注文計算(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> 'その他',
+								'task'		=> self::TASK_OTHER,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_OTHER					// その他設定
+												)
+							)
+						)
+					)
+				);
+		
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
+
+/*		// パンくずリストを作成
 		switch ($task){
 			case 'member':		// 会員管理
 			case 'member_detail':		// 会員管理(詳細)
@@ -278,6 +527,7 @@ class admin_ec_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . self::DEFAULT_TOP_TITLE . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+		*/
 	}
 	/**
 	 * 定義値を取得
