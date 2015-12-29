@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,96 +20,99 @@ function updateItem(){
 	return true;
 }
 $(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_member_notice', 150);
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
-<table width="90%"><tr><td>
-<table class="simple-table" style="margin:0 auto;width:950px;">
+<h3 class="m3config_h"><span {_HELP_OTHER_TITLE}>その他</span></h3>
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_OTHER_OPERATION}>運用機能</span></td>
-	    <td><input type="checkbox" name="accept_order" {ACCEPT_ORDER} /><span {_HELP_OTHER_ACCEPT_ORDER}>注文の受け付け</span><br />
-		<input type="checkbox" name="non_member_order" {NON_MEMBER_ORDER} /><span {_HELP_OTHER_NON_MEMBER_ORDER}>非会員からの注文受付</span><br />
-		<input type="checkbox" name="auto_stock" {AUTO_STOCK} /><span {_HELP_OTHER_AUTO_STOCK}>在庫自動処理</span><br />
+    <tr>
+	    <th><span {_HELP_OTHER_OPERATION}>運用機能</span></th>
+	    <td>
+		<div class="checkbox"><label><input type="checkbox" name="accept_order" {ACCEPT_ORDER} />注文の受け付け</label></div>
+		<div class="checkbox"><label><input type="checkbox" name="non_member_order" {NON_MEMBER_ORDER} />非会員からの注文受付</label></div>
+		<div class="checkbox"><label><input type="checkbox" name="auto_stock" {AUTO_STOCK} />在庫自動処理</label></div>
 		</td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_OTHER_EMAIL}>メール機能</span></td>
-	    <td><input type="checkbox" name="use_email" {USE_EMAIL} /><span {_HELP_OTHER_USE_EMAIL}>メール送信機能使用</span><br />
-	    <span {_HELP_OTHER_AUTO_EMAIL}>送信元メールアドレス：</span><input type="text" name="auto_email" value="{AUTO_EMAIL}" size="30" maxlength="40" /><br />
-	    <span {_HELP_OTHER_ORDER_EMAIL}>受注時送信先メールアドレス：</span><input type="text" name="item_email_to_order_product" value="{EMAIL_TO_ORDER_PRODUCT}" size="30" maxlength="40" /><br />
+    <tr>
+	    <th><span {_HELP_OTHER_EMAIL}>メール機能</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="use_email" {USE_EMAIL} />メール送信機能使用</label></div>
+	    <div class="form-group"><div class="form-control-static col-sm-4 m3config_item"><span {_HELP_OTHER_AUTO_EMAIL}>送信元メールアドレス：</span></div><div class="col-sm-8 m3config_item"><input type="text" name="auto_email" value="{AUTO_EMAIL}" maxlength="40" /></div><div class="clearfix"></div></div>
+	    <div class="form-group"><div class="form-control-static col-sm-4 m3config_item"><span {_HELP_OTHER_ORDER_EMAIL}>受注時送信先メールアドレス：</span></div><div class="col-sm-8 m3config_item"><input type="text" name="item_email_to_order_product" value="{EMAIL_TO_ORDER_PRODUCT}" maxlength="40" /></div><div class="clearfix"></div></div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_OTHER_SELL_PRODUCT}>販売商品</span></td>
-	    <td><label class="item_list_inline"><input type="checkbox" checked disabled />一般商品</label></td>
+    <tr>
+	    <th><span {_HELP_OTHER_SELL_PRODUCT}>販売商品</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" checked disabled />一般商品</label></div></td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_OTHER_PRODUCT_CATEGORY}>商品カテゴリー</span></td>
-	    <td>選択可能数：<input type="text" name="item_category_select_count" value="{CATEGORY_SELECT_COUNT}" size="2" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></td>
+    <tr>
+	    <th><span {_HELP_OTHER_PRODUCT_CATEGORY}>商品カテゴリー</span></th>
+	    <td><div class="form-control-static col-sm-2 m3config_item">選択可能数：</div>
+		<div class="col-sm-1 m3config_item"><input type="text" name="item_category_select_count" value="{CATEGORY_SELECT_COUNT}" maxlength="2" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
-<!--    <tr class="even">
-	    <td class="table-headside">在庫なし時<br />コンテンツ</td>
+<!--    <tr>
+	    <th>在庫なし時<br />コンテンツ</th>
 	    <td height="200"><textarea name="item_content_no_stock">{CONTENT_NO_STOCK}</textarea></td>
 	</tr>-->
     <tr>
-	    <td class="table-headside">会員向けお知らせ</td>
-	    <td><textarea name="item_member_notice">{MEMBER_NOTICE}</textarea></td>
+	    <th>会員向けお知らせ</th>
+	    <td class="ckeditor"><textarea name="item_member_notice">{MEMBER_NOTICE}</textarea></td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside" colspan="2"><span {_HELP_OTHER_SHOP_INFO}>ショップ情報</span></td>
+    <tr>
+	    <th colspan="2"><span {_HELP_OTHER_SHOP_INFO}>ショップ情報</span></th>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_OTHER_SHOP_NAME}>ショップ名</span></td>
+    <tr>
+	    <th><span {_HELP_OTHER_SHOP_NAME}>ショップ名</span></th>
 	    <td><input type="text" name="shop_name" value="{SHOP_NAME}" size="40" maxlength="100" /></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_OTHER_SHOP_OWNER}>ショップオーナー名</span></td>
+	    <th><span {_HELP_OTHER_SHOP_OWNER}>オーナー名</span></th>
 	    <td><input type="text" name="shop_owner" value="{SHOP_OWNER}" size="40" maxlength="100" /></td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_OTHER_SHOP_ZIP}>ショップ郵便番号</span></td>
+    <tr>
+	    <th><span {_HELP_OTHER_SHOP_ZIP}>郵便番号</span></th>
 	    <td><input type="text" name="shop_zipcode" value="{SHOP_ZIPCODE}" size="10" maxlength="10" /></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_OTHER_SHOP_ADDRESS}>ショップ住所</span></td>
-	    <td><input type="text" name="shop_address" value="{SHOP_ADDRESS}" maxlength="100" style="width:100%;" /></td>
+	    <th><span {_HELP_OTHER_SHOP_ADDRESS}>住所</span></th>
+	    <td><input type="text" name="shop_address" value="{SHOP_ADDRESS}" maxlength="100" /></td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_OTHER_SHOP_PHONE}>ショップ電話番号</span></td>
+    <tr>
+	    <th><span {_HELP_OTHER_SHOP_PHONE}>電話番号</span></th>
 	    <td><input type="text" name="shop_phone" value="{SHOP_PHONE}" size="30" maxlength="30" /></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_OTHER_SHOP_SIGNATURE}>ショップメール署名</span></td>
-	    <td height="50"><textarea name="item_shop_signature" style="width:100%;height:100%;">{SHOP_SIGNATURE}</textarea></td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside" rowspan="4"><span {_HELP_OTHER_MAIL_FORM}>メールフォーム</span></td>
-	    <td class="table-headside">パスワード送信</td>
+	    <th><span {_HELP_OTHER_SHOP_SIGNATURE}>メール署名</span></th>
+	    <td style="height:50px;"><textarea name="item_shop_signature">{SHOP_SIGNATURE}</textarea></td>
 	</tr>
     <tr>
-	    <td height="50"><textarea name="item_mail_form_send_pwd" style="width:100%;height:100%;">{MAIL_FORM_SEND_PWD}</textarea></td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside">注文受付</td>
+	    <th rowspan="4"><span {_HELP_OTHER_MAIL_FORM}>メールフォーム</span></th>
+	    <td class="info">パスワード送信</td>
 	</tr>
     <tr>
-	    <td height="50"><textarea name="item_mail_form_order_product" style="width:100%;height:100%;">{MAIL_FORM_ORDER_PRODUCT}</textarea></td>
+	    <td style="height:50px;"><textarea name="item_mail_form_send_pwd">{MAIL_FORM_SEND_PWD}</textarea></td>
+	</tr>
+    <tr>
+	    <td class="info">注文受付</td>
+	</tr>
+    <tr>
+	    <td style="height:50px;"><textarea name="item_mail_form_order_product">{MAIL_FORM_ORDER_PRODUCT}</textarea></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-<tr><td align="right">
-<input type="button" class="button" onclick="updateItem();" value="更新" />
-</td></tr></table>
 
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
