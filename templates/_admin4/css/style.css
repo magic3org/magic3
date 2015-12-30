@@ -1,3 +1,10 @@
+/****** 管理画面テンプレート *****/
+.m3sideblock {
+	margin-top:25px;
+}
+.m3centerblock {
+	margin-top:15px;
+}
 /****** 管理画面全体 *****/
 .m3admin_container {
 	margin:0 auto;

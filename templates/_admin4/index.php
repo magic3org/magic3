@@ -31,17 +31,17 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 <div class="container">
 <?php if ($document->countModules('left') || $document->countModules('right')): ?><div class="row"><?php endif; ?>
 <?php if ($document->countModules('left')): ?>
-    <div class="col-lg-3"><jdoc:include type="modules" name="left" style="none" /></div>
+    <div class="col-lg-3 m3sideblock"><jdoc:include type="modules" name="left" style="none" /></div>
 <?php endif; ?>
 <?php if ($document->countModules('left') && $document->countModules('right')): ?>
-    <div class="col-lg-6"><jdoc:include type="component" style="none" /></div>
+    <div class="col-lg-6 m3centerblock"><jdoc:include type="component" style="none" /></div>
 <?php elseif ($document->countModules('left') || $document->countModules('right')): ?>
-    <div class="col-lg-9"><jdoc:include type="component" style="none" /></div>
+    <div class="col-lg-9 m3centerblock"><jdoc:include type="component" style="none" /></div>
 <?php else: ?>
     <jdoc:include type="component" style="none" />
 <?php endif; ?>
 <?php if ($document->countModules('right')): ?>
-    <div class="col-lg-3"><jdoc:include type="modules" name="right" style="none" /></div>
+    <div class="col-lg-3 m3sideblock"><jdoc:include type="modules" name="right" style="none" /></div>
 <?php endif; ?>
 <?php if ($document->countModules('left') || $document->countModules('right')): ?></div><?php endif; ?>
 <jdoc:include type="modules" name="bottom" style="none" />
