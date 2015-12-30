@@ -108,6 +108,7 @@ class admin_ec_mainDelivmethodWidgetContainer extends admin_ec_mainBaseWidgetCon
 		}
 		// 一覧を表示
 		$this->db->getAllDelivMethodDef($this->langId, 0/*デフォルトのセットID*/, array($this, 'delivDefLoop'));
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('delivmethod_list', 'visibility', 'hidden');// 設定がないときは、一覧を表示しない
 		
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		

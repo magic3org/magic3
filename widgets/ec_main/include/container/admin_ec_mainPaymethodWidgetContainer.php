@@ -106,6 +106,7 @@ class admin_ec_mainPaymethodWidgetContainer extends admin_ec_mainBaseWidgetConta
 		}
 		// 一覧を表示
 		$this->db->getAllPayMethodDef($this->_langId, 0/*デフォルトのセットID*/, array($this, 'payDefLoop'));
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('paymethod_list', 'visibility', 'hidden');// 設定がないときは、一覧を表示しない
 		
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		
