@@ -69,17 +69,17 @@ $(function(){
 	    <th><span {_HELP_DELIVMETHOD_ID}>ID</span></th>
 	    <td style="width:200px;">{ID_LABEL}
 	    <patTemplate:tmpl name="add_id_field" visibility="hidden">
-	    <input type="text" name="item_id" value="{ADD_ID}" size="20" maxlength="20" />
+	    <input type="text" name="item_id" value="{ADD_ID}" maxlength="20" />
 	    </patTemplate:tmpl>
 	    </td>
 	    <th><span {_HELP_DELIVMETHOD_NAME}>名前</span></th>
-	    <td><input type="text" name="item_name" value="{NAME}" size="30" maxlength="40" /></td>
+	    <td><input type="text" name="item_name" value="{NAME}" maxlength="40" /></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_DELIVMETHOD_VISIBLE}>公開</span></th>
 	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>
 	    <th><span {_HELP_DELIVMETHOD_INDEX}>表示順</span></th>
-	    <td><input type="text" name="item_index" value="{INDEX}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td><div class="col-sm-2 m3config_item"><input type="text" name="item_index" value="{INDEX}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_DELIVMETHOD_DESC}>説明</span></th>

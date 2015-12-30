@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_mainPaymethodWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_ec_mainBaseWidgetContainer.php');
@@ -248,7 +248,7 @@ class admin_ec_mainPaymethodWidgetContainer extends admin_ec_mainBaseWidgetConta
 		}
 		
 		if (empty($this->serialNo)){		// シリアル番号が空のときは新規とする
-			$this->tmpl->addVar("_widget", "id_label", '新規');			// 選択項目のIDラベル
+			$this->tmpl->addVar("_widget", "id_label", '');			// 選択項目のIDラベル
 			$this->tmpl->addVar("_widget", "new_selected", 'checked');// ユーザIDが0のときは新規追加をチェック状態にする
 			
 			$this->tmpl->setAttribute('add_id_field', 'visibility', 'visible');// 新規ID入力フィールド表示

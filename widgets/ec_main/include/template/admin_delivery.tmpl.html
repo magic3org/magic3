@@ -84,8 +84,7 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 
-<h3 class="m3config_h"><span {_HELP_DELIVMETHOD_LIST}>配送方法一覧</span>
-</h3>
+<h3 class="m3config_h"><span {_HELP_DELIVMETHOD_LIST}>配送方法一覧</span></h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_ENTRY_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
@@ -106,7 +105,7 @@ $(function(){
     <tbody>
     <patTemplate:tmpl name="delivmethod_list">
     <tr>
-        <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+        <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{ID}</td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
 	    <td>{VIEW_INDEX}</td>
