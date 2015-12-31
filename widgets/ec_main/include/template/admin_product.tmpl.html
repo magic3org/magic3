@@ -84,6 +84,9 @@ function sortList(type){
 	return true;
 }
 $(function(){
+	// テーブルを作成
+	m3SetConfigTable('productlist');
+	
 	// スクロールバー付きのテーブルを作成
 	m3_tableWithScrollbar('productlist', 20, 0);	// データは20行表示
 });
@@ -98,9 +101,7 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="sort" value="{SORT}" />
 
-<h3 class="m3config_h"><span {_HELP_PRODUCT}>商品一覧</span>
-{SEARCH_AREA_BUTTON}
-</h3>
+<h3 class="m3config_h"><span {_HELP_PRODUCT_LIST}>商品一覧</span> {SEARCH_AREA_BUTTON}</h3>
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
@@ -169,29 +170,29 @@ $(function(){
 <table id="productlist">
     <thead>
      <tr>
-	    <th width="35"><span {_HELP_PRODUCT_CHECK}>選択</span></th>
-        <th width="30"><a href="#" onclick="sortList('{SORT_ID}');"><span {_HELP_PRODUCT_ID}>ID</span></a>{DIRECT_ICON_ID}</th>
-        <th width="20%"><a href="#" onclick="sortList('{SORT_NAME}');"><span {_HELP_PRODUCT_NAME}>商品名</span></a>{DIRECT_ICON_NAME}</th>
-        <th width="20%"><a href="#" onclick="sortList('{SORT_CODE}');"><span {_HELP_PRODUCT_CODE}>商品コード</span></a>{DIRECT_ICON_CODE}</th>
-	    <th width="120"><span {_HELP_PRODUCT_PRICE_WITH_TAX}>税込価格(円)</span></th>
-	    <th width="80"><a href="#" onclick="sortList('{SORT_STOCK}');"><span {_HELP_PRODUCT_STOCK_COUNT}>在庫数</span></a>{DIRECT_ICON_STOCK}</th>
-	    <th width="80"><a href="#" onclick="sortList('{SORT_INDEX}');"><span {_HELP_PRODUCT_INDEX}>表示順</span></a>{DIRECT_ICON_INDEX}</th>
-	    <th width="80"><a href="#" onclick="sortList('{SORT_VISIBLE}');"><span {_HELP_PRODUCT_VISIBLE}>公開</span></a>{DIRECT_ICON_VISIBLE}</th>
-	    <th width="120"><a href="#" onclick="sortList('{SORT_DATE}');"><span {_HELP_PRODUCT_UPDATE_DATE}>更新日時</span></a>{DIRECT_ICON_DATE}</th>
+	    <th class="select"><span {_HELP_PRODUCT_CHECK}>選択</span></th>
+        <th class="narrow sort"><a href="#" onclick="sortList('{SORT_ID}');"><span {_HELP_PRODUCT_ID}>ID</span></a>{DIRECT_ICON_ID}</th>
+        <th class="sort"><a href="#" onclick="sortList('{SORT_NAME}');"><span {_HELP_PRODUCT_NAME}>商品名</span></a>{DIRECT_ICON_NAME}</th>
+        <th class="sort"><a href="#" onclick="sortList('{SORT_CODE}');"><span {_HELP_PRODUCT_CODE}>商品コード</span></a>{DIRECT_ICON_CODE}</th>
+	    <th><span {_HELP_PRODUCT_PRICE_WITH_TAX}>税込価格(円)</span></th>
+	    <th class="narrow sort"><a href="#" onclick="sortList('{SORT_STOCK}');"><span {_HELP_PRODUCT_STOCK_COUNT}>在庫数</span></a>{DIRECT_ICON_STOCK}</th>
+	    <th class="narrow sort"><a href="#" onclick="sortList('{SORT_INDEX}');"><span {_HELP_PRODUCT_INDEX}>表示順</span></a>{DIRECT_ICON_INDEX}</th>
+	    <th class="narrow sort"><a href="#" onclick="sortList('{SORT_VISIBLE}');"><span {_HELP_PRODUCT_VISIBLE}>公開</span></a>{DIRECT_ICON_VISIBLE}</th>
+	    <th class="sort"><a href="#" onclick="sortList('{SORT_DATE}');"><span {_HELP_PRODUCT_UPDATE_DATE}>更新日時</span></a>{DIRECT_ICON_DATE}</th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="itemlist">
-        <tr>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td align="center">{ID}</td>
+    <patTemplate:tmpl name="itemlist">
+    <tr>
+	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><div class="form-control-static">{ID}</div></td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
 	    <td>{CODE}</td>
-	    <td align="right">{PRICE}</td>
-	    <td align="center">{STOCK_COUNT}</td>
-	    <td align="center">{VIEW_INDEX}</td>
-	    <td align="center"><input type="checkbox" name="item_visible" {VISIBLE} disabled /></td>
-	    <td align="center">{UPDATE_DT}</td>
+	    <td class="number">{PRICE}</td>
+	    <td>{STOCK_COUNT}</td>
+	    <td>{VIEW_INDEX}</td>
+	    <td><input type="checkbox" name="item_visible" {VISIBLE} disabled /></td>
+	    <td>{UPDATE_DT}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>

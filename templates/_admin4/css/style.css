@@ -597,6 +597,13 @@ span[rel="m3help"] { cursor: default; }
 .m3config_table th {
 	width: 150px;
 }
+.m3config_table th.sort
+{
+	text-decoration: underline;
+}
+.m3config_table th.narrow {
+	width: 75px;
+}
 .m3config_table th.select {
 	width: 50px;
 }
