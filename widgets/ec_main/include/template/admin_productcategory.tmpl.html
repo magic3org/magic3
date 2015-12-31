@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_productcategory.tmpl.html 5438 2012-12-07 14:09:57Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -65,54 +65,49 @@ function delItem(){
 	return true;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('categorylist', 20, 0);	// データは20行表示
+	// テーブル作成
+	m3SetConfigTable('categorylist');
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="productcategory" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-<table width="90%">
-<tr><td>
-<label><span {_HELP_PRODUCTCATEGORY_LIST}>カテゴリー一覧</span></label>
-</td><td align="right">
-<span {_HELP_PRODUCTCATEGORY_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_PRODUCTCATEGORY_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_PRODUCTCATEGORY_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
-</td></tr>
-<tr><td colspan="2">
 
-<table id="categorylist" class="simple-table" width="100%">
+<h3 class="m3config_h"><span {_HELP_PRODUCTCATEGORY_LIST}>カテゴリー一覧</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_ENTRY_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+</div></div></div>
+
+<table id="categorylist">
     <thead>
-        <tr>
-            <th width="35"><span {_HELP_PRODUCTCATEGORY_CHECK}>選択</span></th>
-            <th width="35"><span {_HELP_PRODUCTCATEGORY_ID}>ID</span></th>
-            <th width="40%"><span {_HELP_PRODUCTCATEGORY_NAME}>カテゴリー名</span></th>
-			<th width="30%"><span {_HELP_PRODUCTCATEGORY_PARENT_NAME}>親カテゴリー名</span></th>
-	    <th width="10%"><span {_HELP_PRODUCTCATEGORY_INDEX}>表示順</span></th>
+    <tr>
+        <th class="select"><span {_HELP_PRODUCTCATEGORY_CHECK}>選択</span></th>
+        <th><span {_HELP_PRODUCTCATEGORY_ID}>ID</span></th>
+        <th><span {_HELP_PRODUCTCATEGORY_NAME}>カテゴリー名</span></th>
+	    <th><span {_HELP_PRODUCTCATEGORY_PARENT_NAME}>親カテゴリー名</span></th>
+	    <th><span {_HELP_PRODUCTCATEGORY_INDEX}>表示順</span></th>
 	    <th><span {_HELP_PRODUCTCATEGORY_VISIBLE}>公開</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="itemlist">
-        <tr {LINE_COLOR}>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td align="center">{ID}</td>
+    <patTemplate:tmpl name="itemlist">
+    <tr>
+	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td>{ID}</td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></td>
 		<td>{PCATEGORY_NAME}</td>
-	    <td align="center">{VIEW_INDEX}</td>
-	    <td align="center"><input type="checkbox" name="item_visible" {VISIBLE} disabled /></td>
+	    <td>{VIEW_INDEX}</td>
+	    <td><input type="checkbox" name="item_visible" {VISIBLE} disabled /></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
 
-</td></tr>
-</table>
 </form>
 </div>
 </patTemplate:tmpl>
