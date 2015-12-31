@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2008 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 5547 2013-01-14 08:59:13Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 直接アクセスの防止
@@ -106,6 +106,10 @@ $HELP['product_desc_short']['title'] = '説明(簡易)';
 $HELP['product_desc_short']['body'] = '商品の簡易説明です。商品の一覧画面、およびヘッダ部のdescriptionタグに設定されます。120文字程度で記述します。Googleでは検索結果に表示されます。';
 $HELP['product_admin_note']['title'] = '管理者用備考';
 $HELP['product_admin_note']['body'] = '任意に設定可能な管理者用の備考欄です。';
+$HELP['product_search_keyword']['title'] = 'キーワード';
+$HELP['product_search_keyword']['body'] = '商品を検索するキーワードを設定します。スペース区切りで複数のキーワードでの絞り込みができます。検索対象は商品名、商品コード、商品説明、簡易商品説明です。';
+$HELP['product_search_category']['title'] = 'カテゴリー';
+$HELP['product_search_category']['body'] = '商品をカテゴリーで絞り込みます。';
 
 // ########## 配送方法 ##########
 $HELP['delivmethod_list']['title'] = '配送方法一覧';

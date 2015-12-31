@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -70,13 +70,13 @@ function search(){
 	return true;
 }
 function clearSearchParam(){
-	document.main.keyword.value = '';
-	document.main.category.value = '';
+	document.main.search_category0.value = '0';
+	document.main.search_keyword.value = '';
 	return true;
 }
 function showSearchArea()
 {
-	$('#search_comment').slideToggle('slow');
+	$('#search_product').slideToggle('slow');
 }
 function sortList(type){
 	document.main.sort.value = type;
@@ -89,8 +89,7 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="product" />
@@ -98,7 +97,15 @@ $(function(){
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="sort" value="{SORT}" />
-<table width="90%"><tr><td colspan="2">
+
+<h3 class="m3config_h"><span {_HELP_PRODUCT}>商品一覧</span>
+{SEARCH_AREA_BUTTON}
+</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
+</div></div></div>
+
+<!--
 <div id="search_comment" class="m3search" style="display:none;">
 <table class="simple-table">
 <caption>検索</caption>
@@ -112,7 +119,7 @@ $(function(){
 	    <td colspan="3">
 	    <select name="category">
 	        <option value="">-- 未選択 --</option>
-	        <patTemplate:tmpl name="category_list">
+	        <patTemplate:tmpl name="_category_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
@@ -124,21 +131,48 @@ $(function(){
     </tbody>
 </table>
 </div>
-</td></tr>
-<tr><td>
-<label><span>商品一覧</span></label>&nbsp;&nbsp;
-<a href="javascript:void(0);" onclick="showSearchArea();"><img src="{SEARCH_IMG}" width="16" height="16" border="0" alt="{SEARCH_STR}" title="{SEARCH_STR}" /></a>
-</td>
-<td align="right"><span {_HELP_PRODUCT_NEW_BTN}><input type="button" class="button" onclick="newItem();" value="新規" /></span><span {_HELP_PRODUCT_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="編集" /></span><span {_HELP_PRODUCT_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table id="productlist" class="simple-table" width="100%">
+-->
+<div id="search_product" class="m3search panel panel-info" style="display:none;width:600px;">
+<div class="panel-heading">
+    <h3 class="panel-title"><span {_HELP_PRODUCT_SEARCH}>商品検索</span></h3>
+</div>
+<div class="panel-body form-horizontal">
+<div class="form-group">
+    <label for="search_keyword" class="col-sm-3 control-label"><span {_HELP_PRODUCT_SEARCH_KEYWORD}>キーワード</span></label>
+    <div class="col-sm-9">
+	<input type="text" id="search_keyword" name="search_keyword" class="form-control" value="{SEARCH_KEYWORD}" maxlength="50" />
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label"><span {_HELP_PRODUCT_SEARCH_CATEGORY}>カテゴリー</span></label>
+    <div class="col-sm-9">
+<patTemplate:tmpl name="category">
+		<div class="col-sm-6 m3config_item">
+	    <select name="search_category{INDEX}" class="form-control">
+	        <option value="0">-- 未選択 --</option>
+	        <patTemplate:tmpl name="category_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+</patTemplate:tmpl>
+    </div>
+</div>
+<div class="form-group">
+	<div class="col-sm-12 text-right">
+	<input type="button" class="button" onclick="clearSearchParam();" value="クリア" /> <input type="button" class="button" onclick="search();" value="検索" />
+	</div>
+</div>
+</div>
+</div>
+
+<table id="productlist">
     <thead>
-        <tr>
+     <tr>
 	    <th width="35"><span {_HELP_PRODUCT_CHECK}>選択</span></th>
-            <th width="30"><a href="#" onclick="sortList('{SORT_ID}');"><span {_HELP_PRODUCT_ID}>ID</span></a>{DIRECT_ICON_ID}</th>
-            <th width="20%"><a href="#" onclick="sortList('{SORT_NAME}');"><span {_HELP_PRODUCT_NAME}>商品名</span></a>{DIRECT_ICON_NAME}</th>
-            <th width="20%"><a href="#" onclick="sortList('{SORT_CODE}');"><span {_HELP_PRODUCT_CODE}>商品コード</span></a>{DIRECT_ICON_CODE}</th>
+        <th width="30"><a href="#" onclick="sortList('{SORT_ID}');"><span {_HELP_PRODUCT_ID}>ID</span></a>{DIRECT_ICON_ID}</th>
+        <th width="20%"><a href="#" onclick="sortList('{SORT_NAME}');"><span {_HELP_PRODUCT_NAME}>商品名</span></a>{DIRECT_ICON_NAME}</th>
+        <th width="20%"><a href="#" onclick="sortList('{SORT_CODE}');"><span {_HELP_PRODUCT_CODE}>商品コード</span></a>{DIRECT_ICON_CODE}</th>
 	    <th width="120"><span {_HELP_PRODUCT_PRICE_WITH_TAX}>税込価格(円)</span></th>
 	    <th width="80"><a href="#" onclick="sortList('{SORT_STOCK}');"><span {_HELP_PRODUCT_STOCK_COUNT}>在庫数</span></a>{DIRECT_ICON_STOCK}</th>
 	    <th width="80"><a href="#" onclick="sortList('{SORT_INDEX}');"><span {_HELP_PRODUCT_INDEX}>表示順</span></a>{DIRECT_ICON_INDEX}</th>
@@ -162,9 +196,10 @@ $(function(){
 	</patTemplate:tmpl>
     </tbody>
 </table>
-</td></tr>
+<!--
 <tr><td>{PAGE_LINK}</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{START_NO}-{END_NO}件目</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}件中</label></td></tr>
-</table>
+-->
+
 </form>
 </div>
 </patTemplate:tmpl>

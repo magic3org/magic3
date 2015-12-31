@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -34,7 +34,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	private $sortKey;		// ソートキー
 	private $sortDirection;		// ソート方向
 	private $imageTypes;			// 画像タイプ
-	private $catagorySelectCount;	// カテゴリー選択可能数
+	private $categoryCount;	// カテゴリー選択可能数
 	const MAX_HIER_LEVEL = 20;		// カテゴリー階層最大値
 	const STANDARD_PRICE = 'selling';		// 通常価格
 	const PRODUCT_IMAGE_MEDIUM = 'standard-product';		// 中サイズ商品画像ID
@@ -75,8 +75,21 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		
 		$this->sortKeyType = array('index'/*表示順*/, 'stock'/*在庫数*/, 'id'/*商品ID*/, 'date'/*更新日時*/, 'name'/*商品名*/, 'code'/*商品コード*/, 'price'/*商品価格*/, 'visible'/*公開状態*/);
 		$this->imageTypes = array('s', 'm', 'l');			// 画像タイプ
-		$this->catagorySelectCount = self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);	// カテゴリー選択可能数
-		if ($this->catagorySelectCount <= 0) $this->catagorySelectCount = self::DEFAULT_CATEGORY_COUNT;
+		$this->categoryCount = self::$_mainDb->getCommerceConfig(photo_shopCommonDef::CF_E_CATEGORY_SELECT_COUNT);	// カテゴリー選択可能数
+		if ($this->categoryCount <= 0) $this->categoryCount = self::DEFAULT_CATEGORY_COUNT;
+	}
+	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		$this->db->getAllCategory($this->_langId, $this->categoryListData);		// カテゴリー情報
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -139,9 +152,16 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$this->search_categoryId = $request->trimValueOf('category');		// 検索カテゴリー
-		$keyword = $request->trimValueOf('keyword');			// 検索キーワード
+//		$this->search_categoryId = $request->trimValueOf('category');		// 検索カテゴリー
+		$search_categoryId = $request->trimValueOf('search_category0');			// 検索カテゴリー
+		$search_keyword = $request->trimValueOf('search_keyword');			// 検索キーワード
 		$sort = $request->trimValueOf('sort');		// ソート順
+		
+		// カテゴリーを格納
+		$this->categoryArray = array();
+		if (!empty($search_categoryId)){		// 0以外の値を取得
+			$this->categoryArray[] = $search_categoryId;
+		}
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'delete'){		// 項目削除の場合
@@ -207,14 +227,14 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$this->resetUploadImage();
 			
 		// カテゴリー一覧を作成
-		$this->db->getAllCategoryByLoop($defaultLangId, array($this, 'categoryLoop'));
+//		$this->db->getAllCategoryByLoop($defaultLangId, array($this, 'categoryLoop'));
 						
 		// ###### 検索条件を作成 ######
 		// キーワード分割
-		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
+		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($search_keyword);
 				
 		// 総数を取得
-		$totalCount = $this->db->searchProductCount($parsedKeywords, $this->search_categoryId, $defaultLangId);
+		$totalCount = $this->db->searchProductCount($parsedKeywords, $this->categoryArray, $defaultLangId);
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
 
 		// 表示するページ番号の修正
@@ -229,7 +249,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		}
 		
 		// 商品リストを表示
-		$this->db->searchProduct($parsedKeywords, $this->search_categoryId, $defaultLangId, $maxListCount, ($pageNo -1) * $maxListCount,
+		$this->db->searchProduct($parsedKeywords, $this->categoryArray, $defaultLangId, $maxListCount, ($pageNo -1) * $maxListCount,
 									$this->sortKey, $this->sortDirection, array($this, 'productListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 
@@ -239,11 +259,13 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$sort = '';		// ソート値
 			if (!empty($this->sortKey)) $sort = '&sort=' . $this->sortKey . '-' . $this->sortDirection;
 			
+			$category = '';
+			if (count($this->categoryArray) > 0) $category = implode(',', $this->categoryArray);
+			
 			for ($i = 1; $i <= $pageCount; $i++){
 				//$linkUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . 
 				//				'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() . 
-				$linkUrl = $this->_baseUrl .
-							'&task=product&keyword=' . urlencode($keyword) . '&category=' . $this->search_categoryId . '&page=' . $i . $sort;
+				$linkUrl = $this->_baseUrl . '&task=product&keyword=' . urlencode($search_keyword) . '&category=' . $category . '&page=' . $i . $sort;
 				if ($i == $pageNo){
 					$link = '&nbsp;' . $i;
 				} else {
@@ -263,95 +285,94 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
 		
 		// ソート用データ設定
-/*		if (empty($this->sortKey)){		// ソートが設定されていない場合
+		if (empty($this->sortDirection)){
+			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_UP_ICON_FILE);	// ソート降順アイコン
+			$iconTitle = '降順';
+		} else {
+			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_DOWN_ICON_FILE);	// ソート昇順アイコン
+			$iconTitle = '昇順';
+		}
+		$sortImage = '<img src="' . $iconUrl . '" width="' . self::SORT_ICON_SIZE . '" height="' . self::SORT_ICON_SIZE . '" title="' . $iconTitle . '" alt="' . $iconTitle . '" />';
+		
+		switch ($this->sortKey){
+			case 'id':		// 商品ID
+				$this->tmpl->addVar('_widget', 'direct_icon_id', $sortImage);
+				break;
+			case 'name':		// 商品名
+				$this->tmpl->addVar('_widget', 'direct_icon_name', $sortImage);
+				break;
+			case 'code':		// 商品コード
+				$this->tmpl->addVar('_widget', 'direct_icon_code', $sortImage);
+				break;
+			case 'price':		// 商品価格
+				$this->tmpl->addVar('_widget', 'direct_icon_price', $sortImage);
+				break;
+			case 'stock':		// 在庫数
+				$this->tmpl->addVar('_widget', 'direct_icon_stock', $sortImage);
+				break;
+			case 'index':		// 表示順
+				$this->tmpl->addVar('_widget', 'direct_icon_index', $sortImage);
+				break;
+			case 'visible':		// 公開状態
+				$this->tmpl->addVar('_widget', 'direct_icon_visible', $sortImage);
+				break;
+			case 'date':		// 更新日時
+				$this->tmpl->addVar('_widget', 'direct_icon_date', $sortImage);
+				break;
+		}
+		if ($this->sortKey == 'id' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_id', 'id-0');
+		} else {
 			$this->tmpl->addVar('_widget', 'sort_id', 'id-1');
+		}
+		if ($this->sortKey == 'name' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_name', 'name-0');
+		} else {
 			$this->tmpl->addVar('_widget', 'sort_name', 'name-1');
+		}
+		if ($this->sortKey == 'code' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_code', 'code-0');
+		} else {
 			$this->tmpl->addVar('_widget', 'sort_code', 'code-1');
+		}
+		if ($this->sortKey == 'stock' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_stock', 'stock-0');
+		} else {
 			$this->tmpl->addVar('_widget', 'sort_stock', 'stock-1');
+		}
+		if ($this->sortKey == 'index' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_index', 'index-0');
+		} else {
 			$this->tmpl->addVar('_widget', 'sort_index', 'index-1');
+		}
+		if ($this->sortKey == 'visible' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_visible', 'visible-0');
+		} else {
 			$this->tmpl->addVar('_widget', 'sort_visible', 'visible-1');
+		}
+		if ($this->sortKey == 'date' && !empty($this->sortDirection)){
+			$this->tmpl->addVar('_widget', 'sort_date', 'date-0');
+		} else {
 			$this->tmpl->addVar('_widget', 'sort_date', 'date-1');
-		} else {		// ソートが設定されている場合*/
-			if (empty($this->sortDirection)){
-				$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_UP_ICON_FILE);	// ソート降順アイコン
-				$iconTitle = '降順';
-			} else {
-				$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_DOWN_ICON_FILE);	// ソート昇順アイコン
-				$iconTitle = '昇順';
-			}
-			$sortImage = '<img src="' . $iconUrl . '" width="' . self::SORT_ICON_SIZE . '" height="' . self::SORT_ICON_SIZE . '" title="' . $iconTitle . '" alt="' . $iconTitle . '" />';
-			
-			switch ($this->sortKey){
-				case 'id':		// 商品ID
-					$this->tmpl->addVar('_widget', 'direct_icon_id', $sortImage);
-					break;
-				case 'name':		// 商品名
-					$this->tmpl->addVar('_widget', 'direct_icon_name', $sortImage);
-					break;
-				case 'code':		// 商品コード
-					$this->tmpl->addVar('_widget', 'direct_icon_code', $sortImage);
-					break;
-				case 'price':		// 商品価格
-					$this->tmpl->addVar('_widget', 'direct_icon_price', $sortImage);
-					break;
-				case 'stock':		// 在庫数
-					$this->tmpl->addVar('_widget', 'direct_icon_stock', $sortImage);
-					break;
-				case 'index':		// 表示順
-					$this->tmpl->addVar('_widget', 'direct_icon_index', $sortImage);
-					break;
-				case 'visible':		// 公開状態
-					$this->tmpl->addVar('_widget', 'direct_icon_visible', $sortImage);
-					break;
-				case 'date':		// 更新日時
-					$this->tmpl->addVar('_widget', 'direct_icon_date', $sortImage);
-					break;
-			}
-			if ($this->sortKey == 'id' && !empty($this->sortDirection)){
-				$this->tmpl->addVar('_widget', 'sort_id', 'id-0');
-			} else {
-				$this->tmpl->addVar('_widget', 'sort_id', 'id-1');
-			}
-			if ($this->sortKey == 'name' && !empty($this->sortDirection)){
-				$this->tmpl->addVar('_widget', 'sort_name', 'name-0');
-			} else {
-				$this->tmpl->addVar('_widget', 'sort_name', 'name-1');
-			}
-			if ($this->sortKey == 'code' && !empty($this->sortDirection)){
-				$this->tmpl->addVar('_widget', 'sort_code', 'code-0');
-			} else {
-				$this->tmpl->addVar('_widget', 'sort_code', 'code-1');
-			}
-			if ($this->sortKey == 'stock' && !empty($this->sortDirection)){
-				$this->tmpl->addVar('_widget', 'sort_stock', 'stock-0');
-			} else {
-				$this->tmpl->addVar('_widget', 'sort_stock', 'stock-1');
-			}
-			if ($this->sortKey == 'index' && !empty($this->sortDirection)){
-				$this->tmpl->addVar('_widget', 'sort_index', 'index-0');
-			} else {
-				$this->tmpl->addVar('_widget', 'sort_index', 'index-1');
-			}
-			if ($this->sortKey == 'visible' && !empty($this->sortDirection)){
-				$this->tmpl->addVar('_widget', 'sort_visible', 'visible-0');
-			} else {
-				$this->tmpl->addVar('_widget', 'sort_visible', 'visible-1');
-			}
-			if ($this->sortKey == 'date' && !empty($this->sortDirection)){
-				$this->tmpl->addVar('_widget', 'sort_date', 'date-0');
-			} else {
-				$this->tmpl->addVar('_widget', 'sort_date', 'date-1');
-			}
-			$this->tmpl->addVar('_widget', 'sort', $this->sortKey . '-' . $this->sortDirection);
-//		}
-		// ボタン作成
+		}
+		$this->tmpl->addVar('_widget', 'sort', $this->sortKey . '-' . $this->sortDirection);
+
+		// カテゴリーメニューを作成
+		$this->createCategoryMenu(1);		// メニューは１つだけ表示
+
+		// 検索ボタン作成
+		$eventAttr = 'onclick="showSearchArea();"';
+		$searchButtonTag = $this->gDesign->createSearchButton(''/*同画面*/, '商品を検索'/*ボタンタイトル*/, ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+		$this->tmpl->addVar("_widget", "search_area_button", $searchButtonTag);
+		
+/*		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
 		$searchStr = '検索';
 		$this->tmpl->addVar("_widget", "search_img", $searchImg);
-		$this->tmpl->addVar("_widget", "search_str", $searchStr);
+		$this->tmpl->addVar("_widget", "search_str", $searchStr);*/
 		
 		// パラメータ再設定
-		$this->tmpl->addVar("_widget", "search_word", $this->convertToDispString($keyword));
+		$this->tmpl->addVar("_widget", "search_keyword", $this->convertToDispString($search_keyword));
 			
 		// その他
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
@@ -458,7 +479,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		
 		// カテゴリーを取得
 		$this->categoryArray = array();
-		for ($i = 0; $i < $this->catagorySelectCount; $i++){
+		for ($i = 0; $i < $this->categoryCount; $i++){
 			$itemName = 'item_category' . $i;
 			$itemValue = $request->trimValueOf($itemName);
 			if (!empty($itemValue)){		// 0以外の値を取得
@@ -975,8 +996,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		}
 		
 		// カテゴリーメニューを作成
-		$this->db->getAllCategory($defaultLang, $this->categoryListData);
-		$this->createCategoryMenu();
+//		$this->db->getAllCategory($defaultLang, $this->categoryListData);
+		$this->createCategoryMenu($this->categoryCount);
 		
 		// 各種価格を求める
 		$price = $this->ecObj->getCurrencyPrice($price);	// 端数調整
@@ -1274,7 +1295,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			if (!empty($srcRows[$i]['pw_category_id'])){
 				$destArray[] = $srcRows[$i]['pw_category_id'];
 				$itemCount++;
-				if ($itemCount >= $this->catagorySelectCount) break;
+				if ($itemCount >= $this->categoryCount) break;
 			}
 		}
 		return $destArray;
@@ -1284,7 +1305,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	 *
 	 * @return なし						
 	 */
-	function createCategoryMenu()
+/*	function createCategoryMenu()
 	{
 		for ($j = 0; $j < $this->catagorySelectCount; $j++){
 			// selectメニューの作成
@@ -1309,7 +1330,40 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$this->tmpl->addVars('category', $itemRow);
 			$this->tmpl->parseTemplate('category', 'a');
 		}
+	}*/
+	/**
+	 * 記事カテゴリーメニューを作成
+	 *
+	 * @param int  	$size			メニューの表示数
+	 * @return なし						
+	 */
+	function createCategoryMenu($size)
+	{
+		for ($j = 0; $j < $size; $j++){
+			// selectメニューの作成
+			$this->tmpl->clearTemplate('category_list');
+			for ($i = 0; $i < count($this->categoryListData); $i++){
+				$categoryId = $this->categoryListData[$i]['pc_id'];
+				$selected = '';
+				if ($j < count($this->categoryArray) && $this->categoryArray[$j] == $categoryId){
+					$selected = 'selected';
+				}
+				$menurow = array(
+					'value'		=> $categoryId,			// カテゴリーID
+					'name'		=> $this->categoryListData[$i]['pc_name'],			// カテゴリー名
+					'selected'	=> $selected														// 選択中かどうか
+				);
+				$this->tmpl->addVars('category_list', $menurow);
+				$this->tmpl->parseTemplate('category_list', 'a');
+			}
+			$itemRow = array(		
+					'index'		=> $j			// 項目番号											
+			);
+			$this->tmpl->addVars('category', $itemRow);
+			$this->tmpl->parseTemplate('category', 'a');
+		}
 	}
+	
 	/**
 	 * 取得したカテゴリーをテンプレートに設定する
 	 *
@@ -1318,7 +1372,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	 * @param object $param			未使用
 	 * @return bool					true=処理続行の場合、false=処理終了の場合
 	 */
-	function categoryLoop($index, $fetchedRow, $param)
+/*	function categoryLoop($index, $fetchedRow, $param)
 	{
 		$selected = '';
 		if ($fetchedRow['pc_id'] == $this->search_categoryId){
@@ -1334,7 +1388,7 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		$this->tmpl->addVars('category_list', $row);
 		$this->tmpl->parseTemplate('category_list', 'a');
 		return true;
-	}
+	}*/
 	/**
 	 * アップロード画像初期化
 	 *
