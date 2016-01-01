@@ -96,8 +96,8 @@ function createUploader(){
 	});
 }
 $(function(){
-	// テーブル行をカラー化
-	m3_tableWithCololor('product', false);
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
 	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_description', 200/* 高さ */);
@@ -125,8 +125,7 @@ $(function(){
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="product_detail" />
@@ -134,67 +133,71 @@ $(function(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="sort" value="{SORT}" />
 <input type="hidden" name="current_image" />
-<table width="90%"><tr><td>
-<label>商品情報</label>
-</td><td align="right"><patTemplate:tmpl name="cancel_button" visibility="visible">
-<span {_HELP_PRODUCT_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
-</patTemplate:tmpl></td></tr>
-<tr><td colspan="2">
-<table id="product" class="simple-table" style="width:950px;">
+
+<h3 class="m3config_h"><span {_HELP_PRODUCT_DETAIL}>商品情報</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div>
+
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_PRODUCT_ID}>商品ID</span></td>
-	    <td colspan="3">{ID}</td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_ID}>商品ID</span></th>
+	    <td colspan="3"><div class="form-control-static">{ID}</div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_NAME}>商品名</span></td>
-	    <td><input type="text" name="item_name" value="{NAME}" size="60" maxlength="60" style="width:100%" {NAME_DISABLED} /></td>
-	    <td class="table-headside" width="150"><span {_HELP_PRODUCT_CODE}>商品コード</span></td>
-	    <td><input type="text" name="item_code" value="{CODE}" size="60" maxlength="60" style="width:100%" {CODE_DISABLED} /></td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_NAME}>商品名</span></th>
+	    <td><input type="text" name="item_name" value="{NAME}" maxlength="60" {NAME_DISABLED} /></td>
+	    <th><span {_HELP_PRODUCT_CODE}>商品コード</span></th>
+	    <td><input type="text" name="item_code" value="{CODE}" maxlength="60" {CODE_DISABLED} /></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_VISIBLE}>公開</span></td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_VISIBLE}>公開</span></th>
 	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>
-	    <td class="table-headside"><span {_HELP_PRODUCT_INDEX}>表示順</span></td>
-	    <td><input type="text" name="item_index" value="{INDEX}" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <th><span {_HELP_PRODUCT_INDEX}>表示順</span></th>
+	    <td><div class="col-sm-4 m3config_item"><input type="text" name="item_index" value="{INDEX}" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_STATUS}>商品ステータス</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_new" {NEW} />新着&nbsp;&nbsp;<input type="checkbox" name="item_suggest" {SUGGEST} />おすすめ</td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_STATUS}>商品ステータス</span></th>
+	    <td colspan="3"><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_new" {NEW} />新着</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_suggest" {SUGGEST} />おすすめ</label></div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_PRICE}>販売価格</span></td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_PRICE}>販売価格</span></th>
 	    <td>
-	    <input type="text" name="item_price" value="{PRICE}" size="10" maxlength="10" onkeypress="return m3_numericKey(event,true);" style="width:100px;" />円(税抜)&nbsp;&nbsp;&nbsp;&nbsp;{PRICE_WITH_TAX}円(税込)
+	    <div class="m3config_item col-sm-4" ><input type="text" name="item_price" value="{PRICE}" maxlength="10" onkeypress="return m3_numericKey(event,true);" /></div><div class="m3config_item form-control-static col-sm-3">円(税抜)</div><div class="m3config_item form-control-static col-sm-5" style="margin-right:0;">{PRICE_WITH_TAX}円(税込)</div>
 	    </td>
-	    <td class="table-headside">課税種別</td>
+	    <th>課税種別</th>
 	    <td>
+	<div class="col-sm-6 m3config_item">
     <select name="item_tax_type" {TAX_TYPE_DISABLE}>
         <option value="">-- 未選択 --</option>
         <patTemplate:tmpl name="tax_type_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
+	</div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_STOCK_COUNT}>在庫数</span></td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_STOCK_COUNT}>在庫数</span></th>
 	    <td>
-	    <input type="text" name="item_stock_count" value="{STOCK_COUNT}" size="5" maxlength="5" onkeypress="return m3_numericKey(event,true);" />
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_stock_count" value="{STOCK_COUNT}" maxlength="5" onkeypress="return m3_numericKey(event,true);" /></div>
 	    </td>
-	    <td class="table-headside">販売単位/単位数量</td>
+	    <th>販売単位/単位数量</th>
 	    <td>
+	<div class="col-sm-6 m3config_item">
     <select name="item_unit_type" {UNIT_TYPE_DISABLE}>
         <option value="" {UNIT_TYPE_SELECTED}>-- 未選択 --</option>
         <patTemplate:tmpl name="unit_type_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
-	    <input type="text" name="item_unit_quantity" value="{UNIT_QUANTITY}" size="4" maxlength="4" onkeypress="return m3_numericKey(event,true);" />
+	</div>
+	    <div class="col-sm-6 m3config_item"><input type="text" name="item_unit_quantity" value="{UNIT_QUANTITY}" maxlength="4" onkeypress="return m3_numericKey(event,true);" /></div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside">配送種別</td>
+    <tr>
+	    <th>配送種別</th>
 	    <td>
     <select name="item_deliv_type" {TAX_TYPE_DISABLE}>
         <option value="">-- デフォルト --</option>
@@ -202,82 +205,85 @@ $(function(){
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
-	    </td>
-	    <td class="table-headside">送料基準</td>
+	</td>
+	    <th>送料基準</th>
 	    <td>
-	    送料単価：<input type="text" name="item_deliv_price" value="{DELIV_PRICE}" size="6" maxlength="6" onkeypress="return m3_numericKey(event,true);" style="width:100px;" />&nbsp;&nbsp;
-	    重量：<input type="text" name="item_deliv_weight" value="{DELIV_WEIGHT}" size="8" maxlength="8" onkeypress="return m3_numericKey(event,true);" style="width:100px;" />
+	    <div class="form-control-static col-sm-3 m3config_item">送料単価：</div><div class="col-sm-3 m3config_item"><input type="text" name="item_deliv_price" value="{DELIV_PRICE}" maxlength="6" onkeypress="return m3_numericKey(event,true);" /></div>
+	    <div class="form-control-static col-sm-3 m3config_item">重量：</div><div class="col-sm-3 m3config_item"><input type="text" name="item_deliv_weight" value="{DELIV_WEIGHT}" maxlength="8" onkeypress="return m3_numericKey(event,true);" /></div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_CATEGORY}>商品カテゴリー</span></td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_CATEGORY}>商品カテゴリー</span></th>
 	    <td colspan="3">
     <patTemplate:tmpl name="category">
+	<div class="col-sm-4 m3config_item">
     <select name="item_category{INDEX}">
         <option value="0">-- 未選択 --</option>
         <patTemplate:tmpl name="category_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
+	</div>
     </patTemplate:tmpl>
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_DESC_SHORT}>商品説明(簡易)</span></td>
-	    <td colspan="3"><input type="text" name="item_desc_short" value="{DESC_SHORT}" maxlength="300" style="width:100%" /></td>
+	    <th><span {_HELP_PRODUCT_DESC_SHORT}>商品説明(簡易)</span></th>
+	    <td colspan="3"><input type="text" name="item_desc_short" value="{DESC_SHORT}" maxlength="300" /></td>
 	</tr>
 	<tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_DESC}>商品説明(詳細)</span></td>
-	    <td colspan="3">
+	    <th><span {_HELP_PRODUCT_DESC}>商品説明(詳細)</span></th>
+	    <td class="ckeditor" colspan="3">
 	    <textarea name="item_description">{DESCRIPTION}</textarea>
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_IMAGE_SMALL}>規定画像(小)</span><br />サイズ {IMAGE_S_WIDTH}x{IMAGE_S_HEIGHT}<br /><a id="show_uploadbox_s" href="#"><img src="{UPLOAD_IMAGE}" alt="アップロードボックス表示" title="アップロードボックス表示" /></a></td>
+	    <th><span {_HELP_PRODUCT_IMAGE_SMALL}>規定画像(小)</span><br />サイズ {IMAGE_S_WIDTH}x{IMAGE_S_HEIGHT}<br /><a id="show_uploadbox_s" href="#"><img src="{UPLOAD_IMAGE}" alt="アップロードボックス表示" title="アップロードボックス表示" /></a></td>
 	    <td valign="bottom">
 	    <div><img id="preview_img_small" src="{IMAGE_S}" /></div>
             <div id="file-uploader_s" style="display:none;" ></div><!--<div><input type="button" class="button" onclick="BrowseServer('small');" value="変更" /> {IMAGE_URL_S}</div>-->
-	    </td>
-		<td class="table-headside" rowspan="2"><span {_HELP_PRODUCT_IMAGE_LARGE}>規定画像(大)</span><br />サイズ {IMAGE_L_WIDTH}x{IMAGE_L_HEIGHT}<br /><a id="show_uploadbox_l" href="#"><img src="{UPLOAD_IMAGE}" alt="アップロードボックス表示" title="アップロードボックス表示" /></a></td>
+	    </th>
+		<th rowspan="2"><span {_HELP_PRODUCT_IMAGE_LARGE}>規定画像(大)</span><br />サイズ {IMAGE_L_WIDTH}x{IMAGE_L_HEIGHT}<br /><a id="show_uploadbox_l" href="#"><img src="{UPLOAD_IMAGE}" alt="アップロードボックス表示" title="アップロードボックス表示" /></a></th>
 		<td rowspan="2" valign="bottom">
 	    <div><img id="preview_img_large" src="{IMAGE_L}" /></div>
             <div id="file-uploader_l" style="display:none;"></div><!--<div><input type="button" class="button" onclick="BrowseServer('large');" value="変更" /> {IMAGE_URL_L}</div>-->
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_IMAGE_MIDDLE}>規定画像(標準)</span><br />サイズ {IMAGE_M_WIDTH}x{IMAGE_M_HEIGHT}<br /><a id="show_uploadbox_m" href="#"><img src="{UPLOAD_IMAGE}" alt="アップロードボックス表示" title="アップロードボックス表示" /></a></td>
+	    <th><span {_HELP_PRODUCT_IMAGE_MIDDLE}>規定画像(標準)</span><br />サイズ {IMAGE_M_WIDTH}x{IMAGE_M_HEIGHT}<br /><a id="show_uploadbox_m" href="#"><img src="{UPLOAD_IMAGE}" alt="アップロードボックス表示" title="アップロードボックス表示" /></a></th>
 	    <td valign="bottom">
 	    <div><img id="preview_img_medium" src="{IMAGE_M}" /></div>
             <div id="file-uploader_m" style="display:none;"></div><!--<div><input type="button" class="button" onclick="BrowseServer('medium');" value="変更" /> {IMAGE_URL_M}</div>-->
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_IMAGE_ALL}>規定画像(全)</span><br /><a id="show_uploadbox_all" href="#"><img src="{UPLOAD_IMAGE}" alt="アップロードボックス表示" title="アップロードボックス表示" /></a></td>
+	    <th><span {_HELP_PRODUCT_IMAGE_ALL}>規定画像(全)</span><br /><a id="show_uploadbox_all" href="#"><img src="{UPLOAD_IMAGE}" alt="アップロードボックス表示" title="アップロードボックス表示" /></a></th>
 	    <td colspan="3" valign="bottom">
 		<div id="file-uploader_all" style="display:none;"></div>
 	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_META_KEYWORDS}>検索キーワード</span></td>
-	    <td colspan="3" height="50"><textarea name="item_meta_keyword" style="width:100%;height:100%;">{META_KEYWORD}</textarea></td>
+	    <th><span {_HELP_PRODUCT_META_KEYWORDS}>検索キーワード</span></th>
+	    <td colspan="3" height="50"><textarea name="item_meta_keyword">{META_KEYWORD}</textarea></td>
 	</tr>
 <!--    <tr>
 	    <td class="table-headside">詳細情報URL</td>
 	    <td colspan="3"><input type="text" name="item_url" value="{URL}" maxlength="300" style="width:100%" /></td>
 	</tr>-->
-        <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_ADMIN_NOTE}>管理者用備考</span></td>
-	    <td colspan="3"><input type="text" name="item_admin_note" value="{ADMIN_NOTE}" maxlength="300" style="width:100%" /></td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_ADMIN_NOTE}>管理者用備考</span></th>
+	    <td colspan="3"><input type="text" name="item_admin_note" value="{ADMIN_NOTE}" maxlength="300" /></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_PRODUCT_UPDATE_USER}>更新者</span></td>
-	    <td>{UPDATE_USER}</td>
-	    <td class="table-headside"><span {_HELP_PRODUCT_UPDATE_DATE}>更新日時</span></td>
-	    <td>{UPDATE_DT}</td>
+    <tr>
+	    <th><span {_HELP_PRODUCT_UPDATE_USER}>更新者</span></th>
+	    <td><div class="form-control-static">{UPDATE_USER}</div></td>
+	    <th><span {_HELP_PRODUCT_UPDATE_DATE}>更新日時</span></th>
+	    <td><div class="form-control-static">{UPDATE_DT}</div></td>
 	</tr>
-	<tr>
-	<td colspan="4" align="right">
-	{MESSAGE}
+    </tbody>
+</table>
+
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="delete_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 </patTemplate:tmpl>
@@ -290,11 +296,8 @@ $(function(){
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	</td>
-	</tr>
-    </tbody>
-</table>
-</td></tr></table>
+</div>
+
 </form>
 </div>
 </patTemplate:tmpl>
