@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_mainOrderWidgetContainer.php 5440 2012-12-08 09:37:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_ec_mainBaseWidgetContainer.php');
@@ -109,8 +109,10 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$this->search_status = $request->trimValueOf('status');		// ステータス
-		$keyword = $request->trimValueOf('keyword');			// 検索キーワード
+//		$this->search_status = $request->trimValueOf('status');		// ステータス
+//		$keyword = $request->trimValueOf('keyword');			// 検索キーワード
+		$search_keyword = $request->trimValueOf('search_keyword');			// 検索キーワード
+		$this->search_status = $request->trimValueOf('search_status');		// ステータス
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'search'){		// 検索のとき
@@ -184,6 +186,12 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		$this->tmpl->addVar("search_range", "start_no", $startNo);
 		$this->tmpl->addVar("search_range", "end_no", $endNo);
 		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+		
+		// ##### 検索エリア作成 #####
+		// 検索ボタン作成
+		$eventAttr = 'onclick="showSearchArea();"';
+		$searchButtonTag = $this->gDesign->createSearchButton(''/*同画面*/, '受注を検索'/*ボタンタイトル*/, ''/*タグID*/, $eventAttr/*クリックイベント時処理*/);
+		$this->tmpl->addVar("_widget", "search_area_button", $searchButtonTag);
 		
 		if ($this->search_status == 0){		// 終了、キャンセル以外
 			$this->tmpl->addVar("_widget", "status_active_selected", 'selected');

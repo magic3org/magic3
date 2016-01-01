@@ -70,8 +70,8 @@ function search(){
 	return true;
 }
 function clearSearchParam(){
-	document.main.search_category0.value = '0';
 	document.main.search_keyword.value = '';
+	document.main.search_category0.value = '0';
 	return true;
 }
 function showSearchArea()
@@ -88,7 +88,7 @@ $(function(){
 	m3SetConfigTable('productlist');
 	
 	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('productlist', 20, 0);	// データは20行表示
+//	m3_tableWithScrollbar('productlist', 20, 0);	// データは20行表示
 });
 //]]>
 </script>
@@ -102,37 +102,10 @@ $(function(){
 <input type="hidden" name="sort" value="{SORT}" />
 
 <h3 class="m3config_h"><span {_HELP_PRODUCT_LIST}>商品一覧</span> {SEARCH_AREA_BUTTON}</h3>
-<div class="m3config_h_side_buttons pull-right"><div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_PRODUCT_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
 
-<!--
-<div id="search_comment" class="m3search" style="display:none;">
-<table class="simple-table">
-<caption>検索</caption>
-    <tbody>
-        <tr>
-	    <td class="table-headside" width="100">キーワード</td>
-	    <td colspan="3"><input type="text" name="keyword" value="{SEARCH_WORD}" size="30" maxlength="60" /></td>
-	</tr>
-        <tr class="even">
-	    <td class="table-headside" width="100">カテゴリー</td>
-	    <td colspan="3">
-	    <select name="category">
-	        <option value="">-- 未選択 --</option>
-	        <patTemplate:tmpl name="_category_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select>
-	    </td>
-	</tr>
-	<tr>
-	    <td colspan="4" align="right"><input type="button" class="button" onclick="clearSearchParam();" value="クリア" /><input type="button" class="button" onclick="search();" value="検索" /></td>
-	</tr>
-    </tbody>
-</table>
-</div>
--->
 <div id="search_product" class="m3search panel panel-info" style="display:none;width:600px;">
 <div class="panel-heading">
     <h3 class="panel-title"><span {_HELP_PRODUCT_SEARCH}>商品検索</span></h3>
