@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2015 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -47,80 +47,85 @@ function sendPassword(){
 	document.main.submit();
 	return true;
 }
-<patTemplate:tmpl name="script_member_info_option" visibility="hidden">
+
 $(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+	
+<patTemplate:tmpl name="script_member_info_option" visibility="hidden">
 	Calendar.setup({
 		inputField  : "calenderinput",         // ID of the input field
 		ifFormat    : "%Y/%m/%d",    // the date format
 		button      : "calenderbutton"       // ID of the button
 	});
-});
 </patTemplate:tmpl>
+});
+
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="member_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="member_type" value="{MEMBER_TYPE}" />
-<table width="90%">
-<tr><td>
-<label><span {_HELP_MEMBER_DETAIL}>{TITLE}</span></label>
-</td>
-<td align="right"><patTemplate:tmpl name="cancel_button" visibility="visible"><input type="button" class="button" onclick="cancelItem();" value="戻る" /></patTemplate:tmpl>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table" style="margin:0 auto;width:900px;">
+
+<h3 class="m3config_h"><span {_HELP_MEMBER_DETAIL}>{TITLE}</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div class="btn-group">
+<patTemplate:tmpl name="cancel_button" visibility="visible"><input type="button" class="button" onclick="cancelItem();" value="戻る" /></patTemplate:tmpl>
+</div></div>
+
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_MEMBER_NO}>会員No</span></td>
-	    <td width="300"><input type="text" name="member_no" value="{MEMBER_NO}" size="30" maxlength="30" style="width:100%;" {MEMBER_NO_DISABLED} /></td>
-	    <td class="table-headside" width="150"><span {_HELP_MEMBER_EMAIL}>Eメール</span></td>
-	    <td><input type="text" name="email" value="{EMAIL}" size="30" maxlength="50" style="width:100%;" {EMAIL_DISABLED} /></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_NO}>会員No</span></th>
+	    <td width="300"><input type="text" name="member_no" value="{MEMBER_NO}" maxlength="30" {MEMBER_NO_DISABLED} /></td>
+	    <th><span {_HELP_MEMBER_EMAIL}>Eメール</span></th>
+	    <td><input type="text" name="email" value="{EMAIL}" maxlength="50" {EMAIL_DISABLED} /></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_MEMBER_NAME}>会員名(姓・名)</span></td>
-	    <td><input type="text" name="family_name" value="{FAMILY_NAME}" size="10" maxlength="20" style="width:100px;" {FAMILY_NAME_DISABLED} />&nbsp;<input type="text" name="first_name" value="{FIRST_NAME}" size="10" maxlength="20" style="width:100px;" {FIRST_NAME_DISABLED} /></td>
-	    <td class="table-headside"><span {_HELP_MEMBER_NAME_KANA}>会員名カナ(姓・名)</span></td>
-	    <td><input type="text" name="family_name_kana" value="{FAMILY_NAME_KANA}" size="10" maxlength="20" style="width:100px;" {FAMILY_NAME_KANA_DISABLED} />&nbsp;<input type="text" name="first_name_kana" value="{FIRST_NAME_KANA}" size="10" maxlength="20" style="width:100px;" {FIRST_NAME_KANA_DISABLED} /></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_NAME}>会員名(姓・名)</span></th>
+	    <td><div class="col-sm-6 m3config_item"><input type="text" name="family_name" value="{FAMILY_NAME}" maxlength="20" {FAMILY_NAME_DISABLED} /></div><div class="col-sm-6 m3config_item"><input type="text" name="first_name" value="{FIRST_NAME}" maxlength="20" {FIRST_NAME_DISABLED} /></div></td>
+	    <th><span {_HELP_MEMBER_NAME_KANA}>会員名カナ(姓・名)</span></th>
+	    <td><div class="col-sm-6 m3config_item"><input type="text" name="family_name_kana" value="{FAMILY_NAME_KANA}" maxlength="20" {FAMILY_NAME_KANA_DISABLED} /></div><div class="col-sm-6 m3config_item"><input type="text" name="first_name_kana" value="{FIRST_NAME_KANA}" maxlength="20" {FIRST_NAME_KANA_DISABLED} /></div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_MEMBER_ZIP}>郵便番号</span></td>
-	    <td><input type="text" name="zipcode" value="{ZIPCODE}" size="10" maxlength="10" {ZIPCODE_DISABLED} /></td>
-	    <td class="table-headside"><span {_HELP_MEMBER_STATE}>都道府県</span></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_ZIP}>郵便番号</span></th>
+	    <td><div class="col-sm-6 m3config_item"><input type="text" name="zipcode" value="{ZIPCODE}" maxlength="10" {ZIPCODE_DISABLED} /></div></td>
+	    <th><span {_HELP_MEMBER_STATE}>都道府県</span></th>
 	    <td>
+<div class="col-sm-6 m3config_item">
 <select name="state" {STATE_DISABLED}>
 <option value="0">未設定</option>
 <patTemplate:tmpl name="state_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
 </select>
+</div>
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_MEMBER_ADD1}>住所1</span></td>
-	    <td colspan="3"><input type="text" name="address" value="{ADDRESS}" maxlength="100" style="width:100%;" {ADDRESS_DISABLED} /></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_ADD1}>住所1</span></th>
+	    <td colspan="3"><input type="text" name="address" value="{ADDRESS}" maxlength="100" {ADDRESS_DISABLED} /></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_MEMBER_ADD2}>住所2</span></td>
-	    <td colspan="3"><input type="text" name="address2" value="{ADDRESS2}" maxlength="100" style="width:100%;" {ADDRESS2_DISABLED} /></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_ADD2}>住所2</span></th>
+	    <td colspan="3"><input type="text" name="address2" value="{ADDRESS2}" maxlength="100" {ADDRESS2_DISABLED} /></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_MEMBER_PHONE}>電話番号</span></td>
-	    <td><input type="text" name="phone" value="{PHONE}" size="30" maxlength="30" style="width:100%;" {PHONE_DISABLED} /></td>
-	    <td class="table-headside"><span {_HELP_MEMBER_FAX}>FAX</span></td>
-	    <td><input type="text" name="fax" value="{FAX}" size="30" maxlength="30" style="width:100%;" {FAX_DISABLED} /></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_PHONE}>電話番号</span></th>
+	    <td><input type="text" name="phone" value="{PHONE}" maxlength="30" {PHONE_DISABLED} /></td>
+	    <th><span {_HELP_MEMBER_FAX}>FAX</span></th>
+	    <td><input type="text" name="fax" value="{FAX}" maxlength="30" {FAX_DISABLED} /></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_MEMBER_MOBILE}>携帯電話</span></td>
-	    <td colspan="3"><input type="text" name="mobile" value="{MOBILE}" size="30" maxlength="30" style="width:100%;" {MOBILE_DISABLED} /></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_MOBILE}>携帯電話</span></th>
+	    <td colspan="3"><input type="text" name="mobile" value="{MOBILE}" maxlength="30" {MOBILE_DISABLED} /></td>
 	</tr>
 <patTemplate:tmpl name="show_member_info_option" visibility="hidden">
     <tr>
-	    <td class="table-headside"><span {_HELP_MEMBER_GENDER}>性別</span></td>
+	    <th><span {_HELP_MEMBER_GENDER}>性別</span></th>
 	    <td>
 <select name="gender" {GENDER_DISABLED}>
 <option value="0" {GENDER_NONE}>未設定</option>
@@ -128,29 +133,31 @@ $(function(){
 <option value="2" {GENDER_FEMALE}>女</option>
 </select>
 	    </td>
-	    <td class="table-headside"><span {_HELP_MEMBER_BIRTH}>生年月日</span></td>
-	    <td><input type="text" id="calenderinput" name="birthday" value="{BIRTHDAY}" size="15" maxlength="15" {BIRTHDAY_DISABLED} /><button id="calenderbutton" {CALENDER_DISABLED}>カレンダー</button>
+	    <th><span {_HELP_MEMBER_BIRTH}>生年月日</span></th>
+	    <td><input type="text" id="calenderinput" name="birthday" value="{BIRTHDAY}" maxlength="15" {BIRTHDAY_DISABLED} /><button id="calenderbutton" {CALENDER_DISABLED}>カレンダー</button>
 	    </td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_MEMBER_OTHERS}>その他</span></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_OTHERS}>その他</span></th>
 	    <td colspan="3">現在やっているスポーツ<input type="text" name="item_sports" value="{SPORTS}" maxlength="100" readonly /></td>
 	</tr>
 </patTemplate:tmpl>
-        <tr>
-	    <td class="table-headside">更新者</td>
-	    <td>{UPDATE_USER}</td>
-	    <td class="table-headside">更新日時</td>
-	    <td>{UPDATE_DT}</td>
+    <tr>
+	    <th>更新者</th>
+	    <td><div class="form-control-static">{UPDATE_USER}</div></td>
+	    <th>更新日時</th>
+	    <td><div class="form-control-static">{UPDATE_DT}</div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_MEMBER_PWD}>パスワード</span></td>
+    <tr>
+	    <th><span {_HELP_MEMBER_PWD}>パスワード</span></th>
 	    <td colspan="3">
 	    <input type="button" class="button" onclick="sendPassword();" value="再作成して、メール送信" {SEND_PWD} />&nbsp;&nbsp;
 	    {SEND_MESSAGE} {PWD_MESSAGE}</td>
 	</tr>
-	<tr>
-	<td colspan="4" align="right">
+    </tbody>
+</table>
+
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="delete_button" visibility="hidden">
 		<!--<input type="checkbox" name="withloginuser" checked />ログインアカウントも削除&nbsp;--><input type="button" class="button" onclick="delItem();" value="削除" />
 </patTemplate:tmpl>
@@ -160,12 +167,8 @@ $(function(){
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-	</td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
+
 </form>
 </div>
 </patTemplate:tmpl>
