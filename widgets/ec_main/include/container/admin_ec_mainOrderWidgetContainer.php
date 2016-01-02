@@ -567,13 +567,9 @@ class admin_ec_mainOrderWidgetContainer extends admin_ec_mainBaseWidgetContainer
 		// ボタンの設定
 		if (empty($this->serialNo)){		// 新規追加項目を選択しているとき
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
-			$this->tmpl->setAttribute('add_button1', 'visibility', 'visible');// 「新規追加」ボタン
-			$this->tmpl->setAttribute('add_button2', 'visibility', 'visible');// 「新規追加」ボタン
 		} else {
 			// データ更新、削除ボタン表示
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
-			$this->tmpl->setAttribute('update_button1', 'visibility', 'visible');
-			$this->tmpl->setAttribute('update_button2', 'visibility', 'visible');
 		}
 		// 埋め込みパラメータの設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
