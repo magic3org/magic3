@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: ec_mainProductDb.php 5560 2013-01-16 22:49:43Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -984,7 +984,7 @@ class ec_mainProductDb extends BaseDb
 	 * 商品を検索(管理用)
 	 *
 	 * @param array		$keywords			検索キーワード
-	 * @param string	$categoryId			商品カテゴリー(カンマ区切りで複数指定可)
+	 * @param string,array $categoryId		商品カテゴリー
 	 * @param string	$lang				言語
 	 * @param int		$limit				取得する項目数
 	 * @param int		$offset				取得する先頭位置(0～)
@@ -1006,7 +1006,10 @@ class ec_mainProductDb extends BaseDb
 //		$queryStr .=    'AND pt_visible = true ';		// 表示可能な商品
 		
 		// 商品カテゴリー
-		if (!empty($categoryId)) $queryStr .=    'AND pw_category_id in (' . $categoryId . ') ';
+		if (!empty($categoryId)){
+			if (!is_array($categoryId)) $categoryId = array($categoryId);
+			$queryStr .=    'AND pw_category_id in (' . implode(",", $categoryId) . ') ';
+		}
 
 		// 商品名、商品コード、説明を検索
 		if (!empty($keywords)){
@@ -1072,7 +1075,7 @@ class ec_mainProductDb extends BaseDb
 	 * 商品検索数を取得(管理用)
 	 *
 	 * @param array		$keywords			検索キーワード
-	 * @param string	$categoryId			商品カテゴリー(カンマ区切りで複数指定可)
+	 * @param string,array $categoryId		商品カテゴリー
 	 * @param string	$lang				言語
 	 * @return int							商品総数
 	 */
@@ -1089,7 +1092,10 @@ class ec_mainProductDb extends BaseDb
 //		$queryStr .=    'AND pt_visible = true ';		// 表示可能な商品
 
 		// 商品カテゴリー
-		if (!empty($categoryId)) $queryStr .=    'AND pw_category_id in (' . $categoryId . ') ';
+		if (!empty($categoryId)){
+			if (!is_array($categoryId)) $categoryId = array($categoryId);
+			$queryStr .=    'AND pw_category_id in (' . implode(",", $categoryId) . ') ';
+		}
 		
 		// 商品名、商品コード、説明を検索
 		if (!empty($keywords)){
