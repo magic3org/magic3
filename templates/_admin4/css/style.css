@@ -653,8 +653,12 @@ span[rel="m3help"] { cursor: default; }
 /* fix item width */
 .m3config_item {
 	padding-left: 0;
-/*	padding-right: 0;*/
-	padding-right: 5px;
+	padding-right: 0;
+/*	padding-right: 5px;*/
+}
+.m3config_item.form-control-static {
+	padding-left: 3px;
+	padding-right: 3px;
 }
 /* インライン項目 */
 .m3config_inline_item {
