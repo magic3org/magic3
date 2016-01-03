@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -62,8 +62,8 @@ class admin_test_ckeditorWidgetContainer extends BaseAdminWidgetContainer
 //		$this->tmpl->addVar("_widget", "root_url", $gEnvManager->getRootUrl());
 //		$this->tmpl->addVar("_widget", "widget_sc_url", $gEnvManager->getCurrentWidgetScriptsUrl());
 
-$this->gPage->addCkeditorCssFile($this->gEnv->getScriptsUrl() . '/' . 'bootstrap-3.2.0/css/bootstrap.min.css');
-echo 'CKEditor2 added: ' . $this->gEnv->getScriptsUrl() . '/' . 'bootstrap-3.2.0/css/bootstrap.min.css';
+$this->gPage->addCkeditorCssFile($this->gEnv->getScriptsUrl() . '/' . 'bootstrap-3.3.6/css/bootstrap.min.css');
+echo 'CKEditor2 added: ' . $this->gEnv->getScriptsUrl() . '/' . 'bootstrap-3.3.6/css/bootstrap.min.css';
 	}
 }
 ?>
