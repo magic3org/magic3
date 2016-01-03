@@ -17,7 +17,7 @@ function default_login_login(){
 	document.default_login.act.value = 'loginbox_login';
 	document.default_login.password.value = hex_md5(document.default_login.login_password.value);
 //	document.default_login.login_password.disabled = true;
-	document.default_login.login_password.value = document.default_login.login_password.replace(/./g, '*');
+	document.default_login.login_password.value = document.default_login.login_password.value.replace(/./g, '*');
 	document.default_login.submit();
 	return true;
 }

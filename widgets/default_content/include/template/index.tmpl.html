@@ -29,7 +29,7 @@ function {FUNC_NAME}(){
 	document.{FORM_NAME}.act.value = 'checkpassword';
 	document.{FORM_NAME}.password.value = hex_md5(document.{FORM_NAME}.access_password.value);
 //	document.{FORM_NAME}.access_password.disabled = true;
-	document.{FORM_NAME}.access_password.value = document.{FORM_NAME}.access_password.replace(/./g, '*');
+	document.{FORM_NAME}.access_password.value = document.{FORM_NAME}.access_password.value.replace(/./g, '*');
 	document.{FORM_NAME}.submit();
 	return true;
 }
