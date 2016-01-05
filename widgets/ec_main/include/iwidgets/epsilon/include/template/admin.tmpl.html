@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin.tmpl.html 5437 2012-12-07 13:14:59Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -23,19 +23,30 @@ function testConnect(){
 //]]>
 </script>
 <input type="hidden" name="iw_act" />
-<fieldset>
-<legend>サーバ接続情報</legend>
-<label>接続先</label><br />
-<label><input type="radio" name="iw_connect_mode" value="test" {TEST_CHECKED} />テストサーバ({TEST_URL})</label>
-<input type="button" class="button" onclick="testConnect();" value="テスト接続" {TEST_DISABLED} />{TEST_RESULT}<br />
-<label><input type="radio" name="iw_connect_mode" value="production" {PRODUCTION_CHECKED} />本番サーバ</label><input type="text" name="iw_url" value="{URL}" size="200" maxlength="200" style="width:70%;" /><br />
-<label>契約コード<input type="text" name="iw_contract_code" value="{CONTRACT_CODE}" size="10" maxlength="10" /></label>
-</fieldset>
-<fieldset>
-<legend>イプシロン設定情報</legend>
-<label>オーダー情報発信元ホスト情報：</label> {HOST_IP}<br />
-<label>決済完了後のリダイレクト先：</label> {COMPLETE_URL}<br />
-<label>[戻る]ボタンの戻り先URL：</label> {GOBACK_URL}<br />
-<label>エラー発生時の戻り先URL：</label> {ERROR_URL}<br />
-</fieldset>
+
+<h4>サーバ接続情報</h4>
+<div class="form-group clearfix">接続先：
+<div class="radio"><label><input type="radio" name="iw_connect_mode" value="test" {TEST_CHECKED} />テストサーバ({TEST_URL})</label></div>
+<input type="button" class="button" onclick="testConnect();" value="テスト接続" {TEST_DISABLED} />{TEST_RESULT}
+<div class="radio"><label><input type="radio" name="iw_connect_mode" value="production" {PRODUCTION_CHECKED} />本番サーバ</label></div><input type="text" name="iw_url" value="{URL}" maxlength="200" />
+</div>
+<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-2" style="width:7em;">契約コード：</div>
+<div class="col-sm-3 m3config_item"><input type="text" name="iw_contract_code" value="{CONTRACT_CODE}" maxlength="10" /></div>
+</div>
+<br />
+
+<h4>イプシロン設定情報</h4>
+<div class="form-group clearfix">
+オーダー情報発信元ホスト情報：{HOST_IP}
+</div>
+<div class="form-group clearfix">
+決済完了後のリダイレクト先：<div class="form-control-static m3config_item">{COMPLETE_URL}</div>
+</div>
+<div class="form-group clearfix">
+[戻る]ボタンの戻り先URL：<div class="form-control-static m3config_item">{GOBACK_URL}</div>
+</div>
+<div class="form-group">
+エラー発生時の戻り先URL：<div class="form-control-static m3config_item">{ERROR_URL}</div>
+</div>
+
 </patTemplate:tmpl>
