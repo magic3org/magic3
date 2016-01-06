@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -112,8 +112,10 @@ $(function(){
 	    <th><span {_HELP_PAYMETHOD_CALC_DETAIL}>支払方法詳細</span></th>
 	    <td colspan="3">{IWIDGET}</td>
 	</tr>
-    <tr>
-	    <td colspan="4" align="right">
+    </tbody>
+</table>
+
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="add_button" visibility="hidden">
 	    <input type="button" class="button" onclick="addItem();" value="新規登録" />
 </patTemplate:tmpl>
@@ -121,11 +123,7 @@ $(function(){
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-
+</div>
 
 </form>
 </div>
