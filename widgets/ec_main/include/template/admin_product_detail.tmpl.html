@@ -147,7 +147,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_PRODUCT_NAME}>商品名</span></th>
-	    <td><input type="text" name="item_name" value="{NAME}" maxlength="60" {NAME_DISABLED} /></td>
+	    <td style="width:300px;"><input type="text" name="item_name" value="{NAME}" maxlength="60" {NAME_DISABLED} /></td>
 	    <th><span {_HELP_PRODUCT_CODE}>商品コード</span></th>
 	    <td><input type="text" name="item_code" value="{CODE}" maxlength="60" {CODE_DISABLED} /></td>
 	</tr>
@@ -205,7 +205,7 @@ $(function(){
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
-	</td>
+	    </td>
 	    <th>送料基準</th>
 	    <td>
 	    <div class="form-control-static col-sm-3 m3config_item">送料単価：</div><div class="col-sm-3 m3config_item"><input type="text" name="item_deliv_price" value="{DELIV_PRICE}" maxlength="6" onkeypress="return m3_numericKey(event,true);" /></div>
@@ -267,7 +267,7 @@ $(function(){
 	    <td colspan="3" height="50"><textarea name="item_meta_keyword">{META_KEYWORD}</textarea></td>
 	</tr>
 <!--    <tr>
-	    <td class="table-headside">詳細情報URL</td>
+	    <th>詳細情報URL</th>
 	    <td colspan="3"><input type="text" name="item_url" value="{URL}" maxlength="300" style="width:100%" /></td>
 	</tr>-->
     <tr>

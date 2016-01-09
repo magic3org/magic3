@@ -103,7 +103,6 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		if (empty($pageNo)) $pageNo = 1;
 		// DBの保存設定値を取得
 		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$keyword = $request->trimValueOf('keyword');			// 検索キーワード
 		
 		$act = $request->trimValueOf('act');
 		if ($act == 'delete'){		// 項目削除の場合
@@ -147,12 +146,9 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		} else if ($act == 'search'){		// 検索のとき
 			$pageNo = 1;		// ページ番号初期化
 		}
-						
-		// ###### 検索条件を作成 ######
-		// キーワード分割
-		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($keyword);
 				
 		// 総数を取得
+		$parsedKeywords = array();
 		$totalCount = $this->db->searchProductCount($parsedKeywords, $defaultLangId);
 		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
 
@@ -162,13 +158,14 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 
 		// 商品リストを表示
 		$this->db->searchProduct($parsedKeywords, $defaultLangId, $maxListCount, ($pageNo -1) * $maxListCount, array($this, 'productListLoop'));
-
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
+		
 		// ページング用リンク作成
 		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			for ($i = 1; $i <= $pageCount; $i++){
 				$linkUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . 
-				'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() . '&task=photoproduct&keyword=' . urlencode($keyword) . '&&page=' . $i;
+				'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() . '&task=photoproduct&page=' . $i;
 				if ($i == $pageNo){
 					$link = '&nbsp;' . $i;
 				} else {
@@ -186,9 +183,6 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		$this->tmpl->addVar("search_range", "start_no", $startNo);
 		$this->tmpl->addVar("search_range", "end_no", $endNo);
 		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
-		
-		// パラメータ再設定
-		$this->tmpl->addVar("_widget", "search_word", $this->convertToDispString($keyword));
 			
 		// その他
 		$this->tmpl->addVar("_widget", "admin_url", $this->getUrl($this->gEnv->getDefaultAdminUrl()));
@@ -253,7 +247,8 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		if (empty($delivWeight)) $delivWeight = 0;
 		$description = $request->valueOf('item_description');			// 説明
 		$description_short = $request->trimValueOf('item_desc_short');		// 簡易説明
-		$keyword = $request->trimValueOf('item_keyword');					// 検索キーワード
+//		$keyword = $request->trimValueOf('item_keyword');					// 検索キーワード
+		$metaKeyword = $request->trimValueOf('item_meta_keyword');	// METAタグ用キーワード
 		$url = $request->trimValueOf('item_url');							// 詳細情報URL
 		$this->taxType = $request->trimValueOf('item_tax_type');					// 税種別
 		$adminNote = $request->trimValueOf('item_admin_note');		// 管理者用備考
@@ -307,7 +302,8 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 				$otherParams['hp_unit_quantity'] = $unitQuantity;		// 数量
 				$otherParams['hp_description'] = $description;		// 説明
 				$otherParams['hp_description_short'] = $description_short;	// 簡易説明
-				$otherParams['hp_search_keyword'] = $keyword;		// 検索キーワード
+//				$otherParams['hp_search_keyword'] = $keyword;		// 検索キーワード
+				$otherParams['hp_meta_keywords'] = $metaKeyword;	// METAタグ用キーワード
 				$otherParams['hp_site_url'] = $url;			// 詳細情報URL
 				$otherParams['hp_tax_type_id'] = $this->taxType;	// 税種別
 				$otherParams['hp_admin_note'] = $adminNote;		// 管理者用備考
@@ -367,7 +363,8 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 				$otherParams['hp_unit_quantity'] = $unitQuantity;		// 数量
 				$otherParams['hp_description'] = $description;		// 説明
 				$otherParams['hp_description_short'] = $description_short;	// 簡易説明
-				$otherParams['hp_search_keyword'] = $keyword;		// 検索キーワード
+//				$otherParams['hp_search_keyword'] = $keyword;		// 検索キーワード
+				$otherParams['hp_meta_keywords'] = $metaKeyword;	// METAタグ用キーワード
 				$otherParams['hp_site_url'] = $url;			// 詳細情報URL
 				$otherParams['hp_tax_type_id'] = $this->taxType;	// 税種別
 				$otherParams['hp_admin_note'] = $adminNote;		// 管理者用備考
@@ -460,7 +457,8 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 				$delivWeight = 0;		// 配送基準重量
 				$description = '';			// 説明
 				$description_short = '';		// 簡易説明
-				$keyword = '';					// 検索キーワード
+//				$keyword = '';					// 検索キーワード
+				$metaKeyword = '';	// METAタグ用キーワード
 				$url = '';							// 詳細情報URL
 				$this->taxType	= self::DEFAULT_TAX_TYPE;		// 税種別
 				$adminNote = '';		// 管理者用備考
@@ -487,7 +485,8 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 					$delivWeight = $row['hp_weight'];		// 配送基準重量
 					$description = $row['hp_description'];			// 説明
 					$description_short = $row['hp_description_short'];		// 簡易説明
-					$keyword = $row['hp_search_keyword'];					// 検索キーワード
+//					$keyword = $row['hp_search_keyword'];					// 検索キーワード
+					$metaKeyword = $row['hp_meta_keywords'];	// METAタグ用キーワード
 					$url = $row['hp_site_url'];							// 詳細情報URL
 					$this->taxType = $row['hp_tax_type_id'];					// 税種別
 					$adminNote = $row['hp_admin_note'];		// 管理者用備考
@@ -526,7 +525,8 @@ class admin_ec_mainPhotoproductWidgetContainer extends admin_ec_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "deliv_weight", $delivWeight);		// 配送基準重量
 		$this->tmpl->addVar("_widget", "description", $description);		// 説明
 		$this->tmpl->addVar("_widget", "desc_short", $description_short);		// 簡易説明		
-		$this->tmpl->addVar("_widget", "keyword", $keyword);		// 検索キーワード
+//		$this->tmpl->addVar("_widget", "keyword", $keyword);		// 検索キーワード
+		$this->tmpl->addVar("_widget", "meta_keyword", $metaKeyword);	// METAタグ用キーワード
 		$this->tmpl->addVar("_widget", "url", $url);				// 詳細情報URL
 		$this->tmpl->addVar("_widget", "admin_note", $adminNote);			// 管理者用備考
 		$this->tmpl->addVar("_widget", "price", $price);		// 価格
