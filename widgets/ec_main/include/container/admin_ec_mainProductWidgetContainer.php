@@ -45,7 +45,8 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 	const DEFAULT_TAX_TYPE = 'sales';			// デフォルト税種別
 	const PRICE_OBJ_ID = "eclib";		// 価格計算オブジェクトID
 	const DEFAULT_CATEGORY_COUNT = 5;				// 商品カテゴリーの選択可能数
-	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT	= 20;			// 最大リスト表示数
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const DEFAULT_UNIT_TYPE_ID = 'ko';		// 販売単位(個)
 	const UPLOAD_ICON_FILE = '/images/system/upload_box32.png';		// アップロードボックスアイコン
 	const SORT_UP_ICON_FILE = '/images/system/arrow_up10.png';		// ソート降順アイコン
@@ -232,14 +233,6 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 		// ###### 検索条件を作成 ######
 		// キーワード分割
 		$parsedKeywords = $this->gInstance->getTextConvManager()->parseSearchKeyword($search_keyword);
-				
-		// 総数を取得
-		$totalCount = $this->db->searchProductCount($parsedKeywords, $this->categoryArray, $defaultLangId);
-		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
-
-		// 表示するページ番号の修正
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
 
 		// ソート順
 		list($this->sortKey, $this->sortDirection) = explode('-', $sort);
@@ -248,13 +241,32 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			$this->sortDirection = '1';	// 昇順
 		}
 		
+		// 総数を取得
+		$totalCount = $this->db->searchProductCount($parsedKeywords, $this->categoryArray, $defaultLangId);
+//		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
+
+/*		// 表示するページ番号の修正
+		if ($pageNo < 1) $pageNo = 1;
+		if ($pageNo > $pageCount) $pageNo = $pageCount;
+*/
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		
+		// ページングリンク作成
+		$sort = '';		// ソート値
+		if (!empty($this->sortKey)) $sort = '&sort=' . $this->sortKey . '-' . $this->sortDirection;
+		$category = '';
+		if (count($this->categoryArray) > 0) $category = implode(',', $this->categoryArray);
+		$currentBaseUrl = $this->_baseUrl . '&task=product&keyword=' . urlencode($search_keyword) . '&category=' . $category . $sort;
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $currentBaseUrl/*リンク作成用*/);
+		
 		// 商品リストを表示
 		$this->db->searchProduct($parsedKeywords, $this->categoryArray, $defaultLangId, $maxListCount, ($pageNo -1) * $maxListCount,
 									$this->sortKey, $this->sortDirection, array($this, 'productListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 項目がないときは、一覧を表示しない
 
 		// ページング用リンク作成
-		$pageLink = '';
+/*		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			$sort = '';		// ソート値
 			if (!empty($this->sortKey)) $sort = '&sort=' . $this->sortKey . '-' . $this->sortDirection;
@@ -263,8 +275,6 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 			if (count($this->categoryArray) > 0) $category = implode(',', $this->categoryArray);
 			
 			for ($i = 1; $i <= $pageCount; $i++){
-				//$linkUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET . 
-				//				'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId() . 
 				$linkUrl = $this->_baseUrl . '&task=product&keyword=' . urlencode($search_keyword) . '&category=' . $category . '&page=' . $i . $sort;
 				if ($i == $pageNo){
 					$link = '&nbsp;' . $i;
@@ -273,17 +283,16 @@ class admin_ec_mainProductWidgetContainer extends admin_ec_mainBaseWidgetContain
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
 		// 検出順を作成
-		$startNo = ($pageNo -1) * $maxListCount +1;
-		$endNo = $pageNo * $maxListCount > $totalCount ? $totalCount : $pageNo * $maxListCount;
-		$this->tmpl->addVar("show_productlist", "page_link", $pageLink);
+//		$startNo = ($pageNo -1) * $maxListCount +1;
+//		$endNo = $pageNo * $maxListCount > $totalCount ? $totalCount : $pageNo * $maxListCount;
+//		$this->tmpl->addVar("_widget", "total_count", $totalCount);
+//		$this->tmpl->addVar("search_range", "start_no", $startNo);
+//		$this->tmpl->addVar("search_range", "end_no", $endNo);
+//		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $totalCount);
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
-		
+				
 		// ソート用データ設定
 		if (empty($this->sortDirection)){
 			$iconUrl = $this->getUrl($this->gEnv->getRootUrl() . self::SORT_UP_ICON_FILE);	// ソート降順アイコン
