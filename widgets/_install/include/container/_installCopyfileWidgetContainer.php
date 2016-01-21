@@ -205,7 +205,7 @@ class _installCopyfileWidgetContainer extends _installBaseWidgetContainer
 			$rootDir = '';
 			$backupDirName = '_' . basename($this->gEnv->getSystemRootPath());
 			$backupDir = dirname($this->gEnv->getSystemRootPath()) . '/' . $backupDirName;
-			if (file_exists($backupDir)) $rootDir = $backupDirName;		// バックアップディレクトリが存在している場合は値を設定
+			if (@file_exists($backupDir)) $rootDir = $backupDirName;		// バックアップディレクトリが存在している場合は値を設定。2016/1/21 PHPの設定open_basedirディレクトリアクセス制限の場合のエラーメッセージを抑止
 		}
 		
 		// 画面のヘッダ、タイトルを設定
