@@ -1,0 +1,8 @@
+#productcarousel {
+	width:520px;
+	height:280px;
+	background:#000;
+	overflow:scroll;
+	margin-left:auto;
+	margin-right:auto;
+}
