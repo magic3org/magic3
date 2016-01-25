@@ -28,7 +28,7 @@ class ec_cartWidgetContainer extends BaseWidgetContainer
 	protected $productImageWidth;		// 商品画像幅
 	protected $productImageHeight;		// 商品画像高さ
 	const PRICE_OBJ_ID = "eclib";		// 価格計算オブジェクトID
-	const DEFAULT_CART_WIDGET = 'photo_shop';		// カート内容表示用呼び出しウィジェットID
+	const DEFAULT_CART_WIDGET = 'ec_main';		// カート内容表示用呼び出しウィジェットID
 	const DEFAULT_TITLE = 'カート';			// デフォルトのウィジェットタイトル名
 	const PRODUCT_CLASS_PHOTO = 'photo';		// 商品クラス
 	const PRODUCT_CLASS_DEFAULT = '';		// 商品クラス

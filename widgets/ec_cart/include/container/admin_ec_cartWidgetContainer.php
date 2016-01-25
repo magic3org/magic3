@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_cartWidgetContainer.php 5418 2012-11-30 03:10:50Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -60,6 +60,7 @@ class admin_ec_cartWidgetContainer extends BaseAdminWidgetContainer
 			$titleLength	= $request->trimValueOf('item_title_length');			// タイトル文字数
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
+				$paramObj = new stdClass;
 			//	$paramObj->isTargetPhoto = $isTargetPhoto;				// フォトギャラリー画像
 		//		$paramObj->isTargetProduct = $isTargetProduct;				// 商品
 				$paramObj->titleLength	= $titleLength;		// タイトル文字数
@@ -75,12 +76,7 @@ class admin_ec_cartWidgetContainer extends BaseAdminWidgetContainer
 			// デフォルト値設定
 			$titleLength = self::DEFAULT_TITLE_LENGTH;	// タイトル文字数
 			$paramObj = $this->getWidgetParamObj();
-			if (empty($paramObj)){
-		//		$isTargetPhoto = 1;				// フォトギャラリー画像
-		//		$isTargetProduct = 1;			// 商品
-			} else {
-		//		$isTargetPhoto = $paramObj->isTargetPhoto;				// フォトギャラリー画像
-		//		$isTargetProduct = $paramObj->isTargetProduct;			// 商品
+			if (!empty($paramObj)){
 				$titleLength	= $paramObj->titleLength;
 			}
 		}
@@ -89,6 +85,20 @@ class admin_ec_cartWidgetContainer extends BaseAdminWidgetContainer
 	//	if (!empty($isTargetPhoto)) $this->tmpl->addVar('_widget', 'target_photo_checked', 'checked');		// フォトギャラリー画像
 	//	if (!empty($isTargetProduct)) $this->tmpl->addVar('_widget', 'target_product_checked', 'checked');	// 商品
 		$this->tmpl->addVar("_widget", "title_length",	$titleLength);// タイトル文字数
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 }
 ?>
