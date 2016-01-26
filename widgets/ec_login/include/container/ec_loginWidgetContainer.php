@@ -18,7 +18,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/ec_loginDb.php');
 
 class ec_loginWidgetContainer extends BaseWidgetContainer
 {
-	const DEFAULT_CART_WIDGET = 'photo_shop';		// カート内容表示用呼び出しウィジェットID
+	const DEFAULT_CART_WIDGET = 'ec_main';		// カート内容表示用呼び出しウィジェットID
 	const MAIL_OBJ_ID = 'ecmail';			// メール連携オブジェクト
 	const EC_LIB_ID = "eclib";		// EC共通ライブラリオブジェクトID
 	const DEFAULT_TITLE = '会員ログイン';

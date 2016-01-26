@@ -63,7 +63,7 @@ class s_photoTopWidgetContainer extends s_photoBaseWidgetContainer
 	const NEXT_BUTTON_TITLE = '次へ';		// 「次へ」ボタンタイトル
 	const SEARCH_FIELD_HEAD = 'photo_main_item';			// フィールド名の先頭文字列
 	const SEARCH_FIELD_CLASS_HEAD = 'photo_main_';			// フィールドクラスの先頭文字列
-	const TARGET_WIDGET = 'photo_shop';			// 画像購入ウィジェット
+	const TARGET_WIDGET = 'ec_main';			// 画像購入ウィジェット
 	const PRODUCT_CLASS = 'photo';			// 商品クラス
 	const TAX_TYPE = 'sales';						// 課税タイプ(外税)
 	const PRODUCT_TYPE_DOWNLOAD = 'download';		// 商品タイプ

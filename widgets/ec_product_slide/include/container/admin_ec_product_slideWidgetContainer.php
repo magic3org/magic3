@@ -8,17 +8,15 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_product_slideWidgetContainer.php 5343 2012-10-28 13:31:58Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
-require_once($gEnvManager->getCurrentWidgetDbPath() .	'/ec_product_slideDb.php');
 
 class admin_ec_product_slideWidgetContainer extends BaseAdminWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
 	private $paramObj;		// ウィジェットデータオブジェクト
 	const DEFAULT_ITEM_COUNT = 8;				// デフォルトの表示項目数
 	
@@ -29,9 +27,6 @@ class admin_ec_product_slideWidgetContainer extends BaseAdminWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
-		
-		// DBオブジェクト作成
-		$this->db = new ec_product_slideDb();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -86,6 +81,20 @@ class admin_ec_product_slideWidgetContainer extends BaseAdminWidgetContainer
 		}
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar("_widget", "view_count",	$viewCount);// 表示項目数
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 }
 ?>
