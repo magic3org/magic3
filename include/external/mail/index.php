@@ -15,7 +15,6 @@
  * @link       http://www.magic3.org
  */
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/include/external_global.php');
-//require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/include/global.php');
 
 // プログラム実行
 $gLaunchManager->goJob(__FILE__);
