@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -646,6 +646,20 @@ class AccessManager extends Core
 		} else {
 			return false;
 		}*/
+	}
+	/**
+	 * 外部起動可能ユーザかどうか(rootユーザかどうか)判断
+	 *
+	 * @return bool		true=起動可能ユーザ、false=起動不可ユーザ
+	 */
+	function isExternalPermittedUser()
+	{
+		$execUser = trim(shell_exec('whoami'));			// 改行コードが入るのでtrimする必要あり
+		if ($execUser == 'root'){
+			return true;
+		} else {
+			return false;
+		}
 	}
 	/**
 	 * 管理者認証用一時キーが存在するかどうか
