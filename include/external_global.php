@@ -22,7 +22,7 @@ $execFilePath = $argv[0];		// 実行スクリプトファイルパス
 $jobTypeId = basename(dirname($execFilePath));
 
 // ジョブ起動制御ファイルをチェック
-$jobFlagFile = dirname(__FILE__) . '/croncontrols/' . $jobTypeId;
+$jobFlagFile = dirname(__FILE__) . '/jobcontrols/' . $jobTypeId;
 if (!file_exists($jobFlagFile)) exit(0);			// ジョブ監視ファイルがない場合は正常終了
 
 // ########## Magic3アクセス制御(開始) ##########

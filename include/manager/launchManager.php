@@ -11,7 +11,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -327,6 +327,14 @@ class LaunchManager extends Core
 			$widgetContainer->process($gRequestManager, $install);
 			$gEnvManager->setCurrentWidgetObj(null);
 		}
+	}
+	/**
+	 * ジョブプログラムを実行
+	 *
+	 * @param string $filepath		呼び出し元ファイルのフルパス。通常は「__FILE__」。OSによってパスの表現が違うので注意。
+	 */
+	function goJob($filepath)
+	{
 	}
 	/**
 	 * 携帯用プログラムを実行
