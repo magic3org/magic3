@@ -14,10 +14,8 @@
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
-// 直接アクセスの防止
-defined('M3_SYSTEM') or die('Access error: Direct access denied.');
+require_once(dirname(__FILE__) . '/include/global.php');
 
-// ジョブ実行
-global $gLaunchManager;
+// プログラム実行
 $gLaunchManager->goJob(__FILE__);
 ?>
