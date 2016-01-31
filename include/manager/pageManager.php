@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -186,6 +186,7 @@ class PageManager extends Core
 	// アドオンオブジェクト用
 	const CONTENT_OBJ_ID	= 'contentlib';	// 汎用コンテンツオブジェクトID
 	const BLOG_OBJ_ID		= 'bloglib';		// ブログオブジェクトID
+	const LINKINFO_OBJ_ID	= 'linkinfo';	// リンク情報オブジェクトID
 	
 	// インナーウィジェット用
 	const IWIDTET_CMD_CONTENT = 'content';		// コンテンツ取得
@@ -5159,7 +5160,7 @@ class PageManager extends Core
 	 * @param int $configId			ウィジェット定義ID
 	 * @return string				ウィジェットの出力
 	 */
-	function getWidgetOutput($widgetId, $configId)
+	function getWidgetOutput($widgetId, $configId = 0)
 	{
 		global $gEnvManager;
 		global $gErrorManager;
@@ -5753,6 +5754,33 @@ class PageManager extends Core
 	function getWidgetIdWithPageInfoByContentType($pageId, $contentType)
 	{
 		$widgetId = $this->db->getWidgetIdWithPageInfoByContentType($pageId, $contentType);
+		return $widgetId;
+	}
+	/**
+	 * ジョブタイプからウィジェットIDを取得
+	 *
+	 * @param string $jobType		ジョブタイプ
+	 * @return string				ウィジェットID
+	 */
+	function getWidgetIdByJobType($jobType)
+	{
+		global $gEnvManager;
+		global $gErrorManager;
+
+		// ジョブ実行用ウィジェット取得
+		$widgetId = '';
+		$linkInfoObj = $this->gInstance->getObject(self::LINKINFO_OBJ_ID);
+		if (isset($linkInfoObj)) $widgetId = $linkInfoObj->getJobWidget($jobType);
+		
+		// ウィジェットのアクセス権をチェック
+		if (!$this->db->canAccessWidget($widgetId)) return '';
+
+		// ウィジェット情報取得
+		if (!$this->db->getWidgetInfo($widgetId, $row)) return '';
+
+		// 端末タイプをチェック
+		if (intval($row['wd_device_type']) != intval($gEnvManager->getCurrentPageDeviceType())) return '';
+		
 		return $widgetId;
 	}
 	/**

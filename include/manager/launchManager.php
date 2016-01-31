@@ -312,7 +312,7 @@ class LaunchManager extends Core
 		
 		// コンテナクラスが既にロードされているときはエラー
 		if (class_exists($containerClass)){
-			echo 'class redefined error3: ' . $containerClass;
+			echo 'class redefined error4: ' . $containerClass;
 		} else {
 			// コンテナクラスファイル取り込み
 			$containerPath = $gEnvManager->getCurrentWidgetContainerPath() . '/' . $containerClass . '.php';
@@ -335,6 +335,49 @@ class LaunchManager extends Core
 	 */
 	function goJob($filepath)
 	{
+		global $gEnvManager;
+		global $gRequestManager;
+		global $gPageManager;
+		
+		// ##### ジョブタイプから実行するウィジェットIDを取得 #####
+		$jobType = basename(dirname($filepath));
+		$widgetId = $gPageManager->getWidgetIdByJobType($jobType);
+		if (empty($widgetId)) return;
+
+		// ##### ウィジェットのジョブを実行 #####
+		// コンテナクラス名作成
+		$containerClass = 'admin_';
+		$containerClass .= $widgetId . 'JobWidgetContainer';
+
+		// コンテナクラス名修正
+		$containerClass = str_replace('/', '_', $containerClass);
+		
+		// コンテナクラスが既にロードされているときはエラー
+		if (class_exists($containerClass)){
+			echo 'class redefined error5: ' . $containerClass;
+		} else {
+			// コンテナクラスファイル取り込み
+			$containerPath = $gEnvManager->getCurrentWidgetContainerPath() . '/' . $containerClass . '.php';
+			if (file_exists($containerPath)){
+				require_once($containerPath);
+			} else {		// ジョブ実行クラスが存在しないときは終了
+				return;
+			}
+			// コンテナクラスを起動
+			$widgetContainer = new $containerClass();
+			$gEnvManager->setCurrentWidgetObj($widgetContainer);				// 実行するウィジェットコンテナオブジェクトを登録
+			$widgetContainer->process($gRequestManager);
+			$gEnvManager->setCurrentWidgetObj(null);
+		}
+	}
+	/**
+	 * ウィジェットジョブプログラムを実行
+	 *
+	 * @param string $filepath		呼び出し元ファイルのフルパス。通常は「__FILE__」。OSによってパスの表現が違うので注意。
+	 */
+	function goWidgetJob($filepath)
+	{
+	echo 'widget....';
 	}
 	/**
 	 * 携帯用プログラムを実行

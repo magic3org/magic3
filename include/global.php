@@ -249,6 +249,8 @@ define('M3_VIEW_TYPE_NEWS',			'news');				// 新着情報
 define('M3_VIEW_TYPE_COMMENT',		'comment');				// コメント
 define('M3_VIEW_TYPE_EVENTENTRY',	'evententry');			// イベント予約
 define('M3_VIEW_TYPE_BANNER',		'banner');				// バナー
+// ジョブタイプ
+define('M3_JOB_TYPE_MAIL',			'mail');				// メール配信(会員情報に付属)
 
 // すべての機能タイプ
 $M3_ALL_FEATURE_TYPE	= array(	M3_VIEW_TYPE_DASHBOARD,			// ダッシュボード

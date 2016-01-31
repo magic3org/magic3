@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -625,6 +625,26 @@ class linkInfo
 		// 画面に配置しているウィジェットの主要コンテンツタイプを取得
 		$ret = $this->db->getContentEditWidget($contentType, 0/*デバイスタイプはPCに限定*/, $rows);
 		if ($ret) $widgetId = $rows[0]['wd_id'];
+		return $widgetId;
+	}
+	/**
+	 * ジョブ起動用のメインウィジェットを取得
+	 *
+	 * @param string $jobType		ジョブタイプ
+	 * @return string				ウィジェットID
+	 */
+	function getJobWidget($jobType)
+	{
+		switch ($jobType){
+		case M3_JOB_TYPE_MAIL:		// メール配信は会員情報に付属
+			$contentType = M3_VIEW_TYPE_MEMBER;
+			break;
+		default:
+			$contentType = $jobType;
+			break;
+		}
+		
+		$widgetId = $this->getContentEditWidget($contentType);
 		return $widgetId;
 	}
 	
