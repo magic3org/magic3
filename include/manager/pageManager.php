@@ -2425,6 +2425,38 @@ class PageManager extends Core
 		return $destBuf;
 	}
 	/**
+	 * ジョブ実行
+	 *
+	 * @param string $jobType		ジョブタイプ
+	 * @return						なし
+	 */
+	function launchJob($jobType)
+	{
+		global $gEnvManager;
+		
+		// ジョブタイプから実行するウィジェットIDを取得
+		$widgetId = $this->getWidgetIdByJobType($jobType);
+		if (empty($widgetId)) return;
+
+		// 作業中のウィジェットIDを設定
+		$gEnvManager->setCurrentWidgetId($widgetId);
+			
+		// 指定のウィジェットを実行
+		$widgetIndexFile = $gEnvManager->getWidgetsPath() . '/' . $widgetId . '/admin/job.php';
+			
+		if (file_exists($widgetIndexFile)){
+//			// 実行のログを残す
+//			$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd);
+
+			require_once($widgetIndexFile);
+		} else {
+			echo 'file not found: ' . $widgetIndexFile;
+		}
+				
+		// 作業中のウィジェットIDを解除
+		$gEnvManager->setCurrentWidgetId();
+	}
+	/**
 	 * ヘッダ部マクロ変換処理
 	 *
 	 * @param string         $srcBuf		変換元

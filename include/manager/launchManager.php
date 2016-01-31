@@ -332,20 +332,30 @@ class LaunchManager extends Core
 	 * ジョブプログラムを実行
 	 *
 	 * @param string $filepath		呼び出し元ファイルのフルパス。通常は「__FILE__」。OSによってパスの表現が違うので注意。
+	 * @return 						なし
 	 */
 	function goJob($filepath)
 	{
-		global $gEnvManager;
-		global $gRequestManager;
 		global $gPageManager;
 		
-		// ##### ジョブタイプから実行するウィジェットIDを取得 #####
+		// ジョブタイプを取得し実行
 		$jobType = basename(dirname($filepath));
-		$widgetId = $gPageManager->getWidgetIdByJobType($jobType);
-		if (empty($widgetId)) return;
-
+		$gPageManager->launchJob($jobType);
+	}
+	/**
+	 * ウィジェットジョブプログラムを実行
+	 *
+	 * @param string $filepath		呼び出し元ファイルのフルパス。通常は「__FILE__」。OSによってパスの表現が違うので注意。
+	 * @return 						なし
+	 */
+	function goWidgetJob($filepath)
+	{
+		global $gEnvManager;
+		global $gRequestManager;
+		
 		// ##### ウィジェットのジョブを実行 #####
 		// コンテナクラス名作成
+		$widgetId = $gEnvManager->getCurrentWidgetId();
 		$containerClass = 'admin_';
 		$containerClass .= $widgetId . 'JobWidgetContainer';
 
@@ -360,7 +370,7 @@ class LaunchManager extends Core
 			$containerPath = $gEnvManager->getCurrentWidgetContainerPath() . '/' . $containerClass . '.php';
 			if (file_exists($containerPath)){
 				require_once($containerPath);
-			} else {		// ジョブ実行クラスが存在しないときは終了
+			} else {		// インストーラが存在しないときは終了
 				return;
 			}
 			// コンテナクラスを起動
@@ -369,15 +379,6 @@ class LaunchManager extends Core
 			$widgetContainer->process($gRequestManager);
 			$gEnvManager->setCurrentWidgetObj(null);
 		}
-	}
-	/**
-	 * ウィジェットジョブプログラムを実行
-	 *
-	 * @param string $filepath		呼び出し元ファイルのフルパス。通常は「__FILE__」。OSによってパスの表現が違うので注意。
-	 */
-	function goWidgetJob($filepath)
-	{
-	echo 'widget....';
 	}
 	/**
 	 * 携帯用プログラムを実行

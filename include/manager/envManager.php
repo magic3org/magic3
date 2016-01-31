@@ -1535,7 +1535,7 @@ class EnvManager extends Core
 	/**
 	 * 現在処理中のウィジェット
 	 */
-	public function setCurrentWidgetId($id)
+	public function setCurrentWidgetId($id = '')
 	{
 		$this->currentWidgetId = $id;
 	}
@@ -1549,7 +1549,7 @@ class EnvManager extends Core
 	/**
 	 * 現在処理中のインナーウィジェット
 	 */
-	public function setCurrentIWidgetId($id)
+	public function setCurrentIWidgetId($id = '')
 	{
 		$this->currentIWidgetId = $id;
 	}
