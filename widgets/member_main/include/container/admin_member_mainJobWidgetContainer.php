@@ -26,37 +26,13 @@ class admin_member_mainJobWidgetContainer extends BaseJobWidgetContainer
 		parent::__construct();
 	}
 	/**
-	 * テンプレートファイルを設定
+	 * ウィジェットジョブを実行
 	 *
-	 * _assign()でデータを埋め込むテンプレートファイルのファイル名を返す。
-	 * 読み込むディレクトリは、「自ウィジェットディレクトリ/include/template」に固定。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。そのまま_assign()に渡る
-	 * @return string 						テンプレートファイル名。テンプレートライブラリを使用しない場合は空文字列「''」を返す。
+	 * @return								なし
 	 */
-	function _setTemplate($request, &$param)
+	function _execJob()
 	{
-		return '';
-	}
-	/**
-	 * テンプレートにデータ埋め込む
-	 *
-	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @param								なし
-	 */
-	function _assign($request, &$param)
-	{
-		$task = $request->trimValueOf('task');
-		echo '>>>JOB EXEC....':
-/*		if ($task == self::TASK_MEMBER_DETAIL){	// 詳細画面
-			return $this->createDetail($request);
-		} else {			// 一覧画面
-			return $this->createList($request);
-		}*/
+		echo 'JOB EXEC....';
 	}
 }
 ?>

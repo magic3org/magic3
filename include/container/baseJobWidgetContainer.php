@@ -28,12 +28,19 @@ class BaseJobWidgetContainer extends BaseWidgetContainer
 	/**
 	 * 起動マネージャから呼ばれる唯一のメソッド
 	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param RequestManager $request		HTTPリクエスト処理クラス(未使用)
 	 * @return								なし
 	 */
 	function process($request)
 	{
-
+		// ディスパッチ処理
+		if (method_exists($this, '_dispatch')){
+			// 処理を継続しない場合は終了
+			if (!$this->_dispatch()) return;
+		}
+		
+		// ジョブ実行処理
+		if (method_exists($this, '_execJob')) $this->_execJob();
 	}
 }
 ?>
