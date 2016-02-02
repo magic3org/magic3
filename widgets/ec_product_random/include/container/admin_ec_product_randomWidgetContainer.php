@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_product_randomWidgetContainer.php 5461 2012-12-13 01:26:49Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -143,6 +143,20 @@ class admin_ec_product_randomWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVars('product_status', $itemRow);
 			$this->tmpl->parseTemplate('product_status', 'a');
 		}
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 }
 ?>
