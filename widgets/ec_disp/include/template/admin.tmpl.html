@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,48 +20,50 @@ function updateItem(){
 	return true;
 }
 $(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+		
 	// WYSIWYGエディター作成
-	m3SetWysiwygEditor('item_content_no_stock', 200/* 高さ */);
+	m3SetWysiwygEditor('item_content_no_stock', 150/* 高さ */);
 });
 //]]>
 </script>
-<div align="center">
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
-<br />
-<table><tr><td>
-<label>商品表示詳細</label>
-<table class="simple-table" style="margin: 0 auto;width:950px;">
+<h3 class="m3config_h">基本設定</h3>
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_TITLE}>タイトル</span></td>
-	    <td>カテゴリー表示時タイトル：<input type="text" name="item_category_list_title" value="{CATEGORY_LIST_TITLE}" size="20" maxlength="20" /><br />
-		カテゴリータイトル作成用セパレータ：<input type="text" name="item_category_title_separator" value="{CATEGORY_TITLE_SEPARATOR}" size="3" maxlength="3" /></td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_PRODUCT_LIST_COUNT}>商品一覧<br />表示項目数</span></td>
-	    <td><input type="text" name="item_product_list_count" value="{PRODUCT_LIST_COUNT}" size="3" maxlength="3" /></td>
+	    <th><span {_HELP_TITLE}>タイトル</span></th>
+	    <td>
+		<div class="form-group clearfix"><div class="form-control-static col-sm-2 m3config_item" style="width:18.5em;">カテゴリー表示時タイトル：</div><div class="col-sm-4 m3config_item"><input type="text" name="item_category_list_title" value="{CATEGORY_LIST_TITLE}" maxlength="20" /></div></div>
+		<div class="form-group"><div class="form-control-static col-sm-2 m3config_item" style="width:18.5em;">カテゴリータイトル作成用セパレータ：</div><div class="col-sm-1 m3config_item"><input type="text" name="item_category_title_separator" value="{CATEGORY_TITLE_SEPARATOR}" maxlength="3" /></div></div></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_STOCK}>在庫数</span></td>
-	    <td><input type="checkbox" name="item_show_stock" {SHOW_STOCK_CHECKED} />表示&nbsp;&nbsp;フォーマット：
-		<input type="text" name="item_stock_view_format" value="{STOCK_VIEW_FORMAT}" size="40" maxlength="40" /></td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside">在庫なし時<br />コンテンツ</td>
-	    <td><textarea name="item_content_no_stock">{CONTENT_NO_STOCK}</textarea></td>
+	    <th><span {_HELP_PRODUCT_LIST_COUNT}>商品一覧<br />表示項目数</span></th>
+	    <td><div class="col-sm-1 m3config_item"><input type="text" name="item_product_list_count" value="{PRODUCT_LIST_COUNT}" maxlength="3" /></div></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CART_WIDGET}>カート表示<br />ウィジェット</span></td>
-	    <td><input type="text" name="item_cart_widget" value="{CART_WIDGET}" size="20" maxlength="20" /></td>
+	    <th><span {_HELP_STOCK}>在庫数</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_show_stock" {SHOW_STOCK_CHECKED} />表示</label></div>
+		<div class="form-control-static col-sm-2 m3config_item" style="width:7.5em;">フォーマット：</div>
+		<div class="col-sm-6 m3config_item"><input type="text" name="item_stock_view_format" value="{STOCK_VIEW_FORMAT}" maxlength="40" /></div></td>
+	</tr>
+    <tr>
+	    <th>在庫なし時<br />コンテンツ</th>
+	    <td class="ckeditor"><textarea name="item_content_no_stock">{CONTENT_NO_STOCK}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CART_WIDGET}>カート表示<br />ウィジェット</span></th>
+	    <td><div class="col-sm-4 m3config_item"><input type="text" name="item_cart_widget" value="{CART_WIDGET}" maxlength="20" /></div></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-<tr><td align="right">
+<div class="well m3config_update_buttons">
 <input type="button" class="button" onclick="updateItem();" value="更新" />
-</td></tr></table>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

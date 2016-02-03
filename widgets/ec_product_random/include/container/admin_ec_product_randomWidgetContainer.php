@@ -117,6 +117,20 @@ class admin_ec_product_randomWidgetContainer extends BaseAdminWidgetContainer
 		}
 	}
 	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
+	}
+	/**
 	 * ステータス選択部を作成
 	 *
 	 * @return なし						
@@ -143,20 +157,6 @@ class admin_ec_product_randomWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVars('product_status', $itemRow);
 			$this->tmpl->parseTemplate('product_status', 'a');
 		}
-	}
-	/**
-	 * テンプレートにデータ埋め込む
-	 *
-	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
-	 * @return								なし
-	 */
-	function _postAssign($request, &$param)
-	{
-		// メニューバー、パンくずリスト作成(簡易版)
-		$this->createBasicConfigMenubar($request);
 	}
 }
 ?>
