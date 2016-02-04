@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -883,7 +883,9 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// 管理画面がないときは、詳細ボタンを使用不可にする
 		$detailButtonEnabled = '';
+		$idStr = $this->convertToDispString($widgetId);
 		if (!$fetchedRow['wd_has_admin']) $detailButtonEnabled = 'disabled';
+		if (!empty($detailButtonEnabled)) $idStr = '';			// 設定画面の表示をキャンセル
 		
 		// 新規に追加されたウィジェットかチェック
 		$idText = $this->convertToDispString($widgetId);
@@ -956,7 +958,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 		$row = array(
 			'no' => $index + 1,													// 行番号
 			'serial' => $this->convertToDispString($fetchedRow['wd_serial']),			// シリアル番号
-			'id' => $this->convertToDispString($widgetId),			// ID
+			'id' => $idStr,			// ID
 			'id_text' => $idText,
 			'name' => $this->convertToDispString($fetchedRow['wd_name']),		// 名前
 			'version' => $this->convertToDispString($version),		// バージョン
