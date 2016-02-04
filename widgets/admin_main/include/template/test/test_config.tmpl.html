@@ -112,8 +112,48 @@ $(function(){
 	    <td class="ckeditor" colspan="3"><textarea id="item_html" name="item_html">{HTML}</textarea></td>
 	</tr>
 	<tr>
-	    <th><span {_HELP_ENTRY_NAME}>入力</span></th>
-	    <td colspan="3"><input type="text" id="item_input" name="item_input" class="form-control" maxlength="30" /></td>
+	    <th>チェックボックス<br />(インライン)</th>
+	    <td colspan="3">
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check1" />項目A</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check2" />項目BBB</label></div>
+	    <div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check3" />項目12345</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check4" />あいうえお</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check5" />かきくけこ</label></div>
+	    <div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check6" />ＡＢＣＤＥ</label></div>
+		<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check7" />ＸＹＺ</label></div>
+	    <div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_check8" />９８７６５４３２１０</label></div>
+		</td>
+	</tr>
+	<tr>
+	    <th>複数行</th>
+	    <td colspan="3">
+<div class="form-group clearfix">
+		<div class="checkbox m3config_inline_item col-sm-2"><label><input type="checkbox" name="item_img_visible" checked />商品画像</label></div>
+		<div class="form-control-static col-sm-2 m3config_item" style="width:5em;">サイズ:</div>
+	    <div class="col-sm-2 m3config_item"><select name="item_img_size">
+		
+		<option value="small-product" >小</option>
+		
+		<option value="standard-product" selected>中</option>
+		
+		<option value="large-product" >大</option>
+		
+	    </select></div>
+</div>
+<div class="form-group clearfix">
+	    <div class="checkbox m3config_inline_item col-sm-2"><label><input type="checkbox" name="item_detail_visible"  />詳細ボタン</label></div>
+		<div class="form-control-static col-sm-2 m3config_item" style="width:5em;">ラベル:</div><div class="col-sm-4 m3config_item join"><input type="text" name="item_detail_label" value="もっと詳しく..." maxlength="40" /></div>
+	    <div class="col-sm-4 m3config_item"><select name="item_select">
+		<option value="small" >小</option>
+		<option value="large" selected>中</option>
+	    </select></div>
+</div>
+<div class="form-group">
+<div class="col-sm-4 m3config_item join"><input type="text" name="item_input1" value="入力データ1" /></div>
+<div class="col-sm-4 m3config_item join"><input type="text" name="item_input2" value="入力データ2" /></div>
+<div class="col-sm-4 m3config_item"><input type="text" name="item_input3" value="入力データ3" /></div>
+</div>
+		</td>
 	</tr>
     </tbody>
 </table>

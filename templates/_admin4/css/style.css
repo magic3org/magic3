@@ -651,6 +651,10 @@ span[rel="m3help"] { cursor: default; }
 	padding-right: 0;
 /*	padding-right: 5px;*/
 }
+.m3config_item.join {
+	padding-left: 0;
+	padding-right: 5px;
+}
 .m3config_item.form-control-static {
 	padding-left: 3px;
 	padding-right: 3px;
