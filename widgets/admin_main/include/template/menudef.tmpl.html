@@ -176,6 +176,7 @@ $(function(){
     <input type="button" class="button" onclick="newItem();" value="{_LC_LABEL_NEW}" {NEW_DISABLED}/><input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" {EDIT_DISABLED}/><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_DISABLED}/>
 </div></div></div>
 </div>
+<!-- 左部 start -->
 <div class="pull-left">
 <div class="panel panel-success" style="width:230px;">
 <div class="panel-heading"><span {_HELP_MENUDEF_MENU_LAYOUT}><i class="glyphicon glyphicon-sort"></i></span> {_LC_LABEL_MENU_LAYOUT}</div>
@@ -189,7 +190,9 @@ $(function(){
 </div>
 <!--<label>{_LC_MSG_CHANGE_ITEM_ORDER}</label>-->
 </div>
-<div class="pull-right"><!-- 右部 start -->
+<!-- 左部 end -->
+<!-- 右部 start -->
+<div class="pull-right">
 <patTemplate:tmpl name="show_singlelang" visibility="hidden"><!-- 単一言語対応時 start -->
 <table id="menuitemlist" style="width:700px;">
     <thead>
@@ -242,7 +245,8 @@ $(function(){
     </tbody>
 </table>
 </patTemplate:tmpl><!-- 多言語対応時 end -->
-</div><!-- 右部 end -->
+</div>
+<!-- 右部 end -->
 </form>
 </div>
 </patTemplate:tmpl>
