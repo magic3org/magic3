@@ -8,16 +8,20 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_menuBaseWidgetContainer.php 5562 2013-01-18 03:49:58Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
 
 class admin_ec_menuBaseWidgetContainer extends BaseAdminWidgetContainer
 {
-	const DEFAULT_TASK = 'menudef';
+	// 画面
+	const DEFAULT_TASK 			= 'menudef';
+	const TASK_MENUDEF			= 'menudef';			// メニュー定義
+	const TASK_MENUDEF_DETAIL	= 'menudef_detail';		// メニュー定義(詳細)
+	const TASK_OTHER			= 'other';					// その他設定
 	
 	/**
 	 * コンストラクタ
@@ -38,6 +42,54 @@ class admin_ec_menuBaseWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _postAssign($request, &$param)
 	{
+		// 表示画面を決定
+		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
+		if (empty($task)) $task = self::DEFAULT_TASK;
+		
+		// パンくずリストの定義データ作成
+		$titles = array();
+		switch ($task){
+			case self::TASK_MENUDEF:		// メニュー定義
+				$titles[] = 'メニュー定義';
+				break;
+			case self::TASK_MENUDEF_DETAIL:		// メニュー定義(詳細)
+				$titles[] = 'メニュー定義';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_OTHER:		// その他設定
+				$titles[] = '基本';
+				break;
+		}
+		
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> 'メニュー定義',	// メニュー定義
+						'task'		=> self::TASK_MENUDEF,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_MENUDEF ||			// メニュー定義
+											$task == self::TASK_MENUDEF_DETAIL		// メニュー定義(詳細)
+										),
+						'submenu'	=> array()
+					),
+					(Object)array(
+						'name'		=> '基本',		// 基本
+						'task'		=> self::TASK_OTHER,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_OTHER			// その他設定
+										),
+						'submenu'	=> array()
+					)
+				);
+
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
+
+/*
 		// ウィンドウオープンタイプ取得
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		if (!empty($openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
@@ -48,11 +100,11 @@ class admin_ec_menuBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// パンくずリストを作成
 		switch ($task){
-			case 'menudef':		// メニュー定義
-			case 'menudef_detail':		// メニュー定義詳細
+			case self::TASK_MENUDEF:		// メニュー定義
+			case self::TASK_MENUDEF_DETAIL:		// メニュー定義詳細
 				$linkList = ' &gt;&gt; メニュー定義';// パンくずリスト
 				break;
-			case 'other':		// その他
+			case self::TASK_OTHER:		// その他設定
 				$linkList = ' &gt;&gt; その他';// パンくずリスト
 				break;
 		}
@@ -67,8 +119,8 @@ class admin_ec_menuBaseWidgetContainer extends BaseAdminWidgetContainer
 		// メニュー定義
 		$current = '';
 		$link = $this->getUrl($baseUrl . '&task=menudef');
-		if ($task == 'menudef' ||
-			$task == 'menudef_detail'){
+		if ($task == self::TASK_MENUDEF ||
+			$task == self::TASK_MENUDEF_DETAIL){
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>メニュー定義</span></a></li>' . M3_NL;
@@ -76,7 +128,7 @@ class admin_ec_menuBaseWidgetContainer extends BaseAdminWidgetContainer
 		// その他設定
 		$current = '';
 		$link = $this->getUrl($baseUrl . '&task=other');
-		if ($task == 'other'){		// その他設定
+		if ($task == self::TASK_OTHER){		// その他設定
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->convertUrlToHtmlEntity($link) .'"><span>その他</span></a></li>' . M3_NL;
@@ -89,6 +141,7 @@ class admin_ec_menuBaseWidgetContainer extends BaseAdminWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . '商品メニュー' . $linkList . '</label></div>';
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+*/
 	}
 }
 ?>

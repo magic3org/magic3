@@ -177,6 +177,9 @@ class BaseWidgetContainer extends Core
 		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);			// 処理タスク
 		
+		// 引き継ぎパラメータを退避
+		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);		// ウィンドウオープンタイプ
+		
 		// ##### 初期処理 #####
 		// 独自のウィジェットメイン処理を行う場合は、_init()で設定を行う
 		if (method_exists($this, '_preInit')) $this->_preInit($request, $task);		// ベースクラス用
