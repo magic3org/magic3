@@ -5,35 +5,29 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<iframe id="preview" class="m3adjust" name="preview" src="{URL}" width="100%" height="100%" frameborder="0" scrolling="no" allowtransparency="true">実際の画面</iframe>
 <script type="text/javascript">
 //<![CDATA[
 function m3AdjustWindow()
 {
-//	var min = $(window).height() -30;
-//	m3AdjustHeight(this, min);
-	$("#preview").height($("#preview").contents().find("html").height());
+	var height = $("#preview").contents().find("html").height();
+	if (height < _m3ConfigWindowMinHeight) height = _m3ConfigWindowMinHeight;
+	$("#preview").height(height);
 }
-// ウィンドウサイズの調整
 $(function(){
 	// フルサイズ幅で表示
 	$('.container').removeClass('container');
 	
-/*	var min = $(window).height() -30;
-	$('#preview').load(function(){
-		m3AdjustHeight(this, min);
-	});
-	$('#preview').triggerHandler('load');*/
-//	$('#preview').iframeAutoHeight();
+	// ウィンドウ高さの調整
 	var minHeight = $(window).height();
 	$('#preview').iframeAutoHeight({ minHeight: minHeight });
 });
 //]]>
 </script>
+<iframe id="preview" class="m3adjust" name="preview" src="{URL}" width="100%" height="100%" frameborder="0" scrolling="no" allowtransparency="true">実際の画面</iframe>
 </patTemplate:tmpl>
