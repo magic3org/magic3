@@ -584,6 +584,9 @@ span[rel="m3help"] { cursor: default; }
 	left: 0px;
 	right: 0px;
 }
+.m3filebrowser {
+	min-width: 950px;
+}
 /* テーブル */
 .m3config_table {
 	margin: 0 auto 15px auto;

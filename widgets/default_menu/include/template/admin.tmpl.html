@@ -79,7 +79,11 @@ function activateTab(tab)
 // IFRAMEの高さを調整
 function m3AdjustWindow()
 {
-	$("#menu_def").height($("#menu_def").contents().find("html").height());
+//alert($("#menu_def").height());
+//	$("#menu_def").height($("#menu_def").contents().find("html").height());
+	var height = $("#menu_def").contents().find("html").height();
+	if (height < _m3ConfigWindowMinHeight) height = _m3ConfigWindowMinHeight;
+	$("#menu_def").height(height);
 }
 $(function(){
 	// メニュー定義画面作成

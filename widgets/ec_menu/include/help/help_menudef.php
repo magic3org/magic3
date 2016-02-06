@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: help_menudef.php 5562 2013-01-18 03:49:58Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCommonPath()				. '/helpConv.php' );
@@ -28,7 +28,7 @@ class help_menudef extends HelpConv
 		// ########## メニュー定義 ##########
 		$helpData = array(
 			'menudef_list' => array(	
-				'title' =>	$this->_('Menu Definition List'),			// メニュー定義一覧
+				'title' =>	$this->_('Menu Definition'),			// メニュー定義
 				'body' =>	$this->_('Menu item list in selected menu definition.')		// 選択したメニュー定義のメニュー項目一覧です。
 			),
 			'menudef_detail' => array(	
@@ -78,6 +78,10 @@ class help_menudef extends HelpConv
 			'menudef_sel_link' => array(	
 				'title' =>	$this->_('Select Link Type'),			// リンク先を選択
 				'body' =>	$this->_('Select the link type of menu item. If \'contents\' is selected, you can select the contents to view.')		// リンク先を選択します。「コンテンツ」を選択した場合は、表示するコンテンツを指定します。[任意設定]を選択した場合は、任意のURLにリンク先を設定できます。
+			),
+			'menudef_menu_layout' => array(	
+				'title' =>	$this->_('Menu Layout'),			// メニューレイアウト
+				'body' =>	$this->_('Change the order of items by dragging.')		// 項目をドラッグして並び順を変えることができます。
 			),
 			'menudef_desc' => array(	
 				'title' =>	$this->_('Description'),			// 説明

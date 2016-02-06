@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,6 +19,7 @@ var _m3SetUrlCallback;	// リンク作成用コールバック
 var _m3ContentEdited;		// 入力コンテンツが変更されたかどうか
 var _m3CheckContentEdit;	// 入力コンテンツの変更をチェックするかどうか
 var _m3ShowWidgetTool;		// ウィジェットツールを表示するかどうか
+var _m3ConfigWindowMinHeight = 600;			// 設定画面の高さ最小値
 
 // 親ウィンドウを更新
 function m3UpdateParentWindow()

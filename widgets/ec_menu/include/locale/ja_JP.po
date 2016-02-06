@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-17 07:49+0900\n"
-"PO-Revision-Date: 2015-11-17 07:49+0900\n"
+"POT-Creation-Date: 2016-02-06 08:02+0900\n"
+"PO-Revision-Date: 2016-02-06 08:03+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -131,7 +131,7 @@ msgid "Cotrol visible status linked to contents."
 msgstr "リンク先のコンテンツに連動"
 
 #: ../container/admin_ec_menuMenudefWidgetContainer.php:169
-#: ../help/help_menudef.php:83
+#: ../help/help_menudef.php:87
 msgid "Description"
 msgstr "説明"
 
@@ -182,6 +182,7 @@ msgid "Operation"
 msgstr "操作"
 
 #: ../container/admin_ec_menuMenudefWidgetContainer.php:192
+#: ../help/help_menudef.php:83
 msgid "Menu Layout"
 msgstr "メニューレイアウト"
 
@@ -256,8 +257,8 @@ msgid "Edit Content"
 msgstr "コンテンツを編集"
 
 #: ../help/help_menudef.php:31
-msgid "Menu Definition List"
-msgstr "メニュー定義一覧"
+msgid "Menu Definition"
+msgstr "メニュー定義"
 
 #: ../help/help_menudef.php:32
 msgid "Menu item list in selected menu definition."
@@ -355,42 +356,46 @@ msgstr ""
 "定します。[任意設定]を選択した場合は、任意のURLにリンク先を設定できます。"
 
 #: ../help/help_menudef.php:84
+msgid "Change the order of items by dragging."
+msgstr "項目をドラッグして並び順を変えることができます。"
+
+#: ../help/help_menudef.php:88
 msgid "Description about menu item."
 msgstr "メニュー項目についての説明です。"
 
-#: ../help/help_menudef.php:87
+#: ../help/help_menudef.php:91
 msgid "New Button"
 msgstr "新規ボタン"
 
-#: ../help/help_menudef.php:88
+#: ../help/help_menudef.php:92
 msgid "Add menu item."
 msgstr "新規メニュー項目を追加します。"
 
-#: ../help/help_menudef.php:91
+#: ../help/help_menudef.php:95
 msgid "Edit Button"
 msgstr "編集ボタン"
 
-#: ../help/help_menudef.php:92
+#: ../help/help_menudef.php:96
 msgid "Edit menu item.<br />Select the menu item by using the left checkbox."
 msgstr ""
 "選択されているメニュー項目を編集します。<br />メニュー項目を選択するには、一"
 "覧の左端のチェックボックスにチェックを入れます。"
 
-#: ../help/help_menudef.php:95
+#: ../help/help_menudef.php:99
 msgid "Delete Button"
 msgstr "削除ボタン"
 
-#: ../help/help_menudef.php:96
+#: ../help/help_menudef.php:100
 msgid "Delete menu item.<br />Select the menu item by using the left checkbox."
 msgstr ""
 "選択されているメニュー項目を削除します。<br />メニュー項目を選択するには、一"
 "覧の左端のチェックボックスにチェックを入れます。"
 
-#: ../help/help_menudef.php:99
+#: ../help/help_menudef.php:103
 msgid "Go back Button"
 msgstr "戻るボタン"
 
-#: ../help/help_menudef.php:100
+#: ../help/help_menudef.php:104
 msgid "Go back to menu item list."
 msgstr "メニュー項目一覧へ戻ります。"
 
