@@ -811,6 +811,7 @@ nav.secondlevel.minimized .btn.navbar-btn {
 	height:34px;/*for chrome*/
 }
 nav.secondlevel .btn.navbar-btn {
+	margin-top:8px;
 /*	height:41px;*/
 	height:42px;
 	border-bottom-left-radius: 0;
