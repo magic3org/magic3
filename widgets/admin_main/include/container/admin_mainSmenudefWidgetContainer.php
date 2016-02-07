@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -162,10 +162,10 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_new'] = $this->_('New');		// 新規
 			$localeText['label_get_title'] = $this->_('Get Title');		// タイトル取得
 			$localeText['label_item_type'] = $this->_('Item Type');		// 項目タイプ
-			$localeText['label_link_type'] = $this->_('Action');		// 動作(表示方法)
+			$localeText['label_link_type'] = $this->_('Action');		// 動作
 			$localeText['label_link_self'] = $this->_('Open page in the same window');		// 同ウィンドウで表示
 			$localeText['label_link_other'] = $this->_('Open page in the other window');		// 別ウィンドウで表示
-			$localeText['label_link_url'] = $this->_('Link URL');	// リンク先URL
+			$localeText['label_link_url'] = $this->_('URL');	// URL
 			$localeText['label_create_url'] = $this->_('Create URL');	// URLを作成
 			$localeText['label_item_visible'] = $this->_('Item Control');	// 表示制御
 			$localeText['label_visible'] = $this->_('Visible');	// 公開
@@ -190,8 +190,8 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 			$localeText['label_check'] = $this->_('Select');			// 選択
 			$localeText['label_name'] = $this->_('Name');			// 名前
 			$localeText['label_lang'] = $this->_('Language');			// 言語
-			$localeText['label_link_url'] = $this->_('Link URL');			// リンク先URL
-			$localeText['label_link_type'] = $this->_('Action');			// 動作(表示方法)
+			$localeText['label_link_url'] = $this->_('URL');			// URL
+			$localeText['label_link_type'] = $this->_('Division');			// 区分
 			$localeText['label_visible'] = $this->_('Visible');			// 公開
 			$localeText['label_operation'] = $this->_('Operation');		// 操作
 			$localeText['label_menu_layout'] = $this->_('Menu Layout');		// メニューレイアウト

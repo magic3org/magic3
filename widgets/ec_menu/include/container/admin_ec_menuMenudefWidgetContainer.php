@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_ec_menuMenudefWidgetContainer.php 5562 2013-01-18 03:49:58Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_ec_menuBaseWidgetContainer.php');
@@ -54,6 +54,9 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 	const PARAM_CATEGORY_ID = 'category';	// カテゴリーIDキー
 	const DEFAULT_CATEGORY_COUNT = 2;	// デフォルトの商品カテゴリー選択可能数
 	const TREE_ITEM_HEAD = 'treeitem_';		// ツリー項目IDヘッダ
+	const WINDOW_ICON_FILE = '/images/system/window32.png';		// 同じウィンドウアイコン
+	const OTHER_WINDOW_ICON_FILE = '/images/system/other_window32.png';		// 別のウィンドウアイコン
+	const STOP_ICON_FILE = '/images/system/closed32.png';		// 停止中(項目非表示)アイコン
 	
 	/**
 	 * コンストラクタ
@@ -162,7 +165,7 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 			$localeText['label_input'] = $this->_('Input URL');	// URL任意設定
 			$localeText['label_page_id'] = $this->_('Page ID:');	// ページID：
 			$localeText['label_content'] = $this->_('General Contents:');	// 汎用コンテンツ：
-			$localeText['label_url'] = $this->_('URL');	// リンク先URL
+			$localeText['label_url'] = $this->_('URL');	// URL
 			$localeText['label_item_visible'] = $this->_('Item Control');	// 表示制御
 			$localeText['label_visible'] = $this->_('Visible');	// 公開
 			$localeText['msg_link_to_content'] = $this->_('Cotrol visible status linked to contents.');	// リンク先のコンテンツに連動
@@ -185,8 +188,8 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 			$localeText['label_check'] = $this->_('Select');			// 選択
 			$localeText['label_name'] = $this->_('Name');			// 名前
 			$localeText['label_lang'] = $this->_('Language');			// 言語
-			$localeText['label_url'] = $this->_('URL');			// リンク先URL
-			$localeText['label_link_type'] = $this->_('Link Type');			// 表示方法
+			$localeText['label_url'] = $this->_('URL');			// URL
+			$localeText['label_link_type'] = $this->_('Division');			// 区分
 			$localeText['label_visible'] = $this->_('Visible');			// 公開
 			$localeText['label_operation'] = $this->_('Operation');		// 操作
 			$localeText['label_menu_layout'] = $this->_('Menu Layout');		// メニューレイアウト
@@ -731,20 +734,27 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 				}
 				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
-				$visible = '';
-				if ($row['md_visible']){
-					$visible = 'checked';
-				}
 				// リンクタイプ
-				$linkString = '';
-				switch ($row['md_link_type']){
-					case 0:			// 同ウィンドウで開くリンク
-						$linkString = $this->_('Self');		// 同
-						break;
-					case 1:			// 別ウィンドウで開くリンク
-						$linkString = $this->_('Other');	// 別
-						break;
+				$linkIconTag = '';
+				if ($row['md_visible']){			// メニュー項目表示の場合
+					switch ($row['md_link_type']){
+						case 0:			// 同ウィンドウで開くリンク
+							$iconUrl = $this->gEnv->getRootUrl() . self::WINDOW_ICON_FILE;
+							$iconTitle = $this->_('Show in self window');		// 同じウィンドウで表示
+							$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+							break;
+						case 1:			// 別ウィンドウで開くリンク
+							$iconUrl = $this->gEnv->getRootUrl() . self::OTHER_WINDOW_ICON_FILE;
+							$iconTitle = $this->_('Show in other window');		// 別のウィンドウで表示
+							$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+							break;
+					}
+				} else {
+					$iconUrl = $this->gEnv->getRootUrl() . self::STOP_ICON_FILE;// 停止中(項目非表示)アイコン
+					$iconTitle = $this->_('Hidden item');		// 非表示項目
+					$linkIconTag = '<img src="' . $this->getUrl($iconUrl) . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
 				}
+				
 				// 更新用シリアル番号
 				$serial = $id;
 		
@@ -765,9 +775,8 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 					'name' => $this->convertToDispString($name),		// 名前
 					'lang'		=> $lang,			// 言語
 					'item_type' => $iconTag,											// メニュー項目タイプアイコン
-					'link_type' => $linkString,											// リンクタイプ
+					'link_type' => $linkIconTag,											// リンクタイプ
 					'link_str' => $linkUrlStr,											// リンクURL
-					'visible' => $visible,											// メニュー項目表示制御
 					'label_edit_content' => $this->_('Edit Content')				// コンテンツを編集
 				);
 

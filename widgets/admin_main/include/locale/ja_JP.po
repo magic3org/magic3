@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-17 07:44+0900\n"
-"PO-Revision-Date: 2015-11-17 07:44+0900\n"
+"POT-Creation-Date: 2016-02-08 07:35+0900\n"
+"PO-Revision-Date: 2016-02-08 07:37+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -1180,9 +1180,7 @@ msgid "Item Type"
 msgstr "項目タイプ"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:171
-#: ../container/admin_mainMenudefWidgetContainer.php:201
 #: ../container/admin_mainSmenudefWidgetContainer.php:165
-#: ../container/admin_mainSmenudefWidgetContainer.php:194
 #: ../help/help_menudef.php:59
 msgid "Action"
 msgstr "動作"
@@ -1261,6 +1259,11 @@ msgstr "メニュー定義"
 #: ../container/admin_mainUserlistWidgetContainer.php:160
 msgid "Edit"
 msgstr "編集"
+
+#: ../container/admin_mainMenudefWidgetContainer.php:201
+#: ../container/admin_mainSmenudefWidgetContainer.php:194
+msgid "Division"
+msgstr "区分"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:203
 #: ../container/admin_mainPagedefWidgetContainer.php:168
@@ -1668,8 +1671,8 @@ msgstr "ポータルのサイト情報を更新"
 msgid "Save"
 msgstr "保存"
 
-#: ../container/admin_mainServerinfoWidgetContainer.php:100
-#: ../container/admin_mainSitelistWidgetContainer.php:149
+#: ../container/admin_mainServerinfoWidgetContainer.php:208
+#: ../container/admin_mainSitelistWidgetContainer.php:147
 #: ../container/admin_mainWidgetContainer.php:322
 msgid "Can not access the page."
 msgstr "アクセスできません"
@@ -2025,7 +2028,7 @@ msgid "You are not allowed to delete widget directory. (directory: %s)"
 msgstr "ウィジェットのディレクトリの削除権限がありません。(ディレクトリ： %s)"
 
 #: ../container/admin_mainWidgetlistWidgetContainer.php:264
-#: ../container/admin_mainWidgetlistWidgetContainer.php:902
+#: ../container/admin_mainWidgetlistWidgetContainer.php:904
 msgid "Widget not found."
 msgstr "ウィジェットが見つかりません"
 
