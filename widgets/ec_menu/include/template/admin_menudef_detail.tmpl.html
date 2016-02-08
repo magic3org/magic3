@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_menudef_detail.tmpl.html 5810 2013-03-09 11:14:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -45,14 +45,18 @@ function showUrl(url){
 	return false;
 }
 $(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+	
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_html');
 	m3SetWysiwygEditor('item_html', 200);
+	
+	// オプション領域作成
+	m3CreateOptionButton('{OPEN_BUTTON_ID}', '{CLOSE_BUTTON_ID}', 'option_area', {OPTION_AREA_OPEN});
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="fixed_mode" value="{FIXED_MODE}" />
@@ -61,81 +65,91 @@ $(function(){
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="parentid" value="{PARENT_ID}" />
 <input type="hidden" name="menuid" value="{MENU_ID}" />
-<table width="90%">
-<tr><td><span {_HELP_MENUDEF_DETAIL}><label>{_LC_LABEL_MENU_ITEM_DETAIL}</label></span></td>
-<td align="right"><span {_HELP_MENUDEF_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" /></span>
-</td></tr>
-<tr><td colspan="2">
-
-<table class="simple-table">
+<h3 class="m3config_h"><span {_HELP_MENUDEF_DETAIL}>{_LC_LABEL_MENU_ITEM_DETAIL}</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_MENUDEF_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" />
+</div></div></div>
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></td>
-	    <td width="800" colspan="3">
+	    <th><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
+	    <td colspan="3">
+		<div class="col-sm-4 m3config_item join">
 	    <select name="item_sel_menuid" onchange="selectMenu();">
 	        <option value="0" {SELECTED}>-- {_LC_LABEL_NEW} --</option>
                 <patTemplate:tmpl name="menuid_list">
                 <option value="{VALUE}" {SELECTED}>{NAME}</option>
                 </patTemplate:tmpl>
 	    </select>
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" />&nbsp;&nbsp;{LANG}<br />
+		</div>
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" value="{NAME}" maxlength="40" /></div><div class="col-sm-1 m3config_item form-control-static">{LANG}</div>
 	    <patTemplate:tmpl name="input_lang" visibility="hidden">
-	    <input type="text" name="item_name_{ID}" value="{VALUE}" size="40" maxlength="40" />&nbsp;&nbsp;{LANG}<br />
+		<div class="form-group">
+	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name_{ID}" value="{VALUE}" maxlength="40" /></div><div class="col-sm-1 m3config_item form-control-static">{LANG}</div>
+		</div>
 	    </patTemplate:tmpl>
 	    </td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_MENUDEF_ITEM_TYPE}>{_LC_LABEL_ITEM_TYPE}</span></td>
-	    <td>
-	    <select name="item_type">
-                <patTemplate:tmpl name="item_type_list">
-                <option value="{VALUE}" {SELECTED}>{NAME}</option>
-                </patTemplate:tmpl>
-	    </select>
-	    </td>
-	    <td class="table-headside"><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></td>
-	    <td>
-	    <select name="item_link_type">
-	        <option value="0" {LINK_TYPE_0}>{_LC_LABEL_LINK_SELF}</option>
-		<option value="1" {LINK_TYPE_1}>{_LC_LABEL_LINK_OTHER}</option>
-	    </select>
-	    </td>
-	</tr>
     <tr>
-	    <td class="table-headside">商品カテゴリー</td>
+	    <th>商品カテゴリー</th>
 	    <td colspan="3">
     <patTemplate:tmpl name="category">
+	<div class="col-sm-4 m3config_item">
     <select name="item_category{INDEX}">
         <option value="0">-- 未選択 --</option>
         <patTemplate:tmpl name="category_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
+	</div>
     </patTemplate:tmpl>
 	    </td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_MENUDEF_TITLE}>タイトル</span></td>
-	    <td colspan="3"><input type="text" name="item_title" value="{TITLE}" maxlength="300" style="width:100%" /></td>
+    <tr>
+	    <th><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_URL}</span></th>
+	    <td colspan="3">
+	    <div class="form-control-static m3config_item"><a id="linkurl" href="#" onclick="showUrl('{URL}');">{DISP_URL}</a></div>
+	    </td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_MENUDEF_PRODUCT_HEAD_CONTENT}>商品ヘッダ<br />コンテンツ</span></td>
-	    <td  colspan="3">
+	    <th><span {_HELP_MENUDEF_PRODUCT_HEAD_CONTENT}>商品ヘッダ<br />コンテンツ</span></th>
+	    <td class="ckeditor" colspan="3">
 	    <textarea name="item_html">{HTML}</textarea>
 	    </td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_MENUDEF_LINK_URL}>{_LC_LABEL_URL}</span></td>
-	    <td colspan="3">
-	    <a id="linkurl" href="#" onclick="showUrl('{URL}');">{DISP_URL}</a>
+    <tr class="option_area" style="display:none;">
+	    <th><span {_HELP_MENUDEF_ITEM_TYPE}>{_LC_LABEL_ITEM_TYPE}</span></th>
+	    <td style="width:200px;">
+	    <select name="item_type">
+                <patTemplate:tmpl name="item_type_list">
+                <option value="{VALUE}" {SELECTED}>{NAME}</option>
+                </patTemplate:tmpl>
+	    </select>
+	    </td>
+	    <th><span {_HELP_MENUDEF_LINK_TYPE}>{_LC_LABEL_LINK_TYPE}</span></th>
+	    <td>
+		<div class="col-sm-6 m3config_item">
+	    <select name="item_link_type">
+	        <option value="0" {LINK_TYPE_0}>{_LC_LABEL_LINK_SELF}</option>
+		<option value="1" {LINK_TYPE_1}>{_LC_LABEL_LINK_OTHER}</option>
+	    </select>
+		</div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_ITEM_VISIBLE}</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} />{_LC_LABEL_VISIBLE}</td>
+    <tr class="option_area" style="display:none;">
+	    <th><span {_HELP_MENUDEF_VISIBLE}>{_LC_LABEL_ITEM_VISIBLE}</span></th>
+	    <td colspan="3"><div class="checkbox"><label><input type="checkbox" name="item_visible" {SEL_ITEM_VISIBLE} />{_LC_LABEL_VISIBLE}</label></div></td>
 	</tr>
-	<tr class="even">
-	<td colspan="4" align="right">
+    <tr class="option_area" style="display:none;">
+	    <th><span {_HELP_MENUDEF_TITLE}>タイトル</span></th>
+	    <td colspan="3"><input type="text" name="item_title" value="{TITLE}" maxlength="300" style="width:100%" /></td>
+	</tr>
+	<tr>
+	    <td colspan="4"><div class="pull-left">{OPEN_BUTTON}{CLOSE_BUTTON}</div></td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="del_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_BUTTON_DISABLED}/>
 		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
@@ -143,14 +157,7 @@ $(function(){
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="{_LC_LABEL_ADD}" />
 </patTemplate:tmpl>
-	</td>
-	</tr>
-    </tbody>
-</table>
-
-</td></tr>
-</table>
-
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

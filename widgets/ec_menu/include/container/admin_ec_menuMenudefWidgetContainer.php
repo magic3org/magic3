@@ -57,6 +57,10 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 	const WINDOW_ICON_FILE = '/images/system/window32.png';		// 同じウィンドウアイコン
 	const OTHER_WINDOW_ICON_FILE = '/images/system/other_window32.png';		// 別のウィンドウアイコン
 	const STOP_ICON_FILE = '/images/system/closed32.png';		// 停止中(項目非表示)アイコン
+	const TAG_ID_OPEN_OPTION = 'open_area';		// オプション領域表示用ボタンタグ
+	const TOOLTIP_OPEN_OPTION = 'オプションを表示';		// オプション領域表示用ボタンツールチップ
+	const TAG_ID_CLOSE_OPTION = 'close_area';				// オプション領域非表示用ボタンタグ
+	const TOOLTIP_CLOSE_OPTION = 'オプションを非表示';		// オプション領域非表示用ボタンツールチップ
 	
 	/**
 	 * コンストラクタ
@@ -156,7 +160,7 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 			$localeText['label_lang'] = $this->_('Language');			// 言語
 			$localeText['label_new'] = $this->_('New');		// 新規
 			$localeText['label_item_type'] = $this->_('Item Type');		// 項目タイプ
-			$localeText['label_link_type'] = $this->_('Link Type');		// 表示方法
+			$localeText['label_link_type'] = $this->_('Action');		// 動作
 			$localeText['label_link_self'] = $this->_('Open page in the same window');		// 同ウィンドウで表示
 			$localeText['label_link_other'] = $this->_('Open page in the other window');		// 別ウィンドウで表示
 			$localeText['label_select_link'] = $this->_('Select Link Type');		// リンク先を選択
@@ -542,6 +546,19 @@ class admin_ec_menuMenudefWidgetContainer extends admin_ec_menuBaseWidgetContain
 			// その他の入力欄作成
 			$this->tmpl->setAttribute('input_lang', 'visibility', 'visible');
 			$this->createInputLangText($nameLangArray);
+		}
+		
+		// 拡張エリア制御
+		$openButton = $this->gDesign->createOptionButton(0/*表示ボタン*/, ''/*同画面*/, self::TOOLTIP_OPEN_OPTION, self::TAG_ID_OPEN_OPTION);
+		$this->tmpl->addVar('_widget', 'open_button', $openButton);
+		$this->tmpl->addVar('_widget', 'open_button_id', self::TAG_ID_OPEN_OPTION);
+		$closeButton = $this->gDesign->createOptionButton(1/*非表示ボタン*/, ''/*同画面*/, self::TOOLTIP_CLOSE_OPTION, self::TAG_ID_CLOSE_OPTION);
+		$this->tmpl->addVar('_widget', 'close_button', $closeButton);
+		$this->tmpl->addVar('_widget', 'close_button_id', self::TAG_ID_CLOSE_OPTION);
+		if ($this->isOpenOptionArea){
+			$this->tmpl->addVar('_widget', 'option_area_open', 'true');
+		} else {
+			$this->tmpl->addVar('_widget', 'option_area_open', 'false');
 		}
 		
 		// ### 入力値を再設定 ###

@@ -53,14 +53,14 @@ class help_menudef extends HelpConv
 			),
 			'menudef_item_type' => array(	
 				'title' =>	$this->_('Menu Item Type'),			// メニュー項目タイプ
-				'body' =>	$this->_('You can select menu item type below.<br /><strong>Link</strong> - Normal link item to go page if selected.<br /><strong>Folder</strong> - Item has sub menu items.<br /><strong>Text</strong> - Text item not to link.<br /><strong>Separator</strong> - Separete between menu items.')		// メニュー項目のタイプです。<br />「リンク」-クリックすると画面遷移する通常のリンク項目です。<br />「フォルダ」-サブメニューを持つ項目です。<br />「テキスト」-画面遷移せず文字列を表示するだけの項目です。<br />「セパレータ」-区切り項目です。
+				'body' =>	$this->_('You can select menu item type below.<br /><strong>Folder</strong> - Item has sub menu items.<br /><strong>Separator</strong> - Separete between menu items.')		// メニュー項目のタイプです。「フォルダ」-サブメニューを持つ項目です。<br />「セパレータ」-区切り項目です。
 			),
 			'menudef_link_url' => array(	
 				'title' =>	$this->_('URL'),			// リンク先URL
 				'body' =>	$this->_('Url to link.')		// メニュー項目をクリックしたときに表示されるURLです。
 			),
 			'menudef_link_type' => array(	
-				'title' =>	$this->_('Link Type'),			// 表示方法
+				'title' =>	$this->_('Action'),			// 動作
 				'body' =>	$this->_('Select type to open page in the same window or in other window if clicked.')		// メニュー項目をクリックしたときにリンク先が同じウィンドウで表示するか、別ウィンドウで表示するかを指定します。
 			),
 			'menudef_visible' => array(	

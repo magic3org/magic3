@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-08 08:13+0900\n"
-"PO-Revision-Date: 2016-02-08 08:14+0900\n"
+"POT-Creation-Date: 2016-02-08 11:19+0900\n"
+"PO-Revision-Date: 2016-02-08 11:20+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -17,250 +17,250 @@ msgstr ""
 "X-Poedit-SearchPath-0: ../container\n"
 "X-Poedit-SearchPath-1: ../help\n"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:73
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:721
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:77
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:738
 msgid "Folder"
 msgstr "フォルダ"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:74
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:729
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:78
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:746
 msgid "Separator"
 msgstr "セパレータ"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:150
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:154
 msgid "Add menu item?"
 msgstr "項目を新規追加しますか?"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:151
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:155
 msgid "Update menu item?"
 msgstr "項目を更新しますか?"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:152
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:156
 msgid "Delete menu item?"
 msgstr "項目を削除しますか?"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:153
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:157
 #: ../help/help_menudef.php:35
 msgid "Menu Item Detail"
 msgstr "メニュー項目詳細"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:154
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:158
 msgid "Go back"
 msgstr "戻る"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:155
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:189
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:383
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:420
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:159
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:193
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:387
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:424
 #: ../help/help_menudef.php:43
 msgid "Name"
 msgstr "名前"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:156
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:190
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:160
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:194
 #: ../help/help_menudef.php:51
 msgid "Language"
 msgstr "言語"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:157
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:185
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:161
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:189
 msgid "New"
 msgstr "新規"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:158
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:162
 msgid "Item Type"
 msgstr "項目タイプ"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:159
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:163
 #: ../help/help_menudef.php:63
-msgid "Link Type"
-msgstr "表示方法"
+msgid "Action"
+msgstr "動作"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:160
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:164
 msgid "Open page in the same window"
 msgstr "同ウィンドウで表示"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:161
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:165
 msgid "Open page in the other window"
 msgstr "別ウィンドウで表示"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:162
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:166
 #: ../help/help_menudef.php:79
 msgid "Select Link Type"
 msgstr "リンク先を選択"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:163
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:167
 msgid "Unselected"
 msgstr "未選択"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:164
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:168
 msgid "Top"
 msgstr "トップ"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:165
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:169
 msgid "Input URL"
 msgstr "URL任意設定"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:166
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:170
 msgid "Page ID:"
 msgstr "ページID："
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:167
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:171
 msgid "General Contents:"
 msgstr "汎用コンテンツ："
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:168
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:191
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:172
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:195
 #: ../help/help_menudef.php:59
 msgid "URL"
 msgstr "URL"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:169
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:173
 msgid "Item Control"
 msgstr "表示制御"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:170
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:193
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:174
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:197
 #: ../help/help_menudef.php:67
 msgid "Visible"
 msgstr "表示"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:171
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:175
 msgid "Cotrol visible status linked to contents."
 msgstr "リンク先のコンテンツに連動"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:172
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:176
 #: ../help/help_menudef.php:87
 msgid "Description"
 msgstr "説明"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:173
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:187
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:177
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:191
 msgid "Delete"
 msgstr "削除"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:174
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:178
 msgid "Update"
 msgstr "更新"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:175
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:179
 msgid "Add"
 msgstr "新規追加"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:180
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:184
 msgid "Select menu item to edit."
 msgstr "編集する項目を選択してください"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:181
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:185
 msgid "Select menu item to delete."
 msgstr "削除する項目を選択してください"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:182
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:186
 msgid "Delete selected item?"
 msgstr "選択項目を削除しますか?"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:183
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:187
 #: ../help/help_menudef.php:31
 msgid "Menu Definition"
 msgstr "メニュー定義"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:184
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:188
 msgid "Path:"
 msgstr "パス："
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:186
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:190
 msgid "Edit"
 msgstr "編集"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:188
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:192
 msgid "Select"
 msgstr "選択"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:192
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:196
 msgid "Division"
 msgstr "区分"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:194
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:198
 #: ../help/help_menudef.php:75
 msgid "Operation"
 msgstr "操作"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:195
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:199
 #: ../help/help_menudef.php:83
 msgid "Menu Layout"
 msgstr "メニューレイアウト"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:196
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:200
 msgid "Menu items can be sorted by mouse drag and drop."
 msgstr "マウスドラッグで項目の表示順を変更できます"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:197
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:201
 msgid "Menu Top"
 msgstr "メニュートップ"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:198
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:202
 msgid "Open All"
 msgstr "すべて開く"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:199
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:203
 msgid "Close All"
 msgstr "すべて閉じる"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:246
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:250
 msgid "You are not allowed to delete menu item with child item."
 msgstr "子項目を持つメニュー項目は削除できません。"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:257
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:470
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:261
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:474
 msgid "Menu item deleted."
 msgstr "データを削除しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:259
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:472
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:263
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:476
 msgid "Failed in deleting menu item."
 msgstr "データ削除に失敗しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:384
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:388
 msgid "Menu ID"
 msgstr "メニューID"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:409
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:413
 msgid "Menu item added."
 msgstr "データを追加しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:413
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:417
 msgid "Failed in adding menu item."
 msgstr "データ追加に失敗しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:457
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:461
 msgid "Menu item updated."
 msgstr "データを更新しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:461
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:465
 msgid "Failed in updating menu item."
 msgstr "データ更新に失敗しました"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:717
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:734
 msgid "Link"
 msgstr "リンク"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:725
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:742
 msgid "Text"
 msgstr "テキスト"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:743
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:760
 msgid "Show in self window"
 msgstr "同じウィンドウで表示"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:748
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:765
 msgid "Show in other window"
 msgstr "別のウィンドウで表示"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:754
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:771
 msgid "Hidden item"
 msgstr "非表示項目"
 
-#: ../container/admin_ec_menuMenudefWidgetContainer.php:780
+#: ../container/admin_ec_menuMenudefWidgetContainer.php:797
 msgid "Edit Content"
 msgstr "コンテンツを編集"
 
@@ -304,15 +304,12 @@ msgstr "メニュー項目タイプ"
 
 #: ../help/help_menudef.php:56
 msgid ""
-"You can select menu item type below.<br /><strong>Link</strong> - Normal "
-"link item to go page if selected.<br /><strong>Folder</strong> - Item has "
-"sub menu items.<br /><strong>Text</strong> - Text item not to link.<br /"
-"><strong>Separator</strong> - Separete between menu items."
+"You can select menu item type below.<br /><strong>Folder</strong> - Item has "
+"sub menu items.<br /><strong>Separator</strong> - Separete between menu "
+"items."
 msgstr ""
-"メニュー項目のタイプです。<br />「リンク」-クリックすると画面遷移する通常のリ"
-"ンク項目です。<br />「フォルダ」-サブメニューを持つ項目です。<br />「テキス"
-"ト」-画面遷移せず文字列を表示するだけの項目です。<br />「セパレータ」-区切り"
-"項目です。"
+"メニュー項目のタイプです。<br />「フォルダ」-サブメニューを持つ項目です。"
+"<br />「セパレータ」-区切り項目です。"
 
 #: ../help/help_menudef.php:60
 msgid "Url to link."
@@ -402,6 +399,9 @@ msgstr "戻るボタン"
 #: ../help/help_menudef.php:104
 msgid "Go back to menu item list."
 msgstr "メニュー項目一覧へ戻ります。"
+
+#~ msgid "Link Type"
+#~ msgstr "表示方法"
 
 #~ msgid "Self"
 #~ msgstr "同"
@@ -843,9 +843,6 @@ msgstr "メニュー項目一覧へ戻ります。"
 
 #~ msgid "Untitled"
 #~ msgstr "未設定"
-
-#~ msgid "Option"
-#~ msgstr "オプション"
 
 #~ msgid "Menu Item"
 #~ msgstr "メニュー項目"
