@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,7 @@ require_once($gEnvManager->getIncludePath() . '/common/userInfo.php');		// ユ�
 
 class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContainer
 {
-	private $db;	// DB接続オブジェクト
+//	private $db;	// DB接続オブジェクト
 	private $serialNo;	// シリアルNo
 	private $serialArray = array();		// 表示されているコンテンツシリアル番号
 	private $userTypeArray;		// ユーザ種別(-1=未承認ユーザ、0=仮ユーザ、10=一般ユーザ、50=システム運営者、100=システム管理者)
@@ -47,7 +47,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		parent::__construct();
 		
 		// DB接続オブジェクト作成
-		$this->db = new admin_mainDb();
+//		$this->_mainDb = new admin_mainDb();
 		
 		// ユーザタイプメニュー項目
 		$this->userTypeArray = array(	array(	'name' => '-- ' . $this->_('Unselected') . ' --',		'value' => ''),		// 未選択
@@ -186,13 +186,13 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				}
 			}
 			if (count($delItems) > 0){
-				$ret = $this->db->delUserBySerial($delItems);
+				$ret = $this->_mainDb->delUserBySerial($delItems);
 				if ($ret){		// データ削除成功のとき
 					$this->setGuidanceMsg($this->_('Item deleted.'));		// データを削除しました
 					
 					// 運用ログ出力
 					for ($i = 0; $i < count($delItems); $i++){
-						$ret = $this->db->getUserBySerial($delItems[$i], $row, $groupRows);
+						$ret = $this->_mainDb->getUserBySerial($delItems[$i], $row, $groupRows);
 						if ($ret){
 							$account = $row['lu_account'];
 							$loginUserId = $row['lu_id'];
@@ -210,7 +210,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 総数を取得
-		$totalCount = $this->db->getAllUserListCount();
+		$totalCount = $this->_mainDb->getAllUserListCount();
 
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
@@ -241,7 +241,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
 		
 		// ユーザリストを取得
-		$this->db->getAllUserList($viewCount, $pageNo, array($this, 'userListLoop'));
+		$this->_mainDb->getAllUserList($viewCount, $pageNo, array($this, 'userListLoop'));
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
 	/**
@@ -252,9 +252,6 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 	 */
 	function createDetail($request)
 	{
-		$userId = $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		
 		// 入力値を取得
 		$act = $request->trimValueOf('act');
 		$userIdByUrl = $request->trimValueOf(M3_REQUEST_PARAM_USER_ID);		// URLで付加されたユーザID
@@ -313,7 +310,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			
 			// アカウント重複チェック
 			// 設定データを取得
-			$ret = $this->db->getUserBySerial($this->serialNo, $row, $groupRows);
+			$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
 			if ($ret){
 				if ($row['lu_account'] != $account && $this->_db->isExistsAccount($account)) $this->setMsg(self::MSG_USER_ERR, $this->_('Login account is duplicated.'));		// アカウントが重複しています
 			} else {
@@ -357,7 +354,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
 					
 					// 運用ログ出力
-					$ret = $this->db->getUserBySerial($newSerial, $row, $groupRows);
+					$ret = $this->_mainDb->getUserBySerial($newSerial, $row, $groupRows);
 					if ($ret) $loginUserId = $row['lu_id'];
 					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを更新しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 					
@@ -417,7 +414,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item added.'));	// データを追加しました
 					
 					// 運用ログ出力
-					$ret = $this->db->getUserBySerial($newSerial, $row, $groupRows);
+					$ret = $this->_mainDb->getUserBySerial($newSerial, $row, $groupRows);
 					if ($ret) $loginUserId = $row['lu_id'];
 					$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを追加しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 					
@@ -428,12 +425,12 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 				}
 			}
 		} else if ($act == 'delete'){		// 削除のとき
-			$ret = $this->db->delUserBySerial(array($this->serialNo));
+			$ret = $this->_mainDb->delUserBySerial(array($this->serialNo));
 			if ($ret){		// データ削除成功のとき
 				$this->setMsg(self::MSG_GUIDANCE, $this->_('Item deleted.'));	// データを削除しました
 				
 				// 運用ログ出力
-				$ret = $this->db->getUserBySerial($this->serialNo, $row, $groupRows);
+				$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
 				if ($ret) $loginUserId = $row['lu_id'];
 				$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザを削除しました。アカウント: ' . $account, 2100, 'userid=' . $loginUserId . ', username=' . $name);
 			} else {
@@ -447,7 +444,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 			// ##### ユーザIDが設定されているとき(他ウィジェットからの表示)は、データを取得 #####
 			if (!empty($userIdByUrl)){
 				// ユーザ情報を取得
-				$ret = $this->db->getUserById($userIdByUrl, $row);
+				$ret = $this->_mainDb->getUserById($userIdByUrl, $row);
 				if ($ret){
 					$this->serialNo = $row['lu_serial'];		// ユーザシリアル番号
 				} else {
@@ -457,7 +454,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		}
 		if ($reloadData){		// データの再読み込み
 			// 設定データを取得
-			$ret = $this->db->getUserBySerial($this->serialNo, $row, $groupRows);
+			$ret = $this->_mainDb->getUserBySerial($this->serialNo, $row, $groupRows);
 			if ($ret){
 				$name = $row['lu_name'];
 				$account = $row['lu_account'];
@@ -492,7 +489,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$this->createUserTypeMenu($limitedMenu);
 		
 		// ユーザグループメニュー作成
-		$ret = $this->db->getAllUserGroupRows($langId, $this->userGroupListData);
+		$ret = $this->_mainDb->getAllUserGroupRows($this->_langId, $this->userGroupListData);
 		$this->createUserGroupMenu(self::USER_GROUP_COUNT);
 		
 		// 取得データを設定
@@ -502,7 +499,7 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$canLoginCheck = '';
 		if ($canLogin) $canLoginCheck = 'checked';
 		$this->tmpl->addVar("_widget", "can_login", $canLoginCheck);
-		//$this->tmpl->addVar("_widget", "userid", $loginUserId);// ユーザID
+		$this->tmpl->addVar("_widget", "userid", $loginUserId);// ユーザID
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 		$this->tmpl->addVar("_widget", "start_date", $start_date);	// 有効期間開始日
 		$this->tmpl->addVar("_widget", "start_time", $start_time);	// 有効期間開始時間

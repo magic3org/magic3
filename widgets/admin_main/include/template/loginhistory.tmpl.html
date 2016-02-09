@@ -1,0 +1,101 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function selpage(page){
+	document.main.act.value = 'selpage';
+	document.main.page.value = page;
+	document.main.submit();
+	return true;
+}
+function selectMenu(){
+	document.main.submit();
+	return true;
+//	location.href = '?task=loginstatus_history&account=' + document.main.account.value + '&loginstatus=' + document.main.loginstatus.value;
+//	return false;
+}
+function cancelItem(){
+	if (document.main._backurl.value){
+		location.href = document.main._backurl.value;
+		return false;
+	} else {
+//		history.back();
+		document.main.task.value = 'userlist_detail';
+		document.main.submit();
+		return false;
+	}
+}
+function showAccessLog(serial){
+	window.open("{ACCESS_LOG_URL}&serial=" + serial, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=900,height=600");
+	return false;
+}
+$(function(){
+	// テーブルを作成
+	m3SetConfigTable('loginlist');
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="loginhistory" />
+<input type="hidden" name="act" />
+<input type="hidden" name="page" value="{PAGE}" />
+<input type="hidden" name="viewcount" value="{VIEW_COUNT}" />
+<!--<input type="hidden" name="account" value="{ACCOUNT}" />-->
+<input type="hidden" name="userid" value="{USERID}" />
+<!-- m3:PostParam -->
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_LOGINHISTORY}>{_LC_LABEL_LOGINHISTORY}</span>
+<select name="loginstatus" class="form-control" onchange="selectMenu();" style="display:inline-block;width:200px;margin-top:-7px;">
+<patTemplate:tmpl name="login_status_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+</h3>
+<div class="form-control-static m3config_h_side_text" style="margin-left:2em;">{_LC_LABEL_NAME}{NAME}</div><div class="form-control-static m3config_h_side_text" >{_LC_LABEL_ACCOUNT}{ACCOUNT}</div>
+<div class="m3config_h_side_buttons pull-right">
+<div {_HELP_CONTENT_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" />
+</div></div>
+</div>
+
+<table id="loginlist">
+    <thead>
+    <tr>
+	    <th><span {_HELP_LOGINHISTORY_NAME}>{_LC_LABEL_DATE}</span></th>
+		<th class="narrow">種別</th>
+	    <th><span {_HELP_LOGINHISTORY_IP}>IP</span></th>
+	    <th class="narrow">{_LC_LABEL_BROWSER}</th>
+	    <th><span {_HELP_LOGINHISTORY_ACCESS}>{_LC_LABEL_ACCESS_LOG}</span></th>
+	</tr>
+    </thead>
+    <tbody>
+    <patTemplate:tmpl name="loglist">
+    <tr>
+	    <td>{OUTPUT_DT}</td>
+		<td>{TYPE}</td>
+	    <td>{IP}</td>
+	    <td style="text-align:center;">{BROWSER}</td>
+	    <td><a href="#" onclick="showAccessLog({ACCESS_LOG});">{ACCESS_LOG}</a></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+
+{PAGE_LINK}
+<patTemplate:tmpl name="search_range" visibility="hidden"><label>{_LC_LABEL_RANGE}&nbsp;{START_NO}-{END_NO}</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}</label>
+
+</form>
+</div>
+</patTemplate:tmpl>

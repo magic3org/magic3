@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -33,21 +33,21 @@ function editItem(){
 		if (i == items.length){			
 			window.alert('{_LC_MSG_SELECT_ITEM}');
 		} else {
-/*			document.main.task.value = 'userlist_detail';
+			document.main.task.value = 'userlist_detail';
 			document.main.act.value = 'edit';
 			document.main.serial.value = items[i];
-			document.main.submit();*/
-			location.href = '?task=userlist_detail&act=edit&serial=' + items[i];
+			document.main.submit();
+//			location.href = '?task=userlist_detail&act=edit&serial=' + items[i];
 		}
 	}
 	return false;
 }
 function editItemBySerial(serial){
-/*	document.main.task.value = 'userlist_detail';
+	document.main.task.value = 'userlist_detail';
 	document.main.act.value = 'edit';
 	document.main.serial.value = serial;
-	document.main.submit();*/
-	location.href = '?task=userlist_detail&act=edit&serial=' + serial;
+	document.main.submit();
+//	location.href = '?task=userlist_detail&act=edit&serial=' + serial;
 	return false;
 }
 function delItem(){

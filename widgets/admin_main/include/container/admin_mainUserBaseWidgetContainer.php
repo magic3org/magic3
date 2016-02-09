@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,8 +20,11 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	protected $_mainDb;			// DB接続オブジェクト
 	const BREADCRUMB_TITLE	= 'ユーザ管理';		// パンくずリストトップタイトル
+	
+	// 画面
 	const TASK_USERLIST			= 'userlist';		// ユーザ一覧
 	const TASK_USERLIST_DETAIL	= 'userlist_detail';	// ユーザ詳細
+	const TASK_LOGINHISTORY	= 'loginhistory';		// ログイン履歴
 	const TASK_USERGROUP		= 'usergroup';		// ユーザグループ
 	const TASK_USERGROUP_DETAIL	= 'usergroup_detail';		// ユーザグループ詳細
 	const DEFAULT_TOP_PAGE = 'userlist';		// デフォルトのトップ画面
@@ -55,12 +58,23 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		$titles = array(self::BREADCRUMB_TITLE);
 		switch ($task){
 			case self::TASK_USERLIST:	// ユーザ一覧
-			case self::TASK_USERLIST_DETAIL:	// ユーザ詳細
 				$titles[] = 'ユーザ一覧';
 				break;
+			case self::TASK_USERLIST_DETAIL:	// ユーザ詳細
+				$titles[] = 'ユーザ一覧';
+				$titles[] = '詳細';
+				break;			
+			case self::TASK_LOGINHISTORY:	// ログイン履歴
+				$titles[] = 'ユーザ一覧';
+				$titles[] = '詳細';
+				$titles[] = 'ログイン履歴';
+				break;
 			case self::TASK_USERGROUP:	// ユーザグループ
+				$titles[] = 'ユーザグループ';
+				break;
 			case self::TASK_USERGROUP_DETAIL:	// ユーザグループ詳細
 				$titles[] = 'ユーザグループ';
+				$titles[] = '詳細';
 				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
@@ -76,7 +90,9 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'task'		=> self::TASK_USERLIST,
 									'url'		=> '',
 									'tagid'		=> '',
-									'active'	=> ($task == self::TASK_USERLIST || $task == self::TASK_USERLIST_DETAIL),
+									'active'	=> ($task == self::TASK_USERLIST || 
+													$task == self::TASK_USERLIST_DETAIL || 
+													$task == self::TASK_LOGINHISTORY),
 									'submenu'	=> array()
 								),
 								(Object)array(
