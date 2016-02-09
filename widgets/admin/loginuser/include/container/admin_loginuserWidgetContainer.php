@@ -78,7 +78,8 @@ class admin_loginuserWidgetContainer extends BaseWidgetContainer
 			$loginDt	= $row['ll_pre_login_dt'];	// 前回ログイン日時
 			
 			$userDetailUrl	= '?task=userlist_detail&' . M3_REQUEST_PARAM_USER_ID . '=' . $row['lu_id'];		// ユーザ詳細画面URL
-			$loginStatusUrl = '?task=loginstatus_history&account=' . $row['lu_account'];// ログイン状況画面URL
+	//		$loginStatusUrl = '?task=loginstatus_history&account=' . $row['lu_account'];// ログイン状況画面URL
+			$loginStatusUrl = '?task=loginhistory&userid=' . $row['lu_id'];// ログイン履歴画面URL
 		}
 		
 		// ##### アバター画像取得 #####

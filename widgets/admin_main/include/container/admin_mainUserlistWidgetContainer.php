@@ -570,8 +570,9 @@ class admin_mainUserlistWidgetContainer extends admin_mainUserBaseWidgetContaine
 		$loginCount = $fetchedRow['ll_login_count'];
 		if (empty($loginCount)) $loginCount = '0';
 
-		// ログイン状況画面URL
-		$loginStatusUrl = '?task=loginstatus_history&account=' . $fetchedRow['lu_account'];
+		// ログイン履歴画面URL
+		//$loginStatusUrl = '?task=loginstatus_history&account=' . $fetchedRow['lu_account'];
+		$loginStatusUrl = '?task=' . self::TASK_LOGINHISTORY . '&userid=' . $fetchedRow['lu_id'];
 		
 		// ユーザ状態
 		if ($fetchedRow['lu_enable_login']){		// ログイン可能のとき

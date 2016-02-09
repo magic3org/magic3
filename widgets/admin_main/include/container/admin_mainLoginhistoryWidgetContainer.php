@@ -14,8 +14,6 @@
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainUserBaseWidgetContainer.php');
-//require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
-//require_once($gEnvManager->getIncludePath() . '/common/userInfo.php');		// ユーザ情報クラス
 
 class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetContainer
 {
@@ -121,7 +119,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		$localeText = array();
 		$task = $request->trimValueOf('task');
 		
-		if ($task == 'loginhistory'){			// ログイン履歴
+		if ($task == self::TASK_LOGINHISTORY){			// ログイン履歴
 			$this->createList($request);
 			
 			// テキストをローカライズ
@@ -206,7 +204,8 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 				if ($i == $pageNo){
 					$link = '&nbsp;' . $i;
 				} else {
-					$linkUrl = '?task=loginstatus_history&account=' . $account . '&loginstatus=' . intval($this->loginStatus) . '&page=' . $i;
+			//		$linkUrl = '?task=loginstatus_history&account=' . $account . '&loginstatus=' . intval($this->loginStatus) . '&page=' . $i;
+					$linkUrl = '?task=' . self::TASK_LOGINHISTORY . '&userid=' . $userId . '&loginstatus=' . intval($this->loginStatus) . '&page=' . $i;
 					$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($linkUrl) . '">' . $i . '</a>';
 				}
 				$pageLink .= $link;
@@ -227,6 +226,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		
 		// 一覧作成
 		$this->_mainDb->getOpeLogListByMessageCode($messageCode, $searchOption, $viewCount, $pageNo, array($this, 'logListLoop'));
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');			// 履歴がないときは一覧を表示しない
 		
 		// 値を画面に埋め込む
 		$this->tmpl->addVar("_widget", "userid", $this->convertToDispString($userId));	// ユーザID

@@ -83,8 +83,8 @@ class admin_mainEditmenuWidgetContainer extends admin_mainMainteBaseWidgetContai
 																			'desc' => $this->_('Manage user to login.')),		// ログイン可能なユーザを管理します。
 									array('task' => 'usergroup',			'name' => $this->_('User Group'),		// ユーザグループ
 																			'desc' => $this->_('Manage user group.')),		// ユーザグループを管理します。
-									array('task' => 'loginstatus',			'name' => $this->_('Login Status'),		// ログイン状況
-																			'desc' => $this->_('View user login status.')),		// ユーザのログイン状況を表示します。
+//									array('task' => 'loginstatus',			'name' => $this->_('Login Status'),		// ログイン状況
+//																			'desc' => $this->_('View user login status.')),		// ユーザのログイン状況を表示します。
 									array('task' => 'configsite',			'name' => $this->_('Site Information'),		// 基本情報
 																			'desc' => $this->_('Configure site information.')),		// サイトの設定を行います。
 									array('task' => 'usercustom',			'name' => $this->_('User Custom Parameter'),		// ユーザ定義変数管理

@@ -174,9 +174,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						$task = 'userlist';
 					} else if ($task == 'usergroup_detail'){		// ユーザグループ詳細
 						$task = 'usergroup';
-					} else if ($task == 'loginstatus' ||				// ログイン状況
-								$task == 'loginstatus_history'){		// ログイン状況ユーザ単位履歴
-						$task = 'loginstatus';
+//					} else if ($task == 'loginstatus' ||				// ログイン状況
+//								$task == 'loginstatus_history'){		// ログイン状況ユーザ単位履歴
+//						$task = 'loginstatus';
 					} else if ($task == 'pagedef_detail' ||		// ページ定義詳細
 								$task == 'pagedef_mobile' ||	// 携帯用ページ定義
 								$task == 'pagedef_smartphone'){		// スマートフォン用ページ定義
@@ -241,7 +241,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'userlist':	// ユーザリスト
 						case 'usergroup':	// ユーザグループ
 						case 'loginhistory':	// ログイン履歴
-						case 'loginstatus':	// ログイン状況
+//						case 'loginstatus':	// ログイン状況
 						case 'widgetlist':	// ウィジェットリスト
 						case 'templist':	// テンプレートリスト
 						case 'pagedef':		// 画面定義
