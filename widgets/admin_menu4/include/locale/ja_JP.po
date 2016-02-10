@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-21 09:31+0900\n"
-"PO-Revision-Date: 2014-01-21 09:31+0900\n"
+"POT-Creation-Date: 2016-02-10 11:51+0900\n"
+"PO-Revision-Date: 2016-02-10 11:52+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -13,29 +13,34 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.8.4\n"
 "X-Poedit-SearchPath-0: ../container\n"
 
-#: ../container/admin_menu4WidgetContainer.php:209
+#: ../container/admin_menu4WidgetContainer.php:218
 msgid "Server Name:"
 msgstr "サーバ名："
 
-#: ../container/admin_menu4WidgetContainer.php:311
+#: ../container/admin_menu4WidgetContainer.php:326
 msgid "Top Page"
 msgstr "トップ画面"
 
-#: ../container/admin_menu4WidgetContainer.php:363
+#: ../container/admin_menu4WidgetContainer.php:416
 msgid "Logout from system?"
 msgstr "ログアウトしますか?"
 
-#: ../container/admin_menu4WidgetContainer.php:365
+#: ../container/admin_menu4WidgetContainer.php:418
 msgid "Menu"
 msgstr "メニュー"
 
-#: ../container/admin_menu4WidgetContainer.php:366
+#: ../container/admin_menu4WidgetContainer.php:419
+msgid "User Information"
+msgstr "ユーザ情報"
+
+#: ../container/admin_menu4WidgetContainer.php:420
 msgid "Logout"
 msgstr "ログアウト"
 
-#: ../container/admin_menu4WidgetContainer.php:367
+#: ../container/admin_menu4WidgetContainer.php:421
 msgid "Close"
 msgstr "閉じる"
 

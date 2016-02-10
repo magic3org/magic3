@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -353,6 +353,8 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "avatar_img", $iconTag);
 		
 			// ユーザメニュー
+			$loginStatusUrl = '?task=userlist_detail&userid=' . $userId;// ユーザ情報画面URL
+			$this->tmpl->addVar("menu", "user_info_url", $this->convertUrlToHtmlEntity($loginStatusUrl));
 			$iconTitle = 'ログアウト';
 			$iconUrl = $this->gEnv->getRootUrl() . self::LOGOUT_ICON_FILE;		// ログアウト
 			$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
@@ -414,6 +416,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$localeText['msg_logout'] = $this->_('Logout from system?');// ログアウトしますか?
 //		$localeText['label_top'] = $this->_('Top');// トップ
 		$localeText['label_menu'] = $this->_('Menu');// メニュー
+		$localeText['label_user_info'] = $this->_('User Information');// ユーザ情報
 		$localeText['label_logout'] = $this->_('Logout');// ログアウト
 		$localeText['label_close'] = $this->_('Close');// 閉じる
 		$this->setLocaleText($localeText);
