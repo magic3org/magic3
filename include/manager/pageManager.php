@@ -4584,6 +4584,11 @@ class PageManager extends Core
 		global $gEnvManager;
 		static $widgetCountArray = array();
 
+		// 管理画面へのアクセスでログインされていないときは0を返す
+		if ($gEnvManager->isAdminDirAccess() && !$gEnvManager->isSystemManageUser()){		// 管理画面へのアクセスのときでシステム運用権限がない場合
+			return 0;
+		}
+				
 		// 実行コマンドを取得
 		$cmd = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		if ($cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){		// ウィジェット付きポジション表示
