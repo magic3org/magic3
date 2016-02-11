@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2015 Magic3 Project.
+-- * @copyright  Copyright 2006-2016 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -254,6 +254,7 @@ INSERT INTO _page_def
 ('admin_index', 'front',        'main',         3,        'admin/opelog',   0,            true,       true, false),
 ('admin_index', 'front',        'left',         1,        'admin/loginuser',   0,            true,       true, true),
 ('admin_index', 'content',      'main',         1,        'admin_main',   0,            true,       false, false),
+('admin_index', 'content',      'right',        1,        'admin/remotecontent',   0,            true,       true, true),
 ('connector',   'content',      'main',         1,        'c/updateinfo', 0,            true,       false,       true);
 
 -- サイト定義マスター

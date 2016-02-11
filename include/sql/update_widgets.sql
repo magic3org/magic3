@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2015 Magic3 Project.
+-- * @copyright  Copyright 2006-2016 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -43,6 +43,10 @@ DELETE FROM _widgets WHERE wd_id = 'admin/message';
 INSERT INTO _widgets
 (wd_id,           wd_name,            wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_add_script_lib, wd_available, wd_editable, wd_has_admin, wd_initialized,  wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
 ('admin/message', '管理用メッセージ出力', true, 'admin',            '1.0.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true,   1,        '2014-01-02', now(),         now());
+DELETE FROM _widgets WHERE wd_id = 'admin/remotecontent';
+INSERT INTO _widgets
+(wd_id,                 wd_name,                  wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin/remotecontent', 'リモート表示コンテンツ', true,     'admin',        '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                false,        false,       false,        true,           1,               '2016-02-11',  now(),         now());
 
 -- ウィジェット情報(PC用/メニュー)
 DELETE FROM _widgets WHERE wd_id = 'default_menu';

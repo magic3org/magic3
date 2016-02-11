@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -84,6 +84,7 @@ class EnvManager extends Core
 	private $joomlaPageNavData;		// Joomla!v2.5用ページ前後遷移データ
 	private $joomlaPaginationData;	// Joomla!v2.5用ページ番号遷移データ
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
+	private $remoteContent;			// リモート表示コンテンツ
 	private $defaultLacaleArray;	// デフォルトのロケール取得用
 	private $selectedMenuItems = array();				// 現在選択中のメニュー項目
 	const DEFAULT_LOCALE = 'ja_JP';			// デフォルトロケール
@@ -3002,6 +3003,25 @@ class EnvManager extends Core
 	public function getJoomlaViewData()
 	{
 		return $this->joomlaViewData;
+	}
+	/**
+	 * リモート表示コンテンツを設定
+	 *
+	 * @param string $data			コンテンツデータ
+	 * @return 						なし
+	 */
+	public function setRemoteContent($data)
+	{
+		$this->remoteContent = $data;
+	}
+	/**
+	 * リモート表示コンテンツを取得
+	 *
+	 * @return string		コンテンツデータ
+	 */
+	public function getRemoteContent()
+	{
+		return $this->remoteContent;
 	}
 }
 ?>
