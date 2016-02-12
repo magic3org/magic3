@@ -84,7 +84,7 @@ class EnvManager extends Core
 	private $joomlaPageNavData;		// Joomla!v2.5用ページ前後遷移データ
 	private $joomlaPaginationData;	// Joomla!v2.5用ページ番号遷移データ
 	private $joomlaViewData;		// Joomla!ビュー作成用データ
-	private $remoteContent;			// リモート表示コンテンツ
+	private $remoteContent = array();			// リモート表示コンテンツ
 	private $defaultLacaleArray;	// デフォルトのロケール取得用
 	private $selectedMenuItems = array();				// 現在選択中のメニュー項目
 	const DEFAULT_LOCALE = 'ja_JP';			// デフォルトロケール
@@ -3007,21 +3007,23 @@ class EnvManager extends Core
 	/**
 	 * リモート表示コンテンツを設定
 	 *
+	 * @param string $position		配置ポジション名
 	 * @param string $data			コンテンツデータ
 	 * @return 						なし
 	 */
-	public function setRemoteContent($data)
+	public function setRemoteContent($position, $data)
 	{
-		$this->remoteContent = $data;
+		$this->remoteContent[$position] = $data;
 	}
 	/**
 	 * リモート表示コンテンツを取得
 	 *
-	 * @return string		コンテンツデータ
+	 * @param string $position		配置ポジション名
+	 * @return string				コンテンツデータ
 	 */
-	public function getRemoteContent()
+	public function getRemoteContent($position)
 	{
-		return $this->remoteContent;
+		return $this->remoteContent[$position];
 	}
 }
 ?>

@@ -18,7 +18,8 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 class admin_remotecontentWidgetContainer extends BaseWidgetContainer
 {
 	const DEFAULT_TITLE = 'リモート表示コンテンツ';		// デフォルトのウィジェットタイトル名
-		
+	const POS_RIGHT = 'right';			// リモート表示コンテンツキー(rightポジション用)
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -39,11 +40,7 @@ class admin_remotecontentWidgetContainer extends BaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-//		if ($this->useBootstrap){
-//			return 'index_bs.tmpl.html';
-//		} else {
-			return 'index.tmpl.html';
-//		}
+		return 'index.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -56,20 +53,14 @@ class admin_remotecontentWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
+		// 現在のポジション取得
+		$this->gPage->getCurrentWidgetPosition($position, $index);
 
-		// 画面に埋め込む
-		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));
-		$this->tmpl->addVar("_widget", "login_count", $loginCount);
-		$this->tmpl->addVar("_widget", "avatar_image", $iconTag);
-		// 前回ログイン日時。年が同じ場合は省略。
-		if (intval(date('Y', strtotime($loginDt))) == intval(date('Y'))){
-			$this->tmpl->addVar("_widget", "login_dt", $this->convertToDispDateTime($loginDt, 11/*年省略,0なし年月*/, 10/*時分表示*/));
-		} else {
-			$this->tmpl->addVar("_widget", "login_dt", $this->convertToDispDateTime($loginDt, 0, 10/*時分表示*/));
-		}
+		// リモート表示コンテンツ取得
+		$content = $this->gEnv->getRemoteContent($position);
 		
-		$this->tmpl->addVar("_widget", "user_detail_url", $this->convertUrlToHtmlEntity($userDetailUrl));	// ユーザ詳細画面URL
-		$this->tmpl->addVar("_widget", "login_status_url", $this->convertUrlToHtmlEntity($loginStatusUrl));	// ログイン状況画面URL
+		// 画面に埋め込む
+		$this->tmpl->addVar("_widget", "content", $content);
 	}
 	/**
 	 * ウィジェットのタイトルを設定
