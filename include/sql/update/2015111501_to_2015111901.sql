@@ -20,7 +20,7 @@
 -- システム設定マスター
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
-('system_type',                 '',                   'システム運用タイプ'),
+('system_type',                 '',                   'システム運用タイプ');
 
 -- ウィジェット情報マスター
 ALTER TABLE _widgets ADD wd_visible_condition       TEXT                                         NOT NULL;      -- ウィジェット表示条件。「キー=値」の形式でURLクエリーパラメータを指定。複数のクエリーパラメータ条件は「,」で区切り、条件のまとまりは「;」で区切る。)

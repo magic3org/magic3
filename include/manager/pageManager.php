@@ -4619,8 +4619,31 @@ class PageManager extends Core
 				$this->pageDefPosition = '';
 			}
 		}
-		// ウィジェット数を保存
-		$widgetCount = count($this->pageDefRows);
+		// ### ウィジェット数を取得 ###
+		// テンプレートのカラム制御を行うためにウィジェット表示条件でウィジェット数を取得
+		$widgetCount = 0;
+		$rowCount = count($this->pageDefRows);
+		for ($i = 0; $i < $rowCount; $i++){
+			$condition = trim($this->pageDefRows[$i]['wd_visible_condition']);
+			if (empty($condition)){			// ウィジェット表示条件が設定されていない場合はウィジェットを表示
+				$widgetCount++;
+			} else {			// ウィジェット表示条件が設定されている場合はパラメータをチェック
+				$conds = explode(';', $condition);
+				for ($j = 0; $j < count($conds); $j++){
+					$pos = strpos($conds[$j], '=');
+					if ($pos !== false){		// URLクエリーパラメータ条件がマッチした場合はウィジェットを表示
+						list($key, $value) = explode('=', trim($conds[$j]));
+						$key = trim($key);
+						$value = trim($value);
+						if (!empty($key) && !empty($value)){
+							$requestValue = $gRequestManager->trimValueOf($key);
+							if ($value == $requestValue) $widgetCount++;
+						}
+					}
+				}
+			}
+		}
+//		$widgetCount = count($this->pageDefRows);
 		$widgetCountArray[$position] = $widgetCount;
 		return $widgetCount;
 	}
