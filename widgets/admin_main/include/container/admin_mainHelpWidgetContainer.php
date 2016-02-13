@@ -62,8 +62,6 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$act = $request->trimValueOf('act');
-
 		// ヘルプ項目を取得
 		$this->db->getNavItemsByLoop(self::NAV_ID, 0/*第1階層*/, array($this, 'itemListLoop'));
 		
@@ -71,7 +69,6 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 		$content = $this->getParsedTemplateData('help_remote_right.tmpl.html', array($this, 'makeRemoteContentRight'), $request);
 		
 		// リモート表示コンテンツ設定
-//		$content = '<h2>てすと。。。</h2>';
 		$this->gEnv->setRemoteContent(self::POS_RIGHT, $content);
 	}
 	/**
@@ -151,39 +148,32 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 		$tmpl->addVar("_tmpl", "title", $this->convertToDispString(self::MAGIC3_DOC_UPDATE_TITLE));
 		
 		// Magic3ドキュメントサイトの更新情報RSSを取得
+		$isExistsList = false;		// リスト項目が存在するかどうか
 		$rss = simplexml_load_file(self::MAGIC3_DOC_UPDATE_RSS);
 		foreach ($rss->item as $item){
-			$title = $item->title;
-			$date = date("Y年 n月 j日", strtotime($item->pubDate));
-			$link = $item->link;
-			$description = mb_strimwidth (strip_tags($item->description), 0 , 110, "…Read More", "utf-8");
-//			echo $title.'+'.$link;
-			
-//			$name = $fetchedRow['wc_id'];
-//			$date = date(self::DATE_FORMAT, strtotime($fetchedRow['wc_content_dt']));
-			$name = $item->title;
-			$date = date(self::DATE_FORMAT, strtotime($item->pubDate));
-		
+			$name = $item->title;		// 更新ドキュメントタイトル
+			$date = date(self::DATE_FORMAT, strtotime($item->children("http://purl.org/dc/elements/1.1/")->date));
+
 			// リンク先の作成
 			//$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . $fetchedRow['wc_id'], true);
 			$linkUrl = $item->link;
 
-			if (!isset($this->currentDate)){
+			if (!isset($currentDate)){
 				// 日付を更新
-				$this->currentDate = $date;
+				$currentDate = $date;
 			
 				// バッファ更新
 				$tmpl->clearTemplate('item_list');
-			} else if ($date != $this->currentDate){
+			} else if ($date != $currentDate){
 				// 前の日付を表示
 				$dateRow = array(
-					'date'		=> $this->convertToDispString($this->currentDate)			// 日付
+					'date'		=> $this->convertToDispString($currentDate)			// 日付
 				);
 				$tmpl->addVars('date_list', $dateRow);
 				$tmpl->parseTemplate('date_list', 'a');
 			
 				// 日付を更新
-				$this->currentDate = $date;
+				$currentDate = $date;
 			
 				// バッファ更新
 				$tmpl->clearTemplate('item_list');
@@ -195,7 +185,18 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 			$tmpl->addVars('item_list', $row);
 			$tmpl->parseTemplate('item_list', 'a');
 			
-			$this->isExistsList = true;		// リスト項目が存在するかどうか
+			$isExistsList = true;		// リスト項目が存在するかどうか
+		}
+		// 一覧データがない場合は非表示
+		if ($isExistsList){
+			// 前の日付を表示
+			$dateRow = array(
+				'date'		=> $this->convertToDispString($currentDate)			// 日付
+			);
+			$tmpl->addVars('date_list', $dateRow);
+			$tmpl->parseTemplate('date_list', 'a');
+		} else {
+			$tmpl->setAttribute('date_list', 'visibility', 'hidden');
 		}
 	}
 }
