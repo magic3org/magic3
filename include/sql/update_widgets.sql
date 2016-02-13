@@ -45,8 +45,8 @@ INSERT INTO _widgets
 ('admin/message', '管理用メッセージ出力', true, 'admin',            '1.0.0', 'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '', false,        false,       false, true,   1,        '2014-01-02', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'admin/remotecontent';
 INSERT INTO _widgets
-(wd_id,                 wd_name,                  wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_visible_condition, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('admin/remotecontent', 'リモート表示コンテンツ', true,     'admin',        '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'task=help',          false,        false,       false,        true,           1,               '2016-02-11',  now(),         now());
+(wd_id,                 wd_name,                  wd_admin, wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_available, wd_editable, wd_has_admin, wd_initialized, wd_launch_index, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
+('admin/remotecontent', 'リモート表示コンテンツ', true,     'admin',        '1.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                false,        false,       false,        true,           1,               '2016-02-11',  now(),         now());
 
 -- ウィジェット情報(PC用/メニュー)
 DELETE FROM _widgets WHERE wd_id = 'default_menu';

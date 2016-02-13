@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,7 +20,11 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	const BREADCRUMB_TITLE = 'ヘルプ';		// 画面タイトル名(パンくずリスト)
+	const MAGIC3_DOC_UPDATE_TITLE = 'ドキュメント更新情報';		// リモート表示コンテンツのタイトル
 	const NAV_ID = 'helplink';				// ヘルプ項目取得用ナビゲーションID
+	const MAGIC3_DOC_UPDATE_RSS = 'http://doc.magic3.org/index.php?cmd=rss&widget=wiki_update';		// Magic3ドキュメントサイト更新情報RSS
+	const POS_RIGHT = 'right';			// リモート表示コンテンツキー(rightポジション用)
+	const DATE_FORMAT = 'Y年 n月 j日';		// 日付フォーマット
 	
 	/**
 	 * コンストラクタ
@@ -62,6 +66,13 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 
 		// ヘルプ項目を取得
 		$this->db->getNavItemsByLoop(self::NAV_ID, 0/*第1階層*/, array($this, 'itemListLoop'));
+		
+		// リモート表示コンテンツ(rightポジション用)作成
+		$content = $this->getParsedTemplateData('help_remote_right.tmpl.html', array($this, 'makeRemoteContentRight'), $request);
+		
+		// リモート表示コンテンツ設定
+//		$content = '<h2>てすと。。。</h2>';
+		$this->gEnv->setRemoteContent(self::POS_RIGHT, $content);
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -126,6 +137,66 @@ class admin_mainHelpWidgetContainer extends admin_mainBaseWidgetContainer
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
 		return true;
+	}
+	/**
+	 * リモート表示コンテンツ(rightポジション用)作成処理コールバック
+	 *
+	 * @param object	$tmpl			テンプレートオブジェクト
+	 * @param object	$request		任意パラメータ(HTTPリクエストオブジェクト)
+	 * @param							なし
+	 */
+	function makeRemoteContentRight($tmpl, $request)
+	{
+		// タイトル設定
+		$tmpl->addVar("_tmpl", "title", $this->convertToDispString(self::MAGIC3_DOC_UPDATE_TITLE));
+		
+		// Magic3ドキュメントサイトの更新情報RSSを取得
+		$rss = simplexml_load_file(self::MAGIC3_DOC_UPDATE_RSS);
+		foreach ($rss->item as $item){
+			$title = $item->title;
+			$date = date("Y年 n月 j日", strtotime($item->pubDate));
+			$link = $item->link;
+			$description = mb_strimwidth (strip_tags($item->description), 0 , 110, "…Read More", "utf-8");
+//			echo $title.'+'.$link;
+			
+//			$name = $fetchedRow['wc_id'];
+//			$date = date(self::DATE_FORMAT, strtotime($fetchedRow['wc_content_dt']));
+			$name = $item->title;
+			$date = date(self::DATE_FORMAT, strtotime($item->pubDate));
+		
+			// リンク先の作成
+			//$linkUrl = $this->getUrl($this->gEnv->getDefaultUrl() . '?' . $fetchedRow['wc_id'], true);
+			$linkUrl = $item->link;
+
+			if (!isset($this->currentDate)){
+				// 日付を更新
+				$this->currentDate = $date;
+			
+				// バッファ更新
+				$tmpl->clearTemplate('item_list');
+			} else if ($date != $this->currentDate){
+				// 前の日付を表示
+				$dateRow = array(
+					'date'		=> $this->convertToDispString($this->currentDate)			// 日付
+				);
+				$tmpl->addVars('date_list', $dateRow);
+				$tmpl->parseTemplate('date_list', 'a');
+			
+				// 日付を更新
+				$this->currentDate = $date;
+			
+				// バッファ更新
+				$tmpl->clearTemplate('item_list');
+			}
+			$row = array(
+				'link_url'	=> $this->convertUrlToHtmlEntity($linkUrl),		// リンク
+				'name'		=> $this->convertToDispString($name)			// タイトル
+			);
+			$tmpl->addVars('item_list', $row);
+			$tmpl->parseTemplate('item_list', 'a');
+			
+			$this->isExistsList = true;		// リスト項目が存在するかどうか
+		}
 	}
 }
 ?>

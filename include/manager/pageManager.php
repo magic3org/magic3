@@ -4624,7 +4624,8 @@ class PageManager extends Core
 		$widgetCount = 0;
 		$rowCount = count($this->pageDefRows);
 		for ($i = 0; $i < $rowCount; $i++){
-			$condition = trim($this->pageDefRows[$i]['wd_visible_condition']);
+	//		$condition = trim($this->pageDefRows[$i]['wd_visible_condition']);
+			$condition = trim($this->pageDefRows[$i]['pd_visible_condition']);
 			if (empty($condition)){			// ウィジェット表示条件が設定されていない場合はウィジェットを表示
 				$widgetCount++;
 			} else {			// ウィジェット表示条件が設定されている場合はパラメータをチェック
