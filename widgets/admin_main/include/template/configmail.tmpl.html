@@ -27,24 +27,47 @@ $(function() {
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
-<input type="hidden" name="task" value="configmessage" />
+<input type="hidden" name="task" value="configmail" />
 <input type="hidden" name="act" />
 <h3><span {_HELP_CONFIGMAIL_MAIL_SERVER}>メールサーバ</span></h3>
 <table id="config_table">
     <tbody>
     <tr>
-	    <th><span {_HELP_CONFIGMESSAGE_SITE_IN_MAINTENANCE}>サイト</span></th>
-	    <td><input type="text" name="item_msg_site_in_maintenance" class="form-control" value="{MSG_SITE_IN_MAINTENANCE}" size="60" maxlength="200" />
+	    <th><span {_HELP_CONFIGMAIL_SMTP_USE_SERVER}>外部SMTPサーバ</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_smtp_use_server" {SMTP_USE_SERVER} />使用</label></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIGMAIL_SMTP_HOST}>ホスト名</span></th>
+	    <td><input type="text" name="item_smtp_host" class="form-control" value="{SMTP_HOST}" maxlength="100" />
 	    </td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIGMESSAGE_ACCESS_DENY}>アクセス不可</span></th>
-	    <td><input type="text" name="item_msg_access_deny" class="form-control" value="{MSG_ACCESS_DENY}" size="60" maxlength="200" />
+	    <th><span {_HELP_CONFIGMAIL_SMTP_PORT}>ポート番号</span></th>
+	    <td><div class="col-sm-1 m3config_item"><input type="text" name="item_smtp_port" class="form-control" value="{SMTP_PORT}" maxlength="4" /></div>
 	    </td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIGMESSAGE_PAGE_NOT_FOUND}>存在しないページ</span></th>
-	    <td><input type="text" name="item_msg_page_not_found" class="form-control" value="{MSG_PAGE_NOT_FOUND}" size="60" maxlength="200" />
+	    <th><span {_HELP_CONFIGMAIL_SMTP_ENCRYPT_TYPE}>暗号化タイプ</span></th>
+	    <td><div class="col-sm-4 m3config_item">
+	<select name="item_smtp_encrypt_type" class="form-control">
+        <patTemplate:tmpl name="encrypt_type_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+	    </patTemplate:tmpl>
+    </select>
+	</div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIGMAIL_SMTP_AUTHENTICATION}>認証</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_smtp_authentication" {SMTP_AUTHENTICATION} />認証あり</label></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIGMAIL_SMTP_ACCOUNT}>ユーザ名</span></th>
+	    <td><div class="col-sm-3 m3config_item"><input type="text" name="item_smtp_account" class="form-control" value="{SMTP_ACCOUNT}" maxlength="20" /></div></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONFIGMAIL_SMTP_PASSWORD}>パスワード</span></th>
+	    <td><div class="col-sm-3 m3config_item"><input type="password" name="item_smtp_password" class="form-control" value="{SMTP_PASSWORD}" maxlength="20" /></div>
 	    </td>
 	</tr>
     </tbody>

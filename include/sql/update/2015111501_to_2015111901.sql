@@ -19,8 +19,15 @@
 -- *** システムベーステーブル ***
 -- システム設定マスター
 INSERT INTO _system_config 
-(sc_id,                          sc_value,                  sc_name) VALUES
-('system_type',                 '',                   'システム運用タイプ');
+(sc_id,                          sc_value,             sc_name) VALUES
+('system_type',                  '',                   'システム運用タイプ'),
+('smtp_use_server',              '0',                  'SMTP外部サーバを使用するかどうか'),
+('smtp_host',                    '',                   'SMTPホスト名'),
+('smtp_port',                    '587',                'SMTPポート番号'),
+('smtp_encrypt_type',            'tls',                'SMTP暗号化タイプ'),
+('smtp_authentication',          '1',                  'SMTP認証'),
+('smtp_account',                 '',                   'SMTP接続アカウント'),
+('smtp_password',                '',                   'SMTPパスワード');
 
 -- ページ定義マスター
 ALTER TABLE _page_def ADD pd_visible_condition       TEXT                                         NOT NULL;      -- ウィジェット表示条件。「キー=値」の形式でURLクエリーパラメータを指定。複数のクエリーパラメータ条件は「,」で区切り、条件のまとまりは「;」で区切る。
