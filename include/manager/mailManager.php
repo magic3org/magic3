@@ -8,12 +8,13 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
+require_once(M3_SYSTEM_INCLUDE_PATH .	'/lib/PHPMailer-5.2.14/PHPMailerAutoload.php');
 
 class MailManager extends Core
 {
@@ -260,6 +261,15 @@ class MailManager extends Core
 		} else {
 			return false;
 		}
+	}
+	/**
+	 * メールテスト送信
+	 *
+	 * @return bool 				true=正常、false=異常
+	 */
+	function sendTest()
+	{
+
 	}
 }
 ?>

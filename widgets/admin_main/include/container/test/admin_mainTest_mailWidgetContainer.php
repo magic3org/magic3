@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -37,7 +37,7 @@ class admin_mainTest_mailWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{	
-		return 'test_mail.tmpl.html';
+		return 'test/test_mail.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -66,7 +66,8 @@ class admin_mainTest_mailWidgetContainer extends admin_mainBaseWidgetContainer
 			$titleParam = array();
 			$titleParam[M3_TAG_MACRO_SITE_NAME] = $this->gEnv->getSiteName();			// サイト名
 			$titleParam[M3_TAG_MACRO_ACCOUNT]	= $account;							// ログインアカウント
-			$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', $bccAddress, reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO_COMPLETED, $mailParam,
+//			$ret = $this->gInstance->getMailManager()->sendFormMail(1/*自動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, '', $bccAddress, reg_userCommonDef::MAIL_TMPL_REGIST_USER_AUTO_COMPLETED, $mailParam,
+			$ret = $this->gInstance->getMailManager()->sendTest();
 			$this->setGuidanceMsg('送信しました');
 		}
 	}
