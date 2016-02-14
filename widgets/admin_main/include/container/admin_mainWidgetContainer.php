@@ -255,6 +255,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'configlang':	// 言語設定
 						case 'configmessage':	// メッセージ設定
 						case 'configimage':	// 画像設定
+						case 'configmail':		// メールサーバ設定
 						case 'configwidget':	// ウィジェット定義
 						case 'adjustwidget':	// ウィジェット位置調整
 						case 'usercustom':	// ユーザ定義値管理

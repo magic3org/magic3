@@ -37,6 +37,7 @@ class admin_mainUserBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		// 親クラスを呼び出す
 		parent::__construct();
 		
+		// DB接続オブジェクト作成
 		$this->_mainDb = new admin_mainDb();
 	}
 	/**
