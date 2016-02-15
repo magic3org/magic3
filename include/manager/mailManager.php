@@ -20,6 +20,13 @@ class MailManager extends Core
 {
 	private $db;						// DBオブジェクト
 	const EMAIL_SEPARATOR = ';';		// メールアドレスセパレータ
+	const CF_SMTP_USE_SERVER	= 'smtp_use_server';	// SMTP外部サーバを使用するかどうか
+	const CF_SMTP_HOST			= 'smtp_host';			// SMTPホスト名
+	const CF_SMTP_PORT			= 'smtp_port';			// SMTPポート番号
+	const CF_SMTP_ENCRYPT_TYPE	= 'smtp_encrypt_type';	// SMTP暗号化タイプ
+	const CF_SMTP_AUTHENTICATION	= 'smtp_authentication';		// SMTP認証
+	const CF_SMTP_ACCOUNT		= 'smtp_account';		// SMTP接続アカウント
+	const CF_SMTP_PASSWORD		= 'smtp_password';		// SMTPパスワード
 	
 	/**
 	 * コンストラクタ
@@ -263,13 +270,72 @@ class MailManager extends Core
 		}
 	}
 	/**
-	 * メールテスト送信
+	 * SMTPメールテスト送信
 	 *
+	 * @param array	$messages		メッセージ(正常時は追加メッセージ、異常時はエラーメッセージ)
 	 * @return bool 				true=正常、false=異常
 	 */
-	function sendTest()
+	function smtpTest(&$messages)
 	{
+		global $gSystemManager;
+		global $gEnvManager;
+		
+		$messages = array();
+		
+		// 送信先メールアドレスをチェック
+		$siteEmail = $gEnvManager->getSiteEmail();
+		if (empty($siteEmail)){
+			array_push($messages, 'サイト情報のメールアドレスが設定されていません');
+			return false;
+		}
+		
+		$smtpUseServer	= $gSystemManager->getSystemConfig(self::CF_SMTP_USE_SERVER);		// SMTP外部サーバを使用するかどうか
+		$smtpHost		= $gSystemManager->getSystemConfig(self::CF_SMTP_HOST);		// SMTPホスト名
+		$smtpPort		= $gSystemManager->getSystemConfig(self::CF_SMTP_PORT);		// SMTPポート番号
+		$smtpEncryptType = $gSystemManager->getSystemConfig(self::CF_SMTP_ENCRYPT_TYPE);			// SMTP暗号化タイプ
+		$smtpAuthentication = $gSystemManager->getSystemConfig(self::CF_SMTP_AUTHENTICATION);		// SMTP認証
+		$smtpAccount	= $gSystemManager->getSystemConfig(self::CF_SMTP_ACCOUNT);					// SMTP接続アカウント
+		$smtpPassword	= $gSystemManager->getSystemConfig(self::CF_SMTP_PASSWORD);					// SMTPパスワード
 
+		$mail = new PHPMailer;
+
+		// SMTP接続情報
+		$mail->isSMTP();					// Set mailer to use SMTP
+		$mail->Host = $smtpHost;			// Specify main and backup SMTP servers
+		$mail->Port = $smtpPort;			// TCP port to connect to
+		$mail->SMTPAuth = boolval($smtpAuthentication);		// Enable SMTP authentication
+		$mail->Username = $smtpAccount;						// SMTP username
+		$mail->Password = $smtpPassword;					// SMTP password
+		$mail->SMTPSecure = $smtpEncryptType;				// Enable TLS encryption, `ssl` also accepted
+
+$mail->setFrom('from@example.com', mb_encode_mimeheader(mb_convert_encoding('テストメール', 'JIS')));
+//$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
+//$mail->addAddress('ellen@example.com');               // Name is optional
+$mail->addAddress($siteEmail, mb_encode_mimeheader(mb_convert_encoding('テスト用', 'JIS')));     // Add a recipient
+
+//$mail->FromName = mb_encode_mimeheader(mb_convert_encoding($fromname,"JIS","UTF-8")); //差出人(From名)をセット
+//$mail->Subject = mb_encode_mimeheader(mb_convert_encoding($subject,"JIS","UTF-8"));   //件名(Subject)をセット
+//$mail->Body  = mb_convert_encoding($body,"JIS","UTF-8");                              //本文(Body)をセット
+
+//$mail->addReplyTo('info@example.com', 'Information');
+//$mail->addCC('cc@example.com');
+//$mail->addBCC('bcc@example.com');
+
+//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+//mail->isHTML(true);                                  // Set email format to HTML
+
+$mail->Subject = 'Here is the subject';
+$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+		$ret = $mail->send();
+		if ($ret){
+			array_push($messages, '送信先=' . $siteEmail);
+		} else {
+			array_push($messages, $mail->ErrorInfo);
+		}
+		return $ret;
 	}
 }
 ?>

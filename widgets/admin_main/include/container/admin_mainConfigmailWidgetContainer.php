@@ -111,11 +111,17 @@ class admin_mainConfigmailWidgetContainer extends admin_mainConfigsystemBaseWidg
 				$replaceNew = true;		// データを再取得
 			}
 		} else if ($act == 'testmail'){		// テストメール送信のとき
-			$ret = $this->gInstance->getMailManager()->sendTest();
+			$ret = $this->gInstance->getMailManager()->smtpTest($errors);
 			if ($ret){
 				$this->setGuidanceMsg('テストメール送信しました');
 			} else {
 				$this->setMsg(self::MSG_APP_ERR, 'テストメール送信に失敗しました');
+				
+				if (!empty($errors)){
+					foreach ($errors as $error) {
+						$this->setMsg(self::MSG_APP_ERR, $error);
+					}
+				}
 			}
 		} else {
 			$replaceNew = true;		// データを再取得
@@ -134,6 +140,10 @@ class admin_mainConfigmailWidgetContainer extends admin_mainConfigsystemBaseWidg
 		// 暗号化タイプメニュー作成
 		$this->createEncryptTypeMenu();
 		
+		// ボタンの設定
+		$testMailDisabled = false;			// メール送信ボタンの使用可否状態
+		if (empty($host)) $testMailDisabled = true;
+		
 		// 画面にデータを埋め込む
 		$this->tmpl->addVar('_widget', 'smtp_use_server',	$this->convertToCheckedString($useServer));		// SMTP外部サーバを使用するかどうか
 		$this->tmpl->addVar('_widget', 'smtp_host',			$this->convertToDispString($host));			// SMTPホスト名
@@ -141,6 +151,7 @@ class admin_mainConfigmailWidgetContainer extends admin_mainConfigsystemBaseWidg
 		$this->tmpl->addVar('_widget', 'smtp_authentication', $this->convertToCheckedString($authentication));	// SMTP認証
 		$this->tmpl->addVar('_widget', 'smtp_account',		$this->convertToDispString($account));				// SMTP接続アカウント
 		$this->tmpl->addVar('_widget', 'smtp_password',		$this->convertToDispString($password));				// SMTPパスワード
+		$this->tmpl->addVar('_widget', 'test_mail_disabled',		$this->convertToDisabledString($testMailDisabled));		// メールテストボタン
 	}
 	/**
 	 * 暗号化タイプ選択メニュー作成
