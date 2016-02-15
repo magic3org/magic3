@@ -25,6 +25,7 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 	const TASK_CONFIGLANG		= 'configlang';	// 言語設定
 	const TASK_CONFIGMESSAGE	= 'configmessage';	// メッセージ設定
 	const TASK_CONFIGIMAGE		= 'configimage';		// 画像設定
+	const TASK_CONFIGMAIL		= 'configmail';			// メールサーバ
 	const TASK_SERVER_ENV		= 'serverenv';	// サーバ環境
 	const DEFAULT_TASK			= 'configsys';		// デフォルト画面
 	
@@ -72,6 +73,9 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 			case self::TASK_CONFIGIMAGE:		// 画像設定
 				$titles[] = $this->_('Image Cofiguration');
 				break;
+			case self::TASK_CONFIGMAIL:		// メールサーバ
+				$titles[] = $this->_('Mail Server Cofiguration');
+				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
 				
@@ -115,6 +119,15 @@ class admin_mainConfigsystemBaseWidgetContainer extends admin_mainBaseWidgetCont
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_CONFIGIMAGE),
 									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGIMAGE),// ヘルプ文字列
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> $this->_('Mail Server Cofiguration'),		// メールサーバ
+									'task'		=> self::TASK_CONFIGMAIL,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_CONFIGMAIL),
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_CONFIGMAIL),// ヘルプ文字列
 									'submenu'	=> array()
 								),
 								(Object)array(

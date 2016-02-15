@@ -110,6 +110,13 @@ class admin_mainConfigmailWidgetContainer extends admin_mainConfigsystemBaseWidg
 			
 				$replaceNew = true;		// データを再取得
 			}
+		} else if ($act == 'testmail'){		// テストメール送信のとき
+			$ret = $this->gInstance->getMailManager()->sendTest();
+			if ($ret){
+				$this->setGuidanceMsg('テストメール送信しました');
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, 'テストメール送信に失敗しました');
+			}
 		} else {
 			$replaceNew = true;		// データを再取得
 		}

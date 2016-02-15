@@ -19,6 +19,12 @@ function updateItem(){
 	document.main.submit();
 	return true;
 }
+function testMail(){
+	if (!window.confirm('サイト情報のメールアドレス宛てにテストメールを送信しますか?')) return false;
+	document.main.act.value='testmail';
+	document.main.submit();
+	return true;
+}
 $(function() {
 	m3SetConfigTable('config_table');
 });
@@ -72,7 +78,7 @@ $(function() {
 	</tr>
     </tbody>
 </table>
-<div class="well m3config_update_buttons"><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
+<div class="well m3config_update_buttons"><input type="button" class="button pull-left" onclick="testMail();" value="テストメール送信" /><input type="button" class="button" onclick="updateItem();" value="更新" /></div>
 </form>
 </div>
 </patTemplate:tmpl>
