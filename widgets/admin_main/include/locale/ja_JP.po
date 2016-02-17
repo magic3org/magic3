@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-15 13:21+0900\n"
-"PO-Revision-Date: 2016-02-15 13:21+0900\n"
+"POT-Creation-Date: 2016-02-17 17:40+0900\n"
+"PO-Revision-Date: 2016-02-17 17:40+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -330,6 +330,31 @@ msgstr "範囲："
 msgid "%d Total"
 msgstr "全 %d 件"
 
+#: ../container/admin_mainConfigmailWidgetContainer.php:122
+#: ../container/admin_mainConfigsiteWidgetContainer.php:181
+msgid "URL   :"
+msgstr "URL     :"
+
+#: ../container/admin_mainConfigmailWidgetContainer.php:123
+#: ../container/admin_mainConfigsiteWidgetContainer.php:182
+msgid "Date  :"
+msgstr "送信日時:"
+
+#: ../container/admin_mainConfigmailWidgetContainer.php:124
+#: ../container/admin_mainConfigsiteWidgetContainer.php:183
+msgid "Sender:"
+msgstr "送信者  :"
+
+#: ../container/admin_mainConfigmailWidgetContainer.php:129
+#: ../container/admin_mainConfigsiteWidgetContainer.php:186
+msgid "Email sent. To:"
+msgstr "メールを送信しました。メールアドレス:"
+
+#: ../container/admin_mainConfigmailWidgetContainer.php:131
+#: ../container/admin_mainConfigsiteWidgetContainer.php:188
+msgid "Failed in sending email. To:"
+msgstr "メール送信に失敗しました。メールアドレス:"
+
 #: ../container/admin_mainConfigsiteWidgetContainer.php:164
 #: ../container/admin_mainOpelogWidgetContainer.php:337
 #: ../container/admin_mainPagedefWidgetContainer.php:478
@@ -349,26 +374,6 @@ msgstr "データ更新に失敗しました"
 #: ../container/admin_mainWidgetContainer.php:408
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:181
-msgid "URL   :"
-msgstr "URL     :"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:182
-msgid "Date  :"
-msgstr "送信日時:"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:183
-msgid "Sender:"
-msgstr "送信者  :"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:186
-msgid "Email sent. To:"
-msgstr "メールを送信しました。メールアドレス:"
-
-#: ../container/admin_mainConfigsiteWidgetContainer.php:188
-msgid "Failed in sending email. To:"
-msgstr "メール送信に失敗しました。メールアドレス:"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:214
 msgid "Change logo"
@@ -3010,6 +3015,12 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "SMTP Mail Server  :"
+#~ msgstr "SMTPメールサーバ  :"
+
+#~ msgid "SMTP Mail Username:"
+#~ msgstr "SMTPメールユーザ名:"
 
 #~ msgid "Login Status"
 #~ msgstr "ログイン状況"

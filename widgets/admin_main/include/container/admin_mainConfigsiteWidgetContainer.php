@@ -181,7 +181,7 @@ class admin_mainConfigsiteWidgetContainer extends admin_mainConfigbasicBaseWidge
 				$emailParam['BODY']  = $this->_('URL   :') . ' ' . $this->gEnv->getRootUrl() . M3_NL;		// URL     :
 				$emailParam['BODY'] .= $this->_('Date  :') . ' ' . date("Y年m月d日 H時i分s秒") . M3_NL;		// 送信日時:
 				$emailParam['BODY'] .= $this->_('Sender:') . ' ' . $this->gEnv->getCurrentUserName() . M3_NL;	// 送信者  :
-				$ret = $this->gInstance->getMailManager()->sendFormMail(2/*手動送信*/, $this->gEnv->getCurrentWidgetId(), $email, $email, '', '', self::TEST_MAIL_FORM, $emailParam);
+				$ret = $this->gInstance->getMailManager()->sendFormMail(-1/*テスト用*/, $this->gEnv->getCurrentWidgetId(), $email, $email, '', '', self::TEST_MAIL_FORM, $emailParam);
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Email sent. To:') . ' ' . $email);// メールを送信しました。メールアドレス:
 				} else {

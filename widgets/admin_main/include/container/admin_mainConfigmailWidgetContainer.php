@@ -20,6 +20,7 @@ class admin_mainConfigmailWidgetContainer extends admin_mainConfigsystemBaseWidg
 	private $encryptType;			// 暗号化タイプ
 	private $encryptTypeArray;		// 暗号化タイプ
 	
+	const TEST_MAIL_FORM = 'test';					// テストメールフォーム
 	const CF_SMTP_USE_SERVER	= 'smtp_use_server';	// SMTP外部サーバを使用するかどうか
 	const CF_SMTP_HOST			= 'smtp_host';			// SMTPホスト名
 	const CF_SMTP_PORT			= 'smtp_port';			// SMTPポート番号
@@ -111,8 +112,27 @@ class admin_mainConfigmailWidgetContainer extends admin_mainConfigsystemBaseWidg
 				$replaceNew = true;		// データを再取得
 			}
 		} else if ($act == 'testmail'){		// テストメール送信のとき
-			$ret = $this->gInstance->getMailManager()->smtpTest($errors);
+			// サイト情報のメールアドレス取得
+			$siteEmail = $this->gEnv->getSiteEmail();
+			$host			= $this->_mainDb->getSystemConfig(self::CF_SMTP_HOST);			// SMTPホスト名
+			$port			= $this->_mainDb->getSystemConfig(self::CF_SMTP_PORT);			// SMTPポート番号
+			$account		= $this->_mainDb->getSystemConfig(self::CF_SMTP_ACCOUNT);			// SMTP接続アカウント
+					
+			$emailParam = array();
+			$emailParam['BODY']  = $this->_('URL   :') . ' ' . $this->gEnv->getRootUrl() . M3_NL;		// URL     :
+			$emailParam['BODY'] .= $this->_('Date  :') . ' ' . date("Y年m月d日 H時i分s秒") . M3_NL;		// 送信日時:
+			$emailParam['BODY'] .= $this->_('Sender:') . ' ' . $this->gEnv->getCurrentUserName() . M3_NL;	// 送信者  :
+			$this->gInstance->getMailManager()->setSmtpTestMode(true);		// SMTPテストモード起動
+			$ret = $this->gInstance->getMailManager()->sendFormMail(-1/*テスト用*/, $this->gEnv->getCurrentWidgetId(), $siteEmail, $siteEmail, '', '', self::TEST_MAIL_FORM, $emailParam);
+			$this->gInstance->getMailManager()->setSmtpTestMode(false);		// SMTPテストモード解除
 			if ($ret){
+				$this->setMsg(self::MSG_GUIDANCE, $this->_('Email sent. To:') . ' ' . $siteEmail);// メールを送信しました。メールアドレス:
+			} else {
+				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in sending email. To:') . ' ' . $siteEmail);			// メール送信に失敗しました。メールアドレス:
+			}
+//			$ret = $this->gInstance->getMailManager()->smtpTest($errors);
+
+/*			if ($ret){
 				$this->setGuidanceMsg('テストメール送信しました');
 			} else {
 				$this->setMsg(self::MSG_APP_ERR, 'テストメール送信に失敗しました');
@@ -122,7 +142,7 @@ class admin_mainConfigmailWidgetContainer extends admin_mainConfigsystemBaseWidg
 						$this->setMsg(self::MSG_APP_ERR, $error);
 					}
 				}
-			}
+			}*/
 		} else {
 			$replaceNew = true;		// データを再取得
 		}

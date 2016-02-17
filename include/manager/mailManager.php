@@ -19,6 +19,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH .	'/lib/PHPMailer-5.2.14/PHPMailerAutoload.p
 class MailManager extends Core
 {
 	private $db;						// DBオブジェクト
+	private $smtpTestMode;				// SMTPテストモードかどうか
 	const EMAIL_SEPARATOR = ';';		// メールアドレスセパレータ
 	const CF_SMTP_USE_SERVER	= 'smtp_use_server';	// SMTP外部サーバを使用するかどうか
 	const CF_SMTP_HOST			= 'smtp_host';			// SMTPホスト名
@@ -48,9 +49,9 @@ class MailManager extends Core
 	 * メールの内容は、メールフォームテーブルから取得し、パラメータを変換して作成。
 	 * 送信したメールの内容はログテーブルに残す
 	 *
-	 * @param int          $type			メール送信タイプ(0=未設定、1=自動送信、2=手動送信)
+	 * @param int          $type			メール送信タイプ(0=未設定、-1=テスト用、1=自動送信、2=手動送信)
 	 * @param string       $widgetId		送信を行ったウィジェットID
-	 * @param string       $toAddress		送信先メールアドレス(「|」区切りで複数送信可。フォーマット「アドレス1|cc:アドレス2|bcc:アドレス3」)
+	 * @param string       $toAddress		送信先メールアドレス(「;」区切りで複数送信可。フォーマット「アドレス1;cc:アドレス2;bcc:アドレス3」)
 	 * @param string       $fromAddress		送信元メールアドレス
 	 * @param string       $replytoAddress	返信先メールアドレス(空の場合は$fromAddressを使用)
 	 * @param string       $subject			件名(空のときは、メールフォームテーブルから取得)
@@ -68,6 +69,7 @@ class MailManager extends Core
 								$ccAddress = '', $bccAddress = '', $mailForm = '', $titleParams = '', $tilteHeadStr = '', $contentHeadStr = '')
 	{
 		global $gEnvManager;
+		global $gSystemManager;
 		
 		$langId = $gEnvManager->getCurrentLanguage();
 		
@@ -200,23 +202,31 @@ class MailManager extends Core
 		
 		$option = '-f' . $errAddress;		// エラーメールを返すアドレスを設定
 
-		if (function_exists('mb_send_mail')){		// mbが使用可能なとき
-			if (separateMailAddress($toAddress, $mail, $name)){		// メールアドレス、名前を取り出す
-				$toAddress = mb_encode_mimeheader($name) . '<' . $mail . '>';
-			}
-			if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mb_send_mail()の5番目の引数が使用できない
-				$ret = mb_send_mail($toAddress, $destSubject, $destContent, $destHeader);
-			} else {
-				$ret = mb_send_mail($toAddress, $destSubject, $destContent, $destHeader, $option);
-			}
+		// ##### メール送信処理 #####
+		$useSmtpServer	= $gSystemManager->getSystemConfig(self::CF_SMTP_USE_SERVER);		// SMTP外部サーバを使用するかどうか
+		
+		if ($this->smtpTestMode || $useSmtpServer){		// SMTPテストモードまたはSMTPサーバ使用のとき
+			$ret = $this->_smtpSendMail($toAddress, $destSubject, $destContent, $destHeader, $option, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray);
 		} else {
-			if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mail()の5番目の引数が使用できない
-				$ret = mail($toAddress, $destSubject, $destContent, $destHeader);
+			if (function_exists('mb_send_mail')){		// mbが使用可能なとき
+				if (separateMailAddress($toAddress, $mail, $name)){		// メールアドレス、名前を取り出す
+					$toAddress = mb_encode_mimeheader($name) . '<' . $mail . '>';
+				}
+				if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mb_send_mail()の5番目の引数が使用できない
+					$ret = mb_send_mail($toAddress, $destSubject, $destContent, $destHeader);
+				} else {
+					$ret = mb_send_mail($toAddress, $destSubject, $destContent, $destHeader, $option);
+				}
 			} else {
-				$ret = mail($toAddress, $destSubject, $destContent, $destHeader, $option);
+				if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mail()の5番目の引数が使用できない
+					$ret = mail($toAddress, $destSubject, $destContent, $destHeader);
+				} else {
+					$ret = mail($toAddress, $destSubject, $destContent, $destHeader, $option);
+				}
 			}
 		}
 		
+		// ##### ログ出力 #####
 		// 送信成功したときは、ログに残す
 		if ($ret){
 			$this->db->addMailLog($type, $widgetId, $toAddress, $fromAddress, $destSubject, $destContent);
@@ -270,26 +280,44 @@ class MailManager extends Core
 		}
 	}
 	/**
-	 * SMTPメールテスト送信
+	 * SMTPテストモードを設定
 	 *
-	 * @param array	$messages		メッセージ(正常時は追加メッセージ、異常時はエラーメッセージ)
-	 * @return bool 				true=正常、false=異常
+	 * @param bool $on		SMTPテストモードかどうか
+	 * @return				なし
 	 */
-	function smtpTest(&$messages)
+	public function setSmtpTestMode($on)
+	{
+		$this->smtpTestMode = $on;
+	}
+	/**
+	 * SMTPテストモードを取得
+	 *
+	 * @return bool		SMTPテストモードかどうか
+	 */
+	public function getSmtpTestMode()
+	{
+		return $this->smtpTestMode;
+	}
+	/**
+	 * SMTPでメール送信
+	 *
+	 * @param string $toAddress		メール送信先
+	 * @param string $subject		タイトル
+	 * @param string $content		メール本文
+	 * @param string $header		メールヘッダ追加文字列
+	 * @param string $errAddress	エラーメール戻り先
+	 * @param int    $mailType		メール送信タイプ(0=未設定、-1=テスト用、1=自動送信、2=手動送信)
+	 * @param string $fromAddress		メール送信元
+	 * @param string $replytoAddress	メール返信先
+	 * @param array $ccAddressArray		メール送信先(CC)
+	 * @param array $bccAddressArray	メール送信先(BCC)
+	 * @return bool 					true=正常、false=異常
+	 */
+	function _smtpSendMail($toAddress, $subject, $content, $header, $errAddress, $mailType, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray)
 	{
 		global $gSystemManager;
-		global $gEnvManager;
-		
-		$messages = array();
-		
-		// 送信先メールアドレスをチェック
-		$siteEmail = $gEnvManager->getSiteEmail();
-		if (empty($siteEmail)){
-			array_push($messages, 'サイト情報のメールアドレスが設定されていません');
-			return false;
-		}
-		
-		$smtpUseServer	= $gSystemManager->getSystemConfig(self::CF_SMTP_USE_SERVER);		// SMTP外部サーバを使用するかどうか
+				
+		// SMTP接続設定取得
 		$smtpHost		= $gSystemManager->getSystemConfig(self::CF_SMTP_HOST);		// SMTPホスト名
 		$smtpPort		= $gSystemManager->getSystemConfig(self::CF_SMTP_PORT);		// SMTPポート番号
 		$smtpEncryptType = $gSystemManager->getSystemConfig(self::CF_SMTP_ENCRYPT_TYPE);			// SMTP暗号化タイプ
@@ -308,34 +336,94 @@ class MailManager extends Core
 		$mail->Password = $smtpPassword;					// SMTP password
 		$mail->SMTPSecure = $smtpEncryptType;				// Enable TLS encryption, `ssl` also accepted
 
-$mail->setFrom('from@example.com', mb_encode_mimeheader(mb_convert_encoding('テストメール', 'JIS')));
-//$mail->addAddress('joe@example.net', 'Joe User');     // Add a recipient
-//$mail->addAddress('ellen@example.com');               // Name is optional
-$mail->addAddress($siteEmail, mb_encode_mimeheader(mb_convert_encoding('テスト用', 'JIS')));     // Add a recipient
-
-//$mail->FromName = mb_encode_mimeheader(mb_convert_encoding($fromname,"JIS","UTF-8")); //差出人(From名)をセット
-//$mail->Subject = mb_encode_mimeheader(mb_convert_encoding($subject,"JIS","UTF-8"));   //件名(Subject)をセット
-//$mail->Body  = mb_convert_encoding($body,"JIS","UTF-8");                              //本文(Body)をセット
-
-//$mail->addReplyTo('info@example.com', 'Information');
+		// メール送信情報を設定
+		$mail->Sender = $errAddress;		// エラーメールの戻り先
+		// メール送信先
+		if (separateMailAddress($toAddress, $email, $name)){		// メールアドレス、名前を取り出す
+			$mail->addAddress($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+		} else {
+			$mail->addAddress($toAddress);     // Add a recipient
+		}
+		// メール送信元
+		if (separateMailAddress($fromAddress, $email, $name)){		// メールアドレス、名前を取り出す
+			$mail->setFrom($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+		} else {
+			$mail->setFrom($fromAddress);
+		}
+		// メール返信先
+		if (separateMailAddress($replytoAddress, $email, $name)){		// メールアドレス、名前を取り出す
+			$mail->addReplyTo($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+		} else {
+			$mail->addReplyTo($replytoAddress);
+		}
+		// メール送信先(CC)
+		for ($i = 0; $i < count($ccAddressArray); $i++){
+			if (separateMailAddress($ccAddressArray[i], $email, $name)){		// メールアドレス、名前を取り出す
+				$mail->addCC($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+			} else {
+				$mail->addCC($ccAddressArray[i]);
+			}
+		}
+		// メール送信先(BCC)
+		for ($i = 0; $i < count($bccAddressArray); $i++){
+			if (separateMailAddress($bccAddressArray[i], $email, $name)){		// メールアドレス、名前を取り出す
+				$mail->addBCC($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+			} else {
+				$mail->addBCC($bccAddressArray[i]);
+			}
+		}
 //$mail->addCC('cc@example.com');
 //$mail->addBCC('bcc@example.com');
-
-//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-//mail->isHTML(true);                                  // Set email format to HTML
-
-$mail->Subject = 'Here is the subject';
-$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
+		
+		// テストメールの場合はタイトル、本文に情報を追加
+		if ($mailType == -1){
+			$subject .= '(SMTP)';
+			$content .= M3_NL;
+			$content .= 'SMTPメールサーバ  : ' . $smtpHost . ':' . $smtpPort . M3_NL;
+			$content .= 'SMTPメールユーザ名: ' . $smtpAccount . M3_NL;
+		}
+			
+		// メール本文
+		$mail->isHTML(false);		// テキストのみのメール
+		$mail->Encoding = '7bit';
+		$mail->CharSet = 'ISO-2022-JP';
+		$mail->Subject	= mb_encode_mimeheader(mb_convert_encoding($subject, 'JIS', M3_ENCODING));
+		$mail->Body		= mb_convert_encoding($content, 'JIS', M3_ENCODING);
+		// HTMLメールの場合
+		//mail->isHTML(true);                                  // Set email format to HTML
+		//$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+		//$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+		// 添付ファイル
+		//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+		//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+		
 		$ret = $mail->send();
-		if ($ret){
-			array_push($messages, '送信先=' . $siteEmail);
+/*		if ($ret){
+			array_push($messages, '送信先=' . $toAddress);
 		} else {
 			array_push($messages, $mail->ErrorInfo);
-		}
+		}*/
 		return $ret;
 	}
+	/**
+	 * SMTPメールテスト送信
+	 *
+	 * @param array	$messages		メッセージ(正常時は追加メッセージ、異常時はエラーメッセージ)
+	 * @return bool 				true=正常、false=異常
+	 */
+/*	function smtpTest(&$messages)
+	{
+		global $gEnvManager;
+		
+		$messages = array();
+		
+		// 送信先メールアドレスをチェック
+		$siteEmail = $gEnvManager->getSiteEmail();
+		if (empty($siteEmail)){
+			array_push($messages, 'サイト情報のメールアドレスが設定されていません');
+			return false;
+		}
+		return $ret;
+	}*/
 }
 ?>

@@ -925,7 +925,7 @@ CREATE TABLE _site_def (
 DROP TABLE IF EXISTS _mail_send_log;
 CREATE TABLE _mail_send_log (
     ms_serial            INT            AUTO_INCREMENT,                              -- レコードシリアル番号
-    ms_type              INT            DEFAULT 0                     NOT NULL,      -- メール種別(0=未設定、1=自動送信、2=手動送信)
+    ms_type              INT            DEFAULT 0                     NOT NULL,      -- メール種別(0=未設定、-1=テスト用、1=自動送信、2=手動送信)
     ms_widget_id         VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 送信ウィジェットID
     ms_to                VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- メール送信先アドレス
     ms_from              VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- メール送信元アドレス
