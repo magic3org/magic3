@@ -210,12 +210,14 @@ class MailManager extends Core
 		} else {
 			if (function_exists('mb_send_mail')){		// mbが使用可能なとき
 				if (separateMailAddress($toAddress, $mail, $name)){		// メールアドレス、名前を取り出す
-					$toAddress = mb_encode_mimeheader($name) . '<' . $mail . '>';
+					$toAddressMime = mb_encode_mimeheader($name) . '<' . $mail . '>';
+				} else {
+					$toAddressMime = $toAddress;
 				}
 				if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mb_send_mail()の5番目の引数が使用できない
-					$ret = mb_send_mail($toAddress, $destSubject, $destContent, $destHeader);
+					$ret = mb_send_mail($toAddressMime, $destSubject, $destContent, $destHeader);
 				} else {
-					$ret = mb_send_mail($toAddress, $destSubject, $destContent, $destHeader, $option);
+					$ret = mb_send_mail($toAddressMime, $destSubject, $destContent, $destHeader, $option);
 				}
 			} else {
 				if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mail()の5番目の引数が使用できない
@@ -316,7 +318,7 @@ class MailManager extends Core
 	function _smtpSendMail($toAddress, $subject, $content, $header, $errAddress, $mailType, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray)
 	{
 		global $gSystemManager;
-				
+
 		// SMTP接続設定取得
 		$smtpHost		= $gSystemManager->getSystemConfig(self::CF_SMTP_HOST);		// SMTPホスト名
 		$smtpPort		= $gSystemManager->getSystemConfig(self::CF_SMTP_PORT);		// SMTPポート番号
@@ -358,22 +360,20 @@ class MailManager extends Core
 		}
 		// メール送信先(CC)
 		for ($i = 0; $i < count($ccAddressArray); $i++){
-			if (separateMailAddress($ccAddressArray[i], $email, $name)){		// メールアドレス、名前を取り出す
+			if (separateMailAddress($ccAddressArray[$i], $email, $name)){		// メールアドレス、名前を取り出す
 				$mail->addCC($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
 			} else {
-				$mail->addCC($ccAddressArray[i]);
+				$mail->addCC($ccAddressArray[$i]);
 			}
 		}
 		// メール送信先(BCC)
 		for ($i = 0; $i < count($bccAddressArray); $i++){
-			if (separateMailAddress($bccAddressArray[i], $email, $name)){		// メールアドレス、名前を取り出す
+			if (separateMailAddress($bccAddressArray[$i], $email, $name)){		// メールアドレス、名前を取り出す
 				$mail->addBCC($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
 			} else {
-				$mail->addBCC($bccAddressArray[i]);
+				$mail->addBCC($bccAddressArray[$i]);
 			}
 		}
-//$mail->addCC('cc@example.com');
-//$mail->addBCC('bcc@example.com');
 		
 		// テストメールの場合はタイトル、本文に情報を追加
 		if ($mailType == -1){
@@ -396,7 +396,7 @@ class MailManager extends Core
 		// 添付ファイル
 		//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 		//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-		
+
 		$ret = $mail->send();
 /*		if ($ret){
 			array_push($messages, '送信先=' . $toAddress);
