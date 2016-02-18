@@ -20,6 +20,7 @@ class MailManager extends Core
 {
 	private $db;						// DBオブジェクト
 	private $smtpTestMode;				// SMTPテストモードかどうか
+	private $errMessages;				// エラーメッセージ
 	const EMAIL_SEPARATOR = ';';		// メールアドレスセパレータ
 	const CF_SMTP_USE_SERVER	= 'smtp_use_server';	// SMTP外部サーバを使用するかどうか
 	const CF_SMTP_HOST			= 'smtp_host';			// SMTPホスト名
@@ -70,6 +71,9 @@ class MailManager extends Core
 	{
 		global $gEnvManager;
 		global $gSystemManager;
+		
+		// エラーメッセージ初期化
+		$this->_resetErrorMessage();
 		
 		$langId = $gEnvManager->getCurrentLanguage();
 		
@@ -398,32 +402,37 @@ class MailManager extends Core
 		//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
 
 		$ret = $mail->send();
-/*		if ($ret){
-			array_push($messages, '送信先=' . $toAddress);
-		} else {
-			array_push($messages, $mail->ErrorInfo);
-		}*/
+		if (!$ret) $this->_addErrorMessage($mail->ErrorInfo);		// エラーメッセージ追加
+
 		return $ret;
 	}
 	/**
-	 * SMTPメールテスト送信
+	 * エラーメッセージ初期化
 	 *
-	 * @param array	$messages		メッセージ(正常時は追加メッセージ、異常時はエラーメッセージ)
-	 * @return bool 				true=正常、false=異常
+	 * @return				なし
 	 */
-/*	function smtpTest(&$messages)
+	function _resetErrorMessage()
 	{
-		global $gEnvManager;
-		
-		$messages = array();
-		
-		// 送信先メールアドレスをチェック
-		$siteEmail = $gEnvManager->getSiteEmail();
-		if (empty($siteEmail)){
-			array_push($messages, 'サイト情報のメールアドレスが設定されていません');
-			return false;
-		}
-		return $ret;
-	}*/
+		$this->errMessages = array();				// エラーメッセージ
+	}
+	/**
+	 * エラーメッセージ追加
+	 *
+	 * @param string $msg	エラーメッセージ
+	 * @return				なし
+	 */
+	function _addErrorMessage($msg)
+	{
+		$this->errMessages[] = $msg;				// エラーメッセージ
+	}
+	/**
+	 * エラーメッセージ取得
+	 *
+	 * @return array		エラーメッセージ
+	 */
+	function getErrorMessage()
+	{
+		return $this->errMessages;				// エラーメッセージ
+	}
 }
 ?>

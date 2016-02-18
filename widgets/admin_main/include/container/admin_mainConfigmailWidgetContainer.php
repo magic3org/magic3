@@ -129,20 +129,15 @@ class admin_mainConfigmailWidgetContainer extends admin_mainConfigsystemBaseWidg
 				$this->setMsg(self::MSG_GUIDANCE, $this->_('Email sent. To:') . ' ' . $siteEmail);// メールを送信しました。メールアドレス:
 			} else {
 				$this->setMsg(self::MSG_APP_ERR, $this->_('Failed in sending email. To:') . ' ' . $siteEmail);			// メール送信に失敗しました。メールアドレス:
-			}
-//			$ret = $this->gInstance->getMailManager()->smtpTest($errors);
-
-/*			if ($ret){
-				$this->setGuidanceMsg('テストメール送信しました');
-			} else {
-				$this->setMsg(self::MSG_APP_ERR, 'テストメール送信に失敗しました');
 				
+				// エラーメッセージ取得
+				$errors = $this->gInstance->getMailManager()->getErrorMessage();
 				if (!empty($errors)){
 					foreach ($errors as $error) {
 						$this->setMsg(self::MSG_APP_ERR, $error);
 					}
 				}
-			}*/
+			}
 		} else {
 			$replaceNew = true;		// データを再取得
 		}
