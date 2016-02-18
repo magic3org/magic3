@@ -199,15 +199,15 @@ class MailManager extends Core
 		// メール件名、本文に追加文字列を連結
 		$destSubject = $tilteHeadStr . $destSubject;
 		$destContent = $contentHeadStr . $destContent;
-		
-		$option = '-f' . $errAddress;		// エラーメールを返すアドレスを設定
 
 		// ##### メール送信処理 #####
 		$useSmtpServer	= $gSystemManager->getSystemConfig(self::CF_SMTP_USE_SERVER);		// SMTP外部サーバを使用するかどうか
 		
 		if ($this->smtpTestMode || $useSmtpServer){		// SMTPテストモードまたはSMTPサーバ使用のとき
-			$ret = $this->_smtpSendMail($toAddress, $destSubject, $destContent, $destHeader, $option, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray);
+			$ret = $this->_smtpSendMail($toAddress, $destSubject, $destContent, $destHeader, $errAddress, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray);
 		} else {
+			$option = '-f' . $errAddress;		// エラーメールを返すアドレスを設定
+		
 			if (function_exists('mb_send_mail')){		// mbが使用可能なとき
 				if (separateMailAddress($toAddress, $mail, $name)){		// メールアドレス、名前を取り出す
 					$toAddressMime = mb_encode_mimeheader($name) . '<' . $mail . '>';
