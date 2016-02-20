@@ -21,7 +21,11 @@ class MailManager extends Core
 	private $db;						// DBオブジェクト
 	private $smtpTestMode;				// SMTPテストモードかどうか
 	private $errMessages;				// エラーメッセージ
+	private $isMultipleSend;			// 連続送信かどうか
+	private $maxMultipleSendCount;		// 連続送信数最大
+	private $sendCount;					// 送信数
 	const EMAIL_SEPARATOR = ';';		// メールアドレスセパレータ
+	const DEFAULT_MULTIPLE_SEND_COUNT = 100;	// 連続送信数最大デフォルト値
 	const CF_SMTP_USE_SERVER	= 'smtp_use_server';	// SMTP外部サーバを使用するかどうか
 	const CF_SMTP_HOST			= 'smtp_host';			// SMTPホスト名
 	const CF_SMTP_PORT			= 'smtp_port';			// SMTPポート番号
@@ -40,6 +44,9 @@ class MailManager extends Core
 			
 		// システムDBオブジェクト取得
 		$this->db = $this->gInstance->getSytemDbObject();
+		
+		// 初期値設定
+		$this->maxMultipleSendCount = self::DEFAULT_MULTIPLE_SEND_COUNT;			// 連続送信数最大
 	}
 	/**
 	 * メールを送信
@@ -305,6 +312,26 @@ class MailManager extends Core
 		return $this->smtpTestMode;
 	}
 	/**
+	 * 連続メール送信を開始
+	 *
+	 * @return				なし
+	 */
+	public function startMultipleSend()
+	{
+		$this->isMultipleSend = true;
+		$this->sendCount = 0;
+	}
+	/**
+	 * 連続メール送信を終了
+	 *
+	 * @return				なし
+	 */
+	public function endMultipleSend()
+	{
+		$this->isMultipleSend = false;
+		$this->sendCount = 0;
+	}
+	/**
 	 * SMTPでメール送信
 	 *
 	 * @param string $toAddress		メール送信先
@@ -322,6 +349,7 @@ class MailManager extends Core
 	function _smtpSendMail($toAddress, $subject, $content, $header, $errAddress, $mailType, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray)
 	{
 		global $gSystemManager;
+		static $mail;			// メール送信オブジェクト
 
 		// SMTP接続設定取得
 		$smtpHost		= $gSystemManager->getSystemConfig(self::CF_SMTP_HOST);		// SMTPホスト名
@@ -331,52 +359,60 @@ class MailManager extends Core
 		$smtpAccount	= $gSystemManager->getSystemConfig(self::CF_SMTP_ACCOUNT);					// SMTP接続アカウント
 		$smtpPassword	= $gSystemManager->getSystemConfig(self::CF_SMTP_PASSWORD);					// SMTPパスワード
 
-		$mail = new PHPMailer;
+		if (!isset($mail)){
+			$mail = new PHPMailer;
 
-		// SMTP接続情報
-		$mail->isSMTP();					// Set mailer to use SMTP
-		$mail->Host = $smtpHost;			// Specify main and backup SMTP servers
-		$mail->Port = $smtpPort;			// TCP port to connect to
-		$mail->SMTPAuth = boolval($smtpAuthentication);		// Enable SMTP authentication
-		$mail->Username = $smtpAccount;						// SMTP username
-		$mail->Password = $smtpPassword;					// SMTP password
-		$mail->SMTPSecure = $smtpEncryptType;				// Enable TLS encryption, `ssl` also accepted
+			// SMTP接続情報
+			$mail->isSMTP();					// Set mailer to use SMTP
+			$mail->Host = $smtpHost;			// Specify main and backup SMTP servers
+			$mail->Port = $smtpPort;			// TCP port to connect to
+			$mail->SMTPAuth = boolval($smtpAuthentication);		// Enable SMTP authentication
+			$mail->Username = $smtpAccount;						// SMTP username
+			$mail->Password = $smtpPassword;					// SMTP password
+			$mail->SMTPSecure = $smtpEncryptType;				// Enable TLS encryption, `ssl` also accepted
+			
+			// メール送信情報を設定
+			$mail->Sender = $errAddress;		// エラーメールの戻り先
+			// メール送信元
+			if (separateMailAddress($fromAddress, $email, $name)){		// メールアドレス、名前を取り出す
+				$mail->setFrom($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+			} else {
+				$mail->setFrom($fromAddress);
+			}
+			// メール返信先
+			if (separateMailAddress($replytoAddress, $email, $name)){		// メールアドレス、名前を取り出す
+				$mail->addReplyTo($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+			} else {
+				$mail->addReplyTo($replytoAddress);
+			}
+			
+			if ($this->isMultipleSend){
+				$mail->SMTPKeepAlive = true; // SMTP connection will not close after each email sent, reduces SMTP overhead
+			} else {			// メール連続送信の場合はCC,BCCを使用しない
+				// メール送信先(CC)
+				for ($i = 0; $i < count($ccAddressArray); $i++){
+					if (separateMailAddress($ccAddressArray[$i], $email, $name)){		// メールアドレス、名前を取り出す
+						$mail->addCC($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+					} else {
+						$mail->addCC($ccAddressArray[$i]);
+					}
+				}
+				// メール送信先(BCC)
+				for ($i = 0; $i < count($bccAddressArray); $i++){
+					if (separateMailAddress($bccAddressArray[$i], $email, $name)){		// メールアドレス、名前を取り出す
+						$mail->addBCC($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
+					} else {
+						$mail->addBCC($bccAddressArray[$i]);
+					}
+				}
+			}
+		}
 
-		// メール送信情報を設定
-		$mail->Sender = $errAddress;		// エラーメールの戻り先
 		// メール送信先
 		if (separateMailAddress($toAddress, $email, $name)){		// メールアドレス、名前を取り出す
 			$mail->addAddress($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
 		} else {
 			$mail->addAddress($toAddress);     // Add a recipient
-		}
-		// メール送信元
-		if (separateMailAddress($fromAddress, $email, $name)){		// メールアドレス、名前を取り出す
-			$mail->setFrom($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
-		} else {
-			$mail->setFrom($fromAddress);
-		}
-		// メール返信先
-		if (separateMailAddress($replytoAddress, $email, $name)){		// メールアドレス、名前を取り出す
-			$mail->addReplyTo($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
-		} else {
-			$mail->addReplyTo($replytoAddress);
-		}
-		// メール送信先(CC)
-		for ($i = 0; $i < count($ccAddressArray); $i++){
-			if (separateMailAddress($ccAddressArray[$i], $email, $name)){		// メールアドレス、名前を取り出す
-				$mail->addCC($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
-			} else {
-				$mail->addCC($ccAddressArray[$i]);
-			}
-		}
-		// メール送信先(BCC)
-		for ($i = 0; $i < count($bccAddressArray); $i++){
-			if (separateMailAddress($bccAddressArray[$i], $email, $name)){		// メールアドレス、名前を取り出す
-				$mail->addBCC($email, mb_encode_mimeheader(mb_convert_encoding($name, 'JIS', M3_ENCODING)));
-			} else {
-				$mail->addBCC($bccAddressArray[$i]);
-			}
 		}
 		
 		// テストメールの場合はタイトル、本文に情報を追加
@@ -404,6 +440,20 @@ class MailManager extends Core
 		$ret = $mail->send();
 		if (!$ret) $this->_addErrorMessage($mail->ErrorInfo);		// エラーメッセージ追加
 
+		// 連続送信の場合は送信数をカウント
+		if ($this->isMultipleSend){			// メール連続送信の場合
+			// 送信先をクリア
+			$mail->clearAddresses();
+			
+			// 最大送信数に達したときは、一旦コネクションを切断
+			$this->sendCount++;
+			if ($this->sendCount >= $this->maxMultipleSendCount){
+				unset($mail);
+				$this->sendCount = 0;
+			}
+		} else {
+			unset($mail);
+		}
 		return $ret;
 	}
 	/**
