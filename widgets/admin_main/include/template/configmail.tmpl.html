@@ -35,11 +35,12 @@ $(function() {
 <form method="post" name="main">
 <input type="hidden" name="task" value="configmail" />
 <input type="hidden" name="act" />
+<!-- m3:PostParam -->
 <h3><span {_HELP_CONFIGMAIL_MAIL_SERVER}>メールサーバ</span></h3>
 <table id="config_table">
     <tbody>
     <tr>
-	    <th><span {_HELP_CONFIGMAIL_SMTP_USE_SERVER}>外部SMTPサーバ</span></th>
+	    <th><span {_HELP_CONFIGMAIL_SMTP_USE_SERVER}>SMTPサーバ</span></th>
 	    <td><div class="checkbox"><label><input type="checkbox" name="item_smtp_use_server" {SMTP_USE_SERVER} />使用</label></div></td>
 	</tr>
     <tr>
@@ -73,7 +74,7 @@ $(function() {
 	</tr>
     <tr>
 	    <th><span {_HELP_CONFIGMAIL_SMTP_PASSWORD}>パスワード</span></th>
-	    <td><div class="col-sm-3 m3config_item"><input type="password" name="item_smtp_password" class="form-control" value="{SMTP_PASSWORD}" maxlength="20" /></div>
+	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div><div class="col-sm-3 m3config_item"><input type="password" name="item_smtp_password" class="form-control" value="{SMTP_PASSWORD}" maxlength="20" /></div>
 	    </td>
 	</tr>
     </tbody>
