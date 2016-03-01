@@ -81,6 +81,7 @@ define('M3_DIR_NAME_SCRIPTS',		'scripts');								// スクリプト格納ディ
 define('M3_DIR_NAME_RESOURCE',		'resource');							// ユーザリソース格納ディレクトリ名
 define('M3_DIR_NAME_CSS',			'css');									// CSS格納ディレクトリ名
 define('M3_DIR_NAME_LOCALE',		'locale');								// ロケール情報格納ディレクトリ名
+define('M3_DIR_NAME_TOOLS',			'tools');								// 管理ツール格納ディレクトリ名
 define('M3_DIR_NAME_ADMIN',			'admin');								// 管理用ディレクトリ名
 define('M3_DIR_NAME_MOBILE',		'm');									// 携帯用ディレクトリ名
 define('M3_DIR_NAME_SMARTPHONE',	's');									// スマートフォン用ディレクトリ名
