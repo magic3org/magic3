@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -24,6 +24,8 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 	private $updateTableScripts;			// テーブル更新スクリプト
 	const CF_SERVER_ID = 'server_id';
 	const CF_SERVER_URL = 'server_url';		// サーバURL
+	const CF_ADMIN_TOOLS_USER = 'admin_tools_user';			// 管理ツールアカウント
+	const CF_ADMIN_TOOLS_PASSWORD = 'admin_tools_password';		// 管理ツールパスワード
 	const INSTALL_DT = 'install_dt';		// システムインストール日時
 	const WORK_DIR = 'work_dir';			// 一時ディレクトリ
 	const UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
@@ -179,6 +181,12 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				//if ($ret) $ret = $this->_db->updateSystemConfig(self::WORK_DIR, M3_SYSTEM_WORK_DIR_PATH);// 一時ディレクトリ
 				if ($ret) $ret = $this->_db->updateSystemConfig(self::WORK_DIR, $this->gEnv->getWorkDirPath());// 一時ディレクトリ
 				if ($ret) $ret = $this->_db->updateSystemConfig(self::DEFAULT_LANG, $langId);// デフォルト言語
+				
+				// サーバ管理用の情報を登録
+				if (defined('M3_INSTALL_ADMIN_SERVER') && M3_INSTALL_ADMIN_SERVER){			// サーバ管理システムの場合
+					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_ADMIN_TOOLS_USER, M3_INSTALL_ADMIN_TOOLS_USER);// 管理ツールアカウント
+					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_ADMIN_TOOLS_PASSWORD, M3_INSTALL_ADMIN_TOOLS_PASSWORD);// 管理ツールパスワード
+				}
 			}
 			// ##### これ以降、DBへのログ出力可能 #####
 			if ($ret){
