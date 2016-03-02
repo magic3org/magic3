@@ -90,20 +90,28 @@ class admin_mainServertoolWidgetContainer extends admin_mainServeradminBaseWidge
 		$toolExists = false;		// ツールが存在するかどうか
 		
 		for ($i = 0; $i < count($this->toolArray); $i++){
-			$value = $this->toolArray[$i]['value'];
+			$value = $this->toolArray[$i]['value'];		// ディレクトリ名
 			$name = $this->toolArray[$i]['name'];
 			$url =  $this->toolUrl . $value . '/';
 			
+			// ツールが存在するかチェック
+			$ret = @file_get_contents($url);
+			if ($ret === false) continue;
+
 			$row = array(
-//				'value'		=> $value,			// ディレクトリ名
 				'name'		=> $this->convertToDispString($name),			// ツール名
 				'url'		=> $url				// ツールへのURL
 			);
 			$this->tmpl->addVars('tool_list', $row);
 			$this->tmpl->parseTemplate('tool_list', 'a');
-//			$toolExists = true;		// ツールが存在するかどうか
+			$toolExists = true;		// ツールが存在するかどうか
 		}
-		if (!$toolExists) $this->setMsg(self::MSG_GUIDANCE, '使用可能なツールがありません');
+		if (!$toolExists){
+			$this->setMsg(self::MSG_GUIDANCE, '使用可能なツールがありません');
+			
+			// 一覧非表示
+			$this->tmpl->setAttribute('tool_list', 'visibility', 'hidden');
+		}
 	}
 }
 ?>
