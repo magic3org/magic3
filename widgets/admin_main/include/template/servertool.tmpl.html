@@ -18,7 +18,7 @@ $(function(){
 	$.ajax({
 		url: "{TOOL_URL}",
 		success: function(data) {
-			alert('通信成功');
+			$('.menubutton').attr('disabled', false).removeAttr("onclick");
 		}
 	});
 });
@@ -28,7 +28,7 @@ $(function(){
 <!-- m3:ErrorMessage -->
 
 <patTemplate:tmpl name="tool_list">
-<a href="{URL}" class="button btn-info btn-lg menubutton" target="_blank" style="width:500px;margin:50px auto;display:block;" disabled>{NAME}</a>
+<a href="{URL}" class="button btn-info btn-lg menubutton" target="_blank" style="width:500px;margin:50px auto;display:block;" onclick="return false;" disabled>{NAME}</a>
 </patTemplate:tmpl>
 </div>
 </patTemplate:tmpl>

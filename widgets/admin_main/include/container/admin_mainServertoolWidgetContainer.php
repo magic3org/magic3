@@ -78,7 +78,6 @@ class admin_mainServertoolWidgetContainer extends admin_mainServeradminBaseWidge
 			list($preUrl, $postUrl) = explode('//', $this->toolUrl);
 			$toolUrl = $preUrl . '//' . $user . ':' . $pwd . '@' . $postUrl;
 		}
-$toolUrl = 'http://admin:admin@192.168.1.46/dev/';
 		$this->tmpl->addVar("_widget", "tool_url", $toolUrl);
 	}
 	/**
@@ -88,6 +87,8 @@ $toolUrl = 'http://admin:admin@192.168.1.46/dev/';
 	 */
 	function createToolMenu()
 	{
+		$toolExists = false;		// ツールが存在するかどうか
+		
 		for ($i = 0; $i < count($this->toolArray); $i++){
 			$value = $this->toolArray[$i]['value'];
 			$name = $this->toolArray[$i]['name'];
@@ -100,7 +101,9 @@ $toolUrl = 'http://admin:admin@192.168.1.46/dev/';
 			);
 			$this->tmpl->addVars('tool_list', $row);
 			$this->tmpl->parseTemplate('tool_list', 'a');
+//			$toolExists = true;		// ツールが存在するかどうか
 		}
+		if (!$toolExists) $this->setMsg(self::MSG_GUIDANCE, '使用可能なツールがありません');
 	}
 }
 ?>
