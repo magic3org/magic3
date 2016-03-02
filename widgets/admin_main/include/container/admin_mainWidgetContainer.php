@@ -287,6 +287,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'editmenu':		// メニュー編集
 						case 'corefile':		// コアファイル編集
 						case 'serverinfo':		// サーバ情報
+						case 'servertool':		// サーバ管理ツール
 						case 'install':			// インストール
 						case 'sitelist':		// サイト一覧
 						case 'createconfig':	// 設定ファイル作成

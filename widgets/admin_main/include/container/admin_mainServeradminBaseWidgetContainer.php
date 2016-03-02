@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -30,6 +30,7 @@ class admin_mainServeradminBaseWidgetContainer extends admin_mainBaseWidgetConta
 	const TASK_SERVERINFO		= 'serverinfo';			// サーバ情報
 	const TASK_SITELIST			= 'sitelist';			// サイト一覧
 	const TASK_SITELIST_DETAIL	= 'sitelist_detail';	// サイト詳細
+	const TASK_SERVERTOOL		= 'servertool';			// サーバ管理ツール
 	const DEFAULT_TASK			= 'serverinfo';			// デフォルトの画面
 	// ジョブタイプ
 	const JOB_TYPE_CREATE_SITE				= 'CREATESITE';				// サイト作成ジョブ
@@ -99,6 +100,9 @@ class admin_mainServeradminBaseWidgetContainer extends admin_mainBaseWidgetConta
 			case self::TASK_SITELIST_DETAIL:	// サイト詳細
 				$titles[] = 'サイト一覧';
 				break;
+			case self::TASK_SERVERTOOL:			// サーバ管理ツール
+				$titles[] = 'サーバ管理ツール';
+				break;
 		}
 		$this->gPage->setAdminBreadcrumbDef($titles);
 		
@@ -122,6 +126,14 @@ class admin_mainServeradminBaseWidgetContainer extends admin_mainBaseWidgetConta
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> ($task == self::TASK_SITELIST || $task == self::TASK_SITELIST_DETAIL),
+									'submenu'	=> array()
+								),
+								(Object)array(
+									'name'		=> 'サーバ管理ツール',
+									'task'		=> self::TASK_SERVERTOOL,
+									'url'		=> '',
+									'tagid'		=> '',
+									'active'	=> ($task == self::TASK_SERVERTOOL),
 									'submenu'	=> array()
 								)
 							);

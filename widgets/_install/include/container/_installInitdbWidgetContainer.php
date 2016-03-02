@@ -24,8 +24,8 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 	private $updateTableScripts;			// テーブル更新スクリプト
 	const CF_SERVER_ID = 'server_id';
 	const CF_SERVER_URL = 'server_url';		// サーバURL
-	const CF_ADMIN_TOOLS_USER = 'admin_tools_user';			// 管理ツールアカウント
-	const CF_ADMIN_TOOLS_PASSWORD = 'admin_tools_password';		// 管理ツールパスワード
+	const CF_SERVER_TOOL_USER = 'server_tool_user';			// 管理ツールアカウント
+	const CF_SERVER_TOOL_PASSWORD = 'server_tool_password';		// 管理ツールパスワード
 	const INSTALL_DT = 'install_dt';		// システムインストール日時
 	const WORK_DIR = 'work_dir';			// 一時ディレクトリ
 	const UPDATE_DIR = 'update';			// 追加スクリプトディレクトリ名
@@ -184,8 +184,8 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				
 				// サーバ管理用の情報を登録
 				if (defined('M3_INSTALL_ADMIN_SERVER') && M3_INSTALL_ADMIN_SERVER){			// サーバ管理システムの場合
-					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_ADMIN_TOOLS_USER, M3_INSTALL_ADMIN_TOOLS_USER);// 管理ツールアカウント
-					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_ADMIN_TOOLS_PASSWORD, M3_INSTALL_ADMIN_TOOLS_PASSWORD);// 管理ツールパスワード
+					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_TOOL_USER, M3_INSTALL_ADMIN_TOOL_USER);// 管理ツールアカウント
+					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_TOOL_PASSWORD, M3_INSTALL_ADMIN_TOOL_PASSWORD);// 管理ツールパスワード
 				}
 			}
 			// ##### これ以降、DBへのログ出力可能 #####
