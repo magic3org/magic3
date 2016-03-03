@@ -318,12 +318,9 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JSCALENDAR_CSS			= 'jscalendar-1.0/calendar-win2k-1.css';	// jscalendarCSS
 
 	// Bootstrapライブラリ
-//	const BOOTSTRAP_FILENAME		= 'bootstrap-3.2.0/js/bootstrap.min.js';			// bootstrap
-//	const BOOTSTRAP_CSS				= 'bootstrap-3.2.0/css/bootstrap.min.css';
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.3.6/js/bootstrap.min.js';			// bootstrap
 	const BOOTSTRAP_CSS				= 'bootstrap-3.3.6/css/bootstrap.min.css';
 	// BootstrapオプションはBootstrapのディレクトリ配下に格納
-//	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.2.0/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSWATCH_FLATLY_CSS			= 'bootstrap-3.3.6/css/bootswatch_flatly_ja.css';	// bootstrap配色(日本語フォント)
 	const BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS = 'bootstrap/css/bootsnipp_largedropdownmenu.css';
 	const BOOTSTRAP_YAMM_CSS						= 'bootstrap/css/yamm.css';					// bootstrapメガメニュー
