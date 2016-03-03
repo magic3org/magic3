@@ -35,7 +35,7 @@ class admin_mainServertoolWidgetContainer extends admin_mainServeradminBaseWidge
 									array(	'name' => 'PostfixAdmin',	'value' => 'postfixadmin')
 							);
 							
-		$this->toolUrl = $this->gEnv->getAdminUrl(true/*adminディレクトリ削除*/) . '/' . M3_DIR_NAME_TOOLS . '/';
+		$this->toolUrl = $this->gEnv->getAdminUrl(true/*adminディレクトリ削除*/) . '/' . M3_DIR_NAME_SERVER_TOOLS . '/';
 	}
 	/**
 	 * テンプレートファイルを設定
