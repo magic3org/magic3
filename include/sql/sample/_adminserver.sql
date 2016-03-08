@@ -18,6 +18,8 @@
 -- システム設定マスター(PCサイト非公開)
 UPDATE _system_config SET sc_value = '0' WHERE sc_id = 'site_pc_in_public';
 UPDATE _system_config SET sc_value = 'serveradmin' WHERE sc_id = 'system_type';
+-- 管理画面をSSL対応
+UPDATE _system_config SET sc_value = '1' WHERE sc_id = 'use_ssl_admin';
 
 -- サイト定義マスター
 DELETE FROM _site_def WHERE sd_id = 'site_name';
