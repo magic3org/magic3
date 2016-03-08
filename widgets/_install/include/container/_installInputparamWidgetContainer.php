@@ -19,7 +19,6 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/_installDb.php');
 class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 {
 	private $dbFixed;			// DB接続を固定するかどうか
-	const INSTALL_DEF_FILE = '/install/installDef.php';		// インストール定義ファイル
 	
 	/**
 	 * コンストラクタ
@@ -230,16 +229,12 @@ class _installInputparamWidgetContainer extends _installBaseWidgetContainer
 			}
 		}
 		// インストール定義ファイルがある場合は設定値を取得
-		$installDefPath = $this->gEnv->getIncludePath() . self::INSTALL_DEF_FILE;
-		if (file_exists($installDefPath)){
-			require_once($installDefPath);		// 定義ファイル読み込み
-			if (defined('M3_INSTALL_PRE_FIXED_DB') && M3_INSTALL_PRE_FIXED_DB){			// DB接続を固定する場合
-				$dbname = defined('M3_INSTALL_DB_NAME') ? M3_INSTALL_DB_NAME : '';
-				$dbuser = defined('M3_INSTALL_DB_USER') ? M3_INSTALL_DB_USER : '';
+		if (defined('M3_INSTALL_PRE_FIXED_DB') && M3_INSTALL_PRE_FIXED_DB){			// DB接続を固定する場合
+			$dbname = defined('M3_INSTALL_DB_NAME') ? M3_INSTALL_DB_NAME : '';
+			$dbuser = defined('M3_INSTALL_DB_USER') ? M3_INSTALL_DB_USER : '';
 //				$password = defined('M3_INSTALL_DB_PASSWORD') ? M3_INSTALL_DB_PASSWORD : '';
-				
-				$this->dbFixed = true;			// DB接続を固定
-			}
+			
+			$this->dbFixed = true;			// DB接続を固定
 		}
 			
 		// 入力データを再設定

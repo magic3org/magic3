@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -22,6 +22,7 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 	private $sampleId;		// サンプルデータID
 	private $sampleTitle;	// サンプルデータタイトル
 	private $sampleDesc;	// サンプルデータ説明
+	private $adminServerScriptArray;	// サーバ管理システム用スクリプト
 	const SAMPLE_DIR = 'sample';				// サンプルSQLディレクトリ名
 	const DOWNLOAD_FILE_PREFIX = 'DOWNLOAD:';		// ダウンロードファイルプレフィックス
 	
@@ -35,6 +36,9 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 		
 		// DBオブジェクト作成
 		$this->db = new _installDB();
+		
+		// サーバ管理システム用スクリプト
+		$this->adminServerScriptArray = array('_adminserver.sql');
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -126,9 +130,16 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 			while (($file = $dir->read()) !== false){
 				$filePath = $searchPath . '/' . $file;
 				// ファイルかどうかチェック
-				if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath)
-					&& strncmp($file, '_', 1) != 0){	// 「_」で始まる名前のファイルは読み込まない
-					$scriptFiles[] = $file;
+				if (defined('M3_INSTALL_ADMIN_SERVER') && M3_INSTALL_ADMIN_SERVER){			// サーバ管理システムの場合
+					if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath)
+						&& in_array($file, $this->adminServerScriptArray)){	// サーバ管理システム用スクリプトのみ取得
+						$scriptFiles[] = $file;
+					}
+				} else {
+					if (strncmp($file, '.', 1) != 0 && $file != '..' && is_file($filePath)
+						&& strncmp($file, '_', 1) != 0){	// 「_」で始まる名前のファイルは読み込まない
+						$scriptFiles[] = $file;
+					}
 				}
 			}
 			$dir->close();
@@ -169,6 +180,10 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 			// 公式サイトのサンプルデータリストを取得
 			$this->getSampleListFromOfficialSite();
 		}
+		// サーバ管理システムの場合は公式サイト接続を非表示
+		if (defined('M3_INSTALL_ADMIN_SERVER') && M3_INSTALL_ADMIN_SERVER){			// サーバ管理システムの場合
+			$this->tmpl->setAttribute('connect_official', 'visibility', 'hidden');
+		}
 		
 		// 実行スクリプトファイルのヘッダを取得
 		if (!empty($this->sampleId) && !strStartsWith($this->sampleId, self::DOWNLOAD_FILE_PREFIX)){
@@ -202,6 +217,7 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 			fclose($fp);
 			if (count($fileDescArray)) $this->sampleDesc = implode('<br />', $fileDescArray);
 		}
+						
 		// 画面のヘッダ、タイトルを設定
 		if ($dbStatus == 'update'){
 			$this->tmpl->addVar("_widget", "title", $this->_('Database Updated'));		// ＤＢバージョンアップ完了
@@ -215,7 +231,7 @@ class _installInitotherWidgetContainer extends _installBaseWidgetContainer
 		$content = '<h4>' . $this->convertToDispString($this->sampleTitle, true/*タグ変換なし*/) . '</h4>';
 		$content .= $this->convertToDispString($this->sampleDesc, true/*タグ変換なし*/);
 		$this->tmpl->addVar("datainstall_msg", "content", $content);
-		$this->tmpl->addVar("datainstall_msg", "connect_official", $this->convertToCheckedString($connectOfficial));
+		$this->tmpl->addVar("connect_official", "connect_official", $this->convertToCheckedString($connectOfficial));		// 公式サイト接続のチェックボックス
 		$this->tmpl->addVar("_widget", "db_status", $dbStatus);
 		
 		// テキストをローカライズ

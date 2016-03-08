@@ -18,6 +18,7 @@ require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php')
 class _installBaseWidgetContainer extends BaseAdminWidgetContainer
 {
 	const DEFAULT_LANG = 'ja';			// デフォルトの言語(日本語)
+	const INSTALL_DEF_FILE = '/install/installDef.php';		// インストール定義ファイル
 	
 	/**
 	 * コンストラクタ
@@ -26,6 +27,9 @@ class _installBaseWidgetContainer extends BaseAdminWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		$installDefPath = $this->gEnv->getIncludePath() . self::INSTALL_DEF_FILE;
+		if (file_exists($installDefPath)) require_once($installDefPath);		// 定義ファイル読み込み
 	}
 	/**
 	 * テンプレートにデータ埋め込む
