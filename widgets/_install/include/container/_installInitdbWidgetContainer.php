@@ -184,8 +184,8 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				
 				// サーバ管理用の情報を登録
 				if (defined('M3_INSTALL_ADMIN_SERVER') && M3_INSTALL_ADMIN_SERVER){			// サーバ管理システムの場合
-					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_TOOL_USER, M3_INSTALL_ADMIN_TOOL_USER);// 管理ツールアカウント
-					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_TOOL_PASSWORD, M3_INSTALL_ADMIN_TOOL_PASSWORD);// 管理ツールパスワード
+					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_TOOL_USER, M3_INSTALL_SERVER_TOOL_USER);// 管理ツールアカウント
+					if ($ret) $ret = $this->_db->updateSystemConfig(self::CF_SERVER_TOOL_PASSWORD, M3_INSTALL_SERVER_TOOL_PASSWORD);// 管理ツールパスワード
 				}
 			}
 			// ##### これ以降、DBへのログ出力可能 #####
