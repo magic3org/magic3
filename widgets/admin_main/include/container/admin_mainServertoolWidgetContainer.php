@@ -21,6 +21,7 @@ class admin_mainServertoolWidgetContainer extends admin_mainServeradminBaseWidge
 	private $toolUrl;			// ツールディレクトリへのURL
 	const CF_SERVER_TOOL_USER = 'server_tool_user';			// 管理ツールアカウント
 	const CF_SERVER_TOOL_PASSWORD = 'server_tool_password';		// 管理ツールパスワード
+	const TOOL_DIR = '/var/www/magic3/stools/';			// ツール格納ディレクトリ
 	
 	/**
 	 * コンストラクタ
@@ -32,7 +33,8 @@ class admin_mainServertoolWidgetContainer extends admin_mainServeradminBaseWidge
 		
 		// サーバ管理ツール
 		$this->toolArray = array(	array(	'name' => 'phpMyAdmin',		'value' => 'phpmyadmin'),
-									array(	'name' => 'PostfixAdmin',	'value' => 'postfixadmin')
+									array(	'name' => 'PostfixAdmin',	'value' => 'postfixadmin'),
+									array(	'name' => 'Sample',	'value' => 'sample')
 							);
 							
 		$this->toolUrl = $this->gEnv->getAdminUrl(true/*adminディレクトリ削除*/) . '/' . M3_DIR_NAME_SERVER_TOOLS . '/';
@@ -62,23 +64,17 @@ class admin_mainServertoolWidgetContainer extends admin_mainServeradminBaseWidge
 	 */
 	function _assign($request, &$param)
 	{
+		// BASIC認証解除用のURL作成
+		$user = $this->gSystem->getSystemConfig(self::CF_SERVER_TOOL_USER);// 管理ツールアカウント
+		$pwd = $this->gSystem->getSystemConfig(self::CF_SERVER_TOOL_PASSWORD);// 管理ツールパスワード
+		list($preUrl, $postUrl) = explode('//', $this->toolUrl);
+		$this->toolUrl = $preUrl . '//' . $user . ':' . $pwd . '@' . $postUrl;
+			
 		// 入力値を取得
 		$act = $request->trimValueOf('act');
 		
 		// サーバ管理ツールメニュー作成
 		$this->createToolMenu();
-		
-		// BASIC認証解除用のURL作成
-		$user = $this->gSystem->getSystemConfig(self::CF_SERVER_TOOL_USER);// 管理ツールアカウント
-		$pwd = $this->gSystem->getSystemConfig(self::CF_SERVER_TOOL_PASSWORD);// 管理ツールパスワード
-		
-		if (empty($user)){
-			$toolUrl = $this->toolUrl;
-		} else {
-			list($preUrl, $postUrl) = explode('//', $this->toolUrl);
-			$toolUrl = $preUrl . '//' . $user . ':' . $pwd . '@' . $postUrl;
-		}
-		$this->tmpl->addVar("_widget", "tool_url", $toolUrl);
 	}
 	/**
 	 * サーバ管理ツールメニュー作成
@@ -95,8 +91,8 @@ class admin_mainServertoolWidgetContainer extends admin_mainServeradminBaseWidge
 			$url =  $this->toolUrl . $value . '/';
 			
 			// ツールが存在するかチェック
-			$ret = @file_get_contents($url);
-			if ($ret === false) continue;
+			$toolPath = self::TOOL_DIR . $value;
+			if (!is_dir($toolPath)) continue;
 
 			$row = array(
 				'name'		=> $this->convertToDispString($name),			// ツール名
