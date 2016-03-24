@@ -49,6 +49,7 @@ class ScriptLibInfo
 	const LIB_BOOTSTRAP				= 'bootstrap';
 	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
 	const LIB_NOBOOTSTRAP			= 'nobootstrap';			// Bootstrapを使用しない場合の管理画面用ライブラリ
+	const LIB_SOCKETIO				= 'socketio';				// socket.io
 	
 	// Bootstrapプラグイン
 	const LIB_BOOTSTRAP_DATETIMEPICKER		= 'bootstrap.datetimepicker';
@@ -312,6 +313,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const ELFINDER21_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
 
 	const MD5_FILENAME				= 'md5.js';									// MD5
+	const SOCKETIO_FILENAME			= 'socket.io1.4.5.js';						// socket.io
 	const MOMENT_FILENAME			= 'moment-with-locales-2.9.0.js';			// Moment.js
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
 	const JSCALENDAR_FILENAME		= 'jscalendar-1.0/calendar.js';				// jscalendar
@@ -439,6 +441,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 		if (!isset(self::$libs)){
 			self::$libs = array(
 						self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
+						self::LIB_SOCKETIO				=>	array(	'script' 	=> array(self::SOCKETIO_FILENAME)),			// socket.io
 						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
 						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor

@@ -13,13 +13,41 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+function divEscapedContentElement(message)
+{
+	return $('<div></div>').text(message);
+}
+function divSystemContentElement(message)
+{
+	return $('<div></div>').html('<i>' + message + '</i>');
+}
+function processUserInput(chatApp, socket)
+{
+	var message = $('#send-message').val();
+	var systemMessage;
+	
+	if (message.charAt(0) == '/'){
+		systemMessage = chatApp.processCommand(message);
+		if (systemMessage){
+			$('#messages').append(divSystemContentElement(systemMessage));
+		}
+	} else {
+		chatApp.sendMessage($('#room').text(), message);
+		$('#messages').append(dieEscapedContentElement(message));
+		$('#messages').scrollTop($('#messages').prop('scrollHeight'));
+	}
+	$('#send-message').val('');
+}
+
+var socket = io.connect();
 $(function(){
+	var chatApp = new Chat(socket);
 });
 //]]>
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
-<h3 class="m3config_h">チャットシステム</h3>
+<h3 class="m3config_h">チャットサンプル</h3>
 <div id="room"></div>
 <div id="room-list"></div>
 <div id="message"></div>

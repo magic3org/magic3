@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,6 +18,8 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainTest_chatWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	const CHAT_SCRIPT_FILE = '/chat.js';					// チャットテスト用ライブラリ
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -63,6 +65,20 @@ class admin_mainTest_chatWidgetContainer extends admin_mainBaseWidgetContainer
 		echo 'imagetype=[' . $imageType . '] name=[' . $name . '] size=[' . $size . '] type=[' . $type . '] ext=[' . $ext . ']';
 //		echo hex2bin('466F726D617474696E6752756C6573');
 //		echo bin2hex(':FormattingRules');
+	}
+	/**
+	 * JavascriptファイルをHTMLヘッダ部に設定
+	 *
+	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptFileToHead($request, &$param)
+	{
+		return array($this->getUrl($this->gEnv->getCurrentWidgetScriptsUrl() . self::CHAT_SCRIPT_FILE));
 	}
 }
 ?>
