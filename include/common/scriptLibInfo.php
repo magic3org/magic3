@@ -313,7 +313,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const ELFINDER21_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
 
 	const MD5_FILENAME				= 'md5.js';									// MD5
-	const SOCKETIO_FILENAME			= 'socket.io1.4.5.js';						// socket.io
+	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
 	const MOMENT_FILENAME			= 'moment-with-locales-2.9.0.js';			// Moment.js
 	const SWFOBJECT_FILENAME		= 'swfobject/swfobject.js';					// swfobject
 	const JSCALENDAR_FILENAME		= 'jscalendar-1.0/calendar.js';				// jscalendar
@@ -441,7 +441,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 		if (!isset(self::$libs)){
 			self::$libs = array(
 						self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
-						self::LIB_SOCKETIO				=>	array(	'script' 	=> array(self::SOCKETIO_FILENAME)),			// socket.io
+						self::LIB_SOCKETIO				=>	array(	'script' 	=> ''/*空文字列は直前で作成*/),			// socket.io
 						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
 						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
@@ -797,6 +797,31 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 		$scripts = $lib[$libId]['script'];
 		if (is_array($scripts) && count($scripts) == 1) $scripts = $scripts[0];
 		return $scripts;
+	}
+
+	/**
+	 * スクリプトライブラリ情報を作成
+	 *
+	 * @param string $libId			ライブラリID
+	 * @return array				ライブラリ情報
+	 */
+	static function generateLib($libId)
+	{
+		global $gEnvManager;
+		
+		$lib = array();
+		
+		switch ($libId){
+		case self::LIB_SOCKETIO:
+			// Socket.io用のURLを作成
+			$scriptUrl = $gEnvManager->getRealtimeServerUrl() . '/' . self::SOCKETIO_FILENAME;
+			$lib['script'] = array($scriptUrl);
+			
+			// ライブラリ情報更新
+			self::$libs[self::LIB_SOCKETIO] = $lib;
+			break;
+		}
+		return $lib;
 	}
 }
 ?>

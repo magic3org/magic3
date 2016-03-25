@@ -39,9 +39,53 @@ function processUserInput(chatApp, socket)
 	$('#send-message').val('');
 }
 
-var socket = io.connect();
+var socket = io.connect('http://192.168.1.46:2000');
+socket.on('message', function(time){
+document.getElementById('time').innerHTML = time;
+});
+
 $(function(){
-	var chatApp = new Chat(socket);
+/*	var chatApp = new Chat(socket);
+	socket.on('nameResult', function(result){
+		var message;
+		if (result.success){
+			message = 'You are now known as ' + result.name + '.';
+		} else {
+			message = result.message;
+		}
+		$('#messages').append(divSystemContenElement(message));
+	});
+	socket.on('joinResult', function(result){
+		$('#room').text(result.room);
+		$('#messages').append(divSystemContenElement('Room changed.'));
+	});
+	socket.on('message', function(message){
+		var newElement = $('<div></div>').text(message.text);
+		$('#messages').append(newElement);
+	});
+	socket.on('rooms', function(rooms){
+		$('#room-list').empty();
+		for (var room in rooms){
+			room = room.substring(1, room.length);
+			if (room != ''){
+				$('#room-list').append(divEscapedContentElement(room));
+			}
+		}
+		$('#room-list div').click(function(){
+			chatApp.processCommand('/join ' + $(this).text());
+			$('#send-message').focus();
+		});
+	});
+	
+	setInterval(function(){
+		socket.emit('room');
+	}, 1000);
+	
+	$('#send-message').focus();
+	$('#send-form').submit(function(){
+		processUserInput(chatApp, socket);
+		return false;
+	});*/
 });
 //]]>
 </script>
@@ -54,6 +98,7 @@ $(function(){
 <form method="post" name="main">
 <input id="send-message" class="form-control" />
 <input id="send-button" type="submit" class="button" value="送信" />
+<b><span id="time">AAA</span></b>
 <p id="help">
 チャットコマンド：
 <ul>

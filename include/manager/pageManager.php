@@ -1715,9 +1715,17 @@ class PageManager extends Core
 				$this->outputTheme = true;
 			}
 		}
+
 		// Javascript追加
 		if (isset($this->libFiles[$lib]['script'])){
 			$scriptFiles = $this->libFiles[$lib]['script'];
+
+			// ##### ライブラリ情報を作成する場合 #####
+			if (empty($scriptFiles)){
+				$generatedLib = ScriptLibInfo::generateLib($lib);			// ライブラリ取得
+				if (!empty($generatedLib)) $scriptFiles = $generatedLib['script'];
+			}
+			
 			for ($i = 0; $i < count($scriptFiles); $i++){
 				$this->addAdminScriptFile($scriptFiles[$i]);		// 管理機能用のスクリプト追加
 			}
@@ -1888,6 +1896,13 @@ class PageManager extends Core
 		// ライブラリ自体のファイルを追加
 		if (isset($this->libFiles[$lib]['script'])){
 			$scriptFiles = $this->libFiles[$lib]['script'];
+			
+			// ##### ライブラリ情報を作成する場合 #####
+			if (empty($scriptFiles)){
+				$generatedLib = ScriptLibInfo::generateLib($lib);			// ライブラリ取得
+				if (!empty($generatedLib)) $scriptFiles = $generatedLib['script'];
+			}
+			
 			for ($i = 0; $i < count($scriptFiles); $i++){
 				$this->addScriptFile($scriptFiles[$i]);		// 通常機能用のスクリプト追加
 			}
@@ -1922,6 +1937,13 @@ class PageManager extends Core
 				// Javascript追加
 				if (isset($this->libFiles[$libId]['script'])){
 					$scriptFiles = $this->libFiles[$libId]['script'];
+					
+					// ##### ライブラリ情報を作成する場合 #####
+					if (empty($scriptFiles)){
+						$generatedLib = ScriptLibInfo::generateLib($libId);			// ライブラリ取得
+						if (!empty($generatedLib)) $scriptFiles = $generatedLib['script'];
+					}
+			
 					for ($i = 0; $i < count($scriptFiles); $i++){
 						$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
 					}
@@ -1947,6 +1969,13 @@ class PageManager extends Core
 			// Javascript追加
 			if (isset($this->libFiles[$libId]['script'])){
 				$scriptFiles = $this->libFiles[$libId]['script'];
+				
+				// ##### ライブラリ情報を作成する場合 #####
+				if (empty($scriptFiles)){
+					$generatedLib = ScriptLibInfo::generateLib($libId);			// ライブラリ取得
+					if (!empty($generatedLib)) $scriptFiles = $generatedLib['script'];
+				}
+			
 				for ($i = 0; $i < count($scriptFiles); $i++){
 					$this->defaultAdminDirScriptFiles[] = $scriptFiles[$i];		// デフォルトで読み込むスクリプトファイル(管理ディレクトリ用)
 				}

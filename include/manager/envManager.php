@@ -113,6 +113,7 @@ class EnvManager extends Core
 	const CF_MULTI_DOMAIN = 'multi_domain';			// マルチドメイン運用かどうか
 	const CF_SITE_SMARTPHONE_URL = 'site_smartphone_url';		// スマートフォン用サイトURL
 	const CF_SITE_MOBILE_URL = 'site_mobile_url';		// 携帯用サイトURL
+	const CF_REALTIME_SERVER_PORT = 'realtime_server_port';		// リアルタイムサーバ用ポート番号
 	const DEFAULT_SITE_NAME = 'サイト名未設定';		// 管理画面用のデフォルトサイト名
 	
 	/**
@@ -543,6 +544,27 @@ class EnvManager extends Core
 		$isSslPage = $gPageManager->isSslPage($pageId, $pageSubId);
 		if ($isSslPage) $url = $this->getSslRootUrl();
 		return $url;
+	}
+	/**
+	 * リアルタイムサーバ用のURLを取得
+	 *
+	 * @return string				URL
+	 */
+	public function getRealtimeServerUrl()
+	{
+		static $serverUrl;
+		
+		if (!isset($serverUrl)){
+			// リアルタイムサーバ用ポート番号を取得
+			$portNo = $this->gSystem->getSystemConfig(self::CF_REALTIME_SERVER_PORT);
+			$rootUrl = $this->getRootUrlByCurrentPage();
+			
+			$parsedUrl = parse_url($rootUrl);
+			$url = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+			if (!empty($portNo)) $url .= ':' . $portNo;
+			$serverUrl = $url;
+		}
+		return $serverUrl;
 	}
 	/**
 	 * 現在のページにSSLが必要かどうかを取得
