@@ -1,0 +1,30 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+var socket = io.connect('{SERVER_URL}');
+// Apache2.4のリバースプロキシを使用した場合
+//	var socket = io.connect('http://127.0.0.1', {path:'/app'});			// Socket.io v1.0
+//	var socket = io.connect('http://127.0.0.1', {resource:'/app'});		// Socket.io v0.9
+socket.on('message', function(time){
+	$('#time').text(time);
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<h3 class="m3config_h">リアルタイムWebインターフェイスサンプル</h3>
+<div>日時：<b><span id="time">ここに表示</span></b></div>
+</div>
+</patTemplate:tmpl>
