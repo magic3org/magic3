@@ -18,6 +18,8 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
 class admin_mainTest_chatWidgetContainer extends admin_mainBaseWidgetContainer
 {
+	const CHAT_SCRIPT_FILE = '/chat.js';		// scriptファイル
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -51,7 +53,23 @@ class admin_mainTest_chatWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		echo $this->gEnv->getRealtimeServerUrl();
+		$serverUrl = $this->gEnv->getRealtimeServerUrl();
+		$this->tmpl->addVar('_widget', 'server_url', $serverUrl);
+	}
+	/**
+	 * JavascriptファイルをHTMLヘッダ部に設定
+	 *
+	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptFileToHead($request, &$param)
+	{
+		$scriptArray = array($this->getUrl($this->gEnv->getCurrentWidgetScriptsUrl() . self::CHAT_SCRIPT_FILE));
+		return $scriptArray;
 	}
 }
 ?>

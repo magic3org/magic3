@@ -16,22 +16,23 @@
 var socketio = require('socket.io');
 var io;
 var guestNumber = 1;
-var nickNames;
+var nickNames = [];
 var namesUsed = [];
-var currentRoom;
+var currentRoom = [];
 
 exports.listen = function(server)
 {
 	io = socketio.listen(server);
 	io.set('log lebel', 1);
 	io.sockets.on('connection', function(socket){
-		guestNumber = assignGuestName(socket, guessNumber, nickNames, namesUsed);
+		guestNumber = assignGuestName(socket, guestNumber, nickNames, namesUsed);
 		joinRoom(socket, 'Lobby');
-		handleMessageBroadcasting(socket, nichNames, namesUsed);
+		handleMessageBroadcasting(socket, nickNames, namesUsed);
+		handleNameChangeAttempts(socket, nickNames, namesUsed);
 		handleRoomJoining(socket);
 		
 		socket.on('room', function(){
-			socket.emit('rooms', io.socketd.manager.rooms);
+			socket.emit('rooms', io.sockets.manager.rooms);
 		});
 		
 		handleClientDisconnection(socket, nickNames, namesUsed);
@@ -60,7 +61,7 @@ function joinRoom(socket, room)
 		text: nickNames[socket.id] + ' has joined ' + room + '.'
 	});
 	
-	var usersInRoom = io.socket.clients(room);
+	var usersInRoom = io.sockets.clients(room);
 	if (usersInRoom.length > 1){
 		var usersInRoomSummary = 'Users currently in ' + room + ': ';
 		for (var index in usersInRoom){
@@ -116,18 +117,18 @@ function handleMessageBroadcasting(socket)
 		});
 	});
 }
-function handleRoomJoininig(socket)
+function handleRoomJoining(socket)
 {
 	socket.on('join', function(room){
 		socket.leave(currentRoom[socket.id]);
 		joinRoom(socket, room.newRoom);
 	});
 }
-function handleClientDisconnect(socket)
+function handleClientDisconnection(socket)
 {
 	socket.on('disconnect', function(){
-		var nameIndex = namesUsed.indexOf(nickName[socket.id]);
-		delete nameUsed[nameIndex];
+		var nameIndex = namesUsed.indexOf(nickNames[socket.id]);
+		delete namesUsed[nameIndex];
 		delete nickNames[socket.id];
 	});
 }

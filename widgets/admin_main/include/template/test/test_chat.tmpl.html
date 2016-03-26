@@ -13,6 +13,8 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
+var socket = io.connect('{SERVER_URL}');
+
 function divEscapedContentElement(message)
 {
 	return $('<div></div>').text(message);
@@ -39,13 +41,8 @@ function processUserInput(chatApp, socket)
 	$('#send-message').val('');
 }
 
-var socket = io.connect('http://192.168.1.46:2000');
-socket.on('message', function(time){
-document.getElementById('time').innerHTML = time;
-});
-
 $(function(){
-/*	var chatApp = new Chat(socket);
+	var chatApp = new Chat(socket);
 	socket.on('nameResult', function(result){
 		var message;
 		if (result.success){
@@ -53,11 +50,11 @@ $(function(){
 		} else {
 			message = result.message;
 		}
-		$('#messages').append(divSystemContenElement(message));
+		$('#messages').append(divSystemContentElement(message));
 	});
 	socket.on('joinResult', function(result){
 		$('#room').text(result.room);
-		$('#messages').append(divSystemContenElement('Room changed.'));
+		$('#messages').append(divSystemContentElement('Room changed.'));
 	});
 	socket.on('message', function(message){
 		var newElement = $('<div></div>').text(message.text);
@@ -85,7 +82,7 @@ $(function(){
 	$('#send-form').submit(function(){
 		processUserInput(chatApp, socket);
 		return false;
-	});*/
+	});
 });
 //]]>
 </script>
@@ -94,11 +91,10 @@ $(function(){
 <h3 class="m3config_h">チャットサンプル</h3>
 <div id="room"></div>
 <div id="room-list"></div>
-<div id="message"></div>
+<div id="messages">ここにメッセージを表示</div>
 <form method="post" name="main">
 <input id="send-message" class="form-control" />
 <input id="send-button" type="submit" class="button" value="送信" />
-<b><span id="time">AAA</span></b>
 <p id="help">
 チャットコマンド：
 <ul>
