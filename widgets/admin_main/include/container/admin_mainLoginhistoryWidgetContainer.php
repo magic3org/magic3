@@ -154,8 +154,10 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		$page = $request->trimValueOf('page');			// ページ
 		
 		// 表示条件
-		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
+//		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$viewCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// ユーザ情報取得

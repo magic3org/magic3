@@ -232,8 +232,10 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		if ($this->logLevel == '1') $viewLevel = 10;
 
 		// 表示条件
-		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
+//		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$viewCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		if ($act == 'delete'){		// 項目を参照済みに設定

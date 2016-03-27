@@ -271,8 +271,9 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		if (!empty($endNextDt)) $endNextDt = $this->getNextDay($endNextDt);			// 翌日を取得
 		
 		// 表示条件
-		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
+		$viewCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 入力データのエラーチェック

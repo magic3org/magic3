@@ -192,8 +192,10 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		if ($this->logOrder == '') $this->logOrder = self::DEFAULT_LOG_ORDER;
 		
 		// 表示条件
-		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
+//		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$viewCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 
 		// 表示するログのタイプを設定
@@ -291,8 +293,10 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		$savedPageNo = $request->trimValueOf('page');				// ページ番号
 		
 		// 表示条件
-		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
+//		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$viewCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf('page_', '1');				// ページ番号
 		
 		// 総数を取得
