@@ -73,7 +73,7 @@ function joinRoom(socket, room)
 				usersInRoomSummary += nickNames[userSocketId];
 			}
 		}
-		usersInRoomsSummary += '.';
+		usersInRoomSummary += '.';
 		socket.emit('message', {text:usersInRoomSummary});
 	}
 }
@@ -113,7 +113,7 @@ function handleMessageBroadcasting(socket)
 {
 	socket.on('message', function(message){
 		socket.broadcast.to(message.room).emit('message', {
-			text: nichName[socket.id] + ': ' + message.text
+			text: nickNames[socket.id] + ': ' + message.text
 		});
 	});
 }

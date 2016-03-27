@@ -35,7 +35,7 @@ function processUserInput(chatApp, socket)
 		}
 	} else {
 		chatApp.sendMessage($('#room').text(), message);
-		$('#messages').append(dieEscapedContentElement(message));
+		$('#messages').append(divEscapedContentElement(message));
 		$('#messages').scrollTop($('#messages').prop('scrollHeight'));
 	}
 	$('#send-message').val('');
@@ -79,9 +79,12 @@ $(function(){
 	}, 1000);
 	
 	$('#send-message').focus();
-	$('#send-form').submit(function(){
+/*	$('#send-form').submit(function(){
 		processUserInput(chatApp, socket);
 		return false;
+	});*/
+	$("#send-button").click(function(){
+		processUserInput(chatApp, socket);
 	});
 });
 //]]>
@@ -89,19 +92,21 @@ $(function(){
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <h3 class="m3config_h">チャットサンプル</h3>
-<div id="room"></div>
-<div id="room-list"></div>
-<div id="messages">ここにメッセージを表示</div>
+<h4>ルーム名：<span id="room"></span></h4>
+<div>一覧：<div id="room-list"></div></div>
+<div class="well">
+<div id="messages"></div>
+</div>
 <form method="post" name="main">
 <input id="send-message" class="form-control" />
-<input id="send-button" type="submit" class="button" value="送信" />
-<p id="help">
+<input id="send-button" type="button" class="button" value="送信" />
+<div class="well">
 チャットコマンド：
 <ul>
 <li>ニックネーム変更： /nick [ユーザ名]</li>
 <li>ルーム参加/作成： /join [ルーム名]</li>
 </ul>
-</p>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
