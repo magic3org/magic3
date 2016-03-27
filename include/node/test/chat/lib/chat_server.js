@@ -88,7 +88,7 @@ function handleNameChangeAttempts(socket, nickNames, namesUsed)
 		} else {
 			if (namesUsed.indexOf(name) == -1){
 				var previousName = nickNames[socket.id];
-				var previoutNameIndex = namesUsed.indexOf(previoutName);
+				var previousNameIndex = namesUsed.indexOf(previousName);
 				namesUsed.push(name);
 				nickNames[socket.id] = name;
 				delete namesUsed[previousNameIndex];
@@ -97,7 +97,7 @@ function handleNameChangeAttempts(socket, nickNames, namesUsed)
 					success: true,
 					name: name
 				});
-				socket.breadcast.to(currentRoom[socket.id]).emit('message', {
+				socket.broadcast.to(currentRoom[socket.id]).emit('message', {
 					text: previousName + ' is now known as ' + name + '.'
 				});
 			} else {

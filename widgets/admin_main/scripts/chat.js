@@ -22,7 +22,7 @@ Chat.prototype.sendMessage = function(room, text)
 	};
 	this.socket.emit('message', message);
 };
-Chat.prototype.chageRoom = function(room)
+Chat.prototype.changeRoom = function(room)
 {
 	this.socket.emit('join', {
 		newRoom: room
@@ -30,7 +30,7 @@ Chat.prototype.chageRoom = function(room)
 };
 Chat.prototype.processCommand = function(command)
 {
-	var wrods = command.split(' ');
+	var words = command.split(' ');
 	var command = words[0].substring(1, words[0].length).toLowerCase();
 	var message = false;
 	
@@ -42,7 +42,7 @@ Chat.prototype.processCommand = function(command)
 			break;
 		case 'nick':
 			words.shift();
-			var name = word.join(' ');
+			var name = words.join(' ');
 			this.socket.emit('nameAttempt', name);
 			break;
 		default:
