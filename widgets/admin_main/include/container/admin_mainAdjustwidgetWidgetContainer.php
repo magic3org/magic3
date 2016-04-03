@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -376,7 +376,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 				$updateData['pd_suffix']		= $cssClassSuffix;			// 追加CSSクラスサフィックス
 				$updateData['pd_css']			= $generateCss;				// CSS
 				$updateData['pd_param']			= serialize($paramObj);
-				$updateData['pd_h_tag_level']	= $this->hTagLevel;			// Hタグレベル
+				$updateData['pd_h_tag_level']	= intval($this->hTagLevel);			// Hタグレベル
 				
 				// ページ定義を更新
 				$ret = $this->db->updatePageDefRecord($defSerial, $updateData);
@@ -427,7 +427,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 			// 「スタイル」設定
 			$cssClassSuffix = '';			// 追加CSSクラスサフィックス
 			$css = '';
-			$this->hTagLevel = '';			// Hタグレベル
+			$this->hTagLevel = 0;			// Hタグレベル
 				
 			$replaceNew = true;
 		}
@@ -680,7 +680,7 @@ class admin_mainAdjustwidgetWidgetContainer extends admin_mainBaseWidgetContaine
 	 */
 	function createHTagLevelMenu()
 	{
-		$value = '';
+		$value = 0;
 		$name = $this->_('Default Value');
 		
 		$selected = '';
