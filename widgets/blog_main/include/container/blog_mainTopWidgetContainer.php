@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -541,8 +541,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 						// HTMLメタタグの設定
 						$this->headTitle .= $row['bl_meta_title'];
 						if (empty($this->headTitle)) $this->headTitle = $row['bl_name'];
-						$this->headDesc .= $row['bl_meta_description'];
-						$this->headKeyword .= $row['bl_meta_keywords'];
+						$this->headDesc = $row['bl_meta_description'];
+						$this->headKeyword = $row['bl_meta_keywords'];
 						
 						// マルチブログタイトル
 						$this->title = $row['bl_name'];
@@ -1179,8 +1179,13 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		if ($this->viewMode == 10){	// 記事単体表示のとき
 			if (!empty($fetchedRow['be_html_ext'])) $entryHtml = $fetchedRow['be_html_ext'];// 続きがある場合は続きを出力
 			
-			// HTMLヘッダにタグ出力
-			if ($this->outputHead){			// ヘッダ出力するかどうか
+			// ##### HTMLヘッダにタグ出力 #####
+			$metaDesc = $fetchedRow['be_meta_description'];		// ページ要約(METAタグ)
+			if (!empty($metaDesc)) $this->headDesc = $metaDesc;
+			$metaKeyword = $fetchedRow['be_meta_keywords'];		// ページキーワード(METAタグ)
+			if (!empty($metaKeyword)) $this->headKeyword = $metaKeyword;
+
+			if ($this->outputHead){			// OGP等のヘッダ出力するかどうか
 				$headText = self::$_configArray[blog_mainCommonDef::CF_HEAD_VIEW_DETAIL];
 				$headText = $this->convertM3ToHead($headText, $contentInfo);
 				$this->gPage->setHeadOthers($headText);
