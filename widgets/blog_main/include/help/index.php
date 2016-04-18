@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -52,6 +52,10 @@ $HELP['entry_content']['title'] = '投稿内容';
 $HELP['entry_content']['body'] = 'ブログ記事の内容です。「本文1」にブログ記事を記述します。ブログ記事が長い場合は、省略記事を「本文1」全文を「本文2」に記述して、「本文1」から「続きを読む」で「本文2」を表示させることができます。';
 $HELP['entry_desc']['title'] = '簡易説明';
 $HELP['entry_desc']['body'] = 'ブログ記事の概要を設定します。';
+$HELP['entry_meta_description']['title'] = 'ページ要約';
+$HELP['entry_meta_description']['body'] = 'ヘッダ部のdescriptionタグに設定される文字列です。120文字程度で記述します。<br />Googleでは検索結果に表示されます。';
+$HELP['entry_meta_keywords']['title'] = '検索キーワード';
+$HELP['entry_meta_keywords']['body'] = 'ヘッダ部のkeywordsタグに設定される文字列です。検索エンジン用のキーワードを「,」区切りで10個以下で記述します。';
 $HELP['entry_related_content']['title'] = '関連コンテンツ';
 $HELP['entry_related_content']['body'] = '関連するブログ記事のIDを「,」区切りで設定します。';
 $HELP['entry_search_keyword']['title'] = 'キーワード';

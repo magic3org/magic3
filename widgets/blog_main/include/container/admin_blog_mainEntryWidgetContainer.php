@@ -335,6 +335,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$html2 = '';
 		}
 		$desc = $request->trimValueOf('item_desc');		// 簡易説明
+		$metaDesc = $request->trimValueOf('item_meta_desc');			// ページ要約
+		$metaKeyword = $request->trimValueOf('item_meta_keyword');	// ページキーワード
 		$status = $request->trimValueOf('item_status');		// エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
 		$category = '';									// カテゴリー
 		$showComment = ($request->trimValueOf('show_comment') == 'on') ? 1 : 0;				// コメントを表示するかどうか

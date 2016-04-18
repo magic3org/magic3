@@ -293,7 +293,15 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_ENTRY_DESC}>概要</span></th>
-	    <td colspan="5"><input type="text" name="item_desc" class="form-control" value="{DESC}" size="100" maxlength="100" /></td>
+	    <td colspan="5"><input type="text" name="item_desc" class="form-control" value="{DESC}" /></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_ENTRY_META_DESCRIPTION}>ページ要約</span></th>
+	    <td colspan="5" height="50"><textarea name="item_meta_desc" class="form-control">{META_DESC}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_ENTRY_META_KEYWORDS}>検索キーワード</span></th>
+	    <td colspan="5" height="50"><textarea name="item_meta_keyword" class="form-control">{META_KEYWORD}</textarea></td>
 	</tr>
 	<patTemplate:tmpl name="user_fields" type="condition" conditionvar="type" visibility="hidden">
 	<pattemplate:sub condition="__default">
