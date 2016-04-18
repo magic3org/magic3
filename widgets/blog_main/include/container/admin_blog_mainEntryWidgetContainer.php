@@ -461,6 +461,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				
 				// 追加パラメータ
 				$otherParams = array(	'be_description'		=> $desc,		// 簡易説明
+										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
+										'be_meta_keywords'		=> $metaKeyword,		// ページキーワード(METAタグ)
 										'be_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
 										'be_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'be_option_fields'		=> $this->serializeArray($this->fieldValueArray));				// ユーザ定義フィールド値
@@ -583,6 +585,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 
 				// 追加パラメータ
 				$otherParams = array(	'be_description'		=> $desc,		// 簡易説明
+										'be_meta_description'	=> $metaDesc,		// ページ要約(METAタグ)
+										'be_meta_keywords'		=> $metaKeyword,		// ページキーワード(METAタグ)
 										'be_thumb_filename'		=> $thumbFilename,		// サムネールファイル名
 										'be_related_content'	=> $relatedContent,		// 関連コンテンツ
 										'be_option_fields'		=> $this->serializeArray($this->fieldValueArray));				// ユーザ定義フィールド値
@@ -786,6 +790,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$html2 = $row['be_html_ext'];				// HTML
 				$html2 = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html2);// アプリケーションルートを変換
 				$desc = $row['be_description'];		// 簡易説明
+				$metaDesc = $row['be_meta_description'];		// ページ要約(METAタグ)
+				$metaKeyword = $row['be_meta_keywords'];		// ページキーワード(METAタグ)
 				$status = $row['be_status'];				// エントリー状況
 				$reg_user = $row['reg_user_name'];				// 投稿者
 				$entry_date = $this->timestampToDate($row['be_regist_dt']);		// 投稿日
@@ -839,6 +845,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$html = '';				// HTML
 				$html2 = '';				// HTML
 				$desc = '';		// 簡易説明
+				$metaDesc = '';		// ページ要約(METAタグ)
+				$metaKeyword = '';		// ページキーワード(METAタグ)
 				$status = 0;				// エントリー状況
 				$reg_user = '';				// 投稿者
 				$entry_date = date("Y/m/d");		// 投稿日
@@ -908,6 +916,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "item_html", $html);		// HTML
 		$this->tmpl->addVar("_widget", "item_html2", $html2);		// HTML(続き)
 		$this->tmpl->addVar("_widget", "desc", $desc);		// 簡易説明
+		$this->tmpl->addVar("_widget", "meta_desc", $this->convertToDispString($metaDesc));		// ページ要約(METAタグ)
+		$this->tmpl->addVar("_widget", "meta_keyword", $this->convertToDispString($metaKeyword));		// ページキーワード(METAタグ)
 		switch ($status){
 			case 1:	$this->tmpl->addVar("_widget", "selected_edit", 'selected');	break;
 			case 2:	$this->tmpl->addVar("_widget", "selected_public", 'selected');	break;
