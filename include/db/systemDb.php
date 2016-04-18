@@ -3273,11 +3273,12 @@ class SystemDb extends BaseDb
 				$queryStr .=  'WHERE vc_serial = ? ';
 				$this->execStatement($queryStr, array($count, $row['vc_serial']));
 			} else {
+				// コンテンツIDも登録(2016/4/19)
 				$queryStr = 'INSERT INTO _view_count ';
-				$queryStr .=  '(vc_type_id, vc_count, vc_content_serial, vc_date, vc_hour) ';
+				$queryStr .=  '(vc_type_id, vc_count, vc_content_serial, vc_content_id, vc_date, vc_hour) ';
 				$queryStr .=  'VALUES ';
-				$queryStr .=  '(?, 1, ?, ?, ?)';
-				$this->execStatement($queryStr, array($typeId, $serial, $day, $hour));
+				$queryStr .=  '(?, 1, ?, ?, ?, ?)';
+				$this->execStatement($queryStr, array($typeId, $serial, $contentId, $day, $hour));
 			}
 		}
 		
