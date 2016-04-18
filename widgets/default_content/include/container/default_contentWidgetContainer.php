@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -305,8 +305,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 				// 新規作成ボタン
 				$iconUrl = $this->gEnv->getRootUrl() . self::NEW_ICON_FILE;		// 新規アイコン
 				$iconTitle = '新規';
-				$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . 
-									'" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+				$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" data-container="body" />';
 				$buttonList = '<a href="javascript:void(0);" onclick="editContent(0);">' . $editImg . '</a>';
 				switch (default_contentCommonDef::$_deviceType){		// デバイスごとの処理
 					case 0:		// PC
@@ -464,8 +463,7 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 		if (!empty($this->showEdit) && $this->isSystemManageUser){
 			$iconUrl = $this->gEnv->getRootUrl() . self::EDIT_ICON_FILE;		// 編集アイコン
 			$iconTitle = '編集';
-			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . 
-						'" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$editImg = '<img class="m3icon" src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" data-container="body" />';
 			$buttonList = '<a href="javascript:void(0);" onclick="editContent(' . $contentId . ');">' . $editImg . '</a>';
 			switch (default_contentCommonDef::$_deviceType){		// デバイスごとの処理
 				case 0:		// PC
