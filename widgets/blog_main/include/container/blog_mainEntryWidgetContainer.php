@@ -1016,8 +1016,9 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		// シリアル番号
+		// レコード値取得
 		$serial = $fetchedRow['be_serial'];
+		$id		= $fetchedRow['be_id'];
 
 		// カテゴリーを取得
 		$categoryArray = array();
@@ -1039,8 +1040,11 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			case 2:	$status = '<font color="green">公開</font>';	break;
 			case 3:	$status = '非公開';	break;
 		}
-		// 総参照数
-		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);
+		// 参照数
+		$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $serial);		// 更新後からの参照数
+		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, 0, $id);		// 新規作成からの参照数
+		$viewCountStr = $updateViewCount;
+		if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
 		
 		// ユーザからの参照状況
 		$now = date("Y/m/d H:i:s");	// 現在日時
@@ -1072,14 +1076,15 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			'index' => $index,		// 項目番号
 			'no' => $index + 1,													// 行番号
 			'serial' => $serial,			// シリアル番号
-			'id' => $this->convertToDispString($fetchedRow['be_id']),			// ID
+			'id' => $this->convertToDispString($id),			// 記事ID
 			'name' => $this->convertToDispString($fetchedRow['be_name']),		// 名前
 			'lang' => $lang,													// 対応言語
 			'eyecatch_image' => $eyecatchImageTag,									// アイキャッチ画像
 			'status_img' => $statusImg,												// 公開状態
 			'status' => $status,													// 公開状況
 			'category' => $category,											// 記事カテゴリー
-			'view_count' => $totalViewCount,									// 総参照数
+			//'view_count' => $totalViewCount,									// 参照数
+			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
 			'reg_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 投稿者
 			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
 		);
