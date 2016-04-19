@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 5136 2012-08-23 23:19:35Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 直接アクセスの防止
@@ -45,7 +45,7 @@ $HELP['content_update_user']['body'] = 'コンテンツを更新したユーザ�
 $HELP['content_update_dt']['title'] = '更新日時';
 $HELP['content_update_dt']['body'] = 'コンテンツを更新した日時です。';
 $HELP['content_view_count']['title'] = '閲覧数';
-$HELP['content_view_count']['body'] = 'コンテンツがユーザに閲覧された回数です。管理者の閲覧はカウントされません。';
+$HELP['content_view_count']['body'] = 'コンテンツがユーザに閲覧された回数です。()内は新規作成からの閲覧数で、()なしは更新後からの閲覧数です。管理者の閲覧はカウントされません。';
 $HELP['content_act']['title'] = '操作';
 $HELP['content_act']['body'] = '各種操作を行います。<br />●メニューに追加<br />メニュー定義にコンテンツを表示するメニュー項目を追加します。<br />●プレビュー<br />コンテンツをプレビュー表示します。';
 $HELP['content_body']['title'] = '内容';

@@ -59,6 +59,7 @@ class BaseWidgetContainer extends Core
 	protected $_defSerial;						// ページ定義のレコードシリアル番号
 	protected $_backUrl;						// 戻り先URL
 	protected $_openBy;							// ウィンドウオープンタイプ
+	protected $_isCmdAccess;					// cmd付きアクセスかどうか
 	// 現在の値
 	protected $_widgetId;		// 現在のウィジェットID
 	protected $_langId;			// 現在の言語
@@ -176,6 +177,7 @@ class BaseWidgetContainer extends Core
 		// POST,GETパラメータ取得
 		$this->_openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);			// 処理タスク
+		$this->_isCmdAccess = $request->isCmdAccess();			// cmd付きアクセスかどうか
 		
 		// 引き継ぎパラメータを退避
 		$this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->_openBy);		// ウィンドウオープンタイプ

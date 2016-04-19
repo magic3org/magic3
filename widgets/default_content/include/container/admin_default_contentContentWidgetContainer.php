@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -1090,8 +1090,11 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		if ($this->isMultiLang){		// 多言語対応の場合
 			$lang = $this->createLangImage($contentId);
 		}
-		// 総参照数
-		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(default_contentCommonDef::$_viewContentType, $serial);
+		// 参照数
+		$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(default_contentCommonDef::$_viewContentType, $serial);	// 更新後からの参照数
+		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(default_contentCommonDef::$_viewContentType, 0, $contentId);	// 新規作成からの参照数
+		$viewCountStr = $updateViewCount;
+		if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
 		
 		// 公開状況の設定
 		$now = date("Y/m/d H:i:s");	// 現在日時
@@ -1139,7 +1142,8 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			'id' => $this->convertToDispString($contentId),			// ID
 			'name' => $this->convertToDispString($fetchedRow['cn_name']),		// 名前
 			'lang' => $lang,													// 対応言語
-			'view_count' => $totalViewCount,									// 総参照数
+			//'view_count' => $totalViewCount,									// 参照数
+			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
 			'status' => $statusImg,												// 公開状況
 			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
 			'update_dt' => $this->convertToDispDateTime($fetchedRow['cn_create_dt'], 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
