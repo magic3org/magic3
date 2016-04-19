@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -155,7 +155,6 @@ $(function(){
             <th style="width:50px;"><span {_HELP_CONTENT_ID}>ID</span></th>
             <th><span {_HELP_CONTENT_NAME}>名前</span></th>
 	    <th style="width:50px;"><span {_HELP_CONTENT_STATUS}>状態</span></th>
-	    <th style="width:50px;"><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
 	    <th style="width:50px;"><span {_HELP_CONTENT_LIMITED}>制限</span></th>
 		<th style="width:50px;"><span {_HELP_CONTENT_VIEW_COUNT}>閲覧</span></th>
 	    <!--<th width="7%"><span {_HELP_CONTENT_DEFAULT}>デフォルト</span></th>-->
@@ -170,7 +169,6 @@ $(function(){
 	    <td>{ID}</td>
 	    <td><div class="form-control-static col-sm-11 m3config_item"><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></div><div class="form-control-static col-sm-1 text-right m3config_item">{DEFAULT_ICON}</div></td>
 	    <td class="status"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
-	    <td class="status"><input type="checkbox" disabled {VISIBLE} /></td>
 	    <td class="status"><input type="checkbox" disabled {LIMITED} /></td>
 		<td class="number">{VIEW_COUNT}</td>
 	    <!--<td><input type="checkbox" disabled {DEFAULT} /></td>-->
@@ -190,7 +188,6 @@ $(function(){
             <th><span {_HELP_CONTENT_NAME}>名前</span></th>
 	    <th style="width:60px;"><span {_HELP_CONTENT_LANG}>言語</span></th>
 	    <th style="width:50px;"><span {_HELP_CONTENT_STATUS}>状態</span></th>
-	    <th style="width:50px;"><span {_HELP_CONTENT_VISIBLE}>公開</span></th>
 	    <th style="width:50px;"><span {_HELP_CONTENT_LIMITED}>制限</span></th>
 		<th style="width:50px;"><span {_HELP_CONTENT_VIEW_COUNT}>閲覧</span></th>
 	    <!--<th width="7%"><span {_HELP_CONTENT_DEFAULT}>デフォルト</span></th>-->
@@ -206,7 +203,6 @@ $(function(){
 	    <td><div class="form-control-static col-sm-11 m3config_item"><a href="#" onclick="editItemBySerial({SERIAL});">{NAME}</a></div><div class="form-control-static col-sm-1 text-right m3config_item">{DEFAULT_ICON}</div></td>
 	    <td>{LANG}</td>
 	    <td class="status"><a href="javascript:void(0);" onclick="previewInOtherWindow('{STATUS_URL}');">{STATUS}</a></td>
-	    <td class="status"><input type="checkbox" disabled {VISIBLE} /></td>
 	    <td class="status"><input type="checkbox" disabled {LIMITED} /></td>
 		<td class="number">{VIEW_COUNT}</td>
 	    <!--<td><input type="checkbox" disabled {DEFAULT} /></td>-->

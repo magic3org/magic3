@@ -171,7 +171,6 @@ $(function(){
     <tr>
         <th class="select"><span {_HELP_ENTRY_CHECK}>選択</span></th>
         <th style="width:50px;"><span {_HELP_ENTRY_ID}>ID</span></th>
-		<th style="width:50px;"></th>
         <th><span {_HELP_ENTRY_NAME}>タイトル</span></th>
 	    <th class="status"><span {_HELP_ENTRY_STATUS}>状態</span></th>
 	    <!--<th class="status"><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span></th>-->
@@ -185,8 +184,7 @@ $(function(){
     <tr>
 	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{ID}</td>
-		<td>{EYECATCH_IMAGE}</td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});" rel="m3help" title="記事を編集">{NAME}</a></td>
+	    <td>{EYECATCH_IMAGE} <a href="#" onclick="editItemBySerial({SERIAL});" rel="m3help" title="記事を編集">{NAME}</a></td>
 	    <td class="status">{STATUS_IMG}</td>
 	    <!--<td class="status">{STATUS}</td>-->
 	    <td>{CATEGORY}</td>

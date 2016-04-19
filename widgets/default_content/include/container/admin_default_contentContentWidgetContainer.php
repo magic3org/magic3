@@ -1070,10 +1070,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 	{
 		$serial = $this->convertToDispString($fetchedRow['cn_serial']);
 		$contentId = $fetchedRow['cn_id'];		// コンテンツID
-		
-		// 表示状態
-		$visible = '';
-		if ($fetchedRow['cn_visible']) $visible = 'checked';
 
 		// ユーザ制限
 		$limited = '';
@@ -1147,7 +1143,6 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 			'status' => $statusImg,												// 公開状況
 			'update_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
 			'update_dt' => $this->convertToDispDateTime($fetchedRow['cn_create_dt'], 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
-			'visible' => $visible,											// メニュー項目表示制御
 			'limited' => $limited,											// ユーザ制限
 			'default_icon' => $defaultIcon,											// デフォルト項目
 		//	'default' => $default,											// デフォルト項目
