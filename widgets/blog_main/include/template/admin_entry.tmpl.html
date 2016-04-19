@@ -183,8 +183,8 @@ $(function(){
     <patTemplate:tmpl name="itemlist">
     <tr>
 	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td>{ID}</td>
-	    <td>{EYECATCH_IMAGE} <a href="#" onclick="editItemBySerial({SERIAL});" rel="m3help" title="記事を編集">{NAME}</a></td>
+	    <td>{ID}<div class="pull-right">{EYECATCH_IMAGE}</div></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});" rel="m3help" title="記事を編集">{NAME}</a></td>
 	    <td class="status">{STATUS_IMG}</td>
 	    <!--<td class="status">{STATUS}</td>-->
 	    <td>{CATEGORY}</td>
