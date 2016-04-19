@@ -3228,6 +3228,9 @@ class SystemDb extends BaseDb
 	 */
 	function updateViewCount($typeId, $serial, $contentId = '', $day = null, $hour = null)
 	{
+		// パラメータ修正
+		$contentId = strval($contentId);
+		
 		// 現在日時を取得
 		if (is_null($day)) $day = date("Y/m/d");		// 日
 		if (is_null($hour)) $hour = (int)date("H");		// 時間
