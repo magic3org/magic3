@@ -104,6 +104,7 @@ class ScriptLibInfo
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
 	const LIB_JQUERY_M3_DROPDOWN		= 'jquery.m3dropdown';		// ドロップダウンメニュー
+	const LIB_JQUERY_M3_STICKHEADER		= 'jquery.m3stickyheader';		// スクロールバー付きテーブル
 	
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
@@ -246,6 +247,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
 	const JQUERY_M3_DROPDOWN_FILENAME	= 'jquery/jquery.m3dropdown.js';	// ドロップダウンメニュー
 	const JQUERY_M3_DROPDOWN_CSS		= 'jquery/jquery.m3dropdown.css';	// ドロップダウンメニュー
+	const JQUERY_M3_STICKHEADER_FILENAME		= 'jquery/jquery.m3stickyheader.js';	// スクロールバー付きテーブル
+	const JQUERY_M3_STICKHEADER_OTHER_FILENAME	= 'jquery/jquery.ba-throttle-debounce.min.js';	// スクロールバー付きテーブル用ライブラリ
 	
 	// ライブラリの公式サイトのURL
 	const BOOTSTRAP_DATETIMEPICKER_URL	= 'https://github.com/Eonasdan/bootstrap-datetimepicker';
@@ -595,7 +598,8 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 						// Magic3管理画面専用jQueryプラグイン
 						self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
 						self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー
-																	'css'		=> array(self::JQUERY_M3_DROPDOWN_CSS)),
+																	'css'		=> array(self::JQUERY_M3_DROPDOWN_CSS)),												
+						self::LIB_JQUERY_M3_STICKHEADER	=>	array(	'script' 	=> array(self::JQUERY_M3_STICKHEADER_FILENAME, self::JQUERY_M3_STICKHEADER_OTHER_FILENAME)),	// スクロールバー付きテーブル
 																
 						// その他ライブラリ
 						self::LIB_CODEMIRROR_JAVASCRIPT		=>	array(	'script' 	=> array(self::CODEMIRROR_FILENAME, self::CODEMIRROR_JAVASCRIPT_FILENAME),	// CodeMirror用のファイル
