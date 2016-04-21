@@ -599,7 +599,7 @@ const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 						self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
 						self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー
 																	'css'		=> array(self::JQUERY_M3_DROPDOWN_CSS)),												
-						self::LIB_JQUERY_M3_STICKHEADER	=>	array(	'script' 	=> array(self::JQUERY_M3_STICKHEADER_FILENAME, self::JQUERY_M3_STICKHEADER_OTHER_FILENAME)),	// スクロールバー付きテーブル
+						self::LIB_JQUERY_M3_STICKHEADER	=>	array(	'script' 	=> array(self::JQUERY_M3_STICKHEADER_OTHER_FILENAME, self::JQUERY_M3_STICKHEADER_FILENAME)),	// スクロールバー付きテーブル
 																
 						// その他ライブラリ
 						self::LIB_CODEMIRROR_JAVASCRIPT		=>	array(	'script' 	=> array(self::CODEMIRROR_FILENAME, self::CODEMIRROR_JAVASCRIPT_FILENAME),	// CodeMirror用のファイル

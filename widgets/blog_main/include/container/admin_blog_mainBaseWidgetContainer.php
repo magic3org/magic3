@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -36,6 +36,7 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_HISTORY			= 'history';			// ブログ記事履歴
 	const TASK_COMMENT			= 'comment';			// ブログ記事コメント(一覧)
 	const TASK_COMMENT_DETAIL	= 'comment_detail';		// ブログ記事コメント(詳細)
+	const TASK_ANALYTICS		= 'analytics';			// アクセス解析
 	const TASK_CATEGORY			= 'category';			// 記事カテゴリー(一覧)
 	const TASK_CATEGORY_DETAIL	= 'category_detail';	// 記事カテゴリー(詳細)
 	const TASK_BLOGID			= 'blogid';				// マルチブログ設定(一覧)
@@ -109,6 +110,10 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = 'コメント一覧';
 				$titles[] = '詳細';
 				break;
+			case self::TASK_ANALYTICS:		// アクセス解析
+				$titles[] = 'アクセス解析';
+				$titles[] = '記事一覧';
+				break;			
 			case self::TASK_CATEGORY:			// 記事カテゴリー(一覧)
 				$titles[] = '基本';
 				$titles[] = '記事カテゴリー';
@@ -169,6 +174,26 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 								'active'	=> (
 													$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
 													$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
+												)
+							)
+						)
+					),
+					(Object)array(
+						'name'		=> 'アクセス解析',
+						'task'		=> self::TASK_ANALYTICS,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_ANALYTICS					// アクセス解析
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '記事一覧',
+								'task'		=> self::TASK_ANALYTICS,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_ANALYTICS					// アクセス解析
 												)
 							)
 						)

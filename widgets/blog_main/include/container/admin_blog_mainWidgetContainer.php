@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_blog_mainWidgetContainer.php 5145 2012-08-29 13:21:42Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBaseWidgetContainer.php');
@@ -47,6 +47,7 @@ class admin_blog_mainWidgetContainer extends admin_blog_mainBaseWidgetContainer
 			case self::TASK_CONFIG:		// その他設定
 			case self::TASK_IMAGE:		// ブログ記事画像
 			case self::TASK_HISTORY:	// ブログ記事履歴
+			case self::TASK_ANALYTICS:	// アクセス解析
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 			case 'entry':		// ブログ記事管理
