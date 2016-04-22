@@ -217,14 +217,13 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		}
 		
 		// グラフの開始終了期間
-		$today = date("Y-m-d");
 		if (empty($startDate)){
-			$termStart = date("Y-m-d", strtotime("$today -30 day"));
+			$termStart = date("Y-m-d", strtotime("-30 day"));
 		} else {
 			$termStart = $startDate;
 		}
 		if (empty($this->completedDate)){
-			$termEnd = date("Y-m-d", strtotime("$today -1 day"));
+			$termEnd = date("Y-m-d", strtotime("-1 day"));
 		} else {
 			$termEnd = $this->completedDate;
 		}
