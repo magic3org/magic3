@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -216,12 +216,28 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->setAttribute('draw_graph', 'visibility', 'hidden');		// グラフ非表示
 		}
 		
+		// グラフの開始終了期間
+		$today = date("Y-m-d");
+		if (empty($startDate)){
+			$termStart = date("Y-m-d", strtotime("$today -30 day"));
+		} else {
+			$termStart = $startDate;
+		}
+		if (empty($this->completedDate)){
+			$termEnd = date("Y-m-d", strtotime("$today -1 day"));
+		} else {
+			$termEnd = $this->completedDate;
+		}
+		
+		// 集計終了日表示用テキスト作成
 		if (empty($endDate)){
 			$lastData = self::DEFAULT_STR_NOT_CALC;
 		} else {
 			$lastData = $this->convertToDispDate($endDate);		// 最終集計日
 		}
 		// 値を埋め込む
+		$this->tmpl->addVar("draw_graph", "term_start", $termStart);// グラフ期間開始
+		$this->tmpl->addVar("draw_graph", "term_end", $termEnd);// グラフ期間終了
 		$this->tmpl->addVar("draw_graph", "line_data", $lineDataScript);	// ラインデータスクリプト
 		$this->tmpl->addVar("draw_graph", "line_param", trim($lineParam, ','));	// ラインパラメータ
 		$this->tmpl->addVar("draw_graph", "y_max", $yMax);		// グラフY座標最大値
