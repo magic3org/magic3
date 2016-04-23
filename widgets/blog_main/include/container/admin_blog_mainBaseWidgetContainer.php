@@ -112,7 +112,7 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				break;
 			case self::TASK_ANALYTICS:		// アクセス解析
 				$titles[] = 'アクセス解析';
-				$titles[] = '期間上位記事一覧';
+				$titles[] = '期間上位記事';
 				break;			
 			case self::TASK_CATEGORY:			// 記事カテゴリー(一覧)
 				$titles[] = '基本';
@@ -188,7 +188,7 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 										),
 						'submenu'	=> array(
 							(Object)array(
-								'name'		=> '期間上位記事一覧',
+								'name'		=> '期間上位記事',
 								'task'		=> self::TASK_ANALYTICS,
 								'url'		=> '',
 								'tagid'		=> '',

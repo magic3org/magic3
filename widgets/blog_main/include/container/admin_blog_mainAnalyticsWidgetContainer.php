@@ -19,7 +19,11 @@ require_once($gEnvManager->getCurrentWidgetDbPath() .	'/blog_analyticsDb.php');
 class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-		
+	private $calcTypeArray;		// 集計タイプ
+	private $termTypeArray;		// 期間タイプ
+	private $calcType;			// 選択中の集計タイプ
+	const TERM_TYPE_ALL = '_all';				// 全データ表示選択
+
 	/**
 	 * コンストラクタ
 	 */
@@ -30,6 +34,21 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		
 		// DBオブジェクト作成
 		$this->db = new blog_analyticsDb();
+		
+		// 横軸タイプ
+		$this->calcTypeArray = array(
+										array(	'name' => '日単位',		'value' => 'day'),
+										array(	'name' => '時間単位',	'value' => 'hour'),
+										array(	'name' => '月単位',		'value' => 'month'),
+										array(	'name' => '週単位',		'value' => 'week')
+									);
+
+		// 期間タイプ
+		$this->termTypeArray = array(	array(	'name' => '1ヶ月',	'value' => 'month'),					// 日、月、時間の場合は30日。週の場合は4週間。
+										array(	'name' => '3ヶ月',	'value' => '3month'),
+										array(	'name' => '6ヶ月',	'value' => '6month'),
+										array(	'name' => '1年',	'value' => '1year'),
+										array(	'name' => 'すべて',	'value' => self::TERM_TYPE_ALL));
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -57,7 +76,31 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 	 */
 	function _assign($request, &$param)
 	{
-
+		// 集計タイプメニュー作成
+		$this->createCalcTypeMenu();
+	}
+	/**
+	 * 集計タイプ選択メニュー作成
+	 *
+	 * @return なし
+	 */
+	function createCalcTypeMenu()
+	{
+		for ($i = 0; $i < count($this->calcTypeArray); $i++){
+			$value = $this->calcTypeArray[$i]['value'];
+			$name = $this->calcTypeArray[$i]['name'];
+			
+			$selected = '';
+			if ($value == $this->calcType) $selected = 'selected';
+			
+			$row = array(
+				'value'    => $value,			// 集計タイプID
+				'name'     => $name,			// 集計タイプ名
+				'selected' => $selected			// 選択中かどうか
+			);
+			$this->tmpl->addVars('item_calc_type_list', $row);
+			$this->tmpl->parseTemplate('item_calc_type_list', 'a');
+		}
 	}
 }
 ?>

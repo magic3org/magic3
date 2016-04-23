@@ -44,10 +44,22 @@ $.jqplot.config.enablePlugins = true;
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-<h3 class="m3config_h"><span {_HELP_ANALYTICS_LIST}>アクセス解析</span></h3>
+
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_ANALYTICS_LIST}>アクセス解析</span>
+<select name="item_type" class="form-control" onchange="changeType();" style="display:inline-block;width:200px;margin-top:-7px;">
+<patTemplate:tmpl name="item_calc_type_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+</h3>
+
+<!--
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_ANALYTICS_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
+-->
+
+
 <div class="jqPlot" id="chart1" style="margin:0 auto;"></div>
 <h3 class="m3config_h"><span {_HELP_ANALYTICS_LIST}>上位記事</span></h3>
 <table id="mainconfig">
