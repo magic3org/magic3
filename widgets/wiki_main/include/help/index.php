@@ -9,9 +9,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: index.php 1176 2008-11-05 04:23:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 // 直接アクセスの防止
@@ -30,7 +30,7 @@ $HELP['attach_files_label']['body'] = 'Wikiページに添付するファイル�
 $HELP['page_status']['title'] = 'Wikiページ状態';
 $HELP['page_status']['body'] = 'Wikiページの編集可否状態をロック(編集不可)またはアンロック(編集可)で示します。状態はフロントのツールバーから「解凍」「凍結」ボタンで変更します。';
 $HELP['page_view_count']['title'] = '閲覧数';
-$HELP['page_view_count']['body'] = 'Wikiページがユーザに閲覧された回数です。管理者の閲覧はカウントされません。';
+$HELP['page_view_count']['body'] = 'Wikiページがユーザに閲覧された回数です。()内は新規作成からの閲覧数で、()なしは更新後からの閲覧数です。管理者の閲覧はカウントされません。';
 $HELP['page_attach_count']['title'] = '添付ファイル数';
 $HELP['page_attach_count']['body'] = 'ページの添付ファイル数です。';
 $HELP['config_attach_dir']['title'] = '添付ファイルディレクトリ';

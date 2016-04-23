@@ -76,6 +76,10 @@ class AnalyzeManager extends Core
 		static $day;
 		static $hour;
 		
+		// パラメータエラーチェック
+		$serial = intval($serial);
+		if ($serial <= 0) return false;
+		
 		// コンテンツ参照がしない場合は終了
 		if (!$this->canRegistContentView()) return false;
 

@@ -214,9 +214,11 @@ class wiki_mainWidgetContainer extends BaseWidgetContainer
 			$body  = convert_html(get_source($base, false, $serial));
 
 			// ビューカウントを更新
-			if ($serial != 0 && !$this->gEnv->isSystemManageUser()){		// システム運用者以上の場合はカウントしない
-				$this->gInstance->getAnalyzeManager()->updateContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
-			}
+			//if ($serial != 0 && !$this->gEnv->isSystemManageUser()){		// システム運用者以上の場合はカウントしない
+			//$this->gInstance->getAnalyzeManager()->updateContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
+			//}
+			$this->gInstance->getAnalyzeManager()->logContentView(wiki_mainCommonDef::$_viewContentType, $serial, $base);
+			
 //			if ($referer) ref_save($base);
 		}
 		// ##### METAタグ追加 #####

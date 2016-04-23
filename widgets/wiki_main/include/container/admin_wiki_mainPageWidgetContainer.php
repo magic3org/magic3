@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -458,8 +458,12 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 		}
 		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 	
-		// 総参照数
-		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
+		// 参照数
+//		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);
+		$updateViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(wiki_mainCommonDef::$_viewContentType, $serial);	// 更新後からの参照数
+		$totalViewCount = $this->gInstance->getAnalyzeManager()->getTotalContentViewCount(wiki_mainCommonDef::$_viewContentType, 0, $id);	// 新規作成からの参照数
+		$viewCountStr = $updateViewCount;
+		if ($totalViewCount > $updateViewCount) $viewCountStr .= '(' . $totalViewCount . ')';		// 新規作成からの参照数がない旧仕様に対応
 		
 		// 添付ファイル数
 		$attachCount = '';
@@ -478,7 +482,8 @@ class admin_wiki_mainPageWidgetContainer extends admin_wiki_mainBaseWidgetContai
 			'serial'		=> $this->convertToDispString($serial),	// シリアル番号
 			'id'			=> $idTag,		// WikiページID
 			'status'		=> $statusImg,		// Wikiページ状態
-			'view_count'	=> $totalViewCount,									// 総参照数
+//			'view_count'	=> $totalViewCount,									// 参照数
+			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
 			'attach_count'	=> $attachCount,									// 添付ファイル数
 			'user'			=> $this->convertToDispString($fetchedRow['lu_name']),		// 更新者
 			'date'			=> $this->convertToDispDateTime($date, 0/*ロングフォーマット*/, 10/*時分*/),		// 更新日時
