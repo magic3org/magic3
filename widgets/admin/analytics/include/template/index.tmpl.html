@@ -36,6 +36,7 @@ $(function(){
 <patTemplate:tmpl name="draw_graph">
 {LINE_DATA}
 	var plot = $.jqplot('chart1', [{LINE_PARAM}], {
+			animate: true,
 			axes:{
 				xaxis:{
 					min:'{TERM_START}',

@@ -957,10 +957,11 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	function itemsLoop($index, $fetchedRow)
 	{
 		// 参照ビューカウントを更新
-		if (!$this->isSystemManageUser &&		// システム運用者以上の場合はカウントしない
+/*		if (!$this->isSystemManageUser &&		// システム運用者以上の場合はカウントしない
 			!$this->isCmdAccess){				// cmd付きアクセスでない
 			$this->gInstance->getAnalyzeManager()->updateContentViewCount(blog_mainCommonDef::VIEW_CONTENT_TYPE, $fetchedRow['be_serial'], $this->currentDay, $this->currentHour, $fetchedRow['be_id']);
-		}
+		}*/
+		$this->gInstance->getAnalyzeManager()->logContentView(blog_mainCommonDef::VIEW_CONTENT_TYPE, $fetchedRow['be_serial'], $fetchedRow['be_id']);
 
 		$serial = $fetchedRow['be_serial'];		// シリアル番号
 		$entryId = $fetchedRow['be_id'];// 記事ID

@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: analyzeManager.php 5045 2012-07-20 03:13:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -62,6 +62,28 @@ class AnalyzeManager extends Core
 	{
 		$count = $this->db->getTotalViewCount($typeId, $serial, $contentId);
 		return $count;
+	}
+	/**
+	 * コンテンツ参照を記録
+	 *
+	 * @param string    $typeId				コンテンツタイプ
+	 * @param int     	$serial				コンテンツシリアル番号(0のときはコンテンツIDを使用)
+	 * @param string    $contentId			コンテンツID
+	 * @return bool							true=記録、false=記録しない
+	 */
+	function logContentView($typeId, $serial, $contentId = '')
+	{
+		static $day;
+		static $hour;
+		
+		// コンテンツ参照がしない場合は終了
+		if (!$this->canRegistContentView()) return false;
+
+		if (!isset($day)) $day = date("Y/m/d");		// 日
+		if (!isset($hour)) $hour = (int)date("H");		// 時間
+
+		$ret = $this->db->updateViewCount($typeId, $serial, $contentId, $day, $hour);
+		return $ret;
 	}
 	/**
 	 * 検索キーワードログを記録
@@ -345,6 +367,27 @@ class AnalyzeManager extends Core
 		// アクセスログを更新
 		$ret = $this->analyticsDb->updateAccessLog($logSerial, $isFirstAccess, $isCrawler);
 		return $ret;
+	}
+	/**
+	 * コンテンツのアクセスログを記録するかどうかを取得
+	 *
+	 * @return bool			true=記録する、false=記録しない
+	 */
+	public function canRegistContentView()
+	{
+		global $gRequestManager;
+		
+		static $canRegist;
+		
+		if (!isset($canRegist)){
+			if (!$this->gEnv->isSystemManageUser() &&			// システム運用者以上の場合はカウントしない
+				!$gRequestManager->isCmdAccess()){				// cmd付きアクセスでない
+				$canRegist = true;
+			} else {
+				$canRegist = false;
+			}
+		}
+		return $canRegist;
 	}
 }
 ?>

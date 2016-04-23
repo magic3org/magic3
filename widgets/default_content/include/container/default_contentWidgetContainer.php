@@ -506,10 +506,11 @@ class default_contentWidgetContainer extends default_contentBaseWidgetContainer
 			$this->addLib[] = self::LIB_MD5;		// 認証用の暗号化ライブラリを追加
 		} else {
 			// ビューカウントを更新
-			if (!$this->isSystemManageUser &&		// システム運用者以上の場合はカウントしない
+/*			if (!$this->isSystemManageUser &&		// システム運用者以上の場合はカウントしない
 				!$this->_isCmdAccess){				// cmd付きアクセスでない
 				$this->gInstance->getAnalyzeManager()->updateContentViewCount(default_contentCommonDef::$_viewContentType, $fetchedRow['cn_serial'], $this->currentDay, $this->currentHour, $contentId);
-			}
+			}*/
+			$this->gInstance->getAnalyzeManager()->logContentView(default_contentCommonDef::$_viewContentType, $fetchedRow['cn_serial'], $contentId);
 		
 			// コンテンツタイトルの出力設定
 			if (empty($this->showTitle)) $this->tmpl->addVar('contentlist', 'type', 'hide_title');
