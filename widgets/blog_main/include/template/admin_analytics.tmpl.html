@@ -19,8 +19,8 @@
 //<![CDATA[
 $(function(){
 	// テーブルを作成
-//	m3SetConfigTable('mainconfig');
-//$.jqplot.config.enablePlugins = true;
+	m3SetConfigTable('mainconfig');
+
 <patTemplate:tmpl name="draw_graph">
 	var values = {Y_VALUES};
 	var ticks = {X_TICKS};
@@ -45,39 +45,16 @@ $(function(){
 				}
 			}
 		},
-//		highlighter: { show: false }
-highlighter: {
-        show: true,
-        showMarker: false,
-		tooltipLocation: 'n',
-        tooltipAxes: 'y',
-        formatString: '%s'
-      }
+		highlighter: {
+			show: true,
+			showMarker: false,
+			tooltipLocation: 'n',
+			tooltipAxes: 'y',
+			formatString: '%s'
+		}
 	});
 </patTemplate:tmpl>
 });
-
-/*
-{LINE_DATA}
-	var plot = $.jqplot('chart1', [{LINE_PARAM}], {
-			animate: true,
-			axes:{
-				xaxis:{
-					renderer: $.jqplot.CategoryAxisRenderer,
-					ticks: dates
-				},
-				yaxis:{
-					min:0,
-					max:{Y_MAX},
-					numberTicks:5,
-					tickOptions:{
-						formatString: '%d'
-					}
-				}
-			},
-			series:[{lineWidth:4}]
-		});
-*/
 //]]>
 </script>
 <div class="m3config_container">
@@ -101,16 +78,13 @@ highlighter: {
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 </div></div></div>
 -->
-
-
 <div class="jqPlot" id="chart1" style="margin:0 auto;height:200px;"></div>
-<h3 class="m3config_h"><span {_HELP_ANALYTICS_LIST}>上位記事</span></h3>
+
+<h3 class="m3config_h"><span {_HELP_ANALYTICS_TOP_LIST}>アクセス上位記事</span></h3>
 <table id="mainconfig">
     <thead>
     <tr>
-        <th class="select"><span {_HELP_ANALYTICS_CHECK}>選択</span></th>
-        <th><span {_HELP_ANALYTICS_ID}>ID</span></th>
-        <th><span {_HELP_ANALYTICS_NAME}>カテゴリー名</span></th>
+        <th><span {_HELP_ANALYTICS_NAME}>名前</span></th>
 	    <th><span {_HELP_ANALYTICS_INDEX}>表示順</span></th>
 	    <th><span {_HELP_ANALYTICS_VISIBLE}>公開</span></th>
 	</tr>
@@ -118,8 +92,6 @@ highlighter: {
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
-	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{ID}</a></td>
 	    <td>{NAME}</td>
 	    <td>{VIEW_INDEX}</td>
 	    <td><input type="checkbox" name="item_visible" {VISIBLE} disabled /></td>

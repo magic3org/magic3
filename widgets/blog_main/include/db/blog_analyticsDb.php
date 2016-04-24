@@ -55,5 +55,43 @@ class blog_analyticsDb extends BaseDb
 
 		$this->selectLoop($queryStr, $params, $callback);
 	}
+	/**
+	 * 指定期間の参照が多い順にコンテンツを取得
+	 *
+	 * @param string    $typeId				コンテンツタイプ
+	 * @param date		$startDate			集計期間、開始日(NULL=先頭からすべて)
+	 * @param date		$endDate			集計期間、終了日(NULL=最後まですべて)
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param string    $langId				言語ID
+	 * @param function  $callback			コールバック関数
+	 * @return								なし
+	 */
+	function getTopContentByDateRange($typeId, $startDate, $endDate, $limit, $page, $langId, $callback)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+	 
+		$params = array();
+		$queryStr  = 'SELECT vc_content_id, SUM(vc_count) AS total, be_id, be_name FROM _view_count ';
+		$queryStr .=   'LEFT JOIN blog_entry ON CAST(vc_content_id AS INT) = be_id AND be_deleted = false AND be_language_id = ? '; $params[] = $langId;
+		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
+
+		// 日付範囲
+		if (!empty($startDate)){
+			$queryStr .=    'AND ? <= vc_date ';
+			$params[] = $startDate;
+		}
+		if (!empty($endDate)){
+			$queryStr .=    'AND vc_date <= ? ';
+			$params[] = $endDate;
+		}
+
+		// 日付でソート
+		$queryStr .=  'GROUP BY vc_content_id, be_id, be_name ';
+		$queryStr .=  'ORDER BY total DESC, CAST(vc_content_id AS INT) DESC LIMIT ' . $limit . ' offset ' . $offset;
+
+		$this->selectLoop($queryStr, $params, $callback);
+	}
 }
 ?>

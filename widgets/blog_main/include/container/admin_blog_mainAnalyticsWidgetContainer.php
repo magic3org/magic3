@@ -32,6 +32,7 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 	const DEFAULT_Y_TICK_VALUE = 100;		// デフォルトのY軸最大値
 	const LIB_JQPLOT = 'jquery.jqplot';		// ライブラリID
 	const DATE_KEY_FORMAT = 'Y-m-d';		// 参照数管理用の日付キーのフォーマット
+	const DEFAULT_LIST_COUNT = 20;			// リスト表示数
 	
 	/**
 	 * コンストラクタ
@@ -179,6 +180,9 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 			}
 		}
 		
+		// ##### 上位コンテンツを取得 #####
+		$this->db->getTopContentByDateRange(blog_mainCommonDef::VIEW_CONTENT_TYPE, $startDate, $endDate, self::DEFAULT_LIST_COUNT, 1/*先頭ページ*/, $this->_langId, array($this, 'contentListLoop'));
+		
 		// ライブラリパス
 		$libDir = '';
 		$libInfo = $this->gPage->getScriptLibInfo(self::LIB_JQPLOT);
@@ -227,6 +231,25 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		$total = $fetchedRow['total'];
 		if ($total > $this->maxViewCount) $this->maxViewCount = $total;				// コンテンツ参照数最大値
 		
+		return true;
+	}
+	/**
+	 * コンテンツ一覧取得
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function contentListLoop($index, $fetchedRow, $param)
+	{
+//		echo $fetchedRow['be_name'] . '-' . $fetchedRow['vc_content_id'].'-[' .$fetchedRow['total'].'] ';
+
+		$row = array(
+			'name' => $this->convertToDispString($fetchedRow['be_name'])		// 名前
+		);
+		$this->tmpl->addVars('itemlist', $row);
+		$this->tmpl->parseTemplate('itemlist', 'a');
 		return true;
 	}
 }
