@@ -11,30 +11,73 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
+<!--<script type="text/javascript" src="{_SCRIPTS_URL}/{LIB_DIR}/plugins/jqplot.dateAxisRenderer.min.js"></script>-->
+<script type="text/javascript" src="{_SCRIPTS_URL}/{LIB_DIR}/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+<script type="text/javascript" src="{_SCRIPTS_URL}/{LIB_DIR}/plugins/jqplot.barRenderer.js"></script>
+<script type="text/javascript" src="{_SCRIPTS_URL}/{LIB_DIR}/plugins/jqplot.highlighter.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
 	// テーブルを作成
 //	m3SetConfigTable('mainconfig');
-$.jqplot.config.enablePlugins = true;
-        var s1 = [2, 6, 7, 10];
-        var ticks = ['a', 'b', 'c', 'd'];
-         
-        plot1 = $.jqplot('chart1', [s1], {
-            animate: !$.jqplot.use_excanvas,
-            seriesDefaults:{
-                renderer:$.jqplot.BarRenderer,
-                pointLabels: { show: true }
-            },
-            axes: {
-                xaxis: {
-                    renderer: $.jqplot.CategoryAxisRenderer,
-                    ticks: ticks
-                }
-            },
-            highlighter: { show: false }
-        });
+//$.jqplot.config.enablePlugins = true;
+<patTemplate:tmpl name="draw_graph">
+	var values = {Y_VALUES};
+	var ticks = {X_TICKS};
+
+	plot1 = $.jqplot('chart1', [values], {
+		animate: !$.jqplot.use_excanvas,
+		seriesDefaults:{
+			renderer:$.jqplot.BarRenderer,
+			pointLabels: { show: true }
+		},
+		axes: {
+			xaxis:{
+				renderer: $.jqplot.CategoryAxisRenderer,
+				ticks: ticks
+			},
+			yaxis:{
+				min:0,
+				max:{Y_MAX},
+				numberTicks:5,
+				tickOptions:{
+					formatString: '%d'
+				}
+			}
+		},
+//		highlighter: { show: false }
+highlighter: {
+        show: true,
+        showMarker: false,
+		tooltipLocation: 'n',
+        tooltipAxes: 'y',
+        formatString: '%s'
+      }
+	});
+</patTemplate:tmpl>
 });
+
+/*
+{LINE_DATA}
+	var plot = $.jqplot('chart1', [{LINE_PARAM}], {
+			animate: true,
+			axes:{
+				xaxis:{
+					renderer: $.jqplot.CategoryAxisRenderer,
+					ticks: dates
+				},
+				yaxis:{
+					min:0,
+					max:{Y_MAX},
+					numberTicks:5,
+					tickOptions:{
+						formatString: '%d'
+					}
+				}
+			},
+			series:[{lineWidth:4}]
+		});
+*/
 //]]>
 </script>
 <div class="m3config_container">
@@ -45,7 +88,7 @@ $.jqplot.config.enablePlugins = true;
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 
-<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_ANALYTICS_LIST}>アクセス解析</span>
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_ANALYTICS_LIST}>アクセス数</span>
 <select name="item_type" class="form-control" onchange="changeType();" style="display:inline-block;width:200px;margin-top:-7px;">
 <patTemplate:tmpl name="item_calc_type_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
@@ -60,7 +103,7 @@ $.jqplot.config.enablePlugins = true;
 -->
 
 
-<div class="jqPlot" id="chart1" style="margin:0 auto;"></div>
+<div class="jqPlot" id="chart1" style="margin:0 auto;height:200px;"></div>
 <h3 class="m3config_h"><span {_HELP_ANALYTICS_LIST}>上位記事</span></h3>
 <table id="mainconfig">
     <thead>

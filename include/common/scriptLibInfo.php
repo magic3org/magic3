@@ -120,9 +120,6 @@ class ScriptLibInfo
 	const JQUERY_QTIP_VER			= '1.0';
 	const JQUERY_QTIP2_VER			= '2.1.1';
 	const JQUERY_CALCULATION_VER	= '0.4.07';
-	//const JQUERY_JQPLOT_VER			= '0.9.7';
-//const JQUERY_JQPLOT_VER			= '1.0.4r1120';
-//	const JQUERY_JQPLOT_VER			= '1.0.7';
 	const JQUERY_JQPLOT_VER			= '1.0.8';
 	const JQUERY_JSTREE_VER			= '1.0-rc3';
 	const JQUERY_IFRAME_VER			= '2.0.0';
@@ -147,9 +144,6 @@ class ScriptLibInfo
 	const CODEMIRROR_VER			= '3.1';
 	
 	// ライブラリディレクトリ
-	//const JQUERY_JQPLOT_DIR			= 'jquery/jqplot';
-//	const JQUERY_JQPLOT_DIR			= 'jquery/jqplot1.0';
-//	const JQUERY_JQPLOT_DIR			= 'jquery/jqplot1.0.7';
 	const JQUERY_JQPLOT_DIR			= 'jquery/jqplot1.0.8';
 	
 	// jQuery UI
@@ -201,15 +195,8 @@ class ScriptLibInfo
 	const JQUERY_QTIP2_FILENAME			= 'jquery/qtip2-2.1.1/jquery.qtip.min.js';
 	const JQUERY_QTIP2_CSS				= 'jquery/qtip2-2.1.1/jquery.qtip.min.css';
 	const JQUERY_CALCULATION_FILENAME	= 'jquery/jquery.calculation.js';
-	//const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot/jquery.jqplot.min.js';
-//const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0/jquery.jqplot.min.js';
-//const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0.7/jquery.jqplot.min.js';
-const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0.8/jquery.jqplot.min.js';
-//	const JQUERY_JQPLOT_EX_FILENAME		= 'jquery/jqplot/excanvas.min.js';
-	//const JQUERY_JQPLOT_CSS				= 'jquery/jqplot/jquery.jqplot.css';
-//const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0/jquery.jqplot.min.css';
-//const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.7/jquery.jqplot.min.css';
-const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
+	const JQUERY_JQPLOT_FILENAME		= 'jquery/jqplot1.0.8/jquery.jqplot.min.js';
+	const JQUERY_JQPLOT_CSS				= 'jquery/jqplot1.0.8/jquery.jqplot.min.css';
 	const JQUERY_YOUTUBEPLAYER_FILENAME	= 'jquery/jquery.youtube.player.js';
 	const JQUERY_JSTREE_FILENAME		= 'jquery/jstree/jquery.jstree.js';
 //	const JQUERY_IFRAME_FILENAME		= 'jquery/jquery.iframe-auto-height.plugin.1.5.0.min.js';
