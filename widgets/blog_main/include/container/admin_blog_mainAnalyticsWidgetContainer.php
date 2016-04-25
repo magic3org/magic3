@@ -190,6 +190,7 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		$this->db->getTopContentByDateRange(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, self::DEFAULT_LIST_COUNT, 1/*先頭ページ*/, $this->_langId, array($this, 'contentListLoop'));
 		
 		// X軸タイトル作成
+		array_unshift($xTitleArray, '総数');// 左端は総数のカラムを追加
 		$xTitleCount = count($xTitleArray);
 		for ($i = 0; $i < $xTitleCount; $i++){
 			$row = array(
@@ -262,25 +263,32 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 	function contentListLoop($index, $fetchedRow, $param)
 	{
 		$contentId = $fetchedRow['vc_content_id'];
+		$total = $fetchedRow['total'];
 		$viewData = $this->getContentViewData($contentId);
 		
-		// アクセス数一覧を作成
+		// ##### アクセス数一覧を作成 #####
 		$this->tmpl->clearTemplate('countlist');
+		
+		// 先頭に総数を追加
+		$row = array(
+			'count'		=> $total
+		);
+		$this->tmpl->addVars('countlist', $row);
+		$this->tmpl->parseTemplate('countlist', 'a');
+			
+		// 先頭以降のデータを追加
 		$dateKeyCount = count($this->dateKeyArray);
 		for ($i = 0; $i < $dateKeyCount; $i++){
 			$dateKey = $this->dateKeyArray[$i];
 			$accessCount = $viewData[$dateKey];
 			if (!isset($accessCount)) $accessCount = 0;
 			
-			$menurow = array(
+			$row = array(
 				'count'		=> $accessCount
 			);
-			$this->tmpl->addVars('countlist', $menurow);
+			$this->tmpl->addVars('countlist', $row);
 			$this->tmpl->parseTemplate('countlist', 'a');
 		}
-			
-//		echo $fetchedRow['be_name'] . '-' . $fetchedRow['vc_content_id'].'-[' .$fetchedRow['total'].'] ';
-
 
 		$row = array(
 			'name' => $this->convertToDispString($fetchedRow['be_name'])		// 名前
