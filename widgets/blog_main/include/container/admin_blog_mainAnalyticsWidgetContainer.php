@@ -98,6 +98,12 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 	 */
 	function _assign($request, &$param)
 	{
+		$act = $request->trimValueOf('act');
+		$this->calcType = $request->trimValueOf('item_calc_type');		// 集計方法
+		
+		if ($act == 'changetype'){		// 集計タイプの変更のとき
+		}
+		
 		// 集計開始日を取得
 		if (empty($this->startDate)){
 			if ($this->calcType == 'week'){				// 週単位で集計の場合

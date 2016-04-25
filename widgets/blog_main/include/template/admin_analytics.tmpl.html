@@ -17,6 +17,11 @@
 <script type="text/javascript" src="{_SCRIPTS_URL}/{LIB_DIR}/plugins/jqplot.highlighter.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+function changeCalcType(){
+	document.main.act.value = 'changetype';
+	document.main.submit();
+	return true;
+}
 $(function(){
 	// テーブルを作成
 //	m3SetConfigTable('mainconfig');
@@ -71,7 +76,7 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 
 <h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_ANALYTICS_LIST}>アクセス数</span>
-<select name="item_type" class="form-control" onchange="changeType();" style="display:inline-block;width:200px;margin-top:-7px;">
+<select name="item_calc_type" class="form-control" onchange="changeCalcType();" style="display:inline-block;width:200px;margin-top:-7px;">
 <patTemplate:tmpl name="item_calc_type_list">
 <option value="{VALUE}" {SELECTED}>{NAME}</option>
 </patTemplate:tmpl>
@@ -80,18 +85,12 @@ $(function(){
 <div class="m3config_h_side_buttons" style="margin-left:10px;">
 期間：{START_DATE} ～ {END_DATE}
 </div>
-<!--
-<div class="m3config_h_side_buttons pull-right"><div {_HELP_ANALYTICS_BUTTONS}><div class="btn-group">
-<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
-</div></div></div>
--->
 <div class="jqPlot" id="chart1" style="margin:0 auto;height:200px;"></div>
 
 <h3 class="m3config_h"><span {_HELP_ANALYTICS_TOP_LIST}>アクセス上位記事</span></h3>
 <div class="m3stickyheader">
 
-<!--<table id="mainconfig" class="m3stickyheader table-hover overflow-y">-->
-<table id="mainconfig" class="table table-bordered table-striped table-hover overflow-y">
+<table id="mainconfig" class="m3config_table table table-bordered table-striped table-hover overflow-y">
     <thead>
     <tr>
         <th class="info" style="width:200px;"><div class="left-column">記事タイトル</div></th>
@@ -105,7 +104,7 @@ $(function(){
     <tr>
 	    <th class="info"><div class="left-column">{NAME}</div></th>
     <patTemplate:tmpl name="countlist">
-	    <td>{COUNT}</td>
+	    <td class="number">{COUNT}</td>
 	</patTemplate:tmpl>
 	</tr>
 	</patTemplate:tmpl>
