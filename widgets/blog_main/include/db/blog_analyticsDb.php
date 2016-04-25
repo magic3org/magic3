@@ -18,16 +18,47 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 class blog_analyticsDb extends BaseDb
 {
 	/**
+	 * 全コンテンツの参照数を日付範囲で取得
+	 *
+	 * @param string    $typeId			コンテンツタイプ
+	 * @param date		$startDate		集計期間、開始日(NULL=先頭からすべて)
+	 * @param date		$endDate		集計期間、終了日(NULL=最後まですべて)
+	 * @param function $callback		コールバック関数
+	 * @return							なし
+	 */
+	function getAllContentViewCountByDate($typeId, $startDate, $endDate, $callback)
+	{
+		$params = array();
+		$queryStr  = 'SELECT vc_date, SUM(vc_count) AS total FROM _view_count ';
+		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
+
+		// 日付範囲
+		if (!empty($startDate)){
+			$queryStr .=    'AND ? <= vc_date ';
+			$params[] = $startDate;
+		}
+		if (!empty($endDate)){
+			$queryStr .=    'AND vc_date <= ? ';
+			$params[] = $endDate;
+		}
+
+		// 日付でソート
+		$queryStr .=  'GROUP BY vc_date ';
+		$queryStr .=  'ORDER BY vc_date';
+
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
 	 * コンテンツの参照数を日付範囲で取得
 	 *
-	 * @param string    $typeId				コンテンツタイプ
-	 * @param string    $contentId			コンテンツID(空の場合はすべての集計)
-	 * @param date		$startDate			集計期間、開始日(NULL=先頭からすべて)
-	 * @param date		$endDate			集計期間、終了日(NULL=最後まですべて)
-	 * @param function $callback			コールバック関数
-	 * @return								なし
+	 * @param string    $typeId			コンテンツタイプ
+	 * @param string    $contentId		コンテンツID
+	 * @param date		$startDate		集計期間、開始日(NULL=先頭からすべて)
+	 * @param date		$endDate		集計期間、終了日(NULL=最後まですべて)
+	 * @param array		$rows			取得した行データ
+	 * @return bool						true=取得、false=取得せず
 	 */
-	function getContentViewCountByDate($typeId, $contentId, $startDate, $endDate, $callback)
+	function getContentViewCountByDate($typeId, $contentId, $startDate, $endDate, &$rows)
 	{
 		$params = array();
 		$queryStr  = 'SELECT vc_date, SUM(vc_count) AS total FROM _view_count ';
@@ -53,7 +84,8 @@ class blog_analyticsDb extends BaseDb
 		$queryStr .=  'GROUP BY vc_date ';
 		$queryStr .=  'ORDER BY vc_date';
 
-		$this->selectLoop($queryStr, $params, $callback);
+		$retValue = $this->selectRecords($queryStr, $params, $rows);
+		return $retValue;
 	}
 	/**
 	 * 指定期間の参照が多い順にコンテンツを取得

@@ -19,9 +19,10 @@
 //<![CDATA[
 $(function(){
 	// テーブルを作成
-	m3SetConfigTable('mainconfig');
+//	m3SetConfigTable('mainconfig');
 
 <patTemplate:tmpl name="draw_graph">
+	// アクセス数グラフ作成
 	var values = {Y_VALUES};
 	var ticks = {X_TICKS};
 
@@ -54,6 +55,10 @@ $(function(){
 		}
 	});
 </patTemplate:tmpl>
+
+	// 上位アクセスコンテンツテーブル
+	$('#mainconfig').m3stickyheader();
+	
 });
 //]]>
 </script>
@@ -72,7 +77,9 @@ $(function(){
 </patTemplate:tmpl>
 </select>
 </h3>
-
+<div class="m3config_h_side_buttons" style="margin-left:10px;">
+期間：{START_DATE} ～ {END_DATE}
+</div>
 <!--
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_ANALYTICS_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
@@ -81,24 +88,30 @@ $(function(){
 <div class="jqPlot" id="chart1" style="margin:0 auto;height:200px;"></div>
 
 <h3 class="m3config_h"><span {_HELP_ANALYTICS_TOP_LIST}>アクセス上位記事</span></h3>
-<table id="mainconfig">
+<div class="m3stickyheader">
+
+<!--<table id="mainconfig" class="m3stickyheader table-hover overflow-y">-->
+<table id="mainconfig" class="table table-bordered table-striped table-hover overflow-y">
     <thead>
     <tr>
-        <th><span {_HELP_ANALYTICS_NAME}>名前</span></th>
-	    <th><span {_HELP_ANALYTICS_INDEX}>表示順</span></th>
-	    <th><span {_HELP_ANALYTICS_VISIBLE}>公開</span></th>
+        <th class="info" style="width:200px;"><div class="left-column">記事タイトル</div></th>
+    <patTemplate:tmpl name="datelist">
+	    <th class="info" style="width:75px;">{DATE}</th>
+	</patTemplate:tmpl>
 	</tr>
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
-	    <td>{NAME}</td>
-	    <td>{VIEW_INDEX}</td>
-	    <td><input type="checkbox" name="item_visible" {VISIBLE} disabled /></td>
+	    <th class="info"><div class="left-column">{NAME}</div></th>
+    <patTemplate:tmpl name="countlist">
+	    <td>{COUNT}</td>
+	</patTemplate:tmpl>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
+</div>
 
 </form>
 </div>

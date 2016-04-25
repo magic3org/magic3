@@ -628,6 +628,53 @@ span[rel="m3help"] { cursor: default; }
 	width: 100%;
 }
 
+/* wide scrollable table */
+.m3stickyheader {
+	max-width: 950px;
+	overflow: hidden;
+}
+.m3stickyheader table {
+	table-layout: fixed;
+}
+.m3stickyheader td, th {
+	padding: 8px;
+}
+.m3stickyheader tbody th {
+	color: #fff;
+	background-color: #3498db;
+	border-top: 1px solid #ecf0f1;
+}
+.m3stickyheader thead th {
+	color: #fff;
+	background-color: #3498db;
+	border-top: 1px solid #ecf0f1;
+}
+.m3stickyheader tbody th .left-column {
+	width:184px;
+	overflow:hidden;
+}
+.m3stickyheader thead th .left-column {
+	width:184px;
+	overflow:hidden;
+}
+.sticky-wrap {
+	overflow-x: auto;
+	overflow-y: hidden;
+	position: relative;
+	width: 100%;
+}
+.sticky-wrap .sticky-thead,
+.sticky-wrap .sticky-col,
+.sticky-wrap .sticky-intersect {
+	opacity: 0;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: all .125s ease-in-out;
+	z-index: 50;
+	width: auto;
+}
+
 .m3config_update_buttons {
 /*	margin-top: 10px;*/
 	text-align: right;
