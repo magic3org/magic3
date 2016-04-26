@@ -31,6 +31,7 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 	private $graphDataKeyArray;			// グラフデータ取得用キー
 	private $graphDataArray;			// グラフデータ(X軸値をキー、Y軸値を値とする連想配列)
 	private $graphDataKeyFormat;		// グラフデータ用のキーフォーマット
+	private $isContentViewData;			// アクセス解析データが存在するかどうか
 	const TERM_TYPE_ALL = '_all';				// 全データ表示選択
 	const DEFAULT_CALC_TYPE = 'day';			// デフォルトの集計タイプ
 	const DEFAULT_TERM_TYPE = 'month';		// デフォルトの期間タイプ
@@ -307,6 +308,10 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		// ##### 上位コンテンツ一覧を作成 #####
 		// 上位コンテンツを取得
 		$this->db->getTopContentByDateRange(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, self::DEFAULT_LIST_COUNT, 1/*先頭ページ*/, $this->_langId, array($this, 'contentListLoop'));
+		if (!$this->isContentViewData){		// アクセス解析データが存在しない場合
+			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');
+			$this->setGuidanceMsg('アクセス解析データがありません');
+		}
 		
 		// X軸タイトル作成
 		array_unshift($xTitleArray, '総数');// 左端は総数のカラムを追加
@@ -449,6 +454,8 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
+		
+		$this->isContentViewData = true;		// アクセス解析データが存在する
 		return true;
 	}
 	/**
