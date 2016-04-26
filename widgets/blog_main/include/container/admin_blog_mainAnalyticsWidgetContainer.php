@@ -25,8 +25,10 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 	private $termTypeArray;		// 期間タイプ
 	private $calcType;			// 選択中の集計タイプ
 	private $termType;			// 選択中の期間タイプ
-	private $yTickValueArray;	// Y軸の最大値リスト
+	private $yMaxTickArray;		// Y軸の最大値リスト
 	private $weekTypeArray;		// 曜日表示名
+	private $xTitleArray;		// X軸値
+	private $yValueArray;		// Y軸値
 	private $maxViewCount;				// コンテン参照数最大値
 	private $graphDataKeyArray;			// グラフデータ取得用キー
 	private $graphDataArray;			// グラフデータ(X軸値をキー、Y軸値を値とする連想配列)
@@ -75,7 +77,7 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 										array(	'name' => 'すべて',	'value' => self::TERM_TYPE_ALL));
 										
 		// Y軸の最大値リスト
-		$this->yTickValueArray = array(1000000, 500000, 100000, 50000, 10000, 5000, 1000, 500, 100, 0);
+		$this->yMaxTickArray = array(1000000, 500000, 100000, 50000, 10000, 5000, 1000, 500, 100, 0);
 		
 		// 曜日表示名
 		$this->weekTypeArray = array('日', '月', '火', '水', '木', '金', '土');
@@ -197,110 +199,19 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		// 集計タイプメニュー作成
 		$this->createCalcTypeMenu();
 		
-		// ##### 集計グラフ作成 #####
-		$xTitleArray = array();
-		$yValueArray = array();
-		$this->graphDataKeyArray = array();		// グラフデータ取得用キー
-		
-		// 集計グラフ用データ取得
-		if ($this->calcType == 'day'){			// 日単位で集計の場合
-			$this->db->getAllContentViewCountByDate(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
-			
-			// X軸ラベル作成
-			$dateTimestamp	= strtotime($this->startDate);
-			$startTimestamp	= $dateTimestamp;
-			$endTimestamp	= strtotime($this->endDate);
-			$date = $this->startDate;
-			$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
-			while (true){
-				if ($dateTimestamp > $endTimestamp) break;
-				$this->graphDataKeyArray[] = $graphDataKey;			// グラフデータ取得用キー
-
-				// グラフ用のデータ作成
-				$xTitleArray[] = date('n/j', $dateTimestamp);		// X軸タイトル。表示フォーマットに変換。
-				$value = $this->graphDataArray[$graphDataKey];
-				if (isset($value)){
-					$yValueArray[] = intval($value);
-				} else {
-					$yValueArray[] = 0;
-				}
-				$dateTimestamp = strtotime("$date 1 day");
-				$date = date(self::DATE_FORMAT, $dateTimestamp);		// 次の日に更新
-				$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
-			}
-		} else if ($this->calcType == 'month'){			// 月単位で集計の場合
-			$this->db->getAllContentViewCountByMonth(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
-
-			// X軸ラベル作成
-			$year = $startYear;
-			$month = $startMonth;
-			$dateTimestamp	= strtotime("$year-$month-1");
-			$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
-
-			for ($i = 0; $i < 12; $i++){
-				$this->graphDataKeyArray[] = $graphDataKey;			// グラフデータ取得用キー
-
-				// グラフ用のデータ作成
-				$xTitleArray[] = date('n月', $dateTimestamp);		// X軸タイトル。表示フォーマットに変換。
-				$value = $this->graphDataArray[$graphDataKey];
-				if (isset($value)){
-					$yValueArray[] = intval($value);
-				} else {
-					$yValueArray[] = 0;
-				}
-
-				// 次の月へ進む
-				$month++;
-				if ($month > 12){
-					$month = 1;
-					$year++;
-				}
-				$dateTimestamp	= strtotime("$year-$month-1");
-				$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
-			}
-		} else if ($this->calcType == 'hour'){			// 時間単位で集計の場合
-			$this->db->getAllContentViewCountByHour(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
-
-			// X軸ラベル作成
-			for ($i = 0; $i < 24; $i++){
-				$this->graphDataKeyArray[] = $i;			// グラフデータ取得用キー
-
-				// グラフ用のデータ作成
-				$xTitleArray[] = $i . '時';		// X軸タイトル(時間)
-				$value = $this->graphDataArray[$i];
-				if (isset($value)){
-					$yValueArray[] = intval($value);
-				} else {
-					$yValueArray[] = 0;
-				}
-			}
-		} else if ($this->calcType == 'week'){			// 曜日単位で集計の場合
-			$this->db->getAllContentViewCountByWeek(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
-
-			// X軸ラベル作成
-			for ($i = 0; $i < 7; $i++){
-				$this->graphDataKeyArray[] = $i;			// グラフデータ取得用キー
-
-				// グラフ用のデータ作成
-				$xTitleArray[] = $this->weekTypeArray[$i];		// X軸タイトル(曜日)
-				$value = $this->graphDataArray[$i];
-				if (isset($value)){
-					$yValueArray[] = intval($value);
-				} else {
-					$yValueArray[] = 0;
-				}
-			}
-		}
+		// ##### グラフ用データ作成 #####
+		$this->createGraphData();
 		
 		// グラフ用データをスクリプト化
-		$graphDataXStr = '[' . implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $xTitleArray)) . ']';
-		$graphDataYStr = '[' . implode(', ', $yValueArray) . ']';
+		$graphDataXStr = '[' . implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->xTitleArray)) . ']';
+		$graphDataYStr = '[' . implode(', ', $this->yValueArray) . ']';
+		$graphDataKeyStr = '[' . implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->graphDataKeyArray)) . ']';
 
 		// グラフY座標最大値取得
 		$yMax = self::DEFAULT_Y_TICK_VALUE;
-		for ($i = 0; $i < count($this->yTickValueArray) -1; $i++){
-			if ($this->maxViewCount >= $this->yTickValueArray[$i + 1]){
-				$yMax = $this->yTickValueArray[$i];// Y座標最大値
+		for ($i = 0; $i < count($this->yMaxTickArray) -1; $i++){
+			if ($this->maxViewCount >= $this->yMaxTickArray[$i + 1]){
+				$yMax = $this->yMaxTickArray[$i];// Y座標最大値
 				break;
 			}
 		}
@@ -314,11 +225,11 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		}
 		
 		// X軸タイトル作成
-		array_unshift($xTitleArray, '総数');// 左端は総数のカラムを追加
-		$xTitleCount = count($xTitleArray);
+		array_unshift($this->xTitleArray, '総数');// 左端は総数のカラムを追加
+		$xTitleCount = count($this->xTitleArray);
 		for ($i = 0; $i < $xTitleCount; $i++){
 			$row = array(
-				'date'    => $this->convertToDispString($xTitleArray[$i])			// X軸タイトル
+				'date'    => $this->convertToDispString($this->xTitleArray[$i])			// X軸タイトル
 			);
 			$this->tmpl->addVars('datelist', $row);
 			$this->tmpl->parseTemplate('datelist', 'a');
@@ -335,6 +246,7 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		$this->tmpl->addVar('_widget', 'end_date', $this->convertToDispDate($this->endDate));		// 集計期間(終了)
 		$this->tmpl->addVar('draw_graph', 'x_ticks', $graphDataXStr);		// グラフX軸タイトル
 		$this->tmpl->addVar('draw_graph', 'y_values', $graphDataYStr);		// グラフY軸値
+		$this->tmpl->addVar('draw_graph', 'keys', $graphDataKeyStr);		// グラフデータキー
 		$this->tmpl->addVar('draw_graph', 'y_max', $yMax);		// グラフY座標最大値
 	}
 	/**
@@ -530,6 +442,110 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 			break;
 		}
 		return $viewData;
+	}
+	/**
+	 * グラフ用データ作成
+	 *
+	 * @return					なし
+	 */
+	function createGraphData()
+	{
+		// ##### 集計グラフ作成 #####
+		$this->xTitleArray = array();
+		$this->yValueArray = array();
+		$this->graphDataKeyArray = array();		// グラフデータ取得用キー
+		
+		// 集計グラフ用データ取得
+		if ($this->calcType == 'day'){			// 日単位で集計の場合
+			$this->db->getAllContentViewCountByDate(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
+			
+			// X軸ラベル作成
+			$dateTimestamp	= strtotime($this->startDate);
+			$startTimestamp	= $dateTimestamp;
+			$endTimestamp	= strtotime($this->endDate);
+			$date = $this->startDate;
+			$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
+			while (true){
+				if ($dateTimestamp > $endTimestamp) break;
+				$this->graphDataKeyArray[] = $graphDataKey;			// グラフデータ取得用キー
+
+				// グラフ用のデータ作成
+				$this->xTitleArray[] = date('n/j', $dateTimestamp);		// X軸タイトル。表示フォーマットに変換。
+				$value = $this->graphDataArray[$graphDataKey];
+				if (isset($value)){
+					$this->yValueArray[] = intval($value);
+				} else {
+					$this->yValueArray[] = 0;
+				}
+				$dateTimestamp = strtotime("$date 1 day");
+				$date = date(self::DATE_FORMAT, $dateTimestamp);		// 次の日に更新
+				$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
+			}
+			
+			$this->tmpl->setAttribute('graph_clickable', 'visibility', 'visible');			// 1日分のグラフ画面への遷移を可能にする
+		} else if ($this->calcType == 'month'){			// 月単位で集計の場合
+			$this->db->getAllContentViewCountByMonth(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
+
+			// X軸ラベル作成
+			$year = $startYear;
+			$month = $startMonth;
+			$dateTimestamp	= strtotime("$year-$month-1");
+			$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
+
+			for ($i = 0; $i < 12; $i++){
+				$this->graphDataKeyArray[] = $graphDataKey;			// グラフデータ取得用キー
+
+				// グラフ用のデータ作成
+				$this->xTitleArray[] = date('n月', $dateTimestamp);		// X軸タイトル。表示フォーマットに変換。
+				$value = $this->graphDataArray[$graphDataKey];
+				if (isset($value)){
+					$this->yValueArray[] = intval($value);
+				} else {
+					$this->yValueArray[] = 0;
+				}
+
+				// 次の月へ進む
+				$month++;
+				if ($month > 12){
+					$month = 1;
+					$year++;
+				}
+				$dateTimestamp	= strtotime("$year-$month-1");
+				$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
+			}
+		} else if ($this->calcType == 'hour'){			// 時間単位で集計の場合
+			$this->db->getAllContentViewCountByHour(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
+
+			// X軸ラベル作成
+			for ($i = 0; $i < 24; $i++){
+				$this->graphDataKeyArray[] = $i;			// グラフデータ取得用キー
+
+				// グラフ用のデータ作成
+				$this->xTitleArray[] = $i . '時';		// X軸タイトル(時間)
+				$value = $this->graphDataArray[$i];
+				if (isset($value)){
+					$this->yValueArray[] = intval($value);
+				} else {
+					$this->yValueArray[] = 0;
+				}
+			}
+		} else if ($this->calcType == 'week'){			// 曜日単位で集計の場合
+			$this->db->getAllContentViewCountByWeek(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
+
+			// X軸ラベル作成
+			for ($i = 0; $i < 7; $i++){
+				$this->graphDataKeyArray[] = $i;			// グラフデータ取得用キー
+
+				// グラフ用のデータ作成
+				$this->xTitleArray[] = $this->weekTypeArray[$i];		// X軸タイトル(曜日)
+				$value = $this->graphDataArray[$i];
+				if (isset($value)){
+					$this->yValueArray[] = intval($value);
+				} else {
+					$this->yValueArray[] = 0;
+				}
+			}
+		}
 	}
 }
 ?>
