@@ -29,7 +29,7 @@ class blog_analyticsDb extends BaseDb
 	function getAllContentViewCountByDate($typeId, $startDate, $endDate, $callback)
 	{
 		$params = array();
-		$queryStr  = 'SELECT vc_date, SUM(vc_count) AS total FROM _view_count ';
+		$queryStr  = 'SELECT vc_date AS day, SUM(vc_count) AS total FROM _view_count ';
 		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
 
 		// 日付範囲
@@ -43,8 +43,8 @@ class blog_analyticsDb extends BaseDb
 		}
 
 		// 日付でソート
-		$queryStr .=  'GROUP BY vc_date ';
-		$queryStr .=  'ORDER BY vc_date';
+		$queryStr .=  'GROUP BY day ';
+		$queryStr .=  'ORDER BY day';
 
 		$this->selectLoop($queryStr, $params, $callback);
 	}
@@ -154,6 +154,76 @@ class blog_analyticsDb extends BaseDb
 		// 日付でソート
 		$queryStr .=  'GROUP BY year, month ';
 		$queryStr .=  'ORDER BY year, month';
+
+		$retValue = $this->selectRecords($queryStr, $params, $rows);
+		return $retValue;
+	}
+	/**
+	 * 全コンテンツの時間単位の参照数を日付範囲で取得
+	 *
+	 * @param string    $typeId			コンテンツタイプ
+	 * @param date		$startDate		集計期間、開始日(NULL=先頭からすべて)
+	 * @param date		$endDate		集計期間、終了日(NULL=最後まですべて)
+	 * @param function $callback		コールバック関数
+	 * @return							なし
+	 */
+	function getAllContentViewCountByHour($typeId, $startDate, $endDate, $callback)
+	{
+		$params = array();
+		$queryStr  = 'SELECT vc_hour AS hour, SUM(vc_count) AS total FROM _view_count ';
+		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
+
+		// 日付範囲
+		if (!empty($startDate)){
+			$queryStr .=    'AND ? <= vc_date ';
+			$params[] = $startDate;
+		}
+		if (!empty($endDate)){
+			$queryStr .=    'AND vc_date <= ? ';
+			$params[] = $endDate;
+		}
+
+		// 日付でソート
+		$queryStr .=  'GROUP BY hour ';
+		$queryStr .=  'ORDER BY hour';
+
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
+	 * コンテンツの時間単位の参照数を日付範囲で取得
+	 *
+	 * @param string    $typeId			コンテンツタイプ
+	 * @param string    $contentId		コンテンツID
+	 * @param date		$startDate		集計期間、開始日(NULL=先頭からすべて)
+	 * @param date		$endDate		集計期間、終了日(NULL=最後まですべて)
+	 * @param array		$rows			取得した行データ
+	 * @return bool						true=取得、false=取得せず
+	 */
+	function getContentViewCountByHour($typeId, $contentId, $startDate, $endDate, &$rows)
+	{
+		$params = array();
+		$queryStr  = 'SELECT vc_hour AS hour, SUM(vc_count) AS total FROM _view_count ';
+		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
+		
+		// 対象コンテンツ
+		if (!empty($contentId)){
+			$queryStr .=   'AND vc_content_id = ? ';
+			$params[] = $contentId;
+		}
+
+		// 日付範囲
+		if (!empty($startDate)){
+			$queryStr .=    'AND ? <= vc_date ';
+			$params[] = $startDate;
+		}
+		if (!empty($endDate)){
+			$queryStr .=    'AND vc_date <= ? ';
+			$params[] = $endDate;
+		}
+
+		// 日付でソート
+		$queryStr .=  'GROUP BY hour ';
+		$queryStr .=  'ORDER BY hour';
 
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;

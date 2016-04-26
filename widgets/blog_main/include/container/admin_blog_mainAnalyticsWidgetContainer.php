@@ -109,21 +109,25 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		if ($act == 'changetype'){		// 集計タイプの変更のとき
 		}
 		
+		// ##### 集計期間を作成 #####
+		// *** 日単位の場合のみ本日のデータを含んでグラフを作成する ***
+		$baseDate = '';		// 基準日は空文字列(本日)で初期化する
+		
 		// 集計開始日を取得
 		if (empty($this->startDate)){
 			if ($this->calcType == 'day'){			// 日単位で集計の場合
 				switch ($this->termType){		// 期間タイプ
 				case 'month':
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->endDate -30 day"));			// 1ヶ月前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -30 day"));			// 1ヶ月前
 					break;
 				case '3month':
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->endDate -90 day"));		// 3ヶ月前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -90 day"));		// 3ヶ月前
 					break;
 				case '6month':
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->endDate -180 day"));		// 6ヶ月前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -180 day"));		// 6ヶ月前
 					break;
 				case 'year':
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->endDate -1 year"));			// 1年前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -1 year"));			// 1年前
 					break;
 				case self::TERM_TYPE_ALL:		// すべてのデータのとき
 					$this->startDate = NULL;
@@ -133,6 +137,7 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 				$this->graphDataKeyFormat = self::KEY_FORMAT_DAY;		// グラフデータ用のキーフォーマット
 				
 			} else if ($this->calcType == 'month'){			// 月単位で集計の場合
+				// 本日を含まないデータでグラフを作成
 				switch ($this->termType){		// 期間タイプ
 				case 'year':
 					$startYear = intval(date('Y')) -1;
@@ -149,20 +154,31 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 				}
 				
 				$this->graphDataKeyFormat = self::KEY_FORMAT_MONTH;		// グラフデータ用のキーフォーマット
+			} else if ($this->calcType == 'hour'){			// 時間単位で集計の場合
+				switch ($this->termType){		// 期間タイプ
+				case 'month':
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -28 day"));		// 4週間
+					break;
+				case self::TERM_TYPE_ALL:		// すべてのデータのとき
+					$this->startDate = NULL;
+					break;
+				}
+				
+				$this->graphDataKeyFormat = self::KEY_FORMAT_HOUR;		// グラフデータ用のキーフォーマット
 				
 			} else if ($this->calcType == 'week'){				// 曜日単位で集計の場合
 				switch ($this->termType){		// 期間タイプ
 				case 'month':
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->endDate -28 day"));			// 1ヶ月前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -28 day"));			// 1ヶ月前
 					break;
 				case '3month':
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->endDate -86 day"));		// 3ヶ月前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -86 day"));		// 3ヶ月前
 					break;
 				case '6month':
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->endDate -172 day"));		// 6ヶ月前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -172 day"));		// 6ヶ月前
 					break;
 				case 'year':
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->endDate -1 year"));			// 1年前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$baseDate -1 year"));			// 1年前
 					break;
 				case self::TERM_TYPE_ALL:		// すべてのデータのとき
 					$this->startDate = NULL;
@@ -229,7 +245,7 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 				$this->graphDataKeyArray[] = $graphDataKey;			// グラフデータ取得用キー
 
 				// グラフ用のデータ作成
-				$xTitleArray[] = date('n', $dateTimestamp);		// X軸タイトル。表示フォーマットに変換。
+				$xTitleArray[] = date('n月', $dateTimestamp);		// X軸タイトル。表示フォーマットに変換。
 				$value = $this->graphDataArray[$graphDataKey];
 				if (isset($value)){
 					$yValueArray[] = intval($value);
@@ -245,6 +261,22 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 				}
 				$dateTimestamp	= strtotime("$year-$month-1");
 				$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
+			}
+		} else if ($this->calcType == 'hour'){			// 時間単位で集計の場合
+			$this->db->getAllContentViewCountByHour(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
+
+			// X軸ラベル作成
+			for ($i = 0; $i < 24; $i++){
+				$this->graphDataKeyArray[] = $i;			// グラフデータ取得用キー
+
+				// グラフ用のデータ作成
+				$xTitleArray[] = $i . '時';		// X軸タイトル(時間)
+				$value = $this->graphDataArray[$i];
+				if (isset($value)){
+					$yValueArray[] = intval($value);
+				} else {
+					$yValueArray[] = 0;
+				}
 			}
 		}
 		
@@ -341,12 +373,16 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		// 参照数を取得
 		switch ($this->calcType){
 		case 'day':
-			$graphDataKey = date($this->graphDataKeyFormat, strtotime($fetchedRow['vc_date']));
+			$graphDataKey = date($this->graphDataKeyFormat, strtotime($fetchedRow['day']));
 			break;
 		case 'month':
 			$year = $fetchedRow['year'];
 			$month = $fetchedRow['month'];
 			$graphDataKey = date($this->graphDataKeyFormat, strtotime("$year-$month-1"));
+			break;
+		case 'hour':
+			//$graphDataKey = date($this->graphDataKeyFormat, strtotime($fetchedRow['hour']));
+			$graphDataKey = $fetchedRow['hour'];
 			break;
 		}
 		
@@ -437,6 +473,20 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 					$year = $row['year'];
 					$month = $row['month'];
 					$graphDataKey = date($this->graphDataKeyFormat, strtotime("$year-$month-1"));
+					$dayTotal = $row['total'];
+					$viewData[$graphDataKey] = $dayTotal;	// 日単位のアクセス数
+					$total += $dayTotal;
+				}
+				$viewData['total'] = $total;		// 総アクセス数
+			}
+			break;
+		case 'hour':
+			$ret = $this->db->getContentViewCountByHour(blog_mainCommonDef::VIEW_CONTENT_TYPE, $contentId, $this->startDate, $this->endDate, $rows);
+			if ($ret){
+				$rowCount = count($rows);
+				for ($i = 0; $i < $rowCount; $i++){
+					$row = $rows[$i];
+					$graphDataKey = $row['hour'];
 					$dayTotal = $row['total'];
 					$viewData[$graphDataKey] = $dayTotal;	// 日単位のアクセス数
 					$total += $dayTotal;
