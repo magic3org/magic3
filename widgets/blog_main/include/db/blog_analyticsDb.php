@@ -131,7 +131,6 @@ class blog_analyticsDb extends BaseDb
 	function getContentViewCountByMonth($typeId, $contentId, $startDate, $endDate, &$rows)
 	{
 		$params = array();
-//		$queryStr  = 'SELECT vc_date AS day, SUM(vc_count) AS total FROM _view_count ';
 		$queryStr  = 'SELECT EXTRACT(year FROM vc_date) AS year, EXTRACT(month FROM vc_date) AS month, SUM(vc_count) AS total FROM _view_count ';
 		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
 		
@@ -224,6 +223,84 @@ class blog_analyticsDb extends BaseDb
 		// 日付でソート
 		$queryStr .=  'GROUP BY hour ';
 		$queryStr .=  'ORDER BY hour';
+
+		$retValue = $this->selectRecords($queryStr, $params, $rows);
+		return $retValue;
+	}
+	/**
+	 * 全コンテンツの曜日単位の参照数を日付範囲で取得
+	 *
+	 * @param string    $typeId			コンテンツタイプ
+	 * @param date		$startDate		集計期間、開始日(NULL=先頭からすべて)
+	 * @param date		$endDate		集計期間、終了日(NULL=最後まですべて)
+	 * @param function $callback		コールバック関数
+	 * @return							なし
+	 */
+	function getAllContentViewCountByWeek($typeId, $startDate, $endDate, $callback)
+	{
+		$params = array();
+		if ($this->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
+			$queryStr  = 'SELECT WEEKDAY(vc_date) AS week, SUM(vc_count) AS total FROM _view_count ';
+		} else if ($this->getDbType() == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
+			$queryStr  = 'SELECT EXTRACT(dow FROM vc_date) AS week, SUM(vc_count) AS total FROM _view_count ';
+		}
+		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
+
+		// 日付範囲
+		if (!empty($startDate)){
+			$queryStr .=    'AND ? <= vc_date ';
+			$params[] = $startDate;
+		}
+		if (!empty($endDate)){
+			$queryStr .=    'AND vc_date <= ? ';
+			$params[] = $endDate;
+		}
+
+		// 日付でソート
+		$queryStr .=  'GROUP BY week ';
+		$queryStr .=  'ORDER BY week';
+
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
+	 * コンテンツの曜日単位の参照数を日付範囲で取得
+	 *
+	 * @param string    $typeId			コンテンツタイプ
+	 * @param string    $contentId		コンテンツID
+	 * @param date		$startDate		集計期間、開始日(NULL=先頭からすべて)
+	 * @param date		$endDate		集計期間、終了日(NULL=最後まですべて)
+	 * @param array		$rows			取得した行データ
+	 * @return bool						true=取得、false=取得せず
+	 */
+	function getContentViewCountByWeek($typeId, $contentId, $startDate, $endDate, &$rows)
+	{
+		$params = array();
+		if ($this->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
+			$queryStr  = 'SELECT WEEKDAY(vc_date) AS week, SUM(vc_count) AS total FROM _view_count ';
+		} else if ($this->getDbType() == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
+			$queryStr  = 'SELECT EXTRACT(dow FROM vc_date) AS week, SUM(vc_count) AS total FROM _view_count ';
+		}
+		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
+		
+		// 対象コンテンツ
+		if (!empty($contentId)){
+			$queryStr .=   'AND vc_content_id = ? ';
+			$params[] = $contentId;
+		}
+
+		// 日付範囲
+		if (!empty($startDate)){
+			$queryStr .=    'AND ? <= vc_date ';
+			$params[] = $startDate;
+		}
+		if (!empty($endDate)){
+			$queryStr .=    'AND vc_date <= ? ';
+			$params[] = $endDate;
+		}
+
+		// 日付でソート
+		$queryStr .=  'GROUP BY week ';
+		$queryStr .=  'ORDER BY week';
 
 		$retValue = $this->selectRecords($queryStr, $params, $rows);
 		return $retValue;
