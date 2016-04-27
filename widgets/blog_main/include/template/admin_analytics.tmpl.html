@@ -21,6 +21,11 @@ function changeCalcType(){
 	document.main.submit();
 	return true;
 }
+function cancelItem(){
+	document.main.item_calc_type.value = document.main.back_calctype.value;		// 戻りの集計タイプ
+	document.main.submit();
+	return true;
+}
 $(function(){
 <patTemplate:tmpl name="draw_graph">
 	// アクセス数グラフ作成
@@ -85,6 +90,7 @@ $(function(){
 <input type="hidden" name="act" />
 <input type="hidden" name="startdate" />
 <input type="hidden" name="enddate" />
+<input type="hidden" name="back_calctype" value="{CALC_TYPE}" />
 <h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_ANALYTICS_LIST}>アクセス数</span>
 <select name="item_calc_type" class="form-control" onchange="changeCalcType();" style="display:inline-block;width:200px;margin-top:-7px;">
 <patTemplate:tmpl name="item_calc_type_list">
@@ -93,6 +99,14 @@ $(function(){
 </select>
 </h3>
 <div class="m3config_h_side_buttons" style="margin-left:10px;">{TERM}</div>
+<div class="m3config_h_side_buttons pull-right">
+<patTemplate:tmpl name="cancel_button" visibility="hidden">
+<div {_HELP_ANALYTICS_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="戻る" />
+</div></div>
+</patTemplate:tmpl>
+</div>
+
 <div class="jqPlot" id="chart1" style="margin:0 auto;height:200px;"></div>
 
 <h3 class="m3config_h"><span {_HELP_ANALYTICS_TOP_LIST}>アクセス上位記事</span></h3>

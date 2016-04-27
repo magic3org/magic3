@@ -114,11 +114,24 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		$this->termType = $this->getDefaultTermType($this->calcType);	// デフォルトの期間タイプを取得
 		$this->startDate = $request->trimValueOf('startdate');
 		$this->endDate = $request->trimValueOf('enddate');
-//		if (!empty($date)){
-//			$this->startDate = $this->endDate = $date;
-//		}
+		if (!empty($this->startDate)) $this->startDate = date(self::DATE_FORMAT, strtotime($this->startDate));
+		if (!empty($this->endDate)) $this->endDate = date(self::DATE_FORMAT, strtotime($this->endDate));
+		$backCalcType = $request->trimValueOf('back_calctype');
 		
-		if ($act == 'changetype'){		// 集計タイプの変更のとき
+		// キーのフォーマットを取得
+		switch ($this->calcType){
+		case 'day':
+			$this->graphDataKeyFormat = self::KEY_FORMAT_DAY;		// グラフデータ用のキーフォーマット
+			break;
+		case 'month':
+			$this->graphDataKeyFormat = self::KEY_FORMAT_MONTH;		// グラフデータ用のキーフォーマット
+			break;
+		case 'hour':
+			$this->graphDataKeyFormat = self::KEY_FORMAT_HOUR;		// グラフデータ用のキーフォーマット
+			break;
+		case 'week':
+			$this->graphDataKeyFormat = self::KEY_FORMAT_WEEK;		// グラフデータ用のキーフォーマット
+			break;
 		}
 		
 		// ##### 集計期間を作成 #####
@@ -145,9 +158,6 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 					$this->startDate = NULL;
 					break;
 				}
-				
-				$this->graphDataKeyFormat = self::KEY_FORMAT_DAY;		// グラフデータ用のキーフォーマット
-				
 			} else if ($this->calcType == 'month'){			// 月単位で集計の場合
 				// 本日を含まないデータでグラフを作成
 				switch ($this->termType){		// 期間タイプ
@@ -164,8 +174,6 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 					$this->startDate = NULL;
 					break;
 				}
-				
-				$this->graphDataKeyFormat = self::KEY_FORMAT_MONTH;		// グラフデータ用のキーフォーマット
 			} else if ($this->calcType == 'hour'){			// 時間単位で集計の場合
 				switch ($this->termType){		// 期間タイプ
 				case 'month':
@@ -175,9 +183,6 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 					$this->startDate = NULL;
 					break;
 				}
-				
-				$this->graphDataKeyFormat = self::KEY_FORMAT_HOUR;		// グラフデータ用のキーフォーマット
-				
 			} else if ($this->calcType == 'week'){				// 曜日単位で集計の場合
 				switch ($this->termType){		// 期間タイプ
 				case 'month':
@@ -187,8 +192,6 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 					$this->startDate = NULL;
 					break;
 				}
-				
-				$this->graphDataKeyFormat = self::KEY_FORMAT_WEEK;		// グラフデータ用のキーフォーマット
 			}
 			// ##### 集計終了日 #####
 			// 日単位で集計する場合は本日のデータも表示
@@ -201,6 +204,10 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 			// 開始日が設定されている場合は日数分取得
 		}
 
+		// ##### イベント処理 #####
+		if ($act == 'changetype'){		// 集計タイプの変更のとき
+		}
+		
 		// 集計タイプメニュー作成
 		$this->createCalcTypeMenu();
 		
@@ -247,10 +254,19 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		$this->tmpl->addVar('_widget', 'lib_dir', $libDir);
 		
 		// 表示用期間
-		if ($this->startDate == $this->endDate){
+		if ($this->startDate == $this->endDate){		// 1日分のアクセス解析を表示する場合
 			$termStr = '日付：' . $this->convertToDispDate($this->startDate);
+			
+			// 戻るボタン表示
+			$this->tmpl->setAttribute('cancel_button', 'visibility', 'visible');
+			
+			// 戻り用集計タイプ
+			$this->tmpl->addVar('_widget', 'calc_type', $backCalcType);		// 集計タイプ
 		} else {
 			$termStr = '期間：' . $this->convertToDispDate($this->startDate) . ' ～ ' . $this->convertToDispDate($this->endDate);
+			
+			// 戻り用集計タイプ
+			$this->tmpl->addVar('_widget', 'calc_type', $this->calcType);		// 集計タイプ
 		}
 		
 		// 値を埋め込む
