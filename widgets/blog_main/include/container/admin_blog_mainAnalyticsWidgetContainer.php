@@ -112,6 +112,11 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		$this->calcType = $request->trimValueOf('item_calc_type');		// 集計方法
 		if (empty($this->calcType)) $this->calcType = self::DEFAULT_CALC_TYPE;			// デフォルトの集計タイプ
 		$this->termType = $this->getDefaultTermType($this->calcType);	// デフォルトの期間タイプを取得
+		$this->startDate = $request->trimValueOf('startdate');
+		$this->endDate = $request->trimValueOf('enddate');
+//		if (!empty($date)){
+//			$this->startDate = $this->endDate = $date;
+//		}
 		
 		if ($act == 'changetype'){		// 集計タイプの変更のとき
 		}
@@ -241,9 +246,15 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 		if (!empty($libInfo)) $libDir = $libInfo['dir'];
 		$this->tmpl->addVar('_widget', 'lib_dir', $libDir);
 		
+		// 表示用期間
+		if ($this->startDate == $this->endDate){
+			$termStr = '日付：' . $this->convertToDispDate($this->startDate);
+		} else {
+			$termStr = '期間：' . $this->convertToDispDate($this->startDate) . ' ～ ' . $this->convertToDispDate($this->endDate);
+		}
+		
 		// 値を埋め込む
-		$this->tmpl->addVar('_widget', 'start_date', $this->convertToDispDate($this->startDate));		// 集計期間(開始)
-		$this->tmpl->addVar('_widget', 'end_date', $this->convertToDispDate($this->endDate));		// 集計期間(終了)
+		$this->tmpl->addVar('_widget', 'term', $termStr);		// 集計期間
 		$this->tmpl->addVar('draw_graph', 'x_ticks', $graphDataXStr);		// グラフX軸タイトル
 		$this->tmpl->addVar('draw_graph', 'y_values', $graphDataYStr);		// グラフY軸値
 		$this->tmpl->addVar('draw_graph', 'keys', $graphDataKeyStr);		// グラフデータキー

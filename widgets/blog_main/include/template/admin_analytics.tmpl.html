@@ -61,11 +61,14 @@ $(function(){
 		cursor: "pointer",
 		zIndex: "1"
 	}).click(function(){
+		// 指定日のアクセス解析画面へ遷移
 		var index = $('#chart1 .jqplot-xaxis-tick').index(this);
-//		alert('項目番号:' +index);
-		alert(keys[index]);
-		// 画面遷移
-		//location.href = "http://google.com";
+		
+		document.main.act.value = 'changetype';
+		document.main.item_calc_type.value = 'hour';
+		document.main.startdate.value = keys[index];
+		document.main.enddate.value = keys[index];
+		document.main.submit();
 	});
 </patTemplate:tmpl>
 </patTemplate:tmpl>
@@ -80,9 +83,8 @@ $(function(){
 <form method="post" name="main">
 <input type="hidden" name="task" value="analytics" />
 <input type="hidden" name="act" />
-<input type="hidden" name="serial" />
-<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
-
+<input type="hidden" name="startdate" />
+<input type="hidden" name="enddate" />
 <h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_ANALYTICS_LIST}>アクセス数</span>
 <select name="item_calc_type" class="form-control" onchange="changeCalcType();" style="display:inline-block;width:200px;margin-top:-7px;">
 <patTemplate:tmpl name="item_calc_type_list">
@@ -90,9 +92,7 @@ $(function(){
 </patTemplate:tmpl>
 </select>
 </h3>
-<div class="m3config_h_side_buttons" style="margin-left:10px;">
-期間：{START_DATE} ～ {END_DATE}
-</div>
+<div class="m3config_h_side_buttons" style="margin-left:10px;">{TERM}</div>
 <div class="jqPlot" id="chart1" style="margin:0 auto;height:200px;"></div>
 
 <h3 class="m3config_h"><span {_HELP_ANALYTICS_TOP_LIST}>アクセス上位記事</span></h3>
