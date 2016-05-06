@@ -324,8 +324,14 @@ class blog_analyticsDb extends BaseDb
 	 
 		$params = array();
 		$queryStr  = 'SELECT vc_content_id, SUM(vc_count) AS total, be_id, be_name FROM _view_count ';
-		$queryStr .=   'LEFT JOIN blog_entry ON CAST(vc_content_id AS INT) = be_id AND be_deleted = false AND be_language_id = ? '; $params[] = $langId;
+		if ($this->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
+			$queryStr .=   'LEFT JOIN blog_entry ON CAST(vc_content_id AS UNSIGNED) = be_id AND be_deleted = false AND be_language_id = ? '; $params[] = $langId;
+		} else if ($this->getDbType() == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
+			$queryStr .=   'LEFT JOIN blog_entry ON CAST(vc_content_id AS INT) = be_id AND be_deleted = false AND be_language_id = ? '; $params[] = $langId;
+		}
+		
 		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
+		$queryStr .=     'AND vc_content_id != \'\' ';		// 空のコンテンツID除く
 
 		// 日付範囲
 		if (!empty($startDate)){
@@ -339,8 +345,12 @@ class blog_analyticsDb extends BaseDb
 
 		// 日付でソート
 		$queryStr .=  'GROUP BY vc_content_id, be_id, be_name ';
-		$queryStr .=  'ORDER BY total DESC, CAST(vc_content_id AS INT) DESC LIMIT ' . $limit . ' offset ' . $offset;
-
+		if ($this->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
+			$queryStr .=  'ORDER BY total DESC, CAST(vc_content_id AS UNSIGNED) DESC LIMIT ' . $limit . ' offset ' . $offset;
+		} else if ($this->getDbType() == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
+			$queryStr .=  'ORDER BY total DESC, CAST(vc_content_id AS INT) DESC LIMIT ' . $limit . ' offset ' . $offset;
+		}
+		
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 }
