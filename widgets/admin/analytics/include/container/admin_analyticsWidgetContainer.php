@@ -57,7 +57,8 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 										array(	'name' => '訪問者数',		'value' => 'visitor'));
 										
 		// 期間タイプ
-		$this->termTypeArray = array(	array(	'name' => '30日',	'value' => '30day'),
+		$this->termTypeArray = array(	array(	'name' => '10日',	'value' => '10day'),
+										array(	'name' => '30日',	'value' => '30day'),
 										array(	'name' => '3ヶ月',	'value' => '3month'),
 										array(	'name' => '6ヶ月',	'value' => '6month'),
 										array(	'name' => '1年',	'value' => '1year'),
@@ -144,6 +145,9 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 				$logStartDate = date("Y-m-d", strtotime($row['al_dt']));
 			}
 			switch ($this->termType){
+				case '10day':
+					$startDate = date("Y-m-d", strtotime("$endDate -10 day"));			// 10日前
+					break;
 				case '30day':
 					$startDate = date("Y-m-d", strtotime("$endDate -30 day"));			// 30日前
 					break;
