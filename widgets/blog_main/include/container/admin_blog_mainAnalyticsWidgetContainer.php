@@ -21,6 +21,8 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 	private $db;	// DB接続オブジェクト
 	private $startDate;			// 集計期間(開始)
 	private $endDate;			// 集計期間(終了)
+	private $startYear;			// 集計期間(開始年)(集計タイプ月単位用)
+	private $startMonth;		// 集計期間(開始月)(集計タイプ月単位用)
 	private $calcTypeArray;		// 集計タイプ
 	private $termTypeArray;		// 期間タイプ
 	private $calcType;			// 選択中の集計タイプ
@@ -162,13 +164,13 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 				// 本日を含まないデータでグラフを作成
 				switch ($this->termType){		// 期間タイプ
 				case 'year':
-					$startYear = intval(date('Y')) -1;
-					$startMonth = intval(date('n')) + 1;
-					if ($startMonth > 12){
-						$startYear++;
-						$startMonth = 1;
+					$this->startYear = intval(date('Y')) -1;
+					$this->startMonth = intval(date('n')) + 1;
+					if ($this->startMonth > 12){
+						$this->startYear++;
+						$this->startMonth = 1;
 					}
-					$this->startDate = date(self::DATE_FORMAT, strtotime("$startYear-$startMonth-1"));			// 1年前
+					$this->startDate = date(self::DATE_FORMAT, strtotime("$this->startYear-$this->startMonth-1"));			// 1年前
 					break;
 				case self::TERM_TYPE_ALL:		// すべてのデータのとき
 					$this->startDate = NULL;
@@ -514,8 +516,8 @@ class admin_blog_mainAnalyticsWidgetContainer extends admin_blog_mainBaseWidgetC
 			$this->db->getAllContentViewCountByMonth(blog_mainCommonDef::VIEW_CONTENT_TYPE, $this->startDate, $this->endDate, array($this, 'contentViewCountLoop'));
 
 			// X軸ラベル作成
-			$year = $startYear;
-			$month = $startMonth;
+			$year = $this->startYear;			// 期間開始年
+			$month = $this->startMonth;			// 期間開始月
 			$dateTimestamp	= strtotime("$year-$month-1");
 			$graphDataKey = date($this->graphDataKeyFormat, $dateTimestamp);
 
