@@ -27,11 +27,6 @@ class admin_analyticsDb extends BaseDb
 	 */
 	function getOldAccessLog(&$row)
 	{
-//		$queryStr  = 'SELECT * FROM _access_log ';
-/*		$queryStr  = 'SELECT al_dt FROM _access_log ';
-		$queryStr .=   'ORDER BY al_serial';
-		$ret = $this->selectRecord($queryStr, array(), $row);*/
-		
 		$serial = 0;
 		$queryStr  = 'SELECT min(al_serial) as m FROM _access_log ';
 		$ret = $this->selectRecord($queryStr, array(), $row);

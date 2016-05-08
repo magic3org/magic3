@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_analyzeDb.php 4167 2011-06-02 11:59:31Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -27,9 +27,18 @@ class admin_analyzeDb extends BaseDb
 	 */
 	function getOldAccessLog(&$row)
 	{
-		$queryStr  = 'SELECT * FROM _access_log ';
+/*		$queryStr  = 'SELECT * FROM _access_log ';
 		$queryStr .=   'ORDER BY al_serial';
 		$ret = $this->selectRecord($queryStr, array(), $row);
+		return $ret;*/
+		$serial = 0;
+		$queryStr  = 'SELECT min(al_serial) as m FROM _access_log ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $serial = $row['m'];
+		
+		$queryStr  = 'SELECT * FROM _access_log ';
+		$queryStr .=   'WHERE al_serial = ?';
+		$ret = $this->selectRecord($queryStr, array($serial), $row);
 		return $ret;
 	}
 	/**
