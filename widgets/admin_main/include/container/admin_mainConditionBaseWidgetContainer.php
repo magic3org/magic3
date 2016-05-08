@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -21,6 +21,7 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 	protected $_mainDb;
 	protected $_openBy;				// ウィンドウオープンタイプ
 	const BREADCRUMB_TITLE	= '運用状況';		// パンくずリストトップタイトル
+	const DIR_NAME_AWSTATS	= 'awstats';		// Awstatsディレクトリ名
 	// 画面
 	const TASK_OPELOG	= 'opelog';			// 運用ログ一覧
 	const TASK_OPELOG_DETAIL 	= 'opelog_detail';		// 運用ログ詳細
@@ -262,11 +263,17 @@ class admin_mainConditionBaseWidgetContainer extends admin_mainBaseWidgetContain
 	 */
 	function getAwstatsUrl()
 	{
-		$path = $this->gSystem->getSystemConfig(self::CF_AWSTATS_DATA_PATH);
-		if (empty($path)) return '';
+		// Awstatsアクセス用のURLを作成
+		$toolUrl = $this->gEnv->getRootUrl() . '/' . M3_DIR_NAME_TOOLS . '/' . self::DIR_NAME_AWSTATS;
 		
-		$awstatsDataPath = rel2abs($path, $this->gEnv->getRootUrl());
-		return $awstatsDataPath;
+		// BASIC認証解除用のURLに変換
+		// BASIC認証用のユーザ、パスワードはDB接続情報と同じ
+		$user = M3_DB_CONNECT_USER;		// 管理ツールアカウント
+		$pwd = M3_DB_CONNECT_PASSWORD;	// 管理ツールパスワード
+		list($preUrl, $postUrl) = explode('//', $toolUrl);
+		$toolUrl = $preUrl . '//' . $user . ':' . $pwd . '@' . $postUrl;
+		
+		return $toolUrl;
 	}
 }
 ?>
