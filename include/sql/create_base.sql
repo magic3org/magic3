@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2015 Magic3 Project.
+-- * @copyright  Copyright 2006-2016 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -371,6 +371,7 @@ CREATE TABLE _access_log (
     al_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- アクセス日時
     PRIMARY KEY          (al_serial)
 ) ENGINE=innodb;
+ALTER TABLE _access_log ADD INDEX (al_dt);
 
 -- ウィジェット実行ログトラン
 DROP TABLE IF EXISTS _widget_log;
