@@ -371,7 +371,7 @@ CREATE TABLE _access_log (
     al_dt                TIMESTAMP      DEFAULT '0000-00-00 00:00:00' NOT NULL,      -- アクセス日時
     PRIMARY KEY          (al_serial)
 ) ENGINE=innodb;
-ALTER TABLE _access_log ADD INDEX (al_dt);
+CREATE INDEX index__access_log_on_al_dt ON _access_log(al_dt);
 
 -- ウィジェット実行ログトラン
 DROP TABLE IF EXISTS _widget_log;
