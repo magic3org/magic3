@@ -1063,6 +1063,7 @@ CREATE TABLE _analyze_page_view (
     PRIMARY KEY          (ap_serial),
     UNIQUE               (ap_type,      ap_url,   ap_path, ap_date,   ap_hour)
 ) ENGINE=innodb;
+CREATE INDEX index__analyze_page_view_on_ap_date ON _analyze_page_view(ap_date);
 
 -- サイト解析日時カウントトラン
 DROP TABLE IF EXISTS _analyze_daily_count;
