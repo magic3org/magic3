@@ -1109,6 +1109,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			if ($isDefaltContent) $relatedContent = $defaltContentRow['be_related_content'];
 			if (!empty($relatedContent)){
 				$contentIdArray = array_map('trim', explode(',', $relatedContent));
+				$contentIdArray = array_map('intval', $contentIdArray);		// 不正なIDを除く(2016/5/13)
 				$ret = self::$_mainDb->getEntryItem($contentIdArray, $this->_langId, $rows);
 				if ($ret){
 					if ($this->_renderType == M3_RENDER_JOOMLA_NEW){		// Joomla!新型テンプレートのとき
