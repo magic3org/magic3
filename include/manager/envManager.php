@@ -124,6 +124,12 @@ class EnvManager extends Core
 		// 親クラスを呼び出す
 		parent::__construct();
 		
+		// パラメータエラーチェック
+		if (strEndsWith(M3_SYSTEM_ROOT_URL, '/')){
+			$errMsg = '設定の不正: M3_SYSTEM_ROOT_URLの値の最後の「/」を削除してください。ファイル=include/siteDef.php';
+ 			$this->gLog->error(__METHOD__, $errMsg);
+		}
+			
 		// データ初期化
 		$this->accessPath = '';		// アクセスポイントパス
 		$this->accessDir = '';		// アクセスポイントディレクトリ
