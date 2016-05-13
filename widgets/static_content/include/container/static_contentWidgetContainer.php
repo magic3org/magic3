@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -124,7 +124,6 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 				if ($this->gEnv->isCurrentUserLogined() || !$row['cn_user_limited']) $showWidget = true;
 
 				$buttonType = 1;			// 編集ボタンタイプ(編集)
-				//$contentId = $row['cn_id'];
 			}
 		}
 		// ウィジェットの表示
@@ -152,9 +151,10 @@ class static_contentWidgetContainer extends BaseWidgetContainer
 				$this->tmpl->addVar("_widget", "button_list", $buttonList);
 			} else {		// システム運用者以上の場合はカウントしない
 				// ビューカウントを更新
-				$currentDay = date("Y/m/d");		// 日
-				$currentHour = (int)date("H");		// 時間
-				$this->gInstance->getAnalyzeManager()->updateContentViewCount(self::VIEW_CONTENT_TYPE, $row['cn_serial'], $currentDay, $currentHour);
+//				$currentDay = date("Y/m/d");		// 日
+//				$currentHour = (int)date("H");		// 時間
+				//$this->gInstance->getAnalyzeManager()->updateContentViewCount(self::VIEW_CONTENT_TYPE, $row['cn_serial'], $currentDay, $currentHour);
+				$this->gInstance->getAnalyzeManager()->logContentView(self::VIEW_CONTENT_TYPE, $row['cn_serial'], $row['cn_id']);
 			}
 		} else {
 			// 出力抑止
