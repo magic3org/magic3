@@ -468,7 +468,7 @@ class AccessManager extends Core
 		// アクセスログのシリアルNoを保存
 		$this->_accessLogSerialNo = $this->db->accessLog($userId, $cookieVal, $session, $this->_clientIp, $method, $uri, $referer, $request, $agent, $language, $path, $isCookie, $isCrawler, $isCmd);
 		
-		// 即時アクセス解析
+		// ##### 即時アクセス解析 #####
 		if (M3_SYSTEM_REALTIME_ANALYTICS) $gInstanceManager->getAnalyzeManager()->realtimeAnalytics($this->_accessLogSerialNo, $cookieVal);
 	}
 	/**

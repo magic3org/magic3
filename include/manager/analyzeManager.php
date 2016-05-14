@@ -22,6 +22,7 @@ class AnalyzeManager extends Core
 	private $analyticsDb;
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const MAX_CALC_DAYS = 30;					// 最大集計日数
+	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.2/';		// クローラー解析スクリプトディレクトリ
 	
 	/**
 	 * コンストラクタ
@@ -344,6 +345,7 @@ class AnalyzeManager extends Core
 	function realtimeAnalytics($logSerial, $cookieValue)
 	{
 		global $gRequestManager;
+		global $gEnvManager;
 		
 		$uri		= $gRequestManager->trimServerValueOf('REQUEST_URI');
 		$referer	= $gRequestManager->trimServerValueOf('HTTP_REFERER');
@@ -356,7 +358,7 @@ class AnalyzeManager extends Core
 		if (!$ret) $isFirstAccess = true;
 		
 		// クローラーかどうかをチェック
-		$isCrawler = false;
+/*		$isCrawler = false;
 		if (empty($agent)){		// ユーザエージェントが設定されていないものはクローラーと見なす
 			$isCrawler = true;
 		} else {
@@ -367,9 +369,20 @@ class AnalyzeManager extends Core
 					break;
 				}
 			}
-		}
+		}*/
+		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'CrawlerDetect.php');
+		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/AbstractProvider.php');
+		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Crawlers.php');
+		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Exclusions.php');
+		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Headers.php');
+		
+		$CrawlerDetect = new Jaybizzle\CrawlerDetect\CrawlerDetect;
+		$isCrawler = false;
+		if ($CrawlerDetect->isCrawler()) $isCrawler = true;
+		
 		// アクセスログを更新
 		$ret = $this->analyticsDb->updateAccessLog($logSerial, $isFirstAccess, $isCrawler);
+		
 		return $ret;
 	}
 	/**
