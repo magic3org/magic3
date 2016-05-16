@@ -13,24 +13,12 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-
 /* globals MediaRecorder */
-
 var mediaSource = new MediaSource();
 mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
 var mediaRecorder;
 var recordedBlobs;
 var sourceBuffer;
-
-var gumVideo = document.querySelector('video#gum');
-var recordedVideo = document.querySelector('video#recorded');
-
-var recordButton = document.querySelector('button#record');
-var playButton = document.querySelector('button#play');
-var downloadButton = document.querySelector('button#download');
-//recordButton.onclick = toggleRecording;
-//playButton.onclick = play;
-//downloadButton.onclick = download;
 
 // window.isSecureContext could be used for Chrome
 var isSecureOrigin = location.protocol === 'https:' ||
@@ -54,13 +42,21 @@ var constraints = {
 
 navigator.getUserMedia(constraints, successCallback, errorCallback);
 
+var gumVideo;
+var recordedVideo;
+var recordButton;
+var playButton;
+var downloadButton;
+
 function successCallback(stream) {
   console.log('getUserMedia() got stream: ', stream);
   window.stream = stream;
   if (window.URL) {
-    gumVideo.src = window.URL.createObjectURL(stream);
+  //  gumVideo.src = window.URL.createObjectURL(stream);
+    gumVideo.attr('src', window.URL.createObjectURL(stream));
   } else {
-    gumVideo.src = stream;
+  //  gumVideo.src = stream;
+    gumVideo.attr('src', stream);
   }
 }
 
@@ -97,7 +93,7 @@ function handleStop(event) {
   console.log('Recorder stopped: ', event);
 }
 
-function toggleRecording() {
+/*function toggleRecording() {
   if (recordButton.textContent === 'Start Recording') {
     startRecording();
   } else {
@@ -106,7 +102,7 @@ function toggleRecording() {
     playButton.disabled = false;
     downloadButton.disabled = false;
   }
-}
+}*/
 
 // The nested try blocks will be simplified when Chrome 47 moves to Stable
 function startRecording() {
@@ -133,7 +129,8 @@ function startRecording() {
     }
   }
   console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
-  recordButton.textContent = 'Stop Recording';
+//  recordButton.textContent = 'Stop Recording';
+  recordButton.text("Stop Recording");
   playButton.disabled = true;
   downloadButton.disabled = true;
   mediaRecorder.onstop = handleStop;
@@ -148,12 +145,12 @@ function stopRecording() {
   recordedVideo.controls = true;
 }
 
-function play() {
+/*function play() {
   var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
   recordedVideo.src = window.URL.createObjectURL(superBuffer);
-}
+}*/
 
-function download() {
+/*function download() {
   var blob = new Blob(recordedBlobs, {type: 'video/webm'});
   var url = window.URL.createObjectURL(blob);
   var a = document.createElement('a');
@@ -166,12 +163,45 @@ function download() {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   }, 100);
-}
-
+}*/
 $(function(){
-  recordButton.onclick = toggleRecording;
-  playButton.onclick = play;
-  downloadButton.onclick = download;
+  gumVideo = $('video#gum');
+  recordedVideo = $('video#recorded');
+
+  recordButton = $('button#record').click(function(){
+//    if (recordButton.textContent === 'Start Recording') {
+    if ($(this).text() == "Start Recording") {
+      startRecording();
+    } else {
+      stopRecording();
+//      recordButton.textContent = 'Start Recording';
+      $(this).text("Start Recording");
+      playButton.disabled = false;
+      downloadButton.disabled = false;
+    }
+  });
+  playButton = $('button#play').click(function(){
+    var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
+    recordedVideo.src = window.URL.createObjectURL(superBuffer);
+  });
+  downloadButton = $('button#download').click(function(){
+    var blob = new Blob(recordedBlobs, {type: 'video/webm'});
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'test.webm';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+  });
+
+//  recordButton.onclick = toggleRecording;
+//  playButton.onclick = play;
+//  downloadButton.onclick = download;
 });
 //]]>
 </script>
@@ -196,5 +226,25 @@ $(function(){
 
 </div>
 <!--<script src="js/main.js"></script>-->
+<script type="text/javascript">
+//<![CDATA[
 
+/* globals MediaRecorder */
+/*var mediaSource = new MediaSource();
+mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
+var mediaRecorder;
+var recordedBlobs;
+var sourceBuffer;*/
+/*
+var gumVideo = document.querySelector('video#gum');
+var recordedVideo = document.querySelector('video#recorded');
+
+var recordButton = document.querySelector('button#record');
+var playButton = document.querySelector('button#play');
+var downloadButton = document.querySelector('button#download');
+*/
+
+
+//]]>
+</script>
 </patTemplate:tmpl>
