@@ -28,11 +28,11 @@ class ScriptLibInfo
 												'2.1'	=> 'jquery-2.1.4.min.js',
 												'2.2'	=> 'jquery-2.2.1.min.js');
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
-	
+
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
 	const LIB_SET_CKEDITOR_M3_TOOLBAR	= 'ckeditor_m3toolbar';		// CKEditorのツールバー用ライブラリ
-	
+
 	// ベースライブラリ
 	const LIB_JQUERY				= 'jquery';
 	const LIB_JQUERY_UI				= 'jquery-ui';
@@ -50,14 +50,15 @@ class ScriptLibInfo
 	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
 	const LIB_NOBOOTSTRAP			= 'nobootstrap';			// Bootstrapを使用しない場合の管理画面用ライブラリ
 	const LIB_SOCKETIO				= 'socketio';				// socket.io
-	
+	const LIB_WEBRTC					= 'webrtc';				// WebRTC
+
 	// Bootstrapプラグイン
 	const LIB_BOOTSTRAP_DATETIMEPICKER		= 'bootstrap.datetimepicker';
-	
+
 	// スマートフォン用jQueryライブラリ
 	const LIB_JQUERYS				= 'jquerys';
 	const LIB_JQUERYS_MOBILE		= 'jquery.mobile';
-		
+
 	// jQueryプラグイン
 	const LIB_JQUERY_EASING			= 'jquery.easing';
 	const LIB_JQUERY_JCAROUSEL		= 'jquery.jcarousel';
@@ -100,18 +101,18 @@ class ScriptLibInfo
 	const LIB_JQUERY_UPLOADFILE		= 'jquery.uploadfile';
 	const LIB_JQUERY_JCROP			= 'jquery.jcrop';
 	const LIB_JQUERY_NUMERIC		= 'jquery.numeric';
-	
+
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
 	const LIB_JQUERY_M3_DROPDOWN		= 'jquery.m3dropdown';		// ドロップダウンメニュー
 	const LIB_JQUERY_M3_STICKHEADER		= 'jquery.m3stickyheader';		// スクロールバー付きテーブル
-	
+
 	// CodeMirror
 	const LIB_CODEMIRROR_JAVASCRIPT	= 'codemirror.javascript';		// CodeMirror Javascript
-	
+
 	// Bootstrapプラグインバージョン
 	const BOOTSTRAP_DATETIMEPICKER_VER	= '4.0.0';
-	
+
 	// jQueryプラグインバージョン
 	const JQUERY_JCAROUSEL_VER		= '0.2.8';
 	const JQUERY_THICKBOX_VER		= '3.1';
@@ -142,10 +143,10 @@ class ScriptLibInfo
 	const JQUERY_NUMERIC_VER		= '1.4.1';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
-	
+
 	// ライブラリディレクトリ
 	const JQUERY_JQPLOT_DIR			= 'jquery/jqplot1.0.8';
-	
+
 	// jQuery UI
 	const LIB_JQUERY_UI_WIDGETS_ACCORDION		= 'jquery-ui.accordion';		// Widgets Accordion
 	const LIB_JQUERY_UI_WIDGETS_AUTOCOMPLETE	= 'jquery-ui.autocomplete';		// Widgets Autocomplete
@@ -156,11 +157,11 @@ class ScriptLibInfo
 	const LIB_JQUERY_UI_WIDGETS_SLIDER			= 'jquery-ui.slider';			// Widgets Slider
 	const LIB_JQUERY_UI_WIDGETS_TABS			= 'jquery-ui.tabs';				// Widgets Tabs
 	const LIB_JQUERY_UI_EFFECTS					= 'jquery-ui.effects';			// Effects
-	
+
 	// Bootstrapプラグイン用のファイル
 	const BOOTSTRAP_DATETIMEPICKER_FILENAME	= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.js';
 	const BOOTSTRAP_DATETIMEPICKER_CSS		= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.min.css';
-	
+
 	// jQueryプラグイン用のファイル
 	const JQUERY_EASING_FILENAME		= 'jquery/jquery.easing.1.3.js';
 	//const JQUERY_JCAROUSEL_FILENAME		= 'jquery/jquery.jcarousel.0.2.4.min.js';		// jQuery1.4.2対応版
@@ -229,14 +230,14 @@ class ScriptLibInfo
 	const JQUERY_JCROP_FILENAME			= 'jquery/jcrop0.9.12/jquery.Jcrop.js';
 	const JQUERY_JCROP_CSS				= 'jquery/jcrop0.9.12/jquery.Jcrop.css';
 	const JQUERY_NUMERIC_FILENAME		= 'jquery/jquery.numeric.min.js';
-	
+
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
 	const JQUERY_M3_DROPDOWN_FILENAME	= 'jquery/jquery.m3dropdown.js';	// ドロップダウンメニュー
 	const JQUERY_M3_DROPDOWN_CSS		= 'jquery/jquery.m3dropdown.css';	// ドロップダウンメニュー
 	const JQUERY_M3_STICKHEADER_FILENAME		= 'jquery/jquery.m3stickyheader.js';	// スクロールバー付きテーブル
 	const JQUERY_M3_STICKHEADER_OTHER_FILENAME	= 'jquery/jquery.ba-throttle-debounce.min.js';	// スクロールバー付きテーブル用ライブラリ
-	
+
 	// ライブラリの公式サイトのURL
 	const BOOTSTRAP_DATETIMEPICKER_URL	= 'https://github.com/Eonasdan/bootstrap-datetimepicker';
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
@@ -269,10 +270,10 @@ class ScriptLibInfo
 	const JQUERY_UPLOADFILE_URL			= 'https://github.com/hayageek/jquery-upload-file/';
 	const JQUERY_JCROP_URL				= 'http://deepliquid.com/content/Jcrop.html';
 	const JQUERY_NUMERIC_URL			= 'http://www.texotela.co.uk/code/jquery/numeric/';
-	
+
 	// ディレクトリ名
 	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
-	
+
 	// ファイル名
 	//const JQUERY_L_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery最新版(v1.6.4)		// 2012/10/13～
 	//const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.8.2.min.js';			// JQuery UI Core (Core)
@@ -281,7 +282,7 @@ class ScriptLibInfo
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
 	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
 	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor
-	
+
 	// elFinder v2.0版
 /*	const ELFINDER_FILENAME			= 'elfinder-2.0/js/elfinder.full.js';		// elFinder
 	const ELFINDER_LANG_FILENAME	= 'elfinder-2.0/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
@@ -310,6 +311,7 @@ class ScriptLibInfo
 	const JSCALENDAR_LANG_FILENAME	= 'jscalendar-1.0/lang/calendar-ja.js';		// jscalendar言語ファイル
 	const JSCALENDAR_SETUP_FILENAME	= 'jscalendar-1.0/calendar-setup.js';		// jscalendarセットアップファイル
 	const JSCALENDAR_CSS			= 'jscalendar-1.0/calendar-win2k-1.css';	// jscalendarCSS
+	const WEBRTC_ADAPTER_FILENAME	= 'adapter-1.1.0.js';				// WebRTC
 
 	// Bootstrapライブラリ
 	const BOOTSTRAP_FILENAME		= 'bootstrap-3.3.6/js/bootstrap.min.js';			// bootstrap
@@ -335,7 +337,7 @@ class ScriptLibInfo
 	const CODEMIRROR_FILENAME				= 'codemirror-3.1/lib/codemirror.js';				// CodeMirror
 	const CODEMIRROR_CSS					= 'codemirror-3.1/lib/codemirror.css';				// CodeMirror
 	const CODEMIRROR_JAVASCRIPT_FILENAME	= 'codemirror-3.1/mode/javascript/javascript.js';	// CodeMirror Javascript
-	
+
 	// jQuery UI用ファイル
 /*	const JQUERY_UI_WIDGETS_ACCORDION_FILENAME		= 'jquery/ui/1.8.2/jquery.ui.accordion.min.js';		// Widgets Accordion
 	const JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME	= 'jquery/ui/1.8.2/jquery.ui.autocomplete.min.js';		// Widgets Autocomplete
@@ -358,7 +360,7 @@ class ScriptLibInfo
 	const JQUERY_UI_WIDGETS_TABS_FILENAME			= 'jquery/ui/1.10.1/jquery.ui.tabs.min.js';				// Widgets Tabs
 	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.10.1/jquery.effects.min.js';					// Effects
 	*/
-	
+
 	// jQuery UI 1.9.2
 	const JQUERY_UI_WIDGETS_ACCORDION_FILENAME		= 'jquery/ui/1.9.2/jquery.ui.accordion.min.js';		// Widgets Accordion
 	const JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME	= 'jquery/ui/1.9.2/jquery.ui.autocomplete.min.js';		// Widgets Autocomplete
@@ -370,7 +372,7 @@ class ScriptLibInfo
 	const JQUERY_UI_WIDGETS_SLIDER_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.slider.min.js';			// Widgets Slider
 	const JQUERY_UI_WIDGETS_TABS_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.tabs.min.js';				// Widgets Tabs
 	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.9.2/jquery.effects.min.js';					// Effects
-	
+
 	// スマートフォン用jQueryファイル
 	//const JQUERYS_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery MobileはjQuery v1.6以上が必要
 	const JQUERYS_FILENAME			= 'jquery-1.7.2.min.js';					// JQuery Mobile v1.3はjQuery v1.7以上が必要
@@ -384,7 +386,7 @@ class ScriptLibInfo
 	// ##### 外部ライブラリ #####
 	const LIB_GOOGLEMAPS			= 'googlemaps';
 	const GOOGLEMAPS_FILENAME		= 'http://maps.google.com/maps/api/js?sensor=true';
-	
+
 	/**
 	 * コンストラクタ
 	 */
@@ -431,7 +433,8 @@ class ScriptLibInfo
 		if (!isset(self::$libs)){
 			self::$libs = array(
 						self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
-						self::LIB_SOCKETIO				=>	array(	'script' 	=> ''/*空文字列は直前で作成*/),			// socket.io
+						self::LIB_SOCKETIO			=>	array(	'script' 	=> ''/*空文字列は直前で作成*/),			// socket.io
+						self::LIB_WEBRTC				=>	array(	'script' 	=> array(self::WEBRTC_ADAPTER_FILENAME)),			// WebRTC
 						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
 						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
@@ -459,13 +462,13 @@ class ScriptLibInfo
 																							self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS)),*/
 						self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
 																	'css'		=> array(self::NOBOOTSTRAP_CSS)),
-						
+
 						// Bootstrapライブラリ
 						self::LIB_BOOTSTRAP_DATETIMEPICKER		=>	array(	'script' 	=> array(self::BOOTSTRAP_DATETIMEPICKER_FILENAME),		// bootstrap.datetimepicker用
 																			'css'		=> array(self::BOOTSTRAP_DATETIMEPICKER_CSS),
 																			'url'		=> self::BOOTSTRAP_DATETIMEPICKER_URL,
 																			'version'	=> self::BOOTSTRAP_DATETIMEPICKER_VER),
-													
+
 						// jQueryライブラリ
 						self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル
 						self::LIB_JQUERY_JCAROUSEL		=>	array(	'script' 	=> array(self::JQUERY_JCAROUSEL_FILENAME),
@@ -504,7 +507,7 @@ class ScriptLibInfo
 																	'version'	=> self::JQUERY_PRETTYPHOTO_VER),
 						self::LIB_JQUERY_QTIP			=>	array(	'script' 	=> array(self::JQUERY_QTIP_FILENAME),	// jquery.qtip用のファイル
 																	'url'		=> self::JQUERY_QTIP_URL,
-																	'version'	=> self::JQUERY_QTIP_VER),											
+																	'version'	=> self::JQUERY_QTIP_VER),
 						self::LIB_JQUERY_QTIP2			=>	array(	'script' 	=> array(self::JQUERY_QTIP2_FILENAME),	// jquery.qtip2用のファイル
 																	'css'		=> array(self::JQUERY_QTIP2_CSS),
 																	'url'		=> self::JQUERY_QTIP2_URL,
@@ -562,7 +565,7 @@ class ScriptLibInfo
 																	'version'	=> self::JQUERY_BXSLIDER_VER),
 						self::LIB_JQUERY_FITVIDS		=>	array(	'script' 	=> array(self::JQUERY_FITVIDS_FILENAME),		// jquery.fitvids用のファイル
 																	'url'		=> self::JQUERY_FITVIDS_URL,
-																	'version'	=> self::JQUERY_FITVIDS_VER),														
+																	'version'	=> self::JQUERY_FITVIDS_VER),
 						self::LIB_JQUERY_RESPONSIVETABLE	=> array(	'script' 	=> array(self::JQUERY_RESPONSIVETABLE_FILENAME),
 																		'css'		=> array(self::JQUERY_RESPONSIVETABLE_CSS),
 																		'url'		=> self::JQUERY_RESPONSIVETABLE_URL,
@@ -580,29 +583,29 @@ class ScriptLibInfo
 																	'version'	=> self::JQUERY_JCROP_VER),
 						self::LIB_JQUERY_NUMERIC		=> array(	'script' 	=> array(self::JQUERY_NUMERIC_FILENAME),
 																	'url'		=> self::JQUERY_NUMERIC_URL,
-																	'version'	=> self::JQUERY_NUMERIC_VER),																	
-																	
+																	'version'	=> self::JQUERY_NUMERIC_VER),
+
 						// Magic3管理画面専用jQueryプラグイン
 						self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
 						self::LIB_JQUERY_M3_DROPDOWN	=>	array(	'script' 	=> array(self::JQUERY_M3_DROPDOWN_FILENAME),	// ドロップダウンメニュー
-																	'css'		=> array(self::JQUERY_M3_DROPDOWN_CSS)),												
+																	'css'		=> array(self::JQUERY_M3_DROPDOWN_CSS)),
 						self::LIB_JQUERY_M3_STICKHEADER	=>	array(	'script' 	=> array(self::JQUERY_M3_STICKHEADER_OTHER_FILENAME, self::JQUERY_M3_STICKHEADER_FILENAME)),	// スクロールバー付きテーブル
-																
+
 						// その他ライブラリ
 						self::LIB_CODEMIRROR_JAVASCRIPT		=>	array(	'script' 	=> array(self::CODEMIRROR_FILENAME, self::CODEMIRROR_JAVASCRIPT_FILENAME),	// CodeMirror用のファイル
 																		'css'		=> array(self::CODEMIRROR_CSS),
 																		'url'		=> self::CODEMIRROR_URL,
 																		'version'	=> self::CODEMIRROR_VER)
 																	);
-																
+
 			// WYSIWYGエディターに合わせてライブラリを設定
 			self::$libs[self::LIB_WYSIWYG_EDITOR] = self::$libs[self::getWysiwygEditorLibId()];		// LIB_FCKEDITORまたはLIB_CKEDITOR
-					
+
 			// 使用するjQueryバージョンに合わせてファイルを追加
 			self::$libs[self::LIB_JQUERY] = array(	'script' => array(self::getJQueryFilename(0)));	// jquery
 			self::$libs[self::LIB_JQUERY_UI] = array(	'script' => array(self::JQUERY_UI_CORE_FILENAME));	// jquery ui
 //				self::$libs[self::LIB_JQUERY_UI_PLUS] = array(	'script' => array(self::JQUERY_L_UI_PLUS_FILENAME));	// jquery ui plus(追加分)
-			
+
 			// jQuery UI
 			self::$libs[self::LIB_JQUERY_UI_WIDGETS_ACCORDION]	= array(	'script' => array(self::JQUERY_UI_WIDGETS_ACCORDION_FILENAME));		// Widgets Accordion
 			self::$libs[self::LIB_JQUERY_UI_WIDGETS_AUTOCOMPLETE] = array(	'script' => array(self::JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME));	// Widgets Autocomplete
@@ -615,7 +618,7 @@ class ScriptLibInfo
 			self::$libs[self::LIB_JQUERY_UI_WIDGETS_TABS]			= array(	'script' => array(self::JQUERY_UI_WIDGETS_TABS_FILENAME));			// Widgets Tabs
 			self::$libs[self::LIB_JQUERY_UI_EFFECTS]				= array(	'script' => array(self::JQUERY_UI_EFFECTS_FILENAME));				// Effects
 
-		
+
 			// スマートフォン用jQueryライブラリ
 			self::$libs[self::LIB_JQUERYS] 			= array(	'script' => array(self::getJQueryFilename(10)));		// スマートフォン用jQuery
 			self::$libs[self::LIB_JQUERYS_MOBILE]		= array(	'script' 	=> array(self::JQUERYS_MOBILE_FILENAME),	// JQuery Mobile
@@ -625,7 +628,7 @@ class ScriptLibInfo
 		}
 		return self::$libs;
 	}
-	
+
 	/**
 	 * 言語ファイル取得
 	 *
@@ -635,12 +638,12 @@ class ScriptLibInfo
 	static function getLangScript($lib)
 	{
 		global $gEnvManager;
-		
+
 		$langId = $gEnvManager->getCurrentLanguage();
 		$scriptsPath = $gEnvManager->getScriptsPath();
 		$scriptFiles = array();
 		$scripts = self::$libs[$lib]['script_lang'];
-		
+
 		if (isset($scripts)){
 			for ($i = 0; $i < count($scripts); $i++){
 				$scriptInfo = $scripts[$i];
@@ -679,7 +682,7 @@ class ScriptLibInfo
 										self::LIB_JQUERY_FULLCALENDAR_GOOGLE	=> array(self::LIB_MOMENT,		self::LIB_JQUERY_FULLCALENDAR),		// MomentをFullCalendarより先に読み込む
 										self::LIB_BOOTSTRAP_DATETIMEPICKER		=> array(self::LIB_MOMENT)
 									);
-		
+
 		return $dependentLib[$lib];
 	}
 	/**
@@ -706,7 +709,7 @@ class ScriptLibInfo
 	static function getJQueryUiInfo()
 	{
 		static $jQueryUiInfo;		// jQuery UIの情報
-		
+
 		if (!isset($jQueryUiInfo)){
 /*			if (self::$jQueryVer == 0){		// デフォルトのとき
 				$jQueryUiInfo = array();
@@ -799,15 +802,15 @@ class ScriptLibInfo
 	static function generateLib($libId)
 	{
 		global $gEnvManager;
-		
+
 		$lib = array();
-		
+
 		switch ($libId){
 		case self::LIB_SOCKETIO:
 			// Socket.io用のURLを作成
 			$scriptUrl = $gEnvManager->getRealtimeServerUrl() . '/' . self::SOCKETIO_FILENAME;
 			$lib['script'] = array($scriptUrl);
-			
+
 			// ライブラリ情報更新
 			self::$libs[self::LIB_SOCKETIO] = $lib;
 			break;
