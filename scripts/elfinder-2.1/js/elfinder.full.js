@@ -506,7 +506,7 @@ window.elFinder = function(node, opts) {
 	 *
 	 * @type String
 	 **/
-	this.cssClass = 'ui-helper-reset ui-helper-clearfix ui-widget ui-widget-content ui-corner-all elfinder elfinder-'+(this.direction == 'rtl' ? 'rtl' : 'ltr')+' '+this.options.cssClass;
+	this.cssClass = 'ui-helper-reset ui-helper-clearfix ui-widget ui-widget-content elfinder elfinder-'+(this.direction == 'rtl' ? 'rtl' : 'ltr')+' '+this.options.cssClass;
 
 	/**
 	 * Method to store/fetch data
@@ -583,7 +583,7 @@ window.elFinder = function(node, opts) {
 		helper     : function(e, ui) {
 			var element = this.id ? $(this) : $(this).parents('[id]:first'),
 				helper  = $('<div class="elfinder-drag-helper"><span class="elfinder-drag-helper-icon-plus"/></div>'),
-				icon    = function(mime) { return '<div class="elfinder-cwd-icon '+self.mime2class(mime)+' ui-corner-all"/>'; },
+				icon    = function(mime) { return '<div class="elfinder-cwd-icon '+self.mime2class(mime)+'"/>'; },
 				hashes, l;
 			
 			self.trigger('dragstart', {target : element[0], originalEvent : e});
@@ -4630,7 +4630,7 @@ elFinder.prototype.resources = {
 		symlink    : '<span class="elfinder-symlink"/>',
 		navicon    : '<span class="elfinder-nav-icon"/>',
 		navspinner : '<span class="elfinder-navbar-spinner"/>',
-		navdir     : '<div class="elfinder-navbar-wrapper"><span id="{id}" class="ui-corner-all elfinder-navbar-dir {cssclass}"><span class="elfinder-navbar-arrow"/><span class="elfinder-navbar-icon" {style}/>{symlink}{permissions}{name}</span><div class="elfinder-navbar-subtree"/></div>'
+		navdir     : '<div class="elfinder-navbar-wrapper"><span id="{id}" class="elfinder-navbar-dir {cssclass}"><span class="elfinder-navbar-arrow"/><span class="elfinder-navbar-icon" {style}/>{symlink}{permissions}{name}</span><div class="elfinder-navbar-subtree"/></div>'
 		
 	},
 	
@@ -4771,7 +4771,7 @@ $.fn.dialogelfinder = function(opts) {
 		
 		var doc     = $(document),
 			toolbar = $('<div class="ui-widget-header dialogelfinder-drag ui-corner-top">'+(opts.title || 'Files')+'</div>'),
-			button  = $('<a href="#" class="dialogelfinder-drag-close ui-corner-all"><span class="ui-icon ui-icon-closethick"/></a>')
+			button  = $('<a href="#" class="dialogelfinder-drag-close"><span class="ui-icon ui-icon-closethick"/></a>')
 				.appendTo(toolbar)
 				.click(function(e) {
 					e.preventDefault();
@@ -5277,7 +5277,7 @@ $.fn.elfinderbutton = function(cmd) {
 		if ($.isArray(cmd.variants)) {
 			button.addClass('elfinder-menubutton');
 			
-			menu = $('<div class="ui-widget ui-widget-content elfinder-button-menu ui-corner-all"/>')
+			menu = $('<div class="ui-widget ui-widget-content elfinder-button-menu"/>')
 				.hide()
 				.appendTo(button)
 				.zIndex(12+button.zIndex())
@@ -5324,7 +5324,7 @@ $.fn.elfinderbutton = function(cmd) {
 $.fn.elfindercontextmenu = function(fm) {
 	
 	return this.each(function() {
-		var menu = $(this).addClass('ui-helper-reset ui-widget ui-state-default ui-corner-all elfinder-contextmenu elfinder-contextmenu-'+fm.direction)
+		var menu = $(this).addClass('ui-helper-reset ui-widget ui-state-default elfinder-contextmenu elfinder-contextmenu-'+fm.direction)
 				.hide()
 				.appendTo('body')
 				.delegate('.elfinder-contextmenu-item', 'mouseenter mouseleave', function() {
@@ -5392,7 +5392,7 @@ $.fn.elfindercontextmenu = function(fm) {
 							}
 							node = item(cmd.title, cmd.name, function() {});
 							
-							submenu = $('<div class="ui-corner-all elfinder-contextmenu-sub"/>')
+							submenu = $('<div class="elfinder-contextmenu-sub"/>')
 								.appendTo(node.append('<span class="elfinder-contextmenu-arrow"/>'));
 							
 							hover = function(){
@@ -5625,7 +5625,7 @@ $.fn.elfindercwd = function(fm, options) {
 			 * @type Object
 			 **/
 			templates = {
-				icon : '<div id="{hash}" class="'+clFile+' {permsclass} {dirclass} ui-corner-all" title="{tooltip}"><div class="elfinder-cwd-file-wrapper ui-corner-all"><div class="elfinder-cwd-icon {mime} ui-corner-all" unselectable="on" {style}/>{marker}</div><div class="elfinder-cwd-filename" title="{name}">{name}</div></div>',
+				icon : '<div id="{hash}" class="'+clFile+' {permsclass} {dirclass}" title="{tooltip}"><div class="elfinder-cwd-file-wrapper"><div class="elfinder-cwd-icon {mime}" unselectable="on" {style}/>{marker}</div><div class="elfinder-cwd-filename" title="{name}">{name}</div></div>',
 				row  : '<tr id="{hash}" class="'+clFile+' {permsclass} {dirclass}" title="{tooltip}"><td><div class="elfinder-cwd-file-wrapper"><span class="elfinder-cwd-icon {mime}"/>{marker}<span class="elfinder-cwd-filename">{name}</span></div></td><td>{perms}</td><td>{date}</td><td>{size}</td><td>{kind}</td></tr>'
 			},
 			
@@ -6781,8 +6781,8 @@ $.fn.elfinderdialog = function(opts) {
 			})
 		}
 		dialog.prepend(
-			$('<div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">'+opts.title+'</div>')
-				.prepend($('<a href="#" class="ui-dialog-titlebar-close ui-corner-all"><span class="ui-icon ui-icon-closethick"/></a>')
+			$('<div class="ui-dialog-titlebar ui-widget-header ui-helper-clearfix">'+opts.title+'</div>')
+				.prepend($('<a href="#" class="ui-dialog-titlebar-close"><span class="ui-icon ui-icon-closethick"/></a>')
 					.mousedown(function(e) {
 						e.preventDefault();
 						self.elfinderdialog('close');
@@ -6793,7 +6793,7 @@ $.fn.elfinderdialog = function(opts) {
 		
 			
 		$.each(opts.buttons, function(name, cb) {
-			var button = $('<button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+name+'</span></button>')
+			var button = $('<button type="button" class="ui-button ui-widget ui-state-default ui-button-text-only"><span class="ui-button-text">'+name+'</span></button>')
 				.click($.proxy(cb, self[0]))
 				.hover(function(e) { $(this)[e.type == 'mouseenter' ? 'focus' : 'blur']() })
 				.focus(function() { $(this).addClass(clhover) })
@@ -6994,7 +6994,7 @@ $.fn.elfinderoverlay = function(opts) {
 $.fn.elfinderpanel = function(fm) {
 	
 	return this.each(function() {
-		var panel = $(this).addClass('elfinder-panel ui-state-default ui-corner-all'),
+		var panel = $(this).addClass('elfinder-panel ui-state-default'),
 			margin = 'margin-'+(fm.direction == 'ltr' ? 'left' : 'right');
 		
 		fm.one('load', function(e) {
@@ -7218,7 +7218,7 @@ $.fn.elfinderplaces = function(fm, opts) {
 			 *
 			 * @type jQuery
 			 **/
-			places = $(this).addClass(fm.res(c, 'tree')+' elfinder-places ui-corner-all')
+			places = $(this).addClass(fm.res(c, 'tree')+' elfinder-places')
 				.hide()
 				.append(wrapper)
 				.appendTo(fm.getUI('navbar'))
@@ -7497,7 +7497,7 @@ $.fn.elfindersortbutton = function(cmd) {
 						menu.slideToggle(100);
 					}
 				}),
-			menu = $('<div class="ui-widget ui-widget-content elfinder-button-menu ui-corner-all"/>')
+			menu = $('<div class="ui-widget ui-widget-content elfinder-button-menu"/>')
 				.hide()
 				.appendTo(button)
 				.zIndex(12+button.zIndex())
@@ -7643,7 +7643,7 @@ $.fn.elfindertoolbar = function(fm, opts) {
 
 		while (l--) {
 			if (panels[l]) {
-				panel = $('<div class="ui-widget-content ui-corner-all elfinder-buttonset"/>');
+				panel = $('<div class="ui-widget-content elfinder-buttonset"/>');
 				i = panels[l].length;
 				while (i--) {
 					if ((cmd = commands[panels[l][i]])) {
@@ -9245,8 +9245,8 @@ elFinder.prototype.commands.help = function() {
 		sec     = 'ui-priority-secondary',
 		lic     = 'elfinder-help-license',
 		tab     = '<li class="ui-state-default ui-corner-top"><a href="#{id}">{title}</a></li>',
-		html    = ['<div class="ui-tabs ui-widget ui-widget-content ui-corner-all elfinder-help">', 
-				'<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">'],
+		html    = ['<div class="ui-tabs ui-widget ui-widget-content elfinder-help">', 
+				'<ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header">'],
 		stpl    = '<div class="elfinder-help-shortcut"><div class="elfinder-help-shortcut-pattern">{pattern}</div> {descrip}</div>',
 		sep     = '<div class="elfinder-help-separator"/>',
 		
@@ -9438,7 +9438,7 @@ elFinder.prototype.commands.info = function() {
 		};
 		
 	this.tpl = {
-		main       : '<div class="ui-helper-clearfix elfinder-info-title"><span class="elfinder-cwd-icon {class} ui-corner-all"/>{title}</div><table class="elfinder-info-tb">{content}</table>',
+		main       : '<div class="ui-helper-clearfix elfinder-info-title"><span class="elfinder-cwd-icon {class}"/>{title}</div><table class="elfinder-info-tb">{content}</table>',
 		itemTitle  : '<strong>{name}</strong><span class="elfinder-info-kind">{kind}</span>',
 		groupTitle : '<strong>{items}: {num}</strong>',
 		row        : '<tr><td>{label} : </td><td>{value}</td></tr>',
@@ -9751,7 +9751,7 @@ elFinder.prototype.commands.netmount = function() {
 					$.each(o[protocol].inputs, function(name, input) {
 						input.attr('name', name);
 						if (input.attr('type') != 'hidden') {
-							input.addClass('ui-corner-all elfinder-netmount-inputs-'+protocol);
+							input.addClass('elfinder-netmount-inputs-'+protocol);
 							content.append($('<tr/>').addClass('elfinder-netmount-tr elfinder-netmount-tr-'+protocol).append($('<td>'+fm.i18n(name)+'</td>')).append($('<td/>').append(input)));
 						} else {
 							input.addClass('elfinder-netmount-inputs-'+protocol);
@@ -10626,7 +10626,7 @@ elFinder.prototype.commands.quicklook = function() {
 						+ (file.mime == 'directory' ? '' : tpl.replace(/\{value\}/, fm.formatSize(file.size)))
 						+ tpl.replace(/\{value\}/, fm.i18n('modify')+': '+ fm.formatDate(file))
 					)
-				icon.addClass('elfinder-cwd-icon ui-corner-all '+fm.mime2class(file.mime));
+				icon.addClass('elfinder-cwd-icon '+fm.mime2class(file.mime));
 
 				if (file.tmb) {
 					$('<img/>')
@@ -11398,7 +11398,7 @@ elFinder.prototype.commands.resize = function() {
 					rhandlec = $('<div class="elfinder-resize-handle"/>'),
 					uiresize = $('<div class="elfinder-resize-uiresize"/>'),
 					uicrop   = $('<div class="elfinder-resize-uicrop"/>'),
-					uibuttonset = '<div class="ui-widget-content ui-corner-all elfinder-buttonset"/>',
+					uibuttonset = '<div class="ui-widget-content elfinder-buttonset"/>',
 					uibutton    = '<div class="ui-state-default elfinder-button"/>',
 					uiseparator = '<span class="ui-widget-content elfinder-toolbar-button-separator"/>',
 					uirotate    = $('<div class="elfinder-resize-rotate"/>'),
@@ -11413,7 +11413,7 @@ elFinder.prototype.commands.resize = function() {
 							rotate.update(rdegree);
 						})),
 					uiprop   = $('<span />'),
-					reset    = $('<div class="ui-state-default ui-corner-all elfinder-resize-reset"><span class="ui-icon ui-icon-arrowreturnthick-1-w"/></div>'),
+					reset    = $('<div class="ui-state-default elfinder-resize-reset"><span class="ui-icon ui-icon-arrowreturnthick-1-w"/></div>'),
 					uitype   = $('<div class="elfinder-resize-type"/>')
 						.append('<input type="radio" name="type" id="'+id+'-resize" value="resize" checked="checked" /><label for="'+id+'-resize">'+fm.i18n('resize')+'</label>')
 						.append('<input type="radio" name="type" id="'+id+'-crop" value="crop" /><label for="'+id+'-crop">'+fm.i18n('crop')+'</label>')
@@ -12555,7 +12555,7 @@ elFinder.prototype.commands.upload = function() {
 				upload({input : input[0]});
 			});
 
-		button = $('<div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"><span class="ui-button-text">'+fm.i18n('selectForUpload')+'</span></div>')
+		button = $('<div class="ui-button ui-widget ui-state-default ui-button-text-only"><span class="ui-button-text">'+fm.i18n('selectForUpload')+'</span></div>')
 			.append($('<form/>').append(input))
 			.hover(function() {
 				button.toggleClass(hover)
@@ -12564,7 +12564,7 @@ elFinder.prototype.commands.upload = function() {
 		dialog = $('<div class="elfinder-upload-dialog-wrapper"/>')
 			.append(button);
 		
-		pastebox = $('<div class="ui-corner-all elfinder-upload-dropbox" contenteditable="true">'+fm.i18n('dropFilesBrowser')+'</div>')
+		pastebox = $('<div class="elfinder-upload-dropbox" contenteditable="true">'+fm.i18n('dropFilesBrowser')+'</div>')
 			.on('paste drop', function(e){
 				paste(e);
 			})
@@ -12587,7 +12587,7 @@ elFinder.prototype.commands.upload = function() {
 			});
 		
 		if (fm.dragUpload) {
-			dropbox = $('<div class="ui-corner-all elfinder-upload-dropbox" contenteditable="true">'+fm.i18n('dropPasteFiles')+'</div>')
+			dropbox = $('<div class="elfinder-upload-dropbox" contenteditable="true">'+fm.i18n('dropPasteFiles')+'</div>')
 				.on('paste', function(e){
 					paste(e);
 				})
