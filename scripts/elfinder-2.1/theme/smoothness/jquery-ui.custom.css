@@ -784,8 +784,11 @@ body .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-	font-family: Verdana,Arial,sans-serif;
-	font-size: 1.1em;
+/*	font-family: Verdana,Arial,sans-serif;*/
+/*	font-size: 1.1em;*/
+	/* modified for Magic3 */
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+	font-size: 1em;
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
@@ -794,7 +797,9 @@ body .ui-tooltip {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-	font-family: Verdana,Arial,sans-serif;
+	/* modified for Magic3 */
+/*	font-family: Verdana,Arial,sans-serif;*/
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 	font-size: 1em;
 }
 .ui-widget-content {
