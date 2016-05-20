@@ -76,4 +76,4 @@ CREATE TABLE user_content (
 DELETE FROM _widgets WHERE wd_id = 'user_content';
 INSERT INTO _widgets
 (wd_id,          wd_name,                wd_type, wd_version, wd_author,                       wd_copyright,                    wd_license, wd_official_level, wd_description,         wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
-('user_content', 'ユーザ作成コンテンツ', 'user',  '0.5.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'ユーザが管理可能なコンテンツを表示', 'jquery-ui,jquery-ui-plus', '', true, true,           2, 2, now(), now());
+('user_content', 'ユーザ作成コンテンツ', 'user',  '0.5.0',    '株式会社 毎日メディアサービス', '株式会社 毎日メディアサービス', 'GPL',      10,                'ユーザが管理可能なコンテンツを表示', 'jquery-ui', '', true, true,           2, 2, now(), now());
