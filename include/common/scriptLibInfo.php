@@ -284,26 +284,27 @@ class ScriptLibInfo
 	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor
 
 	// elFinder v2.0版
-/*	const ELFINDER_FILENAME			= 'elfinder-2.0/js/elfinder.full.js';		// elFinder
-	const ELFINDER_LANG_FILENAME	= 'elfinder-2.0/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER_CSS				= 'elfinder-2.0/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER_OPTION_CSS		= 'elfinder-2.0/css/theme.css';				// elFinder CSS
-	const ELFINDER_THEME_CSS		= 'elfinder-2.0/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-	*/
 	const ELFINDER_FILENAME			= 'elfinder-2.1/js/elfinder.full.js';		// elFinder
 	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER_CSS				= 'elfinder-2.1/css/elfinder.full.css';		// elFinder CSS
 	const ELFINDER_OPTION_CSS		= 'elfinder-2.1/css/theme.css';				// elFinder CSS
 //	const ELFINDER_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
 	const ELFINDER_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
-
+/*
+	const ELFINDER_FILENAME			= 'elfinder-2.1.11/js/elfinder.full.js';		// elFinder
+	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1.11/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER_CSS				= 'elfinder-2.1.11/css/elfinder.full.css';		// elFinder CSS
+	const ELFINDER_OPTION_CSS		= 'elfinder-2.1.11/css/theme.css';				// elFinder CSS
+//	const ELFINDER_THEME_CSS		= 'elfinder-2.1.11/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
+	const ELFINDER_THEME_CSS		= 'elfinder-2.1.11/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
+*/
 	// elFinder v2.1版
-	const ELFINDER21_FILENAME		= 'elfinder-2.1/js/elfinder.full.js';		// elFinder
-	const ELFINDER21_LANG_FILENAME	= 'elfinder-2.1/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER21_CSS			= 'elfinder-2.1/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER21_OPTION_CSS		= 'elfinder-2.1/css/theme.css';				// elFinder CSS
-//	const ELFINDER21_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-	const ELFINDER21_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
+	const ELFINDER21_FILENAME		= 'elfinder-2.1.11/js/elfinder.full.js';		// elFinder
+	const ELFINDER21_LANG_FILENAME	= 'elfinder-2.1.11/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER21_CSS			= 'elfinder-2.1.11/css/elfinder.full.css';		// elFinder CSS
+	const ELFINDER21_OPTION_CSS		= 'elfinder-2.1.11/css/theme.css';				// elFinder CSS
+//	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.11/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
+	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.11/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
 
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
@@ -675,9 +676,9 @@ class ScriptLibInfo
 	{
 		// ##### 依存ライブラリ情報 #####
 		static $dependentLib = array(
-										//self::LIB_ELFINDER	=>	array(self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),
 										self::LIB_ELFINDER						=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 										self::LIB_ELFINDER21					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
+										
 										self::LIB_JQUERY_TIMEPICKER				=> array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 										self::LIB_JQUERY_UPLOADFILE				=> array(self::LIB_JQUERY_FORM),
 										self::LIB_JQUERY_FULLCALENDAR			=> array(self::LIB_MOMENT),
