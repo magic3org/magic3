@@ -3220,7 +3220,7 @@ class SystemDb extends BaseDb
 	 * コンテンツのビューカウントを更新
 	 *
 	 * @param string    $typeId				コンテンツタイプ
-	 * @param int     	$serial				シリアル番号(0のときはコンテンツIDを使用)
+	 * @param int     	$serial				シリアル番号(0のときは旧インターフェイス用)
 	 * @param string    $contentId			コンテンツID
 	 * @param string	$day				日にち
 	 * @param int		$hour				時間(0～23)
@@ -3238,7 +3238,7 @@ class SystemDb extends BaseDb
 		// トランザクション開始
 		$this->startTransaction();
 		
-		if (empty($serial)){		// コンテンツIDで指定のとき
+		if (empty($serial)){		// シリアル番号が0のとき(旧インターフェイス用)
 			// 既にレコードが作成されている場合はレコードを更新
 			$queryStr  = 'SELECT * FROM _view_count ';
 			$queryStr .=   'WHERE vc_type_id = ? ';			// データタイプはデフォルトコンテンツ
@@ -3265,9 +3265,10 @@ class SystemDb extends BaseDb
 			$queryStr  = 'SELECT * FROM _view_count ';
 			$queryStr .=   'WHERE vc_type_id = ? ';			// データタイプはデフォルトコンテンツ
 			$queryStr .=     'AND vc_content_serial = ? ';
+			$queryStr .=     'AND vc_content_id = ? ';
 			$queryStr .=     'AND vc_date = ? ';
 			$queryStr .=     'AND vc_hour = ? ';
-			$ret = $this->selectRecord($queryStr, array($typeId, $serial, $day, $hour), $row);
+			$ret = $this->selectRecord($queryStr, array($typeId, $serial, $contentId, $day, $hour), $row);// コンテンツID抜けていたバグを修正(2016/5/23)
 			if ($ret){
 				$count = $row['vc_count'];
 				$count++;		// カウント数を更新

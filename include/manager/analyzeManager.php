@@ -68,7 +68,7 @@ class AnalyzeManager extends Core
 	 * コンテンツ参照を記録
 	 *
 	 * @param string    $typeId				コンテンツタイプ
-	 * @param int     	$serial				コンテンツシリアル番号(0のときはコンテンツIDを使用)
+	 * @param int     	$serial				コンテンツシリアル番号
 	 * @param string    $contentId			コンテンツID
 	 * @return bool							true=記録、false=記録しない
 	 */
@@ -81,7 +81,7 @@ class AnalyzeManager extends Core
 		$serial = intval($serial);
 		if ($serial <= 0) return false;
 		
-		// コンテンツ参照がしない場合は終了
+		// コンテンツ参照ない場合は終了
 		if (!$this->canRegistContentView()) return false;
 
 		if (!isset($day)) $day = date("Y/m/d");		// 日
