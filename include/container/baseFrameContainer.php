@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -387,7 +387,11 @@ class BaseFrameContainer extends Core
 			// ウィジェット単体オペレーションのときは、ウィジェット情報の単体実行許可があるかどうか判断(管理権限にかかわらず同じ動作)
 			if ($cmd == M3_REQUEST_CMD_DO_WIDGET ||		// ウィジェット単体実行
 				$cmd == M3_REQUEST_CMD_RSS){		// RSS配信
-				if ($this->_db->getWidgetInfo($widgetId, $row)){
+				if (empty($widgetId)){
+					$this->gOpeLog->writeUserAccess(__METHOD__, 'ウィジェットIDが設定されていません。', 2200,
+						'実行処理はキャンセルされました。');
+					return;
+				} else if ($this->_db->getWidgetInfo($widgetId, $row)){			// ウィジェット情報取得
 					if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !$row['wd_enable_operation']){	// ウィジェット単体実行
 						// アクセスエラーのログを残す
 						$this->_db->writeWidgetLog($widgetId, 1/*単体実行*/, $cmd, self::ERR_MESSAGE_ACCESS_DENY);
