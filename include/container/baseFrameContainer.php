@@ -139,7 +139,7 @@ class BaseFrameContainer extends Core
 					// 管理画面へのアクセスを制御
 					$canAccess = $this->_checkAccess($request);		// サブクラスメソッドの呼び出し
 					
-					// 一般画面から直接管理画面が呼ばれた場合は一旦ログインへ遷移
+					// フロント画面から直接管理画面が呼ばれた場合は一旦ログインへ遷移
 					if (!$canAccess && 
 						($cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||						// ウィジェットの設定
 						$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET)){			// 表示位置を表示するとき(ウィジェット付き)
@@ -147,7 +147,7 @@ class BaseFrameContainer extends Core
 						$toAdminType = 1;		// ログイン画面へ
 					}
 				} else {			// _checkAccess()がないときは、標準のアクセス制御
-					// 一般画面へのアクセスを制御
+					// フロント画面へのアクセスを制御
 					$canAccess = $this->_accessSite($request);		// サイト公開制御
 					if ($canAccess){
 						if ($cmd == M3_REQUEST_CMD_LOGIN ||					// ログイン画面を表示のとき

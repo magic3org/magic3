@@ -21,7 +21,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 {
 	private $db;	// DB接続オブジェクト
 	private $adminTheme;		// 管理画面用jQueryUIテーマ
-	private $defaultTheme;		// 一般画面用jQueryUIテーマ
+	private $defaultTheme;		// フロント画面用jQueryUIテーマ
 	private $systemTemplate;// システム画面用テンプレート
 	private $jqueryVersion;			// jQueryバージョン
 	private $wysiwygMenuData;		// WYSIWYGエディター選択メニューデータ
@@ -52,7 +52,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 	const CF_CONFIG_WINDOW_OPEN_TYPE = 'config_window_open_type';		// ウィジェット設定画面のウィンドウ表示タイプ(0=別ウィンドウ、1=タブ)
 	const CF_SYSTEM_TEMPLATE = 'msg_template';			// メッセージ用テンプレート取得キー
 	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
-	const CF_DEFAULT_THEME = 'default_theme';		// 一般画面用jQueryUIテーマ
+	const CF_DEFAULT_THEME = 'default_theme';		// フロント画面用jQueryUIテーマ
 	const CF_HIERARCHICAL_PAGE = 'hierarchical_page';		// 階層化ページを使用するかどうか
 	const CF_MULTI_LANGUAGE = 'multi_language';			// 多言語対応
 	const CF_JQUERY_VERSION = 'jquery_version';			// jQueryバージョン
@@ -145,7 +145,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$workDir = $request->trimValueOf('item_work_dir');
 		$this->systemTemplate = $request->trimValueOf('item_systemplate');	// システム画面用テンプレート
 		$this->adminTheme = $request->trimValueOf('item_admin_theme');		// 管理画面用jQueryUIテーマ
-		$this->defaultTheme = $request->trimValueOf('item_default_theme');		// 一般画面用jQueryUIテーマ
+		$this->defaultTheme = $request->trimValueOf('item_default_theme');		// フロント画面用jQueryUIテーマ
 		$this->jqueryVersion = $request->trimValueOf('item_jquery_version');		// jQueryバージョン
 //		$useJquery = ($request->trimValueOf('item_use_jquery') == 'on') ? 1 : 0;			// 常にjQueryを使用するかどうか
 		$smartphoneUseJqueryMobile = ($request->trimValueOf('item_smartphone_use_jquery_mobile') == 'on') ? 1 : 0;// スマートフォン画面でjQuery Mobileを使用
@@ -236,7 +236,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 				if (!$this->db->updateSystemConfig(self::CF_ADMIN_DEFAULT_THEME, $this->adminTheme)) $isErr = true;// 管理画面用jQueryUIテーマ
 			}
 			if (!$isErr){
-				if (!$this->db->updateSystemConfig(self::CF_DEFAULT_THEME, $this->defaultTheme)) $isErr = true;// 一般画面用jQueryUIテーマ
+				if (!$this->db->updateSystemConfig(self::CF_DEFAULT_THEME, $this->defaultTheme)) $isErr = true;// フロント画面用jQueryUIテーマ
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_JQUERY_VERSION, $this->jqueryVersion)) $isErr = true;// jQueryバージョン
@@ -297,7 +297,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$multiLanguage = $this->gSystem->getSystemConfig(self::CF_MULTI_LANGUAGE);		// 多言語対応かどうか
 			$this->systemTemplate		= $this->db->getSystemConfig(self::CF_SYSTEM_TEMPLATE);// システム画面用テンプレート
 			$this->adminTheme = $this->db->getSystemConfig(self::CF_ADMIN_DEFAULT_THEME);		// 管理画面用jQueryUIテーマ
-			$this->defaultTheme = $this->db->getSystemConfig(self::CF_DEFAULT_THEME);		// 一般画面用jQueryUIテーマ
+			$this->defaultTheme = $this->db->getSystemConfig(self::CF_DEFAULT_THEME);		// フロント画面用jQueryUIテーマ
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
 			if (empty($this->jqueryVersion)) $this->jqueryVersion = self::DEFAULT_JQUERY_VERSION;
 //			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
@@ -369,7 +369,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$multiLanguage = $this->gSystem->getSystemConfig(self::CF_MULTI_LANGUAGE);		// 多言語対応かどうか
 			$this->systemTemplate		= $this->db->getSystemConfig(self::CF_SYSTEM_TEMPLATE);// システム画面用テンプレート
 			$this->adminTheme = $this->db->getSystemConfig(self::CF_ADMIN_DEFAULT_THEME);		// 管理画面用jQueryUIテーマ
-			$this->defaultTheme = $this->db->getSystemConfig(self::CF_DEFAULT_THEME);		// 一般画面用jQueryUIテーマ
+			$this->defaultTheme = $this->db->getSystemConfig(self::CF_DEFAULT_THEME);		// フロント画面用jQueryUIテーマ
 			$this->jqueryVersion = $this->db->getSystemConfig(self::CF_JQUERY_VERSION);		// jQueryバージョン
 			if (empty($this->jqueryVersion)) $this->jqueryVersion = self::DEFAULT_JQUERY_VERSION;
 //			$useJquery = $this->db->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか

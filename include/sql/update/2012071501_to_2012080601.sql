@@ -19,7 +19,7 @@
 -- *** システムベーステーブル ***
 INSERT INTO _system_config 
 (sc_id,                          sc_value,                  sc_name) VALUES
-('use_jquery',               '1',                       '一般画面にjQueryを使用');
+('use_jquery',               '1',                       'フロント画面にjQueryを使用');
 
 -- *** システム標準テーブル ***
 -- 汎用コンテンツマスター

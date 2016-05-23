@@ -137,7 +137,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 				}
 			}
 		}*/
-		// 一般画面でログアウトの場合は画面を維持
+		// フロント画面でログアウトの場合は画面を維持
 		if ($cmd == M3_REQUEST_CMD_LOGOUT && !$this->gEnv->isAdminDirAccess()){
 			$removeParam = array(	array('key' => M3_REQUEST_PARAM_OPERATION_COMMAND, 'value' => M3_REQUEST_CMD_LOGIN),
 									array('key' => M3_REQUEST_PARAM_OPERATION_COMMAND, 'value' => M3_REQUEST_CMD_LOGOUT));

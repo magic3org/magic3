@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-17 17:40+0900\n"
-"PO-Revision-Date: 2016-02-17 17:40+0900\n"
+"POT-Creation-Date: 2016-05-24 07:29+0900\n"
+"PO-Revision-Date: 2016-05-24 07:29+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -323,8 +323,8 @@ msgid "Range:"
 msgstr "範囲："
 
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:246
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:215
-#: ../container/admin_mainOpelogWidgetContainer.php:290
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:217
+#: ../container/admin_mainOpelogWidgetContainer.php:292
 #: ../container/admin_mainUserlistWidgetContainer.php:237
 #, php-format
 msgid "%d Total"
@@ -356,14 +356,14 @@ msgid "Failed in sending email. To:"
 msgstr "メール送信に失敗しました。メールアドレス:"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:164
-#: ../container/admin_mainOpelogWidgetContainer.php:337
+#: ../container/admin_mainOpelogWidgetContainer.php:339
 #: ../container/admin_mainPagedefWidgetContainer.php:478
 #: ../container/admin_mainPortalWidgetContainer.php:118
 msgid "Data updated."
 msgstr "データを更新しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:166
-#: ../container/admin_mainOpelogWidgetContainer.php:341
+#: ../container/admin_mainOpelogWidgetContainer.php:343
 #: ../container/admin_mainPagedefWidgetContainer.php:480
 #: ../container/admin_mainPagedefWidgetContainer.php:484
 #: ../container/admin_mainPortalWidgetContainer.php:120
@@ -371,7 +371,7 @@ msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:178
-#: ../container/admin_mainWidgetContainer.php:408
+#: ../container/admin_mainWidgetContainer.php:409
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
 
@@ -1037,7 +1037,7 @@ msgstr "作成"
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:36
 #: ../container/admin_mainUserlistWidgetContainer.php:123
 #: ../container/admin_mainUserlistWidgetContainer.php:153
-#: ../container/admin_mainWidgetContainer.php:403
+#: ../container/admin_mainWidgetContainer.php:404
 msgid "Login"
 msgstr "ログイン"
 
@@ -1629,7 +1629,7 @@ msgstr "保存"
 
 #: ../container/admin_mainServerinfoWidgetContainer.php:208
 #: ../container/admin_mainSitelistWidgetContainer.php:147
-#: ../container/admin_mainWidgetContainer.php:324
+#: ../container/admin_mainWidgetContainer.php:325
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
@@ -1850,12 +1850,12 @@ msgid "User Detail"
 msgstr "ユーザ詳細"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:405
+#: ../container/admin_mainWidgetContainer.php:406
 msgid "Account"
 msgstr "アカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:124
-#: ../container/admin_mainWidgetContainer.php:406 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:407 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1879,7 +1879,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:157
 #: ../container/admin_mainUserlistWidgetContainer.php:304
 #: ../container/admin_mainUserlistWidgetContainer.php:372
-#: ../container/admin_mainWidgetContainer.php:407 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:408 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -1958,16 +1958,16 @@ msgstr "制限あり"
 msgid "Out of Range"
 msgstr "該当なし"
 
-#: ../container/admin_mainWidgetContainer.php:330
-#: ../container/admin_mainWidgetContainer.php:336
+#: ../container/admin_mainWidgetContainer.php:331
+#: ../container/admin_mainWidgetContainer.php:337
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:340
+#: ../container/admin_mainWidgetContainer.php:341
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:404
+#: ../container/admin_mainWidgetContainer.php:405
 msgid "Send Password"
 msgstr "パスワード送信"
 
@@ -2406,12 +2406,12 @@ msgstr "共有SSLのルートURL"
 
 #: ../help/help_configsys.php:36
 msgid ""
-"If you use SSL on admin access point or general access point, you can set "
+"If you use SSL on admin access point or front access point, you can set "
 "another url for SSL. If you set blank for the url, the system url which is "
 "changed http to https is used."
 msgstr ""
-"管理画面または一般画面でSSLを使用する場合にSSL専用の別のURLが設定可能です。空"
-"に設定した場合はシステムのルートURLをhttpsに変更したURLが使用されます。"
+"管理画面またはフロント画面でSSLを使用する場合にSSL専用の別のURLが設定可能で"
+"す。空に設定した場合はシステムのルートURLをhttpsに変更したURLが使用されます。"
 
 #: ../help/help_editmenu.php:31
 msgid "Others Button"

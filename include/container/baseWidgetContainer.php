@@ -288,7 +288,7 @@ class BaseWidgetContainer extends Core
 			if (method_exists($this, '_postAssign')) $this->_postAssign($request, $param);
 			
 			// サブメニューバーの作成
-			if ($isAdminDirAccess || $this->gPage->idEditMode()){			// 管理画面あるいは、一般画面編集モードオンの場合
+			if ($isAdminDirAccess || $this->gPage->idEditMode()){			// 管理画面あるいは、フロント画面編集モードオンの場合
 				// 設定画面用パンくずリストの作成
 				if (!empty($this->configMenubarBreadcrumbTitleDef)) $this->gPage->setAdminBreadcrumbDef($this->configMenubarBreadcrumbTitleDef);
 				
@@ -624,7 +624,7 @@ class BaseWidgetContainer extends Core
 		return $this->_hiddenTagInfo;
 	}
 	/**
-	 * 設定画面用の入力設定にする(一般画面用)
+	 * 設定画面用の入力設定にする(フロント画面用)
 	 *
 	 * ・TEXTフィールドの自動入力をオフにする
 	 *
@@ -635,7 +635,7 @@ class BaseWidgetContainer extends Core
 		$this->_configMode = true;
 	}
 	/**
-	 * 設定画面用の入力設定にするかどうかを取得(一般画面用)
+	 * 設定画面用の入力設定にするかどうかを取得(フロント画面用)
 	 *
 	 * @return bool			true=設定画面用の入力設定にする、false=設定画面用の入力設定にしない
 	 */
@@ -3407,7 +3407,7 @@ class BaseWidgetContainer extends Core
 	{
 		$cmd = $this->gRequest->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		
-		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){			// 一般画面のウィジェット設定画面の場合
+		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){			// フロント画面のウィジェット設定画面の場合
 			$url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_DO_WIDGET . 
 						'&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();
 		} else {
@@ -3589,7 +3589,7 @@ class BaseWidgetContainer extends Core
 		return str_replace(array(M3_TAG_START, M3_TAG_END), array('', ''), $str);
 	}
 	/**
-	 * 前画面、次画面遷移用のボタンを追加(一般画面用)
+	 * 前画面、次画面遷移用のボタンを追加(フロント画面用)
 	 *
 	 * @param int $pos			ボタンの表示位置(0=上部、1=下部)
 	 * @param string $prevUrl	前画面のURL(作成しない場合は空文字列)
@@ -3612,7 +3612,7 @@ class BaseWidgetContainer extends Core
 		$this->gEnv->setJoomlaPageNavData($pageNavData);
 	}
 	/**
-	 * 記事表示データを設定(一般画面用)
+	 * 記事表示データを設定(フロント画面用)
 	 *
 	 * @param array $viewItemsData		記事データ一覧
 	 * @param int $leadContentCount		先頭(leading部)のコンテンツ数
@@ -3641,7 +3641,7 @@ class BaseWidgetContainer extends Core
 		$this->gEnv->setJoomlaViewData($viewData);
 	}
 	/**
-	 * ページ番号遷移データを設定(一般画面用)
+	 * ページ番号遷移データを設定(フロント画面用)
 	 *
 	 * @param array $pageLinkInfo	リンクページ情報
 	 * @param int $totalCount		項目総数

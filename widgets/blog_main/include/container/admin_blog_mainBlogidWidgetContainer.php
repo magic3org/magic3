@@ -272,7 +272,7 @@ class admin_blog_mainBlogidWidgetContainer extends admin_blog_mainBaseWidgetCont
 		// プレビュー用URL
 		if (!empty($id)){
 			$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ID . '=' . $id;
-			$this->tmpl->addVar('_widget', 'preview_url', $this->getUrl($previewUrl));// プレビュー用URL(一般画面)
+			$this->tmpl->addVar('_widget', 'preview_url', $this->getUrl($previewUrl));// プレビュー用URL(フロント画面)
 		}
 		
 		// 選択中のシリアル番号を設定

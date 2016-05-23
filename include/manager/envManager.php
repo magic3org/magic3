@@ -2128,7 +2128,7 @@ class EnvManager extends Core
 		return self::DEFAULT_ADMIN_PAGE_ID;
 	}
 	/**
-	 * 一般画面のデフォルトのページID取得
+	 * フロント画面のデフォルトのページID取得
 	 *
 	 * @return array			ページID(0=PC,1=携帯,2=スマートフォン)
 	 */
@@ -2137,7 +2137,7 @@ class EnvManager extends Core
 		return array(self::DEFAULT_PAGE_ID, self::DEFAULT_MOBILE_PAGE_ID, self::DEFAULT_SMARTPHONE_PAGE_ID);
 	}
 	/**
-	 * 一般画面のデフォルトのアクセスポイント取得
+	 * フロント画面のデフォルトのアクセスポイント取得
 	 *
 	 * @return array			アクセスポイント(0=PC,1=携帯,2=スマートフォン)
 	 */

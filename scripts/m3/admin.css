@@ -1,7 +1,7 @@
 /**
  * Magic3管理機能用CSS
  *
- * 機能:一般画面で管理機能を表示する場合に使用
+ * 機能:フロント画面で管理機能を表示する場合に使用
  *
  * LICENSE: This source file is licensed under the terms of the GNU General Public License.
  *
@@ -329,7 +329,7 @@
 	padding-left:8px;
 	padding-bottom:1px;
 }
-/*** 一般画面用 ***/
+/*** フロント画面用 ***/
 /* ウィジェットツールボタン */
 .m3widgettoolbutton {
 /*	padding-right:100px;*/

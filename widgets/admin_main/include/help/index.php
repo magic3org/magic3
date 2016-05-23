@@ -33,7 +33,7 @@ $HELP['configlang_name']['body'] = '言語名です。';
 $HELP['configlang_value']['title'] = '値';
 $HELP['configlang_value']['body'] = '識別用の値です。';
 $HELP['configlang_accept']['title'] = '許可';
-$HELP['configlang_accept']['body'] = '一般画面で切り替え可能な言語にチェックを入れます。';
+$HELP['configlang_accept']['body'] = 'フロント画面で切り替え可能な言語にチェックを入れます。';
 $HELP['configlang_available']['title'] = 'メニュー項目';
 $HELP['configlang_available']['body'] = '管理画面でメニュー表示する言語にチェックを入れます。';
 

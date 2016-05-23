@@ -290,7 +290,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->gEnv->getPageSubIdByContentType($this->gEnv->getDefaultPageId(), M3_VIEW_TYPE_BLOG);
 		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
 //		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
-		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
 		
 		// 検索結果
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
@@ -905,7 +905,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		if ($historyIndex >= 0) $previewUrl .= '&' . M3_REQUEST_PARAM_HISTORY . '=' . $historyIndex;		// 履歴番号(旧データの場合のみ有効)
 		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
 		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
-		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
 		
 		// CKEditor用のCSSファイルを読み込む
 		$this->loadCKEditorCssFiles($previewUrl);

@@ -33,7 +33,7 @@ class help_configsys extends HelpConv
 			),
 			'configsys_ssl_url' => array(	
 				'title' =>	$this->_('Root URL of Shared SSL'),	// 共有SSLのルートURL
-				'body' =>	$this->_('If you use SSL on admin access point or general access point, you can set another url for SSL. If you set blank for the url, the system url which is changed http to https is used.')		// 管理画面または一般画面でSSLを使用する場合にSSL専用の別のURLが設定可能です。空に設定した場合はシステムのルートURLをhttpsに変更したURLが使用されます。
+				'body' =>	$this->_('If you use SSL on admin access point or front access point, you can set another url for SSL. If you set blank for the url, the system url which is changed http to https is used.')		// 管理画面またはフロント画面でSSLを使用する場合にSSL専用の別のURLが設定可能です。空に設定した場合はシステムのルートURLをhttpsに変更したURLが使用されます。
 			)
 		);
 		return $helpData;

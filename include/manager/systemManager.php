@@ -56,7 +56,7 @@ class SystemManager extends Core
 	const CF_DEFAULT_TEMPLATE_MOBILE	= 'mobile_default_template';	// システム定義値取得用キー(携帯用デフォルトテンプレート)
 	const CF_DEFAULT_TEMPLATE_SMARTPHONE	= 'smartphone_default_template';	// システム定義値取得用キー(スマートフォン用デフォルトテンプレート)
 	const CF_ADMIN_DEFAULT_THEME = 'admin_default_theme';		// 管理画面用jQueryUIテーマ
-	const CF_DEFAULT_THEME = 'default_theme';		// 一般画面用jQueryUIテーマ
+	const CF_DEFAULT_THEME = 'default_theme';		// フロント画面用jQueryUIテーマ
 	const CF_ACCEPT_LANGUAGE	= 'accept_language';	// アクセス可能言語
 	const CF_ADMIN_DEFAULT_TEMPLATE = 'admin_default_template';		// 管理用デフォルトテンプレート
 	const CF_MOBILE_AUTO_REDIRECT = 'mobile_auto_redirect';		// 携帯の自動遷移
@@ -434,7 +434,7 @@ class SystemManager extends Core
 		return $this->adminDefaultTheme;
 	}
 	/**
-	 * 一般画面用jQueryUIテーマを取得
+	 * フロント画面用jQueryUIテーマを取得
 	 *
 	 * @return string	jQueryUIテーマ
 	 */

@@ -104,7 +104,7 @@ class user_contentContentWidgetContainer extends user_contentBaseWidgetContainer
 			
 			// プレビュー用URL作成
 			$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_ROOM_ID . '=' . $this->roomId . '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
-			$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+			$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
 		} else {
 			// 項目がないときは、一覧を表示しない
 			$this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');

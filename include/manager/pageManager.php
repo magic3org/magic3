@@ -24,9 +24,9 @@ class PageManager extends Core
 	private $showPositionMode;			// ポジション表示モード
 	private $showWidget;			// ウィジェットの単体表示
 	private $systemHandleMode;			// システム制御遷移モード(1=サイト非公開時)
-	private $isPageEditable;		// 一般画面ページ編集可能モード
+	private $isPageEditable;		// フロント画面ページ編集可能モード
 	private $isTransparentMode;		// 画面透過モード
-	private $isEditMode;			// 一般画面編集モード
+	private $isEditMode;			// フロント画面編集モード
 	private $isLayout;				// 画面レイアウト中かどうか
 	private $isPageTopUrl;			// ページトップ(サブページ内のトップ位置)のURLかどうか
 	private $isContentDetailPage;	// コンテンツ詳細画面のページかどうか
@@ -88,9 +88,9 @@ class PageManager extends Core
 	private $currentPageInfo;			// 現在のページのページ情報
 	private $configWidgetInfo;			// ウィジェット設定画面のウィジェットの情報
 	private $contentType = '';				// ページのコンテンツタイプ
-	private $mainContentTypeInfo;				// 一般画面で使用する主要コンテンツタイプ
-	private $subContentTypeInfo;				// 一般画面で使用する補助コンテンツタイプ
-	private $mainFeatureTypeInfo;				// 一般画面で使用する主要機能タイプ
+	private $mainContentTypeInfo;				// フロント画面で使用する主要コンテンツタイプ
+	private $subContentTypeInfo;				// フロント画面で使用する補助コンテンツタイプ
+	private $mainFeatureTypeInfo;				// フロント画面で使用する主要機能タイプ
 	private $adminFeatureTypeInfo;						// 管理画面専用で使用する主要機能タイプ
 	private $rssVersion;					// RSSバージョン
 	private $rssChannel;				// RSSチャンネルデータ
@@ -199,11 +199,11 @@ class PageManager extends Core
 	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.9.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.4.6.js';			// 一般、管理機能共通スクリプト
-//	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.2.js';			// 一般画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
+//	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.2.js';			// フロント画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
 	const M3_OPTION_SCRIPT_FILENAME			= 'm3opt1.2.0.js';			// AJAXを含んだオプションライブラリファイル(jQuery必須)
 	const M3_ADMIN_CSS_FILE					= 'm3/admin.css';			// 管理機能用のCSS
-	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// 一般画面編集用のCSS
-	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// 一般画面共通のデフォルトCSS
+	const M3_EDIT_CSS_FILE					= 'm3/edit.css';			// フロント画面編集用のCSS
+	const M3_DEFAULT_CSS_FILE				= 'm3/default.css';			// フロント画面共通のデフォルトCSS
 	const M3_CKEDITOR_CSS_FILE				= 'm3/ckeditor.css';			// CKEditorの編集エリア用CSS
 	
 	// 読み込み制御
@@ -265,13 +265,13 @@ class PageManager extends Core
 		$this->selectedJQueryFilename = ScriptLibInfo::getJQueryFilename(0);			// 使用対象のjQueryファイル
 		$this->selectedJQueryUiFilename = ScriptLibInfo::getJQueryFilename(1);		// 使用対象のjQuery UIファイル
 
-		// ##### 一般画面用のデフォルトのJavascript、CSSを取得 #####
+		// ##### フロント画面用のデフォルトのJavascript、CSSを取得 #####
 		$this->defaultScriptFiles	=	array(
 											$this->selectedJQueryFilename,			// jQuery
 											self::M3_STD_SCRIPT_FILENAME
 										);
 		$this->defaultCssFiles		=	array(
-											self::M3_DEFAULT_CSS_FILE				// 一般画面共通のデフォルトCSS
+											self::M3_DEFAULT_CSS_FILE				// フロント画面共通のデフォルトCSS
 										);
 		
 		// ##### 管理機能用のデフォルトのJavascript、CSSを取得 #####
@@ -317,7 +317,7 @@ class PageManager extends Core
 		
 		$this->rssVersion = self::DEFAULT_RSS_VERSION;					// RSSバージョン
 		
-		// 一般画面で使用する主要コンテンツタイプ
+		// フロント画面で使用する主要コンテンツタイプ
 		$this->mainContentTypeInfo	 = array(
 												array(	'name' => '会員情報',					'value' => M3_VIEW_TYPE_MEMBER),
 												array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
@@ -329,13 +329,13 @@ class PageManager extends Core
 												array(	'name' => 'イベント情報',				'value' => M3_VIEW_TYPE_EVENT),
 												array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO)
 											);
-		// 一般画面で使用する補助コンテンツタイプ(ページ属性に対応しない)
+		// フロント画面で使用する補助コンテンツタイプ(ページ属性に対応しない)
 		$this->subContentTypeInfo	 = array(	array(	'name' => '新着情報',					'value' => M3_VIEW_TYPE_NEWS),
 												array(	'name' => 'コメント',					'value' => M3_VIEW_TYPE_COMMENT),
 												array(	'name' => 'イベント予約',				'value' => M3_VIEW_TYPE_EVENTENTRY),
 												array(	'name' => 'バナー',						'value' => M3_VIEW_TYPE_BANNER)
 											);
-		// 一般画面で使用する主要機能タイプ(「ダッシュボード」は含まない)
+		// フロント画面で使用する主要機能タイプ(「ダッシュボード」は含まない)
 		$this->mainFeatureTypeInfo	 = array(	array(	'name' => '検索',						'value' => M3_VIEW_TYPE_SEARCH),
 												array(	'name' => 'Eコマース',					'value' => M3_VIEW_TYPE_COMMERCE),
 												array(	'name' => 'カレンダー',					'value' => M3_VIEW_TYPE_CALENDAR)
@@ -830,7 +830,7 @@ class PageManager extends Core
 		return $this->systemHandleMode;
 	}
 	/**
-	 * 一般画面編集モードを設定
+	 * フロント画面編集モードを設定
 	 *
 	 * @return 				なし
 	 */
@@ -839,7 +839,7 @@ class PageManager extends Core
 		$this->isEditMode = true;
 	}
 	/**
-	 * 一般画面編集モードを取得
+	 * フロント画面編集モードを取得
 	 *
 	 * @return bool		true=編集モードオン、false=編集モードオフ
 	 */
@@ -1086,7 +1086,7 @@ class PageManager extends Core
 		return $this->contentType;
 	}
 	/**
-	 * 一般画面で使用する主要コンテンツタイプの情報取得
+	 * フロント画面で使用する主要コンテンツタイプの情報取得
 	 *
 	 * @return array			コンテンツタイプの情報の連想配列
 	 */
@@ -1095,7 +1095,7 @@ class PageManager extends Core
 		return $this->mainContentTypeInfo;				// 主要コンテンツタイプ
 	}
 	/**
-	 * 一般画面で使用する補助コンテンツタイプの情報取得
+	 * フロント画面で使用する補助コンテンツタイプの情報取得
 	 *
 	 * @return array			コンテンツタイプの情報の連想配列
 	 */
@@ -1104,7 +1104,7 @@ class PageManager extends Core
 		return $this->subContentTypeInfo;				// 補助コンテンツタイプ
 	}
 	/**
-	 * 一般画面で使用する主要コンテンツタイプを取得
+	 * フロント画面で使用する主要コンテンツタイプを取得
 	 *
 	 * @return array			コンテンツタイプの配列
 	 */
@@ -1114,7 +1114,7 @@ class PageManager extends Core
 		return array_map(create_function('$a', 'return $a["value"];'), $this->mainContentTypeInfo);
 	}
 	/**
-	 * 一般画面で使用するサブコンテンツタイプを取得
+	 * フロント画面で使用するサブコンテンツタイプを取得
 	 *
 	 * @return array			コンテンツタイプの配列
 	 */
@@ -1124,7 +1124,7 @@ class PageManager extends Core
 		return array_map(create_function('$a', 'return $a["value"];'), $this->subContentTypeInfo);
 	}
 	/**
-	 * 一般画面で使用する主要機能タイプ情報を取得
+	 * フロント画面で使用する主要機能タイプ情報を取得
 	 *
 	 * @return array			機能タイプの情報の連想配列
 	 */
@@ -1133,7 +1133,7 @@ class PageManager extends Core
 		return $this->mainFeatureTypeInfo;				// 主要機能タイプ
 	}
 	/**
-	 * 一般画面で使用する主要機能タイプを取得
+	 * フロント画面で使用する主要機能タイプを取得
 	 *
 	 * @return array			機能タイプの配列
 	 */
@@ -1430,7 +1430,7 @@ class PageManager extends Core
 		$gEnvManager->setCurrentPageSubId($subId);// サブページIDを設定
 
 		// SSL通信機能がオンの場合は、アクセスされたURLのSSLをチェックし不正の場合は正しいURLにリダイレクト
-		// 設定に間違いがある場合、管理画面にアクセスできなくなるので、一般画面のみ制御
+		// 設定に間違いがある場合、管理画面にアクセスできなくなるので、フロント画面のみ制御
 		if ($gEnvManager->getUseSsl() || $gEnvManager->getUseSslAdmin()){
 			if (!$gEnvManager->isAdminDirAccess()){		// 管理画面以外へのアクセスのとき
 				$isSsl = $gEnvManager->isSslByCurrentPage();
@@ -1464,8 +1464,8 @@ class PageManager extends Core
 		if (!$gEnvManager->getIsMobileSite()){		// 携帯用URL以外のとき
 			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 				if ($gEnvManager->isSystemManageUser()){		// システム運用権限がある場合のみ有効
-//					$this->isEditMode = true;			// 一般画面編集モード
-					$this->isPageEditable = true;		// 一般画面ページ編集可能モードに設定(コンテキストメニュー表示)
+//					$this->isEditMode = true;			// フロント画面編集モード
+					$this->isPageEditable = true;		// フロント画面ページ編集可能モードに設定(コンテキストメニュー表示)
 						
 					// 管理画面用ライブラリを追加
 					if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){	// ウィジェット詳細設定画面のとき
@@ -1480,7 +1480,7 @@ class PageManager extends Core
 						$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_IDTABS);			// 管理パネル用スクリプト追加(ポジション表示追加分)
 						$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_M3_DROPDOWN);		// 管理パネル用スクリプト追加(ドロップダウンメニュー)
 						//$this->useBootstrap = true;		// Bootstrapを使用
-						//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
+						//$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(フロント画面と管理画面の切り替え等)用
 					}
 					$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
 					$this->addAdminScript('', ScriptLibInfo::LIB_JQUERY_CLUETIP);// HELP用スクリプト追加
@@ -1497,23 +1497,23 @@ class PageManager extends Core
 						if ($ret) $this->addAdminScript($task, trim($this->configWidgetInfo['wd_add_script_lib_a']));		// 管理機能用スクリプト
 					}
 				}
-			} else {		// 一般画面へのアクセスのとき
-				// 一般画面用スクリプトファイル追加
+			} else {		// フロント画面へのアクセスのとき
+				// フロント画面用スクリプトファイル追加
 				$value = $gSystemManager->getSystemConfig(self::CF_USE_JQUERY);// 常にjQueryを使用するかどうか
 				if ($value) $this->addScriptFile($this->selectedJQueryFilename);
 		
 				if ($cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
 					$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない
 					if ($gEnvManager->isSystemManageUser()){
-						$this->isEditMode = true;			// 一般画面編集モード
-						$this->isPageEditable = true;		// 一般画面ページ編集可能モードに設定
+						$this->isEditMode = true;			// フロント画面編集モード
+						$this->isPageEditable = true;		// フロント画面ページ編集可能モードに設定
 					
 						// システム運用権限がある場合は管理用スクリプトを追加
-						// 一般画面と管理画面の切り替え用のスライドメニューバーには管理用スクリプト,CSSが必要
+						// フロント画面と管理画面の切り替え用のスライドメニューバーには管理用スクリプト,CSSが必要
 						$this->addScriptFile($this->selectedJQueryFilename);		// JQueryスクリプト追加
 						$this->addScriptFile(ScriptLibInfo::JQUERY_CONTEXTMENU_FILENAME);		// jQuery Contextmenu Lib
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
-						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(一般画面と管理画面の切り替え等)用
+						//$this->addScript('', ScriptLibInfo::LIB_JQUERY_JQEASYPANEL);		// パネルメニュー(フロント画面と管理画面の切り替え等)用
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_M3_SLIDEPANEL);	// 管理パネル用スクリプト追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_COOKIE);			// 管理パネル用スクリプト追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_EASING);			// 管理パネル用スクリプト追加
@@ -1522,15 +1522,15 @@ class PageManager extends Core
 					
 						$this->addCssFile(self::M3_ADMIN_CSS_FILE);		// 管理機能用CSS
 					} else if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
-						$this->isEditMode = true;			// 一般画面編集モード
+						$this->isEditMode = true;			// フロント画面編集モード
 					}
 				} else if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					if ($gEnvManager->isContentEditableUser()){		// コンテンツ編集可能ユーザの場合
-						$this->isEditMode = true;			// 一般画面編集モード
+						$this->isEditMode = true;			// フロント画面編集モード
 					
 //						$this->addScript('', ScriptLibInfo::LIB_JQUERY_RESPONSIVETABLE);// 管理画面作成用
 						$this->addScript('', ScriptLibInfo::getWysiwygEditorLibId());	// WYSIWYGエディターを追加
-					//	$this->addScriptFile(self::M3_PLUS_SCRIPT_FILENAME);		// 一般画面追加用スクリプト追加(PLUSライブラリを追加する場合はFCKEditorも使用可能にする)
+					//	$this->addScriptFile(self::M3_PLUS_SCRIPT_FILENAME);		// フロント画面追加用スクリプト追加(PLUSライブラリを追加する場合はFCKEditorも使用可能にする)
 						$this->addScriptFile(self::M3_ADMIN_SCRIPT_FILENAME);		// 管理スクリプトライブラリ追加
 						$this->addScriptFile(self::M3_OPTION_SCRIPT_FILENAME);	// Magic3のオプションライブラリ追加
 						$this->addScript('', ScriptLibInfo::LIB_JQUERY_HOVERINTENT);// HELP用スクリプト追加
@@ -2838,7 +2838,7 @@ class PageManager extends Core
 		}
 		// ##### スクリプト用出力用タグを埋め込む #####
 		// ウィジェット設定画面用メニューバーの作成
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面または一般画面編集モードのとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面またはフロント画面編集モードのとき
 			echo self::MENUBAR_SCRIPT_TAGS;			// メニューバー出力用タグ
 		}
 		
@@ -2855,7 +2855,7 @@ class PageManager extends Core
 			echo '<body>' . M3_NL;
 		}
 		// ウィジェット設定画面用メニューバーの作成
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面または一般画面編集モードのとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){	// ウィジェット設定画面またはフロント画面編集モードのとき
 			// ウィジェット情報を設定
 			$desc = $row['wd_description'];		// 説明
 			$gEnvManager->setCurrentWidgetParams('desc', $desc);
@@ -2868,9 +2868,9 @@ class PageManager extends Core
 		// 別ウィンドウで表示のときは、「閉じる」ボタンを表示
 		if ($cmd == M3_REQUEST_CMD_SHOW_WIDGET ||		// ウィジェットの単体表示のとき
 			$cmd == M3_REQUEST_CMD_CONFIG_WIDGET ||	// ウィジェット詳細設定画面のとき
-			($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// ウィジェット単体実行で一般画面編集モードのとき
+			($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// ウィジェット単体実行でフロント画面編集モードのとき
 
-//			if ($this->isEditMode){// 一般画面編集モードのとき
+//			if ($this->isEditMode){// フロント画面編集モードのとき
 				if (!empty($openBy)){
 					// サーバ指定されている場合はサーバ情報を取得
 					$serverName = '';
@@ -2957,7 +2957,7 @@ class PageManager extends Core
 		// ##### 初期処理 #####
 		$replaceStr .= '$(function(){' . M3_NL;
 		// トップ位置修正
-		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// ウィジェット設定画面または一般画面編集モードのとき
+		if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET || ($cmd == M3_REQUEST_CMD_DO_WIDGET && $this->isEditMode)){		// ウィジェット設定画面またはフロント画面編集モードのとき
 			if (!empty($this->adminSubNavbarDef) || !empty($this->adminBreadcrumbDef)){
 				$menubarHeight = $gDesignManager->getSubMenubarHeight();
 				$replaceStr .= str_repeat(M3_INDENT_SPACE, 1) . '$("nav.secondlevel").css("margin-top", "0");' . M3_NL;
@@ -3264,7 +3264,7 @@ class PageManager extends Core
 					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP);
 					$this->addPermittedAdminScript(ScriptLibInfo::LIB_BOOTSTRAP_ADMIN);// Bootstrap管理画面オプション
 				}
-			} else {		// 一般画面へのアクセスの場合
+			} else {		// フロント画面へのアクセスの場合
 				// ### Bootstrapのjsとcssはテンプレート側で読み込む ###
 //				$this->addScript('', ScriptLibInfo::LIB_BOOTSTRAP);		// Bootstrapライブラリ
 				if ($cmd == M3_REQUEST_CMD_LOGIN || $cmd == M3_REQUEST_CMD_LOGOUT || $cmd == M3_REQUEST_CMD_PREVIEW ||				// ログイン、ログアウト場合
@@ -3504,7 +3504,7 @@ class PageManager extends Core
 			}
 
 			// ##### 共通CSS読み込み #####
-			if (($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()) || $this->isEditMode){			// 一般画面編集モード
+			if (($gEnvManager->isAdminDirAccess() && $gEnvManager->isSystemManageUser()) || $this->isEditMode){			// フロント画面編集モード
 				$cssURL = $scriptsUrl . '/' . self::M3_EDIT_CSS_FILE;
 				$replaceStr .=  '<link rel="stylesheet" type="text/css" href="' . $cssURL . '" />' . M3_NL;
 			}
@@ -3844,7 +3844,7 @@ class PageManager extends Core
 						$replaceStr .= '});' . M3_NL;
 					}
 				}
-			} else if ($this->isPageEditable){		// 一般画面ページ編集可能モードのとき
+			} else if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
 				$replaceStr .= 'var M3_DEFAULT_ADMIN_URL="' . $gEnvManager->getDefaultAdminUrl() . '";' . M3_NL;		// 管理機能URL
 				if ($openType != '') $replaceStr .= 'var M3_CONFIG_WINDOW_OPEN_TYPE = ' . $openType . ';' . M3_NL;
 				
@@ -3857,7 +3857,7 @@ class PageManager extends Core
 				// テンプレートタイプ
 				$templateType = $gEnvManager->getCurrentTemplateType();
 				if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
-			} else if ($this->isEditMode){			// 一般画面編集モード(コンテンツ編集可能ユーザ)
+			} else if ($this->isEditMode){			// フロント画面編集モード(コンテンツ編集可能ユーザ)
 				if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					// WYSIWYGエディター
 					$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
@@ -3914,7 +3914,7 @@ class PageManager extends Core
 				}
 			}
 			
-			// ##### パネルメニュー(一般画面と管理画面の切り替え等)の表示 #####
+			// ##### パネルメニュー(フロント画面と管理画面の切り替え等)の表示 #####
 			// PC用、携帯用、スマートフォン用画面とウィジェット付きポジションの管理画面時に表示
 			if (($gEnvManager->isAdminDirAccess() && $cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET) ||		// 管理画面(ウィジェット付きポジション表示)のとき
 				(!$gEnvManager->isAdminDirAccess() &&							// 一般用画面のとき
@@ -4010,7 +4010,7 @@ class PageManager extends Core
 					}
 				}
 			}
-			// ##### 一般画面からのウィジェット操作用ツールバー #####
+			// ##### フロント画面からのウィジェット操作用ツールバー #####
 			if (!$gEnvManager->isAdminDirAccess() && 
 				$cmd != M3_REQUEST_CMD_DO_WIDGET &&							// ウィジェット単体実行でない
 				$cmd != M3_REQUEST_CMD_RSS){								// RSS配信でない
@@ -4136,7 +4136,7 @@ class PageManager extends Core
 					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
 				}
 			}
-			// ##### 一般画面のデフォルトのJavaスクリプト #####
+			// ##### フロント画面のデフォルトのJavaスクリプト #####
 //			if (!$gEnvManager->isAdminDirAccess()){
 //				$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (jQuery().tooltip) $(\'[rel=tooltip]\').tooltip();' . M3_NL;		// 標準ツールチップ作成
 //			}
@@ -4276,7 +4276,7 @@ class PageManager extends Core
 							if (!empty($widgetClassSuffix)) $widgetOuterClass .= ' ' . $widgetOuterClass . '_' . $widgetClassSuffix;	// 追加CSSクラス
 							$widgetOuterClass .= ' ' . self::WIDGET_OUTER_CLASS_HEAD_POSITION . $position;		// ポジションブロッククラス
 							$widgetContent = '<div class="' . $widgetOuterClass . '">' . $widgetContent . '</div>';
-							if ($this->isPageEditable){		// 一般画面ページ編集可能モードのとき
+							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
 								$configId = $this->pageDefRows[$i]['pd_config_id'];		// 定義ID
 								$serial = $this->pageDefRows[$i]['pd_serial'];		// シリアル番号
 								$hasAdmin = '0';		// 管理画面があるかどうか
@@ -4429,7 +4429,7 @@ class PageManager extends Core
 							if (!empty($widgetClassSuffix)) $widgetOuterClass .= ' ' . $widgetOuterClass . '_' . $widgetClassSuffix;	// 追加CSSクラス
 							$widgetOuterClass .= ' ' . self::WIDGET_OUTER_CLASS_HEAD_POSITION . $position;	// ポジションブロッククラス
 							$widgetContent = '<div class="' . $widgetOuterClass . '">' . $widgetContent . '</div>';
-							if ($this->isPageEditable){		// 一般画面ページ編集可能モードのとき
+							if ($this->isPageEditable){		// フロント画面ページ編集可能モードのとき
 								//$editInfo = 'widgetid:' . $this->pageDefRows[$i]['wd_id'];
 								$configId = $this->pageDefRows[$i]['pd_config_id'];		// 定義ID
 								$serial = $this->pageDefRows[$i]['pd_serial'];		// シリアル番号
@@ -6323,7 +6323,7 @@ class PageManager extends Core
 		return $themeFile;
 	}
 	/**
-	 * 一般画面用jQueryUIテーマのURLを取得
+	 * フロント画面用jQueryUIテーマのURLを取得
 	 *
 	 * @return string			テーマURL
 	 */	

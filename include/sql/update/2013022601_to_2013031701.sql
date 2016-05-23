@@ -60,7 +60,7 @@ ALTER TABLE _widgets ADD wd_content_name         TEXT                           
 -- システムの動作に影響する設定を管理する
 INSERT INTO _system_config 
 (sc_id,               sc_value,                  sc_name) VALUES
-('auto_login',        '1',                        '一般画面自動ログイン機能'),
+('auto_login',        '1',                        'フロント画面自動ログイン機能'),
 ('auto_login_admin',        '0',                        '管理画面自動ログイン機能');
 
 -- *** システム標準テーブル ***

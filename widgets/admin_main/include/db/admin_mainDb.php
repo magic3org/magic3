@@ -1413,7 +1413,7 @@ class admin_mainDb extends BaseDb
 		// トランザクション開始
 		$this->startTransaction();
 		
-		// 一般画面のアクセスポイントを取得
+		// フロント画面のアクセスポイントを取得
 		$queryStr  = 'SELECT * FROM _page_id ';
 		$queryStr .=   'WHERE pg_type = 0 ';
 		$queryStr .=     'AND pg_analytics = true';

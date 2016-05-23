@@ -975,7 +975,7 @@ class admin_default_contentContentWidgetContainer extends admin_default_contentB
 		if ($historyIndex >= 0) $previewUrl .= '&' . M3_REQUEST_PARAM_HISTORY . '=' . $historyIndex;
 		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
 		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
-		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
 		
 		$this->tmpl->addVar('_widget', 'custom_value_task', 'usercustom');		// ユーザ定義値参照用
 		$this->tmpl->addVar('_widget', 'admin_widget_id', self::ADMIN_WIDGET_ID);// ユーザ定義値参照用(管理ウィジェットのウィジェットID)

@@ -260,7 +260,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		// プレビュー用URL
 		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $this->gEnv->getPageSubIdByContentType($this->gEnv->getDefaultPageId(), M3_VIEW_TYPE_EVENT);
 		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
-		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
 		
 		// ボタン作成
 		$searchImg = $this->getUrl($this->gEnv->getRootUrl() . self::SEARCH_ICON_FILE);
@@ -758,7 +758,7 @@ class admin_event_mainEntryWidgetContainer extends admin_event_mainBaseWidgetCon
 		// プレビュー用URL
 		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_EVENT_ID . '=' . $this->entryId;
 		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
-		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(一般画面)
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
 		
 		// CKEditor用のCSSファイルを読み込む
 		$this->loadCKEditorCssFiles($previewUrl);

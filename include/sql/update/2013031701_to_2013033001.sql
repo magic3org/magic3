@@ -22,7 +22,7 @@
 -- システムの動作に影響する設定を管理する
 INSERT INTO _system_config 
 (sc_id,               sc_value,                  sc_name) VALUES
-('default_theme',         'black-tie',                '一般画面用jQueryUIテーマ');
+('default_theme',         'black-tie',                'フロント画面用jQueryUIテーマ');
 
 -- *** システム標準テーブル ***
 
