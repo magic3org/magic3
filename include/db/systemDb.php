@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -3268,6 +3268,7 @@ class SystemDb extends BaseDb
 			$queryStr .=     'AND vc_content_id = ? ';
 			$queryStr .=     'AND vc_date = ? ';
 			$queryStr .=     'AND vc_hour = ? ';
+			$queryStr .=   'FOR UPDATE';				// 同時INSERTがキー重複エラーで落ちるので追加。(2016/5/26)
 			$ret = $this->selectRecord($queryStr, array($typeId, $serial, $contentId, $day, $hour), $row);// コンテンツID抜けていたバグを修正(2016/5/23)
 			if ($ret){
 				$count = $row['vc_count'];
