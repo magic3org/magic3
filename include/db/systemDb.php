@@ -3261,29 +3261,43 @@ class SystemDb extends BaseDb
 				$this->execStatement($queryStr, array($typeId, $contentId, $day, $hour));
 			}
 		} else {
-			// 既にレコードが作成されている場合はレコードを更新
-			$queryStr  = 'SELECT * FROM _view_count ';
-			$queryStr .=   'WHERE vc_type_id = ? ';			// データタイプはデフォルトコンテンツ
-			$queryStr .=     'AND vc_content_serial = ? ';
-			$queryStr .=     'AND vc_content_id = ? ';
-			$queryStr .=     'AND vc_date = ? ';
-			$queryStr .=     'AND vc_hour = ? ';
-			$queryStr .=   'FOR UPDATE';				// 同時INSERTがキー重複エラーで落ちるので追加。(2016/5/26)
-			$ret = $this->selectRecord($queryStr, array($typeId, $serial, $contentId, $day, $hour), $row);// コンテンツID抜けていたバグを修正(2016/5/23)
-			if ($ret){
-				$count = $row['vc_count'];
-				$count++;		// カウント数を更新
-				$queryStr = 'UPDATE _view_count ';
-				$queryStr .=  'SET vc_count = ? ';
-				$queryStr .=  'WHERE vc_serial = ? ';
-				$this->execStatement($queryStr, array($count, $row['vc_serial']));
-			} else {
-				// コンテンツIDも登録(2016/4/19)
-				$queryStr = 'INSERT INTO _view_count ';
-				$queryStr .=  '(vc_type_id, vc_count, vc_content_serial, vc_content_id, vc_date, vc_hour) ';
-				$queryStr .=  'VALUES ';
-				$queryStr .=  '(?, 1, ?, ?, ?, ?)';
+			// 同時INSERTがキー重複エラーで落ちるの処理方法を変更。MySQLの場合のみ対応。(2016/5/28)
+			if ($this->getDbType() == M3_DB_TYPE_MYSQL){
+				$queryStr  = 'INSERT INTO _view_count (';
+				$queryStr .=   'vc_type_id, ';
+				$queryStr .=   'vc_content_serial, ';
+				$queryStr .=   'vc_content_id, ';
+				$queryStr .=   'vc_date, ';
+				$queryStr .=   'vc_hour, ';
+				$queryStr .=   'vc_count ';
+				$queryStr .= ') VALUES (?, ?, ?, ?, ?, 1) ';
+				$queryStr .= 'ON DUPLICATE KEY UPDATE vc_count = vc_count + 1';
 				$this->execStatement($queryStr, array($typeId, $serial, $contentId, $day, $hour));
+			} else {
+				// 既にレコードが作成されている場合はレコードを更新
+				$queryStr  = 'SELECT * FROM _view_count ';
+				$queryStr .=   'WHERE vc_type_id = ? ';			// データタイプはデフォルトコンテンツ
+				$queryStr .=     'AND vc_content_serial = ? ';
+				$queryStr .=     'AND vc_content_id = ? ';
+				$queryStr .=     'AND vc_date = ? ';
+				$queryStr .=     'AND vc_hour = ? ';
+				$queryStr .=   'FOR UPDATE';				// 同時INSERTがキー重複エラーで落ちるので追加。(2016/5/26)
+				$ret = $this->selectRecord($queryStr, array($typeId, $serial, $contentId, $day, $hour), $row);// コンテンツID抜けていたバグを修正(2016/5/23)
+				if ($ret){
+					$count = $row['vc_count'];
+					$count++;		// カウント数を更新
+					$queryStr = 'UPDATE _view_count ';
+					$queryStr .=  'SET vc_count = ? ';
+					$queryStr .=  'WHERE vc_serial = ? ';
+					$this->execStatement($queryStr, array($count, $row['vc_serial']));
+				} else {
+					// コンテンツIDも登録(2016/4/19)
+					$queryStr = 'INSERT INTO _view_count ';
+					$queryStr .=  '(vc_type_id, vc_count, vc_content_serial, vc_content_id, vc_date, vc_hour) ';
+					$queryStr .=  'VALUES ';
+					$queryStr .=  '(?, 1, ?, ?, ?, ?)';
+					$this->execStatement($queryStr, array($typeId, $serial, $contentId, $day, $hour));
+				}
 			}
 		}
 		
