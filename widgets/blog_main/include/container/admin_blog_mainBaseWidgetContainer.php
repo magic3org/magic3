@@ -34,6 +34,8 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	const TASK_ENTRY_DETAIL		= 'entry_detail';		// ブログ記事(詳細)
 	const TASK_IMAGE			= 'image';				// ブログ記事画像
 	const TASK_HISTORY			= 'history';			// ブログ記事履歴
+	const TASK_SCHEDULE			= 'schedule';			// ブログ記事予約(一覧)
+	const TASK_SCHEDULE_DETAIL	= 'schedule_detail';	// ブログ記事予約(詳細)
 	const TASK_COMMENT			= 'comment';			// ブログ記事コメント(一覧)
 	const TASK_COMMENT_DETAIL	= 'comment_detail';		// ブログ記事コメント(詳細)
 	const TASK_ANALYTICS		= 'analytics';			// アクセス解析
@@ -101,6 +103,19 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 				$titles[] = '詳細';
 				$titles[] = '履歴';
 				break;
+			case self::TASK_SCHEDULE:			// ブログ記事予約(一覧)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '記事詳細';
+				$titles[] = '予約一覧';
+				break;
+			case self::TASK_SCHEDULE_DETAIL:			// ブログ記事予約(詳細)
+				$titles[] = 'ブログ記事管理';
+				$titles[] = '記事一覧';
+				$titles[] = '記事詳細';
+				$titles[] = '予約一覧';
+				$titles[] = '詳細';
+				break;
 			case self::TASK_COMMENT:			// ブログ記事コメント(一覧)
 				$titles[] = 'ブログ記事管理';
 				$titles[] = 'コメント一覧';
@@ -150,6 +165,8 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 											$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
 											$task == self::TASK_IMAGE ||			// ブログ記事画像
 											$task == self::TASK_HISTORY ||			// ブログ記事履歴
+											$task == self::TASK_SCHEDULE ||			// ブログ記事予約(一覧)
+											$task == self::TASK_SCHEDULE_DETAIL ||		// ブログ記事予約(詳細)
 											$task == self::TASK_COMMENT ||			// ブログ記事コメント(一覧)
 											$task == self::TASK_COMMENT_DETAIL		// ブログ記事コメント(詳細)
 										),
@@ -163,7 +180,9 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 													$task == self::TASK_ENTRY ||			// ブログ記事(一覧)
 													$task == self::TASK_ENTRY_DETAIL ||		// ブログ記事(詳細)
 													$task == self::TASK_IMAGE ||			// ブログ記事画像
-													$task == self::TASK_HISTORY				// ブログ記事履歴
+													$task == self::TASK_HISTORY	||			// ブログ記事履歴
+													$task == self::TASK_SCHEDULE ||			// ブログ記事予約(一覧)
+													$task == self::TASK_SCHEDULE_DETAIL		// ブログ記事予約(詳細)
 												)
 							),
 							(Object)array(

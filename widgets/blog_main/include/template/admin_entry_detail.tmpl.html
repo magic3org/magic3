@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -94,6 +94,11 @@ function listItem(){
 }
 function viewHistory(){
 	document.main.task.value = 'history';
+	document.main.submit();
+	return true;
+}
+function schedule(){
+	document.main.task.value = 'schedule';
 	document.main.submit();
 	return true;
 }
@@ -205,7 +210,9 @@ $(function(){
 </patTemplate:tmpl>
 <div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_ENTRY_BUTTONS2}><div class="btn-group">
 <input type="button" class="button" onclick="configImage();" value="画像" {IMAGE_BTN_DISABLED} />
-<input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} /><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} />
+<input type="button" class="button" onclick="schedule();" value="予約" {SCHEDULE_BTN_DISABLED} />
+<input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} />
+<input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} />
 </div></div></div>
 
 <table id="mainconfig">
