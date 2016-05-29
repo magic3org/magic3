@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: s_blog_archiveDb.php 4752 2012-03-14 04:42:10Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -31,6 +31,7 @@ class s_blog_archiveDb extends BaseDb
 		
 		$queryStr = 'SELECT be_regist_dt FROM blog_entry ';
 		$queryStr .=  'WHERE be_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=    'AND be_status = ? ';
 		$queryStr .=    'AND be_language_id = ? ';
 		$queryStr .=    'AND be_regist_dt <= ? ';	// 投稿日時が現在日時よりも過去のものを取得

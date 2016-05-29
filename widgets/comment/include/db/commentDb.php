@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: commentDb.php 6112 2013-06-14 03:21:43Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -459,6 +459,7 @@ class commentDb extends BaseDb
 		$params = array();
 		$queryStr  = 'SELECT *, be_id AS contents_id, be_name AS content_title, be_create_dt AS update_dt FROM blog_entry LEFT JOIN _login_user ON be_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'WHERE be_deleted = false ';		// 削除されていない
+		$queryStr .=     'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=     'AND be_language_id = ? ';$params[] = $langId;
 		$queryStr .=   'ORDER BY be_create_dt DESC ';
 		$queryStr .=   'LIMIT ' . $limit . ' OFFSET ' . $offset;
@@ -475,6 +476,7 @@ class commentDb extends BaseDb
 		$params = array();
 		$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN _login_user ON be_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'WHERE be_deleted = false ';		// 削除されていない
+		$queryStr .=     'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=     'AND be_language_id = ? ';$params[] = $langId;
 		return $this->selectRecordCount($queryStr, $params);
 	}
@@ -490,6 +492,7 @@ class commentDb extends BaseDb
 	{
 		$queryStr  = 'SELECT * FROM blog_entry ';
 		$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=   'AND be_id = ? ';
 		$queryStr .=   'AND be_language_id = ? ';
 		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);

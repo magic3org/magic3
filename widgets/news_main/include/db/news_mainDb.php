@@ -334,9 +334,9 @@ class news_mainDb extends BaseDb
 	{
 		$queryStr  = 'SELECT * FROM blog_entry ';
 		$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
+		$queryStr .=   'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=   'AND be_id = ? ';
 		$queryStr .=   'AND be_language_id = ? ';
-		$queryStr .=   'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
 		return $ret;
 	}

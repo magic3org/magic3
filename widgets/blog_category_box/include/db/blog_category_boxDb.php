@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2010 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: blog_category_boxDb.php 3820 2010-11-14 11:11:58Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -35,6 +35,7 @@ class blog_category_boxDb extends BaseDb
 		// カテゴリに属する記事のシリアル番号を取得
 		$queryStr = 'SELECT distinct(be_serial) FROM blog_entry RIGHT JOIN blog_entry_with_category ON be_serial = bw_entry_serial ';
 		$queryStr .=  'WHERE be_deleted = false ';		// 削除されていない
+		$queryStr .=    'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$queryStr .=    'AND be_status = ? ';		$params[] = 2;	// 「公開」(2)データを表示
 		$queryStr .=    'AND be_language_id = ? ';	$params[] = $langId;
 		$queryStr .=    'AND bw_category_id = ? '; $params[] = $categoryId;// 記事カテゴリー
