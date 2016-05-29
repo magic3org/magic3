@@ -325,9 +325,9 @@ class blog_analyticsDb extends BaseDb
 		$params = array();
 		$queryStr  = 'SELECT vc_content_id, SUM(vc_count) AS total, be_id, be_name FROM _view_count ';
 		if ($this->getDbType() == M3_DB_TYPE_MYSQL){		// MySQLの場合
-			$queryStr .=   'LEFT JOIN blog_entry ON CAST(vc_content_id AS UNSIGNED) = be_id AND be_deleted = false AND be_language_id = ? '; $params[] = $langId;
+			$queryStr .=   'LEFT JOIN blog_entry ON CAST(vc_content_id AS UNSIGNED) = be_id AND be_deleted = false AND be_history_index >= 0 AND be_language_id = ? '; $params[] = $langId;
 		} else if ($this->getDbType() == M3_DB_TYPE_PGSQL){// PostgreSQLの場合
-			$queryStr .=   'LEFT JOIN blog_entry ON CAST(vc_content_id AS INT) = be_id AND be_deleted = false AND be_language_id = ? '; $params[] = $langId;
+			$queryStr .=   'LEFT JOIN blog_entry ON CAST(vc_content_id AS INT) = be_id AND be_deleted = false AND be_history_index >= 0 AND be_language_id = ? '; $params[] = $langId;
 		}
 		
 		$queryStr .=   'WHERE vc_type_id = ? ';	$params[] = $typeId;		// データタイプ
