@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -31,6 +31,7 @@ class blogLibDb extends BaseDb
 		$queryStr .=   'WHERE be_deleted = false ';	// 削除されていない
 		$queryStr .=   'AND be_id = ? ';
 		$queryStr .=   'AND be_language_id = ? ';
+		$queryStr .=   'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		$ret = $this->selectRecord($queryStr, array($id, $langId), $row);
 		return $ret;
 	}
