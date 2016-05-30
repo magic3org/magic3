@@ -48,7 +48,13 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	 */
 	function _setTemplate($request, &$param)
 	{
-		return 'admin_schedule.tmpl.html';
+		$task = $request->trimValueOf('task');
+		
+		if ($task == 'schedule_detail'){		// 詳細画面
+			return 'admin_schedule_detail.tmpl.html';
+		} else {			// 一覧画面
+			return 'admin_schedule.tmpl.html';
+		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -60,6 +66,55 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	 * @param								なし
 	 */
 	function _assign($request, &$param)
+	{
+		$task = $request->trimValueOf('task');
+		if ($task == 'schedule_detail'){	// 詳細画面
+			return $this->createDetail($request);
+		} else {			// 一覧画面
+			return $this->createList($request);
+		}
+	}
+	/**
+	 * JavascriptファイルをHTMLヘッダ部に設定
+	 *
+	 * JavascriptファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						Javascriptファイル。出力しない場合は空文字列を設定。
+	 */
+	function _addScriptFileToHead($request, &$param)
+	{
+		$scriptArray = array($this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_SCRIPT_FILE),		// カレンダースクリプトファイル
+							$this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_LANG_FILE),	// カレンダー言語ファイル
+							$this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_SETUP_FILE));	// カレンダーセットアップファイル
+		return $scriptArray;
+
+	}
+	/**
+	 * CSSファイルをHTMLヘッダ部に設定
+	 *
+	 * CSSファイルをHTMLのheadタグ内に追加出力する。
+	 * _assign()よりも後に実行される。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。
+	 * @return string 						CSS文字列。出力しない場合は空文字列を設定。
+	 */
+	function _addCssFileToHead($request, &$param)
+	{
+		return $this->getUrl($this->gEnv->getScriptsUrl() . self::CALENDAR_CSS_FILE);
+	}
+	/**
+	 * 一覧画面作成
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function createList($request)
 	{
 		$act = $request->trimValueOf('act');
 		$langId	= $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// 編集言語を取得
@@ -87,9 +142,38 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		
+		// その他
 		$this->tmpl->addVar("_widget", "page", $pageNo);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
+	}
+	/**
+	 * 詳細画面作成
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param								なし
+	 */
+	function createDetail($request)
+	{
+		$act = $request->trimValueOf('act');
+		$langId	= $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// 編集言語を取得
+		if (empty($langId)) $langId = $this->_langId;
+		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
+		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
+		
+		// プレビュー用URL
+		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId;
+		if ($historyIndex >= 0) $previewUrl .= '&' . M3_REQUEST_PARAM_HISTORY . '=' . $historyIndex;		// 履歴番号(旧データの場合のみ有効)
+		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $langId;		// 多言語対応の場合は言語IDを付加
+		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
+		
+		// CKEditor用のCSSファイルを読み込む
+		$this->loadCKEditorCssFiles($previewUrl);
+		
+		// その他
+		$this->tmpl->addVar("_widget", "page", $pageNo);
+		$this->tmpl->addVar("_widget", "entry_id", $entryId);
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する

@@ -47,13 +47,17 @@ class admin_blog_mainWidgetContainer extends admin_blog_mainBaseWidgetContainer
 			case self::TASK_CONFIG:		// その他設定
 			case self::TASK_IMAGE:		// ブログ記事画像
 			case self::TASK_HISTORY:	// ブログ記事履歴
-			case self::TASK_SCHEDULE:	// ブログ記事予約
 			case self::TASK_ANALYTICS:	// アクセス解析
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 			case 'entry':		// ブログ記事管理
 			case 'entry_detail':		// ブログ記事管理(詳細)
 				$task = 'entry';
+				$goWidget = true;		// サブウィジェットを実行するかどうか
+				break;
+			case self::TASK_SCHEDULE:	// ブログ記事予約(一覧)
+			case self::TASK_SCHEDULE_DETAIL:	// ブログ記事予約(詳細)
+				$task = self::TASK_SCHEDULE;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 			case 'comment':		// ブログ記事コメント管理

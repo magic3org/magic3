@@ -60,7 +60,8 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 			case self::TASK_ENTRY_DETAIL:			// 記事編集画面詳細
 			case self::TASK_IMAGE:			// ブログ記事画像
 			case self::TASK_HISTORY:			// ブログ記事履歴
-			case self::TASK_SCHEDULE:	// ブログ記事予約
+			case self::TASK_SCHEDULE:	// ブログ記事予約(一覧)
+			case self::TASK_SCHEDULE_DETAIL:	// ブログ記事予約(詳細)
 			case self::TASK_COMMENT:		// ブログ記事コメント管理
 			case self::TASK_COMMENT_DETAIL:		// ブログ記事コメント管理(詳細)
 				if (empty($blogId)){	// ブログIDが指定されていない場合
@@ -100,6 +101,8 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 								break;
 							case self::TASK_IMAGE:			// ブログ記事画像
 							case self::TASK_HISTORY:			// ブログ記事履歴
+							case self::TASK_SCHEDULE:				// ブログ記事予約(一覧)
+							case self::TASK_SCHEDULE_DETAIL:		// ブログ記事予約(詳細)
 								$ret = self::$_mainDb->isExistsEntryInBlogId($serialNo, $blogId);
 								if ($ret) self::$_canEditEntry = true;		// 記事編集権限
 								break;
@@ -144,6 +147,16 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 			case self::TASK_HISTORY:			// ブログ記事履歴
 			case self::TASK_LINKINFO:		// CKEditorプラグインのリンク情報取得用
 				if (self::$_canEditEntry){	// 記事が編集可能かどうか
+					$goWidget = true;		// サブウィジェットを実行するかどうか				
+				} else {
+					$this->SetMsg(self::MSG_APP_ERR, "アクセスできません");
+					return true;
+				}
+				break;
+			case self::TASK_SCHEDULE:				// ブログ記事予約(一覧)
+			case self::TASK_SCHEDULE_DETAIL:		// ブログ記事予約(詳細)
+				if (self::$_canEditEntry){	// 記事が編集可能かどうか
+					$task = self::TASK_SCHEDULE;
 					$goWidget = true;		// サブウィジェットを実行するかどうか				
 				} else {
 					$this->SetMsg(self::MSG_APP_ERR, "アクセスできません");
