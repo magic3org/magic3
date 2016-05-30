@@ -1744,5 +1744,47 @@ class blog_mainDb extends BaseDb
 		$queryStr .=    'AND be_history_index >= 0 ';		// 正規(Regular)記事を対象
 		return $this->selectRecordCount($queryStr, $params);
 	}
+	/**
+	 * ブログ予約記事を取得
+	 *
+	 * @param string	$entryId			記事ID
+	 * @param string	$langId				言語
+	 * @param int		$limit				取得する項目数
+	 * @param int		$page				取得するページ(1～)
+	 * @param function	$callback			コールバック関数
+	 * @return 			なし
+	 */
+	function getEntrySchedule($entryId, $langId, $limit, $page, $callback)
+	{
+		$offset = $limit * ($page -1);
+		if ($offset < 0) $offset = 0;
+		
+		$params = array();
+		$queryStr = 'SELECT * FROM blog_entry LEFT JOIN _login_user ON be_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=  'WHERE be_deleted = false ';
+		$queryStr .=    'AND be_id = ? ';$params[] = $entryId;
+		$queryStr .=    'AND be_language_id = ? ';$params[] = $langId;
+		$queryStr .=    'AND be_history_index <= -1000 ';		// 予約(Scheduled)記事を対象
+		$queryStr .=  'ORDER BY be_active_start_dt DESC, be_history_index ';
+		$queryStr .=  'LIMIT ' . $limit . ' OFFSET ' . $offset;
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
+	 * ブログ予約記事数を取得
+	 *
+	 * @param string	$entryId			記事ID
+	 * @param string	$langId				言語
+	 * @return int							項目数
+	 */
+	function getEntryScheduleCount($entryId, $langId)
+	{
+		$params = array();
+		$queryStr = 'SELECT * FROM blog_entry LEFT JOIN _login_user ON be_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr .=  'WHERE be_deleted = false ';
+		$queryStr .=    'AND be_id = ? ';$params[] = $entryId;
+		$queryStr .=    'AND be_language_id = ? ';$params[] = $langId;
+		$queryStr .=    'AND be_history_index <= -1000 ';		// 予約(Scheduled)記事を対象
+		return $this->selectRecordCount($queryStr, $params);
+	}
 }
 ?>

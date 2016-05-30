@@ -24,16 +24,9 @@ function selpage(page){
 	document.main.submit();
 	return true;
 }
-function getHistory(serial){
-	document.main.task.value = 'entry_detail';
-	document.main.act.value = 'get_history';
-	document.main.serial.value = serial;
-	document.main.submit();
-	return true;
-}
 $(function(){
 	// テーブルを作成
-	m3SetConfigTable('itemlist');
+	m3SetConfigTable('entrylist');
 });
 //]]>
 </script>
@@ -47,27 +40,31 @@ $(function(){
 <input type="hidden" name="entryid" value="{ENTRY_ID}" />
 <input type="hidden" name="page" value="{PAGE}" />
 <!-- m3:PostParam -->
-<h3 class="m3config_h">ブログ記事予約</h3>
-<div class="m3config_h_side_buttons pull-right"><div {_HELP_ENTRY_BUTTONS}><div class="btn-group">
+
+<h3 class="m3config_h"><span {_HELP_SCHEDULE_LIST}>ブログ記事予約</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_SCHEDULE_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" /><input type="button" class="button" onclick="editItem();" value="編集" /><input type="button" class="button" onclick="delItem();" value="削除" />
 <input type="button" class="button" onclick="cancelItem();" value="戻る" />
 </div></div></div>
 
-<table id="itemlist">
+<table id="entrylist">
     <thead>
     <tr>
+        <th class="select"><span {_HELP_SCHEDULE_CHECK}>選択</span></th>
 	    <th style="width:50px;">No</th>
-	    <th>更新日時</th>
-	    <th>更新者</th>
-	    <th>操作</th>
+        <th><span {_HELP_SCHEDULE_NAME}>タイトル</span></th>
+	    <th class="status"><span {_HELP_SCHEDULE_STATUS}>状態</span></th>
+	    <th style="width:110px;"><span {_HELP_SCHEDULE_DT}>更新日時</span></th>
 	</tr>
     </thead>
     <tbody>
     <patTemplate:tmpl name="itemlist">
     <tr>
+	    <td class="select"><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{NO}</td>
-	    <td>{DATE}</td>
-	    <td>{USER}</td>
-	    <td><a href="javascript:void(0);" onclick="getHistory('{SERIAL}');">{IMAGE}</a></td>
+	    <td><a href="#" onclick="editItemBySerial({SERIAL});" rel="m3help" title="記事を編集">{NAME}</a></td>
+	    <td class="status">{STATUS_IMG}</td>
+	    <td>{REG_DATE}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>

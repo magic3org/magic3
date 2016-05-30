@@ -14,7 +14,7 @@
  * @link       http://www.magic3.org
  */
 /***************************************************************************************************
-### 複製元クラス admin_blog_mainHistoryWidgetContainer ###
+### 複製元クラス admin_blog_mainScheduleWidgetContainer ###
 複製元クラスからadmin_blog_mainScheduleWidgetContainerクラスを生成する
 変更行
 　・親クラスファイルの読み込み(require_once)
@@ -24,10 +24,9 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
-	private $totalCount;		// 編集履歴総数
+	private $serialArray = array();		// 表示されている項目シリアル番号
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
-	const HISTORY_GET_ICON_FILE = '/images/system/history_get32.png';		// 履歴データ取得用アイコン
-	const ICON_SIZE = 32;		// アイコンのサイズ
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	
 	/**
 	 * コンストラクタ
@@ -62,42 +61,33 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	 */
 	function _assign($request, &$param)
 	{
-		$userId		= $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$act = $request->trimValueOf('act');
+		$langId	= $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// 編集言語を取得
+		if (empty($langId)) $langId = $this->_langId;
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 一覧表示数
 		$maxListCount = self::DEFAULT_LIST_COUNT;
 		
-		// コンテンツ総数を取得
-		$this->totalCount = self::$_mainDb->getEntryHistoryCount($entryId, $langId);
+		// 総数を取得
+		$totalCount = self::$_mainDb->getEntryScheduleCount($entryId, $langId);
 
-		// 表示するページ番号の修正
-		$pageCount = (int)(($this->totalCount -1) / $maxListCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$this->firstNo = ($pageNo -1) * $maxListCount + 1;		// 先頭番号
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		
-		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i == $pageNo){
-					$link = '&nbsp;' . $i;
-				} else {
-					$link = '&nbsp;<a href="#" onclick="selpage(\'' . $i . '\');return false;">' . $i . '</a>';
-				}
-				$pageLink .= $link;
-			}
-		}
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
 		// コンテンツ編集履歴を取得
-		self::$_mainDb->getEntryHistory($entryId, $langId, $maxListCount, $pageNo, array($this, 'itemListLoop'));
+		self::$_mainDb->getEntrySchedule($entryId, $langId, $maxListCount, $pageNo, array($this, 'itemListLoop'));
+		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		
+		// ページ遷移(Pagination)用
+		$this->tmpl->addVar("_widget", "page_link", $pageLink);
+		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		
 		$this->tmpl->addVar("_widget", "page", $pageNo);
-		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "entry_id", $entryId);
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
@@ -111,22 +101,10 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-		// 履歴番号
-		$no = $fetchedRow['be_history_index'];
-		if ($no == $this->totalCount -1){
-			$no = '最新';
-		} else {
-			$no++;
-		}
-		// 操作用ボタン
-		$iconUrl = $this->gEnv->getRootUrl() . self::HISTORY_GET_ICON_FILE;		// 履歴データ取得用アイコン
-		$iconTitle = 'データを取得';
-		$historyGetTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 
 		$row = array(
-			'no' => $this->convertToDispString($no),													// 履歴番号
+			'no' => $this->convertToDispString($index + 1),								// 項目番号
 			'serial' => $this->convertToDispString($fetchedRow['be_serial']),			// シリアル番号
-			'image' => $historyGetTag,											// 履歴データ取得用の画像
 			'user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
 			'date' => $this->convertToDispDateTime($fetchedRow['be_create_dt'])	// 更新日時
 		);

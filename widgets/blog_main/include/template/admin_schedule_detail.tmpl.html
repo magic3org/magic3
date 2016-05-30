@@ -1,0 +1,364 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function newItem(){
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
+function addItem(){
+	if (!window.confirm('項目を新規追加しますか?')) return false;
+	
+	// CKEditorの入力内容を確定
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
+	// 画面遷移時に変更した値は戻す
+	document.main.task.value = 'entry_detail';
+	
+	document.main.act.value = 'add';
+	document.main.submit();
+	return true;
+}
+function updateItem(){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	
+	// CKEditorの入力内容を確定
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+	
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
+	// 画面遷移時に変更した値は戻す
+	document.main.task.value = 'entry_detail';
+	
+	document.main.act.value = 'update';
+	document.main.submit();
+	return true;
+}
+// 履歴データで更新
+function updateHistoryItem(){
+	if (!window.confirm('項目を更新しますか?')) return false;
+	
+	// CKEditorの入力内容を確定
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+	
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
+	// 画面遷移時に変更した値は戻す
+	document.main.task.value = 'entry_detail';
+	
+	document.main.act.value = 'update';
+	document.main.mode.value = 'history';
+	document.main.submit();
+	return true;
+}
+function delItem(){
+	if (!window.confirm('項目を削除しますか?')) return false;
+	
+	// 入力データ編集中のページ離脱を許可
+	m3CancelSafeContentEdit();
+	
+	// 画面遷移時に変更した値は戻す
+	document.main.task.value = 'entry_detail';
+	
+	document.main.act.value = 'delete';
+	document.main.submit();
+	return true;
+}
+function listItem(){
+	document.main.task.value = 'entry';
+	document.main.submit();
+	return true;
+}
+function viewHistory(){
+	document.main.task.value = 'history';
+	document.main.submit();
+	return true;
+}
+function schedule(){
+	document.main.task.value = 'schedule';
+	document.main.submit();
+	return true;
+}
+function configImage()
+{
+	document.main.task.value = 'image';
+	document.main.submit();
+	return true;
+}
+// プレビューを別ウィンドウで表示
+function previewInOtherWindow()
+{
+	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
+	return true;
+}
+function editEntry(serial){
+	document.main.entryid.value = '';		// 値キャンセル
+	document.main.task.value = 'entry_detail';
+	document.main.act.value = 'edit';
+	document.main.serial.value = serial;
+	document.main.submit();
+}
+function setStatusColor(){
+	var status = $('#item_status').val();
+	if (status == 2){		// 公開状態のとき
+		$('#status_field').removeClass('warning').addClass('success');
+	} else {
+		$('#status_field').removeClass('success').addClass('warning');
+	}
+}
+$(function(){
+	// 編集中の離脱を防止
+	m3SetSafeContentEdit();
+	
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+	
+	// タブを作成
+	$("#entryhtml").tabs();
+		
+	// 編集状態メニューのイベント設定
+	$('#item_status').change(function() {
+		setStatusColor();
+	});
+	setStatusColor();
+	
+	// 公開期間エリア表示制御
+	$("#{TAGID_ACTIVE_TERM}").click(function(){
+		var $tableRow = $('tr.active_term_area');
+		if ($tableRow.is(':hidden')){
+			$('#tmprow').remove();
+			$tableRow.slideToggle('slow');
+	    } else {
+			$tableRow.slideToggle('slow', function(){
+				$tableRow.after('<tr id="tmprow"></tr>');
+			});
+	    }
+	
+		// 表示エリアリサイズ
+		m3AdjustParentWindow();
+		return false;
+	});
+	if ({SHOW_ACTIVE_TERM_AREA}){
+		$('tr.active_term_area').show();
+	} else {
+		$('tr.active_term_area').after('<tr id="tmprow"></tr>').hide();
+	}
+		
+	// カレンダー作成
+	Calendar.setup({
+		inputField  : "item_start_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton1"       // ID of the button
+	});
+	Calendar.setup({
+		inputField  : "item_end_date",         // ID of the input field
+		ifFormat    : "%Y/%m/%d",    // the date format
+		button      : "calenderbutton2"       // ID of the button
+	});
+	
+	// WYSIWYGエディター作成
+	m3SetWysiwygEditor('item_html', 300/* 高さ */);
+	m3SetWysiwygEditor('item_html2', 300/* 高さ */);
+	
+	// 前後エントリー移動ボタン
+	<patTemplate:tmpl name="show_prev_button" visibility="hidden">
+	m3SetPrevButtonEvent(editEntry, {SERIAL});
+	</patTemplate:tmpl>
+	<patTemplate:tmpl name="show_next_button" visibility="hidden">
+	m3SetNextButtonEvent(editEntry, {SERIAL});
+	</patTemplate:tmpl>
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="entry_detail" />
+<input type="hidden" name="act" />
+<input type="hidden" name="mode" />
+<input type="hidden" name="serial" value="{SERIAL}" />
+<input type="hidden" name="entryid" value="{ENTRYID}" />
+<h3 class="m3config_h"><span {_HELP_ENTRY_DETAIL}>ブログ記事詳細</span></h3>
+
+<patTemplate:tmpl name="cancel_button" visibility="visible">
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_ENTRY_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="newItem();" value="新規" {NEW_BTN_DISABLED} /><input type="button" class="button" onclick="listItem();" value="戻る" />
+</div></div></div>
+</patTemplate:tmpl>
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_ENTRY_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="configImage();" value="画像" {IMAGE_BTN_DISABLED} />
+<input type="button" class="button" onclick="schedule();" value="予約" {SCHEDULE_BTN_DISABLED} />
+<input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} />
+<input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} />
+</div></div></div>
+
+<table id="mainconfig">
+    <tbody>
+    <tr>
+	    <th><span {_HELP_ENTRY_ID}>ID</span></th>
+	    <td style="width:200px;"><div class="form-control-static m3config_item col-sm-6">{ID}</div><div class="pull-right">{EYECATCH_IMAGE}</div></td>
+	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
+	    <td id="status_field" colspan="3" class="warning">
+		<div class="col-sm-6 m3config_item">
+	    <select id="item_status" name="item_status" class="form-control">
+	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
+		<option value="2" {SELECTED_PUBLIC}>公開</option>
+		<option value="3" {SELECTED_CLOSED}>非公開</option>
+	    </select>
+		</div>
+	    </td>
+	</tr>
+	<tr>
+	    <th><span {_HELP_ENTRY_NAME}>タイトル</span></th>
+	    <td colspan="5"><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" size="60" maxlength="60" /></td>
+	</tr>
+	<patTemplate:tmpl name="select_blogid_area" visibility="hidden">
+	<tr>
+	    <th><span {_HELP_ENTRY_BLOGID}>所属ブログ</span></th>
+	    <td colspan="5">
+		<div class="col-sm-4 m3config_item">
+	    <select name="blogid" class="form-control">
+	        <patTemplate:tmpl name="blogid_list">
+	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
+	        </patTemplate:tmpl>
+	    </select>
+		</div>
+	    </td>
+	</tr>
+	</patTemplate:tmpl>
+    <tr>
+	    <th><span {_HELP_ENTRY_USER}>投稿者</span></th>
+	    <td><div class="form-control-static m3config_item">{ENTRY_USER}</div></td>
+	    <th><span {_HELP_ENTRY_DT}>投稿日時</span></th>
+	    <td colspan="3">
+<div class="form-group"><div class="form-control-static col-sm-2 m3config_item" >日付：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-2 m3config_item" >時間：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="20" maxlength="10" /></div></div>
+		<!--日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" style="width:100px;" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" style="width:70px;" />-->
+		</td>
+	</tr>
+	<tr class="active_term_area" style="display:none;">
+	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span></th>
+	    <td colspan="5">
+<div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:30px;padding-left:3px;"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:55px;">時間：</div><div class="col-sm-2 m3config_item" style="width:90px;"><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:10px;padding-left:3px;margin-right:5px;">～</div>
+        <div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:30px;padding-left:3px;"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:55px;">時間：</div><div class="col-sm-2 m3config_item" style="width:90px;"><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div>
+		<!--開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" />-->
+		</td>
+	</tr>
+        <tr>
+	    <th><span {_HELP_ENTRY_CATEGORY}>カテゴリー</span></th>
+	    <td colspan="5">
+    <patTemplate:tmpl name="category">
+	<div class="col-sm-4 m3config_item">
+    <select name="item_category{INDEX}" class="form-control">
+        <option value="0">-- 未選択 --</option>
+        <patTemplate:tmpl name="category_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+	</patTemplate:tmpl>
+    </select>
+	</div>
+    </patTemplate:tmpl>
+	    </td>
+	</tr>
+        <tr>
+	    <th><span {_HELP_ENTRY_CONTENT}>投稿内容</span></th>
+	    <td colspan="5" class="ckeditor">
+<div id="entryhtml">
+            <ul>
+	    <li><a href="#entry1"><span>本文1</span></a></li>
+	    <li><a href="#entry2"><span>本文2</span></a></li>
+	    </ul>
+	    <div id="entry1" style="padding:0;">
+	    <textarea name="item_html">{ITEM_HTML}</textarea>
+	    </div>
+	    <div id="entry2" style="padding:0;">
+	    <textarea name="item_html2">{ITEM_HTML2}</textarea>
+	    </div>
+</div>
+	    </td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_ENTRY_DESC}>概要</span></th>
+	    <td colspan="5"><input type="text" name="item_desc" class="form-control" value="{DESC}" /></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_ENTRY_META_DESCRIPTION}>ページ要約</span></th>
+	    <td colspan="5" height="50"><textarea name="item_meta_desc" class="form-control">{META_DESC}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_ENTRY_META_KEYWORDS}>検索キーワード</span></th>
+	    <td colspan="5" height="50"><textarea name="item_meta_keyword" class="form-control">{META_KEYWORD}</textarea></td>
+	</tr>
+	<patTemplate:tmpl name="user_fields" type="condition" conditionvar="type" visibility="hidden">
+	<pattemplate:sub condition="__default">
+    <tr>
+		<th>{FIELD_ID}</th>
+	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" class="form-control" value="{VALUE}" size="40" maxlength="40" /></td>
+	</tr>
+	</pattemplate:sub>
+	<pattemplate:sub condition="first">
+    <tr>
+	    <th rowspan="{ROW_COUNT}">ユーザ定義フィールド</th>
+		<th>{FIELD_ID}</th>
+	    <td colspan="4"><input type="text" name="item_{FIELD_ID}" class="form-control" value="{VALUE}" size="40" maxlength="40" /></td>
+	</tr>
+	</pattemplate:sub>
+	</patTemplate:tmpl>
+	<patTemplate:tmpl name="show_comment_area" visibility="hidden">
+	<tr>
+	    <th>コメント</th>
+	    <td colspan="5"><div class="col-sm-4 m3config_item"><div class="checkbox"><label><input type="checkbox" name="show_comment" {SHOW_COMMENT} />コメントを表示する</label></div></div>
+		<div class="col-sm-4 m3config_item"><div class="checkbox"><label><input type="checkbox" name="receive_comment" {RECEIVE_COMMENT} />コメントを受け付ける</label></div></div>
+		</td>
+	</tr>
+	</patTemplate:tmpl>
+    <tr>
+	    <th><span {_HELP_ENTRY_RELATED_CONTENT}>関連コンテンツ</span></th>
+	    <td colspan="5"><input type="text" name="item_related_content" class="form-control" value="{RELATED_CONTENT}" {RELATED_CONTENT_DISABLED} /></td>
+	</tr>
+	<tr>
+	    <th>更新者</th>
+	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
+	    <th>更新日時</th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
+	</tr>
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
+<patTemplate:tmpl name="delete_button" visibility="hidden">
+		<input type="button" class="button" onclick="delItem();" value="削除" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="更新" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="add_button" visibility="hidden">
+		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+</patTemplate:tmpl>
+<patTemplate:tmpl name="update_history_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateHistoryItem();" value="履歴データで更新" />
+</patTemplate:tmpl>
+</div>
+</form>
+</div>
+</patTemplate:tmpl>
