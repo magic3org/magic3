@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -969,6 +969,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
 			$this->tmpl->addVar('_widget', 'history_btn_disabled', 'disabled');// 履歴ボタン使用不可
 			$this->tmpl->addVar('_widget', 'image_btn_disabled', 'disabled');// 画像ボタン使用不可
+			$this->tmpl->addVar('_widget', 'schedule_btn_disabled', 'disabled');// 記事予約ボタン使用不可
 			$this->tmpl->addVar('cancel_button', 'new_btn_disabled', 'disabled');	// 「新規」ボタン使用不可
 			
 			// デフォルト言語を最初に登録

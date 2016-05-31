@@ -24,6 +24,8 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
+	private $langId;		// 編集言語
+	private $entryId;
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
@@ -118,16 +120,16 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	function createList($request)
 	{
 		$act = $request->trimValueOf('act');
-		$langId	= $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// 編集言語を取得
-		if (empty($langId)) $langId = $this->_langId;
-		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
+		$this->langId	= $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// 編集言語を取得
+		if (empty($this->langId)) $this->langId = $this->_langId;
+		$this->entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 一覧表示数
 		$maxListCount = self::DEFAULT_LIST_COUNT;
 		
 		// 総数を取得
-		$totalCount = self::$_mainDb->getEntryScheduleCount($entryId, $langId);
+		$totalCount = self::$_mainDb->getEntryScheduleCount($this->entryId, $this->langId);
 
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
@@ -135,17 +137,24 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		// ページングリンク作成
 		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
 		
-		// コンテンツ編集履歴を取得
-		self::$_mainDb->getEntrySchedule($entryId, $langId, $maxListCount, $pageNo, array($this, 'itemListLoop'));
+		// 予約記事を取得
+		self::$_mainDb->getEntrySchedule($this->entryId, $this->langId, $maxListCount, $pageNo, array($this, 'itemListLoop'));
 		if (count($this->serialArray) <= 0) $this->tmpl->setAttribute('itemlist', 'visibility', 'hidden');// 投稿記事がないときは、一覧を表示しない
+		
+		// ブログ記事を取得
+		$ret = self::$_mainDb->getEntryItem($this->entryId, $this->langId, $row);
+		if ($ret){
+			$title = $row['be_name'];				// タイトル
+		}
 		
 		// ページ遷移(Pagination)用
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $totalCount);
+		$this->tmpl->addVar("_widget", "total_count", $this->convertToDispString($totalCount));
 		
 		// その他
-		$this->tmpl->addVar("_widget", "page", $pageNo);
-		$this->tmpl->addVar("_widget", "entry_id", $entryId);
+		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($title));		// 記事タイトル
+		$this->tmpl->addVar("_widget", "page", $this->convertToDispString($pageNo));
+		$this->tmpl->addVar("_widget", "entry_id", $this->convertToDispString($this->entryId));
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
 	/**
@@ -157,9 +166,9 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	function createDetail($request)
 	{
 		$act = $request->trimValueOf('act');
-		$langId	= $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// 編集言語を取得
-		if (empty($langId)) $langId = $this->_langId;
-		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
+		$this->langId	= $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// 編集言語を取得
+		if (empty($this->langId)) $this->langId = $this->_langId;
+		$this->entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 //		$name = $request->trimValueOf('item_name');
@@ -168,8 +177,28 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$html = $request->valueOf('item_html');
 		$html2 = $request->valueOf('item_html2');
 		
+		if ($act == 'add'){		// 項目追加の場合
+		} else if ($act == 'update'){		// 項目更新の場合
+		} else if ($act == 'delete'){		// 項目削除の場合
+			if (empty($this->serialNo)){
+				$this->setUserErrorMsg('削除項目が選択されていません');
+			}
+			// エラーなしの場合は、データを削除
+			if ($this->getMsgCount() == 0){
+			}
+		} else {
+		}
+		
+		// 設定データを再取得
+		if ($reloadData){		// データの再ロード
+			$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
+			if ($ret){
+			} else {
+			}
+		}
+		
 		// ブログ記事を取得
-		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
+		$ret = self::$_mainDb->getEntryItem($this->entryId, $this->langId, $row);
 		if ($ret){
 			$entrySerialNo = $row['be_serial'];		// シリアル番号
 			$reloadData = true;		// データの再読み込み
@@ -196,21 +225,32 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 				$html2 = '';				// HTML
 		}
 
+
 		
 		// プレビュー用URL
-		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId;
+		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $this->entryId;
 		if ($historyIndex >= 0) $previewUrl .= '&' . M3_REQUEST_PARAM_HISTORY . '=' . $historyIndex;		// 履歴番号(旧データの場合のみ有効)
 		$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
-		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $langId;		// 多言語対応の場合は言語IDを付加
+		if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
 		$this->tmpl->addVar('_widget', 'preview_url', $previewUrl);// プレビュー用URL(フロント画面)
 		
 		// CKEditor用のCSSファイルを読み込む
 		$this->loadCKEditorCssFiles($previewUrl);
 		
+		// #### 更新、新規登録部をを作成 ####
+		if (empty($this->serialNo)){		// シリアル番号のときは新規とする
+			$this->tmpl->addVar("_widget", "id", '新規');
+			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
+		} else {
+			$this->tmpl->addVar("_widget", "id", $id);
+			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+		}
+		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
+		
 		// その他
 		$this->tmpl->addVar("_widget", "page", $this->convertToDispString($pageNo));
-		$this->tmpl->addVar("_widget", "entry_id", $this->convertToDispString($entryId));
-		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($entryId));
+		$this->tmpl->addVar("_widget", "entry_id", $this->convertToDispString($this->entryId));
+		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($this->entryId));
 		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($name));		// 名前
 		$this->tmpl->addVar("_widget", "item_html", $html);		// HTML
 		$this->tmpl->addVar("_widget", "item_html2", $html2);		// HTML(続き)
