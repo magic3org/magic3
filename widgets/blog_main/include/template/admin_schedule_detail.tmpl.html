@@ -104,32 +104,10 @@ $(function(){
 	$("#entryhtml").tabs();
 		
 	// 編集状態メニューのイベント設定
-/*	$('#item_status').change(function() {
+	$('#item_status').change(function() {
 		setStatusColor();
 	});
-	setStatusColor();*/
-	
-	// 公開期間エリア表示制御
-/*	$("#{TAGID_ACTIVE_TERM}").click(function(){
-		var $tableRow = $('tr.active_term_area');
-		if ($tableRow.is(':hidden')){
-			$('#tmprow').remove();
-			$tableRow.slideToggle('slow');
-	    } else {
-			$tableRow.slideToggle('slow', function(){
-				$tableRow.after('<tr id="tmprow"></tr>');
-			});
-	    }
-	
-		// 表示エリアリサイズ
-		m3AdjustParentWindow();
-		return false;
-	});
-	if ({SHOW_ACTIVE_TERM_AREA}){
-		$('tr.active_term_area').show();
-	} else {
-		$('tr.active_term_area').after('<tr id="tmprow"></tr>').hide();
-	}*/
+	setStatusColor();
 		
 	// カレンダー作成
 /*	Calendar.setup({
@@ -186,30 +164,19 @@ $(function(){
 	    <select id="item_status" name="item_status" class="form-control">
 	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
 		<option value="2" {SELECTED_PUBLIC}>公開</option>
-		<option value="3" {SELECTED_CLOSED}>非公開</option>
 	    </select>
 		</div>
 	    </td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_SCHEDULE_NAME}>タイトル</span></th>
-	    <td colspan="5"><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" size="60" maxlength="60" /></td>
+	    <td colspan="5"><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" maxlength="60" disabled /></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_SCHEDULE_USER}>投稿者</span></th>
-	    <td><div class="form-control-static m3config_item">{ENTRY_USER}</div></td>
-	    <th><span {_HELP_SCHEDULE_DT}>投稿日時</span></th>
-	    <td colspan="3">
-<div class="form-group"><div class="form-control-static col-sm-2 m3config_item" >日付：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-2 m3config_item" >時間：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="20" maxlength="10" /></div></div>
-		<!--日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" style="width:100px;" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" style="width:70px;" />-->
-		</td>
-	</tr>
-	<tr class="active_term_area" style="display:none;">
-	    <th><span {_HELP_SCHEDULE_ACTIVE_TERM}>公開期間</span></th>
+	    <th><span {_HELP_SCHEDULE_DT}>更新日時</span></th>
 	    <td colspan="5">
-<div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control spacer_bottom" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:30px;padding-left:3px;"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:55px;">時間：</div><div class="col-sm-2 m3config_item" style="width:90px;"><input type="text" class="form-control spacer_bottom" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:10px;padding-left:3px;margin-right:5px;">～</div>
-        <div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:30px;padding-left:3px;"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:55px;">時間：</div><div class="col-sm-2 m3config_item" style="width:90px;"><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div>
-		<!--開始日：<input type="text" id="item_start_date" name="item_start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_start_time" name="item_start_time" value="{START_TIME}" size="15" maxlength="10" style="width:100px;" />&nbsp;&nbsp;～&nbsp;&nbsp;終了日：<input type="text" id="item_end_date" name="item_end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" /><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a>&nbsp;&nbsp;時間：<input type="text" id="item_end_time" name="item_end_time" value="{END_TIME}" size="15" maxlength="10" style="width:100px;" />-->
+<div class="form-group"><div class="form-control-static col-sm-2 m3config_item" style="width:4em;">日付：</div><div class="col-sm-4 m3config_item" style="width:10em;"><input type="text" class="form-control" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-2 m3config_item following" style="width:4em;">時間：</div><div class="col-sm-4 m3config_item" style="width:10em;"><input type="text" class="form-control" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="20" maxlength="10" /></div></div>
+		<!--日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" style="width:100px;" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" style="width:70px;" />-->
 		</td>
 	</tr>
     <tr>

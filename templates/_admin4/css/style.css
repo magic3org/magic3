@@ -706,13 +706,20 @@ span[rel="m3help"] { cursor: default; }
 	padding-right: 0;
 /*	padding-right: 5px;*/
 }
-.m3config_item.join {
+/*.m3config_item.join {
 	padding-left: 0;
 	padding-right: 5px;
+}*/
+.m3config_item.following {
+	padding-left: 5px;
+	padding-right: 0;
 }
 .m3config_item.form-control-static {
 	padding-left: 3px;
 	padding-right: 3px;
+}
+.m3config_item.form-control-static.following {
+	margin-left: 20px;
 }
 /* インライン項目 */
 .m3config_inline_item {

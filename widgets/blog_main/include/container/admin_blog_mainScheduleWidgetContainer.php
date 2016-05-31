@@ -27,6 +27,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
+	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	
 	/**
 	 * コンストラクタ
@@ -161,6 +162,41 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
+//		$name = $request->trimValueOf('item_name');
+		$updateDate = $request->trimValueOf('item_date');		// 更新日
+		$updateTime = $request->trimValueOf('item_time');		// 更新時間
+		$html = $request->valueOf('item_html');
+		$html2 = $request->valueOf('item_html2');
+		
+		// ブログ記事を取得
+		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
+		if ($ret){
+			$entrySerialNo = $row['be_serial'];		// シリアル番号
+			$reloadData = true;		// データの再読み込み
+			
+			$name = $row['be_name'];				// タイトル
+			$html = $row['be_html'];				// HTML
+			$html = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html);// アプリケーションルートを変換
+			$html2 = $row['be_html_ext'];				// HTML
+			$html2 = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html2);// アプリケーションルートを変換
+			
+			// アイキャッチ画像
+			$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+			if (empty($row['be_thumb_filename'])){
+				$iconTitle = 'アイキャッチ画像未設定';
+			} else {
+				$iconTitle = 'アイキャッチ画像';
+			}
+			$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		} else {
+			$entrySerialNo = 0;
+			
+				$name = '';				// タイトル
+				$html = '';				// HTML
+				$html2 = '';				// HTML
+		}
+
+		
 		// プレビュー用URL
 		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $entryId;
 		if ($historyIndex >= 0) $previewUrl .= '&' . M3_REQUEST_PARAM_HISTORY . '=' . $historyIndex;		// 履歴番号(旧データの場合のみ有効)
@@ -172,8 +208,13 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$this->loadCKEditorCssFiles($previewUrl);
 		
 		// その他
-		$this->tmpl->addVar("_widget", "page", $pageNo);
-		$this->tmpl->addVar("_widget", "entry_id", $entryId);
+		$this->tmpl->addVar("_widget", "page", $this->convertToDispString($pageNo));
+		$this->tmpl->addVar("_widget", "entry_id", $this->convertToDispString($entryId));
+		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($entryId));
+		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($name));		// 名前
+		$this->tmpl->addVar("_widget", "item_html", $html);		// HTML
+		$this->tmpl->addVar("_widget", "item_html2", $html2);		// HTML(続き)
+		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する

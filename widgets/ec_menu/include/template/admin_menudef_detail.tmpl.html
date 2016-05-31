@@ -74,7 +74,7 @@ $(function(){
     <tr>
 	    <th><span {_HELP_MENUDEF_NAME}>{_LC_LABEL_NAME}</span></th>
 	    <td colspan="3">
-		<div class="col-sm-4 m3config_item join">
+		<div class="col-sm-4 m3config_item">
 	    <select name="item_sel_menuid" onchange="selectMenu();">
 	        <option value="0" {SELECTED}>-- {_LC_LABEL_NEW} --</option>
                 <patTemplate:tmpl name="menuid_list">
@@ -82,10 +82,10 @@ $(function(){
                 </patTemplate:tmpl>
 	    </select>
 		</div>
-	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name" value="{NAME}" maxlength="40" /></div><div class="col-sm-1 m3config_item form-control-static">{LANG}</div>
+	    <div class="col-sm-4 m3config_item following"><input type="text" name="item_name" value="{NAME}" maxlength="40" /></div><div class="col-sm-1 m3config_item form-control-static">{LANG}</div>
 	    <patTemplate:tmpl name="input_lang" visibility="hidden">
 		<div class="form-group">
-	    <div class="col-sm-4 m3config_item"><input type="text" name="item_name_{ID}" value="{VALUE}" maxlength="40" /></div><div class="col-sm-1 m3config_item form-control-static">{LANG}</div>
+	    <div class="col-sm-4 m3config_item following"><input type="text" name="item_name_{ID}" value="{VALUE}" maxlength="40" /></div><div class="col-sm-1 m3config_item form-control-static">{LANG}</div>
 		</div>
 	    </patTemplate:tmpl>
 	    </td>
