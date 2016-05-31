@@ -24,9 +24,10 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_blog_mainBa
 
 class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
+	private $serialNo;		// 記事シリアル番号
+	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $langId;		// 編集言語
 	private $entryId;
-	private $serialArray = array();		// 表示されている項目シリアル番号
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
@@ -166,6 +167,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	function createDetail($request)
 	{
 		$act = $request->trimValueOf('act');
+		$this->serialNo = $request->trimValueOf('serial');		// 記事シリアル番号
 		$this->langId	= $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_LANG);		// 編集言語を取得
 		if (empty($this->langId)) $this->langId = $this->_langId;
 		$this->entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
@@ -186,7 +188,14 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
 			}
-		} else {
+		} else {		// 初期状態
+			if (empty($this->serialNo)){
+				$name = '';				// タイトル
+				$html = '';				// HTML
+				$html2 = '';				// HTML
+				$updateDate = date("Y/m/d");		// 更新日
+				$updateTime = date("H:i:s");		// 更新時間
+			}
 		}
 		
 		// 設定データを再取得
@@ -220,9 +229,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		} else {
 			$entrySerialNo = 0;
 			
-				$name = '';				// タイトル
-				$html = '';				// HTML
-				$html2 = '';				// HTML
+
 		}
 
 
@@ -252,6 +259,8 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "entry_id", $this->convertToDispString($this->entryId));
 		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($this->entryId));
 		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($name));		// 名前
+		$this->tmpl->addVar("_widget", "update_date", $updateDate);	// 更新日
+		$this->tmpl->addVar("_widget", "update_time", $updateTime);	// 更新時間
 		$this->tmpl->addVar("_widget", "item_html", $html);		// HTML
 		$this->tmpl->addVar("_widget", "item_html2", $html2);		// HTML(続き)
 		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
