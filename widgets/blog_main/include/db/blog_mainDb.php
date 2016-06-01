@@ -17,6 +17,8 @@ require_once($gEnvManager->getDbPath() . '/baseDb.php');
 
 class blog_mainDb extends BaseDb
 {
+	const INIT_HISTORY_INDEX_FOR_SCHEDULE = -1000;			// 予約記事用の履歴番号初期値
+	
 	/**
 	 * ブログ定義値を取得をすべて取得
 	 *
@@ -1786,5 +1788,157 @@ class blog_mainDb extends BaseDb
 		$queryStr .=    'AND be_history_index <= -1000 ';		// 予約(Scheduled)記事を対象
 		return $this->selectRecordCount($queryStr, $params);
 	}
+	/**
+	 * 予約記事の新規追加
+	 *
+	 * @param string  $id			記事ID
+	 * @param string  $langId		言語ID
+	 * @param string  $html			HTML
+	 * @param string  $html2		HTML(続き)
+	 * @param timestamp	$startDt	期間(開始日)
+	 * @param timestamp	$endDt		期間(終了日)
+	 * @param int     $newSerial	新規シリアル番号
+	 * @param array   $otherParams	その他のフィールド値
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function addEntryScheduleItem($id, $langId, $html, $html2, $startDt, $endDt, &$newSerial, $otherParams = null)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+			
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 次の履歴IDを取得
+		$historyIndex = self::INIT_HISTORY_INDEX_FOR_SCHEDULE;				// 予約記事履歴番号を初期化
+		$queryStr  = 'SELECT MIN(be_history_index) AS minh FROM blog_entry ';
+		$queryStr .=   'WHERE be_id = ? ';
+		$queryStr .=     'AND be_language_id = ? ';
+		$queryStr .=     'AND be_history_index <= ? ';		// 正規(Regular)記事を対象
+		$ret = $this->selectRecord($queryStr, array($id, $langId, self::INIT_HISTORY_INDEX_FOR_SCHEDULE), $row);
+		if ($ret){
+			if (!is_null($row['minh'])) $historyIndex = intval($row['minh']) - 1;
+		}
+
+		// 期間の値を修正
+		if (is_null($startDt)) $startDt = $this->gEnv->getInitValueOfTimestamp();
+		if (is_null($endDt)) $endDt = $this->gEnv->getInitValueOfTimestamp();
+		
+		// データを追加
+		$params = array($id, $langId, $historyIndex, $html, $html2, $startDt, $endDt, $userId, $now);
+												
+		$queryStr  = 'INSERT INTO blog_entry ';
+		$queryStr .=   '(be_id, ';
+		$queryStr .=   'be_language_id, ';
+		$queryStr .=   'be_history_index, ';
+		$queryStr .=   'be_html, ';
+		$queryStr .=   'be_html_ext, ';
+		$queryStr .=   'be_active_start_dt, ';
+		$queryStr .=   'be_active_end_dt, ';
+		$queryStr .=   'be_update_user_id, ';			// 更新履歴は管理しないのでupdateを使用する
+		$queryStr .=   'be_update_dt ';
+		
+		// その他のフィールド値を追加
+		$otherValueStr = '';
+		if (!empty($otherParams)){
+			$keys = array_keys($otherParams);// キーを取得
+			for ($i = 0; $i < count($keys); $i++){
+				$fieldName = $keys[$i];
+				$fieldValue = $otherParams[$fieldName];
+				if (!isset($fieldValue)) continue;
+				$params[] = $fieldValue;
+				$queryStr .= ', ' . $fieldName;
+				$otherValueStr .= ', ?';
+			}
+		}
+		$queryStr .=  ') VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
+		$this->execStatement($queryStr, $params);
+		
+		// 新規のシリアル番号取得
+		$newSerial = 0;
+		$queryStr = 'SELECT MAX(be_serial) AS ns FROM blog_entry ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $newSerial = $row['ns'];
+
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	
+	/**
+	 * 予約記事の更新
+	 *
+	 * @param int     $serial		シリアル番号
+	 * @param string  $html			HTML
+	 * @param string  $html2		HTML(続き)
+	 * @param timestamp	$startDt	期間(開始日)
+	 * @param timestamp	$endDt		期間(終了日)
+	 * @param array   $otherParams	その他のフィールド値
+	 * @return bool					true = 成功、false = 失敗
+	 */
+/*	function updateEntryScheduleItem($serial, $html, $html2, $startDt, $endDt, $otherParams = null)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+						
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$queryStr  = 'SELECT * FROM blog_entry ';
+		$queryStr .=   'WHERE be_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['be_deleted']){		// レコードが削除されていれば終了
+				$this->endTransaction();
+				return false;
+			}
+		} else {		// 存在しない場合は終了
+			$this->endTransaction();
+			return false;
+		}
+		
+		// 既存項目を更新
+		$queryStr  = 'UPDATE blog_entry ';
+		$queryStr .=   'SET ';
+		for ($i = 0; $i < count($keys); $i++){
+			$queryStr .= $keys[$i] . ' = ?, ';
+			$param[] = $updateData[$keys[$i]];
+		}
+		$queryStr .=     'pd_update_user_id = ?, ';
+		$queryStr .=     'pd_update_dt = ? ';
+		$queryStr .=   'WHERE pd_serial = ? ';
+		$ret = $this->execStatement($queryStr, array_merge($param, array($user, $now, $serialNo)));
+
+
+
+		// 日付を更新
+		$queryStr  = 'UPDATE blog_entry ';
+		$queryStr .=   'SET ';
+		
+		// その他のフィールド値を追加
+		$otherValueStr = '';
+		if (!empty($otherParams)){
+			$keys = array_keys($otherParams);// キーを取得
+			for ($i = 0; $i < count($keys); $i++){
+				$fieldName = $keys[$i];
+				$fieldValue = $otherParams[$fieldName];
+				if (!isset($fieldValue)) continue;
+				$params[] = $fieldValue;
+				$queryStr .= ', ' . $fieldName;
+				$otherValueStr .= ', ?';
+			}
+		}
+		
+		$queryStr .=     'be_update_user_id = ?, ';
+		$queryStr .=     'be_update_dt = ? ';
+		$queryStr .=   'WHERE be_serial = ?';
+		$this->execStatement($queryStr, array($now, $userId, $now, intval($serial)));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}*/
 }
 ?>

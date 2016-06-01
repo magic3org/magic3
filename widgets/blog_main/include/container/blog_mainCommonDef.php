@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -23,6 +23,10 @@ class blog_mainCommonDef
 	const USER_ID_SEPARATOR = ',';				// ユーザID区切り用セパレータ
 	const ATTACH_FILE_DIR = '/etc/blog';		// 添付ファイル格納ディレクトリ
 	const DOWNLOAD_CONTENT_TYPE = '-file';		// ダウンロードするコンテンツのタイプ
+	// 記事状態
+	const ENTRY_STATUS_EDIT = 1;				// 記事状態(編集中)
+	const ENTRY_STATUS_PUBLIC = 2;				// 記事状態(公開)
+	const ENTRY_STATUS_PRIVATE = 3;					// 記事状態(非公開)
 	
 	// ##### DB定義値 #####
 	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数

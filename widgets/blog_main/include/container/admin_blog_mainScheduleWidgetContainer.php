@@ -28,9 +28,13 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $langId;		// 編集言語
 	private $entryId;
+	private $defaultEntryName;		// 対象記事のタイトル
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
+	// 予約状態
+	const SCHEDULE_STATUS_DRAFT = 'draft';		// 予約状態(編集中)
+	const SCHEDULE_STATUS_EXEC = 'exec';			// 予約状態(実行)
 	
 	/**
 	 * コンストラクタ
@@ -116,7 +120,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
+	 * @return								なし
 	 */
 	function createList($request)
 	{
@@ -125,6 +129,9 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		if (empty($this->langId)) $this->langId = $this->_langId;
 		$this->entryId = $request->trimValueOf(M3_REQUEST_PARAM_BLOG_ENTRY_ID);
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
+		
+		// ### 現在のブログ記事の情報を取得 ###
+		$this->loadEntryInfo($this->entryId, $this->langId);
 		
 		// 一覧表示数
 		$maxListCount = self::DEFAULT_LIST_COUNT;
@@ -162,7 +169,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	 * 詳細画面作成
 	 *
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
+	 * @return								なし
 	 */
 	function createDetail($request)
 	{
@@ -174,13 +181,67 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 //		$name = $request->trimValueOf('item_name');
-		$updateDate = $request->trimValueOf('item_date');		// 更新日
-		$updateTime = $request->trimValueOf('item_time');		// 更新時間
+		$status = $request->trimValueOf('item_status');		// エントリー状態(0=未設定、1=編集中、2=公開、3=非公開)
+		$updateDate = $request->trimValueOf('item_update_date');		// 更新日
+		$updateTime = $request->trimValueOf('item_update_time');		// 更新時間
 		$html = $request->valueOf('item_html');
 		$html2 = $request->valueOf('item_html2');
 		
+		// ### 現在のブログ記事の情報を取得 ###
+		$this->loadEntryInfo($this->entryId, $this->langId);
+		
 		if ($act == 'add'){		// 項目追加の場合
+			$this->checkInput($html, '投稿内容');
+			$this->checkDate($updateDate, '更新日付');
+			$this->checkTime($updateTime, '更新時間');
+
+			// 記事公開の場合は更新日時をチェック
+			if ($status == self::SCHEDULE_STATUS_EXEC){		// 予約状態実行の場合
+				if (strtotime($updateDate . ' ' . $updateTime) < strtotime($entryRow['be_regist_dt']) ||		// 投稿日時よりも前の場合
+					strtotime($updateDate . ' ' . $updateTime) < strtotime('now')) $this->setUserErrorMsg('更新日時が不正です');
+			}
+			
+			// エラーなしの場合は、データを登録
+			if ($this->getMsgCount() == 0){
+				// 更新日時は、公開開始日時に格納
+				$startDt = $this->convertToProperDate($updateDate) . ' ' . $this->convertToProperTime($updateTime);
+				
+				$ret = self::$_mainDb->addEntryScheduleItem($this->entryId, $this->langId, $html, $html2, $startDt, $endDt, $newSerial, $otherParams);
+				if ($ret){
+					$this->setGuidanceMsg('データを追加しました');
+					
+					// シリアル番号更新
+					$this->serialNo = $newSerial;
+					$reloadData = true;		// データの再ロード
+				} else {
+					$this->setAppErrorMsg('データ追加に失敗しました');
+				}
+			}
 		} else if ($act == 'update'){		// 項目更新の場合
+			$this->checkInput($html, '投稿内容');
+			$this->checkDate($updateDate, '更新日付');
+			$this->checkTime($updateTime, '更新時間');
+
+			// 記事公開の場合は更新日時をチェック
+			if ($status == self::SCHEDULE_STATUS_EXEC){		// 予約状態実行の場合
+				if (strtotime($updateDate . ' ' . $updateTime) < strtotime($entryRow['be_regist_dt']) ||		// 投稿日時よりも前の場合
+					strtotime($updateDate . ' ' . $updateTime) < strtotime('now')) $this->setUserErrorMsg('更新日時が不正です');
+			}
+			
+			// エラーなしの場合は、データを登録
+			if ($this->getMsgCount() == 0){
+				// 更新日時は、公開開始日時に格納
+				$startDt = $this->convertToProperDate($updateDate) . ' ' . $this->convertToProperTime($updateTime);
+				
+				$ret = self::$_mainDb->updateEntryScheduleItem($this->serialNo, $html, $html2, $startDt, $endDt, $otherParams);
+				if ($ret){
+					$this->setGuidanceMsg('データを更新しました');
+					
+					$reloadData = true;		// データの再ロード
+				} else {
+					$this->setAppErrorMsg('データ更新に失敗しました');
+				}
+			}
 		} else if ($act == 'delete'){		// 項目削除の場合
 			if (empty($this->serialNo)){
 				$this->setUserErrorMsg('削除項目が選択されていません');
@@ -189,50 +250,51 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			if ($this->getMsgCount() == 0){
 			}
 		} else {		// 初期状態
-			if (empty($this->serialNo)){
-				$name = '';				// タイトル
-				$html = '';				// HTML
-				$html2 = '';				// HTML
-				$updateDate = date("Y/m/d");		// 更新日
-				$updateTime = date("H:i:s");		// 更新時間
+			$reloadData = true;			// 設定データ再読み込み
+		}
+
+		// 予約対象のブログ記事を取得(初期設定、表示用)
+		$ret = self::$_mainDb->getEntryItem($this->entryId, $this->langId, $entryRow);
+		if ($ret){
+//			$this->defaultEntryName = $entryRow['be_name'];				// タイトル
+			$entryHtml = $entryRow['be_html'];				// HTML
+			$entryHtml = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryHtml);// アプリケーションルートを変換
+			$entryHtml2 = $entryRow['be_html_ext'];				// HTML
+			$entryHtml2 = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $entryHtml2);// アプリケーションルートを変換
+
+			// アイキャッチ画像
+			$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($entryRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
+			if (empty($entryRow['be_thumb_filename'])){
+				$iconTitle = 'アイキャッチ画像未設定';
+			} else {
+				$iconTitle = 'アイキャッチ画像';
 			}
+			$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		}
 		
 		// 設定データを再取得
 		if ($reloadData){		// データの再ロード
 			$ret = self::$_mainDb->getEntryBySerial($this->serialNo, $row, $categoryRow);
 			if ($ret){
+				// 予約記事で更新
+				$status = $row['be_status'];				// 記事状態
+				$html = $row['be_html'];				// 記事内容1
+				$html = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html);// アプリケーションルートを変換
+				$html2 = $row['be_html_ext'];				// 記事内容2
+				$html2 = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html2);// アプリケーションルートを変換
+				
+				// 公開期間から更新日時を取得
+				$updateDate = $this->convertToDispDate($row['be_active_start_dt']);	// 公開期間開始日
+				$updateTime = $this->timestampToTime($row['be_active_start_dt']);	// 公開期間開始時間
 			} else {
+				$this->serialNo = 0;
+				$status = self::SCHEDULE_STATUS_DRAFT;		// 予約状態(編集中)
+				$html = $entryHtml;				// 記事内容1
+				$html2 = $entryHtml2;				// 記事内容2
+				$updateDate = date("Y/m/d");		// 更新日
+				$updateTime = date("H:i:s");		// 更新時間
 			}
 		}
-		
-		// ブログ記事を取得
-		$ret = self::$_mainDb->getEntryItem($this->entryId, $this->langId, $row);
-		if ($ret){
-			$entrySerialNo = $row['be_serial'];		// シリアル番号
-			$reloadData = true;		// データの再読み込み
-			
-			$name = $row['be_name'];				// タイトル
-			$html = $row['be_html'];				// HTML
-			$html = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html);// アプリケーションルートを変換
-			$html2 = $row['be_html_ext'];				// HTML
-			$html2 = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html2);// アプリケーションルートを変換
-			
-			// アイキャッチ画像
-			$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($row['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
-			if (empty($row['be_thumb_filename'])){
-				$iconTitle = 'アイキャッチ画像未設定';
-			} else {
-				$iconTitle = 'アイキャッチ画像';
-			}
-			$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-		} else {
-			$entrySerialNo = 0;
-			
-
-		}
-
-
 		
 		// プレビュー用URL
 		$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $this->entryId;
@@ -258,7 +320,11 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "page", $this->convertToDispString($pageNo));
 		$this->tmpl->addVar("_widget", "entry_id", $this->convertToDispString($this->entryId));
 		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($this->entryId));
-		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($name));		// 名前
+		switch ($status){		// 記事状態
+			case self::SCHEDULE_STATUS_DRAFT:	$this->tmpl->addVar("_widget", "selected_draft", 'selected');	break;		// 予約状態(編集中)
+			case self::SCHEDULE_STATUS_EXEC:	$this->tmpl->addVar("_widget", "selected_exec", 'selected');	break;		// 予約状態(実行)
+		}
+		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($this->defaultEntryName));		// 名前
 		$this->tmpl->addVar("_widget", "update_date", $updateDate);	// 更新日
 		$this->tmpl->addVar("_widget", "update_time", $updateTime);	// 更新時間
 		$this->tmpl->addVar("_widget", "item_html", $html);		// HTML
@@ -275,12 +341,15 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	 */
 	function itemListLoop($index, $fetchedRow, $param)
 	{
-
+		$name = $fetchedRow['be_name'];			// 記事タイトル
+		if (empty($name)) $name = $this->defaultEntryName;
+		
+		$updateDt = $fetchedRow['be_active_start_dt'];		// 更新日時
 		$row = array(
 			'no' => $this->convertToDispString($index + 1),								// 項目番号
 			'serial' => $this->convertToDispString($fetchedRow['be_serial']),			// シリアル番号
-			'user' => $this->convertToDispString($fetchedRow['lu_name']),	// 更新者
-			'date' => $this->convertToDispDateTime($fetchedRow['be_create_dt'])	// 更新日時
+			'name' => $this->convertToDispString($name),	// 記事タイトル
+			'date' => $this->convertToDispDateTime($updateDt)	// 更新日時
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
@@ -288,6 +357,21 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		// 表示中のコンテンツIDを保存
 		$this->serialArray[] = $fetchedRow['be_serial'];
 		return true;
+	}
+	/**
+	 * ブログ記事情報を取得
+	 *
+	 * @param string $entryId			記事ID
+	 * @param string $langId			言語ID
+	 * @return							なし
+	 */
+	function loadEntryInfo($entryId, $langId)
+	{
+		// 予約対象のブログ記事を取得(初期設定、表示用)
+		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
+		if ($ret){
+			$this->defaultEntryName = $row['be_name'];				// タイトル
+		}
 	}
 }
 ?>

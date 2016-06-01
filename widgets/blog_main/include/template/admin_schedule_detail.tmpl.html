@@ -87,7 +87,7 @@ function editEntry(serial){
 }
 function setStatusColor(){
 	var status = $('#item_status').val();
-	if (status == 2){		// 公開状態のとき
+	if (status == 'exec'){		// 実行状態のとき
 		$('#status_field').removeClass('warning').addClass('success');
 	} else {
 		$('#status_field').removeClass('success').addClass('warning');
@@ -158,12 +158,12 @@ $(function(){
     <tr>
 	    <th><span {_HELP_SCHEDULE_ID}>ID</span></th>
 	    <td style="width:200px;"><div class="form-control-static m3config_item col-sm-6">{ID}</div><div class="pull-right">{EYECATCH_IMAGE}</div></td>
-	    <th><span {_HELP_SCHEDULE_VISIBLE_STATUS}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
+	    <th><span {_HELP_SCHEDULE_STATUS}>予約状態</span></th>
 	    <td id="status_field" colspan="3" class="warning">
 		<div class="col-sm-6 m3config_item">
 	    <select id="item_status" name="item_status" class="form-control">
-	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
-		<option value="2" {SELECTED_PUBLIC}>公開</option>
+	        <option value="draft" {SELECTED_DRAFT}>編集中</option>
+		    <option value="exec" {SELECTED_EXEC}>実行</option>
 	    </select>
 		</div>
 	    </td>
