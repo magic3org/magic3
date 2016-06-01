@@ -1877,11 +1877,11 @@ class blog_mainDb extends BaseDb
 	 * @param array   $otherParams	その他のフィールド値
 	 * @return bool					true = 成功、false = 失敗
 	 */
-/*	function updateEntryScheduleItem($serial, $html, $html2, $startDt, $endDt, $otherParams = null)
+	function updateEntryScheduleItem($serial, $html, $html2, $startDt, $endDt, $otherParams = null)
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
-						
+		
 		// トランザクション開始
 		$this->startTransaction();
 		
@@ -1899,46 +1899,36 @@ class blog_mainDb extends BaseDb
 			return false;
 		}
 		
-		// 既存項目を更新
-		$queryStr  = 'UPDATE blog_entry ';
-		$queryStr .=   'SET ';
-		for ($i = 0; $i < count($keys); $i++){
-			$queryStr .= $keys[$i] . ' = ?, ';
-			$param[] = $updateData[$keys[$i]];
-		}
-		$queryStr .=     'pd_update_user_id = ?, ';
-		$queryStr .=     'pd_update_dt = ? ';
-		$queryStr .=   'WHERE pd_serial = ? ';
-		$ret = $this->execStatement($queryStr, array_merge($param, array($user, $now, $serialNo)));
-
-
-
-		// 日付を更新
-		$queryStr  = 'UPDATE blog_entry ';
-		$queryStr .=   'SET ';
+		// 期間の値を修正
+		if (is_null($startDt)) $startDt = $this->gEnv->getInitValueOfTimestamp();
+		if (is_null($endDt)) $endDt = $this->gEnv->getInitValueOfTimestamp();
 		
-		// その他のフィールド値を追加
-		$otherValueStr = '';
+		// 既存項目を更新
+		$params = array();
+		$queryStr  = 'UPDATE blog_entry ';
+		$queryStr .=   'SET ';
 		if (!empty($otherParams)){
 			$keys = array_keys($otherParams);// キーを取得
 			for ($i = 0; $i < count($keys); $i++){
 				$fieldName = $keys[$i];
 				$fieldValue = $otherParams[$fieldName];
 				if (!isset($fieldValue)) continue;
+				$queryStr .= $fieldName . ' = ?, ';
 				$params[] = $fieldValue;
-				$queryStr .= ', ' . $fieldName;
-				$otherValueStr .= ', ?';
 			}
 		}
-		
+		$queryStr .=     'be_html = ?, ';
+		$queryStr .=     'be_html_ext = ?, ';
+		$queryStr .=     'be_active_start_dt = ?, ';
+		$queryStr .=     'be_active_end_dt = ?, ';
 		$queryStr .=     'be_update_user_id = ?, ';
 		$queryStr .=     'be_update_dt = ? ';
-		$queryStr .=   'WHERE be_serial = ?';
-		$this->execStatement($queryStr, array($now, $userId, $now, intval($serial)));
+		$queryStr .=   'WHERE be_serial = ? ';
+		$ret = $this->execStatement($queryStr, array_merge($params, array($html, $html2, $startDt, $endDt, $userId, $now, intval($serial))));
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
-	}*/
+	}
 }
 ?>
