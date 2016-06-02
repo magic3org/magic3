@@ -234,7 +234,7 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($endDate)){
 			$termEnd = date("Y-m-d", strtotime("-1 day"));
 		} else {
-			$termEnd = $endDate;
+			$termEnd = date("Y-m-d", strtotime("$endDate"));
 		}
 		
 		// 集計終了日表示用テキスト作成
