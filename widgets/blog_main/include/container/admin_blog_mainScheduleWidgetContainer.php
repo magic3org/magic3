@@ -138,6 +138,27 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		// ### 現在のブログ記事の情報を取得 ###
 		$this->loadEntryInfo($this->entryId, $this->langId);
 		
+		if ($act == 'delete'){		// 項目削除の場合
+			$listedItem = explode(',', $request->trimValueOf('seriallist'));
+			$delItems = array();
+			for ($i = 0; $i < count($listedItem); $i++){
+				// 項目がチェックされているかを取得
+				$itemName = 'item' . $i . '_selected';
+				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
+				
+				if ($itemValue){		// チェック項目
+					$delItems[] = $listedItem[$i];
+				}
+			}
+			if (count($delItems) > 0){
+				$ret = self::$_mainDb->delEntryItem($delItems);
+				if ($ret){		// データ削除成功のとき
+					$this->setGuidanceMsg('データを削除しました');
+				} else {
+					$this->setAppErrorMsg('データ削除に失敗しました');
+				}
+			}
+		}
 		// 一覧表示数
 		$maxListCount = self::DEFAULT_LIST_COUNT;
 		
@@ -275,6 +296,12 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			}
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
+				$ret = self::$_mainDb->delEntryItem(array($this->serialNo));
+				if ($ret){		// データ削除成功のとき
+					$this->setGuidanceMsg('データを削除しました');
+				} else {
+					$this->setAppErrorMsg('データ削除に失敗しました');
+				}
 			}
 		} else {		// 初期状態
 			$reloadData = true;			// 設定データ再読み込み
