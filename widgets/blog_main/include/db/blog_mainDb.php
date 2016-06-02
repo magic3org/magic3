@@ -609,8 +609,9 @@ class blog_mainDb extends BaseDb
 	 */
 	function getEntryBySerial($serial, &$row, &$categoryRow)
 	{
-		$queryStr  = 'select *,reg.lu_name as reg_user_name from blog_entry LEFT JOIN _login_user ON be_create_user_id = lu_id AND lu_deleted = false ';
+		$queryStr  = 'SELECT *, reg.lu_name AS reg_user_name, updt.lu_name AS update_user_name FROM blog_entry LEFT JOIN _login_user ON be_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'LEFT JOIN _login_user as reg ON be_regist_user_id = reg.lu_id AND reg.lu_deleted = false ';
+		$queryStr .=   'LEFT JOIN _login_user as updt ON be_update_user_id = updt.lu_id AND updt.lu_deleted = false ';
 		$queryStr .=   'WHERE be_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
 		
@@ -1767,7 +1768,7 @@ class blog_mainDb extends BaseDb
 		$queryStr .=    'AND be_id = ? ';$params[] = $entryId;
 		$queryStr .=    'AND be_language_id = ? ';$params[] = $langId;
 		$queryStr .=    'AND be_history_index <= -1000 ';		// 予約(Scheduled)記事を対象
-		$queryStr .=  'ORDER BY be_active_start_dt DESC, be_history_index ';
+		$queryStr .=  'ORDER BY be_active_start_dt, be_history_index ';
 		$queryStr .=  'LIMIT ' . $limit . ' OFFSET ' . $offset;
 		$this->selectLoop($queryStr, $params, $callback);
 	}

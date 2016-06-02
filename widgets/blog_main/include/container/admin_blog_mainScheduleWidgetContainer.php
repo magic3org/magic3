@@ -33,8 +33,8 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	// 予約状態
-	const SCHEDULE_STATUS_DRAFT = 'draft';		// 予約状態(編集中)
-	const SCHEDULE_STATUS_EXEC = 'exec';			// 予約状態(実行)
+	const SCHEDULE_STATUS_DRAFT = 1;		// 予約状態(編集中)
+	const SCHEDULE_STATUS_EXEC = 2;			// 予約状態(実行)
 	
 	/**
 	 * コンストラクタ
@@ -191,21 +191,31 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$this->loadEntryInfo($this->entryId, $this->langId);
 		
 		if ($act == 'add'){		// 項目追加の場合
-			$this->checkInput($html, '投稿内容');
-			$this->checkDate($updateDate, '更新日付');
-			$this->checkTime($updateTime, '更新時間');
-
-			// 記事公開の場合は更新日時をチェック
-			if ($status == self::SCHEDULE_STATUS_EXEC){		// 予約状態実行の場合
+			// 入力チェック
+			switch ($status){
+			case self::SCHEDULE_STATUS_DRAFT:		// 予約状態(編集中)
+			default:
+				$this->checkDate($updateDate, '更新日付', true/*入力なしOK*/);
+				$this->checkTime($updateTime, '更新時間', true/*入力なしOK*/);
+				break;
+			case self::SCHEDULE_STATUS_EXEC:		// 予約状態(実行)
+				$this->checkDate($updateDate, '更新日付');
+				$this->checkTime($updateTime, '更新時間');
+				
+				// 記事公開の場合は更新日時をチェック
 				if (strtotime($updateDate . ' ' . $updateTime) < strtotime($entryRow['be_regist_dt']) ||		// 投稿日時よりも前の場合
 					strtotime($updateDate . ' ' . $updateTime) < strtotime('now')) $this->setUserErrorMsg('更新日時が不正です');
+				break;
 			}
+			$this->checkInput($html, '投稿内容');
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// 更新日時は、公開開始日時に格納
 				$startDt = $this->convertToProperDate($updateDate) . ' ' . $this->convertToProperTime($updateTime);
 				
+				// 予約記事を登録
+				$otherParams = array('be_status' => $status);
 				$ret = self::$_mainDb->addEntryScheduleItem($this->entryId, $this->langId, $html, $html2, $startDt, $endDt, $newSerial, $otherParams);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
@@ -218,21 +228,31 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 				}
 			}
 		} else if ($act == 'update'){		// 項目更新の場合
-			$this->checkInput($html, '投稿内容');
-			$this->checkDate($updateDate, '更新日付');
-			$this->checkTime($updateTime, '更新時間');
-
-			// 記事公開の場合は更新日時をチェック
-			if ($status == self::SCHEDULE_STATUS_EXEC){		// 予約状態実行の場合
+			// 入力チェック
+			switch ($status){
+			case self::SCHEDULE_STATUS_DRAFT:		// 予約状態(編集中)
+			default:
+				$this->checkDate($updateDate, '更新日付', true/*入力なしOK*/);
+				$this->checkTime($updateTime, '更新時間', true/*入力なしOK*/);
+				break;
+			case self::SCHEDULE_STATUS_EXEC:		// 予約状態(実行)
+				$this->checkDate($updateDate, '更新日付');
+				$this->checkTime($updateTime, '更新時間');
+				
+				// 記事公開の場合は更新日時をチェック
 				if (strtotime($updateDate . ' ' . $updateTime) < strtotime($entryRow['be_regist_dt']) ||		// 投稿日時よりも前の場合
 					strtotime($updateDate . ' ' . $updateTime) < strtotime('now')) $this->setUserErrorMsg('更新日時が不正です');
+				break;
 			}
+			$this->checkInput($html, '投稿内容');
 			
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// 更新日時は、公開開始日時に格納
 				$startDt = $this->convertToProperDate($updateDate) . ' ' . $this->convertToProperTime($updateTime);
 				
+				// 予約記事を更新
+				$otherParams = array('be_status' => $status);
 				$ret = self::$_mainDb->updateEntryScheduleItem($this->serialNo, $html, $html2, $startDt, $endDt, $otherParams);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
@@ -284,8 +304,16 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 				$html2 = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $html2);// アプリケーションルートを変換
 				
 				// 公開期間から更新日時を取得
-				$updateDate = $this->convertToDispDate($row['be_active_start_dt']);	// 公開期間開始日
-				$updateTime = $this->timestampToTime($row['be_active_start_dt']);	// 公開期間開始時間
+				if ($row['be_active_start_dt'] == $this->gEnv->getInitValueOfTimestamp()){
+					$updateDate = '';	// 公開期間開始日
+					$updateTime = '';	// 公開期間開始時間
+				} else {
+					$updateDate = $row['be_active_start_dt'];	// 公開期間開始日
+					$updateTime = $row['be_active_start_dt'];	// 公開期間開始時間
+				}
+			
+				$updateUser = $row['update_user_name'];			// 予約記事更新者
+				$updateDt = $row['be_update_dt'];		// 予約記事更新日時
 			} else {
 				$this->serialNo = 0;
 				$status = self::SCHEDULE_STATUS_DRAFT;		// 予約状態(編集中)
@@ -293,6 +321,9 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 				$html2 = $entryHtml2;				// 記事内容2
 				$updateDate = date("Y/m/d");		// 更新日
 				$updateTime = date("H:i:s");		// 更新時間
+				
+				$updateUser = '';			// 予約記事更新者
+				$updateDt = '';		// 予約記事更新日時
 			}
 		}
 		
@@ -325,11 +356,13 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			case self::SCHEDULE_STATUS_EXEC:	$this->tmpl->addVar("_widget", "selected_exec", 'selected');	break;		// 予約状態(実行)
 		}
 		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($this->defaultEntryName));		// 名前
-		$this->tmpl->addVar("_widget", "update_date", $updateDate);	// 更新日
-		$this->tmpl->addVar("_widget", "update_time", $updateTime);	// 更新時間
+		$this->tmpl->addVar("_widget", "update_date", $this->convertToDispDate($updateDate));	// 更新日
+		$this->tmpl->addVar("_widget", "update_time", $this->timestampToTime($updateTime));	// 更新時間
 		$this->tmpl->addVar("_widget", "item_html", $html);		// HTML
 		$this->tmpl->addVar("_widget", "item_html2", $html2);		// HTML(続き)
 		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
+		$this->tmpl->addVar("_widget", "update_user", $this->convertToDispString($updateUser));	// 更新者
+		$this->tmpl->addVar("_widget", "update_dt", $this->convertToDispDateTime($updateDt));	// 更新日時
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する
@@ -346,6 +379,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		
 		$updateDt = $fetchedRow['be_active_start_dt'];		// 更新日時
 		$row = array(
+			'index' => $this->convertToDispString($index),		// 項目番号
 			'no' => $this->convertToDispString($index + 1),								// 項目番号
 			'serial' => $this->convertToDispString($fetchedRow['be_serial']),			// シリアル番号
 			'name' => $this->convertToDispString($name),	// 記事タイトル
