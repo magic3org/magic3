@@ -32,9 +32,14 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
+	const ICON_SIZE = 32;		// アイコンのサイズ
+
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	// 予約状態
 	const SCHEDULE_STATUS_DRAFT = 1;		// 予約状態(編集中)
 	const SCHEDULE_STATUS_EXEC = 2;			// 予約状態(実行)
+	const SCHEDULE_STATUS_CLOSE = 3;			// 予約状態(終了)
 	
 	/**
 	 * コンストラクタ
@@ -194,6 +199,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			// 入力チェック
 			switch ($status){
 			case self::SCHEDULE_STATUS_DRAFT:		// 予約状態(編集中)
+			case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
 			default:
 				$this->checkDate($updateDate, '更新日付', true/*入力なしOK*/);
 				$this->checkTime($updateTime, '更新時間', true/*入力なしOK*/);
@@ -231,6 +237,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			// 入力チェック
 			switch ($status){
 			case self::SCHEDULE_STATUS_DRAFT:		// 予約状態(編集中)
+			case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
 			default:
 				$this->checkDate($updateDate, '更新日付', true/*入力なしOK*/);
 				$this->checkTime($updateTime, '更新時間', true/*入力なしOK*/);
@@ -354,6 +361,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		switch ($status){		// 記事状態
 			case self::SCHEDULE_STATUS_DRAFT:	$this->tmpl->addVar("_widget", "selected_draft", 'selected');	break;		// 予約状態(編集中)
 			case self::SCHEDULE_STATUS_EXEC:	$this->tmpl->addVar("_widget", "selected_exec", 'selected');	break;		// 予約状態(実行)
+			case self::SCHEDULE_STATUS_CLOSE:	$this->tmpl->addVar("_widget", "selected_close", 'selected');	break;		// 予約状態(終了)
 		}
 		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($this->defaultEntryName));		// 名前
 		$this->tmpl->addVar("_widget", "update_date", $this->convertToDispDate($updateDate));	// 更新日
@@ -377,13 +385,30 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$name = $fetchedRow['be_name'];			// 記事タイトル
 		if (empty($name)) $name = $this->defaultEntryName;
 		
+		switch ($fetchedRow['be_status']){
+		case self::SCHEDULE_STATUS_DRAFT:		// 予約状態(編集中)
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = '編集中';
+			break;
+		case self::SCHEDULE_STATUS_EXEC:		// 予約状態(実行)
+			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+			$iconTitle = '実行';
+			break;
+		case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
+			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+			$iconTitle = '終了';
+			break;
+		}
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		
 		$updateDt = $fetchedRow['be_active_start_dt'];		// 更新日時
 		$row = array(
 			'index' => $this->convertToDispString($index),		// 項目番号
 			'no' => $this->convertToDispString($index + 1),								// 項目番号
 			'serial' => $this->convertToDispString($fetchedRow['be_serial']),			// シリアル番号
 			'name' => $this->convertToDispString($name),	// 記事タイトル
-			'date' => $this->convertToDispDateTime($updateDt)	// 更新日時
+			'date' => $this->convertToDispDateTime($updateDt),	// 更新日時
+			'status_img' => $statusImg												// 予約状態
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
