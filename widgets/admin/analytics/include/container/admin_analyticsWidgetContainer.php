@@ -226,10 +226,15 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$termStart = $startDate;
 		}
-		if (empty($this->completedDate)){
+/*		if (empty($this->completedDate)){
 			$termEnd = date("Y-m-d", strtotime("-1 day"));
 		} else {
 			$termEnd = $this->completedDate;
+		}*/
+		if (empty($endDate)){
+			$termEnd = date("Y-m-d", strtotime("-1 day"));
+		} else {
+			$termEnd = $endDate;
 		}
 		
 		// 集計終了日表示用テキスト作成
