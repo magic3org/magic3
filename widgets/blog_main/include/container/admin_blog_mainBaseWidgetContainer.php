@@ -59,6 +59,9 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// ブログ定義を読み込む
 		if (!isset(self::$_configArray)) self::$_configArray = blog_mainCommonDef::loadConfig(self::$_mainDb);
+		
+		// ブログ記事予約更新処理
+		$this->updateEntryBySchedule();
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -384,6 +387,63 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$outputText .= '<table width="90%"><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
 		*/
+	}
+	/**
+	 * ブログ記事予約更新処理
+	 *
+	 * @return							なし
+	 */
+	function updateEntryBySchedule()
+	{
+//		$ret = self::$_mainDb->getEntryScheduleInActive(array($this, 'updateByScheduleLoop'));
+	}
+	/**
+	 * 予約更新処理を実行
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function updateByScheduleLoop($index, $fetchedRow, $param)
+	{
+//		$scheduleEntrySerialNo = $fetchedRow['be_serial'];
+		$entryId = $fetchedRow['be_id'];		// 記事ID
+		$langId = $fetchedRow['be_language_id'];
+		$name = $fetchedRow['be_name'];			// 記事タイトル
+
+		// 更新対象のブログ記事を取得
+		$statusStr = '';
+		$ret = self::$_mainDb->getEntryItem($entryId, $langId, $row);
+		if ($ret){
+			$serialNo = $row['be_serial'];
+			$name = $row['be_name'];		// コンテンツ名前
+			$updateDt = $row['be_create_dt'];		// 作成日時
+			
+			// 公開状態
+			switch ($row['be_status']){
+				case 1:	$statusStr = '編集中';	break;
+				case 2:	$statusStr = '公開';	break;
+				case 3:	$statusStr = '非公開';	break;
+			}
+		}
+		
+		// 変更値を設定
+		$updateParams = array();
+		
+		// ブログ記事を更新
+		$ret = self::$_mainDb->updateEntryItemBySchedule($serialNo, $updateParams, $newSerial, $oldRecord);
+		if ($ret){
+			// ブログ記事更新成功の場合は、予約記事の状態を更新
+		//	$fetchedRow['be_serial']
+			
+			// ##### 運用ログを残す #####
+			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,
+									M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $entryId,
+									M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+			$this->writeUserInfoEvent(__METHOD__, 'ブログ記事を予約更新(' . $statusStr . ')しました。タイトル: ' . $name, 2401, 'ID=' . $entryId, $eventParam);
+		}
+		return true;
 	}
 }
 ?>
