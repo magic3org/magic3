@@ -395,7 +395,7 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function updateEntryBySchedule()
 	{
-//		$ret = self::$_mainDb->getEntryScheduleInActive(array($this, 'updateByScheduleLoop'));
+		$ret = self::$_mainDb->getEntryScheduleInActive(array($this, 'updateByScheduleLoop'));
 	}
 	/**
 	 * 予約更新処理を実行
@@ -407,7 +407,6 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function updateByScheduleLoop($index, $fetchedRow, $param)
 	{
-//		$scheduleEntrySerialNo = $fetchedRow['be_serial'];
 		$entryId = $fetchedRow['be_id'];		// 記事ID
 		$langId = $fetchedRow['be_language_id'];
 		$name = $fetchedRow['be_name'];			// 記事タイトル
@@ -430,12 +429,16 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 変更値を設定
 		$updateParams = array();
+		$updateParams['be_html'] = $fetchedRow['be_html'];					// 記事内容1
+		$updateParams['be_html_ext'] = $fetchedRow['be_html_ext'];			// 記事内容2
+		$updateParams['be_master_serial'] = $fetchedRow['be_serial'];		// 作成元レコードのシリアル番号
+		// その他の項目は入力値がある場合のみ更新
 		
 		// ブログ記事を更新
 		$ret = self::$_mainDb->updateEntryItemBySchedule($serialNo, $updateParams, $newSerial, $oldRecord);
 		if ($ret){
 			// ブログ記事更新成功の場合は、予約記事の状態を更新
-		//	$fetchedRow['be_serial']
+			$ret = self::$_mainDb->updateScheduleEntryStatus($fetchedRow['be_serial'], 3/*終了*/);
 			
 			// ##### 運用ログを残す #####
 			$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_BLOG,

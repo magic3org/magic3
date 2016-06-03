@@ -1932,6 +1932,46 @@ class blog_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * 予約記事状態の更新
+	 *
+	 * @param int  $serial		シリアル番号
+	 * @param int  $status			記事状態
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function updateScheduleEntryStatus($serial, $status)
+	{
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+						
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 指定のシリアルNoのレコードが削除状態でないかチェック
+		$queryStr  = 'SELECT * FROM blog_entry ';
+		$queryStr .=   'WHERE be_serial = ? ';
+		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
+		if ($ret){		// 既に登録レコードがあるとき
+			if ($row['be_deleted']){		// レコードが削除されていれば終了
+				$this->endTransaction();
+				return false;
+			}
+		} else {		// 存在しない場合は終了
+			$this->endTransaction();
+			return false;
+		}
+		// 日付を更新
+		$queryStr  = 'UPDATE blog_entry ';
+		$queryStr .=   'SET be_status = ?, ';	// 記事状態
+		$queryStr .=     'be_update_user_id = ?, ';
+		$queryStr .=     'be_update_dt = ? ';
+		$queryStr .=   'WHERE be_serial = ?';
+		$this->execStatement($queryStr, array($status, $userId, $now, intval($serial)));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
 	 * 予約中のブログ予約記事を取得
 	 *
 	 * @param function	$callback			コールバック関数
