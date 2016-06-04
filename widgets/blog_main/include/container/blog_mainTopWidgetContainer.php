@@ -1475,7 +1475,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				// ブログIDが空のときは取得
 				if (empty($this->blogId)){
 					$bId = '';
-					$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
+					$blogLibObj = $this->gInstance->getObject(blog_mainCommonDef::BLOG_OBJ_ID);
 					if (isset($blogLibObj)) $bId = $blogLibObj->getBlogId();
 					if (!empty($bId)) $multiBlogParam = '&' . M3_REQUEST_PARAM_BLOG_ID . '=' . $bId;
 				} else {

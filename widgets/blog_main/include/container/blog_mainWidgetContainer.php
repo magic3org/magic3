@@ -83,7 +83,7 @@ class blog_mainWidgetContainer extends blog_mainBaseWidgetContainer
 			} else {
 				// ブログライブラリオブジェクトからテンプレートを取得
 				$blogId = '';
-				$blogLibObj = $this->gInstance->getObject(self::BLOG_OBJ_ID);
+				$blogLibObj = $this->gInstance->getObject(blog_mainCommonDef::BLOG_OBJ_ID);
 				if (isset($blogLibObj)) $blogId = $blogLibObj->getBlogId();
 
 				// ブログの所有者のときは編集権限あり

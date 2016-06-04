@@ -27,7 +27,10 @@ class blog_mainCommonDef
 	const ENTRY_STATUS_EDIT = 1;				// 記事状態(編集中)
 	const ENTRY_STATUS_PUBLIC = 2;				// 記事状態(公開)
 	const ENTRY_STATUS_PRIVATE = 3;					// 記事状態(非公開)
-	
+	// アドオンオブジェクト用
+	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
+//	const LINKINFO_OBJ_ID = 'linkinfo';	// リンク情報オブジェクトID
+
 	// ##### DB定義値 #####
 	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
 	const CF_ENTRY_VIEW_ORDER		= 'entry_view_order';			// 記事表示方向

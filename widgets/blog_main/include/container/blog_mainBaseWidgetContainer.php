@@ -43,10 +43,6 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 	const TASK_LINKINFO			= 'linkinfo';		// CKEditorプラグインのリンク情報取得用
 	const DEFAULT_TASK			= 'top';
 	const DEFAULT_CONFIG_TASK	= 'entry';
-			
-	// アドオンオブジェクト用
-	const BLOG_OBJ_ID = 'bloglib';		// ブログオブジェクトID
-//	const LINKINFO_OBJ_ID = 'linkinfo';	// リンク情報オブジェクトID
 	
 	// カレンダー用スクリプト
 	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル
@@ -67,6 +63,9 @@ class blog_mainBaseWidgetContainer extends BaseWidgetContainer
 		
 		// ブログ定義を読み込む
 		if (!isset(self::$_configArray)) self::$_configArray = blog_mainCommonDef::loadConfig(self::$_mainDb);
+		
+		// ブログオブジェクト生成
+		$blogLibObj = $this->gInstance->getObject(blog_mainCommonDef::BLOG_OBJ_ID);
 	}
 	/**
 	 * ウィジェット初期化
