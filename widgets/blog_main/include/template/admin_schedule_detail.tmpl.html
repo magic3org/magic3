@@ -161,11 +161,13 @@ $(function(){
 	    <th><span {_HELP_SCHEDULE_STATUS}>予約状態</span></th>
 	    <td id="status_field" colspan="3" class="warning">
 		<div class="col-sm-6 m3config_item">
+		<patTemplate:tmpl name="status_area">
 	    <select id="item_status" name="item_status" class="form-control">
 	        <option value="1" {SELECTED_DRAFT}>編集中</option>
 		    <option value="2" {SELECTED_EXEC}>実行</option>
-			<option value="3" {SELECTED_CLOSE}>終了</option>
 	    </select>
+		</patTemplate:tmpl>
+		<patTemplate:tmpl name="status_text" visibility="hidden">{STATUS}</patTemplate:tmpl>
 		</div>
 	    </td>
 	</tr>

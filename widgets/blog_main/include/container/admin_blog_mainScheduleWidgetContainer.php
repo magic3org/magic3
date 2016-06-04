@@ -220,8 +220,6 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			// 入力チェック
 			switch ($status){
 			case self::SCHEDULE_STATUS_DRAFT:		// 予約状態(編集中)
-			case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
-			default:
 				$this->checkDate($scheduleDate, '更新日付', true/*入力なしOK*/);
 				$this->checkTime($scheduleTime, '更新時間', true/*入力なしOK*/);
 				break;
@@ -232,6 +230,10 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 				// 記事公開の場合は更新日時をチェック
 				if (strtotime($scheduleDate . ' ' . $scheduleTime) < strtotime($entryRow['be_regist_dt']) ||		// 投稿日時よりも前の場合
 					strtotime($scheduleDate . ' ' . $scheduleTime) < strtotime('now')) $this->setUserErrorMsg('更新日時が不正です');
+				break;
+			case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
+			default:
+				$this->setUserErrorMsg('状態の値が不正です');
 				break;
 			}
 			$this->checkInput($html, '投稿内容');
@@ -258,8 +260,6 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			// 入力チェック
 			switch ($status){
 			case self::SCHEDULE_STATUS_DRAFT:		// 予約状態(編集中)
-			case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
-			default:
 				$this->checkDate($scheduleDate, '更新日付', true/*入力なしOK*/);
 				$this->checkTime($scheduleTime, '更新時間', true/*入力なしOK*/);
 				break;
@@ -270,6 +270,10 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 				// 記事公開の場合は更新日時をチェック
 				if (strtotime($scheduleDate . ' ' . $scheduleTime) < strtotime($entryRow['be_regist_dt']) ||		// 投稿日時よりも前の場合
 					strtotime($scheduleDate . ' ' . $scheduleTime) < strtotime('now')) $this->setUserErrorMsg('更新日時が不正です');
+				break;
+			case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
+			default:
+				$this->setUserErrorMsg('状態の値が不正です');
 				break;
 			}
 			$this->checkInput($html, '投稿内容');
@@ -376,7 +380,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 「新規追加」ボタン
 		} else {
 			$this->tmpl->addVar("_widget", "id", $id);
-			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');
+			if ($status != self::SCHEDULE_STATUS_CLOSE) $this->tmpl->setAttribute('update_button', 'visibility', 'visible');		// 予約状態が「終了」の場合は更新ボタン使用不可
 			$this->tmpl->setAttribute('delete_button', 'visibility', 'visible');
 		}
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);
@@ -386,9 +390,13 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 		$this->tmpl->addVar("_widget", "entry_id", $this->convertToDispString($this->entryId));
 		$this->tmpl->addVar("_widget", "id", $this->convertToDispString($this->entryId));
 		switch ($status){		// 記事状態
-			case self::SCHEDULE_STATUS_DRAFT:	$this->tmpl->addVar("_widget", "selected_draft", 'selected');	break;		// 予約状態(編集中)
-			case self::SCHEDULE_STATUS_EXEC:	$this->tmpl->addVar("_widget", "selected_exec", 'selected');	break;		// 予約状態(実行)
-			case self::SCHEDULE_STATUS_CLOSE:	$this->tmpl->addVar("_widget", "selected_close", 'selected');	break;		// 予約状態(終了)
+			case self::SCHEDULE_STATUS_DRAFT:	$this->tmpl->addVar("status_area", "selected_draft", 'selected');	break;		// 予約状態(編集中)
+			case self::SCHEDULE_STATUS_EXEC:	$this->tmpl->addVar("status_area", "selected_exec", 'selected');	break;		// 予約状態(実行)
+			case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
+				$this->tmpl->addVar('status_area', 'visibility', 'hidden');
+				$this->tmpl->addVar('status_text', 'visibility', 'visible');
+				$this->tmpl->addVar('status_text', 'status', '終了');
+				break;
 		}
 		$this->tmpl->addVar("_widget", "item_name", $this->convertToDispString($this->defaultEntryName));		// 名前
 		$this->tmpl->addVar("_widget", "update_date", $this->convertToDispString($scheduleDate));	// 更新日
