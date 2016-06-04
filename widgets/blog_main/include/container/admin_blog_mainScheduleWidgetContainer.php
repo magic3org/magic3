@@ -393,8 +393,8 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 			case self::SCHEDULE_STATUS_DRAFT:	$this->tmpl->addVar("status_area", "selected_draft", 'selected');	break;		// 予約状態(編集中)
 			case self::SCHEDULE_STATUS_EXEC:	$this->tmpl->addVar("status_area", "selected_exec", 'selected');	break;		// 予約状態(実行)
 			case self::SCHEDULE_STATUS_CLOSE:			// 予約状態(終了)
-				$this->tmpl->addVar('status_area', 'visibility', 'hidden');
-				$this->tmpl->addVar('status_text', 'visibility', 'visible');
+				$this->tmpl->setAttribute('status_area', 'visibility', 'hidden');
+				$this->tmpl->setAttribute('status_text', 'visibility', 'visible');
 				$this->tmpl->addVar('status_text', 'status', '終了');
 				break;
 		}

@@ -87,10 +87,12 @@ function editEntry(serial){
 }
 function setStatusColor(){
 	var status = $('#item_status').val();
-	if (status == '2'){		// 実行状態のとき
-		$('#status_field').removeClass('warning').addClass('success');
-	} else {
+	if (status == '1'){		// 編集中状態のとき
 		$('#status_field').removeClass('success').addClass('warning');
+	} else if (status == '2'){		// 実行状態のとき
+		$('#status_field').removeClass('warning').addClass('success');
+	} else {						// 終了状態のとき
+		$('#status_field').removeClass('success').removeClass('warning');
 	}
 }
 $(function(){
@@ -167,7 +169,7 @@ $(function(){
 		    <option value="2" {SELECTED_EXEC}>実行</option>
 	    </select>
 		</patTemplate:tmpl>
-		<patTemplate:tmpl name="status_text" visibility="hidden">{STATUS}</patTemplate:tmpl>
+		<patTemplate:tmpl name="status_text" visibility="hidden">{STATUS}<input type="hidden" id="item_status" name="item_status" value="3" /></patTemplate:tmpl>
 		</div>
 	    </td>
 	</tr>
