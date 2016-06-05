@@ -288,20 +288,20 @@ class ScriptLibInfo
 //	const ELFINDER_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
 	const ELFINDER_THEME_CSS		= 'elfinder-2.1/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
 /*
-	const ELFINDER_FILENAME			= 'elfinder-2.1.11/js/elfinder.full.js';		// elFinder
-	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1.11/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER_CSS				= 'elfinder-2.1.11/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER_OPTION_CSS		= 'elfinder-2.1.11/css/theme.css';				// elFinder CSS
-//	const ELFINDER_THEME_CSS		= 'elfinder-2.1.11/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-	const ELFINDER_THEME_CSS		= 'elfinder-2.1.11/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
+	const ELFINDER_FILENAME			= 'elfinder-2.1.12/js/elfinder.full.js';		// elFinder
+	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1.12/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER_CSS				= 'elfinder-2.1.12/css/elfinder.full.css';		// elFinder CSS
+	const ELFINDER_OPTION_CSS		= 'elfinder-2.1.12/css/theme.css';				// elFinder CSS
+//	const ELFINDER_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
+	const ELFINDER_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
 */
 	// elFinder v2.1版
-	const ELFINDER21_FILENAME		= 'elfinder-2.1.11/js/elfinder.full.js';		// elFinder
-	const ELFINDER21_LANG_FILENAME	= 'elfinder-2.1.11/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
-	const ELFINDER21_CSS			= 'elfinder-2.1.11/css/elfinder.full.css';		// elFinder CSS
-	const ELFINDER21_OPTION_CSS		= 'elfinder-2.1.11/css/theme.css';				// elFinder CSS
-//	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.11/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.11/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
+	const ELFINDER21_FILENAME		= 'elfinder-2.1.12/js/elfinder.full.js';		// elFinder
+	const ELFINDER21_LANG_FILENAME	= 'elfinder-2.1.12/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER21_CSS			= 'elfinder-2.1.12/css/elfinder.full.css';		// elFinder CSS
+	const ELFINDER21_OPTION_CSS		= 'elfinder-2.1.12/css/theme.css';				// elFinder CSS
+//	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
+	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
 
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
