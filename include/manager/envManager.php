@@ -46,6 +46,7 @@ class EnvManager extends Core
 	private $currentWidgetParams = array();		// 現在作成中のウィジェットのその他パラメータ
 	private $isCurrentWidgetShared;	// 現在作成中のウィジェットが共通ウィジェットかどうか
 	private $currentDomainRootUrl;	// マルチドメイン運用時の現在のルートURL
+	private $protocolRelativeRootUrl;	// プロトコル省略型のルートURL
 	private $defaultLanguage;	// デフォルト言語(システムで固定)
 	private $currentLanguage;	// 現在の言語(ユーザによって可変)
 	private $defaultLocale;		// デフォルトのロケール
@@ -208,6 +209,9 @@ class EnvManager extends Core
 		}
 		// 現在のルートURL初期化。外部アクセスのときはこのURLを使用。
 		$this->currentDomainRootUrl = M3_SYSTEM_ROOT_URL;
+		
+		// プロトコル省略型のルートURL
+		$this->protocolRelativeRootUrl = preg_replace('(^https?:)', '', M3_SYSTEM_ROOT_URL);
 	}
 	/**
 	 * システム関係のパラメータを再取得
@@ -671,6 +675,15 @@ class EnvManager extends Core
 	public function getSslScriptsUrl()
 	{
 		return $this->getSslRootUrl() . '/scripts';
+	}
+	/**
+	 * scriptsディレクトリへのURLを取得
+	 *
+	 * 例) //www.magic3.org/magic3/scripts
+	 */
+	public function getProtocolRelativeScriptsUrl()
+	{
+		return $this->protocolRelativeRootUrl . '/scripts';
 	}
 	/**
 	 * templatesディレクトリ(テンプレートディレクトリ)へのURLを取得
