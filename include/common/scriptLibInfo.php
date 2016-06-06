@@ -31,7 +31,7 @@ class ScriptLibInfo
 
 	// ##### 選択中のライブラリ #####
 //	const SELECTED_LIB_ELFINDER = self::LIB_ELFINDER;		// elFinder
-	const SELECTED_LIB_ELFINDER = 'elfinder';		// 選択中のelFinder、「elfinder」または「elfinder21」が設定可能。(PHP v5.3対応) 
+	const SELECTED_LIB_ELFINDER = 'elfinder21';		// 選択中のelFinder、「elfinder」または「elfinder21」が設定可能。(PHP v5.3対応) 
 		
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
@@ -306,8 +306,8 @@ class ScriptLibInfo
 	const ELFINDER21_LANG_FILENAME	= 'elfinder-2.1.12/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER21_CSS			= 'elfinder-2.1.12/css/elfinder.full.css';		// elFinder CSS
 	const ELFINDER21_OPTION_CSS		= 'elfinder-2.1.12/css/theme.css';				// elFinder CSS
-//	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.min.css';		// テーマファイル
-	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
+//	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.min.css';		// テーマファイル
+	const ELFINDER21_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.css';		// テーマファイル
 
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
