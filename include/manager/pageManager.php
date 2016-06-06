@@ -3762,6 +3762,9 @@ class PageManager extends Core
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
 				
+				// ファイルブラウザバージョン
+				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;
+				
 				// Googleマップライブラリの読み込み
 				if ($this->useGooglemaps){
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
@@ -3854,6 +3857,9 @@ class PageManager extends Core
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
 				
+				// ファイルブラウザバージョン
+				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;
+				
 				// テンプレートタイプ
 				$templateType = $gEnvManager->getCurrentTemplateType();
 				if (isset($templateType)) $replaceStr .= 'var M3_TEMPLATE_TYPE = ' . $templateType . ';' . M3_NL;
@@ -3861,6 +3867,9 @@ class PageManager extends Core
 				if ($cmd == M3_REQUEST_CMD_DO_WIDGET && !empty($openBy)){						// ウィジェット単体実行でウィンドウを持つ場合の追加スクリプト
 					// WYSIWYGエディター
 					$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
+				
+					// ファイルブラウザバージョン
+					$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;
 				
 					// Googleマップライブラリの読み込み
 					if ($this->useGooglemaps){

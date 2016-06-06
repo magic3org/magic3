@@ -29,10 +29,14 @@ class ScriptLibInfo
 												'2.2'	=> 'jquery-2.2.1.min.js');
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
 
+	// ##### 選択中のライブラリ #####
+//	const SELECTED_LIB_ELFINDER = self::LIB_ELFINDER;		// elFinder
+	const SELECTED_LIB_ELFINDER = 'elfinder';		// 選択中のelFinder、「elfinder」または「elfinder21」が設定可能。(PHP v5.3対応) 
+		
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
 	const LIB_SET_CKEDITOR_M3_TOOLBAR	= 'ckeditor_m3toolbar';		// CKEditorのツールバー用ライブラリ
-
+	
 	// ベースライブラリ
 	const LIB_JQUERY				= 'jquery';
 	const LIB_JQUERY_UI				= 'jquery-ui';
@@ -49,7 +53,7 @@ class ScriptLibInfo
 	const LIB_BOOTSTRAP_ADMIN		= 'bootstrap_admin';		// Bootstrap管理画面用オプション
 	const LIB_NOBOOTSTRAP			= 'nobootstrap';			// Bootstrapを使用しない場合の管理画面用ライブラリ
 	const LIB_SOCKETIO				= 'socketio';				// socket.io
-	const LIB_WEBRTC					= 'webrtc';				// WebRTC
+	const LIB_WEBRTC				= 'webrtc';				// WebRTC
 
 	// Bootstrapプラグイン
 	const LIB_BOOTSTRAP_DATETIMEPICKER		= 'bootstrap.datetimepicker';
@@ -281,6 +285,7 @@ class ScriptLibInfo
 	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor
 
 	// elFinder v2.0版
+	const ELFINDER_VER				= '2.1';									// elFinderバージョン
 	const ELFINDER_FILENAME			= 'elfinder-2.1/js/elfinder.full.js';		// elFinder
 	const ELFINDER_LANG_FILENAME	= 'elfinder-2.1/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER_CSS				= 'elfinder-2.1/css/elfinder.full.css';		// elFinder CSS
@@ -296,6 +301,7 @@ class ScriptLibInfo
 	const ELFINDER_THEME_CSS		= 'elfinder-2.1.12/theme/smoothness/jquery-ui.custom.css';		// テーマファイル
 */
 	// elFinder v2.1版
+	const ELFINDER21_VER			= '2.1.12';									// elFinderバージョン
 	const ELFINDER21_FILENAME		= 'elfinder-2.1.12/js/elfinder.full.js';		// elFinder
 	const ELFINDER21_LANG_FILENAME	= 'elfinder-2.1.12/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER21_CSS			= 'elfinder-2.1.12/css/elfinder.full.css';		// elFinder CSS
@@ -422,6 +428,7 @@ class ScriptLibInfo
 	static function getLib()
 	{
 		if (!isset(self::$libs)){
+			// ##### ライブラリ情報初期化 ####
 			self::$libs = array(
 						self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
 						self::LIB_SOCKETIO			=>	array(	'script' 	=> ''/*空文字列は直前で作成*/),			// socket.io
@@ -430,9 +437,9 @@ class ScriptLibInfo
 						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
 						self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
 						self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
-																	'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS)),	// テーマは最初に読み込む
-						self::LIB_ELFINDER21			=>	array(	'script' 	=> array(self::ELFINDER21_FILENAME, self::ELFINDER21_LANG_FILENAME),		// elFinder v2.1
-																	'css'		=> array(self::ELFINDER21_THEME_CSS, self::ELFINDER21_CSS, self::ELFINDER21_OPTION_CSS)),	// テーマは最初に読み込む
+																	'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS),		// テーマは最初に読み込む
+																	'version'	=> self::ELFINDER_VER					// elFinderバージョン
+																	),
 						self::LIB_SWFOBJECT				=>	array(	'script' 	=> array(self::SWFOBJECT_FILENAME)),	// swfobject
 						self::LIB_JSCALENDAR			=>	array(	'script' 	=> array(
 																							self::JSCALENDAR_FILENAME,			// jscalendar
@@ -588,6 +595,15 @@ class ScriptLibInfo
 																		'url'		=> self::CODEMIRROR_URL,
 																		'version'	=> self::CODEMIRROR_VER)
 																	);
+																	
+			// ##### ライブラリ情報更新 ####
+			// elFinderの選択状態に応じてライブラリを入れ替え
+			if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER21){
+				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER21_FILENAME, self::ELFINDER21_LANG_FILENAME),		// elFinder v2.1.12
+															'css'		=> array(self::ELFINDER21_THEME_CSS, self::ELFINDER21_CSS, self::ELFINDER21_OPTION_CSS),	// テーマは最初に読み込む
+															'version'	=> self::ELFINDER21_VER					// elFinderバージョン
+														);
+			}
 
 			// WYSIWYGエディターに合わせてライブラリを設定
 			self::$libs[self::LIB_WYSIWYG_EDITOR] = self::$libs[self::getWysiwygEditorLibId()];		// LIB_FCKEDITORまたはLIB_CKEDITOR
