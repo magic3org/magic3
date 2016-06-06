@@ -1699,8 +1699,8 @@ embed.elfinder-quicklook-preview-audio {
 .elfinder-ltr .elfinder-button-search .ui-icon-close { right:0;}
 .elfinder-rtl .elfinder-button-search .ui-icon-close { left:0;}
 
-
-
-
-
-
+/******************************************************************/
+/*                  Magic3 optional configure                     */
+/******************************************************************/
+.ui-dialog { z-index: 99999 !important ;}
+/******************************************************************/

@@ -39,12 +39,15 @@ class elFinderVolumeLocalFileSystem extends elFinderVolumeDriver {
 	 * @author Dmitry (dio) Levashov
 	 **/
 	public function __construct() {
+		global $gEnvManager;
+		
 		$this->options['alias']    = '';              // alias to replace root dir name
 		$this->options['dirMode']  = 0755;            // new dirs mode
 		$this->options['fileMode'] = 0644;            // new files mode
 		$this->options['quarantine'] = '.quarantine';  // quarantine folder name - required to check archive (must be hidden)
 		$this->options['maxArcFilesSize'] = 0;        // max allowed archive files size (0 - no limit)
-		$this->options['icon']     = (defined('ELFINDER_IMG_PARENT_URL')? (rtrim(ELFINDER_IMG_PARENT_URL, '/').'/') : '').'img/volume_icon_local.png';
+//		$this->options['icon']     = (defined('ELFINDER_IMG_PARENT_URL')? (rtrim(ELFINDER_IMG_PARENT_URL, '/').'/') : '').'img/volume_icon_local.png';
+		$this->options['icon']     = $gEnvManager->getProtocolRelativeScriptsUrl() . '/elfinder-2.1/img/volume_icon_local.png';			// Modified for Magic3.
 	}
 	
 	/*********************************************************************/
