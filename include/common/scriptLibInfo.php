@@ -275,8 +275,8 @@ class ScriptLibInfo
 
 	// ファイル名
 	//const JQUERY_L_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery最新版(v1.6.4)		// 2012/10/13～
-	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
-//	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
+//	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
+	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
 	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
 	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor
 
@@ -339,6 +339,7 @@ class ScriptLibInfo
 	const CODEMIRROR_JAVASCRIPT_FILENAME	= 'codemirror-3.1/mode/javascript/javascript.js';	// CodeMirror Javascript
 
 	// jQuery UI用ファイル
+/*
 	// jQuery UI 1.9.2
 	const JQUERY_UI_WIDGETS_ACCORDION_FILENAME		= 'jquery/ui/1.9.2/jquery.ui.accordion.min.js';		// Widgets Accordion
 	const JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME	= 'jquery/ui/1.9.2/jquery.ui.autocomplete.min.js';		// Widgets Autocomplete
@@ -350,8 +351,9 @@ class ScriptLibInfo
 	const JQUERY_UI_WIDGETS_SLIDER_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.slider.min.js';			// Widgets Slider
 	const JQUERY_UI_WIDGETS_TABS_FILENAME			= 'jquery/ui/1.9.2/jquery.ui.tabs.min.js';				// Widgets Tabs
 	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.9.2/jquery.effects.min.js';					// Effects
+*/
 	// jQuery UI 1.11.4
-/*	const JQUERY_UI_WIDGETS_ACCORDION_FILENAME		= 'jquery/ui/1.11.4/jquery.ui.accordion.min.js';		// Widgets Accordion
+	const JQUERY_UI_WIDGETS_ACCORDION_FILENAME		= 'jquery/ui/1.11.4/jquery.ui.accordion.min.js';		// Widgets Accordion
 	const JQUERY_UI_WIDGETS_AUTOCOMPLETE_FILENAME	= 'jquery/ui/1.11.4/jquery.ui.autocomplete.min.js';		// Widgets Autocomplete
 	const JQUERY_UI_WIDGETS_BUTTON_FILENAME			= 'jquery/ui/1.11.4/jquery.ui.button.min.js';			// Widgets Button
 	const JQUERY_UI_WIDGETS_DATEPICKER_FILENAME		= 'jquery/ui/1.11.4/jquery.ui.datepicker.min.js';		// Widgets Datepicker
@@ -361,7 +363,6 @@ class ScriptLibInfo
 	const JQUERY_UI_WIDGETS_SLIDER_FILENAME			= 'jquery/ui/1.11.4/jquery.ui.slider.min.js';			// Widgets Slider
 	const JQUERY_UI_WIDGETS_TABS_FILENAME			= 'jquery/ui/1.11.4/jquery.ui.tabs.min.js';				// Widgets Tabs
 	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.11.4/jquery.effects.min.js';					// Effects
-*/
 	
 	// スマートフォン用jQueryファイル
 	//const JQUERYS_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery MobileはjQuery v1.6以上が必要
