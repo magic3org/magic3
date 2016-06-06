@@ -369,7 +369,7 @@ class ScriptLibInfo
 	const JQUERY_UI_WIDGETS_SLIDER_FILENAME			= 'jquery/ui/1.11.4/jquery.ui.slider.min.js';			// Widgets Slider
 	const JQUERY_UI_WIDGETS_TABS_FILENAME			= 'jquery/ui/1.11.4/jquery.ui.tabs.min.js';				// Widgets Tabs
 	const JQUERY_UI_EFFECTS_FILENAME				= 'jquery/ui/1.11.4/jquery.effects.min.js';					// Effects
-	
+
 	// スマートフォン用jQueryファイル
 	//const JQUERYS_FILENAME			= 'jquery-1.6.4.min.js';					// JQuery MobileはjQuery v1.6以上が必要
 	const JQUERYS_FILENAME			= 'jquery-1.7.2.min.js';					// JQuery Mobile v1.3はjQuery v1.7以上が必要

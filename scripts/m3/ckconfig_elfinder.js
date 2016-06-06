@@ -212,15 +212,15 @@ CKEDITOR.on('dialogDefinition', function(ev){
 								option = '?dirtype=file';
 							}
 							$(this).elfinder({
-								url: M3_ROOT_URL + '/scripts/elfinder-2.1/php/connector.php' + option,
-								//url: M3_ROOT_URL + '/scripts/elfinder-2.1/php/connector.php' + option,
+								url: M3_ROOT_URL + '/scripts/elfinder-' + M3_FILEBROWSER_VER + '/php/connector.php' + option,
 								height: '600px',
 								lang: 'ja',
 								resizable: false,
 								getFileCallback: function(file){
 									var url = file.url;
 									CKEDITOR.tools.callFunction(editor._.filebrowserFn, url);
-									$('a.ui-dialog-titlebar-close[role="button"]').click();
+									//$('a.ui-dialog-titlebar-close[role="button"]').click();
+									$('button.ui-dialog-titlebar-close[role="button"]').click();
 								}
 							}).elfinder('instance');
 						}
