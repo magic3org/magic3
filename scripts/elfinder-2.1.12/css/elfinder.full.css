@@ -2365,4 +2365,19 @@ embed.elfinder-quicklook-preview-audio {
 /*                  Magic3 optional configure                     */
 /******************************************************************/
 .ui-dialog { z-index: 99999 !important ;}
+.ui-widget {
+/*	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.1em;*/
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+	font-size: 1em;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+/*	font-family: Verdana,Arial,sans-serif;
+	font-size: 1em;*/
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+	font-size: 1em;
+}
 /******************************************************************/

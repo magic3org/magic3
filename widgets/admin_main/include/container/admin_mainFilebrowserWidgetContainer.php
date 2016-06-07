@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -17,12 +17,12 @@ require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainBaseWid
 
 class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 {
-	private $openByDialog;	// CKEditorからの起動かどうか
+//	private $openByDialog;	// CKEditorからの起動かどうか
 	
 	// ##### 注意 elFinder2.0-rc1はjQuery1.7以下でしか動かない #####
 	// #####      elFinder2.0はjQuery1.8で動作可能             #####
-	const FILE_BROWSER_PATH			= '/elfinder-2.1/php/connector.php';		// ファイルブラウザのパス
-	const DIALOG_FIX_CSS 			= 'body { margin: 0; } #elfinder { border: none; } .elfinder-toolbar, .elfinder-statusbar { border-radius: 0 !important; }';
+//	const FILE_BROWSER_PATH			= '/elfinder-2.1/php/connector.php';		// ファイルブラウザのパス
+//	const DIALOG_FIX_CSS 			= 'body { margin: 0; } #elfinder { border: none; } .elfinder-toolbar, .elfinder-statusbar { border-radius: 0 !important; }';
 	
 	/**
 	 * コンストラクタ
@@ -33,7 +33,7 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 		parent::__construct();
 		
 		// Bootstrapの使用を強制キャンセル
-		$this->gPage->cancelBootstrap();
+//		$this->gPage->cancelBootstrap();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -48,13 +48,13 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	function _setTemplate($request, &$param)
 	{
 		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
-		if ($openBy == 'dialog') $this->openByDialog = true;			// CKEditorから開いた場合
+//		if ($openBy == 'dialog') $this->openByDialog = true;			// CKEditorから開いた場合
 		
-		if ($this->openByDialog){	// CKEditorからの起動かどうか
-			return 'filebrowser_ckeditor.tmpl.html';
-		} else {
+//		if ($this->openByDialog){	// CKEditorからの起動かどうか
+//			return 'filebrowser_ckeditor.tmpl.html';
+//		} else {
 			return 'filebrowser.tmpl.html';
-		}
+//		}
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -67,11 +67,11 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+//		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		
-		$connectorUrl = $this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_BROWSER_PATH);
-		$this->tmpl->addVar('_widget', 'url', $connectorUrl);	// ファイルブラウザ接続先URL
-		$this->tmpl->addVar('_widget', 'lang', $langId);		// 表示言語
+//		$connectorUrl = $this->getUrl($this->gEnv->getScriptsUrl() . self::FILE_BROWSER_PATH);
+//		$this->tmpl->addVar('_widget', 'url', $connectorUrl);	// ファイルブラウザ接続先URL
+		$this->tmpl->addVar('_widget', 'lang', $this->_langId);		// 表示言語
 	}
 	/**
 	 * CSSファイルをHTMLヘッダ部に設定
@@ -118,11 +118,11 @@ class admin_mainFilebrowserWidgetContainer extends admin_mainBaseWidgetContainer
 	 */
 	function _addCssToHead($request, &$param)
 	{
-		if ($this->openByDialog){	// CKEditorからの起動かどうか
-			return self::DIALOG_FIX_CSS;
-		} else {
+//		if ($this->openByDialog){	// CKEditorからの起動かどうか
+//			return self::DIALOG_FIX_CSS;
+//		} else {
 			return '';
-		}
+//		}
 	}
 }
 ?>

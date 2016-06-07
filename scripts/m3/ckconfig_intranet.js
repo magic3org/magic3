@@ -157,7 +157,6 @@ CKEDITOR.editorConfig = function( config ) {
 	// KCFinderの設定
 	config.filebrowserBrowseUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=file';
 	config.filebrowserImageBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=image';
-	//config.filebrowserImageBrowseUrl	= M3_ROOT_URL + '/admin/index.php?task=filebrowser&openby=dialog&mode=image';
 	config.filebrowserFlashBrowseUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/browse.php?type=flash';
 	config.filebrowserUploadUrl			= M3_ROOT_URL + '/scripts/kcfinder-2.51/upload.php?type=file';
 	config.filebrowserImageUploadUrl	= M3_ROOT_URL + '/scripts/kcfinder-2.51/upload.php?type=image';

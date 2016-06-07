@@ -124,19 +124,6 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 			}
 			return true;
 		}
-		// 直接実行の場合
-/*		if($cmd == M3_REQUEST_CMD_DO_WIDGET){		// ウィジェット単体実行
-			// 管理者権限がなければ実行できない
-			if ($this->gEnv->isSystemAdmin()){
-				// コンテナを起動
-				$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-				switch ($task){
-					case 'filebrowse':			// ファイルブラウズ
-						$this->gLaunch->goSubWidget($task);
-						return false;
-				}
-			}
-		}*/
 		// フロント画面でログアウトの場合は画面を維持
 		if ($cmd == M3_REQUEST_CMD_LOGOUT && !$this->gEnv->isAdminDirAccess()){
 			$removeParam = array(	array('key' => M3_REQUEST_PARAM_OPERATION_COMMAND, 'value' => M3_REQUEST_CMD_LOGIN),
@@ -269,7 +256,6 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'searchwordlog':		// 検索語ログ一覧
 						case 'awstats':				// Awstats
 						case 'resbrowse':			// リソースブラウズ(resbrowseからfilebrowserを起動)
-//						case 'filebrowse':			// ファイルブラウズ
 						case 'filebrowser':			// ファイルブラウズ(elfinder)
 						case 'menudef':				// 多階層メニュー定義
 						case 'smenudef':			// 単階層メニュー定義
