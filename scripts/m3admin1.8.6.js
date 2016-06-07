@@ -372,9 +372,10 @@ function m3OpenFileBrowser(seturl_callback)
 				height: '500px',
 				lang: 'ja',
 				resizable: false,
+				ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 				getFileCallback: function(url){
 					seturl_callback(url.url);
-					$('a.ui-dialog-titlebar-close[role="button"]').click();
+					$('.ui-dialog-titlebar-close[role="button"]').click();
 				}
 			}).elfinder('instance');
 		}
@@ -403,9 +404,10 @@ function m3OpenImageFileBrowser(seturl_callback)
 				height: '500px',
 				lang: 'ja',
 				resizable: false,
+				ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 				getFileCallback: function(url){
 					seturl_callback(url.url);
-					$('a.ui-dialog-titlebar-close[role="button"]').click();
+					$('.ui-dialog-titlebar-close[role="button"]').click();
 				}
 			}).elfinder('instance');
 		}
@@ -434,9 +436,10 @@ function m3OpenFlashFileBrowser(seturl_callback)
 				height: '500px',
 				lang: 'ja',
 				resizable: false,
+				ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 				getFileCallback: function(url){
 					seturl_callback(url.url);
-					$('a.ui-dialog-titlebar-close[role="button"]').click();
+					$('.ui-dialog-titlebar-close[role="button"]').click();
 				}
 			}).elfinder('instance');
 		}

@@ -216,11 +216,12 @@ CKEDITOR.on('dialogDefinition', function(ev){
 								height: '600px',
 								lang: 'ja',
 								resizable: false,
+								ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 								getFileCallback: function(file){
 									var url = file.url;
 									CKEDITOR.tools.callFunction(editor._.filebrowserFn, url);
 									//$('a.ui-dialog-titlebar-close[role="button"]').click();
-									$('button.ui-dialog-titlebar-close[role="button"]').click();
+									$('.ui-dialog-titlebar-close[role="button"]').click();
 								}
 							}).elfinder('instance');
 						}

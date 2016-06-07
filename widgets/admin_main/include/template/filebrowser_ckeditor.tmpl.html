@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: filebrowser_ckeditor.tmpl.html 6132 2013-06-25 05:29:46Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -26,14 +26,15 @@ $(function(){
 	var elf = $('#elfinder').elfinder({
 		lang: '{LANG}',             // language
 		url : '{URL}',
+		resizable: false,
+		ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 		getFileCallback : function(file) {
 			var url = file.url;
 			//                if(url.slice(0, options.url.length) == options.url) url = '/' + url;
 	
 			window.opener.CKEDITOR.tools.callFunction(funcNum, url);
 			window.close();
-		},
-		resizable: false
+		}
 	}).elfinder('instance');
 
 	// ウィンドウサイズ自動調整
