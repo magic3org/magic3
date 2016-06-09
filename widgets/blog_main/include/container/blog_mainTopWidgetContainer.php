@@ -319,7 +319,7 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				$this->entryId = intval($entryId);
 				
 				// プレビュー記事を取得
-				$ret = self::$_mainDb->getEntryPreviewItem($this->entryId, $this->_langId, $entryRow);
+				$ret = self::$_mainDb->getEntryPreview($this->entryId, $this->_langId, $entryRow);
 				if ($ret) $showPreviewEntry = true;			// プレビュー用の記事を表示
 			}
 		}

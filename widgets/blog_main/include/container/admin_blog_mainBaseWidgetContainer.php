@@ -57,8 +57,14 @@ class admin_blog_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// DBオブジェクト作成
 		if (!isset(self::$_mainDb)) self::$_mainDb = new blog_mainDb();
 		
-		// ブログ定義を読み込む
-		if (!isset(self::$_configArray)) self::$_configArray = blog_mainCommonDef::loadConfig(self::$_mainDb);
+		// データ初期処理(1回だけ実行)
+		if (!isset(self::$_configArray)){
+			// ブログ定義を読み込む
+			self::$_configArray = blog_mainCommonDef::loadConfig(self::$_mainDb);
+			
+			// プレビューデータを一旦削除
+			self::$_mainDb->delAllEntryPreview();
+		}
 		
 		// ブログオブジェクト生成
 		$blogLibObj = $this->gInstance->getObject(blog_mainCommonDef::BLOG_OBJ_ID);

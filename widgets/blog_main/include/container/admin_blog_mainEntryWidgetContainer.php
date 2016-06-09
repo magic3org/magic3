@@ -771,7 +771,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$otherParams['be_thumb_filename']	= $thumbFilename;		// サムネールファイル名
 			$otherParams['be_related_content']	= $relatedContent;		// 関連コンテンツ
 			$otherParams['be_option_fields']	= $this->serializeArray($this->fieldValueArray);				// ユーザ定義フィールド値
-			$ret = self::$_mainDb->updateEntryPreviewItem($this->entryId, $this->langId, $html, $html2, $this->categoryArray, $otherParams, $serial);
+			$ret = self::$_mainDb->updateEntryPreview($this->entryId, $this->langId, $html, $html2, $this->categoryArray, $otherParams, $serial);
 			if ($ret){
 				// プレビュー用URL作成
 				$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $this->entryId . '-' . $this->_userId;

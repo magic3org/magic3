@@ -1944,7 +1944,7 @@ class blog_mainDb extends BaseDb
 	 * @param int     $serial		更新対象レコードのシリアル番号
 	 * @return bool					true = 成功、false = 失敗
 	 */
-	function updateEntryPreviewItem($id, $langId, $html, $html2, $category, $otherParams, &$serial)
+	function updateEntryPreview($id, $langId, $html, $html2, $category, $otherParams, &$serial)
 	{
 		// パラメータエラーチェック
 		if ($id < 0) return false;
@@ -2029,7 +2029,7 @@ class blog_mainDb extends BaseDb
 	 * @param array     $row				レコード
 	 * @return bool							取得 = true, 取得なし= false
 	 */
-	function getEntryPreviewItem($id, $langId, &$row)
+	function getEntryPreview($id, $langId, &$row)
 	{
 		// パラメータエラーチェック
 		if ($id < 0) return false;
@@ -2045,6 +2045,44 @@ class blog_mainDb extends BaseDb
 		$queryStr .=     'AND be_history_index = ? ';
 		$ret = $this->selectRecord($queryStr, array($entryId, $langId, $historyIndex), $row);
 
+		return $ret;
+	}
+	/**
+	 * すべてのプレビュー用記事を削除
+	 *
+	 * @return bool							true=成功, false=失敗
+	 */
+	function delAllEntryPreview()
+	{
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$historyIndex = $userId * (-1);				// ユーザIDを負の値に変換
+
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// 削除対象の記事のシリアル番号を取得
+		$queryStr  = 'SELECT * FROM blog_entry ';
+		$queryStr .=   'WHERE be_id <= 0 ';
+		$queryStr .=     'AND be_history_index = ? ';
+		$ret = $this->selectRecords($queryStr, array($historyIndex), $rows);
+		if ($ret){
+			for ($i = 0; $i < count($rows); $i++){
+				$serial = $rows[$i]['be_serial'];
+				
+				// カテゴリーを削除
+				$queryStr  = 'DELETE FROM blog_entry_with_category WHERE bw_entry_serial = ?';
+				$this->execStatement($queryStr, array($serial));
+			}
+		}
+
+		// 記事を削除
+		$queryStr  = 'DELETE FROM blog_entry ';
+		$queryStr .=   'WHERE be_id <= 0 ';
+		$queryStr .=     'AND be_history_index = ? ';
+		$this->execStatement($queryStr, array($historyIndex));
+				
+		// トランザクション確定
+		$ret = $this->endTransaction();
 		return $ret;
 	}
 }
