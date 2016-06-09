@@ -114,6 +114,25 @@ function previewInOtherWindow()
 	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
 	return true;
 }
+// オンザフライでプレビューを表示
+function preview()
+{
+	// CKEditorの入力内容を確定
+	if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances){
+		for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();
+	}
+	
+	// AJAXで入力内容を送信
+	document.main.task.value = 'entry_detail';
+	document.main.act.value = 'preview';
+
+	m3_ajax_request('', 'cmd=configwidget&widget={CURRENT_WIDGET}&' + $('#main').serialize(), function(request, retcode, jsondata){		// 正常終了
+		// プレビュー用のURLを設定
+		if (jsondata.url && jsondata.url != '') m3ShowPreviewWindow(0, jsondata.url);
+	}, function(request){		// 異常終了
+		alert('通信に失敗しました。');
+	});
+}
 function editEntry(serial){
 	document.main.entryid.value = '';		// 値キャンセル
 	document.main.task.value = 'entry_detail';
@@ -195,7 +214,7 @@ $(function(){
 </script>
 <div class="m3config_container">
 <!-- m3:ErrorMessage -->
-<form method="post" name="main">
+<form method="post" id="main" name="main">
 <input type="hidden" name="task" value="entry_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="mode" />
@@ -212,7 +231,7 @@ $(function(){
 <input type="button" class="button" onclick="configImage();" value="画像" {IMAGE_BTN_DISABLED} />
 <input type="button" class="button" onclick="schedule();" value="予約" {SCHEDULE_BTN_DISABLED} />
 <input type="button" class="button" onclick="viewHistory();" value="履歴" {HISTORY_BTN_DISABLED} />
-<input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_BTN_DISABLED} />
+<input type="button" class="button" onclick="preview();" value="プレビュー" {PREVIEW_BTN_DISABLED} />
 </div></div></div>
 
 <table id="mainconfig">

@@ -1866,7 +1866,6 @@ class blog_mainDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
-	
 	/**
 	 * 予約記事の更新
 	 *
@@ -1926,6 +1925,97 @@ class blog_mainDb extends BaseDb
 		$queryStr .=     'be_update_dt = ? ';
 		$queryStr .=   'WHERE be_serial = ? ';
 		$ret = $this->execStatement($queryStr, array_merge($params, array($html, $html2, $startDt, $endDt, $userId, $now, intval($serial))));
+		
+		// トランザクション確定
+		$ret = $this->endTransaction();
+		return $ret;
+	}
+	/**
+	 * プレビュー用記事の更新
+	 *
+	 * 機能：記事IDは負の値に変換。
+	 *
+	 * @param string  $id			記事ID
+	 * @param string  $langId		言語ID
+	 * @param string  $html			HTML
+	 * @param string  $html2		HTML(続き)
+	 * @param array   $category		カテゴリーID
+	 * @param array   $otherParams	その他のフィールド値
+	 * @param int     $serial		更新対象レコードのシリアル番号
+	 * @return bool					true = 成功、false = 失敗
+	 */
+	function updateEntryPreviewItem($id, $langId, $html, $html2, $category, $otherParams, &$serial)
+	{
+		// パラメータエラーチェック
+		if ($id < 0) return false;
+		
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$entryId = $id * (-1);						// 記事IDを負の値に変換
+		$historyIndex = $userId * (-1);				// ユーザIDを負の値に変換
+		
+		// トランザクション開始
+		$this->startTransaction();
+		
+		// レコードの状態チェック
+		$queryStr  = 'SELECT * FROM blog_entry ';
+		$queryStr .=   'WHERE be_id = ? ';
+		$queryStr .=     'AND be_language_id = ? ';
+		$queryStr .=     'AND be_history_index = ? ';
+		$ret = $this->selectRecord($queryStr, array($entryId, $langId, $historyIndex), $row);
+		if ($ret){
+			// データ存在している場合は一旦削除
+			$serial = $row['be_serial'];
+			$queryStr  = 'DELETE FROM blog_entry WHERE be_serial = ?';
+			$this->execStatement($queryStr, array($serial));
+			
+			// カテゴリー削除
+			$queryStr  = 'DELETE FROM blog_entry_with_category WHERE bw_entry_serial = ?';
+			$this->execStatement($queryStr, array($serial));
+		}
+
+		// 新規レコードを追加
+		$queryStr  = 'INSERT INTO blog_entry ';
+		$queryStr .=   '(be_id, ';
+		$queryStr .=   'be_language_id, ';
+		$queryStr .=   'be_history_index, ';
+		$queryStr .=   'be_html, ';
+		$queryStr .=   'be_html_ext, ';
+		$queryStr .=   'be_create_user_id, ';
+		$queryStr .=   'be_create_dt ';
+
+		// その他のフィールド値を追加
+		$params = array();
+		$otherValueStr = '';
+		if (!empty($otherParams)){
+			$keys = array_keys($otherParams);// キーを取得
+			for ($i = 0; $i < count($keys); $i++){
+				$fieldName = $keys[$i];
+				$fieldValue = $otherParams[$fieldName];
+				if (!isset($fieldValue)) continue;
+				$params[] = $fieldValue;
+				$queryStr .= ', ' . $fieldName;
+				$otherValueStr .= ', ?';
+			}
+		}
+		$queryStr .=  ') VALUES ';
+		$queryStr .=   '(?, ?, ?, ?, ?, ?, ?' . $otherValueStr . ')';
+		$this->execStatement($queryStr, array_merge(array($entryId, $langId, $historyIndex, $html, $html2, $userId, $now), $params));
+	
+		// 新規のシリアル番号取得
+		$serial = 0;
+		$queryStr = 'SELECT MAX(be_serial) AS ns FROM blog_entry ';
+		$ret = $this->selectRecord($queryStr, array(), $row);
+		if ($ret) $serial = $row['ns'];
+		
+		// 記事カテゴリーの更新
+		for ($i = 0; $i < count($category); $i++){
+			$ret = $this->updateEntryCategory($serial, $i, $category[$i]);
+			if (!$ret){
+				$this->endTransaction();
+				return false;
+			}
+		}
 		
 		// トランザクション確定
 		$ret = $this->endTransaction();

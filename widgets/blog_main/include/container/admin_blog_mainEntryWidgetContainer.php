@@ -743,6 +743,33 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 					$this->setAppErrorMsg('データ削除に失敗しました');
 				}
 			}
+		} else if ($act == 'preview'){		// プレビューデータ追加
+			// ##### ウィジェット出力処理中断 ######
+			$this->gPage->abortWidget();
+			
+			// プレビュー用の記事データを登録
+			$otherParams = array();
+			$otherParams['be_name']				= $name;
+			$otherParams['be_blog_id']			= $this->blogId;
+			$otherParams['be_regist_user_id']	= $this->_userId;
+			$otherParams['be_regist_dt']		= $regDt;
+			$otherParams['be_show_comment']		= $showComment;
+			$otherParams['be_receive_comment']	= $receiveComment;
+			$otherParams['be_description']		= $desc;		// 簡易説明
+			$otherParams['be_meta_description']	= $metaDesc;		// ページ要約(METAタグ)
+			$otherParams['be_meta_keywords']	= $metaKeyword;		// ページキーワード(METAタグ)
+			$otherParams['be_thumb_filename']	= $thumbFilename;		// サムネールファイル名
+			$otherParams['be_related_content']	= $relatedContent;		// 関連コンテンツ
+			$otherParams['be_option_fields']	= $this->serializeArray($this->fieldValueArray);				// ユーザ定義フィールド値
+			$ret = self::$_mainDb->updateEntryPreviewItem($this->entryId, $this->langId, $html, $html2, $this->categoryArray, $otherParams, $serial);
+			if ($ret){
+				// プレビュー用URL作成
+				$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $this->entryId . '-' . $this->_userId;
+				$previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
+				if ($this->isMultiLang) $previewUrl .= '&' . M3_REQUEST_PARAM_OPERATION_LANG . '=' . $this->langId;		// 多言語対応の場合は言語IDを付加
+				$this->gInstance->getAjaxManager()->addData('url', $previewUrl);
+			}
+			return;
 		} else if ($act == 'get_history'){		// 履歴データの取得のとき
 			$reloadData = true;		// データの再読み込み
 		} else {	// 初期画面表示のとき
@@ -935,6 +962,11 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "related_content", $relatedContent);	// 関連コンテンツ
 		$this->tmpl->addVar("_widget", "eyecatch_image", $eyecatchImageTag);		// アイキャッチ画像
 		
+		// その他
+		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
+		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
+		$this->tmpl->addVar('_widget', 'current_widget', $this->_widgetId);		// AJAX用ウィジェットID
+		
 		// 公開期間エリア表示ボタン
 		$activeTermButton = $this->gDesign->createTermButton(''/*同画面*/, self::TOOLTIP_ACTIVE_TERM, self::TAG_ID_ACTIVE_TERM);
 		$this->tmpl->addVar("_widget", "active_term_button", $activeTermButton);
@@ -954,9 +986,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$this->tmpl->setAttribute('show_next_button', 'visibility', 'visible');
 			$this->tmpl->addVar('show_next_button', 'serial', $nextSerial);
 		}
-						
-		// 非表示項目を設定
-		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
 
 		// 入力フィールドの設定、共通項目のデータ設定
 		if (empty($this->entryId)){		// 記事IDが0のときは、新規追加モードにする
@@ -999,9 +1028,6 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			//}
 		}
 
-		// パス等を設定
-		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
-		
 		// 閉じるボタンの表示制御
 		if ($openBy == 'simple') $this->tmpl->setAttribute('cancel_button', 'visibility', 'hidden');		// 詳細画面のみの表示のときは戻るボタンを隠す
 	}
