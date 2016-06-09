@@ -1951,7 +1951,7 @@ class blog_mainDb extends BaseDb
 		
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
-		$entryId = $id * (-1);						// 記事IDを負の値に変換
+		$entryId = intval($id) * (-1);						// 記事IDを負の値に変換
 		$historyIndex = $userId * (-1);				// ユーザIDを負の値に変換
 		
 		// トランザクション開始
