@@ -2021,5 +2021,31 @@ class blog_mainDb extends BaseDb
 		$ret = $this->endTransaction();
 		return $ret;
 	}
+	/**
+	 * プレビュー用記事を取得
+	 *
+	 * @param int,array		$id				エントリーID
+	 * @param string	$langId				言語
+	 * @param array     $row				レコード
+	 * @return bool							取得 = true, 取得なし= false
+	 */
+	function getEntryPreviewItem($id, $langId, &$row)
+	{
+		// パラメータエラーチェック
+		if ($id < 0) return false;
+		
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
+		$entryId = intval($id) * (-1);						// 記事IDを負の値に変換
+		$historyIndex = $userId * (-1);				// ユーザIDを負の値に変換
+		
+		$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+		$queryStr .=   'WHERE be_id = ? ';
+		$queryStr .=     'AND be_language_id = ? ';
+		$queryStr .=     'AND be_history_index = ? ';
+		$ret = $this->selectRecord($queryStr, array($entryId, $langId, $historyIndex), $row);
+
+		return $ret;
+	}
 }
 ?>

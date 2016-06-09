@@ -307,17 +307,33 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 	{
 		$sendButtonLabel = 'コメントを投稿';		// 送信ボタンラベル
 		$sendStatus = 0;		// 送信状況
+		$showPreviewEntry = false;		// プレビュー用の記事を表示するかどうか
 		
-		// 記事ID指定のときは記事を取得
-		$entryRow = array();
-		if (!empty($this->entryId)){
-			$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $entryRow);
-			if ($ret){
-				// ### ウィジェットタイトルは表示しない ###
-				// ページのタイトル設定
-			//	$this->title = $entryRow['be_name'];		// ウィジェットタイトル
-				$this->pageTitle = $entryRow['be_name'];			// 画面タイトル
+		// プレビューモードの場合はプレビュー用の記事があるかどうか確認
+		if ($this->preview){		// プレビューモードの場合
+			// 記事IDを解析
+			list($entryId, $userId) = explode(M3_CONTENT_PREVIEW_ID_SEPARATOR, $this->entryId);
+			
+			// ユーザIDのチェック
+			if ($userId == $this->_userId){
+				$this->entryId = intval($entryId);
+				
+				// プレビュー記事を取得
+				$ret = self::$_mainDb->getEntryPreviewItem($this->entryId, $this->_langId, $entryRow);
+				if ($ret) $showPreviewEntry = true;			// プレビュー用の記事を表示
 			}
+		}
+		
+		// 単体記事を取得
+		if (!$showPreviewEntry){
+			// 記事ID指定のときは記事を取得
+			if (!empty($this->entryId)){
+				$ret = self::$_mainDb->getEntryItem($this->entryId, $this->_langId, $entryRow);
+			}
+		}
+		
+		if (!empty($entryRow)){		// 記事レコードがあるとき
+			$this->pageTitle = $entryRow['be_name'];			// 画面タイトル
 		}
 		
 		// 入力値取得
@@ -435,13 +451,19 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			}
 		}
 
-		// 記事の取得
-		if ($this->isSystemManageUser){		// システム管理ユーザの場合
-			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
-										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログ指定なし*/, null/*ユーザ指定なし*/, $this->preview);
+		// ##### 記事の出力 #####
+		// ***** 記事の出力は直接itemsLoop()を呼び出す方法に変更すべき *****
+		// $this->itemsLoop($index, $fetchedRow)
+		if ($showPreviewEntry){		// プレビュー記事を表示の場合
+			$this->itemsLoop(0, $entryRow);
 		} else {
-			self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
-										''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログ指定なし*/, $this->_userId, $this->preview);
+			if ($this->isSystemManageUser){		// システム管理ユーザの場合
+				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
+											''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログ指定なし*/, null/*ユーザ指定なし*/, $this->preview);
+			} else {
+				self::$_mainDb->getEntryItems($this->entryViewCount, $this->pageNo, $this->now, $this->entryId, $this->startDt/*期間開始*/, $this->endDt/*期間終了*/,
+											''/*検索キーワード*/, $this->_langId, $this->entryViewOrder, array($this, 'itemsLoop'), null/*ブログ指定なし*/, $this->_userId, $this->preview);
+			}
 		}
 		
 		// マルチブログのときはパンくずリストにブログ名を追加

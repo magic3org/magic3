@@ -995,7 +995,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$this->tmpl->addVar('_widget', 'id', '新規');
 			
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');
-			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
+//			$this->tmpl->addVar('_widget', 'preview_btn_disabled', 'disabled');// プレビューボタン使用不可
 			$this->tmpl->addVar('_widget', 'history_btn_disabled', 'disabled');// 履歴ボタン使用不可
 			$this->tmpl->addVar('_widget', 'image_btn_disabled', 'disabled');// 画像ボタン使用不可
 			$this->tmpl->addVar('_widget', 'schedule_btn_disabled', 'disabled');// 記事予約ボタン使用不可
