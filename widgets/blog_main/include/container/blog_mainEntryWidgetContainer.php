@@ -749,6 +749,16 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			// ##### ウィジェット出力処理中断 ######
 			$this->gPage->abortWidget();
 			
+			// プレビューに必要なデータを準備
+			if (empty($name)) $name = blog_mainCommonDef::DEFAULT_TITLE_NO_TITLE;
+			if (empty($entry_date) || empty($entry_time)){
+				$entry_date = date("Y/m/d");		// 投稿日
+				$entry_time = date("H:i:s");		// 投稿時間
+			}
+			
+			// 保存データ作成
+			$regDt = $this->convertToProperDate($entry_date) . ' ' . $this->convertToProperTime($entry_time);		// 投稿日時
+				
 			// プレビュー用の記事データを登録
 			$otherParams = array();
 			$otherParams['be_name']				= $name;

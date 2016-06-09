@@ -186,6 +186,9 @@ define('M3_EVENT_HOOK_PARAM_CONTENT_TYPE',	'content_type');				// コンテン�
 define('M3_EVENT_HOOK_PARAM_CONTENT_ID',	'content_id');					// コンテンツID
 define('M3_EVENT_HOOK_PARAM_UPDATE_DT',		'update_dt');					// 更新日時
 
+// ID作成用
+define('M3_CONTENT_PREVIEW_ID_SEPARATOR',	'-');									// プレビュー用のコンテンツID作成用セパレータ
+
 // データ作成用
 define('M3_WIDGET_ID_SEPARATOR',		',');									// ウィジェットIDと付加情報を連結
 //define('M3_LANG_SEPARATOR',				'|');									// 言語IDと内容を連結

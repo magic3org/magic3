@@ -79,6 +79,7 @@ class blog_mainCommonDef
 	const DEFAULT_TITLE_LIST 			= '「$1」の記事';		// 一覧タイトルのデフォルト値
 	const DEFAULT_TITLE_SEARCH_LIST 	= 'ブログ検索';		// 検索結果タイトルのデフォルト値
 	const DEFAULT_TITLE_NO_ENTRY		= 'ブログ記事未登録';
+	const DEFAULT_TITLE_NO_TITLE		= 'タイトル未設定';
 	const DEFAULT_MESSAGE_NO_ENTRY		= 'ブログ記事は登録されていません';				// ブログ記事が登録されていないメッセージ
 	const DEFAULT_MESSAGE_FIND_NO_ENTRY	= 'ブログ記事が見つかりません';					// ブログ記事が見つからないメッセージ
 //	const DEFAULT_TITLE_TAG_LEVEL		= 2;		// デフォルトのタイトルタグレベル
