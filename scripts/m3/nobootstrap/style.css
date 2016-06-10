@@ -91,6 +91,9 @@
 .glyphicon-wrench:before {
   content: "\e136";
 }
+.glyphicon-tasks:before {
+  content: "\e137";
+}
 .glyphicon-unchecked:before {
   content: "\e157";
 }
