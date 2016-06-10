@@ -756,12 +756,20 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			
 			// 保存データ作成
 			$regDt = $this->convertToProperDate($entry_date) . ' ' . $this->convertToProperTime($entry_time);		// 投稿日時
-				
+			
+			// 既存データ取得
+			$ret = self::$_mainDb->getEntryItem($this->entryId, $this->langId, $row);
+			if ($ret){			// データありの場合
+				$userId = $row['be_regist_user_id'];	// 最初の投稿者
+			} else {
+				$userId = $this->_userId;				// 現在のユーザ
+			}
+			
 			// プレビュー用の記事データを登録
 			$otherParams = array();
 			$otherParams['be_name']				= $name;
 			$otherParams['be_blog_id']			= $this->blogId;
-			$otherParams['be_regist_user_id']	= $this->_userId;
+			$otherParams['be_regist_user_id']	= $userId;				// 投稿者
 			$otherParams['be_regist_dt']		= $regDt;
 			$otherParams['be_show_comment']		= $showComment;
 			$otherParams['be_receive_comment']	= $receiveComment;

@@ -758,12 +758,20 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			
 			// 保存データ作成
 			$regDt = $this->convertToProperDate($entry_date) . ' ' . $this->convertToProperTime($entry_time);		// 投稿日時
-				
+			
+			// 既存データ取得
+			$ret = self::$_mainDb->getEntryItem($this->entryId, $this->langId, $row);
+			if ($ret){			// データありの場合
+				$userId = $row['be_regist_user_id'];	// 最初の投稿者
+			} else {
+				$userId = $this->_userId;				// 現在のユーザ
+			}
+			
 			// プレビュー用の記事データを登録
 			$otherParams = array();
 			$otherParams['be_name']				= $name;
 			$otherParams['be_blog_id']			= $this->blogId;
-			$otherParams['be_regist_user_id']	= $this->_userId;
+			$otherParams['be_regist_user_id']	= $userId;				// 投稿者
 			$otherParams['be_regist_dt']		= $regDt;
 			$otherParams['be_show_comment']		= $showComment;
 			$otherParams['be_receive_comment']	= $receiveComment;
@@ -773,7 +781,7 @@ class blog_mainEntryWidgetContainer extends blog_mainBaseWidgetContainer
 			$otherParams['be_thumb_filename']	= $thumbFilename;		// サムネールファイル名
 			$otherParams['be_related_content']	= $relatedContent;		// 関連コンテンツ
 			$otherParams['be_option_fields']	= $this->serializeArray($this->fieldValueArray);				// ユーザ定義フィールド値
-			$ret = self::$_mainDb->updateEntryPreviewItem($this->entryId, $this->langId, $html, $html2, $this->categoryArray, $otherParams, $serial);
+			$ret = self::$_mainDb->updateEntryPreview($this->entryId, $this->langId, $html, $html2, $this->categoryArray, $otherParams, $serial);
 			if ($ret){
 				// プレビュー用URL作成
 				$previewUrl = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_BLOG_ENTRY_ID . '=' . $this->entryId . '-' . $this->_userId;
