@@ -2039,7 +2039,9 @@ class blog_mainDb extends BaseDb
 		$entryId = intval($id) * (-1);						// 記事IDを負の値に変換
 		$historyIndex = $userId * (-1);				// ユーザIDを負の値に変換
 		
+//		$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
 		$queryStr  = 'SELECT * FROM blog_entry LEFT JOIN blog_id ON be_blog_id = bl_id AND bl_deleted = false ';
+		$queryStr .=   'LEFT JOIN _login_user ON be_regist_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'WHERE be_id = ? ';
 		$queryStr .=     'AND be_language_id = ? ';
 		$queryStr .=     'AND be_history_index = ? ';
