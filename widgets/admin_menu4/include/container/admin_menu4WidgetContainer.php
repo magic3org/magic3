@@ -46,6 +46,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const SITE_OPEN_ICON_FILE = '/images/system/site_open24.png';			// アクセスポイント公開
 	const SITE_CLOSE_ICON_FILE = '/images/system/site_close24.png';			// アクセスポイント非公開
 	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
+	const CONFIG_ICON_FILE = '/images/system/config24.png';		// ウィジェット設定画面アイコン
 	const MAX_SITENAME_LENGTH = 20;		// サイト名の最大文字数
 	const ICON_SIZE = 24;			// アイコンサイズ
 	const SITE_ICON_SIZE = 32;			// サイトメニューアイコンサイズ
@@ -682,8 +683,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				if (empty($title)) $title = $menu[$i]['wd_name'];		// コンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;
 			
+				$iconTitle = 'ウィジェット設定';
+				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
+				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
 				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
-				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;"><span >' . $this->convertToDispString($title) . '</span></a></li>' . M3_NL;
+				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;">' . $iconTag . $this->convertToDispString($title) . '</a></li>' . M3_NL;
 			}
 		}
 		
@@ -713,8 +717,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				if (empty($title)) $title = $subMenu[$i]['wd_name'];		// サブコンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;
 
+				$iconTitle = 'ウィジェット設定';
+				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
+				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
 				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
-				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;"><span >' . $this->convertToDispString($title) . '</span></a></li>' . M3_NL;
+				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;">' . $iconTag . $this->convertToDispString($title) . '</a></li>' . M3_NL;
 			}
 		}
 		
