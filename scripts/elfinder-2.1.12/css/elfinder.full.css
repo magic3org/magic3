@@ -2380,4 +2380,5 @@ embed.elfinder-quicklook-preview-audio {
 	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
 	font-size: 1em;
 }
+.ui-button:focus { outline:none !important }	/* remove highlight at the dialog close box in chrome. */
 /******************************************************************/
