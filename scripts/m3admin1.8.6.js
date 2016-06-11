@@ -360,8 +360,7 @@ function m3OpenFileBrowser(seturl_callback)
 	$('<div />').dialog({
 		title: "ファイルを選択",
 		modal: true,
-		width: "80%",
-		zIndex: 99999,
+		width: $(window).width() * M3_FILEBROWSER_WIDTH_RATIO,
 		open: function(){
 			$(this).parent().css("padding", "0px");
 			$(this).css("padding", "0px");
@@ -392,8 +391,7 @@ function m3OpenImageFileBrowser(seturl_callback)
 	$('<div />').dialog({
 		title: "画像を選択",
 		modal: true,
-		width: "80%",
-		zIndex: 99999,
+		width: $(window).width() * M3_FILEBROWSER_WIDTH_RATIO,
 		open: function(){
 			$(this).parent().css("padding", "0px");
 			$(this).css("padding", "0px");
@@ -424,8 +422,7 @@ function m3OpenFlashFileBrowser(seturl_callback)
 	$('<div />').dialog({
 		title: "Flashを選択",
 		modal: true,
-		width: "80%",
-		zIndex: 99999,
+		width: $(window).width() * M3_FILEBROWSER_WIDTH_RATIO,
 		open: function(){
 			$(this).parent().css("padding", "0px");
 			$(this).css("padding", "0px");

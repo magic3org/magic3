@@ -210,6 +210,10 @@ class PageManager extends Core
 	const USE_BOOTSTRAP_ADMIN	= false;			// 管理画面でBootstrapを使用するかどうか(デフォルト値)
 	const BOOTSTRAP_BUTTON_CLASS = 'btn btn-default';
 	
+	// UI
+	const FILEBROWSER_WIDTH_RATIO = '0.8';			// ファイルブラウザ幅比率
+	const FILEBROWSER_HEIGHT_RATIO = '0.8';			// ファイルブラウザ高さ比率
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -3762,9 +3766,11 @@ class PageManager extends Core
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
 				
-				// ファイルブラウザバージョン
-				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;
-				
+				// ファイルブラウザ
+				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;		// バージョン
+				$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
+				$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
+	
 				// Googleマップライブラリの読み込み
 				if ($this->useGooglemaps){
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
@@ -3857,8 +3863,10 @@ class PageManager extends Core
 				// WYSIWYGエディター
 				$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
 				
-				// ファイルブラウザバージョン
-				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;
+				// ファイルブラウザ
+				$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;	// バージョン
+				$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
+				$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
 				
 				// テンプレートタイプ
 				$templateType = $gEnvManager->getCurrentTemplateType();
@@ -3868,8 +3876,10 @@ class PageManager extends Core
 					// WYSIWYGエディター
 					$replaceStr .= 'var M3_WYSIWYG_EDITOR = "' . $this->wysiwygEditor . '";' . M3_NL;
 				
-					// ファイルブラウザバージョン
-					$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;
+					// ファイルブラウザ
+					$replaceStr .= 'var M3_FILEBROWSER_VER = "' . $this->libFiles[ScriptLibInfo::LIB_ELFINDER]['version'] . '";' . M3_NL;	// バージョン
+					$replaceStr .= 'var M3_FILEBROWSER_WIDTH_RATIO = ' . self::FILEBROWSER_WIDTH_RATIO . ';' . M3_NL;			// ファイルブラウザ幅比率
+					$replaceStr .= 'var M3_FILEBROWSER_HEIGHT_RATIO = ' . self::FILEBROWSER_HEIGHT_RATIO . ';' . M3_NL;		// ファイルブラウザ高さ比率
 				
 					// Googleマップライブラリの読み込み
 					if ($this->useGooglemaps){

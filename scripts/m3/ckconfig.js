@@ -271,8 +271,7 @@ CKEDITOR.on('dialogDefinition', function(ev){
 					$('<div />').dialog({
 						title: title,
 						modal: true,
-						width: "80%",
-						zIndex: 99999,
+						width: $(window).width() * M3_FILEBROWSER_WIDTH_RATIO,
 						open: function(){
 							$(this).parent().css("padding", "0px");
 							$(this).css("padding", "0px");
