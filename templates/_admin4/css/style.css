@@ -717,6 +717,7 @@ span[rel="m3help"] { cursor: default; }
 .m3config_item.form-control-static {
 	padding-left: 3px;
 	padding-right: 3px;
+	white-space: nowrap;
 }
 .m3config_item.form-control-static.following {
 	margin-left: 20px;
