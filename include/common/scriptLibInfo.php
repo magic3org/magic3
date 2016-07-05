@@ -104,6 +104,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_UPLOADFILE		= 'jquery.uploadfile';
 	const LIB_JQUERY_JCROP			= 'jquery.jcrop';
 	const LIB_JQUERY_NUMERIC		= 'jquery.numeric';
+	const LIB_JQUERY_STICKY			= 'jquery.sticky';
 
 	// Magic3管理画面専用jQueryプラグイン
 	const LIB_JQUERY_M3_SLIDEPANEL		= 'jquery.m3slidepanel';		// スライドパネル
@@ -144,6 +145,7 @@ class ScriptLibInfo
 	const JQUERY_UPLOADFILE_VER		= '3.1.10';
 	const JQUERY_JCROP_VER			= '0.9.12';
 	const JQUERY_NUMERIC_VER		= '1.4.1';
+	const JQUERY_STICKY_VER			= '1.0.4';
 	// その他ライブラリバージョン
 	const CODEMIRROR_VER			= '3.1';
 
@@ -233,6 +235,7 @@ class ScriptLibInfo
 	const JQUERY_JCROP_FILENAME			= 'jquery/jcrop0.9.12/jquery.Jcrop.js';
 	const JQUERY_JCROP_CSS				= 'jquery/jcrop0.9.12/jquery.Jcrop.css';
 	const JQUERY_NUMERIC_FILENAME		= 'jquery/jquery.numeric.min.js';
+	const JQUERY_STICKY_FILENAME		= 'jquery/jquery.sticky-1.0.4.js';
 
 	// Magic3管理画面jQueryプラグインのファイル名
 	const JQUERY_M3_SLIDEPANEL_FILENAME	= 'jquery/jquery.m3slidepanel.js';	// スライドパネル
@@ -273,6 +276,7 @@ class ScriptLibInfo
 	const JQUERY_UPLOADFILE_URL			= 'https://github.com/hayageek/jquery-upload-file/';
 	const JQUERY_JCROP_URL				= 'http://deepliquid.com/content/Jcrop.html';
 	const JQUERY_NUMERIC_URL			= 'http://www.texotela.co.uk/code/jquery/numeric/';
+	const JQUERY_STICKY_URL				= 'http://stickyjs.com/';
 
 	// ディレクトリ名
 	const FCKEDITOR_DIRNAME				= 'fckeditor2.6.6';				// FCKEditor
@@ -582,6 +586,9 @@ class ScriptLibInfo
 						self::LIB_JQUERY_NUMERIC		=> array(	'script' 	=> array(self::JQUERY_NUMERIC_FILENAME),
 																	'url'		=> self::JQUERY_NUMERIC_URL,
 																	'version'	=> self::JQUERY_NUMERIC_VER),
+						self::LIB_JQUERY_STICKY			=> array(	'script' 	=> array(self::JQUERY_STICKY_FILENAME),
+																	'url'		=> self::JQUERY_STICKY_URL,
+																	'version'	=> self::JQUERY_STICKY_VER),
 
 						// Magic3管理画面専用jQueryプラグイン
 						self::LIB_JQUERY_M3_SLIDEPANEL	=>	array(	'script' 	=> array(self::JQUERY_M3_SLIDEPANEL_FILENAME)),	// スライドパネル
