@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_jquery_pluginWidgetContainer.php 3468 2010-08-10 03:54:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseAdminWidgetContainer.php');
@@ -39,6 +39,23 @@ class admin_jquery_pluginWidgetContainer extends BaseAdminWidgetContainer
 		parent::__construct();
 	}
 	/**
+	 * ウィジェット初期化
+	 *
+	 * 共通パラメータの初期化や、以下のパターンでウィジェット出力方法の変更を行う。
+	 * ・組み込みの_setTemplate(),_assign()を使用
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @return 								なし
+	 */
+	function _init($request)
+	{
+		$task = $request->trimValueOf('task');
+		if ($task == 'list'){		// 一覧画面
+			// 通常のテンプレート処理を組み込みのテンプレート処理に変更。_setTemplate()、_assign()はキャンセル。
+			$this->replaceAssignTemplate(self::ASSIGN_TEMPLATE_BASIC_CONFIG_LIST);		// 設定一覧(基本)
+		}
+	}
+	/**
 	 * テンプレートファイルを設定
 	 *
 	 * _assign()でデータを埋め込むテンプレートファイルのファイル名を返す。
@@ -50,12 +67,7 @@ class admin_jquery_pluginWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _setTemplate($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return 'admin_list.tmpl.html';
-		} else {			// 一覧画面
-			return 'admin.tmpl.html';
-		}
+		return 'admin.tmpl.html';
 	}
 	/**
 	 * テンプレートにデータ埋め込む
@@ -68,12 +80,21 @@ class admin_jquery_pluginWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		$task = $request->trimValueOf('task');
-		if ($task == 'list'){		// 一覧画面
-			return $this->createList($request);
-		} else {			// 詳細設定画面
-			return $this->createDetail($request);
-		}
+		return $this->createDetail($request);
+	}
+	/**
+	 * テンプレートにデータ埋め込む
+	 *
+	 * _setTemplate()で指定したテンプレートファイルにデータを埋め込む。
+	 *
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param object         $param			任意使用パラメータ。_setTemplate()と共有。
+	 * @return								なし
+	 */
+	function _postAssign($request, &$param)
+	{
+		// メニューバー、パンくずリスト作成(簡易版)
+		$this->createBasicConfigMenubar($request);
 	}
 	/**
 	 * 詳細画面作成
@@ -260,84 +281,6 @@ class admin_jquery_pluginWidgetContainer extends BaseAdminWidgetContainer
 			if ($i == count($this->paramObj)) break;
 		}
 		return $name;
-	}
-	/**
-	 * 一覧画面作成
-	 *
-	 * @param RequestManager $request		HTTPリクエスト処理クラス
-	 * @param								なし
-	 */
-	function createList($request)
-	{
-		// ページ定義IDとページ定義のレコードシリアル番号を取得
-		$this->startPageDefParam($defSerial, $defConfigId, $this->paramObj);
-		
-		$userId		= $this->gEnv->getCurrentUserId();
-		$langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		$act = $request->trimValueOf('act');
-		
-		if ($act == 'delete'){		// メニュー項目の削除
-			$listedItem = explode(',', $request->trimValueOf('seriallist'));
-			$delItems = array();
-			for ($i = 0; $i < count($listedItem); $i++){
-				// 項目がチェックされているかを取得
-				$itemName = 'item' . $i . '_selected';
-				$itemValue = ($request->trimValueOf($itemName) == 'on') ? 1 : 0;
-				
-				if ($itemValue){		// チェック項目
-					$delItems[] = $listedItem[$i];
-				}
-			}
-			if (count($delItems) > 0){
-				$ret = $this->delPageDefParam($defSerial, $defConfigId, $this->paramObj, $delItems);
-				if ($ret){		// データ削除成功のとき
-					$this->setGuidanceMsg('データを削除しました');
-				} else {
-					$this->setAppErrorMsg('データ削除に失敗しました');
-				}
-			}
-		}
-		// 定義一覧作成
-		$this->createItemList();
-		
-		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
-		
-		// ページ定義IDとページ定義のレコードシリアル番号を更新
-		$this->endPageDefParam($defSerial, $defConfigId, $this->paramObj);
-	}
-	/**
-	 * 定義一覧作成
-	 *
-	 * @return なし						
-	 */
-	function createItemList()
-	{
-		for ($i = 0; $i < count($this->paramObj); $i++){
-			$id			= $this->paramObj[$i]->id;// 定義ID
-			$targetObj	= $this->paramObj[$i]->object;
-			$name = $targetObj->name;// 定義名
-		
-			// 使用数
-			$defCount = 0;
-			if (!empty($id)){
-				$defCount = $this->_db->getPageDefCount($this->gEnv->getCurrentWidgetId(), $id);
-			}
-			$operationDisagled = '';
-			if ($defCount > 0) $operationDisagled = 'disabled';
-			
-			$row = array(
-				'index' => $i,
-				'id' => $id,
-				'ope_disabled' => $operationDisagled,			// 選択可能かどうか
-				'name' => $this->convertToDispString($name),		// 名前
-				'def_count' => $defCount							// 使用数
-			);
-			$this->tmpl->addVars('itemlist', $row);
-			$this->tmpl->parseTemplate('itemlist', 'a');
-			
-			// シリアル番号を保存
-			$this->serialArray[] = $id;
-		}
 	}
 	/**
 	 * jQueryプラグイン一覧作成
