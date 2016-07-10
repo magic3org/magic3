@@ -8,16 +8,15 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2009 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: phpcodeWidgetContainer.php 2363 2009-09-26 14:45:44Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class phpcodeWidgetContainer extends BaseWidgetContainer
 {
-	private $langId;		// 現在の言語
 	const DEFAULT_CONFIG_ID = 0;
 	
 	/**
@@ -53,9 +52,7 @@ class phpcodeWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-		global $gEnvManager;
-
-		$this->langId = $gEnvManager->getCurrentLanguage();
+/*		global $gEnvManager;
 		
 		// 定義ID取得
 		$configId = $gEnvManager->getCurrentWidgetConfigId();
@@ -77,6 +74,19 @@ class phpcodeWidgetContainer extends BaseWidgetContainer
 			}
 		}
 		if ($i < count($paramObj)){		// 該当する定義IDのデータが取得できたとき
+			// プログラムの実行
+			eval($code);
+		}
+		*/
+		// 定義ID取得
+		$configId = $this->gEnv->getCurrentWidgetConfigId();
+		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
+
+		// パラメータオブジェクトを取得
+		$targetObj = $this->getWidgetParamObjByConfigId($configId);
+		if (!empty($targetObj)){		// 定義データが取得できたとき
+			$code = $targetObj->code;		// PHPプログラム
+
 			// プログラムの実行
 			eval($code);
 		}
