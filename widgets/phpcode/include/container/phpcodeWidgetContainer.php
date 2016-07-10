@@ -52,32 +52,6 @@ class phpcodeWidgetContainer extends BaseWidgetContainer
 	 */
 	function _assign($request, &$param)
 	{
-/*		global $gEnvManager;
-		
-		// 定義ID取得
-		$configId = $gEnvManager->getCurrentWidgetConfigId();
-		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
-		
-		// パラメータオブジェクトを取得
-		$paramObj = $this->getWidgetParamObj();
-		
-		// 指定定義IDのデータを取得
-		$name = '';
-		for ($i = 0; $i < count($paramObj); $i++){
-			$targetObj = $paramObj[$i];
-			$id = $targetObj->id;// 定義ID
-			if ($id == $configId){
-				$name = $targetObj->name;// 定義名
-				$code = $targetObj->code;		// PHPプログラム
-				$showTitle = $targetObj->showTitle;// タイトルを表示するかどうか
-				break;
-			}
-		}
-		if ($i < count($paramObj)){		// 該当する定義IDのデータが取得できたとき
-			// プログラムの実行
-			eval($code);
-		}
-		*/
 		// 定義ID取得
 		$configId = $this->gEnv->getCurrentWidgetConfigId();
 		if (empty($configId)) $configId = self::DEFAULT_CONFIG_ID;
