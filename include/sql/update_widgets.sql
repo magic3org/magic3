@@ -411,7 +411,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'jquery_plugin';
 INSERT INTO _widgets
 (wd_id,        wd_name,                wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_has_admin, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type,    wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('jquery_plugin', 'jQueryプラグイン追加', '1.1.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQueryプラグインを追加するためのウィジェットです。画面上には何も表示されません。',  '', 'codemirror.javascript',             true,         true,                true,              0,  3,             1, '2013-03-02', now(),         now());
+('jquery_plugin', 'jQueryプラグイン', '1.2.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10,                'jQueryプラグインを追加するためのウィジェットです。画面上には何も表示されません。',  '', 'codemirror.javascript',             true,         true,                true,              0,  3,             1, '2016-07-10', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'head_add';
 INSERT INTO _widgets
 (wd_id,      wd_name,    wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_has_admin, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
