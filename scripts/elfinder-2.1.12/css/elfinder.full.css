@@ -15,7 +15,7 @@
 /********************** COMMAND "RESIZE" ****************************/
 .elfinder-dialog-resize  { margin-top:.3em; }
 .elfinder-resize-type    { float:left; margin-bottom: .4em; }
-.elfinder-resize-control { padding-top:3em; }
+.elfinder-resize-control { float: left; }		/* 2016/7/12 image rotate bug fixed by Magic3 */
 .elfinder-resize-control input[type=text] { border:1px solid #aaa; text-align: right; }
 .elfinder-resize-preview {
 	width:400px;
