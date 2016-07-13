@@ -5,7 +5,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2014 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2016 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -96,12 +96,12 @@ function listItem(){
 function addLine()
 {
 	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
-	lineText += '<td valign="top"><input type="text" name="item_title[]" size="20" maxlength="60" style="width:70%;" />&nbsp;&nbsp;<input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示<br />';
+	lineText += '<td valign="top"><input type="text" name="item_title[]" maxlength="60" style="width:70%;" />&nbsp;&nbsp;<input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示<br />';
 	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list1"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
 	lineText += '&nbsp;&nbsp;<input type="checkbox" name="item_required[]" class="required" />必須</td>';
-	lineText += '<td><input type="text" name="item_desc[]" size="30" maxlength="100" style="width:100%;" /><br /><input type="text" name="item_def[]" size="20" maxlength="500" style="width:75%;" /><input type="text" class="replaceTag" style="width:20%" readonly /><br />';
-	lineText += 'デフォルト：<input type="text" name="item_default[]" size="20" maxlength="60" style="width:28%" />&nbsp;&nbsp;&nbsp;&nbsp;入力制限：<input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字&nbsp;<input type="checkbox" name="item_number[]" class="number" />半角数値<br />';
-	lineText += 'フィールドID：<input type="text" name="item_field_id[]" size="1" maxlength="1" />&nbsp;&nbsp;&nbsp;&nbsp;計算式：<input type="text" name="item_calc[]" size="20" maxlength="60" style="width:40%" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</td>';
+	lineText += '<td><input type="text" name="item_desc[]" maxlength="100" style="width:100%;" /><br /><input type="text" name="item_def[]" maxlength="500" style="width:75%;" /><input type="text" class="replaceTag" style="width:20%" readonly /><br />';
+	lineText += 'デフォルト：<input type="text" name="item_default[]" maxlength="60" style="width:28%" />&nbsp;&nbsp;&nbsp;&nbsp;入力制限：<input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字&nbsp;<input type="checkbox" name="item_number[]" class="number" />半角数値<br />';
+	lineText += 'フィールドID：<input type="text" name="item_field_id[]" maxlength="1" />&nbsp;&nbsp;&nbsp;&nbsp;計算式：<input type="text" name="item_calc[]" maxlength="60" style="width:40%" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</td>';
 	lineText += '<td align="center"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	$('#field_list').append(lineText);
 	
@@ -129,6 +129,12 @@ function setupList()
 	});
 	// インデックスNo再設定
 	setupNo();
+	
+	// スタイル再設定
+	m3SetConfigSubTable('field_list');
+	
+	// HELP追加
+	m3SetHelp($("#field_list"));
 }
 function setupNo()
 {
@@ -144,14 +150,14 @@ function setupNo()
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow()
 {
-	window.open("{PREVIEW_URL}","","toolbar=no,menubar=no,location=yes,status=no,scrollbars=yes,resizable=yes,width=1000,height=800");
+	m3ShowPreviewWindow(0, "{PREVIEW_URL}");
 	return true;
 }
-function viewWidget(widgetId){
-	window.open("?cmd=showwidget&widget=" + widgetId,"","toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=800,height=600");
-	return false;
-}
-$(document).ready(function(){
+//$(document).ready(function(){
+$(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+	
 	// WYSIWYGエディター作成
 	m3SetWysiwygEditor('item_html', 300);
 	
@@ -160,8 +166,7 @@ $(document).ready(function(){
 });
 //]]>
 </script>
-<div align="center">
-<br />
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" />
@@ -174,106 +179,120 @@ $(document).ready(function(){
 <input type="hidden" name="number" />
 <input type="hidden" name="disabled" />
 <!-- m3:PostParam -->
-<table width="90%">
-<tr><td><span {_HELP_CONTACTUS_DETAIL}><label>設定詳細</label></span></td>
-<td align="right"><span {_HELP_CONTACTUS_PREVIEW_BTN}><input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_DISABLED}/></span>&nbsp;&nbsp;<span {_HELP_CONTACTUS_LIST_BTN}><input type="button" class="button" onclick="listItem();" value="一覧" /></span>
-</td></tr>
-<tr><td colspan="2">
+<h3 class="m3config_h">基本設定</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_CONTACTUS_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="listItem();" value="設定一覧" />
+</div></div></div>
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div {_HELP_CONTACTUS_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="previewInOtherWindow();" value="プレビュー" {PREVIEW_DISABLED}/>
+</div></div></div>
 
-<table class="simple-table" style="margin: 0 auto;width:950px;">
+<table id="mainconfig">
     <tbody>
     <tr>
-	    <td class="table-headside" width="150"><span {_HELP_CONTACTUS_NAME_INPUT}>名前</span></td>
-	    <td width="500">
+	    <th><span {_HELP_CONTACTUS_NAME_INPUT}>名前</span></th>
+	    <td>
+		<div class="col-sm-4 m3config_item">
 	    <select name="item_id" onchange="selectItem();" {ID_DISABLED}>
 	        <option value="0">-- 新規 --</option>
 	        <patTemplate:tmpl name="title_list">
 	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	        </patTemplate:tmpl>
 	    </select>
+		</div>
 	    <patTemplate:tmpl name="item_name_visible" visibility="hidden">
-	    <input type="text" name="item_name" value="{NAME}" size="40" maxlength="40" style="width:60%;" />
+	    <div class="col-sm-4 m3config_item following"><input type="text" name="item_name" value="{NAME}" maxlength="40" /></div>
 	    </patTemplate:tmpl>
 	    </td>
-	    <td class="table-headside" width="150"><span {_HELP_CONTACTUS_ID}>ID</span></td>
-	    <td align="center">{ID}</td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONTACTUS_PAGE_TITLE}>画面タイトル</span></td>
-	    <td colspan="3"><input type="text" name="item_page_title" value="{PAGE_TITLE}" size="40" maxlength="60" /></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONTACTUS_FIELD}>お問い合わせ<br />項目</span></td>
-	    <td colspan="3">
-	    <table id="field_list" class="simple-table-inner" width="100%">
+	    <th><span {_HELP_CONTACTUS_PAGE_TITLE}>画面タイトル</span></th>
+	    <td><input type="text" name="item_page_title" value="{PAGE_TITLE}" maxlength="60" /></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONTACTUS_FIELD}>お問い合わせ<br />項目</span></th>
+	    <td>
+	    <table id="field_list">
 	    <thead>
-	    <tr><th rowspan="2" width="35">移動</th><th rowspan="2" width="30">No</th><th width="210">タイトル名</th><th>説明</th><th rowspan="2" width="40">操作</th></tr>
+	    <tr><th rowspan="2" style="width:35px;">移動</th><th rowspan="2" style="width:35px;">No</th><th>タイトル名</th><th>説明</th><th rowspan="2" style="width:35px;">操作</th></tr>
 	    <tr><th>タイプ</th><th>定義/埋め込みタグ</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="field_list">
             <tr class="dragRow">
 	    <td class="dragHandle"></td>
 	    <td align="center"><span class="lineNo"></span></td>
-	    <td valign="top"><input type="text" name="item_title[]" value="{TITLE}" size="20" maxlength="60" style="width:70%" />&nbsp;&nbsp;<input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE} />表示<br />
+	    <td valign="top">
+		<div class="form-group clearfix"><input type="text" name="item_title[]" value="{TITLE}" maxlength="60" style="width:70%" /><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE} />表示</label></div></div>
+		<div class="form-group clearfix">
 	    <select name="item_type[]">
 	       <patTemplate:tmpl name="type_list2">
                <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	       </patTemplate:tmpl>
-            </select>&nbsp;&nbsp;<input type="checkbox" name="item_required[]" class="required" {REQUIRED} />必須
+            </select><input type="checkbox" name="item_required[]" class="required" {REQUIRED} />必須
+		</div>
 	    </td>
-	    <td><input type="text" name="item_desc[]" value="{DESC}" size="30" maxlength="100" style="width:100%" /><br />
-	    <input type="text" name="item_def[]" value="{DEF}" size="20" maxlength="500" style="width:75%" /><input type="text" class="replaceTag" style="width:20%" readonly /><br />
-	    デフォルト：<input type="text" name="item_default[]" value="{DEFAULT}" size="20" maxlength="60" style="width:28%" />&nbsp;&nbsp;&nbsp;&nbsp;入力制限：<input type="checkbox" name="item_alphabet[]" class="alphabet" {ALPHABET} />半角英字&nbsp;<input type="checkbox" name="item_number[]" class="number" {NUMBER} />半角数値<br />
-	    フィールドID：<input type="text" name="item_field_id[]" value="{FIELD_ID}" size="1" maxlength="1" />&nbsp;&nbsp;&nbsp;&nbsp;計算式：<input type="text" name="item_calc[]" value="{CALC}" size="20" maxlength="60" style="width:40%" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="item_disabled[]" class="disabled" {DISABLED} />編集不可</td>
-	    <td align="center"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    <td><input type="text" name="item_desc[]" value="{DESC}" maxlength="100" style="width:100%" /><br />
+	    <input type="text" name="item_def[]" value="{DEF}" maxlength="500" style="width:75%" /><input type="text" class="replaceTag" style="width:20%" readonly /><br />
+	    デフォルト：<input type="text" name="item_default[]" value="{DEFAULT}" maxlength="60" style="width:28%" />&nbsp;&nbsp;&nbsp;&nbsp;入力制限：<input type="checkbox" name="item_alphabet[]" class="alphabet" {ALPHABET} />半角英字&nbsp;<input type="checkbox" name="item_number[]" class="number" {NUMBER} />半角数値<br />
+	    フィールドID：<input type="text" name="item_field_id[]" value="{FIELD_ID}" maxlength="1" />&nbsp;&nbsp;&nbsp;&nbsp;計算式：<input type="text" name="item_calc[]" value="{CALC}" maxlength="60" style="width:40%" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="item_disabled[]" class="disabled" {DISABLED} />編集不可</td>
+	    <td align="center"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
 	    <div><input type="button" class="button" onclick="addLine();" value="追加" /></div>
 	    </td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside">規定タグID</td>
-	    <td colspan="3">{TAG_ID_STR}<input type="hidden" name="item_confirm_button" value="{CONFIRM_BUTTON}" /><input type="hidden" name="item_send_button" value="{SEND_BUTTON}" /><input type="hidden" name="item_cancel_button" value="{CANCEL_BUTTON}" /><input type="hidden" name="item_reset_button" value="{RESET_BUTTON}" /></td>
+    <tr>
+	    <th>規定タグID</th>
+	    <td>{TAG_ID_STR}<input type="hidden" name="item_confirm_button" value="{CONFIRM_BUTTON}" /><input type="hidden" name="item_send_button" value="{SEND_BUTTON}" /><input type="hidden" name="item_cancel_button" value="{CANCEL_BUTTON}" /><input type="hidden" name="item_reset_button" value="{RESET_BUTTON}" /></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONTACTUS_TEMPLATE}>テンプレート</span></td>
-	    <td colspan="3"><textarea name="item_html">{HTML}</textarea></td>
-	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONTACTUS_CSS}>CSS</span></td>
-	    <td colspan="3"><textarea name="item_css" rows="3" style="width:100%;">{CSS}</textarea></td>
+	    <th><span {_HELP_CONTACTUS_TEMPLATE}>テンプレート</span></th>
+	    <td><textarea name="item_html">{HTML}</textarea></td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONTACTUS_DESIGN}>デザイン</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_use_artisteer" {USE_ARTISTEER} />Artisteer対応(チェックボックス,ラジオボタン等)
+	    <th><span {_HELP_CONTACTUS_CSS}>CSS</span></th>
+	    <td><textarea name="item_css" rows="3">{CSS}</textarea></td>
+	</tr>
+    <tr>
+	    <th><span {_HELP_CONTACTUS_DESIGN}>デザイン</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_artisteer" {USE_ARTISTEER} />Artisteer対応(チェックボックス,ラジオボタン等)</label></div>
 	    </td>
 	</tr>
-    <tr class="even">
-	    <td class="table-headside"><span {_HELP_CONTACTUS_EMAIL}>メール送信</span></td>
-	    <td colspan="3">件名：<input type="text" name="item_email_subject" value="{EMAIL_SUBJECT}" size="40" maxlength="60" style="width:300px;" />&nbsp;&nbsp;&nbsp;&nbsp;
-	    送信先メールアドレス：<input type="text" name="item_email_receiver" value="{EMAIL_RECEIVER}" size="25" maxlength="40" style="width:200px;" /></td>
+    <tr>
+	    <th><span {_HELP_CONTACTUS_EMAIL}>メール送信</span></th>
+	    <td>
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-1" style="width:4em;">件名：</div><input type="text" name="item_email_subject" value="{EMAIL_SUBJECT}" maxlength="60" style="width:20em;" />
+		</div>
+		<div class="form-group clearfix">
+	    <div class="form-control-static m3config_item col-sm-1" style="width:12em;">送信先メールアドレス：</div><input type="text" name="item_email_receiver" value="{EMAIL_RECEIVER}" maxlength="40" style="width:12em;" />
+		</div>
+		</td>
 	</tr>
     <tr>
-	    <td class="table-headside"><span {_HELP_CONTACTUS_USER_EMAIL}>確認メール</span></td>
-	    <td colspan="3"><input type="checkbox" name="item_send_user_email" {SEND_USER_EMAIL} />お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信<br />件名：<input type="text" name="item_user_email_subject" value="{USER_EMAIL_SUBJECT}" size="40" maxlength="60" style="width:300px;" />&nbsp;&nbsp;&nbsp;&nbsp;返信先メールアドレス：<input type="text" name="item_user_email_reply" value="{USER_EMAIL_REPLY}" size="25" maxlength="40" style="width:200px;" /><br />
+	    <th><span {_HELP_CONTACTUS_USER_EMAIL}>確認メール</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_send_user_email" {SEND_USER_EMAIL} />お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信</label></div>
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-1" style="width:4em;">件名：</div><input type="text" name="item_user_email_subject" value="{USER_EMAIL_SUBJECT}" maxlength="60" style="width:20em;" />
+		</div>
+		<div class="form-group clearfix">
+		<div class="form-control-static m3config_item col-sm-1" style="width:12em;">返信先メールアドレス：</div><input type="text" name="item_user_email_reply" value="{USER_EMAIL_REPLY}" maxlength="40" style="width:12em;" />
+		</div>
 	    本文：<br />
-	    <textarea name="item_user_email_format" rows="3" style="width:100%;">{USER_EMAIL_FORMAT}</textarea></td>
+	    <textarea name="item_user_email_format" rows="3">{USER_EMAIL_FORMAT}</textarea>
+		</td>
 	</tr>
-	<tr class="even">
-	    <td align="right" colspan="4">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem('update');" value="更新" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateItem('add');" value="新規追加" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>

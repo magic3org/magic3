@@ -8,7 +8,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2016 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -87,6 +87,12 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
 		$sendMessage = self::DEFAULT_SEND_MESSAGE;			// メール送信機能を使用するかどうか
 		
+		// テンプレートタイプがArtisteerの場合は画面出力を調整
+		if ($this->gEnv->getCurrentTemplateGenerator() == M3_TEMPLATE_GENERATOR_ARTISTEER ||
+			$targetObj->useArtisteer){
+			$this->useArtisteer = true;					// Artisteer対応デザイン
+		}
+				
 		//$sendMessage = $targetObj->sendMessage;			// メール送信機能を使用するかどうか
 		$emailReceiver = $targetObj->emailReceiver;		// メール受信者
 		$emailSubject = $targetObj->emailSubject;		// メール件名
@@ -94,7 +100,6 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$userEmailReply = $targetObj->userEmailReply;					// 入力ユーザ向けメール返信先メールアドレス
 		$userEmailSubject = $targetObj->userEmailSubject;				// 入力ユーザ向けメールタイトル
 		$userEmailFormat = $targetObj->userEmailFormat;				// 入力ユーザ向けメール本文フォーマット
-		$this->useArtisteer = $targetObj->useArtisteer;					// Artisteer対応デザイン
 		$baseTemplate = $targetObj->baseTemplate;		// 入力エリア作成用ベーステンプレート
 		$this->css		= $targetObj->css;		// CSS
 		$this->confirmButtonId = $targetObj->confirmButtonId;		// 確認ボタンのタグID
@@ -106,7 +111,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->pageTitle = $targetObj->pageTitle;			// 画面タイトル
 		if (empty($this->pageTitle)) $this->pageTitle = self::DEFAULT_TITLE_NAME;			// 画面タイトル
 		if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// お問い合わせフィールド情報
-		
+				
 		// 入力値を取得
 		$this->valueArray = array();
 		$fieldCount = count($this->fieldInfoArray);
