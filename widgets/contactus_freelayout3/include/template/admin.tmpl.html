@@ -95,14 +95,35 @@ function listItem(){
 // お問い合わせ項目を追加
 function addLine()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
+var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td style="text-align:center;"><span class="lineNo"></span></td>';
+lineText += '<td style="vertical-align:top;">';
+lineText += '<div class="form-group clearfix last"><div class="m3config_item col-sm-9"><input type="text" name="item_title[]" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示</label></div></div></div>';
+lineText += '<hr class="border" />';
+lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list1"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" />入力必須</label></div>';
+lineText += '</td>';
+lineText += '<td style="vertical-align:top;">';
+lineText += '<input type="text" name="item_desc[]" maxlength="100" />';
+lineText += '<hr class="border" />';
+lineText += '<div class="form-group clearfix"><input type="text" name="item_def[]" maxlength="500" /></div>';
+lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">デフォルト値：</div><div class="m3config_item col-sm-7"><input type="text" name="item_default[]" maxlength="60" /></div></div>';
+lineText += '<div class="form-group clearfix">入力制限：<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_number[]" class="number" />半角数値</label></div></div>';
+lineText += '<div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">フィールドID：</div><div class="m3config_item col-sm-3"><input type="text" name="item_field_id[]" maxlength="1" /></div></div>';
+lineText += '<div class="form-group clearfix">計算式：<input type="text" name="item_calc[]" maxlength="60" /></div>';
+lineText += '<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</label></div>';
+lineText += '<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>';
+lineText += '</td>';
+lineText += '<td style="text-align:center;"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>';
+lineText += '</tr>';
+		
+/*	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
 	lineText += '<td valign="top"><input type="text" name="item_title[]" maxlength="60" style="width:70%;" />&nbsp;&nbsp;<input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示<br />';
-	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list1"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
+	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list11"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
 	lineText += '&nbsp;&nbsp;<input type="checkbox" name="item_required[]" class="required" />必須</td>';
 	lineText += '<td><input type="text" name="item_desc[]" maxlength="100" style="width:100%;" /><br /><input type="text" name="item_def[]" maxlength="500" style="width:75%;" /><input type="text" class="replaceTag" style="width:20%" readonly /><br />';
 	lineText += 'デフォルト：<input type="text" name="item_default[]" maxlength="60" style="width:28%" />&nbsp;&nbsp;&nbsp;&nbsp;入力制限：<input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字&nbsp;<input type="checkbox" name="item_number[]" class="number" />半角数値<br />';
 	lineText += 'フィールドID：<input type="text" name="item_field_id[]" maxlength="1" />&nbsp;&nbsp;&nbsp;&nbsp;計算式：<input type="text" name="item_calc[]" maxlength="60" style="width:40%" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</td>';
 	lineText += '<td align="center"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	*/
 	$('#field_list').append(lineText);
 	
 	// 項目一覧を再設定
