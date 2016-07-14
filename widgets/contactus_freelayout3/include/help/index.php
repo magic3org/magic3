@@ -9,7 +9,7 @@
  *
  * @package    フリーレイアウトお問い合わせ
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2009-2013 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2009-2016 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
@@ -43,7 +43,7 @@ $HELP['contactus_field']['body'] = 'お問い合わせ項目を定義します�
 $HELP['contactus_email']['title'] = 'メール送信';
 $HELP['contactus_email']['body'] = 'お問い合わせメールの件名と送信先メールアドレスを設定します。メールアドレスが空の場合は基本情報のメールアドレスへ送信されます。';
 $HELP['contactus_user_email']['title'] = '確認メール';
-$HELP['contactus_user_email']['body'] = 'お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信する場合の設定を行います。基本情報のメールアドレスが送信元になり、「送信元メールアドレス」が設定されます。<br />「本文」の「[#BODY#]」には「メール送信」のメール内容が挿入されます。「[#ITEM_KEY_n#]」で個別の入力値が挿入されます。';
+$HELP['contactus_user_email']['body'] = 'お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信する場合の設定を行います。基本情報のメールアドレスが送信元になり、「送信元メールアドレス」が設定されます。<br />「本文」の「[#BODY#]」には「メール送信」のメール内容がデフォルトの出力形式で挿入されます。個別に項目の入力値を取得するには「[#ITEM_KEY_n#]」タグを使用します。';
 $HELP['contactus_ref']['title'] = '使用';
 $HELP['contactus_ref']['body'] = '設定を使用しているウィジェット数を示します。使用が0の設定のみ削除可能です。';
 $HELP['contactus_list_btn']['title'] = '一覧ボタン';

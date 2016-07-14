@@ -214,28 +214,36 @@ $(function(){
 	    <td>
 	    <table id="field_list">
 	    <thead>
-	    <tr><th rowspan="2" style="width:35px;">移動</th><th rowspan="2" style="width:35px;">No</th><th>タイトル名</th><th>説明</th><th rowspan="2" style="width:35px;">操作</th></tr>
+	    <tr><th rowspan="2" style="width:35px;">移動</th><th rowspan="2" style="width:35px;">No</th><th>タイトル</th><th>説明</th><th rowspan="2" style="width:35px;">操作</th></tr>
 	    <tr><th>タイプ</th><th>定義/埋め込みタグ</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="field_list">
-            <tr class="dragRow">
+        <tr class="dragRow">
 	    <td class="dragHandle"></td>
-	    <td align="center"><span class="lineNo"></span></td>
-	    <td valign="top">
-		<div class="form-group clearfix"><input type="text" name="item_title[]" value="{TITLE}" maxlength="60" style="width:70%" /><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE} />表示</label></div></div>
-		<div class="form-group clearfix">
+	    <td style="text-align:center;"><span class="lineNo"></span></td>
+	    <td style="vertical-align:top;">
+		<div class="form-group clearfix last">
+		<div class="m3config_item col-sm-9"><input type="text" name="item_title[]" value="{TITLE}" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE} />表示</label></div></div>
+		</div>
+		<hr class="border" />
 	    <select name="item_type[]">
 	       <patTemplate:tmpl name="type_list2">
                <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	       </patTemplate:tmpl>
-            </select><input type="checkbox" name="item_required[]" class="required" {REQUIRED} />必須
-		</div>
+            </select><div class="checkbox"><label><input type="checkbox" name="item_required[]" class="required" {REQUIRED} />入力必須</label></div>
 	    </td>
-	    <td><input type="text" name="item_desc[]" value="{DESC}" maxlength="100" style="width:100%" /><br />
-	    <input type="text" name="item_def[]" value="{DEF}" maxlength="500" style="width:75%" /><input type="text" class="replaceTag" style="width:20%" readonly /><br />
-	    デフォルト：<input type="text" name="item_default[]" value="{DEFAULT}" maxlength="60" style="width:28%" />&nbsp;&nbsp;&nbsp;&nbsp;入力制限：<input type="checkbox" name="item_alphabet[]" class="alphabet" {ALPHABET} />半角英字&nbsp;<input type="checkbox" name="item_number[]" class="number" {NUMBER} />半角数値<br />
-	    フィールドID：<input type="text" name="item_field_id[]" value="{FIELD_ID}" maxlength="1" />&nbsp;&nbsp;&nbsp;&nbsp;計算式：<input type="text" name="item_calc[]" value="{CALC}" maxlength="60" style="width:40%" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="item_disabled[]" class="disabled" {DISABLED} />編集不可</td>
-	    <td align="center"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>
+		<td style="vertical-align:top;">
+	    <input type="text" name="item_desc[]" value="{DESC}" maxlength="100" />
+		<hr class="border" />
+	    <div class="form-group clearfix"><input type="text" name="item_def[]" value="{DEF}" maxlength="500" /></div>
+	    <div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">デフォルト値：</div><div class="m3config_item col-sm-7"><input type="text" name="item_default[]" value="{DEFAULT}" maxlength="60" /></div></div>
+		<div class="form-group clearfix">入力制限：<div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_alphabet[]" class="alphabet" {ALPHABET} />半角英字</label></div><div class="checkbox m3config_inline_item"><label><input type="checkbox" name="item_number[]" class="number" {NUMBER} />半角数値</label></div></div>
+	    <div class="form-group clearfix"><div class="form-control-static m3config_item col-sm-5">フィールドID：</div><div class="m3config_item col-sm-3"><input type="text" name="item_field_id[]" value="{FIELD_ID}" maxlength="1" /></div></div>
+		<div class="form-group clearfix">計算式：<input type="text" name="item_calc[]" value="{CALC}" maxlength="60" /></div>
+		<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" {DISABLED} />編集不可</label></div>
+		<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>
+		</td>
+	    <td style="text-align:center;"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
@@ -263,10 +271,10 @@ $(function(){
 	    <th><span {_HELP_CONTACTUS_EMAIL}>メール送信</span></th>
 	    <td>
 		<div class="form-group clearfix">
-		<div class="form-control-static m3config_item col-sm-1" style="width:4em;">件名：</div><input type="text" name="item_email_subject" value="{EMAIL_SUBJECT}" maxlength="60" style="width:20em;" />
+		<div class="form-control-static m3config_item col-sm-1" style="width:4em;">件名：</div><input type="text" name="item_email_subject" value="{EMAIL_SUBJECT}" maxlength="60" style="width:24em;" />
 		</div>
 		<div class="form-group clearfix">
-	    <div class="form-control-static m3config_item col-sm-1" style="width:12em;">送信先メールアドレス：</div><input type="text" name="item_email_receiver" value="{EMAIL_RECEIVER}" maxlength="40" style="width:12em;" />
+	    <div class="form-control-static m3config_item col-sm-1" style="width:12em;">送信先メールアドレス：</div><input type="text" name="item_email_receiver" value="{EMAIL_RECEIVER}" maxlength="40" style="width:16em;" />
 		</div>
 		</td>
 	</tr>
@@ -274,10 +282,10 @@ $(function(){
 	    <th><span {_HELP_CONTACTUS_USER_EMAIL}>確認メール</span></th>
 	    <td><div class="checkbox"><label><input type="checkbox" name="item_send_user_email" {SEND_USER_EMAIL} />お問い合わせ項目タイプが「テキストボックス(Eメール)」のアドレス宛に確認メールを送信</label></div>
 		<div class="form-group clearfix">
-		<div class="form-control-static m3config_item col-sm-1" style="width:4em;">件名：</div><input type="text" name="item_user_email_subject" value="{USER_EMAIL_SUBJECT}" maxlength="60" style="width:20em;" />
+		<div class="form-control-static m3config_item col-sm-1" style="width:4em;">件名：</div><input type="text" name="item_user_email_subject" value="{USER_EMAIL_SUBJECT}" maxlength="60" style="width:24em;" />
 		</div>
 		<div class="form-group clearfix">
-		<div class="form-control-static m3config_item col-sm-1" style="width:12em;">返信先メールアドレス：</div><input type="text" name="item_user_email_reply" value="{USER_EMAIL_REPLY}" maxlength="40" style="width:12em;" />
+		<div class="form-control-static m3config_item col-sm-1" style="width:12em;">返信先メールアドレス：</div><input type="text" name="item_user_email_reply" value="{USER_EMAIL_REPLY}" maxlength="40" style="width:16em;" />
 		</div>
 	    本文：<br />
 	    <textarea name="item_user_email_format" rows="3">{USER_EMAIL_FORMAT}</textarea>
