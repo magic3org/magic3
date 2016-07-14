@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -398,6 +398,53 @@ function m3SetSafeWysiwygEditor(id, height)
 	if (height) config['height'] = height;
 	config['toolbar'] = 'Safe';
 	CKEDITOR.replace(id, config);
+}
+/**
+ * ドラッグ&ドロップファイルアップロード機能を作成
+ *
+ * @param string    id			表示領域タグID
+ * @param string    url			アップロード先URL
+ * @param function	callback	成功時コールバック関数
+ * @param int       type		アップロード可能ファイル(0=画像)
+ * @param int       width		表示幅
+ * @return bool					true=作成成功、false=作成失敗
+ */
+function m3CreateFileUploader(id, url, callback, type, width)
+{
+	if (!jQuery().uploadFile) return false;
+	
+	var fileType = type || 0;
+	var areaWidth = width || 300;
+	var allowTypes = '';
+	
+	switch (fileType){
+	case 0:
+	default:
+		allowTypes = 'png,gif,jpg,jpeg';
+		break;
+	}
+	$('#' + id).uploadFile({
+		url: url,
+		allowedTypes: allowTypes,
+		showFileCounter: false,		// ファイルNoなし
+		showProgress: true,
+		stripedBar: true,
+		dragDropStr: '',
+		progressBarClass: 'progress-bar-info',
+		returnType: 'json',
+		customErrorKeyStr: 'error',
+		abortStr: '中断',
+		cancelStr: 'キャンセル',
+		deletelStr: '削除',
+		doneStr: '完了',
+		dragdropWidth: areaWidth,		// ドラッグ領域幅
+		statusBarWidth: areaWidth,		// ファイルリスト領域幅
+		onSuccess:function(files, data)
+		{
+			if (typeof(callback) == 'function') callback(files, data);
+		}
+	});
+	return true;
 }
 /**
  * (jQueryの機能拡張)TextAreaやINPUTタグのテキストのカーソルの位置に文字列を追加
