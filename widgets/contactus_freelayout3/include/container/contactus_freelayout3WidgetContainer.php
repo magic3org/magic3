@@ -23,6 +23,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	private $addScript;			// 追加スクリプト
 	private $calcScript;		// 計算処理用スクリプト
 	private $recalcScript;		// 計算処理用スクリプト
+	private $uploaderScript;		// ファイルアップローダ用スクリプト
 	private $confirmButtonId;		// 確認ボタンのタグID
 	private $sendButtonId;		// 送信ボタンのタグID
 	private $cancelButtonId;		// 送信キャンセルボタンのタグID
@@ -36,6 +37,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	const DEFAULT_STR_REQUIRED = '<font color="red">*必須</font>';		// 「必須」表示用テキスト
 	const FIELD_HEAD = 'item';			// フィールド名の先頭文字列
 	const LIST_MARK = '●';				// メール本文のフィールドタイトル用マーク
+	const UPLOADER_HEAD = 'uploader_';			// ファイルアップローダタグID
+	const UPLOADEF_CALLBACK_HEAD = 'uploader_onSuccess_';			// ファイルアップローダのコールバック関数名
+	const ACT_UPLOAD = 'upload';			// ファイルアップロード操作
 	
 	/**
 	 * コンストラクタ
@@ -124,8 +128,84 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		if ($sendStatus < 0 || 2 < $sendStatus) $sendStatus = 0;
 		$postTicket = $request->trimValueOf('ticket');		// POST確認用
 		$act = $request->trimValueOf('act');
+		$this->cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		
-		if ($act == 'confirm' && $sendStatus == 0){				// 送信確認
+		if ($this->cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
+
+			if (empty($act)){	// 画像取得
+				$this->downloadImage($request);			// 画像取得
+			} else if ($act == self::ACT_UPLOAD){		// ファイルアップロード
+
+			// 作業ディレクトリを作成
+			$this->tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+			
+			// Ajaxでのファイルアップロード処理
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $this->tmpDir);
+
+			/*
+				// ##### アップロードファイルを保存 #####
+$this->uploadMaxBytes = 512000;		// アップロードファイル最大バイトサイズ
+				$uploader = new qqFileUploader(array(), $this->uploadMaxBytes);
+				$resultObj = $uploader->handleUpload($this->gEnv->getWorkDirPath());		// 一時ディレクトリに保存
+debug($resultObj);
+				if ($resultObj['success']){
+					$fileInfo = $resultObj['file'];
+					$tmpFile = $fileInfo['path'];
+				
+					// 画像ファイル名作成
+					$imageId = $this->gInstance->getFileManager()->createRandFileId();
+					$imagePath = $this->imageDir . DIRECTORY_SEPARATOR . $imageId;
+		
+					// 画像作成
+					$ret = $this->gInstance->getImageManager()->createImage($tmpFile, $imagePath, $this->maxImageSize, commentCommonDef::OUTPUT_IMAGE_TYPE, $destSize);
+
+					// 画像登録
+					if ($ret){
+						$ret = $this->gInstance->getFileManager()->addAttachFileInfo(commentCommonDef::$_viewContentType, $imageId, $imagePath, $fileInfo['filename']);
+					}
+				
+					$destTag = '';
+					if ($ret){
+						$param = commentCommonDef::REQUEST_PARAM_IMAGE_ID . '=' . $imageId;
+						$newUrl = $this->createCmdUrlToCurrentWidget($param);
+						$destTag = '<img src="' . $this->getUrl($newUrl) . '" width="' . $destSize['width'] . '" height="' . $destSize['height'] . '" />';
+					} else {		// エラーの場合
+						$resultObj = array('error' => 'Could not create file information.');
+					}
+				
+					// 結果オブジェクト更新
+					$resultObj['file']['fileid'] = $imageId;
+					$resultObj['file']['html'] = $destTag;
+					unset($resultObj['file']['path']);
+					unset($resultObj['file']['filename']);
+					unset($resultObj['file']['size']);
+
+					// 一時ファイル削除
+					unlink($tmpFile);
+				}
+
+				// ##### 添付ファイルアップロード結果を返す #####
+				// ページ作成処理中断
+				$this->gPage->abortPage();
+	
+				// 添付ファイルの登録データを返す
+				if (function_exists('json_encode')){
+					$destStr = json_encode($resultObj);
+				} else {
+					$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
+				}
+				//$destStr = htmlspecialchars($destStr, ENT_NOQUOTES);// 「&」が「&amp;」に変換されるので使用しない
+				//header('Content-type: application/json; charset=utf-8');
+				header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
+				echo $destStr;
+	
+				// システム強制終了
+				$this->gPage->exitSystem();
+*/
+			}
+
+//			$this->exitWidget();		// ウィジェット終了処理
+		} else if ($act == 'confirm' && $sendStatus == 0){				// 送信確認
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// 入力状況のチェック
 				$isFirstUserEmail = false;		// 最初のEメールアドレスかどうか
@@ -358,12 +438,14 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->addScript = '';			// 追加スクリプト
 		$this->calcScript = '';		// 計算処理用スクリプト
 		$this->recalcScript = '';			// 計算処理用スクリプト
+		$this->uploaderScript = '';		// ファイルアップローダ用スクリプト
 		$fieldOutput = $this->createFieldOutput($baseTemplate, $inputEnabled);
 		$this->tmpl->addVar("_widget", "field_output", $fieldOutput);// お問い合わせ入力項目データ
 		$this->tmpl->addVar("_widget", "field_count", $fieldCount);// お問い合わせ項目数
 		$this->tmpl->addVar("_widget", "add_script", $this->addScript);// 追加スクリプト
 		$this->tmpl->addVar("_widget", "calc_script", $this->calcScript);// 計算処理用スクリプト
 		$this->tmpl->addVar("_widget", "recalc_script", $this->recalcScript);// 計算処理用スクリプト
+		$this->tmpl->addVar("_widget", "uploader_script", $this->uploaderScript);// ファイルアップローダ用スクリプト
 		
 		// その他データの画面埋め込み
 		$this->tmpl->addVar("_widget", "status",	$sendStatus);			// 送信ステータス
@@ -626,6 +708,10 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 						}
 					}
 					break;
+				case 'image':
+					$uploaderId = self::UPLOADER_HEAD . $fieldId;
+					$inputTag .= '<div id="' . $uploaderId . '">' . $this->gDesign->createDragDropFileUploadHtml(). '</div>' . M3_NL;
+					break;
 			}
 
 			// 改行の設定
@@ -731,6 +817,32 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 						$script .= M3_TB . ');' . M3_NL;
 						$this->calcScript .= $script;
 					}
+					break;
+				case 'image':		// 画像
+					$uploaderCallbackName = self::UPLOADEF_CALLBACK_HEAD . $fieldId;
+					$uploaderId = self::UPLOADER_HEAD . $fieldId;		// ファイルアップロードエリア
+					
+					// アップロード用URL
+					$param = M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_UPLOAD;
+					$uploadUrl = $this->createCmdUrlToCurrentWidget($param);
+		
+					$script = '';
+					$script .= M3_TB . 'm3CreateFileUploader("' . $uploaderId . '", "' . $this->getUrl($uploadUrl) . '", ' . $uploaderCallbackName . ');';
+					$this->addScript .= $script;
+					
+					// 画像アップローダのコールバック関数を生成
+					$script = '';
+					$script .= 'function ' . $uploaderCallbackName . '(files, data)';
+					$script .= '{';
+	// 画像を読み込む
+//	$('#preview_entryimage').attr('src', data.url).load(function(){
+//		m3AdjustParentWindow();// 親ウィンドウリサイズ
+//	});
+
+	// 編集フラグを更新
+//	document.main.updated_entryimage.value = '1';
+					$script .= '}';
+					$this->uploaderScript .= $script;
 					break;
 			}
 		}

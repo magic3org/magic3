@@ -486,7 +486,7 @@ class DesignManager extends Core
 	function createDragDropFileUploadHtml()
 	{
 		$iconUrl = call_user_func($this->_getUrlCallback, $this->gEnv->getRootUrl() . self::UPLOAD_ICON_FILE);
-		$html = '<h4 align="center"><img src="' . $iconUrl . '" />ファイルアップロード</h4><p align="center">ここにドラッグ＆ドロップまたはクリック</p>';
+		$html = '<h4 style="display:table;margin-left:auto;margin-right:auto;"><img src="' . $iconUrl . '" style="border:none;margin:0;padding:0;" /><span style="display:table-cell;vertical-align:middle;">ファイルアップロード</span></h4><p style="text-align:center;">ここにファイルをドロップ、またはクリック</p>';
 		return $html;
 	}
 	/**
