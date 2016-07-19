@@ -216,6 +216,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				$sendStatus = 0;
 				
 				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
+				
+				// 作業ディレクトリ削除
+				$this->gInstance->getUserManager()->removeSessionWorkDir();
 			}
 		} else if ($act == 'send' && $sendStatus == 1){		// お問い合わせメール送信
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
@@ -343,6 +346,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					
 				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 			}
+			// 作業ディレクトリ削除
+			$this->gInstance->getUserManager()->removeSessionWorkDir();
 		} else if ($act == 'cancel' && $sendStatus == 1){		// メール送信キャンセルの場合
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// 送信ステータスを更新
@@ -357,6 +362,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				$sendStatus = 0;
 				
 				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
+		
+				// 作業ディレクトリ削除
+				$this->gInstance->getUserManager()->removeSessionWorkDir();
 			}
 		} else {
 			// 送信ステータスを初期化

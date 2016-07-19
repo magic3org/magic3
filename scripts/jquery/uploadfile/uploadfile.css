@@ -55,7 +55,3 @@ background-color: #dfe4ee;
 .ajax-file-upload-error {
 	color: red;
 }
-/* for Bootstrap Element */
-.ajax-file-upload-statusbar button {
-	margin-top: -8px;
-}

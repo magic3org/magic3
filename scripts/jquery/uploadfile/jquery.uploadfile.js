@@ -551,15 +551,15 @@
 			} else {
 				this.progressbar = $("<div class='ajax-file-upload-bar progress-bar " + s.progressBarClass + "' role='progressbar'></div>").appendTo(this.progressbarOuter);
 			}
-            this.abort = $("<button class='btn btn-danger btn-sm " + s.abortButtonClass + " " + obj.formGroup + "'>" + s.abortStr + "</button>").appendTo(this.statusbar)
+            this.abort = $("<button class='button art-button btn btn-danger btn-sm " + s.abortButtonClass + " " + obj.formGroup + "'>" + s.abortStr + "</button>").appendTo(this.statusbar)
                 .hide();
-            this.cancel = $("<button class='btn btn-danger btn-sm " + s.cancelButtonClass + " " + obj.formGroup + "'>" + s.cancelStr + "</button>").appendTo(this.statusbar)
+            this.cancel = $("<button class='button art-button btn btn-danger btn-sm " + s.cancelButtonClass + " " + obj.formGroup + "'>" + s.cancelStr + "</button>").appendTo(this.statusbar)
                 .hide();
 			$("<span>&nbsp;</span>").appendTo(this.statusbar);
-			this.done = $("<button class='btn btn-success btn-sm'>" + s.doneStr + "</button>").appendTo(this.statusbar).hide();
-            this.download = $("<button class='btn btn-success btn-sm'>" + s.downloadStr + "</button>").appendTo(this.statusbar).hide();
+			this.done = $("<button class='button art-button btn btn-success btn-sm'>" + s.doneStr + "</button>").appendTo(this.statusbar).hide();
+            this.download = $("<button class='button art-button btn btn-success btn-sm'>" + s.downloadStr + "</button>").appendTo(this.statusbar).hide();
 			$("<span>&nbsp;</span>").appendTo(this.statusbar);
-			this.del = $("<button class='btn btn-danger btn-sm'>" + s.deletelStr + "</button>").appendTo(this.statusbar).hide();
+			this.del = $("<button class='button art-button btn btn-danger btn-sm'>" + s.deletelStr + "</button>").appendTo(this.statusbar).hide();
             if(s.showQueueDiv)
                 $("#" + s.showQueueDiv).append(this.statusbar);
             else
