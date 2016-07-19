@@ -40,6 +40,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	const UPLOADER_HEAD = 'uploader_';			// ファイルアップローダタグID
 	const UPLOADEF_CALLBACK_HEAD = 'uploader_onSuccess_';			// ファイルアップローダのコールバック関数名
 	const ACT_UPLOAD = 'upload';			// ファイルアップロード操作
+	const MAX_UPLOAD_FILE_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
 	
 	/**
 	 * コンストラクタ
@@ -48,6 +49,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		// 一般ユーザ用作業ディレクトリ内の古いディレクトリを削除
+		$this->gInstance->getUserManager()->cleanupAllSessionWorkDir();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -135,76 +139,12 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 			if (empty($act)){	// 画像取得
 				$this->downloadImage($request);			// 画像取得
 			} else if ($act == self::ACT_UPLOAD){		// ファイルアップロード
+				// 最初のファイルアップロードのときは、作業ディレクトリを作成
+				$workDir = $this->gInstance->getUserManager()->getSessionWorkDir(true/*ディレクトリ作成*/);
 
-			// 作業ディレクトリを作成
-			$this->tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
-			
-			// Ajaxでのファイルアップロード処理
-			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $this->tmpDir);
-
-			/*
-				// ##### アップロードファイルを保存 #####
-$this->uploadMaxBytes = 512000;		// アップロードファイル最大バイトサイズ
-				$uploader = new qqFileUploader(array(), $this->uploadMaxBytes);
-				$resultObj = $uploader->handleUpload($this->gEnv->getWorkDirPath());		// 一時ディレクトリに保存
-debug($resultObj);
-				if ($resultObj['success']){
-					$fileInfo = $resultObj['file'];
-					$tmpFile = $fileInfo['path'];
-				
-					// 画像ファイル名作成
-					$imageId = $this->gInstance->getFileManager()->createRandFileId();
-					$imagePath = $this->imageDir . DIRECTORY_SEPARATOR . $imageId;
-		
-					// 画像作成
-					$ret = $this->gInstance->getImageManager()->createImage($tmpFile, $imagePath, $this->maxImageSize, commentCommonDef::OUTPUT_IMAGE_TYPE, $destSize);
-
-					// 画像登録
-					if ($ret){
-						$ret = $this->gInstance->getFileManager()->addAttachFileInfo(commentCommonDef::$_viewContentType, $imageId, $imagePath, $fileInfo['filename']);
-					}
-				
-					$destTag = '';
-					if ($ret){
-						$param = commentCommonDef::REQUEST_PARAM_IMAGE_ID . '=' . $imageId;
-						$newUrl = $this->createCmdUrlToCurrentWidget($param);
-						$destTag = '<img src="' . $this->getUrl($newUrl) . '" width="' . $destSize['width'] . '" height="' . $destSize['height'] . '" />';
-					} else {		// エラーの場合
-						$resultObj = array('error' => 'Could not create file information.');
-					}
-				
-					// 結果オブジェクト更新
-					$resultObj['file']['fileid'] = $imageId;
-					$resultObj['file']['html'] = $destTag;
-					unset($resultObj['file']['path']);
-					unset($resultObj['file']['filename']);
-					unset($resultObj['file']['size']);
-
-					// 一時ファイル削除
-					unlink($tmpFile);
-				}
-
-				// ##### 添付ファイルアップロード結果を返す #####
-				// ページ作成処理中断
-				$this->gPage->abortPage();
-	
-				// 添付ファイルの登録データを返す
-				if (function_exists('json_encode')){
-					$destStr = json_encode($resultObj);
-				} else {
-					$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
-				}
-				//$destStr = htmlspecialchars($destStr, ENT_NOQUOTES);// 「&」が「&amp;」に変換されるので使用しない
-				//header('Content-type: application/json; charset=utf-8');
-				header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
-				echo $destStr;
-	
-				// システム強制終了
-				$this->gPage->exitSystem();
-*/
+				// Ajaxでのファイルアップロード処理
+				$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes(self::MAX_UPLOAD_FILE_SIZE));
 			}
-
-//			$this->exitWidget();		// ウィジェット終了処理
 		} else if ($act == 'confirm' && $sendStatus == 0){				// 送信確認
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// 入力状況のチェック
@@ -847,6 +787,46 @@ debug($resultObj);
 			}
 		}
 		return $fieldOutput;
+	}
+	/**
+	 * アップロードファイルから各種画像を作成
+	 *
+	 * @param bool           $isSuccess		アップロード成功かどうか
+	 * @param object         $resultObj		アップロード処理結果オブジェクト
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string         $filePath		アップロードされたファイル
+	 * @param string         $destDir		アップロード先ディレクトリ
+	 * @return								なし
+	 */
+	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
+	{
+debug($filePath);
+debug($destDir);
+/*		$type = $request->trimValueOf('type');		// 画像タイプ
+		
+		if ($isSuccess){		// ファイルアップロード成功のとき
+			// 各種画像を作成
+			switch ($type){
+			case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
+				$formats = $this->gInstance->getImageManager()->getSystemThumbFormat();
+				$filenameBase = '0';
+				break;
+			}
+
+			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
+			if ($ret){			// 画像作成成功の場合
+				// 画像参照用URL
+				$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+				$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIG;
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
+				$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
+				$resultObj['url'] = $imageUrl;
+			} else {// エラーの場合
+				$resultObj = array('error' => 'Could not create resized images.');
+			}
+		}
+		*/
 	}
 }
 ?>

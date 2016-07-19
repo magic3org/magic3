@@ -717,14 +717,15 @@ class BaseWidgetContainer extends Core
 	 * @param RequestManager $request		HTTPリクエスト処理クラス
 	 * @param function $callback			コールバック関数
 	 * @param string   $destDir				アップロード先ディレクトリ
+	 * @param int      $maxFileSize			アップロード可能最大ファイルサイズ
 	 * @return 								なし
 	 */
-	function ajaxUploadFile($request, $callback, $destDir)
+	function ajaxUploadFile($request, $callback, $destDir, $maxFileSize = null)
 	{
 		require_once($this->gEnv->getCommonPath() . '/uploadFile.php' );			// ファイルアップロード受信ライブラリ
 		
 		// ファイルアップロード処理
-		$uploader = new uploadFile();
+		$uploader = new uploadFile(array()/*アップロード可能ファイル拡張子*/, $maxFileSize);
 		$resultObj = $uploader->handleUpload($destDir);
 		$isSuccess = $resultObj['success'];
 		

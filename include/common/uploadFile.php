@@ -94,7 +94,7 @@ class uploadFile
         $allowedExtensions = array_map("strtolower", $allowedExtensions);
         $this->allowedExtensions = $allowedExtensions;
 		
-		// アップロードファイルの最大サイズはPHPの設定に合わせる
+		// ***** アップロードファイルの最大サイズはPHPの設定が最大でそれ以下の範囲で設定可能とする *****
         //$this->sizeLimit = $sizeLimit;
 		$maxFileSize = $gSystemManager->getMaxFileSizeForUpload(true);
 		if (empty($sizeLimit) || $sizeLimit > $maxFileSize){
