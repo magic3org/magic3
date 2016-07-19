@@ -830,6 +830,15 @@ class EnvManager extends Core
 		return $this->workDir;
 	}
 	/**
+	 * 一般ユーザ用の作業用ディレクトリへのパスを取得
+	 *
+	 * @return string		作業ディレクトリ
+	 */
+	public function getUserWorkDirPath()
+	{
+		return $this->workDir . DIRECTORY_SEPARATOR . 'users';
+	}
+	/**
 	 * セッション単位の一時ディレクトリを取得
 	 *
 	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
@@ -838,6 +847,18 @@ class EnvManager extends Core
 	function getTempDirBySession($createDir = false)
 	{
 		$dir = $this->workDir . DIRECTORY_SEPARATOR . session_id();
+		if (!file_exists($dir) && $createDir) mkdir($dir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
+		return $dir;
+	}
+	/**
+	 * 一般ユーザ用のセッション単位の一時ディレクトリを取得
+	 *
+	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
+	 * @return string		一時ディレクトリ
+	 */
+	function getUserTempDirBySession($createDir = false)
+	{
+		$dir = $this->getUserWorkDirPath() . DIRECTORY_SEPARATOR . session_id();
 		if (!file_exists($dir) && $createDir) mkdir($dir, M3_SYSTEM_DIR_PERMISSION, true/*再帰的*/);
 		return $dir;
 	}

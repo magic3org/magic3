@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -431,6 +431,21 @@ class InstanceManager extends Core
 		if (!isset($manager)){
 			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/installManager.php');
 			$manager 		= new InstallManager();
+		}
+		return $manager;
+	}
+	/**
+	 * ユーザマネージャー取得
+	 *
+	 * @return object			取得したオブジェクト
+	 */
+	static public function getUserManager()
+	{
+		static $manager;// マネージャーオブジェクト
+		
+		if (!isset($manager)){
+			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/userManager.php');
+			$manager 		= new UserManager();
 		}
 		return $manager;
 	}
