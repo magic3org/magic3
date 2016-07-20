@@ -17,9 +17,8 @@
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
-class UserManager extends Core
+class UserEnvManager extends Core
 {
-	private $db;						// DBオブジェクト
 	const WORK_DIR_EXPIRE_HOUR = 1;		// 作業ディレクトリ自動削除時間
 	
 	/**
@@ -29,9 +28,28 @@ class UserManager extends Core
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+	}
+	/**
+	 * ユーザ環境マネージャの使用宣言(このマネージャーを使用する場合は必ず呼び出す)
+	 *
+	 * @return			なし
+	 */
+	function prepare()
+	{
+		// ##### 不使用な作業ディレクトリを削除 #####
+		$this->cleanupAllSessionWorkDir();
 		
-		// システムDBオブジェクト取得
-		$this->db = $this->gInstance->getSytemDbObject();
+		// ##### 現在のウィジェット用の処理 #####
+		$widgetId = $this->gEnv->getCurrentWidgetId();
+		if (empty($widgetId)) $this->gLog->error(__METHOD__, 'ユーザ環境マネージャー: ウィジェットID取得失敗');
+		
+		// セッションパラメータ取得
+		$this->sessionParamObj = $this->_getWidgetSessionObj();		// セッション保存パラメータ
+		if (empty($this->sessionParamObj)){			// 空の場合は作成
+			$this->sessionParamObj = new stdClass;		
+			$this->sessionParamObj->uploadFile = '';		// アップロードしたファイル
+			$this->sessionParamObj->avatarFile = '';		// アバターファイル
+		}
 	}
 	/**
 	 * セッション単位の作業用ディレクトリ作成
@@ -51,7 +69,7 @@ class UserManager extends Core
 	 *
 	 * @return bool			true=削除を実行、false=削除対象なし
 	 */
-	function removeSessionWorkDir()
+/*	function removeSessionWorkDir()
 	{
 		// ディレクトリを取得
 		$workDir = $this->gEnv->getUserTempDirBySession();
@@ -62,7 +80,7 @@ class UserManager extends Core
 		} else {
 			return false;
 		}
-	}
+	}*/
 	/**
 	 * すべてのユーザ用の作業用ディレクトリに対して、一定期間以上経過したディレクトリを削除
 	 *
@@ -88,6 +106,40 @@ class UserManager extends Core
 				}
 			}
 			$dir->close();
+		}
+	}
+	/**
+	 * ウィジェット専用セッション値(オブジェクト)を設定
+	 *
+	 * ウィジェット専用セッションは同一ウィジェット内でのみ使用するセッションである。
+	 *
+	 * @param object $paramObj	パラメータオブジェクト。nullをセットした場合は削除。
+	 * @return なし
+	 */
+	function _setWidgetSessionObj($paramObj)
+	{
+		$keyName = M3_SESSION_USER_ENV_WIDGET . $this->gEnv->getCurrentWidgetId();
+		if (is_null($paramObj)){
+			$this->gRequest->unsetSessionValue($keyName);
+		} else {
+			$this->gRequest->setSessionValue($keyName, serialize($paramObj));
+		}
+	}
+	/**
+	 * ウィジェット専用セッション値(オブジェクト)を取得
+	 *
+	 * ウィジェット専用セッションは同一ウィジェット内でのみ使用するセッションである。
+	 *
+	 * @return object		ウィジェットオブジェクト。取得できないときはnull。
+	 */
+	function _getWidgetSessionObj()
+	{
+		$keyName = M3_SESSION_USER_ENV_WIDGET . $this->gEnv->getCurrentWidgetId();
+		$serializedObj = $this->gRequest->getSessionValue($keyName);
+		if (empty($serializedObj)){
+			return null;
+		} else {
+			return unserialize($serializedObj);
 		}
 	}
 }

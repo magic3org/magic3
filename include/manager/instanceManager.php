@@ -435,17 +435,17 @@ class InstanceManager extends Core
 		return $manager;
 	}
 	/**
-	 * ユーザマネージャー取得
+	 * ユーザ環境マネージャー取得
 	 *
 	 * @return object			取得したオブジェクト
 	 */
-	static public function getUserManager()
+	static public function getUserEnvManager()
 	{
 		static $manager;// マネージャーオブジェクト
 		
 		if (!isset($manager)){
-			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/userManager.php');
-			$manager 		= new UserManager();
+			require_once(M3_SYSTEM_INCLUDE_PATH . '/manager/userEnvManager.php');
+			$manager 		= new UserEnvManager();
 		}
 		return $manager;
 	}
