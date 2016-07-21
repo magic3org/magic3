@@ -39,8 +39,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	const LIST_MARK = '●';				// メール本文のフィールドタイトル用マーク
 	const UPLOADER_HEAD = 'uploader_';			// ファイルアップローダタグID
 	const UPLOADEF_CALLBACK_HEAD = 'uploader_onSuccess_';			// ファイルアップローダのコールバック関数名
-	const ACT_UPLOAD = 'upload';			// ファイルアップロード操作
 	const MAX_UPLOAD_FILE_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
+	const ACT_UPLOAD = 'upload';			// ファイルアップロード操作
+	const ACT_GET_IMAGE		= 'getimage';		// サムネール画像取得
 	
 	/**
 	 * コンストラクタ
@@ -50,8 +51,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		// 一般ユーザ用作業ディレクトリ内の古いディレクトリを削除
-		$this->gInstance->getUserManager()->cleanupAllSessionWorkDir();
+		// ユーザ環境マネージャーを使用
+		$this->gInstance->getUserEnvManager()->prepare();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -132,19 +133,22 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		if ($sendStatus < 0 || 2 < $sendStatus) $sendStatus = 0;
 		$postTicket = $request->trimValueOf('ticket');		// POST確認用
 		$act = $request->trimValueOf('act');
-		$this->cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
+		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		
-		if ($this->cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
-
-			if (empty($act)){	// 画像取得
-				$this->downloadImage($request);			// 画像取得
-			} else if ($act == self::ACT_UPLOAD){		// ファイルアップロード
+		// コマンドの実行を優先する
+		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
+			if ($act == self::ACT_UPLOAD){		// ファイルアップロード
 				// 最初のファイルアップロードのときは、作業ディレクトリを作成
-				$workDir = $this->gInstance->getUserManager()->getSessionWorkDir(true/*ディレクトリ作成*/);
+				$workDir = $this->gInstance->getUserEnvManager()->getSessionWorkDir(true/*ディレクトリ作成*/);
 
 				// Ajaxでのファイルアップロード処理
-				$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes(self::MAX_UPLOAD_FILE_SIZE));
+				$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes(self::MAX_UPLOAD_FILE_SIZE), false/*アップロードファイルを残す*/);
+			} else if ($act == self::ACT_GET_IMAGE){			// サムネール画像取得
+				$this->getImage();
 			}
+		} else if ($cmd == M3_REQUEST_CMD_CSS){			// CSS生成の場合
+			// ##### CSS生成の場合は、ユーザ環境のwidgetOpen()によってアップロードファイルが削除されるのを防ぐ。 #####
+			// ##### アップロードしたファイルの削除は画面遷移で遷移してきた場合のみ実行する。                    #####
 		} else if ($act == 'confirm' && $sendStatus == 0){				// 送信確認
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// 入力状況のチェック
@@ -216,9 +220,6 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				$sendStatus = 0;
 				
 				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
-				
-				// 作業ディレクトリ削除
-				$this->gInstance->getUserManager()->removeSessionWorkDir();
 			}
 		} else if ($act == 'send' && $sendStatus == 1){		// お問い合わせメール送信
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
@@ -346,8 +347,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					
 				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 			}
-			// 作業ディレクトリ削除
-			$this->gInstance->getUserManager()->removeSessionWorkDir();
+			// ##### ユーザ環境データを閉じる #####
+			$this->gInstance->getUserEnvManager()->widgetClose();
+			
 		} else if ($act == 'cancel' && $sendStatus == 1){		// メール送信キャンセルの場合
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// 送信ステータスを更新
@@ -362,11 +364,11 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				$sendStatus = 0;
 				
 				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
-		
-				// 作業ディレクトリ削除
-				$this->gInstance->getUserManager()->removeSessionWorkDir();
 			}
 		} else {
+			// ##### ユーザ環境データを開く #####
+			$this->gInstance->getUserEnvManager()->widgetOpen();
+		
 			// 送信ステータスを初期化
 			$sendStatus = 0;
 				
@@ -659,6 +661,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				case 'image':
 					$uploaderId = self::UPLOADER_HEAD . $fieldId;
 					$inputTag .= '<div id="' . $uploaderId . '">' . $this->gDesign->createDragDropFileUploadHtml(). '</div>' . M3_NL;
+					$inputTag .= '<ul id="' . $uploaderId . '_filelist"></ul>' . M3_NL;
 					break;
 			}
 
@@ -781,15 +784,11 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					// 画像アップローダのコールバック関数を生成
 					$script = '';
 					$script .= 'function ' . $uploaderCallbackName . '(files, data)';
-					$script .= '{';
-	// 画像を読み込む
-//	$('#preview_entryimage').attr('src', data.url).load(function(){
-//		m3AdjustParentWindow();// 親ウィンドウリサイズ
-//	});
-
-	// 編集フラグを更新
-//	document.main.updated_entryimage.value = '1';
-					$script .= '}';
+					$script .= '{' . M3_NL;
+//					$script .= 'alert(data.file.filename);';
+//					$script .= 'alert(data.file.fileid);';
+					$script .= '$("#' . $uploaderId . '_filelist' . '").append("<li>" + data.file.filename + "</li>");' . M3_NL;
+					$script .= '}' . M3_NL;
 					$this->uploaderScript .= $script;
 					break;
 			}
@@ -808,33 +807,58 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	 */
 	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
 	{
-debug($filePath);
-debug($destDir);
-/*		$type = $request->trimValueOf('type');		// 画像タイプ
-		
-		if ($isSuccess){		// ファイルアップロード成功のとき
-			// 各種画像を作成
-			switch ($type){
-			case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
-				$formats = $this->gInstance->getImageManager()->getSystemThumbFormat();
-				$filenameBase = '0';
-				break;
-			}
+		// ファイルタイプを判定
+		$finfo = finfo_open(FILEINFO_MIME_TYPE); // MIMEタイプで取得
+		$fileType = finfo_file($finfo, $filePath);
+		finfo_close($finfo);
 
-			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
-			if ($ret){			// 画像作成成功の場合
-				// 画像参照用URL
-				$imageUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
-				$imageUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
-				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIG;
-				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_GET_IMAGE;
-				$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
-				$resultObj['url'] = $imageUrl;
-			} else {// エラーの場合
-				$resultObj = array('error' => 'Could not create resized images.');
-			}
+		if ($isSuccess){		// ファイルアップロード成功のとき
+			// ##### ファイル情報を追加 #####
+			$this->gInstance->getUserEnvManager()->widgetAddFileInfo($resultObj['file']);
 		}
-		*/
+	}
+	/**
+	 * サムネール画像を取得
+	 *
+	 * @return					なし
+	 */
+	function getImage()
+	{
+/*		// 画像パス作成
+		switch ($type){
+		case self::IMAGE_TYPE_ENTRY_IMAGE:			// 記事デフォルト画像
+			$filename = $this->getDefaultEntryImageFilename();		// 記事デフォルト画像名取得
+			break;
+		}
+		$imagePath = '';
+		if (!empty($filename)) $imagePath = $this->gEnv->getTempDirBySession() . '/' . $filename;
+			*/
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+
+		if (is_readable($imagePath)){
+			// 画像情報を取得
+			$imageMimeType = '';
+			$imageSize = @getimagesize($imagePath);
+			if ($imageSize) $imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+			
+			// 画像MIMEタイプ設定
+			if (!empty($imageMimeType)) header('Content-type: ' . $imageMimeType);
+			
+			// キャッシュの設定
+			header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');// 過去の日付
+			header('Cache-Control: no-store, no-cache, must-revalidate');// HTTP/1.1
+			header('Cache-Control: post-check=0, pre-check=0');
+			header('Pragma: no-cache');
+		
+			// 画像ファイル読み込み
+			readfile($imagePath);
+		} else {
+			$this->gPage->showError(404);
+		}
+	
+		// システム強制終了
+		$this->gPage->exitSystem();
 	}
 }
 ?>

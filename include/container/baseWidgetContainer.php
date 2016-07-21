@@ -718,9 +718,10 @@ class BaseWidgetContainer extends Core
 	 * @param function $callback			コールバック関数
 	 * @param string   $destDir				アップロード先ディレクトリ
 	 * @param int      $maxFileSize			アップロード可能最大ファイルサイズ
+	 * @param bool     $autoDel				アップロードファイルの自動削除
 	 * @return 								なし
 	 */
-	function ajaxUploadFile($request, $callback, $destDir, $maxFileSize = null)
+	function ajaxUploadFile($request, $callback, $destDir, $maxFileSize = null, $autoDel = true)
 	{
 		require_once($this->gEnv->getCommonPath() . '/uploadFile.php' );			// ファイルアップロード受信ライブラリ
 		
@@ -739,7 +740,7 @@ class BaseWidgetContainer extends Core
 		if (is_callable($callback)) call_user_func_array($callback, array($isSuccess, &$resultObj, $request, $filePath, $destDir));
 		
 		// アップロードファイル削除
-		if ($isSuccess && file_exists($filePath)) unlink($filePath);
+		if ($autoDel && $isSuccess && file_exists($filePath)) unlink($filePath);
 
 		// ##### 添付ファイルアップロード結果を返す #####
 		// ページ作成処理中断

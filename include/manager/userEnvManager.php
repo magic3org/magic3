@@ -19,6 +19,7 @@ require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
 
 class UserEnvManager extends Core
 {
+	private $widgetId;					// 処理対象ウィジェット
 	const WORK_DIR_EXPIRE_HOUR = 1;		// 作業ディレクトリ自動削除時間
 	
 	/**
@@ -39,16 +40,46 @@ class UserEnvManager extends Core
 		// ##### 不使用な作業ディレクトリを削除 #####
 		$this->cleanupAllSessionWorkDir();
 		
-		// ##### 現在のウィジェット用の処理 #####
-		$widgetId = $this->gEnv->getCurrentWidgetId();
-		if (empty($widgetId)) $this->gLog->error(__METHOD__, 'ユーザ環境マネージャー: ウィジェットID取得失敗');
+		// ##### 現在のウィジェットを取得 #####
+		$this->widgetId = $this->gEnv->getCurrentWidgetId();
+		if (empty($this->widgetId)) $this->gLog->error(__METHOD__, 'ユーザ環境マネージャー: ウィジェットID取得失敗');
+	}
+	/**
+	 * 現在のウィジェットに割り当てたユーザ環境データを初期化
+	 *
+	 * @return			なし
+	 */
+	function widgetOpen()
+	{
+		$this->_widgetReset();
+	}
+	/**
+	 * 現在のウィジェットに割り当てたユーザ環境データを破棄
+	 *
+	 * @return			なし
+	 */
+	function widgetClose()
+	{
+		$this->_widgetReset();
+	}
+	/**
+	 * 作業ディレクトリにアップロードしたファイルの情報を追加
+	 *
+	 * @param object $fileInfo	ファイル情報オブジェクト
+	 * @return bool				true=追加成功、false=追加失敗
+	 */
+	function widgetAddFileInfo($fileInfo)
+	{
+		$sessionParamObj = $this->_getWidgetSessionObj();		// セッション保存パラメータ
 		
-		// セッションパラメータ取得
-		$this->sessionParamObj = $this->_getWidgetSessionObj();		// セッション保存パラメータ
-		if (empty($this->sessionParamObj)){			// 空の場合は作成
-			$this->sessionParamObj = new stdClass;		
-			$this->sessionParamObj->uploadFile = '';		// アップロードしたファイル
-			$this->sessionParamObj->avatarFile = '';		// アバターファイル
+		if (empty($sessionParamObj)){
+			// セッションデータが存在しない場合は失敗
+			return false;
+		} else {
+			// セッションパラメータを更新
+			$sessionParamObj->fileInfoArray[] = $fileInfo;
+			$this->_setWidgetSessionObj($sessionParamObj);
+			return true;
 		}
 	}
 	/**
@@ -118,7 +149,7 @@ class UserEnvManager extends Core
 	 */
 	function _setWidgetSessionObj($paramObj)
 	{
-		$keyName = M3_SESSION_USER_ENV_WIDGET . $this->gEnv->getCurrentWidgetId();
+		$keyName = M3_SESSION_USER_ENV_WIDGET . $this->widgetId;
 		if (is_null($paramObj)){
 			$this->gRequest->unsetSessionValue($keyName);
 		} else {
@@ -134,13 +165,37 @@ class UserEnvManager extends Core
 	 */
 	function _getWidgetSessionObj()
 	{
-		$keyName = M3_SESSION_USER_ENV_WIDGET . $this->gEnv->getCurrentWidgetId();
+		$keyName = M3_SESSION_USER_ENV_WIDGET . $this->widgetId;
 		$serializedObj = $this->gRequest->getSessionValue($keyName);
 		if (empty($serializedObj)){
 			return null;
 		} else {
 			return unserialize($serializedObj);
 		}
+	}
+	/**
+	 * ウィジェット専用パラメータ初期化
+	 *
+	 * @return			なし
+	 */
+	function _widgetReset()
+	{
+		// 作業ディレクトリにファイルが残っている場合は削除
+		// セッションパラメータ取得
+		$sessionParamObj = $this->_getWidgetSessionObj();		// セッション保存パラメータ
+		if (!empty($sessionParamObj)){
+			$fileInfoArray = $sessionParamObj->fileInfoArray;
+			for ($i = 0; $i < count($fileInfoArray); $i++){
+				$filePath = $fileInfoArray[$i]['path'];
+				// ファイル削除
+				if (file_exists($filePath)) unlink($filePath);
+			}
+		}
+		
+		// セッションパラメータを更新
+		$sessionParamObj = new stdClass;		
+		$sessionParamObj->fileInfoArray = array();		// 作業ディレクトリのアップロードファイルの情報
+		$this->_setWidgetSessionObj($sessionParamObj);
 	}
 }
 ?>
