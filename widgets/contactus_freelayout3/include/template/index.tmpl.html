@@ -41,6 +41,7 @@ function sendmessage(){
 }
 function sendmessage_reset(){
 	if (!window.confirm('入力内容を消去しますか?')) return false;
+	
 	$('#{SEND_FORM_ID} :input').each(function(){
 		var type = this.type;
 		var tag = this.tagName.toLowerCase();
@@ -52,6 +53,7 @@ function sendmessage_reset(){
 			this.selectedIndex = -1;
 		}
 	});
+{UPLOADER_RESET}
 }
 {UPLOADER_SCRIPT}
 function sendmessage_init(){

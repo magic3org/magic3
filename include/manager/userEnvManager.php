@@ -68,7 +68,7 @@ class UserEnvManager extends Core
 	 * @param object $fileInfo	ファイル情報オブジェクト
 	 * @return bool				true=追加成功、false=追加失敗
 	 */
-	function widgetAddFileInfo($fileInfo)
+	function addFileInfo($fileInfo)
 	{
 		$sessionParamObj = $this->_getWidgetSessionObj();		// セッション保存パラメータ
 		
@@ -83,15 +83,29 @@ class UserEnvManager extends Core
 		}
 	}
 	/**
-	 * セッション単位の作業用ディレクトリ作成
+	 * 作業ディレクトリにアップロードしたファイルの情報を取得
 	 *
-	 * @param bool  $createDir	ディレクトリが存在しない場合、作成するかどうか
+	 * @return array			ファイル情報
+	 */
+	function getFileInfo()
+	{
+		// セッションパラメータ取得
+		$sessionParamObj = $this->_getWidgetSessionObj();		// セッション保存パラメータ
+		if (empty($sessionParamObj)){
+			return array();
+		} else {
+			return $sessionParamObj->fileInfoArray;
+		}
+	}
+	/**
+	 * セッション単位の作業用ディレクトリ取得
+	 *
 	 * @return string			作業ディレクトリパス
 	 */
-	function getSessionWorkDir($createDir = false)
+	function getWorkDir()
 	{
-		// ディレクトリを作成
-		$workDir = $this->gEnv->getUserTempDirBySession($createDir/*ディレクトリ作成*/);
+		// ディレクトリがない場合はディレクトリを作成
+		$workDir = $this->gEnv->getUserTempDirBySession(true/*ディレクトリ作成*/);
 		
 		return $workDir;
 	}

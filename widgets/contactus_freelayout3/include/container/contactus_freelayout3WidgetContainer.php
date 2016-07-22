@@ -24,6 +24,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	private $calcScript;		// 計算処理用スクリプト
 	private $recalcScript;		// 計算処理用スクリプト
 	private $uploaderScript;		// ファイルアップローダ用スクリプト
+	private $uploaderResetScript;	// ファイルアップローダ初期化用スクリプト
 	private $confirmButtonId;		// 確認ボタンのタグID
 	private $sendButtonId;		// 送信ボタンのタグID
 	private $cancelButtonId;		// 送信キャンセルボタンのタグID
@@ -41,6 +42,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	const UPLOADEF_CALLBACK_HEAD = 'uploader_onSuccess_';			// ファイルアップローダのコールバック関数名
 	const MAX_UPLOAD_FILE_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
 	const ACT_UPLOAD = 'upload';			// ファイルアップロード操作
+	const ACT_RESET	= 'reset';				// ファイルアップローダ初期化
 	const ACT_GET_IMAGE		= 'getimage';		// サムネール画像取得
 	
 	/**
@@ -137,12 +139,16 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		
 		// コマンドの実行を優先する
 		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
+			// ##### 自ユーザ環境のみにアクセス #####
 			if ($act == self::ACT_UPLOAD){		// ファイルアップロード
 				// 最初のファイルアップロードのときは、作業ディレクトリを作成
-				$workDir = $this->gInstance->getUserEnvManager()->getSessionWorkDir(true/*ディレクトリ作成*/);
+				$workDir = $this->gInstance->getUserEnvManager()->getWorkDir();
 
 				// Ajaxでのファイルアップロード処理
 				$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes(self::MAX_UPLOAD_FILE_SIZE), false/*アップロードファイルを残す*/);
+			} else if ($act == self::ACT_RESET){		// ファイルアップローダ初期化
+				// ##### ユーザ環境データを閉じる #####
+				$this->gInstance->getUserEnvManager()->widgetClose();
 			} else if ($act == self::ACT_GET_IMAGE){			// サムネール画像取得
 				$this->getImage();
 			}
@@ -389,6 +395,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->calcScript = '';		// 計算処理用スクリプト
 		$this->recalcScript = '';			// 計算処理用スクリプト
 		$this->uploaderScript = '';		// ファイルアップローダ用スクリプト
+		$this->uploaderResetScript = '';	// ファイルアップローダ初期化用スクリプト
 		$fieldOutput = $this->createFieldOutput($baseTemplate, $inputEnabled);
 		$this->tmpl->addVar("_widget", "field_output", $fieldOutput);// お問い合わせ入力項目データ
 		$this->tmpl->addVar("_widget", "field_count", $fieldCount);// お問い合わせ項目数
@@ -396,6 +403,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->tmpl->addVar("_widget", "calc_script", $this->calcScript);// 計算処理用スクリプト
 		$this->tmpl->addVar("_widget", "recalc_script", $this->recalcScript);// 計算処理用スクリプト
 		$this->tmpl->addVar("_widget", "uploader_script", $this->uploaderScript);// ファイルアップローダ用スクリプト
+		$this->tmpl->addVar("_widget", "uploader_reset", $this->uploaderResetScript);// ファイルアップローダ初期化用スクリプト
 		
 		// その他データの画面埋め込み
 		$this->tmpl->addVar("_widget", "status",	$sendStatus);			// 送信ステータス
@@ -660,8 +668,43 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					break;
 				case 'image':
 					$uploaderId = self::UPLOADER_HEAD . $fieldId;
-					$inputTag .= '<div id="' . $uploaderId . '">' . $this->gDesign->createDragDropFileUploadHtml(). '</div>' . M3_NL;
-					$inputTag .= '<ul id="' . $uploaderId . '_filelist"></ul>' . M3_NL;
+					
+					// ##### ファイル情報を取得 #####
+					$fileInfoArray = $this->gInstance->getUserEnvManager()->getFileInfo();
+			
+					if ($enabled){		// 入力状態のとき
+						$inputTag .= '<div id="' . $uploaderId . '">' . $this->gDesign->createDragDropFileUploadHtml(). '</div>' . M3_NL;		// ファイルドラッグエリア
+					}
+					
+					$inputTag .= '<ul id="' . $uploaderId . '_filelist" class="ajax-file-upload-filelist">' . M3_NL;
+					if (is_array($inputValue)){
+						for ($k = 0; $k < count($inputValue); $k++){
+							if ($inputValue[$k] != ''){
+								// ファイル名取得
+								$filename = '';
+								for ($l = 0; $l < count($fileInfoArray); $l++){
+									if ($fileInfoArray[$l]['fileid'] == $inputValue[$k]){
+										$filename = $fileInfoArray[$l]['filename'];
+										break;
+									}
+								}
+								$inputTag .= '<li>' . $this->convertToDispString($filename) . '</li><input type="hidden" name="' . $fieldName . '[]" value="' . $this->convertToDispString($inputValue[$k]) . '" />' . M3_NL;
+							}
+						}
+					} else {
+						if ($inputValue != ''){
+							// ファイル名取得
+							$filename = '';
+							for ($l = 0; $l < count($fileInfoArray); $l++){
+								if ($fileInfoArray[$l]['fileid'] == $inputValue){
+									$filename = $fileInfoArray[$l]['filename'];
+									break;
+								}
+							}
+							$inputTag .= '<li>' . $this->convertToDispString($filename) . '</li><input type="hidden" name="' . $fieldName . '[]" value="' . $this->convertToDispString($inputValue) . '" />' . M3_NL;
+						}
+					}
+					$inputTag .= '</ul>' . M3_NL;
 					break;
 			}
 
@@ -785,11 +828,21 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					$script = '';
 					$script .= 'function ' . $uploaderCallbackName . '(files, data)';
 					$script .= '{' . M3_NL;
-//					$script .= 'alert(data.file.filename);';
-//					$script .= 'alert(data.file.fileid);';
-					$script .= '$("#' . $uploaderId . '_filelist' . '").append("<li>" + data.file.filename + "</li>");' . M3_NL;
+					$script .= M3_TB . '$("#' . $uploaderId . '_filelist' . '").append("<li>" + data.file.filename + "</li><input type=\"hidden\" name=\"' . $fieldName . '[]\" value=\"" + data.file.fileid + "\" />");' . M3_NL;
 					$script .= '}' . M3_NL;
 					$this->uploaderScript .= $script;
+					
+					// ファイルアップローダ初期化用URL
+					$param = M3_REQUEST_PARAM_OPERATION_ACT . '=' . self::ACT_RESET;
+					$resetUrl = $this->createCmdUrlToCurrentWidget($param);
+					
+					// ファイルアップローダ初期化用スクリプト
+					$script = '';
+					$script .= M3_TB . '$(".ajax-upload-dragdrop").remove();' . M3_NL;
+					$script .= M3_TB . '$(".ajax-file-upload-statusbar").remove();' . M3_NL;
+					$script .= M3_TB . '$(".ajax-file-upload-filelist").html("");' . M3_NL;
+					$script .= M3_TB . '$.get("' . $this->getUrl($resetUrl) . '");' . M3_NL;		// アップロードファイル削除
+					$this->uploaderResetScript .= $script;
 					break;
 			}
 		}
@@ -814,7 +867,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 
 		if ($isSuccess){		// ファイルアップロード成功のとき
 			// ##### ファイル情報を追加 #####
-			$this->gInstance->getUserEnvManager()->widgetAddFileInfo($resultObj['file']);
+			$this->gInstance->getUserEnvManager()->addFileInfo($resultObj['file']);
 		}
 	}
 	/**
