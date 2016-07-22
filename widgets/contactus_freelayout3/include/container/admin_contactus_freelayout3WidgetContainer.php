@@ -52,7 +52,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 									array(	'name' => 'セレクトメニュー',			'value' => 'select'),
 									array(	'name' => 'チェックボックス',			'value' => 'checkbox'),
 									array(	'name' => 'ラジオボタン',				'value' => 'radio'),
-									array(	'name' => '画像',						'value' => 'image')
+									array(	'name' => 'ファイルアップローダ',		'value' => 'file')
 								);
 	}
 	/**

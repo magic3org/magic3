@@ -45,22 +45,28 @@ class UserEnvManager extends Core
 		if (empty($this->widgetId)) $this->gLog->error(__METHOD__, 'ユーザ環境マネージャー: ウィジェットID取得失敗');
 	}
 	/**
-	 * 現在のウィジェットに割り当てたユーザ環境データを初期化
+	 * ウィジェット専用パラメータ初期化
 	 *
 	 * @return			なし
 	 */
-	function widgetOpen()
+	function reset()
 	{
-		$this->_widgetReset();
-	}
-	/**
-	 * 現在のウィジェットに割り当てたユーザ環境データを破棄
-	 *
-	 * @return			なし
-	 */
-	function widgetClose()
-	{
-		$this->_widgetReset();
+		// 作業ディレクトリにファイルが残っている場合は削除
+		// セッションパラメータ取得
+		$sessionParamObj = $this->_getWidgetSessionObj();		// セッション保存パラメータ
+		if (!empty($sessionParamObj)){
+			$fileInfoArray = $sessionParamObj->fileInfoArray;
+			for ($i = 0; $i < count($fileInfoArray); $i++){
+				$filePath = $fileInfoArray[$i]['path'];
+				// ファイル削除
+				if (file_exists($filePath)) unlink($filePath);
+			}
+		}
+		
+		// セッションパラメータを更新
+		$sessionParamObj = new stdClass;		
+		$sessionParamObj->fileInfoArray = array();		// 作業ディレクトリのアップロードファイルの情報
+		$this->_setWidgetSessionObj($sessionParamObj);
 	}
 	/**
 	 * 作業ディレクトリにアップロードしたファイルの情報を追加
@@ -109,23 +115,6 @@ class UserEnvManager extends Core
 		
 		return $workDir;
 	}
-	/**
-	 * セッション単位の作業用ディレクトリを削除
-	 *
-	 * @return bool			true=削除を実行、false=削除対象なし
-	 */
-/*	function removeSessionWorkDir()
-	{
-		// ディレクトリを取得
-		$workDir = $this->gEnv->getUserTempDirBySession();
-		
-		if (file_exists($workDir)){
-			rmDirectory($workDir);
-			return true;
-		} else {
-			return false;
-		}
-	}*/
 	/**
 	 * すべてのユーザ用の作業用ディレクトリに対して、一定期間以上経過したディレクトリを削除
 	 *
@@ -186,30 +175,6 @@ class UserEnvManager extends Core
 		} else {
 			return unserialize($serializedObj);
 		}
-	}
-	/**
-	 * ウィジェット専用パラメータ初期化
-	 *
-	 * @return			なし
-	 */
-	function _widgetReset()
-	{
-		// 作業ディレクトリにファイルが残っている場合は削除
-		// セッションパラメータ取得
-		$sessionParamObj = $this->_getWidgetSessionObj();		// セッション保存パラメータ
-		if (!empty($sessionParamObj)){
-			$fileInfoArray = $sessionParamObj->fileInfoArray;
-			for ($i = 0; $i < count($fileInfoArray); $i++){
-				$filePath = $fileInfoArray[$i]['path'];
-				// ファイル削除
-				if (file_exists($filePath)) unlink($filePath);
-			}
-		}
-		
-		// セッションパラメータを更新
-		$sessionParamObj = new stdClass;		
-		$sessionParamObj->fileInfoArray = array();		// 作業ディレクトリのアップロードファイルの情報
-		$this->_setWidgetSessionObj($sessionParamObj);
 	}
 }
 ?>

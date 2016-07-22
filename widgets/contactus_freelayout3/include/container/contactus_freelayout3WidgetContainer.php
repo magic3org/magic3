@@ -147,13 +147,13 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				// Ajaxでのファイルアップロード処理
 				$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes(self::MAX_UPLOAD_FILE_SIZE), false/*アップロードファイルを残す*/);
 			} else if ($act == self::ACT_RESET){		// ファイルアップローダ初期化
-				// ##### ユーザ環境データを閉じる #####
-				$this->gInstance->getUserEnvManager()->widgetClose();
+				// ##### ユーザ環境初期化 #####
+				$this->gInstance->getUserEnvManager()->reset();
 			} else if ($act == self::ACT_GET_IMAGE){			// サムネール画像取得
 				$this->getImage();
 			}
 		} else if ($cmd == M3_REQUEST_CMD_CSS){			// CSS生成の場合
-			// ##### CSS生成の場合は、ユーザ環境のwidgetOpen()によってアップロードファイルが削除されるのを防ぐ。 #####
+			// ##### CSS生成の場合は、ユーザ環境のreset()によってアップロードファイルが削除されるのを防ぐ。 #####
 			// ##### アップロードしたファイルの削除は画面遷移で遷移してきた場合のみ実行する。                    #####
 		} else if ($act == 'confirm' && $sendStatus == 0){				// 送信確認
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
@@ -353,8 +353,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					
 				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 			}
-			// ##### ユーザ環境データを閉じる #####
-			$this->gInstance->getUserEnvManager()->widgetClose();
+			// ##### ユーザ環境初期化 #####
+			$this->gInstance->getUserEnvManager()->reset();
 			
 		} else if ($act == 'cancel' && $sendStatus == 1){		// メール送信キャンセルの場合
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
@@ -372,8 +372,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				$request->unsetSessionValue(M3_SESSION_POST_TICKET);		// セッション値をクリア
 			}
 		} else {
-			// ##### ユーザ環境データを開く #####
-			$this->gInstance->getUserEnvManager()->widgetOpen();
+			// ##### ユーザ環境初期化 #####
+			$this->gInstance->getUserEnvManager()->reset();
 		
 			// 送信ステータスを初期化
 			$sendStatus = 0;
@@ -666,7 +666,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 						}
 					}
 					break;
-				case 'image':
+				case 'file':		// ファイルアップローダ
 					$uploaderId = self::UPLOADER_HEAD . $fieldId;
 					
 					// ##### ファイル情報を取得 #####
@@ -812,7 +812,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 						$this->calcScript .= $script;
 					}
 					break;
-				case 'image':		// 画像
+				case 'file':		// ファイルアップローダ
 					$uploaderCallbackName = self::UPLOADEF_CALLBACK_HEAD . $fieldId;
 					$uploaderId = self::UPLOADER_HEAD . $fieldId;		// ファイルアップロードエリア
 					
@@ -824,7 +824,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					$script .= M3_TB . 'm3CreateFileUploader("' . $uploaderId . '", "' . $this->getUrl($uploadUrl) . '", ' . $uploaderCallbackName . ');';
 					$this->addScript .= $script;
 					
-					// 画像アップローダのコールバック関数を生成
+					// ファイルアップローダのコールバック関数を生成
 					$script = '';
 					$script .= 'function ' . $uploaderCallbackName . '(files, data)';
 					$script .= '{' . M3_NL;
@@ -849,7 +849,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		return $fieldOutput;
 	}
 	/**
-	 * アップロードファイルから各種画像を作成
+	 * アップロードファイルを取得
 	 *
 	 * @param bool           $isSuccess		アップロード成功かどうか
 	 * @param object         $resultObj		アップロード処理結果オブジェクト
