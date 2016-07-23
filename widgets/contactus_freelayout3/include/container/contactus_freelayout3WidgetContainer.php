@@ -31,6 +31,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	private $resetButtonId;		// エリアリセットボタンのタグID
 	private $useArtisteer;					// Artisteer対応デザイン
 	private $pageTitle;			// 画面タイトル
+	private $oldFileInfoArray;	// ファイル情報旧データ
 	const DEFAULT_CONFIG_ID = 0;
 	const CONTACTUS_FORM = 'contact_us';		// お問い合わせフォーム
 	const DEFAULT_SEND_MESSAGE = 1;		// メール送信機能を使用するかどうか(デフォルト使用)
@@ -231,6 +232,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
 				// ##### ファイル情報を取得 #####
 				$fileInfoArray = $this->gInstance->getUserEnvManager()->getFileInfo();
+				$this->oldFileInfoArray = $fileInfoArray;		// 旧ファイル情報
 					
 				// 入力状況のチェック
 				$isFirstUserEmail = false;		// 最初のEメールアドレスかどうか
@@ -718,6 +720,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					
 					// ##### ファイル情報を取得 #####
 					$fileInfoArray = $this->gInstance->getUserEnvManager()->getFileInfo();
+					
+					// メール送信後でファイル情報がない場合は退避データを取得
+					if (empty($fileInfoArray)) $fileInfoArray = $this->oldFileInfoArray;		// 旧ファイル情報
 			
 					if ($enabled){		// 入力状態のとき
 						$inputTag .= '<div id="' . $uploaderId . '">' . $this->gDesign->createDragDropFileUploadHtml(). '</div>' . M3_NL;		// ファイルドラッグエリア
