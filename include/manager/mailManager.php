@@ -24,6 +24,7 @@ class MailManager extends Core
 	private $isMultipleSend;			// 連続送信かどうか
 	private $maxMultipleSendCount;		// 連続送信数最大
 	private $sendCount;					// 送信数
+	const LOCAL_BY_PHPMAILER = true;	// ローカルの送信をPHPMailerで送信するかどうか。true=新規バージョン。
 	const EMAIL_SEPARATOR = ';';		// メールアドレスセパレータ
 	const DEFAULT_MULTIPLE_SEND_COUNT = 100;	// 連続送信数最大デフォルト値
 	const CF_SMTP_USE_SERVER	= 'smtp_use_server';	// SMTP外部サーバを使用するかどうか
@@ -215,26 +216,30 @@ class MailManager extends Core
 		$useSmtpServer	= $gSystemManager->getSystemConfig(self::CF_SMTP_USE_SERVER);		// SMTP外部サーバを使用するかどうか
 		
 		if ($this->smtpTestMode || $useSmtpServer){		// SMTPテストモードまたはSMTPサーバ使用のとき
-			$ret = $this->_smtpSendMail($toAddress, $destSubject, $destContent, $destHeader, $errAddress, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray);
+			$ret = $this->_smtpSendMail(true/*SMTP認証で送信*/, $toAddress, $destSubject, $destContent, $destHeader, $errAddress, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray);
 		} else {
-			$option = '-f' . $errAddress;		// エラーメールを返すアドレスを設定
+			if (self::LOCAL_BY_PHPMAILER){		// PHPMailerで送信(新規バージョン)
+				$ret = $this->_smtpSendMail(false/*SMTP認証なしで送信*/, $toAddress, $destSubject, $destContent, $destHeader, $errAddress, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray);
+			} else {		// 旧バージョン
+				$option = '-f' . $errAddress;		// エラーメールを返すアドレスを設定
 		
-			if (function_exists('mb_send_mail')){		// mbが使用可能なとき
-				if (separateMailAddress($toAddress, $mail, $name)){		// メールアドレス、名前を取り出す
-					$toAddressMime = mb_encode_mimeheader($name) . '<' . $mail . '>';
+				if (function_exists('mb_send_mail')){		// mbが使用可能なとき
+					if (separateMailAddress($toAddress, $mail, $name)){		// メールアドレス、名前を取り出す
+						$toAddressMime = mb_encode_mimeheader($name) . '<' . $mail . '>';
+					} else {
+						$toAddressMime = $toAddress;
+					}
+					if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mb_send_mail()の5番目の引数が使用できない
+						$ret = mb_send_mail($toAddressMime, $destSubject, $destContent, $destHeader);
+					} else {
+						$ret = mb_send_mail($toAddressMime, $destSubject, $destContent, $destHeader, $option);
+					}
 				} else {
-					$toAddressMime = $toAddress;
-				}
-				if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mb_send_mail()の5番目の引数が使用できない
-					$ret = mb_send_mail($toAddressMime, $destSubject, $destContent, $destHeader);
-				} else {
-					$ret = mb_send_mail($toAddressMime, $destSubject, $destContent, $destHeader, $option);
-				}
-			} else {
-				if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mail()の5番目の引数が使用できない
-					$ret = mail($toAddress, $destSubject, $destContent, $destHeader);
-				} else {
-					$ret = mail($toAddress, $destSubject, $destContent, $destHeader, $option);
+					if (ini_get('safe_mode')){		// 「sefe mode」 が効いているときは、mail()の5番目の引数が使用できない
+						$ret = mail($toAddress, $destSubject, $destContent, $destHeader);
+					} else {
+						$ret = mail($toAddress, $destSubject, $destContent, $destHeader, $option);
+					}
 				}
 			}
 		}
@@ -334,6 +339,7 @@ class MailManager extends Core
 	/**
 	 * SMTPでメール送信
 	 *
+	 * @param bool $isSmtp			SMTP認証を行って送信するかどうか
 	 * @param string $toAddress		メール送信先
 	 * @param string $subject		タイトル
 	 * @param string $content		メール本文
@@ -346,7 +352,7 @@ class MailManager extends Core
 	 * @param array $bccAddressArray	メール送信先(BCC)
 	 * @return bool 					true=正常、false=異常
 	 */
-	function _smtpSendMail($toAddress, $subject, $content, $header, $errAddress, $mailType, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray)
+	function _smtpSendMail($isSmtp, $toAddress, $subject, $content, $header, $errAddress, $mailType, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray)
 	{
 		global $gSystemManager;
 		static $mail;			// メール送信オブジェクト
@@ -362,14 +368,16 @@ class MailManager extends Core
 		if (!isset($mail)){
 			$mail = new PHPMailer;
 
-			// SMTP接続情報
-			$mail->isSMTP();					// Set mailer to use SMTP
-			$mail->Host = $smtpHost;			// Specify main and backup SMTP servers
-			$mail->Port = $smtpPort;			// TCP port to connect to
-			$mail->SMTPAuth = boolval($smtpAuthentication);		// Enable SMTP authentication
-			$mail->Username = $smtpAccount;						// SMTP username
-			$mail->Password = $smtpPassword;					// SMTP password
-			$mail->SMTPSecure = $smtpEncryptType;				// Enable TLS encryption, `ssl` also accepted
+			if ($isSmtp){		// SMTP認証付きで送信するかどうか
+				// SMTP接続情報
+				$mail->isSMTP();					// Set mailer to use SMTP
+				$mail->Host = $smtpHost;			// Specify main and backup SMTP servers
+				$mail->Port = $smtpPort;			// TCP port to connect to
+				$mail->SMTPAuth = boolval($smtpAuthentication);		// Enable SMTP authentication
+				$mail->Username = $smtpAccount;						// SMTP username
+				$mail->Password = $smtpPassword;					// SMTP password
+				$mail->SMTPSecure = $smtpEncryptType;				// Enable TLS encryption, `ssl` also accepted
+			}
 			
 			// メール送信情報を設定
 			$mail->Sender = $errAddress;		// エラーメールの戻り先
@@ -415,8 +423,8 @@ class MailManager extends Core
 			$mail->addAddress($toAddress);     // Add a recipient
 		}
 		
-		// テストメールの場合はタイトル、本文に情報を追加
-		if ($mailType == -1){
+		// SMTP認証付きで送信する場合、テストメールはタイトル、本文に情報を追加
+		if ($isSmtp && $mailType == -1){
 			$subject .= '(SMTP)';
 			$content .= M3_NL;
 			$content .= 'SMTPメールサーバ  : ' . $smtpHost . ':' . $smtpPort . M3_NL;
