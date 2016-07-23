@@ -72,10 +72,11 @@ class MailManager extends Core
 	 * @param array,string $titleParams		本文置き換え文字列、連想配列で設定。
 	 * @param string       $tilteHeadStr	タイトルの先頭に追加する文字列
 	 * @param string       $contentHeadStr	本文の先頭に追加する文字列
+	 * @param array        $attachFiles		添付ファイルパス
 	 * @return bool							true=成功、false=失敗
 	 */
 	public function sendFormMail($type, $widgetId, $toAddress, $fromAddress, $replytoAddress, $subject, $formId, $params, 
-								$ccAddress = '', $bccAddress = '', $mailForm = '', $titleParams = '', $tilteHeadStr = '', $contentHeadStr = '')
+								$ccAddress = '', $bccAddress = '', $mailForm = '', $titleParams = '', $tilteHeadStr = '', $contentHeadStr = '', $attachFiles = null)
 	{
 		global $gEnvManager;
 		global $gSystemManager;
@@ -216,10 +217,10 @@ class MailManager extends Core
 		$useSmtpServer	= $gSystemManager->getSystemConfig(self::CF_SMTP_USE_SERVER);		// SMTP外部サーバを使用するかどうか
 		
 		if ($this->smtpTestMode || $useSmtpServer){		// SMTPテストモードまたはSMTPサーバ使用のとき
-			$ret = $this->_smtpSendMail(true/*SMTP認証で送信*/, $toAddress, $destSubject, $destContent, $destHeader, $errAddress, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray);
+			$ret = $this->_smtpSendMail(true/*SMTP認証で送信*/, $toAddress, $destSubject, $destContent, $destHeader, $errAddress, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray, $attachFiles);
 		} else {
 			if (self::LOCAL_BY_PHPMAILER){		// PHPMailerで送信(新規バージョン)
-				$ret = $this->_smtpSendMail(false/*SMTP認証なしで送信*/, $toAddress, $destSubject, $destContent, $destHeader, $errAddress, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray);
+				$ret = $this->_smtpSendMail(false/*SMTP認証なしで送信*/, $toAddress, $destSubject, $destContent, $destHeader, $errAddress, $type, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray, $attachFiles);
 			} else {		// 旧バージョン
 				$option = '-f' . $errAddress;		// エラーメールを返すアドレスを設定
 		
@@ -350,9 +351,10 @@ class MailManager extends Core
 	 * @param string $replytoAddress	メール返信先
 	 * @param array $ccAddressArray		メール送信先(CC)
 	 * @param array $bccAddressArray	メール送信先(BCC)
+	 * @param array $attachFiles		添付ファイル
 	 * @return bool 					true=正常、false=異常
 	 */
-	function _smtpSendMail($isSmtp, $toAddress, $subject, $content, $header, $errAddress, $mailType, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray)
+	function _smtpSendMail($isSmtp, $toAddress, $subject, $content, $header, $errAddress, $mailType, $fromAddress, $replytoAddress, $ccAddressArray, $bccAddressArray, $attachFiles)
 	{
 		global $gSystemManager;
 		static $mail;			// メール送信オブジェクト
@@ -445,6 +447,14 @@ class MailManager extends Core
 		//$mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
 		//$mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
 
+		// 添付ファイル
+		if (!empty($attachFiles)){
+			for ($i = 0; $i < count($attachFiles); $i++){
+				$mail->AddAttachment($attachFiles[$i]['path'], mb_encode_mimeheader(mb_convert_encoding($attachFiles[$i]['filename'], 'JIS', M3_ENCODING)));
+			}
+		}
+		
+		// メール送信
 		$ret = $mail->send();
 		if (!$ret) $this->_addErrorMessage($mail->ErrorInfo);		// エラーメッセージ追加
 

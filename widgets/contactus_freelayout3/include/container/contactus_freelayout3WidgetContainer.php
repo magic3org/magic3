@@ -229,9 +229,13 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 			}
 		} else if ($act == 'send' && $sendStatus == 1){		// お問い合わせメール送信
 			if (!empty($postTicket) && $postTicket == $request->getSessionValue(M3_SESSION_POST_TICKET)){		// 正常なPOST値のとき
+				// ##### ファイル情報を取得 #####
+				$fileInfoArray = $this->gInstance->getUserEnvManager()->getFileInfo();
+					
 				// 入力状況のチェック
 				$isFirstUserEmail = false;		// 最初のEメールアドレスかどうか
 				$userEmail = '';
+				$attachFiles = array();			// 添付ファイル
 				for ($i = 0; $i < $fieldCount; $i++){
 					$infoObj = $this->fieldInfoArray[$i];
 					$title = $infoObj->title;// タイトル名
@@ -262,6 +266,48 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 												$refValue = $this->valueArray[$refNo];
 												$refTitle = $this->fieldInfoArray[$refNo]->title;
 												if ($this->valueArray[$i] != $refValue) $this->setUserErrorMsg('「' . $title . '」が「' . $refTitle . '」の内容と一致しません');
+											}
+											break;
+										}
+									}
+								}
+								break;
+							case 'file':			// ファイルアップローダ
+								// 添付ファイルの存在チェック
+								if (is_array($this->valueArray[$i])){		// 配列データのとき
+									for ($j = 0; $j < count($this->valueArray[$i]); $j++){
+										$fileId = $this->valueArray[$i][$j];
+
+										// ファイル名、添付ファイルパス取得
+										$filename = '';
+										for ($k = 0; $k < count($fileInfoArray); $k++){
+											if ($fileInfoArray[$k]['fileid'] == $fileId){
+												$filename = $fileInfoArray[$k]['filename'];
+												$path = $fileInfoArray[$k]['path'];
+												
+												if (file_exists($path)){
+													$attachFiles[] = array('path' => $path, 'filename' => $filename);
+												} else {
+													$this->setUserErrorMsg('「' . $title . '」の「' . $filename . '」がアップロードされていません');
+												}
+												break;
+											}
+										}
+									}
+								} else {
+									$fileId = $this->valueArray[$i];
+									
+									// ファイル名、添付ファイルパス取得
+									$filename = '';
+									for ($k = 0; $k < count($fileInfoArray); $k++){
+										if ($fileInfoArray[$k]['fileid'] == $fileId){
+											$filename = $fileInfoArray[$k]['filename'];
+											$path = $fileInfoArray[$k]['path'];
+											
+											if (file_exists($path)){
+												$attachFiles[] = array('path' => $path, 'filename' => $filename);
+											} else {
+												$this->setUserErrorMsg('「' . $title . '」の「' . $filename . '」がアップロードされていません');
 											}
 											break;
 										}
@@ -318,8 +364,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 							$this->gOpeLog->writeError(__METHOD__, 'メール送信に失敗しました。基本情報のEメールアドレスが設定されていません。', 1100, 'body=[' . $mailBody . ']');
 						} else {
 							$email = '';		// 返信先は空にする(暫定)
-							$ret = $this->gInstance->getMailManager()->sendFormMail(2/*手動送信*/, $this->gEnv->getCurrentWidgetId(), 
-																					$toAddress, $fromAddress, $email, $emailSubject, self::CONTACTUS_FORM, $mailParam);
+							$ret = $this->gInstance->getMailManager()->sendFormMail(2/*手動送信*/, $this->gEnv->getCurrentWidgetId(), $toAddress, $fromAddress, $email, $emailSubject, self::CONTACTUS_FORM, $mailParam,
+																					''/*cc*/, ''/*bcc*/, '', '', '', '', $attachFiles);
+							
 							// お問い合わせ送信の場合は、確認メールを送信する
 							if ($ret && !empty($sendUserEmail)){
 								// 送信先を取得
