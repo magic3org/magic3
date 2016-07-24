@@ -124,7 +124,12 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		$this->pageTitle = $targetObj->pageTitle;			// 画面タイトル
 		if (empty($this->pageTitle)) $this->pageTitle = self::DEFAULT_TITLE_NAME;			// 画面タイトル
 		if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// お問い合わせフィールド情報
-				
+		$useArtisteer = $targetObj->useArtisteer;					// Artisteer対応デザイン
+		$uploadMaxCount = $targetObj->uploadMaxCount;
+		if (!isset($uploadMaxCount)) $uploadMaxCount = self::UPLOAD_MAX_COUNT;		// アップロードファイル最大数
+		$uploadMaxSize = $targetObj->uploadMaxSize;
+		if (!isset($uploadMaxSize)) $uploadMaxSize = self::UPLOAD_MAX_SIZE;		// アップロードファイル最大サイズ(バイト)
+					
 		// 入力値を取得
 		$this->valueArray = array();
 		$fieldCount = count($this->fieldInfoArray);
@@ -143,11 +148,18 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
 			// ##### 自ユーザ環境のみにアクセス #####
 			if ($act == self::ACT_UPLOAD){		// ファイルアップロード
-				// 最初のファイルアップロードのときは、作業ディレクトリを作成
-				$workDir = $this->gInstance->getUserEnvManager()->getWorkDir();
+				// アップロードファイル数をチェック
+				// ##### ファイル情報を取得 #####
+				$fileInfoArray = $this->gInstance->getUserEnvManager()->getFileInfo();
+				if (count($fileInfoArray) >= $uploadMaxCount){			// 上限に達している場合はアップロードエラー
+				
+				} else {
+					// 最初のファイルアップロードのときは、作業ディレクトリを作成
+					$workDir = $this->gInstance->getUserEnvManager()->getWorkDir();
 
-				// Ajaxでのファイルアップロード処理
-				$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes(self::UPLOAD_MAX_SIZE), false/*アップロードファイルを残す*/);
+					// Ajaxでのファイルアップロード処理
+					$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes($uploadMaxSize), false/*アップロードファイルを残す*/);
+				}
 			} else if ($act == self::ACT_RESET){		// ファイルアップローダ初期化
 				// ##### ユーザ環境初期化 #####
 				$this->gInstance->getUserEnvManager()->reset();

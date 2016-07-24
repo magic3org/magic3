@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -151,25 +151,33 @@ class uploadFile
             return array('error' => 'No files were uploaded.');
         }
         
+		// ファイルサイズのチェック
         $size = $this->file->getSize();
-        
+		
+		// PHPの設定上限に達している場合は0が返る
         if ($size == 0){
 			// IE8では、アップロードファイルのサイズが「upload_max_filesize」よりも大きいと0が返る
 			if (isset($_SERVER["CONTENT_LENGTH"])){
-				//$displayMaxSize = ini_get('upload_max_filesize');
-				//$errorMsg = 'File size is too large. ' . $_SERVER['CONTENT_LENGTH'] . ' bytes exceeds upload_max_filesize(' . $displayMaxSize . ' bytes).';
-				$displayMaxSize = $gSystemManager->getMaxFileSizeForUpload();
-				$errorMsg = 'File size is too large. ' . $_SERVER['CONTENT_LENGTH'] . ' bytes exceeds max upload filesize(' . $displayMaxSize . ' bytes).';
+				// ファイルサイズの上限がPHP設定値よりも小さく設定されている場合は、設定値を表示
+				if ($this->sizeLimit < $gSystemManager->getMaxFileSizeForUpload(true)){
+					$errorMsg = 'File size is too large. ' . $_SERVER['CONTENT_LENGTH'] . ' bytes exceeds max upload filesize(' . $this->sizeLimit . ' bytes).';
+				} else {
+					$displayMaxSize = $gSystemManager->getMaxFileSizeForUpload();
+					$errorMsg = 'File size is too large. ' . $_SERVER['CONTENT_LENGTH'] . ' bytes exceeds max upload filesize(' . $displayMaxSize . ' bytes).';
+				}
 			} else {
 				$errorMsg = 'File is empty';
 			}
 			return array('error' => $errorMsg);
         }
         
-        if ($size > $this->sizeLimit) {
-            return array('error' => 'File is too large');
-        }
-        
+		// 上限サイズを超える場合
+		if ($size > $this->sizeLimit) {
+			//return array('error' => 'File is too large');
+			$errorMsg = 'File size is too large. ' . $size . ' bytes exceeds max upload filesize(' . $this->sizeLimit . ' bytes).';
+			return array('error' => $errorMsg);
+		}
+		
 		$filename = strtr($this->file->getName(), ' ', '_');	// 半角スペースをアンダーバーに変換(Firefox対応)
         $pathinfo = pathinfo($filename);
 //        $filename = $pathinfo['filename'];
