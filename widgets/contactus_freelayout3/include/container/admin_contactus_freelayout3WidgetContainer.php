@@ -32,6 +32,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 	const DEFAULT_NAME_HEAD = '名称未設定';			// デフォルトの設定名
 	const DEFAULT_USER_EMAIL_SUBJECT = '送信内容ご確認(自動送信メール)';
 	const DEFAULT_USER_EMAIL_FORMAT = "以下の内容でお問い合わせを送信しました。\n\n[#BODY#]";
+	const UPLOAD_MAX_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
+	const UPLOAD_MAX_COUNT = 5;			// アップロードファイル最大数
 	
 	/**
 	 * コンストラクタ
@@ -170,6 +172,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$userEmailSubject = $request->trimValueOf('item_user_email_subject');				// 入力ユーザ向けメールタイトル
 		$userEmailFormat = $request->trimValueOf('item_user_email_format');					// 入力ユーザ向けメール本文フォーマット
 		$useArtisteer = ($request->trimValueOf('item_use_artisteer') == 'on') ? 1 : 0;					// Artisteer対応デザイン
+		$uploadMaxSize = $request->trimValueOf('item_upload_max_size');		// アップロードファイル最大サイズ(バイト)
+		$uploadMaxCount = $request->trimValueOf('item_upload_max_count');		// アップロードファイル最大数
 		
 		// 入力データを取得
 		$this->fieldInfoArray = array();
@@ -236,6 +240,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$this->checkInput($userEmailFormat, '確認メール本文');
 			}
 
+			$this->checkNumeric($uploadMaxCount, 'アップロード最大ファイル最数');
+			$this->checkSingleByte($uploadMaxSize, 'アップロード最大ファイルサイズ');
+		
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
 				// 追加オブジェクト作成
@@ -255,6 +262,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$newObj->userEmailSubject = $userEmailSubject;				// 入力ユーザ向けメールタイトル
 				$newObj->userEmailFormat = $userEmailFormat;				// 入力ユーザ向けメール本文フォーマット
 				$newObj->useArtisteer = $useArtisteer;					// Artisteer対応デザイン
+				$newObj->uploadMaxCount = $uploadMaxCount;		// アップロードファイル最大数
+				$newObj->uploadMaxSize = $uploadMaxSize;			// アップロードファイル最大サイズ(バイト)
 				$newObj->fieldInfo	= $this->fieldInfoArray;		// フィールド定義
 				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
@@ -300,6 +309,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$this->checkInput($userEmailFormat, '確認メール本文');
 			}
 
+			$this->checkNumeric($uploadMaxCount, 'アップロード最大ファイル最数');
+			$this->checkSingleByte($uploadMaxSize, 'アップロード最大ファイルサイズ');
+			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
@@ -319,6 +331,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$targetObj->userEmailReply = $userEmailReply;					// 入力ユーザ向けメール返信先メールアドレス
 					$targetObj->userEmailFormat = $userEmailFormat;				// 入力ユーザ向けメール本文フォーマット
 					$targetObj->useArtisteer = $useArtisteer;					// Artisteer対応デザイン
+					$targetObj->uploadMaxCount = $uploadMaxCount;		// アップロードファイル最大数
+					$targetObj->uploadMaxSize = $uploadMaxSize;			// アップロードファイル最大サイズ(バイト)
 					$targetObj->fieldInfo	= $this->fieldInfoArray;		// フィールド定義
 				}
 				
@@ -356,6 +370,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$userEmailSubject = self::DEFAULT_USER_EMAIL_SUBJECT;				// 入力ユーザ向けメールタイトル
 				$userEmailFormat = self::DEFAULT_USER_EMAIL_FORMAT;				// 入力ユーザ向けメール本文フォーマット
 				$useArtisteer = 0;					// Artisteer対応デザイン
+				$uploadMaxCount = self::UPLOAD_MAX_COUNT;		// アップロードファイル最大数
+				$uploadMaxSize = self::UPLOAD_MAX_SIZE;		// アップロードファイル最大サイズ(バイト)
 				$this->fieldInfoArray = array();			// お問い合わせ項目情報
 				
 				// デフォルトのテンプレート作成
@@ -386,6 +402,10 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$userEmailSubject = $targetObj->userEmailSubject;				// 入力ユーザ向けメールタイトル
 					$userEmailFormat = $targetObj->userEmailFormat;				// 入力ユーザ向けメール本文フォーマット
 					$useArtisteer = $targetObj->useArtisteer;					// Artisteer対応デザイン
+					$uploadMaxCount = $targetObj->uploadMaxCount;
+					if (!isset($uploadMaxCount)) $uploadMaxCount = self::UPLOAD_MAX_COUNT;		// アップロードファイル最大数
+					$uploadMaxSize = $targetObj->uploadMaxSize;
+					if (!isset($uploadMaxSize)) $uploadMaxSize = self::UPLOAD_MAX_SIZE;		// アップロードファイル最大サイズ(バイト)
 					if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// お問い合わせ項目情報
 				}
 			}
@@ -426,6 +446,8 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$checked = '';
 		if (!empty($useArtisteer)) $checked = 'checked'; 					
 		$this->tmpl->addVar("_widget", "use_artisteer",	$checked);// Artisteer対応デザイン
+		$this->tmpl->addVar("_widget", "upload_max_count",	$this->convertToDispString($uploadMaxCount));			// アップロードファイル最大数
+		$this->tmpl->addVar("_widget", "upload_max_size",	$this->convertToDispString($uploadMaxSize));			// アップロードファイル最大サイズ(バイト)
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		$this->tmpl->addVar('_widget', 'tag_start', M3_TAG_START . M3_TAG_MACRO_ITEM_KEY);		// 置換タグ(前)
 		$this->tmpl->addVar('_widget', 'tag_end', M3_TAG_END);		// 置換タグ(後)

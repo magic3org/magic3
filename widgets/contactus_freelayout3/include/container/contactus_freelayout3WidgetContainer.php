@@ -41,7 +41,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	const LIST_MARK = '●';				// メール本文のフィールドタイトル用マーク
 	const UPLOADER_HEAD = 'uploader_';			// ファイルアップローダタグID
 	const UPLOADEF_CALLBACK_HEAD = 'uploader_onSuccess_';			// ファイルアップローダのコールバック関数名
-	const MAX_UPLOAD_FILE_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
+	const UPLOAD_MAX_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
+	const UPLOAD_MAX_COUNT = 5;			// アップロードファイル最大数
 	const ACT_UPLOAD = 'upload';			// ファイルアップロード操作
 	const ACT_RESET	= 'reset';				// ファイルアップローダ初期化
 	const ACT_GET_IMAGE		= 'getimage';		// サムネール画像取得
@@ -146,7 +147,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				$workDir = $this->gInstance->getUserEnvManager()->getWorkDir();
 
 				// Ajaxでのファイルアップロード処理
-				$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes(self::MAX_UPLOAD_FILE_SIZE), false/*アップロードファイルを残す*/);
+				$this->ajaxUploadFile($request, array($this, 'uploadFile'), $workDir, convBytes(self::UPLOAD_MAX_SIZE), false/*アップロードファイルを残す*/);
 			} else if ($act == self::ACT_RESET){		// ファイルアップローダ初期化
 				// ##### ユーザ環境初期化 #####
 				$this->gInstance->getUserEnvManager()->reset();
