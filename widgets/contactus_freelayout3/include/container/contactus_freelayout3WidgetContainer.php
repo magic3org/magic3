@@ -340,15 +340,58 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 							$type = $infoObj->type;		// 項目タイプ
 						
 							$mailBody .= self::LIST_MARK . $title . "\n";		// タイトル
-							if (is_array($this->valueArray[$i])){		// 配列データのとき
-								for ($j = 0; $j < count($this->valueArray[$i]); $j++){
-									$mailBody .= $this->valueArray[$i][$j] . "\n";		// 入力値
-								}
-								$value = implode(',', $this->valueArray[$i]);
-							} else {
-								$mailBody .= $this->valueArray[$i] . "\n";			// 入力値
-								$value = $this->valueArray[$i];
+							
+							// データタイプごとの処理
+							switch ($type){
+								case 'file':			// ファイルアップローダ
+									if (is_array($this->valueArray[$i])){		// 配列データのとき
+										$filenameArray = array();
+										for ($j = 0; $j < count($this->valueArray[$i]); $j++){
+											// ファイルID取得
+											$fileId = $this->valueArray[$i][$j];
+
+											// ファイル名取得
+											$filename = 'ファイル名未設定';
+											for ($k = 0; $k < count($fileInfoArray); $k++){
+												if ($fileInfoArray[$k]['fileid'] == $fileId){
+													$filename = $fileInfoArray[$k]['filename'];
+													break;
+												}
+											}
+										
+											$mailBody .= $filename . "\n";		// ファイル名
+											$filenameArray[] = $filename;
+										}
+										$value = implode(',', $filenameArray);
+									} else {
+										$fileId = $this->valueArray[$i];
+									
+										// ファイル名取得
+										$filename = 'ファイル名未設定';
+										for ($k = 0; $k < count($fileInfoArray); $k++){
+											if ($fileInfoArray[$k]['fileid'] == $fileId){
+												$filename = $fileInfoArray[$k]['filename'];
+												break;
+											}
+										}
+									
+										$mailBody .= $filename . "\n";			// 入力値
+										$value = $filename;
+									}
+									break;
+								default:				// その他
+									if (is_array($this->valueArray[$i])){		// 配列データのとき
+										for ($j = 0; $j < count($this->valueArray[$i]); $j++){
+											$mailBody .= $this->valueArray[$i][$j] . "\n";		// 入力値
+										}
+										$value = implode(',', $this->valueArray[$i]);
+									} else {
+										$mailBody .= $this->valueArray[$i] . "\n";			// 入力値
+										$value = $this->valueArray[$i];
+									}
+									break;
 							}
+
 							$mailBody .= "\n";
 							
 							// 個別変換パラメータ
