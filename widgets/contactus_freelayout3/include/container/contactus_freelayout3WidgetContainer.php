@@ -152,7 +152,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 				// ##### ファイル情報を取得 #####
 				$fileInfoArray = $this->gInstance->getUserEnvManager()->getFileInfo();
 				if (count($fileInfoArray) >= $uploadMaxCount){			// 上限に達している場合はアップロードエラー
-				
+					$this->ajaxUploadFileError('アップロード可能なファイル数の上限を超えています');
 				} else {
 					// 最初のファイルアップロードのときは、作業ディレクトリを作成
 					$workDir = $this->gInstance->getUserEnvManager()->getWorkDir();

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -754,6 +754,33 @@ class BaseWidgetContainer extends Core
 		}
 		//$destStr = htmlspecialchars($destStr, ENT_NOQUOTES);// 「&」が「&amp;」に変換されるので使用しない
 		//header('Content-type: application/json; charset=utf-8');
+		header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
+		echo $destStr;
+		
+		// システム強制終了
+		$this->gPage->exitSystem();
+	}
+	/**
+	 * Ajaxファイルアップロード処理時のエラー通知用
+	 *
+	 * @param string   $msg				エラーメッセージ
+	 * @return 							なし
+	 */
+	function ajaxUploadFileError($msg)
+	{
+		$resultObj = array('error' => $msg);
+		
+		// ##### 添付ファイルアップロード結果を返す #####
+		// ページ作成処理中断
+		$this->gPage->abortPage();
+		
+		// 添付ファイルの登録データを返す
+		if (function_exists('json_encode')){
+			$destStr = json_encode($resultObj);
+		} else {
+			$destStr = $this->gInstance->getAjaxManager()->createJsonString($resultObj);
+		}
+
 		header('Content-Type: text/html; charset=UTF-8');		// JSONタイプを指定するとIE8で動作しないのでHTMLタイプを指定
 		echo $destStr;
 		
