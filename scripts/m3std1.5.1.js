@@ -417,6 +417,7 @@ function m3CreateFileUploader(id, url, callback, extensions)
 		allowedTypes: extensions,
 		showFileCounter: false,		// ファイルNoなし
 		showProgress: true,
+		showStatusAfterSuccess: false,
 		stripedBar: true,
 		dragDropStr: '',
 		progressBarClass: 'progress-bar-info',
