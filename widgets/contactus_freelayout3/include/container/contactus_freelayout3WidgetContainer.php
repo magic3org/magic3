@@ -32,6 +32,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	private $useArtisteer;					// Artisteer対応デザイン
 	private $pageTitle;			// 画面タイトル
 	private $oldFileInfoArray;	// ファイル情報旧データ
+	private $uploadFileExtension;		// アップロード可能なファイルの拡張子
 	const DEFAULT_CONFIG_ID = 0;
 	const CONTACTUS_FORM = 'contact_us';		// お問い合わせフォーム
 	const DEFAULT_SEND_MESSAGE = 1;		// メール送信機能を使用するかどうか(デフォルト使用)
@@ -43,6 +44,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	const UPLOADEF_CALLBACK_HEAD = 'uploader_onSuccess_';			// ファイルアップローダのコールバック関数名
 	const UPLOAD_MAX_SIZE = '2M';		// アップロード最大ファイルサイズ(バイト)
 	const UPLOAD_MAX_COUNT = 5;			// アップロードファイル最大数
+	const UPLOAD_FILE_EXTENSION = 'png,gif,jpg,jpeg';		// アップロード可能なファイルの拡張子
 	const ACT_UPLOAD = 'upload';			// ファイルアップロード操作
 	const ACT_RESET	= 'reset';				// ファイルアップローダ初期化
 	const ACT_GET_IMAGE		= 'getimage';		// サムネール画像取得
@@ -129,6 +131,8 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		if (!isset($uploadMaxCount)) $uploadMaxCount = self::UPLOAD_MAX_COUNT;		// アップロードファイル最大数
 		$uploadMaxSize = $targetObj->uploadMaxSize;
 		if (!isset($uploadMaxSize)) $uploadMaxSize = self::UPLOAD_MAX_SIZE;		// アップロードファイル最大サイズ(バイト)
+		$this->uploadFileExtension = $targetObj->uploadFileExtension;
+		if (!isset($this->uploadFileExtension)) $this->uploadFileExtension = self::UPLOAD_FILE_EXTENSION;		// アップロード可能なファイルの拡張子
 					
 		// 入力値を取得
 		$this->valueArray = array();
@@ -929,7 +933,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					$uploadUrl = $this->createCmdUrlToCurrentWidget($param);
 		
 					$script = '';
-					$script .= M3_TB . 'm3CreateFileUploader("' . $uploaderId . '", "' . $this->getUrl($uploadUrl) . '", ' . $uploaderCallbackName . ');';
+					$script .= M3_TB . 'm3CreateFileUploader("' . $uploaderId . '", "' . $this->getUrl($uploadUrl) . '", ' . $uploaderCallbackName . ', "' . $this->uploadFileExtension . '");';// アップロード可能なファイルの拡張子を設定
 					$this->addScript .= $script;
 					
 					// ファイルアップローダのコールバック関数を生成
