@@ -121,7 +121,7 @@ class ScriptLibInfo
 	const JQUERY_JCAROUSEL_VER		= '0.2.8';
 	const JQUERY_THICKBOX_VER		= '3.1';
 	const JQUERY_COOKIE_VER			= '1.4.0';
-	const JQUERY_PRETTYPHOTO_VER	= '3.1.4';		// v3.1.5はタイトル表示のバグがある(2013/9/17)
+	const JQUERY_PRETTYPHOTO_VER	= '3.1.6';
 	const JQUERY_QTIP_VER			= '1.0';
 	const JQUERY_QTIP2_VER			= '2.1.1';
 	const JQUERY_CALCULATION_VER	= '0.4.07';
@@ -193,9 +193,9 @@ class ScriptLibInfo
 	const JQUERY_FACEBOX_FILENAME		= 'jquery/facebox.js';
 	const JQUERY_FACEBOX_CSS			= 'jquery/facebox.css';
 	const JQUERY_CURVYCORNERS_FILENAME	= 'jquery/jquery.curvycorners.packed.js';
-	const JQUERY_PRETTYPHOTO_DIR		= 'jquery/prettyPhoto3.1.4';
-	const JQUERY_PRETTYPHOTO_FILENAME	= 'jquery/prettyPhoto3.1.4/js/jquery.prettyPhoto.js';
-	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyPhoto3.1.4/css/prettyPhoto.css';
+	const JQUERY_PRETTYPHOTO_DIR		= 'jquery/prettyphoto-3.1.6';
+	const JQUERY_PRETTYPHOTO_FILENAME	= 'jquery/prettyphoto-3.1.6/js/jquery.prettyPhoto.js';
+	const JQUERY_PRETTYPHOTO_CSS		= 'jquery/prettyphoto-3.1.6/css/prettyPhoto.css';
 //	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.min.js';
 	const JQUERY_QTIP_FILENAME			= 'jquery/jquery.qtip-1.0.0-rc3.min.js';
 	const JQUERY_QTIP2_FILENAME			= 'jquery/qtip2-2.1.1/jquery.qtip.min.js';
