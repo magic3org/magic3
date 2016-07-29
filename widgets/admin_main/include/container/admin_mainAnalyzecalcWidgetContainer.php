@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainAnalyzecalcWidgetContainer.php 5802 2013-03-07 06:14:29Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConditionBaseWidgetContainer.php');
@@ -22,7 +22,8 @@ class admin_mainAnalyzecalcWidgetContainer extends admin_mainConditionBaseWidget
 	private $sysDb;	// システム情報取得用
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const DEFAULT_STR_NOT_CALC = '未集計';		// 未集計時の表示文字列
-	const MAX_CALC_DAYS = 30;					// 最大集計日数
+//	const MAX_CALC_DAYS = 30;					// 最大集計日数
+	const MAX_CALC_MONTHS = 12;					// 最大集計月数
 	
 	/**
 	 * コンストラクタ
@@ -64,7 +65,7 @@ class admin_mainAnalyzecalcWidgetContainer extends admin_mainConditionBaseWidget
 
 		if ($act == 'calc'){		// 集計実行のとき
 			$messageArray = array();
-			$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray);
+			$ret = $this->gInstance->getAnalyzeManager()->updateAnalyticsData($messageArray, self::MAX_CALC_MONTHS * 30/*12ヶ月分集計*/);
 			if ($ret){
 				$this->setMsg(self::MSG_GUIDANCE, $messageArray[0]);
 			} else {
