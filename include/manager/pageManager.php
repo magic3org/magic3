@@ -1435,9 +1435,15 @@ class PageManager extends Core
 
 		// SSL通信機能がオンの場合は、アクセスされたURLのSSLをチェックし不正の場合は正しいURLにリダイレクト
 		// 設定に間違いがある場合、管理画面にアクセスできなくなるので、フロント画面のみ制御
-		if ($gEnvManager->getUseSsl() || $gEnvManager->getUseSslAdmin()){
+//		if ($gEnvManager->getUseSsl() || $gEnvManager->getUseSslAdmin()){
+		if ($gEnvManager->getUseSsl()){			// フロント画面のSSL設定のみチェック(2016/7/30)
 			if (!$gEnvManager->isAdminDirAccess()){		// 管理画面以外へのアクセスのとき
-				$isSsl = $gEnvManager->isSslByCurrentPage();
+				// ルートURLがSSLの場合はSSLに固定
+				if ($gEnvManager->isRootUrlSsl()){		// ルートURLがSSLの場合はフロント画面のすべてがSSL付き
+					$isSsl = true;
+				} else {
+					$isSsl = $gEnvManager->isSslByCurrentPage();
+				}
 				$currentUrl = $gEnvManager->getCurrentRequestUri();
 				if ($isSsl){
 					$correctUrl = str_replace('http://', 'https://', $currentUrl);
@@ -2594,7 +2600,8 @@ class PageManager extends Core
 		// 実行パラメータ取得
 		$todo = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TODO);
 		$todo = str_replace(M3_TODO_SEPARATOR, '&', $todo);		// セパレータを変換
-		$redirectUrl = '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
+//		$redirectUrl = '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
+		$redirectUrl = $gEnvManager->createPageUrl() . '?' . M3_REQUEST_PARAM_PAGE_SUB_ID . '=' . $gEnvManager->getCurrentPageSubId();
 		if (!empty($todo)) $redirectUrl .= '&' . $todo;
 		if ($gEnvManager->getIsMobileSite()){		// 携帯用アクセスポイントの場合
 			$this->redirect($redirectUrl, true/*遷移時のダイアログ表示を抑止*/);
@@ -5550,7 +5557,7 @@ class PageManager extends Core
 			if ($gEnvManager->isAdminUrlAccess($toUrl)){		// 管理画面へのアクセスのとき
 				// 管理画面のSSL状態を参照
 				if ($gEnvManager->getUseSslAdmin()) $isSslPage = true;		// 管理画面でSSLを使用するとき
-			} else {
+			} else {		// フロント画面へのアクセスのとき
 				// ファイル名を取得
 				$paramArray = array();
 				//list($filename, $query) = explode('?', basename($toUrl));
@@ -6215,11 +6222,14 @@ class PageManager extends Core
 			} else {
 				return false;
 			}
-		} else {		// その他のページのとき
-			// 一般用ページにSSLを使用しない場合は不要を返す
-			if (!$gEnvManager->getUseSsl()) return false;
 		}
 		
+		// ##### フロント画面の場合 #####
+		if ($gEnvManager->isRootUrlSsl()) return true;		// ルートURLがSSLの場合はフロント画面のすべてがSSL付き
+		
+		// 一般用ページにSSLを使用しない場合は不要を返す
+		if (!$gEnvManager->getUseSsl()) return false;
+					
 		// 一般用ページでSSLを使用する場合は、データベースの設定をチェックする
 		$line = $this->getPageInfo($pageId, $pageSubId);
 		if (!empty($line)){

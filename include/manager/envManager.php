@@ -510,6 +510,19 @@ class EnvManager extends Core
 		return $this->currentDomainRootUrl;
 	}
 	/**
+	 * システムのルートURLがSSLのURLかどうか
+	 *
+	 * @return bool			true=SSLのURL、false=SSLのURLではない
+	 */
+	public function isRootUrlSsl()
+	{
+		if (strncasecmp($this->currentDomainRootUrl, 'https://', 8) == 0){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	/**
 	 * SSL用のルートURLを取得
 	 */
 	public function getSslRootUrl()
