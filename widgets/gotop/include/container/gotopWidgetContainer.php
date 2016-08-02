@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -59,7 +59,7 @@ class gotopWidgetContainer extends BaseWidgetContainer
 			$imageUrl	= $paramObj->imageUrl;
 			$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
 		}
-		$this->tmpl->addVar("_widget", "image_url",	$imageUrl);
+		$this->tmpl->addVar("_widget", "image_url",	$this->getUrl($imageUrl));
 	}
 	/**
 	 * JavascriptファイルをHTMLヘッダ部に設定
