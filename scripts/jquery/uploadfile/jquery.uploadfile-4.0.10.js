@@ -1,14 +1,22 @@
 /*!
  * jQuery Upload File Plugin
- * version: 4.0.10
+ * version: 4.0.10.1
  * @requires jQuery v1.5 or later & form plugin
  * Copyright (c) 2013 Ravishanker Kusuma
+ * Licensed under MIT
  * http://hayageek.com/
+ *
+ * Revision History
+ * v4.0.10.1
+ * - Add Bootstrap and Artisteer style by naoki on 2016/8/6.
+ *
+ * v4.0.10
+ * - Original version by Ravishanker Kusuma.
  */
 (function ($) {
-    if($.fn.ajaxForm == undefined) {
-        $.getScript(("https:" == document.location.protocol ? "https://" : "http://") + "malsup.github.io/jquery.form.js");
-    }
+//    if($.fn.ajaxForm == undefined) {
+//        $.getScript(("https:" == document.location.protocol ? "https://" : "http://") + "malsup.github.io/jquery.form.js");
+//    }
     var feature = {};
     feature.fileapi = $("<input type='file'/>").get(0).files !== undefined;
     feature.formdata = window.FormData !== undefined;
@@ -42,9 +50,12 @@
             showStatusAfterSuccess: true,
             showStatusAfterError: true,
             showFileCounter: true,
+            bootstrapStyle: false,
+            artisteerStyle: false,
             fileCounterStyle: "). ",
             showFileSize: true,
             showProgress: false,
+			stripedBar: false,
             nestedForms: true,
             showDownload: false,
             onLoad: function (obj) {},
@@ -108,13 +119,13 @@
             s.multiple = false;
         }
 
-        $(this).html("");
-
         var obj = this;
-        
-        var uploadLabel = $('<div>' + s.uploadStr + '</div>');
-
+        var uploadStr = s.uploadStr;
+		if (uploadStr == '') uploadStr = $(this).html();
+				
+        var uploadLabel = $('<div>' + uploadStr + '</div>');
         $(uploadLabel).addClass(s.uploadButtonClass);
+		$(this).html("");
         
         // wait form ajax Form plugin and initialize
         (function checkAjaxFormLoaded() {
@@ -122,7 +133,11 @@
 
                 if(s.dragDrop) {
                     var dragDrop = $('<div class="' + s.dragDropContainerClass + '" style="vertical-align:top;"></div>').width(s.dragdropWidth);
-                    $(obj).append(dragDrop);
+					if (s.uploadStr == ''){
+						$(obj).before(dragDrop);
+					} else {
+                    	$(obj).append(dragDrop);
+					}
                     $(dragDrop).append(uploadLabel);
                     $(dragDrop).append($(s.dragDropStr));
                     setDragDropHandlers(obj, s, dragDrop);
@@ -645,24 +660,45 @@
 
 		function defaultProgressBar(obj,s)
 		{
-		
 			this.statusbar = $("<div class='ajax-file-upload-statusbar'></div>").width(s.statusBarWidth);
             this.preview = $("<img class='ajax-file-upload-preview' />").width(s.previewWidth).height(s.previewHeight).appendTo(this.statusbar).hide();
             this.filename = $("<div class='ajax-file-upload-filename'></div>").appendTo(this.statusbar);
             this.progressDiv = $("<div class='ajax-file-upload-progress'>").appendTo(this.statusbar).hide();
-            this.progressbar = $("<div class='ajax-file-upload-bar'></div>").appendTo(this.progressDiv);
-            this.abort = $("<div>" + s.abortStr + "</div>").appendTo(this.statusbar).hide();
-            this.cancel = $("<div>" + s.cancelStr + "</div>").appendTo(this.statusbar).hide();
-            this.done = $("<div>" + s.doneStr + "</div>").appendTo(this.statusbar).hide();
-            this.download = $("<div>" + s.downloadStr + "</div>").appendTo(this.statusbar).hide();
-            this.del = $("<div>" + s.deletelStr + "</div>").appendTo(this.statusbar).hide();
+			if (s.bootstrapStyle){
+				this.progressbarOuter = $("<div class='progress'></div>").appendTo(this.progressDiv);
+				if (s.stripedBar){
+					this.progressbar = $("<div class='ajax-file-upload-bar progress-bar progress-bar-striped active' role='progressbar'></div>").appendTo(this.progressbarOuter);
+				} else {
+					this.progressbar = $("<div class='ajax-file-upload-bar progress-bar' role='progressbar'></div>").appendTo(this.progressbarOuter);
+				}
+			} else {
+            	this.progressbar = $("<div class='ajax-file-upload-bar'></div>").appendTo(this.progressDiv);
+			}
+			
+            this.abort = $("<button>" + s.abortStr + "</button>").appendTo(this.statusbar).hide();
+            this.cancel = $("<button>" + s.cancelStr + "</button>").appendTo(this.statusbar).hide();
+            this.done = $("<button>" + s.doneStr + "</button>").appendTo(this.statusbar).hide();
+            this.download = $("<button>" + s.downloadStr + "</button>").appendTo(this.statusbar).hide();
+            this.del = $("<button>" + s.deletelStr + "</button>").appendTo(this.statusbar).hide();
 
             this.abort.addClass("ajax-file-upload-red");
             this.done.addClass("ajax-file-upload-green");
 			this.download.addClass("ajax-file-upload-green");            
             this.cancel.addClass("ajax-file-upload-red");
             this.del.addClass("ajax-file-upload-red");
-            
+            if (s.bootstrapStyle){
+	            this.abort.addClass("btn btn-danger btn-sm");
+	            this.done.addClass("btn btn-success btn-sm");
+				this.download.addClass("btn btn-success btn-sm");            
+	            this.cancel.addClass("btn btn-danger btn-sm");
+	            this.del.addClass("btn btn-danger btn-sm");
+			} else if (s.artisteerStyle){
+	            this.abort.addClass("button art-button");
+	            this.done.addClass("button art-button");
+				this.download.addClass("button art-button");            
+	            this.cancel.addClass("button art-button");
+	            this.del.addClass("button art-button");
+			}
 			return this;
 		}
         function createProgressDiv(obj, s) {
@@ -795,6 +831,7 @@
                         pd.progressbar.html('100%');
                         pd.progressbar.css('text-align', 'center');
                     }
+					if (s.bootstrapStyle && s.stripedBar) pd.progressbar.removeClass('active');
 
                     pd.abort.hide();
                     s.onSuccess.call(this, fileArray, data, xhr, pd);

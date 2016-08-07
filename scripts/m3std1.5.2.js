@@ -412,13 +412,25 @@ function m3CreateFileUploader(id, url, callback, extensions)
 {
 	if (!jQuery().uploadFile) return false;
 	
+	var artisteerStyle = false;
+	var bootstrapStyle = false;
+	
+	if (M3_TEMPLATE_TYPE == 10){
+		bootstrapStyle = true;
+	} else {
+		artisteerStyle = true;
+	}
+	
 	$('#' + id).uploadFile({
 		url: url,
 		allowedTypes: extensions,
 		showFileCounter: false,		// ファイルNoなし
 		showProgress: true,
 		showStatusAfterSuccess: false,
+		artisteerStyle: artisteerStyle,
+		bootstrapStyle: bootstrapStyle,
 		stripedBar: true,
+		uploadStr: '',
 		dragDropStr: '',
 		progressBarClass: 'progress-bar-info',
 		returnType: 'json',
