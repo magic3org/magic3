@@ -105,7 +105,7 @@ class ScriptLibInfo
 	const LIB_JQUERY_RESPONSIVETABLE	= 'jquery.responsivetable';
 	const LIB_JQUERY_FORM			= 'jquery.form';
 	const LIB_JQUERY_UPLOADFILE		= 'jquery.uploadfile';
-	const LIB_JQUERY_UPLOADFILE4	= 'jquery.uploadfile4';		// jQuery Uploadfile v4版
+//	const LIB_JQUERY_UPLOADFILE4	= 'jquery.uploadfile4';		// jQuery Uploadfile v4版
 	const LIB_JQUERY_JCROP			= 'jquery.jcrop';
 	const LIB_JQUERY_NUMERIC		= 'jquery.numeric';
 	const LIB_JQUERY_STICKY			= 'jquery.sticky';
@@ -146,8 +146,8 @@ class ScriptLibInfo
 	const JQUERY_FITVIDS_VER		= '1.1';
 	const JQUERY_RESPONSIVETABLE_VER	= '5.0.4';
 	const JQUERY_FORM_VER			= '3.51.0';
-	const JQUERY_UPLOADFILE_VER		= '3.1.10';
-	const JQUERY_UPLOADFILE4_VER	= '4.0.10';
+//	const JQUERY_UPLOADFILE_VER		= '3.1.10';
+	const JQUERY_UPLOADFILE_VER		= '4.0.10';
 	const JQUERY_JCROP_VER			= '0.9.12';
 	const JQUERY_NUMERIC_VER		= '1.4.1';
 	const JQUERY_STICKY_VER			= '1.0.4';
@@ -235,10 +235,10 @@ class ScriptLibInfo
 	const JQUERY_RESPONSIVETABLE_FILENAME	= 'jquery/responsiveTable/js/rwd-table.js';
 	const JQUERY_RESPONSIVETABLE_CSS		= 'jquery/responsiveTable/css/rwd-table.css';
 	const JQUERY_FORM_FILENAME			= 'jquery/jquery.form.min.js';
-	const JQUERY_UPLOADFILE_FILENAME	= 'jquery/uploadfile/jquery.uploadfile.js';
+//	const JQUERY_UPLOADFILE_FILENAME	= 'jquery/uploadfile/jquery.uploadfile.js';
+//	const JQUERY_UPLOADFILE_CSS			= 'jquery/uploadfile/uploadfile.css';
+	const JQUERY_UPLOADFILE_FILENAME	= 'jquery/uploadfile/jquery.uploadfile-4.0.10.js';		// jQuery Uploadfile v4版
 	const JQUERY_UPLOADFILE_CSS			= 'jquery/uploadfile/uploadfile.css';
-	const JQUERY_UPLOADFILE4_FILENAME	= 'jquery/uploadfile/jquery.uploadfile-4.0.10.js';		// jQuery Uploadfile v4版
-	const JQUERY_UPLOADFILE4_CSS		= 'jquery/uploadfile/uploadfile.css';
 	const JQUERY_JCROP_FILENAME			= 'jquery/jcrop0.9.12/jquery.Jcrop.js';
 	const JQUERY_JCROP_CSS				= 'jquery/jcrop0.9.12/jquery.Jcrop.css';
 	const JQUERY_NUMERIC_FILENAME		= 'jquery/jquery.numeric.min.js';
@@ -586,10 +586,10 @@ class ScriptLibInfo
 																	'css'		=> array(self::JQUERY_UPLOADFILE_CSS),
 																	'url'		=> self::JQUERY_UPLOADFILE_URL,
 																	'version'	=> self::JQUERY_UPLOADFILE_VER),
-						self::LIB_JQUERY_UPLOADFILE4	=> array(	'script' 	=> array(self::JQUERY_UPLOADFILE4_FILENAME),			// jQuery Uploadfile v4版
+/*						self::LIB_JQUERY_UPLOADFILE4	=> array(	'script' 	=> array(self::JQUERY_UPLOADFILE4_FILENAME),			// jQuery Uploadfile v4版
 																	'css'		=> array(self::JQUERY_UPLOADFILE4_CSS),
 																	'url'		=> self::JQUERY_UPLOADFILE_URL,
-																	'version'	=> self::JQUERY_UPLOADFILE4_VER),
+																	'version'	=> self::JQUERY_UPLOADFILE4_VER),*/
 						self::LIB_JQUERY_JCROP			=> array(	'script' 	=> array(self::JQUERY_JCROP_FILENAME),
 																	'css'		=> array(self::JQUERY_JCROP_CSS),
 																	'url'		=> self::JQUERY_JCROP_URL,
@@ -703,7 +703,7 @@ class ScriptLibInfo
 										
 										self::LIB_JQUERY_TIMEPICKER				=> array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 										self::LIB_JQUERY_UPLOADFILE				=> array(self::LIB_JQUERY_FORM),
-										self::LIB_JQUERY_UPLOADFILE4			=> array(self::LIB_JQUERY_FORM),
+//										self::LIB_JQUERY_UPLOADFILE4			=> array(self::LIB_JQUERY_FORM),
 										self::LIB_JQUERY_FULLCALENDAR			=> array(self::LIB_MOMENT),
 										self::LIB_JQUERY_FULLCALENDAR_GOOGLE	=> array(self::LIB_MOMENT,		self::LIB_JQUERY_FULLCALENDAR),		// MomentをFullCalendarより先に読み込む
 										self::LIB_BOOTSTRAP_DATETIMEPICKER		=> array(self::LIB_MOMENT)
