@@ -819,40 +819,35 @@ function m3SetModalTable(object)
  * @param string    id			表示領域タグID
  * @param string    url			アップロード先URL
  * @param function	callback	成功時コールバック関数
- * @param int       type		アップロード可能ファイル(0=画像)
- * @param int       width		表示幅
+ * @param string    extensions	アップロード許可するファイルの拡張子を「,」区切りで列挙
  * @return bool					true=作成成功、false=作成失敗
  */
-function m3CreateDragDropUploadFile(id, url, callback, type, width)
+function m3CreateDragDropUploadFile(id, url, callback, extensions)
 {
 	if (!jQuery().uploadFile) return false;
 	
-	var fileType = type || 0;
-	var areaWidth = width || 300;
-	var allowTypes = '';
+	if (!extensions) extensions = 'png,gif,jpg,jpeg';
 	
-	switch (fileType){
-	case 0:
-	default:
-		allowTypes = 'png,gif,jpg,jpeg';
-		break;
-	}
+	var artisteerStyle = false;
+	var bootstrapStyle = true;
+	
 	$('#' + id).uploadFile({
 		url: url,
-		allowedTypes: allowTypes,
+		allowedTypes: extensions,
 		showFileCounter: false,		// ファイルNoなし
 		showProgress: true,
+		artisteerStyle: artisteerStyle,
+		bootstrapStyle: bootstrapStyle,
 		stripedBar: true,
+		uploadStr: '',
 		dragDropStr: '',
-		progressBarClass: 'progress-bar-info',
+//		progressBarClass: 'progress-bar-info',
 		returnType: 'json',
 		customErrorKeyStr: 'error',
 		abortStr: '中断',
 		cancelStr: 'キャンセル',
 		deletelStr: '削除',
 		doneStr: '完了',
-		dragdropWidth: areaWidth,		// ドラッグ領域幅
-		statusBarWidth: areaWidth,		// ファイルリスト領域幅
 		onSuccess:function(files, data)
 		{
 			if (typeof(callback) == 'function') callback(files, data);
