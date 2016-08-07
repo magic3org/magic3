@@ -703,6 +703,7 @@ class ScriptLibInfo
 										
 										self::LIB_JQUERY_TIMEPICKER				=> array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 										self::LIB_JQUERY_UPLOADFILE				=> array(self::LIB_JQUERY_FORM),
+										self::LIB_JQUERY_UPLOADFILE4			=> array(self::LIB_JQUERY_FORM),
 										self::LIB_JQUERY_FULLCALENDAR			=> array(self::LIB_MOMENT),
 										self::LIB_JQUERY_FULLCALENDAR_GOOGLE	=> array(self::LIB_MOMENT,		self::LIB_JQUERY_FULLCALENDAR),		// MomentをFullCalendarより先に読み込む
 										self::LIB_BOOTSTRAP_DATETIMEPICKER		=> array(self::LIB_MOMENT)
