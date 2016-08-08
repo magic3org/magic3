@@ -176,6 +176,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$uploadMaxSize = $request->trimValueOf('item_upload_max_size');		// アップロードファイル最大サイズ(バイト)
 		$uploadMaxCount = $request->trimValueOf('item_upload_max_count');		// アップロードファイル最大数
 		$uploadFileExtension = $request->trimValueOf('item_upload_file_extension');		// アップロード可能なファイルの拡張子
+		$uploadArea = $request->valueOf('item_upload_area');		// ファイルアップロードエリア
 		
 		// 入力データを取得
 		$this->fieldInfoArray = array();
@@ -248,6 +249,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		
 			// エラーなしの場合は、データを登録
 			if ($this->getMsgCount() == 0){
+				// ファイルアップロードエリアが空のときはデフォルトを取得
+				if (empty($uploadArea)) $uploadArea = $this->gDesign->createDragDropFileUploadHtml();
+				
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name		= $name;// 表示名
@@ -268,6 +272,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$newObj->uploadMaxCount = $uploadMaxCount;		// アップロードファイル最大数
 				$newObj->uploadMaxSize = $uploadMaxSize;			// アップロードファイル最大サイズ(バイト)
 				$newObj->uploadFileExtension = $uploadFileExtension;	// アップロード可能なファイルの拡張子
+				$newObj->uploadArea = $uploadArea;		// ファイルアップロードエリア
 				$newObj->fieldInfo	= $this->fieldInfoArray;		// フィールド定義
 				
 				$ret = $this->addPageDefParam($defSerial, $defConfigId, $this->paramObj, $newObj);
@@ -318,6 +323,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			$this->checkInput($uploadFileExtension, 'アップロード可能なファイルの拡張子');
 			
 			if ($this->getMsgCount() == 0){			// エラーのないとき
+				// ファイルアップロードエリアが空のときはデフォルトを取得
+				if (empty($uploadArea)) $uploadArea = $this->gDesign->createDragDropFileUploadHtml();
+				
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
 				if ($ret){
@@ -339,6 +347,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					$targetObj->uploadMaxCount = $uploadMaxCount;		// アップロードファイル最大数
 					$targetObj->uploadMaxSize = $uploadMaxSize;			// アップロードファイル最大サイズ(バイト)
 					$targetObj->uploadFileExtension = $uploadFileExtension;	// アップロード可能なファイルの拡張子
+					$targetObj->uploadArea = $uploadArea;		// ファイルアップロードエリア
 					$targetObj->fieldInfo	= $this->fieldInfoArray;		// フィールド定義
 				}
 				
@@ -379,6 +388,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				$uploadMaxCount = self::UPLOAD_MAX_COUNT;		// アップロードファイル最大数
 				$uploadMaxSize = self::UPLOAD_MAX_SIZE;		// アップロードファイル最大サイズ(バイト)
 				$uploadFileExtension = self::UPLOAD_FILE_EXTENSION;		// アップロード可能なファイルの拡張子
+				$uploadArea = $this->gDesign->createDragDropFileUploadHtml();		// ファイルアップロードエリア
 				$this->fieldInfoArray = array();			// お問い合わせ項目情報
 				
 				// デフォルトのテンプレート作成
@@ -415,6 +425,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 					if (!isset($uploadMaxSize)) $uploadMaxSize = self::UPLOAD_MAX_SIZE;		// アップロードファイル最大サイズ(バイト)
 					$uploadFileExtension = $targetObj->uploadFileExtension;
 					if (!isset($uploadFileExtension)) $uploadFileExtension = self::UPLOAD_FILE_EXTENSION;		// アップロード可能なファイルの拡張子
+					$uploadArea = $targetObj->uploadArea;
+					if (empty($uploadArea)) $uploadArea = $this->gDesign->createDragDropFileUploadHtml();		// ファイルアップロードエリア
+					$uploadArea = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $uploadArea);				// アプリケーションルートを変換
 					if (!empty($targetObj->fieldInfo)) $this->fieldInfoArray = $targetObj->fieldInfo;			// お問い合わせ項目情報
 				}
 			}
@@ -458,6 +471,7 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 		$this->tmpl->addVar("_widget", "upload_max_count",	$this->convertToDispString($uploadMaxCount));			// アップロードファイル最大数
 		$this->tmpl->addVar("_widget", "upload_max_size",	$this->convertToDispString($uploadMaxSize));			// アップロードファイル最大サイズ(バイト)
 		$this->tmpl->addVar("_widget", "upload_file_extension",	$this->convertToDispString($uploadFileExtension));		// アップロード可能なファイルの拡張子
+		$this->tmpl->addVar("_widget", "upload_area",	$uploadArea);		// ファイルアップロードエリア
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);// 選択中のシリアル番号、IDを設定
 		$this->tmpl->addVar('_widget', 'tag_start', M3_TAG_START . M3_TAG_MACRO_ITEM_KEY);		// 置換タグ(前)
 		$this->tmpl->addVar('_widget', 'tag_end', M3_TAG_END);		// 置換タグ(後)

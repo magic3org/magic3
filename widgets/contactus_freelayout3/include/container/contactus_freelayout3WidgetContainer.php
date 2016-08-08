@@ -33,6 +33,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 	private $pageTitle;			// 画面タイトル
 	private $oldFileInfoArray;	// ファイル情報旧データ
 	private $uploadFileExtension;		// アップロード可能なファイルの拡張子
+	private $uploadArea;		// ファイルアップロードエリア
 	const DEFAULT_CONFIG_ID = 0;
 	const CONTACTUS_FORM = 'contact_us';		// お問い合わせフォーム
 	const DEFAULT_SEND_MESSAGE = 1;		// メール送信機能を使用するかどうか(デフォルト使用)
@@ -133,6 +134,9 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 		if (!isset($uploadMaxSize)) $uploadMaxSize = self::UPLOAD_MAX_SIZE;		// アップロードファイル最大サイズ(バイト)
 		$this->uploadFileExtension = $targetObj->uploadFileExtension;
 		if (!isset($this->uploadFileExtension)) $this->uploadFileExtension = self::UPLOAD_FILE_EXTENSION;		// アップロード可能なファイルの拡張子
+		$this->uploadArea = $targetObj->uploadArea;
+		if (empty($this->uploadArea)) $this->uploadArea = $this->gDesign->createDragDropFileUploadHtml();		// ファイルアップロードエリア
+		$this->uploadArea = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->getUrl($this->gEnv->getRootUrl()), $this->uploadArea);				// アプリケーションルートを変換
 					
 		// 入力値を取得
 		$this->valueArray = array();
@@ -785,7 +789,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					if (empty($fileInfoArray)) $fileInfoArray = $this->oldFileInfoArray;		// 旧ファイル情報
 			
 					if ($enabled){		// 入力状態のとき
-						$inputTag .= '<div id="' . $uploaderId . '">' . $this->gDesign->createDragDropFileUploadHtml(). '</div>' . M3_NL;		// ファイルドラッグエリア
+						$inputTag .= '<div id="' . $uploaderId . '">' . $this->uploadArea . '</div>' . M3_NL;		// ファイルドラッグエリア
 					}
 					
 					$inputTag .= '<ul id="' . $uploaderId . '_filelist" class="ajax-file-upload-filelist">' . M3_NL;
