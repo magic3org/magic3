@@ -432,7 +432,6 @@ function m3CreateFileUploader(id, url, callback, extensions)
 		stripedBar: true,
 		uploadStr: '',
 		dragDropStr: '',
-//		progressBarClass: 'progress-bar-info',
 		returnType: 'json',
 		customErrorKeyStr: 'error',
 		abortStr: '中断',

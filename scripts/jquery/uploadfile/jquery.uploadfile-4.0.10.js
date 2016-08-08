@@ -80,6 +80,7 @@
             dragDropHoverClass: "state-hover",
             errorClass: "ajax-file-upload-error",
             uploadButtonClass: "ajax-file-upload",
+			progressBarClass: 'progress-bar-info',
             dragDropStr: "<span><b>Drag &amp; Drop Files</b></span>",
             uploadStr:"Upload",
             abortStr: "Abort",
@@ -667,9 +668,9 @@
 			if (s.bootstrapStyle){
 				this.progressbarOuter = $("<div class='progress'></div>").appendTo(this.progressDiv);
 				if (s.stripedBar){
-					this.progressbar = $("<div class='ajax-file-upload-bar progress-bar progress-bar-striped active' role='progressbar'></div>").appendTo(this.progressbarOuter);
+					this.progressbar = $("<div class='ajax-file-upload-bar progress-bar progress-bar-striped active " + s.progressBarClass + "' role='progressbar'></div>").appendTo(this.progressbarOuter);
 				} else {
-					this.progressbar = $("<div class='ajax-file-upload-bar progress-bar' role='progressbar'></div>").appendTo(this.progressbarOuter);
+					this.progressbar = $("<div class='ajax-file-upload-bar progress-bar " + s.progressBarClass + "' role='progressbar'></div>").appendTo(this.progressbarOuter);
 				}
 			} else {
             	this.progressbar = $("<div class='ajax-file-upload-bar'></div>").appendTo(this.progressDiv);
