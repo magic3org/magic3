@@ -110,6 +110,7 @@
         var formGroup = "ajax-file-upload-" + (new Date().getTime());
         this.formGroup = formGroup;
         this.errorLog = $("<div></div>"); //Writing errors
+		this.after(this.errorLog);
         this.responses = [];
         this.existingFileNames = [];
         if(!feature.formdata) //check drag drop enabled.
@@ -126,7 +127,8 @@
 				
         var uploadLabel = $('<div>' + uploadStr + '</div>');
         $(uploadLabel).addClass(s.uploadButtonClass);
-		$(this).html("");
+//		$(this).html("");
+		this.hide();
         
         // wait form ajax Form plugin and initialize
         (function checkAjaxFormLoaded() {
@@ -146,8 +148,8 @@
                 } else {
                     $(obj).append(uploadLabel);
                 }
-                $(obj).append(obj.errorLog);
-                
+                //$(obj).append(obj.errorLog);
+				
    				if(s.showQueueDiv)
 		        	obj.container =$("#"+s.showQueueDiv);
         		else

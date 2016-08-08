@@ -951,6 +951,7 @@ class contactus_freelayout3WidgetContainer extends BaseWidgetContainer
 					// ファイルアップローダ初期化用スクリプト
 					$script = '';
 					$script .= M3_TB . '$(".ajax-upload-dragdrop").remove();' . M3_NL;
+					$script .= M3_TB . '$(".ajax-file-upload-error").html("");' . M3_NL;
 					$script .= M3_TB . '$(".ajax-file-upload-statusbar").remove();' . M3_NL;
 					$script .= M3_TB . '$(".ajax-file-upload-filelist").html("");' . M3_NL;
 					$script .= M3_TB . '$.get("' . $this->getUrl($resetUrl) . '");' . M3_NL;		// アップロードファイル削除
