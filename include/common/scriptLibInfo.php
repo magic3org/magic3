@@ -188,7 +188,8 @@ class ScriptLibInfo
 	const JQUERY_SIMPLETREE_CSS			= 'jquery/simple.tree.css';
 	const JQUERY_BGIFRAME_FILENAME		= 'jquery/jquery.bgiframe.min.js';
 	const JQUERY_HOVERINTENT_FILENAME	= 'jquery/jquery.hoverIntent.min.js';
-	const JQUERY_TABLEDND_FILENAME		= 'jquery/jquery.tablednd_0_5.js';
+//	const JQUERY_TABLEDND_FILENAME		= 'jquery/jquery.tablednd_0_5.js';
+const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	const JQUERY_TABLEDND_CSS			= 'jquery/jquery.tablednd.css';
 	const JQUERY_SIMPLEMODAL_FILENAME	= 'jquery/jquery.simplemodal-1.3.5.min.js';
 	const JQUERY_COOKIE_FILENAME		= 'jquery/jquery.cookie.js';
