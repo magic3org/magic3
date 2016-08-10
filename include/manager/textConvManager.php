@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -318,6 +318,41 @@ class TextConvManager extends Core
 		if ($this->convBr) $destTag = $this->convLineBreakToBr($destTag);			// 改行変換するかどうか
 		return $destTag;
 	}
+	/**
+	 * コンテンツマクロへ変換
+	 *
+	 * @param string $src			変換するデータ
+	 * @return string				変換後データ
+	 */
+	function convToContentMacro($src)
+	{
+		// 画像のURLを変換
+		$str = '/<img[^<]*?src\s*=\s*[\'"]+(.+?)[\'"]+[^>]*?>/si';
+		$dest = preg_replace_callback($str, array($this, "_replace_to_content_macro_callback"), $src);
+		return $dest;
+	}
+	/**
+	 * IMGタグ変換コールバック関数
+	 *
+	 * @param array $matchData		検索マッチデータ
+	 * @return string				変換後データ
+	 */
+    function _replace_to_content_macro_callback($matchData)
+	{
+		global $gEnvManager;
+		
+		// 画像のパスを取得
+		$imageUrl = $matchData[1];
+		$destTag = $matchData[0];
+
+		// マクロ表現に変換
+		$imageUrl = $gEnvManager->getMacroPath($imageUrl);
+
+		// URLを設定し直す
+		$str = '/src\s*=\s*[\'"]+(.+?)[\'"]/si';
+		$destTag = preg_replace($str, 'src="' . $imageUrl . '"', $destTag);
+		return $destTag;
+    }
 	/**
 	 * マクロオプションを解析
 	 *

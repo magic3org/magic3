@@ -252,6 +252,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 				// ファイルアップロードエリアが空のときはデフォルトを取得
 				if (empty($uploadArea)) $uploadArea = $this->gDesign->createDragDropFileUploadHtml();
 				
+				// ファイルアップロードエリアをマクロ表現に変換
+				$uploadArea = $this->gInstance->getTextConvManager()->convToContentMacro($uploadArea);
+				
 				// 追加オブジェクト作成
 				$newObj = new stdClass;
 				$newObj->name		= $name;// 表示名
@@ -325,6 +328,9 @@ class admin_contactus_freelayout3WidgetContainer extends BaseAdminWidgetContaine
 			if ($this->getMsgCount() == 0){			// エラーのないとき
 				// ファイルアップロードエリアが空のときはデフォルトを取得
 				if (empty($uploadArea)) $uploadArea = $this->gDesign->createDragDropFileUploadHtml();
+				
+				// ファイルアップロードエリアをマクロ表現に変換
+				$uploadArea = $this->gInstance->getTextConvManager()->convToContentMacro($uploadArea);
 				
 				// 現在の設定値を取得
 				$ret = $this->getPageDefParam($defSerial, $defConfigId, $this->paramObj, $this->configId, $targetObj);
