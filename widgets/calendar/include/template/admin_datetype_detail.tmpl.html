@@ -59,7 +59,7 @@ function addTime()
 function setupTimeList()
 {
 	$("#timelist").tableDnD({
-		dragHandle: "dragHandle"
+		dragHandle: ".dragHandle"
 	});
 	$("#timelist tr").hover(function(){
 		$(this.cells[0]).addClass('currentHandle');

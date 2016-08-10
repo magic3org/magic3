@@ -60,7 +60,7 @@ var SetUrl = function(url)
 function setupList()
 {
 	$("#field_list").tableDnD({
-		dragHandle: "dragHandle"
+		dragHandle: ".dragHandle"
 	});
 	$("#field_list tr").hover(function(){
 		$(this.cells[0]).addClass('currentHandle');

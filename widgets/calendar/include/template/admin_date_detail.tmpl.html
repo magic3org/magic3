@@ -114,7 +114,7 @@ function setupOptionDateList()
 {
 	// 基本日オプション一覧の初期設定
 	$("#option_date_list").tableDnD({
-		dragHandle: "dragHandle"
+		dragHandle: ".dragHandle"
 	});
 	$("#option_date_list tr").hover(function(){
 		$(this.cells[0]).addClass('currentHandle');
@@ -129,7 +129,7 @@ function setupExceptDateList()
 {
 	// 例外日一覧の初期設定
 	$("#except_date_list").tableDnD({
-		dragHandle: "dragHandle"
+		dragHandle: ".dragHandle"
 	});
 	$("#except_date_list tr").hover(function(){
 		$(this.cells[0]).addClass('currentHandle');
@@ -156,7 +156,7 @@ function setupTimeList()
 {
 	// 時間一覧の初期設定
 	$("#time_list").tableDnD({
-		dragHandle: "dragHandle"
+		dragHandle: ".dragHandle"
 	});
 	$("#time_list tr").hover(function(){
 		$(this.cells[0]).addClass('currentHandle');
