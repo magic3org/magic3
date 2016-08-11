@@ -738,7 +738,13 @@ span[rel="m3help"] { cursor: default; }
 .m3config_sortable_box li {
 	cursor: move;
 }
-
+/****** 行ドラッグ&ドロップテーブル ******/
+.m3drag_current{
+	background-image: url(../images/drag.gif);
+	background-repeat: no-repeat;
+	background-position: center center;
+	cursor: move;
+}
 /****** edit line ******/
 .m3line_image {
 	width:16px;
