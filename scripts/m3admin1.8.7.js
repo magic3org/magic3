@@ -814,6 +814,82 @@ function m3SetModalTable(object)
 	$(tableObj).find('th').addClass('info');		// ヘッダ部
 }
 /**
+ * テーブルに行の並び替え機能を追加
+ *
+ * @param object   object			テーブルオブジェクトまたはテーブルID文字列
+ * @param function reorder_callback	並び替え時コールバック関数
+ * @return bool						true=作成成功、false=作成失敗
+ */
+function m3SetDragDropTable(object, reorder_callback)
+{
+	if (!jQuery().tableDnD) return false;
+	
+	var tableObj;		// テーブルオブジェクト
+	
+	if (typeof object == 'string'){
+		tableObj = $('#' + object);
+	} else {
+		tableObj = object;
+	}
+
+	// ドラッグ&ドロップテーブル作成
+	tableObj.tableDnD({
+		onDrop: function(table, row){
+			_setupDragDropTable(tableObj, reorder_callback);
+		},
+		dragHandle: ".m3drag_handle"
+	});
+	tableObj.find('tr').hover(function(){
+		$(this.cells[0]).addClass('m3drag_current');
+	}, function() {
+		$(this.cells[0]).removeClass('m3drag_current');
+	});
+	
+	// 画像項目削除処理
+	tableObj.find('tr .m3drag_delrow').off('click').on('click', function(){
+		var rowObj = $(this);
+
+		m3Confirm('waring', '項目を削除しますか?', function(result){
+			if (result){
+			    rowObj.parents('.m3drag_row').fadeTo(400, 0, function(){
+			        $(this).remove();
+		
+					_setupDragDropTable(tableObj, reorder_callback);
+			    });
+			}
+		});
+		
+    	return false;
+	});
+	// インデックスNo再設定
+	_setupDragDropTable(tableObj, reorder_callback);
+	
+	// スタイル再設定
+	m3SetConfigSubTable(tableObj);
+	
+	// HELP追加
+	m3SetHelp(tableObj);
+	
+	return true;
+}
+/**
+ * 行の並び替えテーブル用関数
+ *
+ * @param object  object		テーブルオブジェクトまたはテーブルID文字列
+ * @param function	callback	コールバック関数
+ * @return なし
+ */
+function _setupDragDropTable(object, callback)
+{
+	// インデックスNo再設定
+	object.find('tr .lineNo').each(function(index){
+		$(this).text(index + 1);
+	});
+	
+	// コールバック関数を実行
+	if (typeof(callback) == 'function') callback();
+}
+/**
  * ドラッグ&ドロップファイルアップロード機能を作成
  *
  * @param string    id			表示領域タグID
