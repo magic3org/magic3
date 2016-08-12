@@ -832,6 +832,11 @@ function m3SetDragDropTable(object, reorder_callback)
 		tableObj = object;
 	}
 
+	// 行のIDを設定
+	tableObj.find('tr').attr('id',function(i){
+		return 'm3drag_rowid_' + i;
+	});
+	
 	// ドラッグ&ドロップテーブル作成
 	tableObj.tableDnD({
 		onDrop: function(table, row){
@@ -882,7 +887,7 @@ function m3SetDragDropTable(object, reorder_callback)
 function _setupDragDropTable(object, callback)
 {
 	// インデックスNo再設定
-	object.find('tr .lineNo').each(function(index){
+	object.find('tr .m3drag_rowno').each(function(index){
 		$(this).text(index + 1);
 	});
 	
