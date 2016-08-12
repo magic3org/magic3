@@ -35,7 +35,7 @@ function addItem(){
 	// 画面遷移時に変更した値は戻す
 	document.main.task.value = 'content_detail';
 	
-	document.main.attachfilecount.value = $('#attach_file_list').find('.dragRow').length;
+	document.main.attachfilecount.value = $('#attach_file_list').find('.m3drag_row').length;
 	document.main.submit();
 	return true;
 }
@@ -53,7 +53,7 @@ function updateItem(){
 	// 画面遷移時に変更した値は戻す
 	document.main.task.value = 'content_detail';
 	
-	document.main.attachfilecount.value = $('#attach_file_list').find('.dragRow').length;
+	document.main.attachfilecount.value = $('#attach_file_list').find('.m3drag_row').length;
 	document.main.submit();
 	return true;
 }
@@ -73,7 +73,7 @@ function updateHistoryItem(){
 	// 画面遷移時に変更した値は戻す
 	document.main.task.value = 'content_detail';
 	
-	document.main.attachfilecount.value = $('#attach_file_list').find('.dragRow').length;
+	document.main.attachfilecount.value = $('#attach_file_list').find('.m3drag_row').length;
 	document.main.submit();
 	return true;
 }
@@ -179,31 +179,33 @@ function selectItemLang(){
 // 添付ファイル追加
 function addAttachFile(fileid, filename)
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td align="center"><span class="m3drag_rowno"></span></td>';
 	lineText += '<td><input type="text" name="item_filetitle[]" class="form-control" size="20" maxlength="60" /></td>';
 	lineText += '<td><input type="text" name="item_filename[]" class="form-control" size="30" maxlength="100" value="' + filename + '" /></td>';
-	lineText += '<td align="center"><input type="hidden" name="item_fileid[]" value="' + fileid + '" /><a class="delLine" href="#">{DELETE_ICON}</a></td></tr>';
+	lineText += '<td align="center"><input type="hidden" name="item_fileid[]" value="' + fileid + '" /><a class="m3drag_delrow" href="#">{DELETE_ICON}</a></td></tr>';
 	$('#attach_file_list').append(lineText);
 	
 	// 項目一覧を再設定
-	setupList();
+	//setupList();
+	m3SetDragDropTable('attach_file_list');
 }
+/*
 function setupList()
 {
 	$("#attach_file_list").tableDnD({
 		onDrop: function(table, row){
 			setupNo();
 		},
-		dragHandle: ".dragHandle"
+		dragHandle: ".m3drag_handle"
 	});
 	$("#attach_file_list tr").hover(function(){
-		$(this.cells[0]).addClass('currentHandle');
+		$(this.cells[0]).addClass('m3drag_current');
 	}, function() {
-		$(this.cells[0]).removeClass('currentHandle');
+		$(this.cells[0]).removeClass('m3drag_current');
 	});
 	// 項目削除処理
-	$("#attach_file_list tr .delLine").click(function(){
-		$(this).parents('.dragRow').remove();
+	$("#attach_file_list tr .m3drag_delrow").click(function(){
+		$(this).parents('.m3drag_row').remove();
 		setupNo();
 	});
 	// インデックスNo再設定
@@ -211,14 +213,15 @@ function setupList()
 	
 	// HELP追加
 	m3SetHelp($("#attach_file_list"));
-}
+}*/
+/*
 function setupNo()
 {
 	// インデックスNo再設定
-	$("#attach_file_list tr .lineNo").each(function(index){
+	$("#attach_file_list tr .m3drag_rowno").each(function(index){
 		$(this).text(index + 1);
 	});
-}
+}*/
 function createUploader(){
 	var uploader = new qq.FileUploader({
 		element: document.getElementById('file-uploader'),
@@ -284,7 +287,9 @@ $(function(){
 		return false;
 	});
 	// 添付ファイル項目一覧を初期化
-	setupList();
+//	setupList();
+	m3SetDragDropTable('attach_file_list');
+		
 	
 	// 画像アップローダー作成
 	createUploader();
@@ -459,12 +464,12 @@ $(function(){
 	    <tr><th style="width:35px;">移動</th><th style="width:30px;">No</th><th style="width:200px;">タイトル</th><th>ファイル名</th><th style="width:35px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="attach_file_list">
-        <tr class="dragRow">
-	    <td class="dragHandle"></td>
-	    <td align="center"><span class="lineNo"></span></td>
+        <tr class="m3drag_row">
+	    <td class="m3drag_handle"></td>
+	    <td align="center"><span class="m3drag_rowno"></span></td>
 	    <td><input type="text" name="item_filetitle[]" class="form-control" value="{TITLE}" size="20" maxlength="60" /></td>
 	    <td><input type="text" name="item_filename[]" class="form-control" value="{FILENAME}" size="30" maxlength="100" /></td>
-	    <td align="center"><input type="hidden" name="item_fileid[]" value="{FILE_ID}" /><a class="delLine" href="#">{DELETE_ICON}</a></td>
+	    <td align="center"><input type="hidden" name="item_fileid[]" value="{FILE_ID}" /><a class="m3drag_delrow" href="#">{DELETE_ICON}</a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>

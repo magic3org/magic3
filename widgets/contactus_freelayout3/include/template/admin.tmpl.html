@@ -21,7 +21,7 @@ function updateItem(operation){
 		if (!window.confirm('設定を更新しますか?')) return false;
 		document.main.act.value='update';
 	}
-	document.main.fieldcount.value = $('#field_list').find('.dragRow').length;
+	document.main.fieldcount.value = $('#field_list').find('.m3drag_row').length;
 
 	// 必須入力
 	var requiredArray = new Array();
@@ -95,7 +95,7 @@ function listItem(){
 // お問い合わせ項目を追加
 function addLine()
 {
-var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td style="text-align:center;"><span class="lineNo"></span></td>';
+var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td style="text-align:center;"><span class="m3drag_rowno"></span></td>';
 lineText += '<td style="vertical-align:top;">';
 lineText += '<div class="form-group clearfix last"><div class="m3config_item col-sm-9"><input type="text" name="item_title[]" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示</label></div></div></div>';
 lineText += '<hr class="border" />';
@@ -112,40 +112,41 @@ lineText += '<div class="form-group clearfix">計算式：<input type="text" nam
 lineText += '<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</label></div>';
 lineText += '<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>';
 lineText += '</td>';
-lineText += '<td style="text-align:center;"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>';
+lineText += '<td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>';
 lineText += '</tr>';
 		
-/*	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
+/*	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td align="center"><span class="m3drag_rowno"></span></td>';
 	lineText += '<td valign="top"><input type="text" name="item_title[]" maxlength="60" style="width:70%;" />&nbsp;&nbsp;<input type="checkbox" name="item_title_visible[]" class="titlevisible" checked />表示<br />';
 	lineText += '<select name="item_type[]"><patTemplate:tmpl name="type_list11"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
 	lineText += '&nbsp;&nbsp;<input type="checkbox" name="item_required[]" class="required" />必須</td>';
 	lineText += '<td><input type="text" name="item_desc[]" maxlength="100" style="width:100%;" /><br /><input type="text" name="item_def[]" maxlength="500" style="width:75%;" /><input type="text" class="replaceTag" style="width:20%" readonly /><br />';
 	lineText += 'デフォルト：<input type="text" name="item_default[]" maxlength="60" style="width:28%" />&nbsp;&nbsp;&nbsp;&nbsp;入力制限：<input type="checkbox" name="item_alphabet[]" class="alphabet" />半角英字&nbsp;<input type="checkbox" name="item_number[]" class="number" />半角数値<br />';
 	lineText += 'フィールドID：<input type="text" name="item_field_id[]" maxlength="1" />&nbsp;&nbsp;&nbsp;&nbsp;計算式：<input type="text" name="item_calc[]" maxlength="60" style="width:40%" />&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="item_disabled[]" class="disabled" />編集不可</td>';
-	lineText += '<td align="center"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	lineText += '<td align="center"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	*/
 	$('#field_list').append(lineText);
 	
 	// 項目一覧を再設定
-	setupList();
-
+//	setupList();
+	m3SetDragDropTable('field_list', reorder);
 }
+/*
 function setupList()
 {
 	$("#field_list").tableDnD({
 		onDrop: function(table, row){
 			setupNo();
 		},
-		dragHandle: ".dragHandle"
+		dragHandle: ".m3drag_handle"
 	});
 	$("#field_list tr").hover(function(){
-		$(this.cells[0]).addClass('currentHandle');
+		$(this.cells[0]).addClass('m3drag_current');
 	}, function() {
-		$(this.cells[0]).removeClass('currentHandle');
+		$(this.cells[0]).removeClass('m3drag_current');
 	});
 	// 画像項目削除処理
-	$("#field_list tr .delLine").click(function(){
-		$(this).parents('.dragRow').remove();
+	$("#field_list tr .m3drag_delrow").click(function(){
+		$(this).parents('.m3drag_row').remove();
 		setupNo();
 	});
 	// インデックスNo再設定
@@ -156,13 +157,21 @@ function setupList()
 	
 	// HELP追加
 	m3SetHelp($("#field_list"));
-}
-function setupNo()
+}*/
+/*function setupNo()
 {
 	// インデックスNo再設定
-	$("#field_list tr .lineNo").each(function(index){
+	$("#field_list tr .m3drag_rowno").each(function(index){
 		$(this).text(index + 1);
 	});
+	$("#field_list tr .replaceTag").each(function(index){
+		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
+		$(this).val(replaceTag);
+	});
+}*/
+// 項目順変更時処理
+function reorder()
+{
 	$("#field_list tr .replaceTag").each(function(index){
 		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
 		$(this).val(replaceTag);
@@ -183,7 +192,8 @@ $(function(){
 	m3SetWysiwygEditor('item_upload_area', 100/* 高さ */);
 	
 	// お問い合わせ項目部作成
-	setupList();
+//	setupList();
+	m3SetDragDropTable('field_list', reorder);
 });
 //]]>
 </script>
@@ -239,9 +249,9 @@ $(function(){
 	    <tr><th>タイプ</th><th>定義/埋め込みタグ</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="field_list">
-        <tr class="dragRow">
-	    <td class="dragHandle"></td>
-	    <td style="text-align:center;"><span class="lineNo"></span></td>
+        <tr class="m3drag_row">
+	    <td class="m3drag_handle"></td>
+	    <td style="text-align:center;"><span class="m3drag_rowno"></span></td>
 	    <td style="vertical-align:top;">
 		<div class="form-group clearfix last">
 		<div class="m3config_item col-sm-9"><input type="text" name="item_title[]" value="{TITLE}" maxlength="60" /></div><div class="m3config_item col-sm-3 following"><div class="checkbox"><label><input type="checkbox" name="item_title_visible[]" class="titlevisible" {TITLE_VISIBLE} />表示</label></div></div>
@@ -264,7 +274,7 @@ $(function(){
 		<div class="checkbox"><label><input type="checkbox" name="item_disabled[]" class="disabled" {DISABLED} />編集不可</label></div>
 		<div class="form-control-static m3config_item col-sm-5">埋め込みタグ：</div><div class="m3config_item col-sm-7"><input type="text" class="replaceTag" readonly /></div>
 		</td>
-	    <td style="text-align:center;"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>
+	    <td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" alt="削除" title="削除" rel="m3help" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>

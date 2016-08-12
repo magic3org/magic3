@@ -844,7 +844,7 @@ function m3SetDragDropTable(object, reorder_callback)
 		},
 		dragHandle: ".m3drag_handle"
 	});
-	tableObj.find('tr').hover(function(){
+	tableObj.find('tr.m3drag_row').hover(function(){
 		$(this.cells[0]).addClass('m3drag_current');
 	}, function() {
 		$(this.cells[0]).removeClass('m3drag_current');

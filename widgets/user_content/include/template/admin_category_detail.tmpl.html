@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -15,14 +15,14 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
-	document.main.itemcount.value = $('#item_list').find('.dragRow').length;
+	document.main.itemcount.value = $('#item_list').find('.m3drag_row').length;
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
 function updateItem(serialNo){
 	if (!window.confirm('項目を更新しますか?')) return false;
-	document.main.itemcount.value = $('#item_list').find('.dragRow').length;
+	document.main.itemcount.value = $('#item_list').find('.m3drag_row').length;
 	document.main.act.value = 'update';
 	document.main.submit();
 	return true;
@@ -41,47 +41,50 @@ function cancelItem(){
 // カテゴリ項目を追加
 function addLine()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td align="center"><span class="m3drag_rowno"></span></td>';
 	lineText += '<td><input type="text" name="item_linename[]" size="20" maxlength="50" style="width:100%" /></td>';
 	lineText += '<td><input type="text" name="item_lineid[]" size="20" maxlength="20" style="width:100%" /></td>';
-	lineText += '<td align="center"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	lineText += '<td align="center"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	$('#item_list').append(lineText);
 	
 	// 項目一覧を再設定
-	setupList();
-
+	//setupList();
+	m3SetDragDropTable('item_list');
 }
+/*
 function setupList()
 {
 	$("#item_list").tableDnD({
 		onDrop: function(table, row){
 			setupNo();
 		},
-		dragHandle: ".dragHandle"
+		dragHandle: ".m3drag_handle"
 	});
 	$("#item_list tr").hover(function(){
-		$(this.cells[0]).addClass('currentHandle');
+		$(this.cells[0]).addClass('m3drag_current');
 	}, function() {
-		$(this.cells[0]).removeClass('currentHandle');
+		$(this.cells[0]).removeClass('m3drag_current');
 	});
 	// 項目削除処理
-	$("#item_list tr .delLine").click(function(){
-		$(this).parents('.dragRow').remove();
+	$("#item_list tr .m3drag_delrow").click(function(){
+		$(this).parents('.m3drag_row').remove();
 		setupNo();
 	});
 	// インデックスNo再設定
 	setupNo();
-}
+}*/
+/*
 function setupNo()
 {
 	// インデックスNo再設定
-	$("#item_list tr .lineNo").each(function(index){
+	$("#item_list tr .m3drag_rowno").each(function(index){
 		$(this).text(index + 1);
 	});
-}
-$(document).ready(function(){
+}*/
+$(function(){
 	// カテゴリ項目部作成
-	setupList();
+	//setupList();
+	m3SetDragDropTable('item_list');
 });
 //]]>
 </script>
@@ -123,12 +126,12 @@ $(document).ready(function(){
 	    <tr><th width="35">移動</th><th width="30">No</th><th width="200">項目名</th><th width="200">項目ID</th><th>操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="item_list">
-            <tr class="dragRow">
-	    <td class="dragHandle"></td>
-	    <td align="center"><span class="lineNo"></span></td>
+            <tr class="m3drag_row">
+	    <td class="m3drag_handle"></td>
+	    <td align="center"><span class="m3drag_rowno"></span></td>
 	    <td><input type="text" name="item_linename[]" value="{NAME}" size="20" maxlength="50" style="width:100%" /></td>
 	    <td><input type="text" name="item_lineid[]" value="{ID}" size="20" maxlength="20" style="width:100%" /></td>
-	    <td align="center"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    <td align="center"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>

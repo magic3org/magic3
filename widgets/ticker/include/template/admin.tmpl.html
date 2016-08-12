@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -15,14 +15,14 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
-	document.main.fieldcount.value = $('#field_list').find('.dragRow').length;
+	document.main.fieldcount.value = $('#field_list').find('.m3drag_row').length;
 	document.main.act.value = 'add';
 	document.main.submit();
 	return true;
 }
 function updateItem(){
 	if (!window.confirm('設定を更新しますか?')) return false;
-	document.main.fieldcount.value = $('#field_list').find('.dragRow').length;
+	document.main.fieldcount.value = $('#field_list').find('.m3drag_row').length;
 	document.main.act.value = 'update';
 	document.main.submit();
 	return true;
@@ -41,31 +41,32 @@ function listItem(){
 // 動画項目を追加
 function addLine()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td align="center"><span class="lineNo"></span></td>';
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td align="center"><span class="m3drag_rowno"></span></td>';
 	lineText += '<td><input type="text" name="item_name[]" maxlength="60" /></td>';
 	lineText += '<td><input type="text" name="item_html[]" maxlength="100" /></td>';
-	lineText += '<td align="center"><a class="delLine" href="#"><img src="{_ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></td></tr>';
+	lineText += '<td align="center"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></td></tr>';
 	$('#field_list').append(lineText);
 	
-	// 項目一覧を再設定
-	setupList();
+	// 表示項目テーブル作成
+	m3SetDragDropTable('field_list');
 }
+/*
 function setupList()
 {
 	$("#field_list").tableDnD({
 		onDrop: function(table, row){
 			setupNo();
 		},
-		dragHandle: ".dragHandle"
+		dragHandle: ".m3drag_handle"
 	});
 	$("#field_list tr").hover(function(){
-		$(this.cells[0]).addClass('currentHandle');
+		$(this.cells[0]).addClass('m3drag_current');
 	}, function() {
-		$(this.cells[0]).removeClass('currentHandle');
+		$(this.cells[0]).removeClass('m3drag_current');
 	});
 	// 項目削除処理
-	$("#field_list tr .delLine").click(function(){
-		$(this).parents('.dragRow').remove();
+	$("#field_list tr .m3drag_delrow").click(function(){
+		$(this).parents('.m3drag_row').remove();
 		setupNo();
 	});
 	// インデックスNo再設定
@@ -77,13 +78,15 @@ function setupList()
 	// HELP追加
 	m3SetHelp($("#field_list"));
 }
+*/
+/*
 function setupNo()
 {
 	// インデックスNo再設定
-	$("#field_list tr .lineNo").each(function(index){
+	$("#field_list tr .m3drag_rowno").each(function(index){
 		$(this).text(index + 1);
 	});
-}
+}*/
 // プレビューを別ウィンドウで表示
 function previewInOtherWindow()
 {
@@ -97,9 +100,10 @@ function clearHtml()
 $(function(){
 	// テーブル作成
 	m3SetConfigTable('mainconfig');
-	m3SetConfigSubTable('field_list');
+//	m3SetConfigSubTable('field_list');
 	
-	setupList();
+	// 表示項目テーブル作成
+	m3SetDragDropTable('field_list');
 });
 //]]>
 </script>
@@ -145,12 +149,12 @@ $(function(){
 	    <tr><th style="width:35px;">移動</th><th style="width:30px;">No</th><th width="20%">タイトル</th><th>メッセージ</th><th style="width:50px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="field_list">
-        <tr class="dragRow">
-	    <td class="dragHandle"></td>
-	    <td align="center"><span class="lineNo"></span></td>
+        <tr class="m3drag_row">
+	    <td class="m3drag_handle"></td>
+	    <td align="center"><span class="m3drag_rowno"></span></td>
 	    <td><input type="text" name="item_name[]" value="{NAME}" maxlength="60" /></td>
 	    <td><input type="text" name="item_html[]" value="{HTML}" maxlength="100" /></td>
-	    <td align="center"><a class="delLine" href="#"><img src="{ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></td>
+	    <td align="center"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
