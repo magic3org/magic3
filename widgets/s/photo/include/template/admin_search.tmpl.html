@@ -34,7 +34,7 @@ function addLine()
 	
 	// 項目一覧を再設定
 	//setupList();
-	m3SetDragDropTable('field_list', reorder);
+	m3SetDragDropTable('field_list', reorder_callback);
 }
 /*
 function setupList()
@@ -71,7 +71,7 @@ function setupNo()
 }
 */
 // 項目順変更時処理
-function reorder()
+function reorder_callback()
 {
 	$("#field_list tr .replaceTag").each(function(index){
 		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
@@ -85,7 +85,7 @@ $(function(){
 	
 	// カテゴリ項目作成
 	//setupList();
-	m3SetDragDropTable('field_list', reorder);
+	m3SetDragDropTable('field_list', reorder_callback);
 });
 //]]>
 </script>

@@ -726,6 +726,10 @@ span[rel="m3help"] { cursor: default; }
 	padding-right: 3px;
 	white-space: nowrap;
 }
+.m3config_item.form-control-static.linebreak {
+	white-space: normal;
+	word-break: break-all;
+}
 .m3config_item.form-control-static.following {
 	margin-left: 20px;
 }
