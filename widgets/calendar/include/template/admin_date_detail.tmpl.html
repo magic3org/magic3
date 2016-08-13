@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -15,8 +15,8 @@
 //<![CDATA[
 function addItem(){
 	if (!window.confirm('項目を新規追加しますか?')) return false;
-	document.main.optiondatecount.value = $('#option_date_list').find('.dragRow').length;
-	document.main.exceptdatecount.value = $('#except_date_list').find('.dragRow').length;
+	document.main.optiondatecount.value = $('#option_date_list').find('.m3drag_row').length;
+	document.main.exceptdatecount.value = $('#except_date_list').find('.m3drag_row').length;
 	document.main.timelistdata.value = createTimeListData();
 	document.main.act.value = 'add';
 	document.main.submit();
@@ -24,8 +24,8 @@ function addItem(){
 }
 function updateItem(){	
 	if (!window.confirm('設定を更新しますか?')) return false;
-	document.main.optiondatecount.value = $('#option_date_list').find('.dragRow').length;		
-	document.main.exceptdatecount.value = $('#except_date_list').find('.dragRow').length;
+	document.main.optiondatecount.value = $('#option_date_list').find('.m3drag_row').length;		
+	document.main.exceptdatecount.value = $('#except_date_list').find('.m3drag_row').length;
 	document.main.timelistdata.value = createTimeListData();
 	document.main.act.value='update';
 	document.main.submit();
@@ -47,7 +47,7 @@ function createTimeListData()
 {
 	var lines = [];
 	var i = 0;
-	$("#except_date_list tr.dragRow").each(function (index, obj){
+	$("#except_date_list tr.m3drag_row").each(function (index, obj){
 		var dateType = jQuery.trim($(this).find('.except_date_type').val());
 		if (dateType == -1){
 			var timeList = $(this).data('timeList');
@@ -63,11 +63,11 @@ function createTimeListData()
 // 基本日オプションを追加
 function addOptionDate()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><select name="item_option_date_no[]" class="option_date_no form-control"></select></td>';
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td><select name="item_option_date_no[]" class="option_date_no form-control"></select></td>';
 	lineText += '<td><select name="item_option_date_week[]" class="option_date_week form-control"></select></td>';
 	lineText += '<td><input type="text" name="item_option_date_name[]" class="form-control" size="20" maxlength="60" /></td>';
 	lineText += '<td><select name="item_option_date_type[]" class="option_date_type form-control"></select></td>';
-	lineText += '<td style="text-align:center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	lineText += '<td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	
 	var rowObj = $(lineText);
 	var options = $("#date_type_menu option");
@@ -84,10 +84,10 @@ function addOptionDate()
 // 例外日を追加
 function addDate()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" name="item_except_date[]" class="date_field form-control" size="15" maxlength="10" /></td>';
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td><input type="text" name="item_except_date[]" class="date_field form-control" size="15" maxlength="10" /></td>';
 	lineText += '<td><input type="text" name="item_except_date_name[]" class="form-control" size="20" maxlength="60" /></td>';
 	lineText += '<td><select name="item_except_date_type[]" class="except_date_type form-control"></select><span class="def_time_button"><input type="button" class="button btn btn-default btn-sm" onclick="editTime($(this));" value="時間定義" style="margin-top:5px;" /></span></td>';
-	lineText += '<td style="text-align: center;"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	lineText += '<td style="text-align: center;"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
 	
 	var rowObj = $(lineText);
 	var options = $("#date_type_menu2 option");
@@ -101,10 +101,10 @@ function addDate()
 // 時間枠を追加
 function addTime()
 {
-	var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField form-control" size="20" maxlength="60" /></td>';
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td><input type="text" class="nameField form-control" size="20" maxlength="60" /></td>';
 	lineText += '<td><input type="text" class="timeField form-control" size="5" maxlength="5" /></td>';
 	lineText += '<td><input type="text" class="minuteField form-control" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
-	lineText += '<td style="text-align: center;"><div class="form-control-static"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></div></td></tr>';
+	lineText += '<td style="text-align: center;"><div class="form-control-static"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></div></td></tr>';
 	$('#time_list').append(lineText);
 
 	// 時間枠一覧を再設定
@@ -112,34 +112,40 @@ function addTime()
 }
 function setupOptionDateList()
 {
+/*
 	// 基本日オプション一覧の初期設定
 	$("#option_date_list").tableDnD({
-		dragHandle: ".dragHandle"
+		dragHandle: ".m3drag_handle"
 	});
 	$("#option_date_list tr").hover(function(){
-		$(this.cells[0]).addClass('currentHandle');
+		$(this.cells[0]).addClass('m3drag_current');
 	}, function() {
-		$(this.cells[0]).removeClass('currentHandle');
+		$(this.cells[0]).removeClass('m3drag_current');
 	});
-	$("#option_date_list tr .delRow").click(function(){
-		$(this).parents('.dragRow').remove();
+	$("#option_date_list tr .m3drag_delrow").click(function(){
+		$(this).parents('.m3drag_row').remove();
 	});
+	*/
+	// テーブル作成
+	m3SetDragDropTable('option_date_list');
 }
 function setupExceptDateList()
 {
-	// 例外日一覧の初期設定
+/*	// 例外日一覧の初期設定
 	$("#except_date_list").tableDnD({
-		dragHandle: ".dragHandle"
+		dragHandle: ".m3drag_handle"
 	});
 	$("#except_date_list tr").hover(function(){
-		$(this.cells[0]).addClass('currentHandle');
+		$(this.cells[0]).addClass('m3drag_current');
 	}, function() {
-		$(this.cells[0]).removeClass('currentHandle');
+		$(this.cells[0]).removeClass('m3drag_current');
 	});
-	$("#except_date_list tr .delRow").click(function(){
-		$(this).parents('.dragRow').remove();
-	});
-		
+	$("#except_date_list tr .m3drag_delrow").click(function(){
+		$(this).parents('.m3drag_row').remove();
+	});*/
+	// テーブル作成
+	m3SetDragDropTable('except_date_list');
+	
 	// 日付ピッカー追加
 	$('.date_field').datepicker();
 	
@@ -154,18 +160,21 @@ function setupExceptDateList()
 }
 function setupTimeList()
 {
+/*
 	// 時間一覧の初期設定
 	$("#time_list").tableDnD({
-		dragHandle: ".dragHandle"
+		dragHandle: ".m3drag_handle"
 	});
 	$("#time_list tr").hover(function(){
-		$(this.cells[0]).addClass('currentHandle');
+		$(this.cells[0]).addClass('m3drag_current');
 	}, function() {
-		$(this.cells[0]).removeClass('currentHandle');
+		$(this.cells[0]).removeClass('m3drag_current');
 	});
-	$("#time_list tr .delRow").click(function(){
-		$(this).parents('.dragRow').remove();
-	});
+	$("#time_list tr .m3drag_delrow").click(function(){
+		$(this).parents('.m3drag_row').remove();
+	});*/
+	// テーブル作成
+	m3SetDragDropTable('time_list');
 	
 	// タイムピッカー追加
 	$('.timeField').timepicker({ defaultTime: '' });
@@ -182,7 +191,7 @@ function selectMenu(){
 }
 function editTime(obj){
 	// ダイアログ表示	
-//	$("#def_time").data('dateRowObj', obj.parents('.dragRow')).dialog("open");
+//	$("#def_time").data('dateRowObj', obj.parents('.m3drag_row')).dialog("open");
 /*
 	$("#def_time").dialog({
 		autoOpen: false,
@@ -198,7 +207,7 @@ function editTime(obj){
 				var errMessage = '';
 				
 				var lines = [];
-				$("#time_list tr.dragRow").each(function (index, obj){
+				$("#time_list tr.m3drag_row").each(function (index, obj){
 					var nameValue = jQuery.trim($(this).find('.nameField').val());
 					var timeValue = jQuery.trim($(this).find('.timeField').val());
 					var minuteValue = jQuery.trim($(this).find('.minuteField').val());
@@ -245,21 +254,21 @@ function editTime(obj){
 		nl2br: false,
 		onshown: function(dialog) {
 			// データ更新対象のオブジェクトを設定
-			dialog.setData('dateRowObj', obj.parents('.dragRow'));
+			dialog.setData('dateRowObj', obj.parents('.m3drag_row'));
 			
 			// 一旦時間割を削除
-			$("#time_list tr.dragRow").remove();
+			$("#time_list tr.m3drag_row").remove();
 	
 			// 時間割を作成
-			var timeList = obj.parents('.dragRow').data('timeList');
+			var timeList = obj.parents('.m3drag_row').data('timeList');
 			if (timeList){
 				for (var i = 0; i < timeList.length; i++){
 					var line = timeList[i];
 			
-					var lineText = '<tr class="dragRow"><td class="dragHandle"></td><td><input type="text" class="nameField form-control" size="20" maxlength="60" /></td>';
+					var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td><input type="text" class="nameField form-control" size="20" maxlength="60" /></td>';
 					lineText += '<td><input type="text" class="timeField form-control" size="5" maxlength="5" /></td>';
 					lineText += '<td><input type="text" class="minuteField form-control" size="3" maxlength="3" onkeypress="return m3_numericKey(event,true);" /></td>';
-					lineText += '<td style="text-align: center;"><div class="form-control-static"><a class="delRow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></div></td></tr>';
+					lineText += '<td style="text-align: center;"><div class="form-control-static"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></div></td></tr>';
 	
 					var rowObj = $(lineText);
 					rowObj.find('.nameField').val(line.name);
@@ -286,7 +295,7 @@ function editTime(obj){
 				var errMessage = '';
 				
 				var lines = [];
-				$("#time_list tr.dragRow").each(function (index, obj){
+				$("#time_list tr.m3drag_row").each(function (index, obj){
 					var nameValue = jQuery.trim($(this).find('.nameField').val());
 					var timeValue = jQuery.trim($(this).find('.timeField').val());
 					var minuteValue = jQuery.trim($(this).find('.minuteField').val());
@@ -319,8 +328,8 @@ $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
 	m3SetConfigSubTable($('.simple-table-inner'));
-	m3SetConfigSubTable('option_date_list');
-	m3SetConfigSubTable('except_date_list');
+//	m3SetConfigSubTable('option_date_list');
+//	m3SetConfigSubTable('except_date_list');
 	
 	// 時間割データ
 	var timeListData = {TIME_LIST_DATA};
@@ -369,7 +378,7 @@ $(function(){
 	
 	// 時間割データの設定
 	var i = 0;
-	$("#except_date_list tr.dragRow").each(function (index, obj){
+	$("#except_date_list tr.m3drag_row").each(function (index, obj){
 		var dateType = jQuery.trim($(this).find('.except_date_type').val());
 		if (dateType == -1){
 			var timeList = timeListData[i++];
@@ -460,13 +469,13 @@ $(function(){
 	    <tr><th style="width:35px;">移動</th><th style="width:60px;">第</th><th style="width:60px;">曜日</th><th style="width:200px;">名前</th><th>日付タイプ</th><th style="width:50px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="option_date_list">
-        <tr class="dragRow">
-	    <td class="dragHandle"></td>
+        <tr class="m3drag_row">
+	    <td class="m3drag_handle"></td>
 	    <td><select id="option_date_no{INDEX}" name="item_option_date_no[]" class="option_date_no form-control"></select><input type="hidden" id="option_date_no_value{INDEX}" value="{NO}" /></td>
 	    <td><select id="option_date_week{INDEX}" name="item_option_date_week[]" class="option_date_week form-control"></select><input type="hidden" id="option_date_week_value{INDEX}" value="{WEEK}" /></td>
 		<td><input type="text" name="item_option_date_name[]" class="form-control" value="{NAME}" size="20" maxlength="60" /></td>
 	    <td><select id="option_date_type{INDEX}" name="item_option_date_type[]" class="option_date_type form-control"></select><input type="hidden" id="option_date_value{INDEX}" value="{TYPE_ID}" /></td>
-	    <td style="text-align:center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    <td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
@@ -481,12 +490,12 @@ $(function(){
 	    <tr><th style="width:35px;">移動</th><th style="width:100px;">日付</th><th style="width:200px;">名前</th><th>日付タイプ</th><th style="width:50px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="except_date_list">
-        <tr class="dragRow">
-	    <td class="dragHandle"></td>
+        <tr class="m3drag_row">
+	    <td class="m3drag_handle"></td>
 	    <td><input type="text" name="item_except_date[]" class="date_field form-control" value="{DATE}" size="15" maxlength="10" /></td>
 	    <td><input type="text" name="item_except_date_name[]" class="form-control" value="{NAME}" size="20" maxlength="60" /></td>
 	    <td><select id="except_date_type{INDEX}" name="item_except_date_type[]" class="except_date_type form-control"></select><input type="hidden" id="except_date_value{INDEX}" value="{TYPE_ID}" /><span id="def_time_button{INDEX}" class="def_time_button"><input type="button" class="button btn btn-default btn-sm" onclick="editTime($(this));" value="時間定義" style="margin-top:5px;" /></span></td>
-	    <td style="text-align:center;"><a class="delRow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    <td style="text-align:center;"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
