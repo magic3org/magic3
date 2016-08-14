@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainPageheadWidgetContainer.php 5120 2012-08-18 13:33:05Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConfigbasicBaseWidgetContainer.php');
@@ -21,7 +21,6 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 	private $db;	// DB接続オブジェクト
 	private $pageId;	// ページID
 	private $pageSubId;	// ページサブID
-	private $defaultSubId;	// デフォルトのページサブID
 	private $langId;		// 選択中の言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	
@@ -90,15 +89,12 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 		$this->pageId = $request->trimValueOf('pageid');		// ページID
 		$this->pageSubId = $request->trimValueOf('pagesubid');// ページサブID
 		
-		// ページメインIDメニュー作成
-		// 選択中のページIDを決定
-		$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/);
-		
-		// デフォルトのページサブIDを取得
-		$this->defaultSubId = $this->_db->getDefaultPageSubId($this->pageId);
+		// アクセスポイントメニュー作成
+		$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/, -1/**/, true);
 
 		// ページサブID一覧を作成
-		$this->db->getPageSubIdList($this->pageId, $this->langId, array($this, 'pageSubIdLoop'));
+//		$this->db->getPageSubIdList($this->pageId, $this->langId, array($this, 'pageSubIdLoop'));
+		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/, -1/*デバイス関係なし*/, true/*メニューから選択可項目のみ*/);
 		
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
@@ -175,6 +171,14 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 	 */
 	function pageIdLoop($index, $fetchedRow, $param)
 	{
+		// フロント画面用アクセスポイントのみ取得
+		if (!$fetchedRow['pg_analytics']) return true;
+		
+		// 現在有効なアクセスポイントのみ取得
+		$deviceType = $fetchedRow['pg_device_type'];		// デバイスタイプ
+		$isActiveSite = $this->gSystem->getSiteActiveStatus($deviceType);
+		if (!$isActiveSite) return true;
+		
 		// デフォルトのページIDを取得
 		if (empty($this->pageId)) $this->pageId = $fetchedRow['pg_id'];
 		
@@ -185,7 +189,9 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 			// デフォルトのページサブIDを取得
 			$this->defaultPageSubId = $fetchedRow['pg_default_sub_id'];		// デフォルトのページID
 		}
-		$name = $this->convertToDispString($fetchedRow['pg_id']) . ' - ' . $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
+//		$name = $this->convertToDispString($fetchedRow['pg_id']) . ' - ' . $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
+		$name = $this->convertToDispString($fetchedRow['pg_name']);			// アクセスポイント名
+
 		$row = array(
 			'value'    => $this->convertToDispString($fetchedRow['pg_id']),			// ページID
 			'name'     => $name,			// ページ名
@@ -208,10 +214,6 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 		$pid = $fetchedRow['pg_id'];
 		$value = $this->convertToDispString($pid);
 		
-		// デフォルトページ
-		$default = '';
-		if ($pid == $this->defaultSubId) $default = 'checked';
-		
 		// 公開状況
 		$public = '';
 		if ($fetchedRow['pg_active']) $public = 'checked';
@@ -221,11 +223,7 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 			'value'    => $value,			// ページID
 			'name'     => $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
 			'title'     => $this->convertToDispString($fetchedRow['pn_meta_title']),			// ページタイトル
-			'desc'     => $this->convertToDispString($fetchedRow['pn_meta_description']),			// ページ要約
-			'keyword'     => $this->convertToDispString($fetchedRow['pn_meta_keywords']),			// ページキーワード
-			'content_type'     => $this->convertToDispString($fetchedRow['pn_content_type']),			// コンテンツタイプ
-			'public'	=> $public,			// ページ公開
-			'default'	=> $default		// デフォルトのページサブID
+			'desc'     => $this->convertToDispString($fetchedRow['pn_meta_description'])			// ページ要約
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
 		$this->tmpl->parseTemplate('sub_id_list', 'a');
