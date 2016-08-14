@@ -118,11 +118,11 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 				$titles[] = '状況';
 				break;
 			case self::TASK_INITWIZARD:		// 管理画面カスタムウィザード
-				$titles[] = 'コア制御';
+				$titles[] = 'コア管理';
 				$titles[] = '管理画面カスタムウィザード';
 				break;
 			case self::TASK_EDITMENU:		// 管理メニュー編集
-				$titles[] = 'コア制御';
+				$titles[] = 'コア管理';
 				$titles[] = '管理メニュー編集';
 				break;
 		}
@@ -244,7 +244,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 								),
 								
 								(Object)array(
-									'name'		=> 'コア制御',
+									'name'		=> 'コア管理',
 									'task'		=> '',
 									'url'		=> '',
 									'tagid'		=> '',

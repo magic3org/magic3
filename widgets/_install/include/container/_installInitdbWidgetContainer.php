@@ -269,7 +269,7 @@ class _installInitdbWidgetContainer extends _installBaseWidgetContainer
 				$this->gOpeLog->writeInfo(__METHOD__, $installMsg, 1000);
 				
 				// 初期設定用画面への遷移を通知
-//				$guideMsg = $this->_('If you want initializing the system easily, use \'Admin Page Custom Wizard\'. Select \'Maintenance / Core Control / Admin Page Custom Wizard\' on the main menu.');	// システムの初期化を簡単に行うには「管理画面カスタムウィザード」を使用します。メインメニューから「メンテナンス / コア制御 / 管理画面カスタムウィザード」を選択します。
+//				$guideMsg = $this->_('If you want initializing the system easily, use \'Admin Page Custom Wizard\'. Select \'Maintenance / Core Control / Admin Page Custom Wizard\' on the main menu.');	// システムの初期化を簡単に行うには「管理画面カスタムウィザード」を使用します。メインメニューから「メンテナンス / コア管理 / 管理画面カスタムウィザード」を選択します。
 //				$this->gOpeLog->writeGuide(__METHOD__, $guideMsg, 3000, '', '', 'task=initwizard', true/*トップ表示*/);
 				
 				// 次の画面へ遷移
