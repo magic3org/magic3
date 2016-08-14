@@ -663,15 +663,17 @@ class admin_mainDb extends BaseDb
 	 * @param string $pageId		ページID
 	 * @param string $langId		言語ID
 	 * @param function $callback	コールバック関数
+	 * @param bool $availableOnly	true=メニュー表示可能項目のみ取得、false=すべて取得
 	 * @return						なし
 	 */
-	function getPageSubIdList($pageId, $langId, $callback)
+	function getPageSubIdList($pageId, $langId, $callback, $availableOnly = false)
 	{
 		//$queryStr = 'SELECT * FROM _page_info RIGHT JOIN _page_id ON pn_sub_id = pg_id AND pg_type = 1 AND pn_deleted = false AND pn_id = ? ';
 		$queryStr = 'SELECT * FROM _page_info RIGHT JOIN _page_id ON pn_sub_id = pg_id AND pg_type = 1 AND pn_deleted = false AND pn_id = ? AND pn_language_id = ? ';// 2010/2/23更新
-		$queryStr .=  'WHERE (pn_deleted IS NULL ';
+		$queryStr .=  'WHERE ((pn_deleted IS NULL ';
 		$queryStr .=    'AND pg_type = 1) ';		// サブページID
-		$queryStr .=    'OR pn_deleted = false ';
+		$queryStr .=    'OR pn_deleted = false) ';
+		if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
 		$queryStr .=  'ORDER BY pg_priority';
 		$this->selectLoop($queryStr, array($pageId, $langId), $callback);
 	}
