@@ -23,6 +23,7 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 	private $pageSubId;	// ページサブID
 	private $langId;		// 選択中の言語
 	private $serialArray = array();		// 表示されている項目シリアル番号
+	const MAX_DESC_LENGTH = 40;					// 一覧の説明フィールドの最大文字列長
 	
 	/**
 	 * コンストラクタ
@@ -94,7 +95,6 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 
 		// ページサブID一覧を作成
 		$this->db->getPageSubIdList($this->pageId, $this->langId, array($this, 'pageSubIdLoop'), true/*メニューから選択可項目のみ*/);
-//		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1/*サブページID*/, -1/*デバイス関係なし*/, true/*メニューから選択可項目のみ*/);
 		
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
@@ -141,6 +141,12 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 		// 表示データ再取得
 		$name = '';
 		if ($replaceNew){
+			// アクセスポイント情報を取得
+			$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $this->pageId, $row);
+			if ($ret){
+				$accessPointName = $row['pg_name'];
+			}
+		
 			// 言語指定が必要
 			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 			if ($ret){
@@ -153,8 +159,9 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 		}
 		
 		$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
-		$this->tmpl->addVar("_widget", "page_id", $this->pageId);			// ページID
-		$this->tmpl->addVar("_widget", "page_subid", $this->pageSubId);		// ページサブID
+		$this->tmpl->addVar("_widget", "access_point_name", $this->convertToDispString($accessPointName));			// アクセスポイント名
+		$this->tmpl->addVar("_widget", "page_id", $this->convertToDispString($this->pageId));			// ページID
+		$this->tmpl->addVar("_widget", "page_subid", $this->convertToDispString($this->pageSubId));		// ページサブID
 		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// ページ名
 		$this->tmpl->addVar("_widget", "title", $this->convertToDispString($metaTitle));		// ページタイトル名
 		$this->tmpl->addVar("_widget", "desc", $this->convertToDispString($metaDesc));			// ページ要約
@@ -218,12 +225,13 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 		$public = '';
 		if ($fetchedRow['pg_active']) $public = 'checked';
 		
+		$desc = makeTruncStr($fetchedRow['pn_meta_description'], self::MAX_DESC_LENGTH);
 		$row = array(
 			'index'    => $index,			// インデックス番号
 			'value'    => $value,			// ページID
 			'name'     => $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
 			'title'     => $this->convertToDispString($fetchedRow['pn_meta_title']),			// ページタイトル
-			'desc'     => $this->convertToDispString($fetchedRow['pn_meta_description'])			// ページ要約
+			'desc'     => $this->convertToDispString($desc)			// ページ要約
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
 		$this->tmpl->parseTemplate('sub_id_list', 'a');
