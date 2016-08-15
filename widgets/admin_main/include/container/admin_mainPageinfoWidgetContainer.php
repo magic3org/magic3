@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -25,6 +25,10 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 	private $contentType;
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $contentTypeArray;		// コンテンタイプ
+	private $developMode;			// 開発モードかどうか
+	const TITLE_PRE_ICON_HOME = '<i class="glyphicon glyphicon-home" rel="m3help" title="デフォルト"></i> ';		// タイトル付加用アイコン(デフォルトページ)
+	const TITLE_PRE_ICON_LOCK = '<i class="glyphicon glyphicon-lock" rel="m3help" title="SSL"></i> ';		// タイトル付加用アイコン(SSL)
+	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 開発モードかどうか
 	
 	/**
 	 * コンストラクタ
@@ -40,17 +44,8 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		// コンテンツタイプ
 		$this->contentTypeArray = array(	array(	'name' => '[指定なし]',					'value' => ''));
 		$this->contentTypeArray = array_merge($this->contentTypeArray, $this->gPage->getAllPageAttributeTypeInfo());			// すべてのページ属性を取得
-/*		$this->contentTypeArray = array(	array(	'name' => '指定なし',					'value' => ''),
-											array(	'name' => '汎用コンテンツ',				'value' => M3_VIEW_TYPE_CONTENT),
-											array(	'name' => '製品',						'value' => M3_VIEW_TYPE_PRODUCT),
-											array(	'name' => 'BBS',						'value' => M3_VIEW_TYPE_BBS),
-											array(	'name' => 'ブログ',						'value' => M3_VIEW_TYPE_BLOG),
-											array(	'name' => 'Wiki',						'value' => M3_VIEW_TYPE_WIKI),
-											array(	'name' => 'ユーザ作成コンテンツ',		'value' => M3_VIEW_TYPE_USER),
-											array(	'name' => 'イベント',					'value' => M3_VIEW_TYPE_EVENT),
-											array(	'name' => 'フォトギャラリー',			'value' => M3_VIEW_TYPE_PHOTO),
-											array(	'name' => '検索結果',					'value' => M3_VIEW_TYPE_SEARCH),
-											array(	'name' => 'ダッシュボード',				'value' => M3_VIEW_TYPE_DASHBOARD));*/
+		
+		$this->developMode = $this->gSystem->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);	// 開発モード
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -162,6 +157,12 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$name = '';
 		$deviceType = -1;
 		if ($replaceNew){
+			// アクセスポイント情報を取得
+			$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $this->pageId, $row);
+			if ($ret){
+				$accessPointName = $row['pg_name'];
+			}
+			
 			$ret = $this->db->getPageInfo($this->pageId, $this->pageSubId, $row);
 			if ($ret){
 				$this->contentType = $row['pn_content_type'];
@@ -194,6 +195,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		if (!empty($userLimited)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "user_limited_checked", $checked);		// ユーザ制限するかどうか
 		$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
+		$this->tmpl->addVar("_widget", "access_point_name", $this->convertToDispString($accessPointName));			// アクセスポイント名
 		$this->tmpl->addVar("_widget", "page_id", $this->pageId);			// ページID
 		$this->tmpl->addVar("_widget", "page_subid", $this->pageSubId);		// ページサブID
 		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
@@ -209,6 +211,9 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 	 */
 	function pageIdLoop($index, $fetchedRow, $param)
 	{
+		// 開発モードのときはすべて表示、開発モードでないときはフロント画面用アクセスポイントのみ取得
+		if (!$this->developMode && !$fetchedRow['pg_analytics']) return true;
+		
 		// デフォルトのページIDを取得
 		if (empty($this->pageId)) $this->pageId = $fetchedRow['pg_id'];
 		
@@ -219,7 +224,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 			// デフォルトのページサブIDを取得
 			$this->defaultPageSubId = $fetchedRow['pg_default_sub_id'];		// デフォルトのページID
 		}
-		$name = $this->convertToDispString($fetchedRow['pg_id']) . ' - ' . $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
+		$name = $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
 		$row = array(
 			'value'    => $this->convertToDispString($fetchedRow['pg_id']),			// ページID
 			'name'     => $name,			// ページ名
@@ -242,17 +247,25 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$pid = $fetchedRow['pg_id'];
 		$value = $this->convertToDispString($pid);
 		
+		// 行の先頭にデフォルトかSSL使用のアイコンを付加。デフォルトアイコンが優先。
+		// SSLを使用するかどうか
+		$titleIcon = '';
+		$ssl = '';
+		if ($fetchedRow['pn_use_ssl']){
+			$ssl = 'checked';
+			$titleIcon = self::TITLE_PRE_ICON_LOCK;		// SSLアイコン
+		}
+		
 		// デフォルトページ
 		$default = '';
-		if ($pid == $this->defaultSubId) $default = 'checked';
-		
+		if ($pid == $this->defaultSubId){
+			$default = 'checked';
+			$titleIcon = self::TITLE_PRE_ICON_HOME;		// デフォルトページアイコン
+		}
+
 		// 公開状況
 		$public = '';
 		if ($fetchedRow['pg_active']) $public = 'checked';
-		
-		// SSLを使用するかどうか
-		$ssl = '';
-		if ($fetchedRow['pn_use_ssl']) $ssl = 'checked';
 		
 		// ユーザ制限するかどうか
 		$userLimited = '';
@@ -263,6 +276,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		
 		$row = array(
 			'index'    => $index,			// インデックス番号
+			'title_icon'    => $titleIcon,			// デフォルト、SSLの表示アイコン
 			'value'    => $value,			// ページID
 			'name'     => $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
 			'content_type'     => $this->convertToDispString($fetchedRow['pn_content_type']),			// コンテンツタイプ
