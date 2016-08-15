@@ -303,12 +303,14 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 	{
 		for ($i = 0; $i < count($this->contentTypeArray); $i++){
 			$value = $this->contentTypeArray[$i]['value'];
-			$name = $this->contentTypeArray[$i]['name'];
+			$name = $value . '(' . $this->contentTypeArray[$i]['name'] . ')';
+			
 			$selected = '';
 			if ($value == $this->contentType) $selected = 'selected';
+			
 			$row = array(
-				'value'    => $value,			// ページID
-				'name'     => $name,			// ページ名
+				'value'    => $this->convertToDispString($value),			// ページID
+				'name'     => $this->convertToDispString($name),			// ページ属性
 				'selected' => $selected														// 選択中かどうか
 			);
 			$this->tmpl->addVars('content_type_list', $row);
