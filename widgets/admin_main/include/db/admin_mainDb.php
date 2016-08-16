@@ -2890,7 +2890,8 @@ class admin_mainDb extends BaseDb
 	{
 		$addWhere = '';
 		$params = array();
-		$queryStr = 'SELECT * FROM _menu_id ';
+		$queryStr  = 'SELECT * FROM _menu_id ';
+		$queryStr .=   'LEFT JOIN _page_id ON mn_device_type = pg_device_type AND pg_type = 0 AND pg_analytics = true ';
 		if ($deviceType != -1){
 			$addWhere = 'WHERE mn_device_type = ? ';
 			$params[] = $deviceType;
@@ -2905,7 +2906,7 @@ class admin_mainDb extends BaseDb
 			$addWhere .=  'mn_widget_id = \'\' ';
 		}
 		$queryStr .= $addWhere;
-		$queryStr .= 'ORDER BY mn_sort_order';
+		$queryStr .= 'ORDER BY mn_device_type, mn_sort_order';
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**

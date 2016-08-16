@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainMenuidWidgetContainer.php 5310 2012-10-25 06:35:11Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainMainteBaseWidgetContainer.php');
@@ -19,7 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $sysDb;	// システム情報取得用
+	private $pageId;	// ページID
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	
 	/**
@@ -32,7 +32,6 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		
 		// DBオブジェクト作成
 		$this->db = new admin_mainDb();
-		$this->sysDb = $this->gInstance->getSytemDbObject();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -95,7 +94,7 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 					$delItems[] = $listedItem[$i];
 					
 					// 削除可能かチェック
-					$refCount = $this->sysDb->getMenuIdRefCount($listedItem[$i]);		// メニューID使用数
+					$refCount = $this->_db->getMenuIdRefCount($listedItem[$i]);		// メニューID使用数
 					if ($refCount > 0){		// 参照ありのときは削除できない
 						$this->setMsg(self::MSG_USER_ERR, '使用中のメニューIDは削除できません。メニューID=' . $listedItem[$i]);
 						break;
@@ -112,7 +111,7 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			}
 		}
 		
-		$this->db->getMenuIdList(array($this, 'itemLoop'), true/*すべてのメニューIDを取得*/);
+		$this->db->getMenuIdList(-1/*すべてのデバイス*/, array($this, 'itemLoop'), true/*すべてのメニューIDを取得*/);
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
 	/**
@@ -174,7 +173,7 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			}
 		} else if ($act == 'delete'){		// 削除のとき
 			// 参照ありのときは削除できない
-			$refCount = $this->sysDb->getMenuIdRefCount($this->menuId);		// メニューID使用数
+			$refCount = $this->_db->getMenuIdRefCount($this->menuId);		// メニューID使用数
 			if ($refCount > 0) $this->setMsg(self::MSG_USER_ERR, '使用中のメニューIDは削除できません');
 			
 			// エラーなしの場合は、データを削除
@@ -208,7 +207,7 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			$this->tmpl->addVar("_widget", "menu_id", $this->menuId);			// メニューID
 			
 			// 使用中のメニューIDは削除できない
-			$refCount = $this->sysDb->getMenuIdRefCount($this->menuId);		// メニューID使用数
+			$refCount = $this->_db->getMenuIdRefCount($this->menuId);		// メニューID使用数
 			if ($refCount > 0) $this->tmpl->addVar("update_button", "del_disabled", "disabled");		// 削除ボタン使用不可
 		}
 		
@@ -227,18 +226,51 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 	function itemLoop($index, $fetchedRow, $param)
 	{
 		$value = $this->convertToDispString($fetchedRow['mn_id']);
+		
+		$accessPointName = str_replace('用アクセスポイント', '', $fetchedRow['pg_name']);		// アクセスポイント名
 		$row = array(
 			'index'		=> $index,			// インデックス番号
 			'value'		=> $value,			// メニューID
 			'name'		=> $this->convertToDispString($fetchedRow['mn_name']),			// メニューID名
+			'access_point_name'	=> $this->convertToDispString($accessPointName),
 			'sort_order'	=> $this->convertToDispString($fetchedRow['mn_sort_order']),	// ソート順
-			'ref_count' => $this->sysDb->getMenuIdRefCount($value)		// メニューID使用数
+			'ref_count' => $this->_db->getMenuIdRefCount($value)		// メニューID使用数
 		);
 		$this->tmpl->addVars('id_list', $row);
 		$this->tmpl->parseTemplate('id_list', 'a');
 		
 		// 表示中項目のページサブIDを保存
 		$this->serialArray[] = $value;
+		return true;
+	}
+	/**
+	 * ページID、取得したデータをテンプレートに設定する
+	 *
+	 * @param int $index			行番号(0～)
+	 * @param array $fetchedRow		フェッチ取得した行
+	 * @param object $param			未使用
+	 * @return bool					true=処理続行の場合、false=処理終了の場合
+	 */
+	function pageIdLoop($index, $fetchedRow, $param)
+	{
+		// デフォルトのページIDを取得
+		if (empty($this->pageId)) $this->pageId = $fetchedRow['pg_id'];
+		
+		$selected = '';
+		if ($fetchedRow['pg_id'] == $this->pageId){
+			$selected = 'selected';
+			
+			// デフォルトのページサブIDを取得
+			$this->defaultPageSubId = $fetchedRow['pg_default_sub_id'];		// デフォルトのページID
+		}
+		$name = $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
+		$row = array(
+			'value'    => $this->convertToDispString($fetchedRow['pg_id']),			// ページID
+			'name'     => $name,			// ページ名
+			'selected' => $selected														// 選択中かどうか
+		);
+		$this->tmpl->addVars('main_id_list', $row);
+		$this->tmpl->parseTemplate('main_id_list', 'a');
 		return true;
 	}
 }

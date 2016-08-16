@@ -9,7 +9,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -278,9 +278,9 @@ $HELP['searchwordlog_ret_btn']['body'] = '検索語ログ一覧へ戻ります�
 
 // ########## メニューID ##########
 $HELP['menuid']['title'] = 'メニューID';
-$HELP['menuid']['body'] = 'メニューIDの編集を行います';
+$HELP['menuid']['body'] = 'メニュー定義に使用するメニューIDの管理を行います。';
 $HELP['menuid_list']['title'] = 'メニューID一覧';
-$HELP['menuid_list']['body'] = 'メニューIDの一覧です。';
+$HELP['menuid_list']['body'] = 'メニュー定義に使用するメニューIDの管理を行います。';
 $HELP['menuid_detail']['title'] = 'メニューID詳細';
 $HELP['menuid_detail']['body'] = 'メニューIDを編集します。';
 $HELP['menuid_check']['title'] = '選択用チェックボックス';
@@ -291,10 +291,10 @@ $HELP['menuid_name']['title'] = '名前';
 $HELP['menuid_name']['body'] = '選択メニュー等で表示される名前です。';
 $HELP['menuid_desc']['title'] = '説明';
 $HELP['menuid_desc']['body'] = '項目についての説明です。';
-$HELP['menuid_sort_order']['title'] = 'ソート順';
-$HELP['menuid_sort_order']['body'] = '項目の並び順を指定します。';
+$HELP['menuid_priority']['title'] = '優先順';
+$HELP['menuid_priority']['body'] = '項目の優先順を指定します。';
 $HELP['menuid_ref']['title'] = '使用';
-$HELP['menuid_ref']['body'] = 'メニューIDを使用しているウィジェット数を示します。使用が0のメニューIDのみ削除可能です。';
+$HELP['menuid_ref']['body'] = 'メニューIDを使用しているメニュー型ウィジェットの総数を示します。「使用」が0のメニューIDのみ削除可能です。';
 $HELP['menuid_new_btn']['title'] = '新規ボタン';
 $HELP['menuid_new_btn']['body'] = '新規メニューIDを追加します。';
 $HELP['menuid_edit_btn']['title'] = '編集ボタン';
