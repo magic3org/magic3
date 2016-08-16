@@ -197,6 +197,12 @@ define('M3_MACRO_SEPARATOR',			'|');									// マクロキーと値を連結(�
 //define('M3_MACRO_SEPARATOR',			"\t");									// マクロキーと値を連結
 define('M3_MACRO_OPTION_SEPARATOR',		'|');									// マクロキーとオプションを連結
 
+// デバイスタイプ
+define('M3_DEVICE_TYPE_PC',				0);		// PC
+define('M3_DEVICE_TYPE_MOBILE',			1);		// 携帯
+define('M3_DEVICE_TYPE_SMARTPHONE',		2);		// スマートフォン
+define('M3_DEVICE_TYPE_MAX_VALUE',		2);		// デバイスタイプの最大値
+
 // テンプレートタイプ
 define('M3_TEMPLATE_JOOMLA_10',			0);		// Joomla!v1.0テンプレート
 define('M3_TEMPLATE_JOOMLA_15',			1);		// Joomla!v1.5テンプレート

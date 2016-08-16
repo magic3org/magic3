@@ -2881,16 +2881,32 @@ class admin_mainDb extends BaseDb
 	/**
 	 * メニューIDのリストを取得
 	 *
+	 * @param int $deviceType		端末タイプ(-1=すべて、0=PC、1=携帯、2=スマートフォン)
 	 * @param function $callback	コールバック関数
 	 * @param bool $getWidgetMenu	ウィジェット専用メニューを取得するかどうか
 	 * @return						なし
 	 */
-	function getMenuIdList($callback, $getWidgetMenu = false)
+	function getMenuIdList($deviceType, $callback, $getWidgetMenu = false)
 	{
+		$addWhere = '';
+		$params = array();
 		$queryStr = 'SELECT * FROM _menu_id ';
-		if (!$getWidgetMenu) $queryStr .=  'WHERE mn_widget_id = \'\' ';
-		$queryStr .=  'ORDER BY mn_sort_order';
-		$this->selectLoop($queryStr, array(), $callback);
+		if ($deviceType != -1){
+			$addWhere = 'WHERE mn_device_type = ? ';
+			$params[] = $deviceType;
+		}
+
+		if (!$getWidgetMenu){
+			if (empty($addWhere)){
+				$addWhere .= 'WHERE ';
+			} else {
+				$addWhere .= 'AND ';
+			}
+			$addWhere .=  'mn_widget_id = \'\' ';
+		}
+		$queryStr .= $addWhere;
+		$queryStr .= 'ORDER BY mn_sort_order';
+		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**
 	 * メニューIDのレコードを取得

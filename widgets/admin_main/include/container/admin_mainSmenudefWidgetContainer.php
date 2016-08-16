@@ -285,7 +285,11 @@ class admin_mainSmenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		
 		// メニューID選択メニュー作成
-		$this->db->getMenuIdList(array($this, 'menuIdListLoop'));
+		for ($i = 0; $i <= M3_DEVICE_TYPE_MAX_VALUE; $i++){
+			// 現在有効なデバイスのアクセスポイントのメニューのみ取得
+			$isActiveSite = $this->gSystem->getSiteActiveStatus($i);
+			if ($isActiveSite) $this->db->getMenuIdList($i, array($this, 'menuIdListLoop'));
+		}
 		
 		// メニュー項目一覧を作成
 		$this->createMenuList($this->menuId);
