@@ -2881,12 +2881,13 @@ class admin_mainDb extends BaseDb
 	/**
 	 * メニューIDのリストを取得
 	 *
-	 * @param int $deviceType		端末タイプ(-1=すべて、0=PC、1=携帯、2=スマートフォン)
-	 * @param function $callback	コールバック関数
-	 * @param bool $getWidgetMenu	ウィジェット専用メニューを取得するかどうか
-	 * @return						なし
+	 * @param int $deviceType				端末タイプ(-1=すべて、0=PC、1=携帯、2=スマートフォン)
+	 * @param function $callback			コールバック関数
+	 * @param bool $getWidgetMenu			ウィジェット専用メニューを取得するかどうか
+	 * @param bool $activeAccessPointOnly	有効なアクセスポイントのメニューIDのみを取得するかどうか
+	 * @return								なし
 	 */
-	function getMenuIdList($deviceType, $callback, $getWidgetMenu = false)
+	function getMenuIdList($deviceType, $callback, $getWidgetMenu = false, $activeAccessPointOnly = false)
 	{
 		$addWhere = '';
 		$params = array();
@@ -2905,8 +2906,18 @@ class admin_mainDb extends BaseDb
 			}
 			$addWhere .=  'mn_widget_id = \'\' ';
 		}
+
+		if ($activeAccessPointOnly){
+			if (empty($addWhere)){
+				$addWhere .= 'WHERE ';
+			} else {
+				$addWhere .= 'AND ';
+			}
+			$addWhere .=  'pg_active = true ';
+		}
+		
 		$queryStr .= $addWhere;
-		$queryStr .= 'ORDER BY mn_device_type, mn_sort_order';
+		$queryStr .= 'ORDER BY pg_priority, mn_sort_order';
 		$this->selectLoop($queryStr, $params, $callback);
 	}
 	/**

@@ -42,8 +42,9 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->db = new admin_mainDb();
 		
 		// コンテンツタイプ
-		$this->contentTypeArray = array(	array(	'name' => '[指定なし]',					'value' => ''));
-		$this->contentTypeArray = array_merge($this->contentTypeArray, $this->gPage->getAllPageAttributeTypeInfo());			// すべてのページ属性を取得
+//		$this->contentTypeArray = array(	array(	'name' => '[指定なし]',					'value' => ''));
+//		$this->contentTypeArray = array_merge($this->contentTypeArray, $this->gPage->getAllPageAttributeTypeInfo());			// すべてのページ属性を取得
+		$this->contentTypeArray = $this->gPage->getAllPageAttributeTypeInfo();		// すべてのページ属性を取得
 		
 		$this->developMode = $this->gSystem->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);	// 開発モード
 	}

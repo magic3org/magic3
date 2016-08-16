@@ -65,6 +65,7 @@ $(function(){
 	    <th><span {_HELP_PAGEINFO_ATTR}>ページ属性</span></th>
 	    <td>
     <select name="item_contenttype">
+	    <option value="">[選択なし]</option>
         <patTemplate:tmpl name="content_type_list">
         <option value="{VALUE}" {SELECTED}>{NAME}</option>
         </patTemplate:tmpl>

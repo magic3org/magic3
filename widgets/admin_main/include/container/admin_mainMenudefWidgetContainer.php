@@ -317,11 +317,7 @@ class admin_mainMenudefWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 		
 		// メニューID選択メニュー作成
-		for ($i = 0; $i <= M3_DEVICE_TYPE_MAX_VALUE; $i++){
-			// 現在有効なデバイスのアクセスポイントのメニューのみ取得
-			$isActiveSite = $this->gSystem->getSiteActiveStatus($i);
-			if ($isActiveSite) $this->db->getMenuIdList($i, array($this, 'menuIdListLoop'));
-		}
+		$this->db->getMenuIdList(-1/*すべてのアクセスポイントが対象*/, array($this, 'menuIdListLoop'), false/*ウィジェット専用のメニューは取得しない*/, true/*有効なアクセスポイントのみ取得*/);
 		
 		// メニューツリー作成
 		$treeMenu = $this->createTreeMenu($this->menuId, 0);

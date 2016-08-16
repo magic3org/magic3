@@ -91,7 +91,7 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 		$this->pageSubId = $request->trimValueOf('pagesubid');// ページサブID
 		
 		// アクセスポイントメニュー作成
-		$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/, -1/**/, true);
+		$this->db->getPageIdList(array($this, 'pageIdLoop'), 0/*ページID*/);
 
 		// ページサブID一覧を作成
 		$this->db->getPageSubIdList($this->pageId, $this->langId, array($this, 'pageSubIdLoop'), true/*メニューから選択可項目のみ*/);
