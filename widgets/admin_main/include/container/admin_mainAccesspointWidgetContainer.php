@@ -16,7 +16,7 @@
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_mainMainteBaseWidgetContainer.php');
 require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 
-class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContainer
+class admin_mainAccesspointWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
 	private $pageId;	// ページID
@@ -46,10 +46,10 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'pageid_detail'){		// 詳細画面
-			return 'pageid_detail.tmpl.html';
+		if ($task == 'accesspoint_detail'){		// 詳細画面
+			return 'accesspoint_detail.tmpl.html';
 		} else {			// 一覧画面
-			return 'pageid.tmpl.html';
+			return 'accesspoint.tmpl.html';
 		}
 	}
 	/**
@@ -64,7 +64,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'pageid_detail'){	// 詳細画面
+		if ($task == 'accesspoint_detail'){	// 詳細画面
 			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);
@@ -94,7 +94,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 					$delItems[] = $listedItem[$i];
 					
 					// 削除可能かチェック
-					$ret = $this->db->getPageIdRecord(1/*ページID*/, $listedItem[$i], $row);
+					$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $listedItem[$i], $row);
 					if ($ret){
 						if (!$row['pg_editable']) $this->setMsg(self::MSG_APP_ERR, 'このデータは削除不可データです。ID=' . $listedItem[$i]);
 					} else {
@@ -104,7 +104,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			}
 			if ($this->getMsgCount() == 0 && count($delItems) > 0){		// 削除項目ありのとき
 				for ($i = 0; $i < count($delItems); $i++){
-					$ret = $this->db->deletePageId(1/*ページID*/, $delItems[$i]);
+					$ret = $this->db->deletePageId(0/*アクセスポイント*/, $delItems[$i]);
 					if (!$ret) break;
 				}
 				if ($ret){		// データ削除成功のとき
@@ -115,9 +115,9 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			}
 		}
 		
-		//$this->tmpl->setAttribute('pagesubid_list', 'visibility', 'visible');		// ページサブID一覧表示
-		$this->db->getPageIdList(array($this, 'pageSubIdLoop'), 1);
-			
+//		$this->tmpl->setAttribute('pageid_list', 'visibility', 'visible');		// ページID一覧表示
+		$this->db->getPageIdList(array($this, 'pageIdLoop'), 0);
+		
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 	}
 	/**
@@ -148,12 +148,12 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			
 			// 登録済みのページIDかどうかチェック
 			if ($this->getMsgCount() == 0){
-				if ($this->db->isExistsPageId(1/*ページID*/, $newPageId)) $this->setMsg(self::MSG_USER_ERR, 'すでに登録済みのページIDです');
+				if ($this->db->isExistsPageId(0/*アクセスポイント*/, $newPageId)) $this->setMsg(self::MSG_USER_ERR, 'すでに登録済みのページIDです');
 			}
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの追加
-				$ret = $this->db->updatePageId(1/*ページID*/, $newPageId, $name, $desc, $priority, $active, $available);
+				$ret = $this->db->updatePageId(0/*アクセスポイント*/, $newPageId, $name, $desc, $priority, $active, $available);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
@@ -172,7 +172,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 
 			// 更新可能かチェック
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->getPageIdRecord(1/*ページID*/, $this->pageId, $row);
+				$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $this->pageId, $row);
 				if ($ret){
 					if (!$row['pg_editable']) $this->setMsg(self::MSG_APP_ERR, 'このデータは編集不可データです');
 				} else {
@@ -183,7 +183,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの更新
-				$ret = $this->db->updatePageId(1/*ページID*/, $this->pageId, $name, $desc, $priority, $active, $available);
+				$ret = $this->db->updatePageId(0/*アクセスポイント*/, $this->pageId, $name, $desc, $priority, $active, $available);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データを再取得
@@ -193,7 +193,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			}
 		} else if ($act == 'delete'){		// 削除のとき
 			// 削除可能かチェック
-			$ret = $this->db->getPageIdRecord(1/*ページID*/, $this->pageId, $row);
+			$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $this->pageId, $row);
 			if ($ret){
 				if (!$row['pg_editable']) $this->setMsg(self::MSG_APP_ERR, 'このデータは編集不可データです');
 			} else {
@@ -202,7 +202,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->deletePageId(1/*ページID*/, $this->pageId);
+				$ret = $this->db->deletePageId(0/*アクセスポイント*/, $this->pageId);
 				if ($ret){		// データ削除成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを削除しました');
 				} else {
@@ -215,7 +215,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		// 表示データ再取得
 		$editable = true;			// データの編集が可能かどうか
 		if ($replaceNew){
-			$ret = $this->db->getPageIdRecord(1/*ページID*/, $this->pageId, $row);
+			$ret = $this->db->getPageIdRecord(0/*アクセスポイント*/, $this->pageId, $row);
 			if ($ret){
 				$name = $row['pg_name'];
 				$desc = $row['pg_description'];

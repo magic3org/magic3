@@ -177,6 +177,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 					} else if ($task == 'pageinfo' ||				// ページ情報
 								$task == 'pageinfo_detail'){		// ページ情報詳細
 						$task = 'pageinfo';
+					} else if ($task == 'accesspoint' ||				// アクセスポイント一覧
+								$task == 'accesspoint_detail'){		// アクセスポイント詳細
+						$task = 'accesspoint';
 					} else if ($task == 'pageid' ||				// ページID一覧
 								$task == 'pageid_detail'){		// ページID詳細
 						$task = 'pageid';
@@ -249,6 +252,7 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'createtable':		// テーブル作成
 						case 'edittable':		// テーブル編集
 						case 'pageinfo':		// ページ情報
+						case 'accesspoint':		// アクセスポイント
 						case 'pageid':			// ページID
 						case 'menuid':			// メニューID
 						case 'opelog':			// 運用ログ

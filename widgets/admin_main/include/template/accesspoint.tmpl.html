@@ -1,0 +1,114 @@
+/**
+ * 表示データ作成用テンプレート(patTemplate)
+ *
+ * LICENSE: This source file is licensed under the terms of the GNU General Public License.
+ *
+ * @package    Magic3 Framework
+ * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
+ * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
+ * @version    SVN: $Id$
+ * @link       http://www.magic3.org
+ */
+<patTemplate:tmpl name="_widget">
+<script type="text/javascript">
+//<![CDATA[
+function newItem(){
+	document.main.task.value = 'accesspoint_detail';
+	document.main.act.value = 'new';
+	document.main.submit();
+	return true;
+}
+function editItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('編集する項目を選択してください');
+		} else {
+			document.main.task.value = 'accesspoint_detail';
+			document.main.act.value = 'edit';
+			document.main.pageid.value = items[i];
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function delItem(){
+	if (document.main.seriallist.value){
+		var items = document.main.seriallist.value.split(",");
+		for (var i = 0; i < items.length; i++){
+			var name = "document.main.item" + i + "_selected";
+			var itemObj = eval(name);
+			// チェックありのときは終了
+			if (itemObj && itemObj.checked) break;
+		}
+		if (i == items.length){			
+			window.alert('削除する項目を選択してください');
+		} else {
+			if (!window.confirm('選択項目を削除しますか?')) return false;
+			document.main.act.value = 'delete';
+			document.main.submit();
+		}
+	}
+	return true;
+}
+function editItemBySubId(id){
+	document.main.task.value = 'accesspoint_detail';
+	document.main.act.value = 'edit';
+	document.main.pageid.value = id;
+	document.main.submit();
+}
+$(function(){
+	// テーブル作成
+	m3SetConfigTable('config_table');
+});
+//]]>
+</script>
+<div class="m3config_container">
+<!-- m3:ErrorMessage -->
+<form method="post" name="main">
+<input type="hidden" name="task" value="accesspoint" />
+<input type="hidden" name="act" />
+<input type="hidden" name="pageid" />
+<input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
+
+<h3 class="m3config_h"><span {_HELP_ACCESSPOINT_LIST}>アクセスポイント一覧</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_ACCESSPOINT_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="editItem();" value="編集" />
+</div></div></div>
+
+<table id="config_table">
+    <thead>
+    <tr>
+	    <th class="select"><span {_HELP_ACCESSPOINT_CHECK}>選択</span></th>
+	    <th><span {_HELP_ACCESSPOINT_ID}>ID</span></th>
+	    <th><span {_HELP_ACCESSPOINT_NAME}>名前</span></th>
+	    <th><span {_HELP_ACCESSPOINT_PATH}>パス</span></th>
+	    <th><span {_HELP_ACCESSPOINT_PRIORITY}>優先順</span></th>
+	    <th><span {_HELP_ACCESSPOINT_ACTIVE}>公開</span></th>
+	</tr>
+    </thead>
+    <tbody>
+    <patTemplate:tmpl name="id_list">
+    <tr>
+        <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td><a href="#" onclick="editItemBySubId('{VALUE}');">{VALUE}</a></td>
+	    <td>{NAME}</td>
+	    <td>{PATH}</td>
+	    <td>{PRIORITY}</td>
+	    <td><input type="checkbox" {AVAILABLE} disabled /></td>
+	</tr>
+	</patTemplate:tmpl>
+    </tbody>
+</table>
+
+</form>
+</div>
+</patTemplate:tmpl>
+

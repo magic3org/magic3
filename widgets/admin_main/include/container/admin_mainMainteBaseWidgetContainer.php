@@ -22,6 +22,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_RESBROWSE 		= 'resbrowse';		// ファイルブラウザ
 	const TASK_PAGEINFO			= 'pageinfo';	// ページ情報
 	const TASK_PAGEINFO_DETAIL	= 'pageinfo_detail';	// ページ情報
+	const TASK_ACCESSPOINT			= 'accesspoint';		// アクセスポイント
+	const TASK_ACCESSPOINT_DETAIL	= 'accesspoint_detail';		// アクセスポイント
 	const TASK_PAGEID			= 'pageid';		// ページID
 	const TASK_PAGEID_DETAIL	= 'pageid_detail';		// ページID
 	const TASK_MENUID			= 'menuid';		// メニューID
@@ -81,6 +83,15 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 			case self::TASK_PAGEINFO_DETAIL:	// ページ情報
 				$titles[] = 'マスター管理';
 				$titles[] = 'ページ情報';
+				$titles[] = '詳細';
+				break;
+			case self::TASK_ACCESSPOINT:		// アクセスポイント
+				$titles[] = 'マスター管理';
+				$titles[] = 'アクセスポイント';
+				break;
+			case self::TASK_ACCESSPOINT_DETAIL:		// アクセスポイント
+				$titles[] = 'マスター管理';
+				$titles[] = 'アクセスポイント';
 				$titles[] = '詳細';
 				break;
 			case self::TASK_PAGEID:	// ページID
@@ -164,6 +175,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'active'	=> (
 														$task == self::TASK_PAGEINFO ||			// ページ情報
 														$task == self::TASK_PAGEINFO_DETAIL ||	// ページ情報詳細
+														$task == self::TASK_ACCESSPOINT ||			// アクセスポイント
+														$task == self::TASK_ACCESSPOINT_DETAIL ||	// アクセスポイント
 														$task == self::TASK_PAGEID ||			// ページID
 														$task == self::TASK_PAGEID_DETAIL ||	// ページID詳細
 														$task == self::TASK_MENUID ||			// メニューID
@@ -178,6 +191,16 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 											'active'	=> (
 																$task == self::TASK_PAGEINFO ||			// ページ情報
 																$task == self::TASK_PAGEINFO_DETAIL	// ページ情報詳細
+															)
+										),
+										(Object)array(
+											'name'		=> 'アクセスポイント',
+											'task'		=> self::TASK_ACCESSPOINT,
+											'url'		=> '',
+											'tagid'		=> '',
+											'active'	=> (
+																$task == self::TASK_ACCESSPOINT ||			// アクセスポイント
+																$task == self::TASK_ACCESSPOINT_DETAIL		// アクセスポイント詳細
 															)
 										),
 										(Object)array(
