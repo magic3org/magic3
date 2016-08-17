@@ -19,7 +19,7 @@ require_once($gEnvManager->getCurrentWidgetDbPath() . '/admin_mainDb.php');
 class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContainer
 {
 	private $db;	// DB接続オブジェクト
-	private $pageId;	// ページID
+	private $deviceType;	// 端末タイプ
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	
 	/**
@@ -123,12 +123,13 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 	function createDetail($request)
 	{
 		$act = $request->trimValueOf('act');
-		$this->menuId = $request->trimValueOf('serial');		// メニューID
+		$menuId = $request->trimValueOf('serial');		// メニューID
 
 		$newMenuId = $request->trimValueOf('item_menuid');		// 新規メニューID
 		$name = $request->trimValueOf('item_name');		// 名前
-		$desc = $request->trimValueOf('item_desc');		// 説明
 		$sortOrder = $request->trimValueOf('item_sort_order');		// ソート順
+		$this->deviceType = $request->trimValueOf('item_device_type');		// 端末タイプ
+		$targetWidget = $request->trimValueOf('item_target_widget');		// 対象ウィジェット
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
@@ -144,11 +145,11 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの追加
-				$ret = $this->db->updateMenuId($newMenuId, $name, $desc, $sortOrder);
+				$ret = $this->db->updateMenuId($newMenuId, $name, $sortOrder, $this->deviceType, $targetWidget);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
-					$this->menuId = $newMenuId;		// メニューID再設定
+					$menuId = $newMenuId;		// メニューID再設定
 					$replaceNew = true;			// データを再取得
 				} else {
 					$this->setMsg(self::MSG_APP_ERR, 'データの追加に失敗しました');
@@ -156,14 +157,14 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			}
 		} else if ($act == 'update'){		// 更新のとき
 			// 入力チェック
-			$this->checkSingleByte($this->menuId, 'メニューID');
+			$this->checkSingleByte($menuId, 'メニューID');
 			$this->checkInput($name, '名前');
 			$this->checkNumeric($sortOrder, 'ソート順');
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの更新
-				$ret = $this->db->updateMenuId($this->menuId, $name, $desc, $sortOrder);
+				$ret = $this->db->updateMenuId($menuId, $name, $sortOrder, $this->deviceType, $targetWidget);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データを再取得
@@ -173,12 +174,12 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			}
 		} else if ($act == 'delete'){		// 削除のとき
 			// 参照ありのときは削除できない
-			$refCount = $this->_db->getMenuIdRefCount($this->menuId);		// メニューID使用数
+			$refCount = $this->_db->getMenuIdRefCount($menuId);		// メニューID使用数
 			if ($refCount > 0) $this->setMsg(self::MSG_USER_ERR, '使用中のメニューIDは削除できません');
 			
 			// エラーなしの場合は、データを削除
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->delMenuId(array($this->menuId));
+				$ret = $this->db->delMenuId(array($menuId));
 				if ($ret){		// データ削除成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを削除しました');
 				} else {
@@ -190,30 +191,35 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		}
 		// 表示データ再取得
 		if ($replaceNew){
-			$ret = $this->db->getMenuId($this->menuId, $row);
+			$ret = $this->db->getMenuId($menuId, $row);
 			if ($ret){
 				$name = $row['mn_name'];
-				$desc = $row['mn_description'];
 				$sortOrder = $row['mn_sort_order'];
+				$this->deviceType = $row['mn_device_type'];		// 端末タイプ
+				$targetWidget = $row['mn_widget_id'];			// 対象ウィジェット
 			}
 		}
-		if (empty($this->menuId)){		// 新規追加のとき
+		
+		// アクセスポイント選択メニュー作成
+		$this->db->getAccessPointList(array($this, 'pageIdLoop'));
+		
+		if (empty($menuId)){		// 新規追加のとき
 			$this->tmpl->setAttribute('show_menuid', 'visibility', 'visible');// メニューID入力領域表示
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 追加ボタン表示
 			
 			$this->tmpl->addVar("show_menuid", "menu_id", $newMenuId);			// メニューID
 		} else {
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
-			$this->tmpl->addVar("_widget", "menu_id", $this->menuId);			// メニューID
+			$this->tmpl->addVar("_widget", "menu_id", $menuId);			// メニューID
 			
 			// 使用中のメニューIDは削除できない
-			$refCount = $this->_db->getMenuIdRefCount($this->menuId);		// メニューID使用数
+			$refCount = $this->_db->getMenuIdRefCount($menuId);		// メニューID使用数
 			if ($refCount > 0) $this->tmpl->addVar("update_button", "del_disabled", "disabled");		// 削除ボタン使用不可
 		}
 		
-		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
-		$this->tmpl->addVar("_widget", "desc", $desc);		// 説明
+		$this->tmpl->addVar("_widget", "name", $this->convertToDispString($name));		// ページ名
 		$this->tmpl->addVar("_widget", "sort_order", $sortOrder);		// ソート順
+		$this->tmpl->addVar("_widget", "target_widget", $targetWidget);		// 対象ウィジェット
 	}
 	/**
 	 * メニューIDをテンプレートに設定する
@@ -253,21 +259,16 @@ class admin_mainMenuidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 	 */
 	function pageIdLoop($index, $fetchedRow, $param)
 	{
-		// デフォルトのページIDを取得
-		if (empty($this->pageId)) $this->pageId = $fetchedRow['pg_id'];
+		$name	= $fetchedRow['pg_name'];			// ページ名
+		$deviceType = $fetchedRow['pg_device_type'];	// 端末タイプ(0=PC、1=携帯、2=スマートフォン)
 		
 		$selected = '';
-		if ($fetchedRow['pg_id'] == $this->pageId){
-			$selected = 'selected';
-			
-			// デフォルトのページサブIDを取得
-			$this->defaultPageSubId = $fetchedRow['pg_default_sub_id'];		// デフォルトのページID
-		}
-		$name = $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
+		if ($deviceType == $this->deviceType) $selected = 'selected';
+
 		$row = array(
-			'value'    => $this->convertToDispString($fetchedRow['pg_id']),			// ページID
-			'name'     => $name,			// ページ名
-			'selected' => $selected														// 選択中かどうか
+			'value'    => $this->convertToDispString($deviceType),			// 端末タイプ
+			'name'     => $this->convertToDispString($name),					// ページ名
+			'selected' => $selected												// 選択中かどうか
 		);
 		$this->tmpl->addVars('main_id_list', $row);
 		$this->tmpl->parseTemplate('main_id_list', 'a');

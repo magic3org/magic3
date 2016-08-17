@@ -598,6 +598,23 @@ class admin_mainDb extends BaseDb
 		return $ret;
 	}
 	/**
+	 * フロント画面のアクセスポイントのリストを取得
+	 *
+	 * @param function $callback			コールバック関数
+	 * @param bool $activeOnly				有効なアクセスポイントのメニューIDのみを取得するかどうか
+	 * @return								なし
+	 */
+	function getAccessPointList($callback, $activeOnly = false)
+	{
+		$params = array();
+		$queryStr  = 'SELECT * FROM _page_id ';
+		$queryStr .= 'WHERE pg_type = 0 ';			// アクセスポイント
+		$queryStr .=   'AND pg_analytics = true ';		// フロント画面用
+		if ($activeOnly) $queryStr .=  'AND pg_active = true ';	// 有効
+		$queryStr .= 'ORDER BY pg_priority';
+		$this->selectLoop($queryStr, $params, $callback);
+	}
+	/**
 	 * ページIDのリストを取得
 	 *
 	 * @param function $callback	コールバック関数
@@ -2938,13 +2955,14 @@ class admin_mainDb extends BaseDb
 	/**
 	 * メニューIDのレコードを更新
 	 *
-	 * @param string $id	メニューID(存在しない場合は新規追加)
-	 * @param string $name	名前
-	 * @param string $desc	説明
-	 * @param int    $order	ソート順
+	 * @param string $id			メニューID(存在しない場合は新規追加)
+	 * @param string $name			名前
+	 * @param int    $order			ソート順
+	 * @param ing    $deviceType	端末タイプ
+	 * @param string $widget		対象ウィジェット
 	 * @return bool			true=更新成功、false=更新失敗
 	 */
-	function updateMenuId($id, $name, $desc, $order)
+	function updateMenuId($id, $name, $order, $deviceType, $widget)
 	{
 		// トランザクション開始
 		$this->startTransaction();
@@ -2955,20 +2973,22 @@ class admin_mainDb extends BaseDb
 		if ($ret){
 			$queryStr  = 'UPDATE _menu_id ';
 			$queryStr .=   'SET mn_name = ?, ';
-			$queryStr .=     'mn_description = ?, ';
-			$queryStr .=     'mn_sort_order = ? ';
+			$queryStr .=     'mn_sort_order = ?, ';
+			$queryStr .=     'mn_device_type = ?, ';
+			$queryStr .=     'mn_widget_id = ? ';
 			$queryStr .=   'WHERE mn_id = ?';
-			$ret = $this->execStatement($queryStr, array($name, $desc, $order, $id));			
+			$ret = $this->execStatement($queryStr, array($name, $order, $deviceType, $widget, $id));			
 		} else {
 			$queryStr = 'INSERT INTO _menu_id (';
 			$queryStr .=  'mn_id, ';
 			$queryStr .=  'mn_name, ';
-			$queryStr .=  'mn_description, ';
-			$queryStr .=  'mn_sort_order ';
+			$queryStr .=  'mn_sort_order, ';
+			$queryStr .=  'mn_device_type, ';
+			$queryStr .=  'mn_widget_id ';
 			$queryStr .=  ') VALUES (';
-			$queryStr .=  '?, ?, ?, ?';
+			$queryStr .=  '?, ?, ?, ?, ?';
 			$queryStr .=  ')';
-			$ret = $this->execStatement($queryStr, array($id, $name, $desc, $order));	
+			$ret = $this->execStatement($queryStr, array($id, $name, $order, $deviceType, $widget));	
 		}
 		// トランザクション確定
 		$ret = $this->endTransaction();
