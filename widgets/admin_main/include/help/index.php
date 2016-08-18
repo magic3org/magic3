@@ -142,15 +142,15 @@ $HELP['pagehead_ret_btn']['body'] = 'ページ情報一覧へ戻ります。';
 
 // ########## ページID ##########
 $HELP['pageid']['title'] = 'ページID';
-$HELP['pageid']['body'] = 'ページID、ページサブIDの編集を行います';
+$HELP['pageid']['body'] = 'ページIDの編集を行います';
 $HELP['pageid_list']['title'] = 'ページID一覧';
-$HELP['pageid_list']['body'] = 'ページIDの一覧です。ページIDとページサブIDを切り替えます。';
+$HELP['pageid_list']['body'] = 'ページIDの一覧です。';
 $HELP['pageid_detail']['title'] = 'ページID詳細';
 $HELP['pageid_detail']['body'] = 'ページIDを編集します。';
 $HELP['pageid_check']['title'] = '選択用チェックボックス';
 $HELP['pageid_check']['body'] = '編集を行う項目を選択します。';
 $HELP['pageid_id']['title'] = 'ページID';
-$HELP['pageid_id']['body'] = 'ページIDまたはページサブIDを示します。';
+$HELP['pageid_id']['body'] = 'ページIDを示します。';
 $HELP['pageid_name']['title'] = '名前';
 $HELP['pageid_name']['body'] = '選択メニュー等で表示される名前です。';
 $HELP['pageid_desc']['title'] = '説明';
@@ -171,6 +171,32 @@ $HELP['pageid_del_btn']['title'] = '削除ボタン';
 $HELP['pageid_del_btn']['body'] = '選択されているページIDを削除します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
 $HELP['pageid_ret_btn']['title'] = '戻るボタン';
 $HELP['pageid_ret_btn']['body'] = 'ページID一覧へ戻ります。';
+
+// ########## アクセスポイント ##########
+$HELP['accesspoint']['title'] = 'アクセスポイント';
+$HELP['accesspoint']['body'] = 'アクセスポイントの情報の編集を行います';
+$HELP['accesspoint_list']['title'] = 'アクセスポイント一覧';
+$HELP['accesspoint_list']['body'] = 'アクセスポイントの一覧です。';
+$HELP['accesspoint_detail']['title'] = 'アクセスポイント詳細';
+$HELP['accesspoint_detail']['body'] = 'アクセスポイントを編集します。';
+$HELP['accesspoint_check']['title'] = '選択用チェックボックス';
+$HELP['accesspoint_check']['body'] = '編集を行う項目を選択します。';
+$HELP['accesspoint_id']['title'] = 'ID';
+$HELP['accesspoint_id']['body'] = 'アクセスポイントのIDを示します。';
+$HELP['accesspoint_name']['title'] = '名前';
+$HELP['accesspoint_name']['body'] = '選択メニュー等で表示される名前です。';
+$HELP['accesspoint_desc']['title'] = '説明';
+$HELP['accesspoint_desc']['body'] = '項目についての説明です。';
+$HELP['accesspoint_path']['title'] = 'パス';
+$HELP['accesspoint_path']['body'] = 'URLでのアクセスパスを示します。';
+$HELP['accesspoint_priority']['title'] = '優先順';
+$HELP['accesspoint_priority']['body'] = '項目の優先順を指定します。';
+$HELP['accesspoint_active']['title'] = '有効';
+$HELP['accesspoint_active']['body'] = 'フロント画面用のアクセスポイントを使用可能にするかどうかを指定します。';
+$HELP['accesspoint_edit_btn']['title'] = '編集ボタン';
+$HELP['accesspoint_edit_btn']['body'] = '選択されているアクセスポイントを編集します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
+$HELP['accesspoint_ret_btn']['title'] = '戻るボタン';
+$HELP['accesspoint_ret_btn']['body'] = 'アクセスポイント一覧へ戻ります。';
 
 // ########## 運用ログ ##########
 $HELP['opelog_list']['title'] = '運用ログ一覧';

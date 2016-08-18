@@ -91,7 +91,7 @@ $(function(){
 	    <th><span {_HELP_ACCESSPOINT_NAME}>名前</span></th>
 	    <th><span {_HELP_ACCESSPOINT_PATH}>パス</span></th>
 	    <th><span {_HELP_ACCESSPOINT_PRIORITY}>優先順</span></th>
-	    <th><span {_HELP_ACCESSPOINT_ACTIVE}>公開</span></th>
+	    <th><span {_HELP_ACCESSPOINT_ACTIVE}>有効</span></th>
 	</tr>
     </thead>
     <tbody>
@@ -102,7 +102,7 @@ $(function(){
 	    <td><div class="form-control-static m3config_item">{NAME}</div></td>
 	    <td>{PATH}</td>
 	    <td>{PRIORITY}</td>
-	    <td><input type="checkbox" {AVAILABLE} disabled /></td>
+	    <td><input type="checkbox" {ACTIVE} disabled /></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
