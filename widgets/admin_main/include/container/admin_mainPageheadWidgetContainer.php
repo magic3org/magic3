@@ -179,7 +179,7 @@ class admin_mainPageheadWidgetContainer extends admin_mainConfigbasicBaseWidgetC
 	function pageIdLoop($index, $fetchedRow, $param)
 	{
 		// フロント画面用アクセスポイントのみ取得
-		if (!$fetchedRow['pg_analytics']) return true;
+		if (!$fetchedRow['pg_frontend']) return true;
 		
 		// 現在有効なアクセスポイントのみ取得
 		$deviceType = $fetchedRow['pg_device_type'];		// デバイスタイプ

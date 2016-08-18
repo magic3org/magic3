@@ -609,7 +609,7 @@ class admin_mainDb extends BaseDb
 		$params = array();
 		$queryStr  = 'SELECT * FROM _page_id ';
 		$queryStr .= 'WHERE pg_type = 0 ';			// アクセスポイント
-		$queryStr .=   'AND pg_analytics = true ';		// フロント画面用
+		$queryStr .=   'AND pg_frontend = true ';		// フロント画面用
 		if ($activeOnly) $queryStr .=  'AND pg_active = true ';	// 有効
 		$queryStr .= 'ORDER BY pg_priority';
 		$this->selectLoop($queryStr, $params, $callback);
@@ -1435,7 +1435,7 @@ class admin_mainDb extends BaseDb
 		// フロント画面のアクセスポイントを取得
 		$queryStr  = 'SELECT * FROM _page_id ';
 		$queryStr .=   'WHERE pg_type = 0 ';
-		$queryStr .=     'AND pg_analytics = true';
+		$queryStr .=     'AND pg_frontend = true';
 		$ret = $this->selectRecords($queryStr, array(), $rows);
 		if ($ret){
 			for ($i = 0; $i < count($rows); $i++){
@@ -2909,7 +2909,7 @@ class admin_mainDb extends BaseDb
 		$addWhere = '';
 		$params = array();
 		$queryStr  = 'SELECT * FROM _menu_id ';
-		$queryStr .=   'LEFT JOIN _page_id ON mn_device_type = pg_device_type AND pg_type = 0 AND pg_analytics = true ';
+		$queryStr .=   'LEFT JOIN _page_id ON mn_device_type = pg_device_type AND pg_type = 0 AND pg_frontend = true ';
 		if ($deviceType != -1){
 			$addWhere = 'WHERE mn_device_type = ? ';
 			$params[] = $deviceType;

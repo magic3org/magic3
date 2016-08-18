@@ -213,7 +213,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 	function pageIdLoop($index, $fetchedRow, $param)
 	{
 		// 開発モードのときはすべて表示、開発モードでないときはフロント画面用アクセスポイントのみ取得
-		if (!$this->developMode && !$fetchedRow['pg_analytics']) return true;
+		if (!$this->developMode && !$fetchedRow['pg_frontend']) return true;
 		
 		// デフォルトのページIDを取得
 		if (empty($this->pageId)) $this->pageId = $fetchedRow['pg_id'];

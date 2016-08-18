@@ -529,7 +529,7 @@ class admin_analyticsDb extends BaseDb
 	{
 		$queryStr  = 'SELECT * FROM _page_id ';
 		$queryStr .=   'WHERE pg_type = 0 ';			// アクセスポイント
-		$queryStr .=     'AND pg_analytics = true ';	// アクセス解析あり
+		$queryStr .=     'AND pg_frontend = true ';		// フロント画面
 		$queryStr .=     'AND pg_visible = true ';		// 公開しているアクセスポイントのみ
 		$queryStr .=     'AND pg_active = true ';		// アクセス許可しているアクセスポイントのみ
 		$queryStr .=   'ORDER BY pg_priority';
