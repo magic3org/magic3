@@ -133,7 +133,6 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 
 		$newPageId = $request->trimValueOf('item_newpageid');		// 新規ページID
 		$name = $request->trimValueOf('item_name');		// 名前
-		$desc = $request->trimValueOf('item_desc');		// 説明
 		$priority = $request->trimValueOf('item_priority');		// 優先度
 		$active = ($request->trimValueOf('item_active') == 'on') ? 1 : 0;		// 値が有効かどうか
 		$available = ($request->trimValueOf('item_available') == 'on') ? 1 : 0;		// メニューから選択可能かどうか
@@ -218,7 +217,6 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			$ret = $this->db->getPageIdRecord(1/*ページID*/, $this->pageId, $row);
 			if ($ret){
 				$name = $row['pg_name'];
-				$desc = $row['pg_description'];
 				$priority = $row['pg_priority'];
 				$active = $row['pg_active'];
 				$available = $row['pg_available'];		// メニューから選択可能かどうか
@@ -242,7 +240,6 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			
 			// その他の項目無効化
 			$this->tmpl->addVar("_widget", "name_disabled", 'disabled');		// ページ名
-			$this->tmpl->addVar("_widget", "desc_disabled", 'disabled');		// 説明
 			$this->tmpl->addVar("_widget", "priority_disabled", 'disabled');		// 優先度
 			$this->tmpl->addVar("_widget", "active_disabled", 'disabled');		// 有効な値かどうか
 		}
@@ -250,7 +247,6 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		$this->tmpl->addVar("_widget", "page_id", $this->pageId);			// ページID
 		
 		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
-		$this->tmpl->addVar("_widget", "desc", $desc);		// 説明
 		$this->tmpl->addVar("_widget", "priority", $priority);		// 優先度
 		$checked = '';
 		if ($active) $checked = 'checked';

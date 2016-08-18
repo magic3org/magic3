@@ -97,8 +97,8 @@ $(function(){
     <patTemplate:tmpl name="sub_id_list">
     <tr>
         <td><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td><a href="#" onclick="editItemBySubId('{VALUE}');">{VALUE}</a></td>
-	    <td>{NAME}</td>
+	    <td><div class="form-control-static m3config_item"><a href="#" onclick="editItemBySubId('{VALUE}');">{VALUE}</a></div></td>
+	    <td><div class="form-control-static m3config_item">{NAME}</div></td>
 	    <td>{PRIORITY}</td>
 	    <td><input type="checkbox" {AVAILABLE} disabled /></td>
 	</tr>
