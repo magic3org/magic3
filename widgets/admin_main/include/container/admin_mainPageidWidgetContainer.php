@@ -152,7 +152,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの追加
-				$ret = $this->db->updatePageId(1/*ページID*/, $newPageId, $name, $desc, $priority, $active, $available);
+				$ret = $this->db->updatePageId(1/*ページID*/, $newPageId, $name, ''/*説明*/, $priority, $active, $available);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
@@ -182,7 +182,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの更新
-				$ret = $this->db->updatePageId(1/*ページID*/, $this->pageId, $name, $desc, $priority, $active, $available);
+				$ret = $this->db->updatePageId(1/*ページID*/, $this->pageId, $name, ''/*説明*/, $priority, $active, $available);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データを再取得
