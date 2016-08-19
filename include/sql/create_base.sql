@@ -768,22 +768,22 @@ CREATE TABLE _iwidget_method (
 -- ページIDマスター
 DROP TABLE IF EXISTS _page_id;
 CREATE TABLE _page_id (
-    pg_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- ページメインID、ページサブID
-    pg_type              INT            DEFAULT 0                     NOT NULL,      -- ページID種別(0=ページメインID,1=ページサブID)
+    pg_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- アクセスポイント、ページID
+    pg_type              INT            DEFAULT 0                     NOT NULL,      -- ページID種別(0=アクセスポイント,1=ページID)
     
-    pg_default_sub_id    VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- デフォルトのサブページID(ページID種別がページメインIDとき使用)
-    pg_url               TEXT                                         NOT NULL,      -- アクセスURL(ページID種別がページメインIDとき使用)
-    pg_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス(ページID種別がページメインIDとき使用)
-    pg_class             VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 起動クラス名(ページID種別がページメインIDとき使用)
+    pg_default_sub_id    VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- デフォルトのサブページID(ページID種別がアクセスポイントとき使用)
+    pg_url               TEXT                                         NOT NULL,      -- アクセスURL(ページID種別がアクセスポイントとき使用)
+    pg_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス(ページID種別がアクセスポイントとき使用)
+    pg_class             VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 起動クラス名(ページID種別がアクセスポイントとき使用)
     pg_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
     pg_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名称
     pg_description       VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 説明
     pg_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
-    pg_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか(ページID種別がページメインIDとき使用)
+    pg_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか(ページID種別がアクセスポイントとき使用)
     pg_active            BOOLEAN        DEFAULT true                  NOT NULL,      -- 有効かどうか
     pg_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可能かどうか
     pg_editable          BOOLEAN        DEFAULT true                  NOT NULL,      -- データ編集可能かどうか
-    pg_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか
+    pg_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか(ページID種別がページIDのとき使用)
     pg_admin_menu        BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理メニューを表示するかどうか(ページID種別がアクセスポイント時。初期値。)
     pg_analytics         BOOLEAN        DEFAULT false                 NOT NULL,      -- アクセス解析対象かどうか(ページID種別がアクセスポイント時)(廃止予定)
     PRIMARY KEY  (pg_id, pg_type)
@@ -843,7 +843,7 @@ CREATE TABLE _page_def (
     pd_style             TEXT                                         NOT NULL,      -- HTMLスタイル属性
     pd_css               TEXT                                         NOT NULL,      -- CSS
     pd_param             TEXT                                         NOT NULL,      -- パラメータオブジェクトをシリアライズしたもの
-    pd_except_sub_id     TEXT                                         NOT NULL,      -- 共通時例外ページサブID(「,」区切りで複数指定可)
+    pd_except_sub_id     TEXT                                         NOT NULL,      -- 共通時例外ページID(「,」区切りで複数指定可)
     pd_view_control_type INT            DEFAULT 0                     NOT NULL,      -- 表示出力の制御タイプ(0=常時表示、1=ログイン時のみ表示、2=非ログイン時のみ表示)
     pd_view_page_state   INT            DEFAULT 0                     NOT NULL,      -- ページ状況での表示制御タイプ(0=常時表示、1=トップ時のみ表示)
     pd_view_option       TEXT                                         NOT NULL,      -- 表示オプション

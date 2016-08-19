@@ -26,8 +26,8 @@ DELETE FROM _page_id WHERE pg_type = 0;
 INSERT INTO _page_id 
 (pg_id,          pg_type, pg_default_sub_id, pg_path,       pg_name,                            pg_description,                       pg_priority, pg_device_type, pg_active, pg_visible, pg_mobile, pg_editable, pg_admin_menu, pg_frontend) VALUES
 ('index',        0,       'content',         'index',       'PC用アクセスポイント',             'PC用アクセスポイント',               0,           0,              true,      true,       false,     true,        true,          true),
-('s_index',      0,       'front',           's/index',     'スマートフォン用アクセスポイント', 'スマートフォン用アクセスポイント',   1,           2,              true,      true,       false,     true,        false,         true),
-('m_index',      0,       'front',           'm/index',     '携帯用アクセスポイント',           '携帯用アクセスポイント',             2,           1,              true,      true,       true,      true,        false,         true),
+('s_index',      0,       'front',           's/index',     'スマートフォン用アクセスポイント', 'スマートフォン用アクセスポイント',   1,           2,              false,     true,       false,     true,        false,         true),
+('m_index',      0,       'front',           'm/index',     '携帯用アクセスポイント',           '携帯用アクセスポイント',             2,           1,              false,     true,       true,      true,        false,         true),
 ('admin_index',  0,       'content',         'admin/index', '管理用アクセスポイント',           '管理用アクセスポイント',             3,           0,              true,      true,       false,     false,       false,         false),
 ('connector',    0,       'content',         'connector',   'サーバ接続用アクセスポイント',     'サーバ接続用アクセスポイント',       4,           0,              true,      true,       false,     false,       false,         false);
 
