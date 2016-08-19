@@ -167,13 +167,13 @@ INSERT INTO _nav_item
 INSERT INTO _page_id 
 (pg_id,          pg_type, pg_default_sub_id, pg_path,       pg_name,                            pg_description,                       pg_priority, pg_device_type, pg_active, pg_visible, pg_mobile, pg_editable, pg_admin_menu, pg_analytics) VALUES
 ('index',        0,       'content',         'index',       'PC用アクセスポイント',             'PC用アクセスポイント',               0,           0,              true,      true,      false,     true, true, true),
-('s_index',      0,       'front',         's/index',     'スマートフォン用アクセスポイント', 'スマートフォン用アクセスポイント',   1,           2,              true,      true,      false,     true, false, true),
-('m_index',      0,       'front',         'm/index',     '携帯用アクセスポイント',           '携帯用アクセスポイント',             2,           1,              true,      true,      true,      true, false, true),
+('s_index',      0,       'content',         's/index',     'スマートフォン用アクセスポイント', 'スマートフォン用アクセスポイント',   1,           2,              true,      true,      false,     true, false, true),
+('m_index',      0,       'content',         'm/index',     '携帯用アクセスポイント',           '携帯用アクセスポイント',             2,           1,              true,      true,      true,      true, false, true),
 ('admin_index',  0,       'content',         'admin/index', '管理用アクセスポイント',           '管理用アクセスポイント',             3,           0,              true,      true,      false,     false, false, false),
 ('connector',    0,       'content',         'connector',   'サーバ接続用アクセスポイント',     'サーバ接続用アクセスポイント',       4,           0,              true,      true,      false,     true, false, false);
 INSERT INTO _page_id 
 (pg_id,          pg_type,      pg_name,                            pg_description,                       pg_priority, pg_active, pg_visible, pg_editable) VALUES
-('front',        1,            'トップ画面',                       'トップ画面用',                       0,           true,      true,       true),
+('front',        1,            'トップ画面',                       'トップ画面用',                       0,           false,      true,       true),
 ('content',      1,            'コンテンツ',                       'コンテンツ画面用',                   1,           true,      true,       false),
 ('shop',         1,            'ECショップ',                       'ECショップ画面用',                   2,           false,      true,       true),
 ('shop_safe',    1,            'ECショップ(セキュリティ保護)',     'ECショップ(セキュリティ保護)画面用', 3,           false,      true,       true),
