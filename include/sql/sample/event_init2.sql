@@ -28,27 +28,26 @@ UPDATE _page_id SET pg_active = false WHERE pg_id = 'm_index' AND pg_type = 0;
 -- 必要なページのみ表示
 DELETE FROM _page_id WHERE pg_type = 1;
 INSERT INTO _page_id 
-(pg_id,          pg_type,      pg_name,                            pg_description,                       pg_priority, pg_active, pg_visible, pg_editable, pg_available) VALUES
-('front',        1,            'トップ画面',                       'トップ画面用',                       0,           true,      true,       true,        true),
-('content',      1,            'コンテンツ',                       'コンテンツ画面用',                   1,           true,      true,       false,       true),
-('shop',         1,            'ECショップ',                       'ECショップ画面用',                   2,           true,      true,       true,        false),
-('shop_safe',    1,            'ECショップ(セキュリティ保護)',     'ECショップ(セキュリティ保護)画面用', 3,           true,      true,       true,        false),
-('bbs',          1,            '掲示板',                           '掲示板画面用',                       4,           true,      true,       true,        false),
-('blog',         1,            'ブログ',                           'ブログ画面用',                       5,           true,      true,       true,        true),
-('wiki',         1,            'Wiki',                             'Wiki画面用',                         6,           true,      true,       true,        false),
-('calendar',     1,            'カレンダー',                       'カレンダー画面用',                   7,           true,      true,       true,        true),
-('event',        1,            'イベント情報',                     'イベント情報画面用',                 8,           true,      true,       true,        true),
-('photo',        1,            'フォトギャラリー',                 'フォトギャラリー画面用',             9,           true,      true,       true,        false),
-('contact',      1,            'お問い合わせ',                     'お問い合わせ画面用',                 10,          true,      true,       true,        true),
-('contact2',     1,            'お問い合わせ2',                    'お問い合わせ画面用',                 11,          true,      true,       true,        false),
-('reguser',      1,            'ユーザ登録',                       'ユーザ登録画面用',                   12,          true,      true,       true,        false),
-('reserve',      1,            '予約',                             '予約画面用',                         19,          true,      true,       true,        false),
-('member',       1,            '会員',                             '会員画面用',                         20,          true,      true,       true,        true),
-('evententry',   1,            'イベント予約',                     'イベント予約画面用',                 21,          true,      true,       true,        true),
-('search',       1,            '検索',                             '検索画面用',                         22,          true,      true,       true,        true),
-('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          true,      true,       true,        false),
-('deploy',       1,            '[ウィジェット有効化用]',             'ウィジェット有効化用',               100,         true,      false,      true,        false),
-('test',         1,            '[ウィジェットテスト用]',             'ウィジェットテスト用非公開画面',     101,         false,     true,       true,        false);
+(pg_id,          pg_type,      pg_name,                            pg_description,                       pg_priority, pg_active, pg_visible, pg_editable) VALUES
+('front',        1,            'トップ画面',                       'トップ画面用',                       0,           true,      true,       true),
+('content',      1,            'コンテンツ',                       'コンテンツ画面用',                   1,           true,      true,       false),
+('shop',         1,            'ECショップ',                       'ECショップ画面用',                   2,           false,      true,       true),
+('shop_safe',    1,            'ECショップ(セキュリティ保護)',     'ECショップ(セキュリティ保護)画面用', 3,           false,      true,       true),
+('bbs',          1,            '掲示板',                           '掲示板画面用',                       4,           false,      true,       true),
+('blog',         1,            'ブログ',                           'ブログ画面用',                       5,           true,      true,       true),
+('wiki',         1,            'Wiki',                             'Wiki画面用',                         6,           false,      true,       true),
+('calendar',     1,            'カレンダー',                       'カレンダー画面用',                   7,           true,      true,       true),
+('event',        1,            'イベント情報',                     'イベント情報画面用',                 8,           true,      true,       true),
+('photo',        1,            'フォトギャラリー',                 'フォトギャラリー画面用',             9,           false,      true,       true),
+('contact',      1,            'お問い合わせ',                     'お問い合わせ画面用',                 10,          true,      true,       true),
+('contact2',     1,            'お問い合わせ2',                    'お問い合わせ画面用',                 11,          false,      true,       true),
+('reguser',      1,            'ユーザ登録',                       'ユーザ登録画面用',                   12,          false,      true,       true),
+('reserve',      1,            '予約',                             '予約画面用',                         19,          false,      true,       true),
+('member',       1,            '会員',                             '会員画面用',                         20,          true,      true,       true),
+('evententry',   1,            'イベント予約',                     'イベント予約画面用',                 21,          true,      true,       true),
+('search',       1,            '検索',                             '検索画面用',                         22,          true,      true,       true),
+('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          false,      true,       true),
+('deploy',       1,            '[ウィジェット有効化用]',             'ウィジェット有効化用',             100,         false,      false,      true);
 
 -- 管理画面メニューデータ
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';
