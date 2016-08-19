@@ -84,7 +84,7 @@ class admin_mainInitwizard_page1WidgetContainer extends admin_mainInitwizardBase
 					// 現在の設定を取得
 					$ret = $this->_mainDb->getPageIdRecord(1/*ページサブIDを指定*/, $listedItem[$i], $row);
 					if ($ret){
-						$ret = $this->_mainDb->updatePageId(1/*ページサブIDを指定*/, $listedItem[$i], $row['pg_name'], $row['pg_description'], $row['pg_priority'], $row['pg_active'], $itemValue);
+						$ret = $this->_mainDb->updatePageId(1/*ページサブIDを指定*/, $listedItem[$i], $row['pg_name'], $row['pg_description'], $row['pg_priority'], $itemValue, $row['pg_visible']);
 						if ($ret){
 							// メニュー非表示のページの場合は配置されているウィジェットを削除
 							if (!$itemValue) $this->_mainDb->delPageDefAllNonCommon($listedItem[$i]);
@@ -125,7 +125,7 @@ class admin_mainInitwizard_page1WidgetContainer extends admin_mainInitwizardBase
 		
 		// 使用するページかどうか
 		$checked = '';
-		if ($fetchedRow['pg_available']) $checked = 'checked';
+		if ($fetchedRow['pg_active']) $checked = 'checked';
 		
 		$row = array(
 			'index'		=> $index,			// インデックス番号

@@ -783,7 +783,7 @@ CREATE TABLE _page_id (
     pg_active            BOOLEAN        DEFAULT true                  NOT NULL,      -- 有効かどうか
     pg_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可能かどうか
     pg_editable          BOOLEAN        DEFAULT true                  NOT NULL,      -- データ編集可能かどうか
-    pg_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか(ページID種別がページIDのとき使用)
+    pg_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか(ページID種別がページIDのとき使用)(廃止予定)
     pg_admin_menu        BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理メニューを表示するかどうか(ページID種別がアクセスポイント時。初期値。)
     pg_analytics         BOOLEAN        DEFAULT false                 NOT NULL,      -- アクセス解析対象かどうか(ページID種別がアクセスポイント時)(廃止予定)
     PRIMARY KEY  (pg_id, pg_type)

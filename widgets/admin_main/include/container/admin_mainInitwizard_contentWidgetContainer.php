@@ -105,8 +105,8 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 									$this->_db->addWidget($pageId, $pageSubId, 'main', $widgetId, 0/*インデックス*/);
 								}
 								
-								// ページの使用状況を更新
-								$this->updatePageAvailable($pageSubId, true);	// メニューから選択可能
+								// ページの有効状態を更新
+								$this->updatePageActive($pageSubId, true);	// ページ有効
 							}
 						}
 					} else {
@@ -129,8 +129,8 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 							// コンテンツ属性からページサブIDを取得
 							$pageSubId = $this->gPage->getPageSubIdByContentType($contentType, $pageId);
 					
-							// ページの使用状況を更新
-							$this->updatePageAvailable($pageSubId, false);	// メニューから選択不可
+							// ページの有効状態を更新
+							$this->updatePageActive($pageSubId, false);	// ページ無効
 						}
 //						}
 					}
@@ -243,18 +243,18 @@ class admin_mainInitwizard_contentWidgetContainer extends admin_mainInitwizardBa
 		return $selectedContentType;
 	}
 	/**
-	 * ページの使用状況を更新
+	 * ページの有効状態を更新
 	 *
 	 * @param string $pageSubId		ページサブID
-	 * @param bool $available		メニューから利用可能かどうか
+	 * @param bool $active			ページが有効かどうか
 	 * @return bool					true=成功、false=失敗
 	 */
-	function updatePageAvailable($pageSubId, $available)
+	function updatePageActive($pageSubId, $active)
 	{
 		// 使用ページにする
 		$ret = $this->_mainDb->getPageIdRecord(1/*ページサブIDを指定*/, $pageSubId, $row);
 		if ($ret){
-			$ret = $this->_mainDb->updatePageId(1/*ページサブIDを指定*/, $pageSubId, $row['pg_name'], $row['pg_description'], $row['pg_priority'], $row['pg_active'], $available);
+			$ret = $this->_mainDb->updatePageId(1/*ページサブIDを指定*/, $pageSubId, $row['pg_name'], $row['pg_description'], $row['pg_priority'], $active, $row['pg_visible']);
 		}
 		return $ret;
 	}

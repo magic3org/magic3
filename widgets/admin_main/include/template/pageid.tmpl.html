@@ -90,7 +90,8 @@ $(function(){
 	    <th><span {_HELP_PAGEID_ID}>ID</span></th>
 	    <th><span {_HELP_PAGEID_NAME}>名前</span></th>
 	    <th><span {_HELP_PAGEID_PRIORITY}>優先順</span></th>
-	    <th><span {_HELP_PAGEID_ACTIVE}>公開</span></th>
+	    <th><span {_HELP_PAGEID_VISIBLE}>公開</span></th>
+		<th><span {_HELP_PAGEID_ACTIVE}>有効</span></th>
 	</tr>
     </thead>
     <tbody>
@@ -100,7 +101,8 @@ $(function(){
 	    <td><div class="form-control-static m3config_item"><a href="#" onclick="editItemBySubId('{VALUE}');">{VALUE}</a></div></td>
 	    <td><div class="form-control-static m3config_item">{NAME}</div></td>
 	    <td>{PRIORITY}</td>
-	    <td><input type="checkbox" {AVAILABLE} disabled /></td>
+	    <td><input type="checkbox" {VISIBLE} disabled /></td>
+		<td><input type="checkbox" {ACTIVE} disabled /></td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>

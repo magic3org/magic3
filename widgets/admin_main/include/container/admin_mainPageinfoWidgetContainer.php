@@ -275,6 +275,10 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		// ページ上のウィジェット数(共通属性のウィジェット除く)
 		$refCount = $this->_db->getWidgetCountOnPage($this->pageId, $pid, true/*共通ウィジェット除く*/);
 		
+		// 有効でない場合のinactiveクラス
+		$inactive = '';
+		if (!$fetchedRow['pg_active']) $inactive = 'inactive';
+		
 		$row = array(
 			'index'    => $index,			// インデックス番号
 			'title_icon'    => $titleIcon,			// デフォルト、SSLの表示アイコン
@@ -286,7 +290,8 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 			'ssl'		=> $ssl,			// SSLを使用するかどうか
 			'user_limited'		=> $userLimited,			// ユーザ制限するかどうか
 			'default'	=> $default,		// デフォルトのページサブID
-			'ref_count'		=> $refCount		// ページ上のウィジェット数
+			'ref_count'		=> $refCount,		// ページ上のウィジェット数
+			'inactive'	=> $inactive			// 有効でない場合の文字をグレーアウトにする
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
 		$this->tmpl->parseTemplate('sub_id_list', 'a');

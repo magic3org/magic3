@@ -124,7 +124,7 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 		return $isActive;
 	}
 	/**
-	 * アクセスポイントが有効状態を更新
+	 * アクセスポイントの有効状態を更新
 	 *
 	 * @param int   $deviceType デバイスタイプ(0=PC,1=携帯,2=スマートフォン)
 	 * @param bool  $status		有効状態
@@ -147,7 +147,7 @@ class admin_mainInitwizard_accesspointWidgetContainer extends admin_mainInitwiza
 		
 		$ret = $this->_mainDb->getPageIdRecord(0/*アクセスポイント*/, $pageId, $row);
 		if ($ret){
-			$ret = $this->_mainDb->updatePageId(0/*アクセスポイント*/, $pageId, $row['pg_name'], $row['pg_description'], $row['pg_priority'], $status, $row['pg_available']);
+			$ret = $this->_mainDb->updatePageId(0/*アクセスポイント*/, $pageId, $row['pg_name'], $row['pg_description'], $row['pg_priority'], $status, $row['pg_visible']);
 		}
 		return $ret;
 	}

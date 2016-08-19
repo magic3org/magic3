@@ -151,7 +151,7 @@ class admin_mainAccesspointWidgetContainer extends admin_mainMainteBaseWidgetCon
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの追加
-				$ret = $this->db->updatePageId(0/*アクセスポイント*/, $newPageId, $name, ''/*説明*/, $priority, $active, true/*未使用*/);
+				$ret = $this->db->updatePageId(0/*アクセスポイント*/, $newPageId, $name, ''/*説明*/, $priority, $active, null/*未使用*/);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
@@ -181,7 +181,7 @@ class admin_mainAccesspointWidgetContainer extends admin_mainMainteBaseWidgetCon
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの更新
-				$ret = $this->db->updatePageId(0/*アクセスポイント*/, $this->pageId, $name, ''/*説明*/, $priority, $active, true/*未使用*/);
+				$ret = $this->db->updatePageId(0/*アクセスポイント*/, $this->pageId, $name, ''/*説明*/, $priority, $active, null/*未使用*/);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データを再取得

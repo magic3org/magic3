@@ -733,6 +733,9 @@ span[rel="m3help"] { cursor: default; }
 .m3config_item.form-control-static.following {
 	margin-left: 20px;
 }
+.m3config_item.form-control-static.inactive {
+	color: #b4bcc2;
+}
 /* インライン項目 */
 .m3config_inline_item {
 	padding-left: 0;

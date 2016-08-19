@@ -639,7 +639,8 @@ class admin_mainDb extends BaseDb
 			if ($filter == 1) $mobile = 1;			// 携帯のとき
 			$params[] = $mobile;
 		}
-		if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
+//		if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
+		if ($availableOnly) $queryStr .=    'AND pg_active = true ';		// 有効ページのみメニュー用に取得
 		$queryStr .=  'ORDER BY pg_priority';
 		$this->selectLoop($queryStr, $params, $callback);
 	}
@@ -670,7 +671,8 @@ class admin_mainDb extends BaseDb
 	{
 		$queryStr 	= 'SELECT * FROM _page_id ';
 		$queryStr .=  	'WHERE pg_type = ? ';
-		if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
+		//if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
+		if ($availableOnly) $queryStr .=    'AND pg_active = true ';		// 有効ページのみメニュー用に取得
 		$queryStr .=  'ORDER BY pg_priority';
 		return $this->selectRecords($queryStr, array($type), $row);
 	}
@@ -690,7 +692,8 @@ class admin_mainDb extends BaseDb
 		$queryStr .=  'WHERE ((pn_deleted IS NULL ';
 		$queryStr .=    'AND pg_type = 1) ';		// サブページID
 		$queryStr .=    'OR pn_deleted = false) ';
-		if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
+		//if ($availableOnly) $queryStr .=    'AND pg_available = true ';		// メニューから選択可能項目のみ取得
+		if ($availableOnly) $queryStr .=    'AND pg_active = true ';		// 有効ページのみメニュー用に取得
 		$queryStr .=  'ORDER BY pg_priority';
 		$this->selectLoop($queryStr, array($pageId, $langId), $callback);
 	}
@@ -938,16 +941,22 @@ class admin_mainDb extends BaseDb
 	 * @param string  $desc			説明
 	 * @param int  $priority		優先度
 	 * @param bool  $active			有効かどうか
-	 * @param bool  $available		メニューから選択可能かどうか
+	 * @param bool  $visible		公開ページかどうか
 	 * @return						true=成功、false=失敗
 	 */
-	function updatePageId($type, $id, $name, $desc, $priority, $active, $available)
+	function updatePageId($type, $id, $name, $desc, $priority, $active, $visible = null)
 	{
 		// トランザクション開始
 		$this->startTransaction();
 		
 		$ret = $this->isExistsPageId($type, $id);
 		if ($ret){		// データが存在する場合
+			// 既存値を取得
+			$ret = $this->getPageIdRecord($type, $id, $row);
+			if ($ret){
+				if (is_null($visible)) $visible = $row['pg_visible'];
+			}
+			
 			// 既存項目を更新
 			$queryStr  = 'UPDATE _page_id ';
 			$queryStr .=   'SET ';
@@ -955,11 +964,13 @@ class admin_mainDb extends BaseDb
 			$queryStr .=     'pg_description = ?, ';
 			$queryStr .=     'pg_priority = ?, ';
 			$queryStr .=     'pg_active = ?, ';
-			$queryStr .=     'pg_available = ? ';
+			$queryStr .=     'pg_visible = ? ';
 			$queryStr .=   'WHERE pg_id = ? ';
 			$queryStr .=     'AND pg_type = ? ';
-			$this->execStatement($queryStr, array($name, $desc, $priority, intval($active), intval($available), $id, $type));
+			$this->execStatement($queryStr, array($name, $desc, $priority, intval($active), intval($visible), $id, $type));
 		} else {
+			if (is_null($visible)) $visible = true;
+			
 			// 新規レコードを追加
 			$queryStr  = 'INSERT INTO _page_id (';
 			$queryStr .=   'pg_id, ';
@@ -968,7 +979,7 @@ class admin_mainDb extends BaseDb
 			$queryStr .=   'pg_description, ';
 			$queryStr .=   'pg_priority, ';
 			$queryStr .=   'pg_active, ';
-			$queryStr .=   'pg_available ';
+			$queryStr .=   'pg_visible ';
 			$queryStr .= ') VALUES (';
 			$queryStr .=   '?, ';
 			$queryStr .=   '?, ';
@@ -977,7 +988,7 @@ class admin_mainDb extends BaseDb
 			$queryStr .=   '?, ';
 			$queryStr .=   '?, ';
 			$queryStr .=   '?) ';
-			$this->execStatement($queryStr, array($id, $type, $name, $desc, $priority, intval($active), intval($available)));
+			$this->execStatement($queryStr, array($id, $type, $name, $desc, $priority, intval($active), intval($visible)));
 		}
 
 		// トランザクション確定

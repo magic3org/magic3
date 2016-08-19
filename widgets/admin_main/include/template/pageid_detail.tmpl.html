@@ -66,13 +66,15 @@ $(function(){
 	    <td colspan="3"><div class="col-sm-4 m3config_item" style="width:4em;"><input type="text" name="item_priority" value="{PRIORITY}" maxlength="3" onkeypress="return m3_numericKey(event,true);" {PRIORITY_DISABLED} /></div></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_PAGEID_ACTIVE}>公開</span></th>
-	    <td colspan="3"><div class="checkbox"><label><input type="checkbox" name="item_active" {ACTIVE} {ACTIVE_DISABLED} /></label></div></td>
+	    <th><span {_HELP_PAGEID_VISIBLE}>公開</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_vicible" {VISIBLE} {VISIBLE_DISABLED} /></label></div></td>
+	    <th><span {_HELP_PAGEID_ACTIVE}>有効</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_active" {ACTIVE} {ACTIVE_DISABLED} /></label></div></td>
 	</tr>
-    <tr>
+<!--    <tr>
 	    <th><span {_HELP_PAGEID_AVAILABLE}>メニュー項目</span></th>
 	    <td colspan="3"><div class="checkbox"><label><input type="checkbox" name="item_available" {AVAILABLE} {AVAILABLE_DISABLED} /></label></div></td>
-	</tr>
+	</tr>-->
     </tbody>
 </table>
 <div class="well m3config_update_buttons">

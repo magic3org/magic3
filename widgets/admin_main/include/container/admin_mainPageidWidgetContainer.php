@@ -134,8 +134,8 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		$newPageId = $request->trimValueOf('item_newpageid');		// 新規ページID
 		$name = $request->trimValueOf('item_name');		// 名前
 		$priority = $request->trimValueOf('item_priority');		// 優先度
-		$active = ($request->trimValueOf('item_active') == 'on') ? 1 : 0;		// 値が有効かどうか
-		$available = ($request->trimValueOf('item_available') == 'on') ? 1 : 0;		// メニューから選択可能かどうか
+		$active = ($request->trimValueOf('item_active') == 'on') ? 1 : 0;		// ページIDが有効かどうか
+		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;		// ページ公開するかどうか
 
 		$replaceNew = false;		// データを再取得するかどうか
 		if ($act == 'add'){		// 新規追加のとき
@@ -152,7 +152,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの追加
-				$ret = $this->db->updatePageId(1/*ページID*/, $newPageId, $name, ''/*説明*/, $priority, $active, $available);
+				$ret = $this->db->updatePageId(1/*ページID*/, $newPageId, $name, ''/*説明*/, $priority, $active, $visible);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを追加しました');
 					
@@ -182,7 +182,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの更新
-				$ret = $this->db->updatePageId(1/*ページID*/, $this->pageId, $name, ''/*説明*/, $priority, $active, $available);
+				$ret = $this->db->updatePageId(1/*ページID*/, $this->pageId, $name, ''/*説明*/, $priority, $active, $visible);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データを再取得
@@ -219,11 +219,11 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 				$name = $row['pg_name'];
 				$priority = $row['pg_priority'];
 				$active = $row['pg_active'];
-				$available = $row['pg_available'];		// メニューから選択可能かどうか
+				$visible = $row['pg_visible'];		// ページ公開するかどうか
 				if (!$row['pg_editable']) $editable = false;
 			} else {
-				$active = '1';		// デフォルトはページ公開
-				$available = '1';		// メニューから選択可能かどうか
+				$active = '1';		// デフォルトはページ有効
+				$visible = '1';		// ページ公開
 			}
 		}
 		
@@ -248,43 +248,8 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		
 		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
 		$this->tmpl->addVar("_widget", "priority", $priority);		// 優先度
-		$checked = '';
-		if ($active) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "active", $checked);		// 有効な値かどうか
-		$checked = '';
-		if ($available) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "available", $checked);		// メニューから選択可能かどうか
-	}
-	/**
-	 * ページID、取得したデータをテンプレートに設定する
-	 *
-	 * @param int $index			行番号(0～)
-	 * @param array $fetchedRow		フェッチ取得した行
-	 * @param object $param			未使用
-	 * @return bool					true=処理続行の場合、false=処理終了の場合
-	 */
-	function pageIdLoop($index, $fetchedRow, $param)
-	{
-		$value = $this->convertToDispString($fetchedRow['pg_id']);
-		
-		// 有効かどうか
-		$available = '';
-		if ($fetchedRow['pg_active']) $available = 'checked';
-		
-		$row = array(
-			'index'		=> $index,			// インデックス番号
-			'value'		=> $value,			// ページID
-			'name'		=> $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
-			'path'		=> $this->convertToDispString($fetchedRow['pg_path']),			// パス
-			'priority'	=> $this->convertToDispString($fetchedRow['pg_priority']),			// 優先度
-			'available'	=> $available	// 有効無効
-		);
-		$this->tmpl->addVars('id_list', $row);
-		$this->tmpl->parseTemplate('id_list', 'a');
-		
-		// 表示中項目のページサブIDを保存
-		$this->serialArray[] = $value;
-		return true;
+		$this->tmpl->addVar("_widget", "active", $this->convertToCheckedString($active));		// 有効な値かどうか
+		$this->tmpl->addVar("_widget", "visible", $this->convertToCheckedString($visible));		// ページ公開するかどうか
 	}
 	/**
 	 * ページサブID、取得したデータをテンプレートに設定する
@@ -298,16 +263,13 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 	{
 		$value = $this->convertToDispString($fetchedRow['pg_id']);
 		
-		// 有効かどうか
-		$available = '';
-		if ($fetchedRow['pg_active']) $available = 'checked';
-		
 		$row = array(
 			'index'		=> $index,			// インデックス番号
 			'value'		=> $value,			// ページID
 			'name'		=> $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
 			'priority'	=> $this->convertToDispString($fetchedRow['pg_priority']),			// 優先度
-			'available'		=> $available	// 有効無効
+			'visible'	=> $this->convertToCheckedString($fetchedRow['pg_visible']),	// 公開
+			'active'	=> $this->convertToCheckedString($fetchedRow['pg_active'])		// 有効無効
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
 		$this->tmpl->parseTemplate('sub_id_list', 'a');

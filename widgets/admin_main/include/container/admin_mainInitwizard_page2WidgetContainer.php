@@ -161,8 +161,8 @@ class admin_mainInitwizard_page2WidgetContainer extends admin_mainInitwizardBase
 	{
 		$value = $fetchedRow['pg_id'];
 		
-		// 使用するページでない場合はメニューに追加しない
-		if (!$fetchedRow['pg_available']) return true;
+		// 有効かつ公開でないページの場合は追加しない
+		if (!$fetchedRow['pg_active'] || !$fetchedRow['pg_visible']) return true;
 		
 		$selected = '';
 		if ($value == $this->defaultPageId) $selected = 'selected';

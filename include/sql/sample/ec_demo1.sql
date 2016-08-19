@@ -62,8 +62,8 @@ INSERT INTO _page_id
 ('member',       1,            '会員',                             '会員画面用',                         20,          true,      true,       true,        true),
 ('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true,        true),
 ('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          true,      true,       true,        false),
-('deploy',       1,            'ウィジェット有効化用',             'ウィジェット有効化用',               100,         true,      false,      true,        false),
-('test',         1,            'ウィジェットテスト用',             'ウィジェットテスト用非公開画面',     101,         false,     true,       true,        false);
+('deploy',       1,            '[ウィジェット有効化用]',             'ウィジェット有効化用',               100,         true,      false,      true,        false),
+('test',         1,            '[ウィジェットテスト用]',             'ウィジェットテスト用非公開画面',     101,         false,     true,       true,        false);
 
 -- 管理画面メニューデータ
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';
