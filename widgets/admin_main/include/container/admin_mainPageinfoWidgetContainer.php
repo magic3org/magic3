@@ -275,9 +275,13 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		// ページ上のウィジェット数(共通属性のウィジェット除く)
 		$refCount = $this->_db->getWidgetCountOnPage($this->pageId, $pid, true/*共通ウィジェット除く*/);
 		
-		// 有効でない場合のinactiveクラス
-		$inactive = '';
-		if (!$fetchedRow['pg_active']) $inactive = 'inactive';
+		// 有効状態のページを色分け
+		$active = '';
+		$activeDesc = '';
+		if ($fetchedRow['pg_active']){
+			$active = 'class="success"';
+			$activeDesc = 'rel="m3help" title="有効なページ"';
+		}
 		
 		$row = array(
 			'index'    => $index,			// インデックス番号
@@ -290,8 +294,9 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 			'ssl'		=> $ssl,			// SSLを使用するかどうか
 			'user_limited'		=> $userLimited,			// ユーザ制限するかどうか
 			'default'	=> $default,		// デフォルトのページサブID
-			'ref_count'		=> $refCount,		// ページ上のウィジェット数
-			'inactive'	=> $inactive			// 有効でない場合の文字をグレーアウトにする
+			'ref_count'	=> $refCount,		// ページ上のウィジェット数
+			'active'		=> $active,			// 有効な行をカラー表示
+			'active_desc'	=> $activeDesc		// 有効行説明用
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
 		$this->tmpl->parseTemplate('sub_id_list', 'a');

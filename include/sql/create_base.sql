@@ -775,7 +775,7 @@ CREATE TABLE _page_id (
     pg_url               TEXT                                         NOT NULL,      -- アクセスURL(ページID種別がアクセスポイントとき使用)
     pg_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス(ページID種別がアクセスポイントとき使用)
     pg_class             VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 起動クラス名(ページID種別がアクセスポイントとき使用)
-    pg_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)
+    pg_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)(ページID種別がアクセスポイントとき使用)
     pg_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名称
     pg_description       VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 説明
     pg_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
