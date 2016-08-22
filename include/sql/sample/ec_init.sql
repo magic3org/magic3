@@ -43,7 +43,7 @@ UPDATE _page_id SET pg_default_sub_id = 'front' WHERE pg_id = 'index' AND pg_typ
 UPDATE _page_id SET pg_active = false WHERE pg_id = 's_index' AND pg_type = 0;
 UPDATE _page_id SET pg_active = false WHERE pg_id = 'm_index' AND pg_type = 0;
 -- 必要なページのみ表示
-DELETE FROM _page_id WHERE pg_type = 1;
+DELETE FROM _page_id WHERE pg_type = 1 AND pg_priority < 100;
 INSERT INTO _page_id 
 (pg_id,          pg_type,      pg_name,                            pg_description,                       pg_priority, pg_active, pg_visible, pg_editable) VALUES
 ('front',        1,            'トップ画面',                       'トップ画面用',                       0,           true,      true,       true),
@@ -62,8 +62,7 @@ INSERT INTO _page_id
 ('reserve',      1,            '予約',                             '予約画面用',                         19,          false,      true,       true),
 ('member',       1,            '会員',                             '会員画面用',                         20,          true,      true,       true),
 ('search',       1,            '検索',                             '検索画面用',                         21,          true,      true,       true),
-('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          false,      true,       true),
-('deploy',       1,            '[ウィジェット有効化用]',             'ウィジェット有効化用',             100,         false,      false,      true);
+('user',         1,            'ユーザコンテンツ',                 'ユーザ作成コンテンツ用',             50,          false,      true,       true);
 
 -- 管理画面メニューデータ
 DELETE FROM _nav_item WHERE ni_nav_id = 'admin_menu';

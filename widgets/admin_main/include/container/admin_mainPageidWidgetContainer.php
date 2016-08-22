@@ -221,6 +221,8 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 				$active = $row['pg_active'];
 				$visible = $row['pg_visible'];		// ページ公開するかどうか
 				if (!$row['pg_editable']) $editable = false;
+				$systemType = $row['pg_system_type'];		// システム用タイプ
+				if (!empty($systemType)) echo $systemType;
 			} else {
 				$active = '1';		// デフォルトはページ有効
 				$visible = '1';		// ページ公開
