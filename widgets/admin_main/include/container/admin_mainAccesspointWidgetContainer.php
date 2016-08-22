@@ -260,18 +260,19 @@ class admin_mainAccesspointWidgetContainer extends admin_mainMainteBaseWidgetCon
 	function pageIdLoop($index, $fetchedRow, $param)
 	{
 		$value = $this->convertToDispString($fetchedRow['pg_id']);
-		
-		// 有効かどうか
-		$active = '';
-		if ($fetchedRow['pg_active']) $active = 'checked';
+
+		$path = $fetchedRow['pg_path'];
+		$path = str_replace('index', '', $path);
+		$path = rtrim($path, '/');
+		$path = '/' . $path;
 		
 		$row = array(
 			'index'		=> $index,			// インデックス番号
 			'value'		=> $value,			// ページID
 			'name'		=> $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
-			'path'		=> $this->convertToDispString($fetchedRow['pg_path']),			// パス
+			'path'		=> $this->convertToDispString($path),			// パス
 			'priority'	=> $this->convertToDispString($fetchedRow['pg_priority']),			// 優先度
-			'active'	=> $active	// 有効無効
+			'active'	=> $this->convertToCheckedString($fetchedRow['pg_active'])	// 有効無効
 		);
 		$this->tmpl->addVars('id_list', $row);
 		$this->tmpl->parseTemplate('id_list', 'a');
