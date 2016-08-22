@@ -59,12 +59,12 @@ $(function(){
 	    <th><span {_HELP_PAGEINFO_DEFAULT}>デフォルト</span></th>
 	    <td><div class="checkbox"><label><input type="checkbox" name="item_default" {DEFAULT} {DEFAULT_DISABLED} /></label></div></td>
 	    <th><span {_HELP_PAGEINFO_SSL}>SSL使用</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_ssl" {USE_SSL_CHECKED} /></label></div></td>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_ssl" {USE_SSL_CHECKED} {USE_SSL_DISABLED} /></label></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_PAGEINFO_ATTR}>ページ属性</span></th>
 	    <td>
-    <select name="item_contenttype">
+    <select name="item_contenttype" {CONTENTTYPE_DISABLED}>
 	    <option value="">[選択なし]</option>
         <patTemplate:tmpl name="content_type_list">
         <option value="{VALUE}" {SELECTED}>{NAME}</option>
@@ -73,7 +73,7 @@ $(function(){
 	    </td>
 	    <th><span {_HELP_PAGEINFO_TEMPLATE}>テンプレート</span></th>
 	    <td>
-    <select name="item_template_id">
+    <select name="item_template_id" {TEMPLATE_ID_DISABLED}>
         <option value="">[選択なし]</option>
         <patTemplate:tmpl name="template_id_list">
         <option value="{VALUE}" {SELECTED}>{NAME}</option>
@@ -83,13 +83,13 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_PAGEINFO_USER_LIMITED}>ユーザ制限</span></th>
-	    <td colspan="3"><div class="checkbox"><label><input type="checkbox" name="item_user_limited" {USER_LIMITED_CHECKED} /></label></div></td>
+	    <td colspan="3"><div class="checkbox"><label><input type="checkbox" name="item_user_limited" {USER_LIMITED_CHECKED} {USER_LIMITED_DISABLED} /></label></div></td>
 	</tr>
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
-		<input type="button" class="button" onclick="updateItem();" value="更新" />
+		<input type="button" class="button" onclick="updateItem();" value="更新" {UPDATE_DISABLED} />
 </patTemplate:tmpl>
 </div>
 

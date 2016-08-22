@@ -156,6 +156,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		}
 		// 表示データ再取得
 		$name = '';
+		$systemType = '';
 		$deviceType = -1;
 		if ($replaceNew){
 			// アクセスポイント情報を取得
@@ -171,6 +172,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 				$userLimited = $row['pn_user_limited'];// ユーザ制限するかどうか
 				$name = $row['pg_name'];
 				$this->templateId = $row['pn_template_id'];			// テンプレートID
+				$systemType = $row['pg_system_type'];		// システム用ページタイプ
 				
 				// 端末タイプを取得
 				$ret = $this->db->getPageIdRecord(0/*ページID*/, $this->pageId, $row);
@@ -189,19 +191,28 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->defaultSubId = $this->_db->getDefaultPageSubId($this->pageId);
 		if ($this->pageSubId == $this->defaultSubId) $isDefault = true;
 		
-		$checked = '';
-		if (!empty($useSsl)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "use_ssl_checked", $checked);		// SSLを使用するかどうか
-		$checked = '';
-		if (!empty($userLimited)) $checked = 'checked';
-		$this->tmpl->addVar("_widget", "user_limited_checked", $checked);		// ユーザ制限するかどうか
+		// システム用ページタイプの場合は更新を行わない
 		$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
+		if (empty($systemType)){
+			$this->tmpl->addVar("_widget", "default_disabled", $this->convertToDisabledString($isDefault));		// デフォルトの場合はデフォルト値の変更不可
+		} else {
+			$this->tmpl->addVar("update_button", "update_disabled", 'disabled');		// 更新ボタン無効
+			
+			// その他の項目無効化
+			$this->tmpl->addVar("_widget", "default_disabled", 'disabled');		// デフォルトページ
+			$this->tmpl->addVar("_widget", "use_ssl_disabled", 'disabled');		// SSL
+			$this->tmpl->addVar("_widget", "contenttype_disabled", 'disabled');		// ページ属性
+			$this->tmpl->addVar("_widget", "template_id_disabled", 'disabled');		// テンプレート
+			$this->tmpl->addVar("_widget", "user_limited_disabled", 'disabled');		// ユーザ制限
+		}
+		
+		$this->tmpl->addVar("_widget", "use_ssl_checked", $this->convertToCheckedString($useSsl));		// SSLを使用するかどうか
+		$this->tmpl->addVar("_widget", "user_limited_checked", $this->convertToCheckedString($userLimited));		// ユーザ制限するかどうか
 		$this->tmpl->addVar("_widget", "access_point_name", $this->convertToDispString($accessPointName));			// アクセスポイント名
 		$this->tmpl->addVar("_widget", "page_id", $this->pageId);			// ページID
 		$this->tmpl->addVar("_widget", "page_subid", $this->pageSubId);		// ページサブID
 		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
 		$this->tmpl->addVar("_widget", "default", $this->convertToCheckedString($isDefault));				// デフォルトのページかどうか
-		$this->tmpl->addVar("_widget", "default_disabled", $this->convertToDisabledString($isDefault));		// デフォルトの場合はデフォルト値の変更不可
 	}
 	/**
 	 * ページID、取得したデータをテンプレートに設定する

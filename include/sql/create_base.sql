@@ -771,19 +771,19 @@ CREATE TABLE _page_id (
     pg_id                VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- アクセスポイント、ページID
     pg_type              INT            DEFAULT 0                     NOT NULL,      -- ページID種別(0=アクセスポイント,1=ページID)
     
-    pg_default_sub_id    VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- デフォルトのサブページID(ページID種別がアクセスポイントとき使用)
-    pg_url               TEXT                                         NOT NULL,      -- アクセスURL(ページID種別がアクセスポイントとき使用)
-    pg_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス(ページID種別がアクセスポイントとき使用)
-    pg_class             VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 起動クラス名(ページID種別がアクセスポイントとき使用)
-    pg_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)(ページID種別がアクセスポイントとき使用)
+    pg_default_sub_id    VARCHAR(20)    DEFAULT ''                    NOT NULL,      -- デフォルトのサブページID(ページID種別がアクセスポイント時使用)
+    pg_url               TEXT                                         NOT NULL,      -- アクセスURL(ページID種別がアクセスポイント時使用)
+    pg_path              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- アクセスポイントパス(ページID種別がアクセスポイント時使用)
+    pg_class             VARCHAR(50)    DEFAULT ''                    NOT NULL,      -- 起動クラス名(ページID種別がアクセスポイント時使用)
+    pg_device_type       INT            DEFAULT 0                     NOT NULL,      -- 端末タイプ(0=PC、1=携帯、2=スマートフォン)(ページID種別がアクセスポイント時使用)
     pg_name              VARCHAR(40)    DEFAULT ''                    NOT NULL,      -- ページ名称
     pg_description       VARCHAR(60)    DEFAULT ''                    NOT NULL,      -- 説明
     pg_priority          INT            DEFAULT 0                     NOT NULL,      -- 優先度
-    pg_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか(ページID種別がアクセスポイントとき使用)
+    pg_mobile            BOOLEAN        DEFAULT false                 NOT NULL,      -- 携帯対応かどうか(ページID種別がアクセスポイント時使用)
     pg_active            BOOLEAN        DEFAULT true                  NOT NULL,      -- 有効かどうか
     pg_visible           BOOLEAN        DEFAULT true                  NOT NULL,      -- 表示可能かどうか
     pg_editable          BOOLEAN        DEFAULT true                  NOT NULL,      -- データ編集可能かどうか
-    pg_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか(ページID種別がページIDのとき使用)(廃止予定)
+    pg_available         BOOLEAN        DEFAULT true                  NOT NULL,      -- メニューから選択可能かどうか(ページID種別がページIDの時使用)(廃止予定)
     pg_admin_menu        BOOLEAN        DEFAULT false                 NOT NULL,      -- 管理メニューを表示するかどうか(ページID種別がアクセスポイント時。初期値。)
     pg_analytics         BOOLEAN        DEFAULT false                 NOT NULL,      -- アクセス解析対象かどうか(ページID種別がアクセスポイント時)(廃止予定)
     PRIMARY KEY  (pg_id, pg_type)
