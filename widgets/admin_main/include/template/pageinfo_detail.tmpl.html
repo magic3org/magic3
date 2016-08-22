@@ -57,9 +57,7 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_PAGEINFO_DEFAULT}>デフォルト</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_default" {DEFAULT} {DEFAULT_DISABLED} /></label></div></td>
-	    <th><span {_HELP_PAGEINFO_SSL}>SSL使用</span></th>
-	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_ssl" {USE_SSL_CHECKED} {USE_SSL_DISABLED} /></label></div></td>
+	    <td colspan="3"><div class="checkbox"><label><input type="checkbox" name="item_default" {DEFAULT} {DEFAULT_DISABLED} /></label></div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_PAGEINFO_ATTR}>ページ属性</span></th>
@@ -82,9 +80,17 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
+	    <th><span {_HELP_PAGEINFO_SSL}>SSL使用</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_use_ssl" {USE_SSL_CHECKED} {USE_SSL_DISABLED} /></label></div></td>
 	    <th><span {_HELP_PAGEINFO_USER_LIMITED}>ユーザ制限</span></th>
-	    <td colspan="3"><div class="checkbox"><label><input type="checkbox" name="item_user_limited" {USER_LIMITED_CHECKED} {USER_LIMITED_DISABLED} /></label></div></td>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_user_limited" {USER_LIMITED_CHECKED} {USER_LIMITED_DISABLED} /></label></div></td>
 	</tr>
+<!--    <tr>
+	    <th><span {_HELP_PAGEINFO_VISIBLE}>公開</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_vicible" {VISIBLE} {VISIBLE_DISABLED} /></label></div></td>
+	    <th><span {_HELP_PAGEINFO_ACTIVE}>有効</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_active" {ACTIVE} {ACTIVE_DISABLED} /></label></div></td>
+	</tr>-->
     </tbody>
 </table>
 <div class="well m3config_update_buttons">
