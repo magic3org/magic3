@@ -241,6 +241,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// その他の項目無効化
 			$this->tmpl->addVar("_widget", "name_disabled", 'disabled');		// ページ名
 			$this->tmpl->addVar("_widget", "priority_disabled", 'disabled');		// 優先度
+			$this->tmpl->addVar("_widget", "visible_disabled", 'disabled');		// 公開するかどうか
 			$this->tmpl->addVar("_widget", "active_disabled", 'disabled');		// 有効な値かどうか
 		}
 
