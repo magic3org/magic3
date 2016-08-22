@@ -964,10 +964,11 @@ class admin_mainDb extends BaseDb
 			$queryStr .=     'pg_description = ?, ';
 			$queryStr .=     'pg_priority = ?, ';
 			$queryStr .=     'pg_active = ?, ';
-			$queryStr .=     'pg_visible = ? ';
+			$queryStr .=     'pg_visible = ?, ';
+			$queryStr .=     'pg_system_type = ? ';			// システム用ページタイプ
 			$queryStr .=   'WHERE pg_id = ? ';
 			$queryStr .=     'AND pg_type = ? ';
-			$this->execStatement($queryStr, array($name, $desc, $priority, intval($active), intval($visible), $id, $type));
+			$this->execStatement($queryStr, array($name, $desc, $priority, intval($active), intval($visible), $row['pg_system_type'], $id, $type));
 		} else {
 			if (is_null($visible)) $visible = true;
 			
@@ -994,6 +995,42 @@ class admin_mainDb extends BaseDb
 		// トランザクション確定
 		$ret = $this->endTransaction();
 		return $ret;
+	}
+	/**
+	 * ページIDの有効状態のみ変更
+	 *
+	 * @param int $type				ページタイプ(0=ページID,1=ページサブID)
+	 * @param string  $id			ID
+	 * @param bool  $active			有効かどうか
+	 * @return						true=成功、false=失敗
+	 */
+	function updatePageIdActive($type, $id, $active)
+	{
+		// 既存値を取得
+		$ret = $this->getPageIdRecord($type, $id, $row);
+		if ($ret){
+			// トランザクション開始
+			$this->startTransaction();
+		
+			// 既存項目を更新
+			$queryStr  = 'UPDATE _page_id ';
+			$queryStr .=   'SET ';
+			$queryStr .=     'pg_name = ?, ';
+			$queryStr .=     'pg_description = ?, ';
+			$queryStr .=     'pg_priority = ?, ';
+			$queryStr .=     'pg_active = ?, ';
+			$queryStr .=     'pg_visible = ?, ';
+			$queryStr .=     'pg_system_type = ? ';			// システム用ページタイプ
+			$queryStr .=   'WHERE pg_id = ? ';
+			$queryStr .=     'AND pg_type = ? ';
+			$this->execStatement($queryStr, array($row['pg_name'], $row['pg_description'], $row['pg_priority'], intval($active), intval($row['pg_visible']), $row['pg_system_type'], $id, $type));
+			
+			// トランザクション確定
+			$ret = $this->endTransaction();
+			return $ret;
+		} else {
+			return false;
+		}
 	}
 	/**
 	 * ページIDの存在チェック

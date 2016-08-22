@@ -163,15 +163,22 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 				}
 			}
 		} else if ($act == 'update'){		// 更新のとき
+			// 既存データを取得
+			$systemType = '';		// システム用ページタイプ
+			$ret = $this->db->getPageIdRecord(1/*ページID*/, $this->pageId, $row);
+			if ($ret) $systemType = $row['pg_system_type'];		// システム用ページタイプ
+				
 			// 入力チェック
+			// システム用ページタイプの場合はページIDのみエラーチェック
 			//$this->checkSingleByte($this->pageId, 'ページID');
 			$this->checkPath($this->pageId, 'ページID');
-			$this->checkInput($name, '名前');
-			$this->checkNumeric($priority, '優先順');
+			if (empty($systemType)){
+				$this->checkInput($name, '名前');
+				$this->checkNumeric($priority, '優先順');
+			}
 
 			// 更新可能かチェック
 			if ($this->getMsgCount() == 0){
-				$ret = $this->db->getPageIdRecord(1/*ページID*/, $this->pageId, $row);
 				if ($ret){
 					if (!$row['pg_editable']) $this->setMsg(self::MSG_APP_ERR, 'このデータは編集不可データです');
 				} else {
@@ -182,7 +189,11 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
 				// ページIDの更新
-				$ret = $this->db->updatePageId(1/*ページID*/, $this->pageId, $name, ''/*説明*/, $priority, $active, $visible);
+				if (empty($systemType)){
+					$ret = $this->db->updatePageId(1/*ページID*/, $this->pageId, $name, ''/*説明*/, $priority, $active, $visible);
+				} else {			// システム用ページタイプの場合は有効状態のみ変更
+					$ret = $this->db->updatePageIdActive(1/*ページID*/, $this->pageId, $active);
+				}
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
 					$replaceNew = true;			// データを再取得
@@ -213,6 +224,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 		}
 		// 表示データ再取得
 		$editable = true;			// データの編集が可能かどうか
+		$systemType = '';		// システム用ページタイプ
 		if ($replaceNew){
 			$ret = $this->db->getPageIdRecord(1/*ページID*/, $this->pageId, $row);
 			if ($ret){
@@ -221,8 +233,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 				$active = $row['pg_active'];
 				$visible = $row['pg_visible'];		// ページ公開するかどうか
 				if (!$row['pg_editable']) $editable = false;
-				$systemType = $row['pg_system_type'];		// システム用タイプ
-				if (!empty($systemType)) echo $systemType;
+				$systemType = $row['pg_system_type'];		// システム用ページタイプ
 			} else {
 				$active = '1';		// デフォルトはページ有効
 				$visible = '1';		// ページ公開
@@ -233,6 +244,15 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			$this->tmpl->setAttribute('new_pageid', 'visibility', 'visible');// ページID入力領域表示
 			$this->tmpl->addVar("new_pageid", "new_pageid", $newPageId);			// ページID
 			$this->tmpl->setAttribute('add_button', 'visibility', 'visible');// 追加ボタン表示
+		} else if (!empty($systemType)){			// システム用ページタイプが設定されているとき
+			// 有効状態の変更のみ可能
+			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
+			$this->tmpl->addVar("update_button", "del_disabled", 'disabled');		// 削除ボタン無効
+			
+			// その他の項目無効化
+			$this->tmpl->addVar("_widget", "name_disabled", 'disabled');		// ページ名
+			$this->tmpl->addVar("_widget", "priority_disabled", 'disabled');		// 優先度
+			$this->tmpl->addVar("_widget", "visible_disabled", 'disabled');		// 公開するかどうか
 		} else if ($editable){		// 編集可能のとき
 			$this->tmpl->setAttribute('update_button', 'visibility', 'visible');// 更新ボタン表示
 		} else {		// 編集不可のとき
