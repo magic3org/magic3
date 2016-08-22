@@ -185,9 +185,9 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->db->getAllTemplateList($deviceType, array($this, 'templateIdLoop'));
 			
 		// デフォルトのページサブIDを取得
+		$isDefault = false;
 		$this->defaultSubId = $this->_db->getDefaultPageSubId($this->pageId);
-		$default = '';
-		if ($this->pageSubId == $this->defaultSubId) $default = 'checked';
+		if ($this->pageSubId == $this->defaultSubId) $isDefault = true;
 		
 		$checked = '';
 		if (!empty($useSsl)) $checked = 'checked';
@@ -200,7 +200,8 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$this->tmpl->addVar("_widget", "page_id", $this->pageId);			// ページID
 		$this->tmpl->addVar("_widget", "page_subid", $this->pageSubId);		// ページサブID
 		$this->tmpl->addVar("_widget", "name", $name);		// ページ名
-		$this->tmpl->addVar("_widget", "default", $default);		// デフォルトのページかどうか
+		$this->tmpl->addVar("_widget", "default", $this->convertToCheckedString($isDefault));				// デフォルトのページかどうか
+		$this->tmpl->addVar("_widget", "default_disabled", $this->convertToDisabledString($isDefault));		// デフォルトの場合はデフォルト値の変更不可
 	}
 	/**
 	 * ページID、取得したデータをテンプレートに設定する

@@ -76,16 +76,16 @@ $HELP['usercustom_value']['body'] = 'コンテンツ表示時に、コンテン�
 $HELP['pageinfo']['title'] = 'ページ情報';
 $HELP['pageinfo']['body'] = 'サイトのアクセス単位であるページについての情報を設定します。';
 $HELP['pageinfo_list']['title'] = 'ページ情報一覧';
-$HELP['pageinfo_list']['body'] = 'ページはアクセスポイントである「ページID」とサブパラメータの「ページサブID」のセットで一意に決まります。<br />ページサブIDはURLのクエリーパラメータ「sub=サブページID」で指定されるIDです。';
+$HELP['pageinfo_list']['body'] = 'ページの属性等、ページに関する情報を設定します。<br />ページIDはURLのクエリーパラメータ「sub=ページID」で指定されるIDです。';
 $HELP['pageinfo_detail']['title'] = 'ページ情報詳細';
 $HELP['pageinfo_detail']['body'] = 'ページ情報を編集します。';
 
 $HELP['pageinfo_check']['title'] = '選択用チェックボックス';
 $HELP['pageinfo_check']['body'] = '編集を行う項目を選択します。';
-$HELP['pageinfo_pageid']['title'] = 'ページID';
-$HELP['pageinfo_pageid']['body'] = 'URLで実行されるスクリプトファイルがアクセスポイントであるページIDです。';
-$HELP['pageinfo_subid']['title'] = 'ページサブID';
-$HELP['pageinfo_subid']['body'] = 'URLのクエリーパラメータ「sub=サブページID」で指定するIDです。';
+$HELP['pageinfo_pageid']['title'] = 'アクセスポイント';
+$HELP['pageinfo_pageid']['body'] = 'アクセスポイントを選択します。アクセスポイントはデバイスごとに異なるベースのURLです。';
+$HELP['pageinfo_subid']['title'] = 'ページID';
+$HELP['pageinfo_subid']['body'] = 'URLのクエリーパラメータ「sub=ページID」で指定するIDです。';
 $HELP['pageinfo_name']['title'] = '名前';
 $HELP['pageinfo_name']['body'] = '選択メニュー等で表示される名前です。';
 $HELP['pageinfo_attr']['title'] = 'ページ属性';
@@ -99,11 +99,11 @@ $HELP['pageinfo_ssl']['body'] = 'SSLを使用してページを表示するか�
 $HELP['pageinfo_user_limited']['title'] = 'ユーザ制限';
 $HELP['pageinfo_user_limited']['body'] = 'ページにアクセスできるユーザをログインしたユーザに制限するかどうかを設定します。チェックが入っている場合は、ログインユーザのみがアクセス可能です。';
 $HELP['pageinfo_default']['title'] = 'デフォルト';
-$HELP['pageinfo_default']['body'] = 'デフォルトで選択されている項目は、ページサブIDが省略されたときに指定されるページサブIDです。';
+$HELP['pageinfo_default']['body'] = 'デフォルトで選択されている項目は、ページIDが省略されたときに指定されるページIDです。';
 $HELP['pageinfo_ref']['title'] = '使用';
 $HELP['pageinfo_ref']['body'] = 'ページ上に存在するウィジェット数です。共通属性が設定されているウィジェットは含みません。';
 $HELP['pageinfo_edit_btn']['title'] = '編集ボタン';
-$HELP['pageinfo_edit_btn']['body'] = '選択されているページサブIDの情報を編集します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
+$HELP['pageinfo_edit_btn']['body'] = '選択されているページIDの情報を編集します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
 $HELP['pageinfo_ret_btn']['title'] = '戻るボタン';
 $HELP['pageinfo_ret_btn']['body'] = 'ページ情報一覧へ戻ります。';
 
@@ -117,8 +117,8 @@ $HELP['pagehead_detail']['body'] = 'ページヘッダ情報を編集します�
 
 $HELP['pagehead_check']['title'] = '選択用チェックボックス';
 $HELP['pagehead_check']['body'] = '編集を行う項目を選択します。';
-$HELP['pagehead_pageid']['title'] = 'ページID';
-$HELP['pagehead_pageid']['body'] = 'URLで実行されるスクリプトファイルがアクセスポイントであるページIDです。';
+$HELP['pagehead_pageid']['title'] = 'アクセスポイント';
+$HELP['pagehead_pageid']['body'] = '編集対象のアクセスポイントです。アクセスポイントはデバイスごとに異なるベースのURLです。';
 $HELP['pagehead_subid']['title'] = 'ページID';
 $HELP['pagehead_subid']['body'] = 'URLのクエリーパラメータ「sub=ページID」で指定するIDです。';
 $HELP['pagehead_name']['title'] = 'ページ名';
@@ -134,9 +134,9 @@ $HELP['pagehead_others']['body'] = 'ヘッダ部に出力するタグを設定�
 $HELP['pagehead_public']['title'] = '公開';
 $HELP['pagehead_public']['body'] = '管理者以外のユーザがアクセス可能であるかどうかを示します。';
 $HELP['pagehead_default']['title'] = 'デフォルト';
-$HELP['pagehead_default']['body'] = 'デフォルトで選択されている項目は、ページサブIDが省略されたときに使用されるページサブIDです。';
+$HELP['pagehead_default']['body'] = 'デフォルトで選択されている項目は、ページIDが省略されたときに使用されるページIDです。';
 $HELP['pagehead_edit_btn']['title'] = '編集ボタン';
-$HELP['pagehead_edit_btn']['body'] = '選択されているページサブIDの情報を編集します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
+$HELP['pagehead_edit_btn']['body'] = '選択されているページIDの情報を編集します。<br />選択するには、一覧の左端のチェックボックスにチェックを入れます。';
 $HELP['pagehead_ret_btn']['title'] = '戻るボタン';
 $HELP['pagehead_ret_btn']['body'] = 'ページ情報一覧へ戻ります。';
 
@@ -176,7 +176,7 @@ $HELP['pageid_ret_btn']['body'] = 'ページID一覧へ戻ります。';
 $HELP['accesspoint']['title'] = 'アクセスポイント';
 $HELP['accesspoint']['body'] = 'アクセスポイントの情報の編集を行います';
 $HELP['accesspoint_list']['title'] = 'アクセスポイント一覧';
-$HELP['accesspoint_list']['body'] = 'アクセスポイントの一覧です。';
+$HELP['accesspoint_list']['body'] = 'アクセスポイントの一覧です。アクセスポイントはデバイスごとに異なるベースのURLです。';
 $HELP['accesspoint_detail']['title'] = 'アクセスポイント詳細';
 $HELP['accesspoint_detail']['body'] = 'アクセスポイントを編集します。';
 $HELP['accesspoint_check']['title'] = '選択用チェックボックス';
