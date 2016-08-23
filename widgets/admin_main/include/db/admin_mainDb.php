@@ -1033,6 +1033,42 @@ class admin_mainDb extends BaseDb
 		}
 	}
 	/**
+	 * ページIDの公開状態のみ変更
+	 *
+	 * @param int $type				ページタイプ(0=ページID,1=ページサブID)
+	 * @param string  $id			ID
+	 * @param bool  $visible		公開かどうか
+	 * @return						true=成功、false=失敗
+	 */
+	function updatePageIdVisible($type, $id, $visible)
+	{
+		// 既存値を取得
+		$ret = $this->getPageIdRecord($type, $id, $row);
+		if ($ret){
+			// トランザクション開始
+			$this->startTransaction();
+		
+			// 既存項目を更新
+			$queryStr  = 'UPDATE _page_id ';
+			$queryStr .=   'SET ';
+			$queryStr .=     'pg_name = ?, ';
+			$queryStr .=     'pg_description = ?, ';
+			$queryStr .=     'pg_priority = ?, ';
+			$queryStr .=     'pg_active = ?, ';
+			$queryStr .=     'pg_visible = ?, ';
+			$queryStr .=     'pg_system_type = ? ';			// システム用ページタイプ
+			$queryStr .=   'WHERE pg_id = ? ';
+			$queryStr .=     'AND pg_type = ? ';
+			$this->execStatement($queryStr, array($row['pg_name'], $row['pg_description'], $row['pg_priority'], intval($row['pg_active']), intval($visible), $row['pg_system_type'], $id, $type));
+			
+			// トランザクション確定
+			$ret = $this->endTransaction();
+			return $ret;
+		} else {
+			return false;
+		}
+	}
+	/**
 	 * ページIDの存在チェック
 	 *
 	 * @param int $type				リストの種別

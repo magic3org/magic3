@@ -98,6 +98,39 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$act = $request->trimValueOf('act');
 		$this->pageId = $request->trimValueOf('pageid');		// ページID
 		$this->pageSubId = $request->trimValueOf('pagesubid');// ページサブID
+		$toggleType = $request->trimValueOf('toggletype');			// トグルボタンのタイプ
+		$toggleValue = $request->trimValueOf('togglevalue');
+		
+		if ($act == 'toggle'){		// 値変更の場合
+			switch($toggleType){
+			case 'visible':				// 公開状態
+				$ret = $this->db->updatePageIdVisible(1/*ページID*/, $this->pageSubId, $toggleValue);
+				if ($ret){		// データ追加成功のとき
+					if ($toggleValue){
+						$message = '「' . $this->pageSubId . '」が「公開」になりました';
+					} else {
+						$message = '「' . $this->pageSubId . '」が「非公開」になりました';
+					}
+					$this->setMsg(self::MSG_GUIDANCE, $message);
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
+				}
+				break;
+			case 'active':				// 有効状態
+				$ret = $this->db->updatePageIdActive(1/*ページID*/, $this->pageSubId, $toggleValue);
+				if ($ret){		// データ追加成功のとき
+					if ($toggleValue){
+						$message = '「' . $this->pageSubId . '」が「有効」になりました';
+					} else {
+						$message = '「' . $this->pageSubId . '」が「無効」になりました';
+					}
+					$this->setMsg(self::MSG_GUIDANCE, $message);
+				} else {
+					$this->setMsg(self::MSG_APP_ERR, 'データ更新に失敗しました');
+				}
+				break;
+			}
+		}
 		
 		// ページメインIDメニュー作成
 		// 選択中のページIDを決定
@@ -308,7 +341,9 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 			'default'	=> $default,		// デフォルトのページサブID
 			'ref_count'	=> $refCount,		// ページ上のウィジェット数
 			'active'		=> $active,			// 有効な行をカラー表示
-			'active_desc'	=> $activeDesc		// 有効行説明用
+			'active_desc'	=> $activeDesc,		// 有効行説明用
+			'visible_checked'	=> $this->convertToCheckedString($fetchedRow['pg_visible']),			// 公開切り替えボタン
+			'active_checked'	=> $this->convertToCheckedString($fetchedRow['pg_active'])			// 有効切り替えボタン
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
 		$this->tmpl->parseTemplate('sub_id_list', 'a');

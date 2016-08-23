@@ -46,6 +46,49 @@ function editItemBySubId(id){
 $(function(){
 	// テーブル作成
 	m3SetConfigTable('config_table');
+	
+	$('.toggle_visible').on('change', function(){
+		if ($(this).hasClass('fired') == false){
+			$(this).addClass('fired');
+
+			if (window.confirm('設定を変更しますか?')){
+				document.main.act.value = 'toggle';
+				document.main.pagesubid.value = $(this).data('page');
+				document.main.toggletype.value = 'visible';
+				if ($(this).prop('checked')){
+					document.main.togglevalue.value = 1;
+				} else {
+					document.main.togglevalue.value = 0;
+				}
+				document.main.submit();
+			} else {
+				// トグルボタンを元に戻す
+				$(this).bootstrapToggle('toggle');
+			}
+			$(this).removeClass('fired');
+		}
+	});
+	$('.toggle_active').on('change', function(){
+		if ($(this).hasClass('fired') == false){
+			$(this).addClass('fired');
+
+			if (window.confirm('設定を変更しますか?')){
+				document.main.act.value = 'toggle';
+				document.main.pagesubid.value = $(this).data('page');
+				document.main.toggletype.value = 'active';
+				if ($(this).prop('checked')){
+					document.main.togglevalue.value = 1;
+				} else {
+					document.main.togglevalue.value = 0;
+				}
+				document.main.submit();
+			} else {
+				// トグルボタンを元に戻す
+				$(this).bootstrapToggle('toggle');
+			}
+			$(this).removeClass('fired');
+		}
+	});
 });
 //]]>
 </script>
@@ -55,6 +98,8 @@ $(function(){
 <input type="hidden" name="task" value="pageinfo" />
 <input type="hidden" name="act" />
 <input type="hidden" name="pagesubid" />
+<input type="hidden" name="toggletype" />
+<input type="hidden" name="togglevalue" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_PAGEINFO_LIST}>ページ情報一覧</span>
 <select name="pageid" class="form-control" onchange="selectMenu();" style="display:inline-block;width:300px;margin-top:-7px;">
@@ -73,10 +118,9 @@ $(function(){
 	    <th class="select"><span {_HELP_PAGEINFO_CHECK}>選択</span></th>
 	    <th><span {_HELP_PAGEINFO_SUBID}>ページID</span></th>
 	    <th><span {_HELP_PAGEINFO_NAME}>名前</span></th>
-	    <th><span {_HELP_PAGEINFO_ATTR}>ページ属性</span></th>
-<!--	    <th><span {_HELP_PAGEINFO_PUBLIC}>公開</span></th>-->
-	    <th><span {_HELP_PAGEINFO_USER_LIMITED}>ユーザ制限</span></th>
-<!--	    <th><span {_HELP_PAGEINFO_REF}>使用</span></th>-->
+	    <th style="width:100px;"><span {_HELP_PAGEINFO_ATTR}>ページ属性</span></th>
+	    <th style="width:100px;"><span {_HELP_PAGEINFO_USER_LIMITED}>ユーザ制限</span></th>
+        <th><span {_HELP_PAGEINFO_STATUS}>状態</span></th>
 	</tr>
     </thead>
     <tbody>
@@ -86,9 +130,10 @@ $(function(){
 	    <td><div class="form-control-static m3config_item"><a href="#" onclick="editItemBySubId('{VALUE}');">{VALUE}</a></div></td>
 	    <td><div class="form-control-static m3config_item">{TITLE_ICON}{NAME}</div></td>
 	    <td><div class="form-control-static m3config_item">{CONTENT_TYPE}</div></td>
-<!--	    <td><input type="checkbox" {PUBLIC} disabled /></td>-->
 		<td><input type="checkbox" {USER_LIMITED} disabled /></td>
-<!--	    <td>{REF_COUNT}</td>-->
+        <td><input type="checkbox" class="toggle_visible" data-toggle="toggle" data-size="small" data-onstyle="primary" data-offstyle="danger" data-on="<i class='fa fa-play'></i> 公開" data-off="<i class='fa fa-pause'></i> 非公開" data-page="{VALUE}" {VISIBLE_CHECKED} {VISIBLE_DISABLED} />
+		<input type="checkbox" class="toggle_active" data-toggle="toggle" data-size="small" data-onstyle="success" data-offstyle="default" data-on="<i class='fa fa-play'></i> 有効" data-off="<i class='fa fa-pause'></i> 無効" data-page="{VALUE}" {ACTIVE_CHECKED} {ACTIVE_DISABLED} />
+		</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
