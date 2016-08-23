@@ -290,8 +290,8 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 	 */
 	function pageSubIdLoop($index, $fetchedRow, $param)
 	{
-		$pid = $fetchedRow['pg_id'];
-		$value = $this->convertToDispString($pid);
+		$pageId = $fetchedRow['pg_id'];
+		$systemType = $fetchedRow['pg_system_type'];		// システム用ページタイプ
 		
 		// 行の先頭にデフォルトかSSL使用のアイコンを付加。デフォルトアイコンが優先。
 		// SSLを使用するかどうか
@@ -304,21 +304,17 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		
 		// デフォルトページ
 		$default = '';
-		if ($pid == $this->defaultSubId){
+		if ($pageId == $this->defaultSubId){
 			$default = 'checked';
 			$titleIcon = self::TITLE_PRE_ICON_HOME;		// デフォルトページアイコン
 		}
-
-		// 公開状況
-		$public = '';
-		if ($fetchedRow['pg_active']) $public = 'checked';
 		
 		// ユーザ制限するかどうか
 		$userLimited = '';
 		if ($fetchedRow['pn_user_limited']) $userLimited = 'checked';
 		
 		// ページ上のウィジェット数(共通属性のウィジェット除く)
-		$refCount = $this->_db->getWidgetCountOnPage($this->pageId, $pid, true/*共通ウィジェット除く*/);
+		$refCount = $this->_db->getWidgetCountOnPage($this->pageId, $pageId, true/*共通ウィジェット除く*/);
 		
 		// 有効状態のページを色分け
 		$active = '';
@@ -327,23 +323,28 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 			$active = 'class="success"';
 			$activeDesc = 'rel="m3help" title="有効なページ"';
 		}
-		
+		// 公開、有効ボタン
+		$visibleDisabled = false;		// 公開切り替えボタン、使用不可制御用
+		$activeDisabled = false;			// 有効切り替えボタン、使用不可制御用
+		if (!empty($systemType)) $visibleDisabled = true;
+			
 		$row = array(
-			'index'    => $index,			// インデックス番号
-			'title_icon'    => $titleIcon,			// デフォルト、SSLの表示アイコン
-			'value'    => $value,			// ページID
-			'name'     => $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
-			'content_type'     => $this->convertToDispString($fetchedRow['pn_content_type']),			// コンテンツタイプ
-			'template'     => $this->convertToDispString($fetchedRow['pn_template_id']),			// テンプレート
-			'public'	=> $public,			// ページ公開
-			'ssl'		=> $ssl,			// SSLを使用するかどうか
-			'user_limited'		=> $userLimited,			// ユーザ制限するかどうか
-			'default'	=> $default,		// デフォルトのページサブID
-			'ref_count'	=> $refCount,		// ページ上のウィジェット数
+			'index'			=> $index,			// インデックス番号
+			'title_icon'	=> $titleIcon,			// デフォルト、SSLの表示アイコン
+			'value'			=> $this->convertToDispString($pageId),			// ページID
+			'name'			=> $this->convertToDispString($fetchedRow['pg_name']),			// ページ名
+			'content_type'	=> $this->convertToDispString($fetchedRow['pn_content_type']),			// コンテンツタイプ
+			'template'		=> $this->convertToDispString($fetchedRow['pn_template_id']),			// テンプレート
+			'ssl'			=> $ssl,			// SSLを使用するかどうか
+			'user_limited'	=> $userLimited,			// ユーザ制限するかどうか
+			'default'		=> $default,		// デフォルトのページサブID
+			'ref_count'		=> $refCount,		// ページ上のウィジェット数
 			'active'		=> $active,			// 有効な行をカラー表示
 			'active_desc'	=> $activeDesc,		// 有効行説明用
-			'visible_checked'	=> $this->convertToCheckedString($fetchedRow['pg_visible']),			// 公開切り替えボタン
-			'active_checked'	=> $this->convertToCheckedString($fetchedRow['pg_active'])			// 有効切り替えボタン
+			'visible_checked'	=> $this->convertToCheckedString($fetchedRow['pg_visible']),		// 公開切り替えボタン
+			'active_checked'	=> $this->convertToCheckedString($fetchedRow['pg_active']),			// 有効切り替えボタン
+			'visible_disabled'	=> $this->convertToDisabledString($visibleDisabled),		// 公開切り替えボタン、使用不可制御用
+			'active_disabled'	=> $this->convertToDisabledString($activeDisabled),			// 有効切り替えボタン、使用不可制御用
 		);
 		$this->tmpl->addVars('sub_id_list', $row);
 		$this->tmpl->parseTemplate('sub_id_list', 'a');

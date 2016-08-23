@@ -174,7 +174,7 @@ class ScriptLibInfo
 	const BOOTSTRAP_DATETIMEPICKER_FILENAME		= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.js';
 	const BOOTSTRAP_DATETIMEPICKER_CSS			= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.min.css';
 	const BOOTSTRAP_TOGGLE_FILENAME				= 'bootstrap/bootstrap-toggle-2.2.2/bootstrap-toggle.min.js';		// Bootstrap Toggleボタン
-	const BOOTSTRAP_TOGGLE_CSS					= 'bootstrap/bootstrap-toggle-2.2.2/bootstrap-toggle.min.css';
+	const BOOTSTRAP_TOGGLE_CSS					= 'bootstrap/bootstrap-toggle-2.2.2/bootstrap-toggle.css';
 
 	// jQueryプラグイン用のファイル
 	const JQUERY_EASING_FILENAME		= 'jquery/jquery.easing.1.3.js';

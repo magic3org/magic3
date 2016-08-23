@@ -815,6 +815,11 @@ input[type="password"]{
 	font-size: 14px;
 	font-family: Arial;/*for IE8 bug*/
 }
+/*** inline checkbox disable cursor fixed ***/
+.checkbox-inline.disabled label {
+	cursor: not-allowed;
+}
+
 /*** Bootstrap plus option ***/
 /*.align_middle_row.table td {
 	vertical-align: middle;
