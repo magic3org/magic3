@@ -60,6 +60,7 @@ class ScriptLibInfo
 
 	// Bootstrapプラグイン
 	const LIB_BOOTSTRAP_DATETIMEPICKER		= 'bootstrap.datetimepicker';
+	const LIB_BOOTSTRAP_TOGGLE_URL			= 'bootstrap.toggle';
 
 	// スマートフォン用jQueryライブラリ
 	const LIB_JQUERYS				= 'jquerys';
@@ -120,6 +121,7 @@ class ScriptLibInfo
 
 	// Bootstrapプラグインバージョン
 	const BOOTSTRAP_DATETIMEPICKER_VER	= '4.0.0';
+	const BOOTSTRAP_TOGGLE_VER			= '2.2.2';
 
 	// jQueryプラグインバージョン
 	const JQUERY_JCAROUSEL_VER		= '0.2.8';
@@ -169,8 +171,10 @@ class ScriptLibInfo
 	const LIB_JQUERY_UI_EFFECTS					= 'jquery-ui.effects';			// Effects
 
 	// Bootstrapプラグイン用のファイル
-	const BOOTSTRAP_DATETIMEPICKER_FILENAME	= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.js';
-	const BOOTSTRAP_DATETIMEPICKER_CSS		= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.min.css';
+	const BOOTSTRAP_DATETIMEPICKER_FILENAME		= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.js';
+	const BOOTSTRAP_DATETIMEPICKER_CSS			= 'bootstrap/bootstrap-datetimepicker-4.0.0/bootstrap-datetimepicker.min.css';
+	const BOOTSTRAP_TOGGLE_FILENAME				= 'bootstrap/bootstrap-toggle-2.2.2/bootstrap-toggle.min.js';		// Bootstrap Toggleボタン
+	const BOOTSTRAP_TOGGLE_CSS					= 'bootstrap/bootstrap-toggle-2.2.2/bootstrap-toggle.min.css';
 
 	// jQueryプラグイン用のファイル
 	const JQUERY_EASING_FILENAME		= 'jquery/jquery.easing.1.3.js';
@@ -254,6 +258,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 
 	// ライブラリの公式サイトのURL
 	const BOOTSTRAP_DATETIMEPICKER_URL	= 'https://github.com/Eonasdan/bootstrap-datetimepicker';
+	const BOOTSTRAP_TOGGLE_URL			= 'https://github.com/minhur/bootstrap-toggle';
 	const JQUERY_JCAROUSEL_URL			= 'http://sorgalla.com/projects/jcarousel/';
 	const JQUERY_THICKBOX_URL			= 'http://thickbox.net/';
 	const JQUERY_CLUETIP_URL			= 'http://plugins.learningjquery.com/cluetip/';
@@ -473,11 +478,15 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 						self::LIB_NOBOOTSTRAP			=>	array(	'script' 	=> array(self::NOBOOTSTRAP_TOOLTIP_FILENAME, self::NOBOOTSTRAP_DROPDOWN_FILENAME),// Bootstrapなし管理画面用スクリプト
 																	'css'		=> array(self::NOBOOTSTRAP_CSS)),
 
-						// Bootstrapライブラリ
+						// Bootstrapプラグイン
 						self::LIB_BOOTSTRAP_DATETIMEPICKER		=>	array(	'script' 	=> array(self::BOOTSTRAP_DATETIMEPICKER_FILENAME),		// bootstrap.datetimepicker用
 																			'css'		=> array(self::BOOTSTRAP_DATETIMEPICKER_CSS),
 																			'url'		=> self::BOOTSTRAP_DATETIMEPICKER_URL,
 																			'version'	=> self::BOOTSTRAP_DATETIMEPICKER_VER),
+						self::LIB_BOOTSTRAP_TOGGLE				=> array(	'script' 	=> array(self::BOOTSTRAP_TOGGLE_FILENAME),		// Bootstrap Toggleボタン
+																			'css'		=> array(self::BOOTSTRAP_TOGGLE_CSS),
+																			'url'		=> self::BOOTSTRAP_TOGGLE_URL,
+																			'version'	=> self::BOOTSTRAP_TOGGLE_VER),
 
 						// jQueryライブラリ
 						self::LIB_JQUERY_EASING			=>	array(	'script' 	=> array(self::JQUERY_EASING_FILENAME)),		// jquery.easing用のファイル
