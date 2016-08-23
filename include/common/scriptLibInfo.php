@@ -60,7 +60,7 @@ class ScriptLibInfo
 
 	// Bootstrapプラグイン
 	const LIB_BOOTSTRAP_DATETIMEPICKER		= 'bootstrap.datetimepicker';
-	const LIB_BOOTSTRAP_TOGGLE_URL			= 'bootstrap.toggle';
+	const LIB_BOOTSTRAP_TOGGLE				= 'bootstrap.toggle';
 
 	// スマートフォン用jQueryライブラリ
 	const LIB_JQUERYS				= 'jquerys';
