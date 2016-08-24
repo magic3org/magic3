@@ -816,7 +816,8 @@ input[type="password"]{
 	font-family: Arial;/*for IE8 bug*/
 }
 /*** inline checkbox disable cursor fixed ***/
-.checkbox-inline.disabled label {
+.checkbox-inline.disabled label, 
+.checkbox-inline.disabled span {
 	cursor: not-allowed;
 }
 
