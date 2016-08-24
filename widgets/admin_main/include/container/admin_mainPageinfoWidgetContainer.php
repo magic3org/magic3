@@ -205,7 +205,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 				$userLimited = $row['pn_user_limited'];// ユーザ制限するかどうか
 				$name = $row['pg_name'];
 				$this->templateId = $row['pn_template_id'];			// テンプレートID
-				$systemType = $row['pg_functional_type'];		// システム用機能タイプ
+				$systemType = $row['pg_function_type'];		// システム用機能タイプ
 				
 				// 端末タイプを取得
 				$ret = $this->db->getPageIdRecord(0/*ページID*/, $this->pageId, $row);
@@ -291,7 +291,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 	function pageSubIdLoop($index, $fetchedRow, $param)
 	{
 		$pageId = $fetchedRow['pg_id'];
-		$systemType = $fetchedRow['pg_functional_type'];		// システム用機能タイプ
+		$systemType = $fetchedRow['pg_function_type'];		// システム用機能タイプ
 		$editable = $fetchedRow['pg_editable'];				// ページIDレコードが編集可能かどうか
 		
 		// 行の先頭にデフォルトかSSL使用のアイコンを付加。デフォルトアイコンが優先。

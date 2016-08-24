@@ -22,7 +22,7 @@ ALTER TABLE _widgets ADD wd_enable_content  BOOLEAN        DEFAULT false        
 
 -- ページIDマスター
 ALTER TABLE _page_id ADD pg_frontend           BOOLEAN        DEFAULT false                  NOT NULL;      -- フロント画面用かどうか(ページID種別がアクセスポイント時)、pg_analyticsは廃止
-ALTER TABLE _page_id ADD pg_functional_type    VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- システム用機能タイプ
+ALTER TABLE _page_id ADD pg_function_type    VARCHAR(20)    DEFAULT ''                    NOT NULL;      -- システム用機能タイプ
 DELETE FROM _page_id WHERE pg_type = 0;
 INSERT INTO _page_id 
 (pg_id,          pg_type, pg_default_sub_id, pg_path,       pg_name,                            pg_description,                       pg_priority, pg_device_type, pg_active, pg_visible, pg_mobile, pg_editable, pg_admin_menu, pg_frontend) VALUES
@@ -31,7 +31,7 @@ INSERT INTO _page_id
 ('m_index',      0,       'content',           'm/index',     '携帯用アクセスポイント',           '携帯用アクセスポイント',             2,           1,              false,     true,       true,      true,        false,         true),
 ('admin_index',  0,       'content',         'admin/index', '管理用アクセスポイント',           '管理用アクセスポイント',             3,           0,              true,      true,       false,     false,       false,         false),
 ('connector',    0,       'content',         'connector',   'サーバ接続用アクセスポイント',     'サーバ接続用アクセスポイント',       4,           0,              true,      true,       false,     false,       false,         false);
-UPDATE _page_id SET pg_functional_type = 'activate' WHERE pg_id = 'deploy' AND pg_type = 1;
+UPDATE _page_id SET pg_function_type = 'activate' WHERE pg_id = 'deploy' AND pg_type = 1;
 
 -- *** システム標準テーブル ***
 

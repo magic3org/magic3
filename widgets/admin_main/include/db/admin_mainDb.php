@@ -965,10 +965,10 @@ class admin_mainDb extends BaseDb
 			$queryStr .=     'pg_priority = ?, ';
 			$queryStr .=     'pg_active = ?, ';
 			$queryStr .=     'pg_visible = ?, ';
-			$queryStr .=     'pg_functional_type = ? ';			// システム用機能タイプ
+			$queryStr .=     'pg_function_type = ? ';			// システム用機能タイプ
 			$queryStr .=   'WHERE pg_id = ? ';
 			$queryStr .=     'AND pg_type = ? ';
-			$this->execStatement($queryStr, array($name, $desc, $priority, intval($active), intval($visible), $row['pg_functional_type'], $id, $type));
+			$this->execStatement($queryStr, array($name, $desc, $priority, intval($active), intval($visible), $row['pg_function_type'], $id, $type));
 		} else {
 			if (is_null($visible)) $visible = true;
 			
@@ -1020,10 +1020,10 @@ class admin_mainDb extends BaseDb
 			$queryStr .=     'pg_priority = ?, ';
 			$queryStr .=     'pg_active = ?, ';
 			$queryStr .=     'pg_visible = ?, ';
-			$queryStr .=     'pg_functional_type = ? ';			// システム用機能タイプ
+			$queryStr .=     'pg_function_type = ? ';			// システム用機能タイプ
 			$queryStr .=   'WHERE pg_id = ? ';
 			$queryStr .=     'AND pg_type = ? ';
-			$this->execStatement($queryStr, array($row['pg_name'], $row['pg_description'], $row['pg_priority'], intval($active), intval($row['pg_visible']), $row['pg_functional_type'], $id, $type));
+			$this->execStatement($queryStr, array($row['pg_name'], $row['pg_description'], $row['pg_priority'], intval($active), intval($row['pg_visible']), $row['pg_function_type'], $id, $type));
 			
 			// トランザクション確定
 			$ret = $this->endTransaction();
@@ -1056,10 +1056,10 @@ class admin_mainDb extends BaseDb
 			$queryStr .=     'pg_priority = ?, ';
 			$queryStr .=     'pg_active = ?, ';
 			$queryStr .=     'pg_visible = ?, ';
-			$queryStr .=     'pg_functional_type = ? ';			// システム用機能タイプ
+			$queryStr .=     'pg_function_type = ? ';			// システム用機能タイプ
 			$queryStr .=   'WHERE pg_id = ? ';
 			$queryStr .=     'AND pg_type = ? ';
-			$this->execStatement($queryStr, array($row['pg_name'], $row['pg_description'], $row['pg_priority'], intval($row['pg_active']), intval($visible), $row['pg_functional_type'], $id, $type));
+			$this->execStatement($queryStr, array($row['pg_name'], $row['pg_description'], $row['pg_priority'], intval($row['pg_active']), intval($visible), $row['pg_function_type'], $id, $type));
 			
 			// トランザクション確定
 			$ret = $this->endTransaction();
