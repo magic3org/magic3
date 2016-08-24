@@ -166,7 +166,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 			// 既存データを取得
 			$systemType = '';		// システム用ページタイプ
 			$ret = $this->db->getPageIdRecord(1/*ページID*/, $this->pageId, $row);
-			if ($ret) $systemType = $row['pg_system_type'];		// システム用ページタイプ
+			if ($ret) $systemType = $row['pg_functional_type'];		// システム用機能タイプ
 				
 			// 入力チェック
 			// システム用ページタイプの場合はページIDのみエラーチェック
@@ -233,7 +233,7 @@ class admin_mainPageidWidgetContainer extends admin_mainMainteBaseWidgetContaine
 				$active = $row['pg_active'];
 				$visible = $row['pg_visible'];		// ページ公開するかどうか
 				if (!$row['pg_editable']) $editable = false;
-				$systemType = $row['pg_system_type'];		// システム用ページタイプ
+				$systemType = $row['pg_functional_type'];		// システム用機能タイプ
 			} else {
 				$active = '1';		// デフォルトはページ有効
 				$visible = '1';		// ページ公開
