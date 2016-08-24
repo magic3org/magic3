@@ -292,6 +292,7 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 	{
 		$pageId = $fetchedRow['pg_id'];
 		$systemType = $fetchedRow['pg_system_type'];		// システム用ページタイプ
+		$editable = $fetchedRow['pg_editable'];				// ページIDレコードが編集可能かどうか
 		
 		// 行の先頭にデフォルトかSSL使用のアイコンを付加。デフォルトアイコンが優先。
 		// SSLを使用するかどうか
@@ -326,7 +327,12 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		// 公開、有効ボタン
 		$visibleDisabled = false;		// 公開切り替えボタン、使用不可制御用
 		$activeDisabled = false;			// 有効切り替えボタン、使用不可制御用
-		if (!empty($systemType)) $visibleDisabled = true;
+		if ($editable){
+			if (!empty($systemType)) $visibleDisabled = true;
+		} else {
+			$visibleDisabled = true;		// 公開切り替えボタン、使用不可制御用
+			$activeDisabled = true;			// 有効切り替えボタン、使用不可制御用
+		}
 			
 		$row = array(
 			'index'			=> $index,			// インデックス番号
