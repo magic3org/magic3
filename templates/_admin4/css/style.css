@@ -352,6 +352,13 @@ background-color: #0081c2;
 #layout_template_table td:hover {
 	cursor: pointer;
 }
+#mode_template_toggle_outer .toggle-group label {
+/*	padding:10px 15px;*//* original value */
+	padding:5px 10px;
+}
+#mode_template_toggle_outer {
+	margin-top:-18px;
+}
 #mode_template_normal img {
 	margin-top:-7px;
 	margin-bottom:-7px;

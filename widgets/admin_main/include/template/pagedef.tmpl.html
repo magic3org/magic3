@@ -265,11 +265,14 @@ URL：{DISP_URL}
 	    </select>
 </patTemplate:tmpl>
 </div>
-<div class="col-lg-3 text-right">
+<div class="col-lg-3 text-right" style="padding-left:0;">
+<div id="mode_template_toggle_outer" class="checkbox-inline">
+<input type="checkbox" id="mode_template_toggle" data-toggle="toggle" data-onstyle="default" data-offstyle="default" data-on="<img class='layout_img' src='{TEMPLATE_NORMAL32}' alt='通常モード' title='通常モード' /> 通常モード" data-off="<img class='layout_img' src='{TEMPLATE_PLAIN32}' alt='レイアウトモード' title='レイアウトモード' /> レイアウト" data-width="160" checked />
+</div><span {_HELP_PAGEDEF_PREVIEW_BTN}><button type="button" id="previewother" class="btn btn-default" onclick="previewInOtherWindow();return false;">{_LC_LABEL_PREVIEW}</button></span>
+<!--
 <button type="button" id="mode_template_normal" class="btn btn-default" style="{TEMPLATE_NORMAL_STYLE}" {TEMPLATE_NORMAL_DISABLED}><img src="{TEMPLATE_NORMAL32}" alt="通常モード" title="通常モード" width="32" height="32" />通常モード</button>
-<button type="button" id="mode_template_plain" class="btn btn-default" style="{TEMPLATE_PLAIN_STYLE}"><img src="{TEMPLATE_PLAIN32}" alt="レイアウトモード" title="レイアウトモード" width="32" height="32" />レイアウト</button>
+<button type="button" id="mode_template_plain" class="btn btn-default" style="{TEMPLATE_PLAIN_STYLE}"><img src="{TEMPLATE_PLAIN32}" alt="レイアウトモード" title="レイアウトモード" width="32" height="32" />レイアウト</button>-->
 
-<span {_HELP_PAGEDEF_PREVIEW_BTN}><button type="button" id="previewother" class="btn btn-default" onclick="previewInOtherWindow();return false;">{_LC_LABEL_PREVIEW}</button></span>
 </div>
 </div><!-- row end -->
 
