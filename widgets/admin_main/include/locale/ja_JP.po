@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-24 07:29+0900\n"
-"PO-Revision-Date: 2016-05-24 07:29+0900\n"
+"POT-Creation-Date: 2016-08-27 10:19+0900\n"
+"PO-Revision-Date: 2016-08-27 10:20+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -158,7 +158,7 @@ msgstr "タイトル"
 #: ../container/admin_mainPagedefWidgetContainer.php:166
 #: ../container/admin_mainSmenudefWidgetContainer.php:171
 #: ../container/admin_mainSmenudefWidgetContainer.php:195
-#: ../help/help_menudef.php:63 ../help/help_pagedef.php:87
+#: ../help/help_menudef.php:63 ../help/help_pagedef.php:91
 msgid "Visible"
 msgstr "表示"
 
@@ -231,7 +231,7 @@ msgid "Remove list marker"
 msgstr "リストのマーカーを削除"
 
 #: ../container/admin_mainAdjustwidgetWidgetContainer.php:748
-#: ../help/help_adjustwidget.php:67 ../help/help_pagedef.php:91
+#: ../help/help_adjustwidget.php:67 ../help/help_pagedef.php:95
 msgid "Global Attribute"
 msgstr "グローバル属性"
 
@@ -371,7 +371,7 @@ msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:178
-#: ../container/admin_mainWidgetContainer.php:409
+#: ../container/admin_mainWidgetContainer.php:399
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
 
@@ -904,140 +904,10 @@ msgstr ""
 "アップロードファイルが見つかりません。(要因： アップロード可能なファイルのMax"
 "サイズを超えている可能性があります。 %sバイト)"
 
-#: ../container/admin_mainFilebrowseWidgetContainer.php:104
-#, php-format
-msgid "Include files not allowed to delete. (filename: %s)"
-msgstr "削除できないファイルが含まれています。(ファイル名： %s)"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:121
-msgid "Files deleted."
-msgstr "ファイルを削除しました"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:124
-msgid "Failed in deleting files."
-msgstr "ファイル削除に失敗しました"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:129
-#: ../container/admin_mainFilebrowseWidgetContainer.php:213
-msgid "Directory Name"
-msgstr "ディレクトリ名"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:135
-msgid "Directory created."
-msgstr "ディレクトリを作成しました"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:138
-msgid "Failed in creating directory."
-msgstr "ディレクトリの作成に失敗しました"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:194
-msgid "Files uploaded. Refresh file list?"
-msgstr "アップロード終了しました。ファイル一覧を更新しますか?"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:195
-msgid "Select files to delete."
-msgstr "削除する項目を選択してください"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:196
-msgid "Delete selected files?"
-msgstr "選択項目を削除しますか?"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:197
-msgid "Create directory?"
-msgstr "ディレクトリを作成しますか?"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:198
-#: ../container/admin_mainMenudefWidgetContainer.php:193
-msgid "Path:"
-msgstr "パス："
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:199
-#: ../container/admin_mainMenudefWidgetContainer.php:182
-#: ../container/admin_mainMenudefWidgetContainer.php:196
-#: ../container/admin_mainSmenudefWidgetContainer.php:176
-#: ../container/admin_mainSmenudefWidgetContainer.php:189
-#: ../container/admin_mainTemplistWidgetContainer.php:558
-#: ../container/admin_mainUserlistWidgetContainer.php:138
-#: ../container/admin_mainUserlistWidgetContainer.php:161
-msgid "Delete"
-msgstr "削除"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:200
-#: ../container/admin_mainMenudefWidgetContainer.php:197
-#: ../container/admin_mainOpelogWidgetContainer.php:205
-#: ../container/admin_mainSmenudefWidgetContainer.php:190
-#: ../container/admin_mainUserlistWidgetContainer.php:149
-msgid "Select"
-msgstr "選択"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:201
-#: ../help/help_browse.php:46
-msgid "Filename"
-msgstr "ファイル名"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:202
-#: ../help/help_browse.php:50
-msgid "Size"
-msgstr "サイズ"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:203
-#: ../help/help_browse.php:54
-msgid "Permission"
-msgstr "パーミッション"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:204
-#: ../container/admin_mainTemplistWidgetContainer.php:465
-#: ../container/admin_mainUserlistWidgetContainer.php:156
-#: ../help/help_browse.php:66
-msgid "Update Date"
-msgstr "更新日"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:205
-#: ../help/help_browse.php:58
-msgid "Owner"
-msgstr "所有者"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:206
-#: ../help/help_browse.php:62
-msgid "Group"
-msgstr "グループ"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:207
-msgid "Items"
-msgstr "件目"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:208
-#: ../help/help_browse.php:70
-msgid "Upload File"
-msgstr "ファイルアップロード"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:209
-msgid "Max Filesize"
-msgstr "1ファイル最大サイズ"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:210
-msgid "Select Files"
-msgstr "ファイルを選択"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:211
-#: ../container/admin_mainTemplistWidgetContainer.php:470
-#: ../container/admin_mainWidgetlistWidgetContainer.php:673
-msgid "Cancel"
-msgstr "キャンセル"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:212
-#: ../help/help_browse.php:74
-msgid "Create Directory"
-msgstr "ディレクトリ作成"
-
-#: ../container/admin_mainFilebrowseWidgetContainer.php:214
-msgid "Create"
-msgstr "作成"
-
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:36
 #: ../container/admin_mainUserlistWidgetContainer.php:123
 #: ../container/admin_mainUserlistWidgetContainer.php:153
-#: ../container/admin_mainWidgetContainer.php:404
+#: ../container/admin_mainWidgetContainer.php:394
 msgid "Login"
 msgstr "ログイン"
 
@@ -1185,6 +1055,16 @@ msgstr "ユーザ制限"
 msgid "Cotrol visible status linked to contents."
 msgstr "リンク先のコンテンツに連動"
 
+#: ../container/admin_mainMenudefWidgetContainer.php:182
+#: ../container/admin_mainMenudefWidgetContainer.php:196
+#: ../container/admin_mainSmenudefWidgetContainer.php:176
+#: ../container/admin_mainSmenudefWidgetContainer.php:189
+#: ../container/admin_mainTemplistWidgetContainer.php:558
+#: ../container/admin_mainUserlistWidgetContainer.php:138
+#: ../container/admin_mainUserlistWidgetContainer.php:161
+msgid "Delete"
+msgstr "削除"
+
 #: ../container/admin_mainMenudefWidgetContainer.php:184
 #: ../container/admin_mainSmenudefWidgetContainer.php:178
 #: ../container/admin_mainUserlistWidgetContainer.php:140
@@ -1214,12 +1094,23 @@ msgstr "選択項目を削除しますか?"
 msgid "Menu Definition"
 msgstr "メニュー定義"
 
+#: ../container/admin_mainMenudefWidgetContainer.php:193
+msgid "Path:"
+msgstr "パス："
+
 #: ../container/admin_mainMenudefWidgetContainer.php:195
 #: ../container/admin_mainOpelogWidgetContainer.php:204
 #: ../container/admin_mainSmenudefWidgetContainer.php:188
 #: ../container/admin_mainUserlistWidgetContainer.php:160
 msgid "Edit"
 msgstr "編集"
+
+#: ../container/admin_mainMenudefWidgetContainer.php:197
+#: ../container/admin_mainOpelogWidgetContainer.php:205
+#: ../container/admin_mainSmenudefWidgetContainer.php:190
+#: ../container/admin_mainUserlistWidgetContainer.php:149
+msgid "Select"
+msgstr "選択"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:201
 #: ../container/admin_mainSmenudefWidgetContainer.php:194
@@ -1407,17 +1298,17 @@ msgid "Show Detail"
 msgstr "詳細"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:142
-#: ../help/help_pagedef.php:55 ../help/help_templist.php:55
+#: ../help/help_pagedef.php:59 ../help/help_templist.php:55
 msgid "Default Template"
 msgstr "デフォルトテンプレート"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:143
-#: ../help/help_pagedef.php:59
+#: ../help/help_pagedef.php:63
 msgid "Change Template"
 msgstr "変更"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:144
-#: ../help/help_pagedef.php:67
+#: ../help/help_pagedef.php:71
 msgid "Page Layout"
 msgstr "画面デザイン"
 
@@ -1435,7 +1326,7 @@ msgid "Maximize"
 msgstr "最大化"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:148
-#: ../help/help_pagedef.php:51
+#: ../help/help_pagedef.php:55
 msgid "Preview in other window"
 msgstr "別画面でプレビュー"
 
@@ -1444,12 +1335,12 @@ msgid "Site Preview"
 msgstr "実際の画面"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:150
-#: ../help/help_pagedef.php:97
+#: ../help/help_pagedef.php:101
 msgid "Page"
 msgstr "ページ"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:151
-#: ../help/help_pagedef.php:101
+#: ../help/help_pagedef.php:105
 msgid "Template"
 msgstr "テンプレート"
 
@@ -1470,13 +1361,13 @@ msgid "Page Definition Detail"
 msgstr "ページ定義詳細"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:161
-#: ../help/help_pagedef.php:75
+#: ../help/help_pagedef.php:79
 msgid "Position"
 msgstr "ポジション名"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:162
 #: ../container/admin_mainPagedefWidgetContainer.php:471
-#: ../help/help_pagedef.php:79
+#: ../help/help_pagedef.php:83
 msgid "Order"
 msgstr "表示順"
 
@@ -1486,7 +1377,7 @@ msgid "Widget Name"
 msgstr "ウィジェット名"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:165
-#: ../help/help_pagedef.php:83
+#: ../help/help_pagedef.php:87
 msgid "Config ID"
 msgstr "定義ID"
 
@@ -1629,7 +1520,7 @@ msgstr "保存"
 
 #: ../container/admin_mainServerinfoWidgetContainer.php:208
 #: ../container/admin_mainSitelistWidgetContainer.php:147
-#: ../container/admin_mainWidgetContainer.php:325
+#: ../container/admin_mainWidgetContainer.php:315
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
@@ -1762,6 +1653,12 @@ msgstr "形式"
 msgid "Genarator - Version"
 msgstr "生成ソフト - バージョン"
 
+#: ../container/admin_mainTemplistWidgetContainer.php:465
+#: ../container/admin_mainUserlistWidgetContainer.php:156
+#: ../help/help_browse.php:66
+msgid "Update Date"
+msgstr "更新日"
+
 #: ../container/admin_mainTemplistWidgetContainer.php:467
 msgid "Template Upload (zip compressed file)"
 msgstr "テンプレートアップロード(zip圧縮ファイル)"
@@ -1770,6 +1667,11 @@ msgstr "テンプレートアップロード(zip圧縮ファイル)"
 #: ../container/admin_mainWidgetlistWidgetContainer.php:670
 msgid "Select file to upload."
 msgstr "アップロードするファイルを選択してください"
+
+#: ../container/admin_mainTemplistWidgetContainer.php:470
+#: ../container/admin_mainWidgetlistWidgetContainer.php:673
+msgid "Cancel"
+msgstr "キャンセル"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:516
 msgid "Template not found."
@@ -1850,12 +1752,12 @@ msgid "User Detail"
 msgstr "ユーザ詳細"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:406
+#: ../container/admin_mainWidgetContainer.php:396
 msgid "Account"
 msgstr "アカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:124
-#: ../container/admin_mainWidgetContainer.php:407 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:397 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1879,7 +1781,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:157
 #: ../container/admin_mainUserlistWidgetContainer.php:304
 #: ../container/admin_mainUserlistWidgetContainer.php:372
-#: ../container/admin_mainWidgetContainer.php:408 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:398 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -1958,16 +1860,16 @@ msgstr "制限あり"
 msgid "Out of Range"
 msgstr "該当なし"
 
-#: ../container/admin_mainWidgetContainer.php:331
-#: ../container/admin_mainWidgetContainer.php:337
+#: ../container/admin_mainWidgetContainer.php:321
+#: ../container/admin_mainWidgetContainer.php:327
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:341
+#: ../container/admin_mainWidgetContainer.php:331
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:405
+#: ../container/admin_mainWidgetContainer.php:395
 msgid "Send Password"
 msgstr "パスワード送信"
 
@@ -2264,21 +2166,41 @@ msgstr "パス"
 msgid "Show current directory."
 msgstr "現在のディレクトリパスを示します。"
 
+#: ../help/help_browse.php:46
+msgid "Filename"
+msgstr "ファイル名"
+
 #: ../help/help_browse.php:47
 msgid "Show file or directory name."
 msgstr "ファイル名、ディレクトリ名を示します。"
+
+#: ../help/help_browse.php:50
+msgid "Size"
+msgstr "サイズ"
 
 #: ../help/help_browse.php:51
 msgid "Show byte counts of file."
 msgstr "ファイルのサイズを示します。"
 
+#: ../help/help_browse.php:54
+msgid "Permission"
+msgstr "パーミッション"
+
 #: ../help/help_browse.php:55
 msgid "Show permission of file or directory."
 msgstr "ファイル、ディレクトリのパーミッションを示します。"
 
+#: ../help/help_browse.php:58
+msgid "Owner"
+msgstr "所有者"
+
 #: ../help/help_browse.php:59
 msgid "Show owner of file or directory."
 msgstr "ファイル、ディレクトリの所有者を示します。"
+
+#: ../help/help_browse.php:62
+msgid "Group"
+msgstr "グループ"
 
 #: ../help/help_browse.php:63
 msgid "Show group owner of file or directory."
@@ -2288,11 +2210,19 @@ msgstr "ファイル、ディレクトリのグループ所有者を示します
 msgid "Show update date of file or directory."
 msgstr "ファイル、ディレクトリの更新日時を示します。"
 
+#: ../help/help_browse.php:70
+msgid "Upload File"
+msgstr "ファイルアップロード"
+
 #: ../help/help_browse.php:71
 msgid "Uplod files in this area. Show upload status in uploading files."
 msgstr ""
 "ファイルのアップロードはここから行います。ファイルアップロード時はアップロー"
 "ド状況が表示されます。"
+
+#: ../help/help_browse.php:74
+msgid "Create Directory"
+msgstr "ディレクトリ作成"
 
 #: ../help/help_browse.php:75
 msgid "Create directory in this area."
@@ -2603,27 +2533,37 @@ msgstr ""
 "レイアウト画面を最大化します。画面を元に戻すにはESCキーを押します。ESCキーで"
 "も最大化できます。"
 
+#: ../help/help_pagedef.php:51
+msgid "Normal mode / Layout mode Switch"
+msgstr "通常モード/レイアウトモード切り替え"
+
 #: ../help/help_pagedef.php:52
+msgid ""
+"If it is difficult to move widgets in normal mode, operate in layout mode."
+msgstr ""
+"通常モードでウィジェットが移動しにくい場合は、レイアウトモードを使用します。"
+
+#: ../help/help_pagedef.php:56
 msgid "Preview page in other window."
 msgstr "実際に表示される画面を別ウィンドウで表示します。"
 
-#: ../help/help_pagedef.php:56
+#: ../help/help_pagedef.php:60
 msgid "Select default template for site."
 msgstr "デフォルトで設定されるデザインテンプレートを指定します。"
 
-#: ../help/help_pagedef.php:60
+#: ../help/help_pagedef.php:64
 msgid "Change template."
 msgstr "デフォルトのテンプレートを変更します。"
 
-#: ../help/help_pagedef.php:63
+#: ../help/help_pagedef.php:67
 msgid "Template Image"
 msgstr "テンプレート表示イメージ"
 
-#: ../help/help_pagedef.php:64
+#: ../help/help_pagedef.php:68
 msgid "The template image if site on window."
 msgstr "テンプレートを設定した場合の画面の表示イメージです。"
 
-#: ../help/help_pagedef.php:68
+#: ../help/help_pagedef.php:72
 msgid ""
 "<strong>Widget Layout</strong> - Create page with layouting widgets. Get "
 "widgets from widget list by mouse drag & drops. Layout widgets by dropping "
@@ -2648,36 +2588,36 @@ msgstr ""
 "ます。グローバル属性を設定したウィジェットは、ページに関わらず常に表示されま"
 "す。(赤色表示)"
 
-#: ../help/help_pagedef.php:71
+#: ../help/help_pagedef.php:75
 msgid "Refresh Window"
 msgstr "画面再表示"
 
-#: ../help/help_pagedef.php:72
+#: ../help/help_pagedef.php:76
 msgid "Refresh layout page or preview."
 msgstr "レイアウトまたはプレビュー画面を再表示します。"
 
-#: ../help/help_pagedef.php:76
+#: ../help/help_pagedef.php:80
 msgid "The position is block name for layouting widgets in design template."
 msgstr "デザインテンプレート内でのウィジェットの配置ブロックを指定します。"
 
-#: ../help/help_pagedef.php:80
+#: ../help/help_pagedef.php:84
 msgid "The order is the widget order in position block."
 msgstr "ポジションブロック内でのウィジェットの表示順を指定します。"
 
-#: ../help/help_pagedef.php:84
+#: ../help/help_pagedef.php:88
 msgid "The Config ID is used for widget if needed."
 msgstr ""
 "個別のウィジェットの設定IDです。設定が必要な場合のみ設定可能になります。"
 
-#: ../help/help_pagedef.php:88
+#: ../help/help_pagedef.php:92
 msgid "Control widget visible status."
 msgstr "ウィジェットの表示、非表示を制御します。"
 
-#: ../help/help_pagedef.php:92
+#: ../help/help_pagedef.php:96
 msgid "If the widget has global attribute, it always shows on all pages."
 msgstr "ページに関わらずウィジェットを表示するかどうかを指定します。"
 
-#: ../help/help_pagedef.php:98
+#: ../help/help_pagedef.php:102
 msgid ""
 "Select the page to edit. Page is identified by Page ID added to url as "
 "parameter. Unpublish page is not published to users without site "
@@ -2686,7 +2626,7 @@ msgstr ""
 "編集するページを選択します。ページはURLに付加されるページIDで区別されます。非"
 "公開項目は管理権限のない一般ユーザには公開されないページです。"
 
-#: ../help/help_pagedef.php:102
+#: ../help/help_pagedef.php:106
 msgid "Select the template for page."
 msgstr "ページに対してテンプレートを選択します。"
 
@@ -3015,6 +2955,48 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#~ msgid "Include files not allowed to delete. (filename: %s)"
+#~ msgstr "削除できないファイルが含まれています。(ファイル名： %s)"
+
+#~ msgid "Files deleted."
+#~ msgstr "ファイルを削除しました"
+
+#~ msgid "Failed in deleting files."
+#~ msgstr "ファイル削除に失敗しました"
+
+#~ msgid "Directory Name"
+#~ msgstr "ディレクトリ名"
+
+#~ msgid "Directory created."
+#~ msgstr "ディレクトリを作成しました"
+
+#~ msgid "Failed in creating directory."
+#~ msgstr "ディレクトリの作成に失敗しました"
+
+#~ msgid "Files uploaded. Refresh file list?"
+#~ msgstr "アップロード終了しました。ファイル一覧を更新しますか?"
+
+#~ msgid "Select files to delete."
+#~ msgstr "削除する項目を選択してください"
+
+#~ msgid "Delete selected files?"
+#~ msgstr "選択項目を削除しますか?"
+
+#~ msgid "Create directory?"
+#~ msgstr "ディレクトリを作成しますか?"
+
+#~ msgid "Items"
+#~ msgstr "件目"
+
+#~ msgid "Max Filesize"
+#~ msgstr "1ファイル最大サイズ"
+
+#~ msgid "Select Files"
+#~ msgstr "ファイルを選択"
+
+#~ msgid "Create"
+#~ msgstr "作成"
 
 #~ msgid "SMTP Mail Server  :"
 #~ msgstr "SMTPメールサーバ  :"

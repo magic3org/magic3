@@ -353,7 +353,6 @@ background-color: #0081c2;
 	cursor: pointer;
 }
 #mode_template_toggle_outer .toggle-group label {
-/*	padding:10px 15px;*//* original value */
 	padding:5px 10px;
 }
 #mode_template_toggle_outer {

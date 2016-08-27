@@ -47,6 +47,10 @@ class help_pagedef extends HelpConv
 				'title' =>	$this->_('Maximize Button'),			// 最大化ボタン
 				'body'	=>	$this->_('Maximize layout tab. If go back to minimized tab, push down ESC key. If maximize, push down ESC key.')		// レイアウト画面を最大化します。画面を元に戻すにはESCキーを押します。ESCキーでも最大化できます。
 			),
+			'pagedef_layout_btn' => array(	
+				'title' =>	$this->_('Normal mode / Layout mode Switch'),	// 通常モード/レイアウトモード切り替え
+				'body'	=>	$this->_('If it is difficult to move widgets in normal mode, operate in layout mode.')		// 通常モードでウィジェットが移動しにくい場合は、レイアウトモードを使用します。
+			),
 			'pagedef_preview_btn' => array(	
 				'title' =>	$this->_('Preview in other window'),			// 別画面でプレビュー
 				'body'	=>	$this->_('Preview page in other window.')		// 実際に表示される画面を別ウィンドウで表示します。
