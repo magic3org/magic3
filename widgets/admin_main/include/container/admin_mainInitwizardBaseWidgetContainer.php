@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -111,8 +111,8 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 			if ($task == $this->_taskArray[$i]) $attr = ' class="active"';
 			$menuHtml .= '<li' . $attr . '><a href="' . $url . '">' . $this->convertToDispString($this->_taskTitleArray[$i]) . '</a></li>';
 		}
-//		$menuHtml = '<ul class="nav nav-pills">' . $menuHtml . '</ul>';
-		$menuHtml = '<ul class="nav nav-tabs">' . $menuHtml . '</ul>';
+//		$menuHtml = '<ul class="nav nav-tabs">' . $menuHtml . '</ul>';
+		$menuHtml = '<ul class="nav nav-wizard">' . $menuHtml . '</ul>';
 		$this->tmpl->addVar("_widget", "menu_items", $menuHtml);
 		
 		// 前後エントリー移動ボタン
