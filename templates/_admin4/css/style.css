@@ -943,12 +943,11 @@ nav.secondlevel .btn.navbar-btn:focus {
 	padding-left:100px;
 }
 
-/*** ナビゲーションボタン追加 ***/
-.centered-pills { text-align:center; }
-.centered-pills ul.nav.nav-pills, .centered-pills ul.nav.nav-tabs { display:inline-block; }
-.centered-pills ul.nav.nav-pills li, .centered-pills ul.nav.nav-tabs li { display:inline; }
-
 /*** ウィザードスタイルのナビゲーションタブ用 ***/
+.m3wizard_nav {
+	margin-top: 20px;
+	margin-bottom: 50px;
+}
 .nav-wizard > li {
 	float: left;
 }
