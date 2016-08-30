@@ -108,6 +108,7 @@ class PageManager extends Core
 	private $ckeditorTemplateType;			// CKEditor用のテンプレートタイプ
 	private $adminSubNavbarDef = array();		// 管理画面用のサブメニューバーの定義
 	private $adminBreadcrumbDef = array();			// 管理画面用パンくずリスト定義
+	private $adminBreadcrumbDefHelp = array();				// 管理画面用パンくずリストヘルプ定義
 	const CONFIG_KEY_HEAD_TITLE_FORMAT = 'head_title_format';		// ヘッダ作成用フォーマット
 	const ADMIN_WIDGET_ID = 'admin_main';		// 管理用ウィジェットのウィジェットID
 	//const CONTENT_TYPE_WIKI = 'wiki';		// ページのコンテンツタイプ(Wiki)
@@ -1179,19 +1180,28 @@ class PageManager extends Core
 	 * 管理画面用パンくずリスト定義を設定
 	 *
 	 * @param array $def	パンくずリスト定義
+	 * @param array $help	ヘルプ(title,bodyの連想配列)
 	 * @return 				なし
 	 */
-	function setAdminBreadcrumbDef($def)
+	function setAdminBreadcrumbDef($def, $help = array())
 	{
 		$this->adminBreadcrumbDef = $def;
+		if (!empty(($help))) $this->adminBreadcrumbDefHelp = $help;				// 管理画面用パンくずリストヘルプ定義
 	}
 	/**
 	 * 管理画面用パンくずリスト定義を取得
 	 *
-	 * @return array パンくずリスト定義
+	 * @param array $help	ヘルプ(title,bodyの連想配列)
+	 * @return array		パンくずリスト定義
 	 */
-	function getAdminBreadcrumbDef()
+	function getAdminBreadcrumbDef(&$help)
 	{
+		// パラメータ数を取得
+		$argNum = func_num_args();
+		
+		// ヘルプ取得用パラメータが存在する場合は定義を設定
+		if ($argNum > 0) $help = $this->adminBreadcrumbDefHelp;
+
 		return $this->adminBreadcrumbDef;
 	}
 	/**

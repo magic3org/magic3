@@ -110,11 +110,7 @@ $(function(){
 	</div>
 </nav>
 </patTemplate:tmpl>
-<patTemplate:tmpl name="breadcrumb" visibility="hidden">
-<ol class="breadcrumb">
-<patTemplate:tmpl name="breadcrumb_list"><li>{NAME}</li></patTemplate:tmpl>
-</ol>
-</patTemplate:tmpl>
+<patTemplate:tmpl name="breadcrumb" visibility="hidden">{HTML}</patTemplate:tmpl>
 <patTemplate:tmpl name="closebutton" visibility="hidden">
 <div class="m3configclose"><a href="#" onclick="window.close();" title="{_LC_LABEL_CLOSE}" data-placement="left" data-container="body" rel="m3help"><img src="{CLOSE_IMAGE}" alt="{_LC_LABEL_CLOSE}" /></a></div>
 </patTemplate:tmpl>

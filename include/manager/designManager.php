@@ -545,10 +545,11 @@ class DesignManager extends Core
 	/**
 	 * 管理画面用パンくずリストを作成
 	 *
-	 * @param array $def				パンくずリストの定義
-	 * @return string 					パンくずリストのHTML
+	 * @param array $def		パンくずリストの定義
+	 * @param array $help		ヘルプ(title,bodyの連想配列)
+	 * @return string 			パンくずリストのHTML
 	 */
-	function createAdminBreadcrumb($def)
+	function createAdminBreadcrumb($def, $help = array())
 	{
 		$destHtml = '<ol class="breadcrumb">';
 		for ($i = 0; $i < count($def); $i++){

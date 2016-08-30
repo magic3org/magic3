@@ -398,16 +398,11 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar('subnavbar', 'menu', $menu);
 		}
 		// パンくずリストを表示
-		$breadcrumbDef = $this->gPage->getAdminBreadcrumbDef();
+		$breadcrumbDef = $this->gPage->getAdminBreadcrumbDef($helpDef);
 		if (!empty($breadcrumbDef)){
 			$this->tmpl->setAttribute('breadcrumb', 'visibility', 'visible');
-			for ($i = 0; $i < count($breadcrumbDef); $i++){
-				$row = array(
-					'name' => $this->convertToDispString($breadcrumbDef[$i])
-				);
-				$this->tmpl->addVars('breadcrumb_list', $row);
-				$this->tmpl->parseTemplate('breadcrumb_list', 'a');
-			}
+			$breadcrumbHtml = $this->gDesign->createAdminBreadcrumb($breadcrumbDef);
+			$this->tmpl->addVar('breadcrumb', 'html', $breadcrumbHtml);
 		}
 		// メニューバーの高さ位置を修正
 		if (!empty($subNavbarDef) || !empty($breadcrumbDef)){
