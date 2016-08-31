@@ -20,32 +20,27 @@
 	margin-left:140px;
 }
 /* top page button */
-.toppage-button {
+/*.toppage-button {
 	display:block;
 	background-color: #FFD50F;
 	border: 2px solid #DA9D42;
-/*	color: #693A3A;*/
 	font-weight:bold;
 	width: 180px;
 	font-size: 90%;
 	text-align:center;
 	padding:10px 0px;
 	margin: 10px 0px;
-}
+}*/
 /* default button */
-.link-button {
-/*	display:block;*/
+/*.link-button {
 	background-color: #FFD50F;
 	border: 2px solid #DA9D42;
-/*	color: #693A3A;*/
 	font-weight:bold;
 	width: 90px;
 	height: 20px;
 	font-size: 100%;
 	text-align:center;
-/*	padding:10px 0px;*/
-/*	margin: 5px 0px;*/
-}
+}*/
 /* main content area */
 /*#main-content
 {
@@ -179,10 +174,10 @@ background-color: #0081c2;
 	display:block;
 }
 /* widget */
-.widget_obj
+/*.widget_obj
 {
 	font-size        : 90%;
-}
+}*/
 /* error message */
 .m3messages {
 /*	margin-top: 10px;*/
@@ -937,11 +932,21 @@ nav.secondlevel .btn.navbar-btn:focus {
 	outline: 0;
 }
 /*** パンくずリスト ***/
-.breadcrumb {
+.m3breadcrumbbar {
+	background-color: #ecf0f1;
+	height: 38px;
+}
+.m3breadcrumbbar .breadcrumb {
+	display: inline-block;
+	margin-top: 1px;
+	margin-bottom:0px;
+	padding-left:100px;
+}
+/*.breadcrumb {
 	margin-top:0;
 	margin-bottom:10px;
 	padding-left:100px;
-}
+}*/
 
 /*** ウィザードスタイルのナビゲーションタブ用 ***/
 .m3wizard_nav {

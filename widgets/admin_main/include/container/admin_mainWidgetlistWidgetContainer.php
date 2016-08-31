@@ -904,7 +904,7 @@ class admin_mainWidgetlistWidgetContainer extends admin_mainBaseWidgetContainer
 			$iconTitle = $this->_('Widget not found.');		// ウィジェットが見つかりません
 			$iconUrl = $this->gEnv->getRootUrl() . self::NOT_FOUND_WIDGET_ICON_FILE;
 		}
-		$imageTag = '<img class="widget_obj" src="' . $this->getUrl($iconUrl) . '" ';
+		$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" ';
 		$imageTag .= 'width="' . $this->defaultImageSize . '"';
 		$imageTag .= ' height="' . $this->defaultImageSize . '"';
 		$imageTag .= ' alt="' . $iconTitle . '" title="' . $iconTitle . '" />';

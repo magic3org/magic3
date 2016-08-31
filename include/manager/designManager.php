@@ -551,12 +551,23 @@ class DesignManager extends Core
 	 */
 	function createAdminBreadcrumb($def, $help = array())
 	{
-		$destHtml = '<ol class="breadcrumb">';
+		$destHtml = '<div class="m3breadcrumbbar">';
+		$destHtml .= '<ol class="breadcrumb">';
 		for ($i = 0; $i < count($def); $i++){
 			$name = $def[$i];
 			$destHtml .= '<li>' . convertToHtmlEntity($name) . '</li>';
 		}
 		$destHtml .= '</ol>';
+		
+		// ヘルプが設定されている場合は追加
+		if (!empty($help)){
+			$title = $help['title'];
+			if (!empty($title)){
+				$helpText = $this->gInstance->getHelpManager()->createHelpText($title, $help['body']);
+				$destHtml .= '<span ' . $helpText . '><i class="glyphicon glyphicon-question-sign text-warning"></i></span>';
+			}
+		}
+		$destHtml .= '</div>';
 		return $destHtml;
 	}
 	/**

@@ -401,7 +401,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		$breadcrumbDef = $this->gPage->getAdminBreadcrumbDef($helpDef);
 		if (!empty($breadcrumbDef)){
 			$this->tmpl->setAttribute('breadcrumb', 'visibility', 'visible');
-			$breadcrumbHtml = $this->gDesign->createAdminBreadcrumb($breadcrumbDef);
+			$breadcrumbHtml = $this->gDesign->createAdminBreadcrumb($breadcrumbDef, $helpDef);
 			$this->tmpl->addVar('breadcrumb', 'html', $breadcrumbHtml);
 		}
 		// メニューバーの高さ位置を修正
