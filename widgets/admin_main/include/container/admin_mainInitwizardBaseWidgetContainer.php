@@ -126,7 +126,8 @@ class admin_mainInitwizardBaseWidgetContainer extends admin_mainBaseWidgetContai
 		}
 		
 		// パンくずリストの作成
-		$this->gPage->setAdminBreadcrumbDef(array(self::BREADCRUMB_TITLE));
+		$helpHtml = 'ウィザードスタイルの画面遷移でサイトの最小限の設定が行えます。<br />右下の「次へ」ボタンを押す度に画面に表示している設定値でシステムが更新されます。「サイト」から「完了」まで、すべての画面を連続で遷移する使い方だけでなく、単体の画面遷移でその部分だけの設定変更が可能です。';
+		$this->gPage->setAdminBreadcrumbDef(array(self::BREADCRUMB_TITLE), array('title' => self::BREADCRUMB_TITLE, 'body' => $helpHtml));
 	}
 	/**
 	 * 次のタスクがある場合は画面遷移
