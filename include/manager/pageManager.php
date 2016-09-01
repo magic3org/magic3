@@ -197,7 +197,7 @@ class PageManager extends Core
 	
 	// Magic3用スクリプト
 	const M3_ADMIN_SCRIPT_FILENAME			= 'm3admin1.8.7.js';				// 管理機能用スクリプト(FCKEditor2.6.6、CKEditor4.0.1対応)
-	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.9.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
+	const M3_ADMIN_WIDGET_SCRIPT_FILENAME	= 'm3admin_widget2.0.10.js';	// 管理機能(ウィジェット操作)用スクリプト(Magic3 v1.15.0以降)
 	const M3_ADMIN_WIDGET_CSS_FILE			= '/m3/widget.css';			// 管理機能(ウィジェット操作)用CSSファイル
 	const M3_STD_SCRIPT_FILENAME			= 'm3std1.5.2.js';			// 一般、管理機能共通スクリプト
 //	const M3_PLUS_SCRIPT_FILENAME			= 'm3plus1.6.2.js';			// フロント画面追加用スクリプト(FCKEditor2.6.6対応、CKEditor4.0.1対応)
@@ -3981,7 +3981,8 @@ class PageManager extends Core
 						$editTag .= '<i class="glyphicon glyphicon-ok-sign"></i></a></div>';
 						$menubarTag .= $editTag;
 						
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
+				//		$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
+						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window == window.parent){' . M3_NL;// インラインフレームでないときパネルメニューを表示(修正 2016/9/1)
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").prepend(\'' . $menubarTag . '\');' . M3_NL;		// appendでうまく表示できないのでprependで表示
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . '}' . M3_NL;
 					} else if ($this->isAccessPointWithAdminMenu){		// 通常画面は、管理メニューを使用するアクセスポイントの場合のみ表示
@@ -4035,7 +4036,8 @@ class PageManager extends Core
 						$menubarTag .= '</div>';
 					//	$menubarTag .= '</div>';
 
-						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
+					//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window.parent && window.parent.frames.length == 0){' . M3_NL;// インラインフレームでないときパネルメニューを表示
+						$this->initScript .= str_repeat(M3_INDENT_SPACE, 1) . 'if (window == window.parent){' . M3_NL;// インラインフレームでないときパネルメニューを表示(修正 2016/9/1)
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("body").append(\'' . $menubarTag . '\');' . M3_NL;
 						//$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$("#m3slidemenubarpanel").m3SlideMenubar();' . M3_NL;
 						$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(".m3panel_top").m3slidepanel({ "position": "top", "type": "push" });' . M3_NL;

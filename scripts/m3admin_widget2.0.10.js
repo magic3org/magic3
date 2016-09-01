@@ -460,7 +460,8 @@
 		widgetWindow += '</div>';
 		
 		// 画面リサイズボタン(右上)
-		if (!(window.parent && window.parent.frames.length == 0)){			// 親ウィンドウありの場合
+		//if (!(window.parent && window.parent.frames.length == 0)){			// 親ウィンドウありの場合
+		if (!(window == window.parent)){		// 親ウィンドウありの場合
 			widgetWindow += '<div class="m3resizer m3topright"><a href="#" rel="m3help" data-placement="bottom" data-container="body" title="画面の拡大縮小"><i class="glyphicon"></i></a></div>';
     	}
 		
