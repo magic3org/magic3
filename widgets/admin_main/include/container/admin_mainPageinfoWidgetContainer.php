@@ -321,8 +321,13 @@ class admin_mainPageinfoWidgetContainer extends admin_mainMainteBaseWidgetContai
 		$active = '';
 		$activeDesc = '';
 		if ($fetchedRow['pg_active']){
-			$active = 'class="success"';
-			$activeDesc = 'rel="m3help" title="有効なページ"';
+			if ($refCount > 0){			// ウィジェットが配置されている場合
+				$active = 'class="success"';
+				$activeDesc = 'rel="m3help" title="有効なページ(使用数 ' . $refCount . ')"';
+			} else {
+				$active = 'class="warning"';
+				$activeDesc = 'rel="m3help" title="有効なページ(未使用)"';
+			}
 		}
 		// 公開、有効ボタン
 		$visibleDisabled = false;		// 公開切り替えボタン、使用不可制御用

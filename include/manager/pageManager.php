@@ -1186,7 +1186,7 @@ class PageManager extends Core
 	function setAdminBreadcrumbDef($def, $help = array())
 	{
 		$this->adminBreadcrumbDef = $def;
-		if (!empty(($help))) $this->adminBreadcrumbDefHelp = $help;				// 管理画面用パンくずリストヘルプ定義
+		if (!empty($help)) $this->adminBreadcrumbDefHelp = $help;				// 管理画面用パンくずリストヘルプ定義
 	}
 	/**
 	 * 管理画面用パンくずリスト定義を取得
