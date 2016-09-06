@@ -10,9 +10,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: messageManager.php 5728 2013-02-25 09:14:19Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once(M3_SYSTEM_INCLUDE_PATH . '/common/core.php');
@@ -23,6 +23,7 @@ class MessageManager extends Core
 	private $errorMessage    = array();		// アプリケーションのエラー
 	private $warningMessage  = array();		// ユーザ操作の誤り
 	private $guideMessage = array();		// ガイダンス
+	private $_popupMessage	= array();		// ポップアップメッセージ
 	private $_langStringArray = array();		// 読み込んだ言語テキスト
 	private $langStringLoaded;		// 初期データを読み込んだかどうか
 	private $loadedLang;			// データを読み込んだ言語ID
@@ -89,6 +90,26 @@ class MessageManager extends Core
 	function getGuideMessage()
 	{	
 		return $this->guideMessage;
+	}
+	/**
+	 * ポップアップメッセージを追加する
+	 *
+	 * @param string,array $message		メッセージ
+	 * @return							なし
+	 */
+	function addPopupMsg($message)
+	{
+		if (!is_array($message)) $message = array($message);
+		$this->_popupMessage		= array_merge($this->_popupMessage, $message);
+	}
+	/**
+	 * ポップアップメッセージを取得する
+	 *
+	 * @return array			メッセージ
+	 */
+	function getPopupMsg()
+	{
+		return $this->_popupMessage;
 	}
 	/**
 	 * 言語テキスト定義をDBから取得
