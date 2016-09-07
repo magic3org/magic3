@@ -220,8 +220,11 @@ function m3Alert(type, message, after_callback, title)
 	case 'failure':
 		dialogType = BootstrapDialog.TYPE_WARNING;
 		break;
-	case 'waring':
+	case 'warning':
 		dialogType = BootstrapDialog.TYPE_WARNING;
+		break;
+	case 'danger':
+		dialogType = BootstrapDialog.TYPE_DANGER;
 		break;
 	case 'error':
 		dialogType = BootstrapDialog.TYPE_DANGER;
@@ -249,6 +252,9 @@ function m3Alert(type, message, after_callback, title)
 			title = "警告";
 			break;
 		case 'danger':
+			title = '危険';
+			break;
+		case 'error':
 			title = 'エラー';
 			break;
 		}

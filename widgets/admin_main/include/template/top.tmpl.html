@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -13,13 +13,6 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript">
 //<![CDATA[
-function menuLogout()
-{
-	if (!window.confirm('{_LC_MSG_LOGOUT}')) return false;
- 
- 	location.href = '?cmd=logout';
-	return true;
-}
 function editMenu(){
 	window.location.href = '{ADMIN_URL}?task=menu';
 }
@@ -35,9 +28,13 @@ $(function(){
 			editMenu();		// 管理機能設定画面
 		}
 	});
+<patTemplate:tmpl name="showpopup" visibility="hidden">
+	m3Alert('warning', '{MESSAGE}');
+</patTemplate:tmpl>
 });
 //]]>
 </script>
+<patTemplate:tmpl name="showmenu" visibility="hidden">
 <div align="center">
 <table border="0" cellpadding="0" cellspacing="0" width="80%">
 <tr><td>
@@ -45,12 +42,8 @@ $(function(){
 {ITEMS}
 </table>
 </td>
-<patTemplate:tmpl name="showimage" visibility="hidden">
-<td align="center">
-<img src="{TOPPAGE_IMG}" />
-</td>
-</patTemplate:tmpl>
 </tr>
 </table>
 </div>
+</patTemplate:tmpl>
 </patTemplate:tmpl>

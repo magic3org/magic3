@@ -73,8 +73,20 @@ class admin_mainTopWidgetContainer extends admin_mainBaseWidgetContainer
 				$message = 'インストーラファイルが存在しています。削除してください。ファイル=' . $installFile;
 				$this->gOpeLog->writeRequest(__METHOD__, $message, 1301, '', '', '', true/*トップ表示*/, true/*メッセージが表示されない場合のみ追加*/);
 			}
+			
+			// ##### ポップアップメッセージを表示 #####
+			$popupMessage = $this->gInstance->getMessageManager()->getPopupMsg();
+			if (!empty($popupMessage)){
+				$message = $popupMessage[0];
+				$this->tmpl->setAttribute('showpopup', 'visibility', 'visible');
+				$this->tmpl->addVar('showpopup', 'message', $this->convertToDispString($message));
+			}
+
 			return;
 		}
+		
+		// メニューヘルプ表示の場合
+		$this->tmpl->setAttribute('showmenu', 'visibility', 'visible');
 		
 		// トップレベル項目を取得
 		$navId = self::DEFAULT_NAV_ID . '.' . $this->gEnv->getCurrentLanguage();
@@ -153,32 +165,10 @@ class admin_mainTopWidgetContainer extends admin_mainBaseWidgetContainer
 		}
 
 		$menuInner .= '</td></tr>';
-		$this->tmpl->addVar("_widget", "items", $menuInner);
-		
-		// トップページ用画像
-/*		$imageUrl = $this->db->getSystemConfig(self::TOPPAGE_IMAGE_PATH);
-		if (!empty($imageUrl)){
-			if (strStartsWith($imageUrl, '/')){		// 相対パス表記のとき
-				$relativePath = $this->gEnv->getRelativePathToSystemRootUrl($this->gEnv->getDocumentRootUrl() . $imageUrl);
-				$imagePath = $this->gEnv->getSystemRootPath() . $relativePath;
-				$imageUrl = $this->gEnv->getRootUrl() . $relativePath;
-			} else {		// マクロ表記のとき
-				$imagePath = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getSystemRootPath(), $imageUrl);
-				$imageUrl = str_replace(M3_TAG_START . M3_TAG_MACRO_ROOT_URL . M3_TAG_END, $this->gEnv->getRootUrl(), $imageUrl);
-			}
-			if (file_exists($imagePath)){		// 画像ファイルが存在するとき
-				$this->tmpl->addVar("showimage", "toppage_img", $imageUrl);
-				$this->tmpl->setAttribute('showimage', 'visibility', 'visible');
-			}
-		}*/
+		$this->tmpl->addVar("showmenu", "items", $menuInner);
 		
 		// 管理用URL設定
 		$this->tmpl->addVar("_widget", "admin_url", $this->gEnv->getDefaultAdminUrl());
-		
-		// テキストをローカライズ
-		$localeText = array();
-		$localeText['msg_logout'] = $this->_('Logout from system?');		// ログアウトしますか?
-		$this->setLocaleText($localeText);
 	}
 	/**
 	 * JavascriptファイルをHTMLヘッダ部に設定
