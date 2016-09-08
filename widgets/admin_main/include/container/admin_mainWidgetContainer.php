@@ -24,7 +24,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 	const CF_USE_CONTENT_MAINTENANCE = 'use_content_maintenance';		// メンテナンス画面に汎用コンテンツを使用するかどうか
 	const CF_USE_CONTENT_ACCESS_DENY = 'use_content_access_deny';		// アクセス不可画面に汎用コンテンツを使用するかどうか
 	const CF_USE_CONTENT_PAGE_NOT_FOUND = 'use_content_page_not_found';		// 存在しないページ画面に汎用コンテンツを使用するかどうか
-
+	const SK_SHOW_POPUP_STATUS = 'show_popup_status';		// ポップアップメッセージの表示状態
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -145,9 +146,20 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 		} else {
 			$retValue = $this->gPage->standardLoginLogoutRedirect($request, $success, $url);
 		}
-		if ($retValue == 0){
+		if ($retValue == 0){		// 何も処理を行わなかったとき
 			if ($this->gEnv->isCurrentUserLogined()){	// ログインしている場合
 				if ($this->gEnv->isSystemAdmin()){	// システム管理者の場合
+					// ##### ポップアップメッセージ表示状態を取得 #####
+					$popupStatus = intval($this->getWidgetSession(self::SK_SHOW_POPUP_STATUS));
+					if (empty($popupStatus)){			// 1度もメッセージが表示されていない場合
+						// セッションにログイン状態を更新
+						$this->setWidgetSession(self::SK_SHOW_POPUP_STATUS, 1);
+						
+						// ログイン直後のダッシュボードでメッセージを表示
+						$message = $this->gInstance->getMessageManager()->getMessage(MessageManager::MSG_ADMIN_POPUP_LOGIN, $this->_langId);
+						if (!empty($message)) $this->gInstance->getMessageManager()->addPopupMsg($message);
+					}
+				
 					// 表示画面を決定
 					$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
 					$taskSrc = $task;
@@ -323,9 +335,11 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 			} else {		// ログインしていないとき
 				// メッセージは何も表示しないでログイン画面へ
 			}
-		} else if ($retValue == 1 && $success == false){	// ログイン失敗の場合
-			$this->SetMsg(self::MSG_APP_ERR, $this->_('Failed to login.'));			// ログインに失敗しました
-			if (!empty($url)) $this->redirectUrl = $url;	// リダイレクト先が設定されている場合は再設定
+		} else if ($retValue == 1){		// ログインの場合
+			if (!$success){		// ログイン失敗の場合
+				$this->SetMsg(self::MSG_APP_ERR, $this->_('Failed to login.'));			// ログインに失敗しました
+				if (!empty($url)) $this->redirectUrl = $url;	// リダイレクト先が設定されている場合は再設定
+			}
 		} else if ($retValue == 3){			// パスワード送信のとき
 //			$this->setGuidanceMsg($this->_('Password sent.'));		// パスワードを送信しました
 			$this->setSuccessMsg($this->_('Password sent.'));		// パスワードを送信しました
