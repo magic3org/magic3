@@ -55,7 +55,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const HELP_TITLE = 'ヘルプ';
 	const MENU_TITLE_PREVIEW = 'プレビュー';
 	const MENU_TITLE_CONTENT = 'コンテンツ管理';		// コンテンツ編集メニューのタイトル
-	const MENU_TITLE_SUB_CONTENT = '補助コンテンツ管理';		// サブコンテンツ編集メニューのタイトル
+	const MENU_TITLE_SUB_CONTENT = 'サブコンテンツ管理';		// サブコンテンツ編集メニューのタイトル
 	const UNTITLED_USER_NAME = '名称なしユーザ';		// ユーザ名が設定されていなかった場合の表示名
 	const MAINMENU_INDENT_LEBEL = 4;		// メインメニューのインデントレベル
 	const SITEMENU_INDENT_LEBEL = 2;		// サイトメニューのインデントレベル
@@ -627,7 +627,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		}
 		if (!isset($subContentTypeArray)){
 			$subContentTypeArray = array();
-			$subContentTypeInfo = $this->gPage->getSubContentTypeInfo();		// 補助コンテンツタイプ情報
+			$subContentTypeInfo = $this->gPage->getSubContentTypeInfo();		// サブコンテンツタイプ情報
 			for ($i = 0; $i < count($subContentTypeInfo); $i++){
 				$value = $subContentTypeInfo[$i]['value'];
 				$name = $subContentTypeInfo[$i]['name'];
@@ -714,7 +714,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				$title = $this->getCurrentLangString($subMenu[$i]['wd_content_name']);		// ウィジェットのコンテンツ名を取得
 				
 				if (empty($title)){
-					// コンテンツ単位でタイトルを取得(主要コンテンツ、補助コンテンツ、主要機能タイプの順に探す)
+					// コンテンツ単位でタイトルを取得(主要コンテンツ、サブコンテンツ、主要機能タイプの順に探す)
 					$contentType = $subMenu[$i]['wd_content_type'];
 					$title = $mainContentTypeArray[$contentType];
 					if (empty($title)) $title = $subContentTypeArray[$contentType];
