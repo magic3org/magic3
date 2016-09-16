@@ -24,10 +24,10 @@ class ScriptLibInfo
 											'1.9'	=> 'jquery-1.9.1.min.js',
 											'1.10'	=> 'jquery-1.10.2.min.js',
 											'1.11'	=> 'jquery-1.11.3.min.js',
-											'1.12'	=> 'jquery-1.12.1.min.js',
+											'1.12'	=> 'jquery-1.12.4.min.js',
 											'2.0'	=> 'jquery-2.0.3.min.js',
 											'2.1'	=> 'jquery-2.1.4.min.js',
-											'2.2'	=> 'jquery-2.2.1.min.js',
+											'2.2'	=> 'jquery-2.2.4.min.js',
 											'3.1'	=> 'jquery-3.1.0.min.js'
 										);
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
