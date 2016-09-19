@@ -131,7 +131,8 @@ class s_googlemapsWidgetContainer extends BaseWidgetContainer
 	 */
 	function _addScriptFileToHead($request, &$param)
 	{
-		$scriptUrl = $this->getUrl('http://maps.google.com/maps/api/js?sensor=true');
+//		$scriptUrl = $this->getUrl('http://maps.google.com/maps/api/js?sensor=true');
+		$scriptUrl = $this->getUrl('http://maps.googleapis.com/maps/api/js');		// 2016/9/19更新
 		return $scriptUrl;
 	}
 }

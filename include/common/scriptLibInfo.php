@@ -399,7 +399,11 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 
 	// ##### 外部ライブラリ #####
 	const LIB_GOOGLEMAPS			= 'googlemaps';
-	const GOOGLEMAPS_FILENAME		= 'http://maps.google.com/maps/api/js?sensor=true';
+//	const GOOGLEMAPS_FILENAME		= 'http://maps.google.com/maps/api/js?sensor=true';
+	const GOOGLEMAPS_FILENAME		= 'http://maps.googleapis.com/maps/api/js';		// 2016/9/19 更新
+
+	// DB定義値取得用
+	const CF_GOOGLE_MAPS_KEY = 'google_maps_key';				// GoogleマップAPIキー
 
 	/**
 	 * コンストラクタ
@@ -444,7 +448,14 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 	 */
 	static function getLib()
 	{
+		global $gSystemManager;
+		
 		if (!isset(self::$libs)){
+			// GoogleMaps用ライブラリ用のパラメータ取得
+			$googleMapsParams = '';
+			$param = $gSystemManager->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);
+			if (!empty($param)) $googleMapsParams = '?key=' . $param;
+			
 			// ##### ライブラリ情報初期化 ####
 			self::$libs = array(
 						self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
@@ -659,7 +670,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 			self::$libs[self::LIB_JQUERYS_MOBILE]		= array(	'script' 	=> array(self::JQUERYS_MOBILE_FILENAME),	// JQuery Mobile
 															'css'		=> array(self::JQUERYS_MOBILE_CSS));
 			// 外部ライブラリ
-			self::$libs[self::LIB_GOOGLEMAPS]			= array(	'script'	=> array(self::GOOGLEMAPS_FILENAME));
+			self::$libs[self::LIB_GOOGLEMAPS]			= array(	'script'	=> array(self::GOOGLEMAPS_FILENAME . $googleMapsParams));
 		}
 		return self::$libs;
 	}

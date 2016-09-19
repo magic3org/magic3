@@ -129,7 +129,8 @@ define ('PLUGIN_GOOGLEMAPS3_DEF_KML'         , '');        //読み読むKMLフ�
 define ('PLUGIN_GOOGLEMAPS3_DEF_PRESERVEVIEWPORT', false); //KMLレイヤー表示時にビューポートの設定を変更しない
 define ('PLUGIN_GOOGLEMAPS3_DEF_IMPORTICON', '');          //アイコンを取得するPukiwikiページ
 define ('PLUGIN_GOOGLEMAPS3_DEF_BACKLINKMARKER', false);   //バックリンクでマーカーを集める
-define ('PLUGIN_GOOGLEMAPS3_DEF_SCRIPT', 'http://maps.google.com/maps/api/js?v=3.10&sensor=true&libraries=places');			// GoogleMapsスクリプト
+//define ('PLUGIN_GOOGLEMAPS3_DEF_SCRIPT', 'http://maps.google.com/maps/api/js?v=3.10&sensor=true&libraries=places');			// GoogleMapsスクリプト
+define ('PLUGIN_GOOGLEMAPS3_DEF_SCRIPT', 'http://maps.googleapis.com/maps/api/js?libraries=places');			// GoogleMapsスクリプト		// 2016/9/19更新
 define ('PLUGIN_GOOGLEMAPS3_DEF_CLASS', 'googlemaps');			// GoogleMapsのCSSクラス
 
 //Pukiwikiは1.4.5から携帯電話などのデバイスごとにプロファイルを用意して

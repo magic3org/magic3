@@ -119,7 +119,8 @@ class m_googlemapsWidgetContainer extends BaseWidgetContainer
 		if ($pixelX != 0 || $pixelY != 0) list($lng, $lat) = $this->moveByPixel($lng, $lat, $pixelX, $pixelY, $zoom);
 
 		// 画像URL作成
-		$url = 'http://maps.google.com/maps/api/staticmap?center=' . $lat . ',' . $lng . '&zoom=' . $zoom . '&size=' . $width . 'x' . $height . '&format=gif&mobile=true&sensor=true';	// docomo携帯では「format」が必須
+//		$url = 'http://maps.google.com/maps/api/staticmap?center=' . $lat . ',' . $lng . '&zoom=' . $zoom . '&size=' . $width . 'x' . $height . '&format=gif&mobile=true&sensor=true';	// docomo携帯では「format」が必須
+		$url = 'http://maps.googleapis.com/maps/api/staticmap?center=' . $lat . ',' . $lng . '&zoom=' . $zoom . '&size=' . $width . 'x' . $height . '&format=gif&mobile=true';	// docomo携帯では「format」が必須		// 2016/9/19更新
 		if ($showMarker){// マーカー表示
 			$url .= '&markers=' . $markerLat . ',' . $markerLng;
 		}
