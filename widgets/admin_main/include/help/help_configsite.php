@@ -51,6 +51,14 @@ class help_configsite extends HelpConv
 				'title' =>	$this->_('Site Logo'),			// ロゴ
 				'body' =>	$this->_('Select image for site logo.')		// サイトのロゴ用の画像を選択します。
 			),
+			'configsite_google_maps_key' => array(
+				'title' =>	$this->_('Google Maps API Key'),			// GoogleマップAPIキー
+				'body' =>	$this->_('Input Google Maps API key if use Google Maps.')		// Googleマップを使用するにはGoogleマップAPIキーを設定します。
+			),
+			'configsite_google_calendar_key' => array(
+				'title' =>	$this->_('Google Calendar API Key'),			// GoogleカレンダーAPIキー
+				'body' =>	$this->_('Input Google Calendar API key if use Google Calendar.')		// Googleカレンダーを使用するにはGoogleカレンダーAPIキーを設定します。
+			),
 			'configsite_pagehead' => array(	
 				'title' =>	$this->_('Page Header Information (Default)'),			// ページヘッダ情報(デフォルト値)
 				'body' =>	$this->_('Input header meta tag string on html. It is default string if each page does not have meta tag string.')		// HTMLのヘッダ部のmetaタグに出力する文字列を設定します。個々のページで設定されていない場合のデフォルト値です。

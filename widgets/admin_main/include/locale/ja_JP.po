@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-19 13:53+0900\n"
-"PO-Revision-Date: 2016-09-19 13:56+0900\n"
+"POT-Creation-Date: 2016-09-20 07:44+0900\n"
+"PO-Revision-Date: 2016-09-20 07:45+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -425,10 +425,12 @@ msgid "Logo"
 msgstr "ロゴ"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:262
+#: ../help/help_configsite.php:59
 msgid "Google Calendar API Key"
 msgstr "Googleカレンダー APIキー"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:263
+#: ../help/help_configsite.php:55
 msgid "Google Maps API Key"
 msgstr "Googleマップ APIキー"
 
@@ -441,17 +443,17 @@ msgid "Header Tilte"
 msgstr "タイトル名"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:266
-#: ../help/help_configsite.php:63
+#: ../help/help_configsite.php:71
 msgid "Site Description"
 msgstr "サイト説明"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:267
-#: ../help/help_configsite.php:67
+#: ../help/help_configsite.php:75
 msgid "Header Keywords"
 msgstr "検索キーワード"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:268
-#: ../help/help_configsite.php:71
+#: ../help/help_configsite.php:79
 msgid "Header Others (by Tag Style)"
 msgstr "その他(タグ形式)"
 
@@ -2282,11 +2284,19 @@ msgstr "サイトロゴ"
 msgid "Select image for site logo."
 msgstr "サイトのロゴ用の画像を選択します。"
 
-#: ../help/help_configsite.php:55
+#: ../help/help_configsite.php:56
+msgid "Input Google Maps API key if use Google Maps."
+msgstr "Googleマップを使用するにはGoogleマップAPIキーを設定します。"
+
+#: ../help/help_configsite.php:60
+msgid "Input Google Calendar API key if use Google Calendar."
+msgstr "Googleカレンダーを使用するにはGoogleカレンダーAPIキーを設定します。"
+
+#: ../help/help_configsite.php:63
 msgid "Page Header Information (Default)"
 msgstr "ページヘッダ情報(デフォルト値)"
 
-#: ../help/help_configsite.php:56
+#: ../help/help_configsite.php:64
 msgid ""
 "Input header meta tag string on html. It is default string if each page does "
 "not have meta tag string."
@@ -2294,17 +2304,17 @@ msgstr ""
 "HTMLのヘッダ部のmetaタグに出力する文字列を設定します。個々のページで設定され"
 "ていない場合のデフォルト値です。"
 
-#: ../help/help_configsite.php:59
+#: ../help/help_configsite.php:67
 msgid "Header Title"
 msgstr "タイトル名"
 
-#: ../help/help_configsite.php:60
+#: ../help/help_configsite.php:68
 msgid "Input meta title string. It is used as web browser window title."
 msgstr ""
 "ヘッダ部のtitleタグに設定される文字列です。Webブラウザの画面タイトルとして表"
 "示されます。"
 
-#: ../help/help_configsite.php:64
+#: ../help/help_configsite.php:72
 msgid ""
 "Input meta description for site with string with 120 letters. It appears on "
 "searched list by google."
@@ -2312,13 +2322,13 @@ msgstr ""
 "サイトの説明のためにヘッダ部のdescriptionタグに設定される文字列です。120文字"
 "程度で記述します。<br />Googleでは検索結果に表示されます。"
 
-#: ../help/help_configsite.php:68
+#: ../help/help_configsite.php:76
 msgid "Input meta Keywords string with max 10 counts separeted by comma."
 msgstr ""
 "ヘッダ部のkeywordsタグに設定される文字列です。検索エンジン用のキーワードを"
 "「,」区切りで10個以下で記述します。"
 
-#: ../help/help_configsite.php:72
+#: ../help/help_configsite.php:80
 msgid "Input other tag string in meta area."
 msgstr "ヘッダ部に出力するタグを設定します。"
 
