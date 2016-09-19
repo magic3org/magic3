@@ -35,4 +35,5 @@ INSERT INTO _nav_item
 ('helplink', 12,     12,        'task=configsys',       'SSLを設定するには？', '「システム基本設定」画面の「SSL」の項目にチェックを入れると「https://～」でアクセスできるようになります。'),
 ('helplink', 13,     13,        'task=configsys',       '共有SSLを設定するには？', '「システム基本設定」画面の「SSL」の「フロント画面にSSLを使用」にチェックを入れ、「共有SSLのルートURL」に共有SSL用のURLを設定します。'),
 ('helplink', 14,     14,        'task=configsys',       'イントラネット運用するには？', '「システム基本設定」画面の「ネットワーク」の「イントラネット運用」にチェックを入れます。Googleマップ等外部サービスにアクセスする機能が停止になります。'),
-('helplink', 15,     15,        '',       'サイトのURLを変更するには？', '管理画面からは変更できません。直接、[Magic3ルート]/include/siteDef.phpファイルを修正します。');
+('helplink', 15,     15,        '',       'サイトのURLを変更するには？', '管理画面からは変更できません。直接、[Magic3ルート]/include/siteDef.phpファイルを修正します。'),
+('helplink', 16,     16,        '',                    'GoogleマップAPIキーを取得するには？', 'Googleのサイト(https://developers.google.com/maps/web/)画面右上の「キーを取得」から取得できます。');
