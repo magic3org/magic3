@@ -32,7 +32,7 @@ FCKConfig.TemplateReplaceAll = false ;
 FCKConfig.SkinPath = FCKConfig.BasePath + 'skins/office2003/';
 
 // Googleマップ用設定
-if (window.parent) FCKConfig.GoogleMaps_Key = window.parent.M3_GOOGLE_MAPS_KEY;
+if (window.parent) FCKConfig.GoogleMaps_Key = window.parent.M3_GOOGLEMAPS_KEY;
 
 // プラグインの追加
 FCKConfig.Plugins.Add('FileBrowser_Thumbnail', 'en,ja');// ファイルブラウザ

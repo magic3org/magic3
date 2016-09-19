@@ -3791,6 +3791,10 @@ class PageManager extends Core
 				// Googleマップライブラリの読み込み
 				if ($this->useGooglemaps){
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+					
+					// CKEditor拡張プラグイン用の定義
+					$googleMapsKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);		// Googleマップ利用キー
+					if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLEMAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
 				} else {
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
 				}
@@ -3901,6 +3905,10 @@ class PageManager extends Core
 					// Googleマップライブラリの読み込み
 					if ($this->useGooglemaps){
 						$replaceStr .= 'var M3_USE_GOOGLEMAPS = true;' . M3_NL;
+						
+						// CKEditor拡張プラグイン用の定義
+						$googleMapsKey = $this->gSystem->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);		// Googleマップ利用キー
+						if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLEMAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
 					} else {
 						$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
 					}
