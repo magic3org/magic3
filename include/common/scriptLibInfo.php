@@ -48,6 +48,7 @@ class ScriptLibInfo
 	const LIB_CKEDITOR				= 'ckeditor';
 	const LIB_ELFINDER				= 'elfinder';
 	const LIB_ELFINDER112			= 'elfinder112';			// v2.1.12
+	const LIB_ELFINDER115			= 'elfinder115';			// v2.1.15
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
 	const LIB_SWFOBJECT				= 'swfobject';
