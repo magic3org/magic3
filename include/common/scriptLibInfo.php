@@ -33,8 +33,8 @@ class ScriptLibInfo
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
 
 	// ##### 選択中のライブラリ #####
-//	const SELECTED_LIB_ELFINDER = self::LIB_ELFINDER;		// elFinder
-	const SELECTED_LIB_ELFINDER = 'elfinder112';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」が設定可能。(PHP v5.3対応) 
+//	const SELECTED_LIB_ELFINDER = 'elfinder112';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」が設定可能。(PHP v5.3対応) 
+	const SELECTED_LIB_ELFINDER = 'elfinder115';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」が設定可能。(PHP v5.3対応) 
 		
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
@@ -320,7 +320,8 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 */
 	// elFinder v2.1.12版
 	const ELFINDER112_VER			= '2.1.12';									// elFinderバージョン
-	const ELFINDER112_FILENAME		= 'elfinder-2.1.12/js/elfinder.full.js';		// elFinder
+//	const ELFINDER112_FILENAME		= 'elfinder-2.1.12/js/elfinder.full.js';		// elFinder
+	const ELFINDER112_FILENAME		= 'elfinder-2.1.12/js/elfinder.min.js';		// elFinder
 	const ELFINDER112_LANG_FILENAME	= 'elfinder-2.1.12/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER112_CSS			= 'elfinder-2.1.12/css/elfinder.full.css';		// elFinder CSS
 	const ELFINDER112_OPTION_CSS		= 'elfinder-2.1.12/css/theme.css';				// elFinder CSS
@@ -329,7 +330,8 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 
 	// elFinder v2.1.15版
 	const ELFINDER115_VER			= '2.1.15';									// elFinderバージョン
-	const ELFINDER115_FILENAME		= 'elfinder-2.1.15/js/elfinder.full.js';		// elFinder
+//	const ELFINDER115_FILENAME		= 'elfinder-2.1.15/js/elfinder.full.js';		// elFinder
+	const ELFINDER115_FILENAME		= 'elfinder-2.1.15/js/elfinder.min.js';		// elFinder
 	const ELFINDER115_LANG_FILENAME	= 'elfinder-2.1.15/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
 	const ELFINDER115_CSS			= 'elfinder-2.1.15/css/elfinder.full.css';		// elFinder CSS
 	const ELFINDER115_OPTION_CSS		= 'elfinder-2.1.15/css/theme.css';				// elFinder CSS
@@ -652,6 +654,11 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER112_FILENAME, self::ELFINDER112_LANG_FILENAME),		// elFinder v2.1.12
 															'css'		=> array(self::ELFINDER112_THEME_CSS, self::ELFINDER112_CSS, self::ELFINDER112_OPTION_CSS),	// テーマは最初に読み込む
 															'version'	=> self::ELFINDER112_VER					// elFinderバージョン
+														);
+			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER115){
+				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER115_FILENAME, self::ELFINDER115_LANG_FILENAME),		// elFinder v2.1.15
+															'css'		=> array(self::ELFINDER115_THEME_CSS, self::ELFINDER115_CSS, self::ELFINDER115_OPTION_CSS),	// テーマは最初に読み込む
+															'version'	=> self::ELFINDER115_VER					// elFinderバージョン
 														);
 			}
 
