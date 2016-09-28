@@ -5,7 +5,7 @@
  * @version 2016-09-10
  */
 if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object') {
-	elFinder.prototype.i18.jp = {
+	elFinder.prototype.i18.ja = {
 		translator : 'Tomoaki Yoshida &lt;info@yoshida-studio.jp&gt;, Naoki Sawada &lt;hypweb@gmail.com&gt;',
 		language   : 'Japanese',
 		direction  : 'ltr',
@@ -34,7 +34,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errDataEmpty'         : '空のデータです',
 			'errCmdReq'            : 'バックエンドリクエストがコマンド名を要求しています',
 			'errOpen'              : '"$1"を開くことができません',
-			'errNotFolder'         : 'オブジェクトがフォルダーではありません',
+			'errNotFolder'         : 'オブジェクトがフォルダではありません',
 			'errNotFile'           : 'オブジェクトがファイルではありません',
 			'errRead'              : '"$1"を読むことができません',
 			'errWrite'             : '"$1"に書きこむことができません',
@@ -42,11 +42,11 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errLocked'            : '"$1" はロックされているので名前の変更、移動、削除ができません',
 			'errExists'            : '"$1"というファイル名はすでに存在しています',
 			'errInvName'           : '無効なファイル名です',
-			'errFolderNotFound'    : 'フォルダーが見つかりません',
+			'errFolderNotFound'    : 'フォルダが見つかりません',
 			'errFileNotFound'      : 'ファイルが見つかりません',
-			'errTrgFolderNotFound' : 'ターゲットとするフォルダー "$1" が見つかりません',
+			'errTrgFolderNotFound' : 'ターゲットとするフォルダ "$1" が見つかりません',
 			'errPopup'             : 'ポップアップウィンドウが開けません。ファイルを開くにはブラウザの設定を変更してください',
-			'errMkdir'             : '"$1"フォルダーを作成することができません',
+			'errMkdir'             : '"$1"フォルダを作成することができません',
 			'errMkfile'            : '"$1"ファイルを作成することができません',
 			'errRename'            : '"$1"の名前を変更することができません',
 			'errCopyFrom'          : '"$1"からのファイルコピーが許可されていません',
@@ -54,7 +54,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'errMkOutLink'         : 'ボリュームルート外へのリンクを作成することはできません', // from v2.1 added 03.10.2015
 			'errUpload'            : 'アップロードエラー',  // old name - errUploadCommon
 			'errUploadFile'        : '"$1"がアップロードできません', // old name - errUpload
-			'errUploadNoFiles'     : 'アップロードされたファイルはありません',
+			'errUploadNoFiles'     : 'アップロードされたファイルがありません',
 			'errUploadTotalSize'   : 'データが許容サイズを超えています', // old name - errMaxSize
 			'errUploadFileSize'    : 'ファイルが許容サイズを超えています', //  old name - errFileMaxSize
 			'errUploadMime'        : '許可されていないファイル形式です',
@@ -114,8 +114,8 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'cmdhelp'      : 'このソフトウェアについて',
 			'cmdhome'      : 'ホーム',
 			'cmdinfo'      : '情報',
-			'cmdmkdir'     : '新規フォルダー',
-			'cmdmkdirin'   : '新規フォルダーへ', // from v2.1.7 added 19.2.2016
+			'cmdmkdir'     : '新規フォルダ',
+			'cmdmkdirin'   : '新規フォルダへ', // from v2.1.7 added 19.2.2016
 			'cmdmkfile'    : '新規テキストファイル',
 			'cmdopen'      : '開く',
 			'cmdpaste'     : 'ペースト',
@@ -159,9 +159,9 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'btnBackup' : 'バックアップ', // fromv2.1 added 28.11.2015
 
 			/******************************** notifications ********************************/
-			'ntfopen'     : 'フォルダーを開いています',
+			'ntfopen'     : 'フォルダを開いています',
 			'ntffile'     : 'ファイルを開いています',
-			'ntfreload'   : 'フォルダーを再読込しています',
+			'ntfreload'   : 'フォルダを再読込しています',
 			'ntfmkdir'    : 'ディレクトリーを作成しています',
 			'ntfmkfile'   : 'ファイルを作成しています',
 			'ntfrm'       : 'ファイルを削除しています',
@@ -277,7 +277,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 			'locked'          : 'ロック',
 			'dim'             : 'サイズ',
 			'files'           : 'ファイル',
-			'folders'         : 'フォルダー',
+			'folders'         : 'フォルダ',
 			'items'           : 'アイテム',
 			'yes'             : 'はい',
 			'no'              : 'いいえ',
@@ -365,7 +365,7 @@ if (elFinder && elFinder.prototype && typeof(elFinder.prototype.i18) == 'object'
 
 			/********************************** mimetypes **********************************/
 			'kindUnknown'     : '不明',
-			'kindFolder'      : 'フォルダー',
+			'kindFolder'      : 'フォルダ',
 			'kindAlias'       : '別名',
 			'kindAliasBroken' : '宛先不明の別名',
 			// applications
