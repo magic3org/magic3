@@ -105,8 +105,8 @@ class admin_mainEditmenuWidgetContainer extends admin_mainMainteBaseWidgetContai
 																			'desc' => $this->_('View site access log.')),	// アクセスログを参照します。
 									array('task' => 'searchwordlog',		'name' => $this->_('Search Word Log'),	// 検索語ログ参照
 																			'desc' => $this->_('View words to search.')),	// 検索語ログを参照します。
-									array('task' => 'resbrowse',			'name' => $this->_('Resource Browse'),	// リソースブラウズ
-																			'desc' => $this->_('Administrate resource files.')),	// リソースファイルを管理します。
+									array('task' => 'filebrowse',			'name' => $this->_('File Browser'),	// ファイルブラウザ
+																			'desc' => $this->_('Administrate files under resource directory.')),	// リソースディレクトリ以下のファイルを管理します。
 									array('task' => 'initsystem',			'name' => $this->_('Datebase Initialize'),	// DB初期化
 																			'desc' => $this->_('Initialize database data.')),	// DBデータの初期化を行います。
 									array('task' => 'dbbackup',				'name' => $this->_('Database Backup'),	// DBバックアップ

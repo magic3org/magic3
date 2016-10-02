@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 07:44+0900\n"
-"PO-Revision-Date: 2016-09-20 07:45+0900\n"
+"POT-Creation-Date: 2016-10-02 20:45+0900\n"
+"PO-Revision-Date: 2016-10-02 20:46+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-KeywordsList: _;gettext;gettext_noop\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.9\n"
 "X-Poedit-SearchPath-0: ../container\n"
 "X-Poedit-SearchPath-1: ../help\n"
 
@@ -371,7 +371,7 @@ msgid "Failed in updating data."
 msgstr "データ更新に失敗しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:182
-#: ../container/admin_mainWidgetContainer.php:413
+#: ../container/admin_mainWidgetContainer.php:415
 msgid "Input email address."
 msgstr "Eメールアドレスが設定されていません"
 
@@ -694,13 +694,14 @@ msgid "View words to search."
 msgstr "検索語ログを参照します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:108
-#: ../help/help_browse.php:31
-msgid "Resource Browse"
-msgstr "リソースブラウズ"
+#: ../help/Rs[~1.PHP:31
+msgid "File Browser"
+msgstr "ファイルブラウザ"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:109
-msgid "Administrate resource files."
-msgstr "リソースファイルを管理します。"
+#: ../help/Rs[~1.PHP:32
+msgid "Administrate files under resource directory."
+msgstr "リソースディレクトリ以下のファイルを管理します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:110
 msgid "Datebase Initialize"
@@ -913,7 +914,7 @@ msgstr ""
 #: ../container/admin_mainLoginhistoryWidgetContainer.php:36
 #: ../container/admin_mainUserlistWidgetContainer.php:123
 #: ../container/admin_mainUserlistWidgetContainer.php:153
-#: ../container/admin_mainWidgetContainer.php:408
+#: ../container/admin_mainWidgetContainer.php:410
 msgid "Login"
 msgstr "ログイン"
 
@@ -1526,7 +1527,7 @@ msgstr "保存"
 
 #: ../container/admin_mainServerinfoWidgetContainer.php:208
 #: ../container/admin_mainSitelistWidgetContainer.php:147
-#: ../container/admin_mainWidgetContainer.php:327
+#: ../container/admin_mainWidgetContainer.php:329
 msgid "Can not access the page."
 msgstr "アクセスできません"
 
@@ -1661,7 +1662,7 @@ msgstr "生成ソフト - バージョン"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:465
 #: ../container/admin_mainUserlistWidgetContainer.php:156
-#: ../help/help_browse.php:66
+#: ../help/Rs[~1.PHP:66
 msgid "Update Date"
 msgstr "更新日"
 
@@ -1754,12 +1755,12 @@ msgid "User Detail"
 msgstr "ユーザ詳細"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:123
-#: ../container/admin_mainWidgetContainer.php:410
+#: ../container/admin_mainWidgetContainer.php:412
 msgid "Account"
 msgstr "アカウント"
 
 #: ../container/admin_mainUserlistWidgetContainer.php:124
-#: ../container/admin_mainWidgetContainer.php:411 ../help/help_userlist.php:43
+#: ../container/admin_mainWidgetContainer.php:413 ../help/help_userlist.php:43
 msgid "Password"
 msgstr "パスワード"
 
@@ -1783,7 +1784,7 @@ msgstr "有効期間"
 #: ../container/admin_mainUserlistWidgetContainer.php:157
 #: ../container/admin_mainUserlistWidgetContainer.php:304
 #: ../container/admin_mainUserlistWidgetContainer.php:372
-#: ../container/admin_mainWidgetContainer.php:412 ../help/help_userlist.php:51
+#: ../container/admin_mainWidgetContainer.php:414 ../help/help_userlist.php:51
 msgid "Email"
 msgstr "Eメール"
 
@@ -1862,16 +1863,16 @@ msgstr "制限あり"
 msgid "Out of Range"
 msgstr "該当なし"
 
-#: ../container/admin_mainWidgetContainer.php:333
-#: ../container/admin_mainWidgetContainer.php:340
+#: ../container/admin_mainWidgetContainer.php:335
+#: ../container/admin_mainWidgetContainer.php:342
 msgid "Failed to login."
 msgstr "ログインに失敗しました"
 
-#: ../container/admin_mainWidgetContainer.php:345
+#: ../container/admin_mainWidgetContainer.php:347
 msgid "Password sent."
 msgstr "パスワードを送信しました"
 
-#: ../container/admin_mainWidgetContainer.php:409
+#: ../container/admin_mainWidgetContainer.php:411
 msgid "Send Password"
 msgstr "パスワード送信"
 
@@ -2148,102 +2149,6 @@ msgstr ""
 "示」(ユーザがログインしている場合のみウィジェットを表示)、「非ログイン時のみ"
 "表示」(ユーザがログインしていない場合のみウィジェットを表示)"
 
-#: ../help/help_browse.php:32
-msgid "Operate files with thumbnail."
-msgstr "サムネール画像を見ながら画像ファイルの処理が行えます。"
-
-#: ../help/help_browse.php:38
-msgid "File Browse"
-msgstr "ファイルブラウズ"
-
-#: ../help/help_browse.php:39
-msgid "Upload files at once."
-msgstr "複数のファイルを一度にアップロードできます。"
-
-#: ../help/help_browse.php:42
-msgid "Path"
-msgstr "パス"
-
-#: ../help/help_browse.php:43
-msgid "Show current directory."
-msgstr "現在のディレクトリパスを示します。"
-
-#: ../help/help_browse.php:46
-msgid "Filename"
-msgstr "ファイル名"
-
-#: ../help/help_browse.php:47
-msgid "Show file or directory name."
-msgstr "ファイル名、ディレクトリ名を示します。"
-
-#: ../help/help_browse.php:50
-msgid "Size"
-msgstr "サイズ"
-
-#: ../help/help_browse.php:51
-msgid "Show byte counts of file."
-msgstr "ファイルのサイズを示します。"
-
-#: ../help/help_browse.php:54
-msgid "Permission"
-msgstr "パーミッション"
-
-#: ../help/help_browse.php:55
-msgid "Show permission of file or directory."
-msgstr "ファイル、ディレクトリのパーミッションを示します。"
-
-#: ../help/help_browse.php:58
-msgid "Owner"
-msgstr "所有者"
-
-#: ../help/help_browse.php:59
-msgid "Show owner of file or directory."
-msgstr "ファイル、ディレクトリの所有者を示します。"
-
-#: ../help/help_browse.php:62
-msgid "Group"
-msgstr "グループ"
-
-#: ../help/help_browse.php:63
-msgid "Show group owner of file or directory."
-msgstr "ファイル、ディレクトリのグループ所有者を示します。"
-
-#: ../help/help_browse.php:67
-msgid "Show update date of file or directory."
-msgstr "ファイル、ディレクトリの更新日時を示します。"
-
-#: ../help/help_browse.php:70
-msgid "Upload File"
-msgstr "ファイルアップロード"
-
-#: ../help/help_browse.php:71
-msgid "Uplod files in this area. Show upload status in uploading files."
-msgstr ""
-"ファイルのアップロードはここから行います。ファイルアップロード時はアップロー"
-"ド状況が表示されます。"
-
-#: ../help/help_browse.php:74
-msgid "Create Directory"
-msgstr "ディレクトリ作成"
-
-#: ../help/help_browse.php:75
-msgid "Create directory in this area."
-msgstr "ディレクトリの作成はここから行います。"
-
-#: ../help/help_browse.php:78 ../help/help_menudef.php:95
-#: ../help/help_userlist.php:99
-msgid "Delete Button"
-msgstr "削除ボタン"
-
-#: ../help/help_browse.php:79
-msgid ""
-"Delete files.<br />Select the file by using the left checkbox.<br />You can "
-"delete files and directory in 'resource' directory."
-msgstr ""
-"選択されているファイル項目を削除します。<br />メニュー項目を選択するには、一"
-"覧の左端のチェックボックスにチェックを入れます。<br />「resource」ディレクト"
-"リ以下のファイルのみ削除可能です。"
-
 #: ../help/help_configsite.php:32
 msgid "Input basic site information."
 msgstr "システムで必要なサイトの情報です。"
@@ -2492,6 +2397,11 @@ msgid "Edit menu item.<br />Select the menu item by using the left checkbox."
 msgstr ""
 "選択されているメニュー項目を編集します。<br />メニュー項目を選択するには、一"
 "覧の左端のチェックボックスにチェックを入れます。"
+
+#: ../help/help_menudef.php:95 ../help/help_userlist.php:99
+#: ../help/Rs[~1.PHP:78
+msgid "Delete Button"
+msgstr "削除ボタン"
 
 #: ../help/help_menudef.php:96
 msgid "Delete menu item.<br />Select the menu item by using the left checkbox."
@@ -2965,6 +2875,99 @@ msgid "Reload the directory and automatically install unlisted widget."
 msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
+
+#: ../help/Rs[~1.PHP:38
+msgid "File Browse"
+msgstr "ファイルブラウズ"
+
+#: ../help/Rs[~1.PHP:39
+msgid "Upload files at once."
+msgstr "複数のファイルを一度にアップロードできます。"
+
+#: ../help/Rs[~1.PHP:42
+msgid "Path"
+msgstr "パス"
+
+#: ../help/Rs[~1.PHP:43
+msgid "Show current directory."
+msgstr "現在のディレクトリパスを示します。"
+
+#: ../help/Rs[~1.PHP:46
+msgid "Filename"
+msgstr "ファイル名"
+
+#: ../help/Rs[~1.PHP:47
+msgid "Show file or directory name."
+msgstr "ファイル名、ディレクトリ名を示します。"
+
+#: ../help/Rs[~1.PHP:50
+msgid "Size"
+msgstr "サイズ"
+
+#: ../help/Rs[~1.PHP:51
+msgid "Show byte counts of file."
+msgstr "ファイルのサイズを示します。"
+
+#: ../help/Rs[~1.PHP:54
+msgid "Permission"
+msgstr "パーミッション"
+
+#: ../help/Rs[~1.PHP:55
+msgid "Show permission of file or directory."
+msgstr "ファイル、ディレクトリのパーミッションを示します。"
+
+#: ../help/Rs[~1.PHP:58
+msgid "Owner"
+msgstr "所有者"
+
+#: ../help/Rs[~1.PHP:59
+msgid "Show owner of file or directory."
+msgstr "ファイル、ディレクトリの所有者を示します。"
+
+#: ../help/Rs[~1.PHP:62
+msgid "Group"
+msgstr "グループ"
+
+#: ../help/Rs[~1.PHP:63
+msgid "Show group owner of file or directory."
+msgstr "ファイル、ディレクトリのグループ所有者を示します。"
+
+#: ../help/Rs[~1.PHP:67
+msgid "Show update date of file or directory."
+msgstr "ファイル、ディレクトリの更新日時を示します。"
+
+#: ../help/Rs[~1.PHP:70
+msgid "Upload File"
+msgstr "ファイルアップロード"
+
+#: ../help/Rs[~1.PHP:71
+msgid "Uplod files in this area. Show upload status in uploading files."
+msgstr ""
+"ファイルのアップロードはここから行います。ファイルアップロード時はアップロー"
+"ド状況が表示されます。"
+
+#: ../help/Rs[~1.PHP:74
+msgid "Create Directory"
+msgstr "ディレクトリ作成"
+
+#: ../help/Rs[~1.PHP:75
+msgid "Create directory in this area."
+msgstr "ディレクトリの作成はここから行います。"
+
+#: ../help/Rs[~1.PHP:79
+msgid ""
+"Delete files.<br />Select the file by using the left checkbox.<br />You can "
+"delete files and directory in 'resource' directory."
+msgstr ""
+"選択されているファイル項目を削除します。<br />メニュー項目を選択するには、一"
+"覧の左端のチェックボックスにチェックを入れます。<br />「resource」ディレクト"
+"リ以下のファイルのみ削除可能です。"
+
+#~ msgid "Resource Browse"
+#~ msgstr "リソースブラウズ"
+
+#~ msgid "Operate files with thumbnail."
+#~ msgstr "サムネール画像を見ながら画像ファイルの処理が行えます。"
 
 #~ msgid "Logout from system?"
 #~ msgstr "ログアウトしますか?"

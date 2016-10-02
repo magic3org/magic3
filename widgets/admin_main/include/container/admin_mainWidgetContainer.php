@@ -168,7 +168,8 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 //					} else if ($task == 'menu'){		// マスター管理
 //						$task = 'pageinfo';			// ページ情報をデフォルトにする
 					} else if ($task == 'mainte'){		// システムメンテナンス
-						$task = 'resbrowse';			// ファイルブラウザをデフォルトにする
+//						$task = 'resbrowse';			// ファイルブラウザをデフォルトにする
+						$task = 'filebrowse';			// ファイルブラウザをデフォルトにする
 					} else if ($task == 'userlist_detail'){		// ユーザ詳細
 						$task = 'userlist';
 					} else if ($task == 'usergroup_detail'){		// ユーザグループ詳細
@@ -271,8 +272,9 @@ class admin_mainWidgetContainer extends admin_mainBaseWidgetContainer
 						case 'accesslog':			// アクセスログ
 						case 'searchwordlog':		// 検索語ログ一覧
 						case 'awstats':				// Awstats
-						case 'resbrowse':			// リソースブラウズ(resbrowseからfilebrowserを起動)
-						case 'filebrowser':			// ファイルブラウズ(elfinder)
+//						case 'resbrowse':			// リソースブラウズ(resbrowseからfilebrowserを起動)
+//						case 'filebrowser':			// ファイルブラウズ(elfinder)-旧バージョン
+						case 'filebrowse':			// ファイルブラウズ(elfinder)
 						case 'menudef':				// 多階層メニュー定義
 						case 'smenudef':			// 単階層メニュー定義
 						case 'linkinfo':			// 内部リンク情報取得

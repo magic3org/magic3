@@ -369,8 +369,8 @@ $HELP['tenantserver_ret_btn']['title'] = '戻るボタン';
 $HELP['tenantserver_ret_btn']['body'] = 'テナントサーバ一覧へ戻ります。';
 
 // ########## ファイルブラウザ ##########
-$HELP['resbrowse']['title'] = 'ファイルブラウザ';
-$HELP['resbrowse']['body'] = 'サーバ上の各種ファイル操作を行います。';
+$HELP['filebrowse']['title'] = 'ファイルブラウザ';
+$HELP['filebrowse']['body'] = 'リソースディレクトリ以下の各種ファイル操作を行います。';
 
 // ########## DBデータ初期化 ##########
 $HELP['initsystem']['title'] = 'DBデータ初期化';

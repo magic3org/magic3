@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,7 +19,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 {
 	const BREADCRUMB_TITLE	= 'メンテナンス';		// パンくずリストトップタイトル
 	// 画面
-	const TASK_RESBROWSE 		= 'resbrowse';		// ファイルブラウザ
+//	const TASK_RESBROWSE 		= 'resbrowse';		// ファイルブラウザ
+	const TASK_FILEBROWSE 		= 'filebrowse';		// ファイルブラウザ
 	const TASK_PAGEINFO			= 'pageinfo';	// ページ情報
 	const TASK_PAGEINFO_DETAIL	= 'pageinfo_detail';	// ページ情報
 	const TASK_ACCESSPOINT			= 'accesspoint';		// アクセスポイント
@@ -35,10 +36,11 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	const TASK_INITWIZARD		= 'initwizard';		// 管理画面カスタムウィザード
 	const TASK_EDITMENU			= 'editmenu';		// 管理メニュー編集
 	const TASK_MAIN				= 'mainte';			// 全体(メンテナンス)
-	const DEFAULT_TASK			= 'resbrowse';		// デフォルト(ファイルブラウザ)
+//	const DEFAULT_TASK			= 'resbrowse';		// デフォルト(ファイルブラウザ)
+	const DEFAULT_TASK			= 'filebrowse';		// デフォルト(ファイルブラウザ)
 	
 	const TASK_NAME_MAIN = 'メンテナンス';
-	const HELP_KEY_RESBROWSE	= 'resbrowse';		// ファイルブラウザ
+//	const HELP_KEY_RESBROWSE	= 'resbrowse';		// ファイルブラウザ
 	const HELP_KEY_PAGEINFO		= 'pageinfo';
 	const HELP_KEY_PAGEID		= 'pageid';
 	const HELP_KEY_MENUID		= 'menuid';
@@ -66,13 +68,19 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 	function _postAssign($request, &$param)
 	{
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if ($task == self::TASK_MAIN) $task = self::DEFAULT_TASK;
+		if ($task == self::TASK_MAIN){		// トップページ指定の場合はデフォルトページへリダイレクト
+			//$task = self::DEFAULT_TASK;
 		
+			$mainteTopPage = $this->gEnv->getDefaultAdminUrl() . '?task=' . self::DEFAULT_TASK;
+			$this->gPage->redirect($this->getUrl($mainteTopPage));
+			return;
+		}
+							
 		// パンくずリストの作成
 		$titles = array();
 		$titles[] = self::BREADCRUMB_TITLE;
 		switch ($task){
-			case self::TASK_RESBROWSE:		// ファイルブラウザ
+			case self::TASK_FILEBROWSE:		// ファイルブラウザ
 				$titles[] = 'ファイル管理';
 				$titles[] = 'ファイルブラウザ';
 				break;
@@ -151,19 +159,19 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 									'url'		=> '',
 									'tagid'		=> '',
 									'active'	=> (
-														$task == self::TASK_RESBROWSE		// ファイルブラウザ
+														$task == self::TASK_FILEBROWSE		// ファイルブラウザ
 													),
-									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_RESBROWSE),// ヘルプ文字列
+									'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_FILEBROWSE),// ヘルプ文字列
 									'submenu'	=> array(
 										(Object)array(
 											'name'		=> 'ファイルブラウザ',
-											'task'		=> self::TASK_RESBROWSE,
+											'task'		=> self::TASK_FILEBROWSE,
 											'url'		=> '',
 											'tagid'		=> '',
 											'active'	=> (
-																$task == self::TASK_RESBROWSE		// ファイルブラウザ
+																$task == self::TASK_FILEBROWSE		// ファイルブラウザ
 															),
-											'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_RESBROWSE),// ヘルプ文字列
+											'help'		=> $this->gInstance->getHelpManager()->getHelpText(self::TASK_FILEBROWSE),// ヘルプ文字列
 										)
 									)
 								),
@@ -312,7 +320,7 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 /*
 		// パンくずリストを作成
 		switch ($task){
-			case self::TASK_RESBROWSE:		// ファイルブラウザ
+			case self::TASK_FILEBROWSE:		// ファイルブラウザ
 				$linkList = ' ファイル管理 &gt;&gt; ファイルブラウザ';
 				break;	
 			case self::TASK_PAGEINFO:	// ページ情報一覧
@@ -346,8 +354,8 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		
 		// ファイル管理
 		$current = '';
-		$link = $baseUrl . '?task=' . self::TASK_RESBROWSE;
-		if ($task == self::TASK_RESBROWSE){		// ファイルブラウザ
+		$link = $baseUrl . '?task=' . self::TASK_FILEBROWSE;
+		if ($task == self::TASK_FILEBROWSE){		// ファイルブラウザ
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>ファイル管理</span></a></li>' . M3_NL;
@@ -383,11 +391,11 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 		$menuText .= '<div id="configmenu-lower">' . M3_NL;
 		$menuText .= '<ul>' . M3_NL;
 				
-		if ($task == self::TASK_RESBROWSE){		// ファイルブラウザ
+		if ($task == self::TASK_FILEBROWSE){		// ファイルブラウザ
 			// ### ファイルブラウザ ###
 			$current = '';
-			$link = $baseUrl . '?task=' . self::TASK_RESBROWSE;
-			if ($task == self::TASK_RESBROWSE) $current = 'id="current"';
+			$link = $baseUrl . '?task=' . self::TASK_FILEBROWSE;
+			if ($task == self::TASK_FILEBROWSE) $current = 'id="current"';
 
 			// ヘルプを作成
 			$helpText = $this->gInstance->getHelpManager()->getHelpText(self::HELP_KEY_RESBROWSE);
