@@ -16,11 +16,12 @@
 $(function(){
 	// フルサイズでファイルブラウザを表示
 	$(".container").removeClass("container");
+	var browserHeight = ($(window).height() - 200/*ヘッダ高さ*/) * 0.9;
 	
 	var elf = $('#elfinder').elfinder({
 		url : M3_ROOT_URL + '/scripts/elfinder-' + M3_FILEBROWSER_VER + '/php/connector.php',
 		width: '100%',
-		height: '500px',
+		height: browserHeight,
 		lang: '{LANG}',             // language (OPTIONAL)
 		ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
 		getFileCallback : function(files, fm){		// ダブルクリックのファイルオープン禁止
