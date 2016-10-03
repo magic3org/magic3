@@ -9,7 +9,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    1.2
+ * @version    1.3
  * @link       http://www.magic3.org
  */
 var GoogleMapsHandler = {
@@ -82,7 +82,13 @@ GoogleMap.prototype.generateStaticMap = function()
 
 //	var mapUrl = 'http://maps.google.com/maps/api/staticmap?center=' + this.centerLat + ',' + this.centerLon 
 	var mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?';
-	if (M3_GOOGLEMAPS_KEY) mapUrl += 'key=' + M3_GOOGLEMAPS_KEY + '&';
+//	if (M3_GOOGLEMAPS_KEY) mapUrl += 'key=' + M3_GOOGLEMAPS_KEY + '&';
+	if (typeof(M3_GOOGLEMAPS_KEY) === "undefined"){
+		alert('Googleマップを表示するにはAPIキーの設定が必要です');
+	} else {
+		mapUrl += 'key=' + M3_GOOGLEMAPS_KEY + '&';
+	}
+
 	mapUrl	+= 'center=' + this.centerLat + ',' + this.centerLon 
 				+ '&zoom=' + this.zoom + '&size=' + w + 'x' + h 
 				+ '&maptype=' + staticMapTypes[ this.mapType ]
