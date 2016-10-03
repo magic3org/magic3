@@ -2687,4 +2687,10 @@ embed.elfinder-quicklook-preview-audio {
 	font-size: 1em;
 }
 .ui-button:focus { outline:none !important }	/* remove highlight at the dialog close box in chrome. */
+
+/* fix input text field size with Bootstrap */
+#elfinder .elfinder-button-search input {
+	width: 202px;
+	height: 24px;
+}
 /******************************************************************/
