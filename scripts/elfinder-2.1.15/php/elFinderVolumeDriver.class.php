@@ -350,7 +350,7 @@ abstract class elFinderVolumeDriver {
 		'syncMinMs'    => null,
 		// required to fix bug on macos
 		'utf8fix'      => false,
-		 //                           й                 ё              Й               Ё              Ø         Å
+		 //                           й                 ё              Й               Ё              O         A
 		'utf8patterns' => array("\u0438\u0306", "\u0435\u0308", "\u0418\u0306", "\u0415\u0308", "\u00d8A", "\u030a"),
 		'utf8replace'  => array("\u0439",        "\u0451",       "\u0419",       "\u0401",       "\u00d8", "\u00c5")
 	);
@@ -5213,8 +5213,13 @@ abstract class elFinderVolumeDriver {
 	protected function gdImageBackground($image, $bgcolor){
 	
 		if ($bgcolor === 'transparent'){
-			imagealphablending($image, false);
+			/***** 背景色が透過にならず黒になるバグがあるためelFinder v2.1.11以下の方法に戻す for magic3 *****/
+			imagesavealpha($image,true);
+			$bgcolor1 = imagecolorallocatealpha($image, 255, 255, 255, 127);
+			imagefill($image, 0, 0, $bgcolor1);
+/*			imagealphablending($image, false);
 			imagesavealpha($image, true);
+*/
 		} else {
 			list($r, $g, $b) = sscanf($bgcolor, "#%02x%02x%02x");
 			$bgcolor1 = imagecolorallocate($image, $r, $g, $b);
