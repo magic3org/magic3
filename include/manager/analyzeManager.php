@@ -22,7 +22,10 @@ class AnalyzeManager extends Core
 	private $analyticsDb;
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const MAX_CALC_DAYS = 30;					// 最大集計日数
-	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.2/';		// クローラー解析スクリプトディレクトリ
+//	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.2/';		// クローラー解析スクリプトディレクトリ
+	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.20/';		// クローラー解析スクリプトディレクトリ
+	const USER_AGENT_SCRIPT = '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php';		// ユーザエージェント解析用スクリプト
+	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.5.2/UserAgentParser.php';		// ブラウザ判定スクリプト
 	
 	/**
 	 * コンストラクタ
@@ -150,35 +153,84 @@ class AnalyzeManager extends Core
 	/**
 	 * ブラウザのタイプを取得
 	 *
+	 * (注意)クローラーがシュミレートしている場合はクローラーと判定する
+	 *
 	 * @param string $agent		解析元の文字列。HTTP_USER_AGENTの値。
-	 * @param string $version	ブラウザのバージョン
-	 * @return string			ブラウザのタイプコード。不明のときは空文字列
+	 * @return array			ブラウザ情報
 	 */
-	public function getBrowserType($agent, &$version)
+	public function getBrowserType($agent)
 	{
-		require_once(M3_SYSTEM_LIB_PATH . '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php');
-		$parser = Net_UserAgent_Mobile::singleton($agent);
+/*
+//$agent = 'DoCoMo/2.0 N905i(c100;TB;W24H16) (compatible; Googlebot-Mobile/2.1; +http://www.google.com/bot.html)';		// google 携帯シュミレート
+$agent = 'Mozilla/5.0 (compatible; Steeler/3.5; http://www.tkl.iis.u-tokyo.ac.jp/~crawler/)';		// クローラー
+//$agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
+//$agent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)';
+$agent = 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko';
+$agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393';		// edge
+$agent = 'Mozilla/5.0 (iPad; CPU OS 10_0_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/14A403 Safari/602.1';		// ipad
+$agent = 'Mozilla/5.0 (Linux; U; Android 1.6; ja-jp; Docomo HT-03A Build/DRD08) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1';		
+$agent = 'SoftBank/1.0/831SH/SHJ003/SN123456789012345 Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1';	// SoftBank携帯
+*/
+		$resultObj = array();
+
+		// クローラーかどうかのチェック
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'CrawlerDetect.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/AbstractProvider.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Crawlers.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Exclusions.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Headers.php');
 		
-		if ($parser->isNonMobile()){		// 携帯以外のとき
-			require_once(M3_SYSTEM_LIB_PATH . '/UserAgentParser.php');
-			$retObj = UserAgentParser::getBrowser($agent);
-			if ($retObj === false){
-				return '';
-			} else {
-				$version = $retObj['version'];
-				return $retObj['id'];
-			}
-		} else {		// 携帯のとき
-			if ($parser->isDoCoMo()){	// ドコモ端末のとき
-				return 'DC';
-			} else if ($parser->isEZweb()){	// au端末のとき
-				return 'AU';
-			} else if ($parser->isSoftBank()){	// ソフトバンク端末のとき
-				return 'SB';
-			} else {
-				return '';
+		$crawlerDetect = new Jaybizzle\CrawlerDetect\CrawlerDetect;
+		if ($crawlerDetect->isCrawler($agent)){		// クローラー検出の場合
+			$crawlerName = $crawlerDetect->getMatches();
+			$resultObj['name'] = strval($crawlerName);
+			$resultObj['browser'] = strtolower($crawlerName);
+//				$resultObj['version'] = strtolower($infoObj['version']);
+			$crawlerIcon = $this->_getBrowserIconFile($resultObj['browser']);
+			if (empty($crawlerIcon)) $crawlerIcon = $this->_getBrowserIconFile('crawler');		// クローラーデフォルトアイコン
+			$resultObj['icon'] = $crawlerIcon;
+		} else {
+			// 携帯かどうかのチェック
+			require_once(M3_SYSTEM_LIB_PATH . self::USER_AGENT_SCRIPT);
+			
+			$parser = Net_UserAgent_Mobile::singleton($agent);
+			
+			if ($parser->isNonMobile()){		// 携帯以外のとき
+				// ブラウザを解析
+				require_once(M3_SYSTEM_LIB_PATH . self::BROWSER_DETECT_SCRIPT);
+				
+				$infoObj = parse_user_agent($agent);
+				$resultObj['name'] = strval($infoObj['browser']);
+				$resultObj['platform'] = strtolower($infoObj['platform']);
+				$resultObj['browser'] = strtolower($infoObj['browser']);
+				$resultObj['version'] = strtolower($infoObj['version']);
+				$resultObj['icon'] = $this->_getBrowserIconFile($resultObj['browser']);
+
+/*				require_once(M3_SYSTEM_LIB_PATH . '/UserAgentParser.php');
+				$retObj = UserAgentParser::getBrowser($agent);
+				if ($retObj === false){
+					return '';
+				} else {
+					$version = $retObj['version'];
+					return $retObj['id'];
+				}*/
+			} else {		// 携帯(ガラケー)のとき
+				if ($parser->isDoCoMo()){	// ドコモ端末のとき
+					$resultObj['name'] = 'DoCoMo';
+					$resultObj['icon'] = $this->_getBrowserIconFile('docomo');
+				} else if ($parser->isEZweb()){	// au端末のとき
+					$resultObj['name'] = 'au';
+					$resultObj['icon'] = $this->_getBrowserIconFile('au');
+				} else if ($parser->isSoftBank()){	// ソフトバンク端末のとき
+					$resultObj['name'] = 'SoftBank';
+					$resultObj['icon'] = $this->_getBrowserIconFile('softbank');
+				} else if ($parser->isWillcom()){	// WILLCOM端末のとき
+					$resultObj['name'] = 'WILLCOM';
+					$resultObj['icon'] = $this->_getBrowserIconFile('willcom');
+				}
 			}
 		}
+		return $resultObj;
 	}
 	/**
 	 * プラットフォーム(OSまたは携帯機種)のタイプを取得
@@ -188,7 +240,7 @@ class AnalyzeManager extends Core
 	 */
 	public function getPlatformType($agent)
 	{
-		require_once(M3_SYSTEM_LIB_PATH . '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::USER_AGENT_SCRIPT);
 		$parser = Net_UserAgent_Mobile::singleton($agent);
 		
 		if ($parser->isNonMobile()){		// 携帯以外のとき
@@ -345,7 +397,7 @@ class AnalyzeManager extends Core
 	function realtimeAnalytics($logSerial, $cookieValue)
 	{
 		global $gRequestManager;
-		global $gEnvManager;
+//		global $gEnvManager;
 		
 		$uri		= $gRequestManager->trimServerValueOf('REQUEST_URI');
 		$referer	= $gRequestManager->trimServerValueOf('HTTP_REFERER');
@@ -370,15 +422,15 @@ class AnalyzeManager extends Core
 				}
 			}
 		}*/
-		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'CrawlerDetect.php');
-		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/AbstractProvider.php');
-		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Crawlers.php');
-		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Exclusions.php');
-		require_once($gEnvManager->getLibPath() . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Headers.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'CrawlerDetect.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/AbstractProvider.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Crawlers.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Exclusions.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::CRAWLER_DETECT_SCRIPT_DIR . 'Fixtures/Headers.php');
 		
-		$CrawlerDetect = new Jaybizzle\CrawlerDetect\CrawlerDetect;
+		$crawlerDetect = new Jaybizzle\CrawlerDetect\CrawlerDetect;
 		$isCrawler = false;
-		if ($CrawlerDetect->isCrawler()) $isCrawler = true;
+		if ($crawlerDetect->isCrawler()) $isCrawler = true;
 		
 		// アクセスログを更新
 		$ret = $this->analyticsDb->updateAccessLog($logSerial, $isFirstAccess, $isCrawler);
@@ -405,6 +457,122 @@ class AnalyzeManager extends Core
 			}
 		}
 		return $canRegist;
+	}
+	/**
+	 * ブラウザアイコンファイル名を取得
+	 *
+	 * @param string  $type		ブラウザ種別
+	 * @return string			ファイル名(該当なしの場合は空文字列)
+	 */
+	public function _getBrowserIconFile($type)
+	{
+		// ブラウザアイコンファイル名
+		static $browserIconFile = array(
+			'opera'							=> 'opera.png',
+			'msie'							=> 'ie.png',
+			'microsoft internet explorer'	=> 'ie.png',
+			'internet explorer'				=> 'ie.png',
+			'edge'							=> 'edge.png',
+			'netscape6'						=> 'netscape.png',
+			'netscape'						=> 'netscape.png',
+			'galeon'						=> 'galeon.png',
+			'phoenix'						=> 'phoenix.png',
+			'firefox'						=> 'firefox.png',
+			'mozilla firebird'				=> 'firebird.png',
+			'firebird'						=> 'firebird.png',
+			'seamonkey'						=> 'seamonkey.png',
+			'camino'						=> 'camino.png',
+			'safari'						=> 'safari.png',
+			'chrome'						=> 'chrome.gif',
+			'k-meleon'						=> 'k-meleon.png',
+			'mozilla'						=> 'mozilla.gif',
+			'konqueror'						=> 'konqueror.png',
+			'blackberry'					=> '',
+			'icab'							=> 'icab.png',
+			'lynx'							=> '',
+			'links'							=> '',
+			'ncsa mosaic'					=> '',
+			'amaya'							=> '',
+			'omniweb'						=> 'omniweb.png',
+			'hotjava'						=> '',
+			'browsex'						=> '',
+			'amigavoyager'					=> '',
+			'amiga-aweb'					=> '',
+			'ibrowse'						=> '',
+			'arora'							=> '',
+			
+			// 以下、追加
+			'epiphany'						=> 'epiphany.png',
+			'flock'							=> 'flock.png',
+			'sleipnir'						=> 'sleipnir.gif',
+			'lunascape'						=> 'lunascape.gif',
+			'shiira'						=> 'shiira.gif',
+			'swift'							=> 'swift.png',
+			'wamcom.org'					=> '',
+			'playstation portable'			=> 'playstation.gif',
+			'scej psp browser'				=> '',	// ワイプアウトピュア
+			'w3m'							=> '',
+			'netcaptor'						=> 'netcaptor.gif',
+			'webtv'							=> 'webtv.gif',
+			
+			// ダウンローダ
+			'freshreader'					=> '',
+			'pockey'						=> '',		// GetHTMLW
+			'wwwc'							=> '',
+			'wwwd'							=> '',
+			'flashget'						=> '',
+			'download ninja'				=> '',	// ダウンロードNinja
+			'webauto'						=> '',
+			'arachmo'						=> '',
+			'wget'							=> '',
+			
+			// クローラー
+			'googlebot'					=> 'google.gif',	// Google
+			'googlebot-mobile'			=> 'google.gif',	// Google-Mobile
+			'mediapartners-google'		=> 'google.gif',	// Google
+			'msnbot'					=> 'msn.gif',	// MSN
+			'msnbot-media'				=> 'msn.gif',	// MSN
+			'yahooseeker'				=> 'yahoo.gif',	// YahooSeeker
+			'yahoo! de slurp'			=> 'yahoo.gif',	// Yahoo!
+			'yahoo! slurp'				=> 'yahoo.gif',	// Yahoo!
+			'zyborg'					=> '',	// InfoSeek
+			'infoseek'					=> '',	// InfoSeek
+			'slurp.so/goo; slurp'		=> 'goo.gif',	// goo
+			'mogimogi'					=> 'goo.gif',	// goo
+			'moget'						=> 'goo.gif',	// goo
+			'ichiro'					=> 'goo.gif',	// goo
+			'baiduspider'				=> 'baidu.png',	// 百度
+			'baiduspider+'				=> 'baidu.png',	// 百度
+			'sogou web spider'			=> '',			// 搜狗
+			'asahina-antenna'			=> '',			// 朝日奈アンテナ
+			'hatena antenna'			=> 'hatena.gif',	// はてなアンテナ
+			'yeti'						=> 'naver.gif',	// Naver(韓国)
+			'icc-crawler'				=> 'nict.gif',	// 独立行政法人情報通信研究機構
+			'dotbot'					=> 'dotbot.gif',	// Dotbot
+			'speedy spider'				=> 'entireweb.png',	// Entireweb
+			'turnitinbot'				=> 'turnitinbot.png',	// TurnitinBot
+			'bingbot'					=> 'bing.png',	// Bing
+			'yacybot'					=> 'yacy.png',	// YaCy
+			'mj12bot'					=> 'mj12bot.png',
+			
+			// クローラーその他
+			'msproxy'					=> '',	// ProxyServer
+			'spacebison'				=> '',	// Proxomitron
+			'bookmark renewal'			=> '',	// Bookまーく
+			'hatenascreenshot'			=> '',	// はてなスクリーンショット
+			'monazilla'					=> '',
+			'crawler'					=> 'crawler.png',			// クローラー該当なしの場合
+
+
+			// 携帯
+			'docomo'					=> 'docomo.gif',		// ドコモ
+			'au'						=> 'au.gif',		// au
+			'softbank'					=> 'softbank.gif',		// ソフトバンク
+			'willcom'					=> 'willcom.gif',		// WILLCOM
+		);
+		$filename = $browserIconFile[$type];
+		if (!isset($filename)) $filename = '';
+		return $filename;
 	}
 }
 ?>
