@@ -269,6 +269,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 	function logListLoop($index, $fetchedRow, $param)
 	{
 		$serial = $fetchedRow['ol_serial'];
+		$agent = $fetchedRow['al_user_agent'];
 				
 		$msgChecked = '';
 		if ($fetchedRow['ol_checked']){
@@ -297,7 +298,7 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		}
 		
 		// ブラウザ、プラットフォームの情報を取得
-		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
+/*		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
 		$browserImg = '';
 		if (!empty($browserCode)){
 			$iconFile = $this->browserIconFile[$browserCode];
@@ -305,6 +306,16 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 				$iconTitle = $browserCode;
 				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
 				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			}
+		}*/
+		$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
+		$browserImg = '';
+		if (!empty($browserTypeInfo)){
+			$iconFile = $browserTypeInfo['icon'];
+			if (!empty($iconFile)){
+				$iconTitle = $browserTypeInfo['name'];
+				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
+				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
 		}
 		

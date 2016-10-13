@@ -398,8 +398,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 					}
 				}
 				// ブラウザ、プラットフォームの情報を取得
-				$isMobile = false;		// 携帯かどうか
-				$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($agent, $version);
+/*				$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($agent, $version);
 				$browserImg = '';
 				if (!empty($browserCode)){
 					$iconFile = $this->browserIconFile[$browserCode];
@@ -408,17 +407,21 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 						$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
 						$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					}
-				}
-				if ($browserCode == 'DC' ||		// ドコモ
-					$browserCode == 'AU' ||		// au
-					$browserCode == 'SB'){		// ソフトバンク
-					$isMobile = true;
+				}*/
+				$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
+				$browserImg = '';
+				if (!empty($browserTypeInfo)){
+					$iconFile = $browserTypeInfo['icon'];
+					if (!empty($iconFile)){
+						$iconTitle = $browserTypeInfo['name'];
+						$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
+						$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+					}
 				}
 		
 				// アクセスユーザの国を取得
 				$countryCode = '';
 				if (!empty($language)) $countryCode = $this->gInstance->getAnalyzeManager()->getBrowserCountryCode($language);
-				if ($isMobile) $countryCode = 'jp';		// 携帯の場合は日本に設定
 		
 				$countryImg = '';
 				if (!empty($countryCode)){
@@ -429,14 +432,12 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		
 				$osImg = '';			// OS
 				$osCode = $this->gInstance->getAnalyzeManager()->getPlatformType($agent, $version);
-				if (!$isMobile){		// 携帯以外の場合
-					if (!empty($osCode)){
-						$iconFile = $this->osIconFile[$osCode];	// OSアイコンファイル名
-						if (!empty($iconFile)){
-							$iconTitle = $osCode;
-							$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
-							$osImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-						}
+				if (!empty($osCode)){
+					$iconFile = $this->osIconFile[$osCode];	// OSアイコンファイル名
+					if (!empty($iconFile)){
+						$iconTitle = $osCode;
+						$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
+						$osImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					}
 				}
 			}
@@ -484,6 +485,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	function logListLoop($index, $fetchedRow, $param)
 	{
 		$serial = $fetchedRow['al_serial'];
+		$agent = $fetchedRow['al_user_agent'];
 		
 		$ip = $fetchedRow['al_ip'];
 		$ipStr = $this->convertToDispString($ip);
@@ -492,8 +494,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		}
 		
 		// ブラウザ、プラットフォームの情報を取得
-		$isMobile = false;		// 携帯かどうか
-		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
+/*		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
 		$browserImg = '';
 		if (!empty($browserCode)){
 			$iconFile = $this->browserIconFile[$browserCode];
@@ -502,17 +503,21 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
 				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
-		}
-		if ($browserCode == 'DC' ||		// ドコモ
-			$browserCode == 'AU' ||		// au
-			$browserCode == 'SB'){		// ソフトバンク
-			$isMobile = true;
+		}*/
+		$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
+		$browserImg = '';
+		if (!empty($browserTypeInfo)){
+			$iconFile = $browserTypeInfo['icon'];
+			if (!empty($iconFile)){
+				$iconTitle = $browserTypeInfo['name'];
+				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
+				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			}
 		}
 		
 		// アクセスユーザの国を取得
 		$countryCode = '';
 		if (!empty($fetchedRow['al_accept_language'])) $countryCode = $this->gInstance->getAnalyzeManager()->getBrowserCountryCode($fetchedRow['al_accept_language']);
-		if ($isMobile) $countryCode = 'jp';		// 携帯の場合は日本に設定
 		
 		$countryImg = '';
 		if (!empty($countryCode)){
@@ -523,14 +528,12 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		
 		$osImg = '';			// OS
 		$osCode = $this->gInstance->getAnalyzeManager()->getPlatformType($fetchedRow['al_user_agent'], $version);
-		if (!$isMobile){		// 携帯以外の場合
-			if (!empty($osCode)){
-				$iconFile = $this->osIconFile[$osCode];	// OSアイコンファイル名
-				if (!empty($iconFile)){
-					$iconTitle = $osCode;
-					$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
-					$osImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-				}
+		if (!empty($osCode)){
+			$iconFile = $this->osIconFile[$osCode];	// OSアイコンファイル名
+			if (!empty($iconFile)){
+				$iconTitle = $osCode;
+				$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
+				$osImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
 		}
 

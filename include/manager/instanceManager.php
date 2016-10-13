@@ -27,6 +27,8 @@ class InstanceManager extends Core
 	private $addonDir;			// 追加クラスインストールディレクトリ
 	private $addonArray;		// ロード済みの追加クラス
 	private $addonInfoArray;	// アドオンクラス情報
+	const USER_AGENT_SCRIPT = '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php';		// ユーザエージェント解析用スクリプト
+	
 	/**
 	 * コンストラクタ
 	 */
@@ -77,7 +79,7 @@ class InstanceManager extends Core
 		static $mobileAgent;// 携帯判定用オブジェクト
 		
 		if (!isset($mobileAgent)){
-			require_once($gEnvManager->getLibPath() . '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php');
+			require_once($gEnvManager->getLibPath() . self::USER_AGENT_SCRIPT);
 			$mobileAgent = Net_UserAgent_Mobile::singleton();
 		}
 		return $mobileAgent;

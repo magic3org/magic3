@@ -363,25 +363,14 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 	 */
 	function logListLoop($index, $fetchedRow, $param)
 	{
+		$agent = $fetchedRow['al_user_agent'];
+		
 		// 先頭の項目番号
 		$no = $this->startNo + $index;
-		
-		// ブラウザ、プラットフォームの情報を取得
-		$isMobile = false;		// 携帯かどうか
-		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
-		$browserImg = '';
-		if (!empty($browserCode)){
-		}
-		if ($browserCode == 'DC' ||		// ドコモ
-			$browserCode == 'AU' ||		// au
-			$browserCode == 'SB'){		// ソフトバンク
-			$isMobile = true;
-		}
 		
 		// アクセスユーザの国を取得
 		$countryCode = '';
 		if (!empty($fetchedRow['al_accept_language'])) $countryCode = $this->gInstance->getAnalyzeManager()->getBrowserCountryCode($fetchedRow['al_accept_language']);
-		if ($isMobile) $countryCode = 'jp';		// 携帯の場合は日本に設定
 		
 		$countryImg = '';
 		if (!empty($countryCode)){
@@ -391,7 +380,7 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		}
 		
 		// ブラウザ、プラットフォームの情報を取得
-		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
+/*		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
 		$browserImg = '';
 		if (!empty($browserCode)){
 			$iconFile = $this->browserIconFile[$browserCode];
@@ -400,7 +389,18 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
 				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
+		}*/
+		$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
+		$browserImg = '';
+		if (!empty($browserTypeInfo)){
+			$iconFile = $browserTypeInfo['icon'];
+			if (!empty($iconFile)){
+				$iconTitle = $browserTypeInfo['name'];
+				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
+				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			}
 		}
+
 		// アクセスログ番号
 		$accessLog = '';
 		if (!empty($fetchedRow['sw_access_log_serial'])) $accessLog = $this->convertToDispString($fetchedRow['sw_access_log_serial']);
