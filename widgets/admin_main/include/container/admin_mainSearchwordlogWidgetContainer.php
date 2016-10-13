@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     株式会社 毎日メディアサービス
- * @copyright  Copyright 2010 株式会社 毎日メディアサービス.
+ * @copyright  Copyright 2016 株式会社 毎日メディアサービス.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_mainSearchwordlogWidgetContainer.php 5802 2013-03-07 06:14:29Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.m-media.co.jp
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/admin_mainConditionBaseWidgetContainer.php');
@@ -28,7 +28,6 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 	private $path;				// アクセスパス
 	private $logOrder;			// 検索語の表示順
 	private $logOrderArray;		// 検索語の表示順タイプ
-	private $browserIconFile;	// ブラウザアイコンファイル名
 	private $showMessage;		// メッセージ画面かどうか
 	private $message;			// 表示メッセージ
 	private $server;			// 指定サーバ
@@ -60,60 +59,6 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		// 検索語の表示順タイプ
 		$this->logOrderArray = array(	array(	'name' => '最新',	'value' => '0'),
 										array(	'name' => '頻度高',	'value' => '1'));
-										
-		// ブラウザアイコンファイル名
-		$this->browserIconFile = array(
-			'OP' => 'opera.png',	// opera
-			'IE' => 'ie.png',	// microsoft internet explorer
-			'NS' => 'netscape.png',	// netscape
-			'GA' => 'galeon.png',	// galeon
-			'PX' => 'phoenix.png',	// phoenix
-			'FF' => 'firefox.png',	// firefox
-			'FB' => 'firebird.png',	// mozilla firebird
-			'SM' => 'seamonkey.png',	// seamonkey
-			'CA' => 'camino.png',	// camino
-			'SF' => 'safari.png',	// safari
-			'CH' => 'chrome.gif',	// chrome
-			'KM' => 'k-meleon.png',	// k-meleon
-			'MO' => 'mozilla.gif',	// mozilla
-			'KO' => 'konqueror.png',	// konqueror
-			'BB' => '',	// blackberry
-			'IC' => 'icab.png',	// icab
-			'LX' => '',	// lynx
-			'LI' => '',	// links
-			'MC' => '',	// ncsa mosaic
-			'AM' => '',	// amaya
-			'OW' => 'omniweb.png',	// omniweb
-			'HJ' => '',	// hotjava
-			'BX' => '',	// browsex
-			'AV' => '',	// amigavoyager
-			'AW' => '',	// amiga-aweb
-			'IB' => '',	// ibrowse
-			'AR' => '',	// arora
-			'EP' => 'epiphany.png',	// epiphany
-			'FL' => 'flock.png',	// flock
-			'SL' => 'sleipnir.gif'		,// sleipnir
-			'LU' => 'lunascape.gif',	// lunascape
-			'SH' => 'shiira.gif',		// shiira
-			'SW' => 'swift.png',	// swift
-			'PS' => 'playstation.gif',	// playstation portable
-			'PP' => 'playstation.gif',	// ワイプアウトピュア
-			'NC' => 'netcaptor.gif',	// netcaptor
-			'WT' => 'webtv.gif',	// webtv
-			
-			// クローラ
-			'GB' => 'google.gif',	// Google
-			'MS' => 'msn.gif',	// MSN
-			'YA' => 'yahoo.gif',	// YahooSeeker
-			'GO' => 'goo.gif',	// goo
-			'HT' => 'hatena.gif',	// はてなアンテナ
-			'NV' => 'naver.gif',	// Naver(韓国)
-			
-			// 携帯
-			'DC' => 'docomo.gif',		// ドコモ
-			'AU' => 'au.gif',		// au
-			'SB' => 'softbank.gif',		// ソフトバンク
-		);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -380,16 +325,6 @@ class admin_mainSearchwordlogWidgetContainer extends admin_mainConditionBaseWidg
 		}
 		
 		// ブラウザ、プラットフォームの情報を取得
-/*		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
-		$browserImg = '';
-		if (!empty($browserCode)){
-			$iconFile = $this->browserIconFile[$browserCode];
-			if (!empty($iconFile)){
-				$iconTitle = $browserCode;
-				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
-				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-			}
-		}*/
 		$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
 		$browserImg = '';
 		if (!empty($browserTypeInfo)){

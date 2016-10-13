@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,7 +28,6 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 	private $logLevel;					// 現在のログ表示レベル
 	private $logStatus;					// 現在のログ表示ステータス
 	private $clientIp;			// クライアントのIPアドレス
-	private $browserIconFile;	// ブラウザアイコンファイル名
 	private $showMessage;		// メッセージ画面かどうか
 	private $message;			// 表示メッセージ
 	private $server;			// 指定サーバ
@@ -63,60 +62,6 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		$this->logStatusArray = array(	array(	'name' => $this->_('All'),			'value' => '0'),	// すべて
 										array(	'name' => $this->_('Unchecked'),	'value' => '1'),	// 未確認項目
 										array(	'name' => $this->_('Checked'),		'value' => '2'));	// 確認済項目
-										
-		// ブラウザアイコンファイル名
-		$this->browserIconFile = array(
-			'OP' => 'opera.png',	// opera
-			'IE' => 'ie.png',	// microsoft internet explorer
-			'NS' => 'netscape.png',	// netscape
-			'GA' => 'galeon.png',	// galeon
-			'PX' => 'phoenix.png',	// phoenix
-			'FF' => 'firefox.png',	// firefox
-			'FB' => 'firebird.png',	// mozilla firebird
-			'SM' => 'seamonkey.png',	// seamonkey
-			'CA' => 'camino.png',	// camino
-			'SF' => 'safari.png',	// safari
-			'CH' => 'chrome.gif',	// chrome
-			'KM' => 'k-meleon.png',	// k-meleon
-			'MO' => 'mozilla.gif',	// mozilla
-			'KO' => 'konqueror.png',	// konqueror
-			'BB' => '',	// blackberry
-			'IC' => 'icab.png',	// icab
-			'LX' => '',	// lynx
-			'LI' => '',	// links
-			'MC' => '',	// ncsa mosaic
-			'AM' => '',	// amaya
-			'OW' => 'omniweb.png',	// omniweb
-			'HJ' => '',	// hotjava
-			'BX' => '',	// browsex
-			'AV' => '',	// amigavoyager
-			'AW' => '',	// amiga-aweb
-			'IB' => '',	// ibrowse
-			'AR' => '',	// arora
-			'EP' => 'epiphany.png',	// epiphany
-			'FL' => 'flock.png',	// flock
-			'SL' => 'sleipnir.gif'		,// sleipnir
-			'LU' => 'lunascape.gif',	// lunascape
-			'SH' => 'shiira.gif',		// shiira
-			'SW' => 'swift.png',	// swift
-			'PS' => 'playstation.gif',	// playstation portable
-			'PP' => 'playstation.gif',	// ワイプアウトピュア
-			'NC' => 'netcaptor.gif',	// netcaptor
-			'WT' => 'webtv.gif',	// webtv
-			
-			// クローラ
-			'GB' => 'google.gif',	// Google
-			'MS' => 'msn.gif',	// MSN
-			'YA' => 'yahoo.gif',	// YahooSeeker
-			'GO' => 'goo.gif',	// goo
-			'HT' => 'hatena.gif',	// はてなアンテナ
-			'NV' => 'naver.gif',	// Naver(韓国)
-			
-			// 携帯
-			'DC' => 'docomo.gif',		// ドコモ
-			'AU' => 'au.gif',		// au
-			'SB' => 'softbank.gif',		// ソフトバンク
-		);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -476,16 +421,6 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		}
 		
 		// ブラウザ、プラットフォームの情報を取得
-/*		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
-		$browserImg = '';
-		if (!empty($browserCode)){
-			$iconFile = $this->browserIconFile[$browserCode];
-			if (!empty($iconFile)){
-				$iconTitle = $browserCode;
-				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
-				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-			}
-		}*/
 		$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
 		$browserImg = '';
 		if (!empty($browserTypeInfo)){

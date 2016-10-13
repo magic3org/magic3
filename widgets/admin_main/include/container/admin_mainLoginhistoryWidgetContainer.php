@@ -19,7 +19,6 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 {
 	private $loginStatusArray;		// ログイン状況選択用
 	private $loginStatus;	// ログイン状況
-	private $browserIconFile;	// ブラウザアイコンファイル名
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const MAX_PAGE_COUNT = 20;				// 最大ページ数
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
@@ -36,60 +35,6 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		$this->loginStatusArray = array(	array(	'name' => $this->_('Login'),		'value' => '0'),	// ログイン
 											array(	'name' => $this->_('Logout'),		'value' => '1'),	// ログアウト
 											array(	'name' => $this->_('Error'),		'value' => '2'));	// エラー
-											
-		// ブラウザアイコンファイル名
-		$this->browserIconFile = array(
-			'OP' => 'opera.png',	// opera
-			'IE' => 'ie.png',	// microsoft internet explorer
-			'NS' => 'netscape.png',	// netscape
-			'GA' => 'galeon.png',	// galeon
-			'PX' => 'phoenix.png',	// phoenix
-			'FF' => 'firefox.png',	// firefox
-			'FB' => 'firebird.png',	// mozilla firebird
-			'SM' => 'seamonkey.png',	// seamonkey
-			'CA' => 'camino.png',	// camino
-			'SF' => 'safari.png',	// safari
-			'CH' => 'chrome.gif',	// chrome
-			'KM' => 'k-meleon.png',	// k-meleon
-			'MO' => 'mozilla.gif',	// mozilla
-			'KO' => 'konqueror.png',	// konqueror
-			'BB' => '',	// blackberry
-			'IC' => 'icab.png',	// icab
-			'LX' => '',	// lynx
-			'LI' => '',	// links
-			'MC' => '',	// ncsa mosaic
-			'AM' => '',	// amaya
-			'OW' => 'omniweb.png',	// omniweb
-			'HJ' => '',	// hotjava
-			'BX' => '',	// browsex
-			'AV' => '',	// amigavoyager
-			'AW' => '',	// amiga-aweb
-			'IB' => '',	// ibrowse
-			'AR' => '',	// arora
-			'EP' => 'epiphany.png',	// epiphany
-			'FL' => 'flock.png',	// flock
-			'SL' => 'sleipnir.gif'		,// sleipnir
-			'LU' => 'lunascape.gif',	// lunascape
-			'SH' => 'shiira.gif',		// shiira
-			'SW' => 'swift.png',	// swift
-			'PS' => 'playstation.gif',	// playstation portable
-			'PP' => 'playstation.gif',	// ワイプアウトピュア
-			'NC' => 'netcaptor.gif',	// netcaptor
-			'WT' => 'webtv.gif',	// webtv
-			
-			// クローラ
-			'GB' => 'google.gif',	// Google
-			'MS' => 'msn.gif',	// MSN
-			'YA' => 'yahoo.gif',	// YahooSeeker
-			'GO' => 'goo.gif',	// goo
-			'HT' => 'hatena.gif',	// はてなアンテナ
-			'NV' => 'naver.gif',	// Naver(韓国)
-			
-			// 携帯
-			'DC' => 'docomo.gif',		// ドコモ
-			'AU' => 'au.gif',		// au
-			'SB' => 'softbank.gif',		// ソフトバンク
-		);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -298,16 +243,6 @@ class admin_mainLoginhistoryWidgetContainer extends admin_mainUserBaseWidgetCont
 		}
 		
 		// ブラウザ、プラットフォームの情報を取得
-/*		$browserCode = $this->gInstance->getAnalyzeManager()->getBrowserType($fetchedRow['al_user_agent'], $version);
-		$browserImg = '';
-		if (!empty($browserCode)){
-			$iconFile = $this->browserIconFile[$browserCode];
-			if (!empty($iconFile)){
-				$iconTitle = $browserCode;
-				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
-				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
-			}
-		}*/
 		$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
 		$browserImg = '';
 		if (!empty($browserTypeInfo)){
