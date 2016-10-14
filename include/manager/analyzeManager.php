@@ -170,7 +170,16 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, l
 $agent = 'Mozilla/5.0 (iPad; CPU OS 10_0_1 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/14A403 Safari/602.1';		// ipad
 $agent = 'Mozilla/5.0 (Linux; U; Android 1.6; ja-jp; Docomo HT-03A Build/DRD08) AppleWebKit/528.5+ (KHTML, like Gecko) Version/3.1.2 Mobile Safari/525.20.1';		
 $agent = 'SoftBank/1.0/831SH/SHJ003/SN123456789012345 Browser/NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1';	// SoftBank携帯
+
+$agent = 'Mozilla/5.0 (PlayStation Vita 3.01) AppleWebKit/536.26 (KHTML, like Gecko) Silk/3.2';
+$agent = 'SAMSUNG-GT-C3303/C3303DDJG4 NetFront/3.5 Profile/MIDP-2.0 Configuration/CLDC-1.1';
+//$agent = 'Mozilla/5.0 (Linux; U; Android 4.0.3; ja-jp; SC-02C Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30';		// Android標準
+//$agent = 'Mozilla/5.0 (Linux; Android 4.0.3; SC-02C Build/IML74K) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.58 Mobile Safari/537.31';		// Android Chrome
+$agent = 'Mozilla/4.0 (PS2; PlayStation BB Navigator 1.0) NetFront/3.0';
+$agent = 'Opera/9.80 (Android; Opera Mini/6.5.27452/27.1324; U; ja) Presto/2.8.119 Version/11.10';
+$agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.122 Safari/537.36 Vivaldi/1.4.589.29';		// Vivaldi
 */
+
 		$resultObj = array();
 
 		// クローラーかどうかのチェック
@@ -205,7 +214,6 @@ $agent = 'SoftBank/1.0/831SH/SHJ003/SN123456789012345 Browser/NetFront/3.5 Profi
 				$resultObj['browser'] = strtolower($infoObj['browser']);
 				$resultObj['version'] = strtolower($infoObj['version']);
 				$resultObj['icon'] = $this->_getBrowserIconFile($resultObj['browser']);
-
 /*				require_once(M3_SYSTEM_LIB_PATH . '/UserAgentParser.php');
 				$retObj = UserAgentParser::getBrowser($agent);
 				if ($retObj === false){
@@ -473,8 +481,10 @@ $agent = 'SoftBank/1.0/831SH/SHJ003/SN123456789012345 Browser/NetFront/3.5 Profi
 			'microsoft internet explorer'	=> 'ie.png',
 			'internet explorer'				=> 'ie.png',
 			'edge'							=> 'edge.png',
+			'android browser'				=> 'android.png',
 			'netscape6'						=> 'netscape.png',
 			'netscape'						=> 'netscape.png',
+			'netfront'						=> 'netfront.gif',
 			'galeon'						=> 'galeon.png',
 			'phoenix'						=> 'phoenix.png',
 			'firefox'						=> 'firefox.png',
@@ -500,8 +510,6 @@ $agent = 'SoftBank/1.0/831SH/SHJ003/SN123456789012345 Browser/NetFront/3.5 Profi
 			'amiga-aweb'					=> '',
 			'ibrowse'						=> '',
 			'arora'							=> '',
-			
-			// 以下、追加
 			'epiphany'						=> 'epiphany.png',
 			'flock'							=> 'flock.png',
 			'sleipnir'						=> 'sleipnir.gif',
@@ -514,6 +522,7 @@ $agent = 'SoftBank/1.0/831SH/SHJ003/SN123456789012345 Browser/NetFront/3.5 Profi
 			'w3m'							=> '',
 			'netcaptor'						=> 'netcaptor.gif',
 			'webtv'							=> 'webtv.gif',
+			'vivaldi'						=> 'vivaldi.png',
 			
 			// ダウンローダ
 			'freshreader'					=> '',
@@ -562,7 +571,6 @@ $agent = 'SoftBank/1.0/831SH/SHJ003/SN123456789012345 Browser/NetFront/3.5 Profi
 			'hatenascreenshot'			=> '',	// はてなスクリーンショット
 			'monazilla'					=> '',
 			'crawler'					=> 'crawler.png',			// クローラー該当なしの場合
-
 
 			// 携帯
 			'docomo'					=> 'docomo.gif',		// ドコモ
