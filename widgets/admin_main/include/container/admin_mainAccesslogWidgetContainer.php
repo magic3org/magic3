@@ -341,7 +341,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 				if (!empty($osInfo)){
 					$iconFile = $osInfo['icon'];	// OSアイコンファイル名
 					if (!empty($iconFile)){
-						$iconTitle = $osInfo['name'];
+						$iconTitle = $osInfo['name'] . ' ' . $osInfo['version_name'];
 						$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
 						$osImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					}
@@ -435,7 +435,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		if (!empty($osInfo)){
 			$iconFile = $osInfo['icon'];	// OSアイコンファイル名
 			if (!empty($iconFile)){
-				$iconTitle = $osInfo['name'];
+				$iconTitle = $osInfo['name'] . ' ' . $osInfo['version_name'];
 				$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
 				$osImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
