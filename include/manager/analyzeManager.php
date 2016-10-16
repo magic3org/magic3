@@ -634,21 +634,21 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			'LIN' => '',	// Linux
 			*/
 			'windows'		=> 'windows.png',
-			'windows phone' => '',
+			'windows phone' => 'windowsphone.gif',
 			'os x'			=> 'osx.png',
-			'ios'			=> '',
-			'android'		=> '',
-			'chrome os'		=> '',
+			'ios'			=> 'ios.png',
+			'android'		=> 'android.png',
+			'chrome os'		=> 'chromeos.gif',
 			'linux'			=> 'linux.gif',
 			'symbos'		=> '',
 			'nokia'			=> '',
 			'blackberry'	=> '',
 			'freebsd'		=> 'bsd.gif',
-			'openbsd'		=> '',
+			'openbsd'		=> 'obs.gif',
 			'netbsd'		=> 'bsd.gif',
 			'opensolaris'	=> '',
 			'sunos'			=> 'sun.gif',
-			'os2'			=> '',
+			'os2'			=> 'os2.gif',
 			'beos'			=> ''
 		);
 		$filename = $osIconFile[$type];
