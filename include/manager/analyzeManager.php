@@ -26,6 +26,7 @@ class AnalyzeManager extends Core
 	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.20/';		// クローラー解析スクリプトディレクトリ
 	const USER_AGENT_SCRIPT = '/Net_UserAgent_Mobile-1.0.0/Net/UserAgent/Mobile.php';		// ユーザエージェント解析用スクリプト
 	const BROWSER_DETECT_SCRIPT = '/PhpUserAgent-0.5.2/UserAgentParser.php';		// ブラウザ判定スクリプト
+	const PLATFORM_DETECT_SCRIPT_DIR = '/php-browser-detector-6.0.5/';		// プラットフォーム判定スクリプト
 	
 	/**
 	 * コンストラクタ
@@ -163,7 +164,7 @@ class AnalyzeManager extends Core
 /*
 //$agent = 'DoCoMo/2.0 N905i(c100;TB;W24H16) (compatible; Googlebot-Mobile/2.1; +http://www.google.com/bot.html)';		// google 携帯シュミレート
 $agent = 'Mozilla/5.0 (compatible; Steeler/3.5; http://www.tkl.iis.u-tokyo.ac.jp/~crawler/)';		// クローラー
-//$agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
+//
 //$agent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_0 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Version/7.0 Mobile/11A465 Safari/9537.53 (compatible; bingbot/2.0; +http://www.bing.com/bingbot.htm)';
 $agent = 'Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko';
 $agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393';		// edge
@@ -179,7 +180,8 @@ $agent = 'Mozilla/4.0 (PS2; PlayStation BB Navigator 1.0) NetFront/3.0';
 $agent = 'Opera/9.80 (Android; Opera Mini/6.5.27452/27.1324; U; ja) Presto/2.8.119 Version/11.10';
 $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.122 Safari/537.36 Vivaldi/1.4.589.29';		// Vivaldi
 */
-
+//$agent = 'Mozilla/5.0 (PlayStation 4 1.70) AppleWebKit/536.26 (KHTML, like Gecko)';			// Playstation4
+//$agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
 		$resultObj = array();
 
 		// クローラーかどうかのチェック
@@ -214,14 +216,19 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 				$resultObj['browser'] = strtolower($infoObj['browser']);
 				$resultObj['version'] = strtolower($infoObj['version']);
 				$resultObj['icon'] = $this->_getBrowserIconFile($resultObj['browser']);
-/*				require_once(M3_SYSTEM_LIB_PATH . '/UserAgentParser.php');
+				
+//echo '---<br>';
+//var_dump($infoObj);
+				/*
+				require_once(M3_SYSTEM_LIB_PATH . '/UserAgentParser.php');
 				$retObj = UserAgentParser::getBrowser($agent);
-				if ($retObj === false){
-					return '';
-				} else {
-					$version = $retObj['version'];
-					return $retObj['id'];
-				}*/
+//				if ($retObj === false){
+//					return '';
+//				} else {
+//					$version = $retObj['version'];
+//					return $retObj['id'];
+//				}
+*/
 			} else {		// 携帯(ガラケー)のとき
 				if ($parser->isDoCoMo()){	// ドコモ端末のとき
 					$resultObj['name'] = 'DoCoMo';
@@ -244,11 +251,11 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 	 * プラットフォーム(OSまたは携帯機種)のタイプを取得
 	 *
 	 * @param string $agent		解析元の文字列。HTTP_USER_AGENTの値。
-	 * @return string			プラットフォームのタイプコード
+	 * @return array			プラットフォーム情報
 	 */
 	public function getPlatformType($agent)
 	{
-		require_once(M3_SYSTEM_LIB_PATH . self::USER_AGENT_SCRIPT);
+/*		require_once(M3_SYSTEM_LIB_PATH . self::USER_AGENT_SCRIPT);
 		$parser = Net_UserAgent_Mobile::singleton($agent);
 		
 		if ($parser->isNonMobile()){		// 携帯以外のとき
@@ -261,7 +268,21 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			}
 		} else {		// 携帯のとき
 			return $parser->getModel();		// 機種を取得
-		}
+		}*/
+		$resultObj = array();
+		
+		require_once(M3_SYSTEM_LIB_PATH . self::PLATFORM_DETECT_SCRIPT_DIR . 'DetectorInterface.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::PLATFORM_DETECT_SCRIPT_DIR . 'BrowserDetector.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::PLATFORM_DETECT_SCRIPT_DIR . 'UserAgent.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::PLATFORM_DETECT_SCRIPT_DIR . 'OsDetector.php');
+		require_once(M3_SYSTEM_LIB_PATH . self::PLATFORM_DETECT_SCRIPT_DIR . 'Os.php');
+
+		$osInfo = new Sinergi\BrowserDetector\Os($agent);
+		$resultObj['name'] = strval($osInfo->getName());
+		$resultObj['platform'] = strtolower($resultObj['name']);
+		$resultObj['version'] = strtolower($osInfo->getVersion());
+		$resultObj['icon'] = $this->_getOsIconFile($resultObj['platform']);
+		return $resultObj;
 	}
 	/**
 	 * ブラウザの言語から国コードを取得
@@ -579,6 +600,58 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 			'willcom'					=> 'willcom.gif',		// WILLCOM
 		);
 		$filename = $browserIconFile[$type];
+		if (!isset($filename)) $filename = '';
+		return $filename;
+	}
+	/**
+	 * OSアイコンファイル名を取得
+	 *
+	 * @param string  $type		OS種別
+	 * @return string			ファイル名(該当なしの場合は空文字列)
+	 */
+	public function _getOsIconFile($type)
+	{
+		// OSアイコンファイル名
+		static $osIconFile = array(
+/*			'IPD' => '',	// iPod
+			'IPH' => '',	// iPhone
+			'WII' => '',	// Nintendo Wii
+			'PSP' => '',	// PlayStation Portable
+			'PS3' => '',	// PlayStation 3
+			'AND' => '',	// Android
+			'POS' => '',	// PalmOS
+			'BLB' => '',	// BlackBerry
+			'WI7' => 'winvista.gif',	// Windows NT 6.1, Windows 7
+			'WVI' => 'winvista.gif',	// Windows NT 6.0, Windows Vista
+			'WS3' => 'win.gif',	// Windows NT 5.2, Windows Server 2003
+			'WXP' => 'win.gif',	// Windows NT 5.1, Windows XP
+			'W98' => 'win98.gif',	// Windows 98
+			'W2K' => 'win.gif',	// Windows NT 5.0, Windows 2000
+			'WNT' => 'win98.gif',	// Windows NT 4.0
+			'WME' => 'win98.gif',	// Win 9x 4.90, Windows ME
+			'W95' => 'win98.gif',	// Windows 95
+			'MAC' => '', 	// Mac PowerPC
+			'LIN' => '',	// Linux
+			*/
+			'windows'		=> 'windows.png',
+			'windows phone' => '',
+			'os x'			=> 'osx.png',
+			'ios'			=> '',
+			'android'		=> '',
+			'chrome os'		=> '',
+			'linux'			=> 'linux.gif',
+			'symbos'		=> '',
+			'nokia'			=> '',
+			'blackberry'	=> '',
+			'freebsd'		=> 'bsd.gif',
+			'openbsd'		=> '',
+			'netbsd'		=> 'bsd.gif',
+			'opensolaris'	=> '',
+			'sunos'			=> 'sun.gif',
+			'os2'			=> '',
+			'beos'			=> ''
+		);
+		$filename = $osIconFile[$type];
 		if (!isset($filename)) $filename = '';
 		return $filename;
 	}

@@ -26,7 +26,6 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	private $serialArray = array();		// 表示されているコンテンツシリアル番号
 	private $clientIp;			// クライアントのIPアドレス
 	private $path;				// アクセスパス
-	private $osIconFile;	// OSアイコンファイル名
 	private $showMessage;		// メッセージ画面かどうか
 	private $message;			// 表示メッセージ
 	private $server;			// 指定サーバ
@@ -64,36 +63,6 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
 		$this->serverDb = new admin_serverDb();
-		
-		// OSアイコンファイル名
-		$this->osIconFile = array(
-			'IPD' => '',	// iPod
-			'IPH' => '',	// iPhone
-			'WII' => '',	// Nintendo Wii
-			'PSP' => '',	// PlayStation Portable
-			'PS3' => '',	// PlayStation 3
-			'AND' => '',	// Android
-			'POS' => '',	// PalmOS
-			'BLB' => '',	// BlackBerry
-			'WI7' => 'winvista.gif',	// Windows NT 6.1, Windows 7
-			'WVI' => 'winvista.gif',	// Windows NT 6.0, Windows Vista
-			'WS3' => 'win.gif',	// Windows NT 5.2, Windows Server 2003
-			'WXP' => 'win.gif',	// Windows NT 5.1, Windows XP
-			'W98' => 'win98.gif',	// Windows 98
-			'W2K' => 'win.gif',	// Windows NT 5.0, Windows 2000
-			'WNT' => 'win98.gif',	// Windows NT 4.0
-			'WME' => 'win98.gif',	// Win 9x 4.90, Windows ME
-			'W95' => 'win98.gif',	// Windows 95
-			'MAC' => 'osx.gif', 	// Mac PowerPC
-			'LIN' => 'linux.gif',	// Linux
-			'SOS' => 'sun.gif',	// SunOS
-			'BSD' => 'bsd.gif',	// FreeBSD
-			'AIX' => '',	// AIX
-			'IRI' => 'irix.gif',	// IRIX
-			'HPX' => 'hp-ux.gif',	// HP-UX
-			'OS2' => '',	// OS/2
-			'NBS' => 'bsd.gif',	// NetBSD
-		);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -360,13 +329,21 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 				}
 		
 				$osImg = '';			// OS
-				$osCode = $this->gInstance->getAnalyzeManager()->getPlatformType($agent, $version);
-				if (!empty($osCode)){
+				$osInfo = $this->gInstance->getAnalyzeManager()->getPlatformType($agent);
+/*				if (!empty($osCode)){
 					$iconFile = $this->osIconFile[$osCode];	// OSアイコンファイル名
 					if (!empty($iconFile)){
 						$iconTitle = $osCode;
 						$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
 						$osImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+					}
+				}*/
+				if (!empty($osInfo)){
+					$iconFile = $osInfo['icon'];	// OSアイコンファイル名
+					if (!empty($iconFile)){
+						$iconTitle = $osInfo['name'];
+						$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
+						$osImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					}
 				}
 			}
@@ -446,13 +423,21 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		}
 		
 		$osImg = '';			// OS
-		$osCode = $this->gInstance->getAnalyzeManager()->getPlatformType($fetchedRow['al_user_agent'], $version);
-		if (!empty($osCode)){
+		$osInfo = $this->gInstance->getAnalyzeManager()->getPlatformType($agent);
+/*		if (!empty($osCode)){
 			$iconFile = $this->osIconFile[$osCode];	// OSアイコンファイル名
 			if (!empty($iconFile)){
 				$iconTitle = $osCode;
 				$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
 				$osImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			}
+		}*/
+		if (!empty($osInfo)){
+			$iconFile = $osInfo['icon'];	// OSアイコンファイル名
+			if (!empty($iconFile)){
+				$iconTitle = $osInfo['name'];
+				$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
+				$osImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
 		}
 
