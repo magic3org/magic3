@@ -31,6 +31,8 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	private $server;			// 指定サーバ
 	private $startDt;			// 検索範囲開始日付
 	private $endDt;				// 検索範囲終了日付
+	private $browserTypeInfo;	// ブラウザ情報(再利用)
+	private $osInfo;			// プラットフォーム情報(再利用)
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const MAX_PAGE_COUNT = 200;				// 最大ページ数
 	const INFO_ICON_FILE = '/images/system/info16.png';			// 情報アイコン
@@ -325,7 +327,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 				if (!empty($countryCode)){
 					$iconTitle = $countryCode;
 					$iconUrl = $this->gEnv->getRootUrl() . self::FLAG_ICON_DIR . $countryCode . '.png';
-					$countryImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+					$countryImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 				}
 		
 				$osImg = '';			// OS
@@ -390,6 +392,8 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	 */
 	function logListLoop($index, $fetchedRow, $param)
 	{
+		static $savedAgent;		// 前ブラウザ情報退避用
+		
 		$serial = $fetchedRow['al_serial'];
 		$agent = $fetchedRow['al_user_agent'];
 		
@@ -400,12 +404,12 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		}
 		
 		// ブラウザ、プラットフォームの情報を取得
-		$browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
+		if ($agent != $savedAgent) $this->browserTypeInfo = $this->gInstance->getAnalyzeManager()->getBrowserType($agent);
 		$browserImg = '';
-		if (!empty($browserTypeInfo)){
-			$iconFile = $browserTypeInfo['icon'];
+		if (!empty($this->browserTypeInfo)){
+			$iconFile = $this->browserTypeInfo['icon'];
 			if (!empty($iconFile)){
-				$iconTitle = $browserTypeInfo['name'];
+				$iconTitle = $this->browserTypeInfo['name'];
 				$iconUrl = $this->gEnv->getRootUrl() . self::BROWSER_ICON_DIR . $iconFile;
 				$browserImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
@@ -419,11 +423,11 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		if (!empty($countryCode)){
 			$iconTitle = $countryCode;
 			$iconUrl = $this->gEnv->getRootUrl() . self::FLAG_ICON_DIR . $countryCode . '.png';
-			$countryImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$countryImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		}
 		
 		$osImg = '';			// OS
-		$osInfo = $this->gInstance->getAnalyzeManager()->getPlatformType($agent);
+		if ($agent != $savedAgent) $this->osInfo = $this->gInstance->getAnalyzeManager()->getPlatformType($agent);
 /*		if (!empty($osCode)){
 			$iconFile = $this->osIconFile[$osCode];	// OSアイコンファイル名
 			if (!empty($iconFile)){
@@ -432,10 +436,10 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 				$osImg = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
 		}*/
-		if (!empty($osInfo)){
-			$iconFile = $osInfo['icon'];	// OSアイコンファイル名
+		if (!empty($this->osInfo)){
+			$iconFile = $this->osInfo['icon'];	// OSアイコンファイル名
 			if (!empty($iconFile)){
-				$iconTitle = $osInfo['name'] . ' ' . $osInfo['version_name'];
+				$iconTitle = $this->osInfo['name'] . ' ' . $this->osInfo['version_name'];
 				$iconUrl = $this->gEnv->getRootUrl() . self::OS_ICON_DIR . $iconFile;
 				$osImg = '<img src="' . $this->getUrl($iconUrl) . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
@@ -459,6 +463,9 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		);
 		$this->tmpl->addVars('loglist', $row);
 		$this->tmpl->parseTemplate('loglist', 'a');
+		
+		// ブラウザ情報退避
+		$savedAgent = $agent;		// 前ブラウザ情報退避用
 		
 		// 表示中のコンテンツIDを保存
 		$this->serialArray[] = $serial;
