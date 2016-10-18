@@ -587,6 +587,8 @@ $agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; 
 			'bingbot'					=> 'bing.png',	// Bing
 			'yacybot'					=> 'yacy.png',	// YaCy
 			'mj12bot'					=> 'mj12bot.png',
+			'ahrefsbot'					=> 'ahrefs.png',
+			'semrushbot'				=> 'semrush.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
