@@ -556,6 +556,9 @@ $agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; 
 			'arachmo'						=> '',
 			'wget'							=> '',
 			
+			// RSSリーダー
+			'simplepie'						=> 'simplepie.png',
+			
 			// クローラー
 			'googlebot'					=> 'google.gif',	// Google
 			'googlebot-mobile'			=> 'google.gif',	// Google-Mobile
