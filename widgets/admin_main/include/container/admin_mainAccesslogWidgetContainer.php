@@ -452,6 +452,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 			'index' => $index,													// 行番号
 			'serial' => $this->convertToDispString($serial),			// シリアル番号
 			'uri' => $this->convertToDispString($fetchedRow['al_uri']),		// URI
+			'url_title' => $this->convertToDispString(urldecode($fetchedRow['al_uri'])),		// URLタイトル
 			'detail_url' => $this->convertUrlToHtmlEntity($detailUrl),		// 詳細画面URL
 			'browser' => $browserImg,		// ブラウザ
 			'os' => $osImg,			// OS

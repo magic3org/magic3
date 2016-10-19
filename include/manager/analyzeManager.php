@@ -183,6 +183,10 @@ $agent = 'Mozilla/5.0 (PlayStation 4 1.70) AppleWebKit/536.26 (KHTML, like Gecko
 $agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
 $agent = 'Mozilla/5.0 (Mobile; Windows Phone 8.1; Android 4.0; ARM; Trident/7.0; Touch; rv:11.0; IEMobile/11.0; NOKIA; Lumia 1320) like iPhone OS 7_0_3 Mac OS X AppleWebKit/537 (KHTML, like Gecko) Mobile Safari/537';	// Windows Phone(new) -> NG
 $agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; IEMobile/9.0; FujitsuToshibaMobileCommun; IS12T; KDDI)';	// Windows Phone(old)
+
+// ***** 検出失敗(2016/10/19) *****
+$agent = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 10.0; WOW64; Trident/7.0; Sleipnir6/6.2.1; SleipnirSiteUpdates/6.2.1)';		// Sleipnir RSS取得用
+$agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 Sleipnir/6.2.1';		// Sleipnir
 */
 		$resultObj = array();
 
@@ -589,6 +593,7 @@ $agent = 'Mozilla/5.0 (compatible; MSIE 9.0; Windows Phone OS 7.5; Trident/5.0; 
 			'mj12bot'					=> 'mj12bot.png',
 			'ahrefsbot'					=> 'ahrefs.png',
 			'semrushbot'				=> 'semrush.png',
+			'scrapy'					=> 'scrapy.png',
 			
 			// クローラーその他
 			'msproxy'					=> '',	// ProxyServer
