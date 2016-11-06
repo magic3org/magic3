@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: _installCompleteWidgetContainer.php 5060 2012-07-23 08:42:48Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() .	'/_installBaseWidgetContainer.php');
@@ -60,8 +60,13 @@ class _installCompleteWidgetContainer extends _installBaseWidgetContainer
 		$dbStatus = $request->trimValueOf('dbstatus');		// DBの状態
 		$act = $request->trimValueOf('act');
 		if ($act == 'delinstaller'){		// インストーラを削除の場合
-			// ファイルを退避する
-			$this->gInstance->getFileManager()->backupInstaller();
+			if (M3_PERMIT_REINSTALL){		// 再インストール実行可能な場合
+				// ファイルを退避する
+				$this->gInstance->getFileManager()->backupInstaller();
+			} else {
+				// ファイルを削除
+				$this->gInstance->getFileManager()->removeInstaller();
+			}
 			
 			// 管理者画面へ遷移
 			$this->gPage->redirectToDirectory();

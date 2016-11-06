@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -28,7 +28,6 @@ class FileManager extends Core
 		// システムDBオブジェクト取得
 		$this->db = $this->gInstance->getSytemDbObject();
 	}
-	
 	/**
 	 * インストーラを退避
 	 *
@@ -44,6 +43,22 @@ class FileManager extends Core
 		$filename = $sytemRoot . '/admin/install.php';
 		$backupFilename = $filename . '_backup';
 		return rename($filename, $backupFilename);
+	}
+	/**
+	 * インストーラを削除
+	 *
+	 * @return bool				true=成功、false=失敗
+	 */
+	public function removeInstaller()
+	{
+		global $gEnvManager;
+		
+		// システムルート取得
+		$sytemRoot = $gEnvManager->getSystemRootPath();
+		
+		$filename = $sytemRoot . '/admin/install.php';
+		$ret = unlink($filename)
+		return $ret;
 	}
 	/**
 	 * インストーラを回復

@@ -28,6 +28,7 @@ define('M3_SESSION_DB',		true);		// セッションの保存先にDBを使用す
 // ######### システム処理モード #########
 define('M3_DB_MULTIBYTE_SCRIPT',		false);		// マルチバイト対応でのSQLスクリプトファイルの読み込み
 define('M3_DB_ERROR_OUTPUT_STATEMENT',		false);		// エラーメッセージにクエリー文字列を出力するかどうか
+define('M3_PERMIT_REINSTALL',			false);		// 再インストール許可するかどうか
 
 // ######### 出力の制御 #########
 ini_set('display_errors', '1');		// コメントをはずすと画面にエラー出力する(以下はエラーレベルの設定)
