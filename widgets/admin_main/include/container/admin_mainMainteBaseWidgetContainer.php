@@ -272,49 +272,83 @@ class admin_mainMainteBaseWidgetContainer extends admin_mainBaseWidgetContainer
 															)
 										)
 									)
-								),
-								
-								(Object)array(
-									'name'		=> 'コア管理',
-									'task'		=> '',
-									'url'		=> '',
-									'tagid'		=> '',
-									'active'	=> (
-														$task == self::TASK_INITWIZARD ||		// 管理画面カスタムウィザード
-														$task == self::TASK_EDITMENU ||			// 管理メニュー編集
-														$task == self::TASK_INITSYSTEM			// システム再インストール
-													),
-									'submenu'	=> array(
-										(Object)array(
-											'name'		=> '管理画面カスタムウィザード',
-											'task'		=> self::TASK_INITWIZARD,
-											'url'		=> '',
-											'tagid'		=> '',
-											'active'	=> (
-																$task == self::TASK_INITWIZARD		// 管理画面カスタムウィザード
-															)
-										),
-										(Object)array(
-											'name'		=> '管理メニュー編集',
-											'task'		=> self::TASK_EDITMENU,
-											'url'		=> '',
-											'tagid'		=> '',
-											'active'	=> (
-																$task == self::TASK_EDITMENU		// 管理メニュー編集
-															)
-										),
-										(Object)array(
-											'name'		=> 'システム再インストール',
-											'task'		=> self::TASK_INITSYSTEM,
-											'url'		=> '',
-											'tagid'		=> '',
-											'active'	=> (
-																$task == self::TASK_INITSYSTEM		// システム再インストール
-															)
-										),
-									)
 								)
 							);
+							
+		// 設定によって「コア管理」は変更
+		if (M3_PERMIT_REINSTALL){			// 再インストール可能な場合は「システム再インストール」項目を表示
+			$navbarDef->menu[] =	(Object)array(
+										'name'		=> 'コア管理',
+										'task'		=> '',
+										'url'		=> '',
+										'tagid'		=> '',
+										'active'	=> (
+															$task == self::TASK_INITWIZARD ||		// 管理画面カスタムウィザード
+															$task == self::TASK_EDITMENU ||			// 管理メニュー編集
+															$task == self::TASK_INITSYSTEM			// システム再インストール
+														),
+										'submenu'	=> array(
+											(Object)array(
+												'name'		=> '管理画面カスタムウィザード',
+												'task'		=> self::TASK_INITWIZARD,
+												'url'		=> '',
+												'tagid'		=> '',
+												'active'	=> (
+																	$task == self::TASK_INITWIZARD		// 管理画面カスタムウィザード
+																)
+											),
+											(Object)array(
+												'name'		=> '管理メニュー編集',
+												'task'		=> self::TASK_EDITMENU,
+												'url'		=> '',
+												'tagid'		=> '',
+												'active'	=> (
+																	$task == self::TASK_EDITMENU		// 管理メニュー編集
+																)
+											),
+											(Object)array(
+												'name'		=> 'システム再インストール',
+												'task'		=> self::TASK_INITSYSTEM,
+												'url'		=> '',
+												'tagid'		=> '',
+												'active'	=> (
+																	$task == self::TASK_INITSYSTEM		// システム再インストール
+																)
+											),
+										)
+									);
+		} else {
+			$navbarDef->menu[] =	(Object)array(
+										'name'		=> 'コア管理',
+										'task'		=> '',
+										'url'		=> '',
+										'tagid'		=> '',
+										'active'	=> (
+															$task == self::TASK_INITWIZARD ||		// 管理画面カスタムウィザード
+															$task == self::TASK_EDITMENU			// 管理メニュー編集
+														),
+										'submenu'	=> array(
+											(Object)array(
+												'name'		=> '管理画面カスタムウィザード',
+												'task'		=> self::TASK_INITWIZARD,
+												'url'		=> '',
+												'tagid'		=> '',
+												'active'	=> (
+																	$task == self::TASK_INITWIZARD		// 管理画面カスタムウィザード
+																)
+											),
+											(Object)array(
+												'name'		=> '管理メニュー編集',
+												'task'		=> self::TASK_EDITMENU,
+												'url'		=> '',
+												'tagid'		=> '',
+												'active'	=> (
+																	$task == self::TASK_EDITMENU		// 管理メニュー編集
+																)
+											)
+										)
+									);
+		}
 		$this->gPage->setAdminSubNavbarDef($navbarDef);
 		
 /*
