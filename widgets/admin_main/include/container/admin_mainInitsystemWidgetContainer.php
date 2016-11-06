@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -54,16 +54,20 @@ class admin_mainInitsystemWidgetContainer extends admin_mainMainteBaseWidgetCont
 		$act = $request->trimValueOf('act');
 
 		if ($act == 'initsys'){		// システム初期化のとき
-			// テーブルの初期化フラグをリセット
-			$this->gSystem->enableInitSystem();
+			if (M3_PERMIT_REINSTALL){		// 再インストール可能なとき
+				// テーブルの初期化フラグをリセット
+				$this->gSystem->enableInitSystem();
 			
-			// インストーラを回復
-			$this->gInstance->getFileManager()->recoverInstaller();
+				// インストーラを回復
+				$this->gInstance->getFileManager()->recoverInstaller();
 			
-			$this->setMsg(self::MSG_GUIDANCE, 'インストーラを起動します<br />一旦ログアウトしてください');
+				$this->setMsg(self::MSG_GUIDANCE, 'インストーラを起動します<br />一旦ログアウトしてください');
 			
-			// 現在の設定しているテンプレートを解除
-			$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
+				// 現在の設定しているテンプレートを解除
+				$request->unsetSessionValue(M3_SESSION_CURRENT_TEMPLATE);
+			} else {
+				$this->setUserErrorMsg('インストール時の設定により再インストール処理は実行できません');
+			}
 		}
 	}
 }

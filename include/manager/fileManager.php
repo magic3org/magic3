@@ -57,7 +57,7 @@ class FileManager extends Core
 		$sytemRoot = $gEnvManager->getSystemRootPath();
 		
 		$filename = $sytemRoot . '/admin/install.php';
-		$ret = unlink($filename)
+		$ret = unlink($filename);
 		return $ret;
 	}
 	/**
