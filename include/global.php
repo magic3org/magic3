@@ -24,7 +24,7 @@ if (version_compare(PHP_VERSION, '5.3.0') < 0) die("PHP version error: ver=" . P
 define('M3_SYSTEM',			true);
 define('M3_SYSTEM_DEMO',	false);		// システム起動モード、デモモードフラグ
 define('M3_SYSTEM_DEBUG',	false);		// システム起動モード、デバッグモードフラグ
-define('M3_SESSION_DB',		true);		// セッションの保存先にDBを使用するかどうか
+define('M3_SESSION_DB',		false);		// セッションの保存先にDBを使用するかどうか
 // ######### システム処理モード #########
 define('M3_DB_MULTIBYTE_SCRIPT',		false);		// マルチバイト対応でのSQLスクリプトファイルの読み込み
 define('M3_DB_ERROR_OUTPUT_STATEMENT',		false);		// エラーメッセージにクエリー文字列を出力するかどうか
