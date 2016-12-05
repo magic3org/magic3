@@ -12,7 +12,7 @@
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
  * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    Release 2.17.x SVN: $Id$
+ * @version    Release 2.18.x SVN: $Id$
  * @link       http://www.magic3.org
  */
 if (defined("M3_SYSTEM_DEFINE_INCLUDED")) return;
@@ -32,16 +32,15 @@ define('M3_PERMIT_REINSTALL',			false);		// 再インストール許可するか
 
 // ######### 出力の制御 #########
 ini_set('display_errors', '1');		// コメントをはずすと画面にエラー出力する(以下はエラーレベルの設定)
-//if (phpversion() < '5.4.0'){
 if (version_compare(PHP_VERSION, '5.4.0') < 0){
 error_reporting(E_ALL ^ E_NOTICE);			// E_NOTICE 以外の全てのエラーを表示する(PHP5.3以下初期設定値)
 } else if (version_compare(PHP_VERSION, '5.6.0') < 0){
 error_reporting(E_ALL & ~E_STRICT & ~E_NOTICE);	// E_STRICT,E_NOTICE 以外の全てのエラーを表示する(PHP5.4以上初期設定値)
-} else {
+} else if (version_compare(PHP_VERSION, '7.0.0') < 0){
 error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED);
+} else {		// PHP7以降
+error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING ^ E_DEPRECATED);
 }
-//error_reporting(E_ALL);
-//error_reporting(E_ALL | E_STRICT);// 構文ミスエラーを表示
 define('M3_SYSTEM_DEBUG_OUT', true);			// デバッグ文出力を行うかどうか
 define('M3_SYSTEM_REALTIME_ANALYTICS', false);	// 即時アクセス解析を行うかどうか
 
@@ -57,7 +56,7 @@ define('M3_TITLE_BRACKET_END',		'」');					// タイトルを括弧表記する
 // ########## システム関係 ##########
 // システム基本情報
 define('M3_SYSTEM_NAME',			'Magic3');		// システム名称
-define('M3_SYSTEM_VERSION',			'2.17.6');		// システムのバージョン
+define('M3_SYSTEM_VERSION',			'2.18.0');		// システムのバージョン
 define('M3_SYSTEM_RELEASE_DATE',	'2016/10/18');	// システムのリリース日付
 define('M3_SYSTEM_ID',				'M3');			// コンポーネント識別用ID
 define('M3_SYSTEM_DESCRIPTION',		'Magic3 is open source cms and web communication platform.');		// システムの説明
