@@ -23,6 +23,7 @@ class AccessManager extends Core
 	private $_oldSessionId;				// 古いセッションID
 	private $_accessLogSerialNo;		// アクセスログのシリアルNo
 	private $_useAutoLogin;				// 自動ログイン機能を使用するかどうか
+	private $_sessionCode;				// セッションセキュリティチェック用
    	const LOG_REQUEST_PARAM_MAX_LENGTH	= 1024;				// ログに保存するリクエストパラメータの最大長
 	const PASSWORD_LENGTH = 8;		// パスワード長
 	const SEND_PASSWORD_FORM = 'send_tmp_password';		// 仮パスワード送信用フォーム
@@ -143,7 +144,7 @@ class AccessManager extends Core
 		
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$accessIp = $gRequestManager->trimServerValueOf('REMOTE_ADDR');		// アクセスIP
-				
+		
 		// ユーザチェックが必要な場合は承認済みユーザのみ許可する
 		if (($checkUser && $row['lu_user_type'] >= 0 && $row['lu_enable_login'] &&
 			$this->_isActive($row['lu_active_start_dt'], $row['lu_active_end_dt'], $now)) || // 承認済みユーザ、ログイン可能
@@ -152,6 +153,10 @@ class AccessManager extends Core
 			// ログインした場合はセッションIDを変更する
 			$this->setOldSessionId(session_id());		// 古いセッションIDを保存
 			session_regenerate_id(true);
+			
+			// 新規のセッションにセキュリティコードを設定
+			$gRequestManager->setSessionValue(M3_SESSION_CODE, $this->getSessionSecurityCode());
+			$gRequestManager->setSessionValue(M3_SESSION_CLIENT_IP, $this->getClientIp());
 	
 			// ユーザ情報オブジェクトを作成
 			$userInfo = new UserInfo();
@@ -430,7 +435,6 @@ class AccessManager extends Core
 	{
 		global $gRequestManager;
 		global $gEnvManager;
-		global $gAccessManager;
 		global $gInstanceManager;
 		
 		// ユーザ情報が存在しているときは、ユーザIDを登録する
@@ -441,8 +445,8 @@ class AccessManager extends Core
 		}
 		$cookieVal	= isset($this->_clientId) ? $this->_clientId : '';			// アクセス管理用クッキー
 		$session	= session_id();				// セッションID
-		//$ip			= $gRequestManager->trimServerValueOf('REMOTE_ADDR');		// クライアントIP
-		$this->_clientIp	= $this->_getClientIp($gRequestManager);		// クライアントIP
+//		if (!isset($this->_clientIp)) $this->_clientIp	= $this->_getClientIp($gRequestManager);		// クライアントIP
+		$clientIp	= $this->getClientIp();		// クライアントIP
 		$method		= $gRequestManager->trimServerValueOf('REQUEST_METHOD');	// アクセスメソッド
 		$uri		= $gRequestManager->trimServerValueOf('REQUEST_URI');
 		$referer	= $gRequestManager->trimServerValueOf('HTTP_REFERER');
@@ -466,7 +470,7 @@ class AccessManager extends Core
 		$isCmd = !empty($cmd);			// コマンド実行かどうか
 		
 		// アクセスログのシリアルNoを保存
-		$this->_accessLogSerialNo = $this->db->accessLog($userId, $cookieVal, $session, $this->_clientIp, $method, $uri, $referer, $request, $agent, $language, $path, $isCookie, $isCrawler, $isCmd);
+		$this->_accessLogSerialNo = $this->db->accessLog($userId, $cookieVal, $session, $clientIp, $method, $uri, $referer, $request, $agent, $language, $path, $isCookie, $isCrawler, $isCmd);
 		
 		// ##### 即時アクセス解析 #####
 		if (M3_SYSTEM_REALTIME_ANALYTICS) $gInstanceManager->getAnalyzeManager()->realtimeAnalytics($this->_accessLogSerialNo, $cookieVal);
@@ -478,6 +482,9 @@ class AccessManager extends Core
 	 */
 	function getClientIp()
 	{
+		global $gRequestManager;
+		
+		if (!isset($this->_clientIp)) $this->_clientIp	= $this->_getClientIp($gRequestManager);		// クライアントIP
 		return $this->_clientIp;
 	}
 	/**
@@ -497,6 +504,72 @@ class AccessManager extends Core
 			if (!empty($ip) && !preg_match("/^(172\.(1[6-9]|2[0-9]|30|31)|192\.168|10|127)\./", $ip)) return $ip;
 		}
 		return $remoteIp;
+	}
+	/**
+	 * セッションセキュリティチェック
+	 *
+	 * @param object  $userInfo		ユーザ情報
+	 * @return bool					true=問題なし、false=問題あり
+	 */
+	function checkSessionSecurity($userInfo)
+	{
+		global $gRequestManager;
+
+		// ユーザ情報がある場合のみチェックを行う
+		if (M3_SESSION_SECURITY_CHECK && isset($userInfo)){
+			// クライアントIP、セキュリティコードをチェック
+			$securityCode = $gRequestManager->getSessionValue(M3_SESSION_CODE);
+			$clientIp = $gRequestManager->getSessionValue(M3_SESSION_CLIENT_IP);
+			$checkSecurityCode = $this->getSessionSecurityCode();
+			$checkClientIp = $this->getClientIp();
+			
+			if ($userInfo->userType >= UserInfo::USER_TYPE_MANAGER){
+				// システム運用可能ユーザのときはクライアントIP、セキュリティコード両方の合致を条件とする
+				if ($securityCode != $checkSecurityCode ||		// セッションのセキュリティコードが合わない場合
+					$clientIp != $checkClientIp){
+					$errMsg = 'セッション情報への不正なアクセスを検出しました。アクセス元IP: ' . $this->getClientIp();
+					$this->gOpeLog->writeUserError(__METHOD__, $errMsg, 2210, 'アクセスをブロックしました。');
+					return false;
+				}
+			} else {
+				// システム運用可能ユーザよりも下のレベルの場合はクライアントIPまたはセキュリティコードのどちらかの合致で問題なしとする
+				if ($securityCode != $checkSecurityCode &&		// セッションのセキュリティコードが合わない場合
+					$clientIp != $checkClientIp){
+					$errMsg = 'セッション情報への不正なアクセスを検出しました。アクセス元IP: ' . $this->getClientIp();
+					$this->gOpeLog->writeUserError(__METHOD__, $errMsg, 2210, 'アクセスをブロックしました。');
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	/**
+	 * セキュリティチェック用コード作成
+	 *
+	 * @return string						セキュリティコード
+	 */
+	function _generateSessionSecurityCode()
+	{
+		global $gRequestManager;
+		
+//		if (!isset($this->_clientIp)) $this->_clientIp	= $this->_getClientIp($gRequestManager);		// クライアントIP
+		
+		$agent		= $gRequestManager->trimServerValueOf('HTTP_USER_AGENT');		// クライアントアプリケーション
+		$language	= $gRequestManager->trimServerValueOf('HTTP_ACCEPT_LANGUAGE');	// クライアント認識可能言語
+//		$sessionCode = md5($this->_clientIp . ':' . $agent . ':' . $language);
+		$sessionCode = md5($agent . ':' . $language);
+		
+		return $sessionCode;
+	}
+	/**
+	 * セキュリティチェック用コード取得
+	 *
+	 * @return string						セキュリティコード
+	 */
+	function getSessionSecurityCode()
+	{
+		if (!isset($this->_sessionCode)) $this->_sessionCode = $this->_generateSessionSecurityCode();
+		return $this->_sessionCode;
 	}
 	/**
 	 * アクセスログユーザの記録

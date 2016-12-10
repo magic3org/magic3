@@ -1271,9 +1271,12 @@ class PageManager extends Core
 			$gAccessManager->setOldSessionId(session_id());		// 古いセッションIDを保存
 			session_regenerate_id(true);
 		}
-
+		
 		// セッションからユーザ情報を取得
 		$userInfo = $gRequestManager->getSessionValueWithSerialize(M3_SESSION_USER_INFO);
+		if (!$gAccessManager->checkSessionSecurity($userInfo)) return;			// セキュリティ問題ありの場合は終了
+		
+		// ユーザ情報をロード
 		$gInstanceManager->setUserInfo($userInfo);
 
 		// ##### 自動ログイン #####

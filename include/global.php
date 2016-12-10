@@ -27,8 +27,9 @@ define('M3_SYSTEM_DEBUG',	false);		// システム起動モード、デバッグ
 define('M3_SESSION_DB',		false);		// セッションの保存先にDBを使用するかどうか
 // ######### システム処理モード #########
 define('M3_DB_MULTIBYTE_SCRIPT',		false);		// マルチバイト対応でのSQLスクリプトファイルの読み込み
-define('M3_DB_ERROR_OUTPUT_STATEMENT',		false);		// エラーメッセージにクエリー文字列を出力するかどうか
+define('M3_DB_ERROR_OUTPUT_STATEMENT',	false);		// エラーメッセージにクエリー文字列を出力するかどうか
 define('M3_PERMIT_REINSTALL',			false);		// 再インストール許可するかどうか
+define('M3_SESSION_SECURITY_CHECK',		true);		// セッションのセキュリティチェックをするかどうか
 
 // ######### 出力の制御 #########
 ini_set('display_errors', '1');		// コメントをはずすと画面にエラー出力する(以下はエラーレベルの設定)
@@ -423,6 +424,8 @@ define('M3_SESSION_USER_INFO',      		'_user_info');					// 現在ログイン�
 define('M3_SESSION_POST_TICKET',      		'_ticket');						// POSTデータ確認用
 define('M3_SESSION_WIDGET',      			'_widget_');					// 各ウィジェット用(+ウィジェットID)
 define('M3_SESSION_USER_ENV_WIDGET',      	'_user_env_widget:');			// ユーザ環境マネージャーのウィジェット用パラメータ
+define('M3_SESSION_CODE',      				'_session_code');				// セッションセキュリティチェック用ブラウザコード
+define('M3_SESSION_CLIENT_IP',      		'_session_client_ip');			// セッションセキュリティチェック用ブラウザIP
 
 // ######### システムの定義 ###########
 define('M3_HTML_CHARSET',	'utf-8');				// キャラクターセット
