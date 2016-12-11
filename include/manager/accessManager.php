@@ -119,11 +119,11 @@ class AccessManager extends Core
 		if ($retValue){
 			// ユーザログインログを残す
 			$this->gOpeLog->writeUserInfo(__METHOD__, 'ユーザがログインしました。アカウント: ' . $account, 2300,
-											'account=' . $account . ', passward=' . $password . ', userid=' . $this->gEnv->getCurrentUserId() . ', IP=' . $this->_clientIp, 'account=' . $account/*検索補助データ*/);
+											'account=' . $account . ', passward=' . $password . ', userid=' . $this->gEnv->getCurrentUserId() . ', IP=' . $this->getClientIp(), 'account=' . $account/*検索補助データ*/);
 		} else {
 			// ユーザエラーログを残す
 			$this->gOpeLog->writeUserError(__METHOD__, 'ユーザがログインに失敗しました。アカウント: ' . $account, 2310,
-											'account=' . $account . ', passward=' . $password . ', IP=' . $this->_clientIp, 'account=' . $account/*検索補助データ*/);
+											'account=' . $account . ', passward=' . $password . ', IP=' . $this->getClientIp(), 'account=' . $account/*検索補助データ*/);
 			
 			// 入力アカウントを保存
 			//$this->db->addErrorLoginLog($account, $accessIp, $this->_accessLogSerialNo);
@@ -436,7 +436,7 @@ class AccessManager extends Core
 		global $gRequestManager;
 		global $gEnvManager;
 		global $gInstanceManager;
-		
+
 		// ユーザ情報が存在しているときは、ユーザIDを登録する
 		$userId = 0;
 		$userInfo = $gEnvManager->getCurrentUserInfo();
@@ -445,7 +445,6 @@ class AccessManager extends Core
 		}
 		$cookieVal	= isset($this->_clientId) ? $this->_clientId : '';			// アクセス管理用クッキー
 		$session	= session_id();				// セッションID
-//		if (!isset($this->_clientIp)) $this->_clientIp	= $this->_getClientIp($gRequestManager);		// クライアントIP
 		$clientIp	= $this->getClientIp();		// クライアントIP
 		$method		= $gRequestManager->trimServerValueOf('REQUEST_METHOD');	// アクセスメソッド
 		$uri		= $gRequestManager->trimServerValueOf('REQUEST_URI');
@@ -528,7 +527,8 @@ class AccessManager extends Core
 				if ($securityCode != $checkSecurityCode ||		// セッションのセキュリティコードが合わない場合
 					$clientIp != $checkClientIp){
 					$errMsg = 'セッション情報への不正なアクセスを検出しました。アクセス元IP: ' . $this->getClientIp();
-					$this->gOpeLog->writeUserError(__METHOD__, $errMsg, 2210, 'アクセスをブロックしました。');
+					$msgDetail = 'アクセスをブロックしました。account=' . $userInfo->account . ', userid=' . $userInfo->userId;
+					$this->gOpeLog->writeUserError(__METHOD__, $errMsg, 2210, $msgDetail);
 					return false;
 				}
 			} else {
@@ -536,7 +536,8 @@ class AccessManager extends Core
 				if ($securityCode != $checkSecurityCode &&		// セッションのセキュリティコードが合わない場合
 					$clientIp != $checkClientIp){
 					$errMsg = 'セッション情報への不正なアクセスを検出しました。アクセス元IP: ' . $this->getClientIp();
-					$this->gOpeLog->writeUserError(__METHOD__, $errMsg, 2210, 'アクセスをブロックしました。');
+					$msgDetail = 'アクセスをブロックしました。account=' . $userInfo->account . ', userid=' . $userInfo->userId;
+					$this->gOpeLog->writeUserError(__METHOD__, $errMsg, 2210, $msgDetail);
 					return false;
 				}
 			}
@@ -552,11 +553,8 @@ class AccessManager extends Core
 	{
 		global $gRequestManager;
 		
-//		if (!isset($this->_clientIp)) $this->_clientIp	= $this->_getClientIp($gRequestManager);		// クライアントIP
-		
 		$agent		= $gRequestManager->trimServerValueOf('HTTP_USER_AGENT');		// クライアントアプリケーション
 		$language	= $gRequestManager->trimServerValueOf('HTTP_ACCEPT_LANGUAGE');	// クライアント認識可能言語
-//		$sessionCode = md5($this->_clientIp . ':' . $agent . ':' . $language);
 		$sessionCode = md5($agent . ':' . $language);
 		
 		return $sessionCode;
