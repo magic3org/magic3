@@ -157,6 +157,9 @@ class AccessManager extends Core
 			// 新規のセッションにセキュリティコードを設定
 			$gRequestManager->setSessionValue(M3_SESSION_CODE, $this->getSessionSecurityCode());
 			$gRequestManager->setSessionValue(M3_SESSION_CLIENT_IP, $this->getClientIp());
+			
+			// Nodejs連携用データ
+			$gRequestManager->setSessionValue(M3_SESSION_USER_ID, $row['lu_id']);		// ユーザID
 	
 			// ユーザ情報オブジェクトを作成
 			$userInfo = new UserInfo();
