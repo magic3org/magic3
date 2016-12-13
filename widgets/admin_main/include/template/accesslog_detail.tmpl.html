@@ -39,6 +39,10 @@ function cancelItem(){
 		return false;
 	}
 }
+$(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
 <div class="m3config_container">
@@ -55,72 +59,66 @@ function cancelItem(){
 <input type="hidden" name="start_date" value="{START_DATE}" />
 <input type="hidden" name="end_date" value="{END_DATE}" />
 <!-- m3:PostParam -->
-<table width="90%">
-<tr><td>
-<label><span {_HELP_ACCESSLOG_DETAIL}>アクセスログ詳細</span></label>
-</td>
-<td align="right">
-<patTemplate:tmpl name="cancel_button" visibility="visible">
-<span {_HELP_ACCESSLOG_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span>
-</patTemplate:tmpl>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table">
+<h3 class="m3config_h"><span {_HELP_ACCESSLOG_DETAIL}>アクセスログ詳細</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_ACCESSLOG_BUTTONS}><div class="btn-group">
+<patTemplate:tmpl name="cancel_button" visibility="visible"><input type="button" class="button" onclick="cancelItem();" value="戻る" /></patTemplate:tmpl>
+</div></div></div>
+
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_ACCESSLOG_NO}>ログ番号</span></td>
-	    <td width="200">{SERIAL}</td>
-	    <td class="table-headside" width="150"><span {_HELP_ACCESSLOG_USER}>ユーザ名(ID)</span></td>
-	    <td>{USER}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_NO}>ログ番号</span></th>
+	    <td style="width:200px;"><div class="form-control-static m3config_item">{SERIAL}</div></td>
+	    <th><span {_HELP_ACCESSLOG_USER}>ユーザ名(ID)</span></th>
+	    <td><div class="form-control-static m3config_item">{USER}</div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_IP}>IP</span></td>
-	    <td colspan="3">{IP}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_IP}>IP</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{IP}</div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_URI}>URI</span></td>
-	    <td colspan="3" width="500" height="50" valign="top">{URI}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_URI}>URI</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{URI}</div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_REFERER}>REFERER</span></td>
-	    <td colspan="3" width="500" height="50" valign="top">{REFERER}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_REFERER}>REFERER</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{REFERER}</div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_REQUEST}>REQUEST</span></td>
-	    <td colspan="3" width="500" height="100" valign="top">{REQUEST}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_REQUEST}>REQUEST</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{REQUEST}</div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_AGENT}>AGENT</span></td>
-	    <td colspan="3">{AGENT}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_AGENT}>AGENT</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{AGENT}</div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_BROWSER}>種別</span></td>
-	    <td>{BROWSER}</td>
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_OS}>OS</span></td>
-	    <td>{OS}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_BROWSER}>種別</span></th>
+	    <td><div class="form-control-static m3config_item">{BROWSER}</div></td>
+	    <th><span {_HELP_ACCESSLOG_OS}>OS</span></th>
+	    <td><div class="form-control-static m3config_item">{OS}</div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_LANGUAGE}>LANGUAGE</span></td>
-	    <td>{LANGUAGE}</td>
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_COUNTRY}>国</span></td>
-	    <td>{COUNTRY}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_LANGUAGE}>LANGUAGE</span></th>
+	    <td><div class="form-control-static m3config_item">{LANGUAGE}</div></td>
+	    <th><span {_HELP_ACCESSLOG_COUNTRY}>国</span></th>
+	    <td><div class="form-control-static m3config_item">{COUNTRY}</div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_METHOD}>メソッド</span></td>
-	    <td colspan="3">{METHOD}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_METHOD}>メソッド</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{METHOD}</div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_COOKIE}>クッキー値</span></td>
-	    <td colspan="3">{COOKIE}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_COOKIE}>クッキー値</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{COOKIE}</div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_ACCESSLOG_DT}>日時</span></td>
-	    <td colspan="3">{TIME}</td>
+    <tr>
+	    <th><span {_HELP_ACCESSLOG_DT}>日時</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{TIME}</div></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-</table>
+
 </form>
 </div>
 </patTemplate:tmpl>
