@@ -37,7 +37,8 @@ function cancelItem(){
 	}
 }
 function showAccessLog(serial){
-	window.open("{ACCESS_LOG_URL}&serial=" + serial, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=900,height=600");
+	//window.open("{ACCESS_LOG_URL}&serial=" + serial, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=900,height=600");
+	m3ShowStandardWindow("{ACCESS_LOG_URL}&serial=" + serial);
 	return false;
 }
 $(function(){
