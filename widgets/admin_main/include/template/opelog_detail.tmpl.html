@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -43,10 +43,13 @@ function showAccessLog(serial){
 	m3ShowStandardWindow("{ACCESS_LOG_URL}&serial=" + serial);
 	return false;
 }
+$(function(){
+	// テーブル作成
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="opelog_detail" />
@@ -57,52 +60,46 @@ function showAccessLog(serial){
 <input type="hidden" name="loglevel" value="{LOG_LEVEL}" />
 <input type="hidden" name="logstatus" value="{LOG_STATUS}" />
 <!-- m3:PostParam -->
-<table width="90%">
-<tr><td>
-<label><span {_HELP_OPELOG_DETAIL}>{_LC_LABEL_LOG_DETAIL}</span></label>
-</td>
-<td align="right"><span {_HELP_OPELOG_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" /></span>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table">
+<h3 class="m3config_h"><span {_HELP_OPELOG_DETAIL}>{_LC_LABEL_LOG_DETAIL}</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_OPELOG_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" />
+</div></div></div>
+
+<table id="mainconfig">
     <tbody>
-        <tr>
-	    <td class="table-headside" width="150"><span {_HELP_OPELOG_MESSAGE_TYPE}>{_LC_LABEL_TYPE}</span></td>
-	    <td width="200">{TYPE_IMAGE}&nbsp;&nbsp;{TYPE}</td>
-	    <td class="table-headside" width="150"><span {_HELP_OPELOG_MESSAGE_CHECK}>{_LC_LABEL_CHECK}</span></td>
-	    <td><input type="checkbox" name="item_msgchecked" {MSG_CHECKED} {MSG_DISABLED} /></td>
+    <tr>
+	    <th><span {_HELP_OPELOG_MESSAGE_TYPE}>{_LC_LABEL_TYPE}</span></th>
+	    <td style="width:200px;"><div class="form-control-static m3config_item">{TYPE_IMAGE}&nbsp;&nbsp;{TYPE}</div></td>
+	    <th><span {_HELP_OPELOG_MESSAGE_CHECK}>{_LC_LABEL_CHECK}</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_msgchecked" {MSG_CHECKED} {MSG_DISABLED} /></label></div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_OPELOG_MESSAGE}>{_LC_LABEL_MESSAGE}</span></td>
-	    <td colspan="3" width="500" height="100" valign="top">{MESSAGE}</td>
+    <tr>
+	    <th><span {_HELP_OPELOG_MESSAGE}>{_LC_LABEL_MESSAGE}</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item linebreak">{MESSAGE}</div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_OPELOG_MESSAGE_DETAIL}>{_LC_LABEL_MESSAGE_DETAIL}</span></td>
-	    <td colspan="3" height="100" valign="top">{DETAIL}</td>
+    <tr>
+	    <th><span {_HELP_OPELOG_MESSAGE_DETAIL}>{_LC_LABEL_MESSAGE_DETAIL}</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item linebreak">{DETAIL}</div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_OPELOG_MESSAGE_CODE}>{_LC_LABEL_MESSAGE_CODE}</span></td>
-	    <td colspan="3">{CODE}</td>
+    <tr>
+	    <th><span {_HELP_OPELOG_MESSAGE_CODE}>{_LC_LABEL_MESSAGE_CODE}</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{CODE}</div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_OPELOG_ACCESS_LOG}>{_LC_LABEL_ACCESS_LOG_NO}</span></td>
-	    <td colspan="3"><a href="#" onclick="showAccessLog({ACCESS_LOG_SERIAL});">{ACCESS_LOG_SERIAL}</a></td>
+    <tr>
+	    <th><span {_HELP_OPELOG_ACCESS_LOG}>{_LC_LABEL_ACCESS_LOG_NO}</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item"><a href="#" onclick="showAccessLog({ACCESS_LOG_SERIAL});">{ACCESS_LOG_SERIAL}</a></div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_OPELOG_MESSAGE_DT}>{_LC_LABEL_DATE}</span></td>
-	    <td colspan="3">{TIME}</td>
-	</tr>
-	<tr>
-	<td align="right" colspan="4">
-<patTemplate:tmpl name="update_button" visibility="hidden">
-		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" {UPDATE_DISABLED}/>
-</patTemplate:tmpl>
-	</td>
+    <tr>
+	    <th><span {_HELP_OPELOG_MESSAGE_DT}>{_LC_LABEL_DATE}</span></th>
+	    <td colspan="3"><div class="form-control-static m3config_item">{TIME}</div></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-</table>
+<div class="well m3config_update_buttons">
+<patTemplate:tmpl name="update_button" visibility="hidden">
+		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" {UPDATE_DISABLED}/>
+</patTemplate:tmpl>
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
