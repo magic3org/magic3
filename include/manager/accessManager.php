@@ -517,6 +517,11 @@ class AccessManager extends Core
 	{
 		global $gRequestManager;
 
+		// サーバ自体のアクセスの場合はチェックなし
+		$senderIp = $gRequestManager->trimServerValueOf('REMOTE_ADDR');
+		$serverIp = $gRequestManager->trimServerValueOf('SERVER_ADDR');
+		if ($senderIp == $serverIp) return true;		// アクセス元と自サーバが同じとき
+			
 		// ユーザ情報がある場合のみチェックを行う
 		if (M3_SESSION_SECURITY_CHECK && isset($userInfo)){
 			// クライアントIP、セキュリティコードをチェック
