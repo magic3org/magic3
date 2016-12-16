@@ -3767,7 +3767,7 @@ class BaseWidgetContainer extends Core
 	function loadCKEditorCssFiles($url = '')
 	{
 		if (empty($url)) $url = $this->gEnv->getDefaultUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_PREVIEW;
-		$this->gPage->getCssFilesByHttp($url);
+		$this->gPage->loadCssFilesByUrl($url);
 	}
 	
 	/**

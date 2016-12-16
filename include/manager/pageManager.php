@@ -6425,12 +6425,12 @@ class PageManager extends Core
 		return $destParam;
 	}
 	/**
-	 * 画面で使用しているCSSファイルを取得
+	 * URLで指定した画面のCSSファイルを取得
 	 *
 	 * @param string $url	取得画面のURL
-	 * @return array		CSSファイルのURL
+	 * @return				なし
 	 */
-	function getCssFilesByHttp($url)
+	function loadCssFilesByUrl($url)
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -6463,8 +6463,26 @@ class PageManager extends Core
 			foreach ($matches as $match) $delUrlArray[] = $match[1];
 		}
 
-		// 管理機能用のCSSを除く
-		$this->ckeditorCssFiles = array_diff($urlArray, $delUrlArray);	// CKEditor用のCSSファイル
+		// テンプレート独自のCSSまたは外部のCSSを取得する
+		$this->ckeditorCssFiles = array();
+		$cssFiles = array_merge(array_diff($urlArray, $delUrlArray));	// CKEditor用のCSSファイル
+		for ($i = 0; $i < count($cssFiles); $i++){
+			$cssFileUrl = $cssFiles[$i];
+			if (strncasecmp($cssFileUrl, 'http://', strlen('http://')) == 0){
+				$baseUrl = $this->gEnv->getRootUrl();
+			} else if (strncasecmp($cssFileUrl, 'https://', strlen('https://')) == 0){
+				$baseUrl = $this->gEnv->getSslRootUrl();		// SSLの場合
+			}
+			// パスを解析
+			$relativePath = str_replace($baseUrl, '', $cssFileUrl);		// ルートURLからの相対パスを取得
+			
+			if (strStartsWith($relativePath, '/' . M3_DIR_NAME_TEMPLATES . '/')){		// テンプレートディレクトリの場合
+				$this->ckeditorCssFiles[] = $cssFileUrl;
+			} else if (strStartsWith($relativePath, '/')){		// テンプレートディレクトリ以外のディレクトリの場合
+			} else {			// 外部URLの場合
+				$this->ckeditorCssFiles[] = $cssFileUrl;
+			}
+		}
 		
 		// テンプレートタイプを取得
 		$pattern = '/var\s*M3_TEMPLATE_TYPE\s*=\s*(\d+?)\s*;/si';
