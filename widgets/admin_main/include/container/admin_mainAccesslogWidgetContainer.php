@@ -34,7 +34,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	private $osInfo;			// プラットフォーム情報(再利用)
 	private $developMode;			// 開発モードかどうか
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
-	const LINK_PAGE_COUNT		= 20;			// リンクページ数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const INFO_ICON_FILE = '/images/system/info16.png';			// 情報アイコン
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// 注意アイコン
 	const ERROR_ICON_FILE = '/images/system/error16.png';		// エラーアイコン

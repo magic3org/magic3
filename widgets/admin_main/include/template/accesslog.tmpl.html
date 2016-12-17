@@ -126,7 +126,7 @@ $(function(){
     <tr>
 	    <th class="select"><span {_HELP_ACCESSLOG_CHECK}>選択</span></th>
 	    <th style="width:50px;"><span {_HELP_ACCESSLOG_NO}>番号</span></th>
-	    <th style="width:250px;"><span {_HELP_ACCESSLOG_URI}>URL</span></th>
+	    <th style="width:350px;"><span {_HELP_ACCESSLOG_URI}>URL</span></th>
 	    <th style="width:50px;"><span {_HELP_ACCESSLOG_BROWSER}>種別</span></th>
 	    <th style="width:50px;"><span {_HELP_ACCESSLOG_OS}>OS</span></th>
 	    <th style="width:50px;"><span {_HELP_ACCESSLOG_COUNTRY}>国</span></th>
@@ -140,7 +140,7 @@ $(function(){
     <tr>
         <td><input type="checkbox" name="item{INDEX}_selected" /></td>
 	    <td>{SERIAL}</td>
-	    <td><span rel="m3help" title="{URL_TITLE}"><a href="{DETAIL_URL}">{URI}</a></span></td>
+	    <td class="linebreak"><span rel="m3help" title="{URL_TITLE}"><a href="{DETAIL_URL}">{URI}</a></span></td>
 	    <td>{BROWSER}</td>
 	    <td>{OS}</td>
 	    <td>{COUNTRY}</td>

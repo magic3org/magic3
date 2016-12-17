@@ -630,6 +630,10 @@ span[rel="m3help"] { cursor: default; }
 .m3config_table .form-group.last {
 	margin-bottom:0;
 }
+.m3config_table .linebreak {
+	white-space: normal;
+	word-break: break-all;
+}
 
 /* for madal table */
 .m3config_modal_table {
