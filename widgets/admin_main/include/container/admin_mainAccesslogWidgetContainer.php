@@ -21,7 +21,6 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 {
 	private $db;	// DB接続オブジェクト
 	private $serverDb;		// DB接続オブジェクト
-	private $sysDb;		// システムDBオブジェクト
 	private $serialNo;	// シリアルNo
 	private $serialArray = array();		// 表示されているコンテンツシリアル番号
 	private $clientIp;			// クライアントのIPアドレス
@@ -33,8 +32,9 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	private $endDt;				// 検索範囲終了日付
 	private $browserTypeInfo;	// ブラウザ情報(再利用)
 	private $osInfo;			// プラットフォーム情報(再利用)
+	private $developMode;			// 開発モードかどうか
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
-	const MAX_PAGE_COUNT = 200;				// 最大ページ数
+	const LINK_PAGE_COUNT		= 20;			// リンクページ数
 	const INFO_ICON_FILE = '/images/system/info16.png';			// 情報アイコン
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// 注意アイコン
 	const ERROR_ICON_FILE = '/images/system/error16.png';		// エラーアイコン
@@ -47,7 +47,8 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	const DEFAULT_ACCESS_PATH = 'index';		// デフォルトのアクセスパス(PC用アクセスポイント)
 	const ACCESS_PATH_ALL = '_all';				// アクセスパスすべて選択
 	const ACCESS_PATH_OTHER = '_other';				// アクセスパスその他
-
+	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 開発モードかどうか
+	
 	// カレンダー用スクリプト
 	const CALENDAR_SCRIPT_FILE = '/jscalendar-1.0/calendar.js';		// カレンダースクリプトファイル
 	const CALENDAR_LANG_FILE = '/jscalendar-1.0/lang/calendar-ja.js';	// カレンダー言語ファイル
@@ -65,6 +66,8 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		// DB接続オブジェクト作成
 		$this->db = new admin_mainDb();
 		$this->serverDb = new admin_serverDb();
+		
+		$this->developMode = $this->gSystem->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);	// 開発モード
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -181,9 +184,8 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		if (!empty($endNextDt)) $endNextDt = $this->getNextDay($endNextDt);			// 翌日を取得
 		
 		// 表示条件
-//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-		$viewCount = $request->trimIntValueOf('viewcount', '0');
-		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$maxListCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($maxListCount)) $maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		// 入力データのエラーチェック
@@ -199,15 +201,18 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 			$pathParam = '';
 		}
 		$totalCount = $this->db->getAccessLogCount($pathParam, $this->startDt, $endNextDt);
-
-		// 表示するページ番号の修正
+		
+/*		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
 		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
 		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
+		*/
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		
-		// ページング用リンク作成
+/*		// ページング用リンク作成
 		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			for ($i = 1; $i <= $pageCount; $i++){
@@ -224,7 +229,12 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
+		// ページングリンク作成
+		$detailUrl = '?task=accesslog&path=' . $this->path;
+		if (!empty($this->startDt)) $detailUrl .= '&start_date=' . $this->startDt;	// 検索範囲開始日付
+		if (!empty($this->endDt)) $detailUrl .= '&end_date=' . $this->endDt;		// 検索範囲終了日付
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $detailUrl);
 		
 		// アクセスパスメニュー作成
 		$this->createPathMenu();
@@ -234,15 +244,11 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		$this->tmpl->addVar("_widget", "start_date", $this->startDt);	// 開始日付
 		$this->tmpl->addVar("_widget", "end_date", $this->endDt);	// 終了日付
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", $totalCount);
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+		$this->tmpl->addVar("_widget", "view_count", $maxListCount);	// 最大表示項目数
 		
 		// アクセスログを取得
-		$this->db->getAccessLogList($viewCount, $pageNo, $pathParam, array($this, 'logListLoop'), $this->startDt, $endNextDt);
+		$this->db->getAccessLogList($maxListCount, $pageNo, $pathParam, array($this, 'logListLoop'), $this->startDt, $endNextDt);
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 	}
@@ -255,7 +261,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	function createDetail($request)
 	{
 		// 表示条件
-		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
+		$maxListCount = $request->trimValueOf('viewcount');// 表示項目数
 		$page = $request->trimValueOf('page');				// ページ番号
 		$path = $request->trimValueOf('path');				// アクセスパス
 		$startDt = $request->trimValueOf('start_date');		// 検索範囲開始日付
@@ -374,7 +380,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 
 		// 一覧の表示条件
 		$this->tmpl->addVar("_widget", "page", $page);	// ページ番号
-		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
+		$this->tmpl->addVar("_widget", "view_count", $maxListCount);	// 最大表示項目数
 		$this->tmpl->addVar("_widget", "path", $path);	// アクセスパス
 		$this->tmpl->addVar("_widget", "start_date", $startDt);	// 開始日付
 		$this->tmpl->addVar("_widget", "end_date", $endDt);	// 終了日付
@@ -515,11 +521,15 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	 */
 	function pageIdLoop($index, $fetchedRow, $param)
 	{
+		// 開発モードのときはすべて表示、開発モードでないときはフロント画面用アクセスポイントのみ取得
+		if (!$this->developMode && !$fetchedRow['pg_frontend']) return true;
+		
 		$selected = '';
 		if ($fetchedRow['pg_path'] == $this->path){
 			$selected = 'selected';
 		}
-		$name = $this->convertToDispString($fetchedRow['pg_path']) . ' - ' . $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
+
+		$name = $this->convertToDispString($fetchedRow['pg_name']);			// ページ名
 		$row = array(
 			'value'    => $this->convertToDispString($fetchedRow['pg_path']),			// アクセスパス
 			'name'     => $name,			// ページ名

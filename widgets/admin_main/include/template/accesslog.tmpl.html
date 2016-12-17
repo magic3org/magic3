@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -78,10 +78,10 @@ function reloadData(){
 	return true;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('loglist', -1, 0);
+	// テーブル作成
+	m3SetConfigTable('config_table');
 	
-	// カレンダー作成
+/*	// カレンダー作成
 	Calendar.setup({
 		inputField  : "start_date",	// ID of the input field
 		ifFormat    : "%Y/%m/%d"		// the date format
@@ -90,11 +90,11 @@ $(function(){
 		inputField  : "end_date",	// ID of the input field
 		ifFormat    : "%Y/%m/%d"		// the date format
 	});
+	*/
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="accesslog" />
@@ -103,56 +103,55 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
 <input type="hidden" name="viewcount" value="{VIEW_COUNT}" />
-<table width="90%">
-<tr><td><label><span {_HELP_ACCESSLOG_LIST}>アクセスログ一覧</span></label>&nbsp;&nbsp;&nbsp;&nbsp;<label>パス:</label>
-    <select name="path" onchange="selectMenu();">
-        <patTemplate:tmpl name="path_list">
-        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-        </patTemplate:tmpl>
-    </select>
-    &nbsp;&nbsp;&nbsp;&nbsp;<label>期間：</label><input type="text" id="start_date" name="start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" />～<input type="text" id="end_date" name="end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" />
-</td>
-<td align="right">
-<input type="button" class="button" onclick="reloadData();" value="再取得" /> <span {_HELP_ACCESSLOG_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="詳細" /></span>
-</td></tr>
-<tr><td colspan="2">
 
-<table id="loglist" class="simple-table" width="100%">
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_ACCESSLOG_LIST}>アクセスログ一覧</span>
+<select name="path" class="form-control" onchange="selectMenu();" style="display:inline-block;width:300px;margin-top:-7px;">
+<patTemplate:tmpl name="path_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+<!--
+<label>期間：</label><input type="text" id="start_date" name="start_date" value="{START_DATE}" size="15" maxlength="10" style="width:100px;" />～<input type="text" id="end_date" name="end_date" value="{END_DATE}" size="15" maxlength="10" style="width:100px;" />
+-->
+</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_ACCESSLOG_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="editItem();" value="詳細" />
+</div></div></div>
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;"><div ><div class="btn-group">
+<input type="button" class="button" onclick="reloadData();" value="再取得" />
+</div></div></div>
+
+<table id="config_table">
     <thead>
-        <tr>
-	    <th width="35"><span {_HELP_ACCESSLOG_CHECK}>選択</span></th>
-	    <th width="50"><span {_HELP_ACCESSLOG_NO}>番号</span></th>
-	    <th width="50%"><span {_HELP_ACCESSLOG_URI}>URI</span></th>
-	    <th width="35"><span {_HELP_ACCESSLOG_BROWSER}>種別</span></th>
-	    <th width="35"><span {_HELP_ACCESSLOG_OS}>OS</span></th>
-	    <th width="35"><span {_HELP_ACCESSLOG_COUNTRY}>国</span></th>
-	    <th width="100"><span {_HELP_ACCESSLOG_IP}>IP</span></th>
-	    <th width="80"><span {_HELP_ACCESSLOG_USER}>ユーザ</span></th>
-	    <th><span {_HELP_ACCESSLOG_DT}>日時</span></th>
+    <tr>
+	    <th class="select"><span {_HELP_ACCESSLOG_CHECK}>選択</span></th>
+	    <th style="width:50px;"><span {_HELP_ACCESSLOG_NO}>番号</span></th>
+	    <th style="width:250px;"><span {_HELP_ACCESSLOG_URI}>URL</span></th>
+	    <th style="width:50px;"><span {_HELP_ACCESSLOG_BROWSER}>種別</span></th>
+	    <th style="width:50px;"><span {_HELP_ACCESSLOG_OS}>OS</span></th>
+	    <th style="width:50px;"><span {_HELP_ACCESSLOG_COUNTRY}>国</span></th>
+	    <th style="width:100px;"><span {_HELP_ACCESSLOG_IP}>IP</span></th>
+	    <th style="width:100px;"><span {_HELP_ACCESSLOG_USER}>ユーザ</span></th>
+	    <th style="width:100px;"><span {_HELP_ACCESSLOG_DT}>日時</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="loglist">
-        <tr>
-            <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td align="center">{SERIAL}</td>
-	    <td style="word-break:break-all;"><span rel="m3help" title="{URL_TITLE}"><a href="{DETAIL_URL}">{URI}</a></span></td>
-	    <td align="center">{BROWSER}</td>
-	    <td align="center">{OS}</td>
-	    <td align="center">{COUNTRY}</td>
-	    <td align="center">{IP}</td>
-	    <td align="center">{USER}</td>
-	    <td align="center">{DT}</td>
+    <patTemplate:tmpl name="loglist">
+    <tr>
+        <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td>{SERIAL}</td>
+	    <td><span rel="m3help" title="{URL_TITLE}"><a href="{DETAIL_URL}">{URI}</a></span></td>
+	    <td>{BROWSER}</td>
+	    <td>{OS}</td>
+	    <td>{COUNTRY}</td>
+	    <td>{IP}</td>
+	    <td>{USER}</td>
+	    <td>{DT}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
-</td></tr>
-<tr ><td width="80%">
 {PAGE_LINK}
-</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{START_NO}-{END_NO}件目</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}件中</label></td></tr>
-</table>
-
 </form>
 </div>
 </patTemplate:tmpl>
