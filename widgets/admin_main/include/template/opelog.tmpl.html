@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2012 Magic3 Project.
+ * @copyright  Copyright 2006-2016 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: opelog.tmpl.html 5802 2013-03-07 06:14:29Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -73,18 +73,16 @@ function delItem(){
 	return true;
 }*/
 function showAccessLog(serial){
-	//window.open("{ACCESS_LOG_URL}&serial=" + serial, "", "toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=900,height=600");
 	m3ShowStandardWindow("{ACCESS_LOG_URL}&serial=" + serial);
 	return false;
 }
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('loglist', -1, 0);
+	// テーブル作成
+	m3SetConfigTable('config_table');
 });
 //]]>
 </script>
-<div align="center">
-{MENU_ITEMS}
+<div class="m3config_container">
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="opelog" />
@@ -93,58 +91,56 @@ $(function(){
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="page" value="{PAGE}" />
 <input type="hidden" name="viewcount" value="{VIEW_COUNT}" />
-<table width="90%">
-<tr><td><label><span {_HELP_OPELOG_LIST}>{_LC_LABEL_LOG_LIST}</span></label>&nbsp;&nbsp;&nbsp;&nbsp;<label><span {_HELP_OPELOG_LOG_LEVEL}>{_LC_LABEL_LOG_LEVEL}</span></label>
-    <select name="loglevel" onchange="selectMenu();">
-        <patTemplate:tmpl name="loglevel_list">
-        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-        </patTemplate:tmpl>
-    </select>
-&nbsp;&nbsp;<label><span {_HELP_OPELOG_LOG_STATUS}>{_LC_LABEL_LOG_STATUS}</span></label>
-    <select name="logstatus" onchange="selectMenu();">
-        <patTemplate:tmpl name="logstatus_list">
-        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-        </patTemplate:tmpl>
-    </select>
-</td>
-<td align="right"><span {_HELP_OPELOG_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /></span><!-- <span {_HELP_OPELOG_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="削除" /></span> -->
-</td></tr>
-<tr><td colspan="2">
 
-<table id="loglist" class="simple-table" width="100%">
+<h3 class="m3config_h" style="margin-bottom:0;"><span {_HELP_OPELOG_LIST}>{_LC_LABEL_LOG_LIST}</span>
+</h3>
+<div class="form-control-static m3config_h_side_label" style="margin-left:20px;"><span {_HELP_OPELOG_LOG_LEVEL}>{_LC_LABEL_LOG_LEVEL}</span></div>
+<select name="loglevel" class="form-control" onchange="selectMenu();" style="display:inline-block;width:150px;margin-top:-7px;">
+<patTemplate:tmpl name="loglevel_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+
+<div class="form-control-static m3config_h_side_label" style="margin-left:20px;"><span {_HELP_OPELOG_LOG_STATUS}>{_LC_LABEL_LOG_STATUS}</span></div>
+<select name="logstatus" class="form-control" onchange="selectMenu();" style="display:inline-block;width:150px;margin-top:-7px;">
+<patTemplate:tmpl name="logstatus_list">
+<option value="{VALUE}" {SELECTED}>{NAME}</option>
+</patTemplate:tmpl>
+</select>
+
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_OPELOG_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" />
+</div></div></div>
+
+<table id="config_table">
     <thead>
-        <tr>
-	    <th width="35"><span {_HELP_OPELOG_CHECK}>{_LC_LABEL_SELECT}</span></th>
-	    <th width="50"><span {_HELP_OPELOG_MESSAGE_TYPE}>{_LC_LABEL_TYPE}</span></th>
-	    <th><span {_HELP_OPELOG_MESSAGE}>{_LC_LABEL_MESSAGE}</span></th>
-	    <th width="100"><span {_HELP_OPELOG_IP}>IP</span></th>
-	    <th width="35"></th>
-	    <th width="90"><span {_HELP_OPELOG_ACCESS_LOG}>{_LC_LABEL_ACCESS_LOG}</span></th>
-	    <th width="50"><span {_HELP_OPELOG_MESSAGE_CHECK}>{_LC_LABEL_CHECK}</span></th>
-	    <th width="150"><span {_HELP_OPELOG_MESSAGE_DT}>{_LC_LABEL_DATE}</span></th>
+    <tr>
+	    <th class="select"><span {_HELP_OPELOG_CHECK}>{_LC_LABEL_SELECT}</span></th>
+	    <th style="width:50px;"><span {_HELP_OPELOG_MESSAGE_TYPE}>{_LC_LABEL_TYPE}</span></th>
+	    <th style="width:350px;"><span {_HELP_OPELOG_MESSAGE}>{_LC_LABEL_MESSAGE}</span></th>
+	    <th style="width:100px;"><span {_HELP_OPELOG_IP}>IP</span></th>
+	    <!--<th style="width:50px;"></th>-->
+	    <th style="width:100px;"><span {_HELP_OPELOG_ACCESS_LOG}>{_LC_LABEL_ACCESS_LOG}</span></th>
+	    <th style="width:50px;"><span {_HELP_OPELOG_MESSAGE_CHECK}>{_LC_LABEL_CHECK}</span></th>
+	    <th style="width:100px;"><span {_HELP_OPELOG_MESSAGE_DT}>{_LC_LABEL_DATE}</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="loglist">
-        <tr>
-            <td align="center"><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td align="center">{TYPE}</td>
-	    <td><a href="{URL}">{MESSAGE}</a></td>
-	    <td align="center">{IP}</td>
-	    <td align="center">{BROWSER}</td>
-	    <td align="center"><a href="#" onclick="showAccessLog({ACCESS_LOG});">{ACCESS_LOG}</a></td>
-	    <td align="center"><input type="checkbox" name="item{NO}_msgchecked" {MSG_CHECKED} disabled /></td>
-	    <td align="center">{OUTPUT_DT}</td>
+    <patTemplate:tmpl name="loglist">
+    <tr>
+        <td><input type="checkbox" name="item{INDEX}_selected" /></td>
+	    <td>{TYPE}</td>
+	    <td class="linebreak"><a href="{URL}">{MESSAGE}</a></td>
+	    <td>{IP}</td>
+	    <!--<td>{BROWSER}</td>-->
+	    <td><a href="#" onclick="showAccessLog({ACCESS_LOG});">{ACCESS_LOG}</a></td>
+	    <td><input type="checkbox" name="item{NO}_msgchecked" {MSG_CHECKED} disabled /></td>
+	    <td>{OUTPUT_DT}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
-</td></tr>
-<tr><td>
 {PAGE_LINK}
-</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{_LC_LABEL_RANGE}&nbsp;{START_NO}-{END_NO}</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}</label></td></tr>
-</table>
-
 </form>
 </div>
 </patTemplate:tmpl>

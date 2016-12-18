@@ -32,7 +32,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 	private $message;			// 表示メッセージ
 	private $server;			// 指定サーバ
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
-	const MAX_PAGE_COUNT = 20;				// 最大ページ数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const INFO_ICON_FILE = '/images/system/info16.png';			// 情報アイコン
 	const NOTICE_ICON_FILE = '/images/system/notice16.png';		// 注意アイコン
 	const ERROR_ICON_FILE = '/images/system/error16.png';		// エラーアイコン
@@ -129,7 +129,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 			$localeText['label_log_detail'] = $this->_('Operation Log Detail');		// 運用ログ詳細
 			$localeText['label_go_back'] = $this->_('Go back');		// 戻る
 			$localeText['label_type'] = $this->_('Type');			// 種別
-			$localeText['label_check'] = $this->_('Checked');		// 確認
+			$localeText['label_check'] = $this->_('Check');		// 確認
 			$localeText['label_message'] = $this->_('Message');			// メッセージ
 			$localeText['label_message_detail'] = $this->_('Message Detail');// メッセージ詳細
 			$localeText['label_message_code'] = $this->_('Message Code');// メッセージコード
@@ -150,8 +150,8 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 			$localeText['label_check'] = $this->_('Select');			// 選択
 			$localeText['label_type'] = $this->_('Type');			// 種別
 			$localeText['label_message'] = $this->_('Message');			// メッセージ
-			$localeText['label_access_log'] = $this->_('Access Log');			// アクセスログ
-			$localeText['label_check'] = $this->_('Checked');			// 確認
+			$localeText['label_access_log'] = $this->_('Log No');			// ログ番号
+			$localeText['label_check'] = $this->_('Check');			// 確認
 			$localeText['label_date'] = $this->_('Date');			// 日時
 			$localeText['label_range'] = $this->_('Range:');		// 範囲：
 		}
@@ -177,10 +177,8 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		if ($this->logLevel == '1') $viewLevel = 10;
 
 		// 表示条件
-//		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
-//		if ($viewCount == '') $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
-		$viewCount = $request->trimIntValueOf('viewcount', '0');
-		if (empty($viewCount)) $viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$maxListCount = $request->trimIntValueOf('viewcount', '0');
+		if (empty($maxListCount)) $maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		if ($act == 'delete'){		// 項目を参照済みに設定
@@ -212,15 +210,18 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		// 総数を取得
 		$totalCount = $this->db->getOpeLogCount($viewLevel, $this->logStatus);
 
-		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
+/*		// 表示するページ番号の修正
+		$pageCount = (int)(($totalCount -1) / $maxListCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
-		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
+		$startNo = ($pageNo -1) * $maxListCount +1;		// 先頭の行番号
+		$endNo = $pageNo * $maxListCount > $totalCount ? $totalCount : $pageNo * $maxListCount;// 最後の行番号
+		*/
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		
 		// ページング用リンク作成
-		$pageLink = '';
+/*		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			for ($i = 1; $i <= $pageCount; $i++){
 				if ($i > self::MAX_PAGE_COUNT) break;			// 最大ページ数以上のときは終了
@@ -232,14 +233,14 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
+		// ページングリンク作成
+		$detailUrl = '?task=opelog';
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $detailUrl);
+		
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+		$this->tmpl->addVar("_widget", "view_count", $maxListCount);	// 最大表示項目数
 		
 		// アクセスログURL
 		$accessLogUrl = '?task=accesslog_detail&openby=simple';
@@ -250,7 +251,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		$this->tmpl->addVar("_widget", "edit_url", '?task=opelog_detail');
 		
 		// 運用ログを取得
-		$this->db->getOpeLogList($viewLevel, $this->logStatus, $viewCount, $pageNo, array($this, 'logListLoop'));
+		$this->db->getOpeLogList($viewLevel, $this->logStatus, $maxListCount, $pageNo, array($this, 'logListLoop'));
 		$this->tmpl->addVar("_widget", "serial_list", implode($this->serialArray, ','));// 表示項目のシリアル番号を設定
 		if (count($this->serialArray) == 0) $this->tmpl->setAttribute('loglist', 'visibility', 'hidden');		// ログがないときは非表示
 	}
@@ -263,7 +264,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 	function createDetail($request)
 	{
 		// 表示条件
-		$viewCount = $request->trimValueOf('viewcount');// 表示項目数
+		$maxListCount = $request->trimValueOf('viewcount');// 表示項目数
 		$page = $request->trimValueOf('page');				// ページ番号
 		$logLevel = $request->trimValueOf('loglevel');// 現在のログ表示レベル
 		$logStatus = $request->trimValueOf('logstatus');// 現在のログ表示ステータス
@@ -358,7 +359,7 @@ class admin_mainOpelogWidgetContainer extends admin_mainConditionBaseWidgetConta
 		
 		// 一覧の表示条件
 		$this->tmpl->addVar("_widget", "page", $page);	// ページ番号
-		$this->tmpl->addVar("_widget", "view_count", $viewCount);	// 最大表示項目数
+		$this->tmpl->addVar("_widget", "view_count", $maxListCount);	// 最大表示項目数
 		$this->tmpl->addVar("_widget", "log_level", $logLevel);	// ログ表示レベル
 		$this->tmpl->addVar("_widget", "log_status", $logStatus);	// ログ表示ステータス
 		

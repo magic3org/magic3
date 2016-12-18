@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-02 20:45+0900\n"
-"PO-Revision-Date: 2016-10-02 20:46+0900\n"
+"POT-Creation-Date: 2016-12-18 21:45+0900\n"
+"PO-Revision-Date: 2016-12-18 21:46+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: ja_JP\n"
@@ -283,7 +283,7 @@ msgstr "トップ時のみ表示"
 #: ../container/admin_mainEditmenuWidgetContainer.php:184
 #: ../container/admin_mainEditmenuWidgetContainer.php:202
 #: ../container/admin_mainMenudefWidgetContainer.php:183
-#: ../container/admin_mainOpelogWidgetContainer.php:193
+#: ../container/admin_mainOpelogWidgetContainer.php:138
 #: ../container/admin_mainSmenudefWidgetContainer.php:177
 #: ../container/admin_mainUserlistWidgetContainer.php:139
 msgid "Update"
@@ -316,15 +316,14 @@ msgid "H Tag Level"
 msgstr "Hタグレベル"
 
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:86
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:131
-#: ../container/admin_mainOpelogWidgetContainer.php:211
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:76
+#: ../container/admin_mainOpelogWidgetContainer.php:156
 #: ../container/admin_mainUserlistWidgetContainer.php:162
 msgid "Range:"
 msgstr "範囲："
 
 #: ../container/admin_mainAnalyzegraphWidgetContainer.php:246
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:217
-#: ../container/admin_mainOpelogWidgetContainer.php:292
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:162
 #: ../container/admin_mainUserlistWidgetContainer.php:237
 #, php-format
 msgid "%d Total"
@@ -356,14 +355,14 @@ msgid "Failed in sending email. To:"
 msgstr "メール送信に失敗しました。メールアドレス:"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:168
-#: ../container/admin_mainOpelogWidgetContainer.php:339
+#: ../container/admin_mainOpelogWidgetContainer.php:285
 #: ../container/admin_mainPagedefWidgetContainer.php:478
 #: ../container/admin_mainPortalWidgetContainer.php:118
 msgid "Data updated."
 msgstr "データを更新しました"
 
 #: ../container/admin_mainConfigsiteWidgetContainer.php:170
-#: ../container/admin_mainOpelogWidgetContainer.php:343
+#: ../container/admin_mainOpelogWidgetContainer.php:289
 #: ../container/admin_mainPagedefWidgetContainer.php:480
 #: ../container/admin_mainPagedefWidgetContainer.php:484
 #: ../container/admin_mainPortalWidgetContainer.php:120
@@ -676,8 +675,7 @@ msgid "View system operation log."
 msgstr "運用ログを参照します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:104
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:130
-#: ../container/admin_mainOpelogWidgetContainer.php:208
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:75
 msgid "Access Log"
 msgstr "アクセスログ"
 
@@ -694,12 +692,10 @@ msgid "View words to search."
 msgstr "検索語ログを参照します。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:108
-#: ../help/Rs[~1.PHP:31
 msgid "File Browser"
 msgstr "ファイルブラウザ"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:109
-#: ../help/Rs[~1.PHP:32
 msgid "Administrate files under resource directory."
 msgstr "リソースディレクトリ以下のファイルを管理します。"
 
@@ -764,7 +760,7 @@ msgid "Manage user original table."
 msgstr "ユーザ定義のテーブルの作成、データの編集を行います。"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:124
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:37
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:36
 msgid "Logout"
 msgstr "ログアウト"
 
@@ -781,9 +777,9 @@ msgid "Administration Menu Others"
 msgstr "管理メニューその他"
 
 #: ../container/admin_mainEditmenuWidgetContainer.php:181
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:132
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:77
 #: ../container/admin_mainMenudefWidgetContainer.php:165
-#: ../container/admin_mainOpelogWidgetContainer.php:185
+#: ../container/admin_mainOpelogWidgetContainer.php:130
 #: ../container/admin_mainPagedefWidgetContainer.php:160
 #: ../container/admin_mainSmenudefWidgetContainer.php:159
 #: ../container/admin_mainUserlistWidgetContainer.php:137
@@ -911,36 +907,36 @@ msgstr ""
 "アップロードファイルが見つかりません。(要因： アップロード可能なファイルのMax"
 "サイズを超えている可能性があります。 %sバイト)"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:36
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:35
 #: ../container/admin_mainUserlistWidgetContainer.php:123
 #: ../container/admin_mainUserlistWidgetContainer.php:153
 #: ../container/admin_mainWidgetContainer.php:410
 msgid "Login"
 msgstr "ログイン"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:38
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:37
 msgid "Error"
 msgstr "エラー"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:126
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:71
 msgid "Login History"
 msgstr "ログイン履歴"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:127
-#: ../container/admin_mainOpelogWidgetContainer.php:192
-#: ../container/admin_mainOpelogWidgetContainer.php:210
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:72
+#: ../container/admin_mainOpelogWidgetContainer.php:137
+#: ../container/admin_mainOpelogWidgetContainer.php:155
 msgid "Date"
 msgstr "日付"
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:128
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:73
 msgid "Name:"
 msgstr "名前："
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:129
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:74
 msgid "Login Acount:"
 msgstr "ログインアカウント："
 
-#: ../container/admin_mainLoginhistoryWidgetContainer.php:133
+#: ../container/admin_mainLoginhistoryWidgetContainer.php:78
 msgid "Browser"
 msgstr "ブラウザ"
 
@@ -1089,7 +1085,7 @@ msgid "Select menu item to delete."
 msgstr "削除する項目を選択してください"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:191
-#: ../container/admin_mainOpelogWidgetContainer.php:200
+#: ../container/admin_mainOpelogWidgetContainer.php:145
 #: ../container/admin_mainSmenudefWidgetContainer.php:185
 #: ../container/admin_mainUserlistWidgetContainer.php:147
 msgid "Delete selected item?"
@@ -1106,14 +1102,14 @@ msgid "Path:"
 msgstr "パス："
 
 #: ../container/admin_mainMenudefWidgetContainer.php:195
-#: ../container/admin_mainOpelogWidgetContainer.php:204
+#: ../container/admin_mainOpelogWidgetContainer.php:149
 #: ../container/admin_mainSmenudefWidgetContainer.php:188
 #: ../container/admin_mainUserlistWidgetContainer.php:160
 msgid "Edit"
 msgstr "編集"
 
 #: ../container/admin_mainMenudefWidgetContainer.php:197
-#: ../container/admin_mainOpelogWidgetContainer.php:205
+#: ../container/admin_mainOpelogWidgetContainer.php:150
 #: ../container/admin_mainSmenudefWidgetContainer.php:190
 #: ../container/admin_mainUserlistWidgetContainer.php:149
 msgid "Select"
@@ -1220,85 +1216,92 @@ msgstr "非表示項目"
 msgid "Edit Content"
 msgstr "コンテンツを編集"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:60
-#: ../container/admin_mainOpelogWidgetContainer.php:63
+#: ../container/admin_mainOpelogWidgetContainer.php:59
+#: ../container/admin_mainOpelogWidgetContainer.php:62
 #: ../container/admin_mainPagedefWidgetContainer.php:158
 msgid "All"
 msgstr "すべて"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:61
+#: ../container/admin_mainOpelogWidgetContainer.php:60
 msgid "Check Required"
 msgstr "要確認項目"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:64
+#: ../container/admin_mainOpelogWidgetContainer.php:63
 msgid "Unchecked"
 msgstr "未確認"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:65
-#: ../container/admin_mainOpelogWidgetContainer.php:187
-#: ../container/admin_mainOpelogWidgetContainer.php:209
+#: ../container/admin_mainOpelogWidgetContainer.php:64
 msgid "Checked"
 msgstr "確認済"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:148
+#: ../container/admin_mainOpelogWidgetContainer.php:93
 msgid "Could not connect to server."
 msgstr "サーバに接続できません"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:182
+#: ../container/admin_mainOpelogWidgetContainer.php:127
 msgid "Update item?"
 msgstr "項目を更新しますか?"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:183
+#: ../container/admin_mainOpelogWidgetContainer.php:128
 msgid "Delete item?"
 msgstr "項目を削除しますか?"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:184
+#: ../container/admin_mainOpelogWidgetContainer.php:129
 msgid "Operation Log Detail"
 msgstr "運用ログ詳細"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:186
-#: ../container/admin_mainOpelogWidgetContainer.php:206
+#: ../container/admin_mainOpelogWidgetContainer.php:131
+#: ../container/admin_mainOpelogWidgetContainer.php:151
 msgid "Type"
 msgstr "種別"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:188
-#: ../container/admin_mainOpelogWidgetContainer.php:207
+#: ../container/admin_mainOpelogWidgetContainer.php:132
+#: ../container/admin_mainOpelogWidgetContainer.php:154
+msgid "Check"
+msgstr "確認"
+
+#: ../container/admin_mainOpelogWidgetContainer.php:133
+#: ../container/admin_mainOpelogWidgetContainer.php:152
 msgid "Message"
 msgstr "メッセージ"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:189
+#: ../container/admin_mainOpelogWidgetContainer.php:134
 msgid "Message Detail"
 msgstr "メッセージ詳細"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:190
+#: ../container/admin_mainOpelogWidgetContainer.php:135
 msgid "Message Code"
 msgstr "メッセージコード"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:191
+#: ../container/admin_mainOpelogWidgetContainer.php:136
 msgid "Access Log No"
 msgstr "アクセスログ番号"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:198
+#: ../container/admin_mainOpelogWidgetContainer.php:143
 #: ../container/admin_mainUserlistWidgetContainer.php:145
 msgid "Select item to edit."
 msgstr "編集する項目を選択してください"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:199
+#: ../container/admin_mainOpelogWidgetContainer.php:144
 #: ../container/admin_mainUserlistWidgetContainer.php:146
 msgid "Select item to delete."
 msgstr "削除する項目を選択してください"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:201
+#: ../container/admin_mainOpelogWidgetContainer.php:146
 msgid "Operation Log List"
 msgstr "運用ログ一覧"
 
-#: ../container/admin_mainOpelogWidgetContainer.php:202
+#: ../container/admin_mainOpelogWidgetContainer.php:147
 msgid "Level:"
 msgstr "レベル："
 
-#: ../container/admin_mainOpelogWidgetContainer.php:203
+#: ../container/admin_mainOpelogWidgetContainer.php:148
 msgid "Status:"
 msgstr "ステータス："
+
+#: ../container/admin_mainOpelogWidgetContainer.php:153
+msgid "Log No"
+msgstr "ログ番号"
 
 #: ../container/admin_mainPagedefWidgetContainer.php:141
 msgid "Show Detail"
@@ -1662,7 +1665,6 @@ msgstr "生成ソフト - バージョン"
 
 #: ../container/admin_mainTemplistWidgetContainer.php:465
 #: ../container/admin_mainUserlistWidgetContainer.php:156
-#: ../help/Rs[~1.PHP:66
 msgid "Update Date"
 msgstr "更新日"
 
@@ -2399,7 +2401,6 @@ msgstr ""
 "覧の左端のチェックボックスにチェックを入れます。"
 
 #: ../help/help_menudef.php:95 ../help/help_userlist.php:99
-#: ../help/Rs[~1.PHP:78
 msgid "Delete Button"
 msgstr "削除ボタン"
 
@@ -2876,92 +2877,72 @@ msgstr ""
 "ウィジェットディレクトリを再読み込みして、一覧に表示されていないウィジェット"
 "を自動的にインストールします。"
 
-#: ../help/Rs[~1.PHP:38
-msgid "File Browse"
-msgstr "ファイルブラウズ"
+#~ msgid "File Browse"
+#~ msgstr "ファイルブラウズ"
 
-#: ../help/Rs[~1.PHP:39
-msgid "Upload files at once."
-msgstr "複数のファイルを一度にアップロードできます。"
+#~ msgid "Upload files at once."
+#~ msgstr "複数のファイルを一度にアップロードできます。"
 
-#: ../help/Rs[~1.PHP:42
-msgid "Path"
-msgstr "パス"
+#~ msgid "Path"
+#~ msgstr "パス"
 
-#: ../help/Rs[~1.PHP:43
-msgid "Show current directory."
-msgstr "現在のディレクトリパスを示します。"
+#~ msgid "Show current directory."
+#~ msgstr "現在のディレクトリパスを示します。"
 
-#: ../help/Rs[~1.PHP:46
-msgid "Filename"
-msgstr "ファイル名"
+#~ msgid "Filename"
+#~ msgstr "ファイル名"
 
-#: ../help/Rs[~1.PHP:47
-msgid "Show file or directory name."
-msgstr "ファイル名、ディレクトリ名を示します。"
+#~ msgid "Show file or directory name."
+#~ msgstr "ファイル名、ディレクトリ名を示します。"
 
-#: ../help/Rs[~1.PHP:50
-msgid "Size"
-msgstr "サイズ"
+#~ msgid "Size"
+#~ msgstr "サイズ"
 
-#: ../help/Rs[~1.PHP:51
-msgid "Show byte counts of file."
-msgstr "ファイルのサイズを示します。"
+#~ msgid "Show byte counts of file."
+#~ msgstr "ファイルのサイズを示します。"
 
-#: ../help/Rs[~1.PHP:54
-msgid "Permission"
-msgstr "パーミッション"
+#~ msgid "Permission"
+#~ msgstr "パーミッション"
 
-#: ../help/Rs[~1.PHP:55
-msgid "Show permission of file or directory."
-msgstr "ファイル、ディレクトリのパーミッションを示します。"
+#~ msgid "Show permission of file or directory."
+#~ msgstr "ファイル、ディレクトリのパーミッションを示します。"
 
-#: ../help/Rs[~1.PHP:58
-msgid "Owner"
-msgstr "所有者"
+#~ msgid "Owner"
+#~ msgstr "所有者"
 
-#: ../help/Rs[~1.PHP:59
-msgid "Show owner of file or directory."
-msgstr "ファイル、ディレクトリの所有者を示します。"
+#~ msgid "Show owner of file or directory."
+#~ msgstr "ファイル、ディレクトリの所有者を示します。"
 
-#: ../help/Rs[~1.PHP:62
-msgid "Group"
-msgstr "グループ"
+#~ msgid "Group"
+#~ msgstr "グループ"
 
-#: ../help/Rs[~1.PHP:63
-msgid "Show group owner of file or directory."
-msgstr "ファイル、ディレクトリのグループ所有者を示します。"
+#~ msgid "Show group owner of file or directory."
+#~ msgstr "ファイル、ディレクトリのグループ所有者を示します。"
 
-#: ../help/Rs[~1.PHP:67
-msgid "Show update date of file or directory."
-msgstr "ファイル、ディレクトリの更新日時を示します。"
+#~ msgid "Show update date of file or directory."
+#~ msgstr "ファイル、ディレクトリの更新日時を示します。"
 
-#: ../help/Rs[~1.PHP:70
-msgid "Upload File"
-msgstr "ファイルアップロード"
+#~ msgid "Upload File"
+#~ msgstr "ファイルアップロード"
 
-#: ../help/Rs[~1.PHP:71
-msgid "Uplod files in this area. Show upload status in uploading files."
-msgstr ""
-"ファイルのアップロードはここから行います。ファイルアップロード時はアップロー"
-"ド状況が表示されます。"
+#~ msgid "Uplod files in this area. Show upload status in uploading files."
+#~ msgstr ""
+#~ "ファイルのアップロードはここから行います。ファイルアップロード時はアップ"
+#~ "ロード状況が表示されます。"
 
-#: ../help/Rs[~1.PHP:74
-msgid "Create Directory"
-msgstr "ディレクトリ作成"
+#~ msgid "Create Directory"
+#~ msgstr "ディレクトリ作成"
 
-#: ../help/Rs[~1.PHP:75
-msgid "Create directory in this area."
-msgstr "ディレクトリの作成はここから行います。"
+#~ msgid "Create directory in this area."
+#~ msgstr "ディレクトリの作成はここから行います。"
 
-#: ../help/Rs[~1.PHP:79
-msgid ""
-"Delete files.<br />Select the file by using the left checkbox.<br />You can "
-"delete files and directory in 'resource' directory."
-msgstr ""
-"選択されているファイル項目を削除します。<br />メニュー項目を選択するには、一"
-"覧の左端のチェックボックスにチェックを入れます。<br />「resource」ディレクト"
-"リ以下のファイルのみ削除可能です。"
+#~ msgid ""
+#~ "Delete files.<br />Select the file by using the left checkbox.<br />You "
+#~ "can delete files and directory in 'resource' directory."
+#~ msgstr ""
+#~ "選択されているファイル項目を削除します。<br />メニュー項目を選択するには、"
+#~ "一覧の左端のチェックボックスにチェックを入れます。<br />「resource」ディレ"
+#~ "クトリ以下のファイルのみ削除可能です。"
 
 #~ msgid "Resource Browse"
 #~ msgstr "リソースブラウズ"

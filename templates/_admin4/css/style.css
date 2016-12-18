@@ -712,6 +712,11 @@ span[rel="m3help"] { cursor: default; }
 	padding-right: 20px;
 	display:inline-block;
 }
+.m3config_h_side_label {
+	padding-left: 0;
+	padding-right: 0px;
+	display:inline-block;
+}
 /* fix item width */
 .m3config_item {
 	padding-left: 0;
