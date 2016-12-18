@@ -42,7 +42,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	const ICON_SIZE = 32;		// アイコンのサイズ
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
-	const LINK_PAGE_COUNT		= 20;			// リンクページ数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const CATEGORY_NAME_SIZE = 20;			// カテゴリー名の最大文字列長
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン

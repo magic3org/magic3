@@ -26,7 +26,7 @@ class admin_blog_mainCommentWidgetContainer extends admin_blog_mainBaseWidgetCon
 	private $serialArray = array();		// 表示されている項目シリアル番号
 	private $entryArray = array();		// 表示されている項目の記事ID
 	const DEFAULT_LIST_COUNT	= 20;			// 最大リスト表示数
-	const LINK_PAGE_COUNT		= 20;			// リンクページ数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const CATEGORY_COUNT = 2;				// 記事カテゴリーの選択可能数
 	const COMMENT_SIZE = 40;			// コメント内容の最大文字列長
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン

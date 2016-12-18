@@ -30,7 +30,7 @@ class admin_blog_mainScheduleWidgetContainer extends admin_blog_mainBaseWidgetCo
 	private $entryId;
 	private $defaultEntryName;		// 対象記事のタイトル
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
-	const LINK_PAGE_COUNT		= 20;			// リンクページ数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const ICON_SIZE = 32;		// アイコンのサイズ
 
