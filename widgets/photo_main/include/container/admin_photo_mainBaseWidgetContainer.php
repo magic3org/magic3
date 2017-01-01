@@ -58,7 +58,7 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// DBオブジェクト作成
 		if (!isset(self::$_mainDb)) self::$_mainDb = new photo_mainDb();
 			
-		// ブログ定義を読み込む
+		// フォト定義を読み込む
 		if (!isset(self::$_configArray)) self::$_configArray = photo_mainCommonDef::loadConfig(self::$_mainDb);
 		
 		// システム運用者の場合は、ユーザオプションがあればユーザ専用ディレクトリに制限
@@ -114,32 +114,151 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// 画像取得の場合は終了
 		if ($task == self::TASK_IMAGEBROWSE_DIRECT) return;
 		
-		// パンくずリストを作成
+		// パンくずリストの定義データ作成
+		$titles = array();
 		switch ($task){
 			case self::TASK_IMAGEBROWSE:		// 画像管理
+				$titles[] = '画像管理';
+				$titles[] = '画像一覧';
+				break;
 			case self::TASK_IMAGEBROWSE_DETAIL:	// 画像管理詳細
-				$linkList = ' &gt;&gt; 画像管理 &gt;&gt; 画像一覧';// パンくずリスト
+				$titles[] = '画像管理';
+				$titles[] = '画像一覧';
+				$titles[] = '詳細';
 				break;
 			case self::TASK_COMMENT:		// 画像コメント
+				$titles[] = '画像管理';
+				$titles[] = 'コメント一覧';
+				break;
 			case self::TASK_COMMENT_DETAIL:	// 画像コメント
-				$linkList = ' &gt;&gt; 画像管理 &gt;&gt; コメント一覧';// パンくずリスト
+				$titles[] = '画像管理';
+				$titles[] = 'コメント一覧';
+				$titles[] = '詳細';
 				break;
 			case self::TASK_AUTHOER:		// 画像管理者一覧
+				$titles[] = '基本';
+				$titles[] = '画像管理者一覧';
+				break;
 			case self::TASK_AUTHER_DETAIL:	// 画像管理者詳細
-				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 画像管理者一覧';// パンくずリスト
+				$titles[] = '基本';
+				$titles[] = '画像管理者一覧';
+				$titles[] = '詳細';
 				break;
 			case self::TASK_CATEGORY:		// 画像カテゴリー一覧
+				$titles[] = '基本';
+				$titles[] = '画像カテゴリー一覧';
+				break;
 			case self::TASK_CATEGORY_DETAIL:	// 画像カテゴリー詳細
-				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 画像カテゴリー一覧';// パンくずリスト
+				$titles[] = '基本';
+				$titles[] = '画像カテゴリー一覧';
+				$titles[] = '詳細';
 				break;
 			case self::TASK_SEARCH:		// 検索条件
-				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 検索条件';// パンくずリスト
+				$titles[] = '基本';
+				$titles[] = '検索条件';
 				break;
 			case self::TASK_CONFIG:		// フォトギャラリー設定
-				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; フォトギャラリー設定';// パンくずリスト
+				$titles[] = '基本';
+				$titles[] = '基本設定';
 				break;
 		}
 
+		// メニューバーの定義データ作成
+		$menu =	array(
+					(Object)array(
+						'name'		=> '画像管理',
+						'task'		=> '',
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_IMAGEBROWSE ||				// 画像管理(一覧)
+											$task == self::TASK_IMAGEBROWSE_DETAIL ||		// 画像管理(詳細)
+											$task == self::TASK_COMMENT ||			// 画像コメント(一覧)
+											$task == self::TASK_COMMENT_DETAIL		// 画像コメント(詳細)
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '画像一覧',
+								'task'		=> self::TASK_IMAGEBROWSE,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_IMAGEBROWSE ||				// 画像管理(一覧)
+													$task == self::TASK_IMAGEBROWSE_DETAIL			// 画像管理(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> 'コメント一覧',
+								'task'		=> self::TASK_COMMENT,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_COMMENT ||			// 画像コメント(一覧)
+													$task == self::TASK_COMMENT_DETAIL		// 画像コメント(詳細)
+												)
+							)
+						)
+					),
+					(Object)array(
+						'name'		=> '基本',
+						'task'		=> self::TASK_CONFIG,
+						'url'		=> '',
+						'tagid'		=> '',
+						'active'	=> (
+											$task == self::TASK_AUTHOER ||				// 画像管理者(一覧)
+											$task == self::TASK_AUTHER_DETAIL ||		// 画像管理者(詳細)
+											$task == self::TASK_CATEGORY ||				// 画像カテゴリー(一覧)
+											$task == self::TASK_CATEGORY_DETAIL ||		// 画像カテゴリー(詳細)
+											$task == self::TASK_SEARCH ||				// 検索条件
+											$task == self::TASK_CONFIG					// 基本設定
+										),
+						'submenu'	=> array(
+							(Object)array(
+								'name'		=> '画像管理者',
+								'task'		=> self::TASK_AUTHOER,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_AUTHOER ||			// 画像管理者(一覧)
+													$task == self::TASK_AUTHER_DETAIL		// 画像管理者(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> '画像カテゴリー',
+								'task'		=> self::TASK_CATEGORY,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CATEGORY ||			// 画像カテゴリー(一覧)
+													$task == self::TASK_CATEGORY_DETAIL		// 画像カテゴリー(詳細)
+												)
+							),
+							(Object)array(
+								'name'		=> '検索条件',
+								'task'		=> self::TASK_SEARCH,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_SEARCH		// 検索条件
+												)
+							),
+							(Object)array(
+								'name'		=> '基本設定',
+								'task'		=> self::TASK_CONFIG,
+								'url'		=> '',
+								'tagid'		=> '',
+								'active'	=> (
+													$task == self::TASK_CONFIG					// 基本設定
+												)
+							)
+						)
+					)
+				);
+				
+		// サブメニューバーを作成
+		$this->setConfigMenubarDef($titles, $menu);
+		
+/*
 		// ####### 上段メニューの作成 #######
 		$menuText = '<div id="configmenu-upper">' . M3_NL;
 		$menuText .= '<ul>' . M3_NL;
@@ -165,7 +284,7 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 			$task == self::TASK_CATEGORY ||		// 画像カテゴリー一覧
 			$task == self::TASK_CATEGORY_DETAIL ||		// 画像カテゴリー詳細
 			$task == self::TASK_SEARCH ||		// 検索条件
-			$task == self::TASK_CONFIG){		// ブログ設定
+			$task == self::TASK_CONFIG){		// フォト設定
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>基本設定</span></a></li>' . M3_NL;
@@ -199,7 +318,7 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 			$task == self::TASK_CATEGORY ||		// 画像カテゴリー一覧
 			$task == self::TASK_CATEGORY_DETAIL ||		// 画像カテゴリー詳細
 			$task == self::TASK_SEARCH ||		// 検索条件
-			$task == self::TASK_CONFIG){		// ブログ設定
+			$task == self::TASK_CONFIG){		// フォト設定
 
 			// 画像管理者
 			$current = '';
@@ -234,6 +353,7 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$linkList = '<div id="configmenu-top"><label>' . 'フォトギャラリー' . $linkList . '</div>';
 		$outputText .= '<table><tr><td>' . $linkList . $menuText . '</td></tr></table>' . M3_NL;
 		$this->tmpl->addVar("_widget", "menu_items", $outputText);
+		*/
 	}
 	/**
 	 * DB定義値を更新
