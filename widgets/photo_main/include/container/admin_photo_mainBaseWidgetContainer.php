@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_photo_mainBaseWidgetContainer.php 5599 2013-02-06 11:47:30Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/photo_mainCommonDef.php');
@@ -22,22 +22,23 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	protected static $_mainDb;			// DB接続オブジェクト
 	protected static $_configArray;		// BBS定義値
 	protected static $_isLimitedUser;		// 使用制限ユーザ(画像投稿者)かどうか
-	protected $_openBy;				// ウィンドウオープンタイプ
+//	protected $_openBy;				// ウィンドウオープンタイプ
 	protected $_baseUrl;			// 管理画面のベースURL
-	protected $_langId;			// 現在の言語
-	protected $_userId;			// 現在のユーザ
+//	protected $_langId;			// 現在の言語
+//	protected $_userId;			// 現在のユーザ
 	protected $_errMessage;		// エラーメッセージ
-/*	const CF_RECEIVE_COMMENT		= 'receive_comment';		// コメントを受け付けるかどうか
-	const CF_RECEIVE_TRACKBACK		= 'receive_trackback';		// トラックバックを受け付けるかどうか
-	const CF_ENTRY_VIEW_COUNT		= 'entry_view_count';			// 記事表示数
-	const CF_ENTRY_VIEW_ORDER		= 'entry_view_order';			// 記事表示方向
-	const CF_MAX_COMMENT_LENGTH		= 'comment_max_length';		// コメント最大文字数
-	const CF_USE_MULTI_BLOG		= 'use_multi_blog';		// マルチブログ機能を使用するかどうか
-	const CF_MULTI_BLOG_TOP_CONTENT	= 'multi_blog_top_content';		// マルチブログ時のトップコンテンツ
-	const CF_CATEGORY_COUNT			= 'category_count';		// カテゴリ数
-	const DEFAULT_COMMENT_LENGTH	= 300;				// デフォルトのコメント最大文字数
-	const DEFAULT_CATEGORY_COUNT	= 2;				// デフォルトのカテゴリ数
-	*/
+	// 画面
+	const TASK_IMAGEBROWSE			= 'imagebrowse';		// 画像管理
+	const TASK_IMAGEBROWSE_DETAIL	= 'imagebrowse_detail';	// 画像管理詳細
+	const TASK_IMAGEBROWSE_DIRECT	= 'imagebrowse_direct';	// 画像取得
+	const TASK_COMMENT				= 'comment';		// 画像コメント
+	const TASK_COMMENT_DETAIL		= 'comment_detail';	// 画像コメント
+	const TASK_AUTHOER				= 'author';		// 画像管理者一覧
+	const TASK_AUTHER_DETAIL		= 'author_detail';	// 画像管理者詳細
+	const TASK_CATEGORY				= 'category';		// 画像カテゴリー一覧
+	const TASK_CATEGORY_DETAIL		= 'category_detail';	// 画像カテゴリー詳細
+	const TASK_SEARCH				= 'search';		// 検索条件
+	const TASK_CONFIG				= 'config';		// フォトギャラリー設定
 	const DEFAULT_TASK = 'imagebrowse';			// デフォルトの画面
 	
 	// カレンダー用スクリプト
@@ -71,8 +72,8 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		}
 		
 		// 変数初期化
-		$this->_langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
-		$this->_userId = $this->gEnv->getCurrentUserId();
+//		$this->_langId	= $this->gEnv->getCurrentLanguage();		// 表示言語を取得
+//		$this->_userId = $this->gEnv->getCurrentUserId();
 	}
 	/**
 	 * テンプレートに前処理
@@ -85,9 +86,6 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _preAssign($request, &$param)
 	{
-		$this->openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
-		if (!empty($this->openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $this->openBy);
-		
 		// 管理画面ペースURL取得
 		$this->_baseUrl = $this->getAdminUrlWithOptionParam();
 	}
@@ -102,7 +100,9 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function _postAssign($request, &$param)
 	{
-		if ($this->openBy == 'simple') return;			// シンプルウィンドウのときはメニューを表示しない
+		$openBy = $request->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+		if (!empty($openBy)) $this->addOptionUrlParam(M3_REQUEST_PARAM_OPEN_BY, $openBy);
+		if ($openBy == 'simple') return;			// シンプルウィンドウのときはメニューを表示しない
 		
 		// 使用限定ユーザの場合はメニュー表示しない
 		if (self::$_isLimitedUser) return;
@@ -112,30 +112,30 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		if (empty($task)) $task = self::DEFAULT_TASK;
 		
 		// 画像取得の場合は終了
-		if ($task == 'imagebrowse_direct') return;
+		if ($task == self::TASK_IMAGEBROWSE_DIRECT) return;
 		
 		// パンくずリストを作成
 		switch ($task){
-			case 'imagebrowse':		// 画像管理
-			case 'imagebrowse_detail':	// 画像管理詳細
+			case self::TASK_IMAGEBROWSE:		// 画像管理
+			case self::TASK_IMAGEBROWSE_DETAIL:	// 画像管理詳細
 				$linkList = ' &gt;&gt; 画像管理 &gt;&gt; 画像一覧';// パンくずリスト
 				break;
-			case 'comment':		// 画像コメント
-			case 'comment_detail':	// 画像コメント
+			case self::TASK_COMMENT:		// 画像コメント
+			case self::TASK_COMMENT_DETAIL:	// 画像コメント
 				$linkList = ' &gt;&gt; 画像管理 &gt;&gt; コメント一覧';// パンくずリスト
 				break;
-			case 'author':		// 画像管理者一覧
-			case 'author_detail':	// 画像管理者詳細
+			case self::TASK_AUTHOER:		// 画像管理者一覧
+			case self::TASK_AUTHER_DETAIL:	// 画像管理者詳細
 				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 画像管理者一覧';// パンくずリスト
 				break;
-			case 'category':		// 画像カテゴリー一覧
-			case 'category_detail':	// 画像カテゴリー詳細
+			case self::TASK_CATEGORY:		// 画像カテゴリー一覧
+			case self::TASK_CATEGORY_DETAIL:	// 画像カテゴリー詳細
 				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 画像カテゴリー一覧';// パンくずリスト
 				break;
-			case 'search':		// 検索条件
+			case self::TASK_SEARCH:		// 検索条件
 				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; 検索条件';// パンくずリスト
 				break;
-			case 'config':		// フォトギャラリー設定
+			case self::TASK_CONFIG:		// フォトギャラリー設定
 				$linkList = ' &gt;&gt; 基本設定 &gt;&gt; フォトギャラリー設定';// パンくずリスト
 				break;
 		}
@@ -149,10 +149,10 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// 画像管理
 		$current = '';
 		$link = $this->_baseUrl . '&task=imagebrowse';
-		if ($task == 'imagebrowse' ||
-			$task == 'imagebrowse_detail' ||
-			$task == 'comment' ||		// 画像コメント一覧
-			$task == 'comment_detail'){		// 画像コメント詳細
+		if ($task == self::TASK_IMAGEBROWSE ||
+			$task == self::TASK_IMAGEBROWSE_DETAIL ||
+			$task == self::TASK_COMMENT ||		// 画像コメント一覧
+			$task == self::TASK_COMMENT_DETAIL){		// 画像コメント詳細
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>画像管理</span></a></li>' . M3_NL;
@@ -160,12 +160,12 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		// 基本設定
 		$current = '';
 		$link = $this->_baseUrl . '&task=author';
-		if ($task == 'author' ||		// 画像管理者一覧
-			$task == 'author_detail' ||		// 画像管理者詳細
-			$task == 'category' ||		// 画像カテゴリー一覧
-			$task == 'category_detail' ||		// 画像カテゴリー詳細
-			$task == 'search' ||		// 検索条件
-			$task == 'config'){		// ブログ設定
+		if ($task == self::TASK_AUTHOER ||		// 画像管理者一覧
+			$task == self::TASK_AUTHER_DETAIL ||		// 画像管理者詳細
+			$task == self::TASK_CATEGORY ||		// 画像カテゴリー一覧
+			$task == self::TASK_CATEGORY_DETAIL ||		// 画像カテゴリー詳細
+			$task == self::TASK_SEARCH ||		// 検索条件
+			$task == self::TASK_CONFIG){		// ブログ設定
 			$current = 'id="current"';
 		}
 		$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>基本設定</span></a></li>' . M3_NL;
@@ -178,51 +178,51 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		$menuText .= '<div id="configmenu-lower">' . M3_NL;
 		$menuText .= '<ul>' . M3_NL;
 
-		if ($task == 'imagebrowse' ||
-			$task == 'imagebrowse_detail' ||
-			$task == 'comment' ||		// 画像コメント一覧
-			$task == 'comment_detail'){		// 画像コメント詳細
+		if ($task == self::TASK_IMAGEBROWSE ||
+			$task == self::TASK_IMAGEBROWSE_DETAIL ||
+			$task == self::TASK_COMMENT ||		// 画像コメント一覧
+			$task == self::TASK_COMMENT_DETAIL){		// 画像コメント詳細
 			
 			// 画像一覧
 			$current = '';
 			$link = $this->_baseUrl . '&task=imagebrowse';
-			if ($task == 'imagebrowse' || $task == 'imagebrowse_detail') $current = 'id="current"';
+			if ($task == self::TASK_IMAGEBROWSE || $task == self::TASK_IMAGEBROWSE_DETAIL) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>画像一覧</span></a></li>' . M3_NL;
 			
 			// 画像コメント一覧
 			$current = '';
 			$link = $this->_baseUrl . '&task=comment';
-			if ($task == 'comment' || $task == 'comment_detail') $current = 'id="current"';
+			if ($task == self::TASK_COMMENT || $task == self::TASK_COMMENT_DETAIL) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>コメント一覧</span></a></li>' . M3_NL;
-		} else if ($task == 'author' ||		// 画像管理者一覧
-			$task == 'author_detail' ||		// 画像管理者詳細
-			$task == 'category' ||		// 画像カテゴリー一覧
-			$task == 'category_detail' ||		// 画像カテゴリー詳細
-			$task == 'search' ||		// 検索条件
-			$task == 'config'){		// ブログ設定
+		} else if ($task == self::TASK_AUTHOER ||		// 画像管理者一覧
+			$task == self::TASK_AUTHER_DETAIL ||		// 画像管理者詳細
+			$task == self::TASK_CATEGORY ||		// 画像カテゴリー一覧
+			$task == self::TASK_CATEGORY_DETAIL ||		// 画像カテゴリー詳細
+			$task == self::TASK_SEARCH ||		// 検索条件
+			$task == self::TASK_CONFIG){		// ブログ設定
 
 			// 画像管理者
 			$current = '';
 			$link = $this->_baseUrl . '&task=author';
-			if ($task == 'author' || $task == 'author_detail') $current = 'id="current"';
+			if ($task == self::TASK_AUTHOER || $task == self::TASK_AUTHER_DETAIL) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>画像管理者</span></a></li>' . M3_NL;
 			
 			// 画像カテゴリー
 			$current = '';
 			$link = $this->_baseUrl . '&task=category';
-			if ($task == 'category' || $task == 'category_detail') $current = 'id="current"';
+			if ($task == self::TASK_CATEGORY || $task == self::TASK_CATEGORY_DETAIL) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>画像カテゴリー</span></a></li>' . M3_NL;
 			
 			// 検索条件
 			$current = '';
 			$link = $this->_baseUrl . '&task=search';
-			if ($task == 'search') $current = 'id="current"';
+			if ($task == self::TASK_SEARCH) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>検索条件</span></a></li>' . M3_NL;
 			
 			// その他設定
 			$current = '';
 			$link = $this->_baseUrl . '&task=config';
-			if ($task == 'config') $current = 'id="current"';
+			if ($task == self::TASK_CONFIG) $current = 'id="current"';
 			$menuText .= '<li ' . $current . '><a href="'. $this->getUrl($link) .'"><span>フォトギャラリー設定</span></a></li>' . M3_NL;
 		}
 		

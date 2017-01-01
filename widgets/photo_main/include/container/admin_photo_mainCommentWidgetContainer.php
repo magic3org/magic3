@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_photo_mainCommentWidgetContainer.php 4368 2011-09-30 02:27:33Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_photo_mainBaseWidgetContainer.php');
@@ -48,7 +48,7 @@ class admin_photo_mainCommentWidgetContainer extends admin_photo_mainBaseWidgetC
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'comment_detail'){		// 詳細画面
+		if ($task == self::TASK_COMMENT_DETAIL){		// 詳細画面
 			return 'admin_comment_detail.tmpl.html';
 		} else {			// 一覧画面
 			return 'admin_comment.tmpl.html';
@@ -66,7 +66,7 @@ class admin_photo_mainCommentWidgetContainer extends admin_photo_mainBaseWidgetC
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'comment_detail'){	// 詳細画面
+		if ($task == self::TASK_COMMENT_DETAIL){	// 詳細画面
 			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);

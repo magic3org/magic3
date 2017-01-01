@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_photo_mainImagebrowseWidgetContainer.php 5630 2013-02-10 11:08:39Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_photo_mainBaseWidgetContainer.php');
@@ -22,8 +22,6 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 	private $sortOrderByDateAsc;		// 日付でソート
 	private $masterMimeType;			// マスター画像のMIMEタイプ
 	private $permitMimeType;			// アップロードを許可する画像タイプ
-	private $userId;					// 現在のユーザ
-	private $langId;					// 現在の言語
 	private $fileListAdded;				// 一覧にデータが追加されたかどうか
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
 	const FILE_ICON_FILE = '/images/system/tree/file.png';			// ファイルアイコン
@@ -60,9 +58,6 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 										image_type_to_mime_type(IMAGETYPE_JPEG),
 										image_type_to_mime_type(IMAGETYPE_PNG),
 										image_type_to_mime_type(IMAGETYPE_BMP));			// アップロードを許可する画像タイプ
-										
-		$this->langId = $this->gEnv->getCurrentLanguage();
-		$this->userId = $this->gEnv->getCurrentUserId();
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -78,14 +73,14 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 	{
 		$task = $request->trimValueOf('task');
 		switch ($task){
-			case 'imagebrowse':
+			case self::TASK_IMAGEBROWSE:
 			default:
 				$filename = 'imagebrowse.tmpl.html';
 				break;
-			case 'imagebrowse_detail':
+			case self::TASK_IMAGEBROWSE_DETAIL:
 				$filename = 'imagebrowse_detail.tmpl.html';
 				break;
-			case 'imagebrowse_direct':
+			case self::TASK_IMAGEBROWSE_DIRECT:
 				$filename = '';
 				break;
 		}
@@ -106,14 +101,14 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		$task = $request->trimValueOf('task');
 		
 		switch ($task){
-			case 'imagebrowse':
+			case self::TASK_IMAGEBROWSE:
 			default:
 				$this->createList($request);
 				break;
-			case 'imagebrowse_detail':
+			case self::TASK_IMAGEBROWSE_DETAIL:
 				$this->createDetail($request);
 				break;
-			case 'imagebrowse_direct':
+			case self::TASK_IMAGEBROWSE_DIRECT:
 				if ($act == 'getimage'){		// 画像取得
 					$width = $request->trimValueOf('width');
 					$height = $request->trimValueOf('height');
@@ -180,7 +175,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			// ファイルのアップロード処理
 			if (isset($_FILES["Filedata"]) && is_uploaded_file($_FILES['Filedata']['tmp_name'])){		// アップロードファイルがある場合
 				// ファイル名を作成
-				$code = $account . '-' . self::$_mainDb->getNewPhotoNo($this->userId);		// 画像コード
+				$code = $account . '-' . self::$_mainDb->getNewPhotoNo($this->_userId);		// 画像コード
 				$ret = self::$_mainDb->isExistsPhotoCode($code);		// 画像コードの重複確認
 				if ($ret){		// 画像コードが重複するとき
 					$errMessage = '画像コードが重複しています。';
@@ -246,8 +241,8 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 								$license = '';		// ライセンス
 								$keyword = '';		// 検索情報
 								$visible = true;	// 表示
-								$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, 0/*新規追加*/, $this->langId, $filename, $relativePath, $code, $imageMimeType,
-												$imageSize, $originalFilename, $filesize, $name, $camera, $location, $date, $summary, $description, $license, $this->userId, 
+								$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, 0/*新規追加*/, $this->_langId, $filename, $relativePath, $code, $imageMimeType,
+												$imageSize, $originalFilename, $filesize, $name, $camera, $location, $date, $summary, $description, $license, $this->_userId, 
 												$keyword, $visible, 0/*ソート順*/, array()/*画像カテゴリー*/, $thumbFilename, $newSerial);
 								if ($ret){
 									// 運用ログを追加
@@ -311,7 +306,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 							// 写真情報のアクセス権をチェック
 							$ret = self::$_mainDb->getPhotoInfoBySerial($serial, $row);
 							if ($ret){
-								if (!self::$_isLimitedUser || (self::$_isLimitedUser && $this->userId == $row['ht_owner_id'])){
+								if (!self::$_isLimitedUser || (self::$_isLimitedUser && $this->_userId == $row['ht_owner_id'])){
 									$delItems[] = $serial;
 									$delPhotos[] = $filename;		// 写真ID
 									$delSystemFiles[] = $row['ht_thumb_filename'];
@@ -465,7 +460,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		// アップロード実行用URL
 		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
-		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . 'imagebrowse';
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGEBROWSE;
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadfile';
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_ADMIN_KEY . '=' . $this->gEnv->getAdminKey();	// 管理者キー
 		//$uploadUrl .= '&path=' . $this->adaptWindowsPath($path);
@@ -550,7 +545,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
-				$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, $this->serialNo/*更新*/, $this->langId, ''/*ファイル名*/, ''/*格納ディレクトリ*/, ''/*画像コード*/, ''/*画像MIMEタイプ*/,
+				$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, $this->serialNo/*更新*/, $this->_langId, ''/*ファイル名*/, ''/*格納ディレクトリ*/, ''/*画像コード*/, ''/*画像MIMEタイプ*/,
 								''/*画像縦横サイズ*/, ''/*元のファイル名*/, ''/*ファイルサイズ*/, $name, $camera, $location, $photoDate, $summary, $description, ''/*ライセンス*/, 0/*所有者*/, $keyword, $visible, $sortOrder, $categoryArray/*画像カテゴリー*/, ''/*サムネールファイル名*/, $newSerial);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
@@ -705,7 +700,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		
 		// カテゴリーメニューを作成
 		if (self::$_configArray[photo_mainCommonDef::CF_USE_PHOTO_CATEGORY]){	// 画像情報(カテゴリー)を使用のとき
-			$ret = self::$_mainDb->getAllCategory($this->langId, $allCategoryRows);
+			$ret = self::$_mainDb->getAllCategory($this->_langId, $allCategoryRows);
 			if ($ret) $this->createCategoryMenu($allCategoryRows, $categoryArray, $categoryCount);
 		}
 		
@@ -848,7 +843,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 				$totalViewCount = '';		// 総参照数
 			} else {		// 画像ファイルのとき
 				// 画像情報取得
-				$ret = self::$_mainDb->getPhotoInfo($file, $this->langId, $row, $categoryRows);
+				$ret = self::$_mainDb->getPhotoInfo($file, $this->_langId, $row, $categoryRows);
 				if ($ret){
 					$serial = $row['ht_serial'];
 					$code = $row['ht_code'];			// 画像コード
@@ -865,7 +860,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 					$filenameOption .= '<br />カテゴリー： ' . $this->convertToDispString($categoryStr);		// 所属カテゴリー
 					
 					// 使用限定ユーザの場合は、所有者でなければ削除できない
-					if (self::$_isLimitedUser && $this->userId != $row['ht_owner_id']){
+					if (self::$_isLimitedUser && $this->_userId != $row['ht_owner_id']){
 						$checkDisabled = 'disabled ';		// チェックボックス使用制御
 						$serial = -1;
 					}

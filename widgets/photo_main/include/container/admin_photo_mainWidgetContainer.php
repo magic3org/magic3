@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_photo_mainWidgetContainer.php 4393 2011-10-13 13:07:12Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_photo_mainBaseWidgetContainer.php');
@@ -44,9 +44,9 @@ class admin_photo_mainWidgetContainer extends admin_photo_mainBaseWidgetContaine
 		// ##### アクセス制御 #####
 		if (self::$_isLimitedUser){		// 使用限定ユーザの場合
 			switch ($task){
-				case 'imagebrowse':		// 画像管理
-				case 'imagebrowse_detail':		// 画像管理(詳細)
-				case 'imagebrowse_direct':		// 画像取得
+				case self::TASK_IMAGEBROWSE:		// 画像管理
+				case self::TASK_IMAGEBROWSE_DETAIL:		// 画像管理(詳細)
+				case self::TASK_IMAGEBROWSE_DIRECT:		// 画像取得
 					// 画像ID、シリアル番号がある場合はアクセス権をチェック
 					$photoId = $request->trimValueOf(M3_REQUEST_PARAM_PHOTO_ID);			// 画像ID
 					if (!empty($photoId)){
@@ -76,31 +76,31 @@ class admin_photo_mainWidgetContainer extends admin_photo_mainBaseWidgetContaine
 		// コンテナを起動
 		$goWidget = false;		// サブウィジェットを実行するかどうか
 		switch ($task){
-			case 'imagebrowse':		// 画像管理
-			case 'imagebrowse_detail':		// 画像管理(詳細)
-			case 'imagebrowse_direct':		// 画像取得
-				$task = 'imagebrowse';
+			case self::TASK_IMAGEBROWSE:		// 画像管理
+			case self::TASK_IMAGEBROWSE_DETAIL:		// 画像管理(詳細)
+			case self::TASK_IMAGEBROWSE_DIRECT:		// 画像取得
+				$task = self::TASK_IMAGEBROWSE;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case 'author':				// 画像管理者管理
-			case 'author_detail':		// 画像管理者管理(詳細)
-				$task = 'author';
+			case self::TASK_AUTHOER:				// 画像管理者管理
+			case self::TASK_AUTHER_DETAIL:		// 画像管理者管理(詳細)
+				$task = self::TASK_AUTHOER;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case 'category':			// カテゴリー
-			case 'category_detail':		// カテゴリー(詳細)
-				$task = 'category';
+			case self::TASK_CATEGORY:			// カテゴリー
+			case self::TASK_CATEGORY_DETAIL:		// カテゴリー(詳細)
+				$task = self::TASK_CATEGORY;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case 'comment':		// 画像コメント管理
-			case 'comment_detail':		// 画像コメント管理(詳細)
-				$task = 'comment';
+			case self::TASK_COMMENT:		// 画像コメント管理
+			case self::TASK_COMMENT_DETAIL:		// 画像コメント管理(詳細)
+				$task = self::TASK_COMMENT;
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case 'search':		// 検索条件設定
+			case self::TASK_SEARCH:		// 検索条件設定
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
-			case 'config':		// その他設定
+			case self::TASK_CONFIG:		// その他設定
 				$goWidget = true;		// サブウィジェットを実行するかどうか
 				break;
 			default:

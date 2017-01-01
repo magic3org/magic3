@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2011 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_photo_mainAuthorWidgetContainer.php 4383 2011-10-07 06:25:53Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getCurrentWidgetContainerPath() . '/admin_photo_mainBaseWidgetContainer.php');
@@ -61,7 +61,7 @@ class admin_photo_mainAuthorWidgetContainer extends admin_photo_mainBaseWidgetCo
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'author_detail'){		// 詳細画面
+		if ($task == self::TASK_AUTHER_DETAIL){		// 詳細画面
 			return 'admin_author_detail.tmpl.html';
 		} else {			// 一覧画面
 			return 'admin_author.tmpl.html';
@@ -81,7 +81,7 @@ class admin_photo_mainAuthorWidgetContainer extends admin_photo_mainBaseWidgetCo
 		$localeText = array();
 		$task = $request->trimValueOf('task');
 		
-		if ($task == 'author_detail'){		// 詳細画面
+		if ($task == self::TASK_AUTHER_DETAIL){		// 詳細画面
 			$this->createDetail($request);
 			
 			// テキストをローカライズ

@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -60,7 +60,7 @@ class admin_photo_mainCategoryWidgetContainer extends admin_photo_mainBaseWidget
 	function _setTemplate($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'category_detail'){		// 詳細画面
+		if ($task == self::TASK_CATEGORY_DETAIL){		// 詳細画面
 			return 'admin_category_detail.tmpl.html';
 		} else {
 			return 'admin_category.tmpl.html';
@@ -78,7 +78,7 @@ class admin_photo_mainCategoryWidgetContainer extends admin_photo_mainBaseWidget
 	function _assign($request, &$param)
 	{
 		$task = $request->trimValueOf('task');
-		if ($task == 'category_detail'){	// 詳細画面
+		if ($task == self::TASK_CATEGORY_DETAIL){	// 詳細画面
 			return $this->createDetail($request);
 		} else {			// 一覧画面
 			return $this->createList($request);
