@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -209,8 +209,8 @@ class photo_categoryDb extends BaseDb
 			if ($pcategory != $row['hc_parent_id']) $changePCategory = true;
 			
 			// パスワードが設定されているときは更新
-			$pwd = $row['hc_password'];
-			if (!empty($password)) $pwd = $password;
+			//$pwd = $row['hc_password'];
+			//if (!empty($password)) $pwd = $password;
 		} else {		// 存在しない場合は終了
 			$this->endTransaction();
 			return false;
@@ -248,7 +248,8 @@ class photo_categoryDb extends BaseDb
 		$queryStr .=  '(hc_id, hc_language_id, hc_history_index, hc_name, hc_password, hc_parent_id, hc_sort_order, hc_visible, hc_create_user_id, hc_create_dt) ';
 		$queryStr .=  'VALUES ';
 		$queryStr .=  '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-		$this->execStatement($queryStr, array($row['hc_id'], $row['hc_language_id'], $historyIndex, $name, $pwd, $pcategory, $index, $visible, $userId, $now));
+//		$this->execStatement($queryStr, array($row['hc_id'], $row['hc_language_id'], $historyIndex, $name, $pwd, $pcategory, $index, $visible, $userId, $now));
+		$this->execStatement($queryStr, array($row['hc_id'], $row['hc_language_id'], $historyIndex, $name, $password, $pcategory, $index, $visible, $userId, $now));
 
 		// 新規のシリアル番号取得
 		$queryStr = 'select max(hc_serial) as ns from photo_category ';
