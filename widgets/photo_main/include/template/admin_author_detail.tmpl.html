@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: admin_author_detail.tmpl.html 4281 2011-09-01 10:28:55Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
@@ -56,43 +56,47 @@ function cancelItem(){
 	document.main.submit();
 	return true;
 }
+$(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+});
 //]]>
 </script>
 <div class="m3config_container">
-{MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="act" />
 <input type="hidden" name="task" value="author_detail" />
 <input type="hidden" name="serial" value="{SERIAL}" />
 <input type="hidden" name="password" />
-<table>
-<tr><td><label>{_LC_LABEL_AUTHOR_DETAIL}</label></td>
-<td align="right"><span {_HELP_AUTHOR_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" /></span>
-</td></tr>
-<tr><td colspan="2">
+<!-- m3:PostParam -->
+<h3 class="m3config_h">{_LC_LABEL_AUTHOR_DETAIL}</h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_AUTHOR_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="cancelItem();" value="{_LC_LABEL_GO_BACK}" />
+</div></div></div>
 
-<table class="simple-table" style="margin:0 auto;width:950px;">
+<table id="mainconfig">
     <tbody>
-        <tr class="even">
-	    <td class="table-headside" width="150"><span {_HELP_AUTHOR_NAME}>{_LC_LABEL_NAME}</span></td>
-	    <td><input type="text" name="item_name" value="{NAME}" size="30" maxlength="40" /></td>
+    <tr>
+	    <th><span {_HELP_AUTHOR_NAME}>{_LC_LABEL_NAME}</span></th>
+	    <td><div class="col-sm-4 m3config_item"><input type="text" name="item_name" value="{NAME}" maxlength="40" /></div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_AUTHOR_ACCOUNT}>{_LC_LABEL_ACCOUNT}</span></td>
-	    <td><input type="text" name="item_account" value="{ACCOUNT}" size="30" maxlength="40" /></td>
+    <tr>
+	    <th><span {_HELP_AUTHOR_ACCOUNT}>{_LC_LABEL_ACCOUNT}</span></th>
+	    <td><div class="col-sm-4 m3config_item"><input type="text" name="item_account" value="{ACCOUNT}" maxlength="40" /></div></td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_AUTHOR_PWD}>{_LC_LABEL_PASSWORD}</span></td>
+    <tr>
+	    <th><span {_HELP_AUTHOR_PWD}>{_LC_LABEL_PASSWORD}</span></th>
 	    <td><div style="display:none;"><input type="password" name="item_password_dummy" /></div>
-		<input type="password" name="item_password" value="{PASSWORD}" size="30" maxlength="40" autocomplete="off" /></td>
+		<div class="col-sm-4 m3config_item"><input type="password" name="item_password" value="{PASSWORD}" maxlength="40" autocomplete="off" /></div></td>
 	</tr>
-        <tr>
-	    <td class="table-headside"><span {_HELP_AUTHOR_LOGIN}>{_LC_LABEL_LOGIN_ENABLE}</span></td>
-	    <td><input type="checkbox" name="item_canlogin" {CAN_LOGIN} /></td>
+    <tr>
+	    <th><span {_HELP_AUTHOR_LOGIN}>{_LC_LABEL_LOGIN_ENABLE}</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_canlogin" {CAN_LOGIN} /></label></div></td>
 	</tr>
-        <tr class="even">
-	    <td colspan="2" align="right">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="add_button" visibility="hidden">
 	    <input type="button" class="button" onclick="addItem();" value="{_LC_LABEL_ADD}" />
 </patTemplate:tmpl>
@@ -100,13 +104,8 @@ function cancelItem(){
 		<input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" />
 		<input type="button" class="button" onclick="updateItem();" value="{_LC_LABEL_UPDATE}" />
 </patTemplate:tmpl>
-	    </td>
-	</tr>
-    </tbody>
-</table>
+</div>
 
-</td></tr>
-</table>
 </form>
 </div>
 </patTemplate:tmpl>

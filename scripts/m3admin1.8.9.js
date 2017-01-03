@@ -776,6 +776,7 @@ function m3SetConfigTable(object)
 	tableObj.find('textarea').addClass('form-control');
 	tableObj.find('select').addClass('form-control');
 	tableObj.find('input[type=text]').addClass('form-control');
+	tableObj.find('input[type=password]').addClass('form-control');
 }
 /**
  * 設定入力用サブテーブルのカラー設定
