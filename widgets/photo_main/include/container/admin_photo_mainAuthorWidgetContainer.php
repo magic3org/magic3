@@ -21,7 +21,8 @@ class admin_photo_mainAuthorWidgetContainer extends admin_photo_mainBaseWidgetCo
 {
 	private $serialNo;	// シリアルNo
 	private $serialArray = array();		// 表示されているコンテンツシリアル番号
-	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const DEFAULT_PASSWORD = '********';	// 設定済みを示すパスワード
 	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
@@ -161,6 +162,12 @@ class admin_photo_mainAuthorWidgetContainer extends admin_photo_mainBaseWidgetCo
 		// 総数を取得
 		$totalCount = self::$_mainDb->getAllUserListCount(photo_mainCommonDef::USER_OPTION);
 
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $viewCount);
+		
+		// ページングリンク作成
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+/*		
 		// 表示するページ番号の修正
 		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
@@ -180,13 +187,14 @@ class admin_photo_mainAuthorWidgetContainer extends admin_photo_mainBaseWidgetCo
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
+		
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));
+//		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+//		$this->tmpl->addVar("search_range", "start_no", $startNo);
+//		$this->tmpl->addVar("search_range", "end_no", $endNo);
+//		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
 		
 		// ユーザリストを取得
 		self::$_mainDb->getAllUserList(photo_mainCommonDef::USER_OPTION, $viewCount, $pageNo, array($this, 'userListLoop'));
