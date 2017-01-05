@@ -609,6 +609,12 @@ span[rel="m3help"] { cursor: default; }
 /*.m3config_table td.select {
 	text-align: center;
 }*/
+.m3config_table th.date {
+	width: 100px;
+}
+.m3config_table th.date_narrow {
+	width: 75px;
+}
 .m3config_table th.status {
 	width: 50px;
 }
