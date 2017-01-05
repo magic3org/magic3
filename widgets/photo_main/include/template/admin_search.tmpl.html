@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -24,52 +24,17 @@ function updateItem(){
 // カテゴリ項目を追加
 function addLine()
 {
-	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td align="center"><span class="m3drag_rowno"></span></td>';
+	var lineText = '<tr class="m3drag_row"><td class="m3drag_handle"></td><td><span class="m3drag_rowno"></span></td>';
 	lineText += '<td><select name="item_type[]"><patTemplate:tmpl name="item_type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select></td>';
 	lineText += '<td><select name="item_sel_type[]"><patTemplate:tmpl name="sel_type_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select>';
 	lineText += '<select name="item_category[]"><patTemplate:tmpl name="category_list"><option value="{VALUE}" {SELECTED}>{NAME}</option></patTemplate:tmpl></select></td>';
-	lineText += '<td><input type="text" class="replaceTag" style="width:100%;" readonly /></td>';
-	lineText += '<td align="center"><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td></tr>';
+	lineText += '<td><input type="text" class="replaceTag" readonly /></td>';
+	lineText += '<td><a class="m3drag_delrow" href="#"><img src="{_ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></td></tr>';
 	$('#field_list').append(lineText);
 	
 	// 項目一覧を再設定
-	//setupList();
 	m3SetDragDropTable('field_list', reorder_callback);
 }
-/*
-function setupList()
-{
-	$("#field_list").tableDnD({
-		onDrop: function(table, row){
-			setupNo();
-		},
-		dragHandle: ".m3drag_handle"
-	});
-	$("#field_list tr").hover(function(){
-		$(this.cells[0]).addClass('m3drag_current');
-	}, function() {
-		$(this.cells[0]).removeClass('m3drag_current');
-	});
-	// 項目削除処理
-	$("#field_list tr .m3drag_delrow").click(function(){
-		$(this).parents('.m3drag_row').remove();
-		setupNo();
-	});
-	// インデックスNo再設定
-	setupNo();
-}*/
-/*
-function setupNo()
-{
-	// インデックスNo再設定
-	$("#field_list tr .m3drag_rowno").each(function(index){
-		$(this).text(index + 1);
-	});
-	$("#field_list tr .replaceTag").each(function(index){
-		var replaceTag = '{TAG_START}' + (index + 1) + '{TAG_END}';
-		$(this).val(replaceTag);
-	});
-}*/
 // 項目順変更時処理
 function reorder_callback()
 {
@@ -79,39 +44,38 @@ function reorder_callback()
 	});
 }
 $(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+	
 	// WYSIWYGエディター作成
-	//m3_setHtmlEditor('item_html');
 	m3SetWysiwygEditor('item_html', 200, false, 'layout');
 	
 	// カテゴリ項目作成
-	//setupList();
 	m3SetDragDropTable('field_list', reorder_callback);
 });
 //]]>
 </script>
 <div class="m3config_container">
-{MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main" class="form">
 <input type="hidden" name="task" value="search" />
 <input type="hidden" name="act" />
 <input type="hidden" name="fieldcount" />
-<table>
-<tr><td colspan="2"><label>検索条件</label></td></tr>
-<tr><td colspan="2">
-<table class="simple-table" style="margin:0 auto;width:950px;">
+<h3 class="m3config_h">検索条件</h3>
+
+<table id="mainconfig">
     <tbody>
-        <tr class="even">
-	    <td class="table-headside" width="150"><span {_HELP_IMAGE_FILE}>追加検索条件</span></td>
+    <tr>
+	    <th><span {_HELP_IMAGE_FILE}>追加検索条件</span></th>
 	    <td>
-	    <table id="field_list" class="simple-table-inner" width="100%">
+	    <table id="field_list" class="simple-table-inner">
 	    <thead>
-	    <tr><th width="35">移動</th><th width="30">No</th><th width="150">種別</th><th width="300">選択方法/親カテゴリー</th><th width="100">埋め込みタグ</th><th>操作</th></tr>
+	    <tr><th style="width:35px;">移動</th><th style="width:35px;">No</th><th>種別</th><th>選択方法/親カテゴリー</th><th>埋め込みタグ</th><th style="width:35px;">操作</th></tr>
 	    </thead><tbody>
 	    <patTemplate:tmpl name="field_list">
             <tr class="m3drag_row">
 	    <td class="m3drag_handle"></td>
-	    <td align="center"><span class="m3drag_rowno"></span></td>
+	    <td><span class="m3drag_rowno"></span></td>
 	    <td><select name="item_type[]">
 	       <patTemplate:tmpl name="item_type_list2">
                <option value="{VALUE}" {SELECTED}>{NAME}</option>
@@ -127,32 +91,27 @@ $(function(){
                <option value="{VALUE}" {SELECTED}>{NAME}</option>
 	       </patTemplate:tmpl>
             </select></td>
-	    <td><input type="text" class="replaceTag" style="width:100%;" readonly /></td>
-	    <td align="center"><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete.png" width="16" height="16" border="0" alt="削除" title="削除" /></a></td>
+	    <td><input type="text" class="replaceTag" readonly /></td>
+	    <td><a class="m3drag_delrow" href="#"><img src="{ROOT_URL}/images/system/delete32.png" width="32" height="32" alt="削除" title="削除" rel="m3help" /></a></td>
 	    </tr>
 	    </patTemplate:tmpl>
 	    </tbody></table>
 	    <div><input type="button" class="button" onclick="addLine();" value="追加" />&nbsp;&nbsp;{USER_CONTENT_MESSAGE}</div>
 	    </td>
 	</tr>
-        <tr>
-	    <td class="table-headside">規定タグID</td>
+    <tr>
+	    <th>規定タグID</th>
 	    <td>{TAG_ID_STR}</td>
 	</tr>
-        <tr class="even">
-	    <td class="table-headside"><span {_HELP_TAB_TEMPLATE}>テンプレート</span></td>
-	    <td><textarea name="item_html">{HTML}</textarea></td>
-	</tr>
-	<tr>
-	    <td align="right" colspan="2">
-		<input type="button" class="button" onclick="updateItem();" value="更新" />
-	    </td>
+    <tr>
+	    <th><span {_HELP_TAB_TEMPLATE}>テンプレート</span></th>
+	    <td class="ckeditor"><textarea name="item_html">{HTML}</textarea></td>
 	</tr>
     </tbody>
 </table>
-</td></tr>
-</table>
-
+<div class="well m3config_update_buttons">
+<input type="button" class="button" onclick="updateItem();" value="更新" />
+</div>
 </form>
 </div>
 </patTemplate:tmpl>
