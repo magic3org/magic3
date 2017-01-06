@@ -75,10 +75,10 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		switch ($task){
 			case self::TASK_IMAGEBROWSE:
 			default:
-				$filename = 'imagebrowse.tmpl.html';
+				$filename = 'admin_imagebrowse.tmpl.html';
 				break;
 			case self::TASK_IMAGEBROWSE_DETAIL:
-				$filename = 'imagebrowse_detail.tmpl.html';
+				$filename = 'admin_imagebrowse_detail.tmpl.html';
 				break;
 			case self::TASK_IMAGEBROWSE_DIRECT:
 				$filename = '';
