@@ -124,9 +124,9 @@ $(function(){
     <patTemplate:tmpl name="itemlist">
     <tr>
 	    <td><input type="checkbox" name="item{INDEX}_selected" /></td>
-	    <td>{RATE}</td>
+	    <td><div class="form-control-static m3config_item">{RATE}</div></td>
 	    <td><a href="#" onclick="editItemBySerial({SERIAL});">{CONTENT}</a></td>
-	    <td>{CODE}</td>
+	    <td><div class="form-control-static m3config_item">{CODE}</div></td>
 	    <td>{REG_DATE}</td>
 	</tr>
 	</patTemplate:tmpl>
