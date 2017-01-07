@@ -45,7 +45,9 @@ function recreateImage(){
 	return true;
 }
 $(function(){
-	var dummy;
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+	
 <patTemplate:tmpl name="show_calender">
 	Calendar.setup({
 		inputField  : "item_date",         // ID of the input field
@@ -60,38 +62,36 @@ $(function(){
 //]]>
 </script>
 <div class="m3config_container">
-{MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="imagebrowse_detail" />
 <input type="hidden" name="act" />
 <input type="hidden" name="serial" value="{SERIAL}" />
-<table>
-<tr><td>
-<label><span {_HELP_IMAGEBROWSE_DETAIL}>画像詳細</span></label>
-</td>
-<td align="right"><patTemplate:tmpl name="cancel_button" visibility="visible"><span {_HELP_IMAGEBROWSE_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span></patTemplate:tmpl>
-</td></tr>
-<tr><td colspan="2">
-<table class="simple-table" style="margin: 0 auto;width:950px;">
+
+<h3 class="m3config_h"><span {_HELP_IMAGEBROWSE_DETAIL}>画像詳細</span></h3>
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_IMAGEBROWSE_BUTTONS2}><div class="btn-group">
+<patTemplate:tmpl name="cancel_button" visibility="visible"><span {_HELP_IMAGEBROWSE_RET_BTN}><input type="button" class="button" onclick="cancelItem();" value="戻る" /></span></patTemplate:tmpl>
+</div></div></div>
+
+<table id="mainconfig">
     <tbody>
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_PUBLIC_ID}>公開ID</span></th>
-	    <td width="450">{PHOTO_ID}</td>
+	    <td style="width:450px;"><div class="form-control-static m3config_item">{PHOTO_ID}</div></td>
 	    <th><span {_HELP_IMAGEBROWSE_CODE}>画像コード</span></th>
-	    <td>{CODE}</td>
+	    <td><div class="form-control-static m3config_item">{CODE}</div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_TITLE}>タイトル名</span></th>
-	    <td ><input type="text" name="item_name" value="{NAME}" maxlength="40" style="width:100%;"/><br />元のファイル名：{ORIGINAL_NAME}</td>
+	    <td ><input type="text" name="item_name" value="{NAME}" maxlength="40" /><div class="form-control-static m3config_item linebreak">元のファイル名：{ORIGINAL_NAME}</div></td>
 	    <th><span {_HELP_IMAGEBROWSE_AUTHOR}>撮影者</span></th>
-	    <td>{AUTHOR}</td>
+	    <td><div class="form-control-static m3config_item">{AUTHOR}</div></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_VISIBLE}>公開</span></th>
-	    <td><input type="checkbox" name="item_visible" {VISIBLE} /></td>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_visible" {VISIBLE} /></label></div></td>
 	    <th><span {_HELP_IMAGEBROWSE_SORT_ORDER}>表示順</span></th>
-	    <td><input type="text" name="item_sort_order" value="{SORT_ORDER}" size="10" maxlength="10" onkeypress="return m3_numericKey(event,true);" /></td>
+	    <td><div class="col-sm-6 m3config_item"><input type="text" name="item_sort_order" value="{SORT_ORDER}" maxlength="10" onkeypress="return m3_numericKey(event,true);" /></div></td>
 	    <!--<th><span {_HELP_IMAGEBROWSE_LIMITED}>ユーザ制限</span></th>
 	    <td><input type="checkbox" name="item_limited" {SEL_ITEM_LIMITED} /></td>-->
 	</tr>
@@ -101,42 +101,42 @@ $(function(){
 	</tr>
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_FORMAT}>フォーマット</span></th>
-	    <td>{FORMAT}</td>
+	    <td><div class="form-control-static m3config_item">{FORMAT}</div></td>
 	    <th><span {_HELP_IMAGEBROWSE_SIZE}>画像サイズ(横x縦)</span></th>
-	    <td>{SIZE}</td>
+	    <td><div class="form-control-static m3config_item">{SIZE}</div></td>
 	</tr>
 	<patTemplate:tmpl name="show_photo_date">
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_DATE}>撮影日</span></th>
-	    <td colspan="3"><input type="text" id="item_date" name="item_date" value="{DATE}" size="15" maxlength="10" /><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" border="0" /></a></td>
+	    <td colspan="3"><div class="col-sm-1 m3config_item" style="width:8em;"><input type="text" id="item_date" name="item_date" value="{DATE}" maxlength="10" /></div><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" /></a></td>
 	</tr>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_photo_location">
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_LOCATION}>撮影場所</span></th>
-	    <td colspan="3"><input type="text" name="item_location" value="{LOCATION}" size="120" maxlength="150" style="width:100%;" /></td>
+	    <td colspan="3"><input type="text" name="item_location" value="{LOCATION}" maxlength="150" /></td>
 	</tr>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_photo_camera">
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_CAMERA}>カメラ</span></th>
-	    <td colspan="3"><input type="text" name="item_camera" value="{CAMERA}" size="120" maxlength="150" style="width:100%;" /></td>
+	    <td colspan="3"><input type="text" name="item_camera" value="{CAMERA}" maxlength="150" /></td>
 	</tr>
 	</patTemplate:tmpl>
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_SUMMARY}>概要</span></th>
-	    <td colspan="3"><input type="text" name="item_summary" value="{SUMMARY}" size="120" maxlength="150" style="width:100%;" /></td>
+	    <td colspan="3"><input type="text" name="item_summary" value="{SUMMARY}" maxlength="150" /></td>
 	</tr>
 	<patTemplate:tmpl name="show_photo_description">
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_DESCRIPTION}>説明</span></th>
-	    <td colspan="3"><textarea name="item_description" style="width:100%;height:100%;">{DESCRIPTION}</textarea></td>
+	    <td colspan="3"><textarea name="item_description">{DESCRIPTION}</textarea></td>
 	</tr>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_photo_keyword">
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_KEYWORD}>検索キーワード</span></th>
-	    <td colspan="3" height="50"><textarea name="item_keyword" style="width:100%;height:100%;">{KEYWORD}</textarea></td>
+	    <td colspan="3" height="50"><textarea name="item_keyword">{KEYWORD}</textarea></td>
 	</tr>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="show_photo_category">
@@ -144,33 +144,32 @@ $(function(){
 	    <th><span {_HELP_IMAGEBROWSE_CATEGORY}>カテゴリー</span></th>
 	    <td colspan="3">
     <patTemplate:tmpl name="category">
+	<div class="col-sm-4 m3config_item justify-3">
     <select name="item_category{INDEX}">
         <option value="0">-- 未選択 --</option>
         <patTemplate:tmpl name="category_list">
 		<option value="{VALUE}" {SELECTED}>{NAME}</option>
 	</patTemplate:tmpl>
     </select>
+	</div>
     </patTemplate:tmpl>
 	    </td>
 	</tr>
 	</patTemplate:tmpl>
     <tr>
 	    <th><span {_HELP_IMAGEBROWSE_PUBLIC_URL}>公開画像</span><br /><input type="button" class="button" onclick="recreateImage();" value="再作成" /></th>
-	    <td colspan="3">サイズ調整画像：{PUBLIC_IMAGE_URL}<br />サムネール：{THUMBNAIL_URL}
+	    <td colspan="3"><div class="form-control-static m3config_item linebreak">サイズ調整画像：{PUBLIC_IMAGE_URL}</div><div class="form-control-static m3config_item linebreak">サムネール：{THUMBNAIL_URL}</div>
 	    </td>
 	</tr>
-	<tr>
-	<td align="right" colspan="4">
+    </tbody>
+</table>
+<div class="well m3config_update_buttons">
 <patTemplate:tmpl name="update_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 		<input type="button" class="button" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
-	</td>
-	</tr>
-    </tbody>
-</table>
-</td></tr>
-</table>
+</div>
+
 </form>
 </div>
 </patTemplate:tmpl>

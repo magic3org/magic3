@@ -737,6 +737,14 @@ span[rel="m3help"] { cursor: default; }
 	padding-left: 5px;
 	padding-right: 0;
 }
+/* 行を3等分 */
+.m3config_table td .m3config_item.justify-3 {
+	padding-left: 5px;
+	padding-right: 0;
+}
+.m3config_table td .m3config_item.justify-3:nth-child(3n+1) {
+	padding-left: 0;
+}
 .m3config_item.form-control-static {
 	padding-left: 3px;
 	padding-right: 3px;
