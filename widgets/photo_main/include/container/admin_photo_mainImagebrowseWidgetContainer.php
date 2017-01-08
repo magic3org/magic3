@@ -24,13 +24,13 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 	private $permitMimeType;			// アップロードを許可する画像タイプ
 	private $fileListAdded;				// 一覧にデータが追加されたかどうか
 	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
-	const FILE_ICON_FILE = '/images/system/tree/file.png';			// ファイルアイコン
-	const FOLDER_ICON_FILE = '/images/system/tree/folder.png';		// ディレクトリアイコン
-	const PARENT_ICON_FILE = '/images/system/tree/parent.png';		// 親ディレクトリアイコン
+	const FILE_ICON_FILE = '/images/system/tree/file_inactive32.png';			// ファイルアイコン
+	const FOLDER_ICON_FILE = '/images/system/tree/folder32.png';		// ディレクトリアイコン
+	const PARENT_ICON_FILE = '/images/system/tree/parent32.png';		// 親ディレクトリアイコン
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
-	const ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
-	const INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
-	const ICON_SIZE = 16;		// アイコンのサイズ
+	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
+	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
+	const ICON_SIZE = 32;		// アイコンのサイズ
 	const LIST_ICON_SIZE = 64;		// リスト用アイコンのサイズ
 	const CSS_FILE = '/swfupload2.5/css/default.css';		// CSSファイルのパス
 //	const PHOTO_DIR = '/etc/photo';		// マスター画像格納ディレクトリ
@@ -444,9 +444,9 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
 		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));// 全 x件
 		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
-		$this->tmpl->addVar("search_range", "start_no", $startNo);
-		$this->tmpl->addVar("search_range", "end_no", $endNo);
-		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
+//		$this->tmpl->addVar("search_range", "start_no", $startNo);
+//		$this->tmpl->addVar("search_range", "end_no", $endNo);
+//		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
 		
 		// ファイル一覧を作成
 		$this->createFileList($path, $fileList, $startNo, $endNo);
@@ -785,7 +785,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			$iconTitle = $file;
 			$iconUrl = $this->gEnv->getRootUrl() . self::PARENT_ICON_FILE;
 			$iconTag = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">';
-			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+			$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			$iconTag .= '</a>';
 			
 			$checkDisabled = 'disabled ';
@@ -828,7 +828,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 				$iconTitle = $this->convertToDispString($file);
 				$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
 				$iconTag = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">';
-				$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+				$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 				$iconTag .= '</a>';
 			
 				$fileLink = '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $this->convertToDispString($file) . '</a>';
@@ -880,12 +880,12 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 				if (file_exists($thumbnailPath)){	// サムネールが存在する場合
 					$iconUrl = photo_mainCommonDef::getThumbnailUrl($file);
 					$iconTag = '<a href="#" onclick="editItemBySerial(' . $serial . ');return false;">';
-					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::LIST_ICON_SIZE . '" height="' . self::LIST_ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::LIST_ICON_SIZE . '" height="' . self::LIST_ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					$iconTag .= '</a>';
 				} else {
 					$iconUrl = $this->gEnv->getRootUrl() . self::FILE_ICON_FILE;
 					$iconTag = '<a href="#" onclick="editItemBySerial(' . $serial . ');return false;">';
-					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+					$iconTag .= '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 					$iconTag .= '</a>';
 				}
 				
@@ -908,7 +908,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 					$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
 					$iconTitle = $this->_('Unpublished');
 				}
-				$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+				$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 			}
 	
 			// ファイル更新日時

@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -13,15 +13,14 @@
 <patTemplate:tmpl name="_widget">
 <script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/swfupload.js"></script>
 <script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/plugins/swfupload.cookies.js"></script>
-<!--<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/plugins/swfupload.swfobject.js"></script>-->
 <script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/plugins/swfupload.queue.js"></script>
 <script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/fileprogress.js"></script>
 <script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/handlers.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(function(){
-	// スクロールバー付きのテーブルを作成
-	m3_tableWithScrollbar('filelist', -1, 0);
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
 	
 	// ファイルアップロード機能を作成
 	var uploadObj = new SWFUpload({
@@ -138,7 +137,6 @@ function createDir()
 //]]>
 </script>
 <div class="m3config_container">
-{MENU_ITEMS}
 <!-- m3:ErrorMessage -->
 <form method="post" name="main">
 <input type="hidden" name="task" value="imagebrowse" />
@@ -146,45 +144,45 @@ function createDir()
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="path" value="{PATH}" />
-<table>
-<tr><td>
-<label><span {_HELP_IMAGEBROWSE_PATH}>{_LC_LABEL_PATH}</span> {PATH_LINK}</label>
-</td><td align="right"><span {_HELP_USERLIST_EDIT_BTN}><input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /></span><span {_HELP_IMAGEBROWSE_DEL_BTN}><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_DISABLED}/></span></td></tr>
-<tr><td colspan="2">
-<table id="filelist" class="simple-table" style="width:100%;">
+
+<h3 class="m3config_h" style="margin-right:20px;"><span {_HELP_IMAGEBROWSE_LIST}>画像一覧</span></h3><span {_HELP_IMAGEBROWSE_PATH}>{_LC_LABEL_PATH}</span>{PATH_LINK}
+<div class="m3config_h_side_buttons pull-right"><div {_HELP_IMAGEBROWSE_BUTTONS}><div class="btn-group">
+<input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_DISABLED}/>
+</div></div></div>
+
+<table id="mainconfig">
     <thead>
-        <tr>
-	    <th width="35"><span {_HELP_IMAGEBROWSE_CHECK}>{_LC_LABEL_CHECK}</span></th>
-	    <th width="30" style="border-right:none;"></th>
-	    <th style="border-left:none;"><span {_HELP_IMAGEBROWSE_FILENAME}>{_LC_LABEL_FILENAME}</span></th>
-	    <th width="35"><span {_HELP_IMAGEBROWSE_STATUS}>{_LC_LABEL_STATUS}</span></th>
+    <tr>
+	    <th class="select"><span {_HELP_IMAGEBROWSE_CHECK}>{_LC_LABEL_CHECK}</span></th>
+	    <th style="border-right:none;width:50px;"></th>
+	    <th style="border-left:none;width:300px;"><span {_HELP_IMAGEBROWSE_FILENAME}>{_LC_LABEL_FILENAME}</span></th>
+	    <th class="status"><span {_HELP_IMAGEBROWSE_STATUS}>{_LC_LABEL_STATUS}</span></th>
 	    <th width="10%"><span {_HELP_IMAGEBROWSE_IMAGE_CODE}>{_LC_LABEL_IMAGE_CODE}</span></th>
-	    <th width="7%"><span {_HELP_IMAGEBROWSE_SIZE}>{_LC_LABEL_SIZE}</span></th>
-	    <th width="7%"><span {_HELP_IMAGEBROWSE_VIEW_COUNT}>{_LC_LABEL_VIEW_COUNT}</span></th>
-	    <th width="7%"><span {_HELP_IMAGEBROWSE_RATE}>{_LC_LABEL_RATE}</span></th>
-	    <th width="13%"><span {_HELP_IMAGEBROWSE_DATE}>{_LC_LABEL_DATE}</span></th>
+	    <!--<th width="7%"><span {_HELP_IMAGEBROWSE_SIZE}>{_LC_LABEL_SIZE}</span></th>-->
+	    <th><span {_HELP_IMAGEBROWSE_VIEW_COUNT}>{_LC_LABEL_VIEW_COUNT}</span></th>
+	    <th class="status"><span {_HELP_IMAGEBROWSE_RATE}>{_LC_LABEL_RATE}</span></th>
+	    <th class="date_narrow"><span {_HELP_IMAGEBROWSE_DATE}>{_LC_LABEL_DATE}</span></th>
 	</tr>
     </thead>
     <tbody>
-        <patTemplate:tmpl name="file_list">
-        <tr>
-	    <td align="center"><input type="checkbox" name="item{INDEX}_selected" {CHECK_DISABLED}/><input type="hidden" name="item{INDEX}_name" value="{NAME}" /></td>
-	    <td align="center" style="border-right:none;">{ICON}</td>
+    <patTemplate:tmpl name="file_list">
+    <tr>
+	    <td><input type="checkbox" name="item{INDEX}_selected" {CHECK_DISABLED}/><input type="hidden" name="item{INDEX}_name" value="{NAME}" /></td>
+	    <td style="border-right:none;text-align:center;">{ICON}</td>
 	    <td style="border-left:none;">{FILENAME}{FILENAME_OPTION}</td>
-	    <td align="center">{STATUS}</td>
-	    <td align="center">{CODE}</td>
-	    <td align="right">{SIZE}</td>
-	    <td align="right">{VIEW_COUNT}</td>
-	    <td align="center">{RATE}</td>
-	    <td align="center">{DATE}</td>
+	    <td>{STATUS}</td>
+	    <td>{CODE}</td>
+	    <!--<td>{SIZE}</td>-->
+	    <td class="number">{VIEW_COUNT}</td>
+	    <td>{RATE}</td>
+	    <td>{DATE}</td>
 	</tr>
 	</patTemplate:tmpl>
     </tbody>
 </table>
-</td></tr>
-<tr><td>{PAGE_LINK}</td><td align="right"><patTemplate:tmpl name="search_range" visibility="hidden"><label>{_LC_LABEL_RANGE}&nbsp;{START_NO}-{END_NO}</label>&nbsp;&nbsp;</patTemplate:tmpl><label>{TOTAL_COUNT}</label></td></tr>
-<tr><td colspan="2">
+{PAGE_LINK}
 
+<!--
 <table><tr><td valign="top">
 <label><span {_HELP_IMAGEBROWSE_UPLOAD}>{_LC_LABEL_UPLOAD}</span></label>
 <table class="simple-table" width="500">
@@ -195,7 +193,7 @@ function createDir()
 <div id="divStatus">0 Files Uploaded</div>
 </td></tr>
 <tr><td colspan="2">
-<!-- ### buttons must place at 'button_placeholder_id' tag position. ### -->
+
 <span id="spanButtonPlaceholder"></span>
 <input id="btnUpload" type="button" value="{_LC_LABEL_SELECT_FILE}" />
 <input id="btnCancel" type="button" value="{_LC_LABEL_CANCEL}" disabled="disabled" />
@@ -222,9 +220,8 @@ function createDir()
 </table>
 </td></tr>
 </table>
+-->
 
-</td></tr>
-</table>
 </form>
 </div>
 </patTemplate:tmpl>
