@@ -20,6 +20,7 @@ class AnalyzeManager extends Core
 {
 	private $db;						// DBオブジェクト
 	private $analyticsDb;
+	const NOT_FOUND_BROWSER_IMAGE = 'noimage.png';			// ブラウザアイコンが見つからなかった場合のアイコン
 	const CF_LAST_DATE_CALC_PV	= 'last_date_calc_pv';	// ページビュー集計の最終更新日
 	const MAX_CALC_DAYS = 30;					// 最大集計日数
 //	const CRAWLER_DETECT_SCRIPT_DIR = '/Crawler-Detect-1.2.2/';		// クローラー解析スクリプトディレクトリ
@@ -222,6 +223,7 @@ $agent = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like G
 				$resultObj['browser'] = strtolower($infoObj['browser']);
 				$resultObj['version'] = strtolower($infoObj['version']);
 				$resultObj['icon'] = $this->_getBrowserIconFile($resultObj['browser']);
+				if (empty($resultObj['icon'])) $resultObj['icon'] = self::NOT_FOUND_BROWSER_IMAGE;			// ブラウザアイコンが見つからなかった場合
 				/*
 				require_once(M3_SYSTEM_LIB_PATH . '/UserAgentParser.php');
 				$retObj = UserAgentParser::getBrowser($agent);
