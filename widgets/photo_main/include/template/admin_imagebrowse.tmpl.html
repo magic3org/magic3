@@ -18,58 +18,6 @@
 <script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/handlers.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-$(function(){
-	// テーブルを作成
-	m3SetConfigTable('mainconfig');
-	
-	// ファイルアップロード機能を作成
-	var uploadObj = new SWFUpload({
-		// Backend Settings
-		flash_url : "{_ROOT_URL}/scripts/swfupload2.5/swfupload.swf",
-		upload_url: "{UPLOAD_URL}",
-		file_post_name : "Filedata",
-		
-		// File Upload Settings
-		//file_size_limit : "500",	// 500 kb
-		file_size_limit : "10 MB",	// 10 MB
-		file_types : "*.*",
-		file_types_description : "All Files",
-		file_upload_limit : "100",
-		file_queue_limit : "0",
-		
-		custom_settings : {
-			progressTarget : "fsUploadProgress",
-			cancelButtonId : "btnCancel"
-		},
-		debug: false,
-
-		// Button Settings
-		button_placeholder_id : "spanButtonPlaceholder",
-		button_width: 100,
-		button_height: 22,
-		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
-		button_cursor: SWFUpload.CURSOR.HAND,
-
-		// The event handler functions are defined in handlers.js
-		swfupload_loaded_handler : swfUploadLoaded,
-		swfupload_pre_load_handler : swfUploadPreLoad,
-		swfupload_load_failed_handler : swfUploadLoadFailed,
-		file_queued_handler : fileQueued,
-		file_queue_error_handler : fileQueueError,
-		file_dialog_complete_handler : fileDialogComplete,
-		upload_start_handler : uploadStart,
-		upload_progress_handler : uploadProgress,
-		upload_error_handler : uploadError,
-		upload_success_handler : uploadSuccess,
-		upload_complete_handler : function(file){
-			if (this.getStats().files_queued == 0){
-				document.getElementById(this.customSettings.cancelButtonId).disabled = true;
-				updateList();
-			}
-		},
-		queue_complete_handler : queueComplete	// Queue plugin event
-	});
-});
 function updateList()
 {
 	if (!window.confirm('{_LC_MSG_FILE_UPLOAD}')) return false;
@@ -127,13 +75,113 @@ function editItemBySerial(serial){
 	document.main.serial.value = serial;
 	document.main.submit();
 }
-function createDir()
+// ディレクトリ作成ダイアログ表示
+function showCreateDir()
 {
-	if (!window.confirm('{_LC_MSG_CREATE_DIRECTORY}')) return false;
+	var dialogText = '';
+	
+	dialogText += '{_LC_LABEL_DIRECTORY_NAME}<input type="text" id="dir_name" name="dir_name" class="form-control" value="{DIRECTORY_NAME}" maxlength="100" />';
+
+	// ダイアログ作成
+	BootstrapDialog.show({
+		title: '{_LC_LABEL_CREATE_DIRECTORY}',
+		message: dialogText,
+		closable: false,
+		nl2br: false,
+		onshown: function(dialog) {		// 起動時の処理
+			// 画像の部分選択機能作成
+			//initJcrop();
+		},
+		buttons: [{
+			id: 'cancel',
+			label: 'キャンセル',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}, {
+			id: 'ok',
+			label: '{_LC_LABEL_CREATE}',
+			cssClass: 'btn-primary',
+			action: function(dialog) {
+				// 入力状態のチェック
+				var value = $('#dir_name').val();
+				if (value){
+					dialog.close();
+					
+					// ディレクトリ名を送信
+					createDir(value);
+				} else {
+					alert("ディレクトリ名を入力してください");
+				}
+			}
+		}]
+	});
+}
+// ディレクトリを作成
+function createDir(dir)
+{
+	document.main.directory_name.value = dir;
 	document.main.act.value = 'createdir';
 	document.main.submit();
 	return true;
 }
+$(function(){
+	// テーブルを作成
+	m3SetConfigTable('mainconfig');
+	
+	// ディレクトリ作成ボタンの処理
+	$("#createdirbutton").click(function (){
+		showCreateDir();
+	});
+	
+	// ファイルアップロード機能を作成
+	var uploadObj = new SWFUpload({
+		// Backend Settings
+		flash_url : "{_ROOT_URL}/scripts/swfupload2.5/swfupload.swf",
+		upload_url: "{UPLOAD_URL}",
+		file_post_name : "Filedata",
+		
+		// File Upload Settings
+		//file_size_limit : "500",	// 500 kb
+		file_size_limit : "10 MB",	// 10 MB
+		file_types : "*.*",
+		file_types_description : "All Files",
+		file_upload_limit : "100",
+		file_queue_limit : "0",
+		
+		custom_settings : {
+			progressTarget : "fsUploadProgress",
+			cancelButtonId : "btnCancel"
+		},
+		debug: false,
+
+		// Button Settings
+		button_placeholder_id : "spanButtonPlaceholder",
+		button_width: 100,
+		button_height: 22,
+		button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+		button_cursor: SWFUpload.CURSOR.HAND,
+
+		// The event handler functions are defined in handlers.js
+		swfupload_loaded_handler : swfUploadLoaded,
+		swfupload_pre_load_handler : swfUploadPreLoad,
+		swfupload_load_failed_handler : swfUploadLoadFailed,
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : function(file){
+			if (this.getStats().files_queued == 0){
+				document.getElementById(this.customSettings.cancelButtonId).disabled = true;
+				updateList();
+			}
+		},
+		queue_complete_handler : queueComplete	// Queue plugin event
+	});
+});
 //]]>
 </script>
 <div class="m3config_container">
@@ -144,10 +192,16 @@ function createDir()
 <input type="hidden" name="serial" />
 <input type="hidden" name="seriallist" value="{SERIAL_LIST}" />
 <input type="hidden" name="path" value="{PATH}" />
+<input type="hidden" name="directory_name" />
 
 <h3 class="m3config_h" style="margin-right:20px;"><span {_HELP_IMAGEBROWSE_LIST}>画像一覧</span></h3><span {_HELP_IMAGEBROWSE_PATH}>{_LC_LABEL_PATH}</span>{PATH_LINK}
 <div class="m3config_h_side_buttons pull-right"><div {_HELP_IMAGEBROWSE_BUTTONS}><div class="btn-group">
 <input type="button" class="button" onclick="editItem();" value="{_LC_LABEL_EDIT}" /><input type="button" class="button" onclick="delItem();" value="{_LC_LABEL_DELETE}" {DEL_DISABLED}/>
+</div></div></div>
+
+<div class="m3config_h_side_buttons pull-right" style="margin-right:10px;">
+<div {_HELP_IMAGEBROWSE_BUTTONS2}><div class="btn-group">
+<input type="button" class="button" onclick="previewInOtherWindow();" value="アップロード" /><a href="javascript:void(0);" id="createdirbutton" class="button" role="button" rel="m3help" data-container="body" title="ディレクトリを作成"><i class="glyphicon glyphicon-folder-close"></i></a>
 </div></div></div>
 
 <table id="mainconfig">
@@ -213,11 +267,8 @@ function createDir()
 </td></tr>
 </table>
 </td><td valign="top">
-<label><span {_HELP_IMAGEBROWSE_CRATE_DIRECTORY}>{_LC_LABEL_CREATE_DIRECTORY}</span></label>
-<table class="simple-table" width="500">
-<tr><td class="table-headside" width="200">{_LC_LABEL_DIRECTORY_NAME}</td><td><input type="text" name="directory_name" value="{DIRECTORY_NAME}" size="60" maxlength="100" style="width:100%;" /></td></tr>
-<tr class="even"><td colspan="2" align="right"><input type="button" class="button" onclick="createDir();" value="{_LC_LABEL_CREATE}" /></td></tr>
-</table>
+<label></label>
+
 </td></tr>
 </table>
 -->
