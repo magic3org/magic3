@@ -11,11 +11,6 @@
  * @link       http://www.magic3.org
  */
 <patTemplate:tmpl name="_widget">
-<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/swfupload.js"></script>
-<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/plugins/swfupload.cookies.js"></script>
-<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/plugins/swfupload.queue.js"></script>
-<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/fileprogress.js"></script>
-<script type="text/javascript" src="{_ROOT_URL}/scripts/swfupload2.5/handlers.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 function updateList()
@@ -88,10 +83,6 @@ function showCreateDir()
 		message: dialogText,
 		closable: false,
 		nl2br: false,
-		onshown: function(dialog) {		// 起動時の処理
-			// 画像の部分選択機能作成
-			//initJcrop();
-		},
 		buttons: [{
 			id: 'cancel',
 			label: 'キャンセル',
@@ -125,6 +116,43 @@ function createDir(dir)
 	document.main.submit();
 	return true;
 }
+// ファイルアップロードダイアログ表示
+function showFileUpload()
+{
+	var dialogText = '';
+	
+	dialogText += '<div id="uploader_image">{UPLOAD_AREA}</div>';
+
+	// ダイアログ作成
+	BootstrapDialog.show({
+		title: '{_LC_LABEL_UPLOAD}',
+		message: dialogText,
+		closable: false,
+		nl2br: false,
+		onshown: function(dialog) {
+			// 画像アップローダー作成
+			m3CreateDragDropUploadFile('uploader_image', '{UPLOAD_IMAGE_URL}', uploader_image_onSuccess);
+		},
+		buttons: [{
+			id: 'cancel',
+			label: 'キャンセル',
+			action: function(dialog) {
+				dialog.close();
+			}
+		}]
+	});
+}
+function uploader_image_onSuccess(files, data)
+{
+/*	// 画像を読み込む
+	$('#useravatar_preview').attr('src', data.url).load(function(){
+		m3AdjustParentWindow();// 親ウィンドウリサイズ
+	});
+	
+	// 編集フラグを更新
+	document.main.useravatar_updated.value = '1';*/
+	alert("完了");
+}
 $(function(){
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
@@ -153,7 +181,7 @@ $(function(){
 
 <div class="m3config_h_side_buttons pull-right" style="margin-right:10px;">
 <div {_HELP_IMAGEBROWSE_BUTTONS2}><div class="btn-group">
-<input type="button" class="button" onclick="previewInOtherWindow();" value="アップロード" /><a href="javascript:void(0);" id="createdirbutton" class="button" role="button" rel="m3help" data-container="body" title="ディレクトリを作成"><i class="glyphicon glyphicon-folder-close"></i></a>
+<input type="button" class="button" onclick="showFileUpload();" value="アップロード" /><a href="javascript:void(0);" id="createdirbutton" class="button" role="button" rel="m3help" data-container="body" title="ディレクトリを作成"><i class="glyphicon glyphicon-folder-close"></i></a>
 </div></div></div>
 
 <table id="mainconfig">
@@ -187,40 +215,6 @@ $(function(){
     </tbody>
 </table>
 {PAGE_LINK}
-
-<!--
-<table><tr><td valign="top">
-<label><span {_HELP_IMAGEBROWSE_UPLOAD}>{_LC_LABEL_UPLOAD}</span></label>
-<table class="simple-table" width="500">
-<tr><td class="table-headside" width="200">{_LC_LABEL_FILESIZE}</td><td align="center">10 MB
-</td></tr>
-<tr class="even"><td colspan="2">
-<div class="fieldset flash" id="fsUploadProgress"></div>
-<div id="divStatus">0 Files Uploaded</div>
-</td></tr>
-<tr><td colspan="2">
-
-<span id="spanButtonPlaceholder"></span>
-<input id="btnUpload" type="button" value="{_LC_LABEL_SELECT_FILE}" />
-<input id="btnCancel" type="button" value="{_LC_LABEL_CANCEL}" disabled="disabled" />
-<noscript>
-	We're sorry.  SWFUpload could not load.  You must have JavaScript enabled to enjoy SWFUpload.
-</noscript>
-<div id="divLoadingContent" class="content" style="display: none;">
-	SWFUpload is loading. Please wait a moment...
-</div>
-<div id="divLongLoading" class="content" style="display: none;">
-	SWFUpload is taking a long time to load or the load has failed.  Please make sure that the Flash Plugin is enabled and that a working version of the Adobe Flash Player is installed.
-</div>
-<div id="divAlternateContent" class="content" style="display: none;">
-	We're sorry.  SWFUpload could not load.  You may need to install or upgrade Flash Player.
-	Visit the <a href="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash">Adobe website</a> to get the Flash Player.
-</div>
-</td></tr>
-</table>
-
--->
-
 </form>
 </div>
 </patTemplate:tmpl>

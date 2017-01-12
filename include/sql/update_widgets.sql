@@ -188,7 +188,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'photo_main';
 INSERT INTO _widgets
 (wd_id,        wd_name,                     wd_type, wd_content_type, wd_category_id, wd_edit_content, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_use_ajax, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('photo_main', 'フォトギャラリー-メイン', 'photo', 'photo',         'photo',        true,         'bootstrap', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フォトギャラリーを表示する。', 'jquery.raty', 'search=jquery.tablednd;imagebrowse_detail=ckeditor_m3toolbar;',  true,     true,        true,               false,true,       1, 2, '2017-01-08', now(),    now());
+('photo_main', 'フォトギャラリー-メイン', 'photo', 'photo',         'photo',        true,         'bootstrap', '2.0.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'フォトギャラリーを表示する。', 'jquery.raty', 'search=jquery.tablednd;imagebrowse=jquery.uploadfile;imagebrowse_detail=ckeditor_m3toolbar;',  true,     true,        true,               false,true,       1, 2, '2017-01-08', now(),    now());
 DELETE FROM _widgets WHERE wd_id = 'photo_new';
 INSERT INTO _widgets
 (wd_id,       wd_name,                   wd_category_id, wd_template_type, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                       wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_has_rss, wd_release_dt, wd_install_dt, wd_create_dt) VALUES

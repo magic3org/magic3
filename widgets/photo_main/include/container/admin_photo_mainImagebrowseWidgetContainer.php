@@ -284,6 +284,12 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			
 			// システム強制終了
 			$this->gPage->exitSystem();
+		} else if ($act == 'uploadimage'){		// 画像アップロード
+			// 作業ディレクトリを作成
+//			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+			
+			// Ajaxでのファイルアップロード処理
+//			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $tmpDir);
 		} else if ($act == 'delete'){			// ファイル削除のとき
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
 			$delItems = array();	// シリアル番号
@@ -383,11 +389,9 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		// カレントディレクトリのパスを作成
 		$photoParentPath = dirname($this->photoBasePath);
 		$pathLink = '';
-		//$relativePath = str_replace($photoParentPath, '', $path);
 		$relativePath = substr($path, strlen($photoParentPath));
 		$relativePath = trim($relativePath, DIRECTORY_SEPARATOR);
 		if (!empty($relativePath)){
-			//$absPath = $this->gEnv->getSystemRootPath();
 			$absPath = $photoParentPath;
 			$pathArray = explode(DIRECTORY_SEPARATOR, $relativePath);
 			for ($i = 0; $i < count($pathArray); $i++){
@@ -397,8 +401,6 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 					$absPath .= DIRECTORY_SEPARATOR . $pathArray[$i];
 					$relativeFilePath = substr($absPath, strlen($this->photoBasePath));
 					$pathLink .= '&nbsp;' . DIRECTORY_SEPARATOR . '&nbsp;';
-					//$pathLink .= '<a href="#" onclick="selDir(\'' . $this->adaptWindowsPath($this->convertToDispString($absPath)) . '\');return false;">' . $this->convertToDispString($pathArray[$i]) . '</a>';
-					//$pathLink .= '<a href="#" onclick="selDir(\'' . $this->adaptWindowsPath($this->convertToDispString($relativeFilePath)) . '\');return false;">' . $this->convertToDispString($pathArray[$i]) . '</a>';
 					$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativeFilePath;
 					$pathLink .= '<a href="' . $this->convertUrlToHtmlEntity($this->getUrl($pageUrl)) . '">' . $this->convertToDispString($pathArray[$i]) . '</a>';
 				}
@@ -467,6 +469,13 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		$uploadUrl .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ
 		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
 		
+		$uploadUrl = $this->gEnv->getDefaultAdminUrl();
+		$uploadUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGEBROWSE;
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
+		$uploadUrl .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ
+		$this->tmpl->addVar("_widget", "upload_image_url", $this->getUrl($uploadUrl));
+	$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());
+	
 		// テキストをローカライズ
 		$localeText = array();
 		$localeText['msg_file_upload'] = $this->_('Files uploaded. Refresh file list?');		// アップロード終了しました。ファイル一覧を更新しますか?
@@ -1339,6 +1348,46 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			$this->gInstance->getImageManager()->delSystemDefaultThumb(M3_VIEW_TYPE_PHOTO, 0/*PC用*/, $oldFiles);
 		}
 		return $ret;
+	}
+	/**
+	 * アップロードファイルから各種画像を作成
+	 *
+	 * @param bool           $isSuccess		アップロード成功かどうか
+	 * @param object         $resultObj		アップロード処理結果オブジェクト
+	 * @param RequestManager $request		HTTPリクエスト処理クラス
+	 * @param string         $filePath		アップロードされたファイル
+	 * @param string         $destDir		アップロード先ディレクトリ
+	 * @return								なし
+	 */
+	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
+	{
+		$type = $request->trimValueOf('type');		// 画像タイプ
+		
+		if ($isSuccess){		// ファイルアップロード成功のとき
+			// 各種画像を作成
+			switch ($type){
+			case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
+				$formats = $this->gInstance->getImageManager()->getAllSiteLogoFormat();
+				$filenameBase = $this->gInstance->getImageManager()->getSiteLogoFilenameBase();
+				break;
+			case self::IMAGE_TYPE_USER_AVATAR:		// アバター
+				$formats = $this->gInstance->getImageManager()->getAllAvatarFormat();
+				$filenameBase = $this->gInstance->getImageManager()->getDefaultAvatarFilenameBase();
+				break;
+			}
+			
+			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
+			if ($ret){			// 画像作成成功の場合
+				// 画像参照用URL
+				$imageUrl = $this->gEnv->getDefaultAdminUrl();
+				$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
+				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
+				$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
+				$resultObj['url'] = $imageUrl;
+			} else {// エラーの場合
+				$resultObj = array('error' => 'Could not create resized images.');
+			}
+		}
 	}
 }
 ?>
