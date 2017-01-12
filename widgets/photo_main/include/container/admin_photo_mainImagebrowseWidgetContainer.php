@@ -168,128 +168,17 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		$act = $request->trimValueOf('act');
-		if ($act == 'uploadfile'){		// ファイルアップロードのとき
-			// ページ作成処理中断
-			$this->gPage->abortPage();
-
-			// ファイルのアップロード処理
-			if (isset($_FILES["Filedata"]) && is_uploaded_file($_FILES['Filedata']['tmp_name'])){		// アップロードファイルがある場合
-				// ファイル名を作成
-				$code = $account . '-' . self::$_mainDb->getNewPhotoNo($this->_userId);		// 画像コード
-				$ret = self::$_mainDb->isExistsPhotoCode($code);		// 画像コードの重複確認
-				if ($ret){		// 画像コードが重複するとき
-					$errMessage = '画像コードが重複しています。';
-					$errDetail = '画像コード=' . $code;
-				} else {
-					// ファイル名は画像ファイルのハッシュを取得
-					//$filename = md5($code . time());
-					$filename = md5_file($_FILES['Filedata']['tmp_name']);
-					$originalFilename = $_FILES['Filedata']['name'];		// 元のファイル名
-					$filePath = $path . DIRECTORY_SEPARATOR . $filename;
-					
-					// 画像のアップロード状況確認
-					$ret = self::$_mainDb->isExistsPhoto($filename);
-					if ($ret){
-						$errMessage = '画像ファイルが重複しています。';
-						$errDetail = '画像ID=' . $filename . ', 元のファイル名=' . $originalFilename;
-					}
-				}
-				
-				if (!$ret){		// 画像の重複がない場合
-					if (file_exists($filePath)) $this->writeError(__METHOD__, 'アップロード画像がすでに存在しています。新しい画像で置き換えます。', 1100, '元のファイル名=' . $originalFilename);
-
-					// アップされたファイルをコピー
-					$ret = move_uploaded_file($_FILES['Filedata']['tmp_name'], $filePath);
-					if ($ret){
-						$isErr = false;		// エラーが発生したかどうか
-
-						// 画像情報を取得
-						$imageSize = @getimagesize($filePath);
-						if ($imageSize){
-							$imageWidth = $imageSize[0];
-							$imageHeight = $imageSize[1];
-							$imageType = $imageSize[2];
-							$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
-
-							// 受付可能なファイルタイプかどうか
-							if (!in_array($imageMimeType, $this->permitMimeType)){
-								$isErr = true;	
-								$this->writeUserError(__METHOD__, 'アップロード画像のタイプが不正です。アカウント: ' . $account, 2200, '元のファイル名=' . $originalFilename);
-							}
-						} else {
-							$isErr = true;
-							$this->writeUserError(__METHOD__, 'アップロード画像が不正です。アカウント: ' . $account, 2200, '元のファイル名=' . $originalFilename);
-						}
-
-						if (!$isErr){
-							// 各種画像作成
-							$ret = $this->createImages($filename, $filePath, $originalFilename, $thumbFilename);
-							if (!$ret) $isErr = true;
-							
-							if (!$isErr){
-								//$relativePath = strtr(str_replace($this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR, '', $path), '\\', '/');		// 画像格納ディレクトリ
-								$relativePath = strtr(substr($path, strlen($this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR)), '\\', '/');		// 画像格納ディレクトリ
-								$imageSize = $imageWidth . 'x' . $imageHeight;		// 画像の縦横サイズ
-								$filesize = filesize($filePath);;			// ファイルサイズ(バイト数)
-								$name = removeExtension($originalFilename);		// 画像名
-								$name = strtr($name, '_', ' ');
-								$camera = '';	// カメラ
-								$location = '';	// 場所
-								$date = $this->gEnv->getInitValueOfDate();		// 撮影日
-								$summary = '';		// 画像概要
-								$description = '';			// その他情報
-								$license = '';		// ライセンス
-								$keyword = '';		// 検索情報
-								$visible = true;	// 表示
-								$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, 0/*新規追加*/, $this->_langId, $filename, $relativePath, $code, $imageMimeType,
-												$imageSize, $originalFilename, $filesize, $name, $camera, $location, $date, $summary, $description, $license, $this->_userId, 
-												$keyword, $visible, 0/*ソート順*/, array()/*画像カテゴリー*/, $thumbFilename, $newSerial);
-								if ($ret){
-									// 運用ログを追加
-									$ret = self::$_mainDb->getPhotoInfoBySerial($newSerial, $row, $categoryRows);
-									if ($ret){
-										$photoId = $row['ht_public_id'];
-										$name = $row['ht_name'];
-										$updateDt = $row['ht_create_dt'];		// コンテンツ作成日時
-									}
-									$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_PHOTO,
-															M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $photoId,
-															M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
-									$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_ADD_CONTENT, $name), 2400, 'ID=' . $photoId, $eventParam);
-								} else {
-									$isErr = true;
-									$this->writeError(__METHOD__, 'アップロード画像のデータ登録に失敗しました。', 1100, '元のファイル名=' . $originalFilename);
-								}
-							}
-						}
-						
-						// エラー処理
-						if ($isErr){
-							header("HTTP/1.1 595 File Upload Error");		// エラーコードはブラウザ画面に表示される
-							
-							// アップロードファイル削除
-							unlink($filePath);
-						}
-					} else {
-						header("HTTP/1.1 596 File Upload Error");		// エラーコードはブラウザ画面に表示される
-					}
-				} else {
-					header("HTTP/1.1 597 File Upload Error");		// エラーコードはブラウザ画面に表示される
-					$this->writeError(__METHOD__, $errMessage, 1100, $errDetail);
-				}
-			} else {			// アップロードファイルがないとき
-				header("HTTP/1.1 598 File Upload Error");			// エラーコードはブラウザ画面に表示される
-				if (isset($_FILES["Filedata"])) echo $_FILES["Filedata"]["error"];
-			}
+		if ($act == 'uploadimage'){		// 画像アップロード
+			$this->path = $path;
 			
-			// システム強制終了
-			$this->gPage->exitSystem();
-		} else if ($act == 'uploadimage'){		// 画像アップロード
 			// 作業ディレクトリを作成
-//			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
+			$tmpDir = $this->gEnv->getTempDirBySession(true/*ディレクトリ作成*/);		// セッション単位の作業ディレクトリを取得
 			
 			// Ajaxでのファイルアップロード処理
-//			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $tmpDir);
+			$this->ajaxUploadFile($request, array($this, 'uploadFile'), $tmpDir);
+			
+			// 作業ディレクトリ削除
+			rmDirectory($tmpDir);
 		} else if ($act == 'delete'){			// ファイル削除のとき
 			$listedItem = explode(',', $request->trimValueOf('seriallist'));
 			$delItems = array();	// シリアル番号
@@ -460,21 +349,20 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		$this->tmpl->addVar('_widget', 'directory_name', $this->convertToDispString($dirName));// ディレクトリ作成用
 		
 		// アップロード実行用URL
-		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
+/*		$uploadUrl = $this->gEnv->getDefaultAdminUrl() . '?' . M3_REQUEST_PARAM_OPERATION_COMMAND . '=' . M3_REQUEST_CMD_CONFIG_WIDGET;	// ウィジェット設定画面
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_WIDGET_ID . '=' . $this->gEnv->getCurrentWidgetId();	// ウィジェットID
 		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGEBROWSE;
-		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadfile';
-		$uploadUrl .= '&' . M3_REQUEST_PARAM_ADMIN_KEY . '=' . $this->gEnv->getAdminKey();	// 管理者キー
+		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
+//		$uploadUrl .= '&' . M3_REQUEST_PARAM_ADMIN_KEY . '=' . $this->gEnv->getAdminKey();	// 管理者キー
 		//$uploadUrl .= '&path=' . $this->adaptWindowsPath($path);
 		$uploadUrl .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ
-		$this->tmpl->addVar("_widget", "upload_url", $this->getUrl($uploadUrl));
-		
-		$uploadUrl = $this->gEnv->getDefaultAdminUrl();
-		$uploadUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGEBROWSE;
-		$uploadUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
-		$uploadUrl .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ
+		*/
+		$param = M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_IMAGEBROWSE;
+		$param .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'uploadimage';
+		$param .= '&path=' . $this->adaptWindowsPath(substr($path, strlen($this->photoBasePath)));					// アップロードディレクトリ
+		$uploadUrl = $this->getConfigAdminUrl($param);
 		$this->tmpl->addVar("_widget", "upload_image_url", $this->getUrl($uploadUrl));
-	$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());
+		$this->tmpl->addVar("_widget", "upload_area", $this->gDesign->createDragDropFileUploadHtml());		// 画像アップロードエリア作成
 	
 		// テキストをローカライズ
 		$localeText = array();
@@ -1361,32 +1249,119 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 	 */
 	function uploadFile($isSuccess, &$resultObj, $request, $filePath, $destDir)
 	{
-		$type = $request->trimValueOf('type');		// 画像タイプ
+		if (!$isSuccess) return;		// ファイルアップロード失敗のときは終了
 		
-		if ($isSuccess){		// ファイルアップロード成功のとき
-			// 各種画像を作成
-			switch ($type){
-			case self::IMAGE_TYPE_SITE_LOGO:		// サイトロゴ
-				$formats = $this->gInstance->getImageManager()->getAllSiteLogoFormat();
-				$filenameBase = $this->gInstance->getImageManager()->getSiteLogoFilenameBase();
-				break;
-			case self::IMAGE_TYPE_USER_AVATAR:		// アバター
-				$formats = $this->gInstance->getImageManager()->getAllAvatarFormat();
-				$filenameBase = $this->gInstance->getImageManager()->getDefaultAvatarFilenameBase();
-				break;
-			}
+		$account = $this->gEnv->getCurrentUserAccount();
+		
+		// ファイル名を作成
+		$code = $account . '-' . self::$_mainDb->getNewPhotoNo($this->_userId);		// 画像コード
+		$ret = self::$_mainDb->isExistsPhotoCode($code);		// 画像コードの重複確認
+		if ($ret){		// 画像コードが重複するとき
+			$errMessage = '画像コードが重複しています。';
+			$errDetail = '画像コード=' . $code;
+		} else {
+			// ファイル名は画像ファイルのハッシュを取得
+			//$filename = md5($code . time());
+			//$filename = md5_file($_FILES['Filedata']['tmp_name']);
+			$filename = md5_file($filePath);			// オリジナル画像の実体のハッシュ値を取得
+			//$originalFilename = $_FILES['Filedata']['name'];		// 元のファイル名
+			$originalFilename = $resultObj['file']['filename'];	// 元のファイル名
+			$destFilePath = $this->path . DIRECTORY_SEPARATOR . $filename;
 			
-			$ret = $this->gInstance->getImageManager()->createImageByFormat($filePath, $formats, $destDir, $filenameBase, $destFilename);
-			if ($ret){			// 画像作成成功の場合
-				// 画像参照用URL
-				$imageUrl = $this->gEnv->getDefaultAdminUrl();
-				$imageUrl .= '?' . M3_REQUEST_PARAM_OPERATION_TASK . '=' . self::TASK_CONFIGIMAGE;
-				$imageUrl .= '&' . M3_REQUEST_PARAM_OPERATION_ACT . '=' . 'getimage';
-				$imageUrl .= '&type=' . $type . '&' . date('YmdHis');
-				$resultObj['url'] = $imageUrl;
-			} else {// エラーの場合
-				$resultObj = array('error' => 'Could not create resized images.');
+			// 画像のアップロード状況確認
+			$ret = self::$_mainDb->isExistsPhoto($filename);
+			if ($ret){
+				$errMessage = '画像ファイルが重複しています。';
+				$errDetail = '画像ID=' . $filename . ', 元のファイル名=' . $originalFilename;
 			}
+		}
+
+		if (!$ret){		// 画像の重複がない場合
+			if (file_exists($destFilePath)) $this->writeError(__METHOD__, 'アップロード画像がすでに存在しています。新しい画像で置き換えます。', 1100, '元のファイル名=' . $originalFilename);
+
+			// アップされたファイルをコピー
+			//$ret = move_uploaded_file($resultObj['file']['path'], $destFilePath);
+			$ret = copy($filePath, $destFilePath);
+			if ($ret){
+				$isErr = false;		// エラーが発生したかどうか
+
+				// 画像情報を取得
+				$imageSize = @getimagesize($destFilePath);
+				if ($imageSize){
+					$imageWidth = $imageSize[0];
+					$imageHeight = $imageSize[1];
+					$imageType = $imageSize[2];
+					$imageMimeType = $imageSize['mime'];	// ファイルタイプを取得
+
+					// 受付可能なファイルタイプかどうか
+					if (!in_array($imageMimeType, $this->permitMimeType)){
+						$isErr = true;	
+						$this->writeUserError(__METHOD__, 'アップロード画像のタイプが不正です。アカウント: ' . $account, 2200, '元のファイル名=' . $originalFilename);
+					}
+				} else {
+					$isErr = true;
+					$this->writeUserError(__METHOD__, 'アップロード画像が不正です。アカウント: ' . $account, 2200, '元のファイル名=' . $originalFilename);
+				}
+
+				if (!$isErr){
+					// 各種画像作成
+					$ret = $this->createImages($filename, $destFilePath, $originalFilename, $thumbFilename);
+					if (!$ret) $isErr = true;
+					
+					if (!$isErr){
+						//$relativePath = strtr(str_replace($this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR, '', $path), '\\', '/');		// 画像格納ディレクトリ
+						$relativePath = strtr(substr($path, strlen($this->gEnv->getIncludePath() . photo_mainCommonDef::PHOTO_DIR)), '\\', '/');		// 画像格納ディレクトリ
+						$imageSize = $imageWidth . 'x' . $imageHeight;		// 画像の縦横サイズ
+						$filesize = filesize($destFilePath);;			// ファイルサイズ(バイト数)
+						$name = removeExtension($originalFilename);		// 画像名
+						$name = strtr($name, '_', ' ');
+						$camera = '';	// カメラ
+						$location = '';	// 場所
+						$date = $this->gEnv->getInitValueOfDate();		// 撮影日
+						$summary = '';		// 画像概要
+						$description = '';			// その他情報
+						$license = '';		// ライセンス
+						$keyword = '';		// 検索情報
+						$visible = true;	// 表示
+						$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, 0/*新規追加*/, $this->_langId, $filename, $relativePath, $code, $imageMimeType,
+										$imageSize, $originalFilename, $filesize, $name, $camera, $location, $date, $summary, $description, $license, $this->_userId, 
+										$keyword, $visible, 0/*ソート順*/, array()/*画像カテゴリー*/, $thumbFilename, $newSerial);
+						if ($ret){
+							// 運用ログを追加
+							$ret = self::$_mainDb->getPhotoInfoBySerial($newSerial, $row, $categoryRows);
+							if ($ret){
+								$photoId = $row['ht_public_id'];
+								$name = $row['ht_name'];
+								$updateDt = $row['ht_create_dt'];		// コンテンツ作成日時
+							}
+							$eventParam = array(	M3_EVENT_HOOK_PARAM_CONTENT_TYPE	=> M3_VIEW_TYPE_PHOTO,
+													M3_EVENT_HOOK_PARAM_CONTENT_ID		=> $photoId,
+													M3_EVENT_HOOK_PARAM_UPDATE_DT		=> $updateDt);
+							$this->writeUserInfoEvent(__METHOD__, sprintf(self::LOG_MSG_ADD_CONTENT, $name), 2400, 'ID=' . $photoId, $eventParam);
+						} else {
+							$isErr = true;
+							$this->writeError(__METHOD__, 'アップロード画像のデータ登録に失敗しました。', 1100, '元のファイル名=' . $originalFilename);
+						}
+					}
+				}
+				
+				// エラー処理
+				if ($isErr){
+					// エラーコード設定
+					$resultObj = array('error' => '595 File Upload Error');
+					
+					// アップロードファイル削除
+					unlink($destFilePath);
+				}
+			} else {
+				// エラーコード設定
+				$resultObj = array('error' => '596 File Upload Error');
+			}
+		} else {		// 画像が重複している場合
+			// エラーコード設定
+			$resultObj = array('error' => '597 File Upload Error');
+			
+			$this->writeError(__METHOD__, $errMessage, 1100, $errDetail);
 		}
 	}
 }

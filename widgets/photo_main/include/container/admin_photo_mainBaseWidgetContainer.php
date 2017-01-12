@@ -109,7 +109,11 @@ class admin_photo_mainBaseWidgetContainer extends BaseAdminWidgetContainer
 		
 		// 表示画面を決定
 		$task = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_TASK);
-		if (empty($task)) $task = self::DEFAULT_TASK;
+		//if (empty($task)) $task = self::DEFAULT_TASK;
+		if (empty($task)){		// トップ画面の場合はタスクを指定してリダイレクト
+			$url = $this->gEnv->getCurrentRequestUri() . '&task=' . self::DEFAULT_TASK;
+			$this->gPage->redirect($url);
+		}
 		
 		// 画像取得の場合は終了
 		if ($task == self::TASK_IMAGEBROWSE_DIRECT) return;
