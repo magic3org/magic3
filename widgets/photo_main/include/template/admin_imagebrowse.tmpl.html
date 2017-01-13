@@ -131,27 +131,19 @@ function showFileUpload()
 		nl2br: false,
 		onshown: function(dialog) {
 			// 画像アップローダー作成
-			m3CreateDragDropUploadFile('uploader_image', '{UPLOAD_IMAGE_URL}', uploader_image_onSuccess);
+			m3CreateDragDropUploadFile('uploader_image', '{UPLOAD_IMAGE_URL}');
 		},
 		buttons: [{
 			id: 'cancel',
-			label: 'キャンセル',
+			label: '終了',
 			action: function(dialog) {
 				dialog.close();
+				
+				// 画面再表示
+				window.location.href = window.location.href;
 			}
 		}]
 	});
-}
-function uploader_image_onSuccess(files, data)
-{
-/*	// 画像を読み込む
-	$('#useravatar_preview').attr('src', data.url).load(function(){
-		m3AdjustParentWindow();// 親ウィンドウリサイズ
-	});
-	
-	// 編集フラグを更新
-	document.main.useravatar_updated.value = '1';*/
-	alert("完了");
 }
 $(function(){
 	// テーブルを作成

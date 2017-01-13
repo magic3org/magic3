@@ -1359,7 +1359,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			}
 		} else {		// 画像が重複している場合
 			// エラーコード設定
-			$resultObj = array('error' => '597 File Upload Error');
+			$resultObj = array('error' => $errMessage);
 			
 			$this->writeError(__METHOD__, $errMessage, 1100, $errDetail);
 		}
