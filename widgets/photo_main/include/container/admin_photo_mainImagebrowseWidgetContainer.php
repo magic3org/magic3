@@ -23,7 +23,8 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 	private $masterMimeType;			// マスター画像のMIMEタイプ
 	private $permitMimeType;			// アップロードを許可する画像タイプ
 	private $fileListAdded;				// 一覧にデータが追加されたかどうか
-	const DEFAULT_LIST_COUNT = 30;			// 最大リスト表示数
+	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
+	const LINK_PAGE_COUNT		= 10;			// リンクページ数
 	const FILE_ICON_FILE = '/images/system/tree/file_inactive32.png';			// ファイルアイコン
 	const FOLDER_ICON_FILE = '/images/system/tree/folder32.png';		// ディレクトリアイコン
 	const PARENT_ICON_FILE = '/images/system/tree/parent32.png';		// 親ディレクトリアイコン
@@ -164,7 +165,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		}
 		
 		// ページ番号
-		$viewCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
+		$maxListCount = self::DEFAULT_LIST_COUNT;				// 表示項目数
 		$pageNo = $request->trimIntValueOf(M3_REQUEST_PARAM_PAGE_NO, '1');				// ページ番号
 		
 		$act = $request->trimValueOf('act');
@@ -309,15 +310,20 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		$totalCount = count($fileList);
 
 		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
+/*		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
 		if ($pageNo < 1) $pageNo = 1;
 		if ($pageNo > $pageCount) $pageNo = $pageCount;
 		$this->firstNo = ($pageNo -1) * $viewCount + 1;		// 先頭番号
 		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
 		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
+		*/
+		// ページング計算
+		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
+		$startNo = ($pageNo -1) * $maxListCount +1;		// 先頭の行番号
+		$endNo = $pageNo * $maxListCount > $totalCount ? $totalCount : $pageNo * $maxListCount;// 最後の行番号
 		
 		// ページング用リンク作成
-		$pageLink = '';
+/*		$pageLink = '';
 		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
 			for ($i = 1; $i <= $pageCount; $i++){
 				if ($i == $pageNo){
@@ -331,10 +337,15 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 				}
 				$pageLink .= $link;
 			}
-		}
+		}*/
+		// ページングリンク作成
+		$relativePath = substr($path, strlen($this->photoBasePath));
+		$pageUrl = $this->_baseUrl . '&task=imagebrowse&path=' . $relativePath;
+		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, $pageUrl);
+
 		$this->tmpl->addVar("_widget", "page_link", $pageLink);
-		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));// 全 x件
-		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
+//		$this->tmpl->addVar("_widget", "total_count", sprintf($this->_('%d Total'), $totalCount));// 全 x件
+//		$this->tmpl->addVar("_widget", "page", $pageNo);	// ページ番号
 //		$this->tmpl->addVar("search_range", "start_no", $startNo);
 //		$this->tmpl->addVar("search_range", "end_no", $endNo);
 //		if ($totalCount > 0) $this->tmpl->setAttribute('search_range', 'visibility', 'visible');// 検出範囲を表示
