@@ -43,8 +43,10 @@ img.avatar {
 	bottom:10px;
 	font-size:150%;
 }
+@media (min-width: 768px) {
 ul.pos-right {
 	float:right;
+}
 }
 a.dropdown-toggle.device_icon, a.dropdown-toggle.avatar_icon {
 /*	padding-top:16px;
@@ -56,6 +58,8 @@ a.dropdown-toggle.device_icon, a.dropdown-toggle.avatar_icon {
 }
 
 /* デバイスアイコンとユーザ項目間のスペーサー */
+@media (min-width: 768px) {
 li.user_menu {
 	margin-left:20px;
+}
 }

@@ -585,8 +585,10 @@ class DesignManager extends Core
 		$menuTag = $this->createSubMenubarMenuTag($navbarDef);
 		
 		// メニューバー作成
-		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel"><div class="collapse navbar-collapse">' . $titleTag . $menuTag . '</div></nav>';
-
+//		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel"><div class="collapse navbar-collapse">' . $titleTag . $menuTag . '</div></nav>';
+		$destHtml = '<nav class="navbar-inverse navbar-fixed-top secondlevel">';
+		$destHtml .= '<div class="navbar-header"><button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#subnavbar-collapse"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>' . $titleTag . '</div>';
+		$destHtml .= '<div class="collapse navbar-collapse" id="subnavbar-collapse">' . $menuTag . '</div></nav>';
 		return $destHtml;
 	}
 	/**

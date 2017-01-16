@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -394,6 +394,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			
 			// サブメニューバー作成
 			list($title, $menu) = $this->createSubMenubar($subNavbarDef);
+			if (empty($title)) $title = '&nbsp;';			// タイトルが空の場合は左位置調整のためにスペースを設定
 			$this->tmpl->addVar('subnavbar', 'title', $title);
 			$this->tmpl->addVar('subnavbar', 'menu', $menu);
 		}
@@ -782,89 +783,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	 */
 	function createSubMenubar($navbarDef)
 	{
-/*		// タイトル作成
-		$titleTag = '';
-		if (!empty($navbarDef->title)){
-			$title = $this->convertToDispString($navbarDef->title);
-			if (!empty($navbarDef->help)) $title = '<span ' . $navbarDef->help . '>' . $title . '</span>';
-			$titleTag = '<div class="navbar-text title">' . $title . '</div>';
-		}
-		
-		// メニュー作成
-		$menuTag = '';
-		$baseUrl = $navbarDef->baseurl;
-		$menu = $navbarDef->menu;
-		$menuItemCount = count($menu);
-		for ($i = 0; $i < $menuItemCount; $i++){
-			$menuItem = $menu[$i];
-			$name	= $menuItem->name;
-			$tagId	= $menuItem->tagid;
-			$active = $menuItem->active;
-			$disabled	= $menuItem->disabled;
-			$task	= $menuItem->task;
-			$url	= $menuItem->url;
-			$help	= $menuItem->help;
-			$subMenu = $menuItem->submenu;
-			
-			if (empty($subMenu)){		// サブメニューを持たない場合
-				if ($active){
-					$buttonType = 'btn-primary';
-				} else {
-					$buttonType = 'btn-success';
-				}
-				if ($disabled) $buttonType .= ' disabled';		// 使用可否
-				$tagIdAttr = '';		// タグID
-				if (!empty($tagId)) $tagIdAttr = ' id="' . $tagId . '"';
-				
-				// タスクまたはURLが設定されている場合はリンクを設定
-				$event = '';
-				$linkUrl = '';			// リンク先 
-				if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);
-				if (empty($linkUrl)) $linkUrl = $url;
-				if (!empty($linkUrl)) $event = ' onclick="window.location=\'' . $linkUrl . '\';"';
-				$button = '<button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '"' . $event . '>' . $this->convertToDispString($name) . '</button>';
-				if (!empty($help)) $button = '<span ' . $help . '>' . $button . '</span>';
-				$menuTag .= '<li>' . $button . '</li>';
-			} else {		// サブメニューがある場合
-				// アクティブな項目があるかチェック
-				$subMenuTag = '';
-				for ($j = 0; $j < count($subMenu); $j++){
-					$subMenuItem = $subMenu[$j];
-					$subName	= $subMenuItem->name;
-					$subTagId	= $subMenuItem->tagid;
-					$subActive	= $subMenuItem->active;
-					$subDisabled	= $subMenuItem->disabled;
-					$task		= $subMenuItem->task;
-					$url		= $subMenuItem->url;
-					
-					$linkUrl = '';			// リンク先 
-					if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);
-					if (empty($linkUrl)) $linkUrl = $url;
-					if (empty($linkUrl)) $linkUrl = '#';
-					$classActive = '';
-					if ($subDisabled){		// 使用可否
-						$classActive = ' class="disabled"';
-						$linkUrl = '#';
-					} else if ($subActive){
-						$classActive = ' class="active"';
-						$active = true;			// 親の階層もアクティブにする
-					}
-					$tagIdAttr = '';		// タグID
-					if (!empty($subTagId)) $tagIdAttr = ' id="' . $subTagId . '"';
-					$subMenuTag .= '<li' . $tagIdAttr . $classActive . '><a href="' . $this->getUrl($linkUrl) . '">' . $this->convertToDispString($subName) . '</a></li>';
-				}
-				$subMenuTag = '<ul class="dropdown-menu" role="menu">' . $subMenuTag . '</ul>';
-
- 				if ($active){
-					$buttonType = 'btn-primary';
-				} else {
-					$buttonType = 'btn-success';
-				}
-				$menuTag .= '<li><a class="btn navbar-btn ' . $buttonType . '" data-toggle="dropdown" href="#" >' . $this->convertToDispString($name) . ' <span class="caret"></span></a>' . $subMenuTag . '</li>';
-			}
-		}
-		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
-		*/
 		// タイトル作成
 		$titleTag = $this->gDesign->createSubMenubarTitleTag($navbarDef, 2/*システム画面(共通設定画面等)*/);
 		

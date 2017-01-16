@@ -878,6 +878,14 @@ nav.navbar-fixed-top .dropdown-menu {
 	margin-top: -1px;
 }
 /*** サブナビゲーションバー ***/
+/*メニューバー最左項目の左端*/
+/*nav.secondlevel .navbar-collapse {
+	margin-left:50px;	
+}*/
+nav.secondlevel .navbar-header {
+	margin-left:5px;	
+}
+@media (min-width: 768px) {
 nav.secondlevel {
 	z-index:900;
 	height:50px;
@@ -885,13 +893,13 @@ nav.secondlevel {
 nav.secondlevel.minimized {
 	height:34px;
 }
-
 nav.secondlevel.minimized .navbar-brand {
 	padding: 4px 5px;
 /*  margin: 8px 15px 8px 0;*/
 }
-nav.secondlevel .navbar-collapse {
-	margin-left:50px;	/*メニューバー最左項目の左端*/
+/*メニューバー最左項目の左端*/
+nav.secondlevel .navbar-header {
+	margin-left:50px;	
 }
 nav.secondlevel .navbar-text.title {
 	font-size: 18px;
@@ -899,45 +907,29 @@ nav.secondlevel .navbar-text.title {
 	margin-bottom: 17px;
 	margin-right: 50px;
 }
-
 nav.secondlevel.minimized .navbar-text.title {
 	font-size: 17px;
 	margin-top:5px;
 	margin-bottom:5px;
 	margin-right: 20px;
-/* default
-  margin-top: 19.5px;
-  margin-bottom: 19.5px;
-  */
 }
 nav.secondlevel.minimized .navbar-toggle {
 	padding: 4px 5px;
 	margin: 8px 15px 8px 0;
 }
 
-/*nav.minimized a {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}*/
-
 nav.secondlevel.minimized .btn.navbar-btn {
 	padding: 6px 9px;
-/*	font-size: 13px;*/
 	font-size: 15px;
 	line-height: 1.5;
-/*	border-radius: 3px;*/
 	border-radius: 0;
 	
 	margin-top: 0px;
 	margin-bottom: 0px;
-/*
-  margin-top: 13.5px;
-  margin-bottom: 13.5px;*/
 	height:34px;/*for chrome*/
 }
 nav.secondlevel .btn.navbar-btn {
 	margin-top:8px;
-/*	height:41px;*/
 	height:42px;
 	border-bottom-left-radius: 0;
 	border-bottom-right-radius: 0;
@@ -969,6 +961,7 @@ nav.secondlevel .btn.navbar-btn:hover,
 nav.secondlevel .btn.navbar-btn:focus {
 	outline: 0;
 }
+}
 /*** パンくずリスト ***/
 .m3breadcrumbbar {
 	background-color: #ecf0f1;
@@ -978,7 +971,12 @@ nav.secondlevel .btn.navbar-btn:focus {
 	display: inline-block;
 	margin-top: 1px;
 	margin-bottom:0px;
+/*	padding-left:100px;*/
+}
+@media (min-width: 768px) {
+.m3breadcrumbbar .breadcrumb {
 	padding-left:100px;
+}
 }
 /*.breadcrumb {
 	margin-top:0;
