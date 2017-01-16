@@ -568,8 +568,16 @@ span[rel="m3help"] { cursor: default; }
 .m3config_container {
 	display: table;
 	margin: 10px auto 20px;
-	min-width: 950px;
+	width:100%;
+}
+@media (min-width: 992px) {
+.m3config_container {
+	display: table;
+	margin: 10px auto 20px;
+	/*min-width: 950px;*/
+	width:950px;
 	max-width: 90%;
+}
 }
 .m3config_tabs {/* 削除予定 */
 	width:95%;
@@ -591,7 +599,14 @@ span[rel="m3help"] { cursor: default; }
 /* テーブル */
 .m3config_table {
 	margin: 0 auto 15px auto;
+	width:100%;
+}
+@media (min-width: 992px) {
+.m3config_table {
+	margin: 0 auto 15px auto;
 	width: 950px;
+	max-width:100%;
+}
 }
 .m3config_table th {
 	width: 150px;
