@@ -20,7 +20,6 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class BaseAdminWidgetContainer extends BaseWidgetContainer
 {
-	protected $_isSmallDeviceOptimize;				// 小画面デバイス最適化を行うかどうか
 	const DEFAULT_WIDGET_TYPE = 'admin';		// ウィジェットタイプ
 	const TASK_CONFIG_LIST = 'list';			// 設定一覧
 	

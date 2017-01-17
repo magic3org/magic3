@@ -40,6 +40,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	private $useComment;// コメント機能を使用するかどうか
 	private $fieldValueArray;		// ユーザ定義フィールド入力値
 	const ICON_SIZE = 32;		// アイコンのサイズ
+	const SMALL_ICON_SIZE = 16;		// アイコンのサイズ
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
@@ -48,6 +49,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
 	const SEARCH_ICON_FILE = '/images/system/search16.png';		// 検索用アイコン
+	const SMALL_ACTIVE_ICON_FILE = '/images/system/active.png';			// 公開中アイコン
+	const SMALL_INACTIVE_ICON_FILE = '/images/system/inactive.png';		// 非公開アイコン
 	const FIELD_HEAD = 'item_';			// フィールド名の先頭文字列
 	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const TAG_ID_ACTIVE_TERM = 'activeterm_button';		// 公開期間エリア表示用ボタンタグ
@@ -100,7 +103,11 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		if ($task == 'entry_detail'){		// 詳細画面
 			return 'admin_entry_detail.tmpl.html';
 		} else {			// 一覧画面
-			return 'admin_entry.tmpl.html';
+			if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+				return 'admin_entry_small.tmpl.html';
+			} else {
+				return 'admin_entry.tmpl.html';
+			}
 		}
 	}
 	/**
@@ -1097,14 +1104,25 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$isActive = false;		// 公開状態
 		if ($fetchedRow['be_status'] == 2) $isActive = $this->isActive($startDt, $endDt, $now);// 表示可能
 		
-		if ($isActive){		// コンテンツが公開状態のとき
-			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
-			$iconTitle = '公開中';
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			if ($isActive){		// コンテンツが公開状態のとき
+				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_ACTIVE_ICON_FILE;			// 公開中アイコン
+				$iconTitle = '公開中';
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_INACTIVE_ICON_FILE;		// 非公開アイコン
+				$iconTitle = '非公開';
+			}
+			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::SMALL_ICON_SIZE . '" height="' . self::SMALL_ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		} else {
-			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
-			$iconTitle = '非公開';
+			if ($isActive){		// コンテンツが公開状態のとき
+				$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
+				$iconTitle = '公開中';
+			} else {
+				$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
+				$iconTitle = '非公開';
+			}
+			$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// アイキャッチ画像
 		$iconUrl = blog_mainCommonDef::getEyecatchImageUrl($fetchedRow['be_thumb_filename'], self::$_configArray[blog_mainCommonDef::CF_ENTRY_DEFAULT_IMAGE], self::$_configArray[blog_mainCommonDef::CF_THUMB_TYPE], 's'/*sサイズ画像*/) . '?' . date('YmdHis');
