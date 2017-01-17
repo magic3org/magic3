@@ -623,7 +623,8 @@ class DesignManager extends Core
 					$title = '<span ' . $navbarDef->help . '>' . $iconTag . '</span>' . $title;
 				}
 			}
-			$titleTag = '<div class="navbar-text title">' . $title . '</div>';
+//			$titleTag = '<div class="navbar-text title">' . $title . '</div>';
+			$titleTag = '<div class="navbar-brand">' . $title . '</div>';
 		}
 		return $titleTag;
 	}

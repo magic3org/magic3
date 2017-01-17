@@ -901,6 +901,10 @@ nav.secondlevel.minimized .navbar-brand {
 nav.secondlevel .navbar-header {
 	margin-left:50px;	
 }
+nav.secondlevel .navbar-brand {
+	margin-top: -5px;
+}
+/*
 nav.secondlevel .navbar-text.title {
 	font-size: 18px;
 	margin-top: 17px;
@@ -917,7 +921,7 @@ nav.secondlevel.minimized .navbar-toggle {
 	padding: 4px 5px;
 	margin: 8px 15px 8px 0;
 }
-
+*/
 nav.secondlevel.minimized .btn.navbar-btn {
 	padding: 6px 9px;
 	font-size: 15px;
