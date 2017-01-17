@@ -115,7 +115,9 @@ class EnvManager extends Core
 	const CF_SITE_SMARTPHONE_URL = 'site_smartphone_url';		// スマートフォン用サイトURL
 	const CF_SITE_MOBILE_URL = 'site_mobile_url';		// 携帯用サイトURL
 	const CF_REALTIME_SERVER_PORT = 'realtime_server_port';		// リアルタイムサーバ用ポート番号
+	const CF_MULTI_DEVICE_ADMIN = 'multi_device_admin';			// マルチデバイス最適化管理画面
 	const DEFAULT_SITE_NAME = 'サイト名未設定';		// 管理画面用のデフォルトサイト名
+	const DETECT_DEVICE_SCRIPT = '/Mobile-Detect-2.8.24/Mobile_Detect.php';		// デバイス判定用スクリプト
 	
 	/**
 	 * コンストラクタ
@@ -2945,6 +2947,35 @@ class EnvManager extends Core
 			}
 		}
 		return $param;
+	}
+	/**
+	 * 小画面デバイス最適化を行うかどうか
+	 *
+	 * @return bool		true=最適化を行う、false=最適化を行わない
+	 */
+	public function isSmallDeviceOptimize()
+	{
+		global $gRequestManager;
+		static $isSmallDeviceOptimize;
+		
+		if (!isset($isSmallDeviceOptimize)){
+			// マルチデバイス最適化管理画面かどうか
+			$multiDeviceAdmin = $this->gSystem->getSystemConfig(self::CF_MULTI_DEVICE_ADMIN);
+			if ($multiDeviceAdmin){
+				// 小画面デバイスかどうか判断
+				require_once(M3_SYSTEM_LIB_PATH . self::DETECT_DEVICE_SCRIPT);
+				
+				$detect = new Mobile_Detect;
+				if ($detect->isMobile() && !$detect->isTablet()){		// 小画面デバイスかどうか(モバイルかつタブレットではない)
+					$isSmallDeviceOptimize = true;
+				} else {
+					$isSmallDeviceOptimize = false;
+				}
+			} else {
+				$isSmallDeviceOptimize = false;
+			}
+		}
+		return $isSmallDeviceOptimize;
 	}
 	/**
 	 * メニューの表示属性を設定
