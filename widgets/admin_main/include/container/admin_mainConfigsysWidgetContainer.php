@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -59,6 +59,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 //	const CF_USE_JQUERY = 'use_jquery';			// jQueryを常に使用するかどうか
 	const CF_SMARTPHONE_USE_JQUERY_MOBILE = 'smartphone_use_jquery_mobile';		// スマートフォン画面でjQuery Mobileを使用
 	const CF_WYSIWYG_EDITOR = 'wysiwyg_editor';		// 管理画面用WYSIWYGエディター
+	const CF_MULTI_DEVICE_ADMIN = 'multi_device_admin';			// マルチデバイス最適化管理画面
 	const CF_PERMIT_DETAIL_CONFIG	= 'permit_detail_config';				// 詳細設定が可能かどうか
 	const CF_DEFAULT_LANG		= 'default_lang';					// デフォルト言語
 	const CF_WORK_DIR = 'work_dir';			// 作業ディレクトリ
@@ -128,6 +129,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$usePageCache = ($request->trimValueOf('item_use_page_cache') == 'on') ? 1 : 0;		// 表示キャッシュ機能を使用するかどうか
 		$canChangeTemplate = ($request->trimValueOf('item_can_change_template') == 'on') ? 1 : 0;		// ユーザによるテンプレート変更を許可するかどうか
 		$canDetailConfig = ($request->trimValueOf('item_can_detail_config') == 'on') ? 1 : 0;		// 詳細システム設定が可能かどうか
+		$multiDeviceAdmin = ($request->trimValueOf('item_multi_device_admin') == 'on') ? 1 : 0;// マルチデバイス最適化管理画面
 		$mobileAutoRedirect = ($request->trimValueOf('item_mobile_auto_redirect') == 'on') ? 1 : 0;		// 携帯の自動遷移
 		$smartphoneAutoRedirect = ($request->trimValueOf('item_smartphone_auto_redirect') == 'on') ? 1 : 0;		// スマートフォンの自動遷移
 		$mobileUseSession = ($request->trimValueOf('item_mobile_use_session') == 'on') ? 1 : 0;		// 携帯でセッション管理するかどうか
@@ -168,6 +170,9 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			if (!$isErr) if (!$this->db->updateSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION, $canChangeTemplate)) $isErr = true;// ユーザによるテンプレート変更を許可するかどうか
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_PERMIT_DETAIL_CONFIG, $canDetailConfig)) $isErr = true;
+			}
+			if (!$isErr){
+				if (!$this->db->updateSystemConfig(self::CF_MULTI_DEVICE_ADMIN, $multiDeviceAdmin)) $isErr = true;// マルチデバイス最適化管理画面
 			}
 			if (!$isErr){
 				if (!$this->db->updateSystemConfig(self::CF_MOBILE_AUTO_REDIRECT, $mobileAutoRedirect)) $isErr = true;
@@ -278,6 +283,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$usePageCache 		= $this->db->getSystemConfig(self::CF_USE_PAGE_CACHE);			// 表示キャッシュ機能を使用するかどうか
 			$canChangeTemplate	= $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);// ユーザによるテンプレート変更を許可するかどうか
 			$canDetailConfig	= $this->db->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);
+			$multiDeviceAdmin	= $this->db->getSystemConfig(self::CF_MULTI_DEVICE_ADMIN);		// マルチデバイス最適化管理画面
 //			$mobileAutoRedirect	= $this->db->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT);
 			$mobileAutoRedirect	= $this->gSystem->mobileAutoRedirect(true/*再取得*/);				// 携帯の自動遷移
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
@@ -350,6 +356,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 			$usePageCache 		= $this->db->getSystemConfig(self::CF_USE_PAGE_CACHE);			// 表示キャッシュ機能を使用するかどうか
 			$canChangeTemplate	= $this->db->getSystemConfig(self::CF_USE_TEMPLATE_ID_IN_SESSION);// ユーザによるテンプレート変更を許可するかどうか
 			$canDetailConfig	= $this->db->getSystemConfig(self::CF_PERMIT_DETAIL_CONFIG);
+			$multiDeviceAdmin	= $this->db->getSystemConfig(self::CF_MULTI_DEVICE_ADMIN);		// マルチデバイス最適化管理画面
 //			$mobileAutoRedirect	= $this->db->getSystemConfig(self::CF_MOBILE_AUTO_REDIRECT);
 			$mobileAutoRedirect	= $this->gSystem->mobileAutoRedirect(true/*再取得*/);				// 携帯の自動遷移
 			$smartphoneAutoRedirect	= $this->gSystem->smartphoneAutoRedirect(true/*再取得*/);		// スマートフォンの自動遷移
@@ -494,6 +501,7 @@ class admin_mainConfigsysWidgetContainer extends admin_mainConfigsystemBaseWidge
 		$checked = '';
 		if ($canDetailConfig) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "can_detail_config", $checked);
+		$this->tmpl->addVar("_widget", "multi_device_admin", $this->convertToCheckedString($multiDeviceAdmin));// マルチデバイス最適化管理画面
 		$checked = '';
 		if (!empty($mobileAutoRedirect)) $checked = 'checked';
 		$this->tmpl->addVar("_widget", "mobile_auto_redirect", $checked);// 携帯の自動遷移

@@ -131,7 +131,7 @@ $(function(){
 	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_mobile_use_session" {MOBILE_USE_SESSION} />携帯でユーザ管理を行う(セッション管理)</label></div></td>
 	</tr>
     <tr>
-	    <th rowspan="4">管理画面</th>
+	    <th rowspan="3">管理画面</th>
 	    <td colspan="2"><div class="form-control-static col-sm-3 m3config_item">管理画面用jQueryUIテーマ</div>
 	    <div class="col-sm-4 m3config_item"><select name="item_admin_theme" class="form-control">
 	        <patTemplate:tmpl name="admin_theme_list">
@@ -150,10 +150,11 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_config_window_open_by_tab" {CONFIG_WINDOW_OPEN_BY_TAB} />設定画面をタブで開く</label></div></td>
-	</tr>
-    <tr>
-	    <td colspan="2"><div class="checkbox"><label><input type="checkbox" name="item_can_detail_config" {CAN_DETAIL_CONFIG} />詳細設定表示(開発モード)</label></div></td>
+	    <td colspan="2">
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_config_window_open_by_tab" {CONFIG_WINDOW_OPEN_BY_TAB} />設定画面をタブで開く</label></div></div>
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_multi_device_admin" {MULTI_DEVICE_ADMIN} />マルチデバイス最適化</label></div></div>
+		<div class="form-group clearfix"><div class="checkbox"><label><input type="checkbox" name="item_can_detail_config" {CAN_DETAIL_CONFIG} />詳細設定表示(開発モード)</label></div></div>
+		</td>
 	</tr>
     <tr>
 	    <th rowspan="2">フロント画面</th>

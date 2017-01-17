@@ -648,7 +648,11 @@ span[rel="m3help"] { cursor: default; }
 .m3config_table hr.border{
 	margin: 5px -5px 5px;
 }
+/*
 .m3config_table .form-group.last {
+	margin-bottom:0;
+}*/
+.m3config_table td .form-group:last-of-type {
 	margin-bottom:0;
 }
 .m3config_table .linebreak {

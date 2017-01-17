@@ -33,7 +33,7 @@ INSERT INTO _system_config
 
 INSERT INTO _system_config 
 (sc_id,                          sc_value, sc_name) VALUES
-('multi_device_optimized_admin', '0',      'マルチデバイス最適化管理画面');
+('multi_device_admin', '0',      'マルチデバイス最適化管理画面');
 
 -- *** システム標準テーブル ***
 
