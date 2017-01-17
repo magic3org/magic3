@@ -2949,11 +2949,11 @@ class EnvManager extends Core
 		return $param;
 	}
 	/**
-	 * 小画面デバイス最適化を行うかどうか
+	 * 管理画面の小画面デバイス最適化を行うかどうか
 	 *
 	 * @return bool		true=最適化を行う、false=最適化を行わない
 	 */
-	public function isSmallDeviceOptimize()
+	public function isSmallDeviceOptimizeAdmin()
 	{
 		global $gRequestManager;
 		static $isSmallDeviceOptimize;

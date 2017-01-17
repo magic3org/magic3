@@ -45,7 +45,6 @@ class BaseWidgetContainer extends Core
 	protected $_useFormCheck;						// フォームチェック機能を使用するかどうか
 	protected $_useHierPage;						// 階層化ページを使用するかどうか
 	protected $_isMultiDomain;						// マルチドメイン運用かどうか
-	protected $_isSmallDeviceOptimize;				// 小画面デバイス最適化を行うかどうか
 	protected $_linkPageCount;						// ページリンク作成用ページ総数
 	protected $_renderType;							// 描画出力タイプ
 	protected $_renderDetailType;					// 描画出力タイプ(詳細)
@@ -120,7 +119,6 @@ class BaseWidgetContainer extends Core
 		// 各種設定取得
 		$this->_useHierPage = $this->gSystem->hierarchicalPage();	// 階層化ページ
 		$this->_isMultiDomain = $this->gEnv->isMultiDomain();			// マルチドメイン運用かどうか
-		$this->_isSmallDeviceOptimize = $this->gEnv->isSmallDeviceOptimize();				// 小画面デバイス最適化を行うかどうか
 
 		// 現在の値取得
 		$this->_widgetId	= $this->gEnv->getCurrentWidgetId();		// 現在のウィジェットID

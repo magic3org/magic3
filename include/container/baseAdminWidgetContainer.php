@@ -11,7 +11,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -20,6 +20,7 @@ require_once($gEnvManager->getContainerPath() . '/baseWidgetContainer.php');
 
 class BaseAdminWidgetContainer extends BaseWidgetContainer
 {
+	protected $_isSmallDeviceOptimize;				// 小画面デバイス最適化を行うかどうか
 	const DEFAULT_WIDGET_TYPE = 'admin';		// ウィジェットタイプ
 	const TASK_CONFIG_LIST = 'list';			// 設定一覧
 	
@@ -33,6 +34,9 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 		
 		// データ初期化
 		$this->_widgetType = self::DEFAULT_WIDGET_TYPE;						// ウィジェットタイプ
+		
+		// 各種設定取得
+		$this->_isSmallDeviceOptimize = $this->gEnv->isSmallDeviceOptimizeAdmin();				// 管理画面の小画面デバイス最適化を行うかどうか
 	}
 	/**
 	 * 出力用の変数に値を設定する
