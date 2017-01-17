@@ -36,7 +36,7 @@ class BaseAdminWidgetContainer extends BaseWidgetContainer
 		$this->_widgetType = self::DEFAULT_WIDGET_TYPE;						// ウィジェットタイプ
 		
 		// 各種設定取得
-		$this->_isSmallDeviceOptimize = $this->gEnv->isSmallDeviceOptimizeAdmin();				// 管理画面の小画面デバイス最適化を行うかどうか
+		$this->_isSmallDeviceOptimize = $this->gEnv->isSmallDeviceAdmin();				// 管理画面の小画面デバイス最適化を行うかどうか
 	}
 	/**
 	 * 出力用の変数に値を設定する

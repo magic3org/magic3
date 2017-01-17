@@ -2953,12 +2953,11 @@ class EnvManager extends Core
 	 *
 	 * @return bool		true=最適化を行う、false=最適化を行わない
 	 */
-	public function isSmallDeviceOptimizeAdmin()
+	public function isSmallDeviceAdmin()
 	{
-		global $gRequestManager;
-		static $isSmallDeviceOptimize;
+		static $isSmallDeviceAdmin;
 		
-		if (!isset($isSmallDeviceOptimize)){
+		if (!isset($isSmallDeviceAdmin)){
 			// マルチデバイス最適化管理画面かどうか
 			$multiDeviceAdmin = $this->gSystem->getSystemConfig(self::CF_MULTI_DEVICE_ADMIN);
 			if ($multiDeviceAdmin){
@@ -2967,15 +2966,15 @@ class EnvManager extends Core
 				
 				$detect = new Mobile_Detect;
 				if ($detect->isMobile() && !$detect->isTablet()){		// 小画面デバイスかどうか(モバイルかつタブレットではない)
-					$isSmallDeviceOptimize = true;
+					$isSmallDeviceAdmin = true;
 				} else {
-					$isSmallDeviceOptimize = false;
+					$isSmallDeviceAdmin = false;
 				}
 			} else {
-				$isSmallDeviceOptimize = false;
+				$isSmallDeviceAdmin = false;
 			}
 		}
-		return $isSmallDeviceOptimize;
+		return $isSmallDeviceAdmin;
 	}
 	/**
 	 * メニューの表示属性を設定
