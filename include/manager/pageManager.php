@@ -3225,7 +3225,6 @@ class PageManager extends Core
 			}
 			
 			// ********** メタタグの設定 **********
-	
 			// キャラクターセット
 			//if ($gEnvManager->getIsSmartphoneSite()){		// スマートフォン用サイトのときはHTML5で設定
 			if ($this->isHtml5){
@@ -3236,7 +3235,11 @@ class PageManager extends Core
 				echo '<meta http-equiv="content-style-type" content="text/css" />' . M3_NL;
 				echo '<meta http-equiv="content-type" content="application/xhtml+xml; charset=' . M3_HTML_CHARSET .'" />' . M3_NL;
 			}
-		
+			if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
+				// Bootstrapで必要なMETAタグを追加
+				echo '<meta name="viewport" content="width=device-width, initial-scale=1">' . M3_NL;
+			}
+			
 			// 基準ディレクトリの指定
 			if ($cmd == M3_REQUEST_CMD_SHOW_POSITION ||				// 表示位置を表示するとき
 				$cmd == M3_REQUEST_CMD_SHOW_POSITION_WITH_WIDGET){	// 表示位置を表示するとき(ウィジェット付き)
