@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -33,6 +33,8 @@ class DesignManager extends Core
 	const DEFAULT_CONFIG_WINDOW_STYLE	= 'toolbar=no,menubar=no,location=no,status=no,scrollbars=yes,resizable=yes,width=1000,height=900';// 設定画面のウィンドウスタイルデフォルト値
 	const UPLOAD_ICON_FILE = '/images/system/upload_box32.png';		// アップロードボックスアイコン
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
+	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
+	const NAV_ITEM_ICON_SIZE = 32;								// ナビゲーションメニューアイコンサイズ
 	const SUB_MENUBAR_HEIGHT = 50;			// サブメニューバーの高さ
 	const DEFAULT_META_NO_INDEX = '<meta name="robots" content="noindex,nofollow" />';		// METAタグ(検索エンジン登録拒否)
 	
@@ -636,6 +638,10 @@ class DesignManager extends Core
 	 */
 	function createSubMenubarMenuTag($navbarDef)
 	{
+		global $gRequestManager;
+		
+		$isSmallDeviceOptimize = $this->gEnv->isSmallDeviceAdmin();				// 管理画面の小画面デバイス最適化を行うかどうか
+		
 		// メニュー作成
 		$menuTag = '';
 		$baseUrl = $navbarDef->baseurl;
@@ -653,10 +659,14 @@ class DesignManager extends Core
 			$subMenu = $menuItem->submenu;
 			
 			if (empty($subMenu)){		// サブメニューを持たない場合
-				if ($active){
-					$buttonType = 'btn-primary';
+				if ($isSmallDeviceOptimize){	// 管理画面の小画面デバイス最適化を行う場合
+					$buttonType = '';
 				} else {
-					$buttonType = 'btn-success';
+					if ($active){
+						$buttonType = 'btn-primary';
+					} else {
+						$buttonType = 'btn-success';
+					}
 				}
 				if ($disabled) $buttonType .= ' disabled';		// 使用可否
 				$tagIdAttr = '';		// タグID
@@ -668,7 +678,11 @@ class DesignManager extends Core
 				if (!empty($task)) $linkUrl = createUrl($baseUrl, 'task=' . $task);
 				if (empty($linkUrl)) $linkUrl = $url;
 				if (!empty($linkUrl)) $event = ' onclick="window.location=\'' . $linkUrl . '\';"';
-				$button = '<button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '"' . $event . '>' . convertToHtmlEntity($name) . '</button>';
+				if ($isSmallDeviceOptimize){	// 管理画面の小画面デバイス最適化を行う場合
+					$button = '<button type="button"' . $tagIdAttr . ' class="' . $buttonType . '"' . $event . '>' . convertToHtmlEntity($name) . '</button>';
+				} else {
+					$button = '<button type="button"' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '"' . $event . '>' . convertToHtmlEntity($name) . '</button>';
+				}
 				if (!empty($help)) $button = '<span ' . $help . '>' . $button . '</span>';
 				$menuTag .= '<li>' . $button . '</li>';
 			} else {		// サブメニューがある場合
@@ -705,16 +719,38 @@ class DesignManager extends Core
 
 				$tagIdAttr = '';		// タグID
 				if (!empty($tagId)) $tagIdAttr = ' id="' . $tagId . '"';
- 				if ($active){
-					$buttonType = 'btn-primary';
+				if ($isSmallDeviceOptimize){	// 管理画面の小画面デバイス最適化を行う場合
+					$buttonType = '';
 				} else {
-					$buttonType = 'btn-success';
+	 				if ($active){
+						$buttonType = 'btn-primary';
+					} else {
+						$buttonType = 'btn-success';
+					}
 				}
-				$menuTag .= '<li><a' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '" data-toggle="dropdown" href="#" >' . convertToHtmlEntity($name) . ' <span class="caret"></span></a>' . $subMenuTag . '</li>';
+				if ($isSmallDeviceOptimize){	// 管理画面の小画面デバイス最適化を行う場合
+					$menuTag .= '<li><a' . $tagIdAttr . ' class="' . $buttonType . '" data-toggle="dropdown" href="#" >' . convertToHtmlEntity($name) . ' <span class="caret"></span></a>' . $subMenuTag . '</li>';
+				} else {
+					$menuTag .= '<li><a' . $tagIdAttr . ' class="btn navbar-btn ' . $buttonType . '" data-toggle="dropdown" href="#" >' . convertToHtmlEntity($name) . ' <span class="caret"></span></a>' . $subMenuTag . '</li>';
+				}
 			}
 		}
-		if (!empty($menuTag)) $menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
-		
+		if (!empty($menuTag)){
+			// 小画面デバイス最適化の場合はメニューの最後に「タブを閉じる」項目を付加
+			if ($isSmallDeviceOptimize){	// 管理画面の小画面デバイス最適化を行う場合
+				// ウィンドウが別画面起動の場合のみ項目付加
+				$openBy = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
+				if ($openBy == 'other'){
+					$name = 'タブを閉じる';
+					$iconTitle = '閉じる';
+					$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_ICON_FILE;
+					$imageSize = self::NAV_ITEM_ICON_SIZE;
+					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" alt="' . $iconTitle . '" />';
+					$menuTag .= '<li><a href="#" onclick="window.close();">' . $iconTag . ' ' . convertToHtmlEntity($name) . '</a></li>';
+				}
+			}
+			$menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
+		}
 		return $menuTag;
 	}
 	/**
