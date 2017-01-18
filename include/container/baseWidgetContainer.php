@@ -1837,7 +1837,7 @@ class BaseWidgetContainer extends Core
 	 * タイムスタンプ型日時をHTML表示用のシステム標準のフォーマットに変換
 	 *
 	 * @param timestamp $src		変換するデータ
-	 * @param int $type				日付タイプ(0=年ロングフォーマット、1=年ショートフォーマット、10=年なし)
+	 * @param int $type				日付タイプ(0=年ロングフォーマット、1,2,3=年ショートフォーマット、10=年なし)
 	 * @param int $timeType			時間タイプ(0=時分秒、10=時分、20=時)
 	 * @return string				変換後データ、初期化値のときは空文字列を返す
 	 */
@@ -1856,31 +1856,39 @@ class BaseWidgetContainer extends Core
 		
 		// 日付フォーマット
 		switch ($type){
-			case 0:
+			case 0:		// デフォルトフォーマット(例 2000/01/01)
 			default:
 				$dateFormat = 'Y/m/d';
 				break;
-			case 1:		// 年ショートフォーマット
+			case 1:		// 年ショートフォーマット(例 00/01/01)
 				$dateFormat = 'y/m/d';
 				break;
-			case 10:		// 年なし
+			case 2:		// 年ショートフォーマット(例 '00 01/01)
+				$dateFormat = "\'y m/d";
+				break;
+			case 3:		// 年ショートフォーマット(例 '00 1/1)
+				$dateFormat = "\'y n/j";
+				break;
+			case 10:		// 年なし(例 01/01)
 				$dateFormat = 'm/d';
 				break;
-			case 11:		// 年なし(0なし年月)
+			case 11:		// 年なし(0なし年月)(例 1/1)
 				$dateFormat = 'n/j';
 				break;
 		}
 		
 		// 時間フォーマット
 		switch ($timeType){
-			case 0:
+			case 0:			// 時分秒(例 01:01:01)
 			default:
 				$timeFormat = 'H:i:s';
 				break;
-			case 10:		// 時分
+			case 1:			// 時分秒0なし(例 1:1:1)
+				break;
+			case 10:		// 時分(例 01:01)
 				$timeFormat = 'H:i';
 				break;
-			case 20:		// 時のみ
+			case 20:		// 時のみ(例 01)
 				$timeFormat = 'H';
 				break;
 		}
@@ -1898,7 +1906,7 @@ class BaseWidgetContainer extends Core
 	 * タイムスタンプ型日時をHTML表示用のシステム標準のフォーマットに変換
 	 *
 	 * @param timestamp $src		変換するデータ
-	 * @param int $type				0=ロングフォーマット、1=ショートフォーマット
+	 * @param int $type				convertToDispDateTime()の日付タイプと同じ
 	 * @return string				変換後データ、初期化値のときは空文字列を返す
 	 */
 	function convertToDispDate($src, $type = 0)
@@ -1911,11 +1919,35 @@ class BaseWidgetContainer extends Core
 		if ($time === false) return '';		// エラーの場合は終了
 		if ($time == strtotime($this->gEnv->getInitValueOfTimestamp())) return '';
 
+/*
 		if ($type == 0){	// ロングフォーマット(yyyy/mm/dd)
 			return date("Y/m/d", $time);
 		} else {			// ショートフォーマット(yy/mm/dd)
 			return date("y/m/d", $time);
+		}*/
+		// 日付フォーマット
+		switch ($type){
+			case 0:		// デフォルトフォーマット(例 2000/01/01)
+			default:
+				$dateFormat = 'Y/m/d';
+				break;
+			case 1:		// 年ショートフォーマット(例 00/01/01)
+				$dateFormat = 'y/m/d';
+				break;
+			case 2:		// 年ショートフォーマット(例 '00 01/01)
+				$dateFormat = "\'y m/d";
+				break;
+			case 3:		// 年ショートフォーマット(例 '00 1/1)
+				$dateFormat = "\'y n/j";
+				break;
+			case 10:		// 年なし(例 01/01)
+				$dateFormat = 'm/d';
+				break;
+			case 11:		// 年なし(0なし年月)(例 1/1)
+				$dateFormat = 'n/j';
+				break;
 		}
+		return date($dateFormat, $time);
 	}
 	/**
 	 * タイムスタンプ型日時をHTML表示用のシステム標準のフォーマットに変換

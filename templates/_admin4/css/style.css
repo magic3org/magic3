@@ -976,7 +976,17 @@ nav.secondlevel .btn.navbar-btn:focus {
 /*** パンくずリスト ***/
 .m3breadcrumbbar {
 	background-color: #ecf0f1;
+/*	height: 38px;*/
+}
+.m3breadcrumbbar .breadcrumb {
+	height: 30px;
+	padding-top:12px;
+}
+@media (min-width: 768px) {
+.m3breadcrumbbar .breadcrumb {
 	height: 38px;
+	padding-top:8px;
+}
 }
 .m3breadcrumbbar .breadcrumb {
 	display: inline-block;

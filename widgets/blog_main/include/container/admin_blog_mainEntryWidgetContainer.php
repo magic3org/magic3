@@ -26,6 +26,7 @@ require_once($gEnvManager->getCommonPath() . '/valueCheck.php');
 
 class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetContainer
 {
+	private $currentYear;		// 現在の年号
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $entryId;
 	private $blogId;		// 所属ブログ
@@ -44,6 +45,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	const EYECATCH_IMAGE_SIZE = 40;		// アイキャッチ画像サイズ
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 10;			// リンクページ数
+	const LINK_PAGE_COUNT_S		= 5;			// リンクページ数(小画面用)
 	const CATEGORY_NAME_SIZE = 20;			// カテゴリー名の最大文字列長
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
@@ -63,6 +65,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	{
 		// 親クラスを呼び出す
 		parent::__construct();
+		
+		$this->currentYear = intval(date('Y'));
 	}
 	/**
 	 * ウィジェット初期化
@@ -284,7 +288,11 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		
 		// ページングリンク作成
-		$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT_S, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		} else {
+			$pageLink = $this->createPageLink($pageNo, self::LINK_PAGE_COUNT, ''/*リンク作成用(未使用)*/, 'selpage($1);return false;');
+		}
 		
 		// 記事項目リストを取得
 		self::$_mainDb->searchEntryItems($maxListCount, $pageNo, $search_startDt, $endDt, $this->categoryArray, $search_keyword, $this->langId, array($this, 'itemListLoop'), $this->blogId);
@@ -1133,6 +1141,18 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		}
 		$eyecatchImageTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::EYECATCH_IMAGE_SIZE . '" height="' . self::EYECATCH_IMAGE_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
+		// 投稿日時
+		$outputDate = $fetchedRow['be_regist_dt'];
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			if (intval(date('Y', strtotime($outputDate))) == $this->currentYear){		// 年号が今日の年号のとき
+				$dispDate = $this->convertToDispDate($outputDate, 11/*年省略,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
+			} else {
+				$dispDate = $this->convertToDispDate($outputDate, 3/*短縮年,0なし年月*/) . '<br />' . $this->convertToDispTime($outputDate, 1/*時分*/);
+			}
+		} else {
+			$dispDate = $this->convertToDispDateTime($outputDate, 0/*ロングフォーマット*/, 10/*時分*/);
+		}
+		
 		$row = array(
 			'index' => $index,		// 項目番号
 			'no' => $index + 1,													// 行番号
@@ -1147,7 +1167,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			//'view_count' => $totalViewCount,									// 参照数
 			'view_count' => $this->convertToDispString($viewCountStr),			// 参照数
 			'reg_user' => $this->convertToDispString($fetchedRow['lu_name']),	// 投稿者
-			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
+//			'reg_date' => $this->convertToDispDateTime($fetchedRow['be_regist_dt'], 0/*ロングフォーマット*/, 10/*時分*/)		// 投稿日時
+			'reg_date' => $dispDate
 		);
 		$this->tmpl->addVars('itemlist', $row);
 		$this->tmpl->parseTemplate('itemlist', 'a');
