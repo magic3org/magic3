@@ -746,7 +746,7 @@ class DesignManager extends Core
 					$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_ICON_FILE;
 					$imageSize = self::NAV_ITEM_ICON_SIZE;
 					$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" alt="' . $iconTitle . '" />';
-					$menuTag .= '<li><a href="#" onclick="window.close();">' . $iconTag . ' ' . convertToHtmlEntity($name) . '</a></li>';
+					$menuTag .= '<li class="visible-xs"><a href="#" onclick="window.close();">' . $iconTag . ' ' . convertToHtmlEntity($name) . '</a></li>';
 				}
 			}
 			$menuTag = '<ul class="nav navbar-nav">' . $menuTag . '</ul>';
