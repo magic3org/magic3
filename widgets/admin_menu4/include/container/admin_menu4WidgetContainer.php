@@ -296,7 +296,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 								case 2:		// 使用不可
 									break;
 								case 3:		// セパレータ
-									$menuInner .= '<li class="divider"></li>' . M3_NL;
+									$menuInner .= '<li class="divider visible-lg visible-md visible-sm"></li>' . M3_NL;
 									break;
 							}
 						}
@@ -672,7 +672,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		if (!empty($menu)){
 			// セパレータ
 			$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
-			$menuTag .= '<li class="divider"></li>' . M3_NL;
+			$menuTag .= '<li class="divider visible-lg visible-md visible-sm"></li>' . M3_NL;
 		
 			// タイトル
 			$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
@@ -703,7 +703,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 		if (!empty($subMenu)){
 			// セパレータ
 			$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
-			$menuTag .= '<li class="divider"></li>' . M3_NL;
+			$menuTag .= '<li class="divider visible-lg visible-md visible-sm"></li>' . M3_NL;
 			
 			// タイトル
 			$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
@@ -737,7 +737,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 
 		// セパレータ
 		$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
-		$menuTag .= '<li class="divider"></li>' . M3_NL;
+		$menuTag .= '<li class="divider visible-lg visible-md visible-sm"></li>' . M3_NL;
 		
 		// アクセスポイントの公開制御
 		if ($isVisibleSite){
