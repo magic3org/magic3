@@ -105,7 +105,11 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$task = $request->trimValueOf('task');
 		
 		if ($task == 'entry_detail'){		// 詳細画面
-			return 'admin_entry_detail.tmpl.html';
+			if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+				return 'admin_entry_detail_small.tmpl.html';
+			} else {
+				return 'admin_entry_detail.tmpl.html';
+			}
 		} else {			// 一覧画面
 			if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
 				return 'admin_entry_small.tmpl.html';
