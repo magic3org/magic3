@@ -35,6 +35,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const TOP_ICON_FILE = '/images/system/home32.png';		// トップ遷移アイコン
 	const DEVELOP_ICON_FILE = '/images/system/develop32.png';		// 開発モードアイコン
 	const TOP_SERVER_ADMIN_ICON_FILE = '/images/system/globe32.png';		// トップ遷移アイコン(サーバ管理運用の場合)
+	const SMALL_DEVICE_ICON_FILE = '/images/system/smalldevice32.png';		// 小画面デバイスアイコン(小画面最適化実行時)
 	const CLOSE_ICON_FILE = '/images/system/close32.png';		// ウィンドウ閉じるアイコン
 	const PREV_ICON_FILE = '/images/system/prev48.png';		// ウィンドウ「前へ」アイコン
 	const NEXT_ICON_FILE = '/images/system/next48.png';		// ウィンドウ「次へ」アイコン
@@ -318,6 +319,15 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$this->tmpl->addVar("menu", "site_name", $siteName);
 			$this->tmpl->addVar("menu", "pc_url", $siteUrl);
 			//$this->tmpl->addVar("menu", "site", '<label><a href="#" onclick="previewSite(\'' . $siteUrl . '\');">' . $siteUrl . '</a></label>');
+			
+			// 小画面最適化アイコン
+			if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
+				$iconUrl = $this->gEnv->getRootUrl() . self::SMALL_DEVICE_ICON_FILE;
+				$iconTitle = $this->_('Small Screen Device');		// 小画面デバイス
+				$imageSize = self::SITE_ICON_SIZE;
+				$iconTag = '<img class="smalldevice" src="' . $this->getUrl($iconUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" border="0" alt="' . $iconTitle . '" />';
+				$this->tmpl->addVar("menu", "small_device_image", $iconTag);
+			}
 			
 			// トップアイコンを設定
 			$this->systemType = $this->gSystem->getSystemConfig(self::CF_SYSTEM_TYPE);		// システム運用タイプ
