@@ -236,12 +236,18 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		} else {
 			$termEnd = date("Y-m-d", strtotime("$endDate"));
 		}
+		// 集計日タイトル
+		if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
+			$dateTitle = '集計';
+		} else {
+			$dateTitle = '最終集計日';
+		}
 		
 		// 集計終了日表示用テキスト作成
 		if (empty($endDate)){
-			$lastData = self::DEFAULT_STR_NOT_CALC;
+			$lastDate = self::DEFAULT_STR_NOT_CALC;
 		} else {
-			$lastData = $this->convertToDispDate($endDate);		// 最終集計日
+			$lastDate = $this->convertToDispDate($endDate);		// 最終集計日
 		}
 		// 値を埋め込む
 		$this->tmpl->addVar("draw_graph", "term_start", $termStart);// グラフ期間開始
@@ -249,7 +255,8 @@ class admin_analyticsWidgetContainer extends BaseAdminWidgetContainer
 		$this->tmpl->addVar("draw_graph", "line_data", $lineDataScript);	// ラインデータスクリプト
 		$this->tmpl->addVar("draw_graph", "line_param", trim($lineParam, ','));	// ラインパラメータ
 		$this->tmpl->addVar("draw_graph", "y_max", $yMax);		// グラフY座標最大値
-		$this->tmpl->addVar("_widget", "date", $lastData);// 最終集計日
+		$this->tmpl->addVar("_widget", "date_title", $this->convertToDispString($dateTitle));// 集計日タイトル
+		$this->tmpl->addVar("_widget", "date", $lastDate);// 最終集計日
 		$this->tmpl->addVar("show_graph", "graph_width", $graphWidth);// グラフ幅
 		$this->tmpl->addVar("show_graph", "graph_height", $graphHeight);// グラフ高さ
 		
