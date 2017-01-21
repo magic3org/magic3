@@ -986,7 +986,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			case 1:	$this->tmpl->addVar("_widget", "selected_edit", 'selected');	break;
 			case 2:	$this->tmpl->addVar("_widget", "selected_public", 'selected');	break;
 			case 3:	$this->tmpl->addVar("_widget", "selected_closed", 'selected');	break;
-		}	
+		}
 		$this->tmpl->addVar("_widget", "entry_user", $reg_user);	// 投稿者
 		$this->tmpl->addVar("_widget", "entry_date", $entry_date);	// 投稿日
 		$this->tmpl->addVar("_widget", "entry_time", $entry_time);	// 投稿時
@@ -1004,6 +1004,23 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 		$this->tmpl->addVar('_widget', 'current_widget', $this->_widgetId);		// AJAX用ウィジェットID
 		
+		// 記事状態ラベル
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			$statusLabelTag = '';
+			switch ($status){
+			case 1:				// 編集中
+				$statusLabelTag = '&nbsp;<span class="label label-warning">編集中</span>';
+				break;
+			case 2:			// 公開
+				$statusLabelTag = '&nbsp;<span class="label label-success">公開</span>';
+				break;
+			case 3:			// 非公開
+				$statusLabelTag = '&nbsp;<span class="label label-warning">非公開</span>';
+				break;
+			}
+			$this->tmpl->addVar("_widget", "status_label", $statusLabelTag);
+		}
+		 
 		// 公開期間エリア表示ボタン
 		$activeTermButton = $this->gDesign->createTermButton(''/*同画面*/, self::TOOLTIP_ACTIVE_TERM, self::TAG_ID_ACTIVE_TERM);
 		$this->tmpl->addVar("_widget", "active_term_button", $activeTermButton);

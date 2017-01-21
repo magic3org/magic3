@@ -608,6 +608,17 @@ span[rel="m3help"] { cursor: default; }
 	max-width:100%;
 }
 }
+/* 入力用テーブル */
+.m3config_table.input {
+	border-style: none;
+}
+.m3config_table.input th, .m3config_table.input td {
+	border-style: none;
+}
+.m3config_table.input td {
+	padding-left: 0;
+	padding-right: 0;
+}
 .m3config_table th {
 	width: 150px;
 }

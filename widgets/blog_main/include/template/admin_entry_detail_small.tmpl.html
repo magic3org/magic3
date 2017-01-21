@@ -157,11 +157,13 @@ $(function(){
 	
 	// タブを作成
 	$("#entryhtml").tabs();
-		
+	
 	// 編集状態メニューのイベント設定
 	$('#item_status').change(function() {
 		setStatusColor();
 	});
+
+	// 現在の公開状態カラーを設定
 	setStatusColor();
 	
 	// 公開期間エリア表示制御
@@ -199,8 +201,8 @@ $(function(){
 	});
 	
 	// WYSIWYGエディター作成
-	m3SetWysiwygEditor('item_html', 300/* 高さ */);
-	m3SetWysiwygEditor('item_html2', 300/* 高さ */);
+//	m3SetWysiwygEditor('item_html', 300/* 高さ */);
+//	m3SetWysiwygEditor('item_html2', 300/* 高さ */);
 	
 	// 前後エントリー移動ボタン
 	<patTemplate:tmpl name="show_prev_button" visibility="hidden">
@@ -232,36 +234,24 @@ $(function(){
 </div></div></div>
 </div>
 
-<table id="mainconfig">
+<table id="mainconfig" class="input">
     <tbody>
     <tr>
-	    <th><span {_HELP_ENTRY_ID}>ID</span></th>
-	    <td><div class="form-control-static m3config_item col-sm-6">{ID}</div><div class="pull-right">{EYECATCH_IMAGE}</div></td>
+	    <th><span {_HELP_ENTRY_ID}>ID / サムネール</span></th>
+	</tr>
+	<tr>
+	    <td><div class="form-control-static m3config_item" style="width:50%;text-align:center;display:inline-block;">{ID}{STATUS_LABEL}</div><div style="width:50%;text-align:center;display:inline-block;">{EYECATCH_IMAGE}</div></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_ENTRY_NAME}>タイトル</span></th>
-	    <td><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" size="60" maxlength="60" /></td>
 	</tr>
-	<patTemplate:tmpl name="select_blogid_area" visibility="hidden">
 	<tr>
-	    <th><span {_HELP_ENTRY_BLOGID}>所属ブログ</span></th>
-	    <td>
-		<div class="col-sm-4 m3config_item">
-	    <select name="blogid" class="form-control">
-	        <patTemplate:tmpl name="blogid_list">
-	        <option value="{VALUE}" {SELECTED}>{NAME}</option>
-	        </patTemplate:tmpl>
-	    </select>
-		</div>
-	    </td>
-	</tr>
-	</patTemplate:tmpl>
-    <tr>
-	    <th><span {_HELP_ENTRY_USER}>投稿者</span></th>
-	    <td><div class="form-control-static m3config_item">{ENTRY_USER}</div></td>
+	    <td><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" size="60" maxlength="60" /></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ENTRY_DT}>投稿日時</span></th>
+	</tr>
+	<tr>
 	    <td>
 <div class="form-group"><div class="form-control-static col-sm-2 m3config_item" >日付：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-2 m3config_item" >時間：</div><div class="col-sm-4 m3config_item" ><input type="text" class="form-control" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="20" maxlength="10" /></div></div>
 		<!--日付<input type="text" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" size="10" maxlength="10" style="width:100px;" />&nbsp;&nbsp;時間<input type="text" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" size="10" maxlength="10" style="width:70px;" />-->
@@ -269,6 +259,8 @@ $(function(){
 	</tr>
 	<tr class="active_term_area" style="display:none;">
 	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span></th>
+	</tr>
+	<tr>
 	    <td>
 <div class="form-control-static col-sm-1 m3config_item" >開始日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="item_start_date" name="item_start_date" value="{START_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:30px;padding-left:3px;"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:55px;">時間：</div><div class="col-sm-2 m3config_item" style="width:90px;"><input type="text" class="form-control" id="item_start_time" name="item_start_time" value="{START_TIME}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:10px;padding-left:3px;margin-right:5px;">～</div>
         <div class="form-control-static col-sm-1 m3config_item" >終了日：</div><div class="col-sm-2 m3config_item" style="width:130px;"><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" size="20" maxlength="10" /></div><div class="form-control-static col-sm-1" style="width:30px;padding-left:3px;"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static col-sm-1 m3config_item" style="width:55px;">時間：</div><div class="col-sm-2 m3config_item" style="width:90px;"><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" size="20" maxlength="10" /></div>
@@ -276,22 +268,15 @@ $(function(){
 		</td>
 	</tr>
     <tr>
-	    <th><span {_HELP_ENTRY_CATEGORY}>カテゴリー</span></th>
-	    <td>
-    <patTemplate:tmpl name="category">
-	<div class="col-sm-4 m3config_item">
-    <select name="item_category{INDEX}" class="form-control">
-        <option value="0">[選択なし]</option>
-        <patTemplate:tmpl name="category_list">
-		<option value="{VALUE}" {SELECTED}>{NAME}</option>
-	</patTemplate:tmpl>
-    </select>
-	</div>
-    </patTemplate:tmpl>
-	    </td>
+	    <th><span {_HELP_ENTRY_USER}>投稿者</span></th>
 	</tr>
-        <tr>
+	<tr>
+	    <td><div class="form-control-static m3config_item">{ENTRY_USER}</div></td>
+	</tr>
+    <tr>
 	    <th><span {_HELP_ENTRY_CONTENT}>投稿内容</span></th>
+	</tr>
+	<tr>
 	    <td class="ckeditor">
 <div id="entryhtml">
             <ul>
@@ -308,31 +293,56 @@ $(function(){
 	    </td>
 	</tr>
     <tr>
+	    <th><span {_HELP_ENTRY_CATEGORY}>カテゴリー</span></th>
+	</tr>
+	<tr>
+	    <td>
+    <patTemplate:tmpl name="category">
+	<div class="col-sm-4 m3config_item">
+    <select name="item_category{INDEX}" class="form-control">
+        <option value="0">[選択なし]</option>
+        <patTemplate:tmpl name="category_list">
+		<option value="{VALUE}" {SELECTED}>{NAME}</option>
+	</patTemplate:tmpl>
+    </select>
+	</div>
+    </patTemplate:tmpl>
+	    </td>
+	</tr>
+    <tr>
 	    <th><span {_HELP_ENTRY_DESC}>概要</span></th>
+	</tr>
+	<tr>
 	    <td colspan="5"><input type="text" name="item_desc" class="form-control" value="{DESC}" /></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ENTRY_META_DESCRIPTION}>ページ要約</span></th>
+	</tr>
+	<tr>
 	    <td height="50"><textarea name="item_meta_desc" class="form-control">{META_DESC}</textarea></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ENTRY_META_KEYWORDS}>検索キーワード</span></th>
+	</tr>
+	<tr>
 	    <td height="50"><textarea name="item_meta_keyword" class="form-control">{META_KEYWORD}</textarea></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ENTRY_RELATED_CONTENT}>関連コンテンツ</span></th>
+	</tr>
+	<tr>
 	    <td><input type="text" name="item_related_content" class="form-control" value="{RELATED_CONTENT}" {RELATED_CONTENT_DISABLED} /></td>
 	</tr>
 	<tr>
-	    <th>更新者</th>
-	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div></td>
+	    <th>更新者 / 更新日時</th>
 	</tr>
 	<tr>
-	    <th>更新日時</th>
-	    <td><div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
+	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div> / <div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
 	</tr>
 	<tr>
 	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
+	</tr>
+	<tr>
 	    <td id="status_field" colspan="3" class="warning">
 		<div class="col-sm-6 m3config_item">
 	    <select id="item_status" name="item_status" class="form-control">
