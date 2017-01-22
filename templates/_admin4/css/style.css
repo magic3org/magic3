@@ -601,6 +601,11 @@ span[rel="m3help"] { cursor: default; }
 	margin: 0 auto 15px auto;
 	width:100%;
 }
+@supports (-ms-ime-align:auto) {
+.m3config_table {
+/*	table-layout:fixed;*/	/* Edge column width trouble fixed */
+}
+}
 @media (min-width: 992px) {
 .m3config_table {
 	margin: 0 auto 15px auto;
@@ -761,6 +766,9 @@ span[rel="m3help"] { cursor: default; }
 	padding-left: 0;
 	padding-right: 0;
 /*	padding-right: 5px;*/
+}
+.m3config_item.inline {
+	display: inline-block;
 }
 /*.m3config_item.join {
 	padding-left: 0;

@@ -163,7 +163,8 @@ CKEDITOR.editorConfig = function(config){
 	config.autoParagraph = false;
 	config.fillEmptyBlocks = false;		// 「&nbsp;」が自動的に入るのを防ぐ
 	config.toolbarCanCollapse = true;		// ツールバー表示制御
-	config.width = 800;
+//	config.width = 800;
+	config.width = 796;		// IE Edgeのカラム幅に合わない問題を調整(2017/1/22)
 	
 	// ツールバーの設定
 	if (M3_USE_GOOGLEMAPS){			// GoogleMapsを使用する場合

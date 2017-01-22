@@ -57,6 +57,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	const NO_BLOG_NAME = '所属なし';		// 所属ブログなし
 	const TAG_ID_ACTIVE_TERM = 'activeterm_button';		// 公開期間エリア表示用ボタンタグ
 	const TOOLTIP_ACTIVE_TERM = '公開期間を設定';		// 公開期間エリア表示用ボタンツールチップ
+	const DATETIME_FORMAT = 'Y年n月j日($1) H:i:s';		// 日付時間フォーマット
 	
 	/**
 	 * コンストラクタ
@@ -1004,6 +1005,15 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
 		$this->tmpl->addVar('_widget', 'current_widget', $this->_widgetId);		// AJAX用ウィジェットID
 		
+		// 投稿日時
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			$resistDtTimestamp = strtotime($row['be_regist_dt']);
+			$weekTypeArray = array('日', '月', '火', '水', '木', '金', '土');// 曜日表示名
+			$datetimeStr = $date = date(self::DATETIME_FORMAT, $resistDtTimestamp);
+			$datetimeStr = str_replace('$1', $weekTypeArray[intval(date('w', $resistDtTimestamp))], $datetimeStr);
+			$this->tmpl->addVar("_widget", "entry_datetime_text", '<div class="form-control-static m3config_item">' . $datetimeStr . '</div>');
+		}
+				
 		// 記事状態ラベル
 		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
 			$statusLabelTag = '';
