@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -473,39 +473,47 @@ function m3_setHtmlEditor(id, isMobile)
 /**
  * TextAreaをWYSIWYGエディターに変更
  *
- * @param string id			TextAreaタグのIDまたはname
- * @param int height		エディター領域の高さ
+ * @param string id				TextAreaタグのIDまたはname
+ * @param int height			エディター領域の高さ
  * @param bool toolbarVisible	ツールバーを表示するかどうか
- * @param string barType		ツールバータイプ(full=全項目,layout=レイアウト用)
+ * @param string barType		ツールバータイプ(full=全項目,layout=レイアウト用,small=小画面デバイス用)
+ * @param int width				エディター領域の幅
  * @return なし
  */
-function m3SetWysiwygEditor(id, height, toolbarVisible, barType)
+function m3SetWysiwygEditor(id, height, toolbarVisible, barType, width)
 {
+	// CKEditor v 4.4のiPhone,AndroidのWebブラウザのアクセス制限を解除(2017/1/21)
+	if ( !CKEDITOR.env.ie || CKEDITOR.env.version > 7 ) CKEDITOR.env.isCompatible = true;
+	
 	// アクセスポイントの設定
 	_m3SetAccessPoint(M3_CONFIG_WIDGET_DEVICE_TYPE);
 		
 	if (M3_WYSIWYG_EDITOR == 'ckeditor'){
 		var config = {};
+		
 		config['customConfig'] = M3_ROOT_URL + '/scripts/m3/ckconfig.js';
-		if (barType == 'layout'){
-			if (typeof(M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES;
-		} else {
-			if (typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
-		}
 		if (height) config['height'] = height;
+		if (width) config['width'] = width;
 		if (toolbarVisible != null && !toolbarVisible) config['toolbarStartupExpanded'] = false;
+		
 		if (barType){
 			switch (barType){
 			case 'full':
 			default:
 				config['toolbar'] = 'Full';
+				if (typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
 				break;
 			case 'layout':
 				config['toolbar'] = 'Layout';
+				if (typeof(M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES;
+				break;
+			case 'small':
+				config['toolbar'] = 'Small';
 				break;
 			}
 		} else {
 			config['toolbar'] = 'Full';
+			if (typeof(M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES) != "undefined") config['contentsCss'] = M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES;
 		}
 		CKEDITOR.replace(id, config);
 	} else {

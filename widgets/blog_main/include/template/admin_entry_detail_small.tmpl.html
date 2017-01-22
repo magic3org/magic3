@@ -200,9 +200,11 @@ $(function(){
 		button      : "calenderbutton2"       // ID of the button
 	});
 	
+
 	// WYSIWYGエディター作成
-//	m3SetWysiwygEditor('item_html', 300/* 高さ */);
-//	m3SetWysiwygEditor('item_html2', 300/* 高さ */);
+	var tableWidth = $('#mainconfig').width();
+	m3SetWysiwygEditor('item_html', 400/* 高さ */, true/*ツールバー表示*/, 'small', tableWidth);
+	m3SetWysiwygEditor('item_html2', 400/* 高さ */, true/*ツールバー表示*/, 'small', tableWidth);
 	
 	// 前後エントリー移動ボタン
 	<patTemplate:tmpl name="show_prev_button" visibility="hidden">
@@ -298,7 +300,7 @@ $(function(){
 	<tr>
 	    <td>
     <patTemplate:tmpl name="category">
-	<div class="col-sm-4 m3config_item">
+	<div class="col-sm-12 m3config_item">
     <select name="item_category{INDEX}" class="form-control">
         <option value="0">[選択なし]</option>
         <patTemplate:tmpl name="category_list">

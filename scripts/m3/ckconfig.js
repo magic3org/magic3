@@ -5,9 +5,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    1.0
+ * @version    2.0
  * @link       http://www.magic3.org
  */
 // スタイルメニューの定義
@@ -205,6 +205,16 @@ CKEDITOR.editorConfig = function(config){
 		{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
 		{ name: 'paragraph', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
 		{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
+	];
+	config.toolbar_Small = [
+		{ name: 'tools', items: [ 'Maximize', 'Source' ] },
+		{ name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight' ] },
+		{ name: 'insert', items: [ 'Image' ] },
+		'/',
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
+		{ name: 'links', items: [ 'M3Link', 'M3Unlink' ] },
+		{ name: 'styles', items: [ 'Format' ] }
 	];
 	if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined" && M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE == 10){
 		config.stylesCombo_stylesSet = 'bootstrap';

@@ -123,7 +123,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
 		{ name: 'clipboard', items: [ 'Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 		{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
-		{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
+//		{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
 		{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
 		{ name: 'others', items: [ 'LinkInfo', 'M3Templates' ] },
 		'/',
@@ -147,7 +147,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.image_previewText = '<strong>「サーバブラウザ」ボタン</strong>をクリックすると画像ブラウザが立ち上がります。サムネール表示の画像をダブルクリックすると画像が取得できます。画像をアップロードするには、画像ブラウザ上部の「アップロード」ボタンをクリックするか、画像ブラウザ上へ画像ファイルをドロップします。';
 	
 	// 追加プラグインの設定
-	config.extraPlugins = 'youtube,googlemaps,linkinfo,m3templates';
+//	config.extraPlugins = 'youtube,googlemaps,linkinfo,m3templates';
 	config.removePlugins = 'iframe';
 	config.allowedContent = true;		// ACF(Advanced Content Filter)を使用しない。SCRIPT,IFRAMEタグ等許可。
 //	config.extraAllowedContent = 'iframe';
