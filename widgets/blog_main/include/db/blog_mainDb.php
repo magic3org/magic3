@@ -266,7 +266,7 @@ class blog_mainDb extends BaseDb
 	{
 		$now = date("Y/m/d H:i:s");	// 現在日時
 		$userId = $this->gEnv->getCurrentUserId();	// 現在のユーザ
-			
+
 		// トランザクション開始
 		$this->startTransaction();
 		
@@ -611,7 +611,7 @@ class blog_mainDb extends BaseDb
 	{
 		$queryStr  = 'SELECT *, reg.lu_name AS reg_user_name, updt.lu_name AS update_user_name FROM blog_entry LEFT JOIN _login_user ON be_create_user_id = lu_id AND lu_deleted = false ';
 		$queryStr .=   'LEFT JOIN _login_user as reg ON be_regist_user_id = reg.lu_id AND reg.lu_deleted = false ';
-		$queryStr .=   'LEFT JOIN _login_user as updt ON be_update_user_id = updt.lu_id AND updt.lu_deleted = false ';
+		$queryStr .=   'LEFT JOIN _login_user as updt ON be_create_user_id = updt.lu_id AND updt.lu_deleted = false ';
 		$queryStr .=   'WHERE be_serial = ? ';
 		$ret = $this->selectRecord($queryStr, array(intval($serial)), $row);
 		

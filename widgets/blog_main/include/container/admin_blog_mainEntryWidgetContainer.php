@@ -861,7 +861,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$reg_user = $row['reg_user_name'];				// 投稿者
 				$entry_date = $this->timestampToDate($row['be_regist_dt']);		// 投稿日
 				$entry_time = $this->timestampToTime($row['be_regist_dt']);		// 投稿時間
-				$update_user = $this->convertToDispString($row['lu_name']);// 更新者
+				//$update_user = $this->convertToDispString($row['lu_name']);// 更新者
+				$update_user = $this->convertToDispString($row['update_user_name']);// 更新者
 				$update_dt = $this->convertToDispDateTime($row['be_create_dt']);
 				$start_date = $this->convertToDispDate($row['be_active_start_dt']);	// 公開期間開始日
 				$start_time = $this->convertToDispTime($row['be_active_start_dt'], 1/*時分*/);	// 公開期間開始時間
@@ -988,7 +989,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			case 2:	$this->tmpl->addVar("_widget", "selected_public", 'selected');	break;
 			case 3:	$this->tmpl->addVar("_widget", "selected_closed", 'selected');	break;
 		}
-		$this->tmpl->addVar("_widget", "entry_user", $reg_user);	// 投稿者
+		$this->tmpl->addVar("_widget", "entry_user", $this->convertToDispString($reg_user));	// 投稿者
 		$this->tmpl->addVar("_widget", "entry_date", $entry_date);	// 投稿日
 		$this->tmpl->addVar("_widget", "entry_time", $entry_time);	// 投稿時
 		$this->tmpl->addVar("_widget", "update_user", $update_user);	// 更新者

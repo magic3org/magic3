@@ -154,6 +154,7 @@ $(function(){
 	
 	// テーブルを作成
 	m3SetConfigTable('mainconfig');
+	m3SetConfigTable('termpanel');
 	
 	// タブを作成
 	$("#entryhtml").tabs();
@@ -226,6 +227,22 @@ $(function(){
 		$('tr.active_term_area').after('<tr id="tmprow"></tr>').hide();
 	}
 
+	// パネル開閉イベント設定
+	$('#pageselectmenu .panel-collapse').on('show.bs.collapse', function (n){
+		$(n.target).siblings('.panel-heading').find('.layout_menu_switch.glyphicon').removeClass("glyphicon-chevron-right").addClass("glyphicon-chevron-down");
+		
+		$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+//		pageSelectMenuVisible = true;
+//		setupPreview();
+	});
+	$('#pageselectmenu .panel-collapse').on('hidden.bs.collapse', function (n){
+		$(n.target).siblings('.panel-heading').find('.layout_menu_switch.glyphicon').removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-right");
+		
+		$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+//		pageSelectMenuVisible = false;
+//		setupPreview();
+	});
+	
 	// WYSIWYGエディター作成
 	var tableWidth = $('#mainconfig').width();
 	m3SetWysiwygEditor('item_html', 400/* 高さ */, true/*ツールバー表示*/, 'small', tableWidth);
@@ -289,28 +306,6 @@ $(function(){
 <div class="m3config_item col-xs-5 col-sm-4"><input type="text" class="form-control" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" maxlength="10" /></div>
 <div class="m3config_item col-xs-4 col-sm-4" style="margin-left:10px;"><input type="text" class="form-control" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" maxlength="10" /></div>
 </div>
-		</td>
-	</tr>
-	<tr class="date_toggle_area" style="display:none;">
-	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span></th>
-	</tr>
-	<tr class="date_toggle_area" style="display:none;">
-	    <td>
-<div class="form-group clearfix">
-<label class="m3config_item control-label col-xs-12 col-sm-2" for="item_start_date">開始日/時間</label>
-<div class="m3config_item col-xs-5 col-sm-4"><input type="text" class="form-control" id="item_start_date" name="item_start_date" value="{START_DATE}" maxlength="10" /></div>
-<div class="m3config_item col-xs-4 col-sm-4" style="margin-left:10px;"><input type="text" class="form-control" id="item_start_time" name="item_start_time" value="{START_TIME}" maxlength="10" /></div>
-</div>
-<div class="form-group clearfix">
-<label class="m3config_item control-label col-xs-12 col-sm-2" for="item_end_date">終了日/時間</label>
-<div class="m3config_item col-xs-5 col-sm-4"><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" maxlength="10" /></div>
-<div class="m3config_item col-xs-4 col-sm-4" style="margin-left:10px;"><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" maxlength="10" /></div>
-</div>
-		<!--<div>
-<div class="form-control-static m3config_item inline" style="width:4em;">開始日：</div><div class="m3config_item inline" style="width:9em;"></div><div class="form-control-static m3config_item inline" style="width:30px;padding-left:3px;"><a href="#" id="calenderbutton1"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static m3config_item inline" style="width:4em;">時間：</div><div class="m3config_item inline" style="width:4em;"></div><div class="form-control-static m3config_item inline" style="width:10px;padding-left:3px;margin-right:5px;">～</div>
-        </div><div>
-        <div class="form-control-static m3config_item inline" style="width:4em;">終了日：</div></div><div class="form-control-static m3config_item inline" style="width:30px;padding-left:3px;"><a href="#" id="calenderbutton2"><img src="{CALENDAR_IMG}" alt="カレンダー" title="カレンダー" rel="m3help" /></a></div><div class="form-control-static m3config_item inline" style="width:4em;">時間：</div><div class="m3config_item inline" style="width:9em;"></div>
-		</div>-->
 		</td>
 	</tr>
     <tr class="entry_user_area">
@@ -390,9 +385,9 @@ $(function(){
 	    <th>更新者 / 更新日時</th>
 	</tr>
 	<tr class="others_toggle_area">
-	    <td><div class="form-control-static m3config_item">{UPDATE_USER}</div> / <div class="form-control-static m3config_item">{UPDATE_DT}</div></td>
+	    <td><div class="form-control-static m3config_item">{UPDATE_USER} / {UPDATE_DT}</div></td>
 	</tr>
-	<tr>
+<!--	<tr>
 	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
 	</tr>
 	<tr>
@@ -405,11 +400,65 @@ $(function(){
 	    </select>
 		</div>
 	    </td>
-	</tr>
+	</tr>-->
     </tbody>
 </table>
-<div class="well m3config_update_buttons">
-<patTemplate:tmpl name="delete_button" visibility="hidden">
+
+<div class="panel panel-info" id="pageselectmenu" style="margin-bottom:50px;">
+        <div class="panel-heading" data-toggle="collapse" data-parent="#pageselectmenu" data-target="#pageselect" rel="m3help" data-container="body" title="ページを選択">
+            <h4 class="panel-title">公開<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i></h4>
+        </div>
+        <div id="pageselect" class="panel-collapse collapse">
+        <div class="panel-body" style="padding:0;">
+<table class="table">
+<thead>
+    <tr>
+        <th>#</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Language</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>1</td>
+        <td>Some</td>
+        <td>One</td>
+        <td>English</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Joe</td>
+        <td>Sixpack</td>
+        <td>English</td>
+    </tr>
+</tbody>
+</table>
+
+<!--<div class="well m3config_update_buttons">
+</div>-->
+<table id="termpanel" class="input">
+	<tr class="date_toggle_area">
+	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span></th>
+	</tr>
+	<tr class="date_toggle_area">
+	    <td>
+<div class="form-group clearfix">
+<label class="m3config_item control-label col-xs-12 col-sm-2" for="item_start_date">開始日/時間</label>
+<div class="m3config_item col-xs-5 col-sm-4"><input type="text" class="form-control" id="item_start_date" name="item_start_date" value="{START_DATE}" maxlength="10" /></div>
+<div class="m3config_item col-xs-4 col-sm-4" style="margin-left:10px;"><input type="text" class="form-control" id="item_start_time" name="item_start_time" value="{START_TIME}" maxlength="10" /></div>
+</div>
+<div class="form-group clearfix">
+<label class="m3config_item control-label col-xs-12 col-sm-2" for="item_end_date">終了日/時間</label>
+<div class="m3config_item col-xs-5 col-sm-4"><input type="text" class="form-control" id="item_end_date" name="item_end_date" value="{END_DATE}" maxlength="10" /></div>
+<div class="m3config_item col-xs-4 col-sm-4" style="margin-left:10px;"><input type="text" class="form-control" id="item_end_time" name="item_end_time" value="{END_TIME}" maxlength="10" /></div>
+</div>
+		</td>
+	</tr>
+</table>
+        </div>
+		<div class="panel-footer text-right">
+		<patTemplate:tmpl name="delete_button" visibility="hidden">
 		<input type="button" class="button" onclick="delItem();" value="削除" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="update_button" visibility="hidden">
@@ -421,7 +470,13 @@ $(function(){
 <patTemplate:tmpl name="update_history_button" visibility="hidden">
 		<input type="button" class="button" onclick="updateHistoryItem();" value="履歴データで更新" />
 </patTemplate:tmpl>
+        </div>
+    </div>
+
+
 </div>
+  
+
 </form>
 </div>
 </patTemplate:tmpl>
