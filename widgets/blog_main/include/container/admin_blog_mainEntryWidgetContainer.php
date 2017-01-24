@@ -1020,16 +1020,24 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$statusLabelTag = '';
 			switch ($status){
 			case 1:				// 編集中
-				$statusLabelTag = '&nbsp;<span class="label label-warning">編集中</span>';
+				$statusLabelTag = '&nbsp;<span id="status_label" class="label label-warning">編集中</span>';
+				$statusPanelTitle = '編集中';		// 記事状態パネルのタイトル
+				$statusPanelColor = 'panel-warning';				// 記事状態パネルのカラー
 				break;
 			case 2:			// 公開
-				$statusLabelTag = '&nbsp;<span class="label label-success">公開</span>';
+				$statusLabelTag = '&nbsp;<span id="status_label" class="label label-success">公開</span>';
+				$statusPanelTitle = '公開';		// 記事状態パネルのタイトル
+				$statusPanelColor = 'panel-success';		// 記事状態パネルのカラー
 				break;
 			case 3:			// 非公開
-				$statusLabelTag = '&nbsp;<span class="label label-warning">非公開</span>';
+				$statusLabelTag = '&nbsp;<span id="status_label" class="label label-warning">非公開</span>';
+				$statusPanelTitle = '非公開';		// 記事状態パネルのタイトル
+				$statusPanelColor = 'panel-warning';		// 記事状態パネルのカラー
 				break;
 			}
 			$this->tmpl->addVar("_widget", "status_label", $statusLabelTag);
+			$this->tmpl->addVar("_widget", "status_panel_color", $statusPanelColor);
+			$this->tmpl->addVar("_widget", "status_panel_title", $statusPanelTitle);
 		}
 		 
 		// 公開期間エリア表示ボタン

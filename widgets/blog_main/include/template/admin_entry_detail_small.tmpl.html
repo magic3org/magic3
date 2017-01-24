@@ -159,13 +159,18 @@ $(function(){
 	// タブを作成
 	$("#entryhtml").tabs();
 	
-	// 編集状態メニューのイベント設定
+/*	// 編集状態メニューのイベント設定
 	$('#item_status').change(function() {
 		setStatusColor();
 	});
 
 	// 現在の公開状態カラーを設定
-	setStatusColor();
+	setStatusColor();*/
+	// 公開状態ラベル
+	$("#status_label").click(function(){
+		// 画面最下部へ移動
+		$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+	});
 	
 	// 投稿日時エリア作成
 	if (document.main.serial.value && document.main.serial.value != '0'){		// 更新画面の場合
@@ -206,41 +211,29 @@ $(function(){
 	}
 	
 	// 公開期間エリア表示制御
-	$("#{TAGID_ACTIVE_TERM}").click(function(){
-		var $tableRow = $('tr.active_term_area');
-		if ($tableRow.is(':hidden')){
-			$('#tmprow').remove();
-			$tableRow.slideToggle('slow');
-	    } else {
-			$tableRow.slideToggle('slow', function(){
-				$tableRow.after('<tr id="tmprow"></tr>');
-			});
-	    }
-	
+	$("#edit_term_button").click(function(){
+		$('.term_toggle_area').slideToggle();
+		
+		// 画面最下部へ移動
+		$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+		
 		// 表示エリアリサイズ
 		m3AdjustParentWindow();
 		return false;
 	});
-	if ({SHOW_ACTIVE_TERM_AREA}){
-		$('tr.active_term_area').show();
-	} else {
-		$('tr.active_term_area').after('<tr id="tmprow"></tr>').hide();
-	}
 
 	// パネル開閉イベント設定
 	$('#pageselectmenu .panel-collapse').on('show.bs.collapse', function (n){
 		$(n.target).siblings('.panel-heading').find('.layout_menu_switch.glyphicon').removeClass("glyphicon-chevron-right").addClass("glyphicon-chevron-down");
 		
+		// 画面最下部へ移動
 		$("html, body").animate({ scrollTop: $(document).height() }, "slow");
-//		pageSelectMenuVisible = true;
-//		setupPreview();
 	});
 	$('#pageselectmenu .panel-collapse').on('hidden.bs.collapse', function (n){
 		$(n.target).siblings('.panel-heading').find('.layout_menu_switch.glyphicon').removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-right");
 		
+		// 画面最下部へ移動
 		$("html, body").animate({ scrollTop: $(document).height() }, "slow");
-//		pageSelectMenuVisible = false;
-//		setupPreview();
 	});
 	
 	// WYSIWYGエディター作成
@@ -290,7 +283,7 @@ $(function(){
 	    <th><span {_HELP_ENTRY_NAME}>タイトル</span></th>
 	</tr>
 	<tr>
-	    <td><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" size="60" maxlength="60" /></td>
+	    <td><input type="text" name="item_name" class="form-control" value="{ITEM_NAME}" maxlength="60" /></td>
 	</tr>
     <tr>
 	    <th><span {_HELP_ENTRY_DT}>投稿日時</span><a href="javascript:void(0);" id="edit_date_button" class="btn btn-xs btn-warning m3config_table_h_side_button" role="button" rel="m3help" data-container="body" title="編集"><i class="glyphicon glyphicon-edit"></i></a>
@@ -298,9 +291,6 @@ $(function(){
 	</tr>
 	<tr>
 	    <td><div id="entry_date_area">{ENTRY_DATETIME_TEXT}</div>
-		<!--<div style="display:flex;">
-<div class="form-control-static m3config_item inline" style="width:4em;">日付：</div><div class="m3config_item inline" style="width:8em;"><input type="text" class="form-control" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" maxlength="10" /></div><div class="form-control-static m3config_item inline" style="margin-left:10px;width:4em;">時間：</div><div class="m3config_item inline" ><input type="text" class="form-control" id="item_entry_time" name="item_entry_time" value="{ENTRY_TIME}" maxlength="10" style="width:7em;" /></div>
-</div>-->
 <div id="edit_date_area" class="form-group">
 <label class="m3config_item control-label col-xs-12 col-sm-2" for="item_entry_date">日付/時間</label>
 <div class="m3config_item col-xs-5 col-sm-4"><input type="text" class="form-control" id="item_entry_date" name="item_entry_date" value="{ENTRY_DATE}" maxlength="10" /></div>
@@ -404,9 +394,9 @@ $(function(){
     </tbody>
 </table>
 
-<div class="panel panel-info" id="pageselectmenu" style="margin-bottom:50px;">
-        <div class="panel-heading" data-toggle="collapse" data-parent="#pageselectmenu" data-target="#pageselect" rel="m3help" data-container="body" title="ページを選択">
-            <h4 class="panel-title">公開<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i></h4>
+<div class="panel {STATUS_PANEL_COLOR}" id="pageselectmenu" style="margin-bottom:50px;">
+        <div class="panel-heading" data-toggle="collapse" data-parent="#pageselectmenu" data-target="#pageselect">
+            <h4 class="panel-title">{STATUS_PANEL_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i></h4>
         </div>
         <div id="pageselect" class="panel-collapse collapse">
         <div class="panel-body" style="padding:0;">
@@ -434,14 +424,12 @@ $(function(){
     </tr>
 </tbody>
 </table>
-
-<!--<div class="well m3config_update_buttons">
-</div>-->
 <table id="termpanel" class="input">
-	<tr class="date_toggle_area">
-	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span></th>
+	<tr>
+	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span><a href="javascript:void(0);" id="edit_term_button" class="btn btn-xs btn-warning m3config_table_h_side_button" role="button" rel="m3help" data-container="body" title="編集"><i class="glyphicon glyphicon-edit"></i></a>
+		</th>
 	</tr>
-	<tr class="date_toggle_area">
+	<tr class="term_toggle_area" style="display:none;">
 	    <td>
 <div class="form-group clearfix">
 <label class="m3config_item control-label col-xs-12 col-sm-2" for="item_start_date">開始日/時間</label>
@@ -466,9 +454,6 @@ $(function(){
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
 		<input type="button" class="button" onclick="addItem();" value="新規追加" />
-</patTemplate:tmpl>
-<patTemplate:tmpl name="update_history_button" visibility="hidden">
-		<input type="button" class="button" onclick="updateHistoryItem();" value="履歴データで更新" />
 </patTemplate:tmpl>
         </div>
     </div>
