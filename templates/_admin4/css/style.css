@@ -675,7 +675,17 @@ span[rel="m3help"] { cursor: default; }
 	white-space: normal;
 	word-break: break-all;
 }
-
+.m3config_table_h_side_button {
+	margin-top:-3px;
+	margin-bottom:-2px;
+	margin-left:10px;
+}
+@media (min-width: 992px) {
+.m3config_table_h_side_button {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+}
 /* for madal table */
 .m3config_modal_table {
 	width: 100%;
