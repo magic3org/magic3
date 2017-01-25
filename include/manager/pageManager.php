@@ -3805,6 +3805,13 @@ class PageManager extends Core
 					$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
 				}
 
+				// 管理画面の小画面デバイス最適化を行うかどうか
+				if ($gEnvManager->isSmallDeviceAdmin()){
+					$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = true;' . M3_NL;
+				} else {
+					$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = false;' . M3_NL;
+				}
+				
 				// ウィジェット詳細設定画面専用のJavaScriptグローバル変数
 				if ($cmd == M3_REQUEST_CMD_CONFIG_WIDGET){
 					// ##### CKEditor用の設定 #####
@@ -3917,6 +3924,13 @@ class PageManager extends Core
 						if (!empty($googleMapsKey)) $replaceStr .= 'var M3_GOOGLEMAPS_KEY="' . $googleMapsKey . '";' . M3_NL;		// システムルートURL
 					} else {
 						$replaceStr .= 'var M3_USE_GOOGLEMAPS = false;' . M3_NL;
+					}
+				
+					// 管理画面の小画面デバイス最適化を行うかどうか
+					if ($gEnvManager->isSmallDeviceAdmin()){
+						$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = true;' . M3_NL;
+					} else {
+						$replaceStr .= 'var M3_SMALL_DEVICE_OPTIMIZE = false;' . M3_NL;
 					}
 				
 					// ##### CKEditor用の設定 #####

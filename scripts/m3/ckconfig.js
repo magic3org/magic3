@@ -253,6 +253,34 @@ CKEDITOR.on('dialogDefinition', function(ev){
 		dialogDefinition.removeContents('Upload');	// 「アップロード」タブ削除
 	}
 	
+	// ツールバー項目
+	var widthRatio, height, options;
+	if (M3_SMALL_DEVICE_OPTIMIZE){		// 小画面デバイス最適化の場合
+		widthRatio = 1.0;
+		height = '500px';
+		options = { toolbar: [['view', 'sort'], ['fullscreen']] };
+	} else {
+		widthRatio = M3_FILEBROWSER_WIDTH_RATIO;
+		height = '600px';
+		options = {	toolbar:[
+						['back', 'forward'],
+						['netmount'],
+						// ['reload'],
+						// ['home', 'up'],
+						['mkdir', 'mkfile', 'upload'],
+						['open', 'download', 'getfile'],
+						['info', 'chmod'],
+						['quicklook'],
+						['copy', 'cut', 'paste'],
+						['rm'],
+						['duplicate', 'rename', 'edit', 'resize'],
+						['extract', 'archive'],
+						['search'],
+						['view', 'sort'],
+						['help'],
+						['fullscreen']
+					] };
+	}
 	// ファイルブラウザ
 	if (jQuery().elfinder){			// elFinderが使用できる場合
 		var editor = ev.editor;
@@ -282,7 +310,7 @@ CKEDITOR.on('dialogDefinition', function(ev){
 					$('<div />').dialog({
 						title: title,
 						modal: true,
-						width: $(window).width() * M3_FILEBROWSER_WIDTH_RATIO,
+						width: $(window).width() * widthRatio,
 						open: function(){
 							$(this).parent().css("padding", "0px");
 							$(this).css("padding", "0px");
@@ -296,10 +324,11 @@ CKEDITOR.on('dialogDefinition', function(ev){
 							}
 							$(this).elfinder({
 								url: M3_ROOT_URL + '/scripts/elfinder-' + M3_FILEBROWSER_VER + '/php/connector.php' + option,
-								height: '600px',
+								height: height,
 								lang: 'ja',
 								resizable: false,
 								ui: ['toolbar', 'places', 'tree', 'path', 'stat'],
+								uiOptions: options,
 								getFileCallback: function(file){
 									var url = file.url;
 									CKEDITOR.tools.callFunction(editor._.filebrowserFn, url);
