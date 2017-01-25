@@ -984,10 +984,18 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$this->tmpl->addVar("_widget", "desc", $desc);		// 簡易説明
 		$this->tmpl->addVar("_widget", "meta_desc", $this->convertToDispString($metaDesc));		// ページ要約(METAタグ)
 		$this->tmpl->addVar("_widget", "meta_keyword", $this->convertToDispString($metaKeyword));		// ページキーワード(METAタグ)
-		switch ($status){
-			case 1:	$this->tmpl->addVar("_widget", "selected_edit", 'selected');	break;
-			case 2:	$this->tmpl->addVar("_widget", "selected_public", 'selected');	break;
-			case 3:	$this->tmpl->addVar("_widget", "selected_closed", 'selected');	break;
+		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
+			switch ($status){
+				case 1:	$this->tmpl->addVar("_widget", "checked_edit", 'checked');		break;
+				case 2:	$this->tmpl->addVar("_widget", "checked_public", 'checked');	break;
+				case 3:	$this->tmpl->addVar("_widget", "checked_closed", 'checked');	break;
+			}
+		} else {
+			switch ($status){
+				case 1:	$this->tmpl->addVar("_widget", "selected_edit", 'selected');	break;
+				case 2:	$this->tmpl->addVar("_widget", "selected_public", 'selected');	break;
+				case 3:	$this->tmpl->addVar("_widget", "selected_closed", 'selected');	break;
+			}
 		}
 		$this->tmpl->addVar("_widget", "entry_user", $this->convertToDispString($reg_user));	// 投稿者
 		$this->tmpl->addVar("_widget", "entry_date", $entry_date);	// 投稿日

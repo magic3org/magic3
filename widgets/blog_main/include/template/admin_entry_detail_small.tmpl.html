@@ -140,14 +140,6 @@ function editEntry(serial){
 	document.main.serial.value = serial;
 	document.main.submit();
 }
-function setStatusColor(){
-	var status = $('#item_status').val();
-	if (status == 2){		// 公開状態のとき
-		$('#status_field').removeClass('warning').addClass('success');
-	} else {
-		$('#status_field').removeClass('success').addClass('warning');
-	}
-}
 $(function(){
 	// 編集中の離脱を防止
 	m3SetSafeContentEdit();
@@ -158,14 +150,7 @@ $(function(){
 	
 	// タブを作成
 	$("#entryhtml").tabs();
-	
-/*	// 編集状態メニューのイベント設定
-	$('#item_status').change(function() {
-		setStatusColor();
-	});
 
-	// 現在の公開状態カラーを設定
-	setStatusColor();*/
 	// 公開状態ラベル
 	$("#status_label").click(function(){
 		// 画面最下部へ移動
@@ -377,20 +362,6 @@ $(function(){
 	<tr class="others_toggle_area">
 	    <td><div class="form-control-static m3config_item">{UPDATE_USER} / {UPDATE_DT}</div></td>
 	</tr>
-<!--	<tr>
-	    <th><span {_HELP_ENTRY_VISIBLE_STATUS}>公開</span><div class="pull-right">{ACTIVE_TERM_BUTTON}</div></th>
-	</tr>
-	<tr>
-	    <td id="status_field" colspan="3" class="warning">
-		<div class="col-sm-6 m3config_item">
-	    <select id="item_status" name="item_status" class="form-control">
-	        <option value="1" {SELECTED_EDIT}>編集中(非公開)</option>
-		<option value="2" {SELECTED_PUBLIC}>公開</option>
-		<option value="3" {SELECTED_CLOSED}>非公開</option>
-	    </select>
-		</div>
-	    </td>
-	</tr>-->
     </tbody>
 </table>
 
@@ -399,31 +370,17 @@ $(function(){
             <h4 class="panel-title">{STATUS_PANEL_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i></h4>
         </div>
         <div id="pageselect" class="panel-collapse collapse">
-        <div class="panel-body" style="padding:0;">
-<table class="table">
-<thead>
-    <tr>
-        <th>#</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Language</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        <td>1</td>
-        <td>Some</td>
-        <td>One</td>
-        <td>English</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Joe</td>
-        <td>Sixpack</td>
-        <td>English</td>
-    </tr>
-</tbody>
-</table>
+        <div class="panel-body">
+<div class="col-xs-12 m3config_item">
+<div class="radio"><label><input type="radio" name="item_status" value="1" {CHECKED_EDIT}>編集中(非公開)</label></div>
+</div>
+<div class="col-xs-12 m3config_item">
+<div class="radio"><label><input type="radio" name="item_status" value="2" {CHECKED_PUBLIC}>公開</label></div>
+</div>
+<div class="col-xs-12 m3config_item">
+<div class="radio"><label><input type="radio" name="item_status" value="3" {CHECKED_CLOSED}>非公開</label></div>
+</div>
+        </div><!-- panel body -->
 <table id="termpanel" class="input">
 	<tr>
 	    <th><span {_HELP_ENTRY_ACTIVE_TERM}>公開期間</span><a href="javascript:void(0);" id="edit_term_button" class="btn btn-xs btn-warning m3config_table_h_side_button" role="button" rel="m3help" data-container="body" title="編集"><i class="glyphicon glyphicon-edit"></i></a>
@@ -444,24 +401,19 @@ $(function(){
 		</td>
 	</tr>
 </table>
-        </div>
-		<div class="panel-footer text-right">
+		<div class="panel-footer">
 		<patTemplate:tmpl name="delete_button" visibility="hidden">
-		<input type="button" class="button" onclick="delItem();" value="削除" />
-</patTemplate:tmpl>
+		<input type="button" class="button btn-danger" onclick="delItem();" value="削除" />
+        </patTemplate:tmpl>
 <patTemplate:tmpl name="update_button" visibility="hidden">
-		<input type="button" class="button" onclick="updateItem();" value="更新" />
+		<input type="button" class="button btn-primary pull-right" onclick="updateItem();" value="更新" />
 </patTemplate:tmpl>
 <patTemplate:tmpl name="add_button" visibility="hidden">
-		<input type="button" class="button" onclick="addItem();" value="新規追加" />
+		<input type="button" class="button btn-primary pull-right" onclick="addItem();" value="新規追加" />
 </patTemplate:tmpl>
-        </div>
-    </div>
-
-
+        </div><!-- footer -->
+    </div><!-- panel collapse -->
 </div>
-  
-
 </form>
 </div>
 </patTemplate:tmpl>
