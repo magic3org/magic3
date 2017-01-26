@@ -693,6 +693,14 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 			$menuTag .= '<li class="dropdown-header">' . self::MENU_TITLE_CONTENT . '</li>' . M3_NL;
 		
+			// アイコン
+			if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
+				$iconTag = '<i class="glyphicon glyphicon-cog"></i> ';
+			} else {
+				$iconTitle = 'ウィジェット設定';
+				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
+				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			}
 			for ($i = 0; $i < count($menu); $i++){
 				$widgetId = $menu[$i]['wd_id'];
 				$title = $this->getCurrentLangString($menu[$i]['wd_content_name']);		// ウィジェットのコンテンツ名を取得
@@ -704,10 +712,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				}
 				if (empty($title)) $title = $menu[$i]['wd_name'];		// コンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;
-			
-				$iconTitle = 'ウィジェット設定';
-				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
-				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+
 				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;">' . $iconTag . $this->convertToDispString($title) . '</a></li>' . M3_NL;
 			}
@@ -724,6 +729,15 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 			$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 			$menuTag .= '<li class="dropdown-header">' . self::MENU_TITLE_SUB_CONTENT . '</li>' . M3_NL;
 		
+			// アイコン
+			if ($this->_isSmallDeviceOptimize){				// 管理画面の小画面デバイス最適化を行う場合
+				$iconTag = '<i class="glyphicon glyphicon-cog"></i> ';
+			} else {
+				$iconTitle = 'ウィジェット設定';
+				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
+				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
+			}
+			
 			for ($i = 0; $i < count($subMenu); $i++){
 				$widgetId = $subMenu[$i]['wd_id'];
 				if ($subMenu[$i]['wd_content_widget_id']) $widgetId = $subMenu[$i]['wd_content_widget_id'];
@@ -739,9 +753,6 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 				if (empty($title)) $title = $subMenu[$i]['wd_name'];		// サブコンテンツ名が取得できないときはウィジェット名を設定
 				if (empty($title)) continue;
 
-				$iconTitle = 'ウィジェット設定';
-				$iconUrl = $this->gEnv->getRootUrl() . self::CONFIG_ICON_FILE;		// ウィジェット設定アイコン
-				$iconTag = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" />';
 				$menuTag .= str_repeat(M3_INDENT_SPACE, self::SITEMENU_INDENT_LEBEL + 2);
 				$menuTag .= '<li ><a href="#" onclick="m3ShowConfigWindow(\'' . $widgetId . '\', 0, 0);return false;">' . $iconTag . $this->convertToDispString($title) . '</a></li>' . M3_NL;
 			}
