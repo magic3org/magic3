@@ -50,7 +50,7 @@ class admin_menu4WidgetContainer extends BaseAdminWidgetContainer
 	const LOGOUT_ICON_FILE = '/images/system/logout24.png';		// ログアウトアイコン
 	const CONFIG_ICON_FILE = '/images/system/config24.png';		// ウィジェット設定画面アイコン
 	const MAX_SITENAME_LENGTH = 20;		// サイト名の最大文字数
-	const MAX_SITENAME_LENGTH_S = 11;		// サイト名の最大文字数
+	const MAX_SITENAME_LENGTH_S = 9;		// サイト名の最大文字数
 	const ICON_SIZE = 24;			// アイコンサイズ
 	const SITE_ICON_SIZE = 32;			// サイトメニューアイコンサイズ
 	const AVATAR_ICON_SIZE = 32;		// ユーザアバターアイコンサイズ

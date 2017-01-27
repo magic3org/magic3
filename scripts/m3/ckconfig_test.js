@@ -124,6 +124,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'clipboard', items: [ 'Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
 		{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
 //		{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
+		{ name: 'insert', items: [ 'Image' ] },
 		{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
 		{ name: 'others', items: [ 'LinkInfo', 'M3Templates' ] },
 		'/',

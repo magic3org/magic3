@@ -208,14 +208,9 @@ CKEDITOR.editorConfig = function(config){
 		{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
 	];
 	config.toolbar_Small = [
-		{ name: 'tools', items: [ 'Maximize', 'Source' ] },
-		{ name: 'clipboard', items: [ 'Undo', 'Redo' ] },
-		{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight' ] },
+		{ name: 'tools', items: [ 'Maximize', 'Source', 'Undo', 'Redo', 'NumberedList', 'BulletedList', 'JustifyLeft', 'JustifyCenter', 'JustifyRight' ] },
 		'/',
-		{ name: 'basicstyles', items: [ 'Bold', 'Italic' ] },
-		{ name: 'links', items: [ 'M3Link', 'M3Unlink' ] },
-		{ name: 'styles', items: [ 'Format' ] },
-		{ name: 'insert', items: [ 'Image' ] },
+		{ name: 'basicstyles', items: [ 'Bold', 'Italic', '-', 'M3Link', 'M3Unlink', 'Format', 'Image' ] }
 	];
 	if (typeof(M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE) != "undefined" && M3_CONFIG_WIDGET_CKEDITOR_TEMPLATE_TYPE == 10){
 		config.stylesCombo_stylesSet = 'bootstrap';
