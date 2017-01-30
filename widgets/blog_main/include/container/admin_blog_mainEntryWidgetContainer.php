@@ -424,7 +424,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				// 取得できないときは一部初期化
 				//$name = '';				// タイトル
 				//$html = '';				// HTML
-				$status = 0;				// エントリー状況
+				//$status = 0;				// エントリー状況
+				$status = 1;				// エントリー状況(編集中)
 				$reg_user = '';				// 投稿者
 				$update_user = '';// 更新者
 				$update_dt = '';							
@@ -913,7 +914,8 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 				$desc = '';		// 簡易説明
 				$metaDesc = '';		// ページ要約(METAタグ)
 				$metaKeyword = '';		// ページキーワード(METAタグ)
-				$status = 0;				// エントリー状況
+				//$status = 0;				// エントリー状況
+				$status = 1;				// エントリー状況(編集中)
 				$reg_user = '';				// 投稿者
 				$entry_date = date("Y/m/d");		// 投稿日
 				$entry_time = date("H:i:s");		// 投稿時間
