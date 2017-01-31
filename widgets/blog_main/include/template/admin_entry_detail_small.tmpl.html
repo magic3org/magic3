@@ -149,7 +149,19 @@ $(function(){
 	m3SetConfigTable('termpanel');
 	
 	// タブを作成
-	$("#entryhtml").tabs();
+	$("#entryhtml").tabs({
+		beforeActivate: function(event, ui){
+			// コンテンツ内容を確定
+			CKEDITOR.instances['item_html'].getData();			
+			CKEDITOR.instances['item_html2'].getData();			// コンテンツ内容を確定
+
+			if (ui.newTab.index()){
+				CKEDITOR.instances['item_html'].focus();
+			} else {
+				CKEDITOR.instances['item_html2'].focus();
+			}
+		}
+	});
 
 	// 公開状態ラベル
 	$("#status_label").click(function(){
@@ -208,13 +220,13 @@ $(function(){
 	});
 
 	// パネル開閉イベント設定
-	$('#pageselectmenu .panel-collapse').on('show.bs.collapse', function (n){
+	$('#status_select_menu .panel-collapse').on('show.bs.collapse', function (n){
 		$(n.target).siblings('.panel-heading').find('.layout_menu_switch.glyphicon').removeClass("glyphicon-chevron-right").addClass("glyphicon-chevron-down");
 		
 		// 画面最下部へ移動
 		$("html, body").animate({ scrollTop: $(document).height() }, "slow");
 	});
-	$('#pageselectmenu .panel-collapse').on('hidden.bs.collapse', function (n){
+	$('#status_select_menu .panel-collapse').on('hidden.bs.collapse', function (n){
 		$(n.target).siblings('.panel-heading').find('.layout_menu_switch.glyphicon').removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-right");
 		
 		// 画面最下部へ移動
@@ -222,17 +234,19 @@ $(function(){
 	});
 	
 	// WYSIWYGエディター作成
+	// item_htmlをカレントにする
 	var tableWidth = $('#mainconfig').width();
 	m3SetWysiwygEditor('item_html', 400/* 高さ */, true/*ツールバー表示*/, 'small', tableWidth);
 	m3SetWysiwygEditor('item_html2', 400/* 高さ */, true/*ツールバー表示*/, 'small', tableWidth);
+	CKEDITOR.instances['item_html'].focus();
 	
 	// 前後エントリー移動ボタン
-	<patTemplate:tmpl name="show_prev_button" visibility="hidden">
-	m3SetPrevButtonEvent(editEntry, {SERIAL});
-	</patTemplate:tmpl>
-	<patTemplate:tmpl name="show_next_button" visibility="hidden">
-	m3SetNextButtonEvent(editEntry, {SERIAL});
-	</patTemplate:tmpl>
+//	<patTemplate:tmpl name="show_prev_button" visibility="hidden">
+//	m3SetPrevButtonEvent(editEntry, {SERIAL});
+//	</patTemplate:tmpl>
+//	<patTemplate:tmpl name="show_next_button" visibility="hidden">
+//	m3SetNextButtonEvent(editEntry, {SERIAL});
+//	</patTemplate:tmpl>
 });
 //]]>
 </script>
@@ -365,11 +379,11 @@ $(function(){
     </tbody>
 </table>
 
-<div class="panel {STATUS_PANEL_COLOR}" id="pageselectmenu" style="margin-bottom:50px;">
-        <div class="panel-heading" data-toggle="collapse" data-parent="#pageselectmenu" data-target="#pageselect">
+<div class="panel {STATUS_PANEL_COLOR}" id="status_select_menu" style="margin-bottom:50px;">
+        <div class="panel-heading" data-toggle="collapse" data-parent="#status_select_menu" data-target="#status_select">
             <h4 class="panel-title">{STATUS_PANEL_TITLE}<i class="glyphicon glyphicon-chevron-right pull-right layout_menu_switch"></i></h4>
         </div>
-        <div id="pageselect" class="panel-collapse collapse">
+        <div id="status_select" class="panel-collapse collapse">
         <div class="panel-body">
 <div class="col-xs-12 m3config_item">
 <div class="radio"><label><input type="radio" name="item_status" value="1" {CHECKED_EDIT}>編集中(非公開)</label></div>
@@ -413,7 +427,7 @@ $(function(){
 </patTemplate:tmpl>
         </div><!-- footer -->
     </div><!-- panel collapse -->
-</div>
+</div><!-- panel -->
 </form>
 </div>
 </patTemplate:tmpl>

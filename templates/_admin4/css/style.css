@@ -890,6 +890,10 @@ input[type="password"]{
 	font-size: 14px;
 	font-family: Arial;/*for IE8 bug*/
 }
+/* not clickable bug on iOS */
+.panel-heading {
+	cursor: pointer;
+}
 /*** inline checkbox disable cursor fixed ***/
 .checkbox-inline.disabled label, 
 .checkbox-inline.disabled span {
