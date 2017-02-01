@@ -10,7 +10,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -244,7 +244,8 @@ class PageManager extends Core
 		// デフォルトのWYSIWYGエディターを取得
 		$this->wysiwygEditor = $gSystemManager->getSystemConfig(self::CF_WYSIWYG_EDITOR);				// 管理画面用WYSIWYGエディター
 		
-		// ##### jQueryバージョン設定 #####
+		// ##### Javascriptライブラリのバージョン設定 #####
+		// jQueryバージョン設定
 		// アクセスする画面に応じてjQueryのバージョンを設定
 		if ($gEnvManager->isAdminDirAccess()){		// 管理画面へのアクセスのとき
 			$value = $gSystemManager->getSystemConfig(self::CF_ADMIN_JQUERY_VERSION);// 管理画面用jQueryバージョン
@@ -255,6 +256,10 @@ class PageManager extends Core
 			
 			// 管理画面にBOOTSTRAPを使用するかどうか(初期値)
 			$this->useBootstrap = self::USE_BOOTSTRAP_ADMIN;
+			
+			// CKEditorのバージョン設定
+			// 小画面デバイス最適化の場合は最新バージョンを使用
+			if ($gEnvManager->isSmallDeviceAdmin()) ScriptLibInfo::setCkeditorVer(1/*最新*/);
 		} else {
 			$value = $gSystemManager->getSystemConfig(self::CF_JQUERY_VERSION);// jQueryバージョン
 		}

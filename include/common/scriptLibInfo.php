@@ -31,6 +31,7 @@ class ScriptLibInfo
 											'3.1'	=> 'jquery-3.1.0.min.js'
 										);
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
+	private static $ckeditorVer = 0;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
 
 	// ##### 選択中のライブラリ #####
 //	const SELECTED_LIB_ELFINDER = 'elfinder112';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」が設定可能。(PHP v5.3対応) 
@@ -300,8 +301,9 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 //	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.9.2.min.js';			// JQuery UI Core (Core,Interactions)
 	const JQUERY_UI_CORE_FILENAME	= 'jquery-ui-core-1.11.4.min.js';			// JQuery UI Core (Core,Interactions)
 	const FCKEDITOR_FILENAME		= 'fckeditor2.6.6/fckeditor.js';			// FCKEditor
-	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor
-
+	const CKEDITOR_FILENAME			= 'ckeditor4.4.2/ckeditor.js';				// CKEditor(デフォルト)
+	const CKEDITOR462_FILENAME		= 'ckeditor4.6.2/ckeditor.js';				// CKEditor(最新スマートフォン対応)
+	
 	// elFinder v2.0版
 	const ELFINDER_VER				= '2.1';									// elFinderバージョン
 	const ELFINDER_FILENAME			= 'elfinder-2.1/js/elfinder.full.js';		// elFinder
@@ -455,6 +457,15 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 		return $filename;
 	}
 	/**
+	 * CKEditorのバージョンを設定
+	 *
+	 * @param int			$version	CKEditorのバージョン(0=デフォルト, 1=最新)
+	 */
+	static function setCkeditorVer($version)
+	{
+		self::$ckeditorVer = $version;
+	}
+	/**
 	 * ライブラリ情報取得
 	 *
 	 * @return array		ライブラリ情報
@@ -469,6 +480,10 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 			$param = $gSystemManager->getSystemConfig(self::CF_GOOGLE_MAPS_KEY);
 			if (!empty($param)) $googleMapsParams = '?key=' . $param;
 			
+			// CKEditorのスクリプトファイルを取得
+			$ckeditorFile = self::CKEDITOR_FILENAME;		// CKEditor(デフォルト)
+			if (self::$ckeditorVer == 1) $ckeditorFile = self::CKEDITOR462_FILENAME;		// CKEditor(最新スマートフォン対応)
+			
 			// ##### ライブラリ情報初期化 ####
 			self::$libs = array(
 						self::LIB_MD5					=>	array(	'script' 	=> array(self::MD5_FILENAME)),			// MD5
@@ -476,7 +491,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 						self::LIB_WEBRTC				=>	array(	'script' 	=> array(self::WEBRTC_ADAPTER_FILENAME)),			// WebRTC
 						self::LIB_MOMENT				=>	array(	'script' 	=> array(self::MOMENT_FILENAME)),		// Moment.js
 						self::LIB_FCKEDITOR				=>	array(	'script' 	=> array(self::FCKEDITOR_FILENAME)),	// FCKEditor
-						self::LIB_CKEDITOR				=>	array(	'script' 	=> array(self::CKEDITOR_FILENAME)),		// CKEditor
+						self::LIB_CKEDITOR				=>	array(	'script' 	=> array($ckeditorFile)),		// CKEditor
 						self::LIB_ELFINDER				=>	array(	'script' 	=> array(self::ELFINDER_FILENAME, self::ELFINDER_LANG_FILENAME),		// elFinder
 																	'css'		=> array(self::ELFINDER_THEME_CSS, self::ELFINDER_CSS, self::ELFINDER_OPTION_CSS),		// テーマは最初に読み込む
 																	'version'	=> self::ELFINDER_VER					// elFinderバージョン

@@ -149,11 +149,12 @@ $(function(){
 	m3SetConfigTable('termpanel');
 	
 	// タブを作成
-	$("#entryhtml").tabs({
-		beforeActivate: function(event, ui){
+/*	$("#entryhtml").tabs({
+		activate: function(event, ui){
+	//	beforeActivate: function(event, ui){
 			// コンテンツ内容を確定
-			CKEDITOR.instances['item_html'].getData();			
-			CKEDITOR.instances['item_html2'].getData();			// コンテンツ内容を確定
+//			CKEDITOR.instances['item_html'].getData();			
+//			CKEDITOR.instances['item_html2'].getData();			// コンテンツ内容を確定
 
 			if (ui.newTab.index()){
 				CKEDITOR.instances['item_html'].focus();
@@ -161,7 +162,8 @@ $(function(){
 				CKEDITOR.instances['item_html2'].focus();
 			}
 		}
-	});
+	});*/
+	$("#entryhtml").tabs();
 
 	// 公開状態ラベル
 	$("#status_label").click(function(){
@@ -238,7 +240,7 @@ $(function(){
 	var tableWidth = $('#mainconfig').width();
 	m3SetWysiwygEditor('item_html', 400/* 高さ */, true/*ツールバー表示*/, 'small', tableWidth);
 	m3SetWysiwygEditor('item_html2', 400/* 高さ */, true/*ツールバー表示*/, 'small', tableWidth);
-	CKEDITOR.instances['item_html'].focus();
+//	CKEDITOR.instances['item_html'].focus();
 	
 	// 前後エントリー移動ボタン
 //	<patTemplate:tmpl name="show_prev_button" visibility="hidden">

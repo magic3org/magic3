@@ -47,6 +47,10 @@ function showAlert()
 {
 BootstrapDialog.alert('メッセージを表示します');
 }
+function focusEdit()
+{
+CKEDITOR.instances['item_html'].focus();
+}
 $(function(){
 	// CKEditorプラグイン直接実行
 	m3LoadCKTools();
@@ -109,7 +113,9 @@ $(function(){
 	    <td colspan="3"><i class="glyphicon glyphicon-cog"></i> {STATIC_NAME}<input type="button" class="button" onclick="showAlert();" value="アラート" /></td>
 	</tr>
     <tr>
-	    <th><span {_HELP_EVENT_URL}>説明</span><div class="pull-right"><a id="selimage" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" data-container="body"><i class="glyphicon glyphicon-edit"></i></a></div></th>
+	    <th><span {_HELP_EVENT_URL}>説明</span><div class="pull-right"><a id="selimage" href="javascript:void(0);" class="btn btn-sm btn-warning" role="button" data-container="body"><i class="glyphicon glyphicon-edit"></i></a></div>
+		<input type="button" class="button" onclick="focusEdit();" value="フォーカス" />
+		</th>
 	    <td class="ckeditor" colspan="3"><textarea id="item_html" name="item_html">{HTML}</textarea></td>
 	</tr>
 	<tr>
