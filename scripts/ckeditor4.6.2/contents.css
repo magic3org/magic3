@@ -2,20 +2,22 @@
 Copyright (c) 2003-2017, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or http://ckeditor.com/license
 */
-
+/* customized for Magic3 */
 body
 {
 	/* Font */
-	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
-	font-size: 12px;
+/*	font-family: sans-serif, Arial, Verdana, "Trebuchet MS";
+	font-size: 12px;*/
 
 	/* Text color */
-	color: #333;
+/*	color: #333;*/
 
 	/* Remove the background color to make it transparent */
-	background-color: #fff;
+/*	background-color: #fff;*/
 
-	margin: 20px;
+	/* margin: 20px; */
+	/* Small screen size configuration. Large screen size configured in m3/ckeditor.css */
+	margin: 10px;
 }
 
 .cke_editable
