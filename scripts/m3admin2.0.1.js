@@ -115,6 +115,12 @@ function m3ShowPreviewWindow(type, url)
 	switch (type){
 		case 0:		// PC用
 		default:
+			// 小画面デバイス最適化の場合はタブで表示
+			if (M3_SMALL_DEVICE_OPTIMIZE){
+				window.open(url, "preview");
+				return;
+			}
+		
 			width = 1000;
 			height = 800;
 			break;
