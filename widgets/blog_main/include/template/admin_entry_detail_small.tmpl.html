@@ -126,9 +126,14 @@ function preview()
 	document.main.task.value = 'entry_detail';
 	document.main.act.value = 'preview';
 
+	// ポップアップブロック対策をしてプレビュー表示
+	var previewWindow = window.open("", "preview");
+	previewWindow.document.body.innerHTML = "loading...";
+
 	m3_ajax_request('', 'cmd=configwidget&widget={CURRENT_WIDGET}&' + $('#main').serialize(), function(request, retcode, jsondata){		// 正常終了
 		// プレビュー用のURLを設定
-		if (jsondata.url && jsondata.url != '') m3ShowPreviewWindow(0, jsondata.url);
+		//if (jsondata.url && jsondata.url != '') m3ShowPreviewWindow(0, jsondata.url);
+		if (jsondata.url && jsondata.url != '') window.open(jsondata.url, "preview");
 	}, function(request){		// 異常終了
 		alert('通信に失敗しました。');
 	});
