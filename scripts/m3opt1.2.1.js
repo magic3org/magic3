@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -18,12 +18,14 @@
  * @param string request_params		リクエストパラメータ
  * @param function success_func(request, retcode, jsondata)	通信成功時の呼び出し関数
  * @param function failure_func(request)					通信失敗時の呼び出し関数
+ * @param bool async				同期通信かどうか(true=非同期,false=同期)
  * @param string request_url		リクエスト先URL
  */
-function m3_ajax_request(request_widget, request_params, success_func, failure_func, request_url)
+function m3_ajax_request(request_widget, request_params, success_func, failure_func, request_url, async)
 {
 	if (request_url == null || request_url == "") request_url = document.location.pathname;
-
+	if (async == null) async = true;
+	
 	var params = "";
 	if (request_widget != null && request_widget != "") params += "cmd=dowidget&widget=" + request_widget;
 	if (request_params != null && request_params != "") params += "&" + request_params;
@@ -32,6 +34,7 @@ function m3_ajax_request(request_widget, request_params, success_func, failure_f
 				type:		'post',
 				data:		params,
 				dataType:	'json',
+				async:		async,
 				success:	function(data, textStatus){
 								if (data) alert("JSON data must be in header with 'X-JSON' type");
 							},

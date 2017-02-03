@@ -117,7 +117,7 @@ function m3ShowPreviewWindow(type, url)
 		default:
 			// 小画面デバイス最適化の場合はタブで表示
 			if (M3_SMALL_DEVICE_OPTIMIZE){
-				window.open(url, "preview");
+				window.open(url, "");
 				return;
 			}
 		
