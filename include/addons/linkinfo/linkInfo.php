@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -379,6 +379,93 @@ class linkInfo
 				break;
 		}
 		return array($contentTitle, $contentText);
+	}
+	/**
+	 * コンテンツの公開状態を取得
+	 *
+	 * @param string $contentType	コンテンツタイプ
+	 * @param string $contentId		コンテンツID
+	 * @return array				公開状態(0=非公開、1=公開)
+	 */
+	function getContentStatus($contentType, $contentId)
+	{
+		global $gEnvManager;
+	
+		$langId = $gEnvManager->getDefaultLanguage();
+		$now = date("Y/m/d H:i:s");	// 現在日時
+		$status = 0;		// 公開状態(非公開)
+		
+		switch ($contentType){
+			case M3_VIEW_TYPE_CONTENT:		// 汎用コンテンツ
+				$ret = $this->db->getContent(''/*PC用*/, $contentId, $langId, $row);
+				if ($ret){
+					$startDt = $row['cn_active_start_dt'];
+					$endDt = $row['cn_active_end_dt'];
+					if ($row['cn_visible']) $status = $this->_isActive($startDt, $endDt, $now);// 表示可能
+				}
+				break;
+			case M3_VIEW_TYPE_PRODUCT:	// 製品
+				$ret = $this->db->getProduct($contentId, $langId, $row);
+				if ($ret){
+					$status = $row['pt_visible'];
+				}
+				break;
+			case M3_VIEW_TYPE_BBS:	// BBS
+				break;
+			case M3_VIEW_TYPE_BLOG:	// ブログ
+				$ret = $this->db->getEntry($contentId, $langId, $row);
+				if ($ret){
+					$startDt = $row['be_active_start_dt'];
+					$endDt = $row['be_active_end_dt'];
+					if ($row['be_status'] == 2/*公開*/) $status = $this->_isActive($startDt, $endDt, $now);// 表示可能
+				}
+				break;
+			case M3_VIEW_TYPE_WIKI:	// Wiki
+				$status = 1;
+				break;
+			case M3_VIEW_TYPE_USER:	// ユーザ作成コンテンツ
+				break;
+			case M3_VIEW_TYPE_EVENT:	// イベント
+				$ret = $this->db->getEvent($contentId, $langId, $row);
+				if ($ret){
+					$status = $row['ee_status'];
+				}
+				break;
+			case M3_VIEW_TYPE_PHOTO:	// フォトギャラリー
+				$ret = $this->db->getPhoto($contentId, $langId, $row);
+				if ($ret){
+					$startDt = $row['ht_active_start_dt'];
+					$endDt = $row['ht_active_end_dt'];
+					if ($row['ht_visible']) $status = $this->_isActive($startDt, $endDt, $now);// 表示可能
+				}
+				break;
+		}
+		return $status;
+	}
+	/**
+	 * 期間から公開可能かチェック
+	 *
+	 * @param timestamp	$startDt		公開開始日時
+	 * @param timestamp	$endDt			公開終了日時
+	 * @param timestamp	$now			基準日時
+	 * @return bool						true=公開可能、false=公開不可
+	 */
+	function _isActive($startDt, $endDt, $now)
+	{
+		global $gEnvManager;
+		
+		$isActive = false;		// 公開状態
+
+		if ($startDt == $gEnvManager->getInitValueOfTimestamp() && $endDt == $gEnvManager->getInitValueOfTimestamp()){
+			$isActive = true;		// 公開状態
+		} else if ($startDt == $gEnvManager->getInitValueOfTimestamp()){
+			if (strtotime($now) < strtotime($endDt)) $isActive = true;		// 公開状態
+		} else if ($endDt == $gEnvManager->getInitValueOfTimestamp()){
+			if (strtotime($now) >= strtotime($startDt)) $isActive = true;		// 公開状態
+		} else {
+			if (strtotime($startDt) <= strtotime($now) && strtotime($now) < strtotime($endDt)) $isActive = true;		// 公開状態
+		}
+		return $isActive;
 	}
 	/**
 	 * URLクエリー文字列からコンテンツタイプを取得
