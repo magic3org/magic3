@@ -24,6 +24,10 @@ class newsLib
 	const FD_DEFAULT_MESSAGE	= 'default_message';		// デフォルトメッセージ
 	const FD_DATE_FORMAT		= 'date_format';			// 日時フォーマット
 	const FD_LAYOUT_LIST_ITEM	= 'layout_list_item';		// リスト項目レイアウト
+	const FD_MSG_FILTER_ACTIVE_CONTENT = 'msg_filter_active_content';		// メッセージ取得フィルター(公開コンテンツのみ取得)
+	
+	// アドオンオブジェクト用
+	const LINKINFO_OBJ_ID	= 'linkinfo';	// リンク情報オブジェクトID
 	
 	/**
 	 * コンストラクタ
@@ -87,6 +91,7 @@ class newsLib
 	function _opelogEventHook($code, $eventParam, $msg, $msgExt)
 	{
 		global $gEnvManager;
+		global $gInstanceManager;
 		
 		// コンテンツの追加、更新の場合は、新着情報を作成する
 		switch ($code){
@@ -97,7 +102,21 @@ class newsLib
 				$contentId		= $eventParam[M3_EVENT_HOOK_PARAM_CONTENT_ID];			// コンテンツID
 				$updateDt		= $eventParam[M3_EVENT_HOOK_PARAM_UPDATE_DT];			// コンテンツ更新日時
 				$url = $gEnvManager->getMacroPath($this->_createContentUrl($contentType, $contentId));// パスをマクロ形式に変換;
-				$this->db->addNewsItem($contentType, $contentId, $this->configArray[self::FD_DEFAULT_MESSAGE], $url, $updateDt, $newSerial);
+				
+				// 公開状態のコンテンツのみ取得する場合は、コンテンツの公開状態を取得
+				if (!empty($this->configArray[self::FD_MSG_FILTER_ACTIVE_CONTENT])){		// 公開コンテンツのみ取得の場合
+					$isActive = false;
+					$linkInfoObj = $gInstanceManager->getObject(self::LINKINFO_OBJ_ID);
+					if (isset($linkInfoObj)){
+						$isActive = $linkInfoObj->getContentStatus($contentType, $contentId);
+					}
+					
+					// メッセージを新着情報に追加
+					if ($isActive) $this->db->addNewsItem($contentType, $contentId, $this->configArray[self::FD_DEFAULT_MESSAGE], $url, $updateDt, $newSerial);
+				} else {
+					// メッセージを新着情報に追加
+					$this->db->addNewsItem($contentType, $contentId, $this->configArray[self::FD_DEFAULT_MESSAGE], $url, $updateDt, $newSerial);
+				}
 				break;
 		}
 	}
