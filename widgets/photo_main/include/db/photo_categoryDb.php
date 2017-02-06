@@ -54,7 +54,7 @@ class photo_categoryDb extends BaseDb
 	 */
 	function getAllPCategory($lang, &$rows)
 	{
-		$queryStr = 'SELECT DISTINCT pc1.hc_parent_id AS parent, pc2.hc_name AS name FROM photo_category AS pc1 RIGHT JOIN photo_category AS pc2 ON pc1.hc_parent_id = pc2.hc_id AND pc1.hc_language_id = pc2.hc_language_id AND pc2.hc_deleted = false ';
+		$queryStr = 'SELECT DISTINCT pc1.hc_parent_id AS parent, pc2.hc_name AS name, pc2.hc_sort_order FROM photo_category AS pc1 RIGHT JOIN photo_category AS pc2 ON pc1.hc_parent_id = pc2.hc_id AND pc1.hc_language_id = pc2.hc_language_id AND pc2.hc_deleted = false ';
 		$queryStr .=  'WHERE pc1.hc_deleted = false ';		// 削除されていない
 		$queryStr .=    'AND pc1.hc_parent_id > 0 ';		// 親カテゴリーあり
 		$queryStr .=    'AND pc1.hc_language_id = ? ';

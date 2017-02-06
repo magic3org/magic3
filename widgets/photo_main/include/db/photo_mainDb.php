@@ -8,9 +8,9 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2013 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
- * @version    SVN: $Id: photo_mainDb.php 5968 2013-04-29 11:08:36Z fishbone $
+ * @version    SVN: $Id$
  * @link       http://www.magic3.org
  */
 require_once($gEnvManager->getDbPath() . '/baseDb.php');
@@ -846,7 +846,8 @@ class photo_mainDb extends BaseDb
 			$queryStr .=    'AND ht_regist_dt < ? ';
 			$params[] = $endDt;
 		}*/
-		$queryStr  = 'SELECT DISTINCT ht_public_id,ht_name,ht_rate_average,ht_view_count,ht_regist_dt FROM photo LEFT JOIN _login_user ON ht_owner_id = lu_id AND lu_deleted = false ';
+	//	$queryStr  = 'SELECT DISTINCT ht_public_id,ht_name,ht_rate_average,ht_view_count,ht_regist_dt FROM photo LEFT JOIN _login_user ON ht_owner_id = lu_id AND lu_deleted = false ';
+		$queryStr  = 'SELECT DISTINCT ht_public_id,ht_name,ht_rate_average,ht_view_count,ht_regist_dt,ht_sort_order FROM photo LEFT JOIN _login_user ON ht_owner_id = lu_id AND lu_deleted = false ';
 		if (!empty($category) || !empty($authCategory)){
 			$tableStr = 'photo_with_category AS ta ';
 			$condStr = 'ht_serial = ta.hw_photo_serial ';

@@ -434,7 +434,7 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 		$visible = ($request->trimValueOf('item_visible') == 'on') ? 1 : 0;		// チェックボックス
 		$photoDate = $request->trimValueOf('item_date');		// 撮影日
 		if (!empty($photoDate)) $photoDate = $this->convertToProperDate($photoDate);
-		
+
 		// カテゴリーを取得
 		$categoryArray = array();
 		for ($i = 0; $i < $categoryCount; $i++){
@@ -450,11 +450,19 @@ class admin_photo_mainImagebrowseWidgetContainer extends admin_photo_mainBaseWid
 			// 入力チェック
 			$this->checkInput($name, $this->_('Name'));		// 名前
 			$this->checkNumeric($sortOrder, '表示順');
+			$this->checkDate($photoDate, '撮影日', true);
 			
 			// エラーなしの場合は、データを更新
 			if ($this->getMsgCount() == 0){
+				// 保存値を作成
+				if (empty($photoDate)){
+					$updatePhotoDate = $this->gEnv->getInitValueOfDate();
+				} else {
+					$updatePhotoDate = $photoDate;
+				}
+
 				$ret = self::$_mainDb->updatePhotoInfo(self::$_isLimitedUser, $this->serialNo/*更新*/, $this->_langId, ''/*ファイル名*/, ''/*格納ディレクトリ*/, ''/*画像コード*/, ''/*画像MIMEタイプ*/,
-								''/*画像縦横サイズ*/, ''/*元のファイル名*/, ''/*ファイルサイズ*/, $name, $camera, $location, $photoDate, $summary, $description, ''/*ライセンス*/, 0/*所有者*/, $keyword, $visible, $sortOrder, $categoryArray/*画像カテゴリー*/, ''/*サムネールファイル名*/, $newSerial);
+								''/*画像縦横サイズ*/, ''/*元のファイル名*/, ''/*ファイルサイズ*/, $name, $camera, $location, $updatePhotoDate, $summary, $description, ''/*ライセンス*/, 0/*所有者*/, $keyword, $visible, $sortOrder, $categoryArray/*画像カテゴリー*/, ''/*サムネールファイル名*/, $newSerial);
 				if ($ret){		// データ追加成功のとき
 					$this->setMsg(self::MSG_GUIDANCE, $this->_('Item updated.'));		// データを更新しました
 					$this->serialNo = $newSerial;
