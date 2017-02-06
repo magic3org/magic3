@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -19,9 +19,8 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 {
 	private $serialNo;		// 選択中の項目のシリアル番号
 	private $serialArray = array();		// 表示されている項目シリアル番号
-	private $status;			// メッセージ状態(0=非公開、1=公開)
-	private $statusTypeArray;	// コメント状態メニュー作成用
 	private $firstNo;		// 一覧の先頭の番号
+	private $linkInfoObj;	// リンク情報オブジェクト
 	
 	const DEFAULT_LIST_COUNT = 20;			// 最大リスト表示数
 	const LINK_PAGE_COUNT		= 20;			// リンクページ数
@@ -31,9 +30,12 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 	const CALENDAR_ICON_FILE = '/images/system/calendar.png';		// カレンダーアイコン
 	const ACTIVE_ICON_FILE = '/images/system/active32.png';			// 公開中アイコン
 	const INACTIVE_ICON_FILE = '/images/system/inactive32.png';		// 非公開アイコン
+	const DISP_STOP_ICON_FILE = '/images/system/disp_stop32.png';		// 表示停止中アイコン
 	const CHANGE_URL_TAG_ID = 'changeurl';			// URL変更ボタンタグID
 	const UNKNOWN_CONTENT_TYPE = 'コンテンツタイプ不明';
 	const UNKNOWN_CONTENT = 'タイトル不明';
+	// アドオンオブジェクト用
+	const LINKINFO_OBJ_ID	= 'linkinfo';	// リンク情報オブジェクトID
 	
 	/**
 	 * コンストラクタ
@@ -43,9 +45,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		// 親クラスを呼び出す
 		parent::__construct();
 		
-		// 初期設定
-		$this->statusTypeArray = array(	array(	'name' => '非公開',	'value' => '0'),
-										array(	'name' => '公開',	'value' => '1'));
+		$this->linkInfoObj = $this->gInstance->getObject(self::LINKINFO_OBJ_ID);
 	}
 	/**
 	 * テンプレートファイルを設定
@@ -225,7 +225,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		$time = $request->trimValueOf('item_time');		// 投稿時間
 		$message = $request->valueOf('item_message');		// メッセージ
 		$url = $request->valueOf('item_url');
-		$this->status = $request->trimValueOf('item_status');		// メッセージ状態(0=非公開、1=公開)
+		$visible = $request->trimCheckedValueOf('item_visible');		// 表示状態(0=非表示、1=表示)
 		$mark = 0;
 		$contentTitleDisabled = '';
 		
@@ -241,8 +241,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 				// 入力データの修正
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
 				
-				//$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $message, $url, $newSerial);
-				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				$ret = self::$_mainDb->updateNewsItem(0/*新規*/, $contentTitle, $message, $url, $mark, $visible, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを追加しました');
 					
@@ -268,8 +267,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 				$regDt = $this->convertToProperDate($date) . ' ' . $this->convertToProperTime($time);		// 登録日時
 				$url = $this->gEnv->getMacroPath($url);// パスをマクロ形式に変換
 				
-				//$ret = self::$_mainDb->updateNewsItem($this->serialNo, $message, $url, $newSerial);
-				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $contentTitle, $message, $url, $mark, $this->status, $regDt, $newSerial);
+				$ret = self::$_mainDb->updateNewsItem($this->serialNo, $contentTitle, $message, $url, $mark, $visible, $regDt, $newSerial);
 				if ($ret){
 					$this->setGuidanceMsg('データを更新しました');
 					
@@ -305,7 +303,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 			if ($ret){
 				$date = $this->timestampToDate($row['nw_regist_dt']);		// 登録日
 				$time = $this->timestampToTime($row['nw_regist_dt']);		// 登録時間
-				$this->status = intval($row['nw_visible']);			// 状態(0=非公開、1=公開)
+				$visible = intval($row['nw_visible']);			// 状態(0=非表示、1=表示)
 
 				$message = $row['nw_message'];				// メッセージ
 				$url = $row['nw_url'];				// URL
@@ -327,7 +325,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 				$this->serialNo = 0;
 				$date = date("Y/m/d");		// 登録日
 				$time = date("H:i:s");		// 登録時間
-				$this->status = 0;			// 状態(0=非公開、1=公開)
+				$visible = 0;			// 状態(0=非表示、1=表示)
 				$message = self::$_configArray[newsCommonDef::FD_DEFAULT_MESSAGE];				// メッセージ
 				
 				$contentType = '';	// コンテンツタイプ
@@ -335,8 +333,6 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 				$contentTitle = '';			// コンテンツタイトル
 			}
 		}
-		// 状態メニュー作成
-		$this->createStatusMenu();
 		
 		// 非表示項目を設定
 		$this->tmpl->addVar("_widget", "serial", $this->serialNo);	// シリアル番号
@@ -366,6 +362,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 		$this->tmpl->addVar("_widget", "date", $date);	// 投稿日
 		$this->tmpl->addVar("_widget", "time", $time);	// 投稿時間
 		$this->tmpl->addVar('_widget', 'calendar_img', $this->getUrl($this->gEnv->getRootUrl() . self::CALENDAR_ICON_FILE));	// カレンダーアイコン
+		$this->tmpl->addVar("_widget", "visible_checked", $this->convertToCheckedString($visible));	// 表示
 	}
 	/**
 	 * 取得したデータをテンプレートに設定する
@@ -379,20 +376,30 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 	{
 		$serial = $fetchedRow['nw_serial'];// シリアル番号
 		$no = $this->firstNo + $index;
+		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
+		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
 		
-		// 公開状態
-		if ($fetchedRow['nw_visible']){		// コンテンツが公開状態のとき
+		if ($fetchedRow['nw_visible']){		// 新着情報が表示の場合
+			$dispStatusImg = '';
+		} else {
+			$iconUrl = $this->gEnv->getRootUrl() . self::DISP_STOP_ICON_FILE;			// 表示停止中アイコン
+			$iconTitle = '非表示項目';
+			$dispStatusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		}
+		
+		// コンテンツの公開状態を取得
+		$status = $this->linkInfoObj->getContentStatus($contentType, $contentId);
+		
+		if ($status == 1/*$fetchedRow['nw_visible']*/){		// コンテンツが公開状態のとき
 			$iconUrl = $this->gEnv->getRootUrl() . self::ACTIVE_ICON_FILE;			// 公開中アイコン
 			$iconTitle = '公開中';
 		} else {
 			$iconUrl = $this->gEnv->getRootUrl() . self::INACTIVE_ICON_FILE;		// 非公開アイコン
 			$iconTitle = '非公開';
 		}
-		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
+		$statusImg = '<img src="' . $this->getUrl($iconUrl) . '" width="' . self::ICON_SIZE . '" height="' . self::ICON_SIZE . '" rel="m3help" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		
 		// コンテンツタイトル取得
-		$contentType = $fetchedRow['nw_content_type'];	// コンテンツタイプ
-		$contentId = $fetchedRow['nw_content_id'];	// コンテンツID
 		if (!empty($contentType) && !empty($contentId)){
 			list($contentTypeName, $contentTitle) = $this->getContentTitle($contentType, $contentId);
 			if ($contentTitle == self::UNKNOWN_CONTENT){
@@ -421,6 +428,7 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 			'no'	=> $no,			// 項目番号(表示用)
 			'id'	=> $this->convertToDispString($fetchedRow['nw_id']),		// ID
 			'message' => $message,		// メッセージ
+			'disp_status'	=> $dispStatusImg,	// 表示停止中状態
 			'status_img' => $statusImg,													// 公開状況
 			'date' => $this->convertToDispDateTime($fetchedRow['nw_regist_dt'])	// 投稿日時
 		);
@@ -503,28 +511,6 @@ class admin_news_mainNewsWidgetContainer extends admin_news_mainBaseWidgetContai
 				break;
 		}
 		return array($contentTypeName, $contentName);
-	}
-	/**
-	 * コメント状態選択タイプメニュー作成
-	 *
-	 * @return なし
-	 */
-	function createStatusMenu()
-	{
-		for ($i = 0; $i < count($this->statusTypeArray); $i++){
-			$value = $this->statusTypeArray[$i]['value'];
-			$name = $this->statusTypeArray[$i]['name'];
-			$selected = '';
-			if ($this->status == $value) $selected = 'selected';
-			
-			$row = array(
-				'value'    => $value,			// タイプ値
-				'name'     => $this->convertToDispString($name),			// タイプ名
-				'selected' => $selected			// 選択中かどうか
-			);
-			$this->tmpl->addVars('status_list', $row);
-			$this->tmpl->parseTemplate('status_list', 'a');
-		}
 	}
 }
 ?>

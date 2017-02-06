@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -54,6 +54,7 @@ class admin_news_mainConfigWidgetContainer extends admin_news_mainBaseWidgetCont
 		$defaultMessage	= $request->trimValueOf('item_default_message');		// デフォルトメッセージ
 		$dateFormat		= $request->trimValueOf('item_date_format');			// 日時フォーマット
 		$layoutListItem = $request->trimValueOf('item_layout_list_item');		// リスト項目レイアウト
+		$msgFilterActiveContent	= $request->trimCheckedValueOf('item_msg_filter_active_content');		// メッセージ取得フィルター(公開コンテンツのみ取得)
 		
 		$reloadData = false;		// データの再ロード
 		if ($act == 'update'){		// 設定更新のとき
@@ -63,6 +64,7 @@ class admin_news_mainConfigWidgetContainer extends admin_news_mainBaseWidgetCont
 				$ret = self::$_mainDb->updateConfig(newsCommonDef::FD_DEFAULT_MESSAGE, $defaultMessage); // デフォルトメッセージ
 				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::FD_DATE_FORMAT, $dateFormat);// 日時フォーマット
 				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::FD_LAYOUT_LIST_ITEM, $layoutListItem);		// リスト項目レイアウト
+				if ($ret) $ret = self::$_mainDb->updateConfig(newsCommonDef::FD_MSG_FILTER_ACTIVE_CONTENT, $msgFilterActiveContent);	// メッセージ取得フィルター(公開コンテンツのみ取得)
 
 				if ($ret){
 					$this->setMsg(self::MSG_GUIDANCE, 'データを更新しました');
@@ -79,12 +81,14 @@ class admin_news_mainConfigWidgetContainer extends admin_news_mainBaseWidgetCont
 			$defaultMessage	= self::$_mainDb->getConfig(newsCommonDef::FD_DEFAULT_MESSAGE);// デフォルトメッセージ
 			$dateFormat		= self::$_mainDb->getConfig(newsCommonDef::FD_DATE_FORMAT);// 日時フォーマット
 			$layoutListItem	= self::$_mainDb->getConfig(newsCommonDef::FD_LAYOUT_LIST_ITEM);// リスト項目レイアウト
+			$msgFilterActiveContent	= self::$_mainDb->getConfig(newsCommonDef::FD_MSG_FILTER_ACTIVE_CONTENT);	// メッセージ取得フィルター(公開コンテンツのみ取得)
 		}
 		
 		// 画面に書き戻す
 		$this->tmpl->addVar("_widget", "default_message",	$this->convertToDispString($defaultMessage));// デフォルトメッセージ
 		$this->tmpl->addVar("_widget", "date_format",		$this->convertToDispString($dateFormat));// 日時フォーマット
 		$this->tmpl->addVar("_widget", "layout_list_item",	$this->convertToDispString($layoutListItem));// リスト項目レイアウト
+		$this->tmpl->addVar("_widget", "msg_filter_active_content_checked", $this->convertToCheckedString($msgFilterActiveContent));	// メッセージ取得フィルター(公開コンテンツのみ取得)
 	}
 }
 ?>

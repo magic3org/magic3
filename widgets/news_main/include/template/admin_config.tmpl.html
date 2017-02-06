@@ -5,7 +5,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -36,17 +36,22 @@ $(function(){
 <table id="mainconfig">
     <tbody>
     <tr>
-	    <th><span {_HELP_CONFIG_EVENT}>フォーマット</span></th>
-	    <td><div class="form-control-static col-sm-2 m3config_item">日時：</div><div class="col-sm-4 m3config_item"><input type="text" name="item_date_format" class="form-control" value="{DATE_FORMAT}" size="10" maxlength="10" /></div>
+	    <th><span {_HELP_CONFIG_MESSAGE_FILTER}>メッセージ<br />フィルタ</span></th>
+	    <td><div class="checkbox"><label><input type="checkbox" name="item_msg_filter_active_content" {MSG_FILTER_ACTIVE_CONTENT_CHECKED} />公開済みコンテンツのメッセージのみ取得</label></div>
         </td>
 	</tr>
     <tr>
-	    <th><span {_HELP_CONFIG_MESSAGE}>メッセージ</span></th>
-	    <td><div class="form-control-static col-sm-2 m3config_item">デフォルト：</div><div class="col-sm-10 m3config_item"><input type="text" name="item_default_message" class="form-control" value="{DEFAULT_MESSAGE}" size="60" maxlength="200" /></div>
+	    <th><span {_HELP_CONFIG_MESSAGE}>メッセージ<br />(デフォルト)</span></th>
+	    <td><input type="text" name="item_default_message" class="form-control" value="{DEFAULT_MESSAGE}" maxlength="200" />
         </td>
 	</tr>
     <tr>
-	    <th rowspan="2"><span {_HELP_CONFIG_LAYOUT}>レイアウト</span></th>
+	    <th><span {_HELP_CONFIG_EVENT}>フォーマット<br />(デフォルト)</span></th>
+	    <td><div class="form-control-static col-sm-2 m3config_item" style="width:4em;">日時：</div><div class="col-sm-4 m3config_item" style="width:10em;"><input type="text" name="item_date_format" class="form-control" value="{DATE_FORMAT}" maxlength="10" /></div>
+        </td>
+	</tr>
+    <tr>
+	    <th rowspan="2"><span {_HELP_CONFIG_LAYOUT}>レイアウト<br />(デフォルト)</span></th>
 	    <th style="width:800px;">リスト項目</th>
 	</tr>
     <tr>

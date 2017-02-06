@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -30,6 +30,7 @@ class newsCommonDef
 	const FD_DEFAULT_MESSAGE	= 'default_message';		// デフォルトメッセージ
 	const FD_DATE_FORMAT		= 'date_format';			// 日時フォーマット
 	const FD_LAYOUT_LIST_ITEM	= 'layout_list_item';		// リスト項目レイアウト
+	const FD_MSG_FILTER_ACTIVE_CONTENT = 'msg_filter_active_content';		// メッセージ取得フィルター(公開コンテンツのみ取得)
 
 	/**
 	 * 新着情報定義値をDBから取得
