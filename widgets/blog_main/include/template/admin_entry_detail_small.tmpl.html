@@ -131,13 +131,28 @@ function preview()
 //	var previewWindow = window.open("", windowName);
 //	previewWindow.document.body.innerHTML = "プレビュー作成中...";
 
+//	m3_ajax_request('', 'cmd=configwidget&widget={CURRENT_WIDGET}&' + $('#main').serialize(), function(request, retcode, jsondata){		// 正常終了
+//		// プレビュー用のURLを設定
+//		//if (jsondata.url && jsondata.url != '') m3ShowPreviewWindow(0, jsondata.url);
+//		if (jsondata.url && jsondata.url != '') window.open(jsondata.url, windowName);
+//	}, function(request){		// 異常終了
+//		alert('通信に失敗しました。');
+//	}, '', false/*同期接続*/);
+
+	var previewWindow = window.open("", windowName);
+	previewWindow.document.body.innerHTML = "プレビュー作成中...";
 	m3_ajax_request('', 'cmd=configwidget&widget={CURRENT_WIDGET}&' + $('#main').serialize(), function(request, retcode, jsondata){		// 正常終了
 		// プレビュー用のURLを設定
-		//if (jsondata.url && jsondata.url != '') m3ShowPreviewWindow(0, jsondata.url);
-		if (jsondata.url && jsondata.url != '') window.open(jsondata.url, windowName);
+		if (jsondata.url && jsondata.url != ''){
+			previewWindow.location.href = jsondata.url;
+		}
+		previewWindow = null;
 	}, function(request){		// 異常終了
 		alert('通信に失敗しました。');
-	}, '', false/*同期接続*/);
+		
+		previewWindow.close();
+ 		previewWindow = null;
+	});
 }
 function editEntry(serial){
 	document.main.entryid.value = '';		// 値キャンセル

@@ -242,7 +242,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'news_main';
 INSERT INTO _widgets
 (wd_id,          wd_name,           wd_status, wd_content_type, wd_category_id, wd_edit_content, wd_content_widget_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a, wd_available, wd_has_admin, wd_use_instance_def, wd_initialized, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('news_main', '新着情報-メイン', 1,         'news',          'subcontent',   true,            '',                   '1.0.1',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '最新情報管理ウィジェット', '',                '',                false,  true,         false,                true,  '2014-07-08', now(),         now());
+('news_main', '新着情報-メイン', 1,         'news',          'subcontent',   true,            '',                   '1.1.0',   'Naoki Hirata', 'Magic3.org', 'GPL',      10,                '最新情報管理ウィジェット', '',                '',                false,  true,         false,                true,  '2017-02-06', now(),         now());
 -- ウィジェット情報(PC用/検索)
 DELETE FROM _widgets WHERE wd_id = 'custom_search';
 INSERT INTO _widgets
