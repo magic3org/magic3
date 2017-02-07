@@ -736,12 +736,12 @@ class DesignManager extends Core
 			}
 		}
 		if (!empty($menuTag)){
-			// 小画面デバイス最適化の場合はメニューの最後に「タブを閉じる」項目を付加
+			// 小画面デバイス最適化の場合はメニューの最後に「閉じる」項目を付加
 			if ($isSmallDeviceOptimize){	// 管理画面の小画面デバイス最適化を行う場合
 				// ウィンドウが別画面起動の場合のみ項目付加
 				$openBy = $gRequestManager->trimValueOf(M3_REQUEST_PARAM_OPEN_BY);		// ウィンドウオープンタイプ
 				if ($openBy == 'other'){
-					$name = 'タブを閉じる';
+					$name = '閉じる';
 					$iconTitle = '閉じる';
 					$iconUrl = $this->gEnv->getRootUrl() . self::CLOSE_ICON_FILE;
 					$imageSize = self::NAV_ITEM_ICON_SIZE;
