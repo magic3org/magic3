@@ -1160,7 +1160,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 		$endDt = $fetchedRow['be_active_end_dt'];
 		
 		$isActive = false;		// 公開状態
-		if ($fetchedRow['be_status'] == 2) $isActive = $this->isActive($startDt, $endDt, $now);// 表示可能
+		if ($fetchedRow['be_status'] == 2) $isActive = $this->_isActive($startDt, $endDt, $now);// 表示可能
 		
 		if ($this->_isSmallDeviceOptimize){			// 小画面デバイス最適化の場合
 			if ($isActive){		// コンテンツが公開状態のとき
@@ -1364,7 +1364,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 	 * @param timestamp	$now			基準日時
 	 * @return bool						true=公開可能、false=公開不可
 	 */
-	function isActive($startDt, $endDt, $now)
+	function _isActive($startDt, $endDt, $now)
 	{
 		$isActive = false;		// 公開状態
 

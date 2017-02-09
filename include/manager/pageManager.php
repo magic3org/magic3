@@ -4205,6 +4205,19 @@ class PageManager extends Core
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 3) . 'return menu;' . M3_NL;
 					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '}' . M3_NL;
 					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
+					
+					// コンテンツの「非公開」表示
+					$this->initScript .= M3_INDENT_SPACE . '$(\'div.m3content_private\').each(function(){' . M3_NL;
+//					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var pos = $(this).position();' . M3_NL;
+//					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var top = pos.top;' . M3_NL;
+//					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var left = pos.left;' . M3_NL;
+//					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var width = $(this).css(\'width\');' . M3_NL;
+//					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var height = $(this).css(\'height\');' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var html = \'<div class="m3content_overlay"><div><h2>非公開</h2></div></div>\';' . M3_NL;
+					$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . '$(this).append(html);' . M3_NL;
+				//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'var overlayObj = $(this).children(\'.m3content_overlay div\');' . M3_NL;
+				//	$this->initScript .= str_repeat(M3_INDENT_SPACE, 2) . 'overlayObj.css({ position:"absolute", top:top + "px", left:left + "px" }).show();' . M3_NL;
+					$this->initScript .= M3_INDENT_SPACE . '});' . M3_NL;
 				}
 			}
 			// ##### フロント画面のデフォルトのJavaスクリプト #####

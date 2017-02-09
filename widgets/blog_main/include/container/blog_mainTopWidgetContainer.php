@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -994,6 +994,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$showComment = $fetchedRow['be_show_comment'];				// コメントを表示するかどうか
 		$blogId = $fetchedRow['be_blog_id'];						// ブログID
 		$accessPointUrl = $this->gEnv->getDefaultUrl();
+		$startDt = $fetchedRow['be_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
+		$endDt = $fetchedRow['be_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
 		
 		// コメントを取得
 		$commentCount = $this->commentDb->getCommentCountByEntryId($entryId, $this->_langId);	// コメント総数
@@ -1159,8 +1161,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$contentInfo[M3_TAG_MACRO_CONTENT_DESCRIPTION] = $fetchedRow['be_description'];			// コンテンツ置換キー(簡易説明)
 		$contentInfo[M3_TAG_MACRO_CONTENT_IMAGE] = $this->getUrl($thumbUrl);		// コンテンツ置換キー(画像)
 		$contentInfo[M3_TAG_MACRO_CONTENT_UPDATE_DT] = $fetchedRow['be_create_dt'];		// コンテンツ置換キー(更新日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $fetchedRow['be_active_start_dt'];		// コンテンツ置換キー(公開開始日時)
-		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $fetchedRow['be_active_end_dt'];		// コンテンツ置換キー(公開終了日時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_START_DT] = $startDt;		// コンテンツ置換キー(公開開始日時)
+		$contentInfo[M3_TAG_MACRO_CONTENT_END_DT] = $endDt;		// コンテンツ置換キー(公開終了日時)
 		if ($this->useMultiBlog && !empty($blogId)){
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_ID]		= $blogId;			// コンテンツ置換キー(ブログID)
 			$contentInfo[M3_TAG_MACRO_CONTENT_BLOG_TITLE]	= $fetchedRow['bl_name'];			// コンテンツ置換キー(ブログタイトル)
@@ -1244,7 +1246,15 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 				break;
 			}
 		}
-		if (!empty($entryHtml)) $entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . '">' . $entryHtml . '</div>';// DIVで括る
+		
+		// 編集権限がある場合、記事が非公開の場合はクラス名を追加
+		$statusClass = '';		// 記事状態クラス
+		if (self::$_canEditEntry){
+			$isActive = false;		// 公開状態
+			if ($fetchedRow['be_status'] == 2) $isActive = $this->_isActive($startDt, $endDt, $this->now);// 表示可能
+			if (!$isActive) $statusClass = ' m3content_private';		// 非公開記事の場合はクラス名を付加
+		}
+		if (!empty($entryHtml)) $entryHtml = '<div class="' . self::ENTRY_BODY_BLOCK_CLASS . $statusClass .'">' . $entryHtml . '</div>';// DIVで括る
 		
 		// コンテンツレイアウトに埋め込む
 		/*$contentParam = array_merge($userFields, array(M3_TAG_MACRO_TITLE => $titleTag, M3_TAG_MACRO_BLOG_LINK => $blogLink, M3_TAG_MACRO_BODY => $entryHtml,
@@ -1262,8 +1272,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 			$entryHtml = $titleTag . $entryHtml;
 		}
 		
-		// コンテンツ編集権限がある場合はボタンを表示
-		$buttonList = '';
+		// ##### コンテンツ編集権限がある場合の追加機能 #####
+		$buttonList = '';		// 記事編集ボタン
 		if (self::$_canEditEntry) $buttonList = $this->createButtonTag($fetchedRow['be_serial']);// 編集権限があるとき
 		
 		$row = array(
@@ -1554,6 +1564,29 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		$imageUrl = $this->gInstance->getImageManager()->getSystemThumbUrl(M3_VIEW_TYPE_BLOG, 0/*PC用*/, $filename);
 		
 		return $imageUrl;
+	}
+	/**
+	 * 期間から公開可能かチェック
+	 *
+	 * @param timestamp	$startDt		公開開始日時
+	 * @param timestamp	$endDt			公開終了日時
+	 * @param timestamp	$now			基準日時
+	 * @return bool						true=公開可能、false=公開不可
+	 */
+	function _isActive($startDt, $endDt, $now)
+	{
+		$isActive = false;		// 公開状態
+
+		if ($startDt == $this->gEnv->getInitValueOfTimestamp() && $endDt == $this->gEnv->getInitValueOfTimestamp()){
+			$isActive = true;		// 公開状態
+		} else if ($startDt == $this->gEnv->getInitValueOfTimestamp()){
+			if (strtotime($now) < strtotime($endDt)) $isActive = true;		// 公開状態
+		} else if ($endDt == $this->gEnv->getInitValueOfTimestamp()){
+			if (strtotime($now) >= strtotime($startDt)) $isActive = true;		// 公開状態
+		} else {
+			if (strtotime($startDt) <= strtotime($now) && strtotime($now) < strtotime($endDt)) $isActive = true;		// 公開状態
+		}
+		return $isActive;
 	}
 }
 ?>
