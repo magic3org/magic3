@@ -109,8 +109,8 @@ div.m3content_overlay {
 div.m3content_overlay div {
 	position:absolute;
 	display:inline-block;
-	top:-50px;
-	right:10px;
+	top:-20px;
+	right:50px;
 	padding:15px;
 	background-color: #f1c40f;
 	border-radius: 5px;
