@@ -34,8 +34,8 @@ class ScriptLibInfo
 	private static $ckeditorVer = 0;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
 
 	// ##### 選択中のライブラリ #####
-//	const SELECTED_LIB_ELFINDER = 'elfinder112';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」が設定可能。(PHP v5.3対応) 
-	const SELECTED_LIB_ELFINDER = 'elfinder115';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」が設定可能。(PHP v5.3対応) 
+//	const SELECTED_LIB_ELFINDER = 'elfinder112';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder121」が設定可能。(PHP v5.3対応) 
+	const SELECTED_LIB_ELFINDER = 'elfinder115';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder121」が設定可能。(PHP v5.3対応) 
 		
 	// ##### Javascriptライブラリ(DBでの設定値) #####
 	// ライブラリセット(複数ライブラリの構成)
@@ -50,6 +50,7 @@ class ScriptLibInfo
 	const LIB_ELFINDER				= 'elfinder';
 	const LIB_ELFINDER112			= 'elfinder112';			// v2.1.12
 	const LIB_ELFINDER115			= 'elfinder115';			// v2.1.15
+	const LIB_ELFINDER121			= 'elfinder121';			// v2.1.21
 	const LIB_MD5					= 'md5';
 	const LIB_MOMENT				= 'moment';
 	const LIB_SWFOBJECT				= 'swfobject';
@@ -340,6 +341,15 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 //	const ELFINDER115_THEME_CSS		= 'elfinder-2.1.15/theme/smoothness/jquery-ui.min.css';		// テーマファイル
 	const ELFINDER115_THEME_CSS		= 'elfinder-2.1.15/theme/smoothness/jquery-ui.css';		// テーマファイル
 
+	// elFinder v2.1.21版
+	const ELFINDER121_VER			= '2.1.21';									// elFinderバージョン
+//	const ELFINDER121_FILENAME		= 'elfinder-2.1.21/js/elfinder.full.js';		// elFinder
+	const ELFINDER121_FILENAME		= 'elfinder-2.1.21/js/elfinder.min.js';		// elFinder
+	const ELFINDER121_LANG_FILENAME	= 'elfinder-2.1.21/js/i18n/elfinder.ja.js';	// elFinder言語ファイル
+	const ELFINDER121_CSS			= 'elfinder-2.1.21/css/elfinder.full.css';		// elFinder CSS
+	const ELFINDER121_OPTION_CSS		= 'elfinder-2.1.21/css/theme.css';				// elFinder CSS
+//	const ELFINDER121_THEME_CSS		= 'elfinder-2.1.21/theme/smoothness/jquery-ui.min.css';		// テーマファイル
+	const ELFINDER121_THEME_CSS		= 'elfinder-2.1.21/theme/smoothness/jquery-ui.css';		// テーマファイル
 
 	const MD5_FILENAME				= 'md5.js';									// MD5
 	const SOCKETIO_FILENAME			= 'socket.io/socket.io.js';					// socket.io
@@ -675,6 +685,11 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 															'css'		=> array(self::ELFINDER115_THEME_CSS, self::ELFINDER115_CSS, self::ELFINDER115_OPTION_CSS),	// テーマは最初に読み込む
 															'version'	=> self::ELFINDER115_VER					// elFinderバージョン
 														);
+			} else if (self::SELECTED_LIB_ELFINDER == self::LIB_ELFINDER121){
+				self::$libs[self::LIB_ELFINDER] = array(	'script' 	=> array(self::ELFINDER121_FILENAME, self::ELFINDER121_LANG_FILENAME),		// elFinder v2.1.15
+															'css'		=> array(self::ELFINDER121_THEME_CSS, self::ELFINDER121_CSS, self::ELFINDER121_OPTION_CSS),	// テーマは最初に読み込む
+															'version'	=> self::ELFINDER121_VER					// elFinderバージョン
+														);
 			}
 
 			// WYSIWYGエディターに合わせてライブラリを設定
@@ -755,6 +770,7 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 										self::LIB_ELFINDER						=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 										self::LIB_ELFINDER112					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 										self::LIB_ELFINDER115					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
+										self::LIB_ELFINDER121					=> array(self::LIB_BOOTSTRAP, self::LIB_JQUERY_UI, self::LIB_JQUERY_UI_WIDGETS_DIALOG, self::LIB_JQUERY_UI_WIDGETS_SLIDER),	// 画像リサイズが実行できないバグの対応。jQuery UIよりも前にBootstrapを読ませる必要がある。(2015/1/25)
 										self::LIB_JQUERY_TIMEPICKER				=> array(self::LIB_JQUERY_UI),	// JQUERY_TIMEPICKERはJQUERY_UIを使用する
 										self::LIB_JQUERY_UPLOADFILE				=> array(self::LIB_JQUERY_FORM),
 //										self::LIB_JQUERY_UPLOADFILE4			=> array(self::LIB_JQUERY_FORM),

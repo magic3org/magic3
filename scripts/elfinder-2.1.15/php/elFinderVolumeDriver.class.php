@@ -4872,32 +4872,35 @@ abstract class elFinderVolumeDriver {
 
 		$result = false;
 
-		// try lossless rotate
-		if ($degree % 90 === 0 && in_array($s[2], array(IMAGETYPE_JPEG, IMAGETYPE_JPEG2000))) {
-			$count = ($degree / 90) % 4;
-			$exiftran = array(
-				1 => '-9',
-				2 => '-1',
-				3 => '-2'
-			);
-			$jpegtran = array(
-				1 => '90',
-				2 => '180',
-				3 => '270'
-			);
-			$quotedPath = escapeshellarg($path);
-			$cmds = array(
-				'exiftran -i '.$exiftran[$count].' '.$path,
-				'jpegtran -rotate '.$jpegtran[$count].' -copy all -outfile '.$quotedPath.' '.$quotedPath
-			);
-			foreach($cmds as $cmd) {
-				if ($this->procExec($cmd) === 0) {
-					$result = true;
-					break;
+		// bug fixed for magic3 by naoki. if exiftran and jpegtran command are not installed, the image is broken.
+		if ($this->procExec('wich exiftran') === 0 && $this->procExec('wich jpegtran') === 0){
+			// try lossless rotate
+			if ($degree % 90 === 0 && in_array($s[2], array(IMAGETYPE_JPEG, IMAGETYPE_JPEG2000))) {
+				$count = ($degree / 90) % 4;
+				$exiftran = array(
+					1 => '-9',
+					2 => '-1',
+					3 => '-2'
+				);
+				$jpegtran = array(
+					1 => '90',
+					2 => '180',
+					3 => '270'
+				);
+				$quotedPath = escapeshellarg($path);
+				$cmds = array(
+					'exiftran -i '.$exiftran[$count].' '.$path,
+					'jpegtran -rotate '.$jpegtran[$count].' -copy all -outfile '.$quotedPath.' '.$quotedPath
+				);
+				foreach($cmds as $cmd) {
+					if ($this->procExec($cmd) === 0) {
+						$result = true;
+						break;
+					}
 				}
-			}
-			if ($result) {
-				return $path;
+				if ($result) {
+					return $path;
+				}
 			}
 		}
 

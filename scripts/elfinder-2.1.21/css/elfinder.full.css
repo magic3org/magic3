@@ -3032,3 +3032,30 @@ embed.elfinder-quicklook-preview-audio {
 		rgba(0,0,0,0) 100%);
 }
 
+/******************************************************************/
+/*                  Magic3 optional configure                     */
+/******************************************************************/
+.ui-dialog { z-index: 99999 !important ;}
+.ui-widget {
+/*	font-family: Verdana,Arial,sans-serif;
+	font-size: 1.1em;*/
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+	font-size: 1em;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+/*	font-family: Verdana,Arial,sans-serif;
+	font-size: 1em;*/
+	font-family: "Lucida Grande","Hiragino Kaku Gothic ProN",Meiryo,sans-serif;
+	font-size: 1em;
+}
+.ui-button:focus { outline:none !important }	/* remove highlight at the dialog close box in chrome. */
+
+/* fix input text field size with Bootstrap */
+#elfinder .elfinder-button-search input {
+	width: 202px;
+	height: 24px;
+}
+/******************************************************************/
