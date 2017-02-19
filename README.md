@@ -5,6 +5,10 @@
 * スクリプトエンジン: PHP5.3以上~(PHP7.0以上対応済み)
 * DB: MySQL5以上またはPostgreSQL8以上
 
+# ダウンロード
+
+https://ja.osdn.net/projects/magic3/
+
 # インストール
 
 パッケージを任意のディレクトリに解凍し、Webブラウザでアクセスするだけです。
