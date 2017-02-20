@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -64,7 +64,10 @@ class pretty_photoWidgetContainer extends BaseWidgetContainer
 		$cmd = $request->trimValueOf(M3_REQUEST_PARAM_OPERATION_COMMAND);
 		
 		if ($cmd == M3_REQUEST_CMD_DO_WIDGET){	// ウィジェット単体実行
-			$imagePath = $this->gEnv->getSystemRootPath() . '/' . $request->trimValueOf('path');			// 画像への相対URL
+			//$imagePath = $this->gEnv->getSystemRootPath() . '/' . $request->trimValueOf('path');			// 画像への相対URL
+			$imagePath = urldecode($request->trimValueOf('path'));			// 日本語ファイル名を処理
+			if (!strStartsWith($imagePath, '/')) $imagePath = '/' . $imagePath;
+			$imagePath = $this->gEnv->getSystemRootPath() . $imagePath;
 			$size = $request->trimValueOf('size');
 			if (empty($size)) $size = self::DEFAULT_IMAGE_SIZE;
 			if (file_exists($imagePath)){
