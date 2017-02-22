@@ -7,7 +7,7 @@
 -- *
 -- * @package    Magic3 Framework
 -- * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
--- * @copyright  Copyright 2006-2016 Magic3 Project.
+-- * @copyright  Copyright 2006-2017 Magic3 Project.
 -- * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
 -- * @version    SVN: $Id$
 -- * @link       http://www.magic3.org
@@ -269,7 +269,7 @@ INSERT INTO _widgets
 DELETE FROM _widgets WHERE wd_id = 'pretty_photo';
 INSERT INTO _widgets
 (wd_id,          wd_name,          wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description, wd_add_script_lib, wd_add_script_lib_a,  wd_available, wd_editable, wd_has_admin, wd_enable_operation, wd_use_instance_def, wd_initialized, wd_launch_index, wd_cache_type, wd_view_control_type, wd_release_dt, wd_install_dt, wd_create_dt) VALUES
-('pretty_photo', 'プリティフォト', 'image', '2.2.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'サムネール表示した画像を拡大します。', 'jquery.prettyphoto', 'jquery.tablednd,jquery.prettyphoto,elfinder',               true,         true,        true,         true,                                true,                true,              0,  3,             1, '2016-07-27', now(),         now());
+('pretty_photo', 'プリティフォト', 'image', '2.3.0',    'Naoki Hirata', 'Magic3.org', 'GPL',      10, 'サムネール表示した画像を拡大します。', 'jquery.prettyphoto', 'jquery.tablednd,jquery.prettyphoto,elfinder',               true,         true,        true,         true,                                true,                true,              0,  3,             1, '2017-02-20', now(),         now());
 DELETE FROM _widgets WHERE wd_id = 'picasa';
 INSERT INTO _widgets
 (wd_id,    wd_name,          wd_category_id, wd_version, wd_author,      wd_copyright, wd_license, wd_official_level, wd_description,                 wd_has_admin, wd_use_instance_def, wd_initialized, wd_cache_type, wd_view_control_type, wd_install_dt, wd_create_dt) VALUES
