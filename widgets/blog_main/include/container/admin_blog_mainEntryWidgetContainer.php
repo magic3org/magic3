@@ -790,6 +790,7 @@ class admin_blog_mainEntryWidgetContainer extends admin_blog_mainBaseWidgetConta
 			$otherParams = array();
 			$otherParams['be_name']				= $name;
 			$otherParams['be_blog_id']			= $this->blogId;
+			$otherParams['be_status']			= $status;
 			$otherParams['be_regist_user_id']	= $userId;				// 投稿者
 			$otherParams['be_regist_dt']		= $regDt;
 			$otherParams['be_show_comment']		= $showComment;
