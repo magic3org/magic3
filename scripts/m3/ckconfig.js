@@ -171,33 +171,27 @@ CKEDITOR.editorConfig = function(config){
 		config.toolbar_Full = [
 			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
 			{ name: 'clipboard', items: [ 'M3Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-			{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
+			{ name: 'editing', items : [ 'Find', 'Replace', 'SelectAll' ] },
 			{ name: 'insert', items: [ 'Image', 'Flash', 'YouTube', 'Googlemaps', 'Table', 'HorizontalRule' ] },
-			{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
+			{ name: 'colors', items : [ 'TextColor', 'BGColor', '-', 'FontSize' ] },
 			'/',
 			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', /*'-', 'Blockquote', 'CreateDiv',*/ '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
-//			{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
 			{ name: 'links', items: [ 'M3Link', 'M3Unlink', 'M3Anchor' ] },
-			{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
-	//		{ name: 'others', items: [ '-' ] }
-	//		{ name: 'about', items: [ 'About' ] }
+			{ name: 'styles', items: [ 'Styles', 'Format' ] }
 		];
 	} else {
 		config.toolbar_Full = [
 			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
 			{ name: 'clipboard', items: [ 'M3Templates', '-', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-			{ name: 'editing', items : [ 'Find','Replace','-','SelectAll' ] },
+			{ name: 'editing', items : [ 'Find', 'Replace', 'SelectAll' ] },
 			{ name: 'insert', items: [ 'Image', 'Flash', /*'YouTube', 'Googlemaps',*/ 'Table', 'HorizontalRule' ] },
-			{ name: 'colors', items : [ 'TextColor', 'BGColor' ] },
+			{ name: 'colors', items : [ 'TextColor', 'BGColor', '-', 'FontSize' ] },
 			'/',
 			{ name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat' ] },
 			{ name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', /*'-', 'Blockquote', 'CreateDiv',*/ '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },
-	//		{ name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
 			{ name: 'links', items: [ 'M3Link', 'M3Unlink', 'M3Anchor' ] },
-			{ name: 'styles', items: [ 'Styles', 'Format', 'FontSize' ] }
-	//		{ name: 'others', items: [ '-' ] }
-	//		{ name: 'about', items: [ 'About' ] }
+			{ name: 'styles', items: [ 'Styles', 'Format' ] }
 		];
 	}
 	config.toolbar_Layout = [
