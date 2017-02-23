@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -31,7 +31,7 @@ class ScriptLibInfo
 											'3.1'	=> 'jquery-3.1.0.min.js'
 										);
 	private static $wysiwygEditorType = 'fckeditor';		// WYSIWYGエディタータイプ
-	private static $ckeditorVer = 0;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
+	private static $ckeditorVer = 1;			// 使用するCKEditorのバージョン(0=デフォルト, 1=最新)
 
 	// ##### 選択中のライブラリ #####
 //	const SELECTED_LIB_ELFINDER = 'elfinder112';		// 選択中のelFinder、「elfinder」または「elfinder112」「elfinder115」「elfinder121」が設定可能。(PHP v5.3対応) 
@@ -519,9 +519,10 @@ const JQUERY_TABLEDND_FILENAME		= 'jquery/tablednd/jquery.tablednd-0.9.2.js';
 																	'css'		=> array(
 																							self::JSCALENDAR_CSS				// jscalendarCSS
 																						)),
-						self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
+/*						self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME),		// bootstrap
 																	'css'		=> array(self::BOOTSTRAP_CSS)),			// CSSファイル必要?
-	//					self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
+																	*/
+						self::LIB_BOOTSTRAP				=>	array(	'script' 	=> array(self::BOOTSTRAP_FILENAME)),		// bootstrap
 						self::LIB_BOOTSTRAP_ADMIN		=>	array(	'script' 	=> array(self::BOOTSTRAP_DIALOG_FILENAME),
 																	'css'		=> array(	self::BOOTSTRAP_BOOTSWATCH_FLATLY_CSS,
 																							self::BOOTSTRAP_BOOTSNIPP_LARGEDROPDOWNMENU_CSS,
