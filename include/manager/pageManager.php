@@ -3826,13 +3826,14 @@ class PageManager extends Core
 					if (!empty($this->ckeditorCssFiles)){
 						// 編集エリア用のCSSファイルを追加
 						$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+						//array_unshift($this->ckeditorCssFiles, $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE);
 						
 						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 					}
 					// CKEditor用(レイアウト)のCSSファイル
 					$cssFiles = array();
-					$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_CSS;		// BootstrapのCSSを追加
+					$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_ADMIN_CSS;		// BootstrapのCSSを追加
 					$cssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
 					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
 					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
@@ -3947,13 +3948,14 @@ class PageManager extends Core
 					if (!empty($this->ckeditorCssFiles)){
 						// 編集エリア用のCSSファイルを追加
 						$this->ckeditorCssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
+						//array_unshift($this->ckeditorCssFiles, $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE);
 					
 						$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $this->ckeditorCssFiles));
 						$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
 					}
 					// CKEditor用(レイアウト)のCSSファイル
 					$cssFiles = array();
-					$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_CSS;		// BootstrapのCSSを追加
+					$cssFiles[] = $scriptsUrl . '/' . ScriptLibInfo::BOOTSTRAP_ADMIN_CSS;		// BootstrapのCSSを追加
 					$cssFiles[] = $scriptsUrl . '/' . self::M3_CKEDITOR_CSS_FILE;
 					$fileList = implode(', ', array_map(create_function('$a','return "\'" . $a . "\'";'), $cssFiles));
 					$replaceStr .= 'var M3_CONFIG_WIDGET_CKEDITOR_LAYOUT_CSS_FILES = [ ' . $fileList . ' ];' . M3_NL;
