@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    1.3
  * @link       http://www.magic3.org
@@ -71,7 +71,7 @@ var GoogleMap = function()
 	this.mapType = 0;
 }
 
-GoogleMap.prototype.generateStaticMap = function()
+GoogleMap.prototype.generateStaticMap = function(apiKey)
 {
 	var w = Math.min(this.width, 640);
 	var h = Math.min(this.height, 640);
@@ -80,14 +80,8 @@ GoogleMap.prototype.generateStaticMap = function()
 	
 	var staticMapTypes = ['roadmap', 'satellite', 'hybrid', 'terrain'];
 
-//	var mapUrl = 'http://maps.google.com/maps/api/staticmap?center=' + this.centerLat + ',' + this.centerLon 
 	var mapUrl = 'https://maps.googleapis.com/maps/api/staticmap?';
-//	if (M3_GOOGLEMAPS_KEY) mapUrl += 'key=' + M3_GOOGLEMAPS_KEY + '&';
-	if (typeof(M3_GOOGLEMAPS_KEY) === "undefined"){
-		alert('Googleマップを表示するにはAPIキーの設定が必要です');
-	} else {
-		mapUrl += 'key=' + M3_GOOGLEMAPS_KEY + '&';
-	}
+	if (apiKey) mapUrl += 'key=' + apiKey + '&';
 
 	mapUrl	+= 'center=' + this.centerLat + ',' + this.centerLon 
 				+ '&zoom=' + this.zoom + '&size=' + w + 'x' + h 

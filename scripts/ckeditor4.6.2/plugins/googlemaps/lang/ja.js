@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    1.0
  * @link       http://www.magic3.org
@@ -55,5 +55,6 @@ CKEDITOR.plugins.setLang( 'googlemaps', 'ja', {
 	line:	'ライン',
 	msgLineInstruction:	'クリックするとポイントが追加されます。<br />ポイントはドラッグすることもDELキーで削除することもできます。',
 	msgInputStyleJsonData: 'JSONフォーマットのスタイルデータを入力してください。',
-	msgInvalidStyle: '無効なJSONデータです。'
+	msgInvalidStyle: '無効なJSONデータです。',
+	msgApiKeyNotConfigured: 'GoogleマップAPIキーが設定されていません。'
 });

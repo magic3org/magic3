@@ -7,7 +7,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2014 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    1.2
  * @link       http://www.magic3.org
@@ -51,6 +51,13 @@
 		},
 		// 初期起動時、ソースモード切替時に呼び出し
 		afterInit: function(editor){
+			var apiKey = '';
+			if (typeof(editor.config.googlemapsPlugin) === "undefined" || typeof(editor.config.googlemapsPlugin.apiKey) === "undefined"){
+				alert(editor.lang.googlemaps.msgApiKeyNotConfigured);
+			} else {
+				apiKey = editor.config.googlemapsPlugin.apiKey;
+			}
+			
 			// SCRIPTタグのGoogleマップ情報読み込み
 			var div = document.createElement('div');
   			div.innerHTML = editor.getData();
@@ -113,7 +120,7 @@
 									CKEDITOR.addCss(
 										'img.cke_googlemaps' + mapNumber +
 										'{' +
-											'background-image: url(' + mapInfo.generateStaticMap() + ');' +
+											'background-image: url(' + mapInfo.generateStaticMap(apiKey) + ');' +
 											'background-position: center center;' +
 											'background-repeat: no-repeat;' +
 											'border: 0px;' +
