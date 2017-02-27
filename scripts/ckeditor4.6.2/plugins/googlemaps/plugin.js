@@ -51,13 +51,6 @@
 		},
 		// 初期起動時、ソースモード切替時に呼び出し
 		afterInit: function(editor){
-			var apiKey = '';
-			if (typeof(editor.config.googlemapsPlugin) === "undefined" || typeof(editor.config.googlemapsPlugin.apiKey) === "undefined"){
-				alert(editor.lang.googlemaps.msgApiKeyNotConfigured);
-			} else {
-				apiKey = editor.config.googlemapsPlugin.apiKey;
-			}
-			
 			// SCRIPTタグのGoogleマップ情報読み込み
 			var div = document.createElement('div');
   			div.innerHTML = editor.getData();
@@ -86,6 +79,14 @@
 								if (regExp.test(objectId)) mapNumber = RegExp.$1;
 								var mapInfo = GoogleMapsHandler.getMap(mapNumber);
 								if (mapInfo){
+									// GoogleマップAPIキーを取得
+									var apiKey = '';
+									if (typeof(editor.config.googlemapsPlugin) === "undefined" || typeof(editor.config.googlemapsPlugin.apiKey) === "undefined"){
+										alert(editor.lang.googlemaps.msgApiKeyNotConfigured);
+									} else {
+										apiKey = editor.config.googlemapsPlugin.apiKey;
+									}
+									
 									// 幅、高さを設定
 									var width, height, widthType, heightType, alignCenter;
 									var style = element.attributes.style;
