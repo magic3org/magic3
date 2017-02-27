@@ -180,6 +180,13 @@ CKEDITOR.editorConfig = function(config){
 			{ name: 'links', items: [ 'M3Link', 'M3Unlink', 'M3Anchor' ] },
 			{ name: 'styles', items: [ 'Styles', 'Format' ] }
 		];
+		
+		// APIキーを設定
+		if (typeof(M3_GOOGLEMAPS_KEY) !== "undefined"){
+			config.googlemapsPlugin = {
+				apiKey: M3_GOOGLEMAPS_KEY
+			};
+		}
 	} else {
 		config.toolbar_Full = [
 			{ name: 'tools', items: [ 'Maximize', 'ShowBlocks', 'Source' ] },
