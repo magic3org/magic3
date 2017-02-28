@@ -10,3 +10,6 @@ ExpiresByType image/png "access plus 7 days"
 ExpiresByType image/x-icon "access plus 7 days"
 ExpiresByType application/x-shockwave-flash "access plus 7 days"
 </ifModule>
+
+# Prohibit listing
+Options -Indexes
