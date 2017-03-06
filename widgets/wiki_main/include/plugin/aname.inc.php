@@ -92,7 +92,7 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	$f_noid  = in_array('noid',  $args); // Option: Without id attribute
 	$f_super = in_array('super', $args); // Option: CSS class
 	$f_full  = in_array('full',  $args); // Option: With full(absolute) URI
-	$f_hidden  = in_array('hidden',  $args);		// 非表示にするかどうか
+	$f_hidden  = in_array('hidden',  $args);		// 非表示アンカーにするかどうか
 
 	if ($body == '') {
 		if ($f_noid)  return plugin_aname_usage($convert, 'Meaningless(No link-title with \'noid\')');
@@ -122,8 +122,11 @@ function plugin_aname_tag($args = array(), $convert = TRUE)
 	} else {
 		$href = $title = '';
 	}
-	$style = $f_hidden ? ' style="display:none;"' : '';			// CSS
-	return '<a class="' . $class . '"' . $attr_id . $href . $title . $style . '>' . $body . '</a>';
+	//$style = $f_hidden ? ' style="display:none;"' : '';			// CSS
+	// 非表示アンカーの場合は内容を空にする
+	if ($f_hidden) $body = '';
+	return '<a class="' . $class . '"' . $attr_id . $href . $title . '>' . $body . '</a>';
+//	return '<a class="' . $class . '"' . $attr_id . $href . $title . $style . '>' . $body . '</a>';
 	//return '<a class="' . $class . '"' . $attr_id . $href . $title . $style . ' rel="tooltip" data-toggle="tooltip">' . $body . '</a>';			// Bootstrapのナビゲーションメニューを固定位置にしたとき、ツールチップの表示位置が上のずれる。
 }
 ?>
