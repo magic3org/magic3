@@ -222,7 +222,8 @@ class blog_mainTopWidgetContainer extends blog_mainBaseWidgetContainer
 		
 		// 管理者でプレビューモードのときは表示制限しない
 		$this->preview = false;
-		if ($this->isSystemManageUser && $cmd == M3_REQUEST_CMD_PREVIEW){		// システム運用者以上
+		//if ($this->isSystemManageUser && $cmd == M3_REQUEST_CMD_PREVIEW){		// システム運用者以上
+		if ($this->isSystemManageUser && ($cmd == M3_REQUEST_CMD_PREVIEW || $cmd == M3_REQUEST_CMD_CSS)){		// システム運用者以上
 			$this->preview = true;
 		}
 		

@@ -592,7 +592,7 @@ class PageManager extends Core
 		}
 	}
 	/**
-	 * 外部出力で出力するCSSの文字列を設定
+	 * 外部出力で出力するCSSの文字列を設定(ウィジェット共通設定からの設定値)
 	 *
 	 * @param string $css	追加するCSS内容
 	 * @return 				なし
