@@ -989,5 +989,23 @@ class DesignManager extends Core
 		$tag .= '<div class="col-sm-2 m3config_item" style="width:110px;"><input type="text" class="form-control" id="' . $endTimeId . '" name="' . $endTimeId . '" value="' . convertToHtmlEntity($endTimeValue) . '" maxlength="10" /></div>';
 		return $tag;
 	}
+	/**
+	 * ユーザアバターを作成
+	 *
+	 * @param string $userName			ユーザ名
+	 * @param string $avatar			アバター画像名
+	 * @param string $linkUrl			リンク先
+	 * @param int $size					画像サイズ
+	 * @return string 					アバターHTML
+	 */
+	function createUserAvatar($userName, $avatar, $size, $linkUrl = '')
+	{
+		$avatarUrl = $this->gInstance->getImageManager()->getAvatarUrl($avatar);
+		$imageSize = intval($size);
+		$iconTitle = convertUrlToHtmlEntity($userName);
+		$iconTag = '<img class="avatar" src="' . $this->getUrl($avatarUrl) . '" width="' . $imageSize . '" height="' . $imageSize . '" alt="' . $iconTitle . '" title="' . $iconTitle . '" rel="m3help" />';
+		if (!empty($linkUrl)) $iconTag ='<a href="' . convertUrlToHtmlEntity($this->getUrl($linkUrl)) . '">' . $iconTag . '</a>';
+		return $iconTag;
+	}
 }
 ?>

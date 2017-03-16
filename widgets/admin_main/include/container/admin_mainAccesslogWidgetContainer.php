@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2016 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -42,6 +42,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 	const BROWSER_ICON_DIR = '/images/system/browser/';		// ブラウザアイコンディレクトリ
 	const OS_ICON_DIR = '/images/system/os/';		// OSアイコンディレクトリ
 	const ICON_SIZE = 16;		// アイコンのサイズ
+	const AVATAR_ICON_SIZE = 32;		// ユーザアバターアイコンサイズ
 	const DEFAULT_LOG_LEVEL = '0';		// デフォルトのログレベル
 	const DEFAULT_LOG_STATUS = '1';		// デフォルトのログステータス
 	const DEFAULT_ACCESS_PATH = 'index';		// デフォルトのアクセスパス(PC用アクセスポイント)
@@ -202,34 +203,9 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		}
 		$totalCount = $this->db->getAccessLogCount($pathParam, $this->startDt, $endNextDt);
 		
-/*		// 表示するページ番号の修正
-		$pageCount = (int)(($totalCount -1) / $viewCount) + 1;		// 総ページ数
-		if ($pageNo < 1) $pageNo = 1;
-		if ($pageNo > $pageCount) $pageNo = $pageCount;
-		$startNo = ($pageNo -1) * $viewCount +1;		// 先頭の行番号
-		$endNo = $pageNo * $viewCount > $totalCount ? $totalCount : $pageNo * $viewCount;// 最後の行番号
-		*/
 		// ページング計算
 		$this->calcPageLink($pageNo, $totalCount, $maxListCount);
 		
-/*		// ページング用リンク作成
-		$pageLink = '';
-		if ($pageCount > 1){	// ページが2ページ以上のときリンクを作成
-			for ($i = 1; $i <= $pageCount; $i++){
-				if ($i > self::MAX_PAGE_COUNT) break;			// 最大ページ数以上のときは終了
-				if ($i == $pageNo){
-					$link = ' ' . $i;
-				} else {
-					$detailUrl = '?task=accesslog&path=' . $this->path;
-					if (!empty($this->startDt)) $detailUrl .= '&start_date=' . $this->startDt;	// 検索範囲開始日付
-					if (!empty($this->endDt)) $detailUrl .= '&end_date=' . $this->endDt;		// 検索範囲終了日付
-					if ($i > 1) $detailUrl .= '&page=' . $i;
-					//$link = '&nbsp;<a href="' . $this->convertUrlToHtmlEntity($detailUrl) . '">' . $i . '</a>';
-					$link = ' <a href="' . $this->convertUrlToHtmlEntity($detailUrl) . '">' . $i . '</a>';			// 「&nbsp;」では自動改行されないので半角スペースで区切る
-				}
-				$pageLink .= $link;
-			}
-		}*/
 		// ページングリンク作成
 		$detailUrl = '?task=accesslog&path=' . $this->path;
 		if (!empty($this->startDt)) $detailUrl .= '&start_date=' . $this->startDt;	// 検索範囲開始日付
@@ -454,6 +430,10 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 		// 詳細画面へのURL
 		$detailUrl = '?task=accesslog_detail&serial=' . $serial;
 		
+		// ユーザアイコン取得
+		$userIconHtml = '';
+		if (!empty($fetchedRow['lu_name'])) $userIconHtml = $this->gDesign->createUserAvatar($fetchedRow['lu_name'], $fetchedRow['lu_avatar'], self::AVATAR_ICON_SIZE);
+		
 		$row = array(
 			'index' => $index,													// 行番号
 			'serial' => $this->convertToDispString($serial),			// シリアル番号
@@ -464,7 +444,7 @@ class admin_mainAccesslogWidgetContainer extends admin_mainConditionBaseWidgetCo
 			'os' => $osImg,			// OS
 			'country' => $countryImg,		// 国画像
 			'ip' => $ipStr,		// クライアントIP
-			'user' => $this->convertToDispString($fetchedRow['lu_name']),										// ユーザ
+			'user' => $userIconHtml,										// ユーザ
 			'dt' => $this->convertToDispDateTime($fetchedRow['al_dt']),	// 出力日時
 			'selected' => $selected												// 項目選択用ラジオボタン
 		);
