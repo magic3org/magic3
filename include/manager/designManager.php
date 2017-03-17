@@ -951,6 +951,30 @@ class DesignManager extends Core
 		return $buttonTag;
 	}
 	/**
+	 * 情報リンクを作成
+	 *
+	 * @param string $url		リンク先(リンク先がない場合は空文字列)
+	 * @param string $title		ツールチップ用文字列
+	 * @param string $tagId		タグのID
+	 * @param string $attr		その他の追加属性
+	 * @param string $btnClass	ボタンのカラークラス
+	 * @return string 			ボタンのタグ
+	 */
+	function createInfoLink($url, $title = '', $btnClass = 'btn-default')
+	{
+		if (empty($url)){
+			$url = 'javascript:void(0);';
+		} else {
+			$url = convertUrlToHtmlEntity($this->getUrl($url));
+		}
+
+		$otherAttr = '';
+		if (!empty($title)) $otherAttr .= ' rel="m3help" title="' . $title . '"';
+
+		$buttonTag = '<a href="' . $url . '" target="_blank" role="button" data-container="body"' . $otherAttr . '><i class="glyphicon glyphicon-info-sign"></i></a>';
+		return $buttonTag;
+	}
+	/**
 	 * カレンダーによる期間入力フィールドを作成
 	 *
 	 * @param string $startDateId		開始日タグID,タグ名

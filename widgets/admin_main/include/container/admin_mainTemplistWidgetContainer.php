@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -31,6 +31,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	private $templateType;			// 現在のテンプレートタイプ
 	private $isExistsTemplateList;		// テンプレートが存在するかどうか
 	const BREADCRUMB_TITLE			= 'テンプレート管理';		// 画面タイトル名(パンくずリスト)
+	const TITLE_INFO_URL			= 'テンプレートの情報';		// テンプレート情報URLのタイトル
 	const TEMPLATE_THUMBNAIL_FILENAME = 'template_thumbnail.png';		// テンプレートサムネール
 	const previewImageSizeHeight = 27;
 	const previewImageSizeWidth = 42;
@@ -482,6 +483,7 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 	{
 		$genarator = $fetchedRow['tm_generator'];			// テンプレート作成アプリケーション
 		$version = $fetchedRow['tm_version'];				// テンプレートバージョン
+		$infoUrl = $fetchedRow['tm_info_url'];				// テンプレート情報リンク
 
 		// テンプレートが存在するかどうかチェック
 		$isExistsTemplate = false;
@@ -517,6 +519,10 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 			$iconUrl = $this->gEnv->getRootUrl() . self::NOT_FOUND_TEMPLATE_ICON_FILE;
 			$imageTag = '<img src="' . $this->getUrl($iconUrl) . '" border="0" alt="' . $iconTitle . '" title="' . $iconTitle . '" />';
 		}
+		
+		// テンプレート情報リンク
+		$infoButtonTag = '';
+		if (!empty($infoUrl)) $infoButtonTag = $this->gDesign->createInfoLink($infoUrl, self::TITLE_INFO_URL);
 		
 		// テンプレートフォーマット
 		switch ($fetchedRow['tm_type']){
@@ -572,15 +578,16 @@ class admin_mainTemplistWidgetContainer extends admin_mainBaseWidgetContainer
 		$downloadButtonTag = '<a class="btn btn-xs" href="javascript:void(0);" onclick="downloadTemplate(\'' . $templateId . '\');" rel="m3help" data-container="body" title="' . $downloadStr . '" ' . $downloadDisabled . '>' . $downloadButtonTag . '</a>';
 
 		$row = array(
-			'no' => $index + 1,													// 行番号
-			'serial' => $this->convertToDispString($fetchedRow['tm_serial']),			// シリアル番号
-			'id_str' => $idText,
-			'id' => $this->convertToDispString($templateId),			// ID
-			'name' => $name,		// 名前
-			'format_type' => $formatType,		// テンプレート形式
-			'update_dt' => $this->convertToDispDateTime($fetchedRow['tm_create_dt']),	// 更新日時
-			'is_default' => $defaultCheck,										// デフォルトテンプレートかどうか
-			'image_tag' => $imageTag,		// 画像
+			'no'			=> $index + 1,													// 行番号
+			'serial'		=> $this->convertToDispString($fetchedRow['tm_serial']),			// シリアル番号
+			'id_str'		=> $idText,
+			'id'			=> $this->convertToDispString($templateId),			// ID
+			'name'			=> $name,		// 名前
+			'info_button'	=> $infoButtonTag,		// テンプレート情報URL
+			'format_type'	=> $formatType,		// テンプレート形式
+			'update_dt'		=> $this->convertToDispDateTime($fetchedRow['tm_create_dt']),	// 更新日時
+			'is_default'	=> $defaultCheck,										// デフォルトテンプレートかどうか
+			'image_tag'		=> $imageTag,		// 画像
 			'delete_button'		=> $deleteButtonTag,		// 削除ボタン
 			'preview_button'	=> $previewButtonTag,		// プレビューボタン
 			'download_button' 	=> $downloadButtonTag								// ダウンロードボタン
