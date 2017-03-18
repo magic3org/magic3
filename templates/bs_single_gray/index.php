@@ -30,15 +30,8 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 	<script src="<?php echo $templateUrl; ?>/js/grayscale.js"></script>
 	<script src="<?php echo $templateUrl; ?>/js/m3custom.js"></script>
-<?php global $gPageManager;if (!$gPageManager->isLayout()): ?>
-<script type="text/javascript">
-//<![CDATA[
-//]]>
-</script>
-<?php endif; ?>
 </head>
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-
     <!-- Navigation -->
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
         <div class="container">
@@ -48,7 +41,6 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">
 				    <jdoc:include type="modules" name="brand" style="none" />
-                    <!--<i class="fa fa-play-circle"></i> <span class="light">Start</span> Bootstrap-->
                 </a>
             </div>
 
@@ -95,6 +87,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     </section>
 
     <!-- Photo Section -->
+	<?php if ($document->countModules('photo')): ?>
     <section id="photo" class="content-section text-center">
         <div class="photo-section">
             <div class="container">
@@ -104,35 +97,28 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
             </div>
         </div>
     </section>
+	<?php endif; ?>
 
     <!-- Other Sections -->
+	<?php if ($document->countModules('others')): ?>
 	<jdoc:include type="modules" name="others" style="bootother" />
+	<?php endif; ?>
 	
     <!-- Contact Section -->
+	<?php if ($document->countModules('contact')): ?>
     <section id="contact" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>Contact Start Bootstrap</h2>
-                <p>Feel free to email us to provide some feedback on our templates, give us suggestions for new templates and themes, or to just say hello!</p>
-                <p><a href="mailto:feedback@startbootstrap.com">feedback@startbootstrap.com</a>
-                </p>
-                <ul class="list-inline banner-social-buttons">
-                    <li>
-                        <a href="https://twitter.com/SBootstrap" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/IronSummitMedia/startbootstrap" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
-                    </li>
-                    <li>
-                        <a href="https://plus.google.com/+Startbootstrap/posts" class="btn btn-default btn-lg"><i class="fa fa-google-plus fa-fw"></i> <span class="network-name">Google+</span></a>
-                    </li>
-                </ul>
+			<jdoc:include type="modules" name="contact" style="bootblock" />
             </div>
         </div>
     </section>
+	<?php endif; ?>
 
     <!-- Map Section -->
-	<?php if ($document->countModules('map')): ?><div id="map"><jdoc:include type="modules" name="map" style="none" /></div><?php endif; ?>
+	<?php if ($document->countModules('map')): ?>
+	<div id="map"><jdoc:include type="modules" name="map" style="none" /></div>
+	<?php endif; ?>
 
     <!-- Footer -->
     <footer>
