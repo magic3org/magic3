@@ -47,7 +47,8 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
                     Menu <i class="fa fa-bars"></i>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">
-                    <i class="fa fa-play-circle"></i> <span class="light">Start</span> Bootstrap
+				    <jdoc:include type="modules" name="brand" style="none" />
+                    <!--<i class="fa fa-play-circle"></i> <span class="light">Start</span> Bootstrap-->
                 </a>
             </div>
 
@@ -76,12 +77,8 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
             <div class="container">
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
-                        <h1 class="brand-heading">Grayscale</h1>
-                        <p class="intro-text">A free, responsive, one page Bootstrap theme.
-                            <br>Created by Start Bootstrap.</p>
-                        <a href="#about" class="btn btn-circle page-scroll">
-                            <i class="fa fa-angle-double-down animated"></i>
-                        </a>
+                        <jdoc:include type="modules" name="header" style="bootheader" />
+                        <a href="#about" class="btn btn-circle page-scroll"><i class="fa fa-angle-double-down animated"></i></a>
                     </div>
                 </div>
             </div>

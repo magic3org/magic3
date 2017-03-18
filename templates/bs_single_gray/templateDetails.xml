@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <install type="template" version="3.1" format="bootstrap">
-  <name>bootstrap_cerulean</name>
-  <creationDate>2014-03-27</creationDate>
+  <name>bs_single_gray</name>
+  <creationDate>2017-03-18</creationDate>
   <version>1.0</version>
   <author></author>
   <authorUrl></authorUrl>
