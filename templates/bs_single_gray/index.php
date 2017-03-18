@@ -44,7 +44,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-                    Menu <i class="fa fa-bars"></i>
+					<jdoc:include type="modules" name="menutitle" style="none" /><i class="fa fa-bars"></i>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top">
 				    <jdoc:include type="modules" name="brand" style="none" />
@@ -59,7 +59,7 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
                         <a class="page-scroll" href="#about">About</a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#download">Download</a>
+                        <a class="page-scroll" href="#photo">Photo</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#contact">Contact</a>
@@ -89,27 +89,25 @@ $templateUrl = $document->baseurl . '/templates/' . $document->template;
     <section id="about" class="container content-section text-center">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2">
-                <h2>About Grayscale</h2>
-                <p>Grayscale is a free Bootstrap 3 theme created by Start Bootstrap. It can be yours right now, simply download the template on <a href="http://startbootstrap.com/template-overviews/grayscale/">the preview page</a>. The theme is open source, and you can use it for any purpose, personal or commercial.</p>
-                <p>This theme features stock photos by <a href="http://gratisography.com/">Gratisography</a> along with a custom Google Maps skin courtesy of <a href="http://snazzymaps.com/">Snazzy Maps</a>.</p>
-                <p>Grayscale includes full HTML, CSS, and custom JavaScript files along with LESS files for easy customization.</p>
+				<jdoc:include type="modules" name="about" style="bootblock" />
             </div>
         </div>
     </section>
 
-    <!-- Download Section -->
-    <section id="download" class="content-section text-center">
-        <div class="download-section">
+    <!-- Photo Section -->
+    <section id="photo" class="content-section text-center">
+        <div class="photo-section">
             <div class="container">
                 <div class="col-lg-8 col-lg-offset-2">
-                    <h2>Download Grayscale</h2>
-                    <p>You can download Grayscale for free on the preview page at Start Bootstrap.</p>
-                    <a href="http://startbootstrap.com/template-overviews/grayscale/" class="btn btn-default btn-lg">Visit Download Page</a>
+					<jdoc:include type="modules" name="photo" style="bootblock" />
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Other Sections -->
+	<jdoc:include type="modules" name="others" style="bootother" />
+	
     <!-- Contact Section -->
     <section id="contact" class="container content-section text-center">
         <div class="row">

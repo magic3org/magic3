@@ -2,4 +2,6 @@
 #pos-fixed {
 	position:relative;
 }
-
+.navbar-toggle {
+	display:block;
+}
