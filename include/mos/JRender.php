@@ -41,7 +41,7 @@ class JRender extends JParameter
 	private $_hookPoints = array();			// フック管理用
 	const DEFAULT_READMORE_TITLE = 'もっと読む';			// もっと読むボタンのデフォルトタイトル
 	const DEFAULT_RENDER_DIR = '/render/';					// デフォルトのビュー作成スクリプトディレクトリ
-	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
+//	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
 	const TEMPLATE_GENERATOR_THEMLER = 'themler';			// テンプレート作成アプリケーション(Themler)
 
 	/**
@@ -118,7 +118,7 @@ class JRender extends JParameter
 		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
 		
 		// ウィジェットの内枠(コンテンツ外枠)を設定
-		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
+//		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
 		
 		// 指定された表示スタイルでウィジェットを出力
 		$chromeMethod = 'modChrome_' . $style;
@@ -171,7 +171,7 @@ class JRender extends JParameter
 		if ($pageDefParam['pd_show_readmore']) $content = $this->addReadMore($content, $pageDefParam['pd_readmore_title'], $pageDefParam['pd_readmore_url']);
 		
 		// ウィジェットの内枠(コンテンツ外枠)を設定
-		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
+//		$content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
 		
 		// 設定を作成
 		// 「$this->item」はテンプレート内では「$this->article」として認識される
@@ -459,7 +459,7 @@ $this->item->title = '****';*/
 		$content = $this->getMenuContents($style, $content, $title, $attribs, $paramsOther, $pageDefParam, $templateVer);
 
 		// ウィジェットの内枠(コンテンツ外枠)を設定
-		if (!empty($content)) $content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
+//		if (!empty($content)) $content = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $content . '</div>';
 		return $content;
 	}
 	/**

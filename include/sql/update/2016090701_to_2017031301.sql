@@ -24,7 +24,10 @@ DELETE FROM _templates WHERE tm_id = 'bs_honoka3';
 INSERT INTO _templates
 (tm_id,                           tm_name,                  tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_info_url, tm_create_dt) VALUES
 ('bs_honoka3',                    'bs_honoka3',             10,       0,              false,     true,             true,        0,             'http://honokak.osaka/',          now());
-
+DELETE FROM _templates WHERE tm_id = 'bs_single_gray';
+INSERT INTO _templates
+(tm_id,                           tm_name,                  tm_type, tm_device_type, tm_mobile, tm_use_bootstrap, tm_available, tm_clean_type, tm_info_url, tm_create_dt) VALUES
+('bs_single_gray',                'bs_single_gray',         10,       0,              false,     true,             true,        0,             'https://startbootstrap.com/template-overviews/grayscale/',          now());
 
 -- *** システム標準テーブル ***
 

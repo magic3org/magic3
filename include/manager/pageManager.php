@@ -124,7 +124,7 @@ class PageManager extends Core
 	const WIDGET_OUTER_CLASS = 'm3_widget_outer';			// ウィジェット外枠クラスクラス
 	const WIDGET_OUTER_CLASS_HEAD_POSITION = 'm3_pos_';			// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
 	const WIDGET_OUTER_CLASS_WIDGET_TAG = 'm3_';				// ウィジェットの外枠クラス用ヘッダ(ポジション表示用)
-	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
+//	const WIDGET_INNER_CLASS = 'm3_widget_inner';			// ウィジェットの内側クラス
 	const POSITION_TAG_HEAD = 'm3pos_';			// ポジションの識別用タグIDヘッダ
 	const WIDGET_TAG_HEAD = 'm3widget_';			// ウィジェットの識別用タグIDヘッダ
 //	const WIDGET_TAG_HEAD_SHORT = 'm3_';			// ウィジェットの識別用タグIDヘッダ
@@ -4351,7 +4351,7 @@ class PageManager extends Core
 							$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);
 
 							// ウィジェットの内枠(コンテンツ外枠)を設定
-							$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+						//	$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 										
 							// キャッシュデータを設定
 							$this->gCache->setWidgetCache($gRequestManager, $this->pageDefRows[$i], $widgetContent,
@@ -4501,7 +4501,7 @@ class PageManager extends Core
 									$widgetContent = $this->_addOptionContent($widgetContent, $pageDefParam);
 									
 									// ウィジェットの内枠(コンテンツ外枠)を設定
-									$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+								//	$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 								}
 							}
 							if (!$ret) return '';		// 処理中断のときは終了
