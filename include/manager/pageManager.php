@@ -2207,8 +2207,8 @@ class PageManager extends Core
 					ob_clean();
 					$this->getHeader();
 					$contents = ob_get_contents();
-				} else if (strcasecmp($type, 'modules') == 0 || 
-							strcasecmp($type, 'module') == 0){		// ポジションタグの場合
+				} else if (strcasecmp($type, 'modules') == 0 || strcasecmp($type, 'module') == 0 ||		// 一般ウィジェット用配置ブロックの場合
+							strcasecmp($type, 'navmenu') == 0){											// ナビゲーションメニューウィジェット用配置ブロックの場合
 					$name = '';			// ポジション名
 					$posType = '';		// ポジションのタイプ
 					$style = '';		// 表示スタイル
@@ -2225,7 +2225,7 @@ class PageManager extends Core
 						$name = $value;
 						$attr['name'] = $value;
 					}
-					$value = $paramArray['type'];		// ポジションのタイプ
+					$value = $paramArray['type'];		// ポジションのタイプ(jdoc:includeのtypeとは別物?)
 					if (isset($value)){
 						$posType = $value;
 						$attr['type'] = $value;
@@ -2270,8 +2270,9 @@ class PageManager extends Core
 								$style = 'none';
 							}
 						}*/
-//						if (strStartsWith($name, 'user') ||		// ナビゲーションメニュー位置の場合
-						if (strcasecmp($name, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
+						if (strcasecmp($type, 'navmenu') == 0){											// メニューウィジェット用配置ブロックの場合
+							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+						} else if (strcasecmp($name, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
 							strcasecmp($name, 'position-1') == 0 ||		// Joomla!v2.5テンプレート対応
 							strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
 							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
