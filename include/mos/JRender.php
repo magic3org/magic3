@@ -8,7 +8,7 @@
  *
  * @package    Magic3 Framework
  * @author     平田直毅(Naoki Hirata) <naoki@aplo.co.jp>
- * @copyright  Copyright 2006-2015 Magic3 Project.
+ * @copyright  Copyright 2006-2017 Magic3 Project.
  * @license    http://www.gnu.org/copyleft/gpl.html  GPL License
  * @version    SVN: $Id$
  * @link       http://www.magic3.org
@@ -499,6 +499,7 @@ $this->item->title = '****';*/
 				$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_mainmenu/default.php';		// メニュー出力用スクリプト
 				break;
 			case 2:		// Joomla!v2.5テンプレート
+			case 10:		// Bootstrapテンプレート
 				$helper = $gEnvManager->getJoomlaRootPath() . '/render/menuHelper.php';
 				$menuPath = $gEnvManager->getTemplatesPath() . '/' . $templateId . '/html/mod_menu/default.php';		// メニュー出力用スクリプト
 				break;

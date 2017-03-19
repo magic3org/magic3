@@ -2225,7 +2225,7 @@ class PageManager extends Core
 						$name = $value;
 						$attr['name'] = $value;
 					}
-					$value = $paramArray['type'];		// ポジションのタイプ(jdoc:includeのtypeとは別物?)
+					$value = $paramArray['type'];		// 配置ブロックのタイプを属性に格納。テンプレート内での参照用。
 					if (isset($value)){
 						$posType = $value;
 						$attr['type'] = $value;
@@ -2272,6 +2272,7 @@ class PageManager extends Core
 						}*/
 						if (strcasecmp($type, 'navmenu') == 0){											// メニューウィジェット用配置ブロックの場合
 							$style = self::WIDGET_STYLE_NAVMENU;		// デフォルトはナビゲーション型
+							$attr['type'] = $type;			// テンプレート内での参照用
 						} else if (strcasecmp($name, 'user3') == 0 ||		// ナビゲーションメニュー位置の場合
 							strcasecmp($name, 'position-1') == 0 ||		// Joomla!v2.5テンプレート対応
 							strcasecmp($posType, 'hmenu') == 0){		// Joomla!v3テンプレート対応
@@ -4462,7 +4463,30 @@ class PageManager extends Core
 										if (!empty($joomlaClass)) $params['moduleclass_sfx'] = $joomlaClass;
 										if (isset($joomlaParam['moduleclass_sfx'])) $params['moduleclass_sfx'] = $joomlaParam['moduleclass_sfx'];// ウィジェットでjoomla用パラメータの設定があるとき
 								
-										if (strcmp($position, 'main') == 0){// メイン部のとき
+										if ($style == self::WIDGET_STYLE_NAVMENU){		// ナビゲーションバーメニューはメニュータイプのウィジェットのみ実行
+											$moduleContent = '';
+											
+											// メニュータイプのウィジェットのみ実行
+											if ($widgetType == 'menu') $moduleContent = $render->getNavMenuContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+								
+											// ナビゲーションバータイプで作成できないときはデフォルトの出力を取得
+											if (empty($moduleContent)) $moduleContent = $render->getModuleContents('xhtml', $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+											$widgetContent = $moduleContent;
+										} else {
+											if (strcmp($position, 'main') == 0){// メイン部のとき
+												// ウィジェットの内枠(コンテンツ外枠)を設定
+												// ウィジェットの内枠はレンダーで設定
+												//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+												$widgetContent = $render->getComponentContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+											} else {		// その他の位置のとき
+												// ウィジェットの内枠(コンテンツ外枠)を設定
+												// ウィジェットの内枠はレンダーで設定
+												//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
+											
+												$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
+											}
+										}
+/*										if (strcmp($position, 'main') == 0){// メイン部のとき
 											// ウィジェットの内枠(コンテンツ外枠)を設定
 											// ウィジェットの内枠はレンダーで設定
 											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
@@ -4492,7 +4516,7 @@ class PageManager extends Core
 											//$widgetContent = '<div class="' . self::WIDGET_INNER_CLASS . '">' . $widgetContent . '</div>';
 											
 											$widgetContent = $render->getModuleContents($style, $widgetContent, $title, $attr, $params, $pageDefParam, $templateVer);
-										}
+										}*/
 										$isRendered = true;		// Joomla!の描画処理を行ったかどうか
 									}
 								}
