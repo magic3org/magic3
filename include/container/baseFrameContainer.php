@@ -354,7 +354,7 @@ class BaseFrameContainer extends Core
 						echo $pageData;
 					} else {		// 管理者以外で、非共通のウィジェットが使用されていないページはアクセス不可とする
 						$errMessage = 'ユーザに公開されていないページへのアクセス。';
-						$messageDetail = 'アクセスポイント状態=公開, 要因: 共有ウィジェットのみのページへのアクセスは不可。';
+						$messageDetail = 'アクセスポイント状態=公開, 要因: グローバルウィジェットのみのページへのアクセスはできません。ページには1つ以上のローカルウィジェットが必要です。';
 						$this->gOpeLog->writeUserAccess(__METHOD__, '不正なアクセスを検出しました。' . $errMessage, 2202, 'アクセスをブロックしました。URL: ' . $this->gEnv->getCurrentRequestUri() . ', ' . $messageDetail);
 
 						// アクセス不可ページへ遷移
