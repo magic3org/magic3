@@ -60,6 +60,8 @@ $view->componentWrapper();
 	<div class="art-hmenu-extra2"><?php echo $view->position('extra2'); ?></div>
 	<?php endif; ?>
 	<div class="cleared reset-box"></div>
+	<?php echo $view->position('brand'); ?>
+	<div class="cleared reset-box"></div>
 	<?php echo $view->position('hmenu'); ?>
 	<div class="cleared reset-box"></div>
 	<?php echo $view->position('user3'); ?>
