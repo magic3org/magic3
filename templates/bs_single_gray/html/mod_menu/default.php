@@ -15,7 +15,7 @@ if (isset($attribs['type']) && $attribs['type'] == 'navmenu') {
     // true - skip the current node, false - render the current node.
     $skip = false;
     
-    echo '<ul class="art-hmenu' . $class_sfx . '"' . $tag . '>';
+    echo '<ul class="nav navbar-nav"' . $tag . '>';
     foreach ($list as $i => & $item) {
         if ($skip) {
             if ($item->shallower) {

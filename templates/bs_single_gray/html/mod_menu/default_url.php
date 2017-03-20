@@ -2,7 +2,9 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.filter.output');
-	
+
+$item->anchor_css = 'page-scroll';
+
 $attributes = array(
     'class' => array($item->anchor_css),
     'title' => $item->anchor_title,
